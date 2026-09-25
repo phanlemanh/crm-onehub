@@ -108,7 +108,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dmk_dau_cuoi
-    paths: [scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, packages/db/scripts/measure-db.ts, packages/db/src/measure-database.ts, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    paths: [scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, packages/db/scripts/measure-db.ts, packages/db/src/measure-database.ts, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs, scripts/lan-do/tien-de.mjs]
     expected: |
       exit 0; rang phien.mjs che do dau-cuoi: dung kho chung gia crm_chung_gia_<id> (migrate
       deploy, gieo mot okrCycle la), DATABASE_URL tro vao no, PHIEN_DO_TEN_CAY=dmk-dau-cuoi-<id>;
@@ -131,7 +131,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dmk_don_khi_do
-    paths: [scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    paths: [scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs, packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, scripts/lan-do/tien-de.mjs]
     expected: |
       exit 0; rang phien.mjs che do don-khi-do (PHIEN_DO_TEN_CAY=dmk-don-<id>, kho chung gia nhu
       E6), MA TRAN 4 ca viet truoc, moi ca 4 khang dinh (ma
@@ -150,7 +150,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dmk_xep_hang
-    paths: [scripts/lan-do/phien-do.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    paths: [scripts/lan-do/phien-do.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs, packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, scripts/lan-do/tien-de.mjs, scripts/lan-do/cau-hinh.mjs]
     expected: |
       exit 0; rang phien.mjs che do xep-hang (kho chung gia nhu E6): phien A
       (PHIEN_DO_TEN_CAY=dmk-hang-<id>) (lenh do ngu 15 s, ghi moc bat dau/ket thuc)
@@ -167,7 +167,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dmk_tien_de
-    paths: [scripts/lan-do/tien-de.mjs, scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    paths: [scripts/lan-do/tien-de.mjs, scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs, packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts]
     expected: |
       exit 0; rang phien.mjs che do tien-de (PHIEN_DO_TEN_CAY=dmk-td-<id>), ba ca: (a) DATABASE_URL
       = kho chung gia nhu E6, APP_URL=
@@ -190,7 +190,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dmk_kho_chung_khong_doi
-    paths: [scripts/lan-do/tien-de.mjs, scripts/lan-do/phien-do.mjs, packages/db/scripts/measure-db.ts, _acceptance/do-man-tren-kho-rieng/rang/kho-chung-khong-doi.mjs]
+    paths: [scripts/lan-do/tien-de.mjs, scripts/lan-do/phien-do.mjs, packages/db/scripts/measure-db.ts, _acceptance/do-man-tren-kho-rieng/rang/kho-chung-khong-doi.mjs, packages/db/src/measure-database.ts, scripts/lan-do/cau-hinh.mjs]
     expected: |
       exit 0; rang kho-chung-khong-doi.mjs doc NGUYEN VAN chuoi lenh executors.test.dok_man_chrome
       tu _acceptance/config.yaml (khong chep tay), chay voi PHIEN_DO_TEN_CAY=dmk-okr-<id>. Hai kho
@@ -212,7 +212,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.dmk_khong_noi_thuoc
-    paths: [_acceptance/do-man-tren-kho-rieng/rang/khong-noi-thuoc.mjs, _acceptance/config.yaml]
+    paths: ["**"]
     expected: |
       exit 0; rang khong-noi-thuoc.mjs lay git diff --name-only merge-base(HEAD, origin/onehub)..HEAD
       va git diff cua _acceptance/config.yaml. Khang dinh: khong tep nao duoi _acceptance/<slug>/
