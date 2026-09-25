@@ -133,10 +133,7 @@ export function AgentModel() {
 							aria-expanded={open}
 							aria-label={t.model.nhan}
 							disabled={
-								!canManage ||
-								save.isPending ||
-								catalog.isPending ||
-								unavailable
+								!canManage || save.isPending || catalog.isPending || unavailable
 							}
 							aria-describedby={canManage ? undefined : lyDoId}
 						>

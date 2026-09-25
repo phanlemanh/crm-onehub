@@ -27,7 +27,10 @@ function thuTuc(ten: string, doc: () => unknown) {
 	return {
 		queryKey: () => [ten],
 		pathKey: () => [ten],
-		queryOptions: () => ({ queryKey: [ten, coQuyen], queryFn: async () => doc() }),
+		queryOptions: () => ({
+			queryKey: [ten, coQuyen],
+			queryFn: async () => doc(),
+		}),
 		mutationOptions: () => ({
 			mutationKey: [ten],
 			mutationFn: async () => ({}),
@@ -160,8 +163,14 @@ const BA_CARD: readonly Card[] = [
 			`${the.textContent?.includes(t.nghienCuu.daCam)} ${the.querySelector<HTMLInputElement>("input[type=password]")?.placeholder}`,
 		mongGiaTri: "true ••••0001",
 		controls: [
-			{ ten: "o khoa", tim: (the) => the.querySelector("input[type=password]") },
-			{ ten: "nut thay khoa", tim: (the) => nutTheoChu(the, t.nghienCuu.thayKhoa) },
+			{
+				ten: "o khoa",
+				tim: (the) => the.querySelector("input[type=password]"),
+			},
+			{
+				ten: "nut thay khoa",
+				tim: (the) => nutTheoChu(the, t.nghienCuu.thayKhoa),
+			},
 		],
 		moKhiCoQuyen: ["o khoa"],
 	},
@@ -171,10 +180,14 @@ const BA_CARD: readonly Card[] = [
 		lyDo: t.luuTru.khongDuQuyen,
 		daTai: (the) => the.querySelector("input[inputmode=numeric]") !== null,
 		giaTri: (the) =>
-			the.querySelector<HTMLInputElement>("input[inputmode=numeric]")?.value ?? "",
+			the.querySelector<HTMLInputElement>("input[inputmode=numeric]")?.value ??
+			"",
 		mongGiaTri: "42",
 		controls: [
-			{ ten: "o so ngay", tim: (the) => the.querySelector("input[inputmode=numeric]") },
+			{
+				ten: "o so ngay",
+				tim: (the) => the.querySelector("input[inputmode=numeric]"),
+			},
 			{ ten: "nut luu", tim: (the) => nutTheoChu(the, t.luuTru.luu) },
 		],
 		moKhiCoQuyen: ["o so ngay"],
@@ -238,9 +251,9 @@ describe("ccq-man-khoa", () => {
 						expect(
 							`${card.ten}: ${control.ten} mo ta trong card ${moTa !== null && the.contains(moTa)}`,
 						).toBe(`${card.ten}: ${control.ten} mo ta trong card true`);
-						expect(`${card.ten}: ${control.ten} ly do ${moTa?.textContent}`).toBe(
-							`${card.ten}: ${control.ten} ly do ${card.lyDo}`,
-						);
+						expect(
+							`${card.ten}: ${control.ten} ly do ${moTa?.textContent}`,
+						).toBe(`${card.ten}: ${control.ten} ly do ${card.lyDo}`);
 					}
 				} else {
 					expect(

@@ -51,18 +51,12 @@ const workspace = (data: {
 	result: { data: { slug: SLUG, viewerRole: "owner", ...data } },
 });
 
-const researchKey = (
-	configured: boolean,
-	canManage: boolean | null = true,
-) => ({
-	result: {
-		data: {
-			configured,
-			hint: configured ? "••••9876" : null,
-			...(canManage === null ? {} : { canManage }),
-		},
-	},
-});
+function researchKey(configured: boolean, canManage: boolean | null = true) {
+	const hint = configured ? "••••9876" : null;
+	const data =
+		canManage === null ? { configured, hint } : { configured, hint, canManage };
+	return { result: { data } };
+}
 
 /** Answers both gate procedures, counting the calls to each. */
 function setup({

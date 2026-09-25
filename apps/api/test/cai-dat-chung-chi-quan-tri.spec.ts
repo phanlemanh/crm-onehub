@@ -29,6 +29,7 @@ import { markOnboarded, WORKSPACE_ID } from "@crm/db/workspace";
 import { congNghienCuu } from "@crm/validation/cong-nghien-cuu";
 import type { INestApplication } from "@nestjs/common";
 import request from "supertest";
+import { z } from "zod";
 import { ResearchKeyService } from "../src/agent/research-key.service";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
@@ -84,12 +85,13 @@ let app: INestApplication;
 let demVerify: Mock<ResearchKeyService["verify"]>;
 let demModels: Mock<ModelCatalogService["models"]>;
 let demBackfill: Mock<BackfillService["run"]>;
-let goc: {
+type GiaTriGoc = {
 	khoa: string | null;
 	model: string | null;
 	ngay: number;
 	metadata: string | null;
 };
+let goc: GiaTriGoc;
 
 type ThaoTac = {
 	ten: "setResearchKey" | "setAgentModel" | "setArchiveRetention";
@@ -136,11 +138,7 @@ async function datTruoc(): Promise<void> {
 	demBackfill.mockClear();
 }
 
-async function doiQua(
-	ai: Loi,
-	lop: Lop,
-	thaoTac: ThaoTac,
-): Promise<TraLoi> {
+async function doiQua(ai: Loi, lop: Lop, thaoTac: ThaoTac): Promise<TraLoi> {
 	const may = request(app.getHttpServer());
 	const res =
 		lop === "trpc"
@@ -173,8 +171,12 @@ async function doc(ai: Loi, thuTuc: string): Promise<TraLoi> {
 	};
 }
 
-function coCo(data: unknown): unknown {
-	return (data as { canManage?: unknown } | undefined)?.canManage;
+const traLoiCoCo = z
+	.object({ canManage: z.boolean().optional() })
+	.catch({ canManage: undefined });
+
+function coCo(tra: TraLoi): boolean | undefined {
+	return traLoiCoCo.parse(tra.data ?? {}).canManage;
 }
 
 async function moPhien(loi: Loi, vai: WorkspaceRole | null): Promise<string> {
@@ -343,7 +345,7 @@ describe("ccq-quan-tri-lam-duoc", () => {
 				expect(`${nhan}: HTTP ${tra.status} ${tra.loi}`).toBe(
 					`${nhan}: HTTP 200 `,
 				);
-				expect(`${nhan}: canManage ${coCo(tra.data)}`).toBe(
+				expect(`${nhan}: canManage ${coCo(tra)}`).toBe(
 					`${nhan}: canManage true`,
 				);
 				expect(`${nhan}: db ${await thaoTac.docDb()}`).toBe(
@@ -358,14 +360,16 @@ describe("ccq-quan-tri-lam-duoc", () => {
 					).toBe(`${nhan}: backfill [["companies"]]`);
 				}
 				if (thaoTac.ten === "setAgentModel") {
-					expect(
-						`${nhan}: models goi ${demModels.mock.calls.length > 0}`,
-					).toBe(`${nhan}: models goi true`);
+					expect(`${nhan}: models goi ${demModels.mock.calls.length > 0}`).toBe(
+						`${nhan}: models goi true`,
+					);
 				}
 				soCa += 1;
 			}
 		}
-		expect(`so ca ${soCa}`).toBe(`so ca ${LOI_DUOC.length * BA_THAO_TAC.length}`);
+		expect(`so ca ${soCa}`).toBe(
+			`so ca ${LOI_DUOC.length * BA_THAO_TAC.length}`,
+		);
 	});
 });
 
@@ -420,7 +424,7 @@ describe("ccq-co-quyen", () => {
 					);
 					expect(`${nhan}: data ${tra.data}`).toBe(`${nhan}: data undefined`);
 				} else {
-					expect(`${nhan}: HTTP ${tra.status} canManage ${coCo(tra.data)}`).toBe(
+					expect(`${nhan}: HTTP ${tra.status} canManage ${coCo(tra)}`).toBe(
 						`${nhan}: HTTP 200 canManage ${mong}`,
 					);
 				}

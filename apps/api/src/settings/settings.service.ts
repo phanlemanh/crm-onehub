@@ -20,13 +20,13 @@ import { ResearchKeyService } from "../agent/research-key.service";
 import { BackfillService } from "../backfill/backfill.service";
 import { InjectDatabase } from "../database/database.constants";
 import { ModelCatalogService } from "./model-catalog.service";
-import { SETTINGS_CONFIG } from "./settings-config";
 import type {
 	AgentModelSettings,
 	ArchiveRetentionSettings,
 	ModelCatalogResult,
 	ResearchKeySettings,
 } from "./settings.contracts";
+import { SETTINGS_CONFIG } from "./settings-config";
 
 @Injectable()
 export class SettingsService {
