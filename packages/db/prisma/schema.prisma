@@ -67,6 +67,11 @@ model User {
   managedPlacements       OrgPlacement[]           @relation("OrgManager")
   orgSecondaryDepartments OrgSecondaryDepartment[]
 
+  okrObjectivesOwned  OkrObjective[]   @relation("OkrObjectiveOwner")
+  okrObjectivesPerson OkrObjective[]   @relation("OkrObjectivePerson")
+  okrKeyResultsOwned  OkrKeyResult[]   @relation("OkrKeyResultOwner")
+  okrParticipations   OkrParticipant[]
+
   @@unique([email])
   @@map("user")
 }
@@ -1435,8 +1440,8 @@ model AppSetting {
   trackingConfigHash       String?
   trackingPaused           Boolean @default(false)
 
-  zaloBotName  String?
-  zaloPolledAt DateTime?
+  zaloBotName       String?
+  zaloPolledAt      DateTime?
   zaloBotToken      String?
   zaloWebhookSecret String?
   zaloWebhookUrl    String?
@@ -1719,6 +1724,7 @@ model Department {
   steps            OnboardingStep[]
   primaryOf        OrgPlacement[]           @relation("PrimaryDepartment")
   secondaryMembers OrgSecondaryDepartment[]
+  okrObjectives    OkrObjective[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1736,8 +1742,9 @@ model Division {
   headUserId String?
   head       User?   @relation("DivisionHead", fields: [headUserId], references: [id], onDelete: SetNull)
 
-  archivedAt  DateTime?
-  departments Department[]
+  archivedAt    DateTime?
+  departments   Department[]
+  okrObjectives OkrObjective[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1934,4 +1941,148 @@ model OnboardingEnrollment {
   @@index([planId])
   @@index([contactId])
   @@map("onboardingEnrollment")
+}
+
+model OkrCycle {
+  id            String         @id @default(cuid())
+  kind          String
+  name          String
+  parentId      String?
+  parent        OkrCycle?      @relation("OkrCycleParent", fields: [parentId], references: [id], onDelete: Restrict)
+  children      OkrCycle[]     @relation("OkrCycleParent")
+  startsOn      DateTime       @db.Date
+  endsOn        DateTime       @db.Date
+  phase         String         @default("lap-ke-hoach")
+  breakStartsOn DateTime?      @db.Date
+  breakEndsOn   DateTime?      @db.Date
+  updateWeekday Int            @default(1)
+  objectives    OkrObjective[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([parentId])
+  @@index([startsOn])
+  @@map("okrCycle")
+}
+
+model OkrProgramConfig {
+  id           String   @id @default(cuid())
+  version      Int      @unique
+  objectiveCap Int
+  krCap        Int
+  capMode      String
+  scoreScale   String
+  weightsOn    Boolean
+  personalOn   Boolean
+  createdById  String
+  createdAt    DateTime @default(now())
+
+  @@map("okrProgramConfig")
+}
+
+model OkrObjective {
+  id           String           @id @default(cuid())
+  cycleId      String
+  cycle        OkrCycle         @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  level        String
+  divisionId   String?
+  division     Division?        @relation(fields: [divisionId], references: [id], onDelete: Restrict)
+  departmentId String?
+  department   Department?      @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  personUserId String?
+  person       User?            @relation("OkrObjectivePerson", fields: [personUserId], references: [id], onDelete: Restrict)
+  ownerUserId  String
+  owner        User             @relation("OkrObjectiveOwner", fields: [ownerUserId], references: [id], onDelete: Restrict)
+  kind         String
+  status       String           @default("nhap")
+  title        String
+  whyNow       String           @default("")
+  publishedAt  DateTime?
+  droppedAt    DateTime?
+  position     Int              @default(0)
+  participants OkrParticipant[]
+  keyResults   OkrKeyResult[]
+  alignments   OkrAlignment[]   @relation("OkrAlignmentSource")
+  alignedBy    OkrAlignment[]   @relation("OkrAlignmentTargetObjective")
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([cycleId, level])
+  @@index([divisionId])
+  @@index([departmentId])
+  @@index([personUserId])
+  @@index([ownerUserId])
+  @@map("okrObjective")
+}
+
+model OkrParticipant {
+  objectiveId String
+  objective   OkrObjective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+
+  @@id([objectiveId, userId])
+  @@index([userId])
+  @@map("okrParticipant")
+}
+
+model OkrKeyResult {
+  id            String         @id @default(cuid())
+  objectiveId   String
+  objective     OkrObjective   @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  title         String
+  kind          String
+  ownerUserId   String
+  owner         User           @relation("OkrKeyResultOwner", fields: [ownerUserId], references: [id], onDelete: Restrict)
+  startValue    Decimal        @db.Decimal(18, 4)
+  targetValue   Decimal        @db.Decimal(18, 4)
+  currentValue  Decimal        @db.Decimal(18, 4)
+  unit          String         @default("")
+  dueOn         DateTime?      @db.Date
+  weight        Decimal        @default(1) @db.Decimal(6, 2)
+  source        String         @default("tay")
+  startLockedAt DateTime?
+  position      Int            @default(0)
+  alignedBy     OkrAlignment[] @relation("OkrAlignmentTargetKeyResult")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([objectiveId, position])
+  @@index([ownerUserId])
+  @@map("okrKeyResult")
+}
+
+model OkrAlignment {
+  id                String        @id @default(cuid())
+  objectiveId       String
+  objective         OkrObjective  @relation("OkrAlignmentSource", fields: [objectiveId], references: [id], onDelete: Cascade)
+  targetObjectiveId String?
+  targetObjective   OkrObjective? @relation("OkrAlignmentTargetObjective", fields: [targetObjectiveId], references: [id], onDelete: Cascade)
+  targetKeyResultId String?
+  targetKeyResult   OkrKeyResult? @relation("OkrAlignmentTargetKeyResult", fields: [targetKeyResultId], references: [id], onDelete: Cascade)
+  createdAt         DateTime      @default(now())
+
+  @@unique([objectiveId, targetObjectiveId, targetKeyResultId])
+  @@index([targetObjectiveId])
+  @@index([targetKeyResultId])
+  @@map("okrAlignment")
+}
+
+model OkrTrail {
+  id          String   @id @default(cuid())
+  at          DateTime @default(now())
+  actorUserId String
+  cycleId     String?
+  objectiveId String?
+  keyResultId String?
+  action      String
+  before      Json?
+  after       Json?
+  note        String?
+
+  @@index([objectiveId, at])
+  @@index([cycleId, at])
+  @@index([at])
+  @@map("okrTrail")
 }
