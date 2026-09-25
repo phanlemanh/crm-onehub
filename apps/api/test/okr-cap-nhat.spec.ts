@@ -370,15 +370,17 @@ describe("gui-lo", () => {
 				`400 ${C.kyKhongChay}`,
 			],
 		];
-		const ketQua: Json[] = [];
-		const mong: Json[] = [];
+		const ketQua: string[] = [];
+		const mong: string[] = [];
 		for (const [ten, hong, loi] of CA) {
 			const ids = [tot.keyResultId, hong.keyResultId];
 			const [demTruoc, soTruoc] = [await demLan(ids), await soHienTai(ids)];
 			const r = await gui(await moPhien(cookieM), [tot, hong], cookieM);
 			const [demSau, soSau] = [await demLan(ids), await soHienTai(ids)];
-			ketQua.push([ten, tuChoi(r), demSau - demTruoc, soSau]);
-			mong.push([ten, loi, 0, soTruoc]);
+			ketQua.push(
+				`${ten}: ${tuChoi(r)} · dem +${demSau - demTruoc} · so ${soSau.join("/")}`,
+			);
+			mong.push(`${ten}: ${loi} · dem +0 · so ${soTruoc.join("/")}`);
 		}
 		expect(ketQua).toEqual(mong);
 
@@ -477,29 +479,30 @@ describe("phien-giay", () => {
 			["phien cua nguoi khac", `403 ${C.phienKhongCua}`, 0, null],
 		]);
 
-		expect(await svc.guiCapNhat(m, { sessionId, items: [dung] }, t1)).toEqual({
-			written: 1,
-			seconds: 47,
-		});
+		const gui47 = await svc.guiCapNhat(m, { sessionId, items: [dung] }, t1);
 		const p = await docPhien();
-		expect([
-			p.openedAt.toISOString(),
-			p.submittedAt?.toISOString() ?? null,
-			p.seconds,
-		]).toEqual([t0.toISOString(), t1.toISOString(), 47]);
 		const cuaK = await db.okrCheckIn.findMany({ where: { keyResultId: k } });
-		expect(cuaK.map((r) => r.sessionId)).toEqual([sessionId]);
-
 		const truocLai = await dem();
 		const lai = await goi(
 			"okr.guiCapNhat",
 			{ sessionId, items: [{ ...dung, value: 26 }] },
 			cookieM,
 		);
-		expect([tuChoi(lai), (await dem()) - truocLai]).toEqual([
-			`400 ${C.phienDaGui}`,
-			0,
-		]);
+		expect({
+			gui: gui47,
+			phien: [
+				p.openedAt.toISOString(),
+				p.submittedAt?.toISOString() ?? null,
+				p.seconds,
+			],
+			phienCuaDong: cuaK.map((r) => r.sessionId),
+			guiLanHai: `${tuChoi(lai)} · dem +${(await dem()) - truocLai}`,
+		}).toEqual({
+			gui: { written: 1, seconds: 47 },
+			phien: [t0.toISOString(), t1.toISOString(), 47],
+			phienCuaDong: [sessionId],
+			guiLanHai: `400 ${C.phienDaGui} · dem +0`,
+		});
 
 		const sid2 = await moPhien(cookieM);
 		const hong = await gui(sid2, [{ ...dung, confidence: "la" }], cookieM);
@@ -563,7 +566,6 @@ describe("ghi-ho", () => {
 			admin: { id: phien.quan.nguoi, cookie: "quan" },
 		};
 		const KR = { KR1: kr1, KR3: kr3 };
-		const CHU = { KR1: m, KR3: n };
 		const O: [keyof typeof NGUOI, keyof typeof KR][] = [
 			["TP", "KR1"],
 			["TP2", "KR1"],
@@ -573,7 +575,9 @@ describe("ghi-ho", () => {
 			["admin", "KR3"],
 			["TP", "KR3"],
 		];
-		const ketQua: Json[] = [];
+		const tenCua = (id: string) =>
+			Object.entries(NGUOI).find(([, v]) => v.id === id)?.[0] ?? id;
+		const ketQua: string[] = [];
 		let so = 0;
 		for (const [ai, tenKr] of O) {
 			const nguoi = NGUOI[ai];
@@ -587,29 +591,27 @@ describe("ghi-ho", () => {
 				nguoi.cookie,
 			);
 			if (r.status !== 200) {
-				ketQua.push([ai, tenKr, tuChoi(r), (await demLan([id])) - truoc]);
+				ketQua.push(
+					`${ai} × ${tenKr}: ${tuChoi(r)} · dem +${(await demLan([id])) - truoc}`,
+				);
 				continue;
 			}
 			const dong = await db.okrCheckIn.findFirstOrThrow({
 				where: { sessionId: sid },
 			});
-			ketQua.push([
-				ai,
-				tenKr,
-				200,
-				dong.authorUserId === nguoi.id,
-				dong.ownerUserId === CHU[tenKr],
-				dong.onBehalf,
-			]);
+			ketQua.push(
+				`${ai} × ${tenKr}: ${r.status} · tac gia ${tenCua(dong.authorUserId)} · phu trach ${tenCua(dong.ownerUserId)} · ghi ho ${dong.onBehalf}`,
+			);
 		}
+		const cam = `403 ${C.khongPhaiChuHayTruong} · dem +0`;
 		expect(ketQua).toEqual([
-			["TP", "KR1", 200, true, true, true],
-			["TP2", "KR1", `403 ${C.khongPhaiChuHayTruong}`, 0],
-			["N", "KR1", `403 ${C.khongPhaiChuHayTruong}`, 0],
-			["M", "KR1", 200, true, true, false],
-			["TB", "KR1", 200, true, true, true],
-			["admin", "KR3", 200, true, true, true],
-			["TP", "KR3", `403 ${C.khongPhaiChuHayTruong}`, 0],
+			"TP × KR1: 200 · tac gia TP · phu trach M · ghi ho true",
+			`TP2 × KR1: ${cam}`,
+			`N × KR1: ${cam}`,
+			"M × KR1: 200 · tac gia M · phu trach M · ghi ho false",
+			"TB × KR1: 200 · tac gia TB · phu trach M · ghi ho true",
+			"admin × KR3: 200 · tac gia admin · phu trach N · ghi ho true",
+			`TP × KR3: ${cam}`,
 		]);
 	});
 });
@@ -706,8 +708,8 @@ describe("hien-tai-khoa", () => {
 			db.okrTrail.count({ where: { keyResultId: id } });
 
 		let so = 0;
-		const ketQua: Json[] = [];
-		const mong: Json[] = [];
+		const ketQua: string[] = [];
+		const mong: string[] = [];
 		for (const [tenKr, id] of KR) {
 			for (const [tenAi, ai] of AI) {
 				for (const doi of DOI) {
@@ -726,28 +728,23 @@ describe("hien-tai-khoa", () => {
 						ai,
 					);
 					const sau = await docKr(id);
-					const o: Json[] = [tenKr, tenAi, doi, tuChoi(r)];
-					const mo: Json[] = [tenKr, tenAi, doi, mongO(tenKr, doi)];
-					if (mongO(tenKr, doi) === KHOA) {
-						o.push(
-							Number(truoc.currentValue),
-							Number(sau.currentValue),
-							JSON.stringify(sau) === JSON.stringify(truoc),
-							(await demVet(id)) - vetTruoc,
-						);
-						mo.push(
-							Number(truoc.currentValue),
-							Number(truoc.currentValue),
-							true,
-							0,
-						);
+					const o = `${tenKr} · ${tenAi} · ${doi}: ${tuChoi(r)}`;
+					const mo = `${tenKr} · ${tenAi} · ${doi}: ${mongO(tenKr, doi)}`;
+					if (mongO(tenKr, doi) !== KHOA) {
+						ketQua.push(o);
+						mong.push(mo);
+						continue;
 					}
-					ketQua.push(o);
-					mong.push(mo);
+					const hienTai = Number(truoc.currentValue);
+					ketQua.push(
+						`${o} · hien tai ${hienTai}→${Number(sau.currentValue)} · ban ghi giu ${JSON.stringify(sau) === JSON.stringify(truoc)} · vet +${(await demVet(id)) - vetTruoc}`,
+					);
+					mong.push(
+						`${mo} · hien tai ${hienTai}→${hienTai} · ban ghi giu true · vet +0`,
+					);
 				}
 			}
 		}
-		expect(ketQua).toEqual(mong);
 
 		const truocTron = await docKr(a);
 		const vetTron = await demVet(a);
@@ -761,21 +758,15 @@ describe("hien-tai-khoa", () => {
 			tp.cookie,
 		);
 		const sauTron = await docKr(a);
-		expect([
-			"tron",
-			tuChoi(tron),
-			Number(sauTron.targetValue),
-			Number(sauTron.currentValue),
-			JSON.stringify(sauTron) === JSON.stringify(truocTron),
-			(await demVet(a)) - vetTron,
-		]).toEqual([
-			"tron",
-			KHOA,
-			Number(truocTron.targetValue),
-			Number(truocTron.currentValue),
-			true,
-			0,
-		]);
+		const banGhi = (k: typeof sauTron) =>
+			`dich ${Number(k.targetValue)} · hien tai ${Number(k.currentValue)}`;
+		expect({
+			maTran: ketQua,
+			tron: `${tuChoi(tron)} · ${banGhi(sauTron)} · ban ghi giu ${JSON.stringify(sauTron) === JSON.stringify(truocTron)} · vet +${(await demVet(a)) - vetTron}`,
+		}).toEqual({
+			maTran: mong,
+			tron: `${KHOA} · ${banGhi(truocTron)} · ban ghi giu true · vet +0`,
+		});
 
 		const bang = await goi(
 			"okr.updateKeyResult",
