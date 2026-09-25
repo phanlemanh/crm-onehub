@@ -1,0 +1,17 @@
+{
+  "so_ca": 11,
+  "ghi_chu": "Ca da ky co ket qua phu thuoc viec doc duoc than webhook hop le. Loai: ca chi do ma tra ve (than hong van 200), ca 403, va webhook-trung (vong tay bat tin thay nen van xanh). Them gui-hong doi chung sau pha-thu 25/09: no do dong log theo message_id, nen phu thuoc viec doc than.",
+  "ca": [
+    "giao-khi-mo > giao-khi-mo: webhook nhan tin den o giay 30",
+    "webhook-noi > webhook-noi: khoa dung, ma song -> noi U voi Z, doc lai tu DB",
+    "webhook-khoa > webhook-khoa: doi chung — cung than, khoa dung -> 200 va noi",
+    "webhook-bo-qua > webhook-bo-qua: than hong, tu bot, tu nhom -> 200, khong ghi, log khoa",
+    "webhook-luat-ma > webhook-luat-ma: sai, chu, anh, dang bi chan",
+    "kenh-route > kenh-route: kenh mount dung mot route POST /zalo/webhook va route do chay",
+    "tin-den > db-loi: transaction noi hong -> 500, khong seen, gui lai khi lanh -> noi dung mot lan",
+    "tin-den > gui-hong: noi xong ma gui hong -> 200, co link va seen, mot dong log; gui lai khong gui them",
+    "tin-den > gui-hong: doi chung duong, gui ok -> khong dong log loi",
+    "tin-den > da-noi-roi: nguoi da noi nhan chu -> ban da noi voi <ten>, 08:30; nguoi chua noi -> huong dan",
+    "tin-den > da-noi-roi: nguoi da noi nhan mot ma da dung -> ghi sai, nhan huong dan"
+  ]
+}
