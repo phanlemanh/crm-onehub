@@ -65,3 +65,13 @@ export function tinhTrang(
 	if (tiLe >= NGUONG.truot) return "cham-nhip";
 	return "truot";
 }
+
+export function tienDoMucTieu(
+	krs: { progress: number; weight: number }[],
+	coTrongSo: boolean,
+): number {
+	const nang = (k: { weight: number }) => (coTrongSo ? k.weight : 1);
+	const tong = krs.reduce((s, k) => s + nang(k), 0);
+	if (tong === 0) return 0;
+	return Math.round(krs.reduce((s, k) => s + k.progress * nang(k), 0) / tong);
+}

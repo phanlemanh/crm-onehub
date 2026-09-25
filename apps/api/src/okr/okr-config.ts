@@ -1,4 +1,5 @@
 export const OKR = {
+	tenGoc: "OneHub",
 	ten: { mucTieuToiDa: 200, krToiDa: 200, donViDo: 24, viSao: 500 },
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
 	nhap: {

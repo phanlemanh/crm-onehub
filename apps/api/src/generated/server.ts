@@ -27,7 +27,7 @@ import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
-import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, programOutput, setProgramInput } from "../okr/okr.contracts";
+import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, programOutput, setProgramInput, byUnitInput, byUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, createKrInput, updateKrInput } from "../okr/okr.contracts";
 import { accessOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
@@ -642,6 +642,46 @@ const appRouter = t.router({
     setProgram: publicProcedure
       .input(setProgramInput)
       .output(programOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    byUnit: publicProcedure
+      .input(byUnitInput)
+      .output(byUnitOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    mine: publicProcedure
+      .input(mineInput)
+      .output(mineOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    objective: publicProcedure
+      .input(objectiveInput)
+      .output(objectiveOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    createObjective: publicProcedure
+      .input(createObjectiveInput)
+      .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    updateObjective: publicProcedure
+      .input(updateObjectiveInput)
+      .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    publishObjective: publicProcedure
+      .input(idInput)
+      .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    dropObjective: publicProcedure
+      .input(idInput)
+      .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    createKeyResult: publicProcedure
+      .input(createKrInput)
+      .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    updateKeyResult: publicProcedure
+      .input(updateKrInput)
+      .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    removeKeyResult: publicProcedure
+      .input(idInput)
+      .output(okOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   onboarding: t.router({

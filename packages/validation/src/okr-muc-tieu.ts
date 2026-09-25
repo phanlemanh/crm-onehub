@@ -23,10 +23,10 @@ export const HANG_CAP = {
 const ma = z.string().trim().min(1).max(120);
 
 export const donViMucTieu = z.discriminatedUnion("level", [
-	z.object({ level: z.literal("onehub") }),
-	z.object({ level: z.literal("bo-phan"), divisionId: ma }),
-	z.object({ level: z.literal("phong-ban"), departmentId: ma }),
-	z.object({ level: z.literal("ca-nhan"), personUserId: ma }),
+	z.strictObject({ level: z.literal("onehub") }),
+	z.strictObject({ level: z.literal("bo-phan"), divisionId: ma }),
+	z.strictObject({ level: z.literal("phong-ban"), departmentId: ma }),
+	z.strictObject({ level: z.literal("ca-nhan"), personUserId: ma }),
 ]);
 
 export type DonViMucTieu = z.infer<typeof donViMucTieu>;

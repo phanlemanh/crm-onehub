@@ -24,6 +24,7 @@ export type Json =
 
 export type TraLoi = { status: number; data: Json; loi: string };
 export type Ai = "quan" | "thuong" | "chu" | "okr";
+export type AiHoacCookie = Ai | (string & {});
 type Phien = { nguoi: string; cookie: string; token: string };
 
 let app: INestApplication;
@@ -34,14 +35,21 @@ export const phien = {
 	okr: { nguoi: "", cookie: "", token: "" },
 } satisfies Record<Ai, Phien>;
 
+const laAi = (ai: string): ai is Ai => ai in phien;
+const cookieCua = (ai: AiHoacCookie) => (laAi(ai) ? phien[ai].cookie : ai);
+
+export async function phienCua(userId: string): Promise<string> {
+	return (await mintPhien(userId)).cookie;
+}
+
 export async function goi(
 	thuTuc: string,
 	vao: Json,
-	ai: Ai = "quan",
+	ai: AiHoacCookie = "quan",
 ): Promise<TraLoi> {
 	const res = await request(app.getHttpServer())
 		.post(`/api/trpc/${thuTuc}`)
-		.set("cookie", phien[ai].cookie)
+		.set("cookie", cookieCua(ai))
 		.set("content-type", "application/json")
 		.send(JSON.stringify(vao));
 	return {
@@ -53,7 +61,7 @@ export async function goi(
 
 export async function doc<T>(
 	thuTuc: string,
-	ai: Ai = "quan",
+	ai: AiHoacCookie = "quan",
 	vao?: Json,
 ): Promise<T> {
 	const q =
@@ -62,7 +70,7 @@ export async function doc<T>(
 			: `?input=${encodeURIComponent(JSON.stringify(vao))}`;
 	const res = await request(app.getHttpServer())
 		.get(`/api/trpc/${thuTuc}${q}`)
-		.set("cookie", phien[ai].cookie);
+		.set("cookie", cookieCua(ai));
 	expect(`${thuTuc}: HTTP ${res.status}`).toBe(`${thuTuc}: HTTP 200`);
 	return res.body.result.data as T;
 }
@@ -108,6 +116,29 @@ export async function datViTri(
 export const pbMoi = (ten: string, divisionId: string | null = null) =>
 	tao("org.createDepartment", { name: ma(ten), divisionId }, `tao ${ten}`);
 
+export const bpMoi = (ten: string) =>
+	tao("org.createDivision", { name: ma(ten) }, `tao ${ten}`);
+
+export async function truongMoi(
+	kind: "division" | "department",
+	id: string,
+	ten: string,
+): Promise<{ nguoi: string; cookie: string }> {
+	const nguoi = await nguoiMoi(ten);
+	if (kind === "department") ok(await datViTri(nguoi, id), `xep ${ten}`);
+	ok(await goi("org.setHead", { kind, id, userId: nguoi }), `truong ${ten}`);
+	return { nguoi, cookie: await phienCua(nguoi) };
+}
+
+export const CHUONG_TRINH_RONG = {
+	objectiveCap: 50,
+	krCap: 50,
+	capMode: "canh-bao",
+	scoreScale: "0-100",
+	weightsOn: false,
+	personalOn: true,
+} as const;
+
 export const taoNam = (ten: string, nam: number) =>
 	tao(
 		"okr.createCycle",
@@ -147,6 +178,13 @@ export const taoQuy = (
 
 export const dangChay = async (id: string) =>
 	ok(await goi("okr.setCyclePhase", { id, phase: "dang-chay" }), "dang chay");
+
+export async function kyDangChay(ten: string): Promise<string> {
+	const nam = await taoNam(`${ten}-nam`, 2026);
+	const quy = await taoQuy(ten, nam, "2026-10-01", "2026-12-31");
+	await dangChay(quy);
+	return quy;
+}
 
 export function dungSan(): void {
 	beforeAll(async () => {

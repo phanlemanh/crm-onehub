@@ -224,4 +224,8 @@ export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
 export type KrOutput = z.infer<typeof krOutput>;
 export type DonViChon = z.infer<typeof donViChon>;
 export type DongNhapOutput = z.infer<typeof dongNhapOutput>;
+export type VetOutput = z.infer<typeof vetOutput>;
+export type ObjectiveOutput = z.infer<typeof objectiveOutput>;
+export type CreateKrInput = z.infer<typeof createKrInput>;
+export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";

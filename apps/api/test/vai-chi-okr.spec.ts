@@ -196,6 +196,9 @@ function choPhepRest(): string[] {
 		.sort();
 }
 
+const khongGanCau = (h: { status: number; message: string }) =>
+	h.status === 404 && h.message === "Not found";
+
 const biChanPhamVi = (h: { status: number; message: string }) =>
 	h.status === 403 && h.message === KHONG_TRONG_PHAM_VI;
 
@@ -352,7 +355,7 @@ describe("vai-chi-okr", () => {
 			const rest = await maTranRest(app, dau);
 			expect(rest.length).toBeGreaterThanOrEqual(SAN_DUONG_REST);
 			expect(
-				rest.filter((h) => h.status === 404).map((h) => h.ten),
+				rest.filter(khongGanCau).map((h) => h.ten),
 				"duong khai ma cau khong gan",
 			).toEqual([]);
 			expect(
