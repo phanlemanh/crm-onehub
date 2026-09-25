@@ -277,6 +277,7 @@ Không tệp nào trong `packages/ui` bị sửa. Mô tả PR chép bảng này.
 | ST-donvi-chuakychay | Theo đơn vị | `Empty` «Quản trị chưa mở chu kỳ» (+ liên kết Cài đặt nếu quản trị) | quản trị mở chu kỳ |
 | ST-donvi-rong | Theo đơn vị | `Empty` «<đơn vị> chưa đặt OKR cho <kỳ>»; trưởng thấy hai nút Thêm / Nhập; đơn vị không trưởng thấy câu gán trưởng | thêm hoặc nhập |
 | ST-donvi-danhsach | Theo đơn vị | thẻ mục tiêu với bảng KR, nút Danh sách đang chọn | mở sheet |
+| ST-donvi-khongthay | Theo đơn vị | `Empty` «Không thấy đơn vị này» (đơn vị đã lưu trữ hoặc mã lạ trên URL) + nút «Về toàn công ty»; cây vẫn hiện | về toàn công ty |
 | ST-donvi-caycanchinh | Theo đơn vị | bảng cây căn chỉnh toàn công ty + nhóm chưa căn chỉnh | mở sheet |
 | ST-donvi-truong | Theo đơn vị | như danh sách + nút Thêm mục tiêu, Nhập từ bảng tính | thêm |
 | ST-sheet-nhap | Sheet mục tiêu | huy hiệu Nháp, nút Công bố sáng, KR đang có | thêm KR, công bố |
