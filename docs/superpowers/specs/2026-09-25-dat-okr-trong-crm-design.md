@@ -187,8 +187,8 @@ Bốn tab là bốn đường con, thanh tab `Tabs variant="line"` dùng nguyên
 | `/okr/toan-canh` | Toàn cảnh | `Empty` nói màn mở ở lượt 5 |
 | (Cập nhật tuần) | — | không có tab; lượt 4 thêm |
 
-Tham số URL (`SEARCH_PARAM.okr`): `ky` (chu kỳ, mặc định `current`), `don` (đơn vị,
-cùng khuôn `DonChon` của Tổ chức), `xem` (`danh-sach`\|`cay`). Sheet mục tiêu mở
+Tham số URL (`SEARCH_PARAM.okr`): `kyOkr` (chu kỳ, mặc định `current`), `donOkr` (đơn vị,
+cùng khuôn `DonChon` của Tổ chức), `xemOkr` (`danh-sach`\|`cay`). Sheet mục tiêu mở
 qua `?record=objective:<id>` — `RECORD_KINDS` thêm `objective`, `record-sheet-host.tsx`
 thêm `ObjectiveSheet` (`objective-sheet.tsx`), `useCrmCache` thêm `okr(id?)`.
 
