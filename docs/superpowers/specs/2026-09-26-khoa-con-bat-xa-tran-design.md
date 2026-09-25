@@ -66,7 +66,10 @@ trình kiểm — chờ gì cụ thể thì chưa quy được (xem giả thuy�
   `doi-chung-thanh-vien` chạy ma trận bằng tư cách thành viên, nên một số thủ tục ghi có
   thể thực thi thật — đổi thứ tự của chúng là đổi phép đo, không nằm trong vòng này.
 - 8 vì pool `pg` của `PrismaPg({ connectionString })` mặc định 10 kết nối: 8 lượt cùng lúc
-  không bao giờ phải xếp hàng chờ pool, còn chỗ cho truy vấn của chính bài kiểm.
+  không phải xếp hàng chờ pool, còn hai chỗ cho truy vấn của chính bài kiểm. Quan hệ này
+  được ĐO lúc chạy trong ca `theo-lo`, không so với hằng chép tay: 32 truy vấn
+  `pg_sleep` đồng thời qua chính `db` của ứng dụng, đếm số phiên Postgres khác nhau chiếm
+  được — đó là cỡ pool thật (round 1 so hai hằng, Cổng 2 trả lại).
 - Hằng số lượt đặt ở đầu tệp cạnh `SAN_THU_TUC`, `SAN_DUONG_REST` — đúng lối của tệp.
 - Ca thêm hai khẳng định: danh sách tên hàng của ma trận tRPC bằng đúng danh sách thủ tục
   của sổ router theo thứ tự, và danh sách tên hàng của ma trận REST bằng đúng danh sách
@@ -74,6 +77,15 @@ trình kiểm — chờ gì cụ thể thì chưa quy được (xem giả thuy�
   thông điệp gọi tên ma trận lệch, không được làm ma trận ngắn lại mà vẫn xanh.
 - Không đổi trần thời gian. Ca không chậm bản chất: 460 lượt gọi độc lập chạy tuần tự
   là lựa chọn của phép đo, không phải của hành vi được đo.
+
+## Round 2 (Cổng 2 trả lại round 1)
+
+Lượt chấm round 1 PASS nhưng xác nhận năm lỗ ở thước: khẳng định pool so hai hằng, soát
+trần bỏ sót khối lệnh nhiều dòng của workflow, AC-2 mới có đột biến cho 3/8 ô. Chủ kho trả
+lại, và nâng phạm vi cho hai mục ngoài hợp đồng: thước khớp thông điệp ghim bằng chuỗi có
+mặt trong đầu ra (bun in khung mã nguồn quanh dòng đỏ, nên thông điệp của khẳng định bên
+cạnh cũng lọt vào) — nay khớp đúng dòng `error: <thông điệp>` (AC-6); và soát cả tệp
+preload. Khoá hàng đợi đo có kẽ hở khi lượt trước bị giết — ghi Known limits.
 
 ## Phương án đã loại
 
