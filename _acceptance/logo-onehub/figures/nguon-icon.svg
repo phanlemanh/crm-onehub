@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1000 664" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="52" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NGUỒN</text>
+      <text x="320" y="52" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HAI NHÁNH</text>
+      <text x="620" y="52" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">BA ĐÍCH</text>
+
+      <path d="M 240 200 L 272 200 A 8 8 0 0 0 280 192 L 280 120 A 8 8 0 0 1 288 112 L 316 112" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 240 248 L 316 248" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 520 208 L 568 208 A 8 8 0 0 0 576 200 L 576 120 A 8 8 0 0 1 584 112 L 616 112" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <path d="M 520 232 L 616 232" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 520 256 L 568 256 A 8 8 0 0 1 576 264 L 576 332 A 8 8 0 0 0 584 340 L 616 340" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 700 440 L 700 396" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+      <path d="M 900 476 L 932 476 A 8 8 0 0 0 940 468 L 940 240 A 8 8 0 0 0 932 232 L 904 232" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+      <path d="M 620 476 L 428 476 A 8 8 0 0 1 420 468 L 420 284" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+
+      <path d="M 140 352 L 140 292" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+      <path d="M 140 424 L 140 460" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+
+      <rect x="40" y="176" width="200" height="112" rx="6" fill="#fafafa"/>
+      <rect x="40" y="176" width="200" height="112" rx="6" fill="#eff5f3" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="52" y="184" width="100" height="16" rx="2" fill="#006B4F"/>
+      <text x="102" y="196" fill="#fafafa" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGUỒN DUY NHẤT</text>
+      <text x="52" y="224" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Nguồn logo OneHub</text>
+      <text x="52" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">packages/ui/src/lib/</text>
+      <text x="52" y="256" fill="#171717" font-size="9" font-weight="500" font-family="'Geist Mono', monospace">logo-onehub.ts</text>
+      <text x="52" y="276" fill="#575757" font-size="10" font-family="'Geist', sans-serif">path mark · path chữ · màu</text>
+
+      <rect x="40" y="352" width="200" height="72" rx="6" fill="#fafafa"/>
+      <rect x="40" y="352" width="200" height="72" rx="6" fill="#ffffff" stroke="#1f4f7a" stroke-width="1"/>
+      <rect x="52" y="360" width="72" height="16" rx="2" fill="transparent" stroke="rgba(31,79,122,0.45)" stroke-width="0.8"/>
+      <text x="88" y="372" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG KIỂM</text>
+      <text x="228" y="372" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-1 · AC-4</text>
+      <text x="52" y="400" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">So nguồn với ảnh gốc</text>
+      <text x="52" y="416" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">logo-khop-goc.spec.ts</text>
+
+      <rect x="40" y="464" width="200" height="96" rx="6" fill="#fafafa"/>
+      <rect x="40" y="464" width="200" height="96" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <rect x="52" y="472" width="60" height="16" rx="2" fill="transparent" stroke="rgba(87,87,87,0.45)" stroke-width="0.8"/>
+      <text x="82" y="484" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ẢNH GỐC</text>
+      <text x="52" y="512" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">PNG gốc của chủ kho</text>
+      <text x="52" y="528" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">packages/ui/scripts/logo-goc/</text>
+      <text x="52" y="544" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">logo-mark · logo-horizontal</text>
+
+      <rect x="320" y="72" width="200" height="80" rx="6" fill="#fafafa"/>
+      <rect x="320" y="72" width="200" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="332" y="80" width="128" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="396" y="92" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHÁNH A · TRONG APP</text>
+      <text x="332" y="120" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Logo trên màn hình</text>
+      <text x="332" y="136" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">Logo · LogoLockup</text>
+
+      <rect x="320" y="184" width="200" height="96" rx="6" fill="#fafafa"/>
+      <rect x="320" y="184" width="200" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="332" y="192" width="116" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="390" y="204" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHÁNH B · BỘ ICON</text>
+      <text x="332" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Script sinh icon</text>
+      <text x="332" y="248" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">packages/ui/scripts/</text>
+      <text x="332" y="264" fill="#171717" font-size="9" font-weight="500" font-family="'Geist Mono', monospace">logo-icons.ts <tspan fill="#575757" font-weight="400">· sharp + ghép ICO</tspan></text>
+
+      <rect x="620" y="64" width="280" height="96" rx="6" fill="#fafafa"/>
+      <rect x="620" y="64" width="280" height="96" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="632" y="72" width="72" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="668" y="84" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGOÀI KHO</text>
+      <text x="888" y="84" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-8</text>
+      <text x="632" y="112" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thư mục chủ kho tự tải lên</text>
+      <text x="632" y="128" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Slack 1024 · Zalo 512 · Google 120</text>
+      <text x="632" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">git status của kho không đổi</text>
+
+      <rect x="620" y="196" width="280" height="72" rx="6" fill="#fafafa"/>
+      <rect x="620" y="196" width="280" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="632" y="204" width="72" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="668" y="216" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">TRONG KHO</text>
+      <text x="888" y="216" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-5</text>
+      <text x="632" y="240" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Favicon Next.js đọc trước</text>
+      <text x="632" y="256" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">apps/app/app/favicon.ico · 16 · 32 · 48</text>
+
+      <rect x="620" y="288" width="280" height="104" rx="6" fill="#fafafa"/>
+      <rect x="620" y="288" width="280" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="632" y="296" width="72" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="668" y="308" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">TRONG KHO</text>
+      <text x="888" y="308" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-5</text>
+      <text x="632" y="332" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Icon trình duyệt và cài app</text>
+      <text x="632" y="348" fill="#171717" font-size="9" font-weight="500" font-family="'Geist Mono', monospace">apps/app/public/</text>
+      <text x="632" y="364" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">favicon.ico · favicon.svg · favicon-96x96</text>
+      <text x="632" y="380" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">apple-touch-icon 180 · manifest 192 · 512</text>
+
+      <rect x="620" y="440" width="280" height="72" rx="6" fill="#fafafa"/>
+      <rect x="620" y="440" width="280" height="72" rx="6" fill="#ffffff" stroke="#1f4f7a" stroke-width="1"/>
+      <rect x="632" y="448" width="72" height="16" rx="2" fill="transparent" stroke="rgba(31,79,122,0.45)" stroke-width="0.8"/>
+      <text x="668" y="460" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG KIỂM</text>
+      <text x="888" y="460" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-6</text>
+      <text x="632" y="484" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Sinh lại trong bộ nhớ rồi so khít</text>
+      <text x="632" y="500" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">logo-icons.spec.ts</text>
+
+      <rect x="504" y="160" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="568" y="172" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">--external</text>
+
+      <rect x="464" y="452" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="520" y="464" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">GỌI LẠI HÀM SINH</text>
+
+      <rect x="708" y="408" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text x="712" y="420" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">SO KHÍT FILE</text>
+
+      <line x1="32" y1="596" x2="968" y2="596" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="616" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="32" y="632" width="16" height="12" rx="2" fill="#eff5f3" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="56" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nguồn duy nhất</text>
+      <line x1="176" y1="638" x2="204" y2="638" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="212" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Sinh ra từ nguồn</text>
+      <line x1="340" y1="638" x2="368" y2="638" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="376" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chỉ khi chạy với cờ --external</text>
+      <line x1="560" y1="638" x2="588" y2="638" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+      <text x="596" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Test đọc lại để so</text>
+      <rect x="740" y="632" width="16" height="12" rx="2" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="764" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nằm ngoài kho</text>
+    </svg>
