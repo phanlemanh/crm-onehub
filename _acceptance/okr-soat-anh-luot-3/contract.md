@@ -1,0 +1,67 @@
+---
+schema_version: 1
+feature: Soát ảnh OKR lượt 3 — hộp Nhập thấy đủ bảy cột và đánh dấu dòng hỏng ở 1440; hàng thẻ Cài đặt ở 390 tự đưa thẻ đang mở vào tầm nhìn; bộ chọn chu kỳ bỏ nhãn loại lặp; gợi ý tên chu kỳ theo năm hiện tại tính ở server
+slug: okr-soat-anh-luot-3
+owner: phanlemanh@gmail.com
+risk_tier: T2
+surfaces: [ui]
+status: draft
+approved_by:
+approved_at:
+veto_state: mo
+veto_opened_at: 2026-09-25T15:26:00Z
+design_doc: docs/superpowers/specs/2026-09-25-okr-soat-anh-luot-3-design.md
+---
+
+# Acceptance Contract: okr-soat-anh-luot-3
+
+## Context
+
+Chủ kho soát ảnh khu OKR (lượt 3, PR #140) ngày 2026-09-25 và thấy bốn chỗ vấp: bảng
+xem trước của hộp «Nhập từ bảng tính» bị cắt trong hộp 640px ở 1440 (cột «Đơn vị đo» còn
+«Đơ», cột email khuất) và dòng hỏng không được đánh dấu trong bảng; hàng thẻ ngang của khung
+Cài đặt ở 390 không đưa thẻ đang mở vào tầm nhìn («Chươ» ở mép phải); bộ chọn chu kỳ hiện
+«Quý 3/2026 Quý»; gợi ý tên của hộp «Mở chu kỳ» cứng là «Năm 2027» / «Quý 1/2027».
+
+Tiêu chí màn hình đo trên cây đang xét, cổng 3630/3631, tiếng Việt, bằng bàn đo
+`rang/do-man.mjs`: bàn đo tạo một người quản trị thử và ba chu kỳ thử (năm hiện tại, quý hiện
+tại, một quý khác tên «Lượt đo <mã>»), không cần cây tổ chức — quản trị nhập được cho đơn vị
+OneHub. «Hôm nay» là ngày theo giờ Việt Nam. «Vỏ bảng» là `[data-slot=table-container]` của
+bảng xem trước. Lô thử có năm dòng: ba hợp lệ (dòng 1 có tên mục tiêu và tên KR mỗi thứ ≥ 120
+ký tự), dòng 4 kiểu lạ, dòng 5 email không phải thành viên.
+
+## Criteria
+
+- AC-1: Given quản trị, chu kỳ quý đang chạy và lô năm dòng, When mở «Nhập từ bảng tính» ở đơn vị OneHub trong khổ 1440×900 và bấm «Xem trước», Then cả chín tiêu đề cột — Dòng · Mục tiêu · KR · Kiểu · Khởi điểm · Đích · Đơn vị đo · Địa chỉ email · Kết quả — nằm trọn trong vỏ bảng khi vỏ ở vị trí cuộn ngang 0, vỏ bảng không tràn ngang, không tiêu đề nào bị cắt chữ, ô email của dòng 5 hiện đủ địa chỉ trong vỏ không bị cắt chữ, và ô «Mục tiêu» của dòng có tên dài (≥ 120 ký tự) xuống dòng mà vỏ vẫn không tràn; And ở khổ 390×844 hộp nằm trọn trong màn, trang không tràn ngang, và bảng cuộn ngang bên trong vỏ của nó.
+- AC-2: Given cùng bước Xem trước của AC-1, When đọc bảng, Then đúng các hàng có số dòng nằm trong danh sách câu lỗi phía trên (dòng 4 và 5) mang dấu hỏng — vạch mép trái màu phá huỷ và chấm trạng thái tông lỗi có chữ «Hỏng» nằm trọn trong vỏ bảng; ba hàng hợp lệ không mang dấu nào trong hai dấu đó mà có chấm «Hợp lệ»; và danh sách câu lỗi phía trên vẫn còn đủ hai câu.
+- AC-3: Given quản trị ở khổ 390×844, When mở lần lượt từng mục Cài đặt mà quản trị thấy (mười một mục của `NHOM_CAI_DAT`), Then ở mỗi trang thẻ đang mở của hàng thẻ ngang nằm trọn trong khung hàng thẻ (lệch không quá 1px), trang không tràn ngang, và trang không bị cuộn dọc vì hàng thẻ (`scrollY` bằng 0); And khi đang ở «Chung» mà bấm thẻ «Chương trình OKR» trên chính hàng thẻ (chuyển trang phía trình duyệt, khung không dựng lại), thẻ đó cũng nằm trọn sau khi trang mới hiện.
+- AC-4: Given hàng thẻ ngang `NavStrip` của `packages/ui` với thẻ đang mở nằm ngoài khung, When nó vẽ lần đầu, Then khung cuộn ngang để thẻ đó nằm trọn; When người tự cuộn khung về đầu rồi hàng thẻ vẽ lại mà thẻ đang mở không đổi, Then khung giữ vị trí người đặt; When thẻ đang mở đổi sang thẻ khác đã nằm trọn trong khung, Then khung không cuộn; When thẻ đang mở đổi sang một thẻ nằm ngoài khung, Then khung cuộn để thẻ đó nằm trọn.
+- AC-5: Given ba chu kỳ thử của bàn đo, When mở khu OKR ở 1440×900 và mở bộ chọn chu kỳ, Then ô chọn đọc đúng «Quý <q>/<năm>» không có chữ «Quý» thứ hai, mục «Năm <năm>» trong danh sách không kèm chữ «Năm» thứ hai, và mục «Lượt đo <mã>» vẫn kèm nhãn «Quý»; And hàm quyết nhãn loại trả cùng kết quả cho tiếng Anh («Q4 2026» không chứa «Quarter» nên vẫn kèm nhãn).
+- AC-6: Given hôm nay theo giờ Việt Nam, When quản trị mở «Mở chu kỳ» ở Cài đặt › Chương trình OKR, Then ô Tên gợi ý «Năm <năm hiện tại>» khi loại là Năm và «Quý <quý kế tiếp>/<năm của quý đó>» khi loại là Quý; And hàm thuần tính gợi ý cho đúng: 2026-09-25 → Năm 2026, Quý 4/2026; 2026-10-26 → Năm 2026, Quý 1/2027; 2026-12-31 → Năm 2026, Quý 1/2027; 2027-01-01 → Năm 2027, Quý 2/2027; thời điểm 2026-12-31T17:30Z (00:30 ngày 01/01/2027 giờ Việt Nam) → Năm 2027; And ngày được tính ở trang server và truyền xuống — các tệp client của hộp không tự đọc đồng hồ, và `okr.ts` không còn năm viết cứng trong gợi ý.
+- AC-7: Given cây sau vòng này, When chạy lại thước màn thật đã ký của `dat-okr-trong-crm` (`man-okr.mjs`) trên cổng 3630/3631 và ba thước không cần trình duyệt của `khung-trang-cai-dat` (soi cấu trúc `cau-truc.mjs`, sân thiết kế `san-thiet-ke.mjs`, test DOM thanh bên), Then tất cả đạt trọn như lúc ký; And bộ test của kho xanh.
+- AC-8: Given tập tệp giao diện vòng này sửa, rút bằng máy từ `diff` so với `origin/onehub` (không liệt tay), When chạy cổng thiết kế tĩnh của kho trên từng tệp, Then không vi phạm nào; And cỡ hộp mới, biến thể hàng hỏng và `NavStrip` nằm trong `packages/ui`; And trong các tệp `apps/app` của tập đó, không phần tử JSX nào có tên nhập từ `@crm/ui` mang lớp đổi màu, góc, khoảng cách hay bóng.
+- AC-9: Given ảnh chụp thật của bàn đo trên giao diện cũ và giao diện mới, When người xem mở ảnh 1440 và 390 của bốn màn — bước Xem trước, trang Chương trình OKR, bộ chọn chu kỳ đang mở, sheet «Mở chu kỳ» — Then ở ảnh mới thấy chín cột trọn trong hộp và hai hàng hỏng có vạch đỏ, thẻ «Chương trình OKR» nằm trọn trong hàng thẻ ở 390, bộ chọn đọc «Quý <q>/<năm>» một lần, gợi ý tên là năm hiện tại và quý kế tiếp; ảnh cũ cho thấy đúng bốn chỗ vấp của lượt soát.
+- AC-10: Given bàn đo đã tạo người thử và chu kỳ thử, When lượt đo kết thúc — đạt, trượt, hay hỏng giữa chừng — Then không còn chu kỳ OKR nào, không còn người thử, và cấu hình chương trình không thêm phiên bản; And lượt đo bị giết bằng tín hiệu ngay sau khi gieo cũng dọn như vậy, hoặc — nếu không kịp — lượt kế nhận ra tàn dư của chính bàn đo (qua sổ gieo), dọn nó rồi đo tiếp; And kho đã có chu kỳ OKR không phải của bàn đo thì bàn đo thoát mã 2, không gieo, không xoá gì.
+
+## Coverage
+
+Bỏ quét morphological-scan — xem sổ quyết định, dòng «bỏ coverage-scan». Bốn chỗ sửa do chủ
+kho khai đích danh từ ảnh; mỗi chỗ một hoặc hai tiêu chí, cộng không hồi quy (AC-7), thiết kế
+tĩnh (AC-8), ảnh (AC-9), dọn (AC-10).
+
+## Out of scope
+
+- Nhãn số đếm của cây đơn vị ở màn «OKR theo đơn vị» — là câu hỏi cho chủ kho (sổ quyết định), vòng này không sửa.
+- Đánh dấu đúng ô gây lỗi trong hàng hỏng — API xem trước chỉ trả câu lỗi, không trả tên cột; cần đổi hợp đồng API.
+- Bảng xem trước ở 390 vẫn cuộn ngang trong vỏ của nó — lời hứa bảy cột là ở 1440.
+- Hộp nhập cây tổ chức (`settings/organization/hop-thoai-nhap.tsx`) giữ cỡ `wide`.
+- Thanh thẻ «Của tôi · Theo đơn vị · Toàn cảnh» của khu OKR — ba thẻ vừa khổ 390.
+- Bản mẫu `/proto/khung-trang-cai-dat` giữ hàng thẻ tự vẽ.
+- Thước màn thật đã ký của `khung-trang-cai-dat` (`man-chrome.mjs`) không chạy lại trong vòng này: nó ghi ảnh thẳng vào `_acceptance/khung-trang-cai-dat/evidence/` của hồ sơ đã ký, và không có biến môi trường nào đổi chỗ ghi. Phần nó đo mà vòng này chạm — hàng thẻ ở khổ hẹp không tràn ngang — do AC-3 đo lại trên cả mười một trang.
+
+## Notes
+
+- Không có `opportunity.md` — vòng sửa đi thẳng từ lượt soát ảnh, không có ngưỡng nghiệm thu, nên không có mục Đường đo.
+- Đường nền đỏ ở hai chỗ, cả hai của bộ kit chứ không của kho: bộ đo chạy lệnh qua `bash -lc` nên bản dựng rơi về Node 22 (`eve requires Node.js >=24`) — cùng lệnh `bunx turbo run build --force` với Node 24 xanh, 4/4 task; và «THIEU merge-base» là bộ đo đọc nhầm lệnh con của git thành công cụ. Đã mở chip sang `~/dev/acceptance-gate-kit`.
+- Ảnh cũ/mới ghi vào `.acceptance-runs/okr-soat-anh-luot-3/evidence/{truoc,sau}/`; thước đã ký của `dat-okr-trong-crm` ghi vào `.acceptance-runs/dat-okr-trong-crm/`, không chạm thư mục bằng chứng đã ký.
+- «Quản trị» trong hợp đồng này là vai chủ sở hữu hoặc quản trị của không gian làm việc, không phải trưởng đơn vị; «điểm», «trạng thái», «xoá», «người xem» dùng theo nghĩa thường (điểm trên màn, chấm trạng thái, xoá dữ liệu thử, người nhìn ảnh). Lint W6 của kit báo năm chữ này theo nghĩa khác trong `CONTEXT.md`.

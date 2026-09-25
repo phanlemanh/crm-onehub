@@ -159,6 +159,24 @@
         "cd apps/app && PORT=3300 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3300 bun run dev"
       ],
       "port": 3300
+    },
+    {
+      "name": "ban-do-osa-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3631 APP_URL=http://localhost:3630,http://127.0.0.1:3630 API_URL=http://localhost:3631 bun run dev"
+      ],
+      "port": 3631
+    },
+    {
+      "name": "ban-do-osa-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3630 NEXT_PUBLIC_API_URL=http://localhost:3631 API_URL=http://localhost:3631 APP_URL=http://localhost:3630 bun run dev"
+      ],
+      "port": 3630
     }
   ]
 }

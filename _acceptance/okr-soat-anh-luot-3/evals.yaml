@@ -1,0 +1,299 @@
+schema_version: 1
+slug: okr-soat-anh-luot-3
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.osa_do_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx"
+      - "packages/ui/src/components/dialog.tsx"
+      - "packages/ui/src/components/simple-table.tsx"
+      - "packages/ui/src/components/table.tsx"
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      Ban do tu chan cay (canhCay qua APP_URL), gieo nguoi quan tri thu + nam/quy hien tai + quy
+      "Lượt đo <ma>", mo /okr/theo-don-vi?donOkr=goc o 1440x900, bam «Nhập từ bảng tính», dan lo
+      5 dong, bam «Xem trước». MA TRAN VIET TRUOC (mang MA_TRAN trong do-man.mjs, moi dong mot ma):
+      9 ma "nhap-1440-cot-<i>" (moi tieu de cot mot dong: "DUNG nhap-1440-cot-<i>: «<chu>» trai
+      <l> >= <vl>, phai <r> <= <vr>, chu khong cat" — l/r la rect cua <th>, vl/vr la rect cua vo
+      bang khi scrollLeft = 0, lech cho phep 1px; chu khong cat = scrollWidth <= clientWidth cua
+      <th>), 1 ma "nhap-1440-vo-khong-tran" (scrollWidth <= clientWidth + 1 cua vo bang), 1 ma
+      "nhap-1440-email-dong-5" (o email cua hang dong 5 nam tron trong vo, textContent bang dia
+      chi da dan, scrollWidth <= clientWidth va text-overflow khac ellipsis), 1 ma
+      "nhap-1440-cot-dai-xuong-dong" (dong 1 cua lo co ten muc tieu va ten KR moi thu >= 120 ky
+      tu, khai trong LO cua do-man.mjs: chieu cao o Muc tieu > 1,5 lan line-height va vo van
+      khong tran). O 390x844 cung lo: "nhap-390-hop-trong-man" (rect cua [data-slot=
+      dialog-content] trong viewport, documentElement.scrollWidth <= innerWidth) va
+      "nhap-390-vo-cuon" (vo bang scrollWidth > clientWidth — bang cuon trong vo; doi chung
+      duong cho ca 1440: o 1440 thi scrollWidth <= clientWidth + 1). Chuoi 9 tieu de doc tu
+      okrMessages("vi").nhap.cot, khong viet tay.
+      CHIEU DO (giao dien chua sua, chay o S3 truoc khi sua): "SAI nhap-1440-cot-7..9" (Đơn vị
+      đo / Địa chỉ email / Kết quả vuot mep phai vo), "SAI nhap-1440-vo-khong-tran", "SAI
+      nhap-1440-cot-dai-xuong-dong" (o nowrap cao mot dong), ma 1.
+      Dong KET LUAN cuoi "<n> DUNG, <m> SAI — ma thoat <c>"; ma trong MA_TRAN khong phat dong
+      nao -> "SAI thieu <ma>", ma 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.osa_do_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx"
+      - "packages/ui/src/components/simple-table.tsx"
+      - "packages/ui/src/components/status-indicator.tsx"
+      - "packages/ui/src/lib/row-accent.ts"
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      Cung buoc Xem truoc cua E1. So dong hong doc tu danh sach cau loi [data-dong-hong] (so sau
+      chu «Dòng»), khong viet tay; phai la {4,5} (dong "DUNG nhap-hong-danh-sach: [4,5]" — doi
+      chung: lo co dung hai dong hong). Moi hang tbody mot dong "DUNG nhap-hong-hang-<n>":
+      hang co n trong danh sach thi co [data-slot=status-indicator][data-tone=error] voi chu
+      «Hỏng» nam tron trong vo bang, va ::before cua o dau co background-color bang mau
+      --destructive (doc getComputedStyle, so voi mau cua mot phan tu mau .bg-destructive), do
+      rong >= 2px va opacity 1 khi chuot KHONG nam tren hang (chuot dua ra goc 0,0 truoc khi doc); hang con lai co status-indicator data-tone=success chu «Hợp lệ», khong co
+      tone=error, va ::before cua o dau khong mang mau --destructive. 5 hang = 5 ma. Them
+      "nhap-hong-danh-sach-con" — danh sach cau loi phia tren van con 2 cau.
+      CHIEU DO (giao dien chua sua): "SAI nhap-hong-hang-4/5" (khong co status-indicator, khong
+      vach), ma 1.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.osa_do_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "packages/ui/src/components/nav-item.tsx"
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      O 390x844, voi moi muc cua NHOM_CAI_DAT (doc tu apps/app/lib/cai-dat-dieu-huong.ts qua
+      import, khong viet tay; 11 muc) mo trang cua muc do bang goto moi (khong bam tu trang
+      truoc), cho hydrate, mot dong "DUNG caidat-390-<khoa>: the «<nhan>» trai <l> >= <nl>,
+      phai <r> <= <nr>, scrollY 0, khong tran" — l/r la rect cua [aria-current=page] trong
+      nav ngang (nav khong nam trong aside, dang hien), nl/nr la rect cua chinh nav, lech 1px;
+      nhan doc tu settingsMessages("vi").thanhBen. Doi chung duong: muc dau «Chung» (vua khung
+      tu dau) phai DUNG ca tren giao dien cu. Them ma "caidat-390-bam-the": goto «Chung», bam
+      the «Chương trình OKR» tren chinh hang the (khong goto), cho URL doi va scrollLeft cua
+      nav dung yen hai khung hinh, roi do rect nhu tren — khung khong dung lai. Tong 12 ma.
+      CHIEU DO (giao dien chua sua): "SAI caidat-390-chuongTrinhOkr: ... phai <r> <= <nr>" va
+      cac muc sau no (dieuPhoi, ketNoi, theoDoi, sso, khoaApi), ma 1.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.osa_nav_strip
+    paths:
+      - "packages/ui/src/components/nav-item.tsx"
+      - "packages/ui/test/nav-strip.dom.tsx"
+    expected: |
+      packages/ui/test/nav-strip.dom.tsx, happy-dom, getBoundingClientRect gia lap theo
+      offsetLeft/scrollLeft: ba ca (1) the dang mo o x 600-700 trong khung 0-390 -> sau lan ve
+      dau scrollLeft > 0 va the nam tron; (2) dat scrollLeft = 0 roi rerender cung the dang mo
+      -> scrollLeft van 0; (3) doi aria-current sang the o x 10-80 (da nam tron) -> scrollLeft
+      khong doi; (4) doi aria-current sang the o x 450-560 (ngoai khung) roi rerender ->
+      scrollLeft doi va the nam tron. Ca doi chung: khung khong co the nao aria-current -> khong
+      nem, scrollLeft 0. Pha-thu S3: bo dieu kien "cung the" -> ca (2) do voi thong diep ghim
+      "nguoi tu cuon bi keo ve"; bo nhanh cuon -> ca (1) do "the dang mo van ngoai khung"; chi
+      canh luc dung (effect deps rong) -> ca (4) do "doi the ngoai khung khong canh".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.osa_do_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/chon-chu-ky.tsx"
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      O 1440x900, /okr/theo-don-vi?ky=<quy hien tai>: "DUNG chuky-o-chon: «Quý <q>/<nam>»" —
+      textContent cua [data-chon-chu-ky] bang dung ten chu ky quy. Mo menu: "DUNG
+      chuky-muc-nam: «Năm <nam>»" (option cua nam khong co chu «Năm» lan hai: dem so lan
+      /năm/i = 1), "DUNG chuky-muc-luot-do: «Lượt đo <ma> Quý»" (option chua ca ten va nhan
+      loai «Quý» — doi chung duong: nhan loai con khi ten khong noi).
+      CHIEU DO (giao dien chua sua): "SAI chuky-o-chon: «Quý <q>/<nam>Quý»", "SAI
+      chuky-muc-nam", ma 1; chuky-muc-luot-do DUNG ca tren giao dien cu.
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.osa_nhan_goi_y
+    paths:
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-chu-ky-nhan.spec.ts"
+    expected: |
+      apps/app/test/okr-chu-ky-nhan.spec.ts -t nhan-loai: ma tran 8 ca viet truoc
+      (ten x loai x tieng): vi «Quý 3/2026»/quy -> khong nhan; «quý 3» chu thuong -> khong nhan;
+      «Năm 2026»/nam -> khong nhan; «Lượt đo»/quy -> «Quý»; «Năm 2026»/quy -> «Quý» (ten noi loai
+      khac); en «Q4 2026»/quy -> «Quarter»; en «Quarter 4»/quy -> khong nhan; en «2026»/nam ->
+      «Year». So assert = 8.
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.osa_nhan_goi_y
+    paths:
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-chu-ky-nhan.spec.ts"
+    expected: |
+      apps/app/test/okr-chu-ky-nhan.spec.ts -t goi-y: ma tran viet truoc 6 ca cua goiYChuKy
+      (2026-09-25 -> {nam 2026, quy 4/2026}; 2026-10-26 -> 2026, 1/2027; 2026-12-31 -> 2026,
+      1/2027; 2027-01-01 -> 2027, 2/2027; 2026-03-31 -> 2026, 2/2026; 2026-04-01 -> 2026,
+      3/2026) + 2 ca cua homNayVn (2026-12-31T17:30:00Z -> "2027-01-01"; 2026-12-31T16:59:00Z ->
+      "2026-12-31") + 4 ca chuoi (vi «Năm 2026», «Quý 4/2026»; en «2026», «Q4 2026»). So assert
+      = 12.
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.osa_do_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      O 1440x900 quan tri mo /settings/okr?moChuKy=true: "DUNG goiy-nam: placeholder «Năm
+      <N>»" voi N tinh DOC LAP trong ban do bang Intl.DateTimeFormat timeZone Asia/Ho_Chi_Minh
+      (khong import ham cua app); chon loai «Quý»: "DUNG goiy-quy: placeholder «Quý <q>/<y>»"
+      voi q/y la quy ke tiep tinh doc lap trong ban do.
+      CHIEU DO (giao dien chua sua): "SAI goiy-nam: placeholder «Năm 2027»", "SAI goiy-quy:
+      placeholder «Quý 1/2027»" (hom nay 2026-09-25), ma 1.
+
+  - id: E9
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.osa_soi_ma
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs"
+    expected: |
+      soi-ma.mjs --ca dong-ho: "DUNG dong-ho-<tep>" cho bang-chu-ky.tsx va sheet-mo-chu-ky.tsx
+      (tep "use client"): AST khong co `new Date`, `Date.now`, `Temporal.`; "DUNG
+      dong-ho-page": page.tsx (khong "use client") goi homNayVn va goiYChuKy; "DUNG
+      goi-y-khong-cung": trong okr.ts khong con literal so nam 4 chu so nam trong khoa tenGoiY.
+      Doi chung am (pha tren ban sao o tmpdir, --ca pha): them `new Date()` vao ban sao
+      sheet-mo-chu-ky.tsx -> "SAI dong-ho-sheet-mo-chu-ky" ma 1.
+
+  - id: E10
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.osa_dok_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/ui/src/components/dialog.tsx"
+      - "packages/ui/src/components/simple-table.tsx"
+    expected: |
+      Thuoc da ky _acceptance/dat-okr-trong-crm/rang/man-okr.mjs chay tren cong 3630/3631 qua
+      mot-luot.sh (khoa xep hang voi do-man): "man-okr: <k> khang dinh, 0 hong", ma 0; anh vao
+      .acceptance-runs/dat-okr-trong-crm/evidence, khong cham _acceptance/dat-okr-trong-crm.
+
+  - id: E11
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.osa_ktcd_khong_trinh_duyet
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "packages/ui/src/components/nav-item.tsx"
+    expected: |
+      Ba thuoc da ky cua khung-trang-cai-dat chay noi tiep: cau-truc.mjs ma 0, san-thiet-ke.mjs
+      ma 0, test DOM khung-trang-cai-dat-thanh-ben.dom.tsx 0 fail; lenh ma 0.
+
+  - id: E12
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.osa_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx"
+      - "apps/app/app/(app)/[slug]/okr/chon-chu-ky.tsx"
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "packages/ui/src/components/dialog.tsx"
+      - "packages/ui/src/components/simple-table.tsx"
+      - "packages/ui/src/components/nav-item.tsx"
+      - "_acceptance/okr-soat-anh-luot-3/rang/san-thiet-ke.mjs"
+    expected: |
+      san-thiet-ke.mjs rut tap tep bang `git diff --name-only $(git merge-base HEAD
+      origin/onehub)` loc *.tsx duoi apps/app (tru test/, app/proto/) va
+      packages/ui/src/components, in "tap tep: <n>" va moi tep mot dong "DUNG <tep>: design-gate
+      ma 0"; <n> = so tep khop trong diff (dong doi chung). Tap rong -> ma 2 "KHONG DO DUOC".
+      Doi chung am (--pha, ban sao tmpdir): chen className="bg-red-500" vao mot TableCell cua
+      hop-thoai-nhap.tsx -> "SAI ... design-gate ma <k>" ma 1.
+
+  - id: E13
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.osa_soi_ma
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx"
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "packages/ui/src/components/dialog.tsx"
+      - "packages/ui/src/components/simple-table.tsx"
+      - "packages/ui/src/components/nav-item.tsx"
+      - "_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs"
+    expected: |
+      soi-ma.mjs --ca thanh-phan: "DUNG dialog-co-table" (dialog.tsx nhan size "table"),
+      "DUNG hang-invalid" (SimpleTableRow nhan prop invalid), "DUNG nav-strip-xuat" (nav-item.tsx
+      xuat NavStrip), "DUNG hop-nhap-dung-table" (hop-thoai-nhap.tsx: DialogContent size="table",
+      SimpleTableRow invalid=..., StatusIndicator), "DUNG khung-dung-nav-strip"
+      (settings-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
+      "lop-o-cho-goi": tap tep rut tu diff nhu E12 (chi *.tsx duoi apps/app), moi tep lay tap ten
+      nhap tu "@crm/ui/..."; MOI phan tu JSX mang mot trong cac ten do la mot dong "DUNG
+      lop-<tep>:<dong> <Ten>" (khong className, hoac className chi gom lop khong doi mau/goc/
+      khoang cach/bong) hoac "SAI ..." goi ten lop vi pham; luat lop: text-<mau>, bg-*, border-
+      <mau>, ring-*, rounded*, shadow*, p/px/py/pt/pb/pl/pr/m/mx/my/mt/mb/ml/mr/gap/space-*.
+      In "so tep <a> = so tep diff <b>". Doi chung am (--ca pha, ban sao tmpdir): them
+      className="text-destructive" vao mot TableCell -> "SAI lop-..." ma 1.
+
+  - id: E14
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.osa_do_man
+    steps:
+      - "Cap cong 3630/3631 (ban-do-osa-app / ban-do-osa-api trong .claude/launch.json). Cong da co may chu: chay `APP_URL=http://localhost:3630 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang hai muc do trong launch.json"
+      - "Chay O TIEN CANH, Bash timeout 600000: lenh cua osa_do_man (NHAN mac dinh = sau). Anh vao .acceptance-runs/okr-soat-anh-luot-3/evidence/sau/"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh trong evidence/sau va anh cung ten trong evidence/truoc (chup o S3 tren giao dien cu), doi chieu bang mat voi Expected"
+    inputs:
+      - .acceptance-runs/okr-soat-anh-luot-3/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx"
+      - "apps/app/app/(app)/[slug]/okr/chon-chu-ky.tsx"
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      Tam anh moi thu muc truoc/ sau/: nhap-1440.png, nhap-390.png, caidat-okr-1440.png,
+      caidat-okr-390.png, chon-chu-ky-1440.png, chon-chu-ky-390.png, mo-chu-ky-1440.png,
+      mo-chu-ky-390.png. sau/nhap-1440: hop rong, du chin tieu de cot doc tron, hai hang dong 4 va
+      5 co vach do mep trai va cham do «Hỏng». sau/caidat-okr-390: the «Chương trình OKR» tron
+      trong hang the, dang chon. sau/nhap-390: hop tron trong man, bang cuon trong vo. sau/chon-chu-ky-*: o chon doc «Quý <q>/<nam>» mot lan. sau/
+      mo-chu-ky-*: o Ten goi y «Năm <nam hien tai>». truoc/: nhap-1440 cot bi cat o mep phai,
+      caidat-okr-390 the bi cat «Chươ…», chon-chu-ky «… Quý» lap, mo-chu-ky «Năm 2027». Thieu
+      anh nao -> khong dat.
+
+  - id: E15
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.osa_do_man
+    paths:
+      - "_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs"
+    expected: |
+      Sau khoi finally cua do-man.mjs: "DUNG don-chu-ky: 0 chu ky OKR", "DUNG don-nguoi: 0 nguoi
+      <tien to>", "DUNG don-cau-hinh: phien ban cau hinh <= <truoc>". Tien de: kho co chu ky tu
+      truoc -> "KHONG DO DUOC: tien de thieu — kho da co <n> chu ky OKR", ma 2, khong gieo.
+      Truoc khi gieo ban do ghi so gieo .acceptance-runs/okr-soat-anh-luot-3/so-gieo.json (id
+      chu ky, email nguoi thu); dau luot, so gieo con -> "GHI CHU don tan du <n> chu ky" roi don
+      theo so va do tiep; chu ky khong co trong so -> ma 2 nhu tren. SIGTERM/SIGINT -> chay don
+      roi thoat 143/130.
+      Pha-thu S3: OSA_PHA_SAU_GIEO=1 (nem loi ngay sau gieo) -> ma 2 va ba dong don van DUNG;
+      kill -9 ngay sau gieo -> luot ke in "don tan du" va dat; kill -TERM -> ma 143, doc DB sau
+      do: 0 chu ky.
