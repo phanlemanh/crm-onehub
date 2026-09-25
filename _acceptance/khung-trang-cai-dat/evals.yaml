@@ -281,9 +281,9 @@ evals:
       thay doi du lieu da khai: danh sach mien dau KHONG_DAU cua apps/app/test/messages-guard.spec.ts
       them dung 3 khoa thanhBen.chung, tieuDeTab.chung, chung.tieuDe (nhan "Chung" khong dau). Doc E17 cua
       nhac-qua-zalo: dong "thanh ben Cai dat co muc Thông báo của bạn" da doi sang menu nguoi dung,
-      buoc mo dung /reminders. Tap eval ui-check cua 11 ho so co paths hoac steps cham tep vong nay
-      doi (diff merge-base..HEAD) phai BANG dung tap khai {nhac-qua-zalo E17, noi-zalo-cho-nguoi-moi
-      E19}; lech -> do, goi ten eval. So ho so doc duoc phai bang 11 (lech -> ma 2).
+      buoc mo dung /reminders. Tap eval ui-check/judgment cua 11 ho so co paths khop mot tep trong
+      diff merge-base..HEAD phai BANG dung tap khai trong tep thuoc (10 eval, 6 ho so); lech -> do, goi
+      ten eval thua hoac thieu. So ho so doc duoc phai bang 11 (lech -> ma 2).
       CHIEU DO: ban sao sua mot bai kiem da ky khac ngoai AC-11 -> do "<ho so>: bai <ten> doi ngoai
       pham vi da khai".
 
