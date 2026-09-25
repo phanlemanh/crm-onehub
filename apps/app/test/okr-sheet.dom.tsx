@@ -93,6 +93,9 @@ function mucTieu(
 		keyResults: [kr("kr-1", coKhoa)],
 		alignments: [],
 		canEdit: true,
+		following: false,
+		followerCount: 0,
+		theoDoi: false,
 		trail: [],
 		canEditKr: ["kr-1"],
 	};

@@ -68,6 +68,9 @@ function mt(
 			keyResultTitle: null,
 		})),
 		canEdit: false,
+		following: false,
+		followerCount: 0,
+		theoDoi: false,
 	};
 }
 

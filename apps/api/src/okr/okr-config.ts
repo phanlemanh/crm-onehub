@@ -74,6 +74,14 @@ export const OKR = {
 					"KR kiểu «phần trăm» chỉ nhận giá trị trong 0–100.",
 			} satisfies Record<LoiGiaTri, string>,
 		},
+		traoDoi: {
+			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
+			nguoiKhongCon: "Người không còn trong CRM",
+		},
+		chuyen: {
+			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
+			choChinhMinh: "Người nhận phải khác người đang phụ trách.",
+		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
 		soTheoKieu: {

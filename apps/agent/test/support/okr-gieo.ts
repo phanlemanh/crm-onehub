@@ -1,6 +1,7 @@
 import { db } from "@crm/db";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
+import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
 import { donDep, ma, TIEN_TO } from "./nhac-gieo";
 
 export const GIO_MS = 60 * 60 * 1000;
@@ -85,6 +86,10 @@ export async function guiCapNhat(
 		where: { id: keyResultId },
 		select: { ownerUserId: true },
 	});
+	const truoc = await db.okrKeyResult.findUniqueOrThrow({
+		where: { id: keyResultId },
+		select: { currentValue: true, objectiveId: true },
+	});
 	const phien = await db.okrCheckInSession.create({
 		data: {
 			userId: nguoi,
@@ -108,28 +113,65 @@ export async function guiCapNhat(
 			createdAt: luc,
 		},
 	});
+	await db.okrKeyResult.update({
+		where: { id: keyResultId },
+		data: { currentValue: 10 },
+	});
+	await vet({
+		action: "cap-nhat-tuan",
+		nguoiLam: nguoi,
+		objectiveId: truoc.objectiveId,
+		keyResultId,
+		truoc: { currentValue: Number(truoc.currentValue) },
+		sau: {
+			currentValue: 10,
+			confidence: "vua",
+			onBehalf: nguoi !== kr.ownerUserId,
+		},
+		luc,
+	});
 }
 
 export async function binhLuan(b: {
 	objectiveId: string;
 	tacGia: string;
 	nhacTen?: string[];
+	keyResultId?: string;
 	luc: Date;
 }): Promise<string> {
+	const nhac = [...new Set(b.nhacTen ?? [])];
 	const c = await db.okrComment.create({
 		data: {
 			objectiveId: b.objectiveId,
+			keyResultId: b.keyResultId ?? null,
 			body: "trao doi",
 			authorUserId: b.tacGia,
 			createdAt: b.luc,
-			mentions: { create: (b.nhacTen ?? []).map((userId) => ({ userId })) },
+			mentions: { create: nhac.map((userId) => ({ userId })) },
 		},
+	});
+	await vet({
+		action: "binh-luan",
+		nguoiLam: b.tacGia,
+		objectiveId: b.objectiveId,
+		keyResultId: b.keyResultId,
+		sau: {
+			commentId: c.id,
+			keyResultId: b.keyResultId ?? null,
+			mentions: nhac,
+		},
+		luc: b.luc,
 	});
 	return c.id;
 }
 
-export async function theoDoi(objectiveId: string, userId: string) {
-	await db.okrFollow.create({ data: { objectiveId, userId } });
+export async function theoDoi(
+	objectiveId: string,
+	userId: string,
+	luc = new Date(),
+) {
+	await db.okrFollow.create({ data: { objectiveId, userId, createdAt: luc } });
+	await vet({ action: "theo-doi", nguoiLam: userId, objectiveId, luc });
 }
 
 export async function vet(v: {
@@ -137,7 +179,8 @@ export async function vet(v: {
 	nguoiLam: string;
 	objectiveId: string;
 	keyResultId?: string;
-	sau?: { ownerUserId: string };
+	truoc?: OkrVetSnapshot;
+	sau?: OkrVetSnapshot;
 	luc: Date;
 }): Promise<void> {
 	await db.okrTrail.create({
@@ -147,6 +190,7 @@ export async function vet(v: {
 			action: v.action,
 			objectiveId: v.objectiveId,
 			keyResultId: v.keyResultId ?? null,
+			before: v.truoc,
 			after: v.sau,
 		},
 	});

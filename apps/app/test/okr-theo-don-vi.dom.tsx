@@ -124,6 +124,9 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 		keyResults: Array.from({ length: soKr }, (_, i) => kr(`${id}-${i}`, id)),
 		alignments: [],
 		canEdit: false,
+		following: false,
+		followerCount: 0,
+		theoDoi: false,
 	};
 }
 

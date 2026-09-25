@@ -407,7 +407,7 @@ export class OkrService {
 		});
 	}
 
-	private async assertThanhVien(tx: Tx, ids: string[]) {
+	async assertThanhVien(tx: Tx | Db, ids: string[]) {
 		const can = [...new Set(ids)];
 		const co = await tx.member.findMany({
 			where: { organizationId: WORKSPACE_ID, userId: { in: can } },
@@ -1009,7 +1009,11 @@ export class OkrService {
 		const ct = await this.program(tx);
 		const rows = await tx.okrObjective.findMany({
 			where,
-			include: chonMucTieu,
+			include: {
+				...chonMucTieu,
+				followers: { where: { userId: viewerId }, select: { userId: true } },
+				_count: { select: { followers: true } },
+			},
 			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 		});
 		return rows.map((r) => {
@@ -1040,6 +1044,7 @@ export class OkrService {
 					hienTaiQuaCapNhat,
 				};
 			});
+			const following = r.followers.length > 0;
 			const nghi =
 				r.cycle.breakStartsOn && r.cycle.breakEndsOn
 					? { tu: r.cycle.breakStartsOn, den: r.cycle.breakEndsOn }
@@ -1081,6 +1086,9 @@ export class OkrService {
 					departmentId: r.departmentId,
 					personUserId: r.personUserId,
 				}),
+				following,
+				followerCount: r._count.followers,
+				theoDoi: following,
 			};
 		});
 	}
@@ -1290,6 +1298,7 @@ export class OkrService {
 					{ personUserId: userId },
 					{ participants: { some: { userId } } },
 					{ keyResults: { some: { ownerUserId: userId } } },
+					{ followers: { some: { userId } } },
 				],
 			},
 			userId,

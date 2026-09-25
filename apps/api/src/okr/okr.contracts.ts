@@ -105,6 +105,9 @@ export const mucTieuOutput = z.object({
 	keyResults: z.array(krOutput),
 	alignments: z.array(noiGopOutput),
 	canEdit: z.boolean(),
+	following: z.boolean(),
+	followerCount: z.number(),
+	theoDoi: z.boolean(),
 });
 export const vetOutput = z.object({
 	id: z.string(),
@@ -253,6 +256,69 @@ export const guiCapNhatOutput = z.object({
 	seconds: z.number(),
 });
 
+export const commentsOutput = z.object({
+	comments: z.array(
+		z.object({
+			id: z.string(),
+			author: nguoiOkr,
+			keyResultId: z.string().nullable(),
+			keyResultTitle: z.string().nullable(),
+			body: z.string(),
+			createdAt: z.string(),
+			mentions: z.array(nguoiOkr),
+		}),
+	),
+});
+export const addCommentOutput = z.object({ id: z.string() });
+export const followOutput = z.object({
+	following: z.boolean(),
+	followerCount: z.number(),
+});
+export const viecOkrOutput = z.discriminatedUnion("loai", [
+	z.object({
+		loai: z.literal("okr-cap-nhat"),
+		krIds: z.array(z.string()),
+		nhan: z.string(),
+		soKr: z.number(),
+	}),
+	z.object({
+		loai: z.literal("okr-kr-im"),
+		keyResultId: z.string(),
+		objectiveId: z.string(),
+		nhan: z.string(),
+		soNgay: z.number(),
+		chuTen: z.string().nullable(),
+	}),
+	z.object({
+		loai: z.literal("okr-duoc-giao"),
+		objectiveId: z.string(),
+		keyResultId: z.string().optional(),
+		nhan: z.string(),
+	}),
+	z.object({
+		loai: z.literal("okr-nhac-ten"),
+		commentId: z.string(),
+		objectiveId: z.string(),
+		nhan: z.string(),
+		nguoiTen: z.string(),
+	}),
+	z.object({
+		loai: z.literal("okr-theo-doi"),
+		objectiveId: z.string(),
+		nhan: z.string(),
+		capNhat: z.number(),
+		binhLuan: z.number(),
+	}),
+]);
+export const viecCuaToiOutput = z.object({
+	viec: z.array(viecOkrOutput),
+	lienQuanOkr: z.boolean(),
+});
+export const transferOkrOutput = z.object({
+	kr: z.number(),
+	mucTieu: z.number(),
+});
+
 export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
 export type AlignmentTreeOutput = z.infer<typeof alignmentTreeOutput>;
@@ -264,4 +330,9 @@ export type ObjectiveOutput = z.infer<typeof objectiveOutput>;
 export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
+export type CommentsOutput = z.infer<typeof commentsOutput>;
+export type FollowOutput = z.infer<typeof followOutput>;
+export type ViecOkrOutput = z.infer<typeof viecOkrOutput>;
+export type ViecCuaToiOutput = z.infer<typeof viecCuaToiOutput>;
+export type TransferOkrOutput = z.infer<typeof transferOkrOutput>;
 export type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";

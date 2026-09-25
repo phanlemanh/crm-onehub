@@ -759,3 +759,162 @@ describe("chua-noi-kenh", () => {
 		});
 	});
 });
+
+describe("su-kien", () => {
+	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+	const LOAI_SU_KIEN = ["okr-duoc-giao", "okr-nhac-ten", "okr-theo-doi"];
+
+	test("su-kien: ma tran 8 nguoi x [loai, ma dich, so dem]; tu lam, ngoai 24 gio, nguoi da roi khong sinh viec", async () => {
+		const X = await gieoNguoi("Xuan");
+		const G = await gieoNguoi("Giang");
+		const G2 = await gieoNguoi("Giao");
+		const G3 = await gieoNguoi("Gia");
+		const H = await gieoNguoi("Hoa");
+		const F = await gieoNguoi("Phi");
+		const N = await gieoNguoi("Nam");
+		const D = await gieoNguoi("Duc", false);
+		const chay = await gieoChuKy("dang-chay", 1);
+		const t2 = new Date(goc.getTime() - 2 * GIO_MS);
+		const t25 = new Date(goc.getTime() - 25 * GIO_MS);
+		const oX = await gieoMucTieu({
+			cycleId: chay,
+			chu: X.id,
+			congBo: ngayCach(goc, -2),
+		});
+		let viTri = 0;
+		const krMoi = async (chu: string, nguoiTao: string, luc: Date) => {
+			viTri += 1;
+			const tieuDe = `KR ${viTri}`;
+			const id = await gieoKr({
+				objectiveId: oX,
+				chu,
+				tieuDe,
+				khoa: ngayCach(goc, -2),
+				viTri,
+			});
+			await vet({
+				action: "tao-kr",
+				nguoiLam: nguoiTao,
+				objectiveId: oX,
+				keyResultId: id,
+				sau: {
+					title: tieuDe,
+					kind: "tang-toi",
+					startValue: 0,
+					targetValue: 100,
+				},
+				luc,
+			});
+			return id;
+		};
+		const kG = await krMoi(G.id, X.id, t2);
+		await krMoi(G.id, G.id, t2);
+		const kG2 = await krMoi(X.id, X.id, t25);
+		await db.okrKeyResult.update({
+			where: { id: kG2 },
+			data: { ownerUserId: G2.id },
+		});
+		await vet({
+			action: "sua-kr",
+			nguoiLam: X.id,
+			objectiveId: oX,
+			keyResultId: kG2,
+			truoc: { ownerUserId: X.id },
+			sau: { ownerUserId: G2.id },
+			luc: t2,
+		});
+		const oG3 = await gieoMucTieu({
+			cycleId: chay,
+			chu: G3.id,
+			cap: "phong-ban",
+			departmentId: await gieoPhongBan(null),
+			congBo: ngayCach(goc, -2),
+		});
+		await vet({
+			action: "chuyen-viec",
+			nguoiLam: X.id,
+			objectiveId: oG3,
+			truoc: { ownerUserId: X.id },
+			sau: { ownerUserId: G3.id },
+			luc: t2,
+		});
+		await krMoi(D.id, X.id, t2);
+		await krMoi(N.id, X.id, t25);
+		const kX = await krMoi(X.id, X.id, t25);
+		await theoDoi(oX, F.id, ngayCach(goc, -3));
+		const oN = await gieoMucTieu({
+			cycleId: chay,
+			chu: X.id,
+			congBo: ngayCach(goc, -2),
+		});
+		const kN = await gieoKr({
+			objectiveId: oN,
+			chu: X.id,
+			khoa: ngayCach(goc, -2),
+		});
+		await theoDoi(oN, N.id, ngayCach(goc, -3));
+		await guiCapNhat(kN, X.id, t25);
+		await binhLuan({ objectiveId: oN, tacGia: X.id, luc: t25 });
+		await guiCapNhat(kX, X.id, t2);
+		await guiCapNhat(kG, G.id, t2);
+		await guiCapNhat(kX, X.id, t25);
+		const c1 = await binhLuan({
+			objectiveId: oX,
+			tacGia: X.id,
+			nhacTen: [H.id, X.id, D.id],
+			keyResultId: kG,
+			luc: t2,
+		});
+		await binhLuan({ objectiveId: oX, tacGia: F.id, luc: t2 });
+		await binhLuan({
+			objectiveId: oX,
+			tacGia: X.id,
+			nhacTen: [N.id],
+			luc: t25,
+		});
+		const kq = await tinh(goc);
+		const ten = new Map<string, string>([
+			[kG, "kG"],
+			[kG2, "kG2"],
+			[oG3, "oG3"],
+			[oX, "oX"],
+			[oN, "oN"],
+			[c1, "c1"],
+		]);
+		const nhan = (id: string | undefined) => (id ? (ten.get(id) ?? id) : "-");
+		const tomTat = (userId: string) =>
+			cua(kq, userId)
+				.filter((v) => LOAI_SU_KIEN.includes(v.loai))
+				.map((v) => {
+					switch (v.loai) {
+						case "okr-duoc-giao":
+							return `${v.loai} ${nhan(v.keyResultId ?? v.objectiveId)}`;
+						case "okr-nhac-ten":
+							return `${v.loai} ${nhan(v.commentId)}`;
+						case "okr-theo-doi":
+							return `${v.loai} ${nhan(v.objectiveId)} ${v.capNhat}/${v.binhLuan}`;
+						default:
+							return v.loai;
+					}
+				});
+		expect({
+			G: tomTat(G.id),
+			G2: tomTat(G2.id),
+			G3: tomTat(G3.id),
+			H: tomTat(H.id),
+			X: tomTat(X.id),
+			F: tomTat(F.id),
+			N: tomTat(N.id),
+			D: kq.has(D.id) ? "co trong Map" : "khong trong Map",
+		}).toEqual({
+			G: ["okr-duoc-giao kG"],
+			G2: ["okr-duoc-giao kG2"],
+			G3: ["okr-duoc-giao oG3"],
+			H: ["okr-nhac-ten c1"],
+			X: [],
+			F: ["okr-theo-doi oX 2/1"],
+			N: [],
+			D: "khong trong Map",
+		});
+	});
+});
