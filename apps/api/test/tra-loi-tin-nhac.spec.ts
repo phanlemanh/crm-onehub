@@ -57,9 +57,10 @@ describe("loi-chung-api", () => {
 		expect(vet.length - truoc, "dung mot dau vet moi").toBe(1);
 		const meta = phan(vet, -1).meta;
 		expect(meta).toMatchObject({ kind: "buoc.xong", stepId: chua.id });
-		expect(Object.keys(Object(meta)), "man ke hoach khong ghi source").not.toContain(
-			"source",
-		);
+		expect(
+			Object.keys(Object(meta)),
+			"man ke hoach khong ghi source",
+		).not.toContain("source");
 	});
 
 	test("loi-chung-api: da-xong khong ghi dau vet moi", async () => {
