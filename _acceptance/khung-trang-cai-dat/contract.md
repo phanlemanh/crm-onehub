@@ -5,7 +5,7 @@ slug: khung-trang-cai-dat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-25-khung-trang-cai-dat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
@@ -64,3 +64,15 @@ Chân sản phẩm: khuôn đích [SUY-TỪ-REPO: docs/settings.md]; khung trang
 
 - Không chạm đường T3: `packages/auth`, `packages/db/prisma`, và bảy module API bị khoá đều ngoài diff.
 - Đường nền 25/09: suite `executors.test.api` đỏ ở lượt đầu, chạy lại trên cây sạch xanh 11/11 — đỏ chập chờn, không phải lỗi của vòng. Hai dòng «THIEU merge-base» là báo nhầm của bộ kit, chip đã mở sang `acceptance-gate-kit`.
+- known-limits (Ngoài-1, Gate 2): nhãn điều hướng của breadcrumb trong `packages/ui` là chữ tiếng Anh «breadcrumb» cố định, trình đọc màn hình tiếng Việt nghe tiếng Anh.
+- known-limits (Ngoài-2, Gate 2): trang `/reminders` lấy hai khối từ thư mục `settings/notifications`, nay chỉ còn là đường chuyển hướng — dọn ở vòng sau.
+- known-limits (Ngoài-3, Gate 2): danh sách trang con Kết nối khai ở ba chỗ kèm ép kiểu; lệch một chỗ thì trang đó mất breadcrumb mà không báo lỗi.
+- known-limits (Ngoài-5, Gate 2): E11 đọc địa chỉ sau khi bàn đo tự mở `/reminders`, nên cú bấm menu dẫn sai trang vẫn xanh; liên kết của mục menu được ghim riêng bằng bài kiểm DOM.
+- known-limits (Ngoài-6, Gate 2): E4 «tiêu đề thẻ không chứa tên nhà cung cấp» vẫn xanh khi không có thẻ nào.
+- known-limits (Ngoài-7, Gate 2): trên trang thật, breadcrumb chỉ được đo là có liên kết, không đo nhãn khớp đúng trang.
+- known-limits (Ngoài-8, Gate 2): khẳng định «mười trang mục không có breadcrumb» đứng một mình, không có đối chứng dương.
+- known-limits (Ngoài-9, Gate 2): E16 miễn trừ cả thân bài `loi-vao-dieu-phoi` thay vì chỉ một khẳng định.
+- known-limits (Ngoài-10, Gate 2): E17 đo breadcrumb chỉ bằng vắng mặt; hai lời hứa dương (cn của kho, biểu tượng Carbon) chưa có thước.
+- known-limits (Ngoài-11, Gate 2): E11 «không có thanh bên Cài đặt trên /reminders» dùng bộ chọn chưa được đối chứng dương trong lượt.
+- known-limits (Ngoài-12, Gate 2): kiểm tràn ngang ở 375 vẫn xanh nếu không tìm thấy phần tử khung nào.
+- known-limits (Gate 2, d-20260925T070608Z-18): trang Trường giữ danh sách tự vẽ ngoài thẻ tới đợt 3; nhãn loại trường cắt «Trong danh sách» thành «rong danh», sửa ở đầu đợt 2.

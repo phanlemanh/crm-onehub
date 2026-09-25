@@ -8,7 +8,7 @@ verified_by: fresh-context sequential verification subagent (round 3, classifier
 enforcement_mode: strict
 bypass_used: false
 verified_commit: de5b4b3b6304ed03227fe64923dbd0c883bc8c62
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-25
 ---
 
 # Evidence Report: khung-trang-cai-dat
