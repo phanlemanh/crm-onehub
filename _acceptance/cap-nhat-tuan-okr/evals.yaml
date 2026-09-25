@@ -56,7 +56,7 @@ evals:
       - "M mở {APP_URL}/<slug>/okr/cap-nhat-tuan ở 1440/vi → thanh tab có bốn tab, tab «Cập nhật tuần» aria-current; mỗi KR một dòng (data-kr), ô giá trị điền sẵn đúng số, dòng «Tuần trước: vừa» ở KR có lần trước, KR mốc có hai nút → evidence E6-step1.png"
       - "Gõ «ba» vào ô KR phan-tram → câu lỗi dưới ô, nút gửi disabled → E6-step2.png; sửa thành 40; chọn mức tự tin cho hai KR → nút «Gửi 2 cập nhật» → E6-step3.png"
       - "Chặn request okr.guiCapNhat (trả 500) rồi bấm gửi → Alert «Chưa gửi được», ô còn nguyên giá trị đã gõ, nút «Gửi lại 2 cập nhật» → E6-step4.png; bỏ chặn, bấm gửi lại → «Đã gửi 2 cập nhật … giây» → E6-step5.png"
-      - "R mở cùng URL → Empty rỗng → E6-step6.png; chặn okr.capNhatTuan (500) → Empty có «Thử lại»; bỏ chặn, bấm → danh sách hiện → E6-step7.png (dùng M)"
+      - "R mở cùng URL → Empty rỗng → E6-step6.png; lỗi tải dựng phía máy chủ (danh sách tải ở trang máy chủ nên chặn trong trình duyệt không tới): app của phép đo trỏ API_URL qua cửa chặn rang/cua-chan.mjs (đứng giữa app và api, chuyển nguyên mọi yêu cầu, bật được trả 500 cho đúng thủ tục okr.capNhatTuan); bật chặn, M mở màn → Empty có «Thử lại»; tắt chặn, bấm «Thử lại» → danh sách hiện → E6-step7.png"
       - "Ở 390: scrollWidth <= innerWidth; ToggleGroup mức tự tin rộng bằng cột (sai số 2px) → E6-step8.png; nền tối 1440 → E6-step9.png"
       - "Khẳng định translate=no trên tên KR, tên mục tiêu, đơn vị đo; không lỗi hydrat trong console; request thất bại ngoài chỗ chặn ghi vào E6-network.txt"
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/okr.ts, _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs]
