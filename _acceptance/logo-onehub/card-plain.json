@@ -1,0 +1,44 @@
+{
+  "feature_plain": "Người dùng CRM thấy logo OneHub thay cho logo Comp AI ở mọi chỗ trong app, trên tab trình duyệt và khi cài app vào điện thoại.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ vẽ hình sáu lục giác dải xanh trùng ảnh gốc từ 98% trở lên, cả hình lẫn màu (đo tự động với ảnh gốc)."},
+    {"id": "AC-3", "p": "Sẽ cho hai logo cùng hiện trên một trang mà không giẫm màu nhau, và trình đọc màn hình đọc là «OneHub»."},
+    {"id": "AC-4", "p": "Sẽ có bản logo kèm chữ OneHub trùng ảnh gốc từ 98%, chữ tự đổi đen hoặc trắng theo nền."},
+    {"id": "AC-5", "p": "Sẽ thay đủ bộ favicon và icon cài app, đúng cỡ từng file; icon trên iPhone có nền trắng, icon Android không bị cắt mất cánh."},
+    {"id": "AC-6", "p": "Sẽ sinh mọi icon từ cùng một nguồn với logo trong app — sửa hình mà quên sinh lại icon là bài kiểm đỏ."},
+    {"id": "AC-7", "p": "Sẽ đổi tên app khi cài vào điện thoại thành «OneHub CRM» (tên ngắn «OneHub»)."},
+    {"id": "AC-8", "p": "Sẽ xuất sẵn ba ảnh đúng cỡ để anh tự thay: ảnh app Slack, ảnh bot Zalo, logo màn xin quyền Google — không ghi gì vào kho."},
+    {"id": "AC-9", "p": "Sẽ chỉ sửa trang đăng nhập trong số các màn đang có logo; landing, logo đối tác và màu nút xanh lá giữ nguyên."},
+    {"id": "AC-10", "p": "Sẽ chụp màn thật: trang đăng nhập (máy tính và điện thoại), thanh trên cùng và tab Agent ở giao diện sáng lẫn tối; kiểm máy chủ trả đúng favicon mới."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG để logo lệch tâm như ảnh gốc (gốc lệch khoảng 12%) — lệch tối đa 1% chiều rộng."}
+  ],
+  "scope_plain": "Không làm lại trang landing, không đổi màu nút, không đổi tên bot Slack «Comp AI», không tự tải ảnh lên Slack, Zalo, Google.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ bốn dạng logo: hình, hình kèm chữ, icon trong app, ảnh cho dịch vụ ngoài — đối chiếu với danh sách icon trang web đang khai (AC-5, AC-8)."},
+    {"i": 1, "p": "Đủ mọi màn đang có logo: thanh trên cùng, đăng nhập, tab Agent, huy hiệu trong trình dựng agent, bản mẫu OKR, tab trình duyệt, màn chính iPhone, app Android, Slack, Zalo, Google — rút từ các chỗ đang gọi logo trong code (AC-9, AC-10)."},
+    {"i": 2, "p": "Đủ hai giao diện sáng và tối; trang đăng nhập luôn tối nên chụp một giao diện (AC-10)."},
+    {"i": 3, "p": "Đủ các cỡ từ 14px trong app tới 1024px cho Slack, theo chuẩn có tên của Apple, Google, Slack, Zalo (AC-5, AC-8)."},
+    {"i": 4, "p": "Anh gạch: cả ba chỗ trên trang đăng nhập dùng bản kèm chữ — trên điện thoại, đầu form là chỗ duy nhất có tên OneHub."},
+    {"i": 5, "p": "Anh gạch: ảnh Zalo 512px và ảnh Slack 1024px, cả hai nền trắng."},
+    {"i": 6, "p": "Anh gạch: tab Agent giữ ô vuông đen (sáng) hoặc trắng (tối) quanh logo như hôm nay."},
+    {"i": 7, "p": "Logo dùng cùng màu ở hai giao diện; chuẩn tương phản miễn cho logo."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo hình đang đo một bản vẽ song song chứ không đo chính logo app dùng — đã sửa: đo thẳng logo của app."},
+    {"i": 1, "p": "Phép kiểm «chỉ sửa trang đăng nhập» sẽ trống rỗng sau khi gộp và bỏ sót phần chưa commit — đã sửa: so cả phần chưa commit, trống thì báo không đo được."},
+    {"i": 2, "p": "Ảnh chụp có thể xanh nhờ logo đang bị ẩn — đã sửa: chỉ đếm logo thật sự nhìn thấy, và bản kèm chữ phải cao từ 20px."},
+    {"i": 3, "p": "Một icon Comp cũ nằm ngoài danh sách vẫn có thể lên tab trình duyệt — đã sửa: rút danh sách icon trang thật sự khai và so đúng bằng."},
+    {"i": 4, "p": "So icon từng điểm ảnh có thể đỏ oan giữa máy Mac và máy CI — đã sửa: cho lệch nhỏ ở mép khử răng cưa."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260925T084134Z-1", "p": "Dùng luôn thiết kế anh duyệt sáng nay, không hỏi lại — đổi lại chỗ phiên đó sót thì chỉ phản biện context sạch bắt."},
+    {"id": "d-20260925T084134Z-2", "p": "Vẽ lại hình bằng sáu lục giác đều (trùng 99,72%) — đổi lại mép bo góc lệch gốc rất nhỏ."},
+    {"id": "d-20260925T084134Z-3", "p": "Chữ OneHub dò theo nét ảnh gốc (trùng 99,6%) thay vì đoán font — đổi lại hình chữ nặng khoảng 9KB."},
+    {"id": "d-20260925T084134Z-4", "p": "Sinh icon bằng thư viện ảnh đã có sẵn trong kho — đổi lại tự giữ một đoạn ghép file .ico nhỏ."},
+    {"id": "d-20260925T084134Z-5", "p": "Chép hai ảnh gốc vào kho để phép đo chạy lại được ở mọi máy — đổi lại kho nặng thêm khoảng 330KB."},
+    {"id": "d-20260925T084134Z-6", "p": "KHÔNG làm bản bấm được trước cổng — vòng chỉ thay hình; thay bằng ảnh xem trước logo sáng, tối và favicon gửi kèm thẻ."},
+    {"id": "d-20260925T084134Z-7", "p": "KHÔNG để máy chụp thanh tab trình duyệt — máy kiểm file favicon máy chủ trả về; ảnh tab thật chụp tay đính ở Cổng Bằng chứng."}
+  ]
+}

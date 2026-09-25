@@ -1,0 +1,222 @@
+schema_version: 1
+slug: logo-onehub
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.lgo_khop_goc
+    paths:
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "packages/ui/scripts/logo-goc/**"
+      - "packages/ui/src/components/logo.tsx"
+      - "packages/ui/test/logo-khop-goc.spec.ts"
+    expected: |
+      Ca "mark-trung-goc": lay chuoi SVG bang renderToStaticMarkup cua CHINH component Logo (khong
+      dung SVG rieng trong test), dat len luoi 625x622 dung toa do tam da khai trong
+      logo-onehub.ts, raster bang sharp, so alpha voi logo-goc/logo-mark.png: IoU mem =
+      sum(min)/sum(max) >= 0.98, in so IoU. Ca "mau-trung-goc": tren diem anh alpha = 255 o CA HAI anh, RMS tung kenh R,G,B
+      <= 8, in ba so.
+      CHIEU DO: cung fixture, dich tam mark 20 don vi -> IoU < 0.98 va test do voi thong diep ghim
+      "IoU mark"; dao hai diem dung mau -> do voi thong diep ghim "RMS kenh G".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.lgo_khop_goc
+    paths:
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "packages/ui/src/components/logo.tsx"
+      - "packages/ui/test/logo-khop-goc.spec.ts"
+    expected: |
+      Ca "can-tam": renderToStaticMarkup cua CHINH Logo (viewBox cua component) raster o 622x622,
+      khung bao phan alpha > 0.5: |tam khung bao - 311| <= 6.22 theo x va theo y, in do lech.
+      CHIEU DO: chi sua viewBox trong logo.tsx lech sang trai 76 don vi (dung lech cua anh goc),
+      khong dung logo-onehub.ts -> do voi thong diep ghim "lech tam x".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.lgo_thanh_phan
+    paths:
+      - "packages/ui/src/components/logo.tsx"
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "packages/ui/test/logo.dom.tsx"
+    expected: |
+      jsdom, render <div>{Logo}{Logo className="size-5" aria-hidden="true"}</div> bang react-dom.
+      Ma tran viet truoc: (a) svg thu nhat co role="img" va aria-label="OneHub"; (b) hai id cua
+      linearGradient khac nhau va khong rong; (c) voi tung svg, fill cua path = "url(#<id>)" va
+      querySelector("#"+CSS.escape(id)) tim thay dung linearGradient va no nam TRONG chinh svg do
+      (svg.contains); (d) svg thu hai co class "size-5" va aria-hidden="true". Dem ca = 4.
+      CHIEU DO: doi useId thanh id co dinh "onehub-mark" -> ca (b) do voi thong diep ghim
+      "id trung".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.lgo_khop_goc
+    paths:
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "packages/ui/scripts/logo-goc/**"
+      - "packages/ui/src/components/logo-lockup.tsx"
+      - "packages/ui/test/logo-khop-goc.spec.ts"
+    expected: |
+      Ca "ban-ngang-trung-goc": renderToStaticMarkup cua CHINH LogoLockup (chu currentColor dat
+      mau den qua style color tren svg) raster len luoi 2048x622, so alpha voi
+      logo-goc/logo-horizontal.png: IoU vung x < 600 (mark) >= 0.98 va IoU vung x >= 600 (chu)
+      >= 0.98, in hai so.
+      CHIEU DO: (a) bo mot duong khep kin cua chu (lo trong chu O) -> do voi thong diep ghim
+      "IoU chu"; (b) chi sua phep doi toa do mark trong logo-lockup.tsx 40 don vi, khong dung
+      logo-onehub.ts -> do voi thong diep ghim "IoU mark ban ngang".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.lgo_thanh_phan
+    paths:
+      - "packages/ui/src/components/logo-lockup.tsx"
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "packages/ui/test/logo.dom.tsx"
+    expected: |
+      jsdom, render hai LogoLockup. Ma tran: (a) role="img", aria-label="OneHub"; (b) path chu co
+      fill="currentColor"; (c) hai id dai mau khac nhau va fill mark tro dung gradient trong chinh
+      svg. Dem ca = 3.
+      CHIEU DO: dat fill chu "#000" -> ca (b) do voi thong diep ghim "chu khong theo currentColor".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.lgo_bo_icon
+    paths:
+      - "apps/app/app/favicon.ico"
+      - "apps/app/public/favicon.ico"
+      - "apps/app/public/favicon.svg"
+      - "apps/app/public/*.png"
+      - "packages/ui/test/logo-icons.spec.ts"
+    expected: |
+      Doc file that tren dia (khong doc tu script). Ma tran viet truoc 8 ca: hai ico giong tung
+      byte; ico doc bang bo doc ICO (header 0,1,n + bang muc 16 byte) co dung n=3 va kich thuoc
+      {16,32,48}, moi anh con la PNG giai ma duoc dung kich thuoc do; favicon-96x96 = 96x96;
+      apple 180x180, min alpha = 255, bon goc #FFFFFF; manifest 192 va 512: dung co, min alpha =
+      255, moi diem anh co max(|R-255|,|G-255|,|B-255|) > 8 nam trong vong tron ban kinh 0.4*S
+      quanh tam; favicon.svg co viewBox vuong va hai stop-color #0045FF, #02D7FF.
+      CHIEU DO: cung fixture, ghi de ban sao favicon.ico bang ico chi co 16 va 32 -> do voi thong
+      diep ghim "ico thieu 48"; ban manifest mark phong to 1.3 -> do voi thong diep ghim "ngoai vung an toan".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.lgo_bo_icon
+    paths:
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "packages/ui/scripts/**"
+      - "apps/app/app/favicon.ico"
+      - "apps/app/public/**"
+      - "packages/ui/test/logo-icons.spec.ts"
+    expected: |
+      Ca "tuoi": goi ham sinh bo icon (cung ham ma CLI logo-icons.ts goi de ghi file — round-trip
+      writer that, khong tu dung lai) vao bo nho; voi tung file trong 7 file cua bang thiet ke,
+      giai ma PNG (tung anh con cua ico) cua ban trong kho va ban vua sinh ve raw RGBA: moi kenh
+      lech khong qua 2 va ti le diem anh co lech khong qua 0.5% (bo raster cua sharp co the lech
+      khu rang cua giua arm64 va x64 — CI chay linux x64); favicon.svg trung tung byte. In so
+      diem anh lech cua tung file. Dem ca = 7.
+      CHIEU DO: doi tam MARK 4 don vi trong logo-onehub.ts (trong ban sao) -> ca do voi thong
+      diep ghim ten file dau tien lech, vd "favicon-96x96.png lech nguon".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.lgo_bo_icon
+    paths:
+      - "apps/app/public/site.webmanifest"
+      - "packages/ui/test/logo-icons.spec.ts"
+    expected: |
+      Ca "manifest": JSON.parse site.webmanifest: name === "OneHub CRM", short_name === "OneHub",
+      icons co dung hai muc 192x192 va 512x512 cung purpose "maskable".
+      CHIEU DO: name "Comp AI CRM" -> do voi thong diep ghim "name".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.lgo_bo_icon
+    paths:
+      - "packages/ui/scripts/**"
+      - "packages/ui/test/logo-icons.spec.ts"
+    expected: |
+      Ca "xuat-ngoai": chay CLI that `bun packages/ui/scripts/logo-icons.ts --external <tmpdir>`
+      (spawn, khong goi ham) voi tmpdir ngoai kho; ghi lai `git status --porcelain` truoc va
+      sau. Ma tran 3 file x (dung co, min alpha 255, goc trang) + zalo: diem anh khac nen nam
+      trong vong ban kinh 0.4*S + google < 1MB + git status truoc === sau. Dem ca = 5.
+      CHIEU DO: goi CLI khong co --external ma voi --external trong -> exit khac 0 va thong diep
+      ghim "--external can mot thu muc".
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.lgo_ranh_gioi
+    paths:
+      - "_acceptance/logo-onehub/rang/ranh-gioi.mjs"
+    expected: |
+      Script tu suy goc kho tu vi tri cua no. Moc so: tham so --base, mac dinh git merge-base
+      HEAD origin/onehub; khi nhanh da len onehub (merge-base == HEAD) thi tim merge commit M
+      mang _acceptance/logo-onehub/contract.md va do merge-base(M^1,M^2)..M^2. Tap file doi =
+      git diff --name-only <moc> (so toi CAY LAM VIEC, khong kem HEAD) hop git ls-files --others
+      --exclude-standard. Diff rong -> ma 2 ghim "diff rong". Tap file goi Logo rut bang git grep
+      "@crm/ui/components/logo" -- apps/app TAI SHA CUA MOC (khong viet tay, khong grep HEAD).
+      KET LUAN liet: file goi Logo co doi (chi duoc auth-shell.tsx), file doi trong 5 vung cam,
+      moi dong --primary trong globals.css = #006b4f. Ma 0 = moi dong DUNG, ma 1 = co dong SAI
+      (goi ten file), ma 2 = khong do duoc.
+      CHIEU DO tren ban sao: (a) sua mot file landing -> ma 1 ghim "vung cam:
+      apps/app/components/landing/"; (b) bo import Logo o app-header.tsx -> ma 1 ghim "file goi
+      Logo doi: apps/app/components/app-header.tsx".
+
+  - id: E11
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.test.lgo_chup
+    steps:
+      - "Cap cong ban-do-cot (api 3501, app 3500 — ban-do-cot-api / ban-do-cot-app trong .claude/launch.json cua cay). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 (dung cay) thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet."
+      - "Chay O TIEN CANH, Bash timeout 600000: lenh cua lgo_chup — rang/chup.mjs tu chan cay (canhCay qua APP_URL), dang nhap bang dev:session, chup evidence/E11-dang-nhap-1440.png, E11-dang-nhap-390.png (khong phien), E11-thanh-tren-sang.png, E11-thanh-tren-toi.png, E11-agent-sang.png, E11-agent-toi.png (giao dien dat qua localStorage theme cua next-themes), va so /favicon.ico may chu tra ve voi apps/app/app/favicon.ico."
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo sau anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/logo-onehub/evidence/
+    paths:
+      - "packages/ui/src/components/logo.tsx"
+      - "packages/ui/src/components/logo-lockup.tsx"
+      - "packages/ui/src/lib/logo-onehub.ts"
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/app/favicon.ico"
+      - "apps/app/app/layout.tsx"
+      - "apps/app/public/**"
+      - "_acceptance/logo-onehub/rang/chup.mjs"
+    expected: |
+      Nhin thay tren anh: mark sau luc giac dai xanh o moi cho tung co logo (goc nua trai va dau
+      form trang dang nhap, thanh tren cung, o vuong man trong tab Agent); chu OneHub doc duoc
+      tren nen toi trang dang nhap o 1440 va 390; khong con mark cu cua Comp (hinh ba vach cheo
+      don sac); khong logo nao bi cat hay tran. Script (dong DUNG/SAI rieng): moi anh dung trang
+      dich (URL cuoi); dem svg[aria-label="OneHub"] THAT SU NHIN THAY (checkVisibility() dung va
+      khung bao > 0): dang nhap 1440 >= 2, 390 >= 1, thanh tren >= 1, tab Agent >= 1; moi
+      LogoLockup nhin thay co chieu cao khung bao >= 20px va nam tron trong khung phan tu cha;
+      tap href cua moi link rel icon / shortcut icon / apple-touch-icon / manifest tren trang dang
+      nhap, cong icons khai trong manifest, BANG DUNG danh sach cua bang thiet ke (favicon.ico,
+      favicon.svg, favicon-96x96.png, apple-touch-icon.png, site.webmanifest, hai anh manifest),
+      va noi dung may chu tra ve cho tung href giong tung byte file trong kho.
+      CHIEU DO tren ban sao: bo lockup o dau form -> anh 390 ma 1 ghim "dau form thieu logo";
+      them app/icon.png -> ma 1 ghim "icon ngoai bang". Thieu anh nao -> khong dat.
+
+  - id: E12
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.check_types
+    paths:
+      - "packages/ui/src/components/logo.tsx"
+      - "packages/ui/src/components/logo-lockup.tsx"
+      - "packages/ui/scripts/**"
+      - "apps/app/components/**"
+    expected: |
+      bun run check-types exit 0 — tam cho goi Logo va agent-scope-badges (ComponentType<SVGProps>)
+      van dung kieu voi Logo moi.
+      CHIEU DO: doi Logo sang nhan props { size: number } -> check-types do tai
+      apps/app/components/app-header.tsx.
