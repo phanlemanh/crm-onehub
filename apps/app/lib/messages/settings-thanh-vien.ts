@@ -12,7 +12,10 @@ const en = {
 		member: "Member",
 		okr: "OKR only",
 	},
+	dem: (tieuDe: string, n: number) => `${tieuDe} · ${n}`,
 	bang: {
+		tieuDe: "Signed in",
+		moTa: "People who have signed in at least once.",
 		ten: "Name",
 		ban: "You",
 		email: "Email",
@@ -34,6 +37,7 @@ const en = {
 		luc: "Allowed",
 		hanhDong: "Actions",
 		rut: "Withdraw",
+		menu: (diaChi: string) => `Actions for ${diaChi}`,
 		trong:
 			"Only the people above can sign in. Allow an address to let someone else in.",
 		nutThem: "Allow an address",
@@ -101,7 +105,10 @@ const vi = {
 		member: "Thành viên",
 		okr: "Chỉ OKR",
 	},
+	dem: (tieuDe: string, n: number) => `${tieuDe} · ${n}`,
 	bang: {
+		tieuDe: "Đã vào",
+		moTa: "Những người đã vào ít nhất một lần.",
 		ten: "Tên",
 		ban: "Bạn",
 		email: "Địa chỉ email",
@@ -123,6 +130,7 @@ const vi = {
 		luc: "Cho phép lúc",
 		hanhDong: "Hành động",
 		rut: "Rút",
+		menu: (diaChi: string) => `Hành động với ${diaChi}`,
 		trong:
 			"Chỉ những người ở bảng trên vào được. Cho phép một địa chỉ để thêm người.",
 		nutThem: "Cho phép một địa chỉ",
