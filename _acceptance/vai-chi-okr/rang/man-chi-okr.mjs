@@ -272,8 +272,8 @@ try {
 			kiem(`${n}: tran ngang`, await khongTran(trang));
 			const dem = await demLink(trang, t.railChinh);
 			kiem(
-				`${n}: rail phai co dung 2 link, thay ${JSON.stringify(dem)}`,
-				dem.length === 1 && dem[0] === 2,
+				`${n}: rail phai co dung 3 link, thay ${JSON.stringify(dem)}`,
+				dem.length === 1 && dem[0] === 3,
 			);
 			const chu = await chuTrang(trang);
 			const lo = t.doiTac.filter((nhan) => chu.includes(nhan));
@@ -394,8 +394,8 @@ try {
 		const a = await moTrang(cookieAdmin, "vi", 1440, `/${slug}`, "main");
 		const dem = await demLink(a.trang, t.railChinh);
 		kiem(
-			`admin: rail phai 8 link, thay ${JSON.stringify(dem)}`,
-			dem.length === 1 && dem[0] === 8,
+			`admin: rail phai 9 link, thay ${JSON.stringify(dem)}`,
+			dem.length === 1 && dem[0] === 9,
 		);
 		await a.trang.screenshot({
 			path: join(BANG_CHUNG, "rail-admin.png"),
