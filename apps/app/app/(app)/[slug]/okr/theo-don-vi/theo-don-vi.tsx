@@ -22,6 +22,7 @@ import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
 import { useChuKy } from "../chon-chu-ky";
 import { HopThoaiMucTieu } from "../hop-thoai-muc-tieu";
+import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { KhoiMucTieu } from "../khoi-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import {
@@ -101,6 +102,7 @@ export function TheoDonVi() {
 	const xem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
 	const { cycles, currentId } = useChuKy();
 	const [themMo, setThemMo] = useState(false);
+	const [nhapMo, setNhapMo] = useState(false);
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const access = useQuery(trpc.okr.access.queryOptions());
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
@@ -250,22 +252,28 @@ export function TheoDonVi() {
 									</ToggleGroupItem>
 									<ToggleGroupItem value="cay">{m.cayCanChinh}</ToggleGroupItem>
 								</ToggleGroup>
+								{byUnit.data?.canEdit || quanTri ? (
+									<Button
+										size="sm"
+										variant="outline"
+										aria-haspopup="dialog"
+										data-nut="nhap-bang-tinh"
+										onClick={() => setNhapMo(true)}
+									>
+										<Icon icon={DocumentImport} data-icon="inline-start" />
+										{m.nhapBangTinh}
+									</Button>
+								) : null}
 								{byUnit.data?.canEdit ? (
-									<>
-										<Button size="sm" variant="outline" aria-haspopup="dialog">
-											<Icon icon={DocumentImport} data-icon="inline-start" />
-											{m.nhapBangTinh}
-										</Button>
-										<Button
-											size="sm"
-											aria-haspopup="dialog"
-											data-nut="them-muc-tieu"
-											onClick={() => setThemMo(true)}
-										>
-											<Icon icon={Add} data-icon="inline-start" />
-											{m.themMucTieu}
-										</Button>
-									</>
+									<Button
+										size="sm"
+										aria-haspopup="dialog"
+										data-nut="them-muc-tieu"
+										onClick={() => setThemMo(true)}
+									>
+										<Icon icon={Add} data-icon="inline-start" />
+										{m.themMucTieu}
+									</Button>
 								) : null}
 							</div>
 						</Card>
@@ -279,6 +287,14 @@ export function TheoDonVi() {
 									tenDon: dv.ten,
 								}}
 								dong={() => setThemMo(false)}
+							/>
+						) : null}
+						{nhapMo ? (
+							<HopThoaiNhapOkr
+								cycleId={currentId}
+								unit={don}
+								tenDonVi={dv.ten}
+								dong={() => setNhapMo(false)}
 							/>
 						) : null}
 					</>
