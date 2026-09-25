@@ -20,7 +20,9 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const BANG_CHUNG = process.env.BANG_CHUNG ?? join(HERE, "..", "evidence");
+const BANG_CHUNG =
+	process.env.BANG_CHUNG ??
+	join(GOC, ".acceptance-runs", "dat-okr-trong-crm", "evidence");
 const RONG = 1440;
 const HEP = 390;
 const CAO = 900;
