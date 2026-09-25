@@ -5,7 +5,7 @@ slug: okr-soat-anh-luot-3
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -66,3 +66,6 @@ tĩnh (AC-8), ảnh (AC-9), dọn (AC-10).
 - Ảnh cũ/mới ghi vào `.acceptance-runs/okr-soat-anh-luot-3/evidence/{truoc,sau}/`; thước đã ký của `dat-okr-trong-crm` ghi vào `.acceptance-runs/dat-okr-trong-crm/`, không chạm thư mục bằng chứng đã ký.
 - «Quản trị» trong hợp đồng này là vai chủ sở hữu hoặc quản trị của không gian làm việc, không phải trưởng đơn vị; «điểm», «trạng thái», «xoá», «người xem» dùng theo nghĩa thường (điểm trên màn, chấm trạng thái, xoá dữ liệu thử, người nhìn ảnh). Lint W6 của kit báo năm chữ này theo nghĩa khác trong `CONTEXT.md`.
 - Lớp đè có từ trước mà soi mã in thành ghi chú: hằng `CELL = "px-3 py-2.5 align-middle"` của khu OKR đè khoảng cách lên `TableCell` (71 chỗ trong `apps/app`, sáu chỗ trong `bang-chu-ky.tsx`), và ô «Loại» của bảng chu kỳ đè màu chữ. Đó là việc «phần đệm ô của `SimpleTable`» ở đợt 2 của `docs/settings.md`, ngoài phạm vi vòng này.
+- Chiều đỏ ở S3 trên giao diện cũ, cây này, cổng 3630/3631: `do-man.mjs` 22 DUNG, 27 SAI, mã 1 — chín cột nhập tràn vỏ 1365px, cột «Mục tiêu» một dòng, không hàng nào có vạch hay chấm trạng thái, thẻ «Chương trình OKR» lệch 84px ở 390 cùng năm thẻ sau nó (kể cả khi bấm thẻ), ô chọn «Quý 3/2026Quý», mục «Năm 2026Năm», gợi ý «Năm 2027» / «Quý 1/2027»; ảnh ở `evidence/truoc/`. Soi mã `dong-ho-page` và `goi-y-khong-cung` SAI.
+- Phá-thử ở S3: `NavStrip` bỏ điều kiện «cùng thẻ» → đỏ «nguoi tu cuon bi keo ve»; bỏ nhánh cuộn → đỏ «the dang mo van ngoai khung»; chỉ canh lúc dựng → đỏ «doi the ngoai khung khong canh»; soi mã trên bản sao — `new Date()` trong sheet → SAI, `className="text-destructive"` trên `TableCell` → SAI; sân thiết kế — `bg-red-500 text-gray-400` → design-gate mã 2 (`gray-on-color`); bàn đo — `OSA_PHA_SAU_GIEO=1` → mã 2, ba dòng dọn DUNG; `kill -TERM` sau gieo → mã 143, DB 0 chu kỳ; `kill -9` sau gieo → để lại 3 chu kỳ và sổ gieo, lượt kế in «don tan du 3 chu ky» rồi 49 DUNG / 0 SAI.
+- Chiều xanh ở S3 tại `9371249c`: `do-man.mjs` 49/0; `man-okr.mjs` đã ký 197 khẳng định / 0 hỏng; ba thước không trình duyệt của `khung-trang-cai-dat` đạt; năm lệnh ở gốc mã 0 (Node 24).
