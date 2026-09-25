@@ -18,3 +18,4 @@
 {"ts":"2026-09-25T22:32:24Z","sha":"4c4f4fe6a39a43e9ba5a520bf3c084aa551d7226","round":1,"kind":"baseline","evals_hash":"27650cb29c139c542bcb8803b364a6e14b388d91ab227a1e65e25b6661b43f7b","non_discriminating":[]}
 {"ts":"2026-09-25T22:32:24Z","sha":"4c4f4fe6a39a43e9ba5a520bf3c084aa551d7226","round":1,"kind":"round-tally","verdict":"PASS","expected":9,"returned":9,"blocked":0}
 {"ts":"2026-09-25T22:32:24Z","sha":"4c4f4fe6a39a43e9ba5a520bf3c084aa551d7226","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":9}
+{"kind":"thuoc-vat","ts":"2026-09-25T22:54:17Z","round":1,"san":"5df71cce7fdc9354331200e06b0ea4dd461da60a","vat":[0,0],"thuoc":[4,1],"ho_so":[21,0],"nhat":1,"lan":0,"tep_thuoc":["_acceptance/khoa-con-bat-xa-tran/rang/do-thoi-gian.mjs"]}
