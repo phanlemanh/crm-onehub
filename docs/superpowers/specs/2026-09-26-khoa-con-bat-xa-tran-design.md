@@ -30,11 +30,16 @@ Cấy tạm bộ đếm giờ vào từng pha của ca (5 lượt):
 
 `beforeEach` chỉ thêm ~70ms. Gần trọn thân ca là hai ma trận: ~460 lượt gọi tuần tự,
 ~4ms mỗi lượt. Cùng ma trận tRPC nhưng bằng cookie (`ma-tran-dang-nhap-lai`) chỉ ~1.5ms
-mỗi lượt. Phần chênh là lượt xác minh khoá: `@better-auth/api-key` 1.6.25, nhánh
-`rateLimit: { enabled: false }`, vẫn ghi `UPDATE apikey SET lastRequest` vào cùng một
-hàng ở MỖI lượt (`consumeRateLimit` → `decision.type === "skip"`). Tức là ~460 câu ghi
-có commit, xếp nối đuôi nhau — độ trễ commit của Postgres trên máy CI quyết định ca
-xanh hay đỏ.
+mỗi lượt. Phần chênh nằm ở đường đi của khoá API.
+
+Giả thuyết ban đầu: `@better-auth/api-key` 1.6.25, nhánh `rateLimit: { enabled: false }`,
+vẫn ghi `UPDATE apikey SET lastRequest` vào cùng một hàng ở MỖI lượt (`consumeRateLimit`
+→ `decision.type === "skip"`), nên thời gian ca bám theo độ trễ commit của Postgres. Một
+phiên khác («Xem việc api-key ghi CSDL ở mỗi yêu cầu», 26/09) đo riêng trên CSDL riêng,
+300 lượt tuần tự và 15×20 song song, hai vòng: mỗi yêu cầu dùng khoá có đúng 2 câu
+`UPDATE apikey`, nhưng chỉ tốn ~0.3–0.5ms/lượt tại chỗ. Giả thuyết vì thế **chưa được
+chứng**: câu ghi giải thích được một phần nhỏ, phần chênh còn lại (~2ms/lượt) chưa quy
+được. Cách sửa của vòng này không dựa vào nguyên nhân đó — nó được đo bằng thời gian.
 
 Hai thử nghiệm trên bản sao tạm của tệp (đã hoàn lại):
 
@@ -44,7 +49,8 @@ Hai thử nghiệm trên bản sao tạm của tệp (đã hoàn lại):
 | B — hai ma trận chạy song song, tối đa 8 lượt cùng lúc | 0.68s / 0.75s |
 
 A không đổi nên chi phí nằm phía máy chủ, không phải ở supertest. B nhanh ~2.7 lần và
-thu hẹp độ dao động, đúng với chẩn đoán «chờ Postgres, không phải CPU».
+thu hẹp độ dao động: phần lớn thời gian mỗi lượt là chờ (I/O), không phải CPU của tiến
+trình kiểm — chờ gì cụ thể thì chưa quy được (xem giả thuyết ở trên).
 
 ## Cách làm
 

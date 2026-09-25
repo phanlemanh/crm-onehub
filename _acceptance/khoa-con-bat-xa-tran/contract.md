@@ -19,8 +19,10 @@ veto_opened_at: 2026-09-25T21:56:20Z
 
 `go-la-cat-quyen > khoa-con-bat` hết giờ ở CI run 36191005876 (attempt 1): 5144ms so với
 trần 5000ms; attempt 2 xanh ở 3731ms. Ca gọi tuần tự hai ma trận (~230 thủ tục tRPC,
-~230 đường REST) bằng một khoá API; mỗi lượt xác minh khoá ghi một câu `UPDATE` vào cùng
-hàng `apikey`, nên thời gian ca bám theo độ trễ commit của Postgres trên máy CI. Vòng
+~230 đường REST) bằng một khoá API, ~4ms mỗi lượt so với ~1.5ms khi gọi bằng cookie.
+Mỗi lượt xác minh khoá ghi `UPDATE apikey`, nhưng một phiên khác đo riêng thấy các câu ghi
+đó chỉ tốn ~0.3–0.5ms/lượt — phần chênh còn lại chưa quy được về nguyên nhân nào. Chạy song
+song rút ngắn ca ~2.5 lần, cho thấy phần lớn thời gian là chờ chứ không phải CPU. Vòng
 này cho hai ma trận của riêng ca đó chạy song song có giới hạn, và thêm khẳng định để
 song song không làm ma trận hụt hàng.
 
