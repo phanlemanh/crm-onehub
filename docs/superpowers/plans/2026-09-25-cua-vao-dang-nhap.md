@@ -341,7 +341,7 @@ git commit -m "feat: chữ và hàm chọn cửa, phân loại lỗi cho cửa v
 **Interfaces:**
 - Produces: `StepList` nhận `tinh?: boolean`; `StepListItem` nhận `activeStep?: number` (tuỳ chọn). Khi `tinh`, không bước nào mang `aria-current`, mọi chỉ báo `data-state="completed"`, tiêu đề không mờ, không dấu tích.
 
-- [ ] **Step 1: Test đỏ** — `packages/ui/test/step-list-tinh.dom.tsx`
+- [x] **Step 1: Test đỏ** — `packages/ui/test/step-list-tinh.dom.tsx`
 
 ```tsx
 import { describe, expect, it } from "bun:test";
@@ -380,15 +380,17 @@ describe("StepList tinh", () => {
 
 Kiểm tên `data-slot` thật của chỉ báo trong `packages/ui/src/components/reui/stepper.tsx` trước khi chạy; khác thì sửa bộ chọn cho khớp.
 
-- [ ] **Step 2: Chạy đỏ** — `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/step-list-tinh.dom.tsx` → FAIL (prop `tinh` chưa có, `aria-current` vẫn có).
+- [x] **Step 2: Chạy đỏ** — `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/step-list-tinh.dom.tsx` → FAIL (prop `tinh` chưa có, `aria-current` vẫn có).
 
-- [ ] **Step 3: Cài** — trong `step-list.tsx`: `StepList` thêm `tinh = false`; khi `tinh` truyền `value={Number.MAX_SAFE_INTEGER}` cho `Stepper` và `indicators={}` (không dấu tích); đưa `tinh` xuống con qua một context nhỏ trong cùng tệp (`const TinhContext = React.createContext(false)`), `StepListItem` đọc nó và bỏ `aria-current` khi `tinh`; `activeStep` của `StepListItem` thành tuỳ chọn. Không đổi hành vi khi `tinh` vắng.
+- [x] **Step 3: Cài** — trong `step-list.tsx`: `StepList` thêm `tinh = false`; khi `tinh` truyền `value={Number.MAX_SAFE_INTEGER}` cho `Stepper` và `indicators={}` (không dấu tích); đưa `tinh` xuống con qua một context nhỏ trong cùng tệp (`const TinhContext = React.createContext(false)`), `StepListItem` đọc nó và bỏ `aria-current` khi `tinh`; `activeStep` của `StepListItem` thành tuỳ chọn. Không đổi hành vi khi `tinh` vắng.
 
-- [ ] **Step 4: Chạy xanh** + test cũ của stepper: `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/step-list-tinh.dom.tsx` và `cd apps/app && bun run test:dom` (hộp nhập tổ chức dùng `StepList` tiến độ).
+- [x] **Step 4: Chạy xanh** + test cũ của stepper: `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/step-list-tinh.dom.tsx` và `cd apps/app && bun run test:dom` (hộp nhập tổ chức dùng `StepList` tiến độ).
 
-- [ ] **Step 5: Commit** — `git commit -m "feat(ui): StepList chế độ tĩnh cho khối hướng dẫn"`
+- [x] **Step 5: Commit** — `git commit -m "feat(ui): StepList chế độ tĩnh cho khối hướng dẫn"`
 
 ---
+
+**Đã làm 2026-09-26 (trước #104, theo lời chủ kho), commit `b55b1b48`.** Test đỏ trên mã cũ: 3/5 ca chế độ tĩnh đỏ, 2 ca đối chứng xanh. Sau khi cài: 5/5 xanh; gói test `packages/ui` xanh; 34 tệp DOM của `apps/app` xanh; `check-types` của `@crm/ui` và `app` xanh. Phá-thử trên cây đã commit, trả nguyên bằng `git show HEAD:<tệp>`: bỏ `!tinh &&` ở `aria-current` → đỏ đúng «khong buoc nao la buoc hien tai»; bỏ `Number.MAX_SAFE_INTEGER` → đỏ đúng «moi chi bao cung mot trang thai…» và «khong tieu de nao bi lam mo».
 
 ### Task 3: `AuthShell` nhận khối cột trái, bỏ ép tối, tiêu đề `h1`
 
