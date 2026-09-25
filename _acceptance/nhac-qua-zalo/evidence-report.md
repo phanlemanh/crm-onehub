@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bd2413701530bdf78535910a813ac9bdcd4ccfe1
+verified_commit: 2e7d0b02e8a8a14184928c6314035d74af045a24
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -347,3 +347,7 @@ Round 2: Expected dòng 4 của E17 được sửa thành "x/y bằng đúng daN
 ### Re-pin lần 1 — 2026-09-23, do hoá cũ do hợp nhất onehub sau chữ ký
 run_id: repin-20260923T103714Z-83695
 sha: bd2413701530bdf78535910a813ac9bdcd4ccfe1 · suites: 4 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-09-25, do gộp onehub (#133, #135, #136, #137) và hướng A cho vai chỉ OKR
+run_id: repin-20260925T084122Z-61552
+sha: 2e7d0b02e8a8a14184928c6314035d74af045a24 · suites: 4 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta

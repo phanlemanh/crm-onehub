@@ -3,10 +3,25 @@ import GoogleLogo from "@crm/ui/components/brand-logos/google";
 import MicrosoftLogo from "@crm/ui/components/brand-logos/microsoft";
 import SlackLogo from "@crm/ui/components/brand-logos/slack";
 import { Button } from "@crm/ui/components/button";
-import { Spinner } from "@crm/ui/components/spinner";
+import {
+	Card,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@crm/ui/components/card";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import {
+	PageShell,
+	PageShellActions,
+	PageShellContent,
+	PageShellDescription,
+	PageShellHeader,
+	PageShellHeading,
+	PageShellLoading,
+	PageShellTitle,
+} from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
@@ -17,13 +32,30 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: ketNoiMessages(await getLocale()).danhSach.tieuDe };
 }
 
-export default function ConnectionsSettingsPage(
+export default async function ConnectionsSettingsPage(
 	props: PageProps<"/[slug]/settings/connections">,
 ) {
+	const t = ketNoiMessages(await getLocale());
+
 	return (
-		<Suspense fallback={<ConnectionsFallback />}>
-			<ConnectionsSettingsPageContent {...props} />
-		</Suspense>
+		<PageShell width="page">
+			<PageShellHeader>
+				<PageShellHeading>
+					<PageShellTitle>{t.danhSach.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.danhSach.moTa}</PageShellDescription>
+				</PageShellHeading>
+				<PageShellActions>
+					<Button asChild variant="outline">
+						<Link href="?add=1">{t.danhSach.them}</Link>
+					</Button>
+				</PageShellActions>
+			</PageShellHeader>
+			<PageShellContent>
+				<Suspense fallback={<PageShellLoading />}>
+					<ConnectionsSettingsPageContent {...props} />
+				</Suspense>
+			</PageShellContent>
+		</PageShell>
 	);
 }
 
@@ -96,46 +128,25 @@ async function ConnectionsSettingsPageContent({
 	];
 
 	return (
-		<main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto px-(--spacing-page-inline) pt-(--spacing-page-top) pb-(--spacing-page-bottom)">
+		<>
 			{rows.length > 0 ? (
-				<div className="mx-auto flex w-full max-w-(--container-page) flex-col gap-(--spacing-page-gap)">
-					<header className="flex items-start justify-between gap-4 px-(--spacing-block-inline)">
-						<div className="flex flex-col gap-2">
-							<h1 className="font-medium text-2xl tracking-tight">
-								{t.danhSach.tieuDe}
-							</h1>
-							<p className="max-w-2xl text-muted-foreground text-sm">
-								{t.danhSach.moTa}
-							</p>
-						</div>
-						<Button asChild variant="outline">
-							<Link href={`/${slug}/settings/connections?add=1`}>
-								{t.danhSach.them}
-							</Link>
-						</Button>
-					</header>
-					<div className="flex flex-col gap-3">
-						{rows.map((row) => (
-							<ConnectionCard
-								key={row.name}
-								{...row}
-								manageLabel={t.danhSach.quanLy}
-								bringsInLabel={t.danhSach.mangVe}
-								sendsLabel={t.danhSach.gui}
-							/>
-						))}
-					</div>
+				<div className="flex flex-col gap-3">
+					{rows.map((row) => (
+						<ConnectionCard
+							key={row.name}
+							{...row}
+							manageLabel={t.danhSach.quanLy}
+							bringsInLabel={t.danhSach.mangVe}
+							sendsLabel={t.danhSach.gui}
+						/>
+					))}
 				</div>
 			) : (
-				<div className="mx-auto flex w-full max-w-(--container-narrow) flex-1 flex-col justify-center gap-(--spacing-page-gap) text-center">
-					<div className="flex flex-col gap-2 px-(--spacing-block-inline)">
-						<h1 className="font-medium text-2xl tracking-tight">
-							{t.danhSach.trongTieuDe}
-						</h1>
-						<p className="text-muted-foreground text-sm leading-relaxed">
-							{t.danhSach.trongMoTa}
-						</p>
-					</div>
+				<Card>
+					<CardHeader>
+						<CardTitle>{t.danhSach.trongTieuDe}</CardTitle>
+						<CardDescription>{t.danhSach.trongMoTa}</CardDescription>
+					</CardHeader>
 					<div className="flex flex-col divide-y rounded-lg border bg-card px-(--spacing-block-inline)">
 						<StarterRow
 							logo={GoogleLogo}
@@ -166,7 +177,7 @@ async function ConnectionsSettingsPageContent({
 							connectLabel={t.danhSach.cam}
 						/>
 					</div>
-					<p className="px-(--spacing-block-inline) text-muted-foreground text-sm">
+					<p className="text-muted-foreground text-sm">
 						{t.danhSach.timGiKhac}{" "}
 						<Link
 							className="font-medium text-foreground underline underline-offset-4"
@@ -175,22 +186,14 @@ async function ConnectionsSettingsPageContent({
 							{t.danhSach.xemTatCa}
 						</Link>
 					</p>
-				</div>
+				</Card>
 			)}
 			<AddConnectionDialog
 				slug={slug}
 				open={first(query.add) === "1"}
 				connected={rows.map((row) => row.name)}
 			/>
-		</main>
-	);
-}
-
-function ConnectionsFallback() {
-	return (
-		<main className="flex min-h-0 min-w-0 flex-1 items-center justify-center px-(--spacing-page-inline) pt-(--spacing-page-top) pb-(--spacing-page-bottom)">
-			<Spinner size="lg" />
-		</main>
+		</>
 	);
 }
 

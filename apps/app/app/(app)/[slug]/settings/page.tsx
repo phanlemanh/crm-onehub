@@ -27,7 +27,7 @@ export default async function GeneralSettingsPage() {
 	const t = settingsMessages(await getLocale());
 
 	return (
-		<PageShell>
+		<PageShell width="page">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{t.chung.tieuDe}</PageShellTitle>
@@ -60,7 +60,7 @@ async function Settings() {
 
 	return (
 		<HydrateClient>
-			<div className="flex max-w-3xl flex-col gap-6">
+			<div className="flex flex-col gap-6">
 				<WorkspaceForm />
 				<ResearchKey />
 				<ArchiveRetention />

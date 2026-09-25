@@ -12,7 +12,7 @@ const en = {
 	chiOkr: {
 		moTa: "The Objectives area is open — set and follow your unit's OKRs there.",
 		noiKhu: "Open Objectives",
-		noiKenh: "Open your notifications",
+		noiKenh: "Open morning reminders",
 	},
 	stats: {
 		closedWon: "Closed won this month",
@@ -100,7 +100,7 @@ const vi = {
 	chiOkr: {
 		moTa: "Khu Mục tiêu đã mở — đặt và theo dõi OKR của đơn vị bạn ở đó.",
 		noiKhu: "Mở Mục tiêu",
-		noiKenh: "Mở Thông báo của bạn",
+		noiKenh: "Mở Nhắc buổi sáng",
 	},
 	stats: {
 		closedWon: "Chốt được tháng này",

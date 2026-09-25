@@ -3,6 +3,7 @@ import {
 	GOC_CAI_DAT,
 	MUC_CAI_DAT,
 	mucCaiDatDangMo,
+	NHOM_CAI_DAT,
 	nhanCaiDat,
 } from "@/lib/cai-dat-dieu-huong";
 import { onboardingMessages } from "@/lib/messages/onboarding";
@@ -19,7 +20,10 @@ const dieuPhoi = () => {
 describe("thanh ben cai dat", () => {
 	it("loi-vao-dieu-phoi: muc dieu phoi dan toi cai dat onboarding, dung cuoi", () => {
 		expect(dieuPhoi().href).toBe("/settings/onboarding");
-		expect(MUC_CAI_DAT.at(-1)).toBe(dieuPhoi());
+		expect(
+			NHOM_CAI_DAT.find((n) => n.khoa === "conNguoi")?.muc.at(-1),
+			"dieu phoi khong dung cuoi nhom Con nguoi",
+		).toBe(dieuPhoi());
 		const onehub = `/onehub${dieuPhoi().href}`;
 		expect(mucCaiDatDangMo(onehub, goc, "/onehub/settings/onboarding")).toBe(
 			true,

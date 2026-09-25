@@ -104,7 +104,6 @@ function GoogleUnavailable({ t }: { t: KetNoiMessages }) {
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						<span translate="no">{t.ten.google}</span>
 						<StatusIndicator
 							size="sm"
 							tone="neutral"
@@ -153,7 +152,6 @@ function ConnectGoogle({
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						<span translate="no">{t.ten.google}</span>
 						<StatusIndicator size="sm" tone="neutral" label={t.chung.chuaCam} />
 					</div>
 				</CardTitle>
@@ -283,7 +281,6 @@ export function GoogleConnection({
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						<span translate="no">{t.ten.google}</span>
 						<StatusIndicator
 							size="sm"
 							tone={healthy ? "success" : "warning"}
