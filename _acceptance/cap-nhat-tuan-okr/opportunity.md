@@ -3,10 +3,10 @@ schema_version: 1
 slug: cap-nhat-tuan-okr
 feature: Cập nhật tuần OKR — màn «Cập nhật tuần của tôi» gom mọi KR tôi phụ trách, điền sẵn số tuần trước, ghi giá trị · mức tự tin · một dòng ghi chú; nhắc buổi sáng và thẻ «việc của tôi» dẫn thẳng vào màn; bình luận và nhắc tên trên mục tiêu và KR; chuyển KR khi người nghỉ
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
+decided_at: 2026-09-25T14:34:49Z
 prototype:
   base_commit: 47b7f00cee56915725680b0707614cfd2e9f1e45
   disposition: keep
@@ -41,19 +41,19 @@ XEM-10, QT-05); từ điển `CONTEXT.md` (Cập nhật tuần, Mức tự tin, 
 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
-| 1 | Người phụ trách cập nhật khi được nhắc đúng ngày cập nhật của chu kỳ (ô «ngày cập nhật trong tuần» của lượt 3, mặc định thứ Hai) qua **cùng một tin buổi sáng** đang nhắc kế hoạch 30 ngày — không cần tin thứ hai | Tỷ lệ cập nhật thấp vì tin bị chìm giữa việc 30 ngày đầu; phải tách tin, trái luật đã chốt | Đếm lần cập nhật trong ngày nhắc so với các ngày khác, ba tuần đầu (từ bảng lần cập nhật · cột kênh) | [đề xuất] chưa thử — đo sau ship |
-| 2 | Mọi người phụ trách KR đã nối Zalo hoặc Slack trước 2026-10-26 (mục 6 lộ trình: «mỗi người nối kênh nhắc») | Nhắc không tới người chưa nối; chỉ còn thẻ trong CRM, mà người không mở CRM thì không thấy | Màn này hiện rõ «bạn chưa nối kênh nhắc» cho người phụ trách chưa nối; màn sức khoẻ chương trình đếm (lượt 5) | [đề xuất] giảm bằng dòng báo trên màn; số đếm ở lượt 5 |
-| 3 | Báo «được giao KR» và «được nhắc tên» đi trong tin buổi sáng hôm sau (chậm tới một ngày) là đủ cho nhịp OKR hằng tuần | Người bị nhắc tên trong bình luận trả lời chậm một ngày, bình luận thành chỗ chết | Đếm khoảng từ lúc nhắc tên tới lúc người đó trả lời hoặc cập nhật, ba tuần đầu | [đề xuất] chấp nhận độ trễ — báo tức thì trong chat là lượt 10 |
-| 4 | Người mang vai «chỉ OKR» thấy thẻ «việc của tôi» (phần OKR) ở trang Tổng quan riêng của họ mà không mở phạm vi đối tác | Nửa công ty không có thẻ dẫn vào màn cập nhật; hoặc phải nới lớp chặn của lượt 2 | Thẻ OKR đọc qua cụm thủ tục khai phạm vi `okr`, không qua `dashboard` (khai phạm vi đối tác) | Đã đọc mã: `dashboard.router` khai `PhamViDoiTacMiddleware`; vai «chỉ OKR» thấy `TongQuanChiOkr` |
-| 5 | Một bảng lần cập nhật chỉ thêm (người ghi, ghi hộ, kênh, số giây mở→gửi đo ở máy chủ) đủ để đo cả hai ngưỡng dưới đây mà không cần công cụ phân tích ngoài | Không đo được ngưỡng tại Cổng Giá trị | Truy vấn đọc thẳng bảng đó; là AC đọc lại từ DB ở S1 | [đề xuất] thiết kế ở S1 |
+| 1 | Người phụ trách cập nhật khi được nhắc đúng ngày cập nhật của chu kỳ (ô «ngày cập nhật trong tuần» của lượt 3, mặc định thứ Hai) qua **cùng một tin buổi sáng** đang nhắc kế hoạch 30 ngày — không cần tin thứ hai | Tỷ lệ cập nhật thấp vì tin bị chìm giữa việc 30 ngày đầu; phải tách tin, trái luật đã chốt | Đếm lần cập nhật trong ngày nhắc so với các ngày khác, ba tuần đầu (từ bảng lần cập nhật · cột kênh) | Chưa thử — đo sau ship |
+| 2 | Mọi người phụ trách KR đã nối Zalo hoặc Slack trước 2026-10-26 (mục 6 lộ trình: «mỗi người nối kênh nhắc») | Nhắc không tới người chưa nối; chỉ còn thẻ trong CRM, mà người không mở CRM thì không thấy | Màn này hiện rõ «bạn chưa nối kênh nhắc» cho người phụ trách chưa nối; màn sức khoẻ chương trình đếm (lượt 5) | Không phải việc của vòng này (Cổng Đáng 2026-09-25); hợp đồng ghi rõ: màn cập nhật tuần và thẻ «việc của tôi» chạy đầy đủ cho người chưa nối kênh — nhắc qua kênh chỉ là lối vào thêm |
+| 3 | Báo «được giao KR» và «được nhắc tên» đi trong tin buổi sáng hôm sau (chậm tới một ngày) là đủ cho nhịp OKR hằng tuần | Người bị nhắc tên trong bình luận trả lời chậm một ngày, bình luận thành chỗ chết | Đếm khoảng từ lúc nhắc tên tới lúc người đó trả lời hoặc cập nhật, ba tuần đầu | Chấp nhận độ trễ — báo tức thì trong chat là lượt 10 |
+| 4 | Người mang vai «chỉ OKR» thấy thẻ «việc của tôi» (phần OKR) ở trang Tổng quan riêng của họ mà không mở phạm vi đối tác | Nửa công ty không có thẻ dẫn vào màn cập nhật; hoặc phải nới lớp chặn của lượt 2 | Thẻ OKR đọc qua cụm thủ tục khai phạm vi `okr`, không qua `dashboard` (khai phạm vi đối tác) | Đã đọc mã: `dashboard.router` khai `PhamViDoiTacMiddleware`; vai «chỉ OKR» thấy `TongQuanChiOkr`. Thành việc trong phạm vi có phép đo (Cổng Đáng 2026-09-25) |
+| 5 | Một bảng lần cập nhật chỉ thêm (người ghi, ghi hộ, kênh, số giây mở→gửi đo ở máy chủ) đủ để đo cả hai ngưỡng dưới đây mà không cần công cụ phân tích ngoài | Không đo được ngưỡng tại Cổng Giá trị | Truy vấn đọc thẳng bảng đó; là AC đọc lại từ DB ở S1 | Thiết kế ở S1 |
 | 6 | Hộp «Chuyển việc 30 ngày» ở màn Thành viên là đúng chỗ để chuyển KR và mục tiêu của người nghỉ | Quản trị không tìm thấy, KR mồ côi vẫn nhắc người đã nghỉ | Hộp đã có luồng xem-trước-rồi-chuyển cho kế hoạch và bước; thêm hai con số KR · mục tiêu | Chốt ở lộ trình mục 5 |
 
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: sau khi OKR quý 4 được công bố, người phụ trách có cập nhật KR của mình mỗi tuần, nhanh, mà không cần ai đi hỏi không?
-- Kết quả nào là SỐNG: [đề xuất] trên mọi phòng ban, ≥ 80% KR đang chạy có ít nhất một lần cập nhật trong mỗi tuần, ba tuần liền (tuần bắt đầu 2026-11-02, 11-09, 11-16); và trung vị số giây từ mở màn tới gửi của một lần cập nhật < 60 giây — cả hai đếm từ bảng lần cập nhật.
-- Kết quả nào là CHẾT: [đề xuất] < 60% KR có cập nhật ở tuần thứ ba; hoặc trung vị > 120 giây; hoặc phải sửa cơ sở dữ liệu tay để ghi, chuyển hay gỡ một lần cập nhật; hoặc ≥ 1 người phụ trách đã nối kênh mà không nhận tin nhắc vào ngày cập nhật vì công cụ.
-- Timebox: [đề xuất] đo ba tuần 2026-11-02 → 2026-11-22, đọc số 2026-11-23; phiên nghiệm thu R1 2026-11-13 đọc trước tuần đầu và trung vị thời gian.
+- Kết quả nào là SỐNG: trên mọi phòng ban, ≥ 80% KR đang chạy có ít nhất một lần cập nhật trong mỗi tuần, ba tuần liền (tuần bắt đầu 2026-11-02, 11-09, 11-16); và trung vị số giây từ mở màn tới gửi của một lần cập nhật < 60 giây — cả hai đếm từ bảng lần cập nhật.
+- Kết quả nào là CHẾT: < 60% KR có cập nhật ở tuần thứ ba; hoặc trung vị > 120 giây; hoặc phải sửa cơ sở dữ liệu tay để ghi, chuyển hay gỡ một lần cập nhật; hoặc ≥ 1 người phụ trách đã nối kênh mà không nhận tin nhắc vào ngày cập nhật vì công cụ.
+- Timebox: đo ba tuần 2026-11-02 → 2026-11-22, đọc số 2026-11-23; phiên nghiệm thu R1 2026-11-13 đọc trước tuần đầu và trung vị thời gian.
 
 ## Kết quả prototype
 
@@ -77,9 +77,9 @@ Không có vật liệu ngôn-ngữ-thiết-kế nào ngoài kho.
 
 ## Cổng 0
 
-- **decision = …** Máy khuyên **build**. Căn cứ: lộ trình mục 6 hẹn cập nhật hằng tuần từ 2026-11-02 cho mọi phòng ban; mục 7 ghi «lùi theo tuần, không cắt lượt 4»; lượt 3 đã lên `onehub` (#140) nên dữ liệu thật để đứng lên đã có.
+- **decision = build.** Căn cứ: lộ trình mục 6 hẹn cập nhật hằng tuần từ 2026-11-02 cho mọi phòng ban; mục 7 ghi «lùi theo tuần, không cắt lượt 4»; lượt 3 đã lên `onehub` (#140) nên dữ liệu thật để đứng lên đã có.
 - **disposition = keep.** Căn cứ: bản mẫu `/proto/ban-mau-okr` ở lại kho vĩnh viễn theo `docs/proto.md`; lượt này đọc hình và chữ từ nó, không xoá.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** SỐNG ≥ 80% KR đang chạy có cập nhật mỗi tuần ba tuần liền (tuần 2026-11-02, 11-09, 11-16) và trung vị mở→gửi < 60 giây; CHẾT < 60% ở tuần thứ ba, hoặc trung vị > 120 giây, hoặc sửa DB tay, hoặc người đã nối kênh không nhận nhắc vì công cụ; đo 2026-11-02 → 11-22, đọc 2026-11-23 — chốt tại Cổng Đáng 2026-09-25, Manh Phan — uỷ quyền phiên điều phối 2026-09-24.
 
 ## Thước đo thành công → ứng viên criterion
 
