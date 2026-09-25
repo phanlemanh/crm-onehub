@@ -112,6 +112,7 @@ const KHONG_DAU = new Set([
 	"cot.kr",
 	"cot.pha",
 	"moc.xong",
+	"dem",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -547,6 +548,11 @@ describe("kho chuoi cua vong ③a", () => {
 			"settings-thanh-vien:phatChia.daChep": [
 				"Đã chép. Dán vào Zalo gửi cho 1.",
 				"Đã chép. Dán vào Zalo gửi cho 12.",
+			],
+			"settings-thanh-vien:dem": ["1 · A", "12 · A"],
+			"settings-thanh-vien:duocPhepVao.menu": [
+				"Hành động với 1",
+				"Hành động với 12",
 			],
 			"settings-thanh-vien:phatChia.vet": [
 				"1 đã phát liên kết · A",
