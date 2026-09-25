@@ -18,11 +18,12 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { okrParsers } from "./okr-search-params";
 
-const TAB = ["cua-toi", "theo-don-vi", "toan-canh"] as const;
+const TAB = ["cua-toi", "cap-nhat-tuan", "theo-don-vi", "toan-canh"] as const;
 export type TabOkr = (typeof TAB)[number];
 
 const DUONG = {
 	"cua-toi": "/okr",
+	"cap-nhat-tuan": "/okr/cap-nhat-tuan",
 	"theo-don-vi": "/okr/theo-don-vi",
 	"toan-canh": "/okr/toan-canh",
 } satisfies Record<TabOkr, string>;
@@ -49,7 +50,9 @@ export function ThanhTabOkr({ tab }: { tab: TabOkr }) {
 			<TabsList variant="line" aria-label={m.tabNhan}>
 				{TAB.map((t) => (
 					<TabsTrigger key={t} value={t} asChild>
-						<Link href={toi(t)}>{m.tab[t]}</Link>
+						<Link href={toi(t)} aria-current={t === tab ? "page" : undefined}>
+							{m.tab[t]}
+						</Link>
 					</TabsTrigger>
 				))}
 			</TabsList>

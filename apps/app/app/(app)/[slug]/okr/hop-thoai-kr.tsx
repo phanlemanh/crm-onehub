@@ -43,7 +43,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { KetQua } from "./kieu";
 
-function hienSo(so: number, locale: Locale): string {
+export function hienSo(so: number, locale: Locale): string {
 	const chu = locale === "vi" ? String(so).replace(".", ",") : String(so);
 	return docSoOkr(chu) === so ? chu : `${chu}0`;
 }

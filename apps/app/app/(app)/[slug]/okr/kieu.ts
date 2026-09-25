@@ -5,6 +5,8 @@ export type ChuKy = RouterOutputs["okr"]["cycles"]["cycles"][number];
 export type MucTieu = RouterOutputs["okr"]["byUnit"]["objectives"][number];
 export type KetQua = MucTieu["keyResults"][number];
 export type NutCay = RouterOutputs["okr"]["alignmentTree"]["roots"][number];
+export type DuLieuCapNhat = RouterOutputs["okr"]["capNhatTuan"];
+export type KrCapNhat = DuLieuCapNhat["items"][number];
 
 export const KHO_HEP = "(max-width: 1023px)";
 

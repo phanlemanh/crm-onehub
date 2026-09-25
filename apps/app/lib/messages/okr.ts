@@ -4,17 +4,21 @@ const vi = {
 	tabNhan: "Khu mục tiêu",
 	tab: {
 		"cua-toi": "Của tôi",
+		"cap-nhat-tuan": "Cập nhật tuần",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
 	},
 	tieuDe: {
 		"cua-toi": "OKR của tôi",
+		"cap-nhat-tuan": "Cập nhật tuần của tôi",
 		"theo-don-vi": "OKR theo đơn vị",
 		"toan-canh": "Toàn cảnh OKR",
 	},
 	moTa: {
 		"cua-toi":
 			"Mục tiêu bạn phụ trách hoặc tham gia, và mục tiêu có KR bạn phụ trách.",
+		"cap-nhat-tuan":
+			"Mọi KR bạn phụ trách ở chu kỳ đang chạy, gửi trong một lượt mỗi tuần.",
 		"theo-don-vi":
 			"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 		"toan-canh": "Cả công ty trong một màn.",
@@ -388,6 +392,63 @@ const vi = {
 			daLuu: "Đã lưu cấu hình chương trình.",
 		},
 	},
+	capNhat: {
+		dauTrang: (n: number, han: string) =>
+			`${n} KR bạn phụ trách · hạn hết Chủ nhật ${han}. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.`,
+		danhSach: "KR cần cập nhật",
+		giaTri: "Giá trị",
+		moc: "Mốc",
+		tuTin: "Mức tự tin",
+		mucTuTin: { cao: "Cao", vua: "Vừa", thap: "Thấp" },
+		ghiChu: "Ghi chú",
+		ghiChuGoiY: "Một dòng: điều gì đổi, cần ai giúp",
+		lanTruoc: {
+			"tuan-nay": "Tuần này",
+			"tuan-truoc": "Tuần trước",
+			"lan-truoc": "Lần trước",
+		},
+		hienTai: "Hiện tại",
+		chuaCapNhat: "Chưa có lần cập nhật nào",
+		dich: "đích",
+		soVoi: (doi: string, moc: string) => `${doi} so với ${moc.toLowerCase()}`,
+		loiSo: (viDu: string) => `Nhập một số, ví dụ ${viDu}`,
+		loiPhanTram: "Nhập phần trăm từ 0 đến 100",
+		thanh: {
+			loiSo: (k: number) => `${k} KR có số chưa hợp lệ — sửa rồi gửi.`,
+			du: (n: number, tong: number) => `Đủ ${n}/${tong} KR.`,
+			chon: (n: number, tong: number) =>
+				`Đã chọn mức tự tin ${n}/${tong} KR. KR chưa chọn sẽ chờ lần gửi sau.`,
+		},
+		gui: (n: number) => `Gửi ${n} cập nhật`,
+		guiLai: (n: number) => `Gửi lại ${n} cập nhật`,
+		dangGui: "Đang gửi…",
+		loiGui: {
+			title: "Chưa gửi được",
+			mayChu: "Máy chủ không trả lời.",
+			conNguyen: "Mọi ô bạn điền vẫn còn trên màn — bấm Gửi lại.",
+		},
+		daGui: {
+			title: (n: number, gio: string, giay: number) =>
+				`Đã gửi ${n} cập nhật lúc ${gio} · mất ${giay} giây`,
+			keTiep: (ngay: string) =>
+				`Lần kế tiếp: thứ Hai ${ngay} — tin nhắc buổi sáng sẽ dẫn thẳng về đây.`,
+			conCho: (k: number) =>
+				`${k} KR chưa chọn mức tự tin vẫn chờ lần gửi sau.`,
+			danhSach: "KR đã gửi",
+		},
+		tuTinNhan: (muc: string) => `Tự tin ${muc.toLowerCase()}`,
+		veCuaToi: "Về Của tôi",
+		rong: {
+			title: "Tuần này bạn không có KR nào cần cập nhật",
+			body: "Bạn chưa phụ trách KR nào đang chạy. Người tham gia một mục tiêu không phải cập nhật tuần.",
+		},
+		loi: {
+			title: "Không lấy được danh sách KR của bạn",
+			body: "Chưa có gì bị mất — thử lại sau ít phút.",
+			action: "Thử lại",
+		},
+		dangTai: "Đang tải KR của bạn…",
+	},
 };
 
 type OkrMessages = typeof vi;
@@ -396,17 +457,21 @@ const en: OkrMessages = {
 	tabNhan: "Objectives area",
 	tab: {
 		"cua-toi": "Mine",
+		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
 	},
 	tieuDe: {
 		"cua-toi": "My OKRs",
+		"cap-nhat-tuan": "My weekly update",
 		"theo-don-vi": "OKRs by unit",
 		"toan-canh": "OKR overview",
 	},
 	moTa: {
 		"cua-toi":
 			"Objectives you own or take part in, and objectives with a key result you own.",
+		"cap-nhat-tuan":
+			"Every key result you own in the running cycle, sent in one go each week.",
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
@@ -782,6 +847,64 @@ const en: OkrMessages = {
 			caNhanMoTa: "Allow objectives at the personal level.",
 			daLuu: "Program settings saved.",
 		},
+	},
+	capNhat: {
+		dauTrang: (n: number, han: string) =>
+			`${n} key results you own · due by the end of Sunday ${han}. Values are filled in from the latest update — change only what moved, then pick a confidence.`,
+		danhSach: "Key results to update",
+		giaTri: "Value",
+		moc: "Milestone",
+		tuTin: "Confidence",
+		mucTuTin: { cao: "High", vua: "Medium", thap: "Low" },
+		ghiChu: "Note",
+		ghiChuGoiY: "One line: what changed, who can help",
+		lanTruoc: {
+			"tuan-nay": "This week",
+			"tuan-truoc": "Last week",
+			"lan-truoc": "Last time",
+		},
+		hienTai: "Current",
+		chuaCapNhat: "No updates yet",
+		dich: "target",
+		soVoi: (doi: string, moc: string) => `${doi} vs ${moc.toLowerCase()}`,
+		loiSo: (viDu: string) => `Enter a number, for example ${viDu}`,
+		loiPhanTram: "Enter a percentage from 0 to 100",
+		thanh: {
+			loiSo: (k: number) =>
+				`${k} key results have an invalid number — fix them, then send.`,
+			du: (n: number, tong: number) => `All ${n}/${tong} key results ready.`,
+			chon: (n: number, tong: number) =>
+				`Confidence picked for ${n}/${tong} key results. The rest wait for your next send.`,
+		},
+		gui: (n: number) => `Send ${n} ${n === 1 ? "update" : "updates"}`,
+		guiLai: (n: number) => `Send ${n} ${n === 1 ? "update" : "updates"} again`,
+		dangGui: "Sending…",
+		loiGui: {
+			title: "Not sent yet",
+			mayChu: "The server did not respond.",
+			conNguyen: "Everything you entered is still here — press Send again.",
+		},
+		daGui: {
+			title: (n: number, gio: string, giay: number) =>
+				`Sent ${n} ${n === 1 ? "update" : "updates"} at ${gio} · took ${giay} seconds`,
+			keTiep: (ngay: string) =>
+				`Next time: Monday ${ngay} — the morning reminder links straight back here.`,
+			conCho: (k: number) =>
+				`${k} key results without a confidence still wait for your next send.`,
+			danhSach: "Key results sent",
+		},
+		tuTinNhan: (muc: string) => `${muc} confidence`,
+		veCuaToi: "Back to Mine",
+		rong: {
+			title: "You have no key results to update this week",
+			body: "You don't own a key result in a running cycle. Taking part in an objective doesn't need a weekly update.",
+		},
+		loi: {
+			title: "Couldn't load your key results",
+			body: "Nothing is lost — try again in a few minutes.",
+			action: "Try again",
+		},
+		dangTai: "Loading your key results…",
 	},
 };
 

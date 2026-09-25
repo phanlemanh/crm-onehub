@@ -545,10 +545,11 @@ describe("thanh-tab", () => {
 			tieuDe: m.tieuDe["theo-don-vi"],
 			lienKet: [
 				"/ws/okr?kyOkr=q3",
+				"/ws/okr/cap-nhat-tuan?kyOkr=q3",
 				"/ws/okr/theo-don-vi?kyOkr=q3",
 				"/ws/okr/toan-canh?kyOkr=q3",
 			],
-			dangChon: ["false", "true", "false"],
+			dangChon: ["false", "false", "true", "false"],
 		});
 	});
 });
