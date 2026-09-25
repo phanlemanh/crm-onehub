@@ -534,6 +534,8 @@ executors:
     mdg_man_goi_org: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t mdg-man-goi-org"
     zgm_ca_production: "cd apps/app && TZ=UTC bun test ./test/zalo-gio-theo-mui-gio-xuong.spec.ts -t ca-production"
     zgm_bien_nua_dem: "cd apps/app && TZ=UTC bun test ./test/zalo-gio-theo-mui-gio-xuong.spec.ts -t bien-nua-dem"
+    tvhk_dang_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-hai-khoi.dom.tsx -t dang-tai"
+    tvhk_rong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-hai-khoi.dom.tsx -t rong"
   script:
     vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
     vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'
@@ -943,6 +945,12 @@ executors:
     mdg_ho_so_da_ghim: "bun _acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs"
     ttv_do_bang: 'APP_URL=${APP_URL:-http://localhost:3500} API_URL=${API_URL:-http://localhost:3501} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"'
     vckc_do_khung: 'APP_URL=${APP_URL:-http://localhost:3500} API_URL=${API_URL:-http://localhost:3501} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"'
+    tvhk_do_khoi: 'APP_URL=${APP_URL:-http://localhost:3620} API_URL=${API_URL:-http://localhost:3621} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"'
+    tvhk_ttv_do_bang: 'APP_URL=${APP_URL:-http://localhost:3620} API_URL=${API_URL:-http://localhost:3621} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"'
+    tvhk_tu_dien: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/tu-dien.mjs"
+    tvhk_soi_ma: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/soi-ma.mjs"
+    tvhk_lam_moi: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/lam-moi.mjs"
+    tvhk_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/page.tsx" "apps/app/app/(app)/[slug]/settings/members/members-table.tsx" "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx" "apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
