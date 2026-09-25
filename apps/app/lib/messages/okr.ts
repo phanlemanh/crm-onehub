@@ -208,6 +208,8 @@ const vi = {
 		chiNguoiSua:
 			"Chỉ người sửa được mục tiêu mới đổi được kiểu, người phụ trách và khởi điểm.",
 		soSai: "Nhập một số, dùng dấu phẩy cho phần thập phân.",
+		quyUocSo:
+			"Dấu phẩy là phần thập phân, dấu chấm để phân nhóm nghìn — «1.500» đọc là 1500.",
 		soTheoKieu: {
 			"dich-phai-lon-hon-khoi-diem": "Đích phải lớn hơn khởi điểm.",
 			"dich-phai-nho-hon-khoi-diem": "Đích phải nhỏ hơn khởi điểm.",
@@ -596,6 +598,8 @@ const en: OkrMessages = {
 		chiNguoiSua:
 			"Only someone who can edit the objective can change the kind, owner and start value.",
 		soSai: "Enter a number; a comma works as the decimal mark.",
+		quyUocSo:
+			"A comma marks the decimal part; a dot groups thousands — «1.500» reads as 1500.",
 		soTheoKieu: {
 			"dich-phai-lon-hon-khoi-diem": "The target must be above the start.",
 			"dich-phai-nho-hon-khoi-diem": "The target must be below the start.",

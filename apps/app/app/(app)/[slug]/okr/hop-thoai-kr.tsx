@@ -286,7 +286,11 @@ export function HopThoaiKr({
 								</FieldError>
 							) : soHong(khoi) || soHong(dich) || soHong(hien) ? (
 								<FieldError>{h.soSai}</FieldError>
-							) : null}
+							) : (
+								<FieldDescription data-quy-uoc-so>
+									{h.quyUocSo}
+								</FieldDescription>
+							)}
 							<div className="grid items-start gap-3 sm:grid-cols-2">
 								<Field>
 									<FieldLabel htmlFor={`${ma}-don-vi`}>{h.donViDo}</FieldLabel>
