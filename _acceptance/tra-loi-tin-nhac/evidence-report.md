@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5776ca15078cfcdc0272ee9b1b751b6b986a6796
+verified_commit: 51c4ee4dc15d5798da7264a1d6aad637b5c46db5
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -266,3 +266,7 @@ sha: a8f91b7d213fc1789b080870e55ded6b0c08e6b6 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-25, do gộp onehub b7951341 (#143) — ghim ở đỉnh cây sắp merge
 run_id: repin-20260925T180548Z-98820
 sha: 5776ca15078cfcdc0272ee9b1b751b6b986a6796 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng
+
+### Re-pin lần 3 — 2026-09-25, do sửa test rò đồng hồ giả (CI #144 đỏ ở enrichment)
+run_id: repin-20260925T220020Z-94983
+sha: 51c4ee4dc15d5798da7264a1d6aad637b5c46db5 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng
