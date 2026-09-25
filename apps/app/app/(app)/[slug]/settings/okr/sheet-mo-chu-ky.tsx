@@ -40,6 +40,7 @@ import { useId, useState } from "react";
 import { toast } from "sonner";
 import type { ChuKy } from "@/app/(app)/[slug]/okr/kieu";
 import { okrMessages } from "@/lib/messages/okr";
+import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { parseMoChuKy, THAM_SO_MO_CHU_KY } from "./okr-settings-search-params";
@@ -52,9 +53,11 @@ const ngayHoacNull = (v: string) => (v === "" ? null : v);
 export function SheetMoChuKy({
 	canManage,
 	cacNam,
+	goiY,
 }: {
 	canManage: boolean;
 	cacNam: ChuKy[];
+	goiY: GoiYChuKy;
 }) {
 	const m = okrMessages(useLocale());
 	const c = m.caiDat.mo;
@@ -162,7 +165,7 @@ export function SheetMoChuKy({
 								maxLength={80}
 								autoComplete="off"
 								translate="no"
-								placeholder={c.tenGoiY[loai]}
+								placeholder={c.tenGoiY[loai](goiY)}
 								data-o-ten
 								onChange={(event) => setTen(event.target.value)}
 							/>

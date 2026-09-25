@@ -39,6 +39,7 @@ import { CELL, type ChuKy } from "@/app/(app)/[slug]/okr/kieu";
 import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { okrMessages } from "@/lib/messages/okr";
 import { useCrmCache } from "@/lib/trpc/cache";
+import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import { parseMoChuKy, THAM_SO_MO_CHU_KY } from "./okr-settings-search-params";
 import { SheetMoChuKy } from "./sheet-mo-chu-ky";
@@ -63,7 +64,7 @@ function theoNam(cycles: ChuKy[]): ChuKy[] {
 	];
 }
 
-export function BangChuKy() {
+export function BangChuKy({ goiY }: { goiY: GoiYChuKy }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const c = m.caiDat;
@@ -141,6 +142,7 @@ export function BangChuKy() {
 			<SheetMoChuKy
 				canManage={canManage}
 				cacNam={ds.filter((ky) => ky.kind === "nam")}
+				goiY={goiY}
 			/>
 		</Card>
 	);

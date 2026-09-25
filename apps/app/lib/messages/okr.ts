@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
 
 const vi = {
 	tabNhan: "Khu mục tiêu",
@@ -339,7 +340,10 @@ const vi = {
 			moTa: "Chu kỳ quý phải nằm trong một chu kỳ năm đã mở.",
 			loai: "Loại",
 			ten: "Tên",
-			tenGoiY: { nam: "Năm 2027", quy: "Quý 1/2027" },
+			tenGoiY: {
+				nam: (g: GoiYChuKy) => `Năm ${g.nam}`,
+				quy: (g: GoiYChuKy) => `Quý ${g.quy.so}/${g.quy.nam}`,
+			},
 			namCha: "Thuộc năm",
 			chonNam: "Chọn năm",
 			chuaCoNam: "Chưa có chu kỳ năm nào. Mở năm trước.",
@@ -729,7 +733,10 @@ const en: OkrMessages = {
 			moTa: "A quarter must sit inside a year cycle that is already open.",
 			loai: "Kind",
 			ten: "Name",
-			tenGoiY: { nam: "2027", quy: "Q1 2027" },
+			tenGoiY: {
+				nam: (g: GoiYChuKy) => `${g.nam}`,
+				quy: (g: GoiYChuKy) => `Q${g.quy.so} ${g.quy.nam}`,
+			},
 			namCha: "Year",
 			chonNam: "Choose a year",
 			chuaCoNam: "No year cycle yet. Open the year first.",
