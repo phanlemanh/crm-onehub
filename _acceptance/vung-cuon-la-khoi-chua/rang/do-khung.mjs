@@ -36,6 +36,8 @@ const CHO_NAC_MS = 60;
 const NGAN_SACH_MS = 540_000;
 const TRANG_ANH = "/settings/fields";
 const MA_GIA = "vckc-khong-co-ban-ghi";
+const DANG_CHUYEN =
+	/Execution context was destroyed|Cannot find context|detached Frame|navigat/i;
 const PHA_DOAN = process.env.VCKC_PHA_DOAN === "1";
 const PHA_GHIM = process.env.VCKC_PHA_GHIM === "1";
 
@@ -154,8 +156,9 @@ async function dienDoan(mau, nguoiId) {
 }
 
 function mauTrang() {
-	const main = document.querySelector("main[data-slot=page-shell-scroll]");
 	const de = document.documentElement;
+	if (!de || !document.body) return JSON.stringify({ chuyen: true, ban: true });
+	const main = document.querySelector("main[data-slot=page-shell-scroll]");
 	return JSON.stringify({
 		duong: location.pathname,
 		main: !!main,
@@ -172,7 +175,11 @@ async function choDungYen(p, nhan) {
 	let lienTiep = 0;
 	for (let i = 0; i < SO_MAU_TOI_DA; i += 1) {
 		await new Promise((r) => setTimeout(r, MAU_MS));
-		const mau = await p.evaluate(mauTrang);
+		const mau = await p.evaluate(mauTrang).catch((loi) => {
+			if (DANG_CHUYEN.test(String(loi?.message)))
+				return JSON.stringify({ chuyen: true, ban: true });
+			throw loi;
+		});
 		const ban = JSON.parse(mau).ban;
 		lienTiep = mau === truoc && !ban ? lienTiep + 1 : 0;
 		truoc = mau;
