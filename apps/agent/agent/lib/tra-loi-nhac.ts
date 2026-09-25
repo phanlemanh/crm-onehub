@@ -35,7 +35,7 @@ export class BuocDoi extends Error {
 	}
 }
 
-const VET_ZALO: VetBuocXong<OnboardingActivityMeta> = {
+export const VET_ZALO: VetBuocXong<OnboardingActivityMeta> = {
 	xong: (b) => vet.buocXong({ ...b, source: "zalo" }),
 	boXong: vet.buocBoXong,
 	coCongTy: vetCoCongTy,
