@@ -14,13 +14,14 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
 import { useChuKy } from "../chon-chu-ky";
+import { HopThoaiMucTieu } from "../hop-thoai-muc-tieu";
 import { KhoiMucTieu } from "../khoi-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import {
@@ -99,6 +100,7 @@ export function TheoDonVi() {
 	const don = url[SEARCH_PARAM.okr.don] ?? GOC;
 	const xem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
 	const { cycles, currentId } = useChuKy();
+	const [themMo, setThemMo] = useState(false);
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const access = useQuery(trpc.okr.access.queryOptions());
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
@@ -254,7 +256,12 @@ export function TheoDonVi() {
 											<Icon icon={DocumentImport} data-icon="inline-start" />
 											{m.nhapBangTinh}
 										</Button>
-										<Button size="sm" aria-haspopup="dialog">
+										<Button
+											size="sm"
+											aria-haspopup="dialog"
+											data-nut="them-muc-tieu"
+											onClick={() => setThemMo(true)}
+										>
 											<Icon icon={Add} data-icon="inline-start" />
 											{m.themMucTieu}
 										</Button>
@@ -263,6 +270,17 @@ export function TheoDonVi() {
 							</div>
 						</Card>
 						{noiDung}
+						{themMo ? (
+							<HopThoaiMucTieu
+								yeuCau={{
+									loai: "tao",
+									cycleId: currentId,
+									don,
+									tenDon: dv.ten,
+								}}
+								dong={() => setThemMo(false)}
+							/>
+						) : null}
 					</>
 				)}
 			</div>

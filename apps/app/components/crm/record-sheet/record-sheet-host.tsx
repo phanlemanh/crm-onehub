@@ -7,6 +7,7 @@ import { DetailSheet } from "@/components/detail-sheet";
 import { CompanySheet } from "./company-sheet";
 import { ContactSheet } from "./contact-sheet";
 import { DealSheet } from "./deal-sheet";
+import { ObjectiveSheet } from "./objective-sheet";
 import { PlanSheet } from "./plan-sheet";
 import { type RecordRef, recordKey, useRecordStack } from "./record-stack";
 
@@ -40,6 +41,10 @@ export function RecordSheetHost() {
 
 				{shown?.kind === "plan" ? (
 					<PlanSheet key={recordKey(shown)} planId={shown.id} />
+				) : null}
+
+				{shown?.kind === "objective" ? (
+					<ObjectiveSheet key={recordKey(shown)} objectiveId={shown.id} />
 				) : null}
 			</DetailSheet>
 

@@ -105,6 +105,7 @@ const KHONG_DAU = new Set([
 	"ten.docusign",
 	"header.otherLocale",
 	"datMatKhau.xong.title",
+	"sheet.tabKr",
 ]);
 
 function mienDau(khoa: string): boolean {

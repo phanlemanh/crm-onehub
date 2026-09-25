@@ -11,6 +11,7 @@ import {
 import { TableCell } from "@crm/ui/components/table";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
+import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { CELL, type KetQua } from "./kieu";
 import { TienDoKr } from "./tien-do-kr";
@@ -32,11 +33,15 @@ export function BangKr({
 	kind,
 	expected,
 	danhDauCuaToi,
+	hanhDong,
+	nhanHanhDong,
 }: {
 	keyResults: KetQua[];
 	kind: LoaiMucTieu;
 	expected: number | null;
 	danhDauCuaToi: boolean;
+	hanhDong?: (kr: KetQua) => ReactNode;
+	nhanHanhDong?: string;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -45,12 +50,15 @@ export function BangKr({
 		{ id: "phuTrach", header: m.cot.phuTrach, width: "w-40" },
 		{ id: "tienDo", header: m.cot.tienDo, width: "w-48" },
 		{ id: "dich", header: m.cot.dich, width: "w-40", align: "right" },
+		...(hanhDong
+			? [{ id: "hanhDong", srLabel: nhanHanhDong, width: "w-12" }]
+			: []),
 	];
 
 	return (
 		<SimpleTable columns={cot}>
 			{keyResults.map((kr) => (
-				<SimpleTableRow key={kr.id} data-kr={kr.id}>
+				<SimpleTableRow key={kr.id} data-kr={kr.id} data-kr-hang={kr.id}>
 					<TableCell className={CELL}>
 						<span className="flex min-w-0 flex-col gap-1">
 							<span className="whitespace-normal" translate="no">
@@ -88,6 +96,9 @@ export function BangKr({
 							</span>
 						)}
 					</TableCell>
+					{hanhDong ? (
+						<TableCell className={CELL}>{hanhDong(kr)}</TableCell>
+					) : null}
 				</SimpleTableRow>
 			))}
 			{keyResults.length === 0 ? (

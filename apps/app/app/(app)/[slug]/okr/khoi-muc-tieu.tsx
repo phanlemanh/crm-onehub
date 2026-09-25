@@ -9,6 +9,7 @@ import {
 	CardTitle,
 } from "@crm/ui/components/card";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangKr } from "./bang-kr";
 import type { MucTieu } from "./kieu";
@@ -24,11 +25,20 @@ export function KhoiMucTieu({
 	danhDauCuaToi: boolean;
 }) {
 	const m = okrMessages(useLocale());
+	const openRecord = useOpenRecord();
 	return (
 		<Card data-muc-tieu={mucTieu.id}>
 			<CardHeader>
 				<CardTitle>
-					<span translate="no">{mucTieu.title}</span>
+					<button
+						type="button"
+						className="text-start underline-offset-2 hover:underline focus-visible:underline"
+						translate="no"
+						data-mo-muc-tieu={mucTieu.id}
+						onClick={() => openRecord({ kind: "objective", id: mucTieu.id })}
+					>
+						{mucTieu.title}
+					</button>
 				</CardTitle>
 				<CardDescription>
 					{hienDonVi ? (
