@@ -51,7 +51,9 @@ Sáu kiểu KR (`okr-kr.ts`):
 | `moc` | Mốc | 0 | 1 | Xong / Chưa xong |
 | `phan-tram` | Phần trăm | 0 | 100 | giá trị hiện tại (0–100) |
 
-Đây là danh mục cố định trong mã (tiền lệ: Perdoo, Weekdone dùng năm kiểu đầu).
+Đây là danh mục cố định trong mã (tiền lệ: Perdoo, Weekdone dùng năm kiểu đầu), chốt
+tại Cổng Phạm vi 2026-09-25. Đơn vị đo là chữ tự do (≤ 24 ký tự), nên KR tiền là «tăng
+tới» với đơn vị tiền — không có kiểu tiền riêng.
 Thêm kiểu là một vòng nhỏ có hợp đồng riêng.
 
 Khuôn dữ liệu (`packages/validation/src`): `okr-chu-ky.ts` (loại, pha, khuôn tạo),
@@ -90,7 +92,7 @@ Thủ tục:
 | `okr.createObjective` · `okr.updateObjective` · `okr.publishObjective` · `okr.dropObjective` | người sửa được đơn vị | xem mục 4 |
 | `okr.addAlignment` · `okr.removeAlignment` | người sửa được mục tiêu góp | |
 | `okr.createKeyResult` · `okr.updateKeyResult` · `okr.removeKeyResult` | người sửa được mục tiêu, hoặc người phụ trách KR (chỉ `update`) | |
-| `okr.previewImport({ cycleId, unit, text })` · `okr.applyImport({ …, congBo })` | người sửa được đơn vị | xem mục 5 |
+| `okr.previewImport({ cycleId, unit, text })` · `okr.applyImport({ …, congBo })` | người sửa được đơn vị, hoặc quản trị workspace cho mọi đơn vị | xem mục 5 |
 
 Mọi thủ tục ghi — mười một thủ tục nội dung (tạo/sửa/công bố/bỏ mục tiêu, tạo/sửa/xoá
 KR, gắn/gỡ căn chỉnh, xem trước/ghi lô) cộng ba thủ tục quản trị (tạo chu kỳ, đổi pha,
@@ -117,7 +119,7 @@ bản ghi đã tải, ném `ForbiddenException`/`NotFoundException`.
 
 | Việc | Ai được |
 | --- | --- |
-| Mở chu kỳ, đổi pha, cấu hình chương trình | quản trị workspace (`owner`/`admin`) — quản trị chương trình. Không sửa nội dung OKR đơn vị thay người |
+| Mở chu kỳ, đổi pha, cấu hình chương trình | quản trị workspace (`owner`/`admin`) — quản trị chương trình. Không sửa nội dung OKR đơn vị thay người, trừ một việc: nhập từ bảng tính cho mọi đơn vị (chốt Cổng Phạm vi) |
 | Mục tiêu cấp OneHub | quản trị workspace (cây tổ chức không có «trưởng OneHub») |
 | Mục tiêu cấp bộ phận | trưởng bộ phận đó (`Division.headUserId`, còn hiệu lực theo `org.tree`) |
 | Mục tiêu cấp phòng ban | trưởng phòng ban đó, hoặc trưởng bộ phận chứa nó |
@@ -140,7 +142,7 @@ hơn, chính nó, hoặc nháp → 400 câu ghim. Một mục tiêu góp đượ
 
 ## 5. Nhập từ bảng tính — khuôn `to-chuc/nhap.ts`
 
-Người sửa được đơn vị dán hoặc chọn `.csv`, chọn chu kỳ và đơn vị trong hộp thoại
+Người sửa được đơn vị — hoặc quản trị workspace, cho mọi đơn vị — dán hoặc chọn `.csv`, chọn chu kỳ và đơn vị trong hộp thoại
 (đơn vị đang xem là mặc định). Bảng phẳng, **mỗi dòng một KR**, bảy cột theo thứ tự:
 
 `mục tiêu · KR · kiểu · khởi điểm · đích · đơn vị đo · email người phụ trách KR`
@@ -232,7 +234,7 @@ Mọi màn có ba trạng thái rỗng · đang tải · lỗi (`Empty`, `Skelet
 | Khối mục tiêu | 1 — `Card` + `CardHeader`/`CardTitle`/`CardContent` | shadcn `item` chưa cài — không cần vì hàng KR có cột |
 | Hàng KR | 1 — `SimpleTable` | |
 | Cây căn chỉnh | 1 — `SimpleTable` thụt lề | thành phần cây là bậc 5, hoãn lượt 5 (Nhóm 2 của bản mẫu) |
-| Tiến độ | 1 — `Progress` | biến thể trung tính có vạch kỳ vọng là Nhóm 2 lượt 5; lượt này chấp nhận tô `primary` |
+| Tiến độ | 1 — `Progress` | biến thể trung tính có vạch kỳ vọng là Nhóm 2 lượt 5; lượt này tô `primary`, ghi Known limits của hợp đồng |
 | Tình trạng, mức tự tin, trạng thái | 1 — `StatusIndicator`, `Badge variant="outline"` | |
 | Sheet mục tiêu | 1 — `RecordSheetFrame`, `DetailSheet*`, `EntityLogo` cho ô biểu tượng | |
 | Hộp thoại mục tiêu, KR, gắn căn chỉnh | 1 — `Dialog`, `Field`, `Input`, `Select`, `Combobox`, `DatePicker` | |
@@ -325,6 +327,10 @@ trừ khoảng nghỉ nếu khai; chưa công bố thì không có kỳ vọng. 
 này cho vạch «lẽ ra».
 
 ## 8. Kiểm chứng
+
+Điều kiện bỏ design-pass (Cổng Phạm vi): bốn phép đo chụp màn thật (E11, E12, E15,
+E20) chụp ba bề mặt mới không có trong bản mẫu — hộp thoại mục tiêu/KR, hộp thoại
+nhập, trang Cài đặt › Chương trình OKR — ở 1440 và 390, cạnh sheet Thoả thuận.
 
 - Bài kiểm API `apps/api/test/okr.spec.ts` + sàn `okr-san.ts` (khuôn `to-chuc-san.ts`):
   gieo cây tổ chức thật qua `org.*`, gieo người từng vai (kể cả `okr`), gọi tRPC

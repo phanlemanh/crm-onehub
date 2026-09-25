@@ -79,7 +79,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.dok_nhap
     paths: [apps/api/src/okr/nhap.ts, apps/api/src/okr/**, apps/api/test/okr-nhap.spec.ts, apps/api/test/okr.spec.ts]
-    expected: "exit 0; hai bài. (a) phanTichLoOkr hàm thuần với snapshot viết tay đúng khuôn SnapNhapOkr: lô 12 dòng, mỗi loại lỗi một dòng (thiếu mục tiêu, thiếu KR, kiểu lạ, email lạ, thiếu đích, tăng-tới đích ≤ khởi điểm, giảm-xuống đích ≥ khởi điểm, phần trăm 120, mục tiêu đã có) + 3 dòng hợp lệ gom 2 mục tiêu; MA TRẬN 12 × câu lỗi ghim viết trước; summary {valid 3, invalid 9, objectives 2}. (b) API: trưởng P previewImport → rows đúng, db.okrObjective đếm không đổi; applyImport → đếm +2 mục tiêu, +3 KR, mục tiêu status nhap, ownerUserId = trưởng P, vết action nhap-bang-tinh có after {unit, cycleId, objectives 2, keyResults 3}; applyImport lại cùng chữ → written 0, đếm mục tiêu không đổi VÀ đếm okrTrail action nhap-bang-tinh không đổi; applyImport với congBo true trên lô mới → status cong-bo; lô 1001 dòng → 400 câu ghim; cấu hình capMode chan với objectiveCap 2 rồi lô 3 mục tiêu mới → 400 câu ghim, đếm mục tiêu và vết không đổi; member không vai trò → 403 cả preview lẫn apply. CHIỀU ĐỎ: bản sao nhap.ts bỏ kiểm «mục tiêu đã có» → lần ghi thứ hai written 2, bài đỏ in đếm."
+    expected: "exit 0; hai bài. (a) phanTichLoOkr hàm thuần với snapshot viết tay đúng khuôn SnapNhapOkr: lô 12 dòng, mỗi loại lỗi một dòng (thiếu mục tiêu, thiếu KR, kiểu lạ, email lạ, thiếu đích, tăng-tới đích ≤ khởi điểm, giảm-xuống đích ≥ khởi điểm, phần trăm 120, mục tiêu đã có) + 3 dòng hợp lệ gom 2 mục tiêu; MA TRẬN 12 × câu lỗi ghim viết trước; summary {valid 3, invalid 9, objectives 2}. (b) API: trưởng P previewImport → rows đúng, db.okrObjective đếm không đổi; applyImport → đếm +2 mục tiêu, +3 KR, mục tiêu status nhap, ownerUserId = trưởng P, vết action nhap-bang-tinh có after {unit, cycleId, objectives 2, keyResults 3}; applyImport lại cùng chữ → written 0, đếm mục tiêu không đổi VÀ đếm okrTrail action nhap-bang-tinh không đổi; applyImport với congBo true trên lô mới → status cong-bo; lô 1001 dòng → 400 câu ghim; cấu hình capMode chan với objectiveCap 2 rồi lô 3 mục tiêu mới → 400 câu ghim, đếm mục tiêu và vết không đổi; member không vai trò → 403 cả preview lẫn apply; admin previewImport và applyImport cho phòng ban mình không làm trưởng → 200 (đối chứng dương cho quyền quản trị nhập). CHIỀU ĐỎ: bản sao nhap.ts bỏ kiểm «mục tiêu đã có» → lần ghi thứ hai written 2, bài đỏ in đếm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
@@ -119,6 +119,7 @@ evals:
       - "Trưởng: mở /<slug>/deals?record=deal:<id thoả thuận seed> ở 1440/vi, rồi đổi URL sang ?record=deal:<id>,objective:<id mục tiêu nháp> → sheet mục tiêu chồng lên có nút Quay lại, tên, đơn vị · chu kỳ, huy hiệu Nháp, 3 tab KR/Căn chỉnh/Vết → chụp E12-step1.png; cùng cảnh ở 390 → E12-step2.png"
       - "Bấm «Thêm KR», điền tên, kiểu tăng tới, khởi điểm 0, đích 10, đơn vị, phụ trách, gửi → bảng KR thêm dòng → E12-step3.png; bấm «Công bố», xác nhận → huy hiệu «Đã công bố» → E12-step4.png; mở hộp KR → ô khởi điểm disabled có chú thích → E12-step5.png; tab Vết có ≥ 3 dòng → E12-step6.png"
       - "Bấm «Quay lại» → URL còn record=deal:<id> (không còn objective), tiêu đề sheet là tên thoả thuận seed → E12-step7.png"
+      - "Cảnh ba bề mặt mới cạnh sheet Thoả thuận (điều kiện bỏ design-pass): với sheet Thoả thuận đang mở, mở hộp thoại «Thêm mục tiêu» từ màn Theo đơn vị → E12-step8.png (1440) và E12-step9.png (390); mở hộp thoại «Thêm KR» từ sheet mục tiêu chồng sheet Thoả thuận → E12-step10.png (1440), E12-step11.png (390)"
       - "Khẳng định translate=no trên tên mục tiêu, tên KR, tên người, đơn vị đo"
     paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/components/crm/record-sheet/record-stack.ts, apps/app/components/crm/record-sheet/record-sheet-host.tsx, "apps/app/app/(app)/[slug]/okr/**", _acceptance/dat-okr-trong-crm/rang/man-okr.mjs]
     expected: "exit 0 và ảnh; script đọc DOM và URL. CHIỀU ĐỎ: bỏ objective khỏi RECORD_KINDS → sheet không mở, bài đỏ in stack; bỏ disabled ở ô khởi điểm sau công bố → bài đỏ; Quay lại gọi đóng hết ngăn xếp → URL không còn record, bài đỏ."
@@ -142,6 +143,7 @@ evals:
       - "Cùng lần chạy với E11"
       - "Trưởng phòng ban: bấm «Nhập từ bảng tính» → hộp thoại bước 1 (chu kỳ và đơn vị điền sẵn) → E20-step1.png; dán lô 5 dòng tab-separated: 3 hợp lệ gom 2 mục tiêu, 2 hỏng (kiểu lạ, email lạ) → «Xem trước» → bước 2: tóm tắt «3 dòng hợp lệ · 2 dòng hỏng», danh sách dòng hỏng có đúng hai câu ghim, bảng dòng có data-hong, ô «Công bố ngay» → E20-step2.png; «Ghi 3 dòng · bỏ 2 dòng hỏng» → bước 3 «2 mục tiêu, 3 KR» → E20-step3.png; đóng → danh sách có thêm 2 thẻ"
       - "Mở lại, dán lô toàn dòng hỏng → nút ghi disabled với nhãn «Không có dòng nào để ghi» → E20-step4.png; dán lại đúng lô đã ghi → xem trước mọi dòng hỏng «mục tiêu này đã có trong CRM» → E20-step5.png"
+      - "Cảnh cạnh sheet Thoả thuận (điều kiện bỏ design-pass): mở sheet Thoả thuận seed rồi mở hộp thoại nhập ở bước 2 → E20-step6.png (1440), E20-step7.png (390, không tràn ngang)"
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/nhap.ts, _acceptance/dat-okr-trong-crm/rang/man-okr.mjs]
     expected: "exit 0 và ảnh; script gõ vào textarea bằng chuỗi có ký tự tab thật, đọc textContent tóm tắt, đếm li dòng hỏng và so từng câu ghim, đọc disabled của nút ghi. CHIỀU ĐỎ: bỏ disabled khỏi nút ghi khi 0 dòng hợp lệ → bài đỏ; hộp thoại đổi ký tự tách cột trước khi gửi → 5 dòng hỏng, bài đỏ in tóm tắt."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -156,7 +158,7 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E22
-    criterion: AC-16
+    criterion: AC-10
     executor: test
     layer: backend-effect
     cmd: config:executors.test.dok_cua_toi
@@ -181,6 +183,7 @@ evals:
       - "Cùng lần chạy với E11"
       - "Quản trị: mở /<slug>/settings/okr ở 1440/vi → thanh bên có mục «Chương trình OKR», trang có 2 CardTitle (Chu kỳ, Cấu hình), bảng chu kỳ có dòng, nút Lưu disabled → E15-step1.png; bấm «Mở chu kỳ» → Sheet mở, URL có tham số, nút gửi disabled tới khi hợp lệ → E15-step2.png; điền quý 1/2027 trong năm 2027 (tạo năm trước) và gửi → bảng thêm dòng → E15-step3.png; sửa trần mục tiêu → nút Lưu bật → bấm → toast «Đã lưu» → E15-step4.png"
       - "Thành viên thường: mở cùng trang → cả hai card còn, điều khiển disabled, dòng dưới tiêu đề nói chỉ quản trị đổi được → E15-step5.png"
+      - "Cảnh cạnh sheet Thoả thuận (điều kiện bỏ design-pass): quản trị mở trang với ?record=deal:<id seed> → E15-step6.png (1440), E15-step7.png (390); Sheet «Mở chu kỳ» ở 390 → E15-step8.png"
     paths: ["apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/cai-dat-dieu-huong.ts, apps/app/lib/messages/settings.ts, _acceptance/dat-okr-trong-crm/rang/man-okr.mjs]
     expected: "exit 0 và ảnh; script đếm CardTitle, đọc disabled, đọc URL, đếm dòng bảng trước/sau. CHIỀU ĐỎ: ẩn card khi không quyền → bài đỏ đếm CardTitle 1; bỏ điều kiện đã-sửa khỏi nút Lưu → disabled ban đầu false, bài đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
