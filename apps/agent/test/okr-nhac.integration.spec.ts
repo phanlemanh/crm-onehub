@@ -212,9 +212,12 @@ describe("nhac-cap-nhat", () => {
 		for (const [o, luc] of O_MATRAN) {
 			thay.push({ o, ...capNhatCua(await tinh(luc), g.A.id, g.ten) });
 		}
-		expect(thay, "ma tran 6 o okr-cap-nhat").toEqual(
-			O_MATRAN.map(([o], i) => ({ o, ...MONG[i] })),
-		);
+		const mong = O_MATRAN.map(([o], i) => ({ o, ...MONG[i] }));
+		expect(
+			thay.filter((t, i) => !Bun.deepEquals(t, mong[i])),
+			"o lech so voi ma tran viet truoc",
+		).toEqual([]);
+		expect(thay, "ma tran 6 o okr-cap-nhat").toEqual(mong);
 		expect(
 			thay.filter((t) => t.krIds.some((k) => k === "KN" || k === "KL")),
 			"KR nhap va KR chu ky khac pha khong bao gio co mat",
