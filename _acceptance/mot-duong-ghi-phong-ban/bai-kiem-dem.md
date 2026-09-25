@@ -1,4 +1,4 @@
-# Đếm khẳng định trước và sau — base 43ef79bd
+# Đếm khẳng định trước và sau — base a8572437
 
 | Tệp | expect/ok trước | expect/ok sau |
 |---|---|---|
@@ -10,6 +10,7 @@
 | `apps/api/test/to-chuc-chi-tiet.spec.ts` | 44 | 44 |
 | `apps/api/test/to-chuc-nhap.spec.ts` | 37 | 37 |
 | `apps/api/test/to-chuc.spec.ts` | 103 | 103 |
+| `apps/api/test/vai-chi-okr.spec.ts` | 52 | 52 |
 | `apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx` | 9 | 9 |
 | `apps/app/test/noi-bon-nut.dom.tsx` | 23 | 23 |
 | `apps/app/test/sua-luu-tru.dom.tsx` | 54 | 54 |

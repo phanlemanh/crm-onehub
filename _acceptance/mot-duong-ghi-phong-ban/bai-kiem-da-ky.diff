@@ -774,6 +774,20 @@ index 7434177b..1b070d79 100644
  	};
  }
  
+diff --git a/apps/api/test/vai-chi-okr.spec.ts b/apps/api/test/vai-chi-okr.spec.ts
+index c2b66fb5..ab21b06b 100644
+--- a/apps/api/test/vai-chi-okr.spec.ts
++++ b/apps/api/test/vai-chi-okr.spec.ts
+@@ -100,6 +100,9 @@ const DAU_VAO_HOP_LE = {
+ 	"org.archiveDivision": { id: "khong-co" },
+ 	"org.restoreDivision": { id: "khong-co" },
+ 	"org.purgeDivision": { id: "khong-co" },
++	"org.archiveDepartment": { id: "khong-co" },
++	"org.restoreDepartment": { id: "khong-co" },
++	"org.purgeDepartment": { id: "khong-co" },
+ 	"org.createDepartment": { name: "Phong thu", divisionId: null },
+ 	"org.renameDepartment": { id: "khong-co", name: "x" },
+ 	"org.moveDepartment": { id: "khong-co", divisionId: null, index: 0 },
 diff --git a/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx b/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx
 index 138026b9..aeea4351 100644
 --- a/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx
