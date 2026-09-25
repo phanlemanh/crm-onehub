@@ -177,6 +177,24 @@
         "export PATH=/Users/manhphan/.local/share/fnm/node-versions/v24.15.0/installation/bin:$HOME/.bun/bin:$PATH; cd apps/app && PROTO_ROUTE=1 PORT=3930 NEXT_PUBLIC_API_URL=http://localhost:3931 API_URL=http://localhost:3931 APP_URL=http://localhost:3930 bun run dev"
       ],
       "port": 3930
+    },
+    {
+      "name": "ban-do-osa-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3631 APP_URL=http://localhost:3630,http://127.0.0.1:3630 API_URL=http://localhost:3631 bun run dev"
+      ],
+      "port": 3631
+    },
+    {
+      "name": "ban-do-osa-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3630 NEXT_PUBLIC_API_URL=http://localhost:3631 API_URL=http://localhost:3631 APP_URL=http://localhost:3630 bun run dev"
+      ],
+      "port": 3630
     }
   ]
 }
