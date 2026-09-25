@@ -1,0 +1,58 @@
+schema_version: 1
+slug: zalo-gio-theo-mui-gio-xuong
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.zgm_ca_production
+    paths:
+      - "apps/app/lib/nhac-qua-zalo-man.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/app/test/zalo-gio-theo-mui-gio-xuong.spec.ts"
+    expected: |
+      Lenh chay TZ=UTC. Ma tran viet truoc 2 o (vi, en) cho 2026-09-24T22:27:04Z:
+        1 ngayGio(locale, luc, NHAC.muiGio) === Intl.DateTimeFormat(locale, {cung tuy chon,
+          timeZone: "Asia/Ho_Chi_Minh"}).format(luc) — quan he voi dong ho doi chung, khong so
+          chuoi voi chinh no
+        2 chuoi chua "05:27" va "25", khong chua "22:27" (chu ghim)
+      Mot toEqual tren bang 2 o, thong diep ghim "gio theo mui gio xuong".
+      Doi chung am cung fixture: Intl.DateTimeFormat khong timeZone duoi TZ=UTC ra "22:27"
+      (chung minh tien trinh dung la UTC — thieu dong nay thi test xanh tren may VN la vo nghia).
+      DOT BIEN (ban sao): bo timeZone trong ngayGio -> do voi thong diep ghim do.
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.zgm_bien_nua_dem
+    paths:
+      - "apps/app/lib/nhac-qua-zalo-man.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/app/test/zalo-gio-theo-mui-gio-xuong.spec.ts"
+    expected: |
+      Lenh chay TZ=UTC. Ma tran TOAN PHAN viet truoc 2 thoi diem (16:59Z, 17:00Z ngay 24-09) x 2
+      ngon ngu = 4 o, moi o: bang chuoi doi chung gio VN, va chu ghim — 16:59Z chua "23:59" va
+      "24"; 17:00Z chua "00:00" va "25". Mot toEqual tren bang 4 khoa, thong diep ghim "bien nua
+      dem theo gio VN". DOT BIEN: bo timeZone -> ca 4 o do.
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "apps/app/lib/nhac-qua-zalo-man.ts"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1"
+      - "Kiem cong 3300, 3301 truoc khi dung — tai nguyen chung; giu PID de tat, khong pkill"
+      - "Dung api 3301 va app 3300 cua CAY DANG XET; may chu app chay voi bien moi truong TZ=UTC (nhu Vercel). Ghi lai lenh da dung vao _acceptance/zalo-gio-theo-mui-gio-xuong/evidence/E3-lenh.txt"
+      - "CHAN CAY: dat dau moc vao apps/app/public roi xin lai qua APP_URL; khong nhan lai -> thoat ma 2, KHONG chup anh"
+      - "Ghi lai gia tri cu cua AppSetting.zaloPolledAt va zaloBotName; gieo zaloPolledAt = 2026-09-24T22:27:04Z (va zaloBotName 'Bot OneHub' neu dang rong)"
+      - "Dang nhap quan tri vien (bun run dev:session trong apps/api cua cay dang xet). Mo Ket noi › Zalo: chup E3-1440.png; lap lai o kho 375: E3-375.png"
+      - "Moi anh ghi o _acceptance/zalo-gio-theo-mui-gio-xuong/evidence/ (duong tinh tu goc kho). Tra AppSetting ve gia tri cu, xoa dau moc, tat may chu bang PID"
+    expected: |
+      E3-1440 va E3-375: dong trang thai bot co "trả lời lần cuối lúc" kem "05:27" va "25", KHONG
+      co "22:27". E3-lenh.txt cho thay may chu app chay voi TZ=UTC.
+    inputs:
+      - _acceptance/zalo-gio-theo-mui-gio-xuong/evidence/
