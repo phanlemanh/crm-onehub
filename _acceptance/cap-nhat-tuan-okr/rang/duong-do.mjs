@@ -107,6 +107,7 @@ async function gieo(mods) {
 	const Q5 = await nguoiMoi("-q5");
 	const NoiseChuKy = await nguoiMoi("-nc");
 	const NoiseNhap = await nguoiMoi("-nd");
+	const NoiseBo = await nguoiMoi("-nb");
 	const B1 = await nguoiMoi("-b1");
 	const B2 = await nguoiMoi("-b2");
 	const B3 = await nguoiMoi("-b3");
@@ -134,6 +135,7 @@ async function gieo(mods) {
 		[Q5, deptQ.id],
 		[NoiseChuKy, deptP.id],
 		[NoiseNhap, deptP.id],
+		[NoiseBo, deptP.id],
 	]) {
 		await db.orgPlacement.create({
 			data: { userId: uid, primaryDepartmentId: phongBanId },
@@ -171,7 +173,18 @@ async function gieo(mods) {
 	const tuan3 = dauTuanVN(gioTuan3);
 	const ngayCongBo = new Date(gioTuan1.getTime() - 7 * 86400000);
 
-	const mucTieuMoi = (ten, level, extra, cycleId, ownerUserId, trangThai) =>
+	const ngayBo = new Date(ngayCongBo.getTime() + 86400000);
+
+	const mucTieuMoi = (
+		ten,
+		level,
+		extra,
+		cycleId,
+		ownerUserId,
+		trangThai,
+		publishedAt,
+		droppedAt,
+	) =>
 		db.okrObjective.create({
 			data: {
 				id: id(ten),
@@ -181,7 +194,8 @@ async function gieo(mods) {
 				ownerUserId,
 				kind: "cam-ket",
 				status: trangThai ?? "cong-bo",
-				publishedAt: ngayCongBo,
+				publishedAt: publishedAt ?? null,
+				droppedAt: droppedAt ?? null,
 				title: id(ten),
 			},
 		});
@@ -192,6 +206,8 @@ async function gieo(mods) {
 		{ departmentId: deptP.id },
 		cycleChay.id,
 		P1,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objPCaNhan = await mucTieuMoi(
 		"-obj-p-ca-nhan",
@@ -199,6 +215,8 @@ async function gieo(mods) {
 		{ personUserId: P5 },
 		cycleChay.id,
 		P5,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objQ = await mucTieuMoi(
 		"-obj-q",
@@ -206,6 +224,8 @@ async function gieo(mods) {
 		{ departmentId: deptQ.id },
 		cycleChay.id,
 		Q1,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objQBoPhan = await mucTieuMoi(
 		"-obj-q-bo-phan",
@@ -213,6 +233,8 @@ async function gieo(mods) {
 		{ divisionId: divQ.id },
 		cycleChay.id,
 		Q5,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objNhieuChuKy = await mucTieuMoi(
 		"-obj-nhieu-chu-ky",
@@ -220,6 +242,8 @@ async function gieo(mods) {
 		{ departmentId: deptP.id },
 		cycleKeHoach.id,
 		NoiseChuKy,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objNhieuNhap = await mucTieuMoi(
 		"-obj-nhieu-nhap",
@@ -228,6 +252,17 @@ async function gieo(mods) {
 		cycleChay.id,
 		NoiseNhap,
 		"nhap",
+		null,
+	);
+	const objNhieuBo = await mucTieuMoi(
+		"-obj-nhieu-bo",
+		"phong-ban",
+		{ departmentId: deptP.id },
+		cycleChay.id,
+		NoiseBo,
+		"da-bo",
+		ngayCongBo,
+		ngayBo,
 	);
 	const objB1 = await mucTieuMoi(
 		"-obj-b1",
@@ -235,6 +270,8 @@ async function gieo(mods) {
 		{ personUserId: B1 },
 		cycleChay.id,
 		B1,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objB2 = await mucTieuMoi(
 		"-obj-b2",
@@ -242,6 +279,8 @@ async function gieo(mods) {
 		{ personUserId: B2 },
 		cycleChay.id,
 		B2,
+		"cong-bo",
+		ngayCongBo,
 	);
 	const objB3 = await mucTieuMoi(
 		"-obj-b3",
@@ -249,6 +288,8 @@ async function gieo(mods) {
 		{ personUserId: B3 },
 		cycleChay.id,
 		B3,
+		"cong-bo",
+		ngayCongBo,
 	);
 
 	const krMoi = (ten, objectiveId, ownerUserId) =>
@@ -278,6 +319,7 @@ async function gieo(mods) {
 	const krQ5 = await krMoi("-kr-q5", objQBoPhan.id, Q5);
 	await krMoi("-kr-nhieu-chu-ky", objNhieuChuKy.id, NoiseChuKy);
 	await krMoi("-kr-nhieu-nhap", objNhieuNhap.id, NoiseNhap);
+	await krMoi("-kr-nhieu-bo", objNhieuBo.id, NoiseBo);
 	const krB1 = await krMoi("-kr-b1", objB1.id, B1);
 	const krB2 = await krMoi("-kr-b2", objB2.id, B2);
 	const krB3 = await krMoi("-kr-b3", objB3.id, B3);
