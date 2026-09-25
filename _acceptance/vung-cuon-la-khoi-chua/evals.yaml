@@ -23,8 +23,13 @@ evals:
       chat/[chatId]. Dong cham: "DUNG AC-1: T tep x 3 kho = 3T nhan (do 3(T-P), khac 3P, ngoai
       tap ghim 0)". Trang ngoai tap ghim ma nhan khac "do", hoac trang trong tap ghim ma nhan "do",
       -> "SAI AC-1: ... — <duong> <kho> <nhan>" tung o, ma 1.
-      Thoat 2 «KHONG DO DUOC» goi ten cho: doan dong ten la; doan dong khong co ban ghi nao; bat ky
-      trang nao ket thuc o /sign-in hoac /onboarding (phien hong / tien de hong).
+      Bang doan dong -> bang: contactId contact, dealId deal, companyId company, planId
+      onboardingPlan, campaignId campaign, agentId agentDefinition, chatId agentConversation cua
+      quan tri. Thoat 2 «KHONG DO DUOC» goi ten cho: doan dong ten la; doan dong cua trang NGOAI tap
+      ghim khong co ban ghi nao; bat ky trang nao ket thuc o /sign-in hoac /onboarding (phien hong /
+      tien de hong). Trang TRONG tap ghim ma bang rong (du lieu dev 25/09: 0 agent, 0 cuoc tro
+      chuyen) mo bang ma gia "vckc-khong-co-ban-ghi" kem dong "GHI CHU <duong>: khong co ban ghi, mo
+      bang ma gia" va chi can nhan khac "do".
       CHIEU DO (pha-thu VCKC_PHA_DOAN=1 them duong gia /[slug]/[doanLa] vao ma tran): ma 2 "KHONG
       DO DUOC: doan dong [doanLa] o <duong> — ban do chua biet lay ma ban ghi nao", khong in dong
       DUNG AC-1. Pha-thu thu hai (VCKC_PHA_GHIM=1 bo settings/notifications khoi tap ghim): "SAI
