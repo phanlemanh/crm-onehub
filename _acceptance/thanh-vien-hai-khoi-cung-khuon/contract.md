@@ -5,7 +5,7 @@ slug: thanh-vien-hai-khoi-cung-khuon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -79,3 +79,6 @@ Never: gộp hai khối thành một `DataTable` có tab — hai danh sách là 
 - Không có `opportunity.md` — vòng đồng bộ giao diện đi thẳng từ ảnh đo thật, không có ngưỡng nghiệm thu, nên không có mục Đường đo.
 - Ảnh hiện trạng: `_acceptance/bang-thanh-vien-giu-hang/evidence/thanh-vien-*-noi.png`.
 - «Khối» trong hợp đồng này là một section của trang Thành viên, không phải bộ phận của cây tổ chức; «quản trị» là vai chủ sở hữu hoặc quản trị của không gian làm việc (`canManageMembers`), không phải trưởng đơn vị. Lint W6 của kit báo hai chữ này theo nghĩa khác trong `CONTEXT.md`.
+- Chiều đỏ đã chạy ở S3 trên giao diện cũ, cây này, cổng 3500/3501: `do-khoi.mjs` 16 DUNG, 30 SAI, mã 1 (vỏ dưới không viền, chữ 14/12px, cột đầu lệch 17px, tràn ngang 98px ở 375, nút đáy 991px, 20 nút «Rút» hiện sẵn, không tiêu đề số đếm); test DOM đỏ 4/5 (ca đối chứng xanh); `tu-dien.mjs` 4 DUNG, 7 SAI.
+- Phá-thử sau sửa (25/09): vỏ `CardTable` `overflow-x-hidden` → SAI con lăn ngang; đóng hộp trong `onSettled` → SAI «hộp vẫn mở» (E18); bỏ `section` khối dưới → `ttv_do_bang` và `do-khoi` mã 2; `TVHK_BO_KHO=768` → đúng 4 dòng «SAI thiếu»; `TVHK_PHA_SAU_GIEO=1` → mã 2, DB 0 hàng tiền tố; `kill -9` sau gieo → 15 hàng nằm lại, lượt kế «xoá 15 tàn dư» và 46/0; soi mã trên bản sao — `className` trên `CardTable`, `bg-muted` qua template, đổi chuỗi lớp `CardTable` → mỗi cái mã 1.
+- Sửa ở S3 (xem sổ): dựng đầu trang trong vùng hydrate như trang Tổ chức làm bản stream ẩn của React chứa `page-shell-content`, và thước đã ký `ttv_do_bang` đo trúng bản ẩn (7 SAI). Ranh `Suspense` trả về trong `PageShellContent`; nút đầu trang có ranh riêng. `do-khoi.mjs` cũng chờ tới khi không còn `[hidden]` chứa bảng.
