@@ -1246,3 +1246,9 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 | 2 | bỏ `customRules` | `-t 'lan thu tu tu cung'` | lần đầu XANH (luật mặc định 60 giây che) → lùi mốc 2 phút → `lan thu tu phai 429, duoc 200` |
 | 2 | log mang thân lỗi Resend | `-t thu-hong` | `log mang dia chi: 1 dong` |
 | 2 | (vật thật, không phá) bộ dọn của better-auth | ca `sau-don` ở scratchpad | `bo don hang dem xoa cua so 15 phut: lan thu tu 200` — lỗi thật, chờ chủ kho |
+| 3 | `isMailConfigured` trả `true` cố định | `-t co-tat` | `expect(received).toBe(expected)` ở vế tắt |
+| 3 | bỏ `quenMatKhau` khỏi `ssoSignInOptionsOutput` | `-t co-bat` | danh sách khoá thiếu `"quenMatKhau"` |
+| 4 | form luôn báo «đã gửi» | `-t form` | `loi van hien man da gui` (hai ca) |
+| 4 | `duongQuenMatKhau` trả `"hien"` vô điều kiện | `-t co-tat` | `co tat thi trang phai ve /sign-in` |
+| 4 | xoá `/quen-mat-khau` khỏi `ANONYMOUS` | `proxy-an-danh.spec.ts` | hai ca đỏ |
+| 4 | thêm `className` màu/cỡ chữ lên `Link` | design-gate static | XANH — thước này không bắt lớp `className` trên `Link`; E19 chỉ chứng không có vi phạm P0 mà nó biết |
