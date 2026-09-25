@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context sequential verification subagent (round 3, classifier-fallback)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2e7d0b02e8a8a14184928c6314035d74af045a24
+verified_commit: d60133f3d91fdf51b9db5e788dc375d25de6c12a
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -321,3 +321,7 @@ Round 3: PASS ở de5b4b3b. Chạy lại toàn bộ và tuần tự: 17/17 eval,
 ### Re-pin lần 1 — 2026-09-25, do gộp onehub (#133, #135, #136, #137) và hướng A cho vai chỉ OKR
 run_id: repin-20260925T084122Z-61552
 sha: 2e7d0b02e8a8a14184928c6314035d74af045a24 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3, E4, E6, E8, E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4
+
+### Re-pin lần 2 — 2026-09-25, do tệp kiểm khung-trang-cai-dat.dom.tsx thôi gọi git merge-base (CI không có origin/onehub); E16 neo vào cặp sha của lần gộp #138
+run_id: repin-20260925T105306Z-51706
+sha: d60133f3d91fdf51b9db5e788dc375d25de6c12a · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4

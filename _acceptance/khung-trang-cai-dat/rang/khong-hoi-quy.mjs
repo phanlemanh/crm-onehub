@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC = process.env.GOC_KHO ?? join(DAY, "..", "..", "..");
 const ts = createRequire(import.meta.url)("typescript");
-const NHANH_GOC = "origin/onehub";
+const GOP_VONG = "f1a32ab991b6e085d5f1c7c540dd8d9553fa6cad";
 const BO_LAN = process.argv.includes("--bo-lan");
 
 const HO_SO = [
@@ -149,10 +149,10 @@ function cacBai(chu) {
 	return ra;
 }
 
-const moc = git("merge-base", "HEAD", NHANH_GOC);
-const doi = git("diff", "--name-only", moc)
+const DAU_VONG = git("rev-parse", `${GOP_VONG}^2`);
+const moc = git("merge-base", `${GOP_VONG}^1`, DAU_VONG);
+const doi = git("diff", "--name-only", moc, DAU_VONG)
 	.split("\n")
-	.concat(git("ls-files", "--others", "--exclude-standard").split("\n"))
 	.filter(Boolean);
 const lenh = lenhCuaCauHinh();
 
@@ -194,7 +194,7 @@ for (const [t, hoSo] of tepBai) {
 		continue;
 	}
 	if (t === GAC_DAU) {
-		const hunk = git("diff", "-U0", moc, "--", t)
+		const hunk = git("diff", "-U0", moc, DAU_VONG, "--", t)
 			.split("\n")
 			.filter((d) => /^[+-]/.test(d) && !/^(\+\+\+|---)/.test(d));
 		const bo = hunk.filter((d) => d.startsWith("-"));
@@ -211,7 +211,7 @@ for (const [t, hoSo] of tepBai) {
 	}
 	if (t === BAI_DOI_DUOC) {
 		const cu = cacBai(git("show", `${moc}:${t}`));
-		const moi = cacBai(readFileSync(join(GOC, t), "utf8"));
+		const moi = cacBai(git("show", `${DAU_VONG}:${t}`));
 		const tenCu = [...cu.keys()].sort();
 		const tenMoi = [...moi.keys()].sort();
 		const khac = tenMoi.filter(
