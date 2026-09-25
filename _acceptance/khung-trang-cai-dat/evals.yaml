@@ -59,10 +59,12 @@ evals:
     expected: |
       exit 0. Ma tran viet truoc: 16 trang x 2 kho (1440, 768) x [dung 1 h1] = 32; 3 kho (1920, 1440,
       768) x [left cua h1 cua 15 trang lech <= 1px so voi trang Chung] = 45 (1920 bat to-chuc width
-      full can giua); 2 kho x [top cua h1 cua 9 trang muc lech <= 1px so voi Chung, top cua 5 trang
+      full can giua); 3 kho x 16 trang x [left cua khoi dau tien trong page-shell-content trung left
+      cua h1 <= 1px] = 48 (bat lop boc can giua trong vung noi dung — ban dau h1 dung yen con cot noi
+      dung nhay); 2 kho x [top cua h1 cua 9 trang muc lech <= 1px so voi Chung, top cua 5 trang
       con lech <= 1px so voi Google] = 28; 2 kho x [top h1 Google - top h1 Chung = chieu cao hop nav
       breadcrumb + khoang cach HANG trong tep thuoc, lech <= 1px] = 2; 17 duong x 375 khong tran = 17.
-      Tong 124 (hang KY_MONG trong tep thuoc; lech -> ma 2). Moi o khong co loi hydrate.
+      Tong 172; cong E4 38, E6 12, E8 4, E11 5, E13 1 = 232 (hang KY_MONG trong tep thuoc; lech -> ma 2). Moi o khong co loi hydrate.
       CHIEU DO: (1) ban sao boc noi dung tracking trong khoi mx-auto max-w-3xl -> do "tracking 1440:
       h1 left lech <n>px so voi Chung"; (2) ban sao them mb-4 cho o breadcrumb -> do "google 1440:
       trang con thap hon <n>px, mong <m>px"; (3) ban sao cho full can giua -> do "to-chuc 1920: h1

@@ -22,7 +22,7 @@ const CHO_HYDRATE_MS = 1200;
 const LECH = 1;
 const KHOANG_BREADCRUMB = 12;
 const LOI_HYDRATE = /hydrat/i;
-const KY_MONG = 184;
+const KY_MONG = 232;
 const MA = `ktcd${Date.now().toString(36).slice(-6)}`;
 
 const MUC = [
@@ -196,6 +196,10 @@ async function docH1(trang) {
 			chu: h[0]?.textContent?.trim() ?? null,
 			dich: h[0]?.getAttribute("translate") ?? null,
 			bc: bc ? bc.height : null,
+			noiDung:
+				document
+					.querySelector("[data-slot='page-shell-content'] > *")
+					?.getBoundingClientRect().left ?? null,
 		};
 	});
 }
@@ -393,6 +397,12 @@ for (const rong of [1920, 1440, 768]) {
 		const h = vt.get(d);
 		if (rong !== 1920)
 			khang(h.so === 1, `${d.split("/").pop()} ${rong}: ${h.so} h1`);
+		khang(
+			h.noiDung !== null &&
+				h.left !== null &&
+				Math.abs(h.noiDung - h.left) <= LECH,
+			`${d.replace("/settings/", "") || "chung"} ${rong}: cot noi dung lech ${Math.round((h.noiDung ?? 0) - (h.left ?? 0))}px so voi h1`,
+		);
 		if (d !== "/settings")
 			khang(
 				h.left !== null && Math.abs(h.left - chung.left) <= LECH,
