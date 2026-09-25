@@ -3,10 +3,10 @@ schema_version: 1
 slug: cua-vao-dang-nhap
 feature: Cửa vào đăng nhập cho người mới — nói cách vào, báo lỗi khi bị từ chối
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-25T20:20:36Z
 prototype:
   base_commit:
   disposition: archive
@@ -47,10 +47,10 @@ Thiết kế đã duyệt: `docs/superpowers/specs/2026-09-25-cua-vao-dang-nhap-
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Người mới đợt 26/10 có tự vào được CRM lần đầu mà không phải nhắn quản trị viên hỏi cách vào không?
-- Kết quả nào là SỐNG: [đề xuất] Trong 14 ngày từ 26/10, số người mới phải nhắn quản trị viên hỏi «vào thế nào» hoặc «bấm rồi không vào được» không quá 10% số người mới đã vào lần đầu trong cùng khoảng; VÀ không ai bị từ chối mà không thấy câu báo.
-- Kết quả nào là CHẾT: [đề xuất] Quá 25% người mới phải nhắn hỏi; HOẶC có dù chỉ một người bị từ chối mà màn không báo gì.
-- Timebox: [đề xuất] S3–S4 không quá hai ngày công sau khi PR #104 merge; lên môi trường thật trước 19/10.
+- Câu hỏi phép đo trả lời: Người mới đợt 26/10 có tự vào được CRM lần đầu mà không phải nhắn quản trị viên hỏi cách vào không?
+- Kết quả nào là SỐNG: Trong 14 ngày từ 26/10, số người mới phải nhắn quản trị viên hỏi «vào thế nào» hoặc «bấm rồi không vào được» không quá 10% số người mới đã vào lần đầu trong cùng khoảng; VÀ không ai bị từ chối mà không thấy câu báo.
+- Kết quả nào là CHẾT: Quá 25% người mới phải nhắn hỏi; HOẶC có dù chỉ một người bị từ chối mà màn không báo gì.
+- Timebox: S3–S4 không quá hai ngày công sau khi PR #104 merge; lên môi trường thật trước 19/10.
 
 Căn cứ: thước đo chỗ đau thật — tin nhắn hỏi quản trị viên — chứ không đo số lần
 mở trang. Số lượt xem khối hướng dẫn không nói người ta có vào được không, và kho
@@ -75,10 +75,10 @@ diện, không gánh phép đo.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** (chủ kho Phan Le Manh, 2026-09-26, trả lời «Cổng Đáng: build»). Căn cứ: đợt người mới 26/10 là đợt lớn nhất, và hôm nay màn đăng nhập vừa không nói cách vào vừa bỏ im người bị từ chối — hướng A đã duyệt ở brainstorm 2026-09-25.
 - **disposition = archive.** Căn cứ: không có prototype nào được giữ làm code
   sản phẩm; bản mẫu `/proto` sống ở kho làm tham chiếu, không nối vào sản phẩm.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng ở mục Ngưỡng, chủ kho chốt 2026-09-26 bằng câu «Cổng Đáng: build» — nhận nguyên bốn ngưỡng máy đề xuất, không sửa.
 
 ## Thước đo thành công → ứng viên criterion
 
