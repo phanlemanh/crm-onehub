@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@crm/ui/components/badge";
+import { Card, CardContent } from "@crm/ui/components/card";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { TreeNav, type TreeNavNode } from "@crm/ui/components/tree-nav";
 import { useState } from "react";
@@ -120,27 +121,30 @@ export function CayCanChinh({
 	ghi(nodes);
 
 	return (
-		<TreeNav
-			className="rounded-lg border p-2"
-			expanded={mo}
-			itemAttrs={(n) => ({
-				"data-cay-khoa": n.id,
-				"data-cap-nut": n.data.loai === "nut" ? n.data.nut.loai : "nhom",
-			})}
-			label={mt.cay.canChinh}
-			nodes={nodes}
-			onExpandedChange={setMo}
-			onSelect={(khoa) => {
-				const nut = theoKhoa.get(khoa);
-				if (nut) openRecord({ kind: "objective", id: nut.objectiveId });
-			}}
-			renderLabel={(n) =>
-				n.data.loai === "nut" ? (
-					<NhanNut nut={n.data.nut} />
-				) : (
-					<span className="text-muted-foreground text-xs">{n.name}</span>
-				)
-			}
-		/>
+		<Card>
+			<CardContent>
+				<TreeNav
+					expanded={mo}
+					itemAttrs={(n) => ({
+						"data-cay-khoa": n.id,
+						"data-cap-nut": n.data.loai === "nut" ? n.data.nut.loai : "nhom",
+					})}
+					label={mt.cay.canChinh}
+					nodes={nodes}
+					onExpandedChange={setMo}
+					onSelect={(khoa) => {
+						const nut = theoKhoa.get(khoa);
+						if (nut) openRecord({ kind: "objective", id: nut.objectiveId });
+					}}
+					renderLabel={(n) =>
+						n.data.loai === "nut" ? (
+							<NhanNut nut={n.data.nut} />
+						) : (
+							<span className="text-muted-foreground text-xs">{n.name}</span>
+						)
+					}
+				/>
+			</CardContent>
+		</Card>
 	);
 }
