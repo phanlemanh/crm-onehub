@@ -29,3 +29,46 @@ colour that changes per theme is not one colour, it is two, and both then need
 maintaining. The single exception is `--ring`, which lightens in dark: a fill
 carries the brand, but a ring only has to be seen, and `#006B4F` is too close to
 the dark background to register.
+
+## Vẽ tay là bậc cuối
+
+Một khối giao diện mới trong `apps/app` đi qua năm bậc theo đúng thứ tự, và dừng
+ở bậc đầu tiên có thứ cần:
+
+1. **`packages/ui`**, kể cả `components/reui/`.
+2. **shadcn gốc chưa cài** — `item`, `breadcrumb`, `radio-group`, `kbd`… Cài vào
+   `packages/ui` theo `docs/reui.md`: `--dry-run` trước, không bao giờ
+   `--overwrite`.
+3. **Thành phần và ví dụ `c-*` miễn phí của ReUI** — cài vào `packages/ui`, rồi
+   sửa đủ bốn chỗ ở `docs/reui.md`.
+4. **Block Pro của ReUI** — chỉ là bản vẽ bố cục, không phải code để cài. Mười ba
+   trên mười sáu block `settings` dựng trên khung `frame`, còn kho dùng `card`:
+   chép cách ghép, dựng lại bằng thành phần của bậc 1–3.
+5. **Không bậc nào có** — dựng thành phần mới trong `packages/ui`, không dựng ở
+   chỗ gọi.
+
+Mỗi khối mới có một dòng trong mô tả PR: dừng ở bậc nào, và đã tra gì ở các bậc
+trên (tên mục, câu tìm ReUI). «Không có» mà không kèm câu tìm là chưa tra.
+
+Một thành phần đang sống trong thư mục tính năng — `settings/members/confirm-dialog.tsx`,
+`settings/copy-value.tsx` — mà khu khác cần tới thì chuyển nó vào `packages/ui`
+trước, rồi mới dùng lần thứ hai.
+
+### Dấu hiệu vẽ tay
+
+Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả lại ở review:
+
+| Vẽ tay | Dùng |
+| --- | --- |
+| `<table>` | `DataTable` khi cần tìm, lọc, phân trang; còn lại `SimpleTable` |
+| `<ul className="divide-y …">`, hộp `rounded-lg border` tự dựng | `Item`; hộp nội dung là `Card` với `CardContent` |
+| chấm `size-2 rounded-full bg-*` | `StatusIndicator` |
+| `<h1>`, `<h2>` tự đặt cỡ chữ | `PageShellTitle`, `CardTitle` |
+| nhãn, mô tả và công tắc xếp bằng `div` | `Field orientation="horizontal"` |
+| chữ phụ `<p className="text-muted-foreground text-xs">` cạnh ô nhập | `FieldDescription` |
+| `navigator.clipboard` | `CopyValue` |
+| `AlertDialog` ráp tay để hỏi lại | `ConfirmDialog` |
+| `className` đổi màu, góc, khoảng cách của một component `@crm/ui` | biến thể mới trong `packages/ui` |
+
+Bảng này sẽ thành một luật `anti-slop` trong `tools/oxlint`. Tới lúc đó, nó được
+kiểm bằng mắt ở review.
