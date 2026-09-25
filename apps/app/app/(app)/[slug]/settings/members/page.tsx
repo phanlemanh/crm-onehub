@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShell,
+	PageShellActions,
 	PageShellContent,
 	PageShellDescription,
 	PageShellHeader,
@@ -15,6 +16,7 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { AllowancesTable } from "./allowances-table";
+import { ChoPhepDiaChi } from "./cho-phep-dia-chi";
 import { membersSearchParams } from "./members-search-params";
 import { MembersTable } from "./members-table";
 
@@ -34,6 +36,11 @@ export default async function MembersSettingsPage({
 					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>
 					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
+				<PageShellActions>
+					<Suspense fallback={null}>
+						<HanhDongDauTrang />
+					</Suspense>
+				</PageShellActions>
 			</PageShellHeader>
 
 			<PageShellContent>
@@ -43,6 +50,20 @@ export default async function MembersSettingsPage({
 			</PageShellContent>
 		</PageShell>
 	);
+}
+
+async function quyenQuanTri(): Promise<boolean> {
+	const trpc = getServerTrpc();
+	const workspace = await getServerQueryClient()
+		.fetchQuery(trpc.workspace.get.queryOptions())
+		.catch(() => null);
+	return workspace?.canManageMembers ?? false;
+}
+
+async function HanhDongDauTrang() {
+	await requireSession();
+
+	return (await quyenQuanTri()) ? <ChoPhepDiaChi /> : null;
 }
 
 async function Members({
@@ -56,9 +77,16 @@ async function Members({
 	const queryClient = getServerQueryClient();
 
 	await Promise.all([
-		queryClient.prefetchQuery(trpc.workspace.get.queryOptions()),
+		quyenQuanTri().then((quanTri) =>
+			quanTri
+				? queryClient.prefetchQuery(trpc.workspace.allowances.queryOptions())
+				: undefined,
+		),
 		queryClient.prefetchQuery(
 			trpc.workspace.members.queryOptions(membersSearchParams.toInput(values)),
+		),
+		queryClient.prefetchQuery(
+			trpc.workspace.members.queryOptions(membersSearchParams.defaultInput()),
 		),
 	]);
 

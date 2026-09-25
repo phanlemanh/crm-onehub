@@ -1,18 +1,40 @@
 "use client";
 
+import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Button } from "@crm/ui/components/button";
+import {
+	Card,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@crm/ui/components/card";
+import {
+	CardTable,
+	type CardTableColumn,
+	CardTableEmpty,
+} from "@crm/ui/components/card-table";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@crm/ui/components/dropdown-menu";
+import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { SimpleTableRow } from "@crm/ui/components/simple-table";
+import { Skeleton } from "@crm/ui/components/skeleton";
+import { TableCell } from "@crm/ui/components/table";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import {
 	type ThanhVienMessages,
 	thanhVienMessages,
 } from "@/lib/messages/settings-thanh-vien";
+import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { AllowDialog } from "./allow-dialog";
 import { ConfirmDialog } from "./confirm-dialog";
 import { PhatChiaButton } from "./phat-chia-button";
 import { VetLine } from "./vet-line";
@@ -20,12 +42,32 @@ import { VetLine } from "./vet-line";
 type Allowance = RouterOutputs["workspace"]["allowances"]["rows"][number];
 type Role = keyof ThanhVienMessages["vaiTro"];
 
+const CELL = "px-3 py-2.5 align-middle";
+
+const HANG_KHUNG_XUONG = ["khung-1", "khung-2", "khung-3"] as const;
+
+function columns(t: ThanhVienMessages): CardTableColumn[] {
+	return [
+		{ id: "diaChi", header: t.duocPhepVao.diaChi },
+		{ id: "vaiTro", header: t.duocPhepVao.vaiTro, width: "w-28" },
+		{ id: "nguoiChoPhep", header: t.duocPhepVao.nguoiChoPhep, width: "w-36" },
+		{ id: "luc", header: t.duocPhepVao.luc, width: "w-28", align: "right" },
+		{ id: "phatChia", srLabel: t.phatChia.nut, width: "w-32", align: "right" },
+		{
+			id: "hanhDong",
+			srLabel: t.duocPhepVao.hanhDong,
+			width: "w-14",
+			align: "right",
+		},
+	];
+}
+
 export function AllowancesTable() {
 	const t = thanhVienMessages(useLocale());
 	const trpc = useTRPC();
+	const cache = useCrmCache();
+	const tieuDeId = useId();
 
-	const [moChoPhep, setMoChoPhep] = useState(false);
-	const [loi, setLoi] = useState<string | null>(null);
 	const [dangRut, setDangRut] = useState<Allowance | null>(null);
 
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
@@ -34,27 +76,11 @@ export function AllowancesTable() {
 		enabled: workspace.data?.canManageMembers ?? false,
 	});
 
-	const lamMoi = async () => {
-		await allowances.refetch();
-	};
-
-	const choPhep = useMutation(
-		trpc.workspace.allowEmail.mutationOptions({
-			onSuccess: async () => {
-				setMoChoPhep(false);
-				setLoi(null);
-				await lamMoi();
-				toast.success(t.hopThoaiChoPhep.xong);
-			},
-			onError: (error) => setLoi(error.message),
-		}),
-	);
-
 	const rut = useMutation(
 		trpc.workspace.revokeAllowance.mutationOptions({
 			onSuccess: async () => {
 				setDangRut(null);
-				await lamMoi();
+				await cache.workspace();
 				toast.success(t.xacNhan.rut.xong);
 			},
 			onError: (error) => {
@@ -66,56 +92,49 @@ export function AllowancesTable() {
 
 	if (!workspace.data?.canManageMembers) return null;
 
-	const rows = (allowances.data?.rows ?? []).filter(
-		(row) => row.status === "pending",
-	);
+	const cot = columns(t);
+	const rows = allowances.data?.rows.filter((row) => row.status === "pending");
 
 	return (
-		<section className="relative flex flex-col gap-4">
-			<div className="flex items-start justify-between gap-4">
-				<div>
-					<h2 className="font-medium text-base">{t.duocPhepVao.tieuDe}</h2>
-					<p className="text-muted-foreground text-sm">{t.duocPhepVao.moTa}</p>
-				</div>
+		<section
+			aria-labelledby={tieuDeId}
+			aria-busy={rows === undefined && !allowances.isError}
+		>
+			<Card>
+				<CardHeader>
+					<CardTitle id={tieuDeId}>
+						{rows === undefined
+							? t.duocPhepVao.tieuDe
+							: t.dem(t.duocPhepVao.tieuDe, rows.length)}
+					</CardTitle>
+					<CardDescription>{t.duocPhepVao.moTa}</CardDescription>
+				</CardHeader>
 
-				<Button onClick={() => setMoChoPhep(true)}>
-					{t.duocPhepVao.nutThem}
-				</Button>
-			</div>
-
-			{rows.length === 0 ? (
-				<p className="text-muted-foreground text-sm">{t.duocPhepVao.trong}</p>
-			) : (
-				<table className="w-full text-sm">
-					<thead className="text-muted-foreground">
-						<tr className="border-b">
-							<th className="py-2 text-left font-normal">
-								{t.duocPhepVao.diaChi}
-							</th>
-							<th className="py-2 text-left font-normal">
-								{t.duocPhepVao.vaiTro}
-							</th>
-							<th className="py-2 text-left font-normal">
-								{t.duocPhepVao.nguoiChoPhep}
-							</th>
-							<th className="py-2 text-left font-normal tabular-nums">
-								{t.duocPhepVao.luc}
-							</th>
-							<th className="py-2 text-right font-normal">
-								<span className="sr-only">{t.phatChia.nut}</span>
-							</th>
-							<th className="py-2 text-right font-normal">
-								<span className="sr-only">{t.duocPhepVao.hanhDong}</span>
-							</th>
-						</tr>
-					</thead>
-
-					<tbody>
+				{allowances.isError ? (
+					<CardTableEmpty>{allowances.error.message}</CardTableEmpty>
+				) : rows === undefined ? (
+					<CardTable columns={cot}>
+						{HANG_KHUNG_XUONG.map((hang) => (
+							<SimpleTableRow key={hang}>
+								{cot.map((o) => (
+									<TableCell key={o.id} className={CELL}>
+										<Skeleton className="h-4 w-full" />
+									</TableCell>
+								))}
+							</SimpleTableRow>
+						))}
+					</CardTable>
+				) : rows.length === 0 ? (
+					<CardTableEmpty>{t.duocPhepVao.trong}</CardTableEmpty>
+				) : (
+					<CardTable columns={cot}>
 						{rows.map((row) => (
-							<tr key={row.id} className="border-b last:border-0">
-								<td className="py-2" translate="no">
-									<div className="flex flex-col gap-1">
-										<span>{row.email}</span>
+							<SimpleTableRow key={row.id}>
+								<TableCell className={CELL} translate="no">
+									<span className="flex min-w-0 flex-col gap-1">
+										<span className="truncate" title={row.email}>
+											{row.email}
+										</span>
 										{row.passwordLinkIssuedByName &&
 										row.passwordLinkIssuedAt ? (
 											<VetLine
@@ -124,51 +143,61 @@ export function AllowancesTable() {
 												luc={row.passwordLinkIssuedAt}
 											/>
 										) : null}
-									</div>
-								</td>
-								<td className="py-2">{t.vaiTro[row.role as Role]}</td>
-								<td className="py-2 text-muted-foreground" translate="no">
+									</span>
+								</TableCell>
+								<TableCell className={`${CELL} text-muted-foreground`}>
+									{t.vaiTro[row.role as Role]}
+								</TableCell>
+								<TableCell
+									className={`${CELL} truncate text-muted-foreground`}
+									translate="no"
+								>
 									{row.invitedByName ?? "—"}
-								</td>
-								<td className="py-2 text-muted-foreground tabular-nums">
+								</TableCell>
+								<TableCell
+									className={`${CELL} text-right text-muted-foreground tabular-nums`}
+								>
 									<LocalRelativeTime date={row.createdAt} />
-								</td>
-								<td className="py-2 text-right">
+								</TableCell>
+								<TableCell className={`${CELL} text-right`}>
 									<PhatChiaButton
 										t={t}
 										email={row.email}
 										ten={row.email}
 										coQuyen={workspace.data?.canIssuePasswordLink ?? false}
-										onDaPhat={lamMoi}
+										onDaPhat={() => {
+											void cache.workspace();
+										}}
 									/>
-								</td>
-								<td className="py-2 text-right">
-									<Button
-										variant="ghost"
-										size="sm"
-										disabled={rut.isPending}
-										onClick={() => setDangRut(row)}
-									>
-										{t.duocPhepVao.rut}
-									</Button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			)}
+								</TableCell>
+								<TableCell className={`${CELL} text-right`}>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button
+												variant="ghost"
+												size="icon"
+												aria-label={t.duocPhepVao.menu(row.email)}
+												disabled={rut.isPending}
+											>
+												<Icon icon={OverflowMenuHorizontal} />
+											</Button>
+										</DropdownMenuTrigger>
 
-			<AllowDialog
-				t={t}
-				open={moChoPhep}
-				onOpenChange={(next) => {
-					setMoChoPhep(next);
-					if (!next) setLoi(null);
-				}}
-				onSubmit={(values) => choPhep.mutate(values)}
-				pending={choPhep.isPending}
-				loi={loi}
-			/>
+										<DropdownMenuContent align="end">
+											<DropdownMenuItem
+												variant="destructive"
+												onSelect={() => setDangRut(row)}
+											>
+												{t.duocPhepVao.rut}
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</TableCell>
+							</SimpleTableRow>
+						))}
+					</CardTable>
+				)}
+			</Card>
 
 			<ConfirmDialog
 				tieuDe={t.xacNhan.rut.tieuDe}
