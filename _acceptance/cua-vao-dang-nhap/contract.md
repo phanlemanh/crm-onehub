@@ -77,7 +77,7 @@ Ngưỡng ở `opportunity.md` (chờ ký Cổng Đáng):
 - Landing dài ở `/` và `components/landing/*` của hãng — hướng B đã bác ở brainstorm 2026-09-25.
 - Sửa `proxy.ts` hay đường dẫn — giữ nguyên theo quyết định đã chốt.
 - Đổi câu tiếng Anh của hook thành mã máy gọn — việc T3 ở `packages/auth`; vòng này đọc câu thật đang có.
-- Trang «Quên mật khẩu» và luồng gửi thư — thuộc PR #104; vòng này chỉ giữ liên kết của nó hiện đúng (AC-13).
+- Trang «Quên mật khẩu» và luồng gửi thư — thuộc PR #104; vòng này chỉ giữ liên kết của nó hiện đúng (AC-12).
 - Bật Microsoft — chưa có khoá; AC-4 đo nhánh Microsoft bằng dữ liệu `signInOptions` giả.
 - Chuỗi đầu-cuối Google → callback → `/sign-in?error=` với một nhà cung cấp OAuth giả — mối nối được khoá bằng hai mỏ neo nguồn ở AC-5.
 - Đổi bố cục bốn trang kia hay bỏ `AuthShader` ở đó — chỉ đổi chuỗi dòng tiêu đề (Q4) và bỏ ép `dark` (Q3).
