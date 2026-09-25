@@ -18,7 +18,7 @@ import {
 import { useIsMobile } from "@crm/ui/hooks/use-mobile";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext } from "react";
 
 const ResponsiveContext = createContext(false);
 const useResponsive = () => useContext(ResponsiveContext);
@@ -31,23 +31,14 @@ type RootProps = {
 	children?: React.ReactNode;
 };
 
-function Sheet({ children, open, ...props }: RootProps) {
+function Sheet({ children, ...props }: RootProps) {
 	const isMobile = useIsMobile();
-	const [khoaLucMo, setKhoaLucMo] = useState(isMobile);
-	const truocDoMo = useRef(open);
-	if (open && !truocDoMo.current) setKhoaLucMo(isMobile);
-	truocDoMo.current = open;
-	const dungDrawer = open ? khoaLucMo : isMobile;
 	return (
-		<ResponsiveContext.Provider value={dungDrawer}>
-			{dungDrawer ? (
-				<Drawer open={open} {...props}>
-					{children}
-				</Drawer>
+		<ResponsiveContext.Provider value={isMobile}>
+			{isMobile ? (
+				<Drawer {...props}>{children}</Drawer>
 			) : (
-				<UISheet open={open} {...props}>
-					{children}
-				</UISheet>
+				<UISheet {...props}>{children}</UISheet>
 			)}
 		</ResponsiveContext.Provider>
 	);
