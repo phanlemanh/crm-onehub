@@ -233,6 +233,10 @@ evals:
   - id: E9
     criterion: AC-7
     executor: judgment
+    question: >-
+      Trong diff cua cac tep kiem thuoc tam ho so da ky, co khang dinh nao bi bo hoac bi noi
+      (doi tuong khac, quan he long hon, ma tran it o hon) ngoai cac thay doi duoc phep cua
+      AC-7 khong, va moi ho so co dong revisit nhac ten tep kiem cua no khong?
     inputs:
       - "_acceptance/mot-duong-ghi-phong-ban/bai-kiem-da-ky.diff"
       - "_acceptance/mot-duong-ghi-phong-ban/bai-kiem-dem.md"
