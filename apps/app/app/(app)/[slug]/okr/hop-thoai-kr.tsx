@@ -29,11 +29,11 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import type { Locale } from "@crm/ui/lib/locale";
 import {
+	docSoOkr,
 	KIEU_KR,
 	type KieuKr,
 	kiemSoTheoKieu,
 	krInput,
-	soKr,
 } from "@crm/validation/okr-kr";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
@@ -43,15 +43,9 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { KetQua } from "./kieu";
 
-function docSo(chu: string): number | null {
-	const gon = chu.trim().replace(",", ".");
-	if (gon === "") return null;
-	const so = Number(gon);
-	return soKr.safeParse(so).success ? so : null;
-}
-
 function hienSo(so: number, locale: Locale): string {
-	return locale === "vi" ? String(so).replace(".", ",") : String(so);
+	const chu = locale === "vi" ? String(so).replace(".", ",") : String(so);
+	return docSoOkr(chu) === so ? chu : `${chu}0`;
 }
 
 export function HopThoaiKr({
@@ -102,10 +96,10 @@ export function HopThoaiKr({
 
 	const khoaKhoi = kr?.startLocked === true || !suaDuocCot;
 	const coTrongSo = program.data?.weightsOn === true;
-	const soKhoi = docSo(khoi);
-	const soDich = docSo(dich);
-	const soHien = hien.trim() === "" ? soKhoi : docSo(hien);
-	const soTrongSo = docSo(trongSo);
+	const soKhoi = docSoOkr(khoi);
+	const soDich = docSoOkr(dich);
+	const soHien = hien.trim() === "" ? soKhoi : docSoOkr(hien);
+	const soTrongSo = docSoOkr(trongSo);
 	const loiKieu =
 		soKhoi !== null && soDich !== null
 			? kiemSoTheoKieu(kieu, soKhoi, soDich)
@@ -181,7 +175,7 @@ export function HopThoaiKr({
 		keywords: [u.email],
 	}));
 	const soHong = (chuSo: string) =>
-		chuSo.trim() !== "" && docSo(chuSo) === null;
+		chuSo.trim() !== "" && docSoOkr(chuSo) === null;
 
 	return (
 		<Dialog

@@ -19,6 +19,18 @@ export const kieuKr = z.enum(KIEU_KR);
 
 export const soKr = z.number().finite().min(-1e12).max(1e12);
 
+const nhomNghin = /^-?\d{1,3}(\.\d{3})+$/;
+
+export function docSoOkr(input: string): number | null {
+	const s = input.replace(/\s/g, "");
+	if (s === "") return null;
+	const n =
+		s.includes(",") || nhomNghin.test(s)
+			? Number(s.replace(/\./g, "").replace(",", "."))
+			: Number(s);
+	return soKr.safeParse(n).success ? n : null;
+}
+
 export const krInput = z.object({
 	title: z.string().trim().min(3).max(200),
 	kind: kieuKr,

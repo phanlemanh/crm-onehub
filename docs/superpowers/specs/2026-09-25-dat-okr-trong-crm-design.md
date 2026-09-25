@@ -229,19 +229,29 @@ Mọi màn có ba trạng thái rỗng · đang tải · lỗi (`Empty`, `Skelet
 
 | Khối | Bậc | Đã tra |
 | --- | --- | --- |
-| Thanh tab khu OKR | 1 — `Tabs variant="line"` nguyên dạng | proto thêm class ở chỗ gọi → bỏ; biến thể thanh điều hướng là Nhóm 2 lượt 5 |
-| Cây đơn vị | 1 — `NavItem` (như màn Tổ chức) | cây bàn phím `role="tree"`: ReUI «tree» kéo `@headless-tree` — Nhóm 2 lượt 5 |
-| Khối mục tiêu | 1 — `Card` + `CardHeader`/`CardTitle`/`CardAction` | shadcn `item` chưa cài — không cần vì hàng KR có cột |
-| Hàng KR | 1 — `SimpleTable` trực tiếp trong `Card`, không qua `CardContent` (theo tiền lệ `currency-settings.tsx`) | |
-| Cây căn chỉnh | 1 — `SimpleTable` thụt lề | thành phần cây là bậc 5, hoãn lượt 5 (Nhóm 2 của bản mẫu) |
-| Tiến độ | 1 — `Progress` | biến thể trung tính có vạch kỳ vọng là Nhóm 2 lượt 5; lượt này tô `primary`, ghi Known limits của hợp đồng |
+| Thanh tab khu OKR (`thanh-tab.tsx`) | 1 — `Tabs variant="line"` nguyên dạng | proto thêm class ở chỗ gọi → bỏ; biến thể thanh điều hướng là Nhóm 2 lượt 5 |
+| Cây đơn vị (`cay-don-vi.tsx`) | 1 — `NavItem` (như màn Tổ chức) | cây bàn phím `role="tree"`: ReUI «tree» kéo `@headless-tree` — Nhóm 2 lượt 5 |
+| Khối mục tiêu (`khoi-muc-tieu.tsx`) | 1 — `Card` + `CardHeader`/`CardTitle`/`CardAction` | shadcn `item` chưa cài — không cần vì hàng KR có cột |
+| Hàng KR (`bang-kr.tsx`) | 1 — `SimpleTable` trực tiếp trong `Card`, không qua `CardContent` (theo tiền lệ `currency-settings.tsx`) | |
+| Cây căn chỉnh (`cay-can-chinh.tsx`) | 1 — `SimpleTable` thụt lề | thành phần cây là bậc 5, hoãn lượt 5 (Nhóm 2 của bản mẫu) |
+| Tiến độ (`tien-do-kr.tsx`) | 1 — `Progress` | biến thể trung tính có vạch kỳ vọng là Nhóm 2 lượt 5; lượt này tô `primary`, ghi Known limits của hợp đồng |
 | Tình trạng, mức tự tin, trạng thái | 1 — `StatusIndicator`, `Badge variant="outline"` | |
-| Sheet mục tiêu | 1 — `RecordSheetFrame`, `DetailSheet*`, `EntityLogo` cho ô biểu tượng | |
-| Hộp thoại mục tiêu, KR, gắn căn chỉnh | 1 — `Dialog`, `Field`, `Input`, `Select`, `Combobox`, `DatePicker` | |
-| Hộp thoại nhập | 1 — `Dialog size="wide"`, `StepList`, `Textarea`, `SimpleTable` | theo `hop-thoai-nhap.tsx` |
+| Sheet mục tiêu (`objective-sheet.tsx`) | 1 — `RecordSheetFrame`, `DetailSheet*`, `EntityLogo` cho ô biểu tượng | |
+| Hộp thoại mục tiêu, KR, gắn căn chỉnh (`hop-thoai-muc-tieu.tsx`, `hop-thoai-kr.tsx`, `hop-thoai-can-chinh.tsx`) | 1 — `Dialog`, `Field`, `Input`, `Select`, `Combobox`, `DatePicker` | |
+| Hộp thoại nhập (`okr/hop-thoai-nhap.tsx`) | 1 — `Dialog size="wide"`, `StepList`, `Textarea`, `SimpleTable` | theo `hop-thoai-nhap.tsx` |
 | Hỏi lại | 1 — `ConfirmDialog` (thư mục `settings/members`) | chuyển vào `packages/ui`: đợt 2 `docs/settings.md`, vòng khác |
-| Vết | 1 — `SimpleTable` (lúc, ai, việc, trước → sau) | `Timeline` của kho gắn `Activity`, không dùng |
-| Trang Cài đặt | 1 — `PageShell`, `Card`, `Field orientation="horizontal"`, `Switch`, `Sheet` | theo `docs/settings.md` |
+| Vết (`bang-vet.tsx`) | 1 — `SimpleTable` (lúc, ai, việc, trước → sau) | `Timeline` của kho gắn `Activity`, không dùng |
+| Trang Cài đặt (`settings/okr/page.tsx`) | 1 — `PageShell`, `Card`, `Field orientation="horizontal"`, `Switch`, `Sheet` | theo `docs/settings.md` |
+| Khung khu OKR (`okr/layout.tsx`) | 1 — `PageShell` (`@/components/page-shell`), `Skeleton` | ghép thanh tab và chọn chu kỳ, không khối mới |
+| Vỏ ba trang (`okr/page.tsx`, `theo-don-vi/page.tsx`, `toan-canh/page.tsx`) | 1 — `PageShellContent`, `PageShellLoading`; toàn cảnh thêm `Empty` | vỏ server, không có khối UI mới |
+| Chọn chu kỳ (`chon-chu-ky.tsx`) | 1 — `Select` nguyên dạng | chu kỳ đọc ghi qua `okr-search-params` (nuqs) |
+| Tab Của tôi (`cua-toi.tsx`) | 1 — `Empty*`, `Button`, `Icon`; ghép `khoi-muc-tieu.tsx` | rỗng dùng `Empty` của kho |
+| Màn Theo đơn vị (`theo-don-vi/theo-don-vi.tsx`) | 1 — `Card*`, `ToggleGroup`, `Button`; ghép cây đơn vị, khối mục tiêu, cây căn chỉnh | khuôn danh-sách-chi-tiết như màn Tổ chức |
+| Trạng thái khu OKR (`trang-thai-okr.tsx`) | 1 — `Empty*`, `Skeleton`, `Card`/`CardContent`, `Button` | đang tải, lỗi, chưa có chu kỳ, rỗng dùng chung một tệp |
+| Bảng chu kỳ (`settings/okr/bang-chu-ky.tsx`) | 1 — `Card*`, `SimpleTable`, `CardTableEmpty`, `StatusIndicator`, `DropdownMenu` | theo tiền lệ `currency-settings.tsx` |
+| Form cấu hình (`settings/okr/form-cau-hinh.tsx`) | 1 — `Card*`, `Field*`, `Input`, `Select`, `Switch`, `Spinner` | theo `docs/settings.md` |
+| Sheet mở chu kỳ (`settings/okr/sheet-mo-chu-ky.tsx`) | 1 — `Sheet*`, `FieldSet`/`FieldLegend`, `Field*`, `DatePicker`, `Select`, `Input` | |
+| Trạng thái Cài đặt (`settings/okr/trang-thai-cai-dat.tsx`) | 1 — `Empty*`, `Skeleton`, `CardContent`, `Button`, `PageShellDescription` | đang tải và lỗi của trang Cài đặt |
 
 Không tệp nào trong `packages/ui` bị sửa. Mô tả PR chép bảng này.
 

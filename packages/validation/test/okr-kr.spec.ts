@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { KIEU_KR, kiemSoTheoKieu, tienDoKr } from "../src/okr-kr";
+import { docSoOkr, KIEU_KR, kiemSoTheoKieu, tienDoKr } from "../src/okr-kr";
 
 const BANG: [string, number, number, number, number][] = [
 	["tang-toi", 0, 40, 0, 0],
@@ -42,5 +42,20 @@ describe("okr-kr", () => {
 		expect(kiemSoTheoKieu("phan-tram", 0, 101)).toBe("phan-tram-ngoai-0-100");
 		expect(kiemSoTheoKieu("giu-tren", 0, 50)).toBeNull();
 		expect(kiemSoTheoKieu("moc", 0, 1)).toBeNull();
+	});
+});
+
+describe("docSoOkr", () => {
+	test("doc so kieu Viet giong het bang nhap", () => {
+		expect(docSoOkr("1.500")).toBe(1500);
+		expect(docSoOkr("1.250,5")).toBe(1250.5);
+		expect(docSoOkr("3.5")).toBe(3.5);
+		expect(docSoOkr("3,5")).toBe(3.5);
+		expect(docSoOkr("1.250.000")).toBe(1250000);
+		expect(docSoOkr("-12.500")).toBe(-12500);
+		expect(docSoOkr("")).toBeNull();
+		expect(docSoOkr("   ")).toBeNull();
+		expect(docSoOkr("abc")).toBeNull();
+		expect(docSoOkr("1e13")).toBeNull();
 	});
 });

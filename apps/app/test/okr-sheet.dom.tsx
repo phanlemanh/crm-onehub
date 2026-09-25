@@ -552,6 +552,36 @@ describe("sheet-kr-hop-le", () => {
 	});
 });
 
+describe("sheet-kr-so-viet", () => {
+	test("sheet-kr-so-viet: go 1.500 vao khoi diem thi gui 1500, cung luat voi bang nhap", async () => {
+		await mo();
+		const them = document.body.querySelector('[data-nut="them-kr"]');
+		if (!them) throw new Error("khong co nut them KR");
+		await bam(them);
+		await cho(() => hop() !== null, "hop thoai KR");
+		const h = hop();
+		if (!h) throw new Error("khong co hop");
+		await go(h.querySelector(`[id$="-ten"]`), "Doanh thu hợp đồng mới");
+		await go(h.querySelector("[data-o-khoi-diem]"), "1.500");
+		await go(h.querySelector("[data-o-dich]"), "2.000,5");
+		await go(h.querySelector(`[id$="-don-vi"]`), "triệu");
+		const btn = h.querySelector<HTMLButtonElement>('[data-nut="gui-kr"]');
+		if (!btn) throw new Error("khong co nut gui");
+		await bam(btn);
+		await cho(() => daGoi.length > 0, "goi tao KR");
+		const dauVao = daGoi[0]?.dauVao as {
+			startValue: number;
+			targetValue: number;
+			currentValue: number;
+		};
+		expect({
+			startValue: dauVao.startValue,
+			targetValue: dauVao.targetValue,
+			currentValue: dauVao.currentValue,
+		}).toEqual({ startValue: 1500, targetValue: 2000.5, currentValue: 1500 });
+	});
+});
+
 async function moMenu(nhan: string, muc: string): Promise<void> {
 	const trigger = document.body.querySelector(`[aria-label="${nhan}"]`);
 	if (!trigger) throw new Error(`khong co menu ${nhan}`);

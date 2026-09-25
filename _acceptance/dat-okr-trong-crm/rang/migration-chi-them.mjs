@@ -38,14 +38,7 @@ function viPham(c) {
 	if (/^(UPDATE|DELETE)\b/.test(hoa) || /\bDROP\b/.test(hoa)) return "DROP";
 	if (/ALTER COLUMN|RENAME/.test(hoa)) return "ALTER COLUMN/RENAME";
 	const cuBang = BANG_CU.has(bang(c));
-	if (
-		cuBang &&
-		/ADD COLUMN/.test(hoa) &&
-		/NOT NULL/.test(hoa) &&
-		!/DEFAULT/.test(hoa)
-	) {
-		return "ADD COLUMN NOT NULL";
-	}
+	if (cuBang && /ADD COLUMN/.test(hoa)) return "ADD COLUMN tren bang co san";
 	if (cuBang && /ADD CONSTRAINT/.test(hoa) && /\b(UNIQUE|CHECK)\b/.test(hoa)) {
 		return "ADD CONSTRAINT UNIQUE/CHECK";
 	}
@@ -68,6 +61,7 @@ if (process.argv[2] === "--chieu-do") {
 			"ADD COLUMN NOT NULL",
 			'ALTER TABLE "department" ADD COLUMN "x" TEXT NOT NULL;',
 		],
+		["ADD COLUMN nullable", 'ALTER TABLE "department" ADD COLUMN "x" TEXT;'],
 		["UNIQUE", 'ALTER TABLE "department" ADD CONSTRAINT "u" UNIQUE ("name");'],
 	]) {
 		const v = cauLenh(sql).map(viPham).filter(Boolean);
@@ -87,7 +81,7 @@ if (process.argv[2] === "--chieu-do") {
 	console.log(
 		`LIEN KHOI: ${viPhamLienKhoi ? `migration khong chi them: model Okr khong lien cuoi schema: sau chung con ${sauOkrGia.join(", ")}` : "KHONG BAT"}`,
 	);
-	process.exit(bat === 4 ? 1 : 0);
+	process.exit(bat === 5 ? 1 : 0);
 }
 
 const moi = lietKe(VONG.sau).filter(
@@ -111,7 +105,9 @@ const dau = models.findIndex((m) => m.startsWith("Okr"));
 const sauOkr = models.slice(dau).filter((m) => !m.startsWith("Okr"));
 if (dau === -1) hong.push("khong co model Okr nao");
 if (sauOkr.length > 0)
-	hong.push(`model Okr khong lien cuoi schema: sau chung con ${sauOkr.join(", ")}`);
+	hong.push(
+		`model Okr khong lien cuoi schema: sau chung con ${sauOkr.join(", ")}`,
+	);
 
 console.log(
 	`migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem}`,

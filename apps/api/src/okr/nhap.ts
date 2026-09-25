@@ -1,8 +1,8 @@
 import {
+	docSoOkr,
 	type KieuKr,
 	kiemSoTheoKieu,
 	kieuKr,
-	soKr,
 } from "@crm/validation/okr-kr";
 import { boDau, khoa, tachO } from "../to-chuc/nhap";
 import type { OkrDongNhapOutput } from "./okr.contracts";
@@ -38,8 +38,6 @@ export type KetQuaNhapOkr = {
 };
 
 const kieuTheoChu = new Map<string, string>(Object.entries(OKR.nhap.kieu));
-
-const nhomNghin = /^-?\d{1,3}(\.\d{3})+$/;
 
 function tachTheo(dong: string, ngan: string): string[] {
 	const o: string[] = [];
@@ -83,15 +81,6 @@ export function dongLoOkr(chu: string): { line: number; o: string[] }[] {
 	return dong;
 }
 
-function docSo(o: string): number | null {
-	const s = o.replace(/\s/g, "");
-	const n =
-		s.includes(",") || nhomNghin.test(s)
-			? Number(s.replace(/\./g, "").replace(",", "."))
-			: Number(s);
-	return soKr.safeParse(n).success ? n : null;
-}
-
 function docKieu(o: string): KieuKr | null {
 	const r = kieuKr.safeParse(kieuTheoChu.get(boDau(o)));
 	return r.success ? r.data : null;
@@ -130,8 +119,8 @@ function docDong(r: OkrDongNhapOutput, nguoi: Map<string, string>): Doc {
 	if (ownerUserId === undefined) return { loi: N.emailLa };
 	const md = macDinh(kind);
 	if (r.target === "" && md.dich === null) return { loi: N.thieuDich };
-	const khoi = r.start === "" ? md.khoi : docSo(r.start);
-	const dich = r.target === "" ? md.dich : docSo(r.target);
+	const khoi = r.start === "" ? md.khoi : docSoOkr(r.start);
+	const dich = r.target === "" ? md.dich : docSoOkr(r.target);
 	if (khoi === null || dich === null) return { loi: N.soLa };
 	const sai = kiemSoTheoKieu(kind, khoi, dich);
 	if (sai) return { loi: OKR.thongDiep.soTheoKieu[sai] };

@@ -212,6 +212,60 @@ describe("chu-ky", () => {
 		expect(chonChuKyHienTai(keHoach, "2026-11-20")?.id).toBe(q4KeHoach);
 		expect(chonChuKyHienTai(cs3, "2026-11-20")?.id).toBe(quy);
 	});
+
+	test("chu-ky: chay lai mot luot o TZ=America/Los_Angeles, chuoi ngay khong lech", async () => {
+		const tzCu = process.env.TZ;
+		process.env.TZ = "America/Los_Angeles";
+		try {
+			expect(new Date(2026, 0, 1).getTimezoneOffset()).toBe(480);
+			const nam = await taoNam("nam-la", 2026);
+			const quy = await tao(
+				"okr.createCycle",
+				{
+					kind: "quy",
+					name: ma("q4-la"),
+					parentId: nam,
+					startsOn: "2026-10-01",
+					endsOn: "2026-12-31",
+					breakStartsOn: "2026-11-01",
+					breakEndsOn: "2026-11-03",
+					updateWeekday: 1,
+				},
+				"q4 la",
+			);
+			const rows = await db.okrCycle.findMany({
+				where: { id: { in: [nam, quy] } },
+				orderBy: { kind: "asc" },
+			});
+			const ngay = (d: Date | null) =>
+				d ? d.toISOString().slice(0, 10) : null;
+			expect(
+				rows.map((r) => [
+					ngay(r.startsOn),
+					ngay(r.endsOn),
+					ngay(r.breakStartsOn),
+					ngay(r.breakEndsOn),
+				]),
+			).toEqual([
+				["2026-01-01", "2026-12-31", null, null],
+				["2026-10-01", "2026-12-31", "2026-11-01", "2026-11-03"],
+			]);
+			const cs = (await doc<{ cycles: ChuKyDoc[] }>("okr.cycles")).cycles;
+			const raNgay = (id: string) => {
+				const c = cs.find((x) => x.id === id);
+				return c
+					? [c.startsOn, c.endsOn, c.breakStartsOn, c.breakEndsOn]
+					: null;
+			};
+			expect([raNgay(nam), raNgay(quy)]).toEqual([
+				["2026-01-01", "2026-12-31", null, null],
+				["2026-10-01", "2026-12-31", "2026-11-01", "2026-11-03"],
+			]);
+		} finally {
+			if (tzCu === undefined) delete process.env.TZ;
+			else process.env.TZ = tzCu;
+		}
+	});
 });
 
 describe("chuong-trinh", () => {

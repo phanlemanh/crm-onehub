@@ -326,6 +326,7 @@ export function HopThoaiMucTieu({
 								<FieldLabel htmlFor={`${ma}-tham-gia`}>{h.thamGia}</FieldLabel>
 								<Combobox
 									id={`${ma}-tham-gia`}
+									translate="no"
 									disabled={users.isPending}
 									options={luaChonThamGia}
 									value=""
