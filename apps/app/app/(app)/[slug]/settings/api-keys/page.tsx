@@ -29,7 +29,7 @@ export default async function ApiKeysSettingsPage({
 	const t = khoaApiMessages(await getLocale());
 
 	return (
-		<PageShell className="min-h-0">
+		<PageShell width="wide" className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>

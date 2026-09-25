@@ -31,7 +31,7 @@ export default async function SsoSettingsPage({
 	const t = ssoMessages(locale);
 
 	return (
-		<PageShell className="min-h-0">
+		<PageShell width="wide" className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>

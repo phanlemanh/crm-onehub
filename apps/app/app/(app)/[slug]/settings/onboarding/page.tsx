@@ -23,7 +23,7 @@ export default async function CaiDatOnboardingPage() {
 	const m = onboardingMessages(await getLocale());
 
 	return (
-		<PageShell className="min-h-0">
+		<PageShell width="wide" className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{m.settings.title}</PageShellTitle>

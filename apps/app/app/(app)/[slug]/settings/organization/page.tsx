@@ -47,7 +47,7 @@ export default async function CaiDatToChucPage() {
 	const m = toChucMessages(await getLocale());
 
 	return (
-		<PageShell>
+		<PageShell width="full">
 			<Suspense
 				fallback={
 					<>

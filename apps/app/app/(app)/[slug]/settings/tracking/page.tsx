@@ -24,7 +24,7 @@ export default async function TrackingSettingsPage() {
 	const t = theoDoiMessages(await getLocale());
 
 	return (
-		<PageShell>
+		<PageShell width="page">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>
@@ -57,7 +57,7 @@ async function Tracking() {
 
 	return (
 		<HydrateClient>
-			<div className="flex max-w-3xl flex-col gap-6">
+			<div className="flex flex-col gap-6">
 				<TrackingSections />
 			</div>
 		</HydrateClient>
