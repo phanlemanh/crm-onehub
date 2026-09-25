@@ -164,7 +164,7 @@ nền pha):
 
 | Bậc | Giá trị ô | Lớp nền | Chữ | Nền sáng | Nền tối |
 |---|---|---|---|---|---|
-| 0 | ≤ 0% | `foreground/5` | `foreground` | 15,6 | 16,9 |
+| 0 | ≤ 0% | `foreground/5` | `foreground` | 15,5 | 16,8 |
 | 1 | ≤ 25% | `foreground/15` | `foreground` | 12,5 | 13,4 |
 | 2 | ≤ 50% | `foreground/30` | `foreground` | 8,8 | 7,9 |
 | 3 | ≤ 75% | `foreground/65` | `background` | 5,5 | 7,5 |

@@ -145,6 +145,22 @@ const en = {
 		mocXong: "Done",
 		mocChua: "Milestone, not done",
 	},
+	heatmap: {
+		donVi: "Unit",
+		chuaCo: "no data",
+		chuGiai: "The more a cell stands out from the background, the more KRs had high confidence.",
+		oRong: "week not reached yet, or nobody updated",
+	},
+	chuKy: {
+		hienTai: "current",
+		daDong: "closed",
+	},
+	bieuDo: {
+		giaTri: "Value",
+		leRa: "Expected",
+		tuan: "Week",
+		chuGiai: "Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
+	},
 };
 
 export type Messages = typeof en;
@@ -293,6 +309,22 @@ const vi = {
 		chuaCoKyVong: "Chưa có vạch lẽ ra",
 		mocXong: "Đã xong",
 		mocChua: "Mốc, chưa xong",
+	},
+	heatmap: {
+		donVi: "Đơn vị",
+		chuaCo: "chưa có",
+		chuGiai: "Ô càng nổi khỏi nền, càng nhiều KR tự tin cao.",
+		oRong: "tuần chưa tới hoặc chưa ai cập nhật",
+	},
+	chuKy: {
+		hienTai: "hiện tại",
+		daDong: "đã đóng",
+	},
+	bieuDo: {
+		giaTri: "Giá trị",
+		leRa: "Lẽ ra",
+		tuan: "Tuần",
+		chuGiai: "Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
 	},
 } satisfies Messages;
 

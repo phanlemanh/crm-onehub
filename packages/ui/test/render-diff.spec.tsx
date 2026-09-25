@@ -30,11 +30,13 @@ import {
 	MessageScrollerButton,
 	MessageScrollerProvider,
 } from "../src/components/message-scroller";
+import { Heatmap } from "../src/components/heatmap";
 import { MoneyInput } from "../src/components/money-input";
 import {
 	ConfidenceIndicator,
 	PaceIndicator,
 } from "../src/components/okr-status";
+import { PeriodSelect } from "../src/components/period-select";
 import { Progress } from "../src/components/progress";
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
@@ -43,6 +45,7 @@ import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
 import { Suggestion } from "../src/components/suggestion";
+import { TargetLineChart } from "../src/components/target-line-chart";
 import { TablePagination } from "../src/components/table-pagination";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
@@ -193,6 +196,44 @@ const CA: Ca[] = [
 	{
 		ten: "Progress",
 		ve: () => <Progress expected={47} value={30} variant="neutral" />,
+	},
+	{
+		ten: "Heatmap",
+		ve: () => (
+			<Heatmap
+				caption={DU_LIEU.cot}
+				columns={[{ id: "a", label: "01/11" }]}
+				rows={[{ id: "r", label: DU_LIEU.tenCongTy }]}
+				values={[[null]]}
+			/>
+		),
+	},
+	{
+		ten: "PeriodSelect",
+		ve: () => (
+			<PeriodSelect
+				groups={[
+					{
+						label: DU_LIEU.nhomLoc,
+						items: [{ value: "q", label: DU_LIEU.cot, current: true }],
+					},
+				]}
+				label={DU_LIEU.nhomLocHai}
+				onValueChange={() => {}}
+				value="q"
+			/>
+		),
+	},
+	{
+		ten: "TargetLineChart",
+		ve: () => (
+			<TargetLineChart
+				data={[{ x: "01/11", value: 1, expected: 1 }]}
+				label={DU_LIEU.cot}
+				target={2}
+				targetLabel={DU_LIEU.cotHai}
+			/>
+		),
 	},
 	{
 		ten: "OkrStatus",
