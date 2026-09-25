@@ -1,0 +1,239 @@
+schema_version: 1
+slug: do-man-tren-kho-rieng
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dmk_ten_kho
+    paths: [packages/db/src/measure-database.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; bai measure-database.spec.ts ca "ten-kho" goi ham that measureDatabaseName va
+      templateDatabaseName. MA TRAN VIET TRUOC 6 ten cay x 2 ham = 12 khang dinh toEqual ten
+      mong doi: "compassionate-hofstadter-928035" -> crm_compassionate_hofstadter_928035_do /
+      _mau_do; "crm" -> crm_crm_do; "Toan-Canh.OKR" -> crm_toan_canh_okr_do; "a--b" -> gop gach;
+      ten 80 ky tu -> dung 63 ky tu, ket thuc _do va _mau_do; "__" -> nem loi "khong con chu
+      hay so". Them: moi ten khop /^[a-z0-9_]+$/, khong ten nao bang crm/crm_test hay ket thuc
+      _test, hai cay khac ten -> hai ten khac.
+      CHIEU DO (pha thu o S3 tren ban da commit, git checkout sau): bo buoc cat 63 ky tu -> ca
+      ten dai do voi thong diep ghim "ten kho qua 63 ky tu"; bo thay ky tu la -> ca Toan-Canh.OKR
+      do "ten kho chi gom a-z0-9_".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_tao
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/scripts/test-db-admin.ts, packages/db/prisma/seed.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; ca "tao": kho chung = kho cua luot test (TEST_DATABASE_URL), duoc gieo mot dong
+      okrCycle truoc; chup dau van tay (moi bang public: count + md5 moi dong sap xep). Goi
+      createMeasureDatabase that voi cay "thu<runid>" tren may chu do. Doc lai qua pg: kho
+      crm_thu<runid>_do ton tai; tap migration_name hoan tat trong _prisma_migrations BANG DUNG
+      tap thu muc trong packages/db/prisma/migrations (toEqual tren mang sap xep, khong chi dem);
+      organization co onboardedAt khac null; deal seed-deal-wise-1 ton tai; shobj_description
+      bat dau "crm phien do" va mang gio ISO trong 10 phut. Dong cuoi stdout cua CLI
+      `bun scripts/measure-db.ts --tao --ten thu<runid>` bang URL tra ve. Dau van tay kho chung
+      sau == truoc (toEqual tren doi tuong bang -> {dem, md5}). Don kho trong afterAll.
+      CHIEU DO (pha thu o S3): seed chay voi NODE_ENV=test bi ro ra -> seed ghi nham kho luot
+      test, ca do voi "dau van tay kho chung doi" in ten bang doi; bo buoc migrate deploy cua kho
+      mau -> ca do "thieu migration" in migration dau tien thieu.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_kho_mau
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; ca "kho-mau": goi createMeasureDatabase hai lan lien tiep cho cung cay. Doc COMMENT
+      cua kho mau: gio tao lan hai == lan mot (mau khong dung lai); gio tao cua kho do lan hai >
+      lan mot. Roi goi lan ba voi dau van tay nguon doi (tham so fingerprint tiem vao ham, cung
+      ma dung dau that o duong CLI) -> gio tao kho mau moi hon. Doi chung duong va do tren CUNG
+      mot cay.
+      CHIEU DO (pha thu o S3): bo so khop dau -> lan hai dung lai mau, ca do "kho mau bi dung
+      lai du dau khop"; so khop luon dung -> lan ba khong dung lai, ca do "dau doi ma kho mau
+      khong dung lai".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_xoa
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; ca "xoa": tao kho do cho cay thu, mo mot ket noi pg giu vao kho do, goi
+      dropMeasureDatabase -> kho khong con trong pg_database. MA TRAN TU CHOI viet truoc 2 ca,
+      moi ca goi CLI `--xoa` voi --ten dan toi mot kho da dung san: (a) kho ten
+      crm_thu<runid>_khac (khong _do, tao bang CREATE DATABASE trong bai) -> exit 2 va stderr
+      chua "khong phai kho do"; (b) kho crm_thu<runid>b_do tao tay khong COMMENT -> exit 2 va
+      stderr chua "khong mang dau phien do"; sau moi ca kho van ton tai. Don trong afterAll.
+      CHIEU DO (pha thu o S3): bo kiem COMMENT truoc khi xoa -> ca (b) do "kho khong dau bi xoa".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_quet_mo_coi
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; ca "quet-mo-coi": dung nam kho rong bang CREATE DATABASE, COMMENT viet bang CHINH
+      ham ghi dau cua measure-db (markMeasureDatabase / markTemplateUsed), khong viet chuoi tay:
+      gia (kho do, tao = now - maxAgeMs - 1 phut), non (kho do, tao = now - 1 phut), khong-dau
+      (ten _do, khong COMMENT), mau-con-dung (kho mau, tao = now - 2*maxAgeMs, dung = now - 1
+      phut), mau-bo (kho mau, tao va dung = now - maxAgeMs - 1 phut). Goi sweepMeasureDatabases(now)
+      that. MA TRAN VIET TRUOC: tap kho con lai trong nam ten BANG DUNG [non, khong-dau,
+      mau-con-dung] va gia tri tra ve BANG DUNG [gia, mau-bo] (sap xep). Doi chung duong tren
+      cung fixture: goi truoc voi now som hon 2 phut -> tra ve rong, ca nam con.
+      CHIEU DO (pha thu o S3): bo dieu kien tuoi -> kho non bi xoa, ca do "kho non tuoi bi xoa";
+      bo loc COMMENT -> kho khong-dau bi xoa, ca do "kho khong dau bi xoa"; bo gio dung khoi
+      moc tuoi -> mau-con-dung bi xoa, ca do "kho mau con dung bi xoa".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dmk_dau_cuoi
+    paths: [scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, packages/db/scripts/measure-db.ts, packages/db/src/measure-database.ts, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    expected: |
+      exit 0; rang phien.mjs che do dau-cuoi: dung kho chung gia crm_chung_gia_<id> (migrate
+      deploy, gieo mot okrCycle la), DATABASE_URL tro vao no, PHIEN_DO_TEN_CAY=dmk-dau-cuoi-<id>;
+      chup dau van tay kho chung gia truoc; chay `bun scripts/lan-do/phien-do.mjs --chay "<lenh do>"` voi lenh do la
+      rang/do-trong-phien.mjs ghi JSON ra .acceptance-runs/do-man-tren-kho-rieng/do.json roi thoat
+      theo DO_MA (0). MA TRAN VIET TRUOC 8 khang dinh tren JSON: ten kho trong DATABASE_URL ==
+      measureDatabaseName(cay nay); cong APP_URL trong dai PHIEN_DO.cong; cong API_URL trong dai;
+      canhCay().ket == "dung-cay"; GET API_URL/health == 200; user NGUOI ton tai trong kho do;
+      ma phien == 0; PHIEN_DO == ten kho. Sau phien 3 khang dinh: hai cong khong con tien trinh
+      nghe (lsof rong), kho do khong con trong pg_database, dau van tay kho chung sau == truoc.
+      CHIEU DO (pha thu o S3): bo buoc xoa kho trong finally -> do "kho do con sau phien"; lenh
+      do ep APP_URL ve mot cong khong ai nghe -> canhCay khong-noi-duoc, do "may chu khong phuc
+      vu cay nay"; phien chay dev:session khong kem DATABASE_URL cua kho do -> do "NGUOI khong co
+      trong kho do".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dmk_don_khi_do
+    paths: [scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    expected: |
+      exit 0; rang phien.mjs che do don-khi-do (PHIEN_DO_TEN_CAY=dmk-don-<id>, kho chung gia nhu
+      E6), MA TRAN 4 ca viet truoc, moi ca 4 khang dinh (ma
+      phien, cong trong, kho do khong con, khong con pid may chu nao ghi trong phien.json):
+      (1) DO_MA=1 -> ma 1; (2) SIGINT gui khi lenh do da ghi JSON -> ma 130; (3) SIGTERM -> 143;
+      (4) SIGKILL phien khi lenh do dang ngu -> hai pid may chu con song ngay sau SIGKILL (doi
+      chung: chung that la mo coi), roi chay phien ke voi lenh do -> truoc lenh do cua phien ke,
+      hai pid cu da chet (lenh do ghi danh sach pid song vao JSON), va phien ke thoat 0 tren kho
+      do moi (gio tao COMMENT moi hon luc SIGKILL).
+      CHIEU DO (pha thu o S3): bo bat SIGTERM -> ca (3) do "SIGTERM de lai kho do"; bo buoc giet
+      nhom trong phien.json -> ca (4) do "may chu mo coi con song".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dmk_xep_hang
+    paths: [scripts/lan-do/phien-do.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    expected: |
+      exit 0; rang phien.mjs che do xep-hang (kho chung gia nhu E6): phien A
+      (PHIEN_DO_TEN_CAY=dmk-hang-<id>) (lenh do ngu 15 s, ghi moc bat dau/ket thuc)
+      va phien B cung ten cay khoi sau A 2 s. Khang dinh: stderr B co dong "cho phien khac cua cay
+      nay"; moc bat dau lenh cua B >= moc ket thuc phien A (A da don); ca hai ma 0. Doi chung:
+      phien C voi PHIEN_DO_TEN_CAY=dmk-hang-<id>-khac khoi sau A 2 s -> C khong in dong cho;
+      khoang chay lenh cua C chong len khoang cua A; hai pid may chu cua A (doc tu phien.json cua
+      A) con song suot luc C dung (kiem moi nhip 500 ms toi khi lenh A ket thuc); A thoat 0.
+      CHIEU DO (pha thu o S3): bo khoa -> B chay chong A, do "hai phien cung cay chay chong".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dmk_tien_de
+    paths: [scripts/lan-do/tien-de.mjs, scripts/lan-do/phien-do.mjs, scripts/lan-do/cau-hinh.mjs, _acceptance/do-man-tren-kho-rieng/rang/phien.mjs]
+    expected: |
+      exit 0; rang phien.mjs che do tien-de (PHIEN_DO_TEN_CAY=dmk-td-<id>), ba ca: (a) DATABASE_URL
+      = kho chung gia nhu E6, APP_URL=
+      http://localhost:1, chay `bun scripts/lan-do/tien-de.mjs --chay "<lenh do>"` -> JSON cua lenh
+      do: ten kho _do cua cay nay, APP_URL khac :1 va trong dai, contextDevApiKey doc tu kho do ==
+      "lan-do-khong-phai-khoa-that"; ma 0; dau van tay kho chung truoc == sau. (b) chay
+      `bun scripts/lan-do/phien-do.mjs --chay "bun scripts/lan-do/tien-de.mjs --chay '<lenh do>'"`
+      -> APP_URL trong lenh do == APP_URL cua phien ngoai (lenh do ghi ca hai), stderr khong co
+      dong cho khoa, ma 0. (c) DATABASE_URL = kho mau crm_dmk_td_<id>_mau_do (da co sau ca a)
+      -> lenh do thay ten kho _do (khong phai _mau_do), ma 0, dau van tay kho mau truoc == sau.
+      CHIEU DO (pha thu o S3): bo re-exec trong tien-de -> ca (a) do "dau van tay kho chung doi"
+      (tien-de dat khoa gia vao kho chung); bo nhan dien kho _do -> ca (b) treo cho khoa, rang
+      dung sau tran thoi gian va in "tien-de long dung phien thu hai".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dmk_kho_chung_khong_doi
+    paths: [scripts/lan-do/tien-de.mjs, scripts/lan-do/phien-do.mjs, packages/db/scripts/measure-db.ts, _acceptance/do-man-tren-kho-rieng/rang/kho-chung-khong-doi.mjs]
+    expected: |
+      exit 0; rang kho-chung-khong-doi.mjs doc NGUYEN VAN chuoi lenh executors.test.dok_man_chrome
+      tu _acceptance/config.yaml (khong chep tay), chay voi PHIEN_DO_TEN_CAY=dmk-okr-<id>. Hai kho
+      chung, moi kho chay lenh mot lan:
+      (i) kho gia crm_chung_gia_<id> (khong _do, khong _gieo) do rang dung bang migrate deploy
+      va gieo mot okrCycle ten "chu ky la cua luot khac", DATABASE_URL tro vao no; (ii) kho crm
+      that cua .env, CHI khi no dang co >= 1 okrCycle — khong co thi in mot dong "kho crm that
+      khong co chu ky la, bo ca (ii)" va khong ghi gi vao no; pg_stat_activity co ket noi khac
+      vao crm (may chu dev cua nguoi) -> ca (ii) van chay lenh nhung chi IN dau van tay
+      truoc/sau, khong khang dinh. Moi ca: dau van tay truoc, chay
+      lenh, dau van tay sau; khang dinh ma lenh == 0 va hai dau bang nhau (in ten bang lech neu
+      co). Kho gia bi xoa trong finally.
+      CHIEU DO (pha thu o S3): bo re-exec trong tien-de -> ca (i) ma 2 voi dong man-okr "kho da
+      co 1 chu ky OKR ngoai fixture", rang do "dok_man_chrome khong xanh tren kho chung co du
+      lieu la".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.dmk_khong_noi_thuoc
+    paths: [_acceptance/do-man-tren-kho-rieng/rang/khong-noi-thuoc.mjs, _acceptance/config.yaml]
+    expected: |
+      exit 0; rang khong-noi-thuoc.mjs lay git diff --name-only merge-base(HEAD, origin/onehub)..HEAD
+      va git diff cua _acceptance/config.yaml. Khang dinh: khong tep nao duoi _acceptance/<slug>/
+      voi slug khac do-man-tren-kho-rieng; moi dong bi xoa ('-') cua config.yaml trong diff la
+      rong (chi them); canh-cay.mjs khong trong danh sach. Doi chung duong va do tren cung ham:
+      danh sach tep gia chua _acceptance/dat-okr-trong-crm/rang/man-okr.mjs -> ham tra loi goi
+      ten tep; diff gia co dong xoa "-    dok_man_chrome: ..." -> loi goi ten khoa.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.dmk_tai_lieu
+    paths: [docs/setup.md, CLAUDE.md, .env.example, _acceptance/do-man-tren-kho-rieng/rang/tai-lieu.mjs]
+    expected: |
+      exit 0; rang tai-lieu.mjs tach muc cua docs/setup.md theo tieu de "### Screen measurements"
+      (than muc toi tieu de ke) va khang dinh than muc chua ca bay moc viet truoc: "db:do --tao",
+      "--xoa", "--quet", "do:man", "template", "maxAgeMs", "tien-de"; muc "## Cách chứng minh nó
+      chạy" cua CLAUDE.md chua "do:man" va "kho chung"; .env.example co dong ghi PHIEN_DO. Moi moc
+      thieu in ten moc va tep. Doi chung do tren cung ham: ban sao chuoi docs bo "--quet" -> loi
+      goi ten "--quet".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.dmk_truoc_gop_toan_kho
+    paths: [_acceptance/do-man-tren-kho-rieng/rang/truoc-gop.mjs, scripts/pre-merge-check.sh, scripts/lan-do/**]
+    expected: |
+      exit 0; rang truoc-gop.mjs chay `bash scripts/pre-merge-check.sh . --base origin/onehub`
+      (khong --slug), tach tung dong vi pham theo ten ho so no goi, bo cac dong cua
+      do-man-tren-kho-rieng, doi so dong con lai == 0 va in nguyen van tung dong neu co. Bo tach
+      dong doc dung khuon dong pre-merge that: doi chung tren cung ham voi hai dong mau lay tu
+      mot luot pre-merge that luu trong rang (mot dong cua ho so khac -> dem 1, mot dong cua ho
+      so nay -> dem 0). Lenh pre-merge thoat ma khac 0/1 (khong chay duoc) -> rang thoat 2.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
