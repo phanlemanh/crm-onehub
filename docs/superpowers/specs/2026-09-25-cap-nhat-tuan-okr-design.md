@@ -145,7 +145,7 @@ dòng khác → sheet mục tiêu.
 - Tab mới «Trao đổi» (thứ tư, sau «Vết»): danh sách bình luận cũ → mới (người, lúc,
   chip KR nếu gắn, tên người được nhắc tô `font-medium`), rồi khung soạn: ô chữ
   (`Textarea`), chọn KR (tuỳ chọn, `Select` các KR của mục tiêu), chọn người nhắc
-  tên (`Combobox` một lựa chọn, mỗi lần chọn thêm một chip `Badge` có nút gỡ; chỉ
+  tên (`Combobox` một lựa chọn, mỗi lần chọn thêm một chip `TokenFieldItem` có nút gỡ; chỉ
   thành viên đang hoạt động), nút «Gửi».
 - Nút «Theo dõi» / «Đang theo dõi» ở phần hành động đầu sheet, cho **mọi người**
   (hôm nay phần đó chỉ hiện với người sửa được — nút theo dõi đứng riêng).
@@ -267,7 +267,7 @@ Căn cứ: màn chính là một danh sách KR đồng dạng điền trong mộ
 |---|---|---|
 | `okr/cap-nhat-tuan/page.tsx`, `cap-nhat-tuan.tsx` — màn cập nhật | 1 (`packages/ui`) + `Item` ở bậc 2 | `Field`, `ToggleGroup`, `InputGroup`, `Alert`, `Empty` có sẵn; `item` chưa có trong `packages/ui/src/components` → cài bản shadcn gốc |
 | `okr/viec-cua-toi.tsx` — thẻ việc OKR | 1 + `Item` (bậc 2) | `Card`, `Button` |
-| `record-sheet/objective-trao-doi.tsx` — tab Trao đổi | 1 + `Item` (bậc 2) | `Textarea`, `Combobox` một lựa chọn + `Badge` (không có combobox nhiều lựa chọn; `token-field` là ô soạn chat), `Select` |
+| `record-sheet/objective-trao-doi.tsx` — tab Trao đổi | 1 + `Item` (bậc 2) | `Textarea`, `Combobox` một lựa chọn + chip `TokenFieldItem`/`TokenFieldAction` (không có combobox nhiều lựa chọn; `Badge` không có chỗ cho nút gỡ nếu không đè `className`; `hop-thoai-muc-tieu.tsx` của lượt 3 đã dùng chip này cho người tham gia), `Badge` cho chip KR, `Select` |
 | `okr/hop-thoai-cap-nhat-kr.tsx` — hộp một KR | 1 | `Dialog`, cùng ô với màn tuần |
 | `settings/members/chuyen-okr-dialog.tsx` | 1 | cùng hình `chuyen-viec-dialog.tsx` |
 
