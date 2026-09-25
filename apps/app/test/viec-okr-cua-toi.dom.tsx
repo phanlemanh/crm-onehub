@@ -214,9 +214,16 @@ describe("the viec OKR", () => {
 		expect(the()?.textContent).toContain(m.rong);
 	});
 
-	test("vai day du: co dong thi hien ca khi co lien quan tinh ra sai", async () => {
+	test("vai day du: co dong ma co lien quan sai thi khong co the", async () => {
 		traVe = () => ({ ...DU, lienQuanOkr: false });
 		await mo("khi-lien-quan", true);
+		await choTraLoi();
+		expect(the()).toBeNull();
+	});
+
+	test("tab Cua toi: co dong thi hien khoi du co lien quan sai", async () => {
+		traVe = () => ({ ...DU, lienQuanOkr: false });
+		await mo("khi-co-viec", false);
 		await cho(() => dong().length === 5, "nam dong");
 	});
 

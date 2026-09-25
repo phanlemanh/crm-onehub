@@ -241,9 +241,8 @@ export function ViecOkrCuaToi({
 
 	const { viec, lienQuanOkr } = duLieu;
 	const hien =
-		viec.length > 0 ||
 		khiHien === "luon" ||
-		(khiHien === "khi-lien-quan" && lienQuanOkr);
+		(khiHien === "khi-lien-quan" ? lienQuanOkr : viec.length > 0);
 	if (!hien) return null;
 
 	if (viec.length === 0) {
