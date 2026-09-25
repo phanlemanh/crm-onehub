@@ -10,6 +10,7 @@ import {
 import {
 	ROW_ACCENT,
 	ROW_ACCENT_EXPANDABLE,
+	ROW_INVALID,
 } from "@crm/ui/lib/row-accent";
 import { cn } from "@crm/ui/lib/utils";
 import type { ComponentProps, ReactNode } from "react";
@@ -100,17 +101,21 @@ export function SimpleTable({
 export function SimpleTableRow({
 	clickable,
 	expandable,
+	invalid,
 	className,
 	...props
 }: ComponentProps<typeof TableRow> & {
 	clickable?: boolean;
 	expandable?: boolean;
+	invalid?: boolean;
 }) {
 	return (
 		<TableRow
+			data-invalid={invalid ? "" : undefined}
 			className={cn(
 				"hover:bg-transparent",
 				clickable && (expandable ? ROW_ACCENT_EXPANDABLE : ROW_ACCENT),
+				invalid && ROW_INVALID,
 				className,
 			)}
 			{...props}
