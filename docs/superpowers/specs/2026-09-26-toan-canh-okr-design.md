@@ -74,8 +74,8 @@ lại đúng một cách đổi hàng thành `MucTieuOutput`.
 - **Lọc ở Prisma**, không ở bộ nhớ: `phuTrach` khớp người phụ trách mục tiêu **hoặc**
   người phụ trách một KR; `tuTin` khớp mục tiêu có KR mà lần cập nhật mới nhất mang
   mức đó. `krKhop` là KR khớp bộ lọc KR (để màn mở sẵn). `facetCounts` đếm mỗi giá trị
-  trên tập đã lọc theo các mặt **khác** — số câu hỏi cố định theo số mặt, không theo số
-  mục tiêu.
+  trên tập đã lọc theo mọi mặt **trừ** mặt của chính nó (chọn một người vẫn thấy số của
+  người khác để chọn thêm) — số câu hỏi cố định theo số mặt, không theo số mục tiêu.
 - **Toàn cảnh** trả hàng theo thứ tự cây: OneHub, rồi từng bộ phận kèm các phòng ban
   của nó, rồi phòng ban chưa xếp. Hàng bộ phận gộp mục tiêu của chính nó và của phòng
   ban con. Mỗi hàng: tiến độ trung bình (mục tiêu đã công bố, cùng công thức
@@ -103,8 +103,12 @@ lại đúng một cách đổi hàng thành `MucTieuOutput`.
   vị: KR đang tính, KR chưa có khởi điểm, người chưa nối kênh (người lấy phòng ban
   chính; bộ phận gộp con), trưởng hoặc «chưa có trưởng»; nhịp 2: KR cập nhật đúng tuần
   (có lần cập nhật với `weekStart` bằng tuần vừa qua), KR im.
-- **Số câu hỏi cố định.** Mỗi thủ tục đọc bằng một số câu `findMany`/`groupBy` không
-  đổi theo số đơn vị, rồi gộp trong hàm thuần. Cây tổ chức đọc một lần mỗi lời gọi.
+- **Số câu hỏi cố định, dưới 1 giây.** Mỗi thủ tục đọc bằng một số câu
+  `findMany`/`groupBy` không đổi theo số đơn vị, rồi gộp trong hàm thuần. Cây tổ chức
+  đọc một lần mỗi lời gọi. Ngưỡng: dưới 1.000 ms trên bộ 50 đơn vị × 2.000 KR (giả định
+  3 của hồ sơ cơ hội).
+- **Mọi tab đọc theo kỳ đang chọn.** `kyOkr` giải qua `giaiKy` ở mọi trang máy chủ và
+  mọi truy vấn khách; không trang nào tự lấy kỳ đang chạy khi URL đã chọn kỳ khác.
 
 ## 4. Đếm «mở bảng họp tuần» — đường đo của Cổng Giá trị
 
@@ -118,6 +122,7 @@ Zod, không `migration`), `objectiveId` rỗng, `cycleId` là kỳ, `after = {do
 - `hopTuan` ghi đúng một dòng cho mỗi (người mở, đơn vị, tuần) — lần mở thứ hai
   cùng tuần không ghi thêm. Chỉ ghi khi người mở là trưởng của đơn vị đó hoặc của bộ
   phận chứa nó; người khác mở không ghi (số đo là của trưởng).
+- Hình dòng ghim: `after = {donVi: "pb:<id>" | "bp:<id>", tuan: "YYYY-MM-DD"}` — `tuan` là **chuỗi** ngày thứ Hai theo giờ Việt Nam từ `dauTuanVN`, không phải `Date` (một `Date` đầu tuần giờ Việt Nam ra JSON là `…T17:00:00.000Z` của ngày hôm trước và câu SQL so chuỗi sẽ đếm 0).
 - Dòng vết đơn vị không hiện ở tab «Vết» của sheet (sheet đọc theo `objectiveId`).
 - Câu đếm ở `_acceptance/toan-canh-okr/rang/ty-le-mo-hop-tuan.sql`: tử số = đơn vị
   chưa lưu trữ có trưởng mà trưởng có dòng `mo-hop-tuan` của đơn vị đó trong tuần;
@@ -141,7 +146,22 @@ thành phần còn lại dừng ở **bậc 5 — dựng mới trong `packages/u
 | Cặp tự tin / tình trạng | `okr-status.tsx` (mới) | `ConfidenceIndicator({level})` Cao·Vừa·Thấp ↔ success·warning·error; `PaceIndicator({pace})` Đúng nhịp·Chậm nhịp·Trượt·Chưa có vạch·Mốc xong·Mốc chưa xong; tham vọng không bao giờ đỏ (luật `tinhTrang` sẵn có); chữ từ `messages.ts` vi/en |
 | Biểu đồ đường có đích | `target-line-chart.tsx` (mới) | bọc `LineChart`/`Line`/`ReferenceLine` của `chart.tsx`: một chuỗi giá trị (liền), «lẽ ra» (đứt), vạch đích có nhãn trực tiếp, tuần chưa tới là khoảng trống, một trục, tooltip mặc định; `aria-label` và bảng ẩn cho trình đọc |
 | Chọn chu kỳ | `period-select.tsx` (mới) | `PeriodSelect({label, groups: {label, items: {value, label, current?, closed?}[]}[], value, onValueChange})`: nhóm theo năm, quý nằm trong năm, «hiện tại» và «đã đóng» mang chữ, không chỉ màu |
-| Heatmap | `heatmap.tsx` (mới) | `Heatmap({caption, rows: {id, label, indent?}[], columns: {id, label, current?}[], values, formatValue, legend})`: năm bậc `foreground` theo độ trong (0/10/25/45/70%), ô rỗng viền đứt có chữ ẩn «chưa có», cột tên dính trái, tự cuộn tới cột hiện tại (`useMountEffect`), chữ trên ô đổi `background` từ bậc 4; tương phản đo ở cả hai nền |
+| Heatmap | `heatmap.tsx` (mới) | `Heatmap({caption, rows: {id, label, indent?}[], columns: {id, label, current?}[], values, formatValue, legend})`: năm bậc `foreground` theo độ trong, ô rỗng viền đứt có chữ ẩn «chưa có», cột tên dính trái, tự cuộn tới cột hiện tại (`useMountEffect`); thang và màu chữ ghim ở bảng dưới |
+
+**Thang heatmap — ghim, tính từ token thật** (nền sáng `--background` ≈ #fafafa,
+chữ `--foreground` ≈ #171717; nền tối #000, chữ #ededed; tỷ lệ WCAG của chữ trên
+nền pha):
+
+| Bậc | Giá trị ô | Lớp nền | Chữ | Nền sáng | Nền tối |
+|---|---|---|---|---|---|
+| 0 | ≤ 0% | `foreground/5` | `foreground` | 15,6 | 16,9 |
+| 1 | ≤ 25% | `foreground/15` | `foreground` | 12,5 | 13,4 |
+| 2 | ≤ 50% | `foreground/30` | `foreground` | 8,8 | 7,9 |
+| 3 | ≤ 75% | `foreground/65` | `background` | 5,5 | 7,5 |
+| 4 | > 75% | `foreground/85` | `background` | 11,0 | 12,8 |
+
+Thang bản mẫu (0/10/25/45/70%) bị bỏ: bậc 45% chỉ đạt 4,6 ở nền tối, bậc 70% với
+chữ tối chỉ 2,6 ở nền sáng — phản biện context sạch bắt, bảng trên tính lại.
 
 Luật chung cho sáu thành phần: không mặc định chuỗi trong tham số destructure (bài
 `lai-ra-man` đếm), `?? "x"` ở chỗ dùng; chữ qua `useMessages()` với ca vi/en trong
