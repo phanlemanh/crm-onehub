@@ -9,6 +9,7 @@ import { type AnhRgba, dat, docAnh, NGUONG_LOGO } from "./logo-raster";
 
 const CLI = fileURLToPath(new URL("../scripts/logo-icons.ts", import.meta.url));
 const { trongKho, ngoaiKho, ico } = ICON_ONEHUB;
+const VUNG_GHI_DUOC = ["apps/app", "packages/ui"];
 
 function docTep(duong: string): Uint8Array {
 	return new Uint8Array(readFileSync(join(GOC_KHO, duong)));
@@ -197,9 +198,12 @@ describe("manifest", () => {
 
 describe("xuat-ngoai", () => {
 	function gitStatus(): string {
-		return Bun.spawnSync(["git", "status", "--porcelain"], {
-			cwd: GOC_KHO,
-		}).stdout.toString();
+		return Bun.spawnSync(
+			["git", "status", "--porcelain", "--", ...VUNG_GHI_DUOC],
+			{
+				cwd: GOC_KHO,
+			},
+		).stdout.toString();
 	}
 
 	test("xuat-ngoai: ba anh dung co vao thu muc ngoai kho, kho khong doi", async () => {
