@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 944bd5dd993d38c3acc27f87820b5fe3e9351cb7
+verified_commit: d91b70b5d3ef94d8d51e67642d164f6fac8253aa
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -207,3 +207,7 @@ Round 3: E1–E8 và toàn bộ suite (test/lint/lint:slop/build) đều pass. P
 ### Re-pin lần 1 — 2026-09-25, do gộp onehub #145 sau chữ ký; bản gốc ghim của PageShell đổi ở vung-cuon-la-khoi-chua
 run_id: repin-20260925T212443Z-96898
 sha: 944bd5dd993d38c3acc27f87820b5fe3e9351cb7 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · AC không có chốt máy: AC-8
+
+### Re-pin lần 2 — 2026-09-25, do gộp onehub #146 (thanh bên Cài đặt, packages/ui) khi tới lượt merge
+run_id: repin-20260925T222401Z-96602
+sha: d91b70b5d3ef94d8d51e67642d164f6fac8253aa · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · AC không có chốt máy: AC-8
