@@ -11,7 +11,9 @@ import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const RA = process.env.BANG_CHUNG ?? join(HERE, "..", "evidence");
+const RA =
+	process.env.BANG_CHUNG ??
+	join(GOC, ".acceptance-runs", "bang-thanh-vien-giu-hang", "evidence");
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const QUAN_TRI = process.env.QUAN_TRI ?? "ada@trycomp.ai";
