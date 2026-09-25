@@ -718,6 +718,7 @@ export class OkrService {
 			await this.assertKyGhiDuoc(tx, mt.cycleId);
 			if ((await this.trangThai(tx, mt.id)) === "da-bo")
 				throw new BadRequestException(T.daBo);
+			await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${kr.id} FOR UPDATE`;
 			if (
 				(await tx.okrAlignment.count({
 					where: { targetKeyResultId: kr.id },
@@ -778,12 +779,16 @@ export class OkrService {
 		);
 		return this.db.$transaction(async (tx) => {
 			await this.assertKyGhiDuoc(tx, nguon.cycleId);
+			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
+			if ((await this.trangThai(tx, nguon.id)) === "da-bo")
+				throw new BadRequestException(T.daBo);
 			if (
 				(input.targetObjectiveId === null) ===
 				(input.targetKeyResultId === null)
 			)
 				throw new BadRequestException(T.canChinh.khongCoDich);
-			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
+			if (input.targetKeyResultId !== null)
+				await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${input.targetKeyResultId} FOR SHARE`;
 			const dich = await this.dichCanChinh(tx, {
 				objectiveId: input.targetObjectiveId,
 				keyResultId: input.targetKeyResultId,
@@ -830,6 +835,8 @@ export class OkrService {
 		const nguon = await this.quyenOkr.assertSuaMucTieu(userId, g.objectiveId);
 		return this.db.$transaction(async (tx) => {
 			await this.assertKyGhiDuoc(tx, nguon.cycleId);
+			if ((await this.trangThai(tx, nguon.id)) === "da-bo")
+				throw new BadRequestException(T.daBo);
 			const xoa = await tx.okrAlignment.deleteMany({ where: { id: g.id } });
 			if (xoa.count === 0) throw new NotFoundException(T.canChinh.khongCo(id));
 			await this.vet(

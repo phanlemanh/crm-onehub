@@ -1616,6 +1616,16 @@ describe("can-chinh", () => {
 		expect(await db.okrKeyResult.count({ where: { id: kr2 } })).toBe(0);
 
 		const gopB = chiTiet.alignments.find((g) => g.targetObjectiveId === B.id);
+		expect(
+			tuChoi(
+				await goi(
+					"okr.removeAlignment",
+					{ id: gopB?.alignmentId ?? "" },
+					"thuong",
+				),
+			),
+		).toBe(`403 ${T.khongSuaDuocDonVi}`);
+		expect(await demP()).toBe(3);
 		ok(
 			await goi(
 				"okr.removeAlignment",
@@ -1628,5 +1638,18 @@ describe("can-chinh", () => {
 		expect(choCua(await cayQuy(), P.id)).toEqual(
 			theoCha([kr1, false], [Bnam.id, true]),
 		);
+
+		const gopP2 = ok<{ id: string }>(
+			await gan(P2.id, { mt: O }, truongP2.cookie),
+			"P2 -> O",
+		).id;
+		ok(await goi("okr.dropObjective", { id: P2.id }, truongP2.cookie), "bo P2");
+		const demP2 = () =>
+			db.okrAlignment.count({ where: { objectiveId: P2.id } });
+		expect([
+			tuChoi(await gan(P2.id, { kr: kr1 }, truongP2.cookie)),
+			tuChoi(await goi("okr.removeAlignment", { id: gopP2 }, truongP2.cookie)),
+			await demP2(),
+		]).toEqual([`400 ${T.daBo}`, `400 ${T.daBo}`, 1]);
 	});
 });
