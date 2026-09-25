@@ -1,7 +1,6 @@
 import Warning from "@carbon/icons-react/es/Warning";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
-import { EntityLogo } from "@crm/ui/components/entity-logo";
 import { Icon } from "@crm/ui/components/icon";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { StepList, StepListItem } from "@crm/ui/components/step-list";
@@ -85,31 +84,22 @@ export function KetNoiZaloThan({
 	const t = nhacQuaZaloMessages(locale).ketNoi;
 	return (
 		<>
-			<header className="flex flex-col gap-2 px-(--spacing-block-inline)">
-				<div className="flex items-center gap-3">
-					<EntityLogo name="Zalo" />
-					<h1 className="font-medium text-xl" translate="no">
-						Zalo
-					</h1>
-					<span className="ml-auto">
-						{du.bat ? (
-							<StatusIndicator
-								tone={du.im ? "warning" : "success"}
-								size="sm"
-								label={
-									<>
-										<span translate="no">{du.tenBot}</span>
-										{du.pollCuoi ? ` · ${t.traLoiLanCuoi(du.pollCuoi)}` : null}
-									</>
-								}
-							/>
-						) : (
-							<StatusIndicator size="sm" label={t.chuaBat} />
-						)}
-					</span>
-				</div>
-				<p className="text-muted-foreground text-sm">{t.moTa}</p>
-			</header>
+			<div className="px-(--spacing-block-inline)">
+				{du.bat ? (
+					<StatusIndicator
+						tone={du.im ? "warning" : "success"}
+						size="sm"
+						label={
+							<>
+								<span translate="no">{du.tenBot}</span>
+								{du.pollCuoi ? ` · ${t.traLoiLanCuoi(du.pollCuoi)}` : null}
+							</>
+						}
+					/>
+				) : (
+					<StatusIndicator size="sm" label={t.chuaBat} />
+				)}
+			</div>
 			<section
 				aria-labelledby="bot-xuong"
 				className="flex flex-col gap-3 border-t px-(--spacing-block-inline) pt-5"

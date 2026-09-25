@@ -1,18 +1,31 @@
 import { Button } from "@crm/ui/components/button";
 import Link from "next/link";
 import { Suspense } from "react";
+import { PageShellLoading } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
-import { ConnectionPage, ConnectionPageLoading } from "../connection-page";
+import { KhungKetNoi } from "../khung-ket-noi";
 
-export default function IntakeConnectionPage(
+export default async function IntakeConnectionPage(
 	props: PageProps<"/[slug]/settings/connections/intake">,
 ) {
+	const locale = await getLocale();
+	const t = ketNoiMessages(locale);
+
 	return (
-		<Suspense fallback={<ConnectionPageLoading />}>
-			<IntakeConnectionPageContent {...props} />
-		</Suspense>
+		<KhungKetNoi
+			params={props.params}
+			con="intake"
+			locale={locale}
+			tieuDe={t.tiepNhan.tieuDe}
+			laTenRieng={false}
+			moTa={t.tiepNhan.moTa}
+		>
+			<Suspense fallback={<PageShellLoading />}>
+				<IntakeConnectionPageContent {...props} />
+			</Suspense>
+		</KhungKetNoi>
 	);
 }
 
@@ -24,22 +37,10 @@ async function IntakeConnectionPageContent({
 	const { slug } = await params;
 
 	return (
-		<ConnectionPage centered className="max-w-(--container-narrow) text-center">
-			<header className="flex flex-col gap-3 px-(--spacing-block-inline)">
-				<h1 className="font-medium text-2xl tracking-tight">
-					{t.tiepNhan.tieuDe}
-				</h1>
-				<p className="text-muted-foreground text-sm leading-relaxed">
-					{t.tiepNhan.moTa}
-				</p>
-			</header>
-			<div>
-				<Button asChild variant="outline">
-					<Link href={`/${slug}/settings/connections`}>
-						{t.tiepNhan.quayLai}
-					</Link>
-				</Button>
-			</div>
-		</ConnectionPage>
+		<div>
+			<Button asChild variant="outline">
+				<Link href={`/${slug}/settings/connections`}>{t.tiepNhan.quayLai}</Link>
+			</Button>
+		</div>
 	);
 }

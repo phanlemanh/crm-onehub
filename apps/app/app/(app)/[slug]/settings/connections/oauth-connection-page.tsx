@@ -1,20 +1,33 @@
 import { Suspense } from "react";
-import { ConnectionPage, ConnectionPageLoading } from "./connection-page";
+import { PageShellLoading } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
+import { KhungKetNoi } from "./khung-ket-noi";
 
 export type ConnectionQuery = Record<string, string | string[] | undefined>;
 
 type OAuthConnectionPageProps = {
 	connection: React.ComponentType<{ slug: string; connectError?: string }>;
 	params: Promise<{ slug: string }>;
-	provider: string;
+	provider: "google" | "microsoft";
 	searchParams: Promise<ConnectionQuery>;
 };
 
-export function OAuthConnectionPage(props: OAuthConnectionPageProps) {
+export async function OAuthConnectionPage(props: OAuthConnectionPageProps) {
+	const locale = await getLocale();
+
 	return (
-		<Suspense fallback={<ConnectionPageLoading />}>
-			<OAuthConnectionPageContent {...props} />
-		</Suspense>
+		<KhungKetNoi
+			params={props.params}
+			con={props.provider}
+			locale={locale}
+			tieuDe={ketNoiMessages(locale).ten[props.provider]}
+			laTenRieng
+		>
+			<Suspense fallback={<PageShellLoading />}>
+				<OAuthConnectionPageContent {...props} />
+			</Suspense>
+		</KhungKetNoi>
 	);
 }
 
@@ -31,9 +44,7 @@ async function OAuthConnectionPageContent({
 	const [{ slug }, query] = await Promise.all([params, searchParams]);
 
 	return (
-		<ConnectionPage>
-			<Connection connectError={connectErrorOf(query, provider)} slug={slug} />
-		</ConnectionPage>
+		<Connection connectError={connectErrorOf(query, provider)} slug={slug} />
 	);
 }
 

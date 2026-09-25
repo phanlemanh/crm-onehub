@@ -14,12 +14,14 @@ import {
 	AlertDescription,
 	AlertTitle,
 } from "@crm/ui/components/alert";
-import SlackLogo from "@crm/ui/components/brand-logos/slack";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import type { Locale } from "@crm/ui/lib/locale";
 import Link from "next/link";
 import { Suspense } from "react";
 import { NewAgentDialog } from "@/components/agent-builder/new-agent-dialog";
+import { PageShellLoading } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import {
 	type KetNoiMessages,
@@ -27,7 +29,7 @@ import {
 } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { ConnectionPage, ConnectionPageLoading } from "../connection-page";
+import { KhungKetNoi } from "../khung-ket-noi";
 import { type ConnectionQuery, connectErrorOf } from "../oauth-connection-page";
 import { SlackChannels } from "./slack-channels";
 import {
@@ -48,10 +50,26 @@ type SlackConnectionPageProps = {
 	searchParams: Promise<ConnectionQuery>;
 };
 
-export default function SlackConnectionPage(props: SlackConnectionPageProps) {
+export default async function SlackConnectionPage(
+	props: SlackConnectionPageProps,
+) {
+	const locale = await getLocale();
+
 	return (
-		<Suspense fallback={<ConnectionPageLoading />}>
-			<SlackConnectionPageContent {...props} />
+		<Suspense
+			fallback={
+				<KhungKetNoi
+					params={props.params}
+					con="slack"
+					locale={locale}
+					tieuDe={ketNoiMessages(locale).ten.slack}
+					laTenRieng
+				>
+					<PageShellLoading />
+				</KhungKetNoi>
+			}
+		>
+			<SlackConnectionPageContent {...props} locale={locale} />
 		</Suspense>
 	);
 }
@@ -59,32 +77,35 @@ export default function SlackConnectionPage(props: SlackConnectionPageProps) {
 async function SlackConnectionPageContent({
 	params,
 	searchParams,
-}: SlackConnectionPageProps) {
+	locale,
+}: SlackConnectionPageProps & { locale: Locale }) {
 	await requireSession();
-	const t = ketNoiMessages(await getLocale());
+	const t = ketNoiMessages(locale);
 	const [{ slug }, query] = await Promise.all([params, searchParams]);
 	const queryClient = getServerQueryClient();
 	const status = await queryClient.fetchQuery(
 		getServerTrpc().slack.status.queryOptions(),
 	);
 	return status.connected ? (
-		<ConnectedSlack slug={slug} status={status} t={t} />
+		<ConnectedSlack
+			slug={slug}
+			status={status}
+			t={t}
+			params={params}
+			locale={locale}
+		/>
 	) : (
-		<ConnectionPage centered className="max-w-(--container-page)">
-			<header className="flex flex-col gap-3 px-(--spacing-block-inline)">
-				<div className="flex items-center gap-3">
-					<SlackLogo className="size-6" />
-					<h1 className="font-medium text-xl" translate="no">
-						{t.ten.slack}
-					</h1>
-					<span className="ml-auto text-muted-foreground text-sm">
-						{t.chung.chuaCam}
-					</span>
-				</div>
-				<p className="text-muted-foreground text-sm leading-relaxed">
-					{t.slack.gioiThieu}
-				</p>
-			</header>
+		<KhungKetNoi
+			params={params}
+			con="slack"
+			locale={locale}
+			tieuDe={t.ten.slack}
+			laTenRieng
+			moTa={t.slack.gioiThieu}
+		>
+			<div className="px-(--spacing-block-inline)">
+				<StatusIndicator size="sm" label={t.chung.chuaCam} />
+			</div>
 			<SlackScopeGroups
 				groups={groupScopes([...SLACK_REQUESTED_SCOPES])}
 				title={t.slack.banGiao}
@@ -120,7 +141,7 @@ async function SlackConnectionPageContent({
 					))}
 				</div>
 			</section>
-		</ConnectionPage>
+		</KhungKetNoi>
 	);
 }
 
@@ -147,8 +168,12 @@ function ConnectedSlack({
 	slug,
 	status,
 	t,
+	params,
+	locale,
 }: {
 	slug: string;
+	params: Promise<{ slug: string }>;
+	locale: Locale;
 	status: {
 		workspace: string | null;
 		agents: Array<{
@@ -170,28 +195,31 @@ function ConnectedSlack({
 		? drift.missing
 		: [...drift.missing, SLACK_USER_GRANT];
 	return (
-		<ConnectionPage>
-			<header className="flex flex-col gap-2 px-(--spacing-block-inline)">
-				<div className="flex items-center gap-3">
-					<SlackLogo className="size-6" />
-					<h1 className="font-medium text-xl" translate="no">
-						{t.ten.slack}
-					</h1>
-					<span
-						className="ml-auto text-muted-foreground text-sm"
-						translate={status.workspace ? "no" : undefined}
-					>
-						{status.workspace ?? t.chung.daCam}
-					</span>
-					<SlackDisconnectButton
-						canManage={status.canManage}
-						workspace={status.workspace}
-					/>
-				</div>
-				<p className="text-muted-foreground text-sm">
-					{status.canManage ? t.slack.moTaQuanTri : t.slack.moTaThuong}
-				</p>
-			</header>
+		<KhungKetNoi
+			params={params}
+			con="slack"
+			locale={locale}
+			tieuDe={t.ten.slack}
+			laTenRieng
+			moTa={status.canManage ? t.slack.moTaQuanTri : t.slack.moTaThuong}
+			hanhDong={
+				<SlackDisconnectButton
+					canManage={status.canManage}
+					workspace={status.workspace}
+				/>
+			}
+		>
+			<div className="px-(--spacing-block-inline)">
+				<StatusIndicator
+					size="sm"
+					tone="success"
+					label={
+						<span translate={status.workspace ? "no" : undefined}>
+							{status.workspace ?? t.chung.daCam}
+						</span>
+					}
+				/>
+			</div>
 			<MissingGrant missing={missing} slug={slug} t={t} />
 			<SlackScopeGroups
 				groups={groupScopes(status.scopes)}
@@ -269,7 +297,7 @@ function ConnectedSlack({
 					</Link>
 				</Button>
 			</div>
-		</ConnectionPage>
+		</KhungKetNoi>
 	);
 }
 
