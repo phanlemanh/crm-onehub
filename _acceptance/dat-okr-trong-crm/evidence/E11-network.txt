@@ -1,4 +1,4 @@
-2026-09-25T09:13:35.475Z 500 GET http://localhost:3910/api/trpc/okr.byUnit?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22cmugqtz4o00bg8icfeinkd8kv%22%2C%22unit%22%3A%7B%22loai%22%3A%22pb%22%2C%22id%22%3A%22cmugqtz3b00bb8icfvrboj3q3%22%7D%7D%7D
-2026-09-25T09:13:35.475Z console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-2026-09-25T09:13:36.481Z 500 GET http://localhost:3910/api/trpc/okr.byUnit?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22cmugqtz4o00bg8icfeinkd8kv%22%2C%22unit%22%3A%7B%22loai%22%3A%22pb%22%2C%22id%22%3A%22cmugqtz3b00bb8icfvrboj3q3%22%7D%7D%7D
-2026-09-25T09:13:36.481Z console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+2026-09-25T09:39:27.259Z 500 GET http://localhost:3910/api/trpc/okr.byUnit?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22cmugrr8gj00d98icf9xv77z4r%22%2C%22unit%22%3A%7B%22loai%22%3A%22pb%22%2C%22id%22%3A%22cmugrr8f300d48icf7k6dm13d%22%7D%7D%7D
+2026-09-25T09:39:27.259Z console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+2026-09-25T09:39:28.263Z 500 GET http://localhost:3910/api/trpc/okr.byUnit?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22cmugrr8gj00d98icf9xv77z4r%22%2C%22unit%22%3A%7B%22loai%22%3A%22pb%22%2C%22id%22%3A%22cmugrr8f300d48icf7k6dm13d%22%7D%7D%7D
+2026-09-25T09:39:28.263Z console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
