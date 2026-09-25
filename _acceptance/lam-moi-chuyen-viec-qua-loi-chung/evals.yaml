@@ -123,7 +123,7 @@ evals:
            moi-phia-deu-thay-ke-hoach:E3 va rut([cache.ts]) phai chua thanh-vien-hai-khoi-cung-khuon:E19
            — thieu -> ma 1 "bo rut tap hong".
         4. Tap = rut(TEP_VONG). LOAI QUET LONG: lenh tro toi mot tep _acceptance/*/rang/*.mjs co chu
-           "worktree" (mot luot quet dung cay goc khac) -> in "LOAI quet long: <lenh> (<eval>)", khong
+           "worktree" hoac "repin-lane" (mot luot quet dung cay goc khac hoac chay lan ghim) -> in "LOAI quet long: <lenh> (<eval>)", khong
            chay; in so ho so da quet (> 0), so eval, so lenh chay, so lenh loai.
         5. Chay tuan tu tung lenh o HEAD tu goc kho; lenh do chay lai mot lan o HEAD (xanh -> in
            "chap chon", khong tinh); lenh con do chay tren worktree tam o B

@@ -16,6 +16,7 @@ const DOI_CHUNG = [
 ];
 const TRAN_MOT_LENH_MS = 15 * 60_000;
 const DONG_DUOI = 6;
+const DAU_QUET_LONG = ["worktree", "repin-lane"];
 
 function dung(ma, loi) {
 	console.log(loi);
@@ -52,11 +53,14 @@ function docYaml(tep) {
 const cauHinh = docYaml(join(GOC, "_acceptance", "config.yaml"));
 const t1 = (cauHinh.risk_tiers?.t1_skip_globs ?? []).map(khuon);
 
+const bangLenh = new Map(
+	Object.entries(cauHinh.executors ?? {}).flatMap(([nhom, khoa]) =>
+		Object.entries(khoa ?? {}).map(([ten, lenh]) => [`config:executors.${nhom}.${ten}`, String(lenh)]),
+	),
+);
+
 function giai(ref) {
-	const duong = ref.replace(/^config:/, "").split(".");
-	const lenh = duong.reduce((o, k) => (o && typeof o === "object" ? o[k] : undefined), cauHinh);
-	if (typeof lenh !== "string") dung(2, `KHONG DO DUOC: ref ${ref} khong giai duoc trong _acceptance/config.yaml`);
-	return lenh;
+	return bangLenh.get(ref) ?? dung(2, `KHONG DO DUOC: ref ${ref} khong giai duoc trong _acceptance/config.yaml`);
 }
 
 const hoSo = [];
@@ -107,7 +111,9 @@ if (ngoai.length > 0) dung(1, `tep ngoai vong: ${ngoai.join(", ")}`);
 function laQuetLong(lenh) {
 	return [...lenh.matchAll(/_acceptance\/[^\s"']+\/rang\/[^\s"']+\.m?[jt]s/g)].some((m) => {
 		const tep = join(GOC, m[0]);
-		return existsSync(tep) && readFileSync(tep, "utf8").includes("worktree");
+		if (!existsSync(tep)) return false;
+		const nguon = readFileSync(tep, "utf8");
+		return DAU_QUET_LONG.some((dau) => nguon.includes(dau));
 	});
 }
 
