@@ -16,15 +16,21 @@ export function chonChuKyHienTai<T extends ChuKyNgan>(
 	homNay: string,
 ): T | null {
 	const quy = cycles.filter((c) => c.kind === "quy");
-	const dangChay = quy.find(
-		(c) =>
-			c.phase === "dang-chay" && c.startsOn <= homNay && homNay <= c.endsOn,
+	const chuaHomNay = quy.filter(
+		(c) => c.startsOn <= homNay && homNay <= c.endsOn,
 	);
-	if (dangChay) return dangChay;
+	const trongNgay =
+		chuaHomNay.find((c) => c.phase === "dang-chay") ?? chuaHomNay[0];
+	if (trongNgay) return trongNgay;
 	const moc = ngayTuyet(homNay);
 	const xa = (c: ChuKyNgan) => Math.abs(ngayTuyet(c.startsOn) - moc);
-	const sap = [...quy].sort((a, b) => xa(a) - xa(b));
-	return sap[0] ?? cycles[0] ?? null;
+	const ganNhat = (ds: T[]) => [...ds].sort((a, b) => xa(a) - xa(b))[0];
+	return (
+		ganNhat(quy.filter((c) => c.phase !== "da-dong")) ??
+		ganNhat(quy) ??
+		cycles[0] ??
+		null
+	);
 }
 
 export function kyVongTheoNgay(

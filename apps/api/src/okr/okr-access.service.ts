@@ -1,5 +1,6 @@
 import {
 	isWorkspaceAdmin,
+	NOT_A_MEMBER,
 	type WorkspaceRole,
 	workspaceRoleOf,
 } from "@crm/auth";
@@ -61,8 +62,7 @@ export class OkrAccessService {
 
 	async quyen(userId: string): Promise<Quyen> {
 		const role = await workspaceRoleOf(userId);
-		if (!role)
-			throw new ForbiddenException("You are not a member of this workspace.");
+		if (!role) throw new ForbiddenException(NOT_A_MEMBER);
 		const cay = await this.toChuc.tree();
 		const truongBoPhan = new Set(
 			cay.divisions.filter((b) => b.head?.id === userId).map((b) => b.id),

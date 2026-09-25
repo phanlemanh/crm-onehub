@@ -176,6 +176,17 @@ describe("chu-ky", () => {
 		expect(chonChuKyHienTai(cs2, "2026-11-15")?.id).toBe(quy);
 		expect(chonChuKyHienTai(cs2, "2027-01-15")?.id).not.toBe(quy);
 		expect(chonChuKyHienTai(cs2, "2027-01-15")?.id).toBe(q1);
+
+		const namB = await taoNam("nam-b", 2026);
+		const q4KeHoach = await taoQuy("q4-b", namB, "2026-10-01", "2026-12-31");
+		const cs3 = (await doc<{ cycles: ChuKyDoc[] }>("okr.cycles")).cycles;
+		const keHoach = cs3.filter((c) => c.id === q4KeHoach || c.id === q1);
+		expect(keHoach.map((c) => c.phase)).toEqual([
+			"lap-ke-hoach",
+			"lap-ke-hoach",
+		]);
+		expect(chonChuKyHienTai(keHoach, "2026-11-20")?.id).toBe(q4KeHoach);
+		expect(chonChuKyHienTai(cs3, "2026-11-20")?.id).toBe(quy);
 	});
 });
 
