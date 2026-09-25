@@ -148,7 +148,8 @@ const en = {
 	heatmap: {
 		donVi: "Unit",
 		chuaCo: "no data",
-		chuGiai: "The more a cell stands out from the background, the more KRs had high confidence.",
+		chuGiai:
+			"The more a cell stands out from the background, the more KRs had high confidence.",
 		oRong: "week not reached yet, or nobody updated",
 	},
 	chuKy: {
@@ -159,7 +160,8 @@ const en = {
 		giaTri: "Value",
 		leRa: "Expected",
 		tuan: "Week",
-		chuGiai: "Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
+		chuGiai:
+			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
 	},
 };
 
@@ -324,7 +326,8 @@ const vi = {
 		giaTri: "Giá trị",
 		leRa: "Lẽ ra",
 		tuan: "Tuần",
-		chuGiai: "Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
+		chuGiai:
+			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
 	},
 } satisfies Messages;
 

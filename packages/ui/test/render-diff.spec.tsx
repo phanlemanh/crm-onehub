@@ -25,12 +25,12 @@ import {
 	DialogTitle,
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
+import { Heatmap } from "../src/components/heatmap";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	MessageScrollerButton,
 	MessageScrollerProvider,
 } from "../src/components/message-scroller";
-import { Heatmap } from "../src/components/heatmap";
 import { MoneyInput } from "../src/components/money-input";
 import {
 	ConfidenceIndicator,
@@ -45,8 +45,8 @@ import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
 import { Suggestion } from "../src/components/suggestion";
-import { TargetLineChart } from "../src/components/target-line-chart";
 import { TablePagination } from "../src/components/table-pagination";
+import { TargetLineChart } from "../src/components/target-line-chart";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";

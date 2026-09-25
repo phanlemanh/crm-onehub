@@ -154,12 +154,11 @@ describe("heatmap — tương phản chữ trên từng bậc, đọc từ token
 				return Math.round(tyLe(o, chuNen ? bg : fg) * 100) / 100;
 			});
 		});
-		ra.forEach((dong, i) =>
-			dong.forEach((so, j) => {
+		for (const [i, dong] of ra.entries())
+			for (const [j, so] of dong.entries()) {
 				expect(Math.abs(so - (BANG_VIET_TRUOC[i]?.[j] ?? 0))).toBeLessThan(0.1);
 				expect(so).toBeGreaterThanOrEqual(4.5);
-			}),
-		);
+			}
 		expect(BAC_NHIET.map((b) => b.nen)).toEqual([
 			"bg-foreground/5",
 			"bg-foreground/15",
