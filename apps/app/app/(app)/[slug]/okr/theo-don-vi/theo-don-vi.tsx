@@ -25,8 +25,8 @@ import { useChuKy } from "../chon-chu-ky";
 import { HopThoaiMucTieu } from "../hop-thoai-muc-tieu";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { KhoiMucTieu } from "../khoi-muc-tieu";
-import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
 import type { CayDuLieu, MucTieu } from "../kieu";
+import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
 import {
 	CACH_XEM,
 	type CachXem,

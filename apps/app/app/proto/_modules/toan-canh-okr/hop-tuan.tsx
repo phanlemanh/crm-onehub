@@ -22,12 +22,12 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
-import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import {
 	SimpleTable,
 	type SimpleTableColumn,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
