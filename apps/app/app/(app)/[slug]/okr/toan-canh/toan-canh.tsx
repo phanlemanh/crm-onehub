@@ -38,7 +38,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "../chon-chu-ky";
 import { okrParsers } from "../okr-search-params";
-import { ThanhTienDo } from "../tien-do-kr";
+import { kyVongCo, ThanhTienDo } from "../tien-do-kr";
 import { ChuaChuKy, DangTai } from "../trang-thai-okr";
 
 type HangToanCanh = RouterOutputs["okr"]["toanCanh"]["hang"][number];
@@ -175,7 +175,9 @@ export function ToanCanh() {
 					description={
 						tongQuan.kyVong === null
 							? mt.toanCanh.chuaCoVach
-							: mt.toanCanh.leRa(String(tongQuan.kyVong))
+							: kyVongCo(tongQuan.kyVong) === null
+								? mt.toanCanh.vuaCongBo
+								: mt.toanCanh.leRa(String(tongQuan.kyVong))
 					}
 					label={mt.toanCanh.tienDoTB}
 					value={tongQuan.tienDo === null ? "—" : `${tongQuan.tienDo}%`}

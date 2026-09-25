@@ -48,6 +48,10 @@ export function NhanTinhTrang({
 	);
 }
 
+export function kyVongCo(expected: number | null) {
+	return expected !== null && expected > 0 ? expected : null;
+}
+
 export function ThanhTienDo({
 	ten,
 	progress,
@@ -60,14 +64,15 @@ export function ThanhTienDo({
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
+	const vach = kyVongCo(expected);
 	return (
 		<Progress
-			expected={expected}
+			expected={vach}
 			value={progress}
 			valueText={
-				expected === null
+				vach === null
 					? m.tienDoCua(ten, progress)
-					: mt.tienDoLeRa(ten, String(progress), String(expected))
+					: mt.tienDoLeRa(ten, String(progress), String(vach))
 			}
 			variant="neutral"
 		/>
