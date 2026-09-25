@@ -274,13 +274,16 @@ evals:
       test/script ma lenh (giai config: ref qua _acceptance/config.yaml) nhac toi mot tep kiem nam
       trong git diff --name-only <base> HEAD. Tap nay phai BANG dung tam slug viet truoc trong
       contract AC-7 (1); lech -> in slug thua/thieu.
-      (b) Voi moi slug cua tap: dong kind "repin" CUOI trong run-log.jsonl co evals_exit khong rong,
-      moi gia tri = 0, suites_exit toan 0 (2); sha cua dong do == verified_commit trong frontmatter
-      evidence-report.md (1); git diff --name-only <sha> HEAD khong co tep nao ngoai _acceptance/ va
-      ngoai risk_tiers.t1_skip_globs (1). 8 x 4 = 32. Tam slug chung MOT run_id (1).
+      (b) Voi moi slug CHUA KHEP cua tap (6): dong kind "repin" CUOI trong run-log.jsonl co evals_exit
+      khong rong, moi gia tri = 0, suites_exit toan 0 (2); sha cua dong do == verified_commit trong
+      frontmatter evidence-report.md (1); git diff --name-only <sha> HEAD khong co tep nao ngoai
+      _acceptance/ va ngoai risk_tiers.t1_skip_globs (1). 6 x 4 = 24. Sau slug chung MOT run_id (1).
+      Voi moi slug DA CHAM BOI THUC TE (2: dieu-phoi-30-ngay-dau, quan-ly-danh-muc-30-ngay):
+      node lib/workspace-record.cjs --thuc-te tra ma 0 (dong quan sat du ve, thuoc khong doi) (2) —
+      mien ghim theo luat dong ho so cua bo kit; bai kiem cua chung chay trong bo kiem day du.
       (c) Chay "bash scripts/pre-merge-check.sh . --base origin/onehub" KHONG --slug: moi dong
       VIOLATION trong dau ra chi duoc nhac chinh [mot-duong-ghi-phong-ban] (ho so dang cham, chua co
-      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 35.
+      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 30.
       Sinh them hai tep cho E9: bai-kiem-da-ky.diff (git diff <base> HEAD tren cac tep kiem cua tap
       bi cham) va bai-kiem-dem.md (moi tep: so khang dinh expect( / ok( truoc va sau).
       CHIEU DO cung lan, tren ban sao trong bo nho: (1) doi evals_exit cua mot eval thanh 1 trong dong

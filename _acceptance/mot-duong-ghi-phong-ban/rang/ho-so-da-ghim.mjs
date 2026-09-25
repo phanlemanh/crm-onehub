@@ -145,9 +145,26 @@ if (JSON.stringify(tap) !== JSON.stringify([...TAM].sort())) {
 	);
 }
 
+const daKhep = (slug) =>
+	/^status:\s*da-cham-boi-thuc-te\s*$/m.test(
+		docTep(`_acceptance/${slug}/contract.md`),
+	);
 const runIds = new Set();
 const ghimTheoSlug = new Map();
-for (const slug of TAM) {
+for (const slug of TAM.filter(daKhep)) {
+	const r = spawnSync(
+		process.execPath,
+		["lib/workspace-record.cjs", "--thuc-te", "--root", ".", "--slug", slug],
+		{ cwd: GOC, encoding: "utf8" },
+	);
+	so += 1;
+	console.log(`${slug}: da cham boi thuc te — ${r.stdout.trim()}`);
+	if (r.status !== 0)
+		loi.push(
+			`${slug}: ho so da khep nhung khoa thuc te hong — ${r.stdout.trim()}`,
+		);
+}
+for (const slug of TAM.filter((s) => !daKhep(s))) {
 	const runLog = docTep(`_acceptance/${slug}/run-log.jsonl`);
 	const ghim = dongGhimCuoi(runLog);
 	ghimTheoSlug.set(slug, ghim);
