@@ -8,7 +8,8 @@ import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
-const RA = join(HERE, "..", "evidence");
+const RA =
+	process.env.BANG_CHUNG ?? join(GOC, ".acceptance-runs", "logo-onehub", "evidence");
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
