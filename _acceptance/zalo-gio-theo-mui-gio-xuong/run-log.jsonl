@@ -11,3 +11,4 @@
 {"ts":"2026-09-25T02:59:16Z","sha":"ee8668411b0763659b1baf05df5f16d1c2dbb29d","round":1,"kind":"round-tally","verdict":"PASS","expected":7,"returned":7,"blocked":0}
 {"ts":"2026-09-25T02:59:16Z","sha":"ee8668411b0763659b1baf05df5f16d1c2dbb29d","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":7}
 {"kind":"thuoc-vat","ts":"2026-09-25T03:21:03Z","round":1,"san":"ee8668411b0763659b1baf05df5f16d1c2dbb29d","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}
+{"ts":"2026-09-25T03:40:34Z","kind":"repin","run_id":"repin-20260925T034034Z-10908","sha":"8a38307ae7a407981e088801f5ef321811f0b59b","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0},"evals_not_machine":["E3"]}

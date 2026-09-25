@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ee8668411b0763659b1baf05df5f16d1c2dbb29d
+verified_commit: 8a38307ae7a407981e088801f5ef321811f0b59b
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -92,3 +92,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1, E2, E3 và các lệnh suite (test/lint/lint:slop/build) đều pass ngay từ vòng đầu — không có vòng sửa lại.
+
+### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub trước khi mở PR (chạy bằng Bun 1.3.12 như CI)
+run_id: repin-20260925T034034Z-10908
+sha: 8a38307ae7a407981e088801f5ef321811f0b59b · suites: 4 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · ngoài làn máy: E3 · AC không có chốt máy: AC-3
