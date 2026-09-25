@@ -409,6 +409,10 @@ executors:
     ccq_man_khoa: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cai-dat-chung-khoa.dom.tsx -t ccq-man-khoa'
     ccq_cong_hoi_quy: 'cd apps/app && bun test test/onboarding-gate.spec.ts && cd ../.. && node _acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs'
     ccq_chup_hai_vai: 'APP_URL=http://localhost:3500 API_URL=http://localhost:3501 NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cai-dat-chung-chi-quan-tri/rang/chup.mjs"'
+    lgo_khop_goc: "cd packages/ui && bun test test/logo-khop-goc.spec.ts"
+    lgo_thanh_phan: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/logo.dom.tsx"
+    lgo_bo_icon: "cd packages/ui && bun test test/logo-icons.spec.ts"
+    lgo_chup: 'APP_URL=http://localhost:3300 API_URL=http://localhost:3301 NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/logo-onehub/rang/chup.mjs"'
     ccq_cong_that: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/cai-dat-chung-chi-quan-tri.spec.ts -t ccq-cong-that"'
     slt_api_quyen: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/sua-luu-tru.spec.ts -t api-quyen"'
     slt_api_dong_mo: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/sua-luu-tru.spec.ts -t api-dong-mo"'
@@ -593,6 +597,8 @@ executors:
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
+    lgo_ranh_gioi: "node _acceptance/logo-onehub/rang/ranh-gioi.mjs"
+    lgo_o_agent: "node _acceptance/logo-onehub/rang/o-agent.mjs"
     build_khong_cache: 'bunx turbo run build --force'
     cdt_hang_xom_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh lanh"'
     cdt_hang_xom_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha"'

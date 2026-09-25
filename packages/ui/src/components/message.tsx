@@ -30,12 +30,17 @@ function Message({
   )
 }
 
-function MessageAvatar({ className, ...props }: React.ComponentProps<"div">) {
+function MessageAvatar({
+  className,
+  square = false,
+  ...props
+}: React.ComponentProps<"div"> & { square?: boolean }) {
   return (
     <div
       data-slot="message-avatar"
+      data-shape={square ? "square" : undefined}
       className={cn(
-        "flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-md bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8",
+        "flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-md bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8 data-[shape=square]:size-8",
         className
       )}
       {...props}
