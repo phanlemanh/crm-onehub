@@ -400,7 +400,7 @@ executors:
     lgo_khop_goc: "cd packages/ui && bun test test/logo-khop-goc.spec.ts"
     lgo_thanh_phan: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/logo.dom.tsx"
     lgo_bo_icon: "cd packages/ui && bun test test/logo-icons.spec.ts"
-    lgo_chup: 'APP_URL=http://localhost:3500 API_URL=http://localhost:3501 NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/logo-onehub/rang/chup.mjs"'
+    lgo_chup: 'APP_URL=http://localhost:3300 API_URL=http://localhost:3301 NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/logo-onehub/rang/chup.mjs"'
     ccq_cong_that: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/cai-dat-chung-chi-quan-tri.spec.ts -t ccq-cong-that"'
     slt_api_quyen: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/sua-luu-tru.spec.ts -t api-quyen"'
     slt_api_dong_mo: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/sua-luu-tru.spec.ts -t api-dong-mo"'
