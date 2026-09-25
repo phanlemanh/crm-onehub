@@ -237,7 +237,13 @@ export function dungSan(): void {
 			where: { objectiveId: { in: mucTieu } },
 		});
 		await db.okrCheckIn.deleteMany({
-			where: { keyResult: { objectiveId: { in: mucTieu } } },
+			where: {
+				OR: [
+					{ keyResult: { objectiveId: { in: mucTieu } } },
+					{ session: { userId: { startsWith: TIEN_TO } } },
+					{ authorUserId: { startsWith: TIEN_TO } },
+				],
+			},
 		});
 		await db.okrCheckInSession.deleteMany({
 			where: { userId: { startsWith: TIEN_TO } },

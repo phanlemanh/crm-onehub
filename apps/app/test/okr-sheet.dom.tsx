@@ -48,6 +48,7 @@ function kr(id: string, startLocked: boolean): KrOutput {
 		startLocked,
 		progress: 40,
 		laCuaToi: false,
+		hienTaiQuaCapNhat: false,
 	};
 }
 

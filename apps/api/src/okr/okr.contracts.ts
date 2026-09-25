@@ -1,3 +1,4 @@
+import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import {
 	chuKyInput,
 	LOAI_CHU_KY,
@@ -75,6 +76,7 @@ export const krOutput = z.object({
 	startLocked: z.boolean(),
 	progress: z.number(),
 	laCuaToi: z.boolean(),
+	hienTaiQuaCapNhat: z.boolean(),
 });
 export const noiGopOutput = z.object({
 	alignmentId: z.string(),
@@ -225,6 +227,31 @@ export const okrImportApplyOutput = z.object({
 	objectives: z.number(),
 	keyResults: z.number(),
 });
+export const capNhatTuanOutput = z.object({
+	items: z.array(
+		z.object({
+			keyResultId: z.string(),
+			title: z.string(),
+			objectiveId: z.string(),
+			objectiveTitle: z.string(),
+			unitName: z.string(),
+			kind: z.enum(KIEU_KR),
+			unit: z.string(),
+			targetValue: z.number(),
+			currentValue: z.number(),
+			lastConfidence: z.enum(MUC_TU_TIN).nullable(),
+			lastAt: z.string().nullable(),
+			updatedThisWeek: z.boolean(),
+		}),
+	),
+	weekStart: ngay,
+	dueWeekday: z.number().nullable(),
+});
+export const moCapNhatOutput = z.object({ sessionId: z.string() });
+export const guiCapNhatOutput = z.object({
+	written: z.number(),
+	seconds: z.number(),
+});
 
 export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
@@ -236,4 +263,5 @@ export type VetOutput = z.infer<typeof vetOutput>;
 export type ObjectiveOutput = z.infer<typeof objectiveOutput>;
 export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
+export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
 export type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";

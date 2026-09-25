@@ -81,7 +81,7 @@ const quanHeDonVi = {
 	department: { select: { name: true } },
 	person: { select: { name: true } },
 } as const;
-const chonTenDonVi = { level: true, ...quanHeDonVi } as const;
+export const chonTenDonVi = { level: true, ...quanHeDonVi } as const;
 const chonMucTieu = {
 	owner: { select: chonNguoi },
 	participants: {
@@ -105,7 +105,14 @@ const chonMucTieu = {
 		},
 		orderBy: { createdAt: "asc" },
 	},
-	cycle: { select: { endsOn: true, breakStartsOn: true, breakEndsOn: true } },
+	cycle: {
+		select: {
+			endsOn: true,
+			breakStartsOn: true,
+			breakEndsOn: true,
+			phase: true,
+		},
+	},
 	...quanHeDonVi,
 } satisfies Prisma.OkrObjectiveInclude;
 
@@ -116,7 +123,7 @@ type TenDonVi = {
 	person: { name: string } | null;
 };
 
-function tenDonVi(r: TenDonVi): string {
+export function tenDonVi(r: TenDonVi): string {
 	switch (capMucTieu.parse(r.level)) {
 		case "onehub":
 			return OKR.tenGoc;
@@ -442,6 +449,14 @@ export class OkrService {
 		return trangThaiMucTieu.parse(mt.status);
 	}
 
+	private async phaCua(tx: Tx, objectiveId: string) {
+		const mt = await tx.okrObjective.findUniqueOrThrow({
+			where: { id: objectiveId },
+			select: { cycle: { select: { phase: true } } },
+		});
+		return phaChuKy.parse(mt.cycle.phase);
+	}
+
 	async createObjective(userId: string, input: MucTieuInput) {
 		const dv = donViCua(input.unit);
 		await this.quyenOkr.assertSuaDonVi(userId, dv);
@@ -664,6 +679,15 @@ export class OkrService {
 			if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
 			const trangThai = await this.trangThai(tx, kr.objectiveId);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
+			const dangChay =
+				trangThai === "cong-bo" &&
+				(await this.phaCua(tx, kr.objectiveId)) === "dang-chay";
+			if (
+				dangChay &&
+				input.currentValue !== undefined &&
+				input.currentValue !== soKr(kr.currentValue)
+			)
+				throw new BadRequestException(T.hienTaiQuaCapNhat);
 			const khoi = soKr(kr.startValue);
 			if (
 				input.startValue !== undefined &&
@@ -757,6 +781,8 @@ export class OkrService {
 				})) > 0
 			)
 				throw new BadRequestException(T.krDangLaDich);
+			if ((await tx.okrCheckIn.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.krDaCapNhat);
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(
 				tx,
@@ -988,6 +1014,8 @@ export class OkrService {
 		});
 		return rows.map((r) => {
 			const level = capMucTieu.parse(r.level);
+			const hienTaiQuaCapNhat =
+				r.status === "cong-bo" && r.cycle.phase === "dang-chay";
 			const keyResults: KrOutput[] = r.keyResults.map((k) => {
 				const kind = kieuKr.parse(k.kind);
 				const startValue = soKr(k.startValue);
@@ -1009,6 +1037,7 @@ export class OkrService {
 					startLocked: k.startLockedAt !== null,
 					progress: tienDoKr(kind, startValue, targetValue, currentValue),
 					laCuaToi: k.ownerUserId === viewerId,
+					hienTaiQuaCapNhat,
 				};
 			});
 			const nghi =

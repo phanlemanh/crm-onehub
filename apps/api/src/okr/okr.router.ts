@@ -1,3 +1,4 @@
+import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { Inject } from "@nestjs/common";
 import {
 	Ctx,
@@ -19,14 +20,17 @@ import {
 	alignmentTreeOutput,
 	byUnitInput,
 	byUnitOutput,
+	capNhatTuanOutput,
 	countByUnitInput,
 	createCycleInput,
 	createKrInput,
 	createObjectiveInput,
 	cyclesOutput,
+	guiCapNhatOutput,
 	idInput,
 	mineInput,
 	mineOutput,
+	moCapNhatOutput,
 	objectiveInput,
 	objectiveOutput,
 	okOutput,
@@ -43,13 +47,17 @@ import {
 	updateObjectiveInput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { OkrCapNhatService } from "./okr-cap-nhat.service";
 
 const TAG = ["OKR"];
 
 @Router({ alias: "okr" })
 @UseMiddlewares(PhamViOkrMiddleware)
 export class OkrRouter {
-	constructor(@Inject(OkrService) private readonly okr: OkrService) {}
+	constructor(
+		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
+	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
 	access(@Ctx() ctx: AuthedTrpcContext) {
@@ -302,5 +310,37 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof okrImportApplyInput>,
 	) {
 		return this.okr.applyImport(ctx.user.id, input);
+	}
+
+	@Query({
+		output: capNhatTuanOutput,
+		meta: restMeta("GET", "/okr/check-ins/mine", TAG),
+	})
+	capNhatTuan(@Ctx() ctx: AuthedTrpcContext) {
+		return this.capNhat.capNhatTuan(ctx.user.id);
+	}
+
+	@Mutation({
+		input: moCapNhatInput,
+		output: moCapNhatOutput,
+		meta: restMeta("POST", "/okr/check-in-sessions", TAG),
+	})
+	moCapNhat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moCapNhatInput>,
+	) {
+		return this.capNhat.moCapNhat(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: guiCapNhatInput,
+		output: guiCapNhatOutput,
+		meta: restMeta("POST", "/okr/check-ins", TAG),
+	})
+	guiCapNhat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof guiCapNhatInput>,
+	) {
+		return this.capNhat.guiCapNhat(ctx.user.id, input);
 	}
 }

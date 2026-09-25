@@ -100,6 +100,7 @@ function kr(id: string, objectiveId: string): KrOutput {
 		startLocked: true,
 		progress: 40,
 		laCuaToi: false,
+		hienTaiQuaCapNhat: false,
 	};
 }
 

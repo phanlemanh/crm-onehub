@@ -25,6 +25,7 @@ function kr(id: string, objectiveId: string, progress: number): KrOutput {
 		startLocked: true,
 		progress,
 		laCuaToi: false,
+		hienTaiQuaCapNhat: false,
 	};
 }
 
