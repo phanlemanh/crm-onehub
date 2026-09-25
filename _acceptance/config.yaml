@@ -938,7 +938,8 @@ executors:
     mdg_mot_cho_ghi_app: "bun _acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs app"
     mdg_ho_so_da_ghim: "bun _acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs"
     ttv_do_bang: 'APP_URL=${APP_URL:-http://localhost:3500} API_URL=${API_URL:-http://localhost:3501} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"'
-    tvhk_do_khoi: 'APP_URL=${APP_URL:-http://localhost:3500} API_URL=${API_URL:-http://localhost:3501} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"'
+    tvhk_do_khoi: 'APP_URL=${APP_URL:-http://localhost:3620} API_URL=${API_URL:-http://localhost:3621} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"'
+    tvhk_ttv_do_bang: 'APP_URL=${APP_URL:-http://localhost:3620} API_URL=${API_URL:-http://localhost:3621} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"'
     tvhk_tu_dien: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/tu-dien.mjs"
     tvhk_soi_ma: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/soi-ma.mjs"
     tvhk_lam_moi: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/lam-moi.mjs"

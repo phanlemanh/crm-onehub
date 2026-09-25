@@ -32,6 +32,7 @@ import {
 	type ThanhVienMessages,
 	thanhVienMessages,
 } from "@/lib/messages/settings-thanh-vien";
+import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -64,6 +65,7 @@ function columns(t: ThanhVienMessages): CardTableColumn[] {
 export function AllowancesTable() {
 	const t = thanhVienMessages(useLocale());
 	const trpc = useTRPC();
+	const cache = useCrmCache();
 	const tieuDeId = useId();
 
 	const [dangRut, setDangRut] = useState<Allowance | null>(null);
@@ -74,15 +76,11 @@ export function AllowancesTable() {
 		enabled: workspace.data?.canManageMembers ?? false,
 	});
 
-	const lamMoi = async () => {
-		await allowances.refetch();
-	};
-
 	const rut = useMutation(
 		trpc.workspace.revokeAllowance.mutationOptions({
 			onSuccess: async () => {
 				setDangRut(null);
-				await lamMoi();
+				await cache.workspace();
 				toast.success(t.xacNhan.rut.xong);
 			},
 			onError: (error) => {
@@ -167,7 +165,9 @@ export function AllowancesTable() {
 										email={row.email}
 										ten={row.email}
 										coQuyen={workspace.data?.canIssuePasswordLink ?? false}
-										onDaPhat={lamMoi}
+										onDaPhat={() => {
+											void cache.workspace();
+										}}
 									/>
 								</TableCell>
 								<TableCell className={`${CELL} text-right`}>

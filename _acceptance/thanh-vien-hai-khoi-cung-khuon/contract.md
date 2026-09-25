@@ -5,7 +5,7 @@ slug: thanh-vien-hai-khoi-cung-khuon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -85,3 +85,4 @@ Never: gộp hai khối thành một `DataTable` có tab — hai danh sách là 
 - Phá-thử sau sửa (25/09): vỏ `CardTable` `overflow-x-hidden` → SAI con lăn ngang; đóng hộp trong `onSettled` → SAI «hộp vẫn mở» (E18); bỏ `section` khối dưới → `ttv_do_bang` và `do-khoi` mã 2; `TVHK_BO_KHO=768` → đúng 4 dòng «SAI thiếu»; `TVHK_PHA_SAU_GIEO=1` → mã 2, DB 0 hàng tiền tố; `kill -9` sau gieo → 15 hàng nằm lại, lượt kế «xoá 15 tàn dư» và 46/0; soi mã trên bản sao — `className` trên `CardTable`, `bg-muted` qua template, đổi chuỗi lớp `CardTable` → mỗi cái mã 1.
 - Sửa ở S3 (xem sổ): dựng đầu trang trong vùng hydrate như trang Tổ chức làm bản stream ẩn của React chứa `page-shell-content`, và thước đã ký `ttv_do_bang` đo trúng bản ẩn (7 SAI). Ranh `Suspense` trả về trong `PageShellContent`; nút đầu trang có ranh riêng. `do-khoi.mjs` cũng chờ tới khi không còn `[hidden]` chứa bảng.
 - Cổng Bằng chứng 25/09 (chủ kho): Ngoài-1 của round 1–2 — làm mới danh sách bằng query key liệt tại chỗ gọi, lệch luật Freshness của `docs/api.md` — nâng phạm vi sửa ngay thành AC-17; chấm lại ở round 3 (xem sổ).
+- S3 của phần AC-17 (25/09): E19 đỏ 2 DUNG, 8 SAI trên mã trước sửa, xanh 9/0 sau; phá-thử trên bản sao — bỏ `workspace.allowances` khỏi `cache.workspace` → SAI, khối dưới tự `refetch()` → SAI. Bàn đo màn thật chuyển sang cổng 3620/3621 vì 3500/3501 đang do phiên khác giữ (xem sổ); trên cổng mới `do-khoi` 46/0 và `do-bang.mjs` của hồ sơ đã ký 30/0.

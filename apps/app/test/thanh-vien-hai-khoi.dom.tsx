@@ -102,6 +102,10 @@ mock.module("@/lib/trpc/client", () => ({
 	}),
 }));
 
+mock.module("@/lib/trpc/cache", () => ({
+	useCrmCache: () => ({ workspace: async () => {} }),
+}));
+
 const { AllowancesTable } = await import(
 	"@/app/(app)/[slug]/settings/members/allowances-table"
 );

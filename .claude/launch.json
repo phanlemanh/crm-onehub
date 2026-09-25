@@ -123,6 +123,24 @@
         "cd apps/app && PORT=3810 NEXT_PUBLIC_API_URL=http://localhost:3811 API_URL=http://localhost:3811 APP_URL=http://localhost:3810 bun run dev"
       ],
       "port": 3810
+    },
+    {
+      "name": "ban-do-tvhk-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3621 APP_URL=http://localhost:3620,http://127.0.0.1:3620 API_URL=http://localhost:3621 bun run dev"
+      ],
+      "port": 3621
+    },
+    {
+      "name": "ban-do-tvhk-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3620 NEXT_PUBLIC_API_URL=http://localhost:3621 API_URL=http://localhost:3621 APP_URL=http://localhost:3620 bun run dev"
+      ],
+      "port": 3620
     }
   ]
 }
