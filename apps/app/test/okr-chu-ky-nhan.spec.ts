@@ -53,9 +53,9 @@ describe("goi-y", () => {
 
 	test("chuoi goi y vi va en", () => {
 		const g = goiYChuKy("2026-09-25");
-		expect(vi.caiDat.mo.tenGoiY.nam(g)).toBe("Năm 2026");
-		expect(vi.caiDat.mo.tenGoiY.quy(g)).toBe("Quý 4/2026");
-		expect(en.caiDat.mo.tenGoiY.nam(g)).toBe("2026");
-		expect(en.caiDat.mo.tenGoiY.quy(g)).toBe("Q4 2026");
+		expect(vi.caiDat.mo.tenGoiY.nam(g.nam)).toBe("Năm 2026");
+		expect(vi.caiDat.mo.tenGoiY.quy(g.quy.so, g.quy.nam)).toBe("Quý 4/2026");
+		expect(en.caiDat.mo.tenGoiY.nam(g.nam)).toBe("2026");
+		expect(en.caiDat.mo.tenGoiY.quy(g.quy.so, g.quy.nam)).toBe("Q4 2026");
 	});
 });

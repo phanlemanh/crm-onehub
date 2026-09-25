@@ -1,5 +1,4 @@
 import type { Locale } from "@crm/ui/lib/locale";
-import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
 
 const vi = {
 	tabNhan: "Khu mục tiêu",
@@ -341,8 +340,8 @@ const vi = {
 			loai: "Loại",
 			ten: "Tên",
 			tenGoiY: {
-				nam: (g: GoiYChuKy) => `Năm ${g.nam}`,
-				quy: (g: GoiYChuKy) => `Quý ${g.quy.so}/${g.quy.nam}`,
+				nam: (nam: number) => `Năm ${nam}`,
+				quy: (so: number, nam: number) => `Quý ${so}/${nam}`,
 			},
 			namCha: "Thuộc năm",
 			chonNam: "Chọn năm",
@@ -734,8 +733,8 @@ const en: OkrMessages = {
 			loai: "Kind",
 			ten: "Name",
 			tenGoiY: {
-				nam: (g: GoiYChuKy) => `${g.nam}`,
-				quy: (g: GoiYChuKy) => `Q${g.quy.so} ${g.quy.nam}`,
+				nam: (nam: number) => `${nam}`,
+				quy: (so: number, nam: number) => `Q${so} ${nam}`,
 			},
 			namCha: "Year",
 			chonNam: "Choose a year",

@@ -165,7 +165,11 @@ export function SheetMoChuKy({
 								maxLength={80}
 								autoComplete="off"
 								translate="no"
-								placeholder={c.tenGoiY[loai](goiY)}
+								placeholder={
+									loai === "nam"
+										? c.tenGoiY.nam(goiY.nam)
+										: c.tenGoiY.quy(goiY.quy.so, goiY.quy.nam)
+								}
 								data-o-ten
 								onChange={(event) => setTen(event.target.value)}
 							/>
