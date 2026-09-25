@@ -142,14 +142,28 @@ try {
 			dung(2, `khong dung duoc cay goc: bun ${buoc.join(" ")}`);
 	}
 	const moi = [];
+	const chapChon = [];
 	for (const d of doHead) {
+		const lai = spawnSync("bash", ["-c", d.lenh], {
+			cwd: GOC,
+			encoding: "utf8",
+		});
+		const maLai = lai.status ?? -1;
 		const r = spawnSync("bash", ["-c", d.lenh], {
 			cwd: cayGoc,
 			encoding: "utf8",
 		});
 		const maGoc = r.status ?? -1;
-		console.log(`${d.ten} ${d.id}: HEAD ${d.ma} · merge-base ${maGoc}`);
-		if (maGoc === 0) moi.push(`${d.ten} ${d.id}`);
+		console.log(
+			`${d.ten} ${d.id}: HEAD ${d.ma} · HEAD chay lai ${maLai} · merge-base ${maGoc}`,
+		);
+		if (maLai === 0) chapChon.push(`${d.ten} ${d.id}`);
+		else if (maGoc === 0) moi.push(`${d.ten} ${d.id}`);
+	}
+	if (chapChon.length > 0) {
+		console.log(
+			`chap chon (xanh khi chay lai tuan tu o HEAD): ${chapChon.join(", ")}`,
+		);
 	}
 	if (moi.length > 0) {
 		dung(1, `vong nay lam do them ${moi.length} eval: ${moi.join(", ")}`);

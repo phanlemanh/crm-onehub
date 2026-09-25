@@ -28,3 +28,4 @@ Mỗi dòng: eval · cách phá (trên cây đã commit, khôi phục bằng `gi
 | E17 | chạy trước khi sửa tài liệu | ba mốc KHÔNG ĐẠT (CONTEXT, docs/agent.md, lộ trình mục 7), exit 1 |
 | E11 | lượt xanh trên HEAD `ac05ae9f` (25/09, khoảng 70 phút): 28 hồ sơ, 4 suite xanh, 46 eval đỏ đều đỏ cùng mã ở `680d112a` | `khong eval nao do them so voi 680d112a`, exit 0 |
 | E11 | worktree tạm của HEAD, `docs/agent.md` đổi `khoa_message` → `khoa-cua-message` | `vong nay lam do them 1 eval: zalo-webhook-doc-khuon-that E5` (HEAD 1 · merge-base 0), exit 1 |
+| E11 | sau hai lượt trên, thêm bước chạy lại tuần tự ở HEAD trước khi so (chống đỏ chập chờn khi E11 chạy song song trong S4) | cặp hai chiều không chạy lại: bước mới chỉ lọc ô xanh khi chạy lại; ô đỏ tất định của lượt phá (E5 tài liệu) vẫn đỏ ở lần chạy lại nên kết luận giữ nguyên |

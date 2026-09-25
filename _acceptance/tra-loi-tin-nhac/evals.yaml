@@ -241,7 +241,8 @@ evals:
         3. Nam spec Zalo da ky khong doi so voi B (git diff --quiet), khac -> exit 1 ghi ten tep.
         4. repin-lane.mjs khong --write tren ca tap tai HEAD; lan xanh tron -> exit 0.
         5. Lan do: bon suite phai thoat 0 (khac -> exit 1 "suite khong xanh o HEAD"); moi eval do
-           o HEAD chay lai dung lenh do tren worktree tam o B (.acceptance-runs/tra-loi-tin-nhac/goc,
+           o HEAD chay lai tuan tu mot lan o HEAD (xanh -> in "chap chon", khong tinh), roi chay
+           dung lenh do tren worktree tam o B (.acceptance-runs/tra-loi-tin-nhac/goc,
            go sau khi chay); eval nao xanh o B -> exit 1 "vong nay lam do them N eval: <ten>".
       Doi chung duong cung fixture: tap rut ra chua nhac-qua-zalo — thieu -> exit 1 "bo rut tap hong".
       So lieu S3 (25/09, HEAD c3b2d780): 28 ho so, 378 eval may, 4 suite xanh, 46 eval do o HEAD,
