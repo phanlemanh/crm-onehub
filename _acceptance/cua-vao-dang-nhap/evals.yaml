@@ -1,0 +1,398 @@
+schema_version: 1
+slug: cua-vao-dang-nhap
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.cvdn_chi_sign_in
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/**/page.tsx"
+      - "apps/app/test/cua-vao-trang-khac.dom.tsx"
+    expected: |
+      Tep test RIENG apps/app/test/cua-vao-trang-khac.dom.tsx, lenh bun test RIENG (mock.module cua
+      bun song ca tien trinh — khong tep nao khac cua vong nay mock AuthShell). Tep nay mock
+      AuthShell thanh bo ghi props roi render page that cua CA NAM trang (du lieu phu mock theo khuon
+      cua sign-in-mat-khau-luon-hien.spec.ts, kieu khai bang RouterOutputs). Ma tran viet truoc 5
+      dong: sign-in -> prop khoi cot trai khac undefined (doi chung duong ngay trong tep: bo ghi bat
+      duoc prop khi co); dat-mat-khau, grant-access, onboarding, onboarding/research -> undefined.
+      Thong diep ghim: "<trang>: AuthShell nhan khoi cot trai" / "sign-in: AuthShell khong nhan khoi".
+      CHIEU DO: cay chua sua -> "sign-in: AuthShell khong nhan khoi"; pha-thu truyen khoi vao
+      onboarding trong ban sao -> "onboarding: AuthShell nhan khoi cot trai".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.cvdn_shell_khong_khoi
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/auth-shader.tsx"
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/test/cua-vao-shell.dom.tsx"
+    expected: |
+      Tep RIENG apps/app/test/cua-vao-shell.dom.tsx, KHONG mock auth-shell hay auth-shader (chi mock
+      locale); assert dau tien ghim AuthShell la ham nhap tu "@/components/auth-shell" that (ten ham
+      va so tham so), de mot mock ro tu tep khac lam do ngay voi thong diep "AuthShell khong phai ban
+      that". Render AuthShell khong co khoi cot trai, locale vi.
+      Ghim: cot trai (section dau) co lop "hidden" va "lg:flex"; co con cua AuthShader (phan tu
+      aria-hidden co nen radial-gradient); co chu «CRM»; dong tieu de dung bang
+      authMessages("vi").shell.headline va bang «CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.»;
+      khong phan tu nao trong cay co lop "dark". Doi chung duong: cung test voi khoi cot trai
+      truyen vao thi AuthShader vang (khop AC-10).
+      CHIEU DO: tren cay chua sua do hai dong ghim — "khung con lop dark" va "tieu de van la
+      «Mọi khách hàng, một chỗ.»".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.cvdn_ba_buoc_google
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/lib/cua-vao/**"
+      - "apps/app/lib/messages/cua-vao.ts"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag ba-buoc-google): signInOptions {google:true, microsoft:false, providers:[]}.
+      Ghim: tieu de khoi «Lần đầu vào?»; dung 3 buoc theo thu tu; buoc 1 chua chu nut
+      thanhVienMessages("vi").duocPhepVao.nutThem va trang.tieuDe (doc tu tep, khong go lai) va chu «Cài đặt» ›
+      «Thành viên»; buoc 2 chua «Google»; buoc 3 chua so phut = PASSWORD.tokenTtlSeconds / 60
+      (tinh trong test tu hang that, khong go 60); dong «là gì» dung bang chuoi da duyet.
+      Pha-thu o S3 tren BAN SAO (khong mock @crm/auth trong suite — mock ro sang tep khac): doi
+      PASSWORD.tokenTtlSeconds = 1800 -> buoc 3 noi 30 phut (chung minh chu tinh tu hang).
+      Fixture signInOptions cua moi ca trong tep nay khai `satisfies RouterOutputs["sso"]
+      ["signInOptions"]` (apps/app/lib/trpc/types.ts) — khuon API troi thi check-types do.
+      CHIEU DO: cay chua sua -> "khong thay khoi «Lần đầu vào?»".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.cvdn_ma_tran_cua
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/lib/cua-vao/**"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag ma-tran-cua). Fixture moi ca `satisfies RouterOutputs["sso"]["signInOptions"]`.
+      Ma tran viet truoc 6 ca (so assert = 6): google-bat,
+      chi-mat-khau, microsoft-bat, co-sso, method-google (google+microsoft bat, ?method=google),
+      options-loi (fetchQuery nem loi). Moi ca rut HAI tap tu CUNG cay da render: tap ten tren
+      nut ngoai (props nhan cua SocialSignIn/SsoSignIn) va tap ten ma buoc 2 goi; ghim hai tap
+      bang nhau. chi-mat-khau: khong nut ngoai, khong buoc 2, buoc mat khau la «Xin liên kết đặt
+      mật khẩu.». options-loi: nut va buoc giong het ca google-bat (so sanh cau truc).
+      Thong diep ghim khi lech: "<ca>: buoc 2 goi {A} nhung nut hien {B}".
+      CHIEU DO: pha-thu trong ban sao cho buoc tinh tu options?.google thay vi tu bien social ->
+      ca method-google do voi thong diep "method-google: buoc 2 goi {Google, Microsoft} nhung
+      nut hien {Google}".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cvdn_ma_loi_that
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "apps/app/lib/cua-vao/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/ma-loi-that.mjs"
+    expected: |
+      Rut tu writer that, khong chep tay: (1) doc packages/auth/src/auth.ts bang bo phan tich cu
+      phap TypeScript, lay moi chuoi message cua `new APIError("FORBIDDEN", …)` trong khoi
+      user.create.before (template co ${domain} -> the "onemount.com"); (2) doc better-auth dang
+      cai (resolve tu packages/auth) va ghim dist/oauth2/link-account.mjs con `error: e.message`
+      va dist/api/routes/callback.mjs con `result.error.split(" ").join("_")`, va @better-auth/sso
+      (resolve tu packages/auth) dist/index.mjs con `error: result.error.split(" ").join("_")` o
+      duong buildSAMLRedirectUrl — mat moc nao -> "SAI moc <writer>: phep bien doi da doi", ma 1; (3) bien doi, qua URLSearchParams, doc lai,
+      dua vao phanLoaiLoiDangNhap. Ma tran viet truoc: writer {oauth, sso} x cau {co-mien, khong-mien,
+      chua-khai} = 6 dong (so assert = 6): hai cau «This CRM is private.» -> "chua-cho-phep", cau
+      «No one can sign in yet» -> "chung". Moi dong in "DUNG <writer>-<cau>: <gia tri doc lai> ->
+      <loai>". So cau rut duoc khac 3 -> SAI goi so, ma 1.
+      CHIEU DO: ban sao auth.ts voi cau doi thanh «This workspace is private.» (bien moi
+      CVDN_AUTH_TS tro ban sao) -> "SAI oauth-co-mien: … -> chung (can chua-cho-phep)", ma 1; ban sao dist SSO voi
+      encodeURIComponent thay split/join (bien CVDN_SSO_DIST) -> "SAI moc sso", ma 1.
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.cvdn_o_loi
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/lib/cua-vao/**"
+      - "apps/app/lib/messages/cua-vao.ts"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag o-loi): trang sign-in voi searchParams.error = gia tri doc lai cua E5 (test
+      nhap cung ham rut cua rang/ma-loi-that.mjs, khong go chuoi) -> phan tu role=alert co
+      tieu de «Địa chỉ này chưa được cho phép vào» va mo ta tuong ung doc tu tep chu vi. Cung tag, E7/E8 dung
+      chung sieu ma tran.
+      CHIEU DO: cay chua sua -> "khong co role=alert".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.cvdn_o_loi
+    paths:
+      - "apps/app/lib/cua-vao/**"
+      - "apps/app/lib/messages/cua-vao.ts"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag o-loi), ca access_denied: role=alert co tieu de «Bạn đã dừng đăng nhập
+      giữa chừng» va mo ta tuong ung. Doi chung: cung ham voi "access_denied " (co khoang trang) -> cau chung,
+      chung minh so khop dung chuoi chu khong phai chua-chuoi-con.
+      CHIEU DO: cay chua sua -> "khong co role=alert".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.cvdn_o_loi
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/lib/cua-vao/**"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag o-loi). Ma tran viet truoc 9 ca: no-one-can (tu E5), invalid_code,
+      state_mismatch, "<script>alert(1)</script>", "\"><img src=x onerror=alert(1)>", chuoi 2000
+      ky tu "x", vang, rong, lap (["access_denied","invalid_code"]). 6 ca dau: role=alert co tieu de
+      va mo ta chung; renderToString cua trang KHONG chua gia tri tho, dang thoat HTML (escape &<>"')
+      hay encodeURIComponent cua no — thong diep ghim "<ca>: HTML chua gia tri URL (<dang>)".
+      vang, rong: khong phan tu role=alert. lap: cau «dừng giữa chừng» (gia tri dau).
+      Doi chung duong: mot ban render co y chen gia tri vao the de chung minh bo do ba dang
+      bat duoc (bo do do tren ban nay).
+      Pham vi cua lenh nay la cay DOM cua trang (phan hien thi + thuoc tinh), khong phai payload
+      RSC; HTML that do o E19.
+      CHIEU DO: pha-thu trong ban sao cho o loi in `error` vao thuoc tinh data-ma -> do
+      "<script>…: HTML chua gia tri URL (thoat HTML)".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.cvdn_o_loi
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag o-loi): trong document da render voi error bat ky — dung mot phan tu
+      role=alert; compareDocumentPosition cho thay no dung TRUOC nut dang nhap dau tien
+      (button hoac nut ngoai); khong co tabindex, khong autoFocus; co mot [data-slot=alert-title] va mot [data-slot=alert-description] voi chu cua loai.
+      CHIEU DO: pha-thu dat o loi sau PasswordSignIn trong ban sao -> "o loi dung sau nut dang
+      nhap".
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.cvdn_chu
+    paths:
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/lib/messages/cua-vao.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Hai lenh trong mot khoa: test DOM tag chu — authMessages("vi").signIn.title bang «Đăng nhập
+      vào CRM», en bang «Sign in to the CRM»; khong chuoi nao cua authMessages hay cuaVaoMessages
+      (vi, en) bang «Mừng bạn quay lại» / «Welcome back»; moi khoa cua cuaVaoMessages("vi") co
+      khoa tuong ung o "en" (duyet de quy, ghim ten khoa thieu). Va messages-guard.spec.ts xanh
+      voi cac ham chu moi da ghim (memory messages-guard-ghim-ham-moi).
+      CHIEU DO: cay chua sua -> "title van la «Mừng bạn quay lại»".
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.cvdn_do_cua_vao
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs"
+    expected: |
+      Ban do man that (tu chan cay qua canhCay; khong dang nhap; mot-luot.sh xep hang). Emulate
+      prefers-color-scheme light roi dark o 1440: "DUNG <gd>: nen body <rgb>" voi do sang
+      tuong doi > 0.9 o light va < 0.2 o dark; "DUNG <gd>: khong to tien nao cua main co lop
+      dark" (o light); "DUNG <gd>: cot trai sign-in khong co AuthShader" (khong phan tu
+      aria-hidden co background-image radial-gradient trong khoi huong dan hay cot chua no). Va
+      mot dong doc signInOptions THAT tu API cua cay dang xet (fetch API_URL/trpc/sso.signInOptions):
+      "DUNG signInOptions that: google=<b> -> buoc 2 goi <ten>" — tap ten o buoc 2 bang tap ten
+      nut ngoai tren man, voi cau hinh ma API that tra ve (khong fixture).
+      MA TRAN VIET TRUOC cua ca luot (mang MA_TRAN trong do-cua-vao.mjs): 2 giao dien x 3 ma
+      (E11) + 8 kho-giao dien x 3 ma (E12: vi-tri, tran-ngang, anh) + 2 kho x 2 giao dien x 2 ma
+      (E13: tab, tuong-phan) + 1 ma (E11: signInOptions that) + 6 ma (E19) = 45. Dong KET LUAN
+      cuoi "45 DUNG, 0 SAI — ma thoat 0". Ma thieu dong ->
+      "SAI thieu <ma>", ma 1. Pha-thu: CVDN_BO_KHO=768 -> dung "SAI thieu 768-…" cho 2 giao
+      dien x 3 ma = 6 dong.
+      CHIEU DO (cay chua sua, S3): "SAI light: nen body rgb(10,10,10)…" va "SAI light: main
+      co to tien lop dark", ma 1.
+
+  - id: E12
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.cvdn_do_cua_vao
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs"
+    expected: |
+      O moi kho 320x640, 768x1024, 1024x768, 1440x900 x light, dark (Google bat): 320/768 —
+      "DUNG <kho>-<gd>: khoi huong dan top <a> >= nut «Đăng nhập» bottom <b>"; 1024/1440 —
+      "DUNG <kho>-<gd>: khoi huong dan right <a> <= khung dang nhap left <b>"; moi kho —
+      "DUNG <kho>-<gd>: document scrollWidth <w> <= innerWidth <v>"; va chup trang day du ra
+      .acceptance-runs/cua-vao-dang-nhap/evidence/cvdn-<kho>-<gd>.png ("DUNG <kho>-<gd>: anh <duong>").
+      Chu nut doc tu authMessages("vi"). Khong thay khoi huong dan -> SAI goi ten, khong ma 2.
+      CHIEU DO (cay chua sua): "SAI 320-light: khong thay khoi «Lần đầu vào?»" o ca 8 o.
+
+  - id: E13
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.cvdn_do_cua_vao
+    paths:
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs"
+    expected: |
+      O 1440 VA 320, /sign-in?error=access_denied, moi giao dien: nhan Tab (page.keyboard) tu body,
+      ghi activeElement moi lan toi khi tro lai body hoac 12 lan; ghim chuoi vai tro/ten viet
+      truoc, GIONG NHAU o hai kho: link logo cua tieu de cot phai (aria-label «Trang chủ») -> nut
+      «Tiếp tục với Google» -> o email -> o mat khau -> (lien ket «Quên mật khẩu?» neu API bao
+      quenMatKhau) -> nut «Đăng nhập»; khong activeElement nao nam trong khoi huong dan; va logo
+      cua khoi huong dan (chi hien tu lg) khong phai lien ket. Tuong phan: moi nut van ban trong khoi huong dan va o loi, tinh ti
+      le WCAG tu mau chu va mau nen hieu dung (leo to tien toi nen khong trong suot) — ghim
+      >= 4.5 (chu < 24px thuong / < 18.66px dam), >= 3 chu lon; dong SAI in ti le va doan chu.
+      Doi chung duong: cung ham tuong phan tren cap (#777 tren #fff) phai ra 4.48 va bi SAI.
+      CHIEU DO: pha-thu them tabIndex=0 vao buoc 1 trong ban sao -> "SAI light: tieu diem vao
+      khoi huong dan (buoc 1)".
+
+  - id: E14
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.cvdn_do_cua_vao
+    steps:
+      - "Cap cong 3840/3841 (ban-do-cvdn-app / ban-do-cvdn-api trong .claude/launch.json). Cong da co may chu: chay `APP_URL=http://localhost:3840 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang hai muc do"
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/cua-vao-dang-nhap/evidence dat tuong minh: lenh cua cvdn_do_cua_vao"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/cua-vao-dang-nhap/evidence/
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs"
+    expected: |
+      Tam anh du ca: cvdn-{320,768,1024,1440}-{light,dark}.png. 320 va 768: mot cot — logo, tieu
+      de «Đăng nhập vào CRM», nut Google, «hoặc», o email va mat khau, nut «Đăng nhập», roi moi
+      toi khoi «Lần đầu vào?» ba buoc danh so; khong tran ngang. 1024 va 1440: hai cot — trai la
+      nen xam phang (khong van nhieu, khong gradient den) voi logo, «Lần đầu vào?» ba buoc va
+      dong «CRM của OneHub: …»; phai la khung dang nhap. Light: nen trang, chu toi; dark: nen
+      toi, chu sang, ca hai doc duoc. Thieu anh nao -> khong dat.
+
+  - id: E15
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.cvdn_quen_mat_khau
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/test/cua-vao-sign-in.dom.tsx"
+    expected: |
+      Test DOM (tag quen-mat-khau), chi chay sau khi #104 merge: signInOptions co quenMatKhau
+      true -> trong khung dang nhap co <a href="/quen-mat-khau"> chu authMessages("vi").signIn
+      .quenMatKhau, nam sau o mat khau va truoc nut submit theo thu tu tai lieu; quenMatKhau
+      false -> khong co lien ket (doi chung).
+      CHIEU DO: pha-thu bo truyen quenMatKhau trong page.tsx ban sao -> "khong thay lien ket
+      Quên mật khẩu? khi quenMatKhau true".
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.cvdn_soi_ma
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/lib/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/soi-ma.mjs"
+    expected: |
+      Bo phan tich cu phap TypeScript (khong regex tren chuoi tho) tren moi tep vong nay viet
+      hoac sua trong apps/app: (a) tep co "use client" khong import "@crm/auth…" hay "@crm/db…";
+      (b) khoi huong dan dung StepList tu "@crm/ui/components/step-list", o loi dung Alert tu
+      "@crm/ui/components/alert"; (c) phan tu JSX nhap tu "@crm/ui/…" khong co className chua
+      bg-*, text-<mau>, rounded-*, border*, shadow*; (d) `git diff --name-only <merge-base
+      onehub>..HEAD` khong chua components/landing/, apps/app/proxy.ts, packages/auth/. Moi dieu
+      mot dong DUNG/SAI ghim ten tep va dieu.
+      Doi chung duong: chay (a) va (c) tren tep mau vi pham trong fixtures cua rang -> SAI.
+      CHIEU DO: ban sao them `import { PASSWORD } from "@crm/auth"` vao tep client cua khoi ->
+      "SAI (a): <tep> nhap @crm/auth", ma 1.
+
+  - id: E17
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.cvdn_san_thiet_ke
+    paths:
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/components/auth-shell.tsx"
+    expected: |
+      design-gate --mode static tren tung tep cua components/cua-vao/ va auth-shell.tsx: ma 0 moi
+      tep. Tep nao ma khac 0 -> in ten tep va phat hien cua design-gate.
+      CHIEU DO: ban sao them mau hex viet cung (#123456) vao mot tep cua khoi -> ma 1.
+
+  - id: E18
+    criterion: AC-15
+    executor: judgment
+    inputs:
+      - CONTEXT.md
+      - apps/app/lib/messages/cua-vao.ts
+      - apps/app/lib/messages/auth.ts
+      - _acceptance/cua-vao-dang-nhap/decisions.jsonl
+    paths:
+      - "apps/app/lib/messages/cua-vao.ts"
+      - "apps/app/lib/messages/auth.ts"
+    expected: |
+      Hoi dong doc moi chuoi tieng Viet moi hoac doi cua vong nay (cuaVaoMessages("vi") va cac
+      khoa auth.ts doi so voi merge-base), doi chieu tung muc `_Avoid_` cua CONTEXT.md theo dung
+      nghia muc do (vd «khách hàng» o muc Nhân viên quan hệ đối tác; «quản trị» chi cam khi y
+      la truong don vi). Dat khi: khong chuoi nao dung tu _Avoid_ theo nghia bi cam; nhan theo
+      luat ngan theo ngu canh; va moi cau da duoc dua nguoi that (giả định 2 cua opportunity.md
+      ve «email công ty», cau loi chung) co dong tra loi cua nguoi trong decisions.jsonl.
+
+  - id: E19
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cvdn_do_cua_vao
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/lib/cua-vao/**"
+      - "_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs"
+    expected: |
+      HTML THAT tu may chu cua cay dang xet (fetch APP_URL/sign-in?error=<gia tri>, khong trinh
+      duyet). Ma tran viet truoc 6 ca = 6 ca dau cua E8 (so assert = 6). Moi ca: tach moi
+      <script>…</script> ra khoi HTML; phan con lai (DOM hien thi + thuoc tinh) KHONG chua gia tri o
+      dang tho, dang thoat HTML hay encodeURIComponent — "DUNG html-<ca>: ngoai script khong chua
+      gia tri"; va trong cac <script>, khong co chuoi "<script" hay "<img" tho nao tu gia tri (payload
+      RSC cua Next duoc phep mang gia tri da thoat \u003c) — "DUNG rsc-<ca>: khong the tho".
+      Doi chung duong: ca co y dung mot trang proto in gia tri vao thuoc tinh? khong — doi chung la
+      ham tach-script chay tren mot chuoi HTML mau co gia tri trong the <p> phai ra SAI.
+      CHIEU DO: pha-thu ban sao cho o loi in `error` vao data-ma -> "SAI html-<script>…".
+
+  - id: E20
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.cvdn_thuoc_da_ky
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/app/(landing)/**"
+      - "apps/app/lib/messages/auth.ts"
+      - "_acceptance/cua-vao-dang-nhap/rang/thuoc-da-ky.mjs"
+    expected: |
+      Rut danh sach eval tu evals.yaml THAT cua ba ho so (khong chep tay id): moi eval executor
+      test/script co paths cham mot trong auth-shell.tsx, (landing)/**, messages/auth.ts; ma tran viet
+      truoc = danh sach do, in ra dau luot "MA TRAN <n> eval: <ho-so>/<id> …" (hom nay ky vong 12:
+      logo-onehub E11; man-xin-quyen-co-rang E1 E2 E4 E5 E6 E7 E8 E9 E10; vao-bang-email-va-mat-khau
+      E13 E15 — lech so thi SAI goi ten, ma 1; eval ui-check/judgment trong danh sach thi in "BO QUA
+      <id> (ngoai lan may)"). Chay tung lenh (giai config: ref) tren HEAD va tren worktree tam tai
+      merge-base voi onehub (git worktree add, go sau luot ke ca khi loi). Moi eval mot dong "DUNG
+      <ho-so>/<id>: base <a> -> head <b>" khi (a != 0) hoac (b == 0); "SAI <ho-so>/<id>: base 0 ->
+      head <b>" khi base dat ma head truot. Ma 1 neu co SAI.
+      Doi chung duong: chay cung ham so sanh tren cap gia (0 -> 1) phai ra SAI.
+      CHIEU DO: pha-thu doi aria-label logo trong auth-shell.tsx ban sao ma eval logo-onehub E11 ghim
+      -> "SAI logo-onehub/E11: base 0 -> head 1".

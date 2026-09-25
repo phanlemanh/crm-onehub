@@ -11,6 +11,24 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "cua-vao-dang-nhap",
+		ten: "Cửa vào đăng nhập cho người mới",
+		states: [
+			{ id: "ST-sign-in-mac-dinh", nhan: "Mặc định — Google bật" },
+			{ id: "ST-sign-in-chi-mat-khau", nhan: "Chỉ mật khẩu — không nút ngoài" },
+			{ id: "ST-sign-in-chua-cho-phep", nhan: "Lỗi — chưa được cho phép" },
+			{ id: "ST-sign-in-da-huy", nhan: "Lỗi — dừng giữa chừng" },
+			{ id: "ST-sign-in-loi-chung", nhan: "Lỗi — câu chung" },
+			{ id: "ST-sign-in-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-shell-khong-khoi", nhan: "Bốn trang kia — khung không khối" },
+			{
+				id: "ST-phan-ky-deu-nhau",
+				nhan: "Phân kỳ — hướng «Đều nhau» (máy khuyên)",
+			},
+			{ id: "ST-phan-ky-tien-do", nhan: "Phân kỳ — hướng «Tiến độ»" },
+		],
+	},
+	{
 		slug: "khung-trang-cai-dat",
 		ten: "Khung trang Cài đặt — thanh bên bốn nhóm, cột căn trái",
 		states: [

@@ -75,8 +75,9 @@ sửa đúng hai tệp vòng này chạm. Việc logo đã merge (#141): `LogoLo
 ### 4.1 `AuthShell` nhận một chỗ trống
 
 `AuthShell` thêm một prop tuỳ chọn (tên tạm `gioiThieu`). Chỉ `sign-in` truyền
-khối hướng dẫn vào; bốn trang kia không truyền và hiện như cũ về bố cục và nội
-dung. Bỏ `dark` khỏi `<main>` — cả năm trang theo giao diện máy (xem câu hỏi Q3).
+khối hướng dẫn vào; bốn trang kia không truyền và giữ nguyên bố cục (cột trái
+có `AuthShader`, «CRM», dòng tiêu đề), chỉ đổi đúng chuỗi dòng tiêu đề theo Q4.
+Bỏ `dark` khỏi `<main>` — cả năm trang theo giao diện máy (Q3).
 
 Thứ tự DOM: **khung đăng nhập trước, khối hướng dẫn sau**. Ở `lg` trở lên CSS
 đặt khối hướng dẫn sang cột trái; dưới `lg` nó nằm **dưới** nút Đăng nhập. Một
@@ -85,9 +86,12 @@ thứ tự Tab không lệch với thứ tự nhìn.
 
 ### 4.2 Cột trái (chỉ ở `sign-in`)
 
-1. `LogoLockup`.
+1. `LogoLockup` **trang trí, không phải liên kết** (`aria-hidden`), chỉ hiện từ
+   `lg`. Liên kết logo duy nhất của trang là logo trong tiêu đề cột phải
+   (`AuthHeading`, «Trang chủ»), hiện ở mọi khổ — nên thứ tự Tab giống nhau ở
+   320 và 1440 (phản biện 25/09, P1 thứ ba).
 2. **«Lần đầu vào?»** — danh sách bước (`StepList` của `packages/ui`):
-   - **Bước 1** — Nhờ quản trị viên cho phép email công ty của bạn. Phụ:
+   - **Bước 1** — Nhờ quản trị viên cho phép địa chỉ email bạn sẽ dùng. Phụ:
      «Ở Cài đặt › Thành viên › Cho phép một địa chỉ.» (chữ nút lấy từ
      `settings-thanh-vien.ts`, không gõ lại).
    - **Bước 2** — chỉ hiện khi có nút đăng nhập ngoài: «Đăng nhập bằng
@@ -116,15 +120,17 @@ Một hàm thuần `phanLoaiLoiDangNhap(error)` trong tệp riêng của OneHub:
 | `error` | Loại | Câu hiện ra (vi) |
 | --- | --- | --- |
 | vắng / rỗng | — | không hiện ô |
-| bắt đầu bằng `This_CRM_is_private.` | chưa được cho phép | «Địa chỉ này chưa được cho phép vào. Nhờ quản trị viên cho phép đúng địa chỉ email bạn vừa dùng.» |
-| `access_denied` | tự huỷ | «Bạn đã dừng đăng nhập giữa chừng. Bấm lại nút đăng nhập để thử lần nữa.» |
-| mọi giá trị khác | chung | «Chưa đăng nhập được. Thử lại; nếu vẫn không được, nhờ quản trị viên xem giúp.» |
+| bắt đầu bằng `This_CRM_is_private.` | chưa được cho phép | **Địa chỉ này chưa được cho phép vào** — Nhờ quản trị viên cho phép đúng địa chỉ email bạn vừa dùng. |
+| `access_denied` | tự huỷ | **Bạn đã dừng đăng nhập giữa chừng** — Bấm lại nút đăng nhập để thử lần nữa. |
+| mọi giá trị khác | chung | **Chưa đăng nhập được** — Thử lại; nếu vẫn không được, nhờ quản trị viên xem giúp. |
 
 - **Không bao giờ in giá trị lấy từ URL**, kể cả trong thuộc tính. Chỉ loại
   (một trong ba) đi qua ranh giới; câu lấy từ tệp chữ.
 - `error` lặp (`?error=a&error=b`) → xét giá trị đầu.
-- Ô là `Alert` của `packages/ui`, render ở server, có `role="alert"` để trình đọc
-  màn hình đọc lên khi trang mở.
+- Ô là `Alert destructive` của `packages/ui` kèm `Icon Warning` và `AlertTitle`
+  (khuôn của màn Kết nối; design-pass 25/09 thêm tiêu đề vì bản chỉ-mô-tả trông
+  như ghi chú thường), render ở server, có `role="alert"` để trình đọc màn hình
+  đọc lên khi trang mở.
 - Câu ví dụ của brainstorm nói «địa chỉ Google»; ở đây viết «địa chỉ email» vì
   mã lỗi không cho biết người đi qua Google hay SSO.
 
@@ -243,20 +249,20 @@ Giới hạn đã biết: chuỗi đầy đủ Google → callback → `/sign-in
 đầu-cuối trong test (cần một nhà cung cấp OAuth giả); nó được khoá bằng hai mỏ
 neo nguồn ở mục 2.
 
-## 8. Câu hỏi cho chủ kho
+## 8. Quyết định của chủ kho (2026-09-25, «duyệt theo đề xuất»)
 
-- **Q1 — tiêu đề cột phải.** Đề xuất: «Đăng nhập vào CRM» + mô tả «Dùng email
-  công ty của bạn.» Đúng cho cả người mới lẫn người cũ, không chào «quay lại».
-- **Q2 — dòng «là gì».** Đề xuất: «CRM của OneHub: đối tác, kế hoạch 30 ngày và
-  OKR.» Người vai «chỉ OKR» không đọc được dữ liệu đối tác — dòng này vẫn đúng vì
-  nói CRM chứa gì, nhưng có thể khiến họ tưởng mình sẽ thấy đối tác.
-- **Q3 — bỏ `dark` và hiệu ứng nền.** `AuthShader` là gradient đen viết cứng
-  (`#000`, `#2e2e2e`) — ở giao diện sáng nó thành mảng xám lạ, và lệch luật màu
-  của `docs/design.md`. Đề xuất: bỏ `dark` cho cả năm trang; `sign-in` dùng nền
-  `muted` phẳng; bốn trang kia giữ hiệu ứng nền (không đổi bố cục như đã hứa).
-- **Q4 — chữ «Mọi khách hàng, một chỗ.»** Bốn trang kia vẫn hiện nó (chữ nằm
-  trong _Avoid_). Đề xuất: đổi đúng một chuỗi chữ này sang dòng «là gì» của Q2,
-  không đổi bố cục. Hay giữ nguyên để đúng lời «như cũ»?
-- **Q5 — ngưỡng Cổng Giá trị (tuỳ chọn).** Lấy «số người mới đợt 26/10 phải hỏi
-  quản trị viên cách vào» làm ngưỡng? Nếu có, phải mở hồ sơ cơ hội ở Cổng Đáng
-  trước khi viết hợp đồng.
+- **Q1 — tiêu đề cột phải:** «Đăng nhập vào CRM», mô tả «Dùng email công ty của
+  bạn.» Thay «Mừng bạn quay lại».
+  **Chờ phê lại ở Cổng Phạm vi:** hồ sơ `vao-bang-email-va-mat-khau` ghi nhân
+  viên kinh doanh dùng Gmail cá nhân. «Email công ty» sẽ dẫn họ đưa sai địa chỉ
+  cho quản trị viên. Máy tạm viết mô tả «Dùng đúng địa chỉ email đã được cho
+  phép.» và bước 1 «địa chỉ email bạn sẽ dùng» (giả định 2 của `opportunity.md`).
+- **Q2 — dòng «là gì»:** «CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.»
+  Rủi ro đã biết: người vai «chỉ OKR» có thể tưởng mình sẽ thấy đối tác — soát
+  lại ở lái-thử người lạ.
+- **Q3 — nền:** bỏ `dark` cho cả năm trang. `sign-in` dùng nền `muted` phẳng,
+  không `AuthShader`. Bốn trang kia giữ `AuthShader`.
+- **Q4 — chữ «Mọi khách hàng, một chỗ.»:** đổi đúng chuỗi này (vi và en) sang
+  dòng «là gì» của Q2. Bốn trang kia không đổi bố cục.
+- **Q5 — ngưỡng Cổng Giá trị:** dùng. Hồ sơ cơ hoi `_acceptance/cua-vao-dang-nhap/opportunity.md`
+  mở trước hợp đồng; hợp đồng có mục `## Đường đo`.
