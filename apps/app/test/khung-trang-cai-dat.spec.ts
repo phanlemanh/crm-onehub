@@ -1,5 +1,24 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 import { NHOM_CAI_DAT } from "@/lib/cai-dat-dieu-huong";
+
+class ChuyenHuongKtcd extends Error {
+	constructor(readonly dich: string) {
+		super(dich);
+	}
+}
+
+const dieuHuongThat = await import("next/navigation");
+mock.module("next/navigation", () => ({
+	...dieuHuongThat,
+	redirect: (dich: string) => {
+		throw new ChuyenHuongKtcd(dich);
+	},
+}));
+
+const { default: TrangCu } = await import(
+	"@/app/(app)/[slug]/settings/notifications/page"
+);
+
 import { settingsMessages } from "@/lib/messages/settings";
 
 const TEN_NHOM = {
@@ -45,19 +64,17 @@ describe("khung-trang-cai-dat", () => {
 	});
 
 	test("chuyen-huong: duong cu chuyen toi reminders dung slug", async () => {
-		const { default: TrangCu } = await import(
-			"@/app/(app)/[slug]/settings/notifications/page"
-		);
 		for (const slug of ["ws", "cong-ty-a"]) {
 			const ket = await TrangCu({ params: Promise.resolve({ slug }) }).then(
 				() => "khong-nem",
-				(e: Error & { digest?: string }) => e.digest ?? "",
+				(e: Error) =>
+					e instanceof ChuyenHuongKtcd ? e.dich : `loi-khac: ${e.message}`,
 			);
 			expect(ket, `${slug}: trang cu ve noi dung truoc khi chuyen`).not.toBe(
 				"khong-nem",
 			);
-			expect(ket, `${slug}: digest khong chua /${slug}/reminders`).toContain(
-				`;/${slug}/reminders;`,
+			expect(ket, `${slug}: digest khong chua /${slug}/reminders`).toBe(
+				`/${slug}/reminders`,
 			);
 		}
 	});

@@ -1,0 +1,29 @@
+{
+  "steps": [
+    "E11-step3.png: /settings/connections/zalo — href cua Noi Zalo cua toi"
+  ],
+  "asserts": [
+    {
+      "pass": false,
+      "label": "bam menu 'Nhắc buổi sáng' -> null"
+    },
+    {
+      "pass": false,
+      "label": "h1 reminders = \"undefined\""
+    },
+    {
+      "pass": false,
+      "label": "hai khoi (zalo=undefined, kenh=undefined)"
+    },
+    {
+      "pass": false,
+      "label": "so nav Cai dat tren /reminders = undefined"
+    },
+    {
+      "pass": false,
+      "label": "href 'Noi Zalo cua toi' = null"
+    }
+  ],
+  "network": [],
+  "consoleErrors": []
+}

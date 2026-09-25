@@ -1,0 +1,3 @@
+app-scope=http://localhost:3000 api-scope=http://localhost:3001
+--- tat ca requestfailed/response>=400 trong pham vi (loai tinh: .map/.ico/anh/font chi note) ---
+--- console errors / pageerror (0) ---
