@@ -1,0 +1,128 @@
+"use client";
+
+import Renew from "@carbon/icons-react/es/Renew";
+import Target from "@carbon/icons-react/es/Target";
+import WarningAlt from "@carbon/icons-react/es/WarningAlt";
+import { Button } from "@crm/ui/components/button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@crm/ui/components/empty";
+import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { Skeleton } from "@crm/ui/components/skeleton";
+import Link from "next/link";
+import { okrMessages } from "@/lib/messages/okr";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+
+const KHUNG_TAI = ["mot", "hai", "ba"] as const;
+
+export function DangTai() {
+	const m = okrMessages(useLocale());
+	return (
+		<div
+			aria-busy="true"
+			className="flex flex-col gap-4"
+			data-trang-thai="ST-donvi-dangtai"
+		>
+			<p className="text-muted-foreground text-sm" role="status">
+				{m.dangTai}
+			</p>
+			{KHUNG_TAI.map((id) => (
+				<div className="flex flex-col gap-2 rounded-lg border p-4" key={id}>
+					<Skeleton className="h-4 w-2/3" />
+					<Skeleton className="h-3 w-full" />
+					<Skeleton className="h-3 w-1/2" />
+				</div>
+			))}
+		</div>
+	);
+}
+
+export function Loi({ thuLai }: { thuLai: () => void }) {
+	const m = okrMessages(useLocale());
+	return (
+		<Empty data-trang-thai="ST-donvi-loi">
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<Icon icon={WarningAlt} />
+				</EmptyMedia>
+				<EmptyTitle>{m.loi.title}</EmptyTitle>
+				<EmptyDescription>{m.loi.body}</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<Button variant="outline" onClick={thuLai}>
+					<Icon icon={Renew} data-icon="inline-start" />
+					{m.loi.action}
+				</Button>
+			</EmptyContent>
+		</Empty>
+	);
+}
+
+export function ChuaChuKy({ quanTri }: { quanTri: boolean }) {
+	const m = okrMessages(useLocale());
+	const url = useWorkspaceUrl();
+	return (
+		<Empty data-trang-thai="ST-donvi-chuakychay">
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<Icon icon={Target} />
+				</EmptyMedia>
+				<EmptyTitle>{m.chuaChuKy.title}</EmptyTitle>
+				<EmptyDescription>
+					{quanTri ? m.chuaChuKy.quanTri : m.chuaChuKy.nguoiKhac}
+				</EmptyDescription>
+			</EmptyHeader>
+			{quanTri ? (
+				<EmptyContent>
+					<Button asChild variant="outline">
+						<Link href={url("/settings/okr")}>{m.chuaChuKy.action}</Link>
+					</Button>
+				</EmptyContent>
+			) : null}
+		</Empty>
+	);
+}
+
+export function Rong({
+	tenDon,
+	tenKy,
+	chuaTruong,
+	quanTri,
+}: {
+	tenDon: string;
+	tenKy: string;
+	chuaTruong: boolean;
+	quanTri: boolean;
+}) {
+	const m = okrMessages(useLocale());
+	const url = useWorkspaceUrl();
+	return (
+		<Empty data-trang-thai="ST-donvi-rong">
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<Icon icon={Target} />
+				</EmptyMedia>
+				<EmptyTitle>
+					<span translate="no">{tenDon}</span> {m.rong.chuaDat}{" "}
+					<span translate="no">{tenKy}</span>
+				</EmptyTitle>
+				<EmptyDescription>
+					{chuaTruong ? m.rong.chuaTruong : m.rong.body}
+				</EmptyDescription>
+			</EmptyHeader>
+			{chuaTruong && quanTri ? (
+				<EmptyContent>
+					<Button asChild variant="outline">
+						<Link href={url("/settings/organization")}>{m.rong.ganTruong}</Link>
+					</Button>
+				</EmptyContent>
+			) : null}
+		</Empty>
+	);
+}

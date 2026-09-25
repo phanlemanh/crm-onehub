@@ -20,6 +20,34 @@ export const HANG_CAP = {
 	"ca-nhan": 3,
 } as const satisfies Record<CapMucTieu, number>;
 
+export const NGUONG_TINH_TRANG = {
+	thamVong: 0.7,
+	cham: 0.85,
+	truot: 0.5,
+} as const;
+
+export const TINH_TRANG = [
+	"dung-nhip",
+	"cham-nhip",
+	"truot",
+	"chua-co-ky-vong",
+] as const;
+export type TinhTrang = (typeof TINH_TRANG)[number];
+
+export function tinhTrang(
+	phanTram: number,
+	kyVong: number | null,
+	loai: LoaiMucTieu,
+): TinhTrang {
+	if (kyVong === null || kyVong === 0) return "chua-co-ky-vong";
+	const tiLe = phanTram / kyVong;
+	if (loai === "tham-vong")
+		return tiLe >= NGUONG_TINH_TRANG.thamVong ? "dung-nhip" : "cham-nhip";
+	if (tiLe >= NGUONG_TINH_TRANG.cham) return "dung-nhip";
+	if (tiLe >= NGUONG_TINH_TRANG.truot) return "cham-nhip";
+	return "truot";
+}
+
 const ma = z.string().trim().min(1).max(120);
 
 export const donViMucTieu = z.discriminatedUnion("level", [

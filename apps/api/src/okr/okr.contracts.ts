@@ -123,6 +123,8 @@ export const byUnitOutput = z.object({
 	canEdit: z.boolean(),
 	canhBao: z.string().nullable(),
 });
+export const countByUnitInput = z.object({ cycleId: ma });
+export const okrCountByUnitOutput = z.record(z.string(), z.number());
 export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({ objectives: z.array(mucTieuOutput) });
 export const objectiveInput = z.object({ id: ma });

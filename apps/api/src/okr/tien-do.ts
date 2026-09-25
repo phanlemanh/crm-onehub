@@ -1,5 +1,4 @@
 import { soNgayVN } from "@crm/db/onboarding-nhac";
-import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 
 export type ChuKyNgan = {
 	id: string;
@@ -46,24 +45,6 @@ export function kyVongTheoNgay(
 	let da = soNgayVN(congBo, homNay);
 	if (nghi && homNay > nghi.den) da -= soNgayNghi;
 	return Math.max(0, Math.min(100, Math.round((da / tong) * 100)));
-}
-
-export const NGUONG = { thamVong: 0.7, cham: 0.85, truot: 0.5 } as const;
-
-export type TinhTrang = "dung-nhip" | "cham-nhip" | "truot" | "chua-co-ky-vong";
-
-export function tinhTrang(
-	phanTram: number,
-	kyVong: number | null,
-	loai: LoaiMucTieu,
-): TinhTrang {
-	if (kyVong === null || kyVong === 0) return "chua-co-ky-vong";
-	const tiLe = phanTram / kyVong;
-	if (loai === "tham-vong")
-		return tiLe >= NGUONG.thamVong ? "dung-nhip" : "cham-nhip";
-	if (tiLe >= NGUONG.cham) return "dung-nhip";
-	if (tiLe >= NGUONG.truot) return "cham-nhip";
-	return "truot";
 }
 
 export function tienDoMucTieu(

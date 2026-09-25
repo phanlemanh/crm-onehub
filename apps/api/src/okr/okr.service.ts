@@ -155,6 +155,24 @@ function khoaDonVi(unit: DonViChon): string {
 	return unit.loai === "goc" ? unit.loai : `${unit.loai}:${unit.id}`;
 }
 
+function khoaDonViDong(r: {
+	level: string;
+	divisionId: string | null;
+	departmentId: string | null;
+	personUserId: string | null;
+}): string {
+	switch (capMucTieu.parse(r.level)) {
+		case "onehub":
+			return "goc";
+		case "bo-phan":
+			return `bp:${r.divisionId}`;
+		case "phong-ban":
+			return `pb:${r.departmentId}`;
+		case "ca-nhan":
+			return `nguoi:${r.personUserId}`;
+	}
+}
+
 const soKr = (d: Prisma.Decimal | number) => Number(d);
 
 function ghiKhac(
@@ -1208,6 +1226,20 @@ export class OkrService {
 			canEdit: this.quyenOkr.suaDuocDonVi(q, userId, dv),
 			canhBao: null,
 		};
+	}
+
+	async countByUnit(cycleId: string): Promise<Record<string, number>> {
+		const nhom = await this.db.okrObjective.groupBy({
+			by: ["level", "divisionId", "departmentId", "personUserId"],
+			where: { cycleId, status: "cong-bo" },
+			_count: { _all: true },
+		});
+		const dem: Record<string, number> = {};
+		for (const n of nhom) {
+			const khoa = khoaDonViDong(n);
+			dem[khoa] = (dem[khoa] ?? 0) + n._count._all;
+		}
+		return dem;
 	}
 
 	async mine(userId: string, cycleId: string) {

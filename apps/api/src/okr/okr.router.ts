@@ -19,6 +19,7 @@ import {
 	alignmentTreeOutput,
 	byUnitInput,
 	byUnitOutput,
+	countByUnitInput,
 	createCycleInput,
 	createKrInput,
 	createObjectiveInput,
@@ -30,6 +31,7 @@ import {
 	objectiveOutput,
 	okOutput,
 	okrAccessOutput,
+	okrCountByUnitOutput,
 	okrImportApplyInput,
 	okrImportApplyOutput,
 	okrImportInput,
@@ -110,6 +112,15 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof byUnitInput>,
 	) {
 		return this.okr.byUnit(ctx.user.id, input.cycleId, input.unit);
+	}
+
+	@Query({
+		input: countByUnitInput,
+		output: okrCountByUnitOutput,
+		meta: restMeta("GET", "/okr/units/count", TAG),
+	})
+	countByUnit(@Input() input: z.infer<typeof countByUnitInput>) {
+		return this.okr.countByUnit(input.cycleId);
 	}
 
 	@Query({

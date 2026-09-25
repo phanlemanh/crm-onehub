@@ -1453,6 +1453,70 @@ describe("cua-toi", () => {
 	});
 });
 
+describe("dem-theo-don-vi", () => {
+	test("dem-theo-don-vi: dem muc tieu da cong bo dung tung don vi, bo nhap va da bo, rieng tung chu ky", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("dem");
+		const quyKhac = await kyDangChay("dem-khac");
+		const bp = await bpMoi("dem-bp");
+		const pb = await pbMoi("dem-pb", bp);
+		const pbRong = await pbMoi("dem-pb-rong", bp);
+		const truongB = await truongMoi("division", bp, "dem-b");
+		const truongP = await truongMoi("department", pb, "dem-p");
+		const k = await nguoiMoi("dem-k");
+		const cookieK = await phienCua(k);
+
+		const congBo = async (
+			cycleId: string,
+			unit: Json,
+			owner: string,
+			ai: AiHoacCookie,
+		) => {
+			const id = (await taoMucTieu(mucTieuVao(cycleId, unit, owner), ai)).id;
+			await taoKr(krVao(id, owner), ai);
+			ok(await goi("okr.publishObjective", { id }, ai), "cong bo");
+			return id;
+		};
+		const goc = { level: "onehub" };
+		const donB = { level: "bo-phan", divisionId: bp };
+		const donP = { level: "phong-ban", departmentId: pb };
+		const quan = phien.quan.nguoi;
+
+		await congBo(quy, goc, quan, "quan");
+		await taoMucTieu(mucTieuVao(quy, goc, quan));
+		await congBo(quy, donB, truongB.nguoi, truongB.cookie);
+		await congBo(quy, donP, truongP.nguoi, truongP.cookie);
+		await congBo(quy, donP, truongP.nguoi, truongP.cookie);
+		const bo = await congBo(quy, donP, truongP.nguoi, truongP.cookie);
+		ok(await goi("okr.dropObjective", { id: bo }, truongP.cookie), "bo");
+		await congBo(quy, { level: "ca-nhan", personUserId: k }, k, cookieK);
+		await congBo(quyKhac, donP, truongP.nguoi, truongP.cookie);
+
+		const khoa = ["goc", `bp:${bp}`, `pb:${pb}`, `pb:${pbRong}`, `nguoi:${k}`];
+		const docDem = async (cycleId: string, ai: AiHoacCookie) => {
+			const dem = await doc<Record<string, number>>("okr.countByUnit", ai, {
+				cycleId,
+			});
+			return khoa.map((x) => [x, dem[x] ?? 0]);
+		};
+		expect(await docDem(quy, "quan")).toEqual([
+			["goc", 1],
+			[`bp:${bp}`, 1],
+			[`pb:${pb}`, 2],
+			[`pb:${pbRong}`, 0],
+			[`nguoi:${k}`, 1],
+		]);
+		expect(await docDem(quy, "thuong")).toEqual(await docDem(quy, "quan"));
+		expect(await docDem(quyKhac, "okr")).toEqual([
+			["goc", 0],
+			[`bp:${bp}`, 0],
+			[`pb:${pb}`, 1],
+			[`pb:${pbRong}`, 0],
+			[`nguoi:${k}`, 0],
+		]);
+	});
+});
+
 type CayCanChinh = { roots: NutCanChinh[]; chuaCanChinh: NutCanChinh[] };
 
 function choCua(cay: CayCanChinh, id: string): [string, boolean][] {
