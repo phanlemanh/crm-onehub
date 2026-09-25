@@ -213,10 +213,8 @@ describe("ma-tran", () => {
 			nut.every((n) => isValidElement(n)),
 			`phan tu khong phai element trong mau ${mau}`,
 		).toBe(true);
-		expect(new Set(khoa).size, `khoa trung trong mau ${mau}`).toBe(
-			khoa.length,
-		);
-		const o = await ve(<>{nut}</>);
+		expect(new Set(khoa).size, `khoa trung trong mau ${mau}`).toBe(khoa.length);
+		const o = await ve(nut);
 		expect(o.textContent, `chu sai trong mau ${mau}`).toBe(kyVong);
 		expect(khoaTrung(), `canh bao khoa trung trong mau ${mau}`).toEqual([]);
 	});
