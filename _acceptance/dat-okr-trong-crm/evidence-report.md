@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1a0cd81e6918a7f7d8209fb8bc619cdc3803e770
+verified_commit: cf0f07286bb2e5f2ea764f2abf7f5224c94fd9af
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -403,3 +403,7 @@ PENDING-JUDGMENT chờ chữ ký.
 ### Re-pin lần 1 — 2026-09-25, do gộp onehub f1a32ab9 (#138 khung Cài đặt) vào dat-okr-trong-crm trước PR; Chương trình OKR theo khung mới
 run_id: repin-20260925T101220Z-91117
 sha: 1a0cd81e6918a7f7d8209fb8bc619cdc3803e770 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths) · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-09-25, do gộp onehub 64b6c988 (#139) vào dat-okr-trong-crm trước PR
+run_id: repin-20260925T113608Z-86410
+sha: cf0f07286bb2e5f2ea764f2abf7f5224c94fd9af · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)
