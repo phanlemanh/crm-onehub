@@ -221,6 +221,7 @@ export const importApplyOutput = z.object({
 
 export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
+export type AlignmentTreeOutput = z.infer<typeof alignmentTreeOutput>;
 export type KrOutput = z.infer<typeof krOutput>;
 export type DonViChon = z.infer<typeof donViChon>;
 export type DongNhapOutput = z.infer<typeof dongNhapOutput>;

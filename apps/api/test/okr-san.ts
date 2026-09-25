@@ -28,6 +28,7 @@ export type AiHoacCookie = Ai | (string & {});
 type Phien = { nguoi: string; cookie: string; token: string };
 
 let app: INestApplication;
+export const ungDung = () => app;
 export const phien = {
 	quan: { nguoi: "", cookie: "", token: "" },
 	thuong: { nguoi: "", cookie: "", token: "" },

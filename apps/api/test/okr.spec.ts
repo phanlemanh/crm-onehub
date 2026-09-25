@@ -1,13 +1,16 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, spyOn, test } from "bun:test";
 import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
 import { db } from "@crm/db";
 import { parseOkrVet } from "@crm/validation/okr-vet";
+import type { NutCanChinh } from "../src/okr/okr.contracts";
+import { OkrAccessService } from "../src/okr/okr-access.service";
 import { OKR } from "../src/okr/okr-config";
 import { chonChuKyHienTai } from "../src/okr/tien-do";
 import {
 	type AiHoacCookie,
 	bpMoi,
 	CHUONG_TRINH_RONG,
+	dangChay,
 	datViTri,
 	doc,
 	dungSan,
@@ -25,6 +28,7 @@ import {
 	taoNam,
 	taoQuy,
 	truongMoi,
+	ungDung,
 } from "./okr-san";
 
 const T = OKR.thongDiep;
@@ -667,6 +671,26 @@ describe("sau-kieu-kr", () => {
 			["phan-tram", nguoi(5), 38],
 		]);
 	});
+
+	test("sau-kieu-kr: vi tri KR moi sau khi xoa khong trung", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("kr-vt");
+		const quan = phien.quan.nguoi;
+		const mt = (await taoMucTieu(mucTieuVao(quy, { level: "onehub" }, quan)))
+			.id;
+		const dau = await taoKr(krVao(mt, quan));
+		await taoKr(krVao(mt, quan));
+		await taoKr(krVao(mt, quan));
+		ok(await goi("okr.removeKeyResult", { id: dau }), "xoa kr dau");
+		await taoKr(krVao(mt, quan));
+		const viTri = (
+			await db.okrKeyResult.findMany({
+				where: { objectiveId: mt },
+				orderBy: { position: "asc" },
+			})
+		).map((k) => k.position);
+		expect(viTri).toEqual([1, 2, 3]);
+	});
 });
 
 type CoSo = {
@@ -676,6 +700,9 @@ type CoSo = {
 	c: string;
 	krSua: string;
 	krXoa: string;
+	nguon: string;
+	dich: string;
+	gopXoa: string;
 };
 
 const THU_TUC_GHI: { ten: string; vao: (f: CoSo) => Json }[] = [
@@ -692,6 +719,15 @@ const THU_TUC_GHI: { ten: string; vao: (f: CoSo) => Json }[] = [
 	},
 	{ ten: "updateKeyResult", vao: (f) => ({ id: f.krSua, currentValue: 33 }) },
 	{ ten: "removeKeyResult", vao: (f) => ({ id: f.krXoa }) },
+	{
+		ten: "addAlignment",
+		vao: (f) => ({
+			objectiveId: f.nguon,
+			targetObjectiveId: f.dich,
+			targetKeyResultId: null,
+		}),
+	},
+	{ ten: "removeAlignment", vao: (f) => ({ id: f.gopXoa }) },
 ];
 
 async function dungCoSo(cycleId: string): Promise<CoSo> {
@@ -703,7 +739,20 @@ async function dungCoSo(cycleId: string): Promise<CoSo> {
 	const krSua = await taoKr(krVao(a, quan));
 	const krXoa = await taoKr(krVao(a, quan));
 	await taoKr(krVao(b, quan));
-	return { cycleId, a, b, c, krSua, krXoa };
+	const dich = (await taoMucTieu(mucTieuVao(cycleId, goc, quan))).id;
+	const krDich = await taoKr(krVao(dich, quan));
+	ok(await goi("okr.publishObjective", { id: dich }), "cong bo dich");
+	const nguon = (
+		await taoMucTieu(
+			mucTieuVao(cycleId, { level: "ca-nhan", personUserId: quan }, quan),
+		)
+	).id;
+	const gopXoa = await tao(
+		"okr.addAlignment",
+		{ objectiveId: nguon, targetObjectiveId: null, targetKeyResultId: krDich },
+		"gan co so",
+	);
+	return { cycleId, a, b, c, krSua, krXoa, nguon, dich, gopXoa };
 }
 
 describe("cong-bo", () => {
@@ -812,7 +861,11 @@ describe("cong-bo", () => {
 		const chup = () =>
 			db.okrObjective.findMany({
 				where: { cycleId: quy },
-				include: { keyResults: { orderBy: { id: "asc" } }, participants: true },
+				include: {
+					keyResults: { orderBy: { id: "asc" } },
+					participants: true,
+					alignments: { orderBy: { id: "asc" } },
+				},
 				orderBy: { id: "asc" },
 			});
 		const truoc = await chup();
@@ -831,6 +884,31 @@ describe("cong-bo", () => {
 		);
 		expect(await chup()).toEqual(truoc);
 	});
+
+	test("cong-bo: khoi diem doc lai trong transaction, cong bo chen giua khong lot", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("cb-chen");
+		const quan = phien.quan.nguoi;
+		const a = (await taoMucTieu(mucTieuVao(quy, { level: "onehub" }, quan))).id;
+		const k = await taoKr(krVao(a, quan));
+		const quyen = ungDung().get(OkrAccessService);
+		const goc = quyen.assertSuaKr.bind(quyen);
+		const chen = spyOn(quyen, "assertSuaKr").mockImplementationOnce(
+			async (userId, id) => {
+				const r = await goc(userId, id);
+				ok(await goi("okr.publishObjective", { id: a }), "cong bo chen");
+				return r;
+			},
+		);
+		const r = await goi("okr.updateKeyResult", { id: k, startValue: 12 });
+		chen.mockRestore();
+		const sau = await db.okrKeyResult.findUniqueOrThrow({ where: { id: k } });
+		expect([
+			tuChoi(r),
+			Number(sau.startValue),
+			sau.startLockedAt !== null,
+		]).toEqual([`400 ${T.khoiDiemDaKhoa}`, 10, true]);
+	});
 });
 
 describe("vet-okr", () => {
@@ -846,6 +924,10 @@ describe("vet-okr", () => {
 		const nam = await taoNam("vet-nam", 2026);
 		const quan = phien.quan.nguoi;
 		const chu = phien.chu.nguoi;
+		const dich = (await taoMucTieu(mucTieuVao(nam, { level: "onehub" }, quan)))
+			.id;
+		await taoKr(krVao(dich, quan));
+		ok(await goi("okr.publishObjective", { id: dich }), "cong bo dich nam");
 
 		const quy = await tao(
 			"okr.createCycle",
@@ -896,6 +978,18 @@ describe("vet-okr", () => {
 			await goi("okr.updateKeyResult", { id: kr, currentValue: 40 }, cookieK),
 			"sua kr",
 		);
+		const gop = ok<{ id: string }>(
+			await goi(
+				"okr.addAlignment",
+				{ objectiveId: mt, targetObjectiveId: dich, targetKeyResultId: null },
+				truongB.cookie,
+			),
+			"gan can chinh",
+		).id;
+		ok(
+			await goi("okr.removeAlignment", { id: gop }, truongP.cookie),
+			"go can chinh",
+		);
 		ok(
 			await goi("okr.publishObjective", { id: mt }, truongB.cookie),
 			"cong bo",
@@ -928,6 +1022,8 @@ describe("vet-okr", () => {
 			[truongB.nguoi, "sua", mt],
 			[truongP.nguoi, "tao-kr", kr],
 			[k, "sua-kr", kr],
+			[truongB.nguoi, "gan-can-chinh", mt],
+			[truongP.nguoi, "go-can-chinh", mt],
 			[truongB.nguoi, "cong-bo", mt],
 			[truongP.nguoi, "bo", mt],
 		]);
@@ -949,6 +1045,18 @@ describe("vet-okr", () => {
 			{ status: "nhap" },
 			{ status: "cong-bo" },
 		]);
+		const gan = {
+			alignmentId: gop,
+			targetObjectiveId: dich,
+			targetKeyResultId: null,
+		};
+		expect([
+			dong("gan-can-chinh")?.before,
+			dong("gan-can-chinh")?.after,
+		]).toEqual([null, gan]);
+		expect([dong("go-can-chinh")?.before, dong("go-can-chinh")?.after]).toEqual(
+			[gan, null],
+		);
 		expect(await db.activity.count()).toBe(activityTruoc);
 
 		ok(
@@ -1008,7 +1116,7 @@ describe("quyen-ban-ghi", () => {
 		);
 		const krK = await taoKr(krVao(mtP1.id, k), truongP1.cookie);
 
-		const NGUOI: Record<Nguoi, AiHoacCookie> = {
+		const NGUOI = {
 			p1: truongP1.cookie,
 			p2: truongP2.cookie,
 			b1: truongB1.cookie,
@@ -1016,10 +1124,10 @@ describe("quyen-ban-ghi", () => {
 			k: cookieK,
 			admin: "quan",
 			member: cookieTran,
-		};
+		} satisfies Record<Nguoi, AiHoacCookie>;
 		const THU_TU: Nguoi[] = ["p1", "p2", "b1", "b2", "k", "admin", "member"];
 
-		const KY_VONG: Record<Nguoi, boolean[]> = {
+		const KY_VONG = {
 			p1: [true, true, false, false, false, false, true, false],
 			p2: [false, false, true, false, false, false, false, false],
 			b1: [true, true, true, true, false, false, true, false, true],
@@ -1027,7 +1135,7 @@ describe("quyen-ban-ghi", () => {
 			k: [false, false, false, false, false, false, true, false],
 			admin: [false, false, false, false, false, true, false, true],
 			member: [false, false, false, false, false, false, false, false],
-		};
+		} satisfies Record<Nguoi, boolean[]>;
 
 		const targetCongBo = async () => {
 			const mt = await taoMucTieu(
@@ -1321,5 +1429,204 @@ describe("cua-toi", () => {
 		}>("okr.access", "quan");
 		expect(accessAdmin.canManageProgram).toBe(true);
 		expect(accessAdmin.headOf).toEqual({ divisions: [], departments: [] });
+	});
+});
+
+type CayCanChinh = { roots: NutCanChinh[]; chuaCanChinh: NutCanChinh[] };
+
+function choCua(cay: CayCanChinh, id: string): [string, boolean][] {
+	const ra: [string, boolean][] = [];
+	const di = (n: NutCanChinh, cha: string) => {
+		if (n.id === id) ra.push([cha, n.lapLai]);
+		for (const con of n.children) di(con, n.id);
+	};
+	for (const n of [...cay.roots, ...cay.chuaCanChinh]) di(n, "-");
+	return ra.sort((x, y) => x[0].localeCompare(y[0]));
+}
+
+const theoCha = (...cho: [string, boolean][]) =>
+	cho.sort((x, y) => x[0].localeCompare(y[0]));
+
+describe("can-chinh", () => {
+	test("can-chinh: gan nhieu-nhieu len cap tren da cong bo, cay lapLai, 6 ca tu choi, go", async () => {
+		await caiChuongTrinh();
+		const C = T.canChinh;
+		const quan = phien.quan.nguoi;
+		const nam = await taoNam("cc-nam", 2026);
+		const quy = await taoQuy("cc", nam, "2026-10-01", "2026-12-31");
+		await dangChay(quy);
+		const quyKhac = await taoQuy("cc-khac", nam, "2026-07-01", "2026-09-30");
+		const bp = await bpMoi("cc-bp");
+		const pb = await pbMoi("cc-pb", bp);
+		const pb2 = await pbMoi("cc-pb2", bp);
+		const truongB = await truongMoi("division", bp, "cc-b");
+		const truongP = await truongMoi("department", pb, "cc-p");
+		const truongP2 = await truongMoi("department", pb2, "cc-p2");
+		const congBo = async (
+			cycleId: string,
+			unit: Json,
+			owner: string,
+			ai: AiHoacCookie,
+		) => {
+			const id = (await taoMucTieu(mucTieuVao(cycleId, unit, owner), ai)).id;
+			const kr = await taoKr(krVao(id, owner), ai);
+			ok(await goi("okr.publishObjective", { id }, ai), "cong bo");
+			return { id, kr };
+		};
+		const goc = { level: "onehub" };
+		const O = (await taoMucTieu(mucTieuVao(quy, goc, quan))).id;
+		const kr1 = await taoKr(krVao(O, quan));
+		const kr2 = await taoKr(krVao(O, quan));
+		ok(await goi("okr.publishObjective", { id: O }), "cong bo O");
+		const donViB = { level: "bo-phan", divisionId: bp };
+		const B = await congBo(quy, donViB, truongB.nguoi, truongB.cookie);
+		const Bnam = await congBo(nam, donViB, truongB.nguoi, truongB.cookie);
+		const P = await congBo(
+			quy,
+			{ level: "phong-ban", departmentId: pb },
+			truongP.nguoi,
+			truongP.cookie,
+		);
+		const P2 = await congBo(
+			quy,
+			{ level: "phong-ban", departmentId: pb2 },
+			truongP2.nguoi,
+			truongP2.cookie,
+		);
+		const Onhap = (await taoMucTieu(mucTieuVao(quy, goc, quan))).id;
+		const Okhac = await congBo(quyKhac, goc, quan, "quan");
+
+		const gan = (
+			objectiveId: string,
+			dich: { mt?: string; kr?: string },
+			ai: AiHoacCookie = truongP.cookie,
+		) =>
+			goi(
+				"okr.addAlignment",
+				{
+					objectiveId,
+					targetObjectiveId: dich.mt ?? null,
+					targetKeyResultId: dich.kr ?? null,
+				},
+				ai,
+			);
+		const demP = () => db.okrAlignment.count({ where: { objectiveId: P.id } });
+		const cayQuy = () =>
+			doc<CayCanChinh>("okr.alignmentTree", "thuong", { cycleId: quy });
+
+		ok(await gan(P.id, { kr: kr1 }), "P -> KR1");
+		ok(await gan(P.id, { mt: B.id }), "P -> B");
+		expect(choCua(await cayQuy(), P.id)).toEqual(
+			theoCha([kr1, false], [B.id, true]),
+		);
+		ok(await gan(P.id, { mt: Bnam.id }), "P -> B nam");
+		expect(await demP()).toBe(3);
+
+		const cay = await cayQuy();
+		expect(choCua(cay, P.id)).toEqual(
+			theoCha([kr1, false], [B.id, true], [Bnam.id, true]),
+		);
+		expect(cay.roots.map((n) => n.id).sort()).toEqual([O, Onhap].sort());
+		expect(
+			cay.roots
+				.find((n) => n.id === O)
+				?.children.map((n) => [n.loai, n.id, n.children.map((c) => c.id)]),
+		).toEqual([
+			["kr", kr1, [P.id]],
+			["kr", kr2, []],
+		]);
+		expect(choCua(cay, P2.id)).toEqual([["-", false]]);
+		expect(
+			choCua(
+				await doc<CayCanChinh>("okr.alignmentTree", "thuong", {
+					cycleId: nam,
+				}),
+				P.id,
+			),
+		).toEqual([[Bnam.id, false]]);
+
+		const ungVien = await doc<{
+			targets: { objectiveId: string; keyResultId: string | null }[];
+		}>("okr.alignmentTargets", "thuong", { objectiveId: P.id });
+		expect(
+			new Set(
+				ungVien.targets.map((t) => `${t.objectiveId}/${t.keyResultId ?? ""}`),
+			),
+		).toEqual(
+			new Set([
+				`${O}/`,
+				`${O}/${kr1}`,
+				`${O}/${kr2}`,
+				`${B.id}/`,
+				`${B.id}/${B.kr}`,
+				`${Bnam.id}/`,
+				`${Bnam.id}/${Bnam.kr}`,
+			]),
+		);
+		expect(ungVien.targets.length).toBe(7);
+
+		const ca: [string, string, { mt?: string; kr?: string }, string, string][] =
+			[
+				["P -> P2 cung cap", P.id, { mt: P2.id }, truongP.cookie, C.cungCap],
+				["B -> P cap thap hon", B.id, { mt: P.id }, truongB.cookie, C.cungCap],
+				["P -> P", P.id, { mt: P.id }, truongP.cookie, C.chinhNo],
+				["P -> nhap", P.id, { mt: Onhap }, truongP.cookie, C.chuaCongBo],
+				["P -> quy khac", P.id, { mt: Okhac.id }, truongP.cookie, C.khacChuKy],
+				["gan lai P -> B", P.id, { mt: B.id }, truongP.cookie, C.daGan],
+			];
+		const ketQua: Json[] = [];
+		for (const [nhan, nguon, dich, ai] of ca) {
+			const r = await gan(nguon, dich, ai);
+			ketQua.push([nhan, r.status, r.loi]);
+		}
+		expect([
+			await demP(),
+			await db.okrAlignment.count({ where: { objectiveId: B.id } }),
+		]).toEqual([3, 0]);
+		expect(ketQua).toEqual(ca.map(([nhan, , , , loi]) => [nhan, 400, loi]));
+
+		expect(tuChoi(await gan(P.id, {}))).toBe(`400 ${C.khongCoDich}`);
+		expect(tuChoi(await gan(P.id, { mt: O, kr: kr1 }))).toBe(
+			`400 ${C.khongCoDich}`,
+		);
+		expect(tuChoi(await gan(P.id, { mt: O }, "thuong"))).toBe(
+			`403 ${T.khongSuaDuocDonVi}`,
+		);
+		expect(await demP()).toBe(3);
+
+		const chiTiet = await doc<{
+			alignments: {
+				targetObjectiveId: string;
+				targetKeyResultId: string | null;
+				alignmentId: string;
+			}[];
+		}>("okr.objective", "thuong", { id: P.id });
+		expect(
+			chiTiet.alignments.map((g) => [g.targetObjectiveId, g.targetKeyResultId]),
+		).toEqual([
+			[O, kr1],
+			[B.id, null],
+			[Bnam.id, null],
+		]);
+
+		const xoaDich = await goi("okr.removeKeyResult", { id: kr1 });
+		expect(tuChoi(xoaDich)).toBe(`400 ${T.krDangLaDich}`);
+		expect(await db.okrKeyResult.count({ where: { id: kr1 } })).toBe(1);
+		ok(await goi("okr.removeKeyResult", { id: kr2 }), "xoa kr khong la dich");
+		expect(await db.okrKeyResult.count({ where: { id: kr2 } })).toBe(0);
+
+		const gopB = chiTiet.alignments.find((g) => g.targetObjectiveId === B.id);
+		ok(
+			await goi(
+				"okr.removeAlignment",
+				{ id: gopB?.alignmentId ?? "" },
+				truongP.cookie,
+			),
+			"go P -> B",
+		);
+		expect(await demP()).toBe(2);
+		expect(choCua(await cayQuy(), P.id)).toEqual(
+			theoCha([kr1, false], [Bnam.id, true]),
+		);
 	});
 });

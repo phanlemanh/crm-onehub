@@ -23,6 +23,7 @@ import {
 import {
 	CAP_MUC_TIEU,
 	type DonViMucTieu,
+	HANG_CAP,
 	LOAI_MUC_TIEU,
 	type MucTieuInput,
 	type MucTieuUpdate,
@@ -43,6 +44,7 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { dungCayCanChinh } from "./can-chinh";
 import type {
 	ChuKyOutput,
 	CreateKrInput,
@@ -569,6 +571,10 @@ export class OkrService {
 			const dem = await tx.okrKeyResult.count({
 				where: { objectiveId: mt.id },
 			});
+			const cuoi = await tx.okrKeyResult.aggregate({
+				where: { objectiveId: mt.id },
+				_max: { position: true },
+			});
 			let canhBao: string | null = null;
 			if (dem + 1 > ct.krCap) {
 				if (ct.capMode === "chan")
@@ -587,7 +593,7 @@ export class OkrService {
 					unit: input.unit,
 					dueOn: input.dueOn ? toDate(input.dueOn) : null,
 					weight: input.weight,
-					position: dem,
+					position: (cuoi._max.position ?? -1) + 1,
 					startLockedAt: trangThai === "cong-bo" ? new Date() : null,
 				},
 			});
@@ -609,18 +615,21 @@ export class OkrService {
 	}
 
 	async updateKeyResult(userId: string, input: UpdateKrInput) {
-		const kr = await this.quyenOkr.assertSuaKr(userId, input.id);
+		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id);
 		const doiCot =
 			input.kind !== undefined ||
 			input.ownerUserId !== undefined ||
 			input.startValue !== undefined;
-		if (doiCot && kr.ownerUserId === userId) {
+		if (doiCot && quyen.ownerUserId === userId) {
 			const q = await this.quyenOkr.quyen(userId);
-			if (!this.quyenOkr.suaDuocDonVi(q, userId, kr.objective))
+			if (!this.quyenOkr.suaDuocDonVi(q, userId, quyen.objective))
 				throw new ForbiddenException(T.khongSuaDuocKr);
 		}
 		return this.db.$transaction(async (tx) => {
-			await this.assertKyGhiDuoc(tx, kr.objective.cycleId);
+			await this.assertKyGhiDuoc(tx, quyen.objective.cycleId);
+			await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${quyen.id} FOR UPDATE`;
+			const kr = await tx.okrKeyResult.findUnique({ where: { id: quyen.id } });
+			if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
 			const trangThai = await this.trangThai(tx, kr.objectiveId);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
 			const khoi = soKr(kr.startValue);
@@ -709,6 +718,12 @@ export class OkrService {
 			await this.assertKyGhiDuoc(tx, mt.cycleId);
 			if ((await this.trangThai(tx, mt.id)) === "da-bo")
 				throw new BadRequestException(T.daBo);
+			if (
+				(await tx.okrAlignment.count({
+					where: { targetKeyResultId: kr.id },
+				})) > 0
+			)
+				throw new BadRequestException(T.krDangLaDich);
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(
 				tx,
@@ -720,6 +735,203 @@ export class OkrService {
 			);
 			return { id: kr.id, canhBao: null };
 		});
+	}
+
+	private async dichCanChinh(
+		tx: Tx,
+		dich: { objectiveId: string | null; keyResultId: string | null },
+	) {
+		const chon = {
+			id: true,
+			level: true,
+			status: true,
+			cycleId: true,
+		} as const;
+		if (dich.keyResultId !== null) {
+			const kr = await tx.okrKeyResult.findUnique({
+				where: { id: dich.keyResultId },
+				select: { objective: { select: chon } },
+			});
+			if (!kr) throw new NotFoundException(T.khongCoKr(dich.keyResultId));
+			return kr.objective;
+		}
+		const id = dich.objectiveId ?? "";
+		const mt = await tx.okrObjective.findUnique({
+			where: { id },
+			select: chon,
+		});
+		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
+		return mt;
+	}
+
+	async addAlignment(
+		userId: string,
+		input: {
+			objectiveId: string;
+			targetObjectiveId: string | null;
+			targetKeyResultId: string | null;
+		},
+	) {
+		const nguon = await this.quyenOkr.assertSuaMucTieu(
+			userId,
+			input.objectiveId,
+		);
+		return this.db.$transaction(async (tx) => {
+			await this.assertKyGhiDuoc(tx, nguon.cycleId);
+			if (
+				(input.targetObjectiveId === null) ===
+				(input.targetKeyResultId === null)
+			)
+				throw new BadRequestException(T.canChinh.khongCoDich);
+			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
+			const dich = await this.dichCanChinh(tx, {
+				objectiveId: input.targetObjectiveId,
+				keyResultId: input.targetKeyResultId,
+			});
+			if (dich.id === nguon.id)
+				throw new BadRequestException(T.canChinh.chinhNo);
+			if (HANG_CAP[capMucTieu.parse(dich.level)] >= HANG_CAP[nguon.level])
+				throw new BadRequestException(T.canChinh.cungCap);
+			if (dich.status !== "cong-bo")
+				throw new BadRequestException(T.canChinh.chuaCongBo);
+			const ky = await tx.okrCycle.findUniqueOrThrow({
+				where: { id: nguon.cycleId },
+				select: { parentId: true },
+			});
+			if (dich.cycleId !== nguon.cycleId && dich.cycleId !== ky.parentId)
+				throw new BadRequestException(T.canChinh.khacChuKy);
+			const noi = {
+				objectiveId: nguon.id,
+				targetObjectiveId: input.targetObjectiveId,
+				targetKeyResultId: input.targetKeyResultId,
+			};
+			if (await tx.okrAlignment.findFirst({ where: noi }))
+				throw new BadRequestException(T.canChinh.daGan);
+			const g = await tx.okrAlignment.create({ data: noi });
+			await this.vet(
+				tx,
+				userId,
+				"gan-can-chinh",
+				{ objectiveId: nguon.id },
+				null,
+				{
+					alignmentId: g.id,
+					targetObjectiveId: g.targetObjectiveId,
+					targetKeyResultId: g.targetKeyResultId,
+				},
+			);
+			return { id: g.id, canhBao: null };
+		});
+	}
+
+	async removeAlignment(userId: string, id: string) {
+		const g = await this.db.okrAlignment.findUnique({ where: { id } });
+		if (!g) throw new NotFoundException(T.canChinh.khongCo(id));
+		const nguon = await this.quyenOkr.assertSuaMucTieu(userId, g.objectiveId);
+		return this.db.$transaction(async (tx) => {
+			await this.assertKyGhiDuoc(tx, nguon.cycleId);
+			const xoa = await tx.okrAlignment.deleteMany({ where: { id: g.id } });
+			if (xoa.count === 0) throw new NotFoundException(T.canChinh.khongCo(id));
+			await this.vet(
+				tx,
+				userId,
+				"go-can-chinh",
+				{ objectiveId: nguon.id },
+				{
+					alignmentId: g.id,
+					targetObjectiveId: g.targetObjectiveId,
+					targetKeyResultId: g.targetKeyResultId,
+				},
+				null,
+			);
+			return { id: g.id, canhBao: null };
+		});
+	}
+
+	async alignmentTargets(objectiveId: string) {
+		const nguon = await this.db.okrObjective.findUnique({
+			where: { id: objectiveId },
+			select: {
+				level: true,
+				cycleId: true,
+				cycle: { select: { parentId: true } },
+			},
+		});
+		if (!nguon) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
+		const hang = HANG_CAP[capMucTieu.parse(nguon.level)];
+		const rows = await this.db.okrObjective.findMany({
+			where: {
+				status: "cong-bo",
+				level: { in: CAP_MUC_TIEU.filter((c) => HANG_CAP[c] < hang) },
+				cycleId: {
+					in: [
+						nguon.cycleId,
+						...(nguon.cycle.parentId ? [nguon.cycle.parentId] : []),
+					],
+				},
+			},
+			select: {
+				id: true,
+				title: true,
+				...chonTenDonVi,
+				keyResults: {
+					select: { id: true, title: true },
+					orderBy: { position: "asc" },
+				},
+			},
+			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+		});
+		const theoCap = [...rows].sort(
+			(a, b) =>
+				HANG_CAP[capMucTieu.parse(a.level)] -
+				HANG_CAP[capMucTieu.parse(b.level)],
+		);
+		return {
+			targets: theoCap.flatMap((r) => {
+				const unitName = tenDonVi(r);
+				return [
+					{ objectiveId: r.id, keyResultId: null, label: r.title, unitName },
+					...r.keyResults.map((k) => ({
+						objectiveId: r.id,
+						keyResultId: k.id,
+						label: k.title,
+						unitName,
+					})),
+				];
+			}),
+		};
+	}
+
+	async alignmentTree(userId: string, cycleId: string) {
+		const q = await this.quyenOkr.quyen(userId);
+		const ky = await this.db.okrCycle.findUnique({
+			where: { id: cycleId },
+			select: { parentId: true },
+		});
+		if (!ky) throw new NotFoundException(T.khongCoChuKy(cycleId));
+		const cha = ky.parentId
+			? await this.docMucTieu(this.db, { cycleId: ky.parentId }, userId, q)
+			: [];
+		const cua = await this.docMucTieu(this.db, { cycleId }, userId, q);
+		const con = ky.parentId
+			? []
+			: await this.docMucTieu(
+					this.db,
+					{
+						cycle: { parentId: cycleId },
+						alignments: {
+							some: {
+								OR: [
+									{ targetObjective: { cycleId } },
+									{ targetKeyResult: { objective: { cycleId } } },
+								],
+							},
+						},
+					},
+					userId,
+					q,
+				);
+		return dungCayCanChinh([...cha, ...cua, ...con]);
 	}
 
 	private async docMucTieu(

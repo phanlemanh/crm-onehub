@@ -12,6 +12,11 @@ import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViOkrMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
+	alignmentInput,
+	alignmentTargetsInput,
+	alignmentTargetsOutput,
+	alignmentTreeInput,
+	alignmentTreeOutput,
 	byUnitInput,
 	byUnitOutput,
 	createCycleInput,
@@ -209,5 +214,54 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof idInput>,
 	) {
 		return this.okr.removeKeyResult(ctx.user.id, input.id);
+	}
+
+	@Query({
+		input: alignmentTreeInput,
+		output: alignmentTreeOutput,
+		meta: restMeta("GET", "/okr/alignment-tree", TAG),
+	})
+	alignmentTree(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof alignmentTreeInput>,
+	) {
+		return this.okr.alignmentTree(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: alignmentTargetsInput,
+		output: alignmentTargetsOutput,
+		meta: restMeta(
+			"GET",
+			"/okr/objectives/{objectiveId}/alignment-targets",
+			TAG,
+		),
+	})
+	alignmentTargets(@Input() input: z.infer<typeof alignmentTargetsInput>) {
+		return this.okr.alignmentTargets(input.objectiveId);
+	}
+
+	@Mutation({
+		input: alignmentInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/alignments", TAG),
+	})
+	addAlignment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof alignmentInput>,
+	) {
+		return this.okr.addAlignment(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("DELETE", "/okr/alignments/{id}", TAG),
+	})
+	removeAlignment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.okr.removeAlignment(ctx.user.id, input.id);
 	}
 }

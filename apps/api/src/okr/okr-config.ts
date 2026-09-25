@@ -23,6 +23,8 @@ export const OKR = {
 		khongCoChuKy: (id: string) => `Không có chu kỳ nào mang mã ${id}.`,
 		khongCoMucTieu: (id: string) => `Không có mục tiêu nào mang mã ${id}.`,
 		khongCoKr: (id: string) => `Không có KR nào mang mã ${id}.`,
+		krDangLaDich:
+			"KR này đang có mục tiêu góp vào — gỡ căn chỉnh trước khi xoá.",
 		quyNgoaiNam: "Quý phải nằm trọn trong năm cha.",
 		quyChong: (ten: string) => `Chồng ngày với chu kỳ «${ten}».`,
 		namKhongCoCha: "Chu kỳ năm không có cha; chu kỳ quý phải có năm cha.",
@@ -55,6 +57,7 @@ export const OKR = {
 			khacChuKy: "Đích phải cùng chu kỳ hoặc thuộc chu kỳ năm cha.",
 			daGan: "Đã gắn vào chỗ này rồi.",
 			khongCoDich: "Cần đúng một đích: mục tiêu hoặc KR.",
+			khongCo: (id: string) => `Không có căn chỉnh nào mang mã ${id}.`,
 		},
 		nhap: {
 			thieuMucTieu: "Thiếu mục tiêu",
