@@ -5,8 +5,10 @@ slug: tra-loi-tin-nhac
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-09-25-tra-loi-tin-nhac-design.md
+approved_by: Phan Le Manh
+approved_at: 2026-09-25T08:29:38Z
 ---
 
 # Acceptance Contract: tra-loi-tin-nhac
