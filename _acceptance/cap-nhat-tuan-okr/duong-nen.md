@@ -1,7 +1,7 @@
 ---
 slug: cap-nhat-tuan-okr
-at: 2026-09-25T14:33:00.126Z
-sha: 47b7f00cee56915725680b0707614cfd2e9f1e45
+at: 2026-09-25T14:37:01.761Z
+sha: 58b316ac6fcbf3b62f27ee888ac32a01899dd444
 nen: do
 cong_cu: do
 suite: do
@@ -14,11 +14,14 @@ engine: xanh
 - nen cong-cu: THIEU merge-base (khoa executors.script.zqw_giu_nqz)
 - nen cong-cu: THIEU merge-base (khoa executors.script.nzm_giu_da_ky)
 - nen suite: DO SAN executors.script.build_khong_cache ma 1
-- nen suite: CAY BAN SAU SUITE _acceptance/cap-nhat-tuan-okr/opportunity.md
 
-## Cách gỡ, ghi trước S3 (phiên dựng lượt 4, 2026-09-25)
+## Lượt nền thứ hai, 2026-09-25 (theo điều phối: PATH Node 24 export trước khi gọi script)
 
-- `DO SAN executors.script.build_khong_cache ma 1`: không phải lỗi của vòng — `eve build` của `apps/agent` đòi Node ≥ 24, shell con của script đường nền lấy Node 22 (`v22.18.0`) dù lệnh gọi đã đặt tiền tố PATH. Chạy lại tay tại `47b7f00c` với `PATH="/Users/manhphan/.local/share/fnm/node-versions/v24.15.0/installation/bin:$PATH" bunx turbo run build --force`: xanh, 4/4 task (23,4 s). Làn S4 chạy với cùng tiền tố — cùng cách gỡ của `vai-chi-okr` và `dat-okr-trong-crm`.
-- `CAY BAN SAU SUITE _acceptance/cap-nhat-tuan-okr/opportunity.md`: báo động giả — tệp do phiên này viết (hồ sơ cơ hội cho Cổng Đáng) trong lúc suite chạy nền, không phải suite ghi rác.
-- Hai dòng `THIEU merge-base`: báo động giả đã biết của bộ kit (đầu lệnh `B=$(git merge-base …)` bị đọc thành tên chương trình), chip đã mở ở lượt 2.
-- `test`, `lint`, `lint:slop` xanh ngay ở lượt nền; lưới trước-merge 0 vi phạm; engine vendored khớp cache 2.18.3.
+Lệnh: `export PATH=/Users/manhphan/.local/share/fnm/node-versions/v24.15.0/installation/bin:$PATH` rồi `node duong-nen.mjs --root . --slug cap-nhat-tuan-okr --base origin/onehub`, tại `58b316ac`. Kết quả thật: vẫn đỏ ở cùng dòng build — `agent:build: eve requires Node.js >=24. You are running v22.18.0.`, `Failed: agent#build`, 2/4 task. Nguyên nhân đo được: script chạy mỗi lệnh suite qua `bash -lc` (shell đăng nhập); shell đăng nhập đọc lại hồ sơ của máy và đặt `/usr/local/bin` lên trước, nên `bash -lc 'node --version'` trả `v22.18.0` (`/usr/local/bin/node`) dù PATH của tiến trình cha đã có Node 24. Export PATH không tới được tiến trình con — không gỡ được từ phía người gọi.
+
+Cách gỡ giữ nguyên: build chạy tay với tiền tố Node 24 xanh 4/4 (23,4 s, lượt đầu ở trên); làn S4 đặt cùng tiền tố. `test`, `lint`, `lint:slop` xanh cả hai lượt; lưới trước-merge 0 vi phạm; engine khớp.
+
+Known limits của đường nền (theo điều phối 2026-09-25):
+
+- `THIEU merge-base` ở hai khoá `zqw_giu_nqz`, `nzm_giu_da_ky` là báo giả của bộ kit (đầu lệnh `B=$(git merge-base …)` bị đọc thành tên chương trình).
+- `CAY BAN SAU SUITE …/opportunity.md` ở lượt đầu là báo giả: tệp do phiên viết trong lúc suite chạy; lượt thứ hai chạy trên cây sạch không còn dòng này.
