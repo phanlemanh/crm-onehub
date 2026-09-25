@@ -213,6 +213,7 @@ executors:
     tco_toan_canh_tu_tin: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t heatmap && bun test test/okr-toan-canh.spec.ts -t toan-canh-tu-tin"'
     tco_hop_tuan: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t hop-tuan && bun test test/okr-toan-canh.spec.ts -t hop-tuan-xep"'
     tco_mo_hop_tuan: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t mo-hop-tuan"'
+    tco_vet_an: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t vet-an" && bun _acceptance/toan-canh-okr/rang/soi-ma.mjs --ca vet'
     tco_dien_bien: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t dien-bien && bun test test/okr-toan-canh.spec.ts -t dien-bien && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/target-line-chart.dom.tsx"'
     tco_khoi_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t khoi-cua-toi"'
     tco_suc_khoe: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t suc-khoe"'

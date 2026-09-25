@@ -63,6 +63,7 @@ lại đúng một cách đổi hàng thành `MucTieuOutput`.
 | `danhSach` | `{cycleId, unit, loc: {phuTrach[], loai[], trangThai[], tuTin[]}}` | `{rows: (MucTieuOutput & {krKhop: string[]})[], total, facetCounts}` | 1 (`tuTin`: 2) |
 | `toanCanh` | `{cycleId}` | `{tongQuan, hang[], tuan[]}` | 1 + 2 |
 | `hopTuan` | `{cycleId, unit}` | `{tuan, dangBan[], conLai[], daCapNhat, tongKr}` | 2 |
+| `moHopTuan` | `{cycleId, unit}` | `{ghi: boolean}` | 2 |
 | `dienBien` | `{keyResultId}` | `{kieu, dich, diem[]}` | 2 |
 | `khoiCuaToi` | `{cycleId, userId?}` | `{kr[], tong}` | 2 |
 | `sucKhoe` | `{cycleId}` | `{tongQuan, hang[]}` — chỉ quản trị | 1 + 2 |
@@ -100,7 +101,7 @@ lại đúng một cách đổi hàng thành `MucTieuOutput`.
 - **Khối của tôi**: KR mà người (mặc định người xem) phụ trách trong kỳ, xếp: trượt,
   chậm nhịp, mốc chưa xong, tự tin thấp (nhịp 2) lên trước; trả tối đa năm và tổng.
 - **Sức khoẻ**: chỉ quản trị (`canManageProgram`), còn lại 403 câu ghim. Mỗi hàng đơn
-  vị: KR đang tính, KR chưa có khởi điểm, người chưa nối kênh (người lấy phòng ban
+  vị: KR đang tính, «KR của mục tiêu chưa công bố» (nhãn chốt tại Cổng Phạm vi), người chưa nối kênh (người lấy phòng ban
   chính; bộ phận gộp con), trưởng hoặc «chưa có trưởng»; nhịp 2: KR cập nhật đúng tuần
   (có lần cập nhật với `weekStart` bằng tuần vừa qua), KR im.
 - **Số câu hỏi cố định, dưới 1 giây.** Mỗi thủ tục đọc bằng một số câu
@@ -119,9 +120,18 @@ thêm mới thì chạm `packages/db/prisma` → T3. Chọn: **bảng vết OKR 
 (`OkrTrail`, chỉ thêm), hành động mới `mo-hop-tuan` trong `HANH_DONG_VET` (khuôn
 Zod, không `migration`), `objectiveId` rỗng, `cycleId` là kỳ, `after = {donVi, tuan}`.
 
-- `hopTuan` ghi đúng một dòng cho mỗi (người mở, đơn vị, tuần) — lần mở thứ hai
-  cùng tuần không ghi thêm. Chỉ ghi khi người mở là trưởng của đơn vị đó hoặc của bộ
-  phận chứa nó; người khác mở không ghi (số đo là của trưởng).
+- `hopTuan` là thủ tục **đọc thuần**. Việc ghi là một thủ tục riêng `moHopTuan({cycleId,
+  unit})`, màn gọi **một lần khi cách xem Họp tuần gắn vào trang** cho đơn vị đó
+  (`useMountEffect` đặt khoá theo đơn vị) — làm mới dữ liệu, đổi bộ lọc không gọi lại.
+  Máy chủ bỏ qua lời gọi trùng người × đơn vị trong `OKR_XEM.moHopTuan.gopPhut` (30
+  phút) để tải lại trang giữa chừng không thành lượt mới. Mỗi lượt mở bảng một dòng
+  (chốt tại Cổng Phạm vi); câu đếm đếm đơn vị khác nhau nên số dòng thừa không làm
+  sai tỷ lệ.
+- Chỉ ghi khi người mở là trưởng của đơn vị đó hoặc của bộ phận chứa nó; người khác
+  mở không ghi (số đo là của trưởng).
+- Dòng **không mang `objectiveId` hay `keyResultId`** — tab «Vết» của sheet đọc theo
+  `objectiveId` nên không thấy; hôm nay không màn nào đọc vết theo chu kỳ, và mọi chỗ
+  đọc vết theo chu kỳ về sau phải lọc bỏ `mo-hop-tuan` (phép đo E30 khẳng định).
 - Hình dòng ghim: `after = {donVi: "pb:<id>" | "bp:<id>", tuan: "YYYY-MM-DD"}` — `tuan` là **chuỗi** ngày thứ Hai theo giờ Việt Nam từ `dauTuanVN`, không phải `Date` (một `Date` đầu tuần giờ Việt Nam ra JSON là `…T17:00:00.000Z` của ngày hôm trước và câu SQL so chuỗi sẽ đếm 0).
 - Dòng vết đơn vị không hiện ở tab «Vết» của sheet (sheet đọc theo `objectiveId`).
 - Câu đếm ở `_acceptance/toan-canh-okr/rang/ty-le-mo-hop-tuan.sql`: tử số = đơn vị

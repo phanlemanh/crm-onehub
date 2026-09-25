@@ -155,7 +155,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.tco_mo_hop_tuan
     paths: [apps/api/src/okr/**, packages/validation/src/okr-vet.ts, apps/api/test/okr-toan-canh.spec.ts, _acceptance/toan-canh-okr/rang/ty-le-mo-hop-tuan.sql]
-    expected: "exit 0; (nhịp 2) (a) trưởng P gọi okr.hopTuan hai lần trong tuần T (homNay đóng băng thứ Ba và thứ Năm), thành viên gọi một lần, trưởng gọi ở tuần T+1: đọc db.okrTrail action mo-hop-tuan theo cycleId: đúng 2 dòng, MA TRẬN 2 × [actorUserId = trưởng, after.donVi === \"pb:<P>\", after.tuan === chuỗi viết trước \"2026-11-16\" / \"2026-11-23\"] = 6 khẳng định, typeof after.tuan là string dài 10; parseOkrVet không ném; thành viên không sinh dòng nào. (b) câu đếm đi vòng qua bên ghi thật: gieo 5 đơn vị có trưởng; ba trưởng gọi okr.hopTuan với homNay đóng băng trong tuần 2026-11-16, một trưởng gọi ở tuần 2026-11-09, một thành viên không trưởng gọi trong tuần 2026-11-16; KHÔNG ghi tay dòng vết nào; rồi chạy nguyên văn tệp ty-le-mo-hop-tuan.sql (đường suy từ vị trí bài) với tham số tuần '2026-11-16' → {mo: 3, tong: 5, ty_le: 0.6}. CHIỀU ĐỎ: (1) bản sao service ghi after.tuan là Date (JSON ISO UTC) → câu SQL trả mo 0, bài đỏ in «ty-le-mo-hop-tuan: mo 0 ≠ 3» kèm after thật; (2) bản sao ghi dòng cho mọi người mở → (a) đếm 3 dòng, bài in actorUserId thừa."
+    expected: "exit 0; (nhịp 2) (a) okr.moHopTuan với homNay đóng băng: trưởng P gọi lúc T0 (thứ Ba tuần 2026-11-16), gọi lại lúc T0+10 phút (tải lại trong cửa gộp), gọi lúc T0+2 giờ (lượt mở khác), gọi ở tuần 2026-11-23; thành viên gọi một lần; gọi okr.hopTuan (đọc) năm lần xen giữa. Đọc db.okrTrail action mo-hop-tuan theo cycleId: đúng 3 dòng; MA TRẬN 3 × [actorUserId = trưởng, objectiveId null, keyResultId null, after.donVi === \"pb:<P>\", after.tuan === chuỗi viết trước \"2026-11-16\" / \"2026-11-16\" / \"2026-11-23\"] = 15 khẳng định; typeof after.tuan là string dài 10; parseOkrVet không ném; thành viên không sinh dòng; okr.hopTuan không sinh dòng nào (đếm trước/sau quanh năm lời gọi đọc bằng nhau); đầu ra moHopTuan {ghi} theo thứ tự [true, false, true, true] và thành viên false. (b) câu đếm đi vòng qua bên ghi thật: gieo 5 đơn vị có trưởng; ba trưởng gọi okr.moHopTuan trong tuần 2026-11-16, một trưởng gọi ở tuần 2026-11-09, một thành viên không trưởng gọi trong tuần 2026-11-16; KHÔNG ghi tay dòng vết nào; chạy nguyên văn tệp ty-le-mo-hop-tuan.sql (đường suy từ vị trí bài) với tuần '2026-11-16' → {mo: 3, tong: 5, ty_le: 0.6}. CHIỀU ĐỎ: (1) bản sao ghi after.tuan là Date → câu SQL trả mo 0, bài in «ty-le-mo-hop-tuan: mo 0 ≠ 3» kèm after thật; (2) bản sao bỏ cửa gộp → (a) đếm 4 dòng, bài in bốn thời điểm; (3) bản sao ghi dòng cho mọi người gọi → bài in actorUserId thừa."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E16
@@ -219,7 +219,7 @@ evals:
     cmd: config:executors.script.tco_man_chrome
     steps:
       - "Cùng lần chạy với E2; gieo dữ liệu E20"
-      - "Quản trị bấm «Sức khoẻ chương trình» trên Toàn cảnh → {APP_URL}/<slug>/okr/suc-khoe ở 1440/vi → breadcrumb «Toàn cảnh › Sức khoẻ chương trình», bốn StatCard, bảng hàng đúng số E20 (đọc textContent) → ảnh buoc-suc-khoe-1; 390 → ảnh buoc-suc-khoe-2"
+      - "Quản trị bấm «Sức khoẻ chương trình» trên Toàn cảnh → {APP_URL}/<slug>/okr/suc-khoe ở 1440/vi → breadcrumb «Toàn cảnh › Sức khoẻ chương trình», bốn StatCard, bảng hàng đúng số E20 (đọc textContent), tiêu đề cột và thẻ số đọc «KR của mục tiêu chưa công bố», trang không có chữ «thiếu khởi điểm» → ảnh buoc-suc-khoe-1; 390 → ảnh buoc-suc-khoe-2"
       - "Thành viên thường mở thẳng URL → «Chỉ quản trị xem được sức khoẻ chương trình» → ảnh buoc-suc-khoe-3"
     paths: ["apps/app/app/(app)/[slug]/okr/suc-khoe/**", _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
     expected: "exit 0; khẳng định DOM. CHIỀU ĐỎ: bản sao trang không kiểm quyền → thành viên thấy bảng, script in bước 3 đỏ."
@@ -253,7 +253,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.tco_pham_vi
     paths: [apps/api/src/okr/**, apps/api/src/trpc/middlewares/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/vai-chi-okr.spec.ts]
-    expected: "exit 0; hai bài. (a) MA TRẬN 4 vai [owner, admin, member, okr] × 6 thủ tục viết trước (đúng/từ chối) = 24 ô, chạy hết rồi so mảng kết quả với bảng: năm thủ tục đọc đều 200 cho 4 vai; sucKhoe 200 cho owner, admin, 403 cho member, okr. (b) vai-chi-okr.spec -t ma-tran-trpc xanh không sửa danh sách ALIAS_CHO_PHEP. CHIỀU ĐỎ: bản sao bỏ kiểm quyền ở sucKhoe → ô [member, sucKhoe] lệch, bài in ô."
+    expected: "exit 0; hai bài. (a) MA TRẬN 4 vai [owner, admin, member, okr] × 7 thủ tục viết trước (đúng/từ chối) = 28 ô, chạy hết rồi so mảng kết quả với bảng: sáu thủ tục (kể cả moHopTuan) đều 200 cho 4 vai; sucKhoe 200 cho owner, admin, 403 cho member, okr. (b) vai-chi-okr.spec -t ma-tran-trpc xanh không sửa danh sách ALIAS_CHO_PHEP. CHIỀU ĐỎ: bản sao bỏ kiểm quyền ở sucKhoe → ô [member, sucKhoe] lệch, bài in ô."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E25
@@ -295,7 +295,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.tco_man_chrome
     paths: [apps/api/src/okr/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
-    expected: "Cùng lần chạy với E14 (nhịp 2): sau khi trưởng mở bảng họp tuần trên trình duyệt thật, script đọc bảng vết bằng Prisma của chính cây (theo cycleId gieo) → đúng 1 dòng action mo-hop-tuan, actorUserId là trưởng, after.donVi = pb:<P>, after.tuan = thứ Hai tuần hiện tại theo giờ Việt Nam (chuỗi); tải lại trang → vẫn 1 dòng. CHIỀU ĐỎ: bản sao màn gọi hopTuan không qua phiên trưởng (ví dụ prefetch bằng phiên máy) → 0 dòng, script in đếm."
+    expected: "Cùng lần chạy với E14 (nhịp 2): sau khi trưởng mở cách xem Họp tuần trên trình duyệt thật, script đọc bảng vết bằng Prisma của chính cây (theo cycleId gieo) → đúng 1 dòng action mo-hop-tuan, actorUserId là trưởng, objectiveId và keyResultId null, after.donVi = pb:<P>, after.tuan = thứ Hai tuần hiện tại theo giờ Việt Nam (chuỗi); đổi một bộ lọc, bấm làm mới, tải lại trang → vẫn 1 dòng; chuyển sang cách xem Danh sách rồi trở lại Họp tuần trong cùng trang → vẫn 1 dòng (trong cửa gộp). CHIỀU ĐỎ: bản sao màn gọi hopTuan không qua phiên trưởng (ví dụ prefetch bằng phiên máy) → 0 dòng, script in đếm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E29
@@ -305,4 +305,13 @@ evals:
     cmd: config:executors.script.tco_man_chrome
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
     expected: "Cùng lần chạy với E23: ghi mọi request tRPC của ba tab sau khi chọn Quý 3; mọi lời gọi okr.danhSach, okr.hopTuan, okr.toanCanh mang input.cycleId bằng id Quý 3 (đọc từ URL request, kể cả lời gọi phía máy chủ ghi trong nhật ký dev của api 3931 nếu trang dựng ở máy chủ). CHIỀU ĐỎ: bản sao Toàn cảnh gọi toanCanh với currentId → khẳng định cycleId đỏ, script in cycleId thật."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E30
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_vet_an
+    paths: [apps/api/src/okr/**, "apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/api/test/okr-toan-canh.spec.ts, _acceptance/toan-canh-okr/rang/soi-ma.mjs]
+    expected: "exit 0; hai bài. (a) API: mục tiêu M của phòng ban P; đọc okr.objective(M).trail (đếm n); trưởng P gọi okr.moHopTuan → ghi true; đọc lại okr.objective(M).trail → đúng n dòng, không dòng nào action mo-hop-tuan. Đối chứng dương: sửa tên M → trail n+1. (b) soi mã: mọi lời gọi okrTrail.findMany/count/groupBy trong apps/api/src có điều kiện objectiveId khác rỗng HOẶC loại action mo-hop-tuan (duyệt AST, in danh sách chỗ đọc và điều kiện của từng chỗ). CHIỀU ĐỎ: (a) bản sao moHopTuan ghi objectiveId của một mục tiêu trong đơn vị → trail n+1, bài in «dòng mo-hop-tuan lọt vào tab Vết»; (b) --chieu-do thêm một findMany theo cycleId không lọc → soi mã đỏ in tệp:dòng."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
