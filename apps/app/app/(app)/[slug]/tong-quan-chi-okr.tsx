@@ -26,7 +26,10 @@ export async function TongQuanChiOkr({ slug }: { slug: string }) {
 			</PageShellHeader>
 
 			<PageShellContent>
-				<div>
+				<div className="flex gap-2">
+					<Button asChild variant="outline">
+						<Link href={workspaceUrl(slug, "/okr")}>{m.chiOkr.noiKhu}</Link>
+					</Button>
 					<Button asChild variant="outline">
 						<Link href={workspaceUrl(slug, DUONG_NHAC_BUOI_SANG)}>
 							{m.chiOkr.noiKenh}

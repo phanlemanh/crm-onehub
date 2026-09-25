@@ -1,0 +1,88 @@
+"use client";
+
+import UserMultiple from "@carbon/icons-react/es/UserMultiple";
+import { Button } from "@crm/ui/components/button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@crm/ui/components/empty";
+import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { skipToken, useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { okrMessages } from "@/lib/messages/okr";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { useTRPC } from "@/lib/trpc/client";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { useChuKy } from "./chon-chu-ky";
+import { KhoiMucTieu } from "./khoi-muc-tieu";
+import { ChuaChuKy, DangTai, Loi } from "./trang-thai-okr";
+
+export function CuaToi() {
+	const m = okrMessages(useLocale());
+	const trpc = useTRPC();
+	const url = useWorkspaceUrl();
+	const { cycles, currentId, ky } = useChuKy();
+	const access = useQuery(trpc.okr.access.queryOptions());
+	const mine = useQuery(
+		trpc.okr.mine.queryOptions(
+			currentId === null ? skipToken : { cycleId: currentId },
+		),
+	);
+
+	if (cycles.isPending || access.isPending) return <DangTai />;
+	if (cycles.isError)
+		return (
+			<Loi
+				thuLai={() => {
+					void cycles.refetch();
+					void access.refetch();
+				}}
+			/>
+		);
+	if (currentId === null)
+		return <ChuaChuKy quanTri={access.data?.canManageProgram === true} />;
+	if (mine.isPending) return <DangTai />;
+	if (mine.isError) return <Loi thuLai={() => void mine.refetch()} />;
+
+	const ds = mine.data.objectives;
+	if (ds.length === 0) {
+		const sang = url("/okr/theo-don-vi");
+		return (
+			<Empty data-trang-thai="ST-cuatoi-rong">
+				<EmptyHeader>
+					<EmptyMedia variant="icon">
+						<Icon icon={UserMultiple} />
+					</EmptyMedia>
+					<EmptyTitle>{m.cuaToiRong.title}</EmptyTitle>
+					<EmptyDescription>{m.cuaToiRong.body}</EmptyDescription>
+				</EmptyHeader>
+				<EmptyContent>
+					<Button asChild variant="outline">
+						<Link
+							href={
+								ky
+									? `${sang}?${new URLSearchParams({ [SEARCH_PARAM.okr.ky]: ky })}`
+									: sang
+							}
+						>
+							{m.cuaToiRong.action}
+						</Link>
+					</Button>
+				</EmptyContent>
+			</Empty>
+		);
+	}
+
+	return (
+		<div className="flex flex-col gap-6" data-trang-thai="ST-cuatoi-codulieu">
+			{ds.map((mt) => (
+				<KhoiMucTieu key={mt.id} mucTieu={mt} hienDonVi danhDauCuaToi />
+			))}
+		</div>
+	);
+}

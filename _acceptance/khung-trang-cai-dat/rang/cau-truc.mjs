@@ -21,6 +21,7 @@ const BANG_BE_RONG = {
 	"sso/page.tsx": "wide",
 	"onboarding/page.tsx": "wide",
 	"organization/page.tsx": "full",
+	"okr/page.tsx": "page",
 	"connections/google/page.tsx": "page",
 	"connections/microsoft/page.tsx": "page",
 	"connections/slack/page.tsx": "page",

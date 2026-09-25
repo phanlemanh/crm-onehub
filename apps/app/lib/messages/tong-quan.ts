@@ -10,7 +10,8 @@ const en = {
 	},
 	scope: { label: "Whose numbers to show", me: "Me", everyone: "Everyone" },
 	chiOkr: {
-		moTa: "The OKR area opens in a later release. Until then you can connect your reminder channel.",
+		moTa: "The Objectives area is open — set and follow your unit's OKRs there.",
+		noiKhu: "Open Objectives",
 		noiKenh: "Open morning reminders",
 	},
 	stats: {
@@ -97,7 +98,8 @@ const vi = {
 	},
 	scope: { label: "Xem số của ai", me: "Tôi", everyone: "Cả đội" },
 	chiOkr: {
-		moTa: "Khu OKR mở ở lượt sau. Trong lúc chờ, bạn có thể nối kênh nhắc.",
+		moTa: "Khu Mục tiêu đã mở — đặt và theo dõi OKR của đơn vị bạn ở đó.",
+		noiKhu: "Mở Mục tiêu",
 		noiKenh: "Mở Nhắc buổi sáng",
 	},
 	stats: {

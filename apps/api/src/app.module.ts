@@ -28,6 +28,7 @@ import { LoggingModule } from "./logging/logging.module";
 import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
 import { MicrosoftModule } from "./microsoft/microsoft.module";
+import { OkrModule } from "./okr/okr.module";
 import { OnboardingModule } from "./onboarding/onboarding.module";
 import { SavedViewsModule } from "./saved-views/saved-views.module";
 import { SearchModule } from "./search/search.module";
@@ -89,6 +90,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		CampaignsModule,
 		OnboardingModule,
 		ToChucModule,
+		OkrModule,
 	],
 })
 export class AppModule {}

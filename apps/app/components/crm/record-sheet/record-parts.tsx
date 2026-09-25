@@ -37,7 +37,7 @@ export function RecordSheetFrame({
 }: {
 	loading: boolean;
 	error: string | null;
-	title: string;
+	title: ReactNode;
 	description?: ReactNode;
 	note?: ReactNode;
 	media?: ReactNode;

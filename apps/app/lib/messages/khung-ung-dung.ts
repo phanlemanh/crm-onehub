@@ -9,6 +9,7 @@ const en = {
 		deals: "Deals",
 		campaigns: "Campaigns",
 		onboarding: "First 30 days",
+		okr: "Objectives",
 		settings: "Settings",
 	},
 	nav: {
@@ -68,6 +69,7 @@ const vi = {
 		deals: "Thoả thuận",
 		campaigns: "Chiến dịch",
 		onboarding: "30 ngày đầu",
+		okr: "Mục tiêu",
 		settings: "Cài đặt",
 	},
 	nav: {
