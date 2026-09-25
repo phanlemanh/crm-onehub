@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma 7 · NestJS + nestjs-trpc · Zod · Next.js (app router) + TanStack Query · eve (agent) · bun test · puppeteer-core cho phép đo màn.
 
+**Duyệt kế hoạch (Cổng 1.5):** Manh Phan — uỷ quyền phiên điều phối 2026-09-24 — mười việc, mỗi việc một tác nhân con kèm người soát riêng.
+
 **Spec:** `docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md` · hợp đồng `_acceptance/cap-nhat-tuan-okr/contract.md` (16 tiêu chí, duyệt 2026-09-25) · phép đo `_acceptance/cap-nhat-tuan-okr/evals.yaml` (29).
 
 ## Global Constraints
@@ -35,7 +37,7 @@
 
 ## Rủi ro — hồ sơ đã ký phải ghim lại
 
-- `dat-okr-trong-crm`: bài `cong-bo` (E5) sửa khẳng định `currentValue` → 400 (Task 2); `expected` E5 và dòng `supersedes` trong sổ của hồ sơ đó (Task 2); `okr-san.ts` đổi phần dọn (Task 1); sheet mục tiêu thêm tab (Task 8).
+- `dat-okr-trong-crm`: bài `cong-bo` (E5) sửa khẳng định `currentValue` → 400 (Task 2); KHÔNG sửa tay `evals.yaml` hay `evidence-report.md` của hồ sơ đó (điều kiện Cổng 1.5) — chỉ nối một dòng vào `decisions.jsonl` của nó (Task 2), rồi ghim lại bằng `repin-lane.mjs --write`; kit hay pre-merge đòi sửa `evals.yaml` hay báo vi phạm → DỪNG, báo nguyên văn; `okr-san.ts` đổi phần dọn (Task 1); sheet mục tiêu thêm tab (Task 8).
 - `vai-chi-okr`: thủ tục mới dưới alias `okr` — ma trận đọc `generated/server.ts`, danh sách alias không đổi.
 - `may-nhac-truoc-nguoi`, `nhac-qua-zalo`, `moi-phia-deu-thay-ke-hoach`: `ViecNhac` thành hợp khuôn, dựng tin đổi (Task 3). Tin chỉ có việc kế hoạch giữ nguyên chữ.
 - Tập thật do máy rút ở Task 10 (`ho-so-bi-cham.mjs`, E21); ghim lại bằng `repin-lane.mjs` sau khi lên `onehub`.
@@ -317,7 +319,7 @@ Phục vụ: E1, E3, E5, E20, E28; sửa E5 của `dat-okr-trong-crm`. **indepen
 **Files:**
 - Create: `apps/api/src/okr/okr-cap-nhat.service.ts`
 - Modify: `okr-config.ts` (câu ghim), `okr.contracts.ts`, `okr.router.ts`, `okr.module.ts`, `okr.service.ts` (`updateKeyResult`, `removeKeyResult`, `docMucTieu` → cờ `hienTaiQuaCapNhat` trên KR), `src/generated/server.ts`
-- Modify: `apps/api/test/okr.spec.ts` (bài `cong-bo`), `_acceptance/dat-okr-trong-crm/evals.yaml` (expected E5), `_acceptance/dat-okr-trong-crm/decisions.jsonl` (một dòng supersede theo khối lệnh ba dòng của feature-loop)
+- Modify: `apps/api/test/okr.spec.ts` (bài `cong-bo`), `_acceptance/dat-okr-trong-crm/decisions.jsonl` (một dòng theo khối lệnh ba dòng của feature-loop; KHÔNG sửa `evals.yaml`/`evidence-report.md` của hồ sơ đó)
 - Test: `apps/api/test/okr-cap-nhat.spec.ts` (các `describe`: `gui-lo`, `phien-giay`, `ghi-ho`, `xoa-kr-da-cap-nhat`, `hien-tai-khoa`)
 
 **Interfaces:**
@@ -390,7 +392,7 @@ if (dangChay && input.currentValue !== undefined && input.currentValue !== soKr(
 
 - [ ] **Step 6: Router + module + sinh** — ba thủ tục `capNhatTuan` (Query, `GET /okr/check-ins/mine`), `moCapNhat` (Mutation, `POST /okr/check-in-sessions`), `guiCapNhat` (Mutation, `POST /okr/check-ins`); `OkrCapNhatService` vào `providers`. Run: `cd apps/api && bun run trpc:generate`.
 
-- [ ] **Step 7: Sửa lượt 3** — bài `cong-bo` trong `okr.spec.ts`: lời gọi `{ id: k1, startValue: 10, targetValue: 60, currentValue: 30 }` tách thành `{ id: k1, startValue: 10, targetValue: 60 }` → 200 và `{ id: k1, currentValue: 30 }` → `400 ${T.hienTaiQuaCapNhat}`; khẳng định cuối thành `[10, 60, 20]`. Sửa `expected` E5 của `dat-okr-trong-crm` đúng câu hợp đồng Notes; nối dòng `supersedes` vào sổ của hồ sơ đó.
+- [ ] **Step 7: Sửa lượt 3** — bài `cong-bo` trong `okr.spec.ts`: lời gọi `{ id: k1, startValue: 10, targetValue: 60, currentValue: 30 }` tách thành `{ id: k1, startValue: 10, targetValue: 60 }` → 200 và `{ id: k1, currentValue: 30 }` → `400 ${T.hienTaiQuaCapNhat}`; khẳng định cuối thành `[10, 60, 20]`. Nối một dòng vào `_acceptance/dat-okr-trong-crm/decisions.jsonl`: AC-16 của `cap-nhat-tuan-okr` thay cho khẳng định cũ của E5.
 
 - [ ] **Step 8: Chạy + phá thử**
 
