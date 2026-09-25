@@ -513,6 +513,23 @@ const vi = {
 		},
 		dangTai: "Đang tải việc OKR của bạn…",
 	},
+	chuyen: {
+		menu: "Chuyển OKR…",
+		tieuDe: "Chuyển OKR của {ten}",
+		coViec:
+			"{ten} đang phụ trách {kr} KR và {mucTieu} mục tiêu ở chu kỳ đang chạy. Chọn người nhận tất cả.",
+		khongViec: "{ten} không phụ trách KR hay mục tiêu nào đang chạy.",
+		nguoiNhan: "Người nhận",
+		chon: "Chọn người nhận",
+		timNguoi: "Tìm người",
+		khongAi: "Không có ai khớp",
+		loiXemTruoc: "Không đếm được OKR của người này",
+		thuLai: "Thử lại",
+		dangTai: "Đang tải danh sách người…",
+		xacNhan: "Chuyển",
+		huy: "Huỷ",
+		xong: "Đã chuyển {kr} KR và {mucTieu} mục tiêu cho {ten}.",
+	},
 };
 
 type OkrMessages = typeof vi;
@@ -1033,6 +1050,23 @@ const en: OkrMessages = {
 			action: "Try again",
 		},
 		dangTai: "Loading your OKR to-dos…",
+	},
+	chuyen: {
+		menu: "Transfer OKR…",
+		tieuDe: "Transfer {ten}'s OKR",
+		coViec:
+			"{ten} owns {kr} running key results and {mucTieu} running objectives. Pick who takes all of it.",
+		khongViec: "{ten} owns no running key result or objective.",
+		nguoiNhan: "Recipient",
+		chon: "Pick a recipient",
+		timNguoi: "Search people",
+		khongAi: "No one matches",
+		loiXemTruoc: "Couldn't count this person's OKR",
+		thuLai: "Try again",
+		dangTai: "Loading people…",
+		xacNhan: "Transfer",
+		huy: "Cancel",
+		xong: "Transferred {kr} key results and {mucTieu} objectives to {ten}.",
 	},
 };
 
