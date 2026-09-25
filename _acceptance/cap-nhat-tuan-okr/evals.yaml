@@ -114,7 +114,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.cnt_viec_cua_toi
     paths: [apps/api/src/okr/**, packages/db/src/okr-nhac.ts, packages/db/src/onboarding-nhac.ts, apps/api/test/okr-cap-nhat.spec.ts]
-    expected: "exit 0; với cùng fixture sự kiện của E11 và now cố định (tham số service), với từng người G, H, F, A: okr.viecCuaToi() so từng phần tử bằng phần OKR (loai bắt đầu okr-) của (await viecCanNhac(db, {now, userId})).get(userId) — cùng độ dài, cùng thứ tự, cùng khoá mã; người không việc → []. dashboard.summary của vai đầy đủ vẫn trả viecCuaToi kế hoạch như trước (so với ảnh chụp đầu vào gieo). CHIỀU ĐỎ: bản sao okr.viecCuaToi tự lọc lại theo cửa sổ riêng 48 giờ → lệch với viecCanNhac, bài đỏ in phần tử thừa."
+    expected: "exit 0; với cùng fixture sự kiện của E11 và now cố định (tham số service), với từng người G, H, F, A: okr.viecCuaToi() so từng phần tử bằng phần OKR (loai bắt đầu okr-) của (await viecCanNhac(db, {now, userId})).get(userId) — cùng độ dài, cùng thứ tự, cùng khoá mã; người không việc → []. dashboard.summary của vai đầy đủ vẫn trả viecCuaToi kế hoạch như trước (so với ảnh chụp đầu vào gieo). Cờ hiện thẻ (lienQuanOkr) trả cùng okr.viecCuaToi: MA TRẬN viết trước 12 người vai đầy đủ × cờ — phụ trách một KR ở chu kỳ dang-chay → true · phụ trách một mục tiêu (không KR) ở dang-chay → true · trưởng một phòng ban (không phụ trách gì) khi có chu kỳ dang-chay → true · trưởng một bộ phận → true · chỉ đang theo dõi một mục tiêu ở dang-chay → true · không dính gì → false · chỉ là người tham gia (participant) một mục tiêu ở dang-chay → false · chỉ phụ trách mục tiêu đã bỏ ở dang-chay → false · trưởng phòng ban đã lưu trữ → false · chỉ phụ trách KR ở chu kỳ lap-ke-hoach → false · chỉ theo dõi mục tiêu ở chu kỳ da-dong → false · trưởng phòng ban trong lượt chạy riêng sau khi chuyển MỌI chu kỳ dang-chay của fixture sang cham-diem → false; đối chứng dương: người «không dính gì» được giao một KR ở dang-chay → cờ lật true. CHIỀU ĐỎ: bản sao okr.viecCuaToi tự lọc lại theo cửa sổ riêng 48 giờ → lệch với viecCanNhac, bài đỏ in phần tử thừa; bản sao tính cờ không lọc pha chu kỳ → ô «chỉ KR ở lap-ke-hoach» thành true, bài đỏ in ô; bản sao tính cờ bằng okr.mine (gồm người tham gia) → ô participant lật true, bài đỏ in ô; bản sao bỏ điều kiện có chu kỳ dang-chay ở vế trưởng → ô «trưởng, không chu kỳ chạy» lật true, bài đỏ in ô."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
@@ -127,9 +127,10 @@ evals:
       - "A mở {APP_URL}/<slug> ở 1440 → thẻ việc OKR (data-the-viec-okr) có dòng «1 KR chờ cập nhật tuần này»; thẻ việc kế hoạch vẫn hiện → E13-step1.png; ở 390 → E13-step2.png"
       - "C (vai okr) mở {APP_URL}/<slug> → trang Tổng quan rút gọn có thẻ việc OKR cùng dòng → E13-step3.png; bấm dòng → URL /okr/cap-nhat-tuan?tu=viec-cua-toi → E13-step4.png"
       - "H mở /<slug>/okr (tab Của tôi) → khối «Việc của tôi» có dòng nhắc tên; bấm → sheet mục tiêu mở (?record=objective:<id>) → E13-step5.png"
-      - "R mở /<slug> → thẻ việc OKR hiện câu rỗng → E13-step6.png"
+      - "C2 (vai okr, không phụ trách gì) mở {APP_URL}/<slug> → thẻ việc OKR vẫn hiện với câu rỗng → E13-step6.png"
+      - "R (vai member, không phụ trách KR hay mục tiêu, không làm trưởng, không theo dõi ở chu kỳ đang chạy) mở {APP_URL}/<slug>, script CHỜ phản hồi mạng okr.viecCuaToi của phiên R (lienQuanOkr = false trong thân) rồi mới khẳng định KHÔNG có data-the-viec-okr, thẻ việc kế hoạch vẫn hiện → E13-step7.png; TR (vai member, chỉ là trưởng một phòng ban, không việc) mở {APP_URL}/<slug> → thẻ việc OKR hiện với câu rỗng → E13-step8.png"
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/dashboard-summary.tsx", "apps/app/app/(app)/[slug]/tong-quan-chi-okr.tsx", "apps/app/app/(app)/[slug]/page.tsx", _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs]
-    expected: "exit 0 và ảnh; script đọc DOM (data-the-viec-okr, textContent dòng, href) và URL. CHIỀU ĐỎ: bỏ thẻ khỏi tong-quan-chi-okr → bước 3 đỏ in «khong thay the viec OKR cho vai okr»; dòng cập nhật trỏ /okr thay vì /okr/cap-nhat-tuan → bước 3 đỏ in href."
+    expected: "exit 0 và ảnh; script đọc DOM (data-the-viec-okr, textContent dòng, href) và URL. CHIỀU ĐỎ: bỏ thẻ khỏi tong-quan-chi-okr → bước 3 đỏ in «khong thay the viec OKR cho vai okr»; dòng cập nhật trỏ /okr thay vì /okr/cap-nhat-tuan → bước 3 đỏ in href; thẻ vai đầy đủ luôn hiện (bỏ điều kiện cờ) → bước 7 đỏ in «R thay the viec OKR»; thẻ vai okr ẩn khi rỗng → bước 6 đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E14
@@ -210,7 +211,7 @@ evals:
     executor: script
     cmd: config:executors.script.cnt_ho_so_bi_cham
     paths: [apps/**, packages/**, _acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs, _acceptance/cap-nhat-tuan-okr/rang/cau-hinh.mjs]
-    expected: "exit 0; script suy gốc kho từ vị trí của nó, đọc VONG.truoc/sau ở rang/cau-hinh.mjs, lấy git diff --name-only VONG.truoc..HEAD (bỏ _acceptance/**); duyệt MỌI hồ sơ _acceptance/*/ có contract status signed-off hoặc machine-cleared (không lọc theo tên), với mỗi eval executor test/script không khai status not-run: lấy tệp nó chạy (đường dẫn trong lệnh đã giải từ config) và các glob paths, giao với diff → tập hồ sơ bị chạm. Khẳng định tập đó ĐÚNG BẰNG danh sách HO_SO_BI_CHAM khai trong cau-hinh.mjs (chép từ thiết kế mục 10), in từng tên và số hồ sơ đã soi (> 0, mã 2 nếu 0). Rồi chạy mọi eval máy của các hồ sơ đó (lệnh trùng chạy một lần, tuần tự, PATH Node 24) → mọi mã 0; in lệnh và mã. Cuối cùng chạy scripts/pre-merge-check.sh --base origin/onehub KHÔNG kèm --slug, in số hồ sơ soi. CHIỀU ĐỎ: bản sao cau-hinh.mjs bỏ một tên → exit 1 «thieu ho so: <tên>»; thêm một tên thừa → exit 1 «ho so khong bi cham: <tên>»; một eval đổi lệnh sang `false` trong bản sao config tạm → exit 1 in lệnh."
+    expected: "exit 0; script suy gốc kho từ vị trí của nó, đọc VONG.truoc/sau ở rang/cau-hinh.mjs, lấy git diff --name-only VONG.truoc..HEAD (bỏ _acceptance/**); duyệt MỌI hồ sơ _acceptance/*/ có contract status signed-off hoặc machine-cleared (không lọc theo tên), với mỗi eval executor test/script không khai status not-run: lấy tệp nó chạy (đường dẫn trong lệnh đã giải từ config) và các glob paths, giao với diff → tập hồ sơ bị chạm. Khẳng định tập đó ĐÚNG BẰNG danh sách HO_SO_BI_CHAM khai trong cau-hinh.mjs (chép từ thiết kế mục 10), in từng tên và số hồ sơ đã soi (> 0, mã 2 nếu 0). Rồi chạy mọi eval máy của các hồ sơ đó (lệnh trùng chạy một lần, tuần tự, PATH Node 24) → mọi mã 0; in lệnh và mã. Khẳng định thêm: expected của E5 trong _acceptance/dat-okr-trong-crm/evals.yaml chứa «currentValue» cùng «400» và «hienTaiQuaCapNhat» (khớp chiều của bài cong-bo đã sửa), và decisions.jsonl của hồ sơ đó có dòng supersedes nhắc cap-nhat-tuan-okr AC-16. Cuối cùng chạy scripts/pre-merge-check.sh --base origin/onehub KHÔNG kèm --slug, in số hồ sơ soi. CHIỀU ĐỎ: bản sao cau-hinh.mjs bỏ một tên → exit 1 «thieu ho so: <tên>»; thêm một tên thừa → exit 1 «ho so khong bi cham: <tên>»; một eval đổi lệnh sang `false` trong bản sao config tạm → exit 1 in lệnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E22
@@ -277,4 +278,28 @@ evals:
     cmd: config:executors.script.cnt_migration_chi_them
     paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/cap-nhat-tuan-okr/rang/migration-chi-them.mjs, _acceptance/cap-nhat-tuan-okr/rang/cau-hinh.mjs]
     expected: "exit 0; script (khuôn dat-okr-trong-crm/rang/migration-chi-them.mjs) đọc mọi thư mục migration có ở VONG.sau mà chưa có ở VONG.truoc; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE INDEX/UNIQUE INDEX trên bảng MỚI, ALTER TABLE <bảng mới> ADD CONSTRAINT ... FOREIGN KEY; cấm UPDATE/DELETE/DROP/ALTER COLUMN/RENAME/ADD COLUMN trên bảng có sẵn; số câu > 0 in ra. Các model tên bắt đầu Okr nằm liền nhau và là các model cuối của schema.prisma. Trên cơ sở dữ liệu tạm: dựng lược đồ VONG.truoc, gieo cây tổ chức, một kế hoạch, một mục tiêu với KR bằng SQL, chạy migration mới, đọc lại số và tên bằng trước. CHIỀU ĐỎ: 3 tệp giả trong tmpdir (DROP COLUMN; ADD COLUMN x ON okrKeyResult; model Okr xen giữa) → exit 1 thông điệp ghim từng loại."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E28
+    criterion: AC-16
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cnt_hien_tai_khoa
+    paths: [apps/api/src/okr/**, apps/api/test/okr-cap-nhat.spec.ts, apps/api/test/okr.spec.ts]
+    expected: "exit 0; ba mục tiêu cùng người sửa được (trưởng P) và người phụ trách KR (M): A công bố ở chu kỳ dang-chay (KR a), B nháp ở dang-chay (KR b), C công bố ở chu kỳ lap-ke-hoach (KR c). MA TRẬN viết trước 3 KR × 2 người × 4 thay đổi (currentValue, targetValue, title, unit) = 24 ô: KR a — currentValue → 400 đúng câu OKR.thongDiep.hienTaiQuaCapNhat, targetValue, title, unit → 200; KR b, KR c — cả bốn → 200. Mỗi ô 400: toàn bộ bản ghi KR đọc lại bằng trước, đếm okrTrail của KR không đổi. Ô trộn: updateKeyResult cho KR a với currentValue khác cộng targetValue mới → 400 câu ghim, toàn bộ bản ghi KR đọc lại bằng trước (không ghi dở). Đối chứng: currentValue BẰNG giá trị đang lưu cùng targetValue mới → 200. Cờ okr.objective: MA TRẬN 3 KR × hienTaiQuaCapNhat = [a true, b false, c false]. Sau chuỗi: gửi một lô cập nhật tuần cho a → currentValue đổi, okrCheckIn +1. CHIỀU ĐỎ: bản sao service bỏ kiểm pha (khoá mọi KR đã công bố) → ô [KR c, currentValue] thành 400, bài đỏ in ô; bản sao bỏ kiểm hoàn toàn → ô [KR a, currentValue] 200, bài đỏ in giá trị trước/sau; bản sao kiểm sau khi ghi đích → ô trộn để lại targetValue mới, bài đỏ in bản ghi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E29
+    criterion: AC-16
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.cnt_man_chrome
+    steps:
+      - "Cùng lần chạy với E6. Mục tiêu A công bố ở chu kỳ dang-chay có KR a; mục tiêu B nháp có KR b; mục tiêu C công bố ở chu kỳ lap-ke-hoach có KR c; trưởng TP đăng nhập"
+      - "TP mở sheet mục tiêu A, menu dòng KR a → «Sửa» → hộp thoại KR: ô «Hiện tại» (data-o-hien-tai) có thuộc tính readonly (không disabled), dưới ô có liên kết «Cập nhật tuần» trỏ /<slug>/okr/cap-nhat-tuan → E29-step1.png (1440), E29-step2.png (390); đổi ô «Đích» rồi Lưu → hộp đóng, SQL thẳng: targetValue đổi, currentValue không đổi"
+      - "Bấm liên kết «Cập nhật tuần» (mở lại hộp) → URL /okr/cap-nhat-tuan → E29-step3.png"
+      - "TP mở sheet mục tiêu B, hộp thoại KR b → ô «Hiện tại» sửa được, không có dòng dẫn; đổi 5 → Lưu → SQL thẳng: currentValue KR b = 5 → E29-step4.png"
+      - "TP mở sheet mục tiêu C (đã công bố, chu kỳ lap-ke-hoach), hộp thoại KR c → ô «Hiện tại» sửa được, không có dòng dẫn; đổi 6 → Lưu → SQL thẳng: currentValue KR c = 6 → E29-step5.png"
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/lib/messages/okr.ts, _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs]
+    expected: "exit 0 và ảnh; DOM (thuộc tính readonly/disabled của data-o-hien-tai, href liên kết) và SQL thẳng DATABASE_URL của cây. CHIỀU ĐỎ: ô Hiện tại không khoá ở KR a → bước 2 đỏ in «o hien tai sua duoc»; khoá cả ở KR nháp → bước 4 đỏ; màn tự suy khoá từ trạng thái công bố thay vì đọc cờ máy chủ → bước 5 (KR c) đỏ in «o hien tai bi khoa sai»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

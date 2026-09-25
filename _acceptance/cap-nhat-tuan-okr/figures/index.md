@@ -10,7 +10,8 @@ Kê từ artifact cuối S1: sổ quyết định chờ seal (8 dòng), chín d�
 | Chuyển OKR mục riêng hay ghép hộp «Chuyển việc 30 ngày» (d-3, giả định 4) | 2 nhánh rẽ | cần hình → `chuyen-okr-hai-loi` |
 | Người là chuỗi, KR có lần cập nhật không xoá được (d-5) | 1 nhánh | dưới ngưỡng |
 | Bỏ design-pass (d-6) | 1 nhánh (bỏ/chạy) | dưới ngưỡng — cờ vàng trên thẻ |
-| Không khoá ô giá trị hộp KR (d-7) | 1 nhánh | dưới ngưỡng |
+| Không khoá ô giá trị hộp KR (d-7) — thay bằng khoá ô với KR đang chạy tại cổng (d-16) | 2 nhánh (đang chạy / nháp hoặc kỳ chưa chạy) | cần hình → `hai-sua-tai-cong` |
+| Thẻ OKR theo vai (d-17) | 3 nhánh (vai «chỉ OKR» / vai đầy đủ dính OKR / không dính) | cần hình → `hai-sua-tai-cong` |
 | Cửa sổ 24 giờ (d-8) | 1 nhánh | dưới ngưỡng — nằm trong hình `tuan-cua-mot-kr` |
 | Ghi hộ theo trưởng đơn vị; chỉ KR công bố ở chu kỳ đang chạy; thẻ hiện cả khi rỗng; mẫu số mọi KR theo phòng ban chính | mỗi cái 1 nhánh | dưới ngưỡng |
 
@@ -37,3 +38,10 @@ Kê từ artifact cuối S1: sổ quyết định chờ seal (8 dòng), chín d�
 - Loại hình: so sánh hai lối (hai cột), mỗi cột một luồng ngắn.
 - Cột trái «Lối chọn — mục riêng "Chuyển OKR…"»: menu hàng thành viên → «Chuyển OKR…» → xem trước «a KR, b mục tiêu» → chọn người nhận → chuyển KR và mục tiêu đơn vị ở chu kỳ còn ghi được; hộp «Chuyển việc 30 ngày» không đổi. Cột phải «Lối không chọn — ghép vào hộp đã ký»: hộp «Chuyển việc 30 ngày» thêm hai con số → đổi hợp đồng đã ký của hồ sơ kế hoạch 30 ngày → phải duyệt lại hồ sơ đó. Chú thích dưới: giá phải trả của lối chọn — quản trị bấm hai mục cho một người nghỉ.
 - AC liên quan: AC-12.
+
+## Đề bài hình 5 — `hai-sua-tai-cong`
+
+- Loại hình: hai cây quyết định nhỏ đặt cạnh nhau, trái → phải.
+- Trái «Ô Hiện tại trong hộp sửa KR»: «KR thuộc mục tiêu đã công bố?» không → «Sửa được như cũ»; có → «Kỳ đang chạy?» không (lập kế hoạch) → «Sửa được như cũ»; có → «Chỉ đọc + lối tới Cập nhật tuần; máy chủ cũng từ chối».
+- Phải «Thẻ việc OKR trên Tổng quan»: «Vai chỉ OKR?» có → «Luôn hiện, kể cả rỗng»; không → «Ở kỳ đang chạy: phụ trách KR, phụ trách mục tiêu, là trưởng đơn vị, hay theo dõi mục tiêu?» có → «Hiện»; không → «Không có thẻ».
+- AC liên quan: AC-7, AC-16.

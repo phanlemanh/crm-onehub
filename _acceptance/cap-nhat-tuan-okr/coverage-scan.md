@@ -43,6 +43,7 @@ Lát D: ngày cập nhật và phần còn lại của tuần, KR im hai nấc, 
 9. Bình luận, nhắc tên, theo dõi qua API — AC-9; trên sheet — AC-10.
 10. Chuyển KR và mục tiêu khi người nghỉ — AC-12.
 11. Vai «chỉ OKR» thấy thẻ OKR mà không mở phạm vi đối tác — AC-13.
+12. Số hiện tại của KR đang chạy chỉ đổi qua lần cập nhật (hộp thoại KR chỉ đọc, máy chủ từ chối) — AC-16, thêm tại Cổng Phạm vi 2026-09-25.
 
 ## Later
 
@@ -50,7 +51,6 @@ Lát D: ngày cập nhật và phần còn lại của tuần, KR im hai nấc, 
 - Bảng họp tuần xếp theo thứ đáng bàn, heatmap, màn sức khoẻ đếm người chưa nối kênh — lượt 5.
 - Sửa, xoá bình luận; phản ứng bằng biểu tượng; đính kèm tệp — chờ số dùng thật.
 - Báo tức thì khi được nhắc tên — lượt 10 (trong chat), trái luật một tin buổi sáng nếu làm ở đây.
-- Khoá ô «giá trị hiện tại» của hộp thoại KR sau công bố để mọi đổi số đi qua cập nhật tuần — đổi hành vi đã ký ở lượt 3 (AC-5 của `dat-okr-trong-crm`); mở vòng riêng nếu số đo cho thấy người ta sửa số qua đó.
 - Nhắc riêng cho người tham gia mục tiêu (không phụ trách KR) — «người tham gia không phải cập nhật tuần» (bản mẫu).
 
 ## Never

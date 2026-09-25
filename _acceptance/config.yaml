@@ -221,6 +221,7 @@ executors:
     cnt_xoa_kr: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t xoa-kr-da-cap-nhat"'
     cnt_chuyen_okr: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t chuyen-okr"'
     cnt_chi_okr: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t chi-okr && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
+    cnt_hien_tai_khoa: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t hien-tai-khoa"'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'

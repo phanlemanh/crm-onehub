@@ -125,12 +125,16 @@ thẻ kế hoạch ở `dashboard`) đều đọc hàm đó, nên tin và thẻ 
   không gửi gì; thẻ và màn vẫn đọc đủ việc của họ.
 
 **Thẻ «việc của tôi» phần OKR** — một thành phần client `ViecOkrCuaToi` trong khu
-`okr/`, đọc `okr.viecCuaToi`, hiện ở ba chỗ:
+`okr/`, đọc `okr.viecCuaToi` (trả `{ viec, lienQuanOkr }`), hiện ở ba chỗ:
 
 - Tổng quan của vai đầy đủ (`dashboard-summary.tsx` — thẻ riêng cạnh thẻ việc
-  hiện có; thẻ việc kế hoạch không đổi).
+  hiện có; thẻ việc kế hoạch không đổi). **Chỉ hiện khi `lienQuanOkr`**: máy chủ
+  tính cờ này là đúng khi, ở một chu kỳ pha `dang-chay`, người gọi phụ trách ít nhất
+  một KR hoặc một mục tiêu (mục tiêu không đã bỏ), hoặc đang theo dõi ít nhất một
+  mục tiêu, hoặc (khi có chu kỳ `dang-chay`) là trưởng một phòng ban hay bộ phận
+  chưa lưu trữ. Người không dính gì tới OKR không thấy thẻ.
 - Tổng quan của vai «chỉ OKR» (`tong-quan-chi-okr.tsx`) — lần đầu trang này có dữ
-  liệu, qua phạm vi `okr`, không qua `dashboard`.
+  liệu, qua phạm vi `okr`, không qua `dashboard`. **Luôn hiện**, kể cả khi rỗng.
 - Khối «Việc của tôi» đầu tab «Của tôi» (bản mẫu `ViecCanLam`).
 
 Mỗi dòng dẫn thẳng vào đích: dòng cập nhật → màn «Cập nhật tuần» với `?tu=viec-cua-toi`;
@@ -148,6 +152,28 @@ dòng khác → sheet mục tiêu.
 - Menu «…» của từng dòng KR thêm «Cập nhật» cho người phụ trách và người sửa được
   đơn vị; mở hộp cập nhật một KR (cùng ba ô như màn tuần, cùng thủ tục, `entry =
   sheet`). Người không phải người phụ trách thấy dòng «Bạn ghi hộ <tên>».
+
+## 6b. Số hiện tại của KR đang chạy chỉ đổi qua lần cập nhật
+
+Với KR của mục tiêu `cong-bo` ở chu kỳ `dang-chay`:
+
+- `okr.updateKeyResult` từ chối khi `currentValue` có mặt và khác giá trị đang lưu:
+  400, câu `OKR.thongDiep.hienTaiQuaCapNhat` («KR đang chạy — đổi số hiện tại bằng
+  Cập nhật tuần»), không ghi gì, không dòng vết. Đích, tên, đơn vị đo, hạn, trọng số
+  vẫn sửa được như lượt 3.
+- Hộp thoại KR (`hop-thoai-kr.tsx`): ô «Hiện tại» `readOnly`, `FieldDescription`
+  kèm liên kết «Cập nhật tuần» tới `/okr/cap-nhat-tuan`. Máy chủ trả cờ
+  `hienTaiQuaCapNhat` trên từng KR của `okr.objective` để màn không tự suy.
+- Mục tiêu nháp, và mục tiêu đã công bố ở chu kỳ `lap-ke-hoach`: như cũ. Hai pha sau
+  (`cham-diem`, `da-dong`) đã khoá mọi ghi từ lượt 3.
+- Kiểm trước khi ghi: lời gọi trộn (đổi số hiện tại cùng đổi đích) bị từ chối cả lời
+  gọi, không ghi dở.
+- Hệ quả: số KR đang chạy không đổi được qua hộp thoại KR; đường ghi số còn lại là
+  cập nhật tuần (và khởi điểm của KR mới tạo), nên tin nhắc và ngưỡng 80% không lệch
+  vì một lần sửa số ngoài đường cập nhật.
+- Hồ sơ `dat-okr-trong-crm` đổi hành vi đã ký: bài `cong-bo` (phép đo E5 của hồ sơ
+  đó) khẳng định đổi `currentValue` trên KR đã công bố ở `dang-chay` được 200 — lượt
+  này sửa khẳng định đó rồi ghim lại hồ sơ.
 
 ## 7. Chuyển KR và mục tiêu khi người nghỉ
 
@@ -197,12 +223,14 @@ con số, chọn người nhận, xác nhận), gọi `okr.transferPreview` / `o
 | ST-capnhat-loigui | Cập nhật tuần | `Alert` đỏ «Chưa gửi được» + câu máy chủ, ô còn nguyên, nút «Gửi lại N cập nhật» | Gửi lại |
 | ST-capnhat-dagui | Cập nhật tuần | «Đã gửi N cập nhật lúc HH:MM · mất S giây», danh sách tóm tắt | «Về Của tôi» |
 | ST-viecokr-coviec | Thẻ việc OKR | dòng theo loại, mỗi dòng một nút đích | bấm dòng |
-| ST-viecokr-rong | Thẻ việc OKR | «Hôm nay OKR không cần gì từ bạn» | — |
-| ST-viecokr-loi | Thẻ việc OKR | câu lỗi + «Thử lại» | Thử lại |
+| ST-viecokr-rong | Thẻ việc OKR | «Hôm nay OKR không cần gì từ bạn» (vai «chỉ OKR»; vai đầy đủ có dính OKR) | — |
+| ST-viecokr-an | Thẻ việc OKR | vai đầy đủ không dính OKR ở chu kỳ đang chạy: không có thẻ | — |
+| ST-viecokr-loi | Thẻ việc OKR | câu lỗi + «Thử lại» — ở Tổng quan vai «chỉ OKR» và tab Của tôi; ở Tổng quan vai đầy đủ lỗi thì ẩn thẻ (chưa biết người có dính OKR không, không làm phiền người bán hàng) | Thử lại |
 | ST-traodoi-rong | Tab Trao đổi | «Chưa có trao đổi nào» + khung soạn | viết |
 | ST-traodoi-codulieu | Tab Trao đổi | bình luận cũ → mới, chip KR, tên được nhắc | viết tiếp |
 | ST-traodoi-loigui | Tab Trao đổi | câu lỗi dưới khung soạn, chữ còn nguyên | gửi lại |
 | ST-chuyenokr-xemtruoc | Hộp Chuyển OKR | «<tên> đang phụ trách a KR và b mục tiêu ở chu kỳ đang chạy» + chọn người nhận | xác nhận |
+| ST-hopkr-hientaichidoc | Hộp thoại KR (lượt 3) | ô «Hiện tại» chỉ đọc + «Số hiện tại đổi ở Cập nhật tuần» có liên kết | sửa ô khác, hoặc bấm liên kết |
 | ST-chuyenokr-khongviec | Hộp Chuyển OKR | «<tên> không phụ trách KR hay mục tiêu nào đang chạy», nút xác nhận khoá | đóng |
 <!-- UX-STATE-TABLE>>> -->
 
@@ -247,23 +275,21 @@ Không khối nào dừng ở bậc 5. Biến thể còn thiếu ghi ở bản m
 `ToggleGroup`, cặp thành phần mức tự tin / tình trạng) là việc lượt 5; lượt này
 không sửa tệp có sẵn nào trong `packages/ui`, chỉ thêm `item.tsx`.
 
-## 9. Giả định chờ Cổng Phạm vi
+## 9. Chốt tại Cổng Phạm vi (2026-09-25, Manh Phan — uỷ quyền phiên điều phối 2026-09-24)
 
 1. Tuần là thứ Hai → Chủ nhật giờ VN; việc «cập nhật» hiện từ ngày cập nhật của
    chu kỳ tới hết Chủ nhật (tin và thẻ nhắc mỗi sáng tới khi xong).
 2. Ngưỡng im: 14 ngày nhắc người phụ trách, 21 ngày thêm trưởng đơn vị.
 3. Cửa sổ sự kiện (giao, nhắc tên, theo dõi) là 24 giờ, cho cả tin lẫn thẻ.
-4. Chuyển OKR là mục riêng «Chuyển OKR…» cạnh «Chuyển việc 30 ngày…», không ghép
-   vào hộp đã ký (mục 7).
-5. Ghi hộ: người sửa được đơn vị (trưởng; quản trị ở cấp OneHub) ghi được cho KR của
-   người khác, dòng mang `onBehalf = true`.
+4. Chuyển OKR là mục riêng «Chuyển OKR…» cạnh «Chuyển việc 30 ngày…» (mục 7).
+5. Ghi hộ: người sửa được đơn vị (trưởng; quản trị ở cấp OneHub), `onBehalf = true`.
 6. Chỉ cập nhật được KR của mục tiêu đã công bố, ở chu kỳ pha «Đang chạy».
-7. Ô «giá trị hiện tại» của hộp thoại KR (lượt 3) giữ nguyên; đổi số qua đó không
-   phải lần cập nhật tuần và không được đếm (Later — mở vòng riêng nếu số đo cần).
-8. Thẻ việc OKR hiện cả khi rỗng, ở cả hai trang Tổng quan.
+7. (sửa tại cổng) Ô «Hiện tại» của hộp thoại KR chỉ đọc với KR đang chạy; máy chủ
+   từ chối đổi số qua thủ tục sửa KR — mục 6b.
+8. (sửa tại cổng) Thẻ việc OKR luôn hiện ở Tổng quan vai «chỉ OKR»; ở vai đầy đủ
+   chỉ hiện khi người đó dính OKR ở chu kỳ đang chạy — mục 5.
 9. Mẫu số ngưỡng «≥ 80% KR mỗi tuần trên mọi phòng ban» là mọi KR đang chạy (mọi cấp,
-   kể cả cá nhân), xếp vào phòng ban chính của người phụ trách; đếm KR khác nhau, không
-   đếm dòng — một KR gửi hai lần trong tuần vẫn là một.
+   kể cả cá nhân), xếp vào phòng ban chính của người phụ trách; đếm KR khác nhau.
 
 ## 10. Hồ sơ đã ký bị chạm
 
@@ -276,7 +302,8 @@ eval sau khi lượt lên `onehub`.
 
 - `vai-chi-okr` — thủ tục mới dưới alias `okr` (ma trận chạy lại, danh sách không đổi).
 - `dat-okr-trong-crm` — sheet mục tiêu thêm tab và nút, `okr.objective` thêm trường,
-  `removeKeyResult` thêm một câu từ chối; bài đo lượt 3 phải xanh nguyên.
+  `removeKeyResult` thêm một câu từ chối, `updateKeyResult` từ chối đổi số hiện tại
+  của KR đang chạy (mục 6b — phép đo E5 của hồ sơ đó sửa khẳng định); chắc chắn ghim lại.
 - `nhac-qua-zalo`, `may-nhac-truoc-nguoi`, `moi-phia-deu-thay-ke-hoach` — dựng tin và
   khuôn `payload` đổi; tin chỉ có việc kế hoạch giữ nguyên chữ.
 - `khung-dieu-huong` (thanh tab OKR ba → bốn), nếu bài đo đếm tab.
