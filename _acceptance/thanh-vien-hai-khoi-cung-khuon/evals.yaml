@@ -1,0 +1,335 @@
+schema_version: 1
+slug: thanh-vien-hai-khoi-cung-khuon
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/card-table.tsx"
+      - "packages/ui/src/components/simple-table.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      Ban do tu chan cay (canhCay qua APP_URL), gieo 15 loi cho phep tien to "tvhk-lan-do-",
+      mo trang that o 1440x900, 768x1024, 375x812. Ma tran viet truoc: moi kho DUNG MOT dong
+      "DUNG <kho>: vo hai bang — vien tren A/B px, goc A/B, nen tieu de A/B, co chu A/B" voi
+      A la vo bang tren ([data-slot=table-container] dau tien trong page-shell-content), B la
+      vo bang dau tien trong section chua tieu de «Được phép vào» (bang ve tay khong co vo thi
+      B la chinh <table>); dat khi vien tren ca hai >= 1px va bang nhau, border-radius bang
+      nhau, background-color cua <thead> bang nhau va khong trong suot, font-size cua o tbody
+      dau bang nhau. Thieu mot trong hai bang -> dong SAI goi ten bang thieu, khong ma 2.
+      MA TRAN VIET TRUOC cua ca luot tvhk_do_khoi (mang MA_TRAN trong do-khoi.mjs, moi dong mot
+      ma): 4 ma moi kho x 3 kho (vo, mep-tieu-de, mep-du-lieu, tran-ngang) + 1440: 5 luong cho
+      phep (E3) + 4 duong loi (E18) + 4 tieu de (E4) + 8 hanh dong hang (E6) + 4 cot (E7) + 1 o
+      tim (E13) + 3 khong quyen (E10) + 375: 2 cuon ngang (E5) + 3 don (E14) = 46. Dong KET LUAN
+      cuoi: "46 DUNG, 0 SAI — ma thoat 0". Ma nao trong MA_TRAN khong phat ra dong nao khi luot
+      ket thuc -> "SAI thieu <ma>", ma 1. Pha-thu o S3: TVHK_BO_KHO=768 -> dung bon dong
+      "SAI thieu 768-..." (tran-ngang, mep-*, vo cua 768 = 4 dong), ma 1.
+      CHIEU DO (chay o S3 tren giao dien chua sua, sau khi chuoi va tu dien da co): "SAI <kho>:
+      vo hai bang — vien tren 1/0 px ... co chu 12/14px" o ca ba kho, ma 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/card-table.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      Moi kho hai dong: "DUNG <kho>: mep trai noi dung o tieu de cot dau lech <d>px" va "DUNG
+      <kho>: mep trai noi dung o du lieu cot dau lech <d>px" voi d = |(rect.left + padding-left
+      + border-left) cua o tren - cua o duoi| <= 1, do khi scrollLeft cua vo bang duoi = 0.
+      Doi chung duong: mep trai cua chinh o tren do hai lan cho cung so (in trong dong GHI CHU).
+      CHIEU DO (giao dien chua sua): "SAI <kho>: mep trai ... lech 17px" (o duoi khong co padding
+      va khong co vien vo) o ca ba kho, ma 1.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/components/page-shell.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 1440x900, scrollTop 0: "DUNG 1440: nut «Cho phép một địa chỉ» trong [data-slot=
+      page-shell-actions] (true), tron trong khung nhin (bottom <px> <= 900), tam tra ve chinh
+      nut (true)". Roi bam nut: "DUNG 1440: hop «Cho phép một địa chỉ» mo"; go dia chi
+      "tvhk-lan-do-<pid>-moi@lan-do.onehub.vn", bam «Cho phép»: "DUNG 1440: hang cua dia chi moi
+      hien trong khoi duoi", "DUNG 1440: DB co 1 loi cho phep dang cho cho dia chi moi",
+      "DUNG 1440: tieu de khoi duoi tu «Được phép vào · M» thanh «Được phép vào · M+1»".
+      Chuoi nut, tieu de hop va nut gui doc tu thanhVienMessages("vi").
+      CHIEU DO (giao dien chua sua): "SAI 1440: nut ... trong page-shell-actions (false), tron
+      trong khung nhin (bottom ~990 <= 900) ..." ma 1 — nut nam o dau khoi duoi, duoi mep man.
+      Ve luong cho phep la doi chung duong: tren giao dien cu luong van chay tu nut o khoi duoi.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 1440: "DUNG 1440: tieu de khoi tren «Đã vào · N»" voi N = db.member.count theo
+      WORKSPACE_ID, "DUNG 1440: tieu de khoi duoi «Được phép vào · M»" voi M = db.invitation.count
+      status pending theo WORKSPACE_ID (sau gieo), ca hai doc tu [data-slot=card-title] va so
+      voi t.dem(t.bang.tieuDe, N) / t.dem(t.duocPhepVao.tieuDe, M); "DUNG 1440: moi khoi la section
+      aria-labelledby tro toi chinh card-title cua no" (2/2). Mo lai voi ?q=<ten mot thanh vien>
+      co san: "DUNG 1440: loc con 1 hang, tieu de van «Đã vào · N»".
+      CHIEU DO (giao dien chua sua): khong co card-title nao -> "SAI 1440: tieu de khoi tren
+      «(khong co)»" va tuong tu khoi duoi, "SAI ... section aria-labelledby 0/2", ma 1.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/card-table.tsx"
+      - "apps/app/components/page-shell.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 375x812: "DUNG 375: tran ngang 0px (document va main)" — max(document.scrollWidth -
+      clientWidth, main.scrollWidth - main.clientWidth) <= 0; "DUNG 375: vo bang duoi cuon
+      ngang duoc (scrollWidth S > clientWidth C)"; dat chuot vao tam vo bang duoi, lan con lan
+      ngang (page.mouse.wheel deltaX, toi 20 nac, dung khi scrollLeft het doi — KHONG gan
+      scrollLeft): "DUNG 375: con lan ngang dua vo toi scrollLeft <n> va nut «…» cua hang dau
+      nam tron trong vo (true)". O 1440 va 768 them "DUNG <kho>: tran ngang 0px".
+      CHIEU DO (giao dien chua sua): "SAI 375: tran ngang 98px" va "SAI 375: vo bang duoi cuon
+      ngang duoc (false)", ma 1. Pha-thu o S3: them overflow-x-hidden cho vo CardTable (ban sao)
+      -> dong con lan ngang SAI.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 1440, trong khoi duoi: "DUNG 1440: 0 nut chu «Rút» hien san" (button co textContent
+      trim bang t.duocPhepVao.rut, rect > 0, khong nam trong [role=menu]); "DUNG 1440: moi hang
+      co nut «Phát liên kết» hien san (15+/15+)"; "DUNG 1440: moi hang co nut «…» ten «Hành động
+      với <dia chi>» (15+/15+)". Voi hang loi cho phep gieo so 00: bam «…» -> "DUNG 1440: menu co
+      muc «Rút» data-variant=destructive"; chon -> "DUNG 1440: hop «Rút lời cho phép này?» mo";
+      bam «Rút» trong hop -> "DUNG 1440: hang bien mat", "DUNG 1440: tieu de giam mot",
+      "DUNG 1440: DB — loi cho phep 00 khong con status pending (canceled)".
+      CHIEU DO (giao dien chua sua): "SAI 1440: 15+ nut chu «Rút» hien san", "SAI 1440: moi hang
+      co nut «…» (0/15+)", cac dong luong menu SAI (khong co nut de bam) — khong ma 2, ma 1.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/card-table.tsx"
+      - "packages/ui/src/components/table.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 1440, cot tim theo chu tieu de cot (t.duocPhepVao.vaiTro, nguoiChoPhep, luc):
+      "DUNG 1440: o «Vai trò khi vào» mau <c> bang mau tieu de cot <c>", tuong tu «Người cho
+      phép»; "DUNG 1440: cot «Cho phép lúc» can phai (tieu de right, du lieu right)"; "DUNG 1440:
+      co chu o du lieu duoi 12px bang tren 12px".
+      CHIEU DO (giao dien chua sua): o vai tro mau chu thuong khac mau tieu de -> SAI; cot thoi
+      gian left/left -> SAI; co chu 14px/12px -> SAI; ma 1.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tvhk_dang_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx"
+      - "apps/app/test/thanh-vien-hai-khoi.dom.tsx"
+    expected: |
+      bun test ca "dang-tai" xanh: render AllowancesTable voi workspace.get canManageMembers true
+      va workspace.allowances co queryFn khong bao gio tra ve; khang dinh section co
+      [data-slot=card-title] bat dau bang t.duocPhepVao.tieuDe, co >= 3 [data-slot=skeleton],
+      va textContent khong chua t.duocPhepVao.trong. Du lieu gia go kieu bang
+      `satisfies RouterOutputs["workspace"]["allowances"]` (va ["workspace"]["get"]) de
+      check-types do khi khuon lech dau ra that. Doi chung duong trong cung tep: cung khung
+      nhung queryFn tra 1 hang -> 0 skeleton va dia chi hien.
+      CHIEU DO (giao dien chua sua): expect loi "khung xuong: 0 >= 3" va "cau rong hien khi
+      dang tai", exit 1.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tvhk_rong
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx"
+      - "packages/ui/src/components/card-table.tsx"
+      - "apps/app/test/thanh-vien-hai-khoi.dom.tsx"
+    expected: |
+      bun test ca "rong" xanh: queryFn tra { rows: [] } -> card-title bang t.dem(t.duocPhepVao
+      .tieuDe, 0), [data-slot=card-table-empty] chua t.duocPhepVao.trong, khong co <table> trong
+      section. Du lieu gia go kieu `satisfies RouterOutputs["workspace"]["allowances"]` (API that
+      tra ca hang da rut, status "canceled"). Doi chung duong: mot hang "canceled" duy nhat van
+      la rong (bo loc pending); mot hang "pending" -> co <table>, khong card-table-empty.
+      CHIEU DO (giao dien chua sua): "khong co card-table-empty" exit 1.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      Phien cua marcus@trycomp.ai (vai member, doc tu DB — vai khac member thi ma 2), 1440:
+      "DUNG 1440 khong-quyen: tieu de «Đã vào · N»", "DUNG 1440 khong-quyen: 0 nut «Cho phép
+      một địa chỉ»", "DUNG 1440 khong-quyen: 0 khoi «Được phép vào»". Doi chung duong: cung
+      phien quan tri o lan mo truoc dem duoc 1 nut va 1 khoi.
+      CHIEU DO (giao dien chua sua): chi dong tieu de SAI (khong co card-title); hai dong con
+      lai DUNG vi hanh vi cu da an — AC nay giu hanh vi, khong doi.
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tvhk_tu_dien
+    paths:
+      - "CONTEXT.md"
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/tu-dien.mjs"
+    expected: |
+      exit 0 va 6 dong DUNG: moi muc «Đã vào», «Được phép vào» co dong "**<ten>**:", mot dong
+      "_Avoid_:" va mot dong "Vì sao:" TRUOC muc ke tiep; thanhVienMessages("vi").bang.tieuDe
+      === "Đã vào" va .duocPhepVao.tieuDe === "Được phép vào". Doi chung duong: muc
+      «Không gian làm việc» co san dat ca ba dong.
+      CHIEU DO (tu dien chua sua): "SAI muc «Đã vào» khong co trong CONTEXT.md" va tuong tu,
+      "SAI bang.tieuDe la undefined", exit 1.
+
+  - id: E12
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.ttv_do_bang
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+    expected: |
+      Ban do da ky cua bang-thanh-vien-giu-hang chay tren cay moi, KHONG sua tep: dong KET LUAN
+      "30 DUNG, 0 SAI — ma thoat 0" nhu luc ky (so dong DUNG bang ma tran 30 da khai o E1..E7 cua
+      ho so do). Ban do tim khoi duoi bang the section chua t.duocPhepVao.tieuDe — nen chuoi do
+      giu nguyen va khoi duoi nam trong <section>.
+      CHIEU DO: bo the <section> boc khoi duoi (ban sao o S3) -> "KHONG DO DUOC: het 60000ms cho
+      du 10 hang thanh vien va tvhk..." ma 2 — do la loai hoi quy E12 bat.
+
+  - id: E13
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 1440: "DUNG 1440: 1 o tim trong page-shell-content (mot DataTable)" — dem input co
+      placeholder t.bang.tim. Doi chung am o S3: ban sao doi khoi duoi sang DataTable -> trang
+      nem loi khoa URL trung, ban do in "SAI 1440: 0 o tim" hoac ma 2 goi ten loi tren man.
+
+  - id: E14
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      Truoc khi gieo: "DUNG don-truoc: xoa <k> tan du tien to tvhk-lan-do-" (theo id VA email;
+      k co the 0). Hai dong don cuoi luot: "DUNG don: con 0 loi cho phep tien to tvhk-lan-do-" (dem theo id
+      VA theo email) va "DUNG don: loi cho phep co san truoc luot giu nguyen (N truoc, N sau,
+      trang thai trung)" — so tap (id, status) doc thang DB truoc gieo va sau don.
+      CHIEU DO: pha-thu TVHK_PHA_SAU_GIEO=1 nem loi ngay sau gieo -> ma 2 va van in hai dong DUNG
+      don; pha-thu bo deleteMany theo email -> "SAI don: con 1 loi cho phep ..." (dia chi do luong
+      cho phep tao) ma 1; pha-thu kill -9 tien trinh do-khoi giua luot (sau gieo) roi chay luot
+      moi -> luot moi in "DUNG don-truoc: xoa 15+ tan du" va ket thuc 46 DUNG.
+
+  - id: E15
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tvhk_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/page.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx"
+    expected: |
+      design-gate --mode static tren bon tep, moi tep exit 0 (khong P0). CHIEU DO: allowances-
+      table.tsx ban goc (bang ve tay, <h2> tu dat co chu) chay cung lenh — ghi lai ket qua o S3;
+      neu ban goc cung exit 0 thi eval nay chi la san, khong phai thuoc cua AC-1 (E1 moi la thuoc).
+
+  - id: E16
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tvhk_do_khoi
+    steps:
+      - "Cap cong 3500/3501 (ban-do-cot-app / ban-do-cot-api trong .claude/launch.json). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang hai muc do trong launch.json"
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/thanh-vien-hai-khoi-cung-khuon/evidence dat tuong minh: lenh cua tvhk_do_khoi (mot-luot.sh xep hang, tien-de.mjs, do-khoi.mjs tu chan cay, gieo, chup, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/thanh-vien-hai-khoi-cung-khuon/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/card-table.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      Chin anh, du ca: tvhk-1440-dau.png, tvhk-1440-noi.png, tvhk-768-dau.png, tvhk-768-noi.png,
+      tvhk-375-dau.png, tvhk-375-noi.png, tvhk-375-cuon-ngang.png, menu-rut-1440.png,
+      khong-quyen-1440.png. Anh -dau (scrollTop 0): tieu de trang, nut «Cho phép một địa chỉ»
+      o goc phai dau trang, khoi «Đã vào · N» voi vo bang vien bo va hang tieu de cot nen xam.
+      Anh -noi (dinh khoi duoi dat giua khung cuon): day khoi tren va khoi «Được phép vào · M»
+      cung mot kieu the — tieu de co so dem, mo ta xam nho, vo bang vien bo, tieu de cot nen
+      xam, chu cung co, cot dau cung thut. Anh 375-cuon-ngang: vo bang duoi da cuon ngang, cot
+      «…» hien, trang khong tran. menu-rut-1440: menu «…» mo voi muc «Rút» mau pha huy.
+      khong-quyen-1440: chi khoi «Đã vào · N», khong nut o dau trang. Thieu anh nao -> khong dat.
+
+  - id: E17
+    criterion: AC-16
+    executor: script
+    cmd: config:executors.script.tvhk_soi_ma
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/src/components/card-table.tsx"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/soi-ma.mjs"
+    expected: |
+      Soi moi tep .tsx trong settings/members bang bo phan tich cu phap TypeScript (khong regex
+      tren chuoi tho): voi moi phan tu JSX co ten nhap tu "@crm/ui/..." — (a) className (chuoi
+      hoac cn(...) hang) khong chua lop rounded-*, border*, bg-*, shadow*; (b) Card, CardHeader,
+      CardTitle, CardDescription, CardTable, DataTable khong co prop className. Va chuoi className
+      cua SimpleTable trong CardTable o packages/ui/src/components/card-table.tsx bang dung chuoi
+      ghim "min-w-[48rem] table-fixed [&_td:first-child]:pl-4 [&_td:last-child]:pr-4
+      [&_th:first-child]:pl-4 [&_th:last-child]:pr-4". Ket: "N DUNG, 0 SAI", exit 0, moi vi pham
+      in "SAI <tep>:<dong> <Component> className=<gia tri>".
+      Doi chung duong: tep ban goc allowances-table.tsx (chep vao fixture cua rang/) co
+      <Button variant="ghost"> khong className -> khong vi pham. CHIEU DO (ban sao o S3): them
+      className="rounded-lg border" cho CardTable -> "SAI ... CardTable className=rounded-lg
+      border", exit 1; doi chuoi min-w cua CardTable -> "SAI card-table.tsx: chuoi lop CardTable
+      doi", exit 1.
+
+  - id: E18
+    criterion: AC-15
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"
+    expected: |
+      O 1440, mo hop tu nut dau trang, go dia chi loi cho phep gieo so 01 (da o danh sach cho),
+      bam «Cho phép»: "DUNG 1440 loi: hop van mo", "DUNG 1440 loi: hop chua thong diep «That
+      address is already on the list.»" (chuoi ghim cua WorkspaceService.allowEmail), "DUNG
+      1440 loi: DB van 1 loi cho phep cho dia chi 01", "DUNG 1440 loi: tieu de van «Được phép
+      vào · M»". Doi chung duong: cung hop, dia chi moi o E3 thi hop dong.
+      CHIEU DO: ban sao o S3 dong hop trong onSettled cua mutation -> "SAI 1440 loi: hop van mo
+      (false)", ma 1.
