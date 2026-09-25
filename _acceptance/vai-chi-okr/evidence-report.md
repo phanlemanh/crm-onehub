@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 09039d2608e2db898dd8741769ca63662412ef84
+verified_commit: 66e9181d34b2c4ed0ef7479eeac460f01d9049c6
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -296,6 +296,7 @@ human_signoff: Manh Phan 2026-09-25
 ## Known limits (thêm sau gộp onehub)
 
 - Vòng 3 chạy SAU chữ ký Cổng Bằng chứng (ký trên d7de59de) vì gộp `origin/onehub` chạm đường của E1, E12, E15: làn máy chạy lại trọn 17 phép đo và 4 lệnh suite tại cây gộp; hai thủ tục ghi mới của cây tổ chức (`org.attachDepartments`, `org.addPeople`) vào bảng đầu vào của phép đo ghi-chung và bị từ chối đúng theo vai quản trị; tám bài ma trận khai hạn 60 giây sau một lần đỏ hạ tầng (danh mục model tải 4,7 giây). Chữ ký người đứng trước vòng này — người ký có thể ký lại nếu muốn chữ ký trùng cây.
+- Ghim lại sau gộp #130: làn máy ghi «diff chạm vật đo ngoài làn máy: E11, E12» vì chính script chụp màn (`rang/man-chi-okr.mjs`) đổi nơi ghi ảnh sang `.acceptance-runs/`; hai ô đó chia cùng một lượt chạy với E13 (executor `script`, cùng lệnh) và E13 xanh trong làn ghim — ảnh của lượt đó nằm ở `.acceptance-runs/vai-chi-okr/evidence/`, không thay ảnh đã ký; không có mã sản phẩm nào của màn đổi giữa hai lần ghim.
 
 ## Ngoài hợp đồng
 
@@ -312,3 +313,7 @@ none — every multi-run eval is uniform (không phép đo nào chạy nhiều l
 Round 1: 17/17 phép đo xanh, 4/4 lệnh suite xanh (build xanh sau khi đặt PATH Node 24 theo duong-nen.md). Soát đối kháng tìm ra hai điểm trong hợp đồng ở AC-11: vai/phạm vi ghim theo `req` nên một lô nhiều thủ tục nhiễm chéo; `workspace.get` không ghi vai. Returned to implementation.
 Round 2: vai/phạm vi mang theo từng lời gọi trong ctx, `workspace.get` ghi vai, phép đo nhật ký thêm ca lô; 17/17 phép đo xanh, 4/4 lệnh suite xanh tại d7de59de. Người ký Cổng Bằng chứng trên cây này.
 Round 3 (S4 delta sau gộp origin/onehub, cây chạm đường của E1, E12, E15): lượt đầu một bài ma trận hết hạn 5 giây mặc định của bun vì danh mục model tải 4,7 giây từ AI Gateway (hạ tầng, không phải sản phẩm) — thử lại một lần đúng luật hạ tầng sau khi tám bài ma trận khai hạn 60 giây và bảng đầu vào biết hai thủ tục ghi mới của cây tổ chức; 17/17 phép đo xanh, 4/4 lệnh suite xanh tại cây gộp.
+
+### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub (#130)
+run_id: repin-20260925T025024Z-57386
+sha: 66e9181d34b2c4ed0ef7479eeac460f01d9049c6 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 · diff chạm vật đo ngoài làn máy: E11, E12 — chưa chứng lại, đi vòng S4 delta
