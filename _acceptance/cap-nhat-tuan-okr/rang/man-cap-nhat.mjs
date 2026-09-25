@@ -53,7 +53,7 @@ const CHU = {
 	chuaGuiDuoc: "Chưa gửi được",
 	daGui2: "Đã gửi 2 cập nhật",
 	rongTitle: "Tuần này bạn không có KR nào cần cập nhật",
-	loiTaiTitle: "Không tải được OKR",
+	loiTaiTitle: "Không lấy được danh sách KR của bạn",
 	thuLai: "Thử lại",
 	gui1: "Gửi 1 cập nhật",
 	daGui1: "Đã gửi 1 cập nhật",
@@ -866,7 +866,7 @@ async function buocE6E7() {
 	kiem("E6 buoc 1: thanh tab co 4 tab", (await demSel(t, "[role='tab']")) === 4);
 	kiem(
 		"E6 buoc 1: tab Cap nhat tuan aria-current",
-		(await chuSel(t, "[aria-current='page']")).includes(CHU.tabCapNhat),
+		(await chuSel(t, "[role='tab'][aria-current='page']")).includes(CHU.tabCapNhat),
 	);
 	kiem(
 		"E6 buoc 1: co 4 dong KR (3 cua muc tieu cn + KR trao doi ot cung chu M)",
@@ -901,7 +901,9 @@ async function buocE6E7() {
 	await ganGiaTri(t, `[data-kr='${KR.pt}'] input`, "40");
 	await cho(200);
 	await bamChu(t, `[data-kr='${KR.tt}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.cao);
+	await cho(200);
 	await bamChu(t, `[data-kr='${KR.pt}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.vua);
+	await cho(200);
 	await doi(t, "E6 buoc 3: nut Gui 2 cap nhat", (chu) =>
 		document.querySelector("[data-nut='gui']")?.textContent?.includes(chu), CHU.gui2,
 	);
