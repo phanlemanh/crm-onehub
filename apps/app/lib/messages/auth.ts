@@ -4,7 +4,7 @@ const en = {
 	shell: {
 		homepage: "Homepage",
 		eyebrow: "CRM",
-		headline: "Every customer, one place.",
+		headline: "The OneHub CRM: partners, 30-day plans and OKRs.",
 	},
 	docTitle: {
 		signIn: "Sign in",
@@ -13,8 +13,8 @@ const en = {
 		grantAccess: "Grant access",
 	},
 	signIn: {
-		title: "Welcome back",
-		description: "Sign in with your account to continue.",
+		title: "Sign in to the CRM",
+		description: "Use the exact email address you were allowed in with.",
 		continueWith: (ten: string) => `Continue with ${ten}`,
 		signingIn: "Signing in…",
 		hoac: "or",
@@ -101,7 +101,7 @@ const vi = {
 	shell: {
 		homepage: "Trang chủ",
 		eyebrow: "CRM",
-		headline: "Mọi khách hàng, một chỗ.",
+		headline: "CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.",
 	},
 	docTitle: {
 		signIn: "Đăng nhập",
@@ -110,8 +110,8 @@ const vi = {
 		grantAccess: "Cấp quyền",
 	},
 	signIn: {
-		title: "Mừng bạn quay lại",
-		description: "Đăng nhập bằng tài khoản của bạn để tiếp tục.",
+		title: "Đăng nhập vào CRM",
+		description: "Dùng đúng địa chỉ email đã được cho phép.",
 		continueWith: (ten: string) => `Tiếp tục với ${ten}`,
 		signingIn: "Đang đăng nhập…",
 		hoac: "hoặc",

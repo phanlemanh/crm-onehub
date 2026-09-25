@@ -644,6 +644,15 @@ describe("kho chuoi cua vong ③a", () => {
 			"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
 			"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
 			"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
+			"cua-vao:buoc.choPhep.moTa": ["Ở 1.", "Ở 12."],
+			"cua-vao:buoc.nutNgoai.tieuDe": [
+				"Đăng nhập bằng 1, đúng địa chỉ đó",
+				"Đăng nhập bằng 12, đúng địa chỉ đó",
+			],
+			"cua-vao:buoc.matKhauPhu.moTa": [
+				"Quản trị viên phát liên kết ở 1. Liên kết dùng một lần, hết hạn sau A phút.",
+				"Quản trị viên phát liên kết ở 12. Liên kết dùng một lần, hết hạn sau A phút.",
+			],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",
