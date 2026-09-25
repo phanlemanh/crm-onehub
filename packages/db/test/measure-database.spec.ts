@@ -325,7 +325,19 @@ describe("quet-mo-coi", () => {
 		const early = await withMaintenance(base, (client) =>
 			sweepMeasureDatabases(client, now - 2 * MINUTE_MS),
 		);
-		expect(early.filter((name) => five.includes(name))).toEqual([]);
+		const labels: [string, string][] = [
+			[young, "non"],
+			[usedTemplate, "mau-con-dung"],
+			[unmarked, "khong-dau"],
+			[old, "gia"],
+			[idleTemplate, "mau-bo"],
+		];
+		for (const [name, label] of labels) {
+			expect(
+				early.includes(name),
+				`kho ${label} bi xoa khi quet truoc han`,
+			).toBe(false);
+		}
 
 		const dropped = await withMaintenance(base, (client) =>
 			sweepMeasureDatabases(client, now),
