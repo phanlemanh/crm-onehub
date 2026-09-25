@@ -12,8 +12,8 @@ import {
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
-import { goiYChuKy, homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { settingsMessages } from "@/lib/messages/settings";
+import { goiYChuKy, homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
