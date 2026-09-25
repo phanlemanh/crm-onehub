@@ -128,9 +128,17 @@ describe("nhac-cap-nhat", () => {
 		["thu Hai sau khi A gui K1", vn("2026-10-12T09:35:00")],
 		["thu Tu", vn("2026-10-14T10:00:00")],
 		["Chu nhat 23:00", vn("2026-10-18T23:00:00")],
-		["thu Hai tuan sau", vn("2026-10-19T07:00:00")],
+		["thu Hai tuan sau 06:59", vn("2026-10-19T06:59:00")],
+		["thu Hai tuan sau 09:00", vn("2026-10-19T09:00:00")],
 	] as const;
-	const MONG = [["K1", "K2"], ["K2"], ["K2"], ["K2"], ["K1", "K2", "K3"]];
+	const MONG = [
+		{ coViec: true, krIds: ["K1", "K2"] },
+		{ coViec: true, krIds: ["K2"] },
+		{ coViec: true, krIds: ["K2", "K3"] },
+		{ coViec: true, krIds: ["K2", "K3"] },
+		{ coViec: true, krIds: ["K1", "K2", "K3"] },
+		{ coViec: true, krIds: ["K1", "K2", "K3"] },
+	];
 
 	async function gieo() {
 		const A = await gieoNguoi("An");
@@ -184,42 +192,33 @@ describe("nhac-cap-nhat", () => {
 			[KL, "KL"],
 			[KC, "KC"],
 		]);
-		return { A, C, K2, ten };
+		return { A, C, K2, K3, ten };
 	}
 
 	function capNhatCua(
 		kq: Map<string, ViecNhac[]>,
 		userId: string,
 		ten: Map<string, string>,
-	): string[] {
+	): { coViec: boolean; krIds: string[] } {
 		const v = cua(kq, userId).find((m) => m.loai === "okr-cap-nhat");
 		return v && v.loai === "okr-cap-nhat"
-			? v.krIds.map((id) => ten.get(id) ?? id)
-			: [];
+			? { coViec: true, krIds: v.krIds.map((id) => ten.get(id) ?? id) }
+			: { coViec: false, krIds: [] };
 	}
 
-	test("nhac-cap-nhat: ma tran 5 thoi diem x krIds cua A", async () => {
+	test("nhac-cap-nhat: ma tran 6 thoi diem x [co viec, krIds] cua A", async () => {
 		const g = await gieo();
 		const thay = [];
 		for (const [o, luc] of O_MATRAN) {
-			thay.push({ o, krIds: capNhatCua(await tinh(luc), g.A.id, g.ten) });
+			thay.push({ o, ...capNhatCua(await tinh(luc), g.A.id, g.ten) });
 		}
-		expect(thay, "ma tran 5 o okr-cap-nhat").toEqual(
-			O_MATRAN.map(([o], i) => ({ o, krIds: MONG[i] })),
+		expect(thay, "ma tran 6 o okr-cap-nhat").toEqual(
+			O_MATRAN.map(([o], i) => ({ o, ...MONG[i] })),
 		);
 		expect(
 			thay.filter((t) => t.krIds.some((k) => k === "KN" || k === "KL")),
 			"KR nhap va KR chu ky khac pha khong bao gio co mat",
 		).toEqual([]);
-	});
-
-	test("nhac-cap-nhat: bien tuan VN thu Hai 06:59 (Chu nhat 23:59 UTC)", async () => {
-		const g = await gieo();
-		const kq = await tinh(vn("2026-10-19T06:59:00"));
-		expect(
-			{ o: "thu Hai tuan sau 06:59", krIds: capNhatCua(kq, g.A.id, g.ten) },
-			"tuan tinh theo gio VN",
-		).toEqual({ o: "thu Hai tuan sau 06:59", krIds: ["K1", "K2", "K3"] });
 	});
 
 	test("nhac-cap-nhat: chu ky updateWeekday 3 -> thu Hai, thu Ba khong, thu Tu co", async () => {
@@ -230,31 +229,33 @@ describe("nhac-cap-nhat", () => {
 			["thu Ba", vn("2026-10-13T10:00:00")],
 			["thu Tu", vn("2026-10-14T10:00:00")],
 		] as const) {
-			thay.push({ o, krIds: capNhatCua(await tinh(luc), g.C.id, g.ten) });
+			thay.push({ o, ...capNhatCua(await tinh(luc), g.C.id, g.ten) });
 		}
 		expect(thay, "ma tran updateWeekday 3").toEqual([
-			{ o: "thu Hai", krIds: [] },
-			{ o: "thu Ba", krIds: [] },
-			{ o: "thu Tu", krIds: ["KC"] },
+			{ o: "thu Hai", coViec: false, krIds: [] },
+			{ o: "thu Ba", coViec: false, krIds: [] },
+			{ o: "thu Tu", coViec: true, krIds: ["KC"] },
 		]);
 	});
 
-	test("nhac-cap-nhat: gui K2 thi viec bien mat o lan tinh ke", async () => {
+	test("nhac-cap-nhat: thu Tu A gui du K2 va K3 -> lan tinh ke khong con viec okr-cap-nhat", async () => {
 		const g = await gieo();
 		const truoc = capNhatCua(
-			await tinh(vn("2026-10-19T08:00:00")),
+			await tinh(vn("2026-10-14T10:00:00")),
 			g.A.id,
 			g.ten,
 		);
-		await guiCapNhat(g.K2, g.A.id, vn("2026-10-19T08:10:00"));
-		const sau = capNhatCua(
-			await tinh(vn("2026-10-19T08:15:00")),
-			g.A.id,
-			g.ten,
-		);
-		expect({ truoc, sau }).toEqual({
-			truoc: ["K1", "K2", "K3"],
-			sau: ["K1", "K3"],
+		await guiCapNhat(g.K2, g.A.id, vn("2026-10-14T10:10:00"));
+		await guiCapNhat(g.K3, g.A.id, vn("2026-10-14T10:10:00"));
+		const kq = await tinh(vn("2026-10-14T10:15:00"));
+		expect({
+			truoc,
+			sau: {
+				coViec: cua(kq, g.A.id).some((v) => v.loai === "okr-cap-nhat"),
+			},
+		}).toEqual({
+			truoc: { coViec: true, krIds: ["K2", "K3"] },
+			sau: { coViec: false },
 		});
 	});
 });

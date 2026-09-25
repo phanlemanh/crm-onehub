@@ -53,8 +53,6 @@ const PHUT_MS = 60 * 1000;
 
 const GIO_MS = 60 * PHUT_MS;
 
-const NGAY_MS = 24 * GIO_MS;
-
 const NGAY_MOI_TUAN = 7;
 
 const CHAY = { phase: "dang-chay" };
@@ -72,10 +70,6 @@ type Gui = { userId: string; viec: ViecOkr };
 function thuTrongTuan(now: Date): number {
 	const thu = new Date(`${ngayVN(now)}T00:00:00Z`).getUTCDay();
 	return ((thu + NGAY_MOI_TUAN - 1) % NGAY_MOI_TUAN) + 1;
-}
-
-function dauTuanLuc(now: Date): Date {
-	return new Date(dauNgayVN(now).getTime() - (thuTrongTuan(now) - 1) * NGAY_MS);
 }
 
 const DON_VI = {
@@ -169,14 +163,14 @@ async function viecKr(db: Db, now: Date): Promise<Gui[]> {
 		}),
 	]);
 	const daCapNhat = new Set(trongTuan.map((c) => c.keyResultId));
-	const dauTuan = dauTuanLuc(now);
+	const dauHomNay = dauNgayVN(now);
 	const thu = thuTrongTuan(now);
 	const cho = krs.filter((k) => {
 		const luc = congBoLuc(k);
 		return (
 			thu >= k.objective.cycle.updateWeekday &&
 			luc !== null &&
-			luc < dauTuan &&
+			luc < dauHomNay &&
 			!daCapNhat.has(k.id)
 		);
 	});
