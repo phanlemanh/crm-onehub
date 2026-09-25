@@ -26,7 +26,9 @@ function dung(el: ReactElement, locale: Locale): HTMLElement {
 	khung = document.createElement("div");
 	document.body.appendChild(khung);
 	root = createRoot(khung);
-	act(() => root?.render(<LocaleProvider locale={locale}>{el}</LocaleProvider>));
+	act(() =>
+		root?.render(<LocaleProvider locale={locale}>{el}</LocaleProvider>),
+	);
 	return khung;
 }
 
