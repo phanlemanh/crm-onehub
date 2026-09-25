@@ -18,11 +18,16 @@ export function gioPhut(locale: string, luc: string | Date): string {
 	}).format(new Date(luc));
 }
 
-export function ngayGio(locale: string, luc: string | Date): string {
+export function ngayGio(
+	locale: string,
+	luc: string | Date,
+	muiGio: string,
+): string {
 	return new Intl.DateTimeFormat(locale, {
 		day: "2-digit",
 		month: "2-digit",
 		hour: "2-digit",
 		minute: "2-digit",
+		timeZone: muiGio,
 	}).format(new Date(luc));
 }

@@ -506,6 +506,14 @@ executors:
     tcct_nhanh_thu_lai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t nhanh-thu-lai"
     tcct_o_chua_biet: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/money-input.dom.tsx -t chua-biet"
     tdb_tao_hai_tieng: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t ten-bao-cao"
+    mdg_go_duong_cu: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-go-duong-cu"'
+    mdg_luat_luu_tru: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-luat-luu-tru"'
+    mdg_luat_xoa_han: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-luat-xoa-han"'
+    mdg_xoa_duoc_mot_noi: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-xoa-duoc-mot-noi"'
+    mdg_quyen_ba_thu_tuc: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-quyen-ba-thu-tuc"'
+    mdg_man_goi_org: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t mdg-man-goi-org"
+    zgm_ca_production: "cd apps/app && TZ=UTC bun test ./test/zalo-gio-theo-mui-gio-xuong.spec.ts -t ca-production"
+    zgm_bien_nua_dem: "cd apps/app && TZ=UTC bun test ./test/zalo-gio-theo-mui-gio-xuong.spec.ts -t bien-nua-dem"
   script:
     vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
     vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'
@@ -903,6 +911,9 @@ executors:
     bkd_cach_ly: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs cach-ly"
     bkd_mui_gio: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs mui-gio"
     bkd_goc: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs goc"
+    mdg_mot_cho_ghi_api: "bun _acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs api"
+    mdg_mot_cho_ghi_app: "bun _acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs app"
+    mdg_ho_so_da_ghim: "bun _acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
+import { ToChucService } from "../src/to-chuc/to-chuc.service";
 import {
 	batLoi,
 	donGieo,
@@ -16,6 +17,19 @@ afterAll(donGieo);
 
 async function dungDichVu(): Promise<OnboardingService> {
 	return new OnboardingService(db);
+}
+
+const toChuc = new ToChucService(db);
+let demPb = 0;
+const tenRieng = (ten: string) =>
+	`${ten} ${Date.now().toString(36)}-${++demPb}`;
+
+async function taoPb(ten: string) {
+	const { id } = await toChuc.createDepartment({
+		name: tenRieng(ten),
+		divisionId: null,
+	});
+	return db.department.findUniqueOrThrow({ where: { id } });
 }
 
 describe("luoc-do", () => {
@@ -80,12 +94,12 @@ describe("luoc-do", () => {
 
 describe("doi-ten-bo-phan", () => {
 	test("doi-ten-bo-phan: ba buoc van tro dung bo phan va hien ten moi", async () => {
-		const service = await dungDichVu();
-		const dep = await service.createDepartment({ name: "Ky thuat" });
+		const dep = await taoPb("Ky thuat");
 		const plan = await gieoKeHoach();
 		await gieoBaBuoc(plan.id, dep.id);
 
-		await service.updateDepartment({ id: dep.id, name: "Ky thuat va Du lieu" });
+		const tenMoi = tenRieng("Ky thuat va Du lieu");
+		await toChuc.renameDepartment({ id: dep.id, name: tenMoi });
 
 		const steps = await db.onboardingStep.findMany({
 			where: { planId: plan.id },
@@ -94,19 +108,17 @@ describe("doi-ten-bo-phan", () => {
 
 		expect(steps).toHaveLength(3);
 		expect(steps.every((s) => s.departmentId === dep.id)).toBe(true);
-		expect(
-			steps.every((s) => s.department.name === "Ky thuat va Du lieu"),
-		).toBe(true);
+		expect(steps.every((s) => s.department.name === tenMoi)).toBe(true);
 		expect(steps.some((s) => s.departmentId === null)).toBe(false);
 	});
 
 	test("doi-ten-bo-phan: luu tru mem khong cat bo phan khoi buoc", async () => {
 		const service = await dungDichVu();
-		const dep = await service.createDepartment({ name: "Van hanh" });
+		const dep = await taoPb("Van hanh");
 		const plan = await gieoKeHoach();
 		await gieoBaBuoc(plan.id, dep.id);
 
-		await service.archiveDepartment({ id: dep.id });
+		await toChuc.archiveDepartment({ id: dep.id });
 
 		const steps = await db.onboardingStep.findMany({
 			where: { planId: plan.id },
@@ -142,7 +154,7 @@ const baBuocKhuon = (departmentId: string) => [
 describe("tao ke hoach tu khuon", () => {
 	test("chep-khong-tham-chieu: sua nhan trong khuon khong dong ke hoach dang chay", async () => {
 		const service = await dungDichVu();
-		const dep = await service.createDepartment({ name: "Van hanh" });
+		const dep = await taoPb("Van hanh");
 		const tpl = await service.createTemplate({
 			name: "San moi gioi",
 			partnerType: "moi-gioi",
@@ -178,7 +190,7 @@ describe("tao ke hoach tu khuon", () => {
 
 	test("buoc-chua-giao: van mang bo phan va van loc ra duoc", async () => {
 		const service = await dungDichVu();
-		const dep = await service.createDepartment({ name: "Ky thuat" });
+		const dep = await taoPb("Ky thuat");
 		const tpl = await service.createTemplate({
 			name: "San moi gioi",
 			partnerType: null,
@@ -209,7 +221,7 @@ describe("tao ke hoach tu khuon", () => {
 		expect(loc.rows.map((r) => r.id)).toContain(step.id);
 		expect(loc.total).toBe(3);
 
-		const depKhac = await service.createDepartment({ name: "Dao tao" });
+		const depKhac = await taoPb("Dao tao");
 		const locKhac = await service.listSteps({
 			planId: plan.id,
 			departmentId: depKhac.id,
@@ -220,7 +232,7 @@ describe("tao ke hoach tu khuon", () => {
 
 	test("nguoi-cam-trich: ownerId khac rong, cong thuc dem tra ve 1, thieu thi khong sinh hang", async () => {
 		const service = await dungDichVu();
-		const dep = await service.createDepartment({ name: "Van hanh" });
+		const dep = await taoPb("Van hanh");
 		const tpl = await service.createTemplate({
 			name: "San moi gioi",
 			partnerType: null,
@@ -261,7 +273,7 @@ describe("tao ke hoach tu khuon", () => {
 
 	test("chep-khong-tham-chieu: han suy tu ngay bat dau cong lech ngay cua khuon", async () => {
 		const service = await dungDichVu();
-		const dep = await service.createDepartment({ name: "Van hanh" });
+		const dep = await taoPb("Van hanh");
 		const tpl = await service.createTemplate({
 			name: "San moi gioi",
 			partnerType: null,
@@ -295,7 +307,7 @@ async function gieoKeHoachCoBuoc(input: {
 	soBuocXong?: number;
 	imNgay?: number;
 }) {
-	const dep = await input.service.createDepartment({ name: input.tenBoPhan });
+	const dep = await taoPb(input.tenBoPhan);
 	const tpl = await input.service.createTemplate({
 		name: `Khuon ${input.tenBoPhan}`,
 		partnerType: null,
@@ -359,7 +371,7 @@ describe("danh muc va vong doi", () => {
 		expect(kq.rows[0]?.imNgay).toBe(9);
 		expect(kq.facetCounts.boPhan?.[a.dep.id]).toBe(1);
 
-		const depTrong = await service.createDepartment({ name: "Khong co gi" });
+		const depTrong = await taoPb("Khong co gi");
 		const rong = await service.listPlans({
 			q: "",
 			sort: "",
@@ -528,7 +540,7 @@ describe("man danh muc", () => {
 		expect(rong.rows).toHaveLength(0);
 		expect(rong.trangThai).toBe("ST-danhmuc-chuacokhuon");
 
-		const dep = await service.createDepartment({ name: "Co khuon roi" });
+		const dep = await taoPb("Co khuon roi");
 		await service.createTemplate({
 			name: "Khuon dau tien",
 			partnerType: null,

@@ -1,0 +1,27 @@
+NETWORK TRUTH — E3 — 127.0.0.1:3300 (app, cay dang xet)
+Nguon: mcp__Claude_Browser (tab "seed") sau khi da dang nhap (cookie crm.session_token +
+lang=vi) va load lai http://127.0.0.1:3300/crm/settings/connections/zalo.
+Ghi chu scope: _acceptance/config.yaml khai dev_server.url=http://localhost:3000 va
+api_base=["http://localhost:3001"] — day la cong mac dinh dung chung (3300 la cong rieng
+danh cho lan do nay theo dung yeu cau cua chinh eval E3, vi 3000/3001 la tai nguyen chung).
+Moi request duoi day toi 127.0.0.1:3300 duoc coi la app-scope tuong duong (cung ung dung,
+chi khac cong theo chi dan cua eval), khong co request nao toi 127.0.0.1:3301 (api) hay
+toi bat ky origin thu ba nao trong phien nay.
+
+== read_network_requests (108 requests, hien 100 gan nhat) ==
+Tat ca deu 200 OK. Danh sach chinh:
+  - 1 GET /crm/settings/connections/zalo -> 200 OK (trang chinh, SSR)
+  - 2x GET /api/trpc/enrichment.queue?... -> 200 OK (tRPC batch, cung app-origin)
+  - Con lai: /_next/static/chunks/*.js, /_next/static/media/*.woff2,
+    /_next/static/chunks/*.css -> toan bo 200 OK (asset tinh, cung app-origin)
+  - KHONG co request nao ma == 4xx/5xx, timeout hay connection-error.
+  - KHONG co request nao toi domain thu ba (khong CDN, khong analytics, khong tracker).
+
+== read_console_messages ==
+  [info] Download React DevTools (thong bao dev binh thuong cua React, khong phai loi)
+  [log] [HMR] connected
+  (lap lai 2 lan do reload trang 1 lan) — KHONG co console.error, KHONG co warning lien
+  quan toi request that bai.
+
+Ket luan: networkObserved = clean (toan bo request app-scope quan sat duoc deu OK,
+khong co request nao that bai o tang wire).
