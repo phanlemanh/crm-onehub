@@ -166,8 +166,10 @@ evals:
       KET LUAN liet: file goi Logo co doi (chi duoc auth-shell.tsx), file doi trong 5 vung cam,
       moi dong --primary trong globals.css = #006b4f. Ma 0 = moi dong DUNG, ma 1 = co dong SAI
       (goi ten file), ma 2 = khong do duoc.
-      CHIEU DO tren ban sao: (a) sua mot file landing -> ma 1 ghim "vung cam:
-      apps/app/components/landing/"; (b) bo import Logo o app-header.tsx -> ma 1 ghim "file goi
+      Vung cam "apps/app/app/(landing)/" la CA THU MUC (gom sign-in/, onboarding/...), khong
+      chi page.tsx. CHIEU DO tren ban sao: (a) sua mot file landing -> ma 1 ghim "vung cam:
+      apps/app/components/landing/"; (a2) sua apps/app/app/(landing)/sign-in/page.tsx -> ma 1
+      ghim "vung cam: apps/app/app/(landing)/"; (b) bo import Logo o app-header.tsx -> ma 1 ghim "file goi
       Logo doi: apps/app/components/app-header.tsx".
 
   - id: E11

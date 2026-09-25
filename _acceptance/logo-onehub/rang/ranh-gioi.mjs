@@ -9,7 +9,7 @@ const NHANH_CHINH = "origin/onehub";
 const CHO_DUOC_DOI = "apps/app/components/auth-shell.tsx";
 const VUNG_CAM = [
 	"apps/app/components/landing/",
-	"apps/app/app/(landing)/page.tsx",
+	"apps/app/app/(landing)/",
 	"packages/ui/src/components/brand-logos/",
 	"apps/api/src/companies/favicon.service.ts",
 	"packages/db/src/favicon.ts",
