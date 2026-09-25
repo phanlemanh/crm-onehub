@@ -76,8 +76,10 @@ evals:
       trang on dinh (ba lan lay mau lien tiep bang nhau, 400ms mot lan).
       Du lieu dev 25/09 cho 0 o moi o ca truoc khi sua, nen AC-3 KHONG co chieu do tren ma goc —
       no la dong hoi quy (trang tu nhien khong duoc vo vi ban sua). CHIEU DO tren cung fixture:
-      pha-thu them `min-w-[3000px]` cho [data-slot=page-shell] trong page-shell.tsx -> "SAI AC-3
-      <kho>: N/N trang ... ngang <n>px", ma 1.
+      pha-thu them `min-w-[3000px]` cho main[data-slot=page-shell-scroll] trong page-shell.tsx (main
+      la phan tu co gian trong hang cua khung ung dung, nen day document; dat tren
+      [data-slot=page-shell] thi chi main tu cuon ngang) -> "SAI AC-3 <kho>: N/N trang ... ngang
+      <n>px", ma 1.
 
   - id: E4
     criterion: AC-4

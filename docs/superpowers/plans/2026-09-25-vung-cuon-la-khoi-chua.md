@@ -104,5 +104,5 @@ className={cn(
 - [ ] **Step 1:** bỏ `relative` → `SAI AC-2/AC-4/AC-5` như chiều đỏ. Trả tệp.
 - [ ] **Step 2:** `relative top-2` → `SAI AC-7`. Trả tệp.
 - [ ] **Step 3:** thêm `<span className="absolute top-0 right-0 size-1" />` đầu `PageShellContent` → `SAI AC-6`. Trả tệp.
-- [ ] **Step 4:** thêm `min-w-[3000px]` cho `[data-slot=page-shell]` → `SAI AC-3`. Trả tệp.
+- [ ] **Step 4:** thêm `min-w-[3000px]` cho `main` → `SAI AC-3`. Trả tệp.
 - [ ] **Step 5:** ghi kết quả vào `contract.md` mục Notes; `git status` sạch ngoài `_acceptance/`; set `status: implemented`, commit.
