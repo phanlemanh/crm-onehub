@@ -1,0 +1,287 @@
+schema_version: 1
+feature_slug: toan-canh-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_danh_sach
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-san.ts]
+    expected: "exit 0; sàn okr-san gieo bộ phận B (P1, P2) và bộ phận C (P3), kỳ quý dang-chay; mục tiêu: B1 (bo-phan, cam-ket, cong-bo, chủ b), P1a (tham-vong, cong-bo, chủ p1, KR chủ k), P1b (cam-ket, nhap, chủ p1), P2a (cam-ket, da-bo, chủ p2), P3a (cam-ket, cong-bo, chủ p3, KR chủ k). BẢNG VIẾT TRƯỚC 7 lời gọi × tập id so bằng tập: {bp:B} → {B1,P1a,P1b,P2a}; {bp:B, phuTrach:[k]} → {P1a} với krKhop = [KR của k]; {bp:B, loai:[tham-vong]} → {P1a}; {bp:B, trangThai:[cong-bo]} → {B1,P1a}; {pb:P3} → {P3a}; {nguoi:k} → {P1a,P3a}; {bp:B, phuTrach:[k], loai:[cam-ket]} → {} và total 0. facetCounts của lời gọi {bp:B}: MA TRẬN viết trước {loai: {cam-ket:3, tham-vong:1}, trangThai: {cong-bo:2, nhap:1, da-bo:1}, phuTrach: {b:1, p1:2, p2:1, k:1}} so toEqual. Nhịp 2 thêm ca: lần cập nhật mới nhất của KR k ở P1a mức thap, lần trước cao → {bp:B, tuTin:[thap]} → {P1a}, {bp:B, tuTin:[cao]} → {}. CHIỀU ĐỎ: bản sao service bỏ mở rộng bộ phận sang phòng ban con → lời gọi 1 trả {B1}, bài đỏ in tập thiếu {P1a,P1b,P2a} kèm tên ca «bp gồm con»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Gieo qua API thật dữ liệu của E1 với tiền tố riêng; đăng nhập dev:session trưởng bộ phận B (vai member) và một người vai okr; dọn theo id ở cuối, kể cả khi đỏ"
+      - "Mở {APP_URL}/<slug>/okr/theo-don-vi?donOkr=bp:<B> ở 1440/vi → ảnh buoc-loc-1: bốn mục tiêu (đếm data-muc-tieu = 4)"
+      - "Mở menu lọc, chọn người phụ trách k → URL có phuTrachOkr=<k>, còn 1 mục tiêu → ảnh buoc-loc-2; tải lại trang → vẫn 1 mục tiêu"
+      - "Thêm loại Cam kết → «Không mục tiêu nào khớp bộ lọc» + nút «Bỏ lọc» → ảnh buoc-loc-3; bấm «Bỏ lọc» → 4 mục tiêu, URL không còn tham số lọc"
+      - "Mở ?donOkr=nguoi:<k> → đầu trang có tên k, phòng ban chính, quản lý trực tiếp; danh sách đúng 2 mục tiêu → ảnh buoc-nguoi-1; ở 390 → ảnh buoc-nguoi-2"
+      - "Mọi ảnh: scrollWidth <= innerWidth; không lỗi console; request thất bại ghi vào E2-network.txt"
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/okr-toan-canh.ts, apps/app/lib/search-param-keys.ts, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0 và ảnh ở .acceptance-runs/toan-canh-okr/evidence/; script khẳng định bằng DOM (đếm data-muc-tieu, đọc URL, đọc textContent câu rỗng) chứ không chỉ chụp. CHIỀU ĐỎ: bản sao màn bỏ ghi tham số lọc vào URL → khẳng định «tải lại vẫn 1 mục tiêu» đỏ, script in bước và số đếm 4."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tco_man_chrome
+    paths: [apps/api/src/okr/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "Cùng lần chạy với E2: ghi mọi request tRPC của trang; sau mỗi đổi lọc có đúng một lời gọi okr.danhSach mang loc khớp lựa chọn (đọc input từ URL request), và tập data-muc-tieu trên màn bằng tập id API trả — màn không lọc thêm trong trình duyệt. CHIỀU ĐỎ: bản sao màn gọi danhSach không kèm loc rồi lọc ở client → khẳng định «input.loc.phuTrach chứa k» đỏ, script in input thật."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tco_ui_cay
+    paths: [packages/ui/src/components/reui/tree.tsx, packages/ui/src/components/tree-nav.tsx, packages/ui/test/tree-nav.dom.tsx]
+    expected: "exit 0; dựng TreeNav với cây 3 cấp viết trước (gốc → 2 nhánh → mỗi nhánh 2 lá), đang gập hết trừ gốc. Kịch bản phím viết trước 10 bước, mỗi bước khẳng định document.activeElement là đúng nút (theo data-id) và aria-expanded đúng: Tab vào cây → gốc; ↓ → nhánh 1; → mở nhánh 1 (aria-expanded true); → vào lá 1.1; ← về nhánh 1; ← gập nhánh 1; End → nhánh cuối nhìn thấy; Home → gốc; Enter → onSelect gọi đúng id gốc một lần. Khẳng định: role tree/treeitem, aria-level 1/2/3, đúng một phần tử tabindex=0 trong cây ở mọi bước. CHIỀU ĐỎ: bản sao TreeNav bỏ hotkeysCoreFeature → bước ↓ đỏ, bài in activeElement và tên bước «mũi tên xuống»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; gieo thêm OneHub có KR K1, B1 góp vào K1 và vào mục tiêu OneHub (hai chỗ)"
+      - "Mở theo-don-vi?xemOkr=cay ở 1440/vi → ảnh buoc-cay-1: phần tử role=tree, có treeitem aria-level 1"
+      - "Chỉ dùng bàn phím (page.keyboard): Tab tới cây, ↓ ×2, → , ↓ → tiêu điểm đi đúng thứ tự viết trước (đọc textContent document.activeElement mỗi bước) → ảnh buoc-cay-2 có vòng tiêu điểm"
+      - "B1 xuất hiện hai lần; lần hai có chữ «cũng hiện ở chỗ góp kia» → ảnh buoc-cay-3; Enter trên B1 mở sheet (URL record=objective:<B1>)"
+      - "Cây đơn vị cột trái: Tab vào, ↓, Enter → URL donOkr đổi sang đơn vị được chọn"
+    paths: ["apps/app/app/(app)/[slug]/okr/**", packages/ui/src/components/tree-nav.tsx, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; khẳng định DOM ở mọi bước; đếm phần tử có tabindex=0 trong role=tree bằng 1. CHIỀU ĐỎ: bản sao cay-can-chinh dùng lại SimpleTable → không có role=tree, script in «không thấy cây» mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tco_ui_thanh_phan
+    paths: [packages/ui/src/components/progress.tsx, packages/ui/src/components/okr-status.tsx, packages/ui/src/lib/messages.ts, packages/ui/test/okr-thanh-phan.dom.tsx]
+    expected: "exit 0; MA TRẬN Progress neutral viết trước 4 ca [value, expected] = [30, 47], [60, 47], [100, null], [0, 0]: vạch data-expected có style left đúng phần trăm (3 ca) và vắng ở ca null; thanh không có lớp bg-primary; aria-label bằng chuỗi ghim «Tiến độ: 30%, lẽ ra đã tới 47%» (vi) và bản en khác. Progress không variant vẫn bg-primary (không đổi hành vi cũ). ConfidenceIndicator 3 mức × 2 ngôn ngữ = 6 nhãn ghim; PaceIndicator 6 giá trị × 2 = 12 nhãn ghim; mỗi mức mang data-tone đúng bảng (cao success, vua warning, thap error, truot error, cham-nhip warning, dung-nhip success, chua-co-ky-vong neutral, moc-xong success, moc-chua neutral). CHIỀU ĐỎ: bản sao Progress neutral giữ bg-primary → khẳng định lớp đỏ, bài in className."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tco_soi_ma
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, packages/ui/src/components/**, _acceptance/toan-canh-okr/rang/soi-ma.mjs]
+    expected: "exit 0; soi AST (typescript) mọi .tsx dưới apps/app/app/(app)/[slug]/okr/, objective-sheet.tsx, objective-dien-bien.tsx và khối Tổng quan: mọi phần tử <Progress> mang variant=\"neutral\" — danh sách tệp và số phần tử in ra; không phần tử StatusIndicator nào tự map mức tự tin hay tình trạng (tìm literal \"Đúng nhịp\"/\"Tự tin\" ngoài messages). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, xoá variant ở một <Progress> → script đỏ in «Progress thiếu variant neutral: <tệp>:<dòng>»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_toan_canh
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-toan-canh-thuan.spec.ts]
+    expected: "exit 0; hai bài. (a) hàm thuần gopToanCanh: đầu vào cây (OneHub, B có P1 P2, C có P3, chưa xếp P4) + mục tiêu có progress/expected viết tay + một nháp và một đã bỏ; đầu ra hàng viết trước so toEqual: thứ tự [goc, bp:B, pb:P1, pb:P2, bp:C, pb:P3, pb:P4], hàng B gộp B + P1 + P2 (tiến độ trung bình 3 mục tiêu), P2 không mục tiêu → tienDo null, soMucTieu 0; nháp và đã bỏ không vào. (b) API: gieo như (a), gọi okr.toanCanh bằng phiên quan, thuong, okr → cả ba 200 và cùng kết quả; MA TRẬN 7 hàng × [key, cap, tienDo, kyVong, soMucTieu, soKr] = 42 khẳng định viết trước; tongQuan.donViCongBo/tongDonVi và donViChuaDat (tập tên) đúng. CHIỀU ĐỎ: bản sao gopToanCanh không gộp phòng ban con vào bộ phận → hàng B đỏ, bài in hàng B thật."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_hieu_nang
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts]
+    expected: "exit 0; gieo bằng createMany 50 phòng ban trong 10 bộ phận, 400 mục tiêu đã công bố, 2.000 KR (và nhịp 2: 8.000 lần cập nhật qua createMany của bảng lượt 4); đo thời gian máy chủ của okr.toanCanh, okr.danhSach({bp}) và okr.sucKhoe: mỗi lời gọi < 1.500 ms trên máy dev; đếm câu truy vấn bằng PRISMA_LOG_QUERIES bắt qua logger trong lời gọi với 5 đơn vị và với 50 đơn vị — hai số bằng nhau (số câu không tăng theo số đơn vị). Dọn theo tiền tố. CHIỀU ĐỎ: bản sao service đọc KR từng mục tiêu trong vòng lặp → số câu ở 50 đơn vị lớn hơn ở 5, bài in hai số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; gieo dữ liệu của E8"
+      - "Người vai okr mở {APP_URL}/<slug>/okr/toan-canh ở 1440/vi → ảnh buoc-toan-canh-1: bốn StatCard, bảng theo đơn vị đúng thứ tự hàng của E8 (đọc textContent cột đơn vị), thanh tiến độ không bg-primary, không nút «Sức khoẻ chương trình»"
+      - "Quản trị mở cùng URL → có nút «Sức khoẻ chương trình» → ảnh buoc-toan-canh-2; ở 390 → ảnh buoc-toan-canh-3, không tràn ngang"
+      - "Chặn okr.toanCanh trả 500 → Empty «Thử lại» → ảnh buoc-toan-canh-4; bấm Thử lại sau khi bỏ chặn → bảng hiện"
+      - "Kỳ chưa có mục tiêu công bố → trạng thái tuần đầu có câu hẹn → ảnh buoc-toan-canh-5"
+    paths: ["apps/app/app/(app)/[slug]/okr/toan-canh/**", apps/app/lib/messages/okr-toan-canh.ts, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; ảnh đủ năm bước; khẳng định DOM ở mỗi bước. CHIỀU ĐỎ: bản sao màn để nút sức khoẻ hiện với mọi vai → khẳng định bước 2 (vai okr không thấy nút) đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_toan_canh_tu_tin
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-toan-canh-thuan.spec.ts]
+    expected: "exit 0; (nhịp 2) gieo lần cập nhật qua thủ tục guiCapNhat thật của lượt 4 (không ghi thẳng bảng) cho 6 KR trong 4 tuần; okr.toanCanh: MA TRẬN hàng × [tuTin.cao, tuTin.vua, tuTin.thap, daCapNhat, dangBan.loai] và dãy theoTuan (10 tuần, số hoặc null) viết trước so toEqual — gồm tuần không ai cập nhật → null, tuần có 2 KR cập nhật 1 cao → 50. CHIỀU ĐỎ: bản sao tính heatmap trên tổng KR thay vì KR có cập nhật tuần đó → ô tuần 3 lệch, bài in dãy thật."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tco_ui_heatmap
+    paths: [packages/ui/src/components/heatmap.tsx, packages/ui/test/heatmap.dom.tsx]
+    expected: "exit 0; (nhịp 1 dựng thành phần, nhịp 2 gắn màn) dựng Heatmap 3 hàng × 5 cột với giá trị viết trước [0, 20, 40, 60, 90, null…]: mỗi ô mang data-bac đúng bảng năm bậc (≤0→0, ≤25→1, ≤50→2, ≤75→3, >75→4); ô null có lớp border-dashed và chữ sr-only «chưa có»; caption có mặt; cột hiện tại có data-current và scrollLeft của khung > 0 khi khung hẹp hơn nội dung. Tương phản: với token nền sáng và nền tối đọc từ globals.css, tính tương phản chữ trên nền pha của từng bậc (công thức WCAG) — MA TRẬN 5 bậc × 2 nền = 10 số ≥ 4.5 in ra. CHIỀU ĐỎ: bản sao đổi bậc 3 giữ chữ foreground (không đổi sang background) → một ô tương phản < 4.5 ở nền sáng, bài in bậc và số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_hop_tuan
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-toan-canh-thuan.spec.ts]
+    expected: "exit 0; (nhịp 2) (a) hàm thuần xepHopTuan với 6 KR viết tay: Ka vua→thap tuần này, Kb cao→thap (tụt hai bậc), Kc cao→vua + ghi chú mới, Kd im 15 ngày, Ke ghi chú mới 3 ngày trước, Kf không gì mới; thứ tự dangBan viết trước [Kb, Ka, Kc, Kd, Ke] và conLai [Kf], lý do mỗi dòng so toEqual. (b) API: gieo đúng 6 KR đó qua guiCapNhat của lượt 4 với ngày đóng băng (tham số homNay), trưởng phòng ban gọi okr.hopTuan → cùng thứ tự; đầu ra không có khoá nào liệt kê người chưa cập nhật (duyệt khoá đệ quy, không có 'chuaCapNhat'/'nguoi' ở mức danh sách). CHIỀU ĐỎ: bản sao xếp im trước tự tin tụt → Kd lên đầu, bài in thứ tự thật."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; (nhịp 2) gieo 6 KR của E13 qua API thật"
+      - "Trưởng phòng ban mở theo-don-vi?donOkr=pb:<P>&xemOkr=hop-tuan ở 1440/vi → ảnh buoc-hop-tuan-1: thứ tự dòng data-kr đúng [Kb, Ka, Kc, Kd, Ke]; mỗi dòng có chấm kèm chữ lý do; «Còn lại 1 KR» gập"
+      - "Bấm dòng Kb → sheet mục tiêu mở → ảnh buoc-hop-tuan-2; đóng → về đúng bảng"
+      - "Ở 390 → ảnh buoc-hop-tuan-3, không tràn ngang; phòng ban không có gì đáng bàn → «Tuần này không KR nào đáng bàn» → ảnh buoc-hop-tuan-4"
+    paths: ["apps/app/app/(app)/[slug]/okr/**", _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; khẳng định DOM thứ tự và chữ. CHIỀU ĐỎ: bản sao màn sắp lại theo tên KR → thứ tự đỏ, script in thứ tự thật."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_mo_hop_tuan
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-vet.ts, apps/api/test/okr-toan-canh.spec.ts, _acceptance/toan-canh-okr/rang/ty-le-mo-hop-tuan.sql]
+    expected: "exit 0; (a) trưởng P gọi okr.hopTuan hai lần trong tuần T (homNay đóng băng thứ Ba và thứ Năm), thành viên gọi một lần, trưởng gọi ở tuần T+1: đọc db.okrTrail action mo-hop-tuan theo cycleId: đúng 2 dòng, MA TRẬN 2 × [actorUserId = trưởng, after.donVi = pb:P, after.tuan = thứ Hai của T / T+1 theo giờ Việt Nam] = 6 khẳng định; parseOkrVet không ném. (b) gieo 5 đơn vị có trưởng, 3 trưởng có dòng mo-hop-tuan tuần 2026-11-16, 1 trưởng có dòng tuần khác, 1 thành viên không trưởng có dòng: chạy nguyên văn tệp ty-le-mo-hop-tuan.sql với tham số tuần → {mo: 3, tong: 5, ty_le: 0.6}. CHIỀU ĐỎ: bản sao service ghi dòng cho mọi người mở → (a) đếm 3, bài in actorUserId thừa."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_dien_bien
+    paths: [apps/api/src/okr/**, packages/ui/src/components/target-line-chart.tsx, apps/api/test/okr-toan-canh-thuan.spec.ts, apps/api/test/okr-toan-canh.spec.ts, packages/ui/test/target-line-chart.dom.tsx]
+    expected: "exit 0; (nhịp 2) (a) hàm thuần dienBienKr: kỳ 10 tuần, KR tang-toi 60→85 công bố tuần 1, lần cập nhật tuần 1, 2, 3 (hai lần — lấy lần sau), 4; bảng 10 điểm × [tuan, giaTri, kyVong, tuTin] viết trước so toEqual, tuần 5–10 giaTri null; KR moc → không có giaTri, chỉ tuTin. (b) API okr.dienBien cùng số. (c) dom: TargetLineChart với dữ liệu (a) vẽ một đường liền, một đường stroke-dasharray, một ReferenceLine có nhãn «Đích 85%» và nhãn nằm trong khung svg (bbox label.right ≤ svg width); aria-label ghim. CHIỀU ĐỎ: bản sao lấy lần cập nhật đầu tuần thay lần cuối → điểm tuần 3 lệch, bài in điểm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; (nhịp 2) gieo KR của E16 qua API thật"
+      - "Mở ?record=objective:<id> ở 1440/vi, tab «Diễn biến» → ảnh buoc-dien-bien-1: có svg biểu đồ, nhãn «Đích 85%» đọc được đủ chữ, dãy mức tự tin chấm kèm chữ"
+      - "Chọn KR mốc → dòng thời gian, không svg → ảnh buoc-dien-bien-2; KR chưa cập nhật → câu hẹn ngày → ảnh buoc-dien-bien-3; 390 → ảnh buoc-dien-bien-4"
+    paths: [apps/app/components/crm/record-sheet/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; khẳng định DOM. CHIỀU ĐỎ: bản sao bỏ tab Diễn biến → script in «không thấy tab Diễn biến» mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_khoi_cua_toi
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts]
+    expected: "exit 0; (nhịp 2) người k phụ trách 6 KR: trượt, chậm nhịp, mốc chưa xong, đúng nhịp tự tin thấp, đúng nhịp tự tin cao, đúng nhịp chưa cập nhật; okr.khoiCuaToi phiên k → 5 KR thứ tự viết trước và tong 6; gọi với userId của k bằng phiên người khác → cùng kết quả; người không KR → kr [] tong 0. CHIỀU ĐỎ: bản sao xếp theo position → thứ tự đỏ, bài in thứ tự."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; (nhịp 2) gieo dữ liệu E18"
+      - "k (member) mở {APP_URL}/<slug> ở 1440/vi → khối «OKR của bạn» đúng 5 dòng thứ tự E18, các khối Tổng quan cũ còn đủ (đếm data-khoi) → ảnh buoc-tong-quan-1"
+      - "k với vai okr mở trang chủ → khối có mặt → ảnh buoc-tong-quan-2; người không KR → câu riêng → ảnh buoc-tong-quan-3; 390 → ảnh buoc-tong-quan-4"
+      - "Người khác mở theo-don-vi?donOkr=nguoi:<k> → cùng khối → ảnh buoc-tong-quan-5"
+    paths: ["apps/app/app/(app)/[slug]/**", _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; khẳng định DOM. CHIỀU ĐỎ: bản sao khối xoá thẻ việc của lượt 4 → đếm data-khoi lệch, script in số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_suc_khoe
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts]
+    expected: "exit 0; gieo B (trưởng b) có P1 (trưởng p1), P2 (không trưởng); 5 người phòng ban chính P1 (2 có ZaloLink, 1 có SlackMemberMatch với slackUserId, 1 có SlackMemberMatch slackUserId null, 1 không gì), 2 người P2 (không gì); kỳ dang-chay: P1 có mục tiêu công bố 3 KR và mục tiêu nháp 2 KR. okr.sucKhoe: quan 200, chu 200; thuong, okr, và p1 (trưởng) 403 với câu ghim OKR.thongDiep.chiQuanTri. MA TRẬN hàng [bp:B, pb:P1, pb:P2] × [tongKr, chuaKhoiDiem, chuaNoiKenh, truong] = 12 khẳng định viết trước (P1: 3, 2, 2, p1; P2: 0, 0, 2, null; B gộp: 3, 2, 4, b). Nhịp 2: thêm lần cập nhật tuần vừa qua cho 2 KR, 1 KR im 16 ngày → dungTuan 2, krIm 1. CHIỀU ĐỎ: bản sao coi SlackMemberMatch có slackUserId null là đã nối → P1 chuaNoiKenh 1, bài in hàng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; gieo dữ liệu E20"
+      - "Quản trị bấm «Sức khoẻ chương trình» trên Toàn cảnh → {APP_URL}/<slug>/okr/suc-khoe ở 1440/vi → breadcrumb «Toàn cảnh › Sức khoẻ chương trình», bốn StatCard, bảng hàng đúng số E20 (đọc textContent) → ảnh buoc-suc-khoe-1; 390 → ảnh buoc-suc-khoe-2"
+      - "Thành viên thường mở thẳng URL → «Chỉ quản trị xem được sức khoẻ chương trình» → ảnh buoc-suc-khoe-3"
+    paths: ["apps/app/app/(app)/[slug]/okr/suc-khoe/**", _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; khẳng định DOM. CHIỀU ĐỎ: bản sao trang không kiểm quyền → thành viên thấy bảng, script in bước 3 đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E22
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.tco_ui_chon_ky
+    paths: [packages/ui/src/components/period-select.tsx, packages/ui/test/period-select.dom.tsx]
+    expected: "exit 0; (nhịp 1 dựng thành phần) PeriodSelect với nhóm 2026 [Năm 2026, Quý 3 (closed), Quý 4 (current)] và 2027 [Năm 2027]: mở bằng phím Enter, ↓ đi qua đúng thứ tự viết trước 4 mục, nhãn nhóm là 2026/2027; mục closed có chữ «đã đóng» (vi) / en khác, mục current có chữ «hiện tại»; Enter chọn → onValueChange một lần đúng giá trị. CHIỀU ĐỎ: bản sao bỏ chữ «đã đóng» chỉ để màu → khẳng định chữ đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E23
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tco_man_chrome
+    steps:
+      - "Cùng lần chạy với E2; (nhịp 2) gieo năm 2026 với quý 3 da-dong, quý 4 dang-chay, năm 2027"
+      - "Mở /okr ở 1440/vi, Tab tới ô chọn chu kỳ, Enter → danh sách nhóm theo năm có chữ «đã đóng», «hiện tại» → ảnh buoc-chon-ky-1; chọn Quý 3 bằng phím → URL kyOkr đổi; chuyển tab Toàn cảnh → URL giữ kyOkr"
+    paths: ["apps/app/app/(app)/[slug]/okr/**", packages/ui/src/components/period-select.tsx, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    expected: "exit 0; khẳng định DOM và URL. CHIỀU ĐỎ: bản sao tab bỏ kyOkr khi chuyển → khẳng định URL đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E24
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_pham_vi
+    paths: [apps/api/src/okr/**, apps/api/src/trpc/middlewares/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/vai-chi-okr.spec.ts]
+    expected: "exit 0; hai bài. (a) MA TRẬN 4 vai [owner, admin, member, okr] × 6 thủ tục viết trước (đúng/từ chối) = 24 ô, chạy hết rồi so mảng kết quả với bảng: năm thủ tục đọc đều 200 cho 4 vai; sucKhoe 200 cho owner, admin, 403 cho member, okr. (b) vai-chi-okr.spec -t ma-tran-trpc xanh không sửa danh sách ALIAS_CHO_PHEP. CHIỀU ĐỎ: bản sao bỏ kiểm quyền ở sucKhoe → ô [member, sucKhoe] lệch, bài in ô."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E25
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.tco_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/*.tsx", apps/app/components/crm/record-sheet/**, packages/ui/src/components/**, _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs]
+    expected: "exit 0; script suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD các .tsx trong apps/app (trừ app/proto/**) và packages/ui/src/components; mỗi tệp apps/app qua design-gate.mjs --mode static không P0 và không chứa dấu hiệu vẽ tay (<table, <h1, <h2, size-2 rounded-full, divide-y, rounded-lg border tự dựng, navigator.clipboard, AlertDialog); mỗi tệp mới packages/ui không có tham số destructure mặc định chuỗi chứa chữ (dùng moi-mac-dinh.mjs của chan-lai-component-ra-man) và không dòng `const … = new Intl.`; tệp mới không `Record<string, unknown>` và không `useEffect(` trần. In danh sách tệp đã soi. CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn `<div className=\"divide-y\">` và một `size = \"sm\"` → script đỏ in hai vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E26
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.tco_chu
+    paths: [apps/app/lib/messages/okr-toan-canh.ts, packages/ui/src/lib/messages.ts, apps/app/test/messages-guard.spec.ts, packages/ui/test/render-diff.spec.tsx]
+    expected: "exit 0; messages-guard.spec và render-diff.spec của packages/ui xanh với tệp chữ mới: mọi chuỗi vi có dấu và khác en; mọi thành phần mới dùng useMessages có ca trong CA. CHIỀU ĐỎ: bản sao chữ vi bằng en ở một khoá → messages-guard đỏ in khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E27
+    criterion: AC-15
+    executor: judgment
+    question: >-
+      Ba trang hướng dẫn theo vai (người phụ trách KR, trưởng đơn vị, quản trị chương
+      trình) có nói bằng chữ của CONTEXT.md mỗi vai làm gì mỗi tuần và ở màn nào —
+      cập nhật tuần, bảng họp tuần, toàn cảnh, sức khoẻ chương trình — mà không hứa
+      tính năng chưa có trong CRM (cập nhật trong Slack/Zalo, trợ lý tóm tắt, chấm cuối
+      kỳ) không?
+    expected: >-
+      Mỗi trang dưới 60 dòng, dùng Mục tiêu, KR, Cập nhật tuần, Mức tự tin, Người phụ
+      trách, Trưởng đơn vị đúng nghĩa từ điển; nêu đúng đường màn (OKR › Theo đơn vị ›
+      Cách xem: Họp tuần; OKR › Toàn cảnh; Toàn cảnh › Sức khoẻ chương trình); nói rõ
+      nhắc buổi sáng là tin đã có; không câu nào mô tả tính năng lượt 7–10.
+    inputs: [docs/huong-dan/okr-nguoi-phu-trach.md, docs/huong-dan/okr-truong-don-vi.md, docs/huong-dan/okr-quan-tri.md, CONTEXT.md]
+    evidence_required: [run_id, verifier, verified_at, output]

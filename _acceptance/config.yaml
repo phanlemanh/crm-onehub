@@ -207,6 +207,21 @@ executors:
     dok_dieu_huong: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts test/pham-vi-man.spec.ts && cd ../../packages/db && bun test test/workspace-slug.spec.ts'
     dok_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t cua-toi"'
     dok_chi_okr: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chi-okr && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
+    tco_danh_sach: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t danh-sach"'
+    tco_toan_canh: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t toan-canh && bun test test/okr-toan-canh.spec.ts -t toan-canh-tien-do"'
+    tco_hieu_nang: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t hieu-nang"'
+    tco_toan_canh_tu_tin: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t heatmap && bun test test/okr-toan-canh.spec.ts -t toan-canh-tu-tin"'
+    tco_hop_tuan: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t hop-tuan && bun test test/okr-toan-canh.spec.ts -t hop-tuan-xep"'
+    tco_mo_hop_tuan: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t mo-hop-tuan"'
+    tco_dien_bien: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t dien-bien && bun test test/okr-toan-canh.spec.ts -t dien-bien && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/target-line-chart.dom.tsx"'
+    tco_khoi_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t khoi-cua-toi"'
+    tco_suc_khoe: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t suc-khoe"'
+    tco_pham_vi: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t pham-vi && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
+    tco_ui_cay: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/tree-nav.dom.tsx'
+    tco_ui_thanh_phan: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/okr-thanh-phan.dom.tsx'
+    tco_ui_heatmap: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/heatmap.dom.tsx'
+    tco_ui_chon_ky: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/period-select.dom.tsx'
+    tco_chu: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/render-diff.spec.tsx'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
@@ -922,6 +937,9 @@ executors:
     dok_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3910} API_URL=${API_URL:-http://localhost:3911} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dat-okr-trong-crm/rang/man-okr.mjs"'
     dok_san_thiet_ke: "bun _acceptance/dat-okr-trong-crm/rang/san-thiet-ke.mjs"
     dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
+    tco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3930} API_URL=${API_URL:-http://localhost:3931} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
+    tco_soi_ma: "bun _acceptance/toan-canh-okr/rang/soi-ma.mjs"
+    tco_san_thiet_ke: "bun _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs"
     tcds_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs"'
     tcds_khong_hoi_quy: "node _acceptance/to-chuc-danh-sach-chi-tiet/rang/khong-hoi-quy.mjs"
     tcds_san_thiet_ke: "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
