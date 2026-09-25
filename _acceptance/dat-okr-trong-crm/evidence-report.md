@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: dat-okr-trong-crm
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
 verified_commit: c31f815fc3d7edc3563d1edb0685bd549a33350b
-human_signoff:
+human_signoff: Manh Phan 2026-09-25
 ---
 
 # Evidence Report: dat-okr-trong-crm
