@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: abf915e37ba31bafa2da175f85a2c3d53ca3efdb
+verified_commit: 944bd5dd993d38c3acc27f87820b5fe3e9351cb7
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -203,3 +203,7 @@ none — every multi-run eval is uniform
 Round 1: SUITE `bun run test` REJECT (thất bại) — bản gốc ghim của PageShell mang `relative`, main không còn là khối chứa. Returned to implementation.
 Round 2: E8 (ui-check) REJECT (thất bại) — bàn đo lấy mẫu ảnh đối chứng đúng lúc trang đang chuyển hướng, ảnh không phản ánh trạng thái ổn định của trang. Returned to implementation.
 Round 3: E1–E8 và toàn bộ suite (test/lint/lint:slop/build) đều pass. PASS.
+
+### Re-pin lần 1 — 2026-09-25, do gộp onehub #145 sau chữ ký; bản gốc ghim của PageShell đổi ở vung-cuon-la-khoi-chua
+run_id: repin-20260925T212443Z-96898
+sha: 944bd5dd993d38c3acc27f87820b5fe3e9351cb7 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · AC không có chốt máy: AC-8
