@@ -344,8 +344,9 @@ evals:
       - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/lam-moi.mjs"
     expected: |
       Soi cay cu phap TypeScript: (a) trong apps/app/lib/trpc/cache.ts, loi goi run(...) cua muc
-      workspace co trpc.workspace.allowances.queryKey() trong mang dau; (b) moi tep .tsx cua
-      settings/members: 0 loi goi thuoc tinh ten invalidateQueries hoac refetchQueries, 0 loi
+      workspace co trpc.workspace.allowances.queryKey() trong mang dau; (b) bon tep vong nay
+      (page.tsx, members-table.tsx, allowances-table.tsx, cho-phep-dia-chi.tsx; tep khac cua
+      settings/members in dong GHI CHU, khong cham): 0 loi goi thuoc tinh ten invalidateQueries hoac refetchQueries, 0 loi
       goi .queryKey(); (c) allowances-table.tsx va cho-phep-dia-chi.tsx: 0 loi goi .refetch(),
       moi tep co useCrmCache() va it nhat mot loi goi .workspace(. DOI CHUNG AM CHAY TRONG CUNG
       LENH: mot doan ma mau viet trong tep thuoc (queryClient.invalidateQueries({ queryKey:

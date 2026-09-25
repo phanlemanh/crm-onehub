@@ -45,7 +45,7 @@ do bàn đo gieo thêm, quản trị `ada@trycomp.ai`, tiếng Việt. «Vỏ b�
 - AC-14: Given ảnh chụp thật của lượt đo, When người xem mở ảnh đầu trang và ảnh chỗ nối hai khối ở mỗi khổ, ảnh menu «…» đang mở và ảnh của người không có quyền, Then nhìn thấy hai khối cùng một kiểu thẻ — tiêu đề có số đếm, vỏ bảng viền bo, tiêu đề cột nền xám — nút «Cho phép một địa chỉ» ở đầu trang, và «Rút» chỉ nằm trong menu.
 - AC-15 (cross-layer): Given hộp «Cho phép một địa chỉ» mở từ đầu trang, When quản trị cho phép một địa chỉ đã có trong danh sách chờ, Then hộp vẫn mở, thông điệp lỗi của API nằm trong hộp, cơ sở dữ liệu không thêm lời cho phép nào, và tiêu đề khối dưới giữ nguyên số đếm.
 - AC-16: Given các tệp của trang Thành viên sau vòng này, When soi mã, Then không component `@crm/ui` nào ở chỗ gọi mang lớp đổi viền, góc, nền hay bóng, các component khung (`Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardTable`, `DataTable`) không nhận `className`, và chuỗi lớp của `CardTable` trong `packages/ui` giữ nguyên.
-- AC-17: Given các thao tác đổi danh sách «Được phép vào» — cho phép một địa chỉ, rút, phát liên kết — When thao tác thành công, Then danh sách làm mới qua lối làm mới chung của ứng dụng (`useCrmCache().workspace()`, mà mục `workspace` trong `apps/app/lib/trpc/cache.ts` phủ cả `workspace.allowances`); không tệp nào của trang Thành viên gọi `invalidateQueries`/`refetchQueries` hay liệt `queryKey()` tại chỗ gọi, và khối «Được phép vào» không tự `refetch()`; trên màn thật hàng mới vẫn hiện sau khi cho phép và hàng vẫn biến mất sau khi rút.
+- AC-17: Given các thao tác đổi danh sách «Được phép vào» — cho phép một địa chỉ, rút, phát liên kết — When thao tác thành công, Then danh sách làm mới qua lối làm mới chung của ứng dụng (`useCrmCache().workspace()`, mà mục `workspace` trong `apps/app/lib/trpc/cache.ts` phủ cả `workspace.allowances`); bốn tệp vòng này viết hoặc sửa (`page.tsx`, `members-table.tsx`, `allowances-table.tsx`, `cho-phep-dia-chi.tsx`) không gọi `invalidateQueries`/`refetchQueries` hay liệt `queryKey()` tại chỗ gọi, và khối «Được phép vào» không tự `refetch()`; trên màn thật hàng mới vẫn hiện sau khi cho phép và hàng vẫn biến mất sau khi rút.
 
 ## Coverage
 
@@ -70,6 +70,7 @@ Never: gộp hai khối thành một `DataTable` có tab — hai danh sách là 
 - Người không phải quản trị thấy khối «Được phép vào» ở dạng khoá kèm lý do — đợt 4 của `docs/settings.md`; API `workspace.allowances` trả 403 cho họ.
 - Ghi trạng thái mở của hộp «Cho phép một địa chỉ» lên URL — luật «Tạo mới» của `docs/settings.md`.
 - Chuyển `ConfirmDialog` vào `packages/ui` — đợt 2.
+- Hộp «Chuyển việc 30 ngày» (`chuyen-viec-dialog.tsx`, của vòng khác) cũng liệt query key tại chỗ gọi — lệch có từ trước, vòng này không chạm tệp đó; tách thành việc riêng.
 - Trạng thái lỗi khi tải «Được phép vào» — đợt 4.
 - Thêm trường đếm thành viên vào API `workspace` — đường T3, không cần cho vòng này.
 - Đường lỗi của «Rút» (toast lỗi, hàng giữ nguyên) — mã xử lý lỗi không đổi so với bản cũ, và không có cách gây lỗi API rút trên màn thật mà không sửa dữ liệu người khác.
