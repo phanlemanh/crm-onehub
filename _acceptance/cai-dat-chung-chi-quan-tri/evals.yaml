@@ -156,7 +156,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.test.ccq_chup_hai_vai
     steps:
-      - "Dung api va app cua CAY DANG XET o cap cong ban-do-cot (api 3501, app 3500 — ca hai khai APP_URL cua 3500) bang .claude/launch.json cua cay; kiem cong truoc, cong bi giu thi BLOCKED goi ten tien trinh, khong giet"
+      - "Cap cong ban-do-cot (api 3501, app 3500 — ca hai khai APP_URL cua 3500, xem .claude/launch.json cua cay). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 (dung cay) thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang dung hai lenh ban-do-cot-api / ban-do-cot-app trong launch.json"
       - "Chay O TIEN CANH (khong chay nen), Bash timeout 600000: lenh cua ccq_chup_hai_vai — mot-luot.sh xep hang voi moi lan do khac, tien-de.mjs dat khoa nghien cuu linh canh chi trong luot roi don; rang chup.mjs tu chan cay (canhCay qua APP_URL), tu kiem tien de (configured true, ada@trycomp.ai canManage true, marcus@trycomp.ai canManage false), tu kiem trang cuoi la /<slug>/settings, doi hydrate xong (o so ngay co gia tri), roi chup evidence/E9-<vai>-<kho>.png o 1440 va 768"
       - "Doc dong KET LUAN cuoi: ma thoat 0 = 16 DUNG; ma 2 = khong do duoc (goi ten tien de hong); ma 1 = co dong SAI"
       - "Mo bon anh va doi chieu bang mat voi Expected"
