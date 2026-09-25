@@ -196,8 +196,8 @@ nhân thì người ta chờ nó tự làm việc, còn "trợ lý" hứa một 
 không có.
 
 **Nối Zalo**: một người trong đội nhắn mã 6 số cho bot Zalo để CRM biết Zalo đó
-là của họ. Làm ở trang cá nhân «Thông báo của bạn» trong Cài đặt. Chốt
-2026-09-23.
+là của họ. Làm ở trang «Nhắc buổi sáng» trong menu người dùng (chuyển khỏi
+Cài đặt 2026-09-25). Chốt 2026-09-23.
 _Avoid_: đăng nhập Zalo, liên kết tài khoản
 Vì sao: người không đăng nhập CRM bằng Zalo, và Zalo không cho CRM đọc gì từ tài
 khoản của họ; việc duy nhất xảy ra là CRM biết nhắn nhắc buổi sáng cho ai.

@@ -1,7 +1,7 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
-	tieuDe: "Your notifications",
+	tieuDe: "Morning reminders",
 	moTa: "Only for you. Every morning at 08:30 the CRM gathers what needs your attention and sends it on one channel.",
 	khoiZalo: {
 		ten: "Your Zalo",
@@ -77,7 +77,7 @@ const en = {
 		daNoiSo: (daNoi: string, tong: string) =>
 			`${daNoi}/${tong} people connected Zalo`,
 		chuaNoiVanSlack:
-			"People who have not connected still get their reminder on Slack. Each person connects under Your notifications.",
+			"People who have not connected still get their reminder on Slack. Each person connects under Morning reminders in their account menu.",
 		noiCuaToi: "Connect my Zalo",
 		daNoi: "Connected",
 		chuaNoi: "Not connected",
@@ -122,7 +122,7 @@ const en = {
 export type NhacQuaZaloMessages = typeof en;
 
 const vi = {
-	tieuDe: "Thông báo của bạn",
+	tieuDe: "Nhắc buổi sáng",
 	moTa: "Chỉ áp cho bạn. Mỗi sáng 08:30 máy gom việc cần để ý và nhắn bạn ở một kênh.",
 	khoiZalo: {
 		ten: "Zalo của bạn",
@@ -197,7 +197,7 @@ const vi = {
 		daNoiSo: (daNoi: string, tong: string) =>
 			`${daNoi}/${tong} người đã nối Zalo`,
 		chuaNoiVanSlack:
-			"Người chưa nối vẫn nhận nhắc qua Slack. Mỗi người tự nối ở Thông báo của bạn.",
+			"Người chưa nối vẫn nhận nhắc qua Slack. Mỗi người tự nối ở Nhắc buổi sáng trong menu người dùng.",
 		noiCuaToi: "Nối Zalo của tôi",
 		daNoi: "Đã nối",
 		chuaNoi: "Chưa nối",

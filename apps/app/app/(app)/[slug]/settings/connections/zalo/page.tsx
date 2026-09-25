@@ -33,7 +33,7 @@ async function ZaloConnectionPageContent({ params }: ZaloConnectionPageProps) {
 		<ConnectionPage>
 			<KetNoiZaloThan
 				locale={locale}
-				hrefThongBao={`/${slug}/settings/notifications`}
+				hrefThongBao={`/${slug}/reminders`}
 				du={{
 					bat: xuong.bat,
 					tenBot: xuong.tenBot,
