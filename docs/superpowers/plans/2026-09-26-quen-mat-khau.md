@@ -1252,3 +1252,7 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 | 4 | `duongQuenMatKhau` trả `"hien"` vô điều kiện | `-t co-tat` | `co tat thi trang phai ve /sign-in` |
 | 4 | xoá `/quen-mat-khau` khỏi `ANONYMOUS` | `proxy-an-danh.spec.ts` | hai ca đỏ |
 | 4 | thêm `className` màu/cỡ chữ lên `Link` | design-gate static | XANH — thước này không bắt lớp `className` trên `Link`; E19 chỉ chứng không có vi phạm P0 mà nó biết |
+| 5 | (thước) E18 đọc `p.content()` | `qmk_chup` | dòng «gui xong hien Kiểm tra hộp thư» XANH HẰNG ĐÚNG — HTML chứa dữ liệu RSC mang sẵn chữ; sửa sang `innerText` (acb35439) |
+| 5 | xoá `/quen-mat-khau` khỏi `ANONYMOUS` | `qmk_chup` | `KET LUAN: 8 DUNG, 6 SAI — ma thoat 1`, gồm `SAI /quen-mat-khau 1440: khong bi day ve /sign-in` |
+| 5 | màn đăng nhập truyền nhãn vô điều kiện + trang luôn hiện | `qmk_chup_tat` | `KET LUAN: 0 DUNG, 2 SAI — ma thoat 1` |
+| 5 | vật lành | `qmk_chup` / `qmk_chup_tat` | `14 DUNG, 0 SAI` / `2 DUNG, 0 SAI`, cổng 3300/3301 22:38–22:40 UTC |
