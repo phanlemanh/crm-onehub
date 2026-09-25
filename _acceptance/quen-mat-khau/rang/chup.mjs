@@ -67,6 +67,10 @@ async function trang(rong, duong) {
 	return p;
 }
 
+async function chuThay(p) {
+	return p.evaluate(() => document.body.innerText);
+}
+
 function duongCuoi(p) {
 	return new URL(p.url()).pathname;
 }
@@ -144,7 +148,7 @@ async function caBat() {
 	await guiForm(daGui, diaChiThu("da-gui"));
 	kiem(
 		`gui xong hien ${CHU_DA_GUI}`,
-		(await daGui.content()).includes(CHU_DA_GUI),
+		(await chuThay(daGui)).includes(CHU_DA_GUI),
 	);
 	await daGui.screenshot({ path: join(RA, "E18-da-gui-1440.png") });
 
@@ -172,7 +176,7 @@ async function caBat() {
 		await quaLuot.goto(`${APP}${DUONG_QUEN}`, { waitUntil: "networkidle0" });
 	}
 	await guiForm(quaLuot, diaChiThu("luot-cuoi"));
-	const noiDung = await quaLuot.content();
+	const noiDung = await chuThay(quaLuot);
 	kiem("lan thu tu hien cau qua luot", noiDung.includes(CHU_QUA_LUOT));
 	kiem(
 		`lan thu tu khong hien ${CHU_DA_GUI}`,
