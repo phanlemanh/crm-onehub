@@ -39,7 +39,7 @@
   },
   {
    "id": "AC-11",
-   "p": "Sẽ bỏ ô vuông đen quanh logo ở tab Agent: màn trống để logo đứng thẳng trên nền (cao từ 28px), ảnh đại diện trợ lý dùng nền xám chuẩn."
+   "p": "Sẽ bỏ ô vuông đen quanh logo ở tab Agent: màn trống để logo đứng thẳng trên nền (cao từ 28px); ảnh đại diện trợ lý là khối vuông xám 32×32 với logo ở giữa, đo trên giao diện thật."
   }
  ],
  "wont_do": [
@@ -165,6 +165,14 @@
   {
    "id": "d-20260925T101637Z-17",
    "p": "Lượt chấm lại vẫn bị chặn vì máy chấm lint chết giữa chừng — mọi phép đo khác đều xanh; không tự chạy thêm lượt, trình anh quyết."
+  },
+  {
+   "id": "d-20260925T102308Z-18",
+   "p": "Cho chạy lượt chấm thứ tư và làm vuông ảnh đại diện trợ lý bằng biến thể mới của thành phần chung — đổi lại mở lại phạm vi lần hai."
+  },
+  {
+   "id": "d-20260925T102308Z-19",
+   "p": "Bịt luôn lỗ đo «bỏ sót chính logo» và đo ảnh đại diện trên giao diện thật dựng riêng, vì bàn đo không có hội thoại mẫu."
   }
  ],
  "decisions": [],

@@ -5,7 +5,7 @@ slug: logo-onehub
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: approved
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
 design_doc: docs/superpowers/specs/2026-09-25-logo-onehub-design.md
@@ -33,7 +33,7 @@ của hãng chỉ nằm trong một file.
 - AC-8: Given một thư mục ngoài kho, When chạy script với `--external <thư mục>`, Then thư mục đó có `slack-app-icon-1024.png` (1024×1024), `zalo-bot-avatar-512.png` (512×512, mark nằm trong vòng tròn bán kính 40% cạnh) và `google-oauth-logo-120.png` (120×120, dưới 1MB), cả ba đục hoàn toàn nền trắng; và `git status` của kho không đổi sau lượt chạy.
 - AC-9: Given nhánh này so với điểm rẽ khỏi `onehub`, When liệt kê file đổi, Then trong các file đang gọi `Logo` chỉ `apps/app/components/auth-shell.tsx` và `apps/app/components/crm/agent-panel.tsx` đổi; không file nào dưới `apps/app/components/landing/`, `apps/app/app/(landing)/`, `packages/ui/src/components/brand-logos/`, `apps/api/src/companies/favicon.service.ts`, `packages/db/src/favicon.ts` đổi; và biến `--primary` trong `packages/ui/src/styles/globals.css` vẫn là `#006B4F` (mọi dòng khai `--primary` trong file đó).
 - AC-10: Given bàn đo của chính cây này với dữ liệu mẫu, When chụp trang đăng nhập ở khổ 1440 và 390, thanh trên cùng ở giao diện sáng và tối, và màn trống tab Agent ở giao diện sáng và tối, Then nhìn thấy trên ảnh: mark sáu lục giác dải xanh ở mọi chỗ từng có logo, chữ OneHub đọc được trên nền tối của trang đăng nhập ở cả hai khổ, không còn hình mark cũ của Comp, không logo nào bị cắt hay tràn; và `/favicon.ico` máy chủ trả về giống từng byte với `apps/app/app/favicon.ico`.
-- AC-11: Given tab Agent của một hồ sơ công ty, When mở màn trống ở giao diện sáng và tối, Then logo đứng thẳng trên nền của màn, không có ô tô nền nào phía sau (mọi phần tử bao logo tới khối màn trống đều nền trong suốt) và logo cao từ 28px trở lên; và trong mã của tab Agent, ảnh đại diện trợ lý đặt logo thẳng trong `MessageAvatar` (nền xám chuẩn của thành phần), không còn ô tô `bg-foreground` nào quanh logo ở cả hai chỗ.
+- AC-11: Given tab Agent của một hồ sơ công ty, When mở màn trống ở giao diện sáng và tối, Then logo đứng thẳng trên nền của màn, không có ô tô nền nào phía sau (chính logo và mọi phần tử bao nó tới khối màn trống đều nền trong suốt) và logo cao từ 28px trở lên; và ảnh đại diện trợ lý là một khối vuông 32×32 nền xám chuẩn (biến thể `square` của `MessageAvatar` trong `packages/ui`) với logo 20px nằm giữa, ở cả hai giao diện, đo bằng CSS thật của app; trong mã của tab Agent không còn ô tô `bg-foreground` nào quanh hay trên logo ở cả hai chỗ.
 
 ## Coverage
 
@@ -65,7 +65,8 @@ Core (vào AC): mark trùng gốc (AC-1, 2) · API component (AC-3, 4) · bộ i
 ## Notes
 
 - Mở lại sau Cổng Bằng chứng round 2 (25/09): chủ kho chọn bỏ ô đen quanh logo ở tab Agent, sửa ngay trong vòng này — AC-9 thêm `agent-panel.tsx`, thêm AC-11.
-- Ảnh đại diện trợ lý chỉ hiện khi đã có hội thoại; bàn đo không có hội thoại mẫu, nên vế ảnh đại diện của AC-11 đo trên mã, không đo trên ảnh chụp.
+- Ảnh đại diện trợ lý chỉ hiện khi đã có hội thoại; bàn đo không có hội thoại mẫu, nên vế ảnh đại diện của AC-11 đo bằng cách dựng thành phần trong trình duyệt với stylesheet thật của máy chủ dev (không trong luồng chat thật).
+- Mở lại lần hai sau round 3 (25/09): chủ kho chọn làm vuông ảnh đại diện (bỏ ô đen làm nó dẹt 32×20) và cho chạy round 4 vượt trần.
 
 - Đo trước khi viết hợp đồng (S1): mark dựng lại IoU 99,72% với `logo-mark.png`, chữ dò nét IoU 99,6%.
 - `sharp` 0.34.5 đã có trong `bun.lock`; vòng này thêm nó vào `devDependencies` của `@crm/ui`.

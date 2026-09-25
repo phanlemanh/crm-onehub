@@ -237,12 +237,13 @@ evals:
       - "_acceptance/logo-onehub/rang/chup.mjs"
     expected: |
       Trong cung luot chup cua E11, voi anh agent-sang va agent-toi: tim svg[aria-label="OneHub"]
-      nam trong [role="dialog"] [data-slot="empty"]; di nguoc tu svg len toi phan tu
+      nam trong [role="dialog"] [data-slot="empty"]; di nguoc TU CHINH svg len toi phan tu
       [data-slot="empty"], moi phan tu co getComputedStyle().backgroundColor trong suot
       (alpha 0) -> dong DUNG "khong o to nen quanh logo"; chieu cao khung bao svg >= 28px.
       Khong tim thay svg trong khoi man trong -> SAI "man trong thieu logo".
       CHIEU DO tren ban sao: tra lai <span className="... bg-foreground ..."> quanh logo o man
-      trong -> ma 1 ghim "o to nen quanh logo".
+      trong -> ma 1 ghim "o to nen quanh logo"; dat bg-foreground len chinh <Logo> -> ma 1 ghim
+      "o to nen quanh logo (svg".
 
   - id: E14
     criterion: AC-11
@@ -254,10 +255,34 @@ evals:
     expected: |
       Script tu suy goc kho, doc apps/app/components/crm/agent-panel.tsx. Ma tran viet truoc
       hai cho = so lan <Logo xuat hien trong tep (dem bang may, phai = 2): voi moi cho, doan JSX
-      tu the mo gan nhat bao quanh (EmptyMedia / MessageAvatar) toi <Logo khong chua
-      "bg-foreground"; o AgentAvatar, the con dau tien cua <MessageAvatar> la <Logo. Dem ca = 2
+      tu the mo gan nhat bao quanh (EmptyMedia / MessageAvatar) toi HET the <Logo ... /> (gom ca
+      thuoc tinh cua chinh Logo) khong chua "bg-foreground"; o AgentAvatar, the con dau tien cua
+      <MessageAvatar> la <Logo va the mo <MessageAvatar mang thuoc tinh square. Dem ca = 3
       (+1 dem so cho). Ma 0 = DUNG het, 1 = co SAI, 2 = khong do duoc (khong thay tep / so cho
       khac 2).
       CHIEU DO tren ban sao: boc lai <span className="flex size-7 ... bg-foreground ..."> quanh
-      logo o AgentAvatar -> ma 1 ghim "AgentAvatar: o bg-foreground quanh logo".
+      logo o AgentAvatar -> ma 1 ghim "AgentAvatar: o bg-foreground quanh logo"; dat
+      className="bg-foreground" len chinh <Logo> -> cung thong diep; bo square -> ma 1 ghim
+      "AgentAvatar: MessageAvatar khong vuong".
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.test.lgo_chup
+    paths:
+      - "packages/ui/src/components/message.tsx"
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "_acceptance/logo-onehub/rang/chup.mjs"
+    expected: |
+      Trong cung luot chup: dung renderToStaticMarkup cua CHINH MessageAvatar (square) boc CHINH
+      Logo className="size-5" — dung dung hai thanh phan agent-panel.tsx dung — dat vao trang
+      cua trinh duyet bang page.setContent, nap MOI stylesheet ma trang /sign-in cua may chu dev
+      that phat ra (link rel=stylesheet), giao dien sang va toi (lop dark tren html). Moi giao
+      dien: khung [data-slot="message-avatar"] rong = cao = 32px (+-0.5), nen khong trong suot,
+      svg cao 20px (+-0.5) va tam svg trung tam khung (+-1px); chup
+      evidence/E15-anh-dai-dien-<sang|toi>.png. Khong nap duoc stylesheet nao -> ma 2.
+      E14 chung AgentAvatar dung square; E15 chung square ve ra khoi vuong tren CSS that — hai
+      eval cung phu AC-11.
+      CHIEU DO tren ban sao: bo lop size-8 cua bien the square trong message.tsx -> khung 32x20,
+      ma 1 ghim "anh dai dien khong vuong".
 
