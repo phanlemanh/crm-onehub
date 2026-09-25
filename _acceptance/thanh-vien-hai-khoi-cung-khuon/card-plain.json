@@ -1,0 +1,14 @@
+{
+  "feature_plain": "Trên trang Thành viên, hai danh sách «Đã vào» và «Được phép vào» giờ trông cùng một kiểu (tiêu đề có số người, bảng viền bo, chữ cùng cỡ), nút «Cho phép một địa chỉ» nằm ở đầu trang, và «Rút» nằm trong menu «…».",
+  "scope_plain": "Để lại cho đợt sau: người không phải quản trị thấy khối bị khoá kèm lý do, ghi trạng thái hộp lên đường dẫn, trạng thái lỗi khi tải danh sách.",
+  "decisions_plain": [
+    {"id": "d-20260925T115242Z-1", "p": "KHÔNG dựng bản bấm thử trước khi duyệt — duyệt trên ảnh đo thật của trang; đổi lại cổng duyệt chỉ thấy ảnh chụp, không bấm thử được."},
+    {"id": "d-20260925T115242Z-2", "p": "Số người ở «Đã vào» đếm cả danh sách, không đổi khi gõ ô tìm; đổi lại mở trang đang lọc thì tốn thêm một lượt gọi."},
+    {"id": "d-20260925T115242Z-3", "p": "Mỗi khối là một vùng có tên cho trình đọc màn hình; đổi lại có thêm một lớp bọc so với trang Theo dõi."},
+    {"id": "d-20260925T115242Z-4", "p": "Danh sách «Được phép vào» có sẵn ngay khi trang mở, không nhảy bố cục; đổi lại trạng thái đang tải chỉ kiểm được bằng test, không thấy trên màn thật."},
+    {"id": "d-20260925T115242Z-5", "p": "KHÔNG đổi gì cho người không phải quản trị — họ vẫn không thấy nút và khối dưới; đổi lại trang còn lệch luật «khoá chứ đừng ẩn» tới đợt 4."},
+    {"id": "d-20260925T120117Z-7", "p": "Ghim số dòng của phép kiểm từ điển thành 11 và bỏ căn chữ số cho số đếm trong tiêu đề; đổi lại số đếm không thẳng cột, không đáng kể."},
+    {"id": "d-20260925T121641Z-8", "p": "Đầu trang hiện ngay, nút «Cho phép một địa chỉ» tải riêng; đổi lại khác cách trang Tổ chức làm, vì cách đó làm hỏng phép đo đã ký của vòng trước."},
+    {"id": "d-20260925T123607Z-9", "p": "Khuôn số đếm «X · N» được miễn luật «chữ tiếng Việt phải có dấu» vì nó không có chữ để dịch; đổi lại danh sách miễn dài thêm một mục."}
+  ]
+}
