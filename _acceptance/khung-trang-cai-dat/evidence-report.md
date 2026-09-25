@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context sequential verification subagent (round 3, classifier-fallback)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: de5b4b3b6304ed03227fe64923dbd0c883bc8c62
+verified_commit: 2e7d0b02e8a8a14184928c6314035d74af045a24
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -317,3 +317,7 @@ none — không eval nào của hồ sơ này mang runs > 1. Mọi eval tất đ
 Round 1: BLOCKED. E6, E8 và E11 (ui-check) va nhau trên bàn đo dùng chung, vì nhiều agent chạy song song trên cùng CSDL dev. Suite `bun run test` đỏ ở app vì bài `chuyen-huong` nhận nhầm mock redirect rò sang từ một spec khác. Lỗi đó đã sửa ở commit 106dd061.
 Round 2: PASS ở 106dd061. Chạy tuần tự, 17/17 eval, 4/4 lệnh suite, bàn đo Chrome 232/232. Sau đó, ở Cổng Bằng chứng, chủ kho yêu cầu nhãn nhóm thanh bên in hoa giãn chữ. Yêu cầu đó thành commit de5b4b3b (một chuỗi class trong `packages/ui/src/components/nav-item.tsx`).
 Round 3: PASS ở de5b4b3b. Chạy lại toàn bộ và tuần tự: 17/17 eval, 4/4 lệnh suite, bàn đo Chrome 232/232. Ảnh 1440 và 768 cho thấy nhãn nhóm in hoa.
+
+### Re-pin lần 1 — 2026-09-25, do gộp onehub (#133, #135, #136, #137) và hướng A cho vai chỉ OKR
+run_id: repin-20260925T084122Z-61552
+sha: 2e7d0b02e8a8a14184928c6314035d74af045a24 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3, E4, E6, E8, E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4
