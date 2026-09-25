@@ -26,6 +26,7 @@ import type {
 	ModelCatalogResult,
 	ResearchKeySettings,
 } from "./settings.contracts";
+import { SETTINGS_CONFIG } from "./settings-config";
 
 @Injectable()
 export class SettingsService {
@@ -38,18 +39,21 @@ export class SettingsService {
 		private readonly backfill: BackfillService,
 	) {}
 
-	private async yeuCauQuanTri(userId: string): Promise<void> {
-		if (!canManageSettings(await workspaceRoleOf(userId))) {
-			throw new ForbiddenException(
-				"Only an owner or an admin can change workspace settings.",
-			);
+	private async canManage(userId: string): Promise<boolean> {
+		return canManageSettings(await workspaceRoleOf(userId));
+	}
+
+	private async requireManager(userId: string): Promise<void> {
+		if (!(await this.canManage(userId))) {
+			throw new ForbiddenException(SETTINGS_CONFIG.messages.forbidden);
 		}
 	}
 
-	async agentModel(): Promise<AgentModelSettings> {
-		const [model, row] = await Promise.all([
+	async agentModel(userId: string): Promise<AgentModelSettings> {
+		const [model, row, canManage] = await Promise.all([
 			readAgentModel(this.db),
 			this.db.appSetting.findFirst({ select: { updatedAt: true } }),
+			this.canManage(userId),
 		]);
 
 		return {
@@ -58,6 +62,7 @@ export class SettingsService {
 			defaultId: DEFAULT_AGENT_MODEL.id,
 			effective: await this.catalog.find(model.id),
 			updatedAt: row?.updatedAt.toISOString() ?? null,
+			canManage,
 		};
 	}
 
@@ -65,12 +70,12 @@ export class SettingsService {
 		userId: string,
 		modelId: string | null,
 	): Promise<AgentModelSettings> {
-		await this.yeuCauQuanTri(userId);
+		await this.requireManager(userId);
 
 		if (modelId === null) {
 			await writeAgentModel(this.db, null);
 			this.logger.log({ message: "Agent model reset to the default" });
-			return this.agentModel();
+			return this.agentModel(userId);
 		}
 
 		const models = await this.catalog.models();
@@ -96,7 +101,7 @@ export class SettingsService {
 
 		this.logger.log({ message: "Agent model changed", modelId: chosen.id });
 
-		return this.agentModel();
+		return this.agentModel(userId);
 	}
 
 	async modelCatalog(): Promise<ModelCatalogResult> {
@@ -104,17 +109,24 @@ export class SettingsService {
 		return { models: models ?? [], available: models !== null };
 	}
 
-	async researchKey(): Promise<ResearchKeySettings> {
-		const key = await readContextDevKey(this.db);
+	async researchKey(userId: string): Promise<ResearchKeySettings> {
+		const [key, canManage] = await Promise.all([
+			readContextDevKey(this.db),
+			this.canManage(userId),
+		]);
 
-		return { configured: key !== null, hint: key ? maskKey(key) : null };
+		return {
+			configured: key !== null,
+			hint: key ? maskKey(key) : null,
+			canManage,
+		};
 	}
 
 	async setResearchKey(
 		userId: string,
 		apiKey: string,
 	): Promise<ResearchKeySettings> {
-		await this.yeuCauQuanTri(userId);
+		await this.requireManager(userId);
 
 		const check = await this.researchKeys.verify(apiKey);
 
@@ -151,18 +163,23 @@ export class SettingsService {
 				);
 			});
 
-		return this.researchKey();
+		return this.researchKey(userId);
 	}
 
-	async archiveRetention(): Promise<ArchiveRetentionSettings> {
-		return { days: await readArchiveRetentionDays(this.db) };
+	async archiveRetention(userId: string): Promise<ArchiveRetentionSettings> {
+		const [days, canManage] = await Promise.all([
+			readArchiveRetentionDays(this.db),
+			this.canManage(userId),
+		]);
+
+		return { days, canManage };
 	}
 
 	async setArchiveRetention(
 		userId: string,
 		days: number,
 	): Promise<ArchiveRetentionSettings> {
-		await this.yeuCauQuanTri(userId);
+		await this.requireManager(userId);
 
 		const saved = await writeArchiveRetentionDays(this.db, days);
 
@@ -171,6 +188,6 @@ export class SettingsService {
 			days: saved,
 		});
 
-		return { days: saved };
+		return { days: saved, canManage: true };
 	}
 }

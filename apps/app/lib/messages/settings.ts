@@ -55,6 +55,7 @@ const en = {
 		khongVoiToi: (ma: string) =>
 			`Could not reach the AI Gateway to list models. The agent is still running ${ma}.`,
 		daLuu: "The agent will use this model from its next session.",
+		khongDuQuyen: "Only an owner or an admin can change the agent's model.",
 	},
 	luuTru: {
 		tieuDe: "Archived records",
@@ -64,6 +65,8 @@ const en = {
 		donVi: "Days. 180 is the default.",
 		daLuu: "Archive retention saved.",
 		phaiLaSo: "Enter a number of days.",
+		khongDuQuyen:
+			"Only an owner or an admin can change how long archived records are kept.",
 	},
 	nghienCuu: {
 		tieuDe: "Company research",
@@ -77,6 +80,7 @@ const en = {
 		chuaCo: "Don't have a Context API key?",
 		dangKy: "Sign up here",
 		daLuu: "Context API key saved.",
+		khongDuQuyen: "Only an owner or an admin can change the research key.",
 	},
 	chep: {
 		nhan: "Copy",
@@ -188,6 +192,7 @@ const vi = {
 		khongVoiToi: (ma: string) =>
 			`Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy ${ma}.`,
 		daLuu: "Tác nhân sẽ dùng model này từ lượt chạy sau.",
+		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới đổi được model.",
 	},
 	luuTru: {
 		tieuDe: "Bản ghi đã xoá",
@@ -197,6 +202,7 @@ const vi = {
 		donVi: "ngày. Mặc định là 180.",
 		daLuu: "Đã lưu hạn dọn.",
 		phaiLaSo: "Nhập số ngày.",
+		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới đổi được hạn dọn.",
 	},
 	nghienCuu: {
 		tieuDe: "Nghiên cứu công ty",
@@ -210,6 +216,7 @@ const vi = {
 		chuaCo: "Chưa có khoá API Context?",
 		dangKy: "Đăng ký ở đây",
 		daLuu: "Đã lưu khoá API Context.",
+		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới thay được khoá.",
 	},
 	chep: {
 		nhan: "Chép",

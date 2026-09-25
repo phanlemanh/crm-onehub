@@ -1,0 +1,195 @@
+schema_version: 1
+slug: cai-dat-chung-chi-quan-tri
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ccq_ham_quyen
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quyen-cai-dat.spec.ts"
+    expected: |
+      Ma tran viet truoc nam ca [owner true, admin true, member false, okr false, null false];
+      mot test khang dinh tap vai trong ma tran (bo null) bang dung WORKSPACE_ROLES. Dem ca = 5 + 1.
+      CHIEU DO: canManageSettings tra true cho member -> do voi thong diep ghim
+      "member: true".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ccq_member_bi_chan
+    paths:
+      - "apps/api/src/settings/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
+    expected: |
+      Qua HTTP that: app dung bang createApp() (co /api/trpc va cau REST /rest), supertest.
+      ResearchKeyService.verify, ModelCatalogService.models, BackfillService.run bi spyOn tren
+      the hien trong app de dem loi goi. Ma tran viet truoc NAM loi x BA thao tac = 15 ca: loi
+      (a) phien member qua tRPC, (b) khoa API cua member qua tRPC (header x-api-key, khoa tao
+      cho dung user do), (c) phien vai okr qua tRPC, (d) phien cua nguoi khong co hang member
+      qua tRPC, (e) phien member qua REST (PATCH /rest/settings/research-key|agent-model|archive-retention). Ba thao tac:
+      setResearchKey, setAgentModel, setArchiveRetention; moi ca dat gia tri truoc bang ham ghi
+      cua @crm/db/settings roi goi voi gia tri KHAC. Moi ca: HTTP 403, thong diep chua cau
+      khong-du-quyen cua settings-config (loi member, okr) hoac NOT_A_MEMBER (loi nonMember — lop
+      chan san co cua AuthMiddleware); doc thang DB: khoa / model / so ngay van la gia tri
+      truoc; bo dem verify, catalog.models, backfill.run deu = 0 sau ca. Dem ca = 15.
+      CHIEU DO: bo requireManager o mot thao tac (vd setArchiveRetention) -> do voi thong diep
+      ghim loi va ten thao tac; dat requireManager SAU researchKeys.verify -> ca setResearchKey
+      do voi thong diep ghim "verify goi 1 lan"; requireManager bo qua role null -> loi (c) do
+      voi thong diep ghim "nonMember <thao tac>".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ccq_quan_tri_lam_duoc
+    paths:
+      - "apps/api/src/settings/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
+    expected: |
+      Cung ma tran ba thao tac cua E2, chay cho BON loi: phien admin, phien owner, khoa API cua
+      admin qua tRPC, va phien admin qua REST (12 ca): moi ca HTTP 200, tra loi co canManage true, doc DB thay gia tri moi;
+      setResearchKey goi verify dung 1 lan va backfill.run("companies") dung 1 lan;
+      setAgentModel goi catalog.models va ghi model ban dem tra. Dem ca = 12. Doi chung duong
+      cua E2 tren cung dang fixture.
+      CHIEU DO: requireManager dung vi tu sai huong (chi owner) hoac chan het -> admin do voi
+      thong diep ghim "admin <thao tac>".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ccq_member_doc_duoc
+    paths:
+      - "apps/api/src/settings/**"
+      - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
+    expected: |
+      Phien member goi researchKey, agentModel, archiveRetention, modelCatalog: bon ca HTTP 200;
+      researchKey.hint bang maskKey cua khoa da dat va KHAC khoa tho; archiveRetention.days bang
+      gia tri da dat. Dem ca = 4.
+      CHIEU DO: gan requireManager vao archiveRetention -> do voi thong diep ghim
+      "member archiveRetention".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ccq_co_quyen
+    paths:
+      - "apps/api/src/settings/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
+    expected: |
+      Ma tran viet truoc NAM phien x BA query = 15 ca: owner true, admin true, member false,
+      okr false (HTTP 200, data.canManage dung gia tri); nguoi co phien nhung khong co hang member ->
+      HTTP 403 NOT_A_MEMBER, khong co data (khong 500). Dem ca = 15.
+      CHIEU DO: agentModel tra canManage true co dinh -> member do voi thong diep ghim
+      "member agentModel canManage".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ccq_cong_nghien_cuu
+    paths:
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/proxy.ts"
+      - "packages/validation/src/cong-nghien-cuu.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      Trong describe "ccq-cong-nghien-cuu": readResearchGate voi {configured:false,canManage:false}
+      -> settled; {configured:false,canManage:true} -> required; {configured:false} thieu
+      canManage -> settled; {configured:true,canManage:false} -> settled. proxy voi workspace da
+      dat ten, chua co khoa, canManage false: mo /<slug>/companies -> khong chuyen huong toi
+      /onboarding/research; mo /onboarding/research -> chuyen ve /<slug>; canManage true ->
+      /<slug>/companies chuyen toi /onboarding/research. Moi khang dinh ghim ten ca.
+      CHIEU DO: readResearchGate bo qua canManage (hanh vi cu) -> ca member do voi thong diep
+      ghim "member khong bi day".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ccq_man_khoa
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/research-key.tsx"
+      - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
+      - "apps/app/app/(app)/[slug]/settings/archive-retention.tsx"
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/test/cai-dat-chung-khoa.dom.tsx"
+    expected: |
+      jsdom, tRPC gia. Ma tran viet truoc BA card x HAI vai. canManage false: moi card hien gia
+      tri hien tai (chi bao da cam + hint; so ngay trong o; ten model tren nut); nam control
+      (o khoa, nut luu khoa, o so ngay, nut luu so ngay, nut chon model) co thuoc tinh disabled;
+      moi control co aria-describedby tro toi mot phan tu co that nam TRONG cung card va mang
+      cau khongDuQuyen cua card do. canManage true: khong co cau khongDuQuyen nao trong ba card;
+      o khoa, o so ngay, nut chon model khong disabled. Moi khang dinh ghim ten card va ten
+      control. canManage true: go vao o khoa va o so ngay thi nut thay khoa va nut luu BAT
+      (doi chung duong cho phep kiem disabled cua thanh vien). Dem ca = 3 x 2.
+      CHIEU DO: bo disabled o nut chon model -> do voi thong diep ghim "model: nut chon
+      disabled"; aria-describedby tro id khong ton tai -> do voi thong diep ghim "mo ta ton tai".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ccq_cong_hoi_quy
+    paths:
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/proxy.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+      - "_acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs"
+    expected: |
+      Chay toan bo apps/app/test/onboarding-gate.spec.ts sau khi bo dung researchKey gia mang
+      canManage (mac dinh true — hinh that cua tra loi); roi rang khang-dinh-cu-nguyen-ven.mjs
+      lay tep do o sha CO DINH a8572437 (dinh onehub da gop vao nhanh, gom #129; git show, khong
+      merge-base), cat moi khoi
+      it(/test( den dong dong cung muc thut, va doi moi khoi cu phai co NGUYEN VAN trong tep
+      hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (30), khong
+      khop thi ma 2. Dong cuoi "KET LUAN: n DUNG, m SAI — ma thoat X".
+      CHIEU DO: sua .toBe cua ca "sends an onboarded rep with no key" (dong rieng) -> SAI goi
+      ten ca, ma 1; doi mot it( thut mot tab thanh it.skip( -> SAI goi ten ca; NEO hong -> ma 2.
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.test.ccq_chup_hai_vai
+    steps:
+      - "Cap cong ban-do-cot (api 3501, app 3500 — ca hai khai APP_URL cua 3500, xem .claude/launch.json cua cay). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 (dung cay) thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang dung hai lenh ban-do-cot-api / ban-do-cot-app trong launch.json"
+      - "Chay O TIEN CANH (khong chay nen), Bash timeout 600000: lenh cua ccq_chup_hai_vai — mot-luot.sh xep hang voi moi lan do khac, tien-de.mjs dat khoa nghien cuu linh canh chi trong luot roi don; rang chup.mjs tu chan cay (canhCay qua APP_URL), tu kiem tien de (configured true, ada@trycomp.ai canManage true, marcus@trycomp.ai canManage false), tu kiem trang cuoi la /<slug>/settings, doi hydrate xong (o so ngay co gia tri), roi chup evidence/E9-<vai>-<kho>.png o 1440 va 768"
+      - "Doc dong KET LUAN cuoi: ma thoat 0 = 16 DUNG; ma 2 = khong do duoc (goi ten tien de hong); ma 1 = co dong SAI"
+      - "Mo bon anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/cai-dat-chung-chi-quan-tri/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/research-key.tsx"
+      - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
+      - "apps/app/app/(app)/[slug]/settings/archive-retention.tsx"
+      - "apps/app/lib/messages/settings.ts"
+      - "_acceptance/cai-dat-chung-chi-quan-tri/rang/chup.mjs"
+    expected: |
+      Nhin thay tren anh: ban thanh vien co dong ly do o ca ba card Khoa nghien cuu, Ban ghi
+      da xoa, Tac nhan nghien cuu va control mo; ban quan tri khong co dong do o ba card va
+      control sang. O so ngay hien so (khong trong). Kho 768 khong co gi tran ngang. Thieu anh
+      nao -> khong dat.
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ccq_cong_that
+    paths:
+      - "apps/api/src/settings/**"
+      - "packages/validation/src/cong-nghien-cuu.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
+    expected: |
+      Round-trip writer -> reader: xoa khoa (writeContextDevKey(db, "")), GET that
+      /api/trpc/settings.researchKey bang phien member va phien admin, dua body.result.data qua
+      congNghienCuu cua @crm/validation/cong-nghien-cuu: member -> settled, admin -> required;
+      dat lai khoa -> admin -> settled. apps/app/lib/onboarding.ts phai goi chinh ham nay
+      (grep import "@crm/validation/cong-nghien-cuu" trong onboarding.ts co mat). Dem ca = 3.
+      CHIEU DO: doi ten truong canManage trong researchKeyOutput -> ca admin do voi thong diep
+      ghim "admin bi day".

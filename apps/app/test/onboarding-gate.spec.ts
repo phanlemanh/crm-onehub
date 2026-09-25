@@ -51,20 +51,25 @@ const workspace = (data: {
 	result: { data: { slug: SLUG, viewerRole: "owner", ...data } },
 });
 
-const researchKey = (configured: boolean) => ({
-	result: { data: { configured, hint: configured ? "••••9876" : null } },
-});
+function researchKey(configured: boolean, canManage: boolean | null = true) {
+	const hint = configured ? "••••9876" : null;
+	const data =
+		canManage === null ? { configured, hint } : { configured, hint, canManage };
+	return { result: { data } };
+}
 
 /** Answers both gate procedures, counting the calls to each. */
 function setup({
 	onboarded = true,
 	canRename = true,
 	configured = true,
+	canManage = true,
 	slug = SLUG,
 }: {
 	onboarded?: boolean;
 	canRename?: boolean;
 	configured?: boolean;
+	canManage?: boolean;
 	slug?: string;
 } = {}) {
 	const calls = { workspace: 0, research: 0 };
@@ -76,7 +81,7 @@ function setup({
 		}
 
 		calls.research += 1;
-		return json(researchKey(configured));
+		return json(researchKey(configured, canManage));
 	});
 
 	return calls;
@@ -423,5 +428,62 @@ describe("the research key gate", () => {
 		expect(
 			redirectedTo(await proxy(request("/onboarding", [SESSION_COOKIE]))),
 		).toBe("/onboarding/research");
+	});
+});
+
+describe("ccq-cong-nghien-cuu", () => {
+	it("member khong bi day khi chua co khoa", async () => {
+		answerWith(researchKey(false, false));
+		expect(
+			`member: ${await readResearchGate(request("/", [SESSION_COOKIE]))}`,
+		).toBe("member: settled");
+	});
+
+	it("quan tri van bi day khi chua co khoa", async () => {
+		answerWith(researchKey(false, true));
+		expect(
+			`admin: ${await readResearchGate(request("/", [SESSION_COOKIE]))}`,
+		).toBe("admin: required");
+	});
+
+	it("thieu co thi settled", async () => {
+		answerWith(researchKey(false, null));
+		expect(
+			`thieu co: ${await readResearchGate(request("/", [SESSION_COOKIE]))}`,
+		).toBe("thieu co: settled");
+	});
+
+	it("co khoa thi settled du khong co quyen", async () => {
+		answerWith(researchKey(true, false));
+		expect(
+			`co khoa: ${await readResearchGate(request("/", [SESSION_COOKIE]))}`,
+		).toBe("co khoa: settled");
+	});
+
+	it("proxy: member mo trang trong ung dung khong bi day", async () => {
+		setup({ configured: false, canManage: false });
+		expect(
+			`member khong bi day: ${redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			)}`,
+		).not.toBe("member khong bi day: /onboarding/research");
+	});
+
+	it("proxy: member go thang /onboarding/research ve trang chinh", async () => {
+		setup({ configured: false, canManage: false });
+		expect(
+			`member go thang: ${redirectedTo(
+				await proxy(request("/onboarding/research", [SESSION_COOKIE])),
+			)}`,
+		).toBe(`member go thang: /${SLUG}`);
+	});
+
+	it("proxy: quan tri van bi day", async () => {
+		setup({ configured: false, canManage: true });
+		expect(
+			`quan tri: ${redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			)}`,
+		).toBe("quan tri: /onboarding/research");
 	});
 });
