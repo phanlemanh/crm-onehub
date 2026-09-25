@@ -275,12 +275,12 @@ evals:
       - "_acceptance/logo-onehub/rang/chup.mjs"
     expected: |
       Trong cung luot chup: dung renderToStaticMarkup cua CHINH MessageAvatar (square) boc CHINH
-      Logo className="size-5" — dung dung hai thanh phan agent-panel.tsx dung — dat vao trang
-      cua trinh duyet bang page.setContent, nap MOI stylesheet ma trang /sign-in cua may chu dev
-      that phat ra (link rel=stylesheet), giao dien sang va toi (lop dark tren html). Moi giao
+      Logo className="size-5" — dung dung hai thanh phan agent-panel.tsx dung — chen vao chinh
+      trang /sign-in cua may chu dev that (cung origin, CSS that cua app da ap), giao dien sang
+      va toi (lop dark tren html); chup rieng khoi chen. Moi giao
       dien: khung [data-slot="message-avatar"] rong = cao = 32px (+-0.5), nen khong trong suot,
       svg cao 20px (+-0.5) va tam svg trung tam khung (+-1px); chup
-      evidence/E15-anh-dai-dien-<sang|toi>.png. Khong nap duoc stylesheet nao -> ma 2.
+      evidence/E15-anh-dai-dien-<sang|toi>.png. Khong dung duoc khoi -> SAI.
       E14 chung AgentAvatar dung square; E15 chung square ve ra khoi vuong tren CSS that — hai
       eval cung phu AC-11.
       CHIEU DO tren ban sao: bo lop size-8 cua bien the square trong message.tsx -> khung 32x20,

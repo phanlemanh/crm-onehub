@@ -454,7 +454,7 @@ function Sources({ sources }: { sources: Source[] }) {
 
 function AgentAvatar() {
 	return (
-		<MessageAvatar>
+		<MessageAvatar square>
 			<Logo className="size-5" />
 		</MessageAvatar>
 	);

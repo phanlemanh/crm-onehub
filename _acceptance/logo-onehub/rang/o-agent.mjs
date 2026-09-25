@@ -50,13 +50,23 @@ for (const b of BOC) {
 		kiem(`${b.ten}: khong thay <Logo nam trong ${b.mo}>`, false);
 		continue;
 	}
-	const doan = ma.slice(ma.lastIndexOf(b.mo, viTri), viTri);
+	const hetLogo = ma.indexOf("/>", viTri);
+	if (hetLogo === -1) {
+		kiem(`${b.ten}: the <Logo khong dong`, false);
+		continue;
+	}
+	const doan = ma.slice(ma.lastIndexOf(b.mo, viTri), hetLogo + 2);
 	kiem(
 		doan.includes(O_TO) ? `${b.ten}: o ${O_TO} quanh logo` : `${b.ten}: khong o ${O_TO} quanh logo`,
 		!doan.includes(O_TO),
 	);
 	if (b.ten === "AgentAvatar") {
-		const conDau = doan.replace(b.mo, "").replace(/^[^>]*>/, "").trim();
+		const theMo = doan.match(/^<MessageAvatar\b([^>]*)>/)?.[1] ?? "";
+		kiem(
+			/\bsquare\b/.test(theMo) ? "AgentAvatar: MessageAvatar vuong" : "AgentAvatar: MessageAvatar khong vuong",
+			/\bsquare\b/.test(theMo),
+		);
+		const conDau = doan.replace(b.mo, "").replace(/^[^>]*>/, "").trim().replace(/<Logo\b[^>]*\/>$/, "").trim();
 		kiem(
 			conDau === "" ? "AgentAvatar: logo la con dau tien cua MessageAvatar" : `AgentAvatar: con dau tien cua MessageAvatar khong phai logo (${conDau.slice(0, 40)})`,
 			conDau === "",

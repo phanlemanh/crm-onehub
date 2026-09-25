@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { markupAnhDaiDien } from "../../../packages/ui/test/logo-markup.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -17,6 +18,9 @@ const CHO_MS = 30_000;
 const LOCKUP_VIEWBOX = "0 0 2048 622";
 const LOCKUP_CAO_TOI_THIEU = 20;
 const LOGO_MAN_TRONG_CAO_TOI_THIEU = 28;
+const ANH_DAI_DIEN_CANH = 32;
+const ANH_DAI_DIEN_LOGO = 20;
+const DUNG_SAI_PX = 0.5;
 const ICON_KHAI = {
 	"/favicon.ico": "apps/app/app/favicon.ico",
 	"/favicon.svg": "apps/app/public/favicon.svg",
@@ -166,7 +170,7 @@ async function kiemManTrong(p, nhan) {
 		const svg = khoi?.querySelector('svg[aria-label="OneHub"]');
 		if (!khoi || !svg) return null;
 		const nen = [];
-		for (let el = svg.parentElement; el && el !== khoi.parentElement; el = el.parentElement) {
+		for (let el = svg; el && el !== khoi.parentElement; el = el.parentElement) {
 			const mau = getComputedStyle(el).backgroundColor;
 			const alpha =
 				mau === "transparent"
@@ -189,6 +193,66 @@ async function kiemManTrong(p, nhan) {
 		kq.nen.length === 0,
 	);
 	kiem(`${nhan}: logo man trong cao ${kq.cao.toFixed(1)}px (can >= ${LOGO_MAN_TRONG_CAO_TOI_THIEU})`, kq.cao >= LOGO_MAN_TRONG_CAO_TOI_THIEU - 0.5);
+}
+
+async function kiemAnhDaiDien() {
+	const markup = markupAnhDaiDien();
+	for (const giaoDien of ["light", "dark"]) {
+		const nhan = giaoDien === "light" ? "sang" : "toi";
+		const ctx = await trinhDuyet.createBrowserContext();
+		const p = await ctx.newPage();
+		await p.setViewport({ width: 1440, height: CAO, deviceScaleFactor: 4 });
+		await p.evaluateOnNewDocument((g) => localStorage.setItem("theme", g), giaoDien);
+		await p.goto(`${APP}/sign-in`, { waitUntil: "networkidle0" });
+		await p.evaluate((m, toi) => {
+			document.documentElement.classList.toggle("dark", toi);
+			const san = document.createElement("div");
+			san.id = "san-anh-dai-dien";
+			san.className = "bg-background p-6";
+			san.style.cssText = "position:fixed;left:0;top:0;z-index:2147483647";
+			san.innerHTML = `<div data-slot="message" class="group/message flex">${m}</div>`;
+			document.body.appendChild(san);
+		}, markup, giaoDien === "dark");
+		const kq = await p.evaluate(() => {
+			const khung = document.querySelector('[data-slot="message-avatar"]');
+			const svg = khung?.querySelector('svg[aria-label="OneHub"]');
+			if (!khung || !svg) return null;
+			const k = khung.getBoundingClientRect();
+			const s = svg.getBoundingClientRect();
+			return {
+				rong: k.width,
+				cao: k.height,
+				nen: getComputedStyle(khung).backgroundColor,
+				logo: s.height,
+				lechX: Math.abs(s.left + s.width / 2 - (k.left + k.width / 2)),
+				lechY: Math.abs(s.top + s.height / 2 - (k.top + k.height / 2)),
+			};
+		});
+		if (!kq) {
+			kiem(`anh-dai-dien-${nhan}: khong dung duoc anh dai dien`, false);
+			await ctx.close();
+			continue;
+		}
+		const vuong =
+			Math.abs(kq.rong - ANH_DAI_DIEN_CANH) <= DUNG_SAI_PX && Math.abs(kq.cao - ANH_DAI_DIEN_CANH) <= DUNG_SAI_PX;
+		kiem(
+			vuong
+				? `anh-dai-dien-${nhan}: khoi vuong ${kq.rong}x${kq.cao}`
+				: `anh-dai-dien-${nhan}: anh dai dien khong vuong ${kq.rong}x${kq.cao}`,
+			vuong,
+		);
+		const trong = kq.nen === "transparent" || /\/\s*0\)$|,\s*0\)$/.test(kq.nen);
+		kiem(`anh-dai-dien-${nhan}: nen ${kq.nen}`, !trong);
+		kiem(
+			`anh-dai-dien-${nhan}: logo cao ${kq.logo}px, lech tam ${kq.lechX.toFixed(1)}/${kq.lechY.toFixed(1)}px`,
+			Math.abs(kq.logo - ANH_DAI_DIEN_LOGO) <= DUNG_SAI_PX && kq.lechX <= 1 && kq.lechY <= 1,
+		);
+		const tep = join(RA, `E15-anh-dai-dien-${nhan}.png`);
+		const san = await p.$("#san-anh-dai-dien");
+		await san.screenshot({ path: tep });
+		dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
+		await ctx.close();
+	}
 }
 
 async function kiemIcon(p) {
@@ -255,7 +319,10 @@ for (const rong of [1440, 390]) {
 		canLockup: rong === 1440 ? null : { co: "dau form co ban ngang", thieu: "dau form thieu logo" },
 		vung: rong === 1440 ? null : "main section:last-of-type",
 	});
-	if (rong === 1440) await kiemIcon(p);
+	if (rong === 1440) {
+		await kiemIcon(p);
+		await kiemAnhDaiDien();
+	}
 	await ctx.close();
 }
 
