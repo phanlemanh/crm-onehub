@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, symlinkSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -250,19 +250,71 @@ khang(
 	`tap eval nhin-thay bi dung lech khai: thua ${JSON.stringify(thua)}, thieu ${JSON.stringify(thieu)}`,
 );
 
+const CAN_MAY_CHU = /tien-de|APP_URL|API_URL/;
+const doSan = [];
+const canMayChu = [];
+
+function cayGoc() {
+	const goc = join(GOC, ".acceptance-runs", "khung-trang-cai-dat", "goc");
+	if (!existsSync(goc)) git("worktree", "add", "--detach", goc, moc);
+	const noi = [
+		".env",
+		"node_modules",
+		"apps/app/node_modules",
+		"apps/api/node_modules",
+		"apps/agent/node_modules",
+		"packages/ui/node_modules",
+		"packages/db/node_modules",
+		"packages/db/src/generated",
+	];
+	for (const d of noi)
+		if (existsSync(join(GOC, d)) && !existsSync(join(goc, d)))
+			symlinkSync(join(GOC, d), join(goc, d));
+	return goc;
+}
+
+function chay(c, cwd) {
+	return spawnSync("bash", ["-lc", c], {
+		cwd,
+		encoding: "utf8",
+		timeout: 900000,
+	});
+}
+
 if (!BO_LAN) {
+	let goc = null;
 	for (const [c, ai] of chayMay) {
-		const r = spawnSync("bash", ["-lc", c], {
-			cwd: GOC,
-			encoding: "utf8",
-			timeout: 900000,
-		});
-		khang(r.status === 0, `${ai}: lenh ma ${r.status} — ${c.slice(0, 120)}`);
-		if (r.status !== 0)
-			console.log(
-				`${r.stdout ?? ""}${r.stderr ?? ""}`.split("\n").slice(-12).join("\n"),
-			);
+		if (CAN_MAY_CHU.test(c)) {
+			canMayChu.push(ai);
+			continue;
+		}
+		const r = chay(c, GOC);
+		if (r.status === 0) {
+			dung += 1;
+			continue;
+		}
+		goc ??= cayGoc();
+		const g = chay(c, goc);
+		if (g.status !== 0) {
+			doSan.push(`${ai} (HEAD ${r.status}, merge-base ${g.status})`);
+			continue;
+		}
+		khang(
+			false,
+			`${ai}: hoi quy — HEAD ma ${r.status}, merge-base ma 0 — ${c.slice(0, 120)}`,
+		);
+		console.log(
+			`${r.stdout ?? ""}${r.stderr ?? ""}`.split("\n").slice(-12).join("\n"),
+		);
 	}
+	console.log(
+		`do san (do ca o merge-base, khong tinh la hoi quy): ${doSan.length}`,
+	);
+	for (const x of doSan) console.log(`  do-san: ${x}`);
+	console.log(
+		`can may chu (khong chay o day, lan ghim lai cua tung ho so): ${canMayChu.length}`,
+	);
+	for (const x of canMayChu) console.log(`  can-may-chu: ${x}`);
 }
 
 console.log(

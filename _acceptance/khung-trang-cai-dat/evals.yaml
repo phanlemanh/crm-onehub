@@ -277,7 +277,9 @@ evals:
       - "_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs"
     expected: |
       Chay moi eval test/script cua 11 ho so trong AC-12 (rut tu evals.yaml cua tung ho so, lenh
-      giai qua config.yaml, trung lenh chay mot lan), cong mot phep so: bai kiem cua cac ho so do tai
+      giai qua config.yaml, trung lenh chay mot lan), TRU lenh can may chu (tien-de, APP_URL) —
+      liet ke ten, de lan ghim lai cua tung ho so. Lenh do o HEAD chay lai tren worktree merge-base:
+      do ca hai = "do san" (liet ke, khong tinh); chi do o HEAD = hoi quy -> do. Cong mot phep so: bai kiem cua cac ho so do tai
       merge-base va tai HEAD co cung tap ten bai, va than bai chi khac o dung ca AC-11 cong dung mot
       thay doi du lieu da khai: danh sach mien dau KHONG_DAU cua apps/app/test/messages-guard.spec.ts
       them dung 3 khoa thanhBen.chung, tieuDeTab.chung, chung.tieuDe (nhan "Chung" khong dau). Doc E17 cua

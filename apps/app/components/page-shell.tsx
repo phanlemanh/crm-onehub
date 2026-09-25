@@ -6,10 +6,10 @@ import { PageShellLoading } from "./page-shell-loading";
 import { PageTransition } from "./page-transition";
 
 const BE_RONG = {
-	narrow: "max-w-(--container-narrow)",
-	page: "max-w-(--container-page)",
-	wide: "max-w-(--container-page-wide)",
-	full: "",
+	narrow: { className: "max-w-(--container-narrow)" },
+	page: { className: "max-w-(--container-page)" },
+	wide: { className: "max-w-(--container-page-wide)" },
+	full: { className: "" },
 } as const;
 
 type BeRongTrang = keyof typeof BE_RONG;
@@ -36,7 +36,7 @@ function PageShell({
 					data-slot="page-shell"
 					className={cn(
 						width
-							? `flex w-full min-w-0 flex-1 flex-col gap-6 ${BE_RONG[width]}`
+							? `flex w-full min-w-0 flex-1 flex-col gap-6 ${BE_RONG[width].className}`
 							: "mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6",
 						className,
 					)}

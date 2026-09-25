@@ -273,7 +273,6 @@ const en = {
 	},
 	nguoi: {
 		nhan: "People",
-		tieuDe: "Slack is connected",
 		moTa: "Match your CRM people to Slack once. Agents use these exact accounts later instead of guessing from a similar name.",
 		demKhop: (khop: string, tong: string) => `${khop} of ${tong} matched`,
 		lamMoi: "Refresh from Slack",
@@ -562,7 +561,6 @@ const vi = {
 	},
 	nguoi: {
 		nhan: "Người",
-		tieuDe: "Slack đã cắm xong",
 		moTa: "Khớp người trong CRM với Slack một lần. Về sau tác nhân dùng đúng những tài khoản này thay vì đoán theo tên na ná.",
 		demKhop: (khop: string, tong: string) => `Đã khớp ${khop} trên ${tong}`,
 		lamMoi: "Lấy lại từ Slack",

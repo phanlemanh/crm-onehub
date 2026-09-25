@@ -13,12 +13,12 @@ import {
 import { duongCaiDat } from "@/lib/cai-dat-breadcrumb";
 
 const DUONG_CON = {
-	google: "google",
-	microsoft: "microsoft",
-	slack: "slack",
-	slackNguoi: "slack/people",
-	zalo: "zalo",
-	intake: "intake",
+	google: { path: "google" },
+	microsoft: { path: "microsoft" },
+	slack: { path: "slack" },
+	slackNguoi: { path: "slack/people" },
+	zalo: { path: "zalo" },
+	intake: { path: "intake" },
 } as const;
 
 export type TrangConKetNoi = keyof typeof DUONG_CON;
@@ -36,7 +36,7 @@ async function DuongDanThat({
 }) {
 	const { slug } = await params;
 	const cap = duongCaiDat(
-		`/${slug}/settings/connections/${DUONG_CON[kind]}`,
+		`/${slug}/settings/connections/${DUONG_CON[kind].path}`,
 		locale,
 	);
 
@@ -53,7 +53,7 @@ function DuongDanKetNoi({
 	locale: Locale;
 }) {
 	const cho = duongCaiDat(
-		`/${GIU_CHO}/settings/connections/${DUONG_CON[kind]}`,
+		`/${GIU_CHO}/settings/connections/${DUONG_CON[kind].path}`,
 		locale,
 	);
 

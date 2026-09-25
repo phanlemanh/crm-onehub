@@ -4,7 +4,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { NavGroup, NavGroupLabel, NavItem } from "@crm/ui/components/nav-item";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { type ReactNode, useId, useMemo } from "react";
 import {
 	GOC_CAI_DAT,
 	type MucCaiDat,
@@ -47,6 +47,17 @@ function Muc({
 	);
 }
 
+function Nhom({ nhan, children }: { nhan: string; children: ReactNode }) {
+	const id = useId();
+
+	return (
+		<NavGroup aria-labelledby={id}>
+			<NavGroupLabel id={id}>{nhan}</NavGroupLabel>
+			{children}
+		</NavGroup>
+	);
+}
+
 function ThanhBen({
 	nhom,
 	trangThai,
@@ -55,7 +66,7 @@ function ThanhBen({
 	trangThai: TrangThaiMuc;
 }) {
 	const t = settingsMessages(useLocale());
-	const dangTai = trangThai ? undefined : "true";
+	const dangTai = trangThai === null || undefined;
 
 	return (
 		<>
@@ -66,10 +77,7 @@ function ThanhBen({
 					className="flex flex-col gap-4 p-3"
 				>
 					{nhom.map((n) => (
-						<NavGroup key={n.khoa} aria-labelledby={`nhom-cai-dat-${n.khoa}`}>
-							<NavGroupLabel id={`nhom-cai-dat-${n.khoa}`}>
-								{t.nhomThanhBen[n.khoa]}
-							</NavGroupLabel>
+						<Nhom key={n.khoa} nhan={t.nhomThanhBen[n.khoa]}>
 							{n.muc.map((muc) => (
 								<Muc
 									key={muc.href}
@@ -79,7 +87,7 @@ function ThanhBen({
 									orientation="vertical"
 								/>
 							))}
-						</NavGroup>
+						</Nhom>
 					))}
 				</nav>
 			</aside>
