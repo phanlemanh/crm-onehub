@@ -116,6 +116,7 @@ phép đo `_acceptance/toan-canh-okr/evals.yaml`.
 ### Task 10: Tài liệu — ba trang hướng dẫn, `docs/api.md`
 
 **Files:** Create `docs/huong-dan/okr-nguoi-phu-trach.md`, `okr-truong-don-vi.md`, `okr-quan-tri.md`; Modify `docs/api.md` mục OKR (thủ tục xem, luật vết `mo-hop-tuan`).
+**Chia hai nửa (S3, 26/09):** nửa nhịp 1 chỉ `docs/api.md` cho bốn thủ tục xem và luật làm mới. Ba trang hướng dẫn và luật vết `mo-hop-tuan` sang cuối nhịp 2, sau khi gộp lượt 4 — chúng phải gọi đúng tên và đường màn của Cập nhật tuần và Họp tuần, hai thứ chưa có trên nhánh ở nhịp 1.
 **Verify:** E27 (judgment ở S4).
 **independent:** true
 

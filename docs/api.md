@@ -464,6 +464,20 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   ones. An objective title that already exists for that unit and cycle is a broken
   row, so pasting the same batch twice writes nothing. Caps and messages live in
   `OKR` (`okr-config.ts`).
+- **Reading views live in `OkrXemService`, not in `OkrService`.** `okr.danhSach`
+  filters a unit's list on the server — owner, kind and status become one Prisma
+  `where`, a division includes its departments, and the facet counts are counted
+  with every other filter applied but their own. `okr.toanCanh` rolls published
+  objectives up by unit, `okr.cayCanChinh` returns the whole company alignment tree
+  with each objective's expected pace, and `okr.sucKhoe` is admin-only
+  (`ForbiddenException` otherwise). `danhSach`, `toanCanh` and `sucKhoe` run a fixed
+  number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
+  pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
+  plain data and are tested without a database. Caps and the admin message live in
+  `OKR_XEM` (`okr-xem.config.ts`).
+- **Expected pace starts at publication.** An objective published today has an
+  expected pace of 0, which `tinhTrang` reads as "no expectation yet" — a screen
+  never prints "expected 0%" or draws a marker at the start of the bar.
 
 ## Money
 
@@ -479,6 +493,9 @@ Read it before touching any amount, total, chart or rate.
   listing keys at the call site. Say what changed — `cache.deal(id)`,
   `cache.company(id)`, `cache.contact(id)`, `cache.activity()`. **A new mutation adds a
   call there, not a new list of keys.**
+- **A new query a screen reads joins the list its writes refresh.** Every `okr.*`
+  query an OKR screen reads is in `cache.okr`, except `okr.access`;
+  `apps/app/test/okr-lam-moi.spec.ts` reads both sides and fails on the one left out.
 - **A deletion is `cache.removed(ref)`** — one wide fan-out, and the only place
   `refetchType: "none"` is right: the deleted record's `byId` query is still mounted
   while the sheet animates shut, so refetching reads a 404 into the closing sheet,
