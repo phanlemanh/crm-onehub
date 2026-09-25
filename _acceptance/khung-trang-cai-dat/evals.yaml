@@ -55,7 +55,7 @@ evals:
       - "Canh cay (rang/canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
       - "Dang nhap quan tri bang dev:session. HAI LAN GIEO co dinh, khai trong tep thuoc: lan 1 Slack chua ket noi (trang gioi thieu); lan 2 Slack da ket noi co it nhat 1 nguoi khop, Google va Microsoft da ket noi, Zalo bat (zaloBotName dat). Mot trang con khong ve duoc o lan gieo cua no -> ma 2, KHONG bo o, KHONG ha so khang dinh"
       - "Mo 16 duong Cai dat va /reminders o 1920, 1440 va 768 -> doc getBoundingClientRect cua moi h1 va cua nav breadcrumb, dem so h1, chup evidence/<duong>-<kho>.png"
-      - "O 375 mo 17 duong -> so scrollWidth voi clientWidth cua tai lieu"
+      - "O 375 mo 17 duong -> mep phai cua page-shell-header, page-shell, nav[aria-label] khong vuot clientWidth; tai lieu tran thi in ten phan tu dau tien trong page-shell-content vuot mep (ngoai-khung, khong tinh)"
     expected: |
       exit 0. Ma tran viet truoc: 16 trang x 2 kho (1440, 768) x [dung 1 h1] = 32; 3 kho (1920, 1440,
       768) x [left cua h1 cua 15 trang lech <= 1px so voi trang Chung] = 45 (1920 bat to-chuc width

@@ -3,6 +3,10 @@ import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { khungUngDungMessages } from "../../../apps/app/lib/messages/khung-ung-dung.ts";
+import { nhacQuaZaloMessages } from "../../../apps/app/lib/messages/nhac-qua-zalo.ts";
+import { settingsMessages } from "../../../apps/app/lib/messages/settings.ts";
+import { ketNoiMessages } from "../../../apps/app/lib/messages/settings-ket-noi.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { WORKSPACE_ID } from "../../../packages/db/src/workspace.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
@@ -41,43 +45,33 @@ const CON = [
 	"/settings/connections/zalo",
 	"/settings/connections/intake",
 ];
-const NHAN = {
-	vi: {
-		google: "Google",
-		microsoft: "Microsoft",
-		slack: "Slack",
-		zalo: "Zalo",
-		intake: "Điểm nhận dữ liệu",
-		nguoi: "Người",
-		them: "Thêm kết nối",
-		go: "Gỡ",
-		chuaCam: "Chưa cắm",
-		ketNoi: "Kết nối",
-		nhac: "Nhắc buổi sáng",
-		noiCuaToi: "Nối Zalo của tôi",
-		caiDat: "Cài đặt",
-	},
-	en: {
-		google: "Google",
-		microsoft: "Microsoft",
-		slack: "Slack",
-		zalo: "Zalo",
-		intake: "Intake endpoint",
-		nguoi: "People",
-		them: "Add a connection",
-		go: "Disconnect",
-		chuaCam: "Not connected",
-		ketNoi: "Connections",
-		nhac: "Morning reminders",
-		noiCuaToi: "Connect my Zalo",
-		caiDat: "Settings",
-	},
-};
+function nhanCua(tieng) {
+	const k = ketNoiMessages(tieng);
+	return {
+		google: k.ten.google,
+		microsoft: k.ten.microsoft,
+		slack: k.ten.slack,
+		zalo: k.ten.zalo,
+		intake: k.tiepNhan.tieuDe,
+		nguoi: k.nguoi.nhan,
+		them: k.danhSach.them,
+		go: k.slack.go,
+		chuaCam: k.chung.chuaCam,
+		ketNoi: k.danhSach.tieuDe,
+		nhac: khungUngDungMessages(tieng).header.nhacBuoiSang,
+		tieuDeNhac: nhacQuaZaloMessages(tieng).tieuDe,
+		noiCuaToi: nhacQuaZaloMessages(tieng).ketNoi.noiCuaToi,
+		caiDat: settingsMessages(tieng).thanhBen.nhan,
+		menuTaiKhoan: khungUngDungMessages(tieng).header.accountMenu,
+	};
+}
+const NHAN = { vi: nhanCua("vi"), en: nhanCua("en") };
 
 mkdirSync(BANG_CHUNG, { recursive: true });
 
 let dung = 0;
 let sai = 0;
+const noiDungTran = [];
 const conTien = [];
 let trinhDuyet = null;
 
@@ -437,12 +431,35 @@ for (const rong of [1920, 1440, 768]) {
 await trang.setViewport({ width: 375, height: 800 });
 for (const d of [...TAT_CA, "/reminders"]) {
 	await moTrang(trang, duongDu(d), loiHydrate);
-	const tran = await trang.evaluate(
-		() =>
-			document.documentElement.scrollWidth -
-			document.documentElement.clientWidth,
-	);
-	khang(tran <= 0, `${d} 375: tran ngang ${tran}px`);
+	const tran = await trang.evaluate(() => {
+		const rong = document.documentElement.clientWidth;
+		const khung = [
+			...document.querySelectorAll(
+				"[data-slot='page-shell-header'], [data-slot='page-shell'], nav[aria-label]",
+			),
+		].filter((e) => e.offsetParent !== null);
+		const khungTran = Math.max(
+			0,
+			...khung.map((e) => Math.ceil(e.getBoundingClientRect().right - rong)),
+		);
+		const noiDung = document.documentElement.scrollWidth - rong;
+		let thuPham = null;
+		if (noiDung > 0)
+			for (const e of document.querySelectorAll(
+				"[data-slot='page-shell-content'] *",
+			))
+				if (e.getBoundingClientRect().right > rong + 1) {
+					const slot = e.getAttribute("data-slot");
+					thuPham = `${e.tagName.toLowerCase()}${slot ? `[${slot}]` : ""}`;
+					break;
+				}
+		return { khungTran, noiDung, thuPham };
+	});
+	khang(tran.khungTran <= 0, `${d} 375: khung tran ngang ${tran.khungTran}px`);
+	if (tran.noiDung > 0)
+		noiDungTran.push(
+			`${d} 375: noi dung tran ${tran.noiDung}px tai ${tran.thuPham ?? "?"}`,
+		);
 }
 await moTrang(trang, duongDu("/settings"), loiHydrate);
 const hep = await trang.evaluate(() => {
@@ -486,7 +503,7 @@ for (const d of CON) {
 }
 
 await moTrang(trang, duongDu("/settings"), loiHydrate);
-const nutMenu = await trang.$("button[aria-label='Menu tài khoản']");
+const nutMenu = await trang.$(`button[aria-label='${NHAN.vi.menuTaiKhoan}']`);
 if (!nutMenu) await khongDo("khong thay nut mo menu nguoi dung");
 await nutMenu.click();
 await trang.waitForSelector("[role='menuitem']", { timeout: CHO_TAI });
@@ -525,7 +542,7 @@ khang(
 	nhac.p === duongDu("/reminders"),
 	`menu: bam Nhac buoi sang toi ${nhac.p}`,
 );
-khang(nhac.h1 === NHAN.vi.nhac, `reminders: h1 "${nhac.h1}"`);
+khang(nhac.h1 === NHAN.vi.tieuDeNhac, `reminders: h1 "${nhac.h1}"`);
 khang(nhac.khoi, "reminders: thieu khoi Zalo hoac khoi kenh");
 khang(nhac.thanhBen === 0, "reminders: co thanh ben Cai dat");
 await trang.screenshot({ path: join(BANG_CHUNG, "nhac-1440.png") });
@@ -571,6 +588,7 @@ if (loiHydrate.length > 0) {
 	);
 }
 
+for (const x of noiDungTran) console.log(`ngoai-khung: ${x}`);
 const tong = dung + sai - (loiHydrate.length > 0 ? 1 : 0);
 console.log(`man-chrome: ${dung}/${tong} khang dinh dat`);
 if (tong !== KY_MONG)
