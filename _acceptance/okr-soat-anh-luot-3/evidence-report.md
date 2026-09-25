@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e162d8e7ca1674580cf94ab861978dfceb9de996
+verified_commit: 64923e26955d85bf793e2b74bb9b4df47dd54325
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -243,3 +243,7 @@ none — every multi-run eval is uniform (khong eval nao co runs > 1 round nay).
 Round 1: 15/15 eval đạt nhưng output `bun run test` bị cắt trước dòng tổng kết (tool timeout) → BLOCKED, không phải lỗi code.
 Round 2 (lần đầu): suite 4/4 mã 0, nhưng agent gõ sai đường dẫn ở E11 (14/15 eval đạt) → BLOCKED.
 Round 2 (lần ghi này): sửa xong đường dẫn E11, toàn bộ 15/15 eval + 4 lệnh suite đều mã 0 → PASS.
+
+### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub (#143, #145) sau lượt chấm
+run_id: repin-20260925T211733Z-58322
+sha: 64923e26955d85bf793e2b74bb9b4df47dd54325 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-9
