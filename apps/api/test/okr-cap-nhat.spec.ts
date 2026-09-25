@@ -1272,6 +1272,8 @@ describe("viec-cua-toi", () => {
 		const tbp = await truongMoi("division", bp, "lq-tbp");
 		const pbLuu = await pbMoi("lq-luu");
 		const luu = await truongMoi("department", pbLuu, "lq-luu");
+		const pbTrong = await pbMoi("lq-trong");
+		const truongTrong = await truongMoi("department", pbTrong, "lq-truong");
 		await db.department.update({
 			where: { id: pbLuu },
 			data: { archivedAt: new Date() },
@@ -1332,7 +1334,7 @@ describe("viec-cua-toi", () => {
 		const bang = {
 			"phu trach KR o dang-chay": await co(nguoi.krChay),
 			"phu trach muc tieu khong KR o dang-chay": await co(nguoi.mtChay),
-			"truong phong ban": await co(tp.nguoi),
+			"truong phong ban": await co(truongTrong.nguoi),
 			"truong bo phan": await co(tbp.nguoi),
 			"chi theo doi o dang-chay": await co(nguoi.theoChay),
 			"khong dinh gi": await co(nguoi.khong),
