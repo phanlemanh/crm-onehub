@@ -173,6 +173,18 @@
   {
    "id": "d-20260925T102308Z-19",
    "p": "Bịt luôn lỗ đo «bỏ sót chính logo» và đo ảnh đại diện trên giao diện thật dựng riêng, vì bàn đo không có hội thoại mẫu."
+  },
+  {
+   "id": "d-20260925T104137Z-21",
+   "p": "Lượt chấm thứ tư đỏ giả vì phép kiểm «xuất ảnh không ghi vào kho» bắt nhầm tệp tạm của làn chụp màn; đã đổi phép kiểm sang soi đúng tệp script có thể ghi."
+  },
+  {
+   "id": "d-20260925T114049Z-22",
+   "p": "Anh cho chạy lượt chấm thứ năm, chỉ chấm lại, không đổi sản phẩm."
+  },
+  {
+   "id": "d-20260925T115024Z-23",
+   "p": "Dọn danh sách chờ anh quyết: bỏ mục trùng và chép lại ba mục cũ bị rơi, đủ 13 mục."
   }
  ],
  "decisions": [],
