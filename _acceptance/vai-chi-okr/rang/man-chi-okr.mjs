@@ -19,7 +19,9 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const BANG_CHUNG = join(HERE, "..", "evidence");
+const BANG_CHUNG =
+	process.env.BANG_CHUNG ??
+	join(GOC, ".acceptance-runs", "vai-chi-okr", "evidence");
 const KHO = [375, 1440];
 const TIENG = ["vi", "en"];
 const CAO = 900;
