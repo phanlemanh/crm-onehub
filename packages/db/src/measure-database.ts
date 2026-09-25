@@ -6,7 +6,9 @@ const HOUR_MS = 60 * MINUTE_MS;
 export const MEASURE_DATABASE = {
 	prefix: "crm",
 	suffix: "_do",
-	templateMark: "_mau",
+	templateMark: "__mau",
+	separator: "__",
+	cleanTree: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
 	maxNameLength: 63,
 	hashLength: 6,
 	maxAgeMs: 12 * HOUR_MS,
@@ -38,30 +40,38 @@ export function treeSlug(tree: string): string {
 	return slug;
 }
 
-function fit(slug: string, tail: string): string {
-	const stem = `${MEASURE_DATABASE.prefix}_${slug}`;
-	const room = MEASURE_DATABASE.maxNameLength - tail.length;
-
-	if (stem.length <= room) return `${stem}${tail}`;
-
-	const hash = createHash("sha256")
-		.update(slug)
+function hashOf(tree: string): string {
+	return createHash("sha256")
+		.update(tree)
 		.digest("hex")
 		.slice(0, MEASURE_DATABASE.hashLength);
-	const kept = stem
-		.slice(0, room - MEASURE_DATABASE.hashLength - 1)
+}
+
+function fit(tree: string, tail: string): string {
+	const { prefix, separator, cleanTree, maxNameLength } = MEASURE_DATABASE;
+	const slug = treeSlug(tree);
+	const whole = cleanTree.test(tree)
+		? `${prefix}_${slug}`
+		: `${prefix}_${slug}${separator}${hashOf(tree)}`;
+	const room = maxNameLength - tail.length;
+
+	if (whole.length <= room) return `${whole}${tail}`;
+
+	const hash = hashOf(tree);
+	const kept = whole
+		.slice(0, room - hash.length - separator.length)
 		.replace(/_+$/, "");
 
-	return `${kept}_${hash}${tail}`;
+	return `${kept}${separator}${hash}${tail}`;
 }
 
 export function measureDatabaseName(tree: string): string {
-	return fit(treeSlug(tree), MEASURE_DATABASE.suffix);
+	return fit(tree, MEASURE_DATABASE.suffix);
 }
 
 export function templateDatabaseName(tree: string): string {
 	return fit(
-		treeSlug(tree),
+		tree,
 		`${MEASURE_DATABASE.templateMark}${MEASURE_DATABASE.suffix}`,
 	);
 }

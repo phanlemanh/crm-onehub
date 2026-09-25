@@ -33,7 +33,10 @@ database»). Vòng này làm cùng việc đó cho phép đo màn.
   (`git rev-parse --show-toplevel`); hạ chữ thường, mọi ký tự ngoài `[a-z0-9]` thành `_`.
   `PHIEN_DO_TEN_CAY` cho hai phiên độc lập trong cùng một checkout (răng của vòng này dùng
   nó để mỗi eval có khoá, kho, tệp ghi và thư mục dựng riêng khi Workflow S4 chạy chúng song
-  song). Kho đo `crm_<cây>_do`, kho mẫu `crm_<cây>_mau_do`.
+  song). Tên sạch (chữ thường, số, gạch ngang đơn) cho kho đo `crm_<cây>_do`; tên khác thêm
+  `__<6 ký tự băm của tên gốc>` để hai cây khác tên không bao giờ chung một kho. Kho mẫu mang
+  đuôi `__mau_do` — tên kho đo không bao giờ chứa `__mau`, nên không kho đo nào trùng kho mẫu
+  (S4 round 1: cây `x-mau` từng trùng kho mẫu của cây `x`).
   Cắt để tổng ≤ 63 ký tự (giới hạn tên của Postgres), giữ nguyên hậu tố.
 - Máy chủ = máy chủ của `DATABASE_URL` (thay tên kho). Máy chủ không cục bộ → từ chối
   (mã 2), cùng tập máy cục bộ với `require-local-db.ts`.
@@ -113,7 +116,7 @@ thẳng lệnh, không xin khoá (xin lại là tự chờ chính mình).
 Hôm nay `tien-de.mjs` ghi `contextDevApiKey`, ảnh đại diện, tên miền được phép vào kho mà
 `DATABASE_URL` trỏ tới — tức `crm`. Sửa: trước khi nạp `@crm/db`, nếu `DATABASE_URL` không
 phải kho dùng-một-lần (tên kết thúc bằng `_do` của phiên đo nhưng không phải kho mẫu
-`_mau_do`, hoặc `_gieo` của kho nháp `kho-nhap.mjs`), `tien-de` tự chạy lại chính nó bên trong một phiên đo:
+`__mau_do`, hoặc `_gieo` của kho nháp `kho-nhap.mjs`), `tien-de` tự chạy lại chính nó bên trong một phiên đo:
 `phien-do.mjs --chay "bun scripts/lan-do/tien-de.mjs --chay <răng>"`. Kho `_gieo` và kho
 `_do` giữ đường cũ, chạy thẳng.
 

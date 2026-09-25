@@ -9,15 +9,21 @@ evals:
     paths: [packages/db/src/measure-database.ts, packages/db/test/measure-database.spec.ts]
     expected: |
       exit 0; bai measure-database.spec.ts ca "ten-kho" goi ham that measureDatabaseName va
-      templateDatabaseName. MA TRAN VIET TRUOC 6 ten cay x 2 ham = 12 khang dinh toEqual ten
-      mong doi: "compassionate-hofstadter-928035" -> crm_compassionate_hofstadter_928035_do /
-      _mau_do; "crm" -> crm_crm_do; "Toan-Canh.OKR" -> crm_toan_canh_okr_do; "a--b" -> gop gach;
-      ten 80 ky tu -> dung 63 ky tu, ket thuc _do va _mau_do, hai ten 80 ky tu chi khac o ky tu
-      cuoi -> hai ten kho khac nhau (bam 6 ky tu); "__" -> nem loi "has no letter or digit left". Them: moi ten khop /^[a-z0-9_]+$/, khong ten nao bang crm/crm_test hay ket thuc
-      _test, hai cay khac ten -> hai ten khac.
-      CHIEU DO (pha thu o S3 tren ban da commit, git checkout sau): bo buoc cat 63 ky tu -> ca
-      ten dai do voi thong diep ghim "ten kho qua 63 ky tu"; bo thay ky tu la -> ca Toan-Canh.OKR
-      do "ten kho chi gom a-z0-9_".
+      templateDatabaseName. MA TRAN VIET TRUOC 5 ten cay x 2 ham toEqual: compassionate-hofstadter-928035
+      -> crm_compassionate_hofstadter_928035_do / __mau_do; crm -> crm_crm_do / crm_crm__mau_do;
+      x-mau -> crm_x_mau_do / crm_x_mau__mau_do; Toan-Canh.OKR -> crm_toan_canh_okr__5a49b2_do;
+      a--b -> crm_a_b__90827a_do (bam 6 ky tu sha256 cua ten goc, viet san, khong tinh lai bang
+      ham). Ten 80 ky tu -> dung 63 ky tu, ket thuc _do / __mau_do, hai ten dai chi khac ky tu
+      cuoi -> khac nhau; "__" -> nem loi "has no letter or digit left". MA TRAN VA CHAM viet
+      truoc 17 ten (a-b, a.b, A-B, a_b, a--b, -a-b, toan-canh-okr, Toan-Canh.OKR, toan_canh_okr,
+      x, x-mau, x_mau, crm, ten worktree that, ba ten dai) x 2 ham = 34 ten: khong hai ten nao
+      trung (thong diep ghim "trung ten kho: <a> va <b>"), moi ten khop /^[a-z0-9_]+$/, khong ten
+      nao la crm/crm_test hay ket thuc _test; isTemplateDatabase(ten kho do) == false va
+      isMeasureDatabase(ten kho mau) == false cho moi cay.
+      CHIEU DO: S4 round 1 (26/09) do cua ban cu (ten = slug) — reviewer chay that: a-b, a.b,
+      A_B, a--b cung ra crm_a_b_do va x-mau trung kho mau cua x; ma tran va cham tren ban cu do voi
+      "trung ten kho". Pha thu o S3: bo cat 63 ky tu -> "ten kho qua 63 ky tu"; bo thay ky tu la
+      -> "ten kho chi gom a-z0-9_".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -83,16 +89,18 @@ evals:
     paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
     expected: |
       exit 0; ca "quet-mo-coi": dung nam kho rong bang CREATE DATABASE, COMMENT viet bang CHINH
-      ham ghi dau cua measure-db (markMeasureDatabase / markTemplateUsed), khong viet chuoi tay:
-      gia (kho do, tao = now - maxAgeMs - 1 phut), non (kho do, tao = now - 1 phut), khong-dau
-      (ten _do, khong COMMENT), mau-con-dung (kho mau, tao = now - 2*maxAgeMs, dung = now - 1
-      phut), mau-bo (kho mau, tao va dung = now - maxAgeMs - 1 phut). Goi sweepMeasureDatabases(now)
-      that. MA TRAN VIET TRUOC: tap kho con lai trong nam ten BANG DUNG [non, khong-dau,
-      mau-con-dung] va gia tri tra ve BANG DUNG [gia, mau-bo] (sap xep). Doi chung duong tren
-      cung fixture: goi truoc voi now som hon 2 phut -> tra ve rong, ca nam con.
+      ham ghi dau cua measure-db (markMeasureDatabase / markTemplate), khong viet chuoi tay. Moi
+      moc thoi gian >= gio that T (de luot quet that cua eval khac chay song song khong dung toi
+      vat do — S4 round 1 do vi dieu nay), bai quet voi now = T + 2*maxAgeMs + 1 phut: gia (kho
+      do, tao T), non (kho do, tao now - 1 phut), khong-dau (ten _do, khong COMMENT),
+      mau-con-dung (kho mau, tao T, dung now - 1 phut), mau-bo (kho mau, tao va dung T). Doi
+      chung duong tren cung fixture: quet truoc voi T + maxAgeMs - 1 phut -> khong kho nao
+      trong nam bi xoa, moi kho mot khang dinh ghim "kho <nhan> bi xoa khi quet truoc han". Roi
+      quet voi now: tap con lai BANG DUNG [non, khong-dau, mau-con-dung], tap bi xoa trong nam
+      BANG DUNG [gia, mau-bo].
       CHIEU DO (pha thu o S3, da chay 26/09): bo dieu kien tuoi -> ca do "kho non bi xoa khi quet
       truoc han"; bo loc COMMENT -> ca do "kho khong-dau bi xoa khi quet truoc han"; bo gio dung
-      khoi moc tuoi -> ca do "kho mau-con-dung bi xoa khi quet truoc han".
+      khoi moc tuoi -> ca do "kho mau con dung bi xoa".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -168,8 +176,8 @@ evals:
       "lan-do-khong-phai-khoa-that"; ma 0; dau van tay kho chung truoc == sau. (b) chay
       `bun scripts/lan-do/phien-do.mjs --chay "bun scripts/lan-do/tien-de.mjs --chay '<lenh do>'"`
       -> APP_URL trong lenh do == APP_URL cua phien ngoai (lenh do ghi ca hai), stderr khong co
-      dong cho khoa, ma 0. (c) DATABASE_URL = kho mau crm_dmk_td_<id>_mau_do (da co sau ca a)
-      -> lenh do thay ten kho _do (khong phai _mau_do), ma 0, dau van tay kho mau truoc == sau.
+      dong cho khoa, ma 0. (c) DATABASE_URL = kho mau crm_dmk_td_<id>__mau_do (da co sau ca a)
+      -> lenh do thay ten kho _do (khong phai __mau_do), ma 0, dau van tay kho mau truoc == sau.
       CHIEU DO (pha thu o S3, da chay 26/09): bo re-exec trong tien-de -> tien-de chay thang tren
       kho chung gia, khong co NGUOI nen thoat 2 truoc khi ghi; ca (a) do "ca a: lenh do chay tren
       kho do cua cay"; bo nhan dien kho _do ca o tien-de lan o duong long cua phien-do (mot mat

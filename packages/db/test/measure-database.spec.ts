@@ -15,6 +15,8 @@ import {
 } from "../scripts/measure-db";
 import { dropDatabase, withMaintenance } from "../scripts/test-db-admin";
 import {
+	isMeasureDatabase,
+	isTemplateDatabase,
 	MEASURE_DATABASE,
 	measureDatabaseName,
 	parseMeasureComment,
@@ -99,11 +101,16 @@ describe("ten-kho", () => {
 		[
 			"compassionate-hofstadter-928035",
 			"crm_compassionate_hofstadter_928035_do",
-			"crm_compassionate_hofstadter_928035_mau_do",
+			"crm_compassionate_hofstadter_928035__mau_do",
 		],
-		["crm", "crm_crm_do", "crm_crm_mau_do"],
-		["Toan-Canh.OKR", "crm_toan_canh_okr_do", "crm_toan_canh_okr_mau_do"],
-		["a--b", "crm_a_b_do", "crm_a_b_mau_do"],
+		["crm", "crm_crm_do", "crm_crm__mau_do"],
+		["x-mau", "crm_x_mau_do", "crm_x_mau__mau_do"],
+		[
+			"Toan-Canh.OKR",
+			"crm_toan_canh_okr__5a49b2_do",
+			"crm_toan_canh_okr__5a49b2__mau_do",
+		],
+		["a--b", "crm_a_b__90827a_do", "crm_a_b__90827a__mau_do"],
 	];
 
 	it("names the measure and template databases of a tree", () => {
@@ -128,7 +135,7 @@ describe("ten-kho", () => {
 			expect(name.length, "ten kho qua 63 ky tu").toBeLessThanOrEqual(63);
 		}
 		expect(measureDatabaseName(long).endsWith("_do")).toBe(true);
-		expect(templateDatabaseName(long).endsWith("_mau_do")).toBe(true);
+		expect(templateDatabaseName(long).endsWith("__mau_do")).toBe(true);
 		expect(measureDatabaseName(long), "hai cay dai trung ten kho").not.toEqual(
 			measureDatabaseName(other),
 		);
@@ -140,23 +147,53 @@ describe("ten-kho", () => {
 		);
 	});
 
-	it("never names crm, crm_test or a _test database, and only uses a-z0-9_", () => {
-		const names = [
-			...cases.flatMap(([name]) => [
-				measureDatabaseName(name),
-				templateDatabaseName(name),
-			]),
-			measureDatabaseName(`cay-${"x".repeat(76)}`),
+	it("gives every distinct tree name its own database names, and no measure name is a template name", () => {
+		const trees = [
+			"a-b",
+			"a.b",
+			"A-B",
+			"a_b",
+			"a--b",
+			"-a-b",
+			"toan-canh-okr",
+			"Toan-Canh.OKR",
+			"toan_canh_okr",
+			"x",
+			"x-mau",
+			"x_mau",
+			"crm",
+			"compassionate-hofstadter-928035",
+			`cay-${"x".repeat(76)}`,
+			`cay-${"x".repeat(75)}y`,
+			`Cay-${"x".repeat(76)}`,
 		];
+		const names = trees.flatMap((tree) => [
+			[`do ${tree}`, measureDatabaseName(tree)],
+			[`mau ${tree}`, templateDatabaseName(tree)],
+		]);
+		const owner = new Map<string, string>();
 
-		for (const name of names) {
+		for (const [label, name] of names) {
+			expect(
+				owner.get(name),
+				`trung ten kho: ${label} va ${owner.get(name)}`,
+			).toBe(undefined);
+			owner.set(name, label);
 			expect(name, "ten kho chi gom a-z0-9_").toMatch(/^[a-z0-9_]+$/);
 			expect(["crm", "crm_test"]).not.toContain(name);
 			expect(name.endsWith("_test")).toBe(false);
 		}
-		expect(measureDatabaseName("cay-a")).not.toEqual(
-			measureDatabaseName("cay-b"),
-		);
+
+		for (const tree of trees) {
+			expect(
+				isTemplateDatabase(measureDatabaseName(tree)),
+				`kho do cua ${tree} bi coi la kho mau`,
+			).toBe(false);
+			expect(
+				isMeasureDatabase(templateDatabaseName(tree)),
+				`kho mau cua ${tree} bi coi la kho do`,
+			).toBe(false);
+		}
 	});
 });
 
@@ -292,38 +329,28 @@ describe("xoa", () => {
 
 describe("quet-mo-coi", () => {
 	it("drops only marked databases untouched for longer than maxAgeMs", async () => {
-		const now = Date.now();
+		const real = Date.now();
 		const age = MEASURE_DATABASE.maxAgeMs;
+		const now = real + 2 * age + MINUTE_MS;
+		const before = real + age - MINUTE_MS;
 		const old = `crm_thu${id}gia_do`;
 		const young = `crm_thu${id}non_do`;
 		const unmarked = `crm_thu${id}kd_do`;
-		const usedTemplate = `crm_thu${id}mcd_mau_do`;
-		const idleTemplate = `crm_thu${id}mb_mau_do`;
+		const usedTemplate = `crm_thu${id}mcd__mau_do`;
+		const idleTemplate = `crm_thu${id}mb__mau_do`;
 		const five = [old, young, unmarked, usedTemplate, idleTemplate];
 
 		for (const name of five) await createEmpty(name);
 
 		await withMaintenance(base, async (client) => {
-			await markMeasureDatabase(client, old, now - age - MINUTE_MS);
+			await markMeasureDatabase(client, old, real);
 			await markMeasureDatabase(client, young, now - MINUTE_MS);
-			await markTemplate(
-				client,
-				usedTemplate,
-				"f",
-				now - 2 * age,
-				now - MINUTE_MS,
-			);
-			await markTemplate(
-				client,
-				idleTemplate,
-				"f",
-				now - age - MINUTE_MS,
-				now - age - MINUTE_MS,
-			);
+			await markTemplate(client, usedTemplate, "f", real, now - MINUTE_MS);
+			await markTemplate(client, idleTemplate, "f", real, real);
 		});
 
 		const early = await withMaintenance(base, (client) =>
-			sweepMeasureDatabases(client, now - 2 * MINUTE_MS),
+			sweepMeasureDatabases(client, before),
 		);
 		const labels: [string, string][] = [
 			[young, "non"],
@@ -342,9 +369,6 @@ describe("quet-mo-coi", () => {
 		const dropped = await withMaintenance(base, (client) =>
 			sweepMeasureDatabases(client, now),
 		);
-		expect(dropped.filter((name) => five.includes(name))).toEqual(
-			[old, idleTemplate].sort(),
-		);
 
 		const left: string[] = [];
 		for (const name of five) if (await exists(name)) left.push(name);
@@ -352,5 +376,8 @@ describe("quet-mo-coi", () => {
 		expect(left.includes(unmarked), "kho khong dau bi xoa").toBe(true);
 		expect(left.includes(usedTemplate), "kho mau con dung bi xoa").toBe(true);
 		expect(left.sort()).toEqual([young, unmarked, usedTemplate].sort());
+		expect(dropped.filter((name) => five.includes(name))).toEqual(
+			[old, idleTemplate].sort(),
+		);
 	});
 });

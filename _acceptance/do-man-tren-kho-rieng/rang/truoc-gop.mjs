@@ -48,6 +48,6 @@ khang(
 	`pre-merge toan kho: ${khac.length} vi pham cua ho so khac`,
 );
 console.log(
-	`truoc-gop: pre-merge thoat ${ra.status}, ${sai === 0 ? "sach" : `${sai} SAI`}`,
+	`truoc-gop: ${sai === 0 ? "XANH" : `DO — ${sai} SAI`} (lenh pre-merge tra ${ra.status}; vi pham cua chinh ho so nay da bo qua)`,
 );
 process.exit(sai > 0 ? 1 : 0);

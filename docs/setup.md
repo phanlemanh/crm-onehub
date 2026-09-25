@@ -215,8 +215,10 @@ worktree made a signed ruler that needs zero cycles exit 2 in another.
 So a measurement now runs in a **measure session** on a database of its own tree:
 
 - `bun run db:do --tao` creates `crm_<tree>_do` and prints its URL on the last line.
-  `<tree>` is the checkout's directory name (or `PHIEN_DO_TEN_CAY`), slugged. The
-  database is cloned (`CREATE DATABASE … TEMPLATE`) from `crm_<tree>_mau_do`, a
+  `<tree>` is the checkout's directory name (or `PHIEN_DO_TEN_CAY`) with hyphens turned
+  into underscores; a name with capitals, dots, underscores or doubled hyphens also gets
+  `__<hash>`, so two different names never share a database. The
+  database is cloned (`CREATE DATABASE … TEMPLATE`) from `crm_<tree>__mau_do`, a
   template built once by `migrate deploy` plus `prisma/seed.ts` and rebuilt when the
   migrations, `schema.prisma` or `seed.ts` change. A clone takes about a second; the
   seed alone takes thirty. Nothing is copied from `crm`. The seed runs with an empty
@@ -241,7 +243,7 @@ So a measurement now runs in a **measure session** on a database of its own tree
   exits with the command's code (130/143/129 when interrupted, 2 when the session
   could not be built).
 - `tien-de` never runs on the shared database. When `DATABASE_URL` does not name a
-  throwaway database — `_do` other than a `_mau_do` template, or a `_gieo` scratch
+  throwaway database — `_do` other than a `__mau_do` template, or a `_gieo` scratch
   database — it re-runs itself inside a session. Every screen eval in
   `_acceptance/config.yaml` goes through it, so a single eval run by a Workflow agent
   or `repin-lane` gets a clean database and its own servers without any change to the
