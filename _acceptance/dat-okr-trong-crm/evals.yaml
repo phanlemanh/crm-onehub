@@ -208,8 +208,18 @@ evals:
   - id: E18
     criterion: AC-14
     executor: judgment
+    question: >-
+      Bảng «Bậc thang «Vẽ tay là bậc cuối» — từng khối» ở mục 6 design doc có nêu tên
+      tệp .tsx thật và bậc dừng cho mỗi khối giao diện mới của ba vùng OKR (khu okr/,
+      settings/okr/, objective-sheet.tsx và các hộp thoại của nó) không, và có khối
+      nào dừng ở bậc 5 (dựng mới trong packages/ui) mà không trỏ tới lượt 5 hoặc một
+      hợp đồng riêng?
+    expected: >-
+      Mỗi khối giao diện mới có một dòng nêu đúng tên tệp và bậc dừng (bậc 1 —
+      packages/ui — cho toàn bộ, vì mọi khối ghép từ thành phần sẵn có); không khối
+      nào dừng ở bậc 5; các biến thể còn thiếu (Progress trung tính, thành phần cây,
+      ConfirmDialog trong packages/ui) đều trỏ rõ sang lượt 5 hoặc đợt 2 docs/settings.md.
     inputs: [docs/superpowers/specs/2026-09-25-dat-okr-trong-crm-design.md, _acceptance/dat-okr-trong-crm/contract.md]
-    expected: "Người chấm đọc bảng «Bậc thang» ở mục 6 design doc và đối chiếu với danh sách tệp .tsx mới trong git diff của ba vùng OKR (khu okr/, settings/okr/, objective-sheet.tsx): mỗi khối giao diện có một dòng nêu bậc dừng và đã tra gì; không khối nào dừng ở bậc 5 mà không trỏ tới lượt 5 hoặc một hợp đồng riêng; mô tả PR (khi có) chép bảng đó."
     evidence_required: [run_id, verifier, verified_at, output]
 
   - id: E19
