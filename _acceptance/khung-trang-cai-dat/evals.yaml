@@ -83,7 +83,8 @@ evals:
       - "Slack chua ket noi: tim chu 'Chưa cắm' ben trong [data-slot=page-shell-content]"
     expected: |
       exit 0. Ma tran: 7 trang (Google, Microsoft, Slack da, Slack chua, Slack Nguoi, Zalo, Intake)
-      x 2 tieng x [h1 dung ten, translate=no] = 28; 2 the x 2 tieng x [tieu de the khong chua ten nha
+      x 2 tieng x [h1 dung ten, translate dung: "no" cho 5 trang ten thuong hieu, vang cho Intake va
+      Nguoi vi la chu thuong can dich] = 28; 2 the x 2 tieng x [tieu de the khong chua ten nha
       cung cap] = 4; 2 nut x 2 tieng x [nam trong page-shell-actions] = 4; 2 tieng x [Chua cam trong
       than] = 2. Tong 38.
       CHIEU DO: ban sao tra ten "Google" vao CardTitle -> do "google vi: tieu de the chua Google".

@@ -41,12 +41,12 @@ import {
 
 type BeRong = "narrow" | "page" | "wide" | "full";
 
-const BE_RONG: Record<BeRong, string> = {
+const BE_RONG = {
 	narrow: "max-w-(--container-narrow)",
 	page: "max-w-(--container-page)",
 	wide: "max-w-(--container-page-wide)",
 	full: "",
-};
+} as const;
 
 type Muc = { nhan: string; state: string };
 
@@ -461,33 +461,37 @@ function TrangNhac() {
 	);
 }
 
-const MUC_THEO_STATE: Record<string, string> = {
-	"ST-chung": "Chung",
-	"ST-thanh-vien": "Thành viên",
-	"ST-ket-noi": "Kết nối",
-	"ST-google": "Kết nối",
-	"ST-slack-nguoi": "Kết nối",
-	"ST-intake": "Kết nối",
-	"ST-dang-tai": "",
-	"ST-menu": "Chung",
-	"ST-phuong-an-a": "Chung",
-};
+const MUC_THEO_STATE = new Map<string, string>(
+	Object.entries({
+		"ST-chung": "Chung",
+		"ST-thanh-vien": "Thành viên",
+		"ST-ket-noi": "Kết nối",
+		"ST-google": "Kết nối",
+		"ST-slack-nguoi": "Kết nối",
+		"ST-intake": "Kết nối",
+		"ST-dang-tai": "",
+		"ST-menu": "Chung",
+		"ST-phuong-an-a": "Chung",
+	}),
+);
 
-const TRANG_THEO_STATE: Record<string, () => ReactNode> = {
-	"ST-chung": TrangChung,
-	"ST-thanh-vien": TrangThanhVien,
-	"ST-ket-noi": TrangKetNoi,
-	"ST-google": TrangGoogle,
-	"ST-slack-nguoi": TrangSlackNguoi,
-	"ST-intake": TrangIntake,
-	"ST-dang-tai": TrangDangTai,
-	"ST-menu": TrangChung,
-	"ST-phuong-an-a": TrangPhuongAnA,
-};
+const TRANG_THEO_STATE = new Map<string, () => ReactNode>(
+	Object.entries({
+		"ST-chung": TrangChung,
+		"ST-thanh-vien": TrangThanhVien,
+		"ST-ket-noi": TrangKetNoi,
+		"ST-google": TrangGoogle,
+		"ST-slack-nguoi": TrangSlackNguoi,
+		"ST-intake": TrangIntake,
+		"ST-dang-tai": TrangDangTai,
+		"ST-menu": TrangChung,
+		"ST-phuong-an-a": TrangPhuongAnA,
+	}),
+);
 
 export function KhungTrangCaiDatMau({ state }: { state: string }) {
 	const laNhac = state === "ST-nhac";
-	const NoiDung = TRANG_THEO_STATE[state] ?? TrangChung;
+	const NoiDung = TRANG_THEO_STATE.get(state) ?? TrangChung;
 
 	return (
 		<div
@@ -498,7 +502,7 @@ export function KhungTrangCaiDatMau({ state }: { state: string }) {
 			<div className="flex min-h-0 flex-1 flex-col md:flex-row">
 				{laNhac ? null : (
 					<ThanhBen
-						dangMo={MUC_THEO_STATE[state] ?? "Chung"}
+						dangMo={MUC_THEO_STATE.get(state) ?? "Chung"}
 						dangTai={state === "ST-dang-tai"}
 					/>
 				)}

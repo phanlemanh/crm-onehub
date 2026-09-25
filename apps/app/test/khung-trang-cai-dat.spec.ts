@@ -7,14 +7,6 @@ const TEN_NHOM = {
 	en: ["Workspace", "People", "Connections & data", "Security"],
 } as const;
 
-function moiChuoi(gia: unknown): string[] {
-	if (typeof gia === "string") return [gia];
-	if (typeof gia === "function") return [];
-	if (gia && typeof gia === "object")
-		return Object.values(gia).flatMap(moiChuoi);
-	return [];
-}
-
 describe("khung-trang-cai-dat", () => {
 	test("nhan: thanh ben la Cai dat, muc dau va trang dau la Chung", () => {
 		const vi = settingsMessages("vi");
@@ -46,14 +38,10 @@ describe("khung-trang-cai-dat", () => {
 	});
 
 	test("nhan: khong con chu cu trong tep chu Cai dat", () => {
-		const chuoi = moiChuoi(settingsMessages("vi"));
-		const sai = chuoi.filter(
-			(c) =>
-				c.includes("Tổng quan") ||
-				c.includes("Cài đặt công ty") ||
-				c === "Công ty",
-		);
-		expect(sai, `vi: con chu cu ${JSON.stringify(sai)}`).toEqual([]);
+		const toanBo = JSON.stringify(settingsMessages("vi"));
+		for (const cu of ["Tổng quan", "Cài đặt công ty", ':"Công ty"']) {
+			expect(toanBo.includes(cu), `vi: con chu cu ${cu}`).toBe(false);
+		}
 	});
 
 	test("chuyen-huong: duong cu chuyen toi reminders dung slug", async () => {
@@ -61,20 +49,15 @@ describe("khung-trang-cai-dat", () => {
 			"@/app/(app)/[slug]/settings/notifications/page"
 		);
 		for (const slug of ["ws", "cong-ty-a"]) {
-			let loi: unknown = null;
-			let traVe: unknown = "chua-goi";
-			try {
-				traVe = await TrangCu({ params: Promise.resolve({ slug }) });
-			} catch (e) {
-				loi = e;
-			}
-			const digest =
-				loi instanceof Error && "digest" in loi ? String(loi.digest) : "";
-			expect(digest, `${slug}: digest khong chua /${slug}/reminders`).toContain(
-				`;/${slug}/reminders;`,
+			const ket = await TrangCu({ params: Promise.resolve({ slug }) }).then(
+				() => "khong-nem",
+				(e: Error & { digest?: string }) => e.digest ?? "",
 			);
-			expect(traVe, `${slug}: trang cu ve noi dung truoc khi chuyen`).toBe(
-				"chua-goi",
+			expect(ket, `${slug}: trang cu ve noi dung truoc khi chuyen`).not.toBe(
+				"khong-nem",
+			);
+			expect(ket, `${slug}: digest khong chua /${slug}/reminders`).toContain(
+				`;/${slug}/reminders;`,
 			);
 		}
 	});

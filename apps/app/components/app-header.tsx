@@ -118,7 +118,13 @@ export function AppHeaderFallback() {
 	);
 }
 
-export function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
+export function UserMenu({
+	user,
+	onSignOut,
+}: {
+	user: User;
+	onSignOut: () => void;
+}) {
 	const { resolvedTheme, setTheme } = useTheme();
 	const isDark = resolvedTheme === "dark";
 	const locale = useLocale();
