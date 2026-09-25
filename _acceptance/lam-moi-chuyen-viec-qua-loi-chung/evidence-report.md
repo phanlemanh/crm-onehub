@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: b7953b160ebc2ca129ad7384e3e0aeddb39007b0
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-26
 ---
 
 # Evidence Report: lam-moi-chuyen-viec-qua-loi-chung
