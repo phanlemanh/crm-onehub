@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { env } from "./env";
+import { thuCauHinh } from "./env";
 
 export const THU = {
 	goc: "https://api.resend.com/emails",
@@ -15,7 +15,7 @@ export type ThuCanGui = {
 };
 
 export async function guiThu(thu: ThuCanGui): Promise<boolean> {
-	const cauHinh = env.thu;
+	const cauHinh = thuCauHinh();
 
 	if (!cauHinh) {
 		console.warn("[auth] chua khai RESEND_API_KEY, khong gui duoc thu");
@@ -39,9 +39,7 @@ export async function guiThu(thu: ThuCanGui): Promise<boolean> {
 		});
 
 		if (!traLoi.ok) {
-			console.warn(
-				`[auth] gui thu that bai: ${traLoi.status} ${(await traLoi.text()).slice(0, 200)}`,
-			);
+			console.warn(`[auth] gui thu that bai: ma ${traLoi.status}`);
 			return false;
 		}
 
@@ -55,7 +53,7 @@ export async function guiThu(thu: ThuCanGui): Promise<boolean> {
 		return true;
 	} catch (loi) {
 		console.warn(
-			`[auth] khong voi toi duoc dich vu gui thu: ${String((loi as Error)?.message ?? loi)}`,
+			`[auth] khong voi toi duoc dich vu gui thu: ${(loi as Error)?.name ?? "loi"}`,
 		);
 		return false;
 	}

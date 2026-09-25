@@ -76,11 +76,16 @@ export const env = {
 	google: googleCredentials(),
 	microsoft: microsoftCredentials(),
 	slack: slackCredentials(),
-	thu: thuCredentials(),
 	cookieDomain: optional("AUTH_COOKIE_DOMAIN"),
 	trustedOrigins: [...new Set([...appUrls, apiUrl])],
 	isProduction: process.env.NODE_ENV === "production",
 } as const;
+
+thuCredentials();
+
+export function thuCauHinh(): { apiKey: string; from: string } | undefined {
+	return thuCredentials();
+}
 
 export function isGoogleConfigured(): boolean {
 	return env.google !== undefined;
@@ -91,7 +96,7 @@ export function isMicrosoftConfigured(): boolean {
 }
 
 export function isMailConfigured(): boolean {
-	return env.thu !== undefined;
+	return thuCauHinh() !== undefined;
 }
 
 export function isSlackConfigured(): boolean {

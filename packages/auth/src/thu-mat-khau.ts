@@ -1,6 +1,6 @@
 import { decideSignInFromDb } from "./allow-list";
 import { PASSWORD } from "./chia-mat-khau";
-import { env } from "./env";
+import { env, isMailConfigured } from "./env";
 import { guiThu } from "./thu";
 
 const SECONDS_PER_MINUTE = 60;
@@ -29,14 +29,20 @@ export const THU_MAT_KHAU = {
 	},
 } as const;
 
-function duongDatMatKhau(token: string): string {
-	return new URL(`/dat-mat-khau/${token}`, env.appUrl).toString();
+export function duongDatMatKhau(
+	token: string,
+	goc: string = env.appUrl,
+): string {
+	const gocCoGach = goc.endsWith("/") ? goc : `${goc}/`;
+	return new URL(`dat-mat-khau/${token}`, gocCoGach).toString();
 }
 
 export async function guiThuXinDatLai(input: {
 	email: string;
 	token: string;
 }): Promise<void> {
+	if (!isMailConfigured()) return;
+
 	const duocVao = await decideSignInFromDb(input.email);
 
 	if (!duocVao.allowed) return;
