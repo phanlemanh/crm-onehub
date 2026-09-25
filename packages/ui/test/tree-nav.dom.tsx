@@ -78,7 +78,7 @@ async function phim(key: keyof typeof MA) {
 	});
 }
 
-function trangThai() {
+function trangThai(buoc: string) {
 	const cay = document.querySelector("[role='tree']");
 	const dangCo = document.activeElement?.getAttribute("data-id") ?? null;
 	const tab0 = cay
@@ -90,7 +90,7 @@ function trangThai() {
 		document
 			.querySelector(`[data-id='${id}']`)
 			?.getAttribute("aria-expanded") ?? null;
-	return { dangCo, tab0, nhanh1: moRa("nhanh1") };
+	return { buoc, dangCo, tab0, nhanh1: moRa("nhanh1") };
 }
 
 describe("tree-nav — đi bằng bàn phím", () => {
@@ -116,7 +116,7 @@ describe("tree-nav — đi bằng bàn phím", () => {
 			"[role='tree'] [tabindex='0']",
 		);
 		await act(async () => vao?.focus());
-		const buoc = [trangThai()];
+		const buoc = [trangThai("tab vào cây")];
 		for (const k of [
 			"ArrowDown",
 			"ArrowRight",
@@ -127,19 +127,34 @@ describe("tree-nav — đi bằng bàn phím", () => {
 			"Home",
 		] as const) {
 			await phim(k);
-			buoc.push(trangThai());
+			buoc.push(trangThai(k));
 		}
 		await phim("Enter");
 
 		expect(buoc).toEqual([
-			{ dangCo: "goc", tab0: ["goc"], nhanh1: "false" },
-			{ dangCo: "nhanh1", tab0: ["nhanh1"], nhanh1: "false" },
-			{ dangCo: "nhanh1", tab0: ["nhanh1"], nhanh1: "true" },
-			{ dangCo: "la11", tab0: ["la11"], nhanh1: "true" },
-			{ dangCo: "nhanh1", tab0: ["nhanh1"], nhanh1: "true" },
-			{ dangCo: "nhanh1", tab0: ["nhanh1"], nhanh1: "false" },
-			{ dangCo: "nhanh2", tab0: ["nhanh2"], nhanh1: "false" },
-			{ dangCo: "goc", tab0: ["goc"], nhanh1: "false" },
+			{ buoc: "tab vào cây", dangCo: "goc", tab0: ["goc"], nhanh1: "false" },
+			{
+				buoc: "ArrowDown",
+				dangCo: "nhanh1",
+				tab0: ["nhanh1"],
+				nhanh1: "false",
+			},
+			{
+				buoc: "ArrowRight",
+				dangCo: "nhanh1",
+				tab0: ["nhanh1"],
+				nhanh1: "true",
+			},
+			{ buoc: "ArrowRight", dangCo: "la11", tab0: ["la11"], nhanh1: "true" },
+			{ buoc: "ArrowLeft", dangCo: "nhanh1", tab0: ["nhanh1"], nhanh1: "true" },
+			{
+				buoc: "ArrowLeft",
+				dangCo: "nhanh1",
+				tab0: ["nhanh1"],
+				nhanh1: "false",
+			},
+			{ buoc: "End", dangCo: "nhanh2", tab0: ["nhanh2"], nhanh1: "false" },
+			{ buoc: "Home", dangCo: "goc", tab0: ["goc"], nhanh1: "false" },
 		]);
 		expect(chon).toEqual(["goc"]);
 		const cap3 = document.querySelector("[data-id='la11']");
