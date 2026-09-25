@@ -100,7 +100,7 @@ bị tránh: không có thư mời nào được gửi.
 ### 4. Hành vi
 
 - «…» là nút biểu tượng có `aria-label`; «Rút» là mục destructive, luôn qua `ConfirmDialog`.
-- Số đếm trong tiêu đề `tabular-nums`; N không đổi theo ô tìm hay bộ lọc vai.
+- N không đổi theo ô tìm hay bộ lọc vai. Số đếm là chữ trong `CardTitle` (không `tabular-nums`: `CardTitle` không nhận `className` ở chỗ gọi, AC-16).
 - Ở 375px: `CardTable` giữ `min-w-[48rem]`, cuộn ngang bên trong vỏ; `main` và `document` không tràn.
 
 ### 5. Xuất xứ component

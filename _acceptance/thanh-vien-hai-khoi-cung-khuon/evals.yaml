@@ -202,10 +202,10 @@ evals:
       - "apps/app/lib/messages/settings-thanh-vien.ts"
       - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/tu-dien.mjs"
     expected: |
-      exit 0 va 6 dong DUNG: moi muc «Đã vào», «Được phép vào» co dong "**<ten>**:", mot dong
-      "_Avoid_:" va mot dong "Vì sao:" TRUOC muc ke tiep; thanhVienMessages("vi").bang.tieuDe
-      === "Đã vào" va .duocPhepVao.tieuDe === "Được phép vào". Doi chung duong: muc
-      «Không gian làm việc» co san dat ca ba dong.
+      exit 0, "11 DUNG, 0 SAI": moi muc «Đã vào», «Được phép vào» co dong "**<ten>**:", mot dong
+      "_Avoid_:" va mot dong "Vì sao:" TRUOC muc ke tiep (6); doi chung duong: muc «Không gian
+      làm việc» co san dat ca ba dong (3); thanhVienMessages("vi").bang.tieuDe === "Đã vào" va
+      .duocPhepVao.tieuDe === "Được phép vào" (2).
       CHIEU DO (tu dien chua sua): "SAI muc «Đã vào» khong co trong CONTEXT.md" va tuong tu,
       "SAI bang.tieuDe la undefined", exit 1.
 
