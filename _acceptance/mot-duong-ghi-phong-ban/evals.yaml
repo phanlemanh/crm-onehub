@@ -283,7 +283,7 @@ evals:
       mien ghim theo luat dong ho so cua bo kit; bai kiem cua chung chay trong bo kiem day du.
       (c) Chay "bash scripts/pre-merge-check.sh . --base origin/onehub" KHONG --slug: moi dong
       VIOLATION trong dau ra chi duoc nhac chinh [mot-duong-ghi-phong-ban] (ho so dang cham, chua co
-      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 30.
+      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 29 (1 + 24 + 1 + 2 + 1).
       Sinh them hai tep cho E9: bai-kiem-da-ky.diff (git diff <base> HEAD tren cac tep kiem cua tap
       bi cham) va bai-kiem-dem.md (moi tep: so khang dinh expect( / ok( truoc va sau).
       CHIEU DO cung lan, tren ban sao trong bo nho: (1) doi evals_exit cua mot eval thanh 1 trong dong
