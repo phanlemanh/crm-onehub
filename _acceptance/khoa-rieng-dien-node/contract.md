@@ -5,7 +5,7 @@ slug: khoa-rieng-dien-node
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-26-khoa-rieng-dien-node-design.md
 approved_by:
 approved_at:
@@ -55,3 +55,24 @@ Không gian AC là ma trận hình dạng mẫu × nguồn mẫu; quét tại ch
 - Không có `opportunity.md` — việc sửa lỗi nhỏ, không có ngưỡng nghiệm thu, nên không có mục Đường đo.
 - Trên mã trước sửa, AC-1 đỏ theo lẽ tự nhiên ở khẳng định khoá trùng (mẫu thật bắt đầu bằng `{ten}`). Tệp test lấy `dienNode` qua `await import`, nên việc hàm chưa được export chỉ làm các ca AC-2 đỏ (`dienNode` không phải hàm), không làm hỏng việc nạp cả tệp. Chiều đỏ đúng nghĩa của AC-2 lấy bằng phá thử sau sửa: bỏ `.filter`, hoặc đổi sang `.filter((phan) => phan.trim() !== "")`.
 - AC-4 không có vế «không tệp mã nào ngoài vòng» như E5 của `lam-moi-chuyen-viec-qua-loi-chung`. Vế đó là nguồn Ngoài-1 của hồ sơ ấy: sau khi merge, một PR khác chạm hộp sẽ làm nó đỏ giả. Phạm vi diff do người chấm S4 soi.
+- S3 (26/09), E1–E3: mã trước sửa, tệp test ở `e575b7c3`:
+  - 4 ca `mau-that` đỏ «khoa trung o vi 2/3 … en 0/0».
+  - 11 ca `ma-tran` đỏ «hop.dienNode is not a function».
+  - `bo-bat-con-song` xanh.
+- Sau sửa (`89109bd0`), đo được:
+  - Tệp mới 16/16 xanh. `lam-moi-chuyen-viec.dom.tsx` 3/3 và `moi-phia-ke-hoach.dom.tsx` 14/14 xanh; đầu ra của cả ba không còn dòng «same key», trước sửa `lam-moi` in 12 dòng.
+  - Ba lệnh `krdn_*` theo `config.yaml` xanh với 4, 11, 1 ca.
+- Phá thử trên bản đã commit, hoàn nguyên bằng `git checkout`:
+  - (a) bỏ `.filter` → 11 đỏ: 4 «khoa trung o …», 7 «khoa trung trong mau …» (`{a} sau`, `{a}`, `{a} va {a}`, `{a} {b}`, `{a}{b}`, `{a}{b}{a}`, `{z} la`).
+  - (b) `.filter(trim)` → 1 đỏ «chu sai trong mau {a} {b}».
+  - (c) bỏ bọc `console.error` → 1 đỏ «bo bat console khong con song».
+  - Xoá dòng `["", ""]` → «nhom ma-tran chay 10 ca, phai 11».
+  - `test.skip.each` nhóm `mau-that` → «nhom mau-that chay 0 ca, phai 4».
+- S3 (26/09), E4, lượt thật ở `73fd6733`:
+  - Quét 91 hồ sơ (83 đã ký), rút 64 eval, chạy 50 lệnh, loại 5 lệnh quét lồng: `ktcd_khong_hoi_quy`, `tcds_khong_hoi_quy`, `ndk_cay_that`, `ndk_pham_vi`, `lmcv_khong_hoi_quy`.
+  - 21 lệnh đỏ ở HEAD sau khi chạy lại, và đỏ cùng mã ở `100847e8` (21 dòng DO SAN). Kết quả: mã 0.
+- Phá thử E4:
+  - (a) Xoá `chuyen.mutate(...)` → mã 1 «vong nay lam do them 2 lenh: … lmcv_ba_khoa (lam-moi-chuyen-viec-qua-loi-chung:E1), … kh2_chuyen_giao_man (moi-phia-deu-thay-ke-hoach:E3)». Lượt này chạy trên bản sao script chỉ giữ hai lệnh đó, để khỏi quét lại trọn ~25 phút; đường so HEAD↔`merge-base` không đổi.
+  - (b) Bản sao với ref không tồn tại → mã 2 «KHONG DO DUOC: khong co ref …».
+  - (c) Bản sao rút trên tập rỗng → mã 1 «bo rut tap hong».
+- Đường nền S1 ghi `suite: do`. Nguyên nhân duy nhất là dòng «CAY BAN SAU SUITE» — tôi viết `contract.md` và design doc trong lúc suite chạy. Cả bốn suite đều thoát 0 (turbo 11/11, 9/9, 4/4).
