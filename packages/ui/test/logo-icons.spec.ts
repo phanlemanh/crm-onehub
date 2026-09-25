@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,7 +10,7 @@ import { type AnhRgba, dat, docAnh, NGUONG_LOGO } from "./logo-raster";
 
 const CLI = fileURLToPath(new URL("../scripts/logo-icons.ts", import.meta.url));
 const { trongKho, ngoaiKho, ico } = ICON_ONEHUB;
-const VUNG_GHI_DUOC = ["apps/app", "packages/ui"];
+const CHO_ANH_NGOAI_LAC = ["", "apps/app/public", "packages/ui"];
 
 function docTep(duong: string): Uint8Array {
 	return new Uint8Array(readFileSync(join(GOC_KHO, duong)));
@@ -197,19 +198,33 @@ describe("manifest", () => {
 });
 
 describe("xuat-ngoai", () => {
-	function gitStatus(): string {
-		return Bun.spawnSync(
-			["git", "status", "--porcelain", "--", ...VUNG_GHI_DUOC],
-			{
-				cwd: GOC_KHO,
-			},
-		).stdout.toString();
+	function bamTepDich(): string[] {
+		const dich = [
+			trongKho.icoApp,
+			trongKho.icoPublic,
+			trongKho.svg,
+			trongKho.png96.duong,
+			trongKho.apple.duong,
+			trongKho.manifest192.duong,
+			trongKho.manifest512.duong,
+		];
+		return dich.map(
+			(d) => `${d}:${createHash("sha256").update(docTep(d)).digest("hex")}`,
+		);
+	}
+
+	function anhNgoaiLacVaoKho(): string[] {
+		return CHO_ANH_NGOAI_LAC.flatMap((thuMuc) =>
+			[ngoaiKho.slack, ngoaiKho.zalo, ngoaiKho.google]
+				.map((anh) => join(thuMuc, anh.ten))
+				.filter((d) => existsSync(join(GOC_KHO, d))),
+		);
 	}
 
 	test("xuat-ngoai: ba anh dung co vao thu muc ngoai kho, kho khong doi", async () => {
 		const thuMuc = mkdtempSync(join(tmpdir(), "logo-onehub-"));
 		try {
-			const truoc = gitStatus();
+			const truoc = bamTepDich();
 			const chay = Bun.spawnSync([process.execPath, CLI, "--external", thuMuc]);
 			dat(
 				chay.exitCode === 0,
@@ -223,7 +238,16 @@ describe("xuat-ngoai", () => {
 				if (anh === ngoaiKho.google)
 					dat(noiDung.length < 1024 * 1024, `${anh.ten} tu 1MB tro len`);
 			}
-			dat(gitStatus() === truoc, "git status cua kho doi sau luot xuat ngoai");
+			const sau = bamTepDich();
+			const doi = sau
+				.filter((b, i) => b !== truoc[i])
+				.map((b) => b.split(":")[0]);
+			dat(
+				doi.length === 0,
+				`luot xuat ngoai ghi de tep icon trong kho: ${doi.join(", ")}`,
+			);
+			const lac = anhNgoaiLacVaoKho();
+			dat(lac.length === 0, `anh ngoai ghi vao kho: ${lac.join(", ")}`);
 		} finally {
 			rmSync(thuMuc, { recursive: true, force: true });
 		}
