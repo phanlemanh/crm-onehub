@@ -83,14 +83,22 @@ export function docIco(buf: Uint8Array): AnhIco[] {
 export async function sinhBoIcon(): Promise<TepIcon[]> {
 	const { trongKho, tiLeMark, ico } = ICON_ONEHUB;
 	const icoNoiDung = ghepIco(
-		await Promise.all(ico.map(async (canh) => ({ canh, png: await pngTrong(canh) }))),
+		await Promise.all(
+			ico.map(async (canh) => ({ canh, png: await pngTrong(canh) })),
+		),
 	);
 	const svg = new TextEncoder().encode(
-		renderToStaticMarkup(createElement(Logo, { width: undefined, height: undefined })),
+		renderToStaticMarkup(
+			createElement(Logo, { width: undefined, height: undefined }),
+		),
 	);
 	return [
 		{ ten: "favicon.ico (app)", duong: trongKho.icoApp, noiDung: icoNoiDung },
-		{ ten: "favicon.ico (public)", duong: trongKho.icoPublic, noiDung: icoNoiDung },
+		{
+			ten: "favicon.ico (public)",
+			duong: trongKho.icoPublic,
+			noiDung: icoNoiDung,
+		},
 		{ ten: "favicon.svg", duong: trongKho.svg, noiDung: svg },
 		{
 			ten: "favicon-96x96.png",

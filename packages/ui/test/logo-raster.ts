@@ -14,6 +14,7 @@ export const NGUONG_LOGO = {
 } as const;
 
 export type AnhRgba = { data: Uint8Array; rong: number; cao: number };
+export type TamAnh = { x: number; y: number };
 
 export function duongGoc(ten: string): string {
 	return fileURLToPath(new URL(`../scripts/logo-goc/${ten}`, import.meta.url));
@@ -35,7 +36,12 @@ export function dat(dieuKien: boolean, thongDiep: string): void {
 	if (!dieuKien) throw new Error(thongDiep);
 }
 
-export function iouMem(a: AnhRgba, b: AnhRgba, tuX: number, denX: number): number {
+export function iouMem(
+	a: AnhRgba,
+	b: AnhRgba,
+	tuX: number,
+	denX: number,
+): number {
 	let giao = 0;
 	let hop = 0;
 	for (let y = 0; y < a.cao; y++) {
@@ -63,14 +69,15 @@ export function rmsKenh(a: AnhRgba, b: AnhRgba, kenh: number): number {
 	return dem === 0 ? Number.POSITIVE_INFINITY : Math.sqrt(tong / dem);
 }
 
-export function tamKhungBao(a: AnhRgba): { x: number; y: number } {
+export function tamKhungBao(a: AnhRgba): TamAnh {
 	let minX = a.rong;
 	let maxX = -1;
 	let minY = a.cao;
 	let maxY = -1;
 	for (let y = 0; y < a.cao; y++) {
 		for (let x = 0; x < a.rong; x++) {
-			if ((a.data[(y * a.rong + x) * 4 + 3] ?? 0) <= NGUONG_LOGO.alphaCo) continue;
+			if ((a.data[(y * a.rong + x) * 4 + 3] ?? 0) <= NGUONG_LOGO.alphaCo)
+				continue;
 			minX = Math.min(minX, x);
 			maxX = Math.max(maxX, x);
 			minY = Math.min(minY, y);

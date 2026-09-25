@@ -80,7 +80,9 @@ describe("Logo", () => {
 });
 
 function haiBanNgang() {
-	return dung(h("div", null, h(LogoLockup, { key: "a" }), h(LogoLockup, { key: "b" })));
+	return dung(
+		h("div", null, h(LogoLockup, { key: "a" }), h(LogoLockup, { key: "b" })),
+	);
 }
 
 describe("LogoLockup", () => {
@@ -93,9 +95,14 @@ describe("LogoLockup", () => {
 	test("b: chu theo currentColor", () => {
 		const [dau] = haiBanNgang();
 		const paths = Array.from(dau?.querySelectorAll("path") ?? []);
-		const chu = paths.filter((p) => !(p.getAttribute("fill") ?? "").startsWith("url("));
+		const chu = paths.filter(
+			(p) => !(p.getAttribute("fill") ?? "").startsWith("url("),
+		);
 		dat(chu.length === 1, `can dung mot path chu, thay ${chu.length}`);
-		dat(chu[0]?.getAttribute("fill") === "currentColor", "chu khong theo currentColor");
+		dat(
+			chu[0]?.getAttribute("fill") === "currentColor",
+			"chu khong theo currentColor",
+		);
 	});
 
 	test("c: moi ban ngang to mark bang dai mau cua chinh no", () => {
@@ -106,7 +113,10 @@ describe("LogoLockup", () => {
 			const gradient = dai(svg);
 			const mark = svg.querySelector(`path[fill="url(#${gradient.id})"]`);
 			dat(mark !== null, `khong path nao to bang url(#${gradient.id})`);
-			dat(document.getElementById(gradient.id) === gradient, `url(#${gradient.id}) tro sang phan tu khac`);
+			dat(
+				document.getElementById(gradient.id) === gradient,
+				`url(#${gradient.id}) tro sang phan tu khac`,
+			);
 		}
 	});
 });

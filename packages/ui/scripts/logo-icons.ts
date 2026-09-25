@@ -1,6 +1,11 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { GOC_KHO, sinhAnhNgoai, sinhBoIcon, type TepIcon } from "./logo-icons-lib";
+import {
+	GOC_KHO,
+	sinhAnhNgoai,
+	sinhBoIcon,
+	type TepIcon,
+} from "./logo-icons-lib";
 
 function ghi(goc: string, tep: TepIcon[]): void {
 	for (const t of tep) {

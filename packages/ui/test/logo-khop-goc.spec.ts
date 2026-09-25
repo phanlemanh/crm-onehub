@@ -36,7 +36,10 @@ describe("logo OneHub khớp ảnh gốc", () => {
 		const { goc, ve } = await markTrenLuoiGoc();
 		const iou = iouMem(ve, goc, 0, goc.rong);
 		console.log(`IoU mark = ${iou.toFixed(5)}`);
-		dat(iou >= NGUONG_LOGO.iou, `IoU mark ${iou.toFixed(5)} < ${NGUONG_LOGO.iou}`);
+		dat(
+			iou >= NGUONG_LOGO.iou,
+			`IoU mark ${iou.toFixed(5)} < ${NGUONG_LOGO.iou}`,
+		);
 	});
 
 	test("mau-trung-goc", async () => {
@@ -44,7 +47,10 @@ describe("logo OneHub khớp ảnh gốc", () => {
 		KENH.forEach((ten, kenh) => {
 			const rms = rmsKenh(ve, goc, kenh);
 			console.log(`RMS kenh ${ten} = ${rms.toFixed(2)}`);
-			dat(rms <= NGUONG_LOGO.rmsKenh, `RMS kenh ${ten} ${rms.toFixed(2)} > ${NGUONG_LOGO.rmsKenh}`);
+			dat(
+				rms <= NGUONG_LOGO.rmsKenh,
+				`RMS kenh ${ten} ${rms.toFixed(2)} > ${NGUONG_LOGO.rmsKenh}`,
+			);
 		});
 	});
 
@@ -75,8 +81,16 @@ describe("logo OneHub khớp ảnh gốc", () => {
 		);
 		const iouMark = iouMem(ve, goc, 0, BIEN_CHU_X);
 		const iouChu = iouMem(ve, goc, BIEN_CHU_X, goc.rong);
-		console.log(`IoU mark ban ngang = ${iouMark.toFixed(5)}, IoU chu = ${iouChu.toFixed(5)}`);
-		dat(iouMark >= NGUONG_LOGO.iou, `IoU mark ban ngang ${iouMark.toFixed(5)} < ${NGUONG_LOGO.iou}`);
-		dat(iouChu >= NGUONG_LOGO.iou, `IoU chu ${iouChu.toFixed(5)} < ${NGUONG_LOGO.iou}`);
+		console.log(
+			`IoU mark ban ngang = ${iouMark.toFixed(5)}, IoU chu = ${iouChu.toFixed(5)}`,
+		);
+		dat(
+			iouMark >= NGUONG_LOGO.iou,
+			`IoU mark ban ngang ${iouMark.toFixed(5)} < ${NGUONG_LOGO.iou}`,
+		);
+		dat(
+			iouChu >= NGUONG_LOGO.iou,
+			`IoU chu ${iouChu.toFixed(5)} < ${NGUONG_LOGO.iou}`,
+		);
 	});
 });
