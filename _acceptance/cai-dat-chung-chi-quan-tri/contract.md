@@ -5,7 +5,7 @@ slug: cai-dat-chung-chi-quan-tri
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
 design_doc: docs/superpowers/specs/2026-09-25-cai-dat-chung-chi-quan-tri-design.md
@@ -62,3 +62,16 @@ Never: chỉ khoá nút mà không chặn máy chủ — khoá nút không phả
 
 - `canManageWorkspaceSettings` là hàm mới trong `@crm/auth` (đường T3), cùng hình với `canManageFields` và tám vị từ anh em.
 - Không có `opportunity.md` — vòng đi thẳng từ buổi soát, không có ngưỡng nghiệm thu, nên không có mục Đường đo.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Phan Le Manh), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-1: `rang/chup.mjs` — lỗi hạ tầng ở biên (`dev:session`, `fetch` tới API, khởi động Chrome, `goto` hết giờ) ném ra ngoài, thoát mã 1 («có dòng SAI») thay vì mã 2 «không đo được», và không in dòng KET LUAN.
+- Ngoài-2: `rang/chup.mjs` — hết 30 giây chờ hydrate bị nuốt (`.catch(() => null)`), trang chưa tải xong bị chấm thành SAI thay vì mã 2.
+- Ngoài-3: cùng lớp với Ngoài-1 (review bugs): lỗi ném ra ở biên của `rang/chup.mjs` thoát mã 1, không in KET LUAN.
+- Ngoài-4: `rang/khang-dinh-cu-nguyen-ven.mjs` chỉ canh khối `it(`/`test(`; đổi một `describe(` cũ thành `describe.skip(` thì cả hai nửa của E8 vẫn xanh.
+- Ngoài-5: `evidence/` còn giữ `E9-tien-de-that-bai.html` và `E9-network.txt` của round 1 (tiền đề hỏng), nằm cạnh ảnh của round 2 đã đạt, không đánh dấu lượt nào là hiện hành.
+- Ngoài-6: đối chứng dương của nút lưu (gõ rồi nút bật) chỉ chạy ở vai quản trị; phép kiểm «nút lưu tắt» ở vai thành viên vẫn không tách được nguyên nhân quyền với nguyên nhân «ô trống/chưa đổi».
+- Ngoài-7: khối `it()` cũ còn nguyên văn không chứng minh khẳng định cũ vẫn chạy và vẫn đạt; E8 dựa vào nửa `bun test` của lệnh cho phần đó.
+- Ngoài-8: `CongNghienCuu` (`packages/validation/src/cong-nghien-cuu.ts`) và `Gate` (`apps/app/lib/onboarding.ts`) khai cùng một union ở hai nơi; thêm giá trị ở một nơi thì hai cổng lệch nhau mà trình biên dịch không báo.
+- Ngoài-9: ca người ngoài workspace của E2 bị `AuthMiddleware` chặn trước `requireManager`, nên chiều đỏ «`requireManager` bỏ qua vai null» không đỏ được bằng ca đó.
+- Ngoài-10: E10 chứng «`onboarding.ts` gọi đúng hàm chung» bằng cách tìm chuỗi import trong mã nguồn, không bằng đầu ra; hành vi cổng thì vẫn đo bằng trả lời thật và proxy thật.
