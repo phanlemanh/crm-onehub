@@ -127,6 +127,24 @@ const en = {
 		tooLarge: "That amount is too large to record.",
 		canDongTien: "Choose a currency to read this amount.",
 	},
+	tienDo: {
+		nhan: "Progress",
+		coVach: (nhan: string, p: string, k: string) =>
+			`${nhan}: ${p}%, expected ${k}% by now`,
+		khongVach: (nhan: string, p: string) => `${nhan}: ${p}%`,
+		leRa: (k: string) => `Expected ${k}% by now`,
+	},
+	okr: {
+		tuTinCao: "High confidence",
+		tuTinVua: "Medium confidence",
+		tuTinThap: "Low confidence",
+		dungNhip: "On track",
+		chamNhip: "Behind",
+		truot: "Off track",
+		chuaCoKyVong: "No expected line yet",
+		mocXong: "Done",
+		mocChua: "Milestone, not done",
+	},
 };
 
 export type Messages = typeof en;
@@ -257,6 +275,24 @@ const vi = {
 		negative: "Số tiền không được âm.",
 		tooLarge: "Số này quá lớn để lưu.",
 		canDongTien: "Chọn đồng tiền để đọc số này.",
+	},
+	tienDo: {
+		nhan: "Tiến độ",
+		coVach: (nhan: string, p: string, k: string) =>
+			`${nhan}: ${p}%, lẽ ra đã tới ${k}%`,
+		khongVach: (nhan: string, p: string) => `${nhan}: ${p}% tiến độ`,
+		leRa: (k: string) => `Lẽ ra đã tới ${k}%`,
+	},
+	okr: {
+		tuTinCao: "Tự tin cao",
+		tuTinVua: "Tự tin vừa",
+		tuTinThap: "Tự tin thấp",
+		dungNhip: "Đúng nhịp",
+		chamNhip: "Chậm nhịp",
+		truot: "Trượt",
+		chuaCoKyVong: "Chưa có vạch lẽ ra",
+		mocXong: "Đã xong",
+		mocChua: "Mốc, chưa xong",
 	},
 } satisfies Messages;
 

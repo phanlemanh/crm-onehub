@@ -31,6 +31,11 @@ import {
 	MessageScrollerProvider,
 } from "../src/components/message-scroller";
 import { MoneyInput } from "../src/components/money-input";
+import {
+	ConfidenceIndicator,
+	PaceIndicator,
+} from "../src/components/okr-status";
+import { Progress } from "../src/components/progress";
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
@@ -185,6 +190,19 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{
+		ten: "Progress",
+		ve: () => <Progress expected={47} value={30} variant="neutral" />,
+	},
+	{
+		ten: "OkrStatus",
+		ve: () => (
+			<>
+				<ConfidenceIndicator level="cao" />
+				<PaceIndicator pace="dung-nhip" />
+			</>
+		),
+	},
 	{ ten: "DotMatrix", ve: () => <DotMatrix /> },
 	{ ten: "ThinkingIndicator", ve: () => <ThinkingIndicator /> },
 	{
