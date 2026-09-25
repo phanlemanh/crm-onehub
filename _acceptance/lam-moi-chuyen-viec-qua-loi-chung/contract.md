@@ -5,7 +5,7 @@ slug: lam-moi-chuyen-viec-qua-loi-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-25-lam-moi-chuyen-viec-qua-loi-chung-design.md
 approved_by:
 approved_at:
@@ -53,3 +53,4 @@ Bỏ quét — xem entry `descope` «bỏ coverage-scan» trong `decisions.jsonl
 - AC-1..AC-3 là phép đo «giữ nguyên»: phải xanh trên cả mã trước sửa lẫn sau sửa. Chiều đỏ của chúng lấy bằng phá thử (xem `expected` từng eval). AC-4 là phép đo đổi chỗ: đỏ trên mã trước sửa.
 - S3 (25/09): E1–E3 xanh 3/3 trên mã TRƯỚC sửa (`b3827cfa`) và sau sửa (`0fdec41a`); E4 đỏ `0 DUNG, 10 SAI` trước sửa, xanh `6 DUNG, 0 SAI` sau sửa, cùng kết quả khi chạy từ `/tmp`. Phá-thử tại chỗ sau commit, hoàn nguyên bằng `git checkout`: bỏ `transferPreview` khỏi mục → E1 đỏ «Expected dung ba khoa lam moi»; thêm `planById` vào mục → E1 đỏ cùng thông điệp, ở khẳng định đầu (dòng «onboarding.planById khong bi danh dau cu» mà `expected` E1 nêu không được chạy tới vì khẳng định đầu đã đỏ); ba khoá sang nhóm không chờ `settle: "record"` → E2 đỏ «hop dong truoc khi lam moi xong»; bỏ `await` → E2 đỏ cùng thông điệp; làm mới trong `onSettled` → E3 đỏ «khong lam moi khi loi». Sau hoàn nguyên 3/3 xanh. `moi-phia-ke-hoach.dom.tsx` 14/14 sau sửa.
 - Ngoài hợp đồng, thấy ở S3: `dienNode` của hộp cho hai phần tử cùng khoá `0` khi mẫu bắt đầu bằng `{ten}` (React cảnh báo mỗi lần vẽ) — có từ trước, không đổi ở vòng này; đã mở chip riêng.
+- E5 ở S3 (25/09): lượt đầu thoát 1 — `tcds_khong_hoi_quy` đỏ ở HEAD, xanh ở `b7951341`, vì suite `lint_slop` bắt hai chỗ `typeof` trong chính `rang/khong-hoi-quy.mjs`; sửa vật (xem sổ). Lượt ở `72b1224b`: 90 hồ sơ quét (82 đã ký), 61 eval, 48 lệnh chạy, 4 lệnh loại vì quét lồng (`ktcd_khong_hoi_quy`, `tcds_khong_hoi_quy`, `ndk_cay_that`, `ndk_pham_vi`), 21 lệnh đỏ ở HEAD sau chạy lại và đỏ cùng mã ở `b7951341` — mã 0. Phá-thử trên bản sao script: xoá `chuyen.mutate(...)` → mã 1 «vong nay lam do them 1 lenh: config:executors.test.kh2_chuyen_giao_man (moi-phia-deu-thay-ke-hoach:E3)»; đối chứng dương rút trên tệp không tồn tại → mã 1 «bo rut tap hong». Một lượt E5 mất ~25 phút.
