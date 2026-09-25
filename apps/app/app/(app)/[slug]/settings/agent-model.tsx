@@ -25,7 +25,7 @@ import {
 	PopoverTrigger,
 } from "@crm/ui/components/popover";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import {
 	type SettingsMessages,
@@ -80,6 +80,7 @@ export function AgentModel() {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const [open, setOpen] = useState(false);
+	const lyDoId = useId();
 
 	const settings = useQuery(trpc.settings.agentModel.queryOptions());
 	const catalog = useQuery(trpc.settings.modelCatalog.queryOptions());
@@ -96,7 +97,8 @@ export function AgentModel() {
 
 	if (!settings.data) return null;
 
-	const { selectedId, effectiveId, defaultId, effective } = settings.data;
+	const { selectedId, effectiveId, defaultId, effective, canManage } =
+		settings.data;
 	const models = catalog.data?.models ?? [];
 	const unavailable = catalog.data !== undefined && !catalog.data.available;
 
@@ -130,7 +132,13 @@ export function AgentModel() {
 							role="combobox"
 							aria-expanded={open}
 							aria-label={t.model.nhan}
-							disabled={save.isPending || catalog.isPending || unavailable}
+							disabled={
+								!canManage ||
+								save.isPending ||
+								catalog.isPending ||
+								unavailable
+							}
+							aria-describedby={canManage ? undefined : lyDoId}
 						>
 							{currentLabel}
 							<Icon icon={ChevronDown} data-icon="inline-end" />
@@ -188,6 +196,12 @@ export function AgentModel() {
 								}`
 							: effectiveId}
 				</p>
+
+				{canManage ? null : (
+					<p id={lyDoId} className="text-muted-foreground text-xs">
+						{t.model.khongDuQuyen}
+					</p>
+				)}
 			</CardContent>
 		</Card>
 	);
