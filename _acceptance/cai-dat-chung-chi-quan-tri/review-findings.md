@@ -1,59 +1,67 @@
-# Review Findings: cai-dat-chung-chi-quan-tri (round 1)
-
 ## Trong hợp đồng
-
-### Hình dạng 3 (assert chuỗi có mặt, lời hứa là quan hệ): chốt hồi quy E8 chỉ bắt dòng bị xoá có chữ `expect(`/`it(`, nên sửa kỳ vọng cũ lọt qua
-- file: `_acceptance/config.yaml:384`
-- severity: high
-- AC: AC-8
-- source: measurement
-
-`ccq_cong_hoi_quy` chạy `! git diff -U0 <merge-base> -- test/onboarding-gate.spec.ts | grep -E "^-[^-].*(expect\(|[^a-z]it\()"`. Lời hứa của E8 là quan hệ "khẳng định cũ không bị viết lại", nhưng lệnh chỉ đo xem dòng bị xoá có chứa chữ `expect(` hay `it(` không. Trong onboarding-gate.spec.ts giá trị kỳ vọng nằm trên một dòng riêng, ví dụ ca "sends an onboarded rep with no key to the key form" (dòng 393-400) kết thúc bằng `).toBe("/onboarding/research");`, còn `expect(` đứng một mình ở dòng khác. Sửa đúng ca mà CHIỀU ĐỎ của E8 nêu tên (đổi `.toBe(...)`) chỉ xoá dòng `-\t\t).toBe(...)`, không chứa `expect(` hay `it(`, nên grep không khớp, `!` trả 0, và E8 xanh. Chiều đỏ đã khai trong evals.yaml:133-150 vì thế không đỏ được. Thêm nữa, `[^-]` ăn mất ký tự thụt lề đầu tiên, nên dòng `-\tit("..."` thụt một tab (mức thụt của mọi `it(` trong tệp) không bao giờ khớp `[^a-z]it\(`. Đã thử: printf ba dòng `-\tit(`, `-\t\t).toBe(...)`, `-\t\texpect(` qua đúng regex đó thì chỉ dòng `expect(` khớp.
-
-Rationale: AC-8 hứa nguyên văn "không dòng expect hay it() cũ nào bị xoá hoặc sửa", và phát hiện chứng minh đúng chốt hồi quy dùng để đo lời hứa này (E8) không bắt được các cách xoá/sửa khẳng định phổ biến (ví dụ sửa .toBe(...) hoặc dòng it( thụt tab).
-
-### Hình dạng 4 (âm tính một mình, không có đối chứng dương): hai nút lưu bị kiểm `disabled true` cho thành viên, nhưng nút bị tắt với mọi vai trò
-- file: `apps/app/test/cai-dat-chung-khoa.dom.tsx:243`
-- severity: medium
-- AC: AC-7
-- source: measurement
-
-Ở nhánh thành viên (dòng 239-257), mỗi control bị kiểm `disabled true`, kể cả "nut thay khoa" (dòng 170-173) và "nut luu" (dòng 191). Nhưng trong bộ dữ liệu giả của test, cả hai nút đều bị tắt bất kể `canManage`. research-key.tsx:67 có `disabled={!canManage || save.isPending || draft.trim() === ""}` với draft khởi tạo `""`. archive-retention.tsx:70-75 tắt nút khi `unchanged` (draft = days vừa nạp). Nhánh quản trị bỏ qua hai nút này vì `moKhiCoQuyen` chỉ có "o khoa" và "o so ngay", nên không có đối chứng dương cho thấy nút bật lên khi có quyền. Bỏ `!canManage` khỏi `disabled` của hai nút lưu thì assert `disabled true` vẫn xanh. Riêng phần tắt-theo-quyền của hai nút này, lời hứa của E7 ("năm control có thuộc tính disabled") chưa được đo. Chỉ assert aria-describedby của chúng là thật sự phân biệt được hai vai.
-
-Rationale: AC-7 liệt kê đích danh "nút lưu khoá" và "nút lưu số ngày" trong năm control phải disabled cho member và bấm được như hôm nay cho quản trị; phát hiện cho thấy phần đo hai nút này không phân biệt được lý do disable là do quyền hay do logic khác, nên nhánh quản trị của đúng lời hứa AC-7 cho hai control đó chưa được đo.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Gate union declared twice: CongNghienCuu in validation duplicates Gate in onboarding.ts**
+- **chup.mjs: hỏng hạ tầng thoát mã 1 (hiểu là «có dòng SAI») thay vì mã 2 «không đo được»**
+  Người dùng thấy gì: Khi máy chủ đo hoặc trình duyệt gặp trục trặc hạ tầng lúc chụp bằng chứng, báo cáo nghiệm thu có thể hiện tính năng bị lỗi dù tính năng thật vẫn hoạt động bình thường.
+  file: `_acceptance/cai-dat-chung-chi-quan-tri/rang/chup.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **chup.mjs nuốt lỗi hết thời gian chờ hydrate rồi vẫn chấm, nên trang chưa tải xong bị tính là SAI của sản phẩm**
+  Người dùng thấy gì: Nếu màn hình chưa kịp tải xong lúc máy chụp ảnh, báo cáo có thể ghi nhầm thành lỗi của tính năng dù người dùng thật không gặp lỗi đó.
+  file: `_acceptance/cai-dat-chung-chi-quan-tri/rang/chup.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **chup.mjs: infrastructure failures exit with code 1 (the "SAI" code) and print no KET LUAN line**
+  Người dùng thấy gì: Khi máy chủ đo hoặc trình duyệt gặp trục trặc hạ tầng lúc chụp bằng chứng, báo cáo nghiệm thu có thể hiện tính năng bị lỗi dù tính năng thật vẫn hoạt động bình thường.
+  file: `_acceptance/cai-dat-chung-chi-quan-tri/rang/chup.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **khang-dinh-cu-nguyen-ven only guards it/test blocks, so describe.skip on an old describe passes both halves of E8**
+  Người dùng thấy gì: Bộ kiểm tra hồi quy hiện có một lỗ hổng: nếu sau này ai đó tắt cả một nhóm bài kiểm cũ, báo cáo nghiệm thu vẫn có thể báo đạt dù các bài kiểm đó không còn chạy.
+  file: `_acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The evidence/ folder still holds the round-1 E9 failure files, which contradict a new passing run**
+  Người dùng thấy gì: Thư mục bằng chứng còn giữ lại ảnh và log của lần đo thất bại trước đó, có thể khiến người xem báo cáo hiểu nhầm là tính năng vẫn đang lỗi.
+  file: `_acceptance/cai-dat-chung-chi-quan-tri/evidence/E9-tien-de-that-bai.html`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (khẳng định âm tính đứng một mình): đối chứng của nút lưu không cùng trạng thái với ca thành viên**
+  Người dùng thấy gì: Bài kiểm so sánh nút mờ giữa thành viên và quản trị hiện chưa chứng minh chắc chắn rằng nút mờ là do phân quyền; nếu sau này phân quyền bị gỡ nhầm, bài kiểm có thể vẫn báo đạt.
+  file: `apps/app/test/cai-dat-chung-khoa.dom.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (khẳng định «chuỗi có mặt» trong khi lời hứa là một quan hệ): khối it() cũ còn nguyên văn không có nghĩa là khẳng định cũ vẫn chạy và vẫn đạt**
+  Người dùng thấy gì: Bộ kiểm tra hồi quy chỉ tìm chữ có mặt trong tệp chứ chưa chắc các bài kiểm cũ thật sự đã chạy và đạt; nếu sau này một nhóm bài kiểm bị tắt qua describe, báo cáo vẫn có thể báo đạt.
+  file: `_acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Gate union declared twice: CongNghienCuu in validation duplicates Gate in onboarding.ts (r1)**
   Người dùng thấy gì: Không ảnh hưởng ai ngay bây giờ, nhưng nếu sau này có người thêm một trạng thái mới vào một nơi mà quên nơi kia, cổng kiểm khoá nghiên cứu và cổng chặn quyền có thể lệch nhau mà không ai nhận ra.
   file: `packages/validation/src/cong-nghien-cuu.ts`
   severity: low
   Đề xuất: known-limits
 
-- **ccq_cong_hoi_quy passes silently when `git merge-base` or `git diff` fails**
-  Người dùng thấy gì: Bộ kiểm tra tự động của vòng này có thể báo 'đạt' ngay cả khi lệnh kiểm bên trong nó thật ra không chạy được, nên nếu sau này ai đó vô tình xoá một bài kiểm cũ của cổng onboarding, việc đó có thể không bị phát hiện.
-  file: `_acceptance/config.yaml`
-  severity: medium
-  Đề xuất: new-contract
-
-- **ccq_cong_hoi_quy regex misses removed or rewritten `it(` lines at one-tab indent**
-  Người dùng thấy gì: Cách máy dò xem có bài kiểm cũ nào bị tắt hay xoá không hiện đang bỏ sót đúng kiểu thụt lề mà mọi bài kiểm của cổng onboarding dùng, nên việc vô hiệu hoá âm thầm một bài kiểm cũ có thể lọt qua.
-  file: `_acceptance/config.yaml`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Hình dạng 4 (âm tính không phân biệt được): ca nonMember của E2 không bao giờ tới requireManager, nên chiều đỏ "requireManager bỏ qua role null" không đỏ được**
+- **Hình dạng 4 (âm tính không phân biệt được): ca nonMember của E2 không bao giờ tới requireManager, nên chiều đỏ "requireManager bỏ qua role null" không đỏ được (r1)**
   Người dùng thấy gì: Người không thuộc workspace vẫn bị từ chối đúng như đã hứa; đây chỉ là một cách kiểm nội bộ chưa phân biệt được lý do chặn, không phải lỗi thật khiến ai đó lọt qua được cửa chặn.
   file: `apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo chỉ dẫn/mã nguồn thay vì đầu ra): E10 chứng minh "onboarding.ts gọi chính hàm này" bằng cách tìm chuỗi import trong tệp nguồn**
+- **Hình dạng 1 (đo chỉ dẫn/mã nguồn thay vì đầu ra): E10 chứng minh "onboarding.ts gọi chính hàm này" bằng cách tìm chuỗi import trong tệp nguồn (r1)**
   Người dùng thấy gì: Việc có đẩy vào màn cắm khoá hay không vẫn được đo bằng dữ liệu thật; chỉ riêng lời hứa phụ 'dùng đúng một hàm chung' được kiểm bằng cách tìm chữ trong mã nguồn, nên nếu sau này có người viết lại logic tương tự mà quên gọi đúng hàm, bài kiểm có thể không phát hiện ra.
   file: `apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts`
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 3/7 lỗi rơi vào file không bộ đo nào phủ (_acceptance/config.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
