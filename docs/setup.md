@@ -250,5 +250,8 @@ So a measurement now runs in a **measure session** on a database of its own tree
 
 To measure a whole lane in one session — one database, one server start — wrap it:
 `bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.
-Evals inside the lane then share that database the way they shared `crm` before. Evals
+Evals inside the lane then share that database the way they shared `crm` before. Wrapping
+also keeps the lane's suites off `crm`: `eve build` loads `apps/agent/agent/agent.ts`,
+which updates the `install` row at import, so a bare lane still writes that one row to
+whatever `DATABASE_URL` names. Evals
 that hard-code their ports (`ccq_chup_hai_vai`, `lgo_chup`) do not follow the session.

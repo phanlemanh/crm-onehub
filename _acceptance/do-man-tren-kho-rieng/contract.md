@@ -5,7 +5,7 @@ slug: do-man-tren-kho-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-26-do-man-tren-kho-rieng-design.md
 approved_by:
 approved_at:
@@ -84,3 +84,29 @@ theo vòng đời một phiên (tạo · chạy · dọn · bị giết · chồ
   (`/usr/local/bin/node`) trong khi `eve build` đòi Node ≥ 24 — đỏ môi trường, có từ trước,
   không phải lỗi của vòng. Hai khoá `zqw_giu_nqz`, `nzm_giu_da_ky` thiếu `merge-base` trong
   bản sao đường nền.
+- S3 (26/09, sha `eaeec248`): phá-thử 19 đột biến trên bản đã commit, trả lại bằng
+  `git checkout`, tất cả làm thước đỏ — E1 ×2, E2 ×2, E3 ×2, E4, E5 ×3, E6 ×3, E7 ×2, E8,
+  E9 ×2, E10. Thông điệp ghim từng ca nằm ở `expected` của `evals.yaml`. Hai ca lệch khuôn
+  đầu: E4 đỏ ở khẳng định mã thoát trước câu «kho khong dau bi xoa» (đã đảo thứ tự, phá lại:
+  đỏ đúng câu); E6 (dev:session không kèm kho đo) bị chính phiên chặn sớm, mã 2 «không có
+  hàng workspace sau dev:session». Phá-thử lộ một lỗi răng: `khongDo()` thoát thẳng nên bỏ
+  `finally`, để lại kho giả — đã sửa (ném lỗi, dọn rồi mới thoát 2).
+- S3: kho mới dựng không có hàng workspace lúc seed chạy nên seed không đặt được mốc
+  onboarding; mốc chuyển sang phiên đo (xem sổ `d-…-9`), AC-2 và AC-6 sửa theo.
+- Chứng thật (26/09): lệnh `dok_man_chrome` nguyên văn chạy trên kho riêng xanh
+  197/197 khẳng định, lúc `crm` còn giữ ba chu kỳ của lượt 4 (21:12 UTC). Ngay sau đó phiên
+  của PR #146 (cây `beautiful-thompson-16c095`) chạy làn của nó trên `crm` và dọn ba chu kỳ,
+  nên các lượt chứng sau dùng kho chung giả có chu kỳ lạ.
+- Làn ghim lại thật của `dat-okr-trong-crm` (không `--write`) với `DATABASE_URL` = kho chung
+  giả có một chu kỳ lạ: 4/4 suite, 17/17 eval máy xanh (gồm thước màn E13), 0 tệp hồ sơ đã
+  thông bị chạm. Gọi trần (`repin-lane` không gói): xanh, nhưng kho chung lệch đúng bảng
+  `install` — ghi bởi suite `build`, không phải phép đo màn (xem Ngoài hợp đồng dưới). Gói
+  trong `bun run do:man`: xanh, kho chung không lệch bảng nào (run_id làn
+  `repin-20260925T220535Z-65301`).
+- Năm lệnh ở gốc tại `eaeec248`: test 0 (167 s) · check-types 0 · lint 0 · lint:slop 0 ·
+  build 0 (PATH Node 24).
+
+Ngoài hợp đồng, thấy ở S3: `apps/agent/agent/agent.ts` gọi `syncVersion()` ở cấp module, nên
+`eve build` cập nhật hàng `install` của kho mà `DATABASE_URL` trỏ tới — kể cả `crm`. Đã mở
+chip riêng.
+
