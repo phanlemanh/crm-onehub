@@ -31,11 +31,15 @@
   },
   {
    "id": "AC-9",
-   "p": "Sẽ chỉ sửa trang đăng nhập trong số các màn đang có logo; landing, logo đối tác và màu nút xanh lá giữ nguyên."
+   "p": "Sẽ chỉ sửa trang đăng nhập và tab Agent trong số các màn đang có logo; landing, logo đối tác và màu nút xanh lá giữ nguyên."
   },
   {
    "id": "AC-10",
    "p": "Sẽ chụp màn thật: trang đăng nhập (máy tính và điện thoại), thanh trên cùng và tab Agent ở giao diện sáng lẫn tối; kiểm máy chủ trả đúng favicon mới."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ bỏ ô vuông đen quanh logo ở tab Agent: màn trống để logo đứng thẳng trên nền (cao từ 28px), ảnh đại diện trợ lý dùng nền xám chuẩn."
   }
  ],
  "wont_do": [
@@ -72,7 +76,7 @@
   },
   {
    "i": 6,
-   "p": "Anh gạch: tab Agent giữ ô vuông đen (sáng) hoặc trắng (tối) quanh logo như hôm nay."
+   "p": "Anh đã chốt ở Cổng Bằng chứng: bỏ ô vuông đen quanh logo ở tab Agent (phương án B, AC-11)."
   },
   {
    "i": 7,
@@ -149,6 +153,10 @@
   {
    "id": "d-20260925T093544Z-13",
    "p": "Chép lại hai lỗ đo của lượt chấm đầu vào danh sách chờ anh quyết, vì lượt chấm thứ hai không mang chúng sang."
+  },
+  {
+   "id": "d-20260925T094444Z-14",
+   "p": "Chọn bỏ ô quanh logo ở tab Agent và sửa ngay vòng này — đổi lại duyệt lại phạm vi và dùng round chấm cuối."
   }
  ],
  "decisions": [],

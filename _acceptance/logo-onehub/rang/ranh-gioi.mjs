@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url";
 const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const HOP_DONG = "_acceptance/logo-onehub/contract.md";
 const NHANH_CHINH = "origin/onehub";
-const CHO_DUOC_DOI = "apps/app/components/auth-shell.tsx";
+const CHO_DUOC_DOI = new Set([
+	"apps/app/components/auth-shell.tsx",
+	"apps/app/components/crm/agent-panel.tsx",
+]);
 const VUNG_CAM = [
 	"apps/app/components/landing/",
 	"apps/app/app/(landing)/",
@@ -87,7 +90,7 @@ try {
 if (goiLogo.length === 0) khongDo("tap tep goi Logo rong");
 
 for (const tep of goiLogo) {
-	if (tep === CHO_DUOC_DOI) continue;
+	if (CHO_DUOC_DOI.has(tep)) continue;
 	kiem(doi.has(tep) ? `file goi Logo doi: ${tep}` : `file goi Logo giu nguyen: ${tep}`, !doi.has(tep));
 }
 for (const vung of VUNG_CAM) {

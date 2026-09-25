@@ -580,6 +580,7 @@ executors:
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
     lgo_ranh_gioi: "node _acceptance/logo-onehub/rang/ranh-gioi.mjs"
+    lgo_o_agent: "node _acceptance/logo-onehub/rang/o-agent.mjs"
     build_khong_cache: 'bunx turbo run build --force'
     cdt_hang_xom_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh lanh"'
     cdt_hang_xom_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha"'

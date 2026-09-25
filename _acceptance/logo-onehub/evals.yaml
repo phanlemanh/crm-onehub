@@ -163,7 +163,7 @@ evals:
       git diff --name-only <moc> (so toi CAY LAM VIEC, khong kem HEAD) hop git ls-files --others
       --exclude-standard. Diff rong -> ma 2 ghim "diff rong". Tap file goi Logo rut bang git grep
       "@crm/ui/components/logo" -- apps/app TAI SHA CUA MOC (khong viet tay, khong grep HEAD).
-      KET LUAN liet: file goi Logo co doi (chi duoc auth-shell.tsx), file doi trong 5 vung cam,
+      KET LUAN liet: file goi Logo co doi (chi duoc auth-shell.tsx va crm/agent-panel.tsx), file doi trong 5 vung cam,
       moi dong --primary trong globals.css = #006b4f. Ma 0 = moi dong DUNG, ma 1 = co dong SAI
       (goi ten file), ma 2 = khong do duoc.
       Vung cam "apps/app/app/(landing)/" la CA THU MUC (gom sign-in/, onboarding/...), khong
@@ -226,3 +226,38 @@ evals:
       van dung kieu voi Logo moi.
       CHIEU DO: doi Logo sang nhan props { size: number } -> check-types do tai
       apps/app/components/app-header.tsx.
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.test.lgo_chup
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "packages/ui/src/components/logo.tsx"
+      - "_acceptance/logo-onehub/rang/chup.mjs"
+    expected: |
+      Trong cung luot chup cua E11, voi anh agent-sang va agent-toi: tim svg[aria-label="OneHub"]
+      nam trong [role="dialog"] [data-slot="empty"]; di nguoc tu svg len toi phan tu
+      [data-slot="empty"], moi phan tu co getComputedStyle().backgroundColor trong suot
+      (alpha 0) -> dong DUNG "khong o to nen quanh logo"; chieu cao khung bao svg >= 28px.
+      Khong tim thay svg trong khoi man trong -> SAI "man trong thieu logo".
+      CHIEU DO tren ban sao: tra lai <span className="... bg-foreground ..."> quanh logo o man
+      trong -> ma 1 ghim "o to nen quanh logo".
+
+  - id: E14
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.lgo_o_agent
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "_acceptance/logo-onehub/rang/o-agent.mjs"
+    expected: |
+      Script tu suy goc kho, doc apps/app/components/crm/agent-panel.tsx. Ma tran viet truoc
+      hai cho = so lan <Logo xuat hien trong tep (dem bang may, phai = 2): voi moi cho, doan JSX
+      tu the mo gan nhat bao quanh (EmptyMedia / MessageAvatar) toi <Logo khong chua
+      "bg-foreground"; o AgentAvatar, the con dau tien cua <MessageAvatar> la <Logo. Dem ca = 2
+      (+1 dem so cho). Ma 0 = DUNG het, 1 = co SAI, 2 = khong do duoc (khong thay tep / so cho
+      khac 2).
+      CHIEU DO tren ban sao: boc lai <span className="flex size-7 ... bg-foreground ..."> quanh
+      logo o AgentAvatar -> ma 1 ghim "AgentAvatar: o bg-foreground quanh logo".
+

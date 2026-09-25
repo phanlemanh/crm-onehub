@@ -5,7 +5,7 @@ slug: logo-onehub
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: approved
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
 design_doc: docs/superpowers/specs/2026-09-25-logo-onehub-design.md
@@ -31,8 +31,9 @@ của hãng chỉ nằm trong một file.
 - AC-6: Given script sinh icon và nguồn `logo-onehub.ts` hiện tại, When sinh lại toàn bộ bộ icon trong bộ nhớ, Then điểm ảnh giải mã của từng file trong kho trùng khít bản vừa sinh — không file raster nào sửa tay hay sót bản cũ.
 - AC-7: Given `apps/app/public/site.webmanifest`, When đọc, Then `name` là «OneHub CRM», `short_name` là «OneHub», và hai icon 192, 512 vẫn khai `purpose: "maskable"`.
 - AC-8: Given một thư mục ngoài kho, When chạy script với `--external <thư mục>`, Then thư mục đó có `slack-app-icon-1024.png` (1024×1024), `zalo-bot-avatar-512.png` (512×512, mark nằm trong vòng tròn bán kính 40% cạnh) và `google-oauth-logo-120.png` (120×120, dưới 1MB), cả ba đục hoàn toàn nền trắng; và `git status` của kho không đổi sau lượt chạy.
-- AC-9: Given nhánh này so với điểm rẽ khỏi `onehub`, When liệt kê file đổi, Then trong các file đang gọi `Logo` chỉ `apps/app/components/auth-shell.tsx` đổi; không file nào dưới `apps/app/components/landing/`, `apps/app/app/(landing)/`, `packages/ui/src/components/brand-logos/`, `apps/api/src/companies/favicon.service.ts`, `packages/db/src/favicon.ts` đổi; và biến `--primary` trong `packages/ui/src/styles/globals.css` vẫn là `#006B4F` (mọi dòng khai `--primary` trong file đó).
+- AC-9: Given nhánh này so với điểm rẽ khỏi `onehub`, When liệt kê file đổi, Then trong các file đang gọi `Logo` chỉ `apps/app/components/auth-shell.tsx` và `apps/app/components/crm/agent-panel.tsx` đổi; không file nào dưới `apps/app/components/landing/`, `apps/app/app/(landing)/`, `packages/ui/src/components/brand-logos/`, `apps/api/src/companies/favicon.service.ts`, `packages/db/src/favicon.ts` đổi; và biến `--primary` trong `packages/ui/src/styles/globals.css` vẫn là `#006B4F` (mọi dòng khai `--primary` trong file đó).
 - AC-10: Given bàn đo của chính cây này với dữ liệu mẫu, When chụp trang đăng nhập ở khổ 1440 và 390, thanh trên cùng ở giao diện sáng và tối, và màn trống tab Agent ở giao diện sáng và tối, Then nhìn thấy trên ảnh: mark sáu lục giác dải xanh ở mọi chỗ từng có logo, chữ OneHub đọc được trên nền tối của trang đăng nhập ở cả hai khổ, không còn hình mark cũ của Comp, không logo nào bị cắt hay tràn; và `/favicon.ico` máy chủ trả về giống từng byte với `apps/app/app/favicon.ico`.
+- AC-11: Given tab Agent của một hồ sơ công ty, When mở màn trống ở giao diện sáng và tối, Then logo đứng thẳng trên nền của màn, không có ô tô nền nào phía sau (mọi phần tử bao logo tới khối màn trống đều nền trong suốt) và logo cao từ 28px trở lên; và trong mã của tab Agent, ảnh đại diện trợ lý đặt logo thẳng trong `MessageAvatar` (nền xám chuẩn của thành phần), không còn ô tô `bg-foreground` nào quanh logo ở cả hai chỗ.
 
 ## Coverage
 
@@ -44,12 +45,12 @@ lượt thay thương hiệu). Chân sản phẩm đào từ repo; chân ngành 
 - Trục giao diện: sáng | tối | trang đăng nhập luôn tối [thước CE: lớp `dark` cố định — SUY-TỪ-REPO: apps/app/components/auth-shell.tsx]
 - Trục cỡ: 14–24px trong app | 16/32/48 favicon | 96–512 icon cài | 120–1024 ảnh ngoài [thước CE: NGÀNH: Apple HIG apple-touch-icon 180px · web.dev «maskable icons» vùng an toàn bán kính 40% · Google Cloud Console Help «App Identity & Branding» 120×120 · Slack app icon 512–2000px · tài liệu Zalo OA avatar tối thiểu 240×240 vuông]
 
-Core (vào AC): mark trùng gốc (AC-1, 2) · API component (AC-3, 4) · bộ icon và nguồn chung (AC-5, 6, 7) · ảnh ngoài (AC-8) · ranh giới không đụng (AC-9) · nhìn thấy trên màn thật (AC-10).
+Core (vào AC): mark trùng gốc (AC-1, 2) · API component (AC-3, 4) · bộ icon và nguồn chung (AC-5, 6, 7) · ảnh ngoài (AC-8) · ranh giới không đụng (AC-9) · nhìn thấy trên màn thật (AC-10) · ô quanh logo ở tab Agent (AC-11).
 
 Để chủ kho gạch tại Cổng 1:
 - [GIẢ ĐỊNH] Cả ba chỗ trong `auth-shell.tsx` dùng `LogoLockup`, kể cả ô giữ chỗ vô hình và đầu form (trên điện thoại đó là chỗ duy nhất có tên thương hiệu).
 - [GIẢ ĐỊNH] Zalo xuất 512px (tài liệu chỉ nói tối thiểu 240) và Slack xuất 1024px, cả hai nền trắng.
-- [GIẢ ĐỊNH] Ô vuông tương phản quanh mark trong tab Agent (`bg-foreground`) giữ nguyên; mark dải màu nằm trong ô đen ở giao diện sáng, ô trắng ở giao diện tối.
+- Chủ kho chốt ở Cổng Bằng chứng 25/09 (phương án B): bỏ ô vuông tương phản quanh logo ở tab Agent — màn trống để logo đứng thẳng trên nền, ảnh đại diện trợ lý dùng nền chuẩn của `MessageAvatar` (AC-11).
 - [NGÀNH] Mark cùng màu ở hai giao diện; logo được miễn ngưỡng tương phản của WCAG 1.4.11 (logotype).
 
 ## Out of scope
@@ -62,6 +63,9 @@ Core (vào AC): mark trùng gốc (AC-1, 2) · API component (AC-3, 4) · bộ i
 - Ảnh tab trình duyệt thật (thanh tab của Chrome): máy chụp đầu không giao diện không có thanh tab — AC-10 đo bằng byte favicon máy chủ trả về; ảnh tab thật chụp tay đính vào gói Cổng 2.
 
 ## Notes
+
+- Mở lại sau Cổng Bằng chứng round 2 (25/09): chủ kho chọn bỏ ô đen quanh logo ở tab Agent, sửa ngay trong vòng này — AC-9 thêm `agent-panel.tsx`, thêm AC-11.
+- Ảnh đại diện trợ lý chỉ hiện khi đã có hội thoại; bàn đo không có hội thoại mẫu, nên vế ảnh đại diện của AC-11 đo trên mã, không đo trên ảnh chụp.
 
 - Đo trước khi viết hợp đồng (S1): mark dựng lại IoU 99,72% với `logo-mark.png`, chữ dò nét IoU 99,6%.
 - `sharp` 0.34.5 đã có trong `bun.lock`; vòng này thêm nó vào `devDependencies` của `@crm/ui`.
