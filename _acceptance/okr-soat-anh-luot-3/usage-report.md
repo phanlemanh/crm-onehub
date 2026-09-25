@@ -78,3 +78,42 @@ wall: 793s
 - **claude-opus-5-5**: 3 agent · 46 calls · out 36,984 · in 92 · cache_read 4,284,497 · cache_create 405,797
 - **claude-haiku-4-5-20251001**: 11 agent · 29 calls · out 13,260 · in 254 · cache_read 1,163,689 · cache_create 307,826
 
+### S4 round 2 (thu lai) — wf_c65f677a-b6a (18 agent, 81,707 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 2 | 21,082 | 4 | 88,808 | 192 |
+| review:bugs | claude-opus-5-5 | 18 | 13,175 | 36 | 1,747,487 | 155 |
+| review:measurement | claude-opus-5-5 | 10 | 12,631 | 20 | 852,933 | 158 |
+| ui:E14 | claude-sonnet-5 | 16 | 9,792 | 32 | 1,300,062 | 170 |
+| review:conventions | claude-opus-5-5 | 13 | 7,181 | 26 | 1,036,842 | 80 |
+| triage | claude-sonnet-5 | 2 | 5,728 | 4 | 72,174 | 64 |
+| machine:node _acceptance/khung-trang-cai-dat/ran | claude-haiku-4-5-20251001 | 2 | 1,435 | 18 | 74,597 | 18 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 5 | 1,406 | 42 | 204,362 | 114 |
+| machine:APP_URL=${APP_URL:-http://localhost:3630 | claude-haiku-4-5-20251001 | 2 | 1,314 | 18 | 74,564 | 172 |
+| machine:bun _acceptance/okr-soat-anh-luot-3/rang | claude-haiku-4-5-20251001 | 2 | 1,309 | 18 | 74,519 | 16 |
+| machine:bun _acceptance/okr-soat-anh-luot-3/rang | claude-haiku-4-5-20251001 | 2 | 1,133 | 18 | 74,517 | 16 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,072 | 18 | 74,485 | 15 |
+| machine:APP_URL=${APP_URL:-http://localhost:3630 | claude-haiku-4-5-20251001 | 2 | 913 | 18 | 74,567 | 62 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 879 | 18 | 74,528 | 13 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 802 | 18 | 74,485 | 22 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 728 | 18 | 74,483 | 12 |
+| capture:provenance | claude-sonnet-5 | 3 | 687 | 6 | 140,222 | 10 |
+| machine:cd apps/app && bun test test/okr-chu-ky- | claude-haiku-4-5-20251001 | 2 | 440 | 18 | 74,511 | 12 |
+
+
+wall: 443s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 11 | 11,431 | 949,618 | 173 | 16:18:11 | 16:21:04 |
+| ui | 1 | 9,792 | 1,300,062 | 170 | 16:18:11 | 16:21:01 |
+| review | 3 | 32,987 | 3,637,262 | 160 | 16:18:11 | 16:20:51 |
+| triage | 1 | 5,728 | 72,174 | 64 | 16:21:06 | 16:22:09 |
+| capture | 1 | 687 | 140,222 | 10 | 16:22:11 | 16:22:21 |
+| synthesize | 1 | 21,082 | 88,808 | 192 | 16:22:22 | 16:25:34 |
+
+- **claude-sonnet-5**: 4 agent · 23 calls · out 37,289 · in 46 · cache_read 1,601,266 · cache_create 366,410
+- **claude-opus-5-5**: 3 agent · 41 calls · out 32,987 · in 82 · cache_read 3,637,262 · cache_create 458,943
+- **claude-haiku-4-5-20251001**: 11 agent · 25 calls · out 11,431 · in 222 · cache_read 949,618 · cache_create 301,264
+

@@ -1,14 +1,12 @@
 ---
 schema_version: 2
 feature_slug: okr-soat-anh-luot-3
-verdict: BLOCKED
+verdict: PASS
 failed_evals: []
-reason: |
-  Lệnh đo E11 (AC-7) chứa lỗi đường dẫn: workflow tham chiếu _acceptance/khung-trang-cai-dat/ran/ nhưng thư mục đúng là _acceptance/khung-trang-cai-dat/rang/ (thiếu chữ "g" trong "rang"). Verifier config:executors.script.osa_ktcd_khong_trinh_duyet thoát mã 1 với "Cannot find module '.../khung-trang-cai-dat/ran/cau-truc.mjs'" — không chạy được, không phải lỗi sản phẩm. 14/15 eval còn lại (E1-E10, E12-E15) và 4 lệnh suite (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) đều đạt. Khắc phục: sửa lại đường dẫn lệnh trong workflow (rang, không phải ran) rồi chạy lại round verify.
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8d1f773190839afbe91bf4ae95c5eb44944f9e25
+verified_commit: e162d8e7ca1674580cf94ab861978dfceb9de996
 human_signoff:
 ---
 
@@ -26,7 +24,7 @@ human_signoff:
 | E8 | AC-6 | script | PASS |
 | E9 | AC-6 | script | PASS |
 | E10 | AC-7 | script | PASS |
-| E11 | AC-7 | script | BLOCKED |
+| E11 | AC-7 | script | PASS |
 | E12 | AC-8 | script | PASS |
 | E13 | AC-8 | script | PASS |
 | E14 | AC-9 | ui-check | PASS |
@@ -39,7 +37,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_do_man
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
     anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
     KET LUAN 49 DUNG, 0 SAI — ma thoat 0
@@ -50,7 +48,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_do_man
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
     anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
     KET LUAN 49 DUNG, 0 SAI — ma thoat 0
@@ -61,7 +59,40 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_do_man
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
+  output: |
+    anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
+    KET LUAN 49 DUNG, 0 SAI — ma thoat 0
+    -- tiền đề làn đo: đã dọn ảnh đại diện
+
+- eval: E5
+  run_id: minted-okr-soat-anh-luot-3-E5-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.osa_do_man
+  verified_at: 2026-09-25T16:15:56Z
+  output: |
+    anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
+    KET LUAN 49 DUNG, 0 SAI — ma thoat 0
+    -- tiền đề làn đo: đã dọn ảnh đại diện
+
+- eval: E8
+  run_id: minted-okr-soat-anh-luot-3-E8-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.osa_do_man
+  verified_at: 2026-09-25T16:15:56Z
+  output: |
+    anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
+    KET LUAN 49 DUNG, 0 SAI — ma thoat 0
+    -- tiền đề làn đo: đã dọn ảnh đại diện
+
+- eval: E15
+  run_id: minted-okr-soat-anh-luot-3-E15-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.osa_do_man
+  verified_at: 2026-09-25T16:15:56Z
   output: |
     anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
     KET LUAN 49 DUNG, 0 SAI — ma thoat 0
@@ -72,62 +103,51 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.osa_nav_strip
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
-    0 fail
-    10 expect() calls
-    Ran 5 tests across 1 file. [562.00ms]
-
-- eval: E5
-  run_id: minted-okr-soat-anh-luot-3-E5-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.osa_do_man
-  verified_at: 2026-09-25T15:59:44Z
-  output: |
-    anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
-    KET LUAN 49 DUNG, 0 SAI — ma thoat 0
-    -- tiền đề làn đo: đã dọn ảnh đại diện
+     0 fail
+     10 expect() calls
+    Ran 5 tests across 1 file. [574.00ms]
 
 - eval: E6
   run_id: minted-okr-soat-anh-luot-3-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.osa_nhan_goi_y
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
-    0 fail
-    21 expect() calls
-    Ran 18 tests across 1 file. [20.00ms]
+     0 fail
+     21 expect() calls
+    Ran 18 tests across 1 file. [16.00ms]
 
 - eval: E7
   run_id: minted-okr-soat-anh-luot-3-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.osa_nhan_goi_y
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
-    0 fail
-    21 expect() calls
-    Ran 18 tests across 1 file. [20.00ms]
-
-- eval: E8
-  run_id: minted-okr-soat-anh-luot-3-E8-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.osa_do_man
-  verified_at: 2026-09-25T15:59:44Z
-  output: |
-    anh o /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau
-    KET LUAN 49 DUNG, 0 SAI — ma thoat 0
-    -- tiền đề làn đo: đã dọn ảnh đại diện
+     0 fail
+     21 expect() calls
+    Ran 18 tests across 1 file. [16.00ms]
 
 - eval: E9
   run_id: minted-okr-soat-anh-luot-3-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_soi_ma
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
+  output: |
+    DUNG pha-lop: them className="text-destructive" vao TableCell cua ban sao -> ma 1
+    goc: .
+    KET LUAN 19 DUNG, 0 SAI — ma thoat 0
+
+- eval: E13
+  run_id: minted-okr-soat-anh-luot-3-E13-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.osa_soi_ma
+  verified_at: 2026-09-25T16:15:56Z
   output: |
     DUNG pha-lop: them className="text-destructive" vao TableCell cua ban sao -> ma 1
     goc: .
@@ -138,87 +158,71 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_dok_man
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
-    anh E15-step8.png
     man-okr: 197 khang dinh, 0 hong
     -- tiền đề làn đo: đã dọn ảnh đại diện
 
 - eval: E11
   run_id: minted-okr-soat-anh-luot-3-E11-r2
-  exit_code: 1
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_ktcd_khong_trinh_duyet
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
-    Error: Cannot find module '/Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/_acceptance/khung-trang-cai-dat/ran/cau-truc.mjs'
-        at Module._resolveFilename (node:internal/modules/cjs/loader:1476:15)
-        at wrapResolveFilename (node:internal/modules/cjs/loader:1049:27)
-        at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1073:10)
-        at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1094:12)
-        at Module._load (node:internal/modules/cjs/loader:1262:25)
-    Script directory path is incorrect: workflow specifies 'ran/' but actual directory is 'rang/'
+     0 fail
+     54 expect() calls
+    Ran 6 tests across 1 file. [386.00ms]
 
 - eval: E12
   run_id: minted-okr-soat-anh-luot-3-E12-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_san_thiet_ke
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   output: |
     DUNG packages/ui/src/components/nav-item.tsx: design-gate ma 0
     DUNG packages/ui/src/components/simple-table.tsx: design-gate ma 0
     KET LUAN 9 DUNG, 0 SAI — ma thoat 0
 
-- eval: E13
-  run_id: minted-okr-soat-anh-luot-3-E13-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.osa_soi_ma
-  verified_at: 2026-09-25T15:59:44Z
-  output: |
-    DUNG pha-lop: them className="text-destructive" vao TableCell cua ban sao -> ma 1
-    goc: .
-    KET LUAN 19 DUNG, 0 SAI — ma thoat 0
-
 - eval: E14
-  run_id: oh5i1mn
+  run_id: okr-soat-anh-luot-3/evidence/sau (nhan=sau, ma=oh61bzm)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.osa_do_man
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
   screenshot: /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/.acceptance-runs/okr-soat-anh-luot-3/evidence/sau/nhap-1440.png
   observed: |
-    Đọc trực tiếp 8 file PNG trong evidence/sau (vừa sinh 23:04:08–23:04:47, run mã=oh5i1mn) và đối chiếu 8 file cùng tên trong evidence/truoc bằng Read (ảnh):
-    - sau/nhap-1440.png: hộp "Nhập từ bảng tính" rộng đủ, đủ 9 tiêu đề cột (Dòng, Mục tiêu, KR, Kiểu, Khởi điểm, Đích, Đơn vị đo, Địa chỉ email, Kết quả) tròn trọn, không cắt; hàng dòng 4 và 5 có vạch đỏ mép trái + chấm đỏ «Hỏng». Đúng Expected. truoc/nhap-1440.png chỉ hiện 2 cột (Dòng, Mục tiêu), bảng bị cắt mép phải — khớp mô tả "trước" bị lỗi.
-    - sau/nhap-390.png: hộp thoại nằm trọn trong màn 390px (không tràn trang), bảng cuộn ngang trong vỏ của nó. Đúng Expected.
-    - sau/caidat-okr-390.png: thẻ «Chương trình OKR» hiện tròn chữ, không cắt, đang ở trạng thái chọn. Đúng Expected. truoc/caidat-okr-390.png hiện «Chươ…» bị cắt ở mép phải — khớp mô tả "trước".
-    - sau/chon-chu-ky-1440.png và chon-chu-ky-390.png: ô chọn chỉ đọc «Quý 3/2026» một lần. Đúng Expected. truoc/chon-chu-ky-1440.png đọc «Quý 3/2026 Quý» — lặp chữ "Quý" — khớp mô tả "trước".
-    - sau/mo-chu-ky-1440.png và mo-chu-ky-390.png: ô "Tên" có placeholder gợi ý «Năm 2026» (năm hiện tại theo giờ VN, hôm nay 2026-09-25). Đúng Expected. truoc/mo-chu-ky-1440.png placeholder «Năm 2027» — sai năm — khớp mô tả "trước".
-    Cả 8 cặp ảnh trước/sau đều tồn tại đủ, không thiếu file nào.
+    Doc truc tiep bang Read tool tung file PNG trong evidence/sau va evidence/truoc (8 cap, 16 anh), doi chieu tung anh voi Expected:
+    - sau/nhap-1440.png: hop dialog rong, du 9 cot tieu de (Dong, Muc tieu, KR, Kieu, Khoi diem, Dich, Don vi do, Dia chi email, Ket qua) khong bi cat mep phai; hang 4 va 5 co vach do mep trai + cham do "Hong" — DUNG voi Expected. truoc/nhap-1440.png: chi thay 2 cot (Dong, Muc tieu), bang bi cat cung mep phai man hinh — dung voi mo ta "truoc/: cot bi cat o mep phai".
+    - sau/caidat-okr-390.png: thanh tab tren cung hien du "Thanh vien | To chuc | Chuong trinh OKR (dang chon, tron chu) | Dieu phoi 30 ngay", khong bi cat — DUNG. truoc/caidat-okr-390.png: thanh tab hien "Chung Tien te Truong Thanh vien To chuc Chu..." — the bi cat "Chuo…" dung nhu mo ta.
+    - sau/nhap-390.png: dialog "Nhap tu bang tinh" la hop tron trong man hinh (co le/canh, khong tran het chieu rong), bang du lieu ben trong co thanh cuon rieng — DUNG voi "hop tron trong man, bang cuon trong vo". truoc/nhap-390.png: dialog tran het be rong man hinh, khong co le hai ben — khac voi sau, dung nhu mo ta doi chieu.
+    - sau/chon-chu-ky-1440.png va -390.png: o chon hien thi mot lan "Quy 3/2026" (khong lap chu "Quy") — DUNG voi "doc «Quy <q>/<nam>» mot lan". truoc/chon-chu-ky-1440.png va -390.png: o chon hien "Quy 3/2026 Quy" — chu "Quy" bi lap, dung nhu mo ta.
+    - sau/mo-chu-ky-1440.png va -390.png: truong "Ten" co placeholder "Nam 2026" (nam hien tai, 2026-09-25) — DUNG voi "Ten goi y «Nam <nam hien tai>»". truoc/mo-chu-ky-1440.png va -390.png: placeholder la "Nam 2027" — sai nam, dung nhu mo ta doi chieu.
+    Tat ca 8 ten file bat buoc co du trong ca hai thu muc truoc/ va sau/ (kiem bang ls, khop danh sach Expected). Khong anh nao mau thuan Expected.
   network_observed: n-a (driver)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: muh5fnndpn73
+  run_id: muh60bw9fz4i
   exit_code: 0
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
 
 - cmd: bunx turbo run lint --force
   run_id: minted-okr-soat-anh-luot-3-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
 
 - cmd: bun run lint:slop
   run_id: minted-okr-soat-anh-luot-3-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
 
 - cmd: bunx turbo run build --force
   run_id: minted-okr-soat-anh-luot-3-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-25T15:59:44Z
+  verified_at: 2026-09-25T16:15:56Z
 
 ## Known limits
 
@@ -228,13 +232,14 @@ human_signoff:
 
 carried tu round 1 — baseline khong do lai round nay
 
-none — mọi field baseline của eval round này ghi "n-a" (không đo lại; xem round 1 cho baseline gốc)
+none — baseline round nay la n-a cho moi eval (khong do lai theo P2, evals.yaml khong doi tu baseline cuoi ghi o round 1), nen khong co eval nao duoc xac nhan la khong-phan-biet trong round nay.
 
 ## Variance
 
-none — không có eval nào chạy nhiều lần (runs > 1) round này; tất cả deterministic (runs=1), variance=false.
+none — every multi-run eval is uniform (khong eval nao co runs > 1 round nay).
 
 ## Iterations
 
-Round 1: BLOCKED — output `bun run test` bị cắt trước dòng tổng kết (tool timeout); 15/15 eval khác đạt.
-Round 2: BLOCKED — lệnh của E11 chứa lỗi đường dẫn (`_acceptance/khung-trang-cai-dat/ran/` thay vì `rang/`), verifier không chạy được; 14/15 eval còn lại (E1-E10, E12-E15) đạt, 4 lệnh suite đạt.
+Round 1: 15/15 eval đạt nhưng output `bun run test` bị cắt trước dòng tổng kết (tool timeout) → BLOCKED, không phải lỗi code.
+Round 2 (lần đầu): suite 4/4 mã 0, nhưng agent gõ sai đường dẫn ở E11 (14/15 eval đạt) → BLOCKED.
+Round 2 (lần ghi này): sửa xong đường dẫn E11, toàn bộ 15/15 eval + 4 lệnh suite đều mã 0 → PASS.

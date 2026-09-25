@@ -1,39 +1,43 @@
-# Review Findings — okr-soat-anh-luot-3 (round 2)
-
 ## Trong hợp đồng
 
-(không có finding nào đã map được vào AC ở round này.)
+(không có finding nào map được vào AC ở round này)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **do-man.mjs re-derives the cycle suggestion (timezone, 3 months/quarter, 4 quarters) inline instead of importing OKR_CHU_KY / goiYChuKy**
-  Người dùng thấy gì: Neu sau nay cong thuc tinh ten goi y chu ky duoc chinh sua, phep kiem man hinh cu co the khong phat hien ra va nguoi dung co the thay goi y ten chu ky sai ma khong ai biet truoc khi phat hanh.
-  file: `_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **A red error stripe is invisible on rows that are both clickable and invalid**
-  Người dùng thấy gì: Neu sau nay mot bang vua cho phep bam vao dong vua can danh dau dong loi, nguoi dung co the khong nhin thay dau hieu dong hong tru khi dang re chuot dung vao dong do.
-  file: `packages/ui/src/lib/row-accent.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 5 (tuyên quét LỚP nhưng không có ma trận viết trước): ma trận «lop-o-cho-goi» của soi-ma.mjs không có số đếm độc lập, đối chứng đếm là hằng đúng**
-  Người dùng thấy gì: Neu phep do tu dong bo sot mot so thanh phan giao dien can kiem, mot kieu chinh sua mau sac hoac khoang cach thu cong co the lot vao san pham ma khong ai phat hien.
-  file: `_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs`
+- **okr-chu-ky-nhan.ts dựng lại helper «hôm nay giờ Việt Nam» và hằng múi giờ đã có sẵn ở @crm/db/onboarding-nhac**
+  Người dùng thấy gì: Nếu sau này có người đổi múi giờ hệ thống, một vài nơi tính ngày có thể không được cập nhật theo vì logic đang lặp lại ở hai chỗ thay vì một chỗ duy nhất.
+  file: `apps/app/lib/okr-chu-ky-nhan.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (khẳng định âm tính đứng một mình): E12 chấm «design-gate mã 0» mà lệnh S4 không chạy đối chứng dương --pha**
-  Người dùng thấy gì: Luot kiem nay moi chung minh khong co loi thiet ke bi bat, chu chua chung minh cong cu kiem that su phat hien duoc loi khi co; neu cong cu kiem bi hong ngam, mot loi tuong phan mau co the lot qua ma khong ai biet.
+- **Dialog size "table" loses its side gutter between 640px and about 1152px wide**
+  Người dùng thấy gì: Ở một số kích thước cửa sổ trung bình (không phải điện thoại, không phải máy tính lớn), hộp thoại nhập bảng dữ liệu có thể chạm sát hai mép màn hình thay vì có khoảng trắng viền quanh.
+  file: `packages/ui/src/components/dialog.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (khẳng định âm tính đứng một mình): E12 chỉ chấm «design-gate mã 0» và lệnh đo không bao giờ chạy phép đối chứng --pha**
+  Người dùng thấy gì: Nếu sau này có lỗi thiết kế thật sự lọt vào (như chữ xám trên nền màu), phép đo tự động của vòng đo này có thể không phát hiện ra vì nó thiếu bước tự kiểm tra rằng cổng kiểm tra vẫn đang hoạt động đúng.
   file: `_acceptance/config.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 (chỉ kiểm có mặt trong khi lời hứa là quan hệ): dong-ho-page chỉ kiểm page.tsx có gọi homNayVn và goiYChuKy**
-  Người dùng thấy gì: Phep kiem nay khong dam bao chac chan ngay gio tinh o may chu luon duoc dua dung vao o goi y ten chu ky; neu co sai lech, nguoi dung co the thay goi y ten chu ky khong khop voi ngay that ma khong bi phat hien truoc khi phat hanh.
+- **Hình dạng 5 (quét cả lớp nhưng bộ đếm tự so với chính nó): «lop-dem-tep» và «tap tep: n» không bao giờ đỏ**
+  Người dùng thấy gì: Nếu bộ lọc tệp bỏ sót một tệp giao diện đã thay đổi, phép đo có thể không nhận ra và vẫn báo mọi thứ ổn.
+  file: `_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (thiếu ma trận toàn phần viết trước): MA_TRAN của do-man tự suy từ COT, MUC_CAI_DAT và LO, không ghim số lượng đã hứa**
+  Người dùng thấy gì: Nếu một cột bảng hay một mục cài đặt bị thiếu mất trong mã nguồn, phép đo tự động có thể không phát hiện ra sự thiếu sót đó.
+  file: `_acceptance/okr-soat-anh-luot-3/rang/do-man.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (kiểm «có mặt» cho một lời hứa về quan hệ): dong-ho-page chỉ kiểm page.tsx có gọi homNayVn và goiYChuKy**
+  Người dùng thấy gì: Phép đo tự động chỉ kiểm tra hai bước tính ngày và gợi ý tên có được gọi hay không, chứ chưa chắc chắn xác nhận chúng được nối đúng thứ tự với nhau, nên một lỗi hiếm khi ghép sai kết quả có thể lọt qua mà không bị phát hiện.
   file: `_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs`
   severity: low
   Đề xuất: known-limits
