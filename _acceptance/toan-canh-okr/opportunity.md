@@ -6,7 +6,7 @@ owner: phanlemanh@gmail.com
 stage: decided
 decision: build
 decided_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
-decided_at: 2026-09-26T04:00:00Z
+decided_at: 2026-09-25T20:50:00Z
 prototype:
   base_commit: 100847e8a747d474b79bc10adb82a94e06313f82
   disposition: keep
