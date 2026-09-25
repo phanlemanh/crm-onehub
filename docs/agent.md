@@ -198,8 +198,16 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   `"zalo"` hoặc `"slack"`, `lechKenh` là `true` khi kênh đã dùng khác lựa chọn của
   người (chọn Zalo mà Zalo chưa dùng được, hay ngược lại). `AUTO` không bao giờ lệch.
   `outcome` vẫn là `da-gui:<n>`.
-- **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở
-  `<APP_URL>/<slug>?record=plan:<id>`; vắng thì tin vẫn gửi, không liên kết.
+- **Việc OKR đi chung một tin.** `viecCanNhac` gộp việc kế hoạch với
+  `viecOkrCanNhac` (`@crm/db/okr-nhac`, hằng số ở `OKR_NHAC`) theo người, lọc thành
+  viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
+  «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi bốn loại OKR còn lại. Trần
+  `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
+  nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ.
+- **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở: kế hoạch
+  `<APP_URL>/<slug>?record=plan:<id>`, cập nhật tuần
+  `<APP_URL>/<slug>/okr/cap-nhat-tuan?tu=nhac`, việc OKR khác
+  `<APP_URL>/<slug>/okr?record=objective:<id>`; vắng thì tin vẫn gửi, không liên kết.
 - **`payload.daGui` là thứ thước đọc**, không phải `payload.muc`. `muc` là danh sách
   lúc quét; `daGui` là đúng các dòng đã có trong tin sau khi cắt. Hai câu truy vấn
   đường đo ở `_acceptance/may-nhac-truoc-nguoi/rang/` đọc tập này. `payload` chỉ giữ

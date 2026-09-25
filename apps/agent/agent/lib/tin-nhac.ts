@@ -1,16 +1,24 @@
+import type { ViecOkr } from "@crm/db/okr-nhac";
 import {
-	LOAI_NHAC,
-	type LoaiNhac,
 	NHAC,
+	THU_TU_NHAC,
+	type ViecKeHoach,
 	type ViecNhac,
 } from "@crm/db/onboarding-nhac";
+
+type LoaiTin = ViecNhac["loai"];
 
 const TIEU_DE = {
 	"buoc-qua-han": "Quá hạn",
 	"buoc-sap-han": "Sắp hạn",
 	"ke-hoach-im": "Kế hoạch im",
 	"moc-ngay": "Mốc ngày",
-} as const satisfies { [K in LoaiNhac]: string };
+	"okr-cap-nhat": "Cập nhật tuần",
+	"okr-kr-im": "KR im",
+	"okr-duoc-giao": "Được giao",
+	"okr-nhac-ten": "Nhắc tên",
+	"okr-theo-doi": "Đang theo dõi",
+} as const satisfies { [K in LoaiTin]: string };
 
 function thoat(chu: string): string {
 	return chu
@@ -24,7 +32,7 @@ function ngayThang(han: string): string {
 	return `${ngay}/${thang}`;
 }
 
-function phanDau(v: ViecNhac): string {
+function phanDau(v: ViecKeHoach): string {
 	if (v.loai === "ke-hoach-im") return `im ${v.soNgay} ngày · `;
 	if (v.loai === "moc-ngay") return `ngày thứ ${v.soNgay} · `;
 	return "";
@@ -32,13 +40,10 @@ function phanDau(v: ViecNhac): string {
 
 export type KhuonTin = "slack" | "tron";
 
-function dong(
-	v: ViecNhac,
-	lienKet: (planId: string) => string | null,
-	khuon: KhuonTin,
-): string {
+export type LienKet = (v: ViecNhac) => string | null;
+
+function dongKeHoach(v: ViecKeHoach, url: string | null, khuon: KhuonTin) {
 	const han = v.han ? `, hạn ${ngayThang(v.han)}` : "";
-	const url = lienKet(v.planId);
 	if (khuon === "tron") {
 		const mo = url ? ` — ${url}` : "";
 		return `• ${v.companyName} · ${phanDau(v)}${v.goiY}${han}${mo}`;
@@ -47,24 +52,61 @@ function dong(
 	return `• ${thoat(v.companyName)} · ${phanDau(v)}${thoat(v.goiY)}${han}${mo}`;
 }
 
+function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
+	switch (v.loai) {
+		case "okr-cap-nhat":
+			return `${v.soKr} KR chờ cập nhật tuần này`;
+		case "okr-kr-im":
+			return v.chuTen === null
+				? `KR «${chu(v.nhan)}» im ${v.soNgay} ngày`
+				: `KR «${chu(v.nhan)}» của ${chu(v.chuTen)} im ${v.soNgay} ngày`;
+		case "okr-duoc-giao":
+			return v.keyResultId
+				? `Bạn phụ trách KR «${chu(v.nhan)}»`
+				: `Bạn phụ trách mục tiêu «${chu(v.nhan)}»`;
+		case "okr-nhac-ten":
+			return `${chu(v.nguoiTen)} nhắc tên bạn ở «${chu(v.nhan)}»`;
+		case "okr-theo-doi":
+			return `«${chu(v.nhan)}» có ${v.capNhat} cập nhật, ${v.binhLuan} bình luận mới`;
+	}
+}
+
+function dongOkr(v: ViecOkr, url: string | null, khuon: KhuonTin): string {
+	if (khuon === "tron") {
+		const mo = url ? ` — ${url}` : "";
+		return `• ${noiDungOkr(v, (s) => s)}${mo}`;
+	}
+	const nhan = v.loai === "okr-cap-nhat" ? "mở cập nhật tuần" : "mở mục tiêu";
+	const mo = url ? ` — <${url}|${nhan}>` : "";
+	return `• ${noiDungOkr(v, thoat)}${mo}`;
+}
+
+function dong(v: ViecNhac, lienKet: LienKet, khuon: KhuonTin): string {
+	const url = lienKet(v);
+	return "planId" in v ? dongKeHoach(v, url, khuon) : dongOkr(v, url, khuon);
+}
+
 export type TinNhac = { text: string; daGui: ViecNhac[] };
 
 export function dungTin(
 	ten: string,
 	viec: ViecNhac[],
-	lienKet: (planId: string) => string | null,
+	lienKet: LienKet,
 	khuon: KhuonTin = "slack",
 	tranKyTu: number = Number.POSITIVE_INFINITY,
 ): TinNhac {
-	const theoThuTu = LOAI_NHAC.flatMap((loai) =>
+	const theoThuTu = THU_TU_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
 	);
-	const tieuDe = (loai: LoaiNhac) =>
+	const tieuDe = (loai: LoaiTin) =>
 		khuon === "tron" ? TIEU_DE[loai] : `*${TIEU_DE[loai]}*`;
 	const tenHien = khuon === "tron" ? ten : thoat(ten);
-	const chao = `Chào ${tenHien}, sáng nay có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
+	const coOkr = theoThuTu.some((v) => !("planId" in v));
+	const chao = coOkr
+		? `Chào ${tenHien}, sáng nay có ${theoThuTu.length} việc cần bạn để ý.`
+		: `Chào ${tenHien}, sáng nay có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
 	const ve = (daGui: ViecNhac[]) => {
-		const nhom = LOAI_NHAC.flatMap((loai) => {
+		const nhom = THU_TU_NHAC.flatMap((loai) => {
 			const ds = daGui.filter((v) => v.loai === loai);
 			if (ds.length === 0) return [];
 			return ["", tieuDe(loai), ...ds.map((v) => dong(v, lienKet, khuon))];
