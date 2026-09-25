@@ -40,5 +40,6 @@ export const ZALO = {
 		dangKyHong:
 			"Zalo chưa nhận đăng ký nhận tin. Bot đang dùng giữ nguyên; thử lại sau.",
 		khongCoToken: "Chưa có Bot Token nào để đăng ký.",
+		goiY: 'Trả lời "xong 2" để đánh dấu mục 2 xong.',
 	},
 } as const;

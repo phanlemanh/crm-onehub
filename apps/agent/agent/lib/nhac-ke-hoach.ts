@@ -151,7 +151,14 @@ async function guiQuaZalo(
 	if (!token || !zaloUserId) {
 		throw new Error("kenh Zalo duoc chon ma thieu token hoac lien ket");
 	}
-	const { text, daGui } = dungTin(ten, viec, lienKet, "tron", ZALO.tranKyTu);
+	const { text, daGui } = dungTin(
+		ten,
+		viec,
+		lienKet,
+		"tron",
+		ZALO.tranKyTu,
+		ZALO.loi.goiY,
+	);
 	await guiZalo(token, zaloUserId, text, { fetcher: deps.zaloFetcher });
 	return daGui;
 }

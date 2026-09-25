@@ -34,6 +34,7 @@ export type KhuonTin = "slack" | "tron";
 
 function dong(
 	v: ViecNhac,
+	so: number,
 	lienKet: (planId: string) => string | null,
 	khuon: KhuonTin,
 ): string {
@@ -41,7 +42,7 @@ function dong(
 	const url = lienKet(v.planId);
 	if (khuon === "tron") {
 		const mo = url ? ` — ${url}` : "";
-		return `• ${v.companyName} · ${phanDau(v)}${v.goiY}${han}${mo}`;
+		return `${so}. ${v.companyName} · ${phanDau(v)}${v.goiY}${han}${mo}`;
 	}
 	const mo = url ? ` — <${url}|mở kế hoạch>` : "";
 	return `• ${thoat(v.companyName)} · ${phanDau(v)}${thoat(v.goiY)}${han}${mo}`;
@@ -55,6 +56,7 @@ export function dungTin(
 	lienKet: (planId: string) => string | null,
 	khuon: KhuonTin = "slack",
 	tranKyTu: number = Number.POSITIVE_INFINITY,
+	dongCuoi: string | null = null,
 ): TinNhac {
 	const theoThuTu = LOAI_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
@@ -67,11 +69,16 @@ export function dungTin(
 		const nhom = LOAI_NHAC.flatMap((loai) => {
 			const ds = daGui.filter((v) => v.loai === loai);
 			if (ds.length === 0) return [];
-			return ["", tieuDe(loai), ...ds.map((v) => dong(v, lienKet, khuon))];
+			return [
+				"",
+				tieuDe(loai),
+				...ds.map((v) => dong(v, daGui.indexOf(v) + 1, lienKet, khuon)),
+			];
 		});
 		const conLai = theoThuTu.length - daGui.length;
 		const cuoi = conLai > 0 ? ["", `và ${conLai} việc nữa — mở tổng quan`] : [];
-		return [chao, ...nhom, ...cuoi].join("\n");
+		const goiY = dongCuoi ? ["", dongCuoi] : [];
+		return [chao, ...nhom, ...cuoi, ...goiY].join("\n");
 	};
 	let daGui = theoThuTu.slice(0, NHAC.tran);
 	while (daGui.length > 0 && ve(daGui).length > tranKyTu) {
