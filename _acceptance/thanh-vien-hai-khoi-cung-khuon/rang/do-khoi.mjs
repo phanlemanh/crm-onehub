@@ -164,7 +164,7 @@ async function choDu(p, soThanhVien, emailMoc) {
 				const bang = noiDung?.querySelector("[data-slot=table-container]");
 				const hang = bang ? bang.querySelectorAll("tbody tr").length : 0;
 				const duoi = [...document.querySelectorAll("section")].find((s) => s.textContent?.includes(tieuDe));
-				return hang >= n && duoi?.textContent?.includes(e);
+				return document.querySelector("[hidden] [data-slot=table-container], [hidden] section") === null && (bang?.getBoundingClientRect().height ?? 0) > 0 && hang >= n && duoi?.textContent?.includes(e);
 			},
 			{ timeout: CHO_MS },
 			soThanhVien,
@@ -260,17 +260,26 @@ async function chup(p, kho) {
 }
 
 async function doCuonNgang(p) {
+	await p.evaluate(
+		(tieuDeDuoi, src) => new Function(`return (${src})`)()(tieuDeDuoi).voDuoi?.scrollIntoView({ block: "start" }),
+		t.duocPhepVao.tieuDe,
+		trongTrang.toString(),
+	);
+	await ngu(CHO_CON_LAN_MS * 4);
 	const vo = await p.evaluate(
 		(tieuDeDuoi, src) => {
 			const { voDuoi } = new Function(`return (${src})`)()(tieuDeDuoi);
 			if (!voDuoi) return null;
-			voDuoi.scrollIntoView({ block: "center" });
 			const r = voDuoi.getBoundingClientRect();
-			return { x: r.left + r.width / 2, y: r.top + Math.min(r.height / 2, 60), rong: voDuoi.scrollWidth, khung: voDuoi.clientWidth };
+			const x = r.left + r.width / 2;
+			const y = Math.max(r.top, 0) + Math.min(r.height / 2, 60);
+			const o = document.elementFromPoint(x, y);
+			return { x, y, rong: voDuoi.scrollWidth, khung: voDuoi.clientWidth, trung: o !== null && voDuoi.contains(o), tai: o ? `${o.tagName}[${o.getAttribute("data-slot") ?? ""}]` : "null" };
 		},
 		t.duocPhepVao.tieuDe,
 		trongTrang.toString(),
 	);
+	if (vo) dong.push(`GHI CHU 375: con tro con lan tai (${Math.round(vo.x)}, ${Math.round(vo.y)}) tren ${vo.tai}, trong vo ${vo.trung}`);
 	kiem("cuon-ngang-vo", `375: vo bang duoi cuon ngang duoc (scrollWidth ${vo?.rong} > clientWidth ${vo?.khung})`, vo !== null && vo.rong > vo.khung);
 	if (vo === null) {
 		kiem("con-lan-ngang", "375: con lan ngang — khong co vo bang duoi", false);
@@ -534,7 +543,7 @@ async function doTieuDe(ctx, slug, p, N, M, tenLoc) {
 			(ten) => {
 				const bang = document.querySelector("[data-slot=page-shell-content] [data-slot=table-container]");
 				const hang = bang ? [...bang.querySelectorAll("tbody tr")] : [];
-				if (hang.length !== 1 || !hang[0].textContent?.includes(ten)) return null;
+				if (!(document.querySelector("[hidden] [data-slot=table-container], [hidden] section") === null) || hang.length !== 1 || !hang[0].textContent?.includes(ten)) return null;
 				return document.querySelector("[data-slot=page-shell-content] [data-slot=card-title]")?.textContent?.trim() ?? "(khong co)";
 			},
 			{ timeout: CHO_MS },
@@ -558,7 +567,7 @@ async function doKhongQuyen(slug, N) {
 	const p = await moTrang(ctx, KHO[0], `/${slug}/settings/members`);
 	await p
 		.waitForFunction(
-			(n) => (document.querySelector("[data-slot=page-shell-content] [data-slot=table-container]")?.querySelectorAll("tbody tr").length ?? 0) >= n,
+			(n) => document.querySelector("[hidden] [data-slot=table-container], [hidden] section") === null && (document.querySelector("[data-slot=page-shell-content] [data-slot=table-container]")?.querySelectorAll("tbody tr").length ?? 0) >= n,
 			{ timeout: CHO_MS },
 			N,
 		)

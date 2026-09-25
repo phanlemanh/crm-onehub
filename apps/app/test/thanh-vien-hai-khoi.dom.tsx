@@ -13,6 +13,11 @@ type TrangThai = DanhSach["rows"][number]["status"];
 
 const TREO = Symbol("treo");
 
+type ChonThuTuc = {
+	onSuccess?: () => void;
+	onError?: (error: { message: string }) => void;
+};
+
 let docDanhSach: () => DanhSach | typeof TREO = () => TREO;
 
 function quaJson<T>(giaTri: T): T {
@@ -35,7 +40,7 @@ function thuTuc(ten: string, doc: () => unknown) {
 			queryKey: [ten],
 			queryFn: async () => doc(),
 		}),
-		mutationOptions: (chon: object = {}) => ({
+		mutationOptions: (chon: ChonThuTuc = {}) => ({
 			...chon,
 			mutationKey: [ten],
 			mutationFn: async () => khongDoc(),
