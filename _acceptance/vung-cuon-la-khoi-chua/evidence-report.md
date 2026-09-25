@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: abf915e37ba31bafa2da175f85a2c3d53ca3efdb
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-26
 ---
 
 # Evidence Report: vung-cuon-la-khoi-chua (round 3)

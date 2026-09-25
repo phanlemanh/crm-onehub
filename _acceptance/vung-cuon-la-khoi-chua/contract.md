@@ -5,7 +5,7 @@ slug: vung-cuon-la-khoi-chua
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -70,3 +70,9 @@ Never: che thanh cuộn bằng `overflow-x-hidden`/`overflow: clip` trên khung 
 - Chiều đỏ trên mã chưa sửa (25/09, commit `070fab63`): 13 DUNG, 9 SAI, mã 1 — AC-2 5/29 ở ba khổ (Tiền tệ 1, Trường 14, Chương trình OKR 4, Danh mục onboarding 1, Tổ chức 1 — 21 phần tử), AC-4 và AC-5 29/29 ở ba khổ (khung ứng dụng trượt tới 2400px); AC-1, AC-3 xanh; AC-6, AC-7 xanh với tập xét rỗng như đã khai.
 - Xanh sau khi sửa: 22 DUNG, 0 SAI, mã 0, 213s; AC-6 xét đúng 21 phần tử đã thoát trước khi sửa.
 - Phá-thử trên mã đã sửa: `relative top-2` → AC-7 đỏ 29/29 (lệch 8px), kéo theo AC-3/4/5; `VCKC_PHA_GHIM=1` → AC-1 đỏ ở `/settings/notifications`; span `absolute top-0 right-0` trong `PageShellContent` → AC-6 đỏ 29/29, gọi đúng tên span; `min-w-[3000px]` thay `min-w-0` của `main` → AC-3 và AC-4 đỏ ngang 1616–2625px; `VCKC_PHA_DOAN=1` → mã 2 gọi tên `[doanLa]`. Bỏ `relative` là chính mã chưa sửa ở dòng đầu. Đầu ra ở `.acceptance-runs/vung-cuon-la-khoi-chua/`.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-26 (Phan Le Manh):
+
+- Ngoài-1 (S4 round 2): tài liệu của hồ sơ `khung-trang-cai-dat` (E1 trong `evals.yaml` của nó) vẫn ghi bản gốc so khung trang là `page-shell.tsx` ở `65bf27cc`, trong khi bản ghim `apps/app/test/fixtures/page-shell-truoc-width.tsx.txt` nay mang thêm `relative` của vòng này — người đọc lại hồ sơ đó sẽ tưởng phép so vẫn dùng bản chép nguyên từ lịch sử.
+- Ngoài-2 (S4 round 2): bản ghim đó thành bản chỉnh tay theo mã mới; ca «không truyền width thì đầu trang giống hệt bản gốc» nay chỉ bắt được thay đổi nào không được chép tay sang bản ghim.
+- Bảy mục ngoài hợp đồng của S4 round 1, về độ chặt của bàn đo `rang/do-khung.mjs` (round 2 sửa tệp đó nên round 3 không mang sang thẻ): dòng đối chứng in gộp một dòng thay vì ba dòng như `evals.yaml` khai; đối chứng của AC-2 chỉ kiểm nửa «tắt khối chứa thì thăm dò thoát ra body», không kiểm thăm dò về lại `main` sau khi trả; AC-6 và AC-7 không chặn tập xét rỗng (lượt 25/09 xét 21 và 5377 phần tử, nên dòng đạt hôm nay có nghĩa); trang ghim chỉ được kiểm «không bị đo», không kiểm đúng nhãn đã ghim; dòng đếm AC-1 «nhãn = tệp × 3» đúng theo cách dựng.
