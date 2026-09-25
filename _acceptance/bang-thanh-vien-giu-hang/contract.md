@@ -32,7 +32,7 @@ chờ do bàn đo gieo thêm, quản trị `ada@trycomp.ai`, tiếng Việt.
 
 - AC-1: Given «Được phép vào» có từ 15 lời mời chờ trở lên, When quản trị mở Cài đặt › Thành viên ở 1440×900, 768×1024 và 375×812, Then số hàng nằm trọn trong vỏ bảng bằng số thành viên của workspace đọc từ cơ sở dữ liệu (một trang, tối đa 25), không hàng nào bị vỏ bảng cắt, và vỏ bảng không giấu phần nội dung nào sau thanh cuộn dọc riêng (chênh lệch cao nội dung và cao vỏ ≤ 2px).
 - AC-2: Given cùng dữ liệu và ba khổ của AC-1, When trang tải xong, Then khối «Được phép vào» bắt đầu ở dưới đáy của khối bảng thành viên (tính cả dòng phân trang), và sau khi cuộn nút menu vai của một thành viên khác quản trị vào giữa khung nhìn, điểm giữa nút nằm trong khung nhìn và không bị phần tử nào khác che.
-- AC-3: Given cùng dữ liệu và ba khổ của AC-1, When cuộn trang tới cuối, Then vùng cuộn của trang (`main` của `PageShell`) cuộn dọc được và hàng lời mời cuối cùng nằm trọn theo chiều dọc trong khung của vùng cuộn đó; đó là vùng cuộn dọc duy nhất — `document` không cuộn dọc riêng; và ở cả ba khổ trang không tràn ngang.
+- AC-3: Given cùng dữ liệu và ba khổ của AC-1, When cuộn trang tới cuối, Then vùng cuộn của trang (`main` của `PageShell`) cuộn dọc được và hàng lời mời cuối cùng nằm trọn theo chiều dọc trong khung của vùng cuộn đó; đó là vùng cuộn dọc duy nhất — `document` không cuộn dọc riêng; và ở 1440 và 768 không tràn ngang, đo cả `document` lẫn vùng cuộn `main`.
 - AC-4: Given cùng dữ liệu và ba khổ của AC-1, When quản trị bấm nút menu vai của một thành viên khác mình, Then menu mở ra và có đủ bốn vai «Chủ sở hữu», «Quản trị», «Thành viên», «Chỉ OKR».
 - AC-5: Given ô tìm của bảng thành viên chứa một chuỗi không khớp ai, When mở trang ở 1440×900, Then câu «Không ai khớp với bộ lọc này.» nằm trọn trong vỏ bảng, cao từ 16px, và không bị phần tử nào che.
 - AC-6: Given trang Khoá API (dùng `DataTable` với cách xếp mặc định), When mở ở 1440×900, Then đáy khối bảng trùng đáy khung trang (lệch ≤ 2px) — cách xếp lấp đầy của bảy trang không đổi.
@@ -58,6 +58,7 @@ Never: ảo hoá hay thu gọn danh sách «Được phép vào» — lời hứ
 ## Out of scope
 
 - Thay bảng «Được phép vào» vẽ tay (`<table>`, `<h2>`) bằng `SimpleTable`/`Card` — đợt 3–4 của `docs/settings.md`.
+- Tràn ngang ở 375px: bảng «Được phép vào» vẽ tay sáu cột rộng hơn `main` (98px, cột «Rút» khuất) — thay bảng là đợt 3–4 của `docs/settings.md`; bàn đo ghi con số thành dòng ghi chú, không chấm.
 - Đổi cách xếp của bảy trang đang dùng `DataTable` lấp đầy.
 - Tiêu đề bảng thành viên dính khi cuộn.
 
@@ -65,4 +66,5 @@ Never: ảo hoá hay thu gọn danh sách «Được phép vào» — lời hứ
 
 - Không có `opportunity.md` — vòng sửa lỗi đi thẳng từ khung hỏng, không có ngưỡng nghiệm thu, nên không có mục Đường đo.
 - Chiều đỏ đã chạy trên mã chưa sửa (25/09): 13 SAI, mã 1; ảnh ở `.acceptance-runs/bang-thanh-vien-giu-hang/truoc-sua/`.
-- Sửa sau niêm phong Cổng 1 (S3, xem sổ): bỏ `min-h-0` làm lộ lỗi hai vùng cuộn — hai `span` sr-only ở tiêu đề bảng «Được phép vào» vẽ tay không có khối chứa trong `main`, kéo dài `document` (153/387/632px) và gây luôn tràn ngang 98px ở 375. AC-3 thêm «một vùng cuộn» và nâng «không tràn ngang» lên cả ba khổ; `<section>` của khối đó thành khối chứa (`relative`).
+- Sửa sau niêm phong Cổng 1 (S3, xem sổ): bỏ `min-h-0` làm lộ lỗi hai vùng cuộn — hai `span` sr-only ở tiêu đề bảng «Được phép vào» vẽ tay không có khối chứa trong `main`, kéo dài `document` (153/387/632px) và gây luôn tràn ngang 98px ở 375. AC-3 thêm «một vùng cuộn»; `<section>` của khối đó thành khối chứa (`relative`).
+- S4 round 1 (REJECT): thước tràn ngang đo `document` nên không thấy bảng sáu cột tràn BÊN TRONG `main` ở 375 — 98px ban đầu có hai nguồn chồng nhau, S3 chỉ gỡ một. Thước nay đo cả hai hộp; AC-3 trả về bản đã niêm phong (tràn ngang chấm ở 1440 và 768).

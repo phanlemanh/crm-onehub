@@ -59,8 +59,9 @@ Hai thay đổi, cùng một vòng:
 3. **Khối «Được phép vào» là khối chứa của chính nó** (`<section className="relative …">`).
    Thêm ở S3: khi trang đã cuộn, hai `span` sr-only ở hàng tiêu đề của bảng vẽ tay (định
    vị `absolute`, không tổ tiên định vị nào trong `main`) lấy `body` làm khối chứa, kéo
-   dài `document` thêm 153/387/632px ở 1440/768/375 — hai vùng cuộn dọc lồng nhau — và
-   gây luôn tràn ngang 98px ở 375 mà bản đầu của thiết kế này đổ nhầm cho bề rộng bảng.
+   dài `document` thêm 153/387/632px ở 1440/768/375 — hai vùng cuộn dọc lồng nhau. (S3 từng
+   tưởng nó cũng là toàn bộ tràn ngang 98px ở 375; S4 round 1 chỉ ra bảng sáu cột vẫn tràn
+   98px bên trong `main` — hai nguồn chồng nhau, vòng này chỉ gỡ nguồn sr-only.)
    Đã loại: cho `main` của `PageShell` làm khối chứa cho mọi trang — đúng hơn về nguyên
    tắc nhưng chạm mọi trang dùng `PageShell`; ghi thành việc ngoài hợp đồng.
 
@@ -138,6 +139,9 @@ Chiều đỏ đã chạy trên mã chưa sửa: 13 SAI, mã 1 (ảnh ở
 `.acceptance-runs/bang-thanh-vien-giu-hang/truoc-sua/`).
 
 ## Ngoài phạm vi
+
+- Tràn ngang ở 375px: bảng «Được phép vào» sáu cột rộng hơn `main` 98px — thay bảng ở
+  đợt 3–4 của `docs/settings.md`.
 
 - Bảng «Được phép vào» vẫn vẽ tay (`<table>`, `<h2>`) — thay bằng `SimpleTable`/`Card` là
   đợt 3–4 của `docs/settings.md`.

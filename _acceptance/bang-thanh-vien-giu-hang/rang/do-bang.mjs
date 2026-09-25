@@ -20,9 +20,9 @@ const SO_LOI_MOI = Number(process.env.SO_LOI_MOI ?? 15);
 const TIEN_TO = "ttv-lan-do-";
 const MIEN = "lan-do.onehub.vn";
 const KHO = [
-	{ rong: 1440, cao: 900 },
-	{ rong: 768, cao: 1024 },
-	{ rong: 375, cao: 812 },
+	{ rong: 1440, cao: 900, doTran: true },
+	{ rong: 768, cao: 1024, doTran: true },
+	{ rong: 375, cao: 812, doTran: false },
 ];
 const CHO_MS = 60_000;
 const LECH_PX = 2;
@@ -154,7 +154,10 @@ async function doDoc(p, soThanhVien, emailMoc) {
 			tranTrong: bang.scrollHeight - bang.clientHeight,
 			dayGoc: Math.round(goc.getBoundingClientRect().bottom),
 			dinhMuc: Math.round(muc.getBoundingClientRect().top),
-			tranNgang: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+			tranNgang: Math.max(
+				document.documentElement.scrollWidth - document.documentElement.clientWidth,
+				cuon.scrollWidth - cuon.clientWidth,
+			),
 			tranDocTaiLieu: document.documentElement.scrollHeight - document.documentElement.clientHeight,
 		};
 	}, t.duocPhepVao.tieuDe);
@@ -310,7 +313,8 @@ async function doMan(slug, cookie, soThanhVien, tenNguoi) {
 		const c = await cuonBangConLan(p);
 		kiem(`${nhan}: con lan cuon trang ${c.daCuon}px va toi duoc loi moi cuoi (${c.denDuoc})`, c.daCuon > 0 && c.denDuoc);
 		kiem(`${nhan}: chi mot vung cuon — tai lieu tran doc ${d.tranDocTaiLieu}px`, d.tranDocTaiLieu <= 0);
-		kiem(`${nhan}: tran ngang ${d.tranNgang}px`, d.tranNgang <= 0);
+		if (kho.doTran) kiem(`${nhan}: tran ngang ${d.tranNgang}px (tai lieu va vung cuon)`, d.tranNgang <= 0);
+		else dong.push(`GHI CHU ${nhan}: tran ngang ${d.tranNgang}px (tai lieu va vung cuon) — bang Duoc phep vao ve tay sau cot, ngoai pham vi`);
 		await chupHaiCho(p, kho);
 		await doMenu(p, kho, tenNguoi);
 		await p.close();
