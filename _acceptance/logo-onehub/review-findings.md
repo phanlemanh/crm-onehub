@@ -1,27 +1,40 @@
-
-# Review Findings: logo-onehub (round 4)
-
 ## Trong hợp đồng
-
-(không có — không có finding nào map được vào AC ở vòng này)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 2 — fixture VIẾT TAY: E15 đo một bản chép AgentAvatar trong logo-markup.ts, không phải AgentAvatar thật**
+- **E9 chép tay danh sách tệp đích thay vì suy từ ICON_ONEHUB.trongKho**
+  Người dùng thấy gì: Nếu sau này có thêm một tệp icon mới vào bộ nguồn, công cụ kiểm tra tự động có thể không được cập nhật theo và bỏ sót việc kiểm tra tệp đó.
+  file: `packages/ui/test/logo-icons.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **E9 cannot detect the CLI writing the in-repo icon set during --external, because those writes produce byte-identical files**
+  Người dùng thấy gì: Nếu một lỗi trong tương lai khiến công cụ xuất ảnh vô tình ghi lại các tệp biểu tượng gốc trong kho bằng đúng nội dung cũ, bộ kiểm tra tự động hiện tại có thể không phát hiện ra hành vi ghi đè đó.
+  file: `packages/ui/test/logo-icons.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5: tuyên quét LỚP «git status của kho không đổi» nhưng chỉ đo điểm-case (7 tệp băm + 3 tên ảnh ở 3 thư mục)**
+  Người dùng thấy gì: Nếu công cụ xuất ảnh trong tương lai vô tình ghi thêm hay sửa một tệp ở nơi khác trong kho ngoài các tệp đã biết, bộ kiểm tra tự động hiện tại có thể không phát hiện ra, dù lẽ ra kho phải giữ nguyên không đổi sau khi chạy.
+  file: `packages/ui/test/logo-icons.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 2 — fixture VIẾT TAY: E15 đo một bản chép AgentAvatar trong logo-markup.ts, không phải AgentAvatar thật (r4)**
   Người dùng thấy gì: Bài đo tự động hiện kiểm tra một bản sao viết tay của ảnh đại diện trợ lý, không phải đúng thành phần đang hiển thị trong ứng dụng. Nếu sau này ai đó lỡ đổi kích thước hay hình dạng logo ở màn hình thật, hệ thống kiểm tra sẽ không phát hiện ra.
   file: `packages/ui/test/logo-markup.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 3 — lời hứa là một QUAN HỆ (nền = xám chuẩn bg-muted) nhưng chỉ assert «nền không trong suốt»**
+- **Hình dạng 3 — lời hứa là một QUAN HỆ (nền = xám chuẩn bg-muted) nhưng chỉ assert «nền không trong suốt» (r4)**
   Người dùng thấy gì: Bài đo hiện chỉ kiểm tra nền phía sau logo không trong suốt, chứ chưa so sánh đúng với màu xám tiêu chuẩn đã hứa. Nếu ô nền đen từng gây lỗi trước đây quay lại trong một lần sửa sau này, hệ thống kiểm tra tự động có thể không báo đỏ.
   file: `_acceptance/logo-onehub/rang/chup.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 — E14 assert chuỗi «square» có mặt, trong khi lời hứa là giá trị của thuộc tính phải đúng**
+- **Hình dạng 3 — E14 assert chuỗi «square» có mặt, trong khi lời hứa là giá trị của thuộc tính phải đúng (r4)**
   Người dùng thấy gì: Bài đo hiện chỉ tìm xem chữ 'square' có xuất hiện trong mã hay không, mà chưa kiểm tra tùy chọn đó có thật sự đang bật hay không. Nếu sau này ai đó vô tình tắt tùy chọn này, ảnh đại diện trợ lý có thể không còn vuông như đã hứa mà hệ thống kiểm tra vẫn báo đạt.
   file: `_acceptance/logo-onehub/rang/o-agent.mjs`
   severity: low
@@ -45,16 +58,16 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: high
   Đề xuất: known-limits
 
-- **Shape 4 (negative-only assertion, no positive control): no raster icon case checks that the mark is present, so a blank white image passes E6, E9 and E7 (r1)**
-  Người dùng thấy gì: Các bài kiểm thử bộ icon (favicon, icon cài app, ảnh xuất cho Slack/Zalo/Google) có thể báo 'đạt' ngay cả khi icon bị dựng ra trống trơn, vì chúng chỉ kiểm viền và nền trắng chứ không kiểm logo có thực sự xuất hiện hay không.
-  file: `packages/ui/test/logo-icons.spec.ts`
-  severity: high
-  Đề xuất: known-limits
-
 - **ranh-gioi.mjs misses files renamed or moved out of a forbidden zone, and renamed Logo caller files, because rename detection lists only the new path (r2)**
   Người dùng thấy gì: Nếu sau này có người đổi tên hoặc di chuyển tệp ra khỏi vùng cấm, công cụ kiểm tra ranh giới có thể không phát hiện và báo an toàn nhầm, để lọt một thay đổi lẽ ra không được phép mà không ai hay biết ngay lúc đó.
   file: `_acceptance/logo-onehub/rang/ranh-gioi.mjs`
   severity: medium
+  Đề xuất: known-limits
+
+- **Shape 4 (negative-only assertion, no positive control): no raster icon case checks that the mark is present, so a blank white image passes E6, E9 and E7 (r1)**
+  Người dùng thấy gì: Các bài kiểm thử bộ icon (favicon, icon cài app, ảnh xuất cho Slack/Zalo/Google) có thể báo 'đạt' ngay cả khi icon bị dựng ra trống trơn, vì chúng chỉ kiểm viền và nền trắng chứ không kiểm logo có thực sự xuất hiện hay không.
+  file: `packages/ui/test/logo-icons.spec.ts`
+  severity: high
   Đề xuất: known-limits
 
 - **ranh-gioi.mjs cannot find the PR merge commit once the branch is on onehub: it gives up with exit 2, or checks the wrong range (r1)**
