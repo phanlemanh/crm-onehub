@@ -1,0 +1,17 @@
+NETWORK TRUTH — E9 (AC-9) — luot xac minh 2026-09-25
+Driver: script chup.mjs chay qua puppeteer-core + mot-luot.sh/tien-de.mjs (Bash),
+khong phai browser tool co read_network_requests/read_console_messages.
+=> networkObserved = "n-a (driver)"
+
+Ket qua lenh (khong qua trinh doc network cua trinh duyet, doc tu stdout cua chinh
+chup.mjs, day la nguon that cho buoc quyet dinh):
+- canh-cay.mjs (guard cay dung cong): ma thoat 0 — "may chu o http://localhost:3500
+  dang phuc vu dung cay dang xet."
+- mot-luot.sh + tien-de.mjs + chup.mjs: ma thoat 0
+  KET LUAN cua chup.mjs: "16 DUNG, 0 SAI — ma thoat 0"
+  4 anh da luu: E9-quan-tri-1440.png, E9-quan-tri-768.png,
+  E9-thanh-vien-1440.png, E9-thanh-vien-768.png
+
+Khong co dau hieu request FAIL-eligible (chup.mjs tu kiem HTTP status cua
+settings.researchKey = 200 cho ca hai vai truoc khi chup, va tu kiem trang cuoi
+la /<slug>/settings — khong co assertion nao SAI trong 16 dong).

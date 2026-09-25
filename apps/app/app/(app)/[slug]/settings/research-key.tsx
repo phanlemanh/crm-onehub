@@ -33,10 +33,9 @@ export function ResearchKey() {
 	const cache = useCrmCache();
 
 	const keyId = useId();
+	const lyDoId = useId();
 	const [draft, setDraft] = useState("");
 
-	const workspace = useQuery(trpc.workspace.get.queryOptions());
-	const coQuyen = workspace.data?.canManageSettings ?? false;
 	const key = useQuery(trpc.settings.researchKey.queryOptions());
 
 	const save = useMutation(
@@ -52,7 +51,8 @@ export function ResearchKey() {
 
 	if (!key.data) return null;
 
-	const { configured, hint } = key.data;
+	const { configured, hint, canManage } = key.data;
+	const lyDo = canManage ? undefined : lyDoId;
 
 	return (
 		<Card>
@@ -64,7 +64,8 @@ export function ResearchKey() {
 					<Button
 						type="submit"
 						form="research-key"
-						disabled={!coQuyen || save.isPending || draft.trim() === ""}
+						disabled={!canManage || save.isPending || draft.trim() === ""}
+						aria-describedby={lyDo}
 					>
 						{save.isPending ? <Spinner data-icon="inline-start" /> : null}
 						{configured ? t.nghienCuu.thayKhoa : t.nghienCuu.luuKhoa}
@@ -100,7 +101,8 @@ export function ResearchKey() {
 								autoCapitalize="off"
 								autoCorrect="off"
 								spellCheck={false}
-								disabled={!coQuyen || save.isPending}
+								disabled={!canManage || save.isPending}
+								aria-describedby={lyDo}
 							/>
 							<FieldDescription>
 								{t.nghienCuu.chuaCo}{" "}
@@ -116,6 +118,12 @@ export function ResearchKey() {
 						</Field>
 					</FieldGroup>
 				</form>
+
+				{canManage ? null : (
+					<p id={lyDoId} className="text-muted-foreground text-xs">
+						{t.nghienCuu.khongDuQuyen}
+					</p>
+				)}
 			</CardContent>
 		</Card>
 	);

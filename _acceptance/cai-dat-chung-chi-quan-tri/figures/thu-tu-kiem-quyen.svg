@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1000 736" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+        <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polyline points="0 0, 8 3, 0 6" fill="none" stroke="#575757" stroke-width="1.2"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-3 · MỘT MUTATION TỪ ĐẦU ĐẾN CUỐI</text>
+
+      <line x1="104" y1="128" x2="104" y2="656" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="292" y1="128" x2="292" y2="656" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="480" y1="128" x2="480" y2="656" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="676" y1="128" x2="676" y2="656" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="872" y1="128" x2="872" y2="656" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <rect x="64" y="304" width="840" height="336" rx="4" fill="none" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <rect x="64" y="304" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="84" y="316" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">ALT</text>
+      <text x="76" y="336" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[member · không thuộc workspace]</text>
+      <line x1="72" y1="416" x2="896" y2="416" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="72" y="424" width="100" height="16" rx="2" fill="#fafafa"/>
+      <text x="76" y="436" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[owner · admin]</text>
+
+      <rect x="288" y="168" width="8" height="56" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="476" y="216" width="8" height="408" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="672" y="456" width="8" height="32" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+
+      <path d="M 104 168 L 288 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="140" y="146" width="112" height="12" rx="2" fill="#fafafa"/>
+      <text x="196" y="155" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">setResearchKey(apiKey)</text>
+
+      <path d="M 296 216 L 476 216" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="320" y="194" width="132" height="12" rx="2" fill="#fafafa"/>
+      <text x="386" y="203" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">ctx.user.id, apiKey</text>
+
+      <path d="M 484 240 L 520 240 A 8 8 0 0 1 528 248 L 528 264 A 8 8 0 0 1 520 272 L 484 272" fill="none" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+      <rect x="536" y="240" width="132" height="32" rx="2" fill="#fafafa"/>
+      <text x="540" y="252" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace">requireManager(userId)</text>
+      <text x="540" y="266" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">canManageWorkspaceSettings</text>
+
+      <path d="M 476 376 L 104 376" fill="none" stroke="#006B4F" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+      <rect x="144" y="352" width="104" height="12" rx="2" fill="#fafafa"/>
+      <text x="196" y="361" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">403 · dừng tại đây</text>
+      <rect x="320" y="352" width="132" height="12" rx="2" fill="#fafafa"/>
+      <text x="386" y="361" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">ForbiddenException</text>
+
+      <rect x="684" y="368" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="688" y="380" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">0 lời gọi verify</text>
+      <rect x="756" y="388" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="864" y="400" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">0 ghi · 0 xếp hàng</text>
+
+      <path d="M 484 456 L 672 456" fill="none" stroke="#1f4f7a" stroke-width="1" marker-end="url(#arrow-link)"/>
+      <rect x="512" y="434" width="136" height="12" rx="2" fill="#fafafa"/>
+      <text x="580" y="443" fill="#1f4f7a" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">researchKeys.verify(apiKey)</text>
+
+      <path d="M 672 488 L 484 488" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="552" y="466" width="56" height="12" rx="2" fill="#fafafa"/>
+      <text x="580" y="475" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">valid</text>
+
+      <path d="M 484 528 L 872 528" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="720" y="506" width="112" height="12" rx="2" fill="#fafafa"/>
+      <text x="776" y="515" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">writeContextDevKey</text>
+
+      <path d="M 484 568 L 872 568" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow-open)"/>
+      <rect x="704" y="546" width="144" height="12" rx="2" fill="#fafafa"/>
+      <text x="776" y="555" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">backfill.run("companies")</text>
+
+      <path d="M 476 608 L 104 608" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="136" y="586" width="120" height="12" rx="2" fill="#fafafa"/>
+      <text x="196" y="595" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">canManage: true</text>
+      <rect x="316" y="586" width="140" height="12" rx="2" fill="#fafafa"/>
+      <text x="386" y="595" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">{ configured, hint, … }</text>
+
+      <rect x="24" y="72" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="24" y="72" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="104" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người gọi</text>
+      <text x="104" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tRPC · khoá API · REST</text>
+
+      <rect x="212" y="72" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="212" y="72" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="292" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">SettingsRouter</text>
+      <text x="292" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AuthMiddleware · có phiên</text>
+
+      <rect x="400" y="72" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="400" y="72" width="160" height="56" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="480" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">SettingsService</text>
+      <text x="480" y="112" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">requireManager</text>
+
+      <rect x="596" y="72" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="596" y="72" width="160" height="56" rx="6" fill="#ffffff" stroke="#1f4f7a" stroke-width="1"/>
+      <text x="676" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ thử khoá</text>
+      <text x="676" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">agent → Context.dev</text>
+
+      <rect x="792" y="72" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="792" y="72" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="872" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">DB · hàng đợi</text>
+      <text x="872" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AppSetting · AgentTask</text>
+
+      <line x1="32" y1="680" x2="968" y2="680" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="696" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <line x1="32" y1="713" x2="56" y2="713" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="64" y="716" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chốt quyền mới và nhánh 403</text>
+      <line x1="232" y1="713" x2="256" y2="713" stroke="#1f4f7a" stroke-width="1"/>
+      <text x="264" y="716" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Lời gọi ra ngoài</text>
+      <line x1="376" y1="713" x2="400" y2="713" stroke="#575757" stroke-width="1"/>
+      <text x="408" y="716" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Lời gọi trong tiến trình</text>
+      <line x1="548" y1="713" x2="572" y2="713" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="584" y="716" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Trả lời</text>
+      <line x1="648" y1="713" x2="672" y2="713" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow-open)"/>
+      <text x="684" y="716" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Xếp việc, không chờ</text>
+    </svg>

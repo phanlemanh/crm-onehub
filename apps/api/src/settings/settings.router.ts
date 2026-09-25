@@ -33,8 +33,8 @@ export class SettingsRouter {
 		output: agentModelOutput,
 		meta: restMeta("GET", "/settings/agent-model", ["Settings"]),
 	})
-	async agentModel() {
-		return this.settings.agentModel();
+	async agentModel(@Ctx() ctx: AuthedTrpcContext) {
+		return this.settings.agentModel(ctx.user.id);
 	}
 
 	@Query({
@@ -61,8 +61,8 @@ export class SettingsRouter {
 		output: researchKeyOutput,
 		meta: restMeta("GET", "/settings/research-key", ["Settings"]),
 	})
-	async researchKey() {
-		return this.settings.researchKey();
+	async researchKey(@Ctx() ctx: AuthedTrpcContext) {
+		return this.settings.researchKey(ctx.user.id);
 	}
 
 	@Mutation({
@@ -81,8 +81,8 @@ export class SettingsRouter {
 		output: archiveRetentionOutput,
 		meta: restMeta("GET", "/settings/archive-retention", ["Settings"]),
 	})
-	async archiveRetention() {
-		return this.settings.archiveRetention();
+	async archiveRetention(@Ctx() ctx: AuthedTrpcContext) {
+		return this.settings.archiveRetention(ctx.user.id);
 	}
 
 	@Mutation({

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cổng khoá nghiên cứu · Hình d-2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 66ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-2 · Luồng rẽ · cai-dat-chung-chi-quan-tri</p>
+    <h1>Cổng <code>/onboarding/research</code> chỉ đẩy người có <code>canManage</code></h1>
+    <p class="sub">Cổng proxy hỏi ba câu nối tiếp mỗi lần một người có phiên mở trang. Câu thứ ba là mới: trước vòng này, workspace chưa có khoá thì ai cũng bị đẩy tới màn cắm khoá, kể cả thành viên thường — ở đó họ chỉ nhận 403. Nay thành viên vào thẳng ứng dụng. AC-6, AC-8.</p>
+
+    <svg viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-2 · CỔNG PROXY KHI ĐĂNG NHẬP</text>
+
+      <path d="M 400 128 L 400 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 512 216 L 600 216" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="516" y="192" width="80" height="12" rx="2" fill="#fafafa"/>
+      <text x="556" y="201" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">chưa + canRename</text>
+
+      <path d="M 400 264 L 400 312" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="292" y="280" width="100" height="12" rx="2" fill="#fafafa"/>
+      <text x="388" y="289" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end">đã đặt / !canRename</text>
+
+      <path d="M 512 360 L 732 360 A 8 8 0 0 1 740 368 L 740 480" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="548" y="336" width="56" height="12" rx="2" fill="#fafafa"/>
+      <text x="576" y="345" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">có khoá</text>
+
+      <path d="M 400 408 L 400 456" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="332" y="424" width="60" height="12" rx="2" fill="#fafafa"/>
+      <text x="388" y="433" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end">chưa khoá</text>
+
+      <path d="M 512 504 L 640 504" fill="none" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+      <rect x="524" y="480" width="104" height="12" rx="2" fill="#fafafa"/>
+      <text x="576" y="489" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">false / thiếu cờ</text>
+
+      <path d="M 400 552 L 400 600" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="360" y="568" width="32" height="12" rx="2" fill="#fafafa"/>
+      <text x="388" y="577" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end">true</text>
+
+      <path d="M 240 504 L 288 504" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-link)"/>
+
+      <path d="M 740 600 L 740 528" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="748" y="558" width="52" height="12" rx="2" fill="#fafafa"/>
+      <text x="752" y="567" fill="#666666" font-size="8" font-family="'Geist Mono', monospace">chuyển về</text>
+
+      <rect x="300" y="80" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="300" y="80" width="200" height="48" rx="24" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="101" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có phiên, mở một trang</text>
+      <text x="400" y="117" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">apps/app/proxy.ts</text>
+
+      <polygon points="400,168 512,216 400,264 288,216" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Workspace đã đặt tên?</text>
+      <text x="400" y="230" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">workspace.get</text>
+
+      <rect x="600" y="192" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="600" y="192" width="200" height="48" rx="24" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="700" y="213" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn đặt tên</text>
+      <text x="700" y="229" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">/onboarding</text>
+
+      <polygon points="400,312 512,360 400,408 288,360" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="358" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đã có khoá nghiên cứu?</text>
+      <text x="400" y="374" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">configured</text>
+
+      <polygon points="400,456 512,504 400,552 288,504" fill="#eff5f3" stroke="#006B4F" stroke-width="1.6"/>
+      <rect x="380" y="474" width="40" height="16" rx="2" fill="#006B4F"/>
+      <text x="400" y="485" fill="#fafafa" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MỚI</text>
+      <text x="400" y="508" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">canManage?</text>
+      <text x="400" y="524" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">congNghienCuu</text>
+
+      <rect x="40" y="452" width="200" height="104" rx="6" fill="#fafafa"/>
+      <rect x="40" y="452" width="200" height="104" rx="6" fill="#ffffff" stroke="#1f4f7a" stroke-width="0.8"/>
+      <text x="52" y="472" fill="#1f4f7a" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NGUỒN CỜ</text>
+      <text x="52" y="490" fill="#171717" font-size="10" font-family="'Geist', sans-serif">Trả lời HTTP thật của</text>
+      <text x="52" y="505" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">settings.researchKey</text>
+      <text x="52" y="522" fill="#171717" font-size="10" font-family="'Geist', sans-serif">đọc bằng <tspan font-family="'Geist Mono', monospace" font-size="9">congNghienCuu</tspan></text>
+      <text x="52" y="540" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">@crm/validation/cong-nghien-cuu</text>
+
+      <rect x="640" y="480" width="200" height="48" rx="6" fill="#fafafa"/>
+      <rect x="640" y="480" width="200" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="740" y="501" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vào thẳng ứng dụng</text>
+      <text x="740" y="517" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">trang chính workspace</text>
+
+      <rect x="300" y="600" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="300" y="600" width="200" height="48" rx="24" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="400" y="621" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn cắm khoá</text>
+      <text x="400" y="637" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">/onboarding/research</text>
+
+      <rect x="620" y="600" width="300" height="68" rx="6" fill="#fafafa"/>
+      <rect x="620" y="600" width="300" height="68" rx="6" fill="transparent" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="632" y="622" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Thành viên gõ thẳng đường cắm khoá</text>
+      <text x="632" y="640" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">/onboarding/research → isSetup → trang chính</text>
+      <text x="632" y="656" fill="#575757" font-size="10" font-family="'Geist', sans-serif">cổng đã settled; đường sẵn có, không thêm mã</text>
+
+      <line x1="32" y1="700" x2="968" y2="700" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <line x1="32" y1="733" x2="56" y2="733" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="64" y="736" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh mới của vòng này</text>
+      <line x1="216" y1="733" x2="240" y2="733" stroke="#575757" stroke-width="1"/>
+      <text x="248" y="736" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh sẵn có, không đổi</text>
+      <line x1="400" y1="733" x2="424" y2="733" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="432" y="736" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nguồn của cờ</text>
+      <line x1="540" y1="733" x2="564" y2="733" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="572" y="736" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Gõ thẳng một đường cổng đã đóng</text>
+      <rect x="764" y="727" width="16" height="12" rx="2" fill="#eff5f3" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="788" y="736" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi mới của cổng</text>
+    </svg>
+
+    <footer>d-2 · cai-dat-chung-chi-quan-tri · cổng onboarding theo canManage · thiết kế 2026-09-25</footer>
+  </div>
+</body>
+</html>

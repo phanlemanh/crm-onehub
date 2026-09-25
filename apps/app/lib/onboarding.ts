@@ -1,3 +1,4 @@
+import { congNghienCuu } from "@crm/validation/cong-nghien-cuu";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { API_URL } from "@/lib/env";
@@ -22,10 +23,6 @@ const workspaceAnswer = z
 		viewerRole: z.string().nullable().optional(),
 	})
 	.catch({ onboarded: null, canRename: null, slug: null });
-
-const researchKeyAnswer = z
-	.object({ configured: z.boolean().nullable().catch(null) })
-	.catch({ configured: null });
 
 async function read(request: NextRequest, procedure: string) {
 	const cookie = request.headers.get("cookie");
@@ -79,11 +76,5 @@ export async function readWorkspaceGate(
 }
 
 export async function readResearchGate(request: NextRequest): Promise<Gate> {
-	const { configured } = researchKeyAnswer.parse(
-		await read(request, "settings.researchKey"),
-	);
-
-	if (configured === null) return "unknown";
-
-	return configured ? "settled" : "required";
+	return congNghienCuu(await read(request, "settings.researchKey"));
 }
