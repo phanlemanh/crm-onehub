@@ -61,7 +61,7 @@ nhật tuần — mức tự tin và ghi chú vẫn do người ghi), «Chốt»
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: khối kinh doanh có thôi đếm tay và để KR lấy số từ CRM không, và số đó có đáng tin không?
-- Kết quả nào là SỐNG: [đề xuất] trước 2026-12-01, ≥ 50% KR đã công bố của khối kinh doanh trong chu kỳ quý 4 có nguồn CRM (đếm từ bảng nguồn KR, danh sách bộ phận do chủ kho gọi tên); và phép thử tin số trên production — năm chỉ số so với số đếm tay — lệch không quá mức khai trước cho từng chỉ số.
+- Kết quả nào là SỐNG: [đề xuất] trước 2026-12-01, ≥ 50% KR đã công bố của khối kinh doanh trong chu kỳ quý 4 có nguồn CRM — tính cả KR nguồn CRM hiệu lực lẫn KR số đo cạnh, vì KR quý 4 công bố từ 26/10 trước khi lượt này lên (danh sách bộ phận do chủ kho gọi tên); đọc kèm tỷ lệ lần cập nhật tuần của KR đo cạnh mà người nhận số máy, làm căn cứ «đã thôi đếm tay chưa»; và phép thử tin số trên production — năm chỉ số so với số đếm tay — lệch không quá mức khai trước cho từng chỉ số.
 - Kết quả nào là CHẾT: [đề xuất] < 20% KR của khối kinh doanh có nguồn CRM ngày 2026-12-01; hoặc một chỉ số lệch số đếm tay ngoài mức khai trước mà không giải thích được bằng định nghĩa.
 - Timebox: phép thử tin số chạy trong tuần đầu sau khi lượt lên production; tỷ lệ KR có nguồn đọc ngày 2026-12-01.
 
