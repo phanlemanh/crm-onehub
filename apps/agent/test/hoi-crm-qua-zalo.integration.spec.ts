@@ -755,9 +755,10 @@ describe("cai-lenh", () => {
 
 		const hoatDong = await db.activity.count();
 		const deal = await db.deal.findFirst({ select: { id: true, stage: true } });
-		const ban = await (
-			chiDoc.events["step.started"] as unknown as GiaiCongCu
-		)({}, ctxZalo("ses-gia-1", h?.id ?? "", "ZA"));
+		const ban = await (chiDoc.events["step.started"] as unknown as GiaiCongCu)(
+			{},
+			ctxZalo("ses-gia-1", h?.id ?? "", "ZA"),
+		);
 		for (const ten of ["set_field_value", "record_fact"]) {
 			expect(
 				await ban?.[ten]?.execute(
@@ -787,7 +788,10 @@ describe("cai-lenh", () => {
 			"ZA",
 			ctxZalo("ses-gia-1", h?.id ?? "", "ZA"),
 		);
-		const ra = guiMayChu("ZA").join(" ");
+		const gui = guiMayChu("ZA");
+		expect(gui.length, "da co tin gui di").toBe(1);
+		expect(gui[0], "tin gui di da che so").toContain(ZALO.hoi.an);
+		const ra = gui.join(" ");
 		expect(ra).not.toMatch(/\d{9,}/);
 		expect(ra).not.toContain("987 654 321");
 
@@ -968,30 +972,30 @@ describe("dang-ban", () => {
 			},
 		);
 		try {
-			if (cu.loai === "hoi") {
-				await suKien(
-					"message.completed",
-					{ message: "Trả lời muộn" },
-					"ZA",
-					ctxZalo("ses-cu", cu.yeuCau.hoiId, "ZA"),
-				);
-				expect(guiMayChu("ZA"), "tra loi muon khong gui").toEqual([]);
-				expect(
-					(await db.zaloHoi.findUnique({ where: { id: cu.yeuCau.hoiId } }))
-						?.ketQua,
-				).toBe("loi");
-				expect(
-					loiIn.some(
-						(d) => d.includes(cu.yeuCau.hoiId) || d.includes("zaloChatId=ZA"),
-					),
-				).toBe(true);
-			}
-			if (moi.loai === "hoi") {
-				expect(
-					(await db.zaloHoi.findUnique({ where: { id: moi.yeuCau.hoiId } }))
-						?.ketQua,
-				).toBe("dang-hoi");
-			}
+			expect(cu.loai, "loai hoi").toBe("hoi");
+			expect(moi.loai, "cau moi mo phien").toBe("hoi");
+			if (cu.loai !== "hoi" || moi.loai !== "hoi") return;
+			await suKien(
+				"message.completed",
+				{ message: "Trả lời muộn" },
+				"ZA",
+				ctxZalo("ses-cu", cu.yeuCau.hoiId, "ZA"),
+			);
+			expect(guiMayChu("ZA"), "tra loi muon khong gui").toEqual([]);
+			expect(
+				(await db.zaloHoi.findUnique({ where: { id: cu.yeuCau.hoiId } }))
+					?.ketQua,
+			).toBe("loi");
+			expect(
+				loiIn.filter((d) =>
+					d.includes(`khong con cau dang hoi hoiId=${cu.yeuCau.hoiId}`),
+				),
+				"log ghim dung hoiId cua cau muon",
+			).toHaveLength(1);
+			expect(
+				(await db.zaloHoi.findUnique({ where: { id: moi.yeuCau.hoiId } }))
+					?.ketQua,
+			).toBe("dang-hoi");
 		} finally {
 			bat.mockRestore();
 		}
