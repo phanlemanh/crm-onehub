@@ -15,6 +15,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 
 type ChuKy = RouterOutputs["okr"]["cycles"];
 type Khoi = RouterOutputs["okr"]["khoiCuaToi"];
+type VaoKhoi = { cycleId: string; userId: string | null };
 
 const KY = {
 	id: "ky-1",
@@ -55,7 +56,7 @@ const treo = () => new Promise<never>(() => {});
 let traChuKy: () => ChuKy | Promise<ChuKy> = () => CO_KY;
 let traKhoi: () => Khoi | Promise<Khoi> = () => HAI_KR;
 const goi = { cycles: 0, khoi: 0 };
-const vaoKhoi: unknown[] = [];
+const vaoKhoi: VaoKhoi[] = [];
 
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
@@ -70,7 +71,7 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			khoiCuaToi: {
-				queryOptions: (vao: unknown) =>
+				queryOptions: (vao: VaoKhoi | typeof skipToken) =>
 					vao === skipToken
 						? { queryKey: ["okr.khoiCuaToi", "skip"], queryFn: skipToken }
 						: {

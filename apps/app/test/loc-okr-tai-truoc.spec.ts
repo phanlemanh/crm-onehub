@@ -7,7 +7,7 @@ import { locDanhSach } from "../../api/src/okr/okr-xem.contracts";
 
 const MAT_API = Object.keys(locDanhSach.shape).sort();
 
-function duMat(loc: object) {
+function duMat(loc: ReturnType<typeof locOkr>) {
 	const co = Object.keys(loc).sort();
 	const thieu = MAT_API.filter((m) => !co.includes(m));
 	const thua = co.filter((m) => !MAT_API.includes(m));
