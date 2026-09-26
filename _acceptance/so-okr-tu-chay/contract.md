@@ -5,7 +5,7 @@ slug: so-okr-tu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-26T14:45:59Z
 design_doc: docs/superpowers/specs/2026-09-26-so-okr-tu-chay-design.md
