@@ -1,7 +1,13 @@
-import { LOI_VAO, MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
+import {
+	LOI_VAO,
+	MUC_TU_TIN,
+	type MucTuTin,
+} from "@crm/validation/okr-cap-nhat";
 import {
 	LOAI_MUC_TIEU,
+	type LoaiMucTieu,
 	TRANG_THAI_MUC_TIEU,
+	type TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
 import {
 	createLoader,
@@ -60,6 +66,20 @@ export const okrParsers = {
 };
 
 export const loadOkrSearchParams = createLoader(okrParsers);
+
+export function locOkr(v: {
+	[SEARCH_PARAM.okr.phuTrach]: string[];
+	[SEARCH_PARAM.okr.loai]: LoaiMucTieu[];
+	[SEARCH_PARAM.okr.trangThai]: TrangThaiMucTieu[];
+	[SEARCH_PARAM.okr.tuTin]: MucTuTin[];
+}) {
+	return {
+		phuTrach: v[SEARCH_PARAM.okr.phuTrach],
+		loai: v[SEARCH_PARAM.okr.loai],
+		trangThai: v[SEARCH_PARAM.okr.trangThai],
+		tuTin: v[SEARCH_PARAM.okr.tuTin],
+	};
+}
 
 export function giaiKy(
 	ky: string | null,

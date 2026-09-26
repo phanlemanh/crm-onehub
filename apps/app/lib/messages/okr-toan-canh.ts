@@ -13,6 +13,7 @@ const vi = {
 		trangThai: "Trạng thái",
 		tuTin: "Mức tự tin",
 		boLoc: "Bỏ lọc",
+		nguoiDaRoi: "Người không còn trong tổ chức",
 		khongKhop: "Không mục tiêu nào khớp bộ lọc",
 		khongKhopMoTa:
 			"Đổi hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị này.",
@@ -119,6 +120,7 @@ const vi = {
 		rongNguoi: "Người này chưa phụ trách KR nào trong kỳ này.",
 		conNua: (n: string) => `và ${n} KR khác`,
 		loi: "Không tải được KR của bạn.",
+		loiNguoi: "Không tải được KR của người này.",
 	},
 	thuLai: "Thử lại",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
@@ -140,6 +142,7 @@ const en: OkrToanCanhMessages = {
 		trangThai: "Status",
 		tuTin: "Confidence",
 		boLoc: "Clear filters",
+		nguoiDaRoi: "No longer in the organization",
 		khongKhop: "No objectives match these filters",
 		khongKhopMoTa:
 			"Change or clear a filter to see this unit's objectives again.",
@@ -247,6 +250,7 @@ const en: OkrToanCanhMessages = {
 		rongNguoi: "This person doesn't own any KRs this cycle.",
 		conNua: (n: string) => `and ${n} more KRs`,
 		loi: "Couldn't load your KRs.",
+		loiNguoi: "Couldn't load this person's KRs.",
 	},
 	thuLai: "Try again",
 	tienDoLeRa: (ten: string, p: string, k: string) =>

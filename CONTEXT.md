@@ -206,13 +206,15 @@ chuông trong app.
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
 nhắc ngay», và đánh dấu bước xong khi người trả lời `xong` kèm số mục của tin nhắc
-hôm nay. Quản trị viên bật nó bằng cách dán Bot Token ở Kết nối › Zalo. Khác
-**Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng lệnh người gõ. Chốt
-2026-09-23, mở rộng 2026-09-24 và 2026-09-25.
+hôm nay, và trả lời câu hỏi về CRM bằng trợ lý AI cho người đã nối, theo quyền của
+người hỏi, chỉ đọc, có trần số câu. Quản trị viên bật nó bằng cách dán Bot Token ở
+Kết nối › Zalo. Khác **Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng
+lệnh hay trả lời đúng câu người gõ. Chốt 2026-09-23, mở rộng 2026-09-24, 2026-09-25
+và 2026-09-26.
 _Avoid_: tác nhân, trợ lý
 Vì sao: "tác nhân" đã là việc tự động người dùng dựng ra; gọi bot Zalo là tác
-nhân thì người ta chờ nó tự làm việc, còn "trợ lý" hứa một cuộc trò chuyện mà bot
-không có.
+nhân thì người ta chờ nó tự làm việc; "trợ lý" một mình lẫn với **Trợ lý AI** — bot
+là cửa vào, trợ lý AI là thứ trả lời.
 
 **Nối Zalo**: một người trong đội nhắn mã 6 số cho bot Zalo để CRM biết Zalo đó
 là của họ. Làm ở trang «Nhắc buổi sáng» trong menu người dùng (chuyển khỏi
@@ -577,8 +579,8 @@ thư ngay trong cùng màn.
 khung hội thoại — đọc lịch sử công ty, thoả thuận, tìm trong CRM và nghiên cứu
 đối tác theo yêu cầu của một người dùng đang đăng nhập. Là một phần của phạm vi
 dữ liệu đối tác: vai «chỉ OKR» không gọi được nó. Khác **Tác nhân** (việc tự động
-người dùng dựng ra, chạy theo mốc) và khác bot Zalo (chỉ nhắc và nối). Chốt
-2026-09-24.
+người dùng dựng ra, chạy theo mốc) và khác bot Zalo (cửa vào trên Zalo: người đã nối
+hỏi qua bot thì trợ lý AI trả lời, chỉ đọc). Chốt 2026-09-24, thêm kênh Zalo 2026-09-26.
 _Avoid_: agent, eve, bot, chatbot
 Vì sao: «agent» và «eve» là tên kỹ thuật trong mã; «bot» đã là bot Zalo; «trợ lý»
 một mình thì lẫn với hai thứ kia — luôn viết đủ «trợ lý AI».

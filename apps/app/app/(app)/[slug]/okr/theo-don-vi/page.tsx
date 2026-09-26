@@ -7,7 +7,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
+import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { TheoDonVi } from "./theo-don-vi";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -51,11 +51,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 				trpc.okr.danhSach.queryOptions({
 					cycleId,
 					unit,
-					loc: {
-						phuTrach: thamSo[SEARCH_PARAM.okr.phuTrach],
-						loai: thamSo[SEARCH_PARAM.okr.loai],
-						trangThai: thamSo[SEARCH_PARAM.okr.trangThai],
-					},
+					loc: locOkr(thamSo),
 				}),
 			),
 			thamSo[SEARCH_PARAM.okr.xem] === "cay"
