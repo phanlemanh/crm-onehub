@@ -117,7 +117,8 @@ export const ZALO = {
 		hetTranPhut: "Chờ một chút rồi hỏi tiếp.",
 		hetTranNgay: (n: number) =>
 			`Hôm nay bạn đã hỏi ${n} câu qua Zalo. Mở OneHub Center để hỏi tiếp; mai hỏi lại ở đây.`,
-		hetTranThang: "Kênh hỏi qua Zalo tháng này đã hết lượt. Mở OneHub Center để hỏi.",
+		hetTranThang:
+			"Kênh hỏi qua Zalo tháng này đã hết lượt. Mở OneHub Center để hỏi.",
 		dangTraLoi:
 			"Tôi đang trả lời câu trước của bạn, gửi câu mới sau khi nhận được nhé.",
 		tacTuLoi:
