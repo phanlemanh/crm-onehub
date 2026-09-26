@@ -1,11 +1,10 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import {
+	copyFileSync,
 	existsSync,
 	mkdirSync,
-	readdirSync,
 	readFileSync,
 	rmSync,
-	symlinkSync,
 	writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
@@ -116,17 +115,17 @@ function dungCayBase() {
 		git("worktree", "remove", "--force", wt);
 	} catch {}
 	git("worktree", "add", "--detach", wt, goc);
-	for (const nm of [
-		".",
-		...readdirSync(join(GOC, "apps")).map((a) => `apps/${a}`),
-		...readdirSync(join(GOC, "packages")).map((p) => `packages/${p}`),
-	]) {
-		const nguon = join(GOC, nm, "node_modules");
-		const dich = join(wt, nm, "node_modules");
-		if (existsSync(nguon) && !existsSync(dich)) symlinkSync(nguon, dich);
+	const cai = spawnSync("bun", ["install", "--frozen-lockfile"], {
+		cwd: wt,
+		encoding: "utf8",
+	});
+	if (cai.status !== 0) {
+		throw new Error(
+			`cay base: bun install that bai (${cai.status}) ${cai.stderr.slice(-300)}`,
+		);
 	}
 	if (existsSync(join(GOC, ".env")))
-		symlinkSync(join(GOC, ".env"), join(wt, ".env"));
+		copyFileSync(join(GOC, ".env"), join(wt, ".env"));
 	const sinh = spawnSync("bun", ["run", "db:generate"], {
 		cwd: join(wt, "packages", "db"),
 		encoding: "utf8",
