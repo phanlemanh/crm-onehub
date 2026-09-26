@@ -116,3 +116,50 @@ describe("loc-cat", () => {
 		expect(ra).toEqual(["Công ty · Giai đoạn\nAcme · Chốt"]);
 	});
 });
+
+const SO_TIEN = [
+	"1.000.000.000.000 đ",
+	"1,000,000,000,000 VND",
+	"2.500.000.000.000",
+	"12.345.678.901.234 đ",
+	"Doanh thu 3.200.000.000.000 đ trong quý",
+	"1.000.000.000.000,50 đ",
+	"1.000.000.000.000đ",
+];
+
+const DIEN_THOAI_LIEN = [
+	{ cau: "0912345678,0987654321", so: 2, giu: "" },
+	{ cau: "0912345678 0987654321", so: 2, giu: "" },
+	{ cau: "0912345678-0987654321", so: 2, giu: "" },
+	{ cau: "Hạn 2.000.000 đ, gọi 0912345678", so: 1, giu: "2.000.000" },
+	{ cau: "Gọi +84 912 345 678", so: 1, giu: "" },
+	{ cau: "Bàn (028) 3823 4567", so: 1, giu: "" },
+];
+
+describe("so-tien", () => {
+	test("so-tien: so tien lon giu nguyen", () => {
+		let dem = 0;
+		for (const so of SO_TIEN) {
+			const ra = locTraLoi(`Giá trị: ${so}`);
+			expect(ra.length, so).toBe(1);
+			expect(ra[0], so).toContain(so);
+			expect(ra[0], so).not.toContain(ZALO.hoi.an);
+			dem += 1;
+		}
+		expect(dem).toBe(SO_TIEN.length);
+	});
+
+	test("so-tien: so dien thoai lien sau so khac van bi che", () => {
+		let dem = 0;
+		for (const { cau, so, giu } of DIEN_THOAI_LIEN) {
+			const ra = locTraLoi(cau).join("\n");
+			expect(ra.split(ZALO.hoi.an).length - 1, cau).toBe(so);
+			const conLai = giu ? ra.replace(giu, "") : ra;
+			expect(conLai, cau).not.toMatch(CHU_SO_LIEN);
+			expect(conLai, cau).not.toMatch(CHU_SO_CACH);
+			if (giu) expect(ra, cau).toContain(giu);
+			dem += 1;
+		}
+		expect(dem).toBe(DIEN_THOAI_LIEN.length);
+	});
+});
