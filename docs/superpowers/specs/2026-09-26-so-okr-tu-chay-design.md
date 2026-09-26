@@ -98,7 +98,7 @@ lực** — nguồn lái `currentValue` và tiến độ. Thêm giá trị `bang
 `lenLichNhac` — không lịch mới. Mỗi nhịp:
 
 1. `ngay` = hôm qua theo giờ VN. Chọn KR có `OkrNguonKr` loại `crm` hoặc
-   `bang-tinh`, mục tiêu không «đã bỏ», chu kỳ ở pha ghi được, `ngay` trong
+   `bang-tinh`, mục tiêu đã công bố (không nháp, không «đã bỏ» — bản nháp thấy số qua dòng xem trước và xoá KR tự do), chu kỳ ở pha ghi được, `ngay` trong
    `[startsOn, endsOn]`, và **chưa có dòng máy cho `ngay`**. Không còn KR nào thì
    dừng — nhịp thường là một câu truy vấn.
 2. `crm`: `demChiSo` cho khoảng `[startsOn, ngay]`. `bang-tinh`: đọc ô (mục 7);
