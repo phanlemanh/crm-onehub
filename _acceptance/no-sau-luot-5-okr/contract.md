@@ -5,9 +5,9 @@ slug: no-sau-luot-5-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
-approved_by: Manh Phan
-approved_at: 2026-09-26T12:54:59Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-26-no-sau-luot-5-okr-design.md
 ---
 
@@ -38,13 +38,14 @@ prompt chủ kho (Ngoài-8, luật lỗi-trước-đang-tải của sổ `d-2026
 - AC-7: Given người mở trang Theo đơn vị (không lọc, chỉ lọc mức tự tin, hoặc lọc cả bốn mặt), When trang hiện xong, Then trình duyệt không gọi danh sách mục tiêu lần nào — danh sách đến từ bản tải trước ở máy chủ — cho tới khi người đổi bộ lọc.
 - AC-8: Given API nhận một tập mặt lọc cho danh sách mục tiêu, When trang máy chủ và trình duyệt dựng bộ lọc từ tham số URL, Then cả hai dựng từ cùng một hàm và hàm đó trả đúng tập mặt lọc API nhận, không thiếu mặt nào.
 - AC-9: Given các tệp giao diện vòng này đổi, When soi bằng sàn thiết kế của kho, Then không có vi phạm P0 của design-gate và không có dấu hiệu vẽ tay của `docs/design.md` — trạng thái lỗi dùng `LoiXem` (Empty + Button) có sẵn, không dựng khối mới.
+- AC-10: Given khối «OKR của bạn» đã hiện bảng KR từ một chu kỳ tải được, When truy vấn chu kỳ tải lại ở nền thất bại (ví dụ quay lại tab sau 30 giây), Then bảng KR cũ giữ nguyên, không đổi sang câu lỗi; câu lỗi của chu kỳ chỉ hiện khi không có chu kỳ nào dùng được.
 
 ## Coverage
 
 Quét bằng `morphological-scan` trong phiên (bản quét: `coverage-scan.md`).
 
 - Trục A — nơi khối hiện: Tổng quan (quản lý bán hàng) | Tổng quan vai «chỉ OKR» | trang một người [thước CE: ba chỗ gọi `KhoiKrCuaToi` — SUY-TỪ-REPO `apps/app/app/(app)/[slug]/dashboard-summary.tsx`, `tong-quan-chi-okr.tsx`, `okr/theo-don-vi/theo-don-vi.tsx`]
-- Trục B — trạng thái truy vấn của khối: chu kỳ lỗi | KR lỗi | đang tải | không có chu kỳ hiện tại | có dữ liệu | rỗng | thử lại hết lỗi | thử lại vẫn lỗi [thước CE: NGÀNH NN/g «Error-Message Guidelines» (lỗi phải hiện, nói chuyện gì, cho đường khôi phục) + luật ST lỗi-trước-đang-tải của lượt 5]
+- Trục B — trạng thái truy vấn của khối: chu kỳ lỗi | KR lỗi | đang tải | không có chu kỳ hiện tại | có dữ liệu | rỗng | thử lại hết lỗi | thử lại vẫn lỗi | tải lại ở nền lỗi khi đã có bảng (AC-10, thêm ở Cổng Bằng chứng vòng 1) [thước CE: NGÀNH NN/g «Error-Message Guidelines» (lỗi phải hiện, nói chuyện gì, cho đường khôi phục) + luật ST lỗi-trước-đang-tải của lượt 5]
 - Trục C — người đã chọn ở bộ lọc phụ trách: có KR khớp | không khớp nhưng còn trong tổ chức | không còn trong tổ chức [thước CE: SUY-TỪ-REPO `apps/api/src/okr/danh-sach.ts` (đếm chỉ gồm người có mục tiêu khớp) + `apps/api/src/to-chuc/cay.ts` (people = thành viên)]
 - Trục D — bộ lọc trên URL khi mở Theo đơn vị: không lọc | chỉ tự tin | chỉ mặt khác | đủ bốn mặt [thước CE: NGÀNH TanStack Query «Advanced Server Rendering» (bản tải trước chỉ dùng được khi khoá truy vấn trùng) + `locDanhSach` trong `apps/api/src/okr/okr-xem.contracts.ts`]
 - [GIẢ ĐỊNH] Người đã rời workspace vẫn có thể nằm trong URL bộ lọc (liên kết cũ, dấu trang) — nhãn chung là đủ, không cần tên cũ của họ.

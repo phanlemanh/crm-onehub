@@ -117,7 +117,10 @@ async function nhip(): Promise<void> {
 	});
 }
 
-async function mo(props: { cycleId?: string; userId?: string }) {
+async function mo(props: {
+	cycleId?: string;
+	userId?: string;
+}): Promise<QueryClient> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -135,6 +138,7 @@ async function mo(props: { cycleId?: string; userId?: string }) {
 		);
 	});
 	await nhip();
+	return client;
 }
 
 async function cho(xong: () => boolean, nhan: string): Promise<void> {
@@ -281,5 +285,20 @@ describe("khoi-kr-cua-toi", () => {
 		expect(khoi().length).toBe(1);
 		expect(khoi()[0]?.querySelector("[data-slot='skeleton']")).not.toBeNull();
 		expect(document.body.querySelector("[data-trang-thai$='-loi']")).toBeNull();
+	});
+	test("tai-lai-nen: chu ky tai lai o nen loi thi bang KR cu giu nguyen, khong doi sang cau loi", async () => {
+		const client = await mo({});
+		await cho(() => hang().length === 2, "bang-kr-lan-dau");
+		const lan0 = goi.cycles;
+		traChuKy = hong;
+		await act(async () => {
+			await client.refetchQueries({ queryKey: ["okr.cycles"] });
+		});
+		for (let vong = 0; vong < 5; vong += 1) await nhip();
+		expect(goi.cycles).toBeGreaterThan(lan0);
+		if (hang().length !== 2 || trangThai("ST-tongquan-loi") !== null)
+			throw new Error(
+				`bang-kr-mat-khi-chu-ky-tai-lai-loi — ${document.body.textContent}`,
+			);
 	});
 });

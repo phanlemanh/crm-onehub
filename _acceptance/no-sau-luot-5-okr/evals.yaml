@@ -115,3 +115,11 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/**", _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs]
     expected: "exit 0; thước sàn thiết kế của lượt 5 (dùng lại, không chép) soi mọi .tsx trong apps/app đổi so với origin/onehub: design-gate --mode static không P0, không dấu hiệu vẽ tay; in danh sách tệp đã soi và danh sách đó chứa khoi-kr-cua-toi.tsx, loc-okr.tsx, theo-don-vi.tsx. CHIỀU ĐỎ: --chieu-do của chính thước (chèn divide-y và mặc định chuỗi vào bản sao) → đỏ in hai vi phạm có tên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.nso_khoi_tai_lai_nen
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", apps/app/test/khoi-kr-cua-toi.dom.tsx]
+    expected: "exit 0; cùng fixture E1 (satisfies RouterOutputs). Bước 1: okr.cycles trả CO_KY, okr.khoiCuaToi trả HAI_KR → 2 [data-kr-cua-toi]. Bước 2: đổi okr.cycles sang ném rồi gọi refetchQueries cho khoá okr.cycles trên QueryClient của lần dựng (mô phỏng tải lại ở nền) → số lần gọi okr.cycles tăng ≥ 1 (lần tải lại thật sự chạy và lỗi), vẫn đúng 2 [data-kr-cua-toi], không có [data-trang-thai='ST-tongquan-loi']. Đối chứng dương cùng tệp: E1 (lỗi lần đầu, không có chu kỳ dùng được) vẫn tới ST-tongquan-loi. CHIỀU ĐỎ: cây vòng 1 (loi = cycles.isError || khoi.isError) → bài đỏ ghim «bang-kr-mat-khi-chu-ky-tai-lai-loi» kèm textContent của body."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
