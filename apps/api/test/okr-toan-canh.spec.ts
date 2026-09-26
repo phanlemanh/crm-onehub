@@ -6,8 +6,8 @@ import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { OKR_XEM } from "../src/okr/okr-xem.config";
-import { OkrXemService } from "../src/okr/okr-xem.service";
 import type { DanhSachOutput } from "../src/okr/okr-xem.contracts";
+import { OkrXemService } from "../src/okr/okr-xem.service";
 import {
 	type AiHoacCookie,
 	bpMoi,
@@ -532,7 +532,12 @@ describe("pham-vi", () => {
 	test("pham-vi: ma tran bon vai × thu tuc xem moi", async () => {
 		await caiChuongTrinh();
 		const quy = await kyDangChay("tco-pv");
-		const G = await taoMucTieu(quy, { level: "onehub" }, phien.quan.nguoi, "quan");
+		const G = await taoMucTieu(
+			quy,
+			{ level: "onehub" },
+			phien.quan.nguoi,
+			"quan",
+		);
 		const krG = await taoKr(G, phien.quan.nguoi, "quan");
 		await congBo(G, "quan");
 		const vao = {
@@ -679,7 +684,12 @@ describe("toan-canh-tu-tin", () => {
 			await congBo(id, ai);
 			return kr;
 		};
-		const [f] = await moi({ level: "bo-phan", divisionId: B }, b.nguoi, b.cookie, 1);
+		const [f] = await moi(
+			{ level: "bo-phan", divisionId: B },
+			b.nguoi,
+			b.cookie,
+			1,
+		);
 		const [a, bb, c] = await moi(
 			{ level: "phong-ban", departmentId: P1 },
 			p1.nguoi,
@@ -782,7 +792,8 @@ describe("hop-tuan-xep", () => {
 			p.cookie,
 		);
 		const kr: string[] = [];
-		for (let i = 0; i < 6; i++) kr.push(await taoKrSo(id, p.nguoi, p.cookie, 20));
+		for (let i = 0; i < 6; i++)
+			kr.push(await taoKrSo(id, p.nguoi, p.cookie, 20));
 		await congBo(id, p.cookie);
 		const [Ka, Kb, Kc, Kd, Ke, Kf] = kr;
 		if (!Ka || !Kb || !Kc || !Kd || !Ke || !Kf) throw new Error("thieu KR");
@@ -942,9 +953,10 @@ describe("mo-hop-tuan", () => {
 				await tx.$executeRaw`UPDATE department SET "archivedAt" = now() WHERE "archivedAt" IS NULL AND NOT (id = ANY(${giu}))`;
 				await tx.$executeRaw`UPDATE division SET "archivedAt" = now() WHERE "archivedAt" IS NULL`;
 				await tx.$executeRaw`SELECT set_config('okr.tuan', '2026-11-16', true)`;
-				const r = await tx.$queryRawUnsafe<
-					{ mo: number; tong: number; ty_le: number }[]
-				>(sql);
+				const r =
+					await tx.$queryRawUnsafe<
+						{ mo: number; tong: number; ty_le: number }[]
+					>(sql);
 				throw new HoanTac(r[0] ?? null);
 			})
 			.catch((e: unknown) => {
@@ -958,7 +970,9 @@ describe("mo-hop-tuan", () => {
 });
 
 class HoanTac extends Error {
-	constructor(readonly ket: { mo: number; tong: number; ty_le: number } | null) {
+	constructor(
+		readonly ket: { mo: number; tong: number; ty_le: number } | null,
+	) {
 		super("hoan tac");
 	}
 }
@@ -1123,7 +1137,8 @@ describe("khoi-cua-toi", () => {
 		const kv = (
 			await doc<{ expected: number | null }>("okr.objective", "quan", { id })
 		).expected;
-		if (kv === null || kv <= 0) throw new Error(`ky vong phai duong, thay ${kv}`);
+		if (kv === null || kv <= 0)
+			throw new Error(`ky vong phai duong, thay ${kv}`);
 		const chua = await krMoi("tang-toi", 100);
 		const thap = await krMoi("tang-toi", 100);
 		const moc = await krMoi("moc", 0);

@@ -254,7 +254,10 @@ describe("hop-tuan", () => {
 
 describe("heatmap", () => {
 	test("heatmap: moi tuan la ty le KR muc cao tren KR co cap nhat tuan do, null khi khong ai hoac tuan chua toi", () => {
-		const tuanKy = cacTuan(vn("2026-10-05T00:00:00"), vn("2026-12-13T00:00:00"));
+		const tuanKy = cacTuan(
+			vn("2026-10-05T00:00:00"),
+			vn("2026-12-13T00:00:00"),
+		);
 		expect(tuanKy).toEqual([
 			"2026-10-05",
 			"2026-10-12",

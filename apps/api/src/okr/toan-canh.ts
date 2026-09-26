@@ -111,9 +111,7 @@ export function gopToanCanh(
 		);
 		donVi.push({ ten: b.name, khoa: `bp:${b.id}` });
 		for (const p of b.departments) {
-			ra.push(
-				hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip),
-			);
+			ra.push(hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip));
 			donVi.push({ ten: p.name, khoa: `pb:${p.id}` });
 		}
 	}

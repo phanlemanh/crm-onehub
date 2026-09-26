@@ -6,6 +6,7 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardAction,
+	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
@@ -18,6 +19,7 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { Heatmap } from "@crm/ui/components/heatmap";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -42,6 +44,23 @@ import { kyVongCo, ThanhTienDo } from "../tien-do-kr";
 import { ChuaChuKy, DangTai } from "../trang-thai-okr";
 
 type HangToanCanh = RouterOutputs["okr"]["toanCanh"]["hang"][number];
+
+const nhanTuan = (tuan: string) => `${tuan.slice(8, 10)}/${tuan.slice(5, 7)}`;
+
+function CauDangBan({ h }: { h: HangToanCanh }) {
+	const mt = okrToanCanhMessages(useLocale());
+	if (h.dangBan === null)
+		return <span className="text-muted-foreground">—</span>;
+	const n = String(h.dangBan.soKr);
+	switch (h.dangBan.loai) {
+		case "tut":
+			return <span>{mt.toanCanh.banTut(n)}</span>;
+		case "im":
+			return <span>{mt.toanCanh.banIm(n)}</span>;
+		case "ghi-chu":
+			return <span>{mt.toanCanh.banGhiChu(n)}</span>;
+	}
+}
 
 const SO_TEN_CHUA_DAT = 3;
 
@@ -99,6 +118,22 @@ function DongDonVi({ h, toi }: { h: HangToanCanh; toi: string }) {
 					</span>
 				)}
 			</TableCell>
+			<TableCell
+				className="hidden px-3 py-2.5 text-xs tabular-nums md:table-cell"
+				data-tu-tin-hang
+			>
+				{h.soKr === 0 ? (
+					<span className="text-muted-foreground">—</span>
+				) : (
+					`${h.tuTin.cao} · ${h.tuTin.vua} · ${h.tuTin.thap}`
+				)}
+			</TableCell>
+			<TableCell
+				className="hidden px-3 py-2.5 text-xs whitespace-normal lg:table-cell"
+				data-dang-ban={h.dangBan?.loai ?? ""}
+			>
+				<CauDangBan h={h} />
+			</TableCell>
 			<TableCell className="hidden px-3 py-2.5 text-right tabular-nums sm:table-cell">
 				{h.soMucTieu}
 			</TableCell>
@@ -141,7 +176,7 @@ export function ToanCanh() {
 			/>
 		);
 
-	const { tongQuan, hang } = tc.data;
+	const { tongQuan, hang, tuan, tuanNay } = tc.data;
 	const chuaDat = tongQuan.donViChuaDat;
 	const tenChuaDat =
 		chuaDat.length > SO_TEN_CHUA_DAT
@@ -150,7 +185,17 @@ export function ToanCanh() {
 	const tuanDau = hang.every((h) => h.soMucTieu === 0);
 	const cot: SimpleTableColumn[] = [
 		{ id: "don-vi", header: mt.toanCanh.cotDonVi },
-		{ id: "tien-do", header: mt.toanCanh.cotTienDo, width: "w-[40%]" },
+		{ id: "tien-do", header: mt.toanCanh.cotTienDo, width: "w-[30%]" },
+		{
+			id: "tu-tin",
+			header: mt.toanCanh.cotTuTin,
+			className: "hidden md:table-cell",
+		},
+		{
+			id: "dang-ban",
+			header: mt.toanCanh.cotDangBan,
+			className: "hidden lg:table-cell",
+		},
 		{
 			id: "muc-tieu",
 			header: mt.toanCanh.cotMucTieu,
@@ -191,6 +236,16 @@ export function ToanCanh() {
 					label={mt.toanCanh.donViCongBo}
 					value={`${tongQuan.donViCongBo}/${tongQuan.tongDonVi}`}
 				/>
+				<StatCard
+					description={mt.toanCanh.soTuanTruoc(String(tongQuan.daCapNhatTruoc))}
+					label={mt.toanCanh.daCapNhat}
+					value={`${tongQuan.daCapNhat}/${tongQuan.tongKr}`}
+				/>
+				<StatCard
+					description={mt.toanCanh.soTuanTruoc(String(tongQuan.tuTinThapTruoc))}
+					label={mt.toanCanh.tuTinThap}
+					value={String(tongQuan.tuTinThap)}
+				/>
 			</StatGroup>
 			{tuanDau ? (
 				<Empty>
@@ -227,6 +282,30 @@ export function ToanCanh() {
 							/>
 						))}
 					</SimpleTable>
+				</Card>
+			)}
+			{tuanDau ? null : (
+				<Card data-khoi="heatmap">
+					<CardHeader>
+						<CardTitle>{mt.toanCanh.heatmap}</CardTitle>
+						<CardDescription>{mt.toanCanh.heatmapMoTa}</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<Heatmap
+							caption={mt.toanCanh.heatmap}
+							columns={tuan.map((t) => ({
+								id: t,
+								label: nhanTuan(t),
+								current: t === tuanNay,
+							}))}
+							rows={hang.map((h) => ({
+								id: h.key,
+								label: <span translate="no">{h.ten}</span>,
+								indent: h.cap === "phong-ban",
+							}))}
+							values={hang.map((h) => h.theoTuan)}
+						/>
+					</CardContent>
 				</Card>
 			)}
 		</div>

@@ -683,6 +683,37 @@ describe("kho chuoi cua vong ③a", () => {
 				"Tiến độ 1: A%, lẽ ra đã tới B%",
 				"Tiến độ 12: A%, lẽ ra đã tới B%",
 			],
+			"okr-toan-canh:hopTuan.tuan": ["Tuần 1", "Tuần 12"],
+			"okr-toan-canh:hopTuan.daCapNhat": [
+				"đã cập nhật 1/A KR",
+				"đã cập nhật 12/A KR",
+			],
+			"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
+			"okr-toan-canh:hopTuan.tut": [
+				"Tự tin tụt: 1 → A",
+				"Tự tin tụt: 12 → A",
+			],
+			"okr-toan-canh:hopTuan.im": ["Im 1 ngày", "Im 12 ngày"],
+			"okr-toan-canh:hopTuan.conLai": [
+				"Còn lại 1 KR — không có gì mới",
+				"Còn lại 12 KR — không có gì mới",
+			],
+			"okr-toan-canh:toanCanh.soTuanTruoc": ["Tuần trước 1", "Tuần trước 12"],
+			"okr-toan-canh:toanCanh.banTut": [
+				"1 KR tụt mức tự tin",
+				"12 KR tụt mức tự tin",
+			],
+			"okr-toan-canh:toanCanh.banIm": ["1 KR im lâu", "12 KR im lâu"],
+			"okr-toan-canh:toanCanh.banGhiChu": [
+				"1 KR có ghi chú mới",
+				"12 KR có ghi chú mới",
+			],
+			"okr-toan-canh:dienBien.bieuDo": [
+				"Diễn biến của 1 theo tuần",
+				"Diễn biến của 12 theo tuần",
+			],
+			"okr-toan-canh:dienBien.dich": ["Đích 1", "Đích 12"],
+			"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",

@@ -525,7 +525,7 @@ describe("theo-don-vi-bien", () => {
 			wrap: true,
 			trongDau: false,
 			cardAction: 0,
-			nut: 5,
+			nut: 6,
 			tinhTrang: "Chưa có kỳ vọng",
 		});
 	});

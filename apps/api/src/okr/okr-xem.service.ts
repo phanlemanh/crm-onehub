@@ -642,11 +642,8 @@ export class OkrXemService {
 		};
 		const xep = dong.sort((a, b) => hang(a) - hang(b) || a.thuTu - b.thuTu);
 		return {
-			kr: xep
-				.slice(0, OKR_XEM.khoiCuaToi.toiDa)
-				.map(({ thuTu: _, ...d }) => d),
+			kr: xep.slice(0, OKR_XEM.khoiCuaToi.toiDa).map(({ thuTu: _, ...d }) => d),
 			tong: xep.length,
 		};
 	}
 }
-

@@ -51,9 +51,11 @@ import {
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { TabDienBien } from "./objective-dien-bien";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";
@@ -491,8 +493,10 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 }
 
 export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
-	const t = okrMessages(useLocale());
+	const locale = useLocale();
+	const t = okrMessages(locale);
 	const m = t.sheet;
+	const mtc = okrToanCanhMessages(locale);
 	const trpc = useTRPC();
 	const { tab, setTab } = useRecordSheetView("kr");
 	const query = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
@@ -510,6 +514,19 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					label: m.tabKr,
 					count: mt.keyResults.length,
 					content: <TabKr mt={mt} />,
+				},
+				{
+					value: "dien-bien",
+					label: mtc.dienBien.tab,
+					count: null,
+					content: (
+						<TabDienBien
+							keyResults={mt.keyResults.map((k) => ({
+								id: k.id,
+								title: k.title,
+							}))}
+						/>
+					),
 				},
 				{
 					value: "can-chinh",

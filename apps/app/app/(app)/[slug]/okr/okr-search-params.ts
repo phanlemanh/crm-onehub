@@ -1,4 +1,4 @@
-import { LOI_VAO } from "@crm/validation/okr-cap-nhat";
+import { LOI_VAO, MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import {
 	LOAI_MUC_TIEU,
 	TRANG_THAI_MUC_TIEU,
@@ -18,7 +18,7 @@ export type DonChonOkr =
 	| { loai: "pb"; id: string }
 	| { loai: "nguoi"; id: string };
 
-export const CACH_XEM = ["danh-sach", "cay"] as const;
+export const CACH_XEM = ["danh-sach", "cay", "hop-tuan"] as const;
 export type CachXem = (typeof CACH_XEM)[number];
 
 export const KY_HIEN_TAI = "current";
@@ -52,6 +52,9 @@ export const okrParsers = {
 	).withDefault([]),
 	[SEARCH_PARAM.okr.trangThai]: parseAsArrayOf(
 		parseAsStringLiteral(TRANG_THAI_MUC_TIEU),
+	).withDefault([]),
+	[SEARCH_PARAM.okr.tuTin]: parseAsArrayOf(
+		parseAsStringLiteral(MUC_TU_TIN),
 	).withDefault([]),
 	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
 };

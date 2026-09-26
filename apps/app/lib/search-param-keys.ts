@@ -51,6 +51,8 @@ export const SEARCH_PARAM = {
 		phuTrach: "phuTrachOkr",
 		loai: "loaiOkr",
 		trangThai: "trangThaiOkr",
+		tuTin: "tuTinOkr",
+		kr: "krOkr",
 		tu: "tu",
 	},
 } as const;

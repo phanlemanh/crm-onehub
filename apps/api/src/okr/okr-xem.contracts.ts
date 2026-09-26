@@ -86,7 +86,11 @@ export const lyDoHop = z.discriminatedUnion("loai", [
 	z.object({ loai: z.literal("ghi-chu"), ngay: z.string() }),
 ]);
 
-const soTuTin = z.object({ cao: z.number(), vua: z.number(), thap: z.number() });
+const soTuTin = z.object({
+	cao: z.number(),
+	vua: z.number(),
+	thap: z.number(),
+});
 
 export const hangToanCanh = z.object({
 	key: z.string(),

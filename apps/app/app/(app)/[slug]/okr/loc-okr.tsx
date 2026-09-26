@@ -12,7 +12,8 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
-import { useLocale } from "@crm/ui/components/locale-provider";
+import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
+import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
 import {
 	LOAI_MUC_TIEU,
 	type LoaiMucTieu,
@@ -29,15 +30,20 @@ export type LocOkrGiaTri = {
 	phuTrach: string[];
 	loai: LoaiMucTieu[];
 	trangThai: TrangThaiMucTieu[];
+	tuTin: MucTuTin[];
 };
 
 export type MatLocOkr = keyof LocOkrGiaTri;
 
 const laMat = (id: string): id is MatLocOkr =>
-	id === "phuTrach" || id === "loai" || id === "trangThai";
+	id === "phuTrach" || id === "loai" || id === "trangThai" || id === "tuTin";
 
 export const coLoc = (loc: LocOkrGiaTri) =>
-	loc.phuTrach.length + loc.loai.length + loc.trangThai.length > 0;
+	loc.phuTrach.length +
+		loc.loai.length +
+		loc.trangThai.length +
+		loc.tuTin.length >
+	0;
 
 export function chuanLoc(
 	id: MatLocOkr,
@@ -54,6 +60,8 @@ export function chuanLoc(
 			return {
 				trangThai: TRANG_THAI_MUC_TIEU.filter((v) => values.includes(v)),
 			};
+		case "tuTin":
+			return { tuTin: MUC_TU_TIN.filter((v) => values.includes(v)) };
 	}
 }
 
@@ -71,6 +79,12 @@ export function LocOkr({
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
+	const ui = useMessages();
+	const tenMuc = {
+		cao: ui.okr.tuTinCao,
+		vua: ui.okr.tuTinVua,
+		thap: ui.okr.tuTinThap,
+	} satisfies Record<MucTuTin, string>;
 	const soCua = (ds: { value: string; count: number }[], v: string) =>
 		ds.find((d) => d.value === v)?.count ?? 0;
 	const nguoi = new Map(
@@ -106,6 +120,14 @@ export function LocOkr({
 				label: `${m.trangThai[v]} · ${soCua(dem?.trangThai ?? [], v)}`,
 			})),
 		},
+		{
+			id: "tuTin",
+			label: mt.loc.tuTin,
+			options: MUC_TU_TIN.map((v) => ({
+				value: v,
+				label: `${tenMuc[v]} · ${soCua(dem?.tuTin ?? [], v)}`,
+			})),
+		},
 	];
 
 	return (
@@ -116,6 +138,7 @@ export function LocOkr({
 					phuTrach: loc.phuTrach,
 					loai: loc.loai,
 					trangThai: loc.trangThai,
+					tuTin: loc.tuTin,
 				}}
 				onFilterChange={(id, values) => {
 					if (laMat(id)) doiLoc(chuanLoc(id, values));

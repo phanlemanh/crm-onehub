@@ -360,7 +360,7 @@ describe("sheet-nhap-co-nut-cong-bo", () => {
 		expect(truoc).toEqual({
 			trangThai: "ST-sheet-nhap",
 			tieuDe: "Tăng khách hàng doanh nghiệp",
-			tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi"],
+			tab: ["KR1", "Diễn biến", "Căn chỉnh", "Vết", "Trao đổi"],
 			congBo: 1,
 			themKr: 1,
 			nhap: true,
@@ -1037,7 +1037,7 @@ describe("sheet-trao-doi", () => {
 				chipKhongDich: "no",
 				noiDungKhongDich: ["no", "no"],
 				nhac: LAN.name,
-				tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi2"],
+				tab: ["KR1", "Diễn biến", "Căn chỉnh", "Vết", "Trao đổi2"],
 			},
 			goi: [
 				{

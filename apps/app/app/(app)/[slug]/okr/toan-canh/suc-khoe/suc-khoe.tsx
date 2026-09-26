@@ -88,6 +88,12 @@ function DongSucKhoe({ h }: { h: HangSucKhoe }) {
 			<TableCell className="px-3 py-2.5 text-right">
 				<So n={h.tongKr} />
 			</TableCell>
+			<TableCell className="hidden px-3 py-2.5 text-right md:table-cell">
+				<So n={h.dungTuan} />
+			</TableCell>
+			<TableCell className="hidden px-3 py-2.5 text-right md:table-cell">
+				<So n={h.krIm} />
+			</TableCell>
 			<TableCell className="px-3 py-2.5 text-right">
 				<So n={h.chuaKhoiDiem} />
 			</TableCell>
@@ -159,6 +165,18 @@ export function SucKhoe() {
 		const cot: SimpleTableColumn[] = [
 			{ id: "don-vi", header: mt.toanCanh.cotDonVi },
 			{ id: "kr", header: mt.sucKhoe.krDangTinh, align: "right" },
+			{
+				id: "dung-tuan",
+				header: mt.sucKhoe.dungTuan,
+				align: "right",
+				className: "hidden md:table-cell",
+			},
+			{
+				id: "kr-im",
+				header: mt.sucKhoe.krIm,
+				align: "right",
+				className: "hidden md:table-cell",
+			},
 			{ id: "chua-cong-bo", header: mt.sucKhoe.chuaCongBo, align: "right" },
 			{ id: "chua-noi-kenh", header: mt.sucKhoe.chuaNoiKenh, align: "right" },
 		];
@@ -172,6 +190,16 @@ export function SucKhoe() {
 						description={mt.sucKhoe.krDangTinhMoTa}
 						label={mt.sucKhoe.krDangTinh}
 						value={sk.data.tongQuan.tongKr}
+					/>
+					<StatCard
+						description={mt.sucKhoe.dungTuanMoTa}
+						label={mt.sucKhoe.dungTuan}
+						value={sk.data.tongQuan.dungTuan}
+					/>
+					<StatCard
+						description={mt.sucKhoe.krImMoTa}
+						label={mt.sucKhoe.krIm}
+						value={sk.data.tongQuan.krIm}
 					/>
 					<StatCard
 						description={mt.sucKhoe.chuaCongBoMoTa}
