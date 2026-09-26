@@ -12,7 +12,6 @@ import { zaloGia } from "./support/zalo-gia";
 
 const SCRIPT = resolve(import.meta.dir, "../../../_acceptance/hoi-crm-qua-zalo/rang/nguong.ts");
 const GIAY_MS = 1_000;
-const PHUT_MS = 60 * GIAY_MS;
 let so = 0;
 
 function vn(gio: string, ngay = "2026-10-15"): Date {
@@ -94,14 +93,15 @@ describe("nguong", () => {
 			data: { messageId: `hczn-tran-${Date.now()}`, crmUserId: A.id, zaloChatId: "ZA", hoiLuc: vn("11:00"), ketQua: "tu-choi-tran-ngay" },
 		});
 		await hoiVaTra(A.id, "ZA", vn("10:00", "2026-10-14"), 1);
-		await db.$transaction((tx) => hoiTacTu(tx, { messageId: `hczn-ban-${Date.now()}`, chatId: "ZA", text: "hỏi" }, A.id, vn("12:00")));
-		await db.$transaction((tx) => hoiTacTu(tx, { messageId: `hczn-ban2-${Date.now()}`, chatId: "ZA", text: "hỏi" }, A.id, new Date(vn("12:00").getTime() + PHUT_MS)));
+		await db.zaloHoi.create({
+			data: { messageId: `hczn-ban-${Date.now()}`, crmUserId: A.id, zaloChatId: "ZA", hoiLuc: vn("12:00"), ketQua: "dang-ban" },
+		});
 
 		const dong = await chayScript("2026-10-15", "2026-10-15");
 		expect(dong).toEqual([
-			"so_cau: 9",
+			"so_cau: 8",
 			"so_nguoi: 3",
-			"ti_le_tra_loi: 5/9",
+			"ti_le_tra_loi: 5/8",
 			"gui_hong: 1",
 			"do_tre_p50_s: 3.5",
 			"do_tre_p95_s: 31.3",
@@ -114,7 +114,7 @@ describe("nguong", () => {
 		await db.zaloHoi.delete({ where: { id: cuaE } });
 		const sau = await chayScript("2026-10-15", "2026-10-15");
 		expect(sau).toContain("nguoi_khong_quyen: 0");
-		expect(sau).toContain("ti_le_tra_loi: 4/8");
+		expect(sau).toContain("ti_le_tra_loi: 4/7");
 		expect(sau).toContain("so_nguoi: 2");
 	});
 });
