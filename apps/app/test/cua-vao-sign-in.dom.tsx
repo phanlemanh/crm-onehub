@@ -16,7 +16,7 @@ import {
 } from "../../../_acceptance/cua-vao-dang-nhap/rang/ma-loi-that.mjs";
 
 type Tieng = "vi" | "en";
-type NutGhi = { loai: "social"; ten: string } | { loai: "sso"; ten: string };
+type NutGhi = { loai: "social" | "sso"; nhan: string };
 
 let tieng: Tieng = "vi";
 let tuyChon: SignInOptions | Error = {
@@ -35,14 +35,14 @@ mock.module("@crm/auth/client", () => ({
 	signIn: { email: async () => ({ error: null }) },
 }));
 mock.module("@/app/(landing)/sign-in/social-sign-in", () => ({
-	SocialSignIn: ({ provider }: { provider: keyof typeof TEN_HANG }) => {
-		nutDaVe.push({ loai: "social", ten: TEN_HANG[provider] });
-		return <button type="button">{TEN_HANG[provider]}</button>;
+	SocialSignIn: ({ nhan }: { nhan: string }) => {
+		nutDaVe.push({ loai: "social", nhan });
+		return <button type="button">{nhan}</button>;
 	},
 }));
 mock.module("@/app/(landing)/sign-in/sso-sign-in", () => ({
-	SsoSignIn: ({ providers }: { providers: { name: string }[] }) => {
-		for (const p of providers) nutDaVe.push({ loai: "sso", ten: p.name });
+	SsoSignIn: ({ providers }: { providers: { nhan: string }[] }) => {
+		for (const p of providers) nutDaVe.push({ loai: "sso", nhan: p.nhan });
 		return <button type="button">sso</button>;
 	},
 }));
@@ -142,6 +142,24 @@ function buocHienRa(o: HTMLElement): { tieuDe: string; moTa: string }[] {
 	);
 }
 
+function tenTuNhan(nhan: string): string {
+	const tienTo = authMessages("vi").signIn.continueWith("");
+	return nhan.startsWith(tienTo) ? nhan.slice(tienTo.length) : `«${nhan}»`;
+}
+
+function layTieuDiem(goc: Element): string | null {
+	for (const e of [goc, ...goc.querySelectorAll("*")]) {
+		if (e.hasAttribute("tabindex"))
+			return `tabindex o <${e.tagName.toLowerCase()}>`;
+		if (e.hasAttribute("autofocus"))
+			return `autofocus o <${e.tagName.toLowerCase()}>`;
+		if (["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA"].includes(e.tagName)) {
+			return `phan tu bam duoc <${e.tagName.toLowerCase()}>`;
+		}
+	}
+	return null;
+}
+
 afterEach(() => {
 	tieng = "vi";
 	tuyChon = GOOGLE;
@@ -166,9 +184,12 @@ describe("ba-buoc-google", () => {
 			cv.buoc.nutNgoai.tieuDe("Google"),
 			cv.buoc.matKhauPhu.tieuDe,
 		]);
-		expect(buoc[0]?.moTa).toContain(caiDat);
-		expect(buoc[0]?.moTa).toContain(tv.trang.tieuDe);
-		expect(buoc[0]?.moTa).toContain(tv.duocPhepVao.nutThem);
+		const duong = [caiDat, tv.trang.tieuDe, tv.duocPhepVao.nutThem].join(" › ");
+		if (buoc[0]?.moTa !== cv.buoc.choPhep.moTa(duong)) {
+			throw new Error(
+				`buoc 1 khong chi dung duong «${duong}»: «${buoc[0]?.moTa}»`,
+			);
+		}
 		expect(buoc[2]?.moTa).toContain(`${phut} phút`);
 		expect(khoi.textContent).toContain(authMessages("vi").shell.headline);
 		expect(authMessages("vi").shell.headline).toBe(
@@ -214,7 +235,7 @@ describe("ma-tran-cua", () => {
 			const cv = cuaVaoMessages("vi");
 			tuyChon = tc;
 			const { o } = await veTrang(params);
-			const tenNut = nutDaVe.map((n) => n.ten);
+			const tenNut = nutDaVe.map((n) => tenTuNhan(n.nhan));
 			const buoc = buocHienRa(o).map((b) => b.tieuDe);
 			if (tenNut.length === 0) {
 				expect(buoc).toEqual([
@@ -356,8 +377,8 @@ describe("o-loi", () => {
 		) {
 			throw new Error("o loi dung sau nut dang nhap");
 		}
-		expect(alert.hasAttribute("tabindex")).toBe(false);
-		expect(alert.hasAttribute("autofocus")).toBe(false);
+		const lay = layTieuDiem(alert);
+		if (lay) throw new Error(`o loi nhan tieu diem (${lay})`);
 	});
 
 	it("da dang nhap: chuyen ve / truoc khi hien o loi", async () => {
@@ -414,5 +435,27 @@ describe("quen-mat-khau", () => {
 		tuyChon = { ...GOOGLE, quenMatKhau: false };
 		const { o } = await veTrang();
 		expect(o.querySelectorAll("a[href='/quen-mat-khau']")).toHaveLength(0);
+	});
+});
+
+describe("o-loi doi chung", () => {
+	it("bo do tieu diem bat duoc tabindex, autofocus va phan tu bam duoc o con", () => {
+		const mau = (x: React.ReactNode) => {
+			const o = document.createElement("div");
+			o.innerHTML = renderToStaticMarkup(<div role="alert">{x}</div>);
+			const goc = o.firstElementChild;
+			if (!goc) throw new Error("mau rong");
+			return layTieuDiem(goc);
+		};
+		expect(mau(<span tabIndex={0}>x</span>)).toBe("tabindex o <span>");
+		expect(mau(<input autoFocus />)).toBe("autofocus o <input>");
+		expect(mau(<a href="/">x</a>)).toBe("phan tu bam duoc <a>");
+		expect(mau(<p>x</p>)).toBeNull();
+	});
+
+	it("bo tach ten tu nhan nut: nhan la khong khop duoc bat buoc tach sai", () => {
+		const m = authMessages("vi").signIn;
+		expect(tenTuNhan(m.continueWith("Google"))).toBe("Google");
+		expect(tenTuNhan("Google")).toBe("«Google»");
 	});
 });
