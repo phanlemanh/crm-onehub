@@ -20,6 +20,7 @@ import {
 import { kieuKr, NGUON_KR, type NguonKr } from "@crm/validation/okr-kr";
 import { TRANG_THAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import {
+	crmHopKieu,
 	type DatNguonKrInput,
 	LOAI_NGUON_MAY,
 	type OkrNguonDong,
@@ -227,6 +228,8 @@ export class OkrSoService {
 			const nguon = nguonKr.parse(kr.source);
 			if (congBo && nguon !== "tay")
 				throw new BadRequestException(T.so.nguonDaKhoa);
+			if (input.loai === "crm" && !crmHopKieu(kieuKr.parse(kr.kind)))
+				throw new BadRequestException(T.so.crmKhongHopKieu);
 			if (input.loai === "crm") await this.kiemPhamVi(tx, input.phamVi);
 			const cu = kr.nguonMay ? parseOkrNguon(kr.nguonMay) : null;
 			const moi = input.loai === "tay" ? null : cauHinhTu(input);
@@ -294,7 +297,10 @@ export class OkrSoService {
 				include: {
 					nguonMay: true,
 					objective: {
-						select: { status: true, cycle: { select: { endsOn: true } } },
+						select: {
+							status: true,
+							cycle: { select: { startsOn: true, endsOn: true } },
+						},
 					},
 				},
 			});
@@ -303,6 +309,8 @@ export class OkrSoService {
 			if (kr.nguonMay?.loai !== "api")
 				throw new BadRequestException(T.so.khongNhanApi);
 			const hom = ngayVN(now);
+			if (hom < kr.objective.cycle.startsOn.toISOString().slice(0, 10))
+				throw new BadRequestException(T.so.kyChuaToi);
 			if (hom > kr.objective.cycle.endsOn.toISOString().slice(0, 10))
 				throw new BadRequestException(T.so.kyDaQua);
 			const loi = kiemGiaTriTheoKieu(kieuKr.parse(kr.kind), input.giaTri);
@@ -447,15 +455,14 @@ export class OkrSoService {
 			endsOn,
 			hang?.ngay ?? input.ngay ?? ngayVN(new Date()),
 		);
-		const soTinhLai = await demChiSo(this.db, dn, k);
 		const trang = await banGhiChiSo(this.db, dn, k, cua);
 		return {
 			...rong,
 			dinhNghia: dn,
 			...ngayKhoang(k),
 			ngay: hang?.ngay ?? input.ngay ?? null,
-			soTinhLai,
-			lech: rong.soDaChup !== null && rong.soDaChup !== soTinhLai,
+			soTinhLai: trang.tong,
+			lech: rong.soDaChup !== null && rong.soDaChup !== trang.tong,
 			tong: trang.tong,
 			dong: trang.dong,
 		};

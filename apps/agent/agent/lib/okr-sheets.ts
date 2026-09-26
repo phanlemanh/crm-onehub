@@ -1,6 +1,7 @@
 import { db } from "@crm/db";
 import { OKR_SO } from "@crm/db/okr-so-config";
-import { docSoOkr, soKr } from "@crm/validation/okr-kr";
+import { kiemGiaTriTheoKieu } from "@crm/validation/okr-cap-nhat";
+import { docSoOkr, type KieuKr, kieuKr, soKr } from "@crm/validation/okr-kr";
 import {
 	type LyDoDocSheet,
 	parseDocSheetPayload,
@@ -236,13 +237,19 @@ export async function chayDocSheet(
 
 async function docVaGhi(task: LeasedTask, f: typeof fetch): Promise<void> {
 	const { keyResultId } = parseDocSheetPayload(task.payload);
-	const hang = await db.okrNguonKr.findUnique({ where: { keyResultId } });
+	const hang = await db.okrNguonKr.findUnique({
+		where: { keyResultId },
+		include: { keyResult: { select: { kind: true } } },
+	});
 	const nguon = hang ? parseOkrNguon(hang) : null;
-	if (nguon?.loai !== "bang-tinh" || !nguon.sheetId || !nguon.sheetO) {
+	if (!hang || nguon?.loai !== "bang-tinh" || !nguon.sheetId || !nguon.sheetO) {
 		await completeTask(task.id, "đọc ô: nguồn không còn là bảng tính");
 		return;
 	}
-	const kq = soHopLeKq(await docOSheet(f)(nguon.sheetId, nguon.sheetO));
+	const kq = hopKieuKq(
+		soHopLeKq(await docOSheet(f)(nguon.sheetId, nguon.sheetO)),
+		kieuKr.parse(hang.keyResult.kind),
+	);
 	const now = new Date();
 	await db.okrNguonKr.updateMany({
 		where: {
@@ -264,4 +271,10 @@ async function docVaGhi(task: LeasedTask, f: typeof fetch): Promise<void> {
 
 export function soHopLeKq(kq: KetQuaDoc): KetQuaDoc {
 	return "giaTri" in kq ? soHopLe(kq.giaTri) : kq;
+}
+
+export function hopKieuKq(kq: KetQuaDoc, kieu: KieuKr): KetQuaDoc {
+	return "giaTri" in kq && kiemGiaTriTheoKieu(kieu, kq.giaTri) !== null
+		? { loi: "khong-hop-kieu" }
+		: kq;
 }

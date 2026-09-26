@@ -95,6 +95,9 @@ export const OKR = {
 			sheetsTat: "Quản trị chưa cắm khoá Google Sheets.",
 			khongNhanApi: "KR này không nhận số qua khoá API.",
 			kyDaQua: "Chu kỳ đã qua ngày cuối — không ghi số nữa.",
+			kyChuaToi: "Chu kỳ chưa tới ngày đầu — chưa ghi số được.",
+			crmKhongHopKieu:
+				"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 			danhSachDoiTac:
 				"Danh sách bản ghi thuộc dữ liệu đối tác — vai «chỉ OKR» chỉ xem được con số.",
 			ghiChuDoCanh: "đo cạnh",

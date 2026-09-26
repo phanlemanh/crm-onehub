@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db, setPrismaLogSink } from "@crm/db";
 import { DIRECT_KINDS, PRIORITY } from "@crm/db/agent-tasks";
 import { OKR_SO } from "@crm/db/okr-so-config";
+import type { KieuKr } from "@crm/validation/okr-kr";
 import { z } from "zod";
 import { capabilitiesFrom, markdownFor } from "../agent/lib/capabilities";
 import { runDirect } from "../agent/lib/dispatch";
@@ -306,7 +307,7 @@ describe("sheets đọc ô", () => {
 	});
 });
 
-async function gieoKrBangTinh(o = "B2"): Promise<string> {
+async function gieoKrBangTinh(o = "B2", kieu?: KieuKr): Promise<string> {
 	const chu = (await gieoNguoi("Sheets")).id;
 	const ky = await gieoChuKy("dang-chay");
 	const muc = await gieoMucTieu({ cycleId: ky, chu, congBo: new Date() });
@@ -315,6 +316,7 @@ async function gieoKrBangTinh(o = "B2"): Promise<string> {
 		chu,
 		khoa: new Date(),
 		nguon: "bang-tinh",
+		kieu,
 	});
 	await gieoNguonKr(kr, chu, { loai: "bang-tinh", sheetId: SHEET_BI_MAT, o });
 	return kr;
@@ -373,6 +375,37 @@ describe("sheets (b) việc okr-doc-sheet", () => {
 		expect(g.goi.filter((x) => x.loai === "values").map((x) => x.o)).toEqual([
 			"B2",
 		]);
+	});
+
+	test("kiểu KR: ô 0.85 cho KR phần trăm đọc được; ô 150 cho KR phần trăm và ô 2 cho KR mốc ghi khong-hop-kieu, không dòng lịch sử", async () => {
+		const ca = [
+			["phan-tram", 0.85, { docGiaTri: 0.85, docLoi: null }, "đọc ô: được"],
+			[
+				"phan-tram",
+				150,
+				{ docGiaTri: null, docLoi: "khong-hop-kieu" },
+				"đọc ô: khong-hop-kieu",
+			],
+			[
+				"moc",
+				2,
+				{ docGiaTri: null, docLoi: "khong-hop-kieu" },
+				"đọc ô: khong-hop-kieu",
+			],
+		] as const;
+		for (const [kieu, o, mong, outcome] of ca) {
+			const kr = await gieoKrBangTinh("B2", kieu);
+			const task = await xepViec(kr);
+			const g = googleTheoO(() => oGia(o));
+			await chayDocSheet(task, g.f);
+			expect({ ca: `${kieu} ${o}`, ...(await trangThai(kr)) }).toEqual({
+				ca: `${kieu} ${o}`,
+				...mong,
+				coDocLuc: true,
+			});
+			expect(await ketViec(task.id)).toEqual({ xong: true, outcome });
+			expect(await db.okrSoChup.count({ where: { keyResultId: kr } })).toBe(0);
+		}
 	});
 
 	test("403: ghi docLoi chua-chia-se, outcome có lý do, không có giá trị", async () => {

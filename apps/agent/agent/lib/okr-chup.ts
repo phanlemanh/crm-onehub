@@ -3,13 +3,20 @@ import { chupKrCrm } from "@crm/db/okr-chi-so";
 import { OKR_SO } from "@crm/db/okr-so-config";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
+import { kieuKr } from "@crm/validation/okr-kr";
 import {
 	type LyDoDocSheet,
 	type OkrNguonDong,
 	parseOkrNguon,
 } from "@crm/validation/okr-nguon";
 import { settledWithin } from "./deadline";
-import { cauHinhSheets, docOSheet, soHopLeKq, tenLoi } from "./okr-sheets";
+import {
+	cauHinhSheets,
+	docOSheet,
+	hopKieuKq,
+	soHopLeKq,
+	tenLoi,
+} from "./okr-sheets";
 
 export type DocO = (
 	sheetId: string,
@@ -110,7 +117,7 @@ export async function chupSoOkr(
 		where: {
 			nguonMay: { loai: { in: [...NGUON_CHUP] } },
 			objective: {
-				status: { not: "da-bo" },
+				status: "cong-bo",
 				cycle: {
 					phase: { in: [...PHA_GHI_DUOC] },
 					startsOn: { lte: ngayDb },
@@ -119,7 +126,7 @@ export async function chupSoOkr(
 			},
 			soChup: { none: { ngay: ngayDb, nguon: { in: [...NGUON_CHUP] } } },
 		},
-		select: { id: true, source: true, nguonMay: true },
+		select: { id: true, source: true, kind: true, nguonMay: true },
 		orderBy: { id: "asc" },
 		take: OKR_SO.chup.toiDaMoiNhip,
 	});
@@ -159,7 +166,10 @@ export async function chupSoOkr(
 				continue;
 			}
 			lanDoc += 1;
-			const doc = soHopLeKq(await docCoTran(docO, nguon.sheetId, nguon.sheetO));
+			const doc = hopKieuKq(
+				soHopLeKq(await docCoTran(docO, nguon.sheetId, nguon.sheetO)),
+				kieuKr.parse(kr.kind),
+			);
 			if ("loi" in doc) {
 				await db.okrNguonKr.update({
 					where: { keyResultId: kr.id },

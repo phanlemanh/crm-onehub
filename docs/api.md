@@ -588,8 +588,14 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   is published the effective source is locked like the start value — a `tay` KR may add
   a **side measurement** (an `OkrNguonKr` row while `source` stays `tay`: the agent
   snapshots it and the screen shows it beside the hand number, progress still follows
-  the hand number), and changing or removing a machine KR's source is refused
-  (`OKR.thongDiep.so.nguonDaKhoa`). A unit in the scope must exist and be live, a person
+  the hand number; `soMay` on `okr.objective` and `okr.capNhatTuan` is the newest
+  snapshot only when its `nguon` is the configured machine type, so switching a side
+  measurement from `crm` to `api` shows no number until the first `api` write), and changing or removing a machine KR's source is refused
+  (`OKR.thongDiep.so.nguonDaKhoa`). A CRM metric is a count, so `crm` — as the effective
+  source or as a side measurement — is refused for a `moc` or `phan-tram` KR
+  (`OKR.thongDiep.so.crmKhongHopKieu`, rule `crmHopKieu` in
+  `@crm/validation/okr-nguon`); `api` and `bang-tinh` stay open to them, and the value
+  they bring is checked against the kind instead. A unit in the scope must exist and be live, a person
   must be a member, a Sheets link must be `docs.google.com/spreadsheets` with an A1
   cell, and Sheets is refused while `GOOGLE_SHEETS_EMAIL` or `GOOGLE_SHEETS_KHOA` is
   missing. Every call leaves one `doi-nguon` trail row (before → after; a side
@@ -630,8 +636,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `OkrAccessService.assertSuaKr` (the KR's owner, or a head who edits the objective's unit),
   so the «chỉ OKR» role may call it. It takes `giaTri` and an optional `ghiChu`; it
   refuses a KR whose source is not `api` (`OKR.thongDiep.so.khongNhanApi`), a value
-  that does not fit the KR's kind, a locked phase, and any call once today in Vietnam
-  is past `endsOn` (`OKR.thongDiep.so.kyDaQua`), even before the phase moves. It writes
+  that does not fit the KR's kind, a locked phase, any call while today in Vietnam is
+  still before `startsOn` (`OKR.thongDiep.so.kyChuaToi`), and any call once today is
+  past `endsOn` (`OKR.thongDiep.so.kyDaQua`), even before the phase moves. It writes
   one `okrSoChup` row (`nguon: api`, `tacGiaUserId`), updates `currentValue` when the
   effective source is `api`, and leaves one `ghi-so-api` trail row.
 - **Clicking a number opens the records behind it.** `okr.lichSuSo` returns the
@@ -640,7 +647,8 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   into that day's snapshot**, not the KR's current settings (a KR with no snapshot yet
   uses its current settings). It returns the definition, the date range, the number
   snapshotted for `ngay` (the latest day by default), the number counted now for the
-  same range, a `lech` flag when the two differ, and one page (`OKR_SO.banGhi.coTrang`)
+  same range (the list's own total — one count, not a second one), a `lech` flag when the
+  two differ, and one page (`OKR_SO.banGhi.coTrang`)
   of `{ loai, id, ten, ngay }` rows the sheet opens as a stacked record. An `api` KR
   returns its writes (`lanGhi`) instead. The list is partner data: the «chỉ OKR» role
   gets `403` with `OKR.thongDiep.so.danhSachDoiTac`, while it can still read the number

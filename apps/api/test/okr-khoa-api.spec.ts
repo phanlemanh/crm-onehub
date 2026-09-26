@@ -18,6 +18,7 @@ const CAU = {
 	khongNhanApi: "KR này không nhận số qua khoá API.",
 	kyDaKhoa: "Chu kỳ này ở pha chấm điểm hoặc đã đóng — không ghi được nữa.",
 	kyDaQua: "Chu kỳ đã qua ngày cuối — không ghi số nữa.",
+	kyChuaToi: "Chu kỳ chưa tới ngày đầu — chưa ghi số được.",
 	mocChi01: "KR kiểu «mốc» chỉ nhận 0 (chưa xong) hoặc 1 (xong).",
 	phanTramNgoai: "KR kiểu «phần trăm» chỉ nhận giá trị trong 0–100.",
 	daBo: "Mục tiêu này đã bỏ.",
@@ -39,6 +40,7 @@ const s = {
 	krApiMoc: "",
 	krApiChamDiem: "",
 	krApiQuaHan: "",
+	krApiChuaToi: "",
 	krApiDaBo: "",
 };
 const taoCac = { user: [] as string[], cycle: [] as string[] };
@@ -175,6 +177,7 @@ beforeAll(async () => {
 	const dangChay = await taoCycle("dang-chay", "2026-01-01", "2030-12-31");
 	const chamDiem = await taoCycle("cham-diem", "2020-01-01", "2020-03-31");
 	const quaHan = await taoCycle("dang-chay", "2020-01-01", "2020-01-31");
+	const chuaToi = await taoCycle("lap-ke-hoach", "2090-01-01", "2090-03-31");
 
 	s.krApiP = await taoKr(dangChay, s.p, { nguon: "api" });
 	s.krApiOkr = await taoKr(dangChay, s.okr, { nguon: "api" });
@@ -186,6 +189,7 @@ beforeAll(async () => {
 	s.krApiMoc = await taoKr(dangChay, s.p, { nguon: "api", kind: "moc" });
 	s.krApiChamDiem = await taoKr(chamDiem, s.p, { nguon: "api" });
 	s.krApiQuaHan = await taoKr(quaHan, s.p, { nguon: "api" });
+	s.krApiChuaToi = await taoKr(chuaToi, s.p, { nguon: "api" });
 	s.krApiDaBo = await taoKr(dangChay, s.p, {
 		nguon: "api",
 		trangThai: "da-bo",
@@ -353,6 +357,21 @@ describe("okr-khoa-api", () => {
 		expect(await soChupApi(s.krApiQuaHan)).toBe(truoc.soChup);
 		expect(await vetGhiSoApi(s.krApiQuaHan)).toBe(truoc.vet);
 		expect(await giaTriHienTai(s.krApiQuaHan)).toBe(truoc.giaTri);
+	});
+
+	test("hom nay truoc ngay dau chu ky: tu choi, khong ghi gi", async () => {
+		const truoc = {
+			soChup: await soChupApi(s.krApiChuaToi),
+			vet: await vetGhiSoApi(s.krApiChuaToi),
+			giaTri: await giaTriHienTai(s.krApiChuaToi),
+		};
+		const res = await ghi(s.khoaP, s.krApiChuaToi, 6);
+		expect(`HTTP ${res.status} ${res.body?.message}`).toBe(
+			`HTTP 400 ${CAU.kyChuaToi}`,
+		);
+		expect(await soChupApi(s.krApiChuaToi)).toBe(truoc.soChup);
+		expect(await vetGhiSoApi(s.krApiChuaToi)).toBe(truoc.vet);
+		expect(await giaTriHienTai(s.krApiChuaToi)).toBe(truoc.giaTri);
 	});
 
 	test("muc tieu da bo: tu choi, khong ghi gi", async () => {

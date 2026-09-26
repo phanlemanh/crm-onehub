@@ -7,6 +7,7 @@ import type {
 	PhamViChiSo,
 } from "@crm/validation/okr-chi-so";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
+import type { KieuKr } from "@crm/validation/okr-kr";
 import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
 import { donDep, ma, TIEN_TO } from "./nhac-gieo";
 
@@ -72,12 +73,13 @@ export async function gieoKr(k: {
 	viTri?: number;
 	nguon?: "tay" | "crm" | "api" | "bang-tinh";
 	giaTri?: number;
+	kieu?: KieuKr;
 }): Promise<string> {
 	const kr = await db.okrKeyResult.create({
 		data: {
 			objectiveId: k.objectiveId,
 			title: k.tieuDe ?? ma(),
-			kind: "tang-toi",
+			kind: k.kieu ?? "tang-toi",
 			ownerUserId: k.chu,
 			startValue: 0,
 			targetValue: 100,

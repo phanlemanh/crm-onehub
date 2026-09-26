@@ -231,13 +231,13 @@ type ChupGanNhat = {
 
 export function doCanhVaSoMay(
 	nguon: string,
-	coNguonMay: boolean,
+	nguonMay: { loai: string } | null,
 	chup: ChupGanNhat | undefined,
 ) {
 	return {
-		doCanh: nguon === "tay" && coNguonMay,
+		doCanh: nguon === "tay" && nguonMay !== null,
 		soMay:
-			coNguonMay && chup
+			nguonMay !== null && chup && chup.nguon === nguonMay.loai
 				? {
 						giaTri: soKr(chup.giaTri),
 						ngay: ngay(chup.ngay),
@@ -1106,7 +1106,7 @@ export class OkrService {
 					dueOn: k.dueOn ? ngay(k.dueOn) : null,
 					weight: soKr(k.weight),
 					source,
-					...doCanhVaSoMay(source, k.nguonMay !== null, chup),
+					...doCanhVaSoMay(source, k.nguonMay, chup),
 					nguonMay: k.nguonMay
 						? {
 								...parseOkrNguon(k.nguonMay),

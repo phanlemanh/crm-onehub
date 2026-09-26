@@ -363,7 +363,8 @@ Nhịp dispatch chụp số OKR qua `chupSoOkr` (`lib/okr-chup.ts`), cạnh `len
 không có lịch riêng. Mỗi nhịp chụp số của **hôm qua** theo giờ VN cho mọi KR có nguồn máy
 chưa có dòng của ngày đó; phần lớn các nhịp chỉ là một câu truy vấn trả rỗng.
 
-- **Chọn KR:** có `OkrNguonKr` loại `crm` hoặc `bang-tinh`, mục tiêu không `da-bo`, chu kỳ
+- **Chọn KR:** có `OkrNguonKr` loại `crm` hoặc `bang-tinh`, mục tiêu đã `cong-bo` (mục tiêu
+  nháp chưa có số máy — hộp thoại KR dùng «đọc thử» và «tới hôm nay» thay cho nó), chu kỳ
   ở pha ghi được (`PHA_GHI_DUOC`), hôm qua nằm trong `[startsOn, endsOn]`, và chưa có dòng
   `okrSoChup` máy cho hôm qua. Tối đa `OKR_SO.chup.toiDaMoiNhip` KR một nhịp; phần còn lại
   nhịp sau.
@@ -400,7 +401,9 @@ gọi mạng — năng lực «Google Sheets» trong `capabilities.ts`).
   gọi có `tranMs / soLanThu`, nên cả lần đọc nằm trong `OKR_SO.sheets.tranMs`. Chỉ 5xx, 429,
   401 và lỗi mạng thử lại. 403 → `chua-chia-se`, 404 → `khong-thay`, khác 2xx → `google-loi`; ô vắng hay rỗng →
   `o-trong`; chữ qua `docSoOkr` («1.240» → 1240), `#REF!`, đúng/sai, số ngoài `soKr` →
-  `khong-phai-so`.
+  `khong-phai-so`. Số đọc được còn phải hợp kiểu KR (`kiemGiaTriTheoKieu`: mốc chỉ 0 hay 1,
+  phần trăm trong 0–100) — không hợp thì `khong-hop-kieu`: ghi `docLoi`, không ghi dòng
+  `okrSoChup`, `currentValue` đứng yên. Luật này chạy ở cả nhịp chụp lẫn «đọc thử».
 - **Không qua `@crm/db/safe-fetch`.** `safe-fetch` chặn địa chỉ do người nhập trỏ vào mạng
   trong. Ở đây hai máy chủ là hằng số của Google trong `OKR_SO.sheets`; người chỉ góp mã
   bảng tính (đã lọc bằng biểu thức ở `sheetIdTuUrl`) và ô, cả hai mã hoá làm một đoạn đường

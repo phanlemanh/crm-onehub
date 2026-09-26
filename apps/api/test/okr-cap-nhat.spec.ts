@@ -1876,9 +1876,8 @@ describe("kr-may", () => {
 			cookieChu,
 		);
 		const krM = await taoKr(a, chu, cookieChu, {
-			kind: "moc",
 			startValue: 0,
-			targetValue: 1,
+			targetValue: 20,
 			currentValue: 0,
 		});
 		const krA = await taoKr(a, chu, cookieChu, {

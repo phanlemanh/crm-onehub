@@ -94,7 +94,7 @@ export class OkrCapNhatService {
 						cuoi !== undefined &&
 						cuoi.weekStart.toISOString().slice(0, 10) === tuan,
 					nguon,
-					...doCanhVaSoMay(nguon, k.nguonMay !== null, chup),
+					...doCanhVaSoMay(nguon, k.nguonMay, chup),
 				};
 			}),
 			weekStart: tuan,

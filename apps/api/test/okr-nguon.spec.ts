@@ -11,6 +11,8 @@ import { parseOkrVet } from "@crm/validation/okr-vet";
 import { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { ConversionService } from "../src/currency/conversion.service";
 import { DealsService } from "../src/deals/deals.service";
+import { OkrService } from "../src/okr/okr.service";
+import { OkrAccessService } from "../src/okr/okr-access.service";
 import { OkrSoService } from "../src/okr/okr-so.service";
 import {
 	type AiHoacCookie,
@@ -57,6 +59,8 @@ const CAU = {
 	hienTaiMay: "Số hiện tại của KR này do máy ghi",
 	daCoSoChup: "KR đã có lịch sử số — sửa được, không xoá được.",
 	doiTac: "Danh sách bản ghi thuộc dữ liệu đối tác",
+	crmKhongHopKieu:
+		"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 } as const;
 
 type Pha = "lap-ke-hoach" | "dang-chay" | "cham-diem" | "da-dong";
@@ -174,12 +178,16 @@ async function mucTieu(pha: Pha, trangThai: TrangThai): Promise<string> {
 	return r.id;
 }
 
-async function kr(objectiveId: string, nguon: Nguon): Promise<string> {
+async function kr(
+	objectiveId: string,
+	nguon: Nguon,
+	kieu?: "moc" | "phan-tram",
+): Promise<string> {
 	const r = await db.okrKeyResult.create({
 		data: {
 			objectiveId,
 			title: ma("kr"),
-			kind: "tang-toi",
+			kind: kieu ?? "tang-toi",
 			ownerUserId: s.phuTrach,
 			startValue: 0,
 			targetValue: 100,
@@ -527,6 +535,101 @@ async function lichSuKhongDoiApi() {
 	});
 }
 
+async function kieuKhongLayCrm() {
+	const mtNhap = await mucTieu("dang-chay", "nhap");
+	const kMoc = await kr(mtNhap, "tay", "moc");
+	const kPhanTram = await kr(mtNhap, "tay", "phan-tram");
+	const kMocCongBo = await kr(
+		await mucTieu("dang-chay", "cong-bo"),
+		"tay",
+		"moc",
+	);
+	for (const [ten, id] of [
+		["moc", kMoc],
+		["phan-tram", kPhanTram],
+		["moc-do-canh", kMocCongBo],
+	] as const) {
+		const truoc = await anhKr(id);
+		const tra = await datNguon(crmP1(id));
+		expect(`${ten}: HTTP ${tra.status} ${tra.loi}`).toBe(
+			`${ten}: HTTP 400 ${CAU.crmKhongHopKieu}`,
+		);
+		expect({ ca: ten, ...(await anhKr(id)) }).toEqual({
+			ca: ten,
+			...truoc,
+		});
+	}
+	const kTang = await kr(mtNhap, "tay");
+	thanhCong(await datNguon(crmP1(kTang)), "doi chung tang-toi");
+	expect((await anhKr(kTang)).source).toBe("crm");
+	thanhCong(await datNguon({ keyResultId: kMoc, loai: "api" }), "moc lay api");
+	expect((await anhKr(kMoc)).source).toBe("api");
+}
+
+async function doCanhDoiLoai() {
+	const T = await kr(await mucTieu("dang-chay", "cong-bo"), "tay");
+	thanhCong(await datNguon(crmP1(T)), "T do canh crm");
+	expect((await chup(T, NGAY.D)).ghi).toBe(1);
+	const crm = await mucTieuCua(T, s.cookiePhuTrach);
+	expect({ soMay: crm.soMay, loai: crm.nguonMay?.loai }).toEqual({
+		soMay: { giaTri: SO_P1, ngay: NGAY.D, nguon: "crm" },
+		loai: "crm",
+	});
+	thanhCong(await datNguon({ keyResultId: T, loai: "api" }), "T do canh api");
+	const api = await mucTieuCua(T, s.cookiePhuTrach);
+	expect({
+		doCanh: api.doCanh,
+		soMay: api.soMay,
+		loai: api.nguonMay?.loai,
+	}).toEqual({ doCanh: true, soMay: null, loai: "api" });
+	const so = ungDung().get(OkrSoService);
+	await so.ghiSoKr(s.phuTrach, { id: T, giaTri: 4 }, CHOT_D);
+	expect((await mucTieuCua(T, s.cookiePhuTrach)).soMay).toEqual({
+		giaTri: 4,
+		ngay: NGAY.D,
+		nguon: "api",
+	});
+}
+
+async function banGhiMotLanDem(kB: string) {
+	let lanDem = 0;
+	const deal = new Proxy(db.deal, {
+		get(dich, khoa) {
+			if (khoa !== "count") return Reflect.get(dich, khoa);
+			return (...doiSo: Parameters<typeof db.deal.count>) => {
+				lanDem += 1;
+				return dich.count(...doiSo);
+			};
+		},
+	});
+	const dbDem = new Proxy(db, {
+		get(dich, khoa) {
+			return khoa === "deal" ? deal : Reflect.get(dich, khoa);
+		},
+	});
+	const goc = ungDung().get(OkrSoService);
+	const so = new OkrSoService(
+		dbDem,
+		ungDung().get(OkrAccessService),
+		ungDung().get(OkrService),
+		ungDung().get(AgentTriggerService),
+	);
+	const r = await so.banGhiChiSo(s.phuTrach, {
+		keyResultId: kB,
+		ngay: NGAY.D,
+		trang: 1,
+	});
+	const doiChung = await goc.banGhiChiSo(s.phuTrach, {
+		keyResultId: kB,
+		ngay: NGAY.D,
+		trang: 1,
+	});
+	expect(`soTinhLai ${r.soTinhLai} tong ${r.tong} lan dem deal ${lanDem}`).toBe(
+		`soTinhLai ${SO_P1} tong ${SO_P1} lan dem deal 1`,
+	);
+	expect(r).toEqual(doiChung);
+}
+
 describe("okr-nguon", () => {
 	beforeAll(async () => {
 		s.phuTrach = await nguoiMoi("phu-trach");
@@ -859,6 +962,12 @@ describe("okr-nguon", () => {
 		});
 	});
 
+	describe("kieu-kr-crm", () => {
+		test("KR moc va phan-tram khong lay nguon crm: cau ghim, khong dong nao doi; doi chung tang-toi va api cho moc dat duoc", async () => {
+			await kieuKhongLayCrm();
+		});
+	});
+
 	describe("khoa-cong-bo", () => {
 		test("KR crm cua muc tieu cong bo: doi hay go nguon bi tu choi, khong dong nao doi", async () => {
 			const mt = await mucTieu("dang-chay", "cong-bo");
@@ -902,6 +1011,10 @@ describe("okr-nguon", () => {
 				},
 			]);
 			expect((await mucTieuCua(T, s.cookiePhuTrach)).doCanh).toBe(true);
+		});
+
+		test("KR tay do canh doi tu crm sang api: soMay khong mang so crm cu, nguonMay theo cau hinh", async () => {
+			await doCanhDoiLoai();
 		});
 
 		test("currentValue cua KR may bi tu choi o moi pha, KR co ban chup khong xoa duoc", async () => {
@@ -1011,6 +1124,10 @@ describe("okr-nguon", () => {
 				new Set(s.dealP1),
 			);
 			expect(t1.lanGhi).toEqual([]);
+		});
+
+		test("KR crm: ban ghi dem bang mot lan dem, khong dem lai rieng cho soTinhLai", async () => {
+			await banGhiMotLanDem(b.kB);
 		});
 
 		test("ngay cu nhat: khoang ngay va soDaChup cua ngay do", async () => {

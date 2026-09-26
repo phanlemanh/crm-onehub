@@ -6,9 +6,19 @@ import {
 	maChiSo,
 	phamViChiSo,
 } from "./okr-chi-so";
+import type { KieuKr } from "./okr-kr";
 
 export const LOAI_NGUON_MAY = ["crm", "api", "bang-tinh"] as const;
 export type LoaiNguonMay = (typeof LOAI_NGUON_MAY)[number];
+
+export const KIEU_KHONG_LAY_CRM = [
+	"moc",
+	"phan-tram",
+] as const satisfies readonly KieuKr[];
+
+export function crmHopKieu(kieu: KieuKr): boolean {
+	return !KIEU_KHONG_LAY_CRM.some((k) => k === kieu);
+}
 
 const URL_SHEET =
 	/^https:\/\/docs\.google\.com\/spreadsheets\/d\/([A-Za-z0-9_-]{1,200})(?:[/?#].*)?$/;
@@ -62,6 +72,7 @@ export const LY_DO_DOC_SHEET = [
 	"o-trong",
 	"google-loi",
 	"tat",
+	"khong-hop-kieu",
 ] as const;
 export const lyDoDocSheet = z.enum(LY_DO_DOC_SHEET);
 export type LyDoDocSheet = z.infer<typeof lyDoDocSheet>;
