@@ -77,6 +77,7 @@ export const env = {
 	microsoft: microsoftCredentials(),
 	slack: slackCredentials(),
 	cookieDomain: optional("AUTH_COOKIE_DOMAIN"),
+	authSecret: optional("BETTER_AUTH_SECRET"),
 	trustedOrigins: [...new Set([...appUrls, apiUrl])],
 	isProduction: process.env.NODE_ENV === "production",
 } as const;

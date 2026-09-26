@@ -401,3 +401,44 @@ evals:
       a[href="/quen-mat-khau"] = 0; mo thang /quen-mat-khau thi URL cuoi la /sign-in. Chup
       E21-dang-nhap-tat-1440.png. Ghep cap voi luot bat cua E18 (1 lien ket, URL giu
       /quen-mat-khau) — hai luot cung script, chi doi cau hinh api.
+
+  - id: E22
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_dia_chi_rieng
+    paths:
+      - "packages/auth/src/dia-chi.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/env.ts"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Goi THAT xuLyXacThuc (ham boc auth.handler ma API gan vao Nest) cho /request-password-reset.
+      Dia chi ky bang chinh ham kyDiaChi cua packages/auth, khong tu dung chuoi ky.
+        1 hai dia chi ky khac nhau: A xin ba lan, lan thu tu cua A 429; B xin ngay sau -> 200
+        2 bon yeu cau mang x-forwarded-for gia khac nhau va header dia chi gia co chu ky SAI:
+          lan thu tu 429 — khong yeu cau nao duoc tinh rieng (xoa hang dem cua khoa du phong
+          truoc ca)
+        3 header dia-chi-tin tu gui vao bi bo, khong duoc tin
+      Chieu do chay THAT bang chinh lenh eval: them "x-forwarded-for" vao ipAddressHeaders ->
+      ve 2 do voi thong diep ghim "gia x-forwarded-for ne duoc gioi han"; bo ipAddressHeaders ->
+      ve 1 do voi thong diep ghim "hai dia chi chung mot khoa dem".
+
+  - id: E23
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.qmk_proxy_ky_dia_chi
+    paths:
+      - "apps/app/lib/api-proxy-headers.ts"
+      - "apps/app/app/api/[...path]/route.ts"
+      - "packages/auth/src/dia-chi.ts"
+      - "apps/app/test/api-proxy-headers.spec.ts"
+    expected: |
+      Don vi cho ham dung header cua proxy /api (route.ts goi dung ham nay):
+        1 vao co x-real-ip 1.2.3.4, x-forwarded-for 9.9.9.9 va header dia chi gia -> ra co dia chi
+          1.2.3.4 va chu ky ma diaChiDaKy CUA packages/auth doc ra dung 1.2.3.4 (round-trip qua
+          ben doc that, khong so chuoi); khong con 9.9.9.9, khong con header gia
+        2 thieu khoa bi mat hoac thieu x-real-ip -> khong co header dia chi nao, khong nem
+        3 x-forwarded-for va host van bi xoa nhu truoc
+      Chieu do: ham lay x-forwarded-for thay x-real-ip -> ve 1 do voi thong diep ghim
+      "proxy ky dia chi trinh duyet tu dat".

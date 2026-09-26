@@ -334,6 +334,8 @@ executors:
     qmk_thu_hong: bun run test -- "cd packages/auth && bun test test/quen-mat-khau.integration.spec.ts -t thu-hong"
     qmk_chup: 'BANG_CHUNG=_acceptance/quen-mat-khau/evidence bash _acceptance/quen-mat-khau/rang/luot-cong.sh bat'
     qmk_chup_tat: 'BANG_CHUNG=_acceptance/quen-mat-khau/evidence bash _acceptance/quen-mat-khau/rang/luot-cong.sh tat'
+    qmk_dia_chi_rieng: bun run test -- "cd packages/auth && bun test test/quen-mat-khau.integration.spec.ts -t dia-chi-rieng"
+    qmk_proxy_ky_dia_chi: cd apps/app && bun test ./test/api-proxy-headers.spec.ts
     qmk_san_thiet_ke: for t in "apps/app/app/(landing)/quen-mat-khau/page.tsx" "apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx" "apps/app/app/(landing)/sign-in/password-sign-in.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
     lv30_loi_vao_thanh_chinh: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts -t loi-vao-30-ngay'
     lv30_danh_dau_dang_mo: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts -t danh-dau-dang-mo'

@@ -13,6 +13,7 @@ import { canhKhoaApiPlugin } from "./canh-khoa-api";
 import { chayNen } from "./chay-nen";
 import { donChiaCu, PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
+import { DIA_CHI, headerTinDiaChi } from "./dia-chi";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
 import { canhDatMatKhau } from "./sang-mat-khau";
@@ -131,6 +132,7 @@ export const auth = betterAuth({
 	advanced: {
 		cookiePrefix: AUTH_COOKIE_PREFIX,
 		backgroundTasks: { handler: chayNen },
+		ipAddress: { ipAddressHeaders: [DIA_CHI.tin] },
 
 		useSecureCookies: env.isProduction,
 		...(env.cookieDomain && {
@@ -339,6 +341,14 @@ export const auth = betterAuth({
 		},
 	},
 });
+
+export function xuLyXacThuc(yeuCau: Request): Promise<Response> {
+	return auth.handler(
+		new Request(yeuCau, {
+			headers: headerTinDiaChi(yeuCau.headers, env.authSecret),
+		}),
+	);
+}
 
 export type Auth = typeof auth;
 export type Session = typeof auth.$Infer.Session;

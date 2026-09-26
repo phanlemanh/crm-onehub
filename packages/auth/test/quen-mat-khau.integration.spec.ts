@@ -9,7 +9,8 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { auth } from "../src/auth";
+import { auth, xuLyXacThuc } from "../src/auth";
+import { DIA_CHI, kyDiaChi } from "../src/dia-chi";
 import { PASSWORD } from "../src/chia-mat-khau";
 import { env } from "../src/env";
 import { SANG_MAT_KHAU } from "../src/sang-mat-khau";
@@ -27,6 +28,7 @@ const MAT_KHAU_MOI = "mot-cau-rat-dai-va-sach-2026";
 const KHOA_VERCEL = Symbol.for("@vercel/request-context");
 const HAN_XA = new Date("2099-01-01");
 const HAN_CA_MS = 60_000;
+const DIA_CHI_DU_PHONG = "127.0.0.1";
 const CUA_SO_MS = PASSWORD.requestWindowSeconds * SECOND_MS;
 const TRONG_CUA_SO_MS = CUA_SO_MS / 2;
 const QUA_CUA_SO_MS = CUA_SO_MS + 10 * SECOND_MS;
@@ -158,14 +160,27 @@ function diaChiLa(): string {
 
 type KetQua = { ma: number; than: string; ms: number };
 
+function khoaBiMat(): string {
+	if (!env.authSecret) throw new Error("thieu BETTER_AUTH_SECRET cho phep do");
+	return env.authSecret;
+}
+
+function headerDiaChi(ip: string) {
+	return {
+		"content-type": "application/json",
+		[DIA_CHI.goc]: ip,
+		[DIA_CHI.ky]: kyDiaChi(ip, khoaBiMat()),
+	};
+}
+
 type ThanGoi = { email: string } | { token: string; newPassword: string };
 
 async function goi(duong: string, than: ThanGoi, ip: string): Promise<KetQua> {
 	const batDau = performance.now();
-	const tra = await auth.handler(
+	const tra = await xuLyXacThuc(
 		new Request(`${env.apiUrl}/api/auth${duong}`, {
 			method: "POST",
-			headers: { "content-type": "application/json", "x-forwarded-for": ip },
+			headers: headerDiaChi(ip),
 			body: JSON.stringify(than),
 		}),
 	);
@@ -542,4 +557,46 @@ describe("thu-hong", () => {
 			}
 		});
 	}
+});
+
+describe("dia-chi-rieng", () => {
+	test("hai dia chi ky khac nhau khong chan nhau", async () => {
+		const a = ipMoi();
+		const b = ipMoi();
+		for (let i = 0; i < PASSWORD.requestMax; i += 1) await xin(diaChiLa(), a);
+		expect((await xin(diaChiLa(), a)).ma).toBe(429);
+		const maB = (await xin(diaChiLa(), b)).ma;
+		if (maB !== 200)
+			throw new Error(`hai dia chi chung mot khoa dem: B ${maB}`);
+	});
+
+	test("gia x-forwarded-for va chu ky sai khong ne duoc gioi han", async () => {
+		await db.rateLimit.deleteMany({
+			where: { key: { startsWith: `${DIA_CHI_DU_PHONG}|` } },
+		});
+		const ma: number[] = [];
+		for (let i = 0; i <= PASSWORD.requestMax; i += 1) {
+			const gia = ipMoi();
+			const tra = await xuLyXacThuc(
+				new Request(`${env.apiUrl}/api/auth/request-password-reset`, {
+					method: "POST",
+					headers: {
+						"content-type": "application/json",
+						"x-forwarded-for": gia,
+						[DIA_CHI.goc]: gia,
+						[DIA_CHI.ky]: "chu-ky-gia",
+						[DIA_CHI.tin]: gia,
+					},
+					body: JSON.stringify({ email: diaChiLa() }),
+				}),
+			);
+			ma.push(tra.status);
+		}
+		if (ma[PASSWORD.requestMax] !== 429) {
+			throw new Error(`gia x-forwarded-for ne duoc gioi han: ${ma.join(",")}`);
+		}
+		expect(ma.slice(0, PASSWORD.requestMax)).toEqual(
+			Array(PASSWORD.requestMax).fill(200),
+		);
+	});
 });
