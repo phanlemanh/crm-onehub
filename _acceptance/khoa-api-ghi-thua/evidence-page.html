@@ -1,0 +1,130 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · khoa-api-ghi-thua</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Xác minh khoá API không ghi CSDL mỗi lượt — vá @better-auth/api-key để lastRequest chỉ ghi khi cũ quá một phút và bỏ lần đóng dấu updatedAt</h1><div class="sub">Trang bằng chứng · <span class="mono">khoa-api-ghi-thua</span> · tier T3</div>
+<div class="card" style="margin-top:12px"><span class="badge pend">PENDING-JUDGMENT</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muhtxaglxm57</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muhtwv9gnb3x</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge neutral">PASS (CARRIED R2)</span></td><td class="mono">muhq238uvnpx</td><td class="mono">2026-09-26T01:24:49Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge neutral">PASS (CARRIED R2)</span></td><td class="mono">muhq2302k75u</td><td class="mono">2026-09-26T01:24:49Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-api-ghi-thua-E5-r4</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge neutral">PASS (CARRIED R2)</span></td><td class="mono">muhq231cr4is</td><td class="mono">2026-09-26T01:24:49Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>script</td><td><span class="badge neutral">PASS (CARRIED R1)</span></td><td class="mono">minted-khoa-api-ghi-thua-E7-r1</td><td class="mono">2026-09-26T01:07:13Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-api-ghi-thua-E8-r4</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-api-ghi-thua-E9-r4</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-api-ghi-thua-E10-r4</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-api-ghi-thua-E11-r4</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-api-ghi-thua-E12-r4</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-9</td><td>judgment</td><td><span class="badge neutral">PASS (ĐỀ XUẤT PANEL — CHỜ HUMAN_OVERRIDE, T3)</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-10</td><td>judgment</td><td><span class="badge neutral">PASS (CARRIED R2 — CHỜ HUMAN_OVERRIDE, T3)</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E15">E15</a></td><td>AC-11</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muhtwvj9i0gy</td><td class="mono">2026-09-26T03:27:12Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given một khoá mới tạo cho một thành viên, `lastRequest` null, When gọi tRPC `contacts.list` bằng khoá đó hai lần liền, Then cả hai lượt trả 200, lượt đầu ghi `lastRequest` khác null, và sau lượt thứ hai cả `lastRequest` lẫn `updatedAt` của hàng giữ đúng giá trị đọc được sau lượt đầu.</p>
+<div class="kv"><span>run_id <b>muhtxaglxm57</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_khong_ghi_trong_nguong</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">5 expect() calls
+Ran 1 test across 1 file. [987.00ms]
+test-run: dropped crm_muhtxaglxm57_test</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given khoá đó với `lastRequest` đặt thẳng trong CSDL, When gọi `contacts.list` một lượt, Then nếu `lastRequest` cũ hơn `API_KEY_USAGE.lastRequestIntervalMs` cộng một giây thì hàng nhận `lastRequest` không sớm hơn lúc bắt đầu lượt; nếu mới hơn ngưỡng trừ một giây thì `lastRequest` giữ nguyên — ngưỡng đọc từ hằng của `@crm/auth`, không gõ số.</p>
+<div class="kv"><span>run_id <b>muhtwv9gnb3x</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_bien_nguong</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">6 expect() calls
+Ran 1 test across 1 file. [1024.00ms]
+test-run: dropped crm_muhtwv9gnb3x_test</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge neutral">PASS (CARRIED R2)</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given một `betterAuth` dựng với adapter bộ nhớ, rate-limit tắt, và phép đếm lệnh `update` lên model `apikey`, When xác minh cùng một khoá ba lượt qua `getSession` với header khoá, Then bản plugin KHÔNG có `lastRequestUpdateIntervalMs` đếm đúng 2 lệnh mỗi lượt, còn bản có tuỳ chọn đếm 1 lệnh ở lượt đầu và 0 ở hai lượt sau — cùng dựng, hai chiều.</p>
+<div class="kv"><span>run_id <b>muhq238uvnpx</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_hai_chieu_thu_vien</b></span><span>verified_at <b>2026-09-26T01:24:49Z</b></span></div>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge neutral">PASS (CARRIED R2)</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given cùng dựng với rate-limit bật (tối đa 2 lượt trong cửa sổ một phút) và có `lastRequestUpdateIntervalMs`, When xác minh ba lượt, Then lượt thứ ba bị từ chối mã `RATE_LIMITED` và `requestCount` của hàng bằng 2 — bản vá không nới rate-limit.</p>
+<div class="kv"><span>run_id <b>muhq2302k75u</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_rate_limit_bat</b></span><span>verified_at <b>2026-09-26T01:24:49Z</b></span></div>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5: Given hai khoá tạo qua `auth.api.createApiKey`, mỗi khoá đã gọi `contacts.list` một lượt trả 200 nên `lastRequest` còn trong ngưỡng, When khoá thứ nhất bị đặt `enabled = false` và khoá thứ hai bị đặt `expiresAt` về quá khứ rồi mỗi khoá gọi lại, Then cả hai lượt tRPC trả 401, và `auth.api.getSession` với header của từng khoá ném lỗi mã `KEY_DISABLED` và `KEY_EXPIRED` tương ứng — ngưỡng ghi không làm tắt phép kiểm bật/hết hạn.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E5-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_tu_choi_van_giu</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">6 expect() calls
+Ran 1 test across 1 file. [1256.00ms]
+test-run: dropped crm_muhtwuzbd1he_test</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge neutral">PASS (CARRIED R2)</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given `package.json` gốc và gói `@better-auth/api-key` đã cài, When chạy phép chống trôi, Then `patchedDependencies` có đúng một khoá `@better-auth/api-key@&lt;phiên bản đã cài&gt;`, tệp vá nó trỏ tới tồn tại, `bun.lock` ghi cùng khoá, và `dist/index.mjs` của gói đã cài (nơi cả bản build Vercel lẫn bản chạy thử lấy mã) có tuỳ chọn `lastRequestUpdateIntervalMs`; cùng hàm so với một phiên bản lệch thì đỏ với thông điệp ghim `nâng @better-auth/api-key mà chưa làm lại bản vá khoa-api-ghi-thua`.</p>
+<div class="kv"><span>run_id <b>muhq231cr4is</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_chong_troi</b></span><span>verified_at <b>2026-09-26T01:24:49Z</b></span></div>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge neutral">PASS (CARRIED R1)</span> &nbsp;E7 · script</h3><p class="crit">AC-7: Given `docs/api.md`, When đọc mục về khoá API, Then có một đoạn nêu `patchedDependencies`, `lastRequestUpdateIntervalMs`, điều kiện gỡ gắn với better-auth#10921, và việc phải làm lại bản vá khi nâng thư viện.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E7-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kagt_tai_lieu</b></span><span>verified_at <b>2026-09-26T01:07:13Z</b></span></div>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run test`), kiểm kiểu, lint, lint:slop và build không dùng bộ nhớ đệm, Then cả năm thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E8-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.api</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    1m28.419s
+
+test-run: dropped crm_muhtwutkixhl_test</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run test`), kiểm kiểu, lint, lint:slop và build không dùng bộ nhớ đệm, Then cả năm thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E9-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.check_types_khong_cache</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Tasks:    13 successful, 13 total
+Cached:    0 cached, 13 total
+Time:    8.722s</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run test`), kiểm kiểu, lint, lint:slop và build không dùng bộ nhớ đệm, Then cả năm thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E10-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.lint_khong_cache</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Checked 543 files in 271ms. No fixes applied.
+Found 3 warnings.</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run test`), kiểm kiểu, lint, lint:slop và build không dùng bộ nhớ đệm, Then cả năm thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E11-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.lint_slop</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Found 0 warnings and 0 errors.
+Finished in 696ms on 1486 files with 9 rules using 14 threads.</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run test`), kiểm kiểu, lint, lint:slop và build không dùng bộ nhớ đệm, Then cả năm thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-api-ghi-thua-E12-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.build_khong_cache</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">app:build:  Tasks:    4 successful, 4 total
+Cached:    0 cached, 4 total
+Time:    11.017s</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge neutral">PASS (ĐỀ XUẤT PANEL — CHỜ HUMAN_OVERRIDE, T3)</span> &nbsp;E13 · judgment</h3><p class="crit">AC-9: Given tệp vá, mã cấu hình ở `packages/auth` và design doc, When người đọc soi, Then trên cấu hình của kho (lưu khoá bằng CSDL, không có `secondaryStorage`) bản vá chỉ đổi hai việc và chỉ khi có tuỳ chọn: hai nhánh `skip` của `evaluateRateLimit` bỏ ghi `lastRequest` còn trong ngưỡng, và `claimUsageInDatabase` bỏ lần đóng dấu `updatedAt`; không đổi cách đếm của nhánh rate-limit bật, không chạm `consumeRemaining`, không thêm chú thích vào mã; đường secondary-storage có bị chạm (tuỳ chọn cũng áp lên nó) nhưng kho không dùng, và AC-11 giữ điều kiện đó bằng máy.</p>
+<div class="kv"><span>judged_by <b>panel (domain-correctness, operational-feasibility, spec-alignment)</b></span></div>
+<div class="ov ovok">human_override: # chi nguoi ghi</div>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge neutral">PASS (CARRIED R2 — CHỜ HUMAN_OVERRIDE, T3)</span> &nbsp;E14 · judgment</h3><p class="crit">AC-10: Given mục mới về bản vá trong `docs/api.md`, When người đọc chỉ đọc mục đó, Then trả lời được hai câu: khi nào gỡ bản vá, và phải làm gì khi nâng `@better-auth/api-key`.</p>
+<div class="kv"><span>judged_by <b>panel (domain-correctness, operational-feasibility, spec-alignment)</b></span></div>
+<div class="ov ovok">human_override: # chi nguoi ghi</div>
+</div>
+<div class="card eval" id="E15"><h3><span class="badge pass">PASS</span> &nbsp;E15 · test</h3><p class="crit">AC-11: Given tuỳ chọn plugin khoá API thật của kho, tách thành hằng `API_KEY_PLUGIN_OPTIONS` (kiểu `ApiKeyConfigurationOptions`) mà `auth.ts` truyền nguyên vào `apiKey()`, When chạy phép kiểm đường lưu, Then `storage` không phải `secondary-storage` và không có `customStorage` — hai công tắc duy nhất mà thư viện dùng để rẽ sang đường secondary-storage; cùng hàm kiểm với bản chép của chính hằng đó có `storage: &quot;secondary-storage&quot;`, và với bản chép có `customStorage`, thì cả hai đỏ với thông điệp ghim `plugin khoá API đi đường secondary-storage — bản vá khoa-api-ghi-thua đổi cả đường đó, xem lại AC-9`; bộ nhớ đệm chung `auth.options.secondaryStorage` không tham gia phép kiểm.</p>
+<div class="kv"><span>run_id <b>muhtwvj9i0gy</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.kagt_khong_secondary_storage</b></span><span>verified_at <b>2026-09-26T03:27:12Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [939.00ms]
+test-run: dropped crm_muhtwvj9i0gy_test</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">E8, E9, E10, E11 — xanh trên cả HEAD lẫn baseline diffBase (suite hồi quy toàn kho: `bun run test`, `turbo check-types`, `turbo lint`, `lint:slop`). Đây là các cổng regression-guard có chủ ý cho AC-8 (đảm bảo phần còn lại của kho không bị phá vỡ), không phải bằng chứng phân biệt riêng cho tính năng khoa-api-ghi-thua — giữ nguyên vai trò regression-guard, không cần viết lại. E12 (`turbo build`) chạy baseline: n-a nên không nằm trong nhóm không-phân-biệt này.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: E7 (AC-7, tài liệu docs/api.md) được xác minh; hợp đồng lúc đó chưa có AC-11.</li><li>Round 2: E3, E4, E6 (AC-3/4/6 — hai chiều thư viện, rate-limit bật, chống trôi bản vá) được xác minh xanh; AC-11 được thêm vào hợp đồng ngay sau đó (8552b4e6, 33c8f044) để chặn đường secondary-storage.</li><li>Round 3: E15 (AC-11) đỏ — ca kiểm đọc nhầm công tắc cấu hình plugin khoá API (không phải công tắc mà auth.ts thật sự dùng); verdict PENDING-JUDGMENT, trần 3 round. Sửa ở 2a645ab8 (AC-11 kiểm đúng tuỳ chọn plugin), Cổng Phạm vi ký lại ở 33c8f044, hợp đồng đưa về `implemented` ở b2a0368d để mở round 4 — round 4 (báo cáo này) E15 đã xanh trở lại.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
