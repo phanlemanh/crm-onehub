@@ -14,6 +14,16 @@ const PHAI_CHE = [
 	"A.B@Gmail.COM",
 	"093 4567 890",
 	"gọi 0912345678 nhé",
+	"Gọi0912345678ngay",
+	"024 3823 4567",
+	"02438234567",
+	"(028) 3823 4567",
+	"84912345678",
+	"0084912345678",
+	"(0912) 345 678",
+	"+84 (0) 912 345 678",
+	"0912 - 345 - 678",
+	"+65 9123 4567",
 ];
 
 const GIU_NGUYEN = [
@@ -23,6 +33,9 @@ const GIU_NGUYEN = [
 	"482913",
 	"26/09/2026",
 	"12%",
+	"1.500.000.000",
+	"84.000.000",
+	"HĐ 2026/0915",
 ];
 
 const CHU_SO_LIEN = /\d{9,}/;
@@ -48,7 +61,7 @@ function kiemTran(phan: string[]): void {
 
 describe("loc-che", () => {
 	test("loc-che: ma tran phai che du phan tu", () => {
-		expect(PHAI_CHE.length).toBe(11);
+		expect(PHAI_CHE.length).toBe(21);
 	});
 	test.each(PHAI_CHE)("loc-che: %s", (s) => {
 		const ra = locTraLoi(`Liên hệ ${s} để biết thêm`);
@@ -63,7 +76,7 @@ describe("loc-che", () => {
 
 describe("loc-giu", () => {
 	test("loc-giu: ma tran giu nguyen du phan tu", () => {
-		expect(GIU_NGUYEN.length).toBe(6);
+		expect(GIU_NGUYEN.length).toBe(9);
 	});
 	test.each(GIU_NGUYEN)("loc-giu: %s", (s) => {
 		const vao = `Giá trị ${s} ở đây`;

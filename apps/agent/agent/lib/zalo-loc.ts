@@ -1,14 +1,33 @@
 import { ZALO } from "./zalo-config";
 
-const SO_DIEN_THOAI =
-	/(?<![\d+])(?:\(?\+84\)?[\s.-]?|0)(?:\d[\s.-]?){8}\d(?!\d)/gu;
+const PHAN_CACH = String.raw`[\s.\-]{0,3}`;
+const SO_DIEN_THOAI = new RegExp(
+	[
+		String.raw`\(?(?:\+|00)\d{1,3}\)?${PHAN_CACH}(?:\(0\)${PHAN_CACH})?(?:\d${PHAN_CACH}){7,11}\d`,
+		String.raw`\(?0\d{1,4}\)?${PHAN_CACH}(?:\d${PHAN_CACH}){5,9}\d`,
+		String.raw`84\d{9}`,
+	]
+		.map((mau) => `(?<![\\d+])${mau}(?!\\d)`)
+		.join("|"),
+	"gu",
+);
+const CHU_SO = /\d/gu;
 const THU = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/gu;
 const DONG_KE_BANG = /^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$/u;
 const DONG_BANG = /^\s*\|(.*)\|\s*$/u;
 const RANH_CAU = /(?<=[.!?…])\s+/u;
 
+function laSoDienThoai(khop: string): boolean {
+	const so = khop.match(CHU_SO)?.length ?? 0;
+	return so >= ZALO.hoi.soChuSo.min && so <= ZALO.hoi.soChuSo.max;
+}
+
 function che(text: string): string {
-	return text.replace(SO_DIEN_THOAI, ZALO.hoi.an).replace(THU, ZALO.hoi.an);
+	return text
+		.replace(SO_DIEN_THOAI, (khop) =>
+			laSoDienThoai(khop) ? ZALO.hoi.an : khop,
+		)
+		.replace(THU, ZALO.hoi.an);
 }
 
 function boBang(text: string): string {

@@ -29,6 +29,7 @@ export const ZALO = {
 		toiDaTin: 3,
 		an: "[đã ẩn]",
 		luoc: "…",
+		soChuSo: { min: 10, max: 15 },
 		tran: { phut: 3, ngay: 20, thang: 1_500 },
 		cuaSoPhutMs: MINUTE_MS,
 		hanTraLoiMs: 5 * MINUTE_MS,
