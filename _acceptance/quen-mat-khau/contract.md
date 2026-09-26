@@ -5,7 +5,7 @@ slug: quen-mat-khau
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-26-quen-mat-khau-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-26
@@ -76,3 +76,10 @@ Password Cheat Sheet]` và `[NGÀNH: NIST SP 800-63B Rev 4]`, cái sau vòng tr�
 - Vận hành: proxy của app và API phải dùng CÙNG `BETTER_AUTH_SECRET`; lệch thì chữ ký bị từ chối và bộ đếm lùi về một khoá chung cho mọi người. Ngày 26/09 cả hai dự án Vercel đều có biến này (Preview + Production), chưa ai so hai giá trị.
 - AC-15 thêm sau S4 round 2 (d-20, chủ kho chọn a): bản sửa round 2 đọc trọn thân yêu cầu trước better-auth, ngoài chỗ nó bắt lỗi, nên người gọi ngắt giữa chừng làm sập API. Lớp bọc nay chỉ sửa header địa chỉ trên yêu cầu gốc.
 - AC-9 sửa sau Cổng Phạm vi, chủ kho chọn hướng (b) ngày 26/09: PR #104 hứa ba lượt mỗi 15 phút, nhưng bộ dọn hàng đếm của better-auth 1.6.25 xoá mọi hàng cũ hơn 60 giây và không tính luật riêng, nên cửa sổ 15 phút không giữ được trên môi trường thật (đo bằng ca `sau-don`). Hạ về ba lượt mỗi 60 giây, đúng mức thư viện giữ. Xem lại khi better-auth tính luật riêng vào bộ dọn, hoặc khi có báo cáo bị dội thư.
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 (Ngoài-2, 2026-09-26): hằng đổi giây sang phút được khai lại ở `thu-mat-khau.ts` và trang `/quen-mat-khau` thay vì suy từ một gốc trong `PASSWORD`; người dùng không thấy khác, nhưng sửa thời hạn phải nhớ sửa nhiều chỗ.
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 (Ngoài-3, 2026-09-26): cấu hình thư đọc lại `process.env` mỗi lần hỏi thay vì chụp một lần vào `env` như các cặp khoá khác; hành vi AC-3 vẫn đúng.
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 (Ngoài-4, 2026-09-26): tự dựng máy chủ ngoài Vercel mà reverse proxy không ghi đè `X-Real-IP` thì người gọi tự đặt địa chỉ và né được giới hạn tần suất của quên mật khẩu lẫn đăng nhập. Trên Vercel an toàn vì nền tảng ghi đè.
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 (Ngoài-5, 2026-09-26): nếu bước dọn liên kết còn treo gặp lỗi CSDL sau khi mật khẩu mới đã lưu, better-auth bỏ qua bước huỷ phiên cũ — biến thể hiếm của giới hạn bánh phiên đã khai.
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 (Ngoài-9, 2026-09-26): ca lỗi mạng của E18 chỉ khẳng định có một thông báo lỗi, chưa khẳng định đó đúng là câu lỗi mạng chứ không phải câu quá lượt.
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 (Ngoài-10, 2026-09-26): ca chạy nền không có ngữ cảnh Vercel chỉ có vế «không ném» là đo thật; vế «việc vẫn chạy xong» không đỏ được.
+- Mở hợp đồng mới theo định đoạt Cổng 2 (2026-09-26): Ngoài-1 (tiêu đề trang xin liên kết tự vẽ, logo biến mất khi tải xong), Ngoài-7 (số phút trên màn chưa đo so với `PASSWORD`), Ngoài-8 (ca hết hạn thiếu đối chứng dương). Chấp nhận không sửa: Ngoài-6 (log lỗi gửi thư cố ý chỉ ghi mã).

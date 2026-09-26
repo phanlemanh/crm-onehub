@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: quen-mat-khau
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 29e5dbb57253028746d6941c7a332f4b8f66e41b
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-26
 ---
 
 # Evidence Report: quen-mat-khau
@@ -307,7 +307,7 @@ human_signoff:
     - domain-correctness: PASS (r2)
     - operational-feasibility: PASS (r2)
     - spec-alignment: PASS (r2)
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Phan Le Manh 2026-09-26
 
 ### Lệnh suite (hồi quy)
 
