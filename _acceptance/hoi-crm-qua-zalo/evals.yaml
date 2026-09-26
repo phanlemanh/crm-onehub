@@ -1,0 +1,312 @@
+schema_version: 1
+slug: hoi-crm-qua-zalo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_duong_chinh
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/agent/lib/thanh-vien-principal.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "apps/agent/test/support/eve-gia.ts"
+    expected: |
+      DB that, Zalo gia (thanWebhook khuon that), eve gia bat send/reset.
+      Gieo A noi ZA vai member. ZA nhan cau hoi qua nhanWebhook -> 200.
+      eveGia.send dai 1: auth toEqual {authenticator:"zalo", principalType:"user",
+      principalId:A.id, attributes:{purpose:"zalo", userId:A.id, zaloChatId:ZA, hoiId:<id hang>}};
+      continuationToken === "chat:"+ZA; text === cau hoi. sendChatAction toi ZA dem = 1.
+      zaloHoi.findMany({messageId}) dai 1, ketQua "dang-hoi", crmUserId A.id, zaloChatId ZA,
+      sessionId === id Session eve gia tra ve. O thu tu: eve gia send() chi resolve sau 3s -> response
+      webhook toi duoi 500ms (do bang performance.now) va hang dang-hoi da co truoc khi send resolve; sau do
+      eveGia.send dai 1. Chieu do: cai dat await hoi() truoc khi tra 200 -> qua 3s -> do ghim "200 truoc send".
+      Gieo AgentEvent bang cach goi hook hooks/audit.ts (writer that) voi 3 su kien step.completed khuon eve
+      cung sessionId, usage {inputTokens:100,outputTokens:20},{50,10},{null,null} — khong insert tay.
+      Goi events["message.completed"]({message:T}, {continuationToken:"chat:"+ZA, ...}).
+      sendMessage toi ZA dai 1, text === T. Doc lai hang: ketQua "da-tra-loi", traLoiLuc >= hoiLuc,
+      doTreMs === traLoiLuc - hoiLuc, tokenVao 150, tokenRa 30. eveGia.send van dai 1.
+      Chieu do (pha-thu S3): bo attributes.hoiId khoi auth -> do ghim "auth cua send";
+      doi ten khoa usage trong fixture su kien (input_tokens) -> tokenVao null -> do ghim "tokenVao 150"
+      (chung to test doc qua writer that, khong tu dung khuon).
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_cung_phien
+    paths:
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/lib/zalo-lenh.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "apps/agent/test/zalo-lenh.spec.ts"
+    expected: |
+      Sau AC-1 (da tra loi), ZA nhan cau 2: send dai 2, send[1].continuationToken === send[0].continuationToken;
+      zaloHoi cua A dem 2. ZA nhan "mới": reset dai 1 voi cung token; send van dai 2; sendMessage cuoi
+      === ZALO.loi.daMoi; zaloHoi van 2. "mới" khi chat con hang dang-hoi chua qua han: reset van dai 1
+      (khong tang), sendMessage cuoi === dangTraLoi, hang cu giu ketQua. docLenh ma tran: ["mới","Mới ","/new"] -> {lenh:"moi"};
+      "mới hỏi cái này" -> null. Chieu do: docLenh nhan "mới hỏi cái này" la moi -> do ghim "moi chi khi dung mot chu".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_tu_choi_vai
+    paths:
+      - "apps/agent/agent/lib/thanh-vien-principal.ts"
+      - "apps/agent/agent/channels/eve.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      Gieo B noi ZB role "okr"; C noi ZC roi db.member.delete hang cua C (ZaloLink giu).
+      ZB nhan cau hoi, ZC nhan cau hoi: send dai 0, sendChatAction dai 0; zaloHoi ketQua
+      "tu-choi-vai" cho moi nguoi, crmUserId dung; sendMessage text === ZALO.loi.hoiKhongQuyen (2 lan).
+      repFromCrm(secret) voi JWT sub=B -> null; sub=A -> principalId A.id; va channels/eve.ts import
+      thanhVienPrincipal (test doc nguon: chuoi "thanhVienPrincipal(" co trong channels/eve.ts va
+      trong lib/zalo-hoi.ts). Chieu do: zalo-hoi bo qua kiem vai -> ZB mo send -> do ghim "okr khong mo phien".
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_kenh_chi_okr
+    paths:
+      - "apps/agent/agent/channels/eve.ts"
+      - "apps/agent/test/kenh-chi-okr.spec.ts"
+    expected: "Spec da ky kenh-chi-okr.spec.ts chay xanh sau khi tach thanhVienPrincipal (khong hoi quy cong vai cua cau noi web)."
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_luat_cu
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      Nam o viet truoc, moi o mot tin: (a) Zalo chua noi hoi -> sendMessage huongDan; (b) ma 6 so con song
+      cua A -> ZaloLink co; (c) "xong 2" voi tin nhac hom nay (dung lenLichNhac+chayNhac that) -> buoc
+      completedAt; (d) Zalo bi chan hoi -> khong sendMessage; (e) tin is_bot / chat_type GROUP -> bo-qua.
+      O ca nam: eveGia.send dai 0 va zaloHoi dem 0. So o thuc chay = 5. Chieu do: zalo-nhan goi hoiTacTu
+      truoc chuanHoaMa -> o (b) co send -> do ghim "ma 6 so khong vao tac tu".
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.hcz_spec_da_ky
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+    expected: "Bon spec da ky (zalo-qua-webhook, noi-zalo-cho-nguoi-moi, zalo-webhook-doc-khuon-that, tra-loi-tin-nhac) chay xanh tren cay nay."
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_tran
+    paths:
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      TZ=Asia/Ho_Chi_Minh; dong ho gia (setSystemTime, afterEach reset). Ma tran viet truoc, dem o trong test:
+      (a) 4 cau trong 60s: send dai 3; hang thu 4 "tu-choi-tran-phut", sendMessage === hetTranPhut.
+      (b) gieo 19 hang da-tra-loi hom nay (gio VN) cua A bang chinh duong AC-1; cau 20 send; cau 21 (sau 61s)
+          "tu-choi-tran-ngay", text === hetTranNgay.
+      (c) dat dong ho 17:01Z (= 00:01 gio VN hom sau): cau ke send (dem lai theo ngay xuong). Doi chung:
+          dat 16:59Z (23:59 VN cung ngay) -> van tu choi.
+      (d) gieo 1.499 hang da-tra-loi trong thang xuong tu A va D (>=2 nguoi); cau 1.500 cua A send;
+          cau 1.501 "tu-choi-tran-thang", text === hetTranThang; dat dong ho ngay 1 thang sau 00:01 VN -> send.
+      Hang tu-choi-*, dang-ban, loi khong tinh: gieo 19 da-tra-loi + 5 tu-choi-tran-phut + 3 dang-ban + 2 loi
+      hom nay -> cau ke van send (dem 19 < 20); gieo them 1 gui-hong -> tu choi (dem 20).
+      Chieu do: dem ngay theo UTC -> o (c) do ghim "ngay xuong"; dem ca hang loi -> do ghim "loi khong tinh".
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_dang_ban
+    paths:
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/agent/channels/crm.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      Hai o: hang dang-hoi hoiLuc = now-30s va now-3phut: cau moi -> send dai 0, hang moi "dang-ban",
+      text === dangTraLoi (so o = 2). Hang dang-hoi hoiLuc = now - hanTraLoiMs - 1s: dongHoiQuaHan() (ham tick goi)
+      -> hang "loi", sendMessage tacTuLoi dem 1; goi lan 2 -> dem van 1; cau moi cua ZA -> send dai 1 (hang dang-hoi moi H2).
+      Roi goi events["message.completed"] voi token cua ZA mang text cua luot cu -> sendMessage dem khong tang,
+      hang cu van "loi", H2 van "dang-hoi", log co message_id cua hang cu.
+      Chieu do: dongHoiQuaHan khong doi ketQua -> lan 2 gui them -> do ghim "tacTuLoi mot lan"; o 3 phut coi la
+      het ban -> send dai 1 -> do ghim "dang ban toi han".
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_chi_doc
+    paths:
+      - "apps/agent/agent/tools/zalo-chi-doc.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/tools/set_field_value.ts"
+      - "apps/agent/test/zalo-chi-doc.spec.ts"
+    expected: |
+      ctx purpose "zalo": resolver session.started tra map; Object.keys(map).sort() toEqual
+      [...ZALO.hoi.congCu.ghi].sort(); va vong lap tron danh sach ghi: voi moi ten, import("../agent/tools/"+ten+".ts")
+      default la mot defineTool don (khong phai map, khong phai defineDynamic) — vi eve dat ten cong cu theo slug tep,
+      so assert = so phan tu; voi moi ten map[ten].execute(...) -> ok:false. map.set_field_value.execute({contactId, field, value}) -> {ok:false, reason}
+      va contact doc lai gia tri cu, activity dem khong doi. ctx purpose "builder" -> null; goi set_field_value
+      that -> gia tri doi. Banh coc: readdirSync(tools).map(bo .ts) sort toEqual [...doc, ...ghi].sort();
+      giao cua doc va ghi rong. Chieu do: tao tam tools/x_moi.ts trong ban sao -> do ghim ten "x_moi".
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.hcz_loc
+    paths:
+      - "apps/agent/agent/lib/zalo-loc.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/zalo-loc.spec.ts"
+    expected: |
+      Ma tran viet truoc (>=10 phai che: "0912 345 678", "0912.345.678", "0912345678", "+84 912 345 678",
+      "+84912345678", "(+84) 912-345-678", "a.b@congty.vn", "<a@b.com>", "A.B@Gmail.COM", "093 4567 890";
+      >=6 giu nguyen: "1.500.000", "2026", "TT-2026-001", "482913", "26/09/2026", "12%"). So phan tu = so assert.
+      Van ban 5.000 ky tu 12 doan -> <= ZALO.hoi.toiDaTin phan, moi phan.length <= ZALO.tranKyTu, moi phan ket
+      thuc o ranh doan, phan cuoi co "…" khi cat. Mot doan 2.500 ky tu khong xuong dong -> dung 2 phan, moi phan
+      <= tranKyTu, phan dau ket bang "…"; assert Math.max(...phan.map(p=>p.length)) <= tranKyTu tren MOI fixture.
+      Chieu do: bo nhanh +84 -> "+84912345678" khong che -> do ghim "+84"; bo nhanh cat cung -> phan 2.500 -> do ghim "khong vuot tran".
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_loc_kenh
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-loc.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      Duong AC-1 toi message.completed voi text chua "0912 345 678": sendMessage toi ZA khong chua chuoi do,
+      chua "[đã ẩn]". Text 5.000 ky tu -> sendMessage dem = ZALO.hoi.toiDaTin, moi text <= tranKyTu.
+      Tinh: khong tep nao trong apps/agent/agent/tools/ chua "appSetting" (doc thu muc that). Chieu do:
+      kenh gui data.message tho -> do ghim "[đã ẩn]".
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_cai_lenh
+    paths:
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/tools/zalo-chi-doc.ts"
+      - "apps/agent/agent/lib/zalo-loc.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      ZA (A member) nhan cau cai lenh: hang dang-hoi, send dai 1 text === nguyen van, auth principalId A.id.
+      Resolver voi ctx {purpose:"zalo", userId:A.id}: map.set_field_value va map.record_fact execute -> {ok:false};
+      deal dau tien doc lai stage khong doi, contact khong doi, activity dem khong doi.
+      message.completed voi text chua 2 so dien thoai -> sendMessage khong chua so nao.
+      Cung cau tu ZB (okr) -> send van dai 1 (khong tang), hang tu-choi-vai.
+      Chieu do: resolver tra null cho purpose zalo -> set_field_value that chay -> stage doi -> do ghim "stage khong doi".
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_loi
+    paths:
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      (a) eveGia.send nem Error("boom"): hang "loi", sendMessage tacTuLoi, log co message_id va "Error",
+      khong co cau hoi. (b) events["turn.failed"] cho token ZA: hang "loi", tacTuLoi dem 1.
+      (c) Zalo gia send:500 o message.completed: hang "gui-hong" (khong phai da-tra-loi), co traLoiLuc/doTreMs, log co message_id.
+      (f) message.completed roi turn.failed cho chat khong con hang dang-hoi: sendMessage dem 0, khong hang doi, log co zaloChatId.
+      (g) turn.failed roi session.failed cung token: tacTuLoi dem 1.
+      (d) mock $transaction nem o buoc ghi hang hoi: response 500, zaloUpdateSeen dem 0 cho tin.
+      (e) cung message_id 2 lan: zaloHoi dem 1, send dai 1. So o = 7. Chieu do: (e) bo skipDuplicates -> 2 hang -> do ghim "mot hang hoi".
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.hcz_khong_log
+    paths:
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      Chuoi danh dau X trong cau hoi, Y trong message.completed. Sau AC-1: SELECT tren cac bang ZaloHoi,
+      ZaloUpdateSeen, ZaloLink chuyen thanh JSON khong chua X/Y; bo bat console thu >= 1 dong cua luot va
+      khong dong nao chua X/Y. Chieu do: log them text -> do ghim "khong log noi dung".
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.hcz_chi_dan
+    paths:
+      - "apps/agent/agent/lib/zalo-chi-dan.ts"
+      - "apps/agent/agent/instructions/task.ts"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      task.ts session.started voi ctx purpose "zalo" -> markdown chua cac cum khai truoc: "tiếng Việt",
+      "không bảng", "chỉ đọc", "số điện thoại", "email", "nguyên văn", "AppSetting", "không có câu trả lời";
+      length < ZALO.tranKyTu; purpose "builder" -> markdown khong chua "AppSetting". Bay khoa ZALO.loi ton tai,
+      moi cau khong chua "\n", length < tranKyTu, co dau tieng Viet, khong chua "trợ lý" hay "thông báo".
+  - id: E12j
+    criterion: AC-12
+    executor: judgment
+    question: "Chỉ dẫn phiên Zalo và bảy câu trả lời mới có đọc tự nhiên với người Việt trong đội, đúng từ điển CONTEXT.md (bot không tự xưng trợ lý, không dùng «thông báo»), và có đủ ba thứ cấm của ranh giới A không?"
+    inputs:
+      - _acceptance/hoi-crm-qua-zalo/contract.md
+      - apps/agent/agent/lib/zalo-chi-dan.ts
+      - apps/agent/agent/lib/zalo-config.ts
+      - CONTEXT.md
+    evidence_required: [judged_by, verdict, rationale]
+  - id: E13
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.hcz_nguong
+    paths:
+      - "_acceptance/hoi-crm-qua-zalo/rang/nguong.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo-nguong.integration.spec.ts"
+    expected: |
+      Gieo bang duong AC-1/AC-3/AC-5/AC-10(c) (khong insert tay): 4 da-tra-loi (2 nguoi, tre 1/2/3/40s, token ghi),
+      1 tu-choi-vai, 1 tu-choi-tran-ngay, 1 gui-hong, 1 da-tra-loi cua nguoi E roi db.member.delete E, trong [D1,D2];
+      1 hang ngoai khoang. Chay script bang Bun.spawn, so stdout dung tung dong (toEqual tung dong, khong toContain):
+      "so_cau: 8", "so_nguoi: 3", "ti_le_tra_loi: 5/8", "gui_hong: 1", "do_tre_p50_s: <tinh tu 5 hang co doTre>",
+      "do_tre_p95_s: 40", "tu_choi: vai=1 tran-ngay=1", "nguoi_khong_quyen: 1", "token_vao: <tong>", "token_ra: <tong>".
+      Xoa hang cua E -> "nguoi_khong_quyen: 0" va "ti_le_tra_loi: 4/7". Chieu do: script dem ca hang ngoai khoang ->
+      "so_cau: 9" -> do; script dem gui-hong vao tu so -> "ti_le_tra_loi: 6/8" -> do.
+  - id: E14
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_telemetry
+    paths:
+      - "apps/api/src/telemetry/**"
+      - "packages/telemetry/src/allowlist.ts"
+      - "apps/api/test/telemetry-zalo-hoi.spec.ts"
+    expected: |
+      Gieo 5 hang ZaloHoi trong 24h (3 da-tra-loi tre 1/5/9s, 1 tu-choi-vai, 1 loi) + 2 hang cu 3 ngay.
+      Chay rollup voi client telemetry gia: event install_daily co zalo_questions toEqual
+      {"da-tra-loi":3,"tu-choi-vai":1,"loi":1}, zalo_answer_latency_median_s === 5; ALLOWED_PROPERTIES chua
+      hai khoa; JSON cua properties khong chua messageId/crmUserId/zaloChatId. Chieu do: bo khoa khoi allowlist ->
+      thuoc tinh bi rot -> do ghim "zalo_questions".
+  - id: E15
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.hcz_tai_lieu
+    paths:
+      - "docs/agent.md"
+      - "apps/agent/agent/skills/data-boundaries.md"
+      - "CONTEXT.md"
+      - "docs/plan/lo-trinh-zalo.md"
+      - "docs/telemetry.md"
+      - "_acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs"
+    expected: |
+      exit 0; stdout moi dong "ok: <kiem>" cho: agent.md luat 4 (chua "outside chat channel" va ba thu cam),
+      agent.md doan Zalo hoi (chua "ZaloHoi"), data-boundaries.md luat 4, CONTEXT.md Bot Zalo (chua "trợ lý AI"
+      va "quyền"), CONTEXT.md Trợ lý AI (chua "Zalo"), lo-trinh muc 7 dong 4 trang thai hop le va != "chờ điều kiện",
+      telemetry.md co zalo_questions; va "ok: merge-base khong co" khi cac chuoi do vang o git show <merge-base>:docs/agent.md
+      va CONTEXT.md. Chieu do: chay tren cay merge-base -> exit 1 ghim ten kiem dau tien do.
