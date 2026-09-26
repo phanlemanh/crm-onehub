@@ -13,7 +13,7 @@ import {
 	mucTieuUpdate,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
-import { LOAI_NGUON_MAY } from "@crm/validation/okr-nguon";
+import { LOAI_NGUON_MAY, okrNguonDong } from "@crm/validation/okr-nguon";
 import { HANH_DONG_VET, okrVetSnapshot } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import { OKR } from "./okr-config";
@@ -81,6 +81,9 @@ export const krOutput = z.object({
 			ngay,
 			nguon: z.enum(LOAI_NGUON_MAY),
 		})
+		.nullable(),
+	nguonMay: okrNguonDong
+		.extend({ docLuc: z.string().nullable(), docGiaTri: z.number().nullable() })
 		.nullable(),
 	startLocked: z.boolean(),
 	progress: z.number(),
