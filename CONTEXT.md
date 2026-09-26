@@ -426,6 +426,38 @@ Vì sao: tình trạng — đúng nhịp hay đang trượt — máy tính đư�
 vọng; mức tự tin là điều người biết mà số chưa cho thấy. Hai thứ đứng cạnh nhau
 trên màn, và lúc chúng lệch nhau là lúc đáng bàn. «Điểm» là của cuối kỳ.
 
+**Tình trạng (KR, mục tiêu)**: máy đọc từ số và vạch «lẽ ra đã tới» — **Đúng
+nhịp**, **Chậm nhịp**, **Trượt**; KR mốc là «Đã xong» hay «Mốc, chưa xong». Mục tiêu
+tham vọng không bao giờ «Trượt». Đứng cạnh mức tự tin, không thay nó. Chốt
+2026-09-26 (lượt 5 lộ trình OKR).
+_Avoid_: rủi ro, sức khoẻ (cho một KR), đèn giao thông, đỏ/vàng/xanh
+Vì sao: «sức khoẻ» đã là chữ của chương trình; màu không phải chữ — tình trạng luôn
+hiện bằng chấm kèm chữ.
+
+**KR im**: KR không có lần cập nhật tuần nào từ 14 ngày trở lên (tính từ lần cuối,
+hoặc từ ngày khởi điểm khoá nếu chưa có lần nào). Là lý do đáng bàn ở bảng họp tuần và
+một cột ở sức khoẻ chương trình. Chốt 2026-09-26.
+_Avoid_: KR chết, KR bỏ quên, KR trễ hạn
+Vì sao: «im» nói đúng điều máy biết — không ai ghi gì — mà không đoán KR có còn chạy.
+
+**Họp tuần**: buổi trưởng đơn vị cùng đơn vị đi qua OKR mỗi tuần. **Bảng họp tuần**
+là cách xem thứ ba của «Theo đơn vị», xếp KR theo thứ đáng bàn: tự tin tụt, KR im,
+ghi chú mới. Bảng xếp theo KR, không liệt kê người chưa cập nhật. Chốt 2026-09-26.
+_Avoid_: điểm danh, báo cáo tuần, giao ban
+Vì sao: «điểm danh» và «giao ban» đặt người vào giữa; họp tuần bàn KR.
+
+**Toàn cảnh**: tab của khu OKR cho mọi vai, kể cả «chỉ OKR» — tiến độ, mức tự tin và
+heatmap của mọi đơn vị trong một chu kỳ. Chốt 2026-09-24 ở bản mẫu, nhãn chốt
+2026-09-26.
+_Avoid_: dashboard, bảng điều khiển
+Vì sao: «Tổng quan» đã là tên trang chủ của CRM; hai màn cùng chữ thì người không biết
+mình đang đứng ở đâu.
+
+**Sức khoẻ chương trình**: màn của quản trị cho biết OKR đang chạy tốt tới đâu theo
+đơn vị — KR cập nhật đúng tuần, KR im, KR chưa có khởi điểm, người chưa nối kênh nhắc.
+Để biết nên kèm đơn vị nào, không để chấm người. Chốt 2026-09-26.
+_Avoid_: tuân thủ, KPI OKR, xếp hạng đơn vị
+
 **Chu kỳ**: khoảng thời gian một bộ OKR sống — năm, hoặc quý nằm trong năm. Có
 ngày đầu, ngày cuối và khoảng nghỉ như Tết. Quản trị chương trình mở và khoá chu
 kỳ. Trong khu OKR, «kỳ» trần là chữ ngắn của chu kỳ — «cuối kỳ», «rà giữa kỳ».

@@ -48,11 +48,19 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		await Promise.all([
 			queryClient.prefetchQuery(trpc.okr.countByUnit.queryOptions({ cycleId })),
 			queryClient.prefetchQuery(
-				trpc.okr.byUnit.queryOptions({ cycleId, unit }),
+				trpc.okr.danhSach.queryOptions({
+					cycleId,
+					unit,
+					loc: {
+						phuTrach: thamSo[SEARCH_PARAM.okr.phuTrach],
+						loai: thamSo[SEARCH_PARAM.okr.loai],
+						trangThai: thamSo[SEARCH_PARAM.okr.trangThai],
+					},
+				}),
 			),
 			thamSo[SEARCH_PARAM.okr.xem] === "cay"
 				? queryClient.prefetchQuery(
-						trpc.okr.alignmentTree.queryOptions({ cycleId }),
+						trpc.okr.cayCanChinh.queryOptions({ cycleId }),
 					)
 				: Promise.resolve(),
 		]);
