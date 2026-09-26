@@ -1,105 +1,137 @@
-# Review Findings: toan-canh-okr — Round 1
+# Review Findings: toan-canh-okr (round 2)
 
 ## Trong hợp đồng
 
-- **Toàn cảnh loads forever when the cycles query fails; its error branch can never run**
-  file:line: `apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:168`
+- **A confidence drop disappears from the weekly-meeting board once the KR is updated a second time in the same week**
+  file: `apps/api/src/okr/hop-tuan.ts:69`
   severity: high
-  AC: AC-5
-  If trpc.okr.cycles errors, cycles.data is undefined, so useChuKy's giaiKy returns currentId === null and the toanCanh query is given skipToken. In TanStack v5 a skipToken query stays at status 'pending' for good. Line 168 (`cycles.isPending || access.isPending || tc.isPending`) therefore always returns <DangTai/>, and the `cycles.isError || tc.isError` branch on line 169 is never reached. The user sees an endless spinner instead of the error card with its retry button. The server page also swallows the cycles failure (`fetchQuery(...).catch(() => null)`), so no error is reported anywhere. Fix: check `cycles.isError` before the pending check, or only include tc.isPending when currentId !== null.
+  AC: AC-7
+
+  `lyDoCua` compares the latest check-in with `kr.lan.at(-2)`, which is the previous check-in, not the previous week's last check-in. `guiCapNhat` (okr-cap-nhat.service.ts) inserts a new `okrCheckIn` row on every submission and has no one-per-week guard, so several check-ins in one week are normal. Example: last week the KR was Cao; on Monday the owner submits Vừa and the KR correctly shows as dropped (tụt). On Wednesday the owner or the head submits again with Vừa, for example to change only the value. Now `truoc` is Monday's Vừa, `bac` is 0, and the drop reason is gone. The KR falls out of «Đáng bàn» on the weekly board (`xepHopTuan`). It also no longer counts toward the row's «đáng bàn» sentence on Toàn cảnh (`soTuanCuaNhom.dangBan`). The same thing happens if the owner first submits Thấp by mistake and corrects it to Vừa: the Cao→Vừa drop is not shown. AC-7 asks for the drop compared with last week. The comparison should be against the latest check-in whose `tuan` is before the current week, e.g. `moiNhatDenTuan(kr, congTuan(tuan, -1))`.
+
+- **The unit tree can't be reached with Tab when the selected unit is not a tree node (one person's OKR page)**
+  file: `packages/ui/src/components/tree-nav.tsx:86`
+  severity: medium
+  AC: AC-3
+
+  `initialState.focusedItem` is set to `selectedId` without checking that the id exists in the tree. `CayDonVi` passes `selectedId={chon}`, which is `nguoi:<id>` when viewing one person (`donOkr=nguoi:…`), or an unknown `bp:`/`pb:` id in the `DonKhongThay` case. The tree has no node for these. In `@headless-tree/core` 1.7.0, `isFocused` is `focusedItem === itemId || (focusedItem === null && index === 0)`. With an unknown non-null `focusedItem`, no item is focused, so every treeitem gets `tabIndex=-1` and a keyboard user cannot Tab into the tree on these pages. AC-3 requires exactly one tree element in the Tab order. The fix is to fall back to `nodes[0]` when `selectedId` is not in the node index (`bang`).
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Khu OKR có thêm module cấu hình thứ hai (okr-xem.config.ts) bên cạnh okr-config.ts, lặp đơn vị thời gian và thông điệp**
-  Người dùng thấy gì: Thông điệp 'không có KR' có thể hiển thị khác câu chữ nhau giữa các màn OKR, và người chỉnh cấu hình sau này dễ sửa nhầm chỗ.
-  file: `apps/api/src/okr/okr-xem.config.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **moHopTuan đọc cột Json okrTrail.after bằng schema zod viết tại chỗ và nuốt lỗi phân tích, không dùng parseOkrVet sẵn có**
-  Người dùng thấy gì: Trong tình huống dữ liệu bị hỏng hiếm gặp, việc mở bảng họp tuần nhiều lần có thể bị đếm trùng, làm sai số liệu về tỷ lệ đơn vị đã mở bảng.
-  file: `apps/api/src/okr/okr-xem.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Các ô bảng mới tự viết lại padding của TableCell thay vì dùng hằng CELL đang có, và hop-tuan lệch sang py-3**
-  Người dùng thấy gì: Bảng họp tuần có khoảng cách dòng hơi khác so với các bảng OKR khác trên cùng khu, tạo cảm giác không đồng nhất khi lướt qua các màn.
-  file: `apps/app/app/(app)/[slug]/okr/hop-tuan.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Sức khoẻ hides query errors: an access error shows 'no permission', a cycles error shows 'no cycle yet'**
-  Người dùng thấy gì: Khi hệ thống gặp trục trặc tạm thời, quản trị viên có thể thấy nhầm thông báo 'không có quyền' còn người khác thấy nhầm 'chưa có chu kỳ' ở màn Sức khoẻ chương trình, thay vì một thông báo lỗi kèm nút thử lại đúng nghĩa.
-  file: `apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/suc-khoe.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Server prefetch of danhSach leaves out loc.tuTin, so it never matches the client's query key**
-  Người dùng thấy gì: Màn 'Theo đơn vị' có thể tải lại danh sách một lần nữa ngay sau khi vừa hiện, gây chớp giao diện và tốn thêm một lượt gọi máy chủ mỗi lần mở trang.
+- **The Theo đơn vị page preloads the list without the confidence filter, so the preloaded data is never used**
+  Người dùng thấy gì: Khi mở trang Theo đơn vị, người dùng có thể thấy một nhịp tải phụ trước khi danh sách hiện ra, dù dữ liệu cuối cùng hiển thị vẫn đúng.
   file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 3 (asserts a relation between two values that don't vary): E9's '5 units vs 50 units' query-count check never changes the number of units**
-  Người dùng thấy gì: Phép đo hiệu năng chứng minh '5 đơn vị hay 50 đơn vị đều nhanh như nhau' hiện chưa thực sự đổi số đơn vị giữa hai lần đo, nên nếu tốc độ chậm dần theo quy mô thật sự thì phép đo này sẽ không phát hiện ra.
-  file: `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
-  severity: high
-  Đề xuất: new-contract
+- **Second config module for the OKR area (okr-xem.config.ts) repeats time units and an error message**
+  Người dùng thấy gì: Thông báo báo lỗi khi không tìm thấy một chỉ số then chốt (KR) có thể hiện khác chữ tuỳ theo màn đang xem, dễ gây khó hiểu.
+  file: `apps/api/src/okr/okr-xem.config.ts`
+  severity: medium
+  Đề xuất: known-limits
 
-- **Shape 4 (negative assertion alone, passes vacuously): E29 'okr.toanCanh never called with the running cycle' uses every() on an array that can be empty**
-  Người dùng thấy gì: Phép kiểm 'màn Toàn cảnh không gọi lại dữ liệu chu kỳ đang chạy một cách thừa' có thể báo đạt ngay cả khi không có gì được kiểm tra, nên một lỗi gọi thừa dữ liệu thật sự có thể lọt qua mà không bị phát hiện.
+- **Types written by hand next to the schemas and enums they copy**
+  Người dùng thấy gì: Nếu sau này sản phẩm thêm một mức tự tin hay một nhịp mới, một vài nơi trên màn có thể không nhận ra giá trị mới đó và hiện trống, dù nơi khác trong hệ thống đã cập nhật đúng.
+  file: `apps/api/src/okr/hop-tuan.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **New OKR tables write their own cell padding instead of using the existing CELL constant, and weekly-meeting rows are taller**
+  Người dùng thấy gì: Bảng họp tuần có khoảng cách giữa các dòng hơi khác so với các bảng OKR khác trong cùng khu vực, có thể trông không đồng bộ khi đặt cạnh nhau.
+  file: `apps/app/app/(app)/[slug]/okr/hop-tuan.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Numbers someone may want to change are defined next to their first use, not in the area config**
+  Người dùng thấy gì: Không ảnh hưởng đến những gì người dùng thấy ngay bây giờ; chỉ khiến việc chỉnh vài con số hiển thị (như số tên đơn vị liệt kê trước khi rút gọn, hay chiều cao biểu đồ) sau này mất công tìm hơn.
+  file: `apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Server prefetch of danhSach leaves out loc.tuTin, so the prefetched data is never used by the client**
+  Người dùng thấy gì: Mỗi lần mở trang Theo đơn vị, danh sách có thể phải tải lại một lần nữa ở trình duyệt dù máy chủ đã từng tải trước, gây thêm một nhịp chờ ngắn.
+  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The owner filter shows a raw user id as the label for a selected person who has zero matches**
+  Người dùng thấy gì: Khi bộ lọc theo người phụ trách không còn ai khớp, ô chọn có thể hiện một mã nội bộ khó đọc thay vì tên người đó.
+  file: `apps/app/app/(app)/[slug]/okr/loc-okr.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **The «OKR của bạn» card disappears with no message when the cycles query fails**
+  Người dùng thấy gì: Nếu việc tải danh sách chu kỳ OKR gặp lỗi, khối «OKR của bạn» có thể biến mất khỏi màn hình mà không có thông báo hay cách thử lại.
+  file: `apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình, đúng trống rỗng): E29 với okr.toanCanh dùng every() trên tập có thể rỗng**
+  Người dùng thấy gì: Phép kiểm tự động cho màn Toàn cảnh có thể báo đạt ngay cả khi trang không thực sự gọi đúng dữ liệu chu kỳ, vì thiếu một phép đối chứng cho trường hợp có gọi thật.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
   severity: high
-  Đề xuất: new-contract
+  Đề xuất: known-limits
 
-- **Shape 5 (claims a full written-ahead matrix but asserts only part of it): E8(b) claims 7 rows × 6 columns = 42 values; the test asserts 36 plus one key, and the kyVong column comes from the system under test**
-  Người dùng thấy gì: Bảng số liệu đối chiếu cho màn tổng hợp hứa kiểm đủ mọi cột của mọi hàng nhưng trên thực tế bỏ sót một hàng và một cột khỏi phép so sánh, nên sai lệch ở đúng phần đó có thể không bị bắt.
+- **Hình dạng 4 (âm tính một mình): E5 ArrowLeft/ArrowRight chỉ kiểm tiêu điểm khác null**
+  Người dùng thấy gì: Phép kiểm phím mũi tên trái/phải trên cây điều hướng có thể báo đạt ngay cả khi phím không thực sự di chuyển tiêu điểm tới đúng chỗ.
+  file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên ma trận nhưng số assert ít hơn): E8 hứa 7 hàng × 6 trường = 42 và tongQuan.donViCongBo/tongDonVi, bài API chỉ kiểm 6 hàng**
+  Người dùng thấy gì: Số liệu của hàng gốc và hai chỉ số tổng quan (đơn vị đã công bố, tổng số đơn vị) trên màn Toàn cảnh chưa được phép kiểm tự động xác nhận qua đường thật, nên một sai sót ở đó có thể chưa bị phát hiện.
   file: `apps/api/test/okr-toan-canh.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 3 (asserts the string is present when the promise is a relation): E16(c)/E17 'Đích 85%' label inside the svg frame is measured only by the text being present**
-  Người dùng thấy gì: Phép kiểm nhãn 'Đích 85%' trên biểu đồ chỉ xem chữ có xuất hiện hay không, chứ chưa xem nhãn có nằm gọn trong khung biểu đồ hay bị cắt mất một phần, nên nhãn bị cắt vẫn có thể được coi là đạt.
+- **Hình dạng 3 (kiểm chuỗi có mặt thay cho quan hệ): nhãn đích của TargetLineChart chỉ kiểm có chữ, không kiểm nằm trong khung**
+  Người dùng thấy gì: Phép kiểm nhãn đích trên biểu đồ diễn biến chỉ xác nhận có chữ, không xác nhận chữ đó nằm gọn trong khung, nên một nhãn bị cắt vẫn có thể báo đạt.
   file: `packages/ui/test/target-line-chart.dom.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 3 (asserts presence when the promise is a relation): E5 ArrowLeft/ArrowRight only checks that some element has focus**
-  Người dùng thấy gì: Phép kiểm điều hướng bàn phím trên cây chỉ xem có ô nào đang được chọn hay không, chứ chưa xem đúng ô cần chọn có được chọn hay không, nên phím mũi tên đưa tiêu điểm sai chỗ vẫn có thể được coi là đạt.
-  file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Shape 4 (negative assertion alone with no positive control): E13(b) 'no list of people who haven't updated' is checked by a two-key regex with no control**
-  Người dùng thấy gì: Phép kiểm 'không liệt kê danh sách người chưa cập nhật' chỉ tìm đúng hai tên trường cụ thể, chưa có ví dụ chứng minh cách tìm này thực sự bắt được vi phạm, nên một cách đặt tên khác vẫn có thể lọt qua mà không bị phát hiện.
-  file: `apps/api/test/okr-toan-canh.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Shape 3 (asserts presence/count when the promise is equal values): E16(b) 'API okr.dienBien returns the same numbers' only asserts length 10**
-  Người dùng thấy gì: Phép kiểm 'số liệu diễn biến từ API khớp với số liệu gốc' chỉ đếm đủ mười điểm dữ liệu chứ chưa so từng giá trị, nên một điểm dữ liệu bị sai số hoặc mất thông tin đi kèm (mức tự tin, ghi chú) vẫn có thể được coi là đạt.
-  file: `apps/api/test/okr-toan-canh.spec.ts`
+- **Hình dạng 3 (kiểm có mặt thay cho quan hệ): Heatmap hứa scrollLeft > 0 khi khung hẹp, bài chỉ đọc chữ của cột data-current**
+  Người dùng thấy gì: Phép kiểm việc bảng nhiệt tự cuộn tới tuần hiện tại khi khung hẹp chưa thực sự xác nhận có cuộn, nên hành vi cuộn có thể hỏng mà chưa bị phát hiện.
+  file: `packages/ui/test/heatmap.dom.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 4 (negative assertion alone with no positive control): the soi-ma 'status label mapped outside messages' check has no red case**
-  Người dùng thấy gì: Phép kiểm 'chữ tình trạng không được viết cứng ngoài chỗ quy định' chưa có ví dụ chứng minh cách quét này thực sự bắt được vi phạm khi có chữ viết cứng chen vào giữa câu, nên trường hợp đó có thể lọt qua.
+- **Hình dạng 3 (đếm thay cho so giá trị): E16 (b) hứa API okr.dienBien «cùng số» với hàm thuần, bài chỉ kiểm độ dài 10**
+  Người dùng thấy gì: Phép kiểm dữ liệu Diễn biến qua đường thật chỉ đếm số điểm chứ chưa so từng giá trị, nên một sai lệch về giá trị, kỳ vọng hay mức tự tin có thể chưa bị phát hiện.
+  file: `apps/api/test/okr-toan-canh.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): hop-tuan-xep kiểm «không có khoá người» bằng regex hẹp, không đối chứng dương; API không được kiểm thứ tự**
+  Người dùng thấy gì: Phép kiểm 'không hiện danh sách người' trên bảng họp tuần dùng quy tắc dò hẹp và chưa có ca thử chứng minh nó bắt được lỗi, nên tên người vẫn có thể lọt ra màn dưới dạng khác mà chưa bị phát hiện.
+  file: `apps/api/test/okr-toan-canh.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên cả lớp nhưng chỉ một điểm): E3 hứa «sau mỗi đổi lọc có đúng một lời gọi okr.danhSach», script kiểm một lần đổi bằng some()**
+  Người dùng thấy gì: Phép kiểm 'mỗi lần đổi bộ lọc chỉ gọi máy chủ đúng một lần' chỉ xác nhận có ít nhất một lần gọi và bỏ sót trường hợp đổi lọc qua đường dẫn, nên việc gọi thừa hay thiếu có thể chưa bị phát hiện.
+  file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): soi-ma dò chữ tình trạng tự map không có chiều đỏ**
+  Người dùng thấy gì: Công cụ dò chữ trạng thái tự ghép cứng trên màn chưa có ca thử chứng minh nó hoạt động, nên hiện tại chưa chắc nó bắt được lỗi loại này nếu có.
   file: `_acceptance/toan-canh-okr/rang/soi-ma.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 4 (assertion passes vacuously when absent): E5 'Enter on the unit tree changes donOkr' passes when there is no focus key**
-  Người dùng thấy gì: Phép kiểm 'bấm Enter trên cây đơn vị đổi đơn vị đang chọn' có thể báo đạt ngay cả khi tiêu điểm bàn phím không rơi vào đâu cả, nên trường hợp phím không có tác dụng gì vẫn có thể được coi là đạt.
-  file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Shape 2 (hand-written fixture shaped for the reader): the danhSach mock in okr-theo-don-vi.dom has drifted from the real contract**
-  Người dùng thấy gì: Bộ dữ liệu giả lập dùng để kiểm màn 'Theo đơn vị' thiếu một trường lọc (mức tự tin) mà màn thật đã có, nên phép kiểm này không còn phản ánh đúng những gì máy chủ thật trả về.
+- **Hình dạng 2 (fixture viết tay theo khuôn bên đọc): mock okr.danhSach ở okr-theo-don-vi.dom thiếu trường bắt buộc và khoá gieo lệch khoá thật**
+  Người dùng thấy gì: Dữ liệu giả lập dùng để kiểm màn Theo đơn vị không khớp đúng hình dạng dữ liệu thật, nên bài kiểm có thể bỏ sót một số lỗi khi dữ liệu thật thay đổi.
   file: `apps/app/test/okr-theo-don-vi.dom.tsx`
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 2/16 lỗi rơi vào file không bộ đo nào phủ (apps/api/test/okr-toan-canh-hieu-nang.spec.ts, apps/app/test/okr-theo-don-vi.dom.tsx) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+- **Hình dạng 4 (assert không đo gì): hai phép so id luôn đúng**
+  Người dùng thấy gì: Hai phép so sánh trong bộ kiểm tra luôn cho kết quả đúng bất kể hệ thống hoạt động thế nào, nên chúng không thực sự bảo vệ chống lại lỗi ở phần đó.
+  file: `apps/api/test/okr-toan-canh.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
