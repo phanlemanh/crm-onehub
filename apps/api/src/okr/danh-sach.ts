@@ -1,3 +1,4 @@
+import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
 import {
 	LOAI_MUC_TIEU,
 	type LoaiMucTieu,
@@ -14,6 +15,7 @@ export type MucTieuGon = {
 	kind: LoaiMucTieu;
 	status: TrangThaiMucTieu;
 	krOwners: NguoiGon[];
+	tuTinKr: MucTuTin[];
 };
 
 type MatLoc = keyof LocDanhSach;
@@ -36,6 +38,12 @@ export function khopLoc(
 		bo !== "trangThai" &&
 		loc.trangThai.length > 0 &&
 		!loc.trangThai.includes(m.status)
+	)
+		return false;
+	if (
+		bo !== "tuTin" &&
+		loc.tuTin.length > 0 &&
+		!m.tuTinKr.some((t) => loc.tuTin.includes(t))
 	)
 		return false;
 	return true;
@@ -80,5 +88,11 @@ export function demMatLoc(
 			TRANG_THAI_MUC_TIEU,
 			(m) => m.status,
 		),
+		tuTin: MUC_TU_TIN.map((value) => ({
+			value,
+			count: ds
+				.filter((x) => khopLoc(x, loc, "tuTin"))
+				.filter((m) => m.tuTinKr.includes(value)).length,
+		})).filter((d) => d.count > 0),
 	};
 }

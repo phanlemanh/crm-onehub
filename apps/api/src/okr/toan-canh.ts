@@ -1,4 +1,12 @@
+import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import type { CapMucTieu } from "@crm/validation/okr-muc-tieu";
+import {
+	congTuan,
+	type KrSo,
+	moiNhat,
+	moiNhatDenTuan,
+	soTuanCuaNhom,
+} from "./hop-tuan";
 import type {
 	HangSucKhoe,
 	HangToanCanh,
@@ -19,13 +27,15 @@ export type MucTieuTinh = {
 	unitId: string | null;
 	progress: number;
 	expected: number | null;
-	soKr: number;
+	kr: KrSo[];
 };
 
 export type SoRieng = {
 	tongKr: number;
 	chuaKhoiDiem: number;
 	chuaNoiKenh: number;
+	dungTuan: number;
+	krIm: number;
 };
 
 export const khoaCuaMucTieu = (m: {
@@ -49,12 +59,16 @@ const trungBinh = (so: number[]): number | null =>
 		? null
 		: Math.round(so.reduce((a, b) => a + b, 0) / so.length);
 
+export type NhipKy = { tuanKy: string[]; homNay: Date };
+
 function hang(
 	key: string,
 	ten: string,
 	cap: HangToanCanh["cap"],
 	ds: MucTieuTinh[],
+	nhip: NhipKy,
 ): HangToanCanh {
+	const kr = ds.flatMap((m) => m.kr);
 	return {
 		key,
 		ten,
@@ -64,7 +78,8 @@ function hang(
 			ds.flatMap((m) => (m.expected === null ? [] : [m.expected])),
 		),
 		soMucTieu: ds.length,
-		soKr: ds.reduce((a, m) => a + m.soKr, 0),
+		soKr: kr.length,
+		...soTuanCuaNhom(kr, nhip.tuanKy, nhip.homNay),
 	};
 }
 
@@ -72,6 +87,7 @@ export function gopToanCanh(
 	cay: CayGon,
 	congBo: MucTieuTinh[],
 	tenGoc: string,
+	nhip: NhipKy,
 ): ToanCanhOutput {
 	const theoKhoa = new Map<string, MucTieuTinh[]>();
 	for (const m of congBo) {
@@ -80,25 +96,42 @@ export function gopToanCanh(
 		theoKhoa.set(k, [...(theoKhoa.get(k) ?? []), m]);
 	}
 	const cua = (k: string) => theoKhoa.get(k) ?? [];
-	const ra: HangToanCanh[] = [hang("goc", tenGoc, "goc", cua("goc"))];
+	const ra: HangToanCanh[] = [hang("goc", tenGoc, "goc", cua("goc"), nhip)];
 	const donVi: { ten: string; khoa: string }[] = [];
 	for (const b of cay.divisions) {
 		const conBp = b.departments.flatMap((p) => cua(`pb:${p.id}`));
 		ra.push(
-			hang(`bp:${b.id}`, b.name, "bo-phan", [...cua(`bp:${b.id}`), ...conBp]),
+			hang(
+				`bp:${b.id}`,
+				b.name,
+				"bo-phan",
+				[...cua(`bp:${b.id}`), ...conBp],
+				nhip,
+			),
 		);
 		donVi.push({ ten: b.name, khoa: `bp:${b.id}` });
 		for (const p of b.departments) {
-			ra.push(hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`)));
+			ra.push(
+				hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip),
+			);
 			donVi.push({ ten: p.name, khoa: `pb:${p.id}` });
 		}
 	}
 	for (const p of cay.chuaXep) {
-		ra.push(hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`)));
+		ra.push(hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip));
 		donVi.push({ ten: p.name, khoa: `pb:${p.id}` });
 	}
 	const cuaDonVi = congBo.filter((m) => khoaCuaMucTieu(m) !== null);
 	const daDat = donVi.filter((d) => cua(d.khoa).length > 0);
+	const tuanNay = dauTuanVN(nhip.homNay);
+	const tuanTruoc = congTuan(tuanNay, -1);
+	const moiKr = congBo.flatMap((m) => m.kr);
+	const coTrongTuan = (t: string) =>
+		moiKr.filter((k) => k.lan.some((l) => l.tuan === t)).length;
+	const thapDen = (t: string | null) =>
+		moiKr.filter(
+			(k) => (t === null ? moiNhat(k) : moiNhatDenTuan(k, t))?.tuTin === "thap",
+		).length;
 	return {
 		tongQuan: {
 			tienDo: trungBinh(cuaDonVi.map((m) => m.progress)),
@@ -110,17 +143,32 @@ export function gopToanCanh(
 			donViChuaDat: donVi
 				.filter((d) => cua(d.khoa).length === 0)
 				.map((d) => d.ten),
+			tongKr: moiKr.length,
+			daCapNhat: coTrongTuan(tuanNay),
+			daCapNhatTruoc: coTrongTuan(tuanTruoc),
+			tuTinThap: thapDen(null),
+			tuTinThapTruoc: thapDen(tuanTruoc),
 		},
+		tuan: nhip.tuanKy,
+		tuanNay,
 		hang: ra,
 	};
 }
 
-const KHONG: SoRieng = { tongKr: 0, chuaKhoiDiem: 0, chuaNoiKenh: 0 };
+export const KHONG: SoRieng = {
+	tongKr: 0,
+	chuaKhoiDiem: 0,
+	chuaNoiKenh: 0,
+	dungTuan: 0,
+	krIm: 0,
+};
 
-const cong = (a: SoRieng, b: SoRieng): SoRieng => ({
-	tongKr: a.tongKr + b.tongKr,
-	chuaKhoiDiem: a.chuaKhoiDiem + b.chuaKhoiDiem,
-	chuaNoiKenh: a.chuaNoiKenh + b.chuaNoiKenh,
+export const cong = (a: SoRieng, b: Partial<SoRieng>): SoRieng => ({
+	tongKr: a.tongKr + (b.tongKr ?? 0),
+	chuaKhoiDiem: a.chuaKhoiDiem + (b.chuaKhoiDiem ?? 0),
+	chuaNoiKenh: a.chuaNoiKenh + (b.chuaNoiKenh ?? 0),
+	dungTuan: a.dungTuan + (b.dungTuan ?? 0),
+	krIm: a.krIm + (b.krIm ?? 0),
 });
 
 export function gopSucKhoe(

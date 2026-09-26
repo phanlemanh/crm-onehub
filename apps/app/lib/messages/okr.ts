@@ -236,6 +236,7 @@ const vi = {
 		"theo-doi": "Theo dõi",
 		"bo-theo-doi": "Bỏ theo dõi",
 		"chuyen-viec": "Chuyển việc",
+		"mo-hop-tuan": "Mở bảng họp tuần",
 	},
 	vet: {
 		cot: {
@@ -758,6 +759,7 @@ const en: OkrMessages = {
 		"theo-doi": "Followed",
 		"bo-theo-doi": "Unfollowed",
 		"chuyen-viec": "Transferred work",
+		"mo-hop-tuan": "Opened the weekly meeting board",
 	},
 	vet: {
 		cot: {

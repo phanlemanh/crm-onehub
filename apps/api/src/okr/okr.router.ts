@@ -67,6 +67,13 @@ import {
 	cycleOnlyInput,
 	danhSachInput,
 	danhSachOutput,
+	dienBienInput,
+	dienBienOutput,
+	hopTuanInput,
+	hopTuanOutput,
+	khoiCuaToiInput,
+	khoiCuaToiOutput,
+	moHopTuanOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
 } from "./okr-xem.contracts";
@@ -383,6 +390,51 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.cayCanChinh(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: hopTuanInput,
+		output: hopTuanOutput,
+		meta: restMeta("GET", "/okr/weekly-meeting", TAG),
+	})
+	hopTuan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hopTuanInput>,
+	) {
+		return this.xem.hopTuan(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hopTuanInput,
+		output: moHopTuanOutput,
+		meta: restMeta("POST", "/okr/weekly-meeting/opened", TAG),
+	})
+	moHopTuan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hopTuanInput>,
+	) {
+		return this.xem.moHopTuan(ctx.user.id, input);
+	}
+
+	@Query({
+		input: dienBienInput,
+		output: dienBienOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/history", TAG),
+	})
+	dienBien(@Input() input: z.infer<typeof dienBienInput>) {
+		return this.xem.dienBien(input.keyResultId);
+	}
+
+	@Query({
+		input: khoiCuaToiInput,
+		output: khoiCuaToiOutput,
+		meta: restMeta("GET", "/okr/my-key-results", TAG),
+	})
+	khoiCuaToi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof khoiCuaToiInput>,
+	) {
+		return this.xem.khoiCuaToi(ctx.user.id, input);
 	}
 
 	@Query({
