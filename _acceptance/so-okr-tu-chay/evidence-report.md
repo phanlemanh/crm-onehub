@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 61d88e8110f45c58107e324340c0ec3029048a9e
+verified_commit: 59d074e41f91d143a73922d355b835ed5ad60990
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -395,3 +395,7 @@ Round 1: tất cả 24 eval máy (E1–E23, E25) PASS, không eval nào đỏ. E
 ### Re-pin lần 1 — 2026-09-26, do gộp onehub sau chữ ký (đổi tên OneHub Center, #161)
 run_id: repin-20260926T231020Z-22520
 sha: 61d88e8110f45c58107e324340c0ec3029048a9e · suites: 4 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · ngoài làn máy: E11, E13, E19, E24 (E24 không khai paths)
+
+### Re-pin lần 2 — 2026-09-26, do bài năng lực Sheets đỏ trên CI vì phụ thuộc khoá của máy chạy
+run_id: repin-20260926T234946Z-61722
+sha: 59d074e41f91d143a73922d355b835ed5ad60990 · suites: 4 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · ngoài làn máy: E11, E13, E19, E24 (E24 không khai paths)
