@@ -29,8 +29,6 @@ let phien: { user: { id: string } } | null = null;
 let nutDaVe: NutGhi[] = [];
 let chuyenToi: string[] = [];
 
-const TEN_HANG = { google: "Google", microsoft: "Microsoft" } as const;
-
 mock.module("@crm/auth/client", () => ({
 	signIn: { email: async () => ({ error: null }) },
 }));

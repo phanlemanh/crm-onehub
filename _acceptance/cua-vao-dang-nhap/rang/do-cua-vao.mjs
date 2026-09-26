@@ -35,14 +35,18 @@ const KHO = [
 const GIAO_DIEN = ["light", "dark"];
 const KHO_TAB = ["1440", "320"];
 const CA_HTML = [
-	["invalid_code", "invalid_code"],
-	["state_mismatch", "state_mismatch"],
-	["script", "<script>alert(1)</script>"],
-	["img", '"><img src=x onerror=alert(1)>'],
-	["dai", "x".repeat(2000)],
+	["invalid_code", () => "invalid_code"],
+	["state_mismatch", () => "state_mismatch"],
+	["script", () => "<script>alert(1)</script>"],
+	["img", () => '"><img src=x onerror=alert(1)>'],
+	["dai", () => "x".repeat(2000)],
 	[
 		"no-one-can",
-		quaCallback(rutCauHook().find((c) => c.ten === "chua-khai")?.cau ?? ""),
+		() => {
+			const cau = rutCauHook().find((c) => c.ten === "chua-khai")?.cau;
+			if (!cau) throw new Error("khong rut duoc cau chua-khai tu auth.ts");
+			return quaCallback(cau);
+		},
 	],
 ];
 
@@ -387,7 +391,8 @@ function thoatHtml(g) {
 }
 
 async function doHtml() {
-	for (const [ca, giaTri] of CA_HTML) {
+	for (const [ca, lay] of CA_HTML) {
+		const giaTri = lay();
 		const res = await fetch(
 			`${APP}/sign-in?${new URLSearchParams({ error: giaTri })}`,
 			{

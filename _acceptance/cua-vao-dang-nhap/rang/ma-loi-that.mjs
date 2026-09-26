@@ -9,31 +9,40 @@ const MIEN_THU = "onemount.com";
 
 const AUTH_TS =
 	process.env.CVDN_AUTH_TS ?? join(GOC, "packages/auth/src/auth.ts");
-const BETTER_AUTH =
-	process.env.CVDN_BETTER_AUTH_DIR ??
-	realpathSync(join(GOC, "packages/auth/node_modules/better-auth"));
-const SSO =
-	process.env.CVDN_SSO_DIR ??
-	realpathSync(join(GOC, "packages/auth/node_modules/@better-auth/sso"));
+const TEN_MOC = ["link-account", "oauth", "sso"];
 
-export const MOC = [
-	{
-		ten: "link-account",
-		tep: join(BETTER_AUTH, "dist/oauth2/link-account.mjs"),
-		chuoi: "error: e.message",
-	},
-	{
-		ten: "oauth",
-		tep: join(BETTER_AUTH, "dist/api/routes/callback.mjs"),
-		chuoi:
-			'redirectOnError(c, resolvedErrorURL, result.error.split(" ").join("_"))',
-	},
-	{
-		ten: "sso",
-		tep: join(SSO, "dist/index.mjs"),
-		chuoi: '{ error: result.error.split(" ").join("_") }',
-	},
-];
+function thuMuc(bien, duong) {
+	return process.env[bien] ?? realpathSync(join(GOC, duong));
+}
+
+export function layMoc() {
+	const betterAuth = thuMuc(
+		"CVDN_BETTER_AUTH_DIR",
+		"packages/auth/node_modules/better-auth",
+	);
+	const sso = thuMuc(
+		"CVDN_SSO_DIR",
+		"packages/auth/node_modules/@better-auth/sso",
+	);
+	return [
+		{
+			ten: "link-account",
+			tep: join(betterAuth, "dist/oauth2/link-account.mjs"),
+			chuoi: "error: e.message",
+		},
+		{
+			ten: "oauth",
+			tep: join(betterAuth, "dist/api/routes/callback.mjs"),
+			chuoi:
+				'redirectOnError(c, resolvedErrorURL, result.error.split(" ").join("_"))',
+		},
+		{
+			ten: "sso",
+			tep: join(sso, "dist/index.mjs"),
+			chuoi: '{ error: result.error.split(" ").join("_") }',
+		},
+	];
+}
 
 const KY_VONG = {
 	"co-mien": "chua-cho-phep",
@@ -43,7 +52,7 @@ const KY_VONG = {
 const WRITER = ["oauth", "sso"];
 
 export const MA_TRAN = [
-	...MOC.map((m) => `moc-${m.ten}`),
+	...TEN_MOC.map((m) => `moc-${m}`),
 	...WRITER.flatMap((w) => Object.keys(KY_VONG).map((c) => `${w}-${c}`)),
 ];
 
@@ -134,7 +143,16 @@ function chay() {
 	const dong = [];
 	const ghi = (ma, dat, chu) => dong.push({ ma, dat, chu });
 
-	for (const m of MOC) {
+	let moc = [];
+	try {
+		moc = layMoc();
+	} catch (loi) {
+		console.log(
+			`KHONG DO DUOC: khong tim thay goi better-auth (${loi.message})`,
+		);
+		process.exit(2);
+	}
+	for (const m of moc) {
 		let noiDung = "";
 		try {
 			noiDung = readFileSync(m.tep, "utf8");
