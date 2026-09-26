@@ -11,6 +11,21 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "kho-tai-lieu",
+		ten: "Kho tài liệu — người viết, máy soạn, người duyệt",
+		states: [
+			{ id: "ST-danh-sach", nhan: "Lượt 1 — Danh sách trang" },
+			{ id: "ST-doc-trang", nhan: "Lượt 1 — Đọc một trang" },
+			{ id: "ST-viet-trang", nhan: "Lượt 1 — Viết trang mới" },
+			{ id: "ST-kho-rong", nhan: "Lượt 1 — Kho còn trống" },
+			{ id: "ST-dang-tai", nhan: "Lượt 1 — Đang tải" },
+			{ id: "ST-tac-nhan-tra-loi", nhan: "Lượt 2 — Tác nhân trả lời theo kho" },
+			{ id: "ST-tai-nguon", nhan: "Lượt 3 — Tải nguồn lên" },
+			{ id: "ST-duyet-ban-may-soan", nhan: "Lượt 3 — Duyệt bản máy soạn" },
+			{ id: "ST-soat-dinh-ky", nhan: "Lượt 4 — Soát định kỳ" },
+		],
+	},
+	{
 		slug: "cua-vao-dang-nhap",
 		ten: "Cửa vào đăng nhập cho người mới",
 		states: [
