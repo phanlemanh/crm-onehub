@@ -4,10 +4,8 @@ feature: Số OKR tự chảy — KR của khối kinh doanh lấy số từ dan
 slug: so-okr-tu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T3
-surfaces: [api, ui, agent]
-status: approved
-approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
-approved_at: 2026-09-26T13:39:06Z
+surfaces: [api, ui]
+status: draft
 design_doc: docs/superpowers/specs/2026-09-26-so-okr-tu-chay-design.md
 ---
 
@@ -86,7 +84,7 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 ## Notes
 
 - Luật đã đọc: `AGENTS.md`, `docs/api.md` (tRPC, cầu REST, khoá API, OKR, phạm vi dữ liệu), `docs/agent.md` (hai làn, dispatch, nhắc buổi sáng, `capabilities`), `docs/currency.md`, `docs/telemetry.md` (lượt này không gửi sự kiện mới), `docs/design.md` (kể cả «Vẽ tay là bậc cuối»), `docs/connections.md`, `CONTEXT.md` (KR, Cập nhật tuần, Mức tự tin, Chốt, Giai đoạn thoả thuận, Ghi danh, Bậc, Chiến dịch); skill `web-design-guidelines` (khai ở `feature_loop.ui_standards_skill`); hồ sơ `dat-okr-trong-crm`, `cap-nhat-tuan-okr`, `toan-canh-okr`.
-- Hạng T3: chạm `packages/db/prisma` (hai bảng mới) và `apps/agent` (việc mới trên nhịp dispatch) — có Cổng 1.5.
+- Hạng T3: chạm `packages/db/prisma` (hai bảng mới) và `apps/agent` (việc mới trên nhịp dispatch) — có Cổng 1.5. Việc của tác tử khai trong bề mặt `api` (lớp máy chủ) vì kit chỉ đọc `api · cli · sdk · ui · mobile · docs · ci · config`.
 - Thứ tự: vòng «Nợ sau lượt 5 OKR» gộp trước; S3 bắt đầu sau khi gộp lại `origin/onehub`, `bun install`, `prisma generate`.
 - Hồ sơ đã ký có thể phải ghim lại: `vai-chi-okr` (danh sách thủ tục của ma trận), `cap-nhat-tuan-okr` (`guiCapNhat` thêm nhánh KR máy), `dat-okr-trong-crm` (hộp thoại KR thêm ô nguồn; `updateKeyResult`, `removeKeyResult` thêm từ chối), `khung-trang-cai-dat` hoặc hồ sơ giữ `copy-value.tsx` (chuyển vào `packages/ui`).
 - Nền hạ tầng (`duong-nen.md`): `build_khong_cache` đỏ vì `bash -lc` nhận Node 22 — làn S4 chạy với tiền tố PATH Node 24 như lượt 5; hai dòng «THIEU merge-base» là khoá của hồ sơ khác.
