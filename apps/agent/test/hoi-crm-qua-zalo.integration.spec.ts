@@ -14,6 +14,11 @@ import { resolve } from "node:path";
 import { db } from "@crm/db";
 import { ghiSai, taoMaLienKet } from "@crm/db/zalo-lien-ket";
 import { z } from "zod";
+import {
+	BRIDGE_AUDIENCE,
+	BRIDGE_ISSUER,
+	repFromCrm,
+} from "../agent/channels/eve";
 import { zaloEvents } from "../agent/channels/zalo";
 import audit from "../agent/hooks/audit";
 import taskInstructions from "../agent/instructions/task";
@@ -60,6 +65,44 @@ import { thanWebhook, yeuCauWebhook } from "./support/zalo-tin";
 
 const GOC_AGENT = resolve(import.meta.dir, "..");
 
+const BI_MAT_CAU_NOI = "hcz-bi-mat-cau-noi-du-dai-de-ky-jwt";
+
+async function kyCauNoi(sub: string): Promise<string> {
+	const now = Math.floor(Date.now() / 1000);
+	const ma = (v: object) =>
+		Buffer.from(JSON.stringify(v)).toString("base64url");
+	const vao = `${ma({ alg: "HS256", typ: "JWT" })}.${ma({
+		iss: BRIDGE_ISSUER,
+		aud: BRIDGE_AUDIENCE,
+		sub,
+		email: `${sub}@thu.test`,
+		name: sub,
+		iat: now,
+		nbf: now - 5,
+		exp: now + 120,
+	})}`;
+	const khoa = await crypto.subtle.importKey(
+		"raw",
+		new TextEncoder().encode(BI_MAT_CAU_NOI),
+		{ name: "HMAC", hash: "SHA-256" },
+		false,
+		["sign"],
+	);
+	const ky = await crypto.subtle.sign(
+		"HMAC",
+		khoa,
+		new TextEncoder().encode(vao),
+	);
+	return `${vao}.${Buffer.from(ky).toString("base64url")}`;
+}
+
+function yeuCauCauNoi(token: string): Request {
+	return new Request("https://agent.example.com/eve/v1/session", {
+		method: "POST",
+		headers: { authorization: `Bearer ${token}` },
+	});
+}
+
 beforeAll(async () => {
 	await moXuong();
 });
@@ -91,13 +134,28 @@ describe("tu-choi-vai", () => {
 		expect(await thanhVienPrincipal(C.id, "zalo")).toBeNull();
 	});
 
-	test("tu-choi-vai: cau noi web va kenh Zalo goi cung mot ham cong vai", () => {
-		const eve = readFileSync(
-			resolve(GOC_AGENT, "agent/channels/eve.ts"),
-			"utf8",
-		);
-		expect(eve).toContain("thanhVienPrincipal(");
-		expect(eve).not.toContain("laVaiChiOkr");
+	test("tu-choi-vai: khung chat web va Zalo cho cung ket qua voi tung vai", async () => {
+		const nguoi = [
+			{ ten: "kinh doanh", u: await gieoVai("Vkd", "member"), mo: true },
+			{ ten: "chi OKR", u: await gieoVai("Vokr", "okr"), mo: false },
+			{ ten: "mat member", u: await gieoVai("Vmat", "member"), mo: false },
+		];
+		const mat = nguoi[2];
+		if (!mat) throw new Error("thieu nguoi mat member");
+		await boThanhVien(mat.u.id);
+		const cong = repFromCrm(BI_MAT_CAU_NOI);
+		let dem = 0;
+		for (const [i, { ten, u, mo }] of nguoi.entries()) {
+			const web = await cong(yeuCauCauNoi(await kyCauNoi(u.id)));
+			expect(web === null ? null : web.principalId, `${ten} o web`).toBe(
+				mo ? u.id : null,
+			);
+			dem += 1;
+			const zalo = await hoi(`ZV${i}`, u.id, new Date());
+			expect(zalo.loai === "hoi", `${ten} o Zalo`).toBe(mo);
+			dem += 1;
+		}
+		expect(dem).toBe(6);
 	});
 });
 
