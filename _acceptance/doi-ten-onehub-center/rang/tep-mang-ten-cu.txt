@@ -1,3 +1,4 @@
+apps/agent/agent/lib/zalo-chi-dan.ts
 apps/agent/agent/lib/zalo-config.ts
 apps/api/src/backfill/backfill.service.ts
 apps/api/src/contacts/contacts.service.ts

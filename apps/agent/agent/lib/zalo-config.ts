@@ -41,7 +41,7 @@ export const ZALO = {
 		authenticator: "zalo",
 		purpose: "zalo",
 		tuChoiGhi:
-			"Not available on Zalo: this conversation is read-only. Answer from what the CRM already holds.",
+			"Not available on Zalo: this conversation is read-only. Answer from what OneHub Center already holds.",
 		congCu: {
 			doc: [
 				"list_deals",
@@ -113,17 +113,17 @@ export const ZALO = {
 		khongGiMoi: "Không có mục nào mới",
 		mocDaXongTruoc: " — đã xong từ trước: ",
 		hoiKhongQuyen:
-			"Tài khoản CRM của bạn không có quyền hỏi dữ liệu đối tác, nên tôi chưa trả lời được câu này.",
+			"Tài khoản của bạn trong OneHub Center không có quyền hỏi dữ liệu đối tác, nên tôi chưa trả lời được câu này.",
 		hetTranPhut: "Chờ một chút rồi hỏi tiếp.",
 		hetTranNgay: (n: number) =>
-			`Hôm nay bạn đã hỏi ${n} câu qua Zalo. Mở CRM để hỏi tiếp; mai hỏi lại ở đây.`,
-		hetTranThang: "Kênh hỏi qua Zalo tháng này đã hết lượt. Mở CRM để hỏi.",
+			`Hôm nay bạn đã hỏi ${n} câu qua Zalo. Mở OneHub Center để hỏi tiếp; mai hỏi lại ở đây.`,
+		hetTranThang: "Kênh hỏi qua Zalo tháng này đã hết lượt. Mở OneHub Center để hỏi.",
 		dangTraLoi:
 			"Tôi đang trả lời câu trước của bạn, gửi câu mới sau khi nhận được nhé.",
 		tacTuLoi:
-			"Tôi chưa trả lời được câu này. Thử lại sau ít phút, hoặc hỏi trong CRM.",
+			"Tôi chưa trả lời được câu này. Thử lại sau ít phút, hoặc hỏi trong OneHub Center.",
 		daMoi: "Đã bắt đầu cuộc trò chuyện mới.",
 		canHoiLai:
-			"Câu này tôi cần hỏi lại mới trả lời được, mà qua Zalo thì chưa hỏi lại được. Hỏi lại rõ hơn ở đây, hoặc hỏi trong CRM.",
+			"Câu này tôi cần hỏi lại mới trả lời được, mà qua Zalo thì chưa hỏi lại được. Hỏi lại rõ hơn ở đây, hoặc hỏi trong OneHub Center.",
 	},
 } as const;
