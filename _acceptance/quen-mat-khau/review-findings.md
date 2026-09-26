@@ -1,75 +1,75 @@
 ## Trong hợp đồng
 
-### The 3-per-minute limit on /request-password-reset is shared by every user, not applied per client
-AC: AC-9
-file: `packages/auth/src/auth.ts:124`
-severity: medium
-source: bugs
-detail: The new customRules entry limits /request-password-reset to PASSWORD.requestMax=3 requests per requestWindowSeconds=60. better-auth keys that counter as `${getIp(req)}|${path}`. The browser never calls the API directly: packages/auth/src/client.ts sets `baseURL: globalThis.window?.location.origin`, so the request goes through the Next proxy at apps/app/app/api/[...path]/route.ts. That proxy explicitly deletes `x-forwarded-for` (line 16) and `forwarded` before it fetches API_URL. Nothing in packages/auth or apps/api sets `advanced.ipAddress.ipAddressHeaders` or `trustedProxies`, and grep finds no other IP header being passed along.
-
-What the API sees in production depends on where it runs. In the core `getIp` (@better-auth/core/dist/utils/ip.mjs), a missing header resolves to null outside dev/test, so the key is the shared `no-trusted-ip|/request-password-reset`. If the API sits behind Vercel, the address is the egress IP of the Next function, which is also shared.
-
-The result is one bucket for the whole install. After any 3 forgot-password requests in a minute, from anyone and for any address, every other user gets 429 and the message "Bạn đã xin quá nhiều lần" even though they never asked. A single anonymous script can keep forgot-password blocked for all users indefinitely.
-
-The qua-luot integration test does not catch this. It calls `auth.handler` directly with a distinct `x-forwarded-for` per test, which skips the proxy. chup.mjs does not catch it either, because in dev `getIp` falls back to 127.0.0.1 for everyone. Possible fixes: have the proxy forward the client IP in a header the API trusts, and configure `advanced.ipAddress` to read it; or key this rule on something that does not collapse to one value.
-rationale (vì sao thuộc AC-9): AC-9 hứa giới hạn 3 lần/60 giây tính theo "cùng một nơi gửi"; nếu bộ đệm proxy xoá header IP khiến mọi người dùng rơi vào cùng một khoá đếm, thì những nơi gửi khác nhau chặn lẫn nhau — đúng cơ chế mà AC-9 mô tả bị hỏng, không phải giới hạn theo địa chỉ nhận (mục đã loại trong Out of scope).
+(không có — không finding nào map được vào một AC trong hợp đồng round này)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **A feature-folder Heading is copied into a second area instead of being moved to packages/ui**
-  Người dùng thấy gì: Trên điện thoại, trong lúc trang đang tải người dùng có thể thấy logo hiện ra rồi biến mất trước khi form xin liên kết hiện lên, gây cảm giác giật hình nhẹ.
-  file: `apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx`
-  severity: medium
-  Đề xuất: known-limits
+- **xuLyXacThuc buffers every auth POST body before routing and before the rate limit, with no size cap**
+    Người dùng thấy gì: Một yêu cầu rất lớn gửi tới cửa đăng nhập hoặc quên mật khẩu có thể khiến máy chủ dùng hết bộ nhớ, làm chậm hoặc treo dịch vụ cho mọi người dùng khác.
+    file: `packages/auth/src/auth.ts`
+    severity: medium
+    Đề xuất: new-contract
 
-- **The minute unit is written twice in packages/auth and the TTL-to-minutes step is repeated in three places**
-  Người dùng thấy gì: Nếu sau này có người chỉnh thời hạn hiệu lực của liên kết, số phút hiển thị ở các màn khác nhau (thư và trang web) có nguy cơ không khớp nhau vì mỗi nơi tự tính riêng.
-  file: `packages/auth/src/thu-mat-khau.ts`
-  severity: low
-  Đề xuất: known-limits
+- **The forgot-password form copies the Heading component from dat-mat-khau-form instead of moving it into packages/ui**
+    Người dùng thấy gì: Trên điện thoại, biểu tượng công ty có thể hiện lên rồi biến mất trong chớp mắt khi màn xin liên kết vừa tải xong.
+    file: `apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx`
+    severity: low
+    Đề xuất: known-limits
 
-- **Mail credentials break env.ts's snapshot pattern: validated at load, then re-parsed (and able to throw) on every call**
-  Người dùng thấy gì: Nếu cấu hình gửi thư trên máy chủ bị đổi giữa lúc đang chạy (trường hợp hiếm), trang đăng nhập có thể báo lỗi tạm thời thay vì chỉ lặng lẽ ẩn nút quên mật khẩu.
-  file: `packages/auth/src/env.ts`
-  severity: low
-  Đề xuất: known-limits
+- **The seconds-per-minute unit is redefined in three new places instead of derived from one base**
+    Người dùng thấy gì: Nếu sau này có người chỉnh thời hạn của liên kết đặt lại mật khẩu, một chỗ hiển thị số phút có thể bị quên sửa, khiến email và màn hình nói khác số phút nhau.
+    file: `packages/auth/src/thu-mat-khau.ts`
+    severity: low
+    Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): E10 'chìa 2 bị từ chối' đỗ xanh suông khi thư thứ hai không tồn tại**
-  Người dùng thấy gì: Không ảnh hưởng người dùng ngay bây giờ, nhưng nếu sau này lời hứa "dùng lại liên kết cũ đều bị từ chối" có lỗi thật, bộ kiểm tra tự động hiện tại có thể không phát hiện ra.
-  file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
-  severity: high
-  Đề xuất: known-limits
+- **A client that drops the connection mid-body on a POST to /api/auth/* now crashes the API process**
+    Người dùng thấy gì: Nếu một người dùng đóng trình duyệt đúng lúc đang gửi yêu cầu đăng nhập hoặc quên mật khẩu, toàn bộ hệ thống có thể sập, khiến mọi người khác cũng không dùng được cho tới khi khởi động lại.
+    file: `packages/auth/src/auth.ts`
+    severity: high
+    Đề xuất: new-contract
 
-- **Hình dạng 3 (chuỗi có mặt thay cho quan hệ): số phút trên màn không được nối với PASSWORD.* ở bất kỳ phép đo nào**
-  Người dùng thấy gì: Số phút hiển thị trên màn "Kiểm tra hộp thư" và câu quá lượt hiện chưa được máy tự động xác nhận là khớp với cấu hình thật; nếu có sai lệch, người dùng có thể thấy số phút chờ không đúng mà chưa chắc bị phát hiện sớm.
-  file: `_acceptance/quen-mat-khau/rang/chup.mjs`
-  severity: high
-  Đề xuất: known-limits
+- **A POST with Content-Type application/json and an empty body now gets 400 instead of being accepted**
+    Người dùng thấy gì: Một vài công cụ kỹ thuật gọi thẳng vào máy chủ theo cách bất thường có thể nhận lỗi thay vì được xử lý; người dùng bình thường qua màn hình không bị ảnh hưởng.
+    file: `packages/auth/src/auth.ts`
+    severity: low
+    Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): ca sau-don của E12 không có đối chứng rằng bộ dọn hàng đếm thật sự đã chạy**
-  Người dùng thấy gì: Không ảnh hưởng người dùng ngay bây giờ, nhưng nếu cơ chế cho phép xin lại sau 60 giây có lỗi thật trong tương lai, bộ kiểm tra hiện tại có thể không phát hiện ra.
-  file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
+- **Hình dạng 3 (assert chuỗi có mặt trong khi lời hứa là quan hệ): số phút ở màn quá lượt và màn «Kiểm tra hộp thư» không được đo so với PASSWORD ở bất kỳ đâu**
+    Người dùng thấy gì: Nếu sau này ai đó vô tình đổi sai số phút chờ hiển thị ở màn quá lượt hoặc màn 'Kiểm tra hộp thư', hệ thống đo tự động có thể không phát hiện, và người dùng sẽ thấy số phút sai.
+    file: `_acceptance/quen-mat-khau/rang/chup.mjs`
+    severity: high
+    Đề xuất: new-contract
 
-- **Hình dạng 4 (âm tính một mình): E21 đếm 0 liên kết mà không kiểm màn đăng nhập đã vẽ xong**
-  Người dùng thấy gì: Phép kiểm tra ẩn nút "Quên mật khẩu?" hiện có thể báo đạt ngay cả khi màn đăng nhập bị lỗi trắng, nên một lỗi hiển thị màn đăng nhập có thể không bị phát hiện sớm.
-  file: `_acceptance/quen-mat-khau/rang/chup.mjs`
-  severity: medium
-  Đề xuất: known-limits
+- **Hình dạng 3 (có mặt thay cho quan hệ): «mật khẩu vừa đặt không đổi» được đo bằng đăng nhập với chính mật khẩu mà mọi lần đặt lại đều gửi**
+    Người dùng thấy gì: Nếu một lỗi khiến mật khẩu bị ghi đè sai khi ai đó dùng lại liên kết cũ, hệ thống đo tự động có thể không phát hiện ra, và người dùng có thể không biết mật khẩu nào đang thật sự có hiệu lực.
+    file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
+    severity: medium
+    Đề xuất: new-contract
 
-- **Hình dạng 4 (âm tính một mình): E11 dùng 'đăng nhập bằng mật khẩu mới thất bại' qua catch-all thay cho 'mật khẩu cũ vẫn dùng được'**
-  Người dùng thấy gì: Không ảnh hưởng người dùng ngay bây giờ, nhưng nếu lời hứa "mật khẩu cũ vẫn dùng được khi liên kết bị từ chối" có lỗi thật, bộ kiểm tra hiện tại có thể không phát hiện ra.
-  file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
+- **Hình dạng 5 (tuyên quét lớp nhưng chỉ có điểm-case): AC-14 hứa cơ chế địa chỉ đã ký áp cho cả luật chống dò mật khẩu ở màn đăng nhập, nhưng chỉ /request-password-reset được đo**
+    Người dùng thấy gì: Nếu giới hạn chống dò mật khẩu ở màn đăng nhập bị lỗi hoặc bị gỡ nhầm sau này, hệ thống đo tự động sẽ không phát hiện, để lộ khe hở cho kẻ xấu dò mật khẩu hàng loạt.
+    file: `_acceptance/quen-mat-khau/evals.yaml`
+    severity: medium
+    Đề xuất: new-contract
 
-- **Hình dạng 3 (chuỗi có mặt thay cho quan hệ): E15 kiểm '[auth]' và '422' trên hai dòng log bất kỳ, không cùng một dòng**
-  Người dùng thấy gì: Nếu có sự cố gửi thư thật, dòng log ghi lại có thể không đủ rõ để tra cứu nhanh, dù bộ kiểm tra tự động vẫn báo đạt.
-  file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
-  severity: low
-  Đề xuất: known-limits
+- **Hình dạng 2 (đầu vào viết tay thay vì đi qua bên đọc thật): ca «thiếu BETTER_AUTH_SECRET thì không ném» đưa thẳng undefined vào tham số, không đi qua khoaXacThuc() hay process.env**
+    Người dùng thấy gì: Nếu môi trường quên khai khoá bí mật, trang có thể báo lỗi hoặc gián đoạn thay vì tiếp tục chạy như đã dự tính, mà hệ thống đo tự động sẽ không phát hiện ra trước khi phát hành.
+    file: `apps/app/test/api-proxy-headers.spec.ts`
+    severity: medium
+    Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): «quá hạn thì mật khẩu không đổi» chỉ đo bằng dangNhapDuoc(...) === false qua hàm nuốt mọi lỗi, và trong ca không có đối chứng dương**
+    Người dùng thấy gì: Nếu một lỗi khiến hệ thống vẫn chấp nhận đổi mật khẩu bằng liên kết đã hết hạn, hệ thống đo tự động có thể không phát hiện ra.
+    file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
+    severity: low
+    Đề xuất: new-contract
+
+- **Hình dạng 4 (âm tính một mình): ca không có context Vercel chỉ có not.toThrow; vế «việc vẫn chạy xong» chờ chính promise của test nên không thể đỏ**
+    Người dùng thấy gì: Nếu việc gửi thư báo chạy nền bị lỗi âm thầm trên môi trường thật, hệ thống đo tự động sẽ không phát hiện ra trước khi phát hành.
+    file: `packages/auth/test/chay-nen.spec.ts`
+    severity: low
+    Đề xuất: new-contract
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

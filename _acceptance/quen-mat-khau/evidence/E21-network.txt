@@ -1,0 +1,2 @@
+Driver: rang/chup.mjs (puppeteer-core headless Chrome, driven via Bash + shell script), khong phai browser tool co read_network_requests/read_console_messages.
+=> networkObserved = "n-a (driver)": khong co duong doc network/console qua MCP browser tool trong luot chay nay.
