@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6dbdf38ae4c777539b9efcb5e7936108da031e8f
+verified_commit: 61d88e8110f45c58107e324340c0ec3029048a9e
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -391,3 +391,7 @@ none — every multi-run eval is uniform (không eval nào mang `runs` > 1 ở v
 ## Iterations
 
 Round 1: tất cả 24 eval máy (E1–E23, E25) PASS, không eval nào đỏ. E24 (judgment, AC-14 — đúng kiến trúc apps/agent/apps/api, parse-ở-biên bằng Zod, xuất xứ component packages/ui) UNCERTAIN ở cả ba lens vì input chỉ có design doc/contract, thiếu diff và file mã thật để đối chiếu — chờ người tự đọc mã và quyết ở Cổng Bằng chứng. Verdict tổng: PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-09-26, do gộp onehub sau chữ ký (đổi tên OneHub Center, #161)
+run_id: repin-20260926T231020Z-22520
+sha: 61d88e8110f45c58107e324340c0ec3029048a9e · suites: 4 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · ngoài làn máy: E11, E13, E19, E24 (E24 không khai paths)
