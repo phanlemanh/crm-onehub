@@ -5,7 +5,9 @@ slug: so-okr-tu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, agent]
-status: draft
+status: approved
+approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
+approved_at: 2026-09-26T13:39:06Z
 design_doc: docs/superpowers/specs/2026-09-26-so-okr-tu-chay-design.md
 ---
 
