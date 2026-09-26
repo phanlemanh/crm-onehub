@@ -95,9 +95,9 @@ evals:
   - id: E13
     criterion: AC-9
     executor: judgment
-    question: "Tep va co chi doi hai nhanh skip cua evaluateRateLimit va lan dong dau updatedAt cuoi cua claimUsageInDatabase, ca hai chi khi co tuy chon lastRequestUpdateIntervalMs, ma khong doi cach dem cua nhanh rate-limit bat, khong cham consumeRemaining hay secondary-storage, va khong them chu thich nao khong? Nguong co nam o module hang so packages/auth/src/api-keys.ts khong?"
-    inputs: [patches/@better-auth%2Fapi-key@1.6.25.patch, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md]
-    expected: "Ban va chi doi hai nhanh skip cua evaluateRateLimit va lan dong dau cuoi cua claimUsageInDatabase, ca hai co dieu kien tuy chon; khong cham nhanh rate-limit bat, consumeRemaining, secondary-storage; khong them chu thich; nguong o module hang so cua packages/auth"
+    question: "Tren cau hinh cua kho (luu khoa bang CSDL, khong co secondaryStorage), tep va co chi doi hai viec va chi khi co tuy chon lastRequestUpdateIntervalMs khong: hai nhanh skip cua evaluateRateLimit bo ghi lastRequest con trong nguong, va claimUsageInDatabase bo lan dong dau updatedAt? Co khong doi cach dem cua nhanh rate-limit bat, khong cham consumeRemaining, khong them chu thich khong? Design doc va AC-9 co noi ro duong secondary-storage bi cham nhung kho khong dung khong? Nguong co nam o packages/auth/src/api-keys.ts khong?"
+    inputs: [patches/@better-auth%2Fapi-key@1.6.25.patch, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md, _acceptance/khoa-api-ghi-thua/contract.md]
+    expected: "Tren cau hinh cua kho ban va chi doi hai viec co dieu kien tuy chon; khong doi cach dem rate-limit bat, khong cham consumeRemaining, khong chu thich; duong secondary-storage bi cham duoc khai ro va AC-11 giu dieu kien kho khong dung no; nguong o module hang so"
     evidence_required: [judged_by, verdict, rationale]
 
   - id: E14
@@ -107,3 +107,11 @@ evals:
     inputs: [docs/api.md]
     expected: "Muc ve ban va khoa-api-ghi-thua trong docs/api.md tra loi duoc hai cau co/khong: (1) co neu dieu kien go ban va gan voi better-auth#10921 khong; (2) co chi dan phai lam lai ban va khi nang @better-auth/api-key khong. Ca hai co thi dat"
     evidence_required: [judged_by, verdict, rationale]
+
+  - id: E15
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.kagt_khong_secondary_storage
+    expected: "exit 0; ca 'khong-secondary-storage' pass hai chieu cung ham: cau hinh auth that cua kho khong co secondaryStorage (xanh); cung ham voi mot cau hinh co secondaryStorage nem loi thong diep ghim 'kho đã bật secondaryStorage — bản vá khoa-api-ghi-thua đổi cả đường secondary-storage, xem lại AC-9'"
+    paths: [packages/auth/src/auth.ts, apps/api/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

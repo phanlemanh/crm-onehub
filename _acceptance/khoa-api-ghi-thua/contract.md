@@ -5,9 +5,9 @@ slug: khoa-api-ghi-thua
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-09-26
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md
 ---
 
@@ -34,9 +34,10 @@ Source input: prompt
 - AC-6: Given `package.json` gốc và gói `@better-auth/api-key` đã cài, When chạy phép chống trôi, Then `patchedDependencies` có đúng một khoá `@better-auth/api-key@<phiên bản đã cài>`, tệp vá nó trỏ tới tồn tại, `bun.lock` ghi cùng khoá, và `dist/index.mjs` của gói đã cài (nơi cả bản build Vercel lẫn bản chạy thử lấy mã) có tuỳ chọn `lastRequestUpdateIntervalMs`; cùng hàm so với một phiên bản lệch thì đỏ với thông điệp ghim `nâng @better-auth/api-key mà chưa làm lại bản vá khoa-api-ghi-thua`.
 - AC-7: Given `docs/api.md`, When đọc mục về khoá API, Then có một đoạn nêu `patchedDependencies`, `lastRequestUpdateIntervalMs`, điều kiện gỡ gắn với better-auth#10921, và việc phải làm lại bản vá khi nâng thư viện.
 - AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run test`), kiểm kiểu, lint, lint:slop và build không dùng bộ nhớ đệm, Then cả năm thoát 0.
-- AC-9: Given tệp vá, mã cấu hình ở `packages/auth` và design doc, When người đọc soi, Then `evaluateRateLimit` chỉ đổi hai nhánh `skip` và chỉ khi có tuỳ chọn; `claimUsageInDatabase` bỏ lần đóng dấu `updatedAt` mỗi khi có tuỳ chọn, bất kể rate-limit bật hay tắt; bản vá không đổi cách đếm của nhánh rate-limit bật, không chạm `consumeRemaining` hay secondary-storage; và không thêm chú thích vào mã. (judgment)
+- AC-9: Given tệp vá, mã cấu hình ở `packages/auth` và design doc, When người đọc soi, Then trên cấu hình của kho (lưu khoá bằng CSDL, không có `secondaryStorage`) bản vá chỉ đổi hai việc và chỉ khi có tuỳ chọn: hai nhánh `skip` của `evaluateRateLimit` bỏ ghi `lastRequest` còn trong ngưỡng, và `claimUsageInDatabase` bỏ lần đóng dấu `updatedAt`; không đổi cách đếm của nhánh rate-limit bật, không chạm `consumeRemaining`, không thêm chú thích vào mã; đường secondary-storage có bị chạm (tuỳ chọn cũng áp lên nó) nhưng kho không dùng, và AC-11 giữ điều kiện đó bằng máy. (judgment)
 - AC-10: Given mục mới về bản vá trong `docs/api.md`, When người đọc chỉ đọc mục đó, Then trả lời được hai câu: khi nào gỡ bản vá, và phải làm gì khi nâng `@better-auth/api-key`. (judgment)
 
+- AC-11: Given cấu hình `auth` thật của kho (`@crm/auth`), When chạy phép kiểm cấu hình lưu, Then `auth.options.secondaryStorage` không được đặt; cùng hàm kiểm với một cấu hình có `secondaryStorage` thì đỏ với thông điệp ghim `kho đã bật secondaryStorage — bản vá khoa-api-ghi-thua đổi cả đường secondary-storage, xem lại AC-9`.
 ## Coverage
 
 Quét bằng `morphological-scan` (preset test-matrix). Chân sản phẩm: `packages/auth/src/auth.ts` [SUY-TỪ-REPO: packages/auth/src/auth.ts] — rate-limit plugin tắt, khoá không đặt `remaining`. Chân ngành: laravel/sanctum#207 [NGÀNH: Laravel Sanctum — ghi `last_used_at` mỗi yêu cầu gây deadlock, cách lách là bỏ ghi khi chỉ cột đó đổi] và better-auth#10921 [NGÀNH: better-auth].
@@ -50,7 +51,7 @@ Không gian nhỏ (khoảng 10 ô có nghĩa), nên Core vượt mốc 20% của
 
 Later: rate-limit tắt riêng khoá (`rateLimitEnabled = false`) — cùng một phép sửa với tắt toàn cục, kho không dùng. Khoá có `remaining` — kho không đặt. Nhiều yêu cầu đồng thời đúng lúc qua ngưỡng — chấp nhận ghi trùng, xem sổ quyết định.
 
-Never: secondary-storage — kho không cấu hình.
+Never: secondary-storage — kho không cấu hình; AC-11 đỏ nếu ai bật nó, vì bản vá cũng đổi đường đó.
 
 ## Out of scope
 

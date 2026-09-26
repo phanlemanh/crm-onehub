@@ -544,6 +544,7 @@ executors:
     kagt_khong_ghi_trong_nguong: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t khong-ghi-trong-nguong"'
     kagt_bien_nguong: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t bien-nguong"'
     kagt_tu_choi_van_giu: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t tu-choi-van-giu"'
+    kagt_khong_secondary_storage: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t khong-secondary-storage"'
     kagt_hai_chieu_thu_vien: 'bun run test -- "cd packages/auth && bun test test/khoa-api-ghi-thua.spec.ts -t hai-chieu-thu-vien"'
     kagt_rate_limit_bat: 'bun run test -- "cd packages/auth && bun test test/khoa-api-ghi-thua.spec.ts -t rate-limit-bat-van-dem"'
     kagt_chong_troi: 'bun run test -- "cd packages/auth && bun test test/khoa-api-ghi-thua.spec.ts -t chong-troi-ban-va"'

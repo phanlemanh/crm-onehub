@@ -45,9 +45,13 @@ móc xác thực.
   `consumeRateLimit` đã có sẵn. Ngược lại trả `now` như gốc.
 - `claimUsageInDatabase`: khi có tuỳ chọn và `storage` là `database`, bỏ lần
   `update({ updatedAt })` cuối và trả hàng đang có (hàng đọc lúc đầu, hoặc hàng mà
-  lệnh ghi phía trên trả về). Đường secondary-storage giữ nguyên như bản gốc.
+  lệnh ghi phía trên trả về).
+- Đường secondary-storage: phần bỏ ghi `lastRequest` trong `evaluateRateLimit`
+  cũng áp lên nó khi có tuỳ chọn, vì hàm này không biết kiểu lưu. Kho không cấu
+  hình `secondaryStorage`, và một test (AC-11) đỏ nếu ai bật nó — chủ kho chọn thu
+  lời hứa về cấu hình thật của kho thay vì rào thêm trong bản vá (dừng-vá, 26/09).
 - Không đổi cách đếm của nhánh rate-limit bật (`start` · `reset` · `increment` ·
-  `deny`), không chạm `consumeRemaining`, không chạm đường secondary-storage. Lần
+  `deny`), không chạm `consumeRemaining`. Lần
   đóng dấu `updatedAt` thì bỏ mỗi khi có tuỳ chọn ở `storage: "database"`, bất kể
   rate-limit bật hay tắt.
 
