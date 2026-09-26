@@ -125,6 +125,11 @@ evals:
   - id: E7
     criterion: AC-7
     executor: judgment
+    question: >-
+      Moi cau vi va en doi o vong nay (bang evidence/chuoi-doi.md) co doc tu nhien sau khi the ten
+      «OneHub Center» khong — khong «OneHub Center cua ban», khong «your OneHub Center data» khi cau
+      cu dung CRM theo nghia kho du lieu, khong tu nao thuoc _Avoid_ cua CONTEXT.md theo dung nghia
+      muc do — va muc «OneHub Center» trong CONTEXT.md co du dinh nghia, _Avoid_ va «Vi sao» chua?
     inputs:
       - "CONTEXT.md"
       - "_acceptance/doi-ten-onehub-center/evidence/chuoi-doi.md"
