@@ -1,0 +1,22 @@
+{
+  "feature_plain": "Mọi chỗ người dùng đọc thấy «CRM» nay ghi «OneHub Center», và cột trái trang đăng nhập có dòng giới thiệu lớn, ba bước nối nhau, nền lưới chấm ở cả sáng lẫn tối.",
+  "decisions": [
+    {"id": "E7", "q": "Tin Zalo «Tài khoản OneHub Center của bạn…» có chấp nhận được không?", "why": "Hai phiếu đạt, một phiếu trượt chỉ đúng câu này: tiêu chí AC-7 cấm cụm «OneHub Center của bạn». Máy khuyên SỬA thành «Tài khoản của bạn trong OneHub Center…» — một dòng, nhưng cần một lượt chấm nhỏ vượt trần ba round."}
+  ],
+  "scope_plain": "Để sau: lời báo lỗi tiếng Anh của trình dựng tác nhân, chữ trên biểu tượng và ảnh chia sẻ, và phần chạy lại eval đã ký (giao cho làn ghim lại trước khi đẩy); không bao giờ: đổi tên gói, cơ sở dữ liệu, công cụ nội bộ.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260926T111345Z-13", "p": "Làm tám việc tuần tự trong một phiên thay vì chạy song song — đổi lại chậm hơn vài phút, không đụng nhau."},
+    {"id": "d-20260926T111345Z-14", "p": "Định dời chỗ gắn nhãn của khối hướng dẫn để đo được — sau đó bỏ, xem dòng kế."},
+    {"id": "d-20260926T111431Z-15", "p": "Coi việc anh dán dòng /goal ở Cổng 1.5 là duyệt kế hoạch — anh nói một câu là máy dừng."},
+    {"id": "d-20260926T111809Z-16", "p": "Đổi luôn dòng mô tả trang «Customer Relationship Management» và xoá nhãn nhỏ «CRM» sớm một bước — đổi lại một chỗ ngoài danh sách đã duyệt."},
+    {"id": "d-20260926T113505Z-17", "p": "Giữ nguyên chỗ gắn nhãn khối hướng dẫn — phép đo mới và phép đo cũ đo cùng một hộp, ba bài kiểm cũ không phải sửa."},
+    {"id": "d-20260926T113743Z-18", "p": "Thêm câu hỏi bắt buộc cho lần chấm bằng mắt E7 — không đổi điều được chấm."},
+    {"id": "d-20260926T134941Z-19", "p": "Sửa một phép đo của tính năng quyền đọc thư để nó bắt đúng câu tiếng Việt sau khi đổi tên — đổi lại một loại sửa thước mới ngoài hai loại đã duyệt."},
+    {"id": "d-20260926T135909Z-20", "p": "Sửa ba phép đo của chính vòng này (tên không gian cũ, tệp thước bị sót, lỗi git bị nuốt) theo lời anh — không thêm tiêu chí."},
+    {"id": "d-20260926T135909Z-21", "p": "Ghi bù Cổng Đáng: anh quyết làm, nhận ngưỡng đề xuất."},
+    {"id": "d-20260926T140123Z-22", "p": "Loại kết quả round 1 của phép đo tính năng đã ký vì máy báo đạt khi lượt chạy chưa xong."},
+    {"id": "d-20260926T143307Z-23", "p": "KHÔNG chạy lại gần 400 bài kiểm của tính năng đã ký trong vòng này — giao cho làn ghim lại trước khi đẩy; đổi lại lỗi hỏng hành vi cũ chỉ lộ ra ở làn đó."},
+    {"id": "d-20260926T143307Z-24", "p": "Viết lại hai câu trợ lý dựng tác nhân cho tự nhiên, bỏ dòng trống làm kiểm định dạng đỏ, và bắt lần chụp ảnh chạy đúng lệnh."}
+  ]
+}

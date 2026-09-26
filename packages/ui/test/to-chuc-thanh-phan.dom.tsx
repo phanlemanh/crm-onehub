@@ -140,7 +140,10 @@ describe("pick-list-dialog", () => {
 
 	test("pick-list-dialog: tim loc danh sach, loi hien duoi o", async () => {
 		dung(
-			<VoChon loi="Email này chưa là thành viên CRM" onConfirm={() => {}} />,
+			<VoChon
+				loi="Email này chưa là thành viên OneHub Center"
+				onConfirm={() => {}}
+			/>,
 		);
 		const hop = document.body.querySelector("[role='dialog']") as HTMLElement;
 		const tim = hop.querySelector("input") as HTMLInputElement;
@@ -157,7 +160,7 @@ describe("pick-list-dialog", () => {
 		);
 		expect(ten).toEqual(["b"]);
 		expect(hop.querySelector("[data-slot='field-error']")?.textContent).toBe(
-			"Email này chưa là thành viên CRM",
+			"Email này chưa là thành viên OneHub Center",
 		);
 	});
 });

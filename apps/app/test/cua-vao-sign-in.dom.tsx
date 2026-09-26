@@ -191,7 +191,7 @@ describe("ba-buoc-google", () => {
 		expect(buoc[2]?.moTa).toContain(`${phut} phút`);
 		expect(khoi.textContent).toContain(authMessages("vi").shell.headline);
 		expect(authMessages("vi").shell.headline).toBe(
-			"CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.",
+			"OneHub Center: đối tác, kế hoạch 30 ngày và OKR.",
 		);
 	});
 
@@ -388,8 +388,8 @@ describe("o-loi", () => {
 
 describe("chu", () => {
 	it("tieu de moi o ca hai tieng, khong con loi chao quay lai", () => {
-		expect(authMessages("vi").signIn.title).toBe("Đăng nhập vào CRM");
-		expect(authMessages("en").signIn.title).toBe("Sign in to the CRM");
+		expect(authMessages("vi").signIn.title).toBe("Đăng nhập vào OneHub Center");
+		expect(authMessages("en").signIn.title).toBe("Sign in to OneHub Center");
 		for (const t of ["vi", "en"] as const) {
 			const chuoi = JSON.stringify([authMessages(t), cuaVaoMessages(t)]);
 			expect(chuoi).not.toContain('"Mừng bạn quay lại"');
@@ -400,7 +400,7 @@ describe("chu", () => {
 	it("trang tieng Anh ve chu tieng Anh", async () => {
 		tieng = "en";
 		const { o } = await veTrang();
-		expect(o.querySelector("h1")?.textContent).toBe("Sign in to the CRM");
+		expect(o.querySelector("h1")?.textContent).toBe("Sign in to OneHub Center");
 		expect(o.textContent).toContain(cuaVaoMessages("en").lanDau.tieuDe);
 	});
 });

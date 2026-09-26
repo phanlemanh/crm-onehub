@@ -11,6 +11,17 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "doi-ten-onehub-center",
+		ten: "OneHub Center — cột trái đăng nhập hướng A",
+		states: [
+			{ id: "ST-sign-in-rong", nhan: "Đăng nhập — Google bật" },
+			{ id: "ST-sign-in-loi", nhan: "Đăng nhập — lỗi chưa được cho phép" },
+			{ id: "ST-sign-in-chi-mat-khau", nhan: "Đăng nhập — chỉ mật khẩu" },
+			{ id: "ST-shell-khac", nhan: "Bốn trang kia — nền và dòng neo" },
+			{ id: "ST-dau-trang", nhan: "Nhãn đầu trang" },
+		],
+	},
+	{
 		slug: "toan-canh-okr",
 		ten: "Toàn cảnh OKR — bốn bề mặt chưa có bản mẫu",
 		states: [

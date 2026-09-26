@@ -25,7 +25,7 @@ const en = {
 	nha: {
 		chaoHoi: (ten: string) => `What can I help with, ${ten}?`,
 		tenThayThe: "there",
-		moTa: "Ask about your CRM, tag a record or integration, or describe an agent to build to automate a task.",
+		moTa: "Ask about your records, tag a record or integration, or describe an agent to build to automate a task.",
 		riengTu:
 			"Chats and agent drafts stay private to you. Deploying an agent makes it available to the whole team.",
 		goiY: "Suggested agents",
@@ -74,7 +74,7 @@ const vi = {
 	nha: {
 		chaoHoi: (ten: string) => `${ten} cần gì hôm nay?`,
 		tenThayThe: "Bạn",
-		moTa: "Hỏi về CRM của bạn, gắn thẻ một bản ghi hay một kết nối, hoặc tả một tác nhân cần dựng để lo hộ một việc.",
+		moTa: "Hỏi về dữ liệu trong OneHub Center, gắn thẻ một bản ghi hay một kết nối, hoặc tả một tác nhân cần dựng để lo hộ một việc.",
 		riengTu:
 			"Hội thoại và bản nháp tác nhân chỉ mình bạn thấy. Đưa một tác nhân vào chạy thì cả đội dùng được.",
 		goiY: "Tác nhân gợi ý",

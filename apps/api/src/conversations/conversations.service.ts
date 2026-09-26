@@ -765,7 +765,7 @@ export class ConversationsService {
 				existing.contactId ?? existing.companyId ?? existing.dealId;
 			if (existingRecordId !== recordId) {
 				throw new BadRequestException(
-					"A conversation cannot be moved to another CRM record.",
+					"A conversation cannot be moved to another record.",
 				);
 			}
 

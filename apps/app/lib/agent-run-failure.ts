@@ -4,7 +4,7 @@ const REASONS: RunFailureReasons = {
 	ACTION_NOT_PERFORMED:
 		"The agent finished without doing what it was built to do. Open the run to see which step it skipped.",
 	NO_EXECUTOR:
-		"This agent asks for something the CRM cannot do yet. It needs rebuilding.",
+		"This agent asks for something OneHub Center cannot do yet. It needs rebuilding.",
 	DEPENDENCY_UNAVAILABLE:
 		"A connection this agent needs is missing. Reconnect it, then run again.",
 	NOT_AUTHORISED:
@@ -18,7 +18,7 @@ const REASONS: RunFailureReasons = {
 	DELIVERY_EXHAUSTED:
 		"This never reached the agent after three attempts. Nothing ran.",
 	ACTION_REJECTED:
-		"The agent tried the action and the CRM refused it. Nothing was written.",
+		"The agent tried the action and OneHub Center refused it. Nothing was written.",
 	AGENT_UNAVAILABLE: "The agent was paused or archived when this run started.",
 	AGENT_DELETED: "The agent was deleted before this run finished.",
 	CANCELLED_BY_USER: "Someone stopped this run.",

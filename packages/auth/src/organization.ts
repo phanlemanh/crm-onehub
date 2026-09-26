@@ -10,7 +10,7 @@ import { isWorkspaceAdmin, toWorkspaceRole, type WorkspaceRole } from "./roles";
 
 export { WORKSPACE_ID };
 
-export const DEFAULT_WORKSPACE_NAME = "CRM";
+export const DEFAULT_WORKSPACE_NAME = "OneHub Center";
 
 export function canRenameWorkspace(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
