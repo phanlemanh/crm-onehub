@@ -41,9 +41,13 @@ ket.push([
 	"lo-trinh-zalo dong 4b",
 	kiemLoTrinh(readFileSync(resolve(GOC, "docs/plan/lo-trinh-zalo.md"), "utf8")),
 ]);
-const goc = execFileSync("git", ["-C", GOC, "show", `${COMMIT_GOC}:docs/agent.md`], {
-	encoding: "utf8",
-});
+const goc = execFileSync(
+	"git",
+	["-C", GOC, "show", `${COMMIT_GOC}:docs/agent.md`],
+	{
+		encoding: "utf8",
+	},
+);
 ket.push([
 	"doi chung ban goc do",
 	kiemAgent(goc) ? null : "hong: doi chung ban goc khong do",

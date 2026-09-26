@@ -4,10 +4,17 @@ import { resolve } from "node:path";
 const GOC = resolve(import.meta.dirname, "../../..");
 const NHANH_CHINH = "origin/onehub";
 const HO_SO = "ha-tran-thang-hoi-zalo";
-const DA_KY = ["_acceptance/hoi-crm-qua-zalo/", "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"];
+const DA_KY = [
+	"_acceptance/hoi-crm-qua-zalo/",
+	"apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts",
+];
 
 function chay(lenh, doiSo) {
-	return spawnSync(lenh, doiSo, { cwd: GOC, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+	return spawnSync(lenh, doiSo, {
+		cwd: GOC,
+		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
+	});
 }
 
 function dongGit(doiSo) {
@@ -30,7 +37,12 @@ if (cham.length) {
 }
 console.log("ok: khong cham ho so da ky");
 
-const truocGop = chay("bash", ["scripts/pre-merge-check.sh", ".", "--base", NHANH_CHINH]);
+const truocGop = chay("bash", [
+	"scripts/pre-merge-check.sh",
+	".",
+	"--base",
+	NHANH_CHINH,
+]);
 if (truocGop.status === null) {
 	console.log("hong: pre-merge-check khong chay duoc");
 	process.exit(1);

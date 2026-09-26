@@ -1,4 +1,11 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "bun:test";
 import { db } from "@crm/db";
 import { ZALO } from "../agent/lib/zalo-config";
 import { dongHoi, hoiTacTu, type KetHoi } from "../agent/lib/zalo-hoi";
@@ -69,16 +76,22 @@ afterAll(async () => {
 
 describe("tran-thang-hoi-zalo", () => {
 	test("gia-tri: ba tran hoi la 3 cau/phut, 20 cau/ngay, 300 cau/thang", () => {
-		expect(
-			ZALO.hoi.tran,
-			"tran thang phai la 300 (quyet dinh 27/09)",
-		).toEqual({ phut: 3, ngay: 20, thang: 300 });
+		expect(ZALO.hoi.tran, "tran thang phai la 300 (quyet dinh 27/09)").toEqual({
+			phut: 3,
+			ngay: 20,
+			thang: 300,
+		});
 	});
 
 	test("bien-300: cau 300 cua xuong mo phien, cau 301 bi chan theo tran thang", async () => {
 		const A = await gieoVai("An", "member");
 		const D = await gieoVai("Dung", "member");
-		await gieo(DA_CO, "da-tra-loi", { A: A.id, D: D.id }, vn("2026-10-01", "08:00"));
+		await gieo(
+			DA_CO,
+			"da-tra-loi",
+			{ A: A.id, D: D.id },
+			vn("2026-10-01", "08:00"),
+		);
 
 		const luc300 = vn("2026-10-20", "10:00");
 		const cau300 = await hoi("ZA", A.id, luc300);
@@ -87,10 +100,14 @@ describe("tran-thang-hoi-zalo", () => {
 		const hang300 = await db.zaloHoi.findUniqueOrThrow({
 			where: { id: cau300.yeuCau.hoiId },
 		});
-		expect(hang300.hoiLuc.getTime(), "hang cau 300 nam trong thang 10 gio VN").toBe(
-			luc300.getTime(),
-		);
-		await dongHoi(cau300.yeuCau.hoiId, { ketQua: "da-tra-loi", traLoiLuc: luc300 });
+		expect(
+			hang300.hoiLuc.getTime(),
+			"hang cau 300 nam trong thang 10 gio VN",
+		).toBe(luc300.getTime());
+		await dongHoi(cau300.yeuCau.hoiId, {
+			ketQua: "da-tra-loi",
+			traLoiLuc: luc300,
+		});
 		expect(
 			await db.zaloHoi.count({
 				where: {
@@ -111,14 +128,21 @@ describe("tran-thang-hoi-zalo", () => {
 		});
 		expect((await hangCuoi(A.id))?.ketQua).toBe("tu-choi-tran-thang");
 		expect(
-			await db.zaloHoi.count({ where: { crmUserId: A.id, ketQua: "dang-hoi" } }),
+			await db.zaloHoi.count({
+				where: { crmUserId: A.id, ketQua: "dang-hoi" },
+			}),
 		).toBe(dangHoiTruoc);
 	});
 
 	test("thang-vn: du 300 thi 23:59 ngay 31/10 bi chan, 00:01 ngay 1/11 gio VN mo phien", async () => {
 		const A = await gieoVai("An", "member");
 		const D = await gieoVai("Dung", "member");
-		await gieo(TRAN_THANG, "da-tra-loi", { A: A.id, D: D.id }, vn("2026-10-01", "08:00"));
+		await gieo(
+			TRAN_THANG,
+			"da-tra-loi",
+			{ A: A.id, D: D.id },
+			vn("2026-10-01", "08:00"),
+		);
 
 		const cuoiThang = await hoi("ZA", A.id, new Date("2026-10-31T16:59:00Z"));
 		expect(cuoiThang, "23:59 ngay 31/10 gio VN van thang cu").toEqual({
@@ -126,10 +150,9 @@ describe("tran-thang-hoi-zalo", () => {
 			text: ZALO.loi.hetTranThang,
 		});
 		const dauThang = await hoi("ZA", A.id, new Date("2026-10-31T17:01:00Z"));
-		expect(
-			dauThang.loai,
-			"thang xuong dem lai luc 00:00 ngay 1 gio VN",
-		).toBe("hoi");
+		expect(dauThang.loai, "thang xuong dem lai luc 00:00 ngay 1 gio VN").toBe(
+			"hoi",
+		);
 	});
 
 	test("khong-tinh: hang khong mo phien khong tinh vao tran thang; gui-hong thi tinh", async () => {
@@ -143,11 +166,11 @@ describe("tran-thang-hoi-zalo", () => {
 		await gieo(3, "dang-ban", nguoi, vn("2026-10-13", "08:00"));
 
 		const mo = await hoi("ZA", A.id, vn("2026-10-20", "10:00"));
-		expect(
-			mo.loai,
-			"hang khong mo phien khong tinh vao tran thang",
-		).toBe("hoi");
-		if (mo.loai === "hoi") await db.zaloHoi.delete({ where: { id: mo.yeuCau.hoiId } });
+		expect(mo.loai, "hang khong mo phien khong tinh vao tran thang").toBe(
+			"hoi",
+		);
+		if (mo.loai === "hoi")
+			await db.zaloHoi.delete({ where: { id: mo.yeuCau.hoiId } });
 
 		await gieo(1, "gui-hong", nguoi, vn("2026-10-14", "08:00"));
 		const chan = await hoi("ZA", A.id, vn("2026-10-20", "10:10"));
