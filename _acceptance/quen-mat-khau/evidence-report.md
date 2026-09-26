@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 29e5dbb57253028746d6941c7a332f4b8f66e41b
+verified_commit: 03296aefd7cb8bb28924a9bbbf9fb189d9190f9a
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -366,3 +366,7 @@ none — không có eval nào chạy runs > 1 vòng này (không có eval ngẫu
 Round 3: thử lại vì hạ tầng — một ca đỏ ở proxy thiếu khoá bí mật (RESEND_API_KEY/MAIL_FROM bị che bởi giá trị mặc định); đã sửa bằng cách bắt proxy nhận khoá bí mật tường minh, bỏ giá trị mặc định che ca thiếu khoá.
 Round 4: toàn bộ 24 eval máy + 4 lệnh suite (test, lint, lint:slop, build) đều xanh, exit 0; panel judgment E20 carried PASS từ round 2 (inputs không đổi).
 Round 4 (chốt): vì packages/auth thuộc đường T3, verdict tổng giữ PENDING-JUDGMENT dù mọi phép đo máy đã xanh — chờ người ký `human_override` trực tiếp trên E20 và điền `human_signoff` ở Cổng Bằng chứng trước khi nâng lên PASS.
+
+### Re-pin lần 1 — 2026-09-26, do hoá cũ do gộp origin/onehub 63359052 sau chữ ký
+run_id: repin-20260926T034437Z-87195
+sha: 03296aefd7cb8bb28924a9bbbf9fb189d9190f9a · suites: 4 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · ngoài làn máy: E18, E20 (E20 không khai paths), E21 · AC không có chốt máy: AC-13
