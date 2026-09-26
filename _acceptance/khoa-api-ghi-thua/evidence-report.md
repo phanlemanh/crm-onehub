@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b2a0368df40e3f0340b7aba3be112ef4e635f5a9
+verified_commit: e2a83d0c535a5430e7408a0bc277842fc1c591b7
 human_signoff: Phan Le Manh 2026-09-26 — ký Cổng 2 trên verdict PASS sau bốn vòng chấm (vòng 4 vượt trần theo quyết định chủ kho), với năm giới hạn đã khai ở Known limits của contract, trong đó có lỗ AC-11 đo hằng khai báo chứ không đo cấu hình plugin đã dựng. Ký trên hiểu biết rằng thẻ Cổng Phạm vi lần ký lại gần nhất đã trình sai nhóm AC-11 và nội dung AC-11 được xác nhận lại ở cổng này.
 ---
 
@@ -202,3 +202,7 @@ none — mọi eval đều deterministic (runs=1), không có pass_rate lệch, 
 Round 1: E7 (AC-7, tài liệu docs/api.md) được xác minh; hợp đồng lúc đó chưa có AC-11.
 Round 2: E3, E4, E6 (AC-3/4/6 — hai chiều thư viện, rate-limit bật, chống trôi bản vá) được xác minh xanh; AC-11 được thêm vào hợp đồng ngay sau đó (8552b4e6, 33c8f044) để chặn đường secondary-storage.
 Round 3: E15 (AC-11) đỏ — ca kiểm đọc nhầm công tắc cấu hình plugin khoá API (không phải công tắc mà auth.ts thật sự dùng); verdict PENDING-JUDGMENT, trần 3 round. Sửa ở 2a645ab8 (AC-11 kiểm đúng tuỳ chọn plugin), Cổng Phạm vi ký lại ở 33c8f044, hợp đồng đưa về `implemented` ở b2a0368d để mở round 4 — round 4 (báo cáo này) E15 đã xanh trở lại.
+
+### Re-pin lần 1 — 2026-09-26, do gộp onehub 46d7d3d7 (#150, #151) sau chữ ký
+run_id: repin-20260926T040506Z-89937
+sha: e2a83d0c535a5430e7408a0bc277842fc1c591b7 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E14 (E14 không khai paths) · AC không có chốt máy: AC-9, AC-10

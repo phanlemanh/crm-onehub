@@ -111,3 +111,4 @@
 {"ts":"2026-09-26T03:27:12Z","sha":"b2a0368df40e3f0340b7aba3be112ef4e635f5a9","round":4,"kind":"round-tally","verdict":"PENDING-JUDGMENT","expected":9,"returned":9,"blocked":0}
 {"ts":"2026-09-26T03:27:12Z","sha":"b2a0368df40e3f0340b7aba3be112ef4e635f5a9","round":4,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":2,"bypass_ack":0,"verified_at":9}
 {"kind":"thuoc-vat","ts":"2026-09-26T03:47:16Z","round":4,"san":"4c243fac01bac6b029570e197ce5831b2b4e4a64","vat":[98,26],"thuoc":[12,3],"ho_so":[212,26],"nhat":2,"lan":0,"tep_thuoc":["_acceptance/config.yaml","_acceptance/khoa-api-ghi-thua/evals.yaml"]}
+{"ts":"2026-09-26T04:05:06Z","kind":"repin","run_id":"repin-20260926T040506Z-89937","sha":"e2a83d0c535a5430e7408a0bc277842fc1c591b7","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E9":0,"E10":0,"E11":0,"E12":0,"E15":0},"evals_not_machine":["E13","E14"]}
