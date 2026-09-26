@@ -5,9 +5,9 @@ slug: khoa-api-ghi-thua
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-09-26
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md
 ---
 
@@ -37,7 +37,7 @@ Source input: prompt
 - AC-9: Given tệp vá, mã cấu hình ở `packages/auth` và design doc, When người đọc soi, Then trên cấu hình của kho (lưu khoá bằng CSDL, không có `secondaryStorage`) bản vá chỉ đổi hai việc và chỉ khi có tuỳ chọn: hai nhánh `skip` của `evaluateRateLimit` bỏ ghi `lastRequest` còn trong ngưỡng, và `claimUsageInDatabase` bỏ lần đóng dấu `updatedAt`; không đổi cách đếm của nhánh rate-limit bật, không chạm `consumeRemaining`, không thêm chú thích vào mã; đường secondary-storage có bị chạm (tuỳ chọn cũng áp lên nó) nhưng kho không dùng, và AC-11 giữ điều kiện đó bằng máy. (judgment)
 - AC-10: Given mục mới về bản vá trong `docs/api.md`, When người đọc chỉ đọc mục đó, Then trả lời được hai câu: khi nào gỡ bản vá, và phải làm gì khi nâng `@better-auth/api-key`. (judgment)
 
-- AC-11: Given cấu hình `auth` thật của kho (`@crm/auth`), When chạy phép kiểm cấu hình lưu, Then `auth.options.secondaryStorage` không được đặt; cùng hàm kiểm với một cấu hình có `secondaryStorage` thì đỏ với thông điệp ghim `kho đã bật secondaryStorage — bản vá khoa-api-ghi-thua đổi cả đường secondary-storage, xem lại AC-9`.
+- AC-11: Given tuỳ chọn plugin khoá API thật của kho, tách thành hằng `API_KEY_PLUGIN_OPTIONS` (kiểu `ApiKeyConfigurationOptions`) mà `auth.ts` truyền nguyên vào `apiKey()`, When chạy phép kiểm đường lưu, Then `storage` không phải `secondary-storage` và không có `customStorage` — hai công tắc duy nhất mà thư viện dùng để rẽ sang đường secondary-storage; cùng hàm kiểm với bản chép của chính hằng đó có `storage: "secondary-storage"`, và với bản chép có `customStorage`, thì cả hai đỏ với thông điệp ghim `plugin khoá API đi đường secondary-storage — bản vá khoa-api-ghi-thua đổi cả đường đó, xem lại AC-9`; bộ nhớ đệm chung `auth.options.secondaryStorage` không tham gia phép kiểm.
 ## Coverage
 
 Quét bằng `morphological-scan` (preset test-matrix). Chân sản phẩm: `packages/auth/src/auth.ts` [SUY-TỪ-REPO: packages/auth/src/auth.ts] — rate-limit plugin tắt, khoá không đặt `remaining`. Chân ngành: laravel/sanctum#207 [NGÀNH: Laravel Sanctum — ghi `last_used_at` mỗi yêu cầu gây deadlock, cách lách là bỏ ghi khi chỉ cột đó đổi] và better-auth#10921 [NGÀNH: better-auth].

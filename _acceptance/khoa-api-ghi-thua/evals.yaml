@@ -112,6 +112,6 @@ evals:
     criterion: AC-11
     executor: test
     cmd: config:executors.test.kagt_khong_secondary_storage
-    expected: "exit 0; ca 'khong-secondary-storage' pass hai chieu cung ham: cau hinh auth that cua kho khong co secondaryStorage (xanh); cung ham voi mot cau hinh co secondaryStorage nem loi thong diep ghim 'kho đã bật secondaryStorage — bản vá khoa-api-ghi-thua đổi cả đường secondary-storage, xem lại AC-9'"
-    paths: [packages/auth/src/auth.ts, apps/api/test/khoa-api-ghi-thua.spec.ts]
+    expected: "exit 0; ca 'khong-secondary-storage' pass: API_KEY_PLUGIN_OPTIONS that cua kho khong co storage 'secondary-storage' va khong co customStorage (xanh); cung ham voi {...API_KEY_PLUGIN_OPTIONS, storage: 'secondary-storage'} va voi {...API_KEY_PLUGIN_OPTIONS, customStorage} deu nem loi thong diep ghim 'plugin khoá API đi đường secondary-storage — bản vá khoa-api-ghi-thua đổi cả đường đó, xem lại AC-9'; phep kiem khong doc auth.options.secondaryStorage"
+    paths: [packages/auth/src/auth.ts, packages/auth/src/api-keys.ts, apps/api/test/khoa-api-ghi-thua.spec.ts]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

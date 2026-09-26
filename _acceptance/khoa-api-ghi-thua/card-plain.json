@@ -27,7 +27,7 @@
     },
     {
       "id": "AC-11",
-      "p": "Sẽ báo đỏ nếu ai bật bộ nhớ đệm ngoài (secondaryStorage) cho đăng nhập, vì bản vá cũng đổi đường đó — lời hứa chỉ đúng trên cấu hình hiện tại của kho."
+      "p": "Sẽ báo đỏ nếu cấu hình của plugin khoá API chuyển sang lưu ở bộ nhớ ngoài (tuỳ chọn storage hoặc customStorage của chính plugin), vì bản vá cũng đổi đường đó — kiểm đúng công tắc mà thư viện dùng để rẽ nhánh."
     }
   ],
   "wont_do": [
@@ -121,6 +121,10 @@
     {
       "id": "d-20260926T023729Z-11",
       "p": "Anh chọn thu phạm vi: lời hứa về «không chạm đường bộ nhớ đệm ngoài» chỉ giữ trên cấu hình thật của kho, và một phép kiểm mới báo đỏ nếu ai bật bộ nhớ đó — đổi lại phải ký lại cổng này."
+    },
+    {
+      "id": "d-20260926T031430Z-13",
+      "p": "Anh cho mở vòng chấm thứ tư ngoài trần: phép kiểm AC-11 sẽ đọc đúng tuỳ chọn của plugin khoá API — đổi lại một vòng máy và một lượt ký lại cổng này."
     }
   ]
 }
