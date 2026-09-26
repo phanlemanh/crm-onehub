@@ -24,6 +24,7 @@ const SCRIPT = resolve(
 	"../../../_acceptance/hoi-crm-qua-zalo/rang/nguong.ts",
 );
 const GIAY_MS = 1_000;
+const TRAN_NGAY_DA_KY = 20;
 let so = 0;
 
 function vn(gio: string, ngay = "2026-10-15"): Date {
@@ -131,7 +132,7 @@ describe("nguong", () => {
 			),
 		);
 		const F = await gieoVai("Phuc", "member");
-		for (let phut = 0; phut < ZALO.hoi.tran.ngay; phut += 1) {
+		for (let phut = 0; phut < TRAN_NGAY_DA_KY; phut += 1) {
 			await hoiVaTra(F.id, "ZF", vn(`13:${String(phut).padStart(2, "0")}`), 3);
 		}
 		const tran = await hoiThat(F.id, "ZF", vn("13:30"));
