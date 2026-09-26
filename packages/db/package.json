@@ -22,6 +22,7 @@
 		"./json": "./src/json.ts",
 		"./kenh-thong-bao": "./src/kenh-thong-bao.ts",
 		"./okr-nhac": "./src/okr-nhac.ts",
+		"./onboarding-buoc": "./src/onboarding-buoc.ts",
 		"./onboarding-nhac": "./src/onboarding-nhac.ts",
 		"./safe-fetch": "./src/safe-fetch.ts",
 		"./settings": "./src/settings.ts",

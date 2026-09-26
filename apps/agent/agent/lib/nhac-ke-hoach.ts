@@ -95,21 +95,38 @@ function appUrlMacDinh(): string | null {
 	return dau || null;
 }
 
-async function duongMo(appUrl: string | null): Promise<LienKet> {
-	if (!appUrl) return () => null;
+async function xuongSlug(
+	appUrl: string | null,
+): Promise<{ appUrl: string; slug: string } | null> {
+	if (!appUrl) return null;
 	const xuong = await db.organization.findUnique({
 		where: { id: WORKSPACE_ID },
 		select: { slug: true },
 	});
 	const slug = xuong?.slug;
-	if (!slug) return () => null;
+	if (!slug) return null;
+	return { appUrl, slug };
+}
+
+async function duongMo(appUrl: string | null): Promise<LienKet> {
+	const ctx = await xuongSlug(appUrl);
+	if (!ctx) return () => null;
 	return (v) => {
-		if ("planId" in v) return `${appUrl}/${slug}?record=plan:${v.planId}`;
+		if ("planId" in v)
+			return `${ctx.appUrl}/${ctx.slug}?record=plan:${v.planId}`;
 		if (v.loai === "okr-cap-nhat") {
-			return `${appUrl}/${slug}/okr/cap-nhat-tuan?tu=nhac`;
+			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
 		}
-		return `${appUrl}/${slug}/okr?record=objective:${v.objectiveId}`;
+		return `${ctx.appUrl}/${ctx.slug}/okr?record=objective:${v.objectiveId}`;
 	};
+}
+
+export async function lienKetKeHoach(): Promise<
+	(planId: string) => string | null
+> {
+	const ctx = await xuongSlug(appUrlMacDinh());
+	if (!ctx) return () => null;
+	return (planId) => `${ctx.appUrl}/${ctx.slug}?record=plan:${planId}`;
 }
 
 async function dong(taskId: string, ket: KetQuaNhac): Promise<KetQuaNhac> {
@@ -175,7 +192,14 @@ async function guiQuaZalo(
 	if (!token || !zaloUserId) {
 		throw new Error("kenh Zalo duoc chon ma thieu token hoac lien ket");
 	}
-	const { text, daGui } = dungTin(ten, viec, lienKet, "tron", ZALO.tranKyTu);
+	const { text, daGui } = dungTin(
+		ten,
+		viec,
+		lienKet,
+		"tron",
+		ZALO.tranKyTu,
+		ZALO.loi.goiY,
+	);
 	await guiZalo(token, zaloUserId, text, { fetcher: deps.zaloFetcher });
 	return daGui;
 }

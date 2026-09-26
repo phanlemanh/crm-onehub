@@ -8,7 +8,7 @@ import {
 
 type LoaiTin = ViecNhac["loai"];
 
-const TIEU_DE = {
+export const TIEU_DE = {
 	"buoc-qua-han": "Quá hạn",
 	"buoc-sap-han": "Sắp hạn",
 	"ke-hoach-im": "Kế hoạch im",
@@ -42,11 +42,16 @@ export type KhuonTin = "slack" | "tron";
 
 export type LienKet = (v: ViecNhac) => string | null;
 
-function dongKeHoach(v: ViecKeHoach, url: string | null, khuon: KhuonTin) {
+function dongKeHoach(
+	v: ViecKeHoach,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
 	const han = v.han ? `, hạn ${ngayThang(v.han)}` : "";
 	if (khuon === "tron") {
 		const mo = url ? ` — ${url}` : "";
-		return `• ${v.companyName} · ${phanDau(v)}${v.goiY}${han}${mo}`;
+		return `${so}. ${v.companyName} · ${phanDau(v)}${v.goiY}${han}${mo}`;
 	}
 	const mo = url ? ` — <${url}|mở kế hoạch>` : "";
 	return `• ${thoat(v.companyName)} · ${phanDau(v)}${thoat(v.goiY)}${han}${mo}`;
@@ -71,19 +76,26 @@ function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
 	}
 }
 
-function dongOkr(v: ViecOkr, url: string | null, khuon: KhuonTin): string {
+function dongOkr(
+	v: ViecOkr,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
 	if (khuon === "tron") {
 		const mo = url ? ` — ${url}` : "";
-		return `• ${noiDungOkr(v, (s) => s)}${mo}`;
+		return `${so}. ${noiDungOkr(v, (s) => s)}${mo}`;
 	}
 	const nhan = v.loai === "okr-cap-nhat" ? "mở cập nhật tuần" : "mở mục tiêu";
 	const mo = url ? ` — <${url}|${nhan}>` : "";
 	return `• ${noiDungOkr(v, thoat)}${mo}`;
 }
 
-function dong(v: ViecNhac, lienKet: LienKet, khuon: KhuonTin): string {
+function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	const url = lienKet(v);
-	return "planId" in v ? dongKeHoach(v, url, khuon) : dongOkr(v, url, khuon);
+	return "planId" in v
+		? dongKeHoach(v, so, url, khuon)
+		: dongOkr(v, so, url, khuon);
 }
 
 export type TinNhac = { text: string; daGui: ViecNhac[] };
@@ -94,6 +106,7 @@ export function dungTin(
 	lienKet: LienKet,
 	khuon: KhuonTin = "slack",
 	tranKyTu: number = Number.POSITIVE_INFINITY,
+	dongCuoi: string | null = null,
 ): TinNhac {
 	const theoThuTu = THU_TU_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
@@ -109,11 +122,16 @@ export function dungTin(
 		const nhom = THU_TU_NHAC.flatMap((loai) => {
 			const ds = daGui.filter((v) => v.loai === loai);
 			if (ds.length === 0) return [];
-			return ["", tieuDe(loai), ...ds.map((v) => dong(v, lienKet, khuon))];
+			return [
+				"",
+				tieuDe(loai),
+				...ds.map((v) => dong(v, daGui.indexOf(v) + 1, lienKet, khuon)),
+			];
 		});
 		const conLai = theoThuTu.length - daGui.length;
 		const cuoi = conLai > 0 ? ["", `và ${conLai} việc nữa — mở tổng quan`] : [];
-		return [chao, ...nhom, ...cuoi].join("\n");
+		const goiY = khuon === "tron" && dongCuoi ? ["", dongCuoi] : [];
+		return [chao, ...nhom, ...cuoi, ...goiY].join("\n");
 	};
 	let daGui = theoThuTu.slice(0, NHAC.tran);
 	while (daGui.length > 0 && ve(daGui).length > tranKyTu) {
