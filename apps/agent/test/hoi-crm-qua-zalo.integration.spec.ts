@@ -35,6 +35,7 @@ import type {
 	GiaiCongCu,
 	XuLyAudit,
 	XuLySuKienKenh,
+	XuLySuKienKenhDoi,
 } from "./support/eve-kieu";
 import { phienAudit } from "./support/eve-kieu";
 import { boThanhVien, donHoi, gieoVai } from "./support/hoi-gieo";
@@ -234,7 +235,7 @@ describe("tu-choi-vai", () => {
 				hoiId: ra.yeuCau.hoiId,
 			},
 		});
-		expect(ra.yeuCau.continuationToken).toBe("chat:ZA");
+		expect(ra.yeuCau.continuationToken).toBe(`chat:ZA:${A.id}:2026-10-15`);
 		expect(await ketCuoi(A.id)).toBe("dang-hoi");
 	});
 });
@@ -539,7 +540,10 @@ describe("duong-chinh", () => {
 		await eve.xong();
 		expect(eve.send.length).toBe(1);
 		expect(eve.send[0]?.text).toBe("Thoả thuận nào của tôi sắp hạn?");
-		expect(eve.send[0]?.continuationToken).toBe("chat:ZA");
+		expect(
+			eve.send[0]?.continuationToken,
+			"token theo chat, nguoi, ngay",
+		).toMatch(new RegExp(`^chat:ZA:${A.id}:\\d{4}-\\d{2}-\\d{2}$`));
 		expect(eve.send[0]?.auth, "auth cua send").toEqual({
 			authenticator: "zalo",
 			principalType: "user",
@@ -600,10 +604,11 @@ describe("cung-phien", () => {
 		);
 		await guiWebhook("ZA", "Câu hai", { eve });
 		await eve.xong();
-		expect(eve.send.map((g) => g.continuationToken)).toEqual([
-			"chat:ZA",
-			"chat:ZA",
-		]);
+		expect(
+			new Set(eve.send.map((g) => g.continuationToken)).size,
+			"cau hai cung phien",
+		).toBe(1);
+		expect(eve.send.length).toBe(2);
 		expect(await db.zaloHoi.count({ where: { crmUserId: A.id } })).toBe(2);
 
 		const dangHoi = await guiWebhook("ZA", "mới", { eve });
@@ -622,7 +627,7 @@ describe("cung-phien", () => {
 		);
 		const moi = await guiWebhook("ZA", "mới", { eve });
 		await eve.xong();
-		expect(eve.reset).toEqual(["chat:ZA"]);
+		expect(eve.reset).toEqual([eve.send[0]?.continuationToken]);
 		expect(eve.send.length).toBe(2);
 		expect(moi.tra()).toEqual([ZALO.loi.daMoi]);
 		expect(await db.zaloHoi.count({ where: { crmUserId: A.id } })).toBe(2);
@@ -1044,5 +1049,46 @@ describe("duong-chinh", () => {
 		);
 		expect(guiMayChu("ZA")).toEqual(["Acme hết hạn 30/10."]);
 		expect((await hangCua(w.messageId))?.ketQua).toBe("da-tra-loi");
+	});
+});
+
+describe("cung-phien", () => {
+	test("cung-phien: sang ngay moi thi sang phien moi", async () => {
+		const A = await gieoVai("An", "member");
+		const mot = await hoi("ZA", A.id, vn("2026-10-15", "23:50"));
+		const hai = await hoi("ZA", A.id, vn("2026-10-16", "00:10"));
+		expect(mot.loai === "hoi" && hai.loai === "hoi").toBe(true);
+		if (mot.loai === "hoi" && hai.loai === "hoi") {
+			expect(hai.yeuCau.continuationToken, "phien moi moi ngay").not.toBe(
+				mot.yeuCau.continuationToken,
+			);
+		}
+	});
+
+	test("cung-phien: phien xin nhap them thi dong cau, bao mot cau, doi dia chi phien", async () => {
+		const A = await gieoVai("An", "member");
+		await noiZalo(A.id, "ZA");
+		moMayChu();
+		const eve = eveGia();
+		const w = await guiWebhook("ZA", "Hỏi gì đó", { eve });
+		await eve.xong();
+		const h = await hangCua(w.messageId);
+		const doi: string[] = [];
+		const xuLy = (zaloEvents as unknown as Record<string, XuLySuKienKenhDoi>)[
+			"input.requested"
+		];
+		expect(xuLy, "kenh co xu ly input.requested").toBeDefined();
+		await xuLy?.(
+			{ kind: "session-limit" },
+			{
+				continuationToken: `zalo:${eve.send[0]?.continuationToken}`,
+				setContinuationToken: (t) => doi.push(t),
+			},
+			ctxZalo("ses-gia-1", h?.id ?? "", "ZA"),
+		);
+		expect((await hangCua(w.messageId))?.ketQua).toBe("loi");
+		expect(guiMayChu("ZA")).toEqual([ZALO.loi.canHoiLai]);
+		expect(doi.length, "doi dia chi phien ket").toBe(1);
+		expect(doi[0]).not.toBe(eve.send[0]?.continuationToken);
 	});
 });

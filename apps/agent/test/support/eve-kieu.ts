@@ -63,3 +63,9 @@ export function phienAudit(sessionId: string, purpose: string): CtxPhien {
 		},
 	};
 }
+
+export type XuLySuKienKenhDoi = (
+	d: DuLieuSuKienKenh,
+	c: { continuationToken: string; setContinuationToken: (t: string) => void },
+	x?: CtxPhien,
+) => Promise<void>;

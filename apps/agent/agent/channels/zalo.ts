@@ -9,7 +9,12 @@ import { authorised } from "../lib/cau-noi-auth";
 import { attribute, type PurposeContext } from "../lib/session-purpose";
 import { datBot, guiThu } from "../lib/zalo-bot-xuong";
 import { ZALO } from "../lib/zalo-config";
-import { loiVe, type SuKienZalo, traLoiVe } from "../lib/zalo-tra-loi";
+import {
+	canHoiLai,
+	loiVe,
+	type SuKienZalo,
+	traLoiVe,
+} from "../lib/zalo-tra-loi";
 import { nhanWebhook } from "../lib/zalo-webhook";
 
 function traVe(status: number): Response {
@@ -43,6 +48,11 @@ export const zaloEvents: ChannelEvents = {
 		const { message, finishReason } = loiNhan.parse(data);
 		if (!message?.trim() || finishReason === ZALO.hoi.giuaLuot) return;
 		await traLoiVe(suKien(channel, ctx), message);
+	},
+	async "input.requested"(_data, channel, ctx) {
+		await canHoiLai(suKien(channel, ctx), (token) =>
+			channel.setContinuationToken(token),
+		);
 	},
 	async "turn.failed"(_data, channel, ctx) {
 		await loiVe(suKien(channel, ctx));

@@ -53,16 +53,20 @@ export type HangDangHoi = {
 const DANG_HOI: ZaloHoiKetQua = "dang-hoi";
 const TINH_TRAN: ZaloHoiKetQua[] = [...KET_QUA_TINH_TRAN];
 
-export function tokenCuaChat(chatId: string): string {
-	return `${ZALO.hoi.tienToToken}${chatId}`;
+export function tokenPhien(
+	chatId: string,
+	crmUserId: string,
+	now: Date,
+): string {
+	return `${ZALO.hoi.tienToToken}${chatId}:${crmUserId}:${ngayVN(now)}`;
 }
 
 export function chatCuaToken(token: string | undefined): string | null {
 	if (!token) return null;
 	const vi = token.lastIndexOf(ZALO.hoi.tienToToken);
 	if (vi === -1) return null;
-	const chat = token.slice(vi + ZALO.hoi.tienToToken.length);
-	return chat.length > 0 ? chat : null;
+	const chat = token.slice(vi + ZALO.hoi.tienToToken.length).split(":")[0];
+	return chat ? chat : null;
 }
 
 function dauThangVN(now: Date): Date {
@@ -183,7 +187,7 @@ export async function hoiTacTu(
 					hoiId,
 				},
 			},
-			continuationToken: tokenCuaChat(tin.chatId),
+			continuationToken: tokenPhien(tin.chatId, crmUserId, now),
 		},
 	};
 }

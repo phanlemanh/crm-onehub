@@ -12,7 +12,7 @@ import { BuocDoi, cauTraLoi, xongTheoTinNhac } from "./tra-loi-nhac";
 import { guiZalo } from "./zalo-api";
 import { gioNhac } from "./zalo-bot-xuong";
 import { ZALO } from "./zalo-config";
-import { dangBan, hoiTacTu, tokenCuaChat, type YeuCauHoi } from "./zalo-hoi";
+import { dangBan, hoiTacTu, tokenPhien, type YeuCauHoi } from "./zalo-hoi";
 import { docLenh } from "./zalo-lenh";
 import { moPhien } from "./zalo-tra-loi";
 
@@ -33,7 +33,7 @@ export type KetQuaTin = "bo-qua" | "xong" | "loi";
 type TraLoi =
 	| { loai: "gui"; chatId: string; text: string }
 	| { loai: "hoi"; chatId: string; yeuCau: YeuCauHoi }
-	| { loai: "moi"; chatId: string };
+	| { loai: "moi"; chatId: string; token: string };
 
 type CoHoi = { coHoi: boolean };
 
@@ -69,7 +69,11 @@ async function khongMa(
 	}
 	if (lenh?.lenh === "moi") {
 		if (await dangBan(tx, chatId, now)) return gui(ZALO.loi.dangTraLoi);
-		return { loai: "moi", chatId };
+		return {
+			loai: "moi",
+			chatId,
+			token: tokenPhien(chatId, lienKet.crmUserId, now),
+		};
 	}
 	const ket = await hoiTacTu(
 		tx,
@@ -150,13 +154,13 @@ function laTinRieng(tin: ZaloMessage): boolean {
 
 async function batDauLai(
 	token: string,
-	chatId: string,
+	moi: { chatId: string; token: string },
 	deps: PhuThuocNhan,
 	messageId: string,
 ): Promise<void> {
 	try {
-		await deps.hoi?.datLai(tokenCuaChat(chatId));
-		await guiZalo(token, chatId, ZALO.loi.daMoi, { fetcher: deps.fetcher });
+		await deps.hoi?.datLai(moi.token);
+		await guiZalo(token, moi.chatId, ZALO.loi.daMoi, { fetcher: deps.fetcher });
 	} catch (loi) {
 		console.error(
 			`[zalo] bat dau lai hong message_id=${messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
@@ -192,7 +196,7 @@ export async function xuLyTinDen(
 		return "xong";
 	}
 	if (traLoi.loai === "moi" && deps.hoi) {
-		deps.hoi.waitUntil(batDauLai(token, traLoi.chatId, deps, tin.message_id));
+		deps.hoi.waitUntil(batDauLai(token, traLoi, deps, tin.message_id));
 		return "xong";
 	}
 	if (traLoi.loai !== "gui") return "xong";

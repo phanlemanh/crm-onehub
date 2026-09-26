@@ -36,6 +36,7 @@ export const ZALO = {
 		tienToToken: "chat:",
 		khoaChat: "zalo-hoi:",
 		giuaLuot: "tool-calls",
+		tienToBo: "bo:",
 		authenticator: "zalo",
 		purpose: "zalo",
 		tuChoiGhi:
@@ -120,5 +121,7 @@ export const ZALO = {
 		tacTuLoi:
 			"Tôi chưa trả lời được câu này. Thử lại sau ít phút, hoặc hỏi trong CRM.",
 		daMoi: "Đã bắt đầu cuộc trò chuyện mới.",
+		canHoiLai:
+			"Câu này tôi cần hỏi lại mới trả lời được, mà qua Zalo thì chưa hỏi lại được. Hỏi lại rõ hơn ở đây, hoặc hỏi trong CRM.",
 	},
 } as const;

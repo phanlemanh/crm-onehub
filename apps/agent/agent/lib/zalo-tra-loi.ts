@@ -112,9 +112,10 @@ export async function traLoiVe(
 	}
 }
 
-export async function loiVe(
+async function dongVaBao(
 	sk: SuKienZalo,
-	deps: PhuThuocTraLoi = {},
+	cau: string,
+	deps: PhuThuocTraLoi,
 ): Promise<void> {
 	const hang = await timHang(sk);
 	if (!hang) {
@@ -125,14 +126,28 @@ export async function loiVe(
 	const bot = await tokenBot(deps);
 	if (!bot) return;
 	try {
-		await guiZalo(bot, hang.zaloChatId, ZALO.loi.tacTuLoi, {
-			fetcher: deps.fetcher,
-		});
+		await guiZalo(bot, hang.zaloChatId, cau, { fetcher: deps.fetcher });
 	} catch (loi) {
 		console.error(
 			`[zalo] gui bao loi hong message_id=${hang.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
 		);
 	}
+}
+
+export async function loiVe(
+	sk: SuKienZalo,
+	deps: PhuThuocTraLoi = {},
+): Promise<void> {
+	await dongVaBao(sk, ZALO.loi.tacTuLoi, deps);
+}
+
+export async function canHoiLai(
+	sk: SuKienZalo,
+	doiToken: (token: string) => void,
+	deps: PhuThuocTraLoi = {},
+): Promise<void> {
+	doiToken(`${ZALO.hoi.tienToBo}${sk.hoiId ?? Date.now()}`);
+	await dongVaBao(sk, ZALO.loi.canHoiLai, deps);
 }
 
 export type PhuThuocMoPhien = {
