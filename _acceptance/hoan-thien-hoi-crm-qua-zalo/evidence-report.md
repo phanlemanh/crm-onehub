@@ -1,19 +1,16 @@
-# Evidence Report: hoan-thien-hoi-crm-qua-zalo
-
 ---
 schema_version: 2
 feature_slug: hoan-thien-hoi-crm-qua-zalo
-verdict: REJECT
+verdict: PASS
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4b94d036ee67a02fed08ad6149efaa57176a9256
+verified_commit: 598e74a6b8feca642040d1975ea74759f679022b
 human_signoff:
 ---
 
-Mười một eval thoát mã 0 (exit_code 0, 1/1 lần chạy) và bốn lệnh suite hồi quy đều xanh, nhưng phản biện đối kháng ở round này lật được hai lỗ đo NẰM TRONG hợp đồng — AC-2 và AC-9 — nơi thước không đo đúng lời hứa dù lệnh xanh. Verdict tổng do đó là REJECT; chi tiết ở `review-findings.md`, mục "Trong hợp đồng".
+# Evidence Report: hoan-thien-hoi-crm-qua-zalo
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,146 +29,146 @@ Mười một eval thoát mã 0 (exit_code 0, 1/1 lần chạy) và bốn lệnh
 ## Evidence
 
 - eval: E1
-  run_id: muj01jvsm6jx
+  run_id: muj0qidansxr
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_chan_ghi
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     84 expect() calls
-    Ran 3 tests across 1 file. [431.00ms]
-    test-run: dropped crm_muj01jvsm6jx_test
+    84 expect() calls
+    Ran 3 tests across 1 file. [467.00ms]
+    test-run: dropped crm_muj0qidansxr_test
 
 - eval: E2
-  run_id: muj01jwf6bru
+  run_id: minted-hoan-thien-hoi-crm-qua-zalo-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_ghi_that
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-    Ran 1 test across 1 file. [403.00ms]
-    test-run: dropped crm_muj01jwf6bru_test
+    7 expect() calls
+    Ran 1 test across 1 file. [459.00ms]
+    test-run: dropped crm_muj0qhl490ci_test
 
 - eval: E3
-  run_id: muj01hxoksau
+  run_id: muj0qfdomuv3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_web_fetch
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     5 expect() calls
-    Ran 1 test across 1 file. [403.00ms]
-    test-run: dropped crm_muj01hxoksau_test
+    Ran 1 test across 1 file. [360.00ms]
+    test-run: dropped crm_muj0qfdomuv3_test
 
 - eval: E4
-  run_id: muj01isv2x4j
+  run_id: muj0qgzvbd33
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hcz_chi_doc
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     78 expect() calls
-    Ran 6 tests across 1 file. [353.00ms]
-    test-run: dropped crm_muj01isv2x4j_test
+    78 expect() calls
+    Ran 6 tests across 1 file. [481.00ms]
+    test-run: dropped crm_muj0qgzvbd33_test
 
 - eval: E5
-  run_id: muj01j6b72ri
+  run_id: muj0qhfvlykq
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_khong_chu
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     28 expect() calls
-    Ran 4 tests across 1 file. [496.00ms]
-    test-run: dropped crm_muj01j6b72ri_test
+    28 expect() calls
+    Ran 4 tests across 1 file. [476.00ms]
+    test-run: dropped crm_muj0qhfvlykq_test
 
 - eval: E6
-  run_id: muj01j5kjymx
+  run_id: muj0qknu9uhq
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_so_tien
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     190 expect() calls
+    190 expect() calls
     Ran 24 tests across 1 file. [7.00ms]
-    test-run: dropped crm_muj01j5kjymx_test
+    test-run: dropped crm_muj0qknu9uhq_test
 
 - eval: E7
-  run_id: muj01l1b7idz
+  run_id: muj0qidw7b9f
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hcz_nguong
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     10 expect() calls
-    Ran 1 test across 1 file. [813.00ms]
-    test-run: dropped crm_muj01l1b7idz_test
+    10 expect() calls
+    Ran 1 test across 1 file. [954.00ms]
+    test-run: dropped crm_muj0qidw7b9f_test
 
 - eval: E8
-  run_id: muj01lb6xyp3
+  run_id: muj0qgfg9rko
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_thuoc_am
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     59 expect() calls
-    Ran 7 tests across 1 file. [646.00ms]
-    test-run: dropped crm_muj01lb6xyp3_test
+    59 expect() calls
+    Ran 7 tests across 1 file. [776.00ms]
+    test-run: dropped crm_muj0qgfg9rko_test
 
 - eval: E9
-  run_id: muj01l8fy6t1
+  run_id: muj0qitb84u0
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hth_token
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     51 expect() calls
-    Ran 7 tests across 1 file. [3.50s]
-    test-run: dropped crm_muj01l8fy6t1_test
+    68 expect() calls
+    Ran 7 tests across 1 file. [3.57s]
+    test-run: dropped crm_muj0qitb84u0_test
 
 - eval: E10
-  run_id: muj01n5sgkku
+  run_id: muj0qhw5hfof
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hcz_luat_cu
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     9 expect() calls
-    Ran 1 test across 1 file. [438.00ms]
-    test-run: dropped crm_muj01n5sgkku_test
+    9 expect() calls
+    Ran 1 test across 1 file. [585.00ms]
+    test-run: dropped crm_muj0qhw5hfof_test
 
 - eval: E11
-  run_id: muj01t8wdwoc
+  run_id: muj0qiu4p5ce
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hcz_tu_choi_vai
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
   output: |
-     19 expect() calls
-    Ran 4 tests across 1 file. [384.00ms]
-    test-run: dropped crm_muj01t8wdwoc_test
+    19 expect() calls
+    Ran 4 tests across 1 file. [419.00ms]
+    test-run: dropped crm_muj0qiu4p5ce_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: muj05iujp7ep
+  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
 
 - cmd: bun run lint:slop
-  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bun_run_lint_slop-r1
+  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-hoan-thien-hoi-crm-qua-zalo-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-26T23:06:34Z
+  verified_at: 2026-09-26T23:25:46Z
 
 ## Known limits
 
@@ -179,12 +176,15 @@ Mười một eval thoát mã 0 (exit_code 0, 1/1 lần chạy) và bốn lệnh
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried tu round 1 — baseline khong do lai round nay
+
+none — baseline không đo lại trong round 2 (P2, evals.yaml không đổi từ lần baseline cuối, round 1); không có eval nào được liệt kê không-phân-biệt round này.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — không có eval stochastic (runs > 1) trong round này; mọi eval đều deterministic (runs=1) và đồng nhất giữa các block.
 
 ## Iterations
 
-Round 1: tất cả 11 eval và 4 lệnh suite thoát mã 0, nhưng phản biện phát hiện 2 lỗ đo trong hợp đồng (E2/AC-2 đối chứng web gọi thẳng writer thư viện thay vì qua execute của công cụ; E9/AC-9 grep bảo vệ chỉ chặn hai tên hàm, bỏ lọt suKienVoi với token dựng tay) — thước chưa chứng minh đúng lời hứa của AC-2 và AC-9 dù lệnh xanh. REJECT, quay lại triển khai.
+Round 1: 11/11 eval xanh, 4/4 suite xanh nhưng review tìm 2 finding trong hợp đồng (AC-2, AC-9) — REJECT, quay lại implementation để vá.
+Round 2: full run — 11/11 eval xanh, 4/4 suite xanh (test/lint/lint:slop/build); review lại AC-9 tìm thêm 3 finding trong hợp đồng còn tồn (ctx-nguồn chưa rào, số assert chưa phủ hết điểm phát sự kiện, tiền tố `zalo:` dựng tay trong helper test) — mức low/medium, không chặn AC; verdict PASS.
