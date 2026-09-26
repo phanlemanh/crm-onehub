@@ -116,7 +116,14 @@ if (process.argv.includes("--chieu-do")) {
 			`VIOLATION [${SLUG}]: verdict=REJECT (must be PASS to merge)`,
 			`VIOLATION [${tenHoaCu}]: evidence is stale — code changed after verify (verified_commit 0000000); re-run verify before merge. Changed:`,
 			"    apps/app/package.json",
+			"pre-merge-check: rules ran=4 declared-off=0 expected=4",
 		].join("\n"),
+	);
+
+	const preMergeChet = join(thuMuc, "pre-merge-chet.txt");
+	writeFileSync(
+		preMergeChet,
+		`VIOLATION [${SLUG}]: verdict=BLOCKED (must be PASS to merge)\n`,
 	);
 
 	const ca = [
@@ -134,6 +141,11 @@ if (process.argv.includes("--chieu-do")) {
 			ten: "luoi truoc gop bao mot ho so hoa cu",
 			doi: ["--pre-merge-tu", preMergeGia],
 			ghim: `ho so hoa cu chua ghim lai: ${tenHoaCu}`,
+		},
+		{
+			ten: "luoi truoc gop chet giua chung (khong co dong tong ket)",
+			doi: ["--pre-merge-tu", preMergeChet],
+			ghim: "thieu dong tong ket",
 		},
 	];
 	let lot = 0;
@@ -339,6 +351,18 @@ if (!raTruocGop.includes(`[${SLUG}]`))
 	doHong.push(
 		`khong doc duoc dau ra truoc gop: khong co dong nao cho [${SLUG}] — luoi khong chay`,
 	);
+const dongTongKet = /^pre-merge-check: rules ran=(\d+) declared-off=\d+ expected=(\d+)$/m.exec(
+	raTruocGop,
+);
+if (!dongTongKet)
+	doHong.push(
+		"khong doc duoc dau ra truoc gop: thieu dong tong ket «pre-merge-check: rules ran=…» — luoi chet giua chung",
+	);
+else if (dongTongKet[1] !== dongTongKet[2])
+	doHong.push(
+		`luoi truoc gop chay ${dongTongKet[1]}/${dongTongKet[2]} luat — khong du`,
+	);
+else console.log(`luoi truoc gop chay du ${dongTongKet[1]}/${dongTongKet[2]} luat`);
 const hoaCu = [
 	...raTruocGop.matchAll(/^VIOLATION \[([^\]]+)\]: evidence is stale/gm),
 ]
