@@ -41,10 +41,10 @@ So `d864d529` (merge-base) với HEAD, trên 35 tệp của `rang/tep-mang-ten-c
 | `apps/app/lib/messages/agent-builder-tac-nhan.ts` | Nothing outside the CRM. | Nothing outside OneHub Center. | en |
 | `apps/app/lib/messages/agent-builder-tac-nhan.ts` | Không gì ra ngoài CRM. | Không gì ra ngoài OneHub Center. | vi |
 | `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | Bounded CRM read access |  | en |
-| `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | I created the Eve agent, applied its bounded CRM and integration access, and made it live for the team. | I created the Eve agent, applied its bounded OneHub Center and integration access, and made it live for the team. | en |
+| `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | I created the Eve agent, applied its bounded CRM and integration access, and made it live for the team. | I created the Eve agent, applied its bounded access to OneHub Center and its integrations, and made it live for the team. | en |
 | `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | On CRM event | On a record event | en |
 | `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | CRM records in the approved scope | Records in the approved scope | en |
-| `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc CRM và quyền kết nối trong phạm vi, rồi đưa vào chạy cho cả đội. | Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc OneHub Center và quyền kết nối trong phạm vi, rồi đưa vào chạy cho cả đội. | vi |
+| `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc CRM và quyền kết nối trong phạm vi, rồi đưa vào chạy cho cả đội. | Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc dữ liệu trong OneHub Center và quyền kết nối trong phạm vi, rồi đưa vào chạy cho cả đội. | vi |
 | `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | Khi CRM có việc |  | vi |
 | `apps/app/lib/messages/agent-builder-tro-chuyen.ts` | Bản ghi CRM trong phạm vi đã duyệt | Bản ghi trong phạm vi đã duyệt | vi |
 | `apps/app/lib/messages/agent-builder-tro-chuyen.ts` |  | Bounded read access in OneHub Center | en |
