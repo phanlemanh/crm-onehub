@@ -20,6 +20,8 @@ import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
+export { dienNode };
+
 export type NguoiDi = { userId: string; name: string };
 
 export function ChuyenViecDialog({

@@ -1,0 +1,78 @@
+schema_version: 1
+slug: khoa-rieng-dien-node
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.krdn_mau_that
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx"
+      - "apps/app/lib/messages/ke-hoach-noi.ts"
+      - "apps/app/test/dien-node-khoa-rieng.dom.tsx"
+    expected: |
+      Test DOM apps/app/test/dien-node-khoa-rieng.dom.tsx, nhom ca "mau-that". Hop THAT
+      (ChuyenViecDialog), mau THAT (keHoachNoiMessages(locale).chuyen), LocaleProvider THAT.
+      useTRPC (mock @/lib/trpc/client) tra createTRPCOptionsProxy<AppRouter> THAT tren
+      createTRPCClient voi link gia tra du lieu theo op.path (khuon cua lam-moi-chuyen-viec.dom.tsx).
+      Bo bat: console.error boc lai trong beforeEach, ghi moi loi goi (doi so ghep chuoi), tra lai
+      ban goc trong afterEach.
+      MA TRAN VIET TRUOC, 4 ca (test.each), moi ca mot ten "<locale> <keHoach>/<buoc>":
+      vi 2/3 · vi 0/0 · en 2/3 · en 0/0. Moi ca: mo hop cho Huong Le, cho toi khi mo ta khong con
+      Spinner, qua them 5 nhip. Khang dinh theo thu tu:
+      (1) so loi goi bo bat chua "same key" = 0 — thong diep ghim "khoa trung o <ten ca>";
+      (2) textContent cua [role=dialog] h2/tieu de = dien(k.tieuDe, {ten: "Huong Le"}) — "tieu de sai o <ten ca>";
+      (3) textContent mo ta = dien(k.coViec, {ten, keHoach: "2", buoc: "3"}) hoac
+          dien(k.khongViec, {ten}) — "mo ta sai o <ten ca>";
+      (4) mo ta co mot phan tu [translate="no"] voi textContent "Huong Le" — "ten khong khoa dich o <ten ca>".
+      dien lay tu plan-copy THAT (cung ham hop dung cho toast), khong viet tay chuoi ky vong.
+      DEM CA: afterAll cua nhom "mau-that" so so ca da chay voi hang 4 viet rieng (khong suy tu
+      bang) — "nhom mau-that chay <n> ca, phai 4".
+      Tep lay ChuyenViecDialog va dienNode bang await import (namespace), khong import ten tinh,
+      de ma truoc sua (chua export dienNode) van nap duoc tep.
+      CHIEU DO: ma TRUOC sua do (1) o ca 4 ca voi thong diep "khoa trung o ..." (mau mo ta bat dau
+      bang {ten}); sau sua, pha thu tren ban commit (bo .filter trong dienNode) -> do lai (1);
+      hoan nguyen bang git checkout sau khi da commit.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.krdn_ma_tran
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx"
+      - "apps/app/test/dien-node-khoa-rieng.dom.tsx"
+    expected: |
+      Nhom ca "ma-tran" cung tep, cung bo bat. dienNode import tu tep hop (export). MA TRAN VIET
+      TRUOC, 11 ca (test.each), moi ca [mau, chu ky vong]:
+        "{a} sau"->"A sau" · "truoc {a}"->"truoc A" · "truoc {a} sau"->"truoc A sau" ·
+        "{a}{b}"->"AB" · "{a} {b}"->"A B" · "{a}"->"A" · "chu tron"->"chu tron" · ""->"" · "{a} va {a}"->"A va A" ·
+        "{z} la"->" la" · "{a}{b}{a}"->"ABA"
+      voi a = <b translate="no">A</b>, b = "B". Moi ca:
+      (1) nut = dienNode(mau, {a, b}); moi phan tu la React element (isValidElement); tap khoa
+          (nut.map(n => n.key)) co kich thuoc bang so phan tu — "khoa trung trong mau <mau>";
+      (2) ve nut vao mot the div bang createRoot + act; textContent = chu ky vong — "chu sai trong mau <mau>";
+      (3) bo bat khong co loi goi chua "same key" — "canh bao khoa trung trong mau <mau>".
+      So ca = 11, so khang dinh co ten = 44 (4 moi ca: (1) tach thanh hai — moi phan tu la element, va tap khoa khong trung — cong (2), (3)). DEM CA: afterAll cua nhom "ma-tran" so so ca da chay
+      voi hang 11 viet rieng — "nhom ma-tran chay <n> ca, phai 11".
+      CHIEU DO: ma TRUOC sua chua export dienNode -> 11 ca do vi dienNode khong phai ham (khong phai
+      do dung cho). Chieu do dung nghia lay bang pha thu SAU sua, tren ban commit:
+      (a) bo .filter -> "{a} sau", "{a}", "{a} va {a}", "{a}{b}", "{a} {b}", "{a}{b}{a}", "{z} la"
+          do o (1) "khoa trung trong mau ..."; "truoc {a}", "truoc {a} sau", "chu tron", "" van xanh;
+      (b) doi thanh .filter((phan) => phan.trim() !== "") -> "{a} {b}" do o (2)
+          "chu sai trong mau {a} {b}".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.krdn_bo_bat
+    paths:
+      - "apps/app/test/dien-node-khoa-rieng.dom.tsx"
+    expected: |
+      Ca "bo-bat-con-song" cung tep, cung bo bat (cung beforeEach/afterEach voi E1, E2). Ve
+      [<Fragment key="trung">x</Fragment>, <Fragment key="trung">y</Fragment>] vao mot div bang
+      createRoot + act. Khang dinh: so loi goi bo bat chua "same key" >= 1 — thong diep ghim
+      "bo bat console khong con song". Doi chung duong cung ca: ngay sau do ve
+      [<Fragment key="p">x</Fragment>, <Fragment key="q">y</Fragment>] vao div moi voi bo ghi da
+      xoa — so loi goi "same key" = 0 ("bo bat bao gia khi khoa rieng").
+      CHIEU DO (pha thu o S3, tren ban commit): bo boc console.error trong beforeEach -> do voi
+      "bo bat console khong con song"; dong thoi E1 va E2 van xanh (dung la ly do can ca nay).

@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	test,
+} from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
@@ -87,6 +95,10 @@ const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { keHoachNoiMessages } = await import("@/lib/messages/ke-hoach-noi");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { ChuyenOkrDialog } = await import(
+	"@/app/(app)/[slug]/settings/members/chuyen-okr-dialog"
+);
+const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 
 const k = keHoachNoiMessages("vi").chuyen;
 const kOkr = okrMessages("vi").chuyen;
@@ -342,4 +354,95 @@ describe("chuyen-okr-man", () => {
 		expect(mucMenu(k.menu), "khong co muc chuyen viec").toBeUndefined();
 		expect(mucMenu(kOkr.menu), "khong co muc chuyen OKR").toBeUndefined();
 	});
+});
+
+const SO_CA_KHOA_RIENG = 4;
+const KHOA_RIENG: ["vi" | "en", number, number][] = [
+	["vi", 2, 1],
+	["vi", 0, 0],
+	["en", 2, 1],
+	["en", 0, 0],
+];
+
+describe("chuyen-okr-khoa-rieng", () => {
+	let daChay = 0;
+	const goc = console.error;
+	let daGhi: string[] = [];
+
+	beforeEach(() => {
+		daGhi = [];
+		console.error = (...doiSo: unknown[]) => {
+			daGhi.push(doiSo.map(String).join(" "));
+		};
+	});
+
+	afterEach(() => {
+		console.error = goc;
+	});
+
+	afterAll(() => {
+		expect(
+			daChay,
+			`nhom chuyen-okr-khoa-rieng chay ${daChay} ca, phai ${SO_CA_KHOA_RIENG}`,
+		).toBe(SO_CA_KHOA_RIENG);
+	});
+
+	test.each(KHOA_RIENG)(
+		"chuyen-okr-khoa-rieng: %s %i KR / %i muc tieu",
+		async (locale, kr, mucTieu) => {
+			daChay += 1;
+			const tenCa = `${locale} ${kr}/${mucTieu}`;
+			const kc = okrMessages(locale).chuyen;
+			datThanhVien(true, { kr, mucTieu });
+			const o = document.createElement("div");
+			document.body.appendChild(o);
+			const root = createRoot(o);
+			dangMo.push({ o, root });
+			const client = new QueryClient({
+				defaultOptions: { queries: { retry: false } },
+			});
+			await act(async () => {
+				root.render(
+					<QueryClientProvider client={client}>
+						<LocaleProvider locale={locale}>
+							<ChuyenOkrDialog
+								nguoi={{ userId: "u-h", name: "Huong Le" }}
+								onDong={() => {}}
+							/>
+						</LocaleProvider>
+					</QueryClientProvider>,
+				);
+			});
+			const moTa = () =>
+				document.body.querySelector<HTMLElement>(
+					'[data-slot="dialog-description"]',
+				);
+			await cho(
+				() => (moTa()?.textContent ?? "").includes("Huong Le"),
+				`mo ta co ten o ${tenCa}`,
+			);
+			await nghi(5);
+
+			const ten = "Huong Le";
+			const kyVong =
+				kr > 0 || mucTieu > 0
+					? dien(kc.coViec, { ten, kr: String(kr), mucTieu: String(mucTieu) })
+					: dien(kc.khongViec, { ten });
+			expect(
+				daGhi.filter((d) => d.includes("same key")),
+				`khoa trung o ${tenCa}`,
+			).toEqual([]);
+			expect(
+				document.body.querySelector('[data-slot="dialog-title"]')?.textContent,
+				`tieu de sai o ${tenCa}`,
+			).toBe(dien(kc.tieuDe, { ten }));
+			expect(moTa()?.textContent, `mo ta sai o ${tenCa}`).toBe(kyVong);
+			expect(
+				[...(moTa()?.querySelectorAll('[translate="no"]') ?? [])].map(
+					(n) => n.textContent,
+				),
+				`ten khong khoa dich o ${tenCa}`,
+			).toContain(ten);
+		},
+	);
 });
