@@ -19,6 +19,7 @@ const CHU = {
 const GOOGLE = {
 	google: true,
 	microsoft: false,
+	quenMatKhau: false,
 	providers: [],
 } satisfies SignInOptions;
 

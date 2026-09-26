@@ -22,6 +22,7 @@ let tieng: Tieng = "vi";
 let tuyChon: SignInOptions | Error = {
 	google: true,
 	microsoft: false,
+	quenMatKhau: false,
 	providers: [],
 };
 let phien: { user: { id: string } } | null = null;
@@ -83,6 +84,7 @@ const { thanhVienMessages } = await import(
 const GOOGLE: SignInOptions = {
 	google: true,
 	microsoft: false,
+	quenMatKhau: false,
 	providers: [],
 };
 

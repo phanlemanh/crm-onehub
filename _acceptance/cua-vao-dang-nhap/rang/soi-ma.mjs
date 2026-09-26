@@ -7,6 +7,7 @@ import ts from "typescript";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
 const CAM_NHAP = ["@crm/auth", "@crm/db"];
+const LOI_VAO_CLIENT = new Set(["@crm/auth/client"]);
 const LOP_CAM = [
 	/(^|\s)(hover:|dark:)?bg-/,
 	/(^|\s)(hover:|dark:)?rounded-/,
@@ -95,7 +96,10 @@ export function soiTep(tep) {
 	const loi = [];
 	if (laClient(nguon)) {
 		for (const tu of new Set(nhap.values())) {
-			if (CAM_NHAP.some((c) => tu === c || tu.startsWith(`${c}/`))) {
+			if (
+				!LOI_VAO_CLIENT.has(tu) &&
+				CAM_NHAP.some((c) => tu === c || tu.startsWith(`${c}/`))
+			) {
 				loi.push(`(a) tep client nhap ${tu}`);
 			}
 		}
