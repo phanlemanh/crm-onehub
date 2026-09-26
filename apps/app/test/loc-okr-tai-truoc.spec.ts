@@ -22,7 +22,7 @@ describe("loc-okr-tai-truoc", () => {
 		duMat(locOkr(loadOkrSearchParams(new URLSearchParams())));
 	});
 
-	const CA = [
+	const CA: { ten: string; q: string; ra: ReturnType<typeof locOkr> }[] = [
 		{
 			ten: "khong-loc",
 			q: "",
@@ -43,7 +43,7 @@ describe("loc-okr-tai-truoc", () => {
 				tuTin: ["thap", "cao"],
 			},
 		},
-	] as const;
+	];
 
 	for (const ca of CA)
 		test(`ma tran URL ${ca.ten}`, () => {
