@@ -67,6 +67,8 @@ import {
 	chiSoOutput,
 	datNguonKrOutput,
 	datNguonKrVao,
+	ghiSoKrInput,
+	ghiSoKrOutput,
 	lichSuSoInput,
 	lichSuSoOutput,
 	xemTruocChiSoInput,
@@ -600,5 +602,17 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof banGhiChiSoInput>,
 	) {
 		return this.so.banGhiChiSo(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ghiSoKrInput,
+		output: ghiSoKrOutput,
+		meta: restMeta("POST", "/okr/key-results/{id}/value", TAG),
+	})
+	ghiSoKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ghiSoKrInput>,
+	) {
+		return this.so.ghiSoKr(ctx.user.id, input);
 	}
 }

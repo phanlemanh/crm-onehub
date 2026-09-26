@@ -1,3 +1,4 @@
+import { GHI_CHU_TOI_DA } from "@crm/validation/okr-cap-nhat";
 import {
 	BAC_GHI_DANH,
 	bacGhiDanh,
@@ -8,7 +9,7 @@ import {
 	maChiSo,
 	phamViChiSo,
 } from "@crm/validation/okr-chi-so";
-import { NGUON_KR } from "@crm/validation/okr-kr";
+import { NGUON_KR, soKr } from "@crm/validation/okr-kr";
 import {
 	type DatNguonKrInput,
 	datNguonKrInput,
@@ -108,3 +109,12 @@ export const banGhiChiSoOutput = z.object({
 	),
 });
 export type BanGhiChiSoOutput = z.infer<typeof banGhiChiSoOutput>;
+
+export const ghiSoKrInput = z.strictObject({
+	id: ma,
+	giaTri: soKr,
+	ghiChu: z.string().trim().max(GHI_CHU_TOI_DA).optional(),
+});
+export type GhiSoKrInput = z.infer<typeof ghiSoKrInput>;
+
+export const ghiSoKrOutput = z.object({ id: z.string(), ngay });

@@ -4,6 +4,7 @@ import { chupKrCrm } from "@crm/db/okr-chi-so";
 import { parseDocSheetPayload, parseOkrNguon } from "@crm/validation/okr-nguon";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { OkrSoService } from "../src/okr/okr-so.service";
 import {
 	type AiHoacCookie,
 	dungSan,
@@ -709,26 +710,9 @@ describe("okr-nguon", () => {
 				await datNguon({ keyResultId: b.kApi, loai: "api" }),
 				"dat nguon api",
 			);
-			await db.okrSoChup.createMany({
-				data: [
-					{
-						keyResultId: b.kApi,
-						ngay: new Date(`${NGAY.D1}T00:00:00Z`),
-						giaTri: 7,
-						nguon: "api",
-						tacGiaUserId: s.phuTrach,
-						chupLuc: new Date("2026-06-09T05:00:00Z"),
-					},
-					{
-						keyResultId: b.kApi,
-						ngay: new Date(`${NGAY.D}T00:00:00Z`),
-						giaTri: 9,
-						nguon: "api",
-						tacGiaUserId: s.truongP1,
-						chupLuc: new Date("2026-06-10T05:00:00Z"),
-					},
-				],
-			});
+			const so = ungDung().get(OkrSoService);
+			await so.ghiSoKr(s.phuTrach, { id: b.kApi, giaTri: 7 }, CHOT_D1);
+			await so.ghiSoKr(s.truongP1, { id: b.kApi, giaTri: 9 }, CHOT_D);
 		});
 
 		test("khong ngay: ngay moi nhat, hai trang cong bang soTinhLai bang soDaChup", async () => {

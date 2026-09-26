@@ -8,6 +8,7 @@ import {
 } from "@crm/db/okr-chi-so";
 import { OKR_SO } from "@crm/db/okr-so-config";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import { kiemGiaTriTheoKieu } from "@crm/validation/okr-cap-nhat";
 import {
 	BAC_GHI_DANH,
 	type BacGhiDanh,
@@ -16,7 +17,7 @@ import {
 	type MaChiSo,
 	type PhamViChiSo,
 } from "@crm/validation/okr-chi-so";
-import { NGUON_KR, type NguonKr } from "@crm/validation/okr-kr";
+import { kieuKr, NGUON_KR, type NguonKr } from "@crm/validation/okr-kr";
 import { TRANG_THAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import {
 	type DatNguonKrInput,
@@ -44,6 +45,7 @@ import { OKR } from "./okr-config";
 import type {
 	BanGhiChiSoInput,
 	BanGhiChiSoOutput,
+	GhiSoKrInput,
 	XemTruocChiSoInput,
 } from "./okr-so.contracts";
 
@@ -281,6 +283,51 @@ export class OkrSoService {
 				loi: loi instanceof Error ? loi.name : "khong-ro",
 			});
 		}
+	}
+
+	async ghiSoKr(userId: string, input: GhiSoKrInput, now = new Date()) {
+		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id);
+		return this.db.$transaction(async (tx) => {
+			await this.okr.assertKyGhiDuoc(tx, quyen.objective.cycleId);
+			const kr = await tx.okrKeyResult.findUniqueOrThrow({
+				where: { id: input.id },
+				include: {
+					nguonMay: true,
+					objective: { select: { cycle: { select: { endsOn: true } } } },
+				},
+			});
+			if (kr.nguonMay?.loai !== "api")
+				throw new BadRequestException(T.so.khongNhanApi);
+			const hom = ngayVN(now);
+			if (hom > kr.objective.cycle.endsOn.toISOString().slice(0, 10))
+				throw new BadRequestException(T.so.kyDaQua);
+			const loi = kiemGiaTriTheoKieu(kieuKr.parse(kr.kind), input.giaTri);
+			if (loi) throw new BadRequestException(T.capNhat.giaTri[loi]);
+			await tx.okrSoChup.create({
+				data: {
+					keyResultId: kr.id,
+					ngay: ngayDb(hom),
+					giaTri: input.giaTri,
+					nguon: "api",
+					tacGiaUserId: userId,
+				},
+			});
+			if (kr.source === "api")
+				await tx.okrKeyResult.update({
+					where: { id: kr.id },
+					data: { currentValue: input.giaTri },
+				});
+			await this.okr.vet(
+				tx,
+				userId,
+				"ghi-so-api",
+				{ objectiveId: kr.objectiveId, keyResultId: kr.id },
+				{ currentValue: Number(kr.currentValue) },
+				{ currentValue: input.giaTri },
+				input.ghiChu ?? null,
+			);
+			return { id: kr.id, ngay: hom };
+		});
 	}
 
 	private async tenNguoi(ids: (string | null)[]) {
