@@ -66,7 +66,7 @@ evals:
     executor: script
     cmd: config:executors.script.sot_soi_chi_them
     paths: [apps/**, packages/**, _acceptance/so-okr-tu-chay/rang/soi-ma.mjs]
-    expected: "exit 0; script suy gốc kho từ vị trí của nó, soi AST (typescript) mọi .ts/.tsx dưới apps/ và packages/ trừ test/: không lời gọi nào có dạng <x>.okrSoChup.update|updateMany|upsert|delete|deleteMany; không chuỗi SQL thô ($executeRaw, $queryRaw, $executeRawUnsafe) nào chứa okrSoChup cùng UPDATE hoặc DELETE; lời gọi okrSoChup.create* chỉ ở apps/agent/agent/lib/okr-chup.ts và dịch vụ ghiSoKr (in danh sách tệp và số lời gọi tìm thấy — phải > 0). CHIỀU ĐỎ: --chieu-do chép okr-chup.ts vào tmpdir, chèn một okrSoChup.updateMany → script đỏ in «okrSoChup bị sửa: <tệp>:<dòng>»."
+    expected: "exit 0; script suy gốc kho từ vị trí của nó, soi AST (typescript) mọi .ts/.tsx dưới apps/ và packages/ trừ test/: không lời gọi nào có dạng <x>.okrSoChup.update|updateMany|upsert|delete|deleteMany; không chuỗi SQL thô ($executeRaw, $queryRaw, $executeRawUnsafe) nào chứa okrSoChup cùng UPDATE hoặc DELETE; lời gọi okrSoChup.create* chỉ ở apps/agent/agent/lib/okr-chup.ts, hàm chụp dùng chung chupKrCrm trong packages/db/src/okr-chi-so.ts và dịch vụ ghiSoKr (in danh sách tệp và số lời gọi tìm thấy — phải > 0). CHIỀU ĐỎ: --chieu-do chép okr-chup.ts vào tmpdir, chèn một okrSoChup.updateMany → script đỏ in «okrSoChup bị sửa: <tệp>:<dòng>»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
