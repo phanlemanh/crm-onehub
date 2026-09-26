@@ -83,7 +83,12 @@ function CayNoi<T>({
 		setSelectedItems: () => undefined,
 		setExpandedItems: (cap) =>
 			onExpandedChange(typeof cap === "function" ? cap(expanded) : cap),
-		initialState: { focusedItem: selectedId ?? nodes[0]?.id ?? null },
+		initialState: {
+			focusedItem:
+				selectedId && bang.has(selectedId)
+					? selectedId
+					: (nodes[0]?.id ?? null),
+		},
 		onPrimaryAction: (item) => onSelect?.(item.getId()),
 		features: [syncDataLoaderFeature, selectionFeature, hotkeysCoreFeature],
 	});

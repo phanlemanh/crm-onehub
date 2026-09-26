@@ -66,7 +66,7 @@ export function lyDoCua(kr: KrSo, homNay: Date): LyDoHop[] {
 	const tuan = dauTuanVN(homNay);
 	const ra: LyDoHop[] = [];
 	const moi = moiNhat(kr);
-	const truoc = kr.lan.at(-2);
+	const truoc = kr.lan.filter((l) => l.tuan < tuan).at(-1);
 	if (moi && truoc && moi.tuan === tuan) {
 		const bac = HANG_TU_TIN[truoc.tuTin] - HANG_TU_TIN[moi.tuTin];
 		if (bac > 0) ra.push({ loai: "tut", tu: truoc.tuTin, den: moi.tuTin, bac });

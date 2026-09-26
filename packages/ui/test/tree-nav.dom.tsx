@@ -40,10 +40,11 @@ const CAY: TreeNavNode<string>[] = [
 
 const chon: string[] = [];
 
-function Vo() {
+function Vo({ selectedId }: { selectedId?: string }) {
 	const [mo, setMo] = useState<string[]>(["goc"]);
 	return (
 		<TreeNav
+			selectedId={selectedId}
 			expanded={mo}
 			label="Cây thử"
 			nodes={CAY}
@@ -160,4 +161,25 @@ describe("tree-nav — đi bằng bàn phím", () => {
 		const cap3 = document.querySelector("[data-id='la11']");
 		expect(cap3).toBeNull();
 	});
+});
+
+describe("tree-nav — mục đang chọn không có trong cây", () => {
+	for (const [ten, selectedId] of [
+		["người không phải nút cây", "nguoi:k"],
+		["đơn vị không thấy", "pb:khong-co"],
+	] as const) {
+		test(`${ten}: đúng một mục trong thứ tự Tab, là mục đầu`, async () => {
+			khung = document.createElement("div");
+			document.body.appendChild(khung);
+			const r = createRoot(khung);
+			root = r;
+			await act(async () => {
+				r.render(<Vo selectedId={selectedId} />);
+			});
+			const tab0 = [
+				...document.querySelectorAll("[role='tree'] [tabindex='0']"),
+			].map((e) => e.getAttribute("data-id"));
+			expect(tab0).toEqual(["goc"]);
+		});
+	}
 });

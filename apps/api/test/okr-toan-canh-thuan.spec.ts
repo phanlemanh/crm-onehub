@@ -256,6 +256,44 @@ describe("hop-tuan", () => {
 	});
 });
 
+describe("hop-tuan-nhieu-lan-mot-tuan", () => {
+	const kr = (id: string, l: KrSo["lan"]): KrSo => ({
+		id,
+		thuTu: 0,
+		khoaLuc: vn("2026-10-05T09:00:00"),
+		lan: l,
+	});
+
+	test("so voi lan cuoi cua tuan truoc, khong so voi lan lien truoc trong cung tuan", () => {
+		const ra = xepHopTuan(
+			[
+				kr("Kvv", [
+					lan("2026-11-09", "2026-11-10T09:00:00", "cao"),
+					lan("2026-11-16", "2026-11-16T09:00:00", "vua"),
+					lan("2026-11-16", "2026-11-18T08:00:00", "vua"),
+				]),
+				kr("Ktv", [
+					lan("2026-11-09", "2026-11-10T09:00:00", "cao"),
+					lan("2026-11-16", "2026-11-16T09:00:00", "thap"),
+					lan("2026-11-16", "2026-11-18T08:00:00", "vua"),
+				]),
+				kr("Kmoi", [
+					lan("2026-11-16", "2026-11-16T09:00:00", "cao"),
+					lan("2026-11-16", "2026-11-18T08:00:00", "vua"),
+				]),
+			],
+			HOM_NAY,
+		);
+		expect(ra).toEqual({
+			dangBan: [
+				{ id: "Kvv", lyDo: [{ loai: "tut", tu: "cao", den: "vua", bac: 1 }] },
+				{ id: "Ktv", lyDo: [{ loai: "tut", tu: "cao", den: "vua", bac: 1 }] },
+			],
+			conLai: [{ id: "Kmoi", lyDo: [] }],
+		});
+	});
+});
+
 describe("heatmap", () => {
 	test("heatmap: moi tuan la ty le KR muc cao tren KR co cap nhat tuan do, null khi khong ai hoac tuan chua toi", () => {
 		const tuanKy = cacTuan(
