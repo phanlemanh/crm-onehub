@@ -5,7 +5,7 @@ slug: toan-canh-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-25T21:28:57Z
 design_doc: docs/superpowers/specs/2026-09-26-toan-canh-okr-design.md

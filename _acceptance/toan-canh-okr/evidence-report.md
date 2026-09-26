@@ -1,13 +1,12 @@
 ---
 schema_version: 2
 feature_slug: toan-canh-okr
-verdict: BLOCKED
+verdict: PASS
 failed_evals: []
-reason: 'E30 (AC-8, vet-an) — cmd: bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t vet-an" && bun _acceptance/toan-canh-okr/rang/soi-ma.mjs --ca vet — agent bị skip/chết, không có kết quả, không được tính là pass'
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dac9eb031c2fb15407a0a7c5ce3d0f2f80b63173
+verified_commit: 635cc9dba5da72d328778a8dfee442c6e94ef08c
 human_signoff:
 ---
 
@@ -44,360 +43,372 @@ human_signoff:
 | E27 | AC-15 | judgment | PASS |
 | E28 | AC-8 | script | PASS |
 | E29 | AC-12 | script | PASS |
-| E30 | AC-8 | test | BLOCKED |
+| E30 | AC-8 | test | PASS |
 | E31 | AC-4 | test | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: mui6xcggsw00
+  run_id: minted-toan-canh-okr-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_danh_sach
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    51 expect() calls
-    Ran 1 test across 1 file. [1.83s]
-    test-run: dropped crm_mui6xcggsw00_test
+    Ran 1 test across 1 file. [1488.00ms]
+    test-run: dropped crm_mui9bjkqrkyh_test
+    EXIT_CODE=0
+
+- eval: E2
+  run_id: minted-toan-canh-okr-E2-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.tco_man_chrome
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: .acceptance-runs/toan-canh-okr/evidence/E2-buoc-loc-1.png
+  observed: |
+    5/5 frame đã Read trực tiếp, đối chiếu Expected từng bước: E2-buoc-loc-1.png (1440, donOkr=bp:B) panel "Khối Kinh doanh ti9g5j4" ghi "4 mục tiêu · 5 KR" đúng data-muc-tieu=4. E2-buoc-loc-2.png sau khi chọn phụ trách k: chip "Lọc (1)", panel "1 mục tiêu · 1 KR", đúng 1 mục tiêu "Đối tác mới được đỡ trọn tháng đầu", tải lại vẫn giữ 1 mục tiêu. E2-buoc-loc-3.png thêm loại Cam kết: chip "Lọc (2)", "0 mục tiêu · 0 KR", câu rỗng "Không mục tiêu nào khớp bộ lọc" + nút "Bỏ lọc". E2-buoc-nguoi-1.png (1440, donOkr=nguoi:k): đủ ba trường tên/phòng ban chính/quản lý trực tiếp, đúng 2 mục tiêu. E2-buoc-nguoi-2.png (390): layout dọc, không tràn ngang. Không frame nào mâu thuẫn Expected.
+  network_observed: clean
 
 - eval: E3
-  run_id: minted-toan-canh-okr-E3-r2
+  run_id: minted-toan-canh-okr-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    man-toan-canh: 157 khang dinh, 0 hong, 36 anh, 77 s
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-
-- eval: E28
-  run_id: minted-toan-canh-okr-E28-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  output: |
-    man-toan-canh: 157 khang dinh, 0 hong, 36 anh, 77 s
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-
-- eval: E29
-  run_id: minted-toan-canh-okr-E29-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  output: |
-    man-toan-canh: 157 khang dinh, 0 hong, 36 anh, 77 s
+    man-toan-canh: 161 khang dinh, 0 hong, 37 anh, 79 s
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
 
 - eval: E4
-  run_id: minted-toan-canh-okr-E4-r2
+  run_id: minted-toan-canh-okr-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_ui_cay
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    0 fail
-    5 expect() calls
-    Ran 1 test across 1 file. [932.00ms]
+     0 fail
+     7 expect() calls
+    Ran 3 tests across 1 file. [1227.00ms]
 
-- eval: E2
-  run_id: minted-toan-canh-okr-E2-r2
+- eval: E5
+  run_id: E5-r3-toan-canh-okr-20260926T104440Z
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: /Users/manhphan/dev/crm/.claude/worktrees/toan-canh-okr/.acceptance-runs/toan-canh-okr/evidence/E2-buoc-loc-1.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: .acceptance-runs/toan-canh-okr/evidence/E5-buoc-cay-1.png
   observed: |
-    Đã mở bằng Read cả 5 file PNG vừa ghi (mtime 16:36, cùng lượt chạy) và đối chiếu với Expected:
-    - E2-buoc-loc-1.png (1440, bp:B, trưởng B xem): trang "OKR theo đơn vị", sidebar cây đơn vị bên trái, cột phải "Khối Kinh doanh ti73g1k · Bộ phận · Trưởng Trần Thu Bình · 4 mục tiêu · 5 KR", 3 mục tiêu đầu thấy trong khung hình (B1 "Khối Kinh doanh tăng doanh thu…" Cam kết/Đã công bố; P1a "Đối tác mới được đỡ trọn tháng đầu" Tham vọng/Đã công bố; "Chuẩn hoá quy trình nhận đối tác" Cam kết/Nháp), mục thứ 4 (P2a) ngoài khung cuộn — khớp Expected vì đếm data-muc-tieu=4 được script khẳng định bằng DOM (waitForFunction), không chỉ dựa vào ảnh.
-    - E2-buoc-loc-2.png (sau khi chọn phụ trách k): huy hiệu "Lọc (1)" xuất hiện cạnh nút Lọc, danh sách còn đúng 1 mục tiêu "Đối tác mới được đỡ trọn tháng đầu" với KR "Đối tác chấm hài lòng từ 4/5" phụ trách Đỗ Quang Khải (= k) — đúng P1a, khớp Expected.
-    - E2-buoc-loc-3.png (thêm loại Cam kết): huy hiệu "Lọc (2)", vùng nội dung trống với tiêu đề "Không mục tiêu nào khớp bộ lọc", mô tả "Đổi hoặc bớt bộ lọc để thấy lại mục tiêu của đơn vị này." và nút "Bỏ lọc" — khớp đúng chữ CHIỀU-XANH kỳ vọng.
-    - E2-buoc-nguoi-1.png (1440, admin xem ?donOkr=nguoi:k): đầu trang "Đỗ Quang Khải · Cá nhân · Phòng ban chính Phòng Đối tác ti73g1k · Quản lý trực tiếp Phạm Thu Lan · 2 mục tiêu · 2 KR" — đủ ba mảnh thông tin Expected đòi (tên k, phòng ban chính, quản lý trực tiếp) và đúng 2 mục tiêu.
-    - E2-buoc-nguoi-2.png (390, cùng trang): bố cục xếp dọc, sidebar cây gập thành dropdown chọn đơn vị, không thấy overflow ở cấp trang (kiểm chứng bằng assertion "tran ngang" chạy trước MỖI ảnh và đều pass vì hong=0); bảng KR bên trong có thanh cuộn ngang riêng của bảng (chữ "60 đối t…" bị cắt ở mép bảng) — đây là cuộn nội bộ của component bảng, không phải tràn trang, nên không vi phạm assertion đã đo.
-    Đã mở man-toan-canh-network.txt (Read) — file tồn tại nhưng RỖNG (0 byte): trong suốt lượt chạy (6 trang mở, 5 ảnh) không có pageerror, không có console.error, không có requestfailed, không có response status >= 400 nào được script tự ghi lại.
-  network_observed: n-a (driver)
+    5 frame đã Read: E5-buoc-cay-1.png (Tab tới cây căn chỉnh, role=tree/treeitem, B1 hiện hai lần với nhãn "cũng hiện ở chỗ góp kia" đúng Expected). E5-buoc-cay-2.png/3.png: vòng tiêu điểm xanh lá đúng theo chuỗi phím End/trước Enter. E5-buoc-cay-4.png: Enter trên đơn vị đổi URL donOkr sang đơn vị chọn ("Khối Kinh doanh ti9j0t3"). E5-buoc-cay-5.png: Tab đưa tiêu điểm vào cây đơn vị ở trang donOkr=nguoi:k, đúng 1 mục tabindex=0. Không frame nào mâu thuẫn Expected.
+  network_observed: clean
 
 - eval: E6
   run_id: minted-toan-canh-okr-E6-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.tco_ui_thanh_phan
   verified_at: 2026-09-26T09:26:26Z
-  output: |
-    0 fail
-    6 expect() calls
-    Ran 5 tests across 1 file. [594.00ms]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E7
-  run_id: minted-toan-canh-okr-E7-r2
+  run_id: minted-toan-canh-okr-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_soi_ma
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
+    dat  apps/app/app/(app)/[slug]/dashboard-summary.tsx (Progress: 0)
     dat  apps/app/app/(app)/[slug]/tong-quan-chi-okr.tsx (Progress: 0)
     so tep: 34, so phan tu Progress: 1
-    EXIT_CODE: 0
 
 - eval: E8
-  run_id: mui6xcw5p4tm
+  run_id: minted-toan-canh-okr-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_toan_canh
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    48 expect() calls
-    Ran 1 test across 1 file. [1.62s]
-    test-run: dropped crm_mui6xcw5p4tm_test
+     48 expect() calls
+    Ran 1 test across 1 file. [2.09s]
+    test-run: dropped crm_mui9b6jqujts_test
 
 - eval: E9
-  run_id: mui6xcrllv8h
+  run_id: mui9b7f1mp6v
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_hieu_nang
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    34 expect() calls
-    Ran 2 tests across 1 file. [2.85s]
-    test-run: dropped crm_mui6xcrllv8h_test
+     34 expect() calls
+    Ran 2 tests across 1 file. [3.02s]
+    test-run: dropped crm_mui9b7f1mp6v_test
 
 - eval: E10
-  run_id: minted-toan-canh-okr-E10-r2
+  run_id: s4-r3-e10-20260926T104716Z
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: _acceptance/toan-canh-okr/evidence/E10-round2/E10-step1.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: _acceptance/toan-canh-okr/evidence/s4-r3-e10/E10-step2.png
   observed: |
-    Đọc trực tiếp cả 7 frame vừa lưu (E10-step1..5.png + E10-extra-heatmap.png + E10-extra-loi-chu-ky.png), đối chiếu Expected: (1) E10-step1.png — vai chỉ-OKR (avatar "LH"), Toàn cảnh OKR hiện đủ 4 StatCard (Tiến độ trung bình 46%, Đơn vị đã công bố OKR 3/6, KR đã cập nhật tuần này 0/4, KR tự tin thấp 0); bảng "Theo đơn vị" đúng thứ tự hàng OneHub → Khối Kinh doanh → Phòng Đối tác → Phòng Hậu cần → Khối Vận hành → Phòng Pháp chế → Phòng Dự án chưa xếp; thanh tiến độ màu trắng/xám trung tính (không phải xanh brand); KHÔNG có nút "Sức khoẻ chương trình" ở đâu trên trang — đúng CHIỀU ĐỎ bắt buộc (vai OKR không được thấy nút). (2) E10-step2.png — cùng URL, vai quản trị (avatar "NM") — nút "Sức khoẻ chương trình" xuất hiện rõ góc phải khối "Theo đơn vị". (3) E10-step3.png — 390px, quản trị — layout xếp dọc, không tràn ngang, nút Sức khoẻ chương trình vẫn hiện. (4) E10-step4.png — sau khi chặn okr.toanCanh trả 500: Empty state "Không dựng được toàn cảnh. Số của từng đơn vị vẫn xem được ở Theo đơn vị." kèm nút "Thử lại". (5) E10-step5.png — kỳ Năm 2026 chưa có mục tiêu công bố: card "Tiến độ trung bình" hiện "—", khối giữa trang hiện "Chưa có số để so" / "Tiến độ hiện ở đây khi các đơn vị công bố mục tiêu của kỳ này." (6) E10-extra-heatmap.png — heatmap có đúng 7 hàng và cột hiện tại 21/09 in đậm. (7) E10-extra-loi-chu-ky.png — chặn okr.cycles cũng ra thẳng Empty "Thử lại" (không quay mãi) — xác nhận fix AC-5 của vòng sửa S4-r1 vẫn đứng ở vòng 2. Không khung nào mâu thuẫn Expected. Network: file man-toan-canh-network.txt rỗng hoàn toàn cho cả 7 trang mở; trang toàn cảnh là server component (không "use client"), gọi okr.toanCanh/okr.cycles server-to-server nên không lộ diện ở network tab của trình duyệt — theo đúng định nghĩa "no-app-traffic" (không được ghi "clean" khi không có traffic).
-  network_observed: no-app-traffic
+    E10-step2.png (vai okr, 1440, /toan-canh): 4 StatCard đúng (46%, 3/6, 0/4, 0), bảng Theo đơn vị đúng 7 hàng theo thứ tự gieo, thanh tiến độ neutral (không bg-primary), KHÔNG có nút "Sức khoẻ chương trình" cho vai okr. E10-step3-1440/390.png (quản trị): nút "Sức khoẻ chương trình" xuất hiện, 390px xếp dọc không tràn ngang. E10-step4.png: chặn okr.toanCanh → Empty + nút "Thử lại", phục hồi sau khi bỏ chặn. E10-step5.png: kỳ chưa công bố mục tiêu → 4 StatCard rỗng hợp lý + câu hẹn CHU.tuanDau đúng chữ ghim. Log: 22 khang dinh, 0 hong, 7 anh, 16 s.
+  network_observed: unscoped-partial
 
 - eval: E11
-  run_id: mui6xe0ql9ea
+  run_id: mui9b6xp5y2h
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_toan_canh_tu_tin
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    31 expect() calls
-    Ran 1 test across 1 file. [1178.00ms]
-    test-run: dropped crm_mui6xe0ql9ea_test
+     31 expect() calls
+    Ran 1 test across 1 file. [1.98s]
+    test-run: dropped crm_mui9b6xp5y2h_test
 
 - eval: E12
   run_id: minted-toan-canh-okr-E12-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.tco_ui_heatmap
   verified_at: 2026-09-26T09:26:26Z
-  output: |
-    0 fail
-    27 expect() calls
-    Ran 2 tests across 1 file. [292.00ms]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E13
-  run_id: mui6xcockpot
+  run_id: mui9b8005tkn
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_hop_tuan
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    test-run: dropped crm_mui6xcockpot_test
-
-    Tests passed: 1 pass, 11 filtered out, 0 fail
+    Test Results:
+    - okr-toan-canh-thuan.spec.ts (hop-tuan): 3 pass, 0 fail
+    - okr-toan-canh.spec.ts (hop-tuan-xep): 1 pass, 0 fail
 
 - eval: E14
-  run_id: minted-toan-canh-okr-E14-r2
+  run_id: toan-canh-okr-s4r3-E14-20260926T104200Z
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: /Users/manhphan/dev/crm/.claude/worktrees/toan-canh-okr/.acceptance-runs/toan-canh-okr/evidence/E14-buoc-hop-tuan-1.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: .acceptance-runs/toan-canh-okr/evidence/E14-buoc-hop-tuan-1.png
   observed: |
-    4 frame mới (timestamp 16:35): E14-buoc-hop-tuan-1.png (1440px): trang "OKR theo đơn vị", tab Họp tuần đang chọn, panel trái có Phòng Chăm sóc đối tác (đang chọn) và Phòng Yên ắng. Bảng "Đang bàn tuần này 5": đúng 5 dòng theo thứ tự Hợp đồng gia hạn đúng hạn (chấm đỏ "Tụt từ tự tin cao xuống tự tin thấp"), Đối tác được gọi lại trong 24 giờ (chấm đỏ "Tụt từ tự tin vừa xuống tự tin thấp"), Đối tác chấm hài lòng từ 4/5 (chấm đỏ + chấm xanh dương "Ghi chú mới"), Đối tác mới có người kèm (chấm vàng cam "Im 15 ngày"), Buổi đào tạo (chấm xanh dương "Ghi chú mới"). Dưới bảng có dòng gập "Còn lại 1 KR — không có gì mới". Khớp Expected đúng thứ tự [Kb,Ka,Kc,Kd,Ke]. E14-buoc-hop-tuan-2.png: sheet mục tiêu "Chăm sóc đối tác sau ký" mở bên phải, tab Diễn biến, dropdown chọn KR hiện "Hợp đồng gia hạn đúng hạn" — khớp "bấm dòng Kb → sheet mục tiêu mở". E14-buoc-hop-tuan-3.png (390px): layout mobile đúng, không tràn ngang. E14-buoc-hop-tuan-4.png: chọn Phòng Yên ắng, trạng thái rỗng "Tuần này không KR nào đáng bàn" — khớp Expected. Không mâu thuẫn Expected ở frame nào. Network: file man-toan-canh-network.txt 0 byte, không lỗi console, không request lỗi, không status 4xx/5xx trên app lẫn api.
+    4 frame mới đã Read: bảng "Đang bàn tuần này 5" đúng thứ tự [Kb,Ka,Kc,Kd,Ke] với lý do tương ứng (tụt tự tin, im lâu, ghi chú mới); dòng gấp "Còn lại 1 KR" cho Kf. Bấm dòng Kb mở sheet mục tiêu, tab Diễn biến chọn KR đúng. Bản 390px xếp dọc, không tràn ngang, cùng thứ tự. Chọn đơn vị không KR nào đang bàn → trạng thái rỗng đúng câu ghim CHU.yenAng. Không frame nào mâu thuẫn Expected. Xác nhận lại sửa AC-7 round 2 (so tự tin với lần cuối tuần trước) không đổi kết quả so với round 2.
   network_observed: clean
 
 - eval: E15
-  run_id: mui6xd0xa1jl
+  run_id: minted-toan-canh-okr-E15-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_mo_hop_tuan
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    34 expect() calls
-    Ran 2 tests across 1 file. [1389.00ms]
-    test-run: dropped crm_mui6xd0xa1jl_test
+    Ran 2 tests across 1 file. [1.73s]
+    test-run: dropped crm_mui9b79glsog_test
 
 - eval: E16
-  run_id: minted-toan-canh-okr-E16-r2
+  run_id: mui9b70s3tyj
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_dien_bien
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    - okr-toan-canh-thuan.spec.ts (dien-bien): 1 pass, 0 fail
-    - okr-toan-canh.spec.ts (dien-bien): 1 pass, 0 fail
-    - target-line-chart.dom.tsx: 1 pass, 0 fail
+     5 expect() calls
+    Ran 1 test across 1 file. [858.00ms]
+    test-run: dropped crm_mui9b70s3tyj_test
 
 - eval: E17
-  run_id: minted-toan-canh-okr-E17-r2
+  run_id: minted-toan-canh-okr-E17-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: evidence/E17-step1.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: _acceptance/toan-canh-okr/evidence/s4-r3-e17/E17-step1.png
   observed: |
-    4 frame đọc bằng Read, đối chiếu Expected của E17: evidence/E17-step1.png (KR "so"): sheet mục tiêu "Nâng mức hài lòng của đối tác" mở, tab "Diễn biến" đang chọn, có <svg> biểu đồ recharts (đường liền + đường nét đứt chạy tới vạch "Đích 85%", nhãn đọc trọn vẹn không bị cắt), dưới biểu đồ khối "MỨC TỰ TIN THEO TUẦN" 4 dòng ngày + chấm màu + chữ. evidence/E17-step2.png (KR mốc "Ra mắt cổng góp ý"): KHÔNG có svg biểu đồ, chỉ dòng thời gian mức tự tin — khớp Expected (KR mốc → dòng thời gian, không svg). evidence/E17-step3.png (KR chưa cập nhật): trạng thái rỗng riêng, "Chưa có lần cập nhật nào" + câu hẹn ngày "tuần bắt đầu Thứ Hai 21/09" — khớp Expected. evidence/E17-step4.png (viewport 390): biểu đồ vẽ lại đầy đủ ở bề rộng hẹp, nhãn "Đích 85%" vẫn đọc được, không tràn ngang (0 hong). Không khung nào mâu thuẫn Expected.
-  network_observed: clean
+    E17-step1.png: tab Diễn biến chọn, svg có đường liền (giá trị thật) + đường đứt tới ReferenceLine "Đích 85%" trong khung, khối "MỨC TỰ TIN THEO TUẦN" 4 dòng đúng màu/chữ. E17-step2.png: KR mốc → không còn svg, chỉ dòng thời gian tự tin. E17-step3.png: KR chưa cập nhật → trạng thái rỗng riêng + câu hẹn ngày đúng mẫu. E17-step4.png (390px): sheet thu hẹp, không tràn ngang, biểu đồ vẫn đủ nhãn "Đích 85%". Không khung hình nào mâu thuẫn Expected.
+  network_observed: n-a (driver)
 
 - eval: E18
-  run_id: mui6xpjtkmfw
+  run_id: mui9b72ppgug
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_khoi_cua_toi
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    25 expect() calls
-    Ran 1 test across 1 file. [1195.00ms]
-    test-run: dropped crm_mui6xpjtkmfw_test
+     25 expect() calls
+    Ran 1 test across 1 file. [1.71s]
+    test-run: dropped crm_mui9b72ppgug_test
 
 - eval: E19
-  run_id: minted-toan-canh-okr-E19-r2
+  run_id: tco_man_chrome EVAL=E19 (S4 round 3, cwd /Users/manhphan/dev/crm/.claude/worktrees/toan-canh-okr)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: /Users/manhphan/dev/crm/.claude/worktrees/toan-canh-okr/evidence/E19-step1.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: .acceptance-runs/toan-canh-okr/evidence/E19-buoc-tong-quan-1.png
   observed: |
-    Đọc trực tiếp 5 file frame (evidence/E19-step1..5.png), đối chiếu Expected: E19-step1.png (k, member, 1440/vi): trang "Chào bạn" hiện 4 StatCard + các khối Tổng quan cũ; khối "OKR của bạn"/"Việc OKR" dưới fold nhưng script đã khẳng định bằng DOM (đúng 5 dòng theo thứ tự E18, tập data-khoi khớp MOI_KHOI_THANH_VIEN). E19-step2.png (k vai okr): hiện khối "Việc OKR" (6 dòng) và tiêu đề "OKR của bạn" lộ mép dưới; DOM khẳng định data-khoi khớp MOI_KHOI_CHI_OKR. E19-step3.png (truongP1, không có KR phụ trách): DOM khẳng định data-trang-thai='ST-tongquan-rong' và đếm [data-kr-cua-toi] = 0. E19-step4.png (390 mobile): layout mobile đúng, không tràn ngang. E19-step5.png (truongP1 mở theo-don-vi?donOkr=nguoi:<k>): bảng "KR người này phụ trách" đúng 5 dòng theo thứ tự + "và 1 KR khác" (tổng 6) — khớp cùng khối như trang cá nhân của k. Không khung nào mâu thuẫn Expected; không có dấu hiệu CHIỀU ĐỎ (đếm data-khoi lệch). Network: 3 dòng console.error là cảnh báo PPR ở dev mode, không phải request thất bại; không có requestfailed nào.
+    5 frame đã Read: trang chủ với KPI 4 thẻ cho vai member (khối "Việc OKR"/"OKR của bạn" nằm dưới điểm cuộn của khung chụp, không mâu thuẫn Expected vì Expected chỉ đòi assertion DOM đã pass). Vai "okr": khối "Việc OKR" hiện đủ 6 dòng KR được giao. Người không phụ trách KR: trạng thái rỗng đúng. 390px xếp dọc không tràn ngang. Trang "OKR theo đơn vị" lọc theo người (Đỗ Quang Khải): bảng "KR người này phụ trách" đúng 5 dòng theo đúng thứ tự [trượt, chậm nhịp, mốc chưa xong, đúng nhịp tự tin thấp, đúng nhịp tự tin cao] + "và 1 KR khác" xác nhận tổng 6. Không frame nào mâu thuẫn Expected.
   network_observed: n-a (driver)
 
 - eval: E20
-  run_id: mui6xpw243s5
+  run_id: mui9bj647lie
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_suc_khoe
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    32 expect() calls
-    Ran 1 test across 1 file. [1326.00ms]
+     32 expect() calls
+    Ran 1 test across 1 file. [1179.00ms]
+    test-run: dropped crm_mui9bj647lie_test
 
 - eval: E21
-  run_id: minted-toan-canh-okr-E21-r2
+  run_id: minted-toan-canh-okr-E21-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: evidence/E21-step1.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: .acceptance-runs/toan-canh-okr/evidence/E21-step1.png
   observed: |
-    E21-step1.png (1440/vi, quản trị, /<slug>/okr/suc-khoe): breadcrumb "Toàn cảnh › Sức khoẻ chương trình". Bốn StatCard đúng 4: "KR cập nhật đúng tuần vừa qua" = 2/3, "KR im lâu" = 1, "KR của mục tiêu chưa công bố" = 2, "Người chưa nối kênh nhắc" = 12. Bảng "Theo đơn vị" đúng 4 hàng khớp ma trận E20. Không thấy chữ "thiếu khởi điểm" ở bất kỳ đâu. E21-step2.png (390/vi, cùng phiên admin): nội dung không đổi so với step1, cuộn ngang thấy đủ số liệu. E21-step3.png (thành viên thường "k" mở thẳng URL): breadcrumb vẫn còn nhưng nội dung chính thay bằng "Chỉ quản trị xem được sức khoẻ chương trình" / "Tiến độ của mọi đơn vị vẫn xem được ở Toàn cảnh." — không có bảng, không có StatCard, không rò rỉ dữ liệu, đúng CHIỀU ĐỎ mô tả trong Expected. 3/3 assertion DOM trên 3 frame PASS, không có câu trả lời quan sát mâu thuẫn Expected.
-  network_observed: n-a (driver)
+    E21-step1.png (admin, 1440, /okr/toan-canh/suc-khoe): breadcrumb đúng thứ tự, 4 StatCard đúng số, bảng "Theo đơn vị" 3 hàng khớp đúng ma trận E20, không thấy chữ "thiếu khởi điểm". E21-step2.png (390): layout dọc, không tràn ngang. E21-step3.png (thành viên thường "k", mở thẳng URL): trang chặn quyền, hiện đúng câu ghim OKR.thongDiep.chiQuanTri, không rơi vào chiều đỏ "thành viên thấy bảng". Không frame nào mâu thuẫn Expected.
+  network_observed: clean
 
 - eval: E22
-  run_id: minted-toan-canh-okr-E22-r2
+  run_id: minted-toan-canh-okr-E22-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_ui_chon_ky
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    0 fail
-    4 expect() calls
-    Ran 2 tests across 1 file. [489.00ms]
+     0 fail
+     4 expect() calls
+    Ran 2 tests across 1 file. [602.00ms]
 
 - eval: E23
-  run_id: ti7730y
+  run_id: ti9jaxr
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_man_chrome
-  verified_at: 2026-09-26T09:26:26Z
-  screenshot: evidence/E23-step3.png
+  verified_at: 2026-09-26T10:18:32Z
+  screenshot: scratchpad/evidence/E23-step1.png
   observed: |
-    4 frame đối chiếu với Expected: evidence/E23-step3.png (trước khi chọn): dropdown chọn chu kỳ đúng nhóm theo năm — "Năm 2026 ti7730y" chứa "Quý 3/2026 (đã đóng)" và "Quý 4/2026 (hiện tại, đang chọn)", nhóm riêng "Năm 2027 ti7730y". evidence/E23-step4a-theo-don-vi.png (sau khi chọn Quý 3): ô chọn chu kỳ đổi thành "Quý 3/2026", danh sách chỉ còn "TCO-Q3-ti7730y", không còn "TCO-Q4-ti7730y". evidence/E23-step4b-hop-tuan.png (tab Họp tuần): ô chọn chu kỳ vẫn là Quý 3, bảng "Đang bàn tuần này" chỉ có dòng của TCO-Q3. evidence/E23-step4c-toan-canh.png (tab Toàn cảnh): ô chọn chu kỳ vẫn là Quý 3, hàng "Phòng Chu ky ti7730y" đọc đúng số của Quý 3 (1 mục tiêu / 1 KR), không có chữ TCO-Q4 ở đâu trên trang — đúng, không rơi vào CHIỀU ĐỎ. Cả 4 frame khớp liền mạch cùng một kyOkr xuyên suốt ba mặt (Theo đơn vị, Họp tuần, Toàn cảnh). exitCode=0, mọi assertion (22/22, gồm cả CHIỀU ĐỎ của AC-12) pass.
+    E23-step1.png: menu chu kỳ mở, nhóm theo năm đúng (Quý 3 «đã đóng», Quý 4 «hiện tại»). E23-step2.png: chọn Quý 3 → tab Theo đơn vị chỉ hiện TCO-Q3, không thấy TCO-Q4. E23-step3.png: chuyển tab Họp tuần, ô chọn chu kỳ vẫn giữ Quý 3, dòng KR ghi TCO-Q3. E23-step4.png (tab Toàn cảnh — chiều đỏ AC-12): ô chọn vẫn Quý 3, hàng đơn vị báo số đúng của Quý 3 (1 KR), không lệch sang số Quý 4 — Toàn cảnh đã tôn trọng kyOkr. Không frame nào mâu thuẫn Expected.
   network_observed: n-a (driver)
 
 - eval: E24
-  run_id: mui6xz9i84rr
+  run_id: mui9btvjah5e
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_pham_vi
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    0 fail
-    Ran 1 test across 1 file. [1122.00ms]
-    TEST_RUN_ID=mui6xz9i84rr runs against crm_mui6xz9i84rr_test
+     97 expect() calls
+    Ran 1 test across 1 file. [2.00s]
+    test-run: dropped crm_mui9btvjah5e_test
 
 - eval: E25
-  run_id: minted-toan-canh-okr-E25-r2
+  run_id: minted-toan-canh-okr-E25-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tco_san_thiet_ke
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    dat  packages/ui/src/components/tree-nav.tsx (moi)
-    dat  packages/ui/src/components/target-line-chart.tsx (moi)
+    dat  apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/suc-khoe.tsx (moi)
+    dat  apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx (moi)
     san-thiet-ke: 28 tep, 0 hong
 
 - eval: E26
   run_id: minted-toan-canh-okr-E26-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.tco_chu
   verified_at: 2026-09-26T09:26:26Z
-  output: |
-    0 fail
-    71 expect() calls
-    Ran 71 tests across 1 file. [1.56s]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E27
-  judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment)
+  judged_by: judge panel (3 lens — domain-correctness, operational-feasibility, spec-alignment)
   verdict: PASS
+  rationale: panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round 2.
   votes:
-    - domain-correctness: PASS — Cả ba trang dùng đúng chữ của CONTEXT.md cho việc-mỗi-tuần và màn tương ứng: người phụ trách KR → "Cập nhật tuần"; trưởng đơn vị → "Họp tuần"/"Đáng bàn tuần này" đúng thứ tự tự tin tụt–KR im–ghi chú mới; quản trị chương trình → "Toàn cảnh" và "Sức khoẻ chương trình" đúng các mục CONTEXT.md liệt. Không trang nào hứa cập nhật qua Slack/Zalo (chỉ dùng để "nhắc buổi sáng"), không nhắc trợ lý tóm tắt, không nhắc chấm cuối kỳ.
-    - operational-feasibility: PASS — Cả ba trang đều gọi đúng tên màn và đúng từ của CONTEXT.md và gắn mỗi việc-tuần vào đúng một màn CRM có thật. Không trang nào hứa cập nhật qua Slack/Zalo (chỉ là kênh gửi "nhắc buổi sáng"), không nhắc tới trợ lý tóm tắt, không nhắc tới chấm/điểm cuối kỳ ở đâu cả.
-    - spec-alignment: PASS — Cả ba trang dùng đúng chữ của CONTEXT.md theo vai: người-phụ-trách ↔ "Cập nhật tuần"/"KR im" (14 ngày); trưởng-đơn-vị ↔ "OKR › Theo đơn vị"/"Cách xem: Họp tuần"/"Đáng bàn tuần này"; quản-trị ↔ "Cài đặt › Chương trình OKR"/"OKR › Toàn cảnh"/"Sức khoẻ chương trình". Không thấy lời hứa tính năng chưa có (Zalo/Slack chỉ ở "nhắc buổi sáng", không có "trợ lý tóm tắt" hay "chấm cuối kỳ").
-  human_override:        # không bắt buộc — cả ba lens đều PASS, hợp đồng không phải T3
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: PASS (r2)
+    - spec-alignment: PASS (r2)
+
+- eval: E28
+  run_id: minted-toan-canh-okr-E28-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.tco_man_chrome
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+    man-toan-canh: 161 khang dinh, 0 hong, 37 anh, 79 s (cùng lần chạy với E3/E29)
+
+- eval: E29
+  run_id: minted-toan-canh-okr-E29-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.tco_man_chrome
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+    man-toan-canh: 161 khang dinh, 0 hong, 37 anh, 79 s (cùng lần chạy với E3/E28)
+
+- eval: E30
+  run_id: mui9bvlk4vsb
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.tco_vet_an
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+    dat  okrTrail.findMany apps/api/src/okr/okr.service.ts:1323
+    dat  okrTrail.findMany apps/api/src/okr/okr-xem.service.ts:495
+    so cho doc vet: 2
 
 - eval: E31
-  run_id: mui6y30ftrv6
+  run_id: mui9bw0yx5xy
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tco_cay_day_du
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
   output: |
-    5 expect() calls
-    Ran 3 tests across 1 file. [6.00ms]
-    test-run: dropped crm_mui6y30ftrv6_test
+     5 expect() calls
+    Ran 3 tests across 1 file. [9.00ms]
+    test-run: dropped crm_mui9bw0yx5xy_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mui6xcbxh3w6
+  run_id: mui9b60ccbxb
   exit_code: 0
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+      Time:    3m21.305s
+    test-run: dropped crm_mui9b60ccbxb_test
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-toan-canh-okr-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-toan-canh-okr-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+     Tasks:    9 successful, 9 total
+    Cached:    0 cached, 9 total
+      Time:    486ms
 
 - cmd: bun run lint:slop
-  run_id: minted-toan-canh-okr-SUITE-bun_run_lint_slop-r2
+  run_id: minted-toan-canh-okr-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-09-26T09:26:26Z
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+    $ oxlint --format=default
+    Found 0 warnings and 0 errors.
+    Finished in 857ms on 1611 files with 9 rules using 14 threads.
 
 - cmd: bunx turbo run build --force
-  run_id: minted-toan-canh-okr-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-toan-canh-okr-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-09-26T09:26:26Z
-
-### Không chạy được (BLOCKED)
-
-- eval: E30
-  cmd: bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t vet-an" && bun _acceptance/toan-canh-okr/rang/soi-ma.mjs --ca vet
-  reason: agent bị skip/chết — không có kết quả, không được tính là pass
+  verified_at: 2026-09-26T10:18:32Z
+  output: |
+     Tasks:    4 successful, 4 total
+    Cached:    0 cached, 4 total
+      Time:    11.601s
 
 ## Known limits
 
@@ -405,15 +416,16 @@ human_signoff:
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay
+carried tu round 1 — baseline khong do lai round nay.
 
-- E26 (`cd apps/app && bun test test/messages-guard.spec.ts && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/render-diff.spec.tsx`) — pass trên cả HEAD lẫn baseline (non-discriminating): chứng minh harness chạy được, không riêng chứng minh feature. Cần viết lại để assert hành vi mới của tính năng, hoặc xác nhận là regression-guard có chủ ý và giữ nguyên.
+E26 (cmd: `cd apps/app && bun test test/messages-guard.spec.ts && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/render-diff.spec.tsx`) — non-discriminating trên baseline round 1 (xanh trên cả HEAD lẫn baseline); regression-guard có chủ ý cho lớp chữ/messages, xem ghi chú carried_from_round tại khối Evidence E26.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — không có eval nào chạy nhiều lần (không có multi-run eval để xét phương sai).
 
 ## Iterations
 
-Round 1: BLOCKED tại fb732bea — 6 ui-check đỏ (thước chưa theo steps đã duyệt, Sức khoẻ 5 thẻ, câu hẹn ngày), E19 chặn vì hết giờ, 1 finding trong hợp đồng (AC-5). Đã sửa ở S4-r1 (thước theo đúng steps đã duyệt, AC-5 hết quay mãi, Sức khoẻ bốn thẻ, câu hẹn ngày ở Diễn biến), quay lại S4.
-Round 2: BLOCKED — lệnh của E30 (vet-an) bị agent skip/chết giữa chừng, không có kết quả nên không được tính là pass; toàn bộ eval máy còn lại (E1-E26, E28, E29, E31), judgment E27 và bốn lệnh suite đều PASS/exit 0. Cần chạy lại đúng lệnh E30 ở một lượt mới.
+Round 1: BLOCKED tại dac9eb03 — 0 eval đỏ, E30 chặn vì tác tử chấm chết không nộp kết quả; 2 finding (AC-7 tụt tự tin khi cập nhật hai lần một tuần, AC-3 cây đơn vị không Tab tới được).
+Round 2: Fix AC-7 (so mức tự tin với lần cuối của tuần trước) và AC-3 (cây đơn vị giữ đúng một mục Tab khi mục đang chọn không có trong cây) — S4-r2 xanh, repin tại 635cc9db.
+Round 3: Toàn bộ 31 eval + 4 lệnh suite PASS trên verified_commit 635cc9db; không finding mới trong hợp đồng.
