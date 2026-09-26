@@ -310,7 +310,7 @@ làn eval sau khi lượt lên `onehub`.
 `cai-dat-con-lai-noi-tieng-viet`, `cau-truc-to-chuc`, `chan-lai-component-ra-man`,
 `cho-phep-ai-vao-o-man-hinh`, `chu-cuoi-cung-tien-de`, `chu-mac-dinh-thu-vien-ngoai`,
 `claimdue-chi-thay-dong-cua-minh`, `cron-theo-ban-khai`, `cua-so-tro-chuyen-noi-tieng-viet`,
-`dat-okr-trong-crm`, `do-quyen-luot-bang-hanh-vi`, `duong-proto-cho-design-pass`,
+`dat-okr-trong-crm`, `do-man-tren-kho-rieng`, `do-quyen-luot-bang-hanh-vi`, `duong-proto-cho-design-pass`,
 `go-la-cat-quyen-that`, `han-viec-theo-ngay`, `ke-hoach-la-mot-ban-ghi`,
 `khoa-cu-khong-mo-khoa-moi`, `khoa-lo-giu-tran`, `khoa-rieng-dien-node`, `khung-trang-cai-dat`,
 `lam-moi-chuyen-viec-qua-loi-chung`, `lenh-chung-khong-an-cache-doi`,

@@ -32,6 +32,7 @@ export const HO_SO_BI_CHAM = [
 	"cua-so-tro-chuyen-noi-tieng-viet",
 	"dat-okr-trong-crm",
 	"do-quyen-luot-bang-hanh-vi",
+	"do-man-tren-kho-rieng",
 	"duong-proto-cho-design-pass",
 	"go-la-cat-quyen-that",
 	"han-viec-theo-ngay",
