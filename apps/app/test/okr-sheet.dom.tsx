@@ -78,6 +78,7 @@ function mucTieu(
 	return {
 		id: "mt-1",
 		cycleId: QUY.id,
+		cycleName: QUY.name,
 		level: "phong-ban",
 		unitId: "pb-1",
 		unitName: "Kinh doanh vùng 1",
@@ -360,7 +361,7 @@ describe("sheet-nhap-co-nut-cong-bo", () => {
 		expect(truoc).toEqual({
 			trangThai: "ST-sheet-nhap",
 			tieuDe: "Tăng khách hàng doanh nghiệp",
-			tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi"],
+			tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi", "Diễn biến"],
 			congBo: 1,
 			themKr: 1,
 			nhap: true,
@@ -1037,7 +1038,7 @@ describe("sheet-trao-doi", () => {
 				chipKhongDich: "no",
 				noiDungKhongDich: ["no", "no"],
 				nhac: LAN.name,
-				tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi2"],
+				tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi2", "Diễn biến"],
 			},
 			goi: [
 				{

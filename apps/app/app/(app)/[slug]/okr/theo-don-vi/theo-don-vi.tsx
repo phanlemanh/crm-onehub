@@ -12,10 +12,11 @@ import {
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
-import { skipToken, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { type ReactNode, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { CayCanChinh } from "../cay-can-chinh";
@@ -23,8 +24,11 @@ import { CayDonVi } from "../cay-don-vi";
 import { useChuKy } from "../chon-chu-ky";
 import { HopThoaiMucTieu } from "../hop-thoai-muc-tieu";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
+import { HopTuan } from "../hop-tuan";
+import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
 import { KhoiMucTieu } from "../khoi-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
+import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
 import {
 	CACH_XEM,
 	type CachXem,
@@ -79,6 +83,15 @@ function khoaMoiDonVi(cay: CayDuLieu): string[] {
 	];
 }
 
+function viTriNguoi(cay: CayDuLieu, id: string) {
+	const p = cay.people.find((x) => x.id === id);
+	const pb = [
+		...cay.divisions.flatMap((x) => x.departments),
+		...cay.chuaXep,
+	].find((x) => x.id === p?.primaryDepartmentId);
+	return { phongBan: pb?.name ?? null, quanLy: p?.manager?.name ?? null };
+}
+
 function DanhSach({ objectives }: { objectives: MucTieu[] }) {
 	return (
 		<div className="flex flex-col gap-6" data-trang-thai="ST-donvi-danhsach">
@@ -94,10 +107,60 @@ function DanhSach({ objectives }: { objectives: MucTieu[] }) {
 	);
 }
 
+function XemCay({
+	cycleId,
+	tenGoc,
+	tenKy,
+}: {
+	cycleId: string;
+	tenGoc: string;
+	tenKy: string;
+}) {
+	const trpc = useTRPC();
+	const cay = useQuery(trpc.okr.cayCanChinh.queryOptions({ cycleId }));
+	if (cay.isPending) return <DangTai />;
+	if (cay.isError) return <Loi thuLai={() => void cay.refetch()} />;
+	if (cay.data.roots.length === 0 && cay.data.chuaCanChinh.length === 0)
+		return (
+			<Rong tenDon={tenGoc} tenKy={tenKy} chuaTruong={false} quanTri={false} />
+		);
+	return (
+		<div data-trang-thai="ST-donvi-caycanchinh">
+			<CayCanChinh
+				roots={cay.data.roots}
+				chuaCanChinh={cay.data.chuaCanChinh}
+			/>
+		</div>
+	);
+}
+
 export function TheoDonVi() {
-	const m = okrMessages(useLocale());
+	const locale = useLocale();
+	const m = okrMessages(locale);
+	const mt = okrToanCanhMessages(locale);
 	const trpc = useTRPC();
 	const [url, datUrl] = useQueryStates(okrParsers);
+	const loc: LocOkrGiaTri = {
+		phuTrach: url[SEARCH_PARAM.okr.phuTrach],
+		loai: url[SEARCH_PARAM.okr.loai],
+		trangThai: url[SEARCH_PARAM.okr.trangThai],
+		tuTin: url[SEARCH_PARAM.okr.tuTin],
+	};
+	const giaTriLoc = <T extends string>(v: T[]) => (v.length > 0 ? v : null);
+	const doiLoc = (thay: Partial<LocOkrGiaTri>) =>
+		void datUrl({
+			[SEARCH_PARAM.okr.phuTrach]: giaTriLoc(thay.phuTrach ?? loc.phuTrach),
+			[SEARCH_PARAM.okr.loai]: giaTriLoc(thay.loai ?? loc.loai),
+			[SEARCH_PARAM.okr.trangThai]: giaTriLoc(thay.trangThai ?? loc.trangThai),
+			[SEARCH_PARAM.okr.tuTin]: giaTriLoc(thay.tuTin ?? loc.tuTin),
+		});
+	const boLoc = () =>
+		void datUrl({
+			[SEARCH_PARAM.okr.phuTrach]: null,
+			[SEARCH_PARAM.okr.loai]: null,
+			[SEARCH_PARAM.okr.trangThai]: null,
+			[SEARCH_PARAM.okr.tuTin]: null,
+		});
 	const don = url[SEARCH_PARAM.okr.don] ?? GOC;
 	const xem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
 	const { cycles, currentId } = useChuKy();
@@ -111,16 +174,12 @@ export function TheoDonVi() {
 			currentId === null ? skipToken : { cycleId: currentId },
 		),
 	);
-	const byUnit = useQuery(
-		trpc.okr.byUnit.queryOptions(
-			currentId === null ? skipToken : { cycleId: currentId, unit: don },
+	const byUnit = useQuery({
+		...trpc.okr.danhSach.queryOptions(
+			currentId === null ? skipToken : { cycleId: currentId, unit: don, loc },
 		),
-	);
-	const cayCanChinh = useQuery(
-		trpc.okr.alignmentTree.queryOptions(
-			currentId === null || xem !== "cay" ? skipToken : { cycleId: currentId },
-		),
-	);
+		placeholderData: keepPreviousData,
+	});
 
 	const quanTri = access.data?.canManageProgram === true;
 	const thuLai = () => {
@@ -138,6 +197,7 @@ export function TheoDonVi() {
 	const tenGoc = workspace.data?.name || m.goc;
 	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
 	const dv = giaiDon(don, cay.data, tenGoc);
+	const nguoi = don.loai === "nguoi" ? viTriNguoi(cay.data, don.id) : null;
 	const demChu = Object.fromEntries(
 		khoaMoiDonVi(cay.data).map((k) => [
 			k,
@@ -148,37 +208,24 @@ export function TheoDonVi() {
 		void datUrl({
 			[SEARCH_PARAM.okr.don]: khoaDon(d) === "goc" ? null : d,
 		});
-	const objectives = byUnit.data?.objectives ?? [];
+	const objectives = byUnit.data?.rows ?? [];
 	const soKr = objectives.reduce((t, mt) => t + mt.keyResults.length, 0);
 
 	let noiDung: ReactNode;
-	if (xem === "cay") {
-		if (cayCanChinh.isPending) noiDung = <DangTai />;
-		else if (cayCanChinh.isError)
-			noiDung = <Loi thuLai={() => void cayCanChinh.refetch()} />;
-		else if (
-			cayCanChinh.data.roots.length === 0 &&
-			cayCanChinh.data.chuaCanChinh.length === 0
-		)
-			noiDung = (
-				<Rong
-					tenDon={tenGoc}
-					tenKy={tenKy}
-					chuaTruong={false}
-					quanTri={false}
-				/>
-			);
-		else
-			noiDung = (
-				<div data-trang-thai="ST-donvi-caycanchinh">
-					<CayCanChinh
-						roots={cayCanChinh.data.roots}
-						chuaCanChinh={cayCanChinh.data.chuaCanChinh}
-					/>
-				</div>
-			);
+	if (xem === "hop-tuan") {
+		noiDung = (
+			<HopTuan
+				cycleId={currentId}
+				key={`${currentId}:${khoaDon(don)}`}
+				unit={don}
+			/>
+		);
+	} else if (xem === "cay") {
+		noiDung = <XemCay cycleId={currentId} tenGoc={tenGoc} tenKy={tenKy} />;
 	} else if (byUnit.isPending) noiDung = <DangTai />;
 	else if (byUnit.isError) noiDung = <Loi thuLai={thuLai} />;
+	else if (objectives.length === 0 && coLoc(loc))
+		noiDung = <KhongKhop boLoc={boLoc} />;
 	else if (objectives.length === 0)
 		noiDung = (
 			<Rong
@@ -213,6 +260,9 @@ export function TheoDonVi() {
 								</CardTitle>
 								<CardDescription>
 									{m.cap[don.loai]}
+									{nguoi
+										? ` · ${nguoi.phongBan ? `${mt.nguoi.phongBanChinh} ${nguoi.phongBan}` : mt.nguoi.chuaCoPhongBan} · ${nguoi.quanLy ? `${mt.nguoi.quanLy} ${nguoi.quanLy}` : mt.nguoi.khongQuanLy}`
+										: null}
 									{don.loai === "bp" || don.loai === "pb" ? (
 										<>
 											{" · "}
@@ -251,7 +301,18 @@ export function TheoDonVi() {
 										{m.danhSach}
 									</ToggleGroupItem>
 									<ToggleGroupItem value="cay">{m.cayCanChinh}</ToggleGroupItem>
+									<ToggleGroupItem value="hop-tuan">
+										{mt.hopTuan.cachXem}
+									</ToggleGroupItem>
 								</ToggleGroup>
+								{xem === "danh-sach" ? (
+									<LocOkr
+										boLoc={boLoc}
+										dem={byUnit.data?.facetCounts}
+										doiLoc={doiLoc}
+										loc={loc}
+									/>
+								) : null}
 								{byUnit.data?.canEdit || quanTri ? (
 									<Button
 										size="sm"
@@ -277,6 +338,9 @@ export function TheoDonVi() {
 								) : null}
 							</div>
 						</Card>
+						{don.loai === "nguoi" && xem === "danh-sach" ? (
+							<KhoiKrCuaToi cycleId={currentId} userId={don.id} />
+						) : null}
 						{noiDung}
 						{themMo ? (
 							<HopThoaiMucTieu

@@ -137,6 +137,7 @@ export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({ objectives: z.array(mucTieuOutput) });
 export const objectiveInput = z.object({ id: ma });
 export const objectiveOutput = mucTieuOutput.extend({
+	cycleName: z.string(),
 	trail: z.array(vetOutput),
 	canEditKr: z.array(z.string()),
 });

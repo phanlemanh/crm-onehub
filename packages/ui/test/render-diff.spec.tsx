@@ -25,12 +25,19 @@ import {
 	DialogTitle,
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
+import { Heatmap } from "../src/components/heatmap";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	MessageScrollerButton,
 	MessageScrollerProvider,
 } from "../src/components/message-scroller";
 import { MoneyInput } from "../src/components/money-input";
+import {
+	ConfidenceIndicator,
+	PaceIndicator,
+} from "../src/components/okr-status";
+import { PeriodSelect } from "../src/components/period-select";
+import { Progress } from "../src/components/progress";
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
@@ -39,6 +46,7 @@ import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
 import { Suggestion } from "../src/components/suggestion";
 import { TablePagination } from "../src/components/table-pagination";
+import { TargetLineChart } from "../src/components/target-line-chart";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
@@ -185,6 +193,57 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{
+		ten: "Progress",
+		ve: () => <Progress expected={47} value={30} variant="neutral" />,
+	},
+	{
+		ten: "Heatmap",
+		ve: () => (
+			<Heatmap
+				caption={DU_LIEU.cot}
+				columns={[{ id: "a", label: "01/11" }]}
+				rows={[{ id: "r", label: DU_LIEU.tenCongTy }]}
+				values={[[null]]}
+			/>
+		),
+	},
+	{
+		ten: "PeriodSelect",
+		ve: () => (
+			<PeriodSelect
+				groups={[
+					{
+						label: DU_LIEU.nhomLoc,
+						items: [{ value: "q", label: DU_LIEU.cot, current: true }],
+					},
+				]}
+				label={DU_LIEU.nhomLocHai}
+				onValueChange={() => {}}
+				value="q"
+			/>
+		),
+	},
+	{
+		ten: "TargetLineChart",
+		ve: () => (
+			<TargetLineChart
+				data={[{ x: "01/11", value: 1, expected: 1 }]}
+				label={DU_LIEU.cot}
+				target={2}
+				targetLabel={DU_LIEU.cotHai}
+			/>
+		),
+	},
+	{
+		ten: "OkrStatus",
+		ve: () => (
+			<>
+				<ConfidenceIndicator level="cao" />
+				<PaceIndicator pace="dung-nhip" />
+			</>
+		),
+	},
 	{ ten: "DotMatrix", ve: () => <DotMatrix /> },
 	{ ten: "ThinkingIndicator", ve: () => <ThinkingIndicator /> },
 	{

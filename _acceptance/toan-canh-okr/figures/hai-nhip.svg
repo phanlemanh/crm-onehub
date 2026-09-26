@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1320 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="32" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HAI NHỊP · MỘT NHÁNH · MỘT HỢP ĐỒNG · toan-canh-okr</text>
+      <text x="32" y="64" fill="#171717" font-size="16" font-family="'Lora', Georgia, serif">Nhịp 2 chỉ bắt đầu sau khi hai vòng khác lên onehub và nhánh này gộp lại</text>
+
+      <path d="M 272 192 L 312 192" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 520 192 L 560 192" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 736 192 L 776 192" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1064 192 L 1104 192" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 464 136 L 464 112 A 8 8 0 0 1 472 104 L 1008 104 A 8 8 0 0 1 1016 112 L 1016 136" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="600" y="80" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="648" y="92" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">CHỈ CHẶN AC-12</text>
+
+      <rect x="32" y="136" width="240" height="240" rx="6" fill="#fafafa"/>
+      <rect x="32" y="136" width="240" height="240" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="40" y="144" width="52" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="66" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHỊP 1</text>
+      <text x="48" y="188" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Nhịp 1</text>
+      <text x="48" y="204" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ngay</text>
+      <line x1="48" y1="216" x2="256" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="48" y="240" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">packages/ui</text>
+      <text x="48" y="262" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">danhSach</text>
+      <text x="48" y="284" fill="#171717" font-size="11" font-family="'Geist', sans-serif">cây bàn phím</text>
+      <text x="48" y="306" fill="#171717" font-size="11" font-family="'Geist', sans-serif">toàn cảnh tiến độ</text>
+      <text x="48" y="328" fill="#171717" font-size="11" font-family="'Geist', sans-serif">sức khoẻ phần có sẵn</text>
+
+      <rect x="312" y="136" width="208" height="192" rx="6" fill="#fafafa"/>
+      <rect x="312" y="136" width="208" height="192" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="320" y="144" width="36" height="16" rx="2" fill="none" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="338" y="156" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CHỜ</text>
+      <text x="328" y="188" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chờ hai vòng</text>
+      <text x="328" y="204" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">lên onehub</text>
+      <line x1="328" y1="216" x2="504" y2="216" stroke="rgba(0,107,79,0.25)" stroke-width="0.8"/>
+      <rect x="328" y="232" width="8" height="8" rx="1" fill="none" stroke="#006B4F" stroke-width="1"/>
+      <text x="344" y="240" fill="#171717" font-size="11" font-family="'Geist', sans-serif">lượt 4 lên onehub</text>
+      <text x="344" y="256" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">cap-nhat-tuan-okr</text>
+      <rect x="328" y="276" width="8" height="8" rx="1" fill="none" stroke="#006B4F" stroke-width="1"/>
+      <text x="344" y="284" fill="#171717" font-size="11" font-family="'Geist', sans-serif">vòng Sửa bốn điểm</text>
+      <text x="344" y="300" fill="#171717" font-size="11" font-family="'Geist', sans-serif">lên onehub</text>
+
+      <rect x="560" y="136" width="176" height="112" rx="6" fill="#fafafa"/>
+      <rect x="560" y="136" width="176" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="568" y="144" width="36" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="586" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GỘP</text>
+      <text x="648" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gộp <tspan font-family="'Geist Mono', monospace" font-weight="500" font-size="11">origin/onehub</tspan></text>
+      <text x="648" y="216" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">vào <tspan font-family="'Geist Mono', monospace" fill="#171717">feat/toan-canh-okr</tspan></text>
+
+      <rect x="776" y="136" width="288" height="264" rx="6" fill="#fafafa"/>
+      <rect x="776" y="136" width="288" height="264" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="784" y="144" width="52" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="810" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHỊP 2</text>
+      <text x="792" y="188" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Nhịp 2</text>
+      <text x="792" y="204" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">sau khi gộp onehub</text>
+      <line x1="792" y1="216" x2="1048" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="792" y="240" fill="#171717" font-size="11" font-family="'Geist', sans-serif">họp tuần + đếm mở bảng</text>
+      <text x="1048" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-7</text>
+      <text x="792" y="262" fill="#171717" font-size="11" font-family="'Geist', sans-serif">heatmap</text>
+      <text x="1048" y="262" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-6</text>
+      <text x="792" y="284" fill="#171717" font-size="11" font-family="'Geist', sans-serif">lọc tự tin</text>
+      <text x="1048" y="284" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-1 · vế nhịp 2</text>
+      <text x="792" y="306" fill="#171717" font-size="11" font-family="'Geist', sans-serif">diễn biến</text>
+      <text x="1048" y="306" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-9</text>
+      <text x="792" y="328" fill="#171717" font-size="11" font-family="'Geist', sans-serif">phần OKR của bạn</text>
+      <text x="1048" y="328" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-10</text>
+      <text x="792" y="350" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chọn chu kỳ</text>
+      <text x="1048" y="350" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-12</text>
+      <text x="792" y="372" fill="#171717" font-size="11" font-family="'Geist', sans-serif">sức khoẻ phần cập nhật</text>
+      <text x="1048" y="372" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">AC-11 · vế nhịp 2</text>
+
+      <rect x="1104" y="136" width="184" height="160" rx="6" fill="#fafafa"/>
+      <rect x="1104" y="136" width="184" height="160" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <rect x="1112" y="144" width="28" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1126" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">S4</text>
+      <text x="1196" y="188" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">implemented</text>
+      <path d="M 1196 196 L 1196 212" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1196 236 L 1196 252" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="1196" y="228" fill="#171717" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">năm lệnh chứng</text>
+      <text x="1196" y="268" fill="#171717" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">báo phiên điều phối mở S4</text>
+
+      <path d="M 32 416 L 32 424 L 1288 424 L 1288 416" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="660" y="444" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">feat/toan-canh-okr · một nhánh · một hợp đồng</text>
+
+      <line x1="32" y1="464" x2="1288" y2="464" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="496" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="132" y="484" width="32" height="16" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="176" y="496" fill="#575757" font-size="10" font-family="'Geist', sans-serif">điều kiện phải chờ</text>
+      <rect x="312" y="484" width="32" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="356" y="496" fill="#575757" font-size="10" font-family="'Geist', sans-serif">bước làm trên nhánh</text>
+      <line x1="496" y1="492" x2="528" y2="492" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="540" y="496" fill="#575757" font-size="10" font-family="'Geist', sans-serif">rẽ: vòng Sửa bốn điểm chỉ chặn chọn chu kỳ</text>
+    </svg>

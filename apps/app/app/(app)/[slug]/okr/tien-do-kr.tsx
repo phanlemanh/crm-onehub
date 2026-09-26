@@ -2,6 +2,7 @@
 
 import { Badge } from "@crm/ui/components/badge";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { type NhipOkr, PaceIndicator } from "@crm/ui/components/okr-status";
 import { Progress } from "@crm/ui/components/progress";
 import {
 	StatusIndicator,
@@ -9,24 +10,27 @@ import {
 } from "@crm/ui/components/status-indicator";
 import {
 	type LoaiMucTieu,
-	type TinhTrang,
 	type TrangThaiMucTieu,
 	tinhTrang,
 } from "@crm/validation/okr-muc-tieu";
 import { okrMessages } from "@/lib/messages/okr";
-
-const TONE_TINH_TRANG = {
-	"dung-nhip": "success",
-	"cham-nhip": "warning",
-	truot: "error",
-	"chua-co-ky-vong": "neutral",
-} satisfies Record<TinhTrang, StatusTone>;
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 
 const TONE_TRANG_THAI = {
 	nhap: "neutral",
 	"cong-bo": "success",
 	"da-bo": "neutral",
 } satisfies Record<TrangThaiMucTieu, StatusTone>;
+
+export function nhipCua(
+	progress: number,
+	expected: number | null,
+	kind: LoaiMucTieu,
+	laMoc: boolean,
+): NhipOkr {
+	if (laMoc) return progress >= 100 ? "moc-xong" : "moc-chua";
+	return tinhTrang(progress, expected, kind);
+}
 
 export function NhanTinhTrang({
 	progress,
@@ -39,20 +43,38 @@ export function NhanTinhTrang({
 	kind: LoaiMucTieu;
 	laMoc?: boolean;
 }) {
-	const m = okrMessages(useLocale());
-	if (laMoc)
-		return progress >= 100 ? (
-			<StatusIndicator size="sm" tone="success" label={m.moc.daXong} />
-		) : (
-			<StatusIndicator size="sm" tone="neutral" label={m.moc.dangCho} />
-		);
-	const t = tinhTrang(progress, expected, kind);
 	return (
-		<StatusIndicator
-			size="sm"
-			tone={TONE_TINH_TRANG[t]}
-			label={m.tinhTrang[t]}
-			data-tinh-trang={t}
+		<PaceIndicator pace={nhipCua(progress, expected, kind, laMoc)} size="sm" />
+	);
+}
+
+export function kyVongCo(expected: number | null) {
+	return expected !== null && expected > 0 ? expected : null;
+}
+
+export function ThanhTienDo({
+	ten,
+	progress,
+	expected,
+}: {
+	ten: string;
+	progress: number;
+	expected: number | null;
+}) {
+	const locale = useLocale();
+	const m = okrMessages(locale);
+	const mt = okrToanCanhMessages(locale);
+	const vach = kyVongCo(expected);
+	return (
+		<Progress
+			expected={vach}
+			value={progress}
+			valueText={
+				vach === null
+					? m.tienDoCua(ten, progress)
+					: mt.tienDoLeRa(ten, String(progress), String(vach))
+			}
+			variant="neutral"
 		/>
 	);
 }
@@ -70,18 +92,21 @@ export function TienDoKr({
 	kind: LoaiMucTieu;
 	laMoc?: boolean;
 }) {
-	const m = okrMessages(useLocale());
 	return (
 		<div className="flex min-w-0 flex-col gap-1.5">
 			<div className="flex items-center gap-2">
-				<Progress value={progress} aria-label={m.tienDoCua(ten, progress)} />
+				<ThanhTienDo
+					expected={laMoc ? null : expected}
+					progress={progress}
+					ten={ten}
+				/>
 				<span className="text-xs tabular-nums">{progress}%</span>
 			</div>
 			<NhanTinhTrang
-				progress={progress}
 				expected={expected}
 				kind={kind}
 				laMoc={laMoc}
+				progress={progress}
 			/>
 		</div>
 	);

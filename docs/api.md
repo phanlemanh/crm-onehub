@@ -517,6 +517,39 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   ones. An objective title that already exists for that unit and cycle is a broken
   row, so pasting the same batch twice writes nothing. Caps and messages live in
   `OKR` (`okr-config.ts`).
+- **Reading views live in `OkrXemService`, not in `OkrService`.** `okr.danhSach`
+  filters a unit's list on the server — owner, kind and status become one Prisma
+  `where`, a division includes its departments, and the facet counts are counted
+  with every other filter applied but their own. `okr.toanCanh` rolls published
+  objectives up by unit, `okr.cayCanChinh` returns the whole company alignment tree
+  with each objective's expected pace, and `okr.sucKhoe` is admin-only
+  (`ForbiddenException` otherwise). `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
+  number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
+  pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
+  plain data and are tested without a database. Caps and the admin message live in
+  `OKR_XEM` (`okr-xem.config.ts`).
+- **Weekly numbers are read from check-ins, never stored again.** `okr.hopTuan`
+  sorts a unit's KRs by why they are worth discussing (`hop-tuan.ts`: confidence
+  dropped, then silent for `OKR_NHAC.imNgay` days, then a new note since the start of
+  last week) and never lists people. `okr.toanCanh` adds each row's confidence split,
+  KRs updated this week, the strongest reason and one heatmap cell per cycle week — the
+  share of KRs whose last check-in that week is `cao`, among KRs updated that week, or
+  `null`. `okr.dienBien` gives one point per cycle week (`dien-bien.ts`), and
+  `okr.khoiCuaToi` a person's five most worrying KRs. A check-in's moment is its
+  session's `submittedAt`, which is the same transaction as `createdAt` in production
+  and is what a test freezes through `OkrCapNhatService`.
+- **Opening the meeting board leaves one `mo-hop-tuan` trail row, and nothing else
+  reads it.** The screen calls `okr.moHopTuan` once when the view mounts; the server
+  writes only for the head of that unit or of its division, skips a repeat by the same
+  person on the same unit within `OKR_XEM.moHopTuan.gopMs`, and stores
+  `after = { donVi, tuan }` with `tuan` as the `YYYY-MM-DD` Monday string, never a
+  `Date`. The row carries no `objectiveId`, so the sheet's Vết tab cannot see it; any
+  new read of the trail by cycle must filter it out — `soi-ma.mjs --ca vet` fails on one
+  that does not. `_acceptance/toan-canh-okr/rang/ty-le-mo-hop-tuan.sql` counts the share
+  of units whose head opened the board in a week (`SET okr.tuan = '2026-11-16'` first).
+- **Expected pace starts at publication.** An objective published today has an
+  expected pace of 0, which `tinhTrang` reads as "no expectation yet" — a screen
+  never prints "expected 0%" or draws a marker at the start of the bar.
 - **The weekly update runs through a session, never a bare write.** `moCapNhat`
   opens an `OkrCheckInSession` (`entry`: `nhac` | `viec-cua-toi` | `tab` | `sheet` —
   where the person came in from) and returns `sessionId`; `guiCapNhat` locks that
@@ -579,6 +612,9 @@ Read it before touching any amount, total, chart or rate.
   listing keys at the call site. Say what changed — `cache.deal(id)`,
   `cache.company(id)`, `cache.contact(id)`, `cache.activity()`. **A new mutation adds a
   call there, not a new list of keys.**
+- **A new query a screen reads joins the list its writes refresh.** Every `okr.*`
+  query an OKR screen reads is in `cache.okr`, except `okr.access` and `okr.thanhVien`;
+  `apps/app/test/okr-lam-moi.spec.ts` reads both sides and fails on the one left out.
 - **A deletion is `cache.removed(ref)`** — one wide fan-out, and the only place
   `refetchType: "none"` is right: the deleted record's `byId` query is still mounted
   while the sheet animates shut, so refetching reads a 404 into the closing sheet,
