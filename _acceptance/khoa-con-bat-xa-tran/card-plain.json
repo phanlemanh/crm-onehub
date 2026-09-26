@@ -2,12 +2,49 @@
   "feature_plain": "Bài kiểm «khoá API của người đã rời kho bị từ chối» chạy trong khoảng 0.6 giây thay vì 1.5–4 giây, nên CI không còn đỏ ngẫu nhiên vì chạm trần 5 giây — mà bài vẫn soát đủ mọi thủ tục và mọi đường như trước.",
   "scope_plain": "Không làm nhanh các bài kiểm ma trận khác, không đổi cấu hình khoá API của sản phẩm, không đụng tệp kiểm khác.",
   "decisions_plain": [
-    {"id": "d-20260925T215023Z-1", "p": "Cho bài kiểm gọi các thủ tục theo lô 8 lượt một lúc — đổi lại không nới trần thời gian, không tách bài, không rút bớt thủ tục được soát."},
-    {"id": "d-20260925T215023Z-2", "p": "KHÔNG làm nhanh các bài kiểm ma trận khác của tệp — đổi lại không đổi phép đo của bài chạy bằng tư cách thành viên; bài chậm kế tiếp có thể là cái chập chờn sau."},
-    {"id": "d-20260925T215023Z-3", "p": "KHÔNG quét độ phủ tiêu chí bằng lưới — không gian chỉ có năm ô và đã đếm hết bằng tay."},
-    {"id": "d-20260925T215023Z-4", "p": "KHÔNG viết đặc tả giao diện — việc không có màn hình nào."},
-    {"id": "d-20260925T215023Z-5", "p": "KHÔNG chạy phiên thiết kế — việc không có màn hình nào."},
-    {"id": "d-20260925T215523Z-6", "p": "Thời gian thật trên CI không thành phép đo của vòng; sẽ đọc sau khi PR chạy CI và ghi vào mô tả PR — quá 2.5 giây thì mở vòng mới."},
-    {"id": "d-20260925T223222Z-8", "p": "Hồ sơ thôi khẳng định «câu ghi mỗi lượt xác minh khoá» là nguyên nhân, vì một phép đo riêng thấy nó chỉ tốn 0.3–0.5ms mỗi lượt — phần chậm còn lại chưa rõ nguồn."}
+    {
+      "id": "d-20260925T215023Z-1",
+      "p": "Cho bài kiểm gọi các thủ tục theo lô 8 lượt một lúc — đổi lại không nới trần thời gian, không tách bài, không rút bớt thủ tục được soát."
+    },
+    {
+      "id": "d-20260925T215023Z-2",
+      "p": "KHÔNG làm nhanh các bài kiểm ma trận khác của tệp — đổi lại không đổi phép đo của bài chạy bằng tư cách thành viên; bài chậm kế tiếp có thể là cái chập chờn sau."
+    },
+    {
+      "id": "d-20260925T215023Z-3",
+      "p": "KHÔNG quét độ phủ tiêu chí bằng lưới — không gian chỉ có năm ô và đã đếm hết bằng tay."
+    },
+    {
+      "id": "d-20260925T215023Z-4",
+      "p": "KHÔNG viết đặc tả giao diện — việc không có màn hình nào."
+    },
+    {
+      "id": "d-20260925T215023Z-5",
+      "p": "KHÔNG chạy phiên thiết kế — việc không có màn hình nào."
+    },
+    {
+      "id": "d-20260925T215523Z-6",
+      "p": "Thời gian thật trên CI không thành phép đo của vòng; sẽ đọc sau khi PR chạy CI và ghi vào mô tả PR — quá 2.5 giây thì mở vòng mới."
+    },
+    {
+      "id": "d-20260925T223222Z-8",
+      "p": "Hồ sơ thôi khẳng định «câu ghi mỗi lượt xác minh khoá» là nguyên nhân, vì một phép đo riêng thấy nó chỉ tốn 0.3–0.5ms mỗi lượt — phần chậm còn lại chưa rõ nguồn."
+    },
+    {
+      "id": "d-20260925T225856Z-9",
+      "p": "Round 1 bị trả lại để sửa thước: năm lỗ trong hợp đồng sửa ở round 2, hai mục ngoài hợp đồng được nâng phạm vi, kẽ hở của khoá hàng đợi đo ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T230330Z-10",
+      "p": "Khẳng định «8 lượt song song nằm dưới pool kết nối» nay đo cỡ pool thật lúc chạy, thay vì so với một con số chép tay — đổi lại ca theo-lo chậm thêm khoảng 0.2 giây."
+    },
+    {
+      "id": "d-20260925T230330Z-11",
+      "p": "Thước chỉ nhận thông điệp trên đúng dòng báo lỗi, đo đủ tám kiểu lệch danh sách, và soát trần ở mọi dòng workflow cùng tệp thiết lập dùng chung — đổi lại một lượt đo dài hơn khoảng 30 giây."
+    },
+    {
+      "id": "d-20260926T001713Z-13",
+      "p": "Round 2 còn một lỗ cùng loại với round 1, nên máy dừng vá ở đây thay vì tự mở round 3 — người chọn: ghi vào hạn chế đã biết, thu hẹp lời hứa, hay đổi cách đo."
+    }
   ]
 }
