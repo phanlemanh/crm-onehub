@@ -38,6 +38,7 @@ export const HO_SO_BI_CHAM = [
 	"ke-hoach-la-mot-ban-ghi",
 	"khoa-cu-khong-mo-khoa-moi",
 	"khoa-lo-giu-tran",
+	"khoa-rieng-dien-node",
 	"khung-trang-cai-dat",
 	"lam-moi-chuyen-viec-qua-loi-chung",
 	"lenh-chung-khong-an-cache-doi",

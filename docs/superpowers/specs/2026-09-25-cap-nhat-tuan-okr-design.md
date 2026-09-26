@@ -312,7 +312,7 @@ làn eval sau khi lượt lên `onehub`.
 `claimdue-chi-thay-dong-cua-minh`, `cron-theo-ban-khai`, `cua-so-tro-chuyen-noi-tieng-viet`,
 `dat-okr-trong-crm`, `do-quyen-luot-bang-hanh-vi`, `duong-proto-cho-design-pass`,
 `go-la-cat-quyen-that`, `han-viec-theo-ngay`, `ke-hoach-la-mot-ban-ghi`,
-`khoa-cu-khong-mo-khoa-moi`, `khoa-lo-giu-tran`, `khung-trang-cai-dat`,
+`khoa-cu-khong-mo-khoa-moi`, `khoa-lo-giu-tran`, `khoa-rieng-dien-node`, `khung-trang-cai-dat`,
 `lam-moi-chuyen-viec-qua-loi-chung`, `lenh-chung-khong-an-cache-doi`,
 `lenh-dung-do-khong-ai-thay`, `logo-onehub`, `loi-tac-tu-zalo-noi-dung-nguyen-nhan`,
 `ma-tran-phai-co-chieu-song`, `man-cai-dat-noi-tieng-viet`, `may-nhac-truoc-nguoi`,
