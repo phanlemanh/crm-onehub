@@ -1,0 +1,107 @@
+schema_version: 1
+feature_slug: khoa-api-ghi-thua
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kagt_khong_ghi_trong_nguong
+    expected: "exit 0; ca 'khong-ghi-trong-nguong' pass: hai luot contacts.list bang khoa deu 200, luot dau lastRequest khac null, sau luot hai lastRequest va updatedAt bang dung gia tri doc sau luot dau. Chieu do cung fixture: go tuy chon khoi auth.ts trong ban sao (pha-thu S3) thi ca do voi thong diep ghim 'lastRequest doi o luot trong nguong'"
+    paths: [patches/**, package.json, bun.lock, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, apps/api/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.kagt_bien_nguong
+    expected: "exit 0; ca 'bien-nguong' pass hai phia cung fixture: lastRequest cu hon API_KEY_USAGE.lastRequestIntervalMs + 1s thi luot ghi lastRequest >= moc bat dau luot (do: thong diep 'khong ghi khi da qua nguong'); moi hon nguong - 1s thi giu nguyen (do: thong diep 'ghi khi con trong nguong'); nguong import tu @crm/auth"
+    paths: [patches/**, package.json, bun.lock, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, apps/api/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.kagt_hai_chieu_thu_vien
+    expected: "exit 0; ca 'hai-chieu-thu-vien' pass: cung dung adapter bo nho, plugin khong tuy chon dem [2,2,2] lenh update apikey qua ba luot, plugin co tuy chon dem [1,0,0]; mang dem so bang toEqual nen lech bat ky luot nao la do voi mang nhan duoc in trong thong diep"
+    paths: [patches/**, package.json, bun.lock, packages/auth/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kagt_rate_limit_bat
+    expected: "exit 0; ca 'rate-limit-bat-van-dem' pass: rate-limit bat max 2 cua so 60s co tuy chon, luot 1-2 hop le, luot 3 bi tu choi code RATE_LIMITED, requestCount cua hang bang 2. Doi chung duong: hai luot dau hop le trong cung ca"
+    paths: [patches/**, package.json, bun.lock, packages/auth/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.kagt_tu_choi_van_giu
+    expected: "exit 0; ca 'tu-choi-van-giu' pass: hai khoa tao qua auth.api.createApiKey (writer that), moi khoa goi contacts.list tra 200 truoc (doi chung duong) nen lastRequest con trong nguong; khoa 1 dat enabled=false, khoa 2 dat expiresAt qua khu; ca hai luot tRPC tra 401 va auth.api.getSession nem ma KEY_DISABLED / KEY_EXPIRED tuong ung (ghim ma, khong chi 401; thong diep 'khoa tat van qua' / 'khoa het han van qua')"
+    paths: [patches/**, package.json, bun.lock, packages/auth/src/auth.ts, apps/api/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.kagt_chong_troi
+    expected: "exit 0; ca 'chong-troi-ban-va' pass: patchedDependencies co dung mot khoa @better-auth/api-key@<ban da cai>, tep va ton tai, bun.lock chua cung khoa, dist/index.mjs cua goi da cai co chuoi lastRequestUpdateIntervalMs (ban va da ap); cung ham so voi phien ban lech (vd 1.6.26) nem loi co thong diep ghim 'nang @better-auth/api-key ma chua lam lai ban va khoa-api-ghi-thua' — hai chieu cung ham"
+    paths: [patches/**, package.json, bun.lock, packages/auth/test/khoa-api-ghi-thua.spec.ts]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.kagt_tai_lieu
+    expected: "exit 0; trong docs/api.md co mot muc chua ca bon chuoi 'patchedDependencies', 'lastRequestUpdateIntervalMs', 'better-auth#10921' va 'khoa-api-ghi-thua' trong cung mot section H2; thieu chuoi nao thi exit 1 in ten chuoi thieu"
+    paths: [docs/api.md]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.api
+    expected: "exit 0; db:test thoat 0 roi turbo test moi goi xanh"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; turbo check-types --force moi goi xanh"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E10
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.lint_slop
+    expected: "exit 0"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E12
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.build_khong_cache
+    expected: "exit 0"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E13
+    criterion: AC-9
+    executor: judgment
+    inputs: [patches/@better-auth%2Fapi-key@1.6.25.patch, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md]
+    expected: "Ban va chi doi hai nhanh skip cua evaluateRateLimit va lan dong dau cuoi cua claimUsageInDatabase, ca hai co dieu kien tuy chon; khong cham nhanh rate-limit bat, consumeRemaining, secondary-storage; khong them chu thich; nguong o module hang so cua packages/auth"
+    evidence_required: [verdict, rationale]
+
+  - id: E14
+    criterion: AC-10
+    executor: judgment
+    inputs: [docs/api.md]
+    expected: "Muc ve ban va khoa-api-ghi-thua trong docs/api.md tra loi duoc hai cau co/khong: (1) co neu dieu kien go ban va gan voi better-auth#10921 khong; (2) co chi dan phai lam lai ban va khi nang @better-auth/api-key khong. Ca hai co thi dat"
+    evidence_required: [verdict, rationale]
