@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: hoi-crm-qua-zalo
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 97f7370ea1849dcd01ad246e1b2efdace05f7a14
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-26
 ---
 
 # Evidence Report: hoi-crm-qua-zalo
@@ -212,7 +212,7 @@ human_signoff:
     - operational-feasibility: PASS — Tám câu mới trong ZALO.loi (hoiKhongQuyen, hetTranPhut, hetTranNgay, hetTranThang, dangTraLoi, tacTuLoi, daMoi, canHoiLai) đều là câu tiếng Việt tự nhiên, không câu nào tự xưng «trợ lý» hay dùng chữ «thông báo», khớp mục Bot Zalo/Trợ lý AI của CONTEXT.md (avoid: tác nhân, trợ lý; avoid: thông báo). Chỉ dẫn phiên Zalo (zalo-chi-dan.ts) nêu đủ ba thứ cấm của ranh giới A: cấm số điện thoại/email cá nhân đối tác, cấm trích nguyên văn thư/lịch, và cấm nêu giá trị AppSetting.</rationale>
     - spec-alignment: PASS — Cả tám câu trong ZALO.loi (hoiKhongQuyen, hetTranPhut, hetTranNgay, hetTranThang, dangTraLoi, tacTuLoi, daMoi, canHoiLai) đọc được là câu tiếng Việt tự nhiên, không câu nào tự xưng «trợ lý» hay dùng chữ «thông báo» — đúng hai điều từ điển CONTEXT.md nêu rõ (mục Bot Zalo/Trợ lý AI tránh lẫn "trợ lý", mục Nhắc buổi sáng tránh "thông báo"); chữ «cuộc trò chuyện» ở daMoi không phạm mục Hội thoại của CONTEXT.md vì mục đó chỉ khoá cho màn hội thoại dựng tác nhân, còn đây là chữ thường ai cũng hiểu cho một khái niệm chưa có mục — đúng luật "chưa có mục thì viết chữ thường ai cũng hiểu". Chỉ dẫn CHI_DAN_ZALO nêu đủ ba thứ cấm của ranh giới A (cấm số điện thoại/email cá nhân đối tác, cấm trích nguyên văn thư/lịch, cấm lộ giá trị AppSetting).
   rationale: Ba lens đều đồng thuận PASS trên cùng bằng chứng — chỉ dẫn phiên Zalo nêu đủ ba cấm của ranh giới A, và tám câu ZALO.loi mới đọc tự nhiên bằng tiếng Việt, đúng từ điển CONTEXT.md, không câu nào dùng «trợ lý»/«thông báo».
-  human_override:        # T3 — bắt buộc người xác nhận trực tiếp mục phán đoán này trước khi tổng thể lên PASS, dù cả ba lens đều đồng thuận PASS; điền "<tên> <ngày>" ở Cổng 2
+  human_override: Phan Le Manh 2026-09-26 — Đạt
 
 - eval: E13
   run_id: muidggsql540

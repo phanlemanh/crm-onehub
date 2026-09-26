@@ -5,7 +5,7 @@ slug: hoi-crm-qua-zalo
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-26T12:06:23Z
 design_doc: docs/superpowers/specs/2026-09-26-hoi-crm-qua-zalo-design.md
@@ -106,3 +106,21 @@ Quét bằng `morphological-scan` (preset test-matrix) —
   không trong `messages` của `apps/app` — vòng này không có màn hình, `messages-guard`
   không đổi.
 - Không biến môi trường mới; thiếu token hay khoá webhook thì năng lực tắt như hôm nay.
+
+### Known limits (Cổng Bằng chứng, 2026-09-26, Phan Le Manh)
+
+- Ngoài-1 (medium): docs/agent.md gives the wrong eve session address and lifetime for Zalo questions (`docs/agent.md`) — sửa tài liệu ngay trong PR (T1).
+- Ngoài-2 (medium): Zalo invariant 'Message text is never stored or logged' is now false but was left in place (`docs/agent.md`) — sửa tài liệu ngay trong PR (T1).
+- Ngoài-3 (low): Dynamic override file in tools/ adds a tool name that is never called to the telemetry allowlist and transcript verbs (`apps/agent/agent/tools/zalo-chi-doc.ts`) — gộp vào chip «siết thước hoi-crm-qua-zalo» (dời tệp chặn ghi ra khỏi tools/ hoặc cho test allowlist bỏ qua tệp bộ giải động).
+- Ngoài-4 (low): docs/agent.md still says xuLyTinDen treats webhook and manual-reader messages alike (`docs/agent.md`) — sửa tài liệu ngay trong PR (T1).
+- Ngoài-5 (low): telemetry.md lists zalo_questions outcomes without `dang-hoi`, which the rollup does send (`docs/telemetry.md`) — sửa tài liệu ngay trong PR (T1).
+- Ngoài-6 (medium): Non-text Zalo messages (sticker, image, file) from a linked member become an empty question sent to eve (`apps/agent/agent/lib/zalo-nhan.ts`) — trái với dòng Out of scope «tin không chữ bị bỏ qua như hôm nay»; chip nhỏ sửa.
+- Ngoài-7 (low): Phone-number redaction mangles VND amounts of 1,000 billion (nghìn tỷ) or more (`apps/agent/agent/lib/zalo-loc.ts`) — cùng chip với Ngoài-6.
+- Ngoài-8 (medium): Hình dạng 2 (fixture viết tay): E13 chèn tay hàng tu-choi-tran-ngay và dang-ban trong khi eval hứa «không insert tay» (`apps/agent/test/hoi-crm-qua-zalo-nguong.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-9 (high): Hình dạng 4 (âm tính một mình): cai-lenh kiểm «stage không đổi, activity không đổi» nhưng chỉ gọi bản giả, không có gì trong test gọi được công cụ ghi thật (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-10 (high): Hình dạng 4 (âm tính một mình): cai-lenh kiểm «không lộ số» mà không kiểm là đã có tin gửi đi (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-11 (high): Hình dạng 4 (bất đẳng thức âm, so với sai giá trị gốc): input.requested «đổi địa chỉ phiên» vẫn xanh khi token không đổi (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-12 (medium): Hình dạng 2 (fixture viết tay): ctx và continuationToken của sự kiện kênh được dựng tay đúng khuôn bên đọc, không lấy từ lời gọi send (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-13 (medium): Hình dạng 3 (assert chuỗi có mặt thay cho quan hệ): ô (c) của luat-cu kiểm một câu trả lời soạn sẵn thay vì bước được đánh dấu completedAt (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-14 (medium): Hình dạng 4 (âm tính một mình, có thể qua rỗng): test «tra loi muon» bọc mọi assert trong `if (cu.loai === "hoi")` và ghim log bằng OR (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
+- Ngoài-15 (low): Hình dạng 1 (đo văn bản nguồn thay vì đầu ra): cổng vai chung được kiểm bằng cách grep channels/eve.ts (`apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts`) — chip «siết thước hoi-crm-qua-zalo» (chỉ sửa test).
