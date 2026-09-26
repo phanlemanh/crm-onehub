@@ -464,6 +464,53 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   ones. An objective title that already exists for that unit and cycle is a broken
   row, so pasting the same batch twice writes nothing. Caps and messages live in
   `OKR` (`okr-config.ts`).
+- **The weekly update runs through a session, never a bare write.** `moCapNhat`
+  opens an `OkrCheckInSession` (`entry`: `nhac` | `viec-cua-toi` | `tab` | `sheet` —
+  where the person came in from) and returns `sessionId`; `guiCapNhat` locks that
+  row (`SELECT … FOR UPDATE`), refuses a second submit (`submittedAt` already set),
+  writes one `OkrCheckIn` per KR and updates `okrKeyResult.currentValue`, and
+  computes `seconds` itself from `now - openedAt` — never a client-supplied
+  duration. Check-ins are append-only: nothing is ever updated in place, and
+  `capNhatTuan` reads the latest one per KR (`distinct: ["keyResultId"]`,
+  newest `createdAt` first). Writing for someone else sets `onBehalf: true` on the
+  check-in and is allowed only when the caller is the KR owner's unit head or an
+  OneHub admin (`OkrAccessService.suaDuocDonVi`) — a fellow KR owner cannot submit
+  for another owner.
+- **A running KR's `currentValue` only moves through a weekly update.**
+  `updateKeyResult` refuses any `currentValue` change
+  (`OKR.thongDiep.hienTaiQuaCapNhat`) once the objective is `cong-bo` and its cycle
+  is `dang-chay` — every other field (title, `targetValue`, `unit`, owner…) still
+  writes normally. `okr.objective`'s per-KR `hienTaiQuaCapNhat` flag is exactly that
+  same condition, so the sheet can lock the field before the write is even tried,
+  not just after a 400.
+- **`removeKeyResult` refuses once a KR has history.** A KR with at least one
+  `OkrCheckIn` row cannot be deleted (`krDaCapNhat`) — only edited; a KR another
+  objective aligns to (`OkrAlignment.targetKeyResultId`) is refused the same way
+  (`krDangLaDich`). Both checks run inside the same lock as the delete, so a
+  check-in written mid-transaction cannot race past them.
+- **Comments, mentions and follow live on the objective, not the KR.**
+  `addComment` may tag one KR of that same objective (`keyResultId`, refused with
+  `krKhacMucTieu` if the KR belongs to a different objective) and every mention
+  must already be a workspace member (`assertThanhVien`). `follow`/unfollow is
+  idempotent — `skipDuplicates` on repeat-follow, a no-op unfollow writes no trail
+  row. Every comment and follow toggle still writes its own `OkrTrail` row via the
+  shared `vet()`, never an `Activity`.
+- **`okr.thanhVien`** lists every workspace member (`id`, `name`, `email`) for the
+  mention and transfer pickers — no role filter, since being mentionable is
+  separate from who can edit.
+- **`okr.viecCuaToi` is one call for the caller's own OKR row.** `viec` is the
+  caller's pending OKR items, filtered from the same `viecCanNhac` queue plan items
+  share; `lienQuanOkr` (`@crm/db/okr-nhac`) is the objectives and KRs the caller
+  owns or participates in at the running cycle, so a screen can show "your OKR"
+  even on a week nothing is due.
+- **`transferPreview`/`transferWork` move a leaver's OKR ownership** — admin-only
+  (`canManageOnboarding`), a separate action from the 30-day work transfer. Both
+  share `dieuKienChuyen(fromUserId)`: a KR or objective only moves while its cycle
+  is still writable (`PHA_GHI_DUOC`, i.e. not `da-bo`), and a personal objective
+  (`level: "ca-nhan"`) owned by the person leaving never moves. `transferWork`
+  re-points `ownerUserId`, drops the leaver from every `OkrParticipant` row, and
+  writes one `chuyen-viec` `OkrTrail` row per KR and objective moved;
+  `transferPreview` returns the same `{kr, mucTieu}` counts without writing anything.
 
 ## Money
 

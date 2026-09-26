@@ -204,6 +204,14 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi bốn loại OKR còn lại. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
   nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ.
+- **`mucNhac` (`@crm/validation/nhac-ke-hoach`) là một hợp, không phải trường mới
+  thêm vào khuôn cũ.** Việc kế hoạch giữ nguyên hình `{loai, planId, stepId?}` như
+  trước khi có OKR; mỗi loại OKR có hình riêng của nó —
+  `{loai: "okr-cap-nhat", krIds}` (một hoặc nhiều KR gộp vào một dòng nhắc),
+  `{loai: "okr-kr-im", keyResultId}`, `{loai: "okr-duoc-giao", objectiveId,
+  keyResultId?}`, `{loai: "okr-nhac-ten", commentId}`,
+  `{loai: "okr-theo-doi", objectiveId}`. Đọc `payload.muc`/`daGui` phải khớp
+  đúng nhánh theo `loai`, không suy trường của nhánh này sang nhánh khác.
 - **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở: kế hoạch
   `<APP_URL>/<slug>?record=plan:<id>`, cập nhật tuần
   `<APP_URL>/<slug>/okr/cap-nhat-tuan?tu=nhac`, việc OKR khác
