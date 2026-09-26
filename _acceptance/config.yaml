@@ -19,6 +19,11 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    dmk_ten_kho: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t ten-kho"'
+    dmk_tao: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t tao"'
+    dmk_kho_mau: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t kho-mau"'
+    dmk_xoa: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t xoa"'
+    dmk_quet_mo_coi: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t quet-mo-coi"'
     dp30_chep_khong_tham_chieu: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t chep-khong-tham-chieu"'
     dp30_buoc_chua_giao_van_co_bo_phan: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t buoc-chua-giao"'
     dp30_danh_muc_loc_va_ngay_im: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t danh-muc-loc"'
@@ -559,6 +564,15 @@ executors:
     krdn_ma_tran: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-node-khoa-rieng.dom.tsx -t ma-tran"
     krdn_bo_bat: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-node-khoa-rieng.dom.tsx -t bo-bat-con-song"
   script:
+    dmk_dau_cuoi: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs dau-cuoi
+    dmk_don_khi_do: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs don-khi-do
+    dmk_xep_hang: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs xep-hang
+    dmk_tien_de: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs tien-de
+    dmk_kho_chung_khong_doi: bun _acceptance/do-man-tren-kho-rieng/rang/kho-chung-khong-doi.mjs
+    dmk_khong_noi_thuoc: node _acceptance/do-man-tren-kho-rieng/rang/khong-noi-thuoc.mjs
+    dmk_tai_lieu: bun _acceptance/do-man-tren-kho-rieng/rang/tai-lieu.mjs
+    dmk_truoc_gop_toan_kho: node _acceptance/do-man-tren-kho-rieng/rang/truoc-gop.mjs
+    dmk_khong_dung_kho_khac: bun _acceptance/do-man-tren-kho-rieng/rang/khong-dung-kho-khac.mjs
     vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
     vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'
     vvc_ca_goi_api: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts ca-goi"'

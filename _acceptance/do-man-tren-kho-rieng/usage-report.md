@@ -1,0 +1,179 @@
+### S4 round 1 — wf_ff7b4469-f22 (26 agent, 72,568 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 2 | 20,972 | 4 | 92,085 | 223 |
+| triage | claude-sonnet-5 | 2 | 20,833 | 4 | 75,510 | 232 |
+| refute:measure-database.ts | claude-sonnet-5 | 9 | 5,579 | 18 | 657,021 | 99 |
+| review:measurement | claude-opus-5-5 | 13 | 3,447 | 26 | 1,333,491 | 217 |
+| baseline:diffBase | claude-sonnet-5 | 23 | 3,264 | 46 | 1,851,374 | 288 |
+| review:bugs | claude-opus-5-5 | 15 | 3,199 | 30 | 1,501,458 | 204 |
+| review:conventions | claude-opus-5-5 | 20 | 2,720 | 40 | 2,139,200 | 230 |
+| refute:measure-database.spec.ts | claude-sonnet-5 | 11 | 1,550 | 22 | 851,893 | 105 |
+| machine:node _acceptance/do-man-tren-kho-rieng/r | claude-haiku-4-5-20251001 | 2 | 1,090 | 18 | 73,313 | 45 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 1,017 | 18 | 73,320 | 120 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 971 | 18 | 73,316 | 50 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 754 | 18 | 73,317 | 46 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 736 | 18 | 73,284 | 28 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 685 | 18 | 73,315 | 24 |
+| machine:node _acceptance/do-man-tren-kho-rieng/r | claude-haiku-4-5-20251001 | 2 | 681 | 18 | 73,311 | 15 |
+| machine:node _acceptance/do-man-tren-kho-rieng/r | claude-haiku-4-5-20251001 | 2 | 653 | 18 | 73,316 | 15 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 3 | 642 | 26 | 96,551 | 183 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 588 | 18 | 73,316 | 98 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 527 | 18 | 73,318 | 56 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 496 | 18 | 73,284 | 14 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 479 | 18 | 73,313 | 55 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 421 | 18 | 73,310 | 40 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 413 | 18 | 73,312 | 20 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 352 | 18 | 73,310 | 39 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 350 | 18 | 73,282 | 12 |
+| capture:provenance | claude-sonnet-5 | 3 | 149 | 6 | 138,680 | 15 |
+
+
+wall: 857s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 3,264 | 1,851,374 | 288 | 22:08:43 | 22:13:31 |
+| machine | 17 | 10,855 | 1,269,488 | 242 | 22:08:43 | 22:12:45 |
+| review | 3 | 9,366 | 4,974,149 | 230 | 22:09:25 | 22:13:14 |
+| triage | 1 | 20,833 | 75,510 | 232 | 22:13:16 | 22:17:08 |
+| refute | 2 | 7,129 | 1,508,914 | 108 | 22:17:11 | 22:18:58 |
+| capture | 1 | 149 | 138,680 | 15 | 22:19:00 | 22:19:15 |
+| synthesize | 1 | 20,972 | 92,085 | 223 | 22:19:17 | 22:23:00 |
+
+- **claude-sonnet-5**: 6 agent · 50 calls · out 52,347 · in 100 · cache_read 3,666,563 · cache_create 518,280
+- **claude-opus-5-5**: 3 agent · 48 calls · out 9,366 · in 96 · cache_read 4,974,149 · cache_create 351,358
+- **claude-haiku-4-5-20251001**: 17 agent · 35 calls · out 10,855 · in 314 · cache_read 1,269,488 · cache_create 448,151
+
+### S4 round 2 — wf_9746f5a8-164 (28 agent, 153,662 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 7 | 30,187 | 14 | 647,637 | 311 |
+| review:measurement | claude-opus-5-5 | 10 | 18,818 | 20 | 981,897 | 191 |
+| triage | claude-sonnet-5 | 2 | 18,499 | 4 | 73,046 | 212 |
+| refute:phien.mjs | claude-sonnet-5 | 11 | 15,712 | 22 | 823,276 | 220 |
+| review:bugs | claude-opus-5-5 | 15 | 15,292 | 30 | 1,457,281 | 159 |
+| review:conventions | claude-opus-5-5 | 13 | 12,466 | 26 | 1,121,616 | 125 |
+| baseline:diffBase | claude-sonnet-5 | 23 | 9,528 | 46 | 1,837,639 | 171 |
+| refute:measure-database.spec.ts | claude-sonnet-5 | 10 | 7,803 | 20 | 824,170 | 120 |
+| refute:tai-lieu.mjs | claude-sonnet-5 | 11 | 6,502 | 22 | 783,256 | 97 |
+| refute:measure-database.spec.ts | claude-sonnet-5 | 12 | 6,165 | 24 | 895,317 | 90 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 4 | 1,158 | 34 | 148,059 | 195 |
+| capture:provenance | claude-sonnet-5 | 2 | 970 | 4 | 66,892 | 15 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 908 | 18 | 73,349 | 56 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 856 | 18 | 73,315 | 12 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 814 | 18 | 73,347 | 46 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 812 | 18 | 73,347 | 124 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 802 | 18 | 73,351 | 120 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 798 | 18 | 73,315 | 21 |
+| machine:node _acceptance/do-man-tren-kho-rieng/r | claude-haiku-4-5-20251001 | 2 | 728 | 18 | 73,342 | 14 |
+| machine:node _acceptance/do-man-tren-kho-rieng/r | claude-haiku-4-5-20251001 | 2 | 691 | 18 | 73,347 | 15 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 631 | 18 | 73,346 | 26 |
+| machine:bun _acceptance/do-man-tren-kho-rieng/ra | claude-haiku-4-5-20251001 | 2 | 624 | 18 | 73,348 | 43 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 599 | 18 | 73,313 | 9 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 518 | 18 | 73,341 | 38 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 500 | 18 | 73,343 | 23 |
+| machine:node _acceptance/do-man-tren-kho-rieng/r | claude-haiku-4-5-20251001 | 2 | 448 | 18 | 73,344 | 38 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 422 | 18 | 73,341 | 37 |
+| machine:bun run test -- "cd packages/db && bun t | claude-haiku-4-5-20251001 | 2 | 411 | 18 | 73,344 | 55 |
+
+
+wall: 997s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 9,528 | 1,837,639 | 171 | 22:31:29 | 22:34:20 |
+| machine | 17 | 11,720 | 1,321,492 | 237 | 22:31:29 | 22:35:26 |
+| review | 3 | 46,576 | 3,560,794 | 195 | 22:32:08 | 22:35:23 |
+| triage | 1 | 18,499 | 73,046 | 212 | 22:35:26 | 22:38:57 |
+| refute | 4 | 36,182 | 3,326,019 | 223 | 22:38:57 | 22:42:40 |
+| capture | 1 | 970 | 66,892 | 15 | 22:42:40 | 22:42:55 |
+| synthesize | 1 | 30,187 | 647,637 | 311 | 22:42:55 | 22:48:06 |
+
+- **claude-sonnet-5**: 8 agent · 78 calls · out 95,366 · in 156 · cache_read 5,951,233 · cache_create 663,601
+- **claude-opus-5-5**: 3 agent · 38 calls · out 46,576 · in 76 · cache_read 3,560,794 · cache_create 319,228
+- **claude-haiku-4-5-20251001**: 17 agent · 36 calls · out 11,720 · in 322 · cache_read 1,321,492 · cache_create 446,580
+
+### S4 round 3 — wf_359055ae-a54 (24 agent, 123,072 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 42 | 21,439 | 84 | 3,734,849 | 291 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 7 | 20,287 | 14 | 671,849 | 213 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 16 | 20,201 | 32 | 1,675,462 | 213 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 16,928 | 4 | 109,948 | 197 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 14 | 14,571 | 28 | 1,339,697 | 159 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 17 | 10,824 | 34 | 1,586,197 | 118 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,601 | 18 | 73,470 | 47 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,495 | 18 | 73,438 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 4 | 1,392 | 34 | 148,510 | 194 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,361 | 18 | 73,467 | 14 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,295 | 18 | 73,474 | 117 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,216 | 18 | 73,471 | 45 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,130 | 18 | 73,470 | 13 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,057 | 18 | 73,467 | 39 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,034 | 18 | 73,470 | 118 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,032 | 18 | 73,472 | 56 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 939 | 18 | 73,467 | 53 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 920 | 18 | 73,466 | 13 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 916 | 18 | 73,464 | 36 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 851 | 18 | 73,469 | 20 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 767 | 18 | 73,464 | 40 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 723 | 18 | 73,436 | 10 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 717 | 18 | 73,438 | 18 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 376 | 4 | 102,938 | 12 |
+
+
+wall: 673s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| [Workflow harness — user request] The harness re | 24 | 123,072 | 10,544,853 | 673 | 01:11:27 | 01:22:40 |
+
+- **claude-sonnet-5**: 4 agent · 53 calls · out 59,030 · in 106 · cache_read 4,619,584 · cache_create 287,046
+- **claude-opus-5-5**: 3 agent · 47 calls · out 45,596 · in 94 · cache_read 4,601,356 · cache_create 342,182
+- **claude-haiku-4-5-20251001**: 17 agent · 36 calls · out 18,446 · in 322 · cache_read 1,323,913 · cache_create 448,376
+
+### S4 round 4 — wf_b18c08c0-a16 (25 agent, 137,407 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 26 | 37,345 | 52 | 3,390,535 | 387 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 23,842 | 4 | 90,572 | 245 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 19 | 16,979 | 38 | 2,039,347 | 191 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 15,619 | 4 | 73,608 | 169 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 22 | 13,342 | 44 | 1,825,599 | 168 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 12 | 9,722 | 24 | 1,015,628 | 121 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 4 | 2,143 | 34 | 147,942 | 199 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,520 | 18 | 73,952 | 118 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,430 | 18 | 73,945 | 41 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,292 | 18 | 73,945 | 14 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,268 | 18 | 73,949 | 43 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,243 | 18 | 73,948 | 102 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,183 | 18 | 73,953 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,150 | 18 | 73,948 | 45 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,143 | 18 | 73,945 | 51 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,114 | 18 | 73,942 | 37 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,052 | 18 | 73,948 | 12 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,050 | 18 | 73,950 | 56 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 915 | 18 | 73,944 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 839 | 18 | 73,942 | 36 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 802 | 18 | 73,916 | 11 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 757 | 18 | 73,916 | 20 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 612 | 18 | 73,914 | 8 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 541 | 4 | 67,602 | 9 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 504 | 18 | 73,947 | 21 |
+
+
+wall: 849s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| [Workflow harness — user request] The harness re | 25 | 137,407 | 9,907,837 | 849 | 01:42:53 | 01:57:02 |
+
+- **claude-opus-5-5**: 3 agent · 57 calls · out 64,046 · in 114 · cache_read 6,445,510 · cache_create 375,675
+- **claude-sonnet-5**: 4 agent · 28 calls · out 53,344 · in 56 · cache_read 2,057,381 · cache_create 360,832
+- **claude-haiku-4-5-20251001**: 18 agent · 38 calls · out 20,017 · in 340 · cache_read 1,404,946 · cache_create 468,855
+
