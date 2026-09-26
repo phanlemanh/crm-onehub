@@ -327,13 +327,13 @@ else {
 		{ cwd: GOC, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
 	);
 	raTruocGop = `${preMerge.stdout ?? ""}${preMerge.stderr ?? ""}`.trim();
+	const dongKhac = raTruocGop
+		.split("\n")
+		.filter((d) => d.startsWith("VIOLATION [") && !d.includes(`[${SLUG}]`));
 	console.log(
-		"=== scripts/pre-merge-check.sh --base origin/onehub (toan kho) ===",
+		`pre-merge-check toan kho: ${dongKhac.length} VIOLATION cua ho so khac (dong cua chinh ${SLUG} la verdict cu cua ho so dang cham, khong tinh)`,
 	);
-	console.log(raTruocGop);
-	console.log(
-		`=== pre-merge-check toan kho thoat ma ${preMerge.status}; ma nay KHONG phai ket qua cua E21 — dong VIOLATION [${SLUG}] la verdict cu cua chinh ho so dang cham, bo qua; E21 chi doc VIOLATION cua ho so KHAC ===`,
-	);
+	for (const d of dongKhac) console.log(`  ${d}`);
 }
 if (!raTruocGop.includes(`[${SLUG}]`))
 	doHong.push(
