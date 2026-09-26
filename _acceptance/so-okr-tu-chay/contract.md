@@ -5,7 +5,7 @@ slug: so-okr-tu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-26T14:45:59Z
 design_doc: docs/superpowers/specs/2026-09-26-so-okr-tu-chay-design.md
@@ -91,3 +91,15 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Hồ sơ đã ký có thể phải ghim lại: `vai-chi-okr` (danh sách thủ tục của ma trận), `cap-nhat-tuan-okr` (`guiCapNhat` thêm nhánh KR máy), `dat-okr-trong-crm` (hộp thoại KR thêm ô nguồn; `updateKeyResult`, `removeKeyResult` thêm từ chối), `khung-trang-cai-dat` hoặc hồ sơ giữ `copy-value.tsx` (chuyển vào `packages/ui`).
 - Nền hạ tầng (`duong-nen.md`): `build_khong_cache` đỏ vì `bash -lc` nhận Node 22 — làn S4 chạy với tiền tố PATH Node 24 như lượt 5; hai dòng «THIEU merge-base» là khoá của hồ sơ khác.
 - Cổng người do phiên điều phối ký theo uỷ quyền của Manh Phan ngày 2026-09-24; dòng ký ghi «Manh Phan — uỷ quyền phiên điều phối 2026-09-24».
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-27, định đoạt mục ngoài hợp đồng của vòng chấm 1; sổ d-20260926T230045Z-23 … -31):
+
+- Ngoài-1 (`apps/api/src/agent/agent-trigger.service.ts`): Bấm 'Đọc lại' hoặc lưu lại nguồn Google Sheets nhiều lần liên tiếp cho cùng một KR có thể xếp thêm nhiều việc đọc trùng nhau, làm tốn thêm lượt gọi Google không cần thiết.
+- Ngoài-2 (`apps/api/src/okr/okr-so.service.ts`): Khi việc đọc Google Sheets thất bại vì lỗi hệ thống, nhật ký chỉ ghi lại tên loại lỗi mà thiếu chi tiết để lần vết — đội vận hành có thể mất nhiều thời gian hơn để tìm nguyên nhân khi có sự cố.
+- Ngoài-3 (`apps/api/src/okr/okr-so.contracts.ts`): Nếu sau này có người thêm một loại bản ghi mới vào danh mục chỉ số nhưng quên cập nhật đủ các nơi liên quan, màn xem danh sách bản ghi đằng sau con số có thể báo lỗi hệ thống thay vì hiển thị đúng dữ liệu.
+- Ngoài-4 (`apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx`): Khi đổi một KR đang lấy số từ CRM sang loại chấm theo mốc hoặc phần trăm cùng lúc với đổi nguồn số trong một lần lưu, việc lưu sẽ báo lỗi và không lưu được gì cả — người dùng phải bấm lưu thêm một lần nữa mới xong.
+- Ngoài-5 (`apps/agent/agent/lib/okr-sheets.ts`): Nếu khoá kết nối tới Google Sheets bị đổi hay hết hạn, lần đọc số kế tiếp luôn báo lỗi dù hệ thống vừa lấy được khoá mới thành công — người dùng phải bấm 'Đọc lại' thêm một lần nữa mới thấy số đúng.
+- Ngoài-6 (`apps/agent/test/okr-chup.integration.spec.ts`): Bài kiểm cho việc chụp số OKR hằng ngày không thật sự chạy thử nhịp, chỉ đọc chữ trong mã nguồn — nếu việc chụp số ngừng chạy thật ngoài đời, hệ thống kiểm tra vẫn có thể báo 'đạt' và không ai biết số đã ngừng cập nhật.
+- Ngoài-7 (`apps/api/test/okr-khoa-api.spec.ts`): Bài kiểm ghi số qua khoá API chỉ đếm số dòng được tạo mà không kiểm ai đứng tên là người ghi; nếu có lỗi gán nhầm người ghi số, việc kiểm tra hiện tại có thể không phát hiện ra.
+- Ngoài-8 (`apps/api/test/okr-nguon.spec.ts`): Bài kiểm 'API không được gọi Google' chưa chứng minh được bẫy chặn có bắt được lời gọi thật; nếu sau này có đường gọi Google khác lọt qua bẫy, dữ liệu có thể vô tình gửi ra ngoài mà không ai phát hiện qua bài kiểm này.
+- Ngoài-9 (`apps/api/test/vai-chi-okr.spec.ts`): Câu thông báo từ chối cho vai 'chỉ OKR' được bài kiểm so sánh với chính câu chữ lấy từ mã nguồn, nên nếu câu đó vô tình bị sửa sai hay để trống, bài kiểm vẫn báo đạt mà người dùng vẫn nhận thông báo sai.

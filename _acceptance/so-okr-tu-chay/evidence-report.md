@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: so-okr-tu-chay
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 6dbdf38ae4c777539b9efcb5e7936108da031e8f
-human_signoff:
+human_signoff: Manh Phan 2026-09-27
 ---
 
 # Evidence Report: so-okr-tu-chay
@@ -343,7 +343,7 @@ human_signoff:
     - "[spec-alignment] grep 'googleapis.com' và 'okrSoChup' trong toàn bộ apps/api/src — xác nhận API không gọi Google và không ghi bảng chụp ngoài đường ghiSoKr (đúng câu cuối AC-14)"
     - "[spec-alignment] Nội dung file packages/validation/src/okr-nguon.ts (hoặc tên tương đương) cho thấy schema Zod của PhamViChiSo/OkrNguonKr, và grep 'Record<string, unknown>' trong packages/validation/src và apps/agent/agent/lib/okr-chup.ts trả rỗng"
     - "[spec-alignment] Ảnh chụp hoặc đoạn JSX của hop-thoai-kr.tsx phần ô 'Nguồn số' cho thấy dùng Field/Select/Combobox/ToggleGroup/Badge/CopyValue từ packages/ui, không có <table>, rounded-lg border tự dựng, hay navigator.clipboard trực tiếp"
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-09-27 — Đạt
 
 - eval: E25
   run_id: minted-so-okr-tu-chay-E25-r1
