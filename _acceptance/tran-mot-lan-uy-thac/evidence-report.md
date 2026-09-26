@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d94ec00fcb72adb6e1e8c219b027da54eeba408c
+verified_commit: e5e7a723d991539cca951cb97b980b2836f44cf3
 human_signoff: Manh Phan 2026-09-09
 ---
 
@@ -192,3 +192,7 @@ Round 3: Cả 9 eval E1-E9 pass, suite `bun run test` xanh, và `bunx turbo run 
 ### Re-pin lần 1 — 2026-09-12, do gop onehub 140 commit vao nhanh da ky — code cua ho so doi that
 run_id: repin-20260912T080529Z-57082
 sha: d94ec00fcb72adb6e1e8c219b027da54eeba408c · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-26, do sau ký Cổng 2 hoi-crm-qua-zalo: gộp onehub 40d423bb; lính canh SESSION_PURPOSES 3→4
+run_id: repin-20260926T132219Z-98927
+sha: e5e7a723d991539cca951cb97b980b2836f44cf3 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng

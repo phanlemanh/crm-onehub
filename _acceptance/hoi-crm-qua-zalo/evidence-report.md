@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 97f7370ea1849dcd01ad246e1b2efdace05f7a14
+verified_commit: e5e7a723d991539cca951cb97b980b2836f44cf3
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -287,3 +287,7 @@ none — mọi eval chạy runs=1, không có eval ngẫu nhiên hay dao động
 
 Round 1: 18/18 eval (E1–E15, gồm E3b/E4b/E8b) đều PASS và 3/4 lệnh suite bắt buộc (`bun run test`, `bunx turbo run lint --force`, `bunx turbo run build --force`) xanh; lệnh suite thứ tư `bun run lint:slop` bị agent bỏ/chết giữa chừng, không có kết quả — verdict BLOCKED, cần chạy lại đúng lệnh đó với timeout dài hơn trước khi vòng này có thể lên PASS hay PENDING-JUDGMENT.
 Round 2: 18/18 eval (E1–E15, gồm E3b/E4b/E8b) đều PASS và cả 4/4 lệnh suite bắt buộc (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) xanh — lệnh `lint:slop` từng BLOCKED ở vòng 1 nay chạy xong sạch. Verdict PENDING-JUDGMENT: hạng T3 của hợp đồng bắt buộc `human_override` trực tiếp của người trên mục phán đoán E12j trước khi lên PASS, dù panel ba lens (domain-correctness, operational-feasibility, spec-alignment) đều đồng thuận PASS.
+
+### Re-pin lần 1 — 2026-09-26, do sau ký Cổng 2 hoi-crm-qua-zalo: gộp onehub 40d423bb; lính canh SESSION_PURPOSES 3→4
+run_id: repin-20260926T132219Z-98927
+sha: e5e7a723d991539cca951cb97b980b2836f44cf3 · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12j (E12j không khai paths)

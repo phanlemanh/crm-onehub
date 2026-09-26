@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 89ab347002554a499400ca7ee0c58d148fa79199
+verified_commit: e5e7a723d991539cca951cb97b980b2836f44cf3
 human_signoff: Manh Phan 2026-09-09
 ---
 
@@ -162,3 +162,7 @@ Round 7: toàn bộ eval máy (E1, E2, E3, E4, E5, E6, E10) và các lệnh suit
 ### Re-pin lần 1 — 2026-09-12, do khoi phuc apps/app/test/chan-uy-thac.spec.ts va gop onehub 46 commit
 run_id: repin-20260912T132520Z-86882
 sha: 89ab347002554a499400ca7ee0c58d148fa79199 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-26, do sau ký Cổng 2 hoi-crm-qua-zalo: gộp onehub 40d423bb; lính canh SESSION_PURPOSES 3→4
+run_id: repin-20260926T132219Z-98927
+sha: e5e7a723d991539cca951cb97b980b2836f44cf3 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 (E7 không khai paths) · AC không có chốt máy: AC-7
