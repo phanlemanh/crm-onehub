@@ -188,7 +188,7 @@ evals:
       - "Cùng phiên đo E11; người phụ trách KR crm và KR tay"
       - "Mở {APP_URL}/<slug>/okr/cap-nhat-tuan ở 1440/vi → dòng KR crm: ô giá trị disabled, chữ «Số từ CRM · <ngày>», nhóm mức tự tin và ô ghi chú bật → ảnh buoc-cap-nhat-may"
       - "Dòng KR đo cạnh: ô giá trị bật, value bằng số máy mới nhất, chữ «Số máy: <số> · <ngày>» → ảnh buoc-cap-nhat-do-canh"
-      - "Gửi thiếu mức tự tin cho KR crm → lỗi tại dòng; chọn mức, gửi → thành công"
+      - "Chưa chọn mức tự tin cho KR crm → nút Gửi tắt và thanh đếm không tính dòng đó (màn giữ KR chưa chọn cho lần gửi sau, không báo lỗi theo dòng); chọn mức, gửi → thành công"
       - "Ảnh ở 390; scrollWidth <= innerWidth"
     paths: ["apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**", apps/app/lib/messages/okr-so.ts, _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs]
     expected: "exit 0; khẳng định DOM (disabled, textContent). CHIỀU ĐỎ: bản sao màn không khoá ô → bước khẳng định disabled đỏ."
