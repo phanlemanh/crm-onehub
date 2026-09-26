@@ -8,10 +8,14 @@ const TIEN_TO = "tzh-";
 const GIO_MS = 60 * 60 * 1000;
 const NGAY_MS = 24 * GIO_MS;
 
-type Gom = { gather(since: Date): Promise<{ properties: Record<string, unknown> }> };
+type ThuocTinh = Parameters<typeof permitted>[0];
+
+type Gom = { gather(since: Date): Promise<{ properties: ThuocTinh }> };
 
 async function donDep(): Promise<void> {
-	await db.zaloHoi.deleteMany({ where: { messageId: { startsWith: TIEN_TO } } });
+	await db.zaloHoi.deleteMany({
+		where: { messageId: { startsWith: TIEN_TO } },
+	});
 }
 
 beforeEach(donDep);
@@ -42,7 +46,7 @@ describe("zalo-hoi", () => {
 
 		const rollup = new RollupService(db, {} as FunnelService) as unknown as Gom;
 		const { properties } = await rollup.gather(new Date(now - NGAY_MS));
-		const gui = permitted(properties as Parameters<typeof permitted>[0]);
+		const gui = permitted(properties);
 
 		expect(gui.zalo_questions, "zalo_questions").toEqual({
 			"da-tra-loi": 3,

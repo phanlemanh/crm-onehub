@@ -1,11 +1,13 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 import { db } from "@crm/db";
+import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 
 const TIEN_TO = "zhs-";
 
 async function donDep(): Promise<void> {
-	await db.zaloHoi.deleteMany({ where: { messageId: { startsWith: TIEN_TO } } });
+	await db.zaloHoi.deleteMany({
+		where: { messageId: { startsWith: TIEN_TO } },
+	});
 }
 
 beforeAll(donDep);

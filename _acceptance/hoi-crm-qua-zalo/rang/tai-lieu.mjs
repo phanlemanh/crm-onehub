@@ -32,7 +32,11 @@ function muc(tuDien, ten) {
 }
 
 function dongLoTrinh(loTrinh) {
-	return loTrinh.split("\n").findLast((d) => d.startsWith("| 4 | `hoi-crm-qua-zalo`")) ?? "";
+	return (
+		loTrinh
+			.split("\n")
+			.findLast((d) => d.startsWith("| 4 | `hoi-crm-qua-zalo`")) ?? ""
+	);
 }
 
 function luat4(vanBan) {
@@ -50,11 +54,26 @@ function kiemTaiLieu() {
 	return [
 		["agent.md luat 4", BA_THU_CAM.every((t) => luat4(agent).includes(t))],
 		["agent.md doan hoi Zalo", agent.includes("ZaloHoi")],
-		["data-boundaries.md luat 4", BA_THU_CAM.every((t) => luat4(ranh).includes(t))],
-		["CONTEXT.md Bot Zalo", botZalo.includes("trợ lý AI") && botZalo.includes("quyền")],
-		["CONTEXT.md Tro ly AI", muc(tuDien, "Trợ lý AI").includes(KENH_ZALO_TRO_LY)],
-		["lo-trinh muc 7 dong 4", TRANG_THAI.includes(trangThai) && trangThai !== "chờ điều kiện"],
-		["telemetry.md zalo_questions", doc("docs/telemetry.md").includes("zalo_questions")],
+		[
+			"data-boundaries.md luat 4",
+			BA_THU_CAM.every((t) => luat4(ranh).includes(t)),
+		],
+		[
+			"CONTEXT.md Bot Zalo",
+			botZalo.includes("trợ lý AI") && botZalo.includes("quyền"),
+		],
+		[
+			"CONTEXT.md Tro ly AI",
+			muc(tuDien, "Trợ lý AI").includes(KENH_ZALO_TRO_LY),
+		],
+		[
+			"lo-trinh muc 7 dong 4",
+			TRANG_THAI.includes(trangThai) && trangThai !== "chờ điều kiện",
+		],
+		[
+			"telemetry.md zalo_questions",
+			doc("docs/telemetry.md").includes("zalo_questions"),
+		],
 	];
 }
 
@@ -69,7 +88,9 @@ function kiemMergeBase() {
 		return null;
 	}
 	const cu = (duong) =>
-		execFileSync("git", ["-C", GOC, "show", `${mb}:${duong}`], { encoding: "utf8" });
+		execFileSync("git", ["-C", GOC, "show", `${mb}:${duong}`], {
+			encoding: "utf8",
+		});
 	return [
 		"merge-base khong co",
 		luat4(cu("docs/agent.md")) === "" &&

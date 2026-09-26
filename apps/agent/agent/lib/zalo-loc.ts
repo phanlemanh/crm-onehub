@@ -1,6 +1,7 @@
 import { ZALO } from "./zalo-config";
 
-const SO_DIEN_THOAI = /(?<![\d+])(?:\(?\+84\)?[\s.-]?|0)(?:\d[\s.-]?){8}\d(?!\d)/gu;
+const SO_DIEN_THOAI =
+	/(?<![\d+])(?:\(?\+84\)?[\s.-]?|0)(?:\d[\s.-]?){8}\d(?!\d)/gu;
 const THU = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/gu;
 const DONG_KE_BANG = /^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$/u;
 const DONG_BANG = /^\s*\|(.*)\|\s*$/u;
@@ -71,7 +72,5 @@ export function locTraLoi(text: string): string[] {
 	const phan = gom(manh, tran);
 	if (phan.length <= ZALO.hoi.toiDaTin) return phan;
 	const giu = phan.slice(0, ZALO.hoi.toiDaTin);
-	return giu.map((p, i) =>
-		i === giu.length - 1 ? `${p}${ZALO.hoi.luoc}` : p,
-	);
+	return giu.map((p, i) => (i === giu.length - 1 ? `${p}${ZALO.hoi.luoc}` : p));
 }

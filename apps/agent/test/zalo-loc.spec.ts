@@ -93,7 +93,9 @@ describe("loc-cat", () => {
 		const ra = locTraLoi(vao);
 		kiemTran(ra);
 		expect(ra.length).toBe(2);
-		expect(ra.join("").replaceAll(ZALO.hoi.luoc, "").length).toBeLessThanOrEqual(vao.length);
+		expect(
+			ra.join("").replaceAll(ZALO.hoi.luoc, "").length,
+		).toBeLessThanOrEqual(vao.length);
 	});
 
 	test("loc-cat: bang markdown thanh dong cham", () => {

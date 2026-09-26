@@ -1,16 +1,27 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "bun:test";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
 import audit from "../agent/hooks/audit";
-import { hoiTacTu, moPhienGia } from "./support/hoi-nguong-gieo";
-import { traLoiVe } from "../agent/lib/zalo-tra-loi";
 import { ZALO } from "../agent/lib/zalo-config";
+import { traLoiVe } from "../agent/lib/zalo-tra-loi";
+import { phienAudit, type XuLyAudit } from "./support/eve-kieu";
 import { boThanhVien, donHoi, gieoVai } from "./support/hoi-gieo";
+import { hoiTacTu, moPhienGia } from "./support/hoi-nguong-gieo";
 import { donDep, moXuong } from "./support/nhac-gieo";
 import { TOKEN } from "./support/tra-loi-gieo";
 import { zaloGia } from "./support/zalo-gia";
 
-const SCRIPT = resolve(import.meta.dir, "../../../_acceptance/hoi-crm-qua-zalo/rang/nguong.ts");
+const SCRIPT = resolve(
+	import.meta.dir,
+	"../../../_acceptance/hoi-crm-qua-zalo/rang/nguong.ts",
+);
 const GIAY_MS = 1_000;
 let so = 0;
 
@@ -30,10 +41,14 @@ async function chayScript(tu: string, den: string): Promise<string[]> {
 }
 
 async function gieoBuoc(sessionId: string, luc: Date, vao: number, ra: number) {
-	const xuLy = audit.events["*"] as unknown as (e: unknown, c: unknown) => Promise<void>;
+	const xuLy = audit.events["*"] as unknown as XuLyAudit;
 	await xuLy(
-		{ type: "step.completed", data: { usage: { inputTokens: vao, outputTokens: ra, costUsd: null } }, meta: { id: `hczn-ev-${sessionId}`, at: luc.toISOString() } },
-		{ session: { id: sessionId, auth: { current: { attributes: { purpose: ZALO.hoi.purpose } }, initiator: null } } },
+		{
+			type: "step.completed",
+			data: { usage: { inputTokens: vao, outputTokens: ra, costUsd: null } },
+			meta: { id: `hczn-ev-${sessionId}`, at: luc.toISOString() },
+		},
+		phienAudit(sessionId, ZALO.hoi.purpose),
 	);
 }
 
@@ -46,12 +61,18 @@ async function hoiVaTra(
 ): Promise<string> {
 	so += 1;
 	const ket = await db.$transaction((tx) =>
-		hoiTacTu(tx, { messageId: `hczn-${Date.now()}-${so}`, chatId: chat, text: "hỏi" }, userId, luc),
+		hoiTacTu(
+			tx,
+			{ messageId: `hczn-${Date.now()}-${so}`, chatId: chat, text: "hỏi" },
+			userId,
+			luc,
+		),
 	);
 	if (ket.loai !== "hoi") throw new Error(`khong mo phien: ${ket.text}`);
 	const sessionId = `hczn-ses-${so}`;
 	await moPhienGia(ket.yeuCau, sessionId);
-	if (chon.token) await gieoBuoc(sessionId, new Date(luc.getTime() + 500), ...chon.token);
+	if (chon.token)
+		await gieoBuoc(sessionId, new Date(luc.getTime() + 500), ...chon.token);
 	const zalo = zaloGia(chon.guiHong ? { send: 500 } : {});
 	await traLoiVe({ hoiId: ket.yeuCau.hoiId, sessionId }, "Trả lời.", {
 		fetcher: zalo.fetcher,
@@ -88,13 +109,32 @@ describe("nguong", () => {
 		await hoiVaTra(D.id, "ZD", vn("10:00"), 5, { guiHong: true });
 		const cuaE = await hoiVaTra(E.id, "ZE", vn("08:00"), 4);
 		await boThanhVien(E.id);
-		await db.$transaction((tx) => hoiTacTu(tx, { messageId: `hczn-b-${Date.now()}`, chatId: "ZB", text: "hỏi" }, B.id, vn("08:30")));
+		await db.$transaction((tx) =>
+			hoiTacTu(
+				tx,
+				{ messageId: `hczn-b-${Date.now()}`, chatId: "ZB", text: "hỏi" },
+				B.id,
+				vn("08:30"),
+			),
+		);
 		await db.zaloHoi.create({
-			data: { messageId: `hczn-tran-${Date.now()}`, crmUserId: A.id, zaloChatId: "ZA", hoiLuc: vn("11:00"), ketQua: "tu-choi-tran-ngay" },
+			data: {
+				messageId: `hczn-tran-${Date.now()}`,
+				crmUserId: A.id,
+				zaloChatId: "ZA",
+				hoiLuc: vn("11:00"),
+				ketQua: "tu-choi-tran-ngay",
+			},
 		});
 		await hoiVaTra(A.id, "ZA", vn("10:00", "2026-10-14"), 1);
 		await db.zaloHoi.create({
-			data: { messageId: `hczn-ban-${Date.now()}`, crmUserId: A.id, zaloChatId: "ZA", hoiLuc: vn("12:00"), ketQua: "dang-ban" },
+			data: {
+				messageId: `hczn-ban-${Date.now()}`,
+				crmUserId: A.id,
+				zaloChatId: "ZA",
+				hoiLuc: vn("12:00"),
+				ketQua: "dang-ban",
+			},
 		});
 
 		const dong = await chayScript("2026-10-15", "2026-10-15");

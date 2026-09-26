@@ -121,7 +121,11 @@ async function xuLyDb(
 		now,
 	});
 	if (ket.loai === "da-noi") {
-		return { loai: "gui", chatId: tin.chat.id, text: ZALO.loi.daNoi(ket.tenCrm) };
+		return {
+			loai: "gui",
+			chatId: tin.chat.id,
+			text: ZALO.loi.daNoi(ket.tenCrm),
+		};
 	}
 	await ghiSai(tx, tu, now);
 	return { loai: "gui", chatId: tin.chat.id, text: ZALO.loi.huongDan };

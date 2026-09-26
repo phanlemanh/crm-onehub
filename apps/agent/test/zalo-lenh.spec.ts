@@ -67,7 +67,10 @@ describe("cung-phien", () => {
 		expect(MOI.length, "so o viet truoc").toBe(6);
 		let daChay = 0;
 		for (const [chu, mong] of MOI) {
-			expect(docLenh(chu), `moi chi khi dung mot chu: ${JSON.stringify(chu)}`).toEqual(mong);
+			expect(
+				docLenh(chu),
+				`moi chi khi dung mot chu: ${JSON.stringify(chu)}`,
+			).toEqual(mong);
 			daChay += 1;
 		}
 		expect(daChay).toBe(MOI.length);

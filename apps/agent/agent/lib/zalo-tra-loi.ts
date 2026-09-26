@@ -32,10 +32,6 @@ const CHON_HANG = {
 	sessionId: true,
 } as const;
 
-function tenLoi(loi: unknown): string {
-	return loi instanceof Error ? loi.name : "loi";
-}
-
 async function timHang(sk: SuKienZalo): Promise<HangDangHoi | null> {
 	if (sk.hoiId) {
 		return db.zaloHoi.findFirst({
@@ -107,7 +103,7 @@ export async function traLoiVe(
 		}
 	} catch (loi) {
 		console.error(
-			`[zalo] gui tra loi hong message_id=${hang.messageId}: ${tenLoi(loi)}`,
+			`[zalo] gui tra loi hong message_id=${hang.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
 		);
 		await db.zaloHoi.update({
 			where: { id: hang.id },
@@ -134,7 +130,7 @@ export async function loiVe(
 		});
 	} catch (loi) {
 		console.error(
-			`[zalo] gui bao loi hong message_id=${hang.messageId}: ${tenLoi(loi)}`,
+			`[zalo] gui bao loi hong message_id=${hang.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
 		);
 	}
 }
@@ -157,7 +153,7 @@ export async function moPhien(
 		});
 	} catch (loi) {
 		console.error(
-			`[zalo] sendChatAction hong message_id=${deps.messageId}: ${tenLoi(loi)}`,
+			`[zalo] sendChatAction hong message_id=${deps.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
 		);
 	}
 	try {
@@ -168,7 +164,7 @@ export async function moPhien(
 		});
 	} catch (loi) {
 		console.error(
-			`[zalo] khong mo duoc phien message_id=${deps.messageId}: ${tenLoi(loi)}`,
+			`[zalo] khong mo duoc phien message_id=${deps.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
 		);
 		await loiVe(
 			{ hoiId: y.hoiId },

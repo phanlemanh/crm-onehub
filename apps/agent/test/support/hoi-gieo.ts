@@ -18,5 +18,7 @@ export async function boThanhVien(userId: string): Promise<void> {
 
 export async function donHoi(): Promise<void> {
 	await db.zaloHoi.deleteMany({});
-	await db.zaloLink.deleteMany({ where: { crmUserId: { startsWith: TIEN_TO } } });
+	await db.zaloLink.deleteMany({
+		where: { crmUserId: { startsWith: TIEN_TO } },
+	});
 }

@@ -4,38 +4,27 @@ import { resolve } from "node:path";
 import { db } from "@crm/db";
 import { ZALO } from "../agent/lib/zalo-config";
 import chiDoc from "../agent/tools/zalo-chi-doc";
+import {
+	type CongCuGia,
+	type CtxPhien,
+	type GiaiCongCu,
+	phienAudit,
+} from "./support/eve-kieu";
 import { TIEN_TO } from "./support/nhac-gieo";
 
 const THU_MUC = resolve(import.meta.dir, "../agent/tools");
 const KHOA = `${TIEN_TO}zcd_khoa`;
 
-type Ctx = {
-	session: {
-		id: string;
-		auth: {
-			current: { attributes: Record<string, string> } | null;
-			initiator: null;
-		};
-	};
-};
+type Ctx = CtxPhien;
 
-type CongCu = { execute: (input: unknown, ctx: unknown) => Promise<unknown> | unknown };
+type CongCu = CongCuGia;
 
 function phien(purpose: string): Ctx {
-	return {
-		session: {
-			id: "ses-zcd",
-			auth: { current: { attributes: { purpose } }, initiator: null },
-			initiator: null,
-		} as unknown as Ctx["session"],
-	};
+	return phienAudit("ses-zcd", purpose);
 }
 
 async function giai(purpose: string): Promise<Record<string, CongCu> | null> {
-	const moc = chiDoc.events["session.started"] as unknown as (
-		e: unknown,
-		c: Ctx,
-	) => Promise<Record<string, CongCu> | null> | Record<string, CongCu> | null;
+	const moc = chiDoc.events["session.started"] as unknown as GiaiCongCu;
 	return (await moc({}, phien(purpose))) ?? null;
 }
 
@@ -58,10 +47,18 @@ beforeAll(async () => {
 	await db.fieldValue.deleteMany({ where: { field: { key: KHOA } } });
 	await db.fieldDefinition.deleteMany({ where: { key: KHOA } });
 	await db.contact.deleteMany({ where: { firstName: `${TIEN_TO}zcd` } });
-	const contact = await db.contact.create({ data: { firstName: `${TIEN_TO}zcd` } });
+	const contact = await db.contact.create({
+		data: { firstName: `${TIEN_TO}zcd` },
+	});
 	contactId = contact.id;
 	const field = await db.fieldDefinition.create({
-		data: { entity: "CONTACT", key: KHOA, label: "Zcd", type: "TEXT", position: 9_999 },
+		data: {
+			entity: "CONTACT",
+			key: KHOA,
+			label: "Zcd",
+			type: "TEXT",
+			position: 9_999,
+		},
 	});
 	fieldId = field.id;
 });
@@ -76,7 +73,9 @@ describe("chi-doc", () => {
 	test("chi-doc: phien zalo nhan dung tap cong cu ghi, moi ban ghi de tu choi", async () => {
 		const ban = await giai(ZALO.hoi.purpose);
 		expect(ban).not.toBeNull();
-		expect(Object.keys(ban ?? {}).sort()).toEqual([...ZALO.hoi.congCu.ghi].sort());
+		expect(Object.keys(ban ?? {}).sort()).toEqual(
+			[...ZALO.hoi.congCu.ghi].sort(),
+		);
 		let daGoi = 0;
 		for (const ten of ZALO.hoi.congCu.ghi) {
 			const tra = await ban?.[ten]?.execute({}, phien(ZALO.hoi.purpose));
@@ -93,8 +92,14 @@ describe("chi-doc", () => {
 		let daKiem = 0;
 		for (const ten of ZALO.hoi.congCu.ghi) {
 			const mod = await import(`../agent/tools/${ten}.ts`);
-			expect(typeof mod.default.execute, `tep ${ten} xuat mot cong cu don`).toBe("function");
-			expect(mod.default.events, `tep ${ten} khong phai bo giai dong`).toBeUndefined();
+			expect(
+				mod.default.execute,
+				`tep ${ten} xuat mot cong cu don`,
+			).toBeInstanceOf(Function);
+			expect(
+				mod.default.events,
+				`tep ${ten} khong phai bo giai dong`,
+			).toBeUndefined();
 			daKiem += 1;
 		}
 		expect(daKiem).toBe(ZALO.hoi.congCu.ghi.length);
@@ -126,7 +131,9 @@ describe("chi-doc", () => {
 		const khai = [...doc, ...ghi, ...tat];
 		expect(new Set(khai).size, "ba danh sach roi nhau").toBe(khai.length);
 		const la = tenTep().filter((t) => !khai.includes(t));
-		expect(la, `tep cong cu chua khai doc hay ghi: ${la.join(", ")}`).toEqual([]);
+		expect(la, `tep cong cu chua khai doc hay ghi: ${la.join(", ")}`).toEqual(
+			[],
+		);
 		const thua = khai.filter((t) => !tenTep().includes(t));
 		expect(thua, `ten khai khong con tep: ${thua.join(", ")}`).toEqual([]);
 	});

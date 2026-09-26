@@ -143,10 +143,7 @@ export async function hoiTacTu(
 	crmUserId: string,
 	now: Date,
 ): Promise<KetHoi> {
-	const principal = await thanhVienPrincipal(
-		crmUserId,
-		ZALO.hoi.authenticator,
-	);
+	const principal = await thanhVienPrincipal(crmUserId, ZALO.hoi.authenticator);
 	if (!principal) {
 		await ghiHang(tx, tin, crmUserId, now, "tu-choi-vai");
 		return { loai: "tra-loi", text: ZALO.loi.hoiKhongQuyen };
@@ -185,9 +182,7 @@ export async function hoiTacTu(
 	};
 }
 
-export async function hangDangHoi(
-	chatId: string,
-): Promise<HangDangHoi | null> {
+export async function hangDangHoi(chatId: string): Promise<HangDangHoi | null> {
 	return db.zaloHoi.findFirst({
 		where: { zaloChatId: chatId, ketQua: DANG_HOI },
 		orderBy: { hoiLuc: "desc" },

@@ -11,7 +11,6 @@ import { RETIRED_OUTCOME } from "@crm/db/agent-tasks";
 import { readAgentModel } from "@crm/db/settings";
 import { CONTACT_CAP_REASON } from "@crm/db/tracking";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 import {
 	bucket,
 	claimRollup,
@@ -28,6 +27,7 @@ import {
 	restoreCounters,
 	telemetryDisabled,
 } from "@crm/telemetry";
+import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import { FunnelService } from "./funnel.service";
