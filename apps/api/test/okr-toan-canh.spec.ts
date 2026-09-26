@@ -949,25 +949,26 @@ describe("mo-hop-tuan", () => {
 			"utf8",
 		);
 		const giu = donVi.map((d) => d.P);
-		let ket: { mo: number; tong: number; ty_le: number } | null = null;
+		const giu2: GiuTyLe = { ket: null };
 		await expect(
 			db.$transaction(async (tx) => {
 				await tx.$executeRaw`UPDATE department SET "archivedAt" = now() WHERE "archivedAt" IS NULL AND NOT (id = ANY(${giu}))`;
 				await tx.$executeRaw`UPDATE division SET "archivedAt" = now() WHERE "archivedAt" IS NULL`;
 				await tx.$executeRaw`SELECT set_config('okr.tuan', '2026-11-16', true)`;
-				const r =
-					await tx.$queryRawUnsafe<
-						{ mo: number; tong: number; ty_le: number }[]
-					>(sql);
-				ket = r[0] ?? null;
+				const r = await tx.$queryRawUnsafe<TyLe[]>(sql);
+				giu2.ket = r[0] ?? null;
 				throw new HoanTac();
 			}),
 		).rejects.toBeInstanceOf(HoanTac);
-		expect({ "ty-le-mo-hop-tuan": ket }).toEqual({
+		expect({ "ty-le-mo-hop-tuan": giu2.ket }).toEqual({
 			"ty-le-mo-hop-tuan": { mo: 3, tong: 5, ty_le: 0.6 },
 		});
 	});
 });
+
+type TyLe = { mo: number; tong: number; ty_le: number };
+
+type GiuTyLe = { ket: TyLe | null };
 
 class HoanTac extends Error {
 	constructor() {
