@@ -322,6 +322,27 @@ API; the API only reads and writes rows.
 
   One bot cannot do both: a bot with a webhook set gets nothing from `getUpdates`
   until the webhook is removed.
+- **Hỏi CRM qua Zalo: câu không phải mã hay lệnh của người đã nối đi vào trợ lý AI.**
+  `hoiTacTu` (`lib/zalo-hoi.ts`) chạy trong cùng giao dịch với `ZaloUpdateSeen`:
+  - cổng vai là `thanhVienPrincipal` (`lib/thanh-vien-principal.ts`), cùng hàm
+    `repFromCrm` dùng — người không còn hàng `member` hay mang vai `okr` bị từ chối
+    trước khi có phiên;
+  - ba trần trong `ZALO.hoi.tran`: 3 câu mỗi phút, 20 câu mỗi ngày của một người,
+    1.500 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
+    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần;
+  - một câu một lúc: còn câu `dang-hoi` chưa quá `ZALO.hoi.hanTraLoiMs` thì câu mới
+    nhận «đang trả lời câu trước»; tick dispatch đóng câu quá hạn (`dongHoiQuaHan`)
+    và báo lỗi đúng một lần;
+  - mỗi câu một hàng `ZaloHoi` (thời điểm, kết quả, độ trễ, token của phiên) — không
+    nội dung câu hỏi hay câu trả lời.
+  Webhook đáp 200 ngay; `send()` của eve chạy qua `waitUntil` với token `chat:<chatId>`
+  (một cuộc trò chuyện mỗi Zalo, nhớ 30 ngày; «mới» gọi `reset`). Trả lời về ở
+  `zaloEvents["message.completed"]` (`channels/zalo.ts`), tìm câu theo `hoiId` trong
+  thuộc tính phiên, qua `locTraLoi` rồi gửi tối đa ba tin. Phiên `purpose: "zalo"`
+  nhận chỉ dẫn `lib/zalo-chi-dan.ts`, và `tools/zalo-chi-doc.ts` thay mọi công cụ ghi
+  trong `ZALO.hoi.congCu.ghi` bằng bản từ chối — thêm một tệp công cụ mà không khai
+  đọc hay ghi là `test/zalo-chi-doc.spec.ts` đỏ. `_acceptance/hoi-crm-qua-zalo/rang/nguong.ts`
+  in số đo cho phiên nghiệm thu.
 - **Message text is never stored or logged.** Only `message_id` and the failure
   counter.
 
@@ -466,6 +487,14 @@ egress:
 1. No customer text in a third-party query. Derived questions only.
 2. Nothing from a mailbox into `/workspace` — different lifetime.
 3. Nothing sensitive logged. Reading is not logging.
+4. Into an outside chat channel (Zalo): what the asker may read on the web,
+   minus exactly three things — personal contact details of partner people
+   (phone, email), verbatim mail or calendar text (a summary is fine), and any
+   value stored in `AppSetting`. Names, stages and amounts are fine; a phone
+   number is not. The reply lives on the platform's servers and on the phone,
+   outside the CRM's retention and audit, which is why the line sits here.
+   `locTraLoi` (`lib/zalo-loc.ts`) masks phone numbers and emails on the way
+   out; verbatim mail is held back by the session's instructions only.
 
 `skills/data-boundaries.md` is the agent's copy. Keep them in step.
 
