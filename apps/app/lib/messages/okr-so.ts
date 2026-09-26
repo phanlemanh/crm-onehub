@@ -132,6 +132,7 @@ const vi = {
 				dangDoc: "Đang đọc thử…",
 				docDuoc: (so: string, gio: string) => `Đọc được ${so} lúc ${gio}`,
 				docLai: "Đọc lại",
+				chuaDocXong: "Chưa đọc xong, thử lại sau.",
 				lyDo: {
 					"chua-chia-se": "Bảng tính chưa chia sẻ cho địa chỉ đọc của CRM",
 					"khong-thay": "Không thấy bảng tính hay trang này",
@@ -312,6 +313,7 @@ const en: OkrSoMessages = {
 				dangDoc: "Reading the cell…",
 				docDuoc: (so: string, gio: string) => `Read ${so} at ${gio}`,
 				docLai: "Read again",
+				chuaDocXong: "Not read yet — try again later.",
 				lyDo: {
 					"chua-chia-se":
 						"The spreadsheet isn't shared with the CRM's reading address",

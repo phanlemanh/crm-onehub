@@ -27,26 +27,17 @@ import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import type { Locale } from "@crm/ui/lib/locale";
 import {
 	BAC_GHI_DANH,
-	type BacGhiDanh,
 	CHI_SO_OKR,
-	type KieuPhamVi,
 	MA_CHI_SO,
 	type MaChiSo,
 	PHAM_VI_CHI_SO,
-	type PhamViChiSo,
 } from "@crm/validation/okr-chi-so";
 import { NGUON_KR, type NguonKr } from "@crm/validation/okr-kr";
-import {
-	type DatNguonKrInput,
-	datNguonKrInput,
-	type LyDoDocSheet,
-	oSheet,
-	sheetIdTuUrl,
-} from "@crm/validation/okr-nguon";
+import { oSheet, sheetIdTuUrl } from "@crm/validation/okr-nguon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useId, useState } from "react";
-import { API_URL } from "@/lib/env";
+import { useApiOrigin } from "@/components/api-origin";
 import { okrSoMessages } from "@/lib/messages/okr-so";
 import { OKR_SO_MAN } from "@/lib/okr-so-man";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -54,27 +45,20 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
+import {
+	bacCua,
+	type ChoDoc,
+	type MucTieuNguon,
+	type NhapNguon,
+	nguonDaDoi,
+	nhapNguonDau,
+	phamViCua,
+	type TrangThaiDoc,
+	trangThaiDoc,
+	vaoDatNguon,
+} from "./nguon-so-luat";
 
-type ChiTiet = RouterOutputs["okr"]["objective"];
-export type MucTieuNguon = Pick<
-	ChiTiet,
-	"cycleId" | "status" | "level" | "unitId"
->;
-
-export type NhapNguon = {
-	loai: NguonKr;
-	chiSo: MaChiSo;
-	kieuPhamVi: KieuPhamVi;
-	idPhamVi: string;
-	bac: BacGhiDanh;
-	url: string;
-	o: string;
-};
-
-export type TrangThaiDoc =
-	| { loai: "dang-doc" }
-	| { loai: "doc-duoc"; giaTri: number; luc: string }
-	| { loai: "loi"; lyDo: LyDoDocSheet };
+export type { MucTieuNguon } from "./nguon-so-luat";
 
 export type LuaChonPhamVi = {
 	boPhan: ComboboxOption[];
@@ -91,104 +75,6 @@ export const NHAN_NGUON = {
 } as const satisfies Record<NguonKr, string>;
 
 const DINH_DANG = { vi: "vi-VN", en: "en-GB" } satisfies Record<Locale, string>;
-
-type DonViMacDinh = { kieu: KieuPhamVi; id: string };
-
-function phamViMacDinh(mt: MucTieuNguon): DonViMacDinh {
-	const id = mt.unitId ?? "";
-	switch (mt.level) {
-		case "bo-phan":
-			return { kieu: "bo-phan", id };
-		case "phong-ban":
-			return { kieu: "phong-ban", id };
-		case "ca-nhan":
-			return { kieu: "nguoi", id };
-		case "onehub":
-			return { kieu: "toan-cong-ty", id: "" };
-	}
-}
-
-export function nhapNguonDau(kr: KetQua | null, mt: MucTieuNguon): NhapNguon {
-	const n = kr?.nguonMay ?? null;
-	const mac = phamViMacDinh(mt);
-	const pv = n?.phamVi ?? null;
-	return {
-		loai: n?.loai ?? "tay",
-		chiSo: n?.chiSo ?? MA_CHI_SO[0],
-		kieuPhamVi: pv?.kieu ?? mac.kieu,
-		idPhamVi: pv === null ? mac.id : pv.kieu === "toan-cong-ty" ? "" : pv.id,
-		bac: n?.bac ?? BAC_GHI_DANH[0],
-		url: n?.sheetId ? `${OKR_SO_MAN.urlBangTinh}${n.sheetId}` : "",
-		o: n?.sheetO ?? "",
-	};
-}
-
-function phamViCua(g: NhapNguon): PhamViChiSo {
-	return g.kieuPhamVi === "toan-cong-ty"
-		? { kieu: "toan-cong-ty" }
-		: { kieu: g.kieuPhamVi, id: g.idPhamVi };
-}
-
-function bacCua(g: NhapNguon): BacGhiDanh | undefined {
-	return g.chiSo === "ghi-danh-dat-bac" ? g.bac : undefined;
-}
-
-export function vaoDatNguon(
-	keyResultId: string,
-	g: NhapNguon,
-): DatNguonKrInput | null {
-	const tho =
-		g.loai === "crm"
-			? {
-					keyResultId,
-					loai: g.loai,
-					chiSo: g.chiSo,
-					phamVi: phamViCua(g),
-					bac: bacCua(g),
-				}
-			: g.loai === "bang-tinh"
-				? { keyResultId, loai: g.loai, url: g.url.trim(), o: g.o.trim() }
-				: { keyResultId, loai: g.loai };
-	const r = datNguonKrInput.safeParse(tho);
-	return r.success ? r.data : null;
-}
-
-export function nguonDaDoi(kr: KetQua | null, g: NhapNguon): boolean {
-	const n = kr?.nguonMay ?? null;
-	if (n === null) return g.loai !== "tay";
-	if (n.loai !== g.loai) return true;
-	if (g.loai === "crm") {
-		const pv = phamViCua(g);
-		const cu = n.phamVi;
-		return (
-			n.chiSo !== g.chiSo ||
-			(n.bac ?? undefined) !== bacCua(g) ||
-			cu?.kieu !== pv.kieu ||
-			(cu.kieu !== "toan-cong-ty" &&
-				pv.kieu !== "toan-cong-ty" &&
-				cu.id !== pv.id)
-		);
-	}
-	if (g.loai === "bang-tinh")
-		return sheetIdTuUrl(g.url) !== n.sheetId || g.o.trim() !== n.sheetO;
-	return false;
-}
-
-export function trangThaiDoc(
-	kr: KetQua | null,
-	g: NhapNguon,
-	choTu: string | null | undefined,
-): TrangThaiDoc | null {
-	const n = kr?.nguonMay ?? null;
-	if (n === null || n.loai !== "bang-tinh" || g.loai !== "bang-tinh")
-		return null;
-	if (nguonDaDoi(kr, g)) return null;
-	if (n.docLuc === null || (choTu !== undefined && n.docLuc === choTu))
-		return { loai: "dang-doc" };
-	if (n.docLoi !== null) return { loai: "loi", lyDo: n.docLoi };
-	if (n.docGiaTri === null) return { loai: "dang-doc" };
-	return { loai: "doc-duoc", giaTri: n.docGiaTri, luc: n.docLuc };
-}
 
 function luaChonPhamVi(
 	cay: RouterOutputs["org"]["tree"] | undefined,
@@ -227,16 +113,21 @@ export function useNguonSo({
 	const cache = useCrmCache();
 	const [krId, setKrId] = useState<string | null>(kr?.id ?? null);
 	const [gia, setGia] = useState<NhapNguon>(() => nhapNguonDau(kr, mucTieu));
-	const [choTu, setChoTu] = useState<string | null | undefined>(undefined);
+	const [cho, setCho] = useState<ChoDoc>(() => ({
+		docTruoc: undefined,
+		tu: Date.now(),
+	}));
 	const moiNhat = (du: { keyResults: KetQua[] } | undefined) =>
 		du?.keyResults.find((k) => k.id === krId) ?? null;
 	const mt = useQuery({
 		...trpc.okr.objective.queryOptions({ id: objectiveId }),
 		refetchInterval: (q) =>
-			trangThaiDoc(moiNhat(q.state.data), gia, choTu)?.loai === "dang-doc"
+			trangThaiDoc(moiNhat(q.state.data), gia, cho, Date.now())?.loai ===
+			"dang-doc"
 				? OKR_SO_MAN.docThuLamMoiMs
 				: false,
 	});
+	const bayGio = Math.max(mt.dataUpdatedAt, Date.now());
 	const canPhamVi = gia.loai === "crm";
 	const cay = useQuery({ ...trpc.org.tree.queryOptions(), enabled: canPhamVi });
 	const thanhVien = useQuery({
@@ -247,7 +138,7 @@ export function useNguonSo({
 	const goc =
 		moiNhat(mt.data) ?? (krId !== null && krId === kr?.id ? kr : null);
 	const doiNguon = nguonDaDoi(goc, gia);
-	const docThu = trangThaiDoc(goc, gia, choTu);
+	const docThu = trangThaiDoc(goc, gia, cho, bayGio);
 	const docTruoc = goc?.nguonMay?.docLuc ?? null;
 
 	const luu = async (id: string): Promise<boolean> => {
@@ -255,7 +146,7 @@ export function useNguonSo({
 		if (!vao) return false;
 		await datNguon.mutateAsync(vao);
 		if (vao.loai !== "bang-tinh") return false;
-		setChoTu(docTruoc);
+		setCho({ docTruoc, tu: Date.now() });
 		return true;
 	};
 
@@ -265,7 +156,7 @@ export function useNguonSo({
 		baoLoi(null);
 		datNguon.mutate(vao, {
 			onSuccess: () => {
-				setChoTu(docTruoc);
+				setCho({ docTruoc, tu: Date.now() });
 				void cache.okr(objectiveId);
 			},
 			onError: (e) => baoLoi(e.message),
@@ -284,7 +175,8 @@ export function useNguonSo({
 		hopLe: vaoDatNguon(krId ?? "moi", gia) !== null,
 		docThu,
 		luu,
-		docLai: docThu?.loai === "loi" ? docLai : null,
+		docLai:
+			docThu?.loai === "loi" || docThu?.loai === "qua-han" ? docLai : null,
 		dangGui: datNguon.isPending,
 		phamVi: luaChonPhamVi(
 			cay.data,
@@ -344,7 +236,7 @@ export function NguonSo({
 				<FieldLabel id={`${ma}-nguon`}>{t.oNguon}</FieldLabel>
 				<ToggleGroup
 					aria-labelledby={`${ma}-nguon`}
-					className="grid w-full grid-cols-2 sm:flex sm:w-fit"
+					layout="grid-2"
 					disabled={khoaChon}
 					onValueChange={(v) => {
 						const moi = NGUON_KR.find((n) => n === v);
@@ -558,6 +450,10 @@ function XemTruoc({ cycleId, gia }: { cycleId: string; gia: NhapNguon }) {
 	});
 
 	if (!du) return null;
+	if (dem.isPending || dem.isFetching)
+		return (
+			<FieldDescription data-xem-truoc="dang-dem">{t.dangDem}</FieldDescription>
+		);
 	if (dem.isError)
 		return (
 			<FieldDescription data-xem-truoc="loi">
@@ -573,10 +469,6 @@ function XemTruoc({ cycleId, gia }: { cycleId: string; gia: NhapNguon }) {
 				</Button>
 			</FieldDescription>
 		);
-	if (dem.isPending || dem.isFetching)
-		return (
-			<FieldDescription data-xem-truoc="dang-dem">{t.dangDem}</FieldDescription>
-		);
 	const so = new Intl.NumberFormat(DINH_DANG[locale]).format(dem.data.giaTri);
 	return (
 		<FieldDescription data-xem-truoc="co" data-gia-tri={dem.data.giaTri}>
@@ -589,7 +481,10 @@ function NhanhApi({ krId }: { krId: string | null }) {
 	const t = okrSoMessages(useLocale()).trangThai.hopThoai.api;
 	const url = useWorkspaceUrl();
 	const ma = useId();
-	const lenh = `curl -X POST ${API_URL}/rest/okr/key-results/${krId ?? "<id>"}/value -H "x-api-key: …" -H "content-type: application/json" -d '{"giaTri": ${OKR_SO_MAN.giaTriMau}}'`;
+	const origin = useApiOrigin();
+	const lenh = origin
+		? `curl -X POST ${origin}/rest/okr/key-results/${krId ?? "<id>"}/value -H "x-api-key: …" -H "content-type: application/json" -d '{"giaTri": ${OKR_SO_MAN.giaTriMau}}'`
+		: null;
 
 	return (
 		<>
@@ -612,20 +507,24 @@ function NhanhApi({ krId }: { krId: string | null }) {
 				</Field>
 			) : null}
 			<Field>
-				<FieldLabel htmlFor={`${ma}-lenh`}>{t.lenhMau}</FieldLabel>
-				<InputGroup>
-					<InputGroupInput
-						className="font-mono"
-						data-lenh-mau
-						id={`${ma}-lenh`}
-						readOnly
-						translate="no"
-						value={lenh}
-					/>
-					<InputGroupAddon align="inline-end">
-						<CopyValue label={t.lenhMau} value={lenh} />
-					</InputGroupAddon>
-				</InputGroup>
+				{lenh ? (
+					<>
+						<FieldLabel htmlFor={`${ma}-lenh`}>{t.lenhMau}</FieldLabel>
+						<InputGroup>
+							<InputGroupInput
+								className="font-mono"
+								data-lenh-mau
+								id={`${ma}-lenh`}
+								readOnly
+								translate="no"
+								value={lenh}
+							/>
+							<InputGroupAddon align="inline-end">
+								<CopyValue label={t.lenhMau} value={lenh} />
+							</InputGroupAddon>
+						</InputGroup>
+					</>
+				) : null}
 				<FieldDescription>
 					{t.moTa}{" "}
 					<Link data-lien-ket-khoa-api href={url("/settings/api-keys")}>
@@ -725,11 +624,17 @@ function NhanhSheets({
 					)}
 				</FieldDescription>
 			) : null}
-			{docThu?.loai === "loi" ? (
+			{docThu?.loai === "loi" || docThu?.loai === "qua-han" ? (
 				<div className="flex flex-wrap items-center gap-2">
-					<FieldError data-doc-thu="loi" data-ly-do={docThu.lyDo}>
-						{t.lyDo[docThu.lyDo]}
-					</FieldError>
+					{docThu.loai === "loi" ? (
+						<FieldError data-doc-thu="loi" data-ly-do={docThu.lyDo}>
+							{t.lyDo[docThu.lyDo]}
+						</FieldError>
+					) : (
+						<FieldDescription data-doc-thu="qua-han">
+							{t.chuaDocXong}
+						</FieldDescription>
+					)}
 					{docLai ? (
 						<Button
 							data-nut="doc-lai"

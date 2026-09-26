@@ -125,6 +125,7 @@ let loiGhi: { duong: string; loi: string } | null = null;
 type CamSheets = { sheetsBat: boolean; emailSheets: string | null };
 const SHEETS_TAT: CamSheets = { sheetsBat: false, emailSheets: null };
 let sheets = SHEETS_TAT;
+let origin: string | null = null;
 
 function thuTuc<TRa, TKet = { id: string; canhBao: string | null }>(
 	duong: string,
@@ -255,6 +256,7 @@ const { ObjectiveSheet } = await import(
 	"@/components/crm/record-sheet/objective-sheet"
 );
 const { DetailSheet } = await import("@/components/detail-sheet");
+const { ApiOriginProvider } = await import("@/components/api-origin");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
@@ -273,10 +275,15 @@ async function mo(duong = "?record=objective:mt-1"): Promise<San> {
 	const client = new QueryClient({
 		defaultOptions: { queries: { retry: false } },
 	});
-	const man: ReactElement = (
+	const sheet: ReactElement = (
 		<DetailSheet onOpenChange={() => {}} open>
 			<ObjectiveSheet objectiveId="mt-1" />
 		</DetailSheet>
+	);
+	const man = origin ? (
+		<ApiOriginProvider origin={origin}>{sheet}</ApiOriginProvider>
+	) : (
+		sheet
 	);
 	await act(async () => {
 		root.render(
@@ -363,6 +370,7 @@ beforeEach(() => {
 	loiGhi = null;
 	binhLuan = [];
 	sheets = SHEETS_TAT;
+	origin = null;
 	chiTiet = mucTieu("nhap", false);
 });
 
@@ -1300,6 +1308,89 @@ describe("nguon-so-luu-crm", () => {
 				chiSo: "thoa-thuan-chot-duoc",
 				phamVi: { kieu: "phong-ban", id: "pb-1" },
 			},
+		});
+	});
+});
+
+describe("nguon-so-api-origin", () => {
+	test("nguon-so-api-origin: lenh mau lay dia chi goc API tu provider, co ma KR cua KR dang sua", async () => {
+		origin = "https://api.thu.test";
+		const h = await moHopKr("sua");
+		const api = h.querySelector('[data-lua-chon-nguon="api"]');
+		if (!api) throw new Error("khong co lua chon API");
+		await bam(api);
+		const lenh = h.querySelector("[data-lenh-mau]");
+		expect({
+			maKr: h.querySelector("[data-ma-kr]")?.getAttribute("data-ma-kr"),
+			lenh:
+				lenh instanceof HTMLInputElement &&
+				lenh.value.includes(
+					"https://api.thu.test/rest/okr/key-results/kr-1/value",
+				),
+		}).toEqual({ maKr: "kr-1", lenh: true });
+	});
+
+	test("nguon-so-api-origin: doi chung — khong co provider thi khong dung lenh mau voi dia chi doan", async () => {
+		const h = await moHopKr("sua");
+		const api = h.querySelector('[data-lua-chon-nguon="api"]');
+		if (!api) throw new Error("khong co lua chon API");
+		await bam(api);
+		expect({
+			maKr: h.querySelector("[data-ma-kr]")?.getAttribute("data-ma-kr"),
+			lenh: h.querySelector("[data-lenh-mau]"),
+		}).toEqual({ maKr: "kr-1", lenh: null });
+	});
+});
+
+describe("nguon-so-doc-lai", () => {
+	test("nguon-so-doc-lai: doc thu hong hien nguyen nhan, Doc lai gui lai datNguonKr cung cau hinh", async () => {
+		sheets = {
+			sheetsBat: true,
+			emailSheets: "okr-doc@du-an.iam.gserviceaccount.com",
+		};
+		chiTiet = {
+			...mucTieu("nhap", false),
+			keyResults: [
+				{
+					...kr("kr-1", false),
+					source: "bang-tinh",
+					nguonMay: {
+						...NGUON_CRM,
+						loai: "bang-tinh",
+						chiSo: null,
+						phamVi: null,
+						sheetId: "1AbC",
+						sheetO: "Tổng!B2",
+						docLuc: "2026-10-05T02:12:00.000Z",
+						docLoi: "chua-chia-se",
+					},
+				},
+			],
+		};
+		const h = await moHopKr("sua");
+		const loi = h.querySelector('[data-doc-thu="loi"]');
+		const docLai = h.querySelector('[data-nut="doc-lai"]');
+		if (!docLai) throw new Error("khong co nut doc lai");
+		await bam(docLai);
+		await cho(
+			() => daGoi.some((g) => g.duong === "okr.datNguonKr"),
+			"goi dat nguon",
+		);
+		expect({
+			lyDo: loi?.getAttribute("data-ly-do"),
+			chu: loi?.textContent,
+			goi: daGoi.map((g) => g.dauVao),
+		}).toEqual({
+			lyDo: "chua-chia-se",
+			chu: so.sheets.lyDo["chua-chia-se"],
+			goi: [
+				{
+					keyResultId: "kr-1",
+					loai: "bang-tinh",
+					url: "https://docs.google.com/spreadsheets/d/1AbC",
+					o: "Tổng!B2",
+				},
+			],
 		});
 	});
 });
