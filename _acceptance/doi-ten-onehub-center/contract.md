@@ -82,8 +82,10 @@ Never: đổi tên gói `@crm/*`, CSDL `crm_*`, công cụ `search_crm` — phí
 
 ## Đường đo
 
-Không có `opportunity.md` (vòng đi thẳng từ yêu cầu của chủ kho, không qua Cổng Đáng) — không
-có ngưỡng để nối.
+Ngưỡng ở `opportunity.md` (Cổng Đáng ghi bù 26/09, chủ kho quyết `build` sau S4 round 1):
+- 0 chữ «CRM» người dùng báo thấy trong 14 ngày · nguồn: lời báo của người dùng, đếm tay · AC bảo đảm vật được đo: AC-1, AC-2 (bộ quét không còn chuỗi nào ngoài bốn ngoại lệ), AC-4, AC-6.
+- Tỉ lệ người mới hỏi cách vào không tệ hơn ≤ 10% của `cua-vao-dang-nhap` · nguồn: cùng thước tin nhắn hỏi quản trị viên của hồ sơ đó (không mã mới) · AC bảo đảm: AC-8, AC-12.
+- Hai tên cho một sản phẩm báo từ 3 lần trở lên là CHẾT · nguồn: lời báo người dùng · AC bảo đảm: AC-5 (đầu trang hiện «OneHub Center» cho không gian còn tên «CRM»).
 
 ## Out of scope
 

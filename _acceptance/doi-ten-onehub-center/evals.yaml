@@ -81,12 +81,12 @@ evals:
       - "packages/auth/src/organization.ts"
       - "apps/app/test/workspace-label.spec.ts"
     expected: |
-      apps/app/test/workspace-label.spec.ts viet lai. Ten mac dinh CU doc bang
-      `git show $(git merge-base HEAD origin/onehub):packages/auth/src/organization.ts` va rut gia tri
-      DEFAULT_WORKSPACE_NAME (khong go tay). Ma tran viet truoc 11 dong: undefined, "", "   ",
-      DEFAULT_WORKSPACE_NAME moi, ten cu, ten cu viet thuong, ten cu co khoang trang hai dau,
-      "OneHub Center" -> "OneHub Center"; "Acme" -> "Acme"; "  Acme  " -> "Acme"; "Acme CRM" -> "Acme CRM"
-      (ten nguoi dat, khong dung vao). Them assert DEFAULT_WORKSPACE_NAME == "OneHub Center". So assert = 12.
+      apps/app/test/workspace-label.spec.ts viet lai. Ten mac dinh CU go cung "CRM" trong test (khong
+      goi git: CI clone nong khong co origin/onehub, va sau khi merge merge-base se tra ten moi — S4-r1).
+      Ma tran viet truoc 11 dong: undefined, "", "   ", DEFAULT_WORKSPACE_NAME moi, "CRM", "crm",
+      " CRM ", "OneHub Center" -> "OneHub Center"; "Acme" -> "Acme"; "  Acme  " -> "Acme"; "Acme CRM" ->
+      "Acme CRM" (ten nguoi dat, khong dung vao). Them assert DEFAULT_WORKSPACE_NAME == "OneHub Center".
+      So assert = 12.
       CHIEU DO: merge-base -> "Acme" ra "Acme CRM", undefined ra "CRM".
 
   - id: E5b

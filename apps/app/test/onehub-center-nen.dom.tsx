@@ -1,5 +1,5 @@
 import { describe, expect, it, mock } from "bun:test";
-import { execFileSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -25,27 +25,26 @@ async function cotTrai(coKhoi: boolean): Promise<Element | undefined> {
 }
 
 function nhapAuthShader(): string {
-	try {
-		return execFileSync(
-			"git",
-			[
-				"-C",
-				GOC,
-				"grep",
-				"-l",
-				"-e",
-				'components/auth-shader"',
-				"--",
-				"apps/app",
-				":(exclude)apps/app/test",
-			],
-			{
-				encoding: "utf8",
-			},
-		);
-	} catch {
-		return "";
+	const ra = spawnSync(
+		"git",
+		[
+			"-C",
+			GOC,
+			"grep",
+			"-l",
+			"-e",
+			'components/auth-shader"',
+			"--",
+			"apps/app",
+			":(exclude)apps/app/test",
+		],
+		{ encoding: "utf8" },
+	);
+	if (ra.status === 1) return "";
+	if (ra.status !== 0) {
+		throw new Error(`git grep hong (ma ${ra.status}): ${ra.stderr}`);
 	}
+	return ra.stdout;
 }
 
 describe("nen luoi cham", () => {
@@ -64,6 +63,29 @@ describe("nen luoi cham", () => {
 			existsSync(join(GOC, "apps/app/components/auth-shader.tsx")),
 			"auth-shader.tsx van con",
 		).toBe(false);
+	});
+
+	it("doi chung: git grep that tim thay mot tep nhap co that", () => {
+		const ra = spawnSync(
+			"git",
+			[
+				"-C",
+				GOC,
+				"grep",
+				"-l",
+				"-e",
+				'components/auth-shell"',
+				"--",
+				"apps/app",
+				":(exclude)apps/app/test",
+			],
+			{ encoding: "utf8" },
+		);
+		expect(ra.status, "git grep khong chay").toBe(0);
+		expect(
+			ra.stdout.trim().length,
+			"doi chung khong tim thay auth-shell",
+		).toBeGreaterThan(0);
 	});
 
 	it("khong tep nao nhap auth-shader", () => {

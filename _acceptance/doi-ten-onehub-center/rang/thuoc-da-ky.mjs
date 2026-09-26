@@ -95,17 +95,18 @@ function hoSoDaKy(goc = GOC) {
 		});
 }
 
-function tepTrongLenh(lenh) {
-	let cwd = ".";
-	const m = lenh.match(/^cd\s+(\S+)\s*&&/);
-	if (m) cwd = m[1];
+export function tepTrongLenh(lenh) {
+	const cwds = [
+		".",
+		...[...lenh.matchAll(/\bcd\s+([^\s&;"']+)\s*&&/g)].map((m) => m[1]),
+	];
 	return [
 		...lenh.matchAll(
 			/(?:\.\/|\.\.\/)?[\w@.\/()\[\]-]+\.(?:tsx?|mjs|cjs|sh|json)\b/g,
 		),
 	]
 		.map((a) => a[0])
-		.flatMap((f) => [join(cwd, f), f])
+		.flatMap((f) => [...cwds.map((c) => join(c, f)), f])
 		.map((f) => f.replace(/^\.\//, ""))
 		.filter((f) => existsSync(join(GOC, f)))
 		.filter((f) => LA_THUOC.test(f));
@@ -275,6 +276,15 @@ function soThuoc(thuocBiCham, base) {
 }
 
 function doiChung() {
+	const lenhLong =
+		'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts"';
+	const bat = tepTrongLenh(lenhLong).includes(
+		"apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts",
+	);
+	ghi(
+		bat,
+		`doi chung lenh cd long trong chuoi: ${bat ? "bat duoc" : "BO SOT"} tep thuoc`,
+	);
 	const tot = catCap(
 		'expect(x).toBe("Đăng nhập vào CRM");',
 		'expect(x).toBe("Đăng nhập vào OneHub Center");',

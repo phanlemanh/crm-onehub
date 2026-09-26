@@ -3,10 +3,10 @@ schema_version: 1
 slug: doi-ten-onehub-center
 feature: Đổi tên sản phẩm thành OneHub Center trên mọi chữ người đọc, và làm lại cột trái trang đăng nhập
 owner: manh.phan@onemount.com
-stage: proposed
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-26T13:57:51Z
 prototype:
   base_commit: d864d529
   disposition: archive
@@ -38,10 +38,10 @@ Chủ kho thấy trang «đơn điệu, không giống các trang khác» (26/09
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Sau khi đổi, người dùng có gọi sản phẩm bằng một tên, và người mới có tự qua trang đăng nhập không?
-- Kết quả nào là SỐNG: [đề xuất] Trong 14 ngày từ ngày ship, 0 chữ «CRM» nào người dùng báo thấy trên màn, thư hay tin Zalo; VÀ tỉ lệ người mới phải nhắn quản trị viên hỏi cách vào không tệ hơn ngưỡng sống của hồ sơ `cua-vao-dang-nhap` (≤ 10%).
-- Kết quả nào là CHẾT: [đề xuất] Người dùng báo hai tên cho một sản phẩm (ví dụ «CRM» ở Cài đặt, «OneHub Center» ở đầu trang) từ 3 lần trở lên; HOẶC tỉ lệ hỏi cách vào tệ hơn trước khi ship.
-- Timebox: [đề xuất] Vòng này đã tới S4; không mở vòng sửa thứ hai chỉ vì thẩm mỹ.
+- Câu hỏi phép đo trả lời: Sau khi đổi, người dùng có gọi sản phẩm bằng một tên, và người mới có tự qua trang đăng nhập không?
+- Kết quả nào là SỐNG: Trong 14 ngày từ ngày ship, 0 chữ «CRM» nào người dùng báo thấy trên màn, thư hay tin Zalo; VÀ tỉ lệ người mới phải nhắn quản trị viên hỏi cách vào không tệ hơn ngưỡng sống của hồ sơ `cua-vao-dang-nhap` (≤ 10%).
+- Kết quả nào là CHẾT: Người dùng báo hai tên cho một sản phẩm (ví dụ «CRM» ở Cài đặt, «OneHub Center» ở đầu trang) từ 3 lần trở lên; HOẶC tỉ lệ hỏi cách vào tệ hơn trước khi ship.
+- Timebox: Vòng này đã tới S4; không mở vòng sửa thứ hai chỉ vì thẩm mỹ.
 
 Căn cứ: cùng thước tin nhắn hỏi quản trị viên của hồ sơ `cua-vao-dang-nhap`, để hai vòng
 chạm cùng trang đăng nhập đo trên một mẫu số; phần tên thì đếm lời báo của người dùng,
