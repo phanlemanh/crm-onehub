@@ -1,0 +1,55 @@
+{
+  "feature_plain": "Mọi chỗ người dùng đọc thấy «CRM» đổi thành «OneHub Center» (trùng tên miền onehub.center), và cột trái trang đăng nhập hết trống: dòng giới thiệu lớn, ba bước nối nhau, nền lưới chấm chạy đúng cả sáng lẫn tối.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ luôn viết đủ «OneHub Center» — không «Center» đứng một mình, không dịch «Trung tâm», tiếng Anh không kèm «the»."},
+    {"id": "AC-3", "p": "Sẽ hiện tiêu đề «Đăng nhập vào OneHub Center» và dòng «OneHub Center: đối tác, kế hoạch 30 ngày và OKR.» ở cả tiếng Việt lẫn tiếng Anh, trên năm trang đăng nhập và bắt đầu."},
+    {"id": "AC-4", "p": "Sẽ đổi tên trên tab trình duyệt và tên ứng dụng khi cài lên máy thành «OneHub Center»."},
+    {"id": "AC-6", "p": "Sẽ đổi tiêu đề thư đặt lại và đổi mật khẩu thành «… OneHub Center», còn câu máy dùng để nhận ra lỗi đăng nhập thì giữ nguyên."},
+    {"id": "AC-9", "p": "Sẽ nối ba bước «Lần đầu vào?» bằng một đường dọc, không đường thừa sau bước cuối; danh sách bước ở các màn khác giữ nguyên."},
+    {"id": "AC-10", "p": "Sẽ dùng một nền lưới chấm chung cho cả năm trang đăng nhập và bắt đầu, màu lấy từ bảng màu của kho, bỏ hẳn nền gradient cũ."},
+    {"id": "AC-11", "p": "Sẽ giữ nền sáng ở giao diện sáng, tối ở giao diện tối; chấm và đường nối luôn thấy được trên nền; chữ đạt độ tương phản chuẩn AA."},
+    {"id": "AC-12", "p": "Sẽ giữ mọi lời hứa cũ của trang đăng nhập: dưới 1024px khối ba bước nằm dưới nút Đăng nhập, không tràn ngang, thứ tự Tab không đổi, đo thêm khổ 1920."},
+    {"id": "AC-13", "p": "Sẽ giữ mọi phép đo của các tính năng đã ký vẫn đạt; phép đo nào phải sửa thì chỉ được đổi tên, trừ đúng ba vạch khai trước bị thay bằng phép đo mới."},
+    {"id": "AC-15", "p": "Sẽ chụp trang đăng nhập thật ở 375, 1440, 1920 × sáng, tối để anh nhìn bằng mắt ở Cổng Bằng chứng."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn: không còn chữ «CRM» nào người dùng đọc được, trừ bốn chuỗi máy khai trước; một ngoại lệ mới lén thêm vào cũng làm bộ quét đỏ."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG ghép «Center» sau tên không gian: đầu trang hiện đúng tên không gian, hoặc «OneHub Center» khi chưa đặt tên hay còn tên cũ «CRM»; không sửa dữ liệu đang có."},
+    {"id": "AC-8", "p": "Sẽ KHÔNG còn hộp quanh khối ba bước; dòng giới thiệu cỡ lớn và khối ba bước thẳng mép trái với logo, rộng không quá 576px."},
+    {"id": "AC-14", "p": "Sẽ KHÔNG chạm trang giới thiệu của hãng, lớp chặn đường dẫn, tên các gói, bản mẫu cũ, hay câu máy «This CRM is private»; không chú thích mới trong mã."}
+  ],
+  "scope_plain": "Để sau: lời báo lỗi tiếng Anh trong trình dựng tác nhân, và chữ trên biểu tượng hay ảnh chia sẻ; không bao giờ: đổi tên gói, cơ sở dữ liệu, công cụ nội bộ.",
+  "coverage_plain": [
+    {"i": 0, "p": "Nguồn chữ: phủ đủ bảy nơi chữ «CRM» đang sống — chữ trên màn, tab và biểu tượng cài, nhãn đầu trang, lời báo của máy chủ, thư mật khẩu, lời báo vai và sự kiện, tin nhắn Zalo (AC-1 quét hết)."},
+    {"i": 1, "p": "Kiểu chỗ: phân biệt tên trong câu, tên đứng riêng, nhãn ghép với tên không gian, và chuỗi máy so khớp không được đụng (AC-2, AC-5, AC-6)."},
+    {"i": 2, "p": "Trang × khổ × giao diện: năm trang, năm khổ 320 đến 1920, sáng và tối — lỗi gốc đo được ở 1860px nên khổ 1920 được thêm (AC-8, AC-11, AC-12, AC-15)."},
+    {"i": 3, "p": "Danh sách bước: chế độ hướng dẫn và chế độ tiến độ, từ 1 đến 4 bước (AC-9)."},
+    {"i": 4, "p": "Áp cho mọi ô: tương phản AA, nền trang trí bị trình đọc màn hình bỏ qua, máy chủ tính còn trình duyệt chỉ vẽ, và không đổi phép đo của tính năng khác ngoài phép thế tên (AC-11, AC-13, AC-14)."},
+    {"i": 5, "p": "Giả định chờ anh gạch: không gian «Acme» hiện «Acme» chứ không «Acme Center» (AC-5)."},
+    {"i": 6, "p": "Giả định chờ anh gạch: không gian đang tên «CRM» hiện «OneHub Center» ở đầu trang, nhưng ô tên trong Cài đặt vẫn ghi «CRM» tới khi quản trị viên đổi (AC-5)."},
+    {"i": 7, "p": "Giả định chờ anh gạch: máy mới cài từ đầu sẽ có không gian tên «OneHub Center», đường dẫn «onehub-center» thay vì «crm»; không gian đang chạy giữ đường dẫn (AC-5, AC-13)."},
+    {"i": 8, "p": "Giả định chờ anh gạch: tên người gửi thư là cấu hình máy chủ — vòng này chỉ đổi dòng mẫu, máy chủ thật do người đổi."},
+    {"i": 9, "p": "Giả định chờ anh gạch: bốn trang kia chỉ đổi nền và bỏ nhãn nhỏ «CRM», bố cục giữ nguyên (AC-10)."},
+    {"i": 10, "p": "Chuẩn ngành: tên sản phẩm viết đủ và nhất quán ở mọi chỗ (Microsoft Writing Style Guide) — cơ sở của AC-2."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bộ quét chữ chỉ soi danh sách tệp tự khai, và ngoại lệ không liệt kê trước — một chữ «CRM» ở tệp khác hay một ngoại lệ lén thêm sẽ lọt. Đã sửa: quét toàn bộ mã trừ vùng loại trừ có lý do, bốn ngoại lệ ghi nguyên văn, ngoại lệ lạ làm đỏ."},
+    {"i": 1, "p": "Lời cấm chạm «trang giới thiệu» vô tình phủ luôn năm trang đăng nhập mà vòng này phải sửa. Đã sửa: danh sách cấm ghi đích danh, có ca đúng và ca sai viết trước."},
+    {"i": 2, "p": "Vòng này lật lời hứa đã ký của tính năng cửa vào (nền phẳng, nền cũ, chữ CRM) mà chưa gọi tên phép đo nào bị thay. Đã sửa: máy rút danh sách, ghi ba vạch bị thay vào hợp đồng và sổ quyết định."},
+    {"i": 3, "p": "Bảng thế tên cho phép sửa bất kỳ dòng nào trong phép đo của người khác, kể cả nới một con số. Đã sửa: mỗi cặp phải là đổi tên thuần, hoặc là cặp câu thật có trong sản phẩm cũ và mới."},
+    {"i": 4, "p": "Phép đo nhãn đầu trang gõ tay tên cũ, và không thử đường tạo không gian thật. Đã sửa: đọc tên cũ từ bản gốc, thêm một ca tạo không gian trên cơ sở dữ liệu thử."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260926T104902Z-1", "p": "Chọn hướng A cho cột trái (biên tập, đường nối, nền lưới) — bỏ hướng ảnh màn Thành viên và hướng đưa hướng dẫn xuống dưới form."},
+    {"id": "d-20260926T104902Z-2", "p": "Viết thẳng «OneHub Center» ở từng câu, giữ nhất quán bằng bộ quét — đổi lại lần đổi tên sau vẫn phải sửa từng chỗ."},
+    {"id": "d-20260926T104902Z-3", "p": "Nhãn đầu trang bỏ hậu tố, không sửa dữ liệu — đổi lại không gian có tên riêng không còn chữ chỉ sản phẩm ở đầu trang."},
+    {"id": "d-20260926T104902Z-4", "p": "Gộp đổi tên và cột trái vào một vòng — đổi lại bằng chứng dày hơn, bù bằng hai nhóm tiêu chí tách bạch."},
+    {"id": "d-20260926T104902Z-5", "p": "Gộp cả thư mật khẩu và tên không gian mặc định (vùng rủi ro cao) — đổi lại thêm một cổng duyệt kế hoạch."},
+    {"id": "d-20260926T104902Z-6", "p": "KHÔNG đổi lời báo lỗi trong trình dựng tác nhân ở vòng này — người dựng tác nhân có thể còn đọc «CRM»."},
+    {"id": "d-20260926T104902Z-7", "p": "Thay nền cũ bằng nền lưới ở cả năm trang, không riêng trang đăng nhập — một nền duy nhất, chạy đúng sáng và tối."},
+    {"id": "d-20260926T104902Z-8", "p": "Chạy phiên thiết kế trên khung toàn màn hình ở 1440 và 1920 — sửa đúng lỗi vòng trước duyệt ở bề ngang hẹp."},
+    {"id": "d-20260926T105601Z-9", "p": "Thay ba vạch đo cũ của trang nền (nền cũ có mặt, chữ CRM, nền phẳng) bằng phép đo tên mới và nền lưới của vòng này."},
+    {"id": "d-20260926T105601Z-10", "p": "Thay vạch «không có nền gradient» của phép đo màn cũ — nó coi mọi nền lưới là nền cũ; các vạch khác giữ nguyên."},
+    {"id": "d-20260926T105601Z-11", "p": "Thay vế «nền xám phẳng» của lần chấm bằng mắt cũ bằng sáu ảnh anh nhìn ở Cổng Bằng chứng."}
+  ]
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chữ «CRM» nào phải đổi — hai câu hỏi, ba kết cục</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1240px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 68ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  code { font-family: var(--mono); font-size: 0.8em; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.95fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình · AC-1 · AC-2 · doi-ten-onehub-center</p>
+  <h1>Chữ «CRM» nào phải đổi — hai câu hỏi, ba kết cục</h1>
+  <p class="standfirst">Mỗi chuỗi mang <code>CRM</code> như một từ đứng riêng đi qua đúng hai câu hỏi. Lọt qua cả hai thì phải đổi thành «OneHub Center»; dừng ở câu nào thì giữ, và lý do giữ đã khai trước ở mục Notes của hợp đồng.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1400 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cây quyết định phạm vi đổi chữ: một chuỗi mang CRM, nếu nằm trong glob loại trừ thì giữ; nếu là một trong bốn ngoại lệ thì giữ; còn lại đổi thành OneHub Center, 35 tệp; bộ quét E1 đỏ nếu còn sót và đỏ nếu có ngoại lệ lạ">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --tint:rgba(0,107,79,0.08);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --tint:rgba(47,155,122,0.14);
+          }
+        }
+        .bg   { fill: var(--paper); }
+        .mask { fill: var(--paper); }
+        .node { fill: var(--node); stroke: var(--ink); stroke-width: 1; }
+        .focal{ fill: var(--tint); stroke: var(--accent); stroke-width: 1.4; }
+        .edge { fill: none; stroke: var(--muted); stroke-width: 1; }
+        .mk   { fill: var(--muted); }
+        .name { fill: var(--ink); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .sub  { fill: var(--muted); font: 400 12px 'Geist', system-ui, sans-serif; }
+        .tech { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+        .alab { fill: var(--soft); font: 400 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; }
+        .call { fill: var(--accent); font: italic 400 16px 'Lora', Georgia, serif; }
+        .hr   { stroke: var(--rule); stroke-width: 0.8; }
+        .lgl  { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .lgi  { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+      </style>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon class="mk" points="0 0, 8 3, 0 6"/>
+      </marker>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <path class="edge" d="M 240 160 H 286" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 592 160 H 666" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 972 160 H 1038" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 440 224 V 318" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 820 224 V 318" marker-end="url(#arrow)"/>
+
+    <rect class="mask" x="600" y="128" width="60" height="18" rx="2"/>
+    <text class="alab" x="630" y="142" text-anchor="middle">KHÔNG</text>
+
+    <rect class="mask" x="976" y="128" width="60" height="18" rx="2"/>
+    <text class="alab" x="1006" y="142" text-anchor="middle">KHÔNG</text>
+
+    <rect class="mask" x="452" y="260" width="32" height="18" rx="2"/>
+    <text class="alab" x="458" y="274">CÓ</text>
+
+    <rect class="mask" x="832" y="260" width="32" height="18" rx="2"/>
+    <text class="alab" x="838" y="274">CÓ</text>
+
+    <rect class="node" x="40" y="124" width="200" height="72" rx="20"/>
+    <text class="name" x="140" y="156" text-anchor="middle">Chuỗi mang CRM</text>
+    <text class="tech" x="140" y="178" text-anchor="middle">\bCRM\b · trong tập quét</text>
+
+    <polygon class="mask" points="440,96 592,160 440,224 288,160"/>
+    <polygon class="node" points="440,96 592,160 440,224 288,160"/>
+    <text class="name" x="440" y="160" text-anchor="middle">Nằm trong glob loại trừ?</text>
+    <text class="sub"  x="440" y="180" text-anchor="middle">glob khai ở mục Notes</text>
+
+    <polygon class="mask" points="820,96 972,160 820,224 668,160"/>
+    <polygon class="node" points="820,96 972,160 820,224 668,160"/>
+    <text class="name" x="820" y="160" text-anchor="middle">Là một trong bốn ngoại lệ?</text>
+    <text class="sub"  x="820" y="180" text-anchor="middle">tệp + chuỗi nguyên văn</text>
+
+    <rect class="mask"  x="1040" y="112" width="320" height="96" rx="20"/>
+    <rect class="focal" x="1040" y="112" width="320" height="96" rx="20"/>
+    <text class="name" x="1200" y="148" text-anchor="middle">Đổi thành OneHub Center</text>
+    <text class="tech" x="1200" y="172" text-anchor="middle">35 tệp · rang/tep-mang-ten-cu.txt</text>
+    <text class="sub"  x="1200" y="192" text-anchor="middle">chữ người đọc, cả vi lẫn en</text>
+
+    <text class="call" x="1200" y="248" text-anchor="middle">bộ quét E1 đỏ nếu còn sót ·</text>
+    <text class="call" x="1200" y="272" text-anchor="middle">ngoại lệ lạ cũng đỏ</text>
+
+    <rect class="node" x="180" y="320" width="440" height="164" rx="20"/>
+    <text class="name" x="204" y="352">Giữ — ngoài tập quét</text>
+    <text class="sub"  x="204" y="376">trang giới thiệu hãng · /proto cũ · tiêu đề API</text>
+    <text class="sub"  x="204" y="396">test · chỉ dẫn cho model</text>
+    <line class="hr" x1="204" y1="412" x2="596" y2="412"/>
+    <text class="tech" x="204" y="432">(landing)/page.tsx · components/landing/** · proto/**</text>
+    <text class="tech" x="204" y="450">create-app.ts · *.spec.* · *.test.* · *.dom.tsx · test/</text>
+    <text class="tech" x="204" y="468">apps/agent/** ngoài zalo-*.ts</text>
+
+    <rect class="node" x="660" y="320" width="340" height="164" rx="20"/>
+    <text class="name" x="684" y="352">Giữ — bốn ngoại lệ</text>
+    <text class="sub"  x="684" y="376">chuỗi máy so khớp · mã giảm giá · user-agent</text>
+    <line class="hr" x1="684" y1="412" x2="976" y2="412"/>
+    <text class="tech" x="684" y="432">auth.ts — This CRM is private. ×2</text>
+    <text class="tech" x="684" y="450">settings.ts — CRM</text>
+    <text class="tech" x="684" y="468">safe-fetch.ts — (compatible; CRM/1.0)</text>
+
+    <line class="hr" x1="40" y1="520" x2="1360" y2="520"/>
+    <text class="lgl" x="40" y="552">CHÚ GIẢI</text>
+    <text class="lgi" x="180" y="552">hình thoi = câu hỏi · khung bo tròn = kết cục</text>
+    <text class="lgi" x="540" y="552">khung xanh = việc vòng này làm</text>
+    <text class="lgi" x="800" y="552">chữ mono = glob, tệp và chuỗi nguyên văn ở mục Notes</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Tập quét theo chiều loại trừ</h2>
+      <p>Bộ quét đọc toàn bộ <code>apps/app/{app,components,lib}</code>, <code>apps/api/src</code>, <code>packages/*/src</code>, <code>zalo-*.ts</code> và <code>site.webmanifest</code>, rồi chỉ bỏ đúng các glob ở khung trái — mỗi glob một lý do. Tệp mới sinh trong tập quét tự vào vòng quét, không cần ai nhớ thêm.</p>
+    </div>
+    <div>
+      <h2>Bốn ngoại lệ là một tập đóng</h2>
+      <p><code>rang/ngoai-le.json</code> phải bằng đúng bốn mục theo phép so tập: thêm một mục lạ là đỏ, và một ngoại lệ không còn trong tệp của nó (mồ côi) cũng đỏ.</p>
+      <p class="quiet">Hai câu «This CRM is private…» là chuỗi máy mà <code>/sign-in</code> dùng để phân loại lỗi; người dùng đọc câu tiếng Việt, không đọc câu này.</p>
+    </div>
+    <div>
+      <h2>Đối chứng ở merge-base</h2>
+      <p>Cùng bộ quét chạy trên <code>merge-base</code> phải đỏ và gọi đúng 35 tệp của <code>rang/tep-mang-ten-cu.txt</code> — không thiếu, không thừa.</p>
+      <p>AC-2 kiểm luật tên trong cùng lượt: «Center» luôn đứng sau «OneHub », không «Trung tâm», không «the OneHub Center».</p>
+    </div>
+  </div>
+
+  <footer>
+    Vẽ theo contract.md (AC-1, AC-2, mục Notes) và quyết định d-20260926T104902Z-2 của hồ sơ doi-ten-onehub-center.<br>
+    Hình dựng 26/09/2026
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,318 @@
+schema_version: 1
+slug: doi-ten-onehub-center
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dtoc_quet_ten
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/components/**"
+      - "apps/app/lib/**"
+      - "apps/app/public/site.webmanifest"
+      - "apps/api/src/**"
+      - "packages/*/src/**"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "_acceptance/doi-ten-onehub-center/rang/**"
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.dtoc_quet_ten
+    paths:
+      - "apps/app/lib/messages/**"
+      - "apps/api/src/**"
+      - "packages/auth/src/**"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "_acceptance/doi-ten-onehub-center/rang/**"
+    expected: |
+      Cung lenh voi E1 (s4 dedupe), vach "luat-ten" cua quet-ten.mjs: tren cung tap chuoi,
+      moi lan xuat hien /\bCenter\b/ phai co "OneHub " dung ngay truoc; khong chuoi nao chua
+      "Trung tâm" (khong phan biet hoa thuong); khong chuoi nao khop /\bthe OneHub Center\b/i.
+      Thong diep ghim: "Center tran: <tep>:<dong>", "dich ten: <tep>:<dong>",
+      "the OneHub Center: <tep>:<dong>".
+      Doi chung duong trong script (ma tran viet truoc 4 chuoi mau chay truoc khi quet):
+      "Sign in to OneHub Center" -> hop le; "Open Center" -> Center tran;
+      "the OneHub Center reads" -> the; "Trung tâm OneHub" -> dich. So assert = 4.
+      CHIEU DO: pha-thu doi mot chuoi thanh "Sign in to Center" -> "Center tran: ...".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dtoc_tieu_de
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/**/page.tsx"
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/lib/messages/cua-vao.ts"
+      - "apps/app/test/onehub-center-tieu-de.dom.tsx"
+    expected: |
+      Tep test RIENG apps/app/test/onehub-center-tieu-de.dom.tsx, lenh rieng (mock.module song ca
+      tien trinh). Ma tran viet truoc: {vi, en} x {sign-in, dat-mat-khau, grant-access,
+      onboarding, onboarding/research} = 10 ca. Moi ca: khong phan tu nao co textContent dung
+      bang "CRM" (nhan nho cu); sign-in: h1 dung bang «Đăng nhập vào OneHub Center» /
+      «Sign in to OneHub Center»; dong gioi thieu dung bang chuoi AC-3 cua ngon ngu do; mo ta
+      khoi huong dan (vi) dung bang «OneHub Center chỉ mở cho địa chỉ quản trị viên đã cho phép.».
+      Chuoi ky vong GO TAY trong test (khong doc tu messages — do la vat dang do).
+      CHIEU DO: tren merge-base 10/10 ca do voi "<trang>/<ngon ngu>: con nhan CRM" hoac
+      "tieu de: <gia tri cu>".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dtoc_metadata
+    paths:
+      - "apps/app/app/layout.tsx"
+      - "apps/app/public/site.webmanifest"
+      - "apps/app/test/onehub-center-metadata.spec.ts"
+    expected: |
+      apps/app/test/onehub-center-metadata.spec.ts nhap `metadata` that tu app/layout.tsx va
+      doc site.webmanifest bang JSON.parse. Ghim: title.default == "OneHub Center",
+      title.template == "%s · OneHub Center", manifest.name == "OneHub Center". 3 assert.
+      CHIEU DO: merge-base -> 3 do voi gia tri cu "OneHub CRM".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dtoc_nhan_dau_trang
+    paths:
+      - "apps/app/lib/workspace-label.ts"
+      - "packages/auth/src/organization.ts"
+      - "apps/app/test/workspace-label.spec.ts"
+    expected: |
+      apps/app/test/workspace-label.spec.ts viet lai. Ten mac dinh CU doc bang
+      `git show $(git merge-base HEAD origin/onehub):packages/auth/src/organization.ts` va rut gia tri
+      DEFAULT_WORKSPACE_NAME (khong go tay). Ma tran viet truoc 11 dong: undefined, "", "   ",
+      DEFAULT_WORKSPACE_NAME moi, ten cu, ten cu viet thuong, ten cu co khoang trang hai dau,
+      "OneHub Center" -> "OneHub Center"; "Acme" -> "Acme"; "  Acme  " -> "Acme"; "Acme CRM" -> "Acme CRM"
+      (ten nguoi dat, khong dung vao). Them assert DEFAULT_WORKSPACE_NAME == "OneHub Center". So assert = 12.
+      CHIEU DO: merge-base -> "Acme" ra "Acme CRM", undefined ra "CRM".
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dtoc_tao_khong_gian
+    paths:
+      - "packages/auth/src/organization.ts"
+      - "packages/auth/test/onehub-center-khong-gian.integration.spec.ts"
+    expected: |
+      packages/auth/test/onehub-center-khong-gian.integration.spec.ts (khuon cua
+      cong-vao.integration.spec.ts, CSDL test rieng cua luot): ca 1 — xoa het organization, goi
+      ensureWorkspaceMembership that, doc lai organization WORKSPACE_ID tu db: name == "OneHub Center";
+      ca 2 — gieo organization {id: WORKSPACE_ID, name: "CRM", slug: "crm"}, goi ham, doc lai: name ==
+      "CRM", slug == "crm" (khong doi du lieu cu). 2 ca, moi ca ghim thong diep.
+      CHIEU DO: merge-base -> ca 1 ra name "CRM".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dtoc_thu_mat_khau
+    paths:
+      - "packages/auth/src/thu-mat-khau.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/test/onehub-center-thu.spec.ts"
+    expected: |
+      packages/auth/test/onehub-center-thu.spec.ts: dung thu dat lai va thu da doi bang ham that
+      cua thu-mat-khau.ts, ghim tieu de hai thu dung bang chuoi AC-6; doc packages/auth/src/auth.ts
+      nhu van ban va ghim `appName: "OneHub Center"` va HAI chuoi «This CRM is private.» nguyen
+      van (khong phai chuoi con — so ca cau). Doi chung hanh vi: eval E5 cua hoso
+      cua-vao-dang-nhap (cvdn_ma_loi_that) chay trong E12 cua vong nay.
+      CHIEU DO: merge-base -> tieu de "Đặt lại mật khẩu CRM OneHub"; pha-thu doi «This CRM is
+      private» thanh «This OneHub Center is private» trong ban sao -> "chuoi phan loai loi doi".
+
+  - id: E7
+    criterion: AC-7
+    executor: judgment
+    inputs:
+      - "CONTEXT.md"
+      - "_acceptance/doi-ten-onehub-center/evidence/chuoi-doi.md"
+    expected: |
+      evidence/chuoi-doi.md do S3 sinh bang script tu `git diff merge-base` (moi dong: tep, khoa,
+      chuoi cu, chuoi moi, vi/en). Hoi dong doc doi chieu CONTEXT.md: cau doc tu nhien sau khi the
+      ten; khong "OneHub Center của bạn" hay "your OneHub Center data" khi cau cu dung CRM theo
+      nghia kho du lieu; khong tu thuoc _Avoid_; muc «OneHub Center» trong CONTEXT.md co dinh
+      nghia, _Avoid_, «Vì sao». Dat khi moi cau dat.
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dtoc_do_cot_trai
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "packages/ui/src/components/luoi-cham.tsx"
+      - "packages/ui/src/components/step-list.tsx"
+      - "_acceptance/doi-ten-onehub-center/rang/do-cot-trai.mjs"
+    steps:
+      - "rang/do-cot-trai.mjs chay qua mot-luot.sh trong phien do (crm_<cay>_do), APP_URL/API_URL cua cay"
+      - "mo /sign-in o 1440x900 va 1920x1080 x sang, toi (emulateMedia) — 4 o"
+      - "moi o doc getBoundingClientRect cua logo cot trai, dong gioi thieu, khoi [data-khoi-huong-dan]"
+    expected: |
+      Ma tran 4 o viet truoc (so dong ket qua = 4). Moi o: cot trai khong co [data-slot=card];
+      dong gioi thieu la <p>, font-size tinh >= 36px; |left(khoi) - left(logo)| <= 1 va
+      |left(dong gioi thieu) - left(logo)| <= 1; width(khoi) <= 576; document co dung 1 h1.
+      Ghi evidence/do-cot-trai.json. Tien de ghim: API tra google=true, neu khong ->
+      "tien de khong dung — API tra google=false" (khong in so do).
+      CHIEU DO: merge-base (chay ban dung o S3 tren cay cu qua APP_URL cua cay do) ->
+      "1440/sang: co card trong cot trai", "dong gioi thieu 14px < 36px".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dtoc_step_list_noi
+    paths:
+      - "packages/ui/src/components/step-list.tsx"
+      - "packages/ui/src/components/reui/stepper.tsx"
+      - "packages/ui/test/step-list-noi.dom.tsx"
+    expected: |
+      packages/ui/test/step-list-noi.dom.tsx. Ma tran viet truoc: tinh x n=1..4 -> so duong noi
+      = 0,1,2,3, moi duong aria-hidden="true", buoc cuoi khong co duong sau no (4 ca); tien do
+      activeStep=2 markCompleted x n=3 -> so duong noi va so dau tick bang so do tren merge-base,
+      ghi thanh hang trong test (do bang ban cu truoc khi sua, 1 ca). So ca = 5.
+      E21 cua cua-vao-dang-nhap (step-list-tinh) chay trong E12 va phai van dat.
+      CHIEU DO: merge-base -> "tinh n=3: 0 duong noi, can 2".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.dtoc_nen_luoi
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/auth-shader.tsx"
+      - "packages/ui/src/components/luoi-cham.tsx"
+      - "apps/app/app/(landing)/**/page.tsx"
+      - "apps/app/test/onehub-center-nen.dom.tsx"
+    expected: |
+      apps/app/test/onehub-center-nen.dom.tsx render AuthShell that (khong mock auth-shell) co va
+      khong co khoi cot trai: cot trai chua dung 1 phan tu [data-slot=luoi-cham] aria-hidden.
+      Cung tep: auth-shader.tsx khong ton tai (fs.existsSync); khong tep nao duoi apps/app nhap
+      "auth-shader" (quet chuoi import); ma nguon luoi-cham.tsx khong khop
+      /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|oklch\(\s*[0-9]/i. Moi vach mot thong diep ghim.
+      CHIEU DO: merge-base -> "khong co luoi-cham", "auth-shader.tsx van con".
+
+  - id: E11
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dtoc_do_cot_trai
+    paths:
+      - "packages/ui/src/components/luoi-cham.tsx"
+      - "apps/app/components/auth-shell.tsx"
+      - "packages/ui/src/styles/**"
+      - "_acceptance/doi-ten-onehub-center/rang/do-cot-trai.mjs"
+    steps:
+      - "cung luot voi E8, vach mau: 1440 x sang, toi"
+      - "doc mau nen body, mau nen cot trai, mau cham cua luoi-cham (getComputedStyle), mau chu khoi huong dan va dong gioi thieu"
+    expected: |
+      Sang: do sang tuong doi nen body > 0.5; toi: < 0.5. Mau cham cua luoi-cham VA mau duong noi
+      [data-slot=stepper-separator] khac mau nen cot trai o ca hai giao dien ("<gd>: duong noi trung
+      mau nen"). Ti le tuong phan chu mo ta khoi huong dan va chu dong gioi thieu tren nen
+      cot trai >= 4.5 (dong gioi thieu >= 36px nen nguong 3.0) o ca hai. Ghi vao
+      evidence/do-cot-trai.json.
+      CHIEU DO: pha-thu o S3 dat mau cham bang dung bien nen trong ban sao -> "toi: cham trung
+      mau nen".
+
+  - id: E12
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.dtoc_giu_loi_hua
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "packages/ui/src/components/step-list.tsx"
+      - "packages/ui/src/components/luoi-cham.tsx"
+    expected: |
+      Lenh gom rang/giu-loi-hua.sh, dung thu tu, dung o lenh dau loi: (1) thuoc man da ky
+      cvdn_do_cua_vao cua hoso cua-vao-dang-nhap (320/768/1024/1440, Tab, tuong phan) — chi bo vach
+      `khong-shader` theo danh sach thay the cua contract, khong sua gi khac (E13 do dieu do); (2) vach 1920
+      cua rang/do-cot-trai.mjs (--kho 1920 --chi-vi-tri): khoi o cot trai, khong tran ngang; (3)
+      cvdn_ma_loi_that va cvdn_step_list_tinh cua hoso do. Exit 0 khi ca bon dat.
+      CHIEU DO: pha-thu o S3 bo lop an khoi o khung hep -> cvdn_do_cua_vao do "768: khoi khong nam duoi nut
+      Đăng nhập".
+
+  - id: E13
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.dtoc_thuoc_da_ky
+    paths:
+      - "_acceptance/*/rang/**"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/doi-ten-onehub-center/rang/bang-the.json"
+      - "_acceptance/doi-ten-onehub-center/rang/thuoc-da-ky.mjs"
+    expected: |
+      rang/thuoc-da-ky.mjs (theo khuon _acceptance/cua-vao-dang-nhap/rang/thuoc-da-ky.mjs):
+      (a) rut tap eval may cua ho so da ky co paths giao `git diff --name-only merge-base..HEAD`, chay moi eval
+      o HEAD va o merge-base (worktree tam), chay lai tuan tu o HEAD cac o do de loc chap chon; do khi co eval
+      dat o base ma do o HEAD — "SAI <slug>/<E>: base 0 -> head <ma>".
+      (b) tep thuoc cua ho so da ky = tep duoi _acceptance/<ho so da ky>/ + tep ma lenh eval da ky chay (rut
+      tu cmd nhu (a)). Voi moi tep do bi diff cham: bo cac hunk thuoc danh sach thay the (hang THAY_THE dau
+      script chep tu Notes cua contract: tep + ma vach), roi ap bang-the.json nguoc, so tung byte voi
+      merge-base; lech -> "SAI the: <tep>". Tep da ky bi xoa -> SAI.
+      (c) kiem tung cap cua bang-the.json: chuoi cu khop /CRM/; va HOAC chuan hoa (thay moi dang
+      /(the |your |this )?(OneHub )?CRM( OneHub)?/ va "OneHub Center" bang mot dau) cho hai chuoi bang nhau,
+      HOAC chuoi cu co nguyen van trong ma san pham o merge-base va chuoi moi co nguyen van trong ma san pham
+      o HEAD (khong tinh tep test va _acceptance) — khong thi "SAI bang the: <cu> -> <moi>".
+      (d) moi ma vach thay the co dong supersedes trong decisions.jsonl — "SAI thay the khong co so: <ma>".
+      Chay nen, log .acceptance-runs/doi-ten-onehub-center/thuoc-da-ky.log; ~70 phut.
+      CHIEU DO: pha-thu S3 them cap {"toBe(2)": "toBe(3)"} vao bang-the.json -> "SAI bang the"; sua them mot
+      dong khac trong khong-dich-cua-lat.json -> "SAI the: _acceptance/cai-dat-con-lai-noi-tieng-viet/...".
+
+  - id: E14
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.dtoc_soi_ma
+    paths:
+      - "apps/app/**"
+      - "packages/ui/src/**"
+      - "packages/auth/src/auth.ts"
+      - "_acceptance/doi-ten-onehub-center/rang/soi-ma.mjs"
+    expected: |
+      rang/soi-ma.mjs tren `git diff merge-base..HEAD` (theo khuon soi-ma.mjs cua cua-vao-dang-nhap):
+      (a) tep "use client" moi/sua nhap @crm/auth|@crm/db -> "SAI (a) <tep>"; (b) dong them co chu thich //
+      hoac /* trong tep ma -> "SAI (b) <tep>:<dong>"; (c) component @crm/ui o cho goi mang className co lop
+      mau/goc/vien/bong -> "SAI (c)"; (d) luoi-cham.tsx nam o packages/ui/src/components; (e) diff cham danh
+      sach cam cua AC-14 (hang DANH_SACH_CAM chep nguyen van) -> "SAI (e) <tep>".
+      Ma tran viet truoc cho (e), chay tren danh sach duong gia truoc khi doc diff that: doi chung duong
+      `apps/app/app/(landing)/sign-in/page.tsx`, `apps/app/app/(landing)/het-quyen/page.tsx`,
+      `apps/app/app/proto/_modules/doi-ten-onehub-center/index.tsx` -> khong SAI; doi chung am
+      `apps/app/app/(landing)/page.tsx`, `apps/app/components/landing/hero.tsx`,
+      `apps/app/app/proto/_modules/cua-vao-dang-nhap/index.tsx`, `apps/app/proxy.ts` -> SAI (e). So assert = 7.
+      CHIEU DO: pha-thu them "// x" vao auth-shell.tsx ban sao -> "SAI (b)".
+
+  - id: E15
+    criterion: AC-15
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dtoc_chup
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "packages/ui/src/components/luoi-cham.tsx"
+      - "packages/ui/src/components/step-list.tsx"
+      - "apps/app/lib/messages/auth.ts"
+    steps:
+      - "rang/do-cot-trai.mjs --chup: /sign-in o 375x812, 1440x900, 1920x1080 x sang, toi"
+      - "luu evidence/sign-in-<kho>-<giao-dien>.png (6 anh, duong tu goc kho)"
+    expected: |
+      Du 6 anh, moi anh > 20 KB va kich thuoc dung kho. Nguoi ky nhin: nen luoi cham, dong neo co
+      lon, ba buoc noi bang duong doc khong hop, tieu de «Đăng nhập vào OneHub Center».
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.dtoc_san_thiet_ke
+    paths:
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/cua-vao/**"
+      - "packages/ui/src/components/luoi-cham.tsx"
+      - "packages/ui/src/components/step-list.tsx"
+    expected: |
+      design-gate --mode static tren tung tep: auth-shell.tsx, cua-vao/*.tsx, luoi-cham.tsx,
+      step-list.tsx. Exit 0 = khong vi pham P0 cua san thiet ke.
+      CHIEU DO: pha-thu them style={{ color: "#ff0000" }} vao ban sao auth-shell.tsx -> design-gate
+      exit != 0.
