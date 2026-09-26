@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 65bd25ae46e462342b34f115c4b4e7341a9c19f7
+verified_commit: dd8145f7c3664b97e4319611ab83f3b4d3e0111d
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -207,3 +207,7 @@ none — không có eval nào chạy nhiều lượt (runs > 1) trong vòng này
 Round 1: PASS — E1–E4, E5–E7, E8–E12 đều xanh; thẻ Cổng Bằng chứng ký PASS, một known-limit (tải lại nền lỗi làm mất bảng KR) ghi ở mục Ngoài hợp đồng.
 Sau round 1: Cổng Phạm vi duyệt lại (gate2-tra), nâng phạm vi — known-limit trên trở thành AC-10 chính thức thay vì ở lại ngoài hợp đồng.
 Round 2: Thêm E13 cho AC-10, cùng E1–E4/E8/E9/E12 chạy lại và 4 lệnh suite — toàn bộ xanh; E5,E6,E7,E10,E11 carry-forward vì delta không chạm paths của các eval đó.
+
+### Re-pin lần 1 — 2026-09-26, do gộp onehub 3090b8e9 (#158) sau chữ ký
+run_id: repin-20260926T141050Z-39922
+sha: dd8145f7c3664b97e4319611ab83f3b4d3e0111d · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E8, E9, E10, E11 · AC không có chốt máy: AC-7
