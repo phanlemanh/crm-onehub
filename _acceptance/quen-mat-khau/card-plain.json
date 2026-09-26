@@ -4,7 +4,7 @@
     {
       "id": "E20",
       "q": "Chữ trên các màn và hai lá thư đọc tự nhiên, không lộ tài khoản?",
-      "why": "Hội đồng ba người chấm đề xuất ĐẠT ở round 2; chữ không đổi từ đó nên round 3 giữ kết quả."
+      "why": "Hội đồng ba người chấm đề xuất ĐẠT ở round 2; chữ không đổi từ đó nên các round sau giữ kết quả."
     }
   ],
   "scope_plain": "Chưa cắt phiên cũ tức thì khi đổi mật khẩu, chưa giới hạn theo hộp thư nhận, chưa huỷ liên kết cũ khi xin liên kết mới, chưa có thư HTML; cắm khoá và xác minh tên miền gửi là việc vận hành.",
@@ -92,7 +92,19 @@
     },
     {
       "id": "d-20260926T013539Z-22",
-      "p": "Anh chọn trình Cổng Bằng chứng ngay trên round 3 bị cắt, không chạy lại bộ test."
+      "p": "Anh từng chọn trình Cổng Bằng chứng trên round 3 bị cắt — đã thay bằng hướng R ngay sau đó."
+    },
+    {
+      "id": "d-20260926T024231Z-23",
+      "p": "Anh chọn hướng R: chạy lại round 3 một lần vì bộ test bị công cụ cắt, chỉ đổi cách đọc kết quả, không nới thước."
+    },
+    {
+      "id": "d-20260926T025948Z-24",
+      "p": "Lượt chạy lại tìm ra một ca đỏ thật (proxy thiếu khoá vẫn ký do giá trị mặc định) — đã sửa, hai chiều đo qua bộ chạy gốc."
+    },
+    {
+      "id": "d-20260926T031222Z-25",
+      "p": "Anh cho chạy round 4, vượt trần ba round, với điều kiện là vòng cuối tuyệt đối."
     }
   ]
 }
