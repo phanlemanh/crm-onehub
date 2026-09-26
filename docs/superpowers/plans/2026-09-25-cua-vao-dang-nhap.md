@@ -507,7 +507,7 @@ Trang (`page.tsx`): `SignInPage` trả
 
 ---
 
-**Đã làm 2026-09-26, commit `c8dbc6a0`, TRỪ ca E15 «Quên mật khẩu?» (chờ #104) và dòng `quenMatKhau={…}` (#104 thêm).** Lệch kế hoạch: không giả lập `AuthShell` ở E1 — hàm trang trả phần tử `<AuthShell>` chưa vẽ nên đọc thẳng `props.gioiThieu`; `phutLienKetDatMatKhau()` ở `lib/cua-vao/thoi-han.ts` thay hằng `SECONDS_PER_MINUTE` tại chỗ của trang `dat-mat-khau`. Chiều đỏ trên cây cũ: `cua-vao-sign-in` 20/24 đỏ (4 ca đo điều cũ vốn đúng), `cua-vao-trang-khac` 1/5 đỏ («sign-in: AuthShell khong nhan khoi»). Phá-thử trên cây đã commit: bỏ `method` khi tính bước → đỏ `method-google`; in `error` ra trang → 6 ca «HTML chua gia tri URL»; `onboarding` nhận khối → đỏ ca đó; ô lỗi sau ô mật khẩu → «o loi dung sau nut dang nhap». `bun test --randomize` seed 1 và 2: 399/399.
+**E15 xong sau #151 (`f61827e5`): test thôi giả lập `PasswordSignIn`, đo thứ tự thật ô mật khẩu → liên kết → nút; trang thôi truyền cờ → «khong thay lien ket Quên mật khẩu?». ** **Đã làm 2026-09-26, commit `c8dbc6a0`, TRỪ ca E15 «Quên mật khẩu?» (chờ #104) và dòng `quenMatKhau={…}` (#104 thêm).** Lệch kế hoạch: không giả lập `AuthShell` ở E1 — hàm trang trả phần tử `<AuthShell>` chưa vẽ nên đọc thẳng `props.gioiThieu`; `phutLienKetDatMatKhau()` ở `lib/cua-vao/thoi-han.ts` thay hằng `SECONDS_PER_MINUTE` tại chỗ của trang `dat-mat-khau`. Chiều đỏ trên cây cũ: `cua-vao-sign-in` 20/24 đỏ (4 ca đo điều cũ vốn đúng), `cua-vao-trang-khac` 1/5 đỏ («sign-in: AuthShell khong nhan khoi»). Phá-thử trên cây đã commit: bỏ `method` khi tính bước → đỏ `method-google`; in `error` ra trang → 6 ca «HTML chua gia tri URL»; `onboarding` nhận khối → đỏ ca đó; ô lỗi sau ô mật khẩu → «o loi dung sau nut dang nhap». `bun test --randomize` seed 1 và 2: 399/399.
 
 ### Task 5a: Răng không cần màn — mã lỗi thật, soi mã, thước đã ký
 
@@ -543,12 +543,14 @@ Mọi đường dẫn suy từ `import.meta.url` (`const GOC = join(dirname(file
 
 Khuôn: như `_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs` — `puppeteer-core` + Chrome cục bộ, `canhCay()` của `_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` trước màn đầu tiên, ảnh ra `BANG_CHUNG ?? .acceptance-runs/cua-vao-dang-nhap/evidence`. Không đăng nhập (trang công khai). `MA_TRAN` 45 mã theo E11: 2 giao diện × 3 mã (E11) + 8 ô khổ×giao diện × 3 mã (E12) + 2 khổ × 2 giao diện × 2 mã (E13) + 1 mã đọc `signInOptions` thật (E11) + 6 mã HTML thật (E19). Thêm một ảnh ngoài ma trận cho Review Focus 4: `/dat-mat-khau/khong-hop-le` ở 1440 sáng (`cvdn-shell-1440-light.png`). Tỉ lệ tương phản WCAG tính trong trang (hàm luminance chuẩn), đối chứng `#777` trên `#fff` = 4,48.
 
-- [ ] **Step 1:** Cấp cổng 3840/3841 theo `steps` của E14 (mục `ban-do-cvdn-*` trong `.claude/launch.json`); kiểm cổng trống trước khi dựng.
-- [ ] **Step 2:** Viết `do-cua-vao.mjs`; chạy chiều đỏ trên cây TRƯỚC Task 3–4 (checkout tạm commit trước Task 3 vào một worktree, KHÔNG `git checkout` tại chỗ — bài học phá-thử mất thay đổi) → ghi nguyên văn dòng SAI.
-- [ ] **Step 3:** Chạy xanh bằng lệnh `cvdn_do_cua_vao`; `CVDN_BO_KHO=768` → đúng 6 dòng `SAI thieu 768-…`.
-- [ ] **Step 4:** Commit — `git commit -m "test: bàn đo màn thật cho cửa vào đăng nhập"`
+- [x] **Step 1:** Cấp cổng 3840/3841 theo `steps` của E14 (mục `ban-do-cvdn-*` trong `.claude/launch.json`); kiểm cổng trống trước khi dựng.
+- [x] **Step 2:** Viết `do-cua-vao.mjs`; chạy chiều đỏ trên cây TRƯỚC Task 3–4 (checkout tạm commit trước Task 3 vào một worktree, KHÔNG `git checkout` tại chỗ — bài học phá-thử mất thay đổi) → ghi nguyên văn dòng SAI.
+- [x] **Step 3:** Chạy xanh bằng lệnh `cvdn_do_cua_vao`; `CVDN_BO_KHO=768` → đúng 6 dòng `SAI thieu 768-…`.
+- [x] **Step 4:** Commit — `git commit -m "test: bàn đo màn thật cho cửa vào đăng nhập"`
 
 ---
+
+**Đã làm 2026-09-26 11:06–11:13, commit `31815ace` + `7d795518`.** Lệch kế hoạch: không dựng máy chủ ở 3840/3841 — `tien-de` sau #150 tự chạy trong phiên đo trên `crm_<cây>_do`, cổng 4100–4899. Lệnh đặt `GOOGLE_CLIENT_ID/SECRET` giả như CI (`.env` máy này để rỗng) để tiền đề «Google bật» của AC-12 đúng; thước gọi tên khi tiền đề sai. Kết quả: 45/45. Chiều đỏ: khoá Google rỗng → 4 dòng «tien de AC-12 khong dung»; `CVDN_BO_KHO=768` → đúng 6 dòng «thieu 768-…»; ép `dark` lên `<main>` → «light: 1 phan tu mang lop dark». Quan sát chưa giải: khi ép `dark` lên `<main>`, nền tính toán của chính `<main>` vẫn sáng nên dòng «nen» không đổi — ca ép tối được bắt ở dòng «theo-may», và ảnh E14 cho người nhìn. Sửa thước giữa chừng: đối chứng tương phản gọi hàm trước khi gán; dòng «nen» đo `<main>` thay `body`.
 
 ### Task 6: Phá-thử, năm lệnh, đóng S3
 
