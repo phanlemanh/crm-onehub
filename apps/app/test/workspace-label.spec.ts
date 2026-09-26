@@ -25,7 +25,6 @@ describe("nhan dau trang", () => {
 		expect(DEFAULT_WORKSPACE_NAME).toBe(SAN_PHAM);
 	});
 
-
 	for (const [vao, ra] of MA_TRAN) {
 		it(`${JSON.stringify(vao)} -> ${ra}`, () => {
 			expect(workspaceLabel(vao)).toBe(ra);

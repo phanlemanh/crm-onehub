@@ -5,9 +5,7 @@ slug: doi-ten-onehub-center
 owner: manh.phan@onemount.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-09-26T11:07:59Z
+status: draft
 design_doc: docs/superpowers/specs/2026-09-26-doi-ten-onehub-center-design.md
 ---
 
@@ -52,7 +50,7 @@ sách tệp + chuỗi nguyên văn khai trước trong `rang/ngoai-le.json`; «k
 
 **Cả vòng**
 
-- AC-13: Given các hồ sơ đã ký có eval máy (`test`/`script`) với `paths` giao `diff` của vòng này, When chạy eval đó trên HEAD và trên `merge-base`, Then mọi eval đạt ở `merge-base` vẫn đạt ở HEAD; và mọi tệp thước của hồ sơ đã ký mà vòng này sửa — tệp dưới `_acceptance/<hồ sơ đã ký>/` và tệp mà lệnh eval đã ký chạy — chỉ lệch `merge-base` bởi (i) các cặp trong `rang/bang-the.json`, mỗi cặp hoặc là phép thế tên (chuẩn hoá mọi dạng tên cũ và «OneHub Center» về cùng một dấu thì hai chuỗi bằng nhau từng byte), hoặc là cặp chuỗi sản phẩm thật (chuỗi cũ có nguyên văn trong mã ở `merge-base`, chuỗi mới có nguyên văn trong mã ở HEAD); hoặc (ii) đúng các vạch khai trong danh sách thay thế ở mục Notes, mỗi vạch có một dòng `supersedes` trong sổ quyết định và một eval của vòng này đo lời hứa mới, đỏ ở `merge-base`.
+- AC-13: Given các tệp thước của hồ sơ đã ký mà vòng này sửa — tệp dưới `_acceptance/<hồ sơ đã ký>/` và tệp mà lệnh eval máy đã ký chạy, rút bằng máy từ lệnh kể cả khi `cd` nằm giữa chuỗi — và bảng `rang/bang-the.json` khai trước, When so từng tệp với `merge-base`, Then mỗi dòng lệch đều thuộc một trong ba loại: (i) cặp có trong bảng, và cặp đó hoặc là phép thế tên (chuẩn hoá mọi dạng tên cũ và «OneHub Center» về một dấu thì hai dòng bằng nhau), hoặc là cặp chuỗi sản phẩm thật dài hơn cái tên trần (chuỗi cũ có trong mã ở `merge-base`, chuỗi mới có ở HEAD), hoặc là cặp «neo lại» khai tên kèm lý do; (ii) hunk mang mã vạch trong danh sách thay thế ở mục Notes, có dòng `supersedes` trong sổ; không cặp nào rút từ `diff` vắng khỏi bảng, và không cặp nào trong bảng vắng khỏi `diff`. Việc chạy lại eval máy của hồ sơ đã ký ở HEAD thuộc làn ghim lại trước khi đẩy (luật điều phối), không thuộc tiêu chí này.
 - AC-14: Given các tệp vòng này viết hoặc sửa, When soi mã và `diff` từ `merge-base`, Then không tệp `"use client"` nào nhập `@crm/auth` hay `@crm/db`; không `className` đổi màu, góc, viền, bóng của component `@crm/ui` ở chỗ gọi; `LuoiCham` nằm trong `packages/ui/src/components`; không chú thích mới trong mã; và `diff` không chạm danh sách cấm viết trước: `apps/app/proxy.ts`, `apps/app/app/(landing)/page.tsx`, `apps/app/components/landing/**`, các module có sẵn dưới `apps/app/app/proto/_modules/` (trừ module mới của vòng này), trường `name` của mọi `package.json`, và hai dòng «This CRM is private» của `packages/auth/src/auth.ts`. Các trang khác dưới `(landing)/` (năm trang `AuthShell`, `het-quyen`, `quen-mat-khau`) được phép sửa.
 - AC-15 (ui-observed): Given `/sign-in` ở 375, 1440, 1920 × sáng, tối, When chụp màn thật của cây đang xét, Then người ký nhìn thấy nền lưới chấm, dòng neo cỡ lớn, ba bước nối bằng đường dọc không có hộp, và tên «OneHub Center» ở tiêu đề cột phải — sáu ảnh nằm trong `evidence/`.
 
@@ -100,7 +98,7 @@ Ngưỡng ở `opportunity.md` (Cổng Đáng ghi bù 26/09, chủ kho quyết `
 ## Notes
 
 - Bàn đo màn thật (AC-8, 11, 12, 15) chạy trong phiên đo của `tien-de.mjs` trên kho `crm_<cây>_do`, qua `mot-luot.sh`, không dùng CSDL dev chung, không dùng cổng 3000/3300/3500. Khoá Google giả `ci-only-google-client-id` đặt khi `.env` để rỗng, như hồ sơ `cua-vao-dang-nhap`.
-- AC-13 dùng quan hệ «đạt ở `merge-base` thì đạt ở HEAD», không «làn thoát 0»: ~46 eval đo màn của các hồ sơ đã ký đỏ sẵn trên máy này vì môi trường (đo 25/09).
+- AC-13 thu phạm vi ngày 26/09 sau S4 round 2 (chủ kho chọn «thu phạm vi» ở điểm dừng-vá): phần chạy lại 399 eval đã ký trên hai cây (~2,5 giờ) chưa lần nào chạy trọn trong agent chấm — round 1 ra PASS giả, round 2 agent dừng trước dòng EXIT — và mỗi round lộ thêm lỗ trong chính thước. Phần đó chuyển sang làn ghim lại trước khi đẩy.
 - Ba thước đã ký biết trước sẽ phải sửa bằng phép thế tên: `cai-dat-con-lai-noi-tieng-viet/rang/khong-dich-cua-lat.json`, `dat-okr-trong-crm/rang/man-okr.mjs`, `man-xin-quyen-co-rang/rang/chieu-do.mjs`. Test của kho (`apps/*/test`, `packages/*/test`) ghim chữ cũ đổi theo, được suite chạy mỗi round.
 
 - **Glob loại trừ khỏi tập quét (AC-1):** `apps/app/app/(landing)/page.tsx` và `apps/app/components/landing/**` — trang giới thiệu của hãng; `apps/app/app/proto/**` — bản mẫu đã chốt của các vòng cũ; `apps/api/src/create-app.ts` — tiêu đề tài liệu API cho lập trình viên; tệp `*.spec.*`, `*.test.*`, `*.dom.tsx`, thư mục `test/` — thước, không phải chữ người đọc; `apps/agent/**` ngoài `zalo-*.ts` — chỉ dẫn và lời báo cho model (Later).

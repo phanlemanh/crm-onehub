@@ -247,25 +247,25 @@ evals:
     paths:
       - "_acceptance/*/rang/**"
       - "_acceptance/*/evals.yaml"
+      - "apps/*/test/**"
+      - "packages/*/test/**"
       - "_acceptance/doi-ten-onehub-center/rang/bang-the.json"
       - "_acceptance/doi-ten-onehub-center/rang/thuoc-da-ky.mjs"
+      - "_acceptance/doi-ten-onehub-center/decisions.jsonl"
     expected: |
-      rang/thuoc-da-ky.mjs (theo khuon _acceptance/cua-vao-dang-nhap/rang/thuoc-da-ky.mjs):
-      (a) rut tap eval may cua ho so da ky co paths giao `git diff --name-only merge-base..HEAD`, chay moi eval
-      o HEAD va o merge-base (worktree tam), chay lai tuan tu o HEAD cac o do de loc chap chon; do khi co eval
-      dat o base ma do o HEAD — "SAI <slug>/<E>: base 0 -> head <ma>".
-      (b) tep thuoc cua ho so da ky = tep duoi _acceptance/<ho so da ky>/ + tep ma lenh eval da ky chay (rut
-      tu cmd nhu (a)). Voi moi tep do bi diff cham: bo cac hunk thuoc danh sach thay the (hang THAY_THE dau
-      script chep tu Notes cua contract: tep + ma vach), roi ap bang-the.json nguoc, so tung byte voi
-      merge-base; lech -> "SAI the: <tep>". Tep da ky bi xoa -> SAI.
-      (c) kiem tung cap cua bang-the.json: chuoi cu khop /CRM/; va HOAC chuan hoa (thay moi dang
-      /(the |your |this )?(OneHub )?CRM( OneHub)?/ va "OneHub Center" bang mot dau) cho hai chuoi bang nhau,
-      HOAC chuoi cu co nguyen van trong ma san pham o merge-base va chuoi moi co nguyen van trong ma san pham
-      o HEAD (khong tinh tep test va _acceptance) — khong thi "SAI bang the: <cu> -> <moi>".
-      (d) moi ma vach thay the co dong supersedes trong decisions.jsonl — "SAI thay the khong co so: <ma>".
-      Chay nen, log .acceptance-runs/doi-ten-onehub-center/thuoc-da-ky.log; ~70 phut.
-      CHIEU DO: pha-thu S3 them cap {"toBe(2)": "toBe(3)"} vao bang-the.json -> "SAI bang the"; sua them mot
-      dong khac trong khong-dich-cua-lat.json -> "SAI the: _acceptance/cai-dat-con-lai-noi-tieng-viet/...".
+      rang/thuoc-da-ky.mjs (tinh, chay vai giay, khong phien do): rut tep thuoc cua ho so da ky tu lenh
+      eval may da ky (moi `cd X &&` trong chuoi, ke ca `bun run test -- "cd ..."`) giao `git diff
+      merge-base..HEAD`; voi moi tep, moi hunk: mang ma vach THAY_THE (tep + ma, chep tu Notes) va co dong
+      supersedes trong decisions.jsonl -> bo qua; con lai ghep dong bo/them 1:1 (khong 1:1 -> "SAI the: <tep>").
+      Moi cap phai CO trong rang/bang-the.json (bang khai truoc, thuoc DOC, khong ghi) -> vang: "SAI chua khai:
+      <tep>: «cu» -> «moi»"; moi dong bang khong ung cap nao trong diff -> "SAI thua trong bang: ...".
+      Moi dong bang phai hop le theo loai: "the-ten" (chuan hoa ca dong bang nhau), "chuoi-that" (cu dai hon
+      ten tran, co trong ma o merge-base; moi co o HEAD), "neo-lai" (khai ly do) -> sai loai: "SAI bang the:
+      «cu» -> «moi»". Doi chung viet truoc trong script: cap toBe(2)->toBe(3) bi loai; ten tran "CRM"->"OneHub
+      Center doc" loai chuoi-that bi loai; lenh cd giua chuoi bat duoc tep thuoc.
+      CHIEU DO (pha-thu S3 tren ban sao): them dong {"cu":"toBe(2)","moi":"toBe(3)"} vao bang-the.json ->
+      "SAI thua trong bang"; sua them mot dong khac trong khong-dich-cua-lat.json -> "SAI chua khai:
+      _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/khong-dich-cua-lat.json".
 
   - id: E14
     criterion: AC-14

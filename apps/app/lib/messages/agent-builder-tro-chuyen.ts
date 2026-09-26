@@ -76,7 +76,7 @@ const en = {
 		chayTay: "Manual only",
 		daSong: (ten: string) => `${ten} is live.`,
 		daSongMoTa:
-			"I created the Eve agent, applied its bounded OneHub Center and integration access, and made it live for the team.",
+			"I created the Eve agent, applied its bounded access to OneHub Center and its integrations, and made it live for the team.",
 		nhanSong: "Live",
 		moc: "Trigger",
 		chayO: "Runs in",
@@ -230,7 +230,7 @@ const vi = {
 		chayTay: "Chỉ chạy tay",
 		daSong: (ten: string) => `${ten} đã vào chạy.`,
 		daSongMoTa:
-			"Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc OneHub Center và quyền kết nối trong phạm vi, rồi đưa vào chạy cho cả đội.",
+			"Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc dữ liệu trong OneHub Center và quyền kết nối trong phạm vi, rồi đưa vào chạy cho cả đội.",
 		nhanSong: "Đang chạy",
 		moc: "Mốc kích hoạt",
 		chayO: "Chạy ở",
