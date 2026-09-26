@@ -4,17 +4,17 @@ import { ma } from "./okr-san";
 import { gieoThanhVien } from "./phien-thu";
 
 export const KY = {
-	startsOn: new Date("2026-10-01T00:00:00Z"),
-	endsOn: new Date("2026-12-31T00:00:00Z"),
+	startsOn: new Date("2026-04-01T00:00:00Z"),
+	endsOn: new Date("2026-06-30T00:00:00Z"),
 } as const;
 
 export const MOC = {
-	truocKy: new Date("2026-09-01T03:00:00Z"),
-	ngoai: new Date("2026-09-30T16:59:00Z"),
-	trong: new Date("2026-09-30T17:00:00Z"),
-	giuaKy: new Date("2026-11-15T03:00:00Z"),
-	sauGiuaKy: new Date("2026-11-16T03:00:00Z"),
-	truocGiuaKy: new Date("2026-11-14T03:00:00Z"),
+	truocKy: new Date("2026-03-01T03:00:00Z"),
+	ngoai: new Date("2026-03-31T16:59:00Z"),
+	trong: new Date("2026-03-31T17:00:00Z"),
+	giuaKy: new Date("2026-05-15T03:00:00Z"),
+	sauGiuaKy: new Date("2026-05-16T03:00:00Z"),
+	truocGiuaKy: new Date("2026-05-14T03:00:00Z"),
 } as const;
 
 const NGUOI = ["a", "b", "c", "d", "e"] as const;
@@ -257,6 +257,7 @@ export async function gieoSanChiSo(): Promise<SanChiSo> {
 		await cuocGoi("d", ct.d, MOC.giuaKy),
 		await cuocGoi("b", ct.b, MOC.trong),
 		await cuocGoi("a", ctLuu, MOC.giuaKy),
+		await cuocGoi("b", ct.c, MOC.giuaKy),
 	];
 	await cuocGoi("a", ct.a, MOC.ngoai);
 	await cuocGoi("a", ct.a, MOC.giuaKy, "ANSWERED");
@@ -335,6 +336,13 @@ export async function gieoSanChiSo(): Promise<SanChiSo> {
 		await buoc({
 			planId: khLuu,
 			departmentId: P1,
+			ai: "a",
+			completedAt: MOC.giuaKy,
+			dueAt: MOC.sauGiuaKy,
+		}),
+		await buoc({
+			planId: kh.c,
+			departmentId: P2,
 			ai: "a",
 			completedAt: MOC.giuaKy,
 			dueAt: MOC.sauGiuaKy,
@@ -444,7 +452,7 @@ export async function gieoSanChiSo(): Promise<SanChiSo> {
 	];
 	await form(ct.a, MOC.ngoai);
 	await form(ctLuu, MOC.giuaKy);
-	await form(ct.a, null);
+	await form(null, null);
 
 	const thu = async (
 		fromEmail: string,

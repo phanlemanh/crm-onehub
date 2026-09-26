@@ -59,18 +59,28 @@ export function khoangKy(startsOn: Date, endsOn: Date, ngay: string): KhoangKy {
 	return { tu: dauNgay(ngayCua(startsOn)), den: dauNgay(ngaySau(cuoi)) };
 }
 
-async function nguoiTrong(db: Doc, pv: PhamViDem): Promise<string[] | null> {
-	if (pv.kieu === "toan-cong-ty") return null;
-	if (pv.kieu === "nguoi") return [pv.id];
-	const phongBan: Prisma.OrgPlacementWhereInput =
-		pv.kieu === "phong-ban"
-			? { primaryDepartmentId: pv.id }
-			: { primaryDepartment: { divisionId: pv.id } };
+async function nguoiCua(
+	db: Doc,
+	where: Prisma.OrgPlacementWhereInput,
+): Promise<string[]> {
 	const rows = await db.orgPlacement.findMany({
-		where: phongBan,
+		where,
 		select: { userId: true },
 	});
 	return rows.map((r) => r.userId);
+}
+
+async function nguoiTrong(db: Doc, pv: PhamViDem): Promise<string[] | null> {
+	switch (pv.kieu) {
+		case "toan-cong-ty":
+			return null;
+		case "nguoi":
+			return [pv.id];
+		case "phong-ban":
+			return nguoiCua(db, { primaryDepartmentId: pv.id });
+		case "bo-phan":
+			return nguoiCua(db, { primaryDepartment: { divisionId: pv.id } });
+	}
 }
 
 function phamViBuoc(pv: PhamViDem): Prisma.OnboardingStepWhereInput {

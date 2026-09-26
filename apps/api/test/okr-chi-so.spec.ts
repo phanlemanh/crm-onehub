@@ -34,14 +34,14 @@ const MA_TRAN: [MaChiSo, PhamViKhoa, number, BacGhiDanh?][] = [
 	["thoa-thuan-moi", "bo-phan:B1", 3],
 	["thoa-thuan-moi", "phong-ban:P1", 2],
 	["thoa-thuan-moi", "nguoi:a", 1],
-	["goi-hen-duoc", "toan-cong-ty", 5],
-	["goi-hen-duoc", "bo-phan:B1", 4],
-	["goi-hen-duoc", "phong-ban:P1", 3],
+	["goi-hen-duoc", "toan-cong-ty", 6],
+	["goi-hen-duoc", "bo-phan:B1", 5],
+	["goi-hen-duoc", "phong-ban:P1", 4],
 	["goi-hen-duoc", "nguoi:a", 2],
-	["buoc-xong-dung-han", "toan-cong-ty", 5],
-	["buoc-xong-dung-han", "bo-phan:B1", 4],
+	["buoc-xong-dung-han", "toan-cong-ty", 6],
+	["buoc-xong-dung-han", "bo-phan:B1", 5],
 	["buoc-xong-dung-han", "phong-ban:P1", 3],
-	["buoc-xong-dung-han", "nguoi:a", 2],
+	["buoc-xong-dung-han", "nguoi:a", 3],
 	["ghi-danh-dat-bac", "toan-cong-ty", 3, "tai-khoan"],
 	["ghi-danh-dat-bac", "bo-phan:B1", 2, "tai-khoan"],
 	["ghi-danh-dat-bac", "phong-ban:P1", 2, "tai-khoan"],
@@ -100,7 +100,7 @@ function dinhNghia(
 	return { chiSo, phamVi: phamVi(pv), bac: b };
 }
 
-const kyDu = () => khoangKy(KY.startsOn, KY.endsOn, "2026-12-31");
+const kyDu = () => khoangKy(KY.startsOn, KY.endsOn, "2026-06-30");
 
 async function idsCua(chiSo: MaChiSo, pv: PhamViKhoa, bac?: BacGhiDanh) {
 	const ds = await banGhiChiSo(db, dinhNghia(chiSo, pv, bac), kyDu(), {
@@ -124,17 +124,17 @@ describe("dem", () => {
 			tu: k.tu.toISOString(),
 			den: k.den.toISOString(),
 		});
-		expect(iso(khoangKy(KY.startsOn, KY.endsOn, "2026-12-31"))).toEqual({
-			tu: "2026-09-30T17:00:00.000Z",
-			den: "2026-12-31T17:00:00.000Z",
+		expect(iso(khoangKy(KY.startsOn, KY.endsOn, "2026-06-30"))).toEqual({
+			tu: "2026-03-31T17:00:00.000Z",
+			den: "2026-06-30T17:00:00.000Z",
 		});
-		expect(iso(khoangKy(KY.startsOn, KY.endsOn, "2026-10-15"))).toEqual({
-			tu: "2026-09-30T17:00:00.000Z",
-			den: "2026-10-15T17:00:00.000Z",
+		expect(iso(khoangKy(KY.startsOn, KY.endsOn, "2026-04-15"))).toEqual({
+			tu: "2026-03-31T17:00:00.000Z",
+			den: "2026-04-15T17:00:00.000Z",
 		});
-		expect(iso(khoangKy(KY.startsOn, KY.endsOn, "2027-02-01"))).toEqual({
-			tu: "2026-09-30T17:00:00.000Z",
-			den: "2026-12-31T17:00:00.000Z",
+		expect(iso(khoangKy(KY.startsOn, KY.endsOn, "2026-08-01"))).toEqual({
+			tu: "2026-03-31T17:00:00.000Z",
+			den: "2026-06-30T17:00:00.000Z",
 		});
 	});
 
@@ -261,12 +261,12 @@ describe("dem", () => {
 					})
 				).currentValue,
 			);
-		expect(await chup("2026-10-15")).toEqual({ ghi: 1, giaTri: 1 });
+		expect(await chup("2026-04-15")).toEqual({ ghi: 1, giaTri: 1 });
 		expect(await hienTai()).toBe(1);
-		expect(await chup("2026-10-15")).toEqual({ ghi: 0, giaTri: 1 });
-		expect(await chup("2026-12-31")).toEqual({ ghi: 1, giaTri: 2 });
+		expect(await chup("2026-04-15")).toEqual({ ghi: 0, giaTri: 1 });
+		expect(await chup("2026-06-30")).toEqual({ ghi: 1, giaTri: 2 });
 		expect(await hienTai()).toBe(2);
-		expect(await chup("2026-11-01")).toEqual({ ghi: 1, giaTri: 1 });
+		expect(await chup("2026-05-01")).toEqual({ ghi: 1, giaTri: 1 });
 		expect(await hienTai()).toBe(2);
 		const dong = await db.okrSoChup.findMany({
 			where: { keyResultId: kr },
@@ -289,9 +289,9 @@ describe("dem", () => {
 		).toEqual(
 			(
 				[
-					["2026-10-15", 1],
-					["2026-11-01", 1],
-					["2026-12-31", 2],
+					["2026-04-15", 1],
+					["2026-05-01", 1],
+					["2026-06-30", 2],
 				] as const
 			).map(([ngay, giaTri]) => ({
 				ngay,
