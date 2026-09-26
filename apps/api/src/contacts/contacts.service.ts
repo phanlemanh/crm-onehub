@@ -437,7 +437,7 @@ export class ContactsService {
 						where: { email: suppress },
 						create: {
 							email: suppress,
-							reason: `Deleted from the CRM (${name})`,
+							reason: `Deleted from OneHub Center (${name})`,
 						},
 						update: {},
 					});

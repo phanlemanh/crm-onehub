@@ -188,7 +188,7 @@ describe("manifest", () => {
 		const m = JSON.parse(
 			readFileSync(join(GOC_KHO, "apps/app/public/site.webmanifest"), "utf8"),
 		);
-		dat(m.name === "OneHub CRM", `name la ${m.name}`);
+		dat(m.name === "OneHub Center", `name la ${m.name}`);
 		dat(m.short_name === "OneHub", `short_name la ${m.short_name}`);
 		const co = m.icons.map(
 			(i: { sizes: string; purpose: string }) => `${i.sizes}:${i.purpose}`,

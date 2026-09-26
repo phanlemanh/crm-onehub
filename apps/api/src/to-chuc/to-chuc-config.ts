@@ -39,7 +39,7 @@ export const TO_CHUC = {
 		loRong: "Không có dòng nào để nhập.",
 		khongDongHopLe: "Không có dòng hợp lệ nào để ghi.",
 		nhap: {
-			emailKhongPhaiThanhVien: "Email này chưa là thành viên CRM",
+			emailKhongPhaiThanhVien: "Email này chưa là thành viên OneHub Center",
 			emailLap: "Email này xuất hiện nhiều lần trong lô",
 			thieuEmail: "Thiếu email",
 			thieuPhongBan: "Thiếu phòng ban",

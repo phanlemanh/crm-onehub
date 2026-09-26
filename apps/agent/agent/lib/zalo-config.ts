@@ -27,13 +27,13 @@ export const ZALO = {
 	lenh: { tu: ["xong", "done"], toiDaSo: 20 },
 	loi: {
 		huongDan:
-			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
+			"Chào bạn. Để nhận nhắc việc, mở OneHub Center › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
 		daNoi: (ten: string) =>
 			`Đã nối với ${ten}. Mỗi sáng tôi gửi việc cần để ý ở đây.`,
 		daNoiRoi: (ten: string, gio: string) =>
 			`Bạn đã nối với ${ten}. Nhắc đến lúc ${gio}.`,
 		guiThu: (gio: string) =>
-			`Tin thử từ CRM. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
+			`Tin thử từ OneHub Center. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
 		tokenSai: "Zalo không nhận token này.",
 		zaloKhongTraLoi:
 			"Zalo đang không trả lời nên chưa kiểm được token. Bot đang dùng giữ nguyên; thử lại sau ít phút.",
@@ -43,7 +43,7 @@ export const ZALO = {
 		goiY: 'Trả lời "xong 2" để đánh dấu mục 2 xong.',
 		thieuSo: 'Gõ "xong" kèm số mục trong tin nhắc sáng nay, ví dụ "xong 2".',
 		khongQuyen:
-			"Tài khoản CRM của bạn không còn quyền với kế hoạch 30 ngày đầu, nên chưa đánh dấu mục nào.",
+			"Tài khoản OneHub Center của bạn không còn quyền với kế hoạch 30 ngày đầu, nên chưa đánh dấu mục nào.",
 		chuaCoTin: (gio: string) =>
 			`Hôm nay chưa có tin nhắc qua Zalo. Nhắc đến lúc ${gio}.`,
 		chuaDanhDau: "Chưa đánh dấu mục nào.",

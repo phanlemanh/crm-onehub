@@ -27,7 +27,7 @@ const VET = [
 		sua: (s) =>
 			s.replace(
 				/privacy:\n\t\t\t"Chỉ lưu trao đổi[^"]*"/,
-				'privacy:\n\t\t\t"Only conversations with companies in the CRM are stored. Personal mail is discarded without being saved."',
+				'privacy:\n\t\t\t"Only conversations with companies in OneHub Center are stored. Personal mail is discarded without being saved."',
 			),
 	},
 	{
@@ -44,8 +44,8 @@ const VET = [
 		ghim: "mo ta man",
 		sua: (s) =>
 			s.replace(
-				/both: "CRM đọc thư và lịch[^"]*"/,
-				'both: "This CRM reads your mail and calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf."',
+				/both: "OneHub Center đọc thư và lịch[^"]*"/,
+				'both: "OneHub Center reads your mail and calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf."',
 			),
 	},
 	{
@@ -65,10 +65,10 @@ const VET = [
 		mong: 1,
 		ghim: "khong khac nhau tung doi mot",
 		sua: (s) => {
-			const both = s.match(/both: "(CRM[^"]*)"/)?.[1];
+			const both = s.match(/both: "(OneHub Center[^"]*)"/)?.[1];
 			if (!both) return s;
 			return s.replace(
-				/microsoft:\n\t\t\t"CRM đọc thư Outlook[^"]*"/,
+				/microsoft:\n\t\t\t"OneHub Center đọc thư Outlook[^"]*"/,
 				`microsoft:\n\t\t\t"${both}"`,
 			);
 		},

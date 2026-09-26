@@ -9,17 +9,17 @@ type CrmEventDefinition = {
 export const CRM_EVENT_CATALOG = {
 	"company.created": {
 		label: "Company created",
-		description: "A company is added to the CRM",
+		description: "A company is added to OneHub Center",
 		recordKind: "company",
 	},
 	"contact.created": {
 		label: "Contact created",
-		description: "A contact is added to the CRM",
+		description: "A contact is added to OneHub Center",
 		recordKind: "contact",
 	},
 	"deal.created": {
 		label: "Deal created",
-		description: "A deal is added to the CRM",
+		description: "A deal is added to OneHub Center",
 		recordKind: "deal",
 	},
 	"deal.stage.changed": {
