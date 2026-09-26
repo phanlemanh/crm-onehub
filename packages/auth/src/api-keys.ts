@@ -7,3 +7,9 @@ export const API_KEY_EXPIRATION = {
 	minDays: 1,
 	maxDays: 365,
 } as const;
+
+const MINUTE_MS = 60 * 1000;
+
+export const API_KEY_USAGE = {
+	lastRequestIntervalMs: MINUTE_MS,
+} as const;

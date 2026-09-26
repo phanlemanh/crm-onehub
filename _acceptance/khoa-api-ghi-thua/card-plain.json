@@ -1,0 +1,150 @@
+{
+  "feature_plain": "Mỗi yêu cầu gọi API bằng khoá thôi ghi vào cơ sở dữ liệu; cột «Dùng lần cuối» của khoá cập nhật tối đa một lần mỗi phút.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ ghi «Dùng lần cuối» ở lượt dùng đầu tiên của khoá, rồi không ghi gì thêm ở các lượt ngay sau đó."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ ghi lại «Dùng lần cuối» khi lần ghi trước đã cũ quá một phút, và không ghi khi còn dưới một phút — ngưỡng lấy từ một hằng số của kho."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ vẫn từ chối khoá đã tắt và khoá đã hết hạn, kể cả ngay sau khi khoá vừa được dùng thành công."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ báo đỏ nếu ai nâng thư viện khoá API mà quên làm lại bản vá, thay vì lặng lẽ quay về ghi mỗi lượt."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ ghi vào tài liệu API vì sao có bản vá, khi nào gỡ và phải làm gì khi nâng thư viện."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ giữ toàn bộ bộ kiểm, kiểm kiểu, lint và bản dựng của kho xanh."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ báo đỏ nếu cấu hình của plugin khoá API chuyển sang lưu ở bộ nhớ ngoài (tuỳ chọn storage hoặc customStorage của chính plugin), vì bản vá cũng đổi đường đó — kiểm đúng công tắc mà thư viện dùng để rẽ nhánh."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG đổi hành vi của thư viện khi kho không bật tuỳ chọn mới — phép đo so hai bản trên cùng một dựng."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ KHÔNG nới giới hạn tần suất gọi khi tính năng đó được bật."
+    }
+  ],
+  "scope_plain": "Không đụng giới hạn tần suất của màn quên mật khẩu, không sửa test chập chờn, không đổi giao diện cột «Dùng lần cuối», không gửi bản sửa lên hãng.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Phủ hai trạng thái giới hạn tần suất mà kho có thể gặp: đang tắt như hiện nay (AC-1, AC-2, AC-3, AC-5) và bật (AC-4 — không nới giới hạn); tắt riêng từng khoá để sau vì kho không dùng."
+    },
+    {
+      "i": 1,
+      "p": "Phủ ba tình huống của «Dùng lần cuối» lúc khoá được dùng: chưa từng dùng, vừa dùng dưới một phút, và đã cũ quá một phút (AC-1, AC-2, AC-3)."
+    },
+    {
+      "i": 2,
+      "p": "Phủ cả hai cách cài thư viện: có bật tuỳ chọn mới và không bật — không bật thì phải y như bản gốc (AC-3)."
+    },
+    {
+      "i": 3,
+      "p": "Phủ khoá còn bật và khoá đã tắt hoặc hết hạn — khoá tắt hay hết hạn luôn bị từ chối (AC-5)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Người phản biện lo các hồ sơ đã ký trước đây có thể vỡ mà không ai chạy lại. Đã soát: không bộ kiểm nào đọc «Dùng lần cuối» sau khi dùng khoá; hồ sơ bị chạm sẽ được ghim lại lúc tới lượt merge."
+    },
+    {
+      "i": 1,
+      "p": "Tiêu chí khoá tắt/hết hạn chưa chắc đo đúng lý do từ chối. Đã sửa: tạo khoá bằng đường thật, dùng thành công trước, rồi mới tắt hoặc cho hết hạn, và ghim đúng mã lỗi."
+    },
+    {
+      "i": 2,
+      "p": "Hai chỗ viết mâu thuẫn về việc có chạm nhánh giới hạn tần suất hay không. Đã sửa cho khớp: bỏ lần đóng dấu phụ ở mọi trường hợp có tuỳ chọn, cách đếm giới hạn không đổi."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo tài liệu chỉ kiểm chữ có mặt, không kiểm tài liệu có nói đủ ý. Đã thêm một câu hỏi cho giám khảo: tài liệu có nói khi nào gỡ và phải làm gì khi nâng thư viện không."
+    },
+    {
+      "i": 4,
+      "p": "Chưa khai bản chạy thật có áp bản vá không. Đã khai đường cài, thêm kiểm mã đã cài có bản vá; việc Vercel cài bằng bun ghi thành giả định để anh gạch."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260926T000320Z-1",
+      "p": "Đã chọn vá thư viện ngay trong kho — đổi lại mỗi lần nâng thư viện phải làm lại bản vá; không chờ hãng, không tự viết lại phần xác thực."
+    },
+    {
+      "id": "d-20260926T000320Z-2",
+      "p": "Đã chọn để ngưỡng một phút ở phía kho, bản vá chỉ thêm tuỳ chọn — đổi lại bản vá dài hơn vài dòng."
+    },
+    {
+      "id": "d-20260926T000320Z-3",
+      "p": "Đã chọn ngưỡng một phút thay vì năm — đổi lại ghi nhiều hơn một chút, nhưng người vừa thử khoá thấy ngay khoá đã chạy."
+    },
+    {
+      "id": "d-20260926T000320Z-4",
+      "p": "Đã chọn bỏ lần đóng dấu phụ mỗi lượt — đổi lại khoá bị xoá hẳn đúng trong vài phần nghìn giây có thể lọt một yêu cầu; khoá bị tắt không bị ảnh hưởng."
+    },
+    {
+      "id": "d-20260926T000320Z-5",
+      "p": "Đã chọn ghi đơn giản khi quá một phút — đổi lại vài yêu cầu cùng lúc có thể cùng ghi, tối đa một đợt mỗi phút."
+    },
+    {
+      "id": "d-20260926T000320Z-6",
+      "p": "KHÔNG làm bản đặc tả giao diện — việc này không đổi màn hình nào."
+    },
+    {
+      "id": "d-20260926T002354Z-8",
+      "p": "Đã chọn kiểm bản vá bằng cách sửa tạm thư viện đã cài rồi cài lại — đổi lại chạm thư mục cài vài giây, không rò sang bộ kiểm khác."
+    },
+    {
+      "id": "d-20260926T004552Z-9",
+      "p": "Đã thêm câu hỏi và người chấm cho hai câu hỏi giám khảo mà bộ chấm bắt buộc — không đổi nghĩa đã duyệt."
+    },
+    {
+      "id": "d-20260926T012430Z-10",
+      "p": "Đã sửa sau vòng chấm 1: chỉ bỏ lần ghi phụ khi lưu khoá bằng CSDL, và siết phép kiểm bản vá trong tệp khoá phiên bản."
+    },
+    {
+      "id": "d-20260926T023729Z-11",
+      "p": "Anh chọn thu phạm vi: lời hứa về «không chạm đường bộ nhớ đệm ngoài» chỉ giữ trên cấu hình thật của kho, và một phép kiểm mới báo đỏ nếu ai bật bộ nhớ đó — đổi lại phải ký lại cổng này."
+    },
+    {
+      "id": "d-20260926T031430Z-13",
+      "p": "Anh cho mở vòng chấm thứ tư ngoài trần: phép kiểm AC-11 sẽ đọc đúng tuỳ chọn của plugin khoá API — đổi lại một vòng máy và một lượt ký lại cổng này."
+    },
+    {
+      "id": "d-20260926T031659Z-15",
+      "p": "Đã sửa sau vòng chấm: phép kiểm AC-11 đọc tuỳ chọn của plugin khoá API thay vì bộ nhớ đệm chung — hành vi đăng nhập không đổi."
+    },
+    {
+      "id": "d-20260926T034743Z-16",
+      "p": "Lỗi bộ công cụ: thẻ duyệt phạm vi lần gần nhất xếp AC-11 vào nhóm «sẽ KHÔNG làm» và hiện chữ kỹ thuật — anh cần xác nhận lại AC-11 ở cổng này."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E13",
+      "q": "Bản vá chỉ đổi đúng hai việc đã hứa trên cấu hình của kho chứ?",
+      "why": "Giám khảo đồng thuận PASS ở vòng 4: chỉ bỏ ghi «Dùng lần cuối» trong 1 phút và bỏ lần ghi phụ."
+    },
+    {
+      "id": "E14",
+      "q": "Mục tài liệu API nói rõ khi nào gỡ bản vá và phải làm gì khi nâng thư viện chứ?",
+      "why": "Giám khảo đồng thuận PASS: mục mới trong docs/api.md trả lời được cả hai câu."
+    }
+  ]
+}
