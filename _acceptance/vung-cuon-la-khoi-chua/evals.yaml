@@ -1,0 +1,188 @@
+schema_version: 1
+slug: vung-cuon-la-khoi-chua
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/app/(app)/[slug]/**/page.tsx"
+      - "apps/app/components/page-shell.tsx"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Ban do tu chan cay (canhCay qua APP_URL), rut danh sach trang tu dia: moi page.tsx duoi
+      apps/app/app/(app)/[slug] (T tep, dem tai luot chay, khong viet tay). Doan dong lay ma ban
+      ghi that cua workspace tu DB theo bang ten-doan -> bang. Moi tep x 3 kho in dung mot dong
+      "NHAN <duong> <kho>: do|chuyen-huong -> <dich>|contained|khong-khung". Duong dan cuoi doc sau
+      khi dung yen (hai lan lay mau lien tiep trung nhau) — Slack › Nguoi chuyen huong trong luong
+      stream.
+      Tap KHONG-DO ghim san theo duong mau (P = 9): chuyen-huong = contacts/[contactId],
+      deals/[dealId], companies/[companyId], onboarding/[planId], settings/notifications,
+      settings/connections/slack/people; contained = agents/[agentId]; khong-khung = chat,
+      chat/[chatId]. Dong cham: "DUNG AC-1: T tep x 3 kho = 3T nhan (do 3(T-P), khac 3P, ngoai
+      tap ghim 0)". Trang ngoai tap ghim ma nhan khac "do", hoac trang trong tap ghim ma nhan "do",
+      -> "SAI AC-1: ... — <duong> <kho> <nhan>" tung o, ma 1.
+      Bang doan dong -> bang: contactId contact, dealId deal, companyId company, planId
+      onboardingPlan, campaignId campaign, agentId agentDefinition, chatId agentConversation cua
+      quan tri. Thoat 2 «KHONG DO DUOC» goi ten cho: doan dong ten la; doan dong cua trang NGOAI tap
+      ghim khong co ban ghi nao; bat ky trang nao ket thuc o /sign-in hoac /onboarding (phien hong /
+      tien de hong). Trang TRONG tap ghim ma bang rong (du lieu dev 25/09: 0 agent, 0 cuoc tro
+      chuyen) mo bang ma gia "vckc-khong-co-ban-ghi" kem dong "GHI CHU <duong>: khong co ban ghi, mo
+      bang ma gia" va chi can nhan khac "do".
+      CHIEU DO (pha-thu VCKC_PHA_DOAN=1 them duong gia /[slug]/[doanLa] vao ma tran): ma 2 "KHONG
+      DO DUOC: doan dong [doanLa] o <duong> — ban do chua biet lay ma ban ghi nao", khong in dong
+      DUNG AC-1. Pha-thu thu hai (VCKC_PHA_GHIM=1 bo settings/notifications khoi tap ghim): "SAI
+      AC-1: ... — /settings/notifications <kho> chuyen-huong" o ca ba kho, ma 1.
+      Ngan sach: moi duong mo MOT trang, doi kho bang setViewport tren trang do (khong tai lai); in
+      "THOI GIAN <duong>: <ms>" va "THOI GIAN tong: <s>s"; tong > 540s -> ma 2 "KHONG DO DUOC: vuot
+      ngan sach 540s" (vuot tran Bash 600s thi mat buoc don cua tien-de).
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Moi kho mot dong: "DUNG AC-2 <kho>: 0/N trang do co phan tu absolute trong main lay body lam
+      offsetParent (k phan tu absolute da xet)" — N la so trang nhan "do" o kho do; k la tong so
+      phan tu co position absolute (computed) trong main tren N trang; k = 0 -> ma 2 "bo chon rong".
+      Trang nao co thi dong SAI liet ke "<duong> (<so>)" tung trang va nhan 40 ky tu dau cua phan tu
+      dau tien.
+      DOI CHUNG DUONG moi trang, moi kho, cung trang dang mo: chen span.sr-only tham do vao cuoi
+      [data-slot=page-shell], ep main.style.position="static" -> span.offsetParent === body; roi tra
+      ve nhu cu -> span.offsetParent la main (sau khi sua). Dong "DUNG doi chung AC-2 <kho>: N/N
+      trang bo chon bat duoc tham do khi tat khoi chua"; trang nao khong bat duoc -> ma 2.
+      CHIEU DO (ma chua sua, du doan tu quet 25/09): "SAI AC-2 <kho>: 5/N ... — /settings/currencies
+      (1), /settings/fields (14), /settings/okr (4), /settings/onboarding (1), /settings/organization
+      (1)" o ca ba kho, ma 1. Pha-thu sau khi sua: bo `relative` khoi main trong page-shell.tsx ->
+      dong SAI y het.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/**"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Moi kho: "DUNG AC-3 <kho>: 0/N trang do co document tran (doc <= 0, ngang <= 0)" — doc =
+      documentElement.scrollHeight - clientHeight, ngang = scrollWidth - clientWidth, doc sau khi
+      trang on dinh (ba lan lay mau lien tiep bang nhau, 400ms mot lan).
+      Du lieu dev 25/09 cho 0 o moi o ca truoc khi sua, nen AC-3 KHONG co chieu do tren ma goc —
+      no la dong hoi quy (trang tu nhien khong duoc vo vi ban sua). CHIEU DO tren cung fixture:
+      pha-thu them `min-w-[3000px]` cho main[data-slot=page-shell-scroll] trong page-shell.tsx (main
+      la phan tu co gian trong hang cua khung ung dung, nen day document; dat tren
+      [data-slot=page-shell] thi chi main tu cuon ngang) -> "SAI AC-3 <kho>: N/N trang ... ngang
+      <n>px", ma 1.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Tren moi trang do, moi kho: chen vao [data-slot=page-shell] (con truc tiep cua main) mot div cao
+      2 x chieu cao khung nhin o dau va mot span.sr-only o cuoi voi margin-left 150vw (day sang phai
+      mot khung ruoi). Truoc khi do khang dinh main.contains(dem) va main.contains(span); sai -> ma 2
+      "tham do ngoai main". Doi hai khung hinh, do lai. Moi kho: "DUNG AC-4 <kho>: 0/N trang do co
+      document tran khi noi dung bi day duoi mep (doc <= 0, ngang <= 0)".
+      DOI CHUNG DUONG cung trang, cung khoi dem va span: ep main.style.position="static" -> document
+      phai tran doc > 0 VA tran ngang > 0. Moi kho: "DUNG doi chung AC-4 <kho>: tat khoi chua thi
+      N/N trang tran document ca doc lan ngang"; trang nao khong tran ca hai chieu khi tat khoi chua
+      -> ma 2 "KHONG DO DUOC: doi chung khong do duoc o <duong> <kho>".
+      CHIEU DO (ma chua sua): "SAI AC-4 <kho>: N/N trang ..." o ca ba kho (span tham do thoat main o
+      moi trang), ma 1. Pha-thu sau khi sua: bo `relative` -> dong SAI y het.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+      - "apps/app/components/app-header.tsx"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Cung fixture cua E4 (khoi dem + span). Dat chuot vao tam main, lan con lan 600px mot nac toi
+      40 nac, dung khi main.scrollTop het doi, roi lan them 3 nac. Moi kho: "DUNG AC-5 <kho>: 0/N
+      trang do lam khung ung dung truot (scrollY 0, dau trang top 0)" — scrollY = window.scrollY, dau
+      trang = header dau tien nam ngoai main. Main phai cuon (scrollTop > 0) o moi trang, khong thi
+      ma 2 "khong lan duoc main o <duong>".
+      CHIEU DO (ma chua sua): "SAI AC-5 <kho>: N/N trang ... — <duong> (scrollY <n>, dau trang top
+      -<n>)", ma 1. Pha-thu sau khi sua: bo `relative` -> dong SAI y het.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Tap xet: phan tu absolute (computed) trong main co offsetParent === main. Voi tung phan tu: lay
+      hop, dat inline top/right/bottom/left = auto !important, lay hop lai, tra style cu; hop lech >
+      1px => phan tu "dat toa do" (khong doc chuoi computed cua top/left vi phan tu da dinh vi tra
+      gia tri px, khong tra "auto"). Moi kho: "DUNG AC-6 <kho>: 0/N trang do co phan tu dat toa do
+      ma khoi chua la main (j phan tu da xet)". Kem mot dong GHI CHU dem phan tu fixed trong main
+      moi kho (khong cham).
+      DOI CHUNG DUONG moi trang, moi kho: chen <span style="position:absolute;top:0;right:0;width:1px;
+      height:1px"> vao dau [data-slot=page-shell]; chay dung bo do tren rieng span do (bo do khong
+      phu thuoc khoi chua) -> phai goi no la "dat toa do"; khong goi duoc -> ma 2. Go span roi moi do
+      tap that. Dong "DUNG doi chung AC-6 <kho>: N/N trang bo do bat duoc tham do dat toa do".
+      Truoc khi sua tap xet (offsetParent === main) rong nen dong DUNG AC-6 khong phai bang chung —
+      AC-6 chi co nghia sau khi sua; j phai >= 21 sau khi sua tren du lieu dev. CHIEU DO sau khi
+      sua: pha-thu them `<span className="absolute top-0 right-0 size-1" />` vao PageShellContent
+      trong page-shell.tsx -> "SAI AC-6 <kho>: M/N trang ..." (M = so trang co PageShellContent),
+      ma 1.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.vckc_do_khung
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Truoc khi chen khoi dem, cuon o dau trang: lay hop (x, y, w, h) cua moi phan tu trong main
+      voi khung nhu dang co, ep main.style.position="static", lay lai, tra ve nhu cu. Moi kho: "DUNG
+      AC-7 <kho>: 0/N trang co hop lech > 1px khi doi khoi chua (<m> phan tu so)" voi m > 0.
+      Truoc khi sua hai trang thai trung nhau nen dong DUNG khong phai bang chung. CHIEU DO sau khi
+      sua: pha-thu doi `relative` thanh `relative top-2` cho main -> "SAI AC-7 <kho>: N/N trang ...",
+      ma 1.
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vckc_do_khung
+    steps:
+      - "Cap cong 3500/3501 (ban-do-cot-app / ban-do-cot-api trong .claude/launch.json). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang hai muc do trong launch.json"
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN dong lenh nay (khong rut gon, khong goi thang do-khung.mjs — thieu mot-luot.sh thi thieu tien-de va trang bi day sang /onboarding/research): BANG_CHUNG=_acceptance/vung-cuon-la-khoi-chua/evidence APP_URL=http://localhost:3500 API_URL=http://localhost:3501 NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh \"bun _acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs\" — mot-luot.sh xep hang voi moi lan do khac (co the cho toi 4 phut sau luot may), do-khung.mjs tu chan cay va chup vao evidence/"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo sau anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/vung-cuon-la-khoi-chua/evidence/
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/settings/fields/**"
+      - "_acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs"
+    expected: |
+      Sau anh, du ca: truong-1440-cuoi.png, truong-768-cuoi.png, truong-375-cuoi.png (khung nhu dang
+      co) va truong-1440-doi-chung.png, truong-768-doi-chung.png, truong-375-doi-chung.png (main ep
+      position static). Ca sau anh chup trang Cai dat › Truong voi khoi dem, sau khi lan con lan toi
+      cuoi va lan them. Anh -cuoi: dau trang cua khung ung dung (logo, o tim) nam o mep tren, thanh
+      ben (1440, 768) nguyen cho, hang cuoi cua bang truong hien trong vung noi dung. Anh -doi-chung:
+      dau trang cua khung ung dung da truot len khoi mep tren (mot phan hoac het). Thieu anh nao ->
+      khong dat.

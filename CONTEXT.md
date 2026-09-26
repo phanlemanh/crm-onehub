@@ -204,9 +204,11 @@ Vì sao: kho không có bảng thông báo; gọi là thông báo thì người 
 chuông trong app.
 
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
-sáng, trả lời mã nối, nhận ra người đã nối, và gửi tin thử khi người bấm «Gửi thử
-nhắc ngay». Quản trị viên bật nó bằng cách dán Bot Token ở Kết nối › Zalo. Khác
-**Tác nhân**: bot Zalo không tự làm việc gì. Chốt 2026-09-23, mở rộng 2026-09-24.
+sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
+nhắc ngay», và đánh dấu bước xong khi người trả lời `xong` kèm số mục của tin nhắc
+hôm nay. Quản trị viên bật nó bằng cách dán Bot Token ở Kết nối › Zalo. Khác
+**Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng lệnh người gõ. Chốt
+2026-09-23, mở rộng 2026-09-24 và 2026-09-25.
 _Avoid_: tác nhân, trợ lý
 Vì sao: "tác nhân" đã là việc tự động người dùng dựng ra; gọi bot Zalo là tác
 nhân thì người ta chờ nó tự làm việc, còn "trợ lý" hứa một cuộc trò chuyện mà bot
