@@ -15,8 +15,10 @@ import {
 	API_KEY_USAGE,
 } from "./api-keys";
 import { canhKhoaApiPlugin } from "./canh-khoa-api";
-import { PASSWORD } from "./chia-mat-khau";
+import { chayNen } from "./chay-nen";
+import { donChiaCu, PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
+import { DIA_CHI, ganDiaChiTin } from "./dia-chi";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
 import { canhDatMatKhau } from "./sang-mat-khau";
@@ -32,6 +34,7 @@ import { canhSlackConnect } from "./slack-connect";
 import { rememberSlackInstall, replaceSlackConnection } from "./slack-grant";
 import { SLACK_REQUESTED_SCOPES, SLACK_USER_SCOPES } from "./slack-scopes";
 import { queueSlackInventorySync } from "./slack-sync";
+import { guiThuBaoDaDoi, guiThuXinDatLai } from "./thu-mat-khau";
 import {
 	googleHostedDomain,
 	hasSignInAllowList,
@@ -107,6 +110,13 @@ export const auth = betterAuth({
 		revokeSessionsOnPasswordReset: true,
 		minPasswordLength: PASSWORD.minLength,
 		resetPasswordTokenExpiresIn: PASSWORD.tokenTtlSeconds,
+		sendResetPassword: async ({ user, token }) => {
+			await guiThuXinDatLai({ email: user.email, token });
+		},
+		onPasswordReset: async ({ user }) => {
+			await donChiaCu(user.id);
+			chayNen(guiThuBaoDaDoi(user.email));
+		},
 	},
 
 	socialProviders,
@@ -131,10 +141,18 @@ export const auth = betterAuth({
 	rateLimit: {
 		enabled: true,
 		storage: "database",
+		customRules: {
+			"/request-password-reset": {
+				window: PASSWORD.requestWindowSeconds,
+				max: PASSWORD.requestMax,
+			},
+		},
 	},
 
 	advanced: {
 		cookiePrefix: AUTH_COOKIE_PREFIX,
+		backgroundTasks: { handler: chayNen },
+		ipAddress: { ipAddressHeaders: [DIA_CHI.tin] },
 
 		useSecureCookies: env.isProduction,
 		...(env.cookieDomain && {
@@ -331,6 +349,11 @@ export const auth = betterAuth({
 		},
 	},
 });
+
+export function xuLyXacThuc(yeuCau: Request): Promise<Response> {
+	ganDiaChiTin(yeuCau.headers, env.authSecret);
+	return auth.handler(yeuCau);
+}
 
 export type Auth = typeof auth;
 export type Session = typeof auth.$Infer.Session;

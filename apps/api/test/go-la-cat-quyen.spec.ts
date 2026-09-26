@@ -35,6 +35,11 @@ const MAT_KHAU = "mat-khau-thu-du-dai-1";
 const NGOAI_LE = ["sso.signInOptions", "workspace.get"] as const;
 const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
+const LO_SONG_SONG = 8;
+const KET_NOI_DU_TRU = 2;
+const SO_TRUY_VAN_DO_POOL = 32;
+const NGU_DO_POOL_GIAY = 0.05;
+const SO_PHAN_TU_GIA = 40;
 const THU_MUC_APP = join(import.meta.dir, "..", "..", "app");
 const MOC_THOI_CU = new Date("2020-01-01T00:00:00.000Z");
 const NGAY_MS = 24 * 60 * 60 * 1000;
@@ -133,17 +138,31 @@ async function goiTrpc(
 	);
 }
 
-async function maTranTrpc(dau: Dau): Promise<HangMaTran[]> {
-	const hang: HangMaTran[] = [];
-	for (const { ten, loai } of soThuTuc()) {
-		const res = await goiTrpc(ten, loai, undefined, dau);
-		hang.push({
-			ten,
-			status: res.status,
-			message: String(res.body?.error?.message ?? ""),
-		});
+async function theoLo<T, R>(
+	ds: readonly T[],
+	fn: (x: T) => Promise<R>,
+	lo = 1,
+): Promise<R[]> {
+	const kq: R[] = [];
+	for (let dau = 0; dau < ds.length; dau += lo) {
+		kq.push(...(await Promise.all(ds.slice(dau, dau + lo).map(fn))));
 	}
-	return hang;
+	return kq;
+}
+
+async function maTranTrpc(dau: Dau, lo?: number): Promise<HangMaTran[]> {
+	return theoLo(
+		soThuTuc(),
+		async ({ ten, loai }) => {
+			const res = await goiTrpc(ten, loai, undefined, dau);
+			return {
+				ten,
+				status: res.status,
+				message: String(res.body?.error?.message ?? ""),
+			};
+		},
+		lo,
+	);
 }
 
 function duongRest(): Array<{ path: string; method: string }> {
@@ -158,24 +177,30 @@ function duongRest(): Array<{ path: string; method: string }> {
 		);
 }
 
-async function maTranRest(dau: Dau): Promise<HangMaTran[]> {
-	const hang: HangMaTran[] = [];
+function tenDuong(d: { path: string; method: string }): string {
+	return `${d.method.toUpperCase()} ${d.path}`;
+}
+
+async function maTranRest(dau: Dau, lo?: number): Promise<HangMaTran[]> {
 	const server = app.getHttpServer();
-	for (const { path, method } of duongRest()) {
-		const url = path.replace(/\{[^}]+\}/g, "khong-co");
-		const verb = method as "get" | "post" | "patch" | "put" | "delete";
-		let req = request(server)[verb](url);
-		if (verb !== "get" && verb !== "delete") {
-			req = req.set("content-type", "application/json").send("{}");
-		}
-		const res = await gan(req, dau);
-		hang.push({
-			ten: `${method.toUpperCase()} ${path}`,
-			status: res.status,
-			message: String(res.body?.message ?? ""),
-		});
-	}
-	return hang;
+	return theoLo(
+		duongRest(),
+		async (d) => {
+			const url = d.path.replace(/\{[^}]+\}/g, "khong-co");
+			const verb = d.method as "get" | "post" | "patch" | "put" | "delete";
+			let req = request(server)[verb](url);
+			if (verb !== "get" && verb !== "delete") {
+				req = req.set("content-type", "application/json").send("{}");
+			}
+			const res = await gan(req, dau);
+			return {
+				ten: tenDuong(d),
+				status: res.status,
+				message: String(res.body?.message ?? ""),
+			};
+		},
+		lo,
+	);
 }
 
 function biChanVeTuCach(h: HangMaTran): boolean {
@@ -358,6 +383,57 @@ afterAll(async () => {
 	await app.close();
 });
 
+async function luotCungLuc(lo?: number) {
+	const ds = Array.from({ length: SO_PHAN_TU_GIA }, (_, i) => i);
+	let dangChay = 0;
+	let lonNhat = 0;
+	const kq = await theoLo(
+		ds,
+		async (x) => {
+			dangChay += 1;
+			lonNhat = Math.max(lonNhat, dangChay);
+			await Bun.sleep(1);
+			dangChay -= 1;
+			return x;
+		},
+		lo,
+	);
+	return { ds, kq, lonNhat };
+}
+
+async function coPoolThat(): Promise<number> {
+	const hang = await Promise.all(
+		Array.from(
+			{ length: SO_TRUY_VAN_DO_POOL },
+			() =>
+				db.$queryRaw<
+					Array<{ pid: number }>
+				>`SELECT pg_backend_pid() AS pid FROM pg_sleep(${NGU_DO_POOL_GIAY}::float8)`,
+		),
+	);
+	return new Set(hang.map(([h]) => h?.pid)).size;
+}
+
+test("theo-lo: bo chia lo mac dinh chay tung luot, LO_SONG_SONG chay dung so luot da khai", async () => {
+	const tuanTu = await luotCungLuc();
+	expect(tuanTu.lonNhat, "bo chia lo mac dinh chay nhieu hon mot luot").toBe(1);
+	expect(tuanTu.kq, "bo chia lo mac dinh lech thu tu").toEqual(tuanTu.ds);
+	const songSong = await luotCungLuc(LO_SONG_SONG);
+	expect(
+		songSong.lonNhat,
+		"bo chia lo khong chay dung LO_SONG_SONG luot cung luc",
+	).toBe(LO_SONG_SONG);
+	expect(songSong.kq, "bo chia lo song song lech thu tu").toEqual(songSong.ds);
+	const coPool = await coPoolThat();
+	expect(coPool, "phep do pool chua lam day pool").toBeLessThan(
+		SO_TRUY_VAN_DO_POOL,
+	);
+	expect(
+		LO_SONG_SONG + KET_NOI_DU_TRU,
+		"LO_SONG_SONG lan vao pool pg",
+	).toBeLessThanOrEqual(coPool);
+});
+
 describe("go-la-cat-quyen", () => {
 	let chu: string;
 	let bi: string;
@@ -454,14 +530,23 @@ describe("go-la-cat-quyen", () => {
 			await khoaBat(khoa.id),
 			"khoa phai con bat de 403 khong den tu tang khoa",
 		).toBe(true);
+		const hangTrpc = await maTranTrpc(dau, LO_SONG_SONG);
 		expect(
-			hangLot(await maTranTrpc(dau), laNgoaiLeTrpc),
+			hangTrpc.map((h) => h.ten),
+			"ma tran tRPC song song lech danh sach thu tuc",
+		).toEqual(soThuTuc().map((t) => t.ten));
+		expect(
+			hangLot(hangTrpc, laNgoaiLeTrpc),
 			"tRPC: khoa con bat cua nguoi ngoai van qua duoc",
 		).toEqual([]);
-		const rest = await maTranRest(dau);
+		const rest = await maTranRest(dau, LO_SONG_SONG);
 		expect(rest.length, "ma tran REST rong hoac qua it").toBeGreaterThanOrEqual(
 			SAN_DUONG_REST,
 		);
+		expect(
+			rest.map((h) => h.ten),
+			"ma tran REST song song lech danh sach duong",
+		).toEqual(duongRest().map(tenDuong));
 		expect(
 			hangLot(rest, laNgoaiLeRest),
 			"REST: khoa con bat cua nguoi ngoai van qua duoc",

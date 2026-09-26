@@ -119,6 +119,13 @@ dựng bản sao riêng ở `CONG_SAO` (mặc định 3200) đúng vì lý do đ
 Cảnh cây mới với tới `APP_URL`. Một máy chủ api của cây khác ở `API_URL` vẫn lọt,
 và `bun run dev:session` thì luôn chạy trong cây đang xét bất kể `API_URL` trỏ đâu.
 
+Từ 26/09 phép đo màn không cần máy chủ dev dựng tay và không bao giờ ghi vào kho
+chung `crm`: `tien-de.mjs` thấy `DATABASE_URL` không phải kho dùng-một-lần thì tự
+chạy trong một phiên đo — kho `crm_<cây>_do` riêng, API và app của chính cây trên hai
+cổng tự do, dọn khi xong hay bị ngắt. Muốn cả làn dùng một phiên:
+`bun run do:man --chay "<làn>"`. Kho chung là của người; máy chủ dev chạy tay vẫn dùng
+nó. Chi tiết ở `docs/setup.md` mục «Screen measurements».
+
 Đẩy lên `origin` cần `http.version HTTP/1.1` (đã đặt trong git config của kho);
 HTTP/2 trả 400. `pre-push` chạy `check-types`, `lint`, `lint:slop`, `test`. Đừng
 `--no-verify` trừ khi có lý do nói được thành lời.

@@ -22,6 +22,8 @@
 		"db:seed": "turbo run db:seed",
 		"db:studio": "turbo run db:studio",
 		"db:test": "bun run --filter=@crm/db db:test",
+		"db:do": "bun run --filter=@crm/db db:do",
+		"do:man": "bun scripts/lan-do/phien-do.mjs",
 		"ui:capture": "node scripts/ui-capture.mjs"
 	},
 	"devDependencies": {

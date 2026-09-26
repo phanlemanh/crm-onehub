@@ -77,6 +77,14 @@ export class EnvironmentVariables {
 	SLACK_CLIENT_SECRET?: string;
 
 	@IsOptional()
+	@IsString()
+	RESEND_API_KEY?: string;
+
+	@IsOptional()
+	@IsString()
+	MAIL_FROM?: string;
+
+	@IsOptional()
 	@IsUrl({ require_tld: false })
 	API_URL?: string;
 

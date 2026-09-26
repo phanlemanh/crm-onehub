@@ -19,15 +19,17 @@
  * Mã thoát: trả NGUYÊN mã của lệnh răng. Đặt/dọn hỏng → mã 2 gọi tên, KHÔNG
  * chạy răng — hỏng tiền đề mà vẫn chấm là màu không tin được.
  */
-import { spawnSync } from "node:child_process";
-import { db } from "../../packages/db/src/client.ts";
-import {
-	readContextDevKey,
-	writeContextDevKey,
-} from "../../packages/db/src/settings.ts";
+import { spawn, spawnSync } from "node:child_process";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { isMeasureDatabase } from "../../packages/db/src/measure-database.ts";
+import { PHIEN_DO } from "./cau-hinh.mjs";
+import { HAU_TO, tenDb } from "./kho-nhap.mjs";
 
+const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const KHOA_LAN_DO = "lan-do-khong-phai-khoa-that";
-const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
+const NGUOI = process.env.NGUOI ?? PHIEN_DO.nguoi;
+const MA_NGAT = { SIGINT: 130, SIGTERM: 143, SIGHUP: 129 };
 const MIEN_LAN_DO = "lan-do.onehub.vn";
 const ANH_LAN_DO =
 	"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -41,6 +43,30 @@ const i = process.argv.indexOf("--chay");
 if (i === -1 || !process.argv[i + 1])
 	thoat(2, 'thiếu --chay "<lệnh răng>" — không có gì để chạy');
 const lenh = process.argv[i + 1];
+
+const kho = tenDb(process.env.DATABASE_URL ?? "");
+if (kho === null || !(isMeasureDatabase(kho) || kho.endsWith(HAU_TO))) {
+	console.log(
+		`-- tiền đề làn đo: kho "${kho ?? "?"}" không phải kho dùng-một-lần — chạy trong một phiên đo riêng`,
+	);
+	const trongPhien = `bun scripts/lan-do/tien-de.mjs --chay '${lenh.replace(/'/g, "'\\''")}'`;
+	const con = spawn(
+		"bun",
+		[join(GOC, "scripts/lan-do/phien-do.mjs"), "--chay", trongPhien],
+		{ cwd: GOC, stdio: "inherit" },
+	);
+	for (const tin of Object.keys(MA_NGAT)) process.on(tin, () => con.kill(tin));
+	const ma = await new Promise((xong) => {
+		con.on("error", () => xong(2));
+		con.on("exit", (m, tin) => xong(m ?? MA_NGAT[tin] ?? 2));
+	});
+	process.exit(ma);
+}
+
+const { db } = await import("../../packages/db/src/client.ts");
+const { readContextDevKey, writeContextDevKey } = await import(
+	"../../packages/db/src/settings.ts"
+);
 
 const truoc = await readContextDevKey(db);
 let daDat = false;
@@ -72,7 +98,10 @@ try {
 	}
 
 	if (nguoi.image === null) {
-		await db.user.update({ where: { email: NGUOI }, data: { image: ANH_LAN_DO } });
+		await db.user.update({
+			where: { email: NGUOI },
+			data: { image: ANH_LAN_DO },
+		});
 		daDatAnh = true;
 		const lai = await db.user.findUnique({
 			where: { email: NGUOI },
@@ -90,10 +119,17 @@ try {
 		daDatMien = true;
 		const lai = await db.trackedDomain.count({ where: { host: MIEN_LAN_DO } });
 		if (lai !== 1)
-			thoat(2, "đặt tên miền được phép xong nhưng đọc lại không thấy — không chấm");
-		console.log(`-- tiền đề làn đo: đã thêm tên miền được phép ${MIEN_LAN_DO} (sẽ dọn)`);
+			thoat(
+				2,
+				"đặt tên miền được phép xong nhưng đọc lại không thấy — không chấm",
+			);
+		console.log(
+			`-- tiền đề làn đo: đã thêm tên miền được phép ${MIEN_LAN_DO} (sẽ dọn)`,
+		);
 	} else {
-		console.log("-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng");
+		console.log(
+			"-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng",
+		);
 	}
 
 	const ra = spawnSync("bash", ["-lc", lenh], { stdio: "inherit" });
@@ -126,7 +162,9 @@ try {
 		await db.trackedDomain.deleteMany({ where: { host: MIEN_LAN_DO } });
 		const con = await db.trackedDomain.count({ where: { host: MIEN_LAN_DO } });
 		if (con !== 0) {
-			console.error("tien-de: DỌN HỎNG — tên miền được phép của làn đo vẫn còn");
+			console.error(
+				"tien-de: DỌN HỎNG — tên miền được phép của làn đo vẫn còn",
+			);
 			process.exitCode = 2;
 		} else {
 			console.log("-- tiền đề làn đo: đã dọn tên miền được phép");

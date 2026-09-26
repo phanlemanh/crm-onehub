@@ -1,4 +1,4 @@
-import { auth } from "@crm/auth";
+import { auth, xuLyXacThuc } from "@crm/auth";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule as BetterAuthModule } from "@thallesp/nestjs-better-auth";
@@ -55,7 +55,10 @@ import { ZaloModule } from "./zalo/zalo.module";
 		AppCacheModule,
 		DatabaseModule,
 		CrmModule,
-		BetterAuthModule.forRoot({ auth, middleware: logAuthRoute }),
+		BetterAuthModule.forRoot({
+			auth: { ...auth, handler: xuLyXacThuc },
+			middleware: logAuthRoute,
+		}),
 		AuthModule,
 		HealthModule,
 		TrpcModule,

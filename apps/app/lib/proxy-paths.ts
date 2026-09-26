@@ -1,4 +1,9 @@
-export const ANONYMOUS: readonly string[] = ["/t", "/proto", "/dat-mat-khau"];
+export const ANONYMOUS: readonly string[] = [
+	"/t",
+	"/proto",
+	"/dat-mat-khau",
+	"/quen-mat-khau",
+];
 
 export function isUnder(pathname: string, prefix: string): boolean {
 	return pathname === prefix || pathname.startsWith(`${prefix}/`);

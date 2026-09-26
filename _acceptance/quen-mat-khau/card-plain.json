@@ -1,0 +1,110 @@
+{
+  "feature_plain": "Người dùng quên mật khẩu tự xin được liên kết đặt lại qua thư, mà cửa này không lộ địa chỉ nào có tài khoản và không để một người dội làm chặn cả công ty.",
+  "decisions": [
+    {
+      "id": "E20",
+      "q": "Chữ trên các màn và hai lá thư đọc tự nhiên, không lộ tài khoản?",
+      "why": "Hội đồng ba người chấm đề xuất ĐẠT ở round 2; chữ không đổi từ đó nên các round sau giữ kết quả."
+    }
+  ],
+  "scope_plain": "Chưa cắt phiên cũ tức thì khi đổi mật khẩu, chưa giới hạn theo hộp thư nhận, chưa huỷ liên kết cũ khi xin liên kết mới, chưa có thư HTML; cắm khoá và xác minh tên miền gửi là việc vận hành.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {
+      "id": "d-20260925T211911Z-1",
+      "p": "Đã chọn gửi thư ở nền bằng cơ chế chạy nền của Vercel — đổi lại thêm một thư viện nhỏ."
+    },
+    {
+      "id": "d-20260925T211911Z-2",
+      "p": "Đã chọn gửi thư thẳng từ máy chủ xác thực, có ghi ngoại lệ trong luật API — đổi lại một dịch vụ ngoài được gọi từ máy chủ."
+    },
+    {
+      "id": "d-20260925T211911Z-3",
+      "p": "Đã chọn đọc cấu hình thư mỗi lần dùng — đổi lại khi thư tắt vẫn ghi một liên kết không đi đâu và tự hết hạn."
+    },
+    {
+      "id": "d-20260925T211911Z-4",
+      "p": "Đã chọn huỷ mọi liên kết còn treo khi đặt mật khẩu xong — đổi lại thêm một bước xoá."
+    },
+    {
+      "id": "d-20260925T211911Z-5",
+      "p": "Tiêu đề trang xin liên kết tự vẽ giống trang đặt mật khẩu — đổi lại có hai bản tiêu đề giống nhau."
+    },
+    {
+      "id": "d-20260925T211911Z-6",
+      "p": "KHÔNG làm phiên thiết kế trước Cổng Phạm vi — đổi lại anh duyệt giao diện bằng chữ, ảnh thật có ở vòng chấm."
+    },
+    {
+      "id": "d-20260925T211911Z-7",
+      "p": "KHÔNG giới hạn theo hộp thư nhận — đổi lại nhiều nơi gửi vẫn dội được hộp thư của một người."
+    },
+    {
+      "id": "d-20260925T211911Z-8",
+      "p": "KHÔNG đo chênh lệch vài mili-giây giữa có và không có tài khoản — mức che của thư viện xác thực."
+    },
+    {
+      "id": "d-20260925T213839Z-9",
+      "p": "Giao bằng PR mới, để PR #104 của Tuan Do Viet nguyên như cũ."
+    },
+    {
+      "id": "d-20260925T214656Z-11",
+      "p": "Liên kết «Quên mật khẩu?» dùng thành phần liên kết chữ của thư viện giao diện thay cho nút kiểu liên kết — chữ thẳng lề ô nhập."
+    },
+    {
+      "id": "d-20260925T214656Z-12",
+      "p": "Form nhận hàm gửi qua một tham số để test được — đổi lại một tham số chỉ test dùng."
+    },
+    {
+      "id": "d-20260925T221621Z-13",
+      "p": "Anh duyệt kế hoạch sáu phần việc tại cổng duyệt kế hoạch."
+    },
+    {
+      "id": "d-20260925T222538Z-14",
+      "p": "Hai phép đo ban đầu xanh cả khi hỏng; đã làm chặt lại để chúng đỏ thật."
+    },
+    {
+      "id": "d-20260925T222538Z-15",
+      "p": "Phát hiện thư viện xoá bộ đếm cũ hơn 60 giây, nên lời hứa 15 phút không giữ được — đã chuyển anh quyết."
+    },
+    {
+      "id": "d-20260925T235803Z-16",
+      "p": "KHÔNG giữ cửa sổ 15 phút — hạ về ba lượt mỗi 60 giây theo anh chọn."
+    },
+    {
+      "id": "d-20260925T235901Z-17",
+      "p": "Anh duyệt sửa tiêu chí quá lượt sau Cổng Phạm vi (hướng b)."
+    },
+    {
+      "id": "d-20260926T003546Z-18",
+      "p": "Anh chọn cho proxy ký địa chỉ người gọi, máy chủ chỉ tin địa chỉ đã ký — mỗi người một bộ đếm, cả đăng nhập."
+    },
+    {
+      "id": "d-20260926T004447Z-19",
+      "p": "Đã sửa việc mọi người chung một bộ đếm, và bắt thêm một lỗi treo do chính bản sửa gây ra."
+    },
+    {
+      "id": "d-20260926T010913Z-20",
+      "p": "Anh chọn sửa ngay lỗi làm sập máy chủ khi người gọi ngắt giữa chừng, trong round cuối."
+    },
+    {
+      "id": "d-20260926T011154Z-21",
+      "p": "Lớp kiểm địa chỉ thôi đọc thân yêu cầu, chỉ sửa header — gỡ lỗi sập và lỗi treo."
+    },
+    {
+      "id": "d-20260926T013539Z-22",
+      "p": "Anh từng chọn trình Cổng Bằng chứng trên round 3 bị cắt — đã thay bằng hướng R ngay sau đó."
+    },
+    {
+      "id": "d-20260926T024231Z-23",
+      "p": "Anh chọn hướng R: chạy lại round 3 một lần vì bộ test bị công cụ cắt, chỉ đổi cách đọc kết quả, không nới thước."
+    },
+    {
+      "id": "d-20260926T025948Z-24",
+      "p": "Lượt chạy lại tìm ra một ca đỏ thật (proxy thiếu khoá vẫn ký do giá trị mặc định) — đã sửa, hai chiều đo qua bộ chạy gốc."
+    },
+    {
+      "id": "d-20260926T031222Z-25",
+      "p": "Anh cho chạy round 4, vượt trần ba round, với điều kiện là vòng cuối tuyệt đối."
+    }
+  ]
+}
