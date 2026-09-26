@@ -34,6 +34,7 @@ import {
 	type CachXem,
 	type DonChonOkr,
 	khoaDon,
+	locOkr,
 	okrParsers,
 } from "../okr-search-params";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
@@ -140,12 +141,7 @@ export function TheoDonVi() {
 	const mt = okrToanCanhMessages(locale);
 	const trpc = useTRPC();
 	const [url, datUrl] = useQueryStates(okrParsers);
-	const loc: LocOkrGiaTri = {
-		phuTrach: url[SEARCH_PARAM.okr.phuTrach],
-		loai: url[SEARCH_PARAM.okr.loai],
-		trangThai: url[SEARCH_PARAM.okr.trangThai],
-		tuTin: url[SEARCH_PARAM.okr.tuTin],
-	};
+	const loc: LocOkrGiaTri = locOkr(url);
 	const giaTriLoc = <T extends string>(v: T[]) => (v.length > 0 ? v : null);
 	const doiLoc = (thay: Partial<LocOkrGiaTri>) =>
 		void datUrl({
@@ -311,6 +307,9 @@ export function TheoDonVi() {
 										dem={byUnit.data?.facetCounts}
 										doiLoc={doiLoc}
 										loc={loc}
+										tenNguoi={
+											new Map(cay.data.people.map((p) => [p.id, p.name]))
+										}
 									/>
 								) : null}
 								{byUnit.data?.canEdit || quanTri ? (

@@ -65,14 +65,37 @@ export function chuanLoc(
 	}
 }
 
+export function luaChonPhuTrach(
+	dem: DemMatLoc["phuTrach"] | undefined,
+	chon: string[],
+	tenNguoi: ReadonlyMap<string, string>,
+	nguoiDaRoi: string,
+): { value: string; label: string }[] {
+	const coDem = new Set((dem ?? []).map((p) => p.value));
+	return [
+		...(dem ?? []).map((p) => ({
+			value: p.value,
+			label: `${p.name} · ${p.count}`,
+		})),
+		...chon
+			.filter((id) => !coDem.has(id))
+			.map((id) => ({
+				value: id,
+				label: `${tenNguoi.get(id) ?? nguoiDaRoi} · 0`,
+			})),
+	];
+}
+
 export function LocOkr({
 	dem,
 	loc,
+	tenNguoi,
 	doiLoc,
 	boLoc,
 }: {
 	dem: DemMatLoc | undefined;
 	loc: LocOkrGiaTri;
+	tenNguoi: ReadonlyMap<string, string>;
 	doiLoc: (thay: Partial<LocOkrGiaTri>) => void;
 	boLoc: () => void;
 }) {
@@ -87,22 +110,16 @@ export function LocOkr({
 	} satisfies Record<MucTuTin, string>;
 	const soCua = (ds: { value: string; count: number }[], v: string) =>
 		ds.find((d) => d.value === v)?.count ?? 0;
-	const nguoi = new Map(
-		(dem?.phuTrach ?? []).map((p) => [p.value, p] as const),
-	);
 	const facets: DataTableFacet[] = [
 		{
 			id: "phuTrach",
 			label: mt.loc.phuTrach,
-			options: [
-				...(dem?.phuTrach ?? []).map((p) => ({
-					value: p.value,
-					label: `${p.name} · ${p.count}`,
-				})),
-				...loc.phuTrach
-					.filter((id) => !nguoi.has(id))
-					.map((id) => ({ value: id, label: `${id} · 0` })),
-			],
+			options: luaChonPhuTrach(
+				dem?.phuTrach,
+				loc.phuTrach,
+				tenNguoi,
+				mt.loc.nguoiDaRoi,
+			),
 		},
 		{
 			id: "loai",

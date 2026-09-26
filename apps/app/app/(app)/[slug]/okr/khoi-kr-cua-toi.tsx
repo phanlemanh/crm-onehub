@@ -32,6 +32,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { ThanhTienDo } from "./tien-do-kr";
+import { LoiXem } from "./toan-canh/toan-canh";
 
 type DongKr = RouterOutputs["okr"]["khoiCuaToi"]["kr"][number];
 
@@ -100,8 +101,9 @@ export function KhoiKrCuaToi({
 		),
 	);
 	const laNguoi = userId !== undefined;
+	const loi = (cycles.isError && ky === null) || khoi.isError;
 
-	if (ky === null && !cycles.isPending) return null;
+	if (!loi && ky === null && !cycles.isPending) return null;
 	const cot: SimpleTableColumn[] = [
 		{ id: "kr", header: mt.khoiCuaToi.cotKr },
 		{ id: "tien-do", header: mt.hopTuan.cotTienDo, width: "w-[34%]" },
@@ -118,7 +120,7 @@ export function KhoiKrCuaToi({
 		<Card
 			data-khoi="okr-cua-toi"
 			data-trang-thai={
-				khoi.data === undefined
+				loi || khoi.data === undefined
 					? undefined
 					: laNguoi
 						? rong
@@ -151,9 +153,16 @@ export function KhoiKrCuaToi({
 					</CardAction>
 				)}
 			</CardHeader>
-			{khoi.isError ? (
+			{loi ? (
 				<CardContent>
-					<p className="text-muted-foreground text-sm">{mt.khoiCuaToi.loi}</p>
+					<LoiXem
+						cau={laNguoi ? mt.khoiCuaToi.loiNguoi : mt.khoiCuaToi.loi}
+						thuLai={() => {
+							if (cycles.isError) void cycles.refetch();
+							if (khoi.isError) void khoi.refetch();
+						}}
+						trangThai={laNguoi ? "ST-nguoi-loi" : "ST-tongquan-loi"}
+					/>
 				</CardContent>
 			) : khoi.data === undefined ? (
 				<CardContent>
@@ -166,7 +175,7 @@ export function KhoiKrCuaToi({
 					))}
 				</SimpleTable>
 			)}
-			{khoi.data && khoi.data.tong > khoi.data.kr.length ? (
+			{!loi && khoi.data && khoi.data.tong > khoi.data.kr.length ? (
 				<CardFooter>
 					<span className="text-muted-foreground text-xs">
 						{mt.khoiCuaToi.conNua(String(khoi.data.tong - khoi.data.kr.length))}

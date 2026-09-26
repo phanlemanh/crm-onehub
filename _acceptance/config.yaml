@@ -632,6 +632,13 @@ executors:
     krdn_mau_that: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-node-khoa-rieng.dom.tsx -t mau-that"
     krdn_ma_tran: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-node-khoa-rieng.dom.tsx -t ma-tran"
     krdn_bo_bat: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-node-khoa-rieng.dom.tsx -t bo-bat-con-song"
+    nso_khoi_chu_ky_loi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t chu-ky-loi'
+    nso_khoi_thu_lai: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t thu-lai'
+    nso_khoi_kr_loi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t kr-loi'
+    nso_khoi_doi_chung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t doi-chung'
+    nso_loc_ten: 'cd apps/app && bun test test/loc-okr-ten.spec.ts'
+    nso_tai_truoc: 'cd apps/app && bun test test/loc-okr-tai-truoc.spec.ts'
+    nso_khoi_tai_lai_nen: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t tai-lai-nen'
     hcz_duong_chinh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t duong-chinh"'
     hcz_cung_phien: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts test/zalo-lenh.spec.ts -t cung-phien"'
     hcz_tu_choi_vai: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t tu-choi-vai"'
@@ -1103,6 +1110,7 @@ executors:
     kcb_con_thanh_vien: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"'
     kcb_khong_noi_tran: "bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs khong-noi-tran"
     kcb_tuan_tu: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs bo-qua-lo && bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs tuan-tu"'
+    nso_do_man: 'NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3960} API_URL=${API_URL:-http://localhost:3961} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
