@@ -5,7 +5,7 @@ slug: cap-nhat-tuan-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: approved
+status: implemented
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-25T15:14:35Z
 design_doc: docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md
