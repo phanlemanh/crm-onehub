@@ -1103,7 +1103,9 @@ describe("loi-tac-tu", () => {
 		const w = await guiWebhook("ZA", "Câu mới", { eve });
 		await eve.xong();
 		await suKien("session.failed", {}, "ZA");
-		expect((await hangCua(w.messageId))?.ketQua, "cau moi van dang-hoi").toBe("dang-hoi");
+		expect((await hangCua(w.messageId))?.ketQua, "cau moi van dang-hoi").toBe(
+			"dang-hoi",
+		);
 		expect(guiMayChu("ZA")).toEqual([]);
 	});
 });
