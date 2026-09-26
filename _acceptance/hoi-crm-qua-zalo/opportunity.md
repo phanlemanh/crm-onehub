@@ -123,6 +123,12 @@ này chỉ đo được sau hàng T**: chưa có `ZALO_BOT_TOKEN`/`ZALO_WEBHOOK_
 Vercel, chưa `db:deploy` hai migration Zalo, chưa có bot công ty. Mọi ngưỡng ở
 mục dưới tính từ ngày hàng T xong và tính năng bật ở production.
 
+> Ghi chú 26/09 tối (vòng `hoan-thien-hoi-crm-qua-zalo`): tiền đề hàng T ở trên sai.
+> Khoá bot nằm trong cài đặt dán trên màn hình (không cần biến `ZALO_*`), và build API
+> production tự chạy `prisma migrate deploy`. #158 lên production 26/09 20:48 ngay sau
+> merge; log 20:54 có câu hỏi thật. Đồng hồ 14 ngày của các ngưỡng dưới tính từ
+> 26/09 — đo lần đầu 10/10.
+
 ## Giả định chốt sinh tử
 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
