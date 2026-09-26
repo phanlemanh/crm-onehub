@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c4e52e1a894981ff25acb05c23c64bfaacb5f447
+verified_commit: 9daa3223456892b4bd41704cee2b5376834f0292
 human_signoff:
 ---
 
@@ -92,3 +92,7 @@ none — vòng này không có eval nào chạy nhiều lần (runs > 1); mọi 
 
 Round 1: E1–E4 và bốn lệnh suite đều chạy sạch (exit 0, không lệch baseline), nhưng review phát hiện hai lỗi Trong hợp đồng ở AC-4 (`_acceptance/khoa-rieng-dien-node/rang/khong-hoi-quy.mjs`): bộ loại «quét lồng» đọc chữ trong mã nguồn thay vì hành vi lệnh nên loại nhầm một ca đang đỏ trên HEAD/xanh trên B, và các lệnh git ngoài try/finally thoát mã 1 giống một hồi quy thật — verdict REJECT.
 Round 2: chủ kho quyết bỏ AC-4/E4 (răng không-hồi-quy của các hồ sơ đã ký khác) thay vì vá `khong-hoi-quy.mjs`, và sửa lại chữ mô tả E2 trong `evals.yaml` cho khớp ma trận/test thật (11 ca, 44 khẳng định); mã của E1–E3 không đổi so với round trước. E1–E3 cùng bốn lệnh suite chạy lại sạch, exit 0, không lệch baseline — verdict PASS.
+
+### Re-pin lần 1 — 2026-09-26, do gộp onehub sau #144 trước khi merge
+run_id: repin-20260926T002546Z-69866
+sha: 9daa3223456892b4bd41704cee2b5376834f0292 · suites: 4 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng
