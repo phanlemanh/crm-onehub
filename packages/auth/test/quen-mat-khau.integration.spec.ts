@@ -478,7 +478,7 @@ describe("bao-da-doi", () => {
 		}
 		await choNen();
 		expect(daGui.map((t) => t.to[0])).toEqual([nguoi.email]);
-		expect(daGui[0]?.subject).toBe("Mật khẩu CRM OneHub vừa được đổi");
+		expect(daGui[0]?.subject).toBe("Mật khẩu OneHub Center vừa được đổi");
 	});
 
 	test("duoi-nguong: dat bi tu choi thi khong co thu bao", async () => {

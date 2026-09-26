@@ -49,8 +49,8 @@ const CHU = {
 	thuLai: "Thử lại",
 	kieuLa:
 		"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
-	emailLa: "Email này chưa là thành viên CRM",
-	daCo: "đã có trong CRM",
+	emailLa: "Email này chưa là thành viên OneHub Center",
+	daCo: "đã có trong OneHub Center",
 	tomTat: "3 dòng hợp lệ · 2 dòng hỏng",
 	nutGhi: "Ghi 3 dòng · bỏ 2 dòng hỏng",
 	khongGhi: "Không có dòng nào để ghi",

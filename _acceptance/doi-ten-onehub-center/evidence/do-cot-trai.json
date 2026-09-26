@@ -1,0 +1,142 @@
+[
+	{
+		"ma": "1440/light-card",
+		"dat": true,
+		"chu": "1440/light: khong co card trong cot trai"
+	},
+	{
+		"ma": "1440/light-neo",
+		"dat": true,
+		"chu": "1440/light: dong gioi thieu P 48px (can P >= 36px)"
+	},
+	{
+		"ma": "1440/light-mep",
+		"dat": true,
+		"chu": "1440/light: lech mep voi logo — khoi 0px, dong neo 0px (toi da 1)"
+	},
+	{
+		"ma": "1440/light-rong",
+		"dat": true,
+		"chu": "1440/light: khoi rong 576px (toi da 576)"
+	},
+	{
+		"ma": "1440/light-h1",
+		"dat": true,
+		"chu": "1440/light: 1 h1 (can 1)"
+	},
+	{
+		"ma": "1440/dark-card",
+		"dat": true,
+		"chu": "1440/dark: khong co card trong cot trai"
+	},
+	{
+		"ma": "1440/dark-neo",
+		"dat": true,
+		"chu": "1440/dark: dong gioi thieu P 48px (can P >= 36px)"
+	},
+	{
+		"ma": "1440/dark-mep",
+		"dat": true,
+		"chu": "1440/dark: lech mep voi logo — khoi 0px, dong neo 0px (toi da 1)"
+	},
+	{
+		"ma": "1440/dark-rong",
+		"dat": true,
+		"chu": "1440/dark: khoi rong 576px (toi da 576)"
+	},
+	{
+		"ma": "1440/dark-h1",
+		"dat": true,
+		"chu": "1440/dark: 1 h1 (can 1)"
+	},
+	{
+		"ma": "1920/light-card",
+		"dat": true,
+		"chu": "1920/light: khong co card trong cot trai"
+	},
+	{
+		"ma": "1920/light-neo",
+		"dat": true,
+		"chu": "1920/light: dong gioi thieu P 60px (can P >= 36px)"
+	},
+	{
+		"ma": "1920/light-mep",
+		"dat": true,
+		"chu": "1920/light: lech mep voi logo — khoi 0px, dong neo 0px (toi da 1)"
+	},
+	{
+		"ma": "1920/light-rong",
+		"dat": true,
+		"chu": "1920/light: khoi rong 576px (toi da 576)"
+	},
+	{
+		"ma": "1920/light-h1",
+		"dat": true,
+		"chu": "1920/light: 1 h1 (can 1)"
+	},
+	{
+		"ma": "1920/dark-card",
+		"dat": true,
+		"chu": "1920/dark: khong co card trong cot trai"
+	},
+	{
+		"ma": "1920/dark-neo",
+		"dat": true,
+		"chu": "1920/dark: dong gioi thieu P 60px (can P >= 36px)"
+	},
+	{
+		"ma": "1920/dark-mep",
+		"dat": true,
+		"chu": "1920/dark: lech mep voi logo — khoi 0px, dong neo 0px (toi da 1)"
+	},
+	{
+		"ma": "1920/dark-rong",
+		"dat": true,
+		"chu": "1920/dark: khoi rong 576px (toi da 576)"
+	},
+	{
+		"ma": "1920/dark-h1",
+		"dat": true,
+		"chu": "1920/dark: 1 h1 (can 1)"
+	},
+	{
+		"ma": "light-nen",
+		"dat": true,
+		"chu": "light: do sang nen trang 0.956"
+	},
+	{
+		"ma": "light-cham",
+		"dat": true,
+		"chu": "light: cham khac mau nen"
+	},
+	{
+		"ma": "light-duong-noi",
+		"dat": true,
+		"chu": "light: duong noi khac mau nen"
+	},
+	{
+		"ma": "light-tuong-phan",
+		"dat": true,
+		"chu": "light: 13 chu, truot AA: -"
+	},
+	{
+		"ma": "dark-nen",
+		"dat": true,
+		"chu": "dark: do sang nen trang 0.000"
+	},
+	{
+		"ma": "dark-cham",
+		"dat": true,
+		"chu": "dark: cham khac mau nen"
+	},
+	{
+		"ma": "dark-duong-noi",
+		"dat": true,
+		"chu": "dark: duong noi khac mau nen"
+	},
+	{
+		"ma": "dark-tuong-phan",
+		"dat": true,
+		"chu": "dark: 13 chu, truot AA: -"
+	}
+]

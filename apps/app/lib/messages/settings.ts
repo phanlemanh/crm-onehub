@@ -37,11 +37,11 @@ const en = {
 	},
 	congTy: {
 		tieuDe: "Workspace",
-		moTa: "The name and website of the company using this CRM.",
+		moTa: "The name and website of the company using OneHub Center.",
 		luu: "Save",
 		ten: "Name",
 		tenGoiY: "Acme Inc.",
-		tenMoTa: "Shown wherever the CRM refers to your own company.",
+		tenMoTa: "Shown wherever OneHub Center refers to your own company.",
 		website: "Website",
 		websiteTienTo: "https://",
 		websiteGoiY: "acme.com",
@@ -77,7 +77,7 @@ const en = {
 	},
 	nghienCuu: {
 		tieuDe: "Company research",
-		moTa: "Enter your Context API key so our agents can research every company in the CRM.",
+		moTa: "Enter your Context API key so our agents can research every company in OneHub Center.",
 		nhan: "Context API key",
 		goiY: "Paste the key",
 		daCam: "Connected",
@@ -97,7 +97,7 @@ const en = {
 		moTa: "What your numbers are reported in, and how the other currencies get there.",
 		dongBaoCao: "Reporting currency",
 		dongBaoCaoMoTa:
-			"Every total, chart and average in the CRM is expressed in this currency. Each deal keeps the currency it was sold in.",
+			"Every total, chart and average in OneHub Center is expressed in this currency. Each deal keeps the currency it was sold in.",
 		baoCaoBang: "Report totals in",
 		doiDuoc:
 			"Changing this re-converts every deal at today's rates. Figures already reported will move.",
@@ -178,11 +178,11 @@ const vi = {
 	},
 	congTy: {
 		tieuDe: "Không gian làm việc",
-		moTa: "Tên và website của công ty đang dùng CRM này.",
+		moTa: "Tên và website của công ty đang dùng OneHub Center.",
 		luu: "Lưu",
 		ten: "Tên",
 		tenGoiY: "Acme Inc.",
-		tenMoTa: "Hiện ở mọi chỗ CRM nhắc tới công ty bạn.",
+		tenMoTa: "Hiện ở mọi chỗ OneHub Center nhắc tới công ty bạn.",
 		website: "Website",
 		websiteTienTo: "https://",
 		websiteGoiY: "acme.com",
@@ -218,7 +218,7 @@ const vi = {
 	},
 	nghienCuu: {
 		tieuDe: "Nghiên cứu công ty",
-		moTa: "Nhập khoá API Context để tác nhân nghiên cứu được mọi công ty trong CRM.",
+		moTa: "Nhập khoá API Context để tác nhân nghiên cứu được mọi công ty trong OneHub Center.",
 		nhan: "Khoá API Context",
 		goiY: "Dán khoá vào đây",
 		daCam: "Đã cắm",
@@ -238,7 +238,7 @@ const vi = {
 		moTa: "Số của bạn báo cáo bằng đồng nào, và các đồng khác quy về đó ra sao.",
 		dongBaoCao: "Đồng tiền báo cáo",
 		dongBaoCaoMoTa:
-			"Mọi tổng, biểu đồ và trung bình trong CRM đều tính bằng đồng này. Mỗi thoả thuận vẫn giữ đồng tiền lúc chốt.",
+			"Mọi tổng, biểu đồ và trung bình trong OneHub Center đều tính bằng đồng này. Mỗi thoả thuận vẫn giữ đồng tiền lúc chốt.",
 		baoCaoBang: "Báo cáo tổng bằng",
 		doiDuoc:
 			"Đổi cái này thì mọi thoả thuận quy đổi lại theo tỷ giá hôm nay. Con số đã báo cáo sẽ dịch chuyển.",

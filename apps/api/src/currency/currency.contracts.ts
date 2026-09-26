@@ -6,7 +6,7 @@ export const currencyCode = z
 	.string()
 	.trim()
 	.length(3, "A currency code is three letters, like USD.")
-	.refine(isCurrencyCode, "That is not a currency this CRM can convert.");
+	.refine(isCurrencyCode, "That is not a currency OneHub Center can convert.");
 
 export const setReportingCurrencyInput = z.object({
 	currency: currencyCode,

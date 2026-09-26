@@ -206,8 +206,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"Bạn đã xin quá nhiều lần. Chờ 12 phút rồi thử lại.",
 			],
 			"auth:quenMatKhau.xong.description": [
-				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
-				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+				"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+				"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
 			],
 			"auth:datMatKhau.toiThieu": [
 				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
@@ -292,8 +292,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"12 và mọi thứ gắn với công ty này mất theo.",
 			],
 			"record-sheet:company.deleteContacts": [
-				"1 làm việc ở đó vẫn ở lại CRM, nhưng không thuộc công ty nào.",
-				"12 làm việc ở đó vẫn ở lại CRM, nhưng không thuộc công ty nào.",
+				"1 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
+				"12 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
 			],
 			"record-sheet:company.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
 			"record-sheet:company.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
@@ -342,8 +342,8 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"record-sheet:deal.created": ["Đã tạo 1.", "Đã tạo 12."],
 			"record-sheet:deal.deleteWarning": [
-				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại CRM.",
-				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại CRM.",
+				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
+				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
 			],
 			"crm:timeline.composer.log": ["Ghi 1", "Ghi 12"],
 			"crm:timeline.messages": ["1 thư", "12 thư"],

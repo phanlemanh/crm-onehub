@@ -76,7 +76,7 @@ export const OKR = {
 		},
 		traoDoi: {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
-			nguoiKhongCon: "Người không còn trong CRM",
+			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
 		},
 		chuyen: {
@@ -127,10 +127,10 @@ export const OKR = {
 				"Tên mục tiêu, tên KR phải dài 3–200 ký tự; đơn vị đo tối đa 24 ký tự",
 			kieuLa:
 				"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
-			emailLa: "Email này chưa là thành viên CRM",
+			emailLa: "Email này chưa là thành viên OneHub Center",
 			thieuDich: "Thiếu đích",
 			soLa: "Khởi điểm hoặc đích không phải số",
-			daCo: "Mục tiêu này đã có trong CRM cho đơn vị và chu kỳ này",
+			daCo: "Mục tiêu này đã có trong OneHub Center cho đơn vị và chu kỳ này",
 			loQuaDai: (n: number) => `Lô có quá ${n} dòng — chia nhỏ rồi nhập lại.`,
 			loRong: "Không có dòng nào để nhập.",
 			khongDongHopLe: "Không có dòng hợp lệ nào để ghi.",

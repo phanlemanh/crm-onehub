@@ -27,10 +27,10 @@ const fontMono = Geist_Mono({
 
 export const metadata: Metadata = {
 	title: {
-		default: "OneHub CRM",
-		template: "%s · OneHub CRM",
+		default: "OneHub Center",
+		template: "%s · OneHub Center",
 	},
-	description: "Customer Relationship Management for OneHub",
+	description: "OneHub Center: partners, 30-day plans and OKRs.",
 	icons: {
 		icon: [
 			{ url: "/favicon.svg", type: "image/svg+xml" },

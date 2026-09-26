@@ -167,8 +167,8 @@ export class WorkspaceService {
 			await this.agent.workspaceChanged(
 				website,
 				before?.website
-					? "The company using this CRM changed its website"
-					: "The company using this CRM said what its website is",
+					? "The company using OneHub Center changed its website"
+					: "The company using OneHub Center said what its website is",
 			);
 		}
 

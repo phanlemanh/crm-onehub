@@ -208,9 +208,9 @@ const en = {
 			phone: "Phone",
 		},
 		agentsPickUp: "Your agents will pick this up.",
-		shapesCompany: "This shapes every company in your CRM.",
-		shapesContact: "This shapes every contact in your CRM.",
-		shapesDeal: "This shapes every deal in your CRM.",
+		shapesCompany: "This shapes every company in OneHub Center.",
+		shapesContact: "This shapes every contact in OneHub Center.",
+		shapesDeal: "This shapes every deal in OneHub Center.",
 		createHint:
 			"Create dynamic fields that your agents can research and pre-fill.",
 		retry:
@@ -529,9 +529,9 @@ const vi = {
 			phone: "Số điện thoại",
 		},
 		agentsPickUp: "Tác nhân của bạn sẽ dùng trường này.",
-		shapesCompany: "Trường này áp cho mọi công ty trong CRM.",
-		shapesContact: "Trường này áp cho mọi cá nhân trong CRM.",
-		shapesDeal: "Trường này áp cho mọi thoả thuận trong CRM.",
+		shapesCompany: "Trường này áp cho mọi công ty trong OneHub Center.",
+		shapesContact: "Trường này áp cho mọi cá nhân trong OneHub Center.",
+		shapesDeal: "Trường này áp cho mọi thoả thuận trong OneHub Center.",
 		createHint: "Tạo trường động để tác nhân tra cứu và điền sẵn.",
 		retry:
 			"Trường của bạn vẫn còn. Thử lại sau một lát, trước khi tạo thêm gì mới.",
