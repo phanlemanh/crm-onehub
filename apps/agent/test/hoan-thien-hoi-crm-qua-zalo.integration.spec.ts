@@ -15,6 +15,7 @@ import { z } from "zod";
 import type { Evidence } from "../agent/lib/evidence";
 import { recordFact } from "../agent/lib/facts";
 import { writeField } from "../agent/lib/fields";
+import { gioNhac } from "../agent/lib/zalo-bot-xuong";
 import { ZALO } from "../agent/lib/zalo-config";
 import { nhanWebhook } from "../agent/lib/zalo-webhook";
 import { eveGia } from "./support/eve-gia";
@@ -319,5 +320,101 @@ describe("web-fetch", () => {
 		} finally {
 			goc.mockRestore();
 		}
+	});
+});
+
+const KHONG_CHU = [
+	{
+		ten: "sticker",
+		chon: {
+			eventName: "message.sticker.received",
+			text: null,
+			sticker: "stk-hth-1",
+		},
+	},
+	{
+		ten: "anh",
+		chon: {
+			eventName: "message.image.received",
+			text: null,
+			photoUrl: "https://example.test/a.jpg",
+		},
+	},
+	{
+		ten: "anh chu thich rong",
+		chon: {
+			eventName: "message.image.received",
+			text: null,
+			photoUrl: "https://example.test/b.jpg",
+			caption: "",
+		},
+	},
+	{
+		ten: "chu toan khoang trang",
+		chon: { eventName: "message.text.received", text: "   " },
+	},
+] as const;
+
+const STICKER = KHONG_CHU[0].chon;
+
+describe("khong-chu", () => {
+	test("khong-chu: moi tin khong chu nhan chiDocChu, khong mo phien, khong them hang", async () => {
+		const A = await gieoVai("Kc", "member");
+		await noiZalo(A.id, "ZK");
+		const eve = eveGia();
+		let dem = 0;
+		for (const { ten, chon } of KHONG_CHU) {
+			const truoc = await db.zaloHoi.count({ where: { crmUserId: A.id } });
+			const w = await guiTho("ZK", chon, eve);
+			await eve.xong();
+			expect(w.res.status, `${ten} 200`).toBe(200);
+			expect(w.tra(), `${ten} nhan chiDocChu`).toEqual([ZALO.loi.chiDocChu]);
+			expect(eve.send.length, `${ten} khong mo phien`).toBe(0);
+			expect(
+				await db.zaloHoi.count({ where: { crmUserId: A.id } }),
+				`${ten} khong them hang`,
+			).toBe(truoc);
+			dem += 1;
+		}
+		expect(dem).toBe(KHONG_CHU.length);
+		const cau = await guiTho("ZK", { text: "Thoả thuận nào sắp hạn?" }, eve);
+		await eve.xong();
+		expect(eve.send.length, "cau chu mo phien").toBe(1);
+		const hang = await db.zaloHoi.findUnique({
+			where: { messageId: cau.messageId },
+		});
+		expect(hang?.ketQua, "cau chu co hang dang-hoi").toBe("dang-hoi");
+	});
+
+	test("khong-chu: tin chi co emoji la tin chu", async () => {
+		const A = await gieoVai("Ke", "member");
+		await noiZalo(A.id, "ZE");
+		const eve = eveGia();
+		const w = await guiTho("ZE", { text: "👍" }, eve);
+		await eve.xong();
+		expect(w.tra(), "emoji khong nhan chiDocChu").not.toContain(
+			ZALO.loi.chiDocChu,
+		);
+		expect(eve.send.length, "emoji mo phien").toBe(1);
+	});
+
+	test("khong-chu: nguoi chua noi va duong luat cu giu nguyen", async () => {
+		const B = await guiTho("ZB", STICKER, eveGia());
+		expect(B.tra(), "chua noi nhan huong dan").toEqual([ZALO.loi.huongDan]);
+		const A = await gieoVai("Kd", "member");
+		await noiZalo(A.id, "ZD");
+		const cu = await guiTho("ZD", STICKER, null);
+		expect(cu.tra(), "luat cu tra daNoiRoi").toEqual([
+			`${ZALO.loi.daNoiRoi(A.name, gioNhac())} ${ZALO.loi.goiY}`,
+		]);
+	});
+
+	test("khong-chu: cau moi mot dong, co dau, dung tu dien", () => {
+		const cau = ZALO.loi.chiDocChu;
+		expect(cau).not.toContain("\n");
+		expect(cau.length).toBeLessThan(ZALO.tranKyTu);
+		expect(cau).toMatch(/[ăâđêôơưáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ]/iu);
+		expect(cau.toLowerCase()).not.toContain("trợ lý");
+		expect(cau.toLowerCase()).not.toContain("thông báo");
 	});
 });

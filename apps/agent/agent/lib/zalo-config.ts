@@ -126,5 +126,6 @@ export const ZALO = {
 		daMoi: "Đã bắt đầu cuộc trò chuyện mới.",
 		canHoiLai:
 			"Câu này tôi cần hỏi lại mới trả lời được, mà qua Zalo thì chưa hỏi lại được. Hỏi lại rõ hơn ở đây, hoặc hỏi trong CRM.",
+		chiDocChu: "Tôi chỉ đọc được tin chữ. Gõ câu hỏi của bạn ở đây nhé.",
 	},
 } as const;
