@@ -321,10 +321,10 @@ evals:
     layer: ui-observed
     cmd: config:executors.test.qmk_chup
     steps:
-      - "Cap cong: app 3300, api 3301 (cau hinh api-cay-nay / app-cay-nay trong .claude/launch.json). Cong 3300 la tai nguyen chung: chay canh-cay truoc; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. API phai khoi dong voi RESEND_API_KEY va MAIL_FROM gia (vd re_test_gia / 'CRM <no-reply@example.test>') de co bat."
-      - "Chay tu goc kho, O TIEN CANH, Bash timeout 600000, dung nguyen van lenh cua config:executors.test.qmk_chup."
-      - "rang/chup.mjs tu chan cay (canhCay qua APP_URL), khong dang nhap, chup vao _acceptance/quen-mat-khau/evidence/ (lenh config dat BANG_CHUNG): E18-dang-nhap-1440.png, E18-dang-nhap-390.png (co lien ket), E18-quen-trong-1440.png, E18-quen-trong-390.png, E18-da-gui-1440.png, E18-loi-1440.png (chan request-password-reset bang page.setRequestInterception -> abort), roi (sau gap-probe F5) xoa hang rateLimit cua khoa /request-password-reset trong DB dev truoc lan gui dau, gui form bon lan voi bon dia chi khac nhau KHONG chan mang va chup E18-qua-luot-1440.png, va doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; 2 = khong do duoc; 1 = co dong SAI."
-      - "Mo sau anh va doi chieu bang mat voi Expected."
+      - "Chay tu goc kho, O TIEN CANH, Bash timeout 600000, dung NGUYEN VAN lenh cua config:executors.test.qmk_chup. KHONG dung tay may chu: rang/luot-cong.sh tu xep hang bang khoa .acceptance-runs/quen-mat-khau/cong.khoa (E18 va E21 dung chung cong 3300/3301 nen chay tuan tu), tu kiem cong trong (bi giu thi ma 2 goi ten tien trinh, khong giet), tu dung api 3301 CO RESEND_API_KEY/MAIL_FROM gia va app 3300 cua cay nay, chay rang/chup.mjs --ca bat, roi tat dung nhom tien trinh cua no."
+      - "chup.mjs tu chan cay (canhCay qua APP_URL), khong dang nhap, chup vao _acceptance/quen-mat-khau/evidence/: E18-dang-nhap-1440.png, E18-dang-nhap-390.png, E18-quen-trong-1440.png, E18-quen-trong-390.png, E18-da-gui-1440.png, E18-loi-1440.png (chan request-password-reset), E18-qua-luot-1440.png (bon lan gui toi may chu that, bo dem da xoa truoc); doc chu nhin thay bang innerText, khong doc HTML."
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; 2 = khong do duoc; 1 = co dong SAI."
+      - "Mo cac anh va doi chieu bang mat voi Expected."
     inputs:
       - _acceptance/quen-mat-khau/evidence/
     paths:
@@ -333,6 +333,7 @@ evals:
       - "apps/app/lib/proxy-paths.ts"
       - "apps/app/lib/messages/auth.ts"
       - "_acceptance/quen-mat-khau/rang/chup.mjs"
+      - "_acceptance/quen-mat-khau/rang/luot-cong.sh"
     expected: |
       Nguoi chua dang nhap: /sign-in co lien ket "Quên mật khẩu?" ngay duoi o mat khau; bam
       vao thi URL la /quen-mat-khau (khong bi day ve /sign-in); form mot o mot nut nam trong
@@ -382,9 +383,8 @@ evals:
     layer: ui-observed
     cmd: config:executors.test.qmk_chup_tat
     steps:
-      - "Them sau gap-probe F3. Cung cong voi E18 (app 3300, api 3301, canh-cay truoc). Khoi dong LAI api 3301 KHONG co RESEND_API_KEY va MAIL_FROM (xoa khoi moi truong cua tien trinh, ke ca .env neu co khai), giu nguyen app 3300."
-      - "Chay tu goc kho, O TIEN CANH, dung nguyen van lenh cua config:executors.test.qmk_chup_tat (rang/chup.mjs --ca tat)."
-      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; 2 = khong do duoc; 1 = co dong SAI. Xong thi khoi dong lai api voi cau hinh cu."
+      - "Chay tu goc kho, O TIEN CANH, Bash timeout 600000, dung NGUYEN VAN lenh cua config:executors.test.qmk_chup_tat. rang/luot-cong.sh xep hang cung khoa voi E18, dung api 3301 KHONG co RESEND_API_KEY/MAIL_FROM va app 3300 cua cay nay, chay rang/chup.mjs --ca tat, roi tat dung nhom tien trinh cua no."
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; 2 = khong do duoc; 1 = co dong SAI."
     inputs:
       - _acceptance/quen-mat-khau/evidence/
     paths:
@@ -394,6 +394,7 @@ evals:
       - "apps/api/src/sso/**"
       - "packages/auth/src/env.ts"
       - "_acceptance/quen-mat-khau/rang/chup.mjs"
+      - "_acceptance/quen-mat-khau/rang/luot-cong.sh"
     expected: |
       Di het chuoi that: api khong co hai bien -> sso.signInOptions -> sign-in/page.tsx va
       quen-mat-khau/page.tsx. Script khang dinh, moi dong DUNG/SAI: o /sign-in so phan tu
