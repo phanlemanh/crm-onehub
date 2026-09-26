@@ -284,6 +284,74 @@ async function mucTieuCua(krId: string, ai: AiHoacCookie): Promise<KrRa> {
 	return ra;
 }
 
+async function nguonMayTrongObjective() {
+	camSheets();
+	const trigger = ungDung().get(AgentTriggerService);
+	const poke = spyOn(
+		trigger as unknown as { poke: () => void },
+		"poke",
+	).mockImplementation(() => undefined);
+	try {
+		const mt = await mucTieu("dang-chay", "nhap");
+		const kCrm = await kr(mt, "crm");
+		const kSheet = await kr(mt, "tay");
+		const kTay = await kr(mt, "tay");
+		thanhCong(
+			await datNguon({
+				keyResultId: kSheet,
+				loai: "bang-tinh",
+				url: SHEET_URL,
+				o: SHEET_O,
+			}),
+			"bang-tinh",
+		);
+		expect((await mucTieuCua(kCrm, s.cookiePhuTrach)).nguonMay).toEqual({
+			loai: "crm",
+			chiSo: "thoa-thuan-chot-duoc",
+			phamVi: { kieu: "phong-ban", id: s.P1 },
+			bac: null,
+			sheetId: null,
+			sheetO: null,
+			docLuc: null,
+			docGiaTri: null,
+			docLoi: null,
+		});
+		const cho = await mucTieuCua(kSheet, s.cookiePhuTrach);
+		expect(cho.nguonMay).toEqual({
+			loai: "bang-tinh",
+			chiSo: null,
+			phamVi: null,
+			bac: null,
+			sheetId: SHEET_ID,
+			sheetO: SHEET_O,
+			docLuc: null,
+			docGiaTri: null,
+			docLoi: null,
+		});
+		const hong = new Date("2026-06-10T02:12:00Z");
+		await db.okrNguonKr.update({
+			where: { keyResultId: kSheet },
+			data: { docLuc: hong, docLoi: "chua-chia-se", thuLuc: hong },
+		});
+		const docHong = await mucTieuCua(kSheet, s.cookiePhuTrach);
+		expect(docHong.nguonMay?.docLoi).toBe("chua-chia-se");
+		expect(docHong.nguonMay?.docLuc).toBe(hong.toISOString());
+		expect(docHong.nguonMay?.docGiaTri).toBeNull();
+		const duoc = new Date("2026-06-10T02:15:00Z");
+		await db.okrNguonKr.update({
+			where: { keyResultId: kSheet },
+			data: { docLuc: duoc, docGiaTri: 1240, docLoi: null },
+		});
+		const docDuoc = await mucTieuCua(kSheet, s.cookiePhuTrach);
+		expect(docDuoc.nguonMay?.docLoi).toBeNull();
+		expect(docDuoc.nguonMay?.docLuc).toBe(duoc.toISOString());
+		expect(docDuoc.nguonMay?.docGiaTri).toBe(1240);
+		expect((await mucTieuCua(kTay, s.cookiePhuTrach)).nguonMay).toBeNull();
+	} finally {
+		poke.mockRestore();
+	}
+}
+
 const TU_VN = new Date("2026-03-31T17:00:00Z");
 const cuoiNgayVN = (ngay: string) => new Date(`${ngay}T17:00:00Z`);
 
@@ -456,72 +524,6 @@ async function lichSuKhongDoiApi() {
 	await db.agentTask.deleteMany({
 		where: { dealId: { in: [moLai, luuTru] } },
 	});
-async function nguonMayTrongObjective() {
-	camSheets();
-	const trigger = ungDung().get(AgentTriggerService);
-	const poke = spyOn(
-		trigger as unknown as { poke: () => void },
-		"poke",
-	).mockImplementation(() => undefined);
-	try {
-		const mt = await mucTieu("dang-chay", "nhap");
-		const kCrm = await kr(mt, "crm");
-		const kSheet = await kr(mt, "tay");
-		const kTay = await kr(mt, "tay");
-		thanhCong(
-			await datNguon({
-				keyResultId: kSheet,
-				loai: "bang-tinh",
-				url: SHEET_URL,
-				o: SHEET_O,
-			}),
-			"bang-tinh",
-		);
-		expect((await mucTieuCua(kCrm, s.cookiePhuTrach)).nguonMay).toEqual({
-			loai: "crm",
-			chiSo: "thoa-thuan-chot-duoc",
-			phamVi: { kieu: "phong-ban", id: s.P1 },
-			bac: null,
-			sheetId: null,
-			sheetO: null,
-			docLuc: null,
-			docGiaTri: null,
-			docLoi: null,
-		});
-		const cho = await mucTieuCua(kSheet, s.cookiePhuTrach);
-		expect(cho.nguonMay).toEqual({
-			loai: "bang-tinh",
-			chiSo: null,
-			phamVi: null,
-			bac: null,
-			sheetId: SHEET_ID,
-			sheetO: SHEET_O,
-			docLuc: null,
-			docGiaTri: null,
-			docLoi: null,
-		});
-		const hong = new Date("2026-06-10T02:12:00Z");
-		await db.okrNguonKr.update({
-			where: { keyResultId: kSheet },
-			data: { docLuc: hong, docLoi: "chua-chia-se", thuLuc: hong },
-		});
-		const docHong = await mucTieuCua(kSheet, s.cookiePhuTrach);
-		expect(docHong.nguonMay?.docLoi).toBe("chua-chia-se");
-		expect(docHong.nguonMay?.docLuc).toBe(hong.toISOString());
-		expect(docHong.nguonMay?.docGiaTri).toBeNull();
-		const duoc = new Date("2026-06-10T02:15:00Z");
-		await db.okrNguonKr.update({
-			where: { keyResultId: kSheet },
-			data: { docLuc: duoc, docGiaTri: 1240, docLoi: null },
-		});
-		const docDuoc = await mucTieuCua(kSheet, s.cookiePhuTrach);
-		expect(docDuoc.nguonMay?.docLoi).toBeNull();
-		expect(docDuoc.nguonMay?.docLuc).toBe(duoc.toISOString());
-		expect(docDuoc.nguonMay?.docGiaTri).toBe(1240);
-		expect((await mucTieuCua(kTay, s.cookiePhuTrach)).nguonMay).toBeNull();
-	} finally {
-		poke.mockRestore();
-	}
 }
 
 describe("okr-nguon", () => {
