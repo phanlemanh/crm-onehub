@@ -60,10 +60,9 @@ describe("khoa-api-ghi-thua", () => {
 		const sauDau = await hang(khoa.id);
 		expect(sauDau.lastRequest, "luot dau phai ghi lastRequest").not.toBeNull();
 		expect((await goi(khoa.key)).status, "luot hai phai 200").toBe(200);
-		expect(
-			await hang(khoa.id),
-			"lastRequest doi o luot trong nguong",
-		).toEqual(sauDau);
+		expect(await hang(khoa.id), "lastRequest doi o luot trong nguong").toEqual(
+			sauDau,
+		);
 	});
 
 	test("bien-nguong: qua nguong thi ghi, duoi nguong thi khong, tuong lai thi khong", async () => {
@@ -77,9 +76,7 @@ describe("khoa-api-ghi-thua", () => {
 		const batDau = Date.now();
 		expect((await goi(khoa.key)).status).toBe(200);
 		const sauCu = (await hang(khoa.id)).lastRequest?.getTime() ?? 0;
-		expect(sauCu, "khong ghi khi da qua nguong").toBeGreaterThanOrEqual(
-			batDau,
-		);
+		expect(sauCu, "khong ghi khi da qua nguong").toBeGreaterThanOrEqual(batDau);
 		const moi = new Date(Date.now() - nguong + GIAY_MS);
 		await db.apikey.update({
 			where: { id: khoa.id },
@@ -125,9 +122,7 @@ describe("khoa-api-ghi-thua", () => {
 		});
 		expect((await goi(tat.key)).status, "khoa tat van qua").toBe(401);
 		expect(await maLoi(tat.key), "khoa tat van qua").toBe("KEY_DISABLED");
-		expect(await maLoi(hetHan.key), "khoa het han van qua").toBe(
-			"KEY_EXPIRED",
-		);
+		expect(await maLoi(hetHan.key), "khoa het han van qua").toBe("KEY_EXPIRED");
 		expect((await goi(hetHan.key)).status, "khoa het han van qua").toBe(401);
 	});
 });

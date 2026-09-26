@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { apiKey } from "@better-auth/api-key";
 import { betterAuth } from "better-auth";
 import { memoryAdapter } from "better-auth/adapters/memory";
+import { z } from "zod";
 
 const GOC_KHO = join(import.meta.dir, "..", "..", "..");
 const TEN_GOI = "@better-auth/api-key";
@@ -12,17 +13,16 @@ const NANG_KHONG_VA =
 const PHUT_MS = 60 * 1000;
 const LUOT = 3;
 
-type Hang = Record<string, unknown>;
-type Kho = Record<string, Hang[]>;
+const hangKhoa = z.object({ id: z.string(), requestCount: z.number() });
 type TuyChon = NonNullable<Parameters<typeof apiKey>[0]>;
 
 async function dung(opts: TuyChon) {
-	const kho: Kho = {
-		user: [],
-		session: [],
-		account: [],
-		verification: [],
-		apikey: [],
+	const kho = {
+		user: [] as object[],
+		session: [] as object[],
+		account: [] as object[],
+		verification: [] as object[],
+		apikey: [] as object[],
 	};
 	const auth = betterAuth({
 		secret: "khoa-api-ghi-thua-bi-mat-du-dai-32-ky-tu",
@@ -114,7 +114,10 @@ describe("khoa-api-ghi-thua thu vien", () => {
 		expect(loi?.body?.code, "luot 3 phai bi chan RATE_LIMITED").toBe(
 			"RATE_LIMITED",
 		);
-		const hang = kho.apikey?.find((h) => h.id === khoaId);
+		const hang = hangKhoa
+			.array()
+			.parse(kho.apikey)
+			.find((h) => h.id === khoaId);
 		expect(hang?.requestCount, "requestCount phai bang 2").toBe(2);
 	});
 
@@ -137,10 +140,9 @@ describe("khoa-api-ghi-thua thu vien", () => {
 			readFileSync(join(GOC_KHO, "bun.lock"), "utf8"),
 			"bun.lock thieu khoa ban va",
 		).toContain(`"${TEN_GOI}@${goiDaCai.version}"`);
-		expect(
-			readFileSync(duongMa, "utf8"),
-			"ma da cai chua co ban va",
-		).toContain("lastRequestUpdateIntervalMs");
+		expect(readFileSync(duongMa, "utf8"), "ma da cai chua co ban va").toContain(
+			"lastRequestUpdateIntervalMs",
+		);
 		expect(
 			() => banVaKhop("1.6.26", Object.keys(vaTheo)),
 			"phien ban lech phai do",
