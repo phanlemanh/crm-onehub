@@ -1,85 +1,69 @@
 ## Trong hợp đồng
 
-(không có phát hiện nào map được vào AC round này)
+(không có finding nào map được vào AC — danh sách rỗng)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Evidence page shows E20's empty human_override in the green 'filled' style**
-  Người dùng thấy gì: Màn hình bằng chứng có thể tô xanh dòng ghi-đè-bằng-tay của người kiểm như thể đã điền xong, dù trên thực tế chưa ai điền — người duyệt cần đọc thẳng báo cáo bằng chữ để chắc việc đó đã thực sự xong, thay vì tin màu trên màn hình này.
-  file: `_acceptance/quen-mat-khau/evidence-page.html`
-  severity: medium
-  Đề xuất: known-limits
-
-- **xuLyXacThuc buffers every auth POST body before routing and before the rate limit, with no size cap (r2)**
-  Người dùng thấy gì: Một yêu cầu rất lớn gửi tới cửa đăng nhập hoặc quên mật khẩu có thể khiến máy chủ dùng hết bộ nhớ, làm chậm hoặc treo dịch vụ cho mọi người dùng khác.
-  file: `packages/auth/src/auth.ts`
+- **The forgot-password page builds its own heading, so the loading state shows the logo and the loaded page does not**
+  Người dùng thấy gì: Khi trang xin liên kết đặt lại mật khẩu tải xong, logo OneHub biến mất khỏi màn hình và bố cục hơi giật, khác với trải nghiệm ở trang đăng nhập.
+  file: `apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx`
   severity: medium
   Đề xuất: new-contract
 
-- **The forgot-password form copies the Heading component from dat-mat-khau-form instead of moving it into packages/ui (r2)**
-  Người dùng thấy gì: Trên điện thoại, biểu tượng công ty có thể hiện lên rồi biến mất trong chớp mắt khi màn xin liên kết vừa tải xong.
-  file: `apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **The seconds-per-minute unit is redefined in three new places instead of derived from one base (r2)**
-  Người dùng thấy gì: Nếu sau này có người chỉnh thời hạn của liên kết đặt lại mật khẩu, một chỗ hiển thị số phút có thể bị quên sửa, khiến email và màn hình nói khác số phút nhau.
+- **The seconds-to-minutes constant is defined again in two new files instead of once**
+  Người dùng thấy gì: Người dùng không thấy khác biệt gì; đây chỉ là cách tổ chức mã nguồn nội bộ chưa gọn.
   file: `packages/auth/src/thu-mat-khau.ts`
   severity: low
   Đề xuất: known-limits
 
-- **A client that drops the connection mid-body on a POST to /api/auth/* now crashes the API process (r2)**
-  Người dùng thấy gì: Nếu một người dùng đóng trình duyệt đúng lúc đang gửi yêu cầu đăng nhập hoặc quên mật khẩu, toàn bộ hệ thống có thể sập, khiến mọi người khác cũng không dùng được cho tới khi khởi động lại.
-  file: `packages/auth/src/auth.ts`
-  severity: high
-  Đề xuất: new-contract
+- **Mail config breaks the one-time `env` pattern: a bare top-level call plus a fresh read of process.env on every check**
+  Người dùng thấy gì: Người dùng không thấy khác biệt; hành vi từ chối cấu hình thư thiếu vẫn đúng như cam kết, đây chỉ là cách viết mã nội bộ có thể gọn hơn.
+  file: `packages/auth/src/env.ts`
+  severity: low
+  Đề xuất: known-limits
 
-- **A POST with Content-Type application/json and an empty body now gets 400 instead of being accepted (r2)**
-  Người dùng thấy gì: Một vài công cụ kỹ thuật gọi thẳng vào máy chủ theo cách bất thường có thể nhận lỗi thay vì được xử lý; người dùng bình thường qua màn hình không bị ảnh hưởng.
+- **Proxy signs a browser-supplied x-real-ip when not running on Vercel, so callers can pick their own rate-limit bucket**
+  Người dùng thấy gì: Nếu công ty tự vận hành máy chủ thay vì dùng Vercel mà chưa cấu hình đúng, một người có thể né được giới hạn số lần xin liên kết hoặc số lần thử đăng nhập bằng cách tự đặt địa chỉ IP giả cho mình.
+  file: `packages/auth/src/dia-chi.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **If onPasswordReset throws, sessions are not revoked after the password has already changed**
+  Người dùng thấy gì: Trong một số ít trường hợp lỗi hệ thống hiếm gặp, sau khi người dùng đặt lại mật khẩu thành công, các phiên đăng nhập cũ (kể cả của người đã chiếm được tài khoản) có thể chưa bị đăng xuất ngay.
   file: `packages/auth/src/auth.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 3 (assert chuỗi có mặt trong khi lời hứa là quan hệ): số phút ở màn quá lượt và màn «Kiểm tra hộp thư» không được đo so với PASSWORD ở bất kỳ đâu (r2)**
-  Người dùng thấy gì: Nếu sau này ai đó vô tình đổi sai số phút chờ hiển thị ở màn quá lượt hoặc màn 'Kiểm tra hộp thư', hệ thống đo tự động có thể không phát hiện, và người dùng sẽ thấy số phút sai.
+- **Mail send failures return only a boolean and log only a status code; the reason from Resend is thrown away**
+  Người dùng thấy gì: Người dùng không bị ảnh hưởng; khi gửi thư báo lỗi ở hậu trường, đội vận hành sẽ có ít chi tiết hơn để tra lỗi, nhưng đây là lựa chọn có chủ đích để không lộ dữ liệu nhạy cảm trong log.
+  file: `packages/auth/src/thu.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Shape 3 (checks that a string is present when the promise is a relation between values): E18 never checks that the minutes on screen come from the right constant**
+  Người dùng thấy gì: Nếu sau này có ai lỡ tay đổi nhầm số phút hiển thị trên hai màn hình xin liên kết, người dùng có thể thấy thời hạn liên kết hoặc thời gian phải chờ bị sai lệch mà không ai phát hiện ra trước khi phát hành.
   file: `_acceptance/quen-mat-khau/rang/chup.mjs`
-  severity: high
+  severity: medium
   Đề xuất: new-contract
 
-- **Hình dạng 3 (có mặt thay cho quan hệ): «mật khẩu vừa đặt không đổi» được đo bằng đăng nhập với chính mật khẩu mà mọi lần đặt lại đều gửi (r2)**
-  Người dùng thấy gì: Nếu một lỗi khiến mật khẩu bị ghi đè sai khi ai đó dùng lại liên kết cũ, hệ thống đo tự động có thể không phát hiện ra, và người dùng có thể không biết mật khẩu nào đang thật sự có hiệu lực.
+- **Shape 4 (negative assertion on its own): het-han asserts login is false with no positive control, and the helper swallows every error**
+  Người dùng thấy gì: Nếu quy trình từ chối liên kết đã hết hạn bị hỏng ngầm sau này, người dùng có thể không phát hiện ra vấn đề trước khi tính năng được phát hành.
   file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **Hình dạng 5 (tuyên quét lớp nhưng chỉ có điểm-case): AC-14 hứa cơ chế địa chỉ đã ký áp cho cả luật chống dò mật khẩu ở màn đăng nhập, nhưng chỉ /request-password-reset được đo (r2)**
-  Người dùng thấy gì: Nếu giới hạn chống dò mật khẩu ở màn đăng nhập bị lỗi hoặc bị gỡ nhầm sau này, hệ thống đo tự động sẽ không phát hiện, để lộ khe hở cho kẻ xấu dò mật khẩu hàng loạt.
-  file: `_acceptance/quen-mat-khau/evals.yaml`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Hình dạng 2 (đầu vào viết tay thay vì đi qua bên đọc thật): ca «thiếu BETTER_AUTH_SECRET thì không ném» đưa thẳng undefined vào tham số, không đi qua khoaXacThuc() hay process.env (r2)**
-  Người dùng thấy gì: Nếu môi trường quên khai khoá bí mật, trang có thể báo lỗi hoặc gián đoạn thay vì tiếp tục chạy như đã dự tính, mà hệ thống đo tự động sẽ không phát hiện ra trước khi phát hành.
-  file: `apps/app/test/api-proxy-headers.spec.ts`
-  severity: medium
+- **Shape 3 (checks that something is present when the promise is a relation): E18's network-error case only checks that some Alert exists, not that it is the error message**
+  Người dùng thấy gì: Nếu thông báo lỗi mạng và thông báo quá lượt bị lẫn nội dung với nhau sau này, người dùng có thể nhận nhầm lý do lỗi mà không ai phát hiện ra trước khi phát hành.
+  file: `_acceptance/quen-mat-khau/rang/chup.mjs`
+  severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): «quá hạn thì mật khẩu không đổi» chỉ đo bằng dangNhapDuoc(...) === false qua hàm nuốt mọi lỗi, và trong ca không có đối chứng dương (r2)**
-  Người dùng thấy gì: Nếu một lỗi khiến hệ thống vẫn chấp nhận đổi mật khẩu bằng liên kết đã hết hạn, hệ thống đo tự động có thể không phát hiện ra.
-  file: `packages/auth/test/quen-mat-khau.integration.spec.ts`
-  severity: low
-  Đề xuất: new-contract
-
-- **Hình dạng 4 (âm tính một mình): ca không có context Vercel chỉ có not.toThrow; vế «việc vẫn chạy xong» chờ chính promise của test nên không thể đỏ (r2)**
-  Người dùng thấy gì: Nếu việc gửi thư báo chạy nền bị lỗi âm thầm trên môi trường thật, hệ thống đo tự động sẽ không phát hiện ra trước khi phát hành.
+- **Shape 4 (negative assertion on its own): in chay-nen the only real check without a Vercel context is not.toThrow; the positive half is a tautology**
+  Người dùng thấy gì: Nếu việc gửi thư ở hậu trường (ví dụ thư báo đổi mật khẩu) âm thầm bị hỏng sau này, người dùng nhận thư có thể không hay biết, và phép đo hiện tại chưa chắc phát hiện ra.
   file: `packages/auth/test/chay-nen.spec.ts`
   severity: low
-  Đề xuất: new-contract
-
-## Chưa adversarial-verify (refuter chết)
-
-(không có mục nào)
+  Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

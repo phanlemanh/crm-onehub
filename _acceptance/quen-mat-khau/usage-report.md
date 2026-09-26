@@ -217,3 +217,51 @@ wall: 866s
 - **claude-haiku-4-5-20251001**: 24 agent · 53 calls · out 13,464 · in 472 · cache_read 2,497,185 · cache_create 1,089,996
 - **claude-opus-5-5**: 3 agent · 17 calls · out 2,066 · in 34 · cache_read 1,601,846 · cache_create 301,317
 
+### S4 round 4 — wf_3082cd93-9d1 (32 agent, 68,344 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 26,669 | 4 | 116,350 | 274 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 13,609 | 4 | 95,672 | 162 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 16 | 6,312 | 32 | 1,816,202 | 167 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 10 | 3,637 | 20 | 997,740 | 172 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 13 | 2,647 | 26 | 1,673,237 | 206 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 26 | 2,621 | 52 | 3,202,426 | 241 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 30 | 1,723 | 60 | 3,968,649 | 290 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 666 | 18 | 90,185 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 600 | 18 | 90,267 | 16 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 593 | 18 | 90,311 | 14 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 591 | 18 | 90,200 | 21 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 583 | 18 | 90,203 | 21 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 534 | 18 | 90,203 | 21 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 533 | 18 | 90,200 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 5 | 530 | 42 | 273,374 | 242 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 510 | 18 | 90,267 | 25 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 473 | 18 | 90,207 | 21 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 466 | 18 | 90,202 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 454 | 18 | 90,208 | 13 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 454 | 18 | 90,204 | 17 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 7 | 441 | 58 | 448,499 | 43 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 413 | 18 | 90,200 | 14 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 410 | 18 | 90,195 | 17 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 392 | 18 | 90,203 | 14 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 5 | 366 | 42 | 300,161 | 29 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 364 | 18 | 90,211 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 334 | 18 | 90,212 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 332 | 18 | 90,186 | 11 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 328 | 18 | 90,193 | 12 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 282 | 18 | 90,265 | 11 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 269 | 18 | 90,188 | 12 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 208 | 4 | 90,247 | 11 |
+
+
+wall: 778s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| [Workflow harness — user request] The harness re | 32 | 68,344 | 14,877,067 | 778 | 03:12:29 | 03:25:27 |
+
+- **claude-sonnet-5**: 5 agent · 32 calls · out 50,435 · in 64 · cache_read 3,116,211 · cache_create 561,991
+- **claude-opus-5-5**: 3 agent · 69 calls · out 6,991 · in 138 · cache_read 8,844,312 · cache_create 425,199
+- **claude-haiku-4-5-20251001**: 24 agent · 59 calls · out 10,918 · in 520 · cache_read 2,916,544 · cache_create 1,064,875
+
