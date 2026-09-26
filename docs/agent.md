@@ -331,8 +331,10 @@ API; the API only reads and writes rows.
     `repFromCrm` dùng — người không còn hàng `member` hay mang vai `okr` bị từ chối
     trước khi có phiên;
   - ba trần trong `ZALO.hoi.tran`: 3 câu mỗi phút, 20 câu mỗi ngày của một người,
-    1.500 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
-    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần;
+    300 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
+    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần. Trần tháng hạ
+    ngày 27/09 theo số đo giá một câu ($0,016 với Gemini 3.7 Flash, $0,039 với GLM
+    5.2 Fast): ở mức cũ, riêng kênh này đủ tiêu hết ngân sách AI $20 của cả team;
   - một câu một lúc: còn câu `dang-hoi` chưa quá `ZALO.hoi.hanTraLoiMs` thì câu mới
     nhận «đang trả lời câu trước»; tick dispatch đóng câu quá hạn (`dongHoiQuaHan`)
     và báo lỗi đúng một lần;
