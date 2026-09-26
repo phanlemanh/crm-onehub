@@ -9,9 +9,11 @@ import {
 	DangTai,
 	DanhSachTrang,
 	DocTrang,
+	KhongCoQuyen,
 	KhoRong,
 	NutDauKho,
 	SoanTrang,
+	SucKhoeKho,
 } from "./man-trang";
 
 type Man =
@@ -22,6 +24,9 @@ type Man =
 	| { loai: "dang-tai" }
 	| { loai: "cho-duyet"; chon: string }
 	| { loai: "nguon" }
+	| { loai: "suc-khoe" }
+	| { loai: "khong-co" }
+	| { loai: "tim-nhanh" }
 	| { loai: "hoi"; tuChoi: boolean };
 
 const MAN_THEO_STATE = {
@@ -35,11 +40,17 @@ const MAN_THEO_STATE = {
 	"ST-tai-nguon": { loai: "nguon" },
 	"ST-duyet-ban-may-soan": { loai: "cho-duyet", chon: "dx-hoa-hong" },
 	"ST-soat-dinh-ky": { loai: "cho-duyet", chon: "dx-zalo" },
+	"ST-de-xuat-cu": { loai: "cho-duyet", chon: "dx-khieu-nai" },
+	"ST-the-cu-phap-ly": { loai: "cho-duyet", chon: "dx-luat" },
+	"ST-suc-khoe": { loai: "suc-khoe" },
+	"ST-tim-nhanh": { loai: "tim-nhanh" },
+	"ST-khong-co-quyen": { loai: "khong-co" },
 } satisfies Record<string, Man>;
 
 function tabCua(man: Man): TabKho | null {
 	if (man.loai === "cho-duyet") return "cho-duyet";
 	if (man.loai === "nguon") return "nguon";
+	if (man.loai === "suc-khoe") return "suc-khoe";
 	if (man.loai === "soan") return null;
 	return "trang";
 }
@@ -58,6 +69,7 @@ function KhoTaiLieu({ dau }: { dau: Man }) {
 	const moTab = (tab: TabKho) => {
 		if (tab === "cho-duyet") setMan({ loai: "cho-duyet", chon: "dx-hoa-hong" });
 		else if (tab === "nguon") setMan({ loai: "nguon" });
+		else if (tab === "suc-khoe") setMan({ loai: "suc-khoe" });
 		else setMan({ loai: "danh-sach" });
 	};
 
@@ -70,6 +82,7 @@ function KhoTaiLieu({ dau }: { dau: Man }) {
 						onViet={() => setMan({ loai: "soan" })}
 					/>
 				}
+				moTimNhanh={man.loai === "tim-nhanh"}
 				onTab={moTab}
 				soChoDuyet={man.loai === "rong" ? 0 : DE_XUAT.length}
 				tab={tabCua(man)}
@@ -94,6 +107,11 @@ function KhoTaiLieu({ dau }: { dau: Man }) {
 				<ChoDuyet chonDau={man.chon} key={man.chon} />
 			) : null}
 			{man.loai === "nguon" ? <DanhSachNguon /> : null}
+			{man.loai === "suc-khoe" ? <SucKhoeKho /> : null}
+			{man.loai === "khong-co" ? <KhongCoQuyen /> : null}
+			{man.loai === "tim-nhanh" ? (
+				<DanhSachTrang onMo={() => setMan({ loai: "doc" })} />
+			) : null}
 		</KhungUngDung>
 	);
 }

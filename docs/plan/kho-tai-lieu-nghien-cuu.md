@@ -978,6 +978,14 @@ xuất đo lượt tìm, mở đồ thị, bấm backlink, mà mình **chưa đ�
 
 Đã sửa trong phiên này: hộp ghi chú `role="note"`; chặn ảnh ngoài và liên kết không `https`.
 
+**Cập nhật 2026-09-26, sau khi chốt «duyệt mọi thay đổi»:** đã làm trong bản mẫu các
+việc 1–5 và 7–9 dưới đây (màn duyệt nguồn trước, đối chiếu từng con số, bậc 2 hai
+người, đề xuất cũ, thẻ cũ pháp lý, ô che dữ liệu cá nhân; trợ lý AI trích phiên bản và
+từ chối không đoán; ⌘K có dấu hay không, backlink kèm đoạn ngữ cảnh, đồ thị cục bộ,
+tab Sức khoẻ; chủ và phó, hạn xác minh; lớp dữ liệu và cờ hai máy đọc lệch; khôi phục
+đi qua duyệt; `[[Trang#Mục]]`; màn không có quyền; từ điển). Còn việc 6 (trình soạn
+nguồn CodeMirror) để vòng làm thật, và quy tắc hộp ghi chú tạm theo GitHub.
+
 Còn lại (thứ tự theo lượt):
 
 1. **Màn duyệt** hiện dùng diff theo dòng và nút «Duyệt và đăng» chọn sẵn. Theo mục 8.4 cần:

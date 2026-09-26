@@ -26,6 +26,7 @@ import {
 	NGUON,
 	type NguonMau,
 	type PhiaXungDot,
+	type TheLuat,
 } from "./du-lieu";
 
 const NHAN_TU = {
@@ -54,6 +55,8 @@ type KetQua =
 
 type TrangThaiDuyet = {
 	daDocNguon: boolean;
+	daChe: boolean;
+	hanhDongLuat: string | null;
 	daDoiChieu: string[];
 	xungDot: LuaChonXungDot | null;
 	lyDo: string;
@@ -62,6 +65,8 @@ type TrangThaiDuyet = {
 
 const TRANG_THAI_DAU: TrangThaiDuyet = {
 	daDocNguon: false,
+	daChe: false,
+	hanhDongLuat: null,
 	daDoiChieu: [],
 	xungDot: null,
 	lyDo: "",
@@ -84,6 +89,168 @@ function TheXungDot({ phia }: { phia: PhiaXungDot }) {
 	);
 }
 
+function TheLuatDeXuat({
+	theLuat,
+	chon,
+	doi,
+}: {
+	theLuat: TheLuat;
+	chon: string | null;
+	doi: (sua: Partial<TrangThaiDuyet>) => void;
+}) {
+	return (
+		<div className="flex flex-col gap-3" data-the-luat="">
+			<Alert role="note">
+				<Icon icon={WarningAlt} />
+				<AlertTitle>Mức {theLuat.mucDo}: căn cứ pháp lý đã đổi</AlertTitle>
+				<AlertDescription translate="no">{theLuat.vanBan}</AlertDescription>
+			</Alert>
+			<dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs">
+				<dt className="text-muted-foreground">Quan hệ</dt>
+				<dd translate="no">{theLuat.quanHe}</dd>
+				<dt className="text-muted-foreground">Đoạn bị ảnh hưởng</dt>
+				<dd translate="no">{theLuat.dieuBiAnhHuong}</dd>
+				<dt className="text-muted-foreground">Dòng thời gian</dt>
+				<dd>{theLuat.hieuLuc}</dd>
+			</dl>
+			<div className="flex flex-col gap-1 text-xs">
+				<span className="font-medium text-sm">Bằng chứng</span>
+				<ul className="flex list-disc flex-col gap-0.5 pl-5">
+					{theLuat.bangChung.map((b) => (
+						<li key={b}>{b}</li>
+					))}
+				</ul>
+			</div>
+			<ToggleGroup
+				aria-label="Xử lý thay đổi pháp lý"
+				className="flex-wrap"
+				onValueChange={(v) => doi({ hanhDongLuat: v === "" ? null : v })}
+				type="single"
+				value={chon ?? ""}
+				variant="outline"
+			>
+				{theLuat.hanhDong.map((h) => (
+					<ToggleGroupItem key={h} value={h}>
+						{h}
+						{h === theLuat.khuyenNghi ? " · khuyến nghị" : ""}
+					</ToggleGroupItem>
+				))}
+			</ToggleGroup>
+		</div>
+	);
+}
+
+function QuyetDinh({
+	dx,
+	tt,
+	doi,
+	duyetDuoc,
+	lyDoKhoa,
+}: {
+	dx: DeXuatMau;
+	tt: TrangThaiDuyet;
+	doi: (sua: Partial<TrangThaiDuyet>) => void;
+	duyetDuoc: boolean;
+	lyDoKhoa: string;
+}) {
+	const duyet = () => {
+		const nguoiHai = dx.nguoiDuyet[1];
+		doi({
+			ketQua:
+				dx.bac === 2 && nguoiHai
+					? { loai: "cho-nguoi-hai", nguoi: nguoiHai }
+					: { loai: "da-dang" },
+		});
+	};
+	return (
+		<>
+			{dx.tu === "may" ? (
+				<Field orientation="horizontal">
+					<Checkbox
+						checked={tt.daChe}
+						id={`${dx.id}-che`}
+						onCheckedChange={(c) => doi({ daChe: c === true })}
+					/>
+					<div className="flex flex-col gap-0.5">
+						<FieldLabel htmlFor={`${dx.id}-che`}>
+							Trang không còn dữ liệu cá nhân, hoặc đã che
+						</FieldLabel>
+						<FieldDescription>
+							Trợ lý AI chỉ gửi trang đã qua ô này tới nhà cung cấp mô hình.
+						</FieldDescription>
+					</div>
+				</Field>
+			) : null}
+
+			{tt.ketQua ? (
+				<Alert data-ket-qua={tt.ketQua.loai} role="status">
+					<AlertTitle>
+						{tt.ketQua.loai === "cho-nguoi-hai"
+							? "Đã ghi duyệt của bạn"
+							: tt.ketQua.loai === "da-dang"
+								? "Đã duyệt và đăng phiên bản mới"
+								: "Đã trả lại cho máy soạn"}
+					</AlertTitle>
+					<AlertDescription translate="no">
+						{tt.ketQua.loai === "cho-nguoi-hai"
+							? `Trang bậc 2 cần người kiểm thứ hai. Đang chờ ${tt.ketQua.nguoi}; bản đang dùng chưa đổi.`
+							: tt.ketQua.loai === "da-dang"
+								? "Trợ lý AI trả lời theo bản này từ bây giờ."
+								: `Lý do sẽ đi vào lần soạn sau: «${tt.ketQua.lyDo}». Máy không đề xuất lại đúng thay đổi này.`}
+					</AlertDescription>
+				</Alert>
+			) : (
+				<div className="flex flex-col gap-3" data-quyet-dinh="">
+					<Field>
+						<FieldLabel htmlFor={`${dx.id}-ly-do`}>
+							Lý do, nếu trả lại
+						</FieldLabel>
+						<Textarea
+							id={`${dx.id}-ly-do`}
+							onChange={(e) => doi({ lyDo: e.target.value })}
+							value={tt.lyDo}
+						/>
+					</Field>
+					<div className="flex flex-wrap items-center gap-2">
+						<Button disabled={!duyetDuoc} onClick={duyet}>
+							{dx.bac === 2 ? "Duyệt, chuyển người thứ hai" : "Duyệt và đăng"}
+						</Button>
+						<Button
+							disabled={tt.lyDo.trim() === ""}
+							onClick={() =>
+								doi({ ketQua: { loai: "tra-lai", lyDo: tt.lyDo.trim() } })
+							}
+							variant="outline"
+						>
+							Trả lại cho máy soạn
+						</Button>
+						{dx.baseDaDoi ? (
+							<Button variant="outline">Soạn lại trên bản mới</Button>
+						) : null}
+						{duyetDuoc || dx.baseDaDoi ? null : (
+							<span className="text-muted-foreground text-xs">{lyDoKhoa}</span>
+						)}
+					</div>
+				</div>
+			)}
+		</>
+	);
+}
+
+function lyDoKhoa(t: {
+	conThieu: number;
+	thieuXungDot: boolean;
+	thieuLuat: boolean;
+	thieuChe: boolean;
+}): string {
+	if (t.conThieu > 0)
+		return `Còn ${t.conThieu} khẳng định bắt buộc chưa đối chiếu`;
+	if (t.thieuXungDot) return "Chưa chọn cách xử lý mâu thuẫn";
+	if (t.thieuLuat) return "Chưa chọn cách xử lý thay đổi pháp lý";
+	if (t.thieuChe) return "Chưa xác nhận che dữ liệu cá nhân";
+	return "";
+}
+
 function MotDeXuat({
 	dx,
 	tt,
@@ -98,17 +265,16 @@ function MotDeXuat({
 	const batBuoc = dx.khangDinh.filter((k) => k.coSo).map((k) => k.id);
 	const conThieu = batBuoc.filter((id) => !tt.daDoiChieu.includes(id)).length;
 	const thieuXungDot = dx.xungDot !== null && tt.xungDot === null;
-	const duyetDuoc = moDeXuat && conThieu === 0 && !thieuXungDot;
-
-	const duyet = () => {
-		const nguoiHai = dx.nguoiDuyet[1];
-		doi({
-			ketQua:
-				dx.bac === 2 && nguoiHai
-					? { loai: "cho-nguoi-hai", nguoi: nguoiHai }
-					: { loai: "da-dang" },
-		});
-	};
+	const canChe = dx.tu === "may";
+	const thieuChe = canChe && !tt.daChe;
+	const thieuLuat = dx.theLuat !== undefined && tt.hanhDongLuat === null;
+	const duyetDuoc =
+		moDeXuat &&
+		conThieu === 0 &&
+		!thieuXungDot &&
+		!thieuChe &&
+		!thieuLuat &&
+		dx.baseDaDoi === undefined;
 
 	return (
 		<section
@@ -128,6 +294,21 @@ function MotDeXuat({
 					Người duyệt: {dx.nguoiDuyet.join(", sau đó ")}
 				</p>
 			</div>
+
+			{dx.baseDaDoi ? (
+				<Alert data-de-xuat-cu="" role="note">
+					<Icon icon={WarningAlt} />
+					<AlertTitle>Đề xuất này đã cũ</AlertTitle>
+					<AlertDescription>
+						{dx.baseDaDoi} Duyệt bây giờ sẽ đè lên sửa đổi đó, nên nút duyệt bị
+						khoá. Cho máy soạn lại trên bản mới.
+					</AlertDescription>
+				</Alert>
+			) : null}
+
+			{dx.theLuat ? (
+				<TheLuatDeXuat chon={tt.hanhDongLuat} doi={doi} theLuat={dx.theLuat} />
+			) : null}
 
 			{canNguon ? (
 				<div className="flex flex-col gap-2">
@@ -251,90 +432,46 @@ function MotDeXuat({
 						</div>
 					) : null}
 
-					<div className="flex flex-col gap-2">
-						<h4 className="font-medium text-sm">Thay đổi trong trang</h4>
-						<div className="overflow-x-auto rounded-lg border font-mono text-xs">
-							{dx.dong.map((d) => (
-								<div
-									className={cn(
-										"flex gap-3 px-3 py-1.5",
-										d.loai === "them" && "bg-muted font-medium",
-										d.loai === "bo" && "text-muted-foreground line-through",
-									)}
-									key={`${dx.id}-${d.loai}-${d.chu}`}
-								>
-									<span aria-hidden="true" className="w-3 shrink-0 select-none">
-										{d.loai === "them" ? "+" : d.loai === "bo" ? "−" : " "}
-									</span>
-									<span className="sr-only">
-										{d.loai === "them"
-											? "Thêm"
-											: d.loai === "bo"
-												? "Bỏ"
-												: "Giữ"}
-									</span>
-									<span translate="no">{d.chu}</span>
-								</div>
-							))}
-						</div>
-					</div>
-
-					{tt.ketQua ? (
-						<Alert data-ket-qua={tt.ketQua.loai} role="status">
-							<AlertTitle>
-								{tt.ketQua.loai === "cho-nguoi-hai"
-									? "Đã ghi duyệt của bạn"
-									: tt.ketQua.loai === "da-dang"
-										? "Đã duyệt và đăng phiên bản mới"
-										: "Đã trả lại cho máy soạn"}
-							</AlertTitle>
-							<AlertDescription translate="no">
-								{tt.ketQua.loai === "cho-nguoi-hai"
-									? `Trang bậc 2 cần người kiểm thứ hai. Đang chờ ${tt.ketQua.nguoi}; bản đang dùng chưa đổi.`
-									: tt.ketQua.loai === "da-dang"
-										? "Tác nhân trả lời theo bản này từ bây giờ."
-										: `Lý do sẽ đi vào lần soạn sau: «${tt.ketQua.lyDo}». Máy không đề xuất lại đúng thay đổi này.`}
-							</AlertDescription>
-						</Alert>
-					) : (
-						<div className="flex flex-col gap-3" data-quyet-dinh="">
-							<Field>
-								<FieldLabel htmlFor={`${dx.id}-ly-do`}>
-									Lý do, nếu trả lại
-								</FieldLabel>
-								<Textarea
-									id={`${dx.id}-ly-do`}
-									onChange={(e) => doi({ lyDo: e.target.value })}
-									value={tt.lyDo}
-								/>
-							</Field>
-							<div className="flex flex-wrap items-center gap-2">
-								<Button disabled={!duyetDuoc} onClick={duyet}>
-									{dx.bac === 2
-										? "Duyệt, chuyển người thứ hai"
-										: "Duyệt và đăng"}
-								</Button>
-								<Button
-									disabled={tt.lyDo.trim() === ""}
-									onClick={() =>
-										doi({ ketQua: { loai: "tra-lai", lyDo: tt.lyDo.trim() } })
-									}
-									variant="outline"
-								>
-									Trả lại cho máy soạn
-								</Button>
-								{duyetDuoc ? null : (
-									<span className="text-muted-foreground text-xs">
-										{conThieu > 0
-											? `Còn ${conThieu} khẳng định bắt buộc chưa đối chiếu`
-											: thieuXungDot
-												? "Chưa chọn cách xử lý mâu thuẫn"
-												: ""}
-									</span>
-								)}
+					{dx.dong.length > 0 ? (
+						<div className="flex flex-col gap-2">
+							<h4 className="font-medium text-sm">Thay đổi trong trang</h4>
+							<div className="overflow-x-auto rounded-lg border font-mono text-xs">
+								{dx.dong.map((d) => (
+									<div
+										className={cn(
+											"flex gap-3 px-3 py-1.5",
+											d.loai === "them" && "bg-muted font-medium",
+											d.loai === "bo" && "text-muted-foreground line-through",
+										)}
+										key={`${dx.id}-${d.loai}-${d.chu}`}
+									>
+										<span
+											aria-hidden="true"
+											className="w-3 shrink-0 select-none"
+										>
+											{d.loai === "them" ? "+" : d.loai === "bo" ? "−" : " "}
+										</span>
+										<span className="sr-only">
+											{d.loai === "them"
+												? "Thêm"
+												: d.loai === "bo"
+													? "Bỏ"
+													: "Giữ"}
+										</span>
+										<span translate="no">{d.chu}</span>
+									</div>
+								))}
 							</div>
 						</div>
-					)}
+					) : null}
+
+					<QuyetDinh
+						doi={doi}
+						duyetDuoc={duyetDuoc}
+						dx={dx}
+						lyDoKhoa={lyDoKhoa({ conThieu, thieuXungDot, thieuLuat, thieuChe })}
+						tt={tt}
+					/>
 				</>
 			) : null}
 		</section>
@@ -403,11 +540,20 @@ const TRANG_THAI_NGUON = {
 	"da-soan": { tone: "warning", busy: false },
 	"da-duyet": { tone: "success", busy: false },
 	"khong-doc-duoc": { tone: "error", busy: false },
+	"hai-may-lech": { tone: "warning", busy: false },
 } satisfies Record<NguonMau["trangThai"], { tone: StatusTone; busy: boolean }>;
+
+const NHAN_LOP = {
+	P: "Công khai",
+	I: "Nội bộ, không dữ liệu cá nhân",
+	B: "Có dữ liệu cá nhân, che trước khi gửi",
+	S: "Nhạy cảm, chỉ xử lý trong nước",
+} satisfies Record<NguonMau["lop"], string>;
 
 const COT_NGUON = [
 	{ id: "nguon", header: "Nguồn" },
 	{ id: "nguoi", header: "Người tải" },
+	{ id: "lop", header: "Lớp dữ liệu" },
 	{ id: "tinh-trang", header: "Tình trạng" },
 	{ id: "luc", header: "Lúc", align: "right" as const },
 ];
@@ -420,7 +566,7 @@ export function DanhSachNguon() {
 				<p className="font-medium text-sm">Kéo file vào đây, hoặc chọn file</p>
 				<p className="max-w-md text-muted-foreground text-xs">
 					PDF hoặc Word. Máy đọc file, tìm các trang liên quan và soạn bản đề
-					xuất. Không trang nào đổi cho tới khi người giữ trang duyệt.
+					xuất. Không trang nào đổi cho tới khi chủ trang duyệt.
 				</p>
 				<Button className="mt-2" variant="outline">
 					Chọn file
@@ -442,6 +588,11 @@ export function DanhSachNguon() {
 								</span>
 							</TableCell>
 							<TableCell translate="no">{n.nguoiTai}</TableCell>
+							<TableCell>
+								<Badge title={NHAN_LOP[n.lop]} variant="outline">
+									{n.lop} · {NHAN_LOP[n.lop]}
+								</Badge>
+							</TableCell>
 							<TableCell>
 								<StatusIndicator
 									busy={tt.busy}

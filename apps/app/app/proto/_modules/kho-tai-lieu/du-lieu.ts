@@ -131,7 +131,7 @@ Công ty ở tầng 2 có giao dịch 3 tỷ được xác nhận: hoa hồng l�
 ## Khi nào chi
 
 1. Giao dịch được xác nhận trên nền tảng.
-2. Phòng Tài chính đối soát trong 5 ngày làm việc, theo [[Duyệt chi dưới 20 triệu]].
+2. Phòng Tài chính đối soát trong 5 ngày làm việc, theo [[Duyệt chi dưới 20 triệu#Chứng từ cần có]].
 3. Chi vào ngày 15 của tháng kế tiếp.
 
 > [!WARNING]
@@ -152,8 +152,14 @@ export type NguonMau = {
 	loai: string;
 	nguoiTai: string;
 	ngay: string;
-	trangThai: "dang-doc" | "da-soan" | "da-duyet" | "khong-doc-duoc";
+	trangThai:
+		| "dang-doc"
+		| "da-soan"
+		| "da-duyet"
+		| "khong-doc-duoc"
+		| "hai-may-lech";
 	ghiChu: string;
+	lop: "P" | "I" | "B" | "S";
 };
 
 const TOM_TAT_THEO_TEN = {
@@ -178,6 +184,16 @@ export const TOM_TAT = new Map(Object.entries(TOM_TAT_THEO_TEN));
 
 export const NGUON: NguonMau[] = [
 	{
+		id: "phu-luc",
+		ten: "Phụ lục biểu phí có dấu đỏ.pdf",
+		loai: "PDF quét · 2 trang",
+		nguoiTai: "Nguyễn Thu Hà",
+		ngay: "Hôm nay 10:02",
+		trangThai: "hai-may-lech",
+		ghiChu: "Hai máy đọc lệch 3 chỗ có số — cần xem ảnh trang",
+		lop: "I",
+	},
+	{
 		id: "qd-18",
 		ten: "Quyết định 18-2026 về hoa hồng.pdf",
 		loai: "PDF · 4 trang",
@@ -185,6 +201,7 @@ export const NGUON: NguonMau[] = [
 		ngay: "Hôm nay 09:12",
 		trangThai: "da-soan",
 		ghiChu: "Máy đã soạn 1 bản đề xuất, 1 chỗ mâu thuẫn",
+		lop: "I",
 	},
 	{
 		id: "bb-hdqt",
@@ -194,6 +211,7 @@ export const NGUON: NguonMau[] = [
 		ngay: "Hôm nay 08:40",
 		trangThai: "dang-doc",
 		ghiChu: "Máy đang đọc",
+		lop: "B",
 	},
 	{
 		id: "scan",
@@ -203,6 +221,7 @@ export const NGUON: NguonMau[] = [
 		ngay: "Hôm qua",
 		trangThai: "khong-doc-duoc",
 		ghiChu: "Bản quét ảnh, không có chữ để đọc",
+		lop: "I",
 	},
 	{
 		id: "qd-12",
@@ -212,6 +231,7 @@ export const NGUON: NguonMau[] = [
 		ngay: "02/06",
 		trangThai: "da-duyet",
 		ghiChu: "Đã vào 2 trang",
+		lop: "I",
 	},
 ];
 
@@ -242,8 +262,14 @@ export const LICH_SU = [
 ];
 
 export const LIEN_KET_DEN = [
-	"Đưa công ty mới vào guồng trong 30 ngày",
-	"Hợp đồng hợp tác mẫu",
+	{
+		ten: "Đưa công ty mới vào guồng trong 30 ngày",
+		doan: "…ngày 30, công ty chuyển sang mức hoa hồng theo tầng tại [[Chính sách hoa hồng cho công ty đối tác]].",
+	},
+	{
+		ten: "Hợp đồng hợp tác mẫu",
+		doan: "…mức và thời điểm chi hoa hồng theo [[Chính sách hoa hồng cho công ty đối tác#Khi nào chi]].",
+	},
 ];
 
 export type DongKhac = { loai: "giu" | "bo" | "them"; chu: string };
@@ -279,6 +305,19 @@ export type DeXuatMau = {
 	suKienDoi: SuKienDoi[];
 	xungDot: { cu: PhiaXungDot; moi: PhiaXungDot } | null;
 	dong: DongKhac[];
+	baseDaDoi?: string;
+	theLuat?: TheLuat;
+};
+
+export type TheLuat = {
+	mucDo: "Nghiêm trọng" | "Lớn" | "Nhỏ" | "Thông tin";
+	vanBan: string;
+	quanHe: string;
+	dieuBiAnhHuong: string;
+	hieuLuc: string;
+	bangChung: string[];
+	hanhDong: string[];
+	khuyenNghi: string;
 };
 
 export const DE_XUAT: DeXuatMau[] = [
@@ -371,6 +410,8 @@ export const DE_XUAT: DeXuatMau[] = [
 			},
 		],
 		suKienDoi: [{ nhan: "Hạn phản hồi đầu", truoc: "48 giờ", sau: "24 giờ" }],
+		baseDaDoi:
+			"Phạm Ngọc Anh đã sửa trang này lúc 16:40 hôm qua, sau khi đề xuất được tạo.",
 		xungDot: null,
 		dong: [
 			{ loai: "giu", chu: "## Phản hồi đầu tiên" },
@@ -406,6 +447,42 @@ export const DE_XUAT: DeXuatMau[] = [
 				chu: "Xem hướng dẫn nối tài khoản ở Cài đặt › Thông báo.",
 			},
 		],
+	},
+	{
+		id: "dx-luat",
+		trang: "Duyệt chi dưới 20 triệu",
+		tu: "soat",
+		ai: "Theo dõi Công báo",
+		vi: "Một điều khoản đang trích vừa bị sửa đổi",
+		khi: "Hôm nay 07:20",
+		bac: 2,
+		nguoiDuyet: ["Nguyễn Thu Hà", "Vũ Thanh Mai"],
+		nguon: null,
+		doanNguon: null,
+		khangDinh: [],
+		suKienDoi: [],
+		xungDot: null,
+		dong: [],
+		theLuat: {
+			mucDo: "Lớn",
+			vanBan: "Thông tư 21/2026/TT-BTC (ví dụ trong bản mẫu)",
+			quanHe: "Sửa đổi khoản 2 Điều 5 của văn bản trang đang trích",
+			dieuBiAnhHuong: "Mục «Chứng từ cần có» của trang",
+			hieuLuc: "Có hiệu lực từ 15/11/2026 · trang chuyển «theo dõi» từ 16/10",
+			bangChung: [
+				"Công báo số 1102, ngày 24/09/2026",
+				"Bộ dò điều khoản: câu «Sửa đổi khoản 2 Điều 5…»",
+				"vbpl.vn chưa ghi quan hệ này (xung đột dữ liệu, không phải thay đổi pháp luật)",
+			],
+			hanhDong: [
+				"Cho máy soạn bản cập nhật dưới dạng diff",
+				"Không ảnh hưởng (phải nêu lý do)",
+				"Hẹn tới ngày hiệu lực",
+				"Lưu trữ trang",
+				"Hỏi luật sư",
+			],
+			khuyenNghi: "Hẹn tới ngày hiệu lực",
+		},
 	},
 ];
 
@@ -450,3 +527,57 @@ const THEO_DOI_THEO_ID = {
 } satisfies Record<string, { pho: string; xacMinh: string; quaHan: boolean }>;
 
 export const THEO_DOI = new Map(Object.entries(THEO_DOI_THEO_ID));
+
+export const SUC_KHOE = [
+	{
+		id: "cu",
+		nhan: "Quá hạn xác minh",
+		trang: ["Dùng Zalo khi làm việc với đối tác"],
+	},
+	{
+		id: "wanted",
+		nhan: "Được nhắc tới nhưng chưa có trang",
+		trang: ["Quy chế thưởng quý", "Bảng giá dịch vụ 2027"],
+	},
+	{
+		id: "mo-coi",
+		nhan: "Mồ côi: không trang nào dẫn tới",
+		trang: ["Nghỉ phép năm"],
+	},
+	{
+		id: "gay",
+		nhan: "Liên kết gãy",
+		trang: ["Dùng Zalo khi làm việc với đối tác"],
+	},
+	{
+		id: "cut",
+		nhan: "Cụt: không dẫn đi đâu",
+		trang: ["Bảo mật dữ liệu khách hàng"],
+	},
+	{
+		id: "cho",
+		nhan: "Có đề xuất chờ duyệt",
+		trang: [
+			"Chính sách hoa hồng cho công ty đối tác",
+			"Xử lý khiếu nại của cá nhân",
+			"Dùng Zalo khi làm việc với đối tác",
+			"Duyệt chi dưới 20 triệu",
+		],
+	},
+];
+
+export const DO_THI_CUC_BO = {
+	giua: { ten: "Chính sách hoa hồng", x: 150, y: 95 },
+	lanCan: [
+		{ ten: "30 ngày đầu", x: 45, y: 30, huong: "den", loai: "dẫn tới" },
+		{ ten: "Hợp đồng mẫu", x: 255, y: 30, huong: "den", loai: "dẫn tới" },
+		{ ten: "Duyệt chi", x: 45, y: 165, huong: "di", loai: "dẫn đi" },
+		{
+			ten: "Quy chế thưởng quý",
+			x: 255,
+			y: 165,
+			huong: "di",
+			loai: "chưa có trang",
+		},
+	],
+};

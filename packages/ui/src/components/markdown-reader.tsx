@@ -142,7 +142,9 @@ function splitWikiLinks(value: string): Node[] {
 		parts.push({
 			type: "link",
 			url: `${WIKI_PREFIX}${encodeURIComponent(target)}`,
-			children: [{ type: "text", value: match[2]?.trim() ?? target }],
+			children: [
+				{ type: "text", value: match[2]?.trim() ?? target.replace("#", " › ") },
+			],
 		});
 		last = start + match[0].length;
 	}
@@ -212,7 +214,8 @@ function WikiLink({
 	resolve?: (target: string) => ReaderLink | null;
 	missingLabel: string;
 }) {
-	const page = resolve?.(target) ?? null;
+	const [ten = target, muc] = target.split("#");
+	const page = resolve?.(ten.trim()) ?? null;
 	if (page === null) {
 		return (
 			<span
@@ -239,6 +242,7 @@ function WikiLink({
 				<span className="flex flex-col gap-1.5">
 					<span className="font-medium text-sm" translate="no">
 						{page.title}
+						{muc ? ` › ${muc.trim()}` : ""}
 					</span>
 					<span className="line-clamp-4 text-muted-foreground text-xs" translate="no">
 						{page.summary}

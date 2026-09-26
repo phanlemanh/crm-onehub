@@ -40,7 +40,7 @@ function TraLoi() {
 				<Icon icon={Bot} />
 			</MessageAvatar>
 			<MessageContent>
-				<MessageHeader>Tác nhân · đọc 1 trang tài liệu đã duyệt</MessageHeader>
+				<MessageHeader>Trợ lý AI · đọc 1 trang tài liệu đã duyệt</MessageHeader>
 				<div className="px-3">
 					<Markdown className="text-sm/6">{HOI_THOAI.tra}</Markdown>
 				</div>
@@ -80,7 +80,7 @@ function TuChoi() {
 			</MessageAvatar>
 			<MessageContent data-tu-choi="">
 				<MessageHeader>
-					Tác nhân · không có trang đã duyệt phù hợp
+					Trợ lý AI · không có trang đã duyệt phù hợp
 				</MessageHeader>
 				<p className="px-3 text-sm/6">{HOI_TU_CHOI.tra}</p>
 				<div className="flex flex-wrap items-center gap-2 px-3 text-xs">

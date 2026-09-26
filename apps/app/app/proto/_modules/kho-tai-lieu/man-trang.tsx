@@ -50,11 +50,13 @@ import { Textarea } from "@crm/ui/components/textarea";
 import { cn } from "@crm/ui/lib/utils";
 import { useState } from "react";
 import {
+	DO_THI_CUC_BO,
 	LICH_SU,
 	LIEN_KET_DEN,
 	NHOM,
 	type Nhom,
 	nhanNhom,
+	SUC_KHOE,
 	THAN_TRANG,
 	THEO_DOI,
 	TOM_TAT,
@@ -80,6 +82,135 @@ const MUC_LUC = readerHeadings(THAN_TRANG);
 function timTrang(ten: string): ReaderLink | null {
 	const t = TOM_TAT.get(ten);
 	return t ? { title: ten, summary: t.summary, meta: t.meta } : null;
+}
+
+function boWikilink(chu: string): string {
+	return chu.replace(
+		/\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]+))?\]\]/g,
+		(_, ten, nhan) => nhan ?? ten,
+	);
+}
+
+function DoThiCucBo() {
+	const { giua, lanCan } = DO_THI_CUC_BO;
+	return (
+		<section
+			aria-label="Đồ thị cục bộ"
+			className="flex flex-col gap-2"
+			data-do-thi=""
+		>
+			<h4 className="font-medium text-sm">Quanh trang này</h4>
+			<svg
+				aria-hidden="true"
+				className="w-full rounded-lg border"
+				viewBox="0 0 300 195"
+			>
+				{lanCan.map((n) => (
+					<line
+						className={
+							n.loai === "chưa có trang"
+								? "stroke-border"
+								: "stroke-muted-foreground"
+						}
+						key={`l-${n.ten}`}
+						strokeDasharray={n.loai === "chưa có trang" ? "4 3" : undefined}
+						x1={giua.x}
+						x2={n.x}
+						y1={giua.y}
+						y2={n.y}
+					/>
+				))}
+				{lanCan.map((n) => (
+					<g key={n.ten}>
+						<circle
+							className={
+								n.loai === "chưa có trang"
+									? "fill-background stroke-muted-foreground"
+									: "fill-muted-foreground"
+							}
+							cx={n.x}
+							cy={n.y}
+							r={6}
+							strokeDasharray={n.loai === "chưa có trang" ? "2 2" : undefined}
+						/>
+						<text
+							className="fill-muted-foreground text-[10px]"
+							textAnchor="middle"
+							x={n.x}
+							y={n.y + 18}
+						>
+							{n.ten}
+						</text>
+					</g>
+				))}
+				<circle className="fill-primary" cx={giua.x} cy={giua.y} r={9} />
+				<text
+					className="fill-foreground font-medium text-[10px]"
+					textAnchor="middle"
+					x={giua.x}
+					y={giua.y + 22}
+				>
+					{giua.ten}
+				</text>
+			</svg>
+			<ul className="flex flex-col gap-0.5 text-muted-foreground text-xs">
+				{lanCan.map((n) => (
+					<li key={n.ten}>
+						{n.ten} · {n.loai}
+					</li>
+				))}
+			</ul>
+		</section>
+	);
+}
+
+export function SucKhoeKho() {
+	return (
+		<div
+			className="flex min-w-0 max-w-3xl flex-1 flex-col gap-5 p-6"
+			data-suc-khoe=""
+		>
+			<p className="text-muted-foreground text-sm">
+				Việc phải làm của chủ trang, xếp theo mức cần xử lý. Danh sách này đi
+				trước đồ thị toàn kho.
+			</p>
+			{SUC_KHOE.map((nhom) => (
+				<section className="flex flex-col gap-2" key={nhom.id}>
+					<h3 className="flex items-center gap-2 font-medium text-sm">
+						{nhom.nhan}
+						<Badge variant="outline">{nhom.trang.length}</Badge>
+					</h3>
+					<ul className="flex flex-col gap-1 text-sm">
+						{nhom.trang.map((t) => (
+							<li className="flex items-center gap-2" key={t}>
+								<Icon icon={Book} />
+								<span translate="no">{t}</span>
+							</li>
+						))}
+					</ul>
+				</section>
+			))}
+		</div>
+	);
+}
+
+export function KhongCoQuyen() {
+	return (
+		<div
+			className="flex flex-1 items-center justify-center p-6"
+			data-khong-co=""
+		>
+			<Empty>
+				<EmptyHeader>
+					<EmptyTitle>Không tìm thấy trang</EmptyTitle>
+					<EmptyDescription>
+						Trang không tồn tại, hoặc bạn không có quyền xem. Hai trường hợp
+						hiện giống nhau để không lộ trang bị hạn chế.
+					</EmptyDescription>
+				</EmptyHeader>
+			</Empty>
+		</div>
+	);
 }
 
 export function NutDauKho({
@@ -207,6 +338,7 @@ export function DocTrang({
 	onVe: () => void;
 	onXemDeXuat: () => void;
 }) {
+	const [khoiPhuc, setKhoiPhuc] = useState<number | null>(null);
 	const t = TRANG_DANG_DOC;
 	return (
 		<div className="flex min-w-0 flex-1 flex-col gap-4 p-6 xl:flex-row">
@@ -248,8 +380,9 @@ export function DocTrang({
 			</article>
 			<aside className="flex w-full shrink-0 flex-col gap-5 xl:sticky xl:top-4 xl:w-72 xl:self-start">
 				<ReaderToc headings={MUC_LUC} label="Trên trang này" />
+				<DoThiCucBo />
 				<section className="flex flex-col gap-2">
-					<h4 className="font-medium text-sm">Người giữ trang</h4>
+					<h4 className="font-medium text-sm">Chủ trang</h4>
 					<p className="text-sm" translate="no">
 						{t.nguoiGiu}
 					</p>
@@ -259,6 +392,12 @@ export function DocTrang({
 				</section>
 				<section className="flex flex-col gap-2">
 					<h4 className="font-medium text-sm">Lịch sử</h4>
+					{khoiPhuc !== null ? (
+						<p className="text-xs" data-khoi-phuc="" role="status">
+							Đã tạo đề xuất khôi phục phiên bản {khoiPhuc}. Bản đang dùng chưa
+							đổi cho tới khi được duyệt như mọi thay đổi khác.
+						</p>
+					) : null}
 					<ol className="flex flex-col gap-3">
 						{LICH_SU.map((l) => (
 							<li className="flex flex-col gap-0.5 text-xs" key={l.ban}>
@@ -271,6 +410,16 @@ export function DocTrang({
 								</span>
 								<span className="text-muted-foreground">{l.ai}</span>
 								<span>{l.vi}</span>
+								{l.ban < TRANG_DANG_DOC.phienBan ? (
+									<Button
+										className="w-fit"
+										onClick={() => setKhoiPhuc(l.ban)}
+										size="sm"
+										variant="ghost"
+									>
+										Khôi phục bản này
+									</Button>
+								) : null}
 							</li>
 						))}
 					</ol>
@@ -279,10 +428,15 @@ export function DocTrang({
 					<h4 className="font-medium text-sm">Trang dẫn tới đây</h4>
 					<ul className="flex flex-col gap-1 text-xs">
 						{LIEN_KET_DEN.map((l) => (
-							<li className="flex items-center gap-2" key={l}>
-								<Icon icon={Book} />
-								<span className="underline underline-offset-2" translate="no">
-									{l}
+							<li className="flex flex-col gap-0.5" key={l.ten}>
+								<span className="flex items-center gap-2">
+									<Icon icon={Book} />
+									<span className="underline underline-offset-2" translate="no">
+										{l.ten}
+									</span>
+								</span>
+								<span className="text-muted-foreground" translate="no">
+									{boWikilink(l.doan)}
 								</span>
 							</li>
 						))}

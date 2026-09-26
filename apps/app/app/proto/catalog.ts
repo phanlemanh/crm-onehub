@@ -19,17 +19,28 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-viet-trang", nhan: "Lượt 1 — Viết trang mới" },
 			{ id: "ST-kho-rong", nhan: "Lượt 1 — Kho còn trống" },
 			{ id: "ST-dang-tai", nhan: "Lượt 1 — Đang tải" },
-			{ id: "ST-tac-nhan-tra-loi", nhan: "Lượt 2 — Tác nhân trả lời theo kho" },
+			{ id: "ST-tim-nhanh", nhan: "Lượt 1 — Tìm nhanh ⌘K, có dấu hay không" },
+			{ id: "ST-suc-khoe", nhan: "Lượt 1 — Sức khoẻ kho: việc của chủ trang" },
+			{
+				id: "ST-khong-co-quyen",
+				nhan: "Lượt 1 — Trang bị hạn chế: 404 như nhau",
+			},
+			{
+				id: "ST-tac-nhan-tra-loi",
+				nhan: "Lượt 2 — Trợ lý AI trả lời theo kho",
+			},
 			{
 				id: "ST-tac-nhan-tu-choi",
-				nhan: "Lượt 2 — Tác nhân từ chối, không đoán",
+				nhan: "Lượt 2 — Trợ lý AI từ chối, không đoán",
 			},
 			{ id: "ST-tai-nguon", nhan: "Lượt 3 — Tải nguồn lên" },
 			{
 				id: "ST-duyet-ban-may-soan",
 				nhan: "Lượt 3 — Duyệt: nguồn trước, đối chiếu từng số",
 			},
+			{ id: "ST-de-xuat-cu", nhan: "Lượt 3 — Đề xuất cũ vì trang đã sửa" },
 			{ id: "ST-soat-dinh-ky", nhan: "Lượt 4 — Soát định kỳ, vẫn qua duyệt" },
+			{ id: "ST-the-cu-phap-ly", nhan: "Lượt 4 — Căn cứ pháp lý đã đổi" },
 		],
 	},
 	{

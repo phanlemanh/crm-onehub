@@ -5,11 +5,21 @@ import Building from "@carbon/icons-react/es/Building";
 import Dashboard from "@carbon/icons-react/es/Dashboard";
 import Partnership from "@carbon/icons-react/es/Partnership";
 import Roadmap from "@carbon/icons-react/es/Roadmap";
+import Search from "@carbon/icons-react/es/Search";
 import Settings from "@carbon/icons-react/es/Settings";
 import Target from "@carbon/icons-react/es/Target";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import {
+	Command,
+	CommandDialog,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@crm/ui/components/command";
 import type { CarbonIcon } from "@crm/ui/components/icon";
 import { Icon } from "@crm/ui/components/icon";
 import Bot from "@crm/ui/components/icons/bot";
@@ -17,12 +27,15 @@ import Logo from "@crm/ui/components/logo";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { cn } from "@crm/ui/lib/utils";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { PageShellTitle } from "@/components/page-shell";
+import { NHOM, TRANG } from "./du-lieu";
 
 export type Muc = "tai-lieu" | "chat";
 
-export type TabKho = "trang" | "cho-duyet" | "nguon";
+export type TabKho = "trang" | "cho-duyet" | "nguon" | "suc-khoe";
+
+const TAB_KHO: readonly TabKho[] = ["trang", "cho-duyet", "nguon", "suc-khoe"];
 
 const DIEU_HUONG: { key: string; nhan: string; icon: CarbonIcon }[] = [
 	{ key: "overview", nhan: "Tổng quan", icon: Dashboard },
@@ -91,24 +104,95 @@ export function KhungUngDung({
 	);
 }
 
+function TimNhanh({ moSan }: { moSan: boolean }) {
+	const [mo, setMo] = useState(moSan);
+	useEffect(() => {
+		const bam = (e: KeyboardEvent) => {
+			if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				setMo((m) => !m);
+			}
+		};
+		window.addEventListener("keydown", bam);
+		return () => window.removeEventListener("keydown", bam);
+	}, []);
+	return (
+		<>
+			<Button onClick={() => setMo(true)} variant="outline">
+				<Icon icon={Search} />
+				Tìm nhanh
+				<kbd className="text-muted-foreground text-xs">⌘K</kbd>
+			</Button>
+			<CommandDialog
+				description="Tìm trang theo tên hoặc nội dung, có dấu hay không dấu"
+				onOpenChange={setMo}
+				open={mo}
+				title="Tìm nhanh trong kho tài liệu"
+			>
+				<Command>
+					<CommandInput placeholder="Gõ tên trang, ví dụ «hoa hong»" />
+					<CommandList>
+						<CommandEmpty>
+							Không có trang nào khớp. Câu hỏi này sẽ vào hàng «chưa có trang».
+						</CommandEmpty>
+						{NHOM.map((n) => (
+							<CommandGroup heading={n.nhan} key={n.id}>
+								{TRANG.filter((t) => t.nhom === n.id).map((t) => (
+									<CommandItem
+										key={t.id}
+										onSelect={() => setMo(false)}
+										value={`${t.ten} ${boDau(t.ten)}`}
+									>
+										<Icon icon={Book} />
+										<span translate="no">{t.ten}</span>
+									</CommandItem>
+								))}
+							</CommandGroup>
+						))}
+					</CommandList>
+				</Command>
+			</CommandDialog>
+		</>
+	);
+}
+
+function boDau(chu: string): string {
+	return chu
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/đ/g, "d")
+		.replace(/Đ/g, "D");
+}
+
 export function DauKho({
 	tab,
 	soChoDuyet,
 	onTab,
 	hanhDong,
+	moTimNhanh = false,
 }: {
 	tab: TabKho | null;
 	soChoDuyet: number;
 	onTab: (tab: TabKho) => void;
 	hanhDong?: ReactNode;
+	moTimNhanh?: boolean;
 }) {
 	return (
 		<div className="flex flex-col gap-3 border-b px-6 pt-5 pb-3">
 			<div className="flex flex-wrap items-center gap-3">
 				<PageShellTitle>Tài liệu</PageShellTitle>
-				<div className="ml-auto flex items-center gap-2">{hanhDong}</div>
+				<div className="ml-auto flex items-center gap-2">
+					<TimNhanh moSan={moTimNhanh} />
+					{hanhDong}
+				</div>
 			</div>
-			<Tabs onValueChange={(v) => onTab(v as TabKho)} value={tab ?? "trang"}>
+			<Tabs
+				onValueChange={(v) => {
+					const tab = TAB_KHO.find((t) => t === v);
+					if (tab) onTab(tab);
+				}}
+				value={tab ?? "trang"}
+			>
 				<TabsList>
 					<TabsTrigger value="trang">Trang</TabsTrigger>
 					<TabsTrigger value="cho-duyet">
@@ -120,6 +204,7 @@ export function DauKho({
 						) : null}
 					</TabsTrigger>
 					<TabsTrigger value="nguon">Nguồn</TabsTrigger>
+					<TabsTrigger value="suc-khoe">Sức khoẻ</TabsTrigger>
 				</TabsList>
 			</Tabs>
 		</div>
