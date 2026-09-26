@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0cca29f600e8ba13c05398afc7521907597b3ffb
+verified_commit: 825d08ccb9bcbaa2dc7a1898056743c0661c7540
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -427,3 +427,7 @@ sha: e17f7d9af7ae8547b82986709c9c5249ef14037b · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-09-26, do gop onehub #153 (luot 4) vao nhanh luot 5; luot 5 doi thuoc man-okr buoc 3, 8, 12 va E12 buoc 1
 run_id: repin-20260926T071057Z-52963
 sha: 0cca29f600e8ba13c05398afc7521907597b3ffb · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths) · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 8 — 2026-09-26, do vong sua S4-r1 cua toan-canh-okr cham tien-do.ts (ky hien tai), okr.objective tra cycleName va sheet muc tieu thoi goi okr.cycles; gop onehub #155
+run_id: repin-20260926T092424Z-22525
+sha: 825d08ccb9bcbaa2dc7a1898056743c0661c7540 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths) · diff chạm vật đo ngoài làn máy: E11, E12, E20 — chưa chứng lại, đi vòng S4 delta
