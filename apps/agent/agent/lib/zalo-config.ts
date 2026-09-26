@@ -74,6 +74,7 @@ export const ZALO = {
 				"write_workspace_profile",
 			],
 			tat: ["agent"],
+			coSanChan: ["web_fetch", "web_search", "ask_question"],
 		},
 	},
 	lenh: { tu: ["xong", "done"], toiDaSo: 20, moi: ["mới", "moi", "/new"] },

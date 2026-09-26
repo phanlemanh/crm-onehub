@@ -74,10 +74,14 @@ describe("chi-doc", () => {
 		const ban = await giai(ZALO.hoi.purpose);
 		expect(ban).not.toBeNull();
 		expect(Object.keys(ban ?? {}).sort()).toEqual(
-			[...ZALO.hoi.congCu.ghi].sort(),
+			[...ZALO.hoi.congCu.ghi, ...ZALO.hoi.congCu.coSanChan].sort(),
 		);
+		expect(
+			[...ZALO.hoi.congCu.coSanChan].sort(),
+			"cong cu co san di ra mang va hoi lai",
+		).toEqual(["ask_question", "web_fetch", "web_search"]);
 		let daGoi = 0;
-		for (const ten of ZALO.hoi.congCu.ghi) {
+		for (const ten of [...ZALO.hoi.congCu.ghi, ...ZALO.hoi.congCu.coSanChan]) {
 			const tra = await ban?.[ten]?.execute({}, phien(ZALO.hoi.purpose));
 			expect(tra, `ban ghi de ${ten} tu choi`).toEqual({
 				ok: false,
@@ -85,7 +89,9 @@ describe("chi-doc", () => {
 			});
 			daGoi += 1;
 		}
-		expect(daGoi).toBe(ZALO.hoi.congCu.ghi.length);
+		expect(daGoi).toBe(
+			ZALO.hoi.congCu.ghi.length + ZALO.hoi.congCu.coSanChan.length,
+		);
 	});
 
 	test("chi-doc: moi ten ghi la mot tep cong cu don cung ten", async () => {
