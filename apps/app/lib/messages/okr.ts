@@ -237,6 +237,8 @@ const vi = {
 		"bo-theo-doi": "Bỏ theo dõi",
 		"chuyen-viec": "Chuyển việc",
 		"mo-hop-tuan": "Mở bảng họp tuần",
+		"doi-nguon": "Đổi nguồn số",
+		"ghi-so-api": "Ghi số qua khoá API",
 	},
 	vet: {
 		cot: {
@@ -760,6 +762,8 @@ const en: OkrMessages = {
 		"bo-theo-doi": "Unfollowed",
 		"chuyen-viec": "Transferred work",
 		"mo-hop-tuan": "Opened the weekly meeting board",
+		"doi-nguon": "Changed number source",
+		"ghi-so-api": "Value written via API key",
 	},
 	vet: {
 		cot: {
