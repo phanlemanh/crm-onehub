@@ -469,7 +469,8 @@ async function bamChu(trang, sel, chu, nhan) {
 		chu,
 	);
 	const el = tay.asElement();
-	if (!el) return kiem(`${nhan}: khong thay «${chu}» trong ${sel} de bam`, false);
+	if (!el)
+		return kiem(`${nhan}: khong thay «${chu}» trong ${sel} de bam`, false);
 	try {
 		await el.click();
 	} catch {
@@ -531,7 +532,10 @@ async function buocTongQuan(ai, soHang, tenAnh) {
 			(dem.goi["okr.cycles"] ?? 0) > truoc,
 		);
 		if (coHang) {
-			const n = await demSel(trang, "[data-khoi='okr-cua-toi'] [data-kr-cua-toi]");
+			const n = await demSel(
+				trang,
+				"[data-khoi='okr-cua-toi'] [data-kr-cua-toi]",
+			);
 			kiem(`E9 (${ai}): bang KR co ${soHang} hang (thay ${n})`, n === soHang);
 			await chup(trang, `${tenAnh}-sau-thu-lai.png`);
 		}
@@ -552,11 +556,12 @@ async function buocTaiTruoc() {
 	];
 	let doiChungDaDem = false;
 	for (const [ten, q] of ca) {
-		const { trang, dem } = await moTrang(
-			cookie.admin,
-			`/okr/theo-don-vi?${q}`,
+		const { trang, dem } = await moTrang(cookie.admin, `/okr/theo-don-vi?${q}`);
+		await hienSel(
+			trang,
+			"[data-muc-tieu]",
+			`E10 ${ten}: danh sach muc tieu hien`,
 		);
-		await hienSel(trang, "[data-muc-tieu]", `E10 ${ten}: danh sach muc tieu hien`);
 		const n = dem.goi["okr.danhSach"] ?? 0;
 		kiem(
 			`E10 ${ten}: trinh duyet goi lai okr.danhSach ${n} lan khi vua mo (URL ?${q})`,
@@ -564,7 +569,9 @@ async function buocTaiTruoc() {
 		);
 		await chup(trang, `E10-theo-don-vi-${ten}.png`);
 		if (ten === "khong-loc") {
-			const truocMt = (await thuocTinh(trang, "[data-muc-tieu]", "data-muc-tieu")).sort();
+			const truocMt = (
+				await thuocTinh(trang, "[data-muc-tieu]", "data-muc-tieu")
+			).sort();
 			await bamChu(trang, "button", CHU.boLoc, "E10 doi chung");
 			await bamChu(trang, "[role='menuitem']", CHU.tuTin, "E10 doi chung");
 			await bamChu(
@@ -577,7 +584,9 @@ async function buocTaiTruoc() {
 			await choMangRanh(trang);
 			const sau = dem.goi["okr.danhSach"] ?? 0;
 			doiChungDaDem = sau >= 1;
-			const sauMt = (await thuocTinh(trang, "[data-muc-tieu]", "data-muc-tieu")).sort();
+			const sauMt = (
+				await thuocTinh(trang, "[data-muc-tieu]", "data-muc-tieu")
+			).sort();
 			kiem(
 				`E10 doi chung: doi bo loc tren man thi danh sach doi (truoc [${truocMt}], sau [${sauMt}])`,
 				JSON.stringify(truocMt) !== JSON.stringify(sauMt),
@@ -656,8 +665,16 @@ try {
 	slug = await suySlug(cookie.admin);
 	await gieo();
 	const buoc = [
-		["tong-quan-quan-tri", ["E8", "E9"], () => buocTongQuan("admin", 2, "E8-tongquan")],
-		["tong-quan-chi-okr", ["E8", "E9"], () => buocTongQuan("chiOkr", 1, "E8-chiokr")],
+		[
+			"tong-quan-quan-tri",
+			["E8", "E9"],
+			() => buocTongQuan("admin", 2, "E8-tongquan"),
+		],
+		[
+			"tong-quan-chi-okr",
+			["E8", "E9"],
+			() => buocTongQuan("chiOkr", 1, "E8-chiokr"),
+		],
 		["tai-truoc", ["E10"], buocTaiTruoc],
 		["nhan-phu-trach", ["E11"], buocNhanPhuTrach],
 	];
@@ -669,7 +686,9 @@ try {
 		} catch (e) {
 			hong.push(`${ten}: nem ${String(e).slice(0, 300)}`);
 		}
-		console.log(`  buoc ${ten}: ${Math.round((Date.now() - batBuoc) / 1000)} s`);
+		console.log(
+			`  buoc ${ten}: ${Math.round((Date.now() - batBuoc) / 1000)} s`,
+		);
 	}
 } catch (e) {
 	hong.push(`tien de: nem ${String(e).slice(0, 400)}`);
