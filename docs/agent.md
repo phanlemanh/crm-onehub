@@ -357,6 +357,33 @@ API; the API only reads and writes rows.
   like every other assistant conversation, and that is where a manual review reads
   them. Log lines carry `message_id`, `hoiId` and `zaloChatId`, never text.
 
+### Đọc Google Sheets (OKR)
+
+`lib/okr-sheets.ts` đọc một ô cho KR nguồn `bang-tinh`, bằng tài khoản dịch vụ chỉ đọc
+(`GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA`; thiếu một trong hai thì trả `tat`, không
+gọi mạng — năng lực «Google Sheets» trong `capabilities.ts`).
+
+- **JWT RS256 ký bằng Web Crypto**, đổi lấy token ở `OKR_SO.sheets.tokenUrl` (phạm vi
+  `spreadsheets.readonly`). Token giữ theo từng hàm `fetch` trong `OKR_SO.sheets.tokenDungMs`;
+  401 xoá nó.
+- **`values/<ô>?valueRenderOption=UNFORMATTED_VALUE`**, `OKR_SO.sheets.soLanThu` lần thử
+  chia chung trần `OKR_SO.sheets.tranMs` của một lần đọc. Chỉ 5xx, 429, 401 và lỗi mạng thử
+  lại. 403 → `chua-chia-se`, 404 → `khong-thay`, khác 2xx → `google-loi`; ô vắng hay rỗng →
+  `o-trong`; chữ qua `docSoOkr` («1.240» → 1240), `#REF!`, đúng/sai, số ngoài `soKr` →
+  `khong-phai-so`.
+- **Không qua `@crm/db/safe-fetch`.** `safe-fetch` chặn địa chỉ do người nhập trỏ vào mạng
+  trong. Ở đây hai máy chủ là hằng số của Google trong `OKR_SO.sheets`; người chỉ góp mã
+  bảng tính (đã lọc bằng biểu thức ở `sheetIdTuUrl`) và ô, cả hai mã hoá làm một đoạn đường
+  dẫn. `OKR_SHEETS_TOKEN_URL`/`OKR_SHEETS_API_URL` ghi đè hai máy chủ đó chỉ khi `NODE_ENV`
+  khác `production`, cho phiên đo trỏ tới Google giả.
+- **Hai lối vào.** Nhịp chụp (`chupSoOkr`) đọc tối đa `OKR_SO.sheets.toiDaMoiNhip` ô và không
+  bắt đầu một lần đọc nếu thời gian đã trôi cộng `tranMs` vượt `OKR_SO.chup.hanNhipMs`. Việc
+  `okr-doc-sheet` (làn trực tiếp, `PRIORITY.okrSheet`) là «đọc thử» khi đặt nguồn hay bấm «Đọc
+  lại»: `chayDocSheet` ghi `docLuc/docGiaTri/docLoi`, không ghi `okrSoChup`, và đóng việc bằng
+  `đọc ô: được` hoặc `đọc ô: <lý do>`.
+- **Log không có giá trị ô, mã bảng tính, khoá hay token** — chỉ lý do, mã HTTP hoặc tên lỗi.
+  Lỗi của `fetch` trong Bun mang theo URL, nên không in đối tượng lỗi.
+
 ### Backfills
 
 Sign-in sweep covers records never looked up (10 credits/company);
