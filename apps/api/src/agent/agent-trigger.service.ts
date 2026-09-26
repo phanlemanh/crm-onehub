@@ -4,6 +4,7 @@ import { CRM_EVENT_CATALOG, type CrmEventType } from "@crm/db/crm-events";
 import { RECORD_ID_COLUMNS } from "@crm/db/fields";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { fieldBackfillPayload } from "@crm/validation/field-backfill";
+import type { DocSheetPayload } from "@crm/validation/okr-nguon";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import { AGENT_DISPATCH } from "./agent-dispatch.config";
@@ -335,6 +336,22 @@ export class AgentTriggerService {
 		if (queued > 0 || merged > 0) this.poke();
 
 		return { queued, merged };
+	}
+
+	async okrDocSheet(keyResultId: string): Promise<void> {
+		const payload = { keyResultId } satisfies DocSheetPayload;
+		await this.db.agentTask.create({
+			data: {
+				kind: "okr-doc-sheet",
+				reason: `Đọc ô Google Sheets của KR ${keyResultId}`,
+				priority: PRIORITY.okrSheet,
+				budget: 0,
+				dueAt: new Date(),
+				payload,
+			},
+		});
+		this.logger.log({ message: "Agent task queued", kind: "okr-doc-sheet" });
+		this.poke();
 	}
 
 	async meetingSoon(contactId: string, when: Date): Promise<void> {

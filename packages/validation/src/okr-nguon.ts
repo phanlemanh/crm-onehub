@@ -84,6 +84,21 @@ export function parseOkrNguon(row: unknown): OkrNguonDong {
 	return r.data;
 }
 
+export const okrSoChupDong = z.object({
+	nguon: z.enum(LOAI_NGUON_MAY),
+	chiSo: maChiSo.nullable(),
+	phamVi: phamViChiSo.nullable(),
+	bac: bacGhiDanh.nullable(),
+});
+export type OkrSoChupDong = z.infer<typeof okrSoChupDong>;
+
+export function parseOkrSoChup(row: unknown): OkrSoChupDong {
+	const r = okrSoChupDong.safeParse(row);
+	if (!r.success)
+		throw new Error(`Bản chụp số KR không đọc được: ${r.error.message}`);
+	return r.data;
+}
+
 export const docSheetPayload = z.strictObject({ keyResultId: ma });
 export type DocSheetPayload = z.infer<typeof docSheetPayload>;
 

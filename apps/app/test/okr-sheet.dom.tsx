@@ -46,6 +46,8 @@ function kr(id: string, startLocked: boolean): KrOutput {
 		dueOn: null,
 		weight: 1,
 		source: "tay",
+		doCanh: false,
+		soMay: null,
 		startLocked,
 		progress: 40,
 		laCuaToi: false,

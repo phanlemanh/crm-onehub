@@ -62,4 +62,5 @@ export const PRIORITY = {
 	slackJoin: 950,
 	event: 700,
 	nhac: 60,
+	okrSheet: 400,
 } as const;

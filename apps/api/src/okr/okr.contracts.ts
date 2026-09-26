@@ -13,6 +13,7 @@ import {
 	mucTieuUpdate,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
+import { LOAI_NGUON_MAY } from "@crm/validation/okr-nguon";
 import { HANH_DONG_VET, okrVetSnapshot } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import { OKR } from "./okr-config";
@@ -73,6 +74,14 @@ export const krOutput = z.object({
 	dueOn: ngay.nullable(),
 	weight: z.number(),
 	source: z.enum(NGUON_KR),
+	doCanh: z.boolean(),
+	soMay: z
+		.object({
+			giaTri: z.number(),
+			ngay,
+			nguon: z.enum(LOAI_NGUON_MAY),
+		})
+		.nullable(),
 	startLocked: z.boolean(),
 	progress: z.number(),
 	laCuaToi: z.boolean(),

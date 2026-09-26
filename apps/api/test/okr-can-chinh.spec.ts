@@ -22,6 +22,8 @@ function kr(id: string, objectiveId: string, progress: number): KrOutput {
 		dueOn: null,
 		weight: 1,
 		source: "tay",
+		doCanh: false,
+		soMay: null,
 		startLocked: true,
 		progress,
 		laCuaToi: false,

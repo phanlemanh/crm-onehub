@@ -1,0 +1,983 @@
+import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
+import { db } from "@crm/db";
+import { chupKrCrm } from "@crm/db/okr-chi-so";
+import { parseDocSheetPayload, parseOkrNguon } from "@crm/validation/okr-nguon";
+import { parseOkrVet } from "@crm/validation/okr-vet";
+import { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import {
+	type AiHoacCookie,
+	dungSan,
+	goi,
+	goiQuery,
+	type Json,
+	ma,
+	nguoiMoi,
+	phien,
+	phienCua,
+	type TraLoi,
+	ungDung,
+} from "./okr-san";
+
+dungSan();
+
+const NGAY = { D: "2026-06-10", D1: "2026-06-09", D2: "2026-06-08" } as const;
+const KY_TU = new Date("2026-04-01T00:00:00Z");
+const KY_DEN = new Date("2026-06-30T00:00:00Z");
+const CHOT_SOM = new Date("2026-05-15T03:00:00Z");
+const CHOT_D1 = new Date("2026-06-09T03:00:00Z");
+const CHOT_D = new Date("2026-06-10T03:00:00Z");
+const SO_CHOT_SOM = 55;
+const SO_P1 = 57;
+const SO_P2 = 3;
+const CO_TRANG = 50;
+const SHEET_ID = "1AbCdEfGh_ij-KL";
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit#gid=0`;
+const SHEET_O = "Trang1!B2";
+const EMAIL_SHEETS = "okr-doc@du-an-thu.iam.gserviceaccount.com";
+
+const CAU = {
+	donVi: "Đơn vị không có hoặc đã lưu trữ.",
+	thanhVien: "Người này không phải thành viên của không gian làm việc.",
+	url: "Đường dẫn phải là một bảng tính Google (docs.google.com/spreadsheets)",
+	o: "Ô phải có dạng A1 hoặc Trang!A1",
+	sheetsTat: "Quản trị chưa cắm khoá Google Sheets.",
+	kyKhoa: "Chu kỳ này ở pha chấm điểm hoặc đã đóng — không ghi được nữa.",
+	khongSua:
+		"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới sửa KR này.",
+	nguonKhoa: "Nguồn đã khoá khi công bố",
+	hienTaiMay: "Số hiện tại của KR này do máy ghi",
+	daCoSoChup: "KR đã có lịch sử số — sửa được, không xoá được.",
+	doiTac: "Danh sách bản ghi thuộc dữ liệu đối tác",
+} as const;
+
+type Pha = "lap-ke-hoach" | "dang-chay" | "cham-diem" | "da-dong";
+type TrangThai = "nhap" | "cong-bo";
+type Nguon = "tay" | "crm";
+
+type DongBanGhi = {
+	loai: string;
+	id: string;
+	ten: string;
+	ngay: string;
+};
+type BanGhiRa = {
+	loai: string;
+	dinhNghia: {
+		chiSo: string;
+		phamVi: { kieu: string; id?: string };
+		bac?: string;
+	} | null;
+	tu: string | null;
+	den: string | null;
+	ngay: string | null;
+	soDaChup: number | null;
+	soTinhLai: number | null;
+	lech: boolean;
+	tong: number;
+	dong: DongBanGhi[];
+	lanGhi: { ngay: string; giaTri: number; nguoi: string | null }[];
+};
+type LichSuRa = {
+	dong: {
+		ngay: string;
+		giaTri: number;
+		nguon: string;
+		tacGia: string | null;
+	}[];
+};
+type KrRa = {
+	id: string;
+	source: string;
+	doCanh: boolean;
+	soMay: { giaTri: number; ngay: string; nguon: string } | null;
+};
+type MucTieuRa = { keyResults: KrRa[] };
+type ChiSoRa = {
+	chiSo: string[];
+	bac: string[];
+	sheetsBat: boolean;
+	emailSheets: string | null;
+};
+
+const s = {
+	phuTrach: "",
+	truongP1: "",
+	nguoiP2: "",
+	cookiePhuTrach: "",
+	cookieTruongP1: "",
+	B1: "",
+	P1: "",
+	P2: "",
+	Pluu: "",
+	cty: "",
+	dealP1: [] as string[],
+	dealKhac: [] as string[],
+	ky: {} as Record<Pha, string>,
+	kr: [] as string[],
+};
+
+const envGoc = {
+	email: process.env.GOOGLE_SHEETS_EMAIL,
+	khoa: process.env.GOOGLE_SHEETS_KHOA,
+};
+
+function camSheets() {
+	process.env.GOOGLE_SHEETS_EMAIL = EMAIL_SHEETS;
+	process.env.GOOGLE_SHEETS_KHOA = "khoa-rieng-thu";
+}
+
+function rutSheets() {
+	delete process.env.GOOGLE_SHEETS_EMAIL;
+	delete process.env.GOOGLE_SHEETS_KHOA;
+}
+
+function traEnv() {
+	if (envGoc.email === undefined) delete process.env.GOOGLE_SHEETS_EMAIL;
+	else process.env.GOOGLE_SHEETS_EMAIL = envGoc.email;
+	if (envGoc.khoa === undefined) delete process.env.GOOGLE_SHEETS_KHOA;
+	else process.env.GOOGLE_SHEETS_KHOA = envGoc.khoa;
+}
+
+async function mucTieu(pha: Pha, trangThai: TrangThai): Promise<string> {
+	const r = await db.okrObjective.create({
+		data: {
+			cycleId: s.ky[pha],
+			level: "phong-ban",
+			departmentId: s.P1,
+			ownerUserId: s.phuTrach,
+			kind: "cam-ket",
+			status: trangThai,
+			publishedAt: trangThai === "cong-bo" ? new Date() : null,
+			title: ma("muc-tieu"),
+		},
+	});
+	return r.id;
+}
+
+async function kr(objectiveId: string, nguon: Nguon): Promise<string> {
+	const r = await db.okrKeyResult.create({
+		data: {
+			objectiveId,
+			title: ma("kr"),
+			kind: "tang-toi",
+			ownerUserId: s.phuTrach,
+			startValue: 0,
+			targetValue: 100,
+			currentValue: 0,
+			source: nguon,
+		},
+	});
+	s.kr.push(r.id);
+	if (nguon === "crm") {
+		await db.okrNguonKr.create({
+			data: {
+				keyResultId: r.id,
+				loai: "crm",
+				chiSo: "thoa-thuan-chot-duoc",
+				phamVi: { kieu: "phong-ban", id: s.P1 },
+				taoBoiUserId: s.phuTrach,
+			},
+		});
+	}
+	return r.id;
+}
+
+const chup = (keyResultId: string, ngay: string) =>
+	chupKrCrm(db, keyResultId, ngay, parseOkrNguon);
+
+const crmP1 = (keyResultId: string): Json => ({
+	keyResultId,
+	loai: "crm",
+	chiSo: "thoa-thuan-chot-duoc",
+	phamVi: { kieu: "phong-ban", id: s.P1 },
+});
+
+const cookieCua = (ai: "phuTrach" | "truongP1"): AiHoacCookie =>
+	ai === "phuTrach" ? s.cookiePhuTrach : s.cookieTruongP1;
+
+const datNguon = (vao: Json, ai: AiHoacCookie = s.cookiePhuTrach) =>
+	goi("okr.datNguonKr", vao, ai);
+
+const banGhi = (vao: Json, ai: AiHoacCookie = s.cookiePhuTrach) =>
+	goiQuery("okr.banGhiChiSo", ai, vao);
+
+function thanhCong<T>(tra: TraLoi, nhan: string): T {
+	expect(`${nhan}: HTTP ${tra.status} ${tra.loi}`).toBe(`${nhan}: HTTP 200 `);
+	return tra.data as T;
+}
+
+async function anhKr(id: string) {
+	const k = await db.okrKeyResult.findUniqueOrThrow({
+		where: { id },
+		select: { source: true, currentValue: true },
+	});
+	const nguon = await db.okrNguonKr.findUnique({ where: { keyResultId: id } });
+	const vet = await db.okrTrail.count({
+		where: { keyResultId: id, action: "doi-nguon" },
+	});
+	const soChup = await db.okrSoChup.count({ where: { keyResultId: id } });
+	return {
+		source: k.source,
+		currentValue: Number(k.currentValue),
+		nguon,
+		vet,
+		soChup,
+	};
+}
+
+async function cauHinh(id: string) {
+	const n = await db.okrNguonKr.findUnique({ where: { keyResultId: id } });
+	return n
+		? {
+				loai: n.loai,
+				chiSo: n.chiSo,
+				phamVi: n.phamVi,
+				bac: n.bac,
+				sheetId: n.sheetId,
+				sheetO: n.sheetO,
+			}
+		: null;
+}
+
+async function vetDoiNguon(id: string) {
+	const rows = await db.okrTrail.findMany({
+		where: { keyResultId: id, action: "doi-nguon" },
+		orderBy: [{ at: "asc" }, { id: "asc" }],
+	});
+	return rows.map((r) => ({
+		before: parseOkrVet(r.before),
+		after: parseOkrVet(r.after),
+		note: r.note,
+	}));
+}
+
+async function mucTieuCua(krId: string, ai: AiHoacCookie): Promise<KrRa> {
+	const k = await db.okrKeyResult.findUniqueOrThrow({
+		where: { id: krId },
+		select: { objectiveId: true },
+	});
+	const mt = thanhCong<MucTieuRa>(
+		await goiQuery("okr.objective", ai, { id: k.objectiveId }),
+		"okr.objective",
+	);
+	const ra = mt.keyResults.find((x) => x.id === krId);
+	if (!ra) throw new Error(`okr.objective không trả KR ${krId}`);
+	return ra;
+}
+
+describe("okr-nguon", () => {
+	beforeAll(async () => {
+		s.phuTrach = await nguoiMoi("phu-trach");
+		s.truongP1 = await nguoiMoi("truong-p1");
+		s.nguoiP2 = await nguoiMoi("nguoi-p2");
+		s.cookiePhuTrach = await phienCua(s.phuTrach);
+		s.cookieTruongP1 = await phienCua(s.truongP1);
+		s.B1 = (
+			await db.division.create({ data: { name: ma("B1"), position: 0 } })
+		).id;
+		const phong = async (ten: string, luuTru: boolean) =>
+			(
+				await db.department.create({
+					data: {
+						name: ma(ten),
+						position: 0,
+						divisionId: s.B1,
+						archivedAt: luuTru ? new Date() : null,
+					},
+				})
+			).id;
+		s.P1 = await phong("P1", false);
+		s.P2 = await phong("P2", false);
+		s.Pluu = await phong("P-luu", true);
+		await db.department.update({
+			where: { id: s.P1 },
+			data: { headUserId: s.truongP1 },
+		});
+		await db.orgPlacement.createMany({
+			data: [
+				{ userId: s.phuTrach, primaryDepartmentId: s.P1 },
+				{ userId: s.truongP1, primaryDepartmentId: s.P1 },
+				{ userId: s.nguoiP2, primaryDepartmentId: s.P2 },
+			],
+		});
+		s.cty = (await db.company.create({ data: { name: ma("cty") } })).id;
+		const chot = (ownerId: string, closedAt: Date, luuTru = false) => ({
+			name: ma("thoa-thuan"),
+			companyId: s.cty,
+			ownerId,
+			stage: "CLOSED_WON" as const,
+			closedAt,
+			archivedAt: luuTru ? new Date("2026-05-20T03:00:00Z") : null,
+		});
+		const p1 = await db.deal.createManyAndReturn({
+			data: [
+				...Array.from({ length: SO_CHOT_SOM }, (_, i) =>
+					chot(i % 2 === 0 ? s.phuTrach : s.truongP1, CHOT_SOM),
+				),
+				chot(s.phuTrach, CHOT_D1),
+				chot(s.truongP1, CHOT_D),
+			],
+			select: { id: true },
+		});
+		s.dealP1 = p1.map((d) => d.id);
+		const khac = await db.deal.createManyAndReturn({
+			data: [
+				chot(s.phuTrach, CHOT_SOM, true),
+				...Array.from({ length: SO_P2 }, () => chot(s.nguoiP2, CHOT_SOM)),
+			],
+			select: { id: true },
+		});
+		s.dealKhac = khac.map((d) => d.id);
+		for (const pha of [
+			"lap-ke-hoach",
+			"dang-chay",
+			"cham-diem",
+			"da-dong",
+		] as const) {
+			const c = await db.okrCycle.create({
+				data: {
+					kind: "quy",
+					name: ma(`ky-${pha}`),
+					startsOn: KY_TU,
+					endsOn: KY_DEN,
+					phase: pha,
+				},
+			});
+			s.ky[pha] = c.id;
+		}
+	});
+
+	afterAll(async () => {
+		traEnv();
+		await db.okrSoChup.deleteMany({ where: { keyResultId: { in: s.kr } } });
+		await db.agentTask.deleteMany({
+			where: {
+				kind: "okr-doc-sheet",
+				OR: s.kr.map((id) => ({
+					payload: { path: ["keyResultId"], equals: id },
+				})),
+			},
+		});
+		await db.deal.deleteMany({
+			where: { id: { in: [...s.dealP1, ...s.dealKhac] } },
+		});
+		await db.company.deleteMany({ where: { id: s.cty } });
+	});
+
+	describe("dat-nguon", () => {
+		test("bon lan dat nguon tren muc tieu nhap: DB va vet dung bang viet truoc", async () => {
+			camSheets();
+			const mt = await mucTieu("dang-chay", "nhap");
+			const k = await kr(mt, "tay");
+			const pv = `phong-ban:${s.P1}`;
+
+			thanhCong(await datNguon(crmP1(k)), "crm");
+			expect((await anhKr(k)).source).toBe("crm");
+			expect(await cauHinh(k)).toEqual({
+				loai: "crm",
+				chiSo: "thoa-thuan-chot-duoc",
+				phamVi: { kieu: "phong-ban", id: s.P1 },
+				bac: null,
+				sheetId: null,
+				sheetO: null,
+			});
+			expect((await chup(k, NGAY.D)).ghi).toBe(1);
+			const soChupGieo = (await anhKr(k)).soChup;
+			expect(soChupGieo).toBe(1);
+
+			thanhCong(await datNguon({ keyResultId: k, loai: "api" }), "api");
+			expect((await anhKr(k)).source).toBe("api");
+			expect(await cauHinh(k)).toEqual({
+				loai: "api",
+				chiSo: null,
+				phamVi: null,
+				bac: null,
+				sheetId: null,
+				sheetO: null,
+			});
+
+			thanhCong(
+				await datNguon({
+					keyResultId: k,
+					loai: "bang-tinh",
+					url: SHEET_URL,
+					o: SHEET_O,
+				}),
+				"bang-tinh",
+			);
+			expect((await anhKr(k)).source).toBe("bang-tinh");
+			expect(await cauHinh(k)).toEqual({
+				loai: "bang-tinh",
+				chiSo: null,
+				phamVi: null,
+				bac: null,
+				sheetId: SHEET_ID,
+				sheetO: SHEET_O,
+			});
+
+			thanhCong(await datNguon({ keyResultId: k, loai: "tay" }), "tay");
+			const sau = await anhKr(k);
+			expect(sau.source).toBe("tay");
+			expect(sau.nguon).toBeNull();
+			expect(sau.soChup).toBe(soChupGieo);
+
+			expect(await vetDoiNguon(k)).toEqual([
+				{
+					before: { nguon: "tay" },
+					after: {
+						nguon: "crm",
+						nguonMay: "crm",
+						chiSo: "thoa-thuan-chot-duoc",
+						phamVi: pv,
+					},
+					note: null,
+				},
+				{
+					before: {
+						nguon: "crm",
+						nguonMay: "crm",
+						chiSo: "thoa-thuan-chot-duoc",
+						phamVi: pv,
+					},
+					after: { nguon: "api", nguonMay: "api" },
+					note: null,
+				},
+				{
+					before: { nguon: "api", nguonMay: "api" },
+					after: {
+						nguon: "bang-tinh",
+						nguonMay: "bang-tinh",
+						sheetId: SHEET_ID,
+						sheetO: SHEET_O,
+					},
+					note: null,
+				},
+				{
+					before: {
+						nguon: "bang-tinh",
+						nguonMay: "bang-tinh",
+						sheetId: SHEET_ID,
+						sheetO: SHEET_O,
+					},
+					after: { nguon: "tay" },
+					note: null,
+				},
+			]);
+		});
+
+		test("ma tran tu choi chin ca: cau ghim, khong dong nao doi; doi chung duong ghi duoc", async () => {
+			const mt = await mucTieu("dang-chay", "nhap");
+			const kMa = await kr(mt, "tay");
+			const kCham = await kr(await mucTieu("cham-diem", "nhap"), "tay");
+			const kDong = await kr(await mucTieu("da-dong", "nhap"), "tay");
+			const sheet = (o: string, url = SHEET_URL): Json => ({
+				keyResultId: kMa,
+				loai: "bang-tinh",
+				url,
+				o,
+			});
+			const phamVi = (kieu: string, id: string): Json => ({
+				keyResultId: kMa,
+				loai: "crm",
+				chiSo: "thoa-thuan-chot-duoc",
+				phamVi: { kieu, id },
+			});
+			const MA_TRAN: {
+				ten: string;
+				kr: string;
+				vao: () => Json;
+				ai: () => AiHoacCookie;
+				sheets: boolean;
+				status: number;
+				cau: string;
+			}[] = [
+				{
+					ten: "don-vi-khong-ton-tai",
+					kr: kMa,
+					vao: () => phamVi("phong-ban", "khong-co-phong-ban"),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.donVi,
+				},
+				{
+					ten: "phong-ban-da-luu-tru",
+					kr: kMa,
+					vao: () => phamVi("phong-ban", s.Pluu),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.donVi,
+				},
+				{
+					ten: "nguoi-khong-phai-thanh-vien",
+					kr: kMa,
+					vao: () => phamVi("nguoi", "khong-co-nguoi"),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.thanhVien,
+				},
+				{
+					ten: "url-ngoai-google-sheets",
+					kr: kMa,
+					vao: () => sheet("B2", "https://example.com/spreadsheets/d/abc"),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.url,
+				},
+				{
+					ten: "o-sai-khuon",
+					kr: kMa,
+					vao: () => sheet("B"),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.o,
+				},
+				{
+					ten: "sheets-khi-hai-bien-vang",
+					kr: kMa,
+					vao: () => sheet(SHEET_O),
+					ai: () => s.cookiePhuTrach,
+					sheets: false,
+					status: 400,
+					cau: CAU.sheetsTat,
+				},
+				{
+					ten: "pha-cham-diem",
+					kr: kCham,
+					vao: () => crmP1(kCham),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.kyKhoa,
+				},
+				{
+					ten: "pha-da-dong",
+					kr: kDong,
+					vao: () => crmP1(kDong),
+					ai: () => s.cookiePhuTrach,
+					sheets: true,
+					status: 400,
+					cau: CAU.kyKhoa,
+				},
+				{
+					ten: "nguoi-goi-khong-sua-duoc-kr",
+					kr: kMa,
+					vao: () => crmP1(kMa),
+					ai: () => phien.thuong.cookie,
+					sheets: true,
+					status: 403,
+					cau: CAU.khongSua,
+				},
+			];
+			for (const ca of MA_TRAN) {
+				if (ca.sheets) camSheets();
+				else rutSheets();
+				const truoc = await anhKr(ca.kr);
+				const tra = await datNguon(ca.vao(), ca.ai());
+				expect(`${ca.ten}: HTTP ${tra.status}`).toBe(
+					`${ca.ten}: HTTP ${ca.status}`,
+				);
+				expect(`${ca.ten}: ${tra.loi}`).toContain(ca.cau);
+				expect({ ca: ca.ten, ...(await anhKr(ca.kr)) }).toEqual({
+					ca: ca.ten,
+					...truoc,
+				});
+			}
+			camSheets();
+			thanhCong(await datNguon(crmP1(kMa)), "doi chung duong");
+			expect((await anhKr(kMa)).source).toBe("crm");
+			expect((await cauHinh(kMa))?.phamVi).toEqual({
+				kieu: "phong-ban",
+				id: s.P1,
+			});
+		});
+	});
+
+	describe("khoa-cong-bo", () => {
+		test("muc tieu cong bo: KR tay them do canh, KR crm khoa nguon; currentValue va xoa bi tu choi", async () => {
+			camSheets();
+			const mt = await mucTieu("dang-chay", "cong-bo");
+			const T = await kr(mt, "tay");
+			const C = await kr(mt, "crm");
+
+			const doCanh = thanhCong<{ id: string; doCanh: boolean }>(
+				await datNguon(crmP1(T)),
+				"T do canh",
+			);
+			expect(doCanh.doCanh).toBe(true);
+			const sauT = await anhKr(T);
+			expect(sauT.source).toBe("tay");
+			expect(sauT.nguon?.loai).toBe("crm");
+			expect(await vetDoiNguon(T)).toEqual([
+				{
+					before: { nguon: "tay" },
+					after: {
+						nguon: "tay",
+						nguonMay: "crm",
+						chiSo: "thoa-thuan-chot-duoc",
+						phamVi: `phong-ban:${s.P1}`,
+					},
+					note: "đo cạnh",
+				},
+			]);
+			expect((await mucTieuCua(T, s.cookiePhuTrach)).doCanh).toBe(true);
+
+			for (const vao of [
+				{ keyResultId: C, loai: "api" },
+				{ keyResultId: C, loai: "tay" },
+			]) {
+				const truoc = await anhKr(C);
+				const tra = await datNguon(vao);
+				expect(`C->${vao.loai}: ${tra.status} ${tra.loi}`).toContain(
+					`C->${vao.loai}: 400 ${CAU.nguonKhoa}`,
+				);
+				const sau = await anhKr(C);
+				expect(`C->${vao.loai}: source ${sau.source}`).toBe(
+					`C->${vao.loai}: source crm`,
+				);
+				expect(sau).toEqual(truoc);
+			}
+
+			const chayC = await goi(
+				"okr.updateKeyResult",
+				{ id: C, currentValue: 5 },
+				s.cookiePhuTrach,
+			);
+			expect(`${chayC.status} ${chayC.loi}`).toContain(`400 ${CAU.hienTaiMay}`);
+
+			const mtLap = await mucTieu("lap-ke-hoach", "nhap");
+			const C2 = await kr(mtLap, "crm");
+			const T2 = await kr(mtLap, "tay");
+			const lapC = await goi(
+				"okr.updateKeyResult",
+				{ id: C2, currentValue: 5 },
+				s.cookiePhuTrach,
+			);
+			expect(`${lapC.status} ${lapC.loi}`).toContain(`400 ${CAU.hienTaiMay}`);
+			expect((await anhKr(C2)).currentValue).toBe(0);
+
+			const C3 = await kr(await mucTieu("cham-diem", "nhap"), "crm");
+			const chamC = await goi(
+				"okr.updateKeyResult",
+				{ id: C3, currentValue: 5 },
+				s.cookiePhuTrach,
+			);
+			expect(`${chamC.status} ${chamC.loi}`).toContain(`400 ${CAU.kyKhoa}`);
+
+			thanhCong(
+				await goi(
+					"okr.updateKeyResult",
+					{ id: T2, currentValue: 5 },
+					s.cookiePhuTrach,
+				),
+				"doi chung T2",
+			);
+			expect((await anhKr(T2)).currentValue).toBe(5);
+
+			expect((await chup(C2, NGAY.D)).ghi).toBe(1);
+			const xoa = await goi(
+				"okr.removeKeyResult",
+				{ id: C2 },
+				s.cookieTruongP1,
+			);
+			expect(`${xoa.status} ${xoa.loi}`).toContain(`400 ${CAU.daCoSoChup}`);
+			expect(
+				await db.okrKeyResult.count({ where: { id: C2 } }),
+				"KR C2 con",
+			).toBe(1);
+		});
+	});
+
+	describe("ban-ghi", () => {
+		const b = { kB: "", kApi: "" };
+
+		beforeAll(async () => {
+			const mt = await mucTieu("dang-chay", "nhap");
+			b.kB = await kr(mt, "tay");
+			thanhCong(await datNguon(crmP1(b.kB)), "dat nguon kB");
+			for (const ngay of [NGAY.D, NGAY.D1, NGAY.D2]) {
+				expect((await chup(b.kB, ngay)).ghi, `chup ${ngay}`).toBe(1);
+			}
+			b.kApi = await kr(mt, "tay");
+			thanhCong(
+				await datNguon({ keyResultId: b.kApi, loai: "api" }),
+				"dat nguon api",
+			);
+			await db.okrSoChup.createMany({
+				data: [
+					{
+						keyResultId: b.kApi,
+						ngay: new Date(`${NGAY.D1}T00:00:00Z`),
+						giaTri: 7,
+						nguon: "api",
+						tacGiaUserId: s.phuTrach,
+						chupLuc: new Date("2026-06-09T05:00:00Z"),
+					},
+					{
+						keyResultId: b.kApi,
+						ngay: new Date(`${NGAY.D}T00:00:00Z`),
+						giaTri: 9,
+						nguon: "api",
+						tacGiaUserId: s.truongP1,
+						chupLuc: new Date("2026-06-10T05:00:00Z"),
+					},
+				],
+			});
+		});
+
+		test("khong ngay: ngay moi nhat, hai trang cong bang soTinhLai bang soDaChup", async () => {
+			const t1 = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: b.kB, trang: 1 }),
+				"trang 1",
+			);
+			const t2 = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: b.kB, trang: 2 }),
+				"trang 2",
+			);
+			expect(t1.ngay).toBe(NGAY.D);
+			expect(t1.loai).toBe("crm");
+			expect(t1.dinhNghia).toEqual({
+				chiSo: "thoa-thuan-chot-duoc",
+				phamVi: { kieu: "phong-ban", id: s.P1 },
+			});
+			expect(t1.tu).toBe("2026-04-01");
+			expect(t1.den).toBe(NGAY.D);
+			expect(t1.dong).toHaveLength(CO_TRANG);
+			expect(t2.dong).toHaveLength(SO_P1 - CO_TRANG);
+			const tongDong = t1.dong.length + t2.dong.length;
+			expect(
+				`tong dong ${tongDong} soTinhLai ${t1.soTinhLai} soDaChup ${t1.soDaChup} tong ${t1.tong}`,
+			).toBe(
+				`tong dong ${SO_P1} soTinhLai ${SO_P1} soDaChup ${SO_P1} tong ${SO_P1}`,
+			);
+			expect(t1.lech).toBe(false);
+			for (const d of [...t1.dong, ...t2.dong]) {
+				expect(d.loai).toBe("deal");
+				expect(d.ten.length).toBeGreaterThan(0);
+				expect(d.ngay).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+			}
+			expect(new Set([...t1.dong, ...t2.dong].map((d) => d.id))).toEqual(
+				new Set(s.dealP1),
+			);
+			expect(t1.lanGhi).toEqual([]);
+		});
+
+		test("ngay cu nhat: khoang ngay va soDaChup cua ngay do", async () => {
+			const r = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: b.kB, ngay: NGAY.D2, trang: 1 }),
+				"ngay cu",
+			);
+			expect({
+				ngay: r.ngay,
+				tu: r.tu,
+				den: r.den,
+				soDaChup: r.soDaChup,
+				soTinhLai: r.soTinhLai,
+				tong: r.tong,
+				lech: r.lech,
+			}).toEqual({
+				ngay: NGAY.D2,
+				tu: "2026-04-01",
+				den: NGAY.D2,
+				soDaChup: SO_CHOT_SOM,
+				soTinhLai: SO_CHOT_SOM,
+				tong: SO_CHOT_SOM,
+				lech: false,
+			});
+		});
+
+		test("ma tran vai: ba vai doc duoc, vai okr bi tu choi nhung doc duoc so", async () => {
+			const DOC_DUOC: [string, () => AiHoacCookie][] = [
+				["owner", () => phien.chu.cookie],
+				["admin", () => phien.quan.cookie],
+				["truong-p1", () => cookieCua("truongP1")],
+				["thanh-vien-thuong", () => phien.thuong.cookie],
+			];
+			for (const [ten, ai] of DOC_DUOC) {
+				const tra = await banGhi({ keyResultId: b.kB, trang: 1 }, ai());
+				expect(`${ten}: HTTP ${tra.status} ${tra.loi}`).toBe(
+					`${ten}: HTTP 200 `,
+				);
+				expect((tra.data as BanGhiRa).soTinhLai).toBe(SO_P1);
+			}
+			const okr = await banGhi(
+				{ keyResultId: b.kB, trang: 1 },
+				phien.okr.cookie,
+			);
+			expect(`okr: HTTP ${okr.status} ${okr.loi}`).toContain(
+				`okr: HTTP 403 ${CAU.doiTac}`,
+			);
+			const lichSu = thanhCong<LichSuRa>(
+				await goiQuery("okr.lichSuSo", phien.okr.cookie, {
+					keyResultId: b.kB,
+				}),
+				"okr lichSuSo",
+			);
+			expect(lichSu.dong.map((d) => [d.ngay, d.giaTri, d.nguon])).toEqual([
+				[NGAY.D, SO_P1, "crm"],
+				[NGAY.D1, SO_P1 - 1, "crm"],
+				[NGAY.D2, SO_CHOT_SOM, "crm"],
+			]);
+			const krOkr = await mucTieuCua(b.kB, phien.okr.cookie);
+			expect(krOkr.soMay).toEqual({
+				giaTri: SO_P1,
+				ngay: NGAY.D,
+				nguon: "crm",
+			});
+			expect(krOkr.doCanh).toBe(false);
+		});
+
+		test("doi pham vi sau khi chup: ngay da chup giu dinh nghia cua dong chup", async () => {
+			thanhCong(
+				await datNguon({
+					keyResultId: b.kB,
+					loai: "crm",
+					chiSo: "thoa-thuan-chot-duoc",
+					phamVi: { kieu: "bo-phan", id: s.B1 },
+				}),
+				"doi pham vi",
+			);
+			const t1 = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: b.kB, ngay: NGAY.D, trang: 1 }),
+				"ngay D trang 1",
+			);
+			const t2 = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: b.kB, ngay: NGAY.D, trang: 2 }),
+				"ngay D trang 2",
+			);
+			expect(
+				`phamVi ${JSON.stringify(t1.dinhNghia?.phamVi)} lech ${t1.lech}`,
+			).toBe(
+				`phamVi ${JSON.stringify({ kieu: "phong-ban", id: s.P1 })} lech false`,
+			);
+			expect(t1.soTinhLai).toBe(SO_P1);
+			expect(t1.soDaChup).toBe(SO_P1);
+			const ids = [...t1.dong, ...t2.dong].map((d) => d.id);
+			expect(ids.filter((id) => !s.dealP1.includes(id))).toEqual([]);
+			expect(ids).toHaveLength(SO_P1);
+		});
+
+		test("KR nguon api: lanGhi moi truoc, khong danh sach ban ghi", async () => {
+			const r = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: b.kApi, trang: 1 }),
+				"api",
+			);
+			expect(r.loai).toBe("api");
+			expect(r.lanGhi).toEqual([
+				{ ngay: NGAY.D, giaTri: 9, nguoi: s.truongP1 },
+				{ ngay: NGAY.D1, giaTri: 7, nguoi: s.phuTrach },
+			]);
+			expect(r.dong).toEqual([]);
+			expect(r.tong).toBe(0);
+		});
+	});
+
+	describe("xem-truoc", () => {
+		test("xemTruocChiSo dem toi luc nay, khong ghi gi", async () => {
+			const truoc = await db.okrSoChup.count();
+			const r = thanhCong<{ giaTri: number; tu: string; den: string }>(
+				await goiQuery("okr.xemTruocChiSo", s.cookiePhuTrach, {
+					chiSo: "thoa-thuan-chot-duoc",
+					phamVi: { kieu: "bo-phan", id: s.B1 },
+					cycleId: s.ky["dang-chay"],
+				}),
+				"xem truoc",
+			);
+			expect(r).toEqual({
+				giaTri: SO_P1 + SO_P2,
+				tu: "2026-04-01",
+				den: "2026-06-30",
+			});
+			expect(await db.okrSoChup.count()).toBe(truoc);
+		});
+	});
+
+	describe("sheets", () => {
+		test("bang-tinh xep viec okr-doc-sheet, doc lai them viec, API khong goi Google", async () => {
+			camSheets();
+			const bay: string[] = [];
+			const fetchGoc = globalThis.fetch;
+			const bayFetch = (
+				vao: Parameters<typeof fetch>[0],
+				init?: RequestInit,
+			) => {
+				const url = vao instanceof Request ? vao.url : String(vao);
+				if (url.includes("googleapis.com")) {
+					bay.push(url);
+					return Promise.reject(new Error(`bay googleapis: ${url}`));
+				}
+				return fetchGoc(vao, init);
+			};
+			globalThis.fetch = Object.assign(bayFetch, {
+				preconnect: fetchGoc.preconnect,
+			});
+			const trigger = ungDung().get(AgentTriggerService);
+			const poke = spyOn(
+				trigger as unknown as { poke: () => void },
+				"poke",
+			).mockImplementation(() => undefined);
+			try {
+				const k = await kr(await mucTieu("dang-chay", "nhap"), "tay");
+				const viec = async () =>
+					(
+						await db.agentTask.findMany({
+							where: {
+								kind: "okr-doc-sheet",
+								payload: { path: ["keyResultId"], equals: k },
+							},
+							orderBy: { createdAt: "asc" },
+						})
+					).map((v) => parseDocSheetPayload(v.payload));
+				const vao = {
+					keyResultId: k,
+					loai: "bang-tinh",
+					url: SHEET_URL,
+					o: SHEET_O,
+				};
+				thanhCong(await datNguon(vao), "bang-tinh lan 1");
+				expect(bay, `goi googleapis: ${bay.join(", ")}`).toEqual([]);
+				expect(await viec()).toEqual([{ keyResultId: k }]);
+				expect(poke).toHaveBeenCalledTimes(1);
+				const nguon1 = await db.okrNguonKr.findUniqueOrThrow({
+					where: { keyResultId: k },
+				});
+				const vet1 = (await anhKr(k)).vet;
+
+				thanhCong(await datNguon(vao), "bang-tinh doc lai");
+				expect(bay, `goi googleapis: ${bay.join(", ")}`).toEqual([]);
+				expect(await viec()).toEqual([{ keyResultId: k }, { keyResultId: k }]);
+				expect(poke).toHaveBeenCalledTimes(2);
+				expect(
+					await db.okrNguonKr.findUniqueOrThrow({ where: { keyResultId: k } }),
+				).toEqual(nguon1);
+				expect((await anhKr(k)).vet).toBe(vet1);
+			} finally {
+				poke.mockRestore();
+				globalThis.fetch = fetchGoc;
+			}
+		});
+
+		test("okr.chiSo: bien cam thi bat va co email, vang thi tat va null", async () => {
+			camSheets();
+			const cam = thanhCong<ChiSoRa>(
+				await goiQuery("okr.chiSo", s.cookiePhuTrach),
+				"chiSo cam",
+			);
+			expect(cam.sheetsBat).toBe(true);
+			expect(cam.emailSheets).toBe(EMAIL_SHEETS);
+			expect(cam.chiSo).toContain("thoa-thuan-chot-duoc");
+			expect(cam.bac).toContain("tai-khoan");
+			rutSheets();
+			const vang = thanhCong<ChiSoRa>(
+				await goiQuery("okr.chiSo", s.cookiePhuTrach),
+				"chiSo vang",
+			);
+			expect(vang.sheetsBat).toBe(false);
+			expect(vang.emailSheets).toBeNull();
+		});
+	});
+});

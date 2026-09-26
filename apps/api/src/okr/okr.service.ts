@@ -29,6 +29,7 @@ import {
 	type MucTieuUpdate,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
+import { LOAI_NGUON_MAY } from "@crm/validation/okr-nguon";
 import {
 	HANH_DONG_VET,
 	type HanhDongVet,
@@ -73,6 +74,7 @@ const capMucTieu = z.enum(CAP_MUC_TIEU);
 const loaiMucTieu = z.enum(LOAI_MUC_TIEU);
 const trangThaiMucTieu = z.enum(TRANG_THAI_MUC_TIEU);
 const nguonKr = z.enum(NGUON_KR);
+const loaiNguonMay = z.enum(LOAI_NGUON_MAY);
 const hanhDongVet = z.enum(HANH_DONG_VET);
 
 const chonNguoi = { id: true, name: true, email: true } as const;
@@ -89,7 +91,15 @@ const chonMucTieu = {
 		orderBy: { createdAt: "asc" },
 	},
 	keyResults: {
-		include: { owner: { select: chonNguoi } },
+		include: {
+			owner: { select: chonNguoi },
+			nguonMay: { select: { loai: true } },
+			soChup: {
+				orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
+				take: 1,
+				select: { ngay: true, giaTri: true, nguon: true },
+			},
+		},
 		orderBy: { position: "asc" },
 	},
 	alignments: {
@@ -681,6 +691,12 @@ export class OkrService {
 			await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${quyen.id} FOR UPDATE`;
 			const kr = await tx.okrKeyResult.findUnique({ where: { id: quyen.id } });
 			if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
+			if (
+				input.currentValue !== undefined &&
+				input.currentValue !== soKr(kr.currentValue) &&
+				nguonKr.parse(kr.source) !== "tay"
+			)
+				throw new BadRequestException(T.so.hienTaiCuaMay);
 			const trangThai = await this.trangThai(tx, kr.objectiveId);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
 			const dangChay =
@@ -787,6 +803,9 @@ export class OkrService {
 				throw new BadRequestException(T.krDangLaDich);
 			if ((await tx.okrCheckIn.count({ where: { keyResultId: kr.id } })) > 0)
 				throw new BadRequestException(T.krDaCapNhat);
+			if ((await tx.okrSoChup.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.so.krDaCoSoChup);
+			await tx.okrNguonKr.deleteMany({ where: { keyResultId: kr.id } });
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(
 				tx,
@@ -1033,6 +1052,8 @@ export class OkrService {
 				const startValue = soKr(k.startValue);
 				const targetValue = soKr(k.targetValue);
 				const currentValue = soKr(k.currentValue);
+				const source = nguonKr.parse(k.source);
+				const chup = k.soChup[0];
 				return {
 					id: k.id,
 					objectiveId: k.objectiveId,
@@ -1045,7 +1066,16 @@ export class OkrService {
 					unit: k.unit,
 					dueOn: k.dueOn ? ngay(k.dueOn) : null,
 					weight: soKr(k.weight),
-					source: nguonKr.parse(k.source),
+					source,
+					doCanh: source === "tay" && k.nguonMay !== null,
+					soMay:
+						k.nguonMay && chup
+							? {
+									giaTri: soKr(chup.giaTri),
+									ngay: ngay(chup.ngay),
+									nguon: loaiNguonMay.parse(chup.nguon),
+								}
+							: null,
 					startLocked: k.startLockedAt !== null,
 					progress: tienDoKr(kind, startValue, targetValue, currentValue),
 					laCuaToi: k.ownerUserId === viewerId,

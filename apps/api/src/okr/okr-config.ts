@@ -83,6 +83,22 @@ export const OKR = {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
 			choChinhMinh: "Người nhận phải khác người đang phụ trách.",
 		},
+		so: {
+			nguonDaKhoa:
+				"Nguồn đã khoá khi công bố — thêm số đo cạnh cho KR nhập tay, hoặc đặt KR mới ở kỳ sau.",
+			hienTaiCuaMay:
+				"Số hiện tại của KR này do máy ghi — đổi nguồn khi mục tiêu còn nháp.",
+			krDaCoSoChup: "KR đã có lịch sử số — sửa được, không xoá được.",
+			donViKhongCo: "Đơn vị không có hoặc đã lưu trữ.",
+			khongPhaiThanhVien:
+				"Người này không phải thành viên của không gian làm việc.",
+			sheetsTat: "Quản trị chưa cắm khoá Google Sheets.",
+			khongNhanApi: "KR này không nhận số qua khoá API.",
+			kyDaQua: "Chu kỳ đã qua ngày cuối — không ghi số nữa.",
+			danhSachDoiTac:
+				"Danh sách bản ghi thuộc dữ liệu đối tác — vai «chỉ OKR» chỉ xem được con số.",
+			ghiChuDoCanh: "đo cạnh",
+		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
 		soTheoKieu: {
