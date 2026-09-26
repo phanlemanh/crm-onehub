@@ -1,13 +1,17 @@
 import { describe, expect, test } from "bun:test";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
-import { dienBienKr } from "../src/okr/dien-bien";
+import { dienBienKr, tuanCapNhatDau } from "../src/okr/dien-bien";
 import {
 	cacTuan,
 	type KrSo,
 	soTuanCuaNhom,
 	xepHopTuan,
 } from "../src/okr/hop-tuan";
-import { kyVongTheoNgay } from "../src/okr/tien-do";
+import {
+	type ChuKyNgan,
+	chonChuKyHienTai,
+	kyVongTheoNgay,
+} from "../src/okr/tien-do";
 import {
 	type CayGon,
 	gopToanCanh,
@@ -371,5 +375,58 @@ describe("dien-bien", () => {
 			[null, null, "cao"],
 			[null, null, null],
 		]);
+	});
+});
+
+describe("chu-ky-hien-tai", () => {
+	const ky = (
+		id: string,
+		phase: string,
+		startsOn: string,
+		endsOn: string,
+	): ChuKyNgan => ({
+		id,
+		kind: "quy",
+		phase,
+		startsOn,
+		endsOn,
+	});
+	const q3Dong = ky("q3", "da-dong", "2026-07-01", "2026-09-30");
+	const q4Chay = ky("q4", "dang-chay", "2026-10-01", "2026-12-31");
+	const q1KeHoach = ky("q1", "lap-ke-hoach", "2027-01-01", "2027-03-31");
+
+	test("quy chua hom nay da dong nhuong cho quy dang chay", () => {
+		expect(chonChuKyHienTai([q3Dong, q4Chay], "2026-09-26")?.id).toBe("q4");
+		expect(chonChuKyHienTai([q3Dong, q1KeHoach], "2026-09-26")?.id).toBe("q1");
+	});
+
+	test("chi con quy da dong thi van la quy chua hom nay", () => {
+		const q2Dong = ky("q2", "da-dong", "2026-04-01", "2026-06-30");
+		expect(chonChuKyHienTai([q2Dong, q3Dong], "2026-09-26")?.id).toBe("q3");
+	});
+
+	test("quy chua hom nay chua dong van thang quy dang chay o xa", () => {
+		const q3KeHoach = ky("q3", "lap-ke-hoach", "2026-07-01", "2026-09-30");
+		expect(chonChuKyHienTai([q3KeHoach, q4Chay], "2026-09-26")?.id).toBe("q3");
+	});
+});
+
+describe("tuan-cap-nhat-dau", () => {
+	const d = (s: string) => new Date(`${s}T09:00:00+07:00`);
+
+	test("hen thu Hai cua tuan muon nhat trong dau ky, cong bo, hom nay", () => {
+		expect(
+			tuanCapNhatDau(d("2026-10-01"), d("2026-09-20"), d("2026-09-26")),
+		).toBe("2026-09-28");
+		expect(
+			tuanCapNhatDau(d("2026-07-01"), d("2026-07-03"), d("2026-09-26")),
+		).toBe("2026-09-21");
+		expect(
+			tuanCapNhatDau(d("2026-07-01"), d("2026-10-14"), d("2026-09-26")),
+		).toBe("2026-10-12");
+	});
+
+	test("muc tieu chua cong bo thi chua co ngay hen", () => {
+		expect(tuanCapNhatDau(d("2026-07-01"), null, d("2026-09-26"))).toBeNull();
 	});
 });

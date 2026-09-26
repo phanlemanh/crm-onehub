@@ -1319,16 +1319,23 @@ export class OkrService {
 		const q = await this.quyenOkr.quyen(userId);
 		const [mt] = await this.docMucTieu(this.db, { id }, userId, q);
 		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
-		const vet = await this.db.okrTrail.findMany({
-			where: { objectiveId: id },
-			orderBy: [{ at: "asc" }, { id: "asc" }],
-		});
+		const [vet, ky] = await Promise.all([
+			this.db.okrTrail.findMany({
+				where: { objectiveId: id },
+				orderBy: [{ at: "asc" }, { id: "asc" }],
+			}),
+			this.db.okrCycle.findUniqueOrThrow({
+				where: { id: mt.cycleId },
+				select: { name: true },
+			}),
+		]);
 		const nguoi = await this.db.user.findMany({
 			where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
 			select: chonNguoi,
 		});
 		return {
 			...mt,
+			cycleName: ky.name,
 			trail: vet.map((v) => ({
 				id: v.id,
 				at: v.at.toISOString(),

@@ -78,7 +78,11 @@ function NoiDung({ kr }: { kr: KrChon }) {
 		return (
 			<div className="contents" data-trang-thai="ST-dienbien-chuaco">
 				<DetailSheetEmpty
-					description={mt.dienBien.chuaCoMoTa}
+					description={
+						d.tuanDau === null
+							? mt.dienBien.chuaCongBoMoTa
+							: mt.dienBien.chuaCoMoTa(nhanTuan(d.tuanDau))
+					}
 					icon={ChartLine}
 					title={mt.dienBien.chuaCo}
 				/>

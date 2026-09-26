@@ -165,15 +165,18 @@ export function ToanCanh() {
 
 	if (cycles.data?.cycles.length === 0 && !access.isPending)
 		return <ChuaChuKy quanTri={quanTri} />;
-	if (cycles.isPending || access.isPending || tc.isPending) return <DangTai />;
 	if (cycles.isError || tc.isError)
 		return (
 			<LoiXem
 				cau={mt.toanCanh.loi}
-				thuLai={() => void tc.refetch()}
+				thuLai={() => {
+					if (cycles.isError) void cycles.refetch();
+					if (tc.isError) void tc.refetch();
+				}}
 				trangThai="ST-toancanh-loi"
 			/>
 		);
+	if (cycles.isPending || access.isPending || tc.isPending) return <DangTai />;
 
 	const { tongQuan, hang, tuan, tuanNay } = tc.data;
 	const chuaDat = tongQuan.donViChuaDat;

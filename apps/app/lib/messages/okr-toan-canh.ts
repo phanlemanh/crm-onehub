@@ -81,13 +81,13 @@ const vi = {
 	sucKhoe: {
 		moTa: "Để biết nên kèm đơn vị nào — không để chấm điểm người. Bộ phận gộp số của các phòng ban thụt vào bên dưới.",
 		krDangTinh: "KR đang tính",
-		krDangTinhMoTa: "Thuộc mục tiêu đã công bố",
 		chuaCongBo: "KR của mục tiêu chưa công bố",
 		chuaCongBoMoTa: "Khởi điểm chưa khoá vì mục tiêu còn nháp",
 		chuaNoiKenh: "Người chưa nối kênh nhắc",
 		chuaNoiKenhMoTa: "Không nhận được tin nhắc buổi sáng qua Zalo hay Slack",
 		dungTuan: "KR cập nhật đúng tuần vừa qua",
-		dungTuanMoTa: "Có lần cập nhật cho tuần vừa qua",
+		dungTuanMoTa:
+			"Có lần cập nhật cho tuần vừa qua, trên số KR thuộc mục tiêu đã công bố",
 		krIm: "KR im lâu",
 		krImMoTa: "Không có lần cập nhật nào từ hai tuần trở lên",
 		chuaCoTruong: "Chưa có trưởng",
@@ -102,8 +102,10 @@ const vi = {
 		dich: (so: string) => `Đích ${so}`,
 		tuTinTheoTuan: "Mức tự tin theo tuần",
 		chuaCo: "Chưa có lần cập nhật nào",
-		chuaCoMoTa:
-			"Diễn biến hiện ở đây sau lần cập nhật tuần đầu tiên của KR này.",
+		chuaCoMoTa: (ngay: string) =>
+			`Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai ${ngay}.`,
+		chuaCongBoMoTa:
+			"Mục tiêu còn nháp. Lần cập nhật đầu tiên mở ra trong tuần mục tiêu được công bố.",
 		loi: "Không tải được diễn biến của KR này.",
 		khongKr: "Mục tiêu này chưa có KR nào.",
 	},
@@ -206,14 +208,14 @@ const en: OkrToanCanhMessages = {
 	sucKhoe: {
 		moTa: "To see which units need support — not to grade people. Divisions roll up the departments indented below them.",
 		krDangTinh: "KRs counted",
-		krDangTinhMoTa: "On published objectives",
 		chuaCongBo: "KRs on unpublished objectives",
 		chuaCongBoMoTa:
 			"Baseline not locked because the objective is still a draft",
 		chuaNoiKenh: "People without a reminder channel",
 		chuaNoiKenhMoTa: "Don't get the morning reminder on Zalo or Slack",
 		dungTuan: "KRs updated for last week",
-		dungTuanMoTa: "Have an update for the week just gone",
+		dungTuanMoTa:
+			"Have an update for the week just gone, out of the KRs on published objectives",
 		krIm: "Silent KRs",
 		krImMoTa: "No update for two weeks or more",
 		chuaCoTruong: "No head",
@@ -228,7 +230,10 @@ const en: OkrToanCanhMessages = {
 		dich: (so: string) => `Target ${so}`,
 		tuTinTheoTuan: "Confidence by week",
 		chuaCo: "No updates yet",
-		chuaCoMoTa: "History shows here after this KR's first weekly update.",
+		chuaCoMoTa: (ngay: string) =>
+			`The value line and confidence show here from the first update, in the week starting Monday ${ngay}.`,
+		chuaCongBoMoTa:
+			"The objective is still a draft. The first update opens in the week it is published.",
 		loi: "Couldn't load this KR's history.",
 		khongKr: "This objective has no KRs yet.",
 	},

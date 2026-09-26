@@ -501,11 +501,8 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 	const { tab, setTab } = useRecordSheetView("kr");
 	const query = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
 	const binhLuan = useQuery(trpc.okr.comments.queryOptions({ objectiveId }));
-	const cycles = useQuery(trpc.okr.cycles.queryOptions());
 	const mt = query.data;
-	const tenKy = mt
-		? cycles.data?.cycles.find((c) => c.id === mt.cycleId)?.name
-		: undefined;
+	const tenKy = mt?.cycleName;
 
 	const tabs: DetailSheetTab[] = mt
 		? [

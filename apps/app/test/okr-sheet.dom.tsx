@@ -78,6 +78,7 @@ function mucTieu(
 	return {
 		id: "mt-1",
 		cycleId: QUY.id,
+		cycleName: QUY.name,
 		level: "phong-ban",
 		unitId: "pb-1",
 		unitName: "Kinh doanh vùng 1",

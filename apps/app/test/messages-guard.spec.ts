@@ -718,6 +718,10 @@ describe("kho chuoi cua vong ③a", () => {
 				"Diễn biến của 12 theo tuần",
 			],
 			"okr-toan-canh:dienBien.dich": ["Đích 1", "Đích 12"],
+			"okr-toan-canh:dienBien.chuaCoMoTa": [
+				"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 1.",
+				"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 12.",
+			],
 			"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",

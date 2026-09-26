@@ -38,3 +38,17 @@ export function dienBienKr(
 		};
 	});
 }
+
+export function tuanCapNhatDau(
+	batDauKy: Date,
+	congBo: Date | null,
+	homNay: Date,
+): string | null {
+	if (congBo === null) return null;
+	const muonNhat = Math.max(
+		batDauKy.getTime(),
+		congBo.getTime(),
+		homNay.getTime(),
+	);
+	return dauTuanVN(new Date(muonNhat));
+}

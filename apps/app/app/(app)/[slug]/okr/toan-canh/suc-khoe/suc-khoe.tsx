@@ -141,7 +141,18 @@ export function SucKhoe() {
 	);
 
 	let than: ReactNode;
-	if (access.isPending || cycles.isPending) than = <DangTai />;
+	if (access.isError || cycles.isError)
+		than = (
+			<LoiXem
+				cau={mt.sucKhoe.loi}
+				thuLai={() => {
+					if (access.isError) void access.refetch();
+					if (cycles.isError) void cycles.refetch();
+				}}
+				trangThai="ST-suckhoe-loi"
+			/>
+		);
+	else if (access.isPending || cycles.isPending) than = <DangTai />;
 	else if (!quanTri)
 		than = (
 			<Empty data-trang-thai="ST-suckhoe-khongquyen">
@@ -187,14 +198,9 @@ export function SucKhoe() {
 			>
 				<StatGroup>
 					<StatCard
-						description={mt.sucKhoe.krDangTinhMoTa}
-						label={mt.sucKhoe.krDangTinh}
-						value={sk.data.tongQuan.tongKr}
-					/>
-					<StatCard
 						description={mt.sucKhoe.dungTuanMoTa}
 						label={mt.sucKhoe.dungTuan}
-						value={sk.data.tongQuan.dungTuan}
+						value={`${sk.data.tongQuan.dungTuan}/${sk.data.tongQuan.tongKr}`}
 					/>
 					<StatCard
 						description={mt.sucKhoe.krImMoTa}

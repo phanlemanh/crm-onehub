@@ -188,6 +188,7 @@ export const dienBienOutput = z.object({
 	dich: z.number(),
 	donVi: z.string(),
 	coCapNhat: z.boolean(),
+	tuanDau: z.string().nullable(),
 	diem: z.array(
 		z.object({
 			tuan: z.string(),

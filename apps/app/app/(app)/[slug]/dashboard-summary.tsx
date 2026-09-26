@@ -204,7 +204,7 @@ export function DashboardSummary() {
 			<SalesDashboard summary={summary} />
 
 			<div className="grid gap-6 @3xl/page-content:grid-cols-2">
-				<Card className="min-w-0">
+				<Card className="min-w-0" data-khoi="deal-dang-mo">
 					<CardHeader>
 						<CardTitle>{m.open.title}</CardTitle>
 						<CardDescription>{m.open.description}</CardDescription>
@@ -264,7 +264,7 @@ export function DashboardSummary() {
 					</CardPanel>
 				</Card>
 
-				<Card className="min-w-0">
+				<Card className="min-w-0" data-khoi="viec-qua-han">
 					<CardHeader>
 						<CardTitle>{m.tasks.title}</CardTitle>
 						<CardDescription>{moTaTasks}</CardDescription>
@@ -361,7 +361,7 @@ export function DashboardSummary() {
 			<ViecOkrCuaToi noi="tong-quan" khiHien="khi-lien-quan" anKhiLoi />
 			<KhoiKrCuaToi />
 
-			<Card className="min-w-0">
+			<Card className="min-w-0" data-khoi="hoat-dong">
 				<CardHeader>
 					<CardTitle>
 						{mine ? m.activity.titleMine : m.activity.title}

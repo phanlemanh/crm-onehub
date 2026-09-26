@@ -19,7 +19,7 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { dungCayCanChinh } from "./can-chinh";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
-import { dienBienKr } from "./dien-bien";
+import { dienBienKr, tuanCapNhatDau } from "./dien-bien";
 import {
 	cacTuan,
 	congTuan,
@@ -570,6 +570,7 @@ export class OkrXemService {
 			dich: kr.targetValue.toNumber(),
 			donVi: kr.unit,
 			coCapNhat: so.lan.length > 0,
+			tuanDau: tuanCapNhatDau(c.startsOn, kr.objective.publishedAt, homNay),
 			diem: dienBienKr(
 				{
 					...so,
