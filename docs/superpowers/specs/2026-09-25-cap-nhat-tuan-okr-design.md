@@ -303,15 +303,19 @@ nhiều — phần lớn đến từ các lưới quét rộng `apps/app/**`/`pa
 component lọt ra màn, ai được vào màn, cách trình bày danh sách…) mà bất kỳ tệp
 `.tsx` mới nào trong lượt cũng khớp; `khung-dieu-huong` không tồn tại như một hồ sơ
 nên không có trong tập. Tập dưới đã chép nguyên văn vào `HO_SO_BI_CHAM` của
-`rang/cau-hinh.mjs`; E21 đỏ khi hai bên lệch. Mọi hồ sơ trong tập được ghim lại bằng
-làn eval sau khi lượt lên `onehub`.
+`rang/cau-hinh.mjs`; E21 đỏ khi hai bên lệch. Tập này lớn thêm mỗi lần gộp `onehub`
+mang về một hồ sơ mới bị diff của lượt chạm tới (`tra-loi-tin-nhac` sau #144,
+`khoa-rieng-dien-node` sau #149, `khoa-api-ghi-thua` sau #152): mỗi lần như vậy, máy
+rút lại tập rồi chép vào cả mục này lẫn `HO_SO_BI_CHAM`, để phép so «máy rút == khai»
+vẫn có hai nguồn. Hồ sơ nào lưới trước-gộp báo hoá cũ thì ghim lại bằng làn máy trước
+khi mở PR (AC-11 vế hai, đã thu hẹp ở S4-r1).
 
 `agent-builder-noi-tieng-viet`, `bang-thanh-vien-giu-hang`, `bo-dung-chung-nhan-chuoi`,
 `cai-dat-con-lai-noi-tieng-viet`, `cau-truc-to-chuc`, `chan-lai-component-ra-man`,
 `cho-phep-ai-vao-o-man-hinh`, `chu-cuoi-cung-tien-de`, `chu-mac-dinh-thu-vien-ngoai`,
 `claimdue-chi-thay-dong-cua-minh`, `cron-theo-ban-khai`, `cua-so-tro-chuyen-noi-tieng-viet`,
 `dat-okr-trong-crm`, `do-man-tren-kho-rieng`, `do-quyen-luot-bang-hanh-vi`, `duong-proto-cho-design-pass`,
-`go-la-cat-quyen-that`, `han-viec-theo-ngay`, `ke-hoach-la-mot-ban-ghi`,
+`go-la-cat-quyen-that`, `han-viec-theo-ngay`, `ke-hoach-la-mot-ban-ghi`, `khoa-api-ghi-thua`,
 `khoa-cu-khong-mo-khoa-moi`, `khoa-lo-giu-tran`, `khoa-rieng-dien-node`, `khung-trang-cai-dat`,
 `lam-moi-chuyen-viec-qua-loi-chung`, `lenh-chung-khong-an-cache-doi`,
 `lenh-dung-do-khong-ai-thay`, `logo-onehub`, `loi-tac-tu-zalo-noi-dung-nguyen-nhan`,

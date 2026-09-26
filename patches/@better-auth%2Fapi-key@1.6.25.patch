@@ -1,0 +1,56 @@
+diff --git a/node_modules/@better-auth/api-key/.bun-tag-89b3165681df9a98 b/.bun-tag-89b3165681df9a98
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/@better-auth/api-key/.bun-tag-d5dbf22d4bcad913 b/.bun-tag-d5dbf22d4bcad913
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 80d7d4a3ed2fe0858801d0dafe95065e2e1cda72..1392978c05e790febf30dff2f774a3807c4fd0eb 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1576,6 +1576,11 @@ function updateApiKey({ configurations, schema, deleteAllExpiredApiKeys }) {
+ }
+ //#endregion
+ //#region src/rate-limit.ts
++function stampLastRequest(lastRequest, now, opts) {
++	const interval = opts.lastRequestUpdateIntervalMs;
++	if (interval === void 0 || lastRequest === null) return now;
++	return now.getTime() - new Date(lastRequest).getTime() < interval ? null : now;
++}
+ /**
+ * Decides how the current request affects the per-key rate-limit counter, based
+ * on the read-in-memory ApiKey. The verify route applies the result atomically;
+@@ -1588,11 +1593,11 @@ function evaluateRateLimit(apiKey, opts) {
+ 	const rateLimitMax = apiKey.rateLimitMax;
+ 	if (opts.rateLimit.enabled === false) return {
+ 		type: "skip",
+-		lastRequest: now
++		lastRequest: stampLastRequest(lastRequest, now, opts)
+ 	};
+ 	if (apiKey.rateLimitEnabled === false) return {
+ 		type: "skip",
+-		lastRequest: now
++		lastRequest: stampLastRequest(lastRequest, now, opts)
+ 	};
+ 	if (rateLimitTimeWindow === null || rateLimitMax === null) return {
+ 		type: "skip",
+@@ -1721,6 +1726,7 @@ async function claimUsageInDatabase({ ctx, apiKey, opts, hashedKey }) {
+ 	let row = apiKey;
+ 	if (apiKey.remaining !== null) row = await consumeRemaining(ctx, apiKey);
+ 	row = await consumeRateLimit(ctx, row, opts);
++	if (opts.lastRequestUpdateIntervalMs !== void 0 && opts.storage === "database") return row;
+ 	const finalRow = await ctx.context.adapter.update({
+ 		model: API_KEY_TABLE_NAME,
+ 		where: [{
+diff --git a/dist/types-BYqswa0N.d.mts b/dist/types-BYqswa0N.d.mts
+index ef26f56c00f2971e68a30f99e0d4094e749b7a82..d64c98598ee617db33a8efaa84a0d5fcc8e76df6 100644
+--- a/dist/types-BYqswa0N.d.mts
++++ b/dist/types-BYqswa0N.d.mts
+@@ -440,6 +440,7 @@ interface ApiKeyConfigurationOptions {
+    * @default false
+    */
+   deferUpdates?: boolean | undefined;
++  lastRequestUpdateIntervalMs?: number | undefined;
+   /**
+    * What the API key references. This determines ownership over the API key.
+    *

@@ -5,7 +5,7 @@ slug: cap-nhat-tuan-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: signed-off
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-25T15:14:35Z
 design_doc: docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md
@@ -98,6 +98,16 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Phép đo màn của hồ sơ này chạy trên kho riêng `crm_cnt_dev` (cùng máy chủ localhost:5432; `DATABASE_URL` của `.env` gốc thay `/crm?` bằng `/crm_cnt_dev?`, đặt ở lệnh gọi): api, app, `dev:session`, lệnh `cnt_man_chrome` và mọi script gieo đều dùng kho đó, không ghi vào kho `crm` chung (quyết 2026-09-26, chủ kho qua phiên điều phối). Phiên S4 cũng đo ở đó. Mỗi lượt đo tự dọn dữ liệu gieo theo id, kể cả khi đỏ. Từ 2026-09-26 (sau gộp #150) kho đó là `crm_cnt_dev_do`, dựng bằng cơ chế kho đo của #150: `PHIEN_DO_TEN_CAY=cnt-dev bun run db:do --tao` (nhân từ mẫu `crm_cnt_dev__mau_do`, có đánh dấu, tự dọn sau 12 giờ không ai nối); `tien-de.mjs` nhận nó là kho dùng-một-lần nên chạy thẳng trên máy chủ dev 3920/3921 và cửa chặn 3922 của cây, không mở phiên đo — phiên đo đặt `API_URL` của app thẳng vào API của phiên nên bước 7 của E6 không chen được cửa chặn.
 - Nền hạ tầng (`duong-nen.md`): build đỏ vì shell đăng nhập của script đường nền lấy Node 22; xanh khi chạy với PATH Node 24; làn S4 chạy với cùng tiền tố.
 - Hồ sơ đã ký phải ghim lại: tập máy rút ở AC-11 (thiết kế mục 10). Chắc chắn có `dat-okr-trong-crm`: AC-16 đổi một hành vi mà hồ sơ đó đã ký — AC-5 của nó viết «sửa đích và giá trị hiện tại thì ghi được» sau công bố, và phép đo **E5** (`config:executors.test.dok_cong_bo`, bài `cong-bo: khoa khoi diem, can KR, bo giu KR va can chinh` trong `apps/api/test/okr.spec.ts`) khẳng định `updateKeyResult` đổi `currentValue` thành 30 trên KR đã công bố ở chu kỳ `dang-chay` và nhận 200. Lượt này sửa khẳng định đó (đổi đích vẫn 200; đổi hiện tại → 400 câu ghim), rồi ghim lại hồ sơ bằng làn eval sau khi lên `onehub`. Theo điều kiện Cổng 1.5 (2026-09-25): KHÔNG sửa tay `evals.yaml` hay `evidence-report.md` của hồ sơ đó; chỉ nối vào `_acceptance/dat-okr-trong-crm/decisions.jsonl` một dòng ghi rằng AC-16 của `cap-nhat-tuan-okr` thay cho khẳng định cũ của E5, rồi ghim lại bằng làn máy (`repin-lane.mjs --write`, run_id mới). Kit hay lưới trước-merge đòi sửa `evals.yaml` của hồ sơ đã ký, hay báo vi phạm → dừng và báo nguyên văn, không tự lách. E21 khẳng định dòng đó có trong sổ của hồ sơ đó. Các phép đo khác của hồ sơ đó có đổi `currentValue` (E4 `dok_kr`, E6 `dok_quyen`, E8 `dok_vet`, khoá pha trong E5) đều làm trên mục tiêu nháp nên không đổi kết quả; E12 (hộp thoại KR) chỉ kiểm ô khởi điểm.
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-26, định đoạt mục ngoài hợp đồng của vòng chấm 4):
+
+- Ngoài-1 (`apps/app/test/chuyen-okr.dom.tsx`): Bài kiểm tra cho một phần dữ liệu OKR hiện không có phép thử chứng minh việc phát hiện lỗi trùng khoá vẫn hoạt động, nên nếu thực sự phát sinh lỗi trùng dữ liệu sau này, bài kiểm tra có thể không bắt được và báo nhầm là ổn.
+- Ngoài-6 (`packages/db/src/okr-nhac.ts`): Không ảnh hưởng người dùng ngay bây giờ; là rủi ro rằng thời hạn nhắc việc bị sửa không đồng bộ giữa hai nơi trong tương lai.
+- Ngoài-9 (`apps/agent/test/okr-nhac.integration.spec.ts`): Bài kiểm chứng dữ liệu lịch sử ghi đè người phụ trách dùng dữ liệu tự dựng riêng thay vì dữ liệu do đúng luồng ghi thật sinh ra, nên có thể báo Đạt dù luồng ghi thật đang sai định dạng.
+- Ngoài-10 (`_acceptance/cap-nhat-tuan-okr/rang/duong-do.mjs`): Bài kiểm bảo vệ ba con số đo lường (tỷ lệ cập nhật, thời gian trung bình, người chưa nhận tin) có thể báo 'đã bắt được lỗi' dù phép đo thật đã hỏng một phần, vì nó tự dựng phép so sánh riêng thay vì kiểm tra chính phép đo đang dùng thật.
+- Ngoài-11 (`_acceptance/cap-nhat-tuan-okr/rang/san-thiet-ke.mjs`): Bài kiểm 'không được sửa thành phần giao diện dùng chung có sẵn' luôn báo bắt được lỗi bất kể nội dung thật, nên nếu bộ quét thật ngừng hoạt động, không ai biết.
+- Ngoài-12 (`apps/api/test/okr-cap-nhat.spec.ts`): Khẳng định 'không thể sửa hay xoá bản cập nhật/bình luận qua API' dựa trên một bản khai được sinh ra trước đó; nếu bản khai đó không được cập nhật lại sau khi có thay đổi, phép đo vẫn báo Đạt dù khả năng sửa/xoá đã thực sự bị mở ra.
+- Ngoài-13 (`apps/api/test/okr-cap-nhat.spec.ts`): Bảng kiểm quyền truy cập cho các chức năng OKR mới theo từng vai bỏ sót một chức năng (xem danh sách thành viên), nên nếu chức năng đó bị lộ sai quyền, phép đo hiện tại sẽ không phát hiện.
 
 Known limits — AC-11 vế hai thu hẹp (S4-r1, 2026-09-26, Manh Phan — uỷ quyền phiên điều phối 2026-09-24):
 
