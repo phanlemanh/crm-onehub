@@ -595,7 +595,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   source or as a side measurement — is refused for a `moc` or `phan-tram` KR
   (`OKR.thongDiep.so.crmKhongHopKieu`, rule `crmHopKieu` in
   `@crm/validation/okr-nguon`); `api` and `bang-tinh` stay open to them, and the value
-  they bring is checked against the kind instead. A unit in the scope must exist and be live, a person
+  they bring is checked against the kind instead. `updateKeyResult` holds the same line
+  from the other side: changing the kind of a KR that takes `crm` (effective or side
+  measurement) to `moc` or `phan-tram` is refused with the same message. A unit in the scope must exist and be live, a person
   must be a member, a Sheets link must be `docs.google.com/spreadsheets` with an A1
   cell, and Sheets is refused while `GOOGLE_SHEETS_EMAIL` or `GOOGLE_SHEETS_KHOA` is
   missing. Every call leaves one `doi-nguon` trail row (before → after; a side

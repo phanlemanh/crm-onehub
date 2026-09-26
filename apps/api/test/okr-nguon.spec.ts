@@ -630,6 +630,52 @@ async function banGhiMotLanDem(kB: string) {
 	expect(r).toEqual(doiChung);
 }
 
+async function doiKieuKrCrm() {
+	const mtNhap = await mucTieu("dang-chay", "nhap");
+	const kCrm = await kr(mtNhap, "crm");
+	const kDoCanh = await kr(await mucTieu("dang-chay", "cong-bo"), "tay");
+	thanhCong(await datNguon(crmP1(kDoCanh)), "do canh crm");
+	const kApi = await kr(mtNhap, "tay");
+	thanhCong(await datNguon({ keyResultId: kApi, loai: "api" }), "nguon api");
+	const anh = async (id: string) => {
+		const k = await db.okrKeyResult.findUniqueOrThrow({
+			where: { id },
+			select: { kind: true, targetValue: true, source: true },
+		});
+		return {
+			kind: k.kind,
+			targetValue: Number(k.targetValue),
+			source: k.source,
+			nguon: await cauHinh(id),
+			vet: await db.okrTrail.count({ where: { keyResultId: id } }),
+		};
+	};
+	const doiKieu = (vao: Json) =>
+		goi("okr.updateKeyResult", vao, s.cookieTruongP1);
+	for (const [ten, id, kind] of [
+		["crm-moc", kCrm, "moc"],
+		["crm-phan-tram", kCrm, "phan-tram"],
+		["do-canh-moc", kDoCanh, "moc"],
+	] as const) {
+		const truoc = await anh(id);
+		const tra = await doiKieu({ id, kind, targetValue: 1 });
+		expect(`${ten}: HTTP ${tra.status} ${tra.loi}`).toBe(
+			`${ten}: HTTP 400 ${CAU.crmKhongHopKieu}`,
+		);
+		expect({ ca: ten, ...(await anh(id)) }).toEqual({ ca: ten, ...truoc });
+	}
+	thanhCong(
+		await doiKieu({ id: kCrm, kind: "tang-toi", targetValue: 50 }),
+		"crm tang-toi khac dich",
+	);
+	expect((await anh(kCrm)).targetValue).toBe(50);
+	thanhCong(
+		await doiKieu({ id: kApi, kind: "moc", targetValue: 1 }),
+		"api sang moc",
+	);
+	expect((await anh(kApi)).kind).toBe("moc");
+}
+
 describe("okr-nguon", () => {
 	beforeAll(async () => {
 		s.phuTrach = await nguoiMoi("phu-trach");
@@ -959,6 +1005,10 @@ describe("okr-nguon", () => {
 				kieu: "phong-ban",
 				id: s.P1,
 			});
+		});
+
+		test("doi kieu KR dang lay crm sang moc hay phan-tram: cau ghim, khong dong nao doi; doi chung crm tang-toi khac dich va api sang moc ghi duoc", async () => {
+			await doiKieuKrCrm();
 		});
 
 		test("KR moc va phan-tram khong lay nguon crm: cau ghim, khong dong nao doi; doi chung tang-toi va api cho moc dat duoc", async () => {

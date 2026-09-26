@@ -29,7 +29,11 @@ import {
 	type MucTieuUpdate,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
-import { LOAI_NGUON_MAY, parseOkrNguon } from "@crm/validation/okr-nguon";
+import {
+	crmHopKieu,
+	LOAI_NGUON_MAY,
+	parseOkrNguon,
+} from "@crm/validation/okr-nguon";
 import {
 	HANH_DONG_VET,
 	type HanhDongVet,
@@ -736,6 +740,14 @@ export class OkrService {
 				nguonKr.parse(kr.source) !== "tay"
 			)
 				throw new BadRequestException(T.so.hienTaiCuaMay);
+			if (input.kind !== undefined && !crmHopKieu(input.kind)) {
+				const may = await tx.okrNguonKr.findUnique({
+					where: { keyResultId: kr.id },
+					select: { loai: true },
+				});
+				if (kr.source === "crm" || may?.loai === "crm")
+					throw new BadRequestException(T.so.crmKhongHopKieu);
+			}
 			const trangThai = await this.trangThai(tx, kr.objectiveId);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
 			const dangChay =
