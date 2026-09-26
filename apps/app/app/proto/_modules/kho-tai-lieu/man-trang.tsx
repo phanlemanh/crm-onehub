@@ -3,7 +3,6 @@
 import Add from "@carbon/icons-react/es/Add";
 import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import Book from "@carbon/icons-react/es/Book";
-import DocumentBlank from "@carbon/icons-react/es/DocumentBlank";
 import Search from "@carbon/icons-react/es/Search";
 import Upload from "@carbon/icons-react/es/Upload";
 import { Badge } from "@crm/ui/components/badge";
@@ -24,7 +23,12 @@ import {
 	InputGroupAddon,
 	InputGroupInput,
 } from "@crm/ui/components/input-group";
-import { Markdown } from "@crm/ui/components/markdown";
+import {
+	MarkdownReader,
+	type ReaderLink,
+	ReaderToc,
+	readerHeadings,
+} from "@crm/ui/components/markdown-reader";
 import {
 	Select,
 	SelectContent,
@@ -48,14 +52,34 @@ import { useState } from "react";
 import {
 	LICH_SU,
 	LIEN_KET_DEN,
-	NGUON_CUA_TRANG,
 	NHOM,
 	type Nhom,
 	nhanNhom,
 	THAN_TRANG,
+	TOM_TAT,
 	TRANG,
 	TRANG_DANG_DOC,
 } from "./du-lieu";
+
+const DOC_CHU = {
+	calloutLabels: {
+		note: "Ghi chú",
+		tip: "Mẹo",
+		important: "Quan trọng",
+		warning: "Cần lưu ý",
+		caution: "Thận trọng",
+	},
+	missingLabel: "Chưa có trang này",
+	sourcesLabel: "Nguồn",
+	sourceBackLabel: "Về chỗ trích",
+};
+
+const MUC_LUC = readerHeadings(THAN_TRANG);
+
+function timTrang(ten: string): ReaderLink | null {
+	const t = TOM_TAT.get(ten);
+	return t ? { title: ten, summary: t.summary, meta: t.meta } : null;
+}
 
 export function NutDauKho({
 	onViet,
@@ -199,25 +223,13 @@ export function DocTrang({
 				</div>
 				<Separator />
 				<div translate="no">
-					<Markdown className="text-sm/6">{THAN_TRANG}</Markdown>
+					<MarkdownReader {...DOC_CHU} resolveLink={timTrang}>
+						{THAN_TRANG}
+					</MarkdownReader>
 				</div>
-				<Separator />
-				<section aria-label="Nguồn của trang" className="flex flex-col gap-2">
-					<h4 className="font-medium text-sm">Nguồn</h4>
-					<ol className="flex flex-col gap-1 text-muted-foreground text-xs">
-						{NGUON_CUA_TRANG.map((n) => (
-							<li className="flex items-center gap-2" key={n.so}>
-								<Icon icon={DocumentBlank} />
-								<span className="text-foreground" translate="no">
-									{n.ten}
-								</span>
-								<span>{n.cho}</span>
-							</li>
-						))}
-					</ol>
-				</section>
 			</article>
-			<aside className="flex w-full shrink-0 flex-col gap-5 xl:w-72">
+			<aside className="flex w-full shrink-0 flex-col gap-5 xl:sticky xl:top-4 xl:w-72 xl:self-start">
+				<ReaderToc headings={MUC_LUC} label="Trên trang này" />
 				<section className="flex flex-col gap-2">
 					<h4 className="font-medium text-sm">Người giữ trang</h4>
 					<p className="text-sm" translate="no">
@@ -265,7 +277,7 @@ export function DocTrang({
 
 export function SoanTrang({ onHuy }: { onHuy: () => void }) {
 	const [than, setThan] = useState(
-		"## Mục đích\n\nVì sao có quy định này.\n\n## Các bước\n\n1. ",
+		"## Mục đích\n\nVì sao có quy định này. Liên quan tới [[Hợp đồng hợp tác mẫu]].\n\n> [!NOTE]\n> Ghi chú hiện thành hộp riêng.\n\n## Các bước\n\n1. ",
 	);
 	return (
 		<div className="flex min-w-0 max-w-3xl flex-1 flex-col gap-4 p-6">
@@ -335,7 +347,9 @@ export function SoanTrang({ onHuy }: { onHuy: () => void }) {
 				</TabsContent>
 				<TabsContent className="min-h-72 rounded-lg border p-4" value="xem">
 					<div translate="no">
-						<Markdown className="text-sm/6">{than}</Markdown>
+						<MarkdownReader {...DOC_CHU} resolveLink={timTrang}>
+							{than}
+						</MarkdownReader>
 					</div>
 				</TabsContent>
 			</Tabs>

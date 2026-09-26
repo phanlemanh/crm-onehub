@@ -109,30 +109,42 @@ export const [TRANG_DANG_DOC] = TRANG as [TrangMau, ...TrangMau[]];
 
 export const THAN_TRANG = `## Áp dụng cho ai
 
-Mọi công ty đối tác đã ký hợp đồng hợp tác và đã qua **30 ngày đầu**.
+Mọi công ty đối tác đã ký [[Hợp đồng hợp tác mẫu|hợp đồng hợp tác]] và đã qua [[Đưa công ty mới vào guồng trong 30 ngày|30 ngày đầu]].[^1]
+
+> [!NOTE]
+> Công ty còn trong 30 ngày đầu hưởng mức của tầng 1, bất kể doanh số.
 
 ## Mức hoa hồng theo tầng
 
 | Tầng | Doanh số quý | Hoa hồng |
-| --- | --- | --- |
+| --- | --- | ---: |
 | Tầng 1 | dưới 2 tỷ | 0,8% |
 | Tầng 2 | 2 – 10 tỷ | 1,2% |
 | Tầng 3 | trên 10 tỷ | 1,6% |
 
-Tầng được xét lại vào ngày làm việc đầu tiên của mỗi quý, theo doanh số quý trước.
+Tầng được xét lại vào **ngày làm việc đầu tiên của mỗi quý**, theo doanh số quý trước.[^1]
+
+### Ví dụ
+
+Công ty ở tầng 2 có giao dịch 3 tỷ được xác nhận: hoa hồng là 3 tỷ × 1,2% = **36 triệu**.
 
 ## Khi nào chi
 
 1. Giao dịch được xác nhận trên nền tảng.
-2. Phòng Tài chính đối soát trong 5 ngày làm việc.
+2. Phòng Tài chính đối soát trong 5 ngày làm việc, theo [[Duyệt chi dưới 20 triệu]].
 3. Chi vào ngày 15 của tháng kế tiếp.
+
+> [!WARNING]
+> Giao dịch chưa đối soát xong trước ngày 10 thì chuyển sang kỳ chi sau.
 
 ## Không áp dụng
 
 - Giao dịch bị huỷ trong thời gian cam kết.
-- Giao dịch giữa hai đối tác cùng chủ sở hữu.
+- Giao dịch giữa hai đối tác cùng chủ sở hữu.[^2]
+- Thưởng theo quý — xem [[Quy chế thưởng quý]].
 
-Xem thêm: [Duyệt chi dưới 20 triệu](#) · [Hợp đồng hợp tác mẫu](#)`;
+[^1]: Quyết định 12-2026 về hoa hồng, trang 2.
+[^2]: Biên bản họp ban điều hành 15-05, mục 4.`;
 
 export type NguonMau = {
 	id: string;
@@ -143,6 +155,26 @@ export type NguonMau = {
 	trangThai: "dang-doc" | "da-soan" | "da-duyet" | "khong-doc-duoc";
 	ghiChu: string;
 };
+
+const TOM_TAT_THEO_TEN = {
+	"Hợp đồng hợp tác mẫu": {
+		summary:
+			"Mẫu hợp đồng dùng khi một công ty đối tác ký với OneHub: phạm vi hợp tác, thời gian cam kết, cách tính và chi hoa hồng.",
+		meta: "Biểu mẫu · phiên bản 2 · Lê Quang Vinh",
+	},
+	"Đưa công ty mới vào guồng trong 30 ngày": {
+		summary:
+			"Các bước mỗi phòng ban làm trong 30 ngày đầu sau khi một công ty ký, và ai cầm trịch.",
+		meta: "Quy trình · phiên bản 3 · Lê Quang Vinh",
+	},
+	"Duyệt chi dưới 20 triệu": {
+		summary:
+			"Ai được duyệt khoản chi dưới 20 triệu, cần chứng từ gì, và bao lâu thì chi.",
+		meta: "Quy trình · chỉ phòng Tài chính · Nguyễn Thu Hà",
+	},
+} satisfies Record<string, { summary: string; meta: string }>;
+
+export const TOM_TAT = new Map(Object.entries(TOM_TAT_THEO_TEN));
 
 export const NGUON: NguonMau[] = [
 	{
