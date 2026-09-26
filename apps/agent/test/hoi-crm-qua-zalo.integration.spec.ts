@@ -5,6 +5,7 @@ import {
 	beforeEach,
 	describe,
 	expect,
+	setSystemTime,
 	spyOn,
 	test,
 } from "bun:test";
@@ -41,7 +42,18 @@ import type {
 import { phienAudit } from "./support/eve-kieu";
 import { boThanhVien, donHoi, gieoVai } from "./support/hoi-gieo";
 import { donDep, moXuong } from "./support/nhac-gieo";
-import { DU_BIEN, noiZalo, TOKEN } from "./support/tra-loi-gieo";
+import { lucVN, NGAY_NHAC, PHUT_SAU } from "./support/nhac-gui-gieo";
+import {
+	batBot,
+	buocCuaMuc,
+	buocXongLuc,
+	DU_BIEN,
+	donTraLoi,
+	gieoNhac,
+	guiNhac,
+	noiZalo,
+	TOKEN,
+} from "./support/tra-loi-gieo";
 import { zaloGia } from "./support/zalo-gia";
 import { zaloMayChu } from "./support/zalo-may-chu";
 import { thanWebhook, yeuCauWebhook } from "./support/zalo-tin";
@@ -706,10 +718,23 @@ describe("luat-cu", () => {
 
 		const A = await gieoVai("An", "member");
 		await noiZalo(A.id, "ZA");
-		const xong = await guiWebhook("ZA", "xong 2", { eve });
-		expect(xong.tra().join(" "), "o (c) xong di duong danh dau").toContain(
-			"Hôm nay chưa có tin nhắc qua Zalo",
-		);
+		await donTraLoi();
+		await batBot();
+		const gocNhac = lucVN(NGAY_NHAC, PHUT_SAU);
+		const { A: L } = await gieoNhac(gocNhac, { quaHan: 1 }, "Luat");
+		await noiZalo(L.id, "ZL");
+		const nhac = await guiNhac(L.id, gocNhac).finally(() => setSystemTime());
+		const buoc = buocCuaMuc(nhac.daGui, 1);
+		expect(await buocXongLuc(buoc), "o (c) buoc chua xong truoc").toBeNull();
+		await guiWebhook("ZL", "xong 1", {
+			eve,
+			luc: lucVN(NGAY_NHAC, PHUT_SAU + 30),
+		});
+		expect(
+			await buocXongLuc(buoc),
+			"o (c) buoc da xong trong DB",
+		).not.toBeNull();
+		await donTraLoi();
 		soO += 1;
 
 		for (let i = 0; i < 5; i += 1) await ghiSai(db, "Z-chan", new Date());
