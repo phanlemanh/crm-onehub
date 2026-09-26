@@ -127,6 +127,7 @@ const CAU_MOI = [
 	ZALO.loi.dangTraLoi,
 	ZALO.loi.tacTuLoi,
 	ZALO.loi.daMoi,
+	ZALO.loi.canHoiLai,
 ];
 
 describe("chi-dan", () => {
@@ -151,7 +152,7 @@ describe("chi-dan", () => {
 	});
 
 	test("chi-dan: bay cau moi mot dong, co dau, dung tu dien", () => {
-		expect(CAU_MOI.length).toBe(7);
+		expect(CAU_MOI.length).toBe(8);
 		for (const cau of CAU_MOI) {
 			expect(cau).not.toContain("\n");
 			expect(cau.length).toBeLessThan(ZALO.tranKyTu);

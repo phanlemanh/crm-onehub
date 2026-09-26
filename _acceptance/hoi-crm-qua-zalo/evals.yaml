@@ -21,7 +21,7 @@ evals:
       Gieo A noi ZA vai member. ZA nhan cau hoi qua nhanWebhook -> 200.
       eveGia.send dai 1: auth toEqual {authenticator:"zalo", principalType:"user",
       principalId:A.id, attributes:{purpose:"zalo", userId:A.id, zaloChatId:ZA, hoiId:<id hang>}};
-      continuationToken === "chat:"+ZA; text === cau hoi. sendChatAction toi ZA dem = 1.
+      continuationToken khop ^chat:ZA:<A.id>:YYYY-MM-DD$; text === cau hoi. sendChatAction toi ZA dem = 1.
       zaloHoi.findMany({messageId}) dai 1, ketQua "dang-hoi", crmUserId A.id, zaloChatId ZA,
       sessionId === id Session eve gia tra ve. O thu tu: eve gia send() chi resolve sau 3s -> response
       webhook toi duoi 500ms (do bang performance.now) va hang dang-hoi da co truoc khi send resolve; sau do
@@ -31,6 +31,8 @@ evals:
       Goi events["message.completed"]({message:T}, {continuationToken:"chat:"+ZA, ...}).
       sendMessage toi ZA dai 1, text === T. Doc lai hang: ketQua "da-tra-loi", traLoiLuc >= hoiLuc,
       doTreMs === traLoiLuc - hoiLuc, tokenVao 150, tokenRa 30. eveGia.send van dai 1.
+      Ca cau dan: message.completed finishReason "tool-calls" -> sendMessage 0, hang van dang-hoi; roi finishReason
+      "stop" -> gui dung cau cuoi (chieu do: bo kiem finishReason -> do ghim "cau dan khong toi Zalo").
       Chieu do (pha-thu S3): bo attributes.hoiId khoi auth -> do ghim "auth cua send";
       doi ten khoa usage trong fixture su kien (input_tokens) -> tokenVao null -> do ghim "tokenVao 150"
       (chung to test doc qua writer that, khong tu dung khuon).
@@ -47,7 +49,10 @@ evals:
       - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
       - "apps/agent/test/zalo-lenh.spec.ts"
     expected: |
-      Sau AC-1 (da tra loi), ZA nhan cau 2: send dai 2, send[1].continuationToken === send[0].continuationToken;
+      Sau AC-1 (da tra loi), ZA nhan cau 2: send dai 2, hai continuationToken bang nhau;
+      hoiTacTu luc 23:50 va 00:10 gio VN -> hai token khac nhau (phien moi moi ngay);
+      input.requested: hang -> loi, ZA nhan canHoiLai, setContinuationToken goi dung 1 lan voi token khac
+      (chieu do: bo doiToken -> do ghim "doi dia chi phien ket");
       zaloHoi cua A dem 2. ZA nhan "mới": reset dai 1 voi cung token; send van dai 2; sendMessage cuoi
       === ZALO.loi.daMoi; zaloHoi van 2. "mới" khi chat con hang dang-hoi chua qua han: reset van dai 1
       (khong tang), sendMessage cuoi === dangTraLoi, hang cu giu ketQua. docLenh ma tran: ["mới","Mới ","/new"] -> {lenh:"moi"};
@@ -154,12 +159,12 @@ evals:
       - "apps/agent/test/zalo-chi-doc.spec.ts"
     expected: |
       ctx purpose "zalo": resolver session.started tra map; Object.keys(map).sort() toEqual
-      [...ZALO.hoi.congCu.ghi].sort(); va vong lap tron danh sach ghi: voi moi ten, import("../agent/tools/"+ten+".ts")
+      [...ghi, ...coSanChan].sort(), coSanChan === ["ask_question","web_fetch","web_search"]; va vong lap tron danh sach ghi: voi moi ten, import("../agent/tools/"+ten+".ts")
       default la mot defineTool don (khong phai map, khong phai defineDynamic) — vi eve dat ten cong cu theo slug tep,
       so assert = so phan tu; voi moi ten map[ten].execute(...) -> ok:false. map.set_field_value.execute({contactId, field, value}) -> {ok:false, reason}
       va contact doc lai gia tri cu, activity dem khong doi. ctx purpose "builder" -> null; goi set_field_value
-      that -> gia tri doi. Banh coc: readdirSync(tools).map(bo .ts) sort toEqual [...doc, ...ghi].sort();
-      giao cua doc va ghi rong. Chieu do: tao tam tools/x_moi.ts trong ban sao -> do ghim ten "x_moi".
+      that -> gia tri doi. Banh coc: readdirSync(tools).map(bo .ts) khong co ten nao ngoai doc ∪ ghi ∪ tat,
+      ba danh sach roi nhau; moi ten trong tat la disableTool. Chieu do: tao tam tools/x_moi.ts trong ban sao -> do ghim ten "x_moi".
   - id: E8
     criterion: AC-8
     executor: test
@@ -169,7 +174,8 @@ evals:
       - "apps/agent/agent/lib/zalo-config.ts"
       - "apps/agent/test/zalo-loc.spec.ts"
     expected: |
-      Ma tran viet truoc (>=10 phai che: "0912 345 678", "0912.345.678", "0912345678", "+84 912 345 678",
+      Ma tran viet truoc (21 phai che, gom may ban, 84, 0084, (+84), +84 (0), ngoac, nuoc ngoai, dinh chu; 9 giu nguyen
+      gom 1.500.000.000 va 84.000.000). Mau goc (>=10 phai che: "0912 345 678", "0912.345.678", "0912345678", "+84 912 345 678",
       "+84912345678", "(+84) 912-345-678", "a.b@congty.vn", "<a@b.com>", "A.B@Gmail.COM", "093 4567 890";
       >=6 giu nguyen: "1.500.000", "2026", "TT-2026-001", "482913", "26/09/2026", "12%"). So phan tu = so assert.
       Van ban 5.000 ky tu 12 doan -> <= ZALO.hoi.toiDaTin phan, moi phan.length <= ZALO.tranKyTu, moi phan ket
@@ -251,12 +257,13 @@ evals:
     expected: |
       task.ts session.started voi ctx purpose "zalo" -> markdown chua cac cum khai truoc: "tiếng Việt",
       "không bảng", "chỉ đọc", "số điện thoại", "email", "nguyên văn", "AppSetting", "không có câu trả lời";
-      length < ZALO.tranKyTu; purpose "builder" -> markdown khong chua "AppSetting". Bay khoa ZALO.loi ton tai,
+      length < ZALO.tranKyTu; purpose "builder" -> markdown khong chua "AppSetting". Bay khoa ZALO.loi (cong canHoiLai
+      do E2 do) ton tai,
       moi cau khong chua "\n", length < tranKyTu, co dau tieng Viet, khong chua "trợ lý" hay "thông báo".
   - id: E12j
     criterion: AC-12
     executor: judgment
-    question: "Chỉ dẫn phiên Zalo và bảy câu trả lời mới có đọc tự nhiên với người Việt trong đội, đúng từ điển CONTEXT.md (bot không tự xưng trợ lý, không dùng «thông báo»), và có đủ ba thứ cấm của ranh giới A không?"
+    question: "Chỉ dẫn phiên Zalo và tám câu trả lời mới có đọc tự nhiên với người Việt trong đội, đúng từ điển CONTEXT.md (bot không tự xưng trợ lý, không dùng «thông báo»), và có đủ ba thứ cấm của ranh giới A không?"
     inputs:
       - _acceptance/hoi-crm-qua-zalo/contract.md
       - apps/agent/agent/lib/zalo-chi-dan.ts
