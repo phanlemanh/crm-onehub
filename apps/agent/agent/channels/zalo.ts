@@ -9,6 +9,7 @@ import { authorised } from "../lib/cau-noi-auth";
 import { attribute, type PurposeContext } from "../lib/session-purpose";
 import { datBot, guiThu } from "../lib/zalo-bot-xuong";
 import { ZALO } from "../lib/zalo-config";
+import { chatCuaToken } from "../lib/zalo-hoi";
 import {
 	canHoiLai,
 	loiVe,
@@ -58,7 +59,9 @@ export const zaloEvents: ChannelEvents = {
 		await loiVe(suKien(channel, ctx));
 	},
 	async "session.failed"(_data, channel) {
-		await loiVe(suKien(channel));
+		console.error(
+			`[zalo] session.failed zaloChatId=${chatCuaToken(channel.continuationToken) ?? "?"}; tick dong cau qua han`,
+		);
 	},
 };
 

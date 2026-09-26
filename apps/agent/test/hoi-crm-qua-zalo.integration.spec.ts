@@ -1092,3 +1092,17 @@ describe("cung-phien", () => {
 		expect(doi[0]).not.toBe(eve.send[0]?.continuationToken);
 	});
 });
+
+describe("loi-tac-tu", () => {
+	test("loi-tac-tu: session.failed khong mang hoiId thi khong dong cau moi", async () => {
+		const A = await gieoVai("An", "member");
+		await noiZalo(A.id, "ZA");
+		moMayChu();
+		const eve = eveGia();
+		const w = await guiWebhook("ZA", "Câu mới", { eve });
+		await eve.xong();
+		await suKien("session.failed", {}, "ZA");
+		expect((await hangCua(w.messageId))?.ketQua, "cau moi van dang-hoi").toBe("dang-hoi");
+		expect(guiMayChu("ZA")).toEqual([]);
+	});
+});
