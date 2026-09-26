@@ -407,6 +407,7 @@ describe("quet-mo-coi", () => {
 			const age = MEASURE_DATABASE.maxAgeMs;
 			const now = real + 2 * age + MINUTE_MS;
 			const before = real + age - MINUTE_MS;
+			const own = `crm_thu${id}`;
 			const old = `crm_thu${id}gia_do`;
 			const young = `crm_thu${id}non_do`;
 			const unmarked = `crm_thu${id}kd_do`;
@@ -424,7 +425,7 @@ describe("quet-mo-coi", () => {
 			});
 
 			const early = await withMaintenance(base, (client) =>
-				sweepMeasureDatabases(client, before),
+				sweepMeasureDatabases(client, before, own),
 			);
 			const labels: [string, string][] = [
 				[young, "non"],
@@ -441,7 +442,7 @@ describe("quet-mo-coi", () => {
 			}
 
 			const dropped = await withMaintenance(base, (client) =>
-				sweepMeasureDatabases(client, now),
+				sweepMeasureDatabases(client, now, own),
 			);
 
 			const left: string[] = [];

@@ -260,3 +260,24 @@ evals:
       mot luot pre-merge that luu trong rang (mot dong cua ho so khac -> dem 1, mot dong cua ho
       so nay -> dem 0). Lenh pre-merge thoat ma khac 0/1 (khong chay duoc) -> rang thoat 2.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-14
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dmk_khong_dung_kho_khac
+    paths: [packages/db/scripts/measure-db.ts, packages/db/src/measure-database.ts, packages/db/test/measure-database.spec.ts, _acceptance/do-man-tren-kho-rieng/rang/khong-dung-kho-khac.mjs]
+    expected: |
+      exit 0; rang khong-dung-kho-khac.mjs dung hai kho rong cua "cay khac" crm_ngoai<id>_do va
+      crm_ngoai<id>__mau_do, danh dau bang CHINH ham ghi dau (markMeasureDatabase, markTemplate)
+      voi gio tao va gio dung = bay gio, khong ket noi. Chay nguyen van lenh ca quet-mo-coi
+      (config:executors.test.dmk_quet_mo_coi) -> ma 0; sau do hai kho con nguyen (ghim "bo kiem
+      xoa mat kho do cua cay khac" / "... kho mau cua cay khac"). Doi chung duong tren cung vat:
+      goi sweepMeasureDatabases voi dong ho tuong lai (bay gio + 2*maxAgeMs + 1 phut) va tien to
+      crm_ngoai<id> -> tra ve DUNG hai ten do (vat do la loai ma ban cu cua bai kiem da xoa). Don
+      hai kho trong moi nhanh.
+      CHIEU DO: S4 round 3 (26/09) — reviewer chi ra ban cu quet toan may chu voi dong ho tuong
+      lai. Pha thu o S3: bo tien to trong luot quet cua bai kiem -> do "bo kiem xoa mat kho do
+      cua cay khac".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+

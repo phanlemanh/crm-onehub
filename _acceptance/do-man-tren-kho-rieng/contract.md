@@ -5,7 +5,7 @@ slug: do-man-tren-kho-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: approved
 design_doc: docs/superpowers/specs/2026-09-26-do-man-tren-kho-rieng-design.md
 approved_by:
 approved_at:
@@ -54,6 +54,7 @@ Từ ngữ trong hợp đồng này:
 - AC-11: Given `diff` của vòng này so với `merge-base` với `origin/onehub`, When soi danh sách tệp đổi, Then không tệp nào dưới `_acceptance/<hồ sơ khác>/`, không dòng `executors` nào có sẵn của `_acceptance/config.yaml` bị sửa hay xoá, và `canh-cay.mjs` không đổi.
 - AC-12: Given `docs/setup.md`, `CLAUDE.md` và `.env.example` sau vòng này, When đọc, Then `docs/setup.md` có mục mô tả `bun run db:do` (ba cờ), `bun run do:man`, kho mẫu, luật dọn theo tuổi và việc `tien-de` tự dựng phiên; mục «Cách chứng minh nó chạy» của `CLAUDE.md` nói phép đo màn không còn cần máy chủ dev dựng tay và không ghi kho chung; `.env.example` ghi `PHIEN_DO` là biến phiên đo tự đặt, không đặt tay.
 - AC-13: Given cây ở HEAD của vòng này (cộng hồ sơ của chính vòng), When chạy kiểm tra trước khi gộp của bộ kit trên toàn kho — không `--slug`, `--base origin/onehub` — Then không có vi phạm nào thuộc một hồ sơ khác `do-man-tren-kho-rieng`.
+- AC-14: Given một kho đo và một kho mẫu mang dấu phiên đo của một cây khác, đang rảnh (không kết nối) và mới dùng, trên cùng máy chủ Postgres, When bộ kiểm của vòng này chạy ca «quét mồ côi» — ca dùng đồng hồ giả lập tua về tương lai — Then hai kho của cây khác còn nguyên sau khi ca chạy xong; lượt quét trong bài kiểm chỉ chạm các kho do chính bài kiểm tạo (tên mang tiền tố riêng của lượt).
 
 Trong AC-6, AC-9, AC-10, «kho chung» là kho mà `DATABASE_URL` trỏ tới lúc chạy: răng dựng
 một kho chung giả (tên không `_do`, không `_gieo`) có dữ liệu lạ và trỏ vào đó, vì kho `crm`

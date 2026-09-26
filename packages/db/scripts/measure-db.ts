@@ -159,6 +159,7 @@ async function describe(
 export async function sweepMeasureDatabases(
 	client: pg.Client,
 	now = Date.now(),
+	namePrefix = "",
 ): Promise<string[]> {
 	const rows = await client.query<DatabaseRow>(
 		`SELECT d.datname, s.description,
@@ -167,7 +168,7 @@ export async function sweepMeasureDatabases(
 		   JOIN pg_shdescription s ON s.objoid = d.oid
 		  WHERE d.datname LIKE $1 AND s.description LIKE $2`,
 		[
-			`%${MEASURE_DATABASE.suffix.replace(/_/g, "\\_")}`,
+			`${namePrefix.replace(/_/g, "\\_")}%${MEASURE_DATABASE.suffix.replace(/_/g, "\\_")}`,
 			`${MEASURE_DATABASE.commentPrefix} %`,
 		],
 	);
