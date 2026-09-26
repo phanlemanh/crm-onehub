@@ -113,7 +113,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.sot_man_chrome
     paths: [apps/api/src/okr/**, _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs]
-    expected: "Cùng lần chạy với E11: ghi request tRPC; số đã chụp trên màn bằng giaTri dòng okrSoChup đọc thẳng DB cho ngày đó; số dòng bảng bản ghi trên màn bằng số dòng banGhiChiSo trả; chọn ngày gọi banGhiChiSo với input ngay khớp URL. CHIỀU ĐỎ: bản sao ngăn đọc objective.soMay thay vì banGhiChiSo(ngay) → bước chọn ngày đỏ, script in số màn và số DB."
+    expected: "Cùng lần chạy với E11: ghi request tRPC; số đã chụp trên màn bằng giaTri dòng okrSoChup đọc thẳng DB cho ngày đó; số dòng bảng bản ghi trên màn bằng số dòng banGhiChiSo trả; chọn ngày gọi banGhiChiSo với input ngay khớp URL. CHIỀU ĐỎ: bản sao ngăn gọi banGhiChiSo không kèm ngày đã chọn (luôn ngày mới nhất) → bước chọn ngày đỏ, script in số màn và số DB."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
