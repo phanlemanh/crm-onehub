@@ -5,7 +5,7 @@ slug: toan-canh-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-25T21:28:57Z
 design_doc: docs/superpowers/specs/2026-09-26-toan-canh-okr-design.md
@@ -89,3 +89,22 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Nền hạ tầng (`duong-nen.md`): `build_khong_cache` đỏ vì `bash -lc` nhận Node 22; chạy với PATH Node 24 thì xanh (4/4 task, đo 2026-09-26). Hai dòng «THIEU merge-base» là khoá của hồ sơ khác. Làn S4 chạy với tiền tố PATH Node 24.
 - Máy chủ dev của phép đo màn: 3930 (app) / 3931 (api), ảnh ở `.acceptance-runs/toan-canh-okr/evidence/`; gieo tự dọn theo id, không để lại dữ liệu thử trong kho `crm`.
 - Cổng người do phiên điều phối ký theo uỷ quyền của Manh Phan ngày 2026-09-24; dòng ký ghi «Manh Phan — uỷ quyền phiên điều phối 2026-09-24».
+
+Known limits — chủ kho chấp nhận 26/09 tại Cổng Bằng chứng sau S4 vòng 3 (Ngoài-1, 3, 4, 5, 9–16 và phần thêm; sổ d-20260926T110238Z-30, -32, -33, -34, -38 … -45, -48):
+
+- known-limits: `packages/ui/test/tree-nav.dom.tsx` chỉ đo nhánh dự phòng (mục đang chọn không có trong cây); chưa có đối chứng dương cho mục đang chọn có trong cây, nên một hồi quy bỏ hẳn `selectedId` vẫn xanh.
+- known-limits: `apps/api/src/okr/okr-xem.config.ts` là module hằng số thứ hai của khu OKR, lặp đơn vị thời gian và câu lỗi «Không có KR» khác chữ với `okr-config.ts`.
+- known-limits: các bảng OKR mới tự viết khoảng đệm ô thay cho hằng số `CELL`; dòng bảng họp tuần cao hơn các bảng OKR khác.
+- known-limits: vài con số chỉnh được (`SO_TEN_CHUA_DAT`, `LAM_TRON`, chiều cao mặc định của `TargetLineChart`) đặt cạnh chỗ dùng, không ở module cấu hình.
+- known-limits: bài API của E8 kiểm 6 hàng thay vì 7 hàng × 6 trường, và chưa kiểm `tongQuan.donViCongBo`/`tongDonVi`.
+- known-limits: `packages/ui/test/target-line-chart.dom.tsx` chỉ kiểm nhãn đích có chữ, không kiểm nằm trong khung; thước màn E17 có kiểm vế này.
+- known-limits: `packages/ui/test/heatmap.dom.tsx` chưa kiểm `scrollLeft > 0` khi khung hẹp.
+- known-limits: bài API của E16 (b) chỉ đếm 10 điểm, chưa so từng giá trị với hàm thuần.
+- known-limits: `hop-tuan-xep` kiểm «không có khoá người» bằng regex hẹp, không đối chứng dương; thứ tự qua API chưa kiểm.
+- known-limits: `rang/soi-ma.mjs` dò chữ tình trạng tự map chưa có chiều đỏ.
+- known-limits: mock `okr.danhSach` trong `apps/app/test/okr-theo-don-vi.dom.tsx` thiếu trường bắt buộc, khoá gieo lệch khoá thật.
+- known-limits: hai phép so id trong `apps/api/test/okr-toan-canh.spec.ts` luôn đúng.
+- known-limits: E11, E12, E20 của `dat-okr-trong-crm` có vật đo bị chạm ngoài làn máy (làn ghim lại repin-20260926T092424Z-22525 và repin-20260926T101611Z-94802 nói ra); không mở vòng S4 delta cho hồ sơ đó.
+- known-limits: E21 và E23 đọc theo sổ d-20260926T091042Z-26 — E21 nối Zalo cho trưởng P1 để khớp số viết trước của E20; E23 ở Toàn cảnh đọc số của hàng phòng ban vì màn không in tên mục tiêu.
+
+Mở hợp đồng mới (Ngoài-2 và 6, Ngoài-7, Ngoài-8; sổ -31, -35, -36, -37): tải trước danh sách Theo đơn vị kèm bộ lọc mức tự tin; bộ lọc phụ trách hiện tên thay cho mã; khối «OKR của bạn» báo lỗi khi không tải được chu kỳ.
