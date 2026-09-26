@@ -20,6 +20,7 @@ export const onboardingActivityMeta = z.discriminatedUnion("kind", [
 		kind: z.literal("buoc.xong"),
 		...buoc,
 		giaoLucXong: ma.nullable().optional(),
+		source: z.literal("zalo").optional(),
 	}),
 	z.object({ kind: z.literal("buoc.boXong"), ...buoc }),
 	z.object({ kind: z.literal("buoc.doiHan"), ...buoc, tu: ngay, den: ngay }),
