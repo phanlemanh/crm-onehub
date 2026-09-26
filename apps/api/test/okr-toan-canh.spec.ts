@@ -4,9 +4,13 @@ import { join } from "node:path";
 import { db } from "@crm/db";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { parseOkrVet } from "@crm/validation/okr-vet";
+import { z } from "zod";
 import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { OKR_XEM } from "../src/okr/okr-xem.config";
-import type { DanhSachOutput } from "../src/okr/okr-xem.contracts";
+import type {
+	DanhSachOutput,
+	HopTuanOutput,
+} from "../src/okr/okr-xem.contracts";
 import { OkrXemService } from "../src/okr/okr-xem.service";
 import {
 	type AiHoacCookie,
@@ -769,15 +773,12 @@ describe("toan-canh-tu-tin", () => {
 	});
 });
 
-const coKhoaNguoi = (v: unknown): string[] => {
-	if (Array.isArray(v)) return v.flatMap(coKhoaNguoi);
-	if (v && typeof v === "object")
-		return Object.entries(v).flatMap(([k, con]) => [
-			...(["nguoi", "chuaCapNhat"].includes(k) ? [k] : []),
-			...coKhoaNguoi(con),
-		]);
-	return [];
-};
+const KHOA_NGUOI = /"(nguoi|chuaCapNhat)":/g;
+
+const coKhoaNguoi = (v: Json | HopTuanOutput): string[] =>
+	[...JSON.stringify(v).matchAll(KHOA_NGUOI)].flatMap((m) =>
+		m[1] ? [m[1]] : [],
+	);
 
 describe("hop-tuan-xep", () => {
 	test("hop-tuan-xep: truong phong ban doc bang hop — tut hai bac, tut, im, ghi chu moi; khong danh sach nguoi", async () => {
@@ -909,11 +910,11 @@ describe("mo-hop-tuan", () => {
 			[true, null, null, `pb:${P}`, "2026-11-23"],
 		]);
 		expect(
-			dong.map((v) => {
-				const t = parseOkrVet(v.after)?.tuan;
-				return typeof t === "string" ? t.length : typeof t;
-			}),
-		).toEqual([10, 10, 10]);
+			dong.map(
+				(v) =>
+					z.string().length(10).safeParse(parseOkrVet(v.after)?.tuan).success,
+			),
+		).toEqual([true, true, true]);
 	});
 
 	test("mo-hop-tuan: cau dem ty-le-mo-hop-tuan.sql tren dong sinh boi loi goi mo bang", async () => {
@@ -948,8 +949,9 @@ describe("mo-hop-tuan", () => {
 			"utf8",
 		);
 		const giu = donVi.map((d) => d.P);
-		const ket = await db
-			.$transaction(async (tx) => {
+		let ket: { mo: number; tong: number; ty_le: number } | null = null;
+		await expect(
+			db.$transaction(async (tx) => {
 				await tx.$executeRaw`UPDATE department SET "archivedAt" = now() WHERE "archivedAt" IS NULL AND NOT (id = ANY(${giu}))`;
 				await tx.$executeRaw`UPDATE division SET "archivedAt" = now() WHERE "archivedAt" IS NULL`;
 				await tx.$executeRaw`SELECT set_config('okr.tuan', '2026-11-16', true)`;
@@ -957,12 +959,10 @@ describe("mo-hop-tuan", () => {
 					await tx.$queryRawUnsafe<
 						{ mo: number; tong: number; ty_le: number }[]
 					>(sql);
-				throw new HoanTac(r[0] ?? null);
-			})
-			.catch((e: unknown) => {
-				if (e instanceof HoanTac) return e.ket;
-				throw e;
-			});
+				ket = r[0] ?? null;
+				throw new HoanTac();
+			}),
+		).rejects.toBeInstanceOf(HoanTac);
 		expect({ "ty-le-mo-hop-tuan": ket }).toEqual({
 			"ty-le-mo-hop-tuan": { mo: 3, tong: 5, ty_le: 0.6 },
 		});
@@ -970,9 +970,7 @@ describe("mo-hop-tuan", () => {
 });
 
 class HoanTac extends Error {
-	constructor(
-		readonly ket: { mo: number; tong: number; ty_le: number } | null,
-	) {
+	constructor() {
 		super("hoan tac");
 	}
 }

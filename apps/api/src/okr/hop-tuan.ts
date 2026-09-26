@@ -97,10 +97,9 @@ const doManh = (l: LyDoHop): number => {
 
 export type DongXep = { id: string; lyDo: LyDoHop[] };
 
-export function xepHopTuan(
-	krs: KrSo[],
-	homNay: Date,
-): { dangBan: DongXep[]; conLai: DongXep[] } {
+export type XepHop = { dangBan: DongXep[]; conLai: DongXep[] };
+
+export function xepHopTuan(krs: KrSo[], homNay: Date): XepHop {
 	const co = krs.map((kr) => ({ kr, lyDo: lyDoCua(kr, homNay) }));
 	const dangBan = co
 		.filter((d) => d.lyDo.length > 0)
