@@ -1,8 +1,12 @@
 import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
-import { API_KEY_HEADER, API_KEY_USAGE, auth } from "@crm/auth";
+import {
+	API_KEY_HEADER,
+	API_KEY_PLUGIN_OPTIONS,
+	API_KEY_USAGE,
+	auth,
+} from "@crm/auth";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
-import type { BetterAuthOptions } from "better-auth";
 import request from "supertest";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
@@ -13,8 +17,8 @@ const NGUOI = `kagt-${suffix}`;
 const GIAY_MS = 1000;
 const TUONG_LAI_MS = 10 * 60 * GIAY_MS;
 const DUONG = "/api/trpc/contacts.list?input=%7B%7D";
-const DA_BAT_SECONDARY =
-	"kho đã bật secondaryStorage — bản vá khoa-api-ghi-thua đổi cả đường secondary-storage, xem lại AC-9";
+const DI_DUONG_SECONDARY =
+	"plugin khoá API đi đường secondary-storage — bản vá khoa-api-ghi-thua đổi cả đường đó, xem lại AC-9";
 
 let app: NestExpressApplication;
 
@@ -33,11 +37,12 @@ async function hang(id: string) {
 	});
 }
 
-function khongCoSecondaryStorage(
-	secondaryStorage: BetterAuthOptions["secondaryStorage"],
-): void {
-	if (secondaryStorage !== undefined) {
-		throw new Error(DA_BAT_SECONDARY);
+function khongDiDuongSecondary(tuyChon: typeof API_KEY_PLUGIN_OPTIONS): void {
+	if (
+		tuyChon.storage === "secondary-storage" ||
+		tuyChon.customStorage !== undefined
+	) {
+		throw new Error(DI_DUONG_SECONDARY);
 	}
 }
 
@@ -137,17 +142,27 @@ describe("khoa-api-ghi-thua", () => {
 		expect((await goi(hetHan.key)).status, "khoa het han van qua").toBe(401);
 	});
 
-	test("khong-secondary-storage: cau hinh that cua kho khong bat secondaryStorage", () => {
-		const tuyChon: BetterAuthOptions = auth.options;
-		khongCoSecondaryStorage(tuyChon.secondaryStorage);
+	test("khong-secondary-storage: plugin khoa API cua kho khong di duong secondary-storage", () => {
+		khongDiDuongSecondary(API_KEY_PLUGIN_OPTIONS);
 		expect(
 			() =>
-				khongCoSecondaryStorage({
-					get: async () => null,
-					set: async () => {},
-					delete: async () => {},
+				khongDiDuongSecondary({
+					...API_KEY_PLUGIN_OPTIONS,
+					storage: "secondary-storage",
 				}),
-			"cau hinh co secondaryStorage phai do",
-		).toThrow(DA_BAT_SECONDARY);
+			"storage secondary-storage phai do",
+		).toThrow(DI_DUONG_SECONDARY);
+		expect(
+			() =>
+				khongDiDuongSecondary({
+					...API_KEY_PLUGIN_OPTIONS,
+					customStorage: {
+						get: () => null,
+						set: () => null,
+						delete: () => null,
+					},
+				}),
+			"customStorage phai do",
+		).toThrow(DI_DUONG_SECONDARY);
 	});
 });
