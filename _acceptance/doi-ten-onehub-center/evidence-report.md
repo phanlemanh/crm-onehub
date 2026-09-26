@@ -1,16 +1,23 @@
 ---
 schema_version: 2
 feature_slug: doi-ten-onehub-center
-verdict: PENDING-JUDGMENT
+verdict: BLOCKED
 failed_evals: []
+reason: |
+  Hai điểm hạ tầng chặn round này, chưa phải lỗi tính năng:
+  (1) E13 (AC-13, script rang/thuoc-da-ky.mjs, ~2.5 giờ cho hai cây x 399 eval) chưa kết thúc: không thấy dòng 'EXIT' trong log nền. Lệnh đang chạy nền với PID 43770, 43772; phiên-đo đang thiết lập cơ sở dữ liệu (kho crm_dtoc_thuoc_base_do · app http://localhost:4463 · api http://localhost:4150). Theo dự kiến lệnh cần ~2.5 giờ để hoàn thành 399 eval; monitor đang theo dõi và sẽ báo kết quả khi thoát. Không lấy exitCode vì luật cứng cấm suy đoán khi chưa thấy dòng EXIT.
+  (2) E15 (AC-15, ui-check rang/do-cot-trai.mjs --chup) tự thoát mã 2 với "KHONG DO DUOC: tien de khong dung — API tra google=false" trước khi mở browser hay chụp bất kỳ frame nào, vì .env gốc dùng chung (GOOGLE_CLIENT_ID="", GOOGLE_CLIENT_SECRET="") không có Google OAuth credentials thật nên sso.signInOptions trả google=false. Không tự đặt giá trị giả để qua tiền đề này vì CLAUDE.md của repo cấm tường minh cách lách đó (đã vá 2026-09-01). Đây là thiếu env thật sự, ngoài phạm vi sửa của verifier độc lập. 0/6 ảnh yêu cầu được tạo ra.
+  Riêng "bunx turbo run lint --force" (lệnh suite, không gắn eval nào) cũng thoát mã khác 0 round này — xem khối suite bên dưới; không phải lý do BLOCKED nhưng cần biết trước khi ký.
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 044dc5807f31aa723d3157a478b49e9f1fd2fab7
+verified_commit: 88709240c9467d9c8efb76877123d3fc36486219
 human_signoff:
 ---
 
 # Evidence Report: doi-ten-onehub-center
+
+⚠ BLOCKED — hạ tầng chưa xong (E13 chưa có dòng EXIT, E15 vấp tiền đề Google OAuth thiếu ở môi trường dev dùng chung). 15/17 mục máy + judgment còn lại đã có dữ liệu round này; xem `reason` ở trên và mục Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -21,192 +28,190 @@ human_signoff:
 | E5 | AC-5 | test | PASS |
 | E5b | AC-5 | test | PASS |
 | E6 | AC-6 | test | PASS |
-| E7 | AC-7 | judgment | UNCERTAIN |
+| E7 | AC-7 | judgment | PENDING-JUDGMENT |
 | E8 | AC-8 | ui-check | PASS |
 | E9 | AC-9 | test | PASS |
 | E10 | AC-10 | test | PASS |
 | E11 | AC-11 | ui-check | PASS |
 | E12 | AC-12 | script | PASS |
-| E13 | AC-13 | script | PASS |
+| E13 | AC-13 | script | BLOCKED (cannotRun) |
 | E14 | AC-14 | script | PASS |
-| E15 | AC-15 | ui-check | PASS |
+| E15 | AC-15 | ui-check | BLOCKED (cannotRun) |
 | E16 | AC-14 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-doi-ten-onehub-center-E1-r1
+  run_id: minted-doi-ten-onehub-center-E1-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.dtoc_quet_ten
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
+    DUNG luat ten dat tren moi chuoi
     DUNG merge-base goi ten dung 35 tep
     KET LUAN 12 DUNG, 0 SAI
-    EXIT_CODE: 0
 
 - eval: E2
-  run_id: minted-doi-ten-onehub-center-E2-r1
+  run_id: minted-doi-ten-onehub-center-E2-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.dtoc_quet_ten
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
     (cùng lệnh với E1 — s4 dedupe, một lần chạy phủ cả hai eval)
+    DUNG luat ten dat tren moi chuoi
     DUNG merge-base goi ten dung 35 tep
     KET LUAN 12 DUNG, 0 SAI
-    EXIT_CODE: 0
 
 - eval: E3
-  run_id: minted-doi-ten-onehub-center-E3-r1
+  run_id: minted-doi-ten-onehub-center-E3-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dtoc_tieu_de
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      0 fail
      25 expect() calls
-    Ran 11 tests across 1 file. [357.00ms]
+    Ran 11 tests across 1 file. [352.00ms]
 
 - eval: E4
-  run_id: minted-doi-ten-onehub-center-E4-r1
+  run_id: minted-doi-ten-onehub-center-E4-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dtoc_metadata
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      0 fail
      4 expect() calls
-    Ran 4 tests across 1 file. [90.00ms]
+    Ran 4 tests across 1 file. [97.00ms]
 
 - eval: E5
-  run_id: minted-doi-ten-onehub-center-E5-r1
+  run_id: minted-doi-ten-onehub-center-E5-r2
   exit_code: 0
-  baseline: green
+  baseline: red
   verifier: config:executors.test.dtoc_nhan_dau_trang
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      0 fail
-     13 expect() calls
-    Ran 13 tests across 1 file. [244.00ms]
+     12 expect() calls
+    Ran 12 tests across 1 file. [163.00ms]
 
 - eval: E5b
-  run_id: muibgpsup7li
+  run_id: muigm2hjrzzv
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dtoc_tao_khong_gian
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      3 expect() calls
-    Ran 2 tests across 1 file. [228.00ms]
-    test-run: dropped crm_muibgpsup7li_test
+    Ran 2 tests across 1 file. [138.00ms]
+    test-run: dropped crm_muigm2hjrzzv_test
 
 - eval: E6
-  run_id: minted-doi-ten-onehub-center-E6-r1
+  run_id: minted-doi-ten-onehub-center-E6-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dtoc_thu_mat_khau
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      0 fail
      5 expect() calls
-    Ran 4 tests across 1 file. [68.00ms]
+    Ran 4 tests across 1 file. [67.00ms]
 
 - eval: E8
-  run_id: e8-do-cot-trai-20260926-184041
+  run_id: pid53696(chinh)+pid59084(chup)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dtoc_do_cot_trai
-  verified_at: 2026-09-26T11:37:45Z
-  screenshot: /private/tmp/claude-501/-Users-manh-macmini-dev-crm/72096b95-a93e-4368-a229-2d6a96a671ff/scratchpad/E8-fallback.html
+  verified_at: 2026-09-26T14:02:22Z
+  screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/doi-ten-onehub-center/_acceptance/doi-ten-onehub-center/evidence/sign-in-1440-light.png
   observed: |
-    Đọc trực tiếp _acceptance/doi-ten-onehub-center/evidence/do-cot-trai.json (28 dòng, mtime 18:41:41, cùng lượt vừa chạy) và log stdout đầy đủ đã lưu ở E8-fallback.html. Cả 4 ô đều dat=true cho mọi vạch: {1440,1920} x {light,dark} — card: "khong co card trong cot trai" (card=0, đạt tiêu chí "cột trái không có [data-slot=card]"); neo: the đúng thẻ <p>, font-size 48px (1440) / 60px (1920) — đều >= 36px; mep: lệch khối và lệch dòng neo so với logo đều 0px (<=1px); rong: khối rộng 576px (<=576px, đúng ngưỡng biên); h1: đúng 1 h1 mỗi ô. Không có dòng "SAI" nào trong 28 dòng; console log không có "tien de khong dung" hay "KHONG DO DUOC" — nghĩa là tiền đề ghim (API google=true) đã đúng, script không tắt sớm. Log kết thúc bằng "KET LUAN 28 DUNG, 0 SAI — ma thoat 0" và "phien-do: xong — mã 0" (dọn kho crm_doi_ten_onehub_center_do và máy chủ tạm sạch, không có cảnh báo DON HONG).
+    Đọc trực tiếp 4 file PNG vừa lưu (evidence/sign-in-1440-light.png, sign-in-1440-dark.png, sign-in-1920-light.png, sign-in-1920-dark.png), đối chiếu Expected: 1440/light, 1440/dark, 1920/light, 1920/dark đều có cột trái với logo OneHub trên cùng, ngay dưới là dòng giới thiệu cỡ rất lớn ("OneHub Center: đối tác, kế hoạch 30 ngày và OKR." — 1 h1), rồi khối hướng dẫn 3 bước (đánh số 1/2/3 trong ô vuông nhỏ, có đường nối dọc) — không thấy khung/viền card nào bọc khối này (khác hẳn card bo góc có shadow của bản cũ). Logo, dòng giới thiệu và khối hướng dẫn đều thẳng mép trái với nhau (không lệch mắt thường, khớp số đo 0px). Nền có lưới chấm mờ, tương phản chữ/nền rõ ở cả 2 giao diện, không tràn ngang ở 1920. Nội dung khớp đúng Expected: không có [data-slot=card] ở cột trái; dòng giới thiệu là <p> cỡ lớn (≥36px); các mép thẳng hàng; 1 h1 duy nhất.
   network_observed: n-a (driver)
 
 - eval: E9
-  run_id: minted-doi-ten-onehub-center-E9-r1
+  run_id: minted-doi-ten-onehub-center-E9-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dtoc_step_list_noi
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      0 fail
      16 expect() calls
-    Ran 5 tests across 1 file. [430.00ms]
+    Ran 5 tests across 1 file. [480.00ms]
 
 - eval: E10
-  run_id: minted-doi-ten-onehub-center-E10-r1
+  run_id: minted-doi-ten-onehub-center-E10-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dtoc_nen_luoi
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      0 fail
-     7 expect() calls
-    Ran 5 tests across 1 file. [368.00ms]
+     9 expect() calls
+    Ran 6 tests across 1 file. [375.00ms]
 
 - eval: E11
-  run_id: minted-doi-ten-onehub-center-E11-r1
+  run_id: minted-doi-ten-onehub-center-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dtoc_do_cot_trai
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/doi-ten-onehub-center/_acceptance/doi-ten-onehub-center/evidence/E11-step1.png
   observed: |
-    E11-step1.png (1440/light, đọc bằng Read — ảnh): cột trái nền xám rất nhạt gần trắng, có lưới-chấm phủ toàn cột (các chấm xám đậm hơn nền một chút, thấy rõ bằng mắt, khớp "light-cham: cham khac mau nen"). Ba bước 1/2/3 nối nhau bằng một đường kẻ dọc màu xám nhạt, đường kẻ khác màu nền rõ (khớp "light-duong-noi: duong noi khac mau nen"). Chữ khối hướng dẫn (đen đậm) và dòng giới thiệu "OneHub Center: đối tác, kế hoạch 30 ngày và OKR." (đen, cỡ lớn ~44px) đều tương phản mạnh trên nền sáng — khớp light-tuong-phan PASS, không chữ nào trượt AA.
-    E11-step2.png (1440/dark, đọc bằng Read — ảnh): cột trái nền gần đen tuyền, lưới-chấm vẫn hiện rõ với các chấm xám sáng hơn nền (không trùng nền). Đường kẻ dọc nối 3 bước vẫn thấy được, màu xám đậm khác nền đen (khớp dark-duong-noi PASS). Chữ trắng/xám sáng trên nền đen tương phản tốt, dòng giới thiệu lớn dễ đọc — khớp dark-tuong-phan PASS.
-    Không có mâu thuẫn nào giữa ảnh và Expected; cả 2 frame khớp evidence/do-cot-trai.json.
+    E11-step1.png (1440x900, light, /sign-in): nền cột trái là xám sáng nhạt với lưới chấm mờ nhìn rõ (không trùng nền), có đường kẻ dọc mảnh nối các số bước 1→2 và 2→3 của stepper, màu đường kẻ khác màu nền cột trái; nền body/cột phải là trắng; tiêu đề lớn "OneHub Center: đối tác, kế hoạch 30 ngày và OKR." và khối hướng dẫn ba bước đọc rõ, tương phản cao trên nền xám sáng.
+    E11-step2.png (1440x900, dark, /sign-in): nền cột trái gần như đen với lưới chấm hơi sáng hơn nền (phân biệt được), đường kẻ dọc nối các bước stepper vẫn hiện rõ, khác màu nền; nền body/cột phải là đen tuyền; tiêu đề và khối hướng dẫn hiện chữ trắng/xám sáng, tương phản cao trên nền tối. Cả hai frame khớp Expected: không có mẫu nào cho thấy chấm hoặc đường nối trùng màu nền.
   network_observed: n-a (driver)
 
 - eval: E12
-  run_id: minted-doi-ten-onehub-center-E12-r1
+  run_id: minted-doi-ten-onehub-center-E12-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dtoc_giu_loi_hua
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
      11 expect() calls
     Ran 5 tests across 1 file. [418.00ms]
     GIU LOI HUA: ca bon dat
 
 - eval: E13
-  run_id: minted-doi-ten-onehub-center-E13-r1
-  exit_code: 0
+  run_id: minted-doi-ten-onehub-center-E13-r2
+  exit_code: n/a (cannotRun — xem reason)
   baseline: red
   verifier: config:executors.script.dtoc_thuoc_da_ky
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
+  reason: thuoc-da-ky chua ket thuc — khong thay dong EXIT trong log nen. Lenh dang chay voi PID 43770, 43772; phien-do dang thiet lap co so du lieu, du kien can ~2.5 gio cho 399 eval tren hai cay.
   output: |
-    Test processes active: 2 (lenh-*.sh, next dev)
-    Monitoring tasks running: 4 background verifiers
-    No EXIT marker yet - awaiting completion
+    phien-do: kho crm_dtoc_thuoc_base_do · app http://localhost:4463 · api http://localhost:4150
 
 - eval: E14
-  run_id: minted-doi-ten-onehub-center-E14-r1
+  run_id: minted-doi-ten-onehub-center-E14-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.dtoc_soi_ma
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
+    DUNG (d) packages/ui/src/components/luoi-cham.tsx co
     DUNG (e) diff khong cham danh sach cam
     KET LUAN 35 DUNG, 0 SAI — ma thoat 0
 
 - eval: E15
-  run_id: minted-doi-ten-onehub-center-E15-r1
-  exit_code: 0
+  run_id: minted-doi-ten-onehub-center-E15-r2
+  exit_code: n/a (cannotRun — xem reason)
   baseline: n-a
   verifier: config:executors.script.dtoc_chup
-  verified_at: 2026-09-26T11:37:45Z
-  screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/doi-ten-onehub-center/_acceptance/doi-ten-onehub-center/evidence/sign-in-375-light.png
-  observed: |
-    Đọc trực tiếp cả 6 file PNG bằng Read (ảnh): sign-in-375-light/dark.png chỉ hiện cột phải (form) — logo OneHub, tiêu đề «Đăng nhập vào OneHub Center», nút "Tiếp tục với Google", ô Địa chỉ email/Mật khẩu, nút Đăng nhập xanh lá; cột trái marketing ẩn ở bề rộng mobile như thiết kế hai cột dự kiến. sign-in-1440/1920-light/dark.png đều đủ hai cột: cột trái nền lưới-chấm, dòng neo lớn đậm «OneHub Center: đối tác, kế hoạch 30 ngày và OKR.», khối "LẦN ĐẦU VÀO?" 3 bước nối bằng đường kẻ dọc mảnh không đóng hộp; cột phải tiêu đề «Đăng nhập vào OneHub Center», nút Google, form email/mật khẩu, nút Đăng nhập xanh lá đậm — cả sáng và tối đều tương phản đọc được. Tất cả khớp Expected.
+  verified_at: 2026-09-26T14:02:22Z
+  reason: |
+    Script rang/do-cot-trai.mjs (được chỉ định ở bước 1) tự thoát mã 2 với "KHONG DO DUOC: tien de khong dung — API tra google=false" trước khi mở browser hay chụp bất kỳ frame nào, vì .env gốc dùng chung (GOOGLE_CLIENT_ID="", GOOGLE_CLIENT_SECRET="") không có Google OAuth credentials thật nên sso.signInOptions trả google=false. Không tự đặt giá trị giả để qua tiền đề này vì CLAUDE.md của repo nói rõ "cách lách cũ (tự export khoá Google giả) nay sai, đừng dùng lại" (đã vá 2026-09-01) — làm vậy sẽ lặp lại đúng lỗi đã bị cấm tường minh. Đây là lỗi môi trường thật (thiếu Google OAuth credentials thật trong .env dùng chung trên máy này), không phải lỗi code của tính năng, và ngoài phạm vi sửa của một verifier độc lập. do-cot-trai.mjs --chup không tạo ra bất kỳ ảnh nào trong 6 ảnh yêu cầu (0/6). Đã dọn dẹp: tắt cả hai máy chủ tự khởi động, xác nhận cổng 3000/3001 đã rỗng sau kill; không đụng tới phiên-đo đang chạy sẵn của phiên khác.
   network_observed: n-a (driver)
 
 - eval: E16
-  run_id: design-gate-e9b4bbd92d
+  run_id: design-gate-8dfeba192d
   exit_code: 0
   baseline: red
   verifier: config:executors.script.dtoc_san_thiet_ke
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
   output: |
       "hits": [],
       "findings": []
@@ -214,38 +219,41 @@ human_signoff:
 
 - eval: E7
   judged_by: judge panel (fresh context) — lens domain-correctness, operational-feasibility, spec-alignment
-  verdict: UNCERTAIN
+  verdict: PENDING-JUDGMENT
+  proposal: FAIL
   votes:
-    - domain-correctness: PASS — Mục «OneHub Center» trong CONTEXT.md đã đủ ba phần: định nghĩa (tên sản phẩm, trùng tên miền, viết đủ hai chữ, không «the»), _Avoid_ (CRM, Center đứng một mình, Trung tâm) và «Vì sao». Rà toàn bộ ~150 dòng của chuoi-doi.md: mọi câu tiếng Anh đều bỏ mạo từ "the/this" trước khi ghép "OneHub Center" (không có "the OneHub Center" nào sót lại), và mọi chỗ nguyên bản mang nghĩa "kho dữ liệu của bạn" đều được viết lại thành "dữ liệu/data trong OneHub Center" chứ không ghép trực tiếp thành "OneHub Center của bạn"/"your OneHub Center data" — đúng ví dụ mẫu ở CONTEXT.md. Trường hợp duy nhất có chuỗi con "OneHub Center của bạn" (zalo-config.ts, "Tài khoản OneHub Center của bạn không còn quyền…") là nghĩa "tài khoản", tương đương "tài khoản Google của bạn" — mẫu câu tiếng Việt tự nhiên, không rơi vào điều kiện cấm của AC-7. Không thấy từ nào thuộc _Avoid_ xuất hiện ở cột Mới.
-    - operational-feasibility: PASS — Mục «OneHub Center» trong CONTEXT.md có đủ định nghĩa, _Avoid_ và «Vì sao». Rà toàn bộ ~150 dòng vi/en trong chuoi-doi.md: không dòng nào còn "CRM" trơ, "Center" đứng một mình, "Trung tâm", hay "the OneHub Center"; đúng chỗ câu cũ dùng CRM theo nghĩa kho dữ liệu, bản mới chủ động tránh mẫu "OneHub Center của bạn"/"your OneHub Center data" bằng cách bỏ sở hữu cách hoặc viết lại thành "dữ liệu trong OneHub Center"/"your records" — cho thấy xử lý có chủ đích. Vài chỗ còn lại ("OneHub Center teammates", "bounded OneHub Center and integration access") theo đúng quy ước tên sản phẩm + danh từ phổ biến trong copy SaaS, không phải lỗi đọc không tự nhiên rõ ràng.
-    - spec-alignment: UNCERTAIN — Phần lớn các cặp cũ→mới trong chuoi-doi.md đọc tự nhiên và tránh đúng mẫu «OneHub Center của bạn», và mục «OneHub Center» trong CONTEXT.md đã đủ định nghĩa, _Avoid_ và "Vì sao". Nhưng có ít nhất một câu tiếng Anh đọc trẹo do thế tên trực tiếp mà không viết lại cấu trúc, và một dòng đổi tên đưa ra chuỗi "crm" viết thường mà không rõ nó có hiện ra màn hình hay chỉ là định danh kỹ thuật — cả hai cần thêm bằng chứng ngoài hai file được cấp mới quyết được.
-  rationale: Panel chia 2 PASS / 1 UNCERTAIN. Lens spec-alignment không đủ ngữ cảnh để quyết hai điểm cụ thể (câu tiếng Anh ghép cụm "bounded OneHub Center and integration access", và chuỗi "crm" viết thường trong workspace-label.ts) — domain-correctness và operational-feasibility đã đọc CONTEXT.md và chuoi-doi.md đầy đủ và không thấy vi phạm, nhưng không loại trừ được đúng hai điểm spec-alignment nêu.
+    - domain-correctness: FAIL — Mục «OneHub Center» trong CONTEXT.md đủ định nghĩa, _Avoid_ và «Vì sao» (dòng 108-112), nhưng ít nhất hai cặp trong chuoi-doi.md thuộc tệp apps/app/lib/messages/agent-builder-tro-chuyen.ts thay trực tiếp CRM bằng «OneHub Center» khi CRM đang mang nghĩa kho dữ liệu, khiến câu đọc không tự nhiên — trong khi một dòng khác cùng tệp xử lý đúng bằng cách bỏ tên sản phẩm, cho thấy đây là lỗi thật chứ không phải khác biệt phong cách chấp nhận được.
+    - operational-feasibility: FAIL — Mục «OneHub Center» trong CONTEXT.md có đủ ba phần (định nghĩa, _Avoid_, «Vì sao»), nhưng ít nhất một cặp câu đổi trong chuoi-doi.md không đọc tự nhiên sau khi thế tên: câu ở apps/app/lib/messages/agent-builder-tro-chuyen.ts — "I created the Eve agent, applied its bounded OneHub Center and integration access, and made it live for the team." — vì bản cũ dùng "CRM and integration access" như một phép co giản (cả hai đều là loại "access"), còn "OneHub Center" là danh từ riêng hai chữ nên câu mới đọc thành "bounded OneHub Center" và "integration access" tách rời, gây mơ hồ chứ không tự nhiên. Vì bảng đòi hỏi TẤT CẢ câu đổi đều đọc tự nhiên, một trường hợp sai đã đủ làm câu hỏi phán xét thành FAIL.
+    - spec-alignment: PASS — Rà toàn bộ 129 cặp chuỗi đổi trong chuoi-doi.md: mọi chỗ cũ dùng CRM theo nghĩa "kho dữ liệu" đều được diễn lại tự nhiên thành "dữ liệu trong OneHub Center" / "your data in OneHub Center", tránh đúng hai mẫu cấm "OneHub Center của bạn" và "your OneHub Center data"; chỗ duy nhất còn cụm "OneHub Center của bạn" (zalo-config.ts, nghĩa tài khoản) nằm ngoài mẫu cấm và vẫn đọc tự nhiên. Không câu nào còn chữ "CRM" trần, đứng một mình "Center", hay "Trung tâm". Mục «OneHub Center» trong CONTEXT.md có đủ ba phần: định nghĩa (dòng 108-109), _Avoid_ (dòng 110) và «Vì sao» (dòng 111-112).
+  rationale: Panel chia 2 FAIL / 1 PASS (proposal FAIL). Hai lens FAIL cùng chỉ ra một câu cụ thể ở apps/app/lib/messages/agent-builder-tro-chuyen.ts ("bounded OneHub Center and integration access") đọc không tự nhiên sau khi thế tên trực tiếp; lens PASS đã rà toàn bộ 129 cặp và không thấy vi phạm mẫu cấm nào. Đây là hợp đồng T3 (chạm packages/auth) — mọi judgment item cần human_override bất kể phiếu của judge.
   required_evidence:
-    - Ngữ cảnh đủ (toàn văn hoặc ảnh chụp UI) của `apps/app/lib/messages/agent-builder-tro-chuyen.ts` quanh câu "I created the Eve agent, applied its bounded OneHub Center and integration access, and made it live for the team." — cần thấy liệu cụm "bounded OneHub Center and integration access" hiện ra như một câu văn liền mạch (thì đọc trẹo, verdict ngả FAIL) hay đã được tách dòng/viết lại rõ ràng ở nơi hiển thị thật (thì đổi PASS).
-    - Toàn văn `apps/app/lib/workspace-label.ts` quanh dòng đổi từ chuỗi rỗng thành "crm" (viết thường) — cần xác nhận đây là nhãn hiện ra màn hình (vi phạm _Avoid_ "CRM (trên màn hình)" của mục OneHub Center, verdict ngả FAIL) hay chỉ là định danh/slug kỹ thuật không hiển thị (thì không tính, verdict ngả PASS).
+    - (domain-correctness) "chuoi-doi.md, dòng tệp apps/app/lib/messages/agent-builder-tro-chuyen.ts: 'Tôi đã tạo tác nhân Eve, cấp cho nó quyền đọc CRM và quyền kết nối trong phạm vi...' → 'cấp cho nó quyền đọc OneHub Center và quyền kết nối trong phạm vi...' — CRM ở đây là kho dữ liệu, thay trực tiếp thành 'quyền đọc OneHub Center' đọc như đọc chính sản phẩm; sửa thành 'quyền đọc dữ liệu trong OneHub Center' (đúng lối dòng liền kề đã làm) thì verdict đổi thành PASS."
+    - (domain-correctness) "chuoi-doi.md, cùng tệp, bản tiếng Anh: 'applied its bounded CRM and integration access' → 'applied its bounded OneHub Center and integration access' — liệt kê tên sản phẩm hai chữ ngang hàng với 'integration' trong một cụm 'X and Y access' đọc gượng; sửa thành 'applied its bounded access to OneHub Center and integrations' thì verdict đổi."
+    - (operational-feasibility) "Dòng bảng trong chuoi-doi.md ứng với apps/app/lib/messages/agent-builder-tro-chuyen.ts, cặp Cũ='I created the Eve agent, applied its bounded CRM and integration access, and made it live for the team.' / Mới='I created the Eve agent, applied its bounded OneHub Center and integration access, and made it live for the team.' — cần viết lại câu này rồi cập nhật lại chuoi-doi.md; có bản viết lại tự nhiên hơn thì verdict đổi thành PASS cho hạng mục này."
+    - (operational-feasibility) "Dòng bảng ứng với apps/app/lib/workspace-label.ts, cặp Cũ='' / Mới='crm' (chữ thường) — cần xác nhận (đọc apps/app/lib/workspace-label.ts, tệp này NGOÀI phạm vi input được cấp cho lượt chấm này) chuỗi 'crm' đó có hiện ra trên màn hình cho người dùng hay chỉ là khoá/slug nội bộ; nếu nó hiện trên màn hình thì vi phạm _Avoid_ 'CRM (trên màn hình)' của CONTEXT.md."
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: muibgoemifq0
+  run_id: muigm2tmpv0g
   exit_code: 0
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-doi-ten-onehub-center-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 0
-  verified_at: 2026-09-26T11:37:45Z
+  run_id: minted-doi-ten-onehub-center-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 1
+  verified_at: 2026-09-26T14:02:22Z
 
 - cmd: bun run lint:slop
-  run_id: minted-doi-ten-onehub-center-SUITE-bun_run_lint_slop-r1
+  run_id: minted-doi-ten-onehub-center-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-doi-ten-onehub-center-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-doi-ten-onehub-center-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-26T11:37:45Z
+  verified_at: 2026-09-26T14:02:22Z
 
 ## Known limits
 
@@ -253,12 +261,14 @@ human_signoff:
 
 ## Analyst
 
-E5 — `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/workspace-label.spec.ts`: pass trên cả HEAD lẫn baseline (green) — eval chưa phân biệt được tính năng ở toàn bộ ma trận, cần xem lại: hoặc viết thêm case khẳng định hành vi mới (`DEFAULT_WORKSPACE_NAME == "OneHub Center"`) tách khỏi phần regression-guard cũ, hoặc xác nhận rõ đây là regression-guard có chủ ý cho các case ánh xạ tên cũ.
+none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
-none — mọi eval đều `runs: 1` (deterministic), không có eval nào chạy nhiều lần (stochastic).
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: 16/17 mục máy + judgment xanh theo dữ liệu đã thu (E1–E6, E5b, E8–E16 exit 0, phần lớn baseline red — riêng E5 green-on-both, xem mục Analyst); 4 lệnh suite hồi quy (test/lint/lint:slop/build) đều exit 0. Hai điểm giữ verdict tổng ở PENDING-JUDGMENT: (1) E13 (thuoc-da-ky.mjs, ~70 phút) báo exit 0 nhưng outputTail thu được tại thời điểm ghi báo cáo còn nguyên "No EXIT marker yet - awaiting completion" — cần đối chiếu lại log đầy đủ (.acceptance-runs/doi-ten-onehub-center/thuoc-da-ky.log) trước khi tin kết quả; (2) E7 (judgment, AC-7) có panel 2 PASS / 1 UNCERTAIN (lens spec-alignment thiếu bằng chứng cho hai đoạn cụ thể) — chờ người xem `required_evidence` và điền `human_override` ở Gate 2.
+Round 1: 16/17 mục máy + judgment xanh theo dữ liệu đã thu (E1–E6, E5b, E8–E16 exit 0, phần lớn baseline red — riêng E5 green-on-both, xem mục Analyst); 4 lệnh suite hồi quy (test/lint/lint:slop/build) đều exit 0. Hai điểm giữ verdict tổng ở PENDING-JUDGMENT: (1) E13 (thuoc-da-ky.mjs, ~70 phút) báo exit 0 nhưng outputTail thu được tại thời điểm ghi báo cáo còn nguyên "No EXIT marker yet - awaiting completion"; (2) E7 (judgment, AC-7) có panel 2 PASS / 1 UNCERTAIN — chờ người xem `required_evidence` và điền `human_override` ở Gate 2.
+
+Round 2: 15/17 mục máy + judgment có dữ liệu, phần lớn xanh (E1–E6, E5b, E8–E12, E14, E16 exit 0, baseline chủ yếu red — không có mục nào green-on-both lần này). Verdict tổng hạ xuống BLOCKED (nặng hơn round 1) vì hai lý do hạ tầng mới: E13 (thuoc-da-ky.mjs) vẫn chưa ra dòng EXIT sau ~2.5 giờ dự kiến chạy nền, và E15 (chụp ảnh cột trái) lần đầu cannotRun vì .env dev dùng chung thiếu Google OAuth credentials thật (sso.signInOptions trả google=false) — khác round 1, nơi E15 từng PASS đủ 6 ảnh. Panel E7 cũng đổi hướng: từ 2 PASS/1 UNCERTAIN (round 1) sang 2 FAIL/1 PASS (round 2, proposal FAIL) trên cùng câu ở agent-builder-tro-chuyen.ts — cần human_override ở Gate 2 (T3, bắt buộc mọi judgment item). Thêm một lệnh suite đỏ mới: `bunx turbo run lint --force` exit 1 (biome format lỗi ở apps/app/test/workspace-label.spec.ts, xem review-findings.md).
