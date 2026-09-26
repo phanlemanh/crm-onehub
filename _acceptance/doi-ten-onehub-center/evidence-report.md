@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: doi-ten-onehub-center
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 256e8de37363395290cde29efd81202c5324400c
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-26
 ---
 
 # Evidence Report: doi-ten-onehub-center
@@ -125,7 +125,7 @@ human_signoff:
     - spec-alignment: PASS — Mục «OneHub Center» ở CONTEXT.md (dòng 108-112) có đủ ba phần: định nghĩa (tên sản phẩm, trùng tên miền, viết đủ hai chữ, không dịch, không kèm «the»), _Avoid_ (CRM trên màn hình, Center đứng một mình, Trung tâm) và «Vì sao». Rà toàn bộ ~150 dòng của chuoi-doi.md: không dòng nào dịch thành «Center» đứng một mình hay «Trung tâm»; không dòng tiếng Anh nào giữ «the OneHub Center»; các chỗ câu cũ dùng «CRM của bạn»/«your CRM» theo nghĩa kho dữ liệu đều được viết lại tránh gắn trực tiếp «của bạn»/«your» sau «OneHub Center» (ví dụ dòng 32, 37, 61, 73, 77, 100, 109 dùng «dữ liệu trong OneHub Center» / «your data in OneHub Center» / bỏ hẳn sở hữu cách thay vì «OneHub Center của bạn»). Các chỗ còn lại đọc tự nhiên theo cấu trúc «tài khoản OneHub Center», «thành viên OneHub Center», «trong OneHub Center» — tương tự cách nói «tài khoản Gmail của bạn», không phải mẫu bị cấm.
   required_evidence:
     - Dòng dữ liệu của apps/agent/agent/lib/zalo-config.ts trong _acceptance/doi-ten-onehub-center/evidence/chuoi-doi.md (chuỗi 'Tài khoản CRM của bạn...') phải được sửa để không đặt 'của bạn' ngay sau 'OneHub Center' — ví dụ đổi thành 'Tài khoản của bạn trong OneHub Center không còn quyền...' hoặc bỏ hẳn 'của bạn' như các dòng khác trong cùng hồ sơ đã làm; sau khi tệp nguồn zalo-config.ts được sửa và chuoi-doi.md cập nhật lại không còn xuất hiện cụm 'OneHub Center của bạn' ở bất kỳ dòng nào, verdict đổi thành PASS.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-09-26 — Đạt
 
 - eval: E8
   run_id: minted-doi-ten-onehub-center-E8-r3

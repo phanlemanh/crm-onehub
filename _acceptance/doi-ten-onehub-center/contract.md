@@ -5,7 +5,7 @@ slug: doi-ten-onehub-center
 owner: manh.phan@onemount.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-26T14:52:22Z
 design_doc: docs/superpowers/specs/2026-09-26-doi-ten-onehub-center-design.md
@@ -107,3 +107,18 @@ Ngưỡng ở `opportunity.md` (Cổng Đáng ghi bù 26/09, chủ kho quyết `
 - **Bốn ngoại lệ (AC-1), nguyên văn:** `packages/auth/src/auth.ts` · ``This CRM is private. Sign in with your @${domain} account.`` · `packages/auth/src/auth.ts` · `This CRM is private. That address is not on the allow-list.` (chuỗi máy so khớp của `/sign-in`) · `packages/db/src/settings.ts` · `CRM` (mã giảm giá Context cho bản dev, không phải tên) · `packages/db/src/safe-fetch.ts` · `Mozilla/5.0 (compatible; CRM/1.0)` (user-agent gửi máy chủ ngoài).
 - **Danh sách thay thế (AC-13 (ii)), rút bằng máy ngày 26/09 từ lệnh của mọi eval máy đã ký:** `cua-vao-dang-nhap` E2 — ba vạch «có con của AuthShader», «có chữ CRM», «cột trái bg-muted phẳng khi có khối» của `apps/app/test/cua-vao-shell.dom.tsx`, thay bằng E3, E10 của vòng này; `cua-vao-dang-nhap` E11, E12, E13, E19 — vạch `khong-shader` của `_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs` (nó coi mọi nền `radial-gradient` là AuthShader, nên `LuoiCham` làm nó đỏ), thay bằng E10, E11; `cua-vao-dang-nhap` E14 (judgment) — vế «nền xám phẳng», thay bằng E15. Các eval đã ký khác mà máy tìm thấy trong tệp mang chữ «CRM» (`messages-guard.spec.ts`, `cua-vao-sign-in.dom.tsx`, `chu-la.mjs`, `man-okr.mjs`, `logo-icons.spec.ts`, `agent-transcript.spec.ts`, `quen-mat-khau-cau-hinh.spec.ts`, hai tệp tích hợp Zalo) chỉ được sửa theo (i).
 - Lint W6 báo 5 chữ theo nghĩa khác với mục `_Avoid_` của `CONTEXT.md`: «nhóm» là nhóm tiêu chí Chữ / Cột trái (không phải bộ phận); «khối» là khối giao diện «Lần đầu vào?» (không phải bộ phận); «quản trị» nằm trong «quản trị viên» — vai quản trị của không gian làm việc (không phải trưởng đơn vị); «điểm» là điểm neo thị giác (không phải mức tự tin); «module» là module bản mẫu dưới `/proto` (không phải phạm vi dữ liệu).
+
+Known limits — chủ kho chấp nhận 26/09 tại Cổng Bằng chứng (Ngoài-2,3,4,6,7,8,9,10,11,12,13,14):
+
+- Ngoài-2: Nếu một tệp bài kiểm đã ký (nằm ngoài hồ sơ nghiệm thu) bị xoá ở một vòng sau, máy kiểm có thể không báo lỗi — người dùng có thể lặng lẽ mất một bài kiểm tra đã ký mà không ai biết.
+- Ngoài-3: Một số dòng mã bắt đầu bằng hai dấu gạch ngang hoặc hai dấu cộng có thể bị máy kiểm bỏ sót khi so sánh, khiến vài thay đổi nhỏ trong tương lai không được đối chiếu đúng.
+- Ngoài-4: Bảy hồ sơ đã chấm ở một trạng thái khác chưa được máy kiểm coi là 'đã ký', nên bài kiểm của bảy hồ sơ đó tạm thời không được bảo vệ khỏi bị sửa lặng lẽ ở các vòng sau.
+- Ngoài-6: Một bài tự-kiểm của máy chấm (để chứng minh nó bắt được lỗi sửa số) hiện báo đạt vì một lý do khác với lý do nó tuyên bố, nên độ tin cậy thật của máy kiểm thấp hơn vẻ ngoài.
+- Ngoài-7: Nếu sau này ai đó đổi tên sản phẩm hoặc tên không gian mặc định mà chỉ sửa một chỗ, tiêu đề trên đầu trang có thể hiện khác với tên không gian được tạo, gây nhầm lẫn cho người dùng.
+- Ngoài-8: Khối giới thiệu ở cột trái có thể không đồng bộ cách chỉnh cỡ chữ với các khối khác trong sản phẩm về sau, nhưng người dùng hôm nay vẫn thấy đúng như mô tả — không có khung, chữ lớn.
+- Ngoài-9: Trang mẫu nội bộ (không phải trang khách hàng thấy) có thể trông khác dần so với trang đăng nhập thật theo thời gian, nhưng đây không phải màn hình người dùng thực sự nhìn thấy.
+- Ngoài-10: Trang đăng ký/dùng thử lần đầu có thể vẫn gợi ý tên công ty mẫu là tên cũ ở một chỗ nhỏ, và một phép đo không liên quan tới vòng này có thể báo lỗi không ăn nhập.
+- Ngoài-11: Bài kiểm tra dòng giới thiệu trên trang đăng nhập có thể báo đạt dù trang thật hiện sai hoặc thiếu nội dung đó, vì nó không thực sự nhìn vào những gì hiện lên màn hình.
+- Ngoài-12: Bộ kiểm tra tuyên bố phủ cả năm trang đăng nhập/khôi phục nhưng thực chất chỉ kiểm một kiểu màn hình lặp lại, nên lỗi riêng của bốn trang còn lại có thể không bị phát hiện.
+- Ngoài-13: Công cụ kiểm tra 'không thêm chú thích mới trong mã' có thể bỏ sót một số kiểu chú thích, nên chú thích mới lọt qua ở dạng đó sẽ không bị phát hiện.
+- Ngoài-14: Bài kiểm tra tiêu đề thư đặt lại mật khẩu có thể báo đạt dù thư thật được gửi ra mang tiêu đề khác, vì nó so với một giá trị định sẵn thay vì thư thực tế được dùng.
