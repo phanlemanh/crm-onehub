@@ -516,19 +516,6 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					content: <TabKr mt={mt} />,
 				},
 				{
-					value: "dien-bien",
-					label: mtc.dienBien.tab,
-					count: null,
-					content: (
-						<TabDienBien
-							keyResults={mt.keyResults.map((k) => ({
-								id: k.id,
-								title: k.title,
-							}))}
-						/>
-					),
-				},
-				{
 					value: "can-chinh",
 					label: m.tabCanChinh,
 					count: mt.alignments.length,
@@ -555,6 +542,19 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					content: (
 						<TabTraoDoi
 							objectiveId={mt.id}
+							keyResults={mt.keyResults.map((k) => ({
+								id: k.id,
+								title: k.title,
+							}))}
+						/>
+					),
+				},
+				{
+					value: "dien-bien",
+					label: mtc.dienBien.tab,
+					count: null,
+					content: (
+						<TabDienBien
 							keyResults={mt.keyResults.map((k) => ({
 								id: k.id,
 								title: k.title,
