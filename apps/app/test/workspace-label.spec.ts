@@ -6,13 +6,23 @@ import { workspaceLabel } from "../lib/workspace-label";
 const SAN_PHAM = "OneHub Center";
 
 function tenCu(): string {
-	const goc = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim();
-	const base = execFileSync("git", ["-C", goc, "merge-base", "HEAD", "origin/onehub"], {
+	const goc = execFileSync("git", ["rev-parse", "--show-toplevel"], {
 		encoding: "utf8",
 	}).trim();
-	const nguon = execFileSync("git", ["-C", goc, "show", `${base}:packages/auth/src/organization.ts`], {
-		encoding: "utf8",
-	});
+	const base = execFileSync(
+		"git",
+		["-C", goc, "merge-base", "HEAD", "origin/onehub"],
+		{
+			encoding: "utf8",
+		},
+	).trim();
+	const nguon = execFileSync(
+		"git",
+		["-C", goc, "show", `${base}:packages/auth/src/organization.ts`],
+		{
+			encoding: "utf8",
+		},
+	);
 	return nguon.match(/DEFAULT_WORKSPACE_NAME = "([^"]+)"/)?.[1] ?? "";
 }
 

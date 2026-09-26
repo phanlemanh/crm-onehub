@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { THU_MAT_KHAU } from "../src/thu-mat-khau";
 
-const AUTH = readFileSync(join(import.meta.dir, "..", "src", "auth.ts"), "utf8");
+const AUTH = readFileSync(
+	join(import.meta.dir, "..", "src", "auth.ts"),
+	"utf8",
+);
 
 describe("thu va ten ung dung", () => {
 	it("tieu de thu dat lai", () => {
@@ -11,7 +14,9 @@ describe("thu va ten ung dung", () => {
 	});
 
 	it("tieu de thu da doi", () => {
-		expect(THU_MAT_KHAU.daDoi.tieuDe).toBe("Mật khẩu OneHub Center vừa được đổi");
+		expect(THU_MAT_KHAU.daDoi.tieuDe).toBe(
+			"Mật khẩu OneHub Center vừa được đổi",
+		);
 	});
 
 	it("appName", () => {

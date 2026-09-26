@@ -19,7 +19,8 @@ function metadataThat(): Record<string, string> {
 			if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) continue;
 			const khoa = `${tien}${p.name.text}`;
 			if (ts.isStringLiteral(p.initializer)) ra[khoa] = p.initializer.text;
-			if (ts.isObjectLiteralExpression(p.initializer)) docObject(p.initializer, `${khoa}.`);
+			if (ts.isObjectLiteralExpression(p.initializer))
+				docObject(p.initializer, `${khoa}.`);
 		}
 	};
 	const di = (n: ts.Node) => {
@@ -42,7 +43,9 @@ const META = metadataThat();
 
 describe("ten tab va manifest", () => {
 	it("doc duoc metadata tu layout", () => {
-		expect(Object.keys(META).length, "khong doc duoc metadata").toBeGreaterThan(0);
+		expect(Object.keys(META).length, "khong doc duoc metadata").toBeGreaterThan(
+			0,
+		);
 	});
 
 	it("title mac dinh", () => {
@@ -55,7 +58,10 @@ describe("ten tab va manifest", () => {
 
 	it("manifest name", () => {
 		const m = JSON.parse(
-			readFileSync(join(import.meta.dir, "..", "public", "site.webmanifest"), "utf8"),
+			readFileSync(
+				join(import.meta.dir, "..", "public", "site.webmanifest"),
+				"utf8",
+			),
 		);
 		expect(m.name).toBe("OneHub Center");
 	});
