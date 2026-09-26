@@ -114,6 +114,10 @@ const KHONG_DAU = new Set([
 	"moc.xong",
 	"mucTuTin.cao",
 	"dem",
+	"bangTinh.nhan",
+	"dau.crm",
+	"dau.api",
+	"dau.bangTinh",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -152,6 +156,35 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.currency",
 	"crm.standard.closeDate",
 	"crm.standard.stage",
+	"okr-so.chiSo.buoc-xong-dung-han.dinhNghia",
+	"okr-so.chiSo.buoc-xong-dung-han.nhan",
+	"okr-so.chiSo.buoc-xong-dung-han.rong",
+	"okr-so.chiSo.email-gui-ra.dinhNghia",
+	"okr-so.chiSo.email-gui-ra.nhan",
+	"okr-so.chiSo.email-gui-ra.rong",
+	"okr-so.chiSo.form-thanh-ca-nhan.dinhNghia",
+	"okr-so.chiSo.form-thanh-ca-nhan.nhan",
+	"okr-so.chiSo.form-thanh-ca-nhan.rong",
+	"okr-so.chiSo.ghi-danh-dat-bac.dinhNghia",
+	"okr-so.chiSo.ghi-danh-dat-bac.nhan",
+	"okr-so.chiSo.ghi-danh-dat-bac.rong",
+	"okr-so.chiSo.goi-hen-duoc.dinhNghia",
+	"okr-so.chiSo.goi-hen-duoc.nhan",
+	"okr-so.chiSo.goi-hen-duoc.rong",
+	"okr-so.chiSo.thoa-thuan-chot-duoc.dinhNghia",
+	"okr-so.chiSo.thoa-thuan-chot-duoc.nhan",
+	"okr-so.chiSo.thoa-thuan-chot-duoc.rong",
+	"okr-so.chiSo.thoa-thuan-moi.dinhNghia",
+	"okr-so.chiSo.thoa-thuan-moi.nhan",
+	"okr-so.chiSo.thoa-thuan-moi.rong",
+	"okr-so.dau.api",
+	"okr-so.dau.bangTinh",
+	"okr-so.dau.crm",
+	"okr-so.donVi.buoc",
+	"okr-so.donVi.ca-nhan",
+	"okr-so.donVi.cuoc-goi",
+	"okr-so.donVi.thoa-thuan",
+	"okr-so.donVi.thu",
 ];
 
 describe("kho chuoi cua vong ③a", () => {
@@ -388,7 +421,6 @@ describe("kho chuoi cua vong ③a", () => {
 				"Gỡ 12 khỏi thoả thuận này",
 			],
 			"record-sheet:deal.namePlaceholder": ["1 — OneHub", "12 — OneHub"],
-			"settings:chep.xong": ["Đã chép 1.", "Đã chép 12."],
 			"settings:chep.hong": [
 				"Không chép được 1. Bôi đen rồi chép tay.",
 				"Không chép được 12. Bôi đen rồi chép tay.",
@@ -736,6 +768,36 @@ describe("kho chuoi cua vong ③a", () => {
 				"Cả đội · 1",
 				"Cả đội · 12",
 			],
+			"okr-so:donVi.buoc": ["1 bước", "12 bước"],
+			"okr-so:donVi.ca-nhan": ["1 cá nhân", "12 cá nhân"],
+			"okr-so:donVi.cuoc-goi": ["1 cuộc gọi", "12 cuộc gọi"],
+			"okr-so:donVi.thoa-thuan": ["1 thoả thuận", "12 thoả thuận"],
+			"okr-so:donVi.thu": ["1 thư", "12 thư"],
+			"okr-so:trangThai.hopThoai.xemTruoc.toiHomNay": [
+				"Tới hôm nay: 1",
+				"Tới hôm nay: 12",
+			],
+			"okr-so:trangThai.hopThoai.sheets.chiaSe": [
+				"Chia sẻ bảng tính cho 1",
+				"Chia sẻ bảng tính cho 12",
+			],
+			"okr-so:trangThai.hopThoai.sheets.docDuoc": [
+				"Đọc được 1 lúc A",
+				"Đọc được 12 lúc A",
+			],
+			"okr-so:trangThai.bangKr.doCanh": ["1 tay · A máy", "12 tay · A máy"],
+			"okr-so:trangThai.bangKr.moSo": [
+				"Xem bản ghi làm nên số của 1",
+				"Xem bản ghi làm nên số của 12",
+			],
+			"okr-so:trangThai.so.khoang": ["Từ 1 đến A", "Từ 12 đến A"],
+			"okr-so:trangThai.so.daChup": ["Đã chụp 1 ngày A", "Đã chụp 12 ngày A"],
+			"okr-so:trangThai.so.lech": [
+				"Đã chụp 1 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
+				"Đã chụp 12 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
+			],
+			"okr-so:trangThai.capNhat.soTu": ["Số từ 1 · A", "Số từ 12 · A"],
+			"okr-so:trangThai.capNhat.soMay": ["Số máy: 1 · A", "Số máy: 12 · A"],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

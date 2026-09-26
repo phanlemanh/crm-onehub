@@ -16,6 +16,7 @@ import {
 } from "../src/components/carousel";
 import { Combobox } from "../src/components/combobox";
 import { CommandDialog } from "../src/components/command";
+import { CopyValue } from "../src/components/copy-value";
 import { DataTable } from "../src/components/data-table";
 import { DatePicker } from "../src/components/date-picker";
 import {
@@ -193,6 +194,10 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{
+		ten: "CopyValue",
+		ve: () => <CopyValue value="crm_9f2c" label={DU_LIEU.thu} />,
+	},
 	{
 		ten: "Progress",
 		ve: () => <Progress expected={47} value={30} variant="neutral" />,

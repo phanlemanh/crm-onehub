@@ -156,6 +156,11 @@ const en = {
 		hienTai: "current",
 		daDong: "closed",
 	},
+	chep: {
+		nhan: (ten: string) => `Copy ${ten}`,
+		xong: (ten: string) => `${ten} copied.`,
+		hong: (ten: string) => `Could not copy the ${ten}. Select it instead.`,
+	},
 	bieuDo: {
 		giaTri: "Value",
 		leRa: "Expected",
@@ -321,6 +326,11 @@ const vi = {
 	chuKy: {
 		hienTai: "hiện tại",
 		daDong: "đã đóng",
+	},
+	chep: {
+		nhan: (ten: string) => `Chép ${ten}`,
+		xong: (ten: string) => `Đã chép ${ten}.`,
+		hong: (ten: string) => `Không chép được ${ten}. Bôi đen rồi chép tay.`,
 	},
 	bieuDo: {
 		giaTri: "Giá trị",
