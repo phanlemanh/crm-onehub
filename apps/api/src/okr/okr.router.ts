@@ -395,7 +395,7 @@ export class OkrRouter {
 	@Query({
 		input: hopTuanInput,
 		output: hopTuanOutput,
-		meta: restMeta("GET", "/okr/weekly-meeting", TAG),
+		meta: restMeta("POST", "/okr/weekly-meeting", TAG),
 	})
 	hopTuan(
 		@Ctx() ctx: AuthedTrpcContext,
@@ -428,7 +428,7 @@ export class OkrRouter {
 	@Query({
 		input: khoiCuaToiInput,
 		output: khoiCuaToiOutput,
-		meta: restMeta("GET", "/okr/my-key-results", TAG),
+		meta: restMeta("POST", "/okr/my-key-results", TAG),
 	})
 	khoiCuaToi(
 		@Ctx() ctx: AuthedTrpcContext,

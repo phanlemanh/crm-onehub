@@ -57,7 +57,7 @@ async function gieo(
 		),
 		select: { id: true },
 	});
-	await db.okrKeyResult.createMany({
+	const kr = await db.okrKeyResult.createManyAndReturn({
 		data: mucTieu.flatMap((m) =>
 			Array.from({ length: moiMucTieu }, (_, k) => ({
 				objectiveId: m.id,
@@ -71,8 +71,32 @@ async function gieo(
 				startLockedAt: bayGio,
 			})),
 		),
+		select: { id: true },
 	});
-	return { boPhan: boPhan[0]?.id ?? "", soMucTieu: mucTieu.length };
+	const phienCapNhat = await db.okrCheckInSession.create({
+		data: { userId: phien.quan.nguoi, entry: "tab", submittedAt: bayGio },
+	});
+	const TUAN = ["2026-10-26", "2026-11-02", "2026-11-09", "2026-11-16"];
+	const MUC = ["cao", "vua", "thap", "cao"];
+	await db.okrCheckIn.createMany({
+		data: kr.flatMap((k, i) =>
+			TUAN.map((tuan, j) => ({
+				keyResultId: k.id,
+				sessionId: phienCapNhat.id,
+				weekStart: new Date(`${tuan}T00:00:00Z`),
+				value: 10 * j,
+				confidence: MUC[(i + j) % MUC.length] ?? "cao",
+				note: j === TUAN.length - 1 ? "ghi chú" : "",
+				authorUserId: phien.quan.nguoi,
+				ownerUserId: phien.quan.nguoi,
+			})),
+		),
+	});
+	return {
+		boPhan: boPhan[0]?.id ?? "",
+		soMucTieu: mucTieu.length,
+		soCapNhat: kr.length * TUAN.length,
+	};
 }
 
 async function doLuot(
@@ -106,6 +130,7 @@ describe("hieu-nang", () => {
 		const nho = await gieo(kyNho, 1, 5, 1, 1);
 		const lon = await gieo(kyLon, 10, 5, 8, 5);
 		expect([nho.soMucTieu, lon.soMucTieu]).toEqual([5, 400]);
+		expect(lon.soCapNhat).toBe(8000);
 		const loc = {
 			phuTrach: [phien.quan.nguoi],
 			loai: ["cam-ket"],
@@ -119,11 +144,16 @@ describe("hieu-nang", () => {
 				{ cycleId: kyLon, unit: { loai: "bp", id: lon.boPhan }, loc },
 			],
 			["okr.sucKhoe", { cycleId: kyNho }, { cycleId: kyLon }],
+			[
+				"okr.hopTuan",
+				{ cycleId: kyNho, unit: { loai: "bp", id: nho.boPhan } },
+				{ cycleId: kyLon, unit: { loai: "bp", id: lon.boPhan } },
+			],
 		];
 	}, 120_000);
 
 	test("hieu-nang: 50 phong ban × 2.000 KR duoi 1 giay", async () => {
-		expect(cap.length).toBe(3);
+		expect(cap.length).toBe(4);
 		for (const [thuTuc, , vaoLon] of cap) {
 			await doLuot(thuTuc, vaoLon);
 			const b = await doLuot(thuTuc, vaoLon);
@@ -137,7 +167,7 @@ describe("hieu-nang", () => {
 	test.if(DEM_DUOC)(
 		"hieu-nang: so cau truy van khong tang theo so don vi",
 		async () => {
-			expect(cap.length).toBe(3);
+			expect(cap.length).toBe(4);
 			for (const [thuTuc, vaoNho, vaoLon] of cap) {
 				await doLuot(thuTuc, vaoLon);
 				const a = await doLuot(thuTuc, vaoNho);
