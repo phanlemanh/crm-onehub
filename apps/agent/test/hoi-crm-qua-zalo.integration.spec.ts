@@ -712,12 +712,24 @@ describe("cung-phien", () => {
 				.map((phan) => phan.split("\ndescribe(")[0] ?? ""),
 		);
 		expect(khoi.length, "du khoi").toBe(5);
+		const cam = [
+			...["ctxZalo", "suKien", "suKienVoi"].map((ten) => `${ten}(`),
+			...['"', "`"].map((nhay) => `${nhay}zalo${":"}`),
+		];
+		const tenToken = ["continuation", "Token:"].join("");
+		const dongToken = new RegExp(`${tenToken}\\s*[^,\\n]+`, "g");
+		const tuSend = new RegExp(`^${tenToken}\\s*tokenTuSend\\(`);
+		let soToken = 0;
 		for (const doan of khoi) {
-			expect(doan, "khong dung ctx tay").not.toContain(
-				["ctxZalo", "("].join(""),
-			);
-			expect(doan, "khong dung token tay").not.toMatch(/\bsuKien\(/);
+			for (const tu of cam) {
+				expect(doan.split(tu).length - 1, `khong dung ${tu} dung tay`).toBe(0);
+			}
+			for (const t of doan.match(dongToken) ?? []) {
+				expect(t, "token rut tu send").toMatch(tuSend);
+				soToken += 1;
+			}
 		}
+		expect(soToken, "co dong token de quet").toBeGreaterThan(0);
 	});
 
 	test("cung-phien: cau hai cung token, moi thi reset, moi khi dang hoi thi bao dang tra loi", async () => {

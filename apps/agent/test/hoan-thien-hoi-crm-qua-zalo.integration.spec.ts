@@ -12,14 +12,13 @@ import { resolve } from "node:path";
 import { db } from "@crm/db";
 import { webFetch } from "eve/tools/defaults";
 import { z } from "zod";
-import type { Evidence } from "../agent/lib/evidence";
-import { recordFact } from "../agent/lib/facts";
 import { writeField } from "../agent/lib/fields";
 import { gioNhac } from "../agent/lib/zalo-bot-xuong";
 import { ZALO } from "../agent/lib/zalo-config";
 import { nhanWebhook } from "../agent/lib/zalo-webhook";
 import { eveGia } from "./support/eve-gia";
 import type { CtxPhien } from "./support/eve-kieu";
+import { trongNguCanhEve } from "./support/eve-ngu-canh";
 import { donHoi, gieoVai } from "./support/hoi-gieo";
 import { donDep, moXuong, TIEN_TO } from "./support/nhac-gieo";
 import { DU_BIEN, noiZalo } from "./support/tra-loi-gieo";
@@ -285,20 +284,14 @@ describe("ghi-that", () => {
 		await expect(rf.execute(R, zalo)).rejects.toThrow(ZALO.hoi.tuChoiGhi);
 		expect(await giaTri(C.id), "gia tri giu nguyen tren Zalo").toBe("truoc");
 		expect(await demFact(), "record_fact khong ghi tren Zalo").toBe(truoc);
-		const ghiWeb = await writeField({
-			entity: "CONTACT",
-			recordId: C.id,
-			key: KHOA_HTH,
-			value: "web",
-		});
-		expect(ghiWeb.written, "writer that ghi duoc o web").toBe(true);
-		await recordFact({
-			contactId: R.contactId,
-			field: "title",
-			value: R.value,
-			evidence: R.evidence as Evidence[],
-			method: R.method,
-		});
+		const web = ctxMucDich({});
+		await trongNguCanhEve(() =>
+			sfv.execute(
+				{ entity: "CONTACT", recordId: C.id, key: KHOA_HTH, value: "web" },
+				web,
+			),
+		);
+		await trongNguCanhEve(() => rf.execute(R, web));
 		expect(await giaTri(C.id), "web ghi duoc").toBe("web");
 		expect(await demFact(), "web ghi duoc mot fact").toBe(truoc + 1);
 	});
