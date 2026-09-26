@@ -1,5 +1,6 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
 import {
 	type OnboardingActivityMeta,
 	vet,
@@ -159,6 +160,12 @@ async function yeuCauQuanTri(userId: string): Promise<void> {
 	}
 }
 
+const VET_MAN: VetBuocXong<OnboardingActivityMeta> = {
+	xong: vet.buocXong,
+	boXong: vet.buocBoXong,
+	coCongTy: vetCoCongTy,
+};
+
 export class OnboardingGhi {
 	constructor(private readonly db: Db) {}
 
@@ -198,23 +205,23 @@ export class OnboardingGhi {
 
 	setStepDone(input: StepDoneInput, actingUserId: string): Promise<StepOutput> {
 		return this.db.$transaction(async (tx) => {
-			const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
-			if ((buoc.completedAt !== null) === input.done) return buocRa(buoc);
-
-			const sau = await tx.onboardingStep.update({
-				where: { id: buoc.id },
-				data: { completedAt: input.done ? new Date() : null },
+			const ket = await datBuocXong(
+				tx,
+				{ ...input, nguoiId: actingUserId, now: new Date() },
+				VET_MAN,
+			);
+			if (ket.ket === "khong-co-buoc") {
+				throw new NotFoundException(
+					ONBOARDING.thongDiep.khongCoBuoc(input.stepId),
+				);
+			}
+			if (ket.ket === "ke-hoach-dong") {
+				throw new ConflictException(ONBOARDING.thongDiep.keHoachDaDong);
+			}
+			const sau = await tx.onboardingStep.findUniqueOrThrow({
+				where: { id: input.stepId },
 				select: CHON_BUOC,
 			});
-			const chung = { stepId: buoc.id, nhan: buoc.label };
-			await ghiVet(
-				tx,
-				plan,
-				input.done
-					? vet.buocXong({ ...chung, giaoLucXong: buoc.assigneeId })
-					: vet.buocBoXong(chung),
-				actingUserId,
-			);
 			return buocRa(sau);
 		});
 	}

@@ -3,9 +3,16 @@
 import { signIn } from "@crm/auth/client";
 import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
-import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldGroup,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
+import { Link } from "@crm/ui/components/link";
 import { Spinner } from "@crm/ui/components/spinner";
+import NextLink from "next/link";
 import { type FormEvent, useState } from "react";
 
 export function PasswordSignIn({
@@ -14,12 +21,14 @@ export function PasswordSignIn({
 	dangNhap,
 	dangGui,
 	saiChung,
+	quenMatKhau,
 }: {
 	diaChi: string;
 	matKhau: string;
 	dangNhap: string;
 	dangGui: string;
 	saiChung: string;
+	quenMatKhau: string | null;
 }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -79,6 +88,13 @@ export function PasswordSignIn({
 						type="password"
 						value={password}
 					/>
+					{quenMatKhau ? (
+						<FieldDescription>
+							<Link asChild variant="quiet">
+								<NextLink href="/quen-mat-khau">{quenMatKhau}</NextLink>
+							</Link>
+						</FieldDescription>
+					) : null}
 				</Field>
 			</FieldGroup>
 			<Button className="w-full" disabled={pending} type="submit">

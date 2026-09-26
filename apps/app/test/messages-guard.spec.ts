@@ -196,6 +196,14 @@ describe("kho chuoi cua vong ③a", () => {
 				"Mật khẩu phải có ít nhất 1 ký tự.",
 				"Mật khẩu phải có ít nhất 12 ký tự.",
 			],
+			"auth:quenMatKhau.quaLuot": [
+				"Bạn đã xin quá nhiều lần. Chờ 1 phút rồi thử lại.",
+				"Bạn đã xin quá nhiều lần. Chờ 12 phút rồi thử lại.",
+			],
+			"auth:quenMatKhau.xong.description": [
+				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+			],
 			"auth:datMatKhau.toiThieu": [
 				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 				"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
@@ -653,6 +661,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"Quản trị viên phát liên kết ở 1. Liên kết dùng một lần, hết hạn sau A phút.",
 				"Quản trị viên phát liên kết ở 12. Liên kết dùng một lần, hết hạn sau A phút.",
 			],
+			"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
+			"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",

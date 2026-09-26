@@ -184,6 +184,7 @@ async function SignIn({
 				dangNhap={m.dangNhap}
 				diaChi={m.diaChi}
 				matKhau={m.matKhau}
+				quenMatKhau={options?.quenMatKhau ? m.quenMatKhau : null}
 				saiChung={m.saiChung}
 			/>
 		</>

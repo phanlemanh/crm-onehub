@@ -28,8 +28,13 @@ Nest's half is to report *that something happened*: `AgentTriggerService` writes
 `AgentTask` row. A row, not an HTTP call — the agent already leases from that table,
 so the row survives the agent being down.
 
-About to add a vendor client to `apps/api`? You want `apps/agent/agent/lib`. One
-documented exception, for timing: the exchange-rate fetcher, below.
+About to add a vendor client to `apps/api`? You want `apps/agent/agent/lib`. Two
+documented exceptions, both for timing: the exchange-rate fetcher, below, and the
+transactional auth mail — `packages/auth` posts the password-reset link and the
+password-changed notice to Resend itself (`thu.ts`), in the background through
+`advanced.backgroundTasks`. The reset token must not sit in plain text in an
+`AgentTask` row, and a stopped agent must not leave someone waiting for a link. It
+decides nothing about a person; it only delivers what Better Auth made.
 
 ## One organization, and it is not a tenancy boundary
 
@@ -88,6 +93,30 @@ here, what do we sell.
 - **The website queues the agent's `workspace-profile` task** and goes through
   `normalizeDomain`, rejecting null. Stored canonical, so re-saving uncanonically
   counts as a change and re-queues research.
+
+### Rate limits count people, not the app's own proxy
+
+The browser reaches `/api/auth/*` through the app's `/api` proxy
+(`apps/app/app/api/[...path]/route.ts`), which drops `x-forwarded-for`. Left alone,
+every person lands in one Better Auth rate-limit bucket, so three forgotten
+passwords from anyone lock the door for everyone.
+
+- **The proxy signs the address the platform gave it.** `headerGuiApi`
+  (`apps/app/lib/api-proxy-headers.ts`) reads `x-real-ip`, which Vercel overwrites,
+  and sends it with an HMAC made with `BETTER_AUTH_SECRET` (`@crm/auth/dia-chi`). It
+  never forwards what the browser put in `x-forwarded-for`.
+- **The API trusts only a signed address.** `xuLyXacThuc` (`@crm/auth`) wraps
+  `auth.handler`: it drops every address header a caller sent and sets the trusted
+  one only when the signature checks out; `advanced.ipAddress.ipAddressHeaders`
+  reads that header and nothing else. `app.module.ts` mounts the wrapper, not the
+  bare `auth`.
+- **Missing pieces fall back, never throw.** No secret or no `x-real-ip` means no
+  signed address, and counting behaves as it did before.
+- **It edits headers on the original request and never touches the body.**
+  Rebuilding the `Request` around the Node adapter's stream hangs every POST, and
+  reading the body first moves the read outside Better Auth's error handling, so a
+  caller that drops the connection mid-body crashes the API process. Both were
+  measured; `test/xu-ly-xac-thuc.spec.ts` keeps the second one from coming back.
 
 ### Gates in `proxy.ts`
 

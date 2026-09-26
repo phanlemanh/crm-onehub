@@ -8,7 +8,8 @@
 		"./client": "./src/client.ts",
 		"./cookies": "./src/cookies.ts",
 		"./scopes": "./src/scopes.ts",
-		"./workspace": "./src/workspace.ts"
+		"./workspace": "./src/workspace.ts",
+		"./dia-chi": "./src/dia-chi.ts"
 	},
 	"scripts": {
 		"auth:generate": "better-auth generate --config src/auth.ts --output ../db/prisma/schema.prisma --y",
@@ -23,6 +24,7 @@
 		"@crm/db": "workspace:*",
 		"@crm/env": "workspace:*",
 		"@crm/validation": "workspace:*",
+		"@vercel/functions": "3.9.9",
 		"better-auth": "^1.6.25",
 		"zod": "^4.4.3"
 	},
