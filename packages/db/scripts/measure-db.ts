@@ -82,18 +82,32 @@ export function currentTree(cwd = process.cwd()): string {
 	return basename(top.stdout.trim());
 }
 
-export function sourceFingerprint(): string {
+export interface FingerprintSources {
+	migrations: string;
+	schema: string;
+	seed: string;
+}
+
+export const FINGERPRINT_SOURCES: FingerprintSources = {
+	migrations: MIGRATIONS,
+	schema: SCHEMA,
+	seed: SEED,
+};
+
+export function sourceFingerprint(
+	sources: FingerprintSources = FINGERPRINT_SOURCES,
+): string {
 	const hash = createHash("sha256");
-	const migrations = existsSync(MIGRATIONS)
-		? readdirSync(MIGRATIONS, { withFileTypes: true })
+	const migrations = existsSync(sources.migrations)
+		? readdirSync(sources.migrations, { withFileTypes: true })
 				.filter((entry) => entry.isDirectory())
 				.map((entry) => entry.name)
 				.sort()
 		: [];
 
 	hash.update(migrations.join("\n"));
-	hash.update(readFileSync(SCHEMA));
-	hash.update(readFileSync(SEED));
+	hash.update(readFileSync(sources.schema));
+	hash.update(readFileSync(sources.seed));
 
 	return hash.digest("hex").slice(0, 16);
 }

@@ -227,7 +227,7 @@ So a measurement now runs in a **measure session** on a database of its own tree
   not end in `_do`, and one without the measure-session `COMMENT`.
 - `bun run db:do --quet` drops every marked measure database and template with no
   connection whose last touch — creation, or the last clone for a template — is older
-  than `MEASURE_DATABASE.maxAgeMs` (twelve hours). Every `--tao` runs the same sweep,
+  than `MEASURE_DATABASE.maxAgeMs` (12 hours). Every `--tao` runs the same sweep,
   so a database left by a killed run goes on a later one. Rules and constants:
   `packages/db/src/measure-database.ts`.
 - `bun run do:man --chay "<command>"` is a whole session

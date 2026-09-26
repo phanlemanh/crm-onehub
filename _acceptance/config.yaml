@@ -553,7 +553,7 @@ executors:
     dmk_tien_de: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs tien-de
     dmk_kho_chung_khong_doi: bun _acceptance/do-man-tren-kho-rieng/rang/kho-chung-khong-doi.mjs
     dmk_khong_noi_thuoc: node _acceptance/do-man-tren-kho-rieng/rang/khong-noi-thuoc.mjs
-    dmk_tai_lieu: node _acceptance/do-man-tren-kho-rieng/rang/tai-lieu.mjs
+    dmk_tai_lieu: bun _acceptance/do-man-tren-kho-rieng/rang/tai-lieu.mjs
     dmk_truoc_gop_toan_kho: node _acceptance/do-man-tren-kho-rieng/rang/truoc-gop.mjs
     vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
     vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'

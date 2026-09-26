@@ -137,7 +137,31 @@ function ra(ten) {
 	return tep;
 }
 
-async function sauPhien(j, kho, nhom, ten) {
+async function nhomCua(cay, pidPhien) {
+	const ghi = await choTep(
+		tepGhi(cay),
+		(g) =>
+			g.nhom?.length === 2 && (pidPhien === undefined || g.pid === pidPhien),
+	);
+	const nhom = (ghi?.nhom ?? []).map((n) => n.pgid);
+	return {
+		nhom,
+		songLucDoc: nhom.length === 2 && nhom.every((g) => nhomSong(g)),
+	};
+}
+
+async function sauPhien(j, kho, { nhom, songLucDoc }, ten) {
+	khang(j !== null, `${ten}: lenh do da ghi JSON`);
+	khang(
+		trongDai(j?.appUrl) && trongDai(j?.apiUrl),
+		`${ten}: hai cong cua phien nam trong dai (doi chung cho cong trong)`,
+		`${j?.appUrl} ${j?.apiUrl}`,
+	);
+	khang(
+		nhom.length === 2 && songLucDoc,
+		`${ten}: phien co hai nhom may chu dang song luc chay (doi chung cho khong con tien trinh)`,
+		nhom.join(","),
+	);
 	khang(
 		!coNghe(congCua(j?.appUrl)) && !coNghe(congCua(j?.apiUrl)),
 		`${ten}: hai cong cua phien khong con ai nghe`,
@@ -164,8 +188,8 @@ async function dauCuoi() {
 		DO_RA: tep,
 		DO_NGU: "2",
 	});
-	const ghi = await choTep(tepGhi(cay), (g) => g.nhom?.length === 2);
-	const nhom = (ghi?.nhom ?? []).map((n) => n.pgid);
+	const may = await nhomCua(cay, p.con.pid);
+	const nhom = may.nhom;
 	await p.xong;
 	const j = docJson(tep);
 	if (!j) khongDo(`lenh do khong ghi ${tep}:\n${p.loi}`);
@@ -179,7 +203,7 @@ async function dauCuoi() {
 	khang(p.ma === 0, "ma phien bang ma lenh do (0)", String(p.ma));
 	khang(j.phienDo === kho, "PHIEN_DO bang ten kho", j.phienDo);
 	khang(nhom.length === 2, "phien ghi hai nhom may chu", String(nhom.length));
-	await sauPhien(j, kho, nhom, "dau-cuoi");
+	await sauPhien(j, kho, may, "dau-cuoi");
 	const sau = await vanTay(gia.url);
 	const doi = lech(truoc, sau);
 	khang(doi.length === 0, "dau van tay kho chung khong doi", doi.join(", "));
@@ -196,14 +220,13 @@ async function mot(ca, cay, gia, { maDo, tin, maMong }) {
 		DO_NGU: tin ? "30" : "3",
 		DO_MA: String(maDo),
 	});
-	const ghi = await choTep(tepGhi(cay), (g) => g.nhom?.length === 2);
-	const nhom = (ghi?.nhom ?? []).map((n) => n.pgid);
+	const may = await nhomCua(cay, p.con.pid);
 	const j = await choTep(tep);
 	if (!j) khongDo(`ca ${ca}: lenh do khong ghi ${tep}:\n${p.loi}`);
 	if (tin) p.con.kill(tin);
 	await p.xong;
 	khang(p.ma === maMong, `ca ${ca}: ma phien ${maMong}`, `${p.ma}`);
-	await sauPhien(j, kho, nhom, `ca ${ca}`);
+	await sauPhien(j, kho, may, `ca ${ca}`);
 	if (p.ma !== maMong) console.log(p.loi);
 }
 
@@ -222,8 +245,7 @@ async function donKhiDo() {
 		DO_RA: tep,
 		DO_NGU: "30",
 	});
-	const ghi = await choTep(tepGhi(cay), (g) => g.nhom?.length === 2);
-	const nhom = (ghi?.nhom ?? []).map((n) => n.pgid);
+	const { nhom } = await nhomCua(cay, p.con.pid);
 	const j = await choTep(tep);
 	if (!j || nhom.length !== 2) khongDo(`ca 4: phien chua dung xong:\n${p.loi}`);
 	const git = Date.now();
@@ -240,7 +262,9 @@ async function donKhiDo() {
 		PHIEN_DO_TEN_CAY: cay,
 		DO_RA: tep2,
 		DO_PID_CU: nhom.join(","),
+		DO_NGU: "3",
 	});
+	const mayKe = await nhomCua(cay, ke.con.pid);
 	await ke.xong;
 	const j2 = docJson(tep2);
 	khang(ke.ma === 0, "ca 4: phien ke thoat 0", `${ke.ma}`);
@@ -256,7 +280,11 @@ async function donKhiDo() {
 		String(j2?.khoTaoLuc),
 	);
 	if (ke.ma !== 0) console.log(ke.loi);
-	await sauPhien(j2, measureDatabaseName(cay), nhom, "ca 4");
+	khang(
+		mayKe.nhom.every((g) => !nhom.includes(g)),
+		"ca 4: phien ke co may chu rieng, khac nhom cua phien bi giet",
+	);
+	await sauPhien(j2, measureDatabaseName(cay), mayKe, "ca 4");
 }
 
 async function xepHang() {

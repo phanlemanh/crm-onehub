@@ -1,6 +1,13 @@
 import { afterAll, describe, expect, it } from "bun:test";
 import { spawnSync } from "node:child_process";
-import { readdirSync } from "node:fs";
+import {
+	appendFileSync,
+	cpSync,
+	mkdirSync,
+	mkdtempSync,
+	readdirSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import pg from "pg";
 import {
@@ -8,6 +15,8 @@ import {
 	databaseFingerprint,
 	databaseUrl,
 	dropMeasureDatabase,
+	FINGERPRINT_SOURCES,
+	type FingerprintSources,
 	markMeasureDatabase,
 	markTemplate,
 	sourceFingerprint,
@@ -180,6 +189,13 @@ describe("ten-kho", () => {
 			).toBe(undefined);
 			owner.set(name, label);
 			expect(name, "ten kho chi gom a-z0-9_").toMatch(/^[a-z0-9_]+$/);
+			expect(name.length, `ten kho qua 63 ky tu: ${label}`).toBeLessThanOrEqual(
+				63,
+			);
+			expect(
+				name.endsWith(label.startsWith("mau ") ? "__mau_do" : "_do"),
+				`ten kho sai duoi: ${label}`,
+			).toBe(true);
 			expect(["crm", "crm_test"]).not.toContain(name);
 			expect(name.endsWith("_test")).toBe(false);
 		}
@@ -250,19 +266,70 @@ describe("tao", () => {
 });
 
 describe("kho-mau", () => {
+	function mirrorSources(): FingerprintSources {
+		const root = mkdtempSync(join(tmpdir(), "dau-nguon-"));
+		const migrations = join(root, "migrations");
+		mkdirSync(migrations);
+		for (const entry of readdirSync(FINGERPRINT_SOURCES.migrations, {
+			withFileTypes: true,
+		})) {
+			if (entry.isDirectory()) mkdirSync(join(migrations, entry.name));
+		}
+		const schema = join(root, "schema.prisma");
+		const seed = join(root, "seed.ts");
+		cpSync(FINGERPRINT_SOURCES.schema, schema);
+		cpSync(FINGERPRINT_SOURCES.seed, seed);
+		return { migrations, schema, seed };
+	}
+
+	it("changes the source fingerprint when a migration, schema.prisma or seed.ts changes", () => {
+		const real = sourceFingerprint();
+		const mirror = mirrorSources();
+		expect(
+			sourceFingerprint(mirror),
+			"ban sao nguon khong ra cung dau",
+		).toEqual(real);
+
+		const changes: [string, (sources: FingerprintSources) => void][] = [
+			[
+				"migration moi",
+				(sources) => mkdirSync(join(sources.migrations, "29990101000000_thu")),
+			],
+			["schema.prisma doi", (sources) => appendFileSync(sources.schema, "\n")],
+			["seed.ts doi", (sources) => appendFileSync(sources.seed, "\n")],
+		];
+
+		for (const [label, change] of changes) {
+			const sources = mirrorSources();
+			change(sources);
+			expect(
+				sourceFingerprint(sources),
+				`dau khong doi khi ${label}`,
+			).not.toEqual(real);
+		}
+	});
+
 	it(
-		"reuses the template while the source fingerprint matches and rebuilds it when it does not",
+		"reuses the template while the source fingerprint matches and rebuilds it when the source changes",
 		async () => {
 			const name = tree("mau");
-			const fingerprint = sourceFingerprint();
 			const template = templateDatabaseName(name);
 			const measure = measureDatabaseName(name);
+			const sources = mirrorSources();
 
-			await createMeasureDatabase({ base, tree: name, fingerprint });
+			await createMeasureDatabase({
+				base,
+				tree: name,
+				fingerprint: sourceFingerprint(sources),
+			});
 			const firstTemplate = parseMeasureComment(await commentOf(template));
 			const firstMeasure = parseMeasureComment(await commentOf(measure));
 
-			await createMeasureDatabase({ base, tree: name, fingerprint });
+			await createMeasureDatabase({
+				base,
+				tree: name,
+				fingerprint: sourceFingerprint(sources),
+			});
 			const secondTemplate = parseMeasureComment(await commentOf(template));
 			const secondMeasure = parseMeasureComment(await commentOf(measure));
 
@@ -274,10 +341,11 @@ describe("kho-mau", () => {
 				firstMeasure?.createdAt ?? 0,
 			);
 
+			appendFileSync(sources.seed, "\n");
 			await createMeasureDatabase({
 				base,
 				tree: name,
-				fingerprint: `${fingerprint}x`,
+				fingerprint: sourceFingerprint(sources),
 			});
 			const third = parseMeasureComment(await commentOf(template));
 			expect(
@@ -307,77 +375,85 @@ describe("xoa", () => {
 		SLOW_MS,
 	);
 
-	it("refuses a name that is not a measure database, and one without the mark", async () => {
-		const plain = `crm_thu${id}_khac`;
-		const unmarked = `crm_thu${id}b_do`;
-		await createEmpty(plain);
-		await createEmpty(unmarked);
+	it(
+		"refuses a name that is not a measure database, and one without the mark",
+		async () => {
+			const plain = `crm_thu${id}_khac`;
+			const unmarked = `crm_thu${id}b_do`;
+			await createEmpty(plain);
+			await createEmpty(unmarked);
 
-		const refusals: [string, RegExp][] = [
-			[plain, /is not a measure database/],
-			[unmarked, /does not carry the measure-session mark/],
-		];
+			const refusals: [string, RegExp][] = [
+				[plain, /is not a measure database/],
+				[unmarked, /does not carry the measure-session mark/],
+			];
 
-		for (const [target, message] of refusals) {
-			const run = cli(["--xoa", "--kho", target]);
-			expect(await exists(target), "kho khong dau bi xoa").toBe(true);
-			expect(run.status, `--xoa ${target}`).toBe(2);
-			expect(run.stderr).toMatch(message);
-		}
-	});
+			for (const [target, message] of refusals) {
+				const run = cli(["--xoa", "--kho", target]);
+				expect(await exists(target), "kho khong dau bi xoa").toBe(true);
+				expect(run.status, `--xoa ${target}`).toBe(2);
+				expect(run.stderr).toMatch(message);
+			}
+		},
+		SLOW_MS,
+	);
 });
 
 describe("quet-mo-coi", () => {
-	it("drops only marked databases untouched for longer than maxAgeMs", async () => {
-		const real = Date.now();
-		const age = MEASURE_DATABASE.maxAgeMs;
-		const now = real + 2 * age + MINUTE_MS;
-		const before = real + age - MINUTE_MS;
-		const old = `crm_thu${id}gia_do`;
-		const young = `crm_thu${id}non_do`;
-		const unmarked = `crm_thu${id}kd_do`;
-		const usedTemplate = `crm_thu${id}mcd__mau_do`;
-		const idleTemplate = `crm_thu${id}mb__mau_do`;
-		const five = [old, young, unmarked, usedTemplate, idleTemplate];
+	it(
+		"drops only marked databases untouched for longer than maxAgeMs",
+		async () => {
+			const real = Date.now();
+			const age = MEASURE_DATABASE.maxAgeMs;
+			const now = real + 2 * age + MINUTE_MS;
+			const before = real + age - MINUTE_MS;
+			const old = `crm_thu${id}gia_do`;
+			const young = `crm_thu${id}non_do`;
+			const unmarked = `crm_thu${id}kd_do`;
+			const usedTemplate = `crm_thu${id}mcd__mau_do`;
+			const idleTemplate = `crm_thu${id}mb__mau_do`;
+			const five = [old, young, unmarked, usedTemplate, idleTemplate];
 
-		for (const name of five) await createEmpty(name);
+			for (const name of five) await createEmpty(name);
 
-		await withMaintenance(base, async (client) => {
-			await markMeasureDatabase(client, old, real);
-			await markMeasureDatabase(client, young, now - MINUTE_MS);
-			await markTemplate(client, usedTemplate, "f", real, now - MINUTE_MS);
-			await markTemplate(client, idleTemplate, "f", real, real);
-		});
+			await withMaintenance(base, async (client) => {
+				await markMeasureDatabase(client, old, real);
+				await markMeasureDatabase(client, young, now - MINUTE_MS);
+				await markTemplate(client, usedTemplate, "f", real, now - MINUTE_MS);
+				await markTemplate(client, idleTemplate, "f", real, real);
+			});
 
-		const early = await withMaintenance(base, (client) =>
-			sweepMeasureDatabases(client, before),
-		);
-		const labels: [string, string][] = [
-			[young, "non"],
-			[usedTemplate, "mau-con-dung"],
-			[unmarked, "khong-dau"],
-			[old, "gia"],
-			[idleTemplate, "mau-bo"],
-		];
-		for (const [name, label] of labels) {
-			expect(
-				early.includes(name),
-				`kho ${label} bi xoa khi quet truoc han`,
-			).toBe(false);
-		}
+			const early = await withMaintenance(base, (client) =>
+				sweepMeasureDatabases(client, before),
+			);
+			const labels: [string, string][] = [
+				[young, "non"],
+				[usedTemplate, "mau-con-dung"],
+				[unmarked, "khong-dau"],
+				[old, "gia"],
+				[idleTemplate, "mau-bo"],
+			];
+			for (const [name, label] of labels) {
+				expect(
+					early.includes(name),
+					`kho ${label} bi xoa khi quet truoc han`,
+				).toBe(false);
+			}
 
-		const dropped = await withMaintenance(base, (client) =>
-			sweepMeasureDatabases(client, now),
-		);
+			const dropped = await withMaintenance(base, (client) =>
+				sweepMeasureDatabases(client, now),
+			);
 
-		const left: string[] = [];
-		for (const name of five) if (await exists(name)) left.push(name);
-		expect(left.includes(young), "kho non tuoi bi xoa").toBe(true);
-		expect(left.includes(unmarked), "kho khong dau bi xoa").toBe(true);
-		expect(left.includes(usedTemplate), "kho mau con dung bi xoa").toBe(true);
-		expect(left.sort()).toEqual([young, unmarked, usedTemplate].sort());
-		expect(dropped.filter((name) => five.includes(name))).toEqual(
-			[old, idleTemplate].sort(),
-		);
-	});
+			const left: string[] = [];
+			for (const name of five) if (await exists(name)) left.push(name);
+			expect(left.includes(young), "kho non tuoi bi xoa").toBe(true);
+			expect(left.includes(unmarked), "kho khong dau bi xoa").toBe(true);
+			expect(left.includes(usedTemplate), "kho mau con dung bi xoa").toBe(true);
+			expect(left.sort()).toEqual([young, unmarked, usedTemplate].sort());
+			expect(dropped.filter((name) => five.includes(name))).toEqual(
+				[old, idleTemplate].sort(),
+			);
+		},
+		SLOW_MS,
+	);
 });

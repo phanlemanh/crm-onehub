@@ -18,8 +18,9 @@ evals:
       truoc 17 ten (a-b, a.b, A-B, a_b, a--b, -a-b, toan-canh-okr, Toan-Canh.OKR, toan_canh_okr,
       x, x-mau, x_mau, crm, ten worktree that, ba ten dai) x 2 ham = 34 ten: khong hai ten nao
       trung (thong diep ghim "trung ten kho: <a> va <b>"), moi ten khop /^[a-z0-9_]+$/, khong ten
-      nao la crm/crm_test hay ket thuc _test; isTemplateDatabase(ten kho do) == false va
-      isMeasureDatabase(ten kho mau) == false cho moi cay.
+      nao la crm/crm_test hay ket thuc _test, MOI ten <= 63 ky tu ("ten kho qua 63 ky tu: <nhan>")
+      va dung duoi (_do cho kho do, __mau_do cho kho mau; "ten kho sai duoi: <nhan>");
+      isTemplateDatabase(ten kho do) == false va isMeasureDatabase(ten kho mau) == false cho moi cay.
       CHIEU DO: S4 round 1 (26/09) do cua ban cu (ten = slug) — reviewer chay that: a-b, a.b,
       A_B, a--b cung ra crm_a_b_do va x-mau trung kho mau cua x; ma tran va cham tren ban cu do voi
       "trung ten kho". Pha thu o S3: bo cat 63 ky tu -> "ten kho qua 63 ky tu"; bo thay ky tu la
@@ -54,14 +55,18 @@ evals:
     cmd: config:executors.test.dmk_kho_mau
     paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
     expected: |
-      exit 0; ca "kho-mau": goi createMeasureDatabase hai lan lien tiep cho cung cay. Doc COMMENT
-      cua kho mau: gio tao lan hai == lan mot (mau khong dung lai); gio tao cua kho do lan hai >
-      lan mot. Roi goi lan ba voi dau van tay nguon doi (tham so fingerprint tiem vao ham, cung
-      ma dung dau that o duong CLI) -> gio tao kho mau moi hon. Doi chung duong va do tren CUNG
-      mot cay.
-      CHIEU DO (pha thu o S3): bo so khop dau -> lan hai dung lai mau, ca do "kho mau bi dung
-      lai du dau khop"; so khop luon dung -> lan ba khong dung lai, ca do "dau doi ma kho mau
-      khong dung lai".
+      exit 0; hai ca "kho-mau". (1) Dau nguon: dung ban sao nguon trong thu muc tam (thu muc
+      migration cung ten, schema.prisma va seed.ts chep that); sourceFingerprint(ban sao) ==
+      sourceFingerprint() that (doi chung duong, ghim "ban sao nguon khong ra cung dau"); MA TRAN 3
+      thay doi viet truoc, moi thay doi tren mot ban sao moi: them thu muc migration, them mot dong
+      vao schema.prisma, them mot dong vao seed.ts -> dau khac dau that, ghim "dau khong doi khi
+      <thay doi>". (2) Kho mau: createMeasureDatabase hai lan voi fingerprint = sourceFingerprint(ban
+      sao) -> gio tao kho mau lan hai == lan mot, gio tao kho do lan hai > lan mot; roi them mot
+      dong vao seed.ts cua ban sao va goi lai voi sourceFingerprint(ban sao) -> gio tao kho mau
+      moi hon (dau di qua ham tao dau that, khong tiem chuoi viet tay).
+      CHIEU DO: S4 round 2 do ban cu (tiem `${fingerprint}x`, khong do ham tao dau). Pha thu o S3:
+      sourceFingerprint bo bam seed.ts -> ca (1) do "dau khong doi khi seed.ts doi"; bo so khop dau
+      -> ca (2) do "kho mau bi dung lai du dau khop".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
@@ -97,7 +102,8 @@ evals:
       chung duong tren cung fixture: quet truoc voi T + maxAgeMs - 1 phut -> khong kho nao
       trong nam bi xoa, moi kho mot khang dinh ghim "kho <nhan> bi xoa khi quet truoc han". Roi
       quet voi now: tap con lai BANG DUNG [non, khong-dau, mau-con-dung], tap bi xoa trong nam
-      BANG DUNG [gia, mau-bo].
+      BANG DUNG [gia, mau-bo]. Ca mang tran thoi gian rieng (SLOW_MS) nhu cac ca cham kho khac:
+      S4 round 1 va round 2 do vi tran 5 s mac dinh cua bun test khi 13 eval chay song song.
       CHIEU DO (pha thu o S3, da chay 26/09): bo dieu kien tuoi -> ca do "kho non bi xoa khi quet
       truoc han"; bo loc COMMENT -> ca do "kho khong-dau bi xoa khi quet truoc han"; bo gio dung
       khoi moc tuoi -> ca do "kho mau con dung bi xoa".
@@ -136,11 +142,14 @@ evals:
       exit 0; rang phien.mjs che do don-khi-do (PHIEN_DO_TEN_CAY=dmk-don-<id>, kho chung gia nhu
       E6), MA TRAN 4 ca viet truoc, moi ca 4 khang dinh (ma
       phien, cong trong, kho do khong con, khong con pid may chu nao ghi trong phien.json):
-      (1) DO_MA=1 -> ma 1; (2) SIGINT gui khi lenh do da ghi JSON -> ma 130; (3) SIGTERM -> 143;
+      moi ca them ba doi chung duong truoc cac khang dinh am: lenh do da ghi JSON; hai cong cua
+      phien trong dai; phien.json cua CHINH phien do (khop pid) co hai nhom may chu dang song luc
+      doc. (1) DO_MA=1 -> ma 1; (2) SIGINT gui khi lenh do da ghi JSON -> ma 130; (3) SIGTERM -> 143;
       (4) SIGKILL phien khi lenh do dang ngu -> hai pid may chu con song ngay sau SIGKILL (doi
       chung: chung that la mo coi), roi chay phien ke voi lenh do -> truoc lenh do cua phien ke,
       hai pid cu da chet (lenh do ghi danh sach pid song vao JSON), va phien ke thoat 0 tren kho
-      do moi (gio tao COMMENT moi hon luc SIGKILL).
+      do moi (gio tao COMMENT moi hon luc SIGKILL); nhom may chu cua phien ke doc tu phien.json
+      cua phien ke (khop pid), khac nhom cua phien bi giet, va sau phien ke khong con.
       CHIEU DO (pha thu o S3): bo bat SIGTERM -> ca (3) do "SIGTERM de lai kho do"; bo buoc giet
       nhom trong phien.json -> ca (4) do "may chu mo coi con song".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -228,12 +237,14 @@ evals:
     cmd: config:executors.script.dmk_tai_lieu
     paths: [docs/setup.md, CLAUDE.md, .env.example, _acceptance/do-man-tren-kho-rieng/rang/tai-lieu.mjs]
     expected: |
-      exit 0; rang tai-lieu.mjs tach muc cua docs/setup.md theo tieu de "### Screen measurements"
-      (than muc toi tieu de ke) va khang dinh than muc chua ca bay moc viet truoc: "db:do --tao",
-      "--xoa", "--quet", "do:man", "template", "maxAgeMs", "tien-de"; muc "## Cách chứng minh nó
-      chạy" cua CLAUDE.md chua "do:man" va "kho chung"; .env.example co dong ghi PHIEN_DO. Moi moc
-      thieu in ten moc va tep. Doi chung do tren cung ham: ban sao chuoi docs bo "--quet" -> loi
-      goi ten "--quet".
+      exit 0; rang tai-lieu.mjs (chay bang bun, nap hang so that MEASURE_DATABASE va PHIEN_DO) tach
+      muc "### Screen measurements" cua docs/setup.md: chua bay moc "db:do --tao", "--xoa",
+      "--quet", "do:man", "template", "maxAgeMs", "tien-de"; so gio ghi trong "(N hours)" nhan
+      3 600 000 == MEASURE_DATABASE.maxAgeMs va dai "tu–den" == PHIEN_DO.cong (quan he gia tri,
+      khong chi chuoi co mat). Muc "## Cách chứng minh nó chạy" cua CLAUDE.md chua "do:man" va cau
+      "không bao giờ ghi vào kho chung". Khoi chu thich PHIEN_DO cua .env.example chua "never by
+      hand". Doi chung do tren cung ham, bon ca: bo "--quet"; ghi 6 gio; ghi dai 3000–3999; bo
+      "never by hand" -> moi ca bi goi ten.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
