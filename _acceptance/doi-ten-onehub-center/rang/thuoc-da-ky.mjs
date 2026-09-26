@@ -1,11 +1,14 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const yeuCau = createRequire(import.meta.url);
 const GOC = process.env.DTOC_GOC ?? join(HERE, "..", "..", "..");
 const BANG = process.env.DTOC_BANG ?? join(HERE, "bang-the.json");
+const VONG_NAY = "doi-ten-onehub-center";
 const LAN_MAY = new Set(["test", "script"]);
 const DA_KY = new Set(["signed-off", "machine-cleared"]);
 const LA_THUOC = /(^_acceptance\/|\/test\/|\.spec\.|\.test\.|\.dom\.tsx$)/;
@@ -89,7 +92,9 @@ function hoSoDaKy() {
 				join(GOC, "_acceptance", slug, "contract.md"),
 				"utf8",
 			);
-			return DA_KY.has(c.match(/^status:\s*(\S+)/m)?.[1] ?? "");
+			return (
+				slug !== VONG_NAY && DA_KY.has(c.match(/^status:\s*(\S+)/m)?.[1] ?? "")
+			);
 		});
 }
 
@@ -102,8 +107,12 @@ export function tepThuocBiCham(doi) {
 	for (const slug of daKy) {
 		const tepEvals = join(GOC, "_acceptance", slug, "evals.yaml");
 		if (!existsSync(tepEvals)) continue;
-		for (const ev of Bun.YAML.parse(readFileSync(tepEvals, "utf8")).evals ??
-			[]) {
+		const { parseEvals } = yeuCau(join(GOC, "lib", "eval-yaml.cjs"));
+		for (const ev of parseEvals(readFileSync(tepEvals, "utf8"), [
+			"executor",
+			"cmd",
+			"status",
+		])) {
 			if (!LAN_MAY.has(ev.executor) || ev.status === "not-run") continue;
 			for (const t of tepTrongLenh(giaiRef(cauHinh, ev.cmd))) tepThuoc.add(t);
 		}
@@ -222,6 +231,21 @@ export function rutCap(thuocBiCham, base) {
 }
 
 function doiChung(base) {
+	const { parseEvals } = yeuCau(join(GOC, "lib", "eval-yaml.cjs"));
+	const mau = join(GOC, "_acceptance", "no-sau-luot-5-okr", "evals.yaml");
+	if (existsSync(mau)) {
+		const doc = parseEvals(readFileSync(mau, "utf8"), ["executor", "cmd"]);
+		const coLenh = doc.some((e) => e.cmd.startsWith("config:"));
+		ghi(
+			coLenh,
+			`doi chung bo doc cua kit: doc duoc ${doc.length} eval tu evals.yaml Bun.YAML tu choi`,
+		);
+	}
+	const tuDo = hoSoDaKy().includes(VONG_NAY);
+	ghi(
+		!tuDo,
+		`doi chung vong nay ${tuDo ? "BI TINH" : "khong tinh"} la ho so da ky`,
+	);
 	const nho = catCap("expect(n).toBe(2);", "expect(n).toBe(3);");
 	ghi(
 		dongHopLe(
