@@ -47,6 +47,7 @@ describe("Auth (e2e)", () => {
 		expect(response.body.result.data).toEqual({
 			google: true,
 			microsoft: false,
+			quenMatKhau: false,
 			providers: [],
 		});
 	});

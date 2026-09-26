@@ -161,6 +161,24 @@
       "port": 3300
     },
     {
+      "name": "qmk-api-thu",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3301 APP_URL=http://localhost:3300,http://127.0.0.1:3300 API_URL=http://localhost:3301 RESEND_API_KEY=re_test_gia MAIL_FROM='CRM <no-reply@example.test>' bun run dev"
+      ],
+      "port": 3301
+    },
+    {
+      "name": "qmk-api-tat",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3301 APP_URL=http://localhost:3300,http://127.0.0.1:3300 API_URL=http://localhost:3301 RESEND_API_KEY= MAIL_FROM= bun run dev"
+      ],
+      "port": 3301
+    },
+    {
       "name": "ban-do-osa-api",
       "runtimeExecutable": "bash",
       "runtimeArgs": [

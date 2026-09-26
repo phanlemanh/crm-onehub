@@ -83,6 +83,11 @@ visitor filtering behave. `apps/api/src/workspace/staff-domains.ts`.
   point the redirect silently becomes that host. `ssoCallbackBase()` is the
   pattern; `slackRedirectUri` in `auth.ts` once was not.
 - **`AUTH_COOKIE_DOMAIN`** only for API and app on different subdomains of one parent.
+- **`BETTER_AUTH_SECRET` must reach the app too**, not only the API: the `/api` proxy
+  signs the caller's address with it so rate limits count people (`docs/api.md`).
+  Without it the proxy sends no address and everyone shares one bucket. Self-hosted
+  behind your own reverse proxy, that proxy must **overwrite** `X-Real-IP` with the
+  client address — a value passed through from the browser would be trusted.
 - **`AGENT_URL`** is the agent's deployment, server-side only, and **must include the
   scheme** — validated at boot, or it throws when a task is queued instead.
 - **`AUTH_COOKIE_PREFIX` is `crm`** (`@crm/auth/cookies`), set on **both**
