@@ -1,0 +1,364 @@
+schema_version: 1
+slug: tra-loi-tin-nhac
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_danh_so
+    paths:
+      - "apps/agent/agent/lib/tin-nhac.ts"
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+      - "apps/agent/test/support/nhac-gui-gieo.ts"
+    expected: |
+      chayNhac that (DB that, Zalo gia, Slack gia). Ba o viet truoc:
+        o zalo-bon: A co bon viec, moi loai mot (qua-han, sap-han, im, moc).
+          Lay daGui tu hang doc lai; tach dong bat dau /^\d+\. / theo thu tu xuat hien.
+          Assert: so dong danh so = daGui.length; dong thu n bat dau "n. ";
+          lienKetTron(dong n) ket thuc bang ?record=plan:<daGui[n-1].planId>;
+          tieu de nhom gan nhat phia tren dong n = TIEU_DE[daGui[n-1].loai];
+          dem dong chua "xong 2" = 1.
+        o zalo-muoi-hai: muoi hai viec ten dai (guiMuoiHai(true)): text.length <= ZALO.tranKyTu;
+          so dong danh so = daGui.length.
+        o slack: cung du lieu, kenh Slack: khong dong nao khop /^\d+\. /; khong chuoi "xong 2".
+      So o thuc chay = 3, dem trong test.
+      Chieu do (pha-thu tren ban sao, S3): dungTin danh so theo thu tu nhom nguoc
+      (LOAI_NHAC dao) -> o zalo-bon do voi thong diep ghim "dong n thuoc daGui[n-1]";
+      bo dong goi y ra khoi phep tinh tran -> o zalo-muoi-hai do voi "khong vuot tran".
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_xong_mot
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "apps/agent/agent/lib/zalo-lenh.ts"
+      - "packages/db/src/onboarding-buoc.ts"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Gieo A noi ZA, tin nhac hom nay gui xong qua Zalo, muc 2 = buoc S chua xong,
+      cac muc con lai co buoc T1..Tk. ZA nhan "xong 2" qua nhanWebhook (than khuon that).
+      Doc lai tu DB:
+        S.completedAt != null;
+        Activity PLAN_CHANGE moi (occurredAt >= luc gui) dem = 1, meta toEqual
+        {kind:"buoc.xong", stepId:S.id, nhan:S.label, giaoLucXong:S.assigneeId, source:"zalo"},
+        createdById = A.id, planId = S.planId;
+        completedAt cua T1..Tk bang dung gia tri truoc khi nhan (map toEqual).
+      guiToi("ZA") dai 1; text khong chua "\n"; chua cap "2 · " + S.label; chua ten cong ty
+      cua ke hoach S.
+      Cross-layer: doc dau vet qua thu tuc liet ke hoat dong theo planId cua API (goi service
+      API truc tiep nhu support/nhac-gieo.ts goi OnboardingGhi): dung mot muc buoc.xong cua S;
+      onboardingActivityMeta.safeParse(meta).success = true.
+      Doi chung duong cung fixture: ZA nhan "xong 1" -> buoc muc 1 doi, S khong doi
+      (chung to test doc dung so -> buoc, khong hang dung).
+      Chieu do (pha-thu, S3): xongTheoTinNhac lay muc theo daGui[n] (lech mot) ->
+      do voi thong diep ghim "muc 2 la S"; bo source khoi meta -> do voi "source zalo".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_nhieu_so
+    paths:
+      - "apps/agent/agent/lib/zalo-lenh.ts"
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Ma tran viet truoc, nam o, moi o mot nguoi va mot tin nhac rieng (muc 1, muc 3 la buoc
+      chua xong): ["Xong 1 3", "xong 1,3", "done 1 3", "  XONG  1 , 3 ", "xong 3 1 3"].
+      Moi o: hai buoc co completedAt; Activity buoc.xong moi dem = 2, moi cai source "zalo";
+      guiToi dai 1, mot dong, chua cap "1 · <nhan buoc muc 1>" va cap "3 · <nhan buoc muc 3>".
+      So o thuc chay = 5, dem trong test.
+      Chieu do (pha-thu, S3): docLenh bo nhan dau phay -> o "xong 1,3" do voi thong diep
+      ghim "o xong 1,3"; bo gop trung -> o "xong 3 1 3" do voi "dem Activity = 2".
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_doc_lenh
+    paths:
+      - "apps/agent/agent/lib/zalo-lenh.ts"
+      - "apps/agent/test/zalo-lenh.spec.ts"
+    expected: |
+      Bang viet truoc 14 chuoi -> ket qua docLenh toEqual tung o:
+        "Xong 1 3", "xong 1,3", "done 1 3", "  XONG  1 , 3 ", "xong 3 1 3" -> {lenh:"xong", so:[1,3]}
+        "xong", "Xong  " -> {lenh:"xong-thieu-so"}
+        "xong đi", "xong 0", "xong -1", "xong 1.5", "123456", "cảm ơn", "xonG2a" -> null
+      So o = 14, dem trong test.
+      Chieu do (pha-thu, S3): regex nhan so 0 -> o "xong 0" do voi thong diep ghim ten o;
+      doc "123456" thanh lenh -> o "123456" do.
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_ngoai_dai
+    paths:
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Tin nhac hom nay bon muc, muc 2 la buoc chua xong. Nhan "xong 2 9".
+      completedAt moi buoc trong daGui bang truoc (map toEqual); Activity moi dem = 0;
+      guiToi dai 1, mot dong, chua "9" va "1–4".
+      Doi chung duong cung fixture: "xong 2" -> buoc muc 2 xong (chung to muc 2 lam duoc,
+      nen o do la do so 9).
+      Chieu do (pha-thu, S3): danh dau so hop le truoc roi moi kiem so sai -> do voi
+      thong diep ghim "duoc ca hoac khong".
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_khong_phai_buoc
+    paths:
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Bon o viet truoc: {im, moc} x {APP_URL co, APP_URL vang}. Tin nhac co muc 1 la buoc
+      chua xong, muc k "ke-hoach-im" va muc m "moc-ngay" cua ke hoach P (doc chi so tu daGui).
+      Moi o nhan "xong 1 k" (hay "xong 1 m"): khong buoc nao doi; Activity moi = 0;
+      cau tra loi chua so k (m); o APP_URL co: chua "?record=plan:<P>";
+      o APP_URL vang: khong chua "http".
+      So o thuc chay = 4.
+      Chieu do (pha-thu, S3): coi muc khong co stepId la bo qua va danh dau muc 1 ->
+      do voi thong diep ghim "muc khong phai buoc chan ca lenh".
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_trang_thai_buoc
+    paths:
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "packages/db/src/onboarding-buoc.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Ba o viet truoc, moi o tin nhac rieng voi muc 2, muc 3 la buoc:
+        o da-xong: buoc muc 2 danh dau xong truoc bang OnboardingGhi.setStepDone that; nhan
+          "xong 2 3" -> buoc muc 3 co completedAt; dem Activity buoc.xong cua buoc muc 2
+          bang truoc; tach cau tra loi tai moc cua ZALO.loi cho phan "đã xong từ trước":
+          tap so phan truoc toEqual [3], tap so phan sau toEqual [2].
+        o da-xoa: xoa buoc muc 2; nhan "xong 2 3" -> buoc muc 3 completedAt null; Activity moi 0;
+          cau tra loi chua "2"; ZaloUpdateSeen cua message_id dem = 1.
+        o ke-hoach-dong: dong ke hoach cua buoc muc 2; nhu o da-xoa.
+      So o thuc chay = 3.
+      Chieu do (pha-thu, S3): dao hai danh sach trong cau -> o da-xong do voi thong diep ghim
+      "3 vua xong, 2 da xong tu truoc"; o da-xoa bo qua buoc mat va danh dau muc 3 -> do voi thong
+      diep ghim "buoc mat chan ca lenh"; lui ca giao dich ke ca ZaloUpdateSeen -> do voi
+      "tin khong bi gui lai".
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_tin_hom_nay
+    paths:
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Sau o viet truoc, dong ho gia bang setSystemTime va lucVN:
+        (a) chi hom qua qua Zalo; (b) hom nay qua Slack; (c) hom nay khong-viec;
+        (d) hom nay chua chay; (e) gui 08:30 ngay D, nhan 23:59 ngay D;
+        (f) gui 08:30 ngay D, nhan 00:01 ngay D+1.
+      (a)-(d), (f): khong buoc nao doi; Activity moi 0; cau tra loi chua
+        "Hôm nay chưa có tin nhắc qua Zalo" va gio nhac gioNhac().
+      (e): buoc muc 1 co completedAt.
+      So o thuc chay = 6.
+      Chieu do (pha-thu, S3): lay "hom nay" theo UTC -> (e) do voi thong diep ghim
+      "23:59 gio VN van la ngay D"; nhan hang nhac moi nhat thay vi hom nay -> (a) do.
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_nguoi_nhan
+    paths:
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Bon o viet truoc:
+        (a) A noi, khong co tin nhac; B co tin nhac Zalo hom nay. A nhan "xong 1" ->
+            buoc muc 1 cua B khong doi; A nhan cau chua "Hôm nay chưa có tin nhắc qua Zalo".
+        (b) nguoi noi voi vai okr, co tin nhac Zalo hom nay -> khong buoc doi; Activity 0;
+            cau tra loi bang ZALO.loi cua o khong co quyen.
+        (c) Zalo chua noi -> cau tra loi bang ZALO.loi.huongDan; khong buoc doi.
+        (d) Zalo dang bi chan (ghiSai du lan) -> res.status 200; ZaloUpdateSeen cua message_id
+            dem 1; guiToi dai 0; khong buoc doi.
+      So o thuc chay = 4.
+      Doi chung duong cua (b): cung nguoi doi vai ve member -> "xong 1" danh dau duoc.
+      Chieu do (pha-thu, S3): bo kiem vai -> (b) do voi thong diep ghim "vai okr khong ghi".
+  - id: E10
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_khong_lenh
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Ba o: "xong" -> cau chua "xong 2", khong gi doi; "cảm ơn" -> cau bat dau bang
+      ZALO.loi.daNoiRoi(ten, gioNhac()) va chua "xong 2"; ma noi con song cua chinh A ->
+      ZaloLink ghi lai, usedAt cua ma khac null.
+      Chieu do (pha-thu, S3): dat nhanh lenh truoc nhanh ma -> o ma van xanh nhung o "xong"
+      doi thanh ghiSai; test ghim "xong khong tinh la ma sai" bang dem ZaloLinkAttempt = 0.
+  - id: E11
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ttn_giu_da_ky
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "CONTEXT.md"
+      - "docs/**"
+      - "_acceptance/tra-loi-tin-nhac/rang/ho-so-cham.mjs"
+    expected: |
+      Script rang/ho-so-cham.mjs (duong goc suy tu vi tri script, khong hardcode):
+        1. B = merge-base(HEAD, origin/onehub); D = git diff --name-only B..HEAD, bo _acceptance/**.
+        2. Tap ho so signed-off/machine-cleared (tru chinh ho so nay) co mot glob trong paths
+           cua evals.yaml khop mot tep cua D. In tap va so ho so da quet (> 0).
+        3. Nam spec Zalo da ky khong doi so voi B (git diff --quiet), khac -> exit 1 ghi ten tep.
+        4. repin-lane.mjs khong --write tren ca tap tai HEAD; lan xanh tron -> exit 0.
+        5. Lan do: bon suite phai thoat 0 (khac -> exit 1 "suite khong xanh o HEAD"); moi eval do
+           o HEAD chay lai tuan tu mot lan o HEAD (xanh -> in "chap chon", khong tinh), roi chay
+           dung lenh do tren worktree tam o B (.acceptance-runs/tra-loi-tin-nhac/goc,
+           go sau khi chay); eval nao xanh o B -> exit 1 "vong nay lam do them N eval: <ten>".
+      Doi chung duong cung fixture: tap rut ra chua nhac-qua-zalo — thieu -> exit 1 "bo rut tap hong".
+      So lieu S3 (25/09, HEAD c3b2d780): 28 ho so, 378 eval may, 4 suite xanh, 46 eval do o HEAD,
+      ca 46 do cung ma o 680d112a.
+      Chieu do (pha-thu, S3, tren worktree tam cua HEAD): xoa chu khoa_message khoi docs/agent.md
+      -> eval tai-lieu cua zalo-webhook-doc-khuon-that do o HEAD, xanh o B -> exit 1 ghi ten eval.
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_trung_va_loi
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "packages/db/src/onboarding-buoc.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      O trung: cung message_id "xong 1 2" hai lan -> moi buoc Activity buoc.xong moi = 1;
+        guiToi dai 1; hai res.status 200.
+      O loi: tiem loi vao lan ghi buoc thu hai (spyOn db.onboardingStep.update lan 2 nem) ->
+        res.status 500; completedAt ca hai buoc null; ZaloUpdateSeen cua message_id dem 0;
+        go tiem, gui lai dung tin -> ca hai buoc xong, guiToi dai 1.
+      Chieu do (pha-thu, S3): goi datBuocXong ngoai giao dich cua ZaloUpdateSeen -> o loi do
+      voi thong diep ghim "loi DB khong de buoc nao doi".
+  - id: E13
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_loi_chung_api
+    paths:
+      - "packages/db/src/onboarding-buoc.ts"
+      - "apps/api/src/onboarding/onboarding-ghi.ts"
+      - "apps/api/test/tra-loi-tin-nhac.spec.ts"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Bon o qua OnboardingGhi.setStepDone that:
+        chua-xong -> completedAt != null; Activity buoc.xong moi = 1; Object.keys(meta)
+          khong chua "source".
+        da-xong -> Activity moi = 0.
+        khong-co -> nem NotFoundException.
+        dong -> nem ConflictException.
+      Them: spyOn datBuocXong cua @crm/db/onboarding-buoc duoc goi dung 1 lan o o chua-xong
+      (chung to API di qua loi chung).
+      Roi ke-hoach-ban-ghi.spec.ts va moi-phia-ke-hoach.spec.ts chay tron, exit 0.
+      Chieu do (pha-thu, S3): API giu ban cu, khong goi loi -> o spy do voi thong diep ghim
+      "setStepDone di qua datBuocXong".
+  - id: E14
+    criterion: AC-11
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ttn_khong_import_api
+    paths:
+      - "apps/agent/agent/**"
+      - "_acceptance/tra-loi-tin-nhac/rang/khong-import-api.mjs"
+    expected: |
+      Script quet moi tep .ts duoi apps/agent/agent, in so tep da quet (> 0) va danh sach
+      import tro vao apps/api; danh sach rong -> exit 0.
+      Chieu do (pha-thu, S3): ban sao co mot tep import "../../../api/src/x" -> exit 1,
+      in dung duong tep do.
+  - id: E15
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_khong_luu_chu
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/tra-loi-nhac.ts"
+      - "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts"
+    expected: |
+      Tien de chung: hang nhac dung bang lenLichNhac + chayNhac that (Zalo/Slack gia),
+      khong insert AgentTask tay; payload doc bang parseNhacPayload.
+      Chuoi danh dau M = "ttn-" + randomUUID(). Hai tin: "hỏi " + M va "xong 1 " + M.
+      Bat console.log va console.error trong luot; sau luot:
+        ZaloUpdateSeen, ZaloLink, ZaloLinkAttempt, Activity, AgentTask: truy van raw text
+        cast ::text ILIKE '%M%' dem = 0; khong dong log nao chua M;
+        doi chung duong cho bo bat log: bo bat thu duoc >= 1 dong trong luot (vd dong
+        message_id cua webhook) — thieu thi test do voi "bo bat log khong thu duoc gi".
+      Doi chung duong: chuoi M co trong than webhook gui di (tim thay trong JSON than),
+      chung to M thuc su di vao duong xu ly.
+      Chieu do (pha-thu, S3): ghi text vao meta Activity -> do voi thong diep ghim
+      "noi dung tin khong vao DB".
+  - id: E16
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttn_nguong
+    paths:
+      - "_acceptance/tra-loi-tin-nhac/rang/nguong.ts"
+      - "apps/agent/test/tra-loi-tin-nhac-nguong.integration.spec.ts"
+    expected: |
+      Gieo R1 (Zalo, mot xong qua Zalo), R2 (Zalo, khong xong), R3 (Slack), mot buoc danh dau
+      tren man (setStepDone, khong source), va mot Activity buoc.xong source zalo cua buoc
+      ngoai daGui cua tin cung nguoi cung ngay. Chay script (Bun.spawn, bien moi truong DB cua
+      luot) voi --tu D1 --den D2: stdout chua dung dong "ti_le_co_xong: 1/2" va
+      "danh_dau_nham: 1" cung id cua Activity nham.
+      Xoa Activity nham, chay lai: "danh_dau_nham: 0", ti le giu 1/2.
+      Chieu do (pha-thu, S3): script dem ca tin Slack vao mau so -> do voi thong diep ghim
+      "mau so chi tin Zalo".
+  - id: E17
+    criterion: AC-14
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ttn_tai_lieu
+    paths:
+      - "CONTEXT.md"
+      - "docs/agent.md"
+      - "docs/plan/lo-trinh-zalo.md"
+      - "_acceptance/tra-loi-tin-nhac/rang/tai-lieu.mjs"
+    expected: |
+      Script doc ban nhanh va ban merge-base(origin/onehub) cua CONTEXT.md, docs/agent.md,
+      docs/plan/lo-trinh-zalo.md. Kiem: muc Bot Zalo cua CONTEXT.md ban nhanh chua "xong" va
+      ban merge-base khong; docs/agent.md co mot doan chua ca bon moc `xong`, "được cả hoặc
+      không", "hôm nay", `source: "zalo"`; dong tra-loi-tin-nhac o muc 7 co Trang thai thuoc
+      tap gia tri muc 7 va khac "chờ điều kiện". In tung moc voi dat/khong dat; mot moc
+      khong dat -> exit 1 va ghi ten moc.
+      Chieu do: chay tren ban merge-base (bien TTN_REF) -> exit 1, ghim ten moc CONTEXT.

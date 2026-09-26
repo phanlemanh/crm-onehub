@@ -1,0 +1,52 @@
+{
+  "feature_plain": "Người nhận tin nhắc buổi sáng qua Zalo gõ «xong 2» (hay «xong 1 3») là các bước đó được đánh dấu xong như bấm trên màn kế hoạch, và bot đáp lại một dòng.",
+  "scope_plain": "Hoàn tác qua Zalo, hiện «qua Zalo» trên màn, mục KR của OKR, trò chuyện với tác tử qua Zalo, trả lời trên Slack, và triển khai production — để các vòng sau.",
+  "decisions": [],
+  "analyst_plain": "",
+  "decisions_plain": [
+    {
+      "id": "d-20260925T080725Z-1",
+      "p": "Làm vòng 3 ngay dù ba điều kiện mở của lộ trình chưa đủ — đổi lại ngưỡng chỉ đo được sau triển khai, và mục KR của OKR phải cắm thêm sau."
+    },
+    {
+      "id": "d-20260925T080725Z-2",
+      "p": "Màn kế hoạch và Zalo dùng chung một thủ tục đánh dấu, không để tác tử gọi API hay tự chép lệnh ghi — đổi lại hàm dùng chung nhận bộ dựng dấu vết từ bên gọi."
+    },
+    {
+      "id": "d-20260925T080725Z-3",
+      "p": "Nhiều số trong một tin, được cả hoặc không — đổi lại một số sai chặn cả lệnh, người phải nhắn lại."
+    },
+    {
+      "id": "d-20260925T080725Z-4",
+      "p": "Chỉ nhận tin nhắc của hôm nay — đổi lại trước 08:30 không đánh dấu được theo tin hôm qua."
+    },
+    {
+      "id": "d-20260925T080725Z-5",
+      "p": "KHÔNG viết đặc tả màn hình vì vòng này không có màn web — đổi lại anh thấy cấu trúc lần đầu trong code (mặt người nhìn là tin Zalo, đã tả trong thiết kế)."
+    },
+    {
+      "id": "d-20260925T080725Z-6",
+      "p": "KHÔNG làm hoàn tác qua Zalo — người nhắn nhầm phải mở CRM để gỡ."
+    },
+    {
+      "id": "d-20260925T080725Z-7",
+      "p": "KHÔNG hiện «qua Zalo» trên màn, chỉ ghi trong dữ liệu — giữ vòng không có màn web; người xem kế hoạch chưa biết bước đánh dấu từ đâu."
+    },
+    {
+      "id": "d-20260925T083235Z-9",
+      "p": "Viết tuần tự ba phần độc lập trong phiên chính thay vì chạy song song — đỡ dựng ba cây làm việc mới, chậm hơn vài phút."
+    },
+    {
+      "id": "d-20260925T083802Z-10",
+      "p": "Thêm một ô «sát trần ký tự» cho phép đo đánh số, vì ô cũ không bao giờ đỏ khi dòng gợi ý bị bỏ khỏi phép tính trần."
+    },
+    {
+      "id": "d-20260925T094221Z-11",
+      "p": "Đã sửa AC-9 (anh duyệt lại 25/09): không đòi mọi phép đo của hồ sơ đã ký xanh mà đòi vòng này không làm đỏ thêm phép đo nào — đổi lại 46 ô đỏ sẵn vẫn là nợ của các hồ sơ đó."
+    },
+    {
+      "id": "d-20260925T112501Z-13",
+      "p": "Phép đo hồ sơ đã ký chạy lại mỗi ô đỏ một lần trước khi so với bản gốc, để một ô đỏ thoáng qua lúc chạy song song không bị tính oan — đổi lại một lỗi chỉ đỏ khi chạy song song sẽ không bị bắt."
+    }
+  ]
+}

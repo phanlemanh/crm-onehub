@@ -13,6 +13,7 @@ import {
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
 import { settingsMessages } from "@/lib/messages/settings";
+import { goiYChuKy, homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -81,7 +82,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 			<DauTrang tieuDe={tieuDe} moTa={moTa} lyDo={<LyDoKhongQuyen />} />
 			<PageShellContent>
 				<div className="flex flex-col gap-6">
-					<BangChuKy />
+					<BangChuKy goiY={goiYChuKy(homNayVn(new Date()))} />
 					<FormCauHinh />
 				</div>
 			</PageShellContent>

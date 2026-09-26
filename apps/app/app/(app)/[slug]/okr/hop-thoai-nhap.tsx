@@ -21,6 +21,7 @@ import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { StepList, StepListItem } from "@crm/ui/components/step-list";
 import { Switch } from "@crm/ui/components/switch";
 import { TableCell } from "@crm/ui/components/table";
@@ -139,7 +140,7 @@ export function HopThoaiNhapOkr({
 				if (!mo && !ghi.isPending) dong();
 			}}
 		>
-			<DialogContent size="wide" data-hop-thoai-nhap-okr>
+			<DialogContent size="table" data-hop-thoai-nhap-okr>
 				<DialogHeader>
 					<DialogTitle>{m.tieuDe}</DialogTitle>
 					<DialogDescription>{m.moTa}</DialogDescription>
@@ -254,24 +255,32 @@ export function HopThoaiNhapOkr({
 								{ketQua?.xem.rows.map((r) => (
 									<SimpleTableRow
 										key={r.line}
+										invalid={r.error !== null}
 										data-hong={r.error ? "co" : "khong"}
 									>
 										<TableCell>
 											<span className="tabular-nums">{r.line}</span>
 										</TableCell>
-										<TableCell translate="no">{r.objective}</TableCell>
-										<TableCell translate="no">{r.keyResult}</TableCell>
+										<TableCell>
+											<span className="whitespace-normal" translate="no">
+												{r.objective}
+											</span>
+										</TableCell>
+										<TableCell>
+											<span className="whitespace-normal" translate="no">
+												{r.keyResult}
+											</span>
+										</TableCell>
 										<TableCell translate="no">{r.kind}</TableCell>
 										<TableCell translate="no">{r.start}</TableCell>
 										<TableCell translate="no">{r.target}</TableCell>
 										<TableCell translate="no">{r.unit}</TableCell>
 										<TableCell translate="no">{r.email}</TableCell>
 										<TableCell>
-											{r.error ? (
-												<span className="text-destructive">{m.hong}</span>
-											) : (
-												<span className="text-muted-foreground">{m.hopLe}</span>
-											)}
+											<StatusIndicator
+												tone={r.error ? "error" : "success"}
+												label={r.error ? m.hong : m.hopLe}
+											/>
 										</TableCell>
 									</SimpleTableRow>
 								))}
