@@ -2,12 +2,11 @@ import { PASSWORD } from "@crm/auth";
 import { db } from "@crm/db";
 import type { Metadata } from "next";
 import { AuthShell } from "@/components/auth-shell";
+import { phutLienKetDatMatKhau } from "@/lib/cua-vao/thoi-han";
 import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
 import { DatMatKhauForm } from "./dat-mat-khau-form";
 import { LienKetKhongHopLe } from "./lien-ket-khong-hop-le";
-
-const SECONDS_PER_MINUTE = 60;
 
 type TrangThaiChia = "con" | "hetHan" | "khongDungDuoc";
 
@@ -43,7 +42,7 @@ export default async function DatMatKhauPage({
 		);
 	}
 
-	const phut = Math.round(PASSWORD.tokenTtlSeconds / SECONDS_PER_MINUTE);
+	const phut = phutLienKetDatMatKhau();
 
 	return (
 		<AuthShell>

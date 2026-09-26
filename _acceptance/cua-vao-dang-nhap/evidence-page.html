@@ -1,0 +1,186 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · cua-vao-dang-nhap</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Cửa vào đăng nhập cho người mới — trang /sign-in nói cách vào ở khối «Lần đầu vào?» (bước tính theo nút đang bật), báo lỗi khi better-auth trả về vì địa chỉ chưa được cho phép, theo giao diện máy thay vì ép tối; bốn trang AuthShell khác giữ bố cục</h1><div class="sub">Trang bằng chứng · <span class="mono">cua-vao-dang-nhap</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E1-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E2-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E3-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E4-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E5-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E6-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E7-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E8-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E9-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E10-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">crm_xenodochial_gould_763cda_do</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">crm_xenodochial_gould_763cda_do</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-12</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">crm_xenodochial_gould_763cda_do</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-11</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E14-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E15">E15</a></td><td>AC-12</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E15-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E16">E16</a></td><td>AC-14</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E16-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E17">E17</a></td><td>AC-14</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">design-gate-a810260368</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E18">E18</a></td><td>AC-15</td><td>judgment</td><td><span class="badge pass">PASS</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E19">E19</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">crm_xenodochial_gould_763cda_do</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E20">E20</a></td><td>AC-13</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E20-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+<tr><td><a href="#E21">E21</a></td><td>AC-14</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-cua-vao-dang-nhap-E21-r3</td><td class="mono">2026-09-26T07:16:47Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given năm trang dùng `AuthShell`, When mỗi trang được vẽ, Then chỉ `sign-in` có khối hướng dẫn; bốn trang kia gọi `AuthShell` mà không truyền khối cột trái.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E1-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_chi_sign_in</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+5 expect() calls
+Ran 5 tests across 1 file. [890.00ms]</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given `AuthShell` không nhận khối cột trái, When nó được vẽ, Then cột trái vẫn có hiệu ứng nền, chữ «CRM» và một dòng tiêu đề, vẫn ẩn dưới khổ `lg` như hôm nay; dòng tiêu đề tiếng Việt là «CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.» (không còn «Mọi khách hàng, một chỗ.»); và không phần tử nào của khung mang lớp `dark`.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E2-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_shell_khong_khoi</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+22 expect() calls
+Ran 7 tests across 1 file. [391.00ms]</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given `signInOptions` trả Google bật, Microsoft tắt, không SSO, When mở `/sign-in`, Then khối hướng dẫn có tiêu đề «Lần đầu vào?» và đúng ba bước theo thứ tự — nhờ quản trị viên cho phép địa chỉ (có chỉ đường Cài đặt › Thành viên › Cho phép một địa chỉ, chữ nút lấy từ `settings-thanh-vien.ts`) · đăng nhập bằng Google đúng địa chỉ đó · xin liên kết đặt mật khẩu với số phút hết hạn tính từ `PASSWORD.tokenTtlSeconds` — và một dòng «CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.»</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E3-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_ba_buoc_google</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+6 expect() calls
+Ran 2 tests across 1 file. [1091.00ms]</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given mỗi tổ hợp cửa trong ma trận viết trước — chỉ mật khẩu · Microsoft bật · có SSO · `?method=google` · `signInOptions` lỗi — When mở `/sign-in`, Then tập tên nhà cung cấp mà bước 2 gọi bằng đúng tập tên trên các nút ngoài đang hiện; không có nút ngoài thì không có bước 2 và bước mật khẩu là đường chính («Xin liên kết đặt mật khẩu.»); `signInOptions` lỗi thì nút và bước giống hệt ca Google bật.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E4-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_ma_tran_cua</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+3 expect() calls
+Ran 7 tests across 1 file. [1274.00ms]</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · script</h3><p class="crit">AC-5: Given `error` là chuỗi mà better-auth đang cài sinh ra từ mỗi câu mở đầu «This CRM is private.» trong hook `user.create.before` của `packages/auth/src/auth.ts` (rút từ nguồn, qua phép đổi khoảng trắng của callback và `URLSearchParams`), When mở `/sign-in?error=&lt;chuỗi đó&gt;`, Then ô lỗi có biểu tượng cảnh báo, tiêu đề «Địa chỉ này chưa được cho phép vào» và mô tả «Nhờ quản trị viên cho phép đúng địa chỉ email bạn vừa dùng.»</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E5-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_ma_loi_that</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">DUNG sso-co-mien: This_CRM_is_private._Sign_in_with_your_@onemount.com_account. -&gt; chua-cho-phep
+DUNG sso-khong-mien: This_CRM_is_private._That_address_is_not_on_the_allow-list. -&gt; chua-cho-phep
+KET LUAN 9 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-5: Given `error` là chuỗi mà better-auth đang cài sinh ra từ mỗi câu mở đầu «This CRM is private.» trong hook `user.create.before` của `packages/auth/src/auth.ts` (rút từ nguồn, qua phép đổi khoảng trắng của callback và `URLSearchParams`), When mở `/sign-in?error=&lt;chuỗi đó&gt;`, Then ô lỗi có biểu tượng cảnh báo, tiêu đề «Địa chỉ này chưa được cho phép vào» và mô tả «Nhờ quản trị viên cho phép đúng địa chỉ email bạn vừa dùng.»</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E6-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_o_loi</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+45 expect() calls
+Ran 15 tests across 1 file. [1143.00ms]</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-6: Given `error=access_denied` (mã nhà cung cấp trả khi người bấm huỷ, RFC 6749 §4.1.2.1), When mở `/sign-in`, Then ô lỗi có tiêu đề «Bạn đã dừng đăng nhập giữa chừng» và mô tả «Bấm lại nút đăng nhập để thử lần nữa.»</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E7-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_o_loi</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+45 expect() calls
+Ran 15 tests across 1 file. [1143.00ms]</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-7: Given `error` là bất kỳ giá trị nào khác trong ma trận viết trước — câu «No one can sign in yet…» của hook đã biến đổi, `invalid_code`, `state_mismatch`, chuỗi chứa `&lt;script&gt;` và `&lt;img onerror&gt;`, chuỗi 2000 ký tự — When mở `/sign-in`, Then ô lỗi có tiêu đề chung «Chưa đăng nhập được» và mô tả «Thử lại; nếu vẫn không được, nhờ quản trị viên xem giúp.»; phần HTML ngoài các thẻ `&lt;script&gt;` (chữ hiện ra và thuộc tính) không chứa giá trị đó ở dạng thô, dạng thoát HTML hay dạng mã hoá URL; payload RSC của Next trong `&lt;script&gt;` được phép mang giá trị nhưng không mang thẻ `&lt;script`/`&lt;img` thô; `error` vắng hoặc rỗng thì không có ô lỗi; `error` lặp thì xét giá trị đầu.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E8-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_o_loi</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+45 expect() calls
+Ran 15 tests across 1 file. [1143.00ms]</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-8: Given `/sign-in` có `error`, When trang tải xong, Then ô lỗi là phần tử `role=&quot;alert&quot;` duy nhất của trang, đứng trước nút đăng nhập đầu tiên trong thứ tự tài liệu, có tiêu đề và mô tả của loại lỗi (AC-5/6/7) trong cây truy cập, và không lấy tiêu điểm.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E9-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_o_loi</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+45 expect() calls
+Ran 15 tests across 1 file. [1143.00ms]</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · test</h3><p class="crit">AC-9: Given ngôn ngữ vi và en, When mở `/sign-in`, Then tiêu đề cột phải là «Đăng nhập vào CRM» (en: «Sign in to the CRM») với một câu mô tả; không còn «Mừng bạn quay lại» / «Welcome back»; mọi chuỗi mới có bản vi và en, và `messages-guard` ghim chúng.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E10-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_chu</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+522 expect() calls
+Ran 95 tests across 1 file. [570.00ms]</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-10: Given máy người xem đặt giao diện sáng rồi tối, When mở `/sign-in`, Then nền và chữ của trang đổi theo (nền trang sáng ở giao diện sáng, tối ở giao diện tối); cột trái của `sign-in` là nền `muted` phẳng, không có hiệu ứng nền `AuthShader`.</p>
+<div class="kv"><span>run_id <b>crm_xenodochial_gould_763cda_do</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_do_cua_vao</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-11: Given khổ 320, 768, 1024, 1440 px × giao diện sáng, tối, When mở `/sign-in` (Google bật), Then ở 320 và 768 khối hướng dẫn nằm hoàn toàn dưới nút «Đăng nhập» của ô mật khẩu; ở 1024 và 1440 khối hướng dẫn nằm ở cột bên trái khung đăng nhập; ở mọi khổ `document` không tràn ngang.</p>
+<div class="kv"><span>run_id <b>crm_xenodochial_gould_763cda_do</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_do_cua_vao</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pass">PASS</span> &nbsp;E13 · script</h3><p class="crit">AC-12: Given `/sign-in` có ô lỗi, Google bật, ở khổ 1440 và 320, When người dùng nhấn Tab liên tiếp từ đầu trang, Then tiêu điểm đi giống nhau ở hai khổ: liên kết logo của tiêu đề cột phải («Trang chủ») → nút Google → ô email → ô mật khẩu → («Quên mật khẩu?» khi `signInOptions` trả `quenMatKhau: true` — cờ của PR #104; liên kết trỏ `/quen-mat-khau`) → nút «Đăng nhập»; không phần tử nào trong khối hướng dẫn nhận tiêu điểm, và logo của khối hướng dẫn (chỉ hiện từ `lg`) không phải liên kết; chữ trong khối hướng dẫn và ô lỗi đạt tương phản AA (4,5:1; chữ lớn 3:1) ở cả hai giao diện.</p>
+<div class="kv"><span>run_id <b>crm_xenodochial_gould_763cda_do</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_do_cua_vao</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0</pre>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge pass">PASS</span> &nbsp;E14 · ui-check</h3><p class="crit">AC-11: Given khổ 320, 768, 1024, 1440 px × giao diện sáng, tối, When mở `/sign-in` (Google bật), Then ở 320 và 768 khối hướng dẫn nằm hoàn toàn dưới nút «Đăng nhập» của ô mật khẩu; ở 1024 và 1440 khối hướng dẫn nằm ở cột bên trái khung đăng nhập; ở mọi khổ `document` không tràn ngang.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E14-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_do_cua_vao</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="flag fred">Không có screenshot — ui-check có thể đã downgrade sang judgment (không có browser).</div>
+</div>
+<div class="card eval" id="E15"><h3><span class="badge pass">PASS</span> &nbsp;E15 · test</h3><p class="crit">AC-12: Given `/sign-in` có ô lỗi, Google bật, ở khổ 1440 và 320, When người dùng nhấn Tab liên tiếp từ đầu trang, Then tiêu điểm đi giống nhau ở hai khổ: liên kết logo của tiêu đề cột phải («Trang chủ») → nút Google → ô email → ô mật khẩu → («Quên mật khẩu?» khi `signInOptions` trả `quenMatKhau: true` — cờ của PR #104; liên kết trỏ `/quen-mat-khau`) → nút «Đăng nhập»; không phần tử nào trong khối hướng dẫn nhận tiêu điểm, và logo của khối hướng dẫn (chỉ hiện từ `lg`) không phải liên kết; chữ trong khối hướng dẫn và ô lỗi đạt tương phản AA (4,5:1; chữ lớn 3:1) ở cả hai giao diện.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E15-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_quen_mat_khau</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+4 expect() calls
+Ran 2 tests across 1 file. [1172.00ms]</pre>
+</div>
+<div class="card eval" id="E16"><h3><span class="badge pass">PASS</span> &nbsp;E16 · script</h3><p class="crit">AC-14: Given các tệp vòng này viết hoặc sửa, When soi mã và `diff` từ `merge-base` với `onehub`, Then không tệp `&quot;use client&quot;` nào nhập `@crm/auth` hay `@crm/db`; khối hướng dẫn dựng từ `StepList` ở chế độ tĩnh (hướng «Đều nhau» chủ kho chọn ở Cổng Phạm vi: không bước nào mang `aria-current`, không bước nào mờ, mọi chỉ báo cùng một trạng thái, vẫn là danh sách có tên; chế độ tiến độ của các nơi dùng cũ giữ nguyên) và ô lỗi từ `Alert` của `@crm/ui`, không `className` đổi màu, góc, viền, bóng trên component `@crm/ui` ở chỗ gọi; mã mới nằm ở tệp riêng của OneHub; và `diff` không chạm `components/landing/**`, `apps/app/proxy.ts`, `packages/auth/**`.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E16-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_soi_ma</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">DUNG (b) apps/app/components/cua-vao/o-loi-dang-nhap.tsx dung Alert tu @crm/ui/components/alert
+DUNG (d) diff khong cham landing, proxy.ts, packages/auth
+KET LUAN 19 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E17"><h3><span class="badge pass">PASS</span> &nbsp;E17 · script</h3><p class="crit">AC-14: Given các tệp vòng này viết hoặc sửa, When soi mã và `diff` từ `merge-base` với `onehub`, Then không tệp `&quot;use client&quot;` nào nhập `@crm/auth` hay `@crm/db`; khối hướng dẫn dựng từ `StepList` ở chế độ tĩnh (hướng «Đều nhau» chủ kho chọn ở Cổng Phạm vi: không bước nào mang `aria-current`, không bước nào mờ, mọi chỉ báo cùng một trạng thái, vẫn là danh sách có tên; chế độ tiến độ của các nơi dùng cũ giữ nguyên) và ô lỗi từ `Alert` của `@crm/ui`, không `className` đổi màu, góc, viền, bóng trên component `@crm/ui` ở chỗ gọi; mã mới nằm ở tệp riêng của OneHub; và `diff` không chạm `components/landing/**`, `apps/app/proxy.ts`, `packages/auth/**`.</p>
+<div class="kv"><span>run_id <b>design-gate-a810260368</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_san_thiet_ke</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">&quot;blocking&quot;: [],
+&quot;findings&quot;: []</pre>
+</div>
+<div class="card eval" id="E18"><h3><span class="badge pass">PASS</span> &nbsp;E18 · judgment</h3><p class="crit">AC-15: Given mọi chuỗi tiếng Việt mới hoặc đổi của vòng này, When đọc đối chiếu `CONTEXT.md`, Then không chuỗi nào dùng từ nằm trong `_Avoid_` theo đúng nghĩa của mục đó, nhãn theo luật «ngắn theo ngữ cảnh», và mọi câu người đọc phân vân đã có dòng trả lời của người thật trong sổ quyết định.</p>
+<div class="kv"><span>judged_by <b>judge panel (fresh context) — domain-correctness, operational-feasibility, spec-alignment</b></span></div>
+<p class="note"><b>Phán đoán:</b> Cả 3/3 lens của hội đồng round này chấm PASS trên toàn bộ chữ mới/đổi của cuaVaoMessages và các khoá đăng nhập/quên-mật-khẩu/đặt-mật-khẩu của auth.ts, không lens nào UNCERTAIN. Câu duy nhất đưa dữ liệu người thật (&quot;địa chỉ email&quot; thay &quot;email công ty&quot;) đã có dòng quyết định của chủ kho trong decisions.jsonl (d-20260925T152541Z-3, d-20260925T202141Z-6, seal d-...-7, tái khoá d-20260926T071630Z-16 sau khi mở rộng E21).</p>
+<div class="ov">human_override: CHƯA điền (việc của bạn ở Gate 2)</div>
+</div>
+<div class="card eval" id="E19"><h3><span class="badge pass">PASS</span> &nbsp;E19 · script</h3><p class="crit">AC-7: Given `error` là bất kỳ giá trị nào khác trong ma trận viết trước — câu «No one can sign in yet…» của hook đã biến đổi, `invalid_code`, `state_mismatch`, chuỗi chứa `&lt;script&gt;` và `&lt;img onerror&gt;`, chuỗi 2000 ký tự — When mở `/sign-in`, Then ô lỗi có tiêu đề chung «Chưa đăng nhập được» và mô tả «Thử lại; nếu vẫn không được, nhờ quản trị viên xem giúp.»; phần HTML ngoài các thẻ `&lt;script&gt;` (chữ hiện ra và thuộc tính) không chứa giá trị đó ở dạng thô, dạng thoát HTML hay dạng mã hoá URL; payload RSC của Next trong `&lt;script&gt;` được phép mang giá trị nhưng không mang thẻ `&lt;script`/`&lt;img` thô; `error` vắng hoặc rỗng thì không có ô lỗi; `error` lặp thì xét giá trị đầu.</p>
+<div class="kv"><span>run_id <b>crm_xenodochial_gould_763cda_do</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_do_cua_vao</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0</pre>
+</div>
+<div class="card eval" id="E20"><h3><span class="badge pass">PASS</span> &nbsp;E20 · script</h3><p class="crit">AC-13: Given ba hồ sơ đã ký có eval trỏ vào vùng vòng này sửa — `logo-onehub` (E11), `man-xin-quyen-co-rang` (E1, E2, E4–E10), `vao-bang-email-va-mat-khau` (E13, E15) — When chạy lại các eval máy (`test`/`script`) của chúng trên cây sau vòng này và trên `merge-base` với `onehub`, Then mọi eval đạt ở `merge-base` vẫn đạt; eval nào đổi kết quả thì dòng ra gọi tên hồ sơ, eval và mã thoát hai phía.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E20-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.cvdn_thuoc_da_ky</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">DUNG vao-bang-email-va-mat-khau/E17: base 0 -&gt; head 0
+DUNG vao-bang-email-va-mat-khau/E15: base 0 -&gt; head 0
+KET LUAN 13 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E21"><h3><span class="badge pass">PASS</span> &nbsp;E21 · test</h3><p class="crit">AC-14: Given các tệp vòng này viết hoặc sửa, When soi mã và `diff` từ `merge-base` với `onehub`, Then không tệp `&quot;use client&quot;` nào nhập `@crm/auth` hay `@crm/db`; khối hướng dẫn dựng từ `StepList` ở chế độ tĩnh (hướng «Đều nhau» chủ kho chọn ở Cổng Phạm vi: không bước nào mang `aria-current`, không bước nào mờ, mọi chỉ báo cùng một trạng thái, vẫn là danh sách có tên; chế độ tiến độ của các nơi dùng cũ giữ nguyên) và ô lỗi từ `Alert` của `@crm/ui`, không `className` đổi màu, góc, viền, bóng trên component `@crm/ui` ở chỗ gọi; mã mới nằm ở tệp riêng của OneHub; và `diff` không chạm `components/landing/**`, `apps/app/proxy.ts`, `packages/auth/**`.</p>
+<div class="kv"><span>run_id <b>minted-cua-vao-dang-nhap-E21-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.cvdn_step_list_tinh</b></span><span>verified_at <b>2026-09-26T07:16:47Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">0 fail
+11 expect() calls
+Ran 5 tests across 1 file. [409.00ms]</pre>
+</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: 6 phát hiện thước trong hợp đồng bị REJECT (bàn đo Tab không đi hết khối, E19 dùng câu hook giả thay câu thật, thuoc-da-ky xanh rỗng — t3/t5/t7/t10) — đã sửa ở commit 6212fc09 (bàn đo Tab đi hết khối, E19 dùng câu hook thật, thuoc-da-ky không xanh rỗng) và commit 096affd3 (test đăng nhập đo quan hệ và đầu ra thật). Trả lại implementation.</li><li>Round 2: toàn bộ 20 eval (E1–E20) đạt trên máy đo — E18 (judgment) có 1/3 lens UNCERTAIN chờ human_override, không tự nâng verdict. Verdict tổng vẫn REJECT vì lệnh suite `bunx turbo run lint --force` (app#lint, 2 lỗi biome a11y — noNoninteractiveTabindex và noAutofocus — mới xuất hiện trong apps/app/test/cua-vao-sign-in.dom.tsx) thất bại; lệnh này không gắn AC nào nên không vào failed_evals, nhưng CLAUDE.md liệt `bun run lint` là 1 trong 5 lệnh chứng minh bắt buộc của kho.</li><li>Round 3: sau ký lại Gate 1 (mở rộng E21), toàn bộ 21 eval (E1–E21) đạt trên máy đo/ui-check — gồm cả E16 (agent đo ở lượt đầu của round này bị skip/chết giữa chừng, đã chạy lại thành công: 19 DUNG, 0 SAI, mã thoát 0) và E14 ui-check (8/8 ảnh khớp Expected ở cả 4 khổ x 2 theme). Cả 4 lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều xanh — lỗi biome a11y của round 2 đã hết. E18 (judgment) hội đồng 3/3 lens đề xuất PASS, không lens nào UNCERTAIN (khác round 2, khi 1/3 lens UNCERTAIN). Verdict tổng round này là PASS.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
