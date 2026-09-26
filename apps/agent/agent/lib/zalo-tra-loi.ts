@@ -134,6 +134,21 @@ async function dongVaBao(
 	}
 }
 
+export async function capNhatToken(sk: SuKienZalo): Promise<void> {
+	if (!sk.hoiId) return;
+	const hang = await db.zaloHoi.findUnique({
+		where: { id: sk.hoiId },
+		select: { hoiLuc: true, sessionId: true },
+	});
+	if (!hang) return;
+	const token = await tongToken(sk.sessionId ?? hang.sessionId, hang.hoiLuc);
+	if (token.vao === null && token.ra === null) return;
+	await db.zaloHoi.update({
+		where: { id: sk.hoiId },
+		data: { tokenVao: token.vao, tokenRa: token.ra },
+	});
+}
+
 export async function loiVe(
 	sk: SuKienZalo,
 	deps: PhuThuocTraLoi = {},

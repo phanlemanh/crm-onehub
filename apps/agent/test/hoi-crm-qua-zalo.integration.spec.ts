@@ -458,7 +458,11 @@ function ctxZalo(sessionId: string, hoiId: string, chatId: string): Ctx {
 }
 
 async function suKien(
-	ten: "message.completed" | "turn.failed" | "session.failed",
+	ten:
+		| "message.completed"
+		| "turn.failed"
+		| "session.failed"
+		| "turn.completed",
 	data: DuLieuSuKienKenh,
 	chatId: string,
 	ctx?: Ctx,
@@ -1107,5 +1111,43 @@ describe("loi-tac-tu", () => {
 			"dang-hoi",
 		);
 		expect(guiMayChu("ZA")).toEqual([]);
+	});
+});
+
+describe("duong-chinh", () => {
+	test("duong-chinh: token cua buoc cuoi toi sau cau tra loi van duoc cong khi het luot", async () => {
+		const A = await gieoVai("An", "member");
+		await noiZalo(A.id, "ZA");
+		moMayChu();
+		const eve = eveGia();
+		const w = await guiWebhook("ZA", "Một câu", { eve });
+		await eve.xong();
+		const h = await hangCua(w.messageId);
+		const ctx = ctxZalo("ses-gia-1", h?.id ?? "", "ZA");
+		await gieoBuoc("ses-gia-1", [{ inputTokens: 100, outputTokens: 20 }]);
+		await suKien(
+			"message.completed",
+			{ message: "Trả lời.", finishReason: "stop" },
+			"ZA",
+			ctx,
+		);
+		await gieoBuoc("ses-gia-1-cuoi", []);
+		const xuLy = audit.events["*"] as unknown as XuLyAudit;
+		await xuLy(
+			{
+				type: "step.completed",
+				data: { usage: { inputTokens: 50, outputTokens: 10, costUsd: null } },
+				meta: {
+					id: `hcz-ev-ses-gia-1-cuoi-${Date.now()}`,
+					at: new Date().toISOString(),
+				},
+			},
+			phienAudit("ses-gia-1", ZALO.hoi.purpose),
+		);
+		await suKien("turn.completed", {}, "ZA", ctx);
+		const cuoi = await hangCua(w.messageId);
+		expect(cuoi?.ketQua).toBe("da-tra-loi");
+		expect(cuoi?.tokenVao, "token buoc cuoi duoc cong").toBe(150);
+		expect(cuoi?.tokenRa).toBe(30);
 	});
 });

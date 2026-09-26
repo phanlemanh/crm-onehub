@@ -12,6 +12,7 @@ import { ZALO } from "../lib/zalo-config";
 import { chatCuaToken } from "../lib/zalo-hoi";
 import {
 	canHoiLai,
+	capNhatToken,
 	loiVe,
 	type SuKienZalo,
 	traLoiVe,
@@ -54,6 +55,9 @@ export const zaloEvents: ChannelEvents = {
 		await canHoiLai(suKien(channel, ctx), (token) =>
 			channel.setContinuationToken(token),
 		);
+	},
+	async "turn.completed"(_data, channel, ctx) {
+		await capNhatToken(suKien(channel, ctx));
 	},
 	async "turn.failed"(_data, channel, ctx) {
 		await loiVe(suKien(channel, ctx));
