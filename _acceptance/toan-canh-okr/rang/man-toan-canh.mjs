@@ -600,6 +600,7 @@ async function gieoHop() {
 	);
 	await capNhat(c, [muc(Kb, 26, "thap")], tuanNayLuc(1));
 	await capNhat(c, [muc(Ka, 26, "thap")], tuanNayLuc(2));
+	await capNhat(c, [muc(Ka, 27, "thap")], tuanNayLuc(6));
 	await capNhat(c, [muc(Kc, 27, "vua", "Đối tác lùi lịch ký")], tuanNayLuc(3));
 	await capNhat(c, [muc(Kf, 30, "cao")], tuanNayLuc(4));
 	OKR.Y = await moi(
@@ -1363,6 +1364,40 @@ async function buocCay() {
 		OKR.B1.id,
 	);
 	await t.close();
+
+	const p = await moTrang(
+		cookie.truongP1,
+		RONG,
+		theoDonVi(`donOkr=nguoi:${id.k}`),
+	);
+	const cayDonVi = `[role='tree'][aria-label='${CHU.cayDonVi}']`;
+	await hienSel(p, cayDonVi, "E5: trang mot nguoi co cay don vi");
+	const tab0 = await demSel(p, `${cayDonVi} [tabindex='0']`);
+	kiem(
+		`E5 (AC-3): trang mot nguoi, cay don vi co dung mot muc trong thu tu Tab (thay ${tab0})`,
+		tab0 === 1,
+	);
+	let tabNguoi = 0;
+	while (tabNguoi < 60) {
+		await p.keyboard.press("Tab");
+		tabNguoi += 1;
+		if (
+			await p.evaluate(
+				(s) => document.activeElement?.closest(s) !== null,
+				cayDonVi,
+			)
+		)
+			break;
+	}
+	kiem(
+		`E5 (AC-3): trang mot nguoi, Tab toi duoc cay don vi (${tabNguoi} lan Tab)`,
+		await p.evaluate(
+			(s) => document.activeElement?.closest(s) !== null,
+			cayDonVi,
+		),
+	);
+	await chup(p, "E5-buoc-cay-5.png");
+	await p.close();
 
 	const u = await moTrang(cookie.truongP1, RONG, theoDonVi());
 	await hienSel(u, `[role='tree'][aria-label='${CHU.cayDonVi}']`);
