@@ -20,6 +20,7 @@ const CAU = {
 	kyDaQua: "Chu kỳ đã qua ngày cuối — không ghi số nữa.",
 	mocChi01: "KR kiểu «mốc» chỉ nhận 0 (chưa xong) hoặc 1 (xong).",
 	phanTramNgoai: "KR kiểu «phần trăm» chỉ nhận giá trị trong 0–100.",
+	daBo: "Mục tiêu này đã bỏ.",
 } as const;
 
 let app: NestExpressApplication;
@@ -38,6 +39,7 @@ const s = {
 	krApiMoc: "",
 	krApiChamDiem: "",
 	krApiQuaHan: "",
+	krApiDaBo: "",
 };
 const taoCac = { user: [] as string[], cycle: [] as string[] };
 
@@ -63,7 +65,11 @@ async function taoCycle(
 async function taoKr(
 	cycleId: string,
 	ownerUserId: string,
-	tuy: { kind?: string; nguon?: "api" | "crm" } = {},
+	tuy: {
+		kind?: string;
+		nguon?: "api" | "crm";
+		trangThai?: "nhap" | "cong-bo" | "da-bo";
+	} = {},
 ): Promise<string> {
 	const objective = await db.okrObjective.create({
 		data: {
@@ -72,7 +78,7 @@ async function taoKr(
 			personUserId: ownerUserId,
 			ownerUserId,
 			kind: "cam-ket",
-			status: "nhap",
+			status: tuy.trangThai ?? "nhap",
 			title: id("mt"),
 		},
 	});
@@ -180,6 +186,10 @@ beforeAll(async () => {
 	s.krApiMoc = await taoKr(dangChay, s.p, { nguon: "api", kind: "moc" });
 	s.krApiChamDiem = await taoKr(chamDiem, s.p, { nguon: "api" });
 	s.krApiQuaHan = await taoKr(quaHan, s.p, { nguon: "api" });
+	s.krApiDaBo = await taoKr(dangChay, s.p, {
+		nguon: "api",
+		trangThai: "da-bo",
+	});
 });
 
 afterAll(async () => {
@@ -343,5 +353,20 @@ describe("okr-khoa-api", () => {
 		expect(await soChupApi(s.krApiQuaHan)).toBe(truoc.soChup);
 		expect(await vetGhiSoApi(s.krApiQuaHan)).toBe(truoc.vet);
 		expect(await giaTriHienTai(s.krApiQuaHan)).toBe(truoc.giaTri);
+	});
+
+	test("muc tieu da bo: tu choi, khong ghi gi", async () => {
+		const truoc = {
+			soChup: await soChupApi(s.krApiDaBo),
+			vet: await vetGhiSoApi(s.krApiDaBo),
+			giaTri: await giaTriHienTai(s.krApiDaBo),
+		};
+		const res = await ghi(s.khoaP, s.krApiDaBo, 9);
+		expect(`HTTP ${res.status} ${res.body?.message}`).toBe(
+			`HTTP 400 ${CAU.daBo}`,
+		);
+		expect(await soChupApi(s.krApiDaBo)).toBe(truoc.soChup);
+		expect(await vetGhiSoApi(s.krApiDaBo)).toBe(truoc.vet);
+		expect(await giaTriHienTai(s.krApiDaBo)).toBe(truoc.giaTri);
 	});
 });

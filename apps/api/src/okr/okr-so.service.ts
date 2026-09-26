@@ -293,9 +293,13 @@ export class OkrSoService {
 				where: { id: input.id },
 				include: {
 					nguonMay: true,
-					objective: { select: { cycle: { select: { endsOn: true } } } },
+					objective: {
+						select: { status: true, cycle: { select: { endsOn: true } } },
+					},
 				},
 			});
+			if (trangThaiMucTieu.parse(kr.objective.status) === "da-bo")
+				throw new BadRequestException(T.daBo);
 			if (kr.nguonMay?.loai !== "api")
 				throw new BadRequestException(T.so.khongNhanApi);
 			const hom = ngayVN(now);
