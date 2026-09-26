@@ -63,7 +63,8 @@ trang) · `docLuc?` · `docGiaTri Decimal?` · `docLoi?` · `thuLuc?` · `taoBoi
 `OkrSoChup` — lịch sử chỉ thêm: `id` · `keyResultId` · `ngay DATE` (ngày VN mà số
 đúng tới hết ngày đó) · `giaTri Decimal(18,4)` · `nguon` · `chiSo?` · `phamVi Json?`
 · `bac?` (chép định nghĩa lúc chụp, để lịch sử tự mô tả) · `tacGiaUserId?` (khoá
-API) · `chupLuc` · chỉ mục `[keyResultId, ngay]`. **Chỉ mục duy nhất một phần**
+API) · `chupLuc` · chỉ mục `[keyResultId, ngay]`. Khoá ngoại tới KR là
+`ON DELETE RESTRICT`: không đường xoá nào (kể cả lan từ mục tiêu) mang lịch sử đi. **Chỉ mục duy nhất một phần**
 `(keyResultId, ngay) WHERE nguon IN ('crm','bang-tinh')` — một KR một ngày một
 dòng máy; dòng `api` nhiều dòng một ngày được, số của ngày là dòng mới nhất.
 Không thủ tục nào sửa hay xoá bảng này; `soi-ma` chặn `okrSoChup.update*` /
@@ -82,6 +83,10 @@ lực** — nguồn lái `currentValue` và tiến độ. Thêm giá trị `bang
   KR tay được **thêm số đo cạnh** (`OkrNguonKr` mới, `source` giữ `tay`): máy chụp
   và hiện cạnh số tay tới hết kỳ, tiến độ vẫn theo số tay. Đổi hay gỡ nguồn của KR
   máy đã công bố bị từ chối với câu ghim. Kỳ sau đặt KR mới với nguồn máy.
+- **KR đo cạnh trong cập nhật tuần:** ô giá trị **điền sẵn số máy mới nhất**, người
+  sửa được, kèm «Số máy: 15 · 25/10». Người chấp nhận số máy là người thôi đếm tay
+  — đây là cách KR quý 4 (công bố từ 26/10, trước khi lượt này lên) dùng được số
+  máy mà tiến độ không đổi định nghĩa giữa kỳ.
 - Mọi lần đặt, đổi, gỡ để **một dòng vết** `doi-nguon` với trước → sau.
 - Khoá theo pha: như mười một thủ tục ghi, thêm `datNguonKr` và `ghiSoKr`.
 - `updateKeyResult` từ chối đổi `currentValue` của KR nguồn máy ở mọi pha.
@@ -101,7 +106,10 @@ lực** — nguồn lái `currentValue` và tiến độ. Thêm giá trị `bang
 3. Ghi `OkrSoChup` bằng `createMany … skipDuplicates`; KR có `source` bằng loại
    nguồn thì cập nhật `currentValue` trong cùng giao dịch. KR đo cạnh không đụng
    `currentValue`.
-4. Tối đa `OKR_SO.chup.toiDaMoiNhip` KR một nhịp; phần còn lại nhịp sau.
+4. Tối đa `OKR_SO.chup.toiDaMoiNhip` KR và `OKR_SO.sheets.toiDaMoiNhip` lần đọc
+   Sheets một nhịp, mỗi lần đọc có trần `OKR_SO.sheets.tranMs`; phần còn lại nhịp
+   sau. Cả lượt chụp phải xong dưới 60 giây kể cả khi Google treo, để nhắc buổi sáng
+   và hàng việc cùng nhịp không bị trễ (trần sweep của dispatch là 4 phút).
 
 Không dòng vết mỗi ngày: bảng chụp chính là vết của số máy. Ngày đã khép không
 bao giờ chụp lại, nên lưu trữ bản ghi, mở lại thoả thuận, đổi tiền tệ báo cáo hay
@@ -114,6 +122,7 @@ hoặc pha khoá thì `currentValue` đứng yên.
 (khoá của một thành viên — `enableSessionForAPIKeys`). Vào: `giaTri`, `ghiChu?`.
 Quyền: `OkrAccessService.canEditKr` của chủ khoá. Từ chối: KR không có nguồn `api`
 (câu ghim), giá trị không hợp kiểu (`kiemSoTheoKieu`), pha khoá, ngày ngoài kỳ.
+Từ chối cả khi hôm nay (giờ VN) đã qua `endsOn` dù pha chưa chuyển.
 Ghi một `OkrSoChup` (`nguon: api`, `tacGiaUserId`), cập nhật `currentValue` khi
 `source = api`, một dòng vết `ghi-so-api`. Vai «chỉ OKR» gọi được (phạm vi OKR).
 
@@ -143,7 +152,10 @@ giây khi đang chờ. API không gọi Google.
 - `okr.xemTruocChiSo({ chiSo, phamVi, bac?, cycleId })` — số đếm tới lúc này (không
   ghi gì) cho hộp thoại.
 - `okr.lichSuSo({ keyResultId })` — các dòng chụp theo ngày, mới trước.
-- `okr.banGhiChiSo({ keyResultId, ngay?, trang })` — định nghĩa, khoảng ngày, số đã
+- `okr.banGhiChiSo({ keyResultId, ngay?, trang })` — **định nghĩa để tính lại là bản
+  chép trong dòng chụp của ngày đó** (`chiSo`, `phamVi`, `bac`), không phải
+  `OkrNguonKr` hiện tại; không có dòng chụp (KR mới) thì dùng cấu hình hiện tại.
+  Trả định nghĩa, khoảng ngày, số đã
   chụp của `ngay` (mặc định ngày mới nhất), số tính lại lúc bấm cho cùng khoảng,
   cờ `lech`, và một trang bản ghi (`OKR_SO.banGhi.coTrang`) mỗi dòng mang
   `{ loai, id, ten, ngay }` để mở bản ghi trong ngăn chồng. **Vai «chỉ OKR» nhận
@@ -154,16 +166,21 @@ giây khi đang chờ. API không gọi Google.
 
 ## 9. Cập nhật tuần với KR máy
 
-`guiCapNhat` với KR `source ≠ tay`: bỏ giá trị người gửi, ghi `OkrCheckIn.value`
+`guiCapNhat` với KR `source ≠ tay` (crm, api, bang-tinh — cả ba): bỏ giá trị người gửi, ghi `OkrCheckIn.value`
 bằng `currentValue` máy hiện hành, không đụng `currentValue`; mức tự tin và ghi chú
 vẫn bắt buộc như cũ (từ điển «Cập nhật tuần»: số tự chảy không phải cập nhật tuần).
-Màn khoá ô giá trị và ghi «Số từ CRM · 25/10».
+Màn khoá ô giá trị và ghi «Số từ CRM · 25/10» (hoặc API, Sheets). KR đo cạnh: ô
+điền sẵn số máy, sửa được (mục 4).
 
 ## 10. Đường đo
 
-- `_acceptance/so-okr-tu-chay/rang/ty-le-kr-co-nguon.sql` — tỷ lệ KR đã công bố của
-  các bộ phận truyền vào (`SET okr.bo_phan = '<id>,<id>'`) trong chu kỳ quý đang xét
-  có `OkrNguonKr.loai = 'crm'`.
+- `_acceptance/so-okr-tu-chay/rang/ty-le-kr-co-nguon.sql` — trên KR đã công bố của
+  các bộ phận truyền vào (`SET okr.bo_phan = '<id>,<id>'`) trong chu kỳ quý đang xét,
+  trả ba cột tách riêng: tỷ lệ KR nguồn hiệu lực CRM (`source = 'crm'`), tỷ lệ KR đo
+  cạnh CRM (`source = 'tay'` có `OkrNguonKr.loai = 'crm'`), và trong các lần cập nhật
+  tuần của KR đo cạnh sau bản chụp đầu, tỷ lệ lần mà giá trị bằng số máy của ngày
+  trước đó (người nhận số máy = thôi đếm tay). Ngưỡng 50%/20% so với tổng hai cột
+  đầu; cột ba là căn cứ đọc «có thôi đếm tay không».
 - `_acceptance/so-okr-tu-chay/rang/tin-so.mjs` — năm chỉ số (`thoa-thuan-chot-duoc`,
   `thoa-thuan-moi`, `goi-hen-duoc`, `buoc-xong-dung-han`, `email-gui-ra`) tính bằng
   `demChiSo` và bằng SQL đếm độc lập viết riêng trong `rang/dem-doc-lap.sql` (không
@@ -225,6 +242,7 @@ tệp riêng; tệp cũ chỉ nối thêm.
 | ST-so-loi | Ngăn số | `Empty` + «Thử lại» | thử lại |
 | ST-so-api | Ngăn số | không danh sách bản ghi; bảng các lần ghi (ngày, số, người cầm khoá) | — |
 | ST-capnhat-may | Cập nhật tuần | ô giá trị khoá, «Số từ CRM · 25/10» | chọn mức tự tin, ghi chú |
+| ST-capnhat-do-canh | Cập nhật tuần | ô giá trị điền sẵn số máy, sửa được, «Số máy: 15 · 25/10» | giữ hoặc sửa số, chọn mức tự tin |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi

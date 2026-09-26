@@ -41,7 +41,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.sot_khoa_cong_bo
     paths: [apps/api/src/okr/**, apps/api/test/okr-nguon.spec.ts]
-    expected: "exit 0; mục tiêu đã công bố ở pha dang-chay có KR tay T và KR crm C: datNguonKr(T, crm) → ghi được, đọc DB source(T) vẫn 'tay', có okrNguonKr(T), một vết doi-nguon ghi «đo cạnh»; datNguonKr(C, api) và datNguonKr(C, tay) → từ chối câu ghim «Nguồn đã khoá khi công bố», okrNguonKr(C) và source(C) không đổi; updateKeyResult(C, currentValue) bị từ chối câu ghim ở cả ba pha lap-ke-hoach (mục tiêu nháp nguồn crm), dang-chay; updateKeyResult(T, currentValue) ở mục tiêu nháp vẫn ghi được (đối chứng); removeKeyResult trên KR có một dòng okrSoChup → từ chối câu ghim, KR còn. CHIỀU ĐỎ: bản sao datNguonKr không kiểm publishedAt → ca C→api đỏ, bài in source mới."
+    expected: "exit 0; mục tiêu đã công bố ở pha dang-chay có KR tay T và KR crm C: datNguonKr(T, crm) → ghi được, đọc DB source(T) vẫn 'tay', có okrNguonKr(T), một vết doi-nguon ghi «đo cạnh»; datNguonKr(C, api) và datNguonKr(C, tay) → từ chối câu ghim «Nguồn đã khoá khi công bố», okrNguonKr(C) và source(C) không đổi; updateKeyResult(C, currentValue) bị từ chối câu ghim ở pha lap-ke-hoach (mục tiêu nháp nguồn crm) và ở pha dang-chay (ở cham-diem và da-dong mọi ghi đã khoá theo lượt 3 — một ca kiểm lại câu khoá pha); updateKeyResult(T, currentValue) ở mục tiêu nháp vẫn ghi được (đối chứng); removeKeyResult trên KR có một dòng okrSoChup → từ chối câu ghim, KR còn. CHIỀU ĐỎ: bản sao datNguonKr không kiểm publishedAt → ca C→api đỏ, bài in source mới."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -58,7 +58,7 @@ evals:
     executor: test
     cmd: config:executors.test.sot_chup_hieu_nang
     paths: [apps/agent/agent/lib/okr-chup.ts, packages/db/src/okr-chi-so.ts, apps/agent/test/okr-chup-hieu-nang.integration.spec.ts]
-    expected: "exit 0; gieo 200 KR crm chia đều 7 chỉ số và 4 phạm vi cùng 2.000 bản ghi nguồn; một lượt chupSoOkr với trần OKR_SO.chup.toiDaMoiNhip ≥ 200 ghi 200 dòng và chạy dưới OKR_SO.chup.tranMs (in số ms); đếm câu truy vấn (PRISMA_LOG_QUERIES) ở bộ 20 KR và bộ 200 KR: số câu mỗi KR bằng nhau (in hai số). CHIỀU ĐỎ: bản sao nạp phòng ban chính từng người trong vòng lặp bản ghi → số câu mỗi KR ở bộ 200 lớn hơn bộ 20, bài in hai số."
+    expected: "exit 0; (a) gieo 200 KR crm chia đều 7 chỉ số và 4 phạm vi cùng 2.000 bản ghi nguồn; một lượt chupSoOkr ghi 200 dòng và chạy dưới 20 000 ms — con số viết ở đây, không đọc từ OKR_SO (in số ms); đếm câu truy vấn (PRISMA_LOG_QUERIES) ở bộ 20 KR và bộ 200 KR: số câu mỗi KR bằng nhau (in hai số). (b) bộ trộn 50 KR crm + 20 KR bang-tinh với Google giả treo (không trả lời): một lượt xong dưới 60 000 ms, số lần gọi fetch giả ≤ OKR_SO.sheets.toiDaMoiNhip × số lần thử, 50 KR crm có dòng, KR bang-tinh chưa đọc được không có dòng và được đọc ở lượt kế (Google giả trả lời) — in số lần gọi mỗi lượt. CHIỀU ĐỎ: bản sao nạp phòng ban chính từng người trong vòng lặp bản ghi → số câu mỗi KR ở bộ 200 lớn hơn bộ 20, bài in hai số; bản sao đọc Sheets không trần mỗi nhịp → (b) vượt 60 000 ms, bài in thời gian."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -66,7 +66,7 @@ evals:
     executor: script
     cmd: config:executors.script.sot_soi_chi_them
     paths: [apps/**, packages/**, _acceptance/so-okr-tu-chay/rang/soi-ma.mjs]
-    expected: "exit 0; script suy gốc kho từ vị trí của nó, soi AST (typescript) mọi .ts/.tsx dưới apps/ và packages/ trừ test/: không lời gọi nào có dạng <x>.okrSoChup.update|updateMany|upsert|delete|deleteMany; lời gọi okrSoChup.create* chỉ ở apps/agent/agent/lib/okr-chup.ts và dịch vụ ghiSoKr (in danh sách tệp và số lời gọi tìm thấy — phải > 0). CHIỀU ĐỎ: --chieu-do chép okr-chup.ts vào tmpdir, chèn một okrSoChup.updateMany → script đỏ in «okrSoChup bị sửa: <tệp>:<dòng>»."
+    expected: "exit 0; script suy gốc kho từ vị trí của nó, soi AST (typescript) mọi .ts/.tsx dưới apps/ và packages/ trừ test/: không lời gọi nào có dạng <x>.okrSoChup.update|updateMany|upsert|delete|deleteMany; không chuỗi SQL thô ($executeRaw, $queryRaw, $executeRawUnsafe) nào chứa okrSoChup cùng UPDATE hoặc DELETE; lời gọi okrSoChup.create* chỉ ở apps/agent/agent/lib/okr-chup.ts và dịch vụ ghiSoKr (in danh sách tệp và số lời gọi tìm thấy — phải > 0). CHIỀU ĐỎ: --chieu-do chép okr-chup.ts vào tmpdir, chèn một okrSoChup.updateMany → script đỏ in «okrSoChup bị sửa: <tệp>:<dòng>»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -84,7 +84,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.sot_ban_ghi
     paths: [apps/api/src/okr/**, packages/db/src/okr-chi-so.ts, apps/api/test/okr-nguon.spec.ts]
-    expected: "exit 0; KR crm có bản chụp ba ngày (57 thoả thuận chốt được, cỡ trang OKR_SO.banGhi.coTrang = 50): banGhiChiSo không ngày → ngày mới nhất, trang 1 có 50 dòng, trang 2 có 7, tổng dòng hai trang = soTinhLai = 57 = soDaChup, lech false; mỗi dòng có {loai:'deal', id, ten, ngay} và tập id hai trang bằng tập 57 id gieo; với ngày cũ nhất → khoảng ngày và soDaChup của ngày đó. Ma trận vai viết trước 4 ca: owner/admin, trưởng P1 (member), thành viên thường → đọc được; vai okr → FORBIDDEN câu ghim «Danh sách bản ghi thuộc dữ liệu đối tác», và cùng người đó gọi lichSuSo, objective → đọc được số. KR nguồn api có hai lần ghi → banGhiChiSo trả lanGhi [{ngay, giaTri, nguoi}] mới trước, banGhi rỗng. CHIỀU ĐỎ: bản sao banGhiChiSo dựng where riêng thiếu lọc archivedAt → tổng dòng 58 ≠ soTinhLai 57, bài in hai số."
+    expected: "exit 0; KR crm của mục tiêu nháp có bản chụp ba ngày ghi bằng chupSoOkr thật với now lùi từng ngày (không chèn bảng tay) (57 thoả thuận chốt được, cỡ trang OKR_SO.banGhi.coTrang = 50): banGhiChiSo không ngày → ngày mới nhất, trang 1 có 50 dòng, trang 2 có 7, tổng dòng hai trang = soTinhLai = 57 = soDaChup, lech false; mỗi dòng có {loai:'deal', id, ten, ngay} và tập id hai trang bằng tập 57 id gieo; với ngày cũ nhất → khoảng ngày và soDaChup của ngày đó. Ma trận vai viết trước 4 ca: owner/admin, trưởng P1 (member), thành viên thường → đọc được; vai okr → FORBIDDEN câu ghim «Danh sách bản ghi thuộc dữ liệu đối tác», và cùng người đó gọi lichSuSo, objective → đọc được số. Ca đổi định nghĩa sau khi chụp: datNguonKr đổi phạm vi KR từ phong-ban:P1 sang bo-phan:B1 (mục tiêu nháp) → banGhiChiSo(ngày đã chụp) trả phamVi phong-ban:P1 lấy từ dòng chụp, lech false, danh sách chỉ thoả thuận của P1. KR nguồn api có hai lần ghi → banGhiChiSo trả lanGhi [{ngay, giaTri, nguoi}] mới trước, banGhi rỗng. CHIỀU ĐỎ: bản sao banGhiChiSo dựng where riêng thiếu lọc archivedAt → tổng dòng 58 ≠ soTinhLai 57, bài in hai số; bản sao đọc okrNguonKr hiện tại thay vì dòng chụp → ca đổi định nghĩa đỏ, bài in phamVi và lech."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
@@ -149,7 +149,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.sot_khoa_api
     paths: [apps/api/src/okr/**, apps/api/src/trpc/**, packages/auth/src/**, apps/api/test/okr-khoa-api.spec.ts]
-    expected: "exit 0; dựng app Nest thật và gọi HTTP POST /rest/okr/key-results/{id}/value với x-api-key tạo qua Better Auth cho từng người. MA TRẬN VIẾT TRƯỚC 9 ca × (mã HTTP, câu ghim, số dòng okrSoChup, số dòng vết, currentValue): khoá P hợp lệ → 200, +1 dòng nguon api tacGiaUserId=P, +1 vết ghi-so-api, currentValue = giá trị gửi; khoá P lần hai cùng ngày → +1 dòng nữa, lichSuSo ngày đó trả giá trị lần hai; khoá vai okr phụ trách KR api khác → 200; khoá thành viên không sửa được → 403; không khoá → 401; KR nguồn crm → 400 «KR này không nhận số qua khoá API»; phần trăm 120 → 400; mốc 2 → 400; pha cham-diem → từ chối. Ca từ chối: số dòng và currentValue không đổi (đọc DB). CHIỀU ĐỎ: bản sao ghiSoKr bỏ canEditKr → ca 403 đỏ in mã 200 và dòng lọt."
+    expected: "exit 0; dựng app Nest thật và gọi HTTP POST /rest/okr/key-results/{id}/value với x-api-key tạo qua Better Auth cho từng người. MA TRẬN VIẾT TRƯỚC 9 ca × (mã HTTP, câu ghim, số dòng okrSoChup, số dòng vết, currentValue): khoá P hợp lệ → 200, +1 dòng nguon api tacGiaUserId=P, +1 vết ghi-so-api, currentValue = giá trị gửi; khoá P lần hai cùng ngày → +1 dòng nữa, lichSuSo ngày đó trả giá trị lần hai; khoá vai okr phụ trách KR api khác → 200; khoá thành viên không sửa được → 403; không khoá → 401; KR nguồn crm → 400 «KR này không nhận số qua khoá API»; phần trăm 120 → 400; mốc 2 → 400; pha cham-diem → từ chối; now sau endsOn một ngày với pha vẫn dang-chay → từ chối câu ghim «Chu kỳ đã qua ngày cuối». Ca từ chối: số dòng và currentValue không đổi (đọc DB). CHIỀU ĐỎ: bản sao ghiSoKr bỏ canEditKr → ca 403 đỏ in mã 200 và dòng lọt."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E16
@@ -176,7 +176,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.sot_cap_nhat_may
     paths: [apps/api/src/okr/okr-cap-nhat.service.ts, apps/api/src/okr/**, apps/api/test/okr-cap-nhat.spec.ts]
-    expected: "exit 0; người phụ trách KR crm M (currentValue máy 15) và KR tay T; capNhatTuan trả nguon {M: crm, T: tay}; guiCapNhat lô [{M, value 99, cao, 'ghi chú'}, {T, 7, vua, 'x'}] → đọc DB: okrCheckIn(M).value = 15 (không phải 99), currentValue(M) vẫn 15; okrCheckIn(T).value = 7, currentValue(T) = 7; lô có M thiếu mức tự tin → từ chối cả lô như lượt 4, không dòng nào ghi. CHIỀU ĐỎ: bản sao guiCapNhat không rẽ nhánh nguồn → M đỏ in 99."
+    expected: "exit 0; người phụ trách KR crm M (currentValue máy 15), KR api A (currentValue 40), KR đo cạnh C (số tay 5, số máy mới nhất 8) và KR tay T; capNhatTuan trả MA TRẬN viết trước {M: {nguon crm, soMay 15}, A: {nguon api, soMay 40}, C: {nguon tay, doCanh true, soMay 8}, T: {nguon tay, soMay null}}; guiCapNhat lô [{M, 99}, {A, 99}, {C, 8}, {T, 7}] kèm mức tự tin và ghi chú → đọc DB: okrCheckIn(M).value = 15, okrCheckIn(A).value = 40 (không phải 99), currentValue(M) = 15, currentValue(A) = 40; okrCheckIn(C).value = 8 và currentValue(C) = 8 (người nhận số máy); okrCheckIn(T).value = 7; lô có M thiếu mức tự tin → từ chối cả lô như lượt 4, không dòng nào ghi. CHIỀU ĐỎ: bản sao guiCapNhat rẽ nhánh chỉ khi source === 'crm' → A đỏ in 99."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19
@@ -187,6 +187,7 @@ evals:
     steps:
       - "Cùng phiên đo E11; người phụ trách KR crm và KR tay"
       - "Mở {APP_URL}/<slug>/okr/cap-nhat-tuan ở 1440/vi → dòng KR crm: ô giá trị disabled, chữ «Số từ CRM · <ngày>», nhóm mức tự tin và ô ghi chú bật → ảnh buoc-cap-nhat-may"
+      - "Dòng KR đo cạnh: ô giá trị bật, value bằng số máy mới nhất, chữ «Số máy: <số> · <ngày>» → ảnh buoc-cap-nhat-do-canh"
       - "Gửi thiếu mức tự tin cho KR crm → lỗi tại dòng; chọn mức, gửi → thành công"
       - "Ảnh ở 390; scrollWidth <= innerWidth"
     paths: ["apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**", apps/app/lib/messages/okr-so.ts, _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs]
@@ -208,7 +209,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.sot_ty_le
     paths: [_acceptance/so-okr-tu-chay/rang/ty-le-kr-co-nguon.sql, _acceptance/so-okr-tu-chay/rang/ty-le.mjs, apps/api/src/okr/**]
-    expected: "exit 0; trên kho đo: gieo qua okr.datNguonKr thật (không chèn bảng tay) hai bộ phận truyền vào với năm KR đã công bố, ba có nguồn crm (một trong ba là đo cạnh), một KR bộ phận khác có nguồn crm, một KR nháp nguồn crm; SET okr.bo_phan rồi chạy câu SQL → 3 / 5 / 60. CHIỀU ĐỎ: --chieu-do chạy bản sao SQL bỏ lọc bộ phận → 4/6, exit 1 in hai kết quả."
+    expected: "exit 0; trên kho đo: gieo qua okr.datNguonKr, chupSoOkr và okr.guiCapNhat thật (không chèn bảng tay) hai bộ phận truyền vào với năm KR đã công bố — hai nguồn crm hiệu lực, một đo cạnh crm, hai tay; một KR bộ phận khác nguồn crm; một KR nháp nguồn crm; KR đo cạnh có bốn lần cập nhật tuần sau bản chụp đầu, ba lần bằng số máy của ngày trước đó. SET okr.bo_phan rồi chạy câu SQL → ba cột: hiệu lực 2/5, đo cạnh 1/5, nhận số máy 3/4. CHIỀU ĐỎ: --chieu-do chạy bản sao SQL gộp hai cột đầu thành một → script đỏ in «đo cạnh bị gộp»; bản sao bỏ lọc bộ phận → hiệu lực 3/6, exit 1 in hai kết quả."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E22
@@ -249,5 +250,5 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.sot_migration_chi_them
     paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs]
-    expected: "exit 0; script (khuôn dat-okr-trong-crm/rang/migration-chi-them.mjs) đọc mọi thư mục migration mới so với origin/onehub; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE (UNIQUE) INDEX trên bảng MỚI kể cả WHERE một phần, ALTER TABLE <bảng mới> ADD CONSTRAINT … FOREIGN KEY; cấm UPDATE/DELETE/DROP/ALTER COLUMN/RENAME/ADD COLUMN trên bảng có sẵn; số câu > 0 in ra. schema.prisma: các model Okr* liền nhau và là các model cuối, OkrNguonKr và OkrSoChup nằm trong dãy đó. Trên cơ sở dữ liệu tạm: gieo KR, cập nhật tuần, cây tổ chức, thoả thuận bằng lược đồ trước, chạy migration mới, đọc lại số dòng và mọi okrKeyResult.source = 'tay'. CHIỀU ĐỎ: 3 tệp giả trong tmpdir (ADD COLUMN trên okrKeyResult; DROP INDEX; model OkrSoChup đặt giữa tệp) → exit 1 thông điệp ghim từng loại."
+    expected: "exit 0; script (khuôn dat-okr-trong-crm/rang/migration-chi-them.mjs) đọc mọi thư mục migration mới so với origin/onehub; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE (UNIQUE) INDEX trên bảng MỚI kể cả WHERE một phần, ALTER TABLE <bảng mới> ADD CONSTRAINT … FOREIGN KEY; cấm UPDATE/DELETE/DROP/ALTER COLUMN/RENAME/ADD COLUMN trên bảng có sẵn; số câu > 0 in ra. schema.prisma: các model Okr* liền nhau và là các model cuối, OkrNguonKr và OkrSoChup nằm trong dãy đó. Trên cơ sở dữ liệu tạm: gieo KR, cập nhật tuần, cây tổ chức, thoả thuận bằng lược đồ trước, chạy migration mới, đọc lại số dòng và mọi okrKeyResult.source = 'tay'. CHIỀU ĐỎ: 3 tệp giả trong tmpdir (ADD COLUMN trên okrKeyResult; DROP INDEX; model OkrSoChup đặt giữa tệp) → exit 1 thông điệp ghim từng loại. Thêm: khoá ngoại okrSoChup.keyResultId có ON DELETE RESTRICT (đọc SQL migration); tệp giả thứ tư mang ON DELETE CASCADE → exit 1 «bản chụp bị xoá lan»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
