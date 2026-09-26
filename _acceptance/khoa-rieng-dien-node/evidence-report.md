@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9daa3223456892b4bd41704cee2b5376834f0292
+verified_commit: da4783efd107b9ca1aaa77add22247ff0985b9a4
 human_signoff:
 ---
 
@@ -96,3 +96,7 @@ Round 2: chủ kho quyết bỏ AC-4/E4 (răng không-hồi-quy của các hồ 
 ### Re-pin lần 1 — 2026-09-26, do gộp onehub sau #144 trước khi merge
 run_id: repin-20260926T002546Z-69866
 sha: 9daa3223456892b4bd41704cee2b5376834f0292 · suites: 4 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-26, do gộp onehub sau #148 trước khi merge
+run_id: repin-20260926T004149Z-87730
+sha: da4783efd107b9ca1aaa77add22247ff0985b9a4 · suites: 4 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng
