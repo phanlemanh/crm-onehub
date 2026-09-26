@@ -357,6 +357,35 @@ API; the API only reads and writes rows.
   like every other assistant conversation, and that is where a manual review reads
   them. Log lines carry `message_id`, `hoiId` and `zaloChatId`, never text.
 
+### Chụp số OKR mỗi ngày
+
+Nhịp dispatch chụp số OKR qua `chupSoOkr` (`lib/okr-chup.ts`), cạnh `lenLichNhac` —
+không có lịch riêng. Mỗi nhịp chụp số của **hôm qua** theo giờ VN cho mọi KR có nguồn máy
+chưa có dòng của ngày đó; phần lớn các nhịp chỉ là một câu truy vấn trả rỗng.
+
+- **Chọn KR:** có `OkrNguonKr` loại `crm` hoặc `bang-tinh`, mục tiêu không `da-bo`, chu kỳ
+  ở pha ghi được (`PHA_GHI_DUOC`), hôm qua nằm trong `[startsOn, endsOn]`, và chưa có dòng
+  `okrSoChup` máy cho hôm qua. Tối đa `OKR_SO.chup.toiDaMoiNhip` KR một nhịp; phần còn lại
+  nhịp sau.
+- **`crm`** đi qua `chupKrCrm` (`@crm/db/okr-chi-so`) — cùng `demChiSo` mà API dùng cho
+  bấm vào số, đếm từ đầu kỳ tới hết hôm qua. **`bang-tinh`** đọc ô (mục dưới); đọc lỗi
+  thì ghi `docLoi` và `thuLuc`, bỏ KR đó tới khi qua `OKR_SO.sheets.thuLaiMs`.
+- **Ghi bằng `createMany … skipDuplicates`**, dựa trên chỉ mục duy nhất một phần
+  `(keyResultId, ngay)` cho dòng máy: nhịp chạy lại hay hai lượt chồng nhau không thêm
+  dòng. Dòng chép định nghĩa lúc đếm (`chiSo`, `phamVi`, `bac`).
+- **`currentValue` chỉ đổi khi nguồn hiệu lực bằng loại nguồn** (`source = crm` với KR
+  crm, `source = bang-tinh` với KR Sheets), trong cùng giao dịch, và chỉ khi không có
+  dòng máy nào mới hơn. KR đo cạnh (`source = tay`) có dòng chụp nhưng `currentValue` là
+  của người.
+- **Ngày đã chụp không bao giờ chụp lại.** Lưu trữ bản ghi, mở lại thoả thuận, chuyển
+  người sang phòng khác hay đổi tiền tệ báo cáo sau đó không đổi số đã chụp; KR của chu
+  kỳ đã qua `endsOn` hay đã khoá thì không được chọn nữa, nên `currentValue` đứng yên.
+  Bảng chụp là vết của số máy — không có dòng `OkrTrail` mỗi ngày.
+- **Cả lượt có trần thời gian.** Không bắt đầu một lần đọc Sheets nếu thời gian đã trôi
+  cộng `OKR_SO.sheets.tranMs` vượt `OKR_SO.chup.hanNhipMs`, và tối đa
+  `OKR_SO.sheets.toiDaMoiNhip` lần đọc một nhịp — Google treo không làm trễ nhắc buổi sáng
+  hay hàng việc cùng nhịp. Lỗi của một KR ghi log bằng tên lỗi và không dừng các KR khác.
+
 ### Đọc Google Sheets (OKR)
 
 `lib/okr-sheets.ts` đọc một ô cho KR nguồn `bang-tinh`, bằng tài khoản dịch vụ chỉ đọc

@@ -1,12 +1,19 @@
 import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
 import { db } from "@crm/db";
 import { chupKrCrm } from "@crm/db/okr-chi-so";
+import {
+	readReportingCurrency,
+	writeReportingCurrency,
+} from "@crm/db/settings";
 import { parseDocSheetPayload, parseOkrNguon } from "@crm/validation/okr-nguon";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { ConversionService } from "../src/currency/conversion.service";
+import { DealsService } from "../src/deals/deals.service";
 import { OkrSoService } from "../src/okr/okr-so.service";
 import {
 	type AiHoacCookie,
+	datViTri,
 	dungSan,
 	goi,
 	goiQuery,
@@ -264,6 +271,180 @@ async function mucTieuCua(krId: string, ai: AiHoacCookie): Promise<KrRa> {
 	const ra = mt.keyResults.find((x) => x.id === krId);
 	if (!ra) throw new Error(`okr.objective không trả KR ${krId}`);
 	return ra;
+}
+
+const TU_VN = new Date("2026-03-31T17:00:00Z");
+const cuoiNgayVN = (ngay: string) => new Date(`${ngay}T17:00:00Z`);
+
+async function demDocLap(phongBanId: string, ngay: string) {
+	const nguoi = await db.orgPlacement.findMany({
+		where: { primaryDepartmentId: phongBanId },
+		select: { userId: true },
+	});
+	return db.deal.count({
+		where: {
+			stage: "CLOSED_WON",
+			archivedAt: null,
+			ownerId: { in: nguoi.map((n) => n.userId) },
+			closedAt: { gte: TU_VN, lt: cuoiNgayVN(ngay) },
+		},
+	});
+}
+
+async function dongNgay(keyResultId: string, ngay: string) {
+	const rows = await db.okrSoChup.findMany({
+		where: { keyResultId, ngay: new Date(`${ngay}T00:00:00Z`) },
+		select: { giaTri: true, nguon: true },
+	});
+	return rows.map((r) => ({ giaTri: Number(r.giaTri), nguon: r.nguon }));
+}
+
+async function lichSuKhongDoiApi() {
+	const phong = async (ten: string) =>
+		(
+			await db.department.create({
+				data: { name: ma(ten), position: 0, divisionId: s.B1 },
+			})
+		).id;
+	const P1 = await phong("ls-P1");
+	const P2 = await phong("ls-P2");
+	const P3 = await phong("ls-P3");
+	const a = await nguoiMoi("ls-a");
+	const b = await nguoiMoi("ls-b");
+	const c = await nguoiMoi("ls-c");
+	await db.orgPlacement.createMany({
+		data: [
+			{ userId: a, primaryDepartmentId: P1 },
+			{ userId: b, primaryDepartmentId: P1 },
+			{ userId: c, primaryDepartmentId: P2 },
+		],
+	});
+	const thoaThuan = async (ownerId: string) => {
+		const d = await db.deal.create({
+			data: {
+				name: ma("ls-thoa-thuan"),
+				companyId: s.cty,
+				ownerId,
+				stage: "CLOSED_WON",
+				closedAt: CHOT_SOM,
+			},
+		});
+		s.dealKhac.push(d.id);
+		return d.id;
+	};
+	const moLai = await thoaThuan(b);
+	const luuTru = await thoaThuan(b);
+	await thoaThuan(a);
+	await thoaThuan(c);
+
+	const mt = await mucTieu("dang-chay", "nhap");
+	const chinh = await kr(mt, "tay");
+	const doiChung = await kr(mt, "tay");
+	for (const [id, P] of [
+		[chinh, P1],
+		[doiChung, P2],
+	] as const) {
+		thanhCong(
+			await datNguon({
+				keyResultId: id,
+				loai: "crm",
+				chiSo: "thoa-thuan-chot-duoc",
+				phamVi: { kieu: "phong-ban", id: P },
+			}),
+			`dat nguon ${id === chinh ? "chinh" : "doi chung"}`,
+		);
+		expect((await chup(id, NGAY.D)).ghi, "chupKrCrm ngay D").toBe(1);
+	}
+	expect({
+		chinh: await dongNgay(chinh, NGAY.D),
+		doiChung: await dongNgay(doiChung, NGAY.D),
+	}).toEqual({
+		chinh: [{ giaTri: 3, nguon: "crm" }],
+		doiChung: [{ giaTri: 1, nguon: "crm" }],
+	});
+	const hienTaiTruoc = Number(
+		(
+			await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: chinh },
+				select: { currentValue: true },
+			})
+		).currentValue,
+	);
+	expect(hienTaiTruoc).toBe(3);
+
+	const deals = ungDung().get(DealsService);
+	await deals.archive(luuTru);
+	await deals.setStage({ id: moLai, stage: "QUALIFIED_TO_BUY" }, s.phuTrach);
+	thanhCong(await datViTri(a, P3), "chuyen a sang P3");
+	const conversion = ungDung().get(ConversionService);
+	const tienCu = await readReportingCurrency(db);
+	try {
+		await writeReportingCurrency(db, tienCu === "VND" ? "USD" : "VND");
+		await conversion.rerateAll();
+	} finally {
+		await writeReportingCurrency(db, tienCu);
+		await conversion.rerateAll();
+	}
+	const moLaiSau = await db.deal.findUniqueOrThrow({
+		where: { id: moLai },
+		select: { stage: true, closedAt: true },
+	});
+	expect(moLaiSau).toEqual({ stage: "QUALIFIED_TO_BUY", closedAt: null });
+
+	const lichSu = thanhCong<LichSuRa>(
+		await goiQuery("okr.lichSuSo", s.cookiePhuTrach, {
+			keyResultId: chinh,
+		}),
+		"lichSuSo chinh",
+	);
+	const banGhiD = thanhCong<BanGhiRa>(
+		await banGhi({ keyResultId: chinh, ngay: NGAY.D, trang: 1 }),
+		"banGhiChiSo chinh ngay D",
+	);
+	const banGhiDoiChung = thanhCong<BanGhiRa>(
+		await banGhi({ keyResultId: doiChung, ngay: NGAY.D, trang: 1 }),
+		"banGhiChiSo doi chung ngay D",
+	);
+	const docLap = {
+		chinh: await demDocLap(P1, NGAY.D),
+		doiChung: await demDocLap(P2, NGAY.D),
+	};
+	console.log(
+		`lich-su-khong-doi-api: lichSuSo ${JSON.stringify(lichSu.dong.map((d) => [d.ngay, d.giaTri, d.nguon]))}; banGhiChiSo ngay D chinh soDaChup ${banGhiD.soDaChup} soTinhLai ${banGhiD.soTinhLai} lech ${banGhiD.lech}; doi chung soDaChup ${banGhiDoiChung.soDaChup} soTinhLai ${banGhiDoiChung.soTinhLai} lech ${banGhiDoiChung.lech}; dem doc lap ${JSON.stringify(docLap)}`,
+	);
+	expect(await dongNgay(chinh, NGAY.D)).toEqual([{ giaTri: 3, nguon: "crm" }]);
+	expect(lichSu.dong.map((d) => [d.ngay, d.giaTri, d.nguon])).toEqual([
+		[NGAY.D, 3, "crm"],
+	]);
+	expect(docLap).toEqual({ chinh: 0, doiChung: 1 });
+	expect({
+		ngay: banGhiD.ngay,
+		soDaChup: banGhiD.soDaChup,
+		soTinhLai: banGhiD.soTinhLai,
+		lech: banGhiD.lech,
+	}).toEqual({
+		ngay: NGAY.D,
+		soDaChup: 3,
+		soTinhLai: docLap.chinh,
+		lech: true,
+	});
+	expect({
+		soDaChup: banGhiDoiChung.soDaChup,
+		soTinhLai: banGhiDoiChung.soTinhLai,
+		lech: banGhiDoiChung.lech,
+	}).toEqual({ soDaChup: 1, soTinhLai: docLap.doiChung, lech: false });
+	const hienTaiSau = Number(
+		(
+			await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: chinh },
+				select: { currentValue: true },
+			})
+		).currentValue,
+	);
+	expect(hienTaiSau).toBe(hienTaiTruoc);
+	await db.agentTask.deleteMany({
+		where: { dealId: { in: [moLai, luuTru] } },
+	});
 }
 
 describe("okr-nguon", () => {
@@ -1014,5 +1195,12 @@ describe("okr-nguon", () => {
 			expect(vang.sheetsBat).toBe(false);
 			expect(vang.emailSheets).toBeNull();
 		});
+	});
+
+	describe("lich-su-khong-doi-api", () => {
+		test(
+			"ngay D da chup giu nguyen qua lichSuSo va banGhiChiSo sau luu tru, mo lai, chuyen phong, doi tien; doi chung khong lech",
+			lichSuKhongDoiApi,
+		);
 	});
 });
