@@ -181,9 +181,11 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   nên trang và máy gửi không trả lời khác nhau. Riêng agent truyền thêm
   `{ coToken }`: không có `ZALO_BOT_TOKEN` thì Zalo không được, kể cả khi
   `zaloBotName` chưa kịp về null ở nhịp poll kế.
-  - `kenh = zalo`: dựng tin bằng `dungTin(..., "tron", ZALO.tranKyTu)` (không `*đậm*`,
-    không thoát HTML, đường dẫn in trần sau « — », cắt theo trần ký tự của Zalo) rồi
-    gọi `guiZalo`.
+  - `kenh = zalo`: dựng tin bằng `dungTin(..., "tron", ZALO.tranKyTu, ZALO.loi.goiY)`
+    (không `*đậm*`, không thoát HTML, đường dẫn in trần sau « — », cắt theo trần ký
+    tự của Zalo) rồi gọi `guiZalo`. Mỗi dòng việc mở đầu bằng `n. ` — n là vị trí
+    của mục trong `daGui`, chạy liên tục qua các nhóm — và cuối tin có một dòng gợi ý
+    «Trả lời "xong 2"…»; dòng đó tính vào trần. Khuôn Slack không đánh số.
   - `kenh = slack`: đường Slack như cũ, `sendSlackMessage` bằng token của xưởng.
   - `kenh = null`: đóng `khong-slack` hoặc `khong-khop` như trước khi có Zalo.
 - **Zalo lỗi thì ném, không đổi sang Slack.** HTTP khác 2xx hay `ok: false` từ
@@ -244,7 +246,18 @@ API; the API only reads and writes rows.
   rows are written, a failed reply to the person is logged with its `message_id`
   and still counts as done.
 - **A linked person who writes text gets «Bạn đã nối với <tên CRM>. Nhắc đến lúc
-  08:30.»** instead of the link-code instructions.
+  08:30.»** plus the `xong 2` hint, instead of the link-code instructions.
+- **Trả lời tin nhắc: `xong` (hoặc `done`) kèm số mục đánh dấu bước xong.**
+  `docLenh` (`lib/zalo-lenh.ts`) đọc lệnh; `xongTheoTinNhac` (`lib/tra-loi-nhac.ts`)
+  làm trong cùng giao dịch với `ZaloUpdateSeen`: người nhắn phải còn là thành viên
+  và không mang vai `okr`; số n là phần tử thứ n của `daGui` trong hàng nhắc của
+  hôm nay theo giờ VN, gửi qua Zalo — không có hàng như vậy thì bot nói «Hôm nay
+  chưa có tin nhắc qua Zalo», không đoán theo tin hôm qua. Luật được cả hoặc không:
+  một số ngoài dải, một mục «kế hoạch im» hay «mốc ngày», hay một bước đã bị gỡ
+  hoặc kế hoạch đã đóng thì không bước nào đổi. Bước được ghi bằng `datBuocXong`
+  (`@crm/db/onboarding-buoc`), đúng thủ tục `setStepDone` của màn kế hoạch dùng;
+  dấu vết `buoc.xong` đứng tên người nhắn và mang `source: "zalo"`, còn dấu vết từ
+  màn kế hoạch không có khoá đó. Bot xác nhận một dòng; không có hoàn tác qua Zalo.
 - **Two bridge routes, same Bearer rule as `crm.ts`** (`lib/cau-noi-auth.ts`):
   - `POST /internal/zalo/bot {token?}` checks a Bot Token with `getMe`, registers
     the webhook when the request came in on `https://`, and writes token, secret,

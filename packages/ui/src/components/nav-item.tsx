@@ -1,6 +1,7 @@
 "use client";
 
 import type * as React from "react";
+import { useLayoutEffect, useRef } from "react";
 import { Button } from "@crm/ui/components/button";
 import { cn } from "@crm/ui/lib/utils";
 
@@ -66,4 +67,30 @@ function NavGroupLabel({ className, ...props }: React.ComponentProps<"p">) {
 	);
 }
 
-export { NavGroup, NavGroupLabel, NavItem };
+function NavStrip({ className, ...props }: React.ComponentProps<"nav">) {
+	const khung = useRef<HTMLElement>(null);
+	const daCanh = useRef<Element | null>(null);
+
+	useLayoutEffect(() => {
+		const k = khung.current;
+		const the = k?.querySelector("[aria-current='page']") ?? null;
+		if (!k || !the || the === daCanh.current) return;
+		const hop = k.getBoundingClientRect();
+		if (hop.width === 0) return;
+		daCanh.current = the;
+		const o = the.getBoundingClientRect();
+		if (o.left >= hop.left && o.right <= hop.right) return;
+		k.scrollLeft += o.left - hop.left - (hop.width - o.width) / 2;
+	});
+
+	return (
+		<nav
+			ref={khung}
+			data-slot="nav-strip"
+			className={cn("flex gap-1 overflow-x-auto border-b p-2", className)}
+			{...props}
+		/>
+	);
+}
+
+export { NavGroup, NavGroupLabel, NavItem, NavStrip };
