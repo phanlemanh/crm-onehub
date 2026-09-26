@@ -2068,6 +2068,8 @@ model OkrKeyResult {
   alignedBy     OkrAlignment[] @relation("OkrAlignmentTargetKeyResult")
   checkIns      OkrCheckIn[]
   comments      OkrComment[]
+  nguonMay      OkrNguonKr?
+  soChup        OkrSoChup[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2181,4 +2183,43 @@ model OkrFollow {
   @@id([objectiveId, userId])
   @@index([userId])
   @@map("okrFollow")
+}
+
+model OkrNguonKr {
+  id           String       @id @default(cuid())
+  keyResultId  String       @unique
+  keyResult    OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Cascade)
+  loai         String
+  chiSo        String?
+  phamVi       Json?
+  bac          String?
+  sheetId      String?
+  sheetO       String?
+  docLuc       DateTime?
+  docGiaTri    Decimal?     @db.Decimal(18, 4)
+  docLoi       String?
+  thuLuc       DateTime?
+  taoBoiUserId String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([loai])
+  @@map("okrNguonKr")
+}
+
+model OkrSoChup {
+  id           String       @id @default(cuid())
+  keyResultId  String
+  keyResult    OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  ngay         DateTime     @db.Date
+  giaTri       Decimal      @db.Decimal(18, 4)
+  nguon        String
+  chiSo        String?
+  phamVi       Json?
+  bac          String?
+  tacGiaUserId String?
+  chupLuc      DateTime     @default(now())
+
+  @@index([keyResultId, ngay])
+  @@map("okrSoChup")
 }
