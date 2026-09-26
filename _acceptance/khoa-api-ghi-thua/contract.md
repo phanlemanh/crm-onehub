@@ -79,3 +79,10 @@ một lượt dùng. Pin hoá cũ được ghim lại ở lượt merge theo lu�
 `packageManager: bun@1.3.12`), nên `patchedDependencies` được áp trước
 `build-func.mjs` đóng gói thư viện. AC-6 đo mã đã cài tại chỗ, không đo bản đã
 triển khai.
+
+Giá trị còn lại của bản vá, theo số đo 26/09 trên CSDL test riêng (trước khi vá):
+hai `UPDATE apikey` mỗi lượt dùng khoá tốn khoảng 0.3–0.5ms/lượt tại chỗ (300 lượt
+tuần tự: p50 3.42ms có ghi, 3.04ms bỏ ghi); 20 kết nối cùng ghi một hàng chậm khoảng
+2.5 lần so với ghi hàng riêng (p50 3.4ms so 1.4ms). Trên production mỗi lần ghi là
+một vòng khứ hồi tới Neon — chưa đo. Cái bản vá mua là bớt hai lần ghi và bớt tranh
+khoá hàng khi một khoá bị gọi dày, không phải một cải thiện lớn về độ trễ tại chỗ.
