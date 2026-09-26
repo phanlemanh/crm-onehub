@@ -24,7 +24,7 @@ import {
 	SelectValue,
 } from "@crm/ui/components/select";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
-import type { Locale } from "@crm/ui/lib/locale";
+import { dateFormat } from "@crm/ui/lib/format";
 import {
 	BAC_GHI_DANH,
 	CHI_SO_OKR,
@@ -32,8 +32,8 @@ import {
 	type MaChiSo,
 	PHAM_VI_CHI_SO,
 } from "@crm/validation/okr-chi-so";
-import { NGUON_KR } from "@crm/validation/okr-kr";
-import { oSheet, sheetIdTuUrl } from "@crm/validation/okr-nguon";
+import { type KieuKr, NGUON_KR } from "@crm/validation/okr-kr";
+import { crmHopKieu, oSheet, sheetIdTuUrl } from "@crm/validation/okr-nguon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useId, useState } from "react";
@@ -45,7 +45,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
-import { KHOA_NGUON } from "./nguon-so";
+import { chuSo, KHOA_NGUON } from "./nguon-so";
 import {
 	bacCua,
 	type ChoDoc,
@@ -67,8 +67,6 @@ export type LuaChonPhamVi = {
 	nguoi: ComboboxOption[];
 	dangTai: boolean;
 };
-
-const DINH_DANG = { vi: "vi-VN", en: "en-GB" } satisfies Record<Locale, string>;
 
 function luaChonPhamVi(
 	cay: RouterOutputs["org"]["tree"] | undefined,
@@ -182,6 +180,7 @@ export function useNguonSo({
 
 export type NguonSoProps = {
 	kr: KetQua | null;
+	kieu: KieuKr;
 	objective: MucTieuNguon;
 	khoa: boolean;
 	gia: NhapNguon;
@@ -194,6 +193,7 @@ export type NguonSoProps = {
 
 export function NguonSo({
 	kr,
+	kieu,
 	objective,
 	khoa,
 	gia,
@@ -216,6 +216,7 @@ export function NguonSo({
 	const khoaChon = khoa && !doCanh;
 	const khoaO = khoa && !krTay;
 	const sheetsBat = chiSo.data?.sheetsBat === true;
+	const crmDuoc = crmHopKieu(kieu);
 	const luaChon = NGUON_KR.filter(
 		(n) => n !== "bang-tinh" || sheetsBat || gia.loai === "bang-tinh",
 	);
@@ -241,11 +242,21 @@ export function NguonSo({
 					variant="outline"
 				>
 					{luaChon.map((n) => (
-						<ToggleGroupItem key={n} value={n} data-lua-chon-nguon={n}>
+						<ToggleGroupItem
+							key={n}
+							value={n}
+							data-lua-chon-nguon={n}
+							disabled={n === "crm" && !crmDuoc}
+						>
 							{s.nguon[KHOA_NGUON[n]].nhan}
 						</ToggleGroupItem>
 					))}
 				</ToggleGroup>
+				{crmDuoc ? null : (
+					<FieldDescription data-crm-khong-hop-kieu>
+						{t.crmKhongHopKieu}
+					</FieldDescription>
+				)}
 				{chiSo.data && !sheetsBat ? (
 					<FieldDescription data-sheets-tat>{t.sheets.tat}</FieldDescription>
 				) : null}
@@ -258,7 +269,7 @@ export function NguonSo({
 							data-nut="them-do-canh"
 							onClick={() => {
 								setMoDoCanh(true);
-								datGia({ ...gia, loai: "crm" });
+								datGia({ ...gia, loai: crmDuoc ? "crm" : "api" });
 							}}
 							size="sm"
 							type="button"
@@ -463,7 +474,7 @@ function XemTruoc({ cycleId, gia }: { cycleId: string; gia: NhapNguon }) {
 				</Button>
 			</FieldDescription>
 		);
-	const so = new Intl.NumberFormat(DINH_DANG[locale]).format(dem.data.giaTri);
+	const so = chuSo(dem.data.giaTri, locale);
 	return (
 		<FieldDescription data-xem-truoc="co" data-gia-tri={dem.data.giaTri}>
 			{t.toiHomNay(s.donVi[CHI_SO_OKR[gia.chiSo].donVi](so))}
@@ -487,7 +498,7 @@ function NhanhApi({ krId }: { krId: string | null }) {
 					<FieldLabel htmlFor={`${ma}-ma-kr`}>{t.maKr}</FieldLabel>
 					<InputGroup>
 						<InputGroupInput
-							className="font-mono"
+							mono
 							data-ma-kr={krId}
 							id={`${ma}-ma-kr`}
 							readOnly
@@ -506,7 +517,7 @@ function NhanhApi({ krId }: { krId: string | null }) {
 						<FieldLabel htmlFor={`${ma}-lenh`}>{t.lenhMau}</FieldLabel>
 						<InputGroup>
 							<InputGroupInput
-								className="font-mono"
+								mono
 								data-lenh-mau
 								id={`${ma}-lenh`}
 								readOnly
@@ -594,13 +605,15 @@ function NhanhSheets({
 			</Field>
 			{email ? (
 				<div className="flex items-center gap-2">
-					<FieldDescription
-						className="min-w-0 flex-1 wrap-anywhere"
-						data-email-sheets={email}
-						translate="no"
-					>
-						{t.chiaSe(email)}
-					</FieldDescription>
+					<div className="min-w-0 flex-1">
+						<FieldDescription
+							breakAnywhere
+							data-email-sheets={email}
+							translate="no"
+						>
+							{t.chiaSe(email)}
+						</FieldDescription>
+					</div>
 					<CopyValue label={t.diaChiChiaSe} value={email} />
 				</div>
 			) : null}
@@ -610,11 +623,10 @@ function NhanhSheets({
 			{docThu?.loai === "doc-duoc" ? (
 				<FieldDescription data-doc-thu="doc-duoc" data-gia-tri={docThu.giaTri}>
 					{t.docDuoc(
-						new Intl.NumberFormat(DINH_DANG[locale]).format(docThu.giaTri),
-						new Intl.DateTimeFormat(DINH_DANG[locale], {
-							hour: "2-digit",
-							minute: "2-digit",
-						}).format(new Date(docThu.luc)),
+						chuSo(docThu.giaTri, locale),
+						dateFormat(locale, { hour: "2-digit", minute: "2-digit" }).format(
+							new Date(docThu.luc),
+						),
 					)}
 				</FieldDescription>
 			) : null}

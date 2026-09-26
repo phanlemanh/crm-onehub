@@ -65,6 +65,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { giaTri } from "../bang-kr";
 import { hienSo } from "../hop-thoai-kr";
 import type { DuLieuCapNhat, KrCapNhat } from "../kieu";
+import { KHOA_DAU } from "../nguon-so";
 
 const TONE_TU_TIN = {
 	cao: "success",
@@ -139,8 +140,7 @@ function nhanNguonMay(
 	nguon: NonNullable<KrCapNhat["soMay"]>["nguon"],
 	m: OkrSoMessages,
 ): string {
-	if (nguon === "bang-tinh") return m.dau.bangTinh;
-	return m.dau[nguon];
+	return m.dau[KHOA_DAU[nguon]];
 }
 
 export function oBanDau(kr: KrCapNhat, locale: Locale): O {
@@ -502,7 +502,9 @@ export function OGiaTri({
 					nhanNguonMay(kr.soMay.nguon, soMsg),
 					ngayThang(kr.soMay.ngay),
 				)
-			: soMsg.trangThai.bangKr.chuaChup
+			: kr.nguon === "api"
+				? soMsg.trangThai.bangKr.chuaGhiApi
+				: soMsg.trangThai.bangKr.chuaChup
 		: kr.doCanh && kr.soMay
 			? soMsg.trangThai.capNhat.soMay(
 					hienSo(kr.soMay.giaTri, locale),

@@ -99,6 +99,19 @@ export function SimpleTable({
 	);
 }
 
+export function SimpleTableNote({
+	className,
+	...props
+}: ComponentProps<"span">) {
+	return (
+		<span
+			data-slot="simple-table-note"
+			className={cn("text-muted-foreground text-xs", className)}
+			{...props}
+		/>
+	);
+}
+
 export function SimpleTableRow({
 	clickable,
 	expandable,

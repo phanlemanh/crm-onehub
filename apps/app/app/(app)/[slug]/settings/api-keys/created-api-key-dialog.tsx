@@ -46,7 +46,7 @@ export function CreatedApiKeyDialog({
 						value={apiKey?.key ?? ""}
 						readOnly
 						translate="no"
-						className="font-mono"
+						mono
 					/>
 					<InputGroupAddon align="inline-end">
 						<CopyValue value={apiKey?.key ?? ""} label={t.daTao.nhanChep} />

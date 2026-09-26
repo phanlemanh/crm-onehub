@@ -7,6 +7,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
 	type SimpleTableColumn,
+	SimpleTableNote,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
@@ -20,7 +21,7 @@ import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 import type { ReactNode } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
-import { okrSoMessages } from "@/lib/messages/okr-so";
+import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { CELL, type KetQua } from "./kieu";
 import {
 	chuSo,
@@ -54,10 +55,16 @@ function soTran(
 
 function nguonMayCua(kr: KetQua): NguonMay | null {
 	if (kr.source !== "tay") return kr.source;
-	return kr.doCanh ? (kr.soMay?.nguon ?? null) : null;
+	return kr.doCanh ? (kr.nguonMay?.loai ?? null) : null;
 }
 
 const CHUP_THEO_NHIP: readonly NguonMay[] = ["crm", "bang-tinh"];
+
+function chuChuaCoSo(may: NguonMay | null, s: OkrSoMessages): string | null {
+	if (may === null) return null;
+	if (may === "api") return s.trangThai.bangKr.chuaGhiApi;
+	return CHUP_THEO_NHIP.includes(may) ? s.trangThai.bangKr.chuaChup : null;
+}
 
 function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 	const locale = useLocale();
@@ -76,9 +83,7 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 		);
 
 	const may = nguonMayCua(kr);
-	const chuaChup =
-		kr.soMay === null &&
-		(kr.doCanh || CHUP_THEO_NHIP.some((n) => n === kr.source));
+	const chuaCoSo = kr.soMay === null ? chuChuaCoSo(may, s) : null;
 	const so =
 		kr.doCanh && kr.soMay
 			? s.trangThai.bangKr.doCanh(
@@ -131,10 +136,8 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 					)}
 				</span>
 			</span>
-			{chuaChup ? (
-				<span className="text-muted-foreground text-xs" data-chua-chup>
-					{s.trangThai.bangKr.chuaChup}
-				</span>
+			{chuaCoSo ? (
+				<SimpleTableNote data-chua-chup>{chuaCoSo}</SimpleTableNote>
 			) : null}
 		</span>
 	);

@@ -44,6 +44,12 @@ const KR_CRM_CHUA_CHUP = kr({
 	currentValue: 0,
 	soMay: null,
 });
+const KR_API_CHUA_GHI = kr({
+	keyResultId: "kr-api-chua-ghi",
+	nguon: "api",
+	currentValue: 0,
+	soMay: null,
+});
 const KR_DO_CANH = kr({
 	keyResultId: "kr-do-canh",
 	nguon: "tay",
@@ -59,7 +65,14 @@ const KR_TAY = kr({
 });
 
 const DU: CapNhatTuanOutput = {
-	items: [KR_CRM, KR_API, KR_CRM_CHUA_CHUP, KR_DO_CANH, KR_TAY],
+	items: [
+		KR_CRM,
+		KR_API,
+		KR_CRM_CHUA_CHUP,
+		KR_API_CHUA_GHI,
+		KR_DO_CANH,
+		KR_TAY,
+	],
 	weekStart: "2026-09-14",
 	dueWeekday: 1,
 };
@@ -203,6 +216,16 @@ describe("man cap nhat tuan: o so khoa hoac dien san", () => {
 		expect(o.disabled).toBe(true);
 		expect(o.dataset.khoa).toBe("true");
 		expect(d.textContent).toContain("Số máy: sáng mai");
+	});
+
+	test("KR api chua ghi: van khoa, chu Chưa có lần ghi qua khoá API, khong hen sang mai", async () => {
+		await mo();
+		const d = dong("kr-api-chua-ghi");
+		const o = oGiaTri("kr-api-chua-ghi");
+		expect(o.disabled).toBe(true);
+		expect(o.dataset.khoa).toBe("true");
+		expect(d.textContent).toContain("Chưa có lần ghi qua khoá API");
+		expect(d.textContent).not.toContain("sáng mai");
 	});
 
 	test("KR do canh: bat, dien san bang so may, sua duoc", async () => {

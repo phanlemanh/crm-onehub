@@ -22,6 +22,7 @@ const TRANG_THAI = {
 		"phamVi.khongKhop",
 		"trangThai.hopThoai.oBac",
 		"nguon.crm.nhan",
+		"trangThai.hopThoai.crmKhongHopKieu",
 	],
 	"ST-hopthoai-xemtruoc-dangtai": ["trangThai.hopThoai.xemTruoc.dangDem"],
 	"ST-hopthoai-xemtruoc-co": ["trangThai.hopThoai.xemTruoc.toiHomNay"],
@@ -56,7 +57,10 @@ const TRANG_THAI = {
 	],
 	"ST-bangkr-dau-nguon": ["dau.crm", "dau.api", "dau.bangTinh"],
 	"ST-bangkr-do-canh": ["trangThai.bangKr.doCanh", "trangThai.bangKr.moSo"],
-	"ST-bangkr-chua-chup": ["trangThai.bangKr.chuaChup"],
+	"ST-bangkr-chua-chup": [
+		"trangThai.bangKr.chuaChup",
+		"trangThai.bangKr.chuaGhiApi",
+	],
 	"ST-bangkr-chi-okr": ["trangThai.bangKr.chiOkr"],
 	"ST-so-dangtai": ["trangThai.so.dangTai"],
 	"ST-so-co": [

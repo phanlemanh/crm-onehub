@@ -33,18 +33,40 @@ function kr(id: string, doi: Partial<KrOutput>): KrOutput {
 	};
 }
 
+function nguonMay(loai: "crm" | "api" | "bang-tinh"): KrOutput["nguonMay"] {
+	return {
+		loai,
+		chiSo: loai === "crm" ? "thoa-thuan-chot-duoc" : null,
+		phamVi: loai === "crm" ? { kieu: "phong-ban", id: "pb-1" } : null,
+		bac: null,
+		sheetId: loai === "bang-tinh" ? "1AbC" : null,
+		sheetO: loai === "bang-tinh" ? "Tổng!B2" : null,
+		docLuc: null,
+		docGiaTri: null,
+		docLoi: null,
+	};
+}
+
 const CAC_KR: KrOutput[] = [
 	kr("kr-tay", {}),
 	kr("kr-crm", {
 		source: "crm",
 		currentValue: 15,
 		soMay: { giaTri: 15, ngay: "2026-10-25", nguon: "crm" },
+		nguonMay: nguonMay("crm"),
 	}),
 	kr("kr-do-canh", {
 		doCanh: true,
 		soMay: { giaTri: 15, ngay: "2026-10-25", nguon: "crm" },
+		nguonMay: nguonMay("crm"),
 	}),
-	kr("kr-chua-chup", { source: "crm" }),
+	kr("kr-chua-chup", { source: "crm", nguonMay: nguonMay("crm") }),
+];
+
+const KR_CHUA_CO_SO: KrOutput[] = [
+	kr("kr-do-canh-api", { doCanh: true, nguonMay: nguonMay("api") }),
+	kr("kr-api", { source: "api", nguonMay: nguonMay("api") }),
+	kr("kr-do-canh-sheets", { doCanh: true, nguonMay: nguonMay("bang-tinh") }),
 ];
 
 function banGhi(doi: Partial<BanGhiChiSoOutput>): BanGhiChiSoOutput {
@@ -416,6 +438,46 @@ describe("bang-kr-nguon", () => {
 				.split(/\s+/)
 				.filter((c) => c === "flex" || c === "inline-flex"),
 		}).toEqual({ chu: "15 thoả thuận / 40 thoả thuận", flex: [] });
+	});
+});
+
+describe("bang-kr-nguon-cau-hinh", () => {
+	test("bang-kr-nguon-cau-hinh: KR chua co so may van co dau theo nguon dang cau hinh; nguon API chua ghi khong hen sang mai", async () => {
+		await mo(
+			<BangKr
+				keyResults={KR_CHUA_CO_SO}
+				kind="cam-ket"
+				expected={30}
+				danhDauCuaToi={false}
+			/>,
+		);
+		await cho(
+			() => document.body.querySelectorAll("[data-so-kr]").length === 3,
+			"ba nut so",
+		);
+		expect(
+			KR_CHUA_CO_SO.map((k) => ({
+				id: k.id,
+				dau: oSo(k.id)?.querySelector("[data-dau-nguon]")?.textContent ?? null,
+				chuThich: oSo(k.id)?.querySelector("[data-chua-chup]")?.textContent,
+			})),
+		).toEqual([
+			{
+				id: "kr-do-canh-api",
+				dau: s.dau.api,
+				chuThich: s.trangThai.bangKr.chuaGhiApi,
+			},
+			{
+				id: "kr-api",
+				dau: s.dau.api,
+				chuThich: s.trangThai.bangKr.chuaGhiApi,
+			},
+			{
+				id: "kr-do-canh-sheets",
+				dau: s.dau.bangTinh,
+				chuThich: s.trangThai.bangKr.chuaChup,
+			},
+		]);
 	});
 });
 

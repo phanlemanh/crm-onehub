@@ -109,6 +109,8 @@ const vi = {
 			oChiSo: "Chỉ số",
 			oBac: "Bậc",
 			dong: "Đóng",
+			crmKhongHopKieu:
+				"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 			xemTruoc: {
 				dangDem: "Đang đếm…",
 				toiHomNay: (dem: string) => `Tới hôm nay: ${dem}`,
@@ -140,6 +142,8 @@ const vi = {
 					"o-trong": "Ô này đang trống",
 					"google-loi": "Google chưa trả lời, sẽ đọc lại vào sáng mai",
 					tat: "Nguồn Google Sheets đang tắt",
+					"khong-hop-kieu":
+						"Số trong ô không hợp kiểu KR — mốc chỉ nhận 0 hoặc 1, phần trăm trong 0–100",
 				},
 				tat: "Quản trị chưa cắm khoá Google Sheets",
 			},
@@ -151,6 +155,7 @@ const vi = {
 		bangKr: {
 			doCanh: (tay: string, may: string) => `${tay} tay · ${may} máy`,
 			chuaChup: "Số máy: sáng mai",
+			chuaGhiApi: "Chưa có lần ghi qua khoá API",
 			moSo: (ten: string) => `Xem bản ghi làm nên số của ${ten}`,
 			chiOkr: "Bản ghi đằng sau số này nằm ngoài phạm vi OKR của bạn.",
 		},
@@ -290,6 +295,8 @@ const en: OkrSoMessages = {
 			oChiSo: "Metric",
 			oBac: "Stage",
 			dong: "Close",
+			crmKhongHopKieu:
+				"CRM metrics are counts — a milestone or percentage KR can't take its number from them.",
 			xemTruoc: {
 				dangDem: "Counting…",
 				toiHomNay: (dem: string) => `So far: ${dem}`,
@@ -323,6 +330,8 @@ const en: OkrSoMessages = {
 					"google-loi":
 						"Google didn't answer; it will be read again tomorrow morning",
 					tat: "The Google Sheets source is off",
+					"khong-hop-kieu":
+						"The cell's number doesn't fit this KR's type — a milestone takes 0 or 1, a percentage 0–100",
 				},
 				tat: "An admin hasn't added the Google Sheets key yet",
 			},
@@ -334,6 +343,7 @@ const en: OkrSoMessages = {
 		bangKr: {
 			doCanh: (tay: string, may: string) => `${tay} manual · ${may} measured`,
 			chuaChup: "Measured number: tomorrow morning",
+			chuaGhiApi: "No write with an API key yet",
 			moSo: (ten: string) => `See the records behind ${ten}`,
 			chiOkr: "The records behind this number are outside your OKR access.",
 		},

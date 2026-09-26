@@ -35,6 +35,7 @@ import {
 	kiemSoTheoKieu,
 	krInput,
 } from "@crm/validation/okr-kr";
+import { crmHopKieu } from "@crm/validation/okr-nguon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useId, useState } from "react";
@@ -156,6 +157,7 @@ export function HopThoaiKr({
 		soHien !== null &&
 		loiKieu === null &&
 		n.hopLe &&
+		(n.gia.loai !== "crm" || crmHopKieu(kieu)) &&
 		!n.dangCho;
 
 	const doi = goc
@@ -365,6 +367,7 @@ export function HopThoaiKr({
 							)}
 							<NguonSo
 								kr={goc}
+								kieu={kieu}
 								objective={n.mucTieu}
 								khoa={n.mucTieu.status !== "nhap"}
 								gia={n.gia}

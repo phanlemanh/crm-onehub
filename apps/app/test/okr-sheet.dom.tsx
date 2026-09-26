@@ -1290,6 +1290,106 @@ describe("nguon-so-khoa-cong-bo", () => {
 	});
 });
 
+describe("nguon-so-kieu-khong-lay-crm", () => {
+	test("nguon-so-kieu-khong-lay-crm: KR moc va phan tram — Chi so CRM tat, co mot dong giai thich", async () => {
+		const ket: { kieu: string; crmTat: boolean; dong: string | null }[] = [];
+		for (const kieu of ["moc", "phan-tram"] as const) {
+			chiTiet = {
+				...mucTieu("nhap", false),
+				keyResults: [{ ...kr("kr-1", false), kind: kieu }],
+			};
+			const h = await moHopKr("sua");
+			const crm = h.querySelector('[data-lua-chon-nguon="crm"]');
+			ket.push({
+				kieu,
+				crmTat: crm instanceof HTMLButtonElement && crm.disabled,
+				dong: h.querySelector("[data-crm-khong-hop-kieu]")?.textContent ?? null,
+			});
+			for (const san of dangMo) {
+				await act(async () => san.root.unmount());
+				san.o.remove();
+			}
+			dangMo = [];
+			document.body.innerHTML = "";
+		}
+		expect(ket).toEqual([
+			{ kieu: "moc", crmTat: true, dong: so.crmKhongHopKieu },
+			{ kieu: "phan-tram", crmTat: true, dong: so.crmKhongHopKieu },
+		]);
+	});
+
+	test("nguon-so-kieu-khong-lay-crm: doi chung — KR tang toi thi Chi so CRM bat, khong co dong giai thich", async () => {
+		const h = await moHopKr("sua");
+		const crm = h.querySelector('[data-lua-chon-nguon="crm"]');
+		expect({
+			crmTat: crm instanceof HTMLButtonElement && crm.disabled,
+			dong: h.querySelector("[data-crm-khong-hop-kieu]"),
+		}).toEqual({ crmTat: false, dong: null });
+	});
+});
+
+describe("nguon-so-gio-doc-thu", () => {
+	test("nguon-so-gio-doc-thu: tieng Anh dung chung bo dinh dang so va gio cua khu OKR", async () => {
+		const { NguonSo } = await import("@/app/(app)/[slug]/okr/o-nguon-so");
+		const { chuSo } = await import("@/app/(app)/[slug]/okr/nguon-so");
+		const { dateFormat } = await import("@crm/ui/lib/format");
+		const luc = "2026-10-05T08:05:00.000Z";
+		const o = document.createElement("div");
+		document.body.appendChild(o);
+		const root = createRoot(o);
+		dangMo.push({ o, root });
+		const client = new QueryClient({
+			defaultOptions: { queries: { retry: false } },
+		});
+		await act(async () => {
+			root.render(
+				<QueryClientProvider client={client}>
+					<LocaleProvider locale="en">
+						<TooltipProvider>
+							<NguonSo
+								kr={null}
+								kieu="tang-toi"
+								objective={{
+									cycleId: QUY.id,
+									status: "nhap",
+									level: "phong-ban",
+									unitId: "pb-1",
+								}}
+								khoa={false}
+								gia={{
+									loai: "bang-tinh",
+									chiSo: "thoa-thuan-chot-duoc",
+									kieuPhamVi: "phong-ban",
+									idPhamVi: "pb-1",
+									bac: "tai-khoan",
+									url: "https://docs.google.com/spreadsheets/d/1AbC",
+									o: "Tổng!B2",
+								}}
+								datGia={() => {}}
+								phamVi={{ boPhan: [], phongBan: [], nguoi: [], dangTai: false }}
+								docThu={{ loai: "doc-duoc", giaTri: 1240.5, luc }}
+								docLai={null}
+								dangDocLai={false}
+							/>
+						</TooltipProvider>
+					</LocaleProvider>
+				</QueryClientProvider>,
+			);
+		});
+		const gio = dateFormat("en", { hour: "2-digit", minute: "2-digit" }).format(
+			new Date(luc),
+		);
+		expect(
+			document.body.querySelector('[data-doc-thu="doc-duoc"]')?.textContent,
+		).toBe(
+			okrSoMessages("en").trangThai.hopThoai.sheets.docDuoc(
+				chuSo(1240.5, "en"),
+				gio,
+			),
+		);
+	});
+});
+
 describe("nguon-so-luu-crm", () => {
 	test("nguon-so-luu-crm: them KR nguon CRM — pham vi mac dinh la don vi cua muc tieu, luu tao KR roi dat nguon", async () => {
 		const h = await moHopKr("them");
