@@ -24,6 +24,7 @@ function kr(id: string, doi: Partial<KrOutput>): KrOutput {
 		source: "tay",
 		doCanh: false,
 		soMay: null,
+		nguonMay: null,
 		startLocked: true,
 		progress: 30,
 		laCuaToi: false,

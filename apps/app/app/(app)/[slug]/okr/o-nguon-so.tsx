@@ -32,7 +32,7 @@ import {
 	type MaChiSo,
 	PHAM_VI_CHI_SO,
 } from "@crm/validation/okr-chi-so";
-import { NGUON_KR, type NguonKr } from "@crm/validation/okr-kr";
+import { NGUON_KR } from "@crm/validation/okr-kr";
 import { oSheet, sheetIdTuUrl } from "@crm/validation/okr-nguon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -45,6 +45,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
+import { KHOA_NGUON } from "./nguon-so";
 import {
 	bacCua,
 	type ChoDoc,
@@ -66,13 +67,6 @@ export type LuaChonPhamVi = {
 	nguoi: ComboboxOption[];
 	dangTai: boolean;
 };
-
-export const NHAN_NGUON = {
-	tay: "tay",
-	crm: "crm",
-	api: "api",
-	"bang-tinh": "bangTinh",
-} as const satisfies Record<NguonKr, string>;
 
 const DINH_DANG = { vi: "vi-VN", en: "en-GB" } satisfies Record<Locale, string>;
 
@@ -248,7 +242,7 @@ export function NguonSo({
 				>
 					{luaChon.map((n) => (
 						<ToggleGroupItem key={n} value={n} data-lua-chon-nguon={n}>
-							{s.nguon[NHAN_NGUON[n]].nhan}
+							{s.nguon[KHOA_NGUON[n]].nhan}
 						</ToggleGroupItem>
 					))}
 				</ToggleGroup>

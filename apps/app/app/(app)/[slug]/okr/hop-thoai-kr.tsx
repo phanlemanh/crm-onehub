@@ -45,7 +45,8 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
-import { type MucTieuNguon, NguonSo, NHAN_NGUON, useNguonSo } from "./nguon-so";
+import { KHOA_NGUON } from "./nguon-so";
+import { type MucTieuNguon, NguonSo, useNguonSo } from "./o-nguon-so";
 
 export function hienSo(so: number, locale: Locale): string {
 	const chu = locale === "vi" ? String(so).replace(".", ",") : String(so);
@@ -339,7 +340,7 @@ export function HopThoaiKr({
 									/>
 									{khoaMay && goc ? (
 										<FieldDescription id={`${ma}-hien-mo-ta`}>
-											{so.nguon[NHAN_NGUON[goc.source]].moTa}
+											{so.nguon[KHOA_NGUON[goc.source]].moTa}
 										</FieldDescription>
 									) : khoaHien ? (
 										<FieldDescription id={`${ma}-hien-mo-ta`}>
