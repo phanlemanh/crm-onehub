@@ -756,7 +756,7 @@ describe("cai-lenh", () => {
 		const hoatDong = await db.activity.count();
 		const deal = await db.deal.findFirst({ select: { id: true, stage: true } });
 		const ban = await (
-			chiDoc.events["session.started"] as unknown as GiaiCongCu
+			chiDoc.events["step.started"] as unknown as GiaiCongCu
 		)({}, ctxZalo("ses-gia-1", h?.id ?? "", "ZA"));
 		for (const ten of ["set_field_value", "record_fact"]) {
 			expect(

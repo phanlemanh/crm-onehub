@@ -24,7 +24,7 @@ function phien(purpose: string): Ctx {
 }
 
 async function giai(purpose: string): Promise<Record<string, CongCu> | null> {
-	const moc = chiDoc.events["session.started"] as unknown as GiaiCongCu;
+	const moc = chiDoc.events["step.started"] as unknown as GiaiCongCu;
 	return (await moc({}, phien(purpose))) ?? null;
 }
 
@@ -70,6 +70,20 @@ afterAll(async () => {
 });
 
 describe("chi-doc", () => {
+	test("chi-doc: bo giai chay o step.started, khong con session.started", async () => {
+		const suKien = chiDoc.events as Record<string, unknown>;
+		expect(suKien["step.started"], "co step.started").toBeInstanceOf(Function);
+		expect(
+			suKien["session.started"],
+			"khong con session.started",
+		).toBeUndefined();
+		expect(await giai("research"), "phien web khong nhan ban thay").toBeNull();
+		expect(
+			await giai("builder"),
+			"phien builder khong nhan ban thay",
+		).toBeNull();
+	});
+
 	test("chi-doc: phien zalo nhan dung tap cong cu ghi, moi ban ghi de tu choi", async () => {
 		const ban = await giai(ZALO.hoi.purpose);
 		expect(ban).not.toBeNull();
@@ -79,7 +93,7 @@ describe("chi-doc", () => {
 		expect(
 			[...ZALO.hoi.congCu.coSanChan].sort(),
 			"cong cu co san di ra mang va hoi lai",
-		).toEqual(["ask_question", "web_fetch", "web_search"]);
+		).toEqual(["ask_question", "web_search"]);
 		let daGoi = 0;
 		for (const ten of [...ZALO.hoi.congCu.ghi, ...ZALO.hoi.congCu.coSanChan]) {
 			const tra = await ban?.[ten]?.execute({}, phien(ZALO.hoi.purpose));
