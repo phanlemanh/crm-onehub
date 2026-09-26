@@ -11,6 +11,7 @@ const en = {
 		onboarding: "Set up",
 		research: "Research key",
 		grantAccess: "Grant access",
+		quenMatKhau: "Forgot password",
 	},
 	signIn: {
 		title: "Welcome back",
@@ -21,6 +22,7 @@ const en = {
 		diaChi: "Email address",
 		matKhau: "Password",
 		dangNhap: "Sign in",
+		quenMatKhau: "Forgot password?",
 		saiChung: "That email or password isn't right.",
 		error: {
 			unreachable:
@@ -69,6 +71,24 @@ const en = {
 		submit: "Continue",
 		submitting: "Saving…",
 	},
+	quenMatKhau: {
+		title: "Forgot your password",
+		description:
+			"Enter your email address to get a link for setting a new password.",
+		diaChi: "Email address",
+		gui: "Send the link",
+		dangGui: "Sending…",
+		quayLai: "Back to sign in",
+		loi: "The link could not be sent. Check your connection and send again.",
+		quaLuot: (phut: number) =>
+			`You have asked too many times. Wait ${phut === 1 ? "a minute" : `${phut} minutes`} and try again.`,
+		xong: {
+			title: "Check your email",
+			description: (phut: number) =>
+				`If that address can sign in to this CRM, a link is on its way. It can be used once and expires in ${phut} minutes. Nothing changes until you open it.`,
+			quayLai: "Back to sign in",
+		},
+	},
 	datMatKhau: {
 		title: "Set a password",
 		description: (phut: number) =>
@@ -108,6 +128,7 @@ const vi = {
 		onboarding: "Khai báo",
 		research: "Khoá nghiên cứu",
 		grantAccess: "Cấp quyền",
+		quenMatKhau: "Quên mật khẩu",
 	},
 	signIn: {
 		title: "Mừng bạn quay lại",
@@ -118,6 +139,7 @@ const vi = {
 		diaChi: "Địa chỉ email",
 		matKhau: "Mật khẩu",
 		dangNhap: "Đăng nhập",
+		quenMatKhau: "Quên mật khẩu?",
 		saiChung: "Địa chỉ hoặc mật khẩu không đúng.",
 		error: {
 			unreachable:
@@ -165,6 +187,24 @@ const vi = {
 		signUp: "Đăng ký ở đây",
 		submit: "Tiếp tục",
 		submitting: "Đang lưu…",
+	},
+	quenMatKhau: {
+		title: "Quên mật khẩu",
+		description:
+			"Nhập địa chỉ email của bạn, hệ thống gửi cho bạn một liên kết để đặt mật khẩu mới.",
+		diaChi: "Địa chỉ email",
+		gui: "Gửi liên kết",
+		dangGui: "Đang gửi…",
+		quayLai: "Quay lại đăng nhập",
+		loi: "Chưa gửi được liên kết. Kiểm tra kết nối rồi bấm gửi lại.",
+		quaLuot: (phut: number) =>
+			`Bạn đã xin quá nhiều lần. Chờ ${phut} phút rồi thử lại.`,
+		xong: {
+			title: "Kiểm tra hộp thư",
+			description: (phut: number) =>
+				`Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn ${phut} phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.`,
+			quayLai: "Quay lại đăng nhập",
+		},
 	},
 	datMatKhau: {
 		title: "Đặt mật khẩu",
