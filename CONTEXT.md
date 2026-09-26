@@ -396,6 +396,33 @@ Vì sao: KR đo kết quả, không đo việc làm — «gọi 50 cuộc» là 
 Việc và sáng kiến gắn vào KR là thứ khác. «Chỉ số» là danh mục số đo CRM mà một KR
 có thể lấy số từ đó; KR có đích và người phụ trách, chỉ số thì không.
 
+**Chỉ số (OKR)**: một số đo CRM có định nghĩa cố định mà một KR lấy số từ đó —
+đếm gì, ngày nào quyết định bản ghi rơi vào kỳ nào, quy cho ai. Danh mục nằm
+trong mã (bảy chỉ số ở lượt 6: thoả thuận chốt được, thoả thuận mới, cuộc gọi
+chiến dịch hẹn được, bước kế hoạch 30 ngày xong đúng hạn, cá nhân ghi danh đạt
+bậc, form thành cá nhân, email gửi ra); thêm chỉ số là một vòng có hợp đồng. Chỉ
+số không có đích, không có người phụ trách — KR có. Đề xuất 2026-09-26 (lượt 6
+lộ trình OKR), chốt tại Cổng Phạm vi.
+_Avoid_: KPI, công thức
+Vì sao: «KPI» đã là chữ từ điển tránh cho OKR; «công thức» gợi người dùng tự
+viết phép tính, mà chỉ số là một lựa chọn trong danh mục.
+
+**Nguồn số (KR)**: con số hiện tại của một KR đến từ đâu — **Nhập tay** (người
+ghi ở cập nhật tuần), **Chỉ số CRM**, **Khoá API** (máy khác ghi), **Google
+Sheets** (một ô của bảng tính, máy đọc mỗi ngày). Nguồn khoá khi mục tiêu công
+bố, như khởi điểm. Đề xuất 2026-09-26, chốt tại Cổng Phạm vi.
+_Avoid_: kết nối, tích hợp, đồng bộ
+Vì sao: «kết nối» đã là chữ của Cài đặt › Kết nối (Slack, Google); nguồn số là
+thuộc tính của một KR, không phải một kết nối của không gian làm việc.
+
+**Số đo cạnh**: số máy đo cho một KR nhập tay mà mục tiêu đã công bố — hiện cạnh
+số tay tới hết kỳ, không lái tiến độ. Để hai số đứng cạnh nhau cho người quen tin
+số máy trước khi kỳ sau đặt KR có nguồn máy. Đề xuất 2026-09-26, chốt tại Cổng
+Phạm vi.
+_Avoid_: số dự phòng, số tham khảo
+Vì sao: nó không thay số tay khi thiếu, và không phải lời khuyên — nó là cùng
+một KR đo bằng máy.
+
 **Kiểu KR**: cách một KR đo tiến độ, chọn một trong sáu: «tăng tới» (đích lớn
 hơn khởi điểm), «giảm xuống» (đích nhỏ hơn khởi điểm), «giữ trên» và «giữ dưới» (đạt
 khi giá trị hiện tại còn ở phía đúng của đích), «mốc» (xong hay chưa xong) và «phần
