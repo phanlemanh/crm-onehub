@@ -50,6 +50,8 @@ khi có lý do nói được thành lời»). Số đo trước khi làm ở des
 
 ## Notes
 
+- Known limits (Ngoài-1, Cổng 2 round 2): `rang/soi-tep.mjs` khai lại đường dẫn tương đối của tệp spec và `apps/api/package.json` trong khi `rang/chung.mjs` giữ đường tuyệt đối — dời tệp spec mà chỉ sửa `chung.mjs` thì thước vẫn đọc đúng tệp nhưng in và ghim tên cũ.
+- Known limits (Ngoài-2, Cổng 2 round 2): bộ bỏ mã màu của `rang/chung.mjs` dựng ký tự ESC lúc chạy thay vì dùng `stripVTControlCharacters`, lách luật `noControlCharactersInRegex` của biome, và chỉ bỏ mã kết thúc bằng `m`.
 - Known limits (Ngoài-2, Cổng 2 round 1): khoá hàng đợi đo của hồ sơ (`rang/chung.mjs`, `giuKhoa`) có kẽ hở khi một lượt trước bị giết giữa chừng — hai lượt chờ có thể cùng dọn khoá cũ rồi cùng chạy, hoặc thư mục khoá thiếu tệp pid làm lượt sau dừng với lỗi ENOENT phải dọn tay. Chỉ ảnh hưởng thời gian đo của E1 khi xảy ra, không ảnh hưởng bài kiểm của sản phẩm.
 
 - Thời gian thật của `khoa-con-bat` ở CI chỉ đọc được sau khi PR chạy CI; nó được đọc ở S5 và ghi vào mô tả PR (sổ quyết định, entry `revisit`), không phải một eval của vòng.
