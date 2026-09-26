@@ -32,7 +32,7 @@ export const ZALO = {
 		tran: { phut: 3, ngay: 20, thang: 1_500 },
 		cuaSoPhutMs: MINUTE_MS,
 		hanTraLoiMs: 5 * MINUTE_MS,
-		lechGio: "+07:00",
+		ngayMs: DAY_MS,
 		tienToToken: "chat:",
 		authenticator: "zalo",
 		purpose: "zalo",
