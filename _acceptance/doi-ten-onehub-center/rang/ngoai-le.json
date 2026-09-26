@@ -1,0 +1,6 @@
+[
+	{ "tep": "packages/auth/src/auth.ts", "chu": "This CRM is private. Sign in with your @" },
+	{ "tep": "packages/auth/src/auth.ts", "chu": "This CRM is private. That address is not on the allow-list." },
+	{ "tep": "packages/db/src/settings.ts", "chu": "CRM" },
+	{ "tep": "packages/db/src/safe-fetch.ts", "chu": "Mozilla/5.0 (compatible; CRM/1.0)" }
+]
