@@ -197,6 +197,19 @@ mock.module("@/lib/trpc/client", () => ({
 				() => ({ written: 1, seconds: 12 }),
 			),
 		},
+		workspace: {
+			get: thuTuc("workspace.get", () => ({ viewerRole: "member" })),
+		},
+		org: {
+			tree: thuTuc("org.tree", () => ({
+				divisions: [],
+				chuaXep: [],
+				chuaCoPhongBan: [],
+				people: [],
+				archived: { divisions: [], departments: [] },
+				coverage: { members: 0, withPrimary: 0, departmentsWithoutHead: 0 },
+			})),
+		},
 		users: {
 			list: thuTuc("users.list", () => [
 				{ ...HUNG, image: null },

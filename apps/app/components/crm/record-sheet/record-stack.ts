@@ -14,7 +14,12 @@ export const ENTITY_KINDS = ["company", "contact", "deal"] as const;
 
 export type EntityKind = (typeof ENTITY_KINDS)[number];
 
-export const RECORD_KINDS = [...ENTITY_KINDS, "plan", "objective"] as const;
+export const RECORD_KINDS = [
+	...ENTITY_KINDS,
+	"plan",
+	"objective",
+	"so-kr",
+] as const;
 
 export type RecordKind = (typeof RECORD_KINDS)[number];
 
@@ -39,6 +44,7 @@ const params = {
 	[SEARCH_PARAM.fieldsSheet.entity]: parseAsStringLiteral(ENTITY_KINDS),
 	[SEARCH_PARAM.fieldsSheet.field]: parseAsString,
 	[SEARCH_PARAM.record.timeline]: timelineTabParser,
+	[SEARCH_PARAM.record.ngaySo]: parseAsString,
 };
 
 export function recordKey(ref: RecordRef): string {
@@ -75,6 +81,7 @@ export function useRecordStack() {
 					[SEARCH_PARAM.fieldsSheet.entity]: null,
 					[SEARCH_PARAM.fieldsSheet.field]: null,
 					[SEARCH_PARAM.record.timeline]: null,
+					[SEARCH_PARAM.record.ngaySo]: null,
 				},
 				{ history },
 			);
@@ -178,4 +185,17 @@ export function useRecordSheetView(fallbackTab: string) {
 	);
 
 	return { tab: active, setTab, form: add, setForm, thread, setThread };
+}
+
+export function useNgaySo() {
+	const [values, setParams] = useQueryStates(params);
+	const ngay = values[SEARCH_PARAM.record.ngaySo];
+
+	const chon = useCallback(
+		(next: string | null) =>
+			void setParams({ [SEARCH_PARAM.record.ngaySo]: next }),
+		[setParams],
+	);
+
+	return { ngay, chon };
 }

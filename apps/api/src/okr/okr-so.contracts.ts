@@ -94,6 +94,7 @@ const banGhiDong = z.object({
 });
 
 export const banGhiChiSoOutput = z.object({
+	tenKr: z.string(),
 	loai: z.enum(NGUON_KR),
 	dinhNghia: dinhNghiaChiSo.nullable(),
 	tu: ngay.nullable(),

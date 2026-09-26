@@ -11,7 +11,8 @@ import {
 import { TableCell } from "@crm/ui/components/table";
 import { dateFormat, formatDay, toDay } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
-import { KIEU_KR } from "@crm/validation/okr-kr";
+import { BAC_GHI_DANH, MA_CHI_SO } from "@crm/validation/okr-chi-so";
+import { KIEU_KR, NGUON_KR } from "@crm/validation/okr-kr";
 import {
 	CAP_MUC_TIEU,
 	LOAI_MUC_TIEU,
@@ -20,9 +21,11 @@ import {
 import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
 import { useQuery } from "@tanstack/react-query";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { CELL } from "./kieu";
+import { type CayDuLieu, CELL } from "./kieu";
+import { docKhoaPhamVi, hienPhamVi, KHOA_NGUON } from "./nguon-so";
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type Vet = ChiTiet["trail"][number];
@@ -43,6 +46,13 @@ const KHOA_HIEN = [
 	"weight",
 	"targetObjectiveId",
 	"targetKeyResultId",
+	"nguon",
+	"nguonMay",
+	"chiSo",
+	"phamVi",
+	"bac",
+	"sheetId",
+	"sheetO",
 ] as const;
 
 type KhoaHien = (typeof KHOA_HIEN)[number];
@@ -56,6 +66,7 @@ type BoiCanh = {
 	tenNguoi: (id: string) => string;
 	tenMucTieuDich: (id: string) => string | null;
 	tenKr: (id: string) => string | null;
+	cay: CayDuLieu | undefined;
 };
 
 function giaTri(
@@ -64,6 +75,7 @@ function giaTri(
 	bc: BoiCanh,
 ): string | null {
 	const m = okrMessages(bc.locale);
+	const s = okrSoMessages(bc.locale);
 	if (v === null || v === undefined) return null;
 	if (Array.isArray(v)) return v.map(bc.tenNguoi).join(", ");
 	const chu = String(v);
@@ -90,6 +102,25 @@ function giaTri(
 			return bc.tenMucTieuDich(chu);
 		case "targetKeyResultId":
 			return bc.tenKr(chu);
+		case "nguon":
+		case "nguonMay": {
+			const n = NGUON_KR.find((x) => x === chu);
+			return n ? s.nguon[KHOA_NGUON[n]].nhan : chu;
+		}
+		case "chiSo": {
+			const c = MA_CHI_SO.find((x) => x === chu);
+			return c ? s.chiSo[c].nhan : chu;
+		}
+		case "bac": {
+			const b = BAC_GHI_DANH.find((x) => x === chu);
+			return b ? s.bac[b].nhan : chu;
+		}
+		case "phamVi": {
+			const pv = docKhoaPhamVi(chu);
+			if (!pv) return chu;
+			const hien = hienPhamVi(pv, bc.cay, s);
+			return hien.ten ? `${hien.nhan} · ${hien.ten}` : hien.nhan;
+		}
 		default:
 			return chu;
 	}
@@ -133,6 +164,11 @@ export function BangVet({
 	const m = okrMessages(locale);
 	const trpc = useTRPC();
 	const users = useQuery(trpc.users.list.queryOptions());
+	const coNguon = trail.some((v) => v.action === "doi-nguon");
+	const cay = useQuery({
+		...trpc.org.tree.queryOptions(),
+		enabled: coNguon,
+	});
 
 	const bc: BoiCanh = {
 		locale,
@@ -144,6 +180,7 @@ export function BangVet({
 		tenKr: (id) =>
 			alignments.find((a) => a.targetKeyResultId === id)?.keyResultTitle ??
 			null,
+		cay: cay.data,
 	};
 
 	const cot: SimpleTableColumn[] = [
