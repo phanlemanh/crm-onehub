@@ -459,7 +459,7 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 | 6 | `so-okr-tu-chay` | chưa mở | — | — | — |
 | 7 | `khep-ky-okr` | chưa mở | — | — | hạn cứng 2026-12-14 |
 | 8 | `canh-kr-okr` | chưa mở | — | — | xếp lại sau bốn tuần chạy thử |
-| 9 | `tro-ly-okr` | chưa mở | — | — | chờ trần chi tiêu AI |
+| 9 | `tro-ly-okr` | chưa mở | — | — | chờ trần chi tiêu AI · điều kiện mở đã trả lời 2026-09-26 (Manh Phan): cho gửi nội dung OKR tới nhà cung cấp mô hình đang dùng; trần chi tiêu AI của workspace 20 USD mỗi tháng. Ngân sách AI Gateway của team hôm nay cũng là 20 USD và dùng chung với làn nghiên cứu, nên lượt 9 cần khoá riêng có trần theo tháng |
 | 10 | `okr-trong-chat` | chưa mở | — | — | chờ số đo độ trễ của lượt 4 · Zalo không có nút, trên Zalo là trả lời bằng chữ — vòng 3–4 của `lo-trinh-zalo.md`, đề xuất gộp vòng 4 |
 
 ## 11. Bắt đầu thế nào
