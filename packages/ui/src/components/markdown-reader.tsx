@@ -84,6 +84,13 @@ const DEFAULT_CALLOUT_LABELS: ReaderCalloutLabels = {
 	caution: "Caution",
 };
 
+const SAFE_LINK = /^(#|\/(?!\/)|https:\/\/|mailto:)/;
+
+function readerUrl(url: string, key: string): string | null {
+	if (key === "src") return null;
+	return SAFE_LINK.test(url) ? url : null;
+}
+
 export function readerSlug(text: string): string {
 	return text
 		.normalize("NFD")
@@ -337,7 +344,7 @@ function readerComponents({
 				);
 			}
 			return (
-				<Alert data-callout={kind} variant={CALLOUT_VARIANT[kind]}>
+				<Alert data-callout={kind} role="note" variant={CALLOUT_VARIANT[kind]}>
 					<Icon icon={CALLOUT_ICON[kind]} />
 					<AlertTitle>{calloutLabels[kind]}</AlertTitle>
 					<AlertDescription className="*:text-xs/6">{children}</AlertDescription>
@@ -426,6 +433,7 @@ export function MarkdownReader({
 			}}
 			shikiTheme={["github-light", "github-dark"]}
 			tableMaxHeight={0}
+			urlTransform={readerUrl}
 		>
 			{children}
 		</Streamdown>
