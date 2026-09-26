@@ -5,7 +5,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.sot_danh_muc
-    paths: [packages/validation/src/okr-chi-so.ts, packages/validation/src/okr-nguon.ts, packages/validation/test/okr-chi-so.spec.ts]
+    paths: [packages/validation/src/okr-chi-so.ts, packages/db/src/okr-chi-so-danh-muc.ts, packages/validation/src/okr-nguon.ts, packages/validation/test/okr-chi-so.spec.ts]
     expected: "exit 0; BẢNG VIẾT TRƯỚC 7 dòng × 5 trường (mã, đơn vị, ngày quyết định kỳ, quy công, loại bản ghi) và tập phạm vi từng mã so toEqual với CHI_SO_OKR — không đếm số khoá mà so cả bảng; MA_CHI_SO bằng đúng 7 mã theo thứ tự khai. Ma trận từ chối viết trước 7 ca, mỗi ca ghim thông điệp: mã lạ «Chỉ số không có trong danh mục», phạm vi kieu lạ, phạm vi bo-phan thiếu id, ghi-danh-dat-bac thiếu bac, bac lạ, trường thừa `bieuThuc`, trường thừa `cot` (khuôn strict). Đối chứng dương: 7 đầu vào hợp lệ (một mỗi mã, ghi danh có bac) parse ra đúng đối tượng. CHIỀU ĐỎ: bản sao khuôn bỏ .strict() → ca `bieuThuc` đỏ, bài in đầu vào lọt."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -22,8 +22,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.sot_dem
-    paths: [packages/db/src/okr-chi-so.ts, packages/db/src/okr-so-config.ts, apps/api/test/okr-chi-so.spec.ts, apps/api/test/okr-so-san.ts]
-    expected: "exit 0; sàn okr-so-san gieo bộ phận B1 (P1, P2), B2 (P3), năm người (a,b ở P1; c ở P2; d ở P3; e không phòng ban), kỳ 2026-10-01 → 2026-12-31. Cho mỗi chỉ số gieo: 2–3 bản ghi đủ điều kiện rải trên người, 1 bản ghi ngày 2026-09-30 23:59 VN (ngoài), 1 bản ghi 2026-10-01 00:00 VN (trong), 1 đã lưu trữ, 1 không đủ điều kiện (CLOSED_LOST; bước xong sau dueAt; cuộc gọi ANSWERED; form chưa xếp; thư từ địa chỉ ngoài). MA TRẬN VIẾT TRƯỚC 7 chỉ số × 4 phạm vi (toan-cong-ty, bo-phan:B1, phong-ban:P1, nguoi:a) + ghi-danh 4 bậc × toan-cong-ty = 32 ô, mỗi ô so toBe với demChiSo và với số dòng banGhiChiSo cùng lời gọi (đếm và liệt kê cùng một where — so cả hai, không suy cái này từ cái kia); tập id danh sách so bằng tập viết trước ở 7 ô toan-cong-ty. Ca biên: form của cá nhân không phụ trách có ở toan-cong-ty, vắng ở mọi phạm vi khác; bo-phan:B1 bằng tổng P1 + P2 cho mọi chỉ số người-quy-công. CHIỀU ĐỎ: bản sao dieuKienChiSo bỏ lọc archivedAt → ô thoa-thuan-moi × toan-cong-ty đỏ, bài in tên ô, số mong và số nhận; bản sao lấy ranh giới ngày theo UTC → ô bản ghi 00:00 VN đỏ."
+    paths: [packages/db/src/okr-chi-so.ts, packages/db/src/okr-chi-so-danh-muc.ts, packages/db/src/okr-so-config.ts, apps/api/test/okr-chi-so.spec.ts, apps/api/test/okr-so-san.ts]
+    expected: "exit 0; sàn okr-so-san gieo bộ phận B1 (P1, P2), B2 (P3), năm người (a,b ở P1; c ở P2; d ở P3; e không phòng ban), kỳ 2026-04-01 → 2026-06-30 (một quý đã qua, để bản ghi mang giờ hiện tại do bài khác để lại không rơi vào kỳ). Cho mỗi chỉ số gieo: 2–3 bản ghi đủ điều kiện rải trên người, 1 bản ghi ngày 2026-03-31 23:59 VN (ngoài), 1 bản ghi 2026-04-01 00:00 VN (trong), 1 đã lưu trữ, 1 không đủ điều kiện (CLOSED_LOST; bước xong sau dueAt; cuộc gọi ANSWERED; form chưa xếp; thư từ địa chỉ ngoài). MA TRẬN VIẾT TRƯỚC 7 chỉ số × 4 phạm vi (toan-cong-ty, bo-phan:B1, phong-ban:P1, nguoi:a) + ghi-danh 4 bậc × toan-cong-ty = 32 ô, mỗi ô so toBe với demChiSo và với số dòng banGhiChiSo cùng lời gọi (đếm và liệt kê cùng một where — so cả hai, không suy cái này từ cái kia); tập id danh sách so bằng tập viết trước ở 7 ô toan-cong-ty. Ca biên: form của cá nhân không phụ trách có ở toan-cong-ty, vắng ở mọi phạm vi khác; bo-phan:B1 bằng tổng P1 + P2 cho mọi chỉ số người-quy-công. CHIỀU ĐỎ: bản sao dieuKienChiSo bỏ lọc archivedAt → ô thoa-thuan-moi × toan-cong-ty đỏ, bài in tên ô, số mong và số nhận; bản sao lấy ranh giới ngày theo UTC → ô bản ghi 00:00 VN đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
