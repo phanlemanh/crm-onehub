@@ -24,6 +24,11 @@ export const ZALO = {
 	},
 	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
+	hoi: {
+		toiDaTin: 3,
+		an: "[đã ẩn]",
+		luoc: "…",
+	},
 	lenh: { tu: ["xong", "done"], toiDaSo: 20 },
 	loi: {
 		huongDan:
