@@ -108,6 +108,7 @@ const vi = {
 			oNguon: "Nguồn số",
 			oChiSo: "Chỉ số",
 			oBac: "Bậc",
+			dong: "Đóng",
 			xemTruoc: {
 				dangDem: "Đang đếm…",
 				toiHomNay: (dem: string) => `Tới hôm nay: ${dem}`,
@@ -287,6 +288,7 @@ const en: OkrSoMessages = {
 			oNguon: "Number source",
 			oChiSo: "Metric",
 			oBac: "Stage",
+			dong: "Close",
 			xemTruoc: {
 				dangDem: "Counting…",
 				toiHomNay: (dem: string) => `So far: ${dem}`,

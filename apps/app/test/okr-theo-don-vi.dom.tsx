@@ -99,6 +99,7 @@ function kr(id: string, objectiveId: string): KrOutput {
 		source: "tay",
 		doCanh: false,
 		soMay: null,
+		nguonMay: null,
 		startLocked: true,
 		progress: 40,
 		laCuaToi: false,
