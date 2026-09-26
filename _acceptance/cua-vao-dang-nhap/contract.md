@@ -5,9 +5,9 @@ slug: cua-vao-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-09-26T07:16:17Z
 design_doc: docs/superpowers/specs/2026-09-25-cua-vao-dang-nhap-design.md
 ---
 
