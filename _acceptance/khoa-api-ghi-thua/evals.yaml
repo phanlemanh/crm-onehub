@@ -95,13 +95,15 @@ evals:
   - id: E13
     criterion: AC-9
     executor: judgment
+    question: "Tep va co chi doi hai nhanh skip cua evaluateRateLimit va lan dong dau updatedAt cuoi cua claimUsageInDatabase, ca hai chi khi co tuy chon lastRequestUpdateIntervalMs, ma khong doi cach dem cua nhanh rate-limit bat, khong cham consumeRemaining hay secondary-storage, va khong them chu thich nao khong? Nguong co nam o module hang so packages/auth/src/api-keys.ts khong?"
     inputs: [patches/@better-auth%2Fapi-key@1.6.25.patch, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md]
     expected: "Ban va chi doi hai nhanh skip cua evaluateRateLimit va lan dong dau cuoi cua claimUsageInDatabase, ca hai co dieu kien tuy chon; khong cham nhanh rate-limit bat, consumeRemaining, secondary-storage; khong them chu thich; nguong o module hang so cua packages/auth"
-    evidence_required: [verdict, rationale]
+    evidence_required: [judged_by, verdict, rationale]
 
   - id: E14
     criterion: AC-10
     executor: judgment
+    question: "Chi doc muc ve ban va api-key trong docs/api.md, nguoi doc co tra loi duoc hai cau khong: (1) khi nao go ban va (gan voi better-auth#10921); (2) phai lam gi khi nang @better-auth/api-key?"
     inputs: [docs/api.md]
     expected: "Muc ve ban va khoa-api-ghi-thua trong docs/api.md tra loi duoc hai cau co/khong: (1) co neu dieu kien go ban va gan voi better-auth#10921 khong; (2) co chi dan phai lam lai ban va khi nang @better-auth/api-key khong. Ca hai co thi dat"
-    evidence_required: [verdict, rationale]
+    evidence_required: [judged_by, verdict, rationale]
