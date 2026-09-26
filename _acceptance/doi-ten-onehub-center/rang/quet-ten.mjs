@@ -120,15 +120,19 @@ function doiChungLuatTen() {
 }
 
 function mergeBase() {
-	return execFileSync("git", ["-C", GOC, "merge-base", "HEAD", "origin/onehub"], {
-		encoding: "utf8",
-	}).trim();
+	return execFileSync(
+		"git",
+		["-C", GOC, "merge-base", "HEAD", "origin/onehub"],
+		{
+			encoding: "utf8",
+		},
+	).trim();
 }
 
 function soNgoaiLe() {
-	const khai = JSON.parse(readFileSync(join(HERE, "ngoai-le.json"), "utf8")).map(
-		(m) => `${m.tep}${NOI}${m.chu}`,
-	);
+	const khai = JSON.parse(
+		readFileSync(join(HERE, "ngoai-le.json"), "utf8"),
+	).map((m) => `${m.tep}${NOI}${m.chu}`);
 	const la = khai.filter((k) => !BON_NGOAI_LE.includes(k));
 	const thieu = BON_NGOAI_LE.filter((k) => !khai.includes(k));
 	for (const k of la) ghi(false, `ngoai le la: ${hien(k)}`);
@@ -154,12 +158,18 @@ function soBase() {
 	const tam = mkdtempSync(join(tmpdir(), "dtoc-base-"));
 	rmSync(tam, { recursive: true, force: true });
 	try {
-		execFileSync("git", ["-C", GOC, "worktree", "add", "--detach", tam, mergeBase()], {
-			stdio: "ignore",
-		});
+		execFileSync(
+			"git",
+			["-C", GOC, "worktree", "add", "--detach", tam, mergeBase()],
+			{
+				stdio: "ignore",
+			},
+		);
 		const base = new Set(quet(tam).con.map((c) => c.tep));
 		const ky = new Set(
-			readFileSync(join(HERE, "tep-mang-ten-cu.txt"), "utf8").split("\n").filter(Boolean),
+			readFileSync(join(HERE, "tep-mang-ten-cu.txt"), "utf8")
+				.split("\n")
+				.filter(Boolean),
 		);
 		const thieu = [...ky].filter((t) => !base.has(t));
 		const thua = [...base].filter((t) => !ky.has(t));
