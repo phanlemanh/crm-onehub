@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
 import { API_KEY_HEADER, API_KEY_USAGE, auth } from "@crm/auth";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import type { BetterAuthOptions } from "better-auth";
 import request from "supertest";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
@@ -32,10 +33,10 @@ async function hang(id: string) {
 	});
 }
 
-function khongCoSecondaryStorage(options: {
-	secondaryStorage?: unknown;
-}): void {
-	if (options.secondaryStorage !== undefined) {
+function khongCoSecondaryStorage(
+	secondaryStorage: BetterAuthOptions["secondaryStorage"],
+): void {
+	if (secondaryStorage !== undefined) {
 		throw new Error(DA_BAT_SECONDARY);
 	}
 }
@@ -137,15 +138,14 @@ describe("khoa-api-ghi-thua", () => {
 	});
 
 	test("khong-secondary-storage: cau hinh that cua kho khong bat secondaryStorage", () => {
-		khongCoSecondaryStorage(auth.options);
+		const tuyChon: BetterAuthOptions = auth.options;
+		khongCoSecondaryStorage(tuyChon.secondaryStorage);
 		expect(
 			() =>
 				khongCoSecondaryStorage({
-					secondaryStorage: {
-						get: () => null,
-						set: () => null,
-						delete: () => null,
-					},
+					get: async () => null,
+					set: async () => {},
+					delete: async () => {},
 				}),
 			"cau hinh co secondaryStorage phai do",
 		).toThrow(DA_BAT_SECONDARY);
