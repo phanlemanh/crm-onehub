@@ -1,0 +1,15 @@
+{
+  "feature_plain": "Trang dài chỉ còn một vùng cuộn: lăn tới cuối trang thì đầu trang và thanh bên của ứng dụng đứng yên, không trượt lên theo, và không còn tràn ngang giả.",
+  "scope_plain": "Không chấm trang chi tiết agent (nhận cùng dòng sửa); không gỡ một dòng thừa vô hại ở trang Thành viên; không đụng bảng «Được phép vào» vẽ tay; không đo trang ngoài khung trang chung (đăng nhập, trò chuyện).",
+  "decisions_plain": [
+    {"id": "d-20260925T143957Z-1", "p": "Sửa một lần ở khung trang chung cho mọi trang, thay vì vá riêng năm trang đang dính — đổi lại sáu hồ sơ đã ký đang đo khung này phải ghim lại."},
+    {"id": "d-20260925T143957Z-2", "p": "Giả lập «trang dài» bằng một khối đệm và một phần tử ẩn thăm dò do bàn đo chèn vào, thay vì gieo dữ liệu dài cho từng trang — đổi lại hai tiêu chí «trang dài» đo trên trang có hai phần tử nhân tạo; phần tử thật được đo riêng ở trạng thái thường."},
+    {"id": "d-20260925T143957Z-3", "p": "KHÔNG làm bản mẫu thiết kế trước khi duyệt: vòng này không đổi màn nào, thứ nhìn thấy duy nhất (khung thôi trượt) được chụp thật ở bước nghiệm thu."},
+    {"id": "d-20260925T143957Z-4", "p": "KHÔNG viết đặc tả luồng và màn: vòng không thêm hay đổi luồng, màn hay trạng thái nào."},
+    {"id": "d-20260925T143957Z-5", "p": "KHÔNG gỡ dòng «khối chứa» nay thừa ở trang Thành viên — vô hại, và gỡ nó là chạm hồ sơ đã ký của trang đó."},
+    {"id": "d-20260925T144602Z-7", "p": "Trang chi tiết agent và trang trò chuyện chưa có bản ghi nào trên dữ liệu thử, nên được mở bằng mã giả và chỉ cần không bị đo nhầm — cả hai vốn nằm ngoài phạm vi đo."},
+    {"id": "d-20260925T145854Z-8", "p": "Phép phá thử cho tiêu chí «không tràn» được đặt lại đúng chỗ để nó thật sự làm trang tràn — bản cũ không bao giờ đỏ được."},
+    {"id": "d-20260925T154040Z-9", "p": "Bản gốc mà một bài kiểm khác dùng để so khung trang được cập nhật cùng thay đổi này, thay vì nới lỏng phép so — đổi lại bản gốc đó không còn là bản chép nguyên từ lịch sử (xem mục Ngoài hợp đồng)."},
+    {"id": "d-20260925T155616Z-10", "p": "Bàn đo không còn vỡ khi gặp trang đang tự chuyển hướng (Slack › Người) — trước đó một lượt nghiệm thu hỏng vì đúng chỗ này."}
+  ]
+}

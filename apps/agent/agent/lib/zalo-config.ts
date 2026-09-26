@@ -24,6 +24,7 @@ export const ZALO = {
 	},
 	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
+	lenh: { tu: ["xong", "done"], toiDaSo: 20 },
 	loi: {
 		huongDan:
 			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
@@ -39,5 +40,23 @@ export const ZALO = {
 		dangKyHong:
 			"Zalo chưa nhận đăng ký nhận tin. Bot đang dùng giữ nguyên; thử lại sau.",
 		khongCoToken: "Chưa có Bot Token nào để đăng ký.",
+		goiY: 'Trả lời "xong 2" để đánh dấu mục 2 xong.',
+		thieuSo: 'Gõ "xong" kèm số mục trong tin nhắc sáng nay, ví dụ "xong 2".',
+		khongQuyen:
+			"Tài khoản CRM của bạn không còn quyền với kế hoạch 30 ngày đầu, nên chưa đánh dấu mục nào.",
+		chuaCoTin: (gio: string) =>
+			`Hôm nay chưa có tin nhắc qua Zalo. Nhắc đến lúc ${gio}.`,
+		chuaDanhDau: "Chưa đánh dấu mục nào.",
+		ngoaiDai: (sai: string, tran: number) =>
+			`Tin nhắc sáng nay chỉ có mục 1–${tran}, không có mục ${sai}.`,
+		khongPhaiBuoc: (so: number, loai: string, url: string | null) =>
+			`Mục ${so} là «${loai}», không đánh dấu xong được${url ? ` — mở kế hoạch: ${url}` : ""}.`,
+		buocDoi: (so: number, lyDo: "khong-co-buoc" | "ke-hoach-dong") =>
+			lyDo === "khong-co-buoc"
+				? `Mục ${so} không còn bước đó trong kế hoạch.`
+				: `Mục ${so} thuộc kế hoạch đã đóng.`,
+		daXong: "Đã đánh dấu xong: ",
+		khongGiMoi: "Không có mục nào mới",
+		mocDaXongTruoc: " — đã xong từ trước: ",
 	},
 } as const;

@@ -22,18 +22,24 @@ import { useTRPC } from "@/lib/trpc/client";
 
 export type NguoiDi = { userId: string; name: string };
 
-function dienNode(mau: string, gia: Record<string, ReactNode>): ReactNode[] {
+export function dienNode(
+	mau: string,
+	gia: Record<string, ReactNode>,
+): ReactNode[] {
 	let viTri = 0;
-	return mau.split(/(\{\w+\})/).map((phan) => {
-		const khoa = /^\{(\w+)\}$/.exec(phan)?.[1];
-		const khoaReact = `${viTri}`;
-		viTri += phan.length;
-		return (
-			<Fragment key={khoaReact}>
-				{khoa === undefined ? phan : (gia[khoa] ?? "")}
-			</Fragment>
-		);
-	});
+	return mau
+		.split(/(\{\w+\})/)
+		.filter((phan) => phan !== "")
+		.map((phan) => {
+			const khoa = /^\{(\w+)\}$/.exec(phan)?.[1];
+			const khoaReact = `${viTri}`;
+			viTri += phan.length;
+			return (
+				<Fragment key={khoaReact}>
+					{khoa === undefined ? phan : (gia[khoa] ?? "")}
+				</Fragment>
+			);
+		});
 }
 
 export function ChuyenViecDialog({

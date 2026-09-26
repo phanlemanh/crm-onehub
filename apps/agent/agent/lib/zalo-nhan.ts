@@ -7,9 +7,12 @@ import {
 	noiBangMa,
 } from "@crm/db/zalo-lien-ket";
 import type { ZaloMessage } from "@crm/validation/zalo-update";
+import { lienKetKeHoach } from "./nhac-ke-hoach";
+import { BuocDoi, cauTraLoi, xongTheoTinNhac } from "./tra-loi-nhac";
 import { guiZalo } from "./zalo-api";
 import { gioNhac } from "./zalo-bot-xuong";
 import { ZALO } from "./zalo-config";
+import { docLenh } from "./zalo-lenh";
 
 export type PhuThuocNhan = { fetcher: typeof fetch; now: Date };
 
@@ -17,14 +20,45 @@ export type KetQuaTin = "bo-qua" | "xong" | "loi";
 
 type TraLoi = { chatId: string; text: string };
 
-async function cauKhongMa(tx: DbGhi, zaloUserId: string): Promise<string> {
+async function cauKhongMa(
+	tx: DbGhi,
+	zaloUserId: string,
+	text: string,
+	now: Date,
+): Promise<string> {
 	const lienKet = await tx.zaloLink.findUnique({
 		where: { zaloUserId },
 		include: { crmUser: { select: { name: true } } },
 	});
-	return lienKet
-		? ZALO.loi.daNoiRoi(lienKet.crmUser.name, gioNhac())
-		: ZALO.loi.huongDan;
+	if (!lienKet) return ZALO.loi.huongDan;
+	const lenh = docLenh(text);
+	if (!lenh) {
+		return `${ZALO.loi.daNoiRoi(lienKet.crmUser.name, gioNhac())} ${ZALO.loi.goiY}`;
+	}
+	if (lenh.lenh === "xong-thieu-so") return ZALO.loi.thieuSo;
+	const ket = await xongTheoTinNhac(tx, {
+		userId: lienKet.crmUserId,
+		so: lenh.so,
+		now,
+		lienKet: await lienKetKeHoach(),
+	});
+	return cauTraLoi(ket);
+}
+
+async function ghiDaThay(
+	tin: ZaloMessage,
+	now: Date,
+	loi: BuocDoi,
+): Promise<TraLoi | null> {
+	const { count } = await db.zaloUpdateSeen.createMany({
+		data: [{ messageId: tin.message_id, seenAt: now }],
+		skipDuplicates: true,
+	});
+	if (count === 0) return null;
+	return {
+		chatId: tin.chat.id,
+		text: cauTraLoi({ loai: "buoc-doi", muc: loi.muc }),
+	};
 }
 
 async function xuLyDb(
@@ -40,7 +74,12 @@ async function xuLyDb(
 	const tu = tin.from.id;
 	if (await dangBiChan(tx, tu, now)) return null;
 	const ma = chuanHoaMa(tin.text ?? "");
-	if (!ma) return { chatId: tin.chat.id, text: await cauKhongMa(tx, tu) };
+	if (!ma) {
+		return {
+			chatId: tin.chat.id,
+			text: await cauKhongMa(tx, tu, tin.text ?? "", now),
+		};
+	}
 	const ket = await noiBangMa(tx, {
 		ma,
 		zaloUserId: tu,
@@ -52,6 +91,15 @@ async function xuLyDb(
 	}
 	await ghiSai(tx, tu, now);
 	return { chatId: tin.chat.id, text: ZALO.loi.huongDan };
+}
+
+async function ghiTin(tin: ZaloMessage, now: Date): Promise<TraLoi | null> {
+	try {
+		return await db.$transaction((tx) => xuLyDb(tx, tin, now));
+	} catch (loi) {
+		if (loi instanceof BuocDoi) return ghiDaThay(tin, now, loi);
+		throw loi;
+	}
 }
 
 function laTinRieng(tin: ZaloMessage): boolean {
@@ -66,7 +114,7 @@ export async function xuLyTinDen(
 	if (!laTinRieng(tin)) return "bo-qua";
 	let traLoi: TraLoi | null;
 	try {
-		traLoi = await db.$transaction((tx) => xuLyDb(tx, tin, deps.now));
+		traLoi = await ghiTin(tin, deps.now);
 	} catch (loi) {
 		console.error(
 			`[zalo] khong ghi duoc message_id=${tin.message_id}: ${String(loi)}`,
