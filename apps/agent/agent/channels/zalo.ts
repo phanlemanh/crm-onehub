@@ -21,8 +21,11 @@ async function docThan(request: Request): Promise<unknown> {
 }
 
 const loiNhan = z
-	.object({ message: z.string().nullable().catch(null) })
-	.catch({ message: null });
+	.object({
+		message: z.string().nullable().catch(null),
+		finishReason: z.string().nullable().catch(null),
+	})
+	.catch({ message: null, finishReason: null });
 
 function suKien(
 	channel: { continuationToken?: string },
@@ -37,8 +40,8 @@ function suKien(
 
 export const zaloEvents: ChannelEvents = {
 	async "message.completed"(data, channel, ctx) {
-		const { message } = loiNhan.parse(data);
-		if (!message?.trim()) return;
+		const { message, finishReason } = loiNhan.parse(data);
+		if (!message?.trim() || finishReason === ZALO.hoi.giuaLuot) return;
 		await traLoiVe(suKien(channel, ctx), message);
 	},
 	async "turn.failed"(_data, channel, ctx) {

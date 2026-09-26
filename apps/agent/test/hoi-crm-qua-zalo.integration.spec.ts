@@ -1014,3 +1014,35 @@ describe("dang-ban", () => {
 		}
 	});
 });
+
+describe("duong-chinh", () => {
+	test("duong-chinh: cau dan truoc khi goi cong cu khong gui, chi cau tra loi cuoi toi Zalo", async () => {
+		const A = await gieoVai("An", "member");
+		await noiZalo(A.id, "ZA");
+		moMayChu();
+		const eve = eveGia();
+		const w = await guiWebhook("ZA", "Thoả thuận nào sắp hạn?", { eve });
+		await eve.xong();
+		const h = await hangCua(w.messageId);
+		const ctx = ctxZalo("ses-gia-1", h?.id ?? "", "ZA");
+		await suKien(
+			"message.completed",
+			{
+				message: "Để tôi tra danh sách thoả thuận.",
+				finishReason: "tool-calls",
+			},
+			"ZA",
+			ctx,
+		);
+		expect(guiMayChu("ZA"), "cau dan khong toi Zalo").toEqual([]);
+		expect((await hangCua(w.messageId))?.ketQua).toBe("dang-hoi");
+		await suKien(
+			"message.completed",
+			{ message: "Acme hết hạn 30/10.", finishReason: "stop" },
+			"ZA",
+			ctx,
+		);
+		expect(guiMayChu("ZA")).toEqual(["Acme hết hạn 30/10."]);
+		expect((await hangCua(w.messageId))?.ketQua).toBe("da-tra-loi");
+	});
+});
