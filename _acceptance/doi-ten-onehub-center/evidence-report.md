@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 256e8de37363395290cde29efd81202c5324400c
+verified_commit: 9acaf2819022175612728ad0cc7e8a5b9331be6f
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -356,3 +356,7 @@ Round 1: 16/17 mục máy + judgment xanh theo dữ liệu đã thu (E1–E6, E5
 Round 2: 15/17 mục máy + judgment có dữ liệu, phần lớn xanh (E1–E6, E5b, E8–E12, E14, E16 exit 0, baseline chủ yếu red — không có mục nào green-on-both lần này). Verdict tổng hạ xuống BLOCKED (nặng hơn round 1) vì hai lý do hạ tầng mới: E13 (thuoc-da-ky.mjs) vẫn chưa ra dòng EXIT sau ~2.5 giờ dự kiến chạy nền, và E15 (chụp ảnh cột trái) lần đầu cannotRun vì .env dev dùng chung thiếu Google OAuth credentials thật (sso.signInOptions trả google=false) — khác round 1, nơi E15 từng PASS đủ 6 ảnh. Panel E7 cũng đổi hướng: từ 2 PASS/1 UNCERTAIN (round 1) sang 2 FAIL/1 PASS (round 2, proposal FAIL) trên cùng câu ở agent-builder-tro-chuyen.ts — cần human_override ở Gate 2 (T3, bắt buộc mọi judgment item). Thêm một lệnh suite đỏ mới: `bunx turbo run lint --force` exit 1 (biome format lỗi ở apps/app/test/workspace-label.spec.ts, xem review-findings.md).
 
 Round 3: Cả hai điểm hạ tầng của round 2 đã hết — E13 nay hoàn tất với dòng EXIT thật (28 DUNG, 0 SAI, exit 0), và E15 chụp đủ 6 ảnh (tiền đề Google OAuth CI-only đạt, sso.signInOptions trả google=true). 16/16 eval máy exit 0 (không còn eval nào cannotRun); baseline chủ yếu red (không mục nào green-on-both lần này). 4 lệnh suite đều xanh — `bunx turbo run lint --force` hết đỏ so với round 2. Panel E7 đổi điểm nóng lần nữa: round này bất đồng trên một dòng ở `apps/agent/agent/lib/zalo-config.ts` (1 FAIL domain-correctness / 2 PASS operational-feasibility, spec-alignment; proposal PASS) — khác cả round 1 (agent-builder-tro-chuyen.ts, 2 PASS/1 UNCERTAIN) lẫn round 2 (agent-builder-tro-chuyen.ts, 2 FAIL/1 PASS). Verdict tổng giữ PENDING-JUDGMENT: T3 buộc mọi judgment item chờ `human_override` trực tiếp của người bất kể phiếu panel; `human_override` để trống chờ Gate 2.
+
+### Re-pin lần 1 — 2026-09-26, do gộp onehub 4d40c846 sau chữ ký; chữ Zalo mới đổi tên; E13 đọc bằng bộ của kit
+run_id: repin-20260926T153307Z-42878
+sha: 9acaf2819022175612728ad0cc7e8a5b9331be6f · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E7 (E7 không khai paths), E8, E11, E15 · AC không có chốt máy: AC-7, AC-8, AC-11, AC-15
