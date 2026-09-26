@@ -1,146 +1,98 @@
 {
-  "feature_plain": "Người dùng quên mật khẩu tự xin được một liên kết đặt lại qua thư, không phải nhờ quản trị, và được báo thư khi mật khẩu vừa bị đổi.",
-  "will_do": [
+  "feature_plain": "Người dùng quên mật khẩu tự xin được liên kết đặt lại qua thư, mà cửa này không lộ địa chỉ nào có tài khoản và không để một người dội làm chặn cả công ty.",
+  "decisions": [
     {
-      "id": "AC-1",
-      "p": "Sẽ ẩn liên kết «Quên mật khẩu?» và chặn trang xin liên kết khi kho chưa khai khoá gửi thư — người dùng nhờ quản trị như trước."
-    },
-    {
-      "id": "AC-2",
-      "p": "Sẽ hiện «Quên mật khẩu?» dưới ô mật khẩu khi đã khai khoá gửi thư, và người chưa đăng nhập mở được trang xin liên kết."
-    },
-    {
-      "id": "AC-3",
-      "p": "Sẽ không cho máy chủ khởi động khi chỉ khai một nửa cấu hình thư, và báo tên cả hai biến còn thiếu."
-    },
-    {
-      "id": "AC-4",
-      "p": "Sẽ trả cùng một câu, giống nhau từng chữ, dù địa chỉ gõ vào có tài khoản, không có, đã bị thu quyền hay chỉ vào bằng Google."
-    },
-    {
-      "id": "AC-5",
-      "p": "Sẽ trả lời ngay mà không chờ thư gửi xong, nên đo thời gian cũng không đoán được địa chỉ nào có tài khoản."
-    },
-    {
-      "id": "AC-6",
-      "p": "Sẽ gửi đúng một thư có liên kết tới chính người có tài khoản còn quyền vào, ghi hạn dùng bằng số phút thật; địa chỉ lạ hoặc đã bị thu quyền không nhận gì."
-    },
-    {
-      "id": "AC-9",
-      "p": "Sẽ chặn lượt xin thứ tư trong 15 phút từ cùng một nơi, không gửi thư thêm, và màn nói rõ là đã xin quá nhiều lần."
-    },
-    {
-      "id": "AC-10",
-      "p": "Sẽ gửi một thư báo «mật khẩu vừa được đổi» sau khi đặt lại xong, mà việc đặt mật khẩu không phải chờ hay hỏng theo dịch vụ thư; lượt đặt bị từ chối thì không có thư báo nào."
-    },
-    {
-      "id": "AC-11",
-      "p": "Sẽ giữ nguyên câu trả lời khi dịch vụ thư hỏng, và ghi lỗi mà không ghi địa chỉ email của ai."
-    },
-    {
-      "id": "AC-12",
-      "p": "Sẽ cho người dùng thấy đang gửi, đã gửi, lỗi (kèm cách thử lại, chữ đã gõ còn nguyên) và quá lượt — không bao giờ báo «đã gửi» khi lượt gửi hỏng."
-    }
-  ],
-  "wont_do": [
-    {
-      "id": "AC-7",
-      "p": "Chặn dùng lại liên kết: đặt xong bằng một liên kết thì chính nó và mọi liên kết khác người đó đã xin đều hết dùng được."
-    },
-    {
-      "id": "AC-8",
-      "p": "Chặn liên kết quá hạn: quá đúng thời hạn đã khai kể từ lúc xin thì liên kết không đặt được mật khẩu nữa."
+      "id": "E20",
+      "q": "Chữ trên các màn và hai lá thư đọc tự nhiên, không lộ tài khoản?",
+      "why": "Hội đồng ba người chấm đề xuất ĐẠT ở round 2; chữ không đổi từ đó nên round 3 giữ kết quả."
     }
   ],
   "scope_plain": "Chưa cắt phiên cũ tức thì khi đổi mật khẩu, chưa giới hạn theo hộp thư nhận, chưa huỷ liên kết cũ khi xin liên kết mới, chưa có thư HTML; cắm khoá và xác minh tên miền gửi là việc vận hành.",
-  "coverage_plain": [
-    {
-      "i": 0,
-      "p": "Trục người đứng sau địa chỉ: có tài khoản, không có, đã bị thu quyền, chỉ vào bằng Google, đang đăng nhập — mỗi loại có ca riêng ở AC-4 (cùng một câu trả lời) và AC-6 (thư đúng người)."
-    },
-    {
-      "i": 1,
-      "p": "Trục chặng của một lần quên mật khẩu, theo vòng đời trong chuẩn OWASP: hiện cửa, xin, nhận thư, dùng liên kết, sau khi đổi — mỗi chặng có ít nhất một tiêu chí."
-    },
-    {
-      "i": 2,
-      "p": "Trục cấu hình thư: chưa khai, khai đủ, khai đủ mà dịch vụ chậm hay hỏng, khai một nửa — phủ bởi AC-1, AC-2, AC-3, AC-5, AC-11."
-    },
-    {
-      "i": 3,
-      "p": "Trục đường lộ hay lạm dụng: qua câu trả lời (AC-4), qua thời gian (AC-5), dội liên tục (AC-9), liên kết dùng lại hay quá hạn (AC-7, AC-8)."
-    },
-    {
-      "i": 4,
-      "p": "Mười hai ô cốt lõi thành AC-1 tới AC-12; AC-13 (người đọc có hiểu chữ không) là lớp chung cho mọi màn."
-    },
-    {
-      "i": 5,
-      "p": "Người đang đăng nhập mở trang xin liên kết thì trang vẫn hiện như trang đặt mật khẩu, không có gì để hứa thêm nên không thành tiêu chí."
-    },
-    {
-      "i": 6,
-      "p": "Giả định chờ anh gạch: tài khoản chỉ vào bằng Google cũng tự xin được liên kết, và đặt xong thì có thêm cửa mật khẩu — giống việc quản trị phát liên kết cho bất kỳ ai ở vòng trước."
-    },
-    {
-      "i": 7,
-      "p": "Ô bị cắt đều nằm ở phần ngoài phạm vi, không biến mất."
-    }
-  ],
-  "gap_probe_plain": [
-    {
-      "i": 0,
-      "p": "Chưa có phép đo nào chứng minh thư thật sự được giao cho cơ chế chạy nền của Vercel, nên lên môi trường thật thư có thể không bao giờ đi mà máy vẫn báo xanh — đã thêm ca đo đúng chỗ nối đó, cho cả thư đặt lại lẫn thư báo."
-    },
-    {
-      "i": 1,
-      "p": "Thiết kế chưa nói việc huỷ các liên kết còn treo có phải đợi thư báo không; nếu có thì dịch vụ thư chết là liên kết cũ vẫn dùng được — đã chốt huỷ liên kết xong trước khi trả lời, và thêm ca dịch vụ thư chết."
-    },
-    {
-      "i": 2,
-      "p": "Trạng thái «chưa khai khoá thư» chưa được đo trên trang thật, chỉ đo bằng hàm tách riêng — đã thêm một lượt chụp màn với máy chủ không có khoá thư."
-    },
-    {
-      "i": 3,
-      "p": "Phép đo chặn xin quá lượt có thể xanh chỉ nhờ môi trường test; đã khai rõ bộ đếm dùng chung qua cơ sở dữ liệu và thêm ca khẳng định điều đó."
-    },
-    {
-      "i": 4,
-      "p": "Câu «đã xin quá nhiều lần» chỉ được thử với câu trả lời tự dựng — đã thêm bước gửi thật bốn lần tới máy chủ trong lượt chụp màn."
-    }
-  ],
+  "analyst_plain": "",
   "decisions_plain": [
     {
       "id": "d-20260925T211911Z-1",
-      "p": "Đã chọn gửi thư ở nền bằng cơ chế chạy nền của Vercel (anh chọn Q1 = A) — đổi lại thêm một thư viện nhỏ vào gói xác thực."
+      "p": "Đã chọn gửi thư ở nền bằng cơ chế chạy nền của Vercel — đổi lại thêm một thư viện nhỏ."
     },
     {
       "id": "d-20260925T211911Z-2",
-      "p": "Đã chọn giữ việc gửi thư trong máy chủ xác thực và ghi một ngoại lệ có tên vào luật API (anh chọn Q2 = A) — đổi lại một dịch vụ bên ngoài được gọi từ máy chủ, trái chữ của luật chung."
+      "p": "Đã chọn gửi thư thẳng từ máy chủ xác thực, có ghi ngoại lệ trong luật API — đổi lại một dịch vụ ngoài được gọi từ máy chủ."
     },
     {
       "id": "d-20260925T211911Z-3",
-      "p": "Đã chọn đọc cấu hình thư mỗi lần dùng — đổi lại khi thư tắt, máy vẫn ghi một liên kết không đi đâu và tự hết hạn."
+      "p": "Đã chọn đọc cấu hình thư mỗi lần dùng — đổi lại khi thư tắt vẫn ghi một liên kết không đi đâu và tự hết hạn."
     },
     {
       "id": "d-20260925T211911Z-4",
-      "p": "Đã chọn huỷ mọi liên kết còn treo ngay khi đặt mật khẩu xong, như luồng quản trị vòng trước — đổi lại thêm một bước xoá."
+      "p": "Đã chọn huỷ mọi liên kết còn treo khi đặt mật khẩu xong — đổi lại thêm một bước xoá."
     },
     {
       "id": "d-20260925T211911Z-5",
-      "p": "Lệch so với lúc duyệt trong chat: tiêu đề trang xin liên kết tự vẽ giống trang đặt mật khẩu, vì khối tiêu đề chung chỉ chạy phía máy chủ — đổi lại có hai bản tiêu đề giống nhau."
+      "p": "Tiêu đề trang xin liên kết tự vẽ giống trang đặt mật khẩu — đổi lại có hai bản tiêu đề giống nhau."
     },
     {
       "id": "d-20260925T211911Z-6",
-      "p": "KHÔNG làm phiên thiết kế trước cổng — màn chép khuôn trang đặt mật khẩu đã ký và vòng cửa vào sắp dựng lại màn đăng nhập; đổi lại anh duyệt giao diện bằng chữ, ảnh thật có ở vòng chấm."
+      "p": "KHÔNG làm phiên thiết kế trước Cổng Phạm vi — đổi lại anh duyệt giao diện bằng chữ, ảnh thật có ở vòng chấm."
     },
     {
       "id": "d-20260925T211911Z-7",
-      "p": "KHÔNG giới hạn theo hộp thư nhận — đổi lại nhiều nơi gửi vẫn dội được hộp thư của một người; xem lại khi có báo cáo đầu tiên."
+      "p": "KHÔNG giới hạn theo hộp thư nhận — đổi lại nhiều nơi gửi vẫn dội được hộp thư của một người."
     },
     {
       "id": "d-20260925T211911Z-8",
-      "p": "KHÔNG đo chênh lệch vài mili-giây giữa có và không có tài khoản — đó là mức che của chính thư viện xác thực; đổi lại kẻ đo hàng nghìn lượt vẫn có thể thấy."
+      "p": "KHÔNG đo chênh lệch vài mili-giây giữa có và không có tài khoản — mức che của thư viện xác thực."
+    },
+    {
+      "id": "d-20260925T213839Z-9",
+      "p": "Giao bằng PR mới, để PR #104 của Tuan Do Viet nguyên như cũ."
+    },
+    {
+      "id": "d-20260925T214656Z-11",
+      "p": "Liên kết «Quên mật khẩu?» dùng thành phần liên kết chữ của thư viện giao diện thay cho nút kiểu liên kết — chữ thẳng lề ô nhập."
+    },
+    {
+      "id": "d-20260925T214656Z-12",
+      "p": "Form nhận hàm gửi qua một tham số để test được — đổi lại một tham số chỉ test dùng."
+    },
+    {
+      "id": "d-20260925T221621Z-13",
+      "p": "Anh duyệt kế hoạch sáu phần việc tại cổng duyệt kế hoạch."
+    },
+    {
+      "id": "d-20260925T222538Z-14",
+      "p": "Hai phép đo ban đầu xanh cả khi hỏng; đã làm chặt lại để chúng đỏ thật."
+    },
+    {
+      "id": "d-20260925T222538Z-15",
+      "p": "Phát hiện thư viện xoá bộ đếm cũ hơn 60 giây, nên lời hứa 15 phút không giữ được — đã chuyển anh quyết."
+    },
+    {
+      "id": "d-20260925T235803Z-16",
+      "p": "KHÔNG giữ cửa sổ 15 phút — hạ về ba lượt mỗi 60 giây theo anh chọn."
+    },
+    {
+      "id": "d-20260925T235901Z-17",
+      "p": "Anh duyệt sửa tiêu chí quá lượt sau Cổng Phạm vi (hướng b)."
+    },
+    {
+      "id": "d-20260926T003546Z-18",
+      "p": "Anh chọn cho proxy ký địa chỉ người gọi, máy chủ chỉ tin địa chỉ đã ký — mỗi người một bộ đếm, cả đăng nhập."
+    },
+    {
+      "id": "d-20260926T004447Z-19",
+      "p": "Đã sửa việc mọi người chung một bộ đếm, và bắt thêm một lỗi treo do chính bản sửa gây ra."
+    },
+    {
+      "id": "d-20260926T010913Z-20",
+      "p": "Anh chọn sửa ngay lỗi làm sập máy chủ khi người gọi ngắt giữa chừng, trong round cuối."
+    },
+    {
+      "id": "d-20260926T011154Z-21",
+      "p": "Lớp kiểm địa chỉ thôi đọc thân yêu cầu, chỉ sửa header — gỡ lỗi sập và lỗi treo."
+    },
+    {
+      "id": "d-20260926T013539Z-22",
+      "p": "Anh chọn trình Cổng Bằng chứng ngay trên round 3 bị cắt, không chạy lại bộ test."
     }
   ]
 }
