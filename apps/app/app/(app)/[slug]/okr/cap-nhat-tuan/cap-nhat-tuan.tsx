@@ -58,6 +58,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
+import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -125,13 +126,31 @@ function laMucTuTin(v: string): MucTuTin | null {
 	return MUC_TU_TIN.find((m) => m === v) ?? null;
 }
 
+function laKhoaNguon(kr: KrCapNhat): boolean {
+	return kr.nguon !== "tay";
+}
+
+function giaTriMacDinh(kr: KrCapNhat): number {
+	if (laKhoaNguon(kr) || kr.doCanh) return kr.soMay?.giaTri ?? kr.currentValue;
+	return kr.currentValue;
+}
+
+function nhanNguonMay(
+	nguon: NonNullable<KrCapNhat["soMay"]>["nguon"],
+	m: OkrSoMessages,
+): string {
+	if (nguon === "bang-tinh") return m.dau.bangTinh;
+	return m.dau[nguon];
+}
+
 export function oBanDau(kr: KrCapNhat, locale: Locale): O {
+	const macDinh = giaTriMacDinh(kr);
 	const giaTriDau =
 		kr.kind === "moc"
-			? kr.currentValue >= 1
+			? macDinh >= 1
 				? MOC.xong
 				: MOC.chuaXong
-			: hienSo(kr.currentValue, locale);
+			: hienSo(macDinh, locale);
 	return { giaTri: giaTriDau, tuTin: null, ghiChu: "" };
 }
 
@@ -420,7 +439,7 @@ function DongCapNhat({
 }) {
 	const lan = lanTruoc(kr, weekStart);
 	return (
-		<Item data-kr={kr.keyResultId} role="listitem">
+		<Item data-kr={kr.keyResultId} data-nguon={kr.nguon} role="listitem">
 			<ItemContent>
 				<ItemTitle translate="no">{kr.title}</ItemTitle>
 				<ItemDescription translate="no">{kr.objectiveTitle}</ItemDescription>
@@ -472,8 +491,24 @@ export function OGiaTri({
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
+	const soMsg = okrSoMessages(locale);
 	const id = `${kr.keyResultId}-gia-tri`;
 	const nhanLan = lan === null ? m.hienTai : m.lanTruoc[lan];
+	const khoaNguon = laKhoaNguon(kr);
+
+	const moTaSoMay = khoaNguon
+		? kr.soMay
+			? soMsg.trangThai.capNhat.soTu(
+					nhanNguonMay(kr.soMay.nguon, soMsg),
+					ngayThang(kr.soMay.ngay),
+				)
+			: soMsg.trangThai.bangKr.chuaChup
+		: kr.doCanh && kr.soMay
+			? soMsg.trangThai.capNhat.soMay(
+					hienSo(kr.soMay.giaTri, locale),
+					ngayThang(kr.soMay.ngay),
+				)
+			: null;
 
 	if (kr.kind === "moc") {
 		return (
@@ -482,7 +517,8 @@ export function OGiaTri({
 				<ToggleGroup
 					aria-labelledby={id}
 					className="w-full sm:w-fit"
-					disabled={khoa}
+					data-khoa={khoaNguon || undefined}
+					disabled={khoa || khoaNguon}
 					onValueChange={(v) => {
 						if (v) datGiaTri(v);
 					}}
@@ -500,7 +536,8 @@ export function OGiaTri({
 					</ToggleGroupItem>
 				</ToggleGroup>
 				<FieldDescription>
-					{nhanLan}: {giaTri(kr, kr.currentValue, locale).toLowerCase()}
+					{moTaSoMay ??
+						`${nhanLan}: ${giaTri(kr, kr.currentValue, locale).toLowerCase()}`}
 				</FieldDescription>
 			</Field>
 		);
@@ -522,7 +559,8 @@ export function OGiaTri({
 				<InputGroupInput
 					aria-invalid={loi !== null || undefined}
 					className="tabular-nums"
-					disabled={khoa}
+					data-khoa={khoaNguon || undefined}
+					disabled={khoa || khoaNguon}
 					id={id}
 					inputMode="decimal"
 					onChange={(e) => datGiaTri(e.target.value)}
@@ -538,6 +576,10 @@ export function OGiaTri({
 				<FieldError>{m.loiSo(hienSo(VI_DU_SO, locale))}</FieldError>
 			) : loi === "phan-tram" ? (
 				<FieldError>{m.loiPhanTram}</FieldError>
+			) : moTaSoMay ? (
+				<FieldDescription className="tabular-nums">
+					{moTaSoMay}
+				</FieldDescription>
 			) : (
 				<FieldDescription className="tabular-nums">
 					{nhanLan} {giaTri(kr, kr.currentValue, locale)} · {m.dich}{" "}
