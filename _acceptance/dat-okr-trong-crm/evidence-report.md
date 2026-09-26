@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cf0f07286bb2e5f2ea764f2abf7f5224c94fd9af
+verified_commit: e17f7d9af7ae8547b82986709c9c5249ef14037b
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -407,3 +407,19 @@ sha: 1a0cd81e6918a7f7d8209fb8bc619cdc3803e770 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-25, do gộp onehub 64b6c988 (#139) vào dat-okr-trong-crm trước PR
 run_id: repin-20260925T113608Z-86410
 sha: cf0f07286bb2e5f2ea764f2abf7f5224c94fd9af · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)
+
+### Re-pin lần 3 — 2026-09-26, do lượt 4 cap-nhat-tuan-okr: AC-16 khoá số hiện tại KR đang chạy, tab Trao đổi (E12 bước 1 ba tab đầu), gộp onehub ec2849e
+run_id: repin-20260926T005130Z-92007
+sha: 7d8bf4a04cf8160fb028cc3b6f7518d5f4c20d8e · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths) · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-09-26, do gộp onehub #149 #150 vào feat/cap-nhat-tuan-okr: dienNode dùng chung, cơ chế kho đo
+run_id: repin-20260926T032909Z-72323
+sha: 79be3e1775062a225d65bf6a6e652f92010c54dc · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)
+
+### Re-pin lần 5 — 2026-09-26, do hoá cũ sau gộp onehub #151 (đặt lại mật khẩu) vào cap-nhat-tuan-okr; lượt trước đỏ vì hai test onboarding chập chờn
+run_id: repin-20260926T045452Z-13928
+sha: 94dd24ef5fdb7d0e24a2cf7232eb9428d291e283 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)
+
+### Re-pin lần 6 — 2026-09-26, do hoá cũ sau gộp onehub #152 (khoá API ghi thưa) vào cap-nhat-tuan-okr
+run_id: repin-20260926T052510Z-21338
+sha: e17f7d9af7ae8547b82986709c9c5249ef14037b · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)

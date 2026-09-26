@@ -1027,11 +1027,12 @@ async function buocE12() {
 		sheet,
 	);
 	kiem(
-		`E12 buoc 1: phai 3 tab KR/Can chinh/Vet, thay ${JSON.stringify(tab)}`,
-		tab.length === 3 &&
+		`E12 buoc 1: ba tab dau phai KR/Can chinh/Vet (tab thu tu neu co la Trao doi), thay ${JSON.stringify(tab)}`,
+		(tab.length === 3 || tab.length === 4) &&
 			tab[0].startsWith("KR") &&
 			tab[1].startsWith("Căn chỉnh") &&
-			tab[2].startsWith(CHU.vet),
+			tab[2].startsWith(CHU.vet) &&
+			(tab.length === 3 || tab[3].startsWith("Trao đổi")),
 	);
 	await chup(t, "E12-step1.png");
 	await doiRong(t, HEP);

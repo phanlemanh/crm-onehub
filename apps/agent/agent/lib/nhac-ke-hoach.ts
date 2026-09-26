@@ -9,6 +9,7 @@ import {
 } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
+	type MucNhac,
 	mucNhac,
 	type NhacPayload,
 	parseNhacPayload,
@@ -16,7 +17,7 @@ import {
 import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
 import { completeTask } from "./tasks";
-import { dungTin } from "./tin-nhac";
+import { dungTin, type LienKet } from "./tin-nhac";
 import { guiZalo, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
 
@@ -46,10 +47,29 @@ function nguoiCua(subject: string | null): string {
 	return khop[1];
 }
 
+function maViec(v: ViecNhac): MucNhac {
+	switch (v.loai) {
+		case "okr-cap-nhat":
+			return { loai: v.loai, krIds: v.krIds };
+		case "okr-kr-im":
+			return { loai: v.loai, keyResultId: v.keyResultId };
+		case "okr-duoc-giao":
+			return {
+				loai: v.loai,
+				objectiveId: v.objectiveId,
+				keyResultId: v.keyResultId,
+			};
+		case "okr-nhac-ten":
+			return { loai: v.loai, commentId: v.commentId };
+		case "okr-theo-doi":
+			return { loai: v.loai, objectiveId: v.objectiveId };
+		default:
+			return { loai: v.loai, planId: v.planId, stepId: v.stepId };
+	}
+}
+
 function maCua(ds: ViecNhac[]): NhacPayload["muc"] {
-	return ds.map(({ loai, planId, stepId }) =>
-		mucNhac.parse({ loai, planId, stepId }),
-	);
+	return ds.map((v) => mucNhac.parse(maViec(v)));
 }
 
 export async function lenLichNhac(now = new Date()): Promise<{ ghi: number }> {
@@ -75,23 +95,38 @@ function appUrlMacDinh(): string | null {
 	return dau || null;
 }
 
-async function duongMo(
+async function xuongSlug(
 	appUrl: string | null,
-): Promise<(planId: string) => string | null> {
-	if (!appUrl) return () => null;
+): Promise<{ appUrl: string; slug: string } | null> {
+	if (!appUrl) return null;
 	const xuong = await db.organization.findUnique({
 		where: { id: WORKSPACE_ID },
 		select: { slug: true },
 	});
 	const slug = xuong?.slug;
-	if (!slug) return () => null;
-	return (planId) => `${appUrl}/${slug}?record=plan:${planId}`;
+	if (!slug) return null;
+	return { appUrl, slug };
+}
+
+async function duongMo(appUrl: string | null): Promise<LienKet> {
+	const ctx = await xuongSlug(appUrl);
+	if (!ctx) return () => null;
+	return (v) => {
+		if ("planId" in v)
+			return `${ctx.appUrl}/${ctx.slug}?record=plan:${v.planId}`;
+		if (v.loai === "okr-cap-nhat") {
+			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
+		}
+		return `${ctx.appUrl}/${ctx.slug}/okr?record=objective:${v.objectiveId}`;
+	};
 }
 
 export async function lienKetKeHoach(): Promise<
 	(planId: string) => string | null
 > {
-	return duongMo(appUrlMacDinh());
+	const ctx = await xuongSlug(appUrlMacDinh());
+	if (!ctx) return () => null;
+	return (planId) => `${ctx.appUrl}/${ctx.slug}?record=plan:${planId}`;
 }
 
 async function dong(taskId: string, ket: KetQuaNhac): Promise<KetQuaNhac> {
@@ -151,7 +186,7 @@ async function guiQuaZalo(
 	zaloUserId: string | null,
 	ten: string,
 	viec: ViecNhac[],
-	lienKet: (planId: string) => string | null,
+	lienKet: LienKet,
 	deps: PhuThuocGui,
 ): Promise<ViecNhac[]> {
 	if (!token || !zaloUserId) {
@@ -173,7 +208,7 @@ async function guiQuaSlack(
 	slackUserId: string | null,
 	ten: string,
 	viec: ViecNhac[],
-	lienKet: (planId: string) => string | null,
+	lienKet: LienKet,
 	taskId: string,
 	deps: PhuThuocGui,
 ): Promise<ViecNhac[]> {

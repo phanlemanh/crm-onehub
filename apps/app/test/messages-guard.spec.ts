@@ -112,6 +112,7 @@ const KHONG_DAU = new Set([
 	"cot.kr",
 	"cot.pha",
 	"moc.xong",
+	"mucTuTin.cao",
 	"dem",
 ]);
 
@@ -652,6 +653,36 @@ describe("kho chuoi cua vong ③a", () => {
 			"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
 			"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
 			"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
+			"okr:capNhat.dauTrang": [
+				"1 KR bạn phụ trách · hạn hết Chủ nhật A. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.",
+				"12 KR bạn phụ trách · hạn hết Chủ nhật A. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.",
+			],
+			"okr:capNhat.soVoi": ["1 so với a", "12 so với a"],
+			"okr:capNhat.loiSo": ["Nhập một số, ví dụ 1", "Nhập một số, ví dụ 12"],
+			"okr:capNhat.thanh.loiSo": [
+				"1 KR có số chưa hợp lệ — sửa rồi gửi.",
+				"12 KR có số chưa hợp lệ — sửa rồi gửi.",
+			],
+			"okr:capNhat.thanh.du": ["Đủ 1/A KR.", "Đủ 12/A KR."],
+			"okr:capNhat.thanh.chon": [
+				"Đã chọn mức tự tin 1/A KR. KR chưa chọn sẽ chờ lần gửi sau.",
+				"Đã chọn mức tự tin 12/A KR. KR chưa chọn sẽ chờ lần gửi sau.",
+			],
+			"okr:capNhat.gui": ["Gửi 1 cập nhật", "Gửi 12 cập nhật"],
+			"okr:capNhat.guiLai": ["Gửi lại 1 cập nhật", "Gửi lại 12 cập nhật"],
+			"okr:capNhat.daGui.title": [
+				"Đã gửi 1 cập nhật lúc A · mất B giây",
+				"Đã gửi 12 cập nhật lúc A · mất B giây",
+			],
+			"okr:capNhat.daGui.keTiep": [
+				"Lần kế tiếp: thứ Hai 1 — tin nhắc buổi sáng sẽ dẫn thẳng về đây.",
+				"Lần kế tiếp: thứ Hai 12 — tin nhắc buổi sáng sẽ dẫn thẳng về đây.",
+			],
+			"okr:capNhat.daGui.conCho": [
+				"1 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
+				"12 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
+			],
+			"okr:capNhat.tuTinNhan": ["Tự tin 1", "Tự tin 12"],
 			"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
 			"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [

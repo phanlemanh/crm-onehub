@@ -81,7 +81,7 @@ const quanHeDonVi = {
 	department: { select: { name: true } },
 	person: { select: { name: true } },
 } as const;
-const chonTenDonVi = { level: true, ...quanHeDonVi } as const;
+export const chonTenDonVi = { level: true, ...quanHeDonVi } as const;
 const chonMucTieu = {
 	owner: { select: chonNguoi },
 	participants: {
@@ -105,7 +105,14 @@ const chonMucTieu = {
 		},
 		orderBy: { createdAt: "asc" },
 	},
-	cycle: { select: { endsOn: true, breakStartsOn: true, breakEndsOn: true } },
+	cycle: {
+		select: {
+			endsOn: true,
+			breakStartsOn: true,
+			breakEndsOn: true,
+			phase: true,
+		},
+	},
 	...quanHeDonVi,
 } satisfies Prisma.OkrObjectiveInclude;
 
@@ -116,7 +123,7 @@ type TenDonVi = {
 	person: { name: string } | null;
 };
 
-function tenDonVi(r: TenDonVi): string {
+export function tenDonVi(r: TenDonVi): string {
 	switch (capMucTieu.parse(r.level)) {
 		case "onehub":
 			return OKR.tenGoc;
@@ -400,14 +407,18 @@ export class OkrService {
 		});
 	}
 
-	private async assertThanhVien(tx: Tx, ids: string[]) {
+	async assertThanhVien(
+		tx: Tx | Db,
+		ids: string[],
+		loi: (id: string) => string = T.khongPhaiThanhVien,
+	) {
 		const can = [...new Set(ids)];
 		const co = await tx.member.findMany({
 			where: { organizationId: WORKSPACE_ID, userId: { in: can } },
 			select: { userId: true },
 		});
 		const thieu = can.find((id) => !co.some((m) => m.userId === id));
-		if (thieu) throw new BadRequestException(T.khongPhaiThanhVien(thieu));
+		if (thieu) throw new BadRequestException(loi(thieu));
 	}
 
 	private async kiemTranMucTieu(
@@ -440,6 +451,14 @@ export class OkrService {
 		});
 		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
 		return trangThaiMucTieu.parse(mt.status);
+	}
+
+	private async phaCua(tx: Tx, objectiveId: string) {
+		const mt = await tx.okrObjective.findUniqueOrThrow({
+			where: { id: objectiveId },
+			select: { cycle: { select: { phase: true } } },
+		});
+		return phaChuKy.parse(mt.cycle.phase);
 	}
 
 	async createObjective(userId: string, input: MucTieuInput) {
@@ -664,6 +683,15 @@ export class OkrService {
 			if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
 			const trangThai = await this.trangThai(tx, kr.objectiveId);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
+			const dangChay =
+				trangThai === "cong-bo" &&
+				(await this.phaCua(tx, kr.objectiveId)) === "dang-chay";
+			if (
+				dangChay &&
+				input.currentValue !== undefined &&
+				input.currentValue !== soKr(kr.currentValue)
+			)
+				throw new BadRequestException(T.hienTaiQuaCapNhat);
 			const khoi = soKr(kr.startValue);
 			if (
 				input.startValue !== undefined &&
@@ -757,6 +785,8 @@ export class OkrService {
 				})) > 0
 			)
 				throw new BadRequestException(T.krDangLaDich);
+			if ((await tx.okrCheckIn.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.krDaCapNhat);
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(
 				tx,
@@ -983,11 +1013,17 @@ export class OkrService {
 		const ct = await this.program(tx);
 		const rows = await tx.okrObjective.findMany({
 			where,
-			include: chonMucTieu,
+			include: {
+				...chonMucTieu,
+				followers: { where: { userId: viewerId }, select: { userId: true } },
+				_count: { select: { followers: true } },
+			},
 			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 		});
 		return rows.map((r) => {
 			const level = capMucTieu.parse(r.level);
+			const hienTaiQuaCapNhat =
+				r.status === "cong-bo" && r.cycle.phase === "dang-chay";
 			const keyResults: KrOutput[] = r.keyResults.map((k) => {
 				const kind = kieuKr.parse(k.kind);
 				const startValue = soKr(k.startValue);
@@ -1009,8 +1045,10 @@ export class OkrService {
 					startLocked: k.startLockedAt !== null,
 					progress: tienDoKr(kind, startValue, targetValue, currentValue),
 					laCuaToi: k.ownerUserId === viewerId,
+					hienTaiQuaCapNhat,
 				};
 			});
+			const following = r.followers.length > 0;
 			const nghi =
 				r.cycle.breakStartsOn && r.cycle.breakEndsOn
 					? { tu: r.cycle.breakStartsOn, den: r.cycle.breakEndsOn }
@@ -1052,6 +1090,9 @@ export class OkrService {
 					departmentId: r.departmentId,
 					personUserId: r.personUserId,
 				}),
+				following,
+				followerCount: r._count.followers,
+				theoDoi: following,
 			};
 		});
 	}
@@ -1261,6 +1302,7 @@ export class OkrService {
 					{ personUserId: userId },
 					{ participants: { some: { userId } } },
 					{ keyResults: { some: { ownerUserId: userId } } },
+					{ followers: { some: { userId } } },
 				],
 			},
 			userId,

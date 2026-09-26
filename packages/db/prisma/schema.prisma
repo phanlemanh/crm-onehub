@@ -2004,6 +2004,8 @@ model OkrObjective {
   keyResults   OkrKeyResult[]
   alignments   OkrAlignment[]   @relation("OkrAlignmentSource")
   alignedBy    OkrAlignment[]   @relation("OkrAlignmentTargetObjective")
+  comments     OkrComment[]
+  followers    OkrFollow[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
@@ -2045,6 +2047,8 @@ model OkrKeyResult {
   startLockedAt DateTime?
   position      Int            @default(0)
   alignedBy     OkrAlignment[] @relation("OkrAlignmentTargetKeyResult")
+  checkIns      OkrCheckIn[]
+  comments      OkrComment[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2085,4 +2089,77 @@ model OkrTrail {
   @@index([cycleId, at])
   @@index([at])
   @@map("okrTrail")
+}
+
+model OkrCheckInSession {
+  id          String       @id @default(cuid())
+  userId      String
+  entry       String
+  openedAt    DateTime     @default(now())
+  submittedAt DateTime?
+  seconds     Int?
+  checkIns    OkrCheckIn[]
+
+  @@index([userId, openedAt])
+  @@index([submittedAt])
+  @@map("okrCheckInSession")
+}
+
+model OkrCheckIn {
+  id           String            @id @default(cuid())
+  keyResultId  String
+  keyResult    OkrKeyResult      @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  sessionId    String
+  session      OkrCheckInSession @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  weekStart    DateTime          @db.Date
+  value        Decimal           @db.Decimal(18, 4)
+  confidence   String
+  note         String            @default("")
+  authorUserId String
+  ownerUserId  String
+  onBehalf     Boolean           @default(false)
+  channel      String            @default("web")
+  createdAt    DateTime          @default(now())
+
+  @@index([keyResultId, createdAt])
+  @@index([weekStart])
+  @@index([authorUserId])
+  @@map("okrCheckIn")
+}
+
+model OkrComment {
+  id           String        @id @default(cuid())
+  objectiveId  String
+  objective    OkrObjective  @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
+  keyResultId  String?
+  keyResult    OkrKeyResult? @relation(fields: [keyResultId], references: [id], onDelete: SetNull)
+  body         String
+  authorUserId String
+  createdAt    DateTime      @default(now())
+  mentions     OkrMention[]
+
+  @@index([objectiveId, createdAt])
+  @@index([createdAt])
+  @@map("okrComment")
+}
+
+model OkrMention {
+  commentId String
+  comment   OkrComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@id([commentId, userId])
+  @@index([userId])
+  @@map("okrMention")
+}
+
+model OkrFollow {
+  objectiveId String
+  objective   OkrObjective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  userId      String
+  createdAt   DateTime     @default(now())
+
+  @@id([objectiveId, userId])
+  @@index([userId])
+  @@map("okrFollow")
 }

@@ -25,6 +25,7 @@ function kr(id: string, objectiveId: string, progress: number): KrOutput {
 		startLocked: true,
 		progress,
 		laCuaToi: false,
+		hienTaiQuaCapNhat: false,
 	};
 }
 
@@ -67,6 +68,9 @@ function mt(
 			keyResultTitle: null,
 		})),
 		canEdit: false,
+		following: false,
+		followerCount: 0,
+		theoDoi: false,
 	};
 }
 

@@ -461,6 +461,26 @@ không sở hữu việc của phòng ban nào; người phụ trách KR sở h�
 Người được giao làm một bước, không trả lời cho một con số. Trưởng đơn vị sửa được
 OKR của đơn vị nhưng không tự thành người phụ trách mọi KR trong đó.
 
+**Theo dõi (mục tiêu)**: nút ở đầu khung mục tiêu, cho **mọi người** chứ không chỉ
+người sửa được mục tiêu — bấm để tự thêm mình vào danh sách nhận báo của mục tiêu
+đó, không xin quyền, không đổi ai phụ trách. Bật thì lần cập nhật và bình luận mới
+của mục tiêu gộp vào việc OKR của người đó trong cửa sổ 24 giờ; bấm lại «Đang theo
+dõi» để tắt, không mất bình luận hay lần cập nhật đã có. Chốt 2026-09-26.
+_Avoid_: subscribe, đăng ký nhận tin, quan tâm
+Vì sao: «đăng ký» gợi một luồng xin–duyệt, còn theo dõi ở đây một người tự bật tự
+tắt cho chính mình, không ai duyệt. «Quan tâm» không phải một hành động có thể
+bấm và gỡ trên nút.
+
+**Trao đổi (OKR)**: tab thứ tư của khung mục tiêu (sau «Vết»), chứa bình luận cũ →
+mới, mỗi bình luận có thể gắn vào một KR hoặc để cho cả mục tiêu, và nhắc tên một
+thành viên đang hoạt động. Ai mở được mục tiêu cũng đọc tab này; viết bình luận
+hay nhắc tên cần là thành viên. Chốt 2026-09-26.
+_Avoid_: bình luận, comment, thảo luận
+Vì sao: tên tab phải phủ cả ba việc trên đó — hỏi, nhắc tên, theo dõi — chứ không
+chỉ phần viết chữ; gọi tab là «Bình luận» thì đúng cho khung soạn nhưng bỏ sót
+nhắc tên. «Thảo luận» gợi tranh luận qua lại nhiều lượt, còn phần lớn dòng ở đây
+là một câu hỏi ngắn kèm một người được nhắc.
+
 **Điểm cuối kỳ**: số chấm cho mỗi KR khi chu kỳ khép, theo thang chương trình đã
 khai. Máy gợi ý từ số chốt; người chỉnh được, kèm lý do. Đọc theo loại mục tiêu:
 với mục tiêu tham vọng, 0,7 là tốt. **Không phải đánh giá nhân sự** — không nối vào

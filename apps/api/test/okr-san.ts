@@ -227,6 +227,27 @@ export function dungSan(): void {
 		const mucTieu = (
 			await db.okrObjective.findMany({ where: cuaSan, select: { id: true } })
 		).map((m) => m.id);
+		await db.okrMention.deleteMany({
+			where: { comment: { objectiveId: { in: mucTieu } } },
+		});
+		await db.okrComment.deleteMany({
+			where: { objectiveId: { in: mucTieu } },
+		});
+		await db.okrFollow.deleteMany({
+			where: { objectiveId: { in: mucTieu } },
+		});
+		await db.okrCheckIn.deleteMany({
+			where: {
+				OR: [
+					{ keyResult: { objectiveId: { in: mucTieu } } },
+					{ session: { userId: { startsWith: TIEN_TO } } },
+					{ authorUserId: { startsWith: TIEN_TO } },
+				],
+			},
+		});
+		await db.okrCheckInSession.deleteMany({
+			where: { userId: { startsWith: TIEN_TO } },
+		});
 		await db.okrTrail.deleteMany({
 			where: {
 				OR: [

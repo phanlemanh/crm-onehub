@@ -21,8 +21,18 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "./chon-chu-ky";
 import { KhoiMucTieu } from "./khoi-muc-tieu";
 import { ChuaChuKy, DangTai, Loi } from "./trang-thai-okr";
+import { ViecOkrCuaToi } from "./viec-cua-toi";
 
 export function CuaToi() {
+	return (
+		<div className="flex flex-col gap-6">
+			<ViecOkrCuaToi noi="cua-toi" khiHien="khi-co-viec" anKhiLoi={false} />
+			<MucTieuCuaToi />
+		</div>
+	);
+}
+
+function MucTieuCuaToi() {
 	const m = okrMessages(useLocale());
 	const trpc = useTRPC();
 	const url = useWorkspaceUrl();
