@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a28c314d9ca2b8e1b6063e5d0db7d07d0e5672b3
+verified_commit: 3ee9b663fadb357e8a199c9ee1b3f313ec9292cb
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -128,3 +128,7 @@ none — không có eval nào mang field runs > 1 trong round này; toàn bộ E
 
 Round 1: E1–E5 và bốn lệnh suite hồi quy pass ngay từ lượt đầu, nhưng chủ kho trả lại ở Cổng Bằng chứng — năm phát hiện trong hợp đồng (AC-5 so hai hằng viết tay thay vì đo cỡ pool thật, AC-4 soát trần bỏ sót khối `run: |` nhiều dòng, AC-2 chỉ đo 3/8 ô của lớp đã hứa) cộng hai phát hiện ngoài hợp đồng nâng phạm vi sửa ngay. Quay lại S4.
 Round 2: AC-5 đổi sang đo cỡ pool pg thật lúc chạy (32 truy vấn đồng thời, đếm pid khác nhau) thay vì so hằng; AC-2 đủ 8 ô đột biến và khớp đúng dòng lỗi `error: ...` thay vì `includes()`; AC-4 quét mọi dòng workflow (kể cả khối `run: |` nhiều dòng) và thêm tệp preload; thêm AC-6 tự kiểm chiều dương cho bẫy khớp nhầm. E1–E6 và bốn lệnh suite đều pass.
+
+### Re-pin lần 1 — 2026-09-26, do ghim lại ở tip sau gộp onehub 287a5103 (#144, #147)
+run_id: repin-20260926T002508Z-67428
+sha: 3ee9b663fadb357e8a199c9ee1b3f313ec9292cb · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng
