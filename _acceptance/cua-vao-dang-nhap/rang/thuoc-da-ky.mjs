@@ -127,6 +127,15 @@ function dungCayBase() {
 	}
 	if (existsSync(join(GOC, ".env")))
 		symlinkSync(join(GOC, ".env"), join(wt, ".env"));
+	const sinh = spawnSync("bun", ["run", "db:generate"], {
+		cwd: join(wt, "packages", "db"),
+		encoding: "utf8",
+	});
+	if (sinh.status !== 0) {
+		throw new Error(
+			`cay base: db:generate that bai (${sinh.status}) ${sinh.stderr.slice(-300)}`,
+		);
+	}
 	return { wt, goc };
 }
 
