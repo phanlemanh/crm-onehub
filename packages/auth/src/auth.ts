@@ -13,7 +13,7 @@ import { canhKhoaApiPlugin } from "./canh-khoa-api";
 import { chayNen } from "./chay-nen";
 import { donChiaCu, PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
-import { DIA_CHI, headerTinDiaChi } from "./dia-chi";
+import { DIA_CHI, ganDiaChiTin } from "./dia-chi";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
 import { canhDatMatKhau } from "./sang-mat-khau";
@@ -342,20 +342,9 @@ export const auth = betterAuth({
 	},
 });
 
-const PHUONG_THUC_KHONG_THAN = new Set(["GET", "HEAD"]);
-
-export async function xuLyXacThuc(yeuCau: Request): Promise<Response> {
-	const than = PHUONG_THUC_KHONG_THAN.has(yeuCau.method)
-		? undefined
-		: await yeuCau.arrayBuffer();
-	return auth.handler(
-		new Request(yeuCau.url, {
-			method: yeuCau.method,
-			headers: headerTinDiaChi(yeuCau.headers, env.authSecret),
-			body: than,
-			signal: yeuCau.signal,
-		}),
-	);
+export function xuLyXacThuc(yeuCau: Request): Promise<Response> {
+	ganDiaChiTin(yeuCau.headers, env.authSecret);
+	return auth.handler(yeuCau);
 }
 
 export type Auth = typeof auth;

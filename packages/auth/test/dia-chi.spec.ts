@@ -2,8 +2,8 @@ import { describe, expect, it } from "bun:test";
 import {
 	DIA_CHI,
 	diaChiDaKy,
+	ganDiaChiTin,
 	headerProxyKyDiaChi,
-	headerTinDiaChi,
 	kyDiaChi,
 } from "../src/dia-chi";
 
@@ -58,12 +58,12 @@ describe("dia-chi", () => {
 
 	it("cua vao chi dat header tin khi chu ky dung, va bo header tin tu gui", () => {
 		const ky = kyDiaChi(DIA_CHI_THAT, KHOA);
-		const dung = headerTinDiaChi(
-			coHeader({ [DIA_CHI.goc]: DIA_CHI_THAT, [DIA_CHI.ky]: ky }),
-			KHOA,
-		);
+		const dung = coHeader({ [DIA_CHI.goc]: DIA_CHI_THAT, [DIA_CHI.ky]: ky });
+		ganDiaChiTin(dung, KHOA);
 		expect(dung.get(DIA_CHI.tin)).toBe(DIA_CHI_THAT);
-		const tuGui = headerTinDiaChi(coHeader({ [DIA_CHI.tin]: "6.6.6.6" }), KHOA);
+		expect([dung.get(DIA_CHI.goc), dung.get(DIA_CHI.ky)]).toEqual([null, null]);
+		const tuGui = coHeader({ [DIA_CHI.tin]: "6.6.6.6" });
+		ganDiaChiTin(tuGui, KHOA);
 		expect(tuGui.get(DIA_CHI.tin)).toBeNull();
 	});
 });

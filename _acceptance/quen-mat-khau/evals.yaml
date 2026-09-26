@@ -442,3 +442,22 @@ evals:
         3 x-forwarded-for va host van bi xoa nhu truoc
       Chieu do: ham lay x-forwarded-for thay x-real-ip -> ve 1 do voi thong diep ghim
       "proxy ky dia chi trinh duyet tu dat".
+
+  - id: E24
+    criterion: AC-15
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_ngat_giua_chung
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/dia-chi.ts"
+      - "packages/auth/test/xu-ly-xac-thuc.spec.ts"
+    expected: |
+      May chu http that dung bang toNodeHandler cua better-auth tren { ...auth, handler:
+      xuLyXacThuc } — dung duong Nest gan vao. Dem su kien unhandledRejection cua tien trinh.
+        1 mo socket tho, gui POST /api/auth/sign-in/email voi Content-Length 1000 nhung chi 9
+          byte, roi huy socket; cho 500 ms; so unhandledRejection = 0 va GET /api/auth/ok tra 200
+        2 bang cap: cung mot yeu cau POST /api/auth/sign-out voi content-type json va than rong,
+          ma trang thai cua xuLyXacThuc BANG ma cua auth.handler goc (quan he, khong so hang so)
+      Chieu do chay THAT bang chinh lenh eval: tra lop boc ve ban round 2 (doc than thanh bytes
+      roi dung lai Request) -> ve 1 do voi thong diep ghim "api sap khi nguoi goi ngat giua chung".

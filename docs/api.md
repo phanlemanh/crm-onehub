@@ -112,8 +112,11 @@ passwords from anyone lock the door for everyone.
   bare `auth`.
 - **Missing pieces fall back, never throw.** No secret or no `x-real-ip` means no
   signed address, and counting behaves as it did before.
-- **It rebuilds the request from bytes.** Re-wrapping the Node adapter's streamed
-  body hangs every POST; the wrapper reads the (small) body once.
+- **It edits headers on the original request and never touches the body.**
+  Rebuilding the `Request` around the Node adapter's stream hangs every POST, and
+  reading the body first moves the read outside Better Auth's error handling, so a
+  caller that drops the connection mid-body crashes the API process. Both were
+  measured; `test/xu-ly-xac-thuc.spec.ts` keeps the second one from coming back.
 
 ### Gates in `proxy.ts`
 

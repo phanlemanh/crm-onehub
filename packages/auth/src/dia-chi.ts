@@ -47,12 +47,10 @@ export function headerProxyKyDiaChi(
 	return ra;
 }
 
-export function headerTinDiaChi(
-	vao: Headers,
-	khoa: string | undefined,
-): Headers {
-	const diaChi = diaChiDaKy(vao, khoa);
-	const ra = boHeaderDiaChi(vao);
-	if (diaChi) ra.set(DIA_CHI.tin, diaChi);
-	return ra;
+export function ganDiaChiTin(headers: Headers, khoa: string | undefined): void {
+	const diaChi = diaChiDaKy(headers, khoa);
+	headers.delete(DIA_CHI.goc);
+	headers.delete(DIA_CHI.ky);
+	headers.delete(DIA_CHI.tin);
+	if (diaChi) headers.set(DIA_CHI.tin, diaChi);
 }
