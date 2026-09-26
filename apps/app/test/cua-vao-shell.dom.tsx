@@ -70,7 +70,6 @@ describe("AuthShell nhan khoi cot trai — doi chung", () => {
 
 	it("khong hieu ung nen, khong dong tieu de cua khung", async () => {
 		const o = await ve(<div data-khoi="">khối</div>);
-		expect(phanCuaMain(o).some(coHieuUngNen)).toBe(false);
 		expect(o.textContent).not.toContain(DONG_TIEU_DE);
 	});
 

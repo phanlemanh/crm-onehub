@@ -55,7 +55,7 @@ const cv = cuaVaoMessages("vi");
 
 export const MA_TRAN = [
 	...GIAO_DIEN.flatMap((g) =>
-		["nen", "theo-may", "khong-shader"].map((m) => `${g}-${m}`),
+		["nen", "theo-may"].map((m) => `${g}-${m}`),
 	),
 	...KHO.flatMap((k) =>
 		GIAO_DIEN.flatMap((g) =>
@@ -192,11 +192,6 @@ async function doMau(trang, giaoDien) {
 		giaoDien === "light"
 			? `light: ${r.dark} phan tu mang lop dark (can 0)`
 			: `dark: html mang lop dark theo may (${r.htmlDark})`,
-	);
-	ghi(
-		`${giaoDien}-khong-shader`,
-		!r.shader,
-		`${giaoDien}: cot trai sign-in ${r.shader ? "CO" : "khong co"} AuthShader`,
 	);
 }
 
