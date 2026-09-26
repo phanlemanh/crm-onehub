@@ -88,7 +88,11 @@ function Combobox({
 					className={cn(selectTriggerVariants({ variant }), className)}
 					{...props}
 				>
-					<span data-slot="select-value">{selected?.label ?? placeholder ?? msg.macDinh.chonMuc}</span>
+					<span data-slot="select-value">
+						<span className="min-w-0 truncate" title={selected?.label}>
+							{selected?.label ?? placeholder ?? msg.macDinh.chonMuc}
+						</span>
+					</span>
 					<ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
 				</button>
 			</PopoverTrigger>

@@ -408,6 +408,14 @@ describe("bang-kr-nguon", () => {
 			{ id: "kr-chua-chup", nut: 0, dau: true },
 		]);
 		expect(document.body.querySelectorAll("[data-so-kr]").length).toBe(0);
+		const hang =
+			oSo("kr-crm")?.querySelector("[data-so-kr-tran]")?.parentElement;
+		expect({
+			chu: hang?.textContent,
+			flex: (hang?.className ?? "")
+				.split(/\s+/)
+				.filter((c) => c === "flex" || c === "inline-flex"),
+		}).toEqual({ chu: "15 thoả thuận / 40 thoả thuận", flex: [] });
 	});
 });
 
@@ -502,6 +510,19 @@ describe("ngan-so-kr", () => {
 			"so da chup cua ngay cu",
 		);
 		expect(san.url().get("ngaySo")).toBe("2026-10-23");
+		const danhDau = [
+			...document.body.querySelectorAll("[data-lich-su-ngay]"),
+		].map((e) => [
+			e.getAttribute("data-lich-su-ngay"),
+			e.getAttribute("data-state"),
+			e.getAttribute("aria-current"),
+			e.hasAttribute("data-chon"),
+		]);
+		expect(danhDau).toEqual([
+			["2026-10-25", null, null, false],
+			["2026-10-24", null, null, false],
+			["2026-10-23", "selected", "date", true],
+		]);
 		expect(goiBanGhi.at(-1)).toEqual({
 			keyResultId: "kr-crm",
 			ngay: "2026-10-23",
@@ -513,10 +534,14 @@ describe("ngan-so-kr", () => {
 		docBanGhi = () => banGhi({ tong: 0, dong: [], soDaChup: 0, soTinhLai: 0 });
 		await mo(ngan);
 		await cho(() => trangThaiNgan() === "ST-so-co", "ngan co du lieu");
-		expect(
-			document.body.querySelector('[data-trang-thai="ST-so-rong"]')
-				?.textContent,
-		).toContain(s.chiSo["thoa-thuan-chot-duoc"].rong);
+		const rong = document.body.querySelector('[data-trang-thai="ST-so-rong"]');
+		expect(rong?.textContent).toContain(s.chiSo["thoa-thuan-chot-duoc"].rong);
+		const khoi = rong?.querySelector('[data-slot="empty"]');
+		expect({
+			size: khoi?.getAttribute("data-size"),
+			gian: khoi?.className.split(/\s+/).includes("flex-1"),
+			lichSu: document.body.querySelectorAll("[data-lich-su-ngay]").length,
+		}).toEqual({ size: "compact", gian: false, lichSu: 3 });
 	});
 
 	test("ngan-so-kr: loi hien Thu lai, bam thi tai lai va co du lieu", async () => {

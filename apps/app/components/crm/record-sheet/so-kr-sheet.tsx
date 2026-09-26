@@ -191,11 +191,14 @@ function BangBanGhi({
 	if (dn && dong.length === 0)
 		return (
 			<div className="contents" data-trang-thai="ST-so-rong">
-				<DetailSheetEmpty
-					icon={ChartLine}
-					title={s.chiSo[dn.chiSo].rong}
-					description={s.chiSo[dn.chiSo].dinhNghia}
-				/>
+				<DetailSheetSection title={t.banGhi}>
+					<DetailSheetEmpty
+						compact
+						icon={ChartLine}
+						title={s.chiSo[dn.chiSo].rong}
+						description={s.chiSo[dn.chiSo].dinhNghia}
+					/>
+				</DetailSheetSection>
 			</div>
 		);
 
@@ -329,6 +332,8 @@ function BangLichSu({
 							key={d.ngay}
 							data-lich-su-ngay={d.ngay}
 							data-chon={la ? "" : undefined}
+							aria-current={la ? "date" : undefined}
+							selected={la}
 						>
 							<TableCell className={CELL}>
 								<Button

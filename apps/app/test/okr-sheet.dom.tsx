@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { act, type ReactElement } from "react";
+import { act, type ReactElement, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type {
 	ChuKyOutput,
@@ -271,14 +271,30 @@ const so = okrSoMessages("vi").trangThai.hopThoai;
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
 
-async function mo(duong = "?record=objective:mt-1"): Promise<San> {
+function SheetDongDuoc({ children }: { children: ReactElement }) {
+	const [moSheet, datMoSheet] = useState(true);
+	return (
+		<DetailSheet onOpenChange={datMoSheet} open={moSheet}>
+			{children}
+		</DetailSheet>
+	);
+}
+
+async function mo(
+	duong = "?record=objective:mt-1",
+	dongDuoc = false,
+): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
 	const client = new QueryClient({
 		defaultOptions: { queries: { retry: false } },
 	});
-	const sheet: ReactElement = (
+	const sheet: ReactElement = dongDuoc ? (
+		<SheetDongDuoc>
+			<ObjectiveSheet objectiveId="mt-1" />
+		</SheetDongDuoc>
+	) : (
 		<DetailSheet onOpenChange={() => {}} open>
 			<ObjectiveSheet objectiveId="mt-1" />
 		</DetailSheet>
@@ -1394,6 +1410,105 @@ describe("nguon-so-doc-lai", () => {
 					o: "Tổng!B2",
 				},
 			],
+		});
+	});
+});
+
+describe("hop-thoai-kr-escape-tra-lop", () => {
+	test("hop-thoai-kr-escape-tra-lop: mo Sua KR tu menu, mo dong select va combobox ben trong, Escape — trang bam duoc, dong sheet thi body het pointer-events none", async () => {
+		chiTiet = mucTieu("nhap", false);
+		await mo(undefined, true);
+		const sheet = () =>
+			document.body.querySelector<HTMLElement>('[data-slot="sheet-content"]');
+		const lop = () => ({
+			body: document.body.style.pointerEvents,
+			sheet: sheet()?.style.pointerEvents ?? null,
+		});
+		const chiSheet = lop();
+		const moMenu = async () => {
+			const menu = document.body.querySelector(
+				'[aria-label="Thao tác với KR kr-1"]',
+			);
+			if (!menu) throw new Error("khong co menu KR");
+			await bam(menu);
+			await cho(
+				() => document.body.querySelector('[role="menuitem"]') !== null,
+				"menu KR mo",
+			);
+		};
+		const bamEscape = async () => {
+			await act(async () => {
+				(document.activeElement ?? document.body).dispatchEvent(
+					new KeyboardEvent("keydown", {
+						key: "Escape",
+						bubbles: true,
+						cancelable: true,
+					}),
+				);
+			});
+		};
+		await moMenu();
+		const sua = [...document.body.querySelectorAll('[role="menuitem"]')].find(
+			(o) => o.textContent === m.sheet.suaKr,
+		);
+		if (!sua) throw new Error("khong co muc Sua");
+		await bam(sua);
+		await cho(() => hop() !== null, "hop thoai KR");
+
+		const kieu = hop()?.querySelector("[data-o-kieu]");
+		if (!kieu) throw new Error("khong co o kieu");
+		await bam(kieu);
+		await cho(
+			() => document.body.querySelector('[role="option"]') !== null,
+			"select kieu mo",
+		);
+		await bamEscape();
+		await cho(
+			() => document.body.querySelector('[role="option"]') === null,
+			"select kieu dong",
+		);
+
+		const chu = hop()?.querySelector('[data-slot="combobox-trigger"]');
+		if (!chu) throw new Error("khong co combobox");
+		await bam(chu);
+		await cho(
+			() =>
+				document.body.querySelector('[data-slot="popover-content"]') !== null,
+			"combobox mo",
+		);
+		await bamEscape();
+		await cho(
+			() =>
+				document.body.querySelector('[data-slot="popover-content"]') === null,
+			"combobox dong",
+		);
+		const conHop = hop() !== null;
+
+		await bamEscape();
+		await cho(() => hop() === null, "hop thoai KR dong bang Escape");
+		const sauEscape = lop();
+		await moMenu();
+		const moLai = document.body.querySelectorAll('[role="menuitem"]').length;
+		await bamEscape();
+		await cho(
+			() => document.body.querySelector('[role="menuitem"]') === null,
+			"menu KR dong",
+		);
+		await bamEscape();
+		await cho(() => sheet() === null, "sheet dong");
+
+		expect({
+			chiSheet,
+			conHop,
+			sauEscape,
+			moLai: moLai > 0,
+			sauDongSheet: document.body.style.pointerEvents,
+		}).toEqual({
+			chiSheet: { body: "none", sheet: "auto" },
+			conHop: true,
+			sauEscape: { body: "none", sheet: "auto" },
+			moLai: true,
+			sauDongSheet: "",
 		});
 	});
 });

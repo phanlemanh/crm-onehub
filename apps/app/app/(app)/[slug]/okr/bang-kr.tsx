@@ -96,7 +96,7 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 						{s.dau[KHOA_DAU[may]]}
 					</Badge>
 				) : null}
-				<span className="inline-flex items-center">
+				<span>
 					{xem === "chua-biet" ? (
 						<span data-so-kr-cho={kr.id}>{hienSo}</span>
 					) : xem === "duoc" ? (
