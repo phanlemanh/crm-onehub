@@ -1,0 +1,48 @@
+{
+  "feature_plain": "Bot Zalo trả lời câu hỏi CRM mà không bao giờ sửa được dữ liệu, kể cả khi eve bỏ qua lớp ẩn công cụ; sticker, ảnh được báo một câu; số tiền lớn không bị che nhầm; và bộ kiểm của vòng trước thôi xanh giả.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ chứng bằng dữ liệu thật: trên Zalo, sửa một trường hay ghi một sự kiện cho liên hệ đều không đổi gì trong CRM; cùng thao tác đó trong khung chat web thì ghi được."},
+    {"id": "AC-3", "p": "Sẽ chặn trợ lý trên Zalo tải trang web; trong khung chat web vẫn tải được như cũ."},
+    {"id": "AC-4", "p": "Sẽ giấu các công cụ ghi khỏi trợ lý trên Zalo ở mỗi bước, bằng đường mà eve không bỏ qua khi chạy lại bước (lớp ẩn, phụ cho lớp chặn)."},
+    {"id": "AC-5", "p": "Sẽ trả đúng một câu «Tôi chỉ đọc được tin chữ…» khi người đã nối gửi sticker, ảnh, hay tin toàn khoảng trắng — không mở phiên AI, không tính vào trần; người chưa nối và đường cũ giữ nguyên."},
+    {"id": "AC-6", "p": "Sẽ giữ nguyên số tiền từ 1.000 tỷ trở lên trong câu trả lời, và vẫn che mọi số điện thoại — kể cả số đứng liền sau một số khác."},
+    {"id": "AC-7", "p": "Sẽ cho bài đo ngưỡng của vòng trước sinh các lượt bị chặn vì trần và vì đang bận bằng đường hỏi thật, không chèn tay."},
+    {"id": "AC-8", "p": "Sẽ bắt bài kiểm «không lộ số» chứng có tin gửi đi trước, và bài «trả lời muộn» không được lặng lẽ bỏ qua phần kiểm."},
+    {"id": "AC-9", "p": "Sẽ bắt bài kiểm phiên kẹt so đúng địa chỉ phiên mới, và mọi sự kiện kênh trong bài lấy địa chỉ từ lời gọi thật chứ không tự viết."},
+    {"id": "AC-10", "p": "Sẽ bắt bài kiểm «xong n» trên đường cũ đọc lại bước đã xong trong CRM, không chỉ so câu trả lời."},
+    {"id": "AC-11", "p": "Sẽ chứng bằng hành vi rằng khung chat web và Zalo cho cùng kết quả với người vai kinh doanh, vai chỉ OKR, và người đã rời xưởng."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn mọi công cụ ghi của trợ lý khi đang trả lời trên Zalo — 20 công cụ, mỗi công cụ tự từ chối ngay dòng đầu; ở khung chat web, builder và tác tử đã triển khai thì không công cụ nào bị chặn nhầm."}
+  ],
+  "scope_plain": "Không làm lại tên thừa trong danh sách thống kê, không chặn cứng tra web do nhà cung cấp model chạy, không đổi ranh giới dữ liệu hay trần.",
+  "coverage_plain": [
+    {"i": 0, "p": "Loại công cụ: đã soi đủ bảy loại, từ công cụ ghi tự viết tới công cụ tắt hẳn; thước là danh sách tệp công cụ và tài liệu eve."},
+    {"i": 1, "p": "Loại phiên: Zalo, khung chat web, builder, tác tử đã triển khai — đối chứng chạy trên cả ba loại không phải Zalo."},
+    {"i": 2, "p": "Bước trong lượt: bước đầu và bước eve chạy lại — thước là log production tối 26/09."},
+    {"i": 3, "p": "Tin đến: chữ, rỗng, sticker, ảnh, tệp, theo người gửi và đường đi — thước là mã nhận tin và tên sự kiện Zalo từ SDK cộng đồng."},
+    {"i": 4, "p": "Chuỗi số: điện thoại trong nước, quốc tế, đứng liền sau số khác, số tiền lớn và nhỏ."},
+    {"i": 5, "p": "Mỗi ô cần làm đã gắn tiêu chí: chặn ghi AC-1, AC-2; tải web AC-3; lớp ẩn AC-4; tin không chữ AC-5; số tiền AC-6; bộ kiểm cũ AC-7 đến AC-11."},
+    {"i": 6, "p": "Để sau: tra web trên Zalo chỉ bị giấu, chưa chặn cứng; hỏi lại đã có đường xử lý riêng."},
+    {"i": 7, "p": "Phiên builder và tác tử đã triển khai được đưa vào đối chứng AC-1 (từ phản biện)."},
+    {"i": 8, "p": "Không làm: công cụ đọc trên Zalo (được phép), hộp cát (không có mạng, không có CRM), công cụ đã tắt."},
+    {"i": 9, "p": "Cần anh gạch: tin tệp chưa có nguồn tên sự kiện — máy giả định đi cùng đường với sticker."},
+    {"i": 10, "p": "Cần anh gạch: số viết «84.912.345.678» (mã nước không dấu cộng, nhóm bằng dấu chấm) sẽ bị coi là số tiền và không che."},
+    {"i": 11, "p": "Để sau: ảnh có chú thích chữ vẫn được coi là tin không chữ ở vòng này."},
+    {"i": 12, "p": "Cần anh gạch: lớp ẩn đọc từ mã eve, chưa đo trên production — sai thì chỉ mất lớp ẩn, lớp chặn vẫn đứng."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Đối chứng chỉ chạy khung chat web, nên một lớp chặn viết sai có thể làm hỏng builder mà vẫn qua — đã thêm đối chứng cho builder và tác tử đã triển khai."},
+    {"i": 1, "p": "Tin sticker trong bài đo là khuôn tự chế — đã đổi sang dựng từ tin thật production, đúng tên sự kiện sticker và ảnh của Zalo."},
+    {"i": 2, "p": "Cách sửa số tiền ban đầu làm lọt số điện thoại đứng sau số khác — đã đổi cách sửa và thêm bài đo cho đúng ca đó."},
+    {"i": 3, "p": "Phần «ghi sự kiện» thiếu đối chứng có ghi được ở web — đã thêm."},
+    {"i": 4, "p": "Danh sách công cụ ghi chỉ đếm số lượng — đã ghim đúng 20 tên."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260926T154458Z-1", "p": "Đã chọn đặt lớp chặn trong chính từng công cụ, bản ghi đè chỉ còn để giấu — đổi lại phải chạm 20 tệp và công cụ ghi mới phải nhớ gọi chặn (bài đo bắt khi quên)."},
+    {"id": "d-20260926T154458Z-2", "p": "Đã chọn trả một câu cho tin không chữ theo lựa chọn của anh — đổi lại người vai chỉ OKR gửi sticker cũng nhận câu này."},
+    {"id": "d-20260926T154458Z-3", "p": "KHÔNG làm tên thừa trong danh sách thống kê — vô hại, đỡ chạm hai gói khác."},
+    {"id": "d-20260926T154458Z-4", "p": "KHÔNG viết đặc tả giao diện — vòng không có màn hình, chỉ thêm một câu Zalo."},
+    {"id": "d-20260926T154458Z-5", "p": "KHÔNG chặn cứng tra web trên Zalo — nhà cung cấp model chạy nó; xem lại nếu log production còn thấy lớp ẩn bị bỏ qua."}
+  ]
+}

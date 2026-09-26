@@ -1,0 +1,198 @@
+schema_version: 1
+slug: hoan-thien-hoi-crm-qua-zalo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_chan_ghi
+    paths:
+      - "apps/agent/agent/tools/**"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      DB that. Gieo A vai member, noi ZA. ZA nhan cau hoi qua nhanWebhook that (thanWebhook khuon that);
+      eve gia ghi send; ctx Zalo = {session:{id, auth:{current: <auth eve gia ghi>, initiator:null}}} —
+      rut tu loi goi send, khong dung tay purpose. ctx cho moi muc dich khac: cung khuon, attributes lan luot
+      {} (purposeOf -> research, nhu khung chat web), {purpose:"builder"}, {purpose:"team-agent"}.
+      Danh sach viet truoc 20 ten (sap xep): archive_field, enrich_company, fetch_contact_photo, find_contact_socials,
+      get_contact_work_history, get_linkedin_profile, identify_contact, manage_fields, record_fact, record_job_change,
+      research_company, research_person, resolve_linkedin_profile, schedule_recheck, set_chat_title, set_contact_socials,
+      set_field_value, web_fetch, write_brief, write_workspace_profile.
+      Tap rut tu thu muc = readdirSync(agent/tools) .ts tru ZALO.hoi.congCu.doc va .tat, sap xep -> toEqual danh sach tren.
+      Nap `../agent/tools/<ten>.ts` that, goi default.execute({}, ctx).
+      Ma tran: MOI ten x ctx Zalo -> rejects, message === ZALO.hoi.tuChoiGhi (assert mang ten cong cu);
+      MOI ten x moi ctx khac (3 muc dich) -> resolve, hoac reject voi message !== ZALO.hoi.tuChoiGhi
+      (assert mang "<ten> khong tu choi o phien <muc dich>"). Dem: 20 ca Zalo, 60 ca doi chung.
+      Chieu do (pha-thu S3, ban sao): go dong assertNotZaloQuestion khoi set_field_value.ts -> do ghim
+      "set_field_value tu choi tren Zalo"; cho chan nem khi purposeOf !== "research" -> do ghim
+      "set_chat_title khong tu choi o phien builder"; chuyen get_linkedin_profile tu ghi sang doc trong zalo-config -> do
+      o toEqual danh sach, ghim ten get_linkedin_profile.
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_ghi_that
+    paths:
+      - "apps/agent/agent/tools/set_field_value.ts"
+      - "apps/agent/agent/tools/record_fact.ts"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/agent/lib/fields.ts"
+      - "apps/agent/test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      DB that. Gieo lien he C, truong van ban K (entity CONTACT), gia tri V = "truoc" viet bang writeField that.
+      Dau vao record_fact R hop le cho C (mot hang, dung chung cho hai chieu); menh de dem Q = dung bang va cot ma
+      record_fact that ghi cho C (doc tu lan ghi doi chung, khong doan).
+      Doc truoc: gia tri K cua C, count(Q).
+      ctx Zalo rut tu send cua eve gia (nhu E1). set_field_value.execute({entity:"CONTACT", recordId:C, key:K, value:"zalo"}, ctxZalo)
+      -> rejects tuChoiGhi; record_fact.execute(R, ctxZalo) -> rejects tuChoiGhi.
+      Doc lai: gia tri === "truoc", count(Q) bang so truoc.
+      Doi chung cung dau vao, ctx web: set_field_value(value "web") -> doc lai === "web"; record_fact(R) -> count(Q) === truoc + 1.
+      Chieu do: go chan khoi set_field_value.ts trong ban sao -> do ghim "gia tri giu nguyen tren Zalo";
+      go chan khoi record_fact.ts va assertResearchPurpose -> do ghim "record_fact khong ghi tren Zalo".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_web_fetch
+    paths:
+      - "apps/agent/agent/tools/web_fetch.ts"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      Bun.serve({port:0}) dem yeu cau, tra "hth-web-fetch-<ngau nhien>".
+      web_fetch that (agent/tools/web_fetch.ts) .execute({url: http://127.0.0.1:<port>/x}, ctxZalo) -> rejects tuChoiGhi; dem === 0.
+      .execute(cung url, ctxWeb) -> dem === 1 va JSON.stringify(ket qua) chua chuoi rieng.
+      Chieu do: bo chan trong web_fetch.ts -> do ghim "web_fetch khong goi mang tren Zalo" (dem 1);
+      bo uy thac webFetch.execute -> do ghim "web_fetch web van tai trang" (dem 0).
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_chi_doc
+    paths:
+      - "apps/agent/agent/tools/zalo-chi-doc.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/zalo-chi-doc.spec.ts"
+    expected: |
+      chiDoc.events["step.started"] voi phien purpose zalo -> Object.keys sap xep toEqual [...ghi, ...coSanChan] sap xep;
+      moi ban thay execute -> toEqual {ok:false, reason: ZALO.hoi.tuChoiGhi}; dem so lan goi === do dai tap.
+      Voi purpose research va builder -> null. chiDoc.events["session.started"] toBeUndefined.
+      Banh coc cu (moi tep thuoc dung mot danh sach) van xanh voi web_fetch trong ghi.
+      Chieu do: tra lai su kien session.started -> do ghim "khong con session.started"; bo web_fetch khoi ghi -> banh coc do.
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_khong_chu
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts"
+    expected: |
+      DB that, Zalo gia bat sendMessage, eve gia bat send. A vai member noi ZA. Khuon tin lay tu fixtures/zalo-tin-that.json
+      (tin that production) roi doi dung cac truong sau, khong dung khuon moi:
+      Ma tran viet truoc 4 tin: (i) sticker: event_name "message.sticker.received", message bo text, them sticker:"<id>";
+      (ii) anh: "message.image.received", bo text, them photo_url:"https://example.test/a.jpg";
+      (iii) anh chu thich rong: nhu (ii) them caption:""; (iv) "message.text.received", text "   ".
+      Moi tin qua nhanWebhook that -> 200; sendMessage toi ZA them dung 1 voi text === ZALO.loi.chiDocChu;
+      eveGia.send van 0; count ZaloHoi where crmUserId A khong doi. Dem 4 ca (assert mang ten tin).
+      Doi chung cung fixture: ZA gui "Thoa thuan nao sap han?" -> eveGia.send dai 1, 1 hang ZaloHoi dang-hoi.
+      B chua noi gui sticker -> sendMessage text === ZALO.loi.huongDan. Duong luat cu (nhanWebhook khong deps.hoi):
+      A gui sticker -> text === ZALO.loi.daNoiRoi(<ten A>, <gio nhac>).
+      Chieu do: bo nhanh khong-chu trong khongMa -> do ghim "sticker khong mo phien" (send 1, hang +1);
+      them loc event_name khac message.text.received o webhook -> do ghim "sticker nhan chiDocChu".
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_so_tien
+    paths:
+      - "apps/agent/agent/lib/zalo-loc.ts"
+      - "apps/agent/test/zalo-loc.spec.ts"
+    expected: |
+      Ma tran so tien viet truoc (5 phan tu cua AC-6): locTraLoi("Gia tri: <so>") -> mot phan, chua nguyen <so>,
+      khong chua ZALO.hoi.an; dem === 5 (assert mang so).
+      Ma tran so dien thoai lien sau so khac (4 phan tu cua AC-6): moi phan tu -> khong con day 10 chu so nao cua so dien thoai,
+      so lan ZALO.hoi.an === so so dien thoai trong phan tu (2,2,2,1); dem === 4.
+      Doi chung: ca loc-che hien co chay cung lenh, van che du tung phan tu.
+      Chieu do: tra regex cu -> do ghim "1.000.000.000.000 đ"; sua bang nhin lui cam "chu so + dau phan cach" -> do ghim
+      "0912345678,0987654321".
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_nguong
+    paths:
+      - "apps/agent/test/hoi-crm-qua-zalo-nguong.integration.spec.ts"
+      - "apps/agent/test/support/hoi-nguong-gieo.ts"
+      - "_acceptance/hoi-crm-qua-zalo/rang/nguong.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+    expected: |
+      Ca nguong sinh hang tu-choi-tran-ngay bang 21 lan hoiTacTu that trong mot ngay (20 dang-hoi/da-tra-loi + 1 tu choi),
+      hang dang-ban bang hoiTacTu thu hai khi con dang-hoi duoi han. grep "zaloHoi.create" trong tep spec va hoi-nguong-gieo.ts
+      -> 0 (assert trong test, doc tep that). Bang in ra toEqual ky vong cu (muoi dong).
+      Chieu do: nang tran ngay len 21 trong ban sao -> dong tu-choi-tran-ngay 0 -> do ghim "tu-choi-tran-ngay 1".
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_thuoc_am
+    paths:
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "apps/agent/agent/lib/zalo-loc.ts"
+      - "apps/agent/agent/lib/zalo-tra-loi.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+    expected: |
+      cai-lenh: tra loi chua so dien thoai -> sendMessage toi nguoi hoi dai 1 va text chua ZALO.hoi.an TRUOC assert khong co so.
+      tra loi muon: expect(cu.loai).toBe("hoi") khong if; log ghim toContain mot chuoi duy nhat.
+      Chieu do: lam traLoiVe khong gui gi -> cai-lenh do ghim "da co tin gui di" (truoc day xanh rong);
+      doi hoiTacTu tra tu-choi o ca muon -> do ghim loai "hoi" (truoc day bo qua ca).
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hth_token
+    paths:
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "apps/agent/test/support/eve-gia.ts"
+      - "apps/agent/agent/lib/zalo-tra-loi.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+    expected: |
+      input.requested: setContinuationToken goi dung 1 lan voi toBe(ZALO.hoi.tienToBo + hang.id).
+      Moi su kien kenh trong cung-phien va duong-chinh lay continuationToken va attributes tu eveGia.goi[i] (loi goi send that).
+      grep trong tep spec: khong con chuoi `continuationToken: "chat:` hay `continuationToken: \`chat:` dung tay -> 0 (assert).
+      Chieu do: canHoiLai dat token "bo:x" -> do ghim "token bo dung hoiId"; tokenPhien doi dinh dang -> su kien kenh van khop
+      vi rut tu send (truoc day do dung tay).
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_luat_cu
+    paths:
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+    expected: |
+      O (c): sau "xong 1" qua duong luat cu, doc lai buoc trong DB -> completedAt not null (va la buoc cua tin nhac hom nay).
+      Chieu do: xongTheoTinNhac khong ghi completedAt nhung tra cung cau -> do ghim "buoc da xong trong DB".
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_tu_choi_vai
+    paths:
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "apps/agent/agent/channels/eve.ts"
+      - "apps/agent/agent/lib/thanh-vien-principal.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+    expected: |
+      Ba nguoi: kinh doanh, okr, mat member. repFromCrm(secret)(Request voi JWT HS256 ky dung) -> principal / null / null;
+      hoiTacTu -> loai "hoi" / tu-choi-vai / tu-choi-vai. Ma tran 3 x 2 viet truoc, so assert === 6.
+      Ca grep channels/eve.ts bi go (readFileSync eve.ts khong con trong tep).
+      Chieu do: repFromCrm bo kiem thanhVienPrincipal -> do ghim "okr bi tu choi o web".
