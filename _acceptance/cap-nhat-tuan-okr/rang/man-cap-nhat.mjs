@@ -24,16 +24,16 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
+const MA = `n${Date.now().toString(36).slice(-6)}`;
 const BANG_CHUNG =
 	process.env.BANG_CHUNG ??
-	join(GOC, ".acceptance-runs", "cap-nhat-tuan-okr", "evidence");
+	join(GOC, ".acceptance-runs", "cap-nhat-tuan-okr", "evidence", MA);
 const RONG = 1440;
 const HEP = 390;
 const CAO = 900;
 const CHO = 30_000;
 const CHO_HYDRATE_MS = 800;
 const NGAY_LUI_CONG_BO = 2;
-const MA = `n${Date.now().toString(36).slice(-6)}`;
 const LOI_HYDRATE = /hydrat/i;
 const CUA_CHAN_URL = process.env.CUA_CHAN_URL ?? "http://localhost:3922";
 
@@ -190,7 +190,18 @@ async function lam(c, duong, vao) {
 const ORG = {};
 const OKR = {};
 const KR = {};
-const CAC_MUC_TIEU = ["cn", "ot", "a", "c", "h", "u", "di", "o29a", "o29b", "o29c"];
+const CAC_MUC_TIEU = [
+	"cn",
+	"ot",
+	"a",
+	"c",
+	"h",
+	"u",
+	"di",
+	"o29a",
+	"o29b",
+	"o29c",
+];
 const CAC_CHU_KY = ["namChay", "quyChay", "namKeHoach", "quyKeHoach"];
 
 async function gieoToChuc() {
@@ -374,7 +385,11 @@ async function gieoMucTieu() {
 
 	const ot = await taoMucTieu(
 		cookie.tp,
-		{ cycleId: OKR.quyChay, title: `Trao đổi mục tiêu ${MA}`, ownerUserId: id.tp },
+		{
+			cycleId: OKR.quyChay,
+			title: `Trao đổi mục tiêu ${MA}`,
+			ownerUserId: id.tp,
+		},
 		[
 			{
 				title: `KR trao đổi ${MA}`,
@@ -426,7 +441,11 @@ async function gieoMucTieu() {
 
 	const objH = await taoMucTieu(
 		cookie.tp,
-		{ cycleId: OKR.quyChay, title: `Mục tiêu nhắc H ${MA}`, ownerUserId: id.tp },
+		{
+			cycleId: OKR.quyChay,
+			title: `Mục tiêu nhắc H ${MA}`,
+			ownerUserId: id.tp,
+		},
 		[],
 	);
 	OKR.h = objH.id;
@@ -481,7 +500,11 @@ async function gieoMucTieu() {
 
 	const o29a = await taoMucTieu(
 		cookie.tp,
-		{ cycleId: OKR.quyChay, title: `E29 công bố chạy ${MA}`, ownerUserId: id.tp },
+		{
+			cycleId: OKR.quyChay,
+			title: `E29 công bố chạy ${MA}`,
+			ownerUserId: id.tp,
+		},
 		[
 			{
 				title: `KR29a ${MA}`,
@@ -537,7 +560,16 @@ async function gieoMucTieu() {
 	await lam(cookie.tp, "okr.publishObjective", { id: o29c.id });
 
 	const luiVe = new Date(Date.now() - NGAY_LUI_CONG_BO * 24 * 3600 * 1000);
-	const moiCongBo = [OKR.cn, OKR.ot, OKR.a, OKR.c, OKR.u, OKR.di, OKR.o29a, OKR.o29c];
+	const moiCongBo = [
+		OKR.cn,
+		OKR.ot,
+		OKR.a,
+		OKR.c,
+		OKR.u,
+		OKR.di,
+		OKR.o29a,
+		OKR.o29c,
+	];
 	await db.okrObjective.updateMany({
 		where: { id: { in: moiCongBo } },
 		data: { publishedAt: luiVe },
@@ -635,7 +667,9 @@ try {
 	loiGieo = e;
 }
 if (loiGieo !== null) {
-	console.log(`KHONG DO DUOC: gieo qua API that hong — ${loiGieo.stack ?? loiGieo.message}`);
+	console.log(
+		`KHONG DO DUOC: gieo qua API that hong — ${loiGieo.stack ?? loiGieo.message}`,
+	);
 	await donDepRoiThoat(2);
 }
 
@@ -651,17 +685,26 @@ async function donDep() {
 		select: { id: true },
 	});
 	const moiMt = [
-		...new Set([...CAC_MUC_TIEU.map((k) => OKR[k]).filter(Boolean), ...moLac.map((o) => o.id)]),
+		...new Set([
+			...CAC_MUC_TIEU.map((k) => OKR[k]).filter(Boolean),
+			...moLac.map((o) => o.id),
+		]),
 	];
 	const moiKy = CAC_CHU_KY.map((k) => OKR[k]).filter(Boolean);
-	await db.okrMention.deleteMany({ where: { comment: { objectiveId: { in: moiMt } } } });
+	await db.okrMention.deleteMany({
+		where: { comment: { objectiveId: { in: moiMt } } },
+	});
 	await db.okrComment.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrFollow.deleteMany({ where: { userId: { in: moiNguoi } } });
 	await db.okrTrail.deleteMany({
-		where: { OR: [{ actorUserId: { in: moiNguoi } }, { objectiveId: { in: moiMt } }] },
+		where: {
+			OR: [{ actorUserId: { in: moiNguoi } }, { objectiveId: { in: moiMt } }],
+		},
 	});
 	await db.okrCheckIn.deleteMany({ where: { authorUserId: { in: moiNguoi } } });
-	await db.okrCheckInSession.deleteMany({ where: { userId: { in: moiNguoi } } });
+	await db.okrCheckInSession.deleteMany({
+		where: { userId: { in: moiNguoi } },
+	});
 	await db.okrKeyResult.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrParticipant.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrObjective.deleteMany({ where: { id: { in: moiMt } } });
@@ -669,10 +712,17 @@ async function donDep() {
 	await db.okrCycle.deleteMany({ where: { id: { in: moiKy } } });
 	const cacPhongBan = [ORG.p, ORG.p2].filter(Boolean);
 	await db.orgSecondaryDepartment.deleteMany({
-		where: { OR: [{ userId: { in: moiNguoi } }, { departmentId: { in: cacPhongBan } }] },
+		where: {
+			OR: [{ userId: { in: moiNguoi } }, { departmentId: { in: cacPhongBan } }],
+		},
 	});
 	await db.orgPlacement.deleteMany({
-		where: { OR: [{ userId: { in: moiNguoi } }, { primaryDepartmentId: { in: cacPhongBan } }] },
+		where: {
+			OR: [
+				{ userId: { in: moiNguoi } },
+				{ primaryDepartmentId: { in: cacPhongBan } },
+			],
+		},
 	});
 	await db.department.deleteMany({ where: { id: { in: cacPhongBan } } });
 	if (ORG.bp) await db.division.deleteMany({ where: { id: ORG.bp } });
@@ -681,7 +731,10 @@ async function donDep() {
 	await db.user.deleteMany({ where: { id: { in: moiNguoi } } });
 }
 
-const trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });
+const trinhDuyet = await puppeteer.launch({
+	executablePath: CHROME,
+	headless: true,
+});
 datTrinhDuyet(trinhDuyet);
 
 let khang = 0;
@@ -714,7 +767,25 @@ async function moTrang(c, rong, duong, nhom = "E6") {
 		ghi(`requestfailed ${r.url()} ${r.failure()?.errorText ?? ""}`),
 	);
 	trang.on("response", (r) => {
-		if (r.status() >= 400) ghi(`${r.status()} ${r.request().method()} ${r.url()}`);
+		if (r.status() >= 400)
+			ghi(`${r.status()} ${r.request().method()} ${r.url()}`);
+	});
+	trang.trpc = [];
+	trang.on("response", (r) => {
+		const khop = new URL(r.url()).pathname.match(/\/trpc\/(.+)$/);
+		if (!khop) return;
+		const ten = decodeURIComponent(khop[1]).split(",");
+		trang.trpc.push(
+			r
+				.json()
+				.then((than) =>
+					ten.map((t, k) => {
+						const du = (Array.isArray(than) ? than[k] : than)?.result?.data;
+						return { thuTuc: t, du: du?.json ?? du };
+					}),
+				)
+				.catch(() => ten.map((t) => ({ thuTuc: t, du: undefined }))),
+		);
 	});
 	await trang.setViewport({ width: rong, height: CAO });
 	const host = new URL(APP).hostname;
@@ -722,8 +793,13 @@ async function moTrang(c, rong, duong, nhom = "E6") {
 		{ name: c.ten, value: c.gia, domain: host, path: "/" },
 		{ name: "lang", value: "vi", domain: host, path: "/" },
 	);
-	await trang.goto(`${APP}/${slug}${duong}`, { waitUntil: "load", timeout: CHO_TAI });
-	await trang.waitForNetworkIdle({ idleTime: 500, timeout: CHO }).catch(() => null);
+	await trang.goto(`${APP}/${slug}${duong}`, {
+		waitUntil: "load",
+		timeout: CHO_TAI,
+	});
+	await trang
+		.waitForNetworkIdle({ idleTime: 500, timeout: CHO })
+		.catch(() => null);
 	await cho(CHO_HYDRATE_MS);
 	return trang;
 }
@@ -751,7 +827,8 @@ const demSel = (trang, sel) =>
 	trang.evaluate((s) => document.querySelectorAll(s).length, sel);
 const chuSel = (trang, sel) =>
 	trang.evaluate(
-		(s) => document.querySelector(s)?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+		(s) =>
+			document.querySelector(s)?.textContent?.replace(/\s+/g, " ").trim() ?? "",
 		sel,
 	);
 const hienSel = (trang, sel) =>
@@ -768,12 +845,78 @@ const hienSel = (trang, sel) =>
 	);
 const thamSo = (trang, khoa) => new URL(trang.url()).searchParams.get(khoa);
 const khongTran = (trang) =>
-	trang.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+	trang.evaluate(
+		() => document.documentElement.scrollWidth <= window.innerWidth,
+	);
 
-async function chup(trang, ten, toanTrang = false) {
+async function docTrpc(trang, thuTuc) {
+	const han = Date.now() + CHO;
+	for (;;) {
+		const ds = (await Promise.all(trang.trpc))
+			.flat()
+			.filter((x) => x.thuTuc === thuTuc);
+		if (ds.length > 0 || Date.now() > han) return ds.map((x) => x.du);
+		await cho(200);
+	}
+}
+
+function trongKhungNhin(s, c, sauCung) {
+	const moi = [...document.querySelectorAll(s)].filter(
+		(e) => c === null || e.textContent?.replace(/\s+/g, " ").includes(c),
+	);
+	const e = sauCung ? moi.at(-1) : moi[0];
+	if (!e) return false;
+	e.scrollIntoView({ block: "nearest", inline: "nearest" });
+	const r = e.getBoundingClientRect();
+	if (r.width <= 0 || r.height <= 0) return false;
+	if (r.left < -1 || r.right > innerWidth + 1) return false;
+	if (r.top >= innerHeight || r.bottom <= 0) return false;
+	let mo = 1;
+	for (let x = e; x; x = x.parentElement)
+		mo *= Number(getComputedStyle(x).opacity);
+	if (mo < 0.99) return false;
+	if (!e.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }))
+		return false;
+	const tren = document.elementFromPoint(
+		(Math.max(r.left, 0) + Math.min(r.right, innerWidth)) / 2,
+		(Math.max(r.top, 0) + Math.min(r.bottom, innerHeight)) / 2,
+	);
+	return tren !== null && e.contains(tren);
+}
+
+async function chup(trang, ten, { sel, chu = null, cuoi = false }) {
 	kiem(`${ten}: tran ngang`, await khongTran(trang));
+	const vao = await trang
+		.waitForFunction(
+			trongKhungNhin,
+			{ timeout: CHO, polling: 200 },
+			sel,
+			chu,
+			cuoi,
+		)
+		.then(() => true)
+		.catch(() => false);
+	await trang
+		.waitForFunction(
+			() =>
+				document
+					.getAnimations()
+					.filter(
+						(a) =>
+							a.effect?.getComputedTiming().iterations !==
+							Number.POSITIVE_INFINITY,
+					)
+					.every((a) => a.playState !== "running"),
+			{ timeout: CHO, polling: 100 },
+		)
+		.catch(() => null);
 	await cho(250);
-	await trang.screenshot({ path: join(BANG_CHUNG, ten), fullPage: toanTrang });
+	const van = vao && (await trang.evaluate(trongKhungNhin, sel, chu, cuoi));
+	kiem(
+		`${ten}: ${sel}${chu ? ` «${chu}»` : ""} phai hien, khong bi che, nam trong khung nhin luc chup`,
+		van === true,
+	);
+	await trang.screenshot({ path: join(BANG_CHUNG, ten), fullPage: false });
 	anh.push(ten);
 }
 
@@ -794,7 +937,9 @@ async function bamChu(trang, sel, chu) {
 	);
 	const el = tay.asElement();
 	if (!el) return kiem(`khong thay «${chu}» trong ${sel} de bam`, false);
-	await el.evaluate((e) => e.scrollIntoView({ block: "center", inline: "center" }));
+	await el.evaluate((e) =>
+		e.scrollIntoView({ block: "center", inline: "center" }),
+	);
 	await cho(100);
 	try {
 		await el.click();
@@ -814,7 +959,9 @@ async function bamSel(trang, sel) {
 			continue;
 		}
 		try {
-			await e.evaluate((el) => el.scrollIntoView({ block: "center", inline: "center" }));
+			await e.evaluate((el) =>
+				el.scrollIntoView({ block: "center", inline: "center" }),
+			);
 			await cho(100);
 			await e.click();
 			return true;
@@ -860,9 +1007,11 @@ async function ganGiaTri(trang, sel, gia) {
 async function kiemKhongDich(trang, nhan, sel, chu) {
 	const co = await trang.evaluate(
 		(s, c) =>
-			[...document.querySelectorAll(`${s} [translate='no'], ${s}[translate='no']`)].some(
-				(e) => e.textContent?.includes(c),
-			),
+			[
+				...document.querySelectorAll(
+					`${s} [translate='no'], ${s}[translate='no']`,
+				),
+			].some((e) => e.textContent?.includes(c)),
 		sel,
 		chu,
 	);
@@ -870,8 +1019,12 @@ async function kiemKhongDich(trang, nhan, sel, chu) {
 }
 
 async function buocE6E7() {
-	const truocCheckIn = await db.okrCheckIn.count({ where: { authorUserId: id.m } });
-	const truocPhien = await db.okrCheckInSession.count({ where: { userId: id.m } });
+	const truocCheckIn = await db.okrCheckIn.count({
+		where: { authorUserId: id.m },
+	});
+	const truocPhien = await db.okrCheckInSession.count({
+		where: { userId: id.m },
+	});
 
 	const t = await moTrang(cookie.m, RONG, "/okr/cap-nhat-tuan", "E6");
 	await hienSel(t, "[data-kr]");
@@ -879,10 +1032,15 @@ async function buocE6E7() {
 	const T0 = t0Linh[0].agora;
 	await cho(5300);
 
-	kiem("E6 buoc 1: thanh tab co 4 tab", (await demSel(t, "[role='tab']")) === 4);
+	kiem(
+		"E6 buoc 1: thanh tab co 4 tab",
+		(await demSel(t, "[role='tab']")) === 4,
+	);
 	kiem(
 		"E6 buoc 1: tab Cap nhat tuan aria-current",
-		(await chuSel(t, "[role='tab'][aria-current='page']")).includes(CHU.tabCapNhat),
+		(await chuSel(t, "[role='tab'][aria-current='page']")).includes(
+			CHU.tabCapNhat,
+		),
 	);
 	kiem(
 		"E6 buoc 1: co 4 dong KR (3 cua muc tieu cn + KR trao doi ot cung chu M)",
@@ -894,55 +1052,76 @@ async function buocE6E7() {
 	);
 	kiem(
 		`E6 buoc 1: dong «${CHU.tuanTruoc}» cho KR co lan truoc`,
-		(await chuSel(t, `[data-kr='${KR.tt}'] [data-o='tu-tin']`)).includes(CHU.tuanTruoc),
+		(await chuSel(t, `[data-kr='${KR.tt}'] [data-o='tu-tin']`)).includes(
+			CHU.tuanTruoc,
+		),
 	);
 	kiem(
 		"E6 buoc 1: KR moc co 2 nut ToggleGroup",
-		(await demSel(t, `[data-kr='${KR.moc}'] [data-o='gia-tri'] [data-slot='toggle-group-item']`)) === 2,
+		(await demSel(
+			t,
+			`[data-kr='${KR.moc}'] [data-o='gia-tri'] [data-slot='toggle-group-item']`,
+		)) === 2,
 	);
-	await chup(t, "E6-step1.png", true);
+	await chup(t, "E6-step1.png", { sel: `[data-kr='${KR.tt}']` });
 
 	await ganGiaTri(t, `[data-kr='${KR.pt}'] input`, "ba");
 	await cho(200);
 	kiem(
 		`E6 buoc 2: loi so khi go chu khong phai so «${CHU.loiSo}»`,
-		(await chuSel(t, `[data-kr='${KR.pt}'] [data-o='gia-tri']`)).includes(CHU.loiSo),
+		(await chuSel(t, `[data-kr='${KR.pt}'] [data-o='gia-tri']`)).includes(
+			CHU.loiSo,
+		),
 	);
 	kiem(
 		"E6 buoc 2: nut gui disabled khi co so hong",
 		(await t.$eval("[data-nut='gui']", (e) => e.disabled)) === true,
 	);
-	await chup(t, "E6-step2.png", true);
+	await chup(t, "E6-step2.png", { sel: `[data-kr='${KR.pt}']` });
 
 	await ganGiaTri(t, `[data-kr='${KR.pt}'] input`, "40");
 	await cho(200);
-	await bamChu(t, `[data-kr='${KR.tt}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.cao);
-	await cho(200);
-	await bamChu(t, `[data-kr='${KR.pt}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.vua);
-	await cho(200);
-	await doi(t, "E6 buoc 3: nut Gui 2 cap nhat", (chu) =>
-		document.querySelector("[data-nut='gui']")?.textContent?.includes(chu), CHU.gui2,
+	await bamChu(
+		t,
+		`[data-kr='${KR.tt}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`,
+		CHU.cao,
 	);
-	await chup(t, "E6-step3.png", true);
+	await cho(200);
+	await bamChu(
+		t,
+		`[data-kr='${KR.pt}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`,
+		CHU.vua,
+	);
+	await cho(200);
+	await doi(
+		t,
+		"E6 buoc 3: nut Gui 2 cap nhat",
+		(chu) =>
+			document.querySelector("[data-nut='gui']")?.textContent?.includes(chu),
+		CHU.gui2,
+	);
+	await chup(t, "E6-step3.png", { sel: "[data-nut='gui']" });
 
 	await doiRong(t, HEP);
 	kiem("E6 buoc 8: o 390 khong tran ngang", await khongTran(t));
 	const doRongCot = await t.evaluate((krId) => {
 		const kr = document.querySelector(`[data-kr='${krId}'] [data-o='tu-tin']`);
 		if (!kr) return null;
-		const rongToggle = kr.querySelector("[data-slot='toggle-group']")?.getBoundingClientRect().width ?? 0;
+		const rongToggle =
+			kr.querySelector("[data-slot='toggle-group']")?.getBoundingClientRect()
+				.width ?? 0;
 		return { cot: kr.getBoundingClientRect().width, toggle: rongToggle };
 	}, KR.tt);
 	kiem(
 		"E6 buoc 8: ToggleGroup muc tu tin rong bang cot (sai so 2px)",
 		doRongCot !== null && Math.abs(doRongCot.cot - doRongCot.toggle) <= 2,
 	);
-	await chup(t, "E6-step8.png", true);
+	await chup(t, "E6-step8.png", { sel: `[data-kr='${KR.tt}']` });
 
 	await doiRong(t, RONG);
 	await t.evaluate(() => document.documentElement.classList.add("dark"));
 	await cho(300);
-	await chup(t, "E6-step9.png", true);
+	await chup(t, "E6-step9.png", { sel: `[data-kr='${KR.tt}']` });
 	await t.evaluate(() => document.documentElement.classList.remove("dark"));
 
 	let chanGui = true;
@@ -960,8 +1139,13 @@ async function buocE6E7() {
 	t.on("request", chanGuiCapNhat);
 
 	await bamSel(t, "[data-nut='gui']");
-	await doi(t, "E6 buoc 4: Alert Chua gui duoc", (chu) =>
-		document.querySelector("[data-trang-thai='ST-capnhat-loigui']")?.textContent?.includes(chu),
+	await doi(
+		t,
+		"E6 buoc 4: Alert Chua gui duoc",
+		(chu) =>
+			document
+				.querySelector("[data-trang-thai='ST-capnhat-loigui']")
+				?.textContent?.includes(chu),
 		CHU.chuaGuiDuoc,
 	);
 	kiem(
@@ -972,8 +1156,12 @@ async function buocE6E7() {
 		`E6 buoc 4: nut phai «${CHU.guiLai2}»`,
 		(await chuSel(t, "[data-nut='gui']")).includes(CHU.guiLai2),
 	);
-	await chup(t, "E6-step4.png", true);
-	const soCheckInSauChan = await db.okrCheckIn.count({ where: { authorUserId: id.m } });
+	await chup(t, "E6-step4.png", {
+		sel: "[data-trang-thai='ST-capnhat-loigui']",
+	});
+	const soCheckInSauChan = await db.okrCheckIn.count({
+		where: { authorUserId: id.m },
+	});
 	kiem(
 		`E7: sau lan gui bi chan okrCheckIn +0, thay ${soCheckInSauChan - truocCheckIn}`,
 		soCheckInSauChan === truocCheckIn,
@@ -981,21 +1169,34 @@ async function buocE6E7() {
 
 	chanGui = false;
 	await bamSel(t, "[data-nut='gui']");
-	await doi(t, "E6 buoc 5: Alert Da gui", (chu) =>
-		document.querySelector("[data-trang-thai='ST-capnhat-dagui']")?.textContent?.includes(chu),
+	await doi(
+		t,
+		"E6 buoc 5: Alert Da gui",
+		(chu) =>
+			document
+				.querySelector("[data-trang-thai='ST-capnhat-dagui']")
+				?.textContent?.includes(chu),
 		CHU.daGui2,
 	);
 	t.off("request", chanGuiCapNhat);
 	await t.setRequestInterception(false);
-	await chup(t, "E6-step5.png", true);
+	await chup(t, "E6-step5.png", {
+		sel: "[data-trang-thai='ST-capnhat-dagui']",
+	});
 
-	const sauCheckIn = await db.okrCheckIn.count({ where: { authorUserId: id.m } });
+	const sauCheckIn = await db.okrCheckIn.count({
+		where: { authorUserId: id.m },
+	});
 	kiem(
 		`E7: sau «Da gui» okrCheckIn +2, thay ${sauCheckIn - truocCheckIn}`,
 		sauCheckIn === truocCheckIn + 2,
 	);
 	const hangMoi = await db.okrCheckIn.findMany({
-		where: { authorUserId: id.m, keyResultId: { in: [KR.tt, KR.pt] }, createdAt: { gte: new Date(T0) } },
+		where: {
+			authorUserId: id.m,
+			keyResultId: { in: [KR.tt, KR.pt] },
+			createdAt: { gte: new Date(T0) },
+		},
 		orderBy: { createdAt: "desc" },
 		take: 2,
 	});
@@ -1009,7 +1210,9 @@ async function buocE6E7() {
 		`E7: value KR phan-tram phai 40, thay ${hangPt ? Number(hangPt.value) : "khong thay"}`,
 		hangPt !== undefined && Number(hangPt.value) === 40,
 	);
-	const sauPhien = await db.okrCheckInSession.count({ where: { userId: id.m } });
+	const sauPhien = await db.okrCheckInSession.count({
+		where: { userId: id.m },
+	});
 	kiem(
 		`E7: okrCheckInSession cua M +1 dung mot phien, thay ${sauPhien - truocPhien}`,
 		sauPhien === truocPhien + 1,
@@ -1024,7 +1227,8 @@ async function buocE6E7() {
 	);
 	kiem(
 		"E7: openedAt <= T0 + 1s",
-		phienMoi !== null && phienMoi.openedAt.getTime() <= new Date(T0).getTime() + 1000,
+		phienMoi !== null &&
+			phienMoi.openedAt.getTime() <= new Date(T0).getTime() + 1000,
 	);
 	kiem(
 		`E7: seconds >= 5, thay ${phienMoi?.seconds}`,
@@ -1035,10 +1239,12 @@ async function buocE6E7() {
 	if (await hienSel(r, "[data-trang-thai='ST-capnhat-rong']")) {
 		kiem(
 			`E6 buoc 6: Empty rong phai noi «${CHU.rongTitle}»`,
-			(await chuSel(r, "[data-trang-thai='ST-capnhat-rong']")).includes(CHU.rongTitle),
+			(await chuSel(r, "[data-trang-thai='ST-capnhat-rong']")).includes(
+				CHU.rongTitle,
+			),
 		);
 	}
-	await chup(r, "E6-step6.png", true);
+	await chup(r, "E6-step6.png", { sel: "[data-trang-thai='ST-capnhat-rong']" });
 	await r.close();
 
 	await fetch(`${CUA_CHAN_URL}/__cua-chan/chan`, {
@@ -1053,22 +1259,39 @@ async function buocE6E7() {
 	);
 	kiem(
 		`E6 buoc 7: Empty loi phai noi «${CHU.loiTaiTitle}»`,
-		(await chuSel(m2, "[data-trang-thai='ST-capnhat-loi']")).includes(CHU.loiTaiTitle),
+		(await chuSel(m2, "[data-trang-thai='ST-capnhat-loi']")).includes(
+			CHU.loiTaiTitle,
+		),
 	);
 	await fetch(`${CUA_CHAN_URL}/__cua-chan/bo`, { method: "POST" });
 	await bamChu(m2, "[data-trang-thai='ST-capnhat-loi'] button", CHU.thuLai);
-	await doi(m2, "E6 buoc 7: danh sach hien sau thu lai", () =>
-		document.querySelector("[data-kr]") !== null,
+	await doi(
+		m2,
+		"E6 buoc 7: danh sach hien sau thu lai",
+		() => document.querySelector("[data-kr]") !== null,
 	);
-	await chup(m2, "E6-step7.png", true);
+	await chup(m2, "E6-step7.png", { sel: "[data-kr]" });
 	await m2.close();
 
-	await kiemKhongDich(t, "E6 translate", `[data-kr='${KR.tt}']`, `Mở rộng đối tác ${MA}`);
-	await kiemKhongDich(t, "E6 translate", `[data-kr='${KR.tt}']`, `Cập nhật tuần ${MA}`);
+	await kiemKhongDich(
+		t,
+		"E6 translate",
+		`[data-kr='${KR.tt}']`,
+		`Mở rộng đối tác ${MA}`,
+	);
+	await kiemKhongDich(
+		t,
+		"E6 translate",
+		`[data-kr='${KR.tt}']`,
+		`Cập nhật tuần ${MA}`,
+	);
 	await kiemKhongDich(t, "E6 translate", `[data-kr='${KR.tt}']`, "đối tác");
 
 	const daLoiKhac = mangMang.E6.filter(
-		(d) => !d.includes("okr.guiCapNhat") && !d.includes("okr.capNhatTuan") && /^\d{4}-\S+ (4|5)\d\d /.test(d),
+		(d) =>
+			!d.includes("okr.guiCapNhat") &&
+			!d.includes("okr.capNhatTuan") &&
+			/^\d{4}-\S+ (4|5)\d\d /.test(d),
 	);
 	const { writeFileSync } = await import("node:fs");
 	writeFileSync(
@@ -1085,31 +1308,40 @@ async function buocE13E14() {
 	await hienSel(a, "[data-the-viec-okr='tong-quan']");
 	kiem(
 		"E13 buoc 1: the viec OKR co dong 1 KR cho cap nhat",
-		(await chuSel(a, "[data-the-viec-okr='tong-quan']")).includes("1 KR chờ cập nhật tuần này"),
+		(await chuSel(a, "[data-the-viec-okr='tong-quan']")).includes(
+			"1 KR chờ cập nhật tuần này",
+		),
 	);
 	kiem(
 		`E13 buoc 1: the viec ke hoach «${CHU.tasksTitle}» van hien`,
 		await coChu(a, `[data-slot='card-title']`, CHU.tasksTitle),
 	);
-	await chup(a, "E13-step1.png", true);
+	await chup(a, "E13-step1.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await doiRong(a, HEP);
-	await chup(a, "E13-step2.png", true);
+	await chup(a, "E13-step2.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await a.close();
 
 	const c = await moTrang(cookie.c, RONG, "", "E13");
 	await hienSel(c, "[data-the-viec-okr='tong-quan']");
 	kiem(
 		"E13 buoc 3: vai okr thay the viec OKR o Tong quan rut gon",
-		(await chuSel(c, "[data-the-viec-okr='tong-quan']")).includes("1 KR chờ cập nhật tuần này"),
+		(await chuSel(c, "[data-the-viec-okr='tong-quan']")).includes(
+			"1 KR chờ cập nhật tuần này",
+		),
 	);
-	await chup(c, "E13-step3.png", true);
+	await chup(c, "E13-step3.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await bamChu(c, "[data-the-viec-okr='tong-quan'] a", "Cập nhật tuần");
-	await doi(c, "E13 buoc 4: URL sang cap-nhat-tuan", (s) => new URL(location.href).pathname.endsWith(s), "/okr/cap-nhat-tuan");
+	await doi(
+		c,
+		"E13 buoc 4: URL sang cap-nhat-tuan",
+		(s) => new URL(location.href).pathname.endsWith(s),
+		"/okr/cap-nhat-tuan",
+	);
 	kiem(
 		`E13 buoc 4: tham so tu=viec-cua-toi, thay ${thamSo(c, "tu")}`,
 		thamSo(c, "tu") === "viec-cua-toi",
 	);
-	await chup(c, "E13-step4.png", true);
+	await chup(c, "E13-step4.png", { sel: "[data-kr]" });
 	await c.close();
 
 	const h = await moTrang(cookie.h, RONG, "/okr", "E13");
@@ -1119,46 +1351,71 @@ async function buocE13E14() {
 		await coSel(h, "[data-viec-okr='okr-nhac-ten']"),
 	);
 	await bamSel(h, "[data-viec-okr='okr-nhac-ten'] [data-mo-muc-tieu]");
-	await doi(h, "E13 buoc 5: sheet muc tieu mo", (id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null, OKR.h);
+	await doi(
+		h,
+		"E13 buoc 5: sheet muc tieu mo",
+		(id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null,
+		OKR.h,
+	);
 	kiem(
 		`E13 buoc 5: URL record=objective:${OKR.h}, thay ${thamSo(h, "record")}`,
 		thamSo(h, "record") === `objective:${OKR.h}`,
 	);
-	await chup(h, "E13-step5.png", true);
+	await chup(h, "E13-step5.png", {
+		sel: `[data-okr-sheet='${OKR.h}'] [role='tab']`,
+	});
 	await h.close();
 
 	const c2 = await moTrang(cookie.c2, RONG, "", "E13");
 	await hienSel(c2, "[data-the-viec-okr='tong-quan']");
 	kiem(
 		`E13 buoc 6: the viec OKR rong phai noi «${CHU.viecOkrRong}»`,
-		(await chuSel(c2, "[data-the-viec-okr='tong-quan']")).includes(CHU.viecOkrRong),
+		(await chuSel(c2, "[data-the-viec-okr='tong-quan']")).includes(
+			CHU.viecOkrRong,
+		),
 	);
-	await chup(c2, "E13-step6.png", true);
+	await chup(c2, "E13-step6.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await c2.close();
 
 	const r = await moTrang(cookie.r, RONG, "", "E13");
-	await r
-		.waitForResponse(
-			(res) => res.url().includes("okr.viecCuaToi") && res.request().method() === "GET",
-			{ timeout: CHO },
-		)
-		.catch(() => null);
+	const phanR = await docTrpc(r, "okr.viecCuaToi");
+	kiem(
+		`E13 buoc 7: phien R nhan phan hoi okr.viecCuaToi, thay ${phanR.length}`,
+		phanR.length > 0,
+	);
+	kiem(
+		`E13 buoc 7: may chu tra lienQuanOkr=false cho R, thay ${JSON.stringify(phanR.map((d) => d?.lienQuanOkr))}`,
+		phanR.length > 0 && phanR.every((d) => d?.lienQuanOkr === false),
+	);
 	await cho(500);
 	kiem(
 		"E13 buoc 7: R khong co the viec OKR",
 		!(await coSel(r, "[data-the-viec-okr='tong-quan']")),
 	);
-	kiem(`E13 buoc 7: the ke hoach van hien cho R`, await coChu(r, "[data-slot='card-title']", CHU.tasksTitle));
-	await chup(r, "E13-step7.png", true);
+	kiem(
+		`E13 buoc 7: the ke hoach van hien cho R`,
+		await coChu(r, "[data-slot='card-title']", CHU.tasksTitle),
+	);
+	await chup(r, "E13-step7.png", {
+		sel: "[data-slot='card-title']",
+		chu: CHU.tasksTitle,
+	});
 	await r.close();
 
 	const tr = await moTrang(cookie.tr, RONG, "", "E13");
 	await hienSel(tr, "[data-the-viec-okr='tong-quan']");
+	const phanTr = await docTrpc(tr, "okr.viecCuaToi");
+	kiem(
+		`E13 buoc 8: may chu tra lienQuanOkr=true cho TR, thay ${JSON.stringify(phanTr.map((d) => d?.lienQuanOkr))}`,
+		phanTr.length > 0 && phanTr.every((d) => d?.lienQuanOkr === true),
+	);
 	kiem(
 		`E13 buoc 8: TR (truong phong ban, khong viec) van thay the rong «${CHU.viecOkrRong}»`,
-		(await chuSel(tr, "[data-the-viec-okr='tong-quan']")).includes(CHU.viecOkrRong),
+		(await chuSel(tr, "[data-the-viec-okr='tong-quan']")).includes(
+			CHU.viecOkrRong,
+		),
 	);
-	await chup(tr, "E13-step8.png", true);
+	await chup(tr, "E13-step8.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await tr.close();
 
 	const phienC = await db.okrCheckInSession.findFirst({
@@ -1177,21 +1434,45 @@ async function buocE16() {
 	await hienSel(u, "[data-the-viec-okr='tong-quan']");
 	kiem(
 		"E16 buoc 1: the viec OKR co dong cap nhat cho U khong noi kenh",
-		(await chuSel(u, "[data-the-viec-okr='tong-quan']")).includes("chờ cập nhật tuần này"),
+		(await chuSel(u, "[data-the-viec-okr='tong-quan']")).includes(
+			"chờ cập nhật tuần này",
+		),
 	);
-	await chup(u, "E16-step1.png", true);
+	await chup(u, "E16-step1.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await bamChu(u, "[data-the-viec-okr='tong-quan'] a", "Cập nhật tuần");
-	await doi(u, "E16 buoc 2: man cap nhat hien", () => document.querySelector("[data-kr]") !== null);
-	const krU = await u.evaluate(() => document.querySelector("[data-kr]")?.getAttribute("data-kr"));
-	await bamChu(u, `[data-kr='${krU}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.cao);
-	await doi(u, "E16 buoc 2: nut Gui 1 cap nhat", (chu) =>
-		document.querySelector("[data-nut='gui']")?.textContent?.includes(chu), CHU.gui1,
+	await doi(
+		u,
+		"E16 buoc 2: man cap nhat hien",
+		() => document.querySelector("[data-kr]") !== null,
+	);
+	const krU = await u.evaluate(() =>
+		document.querySelector("[data-kr]")?.getAttribute("data-kr"),
+	);
+	await bamChu(
+		u,
+		`[data-kr='${krU}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`,
+		CHU.cao,
+	);
+	await doi(
+		u,
+		"E16 buoc 2: nut Gui 1 cap nhat",
+		(chu) =>
+			document.querySelector("[data-nut='gui']")?.textContent?.includes(chu),
+		CHU.gui1,
 	);
 	await bamSel(u, "[data-nut='gui']");
-	await doi(u, "E16 buoc 2: da gui", (chu) =>
-		document.querySelector("[data-trang-thai='ST-capnhat-dagui']")?.textContent?.includes(chu), CHU.daGui1,
+	await doi(
+		u,
+		"E16 buoc 2: da gui",
+		(chu) =>
+			document
+				.querySelector("[data-trang-thai='ST-capnhat-dagui']")
+				?.textContent?.includes(chu),
+		CHU.daGui1,
 	);
-	await chup(u, "E16-step2.png", true);
+	await chup(u, "E16-step2.png", {
+		sel: "[data-trang-thai='ST-capnhat-dagui']",
+	});
 	await u.close();
 	const sau = await db.okrCheckIn.count({ where: { authorUserId: id.u } });
 	kiem(`E16: okrCheckIn cua U +1, thay ${sau - truoc}`, sau === truoc + 1);
@@ -1200,17 +1481,37 @@ async function buocE16() {
 async function buocE18E19() {
 	const deal = await db.deal.findFirst({ select: { id: true } });
 	if (deal === null)
-		return kiem("E18: khong co thoa thuan nao trong kho de xep chong sheet", false);
+		return kiem(
+			"E18: khong co thoa thuan nao trong kho de xep chong sheet",
+			false,
+		);
 
-	const r = await moTrang(cookie.r, RONG, `/deals?record=deal:${deal.id}`, "E18");
-	await r.goto(`${APP}/${slug}/deals?record=deal:${deal.id},objective:${OKR.ot}`, {
-		waitUntil: "load",
-		timeout: CHO_TAI,
-	});
-	await doi(r, "E18 buoc 1: sheet muc tieu OT hien", (id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null, OKR.ot);
+	const r = await moTrang(
+		cookie.r,
+		RONG,
+		`/deals?record=deal:${deal.id}`,
+		"E18",
+	);
+	await r.goto(
+		`${APP}/${slug}/deals?record=deal:${deal.id},objective:${OKR.ot}`,
+		{
+			waitUntil: "load",
+			timeout: CHO_TAI,
+		},
+	);
+	await doi(
+		r,
+		"E18 buoc 1: sheet muc tieu OT hien",
+		(id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null,
+		OKR.ot,
+	);
 	await cho(CHO_HYDRATE_MS);
 	await bamChu(r, `[data-okr-sheet='${OKR.ot}'] [role='tab']`, CHU.traoDoi);
-	await doi(r, "E18 buoc 1: hai binh luan hien", () => document.querySelectorAll("[data-binh-luan]").length === 2);
+	await doi(
+		r,
+		"E18 buoc 1: hai binh luan hien",
+		() => document.querySelectorAll("[data-binh-luan]").length === 2,
+	);
 	const binhLuan = await r.evaluate(() =>
 		[...document.querySelectorAll("[data-binh-luan]")].map((e) => ({
 			than: e.querySelector("[data-noi-dung]")?.textContent ?? "",
@@ -1218,36 +1519,56 @@ async function buocE18E19() {
 			nhac: e.querySelector("[data-nhac-ten]")?.textContent ?? null,
 		})),
 	);
-	kiem("E18 buoc 1: binh luan dau co chip KR1", binhLuan[0]?.than.includes("Bình luận một") && binhLuan[0]?.chip !== null);
+	kiem(
+		"E18 buoc 1: binh luan dau co chip KR1",
+		binhLuan[0]?.than.includes("Bình luận một") && binhLuan[0]?.chip !== null,
+	);
 	kiem(
 		"E18 buoc 1: binh luan hai co ten TP duoc nhac",
-		binhLuan[1]?.than.includes("Bình luận hai") && (binhLuan[1]?.nhac ?? "").includes(NGUOI.tp.ten),
+		binhLuan[1]?.than.includes("Bình luận hai") &&
+			(binhLuan[1]?.nhac ?? "").includes(NGUOI.tp.ten),
 	);
-	await chup(r, "E18-step1.png", true);
+	await chup(r, "E18-step1.png", { sel: "[data-binh-luan]" });
 	await doiRong(r, HEP);
-	await chup(r, "E18-step2.png", true);
+	await chup(r, "E18-step2.png", { sel: "[data-binh-luan]" });
 	await doiRong(r, RONG);
 
 	await r.type("[data-khung-soan] textarea", "Tuần này cần thêm người");
 	await chonTuySelect(r, "[data-o-kr]", `KR trao đổi ${MA}`);
 	await chonTuySelect(r, "[data-o-nhac-ten]", NGUOI.m.ten);
 	await bamSel(r, "[data-nut='gui-binh-luan']");
-	await doi(r, "E18 buoc 3: ba binh luan hien", () => document.querySelectorAll("[data-binh-luan]").length === 3);
-	await chup(r, "E18-step3.png", true);
+	await doi(
+		r,
+		"E18 buoc 3: ba binh luan hien",
+		() => document.querySelectorAll("[data-binh-luan]").length === 3,
+	);
+	await chup(r, "E18-step3.png", { sel: "[data-binh-luan]", cuoi: true });
 
 	kiem(
 		"E18 buoc 4: R thay nut Theo doi",
 		await coSel(r, "[data-nut='theo-doi']"),
 	);
-	const dangTruoc = await r.$eval("[data-nut='theo-doi']", (e) => e.getAttribute("aria-pressed"));
-	kiem(`E18 buoc 4: aria-pressed truoc la false, thay ${dangTruoc}`, dangTruoc === "false");
+	const dangTruoc = await r.$eval("[data-nut='theo-doi']", (e) =>
+		e.getAttribute("aria-pressed"),
+	);
+	kiem(
+		`E18 buoc 4: aria-pressed truoc la false, thay ${dangTruoc}`,
+		dangTruoc === "false",
+	);
 	await bamSel(r, "[data-nut='theo-doi']");
-	await doi(r, "E18 buoc 4: da theo doi", () => document.querySelector("[data-nut='theo-doi']")?.getAttribute("aria-pressed") === "true");
+	await doi(
+		r,
+		"E18 buoc 4: da theo doi",
+		() =>
+			document
+				.querySelector("[data-nut='theo-doi']")
+				?.getAttribute("aria-pressed") === "true",
+	);
 	kiem(
 		`E18 buoc 4: nut phai noi «${CHU.dangTheoDoi}»`,
 		(await chuSel(r, "[data-nut='theo-doi']")).includes(CHU.dangTheoDoi),
 	);
-	await chup(r, "E18-step4.png", true);
+	await chup(r, "E18-step4.png", { sel: "[data-nut='theo-doi']" });
 
 	kiem(
 		"E18 buoc 5: R khong co menu thao tac tren KR1 (khong the lam gi)",
@@ -1255,12 +1576,25 @@ async function buocE18E19() {
 	);
 	await r.close();
 
-	const tp = await moTrang(cookie.tp, RONG, `/deals?record=deal:${deal.id}`, "E18");
-	await tp.goto(`${APP}/${slug}/deals?record=deal:${deal.id},objective:${OKR.ot}`, {
-		waitUntil: "load",
-		timeout: CHO_TAI,
-	});
-	await doi(tp, "E18 TP: sheet muc tieu OT hien", (id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null, OKR.ot);
+	const tp = await moTrang(
+		cookie.tp,
+		RONG,
+		`/deals?record=deal:${deal.id}`,
+		"E18",
+	);
+	await tp.goto(
+		`${APP}/${slug}/deals?record=deal:${deal.id},objective:${OKR.ot}`,
+		{
+			waitUntil: "load",
+			timeout: CHO_TAI,
+		},
+	);
+	await doi(
+		tp,
+		"E18 TP: sheet muc tieu OT hien",
+		(id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null,
+		OKR.ot,
+	);
 	await cho(CHO_HYDRATE_MS);
 	kiem(
 		"E18 buoc 5: TP co menu thao tac tren KR1",
@@ -1269,9 +1603,18 @@ async function buocE18E19() {
 
 	async function moHopCapNhatKr() {
 		await bamSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`);
-		await doi(tp, "E18 buoc 5: menu KR mo", () => document.querySelector("[role='menuitem']") !== null);
+		await doi(
+			tp,
+			"E18 buoc 5: menu KR mo",
+			() => document.querySelector("[role='menuitem']") !== null,
+		);
 		await bamChu(tp, "[data-muc='cap-nhat-kr']", CHU.capNhatMenu);
-		await doi(tp, "E18 buoc 5: hop cap nhat KR mo", (id) => document.querySelector(`[data-hop-cap-nhat-kr='${id}']`) !== null, KR.ot1);
+		await doi(
+			tp,
+			"E18 buoc 5: hop cap nhat KR mo",
+			(id) => document.querySelector(`[data-hop-cap-nhat-kr='${id}']`) !== null,
+			KR.ot1,
+		);
 	}
 
 	await moHopCapNhatKr();
@@ -1280,23 +1623,56 @@ async function buocE18E19() {
 		(await chuSel(tp, "[data-ghi-ho]")).includes(CHU.ghiHo) &&
 			(await chuSel(tp, "[data-ghi-ho]")).includes(NGUOI.m.ten),
 	);
-	await chup(tp, "E18-step5.png", true);
+	await chup(tp, "E18-step5.png", { sel: "[data-ghi-ho]" });
 	await doiRong(tp, HEP);
 	await moHopCapNhatKr();
-	await chup(tp, "E18-step6.png", true);
+	await chup(tp, "E18-step6.png", { sel: "[data-ghi-ho]" });
 	await doiRong(tp, RONG);
 	await moHopCapNhatKr();
 
-	await bamChu(tp, `[data-hop-cap-nhat-kr='${KR.ot1}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.cao);
-	await doi(tp, "E18 buoc 5: nut gui cap nhat KR bat", () => document.querySelector("[data-nut='gui-cap-nhat-kr']")?.disabled === false);
+	await bamChu(
+		tp,
+		`[data-hop-cap-nhat-kr='${KR.ot1}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`,
+		CHU.cao,
+	);
+	await doi(
+		tp,
+		"E18 buoc 5: nut gui cap nhat KR bat",
+		() =>
+			document.querySelector("[data-nut='gui-cap-nhat-kr']")?.disabled ===
+			false,
+	);
 	await bamSel(tp, "[data-nut='gui-cap-nhat-kr']");
-	await doi(tp, "E18 buoc 5: hop dong sau khi gui", () => document.querySelector("[data-hop-cap-nhat-kr]") === null);
+	await doi(
+		tp,
+		"E18 buoc 5: hop dong sau khi gui",
+		() => document.querySelector("[data-hop-cap-nhat-kr]") === null,
+	);
 
 	await bamChu(tp, `[data-okr-sheet='${OKR.ot}'] [role='tab']`, CHU.traoDoi);
-	await doi(tp, "E18 translate: tab Trao doi hien binh luan", () => document.querySelector("[data-binh-luan]") !== null);
-	await kiemKhongDich(tp, "E18 translate", "[data-binh-luan]", "Tuần này cần thêm người");
-	await kiemKhongDich(tp, "E18 translate", `[data-okr-sheet='${OKR.ot}']`, NGUOI.tp.ten);
-	await kiemKhongDich(tp, "E18 translate", `[data-okr-sheet='${OKR.ot}']`, `KR trao đổi ${MA}`);
+	await doi(
+		tp,
+		"E18 translate: tab Trao doi hien binh luan",
+		() => document.querySelector("[data-binh-luan]") !== null,
+	);
+	await kiemKhongDich(
+		tp,
+		"E18 translate",
+		"[data-binh-luan]",
+		"Tuần này cần thêm người",
+	);
+	await kiemKhongDich(
+		tp,
+		"E18 translate",
+		`[data-okr-sheet='${OKR.ot}']`,
+		NGUOI.tp.ten,
+	);
+	await kiemKhongDich(
+		tp,
+		"E18 translate",
+		`[data-okr-sheet='${OKR.ot}']`,
+		`KR trao đổi ${MA}`,
+	);
 	await tp.close();
 
 	const comment3 = await db.okrComment.findFirst({
@@ -1337,23 +1713,39 @@ async function buocE23() {
 	const trigger = `button:has(span)`;
 	const tay = await q.evaluateHandle((ten) => {
 		const chu = `Đổi vai trò của ${ten}`;
-		return [...document.querySelectorAll("button")].find((b) => b.textContent?.includes(chu)) ?? null;
+		return (
+			[...document.querySelectorAll("button")].find((b) =>
+				b.textContent?.includes(chu),
+			) ?? null
+		);
 	}, NGUOI.nguoiDi.ten);
 	const el = tay.asElement();
 	kiem("E23 buoc 1: thay nut menu hang nguoi di", el !== null);
 	if (el) await el.click();
-	await doi(q, "E23 buoc 1: menu mo", () => document.querySelector("[role='menuitem']") !== null);
+	await doi(
+		q,
+		"E23 buoc 1: menu mo",
+		() => document.querySelector("[role='menuitem']") !== null,
+	);
 	const mucMenu = await q.evaluate(() =>
-		[...document.querySelectorAll("[role='menuitem']")].map((e) => e.textContent?.trim()),
+		[...document.querySelectorAll("[role='menuitem']")].map((e) =>
+			e.textContent?.trim(),
+		),
 	);
 	kiem(
 		`E23 buoc 1: menu co «${CHU.chuyenViecMenu}» va «${CHU.chuyenOkrMenu}»`,
-		mucMenu.some((m) => m === CHU.chuyenViecMenu) && mucMenu.some((m) => m === CHU.chuyenOkrMenu),
+		mucMenu.some((m) => m === CHU.chuyenViecMenu) &&
+			mucMenu.some((m) => m === CHU.chuyenOkrMenu),
 	);
-	await chup(q, "E23-step1.png", true);
+	await chup(q, "E23-step1.png", { sel: "[role='menuitem']" });
 
 	await bamChu(q, "[role='menuitem']", CHU.chuyenOkrMenu);
-	await doi(q, "E23 buoc 2: hop chuyen OKR mo", (ten) => document.body.textContent?.includes(ten), NGUOI.nguoiDi.ten);
+	await doi(
+		q,
+		"E23 buoc 2: hop chuyen OKR mo",
+		(ten) => document.body.textContent?.includes(ten),
+		NGUOI.nguoiDi.ten,
+	);
 	await doi(q, "E23 buoc 2: cau co viec hien", () => {
 		const chu = document.querySelector("[role='dialog']")?.textContent ?? "";
 		return chu.includes("2 KR") && chu.includes("1 mục tiêu");
@@ -1361,38 +1753,67 @@ async function buocE23() {
 	await chonTuySelect(q, "[role='dialog'] [role='combobox']", NGUOI.r.ten);
 	await bamChu(q, "[role='dialog'] button", CHU.xacNhanChuyen);
 	await doi(q, "E23 buoc 2: toast xac nhan", () =>
-		[...document.querySelectorAll("[data-sonner-toast]")].some((e) => e.textContent?.includes("Đã chuyển")),
+		[...document.querySelectorAll("[data-sonner-toast]")].some((e) =>
+			e.textContent?.includes("Đã chuyển"),
+		),
 	);
-	await chup(q, "E23-step2.png", true);
+	await chup(q, "E23-step2.png", { sel: "[data-sonner-toast]" });
 	await doiRong(q, HEP);
-	await chup(q, "E23-step3.png", true);
+	await chup(q, "E23-step3.png", { sel: "[data-sonner-toast]" });
 	await doiRong(q, RONG);
 
 	const tay2 = await q.evaluateHandle((ten) => {
 		const chu = `Đổi vai trò của ${ten}`;
-		return [...document.querySelectorAll("button")].find((b) => b.textContent?.includes(chu)) ?? null;
+		return (
+			[...document.querySelectorAll("button")].find((b) =>
+				b.textContent?.includes(chu),
+			) ?? null
+		);
 	}, NGUOI.nguoiDi.ten);
 	const el2 = tay2.asElement();
 	if (el2) await el2.click();
-	await doi(q, "E23: menu mo lan hai", () => document.querySelector("[role='menuitem']") !== null);
+	await doi(
+		q,
+		"E23: menu mo lan hai",
+		() => document.querySelector("[role='menuitem']") !== null,
+	);
 	await bamChu(q, "[role='menuitem']", CHU.chuyenOkrMenu);
-	await doi(q, "E23 buoc 4: hop chuyen OKR mo lan hai", (ten) => document.body.textContent?.includes(ten), NGUOI.nguoiDi.ten);
-	await doi(q, "E23 buoc 4: cau khong phu trach hien", () =>
-		document.querySelector("[role='dialog']")?.textContent?.includes("không phụ trách KR hay mục tiêu nào") ?? false,
+	await doi(
+		q,
+		"E23 buoc 4: hop chuyen OKR mo lan hai",
+		(ten) => document.body.textContent?.includes(ten),
+		NGUOI.nguoiDi.ten,
+	);
+	await doi(
+		q,
+		"E23 buoc 4: cau khong phu trach hien",
+		() =>
+			document
+				.querySelector("[role='dialog']")
+				?.textContent?.includes("không phụ trách KR hay mục tiêu nào") ?? false,
 	);
 	const dangDisabled = await q.evaluate(() => {
-		const nut = [...document.querySelectorAll("[role='dialog'] button")].find((b) =>
-			b.textContent?.trim() === "Chuyển",
+		const nut = [...document.querySelectorAll("[role='dialog'] button")].find(
+			(b) => b.textContent?.trim() === "Chuyển",
 		);
 		return nut?.disabled === true;
 	});
 	kiem("E23 buoc 4: nut xac nhan disabled", dangDisabled);
-	await chup(q, "E23-step4.png", true);
+	await chup(q, "E23-step4.png", { sel: "[role='dialog']" });
 	await q.close();
 
-	const krDi1 = await db.okrKeyResult.findUnique({ where: { id: KR.di1 }, select: { ownerUserId: true } });
-	const krDi2 = await db.okrKeyResult.findUnique({ where: { id: KR.di2 }, select: { ownerUserId: true } });
-	const objDi = await db.okrObjective.findUnique({ where: { id: OKR.di }, select: { ownerUserId: true } });
+	const krDi1 = await db.okrKeyResult.findUnique({
+		where: { id: KR.di1 },
+		select: { ownerUserId: true },
+	});
+	const krDi2 = await db.okrKeyResult.findUnique({
+		where: { id: KR.di2 },
+		select: { ownerUserId: true },
+	});
+	const objDi = await db.okrObjective.findUnique({
+		where: { id: OKR.di },
+		select: { ownerUserId: true },
+	});
 	kiem(
 		`E23: hai KR cua nguoi di phai co chu moi la R, thay ${krDi1?.ownerUserId}/${krDi2?.ownerUserId}`,
 		krDi1?.ownerUserId === id.r && krDi2?.ownerUserId === id.r,
@@ -1408,17 +1829,30 @@ async function suaKrTrongSheet(trang, objectiveId, krTitle) {
 		waitUntil: "load",
 		timeout: CHO_TAI,
 	});
-	await doi(trang, "E29: sheet muc tieu hien", (id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null, objectiveId);
+	await doi(
+		trang,
+		"E29: sheet muc tieu hien",
+		(id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null,
+		objectiveId,
+	);
 	await cho(CHO_HYDRATE_MS);
 	await bamSel(trang, `button[aria-label='Thao tác với ${krTitle}']`);
-	await doi(trang, "E29: menu KR mo", () => document.querySelector("[role='menuitem']") !== null);
+	await doi(
+		trang,
+		"E29: menu KR mo",
+		() => document.querySelector("[role='menuitem']") !== null,
+	);
 	await bamChu(trang, "[role='menuitem']", CHU.suaMenu);
 	await hienSel(trang, "[data-hop-thoai-kr]");
 }
 
 async function moLaiHopSuaKr(trang, krTitle) {
 	await bamSel(trang, `button[aria-label='Thao tác với ${krTitle}']`);
-	await doi(trang, "E29: menu KR mo lai", () => document.querySelector("[role='menuitem']") !== null);
+	await doi(
+		trang,
+		"E29: menu KR mo lai",
+		() => document.querySelector("[role='menuitem']") !== null,
+	);
 	await bamChu(trang, "[role='menuitem']", CHU.suaMenu);
 	await hienSel(trang, "[data-hop-thoai-kr]");
 }
@@ -1434,21 +1868,34 @@ async function buocE29() {
 		"E29 buoc 2: KR a o hien tai readonly (khong disabled)",
 		oHienA !== null && oHienA.readOnly === true && oHienA.disabled === false,
 	);
-	const hrefLink = await tp.evaluate(() => document.querySelector("[data-hop-thoai-kr] a")?.getAttribute("href") ?? null);
+	const hrefLink = await tp.evaluate(
+		() =>
+			document.querySelector("[data-hop-thoai-kr] a")?.getAttribute("href") ??
+			null,
+	);
 	kiem(
 		`E29 buoc 2: lien ket Cap nhat tuan phai tro ${`/${slug}/okr/cap-nhat-tuan`}, thay ${hrefLink}`,
 		hrefLink === `/${slug}/okr/cap-nhat-tuan`,
 	);
-	await chup(tp, "E29-step1.png", true);
+	await chup(tp, "E29-step1.png", { sel: "[data-hop-thoai-kr]" });
 	await doiRong(tp, HEP);
-	await chup(tp, "E29-step2.png", true);
+	await moLaiHopSuaKr(tp, `KR29a ${MA}`);
+	await chup(tp, "E29-step2.png", { sel: "[data-hop-thoai-kr]" });
 	await doiRong(tp, RONG);
 	await moLaiHopSuaKr(tp, `KR29a ${MA}`);
 
 	await ganGiaTri(tp, "[data-o-dich]", "60");
-	await doi(tp, "E29: nut Luu bat", () => document.querySelector("[data-nut='gui-kr']")?.disabled === false);
+	await doi(
+		tp,
+		"E29: nut Luu bat",
+		() => document.querySelector("[data-nut='gui-kr']")?.disabled === false,
+	);
 	await bamSel(tp, "[data-nut='gui-kr']");
-	await doi(tp, "E29: hop dong sau Luu", () => document.querySelector("[data-hop-thoai-kr]") === null);
+	await doi(
+		tp,
+		"E29: hop dong sau Luu",
+		() => document.querySelector("[data-hop-thoai-kr]") === null,
+	);
 
 	const krASau = await db.okrKeyResult.findUnique({ where: { id: KR.k29a } });
 	kiem(
@@ -1461,25 +1908,55 @@ async function buocE29() {
 	);
 
 	await bamSel(tp, `button[aria-label='Thao tác với KR29a ${MA}']`);
-	await doi(tp, "E29: menu KR mo lai", () => document.querySelector("[role='menuitem']") !== null);
+	await doi(
+		tp,
+		"E29: menu KR mo lai",
+		() => document.querySelector("[role='menuitem']") !== null,
+	);
 	await bamChu(tp, "[role='menuitem']", CHU.suaMenu);
 	await hienSel(tp, "[data-hop-thoai-kr]");
 	await bamChu(tp, "[data-hop-thoai-kr] a", CHU.capNhatTuanLink);
-	await doi(tp, "E29 buoc 3: URL sang cap-nhat-tuan", (s) => new URL(location.href).pathname.endsWith(s), "/okr/cap-nhat-tuan");
-	await chup(tp, "E29-step3.png", true);
+	await doi(
+		tp,
+		"E29 buoc 3: URL sang cap-nhat-tuan",
+		(s) => new URL(location.href).pathname.endsWith(s),
+		"/okr/cap-nhat-tuan",
+	);
+	await chup(tp, "E29-step3.png", { sel: "[data-kr]" });
 
 	await suaKrTrongSheet(tp, OKR.o29b, `KR29b ${MA}`);
 	const oHienB = await tp.evaluate(() => {
 		const e = document.querySelector("[data-o-hien-tai]");
-		return e ? { readOnly: e.readOnly, lienKet: document.querySelector("[data-hop-thoai-kr] a") !== null } : null;
+		return e
+			? {
+					readOnly: e.readOnly,
+					lienKet: document.querySelector("[data-hop-thoai-kr] a") !== null,
+				}
+			: null;
 	});
-	kiem("E29 buoc 4: KR b o hien tai sua duoc", oHienB !== null && oHienB.readOnly === false);
-	kiem("E29 buoc 4: KR b khong co dong dan cap nhat tuan", oHienB !== null && oHienB.lienKet === false);
+	kiem(
+		"E29 buoc 4: KR b o hien tai sua duoc",
+		oHienB !== null && oHienB.readOnly === false,
+	);
+	kiem(
+		"E29 buoc 4: KR b khong co dong dan cap nhat tuan",
+		oHienB !== null && oHienB.lienKet === false,
+	);
 	await ganGiaTri(tp, "[data-o-hien-tai]", "5");
-	await doi(tp, "E29: nut Luu bat cho KR b", () => document.querySelector("[data-nut='gui-kr']")?.disabled === false);
+	await doi(
+		tp,
+		"E29: nut Luu bat cho KR b",
+		() => document.querySelector("[data-nut='gui-kr']")?.disabled === false,
+	);
 	await bamSel(tp, "[data-nut='gui-kr']");
-	await doi(tp, "E29: hop dong sau Luu KR b", () => document.querySelector("[data-hop-thoai-kr]") === null);
-	await chup(tp, "E29-step4.png", true);
+	await doi(
+		tp,
+		"E29: hop dong sau Luu KR b",
+		() => document.querySelector("[data-hop-thoai-kr]") === null,
+	);
+	await chup(tp, "E29-step4.png", {
+		sel: `[data-okr-sheet='${OKR.o29b}'] [role='tab']`,
+	});
 	const krBSau = await db.okrKeyResult.findUnique({ where: { id: KR.k29b } });
 	kiem(
 		`E29: currentValue KR b phai 5, thay ${krBSau ? Number(krBSau.currentValue) : "?"}`,
@@ -1489,18 +1966,36 @@ async function buocE29() {
 	await suaKrTrongSheet(tp, OKR.o29c, `KR29c ${MA}`);
 	const oHienC = await tp.evaluate(() => {
 		const e = document.querySelector("[data-o-hien-tai]");
-		return e ? { readOnly: e.readOnly, lienKet: document.querySelector("[data-hop-thoai-kr] a") !== null } : null;
+		return e
+			? {
+					readOnly: e.readOnly,
+					lienKet: document.querySelector("[data-hop-thoai-kr] a") !== null,
+				}
+			: null;
 	});
 	kiem(
 		"E29 buoc 5: KR c (cong bo, chu ky lap-ke-hoach) o hien tai sua duoc",
 		oHienC !== null && oHienC.readOnly === false,
 	);
-	kiem("E29 buoc 5: KR c khong co dong dan cap nhat tuan", oHienC !== null && oHienC.lienKet === false);
+	kiem(
+		"E29 buoc 5: KR c khong co dong dan cap nhat tuan",
+		oHienC !== null && oHienC.lienKet === false,
+	);
 	await ganGiaTri(tp, "[data-o-hien-tai]", "6");
-	await doi(tp, "E29: nut Luu bat cho KR c", () => document.querySelector("[data-nut='gui-kr']")?.disabled === false);
+	await doi(
+		tp,
+		"E29: nut Luu bat cho KR c",
+		() => document.querySelector("[data-nut='gui-kr']")?.disabled === false,
+	);
 	await bamSel(tp, "[data-nut='gui-kr']");
-	await doi(tp, "E29: hop dong sau Luu KR c", () => document.querySelector("[data-hop-thoai-kr]") === null);
-	await chup(tp, "E29-step5.png", true);
+	await doi(
+		tp,
+		"E29: hop dong sau Luu KR c",
+		() => document.querySelector("[data-hop-thoai-kr]") === null,
+	);
+	await chup(tp, "E29-step5.png", {
+		sel: `[data-okr-sheet='${OKR.o29c}'] [role='tab']`,
+	});
 	const krCSau = await db.okrKeyResult.findUnique({ where: { id: KR.k29c } });
 	kiem(
 		`E29: currentValue KR c phai 6, thay ${krCSau ? Number(krCSau.currentValue) : "?"}`,
@@ -1530,7 +2025,9 @@ try {
 		if (nhom === "E6") continue;
 		writeFileSync(
 			join(BANG_CHUNG, `${nhom}-network.txt`),
-			dong.length === 0 ? "khong co request that bai hay loi console\n" : `${dong.join("\n")}\n`,
+			dong.length === 0
+				? "khong co request that bai hay loi console\n"
+				: `${dong.join("\n")}\n`,
 		);
 	}
 	await trinhDuyet.close().catch(() => {});
