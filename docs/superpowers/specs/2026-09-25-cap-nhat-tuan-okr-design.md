@@ -321,7 +321,7 @@ làn eval sau khi lượt lên `onehub`.
 `nhac-qua-zalo`, `noi-zalo-cho-nguoi-moi`, `o-cam-chay-duoc-that`,
 `o-so-tien-doc-theo-tieng`, `okr-soat-anh-luot-3`, `ten-dong-tien-bao-cao`,
 `thanh-vien-hai-khoi-cung-khuon`, `thuoc-o-soan-don-dep`, `tiep-thi-tuyen-doi-tac`,
-`tieu-de-cot-doc-tron`, `to-chuc-danh-sach-chi-tiet`, `tong-quan-va-khung-noi-tieng-viet`,
+`tieu-de-cot-doc-tron`, `to-chuc-danh-sach-chi-tiet`, `tong-quan-va-khung-noi-tieng-viet`, `tra-loi-tin-nhac`,
 `truong-tu-tao-o-cai-dat`, `vai-chi-okr`, `vao-bang-email-va-mat-khau`,
 `vung-cuon-la-khoi-chua`, `zalo-gio-theo-mui-gio-xuong`, `zalo-goi-thu-hong-hien-dung-bot`,
 `zalo-webhook-doc-khuon-that`.

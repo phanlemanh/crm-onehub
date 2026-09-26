@@ -65,6 +65,7 @@ export const HO_SO_BI_CHAM = [
 	"tieu-de-cot-doc-tron",
 	"to-chuc-danh-sach-chi-tiet",
 	"tong-quan-va-khung-noi-tieng-viet",
+	"tra-loi-tin-nhac",
 	"truong-tu-tao-o-cai-dat",
 	"vai-chi-okr",
 	"vao-bang-email-va-mat-khau",
