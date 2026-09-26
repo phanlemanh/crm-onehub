@@ -1258,3 +1258,4 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 | 5 | vật lành | `qmk_chup` / `qmk_chup_tat` | `14 DUNG, 0 SAI` / `2 DUNG, 0 SAI`, cổng 3300/3301 22:38–22:40 UTC |
 | 2 (b) | `requestMax: 5` | `-t qua-luot` | `lan thu tu phai 429, duoc 200` |
 | 2 (b) | `requestWindowSeconds: 15 * MINUTE_SECONDS` | `-t qua-luot` | `bo don hang dem xoa cua so dang chan: lan thu tu 200` — đúng lỗi gốc, nay có răng |
+| 6 | (năm lệnh chứng) | `git push` → pre-push | lượt đầu ĐỎ: `lint:slop` 8 lỗi kiểu lỏng (`unknown`, `Record<…, unknown>`, `object`) ở mã mới → sửa d3e3c170; lượt hai: check-types, lint, lint:slop, test 11/11, build 4/4 đều xanh, đẩy d3e3c170 lúc 00:08 UTC |
