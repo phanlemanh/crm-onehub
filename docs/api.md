@@ -123,6 +123,30 @@ every query still resolves through `WORKSPACE_ID`.
 - **Renaming moves the URL**, so `workspace-form.tsx` replaces the location onto the
   slug `workspace.update` returns.
 
+## API keys run on a patched library
+
+`@better-auth/api-key` 1.6.25 writes two `UPDATE apikey` statements on every
+request that sends `x-api-key`, even with `rateLimit: { enabled: false }`
+(better-auth#10921). This repo patches it with `bun patch`: the patch lives in
+`patches/`, `package.json` lists it under `patchedDependencies`, and it adds one
+plugin option, `lastRequestUpdateIntervalMs`. Without the option the library
+behaves exactly as released.
+
+- **`lastRequest` is written at most once per `API_KEY_USAGE.lastRequestIntervalMs`**
+  (one minute, `packages/auth/src/api-keys.ts`), so Settings → API keys shows the
+  last use to within a minute. `updatedAt` no longer moves on use; nothing reads it.
+- **Upgrading `@better-auth/api-key` means redoing the patch.** The version is part
+  of the patch key; `packages/auth/test/khoa-api-ghi-thua.spec.ts` fails with a named
+  message when the installed version and the patch disagree. Run
+  `bun patch @better-auth/api-key@<new>`, reapply the three edits in
+  `dist/index.mjs` and the option type, then `bun patch --commit`.
+- **Remove the patch when better-auth#10921 is fixed upstream** with a release that
+  stops writing on every verification while rate limiting is off: upgrade, drop the
+  `patchedDependencies` entry and the patch file, and drop the option from
+  `auth.ts`.
+
+The acceptance record is `_acceptance/khoa-api-ghi-thua/`.
+
 ## SSO is a row, not a deployment
 
 An `ssoProvider` row via Better Auth's `sso` plugin, on Settings → SSO, because a
