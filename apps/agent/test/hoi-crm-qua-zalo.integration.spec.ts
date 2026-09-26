@@ -957,13 +957,14 @@ describe("dang-ban", () => {
 			A.id,
 			new Date(goc.getTime() - ZALO.hoi.hanTraLoiMs - GIAY_MS),
 		);
+		expect(cu.loai, "loai hoi").toBe("hoi");
 		await dongHoiQuaHan({
 			now: () => goc,
 			fetcher: zalo.fetcher,
 			token: TOKEN,
 		});
 		const moi = await hoi("ZA", A.id, goc);
-		expect(moi.loai).toBe("hoi");
+		expect(moi.loai, "cau moi mo phien").toBe("hoi");
 		moMayChu();
 		const loiIn: string[] = [];
 		const bat = spyOn(console, "error").mockImplementation(
@@ -972,8 +973,6 @@ describe("dang-ban", () => {
 			},
 		);
 		try {
-			expect(cu.loai, "loai hoi").toBe("hoi");
-			expect(moi.loai, "cau moi mo phien").toBe("hoi");
 			if (cu.loai !== "hoi" || moi.loai !== "hoi") return;
 			await suKien(
 				"message.completed",
