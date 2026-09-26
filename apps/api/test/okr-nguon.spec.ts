@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
 import { db } from "@crm/db";
 import { chupKrCrm } from "@crm/db/okr-chi-so";
+import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import {
 	readReportingCurrency,
 	writeReportingCurrency,
@@ -352,7 +353,7 @@ async function nguonMayTrongObjective() {
 	}
 }
 
-const TU_VN = new Date("2026-03-31T17:00:00Z");
+const TU_VN = dauNgayVN(KY_TU);
 const cuoiNgayVN = (ngay: string) => new Date(`${ngay}T17:00:00Z`);
 
 async function demDocLap(phongBanId: string, ngay: string) {

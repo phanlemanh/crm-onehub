@@ -596,8 +596,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   measurement notes «đo cạnh») and is phase-locked like the other writes. A Sheets
   source queues an `okr-doc-sheet` `AgentTask` for a trial read — the API never calls
   Google.
-- **Seven CRM metrics, one definition each.** The catalog is `CHI_SO_OKR`
-  (`@crm/validation/okr-chi-so`): what is counted, which date puts a record in the
+- **Seven CRM metrics, one definition each.** The catalog is `CHI_SO_OKR`, defined in
+  `@crm/db/okr-chi-so-danh-muc` and re-exported with its Zod shapes by
+  `@crm/validation/okr-chi-so`: what is counted, which date puts a record in the
   period, who is credited, what record sits behind it and which scopes it accepts
   (company, division, department, person; `ghi-danh-dat-bac` also needs `bac`). There
   is no query builder. `@crm/db/okr-chi-so` holds the one `dieuKienChiSo` that builds
@@ -614,7 +615,7 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   share of side-measured check-ins that took the machine number (`SET okr.chu_ky` and
   `SET okr.bo_phan = '<id>,<id>'` first).
 - **`okrSoChup` is append-only history.** One row per KR per day for `crm` and
-  `bang-tinh` (a partial unique index), any number per day for `api` (the newest is
+  `bang-tinh` (the partial unique index `okrSoChup_may_mot_ngay`), any number per day for `api` (the newest is
   that day's number). Each row copies the definition it was counted with (`chiSo`,
   `phamVi`, `bac`), so history describes itself after the source changes. Nothing
   updates or deletes a row: the foreign key to the KR is `ON DELETE RESTRICT`,
@@ -625,7 +626,8 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `ghiSoKr`.
 - **Another system writes a number with an API key.** `okr.ghiSoKr` is also
   `POST /rest/okr/key-results/{id}/value` with `x-api-key` — a member's key
-  (`enableSessionForAPIKeys`), checked by `OkrAccessService.canEditKr` for that member,
+  (`enableSessionForAPIKeys`); the service checks that member with
+  `OkrAccessService.assertSuaKr` (the KR's owner, or a head who edits the objective's unit),
   so the «chỉ OKR» role may call it. It takes `giaTri` and an optional `ghiChu`; it
   refuses a KR whose source is not `api` (`OKR.thongDiep.so.khongNhanApi`), a value
   that does not fit the KR's kind, a locked phase, and any call once today in Vietnam

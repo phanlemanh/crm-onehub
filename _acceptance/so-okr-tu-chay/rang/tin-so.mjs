@@ -23,6 +23,8 @@ const CHI_SO = [
 ];
 const PHAM_VI = { kieu: "toan-cong-ty" };
 const NGAY = /^\d{4}-\d{2}-\d{2}$/;
+const O_LECH = /^(\d+)(%?)$/;
+const GHIM_DOC_LAP = "dem-doc-lap.sql không độc lập";
 
 function thoat(ma, cau) {
 	console.log(cau);
@@ -36,7 +38,7 @@ const doiSo = (ten) => {
 const san = process.argv.includes("--san");
 const chieuDo = process.argv.includes("--chieu-do");
 
-async function tuKiemSql(sql) {
+async function tuKiemSql(sql, nhan) {
 	const { MA_CHI_SO } = await import(
 		join(GOC, "packages/validation/src/okr-chi-so.ts")
 	);
@@ -49,10 +51,9 @@ async function tuKiemSql(sql) {
 	const thap = sql.toLowerCase();
 	const gap = [...ten].filter((t) => thap.includes(t.toLowerCase()));
 	console.log(
-		`tu kiem dem-doc-lap.sql: soi ${ten.size} ten cua danh muc (ma chi so, ham, hang so) — ${gap.length === 0 ? "khong ten nao" : `GAP ${gap.join(", ")}`}`,
+		`tu kiem ${nhan}: soi ${ten.size} ten cua danh muc (ma chi so, ham, hang so) — ${gap.length === 0 ? "khong ten nao" : `GAP ${gap.join(", ")}`}`,
 	);
-	if (gap.length > 0)
-		thoat(1, `dem-doc-lap.sql không độc lập: nhắc ${gap.join(", ")}`);
+	if (gap.length > 0) thoat(1, `${GHIM_DOC_LAP}: nhắc ${gap.join(", ")}`);
 }
 
 function docLech() {
@@ -63,16 +64,21 @@ function docLech() {
 		if (!CHI_SO.some((c) => c.ma === ma)) continue;
 		bang.set(ma, { gieo: o[2], production: o[3] });
 	}
-	for (const c of CHI_SO)
-		if (!bang.has(c.ma))
-			thoat(2, `KHONG DO DUOC: lech-khai-truoc.md thiếu dòng ${c.ma}`);
+	for (const c of CHI_SO) {
+		const d = bang.get(c.ma);
+		if (!d) thoat(2, `KHONG DO DUOC: lech-khai-truoc.md thiếu dòng ${c.ma}`);
+		for (const o of [d.gieo, d.production])
+			if (!O_LECH.test(o ?? ""))
+				thoat(
+					2,
+					`KHONG DO DUOC: ô lệch khai trước «${o}» của ${c.ma} không phải n hay n%`,
+				);
+	}
 	return bang;
 }
 
 function tran(o, docLap) {
-	const m = /^(\d+)(%?)$/.exec(o ?? "");
-	if (!m)
-		thoat(2, `KHONG DO DUOC: ô lệch khai trước «${o}» không phải n hay n%`);
+	const m = O_LECH.exec(o);
 	return m[2] === "%" ? Math.ceil((Number(m[1]) * docLap) / 100) : Number(m[1]);
 }
 
@@ -100,7 +106,20 @@ async function banSaoDem() {
 }
 
 const sql = readFileSync(TEP_SQL, "utf8");
-await tuKiemSql(sql);
+if (process.argv.includes("--chieu-do-doc-lap")) {
+	const banSao = sql.replace(/\bAS chot\b/, 'AS "thoa-thuan-chot-duoc"');
+	if (banSao === sql)
+		thoat(
+			2,
+			"KHONG DO DUOC: không chèn được mã chỉ số vào bản sao dem-doc-lap.sql",
+		);
+	console.log(
+		'chieu do doc lap: ban sao dem-doc-lap.sql dat ten cot chot la "thoa-thuan-chot-duoc"',
+	);
+	await tuKiemSql(banSao, "ban sao dem-doc-lap.sql");
+	thoat(0, "chieu do doc lap: LOT — tu kiem khong bat ma chi so trong ban sao");
+}
+await tuKiemSql(sql, "dem-doc-lap.sql");
 const lech = docLech();
 
 const { isMeasureDatabase } = await import(
@@ -203,8 +222,8 @@ try {
 		console.log(
 			`chieu do: dong thoa-thuan-chot-duoc ${bat ? "bi bat" : "LOT — ban sao hong khong lam lech"}`,
 		);
-	}
-	process.exitCode = vuot.length === 0 ? 0 : 1;
+		process.exitCode = bat ? 1 : 0;
+	} else process.exitCode = vuot.length === 0 ? 0 : 1;
 } finally {
 	hong?.don();
 	if (gieo) {

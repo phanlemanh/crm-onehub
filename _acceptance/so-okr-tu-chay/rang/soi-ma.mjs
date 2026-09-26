@@ -54,7 +54,6 @@ const DUOC_TAO = new Map([
 const TEP_CHUP = "apps/agent/agent/lib/okr-chup.ts";
 
 const VUNG_APP = /^apps\/app\/(?!app\/proto\/).+\.tsx$/;
-const VUNG_UI = /^packages\/ui\/src\/components\/.+\.tsx$/;
 const VUNG_MOI =
 	/^(apps|packages|scripts|_acceptance\/[^/]+\/rang)\/.+\.(ts|tsx|mts|mjs|js)$/;
 const DAU_HIEU = [
@@ -259,11 +258,15 @@ function chuThichTrong(sf) {
 		}));
 }
 
+function chuThichThem(duong, ten, them) {
+	return chuThichTrong(cay(duong))
+		.filter((c) => them.has(c.dong))
+		.map((c) => `chú thích mã: ${ten}:${c.dong} «${c.chu}»`);
+}
+
 function soiTepMoi(duong, ten) {
 	const sf = cay(duong);
 	const hong = [];
-	for (const c of chuThichTrong(sf))
-		hong.push(`chú thích mã: ${ten}:${c.dong} «${c.chu}»`);
 	const di = (n) => {
 		if (
 			ts.isTypeReferenceNode(n) &&
@@ -295,13 +298,41 @@ function dauHieuVeTay(chu, ten) {
 	);
 }
 
-function dongThem(t) {
-	return git("diff", "-U0", `${MOC}...HEAD`, "--", t)
-		.split("\n")
-		.filter((d) => d.startsWith("+") && !d.startsWith("+++"))
-		.map((d) => d.slice(1))
-		.join("\n");
+let GOC_SO = null;
+function dongThem(t, duong) {
+	GOC_SO ??= git("merge-base", "HEAD", MOC);
+	const thu = mkdtempSync(join(tmpdir(), "soi-dong-them-"));
+	try {
+		const cu = join(thu, "cu");
+		const r0 = spawnSync("git", ["-C", GOC, "show", `${GOC_SO}:${t}`], {
+			encoding: "utf8",
+			maxBuffer: 64 * 1024 * 1024,
+		});
+		writeFileSync(cu, r0.status === 0 ? r0.stdout : "");
+		const r = spawnSync(
+			"git",
+			["diff", "--no-index", "-U0", "--no-color", cu, duong],
+			{ encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+		);
+		const them = new Set();
+		for (const m of (r.stdout ?? "").matchAll(
+			/^@@ -\S+ \+(\d+)(?:,(\d+))? @@/gm,
+		)) {
+			const dau = Number(m[1]);
+			const so = m[2] === undefined ? 1 : Number(m[2]);
+			for (let k = 0; k < so; k += 1) them.add(dau + k);
+		}
+		return them;
+	} finally {
+		rmSync(thu, { recursive: true, force: true });
+	}
 }
+
+const chuDong = (chu, them) =>
+	chu
+		.split("\n")
+		.filter((_, k) => them.has(k + 1))
+		.join("\n");
 
 function giaTriHang(n) {
 	if (ts.isNumericLiteral(n)) return Number(n.text.replace(/_/g, ""));
@@ -388,21 +419,33 @@ function copyValue() {
 	return hong;
 }
 
-async function caThietKe() {
-	const dai = `${MOC}...HEAD`;
-	const theoLoc = (loc) =>
-		git("diff", "--name-only", `--diff-filter=${loc}`, dai)
-			.split("\n")
-			.filter(Boolean);
-	const moi = new Set(theoLoc("A"));
-	const doi = theoLoc("AM").filter((t) => existsSync(join(GOC, t)));
+function tepDiff(loc) {
+	return git(
+		"diff",
+		"--name-only",
+		"--no-renames",
+		`--diff-filter=${loc}`,
+		`${MOC}...HEAD`,
+	)
+		.split("\n")
+		.filter(Boolean);
+}
+
+async function caThietKe(thay = new Map()) {
+	const dai = `${MOC}...HEAD (--no-renames)`;
+	const duongCua = (t) => thay.get(t) ?? join(GOC, t);
+	const tenCua = (t) => thay.get(t) ?? t;
+	const moi = new Set(tepDiff("A"));
+	const doi = tepDiff("AM").filter((t) => existsSync(join(GOC, t)));
 	const khongThu = (t) =>
 		!t.split("/").some((p) => THU_MUC_THU.has(p)) && !LA_THU.test(t);
 	const app = doi.filter((t) => VUNG_APP.test(t) && khongThu(t)).sort();
-	const tepMoi = [...moi]
-		.filter((t) => VUNG_MOI.test(t) && existsSync(join(GOC, t)))
-		.filter((t) => !t.split("/").includes("generated"))
+	const tepMa = doi
+		.filter((t) => VUNG_MOI.test(t) && !t.split("/").includes("generated"))
 		.sort();
+	const tepMoi = tepMa.filter((t) => moi.has(t));
+	const them = new Map(tepMa.map((t) => [t, dongThem(t, duongCua(t))]));
+	for (const t of app) if (!them.has(t)) them.set(t, dongThem(t, duongCua(t)));
 	const { OKR_SO } = await import(join(GOC, TEP_CAU_HINH_SO));
 	const tran = [
 		{ nhan: "trần trang", giaTri: OKR_SO.banGhi.coTrang },
@@ -419,8 +462,11 @@ async function caThietKe() {
 	console.log(`dai so sanh: ${dai}`);
 	console.log(`tep giao dien apps/app (${app.length}):`);
 	for (const t of app) console.log(`  ${t}`);
-	console.log(`tep moi soi chu thich / Record / useEffect (${tepMoi.length}):`);
-	for (const t of tepMoi) console.log(`  ${t}`);
+	console.log(`tep ma doi soi chu thich tren dong them (${tepMa.length}):`);
+	for (const t of tepMa)
+		console.log(`  ${tenCua(t)}${moi.has(t) ? " (moi)" : ""}`);
+	console.log(`tep moi soi Record / useEffect (${tepMoi.length}):`);
+	for (const t of tepMoi) console.log(`  ${tenCua(t)}`);
 	console.log(`tep okr moi soi so tran (${okrMoi.length}):`);
 	for (const t of okrMoi) console.log(`  ${t}`);
 
@@ -432,7 +478,7 @@ async function caThietKe() {
 			[
 				join(kit, "scripts", "design-gate.mjs"),
 				"--target",
-				t,
+				thay.has(t) ? duongCua(t) : t,
 				"--mode",
 				"static",
 			],
@@ -441,21 +487,24 @@ async function caThietKe() {
 		const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
 		const p0 = Number(ra.match(/"p0_count":\s*(\d+)/)?.[1] ?? Number.NaN);
 		if (r.status !== 0 || p0 !== 0)
-			hong.push(`design-gate P0: ${t} (ma ${r.status}, p0 ${p0})`);
-		const tuTruoc = dauHieuVeTay(readFileSync(join(GOC, t), "utf8"), t);
-		const moiThem = dauHieuVeTay(dongThem(t), t);
+			hong.push(`design-gate P0: ${tenCua(t)} (ma ${r.status}, p0 ${p0})`);
+		const chu = readFileSync(duongCua(t), "utf8");
+		const tuTruoc = dauHieuVeTay(chu, tenCua(t));
+		const moiThem = dauHieuVeTay(chuDong(chu, them.get(t)), tenCua(t));
 		hong.push(...moiThem);
 		for (const h of tuTruoc)
 			if (!moiThem.includes(h))
 				console.log(`co tu truoc, dong cu khong tinh: ${h}`);
 		console.log(
-			`design-gate ${r.status === 0 && p0 === 0 ? "dat " : "HONG"} ${t} (p0 ${p0})`,
+			`design-gate ${r.status === 0 && p0 === 0 ? "dat " : "HONG"} ${tenCua(t)} (p0 ${p0})`,
 		);
 	}
 	hong.push(...copyValue());
-	for (const t of tepMoi) hong.push(...soiTepMoi(join(GOC, t), t));
+	for (const t of tepMa)
+		hong.push(...chuThichThem(duongCua(t), tenCua(t), them.get(t)));
+	for (const t of tepMoi) hong.push(...soiTepMoi(duongCua(t), tenCua(t)));
 	for (const t of okrMoi)
-		hong.push(...soTranNgoaiCauHinh(join(GOC, t), t, tran));
+		hong.push(...soTranNgoaiCauHinh(duongCua(t), tenCua(t), tran));
 	let soApi = 0;
 	const doiApi = new Set(doi.filter((t) => t.startsWith("apps/api/src/")));
 	for (const duong of diCay(
@@ -465,10 +514,12 @@ async function caThietKe() {
 	)) {
 		soApi += 1;
 		const t = tuongDoi(duong);
-		if (!readFileSync(duong, "utf8").includes("googleapis.com")) continue;
+		const chu = readFileSync(duong, "utf8");
+		if (!chu.includes("googleapis.com")) continue;
 		const lotVao =
 			t.startsWith("apps/api/src/okr/") ||
-			(doiApi.has(t) && dongThem(t).includes("googleapis.com"));
+			(doiApi.has(t) &&
+				chuDong(chu, dongThem(t, duong)).includes("googleapis.com"));
 		if (lotVao) hong.push(`apps/api gọi googleapis.com: ${t}`);
 		else
 			console.log(
@@ -514,25 +565,42 @@ if (ca === "chi-them" && !chieuDo) {
 }
 
 if (ca === "chi-them" && chieuDo) {
-	const thuMuc = mkdtempSync(join(tmpdir(), "soi-chi-them-"));
-	const tep = join(thuMuc, "okr-chup.ts");
 	const goc = readFileSync(join(GOC, TEP_CHUP), "utf8");
-	const chen = `\nexport async function suaSo(id: string) {\n\tawait db.okrSoChup.updateMany({ where: { keyResultId: id }, data: { giaTri: 0 } });\n}\n`;
-	const banSao = `${goc}${chen}`;
-	writeFileSync(tep, banSao);
-	const dong = dongCuaChu(banSao, "okrSoChup.updateMany");
-	const ghim = `okrSoChup bị sửa: ${tep}:${dong}`;
-	let kq;
-	try {
-		kq = caChiThem(new Map([[TEP_CHUP, tep]]));
-	} finally {
-		rmSync(thuMuc, { recursive: true, force: true });
+	const cac = [
+		{
+			ten: "okrSoChup.updateMany",
+			chen: "\nexport async function suaSo(id: string) {\n\tawait db.okrSoChup.updateMany({ where: { keyResultId: id }, data: { giaTri: 0 } });\n}\n",
+			moc: "okrSoChup.updateMany",
+			duoi: "(updateMany)",
+		},
+		{
+			ten: "$executeRaw UPDATE okrSoChup",
+			chen: '\nexport async function suaSoTho() {\n\tawait db.$executeRaw`UPDATE "okrSoChup" SET "giaTri" = 0`;\n}\n',
+			moc: "db.$executeRaw",
+			duoi: "(SQL thô $executeRaw)",
+		},
+	];
+	let bat = 0;
+	for (const c of cac) {
+		const thuMuc = mkdtempSync(join(tmpdir(), "soi-chi-them-"));
+		const tep = join(thuMuc, "okr-chup.ts");
+		const banSao = `${goc}${c.chen}`;
+		writeFileSync(tep, banSao);
+		const ghim = `okrSoChup bị sửa: ${tep}:${dongCuaChu(banSao, c.moc)} ${c.duoi}`;
+		let kq;
+		try {
+			kq = caChiThem(new Map([[TEP_CHUP, tep]]));
+		} finally {
+			rmSync(thuMuc, { recursive: true, force: true });
+		}
+		const dung = kq.hong.includes(ghim);
+		if (dung) bat += 1;
+		console.log(
+			`chieu do: ban sao okr-chup.ts chen ${c.ten} — ${dung ? `bat, in «${ghim}»` : `LOT, khong in «${ghim}»`}`,
+		);
 	}
-	const bat = kq.hong.some((h) => h.startsWith(ghim));
-	console.log(
-		`chieu do: chen okrSoChup.updateMany vao ban sao okr-chup.ts dong ${dong} — ${bat ? `bat, in «${ghim}»` : `LOT, khong in «${ghim}»`}`,
-	);
-	process.exit(bat ? 1 : 0);
+	console.log(`chieu do: ${bat}/${cac.length} ban sao bi bat`);
+	process.exit(bat === cac.length ? 1 : 0);
 }
 
 if (ca === "thiet-ke" && !chieuDo) {
@@ -545,15 +613,13 @@ if (ca === "thiet-ke" && !chieuDo) {
 }
 
 if (ca === "thiet-ke" && chieuDo) {
-	const nguon = git("diff", "--name-only", "--diff-filter=AM", `${MOC}...HEAD`)
-		.split("\n")
-		.find(
-			(t) =>
-				VUNG_APP.test(t) && existsSync(join(GOC, t)) && !t.includes("/test/"),
-		);
+	const nguon = tepDiff("M").find(
+		(t) =>
+			VUNG_APP.test(t) && existsSync(join(GOC, t)) && !t.includes("/test/"),
+	);
 	if (!nguon) {
 		console.log(
-			"KHONG DO DUOC: diff khong co tep giao dien apps/app nao de chep",
+			"KHONG DO DUOC: diff khong co tep giao dien apps/app da sua nao de chep",
 		);
 		process.exit(2);
 	}
@@ -563,25 +629,25 @@ if (ca === "thiet-ke" && chieuDo) {
 	const banSao = `${goc}\n// x\nexport function KhoiGia() {\n\treturn <div className="divide-y" />;\n}\n`;
 	writeFileSync(tep, banSao);
 	const dong = dongCuaChu(banSao, "\n// x\n") + 1;
-	let hong;
+	let kq;
 	try {
-		hong = [...soiTepMoi(tep, tep), ...dauHieuVeTay(banSao, tep)];
+		kq = await caThietKe(new Map([[nguon, tep]]));
 	} finally {
 		rmSync(thuMuc, { recursive: true, force: true });
 	}
-	for (const h of hong) console.log(`HONG ${h}`);
+	for (const h of kq.hong) console.log(`HONG ${h}`);
 	const ghim = [
 		`chú thích mã: ${tep}:${dong}`,
 		`dấu hiệu vẽ tay: divide-y (${tep})`,
 	];
 	let lot = 0;
 	for (const g of ghim) {
-		const bat = hong.some((h) => h.startsWith(g));
+		const bat = kq.hong.some((h) => h.startsWith(g));
 		if (!bat) lot += 1;
 		console.log(`${bat ? "bat " : "LOT "} ${g}`);
 	}
 	console.log(
-		`chieu do: ban sao ${nguon} chen \`// x\` va divide-y — ${ghim.length - lot}/${ghim.length} vi pham bi bat`,
+		`chieu do: caThietKe voi ban sao tep sua ${nguon} chen \`// x\` va divide-y — ${ghim.length - lot}/${ghim.length} vi pham bi bat`,
 	);
 	process.exit(lot === 0 ? 1 : 0);
 }
