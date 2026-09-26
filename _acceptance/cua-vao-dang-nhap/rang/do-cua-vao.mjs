@@ -147,7 +147,9 @@ async function doMau(trang, giaoDien) {
 	await mo(trang, "/sign-in", giaoDien, kho);
 	const r = await trang.evaluate(() => {
 		const ve = document.createElement("canvas").getContext("2d");
-		ve.fillStyle = getComputedStyle(document.body).backgroundColor;
+		ve.fillStyle = getComputedStyle(
+			document.querySelector("main") ?? document.body,
+		).backgroundColor;
 		ve.fillRect(0, 0, 1, 1);
 		const [red, g, b] = ve.getImageData(0, 0, 1, 1).data;
 		const k = (v) => {
@@ -173,7 +175,7 @@ async function doMau(trang, giaoDien) {
 	ghi(
 		`${giaoDien}-nen`,
 		nenDat,
-		`${giaoDien}: nen body ${r.nen} do sang ${r.sang.toFixed(3)}`,
+		`${giaoDien}: nen main ${r.nen} do sang ${r.sang.toFixed(3)}`,
 	);
 	const theoMay = giaoDien === "light" ? r.dark === 0 : r.htmlDark;
 	ghi(
