@@ -125,6 +125,26 @@
     {
       "id": "d-20260926T031430Z-13",
       "p": "Anh cho mở vòng chấm thứ tư ngoài trần: phép kiểm AC-11 sẽ đọc đúng tuỳ chọn của plugin khoá API — đổi lại một vòng máy và một lượt ký lại cổng này."
+    },
+    {
+      "id": "d-20260926T031659Z-15",
+      "p": "Đã sửa sau vòng chấm: phép kiểm AC-11 đọc tuỳ chọn của plugin khoá API thay vì bộ nhớ đệm chung — hành vi đăng nhập không đổi."
+    },
+    {
+      "id": "d-20260926T034743Z-16",
+      "p": "Lỗi bộ công cụ: thẻ duyệt phạm vi lần gần nhất xếp AC-11 vào nhóm «sẽ KHÔNG làm» và hiện chữ kỹ thuật — anh cần xác nhận lại AC-11 ở cổng này."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E13",
+      "q": "Bản vá chỉ đổi đúng hai việc đã hứa trên cấu hình của kho chứ?",
+      "why": "Giám khảo đồng thuận PASS ở vòng 4: chỉ bỏ ghi «Dùng lần cuối» trong 1 phút và bỏ lần ghi phụ."
+    },
+    {
+      "id": "E14",
+      "q": "Mục tài liệu API nói rõ khi nào gỡ bản vá và phải làm gì khi nâng thư viện chứ?",
+      "why": "Giám khảo đồng thuận PASS: mục mới trong docs/api.md trả lời được cả hai câu."
     }
   ]
 }
