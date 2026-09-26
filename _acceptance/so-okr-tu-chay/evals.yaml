@@ -74,7 +74,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.sot_khong_doi
-    paths: [apps/agent/agent/lib/okr-chup.ts, packages/db/src/okr-chi-so.ts, apps/api/src/okr/**, apps/agent/test/okr-chup.integration.spec.ts]
+    paths: [apps/agent/agent/lib/okr-chup.ts, packages/db/src/okr-chi-so.ts, apps/api/src/okr/**, apps/agent/test/okr-chup.integration.spec.ts, apps/api/test/okr-nguon.spec.ts]
     expected: "exit 0; KR crm thoa-thuan-chot-duoc phong-ban:P1 có bản chụp ngày D = 3 (ghi bằng chupSoOkr thật, không chèn tay); chu kỳ của KR thứ hai đã qua endsOn. Sau đó theo thứ tự: lưu trữ một thoả thuận đã đếm; mở lại một thoả thuận chốt được (stage về QUALIFIED_TO_BUY, closedAt null); chuyển người a sang P3; đổi đồng tiền báo cáo và gọi rerateAll; chạy chupSoOkr ở D+1 và D+2. Khẳng định: dòng okrSoChup ngày D vẫn 3 (đọc DB) và okr.lichSuSo trả 3 cho D; currentValue KR chu kỳ đã qua không đổi sau hai nhịp; okr.banGhiChiSo(D) trả soDaChup 3, soTinhLai 0 (bằng số tính độc lập), lech true. Đối chứng dương: một KR không đổi dữ liệu → lech false, soDaChup = soTinhLai. CHIỀU ĐỎ: bản sao lichSuSo tính lại bằng demChiSo thay vì đọc bảng → D đỏ in 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

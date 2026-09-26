@@ -236,7 +236,7 @@ executors:
     sot_khoa_cong_bo: 'bun run test -- "cd apps/api && bun test test/okr-nguon.spec.ts -t khoa-cong-bo"'
     sot_chup: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chup.integration.spec.ts -t chup-moi-ngay"'
     sot_chup_hieu_nang: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 PRISMA_LOG_QUERIES=true bun test test/okr-chup-hieu-nang.integration.spec.ts"'
-    sot_khong_doi: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chup.integration.spec.ts -t lich-su-khong-doi"'
+    sot_khong_doi: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chup.integration.spec.ts -t lich-su-khong-doi && cd ../api && bun test test/okr-nguon.spec.ts -t lich-su-khong-doi-api"'
     sot_ban_ghi: 'bun run test -- "cd apps/api && bun test test/okr-nguon.spec.ts -t ban-ghi"'
     sot_khoa_api: 'bun run test -- "cd apps/api && bun test test/okr-khoa-api.spec.ts"'
     sot_sheets: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-sheets.spec.ts && bun test test/okr-chup.integration.spec.ts -t sheets"'
