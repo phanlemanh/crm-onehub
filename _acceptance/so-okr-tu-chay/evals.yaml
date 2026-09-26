@@ -200,7 +200,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.sot_tin_so
     paths: [packages/db/src/okr-chi-so.ts, _acceptance/so-okr-tu-chay/rang/tin-so.mjs, _acceptance/so-okr-tu-chay/rang/dem-doc-lap.sql, _acceptance/so-okr-tu-chay/rang/lech-khai-truoc.md]
-    expected: "exit 0; trên kho đo (phiên đo tự dựng, không kho chung) gieo bộ E3 rồi chạy tin-so.mjs cho kỳ 2026-10-01 → 2026-12-31: năm dòng {chỉ số, số máy, số đếm độc lập, lệch, lệch khai trước} in ra, mọi lệch ≤ khai trước (khai trước trên dữ liệu gieo = 0 cho cả năm). Script tự kiểm dem-doc-lap.sql không chứa tên hàm hay mã chỉ số của danh mục (đọc tệp). CHIỀU ĐỎ: --chieu-do chạy với bản sao demChiSo đếm cả CLOSED_LOST → dòng thoa-thuan-chot-duoc lệch 1 > 0, exit 1, in tên chỉ số và hai số."
+    expected: "exit 0; trên kho đo (phiên đo tự dựng, không kho chung) gieo bộ E3 rồi chạy tin-so.mjs cho kỳ của bộ gieo 2026-04-01 → 2026-06-30: năm dòng {chỉ số, số máy, số đếm độc lập, lệch, lệch khai trước} in ra, mọi lệch ≤ khai trước (khai trước trên dữ liệu gieo = 0 cho cả năm). Script tự kiểm dem-doc-lap.sql không chứa tên hàm hay mã chỉ số của danh mục (đọc tệp). CHIỀU ĐỎ: --chieu-do chạy với bản sao demChiSo đếm cả CLOSED_LOST → dòng thoa-thuan-chot-duoc lệch 1 > 0, exit 1, in tên chỉ số và hai số."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E21
@@ -226,7 +226,7 @@ evals:
     executor: script
     cmd: config:executors.script.sot_san_thiet_ke
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/**", apps/app/components/crm/record-sheet/**, packages/ui/src/components/**, apps/api/src/**, apps/agent/agent/**, _acceptance/so-okr-tu-chay/rang/soi-ma.mjs]
-    expected: "exit 0; soi-ma.mjs --ca thiet-ke lấy git diff --name-only origin/onehub...HEAD; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay; copy-value.tsx nằm ở packages/ui/src/components, settings/copy-value.tsx không còn, mọi chỗ nhập trỏ @crm/ui; tệp mới không chú thích mã (quét // và /* ngoài chuỗi), không Record<string, unknown>, không useEffect( trần; apps/api/src không chứa 'googleapis.com'; hằng số OKR_SO là nơi duy nhất chứa trần trang và khoảng thử lại (không số 50 hay 30 * 60_000 trần ở tệp okr mới); GOOGLE_SHEETS_EMAIL và GOOGLE_SHEETS_KHOA có trong .env.example và env.validation.ts. In danh sách tệp đã soi. CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và `<div className=\"divide-y\">` → đỏ in hai vi phạm có tên."
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke lấy git diff --name-only origin/onehub...HEAD và chỉ tính các dòng lượt này thêm (khu apps/api/src/okr soi cả tệp); vi phạm có sẵn trên origin/onehub từ trước được in ra nhưng không tính; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay; copy-value.tsx nằm ở packages/ui/src/components, settings/copy-value.tsx không còn, mọi chỗ nhập trỏ @crm/ui; tệp mới không chú thích mã (quét // và /* ngoài chuỗi), không Record<string, unknown>, không useEffect( trần; apps/api/src không chứa 'googleapis.com'; hằng số OKR_SO là nơi duy nhất chứa trần trang và khoảng thử lại (không số 50 hay 30 * 60_000 trần ở tệp okr mới); GOOGLE_SHEETS_EMAIL và GOOGLE_SHEETS_KHOA có trong .env.example và env.validation.ts. In danh sách tệp đã soi. CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và `<div className=\"divide-y\">` → đỏ in hai vi phạm có tên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E24
