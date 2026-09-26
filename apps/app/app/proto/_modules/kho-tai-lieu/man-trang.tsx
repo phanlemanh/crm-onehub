@@ -56,6 +56,7 @@ import {
 	type Nhom,
 	nhanNhom,
 	THAN_TRANG,
+	THEO_DOI,
 	TOM_TAT,
 	TRANG,
 	TRANG_DANG_DOC,
@@ -105,8 +106,9 @@ export function NutDauKho({
 const COT_TRANG = [
 	{ id: "ten", header: "Trang" },
 	{ id: "nhom", header: "Nhóm" },
-	{ id: "giu", header: "Người giữ trang" },
+	{ id: "giu", header: "Chủ · phó" },
 	{ id: "pham", header: "Ai xem được" },
+	{ id: "xacminh", header: "Xác minh đến" },
 	{ id: "capnhat", header: "Cập nhật", align: "right" as const },
 ];
 
@@ -169,8 +171,24 @@ export function DanhSachTrang({ onMo }: { onMo: () => void }) {
 								</span>
 							</TableCell>
 							<TableCell>{nhanNhom(t.nhom)}</TableCell>
-							<TableCell translate="no">{t.nguoiGiu}</TableCell>
+							<TableCell translate="no">
+								<span className="flex flex-col">
+									<span>{t.nguoiGiu}</span>
+									<span className="text-muted-foreground text-xs">
+										{THEO_DOI.get(t.id)?.pho}
+									</span>
+								</span>
+							</TableCell>
 							<TableCell className="text-muted-foreground">{t.pham}</TableCell>
+							<TableCell className="tabular-nums">
+								{THEO_DOI.get(t.id)?.quaHan ? (
+									<Badge variant="outline">Quá hạn xác minh</Badge>
+								) : (
+									<span className="text-muted-foreground">
+										{THEO_DOI.get(t.id)?.xacMinh}
+									</span>
+								)}
+							</TableCell>
 							<TableCell className="text-right text-muted-foreground tabular-nums">
 								{t.capNhat}
 							</TableCell>

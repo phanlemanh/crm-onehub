@@ -248,6 +248,22 @@ export const LIEN_KET_DEN = [
 
 export type DongKhac = { loai: "giu" | "bo" | "them"; chu: string };
 
+export type KhangDinhMau = {
+	id: string;
+	menhDe: string;
+	trich: string;
+	coSo: boolean;
+};
+
+export type SuKienDoi = { nhan: string; truoc: string; sau: string };
+
+export type PhiaXungDot = {
+	nhan: string;
+	chu: string;
+	nguon: string;
+	hieuLuc: string;
+};
+
 export type DeXuatMau = {
 	id: string;
 	trang: string;
@@ -255,8 +271,13 @@ export type DeXuatMau = {
 	ai: string;
 	vi: string;
 	khi: string;
+	bac: 1 | 2;
+	nguoiDuyet: string[];
 	nguon: string | null;
-	matThuan: string | null;
+	doanNguon: string | null;
+	khangDinh: KhangDinhMau[];
+	suKienDoi: SuKienDoi[];
+	xungDot: { cu: PhiaXungDot; moi: PhiaXungDot } | null;
 	dong: DongKhac[];
 };
 
@@ -268,9 +289,56 @@ export const DE_XUAT: DeXuatMau[] = [
 		ai: "Máy soạn",
 		vi: "Nâng hoa hồng tầng 2 và tầng 3 từ quý IV",
 		khi: "Hôm nay 09:14",
+		bac: 2,
+		nguoiDuyet: ["Nguyễn Thu Hà", "Lê Quang Vinh"],
 		nguon: "Quyết định 18-2026 về hoa hồng.pdf, trang 3",
-		matThuan:
-			"Bản đang dùng ghi tầng 2 là 1,2%. Quyết định 18-2026 ghi 1,5% từ 01/10. Máy không tự chọn — người duyệt quyết.",
+		doanNguon:
+			"Điều 2. Kể từ ngày 01/10/2026, mức hoa hồng áp dụng cho công ty đối tác tầng 2 là 1,5% và tầng 3 là 1,8% giá trị giao dịch đã xác nhận. Mức của tầng 1 giữ nguyên.",
+		khangDinh: [
+			{
+				id: "k1",
+				menhDe: "Tầng 2 hưởng 1,5%",
+				trich: "tầng 2 là 1,5%",
+				coSo: true,
+			},
+			{
+				id: "k2",
+				menhDe: "Tầng 3 hưởng 1,8%",
+				trich: "tầng 3 là 1,8%",
+				coSo: true,
+			},
+			{
+				id: "k3",
+				menhDe: "Áp dụng cho giao dịch xác nhận từ 01/10/2026",
+				trich: "Kể từ ngày 01/10/2026",
+				coSo: true,
+			},
+			{
+				id: "k4",
+				menhDe: "Tầng 1 không đổi",
+				trich: "Mức của tầng 1 giữ nguyên",
+				coSo: false,
+			},
+		],
+		suKienDoi: [
+			{ nhan: "Tầng 2", truoc: "1,2%", sau: "1,5%" },
+			{ nhan: "Tầng 3", truoc: "1,6%", sau: "1,8%" },
+			{ nhan: "Ngày áp dụng", truoc: "—", sau: "01/10/2026" },
+		],
+		xungDot: {
+			cu: {
+				nhan: "Bản đang dùng (phiên bản 5)",
+				chu: "Tầng 2: 1,2% · Tầng 3: 1,6%",
+				nguon: "Quyết định 12-2026, trang 2",
+				hieuLuc: "Từ 01/07/2026",
+			},
+			moi: {
+				nhan: "Nguồn mới",
+				chu: "Tầng 2: 1,5% · Tầng 3: 1,8%",
+				nguon: "Quyết định 18-2026, trang 3",
+				hieuLuc: "Từ 01/10/2026",
+			},
+		},
 		dong: [
 			{ loai: "giu", chu: "| Tầng 1 | dưới 2 tỷ | 0,8% |" },
 			{ loai: "bo", chu: "| Tầng 2 | 2 – 10 tỷ | 1,2% |" },
@@ -290,8 +358,20 @@ export const DE_XUAT: DeXuatMau[] = [
 		ai: "Trần Minh Đức",
 		vi: "Rút thời hạn phản hồi đầu tiên",
 		khi: "Hôm qua",
+		bac: 1,
+		nguoiDuyet: ["Trần Minh Đức"],
 		nguon: null,
-		matThuan: null,
+		doanNguon: null,
+		khangDinh: [
+			{
+				id: "k1",
+				menhDe: "Phản hồi đầu tiên trong 24 giờ",
+				trich: "Người viết sửa trực tiếp, không có nguồn đính kèm",
+				coSo: true,
+			},
+		],
+		suKienDoi: [{ nhan: "Hạn phản hồi đầu", truoc: "48 giờ", sau: "24 giờ" }],
+		xungDot: null,
 		dong: [
 			{ loai: "giu", chu: "## Phản hồi đầu tiên" },
 			{ loai: "bo", chu: "Trong 48 giờ kể từ khi nhận khiếu nại." },
@@ -303,10 +383,15 @@ export const DE_XUAT: DeXuatMau[] = [
 		trang: "Dùng Zalo khi làm việc với đối tác",
 		tu: "soat",
 		ai: "Soát định kỳ",
-		vi: "Trang 120 ngày chưa ai xem lại, và có một liên kết gãy",
+		vi: "Sửa một liên kết gãy. Trang cũng đã 120 ngày chưa ai xác minh",
 		khi: "Hôm nay 06:00",
+		bac: 1,
+		nguoiDuyet: ["Phạm Ngọc Anh"],
 		nguon: null,
-		matThuan: null,
+		doanNguon: null,
+		khangDinh: [],
+		suKienDoi: [],
+		xungDot: null,
 		dong: [
 			{
 				loai: "giu",
@@ -335,7 +420,33 @@ Lưu ý: đang có một bản đề xuất chờ duyệt nâng tầng 2 lên 1,
 		{
 			trang: "Chính sách hoa hồng cho công ty đối tác",
 			muc: "Mức hoa hồng theo tầng",
+			ban: "Phiên bản 5 · Nguyễn Thu Hà duyệt 22/09",
+			doan: "| Tầng 2 | 2 – 10 tỷ | 1,2% |",
 		},
-		{ trang: "Chính sách hoa hồng cho công ty đối tác", muc: "Khi nào chi" },
+		{
+			trang: "Chính sách hoa hồng cho công ty đối tác",
+			muc: "Khi nào chi",
+			ban: "Phiên bản 5 · Nguyễn Thu Hà duyệt 22/09",
+			doan: "Chi vào ngày 15 của tháng kế tiếp.",
+		},
 	],
 };
+
+export const HOI_TU_CHOI = {
+	hoi: "Nhân viên thử việc có được hưởng hoa hồng giới thiệu khách không?",
+	tra: "Chưa có trang đã duyệt nào trả lời câu này. Mình không đoán, vì câu trả lời sai về tiền có thể bị làm theo.",
+	ganNhat: ["Chính sách hoa hồng cho công ty đối tác", "Nghỉ phép năm"],
+};
+
+const THEO_DOI_THEO_ID = {
+	"hoa-hong": { pho: "Vũ Thanh Mai", xacMinh: "20/12/2026", quaHan: false },
+	"30-ngay": { pho: "Trần Minh Đức", xacMinh: "18/03/2027", quaHan: false },
+	"khieu-nai": { pho: "Lê Quang Vinh", xacMinh: "16/03/2027", quaHan: false },
+	"bao-mat": { pho: "Nguyễn Thu Hà", xacMinh: "01/12/2026", quaHan: false },
+	zalo: { pho: "Trần Minh Đức", xacMinh: "28/08/2026", quaHan: true },
+	"duyet-chi": { pho: "Vũ Thanh Mai", xacMinh: "09/12/2026", quaHan: false },
+	"nghi-phep": { pho: "Phạm Ngọc Anh", xacMinh: "28/01/2027", quaHan: false },
+	"hop-dong": { pho: "Nguyễn Thu Hà", xacMinh: "11/01/2027", quaHan: false },
+} satisfies Record<string, { pho: string; xacMinh: string; quaHan: boolean }>;
+
+export const THEO_DOI = new Map(Object.entries(THEO_DOI_THEO_ID));

@@ -6,6 +6,8 @@ import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { Checkbox } from "@crm/ui/components/checkbox";
+import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import Bot from "@crm/ui/components/icons/bot";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
@@ -14,9 +16,17 @@ import {
 	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
+import { Textarea } from "@crm/ui/components/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { cn } from "@crm/ui/lib/utils";
 import { useState } from "react";
-import { DE_XUAT, type DeXuatMau, NGUON, type NguonMau } from "./du-lieu";
+import {
+	DE_XUAT,
+	type DeXuatMau,
+	NGUON,
+	type NguonMau,
+	type PhiaXungDot,
+} from "./du-lieu";
 
 const NHAN_TU = {
 	may: "Máy soạn từ nguồn",
@@ -24,129 +34,366 @@ const NHAN_TU = {
 	soat: "Soát định kỳ",
 } satisfies Record<DeXuatMau["tu"], string>;
 
+const NHAN_BAC = {
+	1: "Bậc 1 · một người duyệt",
+	2: "Bậc 2 · hai người duyệt",
+} satisfies Record<DeXuatMau["bac"], string>;
+
+type LuaChonXungDot = "moi" | "ca-hai" | "giu-cu";
+
+const LUA_CHON_XUNG_DOT: { value: LuaChonXungDot; nhan: string }[] = [
+	{ value: "moi", nhan: "Thay bằng nguồn mới" },
+	{ value: "ca-hai", nhan: "Giữ cả hai, theo ngày hiệu lực" },
+	{ value: "giu-cu", nhan: "Giữ bản đang dùng" },
+];
+
+type KetQua =
+	| { loai: "cho-nguoi-hai"; nguoi: string }
+	| { loai: "da-dang" }
+	| { loai: "tra-lai"; lyDo: string };
+
+type TrangThaiDuyet = {
+	daDocNguon: boolean;
+	daDoiChieu: string[];
+	xungDot: LuaChonXungDot | null;
+	lyDo: string;
+	ketQua: KetQua | null;
+};
+
+const TRANG_THAI_DAU: TrangThaiDuyet = {
+	daDocNguon: false,
+	daDoiChieu: [],
+	xungDot: null,
+	lyDo: "",
+	ketQua: null,
+};
+
 const [DE_DAU] = DE_XUAT as [DeXuatMau, ...DeXuatMau[]];
+
+function TheXungDot({ phia }: { phia: PhiaXungDot }) {
+	return (
+		<div className="flex flex-1 flex-col gap-1 rounded-lg border p-3 text-xs">
+			<span className="text-muted-foreground">{phia.nhan}</span>
+			<span className="font-medium text-sm" translate="no">
+				{phia.chu}
+			</span>
+			<span className="text-muted-foreground" translate="no">
+				{phia.nguon} · {phia.hieuLuc}
+			</span>
+		</div>
+	);
+}
+
+function MotDeXuat({
+	dx,
+	tt,
+	doi,
+}: {
+	dx: DeXuatMau;
+	tt: TrangThaiDuyet;
+	doi: (sua: Partial<TrangThaiDuyet>) => void;
+}) {
+	const canNguon = dx.doanNguon !== null;
+	const moDeXuat = !canNguon || tt.daDocNguon;
+	const batBuoc = dx.khangDinh.filter((k) => k.coSo).map((k) => k.id);
+	const conThieu = batBuoc.filter((id) => !tt.daDoiChieu.includes(id)).length;
+	const thieuXungDot = dx.xungDot !== null && tt.xungDot === null;
+	const duyetDuoc = moDeXuat && conThieu === 0 && !thieuXungDot;
+
+	const duyet = () => {
+		const nguoiHai = dx.nguoiDuyet[1];
+		doi({
+			ketQua:
+				dx.bac === 2 && nguoiHai
+					? { loai: "cho-nguoi-hai", nguoi: nguoiHai }
+					: { loai: "da-dang" },
+		});
+	};
+
+	return (
+		<section
+			aria-label="Bản đang xem"
+			className="flex min-w-0 max-w-3xl flex-1 flex-col gap-5 p-6"
+		>
+			<div className="flex flex-col gap-1">
+				<span className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">
+					{dx.ai} · {dx.khi}
+					<Badge variant="outline">{NHAN_BAC[dx.bac]}</Badge>
+				</span>
+				<h3 className="font-semibold text-lg" translate="no">
+					{dx.trang}
+				</h3>
+				<p className="text-sm">{dx.vi}</p>
+				<p className="text-muted-foreground text-xs" translate="no">
+					Người duyệt: {dx.nguoiDuyet.join(", sau đó ")}
+				</p>
+			</div>
+
+			{canNguon ? (
+				<div className="flex flex-col gap-2">
+					<h4 className="flex items-center gap-2 font-medium text-sm">
+						<Icon icon={DocumentBlank} />
+						Bước 1 · Nguồn nói gì
+					</h4>
+					<p className="text-muted-foreground text-xs" translate="no">
+						{dx.nguon}
+					</p>
+					<blockquote
+						className="border-l-2 pl-4 text-sm/7"
+						data-doan-nguon=""
+						translate="no"
+					>
+						{dx.doanNguon}
+					</blockquote>
+					{tt.daDocNguon ? null : (
+						<Button
+							className="w-fit"
+							onClick={() => doi({ daDocNguon: true })}
+							variant="outline"
+						>
+							Đã đọc nguồn, xem đề xuất của máy
+						</Button>
+					)}
+				</div>
+			) : null}
+
+			{moDeXuat ? (
+				<>
+					{dx.suKienDoi.length > 0 ? (
+						<div className="flex flex-col gap-2" data-su-kien-doi="">
+							<h4 className="font-medium text-sm">
+								{canNguon ? "Bước 2 · " : ""}Con số và ngày bị đổi
+							</h4>
+							<ul className="flex flex-wrap gap-2">
+								{dx.suKienDoi.map((sk) => (
+									<li key={sk.nhan}>
+										<Badge variant="outline">
+											{sk.nhan}: {sk.truoc} → {sk.sau}
+										</Badge>
+									</li>
+								))}
+							</ul>
+						</div>
+					) : null}
+
+					{dx.xungDot ? (
+						<div className="flex flex-col gap-2" data-xung-dot="">
+							<Alert role="note">
+								<Icon icon={WarningAlt} />
+								<AlertTitle>Mâu thuẫn với bản đang dùng</AlertTitle>
+								<AlertDescription>
+									Máy không tự chọn. Bạn chọn một cách xử lý.
+								</AlertDescription>
+							</Alert>
+							<div className="flex flex-col gap-2 sm:flex-row">
+								<TheXungDot phia={dx.xungDot.cu} />
+								<TheXungDot phia={dx.xungDot.moi} />
+							</div>
+							<ToggleGroup
+								aria-label="Cách xử lý mâu thuẫn"
+								onValueChange={(v) =>
+									doi({
+										xungDot:
+											LUA_CHON_XUNG_DOT.find((l) => l.value === v)?.value ??
+											null,
+									})
+								}
+								type="single"
+								value={tt.xungDot ?? ""}
+								variant="outline"
+							>
+								{LUA_CHON_XUNG_DOT.map((l) => (
+									<ToggleGroupItem key={l.value} value={l.value}>
+										{l.nhan}
+									</ToggleGroupItem>
+								))}
+							</ToggleGroup>
+						</div>
+					) : null}
+
+					{dx.khangDinh.length > 0 ? (
+						<div className="flex flex-col gap-2" data-khang-dinh="">
+							<h4 className="font-medium text-sm">Đối chiếu từng khẳng định</h4>
+							<ul className="flex flex-col gap-2">
+								{dx.khangDinh.map((k) => {
+									const da = tt.daDoiChieu.includes(k.id);
+									return (
+										<li key={k.id}>
+											<Field orientation="horizontal">
+												<Checkbox
+													checked={da}
+													id={`${dx.id}-${k.id}`}
+													onCheckedChange={(c) =>
+														doi({
+															daDoiChieu:
+																c === true
+																	? [...tt.daDoiChieu, k.id]
+																	: tt.daDoiChieu.filter((x) => x !== k.id),
+														})
+													}
+												/>
+												<div className="flex flex-col gap-0.5">
+													<FieldLabel htmlFor={`${dx.id}-${k.id}`}>
+														{k.menhDe}
+														{k.coSo ? (
+															<Badge variant="outline">Bắt buộc</Badge>
+														) : null}
+													</FieldLabel>
+													<FieldDescription translate="no">
+														Trích: «{k.trich}»
+													</FieldDescription>
+												</div>
+											</Field>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					) : null}
+
+					<div className="flex flex-col gap-2">
+						<h4 className="font-medium text-sm">Thay đổi trong trang</h4>
+						<div className="overflow-x-auto rounded-lg border font-mono text-xs">
+							{dx.dong.map((d) => (
+								<div
+									className={cn(
+										"flex gap-3 px-3 py-1.5",
+										d.loai === "them" && "bg-muted font-medium",
+										d.loai === "bo" && "text-muted-foreground line-through",
+									)}
+									key={`${dx.id}-${d.loai}-${d.chu}`}
+								>
+									<span aria-hidden="true" className="w-3 shrink-0 select-none">
+										{d.loai === "them" ? "+" : d.loai === "bo" ? "−" : " "}
+									</span>
+									<span className="sr-only">
+										{d.loai === "them"
+											? "Thêm"
+											: d.loai === "bo"
+												? "Bỏ"
+												: "Giữ"}
+									</span>
+									<span translate="no">{d.chu}</span>
+								</div>
+							))}
+						</div>
+					</div>
+
+					{tt.ketQua ? (
+						<Alert data-ket-qua={tt.ketQua.loai} role="status">
+							<AlertTitle>
+								{tt.ketQua.loai === "cho-nguoi-hai"
+									? "Đã ghi duyệt của bạn"
+									: tt.ketQua.loai === "da-dang"
+										? "Đã duyệt và đăng phiên bản mới"
+										: "Đã trả lại cho máy soạn"}
+							</AlertTitle>
+							<AlertDescription translate="no">
+								{tt.ketQua.loai === "cho-nguoi-hai"
+									? `Trang bậc 2 cần người kiểm thứ hai. Đang chờ ${tt.ketQua.nguoi}; bản đang dùng chưa đổi.`
+									: tt.ketQua.loai === "da-dang"
+										? "Tác nhân trả lời theo bản này từ bây giờ."
+										: `Lý do sẽ đi vào lần soạn sau: «${tt.ketQua.lyDo}». Máy không đề xuất lại đúng thay đổi này.`}
+							</AlertDescription>
+						</Alert>
+					) : (
+						<div className="flex flex-col gap-3" data-quyet-dinh="">
+							<Field>
+								<FieldLabel htmlFor={`${dx.id}-ly-do`}>
+									Lý do, nếu trả lại
+								</FieldLabel>
+								<Textarea
+									id={`${dx.id}-ly-do`}
+									onChange={(e) => doi({ lyDo: e.target.value })}
+									value={tt.lyDo}
+								/>
+							</Field>
+							<div className="flex flex-wrap items-center gap-2">
+								<Button disabled={!duyetDuoc} onClick={duyet}>
+									{dx.bac === 2
+										? "Duyệt, chuyển người thứ hai"
+										: "Duyệt và đăng"}
+								</Button>
+								<Button
+									disabled={tt.lyDo.trim() === ""}
+									onClick={() =>
+										doi({ ketQua: { loai: "tra-lai", lyDo: tt.lyDo.trim() } })
+									}
+									variant="outline"
+								>
+									Trả lại cho máy soạn
+								</Button>
+								{duyetDuoc ? null : (
+									<span className="text-muted-foreground text-xs">
+										{conThieu > 0
+											? `Còn ${conThieu} khẳng định bắt buộc chưa đối chiếu`
+											: thieuXungDot
+												? "Chưa chọn cách xử lý mâu thuẫn"
+												: ""}
+									</span>
+								)}
+							</div>
+						</div>
+					)}
+				</>
+			) : null}
+		</section>
+	);
+}
 
 export function ChoDuyet({ chonDau }: { chonDau: string }) {
 	const [chon, setChon] = useState(chonDau);
-	const [daXuLy, setDaXuLy] = useState<Record<string, "duyet" | "bo">>({});
-	const conLai = DE_XUAT.filter((d) => daXuLy[d.id] === undefined);
+	const [theoDx, setTheoDx] = useState<Record<string, TrangThaiDuyet>>({});
 	const dx = DE_XUAT.find((d) => d.id === chon) ?? DE_DAU;
-	const ketQua = daXuLy[dx.id];
+	const tt = theoDx[dx.id] ?? TRANG_THAI_DAU;
+	const doi = (sua: Partial<TrangThaiDuyet>) =>
+		setTheoDx((s) => ({ ...s, [dx.id]: { ...tt, ...sua } }));
+	const conLai = DE_XUAT.filter((d) => !theoDx[d.id]?.ketQua).length;
 
 	return (
 		<div className="flex min-w-0 flex-1 flex-col lg:flex-row">
-			<ul
-				aria-label="Bản chờ duyệt"
-				className="flex shrink-0 flex-col border-b lg:w-80 lg:border-r lg:border-b-0"
-			>
-				{DE_XUAT.map((d) => (
-					<li key={d.id}>
-						<button
-							aria-current={d.id === chon ? "true" : undefined}
-							className={cn(
-								"flex w-full flex-col gap-1 border-b px-4 py-3 text-left hover:bg-muted",
-								d.id === chon && "bg-muted",
-								daXuLy[d.id] !== undefined && "opacity-50",
-							)}
-							onClick={() => setChon(d.id)}
-							type="button"
-						>
-							<span className="flex items-center gap-2 text-muted-foreground text-xs">
-								{d.tu === "nguoi" ? null : <Icon icon={Bot} />}
-								{NHAN_TU[d.tu]}
-								<span className="ml-auto">{d.khi}</span>
-							</span>
-							<span className="font-medium text-sm" translate="no">
-								{d.trang}
-							</span>
-							<span className="text-muted-foreground text-xs">{d.vi}</span>
-							{d.matThuan ? (
-								<Badge className="w-fit" variant="outline">
-									Có mâu thuẫn
-								</Badge>
-							) : null}
-						</button>
-					</li>
-				))}
-				<li className="px-4 py-3 text-muted-foreground text-xs">
-					Còn {conLai.length} bản chờ bạn
-				</li>
-			</ul>
-			<section
-				aria-label="Bản đang xem"
-				className="flex min-w-0 max-w-3xl flex-1 flex-col gap-4 p-6"
-			>
-				<div className="flex flex-col gap-1">
-					<span className="text-muted-foreground text-xs">
-						{dx.ai} · {dx.khi}
-					</span>
-					<h3 className="font-semibold text-lg" translate="no">
-						{dx.trang}
-					</h3>
-					<p className="text-sm">{dx.vi}</p>
-				</div>
-				{dx.nguon ? (
-					<p className="flex items-center gap-2 text-muted-foreground text-xs">
-						<Icon icon={DocumentBlank} />
-						Theo
-						<span
-							className="text-foreground underline underline-offset-2"
-							translate="no"
-						>
-							{dx.nguon}
-						</span>
-					</p>
-				) : null}
-				{dx.matThuan ? (
-					<Alert>
-						<Icon icon={WarningAlt} />
-						<AlertTitle>Mâu thuẫn với bản đang dùng</AlertTitle>
-						<AlertDescription>{dx.matThuan}</AlertDescription>
-					</Alert>
-				) : null}
-				<div className="overflow-x-auto rounded-lg border font-mono text-xs">
-					{dx.dong.map((d) => (
-						<div
-							className={cn(
-								"flex gap-3 px-3 py-1.5",
-								d.loai === "them" && "bg-muted font-medium",
-								d.loai === "bo" && "text-muted-foreground line-through",
-							)}
-							key={`${dx.id}-${d.loai}-${d.chu}`}
-						>
-							<span aria-hidden="true" className="w-3 shrink-0 select-none">
-								{d.loai === "them" ? "+" : d.loai === "bo" ? "−" : " "}
-							</span>
-							<span className="sr-only">
-								{d.loai === "them" ? "Thêm" : d.loai === "bo" ? "Bỏ" : "Giữ"}
-							</span>
-							<span translate="no">{d.chu}</span>
-						</div>
+			<div className="flex shrink-0 flex-col border-b lg:w-80 lg:border-r lg:border-b-0">
+				<p className="border-b px-4 py-3 text-muted-foreground text-xs">
+					Mọi thay đổi đều qua duyệt, kể cả sửa chính tả và liên kết (chốt
+					26/09).
+				</p>
+				<ul aria-label="Bản chờ duyệt" className="flex flex-col">
+					{DE_XUAT.map((d) => (
+						<li key={d.id}>
+							<button
+								aria-current={d.id === chon ? "true" : undefined}
+								className={cn(
+									"flex w-full flex-col gap-1 border-b px-4 py-3 text-left hover:bg-muted",
+									d.id === chon && "bg-muted",
+									theoDx[d.id]?.ketQua && "opacity-50",
+								)}
+								onClick={() => setChon(d.id)}
+								type="button"
+							>
+								<span className="flex items-center gap-2 text-muted-foreground text-xs">
+									{d.tu === "nguoi" ? null : <Icon icon={Bot} />}
+									{NHAN_TU[d.tu]}
+									<span className="ml-auto">{d.khi}</span>
+								</span>
+								<span className="font-medium text-sm" translate="no">
+									{d.trang}
+								</span>
+								<span className="text-muted-foreground text-xs">{d.vi}</span>
+								<span className="flex flex-wrap gap-1">
+									<Badge variant="outline">Bậc {d.bac}</Badge>
+									{d.xungDot ? (
+										<Badge variant="outline">Có mâu thuẫn</Badge>
+									) : null}
+								</span>
+							</button>
+						</li>
 					))}
-				</div>
-				{ketQua ? (
-					<p className="text-sm">
-						{ketQua === "duyet"
-							? "Đã duyệt. Trang lên phiên bản mới, và tác nhân trả lời theo bản này từ bây giờ."
-							: "Đã bỏ. Máy sẽ không đề xuất lại đúng thay đổi này."}
-					</p>
-				) : (
-					<div className="flex flex-wrap gap-2">
-						<Button
-							onClick={() => setDaXuLy((s) => ({ ...s, [dx.id]: "duyet" }))}
-						>
-							Duyệt và đăng
-						</Button>
-						<Button variant="outline">Sửa trước khi duyệt</Button>
-						<Button
-							onClick={() => setDaXuLy((s) => ({ ...s, [dx.id]: "bo" }))}
-							variant="ghost"
-						>
-							Bỏ bản này
-						</Button>
-					</div>
-				)}
-			</section>
+					<li className="px-4 py-3 text-muted-foreground text-xs">
+						Còn {conLai} bản chờ bạn
+					</li>
+				</ul>
+			</div>
+			<MotDeXuat doi={doi} dx={dx} key={dx.id} tt={tt} />
 		</div>
 	);
 }

@@ -22,7 +22,7 @@ type Man =
 	| { loai: "dang-tai" }
 	| { loai: "cho-duyet"; chon: string }
 	| { loai: "nguon" }
-	| { loai: "hoi" };
+	| { loai: "hoi"; tuChoi: boolean };
 
 const MAN_THEO_STATE = {
 	"ST-danh-sach": { loai: "danh-sach" },
@@ -30,7 +30,8 @@ const MAN_THEO_STATE = {
 	"ST-viet-trang": { loai: "soan" },
 	"ST-kho-rong": { loai: "rong" },
 	"ST-dang-tai": { loai: "dang-tai" },
-	"ST-tac-nhan-tra-loi": { loai: "hoi" },
+	"ST-tac-nhan-tra-loi": { loai: "hoi", tuChoi: false },
+	"ST-tac-nhan-tu-choi": { loai: "hoi", tuChoi: true },
 	"ST-tai-nguon": { loai: "nguon" },
 	"ST-duyet-ban-may-soan": { loai: "cho-duyet", chon: "dx-hoa-hong" },
 	"ST-soat-dinh-ky": { loai: "cho-duyet", chon: "dx-zalo" },
@@ -49,7 +50,7 @@ function KhoTaiLieu({ dau }: { dau: Man }) {
 	if (man.loai === "hoi") {
 		return (
 			<KhungUngDung muc="chat">
-				<HoiTacNhan />
+				<HoiTacNhan tuChoi={man.tuChoi} />
 			</KhungUngDung>
 		);
 	}

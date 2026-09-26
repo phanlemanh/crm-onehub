@@ -20,9 +20,16 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-kho-rong", nhan: "Lượt 1 — Kho còn trống" },
 			{ id: "ST-dang-tai", nhan: "Lượt 1 — Đang tải" },
 			{ id: "ST-tac-nhan-tra-loi", nhan: "Lượt 2 — Tác nhân trả lời theo kho" },
+			{
+				id: "ST-tac-nhan-tu-choi",
+				nhan: "Lượt 2 — Tác nhân từ chối, không đoán",
+			},
 			{ id: "ST-tai-nguon", nhan: "Lượt 3 — Tải nguồn lên" },
-			{ id: "ST-duyet-ban-may-soan", nhan: "Lượt 3 — Duyệt bản máy soạn" },
-			{ id: "ST-soat-dinh-ky", nhan: "Lượt 4 — Soát định kỳ" },
+			{
+				id: "ST-duyet-ban-may-soan",
+				nhan: "Lượt 3 — Duyệt: nguồn trước, đối chiếu từng số",
+			},
+			{ id: "ST-soat-dinh-ky", nhan: "Lượt 4 — Soát định kỳ, vẫn qua duyệt" },
 		],
 	},
 	{
