@@ -29,7 +29,7 @@ import {
 	type MucTieuUpdate,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
-import { LOAI_NGUON_MAY } from "@crm/validation/okr-nguon";
+import { LOAI_NGUON_MAY, parseOkrNguon } from "@crm/validation/okr-nguon";
 import {
 	HANH_DONG_VET,
 	type HanhDongVet,
@@ -93,7 +93,19 @@ const chonMucTieu = {
 	keyResults: {
 		include: {
 			owner: { select: chonNguoi },
-			nguonMay: { select: { loai: true } },
+			nguonMay: {
+				select: {
+					loai: true,
+					chiSo: true,
+					phamVi: true,
+					bac: true,
+					sheetId: true,
+					sheetO: true,
+					docLuc: true,
+					docGiaTri: true,
+					docLoi: true,
+				},
+			},
 			soChup: {
 				orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
 				take: 1,
@@ -1076,6 +1088,16 @@ export class OkrService {
 									nguon: loaiNguonMay.parse(chup.nguon),
 								}
 							: null,
+					nguonMay: k.nguonMay
+						? {
+								...parseOkrNguon(k.nguonMay),
+								docLuc: k.nguonMay.docLuc?.toISOString() ?? null,
+								docGiaTri:
+									k.nguonMay.docGiaTri === null
+										? null
+										: soKr(k.nguonMay.docGiaTri),
+							}
+						: null,
 					startLocked: k.startLockedAt !== null,
 					progress: tienDoKr(kind, startValue, targetValue, currentValue),
 					laCuaToi: k.ownerUserId === viewerId,

@@ -48,6 +48,7 @@ function kr(id: string, startLocked: boolean): KrOutput {
 		source: "tay",
 		doCanh: false,
 		soMay: null,
+		nguonMay: null,
 		startLocked,
 		progress: 40,
 		laCuaToi: false,
@@ -121,6 +122,10 @@ let daGoi: LoiGoi[] = [];
 let daLamMoi: string[] = [];
 
 let loiGhi: { duong: string; loi: string } | null = null;
+type CamSheets = { sheetsBat: boolean; emailSheets: string | null };
+const SHEETS_TAT: CamSheets = { sheetsBat: false, emailSheets: null };
+let sheets = SHEETS_TAT;
+let origin: string | null = null;
 
 function thuTuc<TRa, TKet = { id: string; canhBao: string | null }>(
 	duong: string,
@@ -180,6 +185,21 @@ mock.module("@/lib/trpc/client", () => ({
 			removeAlignment: thuTuc("okr.removeAlignment"),
 			comments: thuTuc("okr.comments", () => ({ comments: binhLuan })),
 			thanhVien: thuTuc("okr.thanhVien", () => [HUNG, LAN]),
+			chiSo: thuTuc("okr.chiSo", () => ({
+				chiSo: ["thoa-thuan-chot-duoc", "ghi-danh-dat-bac"],
+				bac: ["tai-khoan"],
+				...sheets,
+			})),
+			xemTruocChiSo: thuTuc("okr.xemTruocChiSo", () => ({
+				giaTri: 0,
+				tu: QUY.startsOn,
+				den: QUY.startsOn,
+			})),
+			datNguonKr: thuTuc(
+				"okr.datNguonKr",
+				() => null,
+				(vao) => ({ id: String(vao?.keyResultId), doCanh: false }),
+			),
 			addComment: thuTuc("okr.addComment"),
 			follow: thuTuc(
 				"okr.follow",
@@ -239,11 +259,14 @@ const { ObjectiveSheet } = await import(
 	"@/components/crm/record-sheet/objective-sheet"
 );
 const { DetailSheet } = await import("@/components/detail-sheet");
+const { ApiOriginProvider } = await import("@/components/api-origin");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
 
 const m = okrMessages("vi");
+const { okrSoMessages } = await import("@/lib/messages/okr-so");
+const so = okrSoMessages("vi").trangThai.hopThoai;
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -255,10 +278,15 @@ async function mo(duong = "?record=objective:mt-1"): Promise<San> {
 	const client = new QueryClient({
 		defaultOptions: { queries: { retry: false } },
 	});
-	const man: ReactElement = (
+	const sheet: ReactElement = (
 		<DetailSheet onOpenChange={() => {}} open>
 			<ObjectiveSheet objectiveId="mt-1" />
 		</DetailSheet>
+	);
+	const man = origin ? (
+		<ApiOriginProvider origin={origin}>{sheet}</ApiOriginProvider>
+	) : (
+		sheet
 	);
 	await act(async () => {
 		root.render(
@@ -344,6 +372,8 @@ beforeEach(() => {
 	daLamMoi = [];
 	loiGhi = null;
 	binhLuan = [];
+	sheets = SHEETS_TAT;
+	origin = null;
 	chiTiet = mucTieu("nhap", false);
 });
 
@@ -1106,6 +1136,264 @@ describe("sheet-trao-doi", () => {
 			loi: m.traoDoi.chuaGui.replace("{loi}", m.traoDoi.mayChu),
 			chu: "Câu hỏi còn giữ",
 			trangThai: "ST-traodoi-loigui",
+		});
+	});
+});
+
+const luaChonNguon = () =>
+	[...(hop()?.querySelectorAll("[data-lua-chon-nguon]") ?? [])].map((o) => ({
+		nguon: o.getAttribute("data-lua-chon-nguon"),
+		tat: o instanceof HTMLButtonElement && o.disabled,
+	}));
+
+async function moHopKr(cach: "them" | "sua"): Promise<Element> {
+	await mo();
+	if (cach === "them") {
+		const them = document.body.querySelector('[data-nut="them-kr"]');
+		if (!them) throw new Error("khong co nut them KR");
+		await bam(them);
+	} else await moMenu("Thao tác với KR kr-1", m.sheet.suaKr);
+	await cho(
+		() =>
+			hop()?.querySelector("[data-sheets-tat]") !== null ||
+			hop()?.querySelector('[data-lua-chon-nguon="bang-tinh"]') !== null,
+		"o nguon so tai xong",
+	);
+	const h = hop();
+	if (!h) throw new Error("khong co hop");
+	return h;
+}
+
+const NGUON_CRM = {
+	loai: "crm",
+	chiSo: "thoa-thuan-chot-duoc",
+	phamVi: { kieu: "phong-ban", id: "pb-1" },
+	bac: null,
+	sheetId: null,
+	sheetO: null,
+	docLuc: null,
+	docGiaTri: null,
+	docLoi: null,
+} satisfies KrOutput["nguonMay"];
+
+describe("nguon-so-sheets-tat", () => {
+	test("nguon-so-sheets-tat: vang khoa Sheets thi khong co lua chon Sheets va co mot dong noi quan tri chua cam", async () => {
+		const h = await moHopKr("them");
+		expect({
+			macDinh: h
+				.querySelector("[data-nguon-so]")
+				?.getAttribute("data-nguon-so"),
+			luaChon: luaChonNguon().map((l) => l.nguon),
+			dong: h.querySelector("[data-sheets-tat]")?.textContent,
+		}).toEqual({
+			macDinh: "tay",
+			luaChon: ["tay", "crm", "api"],
+			dong: so.sheets.tat,
+		});
+	});
+
+	test("nguon-so-sheets-tat: doi chung — cam khoa thi co Sheets, khong co dong tat, chon Sheets hien dia chi chia se", async () => {
+		sheets = {
+			sheetsBat: true,
+			emailSheets: "okr-doc@du-an.iam.gserviceaccount.com",
+		};
+		const h = await moHopKr("them");
+		const truoc = {
+			luaChon: luaChonNguon().map((l) => l.nguon),
+			dongTat: h.querySelector("[data-sheets-tat]"),
+		};
+		const chon = h.querySelector('[data-lua-chon-nguon="bang-tinh"]');
+		if (!chon) throw new Error("khong co lua chon Sheets");
+		await bam(chon);
+		expect({
+			...truoc,
+			nguon: h.querySelector("[data-nguon-so]")?.getAttribute("data-nguon-so"),
+			email: h
+				.querySelector("[data-email-sheets]")
+				?.getAttribute("data-email-sheets"),
+		}).toEqual({
+			luaChon: ["tay", "crm", "api", "bang-tinh"],
+			dongTat: null,
+			nguon: "bang-tinh",
+			email: "okr-doc@du-an.iam.gserviceaccount.com",
+		});
+	});
+});
+
+describe("nguon-so-khoa-cong-bo", () => {
+	test("nguon-so-khoa-cong-bo: KR crm cua muc tieu da cong bo — nguon khoa, o chi so khoa, co chu thich, khong co them do canh", async () => {
+		const goc = mucTieu("cong-bo", true);
+		chiTiet = {
+			...goc,
+			keyResults: [{ ...kr("kr-1", true), source: "crm", nguonMay: NGUON_CRM }],
+		};
+		const h = await moHopKr("sua");
+		const chiSo = h.querySelector("[data-o-chi-so]");
+		expect({
+			nguon: h.querySelector("[data-nguon-so]")?.getAttribute("data-nguon-so"),
+			luaChon: luaChonNguon(),
+			chuThich: h.querySelector("[data-nguon-khoa]")?.textContent,
+			chiSoTat: chiSo instanceof HTMLButtonElement && chiSo.disabled,
+			themDoCanh: h.querySelector('[data-nut="them-do-canh"]'),
+		}).toEqual({
+			nguon: "crm",
+			luaChon: [
+				{ nguon: "tay", tat: true },
+				{ nguon: "crm", tat: true },
+				{ nguon: "api", tat: true },
+			],
+			chuThich: so.khoa.chuThich,
+			chiSoTat: true,
+			themDoCanh: null,
+		});
+	});
+
+	test("nguon-so-khoa-cong-bo: KR tay cua muc tieu da cong bo — nguon khoa, bam Them so do canh thi mo lua chon may", async () => {
+		chiTiet = mucTieu("cong-bo", true);
+		const h = await moHopKr("sua");
+		const truoc = {
+			tatCa: luaChonNguon().every((l) => l.tat),
+			chuThich: h.querySelector("[data-nguon-khoa]")?.textContent,
+		};
+		const them = h.querySelector('[data-nut="them-do-canh"]');
+		if (!them) throw new Error("khong co nut them so do canh");
+		expect(them.textContent).toBe(so.khoa.themDoCanh);
+		await bam(them);
+		expect({
+			...truoc,
+			sau: h.querySelector("[data-nguon-so]")?.getAttribute("data-nguon-so"),
+			moLai: luaChonNguon().every((l) => !l.tat),
+			conNut: h.querySelector('[data-nut="them-do-canh"]'),
+		}).toEqual({
+			tatCa: true,
+			chuThich: so.khoa.chuThich,
+			sau: "crm",
+			moLai: true,
+			conNut: null,
+		});
+	});
+});
+
+describe("nguon-so-luu-crm", () => {
+	test("nguon-so-luu-crm: them KR nguon CRM — pham vi mac dinh la don vi cua muc tieu, luu tao KR roi dat nguon", async () => {
+		const h = await moHopKr("them");
+		await go(h.querySelector(`[id$="-ten"]`), "Thoả thuận chốt quý");
+		await go(h.querySelector("[data-o-dich]"), "40");
+		await go(h.querySelector(`[id$="-don-vi"]`), "thoả thuận");
+		const crm = h.querySelector('[data-lua-chon-nguon="crm"]');
+		if (!crm) throw new Error("khong co lua chon CRM");
+		await bam(crm);
+		await cho(
+			() =>
+				h.querySelector("[data-xem-truoc]")?.getAttribute("data-xem-truoc") ===
+				"co",
+			"xem truoc co so",
+		);
+		const btn = h.querySelector<HTMLButtonElement>('[data-nut="gui-kr"]');
+		if (!btn) throw new Error("khong co nut gui");
+		await bam(btn);
+		await cho(
+			() => daGoi.some((g) => g.duong === "okr.datNguonKr"),
+			"goi dat nguon",
+		);
+		expect({
+			phamVi: h
+				.querySelector("[data-o-kieu-pham-vi]")
+				?.getAttribute("data-o-kieu-pham-vi"),
+			thuTu: daGoi.map((g) => g.duong),
+			nguon: daGoi.find((g) => g.duong === "okr.datNguonKr")?.dauVao,
+		}).toEqual({
+			phamVi: "phong-ban",
+			thuTu: ["okr.createKeyResult", "okr.datNguonKr"],
+			nguon: {
+				keyResultId: "ok",
+				loai: "crm",
+				chiSo: "thoa-thuan-chot-duoc",
+				phamVi: { kieu: "phong-ban", id: "pb-1" },
+			},
+		});
+	});
+});
+
+describe("nguon-so-api-origin", () => {
+	test("nguon-so-api-origin: lenh mau lay dia chi goc API tu provider, co ma KR cua KR dang sua", async () => {
+		origin = "https://api.thu.test";
+		const h = await moHopKr("sua");
+		const api = h.querySelector('[data-lua-chon-nguon="api"]');
+		if (!api) throw new Error("khong co lua chon API");
+		await bam(api);
+		const lenh = h.querySelector("[data-lenh-mau]");
+		expect({
+			maKr: h.querySelector("[data-ma-kr]")?.getAttribute("data-ma-kr"),
+			lenh:
+				lenh instanceof HTMLInputElement &&
+				lenh.value.includes(
+					"https://api.thu.test/rest/okr/key-results/kr-1/value",
+				),
+		}).toEqual({ maKr: "kr-1", lenh: true });
+	});
+
+	test("nguon-so-api-origin: doi chung — khong co provider thi khong dung lenh mau voi dia chi doan", async () => {
+		const h = await moHopKr("sua");
+		const api = h.querySelector('[data-lua-chon-nguon="api"]');
+		if (!api) throw new Error("khong co lua chon API");
+		await bam(api);
+		expect({
+			maKr: h.querySelector("[data-ma-kr]")?.getAttribute("data-ma-kr"),
+			lenh: h.querySelector("[data-lenh-mau]"),
+		}).toEqual({ maKr: "kr-1", lenh: null });
+	});
+});
+
+describe("nguon-so-doc-lai", () => {
+	test("nguon-so-doc-lai: doc thu hong hien nguyen nhan, Doc lai gui lai datNguonKr cung cau hinh", async () => {
+		sheets = {
+			sheetsBat: true,
+			emailSheets: "okr-doc@du-an.iam.gserviceaccount.com",
+		};
+		chiTiet = {
+			...mucTieu("nhap", false),
+			keyResults: [
+				{
+					...kr("kr-1", false),
+					source: "bang-tinh",
+					nguonMay: {
+						...NGUON_CRM,
+						loai: "bang-tinh",
+						chiSo: null,
+						phamVi: null,
+						sheetId: "1AbC",
+						sheetO: "Tổng!B2",
+						docLuc: "2026-10-05T02:12:00.000Z",
+						docLoi: "chua-chia-se",
+					},
+				},
+			],
+		};
+		const h = await moHopKr("sua");
+		const loi = h.querySelector('[data-doc-thu="loi"]');
+		const docLai = h.querySelector('[data-nut="doc-lai"]');
+		if (!docLai) throw new Error("khong co nut doc lai");
+		await bam(docLai);
+		await cho(
+			() => daGoi.some((g) => g.duong === "okr.datNguonKr"),
+			"goi dat nguon",
+		);
+		expect({
+			lyDo: loi?.getAttribute("data-ly-do"),
+			chu: loi?.textContent,
+			goi: daGoi.map((g) => g.dauVao),
+		}).toEqual({
+			lyDo: "chua-chia-se",
+			chu: so.sheets.lyDo["chua-chia-se"],
+			goi: [
+				{
+					keyResultId: "kr-1",
+					loai: "bang-tinh",
+					url: "https://docs.google.com/spreadsheets/d/1AbC",
+					o: "Tổng!B2",
+				},
+			],
 		});
 	});
 });

@@ -24,6 +24,7 @@ function kr(id: string, objectiveId: string, progress: number): KrOutput {
 		source: "tay",
 		doCanh: false,
 		soMay: null,
+		nguonMay: null,
 		startLocked: true,
 		progress,
 		laCuaToi: false,

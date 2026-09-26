@@ -683,7 +683,8 @@ Read it before touching any amount, total, chart or rate.
   `cache.company(id)`, `cache.contact(id)`, `cache.activity()`. **A new mutation adds a
   call there, not a new list of keys.**
 - **A new query a screen reads joins the list its writes refresh.** Every `okr.*`
-  query an OKR screen reads is in `cache.okr`, except `okr.access` and `okr.thanhVien`;
+  query an OKR screen reads is in `cache.okr`, except `okr.access`, `okr.thanhVien`
+  and `okr.chiSo` (the metric catalogue and whether Sheets is on — no OKR write changes it);
   `apps/app/test/okr-lam-moi.spec.ts` reads both sides and fails on the one left out.
 - **A deletion is `cache.removed(ref)`** — one wide fan-out, and the only place
   `refetchType: "none"` is right: the deleted record's `byId` query is still mounted

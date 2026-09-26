@@ -43,6 +43,7 @@ function Combobox({
 	size = "default",
 	variant,
 	className,
+	translate,
 	...props
 }: Omit<React.ComponentProps<"button">, "onChange" | "value"> &
 	VariantProps<typeof selectTriggerVariants> & {
@@ -83,6 +84,7 @@ function Combobox({
 					data-slot="combobox-trigger"
 					data-size={size}
 					data-placeholder={selected ? undefined : ""}
+					translate={translate}
 					className={cn(selectTriggerVariants({ variant }), className)}
 					{...props}
 				>
@@ -94,6 +96,7 @@ function Combobox({
 			<PopoverContent
 				align="start"
 				size="fit"
+				translate={translate}
 				className="w-(--radix-popover-trigger-width) min-w-64"
 			>
 				<Command shouldFilter={onSearchChange === undefined}>
