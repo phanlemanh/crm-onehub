@@ -136,8 +136,9 @@ không hiện, tác tử không gọi Google, không gì ném (`capabilities.ts`
 
 `apps/agent/agent/lib/okr-sheets.ts`: ký JWT RS256 bằng Web Crypto, đổi lấy token
 ở `oauth2.googleapis.com/token` (phạm vi `spreadsheets.readonly`), đọc
-`values/<ô>?valueRenderOption=UNFORMATTED_VALUE` qua `@crm/db/safe-fetch`, hai lần
-thử, trần thời gian. Kết quả: số, hoặc một nguyên nhân có tên — `chua-chia-se`
+`values/<ô>?valueRenderOption=UNFORMATTED_VALUE` bằng `fetch` tiêm vào (hai host
+Google cố định, không qua `safe-fetch`), hai lần thử trong một trần thời gian, lời xin
+token tính là một lần thử. Kết quả: số, hoặc một nguyên nhân có tên — `chua-chia-se`
 (403), `khong-thay` (404), `khong-phai-so`, `o-trong`, `google-loi`. Không ghi log
 giá trị ô hay đường dẫn đầy đủ.
 
