@@ -71,6 +71,15 @@ export function rutDanhSach(goc = GOC) {
 	return { may, boQua };
 }
 
+export function danhGiaMa(maBase, maHead) {
+	const thieu = [...maBase, ...maHead].some((m) => m === -1);
+	if (thieu) return "co eval khong chay tren mot cay (ma -1)";
+	if (!maBase.some((m) => m === 0)) {
+		return "cay base khong eval nao dat — moi truong base hong, so sanh vo nghia";
+	}
+	return null;
+}
+
 export function soSanh(base, head) {
 	if (base !== 0)
 		return {
@@ -156,6 +165,17 @@ function main() {
 		process.exit(2);
 	}
 	console.log("GHI CHU doi-chung so sanh: base 0 -> head 1 la SAI (dung)");
+	if (
+		!danhGiaMa([1, 1], [0, 0]) ||
+		!danhGiaMa([0, -1], [0, 0]) ||
+		danhGiaMa([0, 1], [0, 1])
+	) {
+		console.log("KHONG DO DUOC: bo danh gia cay base khong bat duoc ca hong");
+		process.exit(2);
+	}
+	console.log(
+		"GHI CHU doi-chung cay base: base toan do va ma -1 deu la KHONG DO DUOC (dung)",
+	);
 
 	let base;
 	try {
@@ -163,6 +183,12 @@ function main() {
 		console.log(`-- cay base ${base.goc.slice(0, 8)} o ${base.wt}`);
 		const maBase = chayTrenCay(base.wt, "base", may);
 		const maHead = chayTrenCay(GOC, "head", may);
+		const hong = danhGiaMa(maBase, maHead);
+		if (hong) {
+			console.log(`KHONG DO DUOC: ${hong}`);
+			process.exitCode = 2;
+			return;
+		}
 		let sai = 0;
 		may.forEach((e, i) => {
 			const r = soSanh(maBase[i], maHead[i]);

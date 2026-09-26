@@ -5,6 +5,7 @@ import puppeteer from "puppeteer-core";
 import { authMessages } from "../../../apps/app/lib/messages/auth.ts";
 import { cuaVaoMessages } from "../../../apps/app/lib/messages/cua-vao.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
+import { quaCallback, rutCauHook } from "./ma-loi-that.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
@@ -16,7 +17,7 @@ const APP = process.env.APP_URL ?? "http://localhost:3840";
 const API = process.env.API_URL ?? "http://localhost:3841";
 const BO_KHO = process.env.CVDN_BO_KHO ?? "";
 const CHO_MS = 120_000;
-const SO_TAB_TOI_DA = 12;
+const SO_TAB_TOI_DA = 20;
 const NGUONG_THUONG = 4.5;
 const NGUONG_LON = 3;
 const CO_LON_PX = 24;
@@ -39,7 +40,10 @@ const CA_HTML = [
 	["script", "<script>alert(1)</script>"],
 	["img", '"><img src=x onerror=alert(1)>'],
 	["dai", "x".repeat(2000)],
-	["no-one-can", "No_one_can_sign_in_yet:_set_ALLOWED_SIGN_IN_in_.env"],
+	[
+		"no-one-can",
+		quaCallback(rutCauHook().find((c) => c.ten === "chua-khai")?.cau ?? ""),
+	],
 ];
 
 const auth = authMessages("vi");
@@ -253,13 +257,17 @@ async function doTab(trang, kho, giaoDien, options) {
 		...(options.quenMatKhau ? [`a:${auth.signIn.quenMatKhau}`] : []),
 		`button:${auth.signIn.dangNhap}`,
 	];
+	const lucTai = await trang.evaluate(() => {
+		const e = document.activeElement;
+		return e?.closest("[role=alert]") ? e.tagName : "";
+	});
 	await trang.evaluate(() => {
 		document.activeElement?.blur();
 		window.scrollTo(0, 0);
 	});
 	const thay = [];
 	let vaoKhoi = "";
-	for (let i = 0; i < SO_TAB_TOI_DA && thay.length < can.length; i++) {
+	for (let i = 0; i < SO_TAB_TOI_DA; i++) {
 		await trang.keyboard.press("Tab");
 		const d = await trang.evaluate(() => {
 			const e = document.activeElement;
@@ -270,28 +278,34 @@ async function doTab(trang, kho, giaoDien, options) {
 					? `a:${e.getAttribute("aria-label") ?? e.textContent?.trim()}`
 					: e.tagName === "INPUT"
 						? `input:${e.id}`
-						: `button:${e.textContent?.trim()}`;
+						: `${e.tagName.toLowerCase()}:${e.textContent?.trim()}`;
 			return { ten, trongKhoi };
 		});
-		if (!d) continue;
-		if (d.trongKhoi) vaoKhoi = d.ten;
-		thay.push(
-			d.ten.startsWith("button:") && d.ten.includes("Google")
-				? "button:Google"
-				: d.ten,
+		if (!d) break;
+		if (d.trongKhoi && !vaoKhoi) vaoKhoi = d.ten;
+		const nutHang = ["Google", "Microsoft"].find(
+			(h) => d.ten.startsWith("button:") && d.ten.includes(h),
 		);
+		const ten = nutHang ? `button:${nutHang}` : d.ten;
+		if (thay.length > 0 && ten === thay[0]) break;
+		thay.push(ten);
 	}
 	const ma = `${kho.ten}-${giaoDien}`;
-	const khop = JSON.stringify(thay) === JSON.stringify(can) && !vaoKhoi;
+	const khop =
+		JSON.stringify(thay.slice(0, can.length)) === JSON.stringify(can) &&
+		!vaoKhoi &&
+		!lucTai;
 	const tienDe = options.google === true;
 	ghi(
 		`${ma}-tab`,
 		khop && tienDe,
 		!tienDe
 			? `${ma}: tien de AC-12 khong dung — API tra google=${options.google}, khong co nut Google de do`
-			: vaoKhoi
-				? `${ma}: tieu diem vao khoi huong dan (${vaoKhoi})`
-				: `${ma}: Tab ${thay.join(" -> ")}${khop ? "" : ` (can ${can.join(" -> ")})`}`,
+			: lucTai
+				? `${ma}: o loi lay tieu diem luc tai (${lucTai})`
+				: vaoKhoi
+					? `${ma}: tieu diem vao khoi huong dan (${vaoKhoi})`
+					: `${ma}: Tab ${thay.join(" -> ")}${khop ? " (khong phan tu nao cua khoi huong dan, o loi khong lay tieu diem luc tai)" : ` (can ${can.join(" -> ")})`}`,
 	);
 	const tp = await tuongPhan(trang);
 	const truot = tp.filter((t) => !t.dat);
