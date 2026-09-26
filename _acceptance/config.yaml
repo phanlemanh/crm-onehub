@@ -639,7 +639,25 @@ executors:
     nso_loc_ten: 'cd apps/app && bun test test/loc-okr-ten.spec.ts'
     nso_tai_truoc: 'cd apps/app && bun test test/loc-okr-tai-truoc.spec.ts'
     nso_khoi_tai_lai_nen: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t tai-lai-nen'
+    hcz_duong_chinh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t duong-chinh"'
+    hcz_cung_phien: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts test/zalo-lenh.spec.ts -t cung-phien"'
+    hcz_tu_choi_vai: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t tu-choi-vai"'
+    hcz_kenh_chi_okr: 'bun run test -- "cd apps/agent && bun test test/kenh-chi-okr.spec.ts"'
+    hcz_luat_cu: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t luat-cu"'
+    hcz_spec_da_ky: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/zalo-qua-webhook.integration.spec.ts test/noi-zalo-cho-nguoi-moi.integration.spec.ts test/zalo-webhook-doc-khuon-that.integration.spec.ts test/tra-loi-tin-nhac.integration.spec.ts"'
+    hcz_tran: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t tran"'
+    hcz_dang_ban: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t dang-ban"'
+    hcz_chi_doc: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/zalo-chi-doc.spec.ts"'
+    hcz_loc: 'bun run test -- "cd apps/agent && bun test test/zalo-loc.spec.ts"'
+    hcz_loc_kenh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t loc-kenh"'
+    hcz_cai_lenh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t cai-lenh"'
+    hcz_loi: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t loi-tac-tu"'
+    hcz_khong_log: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t khong-log"'
+    hcz_chi_dan: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t chi-dan"'
+    hcz_nguong: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo-nguong.integration.spec.ts"'
+    hcz_telemetry: 'bun run test -- "cd apps/api && bun test test/telemetry-zalo-hoi.spec.ts"'
   script:
+    hcz_tai_lieu: bun _acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs
     dmk_dau_cuoi: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs dau-cuoi
     dmk_don_khi_do: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs don-khi-do
     dmk_xep_hang: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs xep-hang

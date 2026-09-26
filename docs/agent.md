@@ -252,7 +252,10 @@ API; the API only reads and writes rows.
     (`khoa`), the keys of `message` (`khoa_message`) and its `message_id` —
     never the text — so a changed shape shows up on the first real message.
 - **One core for every path.** `xuLyTinDen` (`lib/zalo-nhan.ts`) handles a
-  message from the webhook and from the manual reader alike:
+  message from the webhook and from the manual reader alike — except questions to the
+  AI assistant and `mới`, which need the eve session helpers only the webhook route
+  passes (`deps.hoi`); over `zalo:poll` a linked person's question still gets the
+  «Bạn đã nối…» reply:
   - messages from bots and from chats that are not `PRIVATE` are skipped. Replying
     «Đã nối với <tên CRM>» in a group would show the name to the group;
   - `ZaloUpdateSeen` dedupes by `message_id`;
@@ -322,8 +325,37 @@ API; the API only reads and writes rows.
 
   One bot cannot do both: a bot with a webhook set gets nothing from `getUpdates`
   until the webhook is removed.
-- **Message text is never stored or logged.** Only `message_id` and the failure
-  counter.
+- **Hỏi CRM qua Zalo: câu không phải mã hay lệnh của người đã nối đi vào trợ lý AI.**
+  `hoiTacTu` (`lib/zalo-hoi.ts`) chạy trong cùng giao dịch với `ZaloUpdateSeen`:
+  - cổng vai là `thanhVienPrincipal` (`lib/thanh-vien-principal.ts`), cùng hàm
+    `repFromCrm` dùng — người không còn hàng `member` hay mang vai `okr` bị từ chối
+    trước khi có phiên;
+  - ba trần trong `ZALO.hoi.tran`: 3 câu mỗi phút, 20 câu mỗi ngày của một người,
+    1.500 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
+    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần;
+  - một câu một lúc: còn câu `dang-hoi` chưa quá `ZALO.hoi.hanTraLoiMs` thì câu mới
+    nhận «đang trả lời câu trước»; tick dispatch đóng câu quá hạn (`dongHoiQuaHan`)
+    và báo lỗi đúng một lần;
+  - mỗi câu một hàng `ZaloHoi` (thời điểm, kết quả, độ trễ, token của phiên) — không
+    nội dung câu hỏi hay câu trả lời.
+  Webhook đáp 200 ngay; `send()` của eve chạy qua `waitUntil` với token
+  `chat:<chatId>:<crmUserId>:<ngày VN>` (`tokenPhien`) — một cuộc trò chuyện mỗi Zalo,
+  mỗi người, mỗi ngày giờ VN; «mới» gọi `reset`; `input.requested` (hết ngân sách
+  token hay tác tử muốn hỏi lại) đóng câu, báo `canHoiLai` và dời phiên kẹt bằng
+  `setContinuationToken`. Trả lời về ở `zaloEvents["message.completed"]`
+  (`channels/zalo.ts`) — lời thuật giữa lượt (`finishReason: "tool-calls"`) bị bỏ —
+  tìm câu theo `hoiId` trong thuộc tính phiên, qua `locTraLoi` rồi gửi tối đa ba tin;
+  token của bước cuối được cộng lại ở `turn.completed`. Phiên `purpose: "zalo"`
+  nhận chỉ dẫn `lib/zalo-chi-dan.ts`, và `tools/zalo-chi-doc.ts` thay mọi công cụ ghi
+  trong `ZALO.hoi.congCu.ghi` bằng bản từ chối — thêm một tệp công cụ mà không khai
+  đọc hay ghi là `test/zalo-chi-doc.spec.ts` đỏ. `_acceptance/hoi-crm-qua-zalo/rang/nguong.ts`
+  in số đo cho phiên nghiệm thu.
+- **Message text is never logged, and stored only in the assistant's session.**
+  Link codes, `xong` commands and the Zalo tables (`ZaloUpdateSeen`, `ZaloLink`,
+  `ZaloHoi`) keep no text — only `message_id` and the failure counter. A question to
+  the AI assistant and its answer do live in that eve session's `AgentEvent` rows,
+  like every other assistant conversation, and that is where a manual review reads
+  them. Log lines carry `message_id`, `hoiId` and `zaloChatId`, never text.
 
 ### Backfills
 
@@ -466,6 +498,14 @@ egress:
 1. No customer text in a third-party query. Derived questions only.
 2. Nothing from a mailbox into `/workspace` — different lifetime.
 3. Nothing sensitive logged. Reading is not logging.
+4. Into an outside chat channel (Zalo): what the asker may read on the web,
+   minus exactly three things — personal contact details of partner people
+   (phone, email), verbatim mail or calendar text (a summary is fine), and any
+   value stored in `AppSetting`. Names, stages and amounts are fine; a phone
+   number is not. The reply lives on the platform's servers and on the phone,
+   outside the CRM's retention and audit, which is why the line sits here.
+   `locTraLoi` (`lib/zalo-loc.ts`) masks phone numbers and emails on the way
+   out; verbatim mail is held back by the session's instructions only.
 
 `skills/data-boundaries.md` is the agent's copy. Keep them in step.
 

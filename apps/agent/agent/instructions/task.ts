@@ -4,6 +4,8 @@ import { focusOn, setBudget } from "../lib/focus";
 import { sessionPreamble } from "../lib/preamble";
 import { RESEARCH_INSTRUCTIONS } from "../lib/research-instructions";
 import { attribute, purposeOf } from "../lib/session-purpose";
+import { CHI_DAN_ZALO } from "../lib/zalo-chi-dan";
+import { ZALO } from "../lib/zalo-config";
 
 const attributeText = z.string().trim().min(1).nullable().catch(null);
 
@@ -20,6 +22,10 @@ export default defineDynamic({
 			const purpose = purposeOf(ctx);
 			if (purpose === "builder") {
 				return builderInstructions(ctx);
+			}
+
+			if (purpose === ZALO.hoi.purpose) {
+				return defineInstructions({ markdown: CHI_DAN_ZALO });
 			}
 
 			if (purpose === "team-agent") {
@@ -57,8 +63,13 @@ export default defineDynamic({
 				markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}`,
 			});
 		},
-		"turn.started": (_event, ctx) =>
-			purposeOf(ctx) === "builder" ? builderInstructions(ctx) : null,
+		"turn.started": (_event, ctx) => {
+			const purpose = purposeOf(ctx);
+			if (purpose === ZALO.hoi.purpose) {
+				return defineInstructions({ markdown: CHI_DAN_ZALO });
+			}
+			return purpose === "builder" ? builderInstructions(ctx) : null;
+		},
 	},
 });
 

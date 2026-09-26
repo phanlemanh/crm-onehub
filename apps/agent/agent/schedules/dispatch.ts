@@ -10,6 +10,7 @@ import { brief, drainAll, taskAuth } from "../lib/dispatch";
 import { lenLichNhac } from "../lib/nhac-ke-hoach";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { kiemBot } from "../lib/zalo-bot";
+import { dongHoiQuaHan } from "../lib/zalo-hoi";
 
 export default defineSchedule({
 	cron: "* * * * *",
@@ -19,6 +20,7 @@ export default defineSchedule({
 				sweepBlankFacts(),
 				lenLichNhac(),
 				kiemBot(),
+				dongHoiQuaHan(),
 
 				(async () => {
 					await reconcileStaleTasks();

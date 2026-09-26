@@ -52,3 +52,27 @@ describe("doc-lenh", () => {
 		}
 	});
 });
+
+const MOI: [string, Lenh | null][] = [
+	["mới", { lenh: "moi" }],
+	["Mới ", { lenh: "moi" }],
+	["moi", { lenh: "moi" }],
+	["/new", { lenh: "moi" }],
+	["mới hỏi cái này", null],
+	["làm mới", null],
+];
+
+describe("cung-phien", () => {
+	test("cung-phien: docLenh nhan moi chi khi dung mot chu", () => {
+		expect(MOI.length, "so o viet truoc").toBe(6);
+		let daChay = 0;
+		for (const [chu, mong] of MOI) {
+			expect(
+				docLenh(chu),
+				`moi chi khi dung mot chu: ${JSON.stringify(chu)}`,
+			).toEqual(mong);
+			daChay += 1;
+		}
+		expect(daChay).toBe(MOI.length);
+	});
+});
