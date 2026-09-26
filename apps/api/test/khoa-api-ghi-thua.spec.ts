@@ -12,6 +12,8 @@ const NGUOI = `kagt-${suffix}`;
 const GIAY_MS = 1000;
 const TUONG_LAI_MS = 10 * 60 * GIAY_MS;
 const DUONG = "/api/trpc/contacts.list?input=%7B%7D";
+const DA_BAT_SECONDARY =
+	"kho đã bật secondaryStorage — bản vá khoa-api-ghi-thua đổi cả đường secondary-storage, xem lại AC-9";
 
 let app: NestExpressApplication;
 
@@ -28,6 +30,14 @@ async function hang(id: string) {
 		where: { id },
 		select: { lastRequest: true, updatedAt: true },
 	});
+}
+
+function khongCoSecondaryStorage(options: {
+	secondaryStorage?: unknown;
+}): void {
+	if (options.secondaryStorage !== undefined) {
+		throw new Error(DA_BAT_SECONDARY);
+	}
 }
 
 async function maLoi(khoa: string): Promise<string | undefined> {
@@ -124,5 +134,20 @@ describe("khoa-api-ghi-thua", () => {
 		expect(await maLoi(tat.key), "khoa tat van qua").toBe("KEY_DISABLED");
 		expect(await maLoi(hetHan.key), "khoa het han van qua").toBe("KEY_EXPIRED");
 		expect((await goi(hetHan.key)).status, "khoa het han van qua").toBe(401);
+	});
+
+	test("khong-secondary-storage: cau hinh that cua kho khong bat secondaryStorage", () => {
+		khongCoSecondaryStorage(auth.options);
+		expect(
+			() =>
+				khongCoSecondaryStorage({
+					secondaryStorage: {
+						get: () => null,
+						set: () => null,
+						delete: () => null,
+					},
+				}),
+			"cau hinh co secondaryStorage phai do",
+		).toThrow(DA_BAT_SECONDARY);
 	});
 });
