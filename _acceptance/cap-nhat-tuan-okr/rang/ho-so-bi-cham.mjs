@@ -333,6 +333,10 @@ else {
 	console.log(raTruocGop);
 	console.log(`=== pre-merge-check ma thoat: ${preMerge.status} ===`);
 }
+if (!raTruocGop.includes(`[${SLUG}]`))
+	doHong.push(
+		`khong doc duoc dau ra truoc gop: khong co dong nao cho [${SLUG}] — luoi khong chay`,
+	);
 const hoaCu = [
 	...raTruocGop.matchAll(/^VIOLATION \[([^\]]+)\]: evidence is stale/gm),
 ]
