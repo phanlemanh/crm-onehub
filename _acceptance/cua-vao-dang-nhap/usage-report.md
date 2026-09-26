@@ -104,3 +104,124 @@ wall: 798s
 - **claude-opus-5-5**: 3 agent · 43 calls · out 35,076 · in 86 · cache_read 4,859,543 · cache_create 353,934
 - **claude-haiku-4-5-20251001**: 16 agent · 36 calls · out 17,508 · in 320 · cache_read 1,692,998 · cache_create 694,363
 
+### S4 round 3 (BLOCKED) — wf_d62a7039-f61 (28 agent, 151,529 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 5 | 25,115 | 10 | 524,155 | 271 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 28 | 22,677 | 56 | 3,005,413 | 345 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 29 | 18,066 | 58 | 3,423,086 | 341 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 32 | 17,257 | 64 | 4,420,834 | 251 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 15,363 | 4 | 127,006 | 166 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 18 | 12,231 | 36 | 2,289,243 | 161 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 11,148 | 4 | 127,008 | 125 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 5,665 | 4 | 90,871 | 67 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 3,448 | 4 | 93,244 | 53 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 8 | 2,917 | 16 | 754,995 | 45 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,717 | 18 | 90,190 | 22 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 4 | 1,362 | 34 | 200,147 | 367 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 3 | 1,322 | 28 | 158,422 | 20 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,187 | 18 | 90,251 | 17 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,184 | 18 | 90,191 | 138 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,110 | 18 | 90,158 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,094 | 18 | 90,223 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,081 | 18 | 90,158 | 35 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 978 | 18 | 90,220 | 16 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 942 | 18 | 90,223 | 16 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 872 | 18 | 90,222 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 819 | 18 | 90,243 | 14 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 754 | 18 | 90,292 | 64 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 748 | 18 | 90,204 | 12 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 739 | 18 | 90,216 | 13 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 689 | 4 | 90,107 | 16 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 589 | 18 | 90,156 | 12 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 455 | 18 | 90,212 | 14 |
+
+
+wall: 781s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| [Workflow harness — user request] The harness re | 28 | 151,529 | 16,657,690 | 781 | 07:17:09 | 07:30:09 |
+
+- **claude-sonnet-5**: 8 agent · 72 calls · out 102,171 · in 144 · cache_read 7,480,890 · cache_create 970,159
+- **claude-opus-5-5**: 3 agent · 58 calls · out 32,405 · in 116 · cache_read 7,465,072 · cache_create 382,276
+- **claude-haiku-4-5-20251001**: 17 agent · 37 calls · out 16,953 · in 332 · cache_read 1,711,728 · cache_create 739,625
+
+### S4 round 3 (thu lai, PASS) — wf_d62a7039-f61 (54 agent, 269,041 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 3 | 32,146 | 6 | 236,716 | 331 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 5 | 25,115 | 10 | 524,155 | 271 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 28 | 22,677 | 56 | 3,005,413 | 345 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 29 | 18,066 | 58 | 3,423,086 | 341 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 32 | 17,257 | 64 | 4,420,834 | 251 |
+| judge:E18:domain-correctness | claude-sonnet-5 | 2 | 15,443 | 4 | 90,812 | 180 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 15,363 | 4 | 127,006 | 166 |
+| judge:E18:spec-alignment | claude-sonnet-5 | 2 | 15,353 | 4 | 90,812 | 173 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 18 | 12,231 | 36 | 2,289,243 | 161 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 11,148 | 4 | 127,008 | 125 |
+| ui:E14 | claude-sonnet-5 | 18 | 9,488 | 36 | 2,075,848 | 206 |
+| judge:E18:operational-feasibility | claude-sonnet-5 | 2 | 9,256 | 4 | 90,814 | 103 |
+| review:measurement | claude-opus-5-5 | 11 | 7,425 | 22 | 1,162,019 | 94 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 5,665 | 4 | 90,871 | 67 |
+| review:bugs | claude-opus-5-5 | 14 | 5,559 | 28 | 1,635,566 | 85 |
+| review:conventions | claude-opus-5-5 | 7 | 4,050 | 14 | 651,125 | 52 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 3,448 | 4 | 93,244 | 53 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 8 | 2,917 | 16 | 754,995 | 45 |
+| triage | claude-sonnet-5 | 2 | 2,861 | 4 | 91,908 | 44 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,717 | 18 | 90,190 | 22 |
+| machine:bun _acceptance/cua-vao-dang-nhap/rang/t | claude-haiku-4-5-20251001 | 2 | 1,579 | 18 | 90,143 | 116 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 4 | 1,362 | 34 | 200,147 | 367 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 3 | 1,322 | 28 | 158,422 | 20 |
+| machine:bun _acceptance/cua-vao-dang-nhap/rang/m | claude-haiku-4-5-20251001 | 2 | 1,217 | 18 | 90,142 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,187 | 18 | 90,251 | 17 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,184 | 18 | 90,191 | 138 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 1,155 | 18 | 90,174 | 18 |
+| machine:bun _acceptance/cua-vao-dang-nhap/rang/s | claude-haiku-4-5-20251001 | 2 | 1,152 | 18 | 90,140 | 18 |
+| machine:GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-ci- | claude-haiku-4-5-20251001 | 2 | 1,140 | 18 | 90,244 | 43 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,110 | 18 | 90,158 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,094 | 18 | 90,223 | 18 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 1,081 | 18 | 90,158 | 35 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 1,079 | 18 | 90,195 | 17 |
+| machine:for t in apps/app/components/auth-shell. | claude-haiku-4-5-20251001 | 2 | 1,072 | 18 | 90,203 | 16 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 1,055 | 18 | 90,175 | 17 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 1,029 | 18 | 90,164 | 16 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 978 | 18 | 90,220 | 16 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 942 | 18 | 90,172 | 17 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 942 | 18 | 90,223 | 16 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 918 | 18 | 90,156 | 14 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 913 | 18 | 90,168 | 16 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 872 | 18 | 90,222 | 15 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 819 | 18 | 90,243 | 14 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 815 | 18 | 90,110 | 25 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 754 | 18 | 90,292 | 64 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 748 | 18 | 90,204 | 12 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 739 | 18 | 90,216 | 13 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 689 | 4 | 90,107 | 16 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 665 | 18 | 62,959 | 13 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 589 | 18 | 90,156 | 12 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 455 | 18 | 90,212 | 14 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 420 | 18 | 90,175 | 17 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 411 | 18 | 90,108 | 14 |
+| capture:provenance | claude-sonnet-5 | 2 | 369 | 4 | 90,048 | 10 |
+
+
+wall: 1450s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| [Workflow harness — user request] The harness re | 28 | 151,529 | 16,657,690 | 781 | 07:17:09 | 07:30:09 |
+| machine | 16 | 15,562 | 1,415,428 | 131 | 07:31:04 | 07:33:14 |
+| ui | 1 | 9,488 | 2,075,848 | 206 | 07:31:23 | 07:34:49 |
+| judge | 3 | 40,052 | 272,438 | 180 | 07:31:23 | 07:34:23 |
+| review | 3 | 17,034 | 3,448,710 | 96 | 07:31:24 | 07:32:59 |
+| triage | 1 | 2,861 | 91,908 | 44 | 07:34:51 | 07:35:34 |
+| capture | 1 | 369 | 90,048 | 10 | 07:35:36 | 07:35:46 |
+| synthesize | 1 | 32,146 | 236,716 | 331 | 07:35:47 | 07:41:19 |
+
+- **claude-sonnet-5**: 15 agent · 103 calls · out 187,087 · in 206 · cache_read 10,247,848 · cache_create 1,850,423
+- **claude-opus-5-5**: 6 agent · 90 calls · out 49,439 · in 180 · cache_read 10,913,782 · cache_create 720,130
+- **claude-haiku-4-5-20251001**: 33 agent · 69 calls · out 32,515 · in 620 · cache_read 3,127,156 · cache_create 1,435,960
+

@@ -1,45 +1,17 @@
+# Review Findings — cua-vao-dang-nhap (round 3)
+
 ## Trong hợp đồng
 
-Không có phát hiện nào map được vào AC ở round này.
+(rỗng — không có phát hiện nào ánh xạ được vào AC ở vòng này.)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **New doi-chung test breaks `bun run lint` (biome a11y errors): noNoninteractiveTabindex and noAutofocus**
-  Người dùng thấy gì: Loi nay chi anh huong buoc kiem tra tu dong noi bo (lint), khong lam thay doi bat cu thu gi nguoi dung nhin thay tren man hinh dang nhap.
-  file: `apps/app/test/cua-vao-sign-in.dom.tsx`
-  severity: high
-  Đề xuất: known-limits
-
-- **TEN_HANG is left unused after the mocks switched to `nhan`**
-  Người dùng thấy gì: Day chi la mot dong code thua trong tep kiem thu noi bo, khong lam thay doi gi ma nguoi dung thay hay lam duoc tren trang dang nhap.
-  file: `apps/app/test/cua-vao-sign-in.dom.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Case html-no-one-can quietly becomes error="" when the hook sentence is not found, and an extraction error exits 1 instead of 2**
-  Người dùng thấy gì: Neu cau canh bao trong he thong dang nhap doi chu trong tuong lai, cong cu do co the bao sai nguyen nhan loi thay vi bao 'khong do duoc' — nhung hien tai trang dang nhap van hoat dong dung nhu mo ta.
-  file: `_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (âm tính một mình, bộ dò không bắn được): vế «logo của khối hướng dẫn không phải liên kết» của E13 không có đường nào đỏ**
-  Người dùng thấy gì: Neu sau nay ai do vo tinh bien logo trong khoi huong dan thanh mot duong dan bam duoc, cong cu do tu dong co the khong phat hien ra loi do — nhung hien tai trang dang nhap van dang hien thi dung nhu ky vong.
-  file: `_acceptance/cua-vao-dang-nhap/rang/do-cua-vao.mjs`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 5 (ma trận viết trước nhưng không có cột kỳ vọng theo ca): ma-tran-cua rẽ nhánh theo chính đầu ra**
-  Người dùng thấy gì: Bo kiem thu tu dong cho cac kieu dang nhap khac nhau (chi mat khau, co SSO, chi Google...) co the khong bat duoc mot so loi hien sai nut dang nhap neu loi do xay ra trong tuong lai — nhung hien tai trang dang nhap van hoat dong dung cho tung kieu.
-  file: `apps/app/test/cua-vao-sign-in.dom.tsx`
+- **Shape 5 (claims a whole class but has only a point case): the E21 control never exercises a completed step, so 'old callers keep their progress mode unchanged' is not measured**
+  Người dùng thấy gì: Neu sau nay co thay doi vo y lam mat dau tick o cac buoc da xong trong hop thoai moi thanh vien, cai dat to chuc hay khoi Zalo, loi do co the lot qua vi phep thu hien tai chua kiem tra dung truong hop nay — hanh vi dang chay bay gio van dung.
+  file: `packages/ui/test/step-list-tinh.dom.tsx`
   severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): chữ «Cài đặt» ở bước 1 được ghim vào aria-label thanh bên, không vào nhãn menu người dùng thật sự bấm**
-  Người dùng thấy gì: Neu sau nay ten muc menu 'Cai dat' tren giao dien doi chu khac, huong dan buoc 1 tren man dang nhap co the khong con khop voi ten muc menu that su nguoi dung nhin thay, nhung bai kiem thu tu dong se khong bao loi.
-  file: `apps/app/test/cua-vao-sign-in.dom.tsx`
-  severity: low
   Đề xuất: known-limits
 
 - **Password-link TTL helper was extracted, but quen-mat-khau still computes the same value its own way (r1)**
@@ -65,7 +37,5 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/app/test/cua-vao-trang-khac.dom.tsx`
   severity: low
   Đề xuất: known-limits
-
-## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
