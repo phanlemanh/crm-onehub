@@ -1293,21 +1293,49 @@ async function moHopSua(t, ten, krId) {
 	return coMat(t, HOP(krId), `hop thoai sua KR ${ten}`);
 }
 
-async function dongHop(t) {
+async function dongHop(t, ten) {
 	await t.keyboard.press("Escape");
 	await doi(
 		t,
 		"dong hop thoai KR",
 		() => window.__tim("[data-hop-thoai-kr]").length === 0,
 	);
-	await cho(1500);
+	await cho(300);
+	const conBamDuoc = await t.evaluate((s) => {
+		const el = window.__tim(s)[0];
+		return el ? getComputedStyle(el).pointerEvents : null;
+	}, SHEET);
+	kiem(
+		`dong hop thoai KR bang Escape: sheet muc tieu con bam duoc (thay ${conBamDuoc})`,
+		conBamDuoc !== null && conBamDuoc !== "none",
+	);
+	await bam(t, `${SHEET} button[aria-label='Thao tác với ${ten}']`);
+	await coMat(
+		t,
+		"[role='menuitem']",
+		`menu cua ${ten} mo lai duoc sau khi dong hop thoai KR`,
+	);
+	await t.keyboard.press("Escape");
+	await doi(
+		t,
+		"dong menu KR mo lai",
+		() => window.__tim("[role='menuitem']").length === 0,
+	);
+	await t.keyboard.press("Escape");
+	await doi(
+		t,
+		"dong sheet muc tieu",
+		(s) => window.__tim(s).length === 0,
+		SHEET,
+	);
+	await cho(300);
 	const chan2 = await t.evaluate(
 		() => getComputedStyle(document.body).pointerEvents,
 	);
-	if (chan2 === "none")
-		console.log(
-			"  quan sat: dong hop thoai KR bang Escape de lai body pointer-events:none",
-		);
+	kiem(
+		`dong sheet muc tieu: body het pointer-events:none (thay ${chan2})`,
+		chan2 !== "none",
+	);
 }
 
 async function luaChonThay(t, k) {
@@ -1611,7 +1639,7 @@ async function buocNguon(sheets) {
 		`E13 buoc 6: KR nguon api, phien khong cam Sheets van khong co Sheets (thay ${thayB.join(",")})`,
 		!thayB.includes("bang-tinh"),
 	);
-	await dongHop(t);
+	await dongHop(t, TEN.Kb);
 
 	const a = await moTrang(cookie.truong, RONG, `/okr?record=objective:${K.A}`);
 	await coMat(
@@ -1641,7 +1669,7 @@ async function buocNguon(sheets) {
 				khoa.nutDoCanh === 0,
 		);
 		await chupTai(a, `${HOP(K.Kcrm)} [data-nguon-khoa]`, "buoc-khoa-crm.png");
-		await dongHop(a);
+		await dongHop(a, TEN.Kcrm);
 	}
 	await a.close();
 	const a2 = await moTrang(cookie.truong, RONG, `/okr?record=objective:${K.A}`);
