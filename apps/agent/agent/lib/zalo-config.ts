@@ -1,5 +1,6 @@
 const SECOND_MS = 1_000;
-const DAY_MS = 24 * 60 * 60 * SECOND_MS;
+const MINUTE_MS = 60 * SECOND_MS;
+const DAY_MS = 24 * 60 * MINUTE_MS;
 
 export const ZALO = {
 	api: "https://bot-api.zaloplatforms.com",
@@ -28,8 +29,15 @@ export const ZALO = {
 		toiDaTin: 3,
 		an: "[đã ẩn]",
 		luoc: "…",
+		tran: { phut: 3, ngay: 20, thang: 1_500 },
+		cuaSoPhutMs: MINUTE_MS,
+		hanTraLoiMs: 5 * MINUTE_MS,
+		lechGio: "+07:00",
+		tienToToken: "chat:",
+		authenticator: "zalo",
+		purpose: "zalo",
 	},
-	lenh: { tu: ["xong", "done"], toiDaSo: 20 },
+	lenh: { tu: ["xong", "done"], toiDaSo: 20, moi: ["mới", "moi", "/new"] },
 	loi: {
 		huongDan:
 			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
@@ -63,5 +71,16 @@ export const ZALO = {
 		daXong: "Đã đánh dấu xong: ",
 		khongGiMoi: "Không có mục nào mới",
 		mocDaXongTruoc: " — đã xong từ trước: ",
+		hoiKhongQuyen:
+			"Tài khoản CRM của bạn không có quyền hỏi dữ liệu đối tác, nên tôi chưa trả lời được câu này.",
+		hetTranPhut: "Chờ một chút rồi hỏi tiếp.",
+		hetTranNgay: (n: number) =>
+			`Hôm nay bạn đã hỏi ${n} câu qua Zalo. Mở CRM để hỏi tiếp; mai hỏi lại ở đây.`,
+		hetTranThang: "Kênh hỏi qua Zalo tháng này đã hết lượt. Mở CRM để hỏi.",
+		dangTraLoi:
+			"Tôi đang trả lời câu trước của bạn, gửi câu mới sau khi nhận được nhé.",
+		tacTuLoi:
+			"Tôi chưa trả lời được câu này. Thử lại sau ít phút, hoặc hỏi trong CRM.",
+		daMoi: "Đã bắt đầu cuộc trò chuyện mới.",
 	},
 } as const;

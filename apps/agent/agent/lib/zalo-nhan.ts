@@ -32,7 +32,7 @@ async function cauKhongMa(
 	});
 	if (!lienKet) return ZALO.loi.huongDan;
 	const lenh = docLenh(text);
-	if (!lenh) {
+	if (!lenh || lenh.lenh === "moi") {
 		return `${ZALO.loi.daNoiRoi(lienKet.crmUser.name, gioNhac())} ${ZALO.loi.goiY}`;
 	}
 	if (lenh.lenh === "xong-thieu-so") return ZALO.loi.thieuSo;

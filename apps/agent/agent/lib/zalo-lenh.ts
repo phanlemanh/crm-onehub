@@ -1,12 +1,16 @@
 import { ZALO } from "./zalo-config";
 
-export type Lenh = { lenh: "xong"; so: number[] } | { lenh: "xong-thieu-so" };
+export type Lenh =
+	| { lenh: "xong"; so: number[] }
+	| { lenh: "xong-thieu-so" }
+	| { lenh: "moi" };
 
 const KHUON = new RegExp(`^(?:${ZALO.lenh.tu.join("|")})(?:\\s+(.*))?$`, "u");
 const SO = /^[1-9]\d*$/;
 
 export function docLenh(text: string): Lenh | null {
 	const gon = text.replaceAll(" ", " ").trim().toLowerCase();
+	if ((ZALO.lenh.moi as readonly string[]).includes(gon)) return { lenh: "moi" };
 	const khop = KHUON.exec(gon);
 	if (!khop) return null;
 	const duoi = khop[1]?.trim() ?? "";
