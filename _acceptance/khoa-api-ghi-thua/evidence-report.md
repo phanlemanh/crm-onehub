@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: khoa-api-ghi-thua
-verdict: PENDING-JUDGMENT
+verdict: BLOCKED
 failed_evals: []
-reason:
+reason: E5 (AC-5, "tu-choi-van-giu") không chạy được — lệnh `bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t tu-choi-van-giu"` không cho kết quả vì agent chấm bị skip/chết giữa chừng. Không có run_id, không có exit_code, không được tính là pass hay fail. Khắc phục là chạy lại đúng lệnh này (agent mới hoặc timeout dài hơn), không phải sửa code.
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4c243fac01bac6b029570e197ce5831b2b4e4a64
+verified_commit: 82ea58c6bbcc02bb4d5e5ef8f23db79d5d662066
 human_signoff:
 ---
 
@@ -19,176 +19,172 @@ human_signoff:
 | E2 | AC-2 | test | PASS |
 | E3 | AC-3 | test | PASS |
 | E4 | AC-4 | test | PASS |
-| E5 | AC-5 | test | PASS |
+| E5 | AC-5 | test | BLOCKED — không có kết quả (agent chết giữa chừng) |
 | E6 | AC-6 | test | PASS |
-| E7 | AC-7 | script | PASS |
+| E7 | AC-7 | script | PASS (carried_from_round: 1) |
 | E8 | AC-8 | test | PASS |
 | E9 | AC-8 | script | PASS |
 | E10 | AC-8 | script | PASS |
 | E11 | AC-8 | script | PASS |
 | E12 | AC-8 | script | PASS |
-| E13 | AC-9 | judgment | UNCERTAIN |
-| E14 | AC-10 | judgment | PASS |
+| E13 | AC-9 | judgment | PASS (đề xuất — chờ human_override, hợp đồng T3 chạm packages/auth) |
+| E14 | AC-10 | judgment | PASS (đề xuất — chờ human_override, hợp đồng T3 chạm packages/auth) |
 
 ## Evidence
 
 - eval: E1
-  run_id: muhoxqehpmt5
+  cmd: bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t khong-ghi-trong-nguong"
+  run_id: muhq22ybprcb
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kagt_khong_ghi_trong_nguong
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    5 expect() calls
-    Ran 1 test across 1 file. [745.00ms]
-    test-run: dropped crm_muhoxqehpmt5_test
+     5 expect() calls
+    Ran 1 test across 1 file. [1.75s]
+    test-run: dropped crm_muhq22ybprcb_test
 
 - eval: E2
-  run_id: minted-khoa-api-ghi-thua-E2-r1
+  cmd: bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t bien-nguong"
+  run_id: muhq22f4nm8r
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kagt_bien_nguong
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    6 expect() calls
-    Ran 1 test across 1 file. [1481.00ms]
-    test-run: dropped crm_muhox2zsjk46_test
+     6 expect() calls
+    Ran 1 test across 1 file. [2.05s]
+    test-run: dropped crm_muhq22f4nm8r_test
 
 - eval: E3
-  run_id: muhox3fo7ee8
+  cmd: bun run test -- "cd packages/auth && bun test test/khoa-api-ghi-thua.spec.ts -t hai-chieu-thu-vien"
+  run_id: muhq238uvnpx
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kagt_hai_chieu_thu_vien
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    3 expect() calls
-    Ran 1 test across 1 file. [241.00ms]
-    test-run: dropped crm_muhox3fo7ee8_test
+     3 expect() calls
+    Ran 1 test across 1 file. [118.00ms]
+    test-run: dropped crm_muhq238uvnpx_test
 
 - eval: E4
-  run_id: muhox4a84y84
+  cmd: bun run test -- "cd packages/auth && bun test test/khoa-api-ghi-thua.spec.ts -t rate-limit-bat-van-dem"
+  run_id: muhq2302k75u
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kagt_rate_limit_bat
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    4 expect() calls
-    Ran 1 test across 1 file. [124.00ms]
-    test-run: dropped crm_muhox4a84y84_test
+     4 expect() calls
+    Ran 1 test across 1 file. [121.00ms]
+    test-run: dropped crm_muhq2302k75u_test
 
 - eval: E5
-  run_id: muhox54m1jyl
-  exit_code: 0
-  baseline: red
+  cmd: bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t tu-choi-van-giu"
+  status: BLOCKED — không có kết quả
   verifier: config:executors.test.kagt_tu_choi_van_giu
-  verified_at: 2026-09-26T01:07:13Z
-  output: |
-    6 expect() calls
-    Ran 1 test across 1 file. [896.00ms]
-    test-run: dropped crm_muhox54m1jyl_test
+  note: agent chấm bị skip/chết giữa chừng khi chạy lệnh này ở round 2; không có run_id, không có exit_code; không được tính là pass. Cần chạy lại lệnh với agent mới/timeout dài hơn trước khi đóng vòng này.
 
 - eval: E6
-  run_id: muhox4bs0qn2
+  cmd: bun run test -- "cd packages/auth && bun test test/khoa-api-ghi-thua.spec.ts -t chong-troi-ban-va"
+  run_id: muhq231cr4is
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kagt_chong_troi
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    4 expect() calls
-    Ran 1 test across 1 file. [110.00ms]
-    test-run: dropped crm_muhox4bs0qn2_test
+     4 expect() calls
+    Ran 1 test across 1 file. [109.00ms]
+    test-run: dropped crm_muhq231cr4is_test
 
 - eval: E7
   run_id: minted-khoa-api-ghi-thua-E7-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.kagt_tai_lieu
   verified_at: 2026-09-26T01:07:13Z
-  output: |
-    tai-lieu: muc «API keys run on a patched library» co du bon chuoi
+  carried_from_round: 1
+  note: carry-forward từ round 1 — delta round 2 không chạm paths của eval này (docs/api.md không đổi).
 
 - eval: E8
-  run_id: muhox1xcqnl4
+  cmd: bun run test
+  run_id: minted-khoa-api-ghi-thua-E8-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.api
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    Time:    1m30.908s
-    test-run: dropped crm_muhox1xcqnl4_test
+      Time:    1m27.659s
+
+    test-run: dropped crm_muhps95saist_test
 
 - eval: E9
-  run_id: minted-khoa-api-ghi-thua-E9-r1
+  cmd: bunx turbo run check-types --force
+  run_id: minted-khoa-api-ghi-thua-E9-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.script.check_types_khong_cache
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    Tasks:    13 successful, 13 total
+     Tasks:    13 successful, 13 total
     Cached:    0 cached, 13 total
-    Time:    8.738s
+      Time:    7.853s
 
 - eval: E10
-  run_id: minted-khoa-api-ghi-thua-E10-r1
+  cmd: bunx turbo run lint --force
+  run_id: minted-khoa-api-ghi-thua-E10-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.script.lint_khong_cache
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
-    Tasks:    9 successful, 9 total
+     Tasks:    9 successful, 9 total
     Cached:    0 cached, 9 total
-    Time:    478ms
+      Time:    632ms
 
 - eval: E11
-  run_id: minted-khoa-api-ghi-thua-E11-r1
+  cmd: bun run lint:slop
+  run_id: minted-khoa-api-ghi-thua-E11-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.script.lint_slop
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
     Found 0 warnings and 0 errors.
-    Finished in 798ms on 1486 files with 9 rules using 14 threads.
+    Finished in 704ms on 1486 files with 9 rules using 14 threads.
 
 - eval: E12
-  run_id: minted-khoa-api-ghi-thua-E12-r1
+  cmd: bunx turbo run build --force
+  run_id: minted-khoa-api-ghi-thua-E12-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.build_khong_cache
-  verified_at: 2026-09-26T01:07:13Z
+  verified_at: 2026-09-26T01:24:49Z
   output: |
     Tasks:    4 successful, 4 total
     Cached:    0 cached, 4 total
-    Time:    16.968s
+      Time:    10.072s
 
 - eval: E13
-  criterion: AC-9
-  judged_by: panel (domain-correctness, operational-feasibility, spec-alignment)
-  proposal: FAIL
-  votes:
-    - domain-correctness: FAIL — Nhánh mới trong claimUsageInDatabase (chỉ khi có lastRequestUpdateIntervalMs) chứa `if (opts.storage === "secondary-storage" && opts.fallbackToDatabase) await setApiKey(ctx, row, opts);` — tức có chạm và đổi hành vi đường secondary-storage (dùng row thay vì finalRow, gọi sớm hơn), trái với đúng câu khẳng định "không chạm ... secondary-storage" trong cả câu hỏi lẫn design doc. Các phần còn lại của câu hỏi (hai nhánh skip của evaluateRateLimit, không đổi cách đếm rate-limit bật, không thêm chú thích, ngưỡng nằm ở packages/auth/src/api-keys.ts) đều khớp thực tế.
-    - operational-feasibility: FAIL — Đúng là hai nhánh skip của evaluateRateLimit và lần ghi updatedAt cuối của claimUsageInDatabase đều được rào bằng lastRequestUpdateIntervalMs, không đổi cách đếm nhánh rate-limit bật, không chạm consumeRemaining, không thêm chú thích, và ngưỡng nằm đúng ở packages/auth/src/api-keys.ts (API_KEY_USAGE.lastRequestIntervalMs). Nhưng câu hỏi còn khẳng định bản vá "không chạm... secondary-storage" — sai: trong claimUsageInDatabase, nhánh mới thêm hẳn một lệnh gọi có điều kiện trên chính storage kiểu secondary-storage.
-    - spec-alignment: PASS — Patch changes exactly the two evaluateRateLimit skip branches (via a new stampLastRequest helper gated on lastRequestUpdateIntervalMs) and the final updatedAt stamp in claimUsageInDatabase (gated on an explicit lastRequestUpdateIntervalMs check); the third skip branch, the counting branches, and consumeRemaining are untouched, the secondary-storage sync is preserved unchanged, and no comment lines are added anywhere in the diff. The threshold constant (API_KEY_USAGE.lastRequestIntervalMs, derived from MINUTE_MS, as const) lives in packages/auth/src/api-keys.ts as claimed.
-  verdict: UNCERTAIN
-  rationale: Hội đồng chia phiếu 2/3 (domain-correctness, operational-feasibility) so với 1/3 (spec-alignment) về việc bản vá có chạm nhánh secondary-storage của claimUsageInDatabase hay không, trái với câu khẳng định "không chạm ... secondary-storage" trong câu hỏi và trong design doc. Mọi phần khác của câu hỏi (hai nhánh skip của evaluateRateLimit, không đổi cách đếm rate-limit bật, không thêm chú thích, ngưỡng ở packages/auth/src/api-keys.ts) được cả ba lens xác nhận khớp thực tế — bất đồng chỉ nằm ở vế secondary-storage.
-  required_evidence:
-    - patches/@better-auth%2Fapi-key@1.6.25.patch dòng 38-39: đoạn code mới `if (opts.lastRequestUpdateIntervalMs !== void 0) { if (opts.storage === "secondary-storage" && opts.fallbackToDatabase) await setApiKey(ctx, row, opts); return row; }` trong claimUsageInDatabase — chứng minh patch có chạm nhánh secondary-storage
-    - docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md mục Thiết kế, câu "không chạm ... đường secondary-storage" — đối chiếu với đoạn patch trên để thấy mâu thuẫn
-    - patches/@better-auth%2Fapi-key@1.6.25.patch, hunk "@@ -1721,6 +1726,10 @@ async function claimUsageInDatabase" — dòng thêm điều kiện trực tiếp trên nhánh secondary-storage, đối chiếu docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md dòng 49
+  judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment)
+  verdict: PASS
   human_override:  # chi nguoi ghi
+  rationale: Cả ba lens đồng thuận PASS. Bản vá chỉ đổi đúng hai nhánh "skip" của evaluateRateLimit (qua stampLastRequest) và một điều kiện chặn sớm return row trong claimUsageInDatabase ngay trước lệnh update updatedAt cuối cùng, cả hai chỉ có hiệu lực khi opts.lastRequestUpdateIntervalMs !== undefined; không dòng nào chạm consumeRemaining hay nhánh rate-limit bật, không thêm chú thích nào trong diff; ngưỡng lastRequestIntervalMs (=MINUTE_MS, as const) nằm đúng trong packages/auth/src/api-keys.ts.
+  votes:
+    - domain-correctness: PASS — Bản vá (@better-auth%2Fapi-key@1.6.25.patch) chỉ sửa đúng hai nhánh "skip" của evaluateRateLimit (rateLimit.enabled===false và apiKey.rateLimitEnabled===false) qua hàm mới stampLastRequest, và thêm một điều kiện chặn sớm return row trong claimUsageInDatabase ngay trước lệnh update updatedAt cuối cùng — cả hai đều chỉ có hiệu lực khi opts.lastRequestUpdateIntervalMs !== undefined (điều kiện chặn còn thêm storage==="database" cho nhánh claimUsageInDatabase, giữ nguyên đường secondary-storage). Không có dòng nào chạm consumeRemaining, không đổi nhánh rate-limit bật (rateLimitTimeWindow/rateLimitMax, start/reset/increment/deny), và không thêm chú thích nào trong toàn bộ diff (kể cả trường kiểu mới lastRequestUpdateIntervalMs trong .d.mts không kèm JSDoc). Ngưỡng lastRequestIntervalMs (=MINUTE_MS, as const) nằm đúng trong API_KEY_USAGE ở packages/auth/src/api-keys.ts và được truyền vào plugin qua auth.ts.
+    - operational-feasibility: PASS — Đọc trực tiếp diff trong patch: chỉ hai nhánh `skip` của `evaluateRateLimit` (rate-limit tắt toàn cục và tắt riêng khoá) được đổi thành gọi `stampLastRequest`, hàm này trả `now` nguyên gốc khi thiếu `lastRequestUpdateIntervalMs` hoặc `lastRequest` null; nhánh `skip` thứ ba (thiếu cấu hình time-window/max) và các nhánh đếm bật (`start/reset/increment/deny`, `consumeRateLimit`, `consumeRemaining`) không nằm trong hunk nào. `claimUsageInDatabase` chỉ thêm một `return row` sớm khi vừa có tuỳ chọn vừa `storage === "database"`, giữ nguyên đường secondary-storage (return sớm không chạm nhánh khác). Không có dòng comment nào được thêm (các khối `/**...*/` đã có sẵn là context, không phải `+`). Hằng số `lastRequestUpdateIntervalMs`/`API_KEY_USAGE.lastRequestIntervalMs` đúng là định nghĩa ở `packages/auth/src/api-keys.ts` và được truyền vào `apiKey()` ở `auth.ts`.
+    - spec-alignment: PASS — Bản vá @better-auth%2Fapi-key@1.6.25.patch chỉ đổi đúng hai nhánh "skip" của evaluateRateLimit (rate-limit tắt toàn cục và tắt riêng khoá, cả hai đổi lastRequest: now → stampLastRequest(...)) và thêm một dòng return sớm trong claimUsageInDatabase để bỏ update({updatedAt}) cuối — cả hai thay đổi đều được gác bởi opts.lastRequestUpdateIntervalMs !== void 0 (và điều kiện storage === "database" cho nhánh thứ hai); không dòng nào trong nhánh rate-limit bật (start/reset/increment/deny), không dòng nào gọi consumeRemaining, và điều kiện storage === "database" giữ nguyên đường secondary-storage; không có bất kỳ chú thích (comment) nào được thêm trong diff. Ngưỡng (lastRequestIntervalMs = MINUTE_MS = 60_000, as const) nằm đúng trong packages/auth/src/api-keys.ts (module hằng số, cùng API_KEY_HEADER/API_KEY_PREFIX/API_KEY_EXPIRATION), và auth.ts chỉ import hằng đó để truyền vào plugin apiKey(...).
 
 - eval: E14
-  criterion: AC-10
-  judged_by: panel (domain-correctness, operational-feasibility, spec-alignment)
-  proposal: PASS
-  votes:
-    - domain-correctness: PASS — Mục "API keys run on a patched library" (docs/api.md dòng 126-148) trả lời rõ cả hai câu: gỡ bản vá "khi better-auth#10921 được sửa ở thượng nguồn... upgrade, bỏ patchedDependencies và file patch, bỏ option khỏi auth.ts" (dòng 143-146), và khi nâng cấp thư viện thì "redoing the patch... chạy bun patch @better-auth/api-key@<new>, áp lại ba chỗ sửa trong dist/index.mjs và kiểu của option, rồi bun patch --commit" (dòng 138-142).
-    - operational-feasibility: PASS — Mục "API keys run on a patched library" (docs/api.md dòng 126-148) trả lời rõ cả hai: câu (1) ở dòng 143 "Remove the patch when better-auth#10921 is fixed upstream with a release that stops writing on every verification while rate limiting is off: upgrade, drop the patchedDependencies entry and the patch file, and drop the option from auth.ts" — nêu đúng điều kiện gỡ và gắn với better-auth#10921; câu (2) ở dòng 138-142 "Upgrading @better-auth/api-key means redoing the patch... Run bun patch @better-auth/api-key@<new>, reapply the three edits in dist/index.mjs and the option type, then bun patch --commit" — nêu đúng việc phải làm khi nâng cấp thư viện.
-    - spec-alignment: PASS — Mục "API keys run on a patched library" (docs/api.md dòng 126-148) trả lời rõ cả hai câu: (1) gỡ bản vá khi better-auth#10921 được vá ngược dòng bằng một bản phát hành ngừng ghi mỗi lần xác thực trong khi tắt rate limit — khi đó nâng cấp, bỏ mục patchedDependencies, xoá file patch, bỏ option khỏi auth.ts; (2) khi nâng @better-auth/api-key phải làm lại patch — chạy bun patch @better-auth/api-key@<new>, áp lại ba chỗ sửa trong dist/index.mjs và kiểu của option, rồi bun patch --commit, với phép thử khoa-api-ghi-thua.spec.ts báo lệch phiên bản.
+  judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment)
   verdict: PASS
-  rationale: Cả ba lens đồng thuận PASS — mục "API keys run on a patched library" ở docs/api.md dòng 126-148 trả lời được cả hai câu hỏi của AC-10 (điều kiện gỡ bản vá gắn với better-auth#10921, và việc phải làm lại patch khi nâng @better-auth/api-key). Không có bất đồng, nhưng human_override vẫn để trống cho người xác nhận ở Cổng 2 trước khi tính vào verdict PASS chung.
-  required_evidence:
-    - docs/api.md dòng 126-148, mục "API keys run on a patched library" — đối chiếu hai câu hỏi của AC-10 với nội dung mục này
   human_override:  # chi nguoi ghi
+  rationale: Cả ba lens đồng thuận PASS. Mục "API keys run on a patched library" trong docs/api.md trả lời rõ cả hai câu bắt buộc — điều kiện gỡ bản vá khi better-auth#10921 được vá ở thượng nguồn, và chỉ dẫn làm lại patch khi nâng @better-auth/api-key.
+  votes:
+    - domain-correctness: PASS — Mục "API keys run on a patched library" trong docs/api.md trả lời rõ cả hai câu: gỡ bản vá "khi better-auth#10921 [...] fixed upstream" kèm ba việc cụ thể (upgrade, xoá patchedDependencies + file patch, xoá option ở auth.ts); và khi nâng @better-auth/api-key thì "redoing the patch" theo đúng ba bước (bun patch @better-auth/api-key@<new>, reapply ba chỗ sửa trong dist/index.mjs + option type, rồi bun patch --commit).
+    - operational-feasibility: PASS — Mục "API keys run on a patched library" (docs/api.md dòng 126-149) trả lời rõ cả hai câu: (1) gỡ bản vá khi better-auth#10921 được vá ở thượng nguồn bằng một bản phát hành ngừng ghi mỗi lần xác minh khi rate limit tắt — khi đó bỏ patchedDependencies, xoá file patch, xoá option khỏi auth.ts; (2) khi nâng @better-auth/api-key phải làm lại patch — chạy bun patch @better-auth/api-key@<new>, áp lại ba chỗ sửa trong dist/index.mjs và kiểu của option, rồi bun patch --commit, có test khoa-api-ghi-thua.spec.ts báo khi version và patch lệch nhau.
+    - spec-alignment: PASS — Mục "API keys run on a patched library" (docs/api.md dòng 126-148) trả lời rõ cả hai câu: gỡ bản vá "khi better-auth#10921 fixed upstream with a release that stops writing on every verification while rate limiting is off" (dòng 143-146), và khi nâng cấp thì "Upgrading @better-auth/api-key means redoing the patch" — chạy `bun patch @better-auth/api-key@<new>`, reapply ba chỗ sửa trong `dist/index.mjs` và kiểu option, rồi `bun patch --commit` (dòng 138-142).
 
 ## Known limits
 
@@ -196,12 +192,15 @@ human_signoff:
 
 ## Analyst
 
-E8, E9, E10, E11 — các cổng hồi quy toàn kho (`bun run test`, `bunx turbo run check-types --force`, `bunx turbo run lint --force`, `bun run lint:slop`) đều xanh trên cả nhánh này lẫn baseline trước feature (diffBase): đây là cổng bảo vệ hồi quy chủ ý (regression-guard) chứng minh harness chạy được, không phải phép đo phân biệt riêng cho khoa-api-ghi-thua — giữ nguyên như hiện tại, không cần viết lại. (E12 build không tính vào đây vì baseline của nó là n-a, không phải green.)
+carried tu round 1 — baseline khong do lai round nay.
+
+E8, E9, E10, E11 xanh trên cả HEAD lẫn baseline (diffBase) — các lệnh này không phân biệt được feature này với code cũ ở phạm vi round hiện tại, vì baseline không được đo lại (evals.yaml không đổi từ lần baseline cuối, round 1). Đây là các bộ kiểm/hồi quy toàn repo (test suite tổng, check-types, lint, lint:slop) nên hợp lý là regression-guard có chủ ý chứ không phải dấu hiệu thiếu eval riêng cho feature — E1-E4, E6 mới là các eval phân biệt trực tiếp hành vi khoa-api-ghi-thua và đều baseline: n-a (chưa đo lại baseline ở round này, không phải "green").
 
 ## Variance
 
-none — không có eval nào có runs > 1 trong vòng này; mọi eval xác định đều 0/N hoặc N/N (ở đây toàn bộ N/N, không có eval nào flaky).
+none — every multi-run eval is uniform (không có eval nào khai `runs > 1` ở round này).
 
 ## Iterations
 
-Round 1: E1–E12 (test/script) đều PASS, bao gồm bốn cổng hồi quy AC-8 (test, check-types, lint, lint:slop, build); E13 (AC-9) hội đồng chia phiếu 2 FAIL / 1 PASS quanh việc bản vá có chạm nhánh secondary-storage của claimUsageInDatabase hay không — chờ người quyết ở Cổng 2; E14 (AC-10) hội đồng đồng thuận PASS, human_override vẫn để trống chờ xác nhận. Chưa quay lại implementation.
+Round 1: PENDING-JUDGMENT — 1 finding trong hợp đồng (patch chạm nhầm đường secondary-storage / thiếu kiểm quan hệ bun.lock). Đã sửa ở commit 82ea58c6 ("fix: khoa-api-ghi-thua không chạm secondary-storage; kiểm bun.lock theo quan hệ").
+Round 2 (báo cáo này): E1-E4, E6, E8-E12 pass trên commit 82ea58c6bbcc02bb4d5e5ef8f23db79d5d662066; E7 carry-forward từ round 1 (docs/api.md không đổi); E13, E14 judgment đề xuất PASS (chờ human_override, hợp đồng T3 chạm packages/auth). E5 (tu-choi-van-giu) không có kết quả — agent chấm bị skip/chết giữa chừng → verdict BLOCKED, cần chạy lại đúng lệnh của E5 trước khi có thể lên PASS hay REJECT.
