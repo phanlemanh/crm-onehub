@@ -65,7 +65,7 @@
 					"Messages it can send",
 					"Channels it can change",
 					"People",
-					"Names and email addresses, so it can match a Slack account to a record in OneHub Center.",
+					"Names and email addresses, so it can match a Slack account to a CRM record.",
 					"Names and topics of public channels, and the messages in any channel it has been added to.",
 					"Post as the app, open a direct message, and preview a link it posts.",
 					"Join, create, rename, archive, and invite people to channels."

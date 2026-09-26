@@ -1,13 +1,5 @@
 [
 	{
-		"tep": "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/khong-dich-cua-lat.json",
-		"cu": "CRM record",
-		"moi": "record in OneHub Center",
-		"dongCu": "\t\t\t\t\t\"Names and email addresses, so it can match a Slack account to a CRM record.\",",
-		"dongMoi": "\t\t\t\t\t\"Names and email addresses, so it can match a Slack account to a record in OneHub Center.\",",
-		"loai": "chuoi-that"
-	},
-	{
 		"tep": "_acceptance/dat-okr-trong-crm/rang/man-okr.mjs",
 		"cu": "CRM",
 		"moi": "OneHub Center",

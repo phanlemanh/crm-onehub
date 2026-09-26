@@ -26,6 +26,7 @@ const THAY_THE = [
 	},
 ];
 const SO_THAY_THE_KHAC = ["cua-vao-dang-nhap/E14"];
+const VAT_CONG_GHI = ["evidence-report.md", "run-log.jsonl", "decisions.jsonl"];
 const TEN =
 	/\b(?:the |your |this |The |This |Your )?(?:OneHub )?CRM(?: OneHub)?\b|\bOneHub Center\b/g;
 const DAU = "\u0000TEN\u0000";
@@ -117,7 +118,9 @@ export function tepThuocBiCham(doi) {
 			for (const t of tepTrongLenh(giaiRef(cauHinh, ev.cmd))) tepThuoc.add(t);
 		}
 	}
-	const cuaHoSo = (t) => daKy.some((s) => t.startsWith(`_acceptance/${s}/`));
+	const cuaHoSo = (t) =>
+		daKy.some((s) => t.startsWith(`_acceptance/${s}/`)) &&
+		!VAT_CONG_GHI.some((ten) => t.endsWith(`/${ten}`));
 	return doi.filter((t) => cuaHoSo(t) || tepThuoc.has(t));
 }
 
