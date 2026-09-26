@@ -1,0 +1,58 @@
+{
+  "feature_plain": "Mỗi lần đo màn thật chạy trên một cơ sở dữ liệu riêng của chính cây đang đo, với máy chủ riêng, tự dựng và tự dọn — cơ sở dữ liệu dev chung của người không còn bị phép đo ghi vào.",
+  "scope_plain": "Không sửa lệnh đo của các hồ sơ đã ký, không dọn dữ liệu trong cơ sở dữ liệu chung của người, không đổi hai đường kho nháp cũ.",
+  "decisions_plain": [
+    {
+      "id": "d-20260925T205803Z-1",
+      "p": "Đã chọn để bước dựng tiền đề tự mở phiên đo riêng khi nó thấy cơ sở dữ liệu chung — đổi lại mỗi eval gọi lẻ tốn thêm một lượt khởi máy chủ."
+    },
+    {
+      "id": "d-20260925T205803Z-2",
+      "p": "Đã chọn mỗi cây một cơ sở dữ liệu đo, các phiên cùng cây xếp hàng — đổi lại eval màn chạy song song trong cùng cây phải chờ nhau."
+    },
+    {
+      "id": "d-20260925T205803Z-3",
+      "p": "Đã chọn nhân cơ sở dữ liệu đo từ một bản mẫu dựng sẵn — mỗi phiên mất khoảng 1 giây thay vì 30 giây, đổi lại mỗi cây giữ thêm một bản mẫu."
+    },
+    {
+      "id": "d-20260925T205803Z-4",
+      "p": "Đã chọn để phiên tự tìm hai cổng trống thay vì dùng cổng eval ghi sẵn — không đụng máy chủ của cây khác, đổi lại eval ghi cứng cổng không đi theo phiên."
+    },
+    {
+      "id": "d-20260925T205803Z-5",
+      "p": "KHÔNG quét độ phủ tiêu chí — vòng đời một phiên đã liệt đủ, đổi lại không có bằng chứng độ phủ."
+    },
+    {
+      "id": "d-20260925T205803Z-6",
+      "p": "KHÔNG làm vòng duyệt giao diện — vòng này không đổi màn nào."
+    },
+    {
+      "id": "d-20260925T205803Z-7",
+      "p": "KHÔNG viết đặc tả trải nghiệm — vòng này không chạm giao diện người dùng."
+    },
+    {
+      "id": "d-20260925T205803Z-8",
+      "p": "KHÔNG dọn ba chu kỳ OKR thử trong cơ sở dữ liệu chung của người — dữ liệu đó là của người."
+    },
+    {
+      "id": "d-20260925T211051Z-9",
+      "p": "Đã chọn đặt mốc «đã qua onboarding» trong lúc mở phiên, sau lần đăng nhập đầu — vì cơ sở dữ liệu mới chưa có hàng workspace lúc nạp dữ liệu mẫu."
+    },
+    {
+      "id": "d-20260925T222924Z-10",
+      "p": "Đã chọn thêm mã băm vào tên cơ sở dữ liệu của cây có tên lạ — hai cây khác tên không bao giờ dùng chung, đổi lại tên khó đọc hơn với cây tên lạ."
+    },
+    {
+      "id": "d-20260925T222924Z-11",
+      "p": "Đã chọn cho phép đo dọn-theo-tuổi dùng đồng hồ giả lập về tương lai — lượt chấm 3 thấy lượt quét này chạm cả cơ sở dữ liệu của cây khác; đã sửa ở lượt 4 (tiêu chí mới AC-14)."
+    },
+    {
+      "id": "d-20260925T222924Z-12",
+      "p": "Đã chọn in XANH/ĐỎ rõ ở dòng kết của phép đo trước-gộp — người chấm hết đọc nhầm mã; phép đo không đổi."
+    },
+    {
+      "id": "d-20260926T014138Z-13",
+      "p": "Anh đã chọn sửa ngay lỗi bộ kiểm chạm cơ sở dữ liệu của cây khác (Ngoài-6 cũ) — đổi lại chấm thêm lượt thứ 4, vượt trần 3 lượt."
+    }
+  ]
+}

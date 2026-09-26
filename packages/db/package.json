@@ -42,6 +42,7 @@
 		"db:seed": "bun scripts/require-local-db.ts db:seed && prisma db seed",
 		"db:studio": "prisma studio",
 		"db:test": "bun scripts/test-db.ts",
+		"db:do": "bun scripts/measure-db.ts",
 		"test": "bun test",
 		"dev:prepare": "bun scripts/prepare-dev.ts",
 		"lint": "biome check .",
