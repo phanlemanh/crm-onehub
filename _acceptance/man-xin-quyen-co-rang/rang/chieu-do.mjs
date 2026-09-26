@@ -65,7 +65,7 @@ const VET = [
 		mong: 1,
 		ghim: "khong khac nhau tung doi mot",
 		sua: (s) => {
-			const both = s.match(/both: "(OneHub Center[^"]*)"/)?.[1];
+			const both = s.match(/both: "(OneHub Center đọc[^"]*)"/)?.[1];
 			if (!both) return s;
 			return s.replace(
 				/microsoft:\n\t\t\t"OneHub Center đọc thư Outlook[^"]*"/,

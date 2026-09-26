@@ -34,6 +34,14 @@ const THAY_THE = [
 	},
 ];
 const SO_THAY_THE_KHAC = ["cua-vao-dang-nhap/E14"];
+const NEO_LAI = [
+	{
+		tep: "_acceptance/man-xin-quyen-co-rang/rang/chieu-do.mjs",
+		cu: '(CRM[^"]*)',
+		moi: '(OneHub Center đọc[^"]*)',
+		ly: "sau khi the ten, cau tieng Anh cung bat dau bang ten nen regex phai neo vao cau tieng Viet de giu dung dot bien cu",
+	},
+];
 const TEN =
 	/\b(?:the |your |this |The |This |Your )?(?:OneHub )?CRM(?: OneHub)?\b|\bOneHub Center\b/g;
 const DAU = "\u0000TEN\u0000";
@@ -185,6 +193,7 @@ function trongSanPham(chuoi, ref) {
 
 export function capHopLe(cap, base) {
 	if (!/\bCRM\b/.test(cap.cu)) return false;
+	if (NEO_LAI.some((n) => n.tep === cap.tep && n.cu === cap.cu && n.moi === cap.moi)) return true;
 	if (chuan(cap.cu) === chuan(cap.moi)) return true;
 	return trongSanPham(cap.cu, base) && trongSanPham(cap.moi, "HEAD");
 }
