@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { headerGuiApi } from "@/lib/api-proxy-headers";
 import { bufferedProxyResponse } from "@/lib/api-proxy-response";
-import { API_URL } from "@/lib/env";
+import { API_URL, khoaXacThuc } from "@/lib/env";
 
 async function handler(request: Request): Promise<Response> {
 	await connection();
@@ -9,7 +9,7 @@ async function handler(request: Request): Promise<Response> {
 	const url = new URL(request.url);
 	const target = `${API_URL}${url.pathname}${url.search}`;
 
-	const headers = headerGuiApi(request.headers);
+	const headers = headerGuiApi(request.headers, khoaXacThuc());
 
 	const init: RequestInit & { duplex?: "half" } = {
 		method: request.method,

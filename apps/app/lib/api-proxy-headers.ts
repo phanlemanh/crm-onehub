@@ -1,5 +1,4 @@
 import { headerProxyKyDiaChi } from "@crm/auth/dia-chi";
-import { khoaXacThuc } from "@/lib/env";
 
 const HEADER_BO = [
 	"host",
@@ -14,10 +13,7 @@ const HEADER_BO = [
 	"expect",
 ] as const;
 
-export function headerGuiApi(
-	vao: Headers,
-	khoa: string | undefined = khoaXacThuc(),
-): Headers {
+export function headerGuiApi(vao: Headers, khoa: string | undefined): Headers {
 	const ra = headerProxyKyDiaChi(vao, khoa);
 	for (const header of HEADER_BO) ra.delete(header);
 	return ra;
