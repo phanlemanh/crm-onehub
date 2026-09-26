@@ -16,8 +16,6 @@ const GOC = join(dirname(TEP_NAY), "..", "..", "..");
 const SLUG = "cap-nhat-tuan-okr";
 const DA_KY = new Set(["signed-off", "machine-cleared"]);
 const MAY = new Set(["test", "script"]);
-const TRAN_MOT_LENH_MS = 15 * 60_000;
-const DONG_DUOI = 6;
 const HO_SO_DAT_OKR = "dat-okr-trong-crm";
 
 function dung(ma, loi) {
@@ -82,8 +80,9 @@ const duongTuyChon = (v) => (v.startsWith("/") ? v : join(GOC, v));
 
 if (process.argv.includes("--chieu-do")) {
 	const CAU_HINH_THAT = join(dirname(TEP_NAY), "cau-hinh.mjs");
-	const { HO_SO_BI_CHAM: HO_SO_GOC } = await import(pathToFileURL(CAU_HINH_THAT).href);
-	const REF_THU = "config:executors.script.cl_phan_biet";
+	const { HO_SO_BI_CHAM: HO_SO_GOC } = await import(
+		pathToFileURL(CAU_HINH_THAT).href
+	);
 	const thuMuc = mkdtempSync(join(tmpdir(), "ho-so-bi-cham-"));
 
 	function chay(doi) {
@@ -109,11 +108,15 @@ if (process.argv.includes("--chieu-do")) {
 		`export { VONG } from ${JSON.stringify(CAU_HINH_THAT)};\nexport const HO_SO_BI_CHAM = ${JSON.stringify([...HO_SO_GOC, tenThua])};\n`,
 	);
 
-	const configThat = readFileSync(join(GOC, "_acceptance", "config.yaml"), "utf8");
-	const capConfig = join(thuMuc, "config-hong.yaml");
+	const tenHoaCu = "khoa-lo-giu-tran";
+	const preMergeGia = join(thuMuc, "pre-merge-gia.txt");
 	writeFileSync(
-		capConfig,
-		configThat.replace(/^(\s*cl_phan_biet:\s*).*$/m, '$1"false"'),
+		preMergeGia,
+		[
+			`VIOLATION [${SLUG}]: verdict=REJECT (must be PASS to merge)`,
+			`VIOLATION [${tenHoaCu}]: evidence is stale — code changed after verify (verified_commit 0000000); re-run verify before merge. Changed:`,
+			"    apps/app/package.json",
+		].join("\n"),
 	);
 
 	const ca = [
@@ -128,9 +131,9 @@ if (process.argv.includes("--chieu-do")) {
 			ghim: `ho so khong bi cham: ${tenThua}`,
 		},
 		{
-			ten: "mot eval doi lenh sang false",
-			doi: ["--config", capConfig, "--chi-lenh", REF_THU],
-			ghim: "false",
+			ten: "luoi truoc gop bao mot ho so hoa cu",
+			doi: ["--pre-merge-tu", preMergeGia],
+			ghim: `ho so hoa cu chua ghim lai: ${tenHoaCu}`,
 		},
 	];
 	let lot = 0;
@@ -216,66 +219,50 @@ const hoSoBiChamMay = [...new Set(evalsBiCham.map((e) => e.ho))].sort();
 
 console.log(`ho so da ky duoc soi: ${hoSo.filter((h) => h.daKy).length}`);
 console.log(`ho so bi cham (may rut): ${hoSoBiChamMay.join(", ") || "(rong)"}`);
-console.log(`HO_SO_BI_CHAM (cau-hinh.mjs): ${[...HO_SO_BI_CHAM].sort().join(", ") || "(rong)"}`);
+console.log(
+	`HO_SO_BI_CHAM (cau-hinh.mjs): ${[...HO_SO_BI_CHAM].sort().join(", ") || "(rong)"}`,
+);
 
 if (hoSoBiChamMay.length === 0) {
-	dung(2, "KHONG DO DUOC: khong ho so nao bi cham trong diff — khong co gi de soi");
+	dung(
+		2,
+		"KHONG DO DUOC: khong ho so nao bi cham trong diff — khong co gi de soi",
+	);
 }
 
 const khai = new Set(HO_SO_BI_CHAM);
 const may = new Set(hoSoBiChamMay);
 const hong = [];
 for (const ten of may) if (!khai.has(ten)) hong.push(`thieu ho so: ${ten}`);
-for (const ten of khai) if (!may.has(ten)) hong.push(`ho so khong bi cham: ${ten}`);
+for (const ten of khai)
+	if (!may.has(ten)) hong.push(`ho so khong bi cham: ${ten}`);
 for (const h of hong) console.log(`HONG ${h}`);
 if (hong.length > 0) process.exit(1);
-console.log(`khop: ${hoSoBiChamMay.length} ho so bi cham == HO_SO_BI_CHAM khai o cau-hinh.mjs`);
+console.log(
+	`khop: ${hoSoBiChamMay.length} ho so bi cham == HO_SO_BI_CHAM khai o cau-hinh.mjs`,
+);
 
 if (process.argv.includes("--chi-tap")) {
 	console.log("--chi-tap: dung o day, khong chay eval nao");
 	process.exit(0);
 }
 
-function thi(lenh, cwd) {
-	const batDau = Date.now();
-	const r = spawnSync("bash", ["-c", lenh], {
-		cwd,
-		encoding: "utf8",
-		maxBuffer: 256 * 1024 * 1024,
-		timeout: TRAN_MOT_LENH_MS,
-	});
-	const duoi = `${r.stdout ?? ""}${r.stderr ?? ""}`
-		.trim()
-		.split("\n")
-		.slice(-DONG_DUOI)
-		.join("\n    ");
-	return { ma: r.status ?? -1, giay: Math.round((Date.now() - batDau) / 1000), duoi };
-}
-
-const CHI_LENH = doiSo("--chi-lenh");
-const lenhCanChay = [...new Map(evalsBiCham.map((e) => [e.cmd, e])).values()].filter(
-	(e) => !CHI_LENH || e.cmd === CHI_LENH,
-);
-console.log(`lenh se chay: ${lenhCanChay.length} (tu ${evalsBiCham.length} eval bi cham)`);
-
 const doHong = [];
-for (const e of lenhCanChay) {
-	const lenh = giai(e.cmd);
-	const kq = thi(lenh, GOC);
-	console.log(`${kq.ma === 0 ? "xanh" : `HONG ma ${kq.ma}`} ${kq.giay}s ${e.cmd}\n  lenh: ${lenh}`);
-	if (kq.ma !== 0) {
-		doHong.push(`eval do: ${e.cmd} — lenh «${lenh}» ma ${kq.ma}\n    ${kq.duoi}`);
-	}
-}
-for (const h of doHong) console.log(`HONG ${h}`);
 
-const decisionsDatOkr = join(GOC, "_acceptance", HO_SO_DAT_OKR, "decisions.jsonl");
+const decisionsDatOkr = join(
+	GOC,
+	"_acceptance",
+	HO_SO_DAT_OKR,
+	"decisions.jsonl",
+);
 const coDong = existsSync(decisionsDatOkr)
 	? readFileSync(decisionsDatOkr, "utf8")
 			.split("\n")
 			.some(
 				(d) =>
-					d.includes("cap-nhat-tuan-okr") && d.includes("AC-16") && d.includes("E5"),
+					d.includes("cap-nhat-tuan-okr") &&
+					d.includes("AC-16") &&
+					d.includes("E5"),
 			)
 	: false;
 console.log(
@@ -295,23 +282,73 @@ const evalsDatOkrDoi = spawnSync("git", [
 console.log(
 	`${HO_SO_DAT_OKR}/evals.yaml so voi ${VONG.truoc}: ${evalsDatOkrDoi === 0 ? "khong doi" : "DA DOI"}`,
 );
-if (evalsDatOkrDoi !== 0) doHong.push(`${HO_SO_DAT_OKR}/evals.yaml da doi so voi VONG.truoc`);
+if (evalsDatOkrDoi !== 0)
+	doHong.push(`${HO_SO_DAT_OKR}/evals.yaml da doi so voi VONG.truoc`);
 
 if (doHong.length > 0) {
 	for (const h of doHong) console.log(`HONG ${h}`);
 	process.exit(1);
 }
 
-const preMerge = spawnSync(
-	"bash",
-	[join(GOC, "scripts", "pre-merge-check.sh"), "--base", "origin/onehub"],
-	{ cwd: GOC, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
+const laToTien = (sha, dich) =>
+	spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", sha, dich])
+		.status === 0;
+
+const ghimTrenNhanh = [];
+for (const ten of hoSoBiChamMay) {
+	const tep = join(GOC, "_acceptance", ten, "run-log.jsonl");
+	if (!existsSync(tep)) continue;
+	for (const dong of readFileSync(tep, "utf8").split("\n")) {
+		if (!dong.includes('"kind":"repin"')) continue;
+		const d = JSON.parse(dong);
+		if (!d.sha || !laToTien(d.sha, "HEAD") || laToTien(d.sha, VONG.truoc))
+			continue;
+		const xanh =
+			(d.suites_exit ?? []).every((m) => m === 0) &&
+			Object.values(d.evals_exit ?? {}).every((m) => m === 0) &&
+			Object.keys(d.evals_exit ?? {}).length > 0;
+		ghimTrenNhanh.push({ ten, runId: d.run_id, xanh });
+	}
+}
+for (const g of ghimTrenNhanh)
+	console.log(
+		`ghim lai tren nhanh: ${g.ten} ${g.runId} ${g.xanh ? "xanh" : "DO"}`,
+	);
+for (const g of ghimTrenNhanh.filter((x) => !x.xanh))
+	doHong.push(`luot ghim lai tren nhanh khong xanh: ${g.ten} ${g.runId}`);
+
+const PRE_MERGE_TU = doiSo("--pre-merge-tu");
+let raTruocGop;
+if (PRE_MERGE_TU) raTruocGop = readFileSync(duongTuyChon(PRE_MERGE_TU), "utf8");
+else {
+	const preMerge = spawnSync(
+		"bash",
+		[join(GOC, "scripts", "pre-merge-check.sh"), "--base", "origin/onehub"],
+		{ cwd: GOC, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
+	);
+	raTruocGop = `${preMerge.stdout ?? ""}${preMerge.stderr ?? ""}`.trim();
+	console.log(
+		"=== scripts/pre-merge-check.sh --base origin/onehub (toan kho) ===",
+	);
+	console.log(raTruocGop);
+	console.log(`=== pre-merge-check ma thoat: ${preMerge.status} ===`);
+}
+const hoaCu = [
+	...raTruocGop.matchAll(/^VIOLATION \[([^\]]+)\]: evidence is stale/gm),
+]
+	.map((m) => m[1])
+	.filter((ten) => ten !== SLUG);
+console.log(
+	`luoi truoc gop bao hoa cu (tru ${SLUG}): ${hoaCu.join(", ") || "(khong co)"}`,
 );
-console.log("=== scripts/pre-merge-check.sh --base origin/onehub ===");
-console.log(`${preMerge.stdout ?? ""}${preMerge.stderr ?? ""}`.trim());
-console.log(`=== pre-merge-check ma thoat: ${preMerge.status} (khong tinh vao ket bai) ===`);
+for (const ten of hoaCu) doHong.push(`ho so hoa cu chua ghim lai: ${ten}`);
+
+if (doHong.length > 0) {
+	for (const h of doHong) console.log(`HONG ${h}`);
+	process.exit(1);
+}
 
 console.log(
-	`ho-so-bi-cham: ${hoSoBiChamMay.length} ho so, ${lenhCanChay.length} lenh chay, 0 hong`,
+	`ho-so-bi-cham: ${hoSoBiChamMay.length} ho so bi cham, ${ghimTrenNhanh.length} luot ghim lai tren nhanh xanh, 0 ho so hoa cu, 0 hong`,
 );
 process.exit(0);

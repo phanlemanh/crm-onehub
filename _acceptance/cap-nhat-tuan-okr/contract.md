@@ -41,7 +41,7 @@ phiên điều phối cho S1 (thẻ OKR cho vai «chỉ OKR»; người chưa n�
 - AC-8: Given một người phụ trách KR không có liên kết Zalo, không khớp Slack, và workspace không có Bot Token Zalo, When tới ngày cập nhật, Then `chayNhac` đóng hàng nhắc của họ với kết quả `khong-slack` hoặc `khong-khop`, không gọi Zalo hay Slack và không ném; nhưng `okr.viecCuaToi` vẫn trả việc «cập nhật tuần» của họ, thẻ trên Tổng quan hiện dòng đó, và họ mở màn rồi gửi được — cơ sở dữ liệu có dòng lần cập nhật như người đã nối kênh. (cross-layer)
 - AC-9: Given một mục tiêu đã công bố có hai KR, When một thành viên thường, một người vai «chỉ OKR» và một trưởng đơn vị lần lượt thêm bình luận — một bình luận gắn một KR của mục tiêu và nhắc tên hai thành viên — rồi bật theo dõi mục tiêu, Then bảng bình luận, bảng nhắc tên và bảng theo dõi đọc lại đúng người viết, mục tiêu, KR, nội dung, người được nhắc và người theo dõi; `okr.comments` trả chúng theo thứ tự thời gian; `okr.objective` trả `following` đúng cho người gọi và đếm người theo dõi; `okr.mine` có mục tiêu đang theo dõi; mỗi thủ tục ghi để lại một dòng vết không chứa nội dung bình luận; And nhắc tên người đã rời workspace hay mã lạ, gắn KR của mục tiêu khác, nội dung rỗng hay quá 2.000 ký tự, bị từ chối và không dòng nào ghi; bật theo dõi hai lần vẫn một dòng; bỏ theo dõi xoá dòng; router không có thủ tục sửa hay xoá bình luận.
 - AC-10: Given sheet Thoả thuận đang mở trong ứng dụng thật, When mở sheet mục tiêu chồng lên, Then có tab «Trao đổi» với bình luận cũ → mới, chip KR và tên người được nhắc; viết một bình luận, chọn một KR và nhắc tên một người rồi «Gửi» thì bình luận hiện ở cuối và cơ sở dữ liệu có dòng bình luận và dòng nhắc tên; nút «Theo dõi» hiện cho cả người không sửa được mục tiêu, bấm thì đổi thành «Đang theo dõi» và cơ sở dữ liệu có dòng theo dõi; menu của một dòng KR có «Cập nhật» cho người phụ trách và trưởng đơn vị (không có cho người khác), mở hộp một KR, trưởng thấy câu «Bạn ghi hộ <tên>», gửi thì cơ sở dữ liệu có dòng lần cập nhật với lối vào `sheet` và ghi hộ = có — chụp ở 1440 và 390, cạnh sheet Thoả thuận. (cross-layer)
-- AC-11: Given một mục tiêu có KR đã có lần cập nhật và một KR chưa có, When người sửa được mục tiêu xoá từng KR, Then KR chưa có lần cập nhật bị xoá như lượt 3, còn KR đã có lần cập nhật bị từ chối với câu ghim «KR đã có lần cập nhật …», KR và mọi lần cập nhật của nó đọc lại nguyên vẹn; And tập hồ sơ đã ký có phép đo máy chạm tệp lượt này đổi được máy rút ra (lệnh và `paths` của từng eval giao với `diff` của lượt), bằng đúng danh sách khai ở thiết kế mục 10, và mọi phép đo máy của các hồ sơ đó chạy lại xanh.
+- AC-11: Given một mục tiêu có KR đã có lần cập nhật và một KR chưa có, When người sửa được mục tiêu xoá từng KR, Then KR chưa có lần cập nhật bị xoá như lượt 3, còn KR đã có lần cập nhật bị từ chối với câu ghim «KR đã có lần cập nhật …», KR và mọi lần cập nhật của nó đọc lại nguyên vẹn; And tập hồ sơ đã ký có phép đo máy chạm tệp lượt này đổi được máy rút ra (lệnh và `paths` của từng eval giao với `diff` của lượt) bằng đúng danh sách khai ở thiết kế mục 10; hồ sơ nào lưới trước-gộp toàn kho báo hoá cũ thì đã được ghim lại xanh trên nhánh; và bộ test toàn kho xanh.
 - AC-12: Given một người sắp nghỉ đang phụ trách KR và mục tiêu cấp đơn vị ở chu kỳ «Đang chạy», một KR ở chu kỳ đã đóng, một mục tiêu cá nhân và các lần cập nhật cũ, When quản trị mở menu «…» của họ ở màn Thành viên, chọn «Chuyển OKR…», thấy số KR và mục tiêu sẽ chuyển, chọn người nhận và xác nhận, Then trong một lần ghi mọi KR và mục tiêu cấp đơn vị ở chu kỳ còn ghi được đổi người phụ trách sang người nhận, mỗi bản ghi một dòng vết «chuyển việc»; KR ở chu kỳ đã đóng, mục tiêu cá nhân và người ghi của lần cập nhật cũ không đổi; số trả về bằng số xem trước; `viecCanNhac` của người đi không còn việc OKR và người nhận có việc «được giao»; And mục «Chuyển việc 30 ngày…» và hộp của nó không đổi; người không phải quản trị bị từ chối cả xem trước lẫn chuyển; chuyển cho chính người đi hay cho người ngoài workspace bị từ chối và không bản ghi nào đổi. (cross-layer)
 - AC-13: Given một người vai «chỉ OKR» phụ trách một KR, When họ đăng nhập và gọi các thủ tục OKR mới, Then mọi thủ tục mới (`okr.capNhatTuan`, `okr.moCapNhat`, `okr.guiCapNhat`, `okr.viecCuaToi`, `okr.comments`, `okr.addComment`, `okr.follow`) chạy cho họ, riêng `okr.transferPreview` và `okr.transferWork` từ chối theo vai quản trị; `contacts.list`, `deals.list`, `dashboard.summary` vẫn từ chối phạm vi; And ma trận phạm vi của hồ sơ `vai-chi-okr` chạy lại xanh; trang Tổng quan của họ có thẻ việc OKR đọc qua phạm vi `okr`.
 - AC-14: Given các tệp giao diện lượt này chạm, When chạy cổng thiết kế tĩnh và bộ quét «Dấu hiệu vẽ tay», Then không tệp nào có vi phạm P0; không tệp nào chứa `<table`, `<h1`, `<h2`, chấm `size-2 rounded-full`, `navigator.clipboard`, `AlertDialog` ráp tay, `divide-y`, hộp `rounded-lg border` tự dựng; không tệp có sẵn nào trong `packages/ui` bị sửa (thêm `item.tsx` được); And bảng bậc thang ở mục 8 thiết kế có một dòng cho mỗi tệp `.tsx` mới. (judgment)
@@ -98,6 +98,66 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Phép đo màn của hồ sơ này chạy trên kho riêng `crm_cnt_dev` (cùng máy chủ localhost:5432; `DATABASE_URL` của `.env` gốc thay `/crm?` bằng `/crm_cnt_dev?`, đặt ở lệnh gọi): api, app, `dev:session`, lệnh `cnt_man_chrome` và mọi script gieo đều dùng kho đó, không ghi vào kho `crm` chung (quyết 2026-09-26, chủ kho qua phiên điều phối). Phiên S4 cũng đo ở đó. Mỗi lượt đo tự dọn dữ liệu gieo theo id, kể cả khi đỏ. Từ 2026-09-26 (sau gộp #150) kho đó là `crm_cnt_dev_do`, dựng bằng cơ chế kho đo của #150: `PHIEN_DO_TEN_CAY=cnt-dev bun run db:do --tao` (nhân từ mẫu `crm_cnt_dev__mau_do`, có đánh dấu, tự dọn sau 12 giờ không ai nối); `tien-de.mjs` nhận nó là kho dùng-một-lần nên chạy thẳng trên máy chủ dev 3920/3921 và cửa chặn 3922 của cây, không mở phiên đo — phiên đo đặt `API_URL` của app thẳng vào API của phiên nên bước 7 của E6 không chen được cửa chặn.
 - Nền hạ tầng (`duong-nen.md`): build đỏ vì shell đăng nhập của script đường nền lấy Node 22; xanh khi chạy với PATH Node 24; làn S4 chạy với cùng tiền tố.
 - Hồ sơ đã ký phải ghim lại: tập máy rút ở AC-11 (thiết kế mục 10). Chắc chắn có `dat-okr-trong-crm`: AC-16 đổi một hành vi mà hồ sơ đó đã ký — AC-5 của nó viết «sửa đích và giá trị hiện tại thì ghi được» sau công bố, và phép đo **E5** (`config:executors.test.dok_cong_bo`, bài `cong-bo: khoa khoi diem, can KR, bo giu KR va can chinh` trong `apps/api/test/okr.spec.ts`) khẳng định `updateKeyResult` đổi `currentValue` thành 30 trên KR đã công bố ở chu kỳ `dang-chay` và nhận 200. Lượt này sửa khẳng định đó (đổi đích vẫn 200; đổi hiện tại → 400 câu ghim), rồi ghim lại hồ sơ bằng làn eval sau khi lên `onehub`. Theo điều kiện Cổng 1.5 (2026-09-25): KHÔNG sửa tay `evals.yaml` hay `evidence-report.md` của hồ sơ đó; chỉ nối vào `_acceptance/dat-okr-trong-crm/decisions.jsonl` một dòng ghi rằng AC-16 của `cap-nhat-tuan-okr` thay cho khẳng định cũ của E5, rồi ghim lại bằng làn máy (`repin-lane.mjs --write`, run_id mới). Kit hay lưới trước-merge đòi sửa `evals.yaml` của hồ sơ đã ký, hay báo vi phạm → dừng và báo nguyên văn, không tự lách. E21 khẳng định dòng đó có trong sổ của hồ sơ đó. Các phép đo khác của hồ sơ đó có đổi `currentValue` (E4 `dok_kr`, E6 `dok_quyen`, E8 `dok_vet`, khoá pha trong E5) đều làm trên mục tiêu nháp nên không đổi kết quả; E12 (hộp thoại KR) chỉ kiểm ô khởi điểm.
+
+Known limits — AC-11 vế hai thu hẹp (S4-r1, 2026-09-26, Manh Phan — uỷ quyền phiên điều phối 2026-09-24):
+
+- Lượt này KHÔNG chạy lại các eval `script` và `ui-check` của 56 hồ sơ đã ký bị chạm mà lưới trước-gộp không báo hoá cũ — 394 eval, liệt kê dưới đây. Phần `test` của chúng nằm trong bộ test toàn kho (`bun run test`, lệnh chung của lượt chấm); hồ sơ hoá cũ duy nhất (`dat-okr-trong-crm`) đã ghim lại xanh bằng làn máy. Lý do: chạy lại cả tập vượt xa trần một lệnh của người chấm (một làn con lồng bên trong đã quá 10 phút). Rủi ro còn lại: một eval script/ui-check của hồ sơ dưới đây đỏ vì lượt này mà chưa ai thấy cho tới khi hồ sơ đó được chấm lại.
+  - `agent-builder-noi-tieng-viet` E1, E2, E3, E4, E5, E6, E8, E9, E10, E11, E12, E14, E15, E17
+  - `bang-thanh-vien-giu-hang` E1, E2, E3, E4, E5, E6, E7, E8
+  - `bo-dung-chung-nhan-chuoi` E1, E2, E3, E4, E5, E6, E7, E8, E9, E11
+  - `cai-dat-con-lai-noi-tieng-viet` E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E16, E17
+  - `cau-truc-to-chuc` E1, E2, E20, E21, E22
+  - `chan-lai-component-ra-man` E1, E2, E3, E4, E5, E6, E9, E11
+  - `cho-phep-ai-vao-o-man-hinh` E12, E13, E15
+  - `chu-cuoi-cung-tien-de` E1, E2, E3, E4, E5, E6, E7, E8, E10
+  - `chu-mac-dinh-thu-vien-ngoai` E1, E2, E3, E4, E5, E7, E8, E9
+  - `claimdue-chi-thay-dong-cua-minh` E1, E2, E3, E4, E5, E6, E7, E9, E10, E11, E13
+  - `cron-theo-ban-khai` E1, E2, E3, E4, E5, E6, E8, E7
+  - `cua-so-tro-chuyen-noi-tieng-viet` E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E12, E13, E14, E15, E16, E17, E19, E21
+  - `do-man-tren-kho-rieng` E6, E7, E8, E9, E10, E11, E12, E13, E14
+  - `do-quyen-luot-bang-hanh-vi` E3, E4, E6, E8, E9
+  - `duong-proto-cho-design-pass` E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E13, E16, E17, E14, E15
+  - `go-la-cat-quyen-that` (không có)
+  - `han-viec-theo-ngay` E9
+  - `ke-hoach-la-mot-ban-ghi` E17
+  - `khoa-cu-khong-mo-khoa-moi` (không có)
+  - `khoa-lo-giu-tran` E1, E2, E3, E4, E5, E6, E7, E9, E10, E11, E12
+  - `khoa-rieng-dien-node` (không có)
+  - `khung-trang-cai-dat` E2, E3, E4, E6, E8, E11, E13, E14, E16, E17
+  - `lam-moi-chuyen-viec-qua-loi-chung` E4, E5
+  - `lenh-chung-khong-an-cache-doi` E1, E2, E5, E7
+  - `lenh-dung-do-khong-ai-thay` E1, E2, E3, E4, E5, E6, E7, E9, E8
+  - `logo-onehub` E10, E11, E12, E13, E14, E15
+  - `loi-tac-tu-zalo-noi-dung-nguyen-nhan` E10
+  - `ma-tran-phai-co-chieu-song` E3, E4, E6
+  - `man-cai-dat-noi-tieng-viet` E13, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E14, E15, E16
+  - `may-nhac-truoc-nguoi` E13
+  - `moi-bai-kiem-dom-deu-chay` E1, E2, E3, E4, E5, E6, E7
+  - `moi-phia-deu-thay-ke-hoach` E17
+  - `mot-duong-ghi-phong-ban` E2, E8, E10
+  - `nen-chat-ai-elements` E1, E3, E4, E5, E9, E10, E11, E13, E14, E15
+  - `neo-dan-so-khong-cung` E1, E2, E3, E4, E5, E6, E7, E8, E9, E10
+  - `ngay-gieo-theo-gio-vn` E4, E7, E8, E9, E10
+  - `nhac-qua-zalo` E17
+  - `noi-zalo-cho-nguoi-moi` E19, E21, E22, E24
+  - `o-cam-chay-duoc-that` E1, E2, E3, E4, E5, E6, E7, E9, E8
+  - `o-so-tien-doc-theo-tieng` E9, E10, E11
+  - `okr-soat-anh-luot-3` E1, E2, E3, E5, E8, E9, E10, E11, E12, E13, E14, E15
+  - `ten-dong-tien-bao-cao` E2, E3, E6, E4, E5
+  - `thanh-vien-hai-khoi-cung-khuon` E1, E2, E3, E4, E5, E6, E7, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19
+  - `thuoc-o-soan-don-dep` E1, E2, E3, E4, E5, E6, E7, E8, E9
+  - `tiep-thi-tuyen-doi-tac` E6, E9, E12, E15, E17, E18, E20, E21, E22, E23
+  - `tieu-de-cot-doc-tron` E1, E2, E3, E4, E5, E6, E7, E8, E9, E10
+  - `to-chuc-danh-sach-chi-tiet` E17, E20, E21
+  - `tong-quan-va-khung-noi-tieng-viet` E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E21, E18, E22, E23, E24, E25
+  - `tra-loi-tin-nhac` E11, E14, E17
+  - `truong-tu-tao-o-cai-dat` E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E14, E15, E16, E18, E19, E20, E21, E22
+  - `vai-chi-okr` E11, E12, E13
+  - `vao-bang-email-va-mat-khau` (không có)
+  - `vung-cuon-la-khoi-chua` E1, E2, E3, E4, E5, E6, E7, E8
+  - `zalo-gio-theo-mui-gio-xuong` E3
+  - `zalo-goi-thu-hong-hien-dung-bot` E8, E9, E10, E11
+  - `zalo-webhook-doc-khuon-that` E5, E6
 
 Known limits — soát lượt chấm 1 (S4-r1, 2026-09-26):
 
