@@ -518,9 +518,10 @@ describe("sheets (d) năng lực", () => {
 		const tra = datBienSheets({ email: EMAIL_SHEETS, khoa: null });
 		try {
 			expect(sheets()?.enabled).toBe(false);
-			expect(markdownFor(capabilitiesFrom(null))).toContain(
-				`- ${sheets()?.label}`,
+			const nguonKhacBat = capabilitiesFrom(null).map((c) =>
+				c.id === "GOOGLE_SHEETS_KHOA" ? c : { ...c, enabled: true },
 			);
+			expect(markdownFor(nguonKhacBat)).toContain(`- ${sheets()?.label}`);
 		} finally {
 			tra();
 		}
