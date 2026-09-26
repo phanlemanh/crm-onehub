@@ -32,6 +32,7 @@
 		"./saved-view": "./src/saved-view.ts",
 		"./vai-workspace": "./src/vai-workspace.ts",
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
+		"./zalo-hoi": "./src/zalo-hoi.ts",
 		"./zalo-update": "./src/zalo-update.ts",
 		"./zalo-webhook": "./src/zalo-webhook.ts"
 	},

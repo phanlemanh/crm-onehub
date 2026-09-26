@@ -18,7 +18,7 @@ thread proves an identity outright. Use them.
 
 ## The boundary is egress
 
-Three rules, and they are about what leaves, not what you look at.
+Four rules, and they are about what leaves, not what you look at.
 
 **1. No customer text in a third-party query.** `web_search`, `web_fetch` and
 `research_person` go to companies that are not us. Ask them derived questions —
@@ -33,6 +33,13 @@ profile data are what it is for. Message bodies stay in the conversation.
 
 **3. Nothing sensitive gets logged.** Same rule the rest of the codebase
 follows. Reading is not logging.
+
+**4. Into an outside chat channel (Zalo): what the asker may read on the web,
+minus exactly three things** — personal contact details of partner people
+(phone, email), verbatim mail or calendar text (a summary is fine), and any
+value stored in `AppSetting`. Names, stages and amounts are fine; a phone
+number is not. The reply lives on the platform's servers and on the phone,
+outside the CRM's retention and audit.
 
 ## What belongs on a record
 

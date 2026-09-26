@@ -42,6 +42,8 @@ export const ALLOWED_PROPERTIES = [
 	"recheck_interval_days",
 	"sandbox_used",
 	"agent_conversations",
+	"zalo_questions",
+	"zalo_answer_latency_median_s",
 
 	"facts_by_status",
 	"facts_by_band",
@@ -141,6 +143,7 @@ export const AGENT_TOOLS = [
 	"set_field_value",
 	"write_brief",
 	"write_workspace_profile",
+	"zalo-chi-doc",
 ] as const;
 
 export const EVE_TOOLS = [

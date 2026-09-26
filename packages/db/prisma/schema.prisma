@@ -1883,6 +1883,25 @@ model ZaloUpdateSeen {
   @@map("zaloUpdateSeen")
 }
 
+model ZaloHoi {
+  id         String    @id @default(cuid())
+  messageId  String    @unique
+  crmUserId  String
+  zaloChatId String
+  sessionId  String?
+  hoiLuc     DateTime  @default(now())
+  traLoiLuc  DateTime?
+  doTreMs    Int?
+  tokenVao   Int?
+  tokenRa    Int?
+  ketQua     String
+
+  @@index([crmUserId, hoiLuc])
+  @@index([zaloChatId, ketQua])
+  @@index([hoiLuc])
+  @@map("zaloHoi")
+}
+
 model NotificationPreference {
   id        String              @id @default(cuid())
   userId    String              @unique
