@@ -50,5 +50,8 @@
 	"workspaces": [
 		"apps/*",
 		"packages/*"
-	]
+	],
+	"patchedDependencies": {
+		"@better-auth/api-key@1.6.25": "patches/@better-auth%2Fapi-key@1.6.25.patch"
+	}
 }

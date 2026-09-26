@@ -11,9 +11,11 @@ export {
 	API_KEY_EXPIRATION,
 	API_KEY_HEADER,
 	API_KEY_PREFIX,
+	API_KEY_USAGE,
 	DAY_SECONDS,
 } from "./api-keys";
 export {
+	API_KEY_PLUGIN_OPTIONS,
 	type Auth,
 	auth,
 	type Session,

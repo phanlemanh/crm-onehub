@@ -1,4 +1,4 @@
-import { apiKey } from "@better-auth/api-key";
+import { type ApiKeyConfigurationOptions, apiKey } from "@better-auth/api-key";
 import { sso } from "@better-auth/sso";
 import { db } from "@crm/db";
 import { schemas } from "@crm/validation";
@@ -8,7 +8,12 @@ import { APIError, createAuthMiddleware } from "better-auth/api";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { organization } from "better-auth/plugins/organization";
 import { decideSignInFromDb } from "./allow-list";
-import { API_KEY_EXPIRATION, API_KEY_HEADER, API_KEY_PREFIX } from "./api-keys";
+import {
+	API_KEY_EXPIRATION,
+	API_KEY_HEADER,
+	API_KEY_PREFIX,
+	API_KEY_USAGE,
+} from "./api-keys";
 import { canhKhoaApiPlugin } from "./canh-khoa-api";
 import { chayNen } from "./chay-nen";
 import { donChiaCu, PASSWORD } from "./chia-mat-khau";
@@ -75,6 +80,21 @@ if (env.microsoft) {
 		}),
 	};
 }
+
+export const API_KEY_PLUGIN_OPTIONS: ApiKeyConfigurationOptions = {
+	apiKeyHeaders: API_KEY_HEADER,
+	defaultPrefix: API_KEY_PREFIX,
+	enableSessionForAPIKeys: true,
+	requireName: true,
+	defaultKeyLength: 32,
+	maximumNameLength: 64,
+	rateLimit: { enabled: false },
+	lastRequestUpdateIntervalMs: API_KEY_USAGE.lastRequestIntervalMs,
+	keyExpiration: {
+		maxExpiresIn: API_KEY_EXPIRATION.maxDays,
+		minExpiresIn: API_KEY_EXPIRATION.minDays,
+	},
+};
 
 export const auth = betterAuth({
 	appName: "CRM",
@@ -261,19 +281,7 @@ export const auth = betterAuth({
 			organizationProvisioning: { disabled: true },
 		}),
 
-		apiKey({
-			apiKeyHeaders: API_KEY_HEADER,
-			defaultPrefix: API_KEY_PREFIX,
-			enableSessionForAPIKeys: true,
-			requireName: true,
-			defaultKeyLength: 32,
-			maximumNameLength: 64,
-			rateLimit: { enabled: false },
-			keyExpiration: {
-				maxExpiresIn: API_KEY_EXPIRATION.maxDays,
-				minExpiresIn: API_KEY_EXPIRATION.minDays,
-			},
-		}),
+		apiKey(API_KEY_PLUGIN_OPTIONS),
 		canhKhoaApiPlugin(),
 	],
 
