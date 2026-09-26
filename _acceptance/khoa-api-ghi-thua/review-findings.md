@@ -1,32 +1,32 @@
 ## Trong hợp đồng
 
-### AC-11 guard reads the wrong setting: the global auth.options.secondaryStorage instead of the api-key plugin's own storage/customStorage
-- file: `apps/api/test/khoa-api-ghi-thua.spec.ts:140`
-- severity: medium
-- source: conventions
-- AC: AC-9
-- detail: The new test `khong-secondary-storage` and its helper `khongCoSecondaryStorage` (line 36) only check `auth.options.secondaryStorage`. The installed @better-auth/api-key does not choose its storage from that global setting — it resolves its own `storage: config?.storage ?? "database"` (dist/index.mjs:2342) and reads `opts.customStorage` first (line 140: `if (opts.customStorage) return opts.customStorage; return ctx.context.secondaryStorage`). The patched secondary-storage path (which AC-9 now admits is touched) only runs when the plugin sets `storage: "secondary-storage"` (lines 271/310/449/1703). The guard gets it wrong both ways: (1) false red — enabling a global secondaryStorage for sessions/rate-limiting while `apiKey({...})` stays on default database storage fails the test even though the api-key path is unchanged; (2) false green — `apiKey({ storage: "secondary-storage", customStorage: {...} })` with no global secondaryStorage takes exactly the patched path and the test stays green. AC-11's stated invariant (repo does not use the secondary-storage path of the patch) is therefore not held by a machine. Should read the api-key plugin's resolved options (storage === "database" and no customStorage) instead, e.g. from the `api-key` entry in `auth.options.plugins`.
-- rationale: AC-9's own text asserts "AC-11 giữ điều kiện đó bằng máy" (AC-11 mechanically enforces that the repo does not take the secondary-storage path); the finding shows the check reads the wrong signal and can be fooled both ways, so that clause of AC-9 fails as written.
-
-### AC-11 guard checks auth.options.secondaryStorage, but the api-key storage mode is set by the plugin's own `storage` option
-- file: `apps/api/test/khoa-api-ghi-thua.spec.ts:140`
-- severity: medium
-- source: bugs
-- AC: AC-9
-- detail: The test `khong-secondary-storage` (and `khongCoSecondaryStorage`) only checks `auth.options.secondaryStorage`. In the installed @better-auth/api-key, the storage path is chosen by the plugin option `storage` (dist/index.mjs:2342), and the storage instance comes from `opts.customStorage` first, falling back to `ctx.context.secondaryStorage` only after that (lines 140-141). This breaks the guard two ways: (1) missed red — `apiKey({ storage: "secondary-storage", customStorage: {...} })` in `packages/auth/src/auth.ts` moves key verification onto the secondary-storage path (the same path AC-9 says the patch also changes, via `claimUsageInSecondaryStorage` using the patched `stampLastRequest`, line 1942), yet `auth.options.secondaryStorage` stays undefined so E15/AC-11 stays green with no signal; (2) false red — turning on auth-level `secondaryStorage` for session caching turns E15 red even though the api-key plugin keeps `storage: "database"` and the patched secondary-storage path is never reached. The check that matches the real condition is on the apiKey plugin's resolved options: `storage !== "secondary-storage"` (and no `customStorage`).
-- rationale: Same root defect as the first finding: AC-9 explicitly claims AC-11 mechanically holds the "kho không dùng đường secondary-storage" condition, and this finding demonstrates the guard's condition does not track the actual branch selector, breaking that clause of AC-9.
-
-### Shape 1 (measures the instruction, not the output): khong-secondary-storage checks auth.options.secondaryStorage, but the plugin picks the secondary-storage path from its own opts.storage / opts.customStorage
-- file: `apps/api/test/khoa-api-ghi-thua.spec.ts:141`
-- severity: medium
-- source: measurement
-- AC: AC-9
-- detail: Lines 141-142 read `auth.options.secondaryStorage` and call `khongCoSecondaryStorage` on it, but neither the patch nor the plugin ever read that value to pick a branch — the branch is chosen by the api-key plugin's `opts.storage` (dist/index.mjs lines 249-449, 1703, 1729, 1739), with the storage backend picked at line 140 (`opts.customStorage` first, falling back to `ctx.context.secondaryStorage`). So a config like `apiKey({ storage: "secondary-storage", customStorage: {...}, lastRequestUpdateIntervalMs })` runs the patched `stampLastRequest` on the secondary-storage path while `auth.options.secondaryStorage` stays undefined and E15 stays green; conversely a global secondaryStorage with the plugin still on `storage: "database"` does not touch the patched secondary path but still fails the test. The red half of the test (lines 143-151) only proves the helper throws on a hand-written `{get,set,delete}` object — it never shows the real config ends up on the secondary-storage path. The value that decides is the resolved `storage`/`customStorage` of the apiKey plugin in the real auth config, not `auth.options.secondaryStorage`.
-- rationale: Same root defect restated via test-shape framing: it falsifies AC-9's clause that "AC-11 giữ điều kiện đó bằng máy", since the guard's checked value does not correspond to the real condition that determines the secondary-storage path.
+- **Hình dạng 1 — đo CHỈ DẪN thay vì ĐẦU RA: AC-11 kiểm hằng khai báo API_KEY_PLUGIN_OPTIONS, không kiểm tuỳ chọn mà plugin trong `auth` thật sự nhận**
+  file: `apps/api/test/khoa-api-ghi-thua.spec.ts:146`
+  severity: medium
+  AC: AC-11
+  detail: Ca 'khong-secondary-storage' (E15) chỉ gọi `khongDiDuongSecondary(API_KEY_PLUGIN_OPTIONS)` (dòng 146) trên hằng được export từ packages/auth/src/auth.ts, cùng hai bản chép `{...API_KEY_PLUGIN_OPTIONS, ...}` (dòng 148-166). Không assert nào nối hằng đó với cấu hình mà `auth` đã dựng, dù contract AC-11 đặt nó làm vế Given: hằng 'mà auth.ts truyền nguyên vào apiKey()'. Hàm `apiKey()` của @better-auth/api-key (node_modules/@better-auth/api-key/dist/index.mjs, khoảng dòng 2398-2400) trả về object plugin `{ id: "api-key", version, $ERROR_CODES, hooks, ... }` mà không để lộ `configurations`. Vì vậy phép kiểm đọc bản khai (khai gì) chứ không đọc đầu ra (plugin chạy với gì). Tình huống lọt: sửa auth.ts thành `apiKey({ ...API_KEY_PLUGIN_OPTIONS, storage: "secondary-storage", fallbackToDatabase: true })`. Hằng không đổi nên E15 vẫn xanh. E1-E5 cũng không bắt được. Lý do: kho không có `ctx.context.secondaryStorage`, nên `getStorageInstance` trả null và nhánh `storage === "secondary-storage" && fallbackToDatabase` vẫn đọc và ghi qua adapter CSDL. Kho khi đó đã đi đường secondary-storage mà AC-9 và AC-11 định chặn, nhưng mọi eval vẫn xanh. Muốn đo đầu ra thì cần một đối chứng chạm vào `auth` đã dựng, hoặc một ràng buộc máy rằng lời gọi `apiKey(...)` trong auth.ts nhận đúng tham chiếu hằng đó. Ca hiện tại không có cả hai.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **card.html đặt AC-11 sai nhóm: rơi khỏi «SẼ làm», hiện nguyên văn Given/When/Then trong «Sẽ KHÔNG làm / sẽ chặn»**
+  Người dùng thấy gì: Màn hình duyệt phạm vi đang xếp nhầm một lời hứa mới (AC-11) vào nhóm 'sẽ KHÔNG làm', và hiện chữ kỹ thuật thô thay vì câu thường — người ký có thể hiểu nhầm tính năng này sẽ không được làm.
+  file: `_acceptance/khoa-api-ghi-thua/card.html`
+  severity: medium
+  Đề xuất: new-contract
+
+- **card.html puts AC-11 in the wrong group and shows raw Given/When/Then text instead of the plain sentence**
+  Người dùng thấy gì: Màn hình duyệt phạm vi đang xếp nhầm một lời hứa mới (AC-11) vào nhóm 'sẽ KHÔNG làm', và hiện chữ kỹ thuật thô thay vì câu thường — người ký có thể hiểu nhầm tính năng này sẽ không được làm.
+  file: `_acceptance/khoa-api-ghi-thua/card.html`
+  severity: medium
+  Đề xuất: new-contract
+
+- **The expired-key tRPC 401 check runs after the library has already deleted the key, so it proves nothing about expiry**
+  Người dùng thấy gì: Bài kiểm thử khoá hết hạn có thể vẫn báo đạt ngay cả khi phần kiểm tra hết hạn bị hỏng, vì phép thử tình cờ đúng nhờ một lý do khác — một lỗi liên quan đến khoá API hết hạn có thể không được phát hiện sớm.
+  file: `apps/api/test/khoa-api-ghi-thua.spec.ts`
+  severity: low
+  Đề xuất: known-limits
 
 - **Bản vá tạo lại mang theo tệp .bun-tag cũ, giờ có hai tệp đánh dấu rỗng (r2)**
   Người dùng thấy gì: Bản vá đi kèm một tệp dấu vết thừa còn sót từ lần vá trước, không ảnh hưởng gì tới việc dùng khoá API — chỉ là rác nhỏ trong tệp nguồn của bản vá.
@@ -46,4 +46,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 2/4 lỗi rơi vào file không bộ đo nào phủ (_acceptance/khoa-api-ghi-thua/card.html) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
