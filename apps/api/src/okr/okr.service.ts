@@ -84,6 +84,26 @@ const quanHeDonVi = {
 	person: { select: { name: true } },
 } as const;
 export const chonTenDonVi = { level: true, ...quanHeDonVi } as const;
+export const chonSoMay = {
+	nguonMay: {
+		select: {
+			loai: true,
+			chiSo: true,
+			phamVi: true,
+			bac: true,
+			sheetId: true,
+			sheetO: true,
+			docLuc: true,
+			docGiaTri: true,
+			docLoi: true,
+		},
+	},
+	soChup: {
+		orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
+		take: 1,
+		select: { ngay: true, giaTri: true, nguon: true },
+	},
+} satisfies Prisma.OkrKeyResultInclude;
 const chonMucTieu = {
 	owner: { select: chonNguoi },
 	participants: {
@@ -93,24 +113,7 @@ const chonMucTieu = {
 	keyResults: {
 		include: {
 			owner: { select: chonNguoi },
-			nguonMay: {
-				select: {
-					loai: true,
-					chiSo: true,
-					phamVi: true,
-					bac: true,
-					sheetId: true,
-					sheetO: true,
-					docLuc: true,
-					docGiaTri: true,
-					docLoi: true,
-				},
-			},
-			soChup: {
-				orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
-				take: 1,
-				select: { ngay: true, giaTri: true, nguon: true },
-			},
+			...chonSoMay,
 		},
 		orderBy: { position: "asc" },
 	},
@@ -219,6 +222,30 @@ function ghiKhac(
 
 const ngay = (d: Date) => ngayVN(d);
 const toDate = (s: string) => new Date(`${s}T00:00:00Z`);
+
+type ChupGanNhat = {
+	ngay: Date;
+	giaTri: Prisma.Decimal | number;
+	nguon: string;
+};
+
+export function doCanhVaSoMay(
+	nguon: string,
+	coNguonMay: boolean,
+	chup: ChupGanNhat | undefined,
+) {
+	return {
+		doCanh: nguon === "tay" && coNguonMay,
+		soMay:
+			coNguonMay && chup
+				? {
+						giaTri: soKr(chup.giaTri),
+						ngay: ngay(chup.ngay),
+						nguon: loaiNguonMay.parse(chup.nguon),
+					}
+				: null,
+	};
+}
 
 type ChuKyDong = {
 	id: string;
@@ -1079,15 +1106,7 @@ export class OkrService {
 					dueOn: k.dueOn ? ngay(k.dueOn) : null,
 					weight: soKr(k.weight),
 					source,
-					doCanh: source === "tay" && k.nguonMay !== null,
-					soMay:
-						k.nguonMay && chup
-							? {
-									giaTri: soKr(chup.giaTri),
-									ngay: ngay(chup.ngay),
-									nguon: loaiNguonMay.parse(chup.nguon),
-								}
-							: null,
+					...doCanhVaSoMay(source, k.nguonMay !== null, chup),
 					nguonMay: k.nguonMay
 						? {
 								...parseOkrNguon(k.nguonMay),

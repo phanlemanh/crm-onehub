@@ -1,5 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
-import { dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
+import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import {
 	type GuiCapNhatInput,
 	kiemGiaTriTheoKieu,
@@ -7,7 +7,6 @@ import {
 	MUC_TU_TIN,
 } from "@crm/validation/okr-cap-nhat";
 import { kieuKr, NGUON_KR } from "@crm/validation/okr-kr";
-import { LOAI_NGUON_MAY } from "@crm/validation/okr-nguon";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -18,17 +17,21 @@ import {
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import type { CapNhatTuanOutput } from "./okr.contracts";
-import { chonTenDonVi, OkrService, tenDonVi } from "./okr.service";
+import {
+	chonSoMay,
+	chonTenDonVi,
+	doCanhVaSoMay,
+	OkrService,
+	tenDonVi,
+} from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
 const mucTuTin = z.enum(MUC_TU_TIN);
 const nguonKr = z.enum(NGUON_KR);
-const loaiNguonMay = z.enum(LOAI_NGUON_MAY);
 const soDb = (d: Prisma.Decimal | number) => Number(d);
 const ngayDb = (s: string) => new Date(`${s}T00:00:00Z`);
-const ngay = (d: Date) => ngayVN(d);
 
 @Injectable()
 export class OkrCapNhatService {
@@ -56,12 +59,7 @@ export class OkrCapNhatService {
 						cycle: { select: { updateWeekday: true } },
 					},
 				},
-				nguonMay: { select: { loai: true } },
-				soChup: {
-					orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
-					take: 1,
-					select: { ngay: true, giaTri: true, nguon: true },
-				},
+				...chonSoMay,
 			},
 			orderBy: [
 				{ objective: { createdAt: "asc" } },
@@ -96,15 +94,7 @@ export class OkrCapNhatService {
 						cuoi !== undefined &&
 						cuoi.weekStart.toISOString().slice(0, 10) === tuan,
 					nguon,
-					doCanh: nguon === "tay" && k.nguonMay !== null,
-					soMay:
-						k.nguonMay && chup
-							? {
-									giaTri: soDb(chup.giaTri),
-									ngay: ngay(chup.ngay),
-									nguon: loaiNguonMay.parse(chup.nguon),
-								}
-							: null,
+					...doCanhVaSoMay(nguon, k.nguonMay !== null, chup),
 				};
 			}),
 			weekStart: tuan,

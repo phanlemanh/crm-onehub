@@ -13,6 +13,7 @@ import request from "supertest";
 import type { ViecCuaToiOutput } from "../src/okr/okr.contracts";
 import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { OKR } from "../src/okr/okr-config";
+import { OkrSoService } from "../src/okr/okr-so.service";
 import { OkrTraoDoiService } from "../src/okr/okr-trao-doi.service";
 import {
 	type AiHoacCookie,
@@ -1938,18 +1939,12 @@ describe("kr-may", () => {
 		}
 		await chupKrCrm(db, krM, NGAY, parseOkrNguon);
 		await chupKrCrm(db, krC, NGAY, parseOkrNguon);
-		await db.okrKeyResult.update({
-			where: { id: krA },
-			data: { currentValue: 40 },
-		});
-		await db.okrSoChup.create({
-			data: {
-				keyResultId: krA,
-				ngay: new Date(`${NGAY}T00:00:00Z`),
-				giaTri: 40,
-				nguon: "api",
-			},
-		});
+		const so = ungDung().get(OkrSoService);
+		await so.ghiSoKr(
+			chu,
+			{ id: krA, giaTri: 40 },
+			new Date(`${NGAY}T03:00:00Z`),
+		);
 		krVoiSoChup.push(krM, krA, krC);
 
 		const truoc = await doc<{ items: DongCapNhatMay[] }>(
