@@ -2220,6 +2220,7 @@ model OkrSoChup {
   tacGiaUserId String?
   chupLuc      DateTime     @default(now())
 
+  @@unique([keyResultId, ngay], map: "okrSoChup_may_mot_ngay", where: raw("nguon = ANY (ARRAY['crm'::text, 'bang-tinh'::text])"))
   @@index([keyResultId, ngay])
   @@map("okrSoChup")
 }

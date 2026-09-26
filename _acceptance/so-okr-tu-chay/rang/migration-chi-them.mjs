@@ -25,6 +25,7 @@ const GHIM = Object.freeze({
 	dropIndex: "migration khong chi them: DROP INDEX",
 	lienKhoi: "model Okr khong lien cuoi schema",
 	xoaLan: "bản chụp bị xoá lan",
+	chiMucSchema: "chi muc mot phan khong khai trong schema.prisma",
 });
 
 const git = (...d) =>
@@ -141,6 +142,16 @@ function soatTinh({ moi, docSql, schema }) {
 	for (const m of MODEL_MOI)
 		if (!khoi.includes(m))
 			hong.push(`thieu model ${m} trong khoi Okr cuoi schema`);
+	const modelChup =
+		schema.match(/^model OkrSoChup \{([\s\S]*?)^\}/m)?.[1] ?? "";
+	const khaiChiMuc = new RegExp(
+		`^\\s*@@unique\\(\\[keyResultId, ngay\\], map: "${CHI_MUC_MAY}", where: `,
+		"m",
+	).test(modelChup);
+	if (!khaiChiMuc)
+		hong.push(
+			`${GHIM.chiMucSchema}: model OkrSoChup thieu @@unique ${CHI_MUC_MAY} co where`,
+		);
 	return { hong, dem };
 }
 
@@ -368,6 +379,16 @@ function chieuDo() {
 			schema,
 			ma: 1,
 			ghim: GHIM.xoaLan,
+		},
+		{
+			nhan: "chi muc mot phan vang khoi schema.prisma",
+			sql: DOI_CHUNG,
+			schema: schema.replace(
+				/^\s*@@unique\(\[keyResultId, ngay\], map: "okrSoChup_may_mot_ngay".*\n/m,
+				"",
+			),
+			ma: 1,
+			ghim: GHIM.chiMucSchema,
 		},
 		{
 			nhan: "doi chung duong",
