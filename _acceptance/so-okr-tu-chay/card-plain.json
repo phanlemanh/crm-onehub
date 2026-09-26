@@ -1,188 +1,93 @@
 {
-  "feature_plain": "Con số của KR tự lấy từ CRM, từ máy khác qua khoá API hoặc từ một ô Google Sheets; mỗi ngày giữ lại một bản không đổi, và bấm vào số là thấy bản ghi làm nên nó.",
-  "will_do": [
-    {
-      "id": "AC-1",
-      "p": "Sẽ có danh mục bảy chỉ số CRM với định nghĩa cố định — đếm gì, ngày nào quyết định kỳ, quy cho ai — và từ chối mọi chỉ số hay tham số ngoài danh mục."
-    },
-    {
-      "id": "AC-2",
-      "p": "Sẽ đếm đúng bảy chỉ số cho toàn công ty, một bộ phận, một phòng ban hay một người, bỏ bản ghi đã lưu trữ và bản ghi ngoài kỳ theo giờ Việt Nam."
-    },
-    {
-      "id": "AC-3",
-      "p": "Sẽ cho người sửa được KR chọn nguồn số khi mục tiêu còn nháp; sau khi công bố chỉ thêm được số đo cạnh cho KR nhập tay, mỗi lần đổi để lại vết."
-    },
-    {
-      "id": "AC-4",
-      "p": "Sẽ chụp số mỗi ngày một lần trên nhịp sẵn có của tác tử, chỉ thêm, không chụp trùng, và không làm chậm nhắc buổi sáng kể cả khi Google treo."
-    },
-    {
-      "id": "AC-5",
-      "p": "Sẽ giữ nguyên số của ngày đã chụp và của kỳ đã khép khi dữ liệu cũ, người, hay đồng tiền báo cáo đổi sau đó."
-    },
-    {
-      "id": "AC-6",
-      "p": "Sẽ trả danh sách bản ghi đằng sau con số của một ngày, nói rõ khi số tính lại lúc này khác số đã chụp; vai «chỉ OKR» thấy số nhưng không thấy danh sách."
-    },
-    {
-      "id": "AC-7",
-      "p": "Sẽ cho bấm vào con số trong bảng KR để mở ngăn «Số của KR» có danh sách bản ghi và lịch sử theo ngày, mở tiếp được từng bản ghi."
-    },
-    {
-      "id": "AC-8",
-      "p": "Sẽ thêm ô «Nguồn số» vào hộp thoại KR với số xem trước, mã KR để chép cho khoá API, và trạng thái đọc thử cho Google Sheets."
-    },
-    {
-      "id": "AC-9",
-      "p": "Sẽ nhận số của KR từ máy khác bằng khoá API của người sửa được KR, từ chối khi sai quyền, sai kiểu số hay ngoài kỳ."
-    },
-    {
-      "id": "AC-10",
-      "p": "Sẽ đọc một ô Google Sheets bằng tài khoản dịch vụ chỉ đọc, gọi tên nguyên nhân khi đọc hỏng, và tắt êm khi quản trị chưa cắm khoá."
-    },
-    {
-      "id": "AC-11",
-      "p": "Sẽ giữ cập nhật tuần cho KR có số máy: số khoá theo máy, KR đo cạnh được điền sẵn số máy, người vẫn chọn mức tự tin và ghi chú."
-    },
-    {
-      "id": "AC-12",
-      "p": "Sẽ có phép thử tin số — năm chỉ số so với số đếm độc lập, lệch khai trước — và câu đếm tỷ lệ KR có nguồn CRM tách số hiệu lực với số đo cạnh."
-    },
-    {
-      "id": "AC-13",
-      "p": "Sẽ giữ đúng phạm vi dữ liệu của bốn vai cho sáu thủ tục mới."
-    },
-    {
-      "id": "AC-15",
-      "p": "Sẽ thêm hai bảng mới mà không sửa bảng hay dữ liệu cũ; mọi KR đang có vẫn là nhập tay."
-    }
-  ],
-  "scope_plain": "Không tiền, không giai đoạn thoả thuận, không truy vấn tự do, không kỳ đo riêng, không sửa lịch sử, không ghi ngược bảng tính, không đổi nguồn sau khi công bố.",
-  "coverage_plain": [
-    {
-      "i": 0,
-      "p": "Bốn nguồn số (tay, CRM, khoá API, Google Sheets) đều có tiêu chí đặt, đo và ghi (AC-3, AC-4, AC-9, AC-10, AC-11); đủ nghĩa là khớp danh sách nguồn của lộ trình."
-    },
-    {
-      "i": 1,
-      "p": "Cả vòng đời một con số — đặt nguồn, đo, chụp, bấm vào, cập nhật tuần, đổi giữa kỳ, khép kỳ — mỗi bước có tiêu chí (AC-2 tới AC-8, AC-11)."
-    },
-    {
-      "i": 2,
-      "p": "Mọi người chạm tới số — người phụ trách KR, trưởng đơn vị, quản trị, thành viên thường, vai «chỉ OKR», máy cầm khoá — có tiêu chí quyền (AC-3, AC-6, AC-9, AC-13)."
-    },
-    {
-      "i": 3,
-      "p": "Bảy chỉ số nhân bốn phạm vi đo hết bằng một ma trận viết trước (AC-1, AC-2)."
-    },
-    {
-      "i": 4,
-      "p": "Việc áp mọi nơi: vết trên mọi lần ghi, khoá theo pha, ba trạng thái màn, hai khổ màn, hai thứ tiếng, trí khôn ở tác tử, bảng chỉ thêm, đường đo."
-    },
-    {
-      "i": 5,
-      "p": "Đối chiếu ngành: Perdoo cho chọn bảng tính, trang, ô; Tability điền sẵn số mới nhất nhưng người vẫn ghi; Profit.co đồng bộ nguồn ngoài hằng ngày."
-    },
-    {
-      "i": 6,
-      "p": "Giả định chờ anh gạch: kỳ đo là chu kỳ của mục tiêu, số cộng dồn từ ngày đầu chu kỳ."
-    },
-    {
-      "i": 7,
-      "p": "Giả định chờ anh gạch: theo phòng ban là theo phòng ban chính của người lúc đếm; số đã chụp không tính lại khi người chuyển phòng."
-    },
-    {
-      "i": 8,
-      "p": "Giả định chờ anh gạch: số của một ngày được chụp ngay sau nửa đêm; số «hôm nay» chỉ thấy ở dòng xem trước và ngăn số."
-    },
-    {
-      "i": 9,
-      "p": "Giả định chờ anh gạch: KR có số máy vẫn cập nhật tuần — số khoá, người ghi mức tự tin và ghi chú; KR đo cạnh được điền sẵn số máy."
-    },
-    {
-      "i": 10,
-      "p": "Giả định chờ anh gạch: nguồn khoá khi công bố; sau đó chỉ thêm số đo cạnh, tiến độ theo số tay tới hết kỳ."
-    },
-    {
-      "i": 11,
-      "p": "Giả định chờ anh gạch: danh sách bản ghi của một ngày cũ là danh sách tính lại hôm nay theo định nghĩa của ngày đó; lệch thì màn nói ra."
-    },
-    {
-      "i": 12,
-      "p": "Giả định chờ anh gạch: email gửi ra tính cho thành viên có địa chỉ gửi trùng email của họ; thư từ bí danh không tính."
-    },
-    {
-      "i": 13,
-      "p": "Giả định chờ anh gạch: ghi danh đạt bậc tính cho người cầm trịch kế hoạch; form thành cá nhân tính cho người phụ trách cá nhân."
-    }
-  ],
-  "gap_probe_plain": [
-    {
-      "i": 0,
-      "p": "Thước 50% từng gộp KR đo cạnh vẫn gõ tay, nên có thể báo «sống» khi người vẫn đếm tay. Đã sửa: câu đếm tách số hiệu lực và số đo cạnh, thêm tỷ lệ lần cập nhật tuần người nhận số máy, và cập nhật tuần điền sẵn số máy cho KR đo cạnh."
-    },
-    {
-      "i": 1,
-      "p": "Chưa nói danh sách của ngày cũ tính theo định nghĩa lúc chụp hay định nghĩa hiện tại. Đã sửa: dùng định nghĩa lưu cùng bản chụp, có phép đo cho ca đổi phạm vi sau khi chụp."
-    },
-    {
-      "i": 2,
-      "p": "Lịch sử có thể bị xoá lan qua khoá ngoại hay câu lệnh thô mà phép đo không thấy. Đã sửa: khoá ngoại chặn xoá, phép đo soi cả câu lệnh thô."
-    },
-    {
-      "i": 3,
-      "p": "Trần thời gian của lượt chụp do chính người làm đặt, và đọc Google Sheets không có trần mỗi nhịp. Đã sửa: ghim 20 giây cho 200 KR, 60 giây khi Google treo, có trần số lần đọc mỗi nhịp."
-    },
-    {
-      "i": 4,
-      "p": "Thiếu ca máy ngoài đẩy số sau ngày cuối kỳ và ca KR nguồn API trong cập nhật tuần. Đã sửa: thêm cả hai ca vào tiêu chí và phép đo."
-    }
-  ],
-  "decisions_plain": [
-    {
-      "id": "d-20260926T132639Z-1",
-      "p": "Đã chọn một định nghĩa đếm dùng chung cho con số và danh sách — đổi lại thêm một mô-đun đọc bảy bảng nguồn ở tầng dữ liệu."
-    },
-    {
-      "id": "d-20260926T132639Z-2",
-      "p": "Đã chọn chụp ngay trong nhịp sẵn có của tác tử, không thêm việc vào hàng đợi — đổi lại lượt chụp không hiện trong hàng việc, lỗi đọc Sheets hiện ở cấu hình nguồn của KR."
-    },
-    {
-      "id": "d-20260926T132639Z-3",
-      "p": "Đã chọn tính lại danh sách lúc bấm thay vì lưu mã bản ghi mỗi ngày — đổi lại danh sách của ngày cũ là danh sách hôm nay, màn nói rõ khi lệch."
-    },
-    {
-      "id": "d-20260926T132639Z-4",
-      "p": "Đã chọn đọc Google Sheets bằng tài khoản dịch vụ chỉ đọc — đổi lại chủ kho phải tạo tài khoản trong Google Cloud và người dùng phải chia sẻ bảng tính cho nó."
-    },
-    {
-      "id": "d-20260926T132639Z-5",
-      "p": "Đã chọn khoá nguồn khi công bố, sau đó chỉ thêm số đo cạnh — đổi lại KR đã công bố muốn lái tiến độ bằng số máy phải đợi kỳ sau."
-    },
-    {
-      "id": "d-20260926T132639Z-6",
-      "p": "KHÔNG chạy phiên thiết kế trước cổng — đổi lại anh duyệt giao diện bằng chữ hôm nay, và nhìn ảnh màn thật ở 1440 và 390 tại Cổng Bằng chứng."
-    },
-    {
-      "id": "d-20260926T132639Z-7",
-      "p": "KHÔNG làm kỳ đo riêng theo tháng hay tuần — đổi lại KR theo tháng phải đặt thành đích cộng dồn của quý."
-    },
-    {
-      "id": "d-20260926T134542Z-9",
-      "p": "Đã chọn để tác tử và bài kiểm cùng đi một đường ghi bản chụp thật ở tầng dữ liệu — đổi lại tầng dữ liệu có thêm một hàm ghi."
-    },
-    {
-      "id": "d-20260926T134542Z-10",
-      "p": "Đã chọn cho phiên đo màn đọc một Google giả bằng hai biến chỉ dùng ngoài production — đổi lại có hai biến chỉ phục vụ đo."
-    },
-    {
-      "id": "d-20260926T143607Z-11",
-      "p": "Lần duyệt kế hoạch trước (mười bốn việc, mỗi việc một tác nhân con có người soát) — sẽ trình lại sau khi anh duyệt lại phạm vi."
-    },
-    {
-      "id": "d-20260926T144011Z-12",
-      "p": "Đã mở lại phạm vi về nháp để đi đúng thứ tự kit: Cổng Đáng trước, rồi duyệt lại trên thẻ nêu đủ cờ — đổi lại thêm hai lượt gõ của anh."
-    }
-  ]
+ "feature_plain": "KR của khối kinh doanh tự lấy số từ bảy chỉ số CRM có định nghĩa cố định, mỗi sáng chụp số thành lịch sử không sửa được, bấm vào số thấy các bản ghi làm nên nó; KR ngoài CRM nhận số qua khoá API hoặc một ô Google Sheets.",
+ "scope_plain": "Tám thứ để kỳ sau: giá trị tiền, chỉ số tự định nghĩa, máy chọn mức tự tin, kỳ đo tự chọn, sửa bản chụp, ghi ngược Sheets, đổi nguồn sau công bố, cảnh báo lệch số.",
+ "decisions": [
+  {
+   "id": "E24",
+   "q": "Phần soi thiết kế và kiến trúc của lượt này có đạt không?",
+   "why": "Ba giám khảo báo «chưa chắc» vì chỉ được đưa bản thiết kế, không được đưa mã. Phần đo được bằng máy của cùng tiêu chí (E23, soi mã theo bảng dấu hiệu vẽ tay) đã xanh, và lượt soát cuối toàn nhánh không còn lỗi luật kho nào. Máy nghiêng về Đạt."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260926T132639Z-1",
+   "p": "Đã chọn một định nghĩa đếm dùng chung cho cả con số lẫn danh sách bản ghi — đổi lại tầng dữ liệu có thêm một mô-đun đọc bảy loại bản ghi."
+  },
+  {
+   "id": "d-20260926T132639Z-2",
+   "p": "Đã chọn chụp số ngay trên nhịp chạy sẵn của tác tử, mỗi KR một dòng mỗi ngày — đổi lại lượt chụp không hiện trong hàng việc của tác tử."
+  },
+  {
+   "id": "d-20260926T132639Z-3",
+   "p": "Đã chọn tính lại danh sách bản ghi lúc bấm và nói rõ khi lệch với số đã chụp — đổi lại danh sách của một ngày cũ là danh sách hôm nay."
+  },
+  {
+   "id": "d-20260926T132639Z-4",
+   "p": "Đã chọn đọc Google Sheets bằng một tài khoản dịch vụ chỉ đọc — đổi lại chủ kho phải tạo tài khoản đó và người dùng phải chia sẻ bảng tính cho nó."
+  },
+  {
+   "id": "d-20260926T132639Z-5",
+   "p": "Đã chọn khoá nguồn số khi công bố, sau đó chỉ thêm được số đo cạnh — đổi lại KR đã công bố muốn chạy bằng số máy phải đợi kỳ sau."
+  },
+  {
+   "id": "d-20260926T132639Z-6",
+   "p": "KHÔNG làm bản mẫu bấm được trước khi duyệt phạm vi — thay bằng ảnh màn thật ở Cổng Bằng chứng; đổi lại lệch thẩm mỹ chỉ lộ ở cổng này."
+  },
+  {
+   "id": "d-20260926T132639Z-7",
+   "p": "KHÔNG làm kỳ đo tự chọn theo tháng hay tuần — số cộng dồn từ đầu chu kỳ; đổi lại KR «mỗi tháng» phải đặt thành đích cộng dồn của quý."
+  },
+  {
+   "id": "d-20260926T134542Z-9",
+   "p": "Đã chọn để bài kiểm ghi lịch sử qua đúng đường ghi thật của tác tử — đổi lại tầng dữ liệu có thêm một hàm ghi."
+  },
+  {
+   "id": "d-20260926T134542Z-10",
+   "p": "Đã chọn cho phép đo màn dùng Google giả qua hai biến chỉ có hiệu lực ngoài production — đổi lại có hai biến chỉ để đo."
+  },
+  {
+   "id": "d-20260926T143607Z-11",
+   "p": "Bản duyệt kế hoạch cũ qua phiên điều phối — đã thay bằng bản chủ kho duyệt trực tiếp ngay dưới."
+  },
+  {
+   "id": "d-20260926T144011Z-12",
+   "p": "Đã mở lại Cổng Phạm vi để đi đúng thứ tự: quyết có làm trước, duyệt phạm vi sau — đổi lại thêm hai lượt gõ của chủ kho."
+  },
+  {
+   "id": "d-20260926T144613Z-14",
+   "p": "Đã chấp nhận nền máy đỏ sẵn vì dùng Node 22, lượt chấm chạy bằng Node 24 — đổi lại mọi lượt chấm phải nhớ điều đó."
+  },
+  {
+   "id": "d-20260926T144729Z-15",
+   "p": "Chủ kho duyệt kế hoạch mười bốn việc, mỗi việc một tác nhân và một người soát — đổi lại tốn thêm một ngữ cảnh mỗi việc."
+  },
+  {
+   "id": "d-20260926T152001Z-16",
+   "p": "Đã dời danh mục chỉ số xuống tầng dữ liệu và dời dữ liệu gieo sang quý 2 năm 2026 — đổi lại danh mục sống khác chỗ thiết kế viết."
+  },
+  {
+   "id": "d-20260926T160256Z-17",
+   "p": "Đã chỉnh ba chỗ đo cho khớp đường ghi thật, lời hứa giữ nguyên — đổi lại lần đọc Sheets thứ hai khi Google chậm chỉ còn nửa thời gian."
+  },
+  {
+   "id": "d-20260926T163213Z-18",
+   "p": "Đã thêm hạn thời gian cho cả lượt chụp và chặn ghi số vào mục tiêu đã bỏ — đổi lại hai câu tiêu chí đổi chữ, lời hứa giữ nguyên."
+  },
+  {
+   "id": "d-20260926T172058Z-19",
+   "p": "Mức lệch cho phép trên production (0 đến 2 bản ghi, thư gửi ra 10%) là đề xuất của máy, chủ kho chốt ở cổng này — đổi lại nợ cũ của kho không được lượt này dọn."
+  },
+  {
+   "id": "d-20260926T182051Z-20",
+   "p": "Đã đo màn cập nhật tuần theo hành vi có từ lượt 4 (nút Gửi tắt khi chưa chọn mức tự tin) — đổi lại lỗi thanh Gửi không sát đáy chưa được sửa."
+  },
+  {
+   "id": "d-20260926T185404Z-21",
+   "p": "Mục tiêu nháp không được chụp số, KR mốc hay phần trăm không lấy được số đếm CRM, số từ Sheets phải hợp kiểu KR — đổi lại bản nháp không có số máy hằng ngày."
+  },
+  {
+   "id": "d-20260926T192603Z-22",
+   "p": "KR đang lấy số CRM không đổi được sang mốc hay phần trăm — đổi lại người phải đổi nguồn trước rồi mới đổi kiểu."
+  }
+ ]
 }
