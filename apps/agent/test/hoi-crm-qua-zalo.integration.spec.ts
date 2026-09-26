@@ -293,3 +293,16 @@ describe("dang-ban", () => {
 		expect(moi.loai).toBe("hoi");
 	});
 });
+
+describe("dang-ban", () => {
+	test("dang-ban: hai tick cung luc chi bao tacTuLoi mot lan", async () => {
+		const A = await gieoVai("An", "member");
+		const goc = vn("2026-10-15", "10:00");
+		await hoi("ZA", A.id, new Date(goc.getTime() - ZALO.hoi.hanTraLoiMs - GIAY_MS));
+		const zalo = zaloGia();
+		const dep = { now: () => goc, fetcher: zalo.fetcher, token: TOKEN };
+		const [mot, hai] = await Promise.all([dongHoiQuaHan(dep), dongHoiQuaHan(dep)]);
+		expect(mot + hai, "chi mot tick dong duoc hang").toBe(1);
+		expect(zalo.guiToi("ZA").length, "tacTuLoi mot lan").toBe(1);
+	});
+});
