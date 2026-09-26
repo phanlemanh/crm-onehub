@@ -1,3 +1,11 @@
+import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import {
+	addCommentInput,
+	commentsInput,
+	followInput,
+	transferOkrInput,
+	transferOkrPreviewInput,
+} from "@crm/validation/okr-trao-doi";
 import { Inject } from "@nestjs/common";
 import {
 	Ctx,
@@ -12,6 +20,7 @@ import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViOkrMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
+	addCommentOutput,
 	alignmentInput,
 	alignmentTargetsInput,
 	alignmentTargetsOutput,
@@ -19,14 +28,19 @@ import {
 	alignmentTreeOutput,
 	byUnitInput,
 	byUnitOutput,
+	capNhatTuanOutput,
+	commentsOutput,
 	countByUnitInput,
 	createCycleInput,
 	createKrInput,
 	createObjectiveInput,
 	cyclesOutput,
+	followOutput,
+	guiCapNhatOutput,
 	idInput,
 	mineInput,
 	mineOutput,
+	moCapNhatOutput,
 	objectiveInput,
 	objectiveOutput,
 	okOutput,
@@ -39,10 +53,15 @@ import {
 	programOutput,
 	setCyclePhaseInput,
 	setProgramInput,
+	thanhVienOutput,
+	transferOkrOutput,
 	updateKrInput,
 	updateObjectiveInput,
+	viecCuaToiOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import {
 	cayCanChinhOutput,
 	cycleOnlyInput,
@@ -61,6 +80,8 @@ export class OkrRouter {
 	constructor(
 		@Inject(OkrService) private readonly okr: OkrService,
 		@Inject(OkrXemService) private readonly xem: OkrXemService,
+		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
+		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -362,5 +383,110 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.cayCanChinh(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		output: capNhatTuanOutput,
+		meta: restMeta("GET", "/okr/check-ins/mine", TAG),
+	})
+	capNhatTuan(@Ctx() ctx: AuthedTrpcContext) {
+		return this.capNhat.capNhatTuan(ctx.user.id);
+	}
+
+	@Mutation({
+		input: moCapNhatInput,
+		output: moCapNhatOutput,
+		meta: restMeta("POST", "/okr/check-in-sessions", TAG),
+	})
+	moCapNhat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moCapNhatInput>,
+	) {
+		return this.capNhat.moCapNhat(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: guiCapNhatInput,
+		output: guiCapNhatOutput,
+		meta: restMeta("POST", "/okr/check-ins", TAG),
+	})
+	guiCapNhat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof guiCapNhatInput>,
+	) {
+		return this.capNhat.guiCapNhat(ctx.user.id, input);
+	}
+
+	@Query({
+		output: viecCuaToiOutput,
+		meta: restMeta("GET", "/okr/my-work", TAG),
+	})
+	viecCuaToi(@Ctx() ctx: AuthedTrpcContext) {
+		return this.traoDoi.viecCuaToi(ctx.user.id);
+	}
+
+	@Query({
+		output: thanhVienOutput,
+		meta: restMeta("GET", "/okr/members", TAG),
+	})
+	thanhVien() {
+		return this.traoDoi.thanhVien();
+	}
+
+	@Query({
+		input: commentsInput,
+		output: commentsOutput,
+		meta: restMeta("GET", "/okr/objectives/{objectiveId}/comments", TAG),
+	})
+	comments(@Input() input: z.infer<typeof commentsInput>) {
+		return this.traoDoi.comments(input.objectiveId);
+	}
+
+	@Mutation({
+		input: addCommentInput,
+		output: addCommentOutput,
+		meta: restMeta("POST", "/okr/objectives/{objectiveId}/comments", TAG),
+	})
+	addComment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof addCommentInput>,
+	) {
+		return this.traoDoi.addComment(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: followInput,
+		output: followOutput,
+		meta: restMeta("PUT", "/okr/objectives/{objectiveId}/follow", TAG),
+	})
+	follow(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof followInput>,
+	) {
+		return this.traoDoi.follow(ctx.user.id, input);
+	}
+
+	@Query({
+		input: transferOkrPreviewInput,
+		output: transferOkrOutput,
+		meta: restMeta("GET", "/okr/transfer/{fromUserId}", TAG),
+	})
+	transferPreview(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof transferOkrPreviewInput>,
+	) {
+		return this.traoDoi.transferPreview(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: transferOkrInput,
+		output: transferOkrOutput,
+		meta: restMeta("POST", "/okr/transfer", TAG),
+	})
+	transferWork(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof transferOkrInput>,
+	) {
+		return this.traoDoi.transferWork(ctx.user.id, input);
 	}
 }

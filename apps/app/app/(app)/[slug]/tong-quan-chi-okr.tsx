@@ -11,10 +11,17 @@ import {
 import { getLocale } from "@/lib/locale/server";
 import { tongQuanMessages } from "@/lib/messages/tong-quan";
 import { DUONG_NHAC_BUOI_SANG } from "@/lib/pham-vi-man";
+import { HydrateClient } from "@/lib/trpc/hydrate";
+import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { workspaceUrl } from "@/lib/workspace-url";
+import { ViecOkrCuaToi } from "./okr/viec-cua-toi";
 
 export async function TongQuanChiOkr({ slug }: { slug: string }) {
+	const taiViec = getServerQueryClient().prefetchQuery(
+		getServerTrpc().okr.viecCuaToi.queryOptions(),
+	);
 	const m = tongQuanMessages(await getLocale());
+	await taiViec;
 
 	return (
 		<PageShell>
@@ -26,6 +33,9 @@ export async function TongQuanChiOkr({ slug }: { slug: string }) {
 			</PageShellHeader>
 
 			<PageShellContent>
+				<HydrateClient>
+					<ViecOkrCuaToi noi="tong-quan" khiHien="luon" anKhiLoi={false} />
+				</HydrateClient>
 				<div className="flex gap-2">
 					<Button asChild variant="outline">
 						<Link href={workspaceUrl(slug, "/okr")}>{m.chiOkr.noiKhu}</Link>

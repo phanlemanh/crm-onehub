@@ -200,8 +200,26 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   `"zalo"` hoặc `"slack"`, `lechKenh` là `true` khi kênh đã dùng khác lựa chọn của
   người (chọn Zalo mà Zalo chưa dùng được, hay ngược lại). `AUTO` không bao giờ lệch.
   `outcome` vẫn là `da-gui:<n>`.
-- **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở
-  `<APP_URL>/<slug>?record=plan:<id>`; vắng thì tin vẫn gửi, không liên kết.
+- **Việc OKR đi chung một tin.** `viecCanNhac` gộp việc kế hoạch với
+  `viecOkrCanNhac` (`@crm/db/okr-nhac`, hằng số ở `OKR_NHAC`) theo người, lọc thành
+  viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
+  «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi bốn loại OKR còn lại. Trần
+  `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
+  nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Khuôn Zalo
+  đánh số mọi dòng theo vị trí trong `daGui`, kể cả dòng OKR — `xong` trỏ vào một
+  số OKR bị từ chối như dòng «kế hoạch im»/«mốc ngày», không đánh dấu bước nào.
+- **`mucNhac` (`@crm/validation/nhac-ke-hoach`) là một hợp, không phải trường mới
+  thêm vào khuôn cũ.** Việc kế hoạch giữ nguyên hình `{loai, planId, stepId?}` như
+  trước khi có OKR; mỗi loại OKR có hình riêng của nó —
+  `{loai: "okr-cap-nhat", krIds}` (một hoặc nhiều KR gộp vào một dòng nhắc),
+  `{loai: "okr-kr-im", keyResultId}`, `{loai: "okr-duoc-giao", objectiveId,
+  keyResultId?}`, `{loai: "okr-nhac-ten", commentId}`,
+  `{loai: "okr-theo-doi", objectiveId}`. Đọc `payload.muc`/`daGui` phải khớp
+  đúng nhánh theo `loai`, không suy trường của nhánh này sang nhánh khác.
+- **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở: kế hoạch
+  `<APP_URL>/<slug>?record=plan:<id>`, cập nhật tuần
+  `<APP_URL>/<slug>/okr/cap-nhat-tuan?tu=nhac`, việc OKR khác
+  `<APP_URL>/<slug>/okr?record=objective:<id>`; vắng thì tin vẫn gửi, không liên kết.
 - **`payload.daGui` là thứ thước đọc**, không phải `payload.muc`. `muc` là danh sách
   lúc quét; `daGui` là đúng các dòng đã có trong tin sau khi cắt. Hai câu truy vấn
   đường đo ở `_acceptance/may-nhac-truoc-nguoi/rang/` đọc tập này. `payload` chỉ giữ
@@ -253,8 +271,9 @@ API; the API only reads and writes rows.
   và không mang vai `okr`; số n là phần tử thứ n của `daGui` trong hàng nhắc của
   hôm nay theo giờ VN, gửi qua Zalo — không có hàng như vậy thì bot nói «Hôm nay
   chưa có tin nhắc qua Zalo», không đoán theo tin hôm qua. Luật được cả hoặc không:
-  một số ngoài dải, một mục «kế hoạch im» hay «mốc ngày», hay một bước đã bị gỡ
-  hoặc kế hoạch đã đóng thì không bước nào đổi. Bước được ghi bằng `datBuocXong`
+  một số ngoài dải, một mục «kế hoạch im» hay «mốc ngày», một mục OKR (không mục
+  OKR nào mang `stepId`, nên luôn rơi vào nhánh «không phải bước»), hay một bước đã
+  bị gỡ hoặc kế hoạch đã đóng thì không bước nào đổi. Bước được ghi bằng `datBuocXong`
   (`@crm/db/onboarding-buoc`), đúng thủ tục `setStepDone` của màn kế hoạch dùng;
   dấu vết `buoc.xong` đứng tên người nhắn và mang `source: "zalo"`, còn dấu vết từ
   màn kế hoạch không có khoá đó. Bot xác nhận một dòng; không có hoàn tác qua Zalo.

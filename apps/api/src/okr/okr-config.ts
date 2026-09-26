@@ -1,5 +1,11 @@
+import {
+	LOI_KHUON_CAP_NHAT,
+	type LoiGiaTri,
+} from "@crm/validation/okr-cap-nhat";
+
 export const OKR = {
 	tenGoc: "OneHub",
+	thoiGian: { giayMs: 1000 },
 	ten: {
 		toiThieu: 3,
 		mucTieuToiDa: 200,
@@ -48,6 +54,35 @@ export const OKR = {
 		khoiDiemDaKhoa:
 			"Khởi điểm đã khoá khi công bố — chỉ sửa được đích và giá trị hiện tại.",
 		congBoCanKr: "Cần ít nhất một KR trước khi công bố.",
+		hienTaiQuaCapNhat: "KR đang chạy — đổi số hiện tại bằng Cập nhật tuần.",
+		krDaCapNhat:
+			"KR đã có lần cập nhật — không xoá được. Hãy bỏ mục tiêu hoặc đổi tên KR.",
+		capNhat: {
+			phienKhongCua: "Phiên cập nhật này không phải của bạn.",
+			phienDaGui:
+				"Phiên cập nhật này đã gửi xong — mở lại Cập nhật tuần để gửi lần mới.",
+			khongPhaiChuHayTruong:
+				"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới cập nhật được KR này.",
+			mucTieuChuaCongBo: "Chỉ cập nhật được KR của mục tiêu đã công bố.",
+			kyKhongChay: "Chỉ cập nhật được KR trong chu kỳ đang chạy.",
+			tuTinThieu: LOI_KHUON_CAP_NHAT.tuTin,
+			giaTriKhongPhaiSo: LOI_KHUON_CAP_NHAT.giaTri,
+			ghiChuQuaDai: LOI_KHUON_CAP_NHAT.ghiChu,
+			giaTri: {
+				"moc-chi-0-1": "KR kiểu «mốc» chỉ nhận 0 (chưa xong) hoặc 1 (xong).",
+				"phan-tram-ngoai-0-100":
+					"KR kiểu «phần trăm» chỉ nhận giá trị trong 0–100.",
+			} satisfies Record<LoiGiaTri, string>,
+		},
+		traoDoi: {
+			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
+			nguoiKhongCon: "Người không còn trong CRM",
+			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
+		},
+		chuyen: {
+			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
+			choChinhMinh: "Người nhận phải khác người đang phụ trách.",
+		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
 		soTheoKieu: {

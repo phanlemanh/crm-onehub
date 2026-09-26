@@ -1,5 +1,5 @@
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
-import type { LoaiNhac } from "@crm/db/onboarding-nhac";
+import type { ViecNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
@@ -24,7 +24,7 @@ export type KetTraLoi =
 	| { loai: "ngoai-dai"; sai: number[]; tran: number }
 	| {
 			loai: "khong-phai-buoc";
-			muc: { so: number; loai: LoaiNhac; url: string | null }[];
+			muc: { so: number; loai: ViecNhac["loai"]; url: string | null }[];
 	  }
 	| { loai: "buoc-doi"; muc: { so: number; lyDo: LyDoDoi }[] }
 	| { loai: "xong"; vua: MucXong[]; truoc: MucXong[] };
@@ -77,7 +77,15 @@ export async function xongTheoTinNhac(
 	if (sai.length > 0) return { loai: "ngoai-dai", sai, tran: muc.length };
 	const chon = input.so.map((so) => ({ so, muc: muc[so - 1] }));
 	const khongPhaiBuoc = chon.flatMap(({ so, muc: m }) =>
-		m && !m.stepId ? [{ so, loai: m.loai, url: input.lienKet(m.planId) }] : [],
+		m && !("stepId" in m && m.stepId)
+			? [
+					{
+						so,
+						loai: m.loai,
+						url: "planId" in m ? input.lienKet(m.planId) : null,
+					},
+				]
+			: [],
 	);
 	if (khongPhaiBuoc.length > 0) {
 		return { loai: "khong-phai-buoc", muc: khongPhaiBuoc };
@@ -86,7 +94,7 @@ export async function xongTheoTinNhac(
 	const truoc: MucXong[] = [];
 	const doi: { so: number; lyDo: LyDoDoi }[] = [];
 	for (const { so, muc: m } of chon) {
-		if (!m?.stepId) continue;
+		if (!(m && "stepId" in m && m.stepId)) continue;
 		const ket = await datBuocXong(
 			tx,
 			{ stepId: m.stepId, done: true, nguoiId: input.userId, now: input.now },

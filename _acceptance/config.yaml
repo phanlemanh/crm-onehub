@@ -229,6 +229,21 @@ executors:
     tco_ui_heatmap: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/heatmap.dom.tsx'
     tco_ui_chon_ky: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/period-select.dom.tsx'
     tco_chu: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/render-diff.spec.tsx'
+    cnt_gui_lo: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t gui-lo"'
+    cnt_khuon: 'bun run test -- "cd packages/validation && bun test test/okr-cap-nhat.spec.ts"'
+    cnt_phien_giay: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t phien-giay"'
+    cnt_ghi_ho: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t ghi-ho"'
+    cnt_nhac_cap_nhat: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t nhac-cap-nhat"'
+    cnt_nhac_im: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t nhac-im"'
+    cnt_mot_tin: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t mot-tin"'
+    cnt_su_kien: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t su-kien"'
+    cnt_viec_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t viec-cua-toi"'
+    cnt_chua_noi_kenh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t chua-noi-kenh && cd ../api && bun test test/okr-cap-nhat.spec.ts -t chua-noi-kenh"'
+    cnt_trao_doi: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t trao-doi"'
+    cnt_xoa_kr: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t xoa-kr-da-cap-nhat"'
+    cnt_chuyen_okr: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t chuyen-okr"'
+    cnt_chi_okr: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t chi-okr && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
+    cnt_hien_tai_khoa: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t hien-tai-khoa"'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
@@ -978,6 +993,11 @@ executors:
     tco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3930} API_URL=${API_URL:-http://localhost:3931} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
     tco_soi_ma: "bun _acceptance/toan-canh-okr/rang/soi-ma.mjs"
     tco_san_thiet_ke: "bun _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs"
+    cnt_duong_do: "bun _acceptance/cap-nhat-tuan-okr/rang/duong-do.mjs"
+    cnt_man_chrome: 'DATABASE_URL="$(sed -n -e "s#^DATABASE_URL=##p" .env | head -1 | tr -d "\\042" | sed "s#/crm?#/crm_cnt_dev_do?#")" NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3920} API_URL=${API_URL:-http://localhost:3921} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"'
+    cnt_san_thiet_ke: "bun _acceptance/cap-nhat-tuan-okr/rang/san-thiet-ke.mjs"
+    cnt_migration_chi_them: "node _acceptance/cap-nhat-tuan-okr/rang/migration-chi-them.mjs"
+    cnt_ho_so_bi_cham: "bun _acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs"
     tcds_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs"'
     tcds_khong_hoi_quy: "node _acceptance/to-chuc-danh-sach-chi-tiet/rang/khong-hoi-quy.mjs"
     tcds_san_thiet_ke: "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"

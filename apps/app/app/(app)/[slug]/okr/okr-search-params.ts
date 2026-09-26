@@ -1,3 +1,4 @@
+import { LOI_VAO } from "@crm/validation/okr-cap-nhat";
 import {
 	LOAI_MUC_TIEU,
 	TRANG_THAI_MUC_TIEU,
@@ -52,6 +53,7 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.trangThai]: parseAsArrayOf(
 		parseAsStringLiteral(TRANG_THAI_MUC_TIEU),
 	).withDefault([]),
+	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
 };
 
 export const loadOkrSearchParams = createLoader(okrParsers);

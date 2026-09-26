@@ -51,6 +51,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { buocQuaHan, DongBuoc, ngayCuaBuoc } from "./dong-buoc";
 import { DongKeHoach } from "./dong-ke-hoach";
+import { ViecOkrCuaToi } from "./okr/viec-cua-toi";
 import { overviewParsers } from "./overview-search-params";
 import { SalesDashboard } from "./sales-dashboard";
 
@@ -355,6 +356,8 @@ export function DashboardSummary() {
 					</CardPanel>
 				</Card>
 			</div>
+
+			<ViecOkrCuaToi noi="tong-quan" khiHien="khi-lien-quan" anKhiLoi />
 
 			<Card className="min-w-0">
 				<CardHeader>

@@ -39,7 +39,7 @@ export type Quyen = {
 
 const capMucTieu = z.enum(CAP_MUC_TIEU);
 
-const chonDonVi = {
+export const chonDonVi = {
 	id: true,
 	cycleId: true,
 	level: true,
@@ -49,7 +49,7 @@ const chonDonVi = {
 	status: true,
 } as const;
 
-function donViCua<T extends { level: string }>(
+export function donViCua<T extends { level: string }>(
 	row: T,
 ): Omit<T, "level"> & { level: CapMucTieu } {
 	return { ...row, level: capMucTieu.parse(row.level) };

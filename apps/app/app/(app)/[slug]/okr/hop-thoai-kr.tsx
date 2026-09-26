@@ -36,14 +36,16 @@ import {
 	krInput,
 } from "@crm/validation/okr-kr";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { okrMessages } from "@/lib/messages/okr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
 
-function hienSo(so: number, locale: Locale): string {
+export function hienSo(so: number, locale: Locale): string {
 	const chu = locale === "vi" ? String(so).replace(".", ",") : String(so);
 	return docSoOkr(chu) === so ? chu : `${chu}0`;
 }
@@ -66,6 +68,7 @@ export function HopThoaiKr({
 	const h = m.hopThoai;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const url = useWorkspaceUrl();
 	const ma = useId();
 	const users = useQuery(trpc.users.list.queryOptions());
 	const program = useQuery(trpc.okr.program.queryOptions());
@@ -95,6 +98,7 @@ export function HopThoaiKr({
 	const dangLuu = tao.isPending || sua.isPending;
 
 	const khoaKhoi = kr?.startLocked === true || !suaDuocCot;
+	const khoaHien = kr?.hienTaiQuaCapNhat === true;
 	const coTrongSo = program.data?.weightsOn === true;
 	const soKhoi = docSoOkr(khoi);
 	const soDich = docSoOkr(dich);
@@ -128,7 +132,9 @@ export function HopThoaiKr({
 				targetValue:
 					soDich === null || soDich === kr.targetValue ? undefined : soDich,
 				currentValue:
-					soHien === null || soHien === kr.currentValue ? undefined : soHien,
+					khoaHien || soHien === null || soHien === kr.currentValue
+						? undefined
+						: soHien,
 				unit: donVi.trim() === kr.unit ? undefined : donVi,
 				dueOn: han === kr.dueOn ? undefined : han,
 				weight:
@@ -275,9 +281,20 @@ export function HopThoaiKr({
 										inputMode="decimal"
 										autoComplete="off"
 										placeholder={khoi}
+										readOnly={khoaHien}
 										aria-invalid={soHong(hien)}
+										aria-describedby={khoaHien ? `${ma}-hien-mo-ta` : undefined}
+										data-o-hien-tai
 										onChange={(e) => setHien(e.target.value)}
 									/>
+									{khoaHien ? (
+										<FieldDescription id={`${ma}-hien-mo-ta`}>
+											{h.hienTaiDoiO}{" "}
+											<Link href={url("/okr/cap-nhat-tuan")}>
+												{h.capNhatTuan}
+											</Link>
+										</FieldDescription>
+									) : null}
 								</Field>
 							</div>
 							{loiKieu ? (

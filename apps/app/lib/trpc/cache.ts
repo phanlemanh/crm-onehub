@@ -254,9 +254,14 @@ export function useCrmCache(): CrmCache {
 					id
 						? trpc.okr.objective.queryKey({ id })
 						: trpc.okr.objective.queryKey(),
+					id
+						? trpc.okr.comments.queryKey({ objectiveId: id })
+						: trpc.okr.comments.queryKey(),
 				],
 				[
 					trpc.okr.byUnit.queryKey(),
+					trpc.okr.capNhatTuan.queryKey(),
+					trpc.okr.viecCuaToi.queryKey(),
 					trpc.okr.mine.queryKey(),
 					trpc.okr.alignmentTree.queryKey(),
 					trpc.okr.countByUnit.queryKey(),
@@ -267,6 +272,7 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.cayCanChinh.queryKey(),
 					trpc.okr.toanCanh.queryKey(),
 					trpc.okr.sucKhoe.queryKey(),
+					trpc.okr.transferPreview.queryKey(),
 				],
 				options,
 			),
