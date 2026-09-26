@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: khoa-api-ghi-thua
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: b2a0368df40e3f0340b7aba3be112ef4e635f5a9
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-26 — ký Cổng 2 trên verdict PASS sau bốn vòng chấm (vòng 4 vượt trần theo quyết định chủ kho), với năm giới hạn đã khai ở Known limits của contract, trong đó có lỗ AC-11 đo hằng khai báo chứ không đo cấu hình plugin đã dựng. Ký trên hiểu biết rằng thẻ Cổng Phạm vi lần ký lại gần nhất đã trình sai nhóm AC-11 và nội dung AC-11 được xác nhận lại ở cổng này.
 ---
 
 # Evidence Report: khoa-api-ghi-thua
@@ -157,7 +157,7 @@ Ghi chú tier: khoa-api-ghi-thua chạm `packages/auth` (api-keys.ts, auth.ts) �
   criterion: AC-9
   judged_by: panel (domain-correctness, operational-feasibility, spec-alignment)
   verdict: PASS
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Phan Le Manh 2026-09-26
   votes:
     - domain-correctness: PASS — Bản vá (`@better-auth%2Fapi-key@1.6.25.patch`) chỉ có đúng hai thay đổi hành vi, cả hai đều qua hàm `stampLastRequest` mới được gọi khi và chỉ khi `opts.lastRequestUpdateIntervalMs !== void 0`: (1) hai nhánh `skip` của `evaluateRateLimit` (rate-limit tắt toàn cục, và tắt riêng khoá) đổi `lastRequest: now` thành `lastRequest: stampLastRequest(...)`; (2) `claimUsageInDatabase` thêm một `return row` sớm khi có tuỳ chọn và `opts.storage === "database"`, đúng trước lệnh `adapter.update` đóng dấu `updatedAt` — khớp mô tả trong design doc. Diff không chạm `consumeRateLimit`'s counting logic (start/reset/increment/deny) hay `consumeRemaining`, và không có dòng chú thích nào được thêm. `stampLastRequest` không phân biệt kiểu lưu trữ nên áp cả lên đường secondary-storage — đúng như design doc và AC-9 đã nêu rõ kho không cấu hình `secondaryStorage`. Ngưỡng `API_KEY_USAGE.lastRequestIntervalMs = MINUTE_MS` nằm đúng ở `packages/auth/src/api-keys.ts`, được `auth.ts` truyền vào qua `lastRequestUpdateIntervalMs: API_KEY_USAGE.lastRequestIntervalMs`. Ba nguồn (patch, api-keys.ts, design doc) nhất quán với đúng những gì AC-9 phát biểu.
     - operational-feasibility: PASS — Patch diff modifies exactly two skip branches in evaluateRateLimit via a new stampLastRequest helper that returns the original `now` when the option is absent or lastRequest is null (no behavior change without the option), and adds one guard `if (opts.lastRequestUpdateIntervalMs !== void 0 && opts.storage === "database") return row;` in claimUsageInDatabase that skips only the final updatedAt-stamping update when both the option is set and storage is "database". No hunk touches the rate-limit-enabled counting path or consumeRemaining, and no comments are added to the new code. The design doc explicitly states the evaluateRateLimit change also applies on the secondary-storage path since the function is storage-agnostic, and contract AC-9 restates this verbatim. The threshold constant lives in packages/auth/src/api-keys.ts and auth.ts's API_KEY_PLUGIN_OPTIONS (no storage/customStorage set) passes it through as lastRequestUpdateIntervalMs. All parts of the question are corroborated by the four listed input files.
@@ -169,7 +169,7 @@ Ghi chú tier: khoa-api-ghi-thua chạm `packages/auth` (api-keys.ts, auth.ts) �
   verdict: PASS
   carried_from_round: 2
   note: panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round đó
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Phan Le Manh 2026-09-26
   votes:
     - domain-correctness: PASS (r2)
     - operational-feasibility: PASS (r2)

@@ -5,7 +5,7 @@ slug: khoa-api-ghi-thua
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-26
 design_doc: docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md
@@ -87,3 +87,23 @@ tuần tự: p50 3.42ms có ghi, 3.04ms bỏ ghi); 20 kết nối cùng ghi mộ
 2.5 lần so với ghi hàng riêng (p50 3.4ms so 1.4ms). Trên production mỗi lần ghi là
 một vòng khứ hồi tới Neon — chưa đo. Cái bản vá mua là bớt hai lần ghi và bớt tranh
 khoá hàng khi một khoá bị gọi dày, không phải một cải thiện lớn về độ trễ tại chỗ.
+
+### Known limits
+
+- **AC-11 đo hằng khai báo, không đo cấu hình plugin đã dựng.** Test đọc
+  `API_KEY_PLUGIN_OPTIONS`; thư viện không để lộ cấu hình mà `apiKey()` nhận. Sửa
+  `auth.ts` thành `apiKey({ ...API_KEY_PLUGIN_OPTIONS, storage: "secondary-storage" })`
+  thì AC-11 vẫn xanh. Lời gọi `apiKey(API_KEY_PLUGIN_OPTIONS)` trong `auth.ts` được giữ
+  bằng mắt ở review. Tái lập: `grep -n "apiKey(" packages/auth/src/auth.ts`.
+- **Ca khoá hết hạn đo 401 của tRPC sau khi thư viện đã xoá hàng.** Trong
+  `tu-choi-van-giu`, `maLoi(hetHan.key)` chạy trước `goi(hetHan.key)`; lượt gọi đầu xoá
+  hàng khoá hết hạn nên 401 của tRPC đến từ «khoá không còn», mã `KEY_EXPIRED` chỉ được
+  ghim ở `getSession`. Tái lập: `grep -n "hetHan" apps/api/test/khoa-api-ghi-thua.spec.ts`.
+- **Tệp vá mang hai tệp dấu vết `.bun-tag-*` rỗng** sót từ các lần `bun patch` trước;
+  vô hại khi chạy. Tái lập: `grep -n "bun-tag" patches/*.patch`.
+- **Phép kiểm `bun.lock` bóc khối `patchedDependencies` bằng regex** và so bằng
+  `JSON.stringify`; thêm gói vá thứ hai với thứ tự khác có thể đỏ oan. Tái lập:
+  `grep -n "khoaVaTrongLock" packages/auth/test/khoa-api-ghi-thua.spec.ts`.
+- **Khoá bị xoá cứng trong khe vài mili-giây giữa đọc và trả kết quả lọt một yêu cầu**,
+  vì lần đóng dấu `updatedAt` cuối — cũng là phép kiểm hàng-còn-không — đã bỏ. Khoá bị
+  tắt không bị ảnh hưởng. Xem sổ quyết định d-20260926T000320Z-4.
