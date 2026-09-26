@@ -276,16 +276,15 @@ describe("chup-moi-ngay", () => {
 		});
 		expect(sheet.goi).toEqual(["sheet-k3!Tong!B2"]);
 
-		const luot2 = await chupSoOkr(NHIP_20_10_0005, { docO: sheet.docO });
-		const luot3 = await chupSoOkr(NHIP_20_10_0005, { docO: sheet.docO });
-		const sau = await dongCua(ten);
-		console.log(
-			`chup-moi-ngay: lượt 1 ghi ${luot1.ghi}; sau lượt 3 có ${sau.length} dòng`,
-		);
-		expect(
-			`lượt 2 ghi ${luot2.ghi} bỏ qua ${luot2.boQua}; lượt 3 ghi ${luot3.ghi} bỏ qua ${luot3.boQua}; tổng ${sau.length} dòng`,
-		).toBe("lượt 2 ghi 0 bỏ qua 0; lượt 3 ghi 0 bỏ qua 0; tổng 3 dòng");
-		expect(sau).toEqual(ky);
+		for (const lan of [2, 3]) {
+			const luot = await chupSoOkr(NHIP_20_10_0005, { docO: sheet.docO });
+			const tong = (await dongCua(ten)).length;
+			console.log(`chup-moi-ngay: sau lượt ${lan} có ${tong} dòng`);
+			expect(
+				`lượt ${lan}: ghi ${luot.ghi}, bỏ qua ${luot.boQua}, tổng ${tong} dòng`,
+			).toBe(`lượt ${lan}: ghi 0, bỏ qua 0, tổng 3 dòng`);
+		}
+		expect(await dongCua(ten)).toEqual(ky);
 		expect(`K2 sau ba lượt: ${await soHienTai(K2)}`).toBe("K2 sau ba lượt: 7");
 		expect(sheet.goi.length).toBe(1);
 	});
