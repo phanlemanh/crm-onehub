@@ -502,7 +502,7 @@ export function OGiaTri({
 					nhanNguonMay(kr.soMay.nguon, soMsg),
 					ngayThang(kr.soMay.ngay),
 				)
-			: null
+			: soMsg.trangThai.bangKr.chuaChup
 		: kr.doCanh && kr.soMay
 			? soMsg.trangThai.capNhat.soMay(
 					hienSo(kr.soMay.giaTri, locale),
