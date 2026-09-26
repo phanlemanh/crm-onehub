@@ -874,7 +874,26 @@ describe("okr-nguon", () => {
 				{ ngay: NGAY.D1, giaTri: 7, nguoi: s.phuTrach },
 			]);
 			expect(r.dong).toEqual([]);
-			expect(r.tong).toBe(0);
+			expect(r.tong).toBe(2);
+		});
+
+		test("ngay da chup giu loai nguon cua dong chup sau khi doi sang api", async () => {
+			const k = await kr(await mucTieu("dang-chay", "nhap"), "tay");
+			thanhCong(await datNguon(crmP1(k)), "dat crm");
+			expect((await chup(k, NGAY.D)).ghi).toBe(1);
+			thanhCong(await datNguon({ keyResultId: k, loai: "api" }), "doi api");
+			const r = thanhCong<BanGhiRa>(
+				await banGhi({ keyResultId: k, ngay: NGAY.D, trang: 1 }),
+				"ngay D sau doi api",
+			);
+			expect(
+				`loai ${r.loai} phamVi ${JSON.stringify(r.dinhNghia?.phamVi)} tong ${r.tong} soDaChup ${r.soDaChup}`,
+			).toBe(
+				`loai crm phamVi ${JSON.stringify({ kieu: "phong-ban", id: s.P1 })} tong ${SO_P1} soDaChup ${SO_P1}`,
+			);
+			expect(r.dinhNghia?.chiSo).toBe("thoa-thuan-chot-duoc");
+			expect(r.lech).toBe(false);
+			expect(r.lanGhi).toEqual([]);
 		});
 	});
 
@@ -960,6 +979,36 @@ describe("okr-nguon", () => {
 			} finally {
 				poke.mockRestore();
 				globalThis.fetch = fetchGoc;
+			}
+		});
+
+		test("xep viec doc Sheets hong sau khi luu: loi goi van thanh cong, cau hinh da ghi", async () => {
+			camSheets();
+			const trigger = ungDung().get(AgentTriggerService);
+			const hong = spyOn(trigger, "okrDocSheet").mockRejectedValue(
+				new Error("agentTask khong ghi duoc"),
+			);
+			try {
+				const k = await kr(await mucTieu("dang-chay", "nhap"), "tay");
+				const tra = await datNguon({
+					keyResultId: k,
+					loai: "bang-tinh",
+					url: SHEET_URL,
+					o: SHEET_O,
+				});
+				expect(`HTTP ${tra.status} ${tra.loi}`).toBe("HTTP 200 ");
+				expect(hong).toHaveBeenCalledTimes(1);
+				expect(await cauHinh(k)).toEqual({
+					loai: "bang-tinh",
+					chiSo: null,
+					phamVi: null,
+					bac: null,
+					sheetId: SHEET_ID,
+					sheetO: SHEET_O,
+				});
+				expect((await anhKr(k)).source).toBe("bang-tinh");
+			} finally {
+				hong.mockRestore();
 			}
 		});
 

@@ -32,6 +32,7 @@ import {
 	ForbiddenException,
 	Inject,
 	Injectable,
+	Logger,
 	NotFoundException,
 } from "@nestjs/common";
 import { z } from "zod";
@@ -143,6 +144,8 @@ const ngayDb = (ngay: string) => new Date(`${ngay}T00:00:00Z`);
 
 @Injectable()
 export class OkrSoService {
+	private readonly logger = new Logger(OkrSoService.name);
+
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
@@ -264,8 +267,20 @@ export class OkrSoService {
 			);
 			return ketQua;
 		});
-		if (kq.docSheet) await this.trigger.okrDocSheet(kq.id);
+		if (kq.docSheet) await this.xepDocSheet(kq.id);
 		return { id: kq.id, doCanh: kq.doCanh };
+	}
+
+	private async xepDocSheet(keyResultId: string) {
+		try {
+			await this.trigger.okrDocSheet(keyResultId);
+		} catch (loi) {
+			this.logger.error({
+				message: "Không xếp được việc đọc Google Sheets; nhịp mỗi ngày vẫn đọc",
+				keyResultId,
+				loi: loi instanceof Error ? loi.name : "khong-ro",
+			});
+		}
 	}
 
 	private async tenNguoi(ids: (string | null)[]) {
@@ -335,7 +350,7 @@ export class OkrSoService {
 					giaTri: Number(chup.giaTri),
 				}
 			: null;
-		const loai = nguonMay?.loai ?? hang?.nguon ?? nguonKr.parse(kr.source);
+		const loai = hang?.nguon ?? nguonMay?.loai ?? nguonKr.parse(kr.source);
 		const rong = {
 			loai,
 			dinhNghia: null,
@@ -350,8 +365,10 @@ export class OkrSoService {
 			lanGhi: [],
 		};
 		if (loai === "api") {
+			const cuaApi = { keyResultId: input.keyResultId, nguon: "api" };
+			const tong = await this.db.okrSoChup.count({ where: cuaApi });
 			const lan = await this.db.okrSoChup.findMany({
-				where: { keyResultId: input.keyResultId, nguon: "api" },
+				where: cuaApi,
 				orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
 				skip: cua.bo,
 				take: cua.lay,
@@ -360,6 +377,7 @@ export class OkrSoService {
 			const ten = await this.tenNguoi(lan.map((r) => r.tacGiaUserId));
 			return {
 				...rong,
+				tong,
 				lanGhi: lan.map((r) => ({
 					ngay: ngayVN(r.ngay),
 					giaTri: Number(r.giaTri),
