@@ -348,6 +348,7 @@ export class OkrSoService {
 		const kr = await this.db.okrKeyResult.findUnique({
 			where: { id: keyResultId },
 			select: {
+				title: true,
 				source: true,
 				nguonMay: true,
 				objective: {
@@ -403,6 +404,7 @@ export class OkrSoService {
 			: null;
 		const loai = hang?.nguon ?? nguonMay?.loai ?? nguonKr.parse(kr.source);
 		const rong = {
+			tenKr: kr.title,
 			loai,
 			dinhNghia: null,
 			tu: null,
