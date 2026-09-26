@@ -1,36 +1,36 @@
 ## Trong hợp đồng
 
+(Không có phát hiện nào được map vào AC ở vòng này.)
+
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **E21 treats a green re-pin run as red when an eval in that run is expected to exit non-zero**
-  Người dùng thấy gì: Người dùng cuối không bị ảnh hưởng ngay; nhưng lần tới khi một hồ sơ có phần đo được thiết kế báo lỗi có chủ đích được cập nhật lại, công cụ kiểm tra nội bộ có thể báo sai là hỏng dù hồ sơ đó vẫn ổn, làm chậm việc phát hành không cần thiết.
-  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
-  severity: medium
-  Đề xuất: known-limits
+### Round 3 (mới)
 
-- **Hình dạng 4 (âm-tính-một-mình): E21 khẳng định «không hồ sơ nào khác bị báo hoá cũ», nhưng lưới trước-gộp chạy với --base không nhìn thấy 55/57 hồ sơ bị chạm**
-  Người dùng thấy gì: Nếu một trong số các hồ sơ đã ký khác bị lượt này chạm nhưng thực ra đang mang dữ liệu cũ, hiện chưa có cách nào phát hiện ra điều đó cho tới khi hồ sơ đó được xem xét lại riêng, dù báo cáo có thể khiến người đọc tưởng đã rà soát toàn bộ.
-  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay): chiều đỏ «lưới báo hồ sơ hoá cũ» đọc một tệp pre-merge giả viết tay đúng khuôn regex, không rút từ pre-merge-check.sh**
-  Người dùng thấy gì: Cách kiểm tra nội bộ hiện dùng câu mẫu tự soạn thay vì lấy từ kết quả kiểm tra thật, nên nếu công cụ kiểm tra đổi cách báo lỗi trong tương lai, việc phát hiện hồ sơ mang dữ liệu cũ có thể ngừng hoạt động mà không ai nhận ra ngay.
+- **The new E21 log line claims more than E21 checks**
+  Người dùng thấy gì: Dòng thông báo trong bước kiểm tra tự động có thể khiến người đọc báo cáo tin rằng mọi cảnh báo ở hồ sơ khác đã được rà hết, trong khi thực ra chỉ một loại cảnh báo được kiểm — dễ bỏ sót cảnh báo thật khi ra quyết định ký duyệt.
   file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm-tính-một-mình): chuyen-okr-khoa-rieng khẳng định không có cảnh báo «same key» nhưng không có ca đối chứng chứng minh bộ bắt console còn sống**
+- **E21 misses a touched signed profile when the eval command starts with a quoted cd (go-khoa-goc-nhin), yet reports a full match**
+  Người dùng thấy gì: Bước kiểm tra tự động có thể báo đã khớp đủ danh sách hồ sơ bị ảnh hưởng, trong khi thực ra bỏ sót một hồ sơ vì cách viết lệnh đặc biệt — người ký duyệt có thể tin nhầm là đã đủ bằng chứng trong khi còn thiếu một trường hợp cần xem lại.
+  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **New E21 message says it reads every VIOLATION from other profiles, but the code only reads the «evidence is stale» kind**
+  Người dùng thấy gì: Dòng thông báo mới nói rộng hơn thực tế: người đọc báo cáo có thể hiểu nhầm là mọi cảnh báo từ hồ sơ khác đều đã được rà, trong khi máy chỉ kiểm một dạng cảnh báo cụ thể — rủi ro bỏ sót cảnh báo thật khi quyết định ký.
+  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+### Carried từ round trước
+
+- **Hình dạng 4 (âm-tính-một-mình): chuyen-okr-khoa-rieng khẳng định không có cảnh báo «same key» nhưng không có ca đối chứng chứng minh bộ bắt console còn sống (r2)**
   Người dùng thấy gì: Bài kiểm tra cho một phần dữ liệu OKR hiện không có phép thử chứng minh việc phát hiện lỗi trùng khoá vẫn hoạt động, nên nếu thực sự phát sinh lỗi trùng dữ liệu sau này, bài kiểm tra có thể không bắt được và báo nhầm là ổn.
   file: `apps/app/test/chuyen-okr.dom.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (quan hệ đo thành hai vế rời): «hồ sơ báo hoá cũ ⇒ đã ghim lại xanh» được đo bằng một phép lượng hoá «mọi dòng repin đều xanh» trên một tập có thể rỗng**
-  Người dùng thấy gì: Việc xác nhận «hồ sơ báo dữ liệu cũ đã được cập nhật lại thành công» có thể tự động được coi là đạt ngay cả khi không có lượt cập nhật nào thực sự được kiểm tra, khiến người ký duyệt có thể tin nhầm là đã xong trong khi chưa có bằng chứng.
-  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
   severity: low
   Đề xuất: known-limits
 
@@ -107,5 +107,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   Đề xuất: known-limits
 
 ## Chưa adversarial-verify (refuter chết)
+
+(Không có.)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
