@@ -1,8 +1,11 @@
+diff --git a/node_modules/@better-auth/api-key/.bun-tag-89b3165681df9a98 b/.bun-tag-89b3165681df9a98
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/@better-auth/api-key/.bun-tag-d5dbf22d4bcad913 b/.bun-tag-d5dbf22d4bcad913
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/dist/index.mjs b/dist/index.mjs
-index 80d7d4a3ed2fe0858801d0dafe95065e2e1cda72..f72a1187f78d07b663efc3f0293ba41dc0808e26 100644
+index 80d7d4a3ed2fe0858801d0dafe95065e2e1cda72..1392978c05e790febf30dff2f774a3807c4fd0eb 100644
 --- a/dist/index.mjs
 +++ b/dist/index.mjs
 @@ -1576,6 +1576,11 @@ function updateApiKey({ configurations, schema, deleteAllExpiredApiKeys }) {
@@ -31,14 +34,11 @@ index 80d7d4a3ed2fe0858801d0dafe95065e2e1cda72..f72a1187f78d07b663efc3f0293ba41d
  	};
  	if (rateLimitTimeWindow === null || rateLimitMax === null) return {
  		type: "skip",
-@@ -1721,6 +1726,10 @@ async function claimUsageInDatabase({ ctx, apiKey, opts, hashedKey }) {
+@@ -1721,6 +1726,7 @@ async function claimUsageInDatabase({ ctx, apiKey, opts, hashedKey }) {
  	let row = apiKey;
  	if (apiKey.remaining !== null) row = await consumeRemaining(ctx, apiKey);
  	row = await consumeRateLimit(ctx, row, opts);
-+	if (opts.lastRequestUpdateIntervalMs !== void 0) {
-+		if (opts.storage === "secondary-storage" && opts.fallbackToDatabase) await setApiKey(ctx, row, opts);
-+		return row;
-+	}
++	if (opts.lastRequestUpdateIntervalMs !== void 0 && opts.storage === "database") return row;
  	const finalRow = await ctx.context.adapter.update({
  		model: API_KEY_TABLE_NAME,
  		where: [{

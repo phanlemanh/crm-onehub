@@ -66,6 +66,24 @@ async function dung(opts: TuyChon) {
 	return { kho, goi, demQuaLuot, khoaId: khoa.id };
 }
 
+const LOCK_LECH = "bun.lock lệch patchedDependencies của package.json";
+
+function khoaVaTrongLock(lock: string): Record<string, string> {
+	const khoi = lock.match(/"patchedDependencies":\s*\{([^}]*)\}/)?.[1] ?? "";
+	return Object.fromEntries(
+		[...khoi.matchAll(/"([^"]+)":\s*"([^"]+)"/g)].map((m) => [m[1], m[2]]),
+	);
+}
+
+function lockKhop(goc: Record<string, string>, lock: string): void {
+	const trongLock = khoaVaTrongLock(lock);
+	if (JSON.stringify(trongLock) !== JSON.stringify(goc)) {
+		throw new Error(
+			`${LOCK_LECH}: package.json ${JSON.stringify(goc)}, bun.lock ${JSON.stringify(trongLock)}`,
+		);
+	}
+}
+
 function banVaKhop(daCai: string, khoaVa: string[]): void {
 	const khop = khoaVa.filter((k) => k.startsWith(`${TEN_GOI}@`));
 	if (khop.length !== 1 || khop[0] !== `${TEN_GOI}@${daCai}`) {
@@ -136,10 +154,16 @@ describe("khoa-api-ghi-thua thu vien", () => {
 			readFileSync(join(GOC_KHO, tepVa), "utf8").length,
 			"tep va rong",
 		).toBeGreaterThan(0);
+		const lock = readFileSync(join(GOC_KHO, "bun.lock"), "utf8");
+		lockKhop(vaTheo, lock);
 		expect(
-			readFileSync(join(GOC_KHO, "bun.lock"), "utf8"),
-			"bun.lock thieu khoa ban va",
-		).toContain(`"${TEN_GOI}@${goiDaCai.version}"`);
+			() =>
+				lockKhop(
+					vaTheo,
+					lock.replace(/"patchedDependencies":\s*\{[^}]*\},?/, ""),
+				),
+			"bun.lock mat muc patchedDependencies phai do",
+		).toThrow(LOCK_LECH);
 		expect(readFileSync(duongMa, "utf8"), "ma da cai chua co ban va").toContain(
 			"lastRequestUpdateIntervalMs",
 		);

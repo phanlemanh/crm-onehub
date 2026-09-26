@@ -43,11 +43,13 @@ móc xác thực.
   cục, hoặc tắt riêng cho khoá): khi có tuỳ chọn và `apiKey.lastRequest` khác null
   và còn mới hơn ngưỡng, trả `lastRequest: null` — nhánh «không ghi» mà
   `consumeRateLimit` đã có sẵn. Ngược lại trả `now` như gốc.
-- `claimUsageInDatabase`: khi có tuỳ chọn, bỏ lần `update({ updatedAt })` cuối và
-  trả hàng đang có (hàng đọc lúc đầu, hoặc hàng mà lệnh ghi phía trên trả về).
+- `claimUsageInDatabase`: khi có tuỳ chọn và `storage` là `database`, bỏ lần
+  `update({ updatedAt })` cuối và trả hàng đang có (hàng đọc lúc đầu, hoặc hàng mà
+  lệnh ghi phía trên trả về). Đường secondary-storage giữ nguyên như bản gốc.
 - Không đổi cách đếm của nhánh rate-limit bật (`start` · `reset` · `increment` ·
   `deny`), không chạm `consumeRemaining`, không chạm đường secondary-storage. Lần
-  đóng dấu `updatedAt` thì bỏ mỗi khi có tuỳ chọn, bất kể rate-limit bật hay tắt.
+  đóng dấu `updatedAt` thì bỏ mỗi khi có tuỳ chọn ở `storage: "database"`, bất kể
+  rate-limit bật hay tắt.
 
 Khi đã quá ngưỡng, lệnh ghi là `UPDATE` thường, không có chốt điều kiện: vài yêu
 cầu đồng thời đúng lúc qua ngưỡng có thể cùng ghi — tối đa một đợt mỗi phút cho
