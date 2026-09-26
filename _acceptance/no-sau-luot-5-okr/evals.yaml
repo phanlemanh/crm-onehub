@@ -1,0 +1,117 @@
+schema_version: 1
+slug: no-sau-luot-5-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.nso_khoi_chu_ky_loi
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx", apps/app/lib/messages/okr-toan-canh.ts, apps/app/test/khoi-kr-cua-toi.dom.tsx]
+    expected: "exit 0; dựng KhoiKrCuaToi không cycleId (Tổng quan) với okr.cycles giả ném lỗi. Khẳng định: có đúng một [data-khoi='okr-cua-toi']; trong nó có [data-trang-thai='ST-tongquan-loi'] chứa chữ ghim «Không tải được KR của bạn.» và một nút chữ ghim «Thử lại»; nút trạng thái đó là [data-slot='empty'] và nút là [data-slot='button'] (quan hệ «đúng là LoiXem», không phải khối tự ráp cùng chữ); không có [data-slot='skeleton']; không có [data-kr-cua-toi]. CHIỀU ĐỎ trên cùng fixture: cây chưa vá (nhánh trả null đứng trước) → bài đỏ với thông điệp ghim «khoi-okr-bien-mat-khi-chu-ky-loi» kèm textContent của body. Mọi fixture khai `satisfies RouterOutputs["okr"][<thủ tục>]` (okr.cycles đủ {cycles, currentId}; okr.khoiCuaToi đủ trường của kiểu thật) và tệp test nằm trong phạm vi check-types của apps/app — bỏ một trường bắt buộc thì check-types đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.nso_khoi_thu_lai
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx", apps/app/test/khoi-kr-cua-toi.dom.tsx]
+    expected: "exit 0; cùng fixture E1. Bước 1: okr.cycles vẫn ném, bấm «Thử lại» → số lần gọi okr.cycles tăng đúng 1, [data-trang-thai='ST-tongquan-loi'] còn. Bước 2: đổi giả để okr.cycles trả {cycles:[chu kỳ 'ky-1' đủ trường], currentId:'ky-1'} và okr.khoiCuaToi trả 2 KR, bấm «Thử lại» → số lần gọi okr.cycles tăng thêm 1, có đúng 2 [data-kr-cua-toi], không còn ST-tongquan-loi, khoiCuaToi được gọi với cycleId 'ky-1'. CHIỀU ĐỎ: cây chưa vá không có nút để bấm → bài đỏ ghim «khong-thay-nut-thu-lai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.nso_khoi_kr_loi
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", apps/app/lib/messages/okr-toan-canh.ts, apps/app/test/khoi-kr-cua-toi.dom.tsx]
+    expected: "exit 0; MA TRẬN viết trước 2 ca (hai giá trị props thật của ba chỗ gọi: Tổng quan và Tổng quan «chỉ OKR» cùng gọi <KhoiKrCuaToi /> không props, trang một người truyền cycleId và userId), okr.cycles trả chu kỳ, okr.khoiCuaToi ném: [Tổng quan (không cycleId, không userId) → ST-tongquan-loi, «Không tải được KR của bạn.»], [trang một người (cycleId 'ky-1', userId 'u-2') → ST-nguoi-loi, «Không tải được KR của người này.»]. Mỗi ca: nút trạng thái là [data-slot='empty'] chứa [data-slot='button'] «Thử lại»; đổi khoiCuaToi sang trả 1 KR rồi bấm → khoiCuaToi gọi thêm đúng 1 lần, có 1 [data-kr-cua-toi]; ở ca trang một người okr.cycles không được gọi lần nào. CHIỀU ĐỎ: cây chưa vá hiện <p> không nút → bài đỏ ghim «khoi-kr-loi-khong-co-thu-lai» kèm tên ca. Mọi fixture khai `satisfies RouterOutputs["okr"][<thủ tục>]` (okr.cycles đủ {cycles, currentId}; okr.khoiCuaToi đủ trường của kiểu thật) và tệp test nằm trong phạm vi check-types của apps/app — bỏ một trường bắt buộc thì check-types đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.nso_khoi_doi_chung
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", apps/app/test/khoi-kr-cua-toi.dom.tsx]
+    expected: "exit 0; hai ca đối chứng dương cho luật lỗi-trước: (a) okr.cycles trả {cycles:[], currentId:null} → body không có [data-khoi='okr-cua-toi'] sau khi truy vấn xong (đếm lần gọi ≥ 1 trước khi khẳng định, để 'không hiện' không phải vì chưa gọi); (b) okr.cycles treo (promise không bao giờ xong) → có [data-khoi='okr-cua-toi'] chứa [data-slot='skeleton'], không có [data-trang-thai$='-loi']. CHIỀU ĐỎ trên cùng fixture: bản sao khối coi mọi ky===null là lỗi → ca (a) đỏ ghim «khong-chu-ky-phai-an-khoi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.nso_loc_ten
+    paths: ["apps/app/app/(app)/[slug]/okr/loc-okr.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", apps/app/lib/messages/okr-toan-canh.ts, apps/app/test/loc-okr-ten.spec.ts]
+    expected: "exit 0; MA TRẬN viết trước cho luaChonPhuTrach, facetCounts khai `satisfies RouterOutputs["okr"]["danhSach"]["facetCounts"]` với phuTrach = [{value:'u-a', name:'Trần An', count:2}], bảng tên {u-a:'Trần An', u-b:'Lê Bình'}, đã chọn ['u-a','u-b','u-x'] → đúng mảng [{u-a,'Trần An · 2'}, {u-b,'Lê Bình · 0'}, {u-x,'Người không còn trong tổ chức · 0'}] so toEqual (vi); bản en ca u-x là 'No longer in the organization · 0'. Khẳng định quan hệ: không nhãn nào chứa value của chính nó. CHIỀU ĐỎ: nhãn rơi về mã (hành vi cũ) → bài đỏ ghim «nhan-phu-trach-lo-ma» kèm nhãn lộ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.nso_loc_ten
+    paths: ["apps/app/app/(app)/[slug]/okr/loc-okr.tsx", apps/app/lib/messages/okr-toan-canh.ts, apps/app/test/loc-okr-ten.spec.ts]
+    expected: "exit 0; cùng ma trận E5, ca u-x (không trong đếm, không trong bảng tên) mang nhãn chung ghim theo ngôn ngữ; ca dem undefined (danh sách chưa tải) với đã chọn ['u-b'] → [{u-b,'Lê Bình · 0'}]. CHIỀU ĐỎ: như E5."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.nso_tai_truoc
+    paths: ["apps/app/app/(app)/[slug]/okr/okr-search-params.ts", "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", apps/api/src/okr/okr-xem.contracts.ts, apps/app/test/loc-okr-tai-truoc.spec.ts]
+    expected: "exit 0; tập khoá của locOkr(loadOkrSearchParams(URL không tham số)) bằng tập khoá của locDanhSach.shape (rút từ schema API thật, không viết tay danh sách mặt); MA TRẬN 3 URL viết trước (không lọc; tuTinOkr=thap; đủ bốn mặt phuTrachOkr=u-a&loaiOkr=cam-ket&trangThaiOkr=cong-bo&tuTinOkr=thap,cao) → locOkr trả đúng object viết trước so toEqual, và locDanhSach.parse(object) trả lại chính nó. CHIỀU ĐỎ: bản sao locOkr bỏ tuTin (hình dạng cũ của page.tsx) → bài đỏ ghim «loc-tai-truoc-thieu-mat» kèm tên mặt thiếu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.nso_do_man
+    steps:
+      - "Gieo: một chu kỳ quý đang chạy, một mục tiêu công bố của NGUOI có 2 KR NGUOI phụ trách"
+      - "Mở {APP_URL}/<slug> ở 1440/vi với okr.cycles bị chặn ở trình duyệt (trả lỗi 500 riêng cho mục okr.cycles trong lô) → [data-trang-thai='ST-tongquan-loi'] hiện, chữ «Không tải được KR của bạn.» và nút «Thử lại» → ảnh E8-tongquan-loi.png"
+      - "Bỏ chặn, bấm «Thử lại» → [data-kr-cua-toi] hiện đủ 2 hàng → ảnh E8-tongquan-sau-thu-lai.png"
+      - "Lặp bước 2–3 với người vai «chỉ OKR» (Tổng quan đi qua tong-quan-chi-okr.tsx) phụ trách 1 KR → ST-tongquan-loi hiện khi chặn, 1 hàng sau Thử lại → ảnh E8-chiokr-loi.png"
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx", apps/app/lib/messages/okr-toan-canh.ts, _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs]
+    expected: "exit 0; ba ảnh (quản trị hai, vai «chỉ OKR» một); khẳng định DOM ở mỗi bước ở cả hai vai và lô có okr.cycles thật sự bị chặn ≥ 1 lần mỗi vai. CHIỀU ĐỎ: cây chưa vá → bước 2 đỏ ghim «E8: khoi OKR cua ban bien mat khi chu ky loi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.nso_do_man
+    steps:
+      - "Cùng lần chạy với E8: bước 3 của E8 là bước của E9 — sau khi bỏ chặn, bấm «Thử lại», trình duyệt gọi okr.cycles thêm ≥ 1 lần và bảng KR hiện"
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx", _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs]
+    expected: "exit 0; số lượt gọi okr.cycles sau khi bấm tăng; 2 hàng [data-kr-cua-toi]. CHIỀU ĐỎ: như E8."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.nso_do_man
+    steps:
+      - "Gieo thêm: đơn vị bộ phận có mục tiêu công bố, KR có lần cập nhật mức thap"
+      - "Mở {APP_URL}/<slug>/okr/theo-don-vi ba lần ở ba URL viết trước: không tham số; ?tuTinOkr=thap; ?phuTrachOkr=<NGUOI>&loaiOkr=cam-ket&trangThaiOkr=cong-bo&tuTinOkr=thap,cao,vua — mỗi lần đếm yêu cầu trình duyệt có okr.danhSach từ lúc goto tới khi mạng rảnh"
+      - "Mỗi URL: [data-muc-tieu] hiện ≥ 1 và số lượt okr.danhSach = 0 → ảnh E10-theo-don-vi-<ca>.png"
+      - "Đối chứng dương cùng lượt: ở ca không tham số, chọn một mặt lọc trên màn (mức tự tin thấp) → bộ đếm thấy ≥ 1 lượt okr.danhSach và tập data-muc-tieu khác trước. Bộ đếm tách tên thủ tục từ đường lô đã giải mã (decodeURIComponent, tách dấu phẩy), đếm cả GET lẫn POST"
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs]
+    expected: "exit 0; ba ca, mỗi ca 0 lượt okr.danhSach ở trình duyệt và danh sách hiện; ca đối chứng ≥ 1 lượt và danh sách đổi — lượt chạy mà bộ đếm chưa ghi nhận lần nào thì đỏ ghim «E10: bo dem khong thay okr.danhSach». CHIỀU ĐỎ: cây chưa vá → cả ba ca đỏ (≥ 1 lượt), thông điệp ghim «E10: trinh duyet goi lai okr.danhSach» kèm số lượt và URL."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.nso_do_man
+    steps:
+      - "Gieo thêm: một thành viên không phụ trách mục tiêu nào (tên ghim «Lê Thị Vắng»)"
+      - "Mở theo-don-vi?phuTrachOkr=<id người vắng>&phuTrachOkr=u-da-roi-<ma> → mở nút bộ lọc, mở mục «Người phụ trách» → các lựa chọn hiện «Lê Thị Vắng · 0» và «Người không còn trong tổ chức · 0», không lựa chọn nào chứa id → ảnh E11-loc-phu-trach.png"
+    paths: ["apps/app/app/(app)/[slug]/okr/loc-okr.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs]
+    expected: "exit 0; innerText của menu con có hai nhãn ghim; innerText của body khi menu đóng và khi menu mở đều không chứa id nào đã gieo. CHIỀU ĐỎ: cây chưa vá → đỏ ghim «E11: nhan phu trach lo ma» kèm nhãn."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tco_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs]
+    expected: "exit 0; thước sàn thiết kế của lượt 5 (dùng lại, không chép) soi mọi .tsx trong apps/app đổi so với origin/onehub: design-gate --mode static không P0, không dấu hiệu vẽ tay; in danh sách tệp đã soi và danh sách đó chứa khoi-kr-cua-toi.tsx, loc-okr.tsx, theo-don-vi.tsx. CHIỀU ĐỎ: --chieu-do của chính thước (chèn divide-y và mặc định chuỗi vào bản sao) → đỏ in hai vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
