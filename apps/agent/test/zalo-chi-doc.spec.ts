@@ -71,12 +71,9 @@ afterAll(async () => {
 
 describe("chi-doc", () => {
 	test("chi-doc: bo giai chay o step.started, khong con session.started", async () => {
-		const suKien = chiDoc.events as Record<string, unknown>;
-		expect(suKien["step.started"], "co step.started").toBeInstanceOf(Function);
-		expect(
-			suKien["session.started"],
-			"khong con session.started",
-		).toBeUndefined();
+		expect(Object.keys(chiDoc.events), "chi con step.started").toEqual([
+			"step.started",
+		]);
 		expect(await giai("research"), "phien web khong nhan ban thay").toBeNull();
 		expect(
 			await giai("builder"),

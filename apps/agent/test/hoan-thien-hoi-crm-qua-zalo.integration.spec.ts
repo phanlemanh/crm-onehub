@@ -63,8 +63,14 @@ const goiAuth = z.object({
 
 type Eve = ReturnType<typeof eveGia>;
 
+type BangChung = { kind: string; detail: string };
+
+type GiaTriVao = string | number | boolean | null | readonly BangChung[];
+
+type DauVao = Readonly<Record<string, GiaTriVao>>;
+
 type CongCu = {
-	execute: (input: unknown, ctx: CtxPhien) => Promise<unknown>;
+	execute: (input: DauVao, ctx: CtxPhien) => Promise<unknown>;
 };
 
 beforeAll(async () => {

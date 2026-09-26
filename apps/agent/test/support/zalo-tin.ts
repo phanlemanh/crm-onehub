@@ -54,12 +54,11 @@ export function tinThat(chon: ChonTin): TinZaloThat {
 	if (chon.isBot !== undefined) message.from.is_bot = chon.isBot;
 	if (chon.text === null) delete message.text;
 	else if (chon.text !== undefined) message.text = chon.text;
-	const them = {
-		...(chon.photo !== undefined ? { photo: chon.photo } : {}),
-		...(chon.sticker !== undefined ? { sticker: chon.sticker } : {}),
-		...(chon.photoUrl !== undefined ? { photo_url: chon.photoUrl } : {}),
-		...(chon.caption !== undefined ? { caption: chon.caption } : {}),
-	};
+	const them: Record<string, string> = {};
+	if (chon.photo !== undefined) them.photo = chon.photo;
+	if (chon.sticker !== undefined) them.sticker = chon.sticker;
+	if (chon.photoUrl !== undefined) them.photo_url = chon.photoUrl;
+	if (chon.caption !== undefined) them.caption = chon.caption;
 	return { ...message, ...them };
 }
 

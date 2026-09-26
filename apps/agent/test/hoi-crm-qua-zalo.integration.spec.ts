@@ -69,7 +69,7 @@ const BI_MAT_CAU_NOI = "hcz-bi-mat-cau-noi-du-dai-de-ky-jwt";
 
 async function kyCauNoi(sub: string): Promise<string> {
 	const now = Math.floor(Date.now() / 1000);
-	const ma = (v: object) =>
+	const ma = (v: Readonly<Record<string, string | number>>) =>
 		Buffer.from(JSON.stringify(v)).toString("base64url");
 	const vao = `${ma({ alg: "HS256", typ: "JWT" })}.${ma({
 		iss: BRIDGE_ISSUER,
