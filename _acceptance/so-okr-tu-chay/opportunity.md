@@ -3,10 +3,10 @@ schema_version: 1
 slug: so-okr-tu-chay
 feature: Số OKR tự chảy — KR của khối kinh doanh lấy số từ danh mục chỉ số CRM có định nghĩa cố định; mỗi ngày chụp giá trị thành lịch sử không đổi; bấm vào con số ra danh sách bản ghi đằng sau; KR ngoài CRM nhận số qua khoá API và Google Sheets
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-26T14:42:00Z
 prototype:
   base_commit: 40d423bb686da7d554d7f5b3bd914e818d9ec455
   disposition: keep
@@ -54,15 +54,15 @@ nhật tuần — mức tự tin và ghi chú vẫn do người ghi), «Chốt»
 | 5 | KR có nguồn máy vẫn vào cập nhật tuần: người chọn mức tự tin và ghi chú, ô giá trị khoá theo số máy (NG-05 giữ nguyên — máy không chọn mức tự tin) | Người thấy hai số, không biết ghi số nào | Hỏi tại Cổng Phạm vi | [đề xuất] |
 | 6 | Đổi nguồn khi mục tiêu còn nháp có hiệu lực ngay; đổi khi mục tiêu đã công bố trong kỳ đang chạy thì để vết, tiến độ vẫn theo nguồn cũ tới hết kỳ, số máy hiện cạnh số tay | Tiến độ nhảy giữa kỳ vì đổi định nghĩa | Hỏi tại Cổng Phạm vi | [đề xuất] |
 | 7 | Bấm vào con số ra danh sách bản ghi tính lại theo định nghĩa lúc bấm, cho đúng khoảng ngày của bản chụp; lệch với số đã chụp thì màn nói ra, không giấu. Vai «chỉ OKR» thấy số, không thấy danh sách (dữ liệu đối tác) | Người bấm thấy danh sách khác số mà không được báo | Hỏi tại Cổng Phạm vi | [đề xuất] |
-| 8 | Google Sheets đọc bằng một tài khoản dịch vụ chỉ đọc (khoá tuỳ chọn trong `.env`; thiếu khoá thì nguồn Sheets không hiện, không lỗi): người chia sẻ bảng tính cho email của tài khoản đó, khai đường dẫn và ô. Phương án khác: đường dẫn «xuất bản lên web» dạng CSV — không cần khoá nhưng ai có đường dẫn đều đọc được số | Chọn sai thì hoặc lộ số, hoặc phải làm lại đường đọc | Chủ kho chọn tại Cổng Đáng | [đề xuất] mặc định tài khoản dịch vụ |
-| 9 | «Khối kinh doanh» là một hay vài bộ phận trong cây tổ chức, chủ kho gọi tên khi đọc số; câu đếm nhận danh sách bộ phận | Ngưỡng đo sai tập KR | Chủ kho gọi tên tại Cổng Đáng hoặc ngày đọc số | [đề xuất] |
+| 8 | Google Sheets đọc bằng một tài khoản dịch vụ chỉ đọc (khoá tuỳ chọn trong `.env`; thiếu khoá thì nguồn Sheets không hiện, không lỗi): người chia sẻ bảng tính cho email của tài khoản đó, khai đường dẫn và ô. Phương án khác: đường dẫn «xuất bản lên web» dạng CSV — không cần khoá nhưng ai có đường dẫn đều đọc được số | Chọn sai thì hoặc lộ số, hoặc phải làm lại đường đọc | Chủ kho chọn tại Cổng Đáng | Chốt tại Cổng Đáng: tài khoản dịch vụ chỉ đọc |
+| 9 | «Khối kinh doanh» là một hay vài bộ phận trong cây tổ chức, chủ kho gọi tên khi đọc số; câu đếm nhận danh sách bộ phận | Ngưỡng đo sai tập KR | Chủ kho gọi tên tại Cổng Đáng hoặc ngày đọc số | Chưa gọi tên tại Cổng Đáng — máy hỏi lại ngày đọc số 2026-12-01 |
 | 10 | Phép thử tin số trên production chạy sau triển khai (chỉ đọc); S4 chạy cùng phép thử trên kho riêng với số đếm độc lập viết tách khỏi mã danh mục | Không có bằng chứng tin số trước khi người dùng thấy | Hỏi tại Cổng Phạm vi | [đề xuất] |
 
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: khối kinh doanh có thôi đếm tay và để KR lấy số từ CRM không, và số đó có đáng tin không?
-- Kết quả nào là SỐNG: [đề xuất] trước 2026-12-01, ≥ 50% KR đã công bố của khối kinh doanh trong chu kỳ quý 4 có nguồn CRM — tính cả KR nguồn CRM hiệu lực lẫn KR số đo cạnh, vì KR quý 4 công bố từ 26/10 trước khi lượt này lên (danh sách bộ phận do chủ kho gọi tên); đọc kèm tỷ lệ lần cập nhật tuần của KR đo cạnh mà người nhận số máy, làm căn cứ «đã thôi đếm tay chưa»; và phép thử tin số trên production — năm chỉ số so với số đếm tay — lệch không quá mức khai trước cho từng chỉ số.
-- Kết quả nào là CHẾT: [đề xuất] < 20% KR của khối kinh doanh có nguồn CRM ngày 2026-12-01; hoặc một chỉ số lệch số đếm tay ngoài mức khai trước mà không giải thích được bằng định nghĩa.
+- Kết quả nào là SỐNG: trước 2026-12-01, ≥ 50% KR đã công bố của khối kinh doanh trong chu kỳ quý 4 có nguồn CRM — tính cả KR nguồn CRM hiệu lực lẫn KR số đo cạnh, vì KR quý 4 công bố từ 26/10 trước khi lượt này lên (danh sách bộ phận do chủ kho gọi tên); đọc kèm tỷ lệ lần cập nhật tuần của KR đo cạnh mà người nhận số máy, làm căn cứ «đã thôi đếm tay chưa»; và phép thử tin số trên production — năm chỉ số so với số đếm tay — lệch không quá mức khai trước cho từng chỉ số.
+- Kết quả nào là CHẾT: < 20% KR của khối kinh doanh có nguồn CRM ngày 2026-12-01; hoặc một chỉ số lệch số đếm tay ngoài mức khai trước mà không giải thích được bằng định nghĩa.
 - Timebox: phép thử tin số chạy trong tuần đầu sau khi lượt lên production; tỷ lệ KR có nguồn đọc ngày 2026-12-01.
 
 ## Kết quả prototype
@@ -84,9 +84,9 @@ màn thật ở 1440 và 390 như lượt 3.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: lộ trình OKR mục 5 «Lượt 6», mốc R2 2026-11-20.
+- **decision = build.** Căn cứ: lộ trình OKR mục 5 «Lượt 6», mốc R2 2026-11-20; bảy chỉ số đo được bằng bảng có sẵn. Quyết 2026-09-26 bởi Manh Phan trong phiên lượt 6.
 - **disposition = keep.** Căn cứ: bản mẫu `ban-mau-okr` ở lại kho (`docs/proto.md`); lượt này không xoá gì của nó.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho SỐNG và CHẾT như section Ngưỡng; nguồn Google Sheets là tài khoản dịch vụ chỉ đọc; danh sách bộ phận của khối kinh doanh chưa gọi tên — hỏi lại ngày đọc số 2026-12-01.
 
 ## Thước đo thành công → ứng viên criterion
 
