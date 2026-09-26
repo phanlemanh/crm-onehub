@@ -61,6 +61,7 @@ const VERBS: ToolVerbs = {
 	record_fact: "Recorded what it found",
 	write_brief: "Wrote the background",
 	write_workspace_profile: "Wrote up who we are",
+	"zalo-chi-doc": "Kept the Zalo chat read-only",
 	research_person: "Researched them on the web",
 	research_company: "Read the company's site",
 	enrich_company: "Looked up the company",

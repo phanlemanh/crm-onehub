@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 960 504" xmlns="http://www.w3.org/2000/svg">
+      <defs><style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-2 · CHẶN GHI BẰNG CÔNG CỤ GHI ĐÈ, KHÔNG BẰNG LỜI DẶN</text>
+
+      <line x1="320" y1="120" x2="320" y2="152" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="424" y1="184" x2="560" y2="184" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="468" y="160" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="492" y="172" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">KHÔNG</text>
+
+      <line x1="320" y1="216" x2="320" y2="256" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <rect x="328" y="224" width="32" height="16" rx="2" fill="#fafafa"/>
+      <text x="344" y="236" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+
+      <line x1="584" y1="300" x2="488" y2="300" stroke="#575757" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <rect x="500" y="276" width="72" height="16" rx="2" fill="#fafafa"/>
+      <text x="536" y="288" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">congCu.ghi</text>
+
+      <rect x="220" y="72" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="220" y="72" width="200" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="320" y="94" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phiên eve bắt đầu</text>
+      <text x="320" y="110" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">session.started · defineDynamic</text>
+
+      <polygon points="320,152 424,184 320,216 216,184" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="188" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">purpose = zalo?</text>
+
+      <rect x="560" y="156" width="208" height="56" rx="6" fill="#fafafa"/>
+      <rect x="560" y="156" width="208" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="664" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace" font-size="11">null</tspan> — công cụ thật</text>
+      <text x="664" y="196" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">set_field_value ghi được như cũ</text>
+
+      <rect x="112" y="256" width="376" height="112" rx="6" fill="#fafafa"/>
+      <rect x="112" y="256" width="376" height="112" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="300" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ giải động trả map: tên công cụ ghi → bản từ chối</text>
+      <text y="304" fill="#575757" font-size="9" font-family="'Geist Mono', monospace"><tspan x="132">set_field_value</tspan><tspan x="276">→ { ok: false, reason }</tspan></text>
+      <text y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace"><tspan x="132">record_fact</tspan><tspan x="276">→ { ok: false, reason }</tspan></text>
+      <text y="336" fill="#575757" font-size="9" font-family="'Geist Mono', monospace"><tspan x="132">… mọi tên trong ZALO.hoi.congCu.ghi</tspan><tspan x="332">→ cùng bản</tspan></text>
+      <text x="132" y="354" fill="#575757" font-size="9" font-family="'Geist', sans-serif">gọi bản ghi đè: giá trị trường và số Activity không đổi</text>
+      <rect x="412" y="248" width="72" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="448" y="260" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">AC-7 · AC-9</text>
+
+      <rect x="584" y="256" width="320" height="112" rx="6" fill="#fafafa"/>
+      <rect x="584" y="256" width="320" height="112" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="744" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bánh cóc danh sách</text>
+      <text x="604" y="304" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">tools/*.ts = congCu.doc ∪ congCu.ghi</text>
+      <text x="604" y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">congCu.doc ∩ congCu.ghi = ∅</text>
+      <text x="604" y="336" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">tệp lạ → test đỏ, nêu tên tệp</text>
+      <text x="604" y="354" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chạy trong test, không chạy lúc phiên mở</text>
+      <rect x="860" y="248" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="880" y="260" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">AC-7</text>
+
+      <text x="112" y="400" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">Chỉ dẫn vẫn nói «chỉ đọc», nhưng thứ được đo là công cụ ghi trả về từ chối và DB không đổi.</text>
+      <text x="112" y="418" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">sensitiveWrite không đủ: nó trả user-approval, mà Zalo không có nút duyệt.</text>
+      <path d="M 100,400 Q 76,360 104,316" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="108" cy="312" r="2" fill="#171717"/>
+
+      <line x1="40" y1="440" x2="920" y2="440" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="456" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="40" y="468" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="478" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bắt đầu</text>
+
+      <rect x="160" y="468" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="192" y="478" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kết quả</text>
+
+      <polygon points="308,468 320,474 308,480 296,474" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="328" y="478" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Cửa</text>
+
+      <rect x="400" y="468" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="432" y="478" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bản ghi đè — cái được đo</text>
+
+      <rect x="600" y="468" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="632" y="478" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kiểm tĩnh trong test</text>
+
+      <line x1="776" y1="474" x2="800" y2="474" stroke="#575757" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <text x="808" y="478" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đọc danh sách</text>
+    </svg>

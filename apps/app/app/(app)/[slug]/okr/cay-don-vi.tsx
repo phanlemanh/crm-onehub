@@ -1,10 +1,8 @@
 "use client";
 
-import ChevronDown from "@carbon/icons-react/es/ChevronDown";
 import Enterprise from "@carbon/icons-react/es/Enterprise";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { NavItem } from "@crm/ui/components/nav-item";
 import {
 	Select,
 	SelectContent,
@@ -15,8 +13,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
-import { useSyncExternalStore } from "react";
+import { TreeNav, type TreeNavNode } from "@crm/ui/components/tree-nav";
+import { useState, useSyncExternalStore } from "react";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { type CayDuLieu, KHO_HEP } from "./kieu";
 import { type DonChonOkr, khoaDon, parseAsDonOkr } from "./okr-search-params";
 
@@ -108,69 +108,101 @@ export function CayDonVi({
 			</Select>
 		);
 
-	const nutPhongBan = (pb: PhongBan) => {
-		const k = `pb:${pb.id}`;
-		return (
-			<NavItem
-				key={pb.id}
-				level={2}
-				active={chon === k}
-				data-nut-cay={k}
-				onClick={() => chonDon({ loai: "pb", id: pb.id })}
-			>
-				<span className="min-w-0 truncate" translate="no">
-					{pb.name}
-				</span>
-				<span className="ms-auto text-muted-foreground text-xs tabular-nums">
-					{dem[k]}
-				</span>
-			</NavItem>
-		);
-	};
-
 	return (
-		<nav aria-label={m.donVi} className="flex flex-col gap-1 p-2">
-			<NavItem
-				active={chon === "goc"}
-				data-nut-cay="goc"
-				onClick={() => chonDon({ loai: "goc" })}
-			>
-				<Icon icon={Enterprise} data-icon="inline-start" />
-				<span className="min-w-0 truncate" translate="no">
-					{tenGoc}
+		<CayRong
+			cay={cay}
+			chon={chon}
+			chonDon={chonDon}
+			dem={dem}
+			nhanChuaXep={m.chuaXep}
+			tenGoc={tenGoc}
+		/>
+	);
+}
+
+type LoaiNut = "goc" | "bp" | "pb" | "nhom";
+
+function CayRong({
+	cay,
+	tenGoc,
+	dem,
+	chon,
+	chonDon,
+	nhanChuaXep,
+}: {
+	cay: CayDuLieu;
+	tenGoc: string;
+	dem: Record<string, string>;
+	chon: string | null;
+	chonDon: (d: DonChonOkr) => void;
+	nhanChuaXep: string;
+}) {
+	const mt = okrToanCanhMessages(useLocale());
+	const la = (pb: PhongBan): TreeNavNode<LoaiNut> => ({
+		id: `pb:${pb.id}`,
+		name: pb.name,
+		data: "pb",
+	});
+	const nhomChuaXep: TreeNavNode<LoaiNut>[] =
+		cay.chuaXep.length > 0
+			? [
+					{
+						id: "chua-xep",
+						name: nhanChuaXep,
+						data: "nhom",
+						children: cay.chuaXep.map(la),
+					},
+				]
+			: [];
+	const nodes: TreeNavNode<LoaiNut>[] = [
+		{ id: "goc", name: tenGoc, data: "goc" },
+		...cay.divisions.map(
+			(bp): TreeNavNode<LoaiNut> => ({
+				id: `bp:${bp.id}`,
+				name: bp.name,
+				data: "bp",
+				children: bp.departments.map(la),
+			}),
+		),
+		...nhomChuaXep,
+	];
+	const [mo, setMo] = useState<string[]>(() =>
+		nodes.filter((n) => (n.children?.length ?? 0) > 0).map((n) => n.id),
+	);
+	return (
+		<TreeNav
+			expanded={mo}
+			itemAttrs={(n) =>
+				n.data === "nhom"
+					? { "data-nhom": "chua-xep" }
+					: { "data-nut-cay": n.id }
+			}
+			label={mt.cay.donVi}
+			nodes={nodes}
+			onExpandedChange={setMo}
+			onSelect={(khoa) => {
+				const d = parseAsDonOkr.parse(khoa);
+				if (d) chonDon(d);
+			}}
+			renderLabel={(n) => (
+				<span className="flex w-full min-w-0 items-center gap-2">
+					{n.data === "goc" ? <Icon icon={Enterprise} /> : null}
+					<span
+						className={
+							n.data === "nhom"
+								? "min-w-0 truncate text-muted-foreground text-xs"
+								: "min-w-0 truncate"
+						}
+						translate="no"
+					>
+						{n.name}
+					</span>
+					<span className="ms-auto text-muted-foreground text-xs tabular-nums">
+						{dem[n.id]}
+					</span>
 				</span>
-				<span className="ms-auto text-muted-foreground text-xs tabular-nums">
-					{dem.goc}
-				</span>
-			</NavItem>
-			{cay.divisions.map((bp) => {
-				const k = `bp:${bp.id}`;
-				return (
-					<div key={bp.id} className="flex flex-col gap-1" data-nhanh={bp.id}>
-						<NavItem
-							level={1}
-							active={chon === k}
-							data-nut-cay={k}
-							onClick={() => chonDon({ loai: "bp", id: bp.id })}
-						>
-							<Icon icon={ChevronDown} data-icon="inline-start" />
-							<span className="min-w-0 truncate" translate="no">
-								{bp.name}
-							</span>
-							<span className="ms-auto text-muted-foreground text-xs tabular-nums">
-								{dem[k]}
-							</span>
-						</NavItem>
-						{bp.departments.map(nutPhongBan)}
-					</div>
-				);
-			})}
-			{cay.chuaXep.length > 0 ? (
-				<div className="flex flex-col gap-1" data-nhom="chua-xep">
-					<p className="px-2 pt-2 text-muted-foreground text-xs">{m.chuaXep}</p>
-					{cay.chuaXep.map(nutPhongBan)}
-				</div>
-			) : null}
-		</nav>
+			)}
+			selectedId={chon}
+		/>
 	);
 }

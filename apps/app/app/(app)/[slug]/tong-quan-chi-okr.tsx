@@ -14,6 +14,7 @@ import { DUONG_NHAC_BUOI_SANG } from "@/lib/pham-vi-man";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { workspaceUrl } from "@/lib/workspace-url";
+import { KhoiKrCuaToi } from "./okr/khoi-kr-cua-toi";
 import { ViecOkrCuaToi } from "./okr/viec-cua-toi";
 
 export async function TongQuanChiOkr({ slug }: { slug: string }) {
@@ -35,6 +36,7 @@ export async function TongQuanChiOkr({ slug }: { slug: string }) {
 			<PageShellContent>
 				<HydrateClient>
 					<ViecOkrCuaToi noi="tong-quan" khiHien="luon" anKhiLoi={false} />
+					<KhoiKrCuaToi />
 				</HydrateClient>
 				<div className="flex gap-2">
 					<Button asChild variant="outline">

@@ -28,6 +28,7 @@ import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, se
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, followOutput, transferOkrOutput } from "../okr/okr.contracts";
+import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
 import { accessOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
@@ -713,6 +714,38 @@ const appRouter = t.router({
       .input(okrImportApplyInput)
       .output(okrImportApplyOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    danhSach: publicProcedure
+      .input(danhSachInput)
+      .output(danhSachOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    toanCanh: publicProcedure
+      .input(cycleOnlyInput)
+      .output(toanCanhOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    sucKhoe: publicProcedure
+      .input(cycleOnlyInput)
+      .output(sucKhoeOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    cayCanChinh: publicProcedure
+      .input(cycleOnlyInput)
+      .output(cayCanChinhOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    hopTuan: publicProcedure
+      .input(hopTuanInput)
+      .output(hopTuanOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    moHopTuan: publicProcedure
+      .input(hopTuanInput)
+      .output(moHopTuanOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    dienBien: publicProcedure
+      .input(dienBienInput)
+      .output(dienBienOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    khoiCuaToi: publicProcedure
+      .input(khoiCuaToiInput)
+      .output(khoiCuaToiOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     capNhatTuan: publicProcedure
       .output(capNhatTuanOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),

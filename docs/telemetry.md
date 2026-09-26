@@ -123,6 +123,8 @@ and reading a person off a LinkedIn URL. They are one key, so they are one boole
 | `recheck_scheduled` | `recheck` tasks queued in the window |
 | `recheck_interval_days` | Their intervals, in day bands |
 | `agent_conversations` | How many `AgentConversation` rows exist |
+| `zalo_questions` | Questions asked through the Zalo bot in the window, keyed by outcome (`dang-hoi` for one still waiting at rollup time, `da-tra-loi`, `gui-hong`, `tu-choi-vai`, `tu-choi-tran-*`, `dang-ban`, `loi`). Counts only — never who asked, the chat, or the text |
+| `zalo_answer_latency_median_s` | Median seconds from the webhook to the answer going out, over answered questions in the window |
 
 Tool names are matched against the authored tools in `apps/agent/agent/tools/` and eve's own
 builtins. Anything else is counted as `other`. Task kinds are matched against `TASK_KINDS`.

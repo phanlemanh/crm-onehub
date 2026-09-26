@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-export const SESSION_PURPOSES = ["builder", "team-agent", "research"] as const;
+export const SESSION_PURPOSES = [
+	"builder",
+	"team-agent",
+	"research",
+	"zalo",
+] as const;
 
 export type SessionPurpose = (typeof SESSION_PURPOSES)[number];
 

@@ -2,12 +2,10 @@
 
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@crm/ui/components/select";
+	type PeriodGroup,
+	type PeriodItem,
+	PeriodSelect,
+} from "@crm/ui/components/period-select";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { okrMessages } from "@/lib/messages/okr";
@@ -34,23 +32,39 @@ export function ChonChuKy() {
 	const { cycles, currentId, datKy } = useChuKy();
 	const ds = cycles.data?.cycles ?? [];
 	if (ds.length === 0 || currentId === null) return null;
+	const dangChay = cycles.data?.currentId ?? null;
+	const nhan = (c: (typeof ds)[number]) =>
+		canNhanLoai(c.name, m.loaiChuKy[c.kind], locale)
+			? `${c.name} · ${m.loaiChuKy[c.kind]}`
+			: c.name;
+	const muc = (c: (typeof ds)[number]): PeriodItem => ({
+		value: c.id,
+		label: nhan(c),
+		current: c.id === dangChay,
+		closed: c.phase === "da-dong",
+	});
+	const theoNgay = (a: { startsOn: string }, b: { startsOn: string }) =>
+		a.startsOn.localeCompare(b.startsOn);
+	const nam = ds.filter((c) => c.kind === "nam").sort(theoNgay);
+	const conCua = (id: string) =>
+		ds.filter((c) => c.parentId === id).sort(theoNgay);
+	const moCoi = ds
+		.filter((c) => c.kind !== "nam" && !nam.some((n) => n.id === c.parentId))
+		.sort(theoNgay);
+	const groups: PeriodGroup[] = [
+		...nam.map((n) => ({
+			label: n.name,
+			items: [muc(n), ...conCua(n.id).map(muc)],
+		})),
+		{ label: m.chuKy, items: moCoi.map(muc) },
+	].filter((g) => g.items.length > 0);
 	return (
-		<Select value={currentId} onValueChange={datKy}>
-			<SelectTrigger aria-label={m.chuKy} size="sm" data-chon-chu-ky>
-				<SelectValue />
-			</SelectTrigger>
-			<SelectContent align="end">
-				{ds.map((c) => (
-					<SelectItem key={c.id} value={c.id}>
-						<span translate="no">{c.name}</span>
-						{canNhanLoai(c.name, m.loaiChuKy[c.kind], locale) ? (
-							<span className="text-muted-foreground">
-								{m.loaiChuKy[c.kind]}
-							</span>
-						) : null}
-					</SelectItem>
-				))}
-			</SelectContent>
-		</Select>
+		<PeriodSelect
+			groups={groups}
+			label={m.chuKy}
+			onValueChange={datKy}
+			triggerAttrs={{ "data-chon-chu-ky": "" }}
+			value={currentId}
+		/>
 	);
 }

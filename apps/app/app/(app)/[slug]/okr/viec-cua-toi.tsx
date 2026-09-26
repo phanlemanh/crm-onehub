@@ -173,7 +173,11 @@ function KhungThe({
 }) {
 	const m = okrMessages(useLocale()).viecCuaToi;
 	return (
-		<Card data-the-viec-okr={noi} data-trang-thai={trangThai}>
+		<Card
+			data-khoi="viec-okr"
+			data-the-viec-okr={noi}
+			data-trang-thai={trangThai}
+		>
 			<CardHeader>
 				<CardTitle>{m.tieuDe[noi]}</CardTitle>
 				<CardDescription>{m.moTa}</CardDescription>

@@ -212,13 +212,15 @@ chuông trong app.
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
 nhắc ngay», và đánh dấu bước xong khi người trả lời `xong` kèm số mục của tin nhắc
-hôm nay. Quản trị viên bật nó bằng cách dán Bot Token ở Kết nối › Zalo. Khác
-**Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng lệnh người gõ. Chốt
-2026-09-23, mở rộng 2026-09-24 và 2026-09-25.
+hôm nay, và trả lời câu hỏi về CRM bằng trợ lý AI cho người đã nối, theo quyền của
+người hỏi, chỉ đọc, có trần số câu. Quản trị viên bật nó bằng cách dán Bot Token ở
+Kết nối › Zalo. Khác **Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng
+lệnh hay trả lời đúng câu người gõ. Chốt 2026-09-23, mở rộng 2026-09-24, 2026-09-25
+và 2026-09-26.
 _Avoid_: tác nhân, trợ lý
 Vì sao: "tác nhân" đã là việc tự động người dùng dựng ra; gọi bot Zalo là tác
-nhân thì người ta chờ nó tự làm việc, còn "trợ lý" hứa một cuộc trò chuyện mà bot
-không có.
+nhân thì người ta chờ nó tự làm việc; "trợ lý" một mình lẫn với **Trợ lý AI** — bot
+là cửa vào, trợ lý AI là thứ trả lời.
 
 **Nối Zalo**: một người trong đội nhắn mã 6 số cho bot Zalo để CRM biết Zalo đó
 là của họ. Làm ở trang «Nhắc buổi sáng» trong menu người dùng (chuyển khỏi
@@ -430,6 +432,38 @@ Vì sao: tình trạng — đúng nhịp hay đang trượt — máy tính đư�
 vọng; mức tự tin là điều người biết mà số chưa cho thấy. Hai thứ đứng cạnh nhau
 trên màn, và lúc chúng lệch nhau là lúc đáng bàn. «Điểm» là của cuối kỳ.
 
+**Tình trạng (KR, mục tiêu)**: máy đọc từ số và vạch «lẽ ra đã tới» — **Đúng
+nhịp**, **Chậm nhịp**, **Trượt**; KR mốc là «Đã xong» hay «Mốc, chưa xong». Mục tiêu
+tham vọng không bao giờ «Trượt». Đứng cạnh mức tự tin, không thay nó. Chốt
+2026-09-26 (lượt 5 lộ trình OKR).
+_Avoid_: rủi ro, sức khoẻ (cho một KR), đèn giao thông, đỏ/vàng/xanh
+Vì sao: «sức khoẻ» đã là chữ của chương trình; màu không phải chữ — tình trạng luôn
+hiện bằng chấm kèm chữ.
+
+**KR im**: KR không có lần cập nhật tuần nào từ 14 ngày trở lên (tính từ lần cuối,
+hoặc từ ngày khởi điểm khoá nếu chưa có lần nào). Là lý do đáng bàn ở bảng họp tuần và
+một cột ở sức khoẻ chương trình. Chốt 2026-09-26.
+_Avoid_: KR chết, KR bỏ quên, KR trễ hạn
+Vì sao: «im» nói đúng điều máy biết — không ai ghi gì — mà không đoán KR có còn chạy.
+
+**Họp tuần**: buổi trưởng đơn vị cùng đơn vị đi qua OKR mỗi tuần. **Bảng họp tuần**
+là cách xem thứ ba của «Theo đơn vị», xếp KR theo thứ đáng bàn: tự tin tụt, KR im,
+ghi chú mới. Bảng xếp theo KR, không liệt kê người chưa cập nhật. Chốt 2026-09-26.
+_Avoid_: điểm danh, báo cáo tuần, giao ban
+Vì sao: «điểm danh» và «giao ban» đặt người vào giữa; họp tuần bàn KR.
+
+**Toàn cảnh**: tab của khu OKR cho mọi vai, kể cả «chỉ OKR» — tiến độ, mức tự tin và
+heatmap của mọi đơn vị trong một chu kỳ. Chốt 2026-09-24 ở bản mẫu, nhãn chốt
+2026-09-26.
+_Avoid_: dashboard, bảng điều khiển
+Vì sao: «Tổng quan» đã là tên trang chủ của CRM; hai màn cùng chữ thì người không biết
+mình đang đứng ở đâu.
+
+**Sức khoẻ chương trình**: màn của quản trị cho biết OKR đang chạy tốt tới đâu theo
+đơn vị — KR cập nhật đúng tuần, KR im, KR chưa có khởi điểm, người chưa nối kênh nhắc.
+Để biết nên kèm đơn vị nào, không để chấm người. Chốt 2026-09-26.
+_Avoid_: tuân thủ, KPI OKR, xếp hạng đơn vị
+
 **Chu kỳ**: khoảng thời gian một bộ OKR sống — năm, hoặc quý nằm trong năm. Có
 ngày đầu, ngày cuối và khoảng nghỉ như Tết. Quản trị chương trình mở và khoá chu
 kỳ. Trong khu OKR, «kỳ» trần là chữ ngắn của chu kỳ — «cuối kỳ», «rà giữa kỳ».
@@ -524,8 +558,8 @@ thư ngay trong cùng màn.
 khung hội thoại — đọc lịch sử công ty, thoả thuận, tìm trong CRM và nghiên cứu
 đối tác theo yêu cầu của một người dùng đang đăng nhập. Là một phần của phạm vi
 dữ liệu đối tác: vai «chỉ OKR» không gọi được nó. Khác **Tác nhân** (việc tự động
-người dùng dựng ra, chạy theo mốc) và khác bot Zalo (chỉ nhắc và nối). Chốt
-2026-09-24.
+người dùng dựng ra, chạy theo mốc) và khác bot Zalo (cửa vào trên Zalo: người đã nối
+hỏi qua bot thì trợ lý AI trả lời, chỉ đọc). Chốt 2026-09-24, thêm kênh Zalo 2026-09-26.
 _Avoid_: agent, eve, bot, chatbot
 Vì sao: «agent» và «eve» là tên kỹ thuật trong mã; «bot» đã là bot Zalo; «trợ lý»
 một mình thì lẫn với hai thứ kia — luôn viết đủ «trợ lý AI».

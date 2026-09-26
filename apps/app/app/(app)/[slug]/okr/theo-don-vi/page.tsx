@@ -7,7 +7,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
+import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { TheoDonVi } from "./theo-don-vi";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -48,11 +48,15 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		await Promise.all([
 			queryClient.prefetchQuery(trpc.okr.countByUnit.queryOptions({ cycleId })),
 			queryClient.prefetchQuery(
-				trpc.okr.byUnit.queryOptions({ cycleId, unit }),
+				trpc.okr.danhSach.queryOptions({
+					cycleId,
+					unit,
+					loc: locOkr(thamSo),
+				}),
 			),
 			thamSo[SEARCH_PARAM.okr.xem] === "cay"
 				? queryClient.prefetchQuery(
-						trpc.okr.alignmentTree.queryOptions({ cycleId }),
+						trpc.okr.cayCanChinh.queryOptions({ cycleId }),
 					)
 				: Promise.resolve(),
 		]);

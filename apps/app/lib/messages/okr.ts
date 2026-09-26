@@ -56,28 +56,14 @@ const vi = {
 	},
 	loai: { "cam-ket": "Cam kết", "tham-vong": "Tham vọng" },
 	trangThai: { nhap: "Nháp", "cong-bo": "Đã công bố", "da-bo": "Đã bỏ" },
-	tinhTrang: {
-		"dung-nhip": "Đúng nhịp",
-		"cham-nhip": "Chậm nhịp",
-		truot: "Trượt",
-		"chua-co-ky-vong": "Chưa có kỳ vọng",
-	},
 	moc: {
 		xong: "Xong",
 		chuaXong: "Chưa xong",
-		daXong: "Đã xong",
-		dangCho: "Mốc, chưa xong",
 	},
 	cot: { kr: "KR", phuTrach: "Phụ trách", tienDo: "Tiến độ", dich: "Đích" },
 	chuaCoKr: "Mục tiêu này chưa có KR.",
-	cotCay: {
-		ten: "Mục tiêu và KR",
-		tienDo: "Tiến độ",
-		trangThai: "Trạng thái",
-	},
 	tienDoCua: (ten: string, p: number) => `Tiến độ ${ten}: ${p}%`,
 	chuaCanChinh: "Chưa căn chỉnh vào đâu",
-	lapLai: "cũng hiện ở chỗ góp kia",
 	dangTai: "Đang tải OKR…",
 	loi: {
 		title: "Không tải được OKR",
@@ -106,10 +92,6 @@ const vi = {
 		title: "Bạn chưa phụ trách mục tiêu hay KR nào",
 		body: "OKR của đơn vị bạn nằm ở Theo đơn vị.",
 		action: "Sang Theo đơn vị",
-	},
-	toanCanh: {
-		title: "Toàn cảnh mở ở lượt 5",
-		body: "Lượt này có Của tôi và Theo đơn vị.",
 	},
 	sheet: {
 		tabKr: "KR",
@@ -254,6 +236,7 @@ const vi = {
 		"theo-doi": "Theo dõi",
 		"bo-theo-doi": "Bỏ theo dõi",
 		"chuyen-viec": "Chuyển việc",
+		"mo-hop-tuan": "Mở bảng họp tuần",
 	},
 	vet: {
 		cot: {
@@ -596,28 +579,14 @@ const en: OkrMessages = {
 	},
 	loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
 	trangThai: { nhap: "Draft", "cong-bo": "Published", "da-bo": "Dropped" },
-	tinhTrang: {
-		"dung-nhip": "On track",
-		"cham-nhip": "Behind",
-		truot: "Off track",
-		"chua-co-ky-vong": "No baseline yet",
-	},
 	moc: {
 		xong: "Done",
 		chuaXong: "Not done",
-		daXong: "Done",
-		dangCho: "Milestone, not done",
 	},
 	cot: { kr: "KR", phuTrach: "Owner", tienDo: "Progress", dich: "Target" },
 	chuaCoKr: "This objective has no KRs yet.",
-	cotCay: {
-		ten: "Objectives and KRs",
-		tienDo: "Progress",
-		trangThai: "Status",
-	},
 	tienDoCua: (ten: string, p: number) => `${ten} progress: ${p}%`,
 	chuaCanChinh: "Not aligned to anything",
-	lapLai: "also shown under its other target",
 	dangTai: "Loading OKRs…",
 	loi: {
 		title: "Couldn't load OKRs",
@@ -646,10 +615,6 @@ const en: OkrMessages = {
 		title: "You don't own any objectives or KRs",
 		body: "Your unit's OKRs are under By unit.",
 		action: "Go to By unit",
-	},
-	toanCanh: {
-		title: "Overview opens in a later release",
-		body: "This release has Mine and By unit.",
 	},
 	sheet: {
 		tabKr: "KR",
@@ -794,6 +759,7 @@ const en: OkrMessages = {
 		"theo-doi": "Followed",
 		"bo-theo-doi": "Unfollowed",
 		"chuyen-viec": "Transferred work",
+		"mo-hop-tuan": "Opened the weekly meeting board",
 	},
 	vet: {
 		cot: {
