@@ -11,12 +11,14 @@ import { RETIRED_OUTCOME } from "@crm/db/agent-tasks";
 import { readAgentModel } from "@crm/db/settings";
 import { CONTACT_CAP_REASON } from "@crm/db/tracking";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 import {
 	bucket,
 	claimRollup,
 	dayBucket,
 	drainCounters,
 	installDaily,
+	OTHER,
 	type Properties,
 	permittedEvidenceKind,
 	permittedMethod,
@@ -33,7 +35,9 @@ import { SEED_OWNER_PREFIX } from "./seed";
 
 const WINDOW_HOURS = 24;
 
-const HOUR_MS = 60 * 60 * 1000;
+const SECOND_MS = 1000;
+
+const HOUR_MS = 60 * 60 * SECOND_MS;
 
 const SUPERSEDE_WINDOW_DAYS = 7;
 
@@ -185,7 +189,7 @@ export class RollupService {
 		since: Date,
 		counters: Record<string, number>,
 	): Promise<Properties> {
-		const [tools, sessions, tasks, attempts, rechecks, conversations] =
+		const [tools, sessions, tasks, attempts, rechecks, conversations, zalo] =
 			await Promise.all([
 				this.toolCalls(since),
 				this.sessions(since),
@@ -193,6 +197,7 @@ export class RollupService {
 				this.attempts(since),
 				this.rechecks(since),
 				this.db.agentConversation.count(),
+				this.zaloQuestions(since),
 			]);
 
 		const total = Object.values(tools.calls).reduce((sum, n) => sum + n, 0);
@@ -222,6 +227,38 @@ export class RollupService {
 			recheck_interval_days: rechecks.buckets,
 
 			agent_conversations: conversations,
+
+			zalo_questions: zalo.byOutcome,
+			zalo_answer_latency_median_s: zalo.medianSeconds,
+		};
+	}
+
+	private async zaloQuestions(since: Date): Promise<{
+		byOutcome: Record<string, number>;
+		medianSeconds: number | null;
+	}> {
+		const [groups, median] = await Promise.all([
+			this.db.zaloHoi.groupBy({
+				by: ["ketQua"],
+				where: { hoiLuc: { gte: since } },
+				_count: { _all: true },
+			}),
+			this.db.$queryRaw<{ median: number | null }[]>`
+				SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY "doTreMs")::float AS median
+				FROM "zaloHoi"
+				WHERE "hoiLuc" >= ${since} AND "ketQua" = 'da-tra-loi' AND "doTreMs" IS NOT NULL
+			`,
+		]);
+		const byOutcome: Record<string, number> = {};
+		for (const group of groups) {
+			const outcome = zaloHoiKetQua.safeParse(group.ketQua);
+			const key = outcome.success ? outcome.data : OTHER;
+			byOutcome[key] = (byOutcome[key] ?? 0) + group._count._all;
+		}
+		const ms = median[0]?.median ?? null;
+		return {
+			byOutcome,
+			medianSeconds: ms === null ? null : round(ms / SECOND_MS),
 		};
 	}
 
