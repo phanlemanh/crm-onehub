@@ -1263,3 +1263,5 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 | S4-r1 fix | bỏ `ipAddressHeaders` | `qmk_dia_chi_rieng` | `hai dia chi chung mot khoa dem: B 429` |
 | S4-r1 fix | proxy đọc `x-forwarded-for` | `qmk_proxy_ky_dia_chi` | `proxy ky dia chi trinh duyet tu dat: 9.9.9.9` |
 | S4-r1 fix | (vật, không phá) bọc lại `Request` quanh thân luồng | `go-la-cat-quyen.spec.ts` | 5 ca POST treo 5 s — sửa: đọc thân thành bytes rồi dựng lại |
+| S4-r2 | trả lớp bọc về bản đọc thân thành bytes | `qmk_ngat_giua_chung` | `api sap khi nguoi goi ngat giua chung: tien trinh thoat ma 1` + trạng thái JSON rỗng lệch better-auth gốc |
+| S4-r2 | (thước) đo sập bằng `process.on("unhandledRejection")` trong cùng tiến trình test | `qmk_ngat_giua_chung` | bun test tự bắt lỗi treo trước bộ nghe → đỏ bằng «error: aborted», không ghim thông điệp; đổi sang máy chủ trong tiến trình con và đo mã thoát |
