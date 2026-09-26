@@ -12,7 +12,7 @@ import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
 import { chayNhac, chuDeNhac, lenLichNhac } from "../agent/lib/nhac-ke-hoach";
-import { dungTin } from "../agent/lib/tin-nhac";
+import { dungTin, TIEU_DE } from "../agent/lib/tin-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
 import {
 	gieoKeHoach,
@@ -48,6 +48,7 @@ import {
 	vet,
 	voiToken,
 } from "./support/okr-gieo";
+import { buocCuaMuc, buocXongLuc, nhan, vetXong } from "./support/tra-loi-gieo";
 import { zaloGia } from "./support/zalo-gia";
 
 const APP_URL = "https://crm.test";
@@ -692,6 +693,53 @@ describe("mot-tin", () => {
 			theo: dongCo(tin.text, "có 1 cập nhật, 1 bình luận mới").length,
 			nhac: dongCo(tin.text, "Xuan nhắc tên bạn ở").length,
 		}).toEqual({ giao: 1, theo: 1, nhac: 1 });
+	});
+
+	test("mot-tin: danh so ca dong OKR, xong tro vao dong OKR khong danh dau buoc nao, xong tro vao dong ke hoach danh dau dung buoc", async () => {
+		const g = await gieoA();
+		setSystemTime(goc);
+		await lenLichNhac(goc);
+		const r = await guiQuaZalo(g.A.id, goc);
+		const daGui = r.payload.daGui ?? [];
+		const loaiDs = daGui.map((m) => m.loai);
+		const soOkr = loaiDs.indexOf("okr-cap-nhat") + 1;
+		const soBuoc = loaiDs.indexOf("buoc-qua-han") + 1;
+		const text = r.z.guiToi("ZA")[0]?.body.text ?? "";
+		const cacDong = text.split("\n");
+		expect(
+			{
+				soOkr,
+				soBuoc,
+				danhSoOkr: cacDong.some((d) => d.startsWith(`${soOkr}. `)),
+				danhSoBuoc: cacDong.some((d) => d.startsWith(`${soBuoc}. `)),
+			},
+			"dong OKR va dong ke hoach deu duoc danh so lien tuc trong daGui",
+		).toEqual({ soOkr: 1, soBuoc: 2, danhSoOkr: true, danhSoBuoc: true });
+
+		const stepId = buocCuaMuc(daGui, soBuoc);
+		const truocOkr = await nhan("ZA", `xong ${soOkr}`, goc);
+		expect(
+			{
+				traLoi: truocOkr.tra[0],
+				buocXong: await buocXongLuc(stepId),
+				soVetXong: (await vetXong(stepId)).length,
+			},
+			"xong tro vao dong OKR bi tu choi, khong danh dau buoc 30 ngay nao",
+		).toEqual({
+			traLoi: `${ZALO.loi.khongPhaiBuoc(soOkr, TIEU_DE["okr-cap-nhat"], null)} ${ZALO.loi.chuaDanhDau}`,
+			buocXong: null,
+			soVetXong: 0,
+		});
+
+		const sauBuoc = await nhan("ZA", `xong ${soBuoc}`, goc);
+		expect(
+			{
+				buocXong: (await buocXongLuc(stepId)) !== null,
+				soVetXong: (await vetXong(stepId)).length,
+				traLoiDungBuoc: (sauBuoc.tra[0] ?? "").includes(`${soBuoc} · Tre (`),
+			},
+			"xong tro vao dong ke hoach danh dau dung buoc do, con dong OKR van khong dinh gi",
+		).toEqual({ buocXong: true, soVetXong: 1, traLoiDungBuoc: true });
 	});
 });
 
