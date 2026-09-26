@@ -28,11 +28,11 @@ const en = {
 		daXoa: (so: string) => `Removed ${so} synced items.`,
 		vaoLai: "Sign out and back in.",
 		batBuoc:
-			"You will be signed out, and you cannot use the CRM again until you grant access.",
+			"You will be signed out, and you cannot use OneHub Center again until you grant access.",
 	},
 	danhSach: {
 		tieuDe: "Connections",
-		moTa: "Where your CRM gets its information, and what it is allowed to send on your behalf.",
+		moTa: "Where OneHub Center gets its information, and what it is allowed to send on your behalf.",
 		them: "Add connection",
 		quanLy: "Manage",
 		cam: "Connect",
@@ -48,7 +48,7 @@ const en = {
 		microsoftMangVe: "Outlook email and the people on it",
 		trongTieuDe: "Nothing is connected yet",
 		trongMoTa:
-			"Right now every deal, contact and note has to be typed in by hand. Connect a tool and the CRM starts filling itself in from the work your team already does.",
+			"Right now every deal, contact and note has to be typed in by hand. Connect a tool and OneHub Center starts filling itself in from the work your team already does.",
 		googleKhoiDau: "File email and meetings against the right company",
 		slackKhoiDau: "Let deployed agents notify approved channels and people",
 		zaloKhoiDau: "Send each person their morning reminder on Zalo",
@@ -73,7 +73,7 @@ const en = {
 		chuaCauHinhMoTa:
 			"Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in the root .env file and restart.",
 		chuaCamMoTa:
-			"Read-only Gmail and Calendar. Only conversations with companies in the CRM are stored.",
+			"Read-only Gmail and Calendar. Only conversations with companies in OneHub Center are stored.",
 		khongVoiToi: "Could not reach Google.",
 		camHong: "Google did not finish connecting",
 		camHongMoTa:
@@ -91,7 +91,7 @@ const en = {
 		dongBoHong: (nguon: string) => `${nguon} sync failed`,
 		xuLy: "Resolve",
 		xoaDuLieuMoTa:
-			"Every email and meeting brought in from Google is removed from the CRM. The next check starts from now, so nothing deleted here comes back.",
+			"Every email and meeting brought in from Google is removed from OneHub Center. The next check starts from now, so nothing deleted here comes back.",
 		go: "Revoke Google access",
 		goHoi: "Revoke Google access?",
 		goMoTa:
@@ -113,7 +113,7 @@ const en = {
 		chuaCauHinhMoTa:
 			"Set MICROSOFT_CLIENT_ID and MICROSOFT_CLIENT_SECRET in the root .env file and restart.",
 		chuaCamMoTa:
-			"Read-only Outlook mail. Only conversations with companies in the CRM are stored.",
+			"Read-only Outlook mail. Only conversations with companies in OneHub Center are stored.",
 		khongVoiToi: "Could not reach Microsoft.",
 		camHong: "Microsoft did not finish connecting",
 		camHongMoTa:
@@ -131,7 +131,7 @@ const en = {
 		nhanEmail: "Email",
 		tuTao: "Add the company and contact when you reply to someone new",
 		xoaDuLieuMoTa:
-			"Every email brought in from Outlook is removed from the CRM. The next check starts from now, so nothing deleted here comes back.",
+			"Every email brought in from Outlook is removed from OneHub Center. The next check starts from now, so nothing deleted here comes back.",
 		go: "Disconnect Microsoft",
 		goHoi: "Disconnect Microsoft?",
 		goMoTa:
@@ -143,7 +143,7 @@ const en = {
 	},
 	slack: {
 		gioiThieu:
-			"Connecting Slack gives the CRM a way in and a way out. What it actually does with that is up to you afterwards, one automation at a time.",
+			"Connecting Slack gives OneHub Center a way in and a way out. What it actually does with that is up to you afterwards, one automation at a time.",
 		banGiao: "What you are handing over",
 		khongBaoGio: "What it will never do",
 		khongBaoGioMuc: [
@@ -203,11 +203,11 @@ const en = {
 			],
 			[
 				"account_already_linked_to_different_user",
-				"That Slack installer is already linked to another CRM account.",
+				"That Slack installer is already linked to another OneHub Center account.",
 			],
 			[
 				"email_doesn't_match",
-				"The Slack installer's email must match the CRM account you are signed in with.",
+				"The Slack installer's email must match the email you signed in to OneHub Center with.",
 			],
 			[
 				"oauth_code_verification_failed",
@@ -273,15 +273,15 @@ const en = {
 	},
 	nguoi: {
 		nhan: "People",
-		moTa: "Match your CRM people to Slack once. Agents use these exact accounts later instead of guessing from a similar name.",
+		moTa: "Match people in OneHub Center to Slack once. Agents use these exact accounts later instead of guessing from a similar name.",
 		demKhop: (khop: string, tong: string) => `${khop} of ${tong} matched`,
 		lamMoi: "Refresh from Slack",
 		dangLamMoi: "Refreshing…",
 		treo: "OneHub is not reading Slack right now. These matches can be out of date.",
-		khongCoAi: "No CRM teammates are available to match.",
+		khongCoAi: "No OneHub Center teammates are available to match.",
 		khongKhopEmail: "No exact email match",
 		ghiChu:
-			"Refresh after a Slack email changes. The CRM matches exact email addresses only. Someone with no exact match stays unmatched, and an agent stops instead of guessing at a similar name.",
+			"Refresh after a Slack email changes. OneHub Center matches exact email addresses only. Someone with no exact match stays unmatched, and an agent stops instead of guessing at a similar name.",
 		tiepTuc: "Continue",
 	},
 	tiepNhan: {
@@ -321,11 +321,11 @@ const vi = {
 		daXoa: (so: string) => `Đã xoá ${so} mục đã kéo về.`,
 		vaoLai: "Đăng xuất rồi đăng nhập lại.",
 		batBuoc:
-			"Bạn sẽ bị đăng xuất, và không dùng lại được CRM cho tới khi cấp quyền.",
+			"Bạn sẽ bị đăng xuất, và không dùng lại được OneHub Center cho tới khi cấp quyền.",
 	},
 	danhSach: {
 		tieuDe: "Kết nối",
-		moTa: "CRM lấy thông tin từ đâu, và nó được phép gửi gì thay mặt bạn.",
+		moTa: "OneHub Center lấy thông tin từ đâu, và nó được phép gửi gì thay mặt bạn.",
 		them: "Thêm kết nối",
 		quanLy: "Quản lý",
 		cam: "Cắm",
@@ -341,7 +341,7 @@ const vi = {
 		microsoftMangVe: "Email Outlook và những người có mặt",
 		trongTieuDe: "Chưa cắm gì cả",
 		trongMoTa:
-			"Hiện giờ mọi thoả thuận, cá nhân và ghi chú đều phải gõ tay. Cắm một công cụ vào thì CRM tự điền lấy từ việc đội bạn vốn đã làm.",
+			"Hiện giờ mọi thoả thuận, cá nhân và ghi chú đều phải gõ tay. Cắm một công cụ vào thì OneHub Center tự điền lấy từ việc đội bạn vốn đã làm.",
 		googleKhoiDau: "Xếp email và cuộc họp về đúng công ty",
 		slackKhoiDau: "Cho tác nhân đã bật báo tin tới kênh và người đã duyệt",
 		zaloKhoiDau: "Gửi nhắc buổi sáng cho từng người qua Zalo",
@@ -366,7 +366,7 @@ const vi = {
 		chuaCauHinhMoTa:
 			"Đặt GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET trong tệp .env ở gốc kho rồi khởi động lại.",
 		chuaCamMoTa:
-			"Chỉ đọc Gmail và Lịch. Chỉ hội thoại với công ty có trong CRM mới được lưu.",
+			"Chỉ đọc Gmail và Lịch. Chỉ hội thoại với công ty có trong OneHub Center mới được lưu.",
 		khongVoiToi: "Không với tới Google.",
 		camHong: "Google chưa cắm xong",
 		camHongMoTa: "Google trả về lỗi trước khi cắm xong. Thử lại.",
@@ -383,7 +383,7 @@ const vi = {
 		dongBoHong: (nguon: string) => `Đồng bộ hỏng: ${nguon}`,
 		xuLy: "Xử lý",
 		xoaDuLieuMoTa:
-			"Mọi thư và cuộc họp kéo về từ Google sẽ bị xoá khỏi CRM. Lần kiểm sau bắt đầu từ bây giờ, nên thứ đã xoá ở đây không quay lại.",
+			"Mọi thư và cuộc họp kéo về từ Google sẽ bị xoá khỏi OneHub Center. Lần kiểm sau bắt đầu từ bây giờ, nên thứ đã xoá ở đây không quay lại.",
 		go: "Thu hồi quyền Google",
 		goHoi: "Thu hồi quyền Google?",
 		goMoTa:
@@ -405,7 +405,7 @@ const vi = {
 		chuaCauHinhMoTa:
 			"Đặt MICROSOFT_CLIENT_ID và MICROSOFT_CLIENT_SECRET trong tệp .env ở gốc kho rồi khởi động lại.",
 		chuaCamMoTa:
-			"Chỉ đọc thư Outlook. Chỉ hội thoại với công ty có trong CRM mới được lưu.",
+			"Chỉ đọc thư Outlook. Chỉ hội thoại với công ty có trong OneHub Center mới được lưu.",
 		khongVoiToi: "Không với tới Microsoft.",
 		camHong: "Microsoft chưa cắm xong",
 		camHongMoTa: "Microsoft trả về lỗi trước khi cắm xong. Thử lại.",
@@ -422,7 +422,7 @@ const vi = {
 		nhanEmail: "Thư",
 		tuTao: "Thêm công ty và cá nhân khi bạn trả lời người mới",
 		xoaDuLieuMoTa:
-			"Mọi thư kéo về từ Outlook sẽ bị xoá khỏi CRM. Lần kiểm sau bắt đầu từ bây giờ, nên thứ đã xoá ở đây không quay lại.",
+			"Mọi thư kéo về từ Outlook sẽ bị xoá khỏi OneHub Center. Lần kiểm sau bắt đầu từ bây giờ, nên thứ đã xoá ở đây không quay lại.",
 		go: "Gỡ Microsoft",
 		goHoi: "Gỡ Microsoft?",
 		goMoTa:
@@ -434,7 +434,7 @@ const vi = {
 	},
 	slack: {
 		gioiThieu:
-			"Cắm Slack là cho CRM một lối vào và một lối ra. Nó thật sự làm gì với hai lối đó thì tuỳ bạn quyết sau, mỗi lần một tự động hoá.",
+			"Cắm Slack là cho OneHub Center một lối vào và một lối ra. Nó thật sự làm gì với hai lối đó thì tuỳ bạn quyết sau, mỗi lần một tự động hoá.",
 		banGiao: "Bạn đang trao đi những gì",
 		khongBaoGio: "Nó sẽ không bao giờ làm gì",
 		khongBaoGioMuc: [
@@ -491,11 +491,11 @@ const vi = {
 			["access_denied", "Việc cài lên Slack bị huỷ trước khi quyền được cấp."],
 			[
 				"account_already_linked_to_different_user",
-				"Người cài Slack đó đã gắn với một tài khoản CRM khác.",
+				"Người cài Slack đó đã gắn với một tài khoản OneHub Center khác.",
 			],
 			[
 				"email_doesn't_match",
-				"Email của người cài Slack phải trùng với tài khoản CRM bạn đang đăng nhập.",
+				"Email của người cài Slack phải trùng với tài khoản OneHub Center bạn đang đăng nhập.",
 			],
 			[
 				"oauth_code_verification_failed",
@@ -561,15 +561,15 @@ const vi = {
 	},
 	nguoi: {
 		nhan: "Người",
-		moTa: "Khớp người trong CRM với Slack một lần. Về sau tác nhân dùng đúng những tài khoản này thay vì đoán theo tên na ná.",
+		moTa: "Khớp người trong OneHub Center với Slack một lần. Về sau tác nhân dùng đúng những tài khoản này thay vì đoán theo tên na ná.",
 		demKhop: (khop: string, tong: string) => `Đã khớp ${khop} trên ${tong}`,
 		lamMoi: "Lấy lại từ Slack",
 		dangLamMoi: "Đang lấy lại…",
 		treo: "OneHub đang không đọc Slack. Các cặp khớp này có thể đã cũ.",
-		khongCoAi: "Không có đồng nghiệp nào trong CRM để khớp.",
+		khongCoAi: "Không có đồng nghiệp nào trong OneHub Center để khớp.",
 		khongKhopEmail: "Không email nào trùng khít",
 		ghiChu:
-			"Lấy lại sau khi một email Slack đổi. CRM chỉ khớp địa chỉ email trùng khít. Người không có email trùng khít thì để trống, và tác nhân dừng lại thay vì đoán theo tên na ná.",
+			"Lấy lại sau khi một email Slack đổi. OneHub Center chỉ khớp địa chỉ email trùng khít. Người không có email trùng khít thì để trống, và tác nhân dừng lại thay vì đoán theo tên na ná.",
 		tiepTuc: "Tiếp tục",
 	},
 	tiepNhan: {

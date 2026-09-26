@@ -3,7 +3,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 const en = {
 	oSoan: {
 		taoTacNhan: "Create agent",
-		datCauHoi: "Ask about your CRM or automate a task…",
+		datCauHoi: "Ask about your records or automate a task…",
 		guiTin: "Send a message",
 		nhanOSoan: "Message the agent builder",
 		gui: "Send message",
@@ -11,9 +11,9 @@ const en = {
 		dangGui: "Sending",
 		daGui: "Sent",
 		guiHong: "Send failed",
-		gan: "Tag CRM records and integrations",
-		timCrm: "Search CRM",
-		nhomBanGhi: "CRM records",
+		gan: "Tag records and integrations",
+		timCrm: "Search OneHub Center",
+		nhomBanGhi: "Records",
 		khongKhop: "No matching records.",
 		dinhTep: "Attach files",
 		moLenh: "Open slash commands",
@@ -38,7 +38,7 @@ export type OSoanMessages = typeof en;
 const vi = {
 	oSoan: {
 		taoTacNhan: "Tạo tác nhân",
-		datCauHoi: "Hỏi về CRM của bạn, hoặc tả một việc cần tự động…",
+		datCauHoi: "Hỏi về dữ liệu trong OneHub Center, hoặc tả một việc cần tự động…",
 		guiTin: "Gửi một tin",
 		nhanOSoan: "Ô soạn tin cho bộ dựng tác nhân",
 		gui: "Gửi tin",
@@ -46,9 +46,9 @@ const vi = {
 		dangGui: "Đang gửi",
 		daGui: "Đã gửi",
 		guiHong: "Gửi hỏng",
-		gan: "Gắn bản ghi CRM và kết nối",
-		timCrm: "Tìm trong CRM",
-		nhomBanGhi: "Bản ghi CRM",
+		gan: "Gắn bản ghi và kết nối",
+		timCrm: "Tìm trong OneHub Center",
+		nhomBanGhi: "Bản ghi",
 		khongKhop: "Không có bản ghi nào khớp.",
 		dinhTep: "Đính tệp",
 		moLenh: "Mở danh sách lệnh",

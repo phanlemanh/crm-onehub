@@ -53,12 +53,6 @@ export async function AuthShell({
 
 				<div className="relative flex max-w-lg flex-col gap-8">
 					<div className="flex flex-col gap-4">
-						<p
-							className="font-mono text-xs/4 text-muted-foreground uppercase"
-							translate="no"
-						>
-							{m.eyebrow}
-						</p>
 						<h1 className="max-w-[14ch] text-5xl/14 font-semibold text-balance">
 							{m.headline}
 						</h1>
