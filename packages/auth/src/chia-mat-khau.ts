@@ -2,7 +2,8 @@ import { randomBytes } from "node:crypto";
 import { db as khoChung, type Prisma } from "@crm/db";
 
 const SECOND_MS = 1000;
-const HOUR_SECONDS = 60 * 60;
+const MINUTE_SECONDS = 60;
+const HOUR_SECONDS = 60 * MINUTE_SECONDS;
 
 export const PASSWORD = {
 	minLength: 12,
@@ -10,6 +11,8 @@ export const PASSWORD = {
 	tokenBytes: 24,
 	rowIdBytes: 16,
 	verificationPrefix: "reset-password:",
+	requestWindowSeconds: MINUTE_SECONDS,
+	requestMax: 3,
 } as const;
 
 export const CHIA = {

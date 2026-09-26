@@ -1,0 +1,11 @@
+Driver: rang/chup.mjs (puppeteer-core headless Chrome) chay qua rang/luot-cong.sh,
+khong phai browser tool co read_network_requests/read_console_messages.
+=> networkObserved = "n-a (driver)".
+
+Doi chieu tho tu server log (.acceptance-runs/quen-mat-khau/may-chu-bat.log):
+- Khong co dong 5xx/Error/Unhandled nao (grep rong) ngoai 429 cua qua-luot.
+- Dong 429 that (lan gui thu 4, may chu that, client better-auth that):
+[api] WARN [HTTP ...] POST /api/auth/request-password-reset 429 6.7ms
+ POST /api/auth/request-password-reset 429 in 41ms (next.js: 1.7ms, application-code: 39ms)
+=> dung ky vong: lan thu 4 nhan 429 that tu may chu that, khop voi
+  "lan gui thu tu toi may chu that (429 that, client better-auth that)".
