@@ -1,0 +1,184 @@
+{
+  "feature_plain": "Người mới mở trang đăng nhập sẽ thấy ba bước để được vào CRM, và người bị từ chối sẽ thấy câu nói lý do thay vì bị trả về im lặng.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chỉ hiện khối «Lần đầu vào?» ở trang đăng nhập; bốn trang dùng chung khung (đặt mật khẩu, cấp quyền, khai báo, khoá nghiên cứu) không có khối này."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ giữ nguyên bố cục bốn trang kia, chỉ đổi dòng tiêu đề «Mọi khách hàng, một chỗ.» thành «CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.» và thôi ép giao diện tối."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ hiện ba bước khi Google bật: nhờ quản trị viên cho phép địa chỉ (kèm chỉ đường tới nút «Cho phép một địa chỉ»), đăng nhập Google đúng địa chỉ đó, xin liên kết đặt mật khẩu với số phút hết hạn lấy từ cấu hình thật."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ để các bước luôn nói khớp với các nút đang hiện: chỉ mật khẩu thì không có bước Google, có Microsoft hay SSO thì gọi đúng tên, không đọc được cấu hình thì giống ca Google bật."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ báo «Địa chỉ này chưa được cho phép vào» cho người bị danh sách cho phép chặn, nhận ra bằng chính câu mà máy chủ đăng nhập đang gửi về hôm nay."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ báo «Bạn đã dừng đăng nhập giữa chừng» khi người bấm huỷ ở trang Google."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ báo một câu chung «Chưa đăng nhập được» cho mọi lỗi khác, và không bao giờ in lại giá trị lạ lấy từ đường dẫn lên trang."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ đặt ô lỗi trên các nút đăng nhập để trình đọc màn hình đọc lên ngay, mà không kéo con trỏ khỏi chỗ người đang đứng."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ đổi tiêu đề «Mừng bạn quay lại» thành «Đăng nhập vào CRM» ở cả tiếng Việt lẫn tiếng Anh."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ để trang đăng nhập theo giao diện sáng hay tối của máy người xem, cột trái nền xám phẳng."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ đặt khối hướng dẫn dưới nút «Đăng nhập» trên điện thoại và máy tính bảng dọc, sang cột trái trên màn rộng, không trang nào phải cuộn ngang."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ giữ phím Tab đi đúng thứ tự từ logo, nút Google, ô email, ô mật khẩu, «Quên mật khẩu?» (khi PR #104 đã vào) tới nút «Đăng nhập», chữ đọc rõ ở cả hai giao diện."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ giữ nguyên kết quả của ba hồ sơ đã ký đang đo cùng vùng này (logo, màn xin quyền, đăng nhập bằng mật khẩu)."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-14",
+      "p": "Chặn mọi đường làm lộ mã máy chủ ra trình duyệt, mọi màu hay góc tự đặt ngoài bộ giao diện chung, và mọi thay đổi vào trang giới thiệu của hãng, bộ định tuyến hay gói đăng nhập; khối hướng dẫn dùng danh sách bước ở chế độ tĩnh, không bước nào trông như chưa tới lượt."
+    }
+  ],
+  "scope_plain": "Không làm trang giới thiệu dài, không đổi câu lỗi gốc ở gói đăng nhập, không làm trang «Quên mật khẩu» (thuộc PR #104), không bật Microsoft, không đổi bố cục bốn trang kia.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã phủ cả năm trang dùng chung khung: chỉ trang đăng nhập có khối mới (AC-1, AC-2)."
+    },
+    {
+      "i": 1,
+      "p": "Đã phủ mọi tổ hợp nút đăng nhập hiện có: Google, Microsoft, SSO, chỉ mật khẩu, ép một cửa, cấu hình lỗi (AC-3, AC-4)."
+    },
+    {
+      "i": 2,
+      "p": "Đã phủ mọi kiểu lỗi có thể quay về trang: vắng, rỗng, chưa được cho phép, chưa khai danh sách, tự huỷ, lỗi khác, chuỗi độc hại, chuỗi lặp (AC-5 đến AC-8)."
+    },
+    {
+      "i": 3,
+      "p": "Đã phủ bốn khổ màn 320, 768, 1024, 1440 ở cả giao diện sáng và tối (AC-10, AC-11)."
+    },
+    {
+      "i": 4,
+      "p": "Áp cho mọi ô: không in giá trị lạ từ đường dẫn, ô lỗi được đọc lên, chữ đủ tương phản, máy chủ tính còn trình duyệt chỉ vẽ, thay đổi ở tệp của hãng giữ nhỏ nhất."
+    },
+    {
+      "i": 5,
+      "p": "Anh chốt: viết «địa chỉ email» thay «email công ty» đã duyệt, vì nhân viên kinh doanh dùng Gmail cá nhân."
+    },
+    {
+      "i": 6,
+      "p": "Anh chốt: ngoài «chưa được cho phép», chỉ ca tự huỷ ở Google đáng một câu riêng; các mã hiếm khác dùng câu chung."
+    },
+    {
+      "i": 7,
+      "p": "Anh chốt: người đã bị gỡ khỏi không gian làm việc đi qua trang «hết quyền», không qua ô lỗi này."
+    },
+    {
+      "i": 8,
+      "p": "Chuẩn ngành: ô lỗi được đọc lên như một thông báo trạng thái, không kéo con trỏ."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Các ca kiểm giả lập một phần trang trong cùng một lần chạy, làm ca khác đo nhầm vật — đã tách thành ba tệp chạy riêng."
+    },
+    {
+      "i": 1,
+      "p": "Lời hứa «không in giá trị lạ» chỉ được đo trên một bản vẽ thử, không trên trang thật — đã viết lại lời hứa cho đúng phạm vi và thêm phép đo trên trang thật."
+    },
+    {
+      "i": 2,
+      "p": "Bản thiết kế nói logo ở hai chỗ khác nhau và không rõ có bấm được không — đã chốt: logo cột trái chỉ để nhìn, logo bấm được duy nhất ở tiêu đề, thứ tự Tab như nhau mọi khổ."
+    },
+    {
+      "i": 3,
+      "p": "Dữ liệu cấu hình đăng nhập trong ca kiểm được gõ tay, lệch máy chủ thật cũng không ai biết — đã buộc khớp kiểu với máy chủ và thêm một dòng đọc cấu hình thật; ba nhánh hiếm (chỉ mật khẩu, SSO, Microsoft) vẫn chỉ đo trên ca kiểm."
+    },
+    {
+      "i": 4,
+      "p": "Đường đăng nhập SSO có cách gửi lỗi riêng mà phép đo bỏ sót — đã thêm mỏ neo thứ ba."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260925T152541Z-1",
+      "p": "Nhận ca «chưa được cho phép» bằng phần đầu câu lỗi tiếng Anh máy chủ đang gửi — đổi lại, đổi câu đó ở gói đăng nhập thì trang về câu chung, và phép đo sẽ đỏ ngay."
+    },
+    {
+      "id": "d-20260925T152541Z-2",
+      "p": "Thôi ép giao diện tối cho cả năm trang; trang đăng nhập nền xám phẳng — đổi lại, bốn trang kia ở giao diện sáng vẫn mang hiệu ứng nền tối mờ, chưa soát bằng mắt."
+    },
+    {
+      "id": "d-20260925T152541Z-3",
+      "p": "Viết «địa chỉ email» thay «email công ty» anh đã duyệt — đổi lại, lệch chữ đã duyệt cho tới khi anh chốt."
+    },
+    {
+      "id": "d-20260925T152541Z-4",
+      "p": "KHÔNG dựng nhà cung cấp đăng nhập giả để chạy trọn đường Google → trang — đổi lại, một thay đổi của thư viện đăng nhập nằm ngoài ba mỏ neo sẽ lọt."
+    },
+    {
+      "id": "d-20260925T152541Z-5",
+      "p": "Chạy bản bấm được trước cổng này — đổi lại, tốn một bàn thử trên cổng riêng."
+    },
+    {
+      "id": "d-20260925T202141Z-6",
+      "p": "Anh nhận năm khuyến nghị khi duyệt lần đầu — không đổi gì thêm."
+    },
+    {
+      "id": "d-20260925T202523Z-8",
+      "p": "Khối hướng dẫn là một phần riêng tự tải, còn nút và bước dùng chung một hàm chọn — đổi lại, cấu hình đăng nhập có thể được đọc hai lần mỗi lượt mở trang."
+    },
+    {
+      "id": "d-20260926T041530Z-9",
+      "p": "Sửa cách đo khi viết mã (danh sách hồ sơ đã ký, bước chạy E14) — không đổi lời hứa nào."
+    },
+    {
+      "id": "d-20260926T052555Z-10",
+      "p": "Sửa cách đo khi viết mã (danh sách hồ sơ đã ký, bước chạy E14) — không đổi lời hứa nào."
+    },
+    {
+      "id": "d-20260926T055126Z-11",
+      "p": "Sửa thước sau lượt chấm máy — không đổi mã trang."
+    },
+    {
+      "id": "d-20260926T060645Z-12",
+      "p": "Sửa thước sau lượt chấm máy — không đổi mã trang."
+    },
+    {
+      "id": "d-20260926T064518Z-13",
+      "p": "Sau khi dừng vá, thêm một phép đo cho danh sách bước ở chế độ tĩnh và ký lại phạm vi — đổi lại, thêm một lần ký."
+    },
+    {
+      "id": "d-20260926T064518Z-14",
+      "p": "KHÔNG siết ba thước yếu trong vòng này — ghi giới hạn đã biết và tách thành việc riêng."
+    },
+    {
+      "id": "d-20260926T064518Z-15",
+      "p": "KHÔNG gom hằng số phút của trang quên mật khẩu và KHÔNG đổi kiểu danh sách bước trong vòng này — mỗi việc một chip riêng."
+    }
+  ],
+  "decisions": [],
+  "analyst_plain": ""
+}

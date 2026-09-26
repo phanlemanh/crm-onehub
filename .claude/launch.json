@@ -161,6 +161,33 @@
       "port": 3300
     },
     {
+      "name": "ban-do-cvdn-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3841 bun run dev"
+      ],
+      "port": 3841
+    },
+    {
+      "name": "ban-do-cvdn-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3840 NEXT_PUBLIC_API_URL=http://localhost:3841 API_URL=http://localhost:3841 APP_URL=http://localhost:3840 bun run dev"
+      ],
+      "port": 3840
+    },
+    {
+      "name": "proto-cvdn",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PROTO_ROUTE=1 PORT=3840 NEXT_PUBLIC_API_URL=http://localhost:3841 API_URL=http://localhost:3841 APP_URL=http://localhost:3840 bun run dev"
+      ],
+      "port": 3840
+    },
+    {
       "name": "qmk-api-thu",
       "runtimeExecutable": "bash",
       "runtimeArgs": [
