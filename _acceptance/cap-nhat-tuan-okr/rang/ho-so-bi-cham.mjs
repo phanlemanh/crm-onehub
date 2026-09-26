@@ -331,7 +331,9 @@ else {
 		"=== scripts/pre-merge-check.sh --base origin/onehub (toan kho) ===",
 	);
 	console.log(raTruocGop);
-	console.log(`=== pre-merge-check ma thoat: ${preMerge.status} ===`);
+	console.log(
+		`=== pre-merge-check toan kho thoat ma ${preMerge.status}; ma nay KHONG phai ket qua cua E21 — dong VIOLATION [${SLUG}] la verdict cu cua chinh ho so dang cham, bo qua; E21 chi doc VIOLATION cua ho so KHAC ===`,
+	);
 }
 if (!raTruocGop.includes(`[${SLUG}]`))
 	doHong.push(
