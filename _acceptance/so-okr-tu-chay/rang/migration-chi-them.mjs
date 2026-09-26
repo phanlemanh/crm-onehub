@@ -21,7 +21,7 @@ const MOC = "origin/onehub";
 const MODEL_MOI = ["OkrNguonKr", "OkrSoChup"];
 const CHI_MUC_MAY = "okrSoChup_may_mot_ngay";
 const GHIM = Object.freeze({
-	addColumn: "migration khong chi them: ADD COLUMN tren bang co san",
+	addColumn: "migration khong chi them: ADD COLUMN",
 	dropIndex: "migration khong chi them: DROP INDEX",
 	lienKhoi: "model Okr khong lien cuoi schema",
 	xoaLan: "bản chụp bị xoá lan",
@@ -75,16 +75,14 @@ function viPham(c) {
 	const drop = hoa.match(/\bDROP\s+(\w+)/)?.[1];
 	if (drop) return `DROP ${drop}`;
 	if (/ALTER COLUMN|RENAME/.test(hoa)) return "ALTER COLUMN/RENAME";
-	if (/ADD COLUMN/.test(hoa))
-		return cuBang
-			? `ADD COLUMN tren bang co san (${bang})`
-			: `ADD COLUMN (${bang})`;
+	if (/^ALTER TABLE "[^"]+" ADD CONSTRAINT "[^"]+" FOREIGN KEY/.test(hoa))
+		return null;
+	if (/ADD COLUMN/.test(hoa)) return `ADD COLUMN (${bang})`;
+	if (/^ALTER TABLE/.test(hoa)) return `ALTER TABLE khac ADD CONSTRAINT FOREIGN KEY (${bang})`;
 	if (/^CREATE TABLE/.test(hoa))
 		return cuBang ? `CREATE TABLE trung bang co san (${bang})` : null;
 	if (/^CREATE (UNIQUE )?INDEX/.test(hoa))
 		return cuBang ? `CREATE INDEX tren bang co san (${bang})` : null;
-	if (/^ALTER TABLE "[^"]+" ADD CONSTRAINT "[^"]+" FOREIGN KEY/.test(hoa))
-		return cuBang ? `ADD CONSTRAINT tren bang co san (${bang})` : null;
 	return `lenh la: ${c.slice(0, 60)}`;
 }
 
@@ -337,8 +335,15 @@ function chieuDo() {
 	const tam = mkdtempSync(join(tmpdir(), "so-okr-mig-"));
 	const bo = [
 		{
-			nhan: "ADD COLUMN tren okrKeyResult",
+			nhan: "ADD COLUMN tren okrKeyResult (bang cu)",
 			sql: `${DOI_CHUNG}ALTER TABLE "okrKeyResult" ADD COLUMN "x" TEXT;\n`,
+			schema,
+			ma: 1,
+			ghim: GHIM.addColumn,
+		},
+		{
+			nhan: "ADD COLUMN tren okrSoChup (bang moi)",
+			sql: `${DOI_CHUNG}ALTER TABLE "okrSoChup" ADD COLUMN "x" TEXT;\n`,
 			schema,
 			ma: 1,
 			ghim: GHIM.addColumn,

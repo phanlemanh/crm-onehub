@@ -1,32 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import type { Locale } from "@crm/ui/lib/locale";
+import { BAC_GHI_DANH, MA_CHI_SO } from "@crm/validation/okr-chi-so";
+import { LY_DO_DOC_SHEET } from "@crm/validation/okr-nguon";
 import { okrSoMessages } from "@/lib/messages/okr-so";
 
-const MA_CHI_SO = [
-	"thoa-thuan-chot-duoc",
-	"thoa-thuan-moi",
-	"goi-hen-duoc",
-	"buoc-xong-dung-han",
-	"ghi-danh-dat-bac",
-	"form-thanh-ca-nhan",
-	"email-gui-ra",
-] as const;
-const BAC_GHI_DANH = [
-	"tai-khoan",
-	"khoa-hoc",
-	"hoat-dong",
-	"giao-dich-dau",
-] as const;
 const DON_VI = ["thoa-thuan", "cuoc-goi", "buoc", "ca-nhan", "thu"] as const;
 const NGUON = ["tay", "crm", "api", "bangTinh"] as const;
-const LY_DO_DOC_SHEET = [
-	"chua-chia-se",
-	"khong-thay",
-	"khong-phai-so",
-	"o-trong",
-	"google-loi",
-	"tat",
-] as const;
 const LOCALE: readonly Locale[] = ["vi", "en"];
 const CO_DAU = /[à-ỹ]/i;
 
@@ -197,5 +176,12 @@ describe("chữ của số OKR", () => {
 			(d) => !d.startsWith("dau.") && d !== "nguon.bangTinh.nhan",
 		);
 		expect(khongDoiTieng(duong)).toEqual([]);
+	});
+
+	test("khoá của sheets.lyDo khớp đúng LY_DO_DOC_SHEET, cả hai tiếng", () => {
+		for (const locale of LOCALE)
+			expect(
+				Object.keys(okrSoMessages(locale).trangThai.hopThoai.sheets.lyDo),
+			).toEqual([...LY_DO_DOC_SHEET]);
 	});
 });
