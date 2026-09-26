@@ -29,6 +29,7 @@ import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
+import { okrMessages } from "@/lib/messages/okr";
 import {
 	type ThanhVienMessages,
 	thanhVienMessages,
@@ -36,6 +37,7 @@ import {
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { ChuyenOkrDialog } from "./chuyen-okr-dialog";
 import { ChuyenViecDialog } from "./chuyen-viec-dialog";
 import { ConfirmDialog } from "./confirm-dialog";
 import { membersSearchParams } from "./members-search-params";
@@ -61,6 +63,8 @@ function columns(
 	pending: boolean,
 	onChuyenViec: ((member: MemberRow) => void) | null,
 	nhanChuyenViec: string,
+	onChuyenOkr: ((member: MemberRow) => void) | null,
+	nhanChuyenOkr: string,
 ): DataTableColumn<MemberRow>[] {
 	return [
 		{
@@ -161,7 +165,7 @@ function columns(
 			align: "right",
 			width: "w-[6%]",
 			cell: (row) =>
-				canChangeRoles || canManageMembers || onChuyenViec ? (
+				canChangeRoles || canManageMembers || onChuyenViec || onChuyenOkr ? (
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" disabled={pending}>
@@ -189,6 +193,12 @@ function columns(
 							{onChuyenViec ? (
 								<DropdownMenuItem onSelect={() => onChuyenViec(row)}>
 									{nhanChuyenViec}
+								</DropdownMenuItem>
+							) : null}
+
+							{onChuyenOkr ? (
+								<DropdownMenuItem onSelect={() => onChuyenOkr(row)}>
+									{nhanChuyenOkr}
 								</DropdownMenuItem>
 							) : null}
 
@@ -237,8 +247,10 @@ export function MembersTable() {
 
 	const [dangGo, setDangGo] = useState<MemberRow | null>(null);
 	const [dangChuyen, setDangChuyen] = useState<MemberRow | null>(null);
+	const [dangChuyenOkr, setDangChuyenOkr] = useState<MemberRow | null>(null);
 	const quyenKeHoach = useQuery(trpc.onboarding.access.queryOptions());
 	const k = keHoachNoiMessages(locale).chuyen;
+	const kOkr = okrMessages(locale).chuyen;
 
 	const remove = useMutation(
 		trpc.workspace.removeMember.mutationOptions({
@@ -300,6 +312,10 @@ export function MembersTable() {
 							? (member) => setDangChuyen(member)
 							: null,
 						k.menu,
+						quyenKeHoach.data?.canManage
+							? (member) => setDangChuyenOkr(member)
+							: null,
+						kOkr.menu,
 					)}
 					rows={members.data?.rows ?? []}
 					total={members.data?.total ?? 0}
@@ -318,6 +334,15 @@ export function MembersTable() {
 						: { userId: dangChuyen.userId, name: dangChuyen.name }
 				}
 				onDong={() => setDangChuyen(null)}
+			/>
+
+			<ChuyenOkrDialog
+				nguoi={
+					dangChuyenOkr === null
+						? null
+						: { userId: dangChuyenOkr.userId, name: dangChuyenOkr.name }
+				}
+				onDong={() => setDangChuyenOkr(null)}
 			/>
 
 			<ConfirmDialog

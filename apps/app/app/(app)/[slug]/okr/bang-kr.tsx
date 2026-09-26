@@ -21,7 +21,11 @@ const DINH_DANG_SO = { vi: "vi-VN", en: "en-US" } satisfies Record<
 	string
 >;
 
-function giaTri(kr: KetQua, so: number, locale: Locale): string {
+export function giaTri(
+	kr: Pick<KetQua, "kind" | "unit">,
+	so: number,
+	locale: Locale,
+): string {
 	const m = okrMessages(locale);
 	if (kr.kind === "moc") return so >= 1 ? m.moc.xong : m.moc.chuaXong;
 	const chu = so.toLocaleString(DINH_DANG_SO[locale]);

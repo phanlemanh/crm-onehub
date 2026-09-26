@@ -100,6 +100,7 @@ function kr(id: string, objectiveId: string): KrOutput {
 		startLocked: true,
 		progress: 40,
 		laCuaToi: false,
+		hienTaiQuaCapNhat: false,
 	};
 }
 
@@ -123,6 +124,9 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 		keyResults: Array.from({ length: soKr }, (_, i) => kr(`${id}-${i}`, id)),
 		alignments: [],
 		canEdit: false,
+		following: false,
+		followerCount: 0,
+		theoDoi: false,
 	};
 }
 
@@ -541,10 +545,11 @@ describe("thanh-tab", () => {
 			tieuDe: m.tieuDe["theo-don-vi"],
 			lienKet: [
 				"/ws/okr?kyOkr=q3",
+				"/ws/okr/cap-nhat-tuan?kyOkr=q3",
 				"/ws/okr/theo-don-vi?kyOkr=q3",
 				"/ws/okr/toan-canh?kyOkr=q3",
 			],
-			dangChon: ["false", "true", "false"],
+			dangChon: ["false", "false", "true", "false"],
 		});
 	});
 });

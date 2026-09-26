@@ -903,16 +903,20 @@ describe("cong-bo", () => {
 				id: k1,
 				startValue: 10,
 				targetValue: 60,
-				currentValue: 30,
 			}),
 			"doi dich",
 		);
+		const doiHienTai = await goi("okr.updateKeyResult", {
+			id: k1,
+			currentValue: 30,
+		});
+		expect(tuChoi(doiHienTai)).toBe(`400 ${T.hienTaiQuaCapNhat}`);
 		const k1Sau = await docK1();
 		expect([
 			Number(k1Sau.startValue),
 			Number(k1Sau.targetValue),
 			Number(k1Sau.currentValue),
-		]).toEqual([10, 60, 30]);
+		]).toEqual([10, 60, 20]);
 
 		const k3 = await taoKr(krVao(a, quan));
 		expect(

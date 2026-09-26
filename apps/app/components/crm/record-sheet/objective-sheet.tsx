@@ -3,6 +3,8 @@
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
 import Link from "@carbon/icons-react/es/Link";
+import Notification from "@carbon/icons-react/es/Notification";
+import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
@@ -28,6 +30,10 @@ import { toast } from "sonner";
 import { BangKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
+import {
+	HopThoaiCapNhatKr,
+	krCapNhatTuSheet,
+} from "@/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr";
 import { HopThoaiKr } from "@/app/(app)/[slug]/okr/hop-thoai-kr";
 import { HopThoaiMucTieu } from "@/app/(app)/[slug]/okr/hop-thoai-muc-tieu";
 import { CELL, type KetQua } from "@/app/(app)/[slug]/okr/kieu";
@@ -48,6 +54,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";
 import { useRecordSheetView } from "./record-stack";
@@ -77,6 +84,35 @@ function useXong(objectiveId: string, baoXong: string, sau: () => void) {
 			toast.error(e.message);
 		},
 	};
+}
+
+function NutTheoDoi({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	const trpc = useTRPC();
+	const cache = useCrmCache();
+	const theoDoi = useMutation(
+		trpc.okr.follow.mutationOptions({
+			onSuccess: () => cache.okr(mt.id, { settle: "record" }),
+			onError: (e) => toast.error(e.message),
+		}),
+	);
+	const dang = theoDoi.isPending ? theoDoi.variables.on : mt.following;
+	return (
+		<Button
+			aria-pressed={dang}
+			data-nut="theo-doi"
+			disabled={theoDoi.isPending}
+			onClick={() => theoDoi.mutate({ objectiveId: mt.id, on: !dang })}
+			size="sm"
+			variant="outline"
+		>
+			<Icon
+				data-icon="inline-start"
+				icon={dang ? NotificationFilled : Notification}
+			/>
+			<span className="max-sm:sr-only">{dang ? m.dangTheoDoi : m.theoDoi}</span>
+		</Button>
+	);
 }
 
 function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
@@ -161,18 +197,21 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 function MenuKr({
 	mt,
 	kr,
+	capNhat,
 	sua,
 	xoa,
 }: {
 	mt: ChiTiet;
 	kr: KetQua;
+	capNhat: () => void;
 	sua: () => void;
 	xoa: () => void;
 }) {
 	const m = okrMessages(useLocale()).sheet;
+	const capNhatDuoc = kr.hienTaiQuaCapNhat && (kr.laCuaToi || mt.canEdit);
 	const suaDuoc = mt.status !== "da-bo" && mt.canEditKr.includes(kr.id);
 	const xoaDuoc = ghiDuoc(mt);
-	if (!suaDuoc && !xoaDuoc) return null;
+	if (!capNhatDuoc && !suaDuoc && !xoaDuoc) return null;
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -185,6 +224,11 @@ function MenuKr({
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
+				{capNhatDuoc ? (
+					<DropdownMenuItem data-muc="cap-nhat-kr" onSelect={capNhat}>
+						{m.capNhatKr}
+					</DropdownMenuItem>
+				) : null}
 				{suaDuoc ? (
 					<DropdownMenuItem onSelect={sua}>{m.suaKr}</DropdownMenuItem>
 				) : null}
@@ -198,12 +242,30 @@ function MenuKr({
 	);
 }
 
-type HopKr = { loai: "tao" } | { loai: "sua"; kr: KetQua };
+type HopKr =
+	| { loai: "tao" }
+	| { loai: "sua"; kr: KetQua }
+	| { loai: "cap-nhat"; kr: KetQua; sessionId: string | null };
 
 function TabKr({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
 	const [hop, setHop] = useState<HopKr | null>(null);
+	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
+	const moCapNhat = (kr: KetQua) => {
+		setHop({ loai: "cap-nhat", kr, sessionId: null });
+		moPhien.mutate(
+			{ entry: "sheet" },
+			{
+				onSuccess: ({ sessionId }) =>
+					setHop((cu) =>
+						cu?.loai === "cap-nhat" && cu.kr.id === kr.id
+							? { ...cu, sessionId }
+							: cu,
+					),
+			},
+		);
+	};
 	const [xoa, setXoa] = useState<KetQua | null>(null);
 	const go = useMutation(
 		trpc.okr.removeKeyResult.mutationOptions(
@@ -227,6 +289,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 								<MenuKr
 									mt={mt}
 									kr={kr}
+									capNhat={() => moCapNhat(kr)}
 									sua={() => setHop({ loai: "sua", kr })}
 									xoa={() => setXoa(kr)}
 								/>
@@ -248,7 +311,17 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 					</Button>
 				</div>
 			) : null}
-			{hop ? (
+			{hop?.loai === "cap-nhat" ? (
+				<HopThoaiCapNhatKr
+					kr={krCapNhatTuSheet(mt, hop.kr)}
+					chuTen={hop.kr.owner.name}
+					ghiHo={!hop.kr.laCuaToi}
+					sessionId={hop.sessionId}
+					loiMo={moPhien.isError}
+					moLai={() => moCapNhat(hop.kr)}
+					dong={() => setHop(null)}
+				/>
+			) : hop ? (
 				<HopThoaiKr
 					objectiveId={mt.id}
 					kr={hop.loai === "sua" ? hop.kr : null}
@@ -423,6 +496,7 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 	const trpc = useTRPC();
 	const { tab, setTab } = useRecordSheetView("kr");
 	const query = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
+	const binhLuan = useQuery(trpc.okr.comments.queryOptions({ objectiveId }));
 	const cycles = useQuery(trpc.okr.cycles.queryOptions());
 	const mt = query.data;
 	const tenKy = mt
@@ -455,6 +529,20 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 								alignments={mt.alignments}
 							/>
 						</DetailSheetBody>
+					),
+				},
+				{
+					value: "trao-doi",
+					label: m.tabTraoDoi,
+					count: binhLuan.data?.comments.length ?? null,
+					content: (
+						<TabTraoDoi
+							objectiveId={mt.id}
+							keyResults={mt.keyResults.map((k) => ({
+								id: k.id,
+								title: k.title,
+							}))}
+						/>
 					),
 				},
 			]
@@ -492,7 +580,14 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					) : null
 				}
 				media={mt ? <EntityLogo name={mt.title} size="lg" /> : null}
-				actions={mt && ghiDuoc(mt) ? <HanhDongMucTieu mt={mt} /> : null}
+				actions={
+					mt ? (
+						<>
+							<NutTheoDoi mt={mt} />
+							{ghiDuoc(mt) ? <HanhDongMucTieu mt={mt} /> : null}
+						</>
+					) : null
+				}
 				stats={mt ? <SoMucTieu mt={mt} /> : null}
 				tabs={tabs}
 				tab={tab}

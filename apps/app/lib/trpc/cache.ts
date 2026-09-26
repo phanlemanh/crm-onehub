@@ -254,15 +254,21 @@ export function useCrmCache(): CrmCache {
 					id
 						? trpc.okr.objective.queryKey({ id })
 						: trpc.okr.objective.queryKey(),
+					id
+						? trpc.okr.comments.queryKey({ objectiveId: id })
+						: trpc.okr.comments.queryKey(),
 				],
 				[
 					trpc.okr.byUnit.queryKey(),
+					trpc.okr.capNhatTuan.queryKey(),
+					trpc.okr.viecCuaToi.queryKey(),
 					trpc.okr.mine.queryKey(),
 					trpc.okr.alignmentTree.queryKey(),
 					trpc.okr.countByUnit.queryKey(),
 					trpc.okr.alignmentTargets.queryKey(),
 					trpc.okr.cycles.queryKey(),
 					trpc.okr.program.queryKey(),
+					trpc.okr.transferPreview.queryKey(),
 				],
 				options,
 			),

@@ -1,0 +1,177 @@
+import type { Db, Prisma } from "@crm/db";
+import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import {
+	type GuiCapNhatInput,
+	kiemGiaTriTheoKieu,
+	type MoCapNhatInput,
+	MUC_TU_TIN,
+} from "@crm/validation/okr-cap-nhat";
+import { kieuKr } from "@crm/validation/okr-kr";
+import {
+	BadRequestException,
+	ForbiddenException,
+	Inject,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
+import { z } from "zod";
+import { InjectDatabase } from "../database/database.constants";
+import type { CapNhatTuanOutput } from "./okr.contracts";
+import { chonTenDonVi, OkrService, tenDonVi } from "./okr.service";
+import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
+import { OKR } from "./okr-config";
+
+const T = OKR.thongDiep;
+const mucTuTin = z.enum(MUC_TU_TIN);
+const soDb = (d: Prisma.Decimal | number) => Number(d);
+const ngayDb = (s: string) => new Date(`${s}T00:00:00Z`);
+
+@Injectable()
+export class OkrCapNhatService {
+	constructor(
+		@InjectDatabase() private readonly db: Db,
+		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(OkrService) private readonly okr: OkrService,
+	) {}
+
+	async capNhatTuan(
+		userId: string,
+		now = new Date(),
+	): Promise<CapNhatTuanOutput> {
+		const tuan = dauTuanVN(now);
+		const krs = await this.db.okrKeyResult.findMany({
+			where: {
+				ownerUserId: userId,
+				objective: { status: "cong-bo", cycle: { phase: "dang-chay" } },
+			},
+			include: {
+				objective: {
+					select: {
+						title: true,
+						...chonTenDonVi,
+						cycle: { select: { updateWeekday: true } },
+					},
+				},
+			},
+			orderBy: [
+				{ objective: { createdAt: "asc" } },
+				{ objectiveId: "asc" },
+				{ position: "asc" },
+			],
+		});
+		const lan = await this.db.okrCheckIn.findMany({
+			where: { keyResultId: { in: krs.map((k) => k.id) } },
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			distinct: ["keyResultId"],
+		});
+		const thu = [...new Set(krs.map((k) => k.objective.cycle.updateWeekday))];
+		return {
+			items: krs.map((k) => {
+				const cuoi = lan.find((l) => l.keyResultId === k.id);
+				return {
+					keyResultId: k.id,
+					title: k.title,
+					objectiveId: k.objectiveId,
+					objectiveTitle: k.objective.title,
+					unitName: tenDonVi(k.objective),
+					kind: kieuKr.parse(k.kind),
+					unit: k.unit,
+					targetValue: soDb(k.targetValue),
+					currentValue: soDb(k.currentValue),
+					lastConfidence: cuoi ? mucTuTin.parse(cuoi.confidence) : null,
+					lastAt: cuoi ? cuoi.createdAt.toISOString() : null,
+					updatedThisWeek:
+						cuoi !== undefined &&
+						cuoi.weekStart.toISOString().slice(0, 10) === tuan,
+				};
+			}),
+			weekStart: tuan,
+			dueWeekday: thu.length > 0 ? Math.min(...thu) : null,
+		};
+	}
+
+	async moCapNhat(userId: string, input: MoCapNhatInput, now = new Date()) {
+		const phien = await this.db.okrCheckInSession.create({
+			data: { userId, entry: input.entry, openedAt: now },
+		});
+		return { sessionId: phien.id };
+	}
+
+	async guiCapNhat(userId: string, input: GuiCapNhatInput, now = new Date()) {
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCheckInSession" WHERE id = ${input.sessionId} FOR UPDATE`;
+			const phien = await tx.okrCheckInSession.findUnique({
+				where: { id: input.sessionId },
+			});
+			if (!phien || phien.userId !== userId)
+				throw new ForbiddenException(T.capNhat.phienKhongCua);
+			if (phien.submittedAt)
+				throw new BadRequestException(T.capNhat.phienDaGui);
+			const krs = await tx.okrKeyResult.findMany({
+				where: { id: { in: input.items.map((m) => m.keyResultId) } },
+				include: {
+					objective: {
+						select: { ...chonDonVi, cycle: { select: { phase: true } } },
+					},
+				},
+			});
+			const q = await this.quyenOkr.quyen(userId);
+			const ke = input.items.map((m) => {
+				const kr = krs.find((k) => k.id === m.keyResultId);
+				if (!kr) throw new NotFoundException(T.khongCoKr(m.keyResultId));
+				if (kr.objective.status !== "cong-bo")
+					throw new BadRequestException(T.capNhat.mucTieuChuaCongBo);
+				if (kr.objective.cycle.phase !== "dang-chay")
+					throw new BadRequestException(T.capNhat.kyKhongChay);
+				const chu = kr.ownerUserId === userId;
+				if (
+					!chu &&
+					!this.quyenOkr.suaDuocDonVi(q, userId, donViCua(kr.objective))
+				)
+					throw new ForbiddenException(T.capNhat.khongPhaiChuHayTruong);
+				const loi = kiemGiaTriTheoKieu(kieuKr.parse(kr.kind), m.value);
+				if (loi) throw new BadRequestException(T.capNhat.giaTri[loi]);
+				return { kr, m, onBehalf: !chu };
+			});
+			const tuan = ngayDb(dauTuanVN(now));
+			for (const { kr, m, onBehalf } of ke) {
+				await tx.okrCheckIn.create({
+					data: {
+						keyResultId: kr.id,
+						sessionId: phien.id,
+						weekStart: tuan,
+						value: m.value,
+						confidence: m.confidence,
+						note: m.note,
+						authorUserId: userId,
+						ownerUserId: kr.ownerUserId,
+						onBehalf,
+					},
+				});
+				await tx.okrKeyResult.update({
+					where: { id: kr.id },
+					data: { currentValue: m.value },
+				});
+				await this.okr.vet(
+					tx,
+					userId,
+					"cap-nhat-tuan",
+					{ objectiveId: kr.objectiveId, keyResultId: kr.id },
+					{ currentValue: soDb(kr.currentValue) },
+					{ currentValue: m.value, confidence: m.confidence, onBehalf },
+				);
+			}
+			const seconds = Math.max(
+				0,
+				Math.floor(
+					(now.getTime() - phien.openedAt.getTime()) / OKR.thoiGian.giayMs,
+				),
+			);
+			await tx.okrCheckInSession.update({
+				where: { id: phien.id },
+				data: { submittedAt: now, seconds },
+			});
+			return { written: ke.length, seconds };
+		});
+	}
+}

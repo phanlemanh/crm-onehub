@@ -3,13 +3,28 @@ import { z } from "zod";
 
 export { LOAI_NHAC, type LoaiNhac } from "@crm/db/onboarding-nhac";
 
-export const mucNhac = z
-	.object({
-		loai: z.enum(LOAI_NHAC),
-		planId: z.string().min(1),
-		stepId: z.string().min(1).optional(),
-	})
-	.strict();
+const ma = z.string().min(1);
+
+export const mucNhac = z.union([
+	z
+		.object({ loai: z.enum(LOAI_NHAC), planId: ma, stepId: ma.optional() })
+		.strict(),
+	z
+		.object({ loai: z.literal("okr-cap-nhat"), krIds: z.array(ma).min(1) })
+		.strict(),
+	z.object({ loai: z.enum(["okr-kr-im"]), keyResultId: ma }).strict(),
+	z
+		.object({
+			loai: z.literal("okr-duoc-giao"),
+			objectiveId: ma,
+			keyResultId: ma.optional(),
+		})
+		.strict(),
+	z.object({ loai: z.literal("okr-nhac-ten"), commentId: ma }).strict(),
+	z.object({ loai: z.literal("okr-theo-doi"), objectiveId: ma }).strict(),
+]);
+
+export type MucNhac = z.infer<typeof mucNhac>;
 
 export const nhacPayload = z
 	.object({

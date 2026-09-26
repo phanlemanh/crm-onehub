@@ -1,3 +1,4 @@
+import { LOI_VAO } from "@crm/validation/okr-cap-nhat";
 import {
 	createLoader,
 	createParser,
@@ -40,6 +41,7 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.ky]: parseAsString,
 	[SEARCH_PARAM.okr.don]: parseAsDonOkr,
 	[SEARCH_PARAM.okr.xem]: parseAsStringLiteral(CACH_XEM),
+	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
 };
 
 export const loadOkrSearchParams = createLoader(okrParsers);
