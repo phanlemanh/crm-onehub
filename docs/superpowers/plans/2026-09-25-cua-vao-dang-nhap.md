@@ -532,7 +532,7 @@ Mọi đường dẫn suy từ `import.meta.url` (`const GOC = join(dirname(file
 
 ---
 
-**Step 1–3 đã làm 2026-09-26.** `ma-loi-that.mjs` 9/9 (3 mỏ neo + 2 writer × 3 câu); chiều đỏ: câu hook đổi → 4 SAI; dist SSO đổi phép biến đổi → «SAI moc sso». `soi-ma.mjs` 19/19 kèm 2 đối chứng dương; chiều đỏ: bản sao client nhập `@crm/auth` → SAI (a), `<Card className="rounded-2xl bg-muted">` → SAI (c). **Step 4 (`thuoc-da-ky`) để lại**: chạy eval của ba hồ sơ đã ký trên hai cây, nặng như một làn đo — xin lượt phiên điều phối.
+**Step 1–3 đã làm 2026-09-26.** `ma-loi-that.mjs` 9/9 (3 mỏ neo + 2 writer × 3 câu); chiều đỏ: câu hook đổi → 4 SAI; dist SSO đổi phép biến đổi → «SAI moc sso». `soi-ma.mjs` 19/19 kèm 2 đối chứng dương; chiều đỏ: bản sao client nhập `@crm/auth` → SAI (a), `<Card className="rounded-2xl bg-muted">` → SAI (c). **Step 4 (`thuoc-da-ky`) xong 12:21–12:25 ngày 26/09, sau gộp #152 (`4da3c175`)**: 13/13 (base `e394b581` 0 → head 0), mỗi cây một phiên đo #150; cây base cài phụ thuộc thật (Turbopack từ chối `node_modules` symlink ra ngoài gốc) và chạy `db:generate`. Chiều đỏ: gỡ vạch «hoặc» ở trang đăng nhập → đúng một dòng «SAI vao-bang-email-va-mat-khau/E13: base 0 -> head 1».
 
 ### Task 5b: Bàn đo màn thật
 
@@ -556,7 +556,9 @@ Khuôn: như `_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs` — `
 
 `independent: false` · phục vụ mọi eval máy
 
-- [ ] **Step 1:** Mỗi phá-thử ghi ở `expected` của E1–E20 chạy trên BẢN SAO (thư mục `.acceptance-runs/cua-vao-dang-nhap/sao-*` + symlink `node_modules`, không trong gói — bài học oxlint quét `.sao-*`), ghi nguyên văn dòng đỏ vào Notes của hợp đồng.
-- [ ] **Step 2:** Năm lệnh từ gốc kho, PATH Bun 1.3.12: `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build`. Tất cả mã 0.
-- [ ] **Step 3:** `cvdn_san_thiet_ke` (design-gate static) mã 0.
-- [ ] **Step 4:** Set contract `status: implemented`, commit, dispatch S4.
+- [x] **Step 1:** Mỗi phá-thử ghi ở `expected` của E1–E20 chạy trên BẢN SAO (thư mục `.acceptance-runs/cua-vao-dang-nhap/sao-*` + symlink `node_modules`, không trong gói — bài học oxlint quét `.sao-*`), ghi nguyên văn dòng đỏ vào Notes của hợp đồng.
+- [x] **Step 2:** Năm lệnh từ gốc kho, PATH Bun 1.3.12: `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build`. Tất cả mã 0.
+- [x] **Step 3:** `cvdn_san_thiet_ke` (design-gate static) mã 0.
+- [x] **Step 4:** Set contract `status: implemented`, commit, dispatch S4.
+
+**Đã làm 2026-09-26.** Năm lệnh 11:15–11:18 xanh (`lint:slop` đỏ một lỗi ở răng mới, sửa `16b8ddbe`); nhánh sao lưu đẩy ở `16b8ddbe`. Sau gộp #152: kiểm kiểu 13/13, `ma-loi-that` 9/9, `soi-ma` 19/19. `cvdn_san_thiet_ke` chạy trong S4.

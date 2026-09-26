@@ -5,7 +5,7 @@ slug: cua-vao-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-25T20:21:04Z
 design_doc: docs/superpowers/specs/2026-09-25-cua-vao-dang-nhap-design.md
@@ -92,3 +92,5 @@ Ngưỡng ở `opportunity.md` (chờ ký Cổng Đáng):
 - design-pass 25/09 (`design-pass.md`): bản mẫu `/proto/cua-vao-dang-nhap`, 36 ảnh; một vá Nhóm 1 (ô lỗi có tiêu đề + biểu tượng), năm mục Nhóm 2 chờ Cổng Phạm vi — trong đó hướng của khối «Lần đầu vào?» («Đều nhau» hay «Tiến độ»).
 - Lint W6 của kit báo 8 chữ theo nghĩa khác với mục `_Avoid_` của `CONTEXT.md`: «ẩn» là ẩn phần tử bằng CSS (không phải lưu trữ); «khách» nằm trong chuỗi cũ «Mọi khách hàng, một chỗ.» mà vòng này bỏ; «quản trị» là vai quản trị của không gian làm việc (không phải trưởng đơn vị); «thuộc tính» là thuộc tính HTML (không phải trường); «điểm» là điểm Tab; «người xem» là người đang nhìn màn hình (không phải vai).
 - Tiền đề của bàn đo màn thật (`cvdn_do_cua_vao`, E11–E14, E19): lệnh đặt `GOOGLE_CLIENT_ID=ci-only-google-client-id` và `GOOGLE_CLIENT_SECRET=ci-only-google-client-secret` khi hai biến này rỗng, đúng giá trị CI dùng (`.github/workflows/ci.yml`). `.env` của máy dev để rỗng hai khoá này nên trang thật không có nút Google; khoá giả chỉ làm API báo `google=true` để điều kiện «Google bật» của AC-3/AC-11/AC-12 đúng — không ai bấm được nút đó tới Google. Thước gọi tên khi tiền đề sai («tien de AC-12 khong dung — API tra google=false»). Bàn đo chạy trong phiên đo #150 trên `crm_<cây>_do`, không trên CSDL dev chung.
+- Chiều đỏ và phá-thử của S3 (26/09): test DOM mới chạy trên mã cũ — `cua-vao-sign-in` 20/24 đỏ, `cua-vao-trang-khac` 1/5 đỏ, `cua-vao-shell` 6/7 đỏ, mỗi ca đỏ với thông điệp ghim; phá-thử trên cây đã commit — bỏ `method` khi tính bước, in `error` ra trang, `onboarding` nhận khối, ô lỗi sau ô mật khẩu, trang thôi truyền `quenMatKhau` — mỗi nhát đỏ đúng ca mang tên. `ma-loi-that`: câu hook đổi → 4 SAI; dist SSO đổi → «SAI moc sso». `soi-ma`: client nhập `@crm/auth` → SAI (a), `<Card className="rounded-2xl bg-muted">` → SAI (c). Bàn đo: khoá Google rỗng → 4 dòng «tien de AC-12 khong dung»; bỏ khổ 768 → 6 dòng «thieu»; ép `dark` lên `<main>` → «light: 1 phan tu mang lop dark». `thuoc-da-ky`: gỡ vạch «hoặc» → «SAI vao-bang-email-va-mat-khau/E13: base 0 -> head 1».
+- `thuoc-da-ky` rút danh sách theo luật của E20 nên khác danh sách viết tay của AC-13: thêm `man-xin-quyen-co-rang` E3, E11 và `vao-bang-email-va-mat-khau` E17; `logo-onehub` E11 và `man-xin-quyen-co-rang` E10 là `ui-check`, ngoài làn máy (sổ quyết định d-…-9, chờ phê ở Cổng Bằng chứng).
