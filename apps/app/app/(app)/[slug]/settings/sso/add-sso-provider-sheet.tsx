@@ -2,6 +2,7 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
+import { CopyValue } from "@crm/ui/components/copy-value";
 import {
 	Field,
 	FieldDescription,
@@ -35,7 +36,6 @@ import { ssoMessages } from "@/lib/messages/settings-sso";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { CopyValue } from "../copy-value";
 
 const FORM = "add-sso-provider";
 

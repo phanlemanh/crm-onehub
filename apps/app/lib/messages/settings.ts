@@ -90,8 +90,6 @@ const en = {
 		khongDuQuyen: "Only an owner or an admin can change the research key.",
 	},
 	chep: {
-		nhan: "Copy",
-		xong: (ten: string) => `${ten} copied.`,
 		hong: (ten: string) => `Could not copy the ${ten}. Select it instead.`,
 	},
 	tienTe: {
@@ -233,8 +231,6 @@ const vi = {
 		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới thay được khoá.",
 	},
 	chep: {
-		nhan: "Chép",
-		xong: (ten: string) => `Đã chép ${ten}.`,
 		hong: (ten: string) => `Không chép được ${ten}. Bôi đen rồi chép tay.`,
 	},
 	tienTe: {
