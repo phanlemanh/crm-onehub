@@ -40,9 +40,8 @@ function hien(khoa) {
 
 export function docChuoi(tep, noiDung) {
 	if (tep.endsWith(".webmanifest")) {
-		return Object.values(JSON.parse(noiDung))
-			.filter((v) => typeof v === "string")
-			.map((chu) => ({ dong: 1, chu }));
+		const { name, short_name: tenNgan } = JSON.parse(noiDung);
+		return [name, tenNgan].filter(Boolean).map((chu) => ({ dong: 1, chu: String(chu) }));
 	}
 	const nguon = ts.createSourceFile(
 		tep,

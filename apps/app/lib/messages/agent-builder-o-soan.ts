@@ -38,7 +38,8 @@ export type OSoanMessages = typeof en;
 const vi = {
 	oSoan: {
 		taoTacNhan: "Tạo tác nhân",
-		datCauHoi: "Hỏi về dữ liệu trong OneHub Center, hoặc tả một việc cần tự động…",
+		datCauHoi:
+			"Hỏi về dữ liệu trong OneHub Center, hoặc tả một việc cần tự động…",
 		guiTin: "Gửi một tin",
 		nhanOSoan: "Ô soạn tin cho bộ dựng tác nhân",
 		gui: "Gửi tin",

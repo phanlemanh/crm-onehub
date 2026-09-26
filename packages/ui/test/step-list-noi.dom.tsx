@@ -5,6 +5,7 @@ import { StepList, StepListItem } from "../src/components/step-list";
 
 const TIEN_DO_SEP = 0;
 const TIEN_DO_XONG = 3;
+const TEN_BUOC = ["bước một", "bước hai", "bước ba", "bước bốn"];
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -28,13 +29,8 @@ function dung(el: ReactElement): HTMLElement {
 function danhSach(n: number, tinh: boolean): HTMLElement {
 	return dung(
 		<StepList activeStep={2} label="Lần đầu vào?" markCompleted tinh={tinh}>
-			{Array.from({ length: n }, (_, i) => (
-				<StepListItem
-					activeStep={2}
-					key={`b${i + 1}`}
-					step={i + 1}
-					title={`bước ${i + 1}`}
-				/>
+			{TEN_BUOC.slice(0, n).map((ten, i) => (
+				<StepListItem activeStep={2} key={ten} step={i + 1} title={ten} />
 			))}
 		</StepList>,
 	);

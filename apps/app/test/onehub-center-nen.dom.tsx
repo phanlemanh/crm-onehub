@@ -28,7 +28,17 @@ function nhapAuthShader(): string {
 	try {
 		return execFileSync(
 			"git",
-			["-C", GOC, "grep", "-l", "auth-shader", "--", "apps/app"],
+			[
+				"-C",
+				GOC,
+				"grep",
+				"-l",
+				"-e",
+				'components/auth-shader"',
+				"--",
+				"apps/app",
+				":(exclude)apps/app/test",
+			],
 			{
 				encoding: "utf8",
 			},

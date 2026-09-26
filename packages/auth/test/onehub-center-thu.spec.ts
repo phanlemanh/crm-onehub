@@ -24,8 +24,8 @@ describe("thu va ten ung dung", () => {
 	});
 
 	it("chuoi phan loai loi khong doi", () => {
-		expect(AUTH, "chuoi phan loai loi doi").toContain(
-			"`This CRM is private. Sign in with your @${domain} account.`",
+		expect(AUTH, "chuoi phan loai loi doi").toMatch(
+			/`This CRM is private\. Sign in with your @\$\{domain\} account\.`/,
 		);
 		expect(AUTH, "chuoi phan loai loi doi").toContain(
 			'"This CRM is private. That address is not on the allow-list."',

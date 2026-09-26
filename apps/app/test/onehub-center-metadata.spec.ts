@@ -5,7 +5,7 @@ import ts from "typescript";
 
 const LAYOUT = join(import.meta.dir, "..", "app", "layout.tsx");
 
-function metadataThat(): Record<string, string> {
+function metadataThat() {
 	const nguon = ts.createSourceFile(
 		LAYOUT,
 		readFileSync(LAYOUT, "utf8"),
@@ -13,12 +13,12 @@ function metadataThat(): Record<string, string> {
 		true,
 		ts.ScriptKind.TSX,
 	);
-	const ra: Record<string, string> = {};
+	const ra = new Map<string, string>();
 	const docObject = (o: ts.ObjectLiteralExpression, tien: string) => {
 		for (const p of o.properties) {
 			if (!ts.isPropertyAssignment(p) || !ts.isIdentifier(p.name)) continue;
 			const khoa = `${tien}${p.name.text}`;
-			if (ts.isStringLiteral(p.initializer)) ra[khoa] = p.initializer.text;
+			if (ts.isStringLiteral(p.initializer)) ra.set(khoa, p.initializer.text);
 			if (ts.isObjectLiteralExpression(p.initializer))
 				docObject(p.initializer, `${khoa}.`);
 		}
@@ -43,17 +43,15 @@ const META = metadataThat();
 
 describe("ten tab va manifest", () => {
 	it("doc duoc metadata tu layout", () => {
-		expect(Object.keys(META).length, "khong doc duoc metadata").toBeGreaterThan(
-			0,
-		);
+		expect(META.size, "khong doc duoc metadata").toBeGreaterThan(0);
 	});
 
 	it("title mac dinh", () => {
-		expect(META["title.default"]).toBe("OneHub Center");
+		expect(META.get("title.default")).toBe("OneHub Center");
 	});
 
 	it("khuon title", () => {
-		expect(META["title.template"]).toBe("%s · OneHub Center");
+		expect(META.get("title.template")).toBe("%s · OneHub Center");
 	});
 
 	it("manifest name", () => {

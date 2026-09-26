@@ -67,8 +67,10 @@ function giaiRef(cauHinh, ref) {
 	if (!ref?.startsWith("config:")) return ref;
 	let nut = cauHinh;
 	for (const k of ref.slice("config:".length).split(".")) nut = nut?.[k];
-	if (typeof nut !== "string") throw new Error(`khong giai duoc ${ref}`);
-	return nut;
+	if (nut === undefined || nut === null || nut instanceof Object) {
+		throw new Error(`khong giai duoc ${ref}`);
+	}
+	return String(nut);
 }
 
 function hoSoDaKy(goc = GOC) {

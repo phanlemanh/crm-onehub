@@ -17,7 +17,8 @@ export const SLACK_SCOPES: readonly SlackScope[] = [
 	{
 		scope: "users:read.email",
 		group: "people",
-		grant: "See their email addresses, so it can match them to records in OneHub Center",
+		grant:
+			"See their email addresses, so it can match them to records in OneHub Center",
 		sensitive: true,
 	},
 	{
