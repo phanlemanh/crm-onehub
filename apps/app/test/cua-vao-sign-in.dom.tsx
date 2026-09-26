@@ -31,8 +31,8 @@ let chuyenToi: string[] = [];
 
 const TEN_HANG = { google: "Google", microsoft: "Microsoft" } as const;
 
-mock.module("@/app/(landing)/sign-in/password-sign-in", () => ({
-	PasswordSignIn: () => <button type="submit">o-mat-khau</button>,
+mock.module("@crm/auth/client", () => ({
+	signIn: { email: async () => ({ error: null }) },
 }));
 mock.module("@/app/(landing)/sign-in/social-sign-in", () => ({
 	SocialSignIn: ({ provider }: { provider: keyof typeof TEN_HANG }) => {
@@ -383,5 +383,36 @@ describe("chu", () => {
 		const { o } = await veTrang();
 		expect(o.querySelector("h1")?.textContent).toBe("Sign in to the CRM");
 		expect(o.textContent).toContain(cuaVaoMessages("en").lanDau.tieuDe);
+	});
+});
+
+describe("quen-mat-khau", () => {
+	it("co co: lien ket nam giua o mat khau va nut Dang nhap, tro /quen-mat-khau", async () => {
+		tuyChon = { ...GOOGLE, quenMatKhau: true };
+		const { o } = await veTrang();
+		const lienKet = [...o.querySelectorAll("a[href='/quen-mat-khau']")];
+		if (lienKet.length !== 1) {
+			throw new Error(
+				`khong thay lien ket Quên mật khẩu? khi quenMatKhau true (${lienKet.length})`,
+			);
+		}
+		const [a] = lienKet;
+		expect(a?.textContent).toBe(authMessages("vi").signIn.quenMatKhau);
+		const oMatKhau = o.querySelector("input[type=password]");
+		const nutGui = o.querySelector("button[type=submit]");
+		if (!a || !oMatKhau || !nutGui)
+			throw new Error("thieu o mat khau hoac nut gui");
+		expect(
+			oMatKhau.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_FOLLOWING,
+		).toBeTruthy();
+		expect(
+			a.compareDocumentPosition(nutGui) & Node.DOCUMENT_POSITION_FOLLOWING,
+		).toBeTruthy();
+	});
+
+	it("doi chung: khong co co thi khong co lien ket", async () => {
+		tuyChon = { ...GOOGLE, quenMatKhau: false };
+		const { o } = await veTrang();
+		expect(o.querySelectorAll("a[href='/quen-mat-khau']")).toHaveLength(0);
 	});
 });
