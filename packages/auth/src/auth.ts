@@ -342,10 +342,18 @@ export const auth = betterAuth({
 	},
 });
 
-export function xuLyXacThuc(yeuCau: Request): Promise<Response> {
+const PHUONG_THUC_KHONG_THAN = new Set(["GET", "HEAD"]);
+
+export async function xuLyXacThuc(yeuCau: Request): Promise<Response> {
+	const than = PHUONG_THUC_KHONG_THAN.has(yeuCau.method)
+		? undefined
+		: await yeuCau.arrayBuffer();
 	return auth.handler(
-		new Request(yeuCau, {
+		new Request(yeuCau.url, {
+			method: yeuCau.method,
 			headers: headerTinDiaChi(yeuCau.headers, env.authSecret),
+			body: than,
+			signal: yeuCau.signal,
 		}),
 	);
 }

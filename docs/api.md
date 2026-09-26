@@ -94,6 +94,27 @@ here, what do we sell.
   `normalizeDomain`, rejecting null. Stored canonical, so re-saving uncanonically
   counts as a change and re-queues research.
 
+### Rate limits count people, not the app's own proxy
+
+The browser reaches `/api/auth/*` through the app's `/api` proxy
+(`apps/app/app/api/[...path]/route.ts`), which drops `x-forwarded-for`. Left alone,
+every person lands in one Better Auth rate-limit bucket, so three forgotten
+passwords from anyone lock the door for everyone.
+
+- **The proxy signs the address the platform gave it.** `headerGuiApi`
+  (`apps/app/lib/api-proxy-headers.ts`) reads `x-real-ip`, which Vercel overwrites,
+  and sends it with an HMAC made with `BETTER_AUTH_SECRET` (`@crm/auth/dia-chi`). It
+  never forwards what the browser put in `x-forwarded-for`.
+- **The API trusts only a signed address.** `xuLyXacThuc` (`@crm/auth`) wraps
+  `auth.handler`: it drops every address header a caller sent and sets the trusted
+  one only when the signature checks out; `advanced.ipAddress.ipAddressHeaders`
+  reads that header and nothing else. `app.module.ts` mounts the wrapper, not the
+  bare `auth`.
+- **Missing pieces fall back, never throw.** No secret or no `x-real-ip` means no
+  signed address, and counting behaves as it did before.
+- **It rebuilds the request from bytes.** Re-wrapping the Node adapter's streamed
+  body hangs every POST; the wrapper reads the (small) body once.
+
 ### Gates in `proxy.ts`
 
 Onboarding, then `/onboarding/research` for the Context key. Asked server-side every

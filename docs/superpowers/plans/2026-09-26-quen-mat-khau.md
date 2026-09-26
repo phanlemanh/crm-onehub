@@ -1259,3 +1259,7 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 | 2 (b) | `requestMax: 5` | `-t qua-luot` | `lan thu tu phai 429, duoc 200` |
 | 2 (b) | `requestWindowSeconds: 15 * MINUTE_SECONDS` | `-t qua-luot` | `bo don hang dem xoa cua so dang chan: lan thu tu 200` — đúng lỗi gốc, nay có răng |
 | 6 | (năm lệnh chứng) | `git push` → pre-push | lượt đầu ĐỎ: `lint:slop` 8 lỗi kiểu lỏng (`unknown`, `Record<…, unknown>`, `object`) ở mã mới → sửa d3e3c170; lượt hai: check-types, lint, lint:slop, test 11/11, build 4/4 đều xanh, đẩy d3e3c170 lúc 00:08 UTC |
+| S4-r1 fix | tin thêm `x-forwarded-for` | `qmk_dia_chi_rieng` | `gia x-forwarded-for ne duoc gioi han: 200,200,200,200` |
+| S4-r1 fix | bỏ `ipAddressHeaders` | `qmk_dia_chi_rieng` | `hai dia chi chung mot khoa dem: B 429` |
+| S4-r1 fix | proxy đọc `x-forwarded-for` | `qmk_proxy_ky_dia_chi` | `proxy ky dia chi trinh duyet tu dat: 9.9.9.9` |
+| S4-r1 fix | (vật, không phá) bọc lại `Request` quanh thân luồng | `go-la-cat-quyen.spec.ts` | 5 ca POST treo 5 s — sửa: đọc thân thành bytes rồi dựng lại |
