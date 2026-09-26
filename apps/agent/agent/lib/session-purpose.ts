@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ZALO } from "./zalo-config";
 
 export const SESSION_PURPOSES = [
 	"builder",
@@ -80,4 +81,8 @@ export function assertResearchPurpose(ctx: PurposeContext): void {
 	if (purposeOf(ctx) !== "research") {
 		throw new Error("This CRM research tool is unavailable for this session.");
 	}
+}
+
+export function assertNotZaloQuestion(ctx: PurposeContext): void {
+	if (purposeOf(ctx) === "zalo") throw new Error(ZALO.hoi.tuChoiGhi);
 }
