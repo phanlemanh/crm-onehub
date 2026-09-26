@@ -53,3 +53,42 @@ wall: 1250s
 - **claude-opus-5-5**: 6 agent · 76 calls · out 16,522 · in 152 · cache_read 8,855,244 · cache_create 490,153
 - **claude-haiku-4-5-20251001**: 17 agent · 39 calls · out 9,846 · in 350 · cache_read 2,094,042 · cache_create 524,414
 
+### S4 round 2 — wf_de8aebe1-d06 (17 agent, 34,820 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 9 | 10,919 | 18 | 989,890 | 220 |
+| refute:soi-tep.mjs | claude-sonnet-5 | 7 | 5,901 | 14 | 642,097 | 174 |
+| review:measurement | claude-opus-5-5 | 12 | 3,284 | 24 | 1,423,735 | 197 |
+| triage | claude-sonnet-5 | 2 | 3,186 | 4 | 93,200 | 46 |
+| review:bugs | claude-opus-5-5 | 20 | 2,890 | 40 | 2,348,081 | 193 |
+| review:conventions | claude-opus-5-5 | 14 | 1,533 | 28 | 1,368,938 | 92 |
+| baseline:diffBase | claude-sonnet-5 | 26 | 1,530 | 52 | 2,764,457 | 210 |
+| machine:bun run test -- "bun _acceptance/khoa-co | claude-haiku-4-5-20251001 | 2 | 796 | 18 | 89,876 | 95 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 3 | 702 | 26 | 130,594 | 128 |
+| machine:bun run test -- "bun _acceptance/khoa-co | claude-haiku-4-5-20251001 | 2 | 683 | 18 | 89,842 | 88 |
+| machine:bun run test -- "bun _acceptance/khoa-co | claude-haiku-4-5-20251001 | 2 | 654 | 18 | 89,841 | 73 |
+| machine:bun run test -- "bun _acceptance/khoa-co | claude-haiku-4-5-20251001 | 2 | 596 | 18 | 89,845 | 91 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 542 | 18 | 89,806 | 25 |
+| machine:bun _acceptance/khoa-con-bat-xa-tran/ran | claude-haiku-4-5-20251001 | 2 | 524 | 18 | 89,843 | 19 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 463 | 18 | 89,806 | 12 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 328 | 18 | 89,804 | 11 |
+| capture:provenance | claude-sonnet-5 | 2 | 289 | 4 | 89,946 | 15 |
+
+
+wall: 660s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 1,530 | 2,764,457 | 210 | 00:05:25 | 00:08:55 |
+| machine | 9 | 5,288 | 849,257 | 182 | 00:05:25 | 00:08:27 |
+| review | 3 | 7,707 | 5,140,754 | 198 | 00:05:25 | 00:08:43 |
+| triage | 1 | 3,186 | 93,200 | 46 | 00:08:45 | 00:09:31 |
+| refute | 1 | 5,901 | 642,097 | 174 | 00:09:32 | 00:12:26 |
+| capture | 1 | 289 | 89,946 | 15 | 00:12:28 | 00:12:43 |
+| synthesize | 1 | 10,919 | 989,890 | 220 | 00:12:44 | 00:16:25 |
+
+- **claude-sonnet-5**: 5 agent · 46 calls · out 21,825 · in 92 · cache_read 4,579,590 · cache_create 608,429
+- **claude-opus-5-5**: 3 agent · 46 calls · out 7,707 · in 92 · cache_read 5,140,754 · cache_create 341,824
+- **claude-haiku-4-5-20251001**: 9 agent · 19 calls · out 5,288 · in 170 · cache_read 849,257 · cache_create 420,460
+
