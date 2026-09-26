@@ -34,6 +34,7 @@ export const ZALO = {
 		hanTraLoiMs: 5 * MINUTE_MS,
 		ngayMs: DAY_MS,
 		tienToToken: "chat:",
+		khoaChat: "zalo-hoi:",
 		authenticator: "zalo",
 		purpose: "zalo",
 		tuChoiGhi:

@@ -1,4 +1,5 @@
-import { db } from "@crm/db";
+import { db, type Prisma } from "@crm/db";
+import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { dauNgayVN, ngayVN } from "@crm/db/onboarding-nhac";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
 import {
@@ -138,12 +139,17 @@ export async function dangBan(
 }
 
 export async function hoiTacTu(
-	tx: DbGhi,
+	tx: Prisma.TransactionClient,
 	tin: TinHoi,
 	crmUserId: string,
 	now: Date,
 ): Promise<KetHoi> {
-	const principal = await thanhVienPrincipal(crmUserId, ZALO.hoi.authenticator);
+	await lockIdempotencyKey(tx, `${ZALO.hoi.khoaChat}${tin.chatId}`);
+	const principal = await thanhVienPrincipal(
+		crmUserId,
+		ZALO.hoi.authenticator,
+		tx,
+	);
 	if (!principal) {
 		await ghiHang(tx, tin, crmUserId, now, "tu-choi-vai");
 		return { loai: "tra-loi", text: ZALO.loi.hoiKhongQuyen };

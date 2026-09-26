@@ -1,4 +1,4 @@
-import { db } from "@crm/db";
+import { db, type Prisma } from "@crm/db";
 import {
 	chuanHoaMa,
 	type DbGhi,
@@ -38,7 +38,7 @@ type TraLoi =
 type CoHoi = { coHoi: boolean };
 
 async function khongMa(
-	tx: DbGhi,
+	tx: Prisma.TransactionClient,
 	tin: ZaloMessage,
 	now: Date,
 	chon: CoHoi,
@@ -100,7 +100,7 @@ async function ghiDaThay(
 }
 
 async function xuLyDb(
-	tx: DbGhi,
+	tx: Prisma.TransactionClient,
 	tin: ZaloMessage,
 	now: Date,
 	chon: CoHoi,

@@ -858,20 +858,21 @@ describe("loi-tac-tu", () => {
 				await db.zaloUpdateSeen.count({ where: { messageId: d.messageId } }),
 			).toBe(0);
 
+			const trung = `hcz-trung-${Date.now()}`;
 			const e1 = await guiWebhook("ZA", "Câu (e)", {
 				eve,
-				messageId: "hcz-trung-1",
+				messageId: trung,
 				luc: new Date(Date.now() + 180_000),
 			});
 			await guiWebhook("ZA", "Câu (e)", {
 				eve,
-				messageId: "hcz-trung-1",
+				messageId: trung,
 				luc: new Date(Date.now() + 180_000),
 			});
 			await eve.xong();
 			expect(e1.res.status).toBe(200);
 			expect(
-				await db.zaloHoi.count({ where: { messageId: "hcz-trung-1" } }),
+				await db.zaloHoi.count({ where: { messageId: trung } }),
 				"mot hang hoi",
 			).toBe(1);
 			expect(eve.send.filter((g) => g.text === "Câu (e)").length).toBe(1);
@@ -983,6 +984,33 @@ describe("dang-ban", () => {
 			}
 		} finally {
 			bat.mockRestore();
+		}
+	});
+});
+
+describe("dang-ban", () => {
+	test("dang-ban: hai tin cung luc tu mot Zalo chi mo mot phien", async () => {
+		const SO_CAP = 4;
+		const luc = vn("2026-10-15", "10:00");
+		const nguoi = await Promise.all(
+			Array.from({ length: SO_CAP }, (_, i) => gieoVai(`Song ${i}`, "member")),
+		);
+		const ket = await Promise.all(
+			nguoi.flatMap((n, i) => [
+				hoi(`ZS${i}`, n.id, luc),
+				hoi(`ZS${i}`, n.id, luc),
+			]),
+		);
+		expect(
+			ket.filter((k) => k.loai === "hoi").length,
+			"hai tin cung luc: moi Zalo mot phien",
+		).toBe(SO_CAP);
+		for (let i = 0; i < SO_CAP; i += 1) {
+			expect(
+				await db.zaloHoi.count({
+					where: { zaloChatId: `ZS${i}`, ketQua: "dang-hoi" },
+				}),
+			).toBe(1);
 		}
 	});
 });
