@@ -70,6 +70,7 @@ export function giuNgaySo(truoc: RecordRef[], sau: RecordRef[]): boolean {
 export function useRecordStack() {
 	const [values, setParams] = useQueryStates(params);
 	const record = values[SEARCH_PARAM.record.stack];
+	const ngaySo = values[SEARCH_PARAM.record.ngaySo];
 
 	const stack = useMemo(
 		() => record.map(parseRef).filter((ref): ref is RecordRef => ref !== null),
@@ -88,14 +89,12 @@ export function useRecordStack() {
 					[SEARCH_PARAM.fieldsSheet.entity]: null,
 					[SEARCH_PARAM.fieldsSheet.field]: null,
 					[SEARCH_PARAM.record.timeline]: null,
-					...(giuNgaySo(stack, next)
-						? {}
-						: { [SEARCH_PARAM.record.ngaySo]: null }),
+					[SEARCH_PARAM.record.ngaySo]: giuNgaySo(stack, next) ? ngaySo : null,
 				},
 				{ history },
 			);
 		},
-		[setParams, stack],
+		[setParams, stack, ngaySo],
 	);
 
 	const open = useCallback(
