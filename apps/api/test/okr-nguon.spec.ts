@@ -598,12 +598,27 @@ describe("okr-nguon", () => {
 	});
 
 	describe("khoa-cong-bo", () => {
-		test("muc tieu cong bo: KR tay them do canh, KR crm khoa nguon; currentValue va xoa bi tu choi", async () => {
-			camSheets();
+		test("KR crm cua muc tieu cong bo: doi hay go nguon bi tu choi, khong dong nao doi", async () => {
+			const mt = await mucTieu("dang-chay", "cong-bo");
+			const C = await kr(mt, "crm");
+			for (const vao of [
+				{ keyResultId: C, loai: "api" },
+				{ keyResultId: C, loai: "tay" },
+			]) {
+				const truoc = await anhKr(C);
+				const tra = await datNguon(vao);
+				const sau = await anhKr(C);
+				expect(`C->${vao.loai}: HTTP ${tra.status} source ${sau.source}`).toBe(
+					`C->${vao.loai}: HTTP 400 source crm`,
+				);
+				expect(`C->${vao.loai}: ${tra.loi}`).toContain(CAU.nguonKhoa);
+				expect(sau).toEqual(truoc);
+			}
+		});
+
+		test("KR tay cua muc tieu cong bo them so do canh, source van tay", async () => {
 			const mt = await mucTieu("dang-chay", "cong-bo");
 			const T = await kr(mt, "tay");
-			const C = await kr(mt, "crm");
-
 			const doCanh = thanhCong<{ id: string; doCanh: boolean }>(
 				await datNguon(crmP1(T)),
 				"T do canh",
@@ -625,23 +640,10 @@ describe("okr-nguon", () => {
 				},
 			]);
 			expect((await mucTieuCua(T, s.cookiePhuTrach)).doCanh).toBe(true);
+		});
 
-			for (const vao of [
-				{ keyResultId: C, loai: "api" },
-				{ keyResultId: C, loai: "tay" },
-			]) {
-				const truoc = await anhKr(C);
-				const tra = await datNguon(vao);
-				expect(`C->${vao.loai}: ${tra.status} ${tra.loi}`).toContain(
-					`C->${vao.loai}: 400 ${CAU.nguonKhoa}`,
-				);
-				const sau = await anhKr(C);
-				expect(`C->${vao.loai}: source ${sau.source}`).toBe(
-					`C->${vao.loai}: source crm`,
-				);
-				expect(sau).toEqual(truoc);
-			}
-
+		test("currentValue cua KR may bi tu choi o moi pha, KR co ban chup khong xoa duoc", async () => {
+			const C = await kr(await mucTieu("dang-chay", "cong-bo"), "crm");
 			const chayC = await goi(
 				"okr.updateKeyResult",
 				{ id: C, currentValue: 5 },
@@ -746,14 +748,14 @@ describe("okr-nguon", () => {
 			});
 			expect(t1.tu).toBe("2026-04-01");
 			expect(t1.den).toBe(NGAY.D);
-			expect(t1.dong).toHaveLength(CO_TRANG);
-			expect(t2.dong).toHaveLength(SO_P1 - CO_TRANG);
 			const tongDong = t1.dong.length + t2.dong.length;
 			expect(
 				`tong dong ${tongDong} soTinhLai ${t1.soTinhLai} soDaChup ${t1.soDaChup} tong ${t1.tong}`,
 			).toBe(
 				`tong dong ${SO_P1} soTinhLai ${SO_P1} soDaChup ${SO_P1} tong ${SO_P1}`,
 			);
+			expect(t1.dong).toHaveLength(CO_TRANG);
+			expect(t2.dong).toHaveLength(SO_P1 - CO_TRANG);
 			expect(t1.lech).toBe(false);
 			for (const d of [...t1.dong, ...t2.dong]) {
 				expect(d.loai).toBe("deal");
