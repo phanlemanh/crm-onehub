@@ -444,60 +444,6 @@ describe("chup-bang-tinh", () => {
 		expect(sau.docLoi).toBeNull();
 	});
 
-	test("kiểu KR: ô 0.85 cho KR phần trăm ghi dòng; ô 150 cho KR phần trăm và ô 2 cho KR mốc ghi khong-hop-kieu, không dòng, số hiện tại đứng yên", async () => {
-		const s = await sanThoaThuan();
-		const q4 = await gieoChuKy("dang-chay");
-		const ca = [
-			["PT085", "phan-tram", 0.85],
-			["PT150", "phan-tram", 150],
-			["MOC2", "moc", 2],
-		] as const;
-		const kr: Record<string, string> = {};
-		for (const [ten, kieu] of ca) {
-			kr[ten] = await krCo({
-				cycleId: q4,
-				chu: s.a,
-				nguon: { loai: "bang-tinh", sheetId: `sheet-${ten}`, o: "A1" },
-				source: "bang-tinh",
-				giaTri: 0,
-				kieu,
-			});
-		}
-		const theoSheet = new Map<string, number>(
-			ca.map(([ten, , giaTri]) => [`sheet-${ten}`, giaTri]),
-		);
-		const docO: DocO = async (sheetId) => ({
-			giaTri: theoSheet.get(sheetId) ?? 0,
-		});
-		await chupSoOkr(NHIP_20_10_0005, { docO });
-		const ket: Record<string, [string | null, number, number | null]> = {};
-		for (const [ten] of ca) {
-			const id = kr[ten] ?? "";
-			const n = await db.okrNguonKr.findUniqueOrThrow({
-				where: { keyResultId: id },
-			});
-			ket[ten] = [
-				n.docLoi,
-				await soHienTai(id),
-				n.docGiaTri === null ? null : Number(n.docGiaTri),
-			];
-		}
-		expect(ket).toEqual({
-			PT085: [null, 0.85, 0.85],
-			PT150: ["khong-hop-kieu", 0, null],
-			MOC2: ["khong-hop-kieu", 0, null],
-		});
-		expect(
-			await dongCua({
-				[kr.PT085 ?? ""]: "PT085",
-				[kr.PT150 ?? ""]: "PT150",
-				[kr.MOC2 ?? ""]: "MOC2",
-			}),
-		).toEqual([
-			{ kr: "PT085", ngay: "2026-10-19", giaTri: 0.85, nguon: "bang-tinh" },
-		]);
-	});
-
 	test("chưa cắm khoá Google Sheets: lý do tat, không gọi mạng", async () => {
 		const s = await sanThoaThuan();
 		const q4 = await gieoChuKy("dang-chay");
@@ -635,6 +581,60 @@ describe("sheets: chụp bảng tính qua bộ đọc thật", () => {
 				.flatMap((x) => (x.loai === "values" ? [x.sheetId] : [])),
 		);
 		expect([...goiLai].sort()).toEqual(MA_TRAN.map(([id]) => id).sort());
+	});
+
+	test("kiểu KR: ô 0.85 cho KR phần trăm ghi dòng; ô 150 cho KR phần trăm và ô 2 cho KR mốc ghi khong-hop-kieu, không dòng, số hiện tại đứng yên", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const ca = [
+			["PT085", "phan-tram", 0.85],
+			["PT150", "phan-tram", 150],
+			["MOC2", "moc", 2],
+		] as const;
+		const kr: Record<string, string> = {};
+		for (const [ten, kieu] of ca) {
+			kr[ten] = await krCo({
+				cycleId: q4,
+				chu: s.a,
+				nguon: { loai: "bang-tinh", sheetId: `sheet-${ten}`, o: "A1" },
+				source: "bang-tinh",
+				giaTri: 0,
+				kieu,
+			});
+		}
+		const theoSheet = new Map<string, number>(
+			ca.map(([ten, , giaTri]) => [`sheet-${ten}`, giaTri]),
+		);
+		const docO: DocO = async (sheetId) => ({
+			giaTri: theoSheet.get(sheetId) ?? 0,
+		});
+		await chupSoOkr(NHIP_20_10_0005, { docO });
+		const ket: Record<string, [string | null, number, number | null]> = {};
+		for (const [ten] of ca) {
+			const id = kr[ten] ?? "";
+			const n = await db.okrNguonKr.findUniqueOrThrow({
+				where: { keyResultId: id },
+			});
+			ket[ten] = [
+				n.docLoi,
+				await soHienTai(id),
+				n.docGiaTri === null ? null : Number(n.docGiaTri),
+			];
+		}
+		expect(ket).toEqual({
+			PT085: [null, 0.85, 0.85],
+			PT150: ["khong-hop-kieu", 0, null],
+			MOC2: ["khong-hop-kieu", 0, null],
+		});
+		expect(
+			await dongCua({
+				[kr.PT085 ?? ""]: "PT085",
+				[kr.PT150 ?? ""]: "PT150",
+				[kr.MOC2 ?? ""]: "MOC2",
+			}),
+		).toEqual([
+			{ kr: "PT085", ngay: "2026-10-19", giaTri: 0.85, nguon: "bang-tinh" },
+		]);
 	});
 
 	test("(d) vắng GOOGLE_SHEETS_KHOA: chupSoOkr bỏ KR bảng tính, không gọi fetch, không ném", async () => {

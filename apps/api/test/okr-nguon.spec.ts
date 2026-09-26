@@ -960,9 +960,7 @@ describe("okr-nguon", () => {
 				id: s.P1,
 			});
 		});
-	});
 
-	describe("kieu-kr-crm", () => {
 		test("KR moc va phan-tram khong lay nguon crm: cau ghim, khong dong nao doi; doi chung tang-toi va api cho moc dat duoc", async () => {
 			await kieuKhongLayCrm();
 		});
