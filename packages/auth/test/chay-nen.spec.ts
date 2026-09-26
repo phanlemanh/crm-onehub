@@ -2,20 +2,23 @@ import { afterEach, describe, expect, it } from "bun:test";
 import { chayNen } from "../src/chay-nen";
 
 const KHOA = Symbol.for("@vercel/request-context");
-const toanCuc = globalThis as unknown as Record<symbol, unknown>;
+type NguCanhVercel = {
+	get: () => { waitUntil: (p: Promise<unknown>) => void };
+};
 
 function gaiContext(daGiao: Promise<unknown>[]) {
-	toanCuc[KHOA] = {
+	const nguCanh: NguCanhVercel = {
 		get: () => ({
 			waitUntil: (p: Promise<unknown>) => {
 				daGiao.push(p);
 			},
 		}),
 	};
+	Reflect.set(globalThis, KHOA, nguCanh);
 }
 
 afterEach(() => {
-	delete toanCuc[KHOA];
+	Reflect.deleteProperty(globalThis, KHOA);
 });
 
 describe("chay-nen", () => {

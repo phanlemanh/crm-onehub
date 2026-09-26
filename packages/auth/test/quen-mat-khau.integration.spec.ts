@@ -41,11 +41,13 @@ const daGui: ThuDaGui[] = [];
 let cheDoThu: CheDoThu = "tot";
 let ipKe = 0;
 const thatFetch = globalThis.fetch;
-const toanCuc = globalThis as unknown as Record<symbol, unknown>;
+type NguCanhVercel = {
+	get: () => { waitUntil: (p: Promise<unknown>) => void };
+};
 const nenDangChay: Promise<unknown>[] = [];
 
 function datContextVercel(them?: (p: Promise<unknown>) => void): void {
-	toanCuc[KHOA_VERCEL] = {
+	const nguCanh: NguCanhVercel = {
 		get: () => ({
 			waitUntil: (p: Promise<unknown>) => {
 				nenDangChay.push(p);
@@ -53,6 +55,7 @@ function datContextVercel(them?: (p: Promise<unknown>) => void): void {
 			},
 		}),
 	};
+	Reflect.set(globalThis, KHOA_VERCEL, nguCanh);
 }
 
 function dinhDanh(nhan: string): string {
@@ -100,7 +103,7 @@ beforeEach(() => {
 afterEach(async () => {
 	await Promise.allSettled(nenDangChay.splice(0));
 	globalThis.fetch = thatFetch;
-	delete toanCuc[KHOA_VERCEL];
+	Reflect.deleteProperty(globalThis, KHOA_VERCEL);
 });
 
 async function dungKho(): Promise<void> {
@@ -155,7 +158,9 @@ function diaChiLa(): string {
 
 type KetQua = { ma: number; than: string; ms: number };
 
-async function goi(duong: string, than: unknown, ip: string): Promise<KetQua> {
+type ThanGoi = { email: string } | { token: string; newPassword: string };
+
+async function goi(duong: string, than: ThanGoi, ip: string): Promise<KetQua> {
 	const batDau = performance.now();
 	const tra = await auth.handler(
 		new Request(`${env.apiUrl}/api/auth${duong}`, {

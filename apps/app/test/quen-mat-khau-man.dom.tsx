@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { act, createElement as h } from "react";
+import { act, type ComponentType, createElement as h } from "react";
 import { createRoot } from "react-dom/client";
 import { duongQuenMatKhau } from "@/lib/quen-mat-khau";
 
@@ -29,12 +29,12 @@ const chuDangNhap = {
 	saiChung: "Sai",
 };
 
-function dung(thanh: unknown, props: object): HTMLElement {
+function dung<P extends {}>(thanh: ComponentType<P>, props: P): HTMLElement {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
 	act(() => {
-		root.render(h(thanh as never, props));
+		root.render(h(thanh, props));
 	});
 	return o;
 }
