@@ -1,32 +1,30 @@
 ## Trong hợp đồng
 
-(Không có phát hiện nào được map vào AC ở vòng này.)
+### 1. E21 no longer prints pre-merge output verbatim; a pre-merge run that dies partway now passes with no trace
+- file:line: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs:330`
+- severity: medium
+- source: bugs
+- AC: AC-11
+- detail: Commit aec732a5, made after round 3, replaced the verbatim dump of `scripts/pre-merge-check.sh --base origin/onehub` with a single count line plus the `VIOLATION [...]` lines of other profiles. E21's `expected` in evals.yaml still says to run it and print it verbatim ("in nguyên văn"), so the script and its own eval now disagree. That is the same kind of mismatch that got E21 marked "sai hợp đồng" in round 3.
+
+  The practical cost is that the run can die halfway and E21 still passes, now with nothing in the output to show it. The only check that the net actually ran is `raTruocGop.includes("[cap-nhat-tuan-okr]")`. Profiles are visited alphabetically, and this profile's own line comes early (line 10 of 100+ in today's output). If pre-merge-check.sh stops after that line — for example a `set -u` error in a later profile's block, a failure mode its own header comments describe — the profiles after it are never checked for staleness. E21 would then report "0 ho so hoa cu" and exit 0. The line that proves the run finished (`pre-merge-check: rules ran=4 declared-off=0 expected=4`) is not checked, and after this change it is not printed either, so neither the grader nor a human can see that the run was cut short.
+
+  How to see it: pass `--pre-merge-tu` a file that holds only `VIOLATION [cap-nhat-tuan-okr]: verdict=BLOCKED (must be PASS to merge)` and no `rules ran=` summary line. E21 exits 0.
+
+  Fix: require the `rules ran=N declared-off=0 expected=N` line (with N equal on both sides) before trusting the output, and restore the verbatim print, or change the eval's `expected`, so the two agree.
+- rationale: AC-11 requires that profiles the branch's pre-merge staleness check flags as stale have been re-pinned green ('hồ sơ nào lưới trước-gộp toàn kho báo hoá cũ thì đã được ghim lại xanh trên nhánh'); this finding shows the eval verifying that exact clause can pass even when the underlying pre-merge run was cut short, so the AC's claim is unproven.
+
+### 2. Hình dạng 2 (danh sách 'khai' viết tay cho khớp bên đọc): HO_SO_BI_CHAM được sửa theo đầu ra của máy, không còn chép từ thiết kế mục 10, nên phép so bằng của E21 thành vòng tròn
+- file:line: `_acceptance/cap-nhat-tuan-okr/rang/cau-hinh.mjs:40`
+- severity: medium
+- source: measurement
+- AC: AC-11
+- detail: E21 (evals.yaml dòng 214) hứa rằng danh sách được khai trong HO_SO_BI_CHAM "chép từ thiết kế mục 10", và phần 10 của docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md ghi danh sách "đã chép nguyên văn vào HO_SO_BI_CHAM; E21 đo khi hai bên lệch". Commit 0ea4485e chỉ thêm "khoa-api-ghi-thua" vào cau-hinh.mjs (dòng 40), sau khi ho-so-bi-cham.mjs đỏ vì thiếu tên đó. Phần 10 của thiết kế vẫn chỉ có 57 tên, không có khoa-api-ghi-thua; cau-hinh.mjs này có 58 tên. Chạy `bun .../ho-so-bi-cham.mjs --chi-tap` ở HEAD vẫn in "khớp: 58 hồ sơ bị chạm == HO_SO_BI_CHAM". Như vậy phép so "tập máy rút == danh sách khai" chỉ còn so đầu ra của máy với một bản chép lại đầu ra đó. Không có gì đối chiếu cau-hinh.mjs với phần 10 của thiết kế. Sổ quyết định cũng không có dòng nào giải thích vì sao hồ sơ này bị chạm: dòng d-34 thêm cùng commit chỉ nói về các round bị chặn. Vì vậy lần nào tên của một hồ sơ mới xuất hiện cũng sẽ được "sửa" bằng cách chép thêm vào danh sách, và E21 không thể bắt được một hồ sơ bị chạm ngoài dự kiến.
+- rationale: AC-11 explicitly requires the machine-derived set of affected signed profiles to equal 'đúng danh sách khai ở thiết kế mục 10'; this finding shows the declared list was hand-edited to match the tool's own output rather than sourced independently from the design doc, making that equality check circular and unable to prove the AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
-
-### Round 3 (mới)
-
-- **The new E21 log line claims more than E21 checks**
-  Người dùng thấy gì: Dòng thông báo trong bước kiểm tra tự động có thể khiến người đọc báo cáo tin rằng mọi cảnh báo ở hồ sơ khác đã được rà hết, trong khi thực ra chỉ một loại cảnh báo được kiểm — dễ bỏ sót cảnh báo thật khi ra quyết định ký duyệt.
-  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **E21 misses a touched signed profile when the eval command starts with a quoted cd (go-khoa-goc-nhin), yet reports a full match**
-  Người dùng thấy gì: Bước kiểm tra tự động có thể báo đã khớp đủ danh sách hồ sơ bị ảnh hưởng, trong khi thực ra bỏ sót một hồ sơ vì cách viết lệnh đặc biệt — người ký duyệt có thể tin nhầm là đã đủ bằng chứng trong khi còn thiếu một trường hợp cần xem lại.
-  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **New E21 message says it reads every VIOLATION from other profiles, but the code only reads the «evidence is stale» kind**
-  Người dùng thấy gì: Dòng thông báo mới nói rộng hơn thực tế: người đọc báo cáo có thể hiểu nhầm là mọi cảnh báo từ hồ sơ khác đều đã được rà, trong khi máy chỉ kiểm một dạng cảnh báo cụ thể — rủi ro bỏ sót cảnh báo thật khi quyết định ký.
-  file: `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-### Carried từ round trước
 
 - **Hình dạng 4 (âm-tính-một-mình): chuyen-okr-khoa-rieng khẳng định không có cảnh báo «same key» nhưng không có ca đối chứng chứng minh bộ bắt console còn sống (r2)**
   Người dùng thấy gì: Bài kiểm tra cho một phần dữ liệu OKR hiện không có phép thử chứng minh việc phát hiện lỗi trùng khoá vẫn hoạt động, nên nếu thực sự phát sinh lỗi trùng dữ liệu sau này, bài kiểm tra có thể không bắt được và báo nhầm là ổn.
@@ -105,9 +103,5 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/api/test/okr-cap-nhat.spec.ts`
   severity: low
   Đề xuất: known-limits
-
-## Chưa adversarial-verify (refuter chết)
-
-(Không có.)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

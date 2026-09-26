@@ -229,6 +229,34 @@
     {
       "id": "d-20260926T004200Z-27",
       "p": "Phép đo màn tự chạy trên kho dữ liệu riêng của lượt này, không thể lỡ ghi vào kho chung — đổi lại phép đo gắn với tên kho riêng và người mẫu có sẵn."
+    },
+    {
+      "id": "d-20260926T030359Z-28",
+      "p": "Ba phép đo màn nay chụp đúng cảnh người dùng thấy (cuộn tới phần tử, chờ hiệu ứng xong, khẳng định phần tử hiện và không bị che) — đổi lại mỗi bước chụp chờ thêm tới 30 giây."
+    },
+    {
+      "id": "d-20260926T030359Z-29",
+      "p": "Phép đo «người ngoài phòng ban không thấy thẻ việc OKR» nay đọc đúng cờ máy chủ trả, có đối chứng người thấy thẻ — đổi lại phép đo phụ thuộc hình dạng phản hồi của máy chủ."
+    },
+    {
+      "id": "d-20260926T030359Z-30",
+      "p": "Phép đo nâng cấp cơ sở dữ liệu nay chạy thật trên một kho tạm có dữ liệu và so từng bảng cũ — đổi lại phép đo cần quyền tạo và xoá kho trên máy chủ cơ sở dữ liệu cục bộ."
+    },
+    {
+      "id": "d-20260926T030359Z-31",
+      "p": "KHÔNG dựng bộ chạy chéo để bài nhắc việc đọc đúng dữ liệu máy chủ ghi — ghi hạn chế đã biết; đổi lại máy chủ đổi khuôn vết mà quên sửa hằng thì bài đó vẫn xanh."
+    },
+    {
+      "id": "d-20260926T032251Z-32",
+      "p": "Phép đo màn chạy trên kho đo riêng dựng theo cơ chế mới của kho, giữ máy chủ và cửa chặn của cây — đổi lại máy chủ dev vẫn dựng tay, và lượt đầu ngay sau khi khởi động lại app có thể đếm hai phiên cập nhật."
+    },
+    {
+      "id": "d-20260926T034306Z-33",
+      "p": "KHÔNG chạy lại 394 phép đo script/màn của 56 hồ sơ đã ký bị lượt này chạm mà lưới trước-gộp không báo cũ — đổi lại lỗi do lượt này gây ra ở các hồ sơ đó chỉ lộ khi chúng được chấm lại."
+    },
+    {
+      "id": "d-20260926T054631Z-34",
+      "p": "Vòng 2 và 3 bị chặn vì người chấm đọc câu người gõ như lệnh và vì cây đổi giữa lượt, không phải lỗi sản phẩm — mở vòng 4 vượt trần ba vòng của kit."
     }
   ],
   "decisions": [

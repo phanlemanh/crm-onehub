@@ -1,49 +1,18 @@
 ---
 schema_version: 2
 feature_slug: cap-nhat-tuan-okr
-verdict: BLOCKED
-failed_evals: ["E21"]
-reason: |
-  Yêu cầu gốc của người dùng (qua harness) là: "Đọc và làm theo tệp
-  luot4-cham-lai-round2.md, mục Bổ sung 3". Tệp này không tồn tại ở bất kỳ
-  đâu tiếp cận được — đã tự kiểm tra độc lập, không chỉ dựa vào tuyên bố của
-  lượt chạy máy trước: `find`/`grep` theo tên (luot4, round2, bo-sung) trong
-  cây đích _acceptance target (worktree cap-nhat-tuan-okr, gồm cả cây
-  .acceptance-runs/ evidence), toàn bộ 10 worktree khác dưới
-  dev/crm/.claude/worktrees (lo-trinh-okr, compassionate-hofstadter-928035,
-  vai-chi-okr, eager-dijkstra-0a5b96, dat-okr-trong-crm,
-  to-chuc-danh-sach-chi-tiet, beautiful-thompson-16c095 — cây phiên này,
-  toan-canh-okr, eager-fermi-5795e9), repo gốc dev/crm, thư mục memory của
-  phiên (~/.claude/projects/-Users-manhphan-dev-crm/memory), ~/dev/
-  acceptance-gate-kit, và ~/Desktop, ~/Documents, ~/Downloads — không khớp
-  tệp nào. Một lượt quét toàn đĩa (find / -iname) cũng không trả kết quả
-  trong thời gian chờ hợp lý.
-  Vì tệp/section được yêu cầu đọc-và-làm-theo không tồn tại, phần việc
-  chính của "Bổ sung 3" không thể thực hiện: script màn cập nhật
-  (man-cap-nhat.mjs, che phủ E7 + E19), ui-check E6, và
-  `bunx turbo run build --force` đều cannotRun (exit 1, lý do: thiếu tệp).
-  Không mở dev server nào, không đổi code, không có ảnh chụp nào được chụp
-  cho phần bị chặn.
-  Riêng E21 (rà hồ sơ bị chạm sau khi gộp) KHÔNG phụ thuộc phần bị chặn ở
-  trên — nó vẫn chạy được và tự thoát mã khác 0 vì lý do thật của chính nó
-  (xem khối eval E21 trong Evidence): `pre-merge-check.sh` phát hiện 1
-  violation và chặn gộp, hồ sơ hiện có 57 hồ sơ bị chạm. failed_evals ghi
-  E21 để phản ánh đúng điều này, tách bạch với phần BLOCKED do thiếu tệp.
+verdict: PENDING-JUDGMENT
+failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ec2849e5e9a88ad3ba5225e2bcb1f4eba9e7e8d5
+verified_commit: 251225fc079a4fb07197f0631afc6be5d9be260b
 human_signoff:
 ---
 
 # Evidence Report: cap-nhat-tuan-okr
 
-⚠ Round 3 — BLOCKED: tệp bổ sung được yêu cầu đọc-và-làm-theo
-("luot4-cham-lai-round2.md", mục "Bổ sung 3") không tồn tại (đã tự kiểm
-tra độc lập, không chỉ dựa vào tuyên bố của lượt máy). Ba khối dưới đây bị
-chặn vì lý do này: cmd script màn cập nhật (E7, E19), ui-check E6, và lệnh
-suite `bunx turbo run build --force`. E21 fail độc lập vì lý do riêng của
-nó (không liên quan phần bị chặn).
+Round 4 — PENDING-JUDGMENT: toàn bộ 29 eval máy PASS (không `failed_evals`, không `blocked`) và cả 4 lệnh suite (`bun run test`, `turbo lint`, `lint:slop`, `turbo build`) đều xanh. Verdict vẫn chờ người vì hợp đồng risk_tier T3 đòi `human_override` trên MỌI mục judgment bất kể hội đồng đã bỏ phiếu gì — E26 (AC-14, judgment) mới có phiếu hội đồng PASS (carried từ round 2), chưa có `human_override`. Gate 2: người tự xác nhận E26 rồi điền `human_override` + `human_signoff` để nâng lên PASS.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -52,8 +21,8 @@ nó (không liên quan phần bị chặn).
 | E3 | AC-2 | test | PASS |
 | E4 | AC-2 | script | PASS |
 | E5 | AC-3 | test | PASS |
-| E6 | AC-4 | ui-check | BLOCKED (cannotRun — xem reason) |
-| E7 | AC-4 | script | BLOCKED (cannotRun — xem reason) |
+| E6 | AC-4 | ui-check | PASS |
+| E7 | AC-4 | script | PASS |
 | E8 | AC-5 | test | PASS |
 | E9 | AC-5 | test | PASS |
 | E10 | AC-5 | test | PASS |
@@ -65,9 +34,9 @@ nó (không liên quan phần bị chặn).
 | E16 | AC-8 | ui-check | PASS |
 | E17 | AC-9 | test | PASS |
 | E18 | AC-10 | ui-check | PASS |
-| E19 | AC-10 | script | BLOCKED (cannotRun — xem reason) |
+| E19 | AC-10 | script | PASS |
 | E20 | AC-11 | test | PASS |
-| E21 | AC-11 | script | FAIL |
+| E21 | AC-11 | script | PASS |
 | E22 | AC-12 | test | PASS |
 | E23 | AC-12 | ui-check | PASS |
 | E24 | AC-13 | test | PASS |
@@ -125,34 +94,38 @@ nó (không liên quan phần bị chặn).
   note: carry-forward từ round 1 — delta không chạm paths của eval.
 
 - eval: E6
-  run_id: minted-cap-nhat-tuan-okr-E6-r3
-  cannotRun: true
-  exit_code: 1
+  run_id: nhz8cy4
+  exit_code: 0
   verifier: config:executors.script.cnt_man_chrome
-  reason: |
-    User's actual instruction (harness-relayed) was to read and follow
-    'luot4-cham-lai-round2.md', mục Bổ sung 3. Tệp đó không tồn tại ở bất
-    kỳ nơi nào tiếp cận được (đã kiểm cả worktree đích cap-nhat-tuan-okr
-    gồm cây .acceptance-runs/, mọi worktree khác, repo gốc, thư mục
-    memory, ~/dev/acceptance-gate-kit, ~/Desktop/Documents/Downloads, và
-    một lượt quét toàn đĩa không ra kết quả trong thời gian hợp lý). Vì
-    vậy không assertion nào của E6 được chạy (không dev:session login,
-    không điền form OKR, không chặn request, không chụp ảnh). Không mở
-    dev server, không sửa code.
-  network_observed: n-a (tool-error: task not executed, referenced source file not found)
+  verified_at: 2026-09-26T05:49:23Z
+  screenshot: evidence/E6-step1.png
+  observed: |
+    Đọc trực tiếp 9 file PNG vừa lưu (evidence/nhz8cy4/E6-step1..9.png), đối chiếu Expected của E6:
+    step1 (M, 1440/vi): thanh tab có đúng 4 tab (Của tôi | Cập nhật tuần | Theo đơn vị | Toàn cảnh), "Cập nhật tuần" gạch chân (aria-current). 4 dòng KR hiện ra (3 KR của mục tiêu công bố + 1 KR "trao đổi" cùng chủ M). KR tăng-tới "Mở rộng đối tác nhz8cy4" ô Giá trị điền sẵn "5", dòng phụ "Tuần trước 5 đối tác · đích 20 đối tác" và "Tuần trước: vừa" dưới Mức tự tin. KR mốc "Viết sổ tay vận hành" có đúng 2 nút ToggleGroup (Chưa xong/Xong).
+    step2: gõ chữ không phải số vào ô KR phần trăm → ô "Giá trị" và nhãn chuyển đỏ, viền đỏ, banner cuối trang đổi thành "1 KR có số chưa hợp lệ — sửa rồi gửi.", nút vẫn "Gửi 0 cập nhật" (disabled).
+    step3: giá trị đã sửa thành "40", chọn mức tự tin "Vừa"/"Cao" cho 2 KR, banner "Đã chọn mức tự tin 2/4 KR", nút xanh "Gửi 2 cập nhật".
+    step4: sau khi chặn okr.guiCapNhat và bấm gửi, ô Giá trị KR phần trăm vẫn còn "40", Mức tự tin vẫn giữ lựa chọn, nút đổi thành "Gửi lại 2 cập nhật" — khung ảnh crop dưới banner Alert nên banner "Chưa gửi được" nằm ngoài mép trên khung hình, nhưng đã có xác nhận riêng bằng DOM trong script.
+    step5: banner xanh "Đã gửi 2 cập nhật lúc 12:56 · mất 12 giây", danh sách rút gọn còn 2 KR vừa gửi.
+    step6 (R, cùng URL): Empty rỗng đúng chữ "Tuần này bạn không có KR nào cần cập nhật".
+    step7 (M mở lại sau bật/tắt cửa chặn): danh sách hiện lại đầy đủ 4 KR, giá trị và mức tự tin của lần gửi trước được giữ.
+    step8 (390px): không thấy thanh cuộn ngang, 3 nút ToggleGroup Mức tự tin rộng đều bằng nhau.
+    step9 (1440, nền tối): toàn bộ form hiển thị đúng, tương phản rõ, không vỡ layout.
+    Không có khung nào mâu thuẫn với Expected; không kích hoạt được chiều đỏ trong lần chạy này.
+  network_observed: clean
+  note: |
+    Cùng lần chạy với E7 (man-cap-nhat.mjs). Không killedByTool, không bị cắt output, có dòng tổng kết cuối cùng và exit code in rõ.
 
 - eval: E7
-  run_id: minted-cap-nhat-tuan-okr-E7-r3
-  cannotRun: true
-  exit_code: 1
+  run_id: minted-cap-nhat-tuan-okr-E7-r4
+  exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.cnt_man_chrome
-  reason: |
-    Cùng nguyên nhân với E6/E19 — tệp luot4-cham-lai-round2.md không tồn
-    tại nên script màn cập nhật (man-cap-nhat.mjs, chạy qua
-    scripts/lan-do/tien-de.mjs với DATABASE_URL trỏ crm_cnt_dev_do) không
-    được thực thi. E7 đo T0/độ trễ 5s và số dòng okrCheckIn/
-    okrCheckInSession trong cùng lần chạy với E6 — không chạy được vì E6
-    không chạy được.
+  verified_at: 2026-09-26T05:49:23Z
+  output: |
+    man-cap-nhat: 205 khang dinh, 0 hong
+    -- tiền đề làn đo: đã dọn contextDevApiKey
+    -- tiền đề làn đo: đã dọn ảnh đại diện
+  note: Cùng lệnh với E6/E19 (man-cap-nhat.mjs qua tien-de.mjs, DATABASE_URL trỏ crm_cnt_dev_do); đo T0/độ trễ 5s và đếm okrCheckIn/okrCheckInSession quanh cùng lần chạy với E6.
 
 - eval: E8
   run_id: muhojarpu105
@@ -206,9 +179,7 @@ nó (không liên quan phần bị chặn).
   verifier: config:executors.script.cnt_man_chrome
   verified_at: 2026-09-26T03:45:22Z
   carried_from_round: 2
-  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung
-    gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations, không
-    chụp lại round này theo đúng luật carry-forward.)
+  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations, không chụp lại round này theo đúng luật carry-forward.)
 
 - eval: E14
   run_id: minted-cap-nhat-tuan-okr-E14-r2
@@ -235,8 +206,7 @@ nó (không liên quan phần bị chặn).
   verifier: config:executors.script.cnt_man_chrome
   verified_at: 2026-09-26T03:45:22Z
   carried_from_round: 2
-  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung
-    gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations.)
+  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations.)
 
 - eval: E17
   run_id: muhok7918s2b
@@ -248,54 +218,34 @@ nó (không liên quan phần bị chặn).
   note: carry-forward từ round 1 — delta không chạm paths của eval.
 
 - eval: E18
-  run_id: nhxxe59
+  run_id: nhz8w3m
+  exit_code: 0
+  verifier: config:executors.script.cnt_man_chrome
+  verified_at: 2026-09-26T05:49:23Z
+  screenshot: evidence/E18-step1.png
+  observed: |
+    Mở 6 frame đã lưu bằng Read (đọc ảnh thật, không suy từ lệnh):
+    E18-step1.png (1440): sheet "Trao đổi mục tiêu nhz8w3m" chồng lên trên deals, tab "Trao đổi 2" đang active. Hai bình luận đúng thứ tự: (1) "Mai Ngọc Minh" — chip "KR trao đổi nhz8w3m" (KR1) + "Bình luận một nhz8w3m"; (2) "Mai Ngọc Minh" — "Bình luận hai nhz8w3m" + dòng "Nhắc tên: Trần Phòng Trưởng" tô đậm.
+    E18-step2.png (390): cùng cảnh, layout xuống 1 cột, không tràn ngang, hai bình luận + chip KR1 + tên TP đậm vẫn hiện đủ.
+    E18-step3.png (1440): sau khi gõ "Tuần này cần thêm người", chọn KR1, nhắc M, bấm Gửi — tab đổi thành "Trao đổi 3", bình luận thứ ba của "Đinh Rành Rang" (R) hiện cuối cùng, có chip "KR trao đổi nhz8w3m" và dòng "Nhắc tên: Mai Ngọc Minh" đậm. Đã zoom pixel xác nhận chữ chính xác.
+    E18-step4.png: nút góc phải sheet đổi từ "Theo dõi" sang "Đang theo dõi" (bell filled) sau khi R bấm nút — không rơi vào chiều đỏ "nút Theo dõi ẩn với người không ghi được".
+    E18-step5.png (1440, TP): hộp "Cập nhật KR" cho "KR trao đổi nhz8w3m" hiện đúng câu "Bạn ghi hộ Mai Ngọc Minh" + mô tả, ô Giá trị=8/30, ToggleGroup Cao/Vừa/Thấp, nút Gửi cập nhật.
+    E18-step6.png (390, TP): cùng hộp, xếp dọc, vẫn còn câu "Bạn ghi hộ Mai Ngọc Minh".
+  network_observed: third-party-only
+  note: |
+    exitCode=0 áp dụng cho phạm vi E18 như phân tích trên; capture.ui dùng puppeteer screenshot trực tiếp vào BANG_CHUNG (tương đương capture.ui của config), không cần fallback .html.
+
+- eval: E19
+  run_id: minted-cap-nhat-tuan-okr-E19-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnt_man_chrome
-  verified_at: 2026-09-26T04:56:08Z
-    trường verified_at riêng; mốc suy từ thời điểm merge HEAD quan sát
-    trong outputTail của chính eval này)
-  screenshot: evidence/E18-step1.png
-  observed: |
-    Đã mở bằng Read cả 6 file frame đã lưu (evidence/E18-step1.png..
-    step6.png), đối chiếu từng bước với Expected: step1.png (1440) — sheet
-    "Trao đổi mục tiêu nhxxe59" chồng lên, tab "Trao đổi 2" active, đúng 2
-    bình luận theo thứ tự (bình luận 1 có chip "KR trao đổi nhxxe59"; bình
-    luận 2 có "Nhắc tên: Trần Phòng Trưởng" in đậm); nút "Theo dõi" (chưa
-    bấm) hiện dù người xem là R. step2.png (390) — cùng cảnh, layout hẹp
-    co đúng, không tràn ngang. step3.png (1440) — bình luận thứ 3 "Đinh
-    Rành Rang" xuất hiện cuối danh sách (tab đổi "Trao đổi 3"), có chip
-    KR1 và "Nhắc tên: Mai Ngọc Minh". step4.png — nút đổi "Theo dõi" →
-    "Đang theo dõi" (bell tô). step5.png (1440) — hộp "Cập nhật KR" mở bởi
-    TP, dòng "Bạn ghi hộ Mai Ngọc Minh" hiện rõ dưới tiêu đề. step6.png
-    (390) — cùng hộp, thu hẹp đúng, vẫn còn dòng ghi-hộ. Không frame nào
-    mâu thuẫn Expected.
-  network_observed: clean
-  note: |
-    Lưu ý phát sinh (không làm eval này fail, nhưng cần báo về Phiên điều
-    phối OKRs): trong lúc/ngay sau khi chấm, HEAD của cây đã trôi từ
-    0bcb769c → e17f7d9a (merge onehub #152 "khoá API ghi thưa", lúc
-    12:19:23) — có phiên khác đang thao tác cùng cây. Đã kiểm
-    `git diff --stat 0bcb769c e17f7d9a` trên đúng 4 đường dẫn của E18
-    (objective-sheet.tsx, objective-trao-doi.tsx, okr/**,
-    rang/man-cap-nhat.mjs) → RỖNG, không đường nào bị chạm, nên PASS ở
-    trên vẫn đứng vững dù invokedSha của s4-args.json (0bcb769c) không
-    còn là HEAD hiện tại. Không tự sinh lại args, không merge, không
-    repin. Dừng ở Cổng Bằng chứng, không ký; gửi kèm cảnh báo HEAD trôi.
-
-- eval: E19
-  run_id: minted-cap-nhat-tuan-okr-E19-r3
-  cannotRun: true
-  exit_code: 1
-  verifier: config:executors.script.cnt_man_chrome
-  reason: |
-    Cùng nguyên nhân với E6/E7 — tệp luot4-cham-lai-round2.md không tồn
-    tại; lệnh nhóm chung với E7 (script màn-cập-nhật qua tien-de.mjs)
-    cannotRun nên phần đọc SQL/DB sau các bước của E19 không thực hiện
-    được ở round này. E18 (cùng lần chạy theo thiết kế của E19) vẫn PASS
-    round này qua đường riêng — hai eval không đồng bộ được trong round 3
-    vì lý do trên; cờ này đáng để nhân sự Gate 2 lưu ý khi xem lại cùng
-    lượt chạy.
+  verified_at: 2026-09-26T05:49:23Z
+  output: |
+    man-cap-nhat: 205 khang dinh, 0 hong
+    -- tiền đề làn đo: đã dọn contextDevApiKey
+    -- tiền đề làn đo: đã dọn ảnh đại diện
+  note: Cùng lệnh với E7 (man-cap-nhat.mjs); SQL thẳng đối chiếu okrComment/okrMention/okrFollow/okrCheckIn sau các bước của E18 (đợt ui-check:E18, run_id nhz8w3m) khớp Expected.
 
 - eval: E20
   run_id: muhojon4bh9u
@@ -307,31 +257,16 @@ nó (không liên quan phần bị chặn).
   note: carry-forward từ round 1 — delta không chạm paths của eval.
 
 - eval: E21
-  run_id: minted-cap-nhat-tuan-okr-E21-r3
-  exit_code: 1
+  run_id: minted-cap-nhat-tuan-okr-E21-r4
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnt_ho_so_bi_cham
-  verified_at: 2026-09-26T04:56:08Z
+  verified_at: 2026-09-26T05:49:23Z
   output: |
-    ran veto-trace
-    ran gap-probe
-    ran t1-escape
-    pre-merge-check: rules ran=4 declared-off=0 expected=4
-    pre-merge-check: 1 violation(s) — merge blocked
-    === pre-merge-check toàn kho thoát mã 1; mã này KHÔNG phải kết quả
-    của E21 — dòng VIOLATION [cap-nhat-tuan-okr] là verdict cũ của chính
-    hồ sơ đang chấm, bỏ qua; E21 chỉ đọc dòng "evidence is stale" của hồ
-    sơ KHÁC ===
-    lưới trước gộp bão hòa cũ (trừ cap-nhat-tuan-okr): (không có)
-    ho-so-bi-cham: 57 hồ sơ bị chạm, 3 lượt ghim lại trên nhánh xanh, 0 hồ
-    sơ hóa cũ, 0 hỏng
-  note: |
-    FAIL độc lập với phần bị chặn của round này (tệp
-    luot4-cham-lai-round2.md thiếu). Lệnh chạy được, có output, và tự
-    thoát mã 1 vì `pre-merge-check.sh` phát hiện 1 violation thật (chặn
-    gộp) trên toàn kho — không phải lỗi công cụ. Xem thêm hai phát hiện
-    "Ngoài hợp đồng" round này về độ chính xác của thông điệp log của
-    chính E21 (review-findings.md).
+    pre-merge-check toan kho: 0 VIOLATION cua ho so khac (dong cua chinh cap-nhat-tuan-okr la verdict cu cua ho so dang cham, khong tinh)
+    luoi truoc gop bao hoa cu (tru cap-nhat-tuan-okr): (khong co)
+    ho-so-bi-cham: 58 ho so bi cham, 4 luot ghim lai tren nhanh xanh, 0 ho so hoa cu, 0 hong
+  note: Round trước (round 3) FAIL vì 1 violation thật trên toàn kho; violation đó đã được xử lý trước round này — nay 0 violation của hồ sơ khác, 58 hồ sơ bị chạm, 4 lượt ghim lại xanh. Xem "Trong hợp đồng" trong review-findings.md cho hai phát hiện còn tồn về độ chính xác/khép kín của chính script này.
 
 - eval: E22
   run_id: muhuk5c7znza
@@ -349,8 +284,7 @@ nó (không liên quan phần bị chặn).
   verifier: config:executors.script.cnt_man_chrome
   verified_at: 2026-09-26T03:45:22Z
   carried_from_round: 2
-  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung
-    gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations.)
+  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations.)
 
 - eval: E24
   run_id: muhojuyndvnp
@@ -362,20 +296,21 @@ nó (không liên quan phần bị chặn).
   note: carry-forward từ round 1 — delta không chạm paths của eval.
 
 - eval: E25
-  run_id: minted-cap-nhat-tuan-okr-E25-r2
+  run_id: minted-cap-nhat-tuan-okr-E25-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnt_san_thiet_ke
-  verified_at: 2026-09-26T03:45:22Z
-  carried_from_round: 2
-  note: carry-forward từ round 2 — delta không chạm paths của eval.
+  verified_at: 2026-09-26T05:49:23Z
+  output: |
+    them packages/ui (duoc-phep): packages/ui/src/components/item.tsx
+    packages/ui/src bi sua: 0, them moi: 1
+    san-thiet-ke: 18 tep, 0 hong
 
 - eval: E26
   judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment)
   verdict: PASS
   carried_from_round: 2
-  note: panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại;
-    rationale xem round 2.
+  note: panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round 2.
   votes:
     - domain-correctness: PASS (r2)
     - operational-feasibility: PASS (r2)
@@ -383,13 +318,14 @@ nó (không liên quan phần bị chặn).
   human_override:  # chi nguoi ghi
 
 - eval: E27
-  run_id: minted-cap-nhat-tuan-okr-E27-r2
+  run_id: minted-cap-nhat-tuan-okr-E27-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnt_migration_chi_them
-  verified_at: 2026-09-26T03:45:22Z
-  carried_from_round: 2
-  note: carry-forward từ round 2 — delta không chạm paths của eval.
+  verified_at: 2026-09-26T05:49:23Z
+  output: |
+    migration moi: 20260927010000_okr_cap_nhat · so cau lenh: 20
+    chay that tren kho tam crm_cnt_mig_71590: 84 bang cu, 10 bang co dong gieo, bang moi: okrCheckIn, okrCheckInSession, okrComment, okrFollow, okrMention
 
 - eval: E28
   run_id: muhuk70auh13
@@ -407,40 +343,29 @@ nó (không liên quan phần bị chặn).
   verifier: config:executors.script.cnt_man_chrome
   verified_at: 2026-09-26T03:45:22Z
   carried_from_round: 2
-  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung
-    gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations.)
+  note: carry-forward từ round 2 — delta không chạm paths của eval. (Khung gốc là ui-check với ảnh; ảnh gốc xem round 2 trong Iterations.)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: muhxs4ze59jn
+  run_id: muhz4jy0f6tl
   exit_code: 0
-  verified_at: 2026-09-26T04:56:08Z
+  verified_at: 2026-09-26T05:49:23Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cap-nhat-tuan-okr-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-cap-nhat-tuan-okr-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-09-26T04:56:08Z
+  verified_at: 2026-09-26T05:49:23Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cap-nhat-tuan-okr-SUITE-bun_run_lint_slop-r3
+  run_id: minted-cap-nhat-tuan-okr-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-09-26T04:56:08Z
+  verified_at: 2026-09-26T05:49:23Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cap-nhat-tuan-okr-SUITE-bunx_turbo_run_build_force-r3
-  cannotRun: true
-  exit_code: 1
-  verified_at: 2026-09-26T04:56:08Z
-  reason: |
-    Cannot locate the instruction file 'luot4-cham-lai-round2.md' which
-    the user requested to read and follow. Searched in
-    /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095,
-    /Users/manhphan/dev/crm/.claude/worktrees/cap-nhat-tuan-okr, và
-    /Users/manhphan/dev/crm — file does not exist. Đây là lệnh suite thứ
-    năm (bun run build), không phải một trong 4 lệnh chứng gốc — hồi quy
-    của nó không được lệnh `bun run test` (đã PASS) bao phủ; xem
-    lenh-build-khong-nam-trong-bo-chung.md.
+  run_id: minted-cap-nhat-tuan-okr-SUITE-bunx_turbo_run_build_force-r4
+  exit_code: 0
+  verified_at: 2026-09-26T05:49:23Z
 
 ## Known limits
 
@@ -450,10 +375,7 @@ nó (không liên quan phần bị chặn).
 
 carried tu round 2 — baseline không đo lại round này.
 
-Non-discriminating evals: none — không eval nào được khai vào danh sách
-green-on-both round này (khi baseline không được đo lại, mọi block eval
-ghi `baseline: n-a`, không phải `green`, nên không có cơ sở liệt kê eval
-nào vào mục này round 3).
+Non-discriminating evals: none — không eval nào được khai vào danh sách green-on-both round này (baseline không đo lại, mọi block eval ghi `baseline: n-a`, không phải `green`, nên không có cơ sở liệt kê eval nào vào mục này round 4).
 
 ## Variance
 
@@ -461,17 +383,7 @@ none — không eval nào của round này khai `runs` > 1.
 
 ## Iterations
 
-Round 1: 21 eval đầu (E1–E5, E8–E11, E17, E20, E24) chạy PASS ở
-2026-09-26T00:52:18Z, thiết lập baseline hợp đồng ban đầu.
-Round 2: 8 eval tiếp (E12–E16, E22, E23, E25, E27–E29) chạy PASS ở
-2026-09-26T03:45:22Z, mở rộng che phủ sang AC-7, AC-8, AC-12, AC-14, AC-15,
-AC-16; judge panel cho E26 (AC-14, judgment) cho PASS.
-Round 3 (round này): mục tiêu là đọc-và-làm-theo
-"luot4-cham-lai-round2.md, mục Bổ sung 3" — tệp không tồn tại (đã tự kiểm
-tra độc lập). E6/E7/E19 và `bunx turbo run build --force` cannotRun vì
-vậy; E18 vẫn chạy được và PASS (kèm cảnh báo HEAD trôi do phiên khác chạm
-cùng cây, không ảnh hưởng verdict); E21 chạy độc lập và FAIL vì lý do thật
-riêng của nó (1 violation pre-merge). → Verdict tổng: BLOCKED. Cần một
-lượt kế tiếp sau khi (a) người dùng xác nhận lại nội dung/đường dẫn thật
-của "Bổ sung 3", hoặc cung cấp tệp, và (b) xử lý violation mà E21 phát
-hiện trước khi round có thể lên PASS hay REJECT rõ ràng.
+Round 1: 21 eval đầu (E1–E5, E8–E11, E17, E20, E24) chạy PASS ở 2026-09-26T00:52:18Z, thiết lập baseline hợp đồng ban đầu.
+Round 2: 8 eval tiếp (E12–E16, E22, E23, E25, E27–E29) chạy PASS ở 2026-09-26T03:45:22Z, mở rộng che phủ sang AC-7, AC-8, AC-12, AC-14, AC-15, AC-16; judge panel cho E26 (AC-14, judgment) cho PASS.
+Round 3: BLOCKED — tệp "luot4-cham-lai-round2.md, mục Bổ sung 3" được yêu cầu đọc-và-làm-theo không tồn tại (đã tự kiểm tra độc lập); E6/E7/E19 và lệnh suite `bun run build` cannotRun vì vậy; E18 vẫn chạy được và PASS (kèm cảnh báo HEAD trôi do phiên khác gộp #152 song song trên cùng cây, không ảnh hưởng verdict); E21 tự thoát mã khác 0 độc lập do một violation pre-merge thật trên toàn kho. Theo quyết định d-20260926T054631Z-34 (Manh Phan — uỷ quyền phiên điều phối 24/09): cả round 2 và round 3 bị chặn vì hạ tầng (câu người gõ lẫn vào phiên S4, cây bị phiên khác gộp song song) chứ không phải lỗi sản phẩm hay phép đo; trần 3 round không tính hai lượt bị chặn do harness này, số round chỉ tăng vì kit đánh số theo run-log.
+Round 4 (round này): lượt thử lại của round 3 trên cùng phạm vi, không phiên nào khác commit vào cây trong round này. Chạy lại E6, E7, E18, E19 (script màn cập nhật + ui-check), E21 (rà hồ sơ bị chạm — nay 58 hồ sơ bị chạm, 4 lượt ghim lại trên nhánh xanh, 0 hồ sơ hoá cũ, 0 hỏng, vs. 1 violation FAIL ở round 3), E25 (sàn thiết kế) và E27 (migration-chỉ-thêm); 21 eval còn lại cùng panel E26 carry-forward nguyên vẹn từ round 1/2 (delta không chạm paths của chúng). Cả 4 lệnh suite (`bun run test`, `turbo lint`, `lint:slop`, `turbo build`) đều xanh round này — lệnh build vốn cannotRun ở round 3 nay chạy hết và thoát mã thành công. Toàn bộ 29 eval PASS, không `failed_evals`, không `blocked`. Verdict vẫn PENDING-JUDGMENT chứ không tự lên PASS: hợp đồng risk_tier T3 đòi `human_override` trên MỌI mục judgment bất kể phán quyết hội đồng — E26 mới có phiếu hội đồng (carried từ round 2), chưa có `human_override`; Gate 2 cần người tự xác nhận E26 rồi điền `human_override` và `human_signoff` trước khi nâng verdict lên PASS.
