@@ -22,7 +22,13 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrSoMessages } from "@/lib/messages/okr-so";
 import { CELL, type KetQua } from "./kieu";
-import { chuSo, KHOA_DAU, type NguonMay, useXemDuocBanGhi } from "./nguon-so";
+import {
+	chuSo,
+	KHOA_DAU,
+	type NguonMay,
+	useXemDuocBanGhi,
+	type XemBanGhi,
+} from "./nguon-so";
 import { TienDoKr } from "./tien-do-kr";
 
 export function giaTri(
@@ -53,7 +59,7 @@ function nguonMayCua(kr: KetQua): NguonMay | null {
 
 const CHUP_THEO_NHIP: readonly NguonMay[] = ["crm", "bang-tinh"];
 
-function SoCuaKr({ kr, xemDuoc }: { kr: KetQua; xemDuoc: boolean }) {
+function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 	const locale = useLocale();
 	const s = okrSoMessages(locale);
 	const moSo = useOpenRecord();
@@ -91,7 +97,9 @@ function SoCuaKr({ kr, xemDuoc }: { kr: KetQua; xemDuoc: boolean }) {
 					</Badge>
 				) : null}
 				<span className="inline-flex items-center">
-					{xemDuoc ? (
+					{xem === "chua-biet" ? (
+						<span data-so-kr-cho={kr.id}>{hienSo}</span>
+					) : xem === "duoc" ? (
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Button
@@ -149,7 +157,7 @@ export function BangKr({
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
-	const xemDuoc = useXemDuocBanGhi();
+	const xem = useXemDuocBanGhi();
 	const cot: SimpleTableColumn[] = [
 		{ id: "ten", header: m.cot.kr },
 		{ id: "phuTrach", header: m.cot.phuTrach, width: "w-40" },
@@ -196,7 +204,7 @@ export function BangKr({
 						data-nguon={kr.source}
 						data-do-canh={kr.doCanh ? "" : undefined}
 					>
-						<SoCuaKr kr={kr} xemDuoc={xemDuoc} />
+						<SoCuaKr kr={kr} xem={xem} />
 					</TableCell>
 					{hanhDong ? (
 						<TableCell className={CELL}>{hanhDong(kr)}</TableCell>

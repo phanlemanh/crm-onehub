@@ -90,12 +90,13 @@ type DauVao =
 	  }
 	| undefined;
 
-let vai: "member" | "okr" = "member";
+let vai: "member" | "okr" | "cho" = "member";
 let docBanGhi: (vao: DauVao) => BanGhiChiSoOutput = () => banGhi({});
 let loiBanGhi = false;
+let loiTrang: number | null = null;
 let goiBanGhi: DauVao[] = [];
 
-function thuTuc<T>(duong: string, doc: (vao: DauVao) => T) {
+function thuTuc<T>(duong: string, doc: (vao: DauVao) => T | Promise<T>) {
 	return {
 		queryKey: (vao?: DauVao) => [duong, vao ?? null],
 		queryOptions: (vao?: DauVao) => ({
@@ -105,9 +106,15 @@ function thuTuc<T>(duong: string, doc: (vao: DauVao) => T) {
 	};
 }
 
+const khongBaoGio = new Promise<never>(() => {});
+
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
-		workspace: { get: thuTuc("workspace.get", () => ({ viewerRole: vai })) },
+		workspace: {
+			get: thuTuc("workspace.get", () =>
+				vai === "cho" ? khongBaoGio : { viewerRole: vai },
+			),
+		},
 		org: {
 			tree: thuTuc("org.tree", () => ({
 				divisions: [
@@ -140,6 +147,8 @@ mock.module("@/lib/trpc/client", () => ({
 			banGhiChiSo: thuTuc("okr.banGhiChiSo", (vao) => {
 				goiBanGhi.push(vao);
 				if (loiBanGhi) throw new Error("Máy chủ không trả lời");
+				if (loiTrang !== null && vao?.trang === loiTrang)
+					throw new Error("Trang sau không tải được");
 				return docBanGhi(vao);
 			}),
 			lichSuSo: thuTuc("okr.lichSuSo", () => ({
@@ -160,7 +169,51 @@ mock.module("next/navigation", () => ({
 	usePathname: () => "/ws/okr",
 }));
 
+let dungDeal: (p: { dealId: string }) => ReactElement = () => <div />;
+const trong = () => null;
+
+mock.module("@/components/crm/record-sheet/deal-sheet", () => ({
+	DealSheet: (p: { dealId: string }) => dungDeal(p),
+}));
+mock.module("@/components/crm/record-sheet/company-sheet", () => ({
+	CompanySheet: trong,
+}));
+mock.module("@/components/crm/record-sheet/contact-sheet", () => ({
+	ContactSheet: trong,
+}));
+mock.module("@/components/crm/record-sheet/plan-sheet", () => ({
+	PlanSheet: trong,
+}));
+mock.module("@/components/crm/record-sheet/objective-sheet", () => ({
+	ObjectiveSheet: trong,
+}));
+mock.module("@/components/crm/fields/fields-sheet", () => ({
+	FieldsSheetHost: trong,
+}));
+mock.module("@/components/crm/stage-change", () => ({
+	CloseReasonDialog: trong,
+	DealStageMenu: trong,
+}));
+
 const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
+const { RecordSheetHost } = await import(
+	"@/components/crm/record-sheet/record-sheet-host"
+);
+const { useRecordStack } = await import(
+	"@/components/crm/record-sheet/record-stack"
+);
+
+function DealGia({ dealId }: { dealId: string }) {
+	const { close } = useRecordStack();
+	return (
+		<div data-deal-gia={dealId}>
+			<button type="button" data-nut="quay-lai-gia" onClick={close}>
+				back
+			</button>
+		</div>
+	);
+}
+dungDeal = (p) => <DealGia dealId={p.dealId} />;
 const { SoKrSheet } = await import("@/components/crm/record-sheet/so-kr-sheet");
 const { DetailSheet } = await import("@/components/detail-sheet");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
@@ -263,6 +316,7 @@ beforeEach(() => {
 	vai = "member";
 	docBanGhi = () => banGhi({});
 	loiBanGhi = false;
+	loiTrang = null;
 	goiBanGhi = [];
 });
 
@@ -353,6 +407,25 @@ describe("bang-kr-nguon", () => {
 			{ id: "kr-chua-chup", nut: 0, dau: true },
 		]);
 		expect(document.body.querySelectorAll("[data-so-kr]").length).toBe(0);
+	});
+});
+
+describe("bang-kr-nguon-cho-vai", () => {
+	test("bang-kr-nguon-cho-vai: chua biet vai thi so khong nut, khong chu thich", async () => {
+		vai = "cho";
+		await mo(bang);
+		await cho(
+			() => document.body.querySelectorAll("[data-so-kr-cho]").length === 3,
+			"ba so cho vai",
+		);
+		expect({
+			nut: document.body.querySelectorAll("[data-so-kr]").length,
+			tran: document.body.querySelectorAll("[data-so-kr-tran]").length,
+			nutTrongO: ["kr-crm", "kr-do-canh", "kr-chua-chup"].map(
+				(id) => oSo(id)?.querySelectorAll("button, a[href]").length,
+			),
+			chu: oSo("kr-crm")?.querySelector("[data-so-kr-cho]")?.textContent,
+		}).toEqual({ nut: 0, tran: 0, nutTrongO: [0, 0, 0], chu: "15 thoả thuận" });
 	});
 });
 
@@ -480,5 +553,183 @@ describe("ngan-so-kr", () => {
 			banGhi: document.body.querySelectorAll("[data-ban-ghi]").length,
 			lichSu: document.body.querySelectorAll("[data-lich-su-ngay]").length,
 		}).toEqual({ lanGhi: 2, banGhi: 0, lichSu: 0 });
+	});
+
+	test("ngan-so-kr: bam ten ban ghi day moRef len chong ngan", async () => {
+		const san = await mo(ngan, "?record=objective:mt-1,so-kr:kr-crm");
+		await cho(() => trangThaiNgan() === "ST-so-co", "ngan co du lieu");
+		const nut = document.body.querySelector('[data-mo-ban-ghi="deal:d-2"]');
+		if (!nut) throw new Error("khong thay nut ban ghi d-2");
+		await bam(nut);
+		await cho(
+			() => san.url().get("record")?.endsWith("deal:d-2") === true,
+			"url co deal",
+		);
+		expect(san.url().get("record")).toBe(
+			"objective:mt-1,so-kr:kr-crm,deal:d-2",
+		);
+	});
+
+	test("ngan-so-kr: Xem them goi trang 2 va noi dong", async () => {
+		docBanGhi = (vao) =>
+			vao?.trang === 2
+				? banGhi({
+						tong: 3,
+						dong: [
+							{
+								loai: "deal",
+								id: "d-3",
+								ten: "Hợp đồng Hải Nam",
+								ngay: "2026-10-12",
+								moRef: { kind: "deal", id: "d-3" },
+							},
+						],
+					})
+				: banGhi({ tong: 3 });
+		await mo(ngan);
+		await cho(() => trangThaiNgan() === "ST-so-co", "ngan co du lieu");
+		const xemThem = document.body.querySelector('[data-nut="xem-them"]');
+		if (!xemThem) throw new Error("khong co nut xem them");
+		await bam(xemThem);
+		await cho(
+			() => document.body.querySelectorAll("[data-ban-ghi]").length === 3,
+			"ba dong sau xem them",
+		);
+		expect(goiBanGhi.map((v) => v?.trang)).toContain(2);
+		expect(
+			[...document.body.querySelectorAll("[data-ban-ghi]")].map((e) =>
+				e.getAttribute("data-ban-ghi"),
+			),
+		).toEqual(["d-1", "d-2", "d-3"]);
+		expect(document.body.querySelector('[data-nut="xem-them"]')).toBeNull();
+	});
+
+	test("ngan-so-kr: trang 2 loi hien Thu lai canh danh sach, bam thi goi lai trang 2", async () => {
+		docBanGhi = (vao) =>
+			vao?.trang === 2
+				? banGhi({
+						tong: 3,
+						dong: [
+							{
+								loai: "deal",
+								id: "d-3",
+								ten: "Hợp đồng Hải Nam",
+								ngay: "2026-10-12",
+								moRef: { kind: "deal", id: "d-3" },
+							},
+						],
+					})
+				: banGhi({ tong: 3 });
+		loiTrang = 2;
+		await mo(ngan);
+		await cho(() => trangThaiNgan() === "ST-so-co", "ngan co du lieu");
+		const xemThem = document.body.querySelector('[data-nut="xem-them"]');
+		if (!xemThem) throw new Error("khong co nut xem them");
+		await bam(xemThem);
+		await cho(
+			() => document.body.querySelector('[data-nut="thu-lai-trang"]') !== null,
+			"nut thu lai trang",
+		);
+		expect({
+			trangThai: trangThaiNgan(),
+			dong: document.body.querySelectorAll("[data-ban-ghi]").length,
+			chu: document.body.querySelector('[data-nut="thu-lai-trang"]')
+				?.textContent,
+		}).toEqual({ trangThai: "ST-so-co", dong: 2, chu: s.thuLai });
+		loiTrang = null;
+		const truoc = goiBanGhi.filter((v) => v?.trang === 2).length;
+		const thuLai = document.body.querySelector('[data-nut="thu-lai-trang"]');
+		if (!thuLai) throw new Error("mat nut thu lai trang");
+		await bam(thuLai);
+		await cho(
+			() => document.body.querySelectorAll("[data-ban-ghi]").length === 3,
+			"ba dong sau thu lai",
+		);
+		expect(goiBanGhi.filter((v) => v?.trang === 2).length).toBe(truoc + 1);
+		expect(
+			document.body.querySelector('[data-nut="thu-lai-trang"]'),
+		).toBeNull();
+	});
+});
+
+describe("ngay-so-qua-chong-ngan", () => {
+	test("ngay-so-qua-chong-ngan: chon ngay, mo ban ghi, Quay lai thi con ngaySo va ngan hoi dung ngay", async () => {
+		docBanGhi = (vao) =>
+			vao?.ngay === "2026-10-23"
+				? banGhi({ ngay: "2026-10-23", soDaChup: 12, tong: 2 })
+				: banGhi({});
+		const san = await mo(
+			<RecordSheetHost />,
+			"?record=objective:mt-1,so-kr:kr-crm",
+		);
+		await cho(() => trangThaiNgan() === "ST-so-co", "ngan co du lieu");
+		const ngay = document.body.querySelector('[data-chon-ngay="2026-10-23"]');
+		if (!ngay) throw new Error("khong thay ngay cu nhat");
+		await bam(ngay);
+		await cho(() => san.url().get("ngaySo") === "2026-10-23", "url co ngaySo");
+		await cho(
+			() =>
+				document.body
+					.querySelector("[data-so-da-chup]")
+					?.getAttribute("data-so-da-chup") === "12",
+			"so cua ngay cu",
+		);
+		const moDeal = document.body.querySelector('[data-mo-ban-ghi="deal:d-1"]');
+		if (!moDeal) throw new Error("khong thay nut ban ghi d-1");
+		await bam(moDeal);
+		await cho(
+			() =>
+				document.body.querySelector('[data-deal-gia="d-1"]') !== null &&
+				san.url().get("record")?.endsWith("deal:d-1") === true,
+			"sheet thoa thuan",
+		);
+		expect({
+			record: san.url().get("record"),
+			ngaySo: san.url().get("ngaySo"),
+		}).toEqual({
+			record: "objective:mt-1,so-kr:kr-crm,deal:d-1",
+			ngaySo: "2026-10-23",
+		});
+		const moc = goiBanGhi.length;
+		const quayLai = document.body.querySelector('[data-nut="quay-lai-gia"]');
+		if (!quayLai) throw new Error("khong co nut quay lai");
+		await bam(quayLai);
+		await cho(() => trangThaiNgan() === "ST-so-co", "ngan so hien lai");
+		await cho(() => goiBanGhi.length > moc, "ngan hoi lai ban ghi");
+		await cho(
+			() => san.url().get("record") === "objective:mt-1,so-kr:kr-crm",
+			"url bo deal",
+		);
+		expect({
+			record: san.url().get("record"),
+			ngaySo: san.url().get("ngaySo"),
+			hoi: goiBanGhi.slice(moc),
+			soDaChup: document.body
+				.querySelector("[data-so-da-chup]")
+				?.getAttribute("data-so-da-chup"),
+		}).toEqual({
+			record: "objective:mt-1,so-kr:kr-crm",
+			ngaySo: "2026-10-23",
+			hoi: [{ keyResultId: "kr-crm", ngay: "2026-10-23", trang: 1 }],
+			soDaChup: "12",
+		});
+	});
+
+	test("ngay-so-qua-chong-ngan: dong ngan so thi xoa ngaySo", async () => {
+		const san = await mo(
+			<RecordSheetHost />,
+			"?record=objective:mt-1,so-kr:kr-crm&ngaySo=2026-10-23",
+		);
+		await cho(() => trangThaiNgan() === "ST-so-co", "ngan co du lieu");
+		const quayLai = [...document.body.querySelectorAll("button")].find(
+			(b) => b.textContent?.trim() === "Quay lại",
+		);
+		if (!quayLai) throw new Error("khong co nut Quay lai cua ngan so");
+		await bam(quayLai);
+		await cho(
+			() => san.url().get("record") === "objective:mt-1",
+			"ve muc tieu",
+		);
+		expect(san.url().get("ngaySo")).toBeNull();
 	});
 });

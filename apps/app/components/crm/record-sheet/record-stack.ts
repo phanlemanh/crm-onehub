@@ -60,6 +60,13 @@ function parseRef(raw: string): RecordRef | null {
 		: null;
 }
 
+export function giuNgaySo(truoc: RecordRef[], sau: RecordRef[]): boolean {
+	const cu = new Set(
+		truoc.filter((ref) => ref.kind === "so-kr").map(recordKey),
+	);
+	return sau.some((ref) => ref.kind === "so-kr" && cu.has(recordKey(ref)));
+}
+
 export function useRecordStack() {
 	const [values, setParams] = useQueryStates(params);
 	const record = values[SEARCH_PARAM.record.stack];
@@ -81,12 +88,14 @@ export function useRecordStack() {
 					[SEARCH_PARAM.fieldsSheet.entity]: null,
 					[SEARCH_PARAM.fieldsSheet.field]: null,
 					[SEARCH_PARAM.record.timeline]: null,
-					[SEARCH_PARAM.record.ngaySo]: null,
+					...(giuNgaySo(stack, next)
+						? {}
+						: { [SEARCH_PARAM.record.ngaySo]: null }),
 				},
 				{ history },
 			);
 		},
-		[setParams],
+		[setParams, stack],
 	);
 
 	const open = useCallback(

@@ -137,18 +137,50 @@ function SoDaChup({ dl }: { dl: BanGhi }) {
 	);
 }
 
+type TrangThem = {
+	con: boolean;
+	dangTai: boolean;
+	loi: boolean;
+	xemThem: () => void;
+	thuLai: () => void;
+};
+
+function NutTrang({ trang }: { trang: TrangThem }) {
+	const s = okrSoMessages(useLocale());
+	if (trang.loi)
+		return (
+			<Button
+				variant="outline"
+				size="sm"
+				data-nut="thu-lai-trang"
+				onClick={trang.thuLai}
+			>
+				<Icon data-icon="inline-start" icon={Renew} />
+				{s.thuLai}
+			</Button>
+		);
+	if (!trang.con) return null;
+	return (
+		<Button
+			variant="outline"
+			size="sm"
+			data-nut="xem-them"
+			disabled={trang.dangTai}
+			onClick={trang.xemThem}
+		>
+			{s.trangThai.so.xemThem}
+		</Button>
+	);
+}
+
 function BangBanGhi({
 	dl,
 	dong,
-	con,
-	dangTai,
-	xemThem,
+	trang,
 }: {
 	dl: BanGhi;
 	dong: BanGhi["dong"];
-	con: boolean;
-	dangTai: boolean;
-	xemThem: () => void;
+	trang: TrangThem;
 }) {
 	const locale = useLocale();
 	const s = okrSoMessages(locale);
@@ -207,31 +239,17 @@ function BangBanGhi({
 					</SimpleTableRow>
 				))}
 			</SimpleTable>
-			{con ? (
-				<Button
-					variant="outline"
-					size="sm"
-					data-nut="xem-them"
-					disabled={dangTai}
-					onClick={xemThem}
-				>
-					{t.xemThem}
-				</Button>
-			) : null}
+			<NutTrang trang={trang} />
 		</DetailSheetSection>
 	);
 }
 
 function BangLanGhi({
 	lanGhi,
-	con,
-	dangTai,
-	xemThem,
+	trang,
 }: {
 	lanGhi: BanGhi["lanGhi"];
-	con: boolean;
-	dangTai: boolean;
-	xemThem: () => void;
+	trang: TrangThem;
 }) {
 	const locale = useLocale();
 	const t = okrSoMessages(locale).trangThai.so;
@@ -272,17 +290,7 @@ function BangLanGhi({
 					</SimpleTableRow>
 				))}
 			</SimpleTable>
-			{con ? (
-				<Button
-					variant="outline"
-					size="sm"
-					data-nut="xem-them"
-					disabled={dangTai}
-					onClick={xemThem}
-				>
-					{t.xemThem}
-				</Button>
-			) : null}
+			<NutTrang trang={trang} />
 		</DetailSheetSection>
 	);
 }
@@ -373,7 +381,16 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 	const dangTai = trangs.some((q) => q.isFetching);
 	const dong = trangs.flatMap((q) => q.data?.dong ?? []);
 	const lanGhi = trangs.flatMap((q) => q.data?.lanGhi ?? []);
-	const xemThem = () => setTrang({ ngay, so: soTrang + 1 });
+	const sau = trangs.slice(1);
+	const trangThem = (con: boolean): TrangThem => ({
+		con,
+		dangTai,
+		loi: sau.some((q) => q.isError),
+		xemThem: () => setTrang({ ngay, so: soTrang + 1 }),
+		thuLai: () => {
+			for (const q of sau) if (q.isError) void q.refetch();
+		},
+	});
 	const thuLai = () => {
 		for (const q of trangs) if (q.isError) void q.refetch();
 		if (lichSu.isError) void lichSu.refetch();
@@ -452,9 +469,7 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 						{dl.loai === "api" ? (
 							<BangLanGhi
 								lanGhi={lanGhi}
-								con={lanGhi.length < dl.tong}
-								dangTai={dangTai}
-								xemThem={xemThem}
+								trang={trangThem(lanGhi.length < dl.tong)}
 							/>
 						) : (
 							<>
@@ -462,9 +477,7 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 									<BangBanGhi
 										dl={dl}
 										dong={dong}
-										con={dong.length < dl.tong}
-										dangTai={dangTai}
-										xemThem={xemThem}
+										trang={trangThem(dong.length < dl.tong)}
 									/>
 								) : null}
 								<BangLichSu

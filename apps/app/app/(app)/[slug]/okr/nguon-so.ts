@@ -31,10 +31,13 @@ export const KHOA_DAU = {
 	"bang-tinh": "bangTinh",
 } as const satisfies Record<NguonMay, keyof OkrSoMessages["dau"]>;
 
-export function useXemDuocBanGhi(): boolean {
+export type XemBanGhi = "chua-biet" | "duoc" | "khong";
+
+export function useXemDuocBanGhi(): XemBanGhi {
 	const trpc = useTRPC();
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
-	return docDuocPhamVi(workspace.data?.viewerRole ?? null, "doi-tac");
+	if (workspace.data === undefined) return "chua-biet";
+	return docDuocPhamVi(workspace.data.viewerRole, "doi-tac") ? "duoc" : "khong";
 }
 
 export type PhamViHien = { nhan: string; ten: string | null };
