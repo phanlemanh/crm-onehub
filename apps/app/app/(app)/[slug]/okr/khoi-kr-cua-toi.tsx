@@ -101,7 +101,7 @@ export function KhoiKrCuaToi({
 		),
 	);
 	const laNguoi = userId !== undefined;
-	const loi = cycles.isError || khoi.isError;
+	const loi = (cycles.isError && ky === null) || khoi.isError;
 
 	if (!loi && ky === null && !cycles.isPending) return null;
 	const cot: SimpleTableColumn[] = [
