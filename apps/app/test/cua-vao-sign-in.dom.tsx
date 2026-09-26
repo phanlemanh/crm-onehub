@@ -440,17 +440,17 @@ describe("quen-mat-khau", () => {
 
 describe("o-loi doi chung", () => {
 	it("bo do tieu diem bat duoc tabindex, autofocus va phan tu bam duoc o con", () => {
-		const mau = (x: React.ReactNode) => {
+		const mau = (html: string) => {
 			const o = document.createElement("div");
-			o.innerHTML = renderToStaticMarkup(<div role="alert">{x}</div>);
+			o.innerHTML = `<div role="alert">${html}</div>`;
 			const goc = o.firstElementChild;
 			if (!goc) throw new Error("mau rong");
 			return layTieuDiem(goc);
 		};
-		expect(mau(<span tabIndex={0}>x</span>)).toBe("tabindex o <span>");
-		expect(mau(<input autoFocus />)).toBe("autofocus o <input>");
-		expect(mau(<a href="/">x</a>)).toBe("phan tu bam duoc <a>");
-		expect(mau(<p>x</p>)).toBeNull();
+		expect(mau('<span tabindex="0">x</span>')).toBe("tabindex o <span>");
+		expect(mau("<input autofocus>")).toBe("autofocus o <input>");
+		expect(mau('<a href="/">x</a>')).toBe("phan tu bam duoc <a>");
+		expect(mau("<p>x</p>")).toBeNull();
 	});
 
 	it("bo tach ten tu nhan nut: nhan la khong khop duoc bat buoc tach sai", () => {
