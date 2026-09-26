@@ -983,6 +983,11 @@ executors:
     osa_san_thiet_ke: "bun _acceptance/okr-soat-anh-luot-3/rang/san-thiet-ke.mjs"
     lmcv_soi_ma: "bun _acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/soi-ma.mjs"
     lmcv_khong_hoi_quy: "bun _acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/khong-hoi-quy.mjs"
+    kcb_thoi_gian: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/do-thoi-gian.mjs"'
+    kcb_lech_hang: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs lech-hang"'
+    kcb_con_thanh_vien: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"'
+    kcb_khong_noi_tran: "bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs khong-noi-tran"
+    kcb_tuan_tu: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs bo-qua-lo && bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs tuan-tu"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
