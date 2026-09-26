@@ -255,6 +255,15 @@ export const capNhatTuanOutput = z.object({
 			lastConfidence: z.enum(MUC_TU_TIN).nullable(),
 			lastAt: z.string().nullable(),
 			updatedThisWeek: z.boolean(),
+			nguon: z.enum(NGUON_KR),
+			doCanh: z.boolean(),
+			soMay: z
+				.object({
+					giaTri: z.number(),
+					ngay,
+					nguon: z.enum(LOAI_NGUON_MAY),
+				})
+				.nullable(),
 		}),
 	),
 	weekStart: ngay,
