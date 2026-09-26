@@ -88,6 +88,12 @@ async function duongMo(
 	return (planId) => `${appUrl}/${slug}?record=plan:${planId}`;
 }
 
+export async function lienKetKeHoach(): Promise<
+	(planId: string) => string | null
+> {
+	return duongMo(appUrlMacDinh());
+}
+
 async function dong(taskId: string, ket: KetQuaNhac): Promise<KetQuaNhac> {
 	await completeTask(taskId, ket);
 	return ket;
@@ -151,7 +157,14 @@ async function guiQuaZalo(
 	if (!token || !zaloUserId) {
 		throw new Error("kenh Zalo duoc chon ma thieu token hoac lien ket");
 	}
-	const { text, daGui } = dungTin(ten, viec, lienKet, "tron", ZALO.tranKyTu);
+	const { text, daGui } = dungTin(
+		ten,
+		viec,
+		lienKet,
+		"tron",
+		ZALO.tranKyTu,
+		ZALO.loi.goiY,
+	);
 	await guiZalo(token, zaloUserId, text, { fetcher: deps.zaloFetcher });
 	return daGui;
 }
