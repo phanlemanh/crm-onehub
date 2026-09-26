@@ -339,6 +339,11 @@ evals:
   - id: E18
     criterion: AC-15
     executor: judgment
+    question: >-
+      Chu moi cua trang dang nhap (cuaVaoMessages va cac khoa auth.ts doi) co doc nhu tieng
+      Viet cua nguoi lam nghe khong, co dung tu nao nam trong _Avoid_ cua CONTEXT.md theo
+      dung nghia muc do khong, va nhung cau da dua nguoi that (email cong ty / dia chi email)
+      da co dong tra loi cua chu kho trong decisions.jsonl chua?
     inputs:
       - CONTEXT.md
       - apps/app/lib/messages/cua-vao.ts
