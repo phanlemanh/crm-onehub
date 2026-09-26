@@ -401,3 +401,21 @@ evals:
       Doi chung duong: chay cung ham so sanh tren cap gia (0 -> 1) phai ra SAI.
       CHIEU DO: pha-thu doi aria-label logo trong auth-shell.tsx ban sao ma eval logo-onehub E11 ghim
       -> "SAI logo-onehub/E11: base 0 -> head 1".
+
+  - id: E21
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.cvdn_step_list_tinh
+    paths:
+      - "packages/ui/src/components/step-list.tsx"
+      - "packages/ui/test/step-list-tinh.dom.tsx"
+    expected: |
+      Test DOM cua packages/ui (bo sung 26/09, chu kho quyet phu tep step-list.tsx). Ma tran viet
+      truoc 5 ca: tinh — khong buoc nao mang aria-current; moi chi bao cung mot data-state va hien
+      so 1,2,3, khong dau tich; khong tieu de nao mang lop mo; van la role=list co aria-label va 3
+      role=listitem. Doi chung trong tep: tien do (tinh=false) — dung mot aria-current=step, trang
+      thai {active, inactive}, hai tieu de mo.
+      CHIEU DO (da chay 26/09 tren cay da commit, tra nguyen bang git show): bo `!tinh &&` o
+      aria-current -> do «khong buoc nao la buoc hien tai»; bo Number.MAX_SAFE_INTEGER -> do «moi chi
+      bao cung mot trang thai…» va «khong tieu de nao bi lam mo». Tren ma cu (truoc b55b1b48) 3/5 do.
+

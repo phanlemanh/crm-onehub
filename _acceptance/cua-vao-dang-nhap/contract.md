@@ -5,9 +5,9 @@ slug: cua-vao-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-09-25T20:21:04Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-25-cua-vao-dang-nhap-design.md
 ---
 
@@ -44,7 +44,7 @@ trên cây đang xét, không đăng nhập, tiếng Việt, API của cùng câ
 - AC-11: Given khổ 320, 768, 1024, 1440 px × giao diện sáng, tối, When mở `/sign-in` (Google bật), Then ở 320 và 768 khối hướng dẫn nằm hoàn toàn dưới nút «Đăng nhập» của ô mật khẩu; ở 1024 và 1440 khối hướng dẫn nằm ở cột bên trái khung đăng nhập; ở mọi khổ `document` không tràn ngang.
 - AC-12: Given `/sign-in` có ô lỗi, Google bật, ở khổ 1440 và 320, When người dùng nhấn Tab liên tiếp từ đầu trang, Then tiêu điểm đi giống nhau ở hai khổ: liên kết logo của tiêu đề cột phải («Trang chủ») → nút Google → ô email → ô mật khẩu → («Quên mật khẩu?» khi `signInOptions` trả `quenMatKhau: true` — cờ của PR #104; liên kết trỏ `/quen-mat-khau`) → nút «Đăng nhập»; không phần tử nào trong khối hướng dẫn nhận tiêu điểm, và logo của khối hướng dẫn (chỉ hiện từ `lg`) không phải liên kết; chữ trong khối hướng dẫn và ô lỗi đạt tương phản AA (4,5:1; chữ lớn 3:1) ở cả hai giao diện.
 - AC-13: Given ba hồ sơ đã ký có eval trỏ vào vùng vòng này sửa — `logo-onehub` (E11), `man-xin-quyen-co-rang` (E1, E2, E4–E10), `vao-bang-email-va-mat-khau` (E13, E15) — When chạy lại các eval máy (`test`/`script`) của chúng trên cây sau vòng này và trên `merge-base` với `onehub`, Then mọi eval đạt ở `merge-base` vẫn đạt; eval nào đổi kết quả thì dòng ra gọi tên hồ sơ, eval và mã thoát hai phía.
-- AC-14: Given các tệp vòng này viết hoặc sửa, When soi mã và `diff` từ `merge-base` với `onehub`, Then không tệp `"use client"` nào nhập `@crm/auth` hay `@crm/db`; khối hướng dẫn dựng từ `StepList` (theo hướng chủ kho chọn ở Cổng Phạm vi) và ô lỗi từ `Alert` của `@crm/ui`, không `className` đổi màu, góc, viền, bóng trên component `@crm/ui` ở chỗ gọi; mã mới nằm ở tệp riêng của OneHub; và `diff` không chạm `components/landing/**`, `apps/app/proxy.ts`, `packages/auth/**`.
+- AC-14: Given các tệp vòng này viết hoặc sửa, When soi mã và `diff` từ `merge-base` với `onehub`, Then không tệp `"use client"` nào nhập `@crm/auth` hay `@crm/db`; khối hướng dẫn dựng từ `StepList` ở chế độ tĩnh (hướng «Đều nhau» chủ kho chọn ở Cổng Phạm vi: không bước nào mang `aria-current`, không bước nào mờ, mọi chỉ báo cùng một trạng thái, vẫn là danh sách có tên; chế độ tiến độ của các nơi dùng cũ giữ nguyên) và ô lỗi từ `Alert` của `@crm/ui`, không `className` đổi màu, góc, viền, bóng trên component `@crm/ui` ở chỗ gọi; mã mới nằm ở tệp riêng của OneHub; và `diff` không chạm `components/landing/**`, `apps/app/proxy.ts`, `packages/auth/**`.
 - AC-15 (judgment): Given mọi chuỗi tiếng Việt mới hoặc đổi của vòng này, When đọc đối chiếu `CONTEXT.md`, Then không chuỗi nào dùng từ nằm trong `_Avoid_` theo đúng nghĩa của mục đó, nhãn theo luật «ngắn theo ngữ cảnh», và mọi câu người đọc phân vân đã có dòng trả lời của người thật trong sổ quyết định.
 
 ## Coverage
@@ -59,6 +59,8 @@ sản phẩm đào từ repo; chân ngành neo vào hai chuẩn có tên.
 - Cắt ngang mọi ô Core: không in giá trị URL · ô lỗi là thông báo trạng thái [NGÀNH: WCAG 2.2 SC 4.1.3, 3.3.1] · tương phản AA [NGÀNH: WCAG 2.2 SC 1.4.3] · máy chủ tính, client vẽ (`AGENTS.md`) · phí bản rẽ nhỏ (`CLAUDE.md`).
 
 Core (vào AC): sign-in × Google (AC-3) · ma trận cửa (AC-4) · bốn trang không khối (AC-1, AC-2) · ba loại `error` + vắng/rỗng/lặp (AC-5, 6, 7, 8) · khổ × giao diện (AC-10, 11) · Tab, tương phản và #104 trong bố cục mới (AC-12) · chữ (AC-9, 15) · không hồi quy hồ sơ đã ký (AC-13) · ranh giới mã (AC-14).
+
+Phủ tệp (bổ sung 26/09 sau S4 round 1, chủ kho quyết): `packages/ui/src/components/step-list.tsx` đo bằng E21 (`packages/ui/test/step-list-tinh.dom.tsx`); `apps/app/test/cua-vao-ham.spec.ts` là tệp test của các hàm thuần, được phủ bởi suite `bun run test` chạy mỗi round.
 
 Để chủ kho gạch tại Cổng Phạm vi:
 - [GIẢ ĐỊNH] Viết «địa chỉ email» thay «email công ty» đã duyệt ở Q1 — hồ sơ `vao-bang-email-va-mat-khau` ghi nhân viên kinh doanh dùng Gmail cá nhân (giả định 2 của `opportunity.md`). Mô tả dưới tiêu đề: «Dùng đúng địa chỉ email đã được cho phép.»
@@ -94,3 +96,9 @@ Ngưỡng ở `opportunity.md` (chờ ký Cổng Đáng):
 - Tiền đề của bàn đo màn thật (`cvdn_do_cua_vao`, E11–E14, E19): lệnh đặt `GOOGLE_CLIENT_ID=ci-only-google-client-id` và `GOOGLE_CLIENT_SECRET=ci-only-google-client-secret` khi hai biến này rỗng, đúng giá trị CI dùng (`.github/workflows/ci.yml`). `.env` của máy dev để rỗng hai khoá này nên trang thật không có nút Google; khoá giả chỉ làm API báo `google=true` để điều kiện «Google bật» của AC-3/AC-11/AC-12 đúng — không ai bấm được nút đó tới Google. Thước gọi tên khi tiền đề sai («tien de AC-12 khong dung — API tra google=false»). Bàn đo chạy trong phiên đo #150 trên `crm_<cây>_do`, không trên CSDL dev chung.
 - Chiều đỏ và phá-thử của S3 (26/09): test DOM mới chạy trên mã cũ — `cua-vao-sign-in` 20/24 đỏ, `cua-vao-trang-khac` 1/5 đỏ, `cua-vao-shell` 6/7 đỏ, mỗi ca đỏ với thông điệp ghim; phá-thử trên cây đã commit — bỏ `method` khi tính bước, in `error` ra trang, `onboarding` nhận khối, ô lỗi sau ô mật khẩu, trang thôi truyền `quenMatKhau` — mỗi nhát đỏ đúng ca mang tên. `ma-loi-that`: câu hook đổi → 4 SAI; dist SSO đổi → «SAI moc sso». `soi-ma`: client nhập `@crm/auth` → SAI (a), `<Card className="rounded-2xl bg-muted">` → SAI (c). Bàn đo: khoá Google rỗng → 4 dòng «tien de AC-12 khong dung»; bỏ khổ 768 → 6 dòng «thieu»; ép `dark` lên `<main>` → «light: 1 phan tu mang lop dark». `thuoc-da-ky`: gỡ vạch «hoặc» → «SAI vao-bang-email-va-mat-khau/E13: base 0 -> head 1».
 - `thuoc-da-ky` rút danh sách theo luật của E20 nên khác danh sách viết tay của AC-13: thêm `man-xin-quyen-co-rang` E3, E11 và `vao-bang-email-va-mat-khau` E17; `logo-onehub` E11 và `man-xin-quyen-co-rang` E10 là `ui-check`, ngoài làn máy (sổ quyết định d-…-9, chờ phê ở Cổng Bằng chứng).
+
+Known limits — chủ kho chấp nhận 26/09 sau S4 round 2 (dừng-vá, đường a), việc siết thước tách sang chip «siết thước cửa vào»:
+
+- Vế «logo của khối hướng dẫn không phải liên kết» của E13 không có đường đỏ: logo nằm ngoài `[data-khoi-huong-dan]`, và vòng Tab dừng khi gặp lại tên phần tử đầu, nên một logo bị bọc thành liên kết «Trang chủ» không làm dòng nào đỏ.
+- Ma trận `ma-tran-cua` của E4 rẽ nhánh theo số nút trang vừa vẽ, không theo cột kỳ vọng viết trước cho từng ca: sáu ca cùng đo quan hệ «bước 2 khớp nút đang hiện», không ca nào ghim tập nút đúng của cấu hình mình.
+- Chữ «Cài đặt» ở bước 1 (E3) được rút từ `settingsMessages(...).thanhBen.nhan` — nhãn trợ năng của thanh bên — không phải nhãn menu người dùng thấy; hai chữ đang trùng nên hôm nay đúng, nhưng thước không bắt được khi chúng tách.
