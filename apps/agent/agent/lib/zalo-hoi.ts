@@ -41,9 +41,10 @@ export type KetDong = {
 	tokenRa?: number | null;
 };
 
-type HangDangHoi = {
+export type HangDangHoi = {
 	id: string;
 	messageId: string;
+	zaloChatId: string;
 	hoiLuc: Date;
 	sessionId: string | null;
 };
@@ -120,7 +121,11 @@ async function chamTran(
 	return null;
 }
 
-async function dangBan(tx: DbGhi, chatId: string, now: Date): Promise<boolean> {
+export async function dangBan(
+	tx: DbGhi,
+	chatId: string,
+	now: Date,
+): Promise<boolean> {
 	const hang = await tx.zaloHoi.findFirst({
 		where: {
 			zaloChatId: chatId,
@@ -186,7 +191,13 @@ export async function hangDangHoi(
 	return db.zaloHoi.findFirst({
 		where: { zaloChatId: chatId, ketQua: DANG_HOI },
 		orderBy: { hoiLuc: "desc" },
-		select: { id: true, messageId: true, hoiLuc: true, sessionId: true },
+		select: {
+			id: true,
+			messageId: true,
+			zaloChatId: true,
+			hoiLuc: true,
+			sessionId: true,
+		},
 	});
 }
 
