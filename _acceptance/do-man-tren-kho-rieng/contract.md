@@ -5,7 +5,7 @@ slug: do-man-tren-kho-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-26-do-man-tren-kho-rieng-design.md
 approved_by:
 approved_at:
@@ -113,3 +113,14 @@ Ngoài hợp đồng, thấy ở S3: `apps/agent/agent/agent.ts` gọi `syncVers
 `eve build` cập nhật hàng `install` của kho mà `DATABASE_URL` trỏ tới — kể cả `crm`. Đã mở
 chip riêng.
 
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-26 (Manh Phan), từ mục ngoài hợp đồng của S4 lượt 4:
+
+- Ngoài-1: Nếu một lượt đo bị tắt đột ngột để lại bản ghi trạng thái hỏng, máy có thể bỏ sót việc tắt các máy chủ đo cũ, khiến chúng tiếp tục chiếm tài nguyên mà không ai biết.
+- Ngoài-2: Tài liệu hướng dẫn vẫn còn một câu mô tả cũ mâu thuẫn với tính năng mới, có thể khiến người đọc hiểu sai quy tắc xoá kho dữ liệu.
+- Ngoài-3: Khi tạo môi trường đo mới, một kho dữ liệu trùng tên nhưng không phải do phép đo tạo ra có thể bị xoá mất mà không có cảnh báo.
+- Ngoài-6: Khi một lượt đo phải chờ đến lượt của cây đang chạy trước xong, người dùng bấm Ctrl-C hoặc hệ thống ra lệnh dừng có thể không có tác dụng trong tối đa một giờ.
+- Ngoài-7: Một lượt đo thất bại trước khi vào lượt có thể xoá mất bản ghi trạng thái của lượt đo khác đang chạy cùng cây, khiến lượt đó mất khả năng tự dọn nếu bị tắt đột ngột sau đó.
+- Ngoài-8: Mỗi lần bài kiểm tự động chạy để lại một thư mục build nặng khoảng nửa GB không được dọn, khiến dung lượng ổ đĩa máy phát triển dần bị chiếm hết theo thời gian.
+- Ngoài-10: Nếu kết nối giữ chỗ giữa hai lượt đo trên cùng một cây bị rớt bất ngờ, hai lượt có thể chạy chồng lên nhau mà không ai được báo, có nguy cơ một lượt xoá mất kho dữ liệu lượt kia đang dùng.
+- Ngoài-11: Bài kiểm tra tự động xác nhận «máy chủ cũ đã tắt hẳn» có thể không phát hiện được trường hợp một tiến trình con của máy chủ đó vẫn còn sống, nên một lỗi dọn dẹp thật có thể lọt qua mà không bị bắt.
+- Ngoài-12: Dữ liệu mẫu dùng để kiểm tra bộ đọc kết quả kiểm tra trước khi gộp mã là viết tay chứ không lấy từ kết quả thật, nên nếu định dạng kết quả thật thay đổi, bài kiểm có thể không phát hiện ra.
