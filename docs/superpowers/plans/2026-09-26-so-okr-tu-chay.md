@@ -45,7 +45,7 @@
 | `packages/validation/src/okr-nguon.ts` (mới) | Khuôn `datNguonKrInput`, `okrNguonDong` (parse dòng `OkrNguonKr`), `oSheet`, `sheetIdTuUrl`, `lyDoDocSheet`, payload `okr-doc-sheet` |
 | `packages/validation/src/okr-kr.ts` | `NGUON_KR` thêm `bang-tinh` |
 | `packages/validation/src/okr-vet.ts` | `HANH_DONG_VET` thêm `doi-nguon`, `ghi-so-api` |
-| `packages/db/prisma/schema.prisma` + `migrations/20260928010000_okr_so_tu_chay` | `OkrNguonKr`, `OkrSoChup`, quan hệ ngược trên `OkrKeyResult` |
+| `packages/db/prisma/schema.prisma` + `migrations/20260929010000_okr_so_tu_chay` | `OkrNguonKr`, `OkrSoChup`, quan hệ ngược trên `OkrKeyResult` |
 | `packages/db/src/okr-so-config.ts` (mới) | `OKR_SO` |
 | `packages/db/src/okr-chi-so.ts` (mới) | `khoangKy`, `dieuKienChiSo`, `demChiSo`, `banGhiChiSo` |
 | `packages/db/src/agent-tasks.ts` | loại `okr-doc-sheet` vào `TASK_KINDS`, `DIRECT_KINDS`, `PRIORITY.okrSheet` |
@@ -270,7 +270,7 @@ export function parseDocSheetPayload(v: unknown) {
 
 **Files:**
 - Modify: `packages/db/prisma/schema.prisma` (cuối tệp; thêm hai quan hệ ngược trong `OkrKeyResult`)
-- Create: `packages/db/prisma/migrations/20260928010000_okr_so_tu_chay/migration.sql`, `_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs` (chép khuôn `_acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs`, đổi `VONG` và tên model)
+- Create: `packages/db/prisma/migrations/20260929010000_okr_so_tu_chay/migration.sql`, `_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs` (chép khuôn `_acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs`, đổi `VONG` và tên model)
 
 **Interfaces:**
 - Produces: `db.okrNguonKr`, `db.okrSoChup`; `OkrKeyResult.nguon?`, `OkrKeyResult.soChup[]`.
@@ -320,7 +320,7 @@ model OkrSoChup {
 
 Trong `model OkrKeyResult` thêm `nguonMay OkrNguonKr?` và `soChup OkrSoChup[]` (quan hệ ngược không sinh cột).
 
-- [ ] **Step 2: Sinh migration** — `cd packages/db && bunx prisma migrate dev --create-only --name okr_so_tu_chay` rồi đổi tên thư mục thành `20260928010000_okr_so_tu_chay` và thêm cuối tệp SQL:
+- [ ] **Step 2: Sinh migration** — `cd packages/db && bunx prisma migrate dev --create-only --name okr_so_tu_chay` rồi đổi tên thư mục thành `20260929010000_okr_so_tu_chay` và thêm cuối tệp SQL:
 
 ```sql
 CREATE UNIQUE INDEX "okrSoChup_may_mot_ngay" ON "okrSoChup"("keyResultId", "ngay") WHERE ("nguon" IN ('crm', 'bang-tinh'));
