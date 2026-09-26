@@ -151,6 +151,16 @@ export async function layTokenSheets(
 	return access_token;
 }
 
+const LOI_KHONG_TAM_THOI = new Set(["DataError", "SyntaxError", "ZodError"]);
+
+const maLoiPrisma = z.object({ code: z.string().min(1).max(20) });
+
+export function tenLoi(e: Error | null): string {
+	const ma = maLoiPrisma.safeParse(e);
+	if (ma.success) return ma.data.code;
+	return e?.name ?? "loi-la";
+}
+
 function thuLaiDuoc(status: number): boolean {
 	return status === 429 || status >= 500;
 }
@@ -192,7 +202,10 @@ async function motLanGoi(
 	} catch (e) {
 		if (e instanceof LoiTokenSheets && !thuLaiDuoc(e.status))
 			return baoLoi({ loi: "google-loi" }, e.message);
-		return baoLoi(THU_LAI, e instanceof Error ? e.name : "lỗi lạ");
+		const ten = tenLoi(e instanceof Error ? e : null);
+		if (e instanceof Error && LOI_KHONG_TAM_THOI.has(e.name))
+			return baoLoi({ loi: "google-loi" }, ten);
+		return baoLoi(THU_LAI, ten);
 	}
 }
 
@@ -212,6 +225,16 @@ export async function chayDocSheet(
 	task: LeasedTask,
 	f: typeof fetch = globalThis.fetch,
 ): Promise<void> {
+	try {
+		await docVaGhi(task, f);
+	} catch (e) {
+		const ten = tenLoi(e instanceof Error ? e : null);
+		console.error(`[okr-sheets] việc đọc ô ${task.id} hỏng: ${ten}`);
+		await completeTask(task.id, `đọc ô: lỗi ${ten}`);
+	}
+}
+
+async function docVaGhi(task: LeasedTask, f: typeof fetch): Promise<void> {
 	const { keyResultId } = parseDocSheetPayload(task.payload);
 	const hang = await db.okrNguonKr.findUnique({ where: { keyResultId } });
 	const nguon = hang ? parseOkrNguon(hang) : null;

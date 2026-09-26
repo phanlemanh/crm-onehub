@@ -8,9 +8,8 @@ import {
 	type OkrNguonDong,
 	parseOkrNguon,
 } from "@crm/validation/okr-nguon";
-import { z } from "zod";
 import { settledWithin } from "./deadline";
-import { cauHinhSheets, docOSheet, soHopLeKq } from "./okr-sheets";
+import { cauHinhSheets, docOSheet, soHopLeKq, tenLoi } from "./okr-sheets";
 
 export type DocO = (
 	sheetId: string,
@@ -26,8 +25,6 @@ const docTat: DocO = async () => ({ loi: "tat" });
 export function docOSheetThat(): DocO {
 	return cauHinhSheets() ? docOSheet(globalThis.fetch) : docTat;
 }
-
-const maLoiPrisma = z.object({ code: z.string().min(1).max(20) });
 
 function homQuaVN(now: Date): string {
 	const d = new Date(`${ngayVN(now)}T00:00:00Z`);
@@ -176,13 +173,9 @@ export async function chupSoOkr(
 		} catch (e) {
 			loi += 1;
 			boQua += 1;
-			const ma = maLoiPrisma.safeParse(e);
-			const ten = ma.success
-				? ma.data.code
-				: e instanceof Error
-					? e.name
-					: "loi-la";
-			console.error(`[okr-chup] KR ${kr.id} không chụp được: ${ten}`);
+			console.error(
+				`[okr-chup] KR ${kr.id} không chụp được: ${tenLoi(e instanceof Error ? e : null)}`,
+			);
 		}
 	}
 	if (ghi > 0 || loi > 0 || loiDoc > 0) {

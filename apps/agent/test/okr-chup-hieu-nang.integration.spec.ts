@@ -499,7 +499,14 @@ describe("hieu-nang", () => {
 			treo = false;
 			await luot(new Date(nhip.getTime() + 60_000));
 			const dong2 = await soDong(bangTinh);
-			expect(`lượt kế đọc được ${dong2 > 0}`).toBe("lượt kế đọc được true");
+			const daThu = Math.ceil(goi1 / OKR_SO.sheets.soLanThu);
+			const mongLuotKe = Math.min(
+				OKR_SO.sheets.toiDaMoiNhip,
+				bangTinh.length - daThu,
+			);
+			expect(`lượt đầu thử ${daThu} KR; lượt kế đọc được ${dong2} KR`).toBe(
+				`lượt đầu thử ${daThu} KR; lượt kế đọc được ${mongLuotKe} KR`,
+			);
 			for (let k = 1; k <= 2 && (await soDong(bangTinh)) < 20; k += 1) {
 				await luot(
 					new Date(nhip.getTime() + k * OKR_SO.sheets.thuLaiMs + 60_000),

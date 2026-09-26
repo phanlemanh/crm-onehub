@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { db } from "@crm/db";
+import { db, setPrismaLogSink } from "@crm/db";
 import { DIRECT_KINDS, PRIORITY } from "@crm/db/agent-tasks";
 import { OKR_SO } from "@crm/db/okr-so-config";
 import { z } from "zod";
@@ -245,6 +245,48 @@ describe("sheets đọc ô", () => {
 		expect(demValues(g)).toBe(0);
 	});
 
+	test("lỗi không tạm thời không thử lại: khoá hỏng, thân không phải JSON, token sai khuôn", async () => {
+		const tra = datBienSheets({ email: EMAIL_SHEETS, khoa: "khong-phai-khoa" });
+		const khoaHong = googleTheoO(() => oGia(1));
+		const tu = nhatKy.length;
+		try {
+			expect(await docOSheet(khoaHong.f)(SHEET_BI_MAT, "A1")).toEqual({
+				loi: "google-loi",
+			});
+		} finally {
+			tra();
+		}
+		const thanHong = googleTheoO(
+			() => new Response("<html>1240</html>", { status: 200 }),
+		);
+		await layTokenSheets(thanHong.f, new Date());
+		expect(await docOSheet(thanHong.f)(SHEET_BI_MAT, "A1")).toEqual({
+			loi: "google-loi",
+		});
+		const tokenHong = googleGia((x) =>
+			x.loai === "token" ? Response.json({ sai: 1 }) : oGia(1),
+		);
+		expect(await docOSheet(tokenHong.f)(SHEET_BI_MAT, "A1")).toEqual({
+			loi: "google-loi",
+		});
+		const log = nhatKy.slice(tu).filter((d) => d.startsWith("[okr-sheets]"));
+		expect({
+			khoaHong: khoaHong.goi.length,
+			thanHong: demValues(thanHong),
+			tokenHong: tokenHong.goi.length,
+			log,
+		}).toEqual({
+			khoaHong: 0,
+			thanHong: 1,
+			tokenHong: 1,
+			log: [
+				"[okr-sheets] đọc ô không được: DataError",
+				"[okr-sheets] đọc ô không được: SyntaxError",
+				"[okr-sheets] đọc ô không được: ZodError",
+			],
+		});
+	});
+
 	test("thiếu một trong hai biến: tat, không gọi mạng", async () => {
 		for (const bien of [
 			{ email: EMAIL_SHEETS, khoa: null },
@@ -348,6 +390,57 @@ describe("sheets (b) việc okr-doc-sheet", () => {
 			outcome: "đọc ô: chua-chia-se",
 		});
 		expect(await db.okrSoChup.count({ where: { keyResultId: kr } })).toBe(0);
+	});
+
+	test("payload hỏng: đóng việc bằng tên lỗi, không có thông điệp lỗi", async () => {
+		const task = await db.agentTask.create({
+			data: {
+				kind: "okr-doc-sheet",
+				reason: "sheets-thu",
+				payload: { sai: "1240" },
+				priority: PRIORITY.okrSheet,
+				dueAt: new Date(),
+			},
+		});
+		const g = googleTheoO(() => oGia(1));
+		await chayDocSheet(task, g.f);
+		expect(await ketViec(task.id)).toEqual({
+			xong: true,
+			outcome: "đọc ô: lỗi Error",
+		});
+		expect(g.goi.length).toBe(0);
+	});
+
+	test("lỗi cơ sở dữ liệu mang giá trị ô: lý do việc chỉ có mã lỗi", async () => {
+		const kr = await gieoKrBangTinh();
+		const task = await xepViec(kr);
+		await db.$executeRawUnsafe(
+			`CREATE OR REPLACE FUNCTION okr_thu_doc_hong() RETURNS trigger AS $$ BEGIN RAISE EXCEPTION 'docGiaTri % hong', NEW."docGiaTri"; END $$ LANGUAGE plpgsql`,
+		);
+		await db.$executeRawUnsafe(
+			`CREATE TRIGGER okr_thu_doc_hong BEFORE UPDATE ON "okrNguonKr" FOR EACH ROW WHEN (NEW."keyResultId" = '${kr}') EXECUTE FUNCTION okr_thu_doc_hong()`,
+		);
+		let loiPrisma = 0;
+		setPrismaLogSink((r) => {
+			if (r.level === "error") loiPrisma += 1;
+		});
+		try {
+			await chayDocSheet(task, googleTheoO(() => oGia(1240)).f);
+		} finally {
+			setPrismaLogSink(null);
+			await db.$executeRawUnsafe(
+				`DROP TRIGGER IF EXISTS okr_thu_doc_hong ON "okrNguonKr"`,
+			);
+			await db.$executeRawUnsafe("DROP FUNCTION IF EXISTS okr_thu_doc_hong()");
+		}
+		const ket = await ketViec(task.id);
+		expect(ket.xong).toBe(true);
+		expect(ket.outcome ?? "").not.toContain("1240");
+		expect(ket.outcome ?? "").toMatch(/^đọc ô: lỗi [A-Za-z0-9]+$/);
+		expect((await trangThai(kr)).docGiaTri).toBeNull();
+		expect(`bộ ghi lỗi của Prisma nhận ${loiPrisma} lỗi`).toBe(
+			"bộ ghi lỗi của Prisma nhận 1 lỗi",
+		);
 	});
 
 	test("KR không còn nguồn bảng tính: đóng việc, không gọi Google", async () => {
