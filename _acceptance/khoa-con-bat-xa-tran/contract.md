@@ -5,7 +5,7 @@ slug: khoa-con-bat-xa-tran
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-26-khoa-con-bat-xa-tran-design.md
 approved_by:
 approved_at:
@@ -50,6 +50,7 @@ khi có lý do nói được thành lời»). Số đo trước khi làm ở des
 
 ## Notes
 
+- Known limits (AC-5 soát chỗ gọi, Cổng 2 round 2): thước chỗ gọi của E5 chỉ đếm lời gọi `maTranTrpc`/`maTranRest` nằm trong thân các ca `test(`; một hàm phụ ngoài ca gọi ma trận với `LO_SONG_SONG`, hay một ca gọi thẳng `theoLo(…, LO_SONG_SONG)`, sẽ không bị thấy. Đổi mặc định của bộ chia lô thì ca `theo-lo` vẫn bắt.
 - Known limits (Ngoài-1, Cổng 2 round 2): `rang/soi-tep.mjs` khai lại đường dẫn tương đối của tệp spec và `apps/api/package.json` trong khi `rang/chung.mjs` giữ đường tuyệt đối — dời tệp spec mà chỉ sửa `chung.mjs` thì thước vẫn đọc đúng tệp nhưng in và ghim tên cũ.
 - Known limits (Ngoài-2, Cổng 2 round 2): bộ bỏ mã màu của `rang/chung.mjs` dựng ký tự ESC lúc chạy thay vì dùng `stripVTControlCharacters`, lách luật `noControlCharactersInRegex` của biome, và chỉ bỏ mã kết thúc bằng `m`.
 - Known limits (Ngoài-2, Cổng 2 round 1): khoá hàng đợi đo của hồ sơ (`rang/chung.mjs`, `giuKhoa`) có kẽ hở khi một lượt trước bị giết giữa chừng — hai lượt chờ có thể cùng dọn khoá cũ rồi cùng chạy, hoặc thư mục khoá thiếu tệp pid làm lượt sau dừng với lỗi ENOENT phải dọn tay. Chỉ ảnh hưởng thời gian đo của E1 khi xảy ra, không ảnh hưởng bài kiểm của sản phẩm.
