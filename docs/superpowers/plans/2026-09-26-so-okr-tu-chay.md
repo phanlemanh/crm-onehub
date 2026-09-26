@@ -8,7 +8,7 @@
 
 **Tech Stack:** Bun, NestJS + nestjs-trpc, Prisma 7 (Postgres), Zod, eve (tác tử), Next.js + `@crm/ui` (shadcn/ReUI), nuqs.
 
-**Duyệt kế hoạch (Cổng 1.5):** Manh Phan — uỷ quyền phiên điều phối 2026-09-24 — mười bốn việc, mỗi việc một tác nhân con kèm người soát riêng.
+**Duyệt kế hoạch (Cổng 1.5):** Manh Phan, 2026-09-26 — mười bốn việc, mỗi việc một tác nhân con kèm người soát riêng; ba việc độc lập (1, 2, 10) chạy song song.
 
 **Spec:** `docs/superpowers/specs/2026-09-26-so-okr-tu-chay-design.md` · hợp đồng `_acceptance/so-okr-tu-chay/contract.md` · phép đo `_acceptance/so-okr-tu-chay/evals.yaml`.
 
