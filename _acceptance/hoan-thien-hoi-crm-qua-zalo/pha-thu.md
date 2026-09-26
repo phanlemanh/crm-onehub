@@ -122,3 +122,17 @@ error: o (c) buoc da xong trong DB
 error: chi OKR o web
 (fail) tu-choi-vai > tu-choi-vai: khung chat web va Zalo cho cung ket qua voi tung vai [19.93ms]
 ```
+
+## S4 round 1 — sửa AC-2, AC-9 (cây 14f290d6)
+
+```
+== set_field_value web lang le khong ghi (exit 1)
+error: web ghi duoc
+(fail) ghi-that > ghi-that: set_field_value va record_fact that khong ghi tren Zalo, ghi o web [57.30ms]
+== record_fact web lang le khong ghi (exit 1)
+error: web ghi duoc mot fact
+(fail) ghi-that > ghi-that: set_field_value va record_fact that khong ghi tren Zalo, ghi o web [56.94ms]
+== token dung tay trong cung-phien (exit 1)
+error: khong dung `zalo: dung tay
+(fail) cung-phien > cung-phien: su kien kenh trong cung-phien va duong-chinh rut tu send [4.07ms]
+```
