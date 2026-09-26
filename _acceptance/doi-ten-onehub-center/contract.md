@@ -5,7 +5,7 @@ slug: doi-ten-onehub-center
 owner: manh.phan@onemount.com
 risk_tier: T3
 surfaces: [ui, api]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-26T11:07:59Z
 design_doc: docs/superpowers/specs/2026-09-26-doi-ten-onehub-center-design.md
