@@ -7,6 +7,7 @@ import { settledWithin } from "./deadline";
 import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
+import { chayDocSheet } from "./okr-sheets";
 import { collapsing, runLimited } from "./pool";
 import { runPortrait } from "./portrait";
 import { runSlackChannelJoin } from "./slack-join-task";
@@ -131,6 +132,11 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 
 	if (task.kind === LOAI_VIEC_NHAC) {
 		await chayNhac(task);
+		return;
+	}
+
+	if (task.kind === "okr-doc-sheet") {
+		await chayDocSheet(task);
 		return;
 	}
 

@@ -3,6 +3,14 @@ import { db, setPrismaLogSink } from "@crm/db";
 import { OKR_SO } from "@crm/db/okr-so-config";
 import { MA_CHI_SO, type PhamViChiSo } from "@crm/validation/okr-chi-so";
 import { chupSoOkr, type DocO } from "../agent/lib/okr-chup";
+import { docOSheet } from "../agent/lib/okr-sheets";
+import {
+	datBienSheets,
+	EMAIL_SHEETS,
+	googleTheoO,
+	oGia,
+	sinhKhoa,
+} from "./support/google-gia";
 import { gieoNguoi, ma, moXuong } from "./support/nhac-gieo";
 import {
 	donOkr,
@@ -448,55 +456,75 @@ describe("hieu-nang", () => {
 			});
 			bangTinh.push(kr);
 		}
-		let goi = 0;
+		const traBien = datBienSheets({
+			email: EMAIL_SHEETS,
+			khoa: (await sinhKhoa()).pemEnv,
+		});
 		let treo = true;
-		const docO: DocO = (sheetId) => {
-			goi += 1;
-			if (treo) return new Promise(() => {});
-			return Promise.resolve({ giaTri: Number(sheetId.slice(6)) });
-		};
+		const g = googleTheoO((sheetId) =>
+			treo ? "treo" : oGia(Number(sheetId.slice(6))),
+		);
+		const docO = docOSheet(g.f);
 		const tran = OKR_SO.sheets.toiDaMoiNhip * OKR_SO.sheets.soLanThu;
+		const goiMoiLuot: number[] = [];
+		const luot = async (luc: Date) => {
+			const truoc = g.goi.length;
+			await chupSoOkr(luc, { docO });
+			goiMoiLuot.push(g.goi.length - truoc);
+		};
 
-		const bat = performance.now();
-		await chupSoOkr(nhip, { docO });
-		const ms = performance.now() - bat;
-		const goi1 = goi;
-		const dong1 = { crm: await soDong(crm), bangTinh: await soDong(bangTinh) };
-		console.log(
-			`hieu-nang (b): lượt Google treo ${Math.round(ms)} ms, gọi đọc ô ${goi1} lần (trần ${tran}), dòng crm ${dong1.crm}, dòng bảng tính ${dong1.bangTinh}`,
-		);
-		expect(
-			`lượt Google treo: ${ms < TRAN_GOOGLE_TREO_MS ? "dưới" : "TRÊN"} ${TRAN_GOOGLE_TREO_MS} ms`,
-		).toBe(`lượt Google treo: dưới ${TRAN_GOOGLE_TREO_MS} ms`);
-		expect(`gọi ${goi1} lần, trong trần: ${goi1 <= tran}`).toBe(
-			`gọi ${goi1} lần, trong trần: true`,
-		);
-		expect(dong1).toEqual({ crm: 50, bangTinh: 0 });
+		try {
+			const bat = performance.now();
+			await luot(nhip);
+			const ms = performance.now() - bat;
+			const goi1 = goiMoiLuot[0] ?? 0;
+			const dong1 = {
+				crm: await soDong(crm),
+				bangTinh: await soDong(bangTinh),
+			};
+			console.log(
+				`hieu-nang (b): lượt Google treo ${Math.round(ms)} ms, gọi fetch ${goi1} lần (trần ${tran}), dòng crm ${dong1.crm}, dòng bảng tính ${dong1.bangTinh}`,
+			);
+			expect(
+				`lượt Google treo: ${ms < TRAN_GOOGLE_TREO_MS ? "dưới" : "TRÊN"} ${TRAN_GOOGLE_TREO_MS} ms`,
+			).toBe(`lượt Google treo: dưới ${TRAN_GOOGLE_TREO_MS} ms`);
+			expect(`gọi fetch ${goi1} lần, trong trần: ${goi1 <= tran}`).toBe(
+				`gọi fetch ${goi1} lần, trong trần: true`,
+			);
+			expect(`gọi fetch lượt treo: ${goi1 > 0}`).toBe(
+				"gọi fetch lượt treo: true",
+			);
+			expect(dong1).toEqual({ crm: 50, bangTinh: 0 });
 
-		treo = false;
-		goi = 0;
-		await chupSoOkr(new Date(nhip.getTime() + 60_000), { docO });
-		const goi2 = goi;
-		goi = 0;
-		await chupSoOkr(
-			new Date(nhip.getTime() + OKR_SO.sheets.thuLaiMs + 60_000),
-			{ docO },
-		);
-		const goi3 = goi;
-		const dong3 = await db.okrSoChup.findMany({
-			where: { keyResultId: { in: bangTinh } },
-			select: { giaTri: true },
-		});
-		console.log(
-			`hieu-nang (b): gọi đọc ô mỗi lượt ${goi1} / ${goi2} / ${goi3}; dòng bảng tính sau ba lượt ${dong3.length}`,
-		);
-		expect({ goi2, goi3, dong: dong3.length }).toEqual({
-			goi2: 20 - goi1,
-			goi3: goi1,
-			dong: 20,
-		});
-		expect(dong3.map((d) => Number(d.giaTri)).sort((x, y) => x - y)).toEqual(
-			Array.from({ length: 20 }, (_, i) => i),
-		);
+			treo = false;
+			await luot(new Date(nhip.getTime() + 60_000));
+			const dong2 = await soDong(bangTinh);
+			const daThu = Math.ceil(goi1 / OKR_SO.sheets.soLanThu);
+			const mongLuotKe = Math.min(
+				OKR_SO.sheets.toiDaMoiNhip,
+				bangTinh.length - daThu,
+			);
+			expect(`lượt đầu thử ${daThu} KR; lượt kế đọc được ${dong2} KR`).toBe(
+				`lượt đầu thử ${daThu} KR; lượt kế đọc được ${mongLuotKe} KR`,
+			);
+			for (let k = 1; k <= 2 && (await soDong(bangTinh)) < 20; k += 1) {
+				await luot(
+					new Date(nhip.getTime() + k * OKR_SO.sheets.thuLaiMs + 60_000),
+				);
+			}
+			const dong3 = await db.okrSoChup.findMany({
+				where: { keyResultId: { in: bangTinh } },
+				select: { giaTri: true },
+			});
+			console.log(
+				`hieu-nang (b): gọi fetch mỗi lượt ${goiMoiLuot.join(" / ")}; dòng bảng tính sau lượt kế ${dong2}, cuối ${dong3.length}`,
+			);
+			expect(goiMoiLuot.filter((n) => n > tran)).toEqual([]);
+			expect(dong3.map((d) => Number(d.giaTri)).sort((x, y) => x - y)).toEqual(
+				Array.from({ length: 20 }, (_, i) => i),
+			);
+		} finally {
+			traBien();
+		}
 	}, 180_000);
 });

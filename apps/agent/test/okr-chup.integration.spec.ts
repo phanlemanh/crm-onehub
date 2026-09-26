@@ -1,10 +1,12 @@
 import {
 	afterAll,
 	afterEach,
+	beforeAll,
 	beforeEach,
 	describe,
 	expect,
 	setSystemTime,
+	spyOn,
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
@@ -17,6 +19,16 @@ import {
 import type { PhamViChiSo } from "@crm/validation/okr-chi-so";
 import { ConversionService } from "../../api/src/currency/conversion.service";
 import { chupSoOkr, type DocO } from "../agent/lib/okr-chup";
+import { docOSheet } from "../agent/lib/okr-sheets";
+import {
+	datBienSheets,
+	demValues,
+	EMAIL_SHEETS,
+	googleTheoO,
+	oGia,
+	sinhKhoa,
+	type TraLoiGoogle,
+} from "./support/google-gia";
 import { gieoNguoi, ma, moXuong } from "./support/nhac-gieo";
 import {
 	donOkr,
@@ -428,6 +440,257 @@ describe("chup-bang-tinh", () => {
 			"lý do tat, gọi mạng 0",
 		);
 		expect(await dongCua({ [kr]: "K" })).toEqual([]);
+	});
+});
+
+describe("sheets: chụp bảng tính qua bộ đọc thật", () => {
+	let traBien: () => void = () => {};
+	let pemEnv = "";
+
+	beforeAll(async () => {
+		pemEnv = (await sinhKhoa()).pemEnv;
+	});
+
+	beforeEach(() => {
+		traBien = datBienSheets({ email: EMAIL_SHEETS, khoa: pemEnv });
+	});
+
+	afterEach(() => {
+		traBien();
+	});
+
+	async function krBangTinh(
+		s: San,
+		cycleId: string,
+		sheetId: string,
+	): Promise<string> {
+		return krCo({
+			cycleId,
+			chu: s.a,
+			nguon: { loai: "bang-tinh", sheetId, o: "A1" },
+			source: "bang-tinh",
+			giaTri: 5,
+		});
+	}
+
+	function batLog(muc: "log" | "error") {
+		const dong: string[] = [];
+		const spy = spyOn(console, muc).mockImplementation(
+			(...a: Parameters<typeof console.log>) => {
+				dong.push(a.map(String).join(" "));
+			},
+		);
+		return { dong, tra: () => spy.mockRestore() };
+	}
+
+	test("(c) ma trận lỗi: 403 404 abc rỗng 500 → docLoi, 0 dòng; nhịp kế trong thuLaiMs không gọi Google, qua đó gọi lại", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const MA_TRAN: [string, () => Response, string][] = [
+			["s403", () => new Response(null, { status: 403 }), "chua-chia-se"],
+			["s404", () => new Response(null, { status: 404 }), "khong-thay"],
+			["sabc", () => oGia("abc"), "khong-phai-so"],
+			["srong", () => oGia(null), "o-trong"],
+			["s500", () => new Response(null, { status: 500 }), "google-loi"],
+		];
+		const kr: Record<string, string> = {};
+		for (const [sheetId] of MA_TRAN) {
+			kr[sheetId] = await krBangTinh(s, q4, sheetId);
+		}
+		const theoSheet = new Map(MA_TRAN.map(([id, tra]) => [id, tra]));
+		const g = googleTheoO(
+			(sheetId): TraLoiGoogle =>
+				theoSheet.get(sheetId)?.() ?? new Response(null, { status: 404 }),
+		);
+		const docO = docOSheet(g.f);
+
+		await chupSoOkr(NHIP_20_10_0005, { docO });
+		const loi: Record<string, string | null> = {};
+		for (const [sheetId, id] of Object.entries(kr)) {
+			const n = await db.okrNguonKr.findUniqueOrThrow({
+				where: { keyResultId: id },
+			});
+			loi[sheetId] = n.docLoi;
+		}
+		expect(loi).toEqual(
+			Object.fromEntries(MA_TRAN.map(([id, , lyDo]) => [id, lyDo])),
+		);
+		const dong = await db.okrSoChup.count({
+			where: { keyResultId: { in: Object.values(kr) } },
+		});
+		expect(`dòng lịch sử sau lượt lỗi: ${dong}`).toBe(
+			"dòng lịch sử sau lượt lỗi: 0",
+		);
+
+		const truoc = demValues(g);
+		await chupSoOkr(new Date(NHIP_20_10_0005.getTime() + 60_000), { docO });
+		expect(
+			`nhịp kế trong thuLaiMs gọi Google ${demValues(g) - truoc} lần`,
+		).toBe("nhịp kế trong thuLaiMs gọi Google 0 lần");
+
+		const truoc2 = demValues(g);
+		await chupSoOkr(
+			new Date(NHIP_20_10_0005.getTime() + OKR_SO.sheets.thuLaiMs + 60_000),
+			{ docO },
+		);
+		const goiLai = new Set(
+			g.goi
+				.slice(truoc2)
+				.flatMap((x) => (x.loai === "values" ? [x.sheetId] : [])),
+		);
+		expect([...goiLai].sort()).toEqual(MA_TRAN.map(([id]) => id).sort());
+	});
+
+	test("(d) vắng GOOGLE_SHEETS_KHOA: chupSoOkr bỏ KR bảng tính, không gọi fetch, không ném", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const kr = await krBangTinh(s, q4, "sheet-khong-khoa");
+		const tra = datBienSheets({ email: EMAIL_SHEETS, khoa: null });
+		const g = googleTheoO(() => oGia(1));
+		const fetchCu = globalThis.fetch;
+		globalThis.fetch = g.f;
+		try {
+			await chupSoOkr(NHIP_20_10_0005);
+		} finally {
+			globalThis.fetch = fetchCu;
+			tra();
+		}
+		const n = await db.okrNguonKr.findUniqueOrThrow({
+			where: { keyResultId: kr },
+		});
+		expect(`lý do ${n.docLoi}, gọi fetch ${g.goi.length}`).toBe(
+			"lý do tat, gọi fetch 0",
+		);
+		expect(await dongCua({ [kr]: "K" })).toEqual([]);
+	});
+
+	test("đủ hai biến: nhịp thật đọc Google qua fetch toàn cục và ghi dòng", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const kr = await krBangTinh(s, q4, "sheet-that");
+		const g = googleTheoO(() => oGia("1.240"));
+		const fetchCu = globalThis.fetch;
+		globalThis.fetch = g.f;
+		try {
+			await chupSoOkr(NHIP_20_10_0005);
+		} finally {
+			globalThis.fetch = fetchCu;
+		}
+		expect(await dongCua({ [kr]: "K" })).toEqual([
+			{ kr: "K", ngay: "2026-10-19", giaTri: 1240, nguon: "bang-tinh" },
+		]);
+		expect(demValues(g)).toBe(1);
+	});
+
+	test("bộ đọc trả số không hữu hạn: khong-phai-so, không ghi dòng", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const nan = await krBangTinh(s, q4, "sheet-nan");
+		const vc = await krBangTinh(s, q4, "sheet-vo-cuc");
+		const docO: DocO = async (sheetId) => ({
+			giaTri: sheetId === "sheet-nan" ? Number.NaN : Number.POSITIVE_INFINITY,
+		});
+		await chupSoOkr(NHIP_20_10_0005, { docO });
+		const loi = await db.okrNguonKr.findMany({
+			where: { keyResultId: { in: [nan, vc] } },
+			select: { docLoi: true },
+		});
+		expect(loi.map((l) => l.docLoi)).toEqual([
+			"khong-phai-so",
+			"khong-phai-so",
+		]);
+		expect(await dongCua({ [nan]: "N", [vc]: "V" })).toEqual([]);
+	});
+
+	test("lỗi ghi của một KR: log chỉ có tên lỗi và mã KR, không có thông điệp", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const kr = await krBangTinh(s, q4, "sheet-ghi-hong");
+		const docO: DocO = async () => ({ giaTri: 1240 });
+		await db.$executeRawUnsafe(
+			`CREATE OR REPLACE FUNCTION okr_thu_ghi_hong() RETURNS trigger AS $$ BEGIN RAISE EXCEPTION 'giaTri % hong', NEW."giaTri"; END $$ LANGUAGE plpgsql`,
+		);
+		await db.$executeRawUnsafe(
+			`CREATE TRIGGER okr_thu_ghi_hong BEFORE INSERT ON "okrSoChup" FOR EACH ROW WHEN (NEW."keyResultId" = '${kr}') EXECUTE FUNCTION okr_thu_ghi_hong()`,
+		);
+		const log = batLog("error");
+		try {
+			await chupSoOkr(NHIP_20_10_0005, { docO });
+		} finally {
+			log.tra();
+			await db.$executeRawUnsafe(
+				`DROP TRIGGER IF EXISTS okr_thu_ghi_hong ON "okrSoChup"`,
+			);
+			await db.$executeRawUnsafe("DROP FUNCTION IF EXISTS okr_thu_ghi_hong()");
+		}
+		const dongKr = log.dong.filter((d) => d.includes(kr));
+		expect(dongKr.length).toBe(1);
+		expect(dongKr.join("\n")).not.toContain("1240");
+		expect(dongKr.join("\n")).toMatch(/không chụp được: [A-Za-z0-9]+$/);
+		expect(await dongCua({ [kr]: "K" })).toEqual([]);
+	});
+
+	test("hạn nhịp: đã trôi gần OKR_SO.chup.hanNhipMs thì bỏ KR bảng tính cho nhịp sau, không đọc, không ghi thuLuc", async () => {
+		expect(OKR_SO.chup.hanNhipMs < 60_000).toBe(true);
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const kr = await krBangTinh(s, q4, "sheet-het-han");
+		const g = docGia({ giaTri: 9 });
+		let lan = 0;
+		const dongHo = () => {
+			lan += 1;
+			return lan === 1 ? 0 : OKR_SO.chup.hanNhipMs - OKR_SO.sheets.tranMs + 1;
+		};
+		const r = await chupSoOkr(NHIP_20_10_0005, { docO: g.docO, dongHo });
+		const n = await db.okrNguonKr.findUniqueOrThrow({
+			where: { keyResultId: kr },
+		});
+		expect({
+			goi: g.goi.length,
+			boQua: r.boQua,
+			thuLuc: n.thuLuc,
+			docLoi: n.docLoi,
+		}).toEqual({ goi: 0, boQua: 1, thuLuc: null, docLoi: null });
+		await chupSoOkr(NHIP_20_10_0005, { docO: g.docO });
+		expect(await dongCua({ [kr]: "K" })).toEqual([
+			{ kr: "K", ngay: "2026-10-19", giaTri: 9, nguon: "bang-tinh" },
+		]);
+	});
+
+	test("KR bảng tính thiếu sheetId hay ô: ghi docLoi khong-thay, không đọc; lượt không có gì thì không in dòng tổng", async () => {
+		const s = await sanThoaThuan();
+		const q4 = await gieoChuKy("dang-chay");
+		const kr = await krBangTinh(s, q4, "sheet-mat");
+		await db.okrNguonKr.update({
+			where: { keyResultId: kr },
+			data: { sheetO: null },
+		});
+		const g = docGia({ giaTri: 1 });
+		const log1 = batLog("log");
+		try {
+			await chupSoOkr(NHIP_20_10_0005, { docO: g.docO });
+		} finally {
+			log1.tra();
+		}
+		const n = await db.okrNguonKr.findUniqueOrThrow({
+			where: { keyResultId: kr },
+		});
+		expect({ docLoi: n.docLoi, goi: g.goi.length }).toEqual({
+			docLoi: "khong-thay",
+			goi: 0,
+		});
+		expect(
+			log1.dong.filter((d) => d.startsWith("[okr-chup] ngày")).length,
+		).toBe(1);
+		const log2 = batLog("log");
+		try {
+			await chupSoOkr(new Date(NHIP_20_10_0005.getTime() + 60_000), {
+				docO: g.docO,
+			});
+		} finally {
+			log2.tra();
+		}
+		expect(log2.dong.filter((d) => d.startsWith("[okr-chup]"))).toEqual([]);
 	});
 });
 

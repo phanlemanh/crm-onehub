@@ -12,6 +12,7 @@ export const TASK_KINDS = [
 	"slack-channel-join",
 	"agent-event",
 	"nhac-ke-hoach",
+	"okr-doc-sheet",
 ] as const;
 
 export type TaskKind = (typeof TASK_KINDS)[number];
@@ -23,6 +24,7 @@ export const DIRECT_KINDS = [
 	"slack-channel-join",
 	"agent-event",
 	"nhac-ke-hoach",
+	"okr-doc-sheet",
 ] as const;
 
 export type DirectKind = (typeof DIRECT_KINDS)[number];

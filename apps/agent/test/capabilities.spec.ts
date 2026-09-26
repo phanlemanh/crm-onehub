@@ -13,6 +13,8 @@ const KEYS = [
 	"PERPLEXITY_API_KEY",
 	"BLOB_READ_WRITE_TOKEN",
 	"ZALO_BOT_TOKEN",
+	"GOOGLE_SHEETS_EMAIL",
+	"GOOGLE_SHEETS_KHOA",
 ] as const;
 
 const saved: Record<string, string | undefined> = {};

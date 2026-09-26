@@ -9,6 +9,7 @@ import {
 	parseOkrNguon,
 } from "@crm/validation/okr-nguon";
 import { settledWithin } from "./deadline";
+import { cauHinhSheets, docOSheet, soHopLeKq, tenLoi } from "./okr-sheets";
 
 export type DocO = (
 	sheetId: string,
@@ -22,7 +23,7 @@ const NGUON_CHUP = ["crm", "bang-tinh"] as const;
 const docTat: DocO = async () => ({ loi: "tat" });
 
 export function docOSheetThat(): DocO {
-	return docTat;
+	return cauHinhSheets() ? docOSheet(globalThis.fetch) : docTat;
 }
 
 function homQuaVN(now: Date): string {
@@ -99,8 +100,10 @@ async function ghiBangTinh(
 
 export async function chupSoOkr(
 	now = new Date(),
-	phuThuoc: { docO?: DocO } = {},
+	phuThuoc: { docO?: DocO; dongHo?: () => number } = {},
 ): Promise<KetQuaChup> {
+	const dongHo = phuThuoc.dongHo ?? (() => performance.now());
+	const batDau = dongHo();
 	const ngay = homQuaVN(now);
 	const ngayDb = new Date(`${ngay}T00:00:00Z`);
 	const can = await db.okrKeyResult.findMany({
@@ -125,6 +128,7 @@ export async function chupSoOkr(
 	let ghi = 0;
 	let boQua = 0;
 	let loi = 0;
+	let loiDoc = 0;
 	let lanDoc = 0;
 	for (const kr of can) {
 		try {
@@ -134,22 +138,34 @@ export async function chupSoOkr(
 				ghi += r.ghi;
 				continue;
 			}
+			if (dangCho(kr, now)) {
+				boQua += 1;
+				continue;
+			}
+			if (!nguon.sheetId || !nguon.sheetO) {
+				await db.okrNguonKr.update({
+					where: { keyResultId: kr.id },
+					data: { docLoi: "khong-thay", thuLuc: now },
+				});
+				loiDoc += 1;
+				boQua += 1;
+				continue;
+			}
 			if (
-				!nguon.sheetId ||
-				!nguon.sheetO ||
-				dangCho(kr, now) ||
-				lanDoc >= OKR_SO.sheets.toiDaMoiNhip
+				lanDoc >= OKR_SO.sheets.toiDaMoiNhip ||
+				dongHo() - batDau + OKR_SO.sheets.tranMs > OKR_SO.chup.hanNhipMs
 			) {
 				boQua += 1;
 				continue;
 			}
 			lanDoc += 1;
-			const doc = await docCoTran(docO, nguon.sheetId, nguon.sheetO);
+			const doc = soHopLeKq(await docCoTran(docO, nguon.sheetId, nguon.sheetO));
 			if ("loi" in doc) {
 				await db.okrNguonKr.update({
 					where: { keyResultId: kr.id },
 					data: { docLoi: doc.loi, thuLuc: now },
 				});
+				loiDoc += 1;
 				boQua += 1;
 				continue;
 			}
@@ -158,13 +174,15 @@ export async function chupSoOkr(
 			loi += 1;
 			boQua += 1;
 			console.error(
-				`[okr-chup] KR ${kr.id} không chụp được: ${e instanceof Error ? e.message : String(e)}`,
+				`[okr-chup] KR ${kr.id} không chụp được: ${tenLoi(e instanceof Error ? e : null)}`,
 			);
 		}
 	}
-	console.log(
-		`[okr-chup] ngày ${ngay}: ${can.length} KR, ghi ${ghi}, bỏ qua ${boQua}, lỗi ${loi}, đọc bảng tính ${lanDoc}`,
-	);
+	if (ghi > 0 || loi > 0 || loiDoc > 0) {
+		console.log(
+			`[okr-chup] ngày ${ngay}: ${can.length} KR, ghi ${ghi}, bỏ qua ${boQua}, lỗi ${loi}, đọc bảng tính ${lanDoc}, đọc lỗi ${loiDoc}`,
+		);
+	}
 	return {
 		ghi,
 		boQua,
