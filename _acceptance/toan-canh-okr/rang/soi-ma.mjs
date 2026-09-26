@@ -19,7 +19,10 @@ const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
 const THU_MUC_OKR = "apps/app/app/(app)/[slug]/okr";
 const THU_MUC_SHEET = "apps/app/components/crm/record-sheet";
-const TEP_TONG_QUAN = ["apps/app/app/(app)/[slug]/khoi-okr.tsx"];
+const TEP_TONG_QUAN = [
+	"apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+	"apps/app/app/(app)/[slug]/tong-quan-chi-okr.tsx",
+];
 const THU_MUC_API = "apps/api/src";
 const CHU_TU_MAP = ["Đúng nhịp", "Chậm nhịp", "Tự tin", "Trượt"];
 const DOC_VET = new Set(["findMany", "findFirst", "count", "groupBy", "aggregate"]);
@@ -107,6 +110,12 @@ function dieuKienVet(sf, doiSoGoi) {
 		if (!rong) return null;
 	}
 	const hanh = thuoc("action");
+	if (
+		hanh &&
+		ts.isStringLiteral(hanh.initializer) &&
+		hanh.initializer.text === "mo-hop-tuan"
+	)
+		return null;
 	if (hanh) {
 		const chu = hanh.initializer.getText(sf);
 		if (/\bnot(In)?\s*:/.test(chu) && /mo-hop-tuan|moHopTuan|MO_HOP_TUAN/i.test(chu))

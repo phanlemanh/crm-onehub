@@ -689,10 +689,7 @@ describe("kho chuoi cua vong ③a", () => {
 				"đã cập nhật 12/A KR",
 			],
 			"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
-			"okr-toan-canh:hopTuan.tut": [
-				"Tự tin tụt: 1 → A",
-				"Tự tin tụt: 12 → A",
-			],
+			"okr-toan-canh:hopTuan.tut": ["Tụt từ 1 xuống A", "Tụt từ 12 xuống A"],
 			"okr-toan-canh:hopTuan.im": ["Im 1 ngày", "Im 12 ngày"],
 			"okr-toan-canh:hopTuan.conLai": [
 				"Còn lại 1 KR — không có gì mới",

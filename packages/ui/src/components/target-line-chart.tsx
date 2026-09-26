@@ -62,7 +62,7 @@ function TargetLineChart({
 				<LineChart
 					accessibilityLayer
 					data={data}
-					margin={{ top: 16, right: 72, bottom: 0, left: 0 }}
+					margin={{ top: 24, right: 16, bottom: 0, left: 0 }}
 				>
 					<CartesianGrid stroke="var(--border)" vertical={false} />
 					<XAxis axisLine={false} dataKey="x" tickLine={false} tickMargin={12} />
@@ -86,7 +86,7 @@ function TargetLineChart({
 						ifOverflow="extendDomain"
 						label={{
 							value: targetLabel,
-							position: "right",
+							position: "insideTopRight",
 							fill: "var(--foreground)",
 							fontSize: 12,
 						}}

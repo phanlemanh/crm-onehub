@@ -6,7 +6,6 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardAction,
-	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
@@ -290,22 +289,20 @@ export function ToanCanh() {
 						<CardTitle>{mt.toanCanh.heatmap}</CardTitle>
 						<CardDescription>{mt.toanCanh.heatmapMoTa}</CardDescription>
 					</CardHeader>
-					<CardContent>
-						<Heatmap
-							caption={mt.toanCanh.heatmap}
-							columns={tuan.map((t) => ({
-								id: t,
-								label: nhanTuan(t),
-								current: t === tuanNay,
-							}))}
-							rows={hang.map((h) => ({
-								id: h.key,
-								label: <span translate="no">{h.ten}</span>,
-								indent: h.cap === "phong-ban",
-							}))}
-							values={hang.map((h) => h.theoTuan)}
-						/>
-					</CardContent>
+					<Heatmap
+						caption={mt.toanCanh.heatmap}
+						columns={tuan.map((t) => ({
+							id: t,
+							label: nhanTuan(t),
+							current: t === tuanNay,
+						}))}
+						rows={hang.map((h) => ({
+							id: h.key,
+							label: <span translate="no">{h.ten}</span>,
+							indent: h.cap === "phong-ban",
+						}))}
+						values={hang.map((h) => h.theoTuan)}
+					/>
 				</Card>
 			)}
 		</div>

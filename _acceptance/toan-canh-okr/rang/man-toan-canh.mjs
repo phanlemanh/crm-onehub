@@ -47,6 +47,15 @@ const CHU = {
 	thuLai: "Thử lại",
 	tuanDau: "Chưa có số để so",
 	vuaCongBo: "Mục tiêu vừa công bố, chưa có kỳ vọng để so",
+	danhSach: "Danh sách",
+	hopTuan: "Họp tuần",
+	conLai: "Còn lại",
+	tutCaoThap: "Tụt từ tự tin cao xuống tự tin thấp",
+	im16: "Im 16 ngày",
+	ghiChuMoi: "Ghi chú mới",
+	dich: "Đích",
+	thap: "Tự tin thấp",
+	hienTai: "hiện tại",
 	toanCanhTab: "Toàn cảnh",
 	chuKy: "Chu kỳ",
 };
@@ -129,6 +138,12 @@ const TEN = {
 	P1a: "Đối tác mới được đỡ trọn tháng đầu",
 	P1b: "Chuẩn hoá quy trình nhận đối tác",
 	P3a: "Hợp đồng đối tác duyệt trong ba ngày",
+	H: "Họp tuần thử của Phòng Đối tác",
+	Ka: "KR tụt mức tự tin",
+	Kb: "KR im lâu",
+	Kc: "KR có ghi chú mới",
+	Kd: "KR không có gì mới",
+	Q2: `TCO-Q-${MA} Mục tiêu của kỳ khác`,
 };
 
 const homNay = new Intl.DateTimeFormat("en-CA", {
@@ -139,6 +154,14 @@ const QUY = Math.ceil(Number(homNay.slice(5, 7)) / 3);
 const ngay = (y, m, d) =>
 	`${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const cuoiThang = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+const QUY_KHAC = QUY === 1 ? 2 : QUY - 1;
+const TEN_KY_KHAC = `Quý ${QUY_KHAC}/${NAM} ${MA}`;
+const NGAY_MS = 24 * 60 * 60 * 1000;
+const tuanNayVN = () => {
+	const d = Date.parse(`${homNay}T00:00:00Z`);
+	const lui = (new Date(d).getUTCDay() + 6) % 7;
+	return new Date(d - lui * NGAY_MS).toISOString().slice(0, 10);
+};
 
 function mu(c) {
 	return { Cookie: `${c.ten}=${c.gia}; lang=vi` };
@@ -344,11 +367,70 @@ async function gieo() {
 			targetObjectiveId,
 			targetKeyResultId,
 		});
+
+	OKR.H = await moi(
+		cookie.truongP1,
+		{ level: "phong-ban", departmentId: ORG.P1 },
+		TEN.H,
+		id.truongP1,
+		[TEN.Ka, TEN.Kb, TEN.Kc, TEN.Kd].map((title) => ({
+			title,
+			ownerUserId: id.truongP1,
+			targetValue: 100,
+			currentValue: 40,
+		})),
+	);
+	await lam(cookie.truongP1, "okr.publishObjective", { id: OKR.H.id });
+	const [Ka, Kb, Kc, Kd] = OKR.H.kr;
+	const capNhat = async (c, items) => {
+		const { sessionId } = await lam(c, "okr.moCapNhat", { entry: "tab" });
+		await lam(c, "okr.guiCapNhat", { sessionId, items });
+	};
+	const muc = (keyResultId, value, confidence, note = "") => ({
+		keyResultId,
+		value,
+		confidence,
+		note,
+	});
+	await capNhat(cookie.truongP1, [muc(Ka, 45, "cao"), muc(Kd, 50, "cao")]);
+	await capNhat(cookie.truongP1, [
+		muc(Ka, 46, "thap"),
+		muc(Kc, 55, "vua", "Đối tác lùi lịch ký"),
+	]);
+	await db.okrKeyResult.update({
+		where: { id: Kb },
+		data: { startLockedAt: new Date(Date.now() - 16 * NGAY_MS) },
+	});
+	await capNhat(cookie.k, [muc(OKR.P1a.kr[0], 62, "thap")]);
+
+	await lam(cookie.admin, "okr.createCycle", {
+		kind: "quy",
+		name: TEN_KY_KHAC,
+		parentId: OKR.nam,
+		startsOn: ngay(NAM, QUY_KHAC * 3 - 2, 1),
+		endsOn: ngay(NAM, QUY_KHAC * 3, cuoiThang(NAM, QUY_KHAC * 3)),
+		breakStartsOn: null,
+		breakEndsOn: null,
+		updateWeekday: 1,
+	});
+	const ds3 = await hoi(cookie.admin, "okr.cycles");
+	OKR.quy2 = ds3.cycles.find((x) => x.name === TEN_KY_KHAC).id;
+	OKR.Q2 = (
+		await lam(cookie.truongP1, "okr.createObjective", {
+			cycleId: OKR.quy2,
+			unit: { level: "phong-ban", departmentId: ORG.P1 },
+			title: TEN.Q2,
+			kind: "cam-ket",
+			ownerUserId: id.truongP1,
+			participantIds: [],
+			whyNow: "",
+		})
+	).id;
 }
 
 async function donDep() {
 	const moiNguoi = Object.values(id);
-	const moiKy = [OKR.quy, OKR.nam].filter(Boolean);
+	const moiKy = [OKR.quy, OKR.quy2, OKR.nam].filter(Boolean);
 	const moiMt = (
 		await db.okrObjective.findMany({
 			where: { cycleId: { in: moiKy } },
@@ -365,10 +447,22 @@ async function donDep() {
 		},
 	});
 	await db.okrAlignment.deleteMany({ where: { objectiveId: { in: moiMt } } });
+	await db.okrCheckIn.deleteMany({
+		where: { keyResult: { objectiveId: { in: moiMt } } },
+	});
+	await db.okrCheckInSession.deleteMany({
+		where: { userId: { in: moiNguoi } },
+	});
+	await db.okrMention.deleteMany({
+		where: { comment: { objectiveId: { in: moiMt } } },
+	});
+	await db.okrComment.deleteMany({ where: { objectiveId: { in: moiMt } } });
+	await db.okrFollow.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrKeyResult.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrParticipant.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrObjective.deleteMany({ where: { id: { in: moiMt } } });
 	if (OKR.quy) await db.okrCycle.deleteMany({ where: { id: OKR.quy } });
+	if (OKR.quy2) await db.okrCycle.deleteMany({ where: { id: OKR.quy2 } });
 	if (OKR.nam) await db.okrCycle.deleteMany({ where: { id: OKR.nam } });
 	const moiPb = ["P1", "P2", "P3"].map((k) => ORG[k]).filter(Boolean);
 	await db.orgSecondaryDepartment.deleteMany({
@@ -525,6 +619,16 @@ async function chup(trang, ten, toanTrang = true) {
 	anh.push(ten);
 }
 
+async function chupKhoi(trang, sel, ten) {
+	const el = await trang.$(sel);
+	if (!el) return kiem(`${ten}: khong thay ${sel} de chup`, false);
+	await el.evaluate((e) => e.scrollIntoView({ block: "start" }));
+	await cho(400);
+	await el.screenshot({ path: join(BANG_CHUNG, ten) });
+	anh.push(ten);
+	return true;
+}
+
 const ky = () => `kyOkr=${OKR.quy}`;
 const theoDonVi = (them) => `/okr/theo-don-vi?${ky()}${them ? `&${them}` : ""}`;
 
@@ -536,8 +640,8 @@ async function buocLoc() {
 	);
 	await hienSel(t, "[data-muc-tieu]");
 	kiem(
-		"E2 buoc 3: bo phan B phai hien 3 muc tieu (B1, P1a, P1b), khong P3a",
-		(await demSel(t, "[data-muc-tieu]")) === 3 &&
+		"E2 buoc 3: bo phan B phai hien 4 muc tieu (B1, P1a, P1b, H), khong P3a",
+		(await demSel(t, "[data-muc-tieu]")) === 4 &&
 			!(await coSel(t, `[data-muc-tieu='${OKR.P3a.id}']`)),
 	);
 	await chup(t, "E2-buoc-loc-1.png");
@@ -625,8 +729,8 @@ async function buocLoc() {
 	);
 	await doi(
 		t,
-		"E2 buoc 5: bo loc tra lai 3 muc tieu",
-		() => document.querySelectorAll("[data-muc-tieu]").length === 3,
+		"E2 buoc 5: bo loc tra lai 4 muc tieu",
+		() => document.querySelectorAll("[data-muc-tieu]").length === 4,
 	);
 	kiem(
 		"E2 buoc 5: URL khong con tham so loc",
@@ -818,6 +922,12 @@ async function buocToanCanh() {
 		await coSel(a, "[data-nut='suc-khoe']"),
 	);
 	await chup(a, "E10-buoc-toan-canh-2.png");
+	kiem(
+		"E10: heatmap co mot hang moi don vi va cot tuan hien tai",
+		(await coSel(a, "[data-khoi='heatmap'] [data-current]")) &&
+			(await demSel(a, "[data-khoi='heatmap'] tbody tr")) === api.hang.length,
+	);
+	await chupKhoi(a, "[data-khoi='heatmap']", "E10-buoc-heatmap.png");
 
 	await a.setRequestInterception(true);
 	let chan = true;
@@ -874,6 +984,13 @@ async function buocSucKhoe() {
 		!chu.includes(CHU.thieuKhoiDiem),
 	);
 	const hangP1 = api.hang.find((h) => h.key === `pb:${ORG.P1}`);
+	const soP1 = [
+		hangP1?.tongKr,
+		hangP1?.dungTuan,
+		hangP1?.krIm,
+		hangP1?.chuaKhoiDiem,
+		hangP1?.chuaNoiKenh,
+	];
 	const oP1 = await a.evaluate(
 		(k) =>
 			[...document.querySelectorAll(`[data-hang-suc-khoe='${k}'] td`)].map(
@@ -882,11 +999,8 @@ async function buocSucKhoe() {
 		`pb:${ORG.P1}`,
 	);
 	kiem(
-		`E21: hang P1 tren man khop API (man ${oP1.slice(1)}, api ${[hangP1?.tongKr, hangP1?.chuaKhoiDiem, hangP1?.chuaNoiKenh]})`,
-		JSON.stringify(oP1.slice(1)) ===
-			JSON.stringify(
-				[hangP1?.tongKr, hangP1?.chuaKhoiDiem, hangP1?.chuaNoiKenh].map(String),
-			),
+		`E21: hang P1 tren man khop API (man ${oP1.slice(1)}, api ${soP1})`,
+		JSON.stringify(oP1.slice(1)) === JSON.stringify(soP1.map(String)),
 	);
 	kiem(
 		"E21: phong ban khong truong ghi Chua co truong",
@@ -916,6 +1030,285 @@ async function buocSucKhoe() {
 	await k.close();
 }
 
+async function bamSel(trang, sel) {
+	await trang.bringToFront();
+	const el = await trang.$(sel);
+	if (!el) return kiem(`khong thay ${sel} de bam`, false);
+	try {
+		await el.click();
+	} catch {
+		await el.evaluate((e) => e.click());
+	}
+	return true;
+}
+
+const vetMoHop = () =>
+	db.okrTrail.findMany({
+		where: { cycleId: OKR.quy, action: "mo-hop-tuan" },
+		select: {
+			actorUserId: true,
+			objectiveId: true,
+			keyResultId: true,
+			after: true,
+		},
+	});
+
+async function taiLai(t) {
+	await t.reload({ waitUntil: "load" });
+	await t.waitForNetworkIdle({ idleTime: 500, timeout: CHO }).catch(() => null);
+	await cho(CHO_HYDRATE_MS);
+}
+
+async function buocHopTuan() {
+	const [Ka, Kb, Kc] = OKR.H.kr;
+	const api = await hoi(cookie.truongP1, "okr.hopTuan", {
+		cycleId: OKR.quy,
+		unit: { loai: "pb", id: ORG.P1 },
+	});
+	kiem(
+		`E14: API xep dang ban Ka, Kb, Kc (thay ${api.dangBan.map((d) => d.tieuDe)})`,
+		JSON.stringify(api.dangBan.map((d) => d.keyResultId)) ===
+			JSON.stringify([Ka, Kb, Kc]),
+	);
+	const dem0 = (await vetMoHop()).length;
+	const t = await moTrang(
+		cookie.truongP1,
+		RONG,
+		theoDonVi(`donOkr=pb:${ORG.P1}&xemOkr=hop-tuan`),
+	);
+	await hienSel(t, "[data-trang-thai='ST-hoptuan-codulieu']");
+	const thuTu = await t.evaluate(() =>
+		[...document.querySelectorAll("[data-kr-hop]")].map((e) =>
+			e.getAttribute("data-kr-hop"),
+		),
+	);
+	kiem(
+		`E14: thu tu dong tren man bang thu tu API (man ${thuTu.length} dong)`,
+		JSON.stringify(thuTu) ===
+			JSON.stringify(api.dangBan.map((d) => d.keyResultId)),
+	);
+	const lyDo = (kr) => chuSel(t, `[data-kr-hop='${kr}'] [data-ly-do]`);
+	kiem(
+		"E14: Ka ghi Tu tin tut: Cao → Thap",
+		(await lyDo(Ka)).includes(CHU.tutCaoThap),
+	);
+	kiem("E14: Kb ghi Im 16 ngay", (await lyDo(Kb)).includes(CHU.im16));
+	kiem("E14: Kc ghi Ghi chu moi", (await lyDo(Kc)).includes(CHU.ghiChuMoi));
+	kiem(
+		"E14: ghi chu moi nhat hien nguyen van",
+		(await chuSel(t, `[data-kr-hop='${Kc}']`)).includes("Đối tác lùi lịch ký"),
+	);
+	await chup(t, "E14-buoc-hop-1.png");
+
+	await cho(1000);
+	const sau1 = await vetMoHop();
+	kiem(
+		`E28: sau lan mo dau co dung 1 dong moi (thay ${sau1.length - dem0})`,
+		sau1.length - dem0 === 1,
+	);
+	const d = sau1.at(-1);
+	kiem(
+		`E28: dong mo-hop-tuan dung hinh (thay ${JSON.stringify(d)})`,
+		d?.actorUserId === id.truongP1 &&
+			d?.objectiveId === null &&
+			d?.keyResultId === null &&
+			d?.after?.donVi === `pb:${ORG.P1}` &&
+			d?.after?.tuan === tuanNayVN(),
+	);
+	await taiLai(t);
+	await hienSel(t, "[data-trang-thai='ST-hoptuan-codulieu']");
+	await bamChu(t, "[role='radio']", CHU.danhSach);
+	await hienSel(t, "[data-muc-tieu]");
+	await bamChu(t, "[role='radio']", CHU.hopTuan);
+	await hienSel(t, "[data-trang-thai='ST-hoptuan-codulieu']");
+	await cho(1500);
+	kiem(
+		"E28: tai lai va doi cach xem trong cua gop khong sinh them dong",
+		(await vetMoHop()).length - dem0 === 1,
+	);
+
+	await bamChu(t, "[data-con-lai] button", CHU.conLai);
+	await doi(
+		t,
+		"E14: mo Con lai hien them dong",
+		(n) => document.querySelectorAll("[data-kr-hop]").length > n,
+		thuTu.length,
+	);
+	await chup(t, "E14-buoc-hop-2.png");
+
+	await bamSel(t, `[data-mo-kr='${Ka}']`);
+	await doi(t, "E17: tab Dien bien ve bieu do", () =>
+		document.querySelector("[data-trang-thai='ST-dienbien-so']"),
+	);
+	kiem(
+		"E17: URL mo tab dien-bien cua Ka",
+		thamSo(t, "tab") === "dien-bien" && thamSo(t, "krOkr") === Ka,
+	);
+	await doi(
+		t,
+		"E17: bieu do co duong gia tri va duong le ra dut",
+		() =>
+			document.querySelectorAll(
+				"[data-trang-thai='ST-dienbien-so'] .recharts-line",
+			).length >= 2,
+	);
+	kiem(
+		"E17: vach dich co nhan",
+		(await chuSel(t, "[data-trang-thai='ST-dienbien-so']")).includes(CHU.dich),
+	);
+	kiem(
+		"E17: day muc tu tin co muc Thap",
+		(await chuSel(t, "[data-day-tu-tin]")).includes(CHU.thap),
+	);
+	await chup(t, "E17-buoc-dien-bien-1.png", false);
+	await bamSel(t, "[data-chon-kr]");
+	await bamChu(t, "[role='option']", TEN.Kb);
+	await doi(t, "E17: KR chua cap nhat hien cau rieng", () =>
+		document.querySelector("[data-trang-thai='ST-dienbien-chuaco']"),
+	);
+	await chup(t, "E17-buoc-dien-bien-2.png", false);
+	await t.close();
+
+	const h = await moTrang(
+		cookie.truongP1,
+		HEP,
+		theoDonVi(`donOkr=pb:${ORG.P1}&xemOkr=hop-tuan`),
+	);
+	await hienSel(h, "[data-trang-thai='ST-hoptuan-codulieu']");
+	await chup(h, "E14-buoc-hop-3.png");
+	await h.close();
+}
+
+async function buocTongQuan() {
+	const api = await hoi(cookie.k, "okr.khoiCuaToi", {
+		cycleId: OKR.quy,
+		userId: null,
+	});
+	const k = await moTrang(cookie.k, RONG, "");
+	await hienSel(k, "[data-khoi='okr-cua-toi'] [data-kr-cua-toi]");
+	const dong = await k.evaluate(() =>
+		[...document.querySelectorAll("[data-kr-cua-toi]")].map((e) =>
+			e.getAttribute("data-kr-cua-toi"),
+		),
+	);
+	kiem(
+		`E19: khoi OKR cua ban dung thu tu API (man ${dong.length}, api ${api.kr.length})`,
+		JSON.stringify(dong) === JSON.stringify(api.kr.map((d) => d.keyResultId)),
+	);
+	kiem(
+		"E19: the viec cua luot 4 van con tren Tong quan",
+		await coSel(k, "[data-viec-okr], [data-viec-okr-rong]"),
+	);
+	kiem(
+		"E19: khoi co nut Mo OKR",
+		await coSel(k, "[data-khoi='okr-cua-toi'] [data-nut='mo-okr']"),
+	);
+	await chup(k, "E19-buoc-tong-quan-1.png");
+	await chupKhoi(k, "[data-khoi='okr-cua-toi']", "E19-buoc-khoi-okr.png");
+	await k.setViewport({ width: HEP, height: CAO });
+	await cho(700);
+	await chup(k, "E19-buoc-tong-quan-2.png");
+	await k.close();
+
+	const o = await moTrang(cookie.chiOkr, RONG, "");
+	await hienSel(o, "[data-khoi='okr-cua-toi']");
+	kiem(
+		"E19: vai chi OKR chua phu trach KR thay cau rieng",
+		await coSel(
+			o,
+			"[data-khoi='okr-cua-toi'][data-trang-thai='ST-tongquan-rong']",
+		),
+	);
+	kiem(
+		"E19: vai chi OKR van co the viec cua luot 4",
+		await coSel(o, "[data-viec-okr], [data-viec-okr-rong]"),
+	);
+	await chup(o, "E19-buoc-tong-quan-3.png");
+	await o.close();
+
+	const n = await moTrang(
+		cookie.admin,
+		RONG,
+		theoDonVi(`donOkr=nguoi:${id.k}`),
+	);
+	await hienSel(
+		n,
+		"[data-khoi='okr-cua-toi'][data-trang-thai='ST-nguoi-codulieu']",
+	);
+	await chup(n, "E19-buoc-nguoi-1.png");
+	await n.close();
+}
+
+async function buocChuKy() {
+	const t = await moTrang(
+		cookie.truongP1,
+		RONG,
+		`/okr/theo-don-vi?donOkr=pb:${ORG.P1}`,
+	);
+	await hienSel(t, "[data-chon-chu-ky]");
+	await bamSel(t, "[data-chon-chu-ky]");
+	await doi(t, "E23: menu chu ky mo", () =>
+		document.querySelector("[role='option']"),
+	);
+	const muc = await t.evaluate(() =>
+		[...document.querySelectorAll("[role='option']")].map((o) =>
+			o.textContent?.replace(/\s+/g, " ").trim(),
+		),
+	);
+	kiem(
+		`E23: ky dang chay mang chu hien tai (thay ${muc})`,
+		muc.some(
+			(x) => x.startsWith(`Quý ${QUY}/${NAM} ${MA}`) && x.includes(CHU.hienTai),
+		),
+	);
+	kiem("E23: nhom theo nam co nhan nam", await coSel(t, "[role='group']"));
+	await chup(t, "E23-buoc-chu-ky-1.png", false);
+	trpc.length = 0;
+	await bamChu(t, "[role='option']", TEN_KY_KHAC);
+	await doi(
+		t,
+		"E23: URL doi sang ky khac",
+		(k) => new URL(location.href).searchParams.get("kyOkr") === k,
+		OKR.quy2,
+	);
+	await hienSel(t, `[data-muc-tieu='${OKR.Q2}']`);
+	kiem(
+		"E23: danh sach khong con muc tieu cua ky dang chay",
+		!(await coSel(t, `[data-muc-tieu='${OKR.P1a.id}']`)),
+	);
+	await chup(t, "E23-buoc-chu-ky-2.png");
+	await bamChu(t, "[role='radio']", CHU.hopTuan);
+	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
+	await bamChu(t, "a", CHU.toanCanhTab);
+	await hienSel(t, "[data-trang-thai^='ST-toancanh-']");
+	await cho(800);
+	kiem("E23: tab Toan canh giu ky da chon", thamSo(t, "kyOkr") === OKR.quy2);
+	await chup(t, "E23-buoc-chu-ky-3.png");
+	const loiGoi = trpc.flatMap((u) => {
+		const url = new URL(u);
+		const ten = decodeURIComponent(
+			url.pathname.split("/api/trpc/")[1] ?? "",
+		).split(",");
+		const vao = JSON.parse(url.searchParams.get("input") ?? "{}");
+		return ten.map((t2, i) => [t2, vao[String(i)]]);
+	});
+	const theoThuTuc = (ten) =>
+		loiGoi.filter(([t2]) => t2 === ten).map(([, v]) => v?.cycleId);
+	for (const ten of ["okr.danhSach", "okr.hopTuan"]) {
+		const ky = theoThuTuc(ten);
+		kiem(
+			`E29: moi loi goi ${ten} mang cycleId ky da chon (thay ${ky})`,
+			ky.length > 0 && ky.every((c) => c === OKR.quy2),
+		);
+	}
+	const kyToanCanh = theoThuTuc("okr.toanCanh");
+	kiem(
+		`E29: okr.toanCanh khong goi voi ky dang chay (thay ${kyToanCanh})`,
+		kyToanCanh.every((c) => c === OKR.quy2),
+	);
+	await t.close();
+}
+
 let ma = 0;
 try {
 	await gieo();
@@ -924,6 +1317,9 @@ try {
 		["cay", buocCay],
 		["toan-canh", buocToanCanh],
 		["suc-khoe", buocSucKhoe],
+		["hop-tuan", buocHopTuan],
+		["tong-quan", buocTongQuan],
+		["chu-ky", buocChuKy],
 	]) {
 		try {
 			await fn();

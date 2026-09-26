@@ -43,9 +43,9 @@ function NhanLyDo({ lyDo }: { lyDo: LyDo }) {
 	const mt = okrToanCanhMessages(useLocale());
 	const ui = useMessages();
 	const tenMuc = {
-		cao: ui.okr.tuTinCao,
-		vua: ui.okr.tuTinVua,
-		thap: ui.okr.tuTinThap,
+		cao: ui.okr.tuTinCao.toLocaleLowerCase(),
+		vua: ui.okr.tuTinVua.toLocaleLowerCase(),
+		thap: ui.okr.tuTinThap.toLocaleLowerCase(),
 	};
 	switch (lyDo.loai) {
 		case "tut":
@@ -214,7 +214,7 @@ export function HopTuan({
 	const d = ht.data;
 	const dauMuc = (
 		<p className="text-muted-foreground text-xs" data-tom-tat-hop>
-			{mt.hopTuan.tuan(d.tuan)}
+			{mt.hopTuan.tuan(`${d.tuan.slice(8, 10)}/${d.tuan.slice(5, 7)}`)}
 			{" · "}
 			{mt.hopTuan.daCapNhat(String(d.daCapNhat), String(d.tongKr))}
 		</p>

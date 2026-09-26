@@ -103,7 +103,9 @@ function NoiDung({ kr }: { kr: KrChon }) {
 					}))}
 					label={mt.dienBien.bieuDo(kr.title)}
 					target={d.dich}
-					targetLabel={mt.dienBien.dich(`${d.dich}${d.donVi}`)}
+					targetLabel={mt.dienBien.dich(
+						d.donVi === "%" ? `${d.dich}%` : `${d.dich} ${d.donVi}`.trim(),
+					)}
 				/>
 			</DetailSheetSection>
 			<DetailSheetSection title={mt.dienBien.tuTinTheoTuan}>
