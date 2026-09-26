@@ -190,21 +190,36 @@ describe("sheets đọc ô", () => {
 		});
 	}
 
-	test("500 thì thử lại đủ OKR_SO.sheets.soLanThu lần; 403 và 404 không thử lại", async () => {
+	test("một lần đọc gọi fetch không quá OKR_SO.sheets.soLanThu lần, kể cả lời xin token", async () => {
 		const loi500 = googleTheoO(() => new Response(null, { status: 500 }));
 		await docOSheet(loi500.f)(SHEET_BI_MAT, "A1");
-		expect(demValues(loi500)).toBe(OKR_SO.sheets.soLanThu);
-		const loi403 = googleTheoO(() => new Response(null, { status: 403 }));
-		await docOSheet(loi403.f)(SHEET_BI_MAT, "A1");
-		expect(demValues(loi403)).toBe(1);
+		expect(loi500.goi.map((x) => x.loai)).toEqual(
+			["token", "values", "values"].slice(0, OKR_SO.sheets.soLanThu),
+		);
 	});
 
-	test("500 rồi được: lần thử thứ hai trả số", async () => {
+	test("token còn hạn: 500 thì thử lại đủ OKR_SO.sheets.soLanThu lần; 403 và 404 không thử lại", async () => {
+		const loi500 = googleTheoO(() => new Response(null, { status: 500 }));
+		await layTokenSheets(loi500.f, new Date());
+		await docOSheet(loi500.f)(SHEET_BI_MAT, "A1");
+		expect(demValues(loi500)).toBe(OKR_SO.sheets.soLanThu);
+		for (const status of [403, 404]) {
+			const g = googleTheoO(() => new Response(null, { status }));
+			await layTokenSheets(g.f, new Date());
+			await docOSheet(g.f)(SHEET_BI_MAT, "A1");
+			expect(`${status}: ${demValues(g)} lời gọi values`).toBe(
+				`${status}: 1 lời gọi values`,
+			);
+		}
+	});
+
+	test("token còn hạn, 503 rồi được: lần thử thứ hai trả số", async () => {
 		let lan = 0;
 		const g = googleTheoO(() => {
 			lan += 1;
 			return lan === 1 ? new Response(null, { status: 503 }) : oGia(7);
 		});
+		await layTokenSheets(g.f, new Date());
 		expect(await docOSheet(g.f)(SHEET_BI_MAT, "A1")).toEqual({ giaTri: 7 });
 	});
 

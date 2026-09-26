@@ -20,6 +20,8 @@ const THUAT_TOAN = { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" } as const;
 
 const THU_LAI = "thu-lai";
 
+const CO_TOKEN = "co-token";
+
 const tokenNho = new WeakMap<typeof fetch, TokenNho>();
 
 const tokenPhan = z.object({ access_token: z.string().min(1) });
@@ -111,6 +113,14 @@ export async function kySheetsJwt(
 	return `${dau}.${than}.${b64u(ky)}`;
 }
 
+function tokenConHan(f: typeof fetch, now: Date): string | null {
+	const nho = tokenNho.get(f);
+	const email = cauHinhSheets()?.email;
+	return nho && nho.email === email && nho.hetMs > now.getTime()
+		? nho.token
+		: null;
+}
+
 export async function layTokenSheets(
 	f: typeof fetch,
 	now: Date,
@@ -118,9 +128,9 @@ export async function layTokenSheets(
 ): Promise<string> {
 	const cau = cauHinhSheets();
 	if (!cau) throw new LoiTokenSheets(0);
+	const nho = tokenConHan(f, now);
+	if (nho) return nho;
 	const nowMs = now.getTime();
-	const nho = tokenNho.get(f);
-	if (nho && nho.email === cau.email && nho.hetMs > nowMs) return nho.token;
 	const jwt = await kySheetsJwt(cau.email, cau.khoa, Math.floor(nowMs / 1000));
 	const res = await f(ghiDe("OKR_SHEETS_TOKEN_URL") ?? OKR_SO.sheets.tokenUrl, {
 		method: "POST",
@@ -150,14 +160,18 @@ function baoLoi<T>(ketQua: T, chiTiet: string): T {
 	return ketQua;
 }
 
-async function thuMotLan(
+async function motLanGoi(
 	f: typeof fetch,
 	sheetId: string,
 	o: string,
 	signal: AbortSignal,
-): Promise<KetQuaDoc | typeof THU_LAI> {
+): Promise<KetQuaDoc | typeof THU_LAI | typeof CO_TOKEN> {
 	try {
-		const token = await layTokenSheets(f, new Date(), signal);
+		const token = tokenConHan(f, new Date());
+		if (token === null) {
+			await layTokenSheets(f, new Date(), signal);
+			return CO_TOKEN;
+		}
 		const goc = ghiDe("OKR_SHEETS_API_URL") ?? OKR_SO.sheets.apiUrl;
 		const res = await f(
 			`${goc}/${encodeURIComponent(sheetId)}/values/${encodeURIComponent(o)}?valueRenderOption=UNFORMATTED_VALUE`,
@@ -187,8 +201,8 @@ export function docOSheet(f: typeof fetch): DocO {
 		if (!cauHinhSheets()) return { loi: "tat" };
 		const moiLanMs = OKR_SO.sheets.tranMs / OKR_SO.sheets.soLanThu;
 		for (let lan = 0; lan < OKR_SO.sheets.soLanThu; lan += 1) {
-			const kq = await thuMotLan(f, sheetId, o, AbortSignal.timeout(moiLanMs));
-			if (kq !== THU_LAI) return kq;
+			const kq = await motLanGoi(f, sheetId, o, AbortSignal.timeout(moiLanMs));
+			if (kq !== THU_LAI && kq !== CO_TOKEN) return kq;
 		}
 		return { loi: "google-loi" };
 	};

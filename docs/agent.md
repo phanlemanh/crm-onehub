@@ -366,9 +366,10 @@ gọi mạng — năng lực «Google Sheets» trong `capabilities.ts`).
 - **JWT RS256 ký bằng Web Crypto**, đổi lấy token ở `OKR_SO.sheets.tokenUrl` (phạm vi
   `spreadsheets.readonly`). Token giữ theo từng hàm `fetch` trong `OKR_SO.sheets.tokenDungMs`;
   401 xoá nó.
-- **`values/<ô>?valueRenderOption=UNFORMATTED_VALUE`**, `OKR_SO.sheets.soLanThu` lần thử
-  chia chung trần `OKR_SO.sheets.tranMs` của một lần đọc. Chỉ 5xx, 429, 401 và lỗi mạng thử
-  lại. 403 → `chua-chia-se`, 404 → `khong-thay`, khác 2xx → `google-loi`; ô vắng hay rỗng →
+- **`values/<ô>?valueRenderOption=UNFORMATTED_VALUE`**. Một lần đọc gọi `fetch` tối đa
+  `OKR_SO.sheets.soLanThu` lần — lời xin token, khi phải xin, là một trong số đó — và mỗi lời
+  gọi có `tranMs / soLanThu`, nên cả lần đọc nằm trong `OKR_SO.sheets.tranMs`. Chỉ 5xx, 429,
+  401 và lỗi mạng thử lại. 403 → `chua-chia-se`, 404 → `khong-thay`, khác 2xx → `google-loi`; ô vắng hay rỗng →
   `o-trong`; chữ qua `docSoOkr` («1.240» → 1240), `#REF!`, đúng/sai, số ngoài `soKr` →
   `khong-phai-so`.
 - **Không qua `@crm/db/safe-fetch`.** `safe-fetch` chặn địa chỉ do người nhập trỏ vào mạng
