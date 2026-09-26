@@ -37,8 +37,8 @@ const SO_THAY_THE_KHAC = ["cua-vao-dang-nhap/E14"];
 const NEO_LAI = [
 	{
 		tep: "_acceptance/man-xin-quyen-co-rang/rang/chieu-do.mjs",
-		cu: '(CRM[^"]*)',
-		moi: '(OneHub Center đọc[^"]*)',
+		cu: "CRM",
+		moi: "OneHub Center đọc",
 		ly: "sau khi the ten, cau tieng Anh cung bat dau bang ten nen regex phai neo vao cau tieng Viet de giu dung dot bien cu",
 	},
 ];
@@ -193,8 +193,16 @@ function trongSanPham(chuoi, ref) {
 
 export function capHopLe(cap, base) {
 	if (!/\bCRM\b/.test(cap.cu)) return false;
-	if (NEO_LAI.some((n) => n.tep === cap.tep && n.cu === cap.cu && n.moi === cap.moi)) return true;
+	if (
+		NEO_LAI.some(
+			(n) => n.tep === cap.tep && n.cu === cap.cu && n.moi === cap.moi,
+		)
+	)
+		return true;
 	if (chuan(cap.cu) === chuan(cap.moi)) return true;
+	if (cap.dongCu !== undefined && chuan(cap.dongCu) === chuan(cap.dongMoi))
+		return true;
+	if (chuan(cap.cu) === DAU) return false;
 	return trongSanPham(cap.cu, base) && trongSanPham(cap.moi, "HEAD");
 }
 
@@ -223,7 +231,14 @@ function soThuoc(thuocBiCham, base) {
 				lech++;
 				continue;
 			}
-			h.bo.forEach((cu, i) => bang.push({ tep, ...catCap(cu, h.them[i]) }));
+			h.bo.forEach((cu, i) =>
+				bang.push({
+					tep,
+					dongCu: cu,
+					dongMoi: h.them[i],
+					...catCap(cu, h.them[i]),
+				}),
+			);
 		}
 		ghi(
 			lech === 0,
@@ -270,8 +285,12 @@ function doiChung() {
 	);
 	const xau = catCap("expect(n).toBe(2);", "expect(n).toBe(3);");
 	ghi(
-		!/\bCRM\b/.test(xau.cu),
+		!capHopLe({ tep: "x", ...xau }, "HEAD"),
 		`doi chung nhat nho so: «${xau.cu}» -> «${xau.moi}» bi loai`,
+	);
+	ghi(
+		!capHopLe({ tep: "x", cu: "CRM", moi: "OneHub Center đọc" }, "HEAD"),
+		"doi chung ten tran them chu ngoai bang neo lai: bi loai",
 	);
 }
 
