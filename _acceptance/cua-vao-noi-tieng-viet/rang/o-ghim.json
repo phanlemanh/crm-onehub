@@ -47,12 +47,12 @@
 		{ "gia_tri": "/", "o": "tien to o dia chi workspace", "nhom": "dinh danh" },
 		{ "gia_tri": "acme.com", "o": "goi y o website", "nhom": "dinh danh" },
 		{
-			"gia_tri": "CRM",
+			"gia_tri": "OneHub Center",
 			"o": "goi y o ten cong ty",
 			"nhom": "du lieu nguoi nhap"
 		},
 		{
-			"gia_tri": "crm",
+			"gia_tri": "onehub-center",
 			"o": "goi y o dia chi workspace",
 			"nhom": "du lieu nguoi nhap"
 		},
