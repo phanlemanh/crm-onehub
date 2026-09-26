@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 79be3e1775062a225d65bf6a6e652f92010c54dc
+verified_commit: 94dd24ef5fdb7d0e24a2cf7232eb9428d291e283
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -415,3 +415,7 @@ sha: 7d8bf4a04cf8160fb028cc3b6f7518d5f4c20d8e · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-26, do gộp onehub #149 #150 vào feat/cap-nhat-tuan-okr: dienNode dùng chung, cơ chế kho đo
 run_id: repin-20260926T032909Z-72323
 sha: 79be3e1775062a225d65bf6a6e652f92010c54dc · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)
+
+### Re-pin lần 5 — 2026-09-26, do hoá cũ sau gộp onehub #151 (đặt lại mật khẩu) vào cap-nhat-tuan-okr; lượt trước đỏ vì hai test onboarding chập chờn
+run_id: repin-20260926T045452Z-13928
+sha: 94dd24ef5fdb7d0e24a2cf7232eb9428d291e283 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths)
