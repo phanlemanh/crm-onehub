@@ -5,7 +5,7 @@ slug: cua-vao-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-26T07:16:17Z
 design_doc: docs/superpowers/specs/2026-09-25-cua-vao-dang-nhap-design.md
@@ -102,3 +102,9 @@ Known limits — chủ kho chấp nhận 26/09 sau S4 round 2 (dừng-vá, đư�
 - Vế «logo của khối hướng dẫn không phải liên kết» của E13 không có đường đỏ: logo nằm ngoài `[data-khoi-huong-dan]`, và vòng Tab dừng khi gặp lại tên phần tử đầu, nên một logo bị bọc thành liên kết «Trang chủ» không làm dòng nào đỏ.
 - Ma trận `ma-tran-cua` của E4 rẽ nhánh theo số nút trang vừa vẽ, không theo cột kỳ vọng viết trước cho từng ca: sáu ca cùng đo quan hệ «bước 2 khớp nút đang hiện», không ca nào ghim tập nút đúng của cấu hình mình.
 - Chữ «Cài đặt» ở bước 1 (E3) được rút từ `settingsMessages(...).thanhBen.nhan` — nhãn trợ năng của thanh bên — không phải nhãn menu người dùng thấy; hai chữ đang trùng nên hôm nay đúng, nhưng thước không bắt được khi chúng tách.
+
+Known limits — chủ kho chấp nhận 26/09 tại Cổng Bằng chứng (Ngoài-1, Ngoài-4, Ngoài-5; sổ d-20260926T075317Z-17, -20, -21):
+
+- Đối chứng của E21 (`packages/ui/test/step-list-tinh.dom.tsx`) không chạy ca có bước đã xong, nên lời hứa «nơi dùng cũ giữ nguyên chế độ tiến độ» chỉ được đo ở một điểm; một thay đổi làm mất dấu tick của bước đã xong có thể lọt.
+- Ma trận `phanLoaiLoiDangNhap` trong `apps/app/test/cua-vao-ham.spec.ts` gõ tay mã lỗi; mã thật do better-auth sinh chỉ được E5 (`rang/ma-loi-that.mjs`) đo.
+- Fixture `signInOptions` trong `apps/app/test/cua-vao-trang-khac.dom.tsx` không khai kiểu `RouterOutputs` như E1 hứa, nên khuôn API đổi có thể không làm test này đỏ kịp.
