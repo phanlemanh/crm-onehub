@@ -3,6 +3,7 @@ const MINUTE_MS = 60 * SECOND_MS;
 
 export const TRO_LY_OKR = {
 	model: "google/gemini-3.8-flash",
+	cuaSoNguCanh: 1_048_576,
 	tranRaMoiLoiGoi: 2_000,
 	limits: {
 		maxInputTokensPerSession: 40_000,
