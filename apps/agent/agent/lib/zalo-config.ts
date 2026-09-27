@@ -52,6 +52,7 @@ export const ZALO = {
 				"read_deal_history",
 				"search_crm",
 				"zalo-chi-doc",
+				"okr-chi-tro-ly",
 			],
 			ghi: [
 				"archive_field",

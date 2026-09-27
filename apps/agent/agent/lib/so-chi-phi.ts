@@ -29,12 +29,19 @@ const buoc = z
 	.nullable()
 	.catch(null);
 
-const phienCon = z
-	.object({ parent: z.object({ id: z.string() }).nullable().catch(null) })
-	.catch({ parent: null });
+const TOKEN_PHIEN_CON = /^subagent:([^:]+):/;
+
+export function phienChaCua(ctx: NguCanhSo): string | null {
+	return (
+		TOKEN_PHIEN_CON.exec(ctx.channel?.continuationToken ?? "")?.[1] ?? null
+	);
+}
 
 export type NguCanhSo = PurposeContext & {
-	readonly channel?: { readonly kind?: string };
+	readonly channel?: {
+		readonly kind?: string;
+		readonly continuationToken?: string;
+	};
 	readonly session: PurposeContext["session"] & { readonly id: string };
 };
 
@@ -51,7 +58,7 @@ export async function ghiBuoc(
 			id: b.meta.id,
 			at: b.meta.at ? new Date(b.meta.at) : new Date(),
 			sessionId: ctx.session.id,
-			phienCha: phienCon.parse(ctx.session).parent?.id ?? null,
+			phienCha: phienChaCua(ctx),
 			kenh: ctx.channel?.kind ?? null,
 			tinhNang: tinhNangCua({
 				kenh: subagent ? null : (ctx.channel?.kind ?? null),
