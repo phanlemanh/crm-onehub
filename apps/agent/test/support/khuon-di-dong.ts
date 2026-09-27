@@ -2,7 +2,10 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Glob } from "bun";
-import { SESSION_PURPOSES } from "../../agent/lib/session-purpose";
+import {
+	type PurposeContext,
+	SESSION_PURPOSES,
+} from "../../agent/lib/session-purpose";
 
 const GOC_AGENT = join(
 	dirname(fileURLToPath(import.meta.url)),
@@ -17,32 +20,41 @@ const MAU_TEP = [
 	"subagents/*/agent.ts",
 ];
 
-type KhuonChuan = {
+export type KhuonChuan = {
 	"~standard": {
 		jsonSchema: { input: (tuyChon: { target: string }) => object };
 	};
 };
 
+type SuKienDong = { type: string };
+
+type BoCongCuDong = Record<string, ModuleKhuon> | null;
+
+type XuLyDong = (
+	suKien: SuKienDong,
+	nguCanh: PurposeContext,
+) => BoCongCuDong | Promise<BoCongCuDong>;
+
 type ModuleKhuon = {
-	inputSchema?: unknown;
-	outputSchema?: unknown;
-	events?: Record<string, (event: object, ctx: object) => unknown>;
+	inputSchema?: KhuonChuan;
+	outputSchema?: KhuonChuan;
+	events?: Record<string, XuLyDong>;
 };
 
-export function chuyenKhuon(schema: unknown): object {
-	return (schema as KhuonChuan)["~standard"].jsonSchema.input({
+export function chuyenKhuon(schema: KhuonChuan): object {
+	return schema["~standard"].jsonSchema.input({
 		target: "draft-07",
 	});
 }
 
-export function viPhamKhuon(ten: string, schema: unknown): string[] {
+export function viPhamKhuon(ten: string, schema: KhuonChuan): string[] {
 	return JSON.stringify(chuyenKhuon(schema)).includes('"$ref"')
 		? [`khuon co vong tham chieu: ${ten}`]
 		: [];
 }
 
 export type PhanLoai =
-	| { loai: "khuon"; ten: string; schema: unknown }
+	| { loai: "khuon"; ten: string; schema: KhuonChuan }
 	| { loai: "dong"; events: NonNullable<ModuleKhuon["events"]> }
 	| { loai: "da-tat" }
 	| { loai: "vi-pham"; loi: string };
@@ -67,25 +79,30 @@ export function phanLoaiTep(
 	return { loai: "vi-pham", loi: `khong khuon, khong dau tat: ${duong}` };
 }
 
-function nguCanhGia(purpose: string) {
+function nguCanhGia(purpose: string): PurposeContext {
 	const thuocTinh = { attributes: { purpose } };
-	return { session: { id: "quet-khuon", auth: { current: thuocTinh, initiator: thuocTinh } } };
+	return {
+		session: {
+			id: "quet-khuon",
+			auth: { current: thuocTinh, initiator: thuocTinh },
+		},
+	};
 }
 
 async function khuonDong(
 	duong: string,
 	events: NonNullable<ModuleKhuon["events"]>,
-): Promise<Array<{ ten: string; schema: unknown }>> {
-	const ra: Array<{ ten: string; schema: unknown }> = [];
+): Promise<Array<{ ten: string; schema: KhuonChuan }>> {
+	const ra: Array<{ ten: string; schema: KhuonChuan }> = [];
 	for (const [suKien, xuLy] of Object.entries(events)) {
 		for (const purpose of SESSION_PURPOSES) {
-			const bo = (await xuLy({ type: suKien }, nguCanhGia(purpose))) as Record<
-				string,
-				ModuleKhuon
-			> | null;
+			const bo = await xuLy({ type: suKien }, nguCanhGia(purpose));
 			for (const [ten, congCu] of Object.entries(bo ?? {})) {
 				if (congCu?.inputSchema) {
-					ra.push({ ten: `${duong}#${purpose}:${ten}`, schema: congCu.inputSchema });
+					ra.push({
+						ten: `${duong}#${purpose}:${ten}`,
+						schema: congCu.inputSchema,
+					});
 				}
 			}
 		}

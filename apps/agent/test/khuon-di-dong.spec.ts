@@ -27,14 +27,11 @@ const KHUON_PHAI_CO = [
 	"agent_runner/agent.ts#output",
 ];
 
-type CoShape = { shape: Record<string, z.ZodType> };
+type CoOKetQua = { shape: { result: z.ZodType } };
 
-function oKetQua(schema: unknown): unknown {
-	let hienTai = (schema as CoShape).shape.result;
-	while (
-		hienTai instanceof z.ZodOptional ||
-		hienTai instanceof z.ZodNullable
-	) {
+function oKetQua(schema: CoOKetQua): z.ZodType {
+	let hienTai = schema.shape.result;
+	while (hienTai instanceof z.ZodOptional || hienTai instanceof z.ZodNullable) {
 		hienTai = hienTai.unwrap() as z.ZodType;
 	}
 	return hienTai;
@@ -75,9 +72,9 @@ describe("khuon-di-dong", () => {
 			loai: "vi-pham",
 			loi: "khong khuon, khong dau tat: gia.ts",
 		});
-		expect(
-			phanLoaiTep("tat.ts", {}, "export default disableTool();"),
-		).toEqual({ loai: "da-tat" });
+		expect(phanLoaiTep("tat.ts", {}, "export default disableTool();")).toEqual({
+			loai: "da-tat",
+		});
 	});
 });
 

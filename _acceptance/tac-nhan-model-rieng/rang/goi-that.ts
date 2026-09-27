@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import finishRun from "../../../apps/agent/agent/subagents/agent_runner/tools/finish_run";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const AGENT = join(GOC, "apps/agent");
@@ -19,30 +20,30 @@ if (!process.env.AI_GATEWAY_API_KEY) {
 
 const yeuCauAgent = createRequire(join(AGENT, "package.json"));
 const { z } = yeuCauAgent("zod") as typeof import("zod");
-const yeuCauEve = createRequire(
-	yeuCauAgent.resolve("eve/package.json"),
-);
-const { generateText, jsonSchema, tool } = yeuCauEve("ai") as typeof import("ai");
+const yeuCauEve = createRequire(yeuCauAgent.resolve("eve/package.json"));
+const { generateText, jsonSchema, tool } = yeuCauEve(
+	"ai",
+) as typeof import("ai");
 
 type KhuonChuan = {
 	"~standard": { jsonSchema: { input: (o: { target: string }) => object } };
 };
 
-function chuyen(schema: unknown) {
+function chuyen(schema: KhuonChuan) {
 	return jsonSchema(
-		(schema as KhuonChuan)["~standard"].jsonSchema.input({ target: "draft-07" }),
+		schema["~standard"].jsonSchema.input({ target: "draft-07" }),
 	);
 }
 
-type CongCu = { description: string; inputSchema: unknown };
+type CongCu = { description: string; inputSchema: KhuonChuan };
 
 async function napCongCu(ten: string): Promise<CongCu> {
 	return (await import(join(TEP_CONG_CU, `${ten}.ts`))).default as CongCu;
 }
 
-const finishRun = await napCongCu("finish_run");
-const runner = (await import(join(AGENT, "agent/subagents/agent_runner/agent.ts")))
-	.default as { outputSchema: unknown };
+const runner = (
+	await import(join(AGENT, "agent/subagents/agent_runner/agent.ts"))
+).default as { outputSchema: KhuonChuan };
 
 const tools: Record<string, ReturnType<typeof tool>> = {};
 for (const ten of [
@@ -61,16 +62,15 @@ for (const ten of [
 					result: z.record(z.string(), z.json()).nullish(),
 				})
 			: congCu.inputSchema;
-	tools[ten] = tool({ description: congCu.description, inputSchema: chuyen(khuon) });
+	tools[ten] = tool({
+		description: congCu.description,
+		inputSchema: chuyen(khuon),
+	});
 }
 tools.final_output = tool({
 	description: "Return the final structured output of this run.",
 	inputSchema: chuyen(runner.outputSchema),
 });
-
-const docKetQua = (finishRun.inputSchema as z.ZodType).safeParse.bind(
-	finishRun.inputSchema,
-);
 
 let loi = 0;
 for (const model of khuonCu ? MODELS.slice(0, 1) : MODELS) {
@@ -79,22 +79,19 @@ for (const model of khuonCu ? MODELS.slice(0, 1) : MODELS) {
 			model,
 			tools,
 			toolChoice: { type: "tool", toolName: "finish_run" },
-			maxOutputTokens: 400,
+			maxOutputTokens: 2000,
 			prompt:
 				'Nộp kết quả bằng công cụ finish_run: summary là "kiểm tra khuôn", result có đúng hai khoá: "kiemTra" là chữ "ok" và "soDem" là số 2.',
 		});
 		const goi = phanHoi.toolCalls[0];
-		const doc = docKetQua(goi?.input) as {
-			success: boolean;
-			data?: { result?: Record<string, unknown> | null };
-		};
+		const doc = finishRun.inputSchema.safeParse(goi?.input);
 		const ok =
 			goi?.toolName === "finish_run" &&
 			doc.success &&
 			doc.data?.result?.kiemTra !== undefined &&
 			doc.data?.result?.soDem !== undefined;
 		console.log(
-			`${model} ${ok ? "ok" : `loi: ${JSON.stringify(goi?.input ?? null).slice(0, 200)}`}`,
+			`${model} ${ok ? "ok" : `loi: ${phanHoi.finishReason} ${JSON.stringify(goi?.input ?? null).slice(0, 200)}`}`,
 		);
 		if (!ok) loi += 1;
 	} catch (error) {

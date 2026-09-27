@@ -10,33 +10,34 @@ export const LY_DO_DONG_LUOT = {
 	khongLyDo: "Bộ chạy báo lỗi nhưng không nói lý do.",
 } as const;
 
-const loiBoChay = z.object({
+const loiCoCau = z.object({ message: z.string().trim().min(1) });
+
+export const loiBoChay = z.object({
 	result: z.object({
 		kind: z.literal("subagent-result"),
 		subagentName: z.literal("agent_runner"),
 		isError: z.literal(true),
-		output: z.unknown(),
+		output: loiCoCau.nullable().catch(null),
 	}),
 });
 
-const loiCoCau = z.object({ message: z.string().trim().min(1) });
-
-function lyDo(output: unknown): string {
-	const coCau = loiCoCau.safeParse(output);
-	return coCau.success
-		? coCau.data.message.slice(0, DISPATCH.run.failureReasonMaxChars)
-		: LY_DO_DONG_LUOT.khongLyDo;
-}
+export type LoiBoChay = z.infer<typeof loiBoChay>;
 
 export async function dongLuotKhiBoChayLoi(
-	data: unknown,
+	loi: LoiBoChay,
 	ctx: PurposeContext,
 ): Promise<void> {
 	if (purposeOf(ctx) !== "team-agent") return;
 	const runId = attribute(ctx, "runId");
-	const loi = loiBoChay.safeParse(data);
-	if (!runId || !loi.success) return;
-	await failRun(runId, "RUNNER_FAILED", lyDo(loi.data.result.output));
+	if (!runId) return;
+	const coCau = loi.result.output;
+	await failRun(
+		runId,
+		"RUNNER_FAILED",
+		coCau
+			? coCau.message.slice(0, DISPATCH.run.failureReasonMaxChars)
+			: LY_DO_DONG_LUOT.khongLyDo,
+	);
 }
 
 export async function choKetLuot(runId: string): Promise<void> {

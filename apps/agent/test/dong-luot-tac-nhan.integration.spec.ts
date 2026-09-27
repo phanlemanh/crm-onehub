@@ -28,14 +28,22 @@ type NguCanhHook = {
 		};
 	};
 };
+type OutputLoi = string | null | { code?: string; message?: string };
+type KetQuaGoc = typeof loiThat.su_kien.data.result;
+type DuLieuSuKien = Omit<typeof loiThat.su_kien.data, "result"> & {
+	result: Omit<KetQuaGoc, "kind" | "subagentName" | "isError" | "output"> & {
+		kind: string;
+		subagentName: string;
+		isError: boolean;
+		output: OutputLoi;
+	};
+};
 type XuLyKetQua = (
-	event: { type: string; data: object },
+	event: { type: string; data: DuLieuSuKien },
 	ctx: NguCanhHook,
 ) => Promise<void>;
 
-const xuLy = (hook.events as Record<string, unknown>)[
-	"action.result"
-] as XuLyKetQua;
+const xuLy = hook.events["action.result"] as unknown as XuLyKetQua;
 
 function nguCanh(thuocTinh: ThuocTinh): NguCanhHook {
 	return {
@@ -61,7 +69,7 @@ async function luotDangChay(): Promise<{ id: string; thuocTinh: ThuocTinh }> {
 	});
 	let thuocTinh: ThuocTinh = {};
 	const send = (async (
-		_message: unknown,
+		_message: Parameters<SendFn>[0],
 		options: { auth: { attributes: ThuocTinh } },
 	) => {
 		thuocTinh = options.auth.attributes;
@@ -71,7 +79,7 @@ async function luotDangChay(): Promise<{ id: string; thuocTinh: ThuocTinh }> {
 	return { id: run.id, thuocTinh };
 }
 
-async function chayHook(data: object, thuocTinh: ThuocTinh) {
+async function chayHook(data: DuLieuSuKien, thuocTinh: ThuocTinh) {
 	await trongNguCanhEve(() =>
 		xuLy({ type: "action.result", data }, nguCanh(thuocTinh)),
 	);
@@ -80,7 +88,13 @@ async function chayHook(data: object, thuocTinh: ThuocTinh) {
 async function docLuot(id: string) {
 	const run = await db.agentRun.findUniqueOrThrow({
 		where: { id },
-		select: { status: true, errorCode: true, errorMessage: true, result: true, summary: true },
+		select: {
+			status: true,
+			errorCode: true,
+			errorMessage: true,
+			result: true,
+			summary: true,
+		},
 	});
 	const soLanHong = await db.agentRunEvent.count({
 		where: { runId: id, type: "run.failed" },
@@ -88,7 +102,7 @@ async function docLuot(id: string) {
 	return { ...run, soLanHong };
 }
 
-function loiVoiOutput(output: unknown) {
+function loiVoiOutput(output: OutputLoi): DuLieuSuKien {
 	const goc = loiThat.su_kien.data;
 	return { ...goc, result: { ...goc.result, output } };
 }
@@ -163,7 +177,9 @@ describe("bao-loi", () => {
 		await chayHook(loiThat.su_kien.data, luot.thuocTinh);
 		const sauHook = await docLuot(luot.id);
 
-		expect(sauHook.status, "bo chay bao loi phai dong luot ngay").toBe("FAILED");
+		expect(sauHook.status, "bo chay bao loi phai dong luot ngay").toBe(
+			"FAILED",
+		);
 		expect(sauHook.errorCode).toBe("RUNNER_FAILED");
 		expect(sauHook.errorMessage).toBe(
 			loiThat.su_kien.data.result.output.message.slice(0, 1000),
@@ -177,7 +193,7 @@ describe("bao-loi", () => {
 	});
 
 	it("bao-loi: ma tran dang output", async () => {
-		const maTran: Array<[unknown, string]> = [
+		const maTran: Array<[OutputLoi, string]> = [
 			[
 				{ code: "SUBAGENT_EXECUTION_FAILED", message: "x".repeat(5000) },
 				"x".repeat(1000),
@@ -202,12 +218,16 @@ describe("bao-loi", () => {
 
 	it("bao-loi: doi chung — khong phai loi cua bo chay thi luot van chay", async () => {
 		const goc = loiThat.su_kien.data;
-		const doiChung: Array<[object, (thuocTinh: ThuocTinh) => ThuocTinh]> = [
-			[{ ...goc, result: { ...goc.result, isError: false } }, (t) => t],
-			[{ ...goc, result: { ...goc.result, subagentName: "agent_builder" } }, (t) => t],
-			[{ ...goc, result: { ...goc.result, kind: "tool-result" } }, (t) => t],
-			[goc, (t) => ({ ...t, purpose: "research" })],
-		];
+		const doiChung: Array<[DuLieuSuKien, (thuocTinh: ThuocTinh) => ThuocTinh]> =
+			[
+				[{ ...goc, result: { ...goc.result, isError: false } }, (t) => t],
+				[
+					{ ...goc, result: { ...goc.result, subagentName: "agent_builder" } },
+					(t) => t,
+				],
+				[{ ...goc, result: { ...goc.result, kind: "tool-result" } }, (t) => t],
+				[goc, (t) => ({ ...t, purpose: "research" })],
+			];
 		for (const [data, doiThuocTinh] of doiChung) {
 			const luot = await luotDangChay();
 			await chayHook(data, doiThuocTinh(luot.thuocTinh));
@@ -281,7 +301,11 @@ describe("chua-nop", () => {
 				(ts.isMethodDeclaration(node) || ts.isPropertyAssignment(node)) &&
 				node.name.getText() === '"session.completed"';
 			const dangTrong = trongNhanh || laNhanh;
-			if (dangTrong && ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
+			if (
+				dangTrong &&
+				ts.isCallExpression(node) &&
+				ts.isIdentifier(node.expression)
+			) {
 				if (node.expression.text === "choKetLuot") goiKetLuot += 1;
 				if (node.expression.text === "runResultOf") goiRunResultOf += 1;
 			}

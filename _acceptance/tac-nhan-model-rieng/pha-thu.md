@@ -15,3 +15,7 @@ Mỗi lượt phá chạy trên tệp đã commit, rồi `git checkout -- <tệp
 | E2 | (Task 4) | chạy từ thư mục không có `.env`, không khoá | `env -u AI_GATEWAY_API_KEY bun …/goi-that.ts` | «thieu AI_GATEWAY_API_KEY», mã 2 |
 
 Lượt xanh của E2 (khuôn mới): ba dòng `ok` cho `google/gemini-3.8-flash`, `zai/glm-5.2-fast`, `openai/gpt-5-mini`, mã 0. Tiền bốn lượt gọi: $0,0054 (khoá chung, 4,63543 → 4,64082).
+| E8 | f1f1af34 | chạy trên merge-base (`--ref dce9a87d`) — tài liệu trước vòng | `node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs --ref <merge-base>` | bốn điều «khong dat», mã 1 |
+| E8 | trước commit f1f1af34 | tài liệu mới chưa có đoạn chỗ rẽ | `node …/tai-lieu.mjs` | điều 3, 4 «khong dat», in danh sách tệp thiếu, mã 1 |
+
+Ghi chú E2: một lượt sau khi sửa kiểu, `openai/gpt-5-mini` trả không có lời gọi công cụ với trần 400 chữ đầu ra — model suy nghĩ tiêu hết trần. Nâng `maxOutputTokens` lên 2.000 và in thêm `finishReason`; hai lượt liền sau đó cả ba `ok`. Tổng tiền phép gọi thật tới đây: khoảng $0,014.

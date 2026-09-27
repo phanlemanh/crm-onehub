@@ -19,8 +19,10 @@ const suffix = crypto.randomUUID();
 const userId = `model-theo-vai-${suffix}`;
 let agentId = "";
 let versionId = "";
-let caiDatCu: { agentModelId: string | null; agentModelContextWindow: number | null } | null =
-	null;
+let caiDatCu: {
+	agentModelId: string | null;
+	agentModelContextWindow: number | null;
+} | null = null;
 
 type ThuocTinh = Record<string, string>;
 
@@ -49,7 +51,10 @@ async function taoLuot() {
 
 async function dieuPhoi(runId: string): Promise<ThuocTinh> {
 	let thuocTinh: ThuocTinh = {};
-	const send = (async (_message: unknown, options: { auth: { attributes: ThuocTinh } }) => {
+	const send = (async (
+		_message: Parameters<SendFn>[0],
+		options: { auth: { attributes: ThuocTinh } },
+	) => {
 		thuocTinh = options.auth.attributes;
 		return { id: `model-theo-vai-session-${crypto.randomUUID()}` };
 	}) as unknown as SendFn;
@@ -230,7 +235,10 @@ afterAll(async () => {
 
 describe("doi-sau-khi-dung", () => {
 	it("doi-sau-khi-dung: luot moi chay model cua Cai dat, ban giu model luc dung", async () => {
-		await writeAgentModel(db, { id: "test/model-y", contextWindowTokens: 2000 });
+		await writeAgentModel(db, {
+			id: "test/model-y",
+			contextWindowTokens: 2000,
+		});
 		const run = await taoLuot();
 
 		const thuocTinh = await dieuPhoi(run.id);
@@ -253,7 +261,10 @@ describe("doi-sau-khi-dung", () => {
 	});
 
 	it("doi-sau-khi-dung: doi chung — khong doi Cai dat thi van model cu", async () => {
-		await writeAgentModel(db, { id: "test/model-x", contextWindowTokens: 1000 });
+		await writeAgentModel(db, {
+			id: "test/model-x",
+			contextWindowTokens: 1000,
+		});
 		const run = await taoLuot();
 
 		const thuocTinh = await dieuPhoi(run.id);
@@ -265,10 +276,9 @@ describe("doi-sau-khi-dung", () => {
 	});
 
 	it("doi-sau-khi-dung: khong tep nao doc model cua ban de chon model chay", () => {
-		expect(
-			tepDocModelCuaBan(),
-			"luot moi phai chay model cua Cai dat",
-		).toEqual([]);
+		expect(tepDocModelCuaBan(), "luot moi phai chay model cua Cai dat").toEqual(
+			[],
+		);
 	});
 });
 
@@ -302,7 +312,8 @@ describe("bon-phien", () => {
 			const thuocTinh = await dieuPhoi(run.id);
 			expect(modelChoBoChay(nguCanh(thuocTinh))).toEqual(mongDoi);
 			expect(
-				(await db.agentRun.findUniqueOrThrow({ where: { id: run.id } })).modelId,
+				(await db.agentRun.findUniqueOrThrow({ where: { id: run.id } }))
+					.modelId,
 			).toBe(caiDat ?? DEFAULT_AGENT_MODEL.id);
 			soO += 1;
 		}
@@ -310,14 +321,20 @@ describe("bon-phien", () => {
 	});
 
 	it("bon-phien: moi phien qua modelTheoVai", () => {
-		const choPhep = new Set(["modelChoPhienGoc", "modelChoBoDung", "modelChoBoChay"]);
+		const choPhep = new Set([
+			"modelChoPhienGoc",
+			"modelChoBoDung",
+			"modelChoBoChay",
+		]);
 		for (const tep of [
 			"agent.ts",
 			"subagents/agent_builder/agent.ts",
 			"subagents/agent_runner/agent.ts",
 		]) {
 			const ten = tenNhapTuModel(join(GOC_AGENT, tep));
-			expect(ten.length, `moi phien qua modelTheoVai: ${tep}`).toBeGreaterThan(0);
+			expect(ten.length, `moi phien qua modelTheoVai: ${tep}`).toBeGreaterThan(
+				0,
+			);
 			expect(
 				ten.filter((mot) => !choPhep.has(mot)),
 				`moi phien qua modelTheoVai: ${tep}`,
