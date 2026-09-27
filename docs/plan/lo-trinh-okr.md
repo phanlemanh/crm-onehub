@@ -17,7 +17,7 @@ cá nhân, bước duyệt) là cấu hình của chương trình, không cứng
 | R1 lên production | 2026-10-23 | Cả công ty đặt, cập nhật, xem OKR quý trong CRM; người ngoài khối kinh doanh vào bằng vai «chỉ OKR» |
 | Quý 4 trên CRM, mọi phòng ban | 2026-10-26 → 2026-12-31 | Mọi phòng ban đưa OKR quý 4 vào CRM và cập nhật hằng tuần — chốt 2026-09-24 (Manh Phan). Phòng ban chưa có OKR quý 4 đặt trong tuần đầu |
 | R2 lên production | 2026-11-20 | Số tự chảy từ CRM; rà giữa kỳ, chấm, nhìn lại, mang sang trong công cụ |
-| R3 lên production | 2026-12-18 | Trợ lý AI; cập nhật ngay trong Slack hoặc Zalo |
+| R3 lên production | 2026-12-18 | Trợ lý OKR góp ý khi bấm và tóm tắt tuần; cập nhật trong Slack hoặc Zalo khi lượt 10 đủ điều kiện — thứ tự và điều kiện chạy ở `docs/plan/lo-trinh-tro-ly-okr.md` |
 | Đóng quý 4 trong công cụ | 2026-12-28 → 2027-01-08 | Lần chấm và nhìn lại đầu tiên chạy thật |
 | OKR năm 2027 và quý 1 | 2026-12-07 → 2027-01-11 | Toàn công ty đặt và công bố trong CRM |
 | Tết Đinh Mùi | 2027-02-06 (mùng 1) | Lịch chu kỳ phải biết khoảng nghỉ trước ngày 2027-01-11 |
@@ -37,10 +37,6 @@ gantt
   section R2
   Lượt 6 số tự chảy                   :r6, 2026-10-26, 7d
   Lượt 7 rà, chấm, khép kỳ            :r7, after r6, 6d
-  Lượt 8 việc, ghi nhận, mẫu          :r8, after r7, 6d
-  section R3
-  Lượt 9 trợ lý viết và tóm tắt       :r9, 2026-11-23, 8d
-  Lượt 10 cập nhật trong chat, rủi ro :r10, after r9, 10d
   section Vận hành
   Quý 4 mọi phòng ban                 :q4, 2026-10-26, 2026-12-31
   Nghiệm thu R1                       :milestone, u1, 2026-11-13, 0d
@@ -53,6 +49,11 @@ Tốc độ dựng không phải điểm nghẽn: các lượt của Điều ph�
 chậm hơn — design-pass, Cổng 1.5 của lượt T3, và phản hồi từ người dùng quý 4 —
 và cho việc khác của CRM chạy song song. Mọi lượt đi **tuần tự**: 32 commit ghim
 lại từ 15/09 là cái giá của nhiều nhánh song song.
+
+Từ 2026-09-27, lượt 8, 9, 10 và lượt vá lối rò Slack không còn ngày trên Gantt:
+lượt nào đủ điều kiện thì chạy, theo thứ tự ở mục 4 của
+`docs/plan/lo-trinh-tro-ly-okr.md`. Chỗ khác với bản đầu ở «Chỗ lệch với lộ
+trình Trợ lý OKR», cuối mục 5.
 
 ## 2. Nguyên tắc chia lượt
 
@@ -84,8 +85,9 @@ lại từ 15/09 là cái giá của nhiều nhánh song song.
 | 5 | `toan-canh-okr` | «Cả công ty nhìn được toàn cảnh và họp tuần trên cùng một màn» | T2 | lượt 4 |
 | 6 | `so-okr-tu-chay` | «Số của KR tự chảy từ CRM, bấm vào là ra bản ghi» | T3 | lượt 3 |
 | 7 | `khep-ky-okr` | «Kỳ được rà, chấm, nhìn lại và mang sang trong công cụ» | T2 | lượt 4, 6 |
-| 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 | lượt 3 |
-| 9 | `tro-ly-okr` | «Trợ lý giúp tôi viết cho sắc và tóm tắt tuần cho đơn vị» | T2 | lượt 4, 7 |
+| 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 · tách 8a, 8b | lượt 3 · 8a sau bốn tuần dùng quý 4 |
+| — | vá lối rò Slack | «Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai chỉ OKR» | T3 | lượt 6 đã gộp; xong trước ngày mở cho cả công ty |
+| 9 | `tro-ly-okr` | «Trợ lý giúp tôi viết cho sắc và tóm tắt tuần cho đơn vị» | 9a T3 · 9b, 9c T2 | 9a sau vá Slack · 9b lượt 3 và luật lượt 7 · 9c sau 9b, ≥ 3 tuần Cập nhật tuần thật |
 | 10 | `okr-trong-chat` | «Tôi cập nhật ngay trong Slack hoặc Zalo, và biết sớm KR nào đang trượt» | T3 | lượt 4, 9 |
 
 ## 4. Chuẩn bị (2026-09-24 → 2026-09-30)
@@ -301,7 +303,7 @@ mọi KR đã chấm; mục tiêu dở mang sang kỳ sau; số kỳ đã đóng
 
 **Hạn cứng:** lên production trước 2026-12-14 — đóng quý 4 dùng nó.
 
-### Lượt 8 — `canh-kr-okr` · R2 · T3
+### Lượt 8 — `canh-kr-okr` · T3 · tách 8a, 8b
 
 **Ý định:** Việc và sáng kiến gắn vào KR, kể cả gắn một chiến dịch hay một kế
 hoạch 30 ngày có sẵn; đính bằng chứng cho KR dạng mốc; gửi ghi nhận; mục tiêu
@@ -316,7 +318,10 @@ XEM-09, TC-06.
 tuần dùng quý 4, xếp lại theo điều người dùng thật hỏi nhiều nhất và cắt đôi nếu
 hợp đồng vượt 15 tiêu chí.
 
-### Lượt 9 — `tro-ly-okr` · R3 · T2
+**Tách hai (chỗ lệch 5):** 8a chạy khi đủ bốn tuần dùng quý 4; 8b chạy sau mùa
+đặt OKR quý 1. Mã nào vào 8a, mã nào vào 8b chưa chia.
+
+### Lượt 9 — `tro-ly-okr` · 9a T3, 9b và 9c T2
 
 **Ý định:** Trợ lý OKR trong `apps/agent` với công cụ chỉ đọc OKR theo quyền
 người hỏi: viết lại câu mục tiêu hay KR khi người bấm, kiểm chất lượng bằng mô
@@ -338,9 +343,20 @@ lần cập nhật gốc, gợi ý căn chỉnh, gợi ý đích so với xu hư
 OKR cho cả đội.
 
 **Điều kiện mở lượt:** trả lời được «nội dung OKR có được gửi tới nhà cung cấp
-mô hình đang dùng không» và có con số trần chi tiêu tháng.
+mô hình đang dùng không» và có con số trần chi tiêu tháng. Đã trả lời
+2026-09-26 (chỗ lệch 11).
 
-### Lượt 10 — `okr-trong-chat` · R3 · T3
+**Chia ba lượt (chỗ lệch 1–4).** Ý định, bàn giao và điều kiện chạy của từng lượt
+ở mục 5 của `docs/plan/lo-trinh-tro-ly-okr.md`; chỗ nào khác phần trên thì theo
+tệp đó.
+
+| Lượt | Slug | Hạng | Phủ | Chạy khi |
+| --- | --- | --- | --- | --- |
+| 9a · nền | `tro-ly-okr-nen` | T3, có Cổng 1.5 | sổ chi phí AI, trần tháng, bật tắt theo đơn vị; người dùng chưa thấy gì | vá Slack đã gộp; ZDR đạt (đạt ở N0, 2026-09-27) |
+| 9b · góp ý khi bấm | `tro-ly-okr-de-xuat` | T2 | AI-01 · AI-02 · AI-03 (AI) · AI-05 · DO-06 | 9a và lượt 7 đã lên; có ít nhất 12 ca mẫu từ OKR quý 4 thật |
+| 9c · tóm tắt tuần | `tro-ly-okr-tom-tat` | T2 | AI-04 | 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật |
+
+### Lượt 10 — `okr-trong-chat` · T3
 
 **Ý định:** Tin nhắc có nút: chọn mức tự tin và sửa số ngay trong Slack hoặc
 Zalo; trưởng đơn vị nhận cảnh báo khi tiến độ và mức tự tin lệch khỏi vạch kỳ
@@ -354,7 +370,29 @@ trên dữ liệu, phần diễn giải qua trợ lý.
 
 **Điều kiện mở lượt:** số đo của lượt 4 cho thấy độ trễ từ nhắc tới cập nhật
 quá một ngày làm việc, hoặc một lần cập nhật quá 2 phút. Không có bằng chứng
-thì lượt này lùi.
+thì lượt này lùi. Đề nghị tách chat và cảnh báo khỏi điều kiện này, quyết ở Cổng
+Đáng của lượt 10 (chỗ lệch 7). Chat đi bằng một eve app riêng; trên Zalo dùng lại
+kênh hỏi CRM qua Zalo (chỗ lệch 6).
+
+### Chỗ lệch với lộ trình Trợ lý OKR
+
+Chép 2026-09-27 từ mục 6 của `docs/plan/lo-trinh-tro-ly-okr.md` (#163). Tệp đó
+viết lại lượt 9 và 10 theo kiến trúc AI chủ kho chọn ngày 2026-09-26, sau khi đo
+trước khi dựng (N0). Mỗi dòng là một chỗ lộ trình này đã đổi theo.
+
+| # | Chỗ | Bản đầu ghi | Nay |
+| --- | --- | --- | --- |
+| 1 | Hạng lượt 9 | Một lượt T2 | Ba lượt: 9a (T3, thêm bảng), 9b và 9c (T2) |
+| 2 | Thứ tự lượt 9 | Sau lượt 8 | 9a ngay sau vá Slack; 9b sau lượt 7 |
+| 3 | Chân đứng của 9b | Lượt 4 và 7 | Lượt 3, cùng luật của lượt 7 |
+| 4 | AI tới người dùng | Thuộc R3 | Cấp OneHub được bật trước mùa OKR năm, sớm hơn R3 |
+| 5 | Lượt 8 | Gantt đặt sớm hơn điều kiện mở của chính nó (sau bốn tuần dùng) | Tách 8a và 8b; 8a chạy khi đủ bốn tuần |
+| 6 | Lượt 10 | Chat dựng trong lượt | Chat bằng eve app riêng; trên Zalo dùng lại kênh hỏi CRM qua Zalo |
+| 7 | Điều kiện mở lượt 10 | Một điều kiện chung về độ trễ Cập nhật tuần | Tách chat và cảnh báo khỏi điều kiện đó |
+| 8 | Nháp «điều học được» | Không có trong 78 mã | Sau mùa, có điều kiện |
+| 9 | Vá lối rò Slack | Không có | Lượt T3 riêng, xong trước ngày mở cho cả công ty |
+| 10 | Đóng băng | Không có | Quanh ngày mở cho cả công ty, và trong mùa đặt OKR quý 1; chỉ vá lỗi |
+| 11 | Điều kiện mở lượt 9 | Dòng 9: gửi tới nhà cung cấp đang dùng, trần workspace $20 | Thêm ZDR bắt buộc (kể cả eval), và trần $9 cho khu OKR |
 
 ## 6. Triển khai cho người dùng
 
