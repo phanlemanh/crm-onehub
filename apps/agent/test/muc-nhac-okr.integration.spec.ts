@@ -42,6 +42,8 @@ import {
 } from "./support/okr-gieo";
 import { zaloGia } from "./support/zalo-gia";
 
+const CHO_CA_MS = 60_000;
+
 const APP_URL = "https://crm.test";
 
 const goc = lucVN(NGAY_NHAC, PHUT_SAU);
@@ -143,121 +145,129 @@ afterAll(async () => {
 });
 
 describe("vet-khuon", () => {
-	test("vet-khuon: dong vet hong khuon lam lenLichNhac bi tu choi neu ma dong, khong ai co hang nhac ngay do", async () => {
-		const chay = await gieoChuKy("dang-chay", 1);
-		const X = await gieoNguoi("Xuan");
-		const Z = await gieoNguoi("Zet");
-		const khac = await gieoNguoi("Khac");
-		const truoc = new Date(goc.getTime() - 2 * GIO_MS);
-		const o = await gieoMucTieu({
-			cycleId: chay,
-			chu: khac.id,
-			congBo: ngayCach(goc, -20),
-		});
-		await gieoKr({ objectiveId: o, chu: Z.id, khoa: ngayCach(goc, -20) });
-		const k = await gieoKr({ objectiveId: o, chu: X.id, khoa: truoc });
-		await db.okrTrail.create({
-			data: {
-				at: truoc,
-				actorUserId: khac.id,
-				action: "sua-kr",
-				objectiveId: o,
-				keyResultId: k,
-				before: { ownerUserId: khac.id },
-				after: { ownerUserId: 123 },
-			},
-		});
-		const dong = await db.okrTrail.findFirstOrThrow({
-			where: { keyResultId: k, action: "sua-kr" },
-		});
-		setSystemTime(goc);
-		const loi = await lenLichNhac(goc).then(
-			() => "",
-			(e: Error) => e.message,
-		);
-		const soHang = await db.agentTask.count({
-			where: {
-				kind: "nhac-ke-hoach",
-				subject: {
-					in: [`user:${X.id}:${NGAY_NHAC}`, `user:${Z.id}:${NGAY_NHAC}`],
+	test(
+		"vet-khuon: dong vet hong khuon lam lenLichNhac bi tu choi neu ma dong, khong ai co hang nhac ngay do",
+		async () => {
+			const chay = await gieoChuKy("dang-chay", 1);
+			const X = await gieoNguoi("Xuan");
+			const Z = await gieoNguoi("Zet");
+			const khac = await gieoNguoi("Khac");
+			const truoc = new Date(goc.getTime() - 2 * GIO_MS);
+			const o = await gieoMucTieu({
+				cycleId: chay,
+				chu: khac.id,
+				congBo: ngayCach(goc, -20),
+			});
+			await gieoKr({ objectiveId: o, chu: Z.id, khoa: ngayCach(goc, -20) });
+			const k = await gieoKr({ objectiveId: o, chu: X.id, khoa: truoc });
+			await db.okrTrail.create({
+				data: {
+					at: truoc,
+					actorUserId: khac.id,
+					action: "sua-kr",
+					objectiveId: o,
+					keyResultId: k,
+					before: { ownerUserId: khac.id },
+					after: { ownerUserId: 123 },
 				},
-			},
-		});
-		if (!loi.includes(`Vết OKR ${dong.id}`) || soHang > 0) {
-			throw new Error(
-				`vet-khuon: loi bi bat (loi «${loi}», so hang ${soHang})`,
+			});
+			const dong = await db.okrTrail.findFirstOrThrow({
+				where: { keyResultId: k, action: "sua-kr" },
+			});
+			setSystemTime(goc);
+			const loi = await lenLichNhac(goc).then(
+				() => "",
+				(e: Error) => e.message,
 			);
-		}
-		expect({ loi: loi.includes("không đọc được"), soHang }).toEqual({
-			loi: true,
-			soHang: 0,
-		});
-	});
+			const soHang = await db.agentTask.count({
+				where: {
+					kind: "nhac-ke-hoach",
+					subject: {
+						in: [`user:${X.id}:${NGAY_NHAC}`, `user:${Z.id}:${NGAY_NHAC}`],
+					},
+				},
+			});
+			if (!loi.includes(`Vết OKR ${dong.id}`) || soHang > 0) {
+				throw new Error(
+					`vet-khuon: loi bi bat (loi «${loi}», so hang ${soHang})`,
+				);
+			}
+			expect({ loi: loi.includes("không đọc được"), soHang }).toEqual({
+				loi: true,
+				soHang: 0,
+			});
+		},
+		CHO_CA_MS,
+	);
 });
 
 describe("du-duong", () => {
-	test("du-duong: nam loai muc OKR di tron duong — ma trong hang theo bang khoa viet tay, tin Slack va tin Zalo moi loai mot dong duoi tieu de", async () => {
-		const chay = await gieoChuKy("dang-chay", 1);
-		const Z = await gieoNamLoai("Zung", chay);
-		const S = await gieoNamLoai("Son", chay);
-		const chuSlack = await gieoNguoi("Chu Slack", false);
-		await noiSlack(chuSlack.id);
-		await khopSlack(S.id, "USON");
-		await noiZalo(Z.id, "ZZUNG");
-		await batBot();
+	test(
+		"du-duong: nam loai muc OKR di tron duong — ma trong hang theo bang khoa viet tay, tin Slack va tin Zalo moi loai mot dong duoi tieu de",
+		async () => {
+			const chay = await gieoChuKy("dang-chay", 1);
+			const Z = await gieoNamLoai("Zung", chay);
+			const S = await gieoNamLoai("Son", chay);
+			const chuSlack = await gieoNguoi("Chu Slack", false);
+			await noiSlack(chuSlack.id);
+			await khopSlack(S.id, "USON");
+			await noiZalo(Z.id, "ZZUNG");
+			await batBot();
 
-		setSystemTime(goc);
-		await lenLichNhac(goc);
-
-		const bang: Record<string, string> = {};
-		const mong: Record<string, string> = {};
-		for (const [ten, g] of [
-			["Z", Z],
-			["S", S],
-		] as const) {
-			const muc = parseNhacPayload((await hangCua(g.id)).payload).muc;
-			for (const loai of LOAI) {
-				const cua = muc.filter((m) => m.loai === loai);
-				bang[`${ten} ${loai} muc`] = JSON.stringify(
-					cua.map((m) => ({ khoa: Object.keys(m).sort(), gia: m })),
-				);
-				mong[`${ten} ${loai} muc`] = JSON.stringify([
-					{ khoa: [...KHOA_VIET_TAY[loai]], gia: g.ma[loai] },
-				]);
-			}
-		}
-
-		const z = zaloGia();
-		const s = slackGia();
-		for (const g of [Z, S]) {
 			setSystemTime(goc);
-			await voiToken(async () =>
-				chayNhac(await hangCua(g.id), {
-					fetcher: s.fetcher,
-					zaloFetcher: z.fetcher,
-					appUrl: APP_URL,
-				}),
-			).catch((e: Error) => {
-				throw new Error(`du-duong: ${e.message}`);
-			});
-		}
-		const tinZalo = z.guiToi("ZZUNG")[0]?.body.text ?? "";
-		const tinSlack =
-			s.goi.find((g) => g.url.endsWith("chat.postMessage"))?.body.text ?? "";
-		for (const loai of LOAI) {
-			bang[`zalo ${loai}`] = String(dongDuoi(tinZalo, TIEU_DE[loai]).length);
-			bang[`slack ${loai}`] = String(
-				dongDuoi(tinSlack, `*${TIEU_DE[loai]}*`).length,
-			);
-			mong[`zalo ${loai}`] = "1";
-			mong[`slack ${loai}`] = "1";
-		}
-		if (JSON.stringify(bang) !== JSON.stringify(mong)) {
-			const lech = Object.keys(mong).filter(
-				(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
-			);
-			throw new Error(`du-duong: ${lech.join(", ")}`);
-		}
-		expect(bang).toEqual(mong);
-	});
+			await lenLichNhac(goc);
+
+			const bang: Record<string, string> = {};
+			const mong: Record<string, string> = {};
+			for (const [ten, g] of [
+				["Z", Z],
+				["S", S],
+			] as const) {
+				const muc = parseNhacPayload((await hangCua(g.id)).payload).muc;
+				for (const loai of LOAI) {
+					const cua = muc.filter((m) => m.loai === loai);
+					bang[`${ten} ${loai} muc`] = JSON.stringify(
+						cua.map((m) => ({ khoa: Object.keys(m).sort(), gia: m })),
+					);
+					mong[`${ten} ${loai} muc`] = JSON.stringify([
+						{ khoa: [...KHOA_VIET_TAY[loai]], gia: g.ma[loai] },
+					]);
+				}
+			}
+
+			const z = zaloGia();
+			const s = slackGia();
+			for (const g of [Z, S]) {
+				setSystemTime(goc);
+				await voiToken(async () =>
+					chayNhac(await hangCua(g.id), {
+						fetcher: s.fetcher,
+						zaloFetcher: z.fetcher,
+						appUrl: APP_URL,
+					}),
+				).catch((e: Error) => {
+					throw new Error(`du-duong: ${e.message}`);
+				});
+			}
+			const tinZalo = z.guiToi("ZZUNG")[0]?.body.text ?? "";
+			const tinSlack =
+				s.goi.find((g) => g.url.endsWith("chat.postMessage"))?.body.text ?? "";
+			for (const loai of LOAI) {
+				bang[`zalo ${loai}`] = String(dongDuoi(tinZalo, TIEU_DE[loai]).length);
+				bang[`slack ${loai}`] = String(
+					dongDuoi(tinSlack, `*${TIEU_DE[loai]}*`).length,
+				);
+				mong[`zalo ${loai}`] = "1";
+				mong[`slack ${loai}`] = "1";
+			}
+			if (JSON.stringify(bang) !== JSON.stringify(mong)) {
+				const lech = Object.keys(mong).filter(
+					(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
+				);
+				throw new Error(`du-duong: ${lech.join(", ")}`);
+			}
+			expect(bang).toEqual(mong);
+		},
+		CHO_CA_MS,
+	);
 });

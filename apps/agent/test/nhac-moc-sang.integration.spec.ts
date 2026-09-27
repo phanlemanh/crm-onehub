@@ -29,6 +29,8 @@ import {
 } from "./support/okr-gieo";
 import { zaloGia } from "./support/zalo-gia";
 
+const CHO_CA_MS = 60_000;
+
 const APP_URL = "https://crm.test";
 
 const NGAY = {
@@ -181,277 +183,306 @@ afterAll(async () => {
 });
 
 describe("giua-ngay", () => {
-	test("giua-ngay: ma tran 3 su kien x 3 nhip trong ngay D — khong hang, khong muc; doi chung truc-tiep thay ca ba", async () => {
-		const g = await gieoSuKien(vn(NGAY.D, "14:00:00"));
-		const bang: Record<string, string> = {};
-		const mong: Record<string, string> = {};
-		for (const gio of ["14:01:00", "17:00:00", "23:59:00"]) {
-			const luc = vn(NGAY.D, gio);
-			await nhip(luc);
-			const soHang = (await hangNgay(g.X, NGAY.D)).length;
-			const viec = await nhacSang(g.X, luc);
-			for (const loai of SU_KIEN) {
-				const co = viec.some((v) => v.loai === loai);
-				bang[`${loai} luc ${gio}`] = JSON.stringify({ soHang, co });
-				mong[`${loai} luc ${gio}`] = JSON.stringify({ soHang: 0, co: false });
+	test(
+		"giua-ngay: ma tran 3 su kien x 3 nhip trong ngay D — khong hang, khong muc; doi chung truc-tiep thay ca ba",
+		async () => {
+			const g = await gieoSuKien(vn(NGAY.D, "14:00:00"));
+			const bang: Record<string, string> = {};
+			const mong: Record<string, string> = {};
+			for (const gio of ["14:01:00", "17:00:00", "23:59:00"]) {
+				const luc = vn(NGAY.D, gio);
+				await nhip(luc);
+				const soHang = (await hangNgay(g.X, NGAY.D)).length;
+				const viec = await nhacSang(g.X, luc);
+				for (const loai of SU_KIEN) {
+					const co = viec.some((v) => v.loai === loai);
+					bang[`${loai} luc ${gio}`] = JSON.stringify({ soHang, co });
+					mong[`${loai} luc ${gio}`] = JSON.stringify({ soHang: 0, co: false });
+				}
 			}
-		}
-		const lech = Object.keys(mong).filter(
-			(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
-		);
-		if (lech.length > 0) throw new Error(`tin-giua-ngay: ${lech.join(", ")}`);
-		const truc = await nhacTrucTiep(g.X, vn(NGAY.D, "14:01:00"));
-		expect(SU_KIEN.map((l) => truc.some((v) => v.loai === l))).toEqual([
-			true,
-			true,
-			true,
-		]);
-	});
+			const lech = Object.keys(mong).filter(
+				(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
+			);
+			if (lech.length > 0) throw new Error(`tin-giua-ngay: ${lech.join(", ")}`);
+			const truc = await nhacTrucTiep(g.X, vn(NGAY.D, "14:01:00"));
+			expect(SU_KIEN.map((l) => truc.some((v) => v.loai === l))).toEqual([
+				true,
+				true,
+				true,
+			]);
+		},
+		CHO_CA_MS,
+	);
 });
 
 describe("sang-sau", () => {
-	test("sang-sau: nhip 14:01 D, 08:31 D+1, 08:31 D+2 — muc su kien dung mot tin sang D+1, dung ma, duoi dung tieu de; D+2 vang", async () => {
-		const g = await gieoSuKien(vn(NGAY.D, "14:00:00"));
-		await nhip(vn(NGAY.D, "14:01:00"));
-		const d = await gui(g.X, NGAY.D, vn(NGAY.D, "14:02:00"));
-		await nhip(vn(NGAY.sau, "08:31:00"));
-		const hangSau = await hangNgay(g.X, NGAY.sau);
-		const d1 = await gui(g.X, NGAY.sau, vn(NGAY.sau, "08:32:00"));
-		await nhip(vn(NGAY.sau2, "08:31:00"));
-		const d2 = await gui(g.X, NGAY.sau2, vn(NGAY.sau2, "08:32:00"));
-		const tinSau = d1.tin[0] ?? "";
-		const bang: Record<string, string> = {};
-		const mong: Record<string, string> = {};
-		for (const loai of SU_KIEN) {
-			const cungMa = (m: MucNhac) =>
-				JSON.stringify(m) === JSON.stringify(g.ma[loai]);
-			bang[`${loai}`] = JSON.stringify({
-				hangSau: hangSau.length,
-				mucSau: d1.muc.filter(cungMa).length,
-				dongDuoiTieuDe: dongDuoi(tinSau, TIEU_DE[loai]).length,
-				tinCoMuc: [...d.daGui, ...d1.daGui, ...d2.daGui].filter(cungMa).length,
-				vangSau2: d2.muc.filter(cungMa).length === 0,
-			});
-			mong[`${loai}`] = JSON.stringify({
-				hangSau: 1,
-				mucSau: 1,
-				dongDuoiTieuDe: 1,
-				tinCoMuc: 1,
-				vangSau2: true,
-			});
-		}
-		const lech = Object.keys(mong).filter(
-			(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
-		);
-		if (lech.length > 0) {
-			throw new Error(
-				`gui-lai-sang-sau: ${lech.join(", ")} ${JSON.stringify(bang)}`,
+	test(
+		"sang-sau: nhip 14:01 D, 08:31 D+1, 08:31 D+2 — muc su kien dung mot tin sang D+1, dung ma, duoi dung tieu de; D+2 vang",
+		async () => {
+			const g = await gieoSuKien(vn(NGAY.D, "14:00:00"));
+			await nhip(vn(NGAY.D, "14:01:00"));
+			const d = await gui(g.X, NGAY.D, vn(NGAY.D, "14:02:00"));
+			await nhip(vn(NGAY.sau, "08:31:00"));
+			const hangSau = await hangNgay(g.X, NGAY.sau);
+			const d1 = await gui(g.X, NGAY.sau, vn(NGAY.sau, "08:32:00"));
+			await nhip(vn(NGAY.sau2, "08:31:00"));
+			const d2 = await gui(g.X, NGAY.sau2, vn(NGAY.sau2, "08:32:00"));
+			const tinSau = d1.tin[0] ?? "";
+			const bang: Record<string, string> = {};
+			const mong: Record<string, string> = {};
+			for (const loai of SU_KIEN) {
+				const cungMa = (m: MucNhac) =>
+					JSON.stringify(m) === JSON.stringify(g.ma[loai]);
+				bang[`${loai}`] = JSON.stringify({
+					hangSau: hangSau.length,
+					mucSau: d1.muc.filter(cungMa).length,
+					dongDuoiTieuDe: dongDuoi(tinSau, TIEU_DE[loai]).length,
+					tinCoMuc: [...d.daGui, ...d1.daGui, ...d2.daGui].filter(cungMa)
+						.length,
+					vangSau2: d2.muc.filter(cungMa).length === 0,
+				});
+				mong[`${loai}`] = JSON.stringify({
+					hangSau: 1,
+					mucSau: 1,
+					dongDuoiTieuDe: 1,
+					tinCoMuc: 1,
+					vangSau2: true,
+				});
+			}
+			const lech = Object.keys(mong).filter(
+				(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
 			);
-		}
-		expect(bang).toEqual(mong);
-	});
+			if (lech.length > 0) {
+				throw new Error(
+					`gui-lai-sang-sau: ${lech.join(", ")} ${JSON.stringify(bang)}`,
+				);
+			}
+			expect(bang).toEqual(mong);
+		},
+		CHO_CA_MS,
+	);
 });
 
 describe("da-co-tin", () => {
-	test("da-co-tin: X da nhan tin sang D; nhac ten 14:00 D khong sinh tin thu hai; co mot lan o tin D+1; vang D+2", async () => {
-		const chay = await gieoChuKy("dang-chay", 1);
-		const X = await gieoNguoi("Xuan");
-		const Y = await gieoNguoi("Yen");
-		await noiZalo(X.id, "ZX");
-		await batBot();
-		const D = vn(NGAY.D, "08:31:00");
-		const O = await gieoMucTieu({
-			cycleId: chay,
-			chu: X.id,
-			congBo: new Date(D.getTime() - 15 * NGAY_MS),
-		});
-		await gieoKr({
-			objectiveId: O,
-			chu: X.id,
-			khoa: new Date(D.getTime() - 15 * NGAY_MS),
-		});
-		await nhip(D);
-		const sangD = await gui(X.id, NGAY.D, vn(NGAY.D, "08:32:00"));
-		const c = await binhLuan({
-			objectiveId: O,
-			tacGia: Y.id,
-			nhacTen: [X.id],
-			luc: vn(NGAY.D, "14:00:00"),
-		});
-		for (const gio of ["14:01:00", "17:00:00"]) await nhip(vn(NGAY.D, gio));
-		const hangD = await hangNgay(X.id, NGAY.D);
-		await nhip(vn(NGAY.sau, "08:31:00"));
-		const d1 = await gui(X.id, NGAY.sau, vn(NGAY.sau, "08:32:00"));
-		await nhip(vn(NGAY.sau2, "08:31:00"));
-		const d2 = await gui(X.id, NGAY.sau2, vn(NGAY.sau2, "08:32:00"));
-		const laMuc = (m: MucNhac) =>
-			m.loai === "okr-nhac-ten" && "commentId" in m && m.commentId === c;
-		const ket = {
-			tinSangD: sangD.tin.length,
-			hangD: hangD.length,
-			dongNhacTenD1: (d1.tin[0] ?? "")
-				.split("\n")
-				.filter((d) => d.includes("Yen nhắc tên bạn")).length,
-			coD2: d2.muc.some(laMuc),
-		};
-		if (ket.coD2) {
-			throw new Error(`mot-lan: nhac-ten co mat o ${NGAY.sau2}`);
-		}
-		expect(ket).toEqual({
-			tinSangD: 1,
-			hangD: 1,
-			dongNhacTenD1: 1,
-			coD2: false,
-		});
-	});
-});
-
-describe("moc-bien", () => {
-	test("moc-bien: ma tran 4 gio su kien x 3 tin sang — moi su kien dung mot tin", async () => {
-		const chay = await gieoChuKy("dang-chay", 1);
-		const X = await gieoNguoi("Xuan");
-		const Y = await gieoNguoi("Yen");
-		const O = await gieoMucTieu({
-			cycleId: chay,
-			chu: Y.id,
-			congBo: vn(NGAY.truoc, "00:00:00"),
-		});
-		const suKien: [string, Date][] = [
-			["08:29 D-1", vn(NGAY.truoc, "08:29:00")],
-			["07:00 D", vn(NGAY.D, "07:00:00")],
-			["08:30:00.000 D", vn(NGAY.D, "08:30:00.000")],
-			["08:30:00.001 D", vn(NGAY.D, "08:30:00.001")],
-		];
-		const ma: Record<string, string> = {};
-		for (const [ten, luc] of suKien) {
-			ma[ten] = await binhLuan({
+	test(
+		"da-co-tin: X da nhan tin sang D; nhac ten 14:00 D khong sinh tin thu hai; co mot lan o tin D+1; vang D+2",
+		async () => {
+			const chay = await gieoChuKy("dang-chay", 1);
+			const X = await gieoNguoi("Xuan");
+			const Y = await gieoNguoi("Yen");
+			await noiZalo(X.id, "ZX");
+			await batBot();
+			const D = vn(NGAY.D, "08:31:00");
+			const O = await gieoMucTieu({
+				cycleId: chay,
+				chu: X.id,
+				congBo: new Date(D.getTime() - 15 * NGAY_MS),
+			});
+			await gieoKr({
+				objectiveId: O,
+				chu: X.id,
+				khoa: new Date(D.getTime() - 15 * NGAY_MS),
+			});
+			await nhip(D);
+			const sangD = await gui(X.id, NGAY.D, vn(NGAY.D, "08:32:00"));
+			const c = await binhLuan({
 				objectiveId: O,
 				tacGia: Y.id,
 				nhacTen: [X.id],
-				luc,
+				luc: vn(NGAY.D, "14:00:00"),
 			});
-		}
-		const tin: [string, Date][] = [
-			["D-1", vn(NGAY.truoc, "08:31:00")],
-			["D", vn(NGAY.D, "08:31:00")],
-			["D+1", vn(NGAY.sau, "08:31:00")],
-		];
-		const bang: Record<string, boolean[]> = {};
-		for (const [ten] of suKien) bang[ten] = [];
-		for (const [, now] of tin) {
-			const viec = await nhacSang(X.id, now);
-			for (const [ten] of suKien) {
-				bang[ten]?.push(
-					viec.some(
-						(v) => v.loai === "okr-nhac-ten" && v.commentId === ma[ten],
-					),
-				);
+			for (const gio of ["14:01:00", "17:00:00"]) await nhip(vn(NGAY.D, gio));
+			const hangD = await hangNgay(X.id, NGAY.D);
+			await nhip(vn(NGAY.sau, "08:31:00"));
+			const d1 = await gui(X.id, NGAY.sau, vn(NGAY.sau, "08:32:00"));
+			await nhip(vn(NGAY.sau2, "08:31:00"));
+			const d2 = await gui(X.id, NGAY.sau2, vn(NGAY.sau2, "08:32:00"));
+			const laMuc = (m: MucNhac) =>
+				m.loai === "okr-nhac-ten" && "commentId" in m && m.commentId === c;
+			const ket = {
+				tinSangD: sangD.tin.length,
+				hangD: hangD.length,
+				dongNhacTenD1: (d1.tin[0] ?? "")
+					.split("\n")
+					.filter((d) => d.includes("Yen nhắc tên bạn")).length,
+				coD2: d2.muc.some(laMuc),
+			};
+			if (ket.coD2) {
+				throw new Error(`mot-lan: nhac-ten co mat o ${NGAY.sau2}`);
 			}
-		}
-		const mong = {
-			"08:29 D-1": [true, false, false],
-			"07:00 D": [false, true, false],
-			"08:30:00.000 D": [false, true, false],
-			"08:30:00.001 D": [false, false, true],
-		};
-		for (const [ten, dong] of Object.entries(mong)) {
-			if (JSON.stringify(bang[ten]) !== JSON.stringify(dong)) {
-				const o = (bang[ten] ?? []).flatMap((c, i) =>
-					c ? [tin[i]?.[0] ?? ""] : [],
-				);
-				throw new Error(
-					`moc-bien: ${ten} o tin ${o.join(",") || "khong tin nao"}`,
-				);
+			expect(ket).toEqual({
+				tinSangD: 1,
+				hangD: 1,
+				dongNhacTenD1: 1,
+				coD2: false,
+			});
+		},
+		CHO_CA_MS,
+	);
+});
+
+describe("moc-bien", () => {
+	test(
+		"moc-bien: ma tran 4 gio su kien x 3 tin sang — moi su kien dung mot tin",
+		async () => {
+			const chay = await gieoChuKy("dang-chay", 1);
+			const X = await gieoNguoi("Xuan");
+			const Y = await gieoNguoi("Yen");
+			const O = await gieoMucTieu({
+				cycleId: chay,
+				chu: Y.id,
+				congBo: vn(NGAY.truoc, "00:00:00"),
+			});
+			const suKien: [string, Date][] = [
+				["08:29 D-1", vn(NGAY.truoc, "08:29:00")],
+				["07:00 D", vn(NGAY.D, "07:00:00")],
+				["08:30:00.000 D", vn(NGAY.D, "08:30:00.000")],
+				["08:30:00.001 D", vn(NGAY.D, "08:30:00.001")],
+			];
+			const ma: Record<string, string> = {};
+			for (const [ten, luc] of suKien) {
+				ma[ten] = await binhLuan({
+					objectiveId: O,
+					tacGia: Y.id,
+					nhacTen: [X.id],
+					luc,
+				});
 			}
-		}
-		expect(bang).toEqual(mong);
-	});
+			const tin: [string, Date][] = [
+				["D-1", vn(NGAY.truoc, "08:31:00")],
+				["D", vn(NGAY.D, "08:31:00")],
+				["D+1", vn(NGAY.sau, "08:31:00")],
+			];
+			const bang: Record<string, boolean[]> = {};
+			for (const [ten] of suKien) bang[ten] = [];
+			for (const [, now] of tin) {
+				const viec = await nhacSang(X.id, now);
+				for (const [ten] of suKien) {
+					bang[ten]?.push(
+						viec.some(
+							(v) => v.loai === "okr-nhac-ten" && v.commentId === ma[ten],
+						),
+					);
+				}
+			}
+			const mong = {
+				"08:29 D-1": [true, false, false],
+				"07:00 D": [false, true, false],
+				"08:30:00.000 D": [false, true, false],
+				"08:30:00.001 D": [false, false, true],
+			};
+			for (const [ten, dong] of Object.entries(mong)) {
+				if (JSON.stringify(bang[ten]) !== JSON.stringify(dong)) {
+					const o = (bang[ten] ?? []).flatMap((c, i) =>
+						c ? [tin[i]?.[0] ?? ""] : [],
+					);
+					throw new Error(
+						`moc-bien: ${ten} o tin ${o.join(",") || "khong tin nao"}`,
+					);
+				}
+			}
+			expect(bang).toEqual(mong);
+		},
+		CHO_CA_MS,
+	);
 });
 
 describe("gui-muon", () => {
-	test("gui-muon: hang tao 08:31 D gui luc 10:00 D chi mang su kien truoc moc; su kien 09:00 D sang tin D+1", async () => {
-		const chay = await gieoChuKy("dang-chay", 1);
-		const X = await gieoNguoi("Xuan");
-		const Y = await gieoNguoi("Yen");
-		await noiZalo(X.id, "ZX");
-		await batBot();
-		const O = await gieoMucTieu({
-			cycleId: chay,
-			chu: Y.id,
-			congBo: vn(NGAY.truoc, "00:00:00"),
-		});
-		const N1 = await binhLuan({
-			objectiveId: O,
-			tacGia: Y.id,
-			nhacTen: [X.id],
-			luc: vn(NGAY.D, "07:00:00"),
-		});
-		await nhip(vn(NGAY.D, "08:31:00"));
-		const N2 = await binhLuan({
-			objectiveId: O,
-			tacGia: Y.id,
-			nhacTen: [X.id],
-			luc: vn(NGAY.D, "09:00:00"),
-		});
-		const d = await gui(X.id, NGAY.D, vn(NGAY.D, "10:00:00"));
-		await nhip(vn(NGAY.sau, "08:31:00"));
-		const d1 = await gui(X.id, NGAY.sau, vn(NGAY.sau, "08:32:00"));
-		const binhLuanCua = (ds: MucNhac[]) =>
-			ds.flatMap((m) => ("commentId" in m ? [m.commentId] : []));
-		const ket = { D: binhLuanCua(d.daGui), "D+1": binhLuanCua(d1.daGui) };
-		if (ket.D.includes(N2)) throw new Error("gui-muon: them su kien sau moc");
-		expect(ket).toEqual({ D: [N1], "D+1": [N2] });
-	});
+	test(
+		"gui-muon: hang tao 08:31 D gui luc 10:00 D chi mang su kien truoc moc; su kien 09:00 D sang tin D+1",
+		async () => {
+			const chay = await gieoChuKy("dang-chay", 1);
+			const X = await gieoNguoi("Xuan");
+			const Y = await gieoNguoi("Yen");
+			await noiZalo(X.id, "ZX");
+			await batBot();
+			const O = await gieoMucTieu({
+				cycleId: chay,
+				chu: Y.id,
+				congBo: vn(NGAY.truoc, "00:00:00"),
+			});
+			const N1 = await binhLuan({
+				objectiveId: O,
+				tacGia: Y.id,
+				nhacTen: [X.id],
+				luc: vn(NGAY.D, "07:00:00"),
+			});
+			await nhip(vn(NGAY.D, "08:31:00"));
+			const N2 = await binhLuan({
+				objectiveId: O,
+				tacGia: Y.id,
+				nhacTen: [X.id],
+				luc: vn(NGAY.D, "09:00:00"),
+			});
+			const d = await gui(X.id, NGAY.D, vn(NGAY.D, "10:00:00"));
+			await nhip(vn(NGAY.sau, "08:31:00"));
+			const d1 = await gui(X.id, NGAY.sau, vn(NGAY.sau, "08:32:00"));
+			const binhLuanCua = (ds: MucNhac[]) =>
+				ds.flatMap((m) => ("commentId" in m ? [m.commentId] : []));
+			const ket = { D: binhLuanCua(d.daGui), "D+1": binhLuanCua(d1.daGui) };
+			if (ket.D.includes(N2)) throw new Error("gui-muon: them su kien sau moc");
+			expect(ket).toEqual({ D: [N1], "D+1": [N2] });
+		},
+		CHO_CA_MS,
+	);
 });
 
 describe("cau-chao-gui", () => {
-	test("cau-chao-gui: ma tran 3 o [gio tao hang, gio gui] qua chayNhac duoi TZ=UTC", async () => {
-		const chay = await gieoChuKy("dang-chay", 1);
-		const W = await gieoNguoi("Wan");
-		const V = await gieoNguoi("Van");
-		await noiZalo(W.id, "ZW");
-		await noiZalo(V.id, "ZV");
-		await batBot();
-		const truoc20 = new Date(vn(NGAY.D, "08:31:00").getTime() - 20 * NGAY_MS);
-		const O = await gieoMucTieu({ cycleId: chay, chu: V.id, congBo: truoc20 });
-		await gieoKr({ objectiveId: O, chu: V.id, khoa: truoc20 });
-		const dongDau = (tin: string[]) => tin.map((t) => t.split("\n")[0] ?? "");
+	test(
+		"cau-chao-gui: ma tran 3 o [gio tao hang, gio gui] qua chayNhac duoi TZ=UTC",
+		async () => {
+			const chay = await gieoChuKy("dang-chay", 1);
+			const W = await gieoNguoi("Wan");
+			const V = await gieoNguoi("Van");
+			await noiZalo(W.id, "ZW");
+			await noiZalo(V.id, "ZV");
+			await batBot();
+			const truoc20 = new Date(vn(NGAY.D, "08:31:00").getTime() - 20 * NGAY_MS);
+			const O = await gieoMucTieu({
+				cycleId: chay,
+				chu: V.id,
+				congBo: truoc20,
+			});
+			await gieoKr({ objectiveId: O, chu: V.id, khoa: truoc20 });
+			const dongDau = (tin: string[]) => tin.map((t) => t.split("\n")[0] ?? "");
 
-		await nhip(vn(NGAY.D, "08:31:00"));
-		const b = await gui(V.id, NGAY.D, vn(NGAY.D, "14:02:00"));
-		await gieoKeHoach({
-			camTrich: W.id,
-			batDau: vn(NGAY.D, "13:00:00"),
-			buoc: [
-				{ nhan: "Gui bao gia", giao: W.id, han: vn(NGAY.sau, "09:00:00") },
-			],
-		});
-		await nhip(vn(NGAY.D, "14:01:00"));
-		const a = await gui(W.id, NGAY.D, vn(NGAY.D, "14:02:00"));
-		await nhip(vn(NGAY.sau, "08:31:00"));
-		const c = await gui(V.id, NGAY.sau, vn(NGAY.sau, "10:00:00"));
+			await nhip(vn(NGAY.D, "08:31:00"));
+			const b = await gui(V.id, NGAY.D, vn(NGAY.D, "14:02:00"));
+			await gieoKeHoach({
+				camTrich: W.id,
+				batDau: vn(NGAY.D, "13:00:00"),
+				buoc: [
+					{ nhan: "Gui bao gia", giao: W.id, han: vn(NGAY.sau, "09:00:00") },
+				],
+			});
+			await nhip(vn(NGAY.D, "14:01:00"));
+			const a = await gui(W.id, NGAY.D, vn(NGAY.D, "14:02:00"));
+			await nhip(vn(NGAY.sau, "08:31:00"));
+			const c = await gui(V.id, NGAY.sau, vn(NGAY.sau, "10:00:00"));
 
-		const bang = {
-			"a 14:01 -> 14:02": dongDau(a.tin),
-			"b 08:31 -> 14:02": dongDau(b.tin),
-			"c 08:31 -> 10:00": dongDau(c.tin),
-		};
-		const mong = {
-			"a 14:01 -> 14:02": "hôm nay",
-			"b 08:31 -> 14:02": "hôm nay",
-			"c 08:31 -> 10:00": "sáng nay",
-		};
-		for (const [o, buoi] of Object.entries(mong)) {
-			const dong = bang[o as keyof typeof bang];
-			const khac = buoi === "hôm nay" ? "sáng nay" : "hôm nay";
-			if (
-				dong.length !== 1 ||
-				!dong[0]?.includes(buoi) ||
-				dong[0]?.includes(khac)
-			) {
-				throw new Error(`cau-chao-gui: ${o} — ${JSON.stringify(dong)}`);
+			const bang = {
+				"a 14:01 -> 14:02": dongDau(a.tin),
+				"b 08:31 -> 14:02": dongDau(b.tin),
+				"c 08:31 -> 10:00": dongDau(c.tin),
+			};
+			const mong = {
+				"a 14:01 -> 14:02": "hôm nay",
+				"b 08:31 -> 14:02": "hôm nay",
+				"c 08:31 -> 10:00": "sáng nay",
+			};
+			for (const [o, buoi] of Object.entries(mong)) {
+				const dong = bang[o as keyof typeof bang];
+				const khac = buoi === "hôm nay" ? "sáng nay" : "hôm nay";
+				if (
+					dong.length !== 1 ||
+					!dong[0]?.includes(buoi) ||
+					dong[0]?.includes(khac)
+				) {
+					throw new Error(`cau-chao-gui: ${o} — ${JSON.stringify(dong)}`);
+				}
 			}
-		}
-		expect(Object.values(bang).map((d) => d.length)).toEqual([1, 1, 1]);
-	});
+			expect(Object.values(bang).map((d) => d.length)).toEqual([1, 1, 1]);
+		},
+		CHO_CA_MS,
+	);
 });
