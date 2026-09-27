@@ -5,7 +5,7 @@ slug: tac-nhan-model-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-27-tac-nhan-model-rieng-design.md
 approved_by: Manh Phan
 approved_at: 2026-09-27T06:52:54Z
@@ -98,3 +98,19 @@ Quét bằng `morphological-scan` (preset test-matrix, trục dựng lại) —
     đó là lệnh con của git.
 - **Phép đo gọi thật (AC-2) tiêu tiền model**, khoảng $0,01 mỗi lượt. Thiếu khoá thì
   nó không xanh.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-27)
+
+- Ngoài-1: hai mã `RUNNER_FAILED` và `RUNNER_NO_RESULT` chưa có câu hiển thị trong
+  `apps/app/lib/agent-run-failure.ts`; lịch sử lượt chạy hiện nguyên lời lỗi của nhà
+  cung cấp (tiếng Anh) hoặc câu tiếng Việt lẫn giữa các câu tiếng Anh.
+- Ngoài-2: bộ đọc `AgentRun.result` dùng khuôn phẳng với `.catch({})`; kết quả lồng
+  đã lưu từ trước cập nhật rơi về `{}` không báo lỗi, kể cả `noActionNeeded`. Chỉ
+  chạm lượt đang chạy dở lúc cập nhật.
+- Ngoài-3: E6, E7 đo việc nối bộ giải vào phiên bằng quét mã nguồn (import, cây cú
+  pháp), không gọi `session.started` của chính agent.
+- Ngoài-4: ô «ba chỗ dùng chung một khuôn» khẳng định đồng nhất hai chỗ; bộ đọc
+  `runResultOf` chỉ được thử gián tiếp.
+- Ngoài-5: phép gọi thật E2 kiểm hai khoá `kiemTra`, `soDem` có mặt, không kiểm kiểu
+  và giá trị.
+

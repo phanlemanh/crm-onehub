@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 05fff5fd3ded8eaf950c2bd95cfe0335421917b6
-human_signoff: 
+human_signoff: Manh Phan 2026-09-27
 ---
 
 # Evidence Report: tac-nhan-model-rieng
