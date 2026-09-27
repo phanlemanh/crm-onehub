@@ -86,7 +86,7 @@ describe("danh sach long ba cap tron loai", () => {
 		khangDinhBatDong("ba-cap-tron-loai", lan1, quaTrinhSoan(lan1));
 	});
 
-	test.failing("gioi han da biet d-20260927T130806Z-13: nap keo cap ba len mot nac", () => {
+	test("danh sach long ba cap tron loai giu dung cap khi nap", () => {
 		expect(quaTrinhSoan(BA_CAP_TRON_LOAI)).toBe(BA_CAP_TRON_LOAI);
 	});
 });

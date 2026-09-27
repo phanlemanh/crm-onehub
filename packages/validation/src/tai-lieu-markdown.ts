@@ -1,5 +1,6 @@
-import type { AnyExtension, JSONContent } from "@tiptap/core";
+import { type AnyExtension, type JSONContent, Node } from "@tiptap/core";
 import Link from "@tiptap/extension-link";
+import { OrderedList } from "@tiptap/extension-list";
 import { TableKit } from "@tiptap/extension-table";
 import { MarkdownManager } from "@tiptap/markdown";
 import StarterKit from "@tiptap/starter-kit";
@@ -15,10 +16,12 @@ export const PHAN_MO_RONG: AnyExtension[] = [
 		blockquote: false,
 		horizontalRule: false,
 		strike: false,
+		orderedList: false,
 		underline: false,
 		link: false,
 		heading: { levels: [...CAP_TIEU_DE] },
 	}),
+	Node.create({ ...OrderedList.config, markdownTokenizer: undefined }),
 	TableKit,
 	Link.configure({ openOnClick: false }),
 ];

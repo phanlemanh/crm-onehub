@@ -261,6 +261,7 @@
         "@crm/db": "workspace:*",
         "@tiptap/core": "3.31.3",
         "@tiptap/extension-link": "3.31.3",
+        "@tiptap/extension-list": "3.31.3",
         "@tiptap/extension-table": "3.31.3",
         "@tiptap/markdown": "3.31.3",
         "@tiptap/starter-kit": "3.31.3",
