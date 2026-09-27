@@ -69,7 +69,7 @@ const en = {
 			`${n} and everything filed against the account go too.`,
 		deleteNoDeals: "Everything filed against the account goes too.",
 		deleteContacts: (n: string) =>
-			`${n} who work there stay in the CRM, without a company.`,
+			`${n} who work there stay in OneHub Center, without a company.`,
 		archived: (name: string) => `${name} was archived.`,
 		restored: (name: string) => `${name} was restored.`,
 		purged: (name: string) => `${name} was deleted forever.`,
@@ -186,7 +186,7 @@ const en = {
 		create: "Create deal",
 		remove: "Remove",
 		deleteWarning: (company: string, people: string) =>
-			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in the CRM.`,
+			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in OneHub Center.`,
 		person: "person",
 		people: "people",
 		closed: "Closed",
@@ -263,7 +263,7 @@ const vi = {
 		deleteDeals: (n: string) => `${n} và mọi thứ gắn với công ty này mất theo.`,
 		deleteNoDeals: "Mọi thứ gắn với công ty này mất theo.",
 		deleteContacts: (n: string) =>
-			`${n} làm việc ở đó vẫn ở lại CRM, nhưng không thuộc công ty nào.`,
+			`${n} làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.`,
 		archived: (name: string) => `Đã lưu trữ ${name}.`,
 		restored: (name: string) => `Đã khôi phục ${name}.`,
 		purged: (name: string) => `Đã xoá vĩnh viễn ${name}.`,
@@ -380,7 +380,7 @@ const vi = {
 		create: "Tạo thoả thuận",
 		remove: "Gỡ",
 		deleteWarning: (company: string, people: string) =>
-			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại CRM.`,
+			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại OneHub Center.`,
 		person: "người",
 		people: "người",
 		closed: "Đã chốt",

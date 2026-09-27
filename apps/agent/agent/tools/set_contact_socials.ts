@@ -4,7 +4,10 @@ import { personForVerification } from "../lib/crm";
 import type { Evidence } from "../lib/evidence";
 import { recordFact } from "../lib/facts";
 import { focusOn } from "../lib/focus";
-import { assertResearchPurpose } from "../lib/session-purpose";
+import {
+	assertNotZaloQuestion,
+	assertResearchPurpose,
+} from "../lib/session-purpose";
 import { parseSocialUrl, verifyGithub, verifyX } from "../lib/socials";
 
 export default defineTool({
@@ -24,6 +27,7 @@ export default defineTool({
 			),
 	}),
 	async execute({ contactId, twitterUrl, githubUrl }, ctx) {
+		assertNotZaloQuestion(ctx);
 		assertResearchPurpose(ctx);
 		focusOn({ contactId });
 

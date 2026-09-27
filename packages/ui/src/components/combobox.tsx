@@ -43,6 +43,7 @@ function Combobox({
 	size = "default",
 	variant,
 	className,
+	translate,
 	...props
 }: Omit<React.ComponentProps<"button">, "onChange" | "value"> &
 	VariantProps<typeof selectTriggerVariants> & {
@@ -83,10 +84,15 @@ function Combobox({
 					data-slot="combobox-trigger"
 					data-size={size}
 					data-placeholder={selected ? undefined : ""}
+					translate={translate}
 					className={cn(selectTriggerVariants({ variant }), className)}
 					{...props}
 				>
-					<span data-slot="select-value">{selected?.label ?? placeholder ?? msg.macDinh.chonMuc}</span>
+					<span data-slot="select-value">
+						<span className="min-w-0 truncate" title={selected?.label}>
+							{selected?.label ?? placeholder ?? msg.macDinh.chonMuc}
+						</span>
+					</span>
 					<ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
 				</button>
 			</PopoverTrigger>
@@ -94,6 +100,7 @@ function Combobox({
 			<PopoverContent
 				align="start"
 				size="fit"
+				translate={translate}
 				className="w-(--radix-popover-trigger-width) min-w-64"
 			>
 				<Command shouldFilter={onSearchChange === undefined}>

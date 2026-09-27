@@ -13,6 +13,7 @@ import {
 	AlertDialogTrigger,
 } from "@crm/ui/components/alert-dialog";
 import { Button } from "@crm/ui/components/button";
+import { CopyValue } from "@crm/ui/components/copy-value";
 import { DataTable, type DataTableColumn } from "@crm/ui/components/data-table";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -24,7 +25,6 @@ import { type SsoMessages, ssoMessages } from "@/lib/messages/settings-sso";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { CopyValue } from "../copy-value";
 import { ssoSearchParams } from "./sso-search-params";
 
 type ProviderRow = RouterOutputs["sso"]["list"]["rows"][number];

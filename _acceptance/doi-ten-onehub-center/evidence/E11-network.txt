@@ -1,0 +1,15 @@
+=== NETWORK REQUESTS (raw dump, browser-pane session) ===
+Scope declared in _acceptance/config.yaml: dev_server.url=http://localhost:3000, dev_server.api_base=[http://localhost:3001]
+
+In-scope (localhost:3000) requests observed during navigation to /sign-in and auto-redirect to /crm:
+- ALL localhost:3000 requests returned 200 OK or 304 Not Modified (static assets, RSC payload, page loads for /sign-in and /crm). No 4xx/5xx, no connection errors, no timeouts on the declared app origin.
+- No localhost:3001 (api_base) XHR/fetch visible client-side — expected, since sso.signInOptions and other tRPC calls used by the sign-in page are made server-side during SSR/RSC render, not as browser-visible XHR.
+
+Out-of-scope entries seen in the same tab's accumulated network log (pre-existing, NOT caused by this eval's steps, origin http://localhost:3870 is not the declared dev_server.url/api_base):
+- Multiple ERR_CONNECTION_REFUSED and one ERR_ABORTED against http://localhost:3870/proto/... — this port belongs to a different (stale/prior) dev-server instance in this shared browser tab's history, unrelated to _acceptance/doi-ten-onehub-center's dev_server config (3000/3001). Per scoping rule this is note-only, non-FAIL-eligible.
+
+CONSOLE:
+- One recurring [error] on route "/[slug]" ("/crm"): "Next.js encountered uncached data during prerendering or a navigation" — a Next.js DEV-MODE diagnostic about a fetch/connection() call outside <Suspense> (Suspense-boundary warning), not an HTTP failure, not a crash, and not on the /sign-in page under test (it appears after auto-redirect to /crm from an already-authenticated cookie in this reused tab). Treated as note-only.
+- Routine [info]/[log] dev-tooling noise (React DevTools banner, HMR connected, Fast Refresh) — no errors.
+
+CONCLUSION: in declared app-scope (localhost:3000 / localhost:3001), all traffic observed was OK (200/304); no FAIL-eligible failures. networkObserved = clean.

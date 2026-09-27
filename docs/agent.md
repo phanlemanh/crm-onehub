@@ -252,7 +252,10 @@ API; the API only reads and writes rows.
     (`khoa`), the keys of `message` (`khoa_message`) and its `message_id` —
     never the text — so a changed shape shows up on the first real message.
 - **One core for every path.** `xuLyTinDen` (`lib/zalo-nhan.ts`) handles a
-  message from the webhook and from the manual reader alike:
+  message from the webhook and from the manual reader alike — except questions to the
+  AI assistant and `mới`, which need the eve session helpers only the webhook route
+  passes (`deps.hoi`); over `zalo:poll` a linked person's question still gets the
+  «Bạn đã nối…» reply:
   - messages from bots and from chats that are not `PRIVATE` are skipped. Replying
     «Đã nối với <tên CRM>» in a group would show the name to the group;
   - `ZaloUpdateSeen` dedupes by `message_id`;
@@ -322,8 +325,109 @@ API; the API only reads and writes rows.
 
   One bot cannot do both: a bot with a webhook set gets nothing from `getUpdates`
   until the webhook is removed.
-- **Message text is never stored or logged.** Only `message_id` and the failure
-  counter.
+- **Hỏi CRM qua Zalo: câu không phải mã hay lệnh của người đã nối đi vào trợ lý AI.**
+  `hoiTacTu` (`lib/zalo-hoi.ts`) chạy trong cùng giao dịch với `ZaloUpdateSeen`:
+  - cổng vai là `thanhVienPrincipal` (`lib/thanh-vien-principal.ts`), cùng hàm
+    `repFromCrm` dùng — người không còn hàng `member` hay mang vai `okr` bị từ chối
+    trước khi có phiên;
+  - ba trần trong `ZALO.hoi.tran`: 3 câu mỗi phút, 20 câu mỗi ngày của một người,
+    300 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
+    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần. Trần tháng hạ
+    ngày 27/09 theo số đo giá một câu ($0,016 với Gemini 3.7 Flash, $0,039 với GLM
+    5.2 Fast): ở mức cũ, riêng kênh này đủ tiêu hết ngân sách AI $20 của cả team;
+  - một câu một lúc: còn câu `dang-hoi` chưa quá `ZALO.hoi.hanTraLoiMs` thì câu mới
+    nhận «đang trả lời câu trước»; tick dispatch đóng câu quá hạn (`dongHoiQuaHan`)
+    và báo lỗi đúng một lần;
+  - mỗi câu một hàng `ZaloHoi` (thời điểm, kết quả, độ trễ, token của phiên) — không
+    nội dung câu hỏi hay câu trả lời.
+  Webhook đáp 200 ngay; `send()` của eve chạy qua `waitUntil` với token
+  `chat:<chatId>:<crmUserId>:<ngày VN>` (`tokenPhien`) — một cuộc trò chuyện mỗi Zalo,
+  mỗi người, mỗi ngày giờ VN; «mới» gọi `reset`; `input.requested` (hết ngân sách
+  token hay tác tử muốn hỏi lại) đóng câu, báo `canHoiLai` và dời phiên kẹt bằng
+  `setContinuationToken`. Trả lời về ở `zaloEvents["message.completed"]`
+  (`channels/zalo.ts`) — lời thuật giữa lượt (`finishReason: "tool-calls"`) bị bỏ —
+  tìm câu theo `hoiId` trong thuộc tính phiên, qua `locTraLoi` rồi gửi tối đa ba tin;
+  token của bước cuối được cộng lại ở `turn.completed`. Phiên `purpose: "zalo"`
+  nhận chỉ dẫn `lib/zalo-chi-dan.ts`. Chặn ghi nằm trong chính công cụ: mọi công cụ
+  trong `ZALO.hoi.congCu.ghi` gọi `assertNotZaloQuestion(ctx)`
+  (`lib/session-purpose.ts`) ở dòng đầu `execute`, và `web_fetch` là bản bọc tĩnh của
+  `webFetch` mặc định (`tools/web_fetch.ts`) cùng chặn đó. `tools/zalo-chi-doc.ts` chỉ
+  còn là lớp ẩn: ở `step.started` nó thay các công cụ đó cùng `web_search`,
+  `ask_question` bằng bản từ chối để model không thấy chúng. Đừng dựa vào lớp ẩn làm
+  ranh giới quyền — production 26/09 cho thấy eve bỏ qua công cụ động đăng ký ở
+  `session.started` từ bước replay trở đi («references step function … which is not
+  registered — skipping»), và công cụ gốc cùng tên lộ lại. Công cụ ghi mới phải gọi
+  chặn và vào danh sách `ghi`: thêm tệp mà không khai là `test/zalo-chi-doc.spec.ts`
+  đỏ, khai mà quên chặn là `test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts` đỏ.
+  Tin không chữ (sticker, ảnh, tệp, chữ toàn khoảng trắng) của người đã nối nhận
+  `ZALO.loi.chiDocChu`, không mở phiên, không tính trần.
+  `_acceptance/hoi-crm-qua-zalo/rang/nguong.ts` in số đo cho phiên nghiệm thu.
+- **Message text is never logged, and stored only in the assistant's session.**
+  Link codes, `xong` commands and the Zalo tables (`ZaloUpdateSeen`, `ZaloLink`,
+  `ZaloHoi`) keep no text — only `message_id` and the failure counter. A question to
+  the AI assistant and its answer do live in that eve session's `AgentEvent` rows,
+  like every other assistant conversation, and that is where a manual review reads
+  them. Log lines carry `message_id`, `hoiId` and `zaloChatId`, never text.
+
+### Chụp số OKR mỗi ngày
+
+Nhịp dispatch chụp số OKR qua `chupSoOkr` (`lib/okr-chup.ts`), cạnh `lenLichNhac` —
+không có lịch riêng. Mỗi nhịp chụp số của **hôm qua** theo giờ VN cho mọi KR có nguồn máy
+chưa có dòng của ngày đó; phần lớn các nhịp chỉ là một câu truy vấn trả rỗng.
+
+- **Chọn KR:** có `OkrNguonKr` loại `crm` hoặc `bang-tinh`, mục tiêu đã `cong-bo` (mục tiêu
+  nháp chưa có số máy — hộp thoại KR dùng «đọc thử» và «tới hôm nay» thay cho nó), chu kỳ
+  ở pha ghi được (`PHA_GHI_DUOC`), hôm qua nằm trong `[startsOn, endsOn]`, và chưa có dòng
+  `okrSoChup` máy cho hôm qua. Tối đa `OKR_SO.chup.toiDaMoiNhip` KR một nhịp; phần còn lại
+  nhịp sau.
+- **`crm`** đi qua `chupKrCrm` (`@crm/db/okr-chi-so`) — cùng `demChiSo` mà API dùng cho
+  bấm vào số, đếm từ đầu kỳ tới hết hôm qua. **`bang-tinh`** đọc ô (mục dưới); đọc lỗi
+  thì ghi `docLoi` và `thuLuc`, bỏ KR đó tới khi qua `OKR_SO.sheets.thuLaiMs`.
+- **Ghi bằng `createMany … skipDuplicates`**, dựa trên chỉ mục duy nhất một phần
+  `(keyResultId, ngay)` cho dòng máy: nhịp chạy lại hay hai lượt chồng nhau không thêm
+  dòng. Dòng chép định nghĩa lúc đếm (`chiSo`, `phamVi`, `bac`).
+- **`currentValue` chỉ đổi khi nguồn hiệu lực bằng loại nguồn** (`source = crm` với KR
+  crm, `source = bang-tinh` với KR Sheets), trong cùng giao dịch, và chỉ khi không có
+  dòng máy nào mới hơn. KR đo cạnh (`source = tay`) có dòng chụp nhưng `currentValue` là
+  của người.
+- **Ngày đã chụp không bao giờ chụp lại.** Lưu trữ bản ghi, mở lại thoả thuận, chuyển
+  người sang phòng khác hay đổi tiền tệ báo cáo sau đó không đổi số đã chụp; KR của chu
+  kỳ đã qua `endsOn` hay đã khoá thì không được chọn nữa, nên `currentValue` đứng yên.
+  Bảng chụp là vết của số máy — không có dòng `OkrTrail` mỗi ngày.
+- **Cả lượt có trần thời gian.** Không bắt đầu một lần đọc Sheets nếu thời gian đã trôi
+  cộng `OKR_SO.sheets.tranMs` vượt `OKR_SO.chup.hanNhipMs`, và tối đa
+  `OKR_SO.sheets.toiDaMoiNhip` lần đọc một nhịp — Google treo không làm trễ nhắc buổi sáng
+  hay hàng việc cùng nhịp. Lỗi của một KR ghi log bằng tên lỗi và không dừng các KR khác.
+
+### Đọc Google Sheets (OKR)
+
+`lib/okr-sheets.ts` đọc một ô cho KR nguồn `bang-tinh`, bằng tài khoản dịch vụ chỉ đọc
+(`GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA`; thiếu một trong hai thì trả `tat`, không
+gọi mạng — năng lực «Google Sheets» trong `capabilities.ts`).
+
+- **JWT RS256 ký bằng Web Crypto**, đổi lấy token ở `OKR_SO.sheets.tokenUrl` (phạm vi
+  `spreadsheets.readonly`). Token giữ theo từng hàm `fetch` trong `OKR_SO.sheets.tokenDungMs`;
+  401 xoá nó.
+- **`values/<ô>?valueRenderOption=UNFORMATTED_VALUE`**. Một lần đọc gọi `fetch` tối đa
+  `OKR_SO.sheets.soLanThu` lần — lời xin token, khi phải xin, là một trong số đó — và mỗi lời
+  gọi có `tranMs / soLanThu`, nên cả lần đọc nằm trong `OKR_SO.sheets.tranMs`. Chỉ 5xx, 429,
+  401 và lỗi mạng thử lại. 403 → `chua-chia-se`, 404 → `khong-thay`, khác 2xx → `google-loi`; ô vắng hay rỗng →
+  `o-trong`; chữ qua `docSoOkr` («1.240» → 1240), `#REF!`, đúng/sai, số ngoài `soKr` →
+  `khong-phai-so`. Số đọc được còn phải hợp kiểu KR (`kiemGiaTriTheoKieu`: mốc chỉ 0 hay 1,
+  phần trăm trong 0–100) — không hợp thì `khong-hop-kieu`: ghi `docLoi`, không ghi dòng
+  `okrSoChup`, `currentValue` đứng yên. Luật này chạy ở cả nhịp chụp lẫn «đọc thử».
+- **Không qua `@crm/db/safe-fetch`.** `safe-fetch` chặn địa chỉ do người nhập trỏ vào mạng
+  trong. Ở đây hai máy chủ là hằng số của Google trong `OKR_SO.sheets`; người chỉ góp mã
+  bảng tính (đã lọc bằng biểu thức ở `sheetIdTuUrl`) và ô, cả hai mã hoá làm một đoạn đường
+  dẫn. `OKR_SHEETS_TOKEN_URL`/`OKR_SHEETS_API_URL` ghi đè hai máy chủ đó chỉ khi `NODE_ENV`
+  khác `production`, cho phiên đo trỏ tới Google giả.
+- **Hai lối vào.** Nhịp chụp (`chupSoOkr`) đọc tối đa `OKR_SO.sheets.toiDaMoiNhip` ô và không
+  bắt đầu một lần đọc nếu thời gian đã trôi cộng `tranMs` vượt `OKR_SO.chup.hanNhipMs`. Việc
+  `okr-doc-sheet` (làn trực tiếp, `PRIORITY.okrSheet`) là «đọc thử» khi đặt nguồn hay bấm «Đọc
+  lại»: `chayDocSheet` ghi `docLuc/docGiaTri/docLoi`, không ghi `okrSoChup`, và đóng việc bằng
+  `đọc ô: được` hoặc `đọc ô: <lý do>`.
+- **Log không có giá trị ô, mã bảng tính, khoá hay token** — chỉ lý do, mã HTTP hoặc tên lỗi.
+  Lỗi của `fetch` trong Bun mang theo URL, nên không in đối tượng lỗi.
 
 ### Backfills
 
@@ -466,6 +570,14 @@ egress:
 1. No customer text in a third-party query. Derived questions only.
 2. Nothing from a mailbox into `/workspace` — different lifetime.
 3. Nothing sensitive logged. Reading is not logging.
+4. Into an outside chat channel (Zalo): what the asker may read on the web,
+   minus exactly three things — personal contact details of partner people
+   (phone, email), verbatim mail or calendar text (a summary is fine), and any
+   value stored in `AppSetting`. Names, stages and amounts are fine; a phone
+   number is not. The reply lives on the platform's servers and on the phone,
+   outside the CRM's retention and audit, which is why the line sits here.
+   `locTraLoi` (`lib/zalo-loc.ts`) masks phone numbers and emails on the way
+   out; verbatim mail is held back by the session's instructions only.
 
 `skills/data-boundaries.md` is the agent's copy. Keep them in step.
 
@@ -477,6 +589,122 @@ the backend factory** so it cannot be forgotten per session. Costs nothing —
 
 **Never give the sandbox `DATABASE_URL`.** CRM access is authored tools. A shell with
 credentials and network is exfiltration-shaped; with neither it is a text processor.
+
+## Khi nào thêm mã, `tool`, `skill`, `subagent` hay Tác nhân
+
+Chốt 2026-09-27 (Manh Phan). Mục này là luật cho mọi việc AI mới trong
+`apps/agent`. Bằng chứng nền:
+`docs/reports/2026-09-26-tro-ly-okr/tac-nhan-hien-nay.md` (PR #165).
+
+### Tên dùng trong mục này
+
+| Tên | Là gì | Ở đâu |
+| --- | --- | --- |
+| **Mã** | Hàm tính tất định, không gọi model | `agent/lib/`, `@crm/*` |
+| **`tool`** | Một cửa đọc hoặc ghi có kiểu. Quyền nằm ở đây | `agent/tools/`, `agent/subagents/<tên>/tools/` |
+| **`skill`** | Cách làm hoặc kiến thức, nạp vào ngữ cảnh khi cần | `agent/skills/` |
+| **`subagent`** | Một `subagent` khai báo của eve: model, `tool`, sandbox, `limits` và hook riêng, không thừa kế gì từ agent gốc | `agent/subagents/<tên>/` |
+| **eve `connection`** | Một họ `tool` từ xa, qua MCP hoặc OpenAPI. Kho chưa dùng | `agent/connections/` |
+| **Agent gốc** | Agent chính; người dùng gọi nó là **trợ lý AI** | `agent/agent.ts` |
+| **Tác nhân** | Việc tự động người dùng tự ghép trong CRM, chạy trên `agent_runner` | mục «Team-agent builder and runner» |
+| **Ranh giới** | Bộ bốn điều: phạm vi dữ liệu được đọc; nơi dữ liệu được gửi tới (nhà cung cấp model, kênh ngoài); trần tiền; ai được xem kết quả | — |
+
+- «Kết nối» Gmail, Lịch, Slack ở `/settings/connections` là tài khoản đã uỷ quyền.
+  Nó **không phải** eve `connection`. Một kết nối chỉ thành nguồn dữ liệu khi có
+  `tool` đọc nó.
+- Không dùng «connector», «plugin» hay «bot» cho bất kỳ thứ nào ở trên.
+
+### Thứ tự quyết định
+
+Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
+
+1. **Tính được bằng luật không?** → Mã.
+2. **Ranh giới có khác với agent đang nhận việc không?** → `subagent` mới.
+3. **Chỉ thiếu một nguồn dữ liệu hay một hành động, trong cùng ranh giới?** →
+   `tool`, gắn vào agent đang có ranh giới đó.
+4. **Chỉ thiếu cách làm hay kiến thức?** → `skill`.
+5. **Người dùng muốn tự đặt một việc lặp lại, trên dữ liệu và hành động đã có trong
+   danh mục của Tác nhân?** → Tác nhân. Đây là cấu hình, không cần mã mới.
+
+### Luật
+
+1. **Việc tính được thì là mã, không phải model.** Ví dụ: phát hiện KR trượt, KR
+   im, khoảng nghỉ giữa hai lần báo, mọi con số. Model chỉ viết chữ diễn giải cho
+   kết quả mã đã tính. Con số model viết ra phải được mã kiểm lại trước khi ghi.
+
+2. **Ranh giới khác thì phải là một `subagent` khác.**
+   - `tool` của `subagent` đó chỉ gồm đúng các cửa nó được dùng.
+   - Mọi `tool` dựng sẵn không cần đều bị tắt; sandbox để `deny-all`.
+   - Model, cờ ZDR và `limits` đặt cố định ở cấp `subagent`. **Không đọc model từ
+     `AppSetting`**: đọc hỏng thì rơi về model mặc định, và model đó không mang cờ
+     ZDR.
+   - Tiền lệ: `agent_builder`, `agent_runner`, và `tro_ly_okr` của lượt 9a.
+
+3. **Không tạo `subagent` khi ranh giới không đổi.** Mỗi tầng thêm một phiên model.
+   N0 đo được bước chuyển tiếp ở gốc tốn $0,007–0,018 mỗi việc, mà không thêm ranh
+   giới nào.
+
+4. **Quyền nằm ở `tool`, không bao giờ ở lời dặn.**
+   - Mỗi `tool` tự kiểm purpose và quyền trong `execute`. Việc ghi nhạy cảm mang
+     policy `approval`.
+   - Một câu cấm trong `skill` hay `instructions` **không** thay được một `tool`
+     thiếu hoặc một kiểm quyền thiếu.
+   - Bằng chứng 27/09: bộ dựng Tác nhân được dặn không hứa năng lực không có, vẫn
+     hứa đọc Mục tiêu và KR, và Tác nhân vẫn được Đưa vào chạy.
+
+5. **`skill` không bao giờ mang quyền hay ranh giới.** Theo eve: *«Loading a skill
+   adds instructions, never a new execution surface»*
+   (`apps/agent/node_modules/eve/docs/skills.mdx`). `skill` chỉ nâng chất lượng việc
+   agent đã được phép làm.
+
+6. **Khuôn của `tool` và `outputSchema` không có kiểu đệ quy.** Không dùng
+   `z.json()` hay `z.lazy()` ở đầu vào model thấy. Model Google từ chối cả lời gọi,
+   và phiên con hỏng ngay ở bước đầu.
+   - Bằng chứng: `agent_runner/tools/finish_run.ts` làm hỏng mọi lượt Tác nhân trên
+     Gemini 3.7 và 3.8.
+   - Mỗi `subagent` mới phải có test ghim rằng mọi khuôn của nó chuyển được sang
+     JSON Schema không có vòng `$ref`.
+
+7. **Việc hỏng phải hiện là hỏng.** Agent gốc không hỏng khi `subagent` hỏng (N0).
+   - Đóng việc theo `isError` của `action.result`, không chờ `turn.failed`.
+   - Không được ghi «xong» cho một việc mà `subagent` chưa nộp kết quả.
+
+8. **Mọi `subagent` mới có sổ chi phí của chính nó.** Hook của agent gốc không chạy
+   trong phiên con. `AgentRun.costUsd` hôm nay chỉ ghi được 21–46% tiền thật của một
+   lượt vì thiếu hook này.
+
+9. **eve `connection` chỉ gắn vào agent mà mọi `tool` nó lộ ra đều nằm trong ranh
+   giới của agent đó.**
+   - Không gắn một eve `connection` vào agent gốc chỉ để dùng một `tool` trong số
+     đó.
+   - Muốn mở CRM ra ngoài bằng MCP thì chỉ làm khi có số đo đòi, như lộ trình Trợ lý
+     OKR đã ghi.
+
+10. **Tác nhân là cấu hình của người dùng, không phải đơn vị mở rộng của sản
+    phẩm.**
+    - Tính năng AI của sản phẩm không dựng thành Tác nhân.
+    - Muốn Tác nhân làm thêm một loại việc thì thêm vào danh mục của nó, tối thiểu ở
+      các chỗ sau: `tool` trong `agent_runner`; loại mới trong
+      `packages/validation/src/agent-manifest.ts` và
+      `subagents/agent_builder/lib/draft-input.ts`; ánh xạ trong
+      `lib/agent-actions.ts`; mô tả trong `inspect_context`; kiểm lúc chạy trong
+      `lib/run-runtime.ts`. Không bao giờ chỉ bằng lời dặn.
+    - Yêu cầu nằm ngoài danh mục thì bộ dựng phải nói không làm được. Hôm nay bộ dựng
+      chưa làm điều này; đó là một lỗi cần vá, không phải cách dùng.
+
+11. **Dữ liệu OKR không vào Tác nhân** cho tới khi có miền thứ hai và một `tool` đọc
+    OKR có ranh giới riêng. Đây là bước «rút khung chung» của
+    `docs/plan/lo-trinh-tro-ly-okr.md`.
+
+### Áp dụng hôm nay
+
+| Việc | Viên gạch | Theo luật |
+| --- | --- | --- |
+| Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
+| Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
+| Trợ lý OKR (9b, 9c) | `subagent` `tro_ly_okr`, cộng `skill` phương pháp OKR, cộng `tool` chỉ đọc OKR, cộng mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
+| Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
+| Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
 
 ## Team-agent builder and runner
 
@@ -626,6 +854,31 @@ HTTP channel. It creates an isolated private conversation, dispatches the builde
 asserts the declared subagent path, verifies a READY side-effect-free manifest, and
 cleans up its rows. It skips visibly when the database, bridge secret or model
 credential is unavailable.
+
+## Chỗ rẽ: người nhận Slack và lượt tự động của Tác nhân
+
+Bản rẽ OneHub sửa hai tệp của hãng để lượt Tác nhân tôn trọng vai «chỉ OKR»:
+
+- `apps/agent/agent/lib/run-runtime.ts` — `postRunSlackMessage` hỏi
+  `kiemNguoiNhanSlack` ngay trước khi gửi; lời từ chối mang mã `ACTION_REJECTED`,
+  nên màn lịch sử Tác nhân dùng câu sẵn có của mã đó.
+- `apps/agent/agent/lib/approval.ts` — `isAutomated` coi phiên mang
+  `purpose: "team-agent"` là tự động. Lượt Tác nhân chạy ở chế độ task, không dừng
+  chờ người được, nên thao tác ghi nhạy cảm bị từ chối có lý do thay vì xin duyệt.
+
+Phần lõi nằm ở tệp của bản rẽ `apps/agent/agent/lib/slack-nguoi-nhan.ts`: đọc ai ở
+đích Slack (mọi trang), khớp họ với thành viên bằng bảng khớp Slack hoặc email, đọc
+vai lúc gửi, và từ chối khi có người không đọc được dữ liệu đối tác
+(`docDuocPhamVi`), hoặc khi không đọc được ai ở đích. Bot và tài khoản Slack đã xoá
+không tính. Người Slack không khớp thành viên nào thì cho qua — mở lại khi có khớp
+tay. Bộ đọc Slack viết lại ở đây, cùng khuôn với `slack-people.ts`, để không chạm
+thêm tệp của hãng.
+
+Gỡ chỗ rẽ khi hãng có bản sửa tương đương: bỏ hai chỗ sửa trên cùng tệp lõi, giữ
+hai tệp kiểm `apps/agent/test/ro-slack-tac-nhan.integration.spec.ts` và
+`apps/agent/test/luot-tu-dong.integration.spec.ts` — chúng phải còn xanh trên mã
+của hãng. Việc báo cho hãng đi qua kênh bảo mật riêng của hãng và cần chủ kho cho
+phép; không qua PR hay issue công khai.
 
 ## The bridge
 

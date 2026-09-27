@@ -1,0 +1,12 @@
+{
+  "feature_plain": "Cả xưởng hỏi CRM qua Zalo được tối đa 300 câu mỗi tháng thay vì 1.500, để riêng kênh này không tiêu hết ngân sách AI của cả team.",
+  "scope_plain": "Chưa đổi trần sang tiền và chưa báo quản trị khi xưởng chạm trần tháng — để tới khi có sổ chi phí AI của Trợ lý OKR.",
+  "decisions_plain": [
+    {"id": "d-20260926T234226Z-1", "p": "KHÔNG quét rộng bộ tiêu chí — chỉ một con số đổi; đổi lại không có bằng chứng độ phủ, sáu tiêu chí phủ các ranh chính."},
+    {"id": "d-20260926T234226Z-2", "p": "KHÔNG viết đặc tả màn hình — không màn nào đổi, câu Zalo trả về giữ nguyên chữ."},
+    {"id": "d-20260926T234226Z-3", "p": "KHÔNG đổi trần sang đô la và KHÔNG báo quản trị lúc chạm trần — đổi lại, nếu production dùng GLM thì 300 câu vẫn tốn khoảng $11,6 một tháng."},
+    {"id": "d-20260926T234226Z-4", "p": "Chọn ghim con số 300 bằng một bộ test riêng viết số tay — đổi con số mà không có quyết định mới thì test đỏ."},
+    {"id": "d-20260926T234720Z-5", "p": "Chọn không dùng bài kiểm tài liệu của vòng Zalo cũ làm bằng chứng — bài đó đỏ sẵn trên mọi nhánh; tài liệu được đo bằng bài kiểm riêng của vòng này."},
+    {"id": "d-20260926T234720Z-6", "p": "Chọn không ghim lại hồ sơ Zalo cũ — không chạm nó thì kiểm trước-gộp không soi nó; đổi lại, nếu luật kiểm đổi thì phải ghim lại sau."}
+  ]
+}

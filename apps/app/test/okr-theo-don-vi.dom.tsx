@@ -97,6 +97,9 @@ function kr(id: string, objectiveId: string): KrOutput {
 		dueOn: null,
 		weight: 1,
 		source: "tay",
+		doCanh: false,
+		soMay: null,
+		nguonMay: null,
 		startLocked: true,
 		progress: 40,
 		laCuaToi: false,
@@ -130,11 +133,13 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 	};
 }
 
+type NutDayDu = RouterOutputs["okr"]["cayCanChinh"]["roots"][number];
+
 function nut(
 	id: string,
 	loai: NutCanChinh["loai"],
-	children: NutCanChinh[],
-): NutCanChinh {
+	children: NutDayDu[],
+): NutDayDu {
 	return {
 		id,
 		loai,
@@ -146,6 +151,7 @@ function nut(
 		kind: "cam-ket",
 		gop: 1,
 		lapLai: false,
+		expected: 25,
 		children,
 	};
 }
@@ -153,7 +159,7 @@ function nut(
 let cycles: RouterOutputs["okr"]["cycles"];
 let quanTri: boolean;
 let theoDon: Map<string, { objectives: MucTieuOutput[]; canEdit: boolean }>;
-let cayCanChinh: AlignmentTreeOutput;
+let cayCanChinh: RouterOutputs["okr"]["cayCanChinh"];
 let dem: RouterOutputs["okr"]["countByUnit"];
 
 type Json =
@@ -193,10 +199,16 @@ const docAccess = () => ({
 });
 const docWorkspace = () => ({ name: "OneHub" });
 const docDem = () => dem;
-const docByUnit = (vao: DauVao) => ({
-	...(theoDon.get(khoaDonVao(vao)) ?? { objectives: [], canEdit: false }),
-	canhBao: null,
-});
+const LOC_RONG = { phuTrach: [], loai: [], trangThai: [] };
+const docDanhSach = (vao: DauVao) => {
+	const d = theoDon.get(khoaDonVao(vao)) ?? { objectives: [], canEdit: false };
+	return {
+		rows: d.objectives.map((o) => ({ ...o, krKhop: [] })),
+		total: d.objectives.length,
+		facetCounts: { phuTrach: [], loai: [], trangThai: [] },
+		canEdit: d.canEdit,
+	};
+};
 const docCayCanChinh = () => cayCanChinh;
 
 mock.module("@/lib/trpc/client", () => ({
@@ -207,8 +219,8 @@ mock.module("@/lib/trpc/client", () => ({
 			cycles: thuTuc("cycles", docCycles),
 			access: thuTuc("access", docAccess),
 			countByUnit: thuTuc("countByUnit", docDem),
-			byUnit: thuTuc("byUnit", docByUnit),
-			alignmentTree: thuTuc("alignmentTree", docCayCanChinh),
+			danhSach: thuTuc("danhSach", docDanhSach),
+			cayCanChinh: thuTuc("cayCanChinh", docCayCanChinh),
 		},
 	}),
 }));
@@ -243,8 +255,10 @@ const { TheoDonVi } = await import(
 const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 
 const m = okrMessages("vi");
+const mt = okrToanCanhMessages("vi");
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -259,11 +273,11 @@ function gieo(client: QueryClient, don: string, xem: string | null) {
 		const cycleId = cycles.currentId;
 		client.setQueryData(["countByUnit", { cycleId }], docDem());
 		client.setQueryData(
-			["byUnit", { cycleId, unit }],
-			docByUnit({ cycleId, unit }),
+			["danhSach", { cycleId, unit, loc: LOC_RONG }],
+			docDanhSach({ cycleId, unit, loc: LOC_RONG }),
 		);
 		if (xem === "cay")
-			client.setQueryData(["alignmentTree", { cycleId }], docCayCanChinh());
+			client.setQueryData(["cayCanChinh", { cycleId }], docCayCanChinh());
 	}
 }
 
@@ -347,7 +361,7 @@ describe("theo-don-vi", () => {
 			demKho: s.o.querySelector('[data-nut-cay="pb:pb-kho"]')?.textContent,
 			dangChon: s.o
 				.querySelector('[data-nut-cay="pb:pb-1"]')
-				?.getAttribute("aria-current"),
+				?.getAttribute("aria-selected"),
 			trangThai: s.o
 				.querySelector("[data-trang-thai]")
 				?.getAttribute("data-trang-thai"),
@@ -361,7 +375,7 @@ describe("theo-don-vi", () => {
 			nutCay: 6,
 			demPb1: "Kinh doanh vùng 13 mục tiêu",
 			demKho: "Kho vậnchưa đặt",
-			dangChon: "page",
+			dangChon: "true",
 			trangThai: "ST-donvi-danhsach",
 			tinhTrang: "cham-nhip",
 		});
@@ -454,19 +468,18 @@ describe("theo-don-vi", () => {
 		const s = await mo("goc", "cay");
 		const dong = [...s.o.querySelectorAll("[data-nut-can-chinh]")];
 		expect({
+			cay:
+				s.o.querySelector(`[role="tree"][aria-label="${mt.cay.canChinh}"]`) !==
+				null,
 			dong: dong.map(
 				(d) =>
-					`${d.getAttribute("data-nut-can-chinh")}@${d.getAttribute("data-cap")}`,
+					`${d.getAttribute("data-nut-can-chinh")}@${d.closest('[role="treeitem"]')?.getAttribute("aria-level")}`,
 			),
-			thut: dong.map(
-				(d) =>
-					(d.firstElementChild as HTMLElement | null)?.style.paddingInlineStart,
-			),
-			nhom: s.o.querySelector('[data-nhom="chua-can-chinh"]')?.textContent,
+			nhom: s.o.querySelector('[data-cap-nut="nhom"]')?.textContent,
 		}).toEqual({
-			dong: ["o@0", "k@1", "p@2", "x@0"],
-			thut: ["1rem", "2.25rem", "3.5rem", "1rem"],
-			nhom: m.chuaCanChinh,
+			cay: true,
+			dong: ["o@1", "k@2", "p@3", "x@2"],
+			nhom: mt.cay.chuaCanChinh,
 		});
 	});
 });
@@ -515,7 +528,7 @@ describe("theo-don-vi-bien", () => {
 			wrap: true,
 			trongDau: false,
 			cardAction: 0,
-			nut: 4,
+			nut: 6,
 			tinhTrang: "Chưa có kỳ vọng",
 		});
 	});

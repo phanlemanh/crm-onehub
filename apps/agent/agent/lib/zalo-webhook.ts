@@ -7,7 +7,7 @@ import {
 } from "@crm/validation/zalo-webhook";
 import { zaloKhoaWebhook, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
-import { xuLyTinDen } from "./zalo-nhan";
+import { type PhuThuocHoi, xuLyTinDen } from "./zalo-nhan";
 
 export type BienWebhook = { token: string | null; khoa: string | null };
 
@@ -15,6 +15,7 @@ export type PhuThuocWebhook = {
 	fetcher?: typeof fetch;
 	now?: () => Date;
 	env?: BienWebhook;
+	hoi?: PhuThuocHoi;
 };
 
 function bam(giaTri: string): Buffer {
@@ -69,6 +70,7 @@ export async function nhanWebhook(
 		const ket = await xuLyTinDen(bien.token, tin.message, {
 			fetcher: deps.fetcher ?? fetch,
 			now: (deps.now ?? (() => new Date()))(),
+			hoi: deps.hoi,
 		});
 		if (ket === "loi") return traVe(ZALO.http.loiMayChu);
 	}

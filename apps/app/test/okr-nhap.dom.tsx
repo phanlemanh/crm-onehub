@@ -229,7 +229,7 @@ describe("hop-thoai-nhap-okr", () => {
 		xemTruoc = {
 			rows: [
 				dongHong(1, "Kiểu lạ"),
-				dongHong(2, "Email này chưa là thành viên CRM"),
+				dongHong(2, "Email này chưa là thành viên OneHub Center"),
 			],
 			summary: { valid: 0, invalid: 2, objectives: 0 },
 		};
@@ -251,7 +251,7 @@ describe("hop-thoai-nhap-okr", () => {
 				dongHopLe(2, "Mục tiêu A"),
 				dongHopLe(3, "Mục tiêu B"),
 				dongHong(4, "Kiểu lạ"),
-				dongHong(5, "Email này chưa là thành viên CRM"),
+				dongHong(5, "Email này chưa là thành viên OneHub Center"),
 			],
 			summary: { valid: 3, invalid: 2, objectives: 2 },
 		};
@@ -277,7 +277,7 @@ describe("hop-thoai-nhap-okr", () => {
 			soDongHong: 2,
 			cauDongHong: [
 				"Dòng 4: Kiểu lạ",
-				"Dòng 5: Email này chưa là thành viên CRM",
+				"Dòng 5: Email này chưa là thành viên OneHub Center",
 			],
 			nhanNutGhi: "Ghi 3 dòng · bỏ 2 dòng hỏng",
 			khoa: false,

@@ -123,7 +123,7 @@ export class BackfillService implements OnModuleInit, OnModuleDestroy {
 
 		await this.agent.workspaceChanged(
 			us.website,
-			"We still have no profile of the company using this CRM",
+			"We still have no profile of the company using OneHub Center",
 		);
 	}
 

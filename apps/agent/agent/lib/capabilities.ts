@@ -78,6 +78,17 @@ export function capabilitiesFrom(
 			gives:
 				"the morning reminder on Zalo for anyone who linked their Zalo, and the bot that answers link codes",
 		},
+		{
+			id: "GOOGLE_SHEETS_KHOA",
+			from: "GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA",
+			label: "Google Sheets",
+			gives:
+				"the daily number of an OKR key result read from a cell of a Google Sheet shared with the service account. The dispatch tick reads it; there is no tool for it in a session",
+			enabled: Boolean(
+				process.env.GOOGLE_SHEETS_EMAIL?.trim() &&
+					process.env.GOOGLE_SHEETS_KHOA?.trim(),
+			),
+		},
 	];
 }
 

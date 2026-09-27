@@ -4,7 +4,7 @@ const en = {
 	trang: {
 		tieuDeTab: "Members",
 		tieuDe: "Members",
-		moTa: "Everyone who has access to your CRM.",
+		moTa: "Everyone who has access to OneHub Center.",
 	},
 	vaiTro: {
 		owner: "Owner",
@@ -97,7 +97,7 @@ const vi = {
 	trang: {
 		tieuDeTab: "Thành viên",
 		tieuDe: "Thành viên",
-		moTa: "Những người vào được CRM của bạn.",
+		moTa: "Những người vào được OneHub Center.",
 	},
 	vaiTro: {
 		owner: "Chủ sở hữu",

@@ -53,6 +53,12 @@ const en = {
 	},
 	dialog: {
 		close: "Close",
+		boThayDoi: {
+			tieuDe: "Discard what you typed?",
+			than: "What you typed in this box will be lost.",
+			tiepTuc: "Keep editing",
+			bo: "Discard",
+		},
 	},
 	carousel: {
 		itemRole: "item",
@@ -127,6 +133,47 @@ const en = {
 		tooLarge: "That amount is too large to record.",
 		canDongTien: "Choose a currency to read this amount.",
 	},
+	tienDo: {
+		nhan: "Progress",
+		coVach: (nhan: string, p: string, k: string) =>
+			`${nhan}: ${p}%, expected ${k}% by now`,
+		khongVach: (nhan: string, p: string) => `${nhan}: ${p}%`,
+		leRa: (k: string) => `Expected ${k}% by now`,
+	},
+	okr: {
+		tuTinCao: "High confidence",
+		tuTinVua: "Medium confidence",
+		tuTinThap: "Low confidence",
+		dungNhip: "On track",
+		chamNhip: "Behind",
+		truot: "Off track",
+		chuaCoKyVong: "No baseline yet",
+		mocXong: "Done",
+		mocChua: "Milestone, not done",
+	},
+	heatmap: {
+		donVi: "Unit",
+		chuaCo: "no data",
+		chuGiai:
+			"The more a cell stands out from the background, the more KRs had high confidence.",
+		oRong: "week not reached yet, or nobody updated",
+	},
+	chuKy: {
+		hienTai: "current",
+		daDong: "closed",
+	},
+	chep: {
+		nhan: (ten: string) => `Copy ${ten}`,
+		xong: (ten: string) => `${ten} copied.`,
+		hong: (ten: string) => `Could not copy the ${ten}. Select it instead.`,
+	},
+	bieuDo: {
+		giaTri: "Value",
+		leRa: "Expected",
+		tuan: "Week",
+		chuGiai:
+			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
+	},
 };
 
 export type Messages = typeof en;
@@ -184,6 +231,12 @@ const vi = {
 	},
 	dialog: {
 		close: "Đóng",
+		boThayDoi: {
+			tieuDe: "Bỏ những gì vừa nhập?",
+			than: "Những gì bạn vừa nhập trong hộp này sẽ mất.",
+			tiepTuc: "Tiếp tục sửa",
+			bo: "Bỏ",
+		},
 	},
 	carousel: {
 		itemRole: "mục",
@@ -257,6 +310,46 @@ const vi = {
 		negative: "Số tiền không được âm.",
 		tooLarge: "Số này quá lớn để lưu.",
 		canDongTien: "Chọn đồng tiền để đọc số này.",
+	},
+	tienDo: {
+		nhan: "Tiến độ",
+		coVach: (nhan: string, p: string, k: string) =>
+			`${nhan}: ${p}%, lẽ ra đã tới ${k}%`,
+		khongVach: (nhan: string, p: string) => `${nhan}: ${p}% tiến độ`,
+		leRa: (k: string) => `Lẽ ra đã tới ${k}%`,
+	},
+	okr: {
+		tuTinCao: "Tự tin cao",
+		tuTinVua: "Tự tin vừa",
+		tuTinThap: "Tự tin thấp",
+		dungNhip: "Đúng nhịp",
+		chamNhip: "Chậm nhịp",
+		truot: "Trượt",
+		chuaCoKyVong: "Chưa có kỳ vọng",
+		mocXong: "Đã xong",
+		mocChua: "Mốc, chưa xong",
+	},
+	heatmap: {
+		donVi: "Đơn vị",
+		chuaCo: "chưa có",
+		chuGiai: "Ô càng nổi khỏi nền, càng nhiều KR tự tin cao.",
+		oRong: "tuần chưa tới hoặc chưa ai cập nhật",
+	},
+	chuKy: {
+		hienTai: "hiện tại",
+		daDong: "đã đóng",
+	},
+	chep: {
+		nhan: (ten: string) => `Chép ${ten}`,
+		xong: (ten: string) => `Đã chép ${ten}.`,
+		hong: (ten: string) => `Không chép được ${ten}. Bôi đen rồi chép tay.`,
+	},
+	bieuDo: {
+		giaTri: "Giá trị",
+		leRa: "Lẽ ra",
+		tuan: "Tuần",
+		chuGiai:
+			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
 	},
 } satisfies Messages;
 

@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -61,6 +62,9 @@ export function krCapNhatTuSheet(mt: ChiTiet, kr: KetQua): KrCapNhat {
 		lastConfidence: tuTin.success ? tuTin.data : null,
 		lastAt: lanCuoi?.at ?? null,
 		updatedThisWeek: false,
+		nguon: kr.source,
+		doCanh: kr.doCanh,
+		soMay: kr.soMay,
 	};
 }
 
@@ -207,9 +211,11 @@ export function HopThoaiCapNhatKr({
 					</FieldGroup>
 				</form>
 				<DialogFooter>
-					<Button disabled={khoa} onClick={dong} variant="outline">
-						{m.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button disabled={khoa} variant="outline">
+							{m.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						data-nut="gui-cap-nhat-kr"
 						disabled={!sanSang || khoa}

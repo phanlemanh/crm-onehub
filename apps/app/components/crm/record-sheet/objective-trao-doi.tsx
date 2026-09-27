@@ -12,6 +12,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@crm/ui/components/field";
+import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,
@@ -194,6 +195,7 @@ function KhungSoan({
 	const ma = useId();
 	const thanhVien = useQuery(trpc.okr.thanhVien.queryOptions());
 	const [noiDung, setNoiDung] = useState("");
+	const khaiThayDoi = useKhaiThayDoi();
 	const [kr, setKr] = useState(CA_MUC_TIEU);
 	const [nhac, setNhac] = useState<string[]>([]);
 	const them = useMutation(
@@ -201,6 +203,7 @@ function KhungSoan({
 			onSuccess: async () => {
 				await cache.okr(objectiveId, { settle: "record" });
 				setNoiDung("");
+				khaiThayDoi(false);
 				setKr(CA_MUC_TIEU);
 				setNhac([]);
 			},
@@ -255,7 +258,10 @@ function KhungSoan({
 						disabled={them.isPending}
 						id={`${ma}-noi-dung`}
 						maxLength={BINH_LUAN_TOI_DA}
-						onChange={(e) => setNoiDung(e.target.value)}
+						onChange={(e) => {
+							setNoiDung(e.target.value);
+							khaiThayDoi(e.target.value.trim() !== "");
+						}}
 						onKeyDown={(e) => {
 							if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
 								e.preventDefault();

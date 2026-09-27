@@ -51,6 +51,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { buocQuaHan, DongBuoc, ngayCuaBuoc } from "./dong-buoc";
 import { DongKeHoach } from "./dong-ke-hoach";
+import { KhoiKrCuaToi } from "./okr/khoi-kr-cua-toi";
 import { ViecOkrCuaToi } from "./okr/viec-cua-toi";
 import { overviewParsers } from "./overview-search-params";
 import { SalesDashboard } from "./sales-dashboard";
@@ -203,7 +204,7 @@ export function DashboardSummary() {
 			<SalesDashboard summary={summary} />
 
 			<div className="grid gap-6 @3xl/page-content:grid-cols-2">
-				<Card className="min-w-0">
+				<Card className="min-w-0" data-khoi="deal-dang-mo">
 					<CardHeader>
 						<CardTitle>{m.open.title}</CardTitle>
 						<CardDescription>{m.open.description}</CardDescription>
@@ -263,7 +264,7 @@ export function DashboardSummary() {
 					</CardPanel>
 				</Card>
 
-				<Card className="min-w-0">
+				<Card className="min-w-0" data-khoi="viec-qua-han">
 					<CardHeader>
 						<CardTitle>{m.tasks.title}</CardTitle>
 						<CardDescription>{moTaTasks}</CardDescription>
@@ -358,8 +359,9 @@ export function DashboardSummary() {
 			</div>
 
 			<ViecOkrCuaToi noi="tong-quan" khiHien="khi-lien-quan" anKhiLoi />
+			<KhoiKrCuaToi />
 
-			<Card className="min-w-0">
+			<Card className="min-w-0" data-khoi="hoat-dong">
 				<CardHeader>
 					<CardTitle>
 						{mine ? m.activity.titleMine : m.activity.title}

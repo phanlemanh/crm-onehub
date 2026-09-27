@@ -3,6 +3,7 @@
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -89,13 +90,11 @@ export function CreateChannelDialog({
 				</div>
 
 				<DialogFooter>
-					<Button
-						disabled={create.isPending}
-						onClick={() => setOpen(false)}
-						variant="outline"
-					>
-						{t.kenh.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button disabled={create.isPending} variant="outline">
+							{t.kenh.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						disabled={!valid || create.isPending}
 						onClick={() => create.mutate({ name: slug, isPrivate })}

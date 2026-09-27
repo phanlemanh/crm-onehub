@@ -1,0 +1,101 @@
+{
+ "feature_plain": "Người trong đội đã nối Zalo nhắn một câu hỏi về CRM cho bot là được trợ lý AI trả lời ngay trong Zalo, chỉ đọc, đúng cổng vai của mình và không lộ số điện thoại, email, thư hay khoá của xưởng.",
+ "scope_plain": "Ghi CRM qua Zalo, hỏi đáp OKR, nhóm và khách hàng, ảnh và tin thoại, Slack, nút và bảng trong tin, đổi trần trên màn hình, xác nhận lại người cầm máy, triển khai production — đều để sau hoặc thuộc lượt khác.",
+ "decisions": [
+  {
+   "id": "E12j",
+   "q": "Lời dặn trợ lý và tám câu bot nói có tự nhiên, đúng từ điển không?",
+   "why": "Ba người chấm độc lập đều đề xuất ĐẠT: câu tiếng Việt tự nhiên, bot không tự xưng trợ lý, đủ ba thứ cấm của ranh giới A."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260926T101520Z-1",
+   "p": "Làm kênh hỏi Zalo ngay ở vòng này, tách khỏi lượt 10 OKR — đổi lại lượt 10 phải dùng lại kênh này thay vì dựng kênh riêng."
+  },
+  {
+   "id": "d-20260926T101520Z-2",
+   "p": "Chặn ghi bằng máy (thay công cụ ghi bằng bản từ chối trên kênh Zalo) thay vì bằng lời dặn — đổi lại mỗi công cụ mới phải khai đọc hay ghi."
+  },
+  {
+   "id": "d-20260926T101520Z-3",
+   "p": "Đáp Zalo trước rồi mới hỏi trợ lý, câu trả lời về sau — đổi lại phải có bước tự đóng khi trợ lý im."
+  },
+  {
+   "id": "d-20260926T101520Z-4",
+   "p": "Ba trần là ba con số trong mã, không có màn hình chỉnh — đổi lại đổi trần là đổi mã."
+  },
+  {
+   "id": "d-20260926T101520Z-5",
+   "p": "KHÔNG làm máy chặn chép nguyên văn thư, lịch — chỉ dặn trợ lý; đổi lại một lần chép thư chỉ lộ khi soát tay ở phiên nghiệm thu."
+  },
+  {
+   "id": "d-20260926T101520Z-6",
+   "p": "KHÔNG chạy mô hình AI trong bộ kiểm — thử bằng bộ giả bắt lời gọi; đổi lại mô hình lờ lời dặn thì chỉ bộ lọc và công cụ từ chối còn chặn."
+  },
+  {
+   "id": "d-20260926T101520Z-7",
+   "p": "KHÔNG viết đặc tả giao diện — vòng không có màn hình web."
+  },
+  {
+   "id": "d-20260926T101520Z-8",
+   "p": "KHÔNG có ảnh chụp màn hình làm bằng chứng — mặt người nhìn là Zalo thật, đo ở production."
+  },
+  {
+   "id": "d-20260926T101520Z-9",
+   "p": "KHÔNG chạy phiên thiết kế — không có bản bấm được trên web."
+  },
+  {
+   "id": "d-20260926T103015Z-10",
+   "p": "KHÔNG đo bằng máy việc eve chọn bản từ chối thay công cụ ghi thật — ghi giới hạn đã biết, thử tay ở phiên nghiệm thu; xem lại khi eve có cách liệt kê công cụ không cần mô hình."
+  },
+  {
+   "id": "d-20260926T104041Z-12",
+   "p": "Kết quả mỗi câu hỏi lưu dạng chữ, tập giá trị kiểm ở một chỗ dùng chung — đổi lại kho dữ liệu không tự chặn giá trị lạ, mọi bên đọc phải kiểm."
+  },
+  {
+   "id": "d-20260926T104041Z-13",
+   "p": "Công cụ tra cứu bên ngoài (nghiên cứu web, LinkedIn) bị chặn trên Zalo như công cụ ghi — đổi lại câu cần tra ngoài chỉ trả lời được trên CRM web."
+  },
+  {
+   "id": "d-20260926T104041Z-14",
+   "p": "Làm tuần tự trong một phiên, không tách việc song song — đổi lại chậm hơn vài phút."
+  },
+  {
+   "id": "d-20260926T112531Z-15",
+   "p": "Phép đo «phiên khác vẫn ghi được» gọi thẳng hàm ghi trường thay vì lớp vỏ công cụ — đổi lại lớp vỏ không nằm trong phép đo."
+  },
+  {
+   "id": "d-20260926T112705Z-16",
+   "p": "Thêm mục đích phiên «zalo» và nâng lính canh của một phép đo đã ký từ 3 lên 4 — đổi lại hai hồ sơ đã ký phải ghim lại cuối vòng."
+  },
+  {
+   "id": "d-20260926T113627Z-17",
+   "p": "Câu trả lời tìm đúng câu hỏi theo mã câu trong phiên, không theo Zalo — đổi lại trả lời quá muộn bị bỏ và ghi log thay vì đóng nhầm câu mới."
+  },
+  {
+   "id": "d-20260926T115626Z-18",
+   "p": "Mỗi Zalo, mỗi người, mỗi ngày một cuộc trò chuyện; khi trợ lý cần hỏi lại thì bắt đầu cuộc mới — đổi lại mất ngữ cảnh qua ngày."
+  },
+  {
+   "id": "d-20260926T115626Z-19",
+   "p": "Đóng năm lỗ người soát tìm ra: chặn tra web và hỏi lại trên Zalo, bỏ lời thuật giữa lượt, xếp hàng hai tin cùng lúc, che thêm dạng số điện thoại, báo lỗi muộn không đè câu mới — đổi lại câu cần tra web chỉ trả lời trên CRM web."
+  },
+  {
+   "id": "d-20260926T115800Z-20",
+   "p": "Mở lại Cổng Phạm vi để duyệt riêng các chữ hợp đồng đã sửa theo lượt sửa — đổi lại thêm một lượt người."
+  },
+  {
+   "id": "d-20260926T120844Z-22",
+   "p": "Ghi bù việc chủ kho đã duyệt kế hoạch thi công ở Gate 1.5 (dòng này được dòng kế thay bằng bản đủ trường)."
+  },
+  {
+   "id": "d-20260926T120921Z-23",
+   "p": "Gate 1.5 — duyệt kế hoạch; ghi bù sau: chủ kho duyệt kế hoạch 11 việc bằng câu «duyệt kế hoạch, làm trong phiên» lúc 10:45Z — anh xác nhận lại dòng này bằng chữ ký."
+  },
+  {
+   "id": "d-20260926T123231Z-24",
+   "p": "Sửa phát hiện trong hợp đồng của vòng chấm 1: số token cộng lại khi hết lượt để không thiếu bước cuối — đổi lại lượt lỗi giữa chừng có thể thiếu bước cuối."
+  }
+ ]
+}

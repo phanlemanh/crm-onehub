@@ -37,7 +37,6 @@ const CHU = {
 	chuaTruong: "Gán trưởng ở Cài đặt › Tổ chức",
 	rongBody: "Trưởng đơn vị thêm từng mục tiêu",
 	cuaToiRong: "Bạn chưa phụ trách mục tiêu hay KR nào",
-	toanCanh: "lượt 5",
 	cayCanChinh: "Cây căn chỉnh",
 	danhSach: "Danh sách",
 	quayLai: "Quay lại",
@@ -50,8 +49,8 @@ const CHU = {
 	thuLai: "Thử lại",
 	kieuLa:
 		"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
-	emailLa: "Email này chưa là thành viên CRM",
-	daCo: "đã có trong CRM",
+	emailLa: "Email này chưa là thành viên OneHub Center",
+	daCo: "đã có trong OneHub Center",
 	tomTat: "3 dòng hợp lệ · 2 dòng hỏng",
 	nutGhi: "Ghi 3 dòng · bỏ 2 dòng hỏng",
 	khongGhi: "Không có dòng nào để ghi",
@@ -760,11 +759,12 @@ async function buocE11() {
 	if (await hienSel(t, "[data-trang-thai='ST-donvi-caycanchinh']")) {
 		const dong = await t.evaluate(() =>
 			[...document.querySelectorAll("[data-nut-can-chinh]")].map((r) => ({
-				cap: Number(r.getAttribute("data-cap")),
+				cap:
+					Number(
+						r.closest("[role='treeitem']")?.getAttribute("aria-level") ?? 0,
+					) - 1,
 				chu: r.textContent ?? "",
-				le: Number.parseFloat(
-					getComputedStyle(r.querySelector("td")).paddingInlineStart,
-				),
+				le: r.getBoundingClientRect().left,
 			})),
 		);
 		const goc = dong.find((d) => d.cap === 0 && d.chu.includes(TEN.o1));
@@ -849,7 +849,7 @@ async function buocE11() {
 	await t.setRequestInterception(true);
 	const chanByUnit = (r) => {
 		if (r.isInterceptResolutionHandled()) return;
-		if (chan && r.url().includes("okr.byUnit"))
+		if (chan && r.url().includes("okr.danhSach"))
 			void r.respond({
 				status: 500,
 				contentType: "text/plain",
@@ -921,13 +921,11 @@ async function buocE11() {
 	await r.close();
 
 	const tc = await moTrang(cookie.truong, RONG, "/okr/toan-canh", "E11");
-	if (await hienSel(tc, "[data-trang-thai='ST-toancanh']"))
-		kiem(
-			"E11 buoc 12: Toan canh phai noi luot 5",
-			(await chuSel(tc, "[data-trang-thai='ST-toancanh']")).includes(
-				CHU.toanCanh,
-			),
-		);
+	await hienSel(tc, "[data-trang-thai^='ST-toancanh-']");
+	kiem(
+		"E11 buoc 12: Toan canh phai la man that cua luot 5, khong con o giu cho",
+		!(await coSel(tc, "[data-trang-thai='ST-toancanh']")),
+	);
 	await chup(tc, "E11-step12.png", true);
 	await tc.close();
 
@@ -1027,12 +1025,14 @@ async function buocE12() {
 		sheet,
 	);
 	kiem(
-		`E12 buoc 1: ba tab dau phai KR/Can chinh/Vet (tab thu tu neu co la Trao doi), thay ${JSON.stringify(tab)}`,
-		(tab.length === 3 || tab.length === 4) &&
+		`E12 buoc 1: ba tab dau phai KR/Can chinh/Vet (tab thu tu neu co la Trao doi, tab thu nam neu co la Dien bien), thay ${JSON.stringify(tab)}`,
+		tab.length >= 3 &&
+			tab.length <= 5 &&
 			tab[0].startsWith("KR") &&
 			tab[1].startsWith("Căn chỉnh") &&
 			tab[2].startsWith(CHU.vet) &&
-			(tab.length === 3 || tab[3].startsWith("Trao đổi")),
+			(tab.length < 4 || tab[3].startsWith("Trao đổi")) &&
+			(tab.length < 5 || tab[4].startsWith("Diễn biến")),
 	);
 	await chup(t, "E12-step1.png");
 	await doiRong(t, HEP);

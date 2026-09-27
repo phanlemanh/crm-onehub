@@ -1,0 +1,226 @@
+{
+  "feature_plain": "Cả công ty xem được OKR của mọi đơn vị trên một màn, trưởng đơn vị chạy họp tuần theo KR đáng bàn, quản trị thấy đơn vị nào cần kèm.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ lọc danh sách mục tiêu ở máy chủ: chọn bộ phận là gồm cả phòng ban con, lọc được theo người phụ trách, loại, trạng thái, và (nhịp 2) mức tự tin."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho người dùng lọc «Theo đơn vị» bằng menu có số đếm, giữ lọc trên đường dẫn, và mở trang OKR của một người."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ cho đi cây đơn vị và cây căn chỉnh toàn công ty chỉ bằng bàn phím, gập mở từng nhánh."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ thay mọi thanh tiến độ OKR bằng thanh xám có vạch «lẽ ra đã tới», tình trạng và mức tự tin hiện bằng chấm kèm chữ."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ mở «Toàn cảnh» cho mọi vai: tiến độ và «lẽ ra» theo từng đơn vị, bộ phận gộp phòng ban con, mở dưới một giây."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ (nhịp 2) thêm vào «Toàn cảnh» phân bố mức tự tin và heatmap đơn vị × tuần đọc rõ ở cả nền sáng lẫn tối."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ (nhịp 2) có bảng họp tuần xếp KR theo tự tin tụt, KR im, ghi chú mới — theo KR, không liệt kê người."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ ghi mỗi lần trưởng mở bảng họp tuần thành một dòng mỗi tuần, để ngày 23/11 đếm được tỷ lệ đơn vị có trưởng mở."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ (nhịp 2) cho xem một KR đi từng tuần so với đích và «lẽ ra» ngay trong sheet mục tiêu."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ (nhịp 2) đặt phần «OKR của bạn» trên Tổng quan và trang của một người, KR đáng lo lên đầu."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ có màn sức khoẻ chương trình chỉ cho quản trị: KR chưa có khởi điểm, người chưa nối kênh nhắc, và (nhịp 2) KR cập nhật đúng tuần, KR im."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ (nhịp 2) có ô chọn chu kỳ nhóm theo năm, chọn một kỳ thì mọi tab đọc đúng kỳ đó."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ cho vai «chỉ OKR» đọc mọi màn mới trừ sức khoẻ chương trình."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-14",
+      "p": "Chặn giao diện vẽ tay, chữ thiếu bản tiếng Anh, và chữ người nhập bị trình duyệt tự dịch."
+    }
+  ],
+  "scope_plain": "Không dựng trang hồ sơ nhân viên, không liệt kê người chưa cập nhật, không bảng mới; năm biến thể giao diện phụ để sau.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đủ chín bề mặt của lượt (AC-1…AC-12): mỗi mã tính năng XEM-02…07 và QT-04 có tiêu chí riêng."
+    },
+    {
+      "i": 1,
+      "p": "Phần đọc số có sẵn làm ngay; phần cần lần cập nhật tuần chờ lượt 4 gộp (nhịp 2); kênh nhắc đọc từ liên kết Zalo và khớp Slack."
+    },
+    {
+      "i": 2,
+      "p": "Bốn vai được thử quyền trên mọi màn mới (AC-5, AC-8, AC-11, AC-13 — ma trận vai × thủ tục)."
+    },
+    {
+      "i": 3,
+      "p": "Mỗi màn có trạng thái có dữ liệu, rỗng hay tuần đầu, đang tải, lỗi, không đủ quyền, và chụp ở 390 lẫn 1440."
+    },
+    {
+      "i": 4,
+      "p": "Áp chung: lọc ở máy chủ và số truy vấn cố định, bàn phím, không tô khối, không vẽ tay, hai thứ tiếng, không liệt kê người."
+    },
+    {
+      "i": 5,
+      "p": "Đối chiếu ngành: Profit.co (cập nhật tuần có tự tin), Perdoo (bản đồ căn chỉnh); heatmap đứng trên chốt bản mẫu 24/09."
+    },
+    {
+      "i": 6,
+      "p": "Cần anh gạch: «trang cá nhân» hiểu là trang OKR của một người trong khu OKR, không dựng trang hồ sơ nhân viên."
+    },
+    {
+      "i": 7,
+      "p": "Cần anh gạch: «KR thiếu khởi điểm» hiểu là KR của mục tiêu còn nháp trong kỳ đang chạy."
+    },
+    {
+      "i": 8,
+      "p": "Cần anh gạch: họp tuần là cách xem thứ ba của «Theo đơn vị» (giữ bốn tab); sức khoẻ là trang riêng mở từ «Toàn cảnh», chỉ quản trị thấy nút."
+    },
+    {
+      "i": 9,
+      "p": "Cần anh gạch: đếm mở bảng họp tuần ghi vào bảng vết OKR sẵn có — không qua telemetry (ẩn danh, gửi ra ngoài), không bảng mới (sẽ thành hạng rủi ro cao)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Câu đếm tỷ lệ mở bảng từng chỉ được thử trên dữ liệu gõ tay — có thể xanh mà ngày 23/11 đọc ra 0%. Đã sửa: dữ liệu thử sinh bằng chính lần mở bảng thật, ngày tuần lưu dạng chữ cố định, thêm phép đo trên trình duyệt."
+    },
+    {
+      "i": 1,
+      "p": "Thang màu heatmap của bản mẫu có ô chữ khó đọc ở nền tối. Đã sửa: tính lại từ màu thật của kho, năm bậc mới đều đọc được ở cả hai nền."
+    },
+    {
+      "i": 2,
+      "p": "Chọn quý khác có thể chỉ đổi đường dẫn mà màn vẫn hiện quý đang chạy. Đã sửa: tiêu chí đòi mọi tab gọi máy chủ đúng kỳ, phép đo gieo hai mục tiêu tên riêng để phân biệt."
+    },
+    {
+      "i": 3,
+      "p": "Số đếm trong menu lọc có thể làm biến mất người khác khi đã chọn một người. Đã sửa: ghi luật «trừ mặt của chính nó» và đo trên lời gọi đã lọc."
+    },
+    {
+      "i": 4,
+      "p": "Hứa «mở dưới một giây» nhưng không tiêu chí nào giữ. Đã sửa: ngưỡng một giây và số truy vấn cố định vào tiêu chí Toàn cảnh."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260925T211204Z-1",
+      "p": "Đã dựng bản bấm được cho bốn màn chưa có bản mẫu — đổi lại thêm một bản mẫu phải giữ khớp."
+    },
+    {
+      "id": "d-20260925T211204Z-2",
+      "p": "Đếm lần trưởng mở bảng bằng bảng vết OKR có sẵn — đổi lại bảng vết mang thêm một loại dòng «đã xem»."
+    },
+    {
+      "id": "d-20260925T211204Z-3",
+      "p": "Cây dùng thành phần có sẵn của ReUI thay vì tự dựng bàn phím — đổi lại thêm hai gói phụ thuộc."
+    },
+    {
+      "id": "d-20260925T211204Z-4",
+      "p": "KHÔNG làm năm biến thể giao diện phụ lượt này (nút chạm 44px, thanh tab, ô biểu tượng sheet…) — chúng chờ hợp đồng riêng."
+    },
+    {
+      "id": "d-20260925T211204Z-5",
+      "p": "Thêm một cách đọc danh sách mới thay vì sửa cách cũ — đổi lại cách cũ còn sống song song một thời gian."
+    },
+    {
+      "id": "d-20260925T211204Z-6",
+      "p": "Làm hai nhịp trên một nhánh — đổi lại nhánh sống lâu hơn, phải gộp onehub giữa chừng."
+    },
+    {
+      "id": "d-20260925T211204Z-7",
+      "p": "KHÔNG dựng trang hồ sơ nhân viên; «trang cá nhân» là trang OKR của một người."
+    },
+    {
+      "id": "d-20260925T223427Z-13",
+      "p": "Ba trang hướng dẫn theo vai viết ở cuối, sau khi phần cập nhật tuần của lượt 4 xong — đổi lại, tài liệu đến muộn hơn màn nhưng gọi đúng tên màn thật."
+    },
+    {
+      "id": "d-20260925T223427Z-14",
+      "p": "Sửa phép đo của hồ sơ đặt OKR đã ký cho khớp màn mới (cây thay cho bảng, Toàn cảnh là màn thật) thay vì giữ giao diện cũ để phép đo khỏi đổi."
+    },
+    {
+      "id": "d-20260925T223427Z-15",
+      "p": "Không sửa dòng mô tả bị ẩn ở màn hẹp trên trang một người, vì đó là luật chung của bộ giao diện — ghi lại để báo."
+    },
+    {
+      "id": "d-20260926T034403Z-16",
+      "p": "Phép đo màn chạy trên một kho dữ liệu riêng dùng một lần, không đụng dữ liệu thật."
+    },
+    {
+      "id": "d-20260926T045410Z-17",
+      "p": "Thời điểm một lần cập nhật tuần tính theo lúc người bấm gửi, không theo lúc tạo từng dòng."
+    },
+    {
+      "id": "d-20260926T045410Z-18",
+      "p": "Cho phép đúng một chỗ đọc lại dấu «đã mở bảng họp tuần» để khỏi ghi trùng trong 30 phút."
+    },
+    {
+      "id": "d-20260926T045410Z-19",
+      "p": "Bấm một KR ở bảng họp tuần hay khối OKR của bạn mở thẳng tab Diễn biến của KR đó."
+    },
+    {
+      "id": "d-20260926T045410Z-20",
+      "p": "Nút chọn chu kỳ chỉ ghi tên kỳ; chữ «hiện tại» và «đã đóng» chỉ hiện trong danh sách mở ra."
+    },
+    {
+      "id": "d-20260926T073253Z-21",
+      "p": "Các lượt đo màn chạy song song phải xếp hàng lần lượt trên cùng một kho đo."
+    },
+    {
+      "id": "d-20260926T091042Z-22",
+      "p": "Viết lại phép đo màn theo đúng các bước đã duyệt, mỗi phần có dữ liệu riêng tự dọn, và chạy riêng được từng phần."
+    },
+    {
+      "id": "d-20260926T091042Z-23",
+      "p": "Toàn cảnh và Sức khoẻ báo lỗi kèm nút «Thử lại» khi không tải được, thay vì quay mãi."
+    },
+    {
+      "id": "d-20260926T091042Z-24",
+      "p": "Sức khoẻ còn bốn thẻ số như bản mẫu (gộp «KR đang tính» thành dạng 2/3); tab Diễn biến hẹn ngày cập nhật đầu tiên khi KR chưa có lần nào."
+    },
+    {
+      "id": "d-20260926T091042Z-25",
+      "p": "Chạm ba chỗ của lượt trước: kỳ đã đóng nhường vị trí «hiện tại» cho kỳ đang chạy; mở sheet mục tiêu từ đường dẫn thôi làm lệch ô chọn chu kỳ; các khối Tổng quan có dấu để đếm."
+    },
+    {
+      "id": "d-20260926T091042Z-26",
+      "p": "Hai chỗ phép đo phải diễn giải chữ của bước đã duyệt: trưởng phòng P1 được nối Zalo để số «chưa nối kênh» đúng như đã viết; Toàn cảnh không in tên mục tiêu nên đọc số của hàng phòng ban."
+    },
+    {
+      "id": "d-20260926T100304Z-27",
+      "p": "Bảng họp tuần so mức tự tin với lần cập nhật cuối của tuần trước, nên cập nhật hai lần trong tuần không làm mất dấu «tụt»."
+    },
+    {
+      "id": "d-20260926T100304Z-28",
+      "p": "Trên trang OKR của một người, cây đơn vị vẫn bấm Tab vào được."
+    },
+    {
+      "id": "d-20260926T100304Z-29",
+      "p": "Phép đo «vết ẩn» giữ nguyên một lệnh; lần chấm hỏng trước là do người chấm, không phải do lệnh chạy lâu."
+    }
+  ]
+}

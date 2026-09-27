@@ -114,6 +114,10 @@ const KHONG_DAU = new Set([
 	"moc.xong",
 	"mucTuTin.cao",
 	"dem",
+	"bangTinh.nhan",
+	"dau.crm",
+	"dau.api",
+	"dau.bangTinh",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -202,8 +206,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"Bạn đã xin quá nhiều lần. Chờ 12 phút rồi thử lại.",
 			],
 			"auth:quenMatKhau.xong.description": [
-				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
-				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+				"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+				"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
 			],
 			"auth:datMatKhau.toiThieu": [
 				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
@@ -288,8 +292,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"12 và mọi thứ gắn với công ty này mất theo.",
 			],
 			"record-sheet:company.deleteContacts": [
-				"1 làm việc ở đó vẫn ở lại CRM, nhưng không thuộc công ty nào.",
-				"12 làm việc ở đó vẫn ở lại CRM, nhưng không thuộc công ty nào.",
+				"1 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
+				"12 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
 			],
 			"record-sheet:company.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
 			"record-sheet:company.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
@@ -338,8 +342,8 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"record-sheet:deal.created": ["Đã tạo 1.", "Đã tạo 12."],
 			"record-sheet:deal.deleteWarning": [
-				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại CRM.",
-				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại CRM.",
+				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
+				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
 			],
 			"crm:timeline.composer.log": ["Ghi 1", "Ghi 12"],
 			"crm:timeline.messages": ["1 thư", "12 thư"],
@@ -388,7 +392,6 @@ describe("kho chuoi cua vong ③a", () => {
 				"Gỡ 12 khỏi thoả thuận này",
 			],
 			"record-sheet:deal.namePlaceholder": ["1 — OneHub", "12 — OneHub"],
-			"settings:chep.xong": ["Đã chép 1.", "Đã chép 12."],
 			"settings:chep.hong": [
 				"Không chép được 1. Bôi đen rồi chép tay.",
 				"Không chép được 12. Bôi đen rồi chép tay.",
@@ -694,10 +697,78 @@ describe("kho chuoi cua vong ③a", () => {
 			"okr:capNhat.tuTinNhan": ["Tự tin 1", "Tự tin 12"],
 			"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
 			"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
+			"okr-toan-canh:toanCanh.leRa": ["Lẽ ra đã tới 1%", "Lẽ ra đã tới 12%"],
+			"okr-toan-canh:toanCanh.chuaDat": ["1 chưa đặt", "12 chưa đặt"],
+			"okr-toan-canh:tienDoLeRa": [
+				"Tiến độ 1: A%, lẽ ra đã tới B%",
+				"Tiến độ 12: A%, lẽ ra đã tới B%",
+			],
+			"okr-toan-canh:hopTuan.tuan": ["Tuần 1", "Tuần 12"],
+			"okr-toan-canh:hopTuan.daCapNhat": [
+				"đã cập nhật 1/A KR",
+				"đã cập nhật 12/A KR",
+			],
+			"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
+			"okr-toan-canh:hopTuan.tut": ["Tụt từ 1 xuống A", "Tụt từ 12 xuống A"],
+			"okr-toan-canh:hopTuan.im": ["Im 1 ngày", "Im 12 ngày"],
+			"okr-toan-canh:hopTuan.conLai": [
+				"Còn lại 1 KR — không có gì mới",
+				"Còn lại 12 KR — không có gì mới",
+			],
+			"okr-toan-canh:toanCanh.soTuanTruoc": ["Tuần trước 1", "Tuần trước 12"],
+			"okr-toan-canh:toanCanh.banTut": [
+				"1 KR tụt mức tự tin",
+				"12 KR tụt mức tự tin",
+			],
+			"okr-toan-canh:toanCanh.banIm": ["1 KR im lâu", "12 KR im lâu"],
+			"okr-toan-canh:toanCanh.banGhiChu": [
+				"1 KR có ghi chú mới",
+				"12 KR có ghi chú mới",
+			],
+			"okr-toan-canh:dienBien.bieuDo": [
+				"Diễn biến của 1 theo tuần",
+				"Diễn biến của 12 theo tuần",
+			],
+			"okr-toan-canh:dienBien.dich": ["Đích 1", "Đích 12"],
+			"okr-toan-canh:dienBien.chuaCoMoTa": [
+				"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 1.",
+				"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 12.",
+			],
+			"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",
 			],
+			"okr-so:donVi.buoc": ["1 bước", "12 bước"],
+			"okr-so:donVi.ca-nhan": ["1 cá nhân", "12 cá nhân"],
+			"okr-so:donVi.cuoc-goi": ["1 cuộc gọi", "12 cuộc gọi"],
+			"okr-so:donVi.thoa-thuan": ["1 thoả thuận", "12 thoả thuận"],
+			"okr-so:donVi.thu": ["1 thư", "12 thư"],
+			"okr-so:trangThai.hopThoai.xemTruoc.toiHomNay": [
+				"Tới hôm nay: 1",
+				"Tới hôm nay: 12",
+			],
+			"okr-so:trangThai.hopThoai.sheets.chiaSe": [
+				"Chia sẻ bảng tính cho 1",
+				"Chia sẻ bảng tính cho 12",
+			],
+			"okr-so:trangThai.hopThoai.sheets.docDuoc": [
+				"Đọc được 1 lúc A",
+				"Đọc được 12 lúc A",
+			],
+			"okr-so:trangThai.bangKr.doCanh": ["1 tay · A máy", "12 tay · A máy"],
+			"okr-so:trangThai.bangKr.moSo": [
+				"Xem bản ghi làm nên số của 1",
+				"Xem bản ghi làm nên số của 12",
+			],
+			"okr-so:trangThai.so.khoang": ["Từ 1 đến A", "Từ 12 đến A"],
+			"okr-so:trangThai.so.daChup": ["Đã chụp 1 ngày A", "Đã chụp 12 ngày A"],
+			"okr-so:trangThai.so.lech": [
+				"Đã chụp 1 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
+				"Đã chụp 12 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
+			],
+			"okr-so:trangThai.capNhat.soTu": ["Số từ 1 · A", "Số từ 12 · A"],
+			"okr-so:trangThai.capNhat.soMay": ["Số máy: 1 · A", "Số máy: 12 · A"],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

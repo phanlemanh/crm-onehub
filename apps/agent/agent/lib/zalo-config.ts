@@ -1,5 +1,6 @@
 const SECOND_MS = 1_000;
-const DAY_MS = 24 * 60 * 60 * SECOND_MS;
+const MINUTE_MS = 60 * SECOND_MS;
+const DAY_MS = 24 * 60 * MINUTE_MS;
 
 export const ZALO = {
 	api: "https://bot-api.zaloplatforms.com",
@@ -24,16 +25,70 @@ export const ZALO = {
 	},
 	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
-	lenh: { tu: ["xong", "done"], toiDaSo: 20 },
+	hoi: {
+		toiDaTin: 3,
+		an: "[đã ẩn]",
+		luoc: "…",
+		soChuSo: { min: 10, max: 15 },
+		tran: { phut: 3, ngay: 20, thang: 300 },
+		cuaSoPhutMs: MINUTE_MS,
+		hanTraLoiMs: 5 * MINUTE_MS,
+		ngayMs: DAY_MS,
+		tienToToken: "chat:",
+		khoaChat: "zalo-hoi:",
+		giuaLuot: "tool-calls",
+		tienToBo: "bo:",
+		authenticator: "zalo",
+		purpose: "zalo",
+		tuChoiGhi:
+			"Not available on Zalo: this conversation is read-only. Answer from what OneHub Center already holds.",
+		congCu: {
+			doc: [
+				"list_deals",
+				"list_fields",
+				"list_outstanding_work",
+				"read_company_history",
+				"read_crm_history",
+				"read_deal_history",
+				"search_crm",
+				"zalo-chi-doc",
+			],
+			ghi: [
+				"archive_field",
+				"enrich_company",
+				"fetch_contact_photo",
+				"find_contact_socials",
+				"get_contact_work_history",
+				"get_linkedin_profile",
+				"identify_contact",
+				"manage_fields",
+				"record_fact",
+				"record_job_change",
+				"research_company",
+				"research_person",
+				"resolve_linkedin_profile",
+				"schedule_recheck",
+				"set_chat_title",
+				"set_contact_socials",
+				"set_field_value",
+				"web_fetch",
+				"write_brief",
+				"write_workspace_profile",
+			],
+			tat: ["agent"],
+			coSanChan: ["web_search", "ask_question"],
+		},
+	},
+	lenh: { tu: ["xong", "done"], toiDaSo: 20, moi: ["mới", "moi", "/new"] },
 	loi: {
 		huongDan:
-			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
+			"Chào bạn. Để nhận nhắc việc, mở OneHub Center › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
 		daNoi: (ten: string) =>
 			`Đã nối với ${ten}. Mỗi sáng tôi gửi việc cần để ý ở đây.`,
 		daNoiRoi: (ten: string, gio: string) =>
 			`Bạn đã nối với ${ten}. Nhắc đến lúc ${gio}.`,
 		guiThu: (gio: string) =>
-			`Tin thử từ CRM. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
+			`Tin thử từ OneHub Center. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
 		tokenSai: "Zalo không nhận token này.",
 		zaloKhongTraLoi:
 			"Zalo đang không trả lời nên chưa kiểm được token. Bot đang dùng giữ nguyên; thử lại sau ít phút.",
@@ -43,7 +98,7 @@ export const ZALO = {
 		goiY: 'Trả lời "xong 2" để đánh dấu mục 2 xong.',
 		thieuSo: 'Gõ "xong" kèm số mục trong tin nhắc sáng nay, ví dụ "xong 2".',
 		khongQuyen:
-			"Tài khoản CRM của bạn không còn quyền với kế hoạch 30 ngày đầu, nên chưa đánh dấu mục nào.",
+			"Tài khoản OneHub Center của bạn không còn quyền với kế hoạch 30 ngày đầu, nên chưa đánh dấu mục nào.",
 		chuaCoTin: (gio: string) =>
 			`Hôm nay chưa có tin nhắc qua Zalo. Nhắc đến lúc ${gio}.`,
 		chuaDanhDau: "Chưa đánh dấu mục nào.",
@@ -58,5 +113,20 @@ export const ZALO = {
 		daXong: "Đã đánh dấu xong: ",
 		khongGiMoi: "Không có mục nào mới",
 		mocDaXongTruoc: " — đã xong từ trước: ",
+		hoiKhongQuyen:
+			"Tài khoản của bạn trong OneHub Center không có quyền hỏi dữ liệu đối tác, nên tôi chưa trả lời được câu này.",
+		hetTranPhut: "Chờ một chút rồi hỏi tiếp.",
+		hetTranNgay: (n: number) =>
+			`Hôm nay bạn đã hỏi ${n} câu qua Zalo. Mở OneHub Center để hỏi tiếp; mai hỏi lại ở đây.`,
+		hetTranThang:
+			"Kênh hỏi qua Zalo tháng này đã hết lượt. Mở OneHub Center để hỏi.",
+		dangTraLoi:
+			"Tôi đang trả lời câu trước của bạn, gửi câu mới sau khi nhận được nhé.",
+		tacTuLoi:
+			"Tôi chưa trả lời được câu này. Thử lại sau ít phút, hoặc hỏi trong OneHub Center.",
+		daMoi: "Đã bắt đầu cuộc trò chuyện mới.",
+		canHoiLai:
+			"Câu này tôi cần hỏi lại mới trả lời được, mà qua Zalo thì chưa hỏi lại được. Hỏi lại rõ hơn ở đây, hoặc hỏi trong OneHub Center.",
+		chiDocChu: "Tôi chỉ đọc được tin chữ. Gõ câu hỏi của bạn ở đây nhé.",
 	},
 } as const;

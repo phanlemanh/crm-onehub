@@ -13,6 +13,7 @@ export const SEARCH_PARAM = {
 		add: "add",
 		thread: "thread",
 		timeline: "timeline",
+		ngaySo: "ngaySo",
 	},
 	fieldsSheet: {
 		entity: "manageFields",
@@ -48,6 +49,11 @@ export const SEARCH_PARAM = {
 		don: "donOkr",
 		xem: "xemOkr",
 		moChuKy: "moChuKy",
+		phuTrach: "phuTrachOkr",
+		loai: "loaiOkr",
+		trangThai: "trangThaiOkr",
+		tuTin: "tuTinOkr",
+		kr: "krOkr",
 		tu: "tu",
 	},
 } as const;

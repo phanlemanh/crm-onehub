@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thước đã ký bị chạm — thế tên hay thay thế</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1240px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 68ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  code { font-family: var(--mono); font-size: 0.8em; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.95fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình · AC-13 · doi-ten-onehub-center</p>
+  <h1>Thước đã ký bị chạm — thế tên hay thay thế</h1>
+  <p class="standfirst">Vòng này phải sửa một số tệp thước của hồ sơ đã ký. Mỗi chỗ sửa đi đúng một trong hai lối: thay thế một vạch đã khai trước, hoặc chỉ thế tên. Lệch <code>merge-base</code> theo cách nào khác là đỏ — và dù đi lối nào, eval đã đạt vẫn phải đạt.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1320 888" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng kiểm thước đã ký: tệp thước của hồ sơ đã ký bị diff chạm; nếu vạch có trong danh sách thay thế thì phải có dòng supersedes và eval mới của vòng này đỏ ở merge-base, ví dụ cua-vao-dang-nhap E2, vạch khong-shader, E14; nếu không thì chỉ được thế tên, thế ngược ra đúng từng byte merge-base, rồi kiểm từng cặp bang-the; cả hai nhánh cùng kết ở luật mọi eval đạt ở merge-base phải đạt ở HEAD">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --tint:rgba(0,107,79,0.08);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --tint:rgba(47,155,122,0.14);
+          }
+        }
+        .bg   { fill: var(--paper); }
+        .mask { fill: var(--paper); }
+        .node { fill: var(--node); stroke: var(--ink); stroke-width: 1; }
+        .focal{ fill: var(--tint); stroke: var(--accent); stroke-width: 1.4; }
+        .edge { fill: none; stroke: var(--muted); stroke-width: 1; }
+        .mk   { fill: var(--muted); }
+        .name { fill: var(--ink); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .sub  { fill: var(--muted); font: 400 12px 'Geist', system-ui, sans-serif; }
+        .tech { fill: var(--ink); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+        .tecm { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+        .to   { fill: var(--accent); font: 500 11px 'Geist Mono', ui-monospace, monospace; }
+        .alab { fill: var(--soft); font: 400 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; }
+        .hr   { stroke: var(--rule); stroke-width: 0.8; }
+        .lgl  { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .lgi  { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+      </style>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon class="mk" points="0 0, 8 3, 0 6"/>
+      </marker>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <path class="edge" d="M 660 112 V 158" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 460 224 H 288 Q 280 224 280 232 V 358" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 860 224 H 1032 Q 1040 224 1040 232 V 358" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1040 472 V 518" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 280 656 V 718" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1040 656 V 718" marker-end="url(#arrow)"/>
+
+    <rect class="mask" x="356" y="200" width="32" height="18" rx="2"/>
+    <text class="alab" x="372" y="214" text-anchor="middle">CÓ</text>
+
+    <rect class="mask" x="920" y="200" width="60" height="18" rx="2"/>
+    <text class="alab" x="950" y="214" text-anchor="middle">KHÔNG</text>
+
+    <rect class="node" x="360" y="32" width="600" height="80" rx="20"/>
+    <text class="name" x="660" y="68" text-anchor="middle">Tệp thước của hồ sơ đã ký bị diff chạm</text>
+    <text class="tecm" x="660" y="92" text-anchor="middle">_acceptance/&lt;hồ sơ đã ký&gt;/** · tệp mà lệnh eval đã ký chạy</text>
+
+    <polygon class="mask" points="660,160 860,224 660,288 460,224"/>
+    <polygon class="node" points="660,160 860,224 660,288 460,224"/>
+    <text class="name" x="660" y="224" text-anchor="middle">Vạch có trong danh sách thay thế?</text>
+    <text class="sub"  x="660" y="244" text-anchor="middle">danh sách ở mục Notes · AC-13 (ii)</text>
+
+    <rect class="node" x="60" y="360" width="440" height="296" rx="6"/>
+    <text class="name" x="84" y="392">Thay thế</text>
+    <text class="sub"  x="84" y="416">có dòng supersedes trong sổ quyết định</text>
+    <text class="sub"  x="84" y="436">+ eval mới của vòng này đo lời hứa mới, đỏ ở merge-base</text>
+    <line class="hr" x1="84" y1="456" x2="476" y2="456"/>
+    <text class="alab" x="84" y="480">ĐÃ KÝ · cua-vao-dang-nhap</text>
+    <text class="alab" x="476" y="480" text-anchor="end">VÒNG NÀY</text>
+
+    <text class="tech" x="84" y="508">E2 — ba vạch của cua-vao-shell.dom.tsx</text>
+    <text class="to"   x="476" y="508" text-anchor="end">→ E3, E10</text>
+    <text class="sub"  x="84" y="526">con của AuthShader · chữ CRM · bg-muted phẳng</text>
+
+    <text class="tech" x="84" y="556">E11 · E12 · E13 · E19 — vạch khong-shader</text>
+    <text class="to"   x="476" y="556" text-anchor="end">→ E10, E11</text>
+    <text class="sub"  x="84" y="574">do-cua-vao.mjs coi mọi radial-gradient là AuthShader</text>
+
+    <text class="tech" x="84" y="604">E14 (judgment) — vế «nền xám phẳng»</text>
+    <text class="to"   x="476" y="604" text-anchor="end">→ E15</text>
+    <text class="tecm" x="84" y="632">supersedes: d-…-9 · d-…-10 · d-…-11</text>
+
+    <rect class="node" x="820" y="360" width="440" height="112" rx="6"/>
+    <text class="name" x="844" y="392">Chỉ được thế tên</text>
+    <text class="sub"  x="844" y="416">thế ngược ra đúng từng byte merge-base</text>
+    <text class="sub"  x="844" y="436">không byte nào khác được lệch</text>
+    <text class="tecm" x="844" y="456">rang/bang-the.json</text>
+
+    <rect class="node" x="820" y="520" width="440" height="136" rx="6"/>
+    <text class="name" x="844" y="552">Kiểm từng cặp bang-the</text>
+    <text class="sub"  x="844" y="580">chuẩn hoá tên: hai chuỗi bằng nhau từng byte</text>
+    <text class="sub"  x="844" y="604">hoặc cặp chuỗi sản phẩm thật:</text>
+    <text class="sub"  x="844" y="624">chuỗi cũ có trong mã ở merge-base, chuỗi mới ở HEAD</text>
+
+    <rect class="mask"  x="60" y="720" width="1200" height="80" rx="20"/>
+    <rect class="focal" x="60" y="720" width="1200" height="80" rx="20"/>
+    <text class="name" x="660" y="756" text-anchor="middle">Mọi eval đạt ở merge-base phải đạt ở HEAD</text>
+    <text class="sub"  x="660" y="780" text-anchor="middle">E13 của vòng này chạy mọi eval máy đã ký có paths giao diff, ở cả hai đầu — áp cho cả hai nhánh</text>
+
+    <line class="hr" x1="60" y1="836" x2="1260" y2="836"/>
+    <text class="lgl" x="60" y="864">CHÚ GIẢI</text>
+    <text class="lgi" x="200" y="864">hình thoi = câu hỏi · khung vuông = bước kiểm</text>
+    <text class="lgi" x="560" y="864">khung xanh = luật chung của cả hai nhánh</text>
+    <text class="lgi" x="880" y="864">→ chữ xanh = eval của vòng này thay vạch cũ</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Hai lối, không lối thứ ba</h2>
+      <p>Mọi byte mà tệp thước đã ký lệch <code>merge-base</code> phải rơi vào một trong hai nhánh. Không có trong danh sách thay thế, cũng không giải thích được bằng một cặp của <code>bang-the.json</code>, thì đỏ.</p>
+    </div>
+    <div>
+      <h2>Danh sách thay thế rút bằng máy</h2>
+      <p>Ba dòng <code>supersedes</code> (d-…-9, -10, -11) rút ngày 26/09 từ lệnh của mọi eval máy đã ký. Các eval đã ký khác mang chữ «CRM» — <code>messages-guard.spec.ts</code>, <code>logo-icons.spec.ts</code>, <code>chu-la.mjs</code>… — chỉ được sửa theo lối thế tên.</p>
+    </div>
+    <div>
+      <h2>So với merge-base, không đòi thoát 0</h2>
+      <p>Khoảng 46 eval đo màn của các hồ sơ đã ký đỏ sẵn trên máy này vì môi trường (đo 25/09). Luật chỉ đòi: đã đạt ở <code>merge-base</code> thì phải đạt ở HEAD.</p>
+      <p class="quiet">Ba thước biết trước phải thế tên: <code>khong-dich-cua-lat.json</code>, <code>man-okr.mjs</code>, <code>chieu-do.mjs</code>.</p>
+    </div>
+  </div>
+
+  <footer>
+    Vẽ theo contract.md (AC-13, mục Notes) và ba dòng supersedes của decisions.jsonl trong hồ sơ doi-ten-onehub-center.<br>
+    Hình dựng 26/09/2026
+  </footer>
+</div>
+</body>
+</html>

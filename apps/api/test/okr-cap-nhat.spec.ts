@@ -1,16 +1,19 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
 import { db } from "@crm/db";
+import { chupKrCrm } from "@crm/db/okr-chi-so";
 import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { GuiCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import { parseOkrNguon } from "@crm/validation/okr-nguon";
 import { LOI_KHUON_TRAO_DOI } from "@crm/validation/okr-trao-doi";
 import { type OkrVetSnapshot, parseOkrVet } from "@crm/validation/okr-vet";
 import request from "supertest";
 import type { ViecCuaToiOutput } from "../src/okr/okr.contracts";
 import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { OKR } from "../src/okr/okr-config";
+import { OkrSoService } from "../src/okr/okr-so.service";
 import { OkrTraoDoiService } from "../src/okr/okr-trao-doi.service";
 import {
 	type AiHoacCookie,
@@ -116,6 +119,9 @@ type Muc = {
 
 const gui = (sessionId: string, items: Muc[], ai: AiHoacCookie) =>
 	goi("okr.guiCapNhat", { sessionId, items }, ai);
+
+const datNguon = (vao: Json, ai: AiHoacCookie) =>
+	goi("okr.datNguonKr", vao, ai);
 
 function thuHaiVN(d: Date): string {
 	const [nam, thang, ngay] = new Intl.DateTimeFormat("en-CA", {
@@ -1835,5 +1841,194 @@ describe("chi-okr", () => {
 			"deals.list": ngoai,
 			"dashboard.summary": ngoai,
 		});
+	});
+});
+
+type DongCapNhatMay = {
+	keyResultId: string;
+	currentValue: number;
+	nguon: string;
+	doCanh: boolean;
+	soMay: { giaTri: number; ngay: string; nguon: string } | null;
+};
+
+describe("kr-may", () => {
+	const krVoiSoChup: string[] = [];
+
+	afterAll(async () => {
+		await db.okrSoChup.deleteMany({
+			where: { keyResultId: { in: krVoiSoChup } },
+		});
+	});
+
+	test("kr-may: nguon crm/api giu so may, do canh dien san so moi nhat, lo thieu tu tin bi tu choi ca lo", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("km");
+		const chu = await nguoiMoi("km-chu");
+		const cookieChu = await phienCua(chu);
+		const NGAY = "2026-10-15";
+		const TRONG_KY = new Date("2026-10-10T03:00:00Z");
+
+		const a = await mucTieu(
+			quy,
+			{ level: "ca-nhan", personUserId: chu },
+			chu,
+			cookieChu,
+		);
+		const krM = await taoKr(a, chu, cookieChu, {
+			startValue: 0,
+			targetValue: 20,
+			currentValue: 0,
+		});
+		const krA = await taoKr(a, chu, cookieChu, {
+			currentValue: 0,
+		});
+		const krC = await taoKr(a, chu, cookieChu, { currentValue: 5 });
+		const krT = await taoKr(a, chu, cookieChu, { currentValue: 7 });
+
+		ok(
+			await datNguon(
+				{
+					keyResultId: krM,
+					loai: "crm",
+					chiSo: "thoa-thuan-moi",
+					phamVi: { kieu: "nguoi", id: chu },
+				},
+				cookieChu,
+			),
+			"nguon M",
+		);
+		ok(await datNguon({ keyResultId: krA, loai: "api" }, cookieChu), "nguon A");
+		await congBo(a, cookieChu);
+		ok(
+			await datNguon(
+				{
+					keyResultId: krC,
+					loai: "crm",
+					chiSo: "thoa-thuan-chot-duoc",
+					phamVi: { kieu: "nguoi", id: chu },
+				},
+				cookieChu,
+			),
+			"do canh C",
+		);
+
+		const cty = await db.company.create({ data: { name: ma("cty-km") } });
+		for (let i = 0; i < 15; i++) {
+			await db.deal.create({
+				data: {
+					name: ma("thoa-thuan-moi"),
+					companyId: cty.id,
+					ownerId: chu,
+					stage: "DEMO_BOOKED",
+					createdAt: TRONG_KY,
+				},
+			});
+		}
+		for (let i = 0; i < 8; i++) {
+			await db.deal.create({
+				data: {
+					name: ma("thoa-thuan-chot"),
+					companyId: cty.id,
+					ownerId: chu,
+					stage: "CLOSED_WON",
+					closedAt: TRONG_KY,
+				},
+			});
+		}
+		await chupKrCrm(db, krM, NGAY, parseOkrNguon);
+		await chupKrCrm(db, krC, NGAY, parseOkrNguon);
+		const so = ungDung().get(OkrSoService);
+		await so.ghiSoKr(
+			chu,
+			{ id: krA, giaTri: 40 },
+			new Date(`${NGAY}T03:00:00Z`),
+		);
+		krVoiSoChup.push(krM, krA, krC);
+
+		const truoc = await doc<{ items: DongCapNhatMay[] }>(
+			"okr.capNhatTuan",
+			cookieChu,
+		);
+		const boKr = [krM, krA, krC, krT];
+		const cuaBo = (items: DongCapNhatMay[]) =>
+			items
+				.filter((i) => boKr.includes(i.keyResultId))
+				.sort(
+					(x, y) => boKr.indexOf(x.keyResultId) - boKr.indexOf(y.keyResultId),
+				)
+				.map((i) => [
+					i.keyResultId,
+					i.currentValue,
+					i.nguon,
+					i.doCanh,
+					i.soMay,
+				]);
+		expect(cuaBo(truoc.items)).toEqual([
+			[krM, 15, "crm", false, { giaTri: 15, ngay: NGAY, nguon: "crm" }],
+			[krA, 40, "api", false, { giaTri: 40, ngay: NGAY, nguon: "api" }],
+			[krC, 5, "tay", true, { giaTri: 8, ngay: NGAY, nguon: "crm" }],
+			[krT, 7, "tay", false, null],
+		]);
+
+		const demTruoc = await demLan(boKr);
+		const sid = await moPhien(cookieChu);
+		const tra = ok<{ written: number }>(
+			await gui(
+				sid,
+				[
+					{ keyResultId: krM, value: 99, confidence: "cao", note: "" },
+					{ keyResultId: krA, value: 99, confidence: "cao", note: "" },
+					{ keyResultId: krC, value: 8, confidence: "cao", note: "c" },
+					{ keyResultId: krT, value: 7, confidence: "cao", note: "t" },
+				],
+				cookieChu,
+			),
+			"gui lo kr-may",
+		);
+		expect(tra.written).toBe(4);
+
+		const dong = (
+			await db.okrCheckIn.findMany({ where: { sessionId: sid } })
+		).sort((x, y) => boKr.indexOf(x.keyResultId) - boKr.indexOf(y.keyResultId));
+		expect(dong.map((r) => Number(r.value))).toEqual([15, 40, 8, 7]);
+		expect(await soHienTai(boKr)).toEqual([15, 40, 8, 7]);
+		expect(await demLan(boKr)).toBe(demTruoc + 4);
+
+		const vet = await db.okrTrail.findMany({
+			where: { action: "cap-nhat-tuan", keyResultId: { in: boKr } },
+		});
+		expect(
+			vet
+				.map((v) => {
+					const sau = parseOkrVet(v.after);
+					return [v.keyResultId, sau?.currentValue ?? null];
+				})
+				.sort(
+					(x, y) => boKr.indexOf(String(x[0])) - boKr.indexOf(String(y[0])),
+				),
+		).toEqual([
+			[krM, 15],
+			[krA, 40],
+			[krC, 8],
+			[krT, 7],
+		]);
+
+		const demTruoc2 = await demLan(boKr);
+		const soTruoc2 = await soHienTai(boKr);
+		const sid2 = await moPhien(cookieChu);
+		const loLo = await gui(
+			sid2,
+			[
+				{ keyResultId: krM, value: 1, note: "" } as Muc,
+				{ keyResultId: krA, value: 40, confidence: "cao", note: "" },
+				{ keyResultId: krC, value: 9, confidence: "cao", note: "" },
+				{ keyResultId: krT, value: 6, confidence: "cao", note: "" },
+			],
+			cookieChu,
+		);
+		expect(tuChoi(loLo)).toBe(`400 ${C.tuTinThieu}`);
+		expect(await demLan(boKr)).toBe(demTruoc2);
+		expect(await soHienTai(boKr)).toEqual(soTruoc2);
 	});
 });

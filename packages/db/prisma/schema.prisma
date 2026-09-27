@@ -1883,6 +1883,25 @@ model ZaloUpdateSeen {
   @@map("zaloUpdateSeen")
 }
 
+model ZaloHoi {
+  id         String    @id @default(cuid())
+  messageId  String    @unique
+  crmUserId  String
+  zaloChatId String
+  sessionId  String?
+  hoiLuc     DateTime  @default(now())
+  traLoiLuc  DateTime?
+  doTreMs    Int?
+  tokenVao   Int?
+  tokenRa    Int?
+  ketQua     String
+
+  @@index([crmUserId, hoiLuc])
+  @@index([zaloChatId, ketQua])
+  @@index([hoiLuc])
+  @@map("zaloHoi")
+}
+
 model NotificationPreference {
   id        String              @id @default(cuid())
   userId    String              @unique
@@ -2049,6 +2068,8 @@ model OkrKeyResult {
   alignedBy     OkrAlignment[] @relation("OkrAlignmentTargetKeyResult")
   checkIns      OkrCheckIn[]
   comments      OkrComment[]
+  nguonMay      OkrNguonKr?
+  soChup        OkrSoChup[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2162,4 +2183,44 @@ model OkrFollow {
   @@id([objectiveId, userId])
   @@index([userId])
   @@map("okrFollow")
+}
+
+model OkrNguonKr {
+  id           String       @id @default(cuid())
+  keyResultId  String       @unique
+  keyResult    OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Cascade)
+  loai         String
+  chiSo        String?
+  phamVi       Json?
+  bac          String?
+  sheetId      String?
+  sheetO       String?
+  docLuc       DateTime?
+  docGiaTri    Decimal?     @db.Decimal(18, 4)
+  docLoi       String?
+  thuLuc       DateTime?
+  taoBoiUserId String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([loai])
+  @@map("okrNguonKr")
+}
+
+model OkrSoChup {
+  id           String       @id @default(cuid())
+  keyResultId  String
+  keyResult    OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  ngay         DateTime     @db.Date
+  giaTri       Decimal      @db.Decimal(18, 4)
+  nguon        String
+  chiSo        String?
+  phamVi       Json?
+  bac          String?
+  tacGiaUserId String?
+  chupLuc      DateTime     @default(now())
+
+  @@unique([keyResultId, ngay], map: "okrSoChup_may_mot_ngay", where: raw("nguon = ANY (ARRAY['crm'::text, 'bang-tinh'::text])"))
+  @@index([keyResultId, ngay])
+  @@map("okrSoChup")
 }

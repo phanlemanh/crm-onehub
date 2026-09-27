@@ -7,14 +7,16 @@ import {
 	StepperDescription,
 	StepperIndicator,
 	StepperItem,
+	StepperSeparator,
 	StepperTitle,
 	useStepItem,
 } from "@crm/ui/components/reui/stepper";
 import { cn } from "@crm/ui/lib/utils";
-import { createContext, useContext } from "react";
+import { Children, createContext, useContext } from "react";
 import type * as React from "react";
 
 const TinhContext = createContext(false);
+const SoBuocContext = createContext(0);
 
 function StepList({
 	activeStep,
@@ -31,18 +33,20 @@ function StepList({
 }) {
 	return (
 		<TinhContext.Provider value={tinh}>
-			<Stepper
-				value={tinh ? Number.MAX_SAFE_INTEGER : activeStep}
-				orientation="vertical"
-				role="list"
-				aria-label={label}
-				indicators={
-					markCompleted && !tinh ? { completed: <Icon icon={Checkmark} /> } : {}
-				}
-				className="flex flex-col"
-			>
-				{children}
-			</Stepper>
+			<SoBuocContext.Provider value={Children.count(children)}>
+				<Stepper
+					value={tinh ? Number.MAX_SAFE_INTEGER : activeStep}
+					orientation="vertical"
+					role="list"
+					aria-label={label}
+					indicators={
+						markCompleted && !tinh ? { completed: <Icon icon={Checkmark} /> } : {}
+					}
+					className="flex flex-col"
+				>
+					{children}
+				</Stepper>
+			</SoBuocContext.Provider>
 		</TinhContext.Provider>
 	);
 }
@@ -91,13 +95,19 @@ function StepListItem({
 	children?: React.ReactNode;
 }) {
 	const tinh = useContext(TinhContext);
+	const soBuoc = useContext(SoBuocContext);
 	return (
 		<StepperItem
 			step={step}
 			role="listitem"
 			aria-current={!tinh && step === activeStep ? "step" : undefined}
-			className="flex-row items-start justify-start gap-3 pb-5 last:pb-0"
+			className="relative flex-row items-start justify-start gap-3 pb-5 last:pb-0"
 		>
+			{tinh && step < soBuoc ? (
+				<span aria-hidden="true" className="contents">
+					<StepperSeparator className="absolute top-7 bottom-1 left-3 m-0 h-auto w-px rounded-none bg-border group-data-[orientation=vertical]/stepper-nav:h-auto group-data-[orientation=vertical]/stepper-nav:w-px" />
+				</span>
+			) : null}
 			<StepperIndicator>{step}</StepperIndicator>
 			<StepListBody title={title} description={description}>
 				{children}

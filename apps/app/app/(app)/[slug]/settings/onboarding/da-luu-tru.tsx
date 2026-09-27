@@ -1,11 +1,11 @@
 "use client";
 
 import { ArchivedList } from "@crm/ui/components/archived-list";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 import { useLamMoiDieuPhoi } from "./lam-moi";

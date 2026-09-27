@@ -4,7 +4,10 @@ import type { Evidence, EvidenceKind } from "../lib/evidence";
 import { WEIGHTS } from "../lib/evidence";
 import { FACT_FIELDS, type FactField, recordFact } from "../lib/facts";
 import { focusOn } from "../lib/focus";
-import { assertResearchPurpose } from "../lib/session-purpose";
+import {
+	assertNotZaloQuestion,
+	assertResearchPurpose,
+} from "../lib/session-purpose";
 
 export default defineTool({
 	description:
@@ -46,6 +49,7 @@ export default defineTool({
 			.describe("The page a rep should open to check."),
 	}),
 	async execute(input, ctx) {
+		assertNotZaloQuestion(ctx);
 		assertResearchPurpose(ctx);
 		focusOn({ contactId: input.contactId });
 

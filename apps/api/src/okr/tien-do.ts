@@ -19,13 +19,15 @@ export function chonChuKyHienTai<T extends ChuKyNgan>(
 		(c) => c.startsOn <= homNay && homNay <= c.endsOn,
 	);
 	const trongNgay =
-		chuaHomNay.find((c) => c.phase === "dang-chay") ?? chuaHomNay[0];
+		chuaHomNay.find((c) => c.phase === "dang-chay") ??
+		chuaHomNay.find((c) => c.phase !== "da-dong");
 	if (trongNgay) return trongNgay;
 	const moc = ngayTuyet(homNay);
 	const xa = (c: ChuKyNgan) => Math.abs(ngayTuyet(c.startsOn) - moc);
 	const ganNhat = (ds: T[]) => [...ds].sort((a, b) => xa(a) - xa(b))[0];
 	return (
 		ganNhat(quy.filter((c) => c.phase !== "da-dong")) ??
+		chuaHomNay[0] ??
 		ganNhat(quy) ??
 		cycles[0] ??
 		null

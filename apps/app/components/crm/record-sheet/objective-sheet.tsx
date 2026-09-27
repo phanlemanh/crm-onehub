@@ -8,6 +8,7 @@ import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -41,7 +42,6 @@ import {
 	NhanTinhTrang,
 	NhanTrangThai,
 } from "@/app/(app)/[slug]/okr/tien-do-kr";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import {
 	DetailSheetBody,
@@ -51,9 +51,11 @@ import {
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { TabDienBien } from "./objective-dien-bien";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";
@@ -324,6 +326,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 			) : hop ? (
 				<HopThoaiKr
 					objectiveId={mt.id}
+					mucTieu={mt}
 					kr={hop.loai === "sua" ? hop.kr : null}
 					chuMacDinh={mt.owner.id}
 					suaDuocCot={mt.canEdit}
@@ -491,17 +494,16 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 }
 
 export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
-	const t = okrMessages(useLocale());
+	const locale = useLocale();
+	const t = okrMessages(locale);
 	const m = t.sheet;
+	const mtc = okrToanCanhMessages(locale);
 	const trpc = useTRPC();
 	const { tab, setTab } = useRecordSheetView("kr");
 	const query = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
 	const binhLuan = useQuery(trpc.okr.comments.queryOptions({ objectiveId }));
-	const cycles = useQuery(trpc.okr.cycles.queryOptions());
 	const mt = query.data;
-	const tenKy = mt
-		? cycles.data?.cycles.find((c) => c.id === mt.cycleId)?.name
-		: undefined;
+	const tenKy = mt?.cycleName;
 
 	const tabs: DetailSheetTab[] = mt
 		? [
@@ -538,6 +540,19 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					content: (
 						<TabTraoDoi
 							objectiveId={mt.id}
+							keyResults={mt.keyResults.map((k) => ({
+								id: k.id,
+								title: k.title,
+							}))}
+						/>
+					),
+				},
+				{
+					value: "dien-bien",
+					label: mtc.dienBien.tab,
+					count: null,
+					content: (
+						<TabDienBien
 							keyResults={mt.keyResults.map((k) => ({
 								id: k.id,
 								title: k.title,

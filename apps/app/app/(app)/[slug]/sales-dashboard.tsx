@@ -86,7 +86,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 	);
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex flex-col gap-6" data-khoi="ban-hang">
 			<StatGroup>
 				<StatCard
 					label={m.stats.closedWon}

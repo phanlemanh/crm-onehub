@@ -31,6 +31,7 @@ import { cn } from "@crm/ui/lib/utils";
 import { type ReactNode, useRef, useState } from "react";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetHeader,
@@ -66,7 +67,7 @@ export function DetailSheet({
 	const content = useRef<HTMLDivElement>(null);
 
 	return (
-		<Sheet open={open} onOpenChange={onOpenChange}>
+		<Sheet open={open} onOpenChange={onOpenChange} tuNhanThayDoi={false}>
 			<SheetContent
 				ref={content}
 				side="right"
@@ -91,7 +92,6 @@ export function DetailSheetHeader({
 	note,
 	actions,
 	onBack,
-	onClose,
 }: {
 	media?: ReactNode;
 	title: ReactNode;
@@ -99,7 +99,6 @@ export function DetailSheetHeader({
 	note?: ReactNode;
 	actions?: ReactNode;
 	onBack?: () => void;
-	onClose: () => void;
 }) {
 	const m = crmMessages(useLocale());
 	return (
@@ -140,10 +139,12 @@ export function DetailSheetHeader({
 					{actions ? (
 						<Separator orientation="vertical" className="mx-1 h-5" />
 					) : null}
-					<Button variant="ghost" size="icon-sm" onClick={onClose}>
-						<Icon icon={Close} />
-						<span className="sr-only">{m.sheet.close}</span>
-					</Button>
+					<SheetClose asChild>
+						<Button variant="ghost" size="icon-sm">
+							<Icon icon={Close} />
+							<span className="sr-only">{m.sheet.close}</span>
+						</Button>
+					</SheetClose>
 				</div>
 			</div>
 		</SheetHeader>
@@ -366,14 +367,19 @@ export function DetailSheetEmpty({
 	title,
 	description,
 	action,
+	compact,
 }: {
 	icon: CarbonIcon;
 	title: string;
 	description: string;
 	action?: ReactNode;
+	compact?: boolean;
 }) {
 	return (
-		<Empty className="flex-1">
+		<Empty
+			className={compact ? undefined : "flex-1"}
+			size={compact ? "compact" : undefined}
+		>
 			<EmptyHeader>
 				<EmptyMedia variant="icon">
 					<Icon icon={icon} />

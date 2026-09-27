@@ -76,12 +76,31 @@ export const OKR = {
 		},
 		traoDoi: {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
-			nguoiKhongCon: "Người không còn trong CRM",
+			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
 			choChinhMinh: "Người nhận phải khác người đang phụ trách.",
+		},
+		so: {
+			nguonDaKhoa:
+				"Nguồn đã khoá khi công bố — thêm số đo cạnh cho KR nhập tay, hoặc đặt KR mới ở kỳ sau.",
+			hienTaiCuaMay:
+				"Số hiện tại của KR này do máy ghi — đổi nguồn khi mục tiêu còn nháp.",
+			krDaCoSoChup: "KR đã có lịch sử số — sửa được, không xoá được.",
+			donViKhongCo: "Đơn vị không có hoặc đã lưu trữ.",
+			khongPhaiThanhVien:
+				"Người này không phải thành viên của không gian làm việc.",
+			sheetsTat: "Quản trị chưa cắm khoá Google Sheets.",
+			khongNhanApi: "KR này không nhận số qua khoá API.",
+			kyDaQua: "Chu kỳ đã qua ngày cuối — không ghi số nữa.",
+			kyChuaToi: "Chu kỳ chưa tới ngày đầu — chưa ghi số được.",
+			crmKhongHopKieu:
+				"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
+			danhSachDoiTac:
+				"Danh sách bản ghi thuộc dữ liệu đối tác — vai «chỉ OKR» chỉ xem được con số.",
+			ghiChuDoCanh: "đo cạnh",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
@@ -108,10 +127,10 @@ export const OKR = {
 				"Tên mục tiêu, tên KR phải dài 3–200 ký tự; đơn vị đo tối đa 24 ký tự",
 			kieuLa:
 				"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
-			emailLa: "Email này chưa là thành viên CRM",
+			emailLa: "Email này chưa là thành viên OneHub Center",
 			thieuDich: "Thiếu đích",
 			soLa: "Khởi điểm hoặc đích không phải số",
-			daCo: "Mục tiêu này đã có trong CRM cho đơn vị và chu kỳ này",
+			daCo: "Mục tiêu này đã có trong OneHub Center cho đơn vị và chu kỳ này",
 			loQuaDai: (n: number) => `Lô có quá ${n} dòng — chia nhỏ rồi nhập lại.`,
 			loRong: "Không có dòng nào để nhập.",
 			khongDongHopLe: "Không có dòng hợp lệ nào để ghi.",

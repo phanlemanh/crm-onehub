@@ -1,0 +1,118 @@
+{
+  "feature_plain": "Ba chỗ nhỏ còn hở sau Toàn cảnh OKR — khối «OKR của bạn» báo lỗi và cho thử lại thay vì biến mất, bộ lọc người phụ trách luôn hiện tên người, trang Theo đơn vị hiện danh sách ngay — cộng một tiêu chí mới: bảng KR đang hiện không bị thay bằng câu lỗi khi tải lại chu kỳ ở nền thất bại.",
+  "scope_plain": "Không đổi máy chủ API, không dời ô lỗi dùng chung sang thư viện giao diện, không thêm bản mẫu cho hai trạng thái lỗi.",
+  "decisions_plain": [
+    {
+      "id": "d-20260926T122058Z-1",
+      "p": "KHÔNG làm bản bấm được trước cổng này — ba sửa dùng lại giao diện đã duyệt; đổi lại anh duyệt bằng chữ, ảnh thật đến ở Cổng Bằng chứng."
+    },
+    {
+      "id": "d-20260926T122058Z-2",
+      "p": "Dùng lại ô lỗi của Toàn cảnh tại chỗ, không dời nó sang thư viện chung — đổi lại khối Tổng quan dựa vào mã của màn Toàn cảnh."
+    },
+    {
+      "id": "d-20260926T122058Z-3",
+      "p": "Lấy tên người từ cây tổ chức trình duyệt đã có, không hỏi thêm máy chủ — đổi lại người đã rời chỉ hiện nhãn chung."
+    },
+    {
+      "id": "d-20260926T122058Z-4",
+      "p": "Một chỗ duy nhất dựng bộ lọc cho cả máy chủ lẫn trình duyệt — đổi lại chạm thêm một tệp của hồ sơ Toàn cảnh đã ký."
+    },
+    {
+      "id": "d-20260926T133658Z-6",
+      "p": "Sửa ngay hồi quy «bảng KR bị thay bằng câu lỗi khi tải lại chu kỳ ở nền» thay vì ghi hạn chế — đổi lại thêm một lượt duyệt phạm vi và một vòng chấm."
+    },
+    {
+      "id": "d-20260926T133658Z-7",
+      "p": "Trả lại Cổng Bằng chứng vòng 1, không ký — hồ sơ về Cổng Phạm vi để thêm AC-10; bằng chứng vòng 1 giữ làm mốc cho vòng 2."
+    }
+  ],
+  "will_do": [
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho người bấm «Thử lại» trên khối đang báo lỗi: hết lỗi thì bảng KR hiện, còn lỗi thì câu lỗi ở lại."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ giữ nguyên hai cảnh cũ: không có chu kỳ đang chạy thì khối ẩn, đang tải thì khung chờ — không nhầm thành lỗi."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ hiện tên người (kèm «· 0») cho người đã chọn ở bộ lọc phụ trách dù họ không còn mục tiêu nào khớp."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ dựng bộ lọc tải trước ở máy chủ và ở trình duyệt từ cùng một chỗ, phủ đủ mọi mặt lọc máy chủ nhận."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ giữ bảng KR đang hiện khi việc tải lại chu kỳ ở nền thất bại (quay lại tab sau một lúc); câu lỗi chu kỳ chỉ hiện khi không có chu kỳ nào dùng được — mới thêm ở Cổng Bằng chứng vòng 1."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ KHÔNG để khối «OKR của bạn» biến mất khỏi Tổng quan khi không tải được chu kỳ — cả vai quản lý lẫn vai «chỉ OKR» đều thấy câu lỗi và nút «Thử lại»."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG để lỗi tải KR chỉ còn một dòng chữ xám không có cách thử lại; trang một người nói đúng «KR của người này», không nói «của bạn»."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG hiện mã người dùng khi người đã chọn không còn trong tổ chức — hiện «Người không còn trong tổ chức · 0»."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ KHÔNG tải lại danh sách mục tiêu ở trình duyệt khi vừa mở Theo đơn vị (có lọc hay không), cho tới khi người đổi bộ lọc."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ KHÔNG dựng khối giao diện mới: trạng thái lỗi dùng đúng ô lỗi có nút thử lại đã duyệt ở Toàn cảnh."
+    }
+  ],
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đủ ba chỗ khối hiện: Tổng quan của quản lý, Tổng quan vai «chỉ OKR», trang một người — AC-1 và AC-3 (khối báo lỗi) gọi tên cả ba."
+    },
+    {
+      "i": 1,
+      "p": "Đủ chín cảnh của khối, từ lỗi chu kỳ lần đầu tới tải lại ở nền lỗi khi đã có bảng — AC-1 tới AC-4 và AC-10; chuẩn đối chiếu: hướng dẫn thông báo lỗi của NN/g."
+    },
+    {
+      "i": 2,
+      "p": "Đủ ba kiểu người đã chọn ở bộ lọc — AC-5 (còn trong tổ chức) và AC-6 (đã rời); kiểu còn khớp giữ nguyên như lượt 5."
+    },
+    {
+      "i": 3,
+      "p": "Đủ bốn kiểu URL khi mở Theo đơn vị — AC-7 (không tải lại) đo ba kiểu, AC-8 (đủ mặt lọc) chặn lệch cho mọi kiểu."
+    },
+    {
+      "i": 4,
+      "p": "Giả định chờ anh gạch: người đã rời vẫn có thể còn trong đường dẫn cũ, và một nhãn chung là đủ, không cần tên cũ của họ."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Chưa gọi tên Tổng quan của vai «chỉ OKR» — đã sửa: tiêu chí gọi tên hai vai, phép đo màn chạy thêm một lượt với vai đó."
+    },
+    {
+      "i": 1,
+      "p": "Phép đếm «không tải lại danh sách» có thể đếm trượt mà vẫn xanh — đã sửa: cùng lượt đổi một bộ lọc, phải đếm được ít nhất một lần tải."
+    },
+    {
+      "i": 2,
+      "p": "Chưa đo rằng ô lỗi đúng là ô lỗi dùng chung — đã sửa: bài kiểm soi đúng khung ô trống và nút của thư viện giao diện."
+    },
+    {
+      "i": 3,
+      "p": "Dữ liệu giả trong bài kiểm viết tay, có chỗ thiếu trường — đã sửa: mọi dữ liệu giả buộc khớp kiểu thật, kiểm kiểu bắt chỗ thiếu."
+    },
+    {
+      "i": 4,
+      "p": "Chỉ soi nhãn trong menu, chưa soi phần còn lại của màn — đã sửa: soi cả trang lúc menu đóng và mở, không được có mã người."
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import Upload from "@carbon/icons-react/es/Upload";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -304,17 +305,18 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 					) : null}
 					{buoc === 3 ? (
 						<>
-							<Button variant="outline" onClick={dong}>
-								{m.dongHop}
-							</Button>
-							<Button
-								onClick={() => {
-									void datUrl({ [SEARCH_PARAM.toChuc.don]: { loai: "goc" } });
-									dong();
-								}}
-							>
-								{m.xemCay}
-							</Button>
+							<DialogClose asChild dongNgay>
+								<Button variant="outline">{m.dongHop}</Button>
+							</DialogClose>
+							<DialogClose asChild dongNgay>
+								<Button
+									onClick={() =>
+										void datUrl({ [SEARCH_PARAM.toChuc.don]: { loai: "goc" } })
+									}
+								>
+									{m.xemCay}
+								</Button>
+							</DialogClose>
 						</>
 					) : null}
 				</DialogFooter>

@@ -34,6 +34,10 @@ export type ChonTin = {
 	chatType?: string;
 	isBot?: boolean;
 	photo?: string;
+	eventName?: string;
+	sticker?: string;
+	photoUrl?: string;
+	caption?: string;
 };
 
 function goc(): KhuonGoc {
@@ -50,10 +54,12 @@ export function tinThat(chon: ChonTin): TinZaloThat {
 	if (chon.isBot !== undefined) message.from.is_bot = chon.isBot;
 	if (chon.text === null) delete message.text;
 	else if (chon.text !== undefined) message.text = chon.text;
-	if (chon.photo !== undefined) {
-		return { ...message, photo: chon.photo };
-	}
-	return message;
+	const them: Record<string, string> = {};
+	if (chon.photo !== undefined) them.photo = chon.photo;
+	if (chon.sticker !== undefined) them.sticker = chon.sticker;
+	if (chon.photoUrl !== undefined) them.photo_url = chon.photoUrl;
+	if (chon.caption !== undefined) them.caption = chon.caption;
+	return { ...message, ...them };
 }
 
 export function thanGetUpdates(chon: ChonTin): KhuonGoc {
@@ -74,7 +80,7 @@ export function thanWebhookCoVo(chon: ChonTin): ThanWebhookCoVo {
 	return {
 		ok: true,
 		result: {
-			event_name: than.result.event_name,
+			event_name: chon.eventName ?? than.result.event_name,
 			message: than.result.message,
 		},
 	};

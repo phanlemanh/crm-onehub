@@ -1,25 +1,36 @@
 "use client";
 
 import { Badge } from "@crm/ui/components/badge";
+import { Button } from "@crm/ui/components/button";
 import { CardTableEmpty } from "@crm/ui/components/card-table";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
 	type SimpleTableColumn,
+	SimpleTableNote,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@crm/ui/components/tooltip";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 import type { ReactNode } from "react";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
+import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { CELL, type KetQua } from "./kieu";
+import {
+	chuSo,
+	KHOA_DAU,
+	type NguonMay,
+	useXemDuocBanGhi,
+	type XemBanGhi,
+} from "./nguon-so";
 import { TienDoKr } from "./tien-do-kr";
-
-const DINH_DANG_SO = { vi: "vi-VN", en: "en-US" } satisfies Record<
-	Locale,
-	string
->;
 
 export function giaTri(
 	kr: Pick<KetQua, "kind" | "unit">,
@@ -28,8 +39,108 @@ export function giaTri(
 ): string {
 	const m = okrMessages(locale);
 	if (kr.kind === "moc") return so >= 1 ? m.moc.xong : m.moc.chuaXong;
-	const chu = so.toLocaleString(DINH_DANG_SO[locale]);
+	const chu = chuSo(so, locale);
 	return kr.unit === "%" ? `${chu}%` : `${chu} ${kr.unit}`.trim();
+}
+
+function soTran(
+	kr: Pick<KetQua, "kind" | "unit">,
+	so: number,
+	locale: Locale,
+): string {
+	if (kr.kind === "moc") return giaTri(kr, so, locale);
+	const chu = chuSo(so, locale);
+	return kr.unit === "%" ? `${chu}%` : chu;
+}
+
+function nguonMayCua(kr: KetQua): NguonMay | null {
+	if (kr.source !== "tay") return kr.source;
+	return kr.doCanh ? (kr.nguonMay?.loai ?? null) : null;
+}
+
+const CHUP_THEO_NHIP: readonly NguonMay[] = ["crm", "bang-tinh"];
+
+function chuChuaCoSo(may: NguonMay | null, s: OkrSoMessages): string | null {
+	if (may === null) return null;
+	if (may === "api") return s.trangThai.bangKr.chuaGhiApi;
+	return CHUP_THEO_NHIP.includes(may) ? s.trangThai.bangKr.chuaChup : null;
+}
+
+function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
+	const locale = useLocale();
+	const s = okrSoMessages(locale);
+	const moSo = useOpenRecord();
+	const coMay = kr.source !== "tay" || kr.doCanh;
+	const dich = giaTri(kr, kr.targetValue, locale);
+
+	if (!coMay)
+		return kr.kind === "moc" ? (
+			giaTri(kr, kr.currentValue, locale)
+		) : (
+			<span translate="no">
+				{giaTri(kr, kr.currentValue, locale)} / {dich}
+			</span>
+		);
+
+	const may = nguonMayCua(kr);
+	const chuaCoSo = kr.soMay === null ? chuChuaCoSo(may, s) : null;
+	const so =
+		kr.doCanh && kr.soMay
+			? s.trangThai.bangKr.doCanh(
+					soTran(kr, kr.currentValue, locale),
+					soTran(kr, kr.soMay.giaTri, locale),
+				)
+			: giaTri(kr, kr.currentValue, locale);
+	const hienSo = kr.doCanh && kr.soMay ? so : <span translate="no">{so}</span>;
+
+	return (
+		<span className="inline-flex flex-col items-end gap-1">
+			<span className="inline-flex flex-wrap items-center justify-end gap-2">
+				{may ? (
+					<Badge variant="outline" data-dau-nguon={may}>
+						{s.dau[KHOA_DAU[may]]}
+					</Badge>
+				) : null}
+				<span>
+					{xem === "chua-biet" ? (
+						<span data-so-kr-cho={kr.id}>{hienSo}</span>
+					) : xem === "duoc" ? (
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									variant="link"
+									size="xs"
+									data-so-kr={kr.id}
+									onClick={() => moSo({ kind: "so-kr", id: kr.id })}
+								>
+									{hienSo}
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								{s.trangThai.bangKr.moSo(kr.title)}
+							</TooltipContent>
+						</Tooltip>
+					) : (
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<span data-so-kr-tran={kr.id}>{hienSo}</span>
+							</TooltipTrigger>
+							<TooltipContent>{s.trangThai.bangKr.chiOkr}</TooltipContent>
+						</Tooltip>
+					)}
+					{kr.kind === "moc" ? null : (
+						<span translate="no">
+							{" / "}
+							{dich}
+						</span>
+					)}
+				</span>
+			</span>
+			{chuaCoSo ? (
+				<SimpleTableNote data-chua-chup>{chuaCoSo}</SimpleTableNote>
+			) : null}
+		</span>
+	);
 }
 
 export function BangKr({
@@ -49,6 +160,7 @@ export function BangKr({
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
+	const xem = useXemDuocBanGhi();
 	const cot: SimpleTableColumn[] = [
 		{ id: "ten", header: m.cot.kr },
 		{ id: "phuTrach", header: m.cot.phuTrach, width: "w-40" },
@@ -90,15 +202,12 @@ export function BangKr({
 							laMoc={kr.kind === "moc"}
 						/>
 					</TableCell>
-					<TableCell className={`${CELL} text-right tabular-nums`}>
-						{kr.kind === "moc" ? (
-							giaTri(kr, kr.currentValue, locale)
-						) : (
-							<span translate="no">
-								{giaTri(kr, kr.currentValue, locale)} /{" "}
-								{giaTri(kr, kr.targetValue, locale)}
-							</span>
-						)}
+					<TableCell
+						className={`${CELL} text-right tabular-nums`}
+						data-nguon={kr.source}
+						data-do-canh={kr.doCanh ? "" : undefined}
+					>
+						<SoCuaKr kr={kr} xem={xem} />
 					</TableCell>
 					{hanhDong ? (
 						<TableCell className={CELL}>{hanhDong(kr)}</TableCell>

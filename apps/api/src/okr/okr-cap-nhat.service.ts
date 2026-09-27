@@ -6,7 +6,7 @@ import {
 	type MoCapNhatInput,
 	MUC_TU_TIN,
 } from "@crm/validation/okr-cap-nhat";
-import { kieuKr } from "@crm/validation/okr-kr";
+import { kieuKr, NGUON_KR } from "@crm/validation/okr-kr";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -17,12 +17,19 @@ import {
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import type { CapNhatTuanOutput } from "./okr.contracts";
-import { chonTenDonVi, OkrService, tenDonVi } from "./okr.service";
+import {
+	chonSoMay,
+	chonTenDonVi,
+	doCanhVaSoMay,
+	OkrService,
+	tenDonVi,
+} from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
 const mucTuTin = z.enum(MUC_TU_TIN);
+const nguonKr = z.enum(NGUON_KR);
 const soDb = (d: Prisma.Decimal | number) => Number(d);
 const ngayDb = (s: string) => new Date(`${s}T00:00:00Z`);
 
@@ -52,6 +59,7 @@ export class OkrCapNhatService {
 						cycle: { select: { updateWeekday: true } },
 					},
 				},
+				...chonSoMay,
 			},
 			orderBy: [
 				{ objective: { createdAt: "asc" } },
@@ -68,6 +76,8 @@ export class OkrCapNhatService {
 		return {
 			items: krs.map((k) => {
 				const cuoi = lan.find((l) => l.keyResultId === k.id);
+				const nguon = nguonKr.parse(k.source);
+				const chup = k.soChup[0];
 				return {
 					keyResultId: k.id,
 					title: k.title,
@@ -83,6 +93,8 @@ export class OkrCapNhatService {
 					updatedThisWeek:
 						cuoi !== undefined &&
 						cuoi.weekStart.toISOString().slice(0, 10) === tuan,
+					nguon,
+					...doCanhVaSoMay(nguon, k.nguonMay, chup),
 				};
 			}),
 			weekStart: tuan,
@@ -129,18 +141,22 @@ export class OkrCapNhatService {
 					!this.quyenOkr.suaDuocDonVi(q, userId, donViCua(kr.objective))
 				)
 					throw new ForbiddenException(T.capNhat.khongPhaiChuHayTruong);
-				const loi = kiemGiaTriTheoKieu(kieuKr.parse(kr.kind), m.value);
-				if (loi) throw new BadRequestException(T.capNhat.giaTri[loi]);
-				return { kr, m, onBehalf: !chu };
+				const may = kr.source !== "tay";
+				if (!may) {
+					const loi = kiemGiaTriTheoKieu(kieuKr.parse(kr.kind), m.value);
+					if (loi) throw new BadRequestException(T.capNhat.giaTri[loi]);
+				}
+				return { kr, m, onBehalf: !chu, may };
 			});
 			const tuan = ngayDb(dauTuanVN(now));
-			for (const { kr, m, onBehalf } of ke) {
+			for (const { kr, m, onBehalf, may } of ke) {
+				const giaTri = may ? soDb(kr.currentValue) : m.value;
 				await tx.okrCheckIn.create({
 					data: {
 						keyResultId: kr.id,
 						sessionId: phien.id,
 						weekStart: tuan,
-						value: m.value,
+						value: giaTri,
 						confidence: m.confidence,
 						note: m.note,
 						authorUserId: userId,
@@ -148,17 +164,19 @@ export class OkrCapNhatService {
 						onBehalf,
 					},
 				});
-				await tx.okrKeyResult.update({
-					where: { id: kr.id },
-					data: { currentValue: m.value },
-				});
+				if (!may) {
+					await tx.okrKeyResult.update({
+						where: { id: kr.id },
+						data: { currentValue: m.value },
+					});
+				}
 				await this.okr.vet(
 					tx,
 					userId,
 					"cap-nhat-tuan",
 					{ objectiveId: kr.objectiveId, keyResultId: kr.id },
 					{ currentValue: soDb(kr.currentValue) },
-					{ currentValue: m.value, confidence: m.confidence, onBehalf },
+					{ currentValue: giaTri, confidence: m.confidence, onBehalf },
 				);
 			}
 			const seconds = Math.max(

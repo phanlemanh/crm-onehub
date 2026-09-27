@@ -4,6 +4,7 @@ import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -126,9 +127,11 @@ export function HopThoaiCanChinh({
 					</Field>
 				</form>
 				<DialogFooter>
-					<Button variant="outline" onClick={dong} disabled={gan.isPending}>
-						{h.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button variant="outline" disabled={gan.isPending}>
+							{h.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						type="submit"
 						form={`${ma}-form`}

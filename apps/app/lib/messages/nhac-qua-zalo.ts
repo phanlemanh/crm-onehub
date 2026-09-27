@@ -2,7 +2,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
 	tieuDe: "Morning reminders",
-	moTa: "Only for you. Every morning at 08:30 the CRM gathers what needs your attention and sends it on one channel.",
+	moTa: "Only for you. Every morning at 08:30 OneHub Center gathers what needs your attention and sends it on one channel.",
 	khoiZalo: {
 		ten: "Your Zalo",
 		tat: "Zalo is not switched on for this workspace. Ask an admin to turn it on under Connections › Zalo.",
@@ -91,7 +91,7 @@ const en = {
 			"In Zalo Bot Manager, open the new bot and copy its Bot Token. It looks like 1234567890:AbC… — not the Secret Token.",
 		buoc3TieuDe: "Paste it here",
 		buoc3MoTa:
-			"The CRM checks the token with Zalo and signs up for messages on its own.",
+			"OneHub Center checks the token with Zalo and signs up for messages on its own.",
 		nhanToken: "Bot Token",
 		goiYToken: "1234567890:AbC…",
 		luu: "Save",
@@ -101,18 +101,18 @@ const en = {
 			"This is not a Bot Token. A Bot Token looks like 1234567890:AbC…, not like the Secret Token.",
 		daLuu: (ten: string) => `${ten} is switched on.`,
 		daLuuChuaNhanTin: (ten: string) =>
-			`${ten} is saved, but Zalo could not reach the CRM yet. Press “Sign up again” in a few minutes.`,
+			`${ten} is saved, but Zalo could not reach OneHub Center yet. Press “Sign up again” in a few minutes.`,
 		daDangKyLai: "Signed up for messages again.",
 		dangKyLaiChuaXong:
-			"Zalo took the sign-up but could not reach the CRM yet. Try “Sign up again” in a few minutes.",
+			"Zalo took the sign-up but could not reach OneHub Center yet. Try “Sign up again” in a few minutes.",
 		tokenEnv:
 			"The token is set in the server's .env file. Paste a token here to replace it.",
 		chiQuanTri: "Only an admin can change the bot.",
 		nhanQuaWebhook: "Receives messages through the webhook",
-		canHttpsTieuDe: "Messages to the bot do not reach the CRM yet",
+		canHttpsTieuDe: "Messages to the bot do not reach OneHub Center yet",
 		canHttpsMoTa:
 			"The agent has no https address, so Zalo cannot deliver messages. When testing on your machine, run",
-		chuaWebhookTieuDe: "Zalo is not delivering messages to the CRM",
+		chuaWebhookTieuDe: "Zalo is not delivering messages to OneHub Center",
 		chuaWebhookMoTa:
 			"People who send their code will not be connected until you sign up again.",
 		dangKyLai: "Sign up again",
@@ -210,7 +210,7 @@ const vi = {
 		buoc2MoTa:
 			"Trong Zalo Bot Manager, mở bot vừa tạo và chép Bot Token. Token có dạng 1234567890:AbC… — không phải Secret Token.",
 		buoc3TieuDe: "Dán vào đây",
-		buoc3MoTa: "CRM kiểm token với Zalo rồi tự đăng ký nhận tin.",
+		buoc3MoTa: "OneHub Center kiểm token với Zalo rồi tự đăng ký nhận tin.",
 		nhanToken: "Bot Token",
 		goiYToken: "1234567890:AbC…",
 		luu: "Lưu",
@@ -228,10 +228,10 @@ const vi = {
 			"Token đang đặt trong tệp .env của máy chủ. Dán token ở đây để thay.",
 		chiQuanTri: "Chỉ quản trị viên thay được bot.",
 		nhanQuaWebhook: "Nhận tin qua webhook",
-		canHttpsTieuDe: "Tin nhắn tới bot chưa về CRM",
+		canHttpsTieuDe: "Tin nhắn tới bot chưa về OneHub Center",
 		canHttpsMoTa:
 			"Tác tử chưa có địa chỉ https nên Zalo không giao tin về được. Khi thử tại máy, chạy",
-		chuaWebhookTieuDe: "Zalo chưa giao tin nhắn về CRM",
+		chuaWebhookTieuDe: "Zalo chưa giao tin nhắn về OneHub Center",
 		chuaWebhookMoTa: "Người nhắn mã sẽ không được nối cho tới khi đăng ký lại.",
 		dangKyLai: "Đăng ký lại",
 	},

@@ -4,6 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -85,9 +86,9 @@ export function PhatChiaDialog({
 				)}
 
 				<DialogFooter>
-					<Button variant="outline" onClick={() => onOpenChange(false)}>
-						{t.phatChia.dong}
-					</Button>
+					<DialogClose asChild dongNgay>
+						<Button variant="outline">{t.phatChia.dong}</Button>
+					</DialogClose>
 					{url && !daChep ? (
 						<Button onClick={chep}>{t.phatChia.chep}</Button>
 					) : null}
