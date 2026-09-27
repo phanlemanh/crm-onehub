@@ -142,6 +142,59 @@ afterAll(async () => {
 	await tatBot();
 });
 
+describe("vet-khuon", () => {
+	test("vet-khuon: dong vet hong khuon lam lenLichNhac bi tu choi neu ma dong, khong ai co hang nhac ngay do", async () => {
+		const chay = await gieoChuKy("dang-chay", 1);
+		const X = await gieoNguoi("Xuan");
+		const Z = await gieoNguoi("Zet");
+		const khac = await gieoNguoi("Khac");
+		const truoc = new Date(goc.getTime() - 2 * GIO_MS);
+		const o = await gieoMucTieu({
+			cycleId: chay,
+			chu: khac.id,
+			congBo: ngayCach(goc, -20),
+		});
+		await gieoKr({ objectiveId: o, chu: Z.id, khoa: ngayCach(goc, -20) });
+		const k = await gieoKr({ objectiveId: o, chu: X.id, khoa: truoc });
+		await db.okrTrail.create({
+			data: {
+				at: truoc,
+				actorUserId: khac.id,
+				action: "sua-kr",
+				objectiveId: o,
+				keyResultId: k,
+				before: { ownerUserId: khac.id },
+				after: { ownerUserId: 123 },
+			},
+		});
+		const dong = await db.okrTrail.findFirstOrThrow({
+			where: { keyResultId: k, action: "sua-kr" },
+		});
+		setSystemTime(goc);
+		const loi = await lenLichNhac(goc).then(
+			() => "",
+			(e: Error) => e.message,
+		);
+		const soHang = await db.agentTask.count({
+			where: {
+				kind: "nhac-ke-hoach",
+				subject: {
+					in: [`user:${X.id}:${NGAY_NHAC}`, `user:${Z.id}:${NGAY_NHAC}`],
+				},
+			},
+		});
+		if (!loi.includes(`Vết OKR ${dong.id}`) || soHang > 0) {
+			throw new Error(
+				`vet-khuon: loi bi bat (loi «${loi}», so hang ${soHang})`,
+			);
+		}
+		expect({ loi: loi.includes("không đọc được"), soHang }).toEqual({
+			loi: true,
+			soHang: 0,
+		});
+	});
+});
+
 describe("du-duong", () => {
 	test("du-duong: nam loai muc OKR di tron duong — ma trong hang theo bang khoa viet tay, tin Slack va tin Zalo moi loai mot dong duoi tieu de", async () => {
 		const chay = await gieoChuKy("dang-chay", 1);

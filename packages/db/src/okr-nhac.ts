@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { Db } from "./client";
-import { jsonObject, jsonText } from "./json";
+import { parseOkrVet } from "./okr-vet";
 import { dauNgayVN, dauTuanVN, ngayVN, soNgayVN } from "./onboarding-nhac";
 
 export const OKR_NHAC = {
@@ -243,6 +243,21 @@ async function viecKr(db: Db, now: Date): Promise<Gui[]> {
 	return [...capNhat, ...im];
 }
 
+function nguoiSauCua(v: { id: string; after: unknown }): string | null {
+	try {
+		const nguoi = parseOkrVet(v.after)?.ownerUserId;
+		if (nguoi === undefined || nguoi === null) return null;
+		if (typeof nguoi !== "string") {
+			throw new Error("ownerUserId không phải chuỗi");
+		}
+		return nguoi;
+	} catch (e) {
+		throw new Error(
+			`Vết OKR ${v.id} không đọc được: ${e instanceof Error ? e.message : String(e)}`,
+		);
+	}
+}
+
 async function viecGiao(
 	db: Db,
 	cuaSo: { gt: Date; lte: Date },
@@ -251,6 +266,7 @@ async function viecGiao(
 		where: { at: cuaSo, action: { in: VET_GIAO } },
 		orderBy: [{ at: "asc" }, { id: "asc" }],
 		select: {
+			id: true,
 			action: true,
 			actorUserId: true,
 			objectiveId: true,
@@ -282,8 +298,7 @@ async function viecGiao(
 		const dich = kr ?? mt;
 		if (!dich) return [];
 		const nguoiSau =
-			jsonText(jsonObject(v.after).ownerUserId) ??
-			(VET_TAO.includes(v.action) ? dich.ownerUserId : null);
+			nguoiSauCua(v) ?? (VET_TAO.includes(v.action) ? dich.ownerUserId : null);
 		if (
 			nguoiSau === null ||
 			nguoiSau !== dich.ownerUserId ||

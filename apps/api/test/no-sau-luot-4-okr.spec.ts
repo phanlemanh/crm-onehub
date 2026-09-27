@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { LOAI_NHAC_OKR } from "@crm/db/okr-nhac";
+import { viecCanNhac } from "@crm/db/onboarding-nhac";
 import {
 	type ViecCuaToiOutput,
 	viecCuaToiOutput,
@@ -12,6 +13,7 @@ import {
 	doc,
 	dungSan,
 	goi,
+	goiQuery,
 	type Json,
 	kyDangChay,
 	ma,
@@ -89,6 +91,118 @@ const moPhien = async (ai: AiHoacCookie) =>
 		await goi("okr.moCapNhat", { entry: "tab" }, ai),
 		"mo phien",
 	).sessionId;
+
+function sangSau(luc: Date): Date {
+	const ngay = new Intl.DateTimeFormat("en-CA", {
+		timeZone: "Asia/Ho_Chi_Minh",
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	}).format(luc);
+	const moc = new Date(`${ngay}T08:31:00+07:00`);
+	return moc > luc ? moc : new Date(moc.getTime() + NGAY_MS);
+}
+
+async function viecNhacSang(userId: string, sau: Date) {
+	const now = sangSau(sau);
+	return (await viecCanNhac(db, { now, userId })).get(userId) ?? [];
+}
+
+async function loiCua(chay: () => Promise<unknown>): Promise<string> {
+	try {
+		await chay();
+		return "";
+	} catch (e) {
+		return e instanceof Error ? e.message : String(e);
+	}
+}
+
+describe("vet-khuon", () => {
+	test("vet-khuon: vet do ben ghi that tao sinh duoc giao; ba dot bien khuon hong nem neu ma dong; loi lan toi the va Tong quan", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("vk");
+		await db.okrCycle.update({
+			where: { id: quy },
+			data: { updateWeekday: 1 },
+		});
+		const C = await nguoiMoi("vk-c");
+		const X = await nguoiMoi("vk-x");
+		const Z = await nguoiMoi("vk-z");
+		const [cX, cZ] = [await phienCua(X), await phienCua(Z)];
+		const o = await mucTieu(quy, { level: "onehub" }, C, "quan");
+		const k1 = await taoKr(o, C, "quan");
+		const kZ = await taoKr(o, Z, "quan");
+		await congBo(o, "quan");
+		await db.okrKeyResult.update({
+			where: { id: kZ },
+			data: { startLockedAt: new Date(Date.now() - 20 * NGAY_MS) },
+		});
+		await db.okrTrail.updateMany({
+			where: { objectiveId: o },
+			data: { at: new Date(Date.now() - 3 * NGAY_MS) },
+		});
+		ok(
+			await goi("okr.updateKeyResult", { id: k1, ownerUserId: X }, "quan"),
+			"quan tri giao k1 cho X",
+		);
+		const dong = await db.okrTrail.findFirstOrThrow({
+			where: { keyResultId: k1, action: "sua-kr" },
+			orderBy: [{ at: "desc" }, { id: "desc" }],
+		});
+		const giao = (await viecNhacSang(X, dong.at)).filter(
+			(v) => v.loai === "okr-duoc-giao",
+		);
+		expect(giao).toEqual([
+			{
+				loai: "okr-duoc-giao",
+				objectiveId: o,
+				keyResultId: k1,
+				nhan: expect.any(String),
+			},
+		]);
+
+		const cauLoi = `Vết OKR ${dong.id} không đọc được`;
+		const ca: Record<string, string> = {};
+		for (const [ten, after] of [
+			["ownerUserId so", { ownerUserId: 123 }],
+			["after chuoi", "x"],
+			["after mang", [1]],
+		] as const) {
+			await db.okrTrail.update({ where: { id: dong.id }, data: { after } });
+			ca[ten] = await loiCua(() => viecNhacSang(X, dong.at));
+		}
+		const nuot = Object.entries(ca).filter(([, l]) => !l.includes(cauLoi));
+		if (nuot.length > 0) {
+			throw new Error(
+				`vet-khuon: vet hong bi nuot (${nuot.map(([t]) => t).join(", ")})`,
+			);
+		}
+
+		await db.okrTrail.update({
+			where: { id: dong.id },
+			data: { after: { title: "t" } },
+		});
+		expect(await loiCua(() => viecNhacSang(X, dong.at))).toBe("");
+		expect(
+			(await viecNhacSang(X, dong.at)).filter(
+				(v) => v.loai === "okr-duoc-giao" && v.keyResultId === k1,
+			),
+		).toEqual([]);
+
+		await db.okrTrail.update({
+			where: { id: dong.id },
+			data: { after: { ownerUserId: 123 } },
+		});
+		const theX = await goiQuery("okr.viecCuaToi", cX);
+		const theZ = await goiQuery("okr.viecCuaToi", cZ);
+		const tongQuanZ = await goiQuery("dashboard.summary", cZ, { scope: "me" });
+		expect({
+			theX: theX.status === 200,
+			theZ: theZ.status === 200,
+			tongQuanZ: tongQuanZ.status === 200,
+		}).toEqual({ theX: false, theZ: false, tongQuanZ: false });
+	});
+});
 
 describe("du-duong", () => {
 	test("du-duong: nam loai muc OKR do duong ghi that tao, okr.viecCuaToi tra du nam loai va qua khuon dau ra", async () => {
