@@ -33,3 +33,4 @@
 {"ts":"2026-09-27T17:02:13Z","sha":"23a11f32852faa1dffcb5fbe3b5eac4ef1686809","round":1,"kind":"baseline","evals_hash":"4c0a81068c01396781df50f81d9a8894f4e316306017efae509eb783140059b4","non_discriminating":[{"cmd":"cd apps/app && bun test test/okr-khep-chu.spec.ts test/messages-guard.spec.ts","evals":["E2"]}]}
 {"ts":"2026-09-27T17:02:13Z","sha":"23a11f32852faa1dffcb5fbe3b5eac4ef1686809","round":1,"kind":"round-tally","verdict":"PENDING-JUDGMENT","expected":23,"returned":23,"blocked":0}
 {"ts":"2026-09-27T17:02:13Z","sha":"23a11f32852faa1dffcb5fbe3b5eac4ef1686809","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":1,"bypass_ack":0,"verified_at":25}
+{"kind":"thuoc-vat","ts":"2026-09-27T17:19:28Z","round":1,"san":"23a11f32852faa1dffcb5fbe3b5eac4ef1686809","vat":[0,0],"thuoc":[0,0],"ho_so":[35,0],"nhat":0,"lan":0,"tep_thuoc":[]}
