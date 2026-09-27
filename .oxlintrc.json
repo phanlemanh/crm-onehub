@@ -50,7 +50,8 @@
 		},
 		{
 			"files": [
-				"packages/validation/src/**"
+				"packages/validation/src/**",
+				"packages/db/src/okr-vet.ts"
 			],
 			"rules": {
 				"anti-slop/no-unknown-parameters": "off"

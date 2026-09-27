@@ -1,27 +1,28 @@
+import { KHOA_MUC_OKR, viecOkr } from "@crm/db/okr-nhac";
 import { LOAI_NHAC } from "@crm/db/onboarding-nhac";
 import { z } from "zod";
 
+export {
+	KHOA_MUC_OKR,
+	type MucOkr,
+	type ViecOkr,
+	viecOkr,
+} from "@crm/db/okr-nhac";
 export { LOAI_NHAC, type LoaiNhac } from "@crm/db/onboarding-nhac";
 
 const ma = z.string().min(1);
+
+const [capNhat, krIm, duocGiao, nhacTen, theoDoi] = viecOkr.options;
 
 export const mucNhac = z.union([
 	z
 		.object({ loai: z.enum(LOAI_NHAC), planId: ma, stepId: ma.optional() })
 		.strict(),
-	z
-		.object({ loai: z.literal("okr-cap-nhat"), krIds: z.array(ma).min(1) })
-		.strict(),
-	z.object({ loai: z.enum(["okr-kr-im"]), keyResultId: ma }).strict(),
-	z
-		.object({
-			loai: z.literal("okr-duoc-giao"),
-			objectiveId: ma,
-			keyResultId: ma.optional(),
-		})
-		.strict(),
-	z.object({ loai: z.literal("okr-nhac-ten"), commentId: ma }).strict(),
-	z.object({ loai: z.literal("okr-theo-doi"), objectiveId: ma }).strict(),
+	capNhat.pick(KHOA_MUC_OKR["okr-cap-nhat"]).strict(),
+	krIm.pick(KHOA_MUC_OKR["okr-kr-im"]).strict(),
+	duocGiao.pick(KHOA_MUC_OKR["okr-duoc-giao"]).strict(),
+	nhacTen.pick(KHOA_MUC_OKR["okr-nhac-ten"]).strict(),
+	theoDoi.pick(KHOA_MUC_OKR["okr-theo-doi"]).strict(),
 ]);
 
 export type MucNhac = z.infer<typeof mucNhac>;

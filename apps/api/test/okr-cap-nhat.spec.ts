@@ -850,9 +850,10 @@ const theoDoiMt = (objectiveId: string, on: boolean, ai: AiHoacCookie) =>
 const laOkr = (v: ViecNhac) => v.loai.startsWith("okr-");
 
 async function phanOkr(userId: string, now: Date) {
-	return ((await viecCanNhac(db, { now, userId })).get(userId) ?? []).filter(
-		laOkr,
-	);
+	return (
+		(await viecCanNhac(db, { now, userId, cuaSo: "truc-tiep" })).get(userId) ??
+		[]
+	).filter(laOkr);
 }
 
 function thuTucOkr(): string[] {

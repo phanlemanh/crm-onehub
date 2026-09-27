@@ -1,5 +1,6 @@
 import type { ViecOkr } from "@crm/db/okr-nhac";
 import {
+	laBuoiSang,
 	NHAC,
 	THU_TU_NHAC,
 	type ViecKeHoach,
@@ -102,12 +103,18 @@ export type TinNhac = { text: string; daGui: ViecNhac[] };
 
 export function dungTin(
 	ten: string,
+	luc: Date,
 	viec: ViecNhac[],
 	lienKet: LienKet,
 	khuon: KhuonTin = "slack",
 	tranKyTu: number = Number.POSITIVE_INFINITY,
 	dongCuoi: string | null = null,
 ): TinNhac {
+	const thuTu: readonly string[] = THU_TU_NHAC;
+	const la = viec.find((v) => !thuTu.includes(v.loai));
+	if (la) {
+		throw new Error(`loại nhắc không có thứ tự trong tin: ${la.loai}`);
+	}
 	const theoThuTu = THU_TU_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
 	);
@@ -115,9 +122,10 @@ export function dungTin(
 		khuon === "tron" ? TIEU_DE[loai] : `*${TIEU_DE[loai]}*`;
 	const tenHien = khuon === "tron" ? ten : thoat(ten);
 	const coOkr = theoThuTu.some((v) => !("planId" in v));
+	const buoi = laBuoiSang(luc) ? "sáng nay" : "hôm nay";
 	const chao = coOkr
-		? `Chào ${tenHien}, sáng nay có ${theoThuTu.length} việc cần bạn để ý.`
-		: `Chào ${tenHien}, sáng nay có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
+		? `Chào ${tenHien}, ${buoi} có ${theoThuTu.length} việc cần bạn để ý.`
+		: `Chào ${tenHien}, ${buoi} có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
 	const ve = (daGui: ViecNhac[]) => {
 		const nhom = THU_TU_NHAC.flatMap((loai) => {
 			const ds = daGui.filter((v) => v.loai === loai);
