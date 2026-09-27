@@ -101,4 +101,46 @@ describe("tai-lieu-markdown", () => {
 
 	test("không liên kết thì rỗng", () =>
 		expect(rutLienKet(doc("bang"))).toEqual([]));
+
+	const DAI: [string, string, string, number][] = [
+		[
+			"nhiều đoạn",
+			Array.from({ length: 2_000 }, (_, i) => `Đoạn ${i} ${"chữ ".repeat(20)}`)
+				.join("\n\n")
+				.slice(0, 200_000),
+			"paragraph",
+			0,
+		],
+		[
+			"danh sách chấm liền",
+			Array.from({ length: 5_000 }, (_, i) => `- mục ${i} ${"chữ ".repeat(8)}`)
+				.join("\n")
+				.slice(0, 200_000),
+			"bulletList",
+			1,
+		],
+		[
+			"danh sách số liền",
+			Array.from(
+				{ length: 5_000 },
+				(_, i) => `${i + 1}. mục ${"chữ ".repeat(8)}`,
+			)
+				.join("\n")
+				.slice(0, 200_000),
+			"orderedList",
+			1,
+		],
+	];
+
+	for (const [ten, md, loai, soNut] of DAI)
+		test(`trang dài 200 000 ký tự, ${ten}: nạp dưới 1 giây, cây không vỡ`, () => {
+			const bd = performance.now();
+			const cay = nap(md);
+			expect(performance.now() - bd).toBeLessThan(1_000);
+			const con = cay.content ?? [];
+			expect(con.every((n) => n.type === loai)).toBe(true);
+			if (soNut > 0) expect(con).toHaveLength(soNut);
+			const l1 = chuanHoa(md);
+			expect(chuanHoa(l1)).toBe(l1);
+		});
 });

@@ -31,6 +31,7 @@ export const TAI_LIEU = {
 	noiDung: { max: 200_000 },
 	danhSach: { coTrang: 25 },
 	diff: { tranMs: 1_500 },
+	nap: { coKhoi: 4_000 },
 	slugDuPhong: "trang",
 } as const;
 
