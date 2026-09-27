@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Màn duyệt bản máy soạn · may-soan-de-xuat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình Cổng 1 · Flowchart · may-soan-de-xuat</p>
+    <h1>Màn duyệt bản máy soạn: đọc nguồn trước, rồi mới quyết</h1>
+    <p class="sub">Bước 1 chỉ có nguồn, chưa có nút Duyệt. Bước 2 đặt nguồn cạnh bản máy soạn với ba nút ngang hàng. Nút Duyệt mở lúc nào là một lựa chọn chưa chốt: A hoặc B, người quyết ở Cổng 1.</p>
+
+    <svg viewBox="0 0 1200 896" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH human-gate1 · TICK TỪNG KHẲNG ĐỊNH TRƯỚC DUYỆT · AC-11</text>
+
+      <rect x="608" y="344" width="560" height="328" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="624" y="366" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHỜ NGƯỜI QUYẾT · CHỌN MỘT TRONG HAI</text>
+
+      <path d="M 400 176 L 400 256" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 240 352 L 240 432" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 480 352 L 480 432" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 600 304 L 872 304 A 8 8 0 0 1 880 312 L 880 376" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 744 432 L 728 432 A 8 8 0 0 0 720 440 L 720 552" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1016 432 L 1032 432 A 8 8 0 0 1 1040 440 L 1040 552" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 720 648 L 720 696 A 8 8 0 0 0 728 704 L 876 704" fill="none" stroke="#575757" stroke-width="1"/>
+      <path d="M 1040 648 L 1040 696 A 8 8 0 0 1 1032 704 L 884 704" fill="none" stroke="#575757" stroke-width="1"/>
+      <path d="M 880 708 L 880 752" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="406" y="206" width="200" height="14" rx="2" fill="#fafafa"/>
+      <text x="410" y="216" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bấm «Đã đọc nguồn, xem bản máy soạn»</text>
+      <rect x="192" y="382" width="42" height="14" rx="2" fill="#fafafa"/>
+      <text x="232" y="392" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">Trả lại</text>
+      <rect x="400" y="382" width="74" height="14" rx="2" fill="#fafafa"/>
+      <text x="472" y="392" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">Sửa bản này</text>
+      <rect x="704" y="282" width="64" height="14" rx="2" fill="#fafafa"/>
+      <text x="736" y="292" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">nút Duyệt</text>
+      <rect x="726" y="494" width="88" height="14" rx="2" fill="#fafafa"/>
+      <text x="730" y="504" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.06em">A · KHÔNG TICK</text>
+      <rect x="928" y="494" width="106" height="14" rx="2" fill="#fafafa"/>
+      <text x="1032" y="504" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">B · TICK BẮT BUỘC</text>
+      <rect x="1048" y="490" width="92" height="20" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="1094" y="504" fill="#006B4F" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">máy khuyên B</text>
+      <rect x="744" y="682" width="112" height="14" rx="2" fill="#fafafa"/>
+      <text x="800" y="692" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">mở ngay</text>
+      <rect x="904" y="682" width="112" height="14" rx="2" fill="#fafafa"/>
+      <text x="960" y="692" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đã tick hết</text>
+
+      <text x="640" y="200" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">Ba nút ở bước 2 ngang hàng: không nút nào nhận focus sẵn,</text>
+      <text x="640" y="222" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">không nút nào được tô là lựa chọn nên bấm.</text>
+
+      <rect x="200" y="80" width="400" height="96" rx="6" fill="#fafafa"/>
+      <rect x="200" y="80" width="400" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="216" y="92" width="56" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="244" y="104" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 1</text>
+      <text x="284" y="105" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">«Nguồn nói gì»</text>
+      <text x="216" y="130" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Chữ nguồn, đoạn được trích tô nền</text>
+      <text x="216" y="146" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Bảng «Con số và ngày»: mỗi số mới → đoạn nguồn của nó</text>
+      <text x="216" y="164" fill="#171717" font-size="11" font-weight="500" font-family="'Geist', sans-serif">Không có nút Duyệt</text>
+
+      <rect x="200" y="256" width="400" height="96" rx="6" fill="#fafafa"/>
+      <rect x="200" y="256" width="400" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="216" y="268" width="56" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="244" y="280" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 2</text>
+      <text x="284" y="281" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Nguồn cạnh bản máy soạn</text>
+      <text x="216" y="306" fill="#575757" font-size="11" font-family="'Geist', sans-serif">1440: nguồn bên trái, bản máy soạn bên phải</text>
+      <text x="216" y="322" fill="#575757" font-size="11" font-family="'Geist', sans-serif">390: hai thẻ «Nguồn» · «Bản máy soạn»</text>
+      <text x="216" y="340" fill="#171717" font-size="11" font-weight="500" font-family="'Geist', sans-serif">Ba nút: Duyệt · Trả lại · Sửa bản này</text>
+
+      <rect x="136" y="432" width="208" height="64" rx="20" fill="#fafafa"/>
+      <rect x="136" y="432" width="208" height="64" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="240" y="458" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trả lại</text>
+      <text x="240" y="478" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đúng luồng lượt 1</text>
+
+      <rect x="376" y="432" width="208" height="64" rx="20" fill="#fafafa"/>
+      <rect x="376" y="432" width="208" height="64" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="480" y="454" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Sửa bản này</text>
+      <text x="480" y="472" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trình soạn lượt 1, giữ nguồn</text>
+      <text x="480" y="486" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">nguonId · trichDoan</text>
+
+      <polygon points="880,376 1016,432 880,488 744,432" fill="#fafafa"/>
+      <polygon points="880,376 1016,432 880,488 744,432" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="880" y="430" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Duyệt mở khi nào?</text>
+      <text x="880" y="446" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chưa chốt, chờ người</text>
+
+      <rect x="624" y="552" width="192" height="96" rx="6" fill="#fafafa"/>
+      <rect x="624" y="552" width="192" height="96" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="640" y="574" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LỰA CHỌN A</text>
+      <text x="640" y="596" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không tick</text>
+      <text x="640" y="616" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Duyệt mở ngay ở bước 2</text>
+
+      <rect x="944" y="552" width="192" height="96" rx="6" fill="#fafafa"/>
+      <rect x="944" y="552" width="192" height="96" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="960" y="574" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LỰA CHỌN B</text>
+      <text x="960" y="596" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tick bắt buộc</text>
+      <text x="960" y="616" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Duyệt khoá tới khi tick hết</text>
+      <text x="960" y="632" fill="#575757" font-size="11" font-family="'Geist', sans-serif">các dòng «Con số và ngày»</text>
+
+      <circle cx="880" cy="704" r="4" fill="#171717"/>
+
+      <rect x="736" y="752" width="288" height="64" rx="20" fill="#fafafa"/>
+      <rect x="736" y="752" width="288" height="64" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="880" y="774" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Duyệt</text>
+      <text x="880" y="792" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đúng luồng lượt 1, thành bản đang dùng</text>
+      <text x="880" y="806" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">taiLieu.approve · diffHash</text>
+
+      <line x1="40" y1="848" x2="1160" y2="848" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="872" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="136" y="864" width="20" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="164" y="873" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bước của màn duyệt</text>
+      <rect x="320" y="864" width="20" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="348" y="873" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Kết cục, đi theo luồng lượt 1</text>
+      <rect x="544" y="864" width="20" height="12" rx="3" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="572" y="873" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Lựa chọn chưa chốt, chỉ làm một</text>
+      <rect x="784" y="864" width="20" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="812" y="873" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Khuyến nghị của máy, người vẫn chọn</text>
+    </svg>
+
+    <footer>may-soan-de-xuat · Cổng 1 · màn duyệt bản máy soạn · design doc 2026-09-28 «Đặc tả UX» mục 1, 3, 4 · human-gate1 · AC-11</footer>
+  </div>
+</body>
+</html>

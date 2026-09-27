@@ -40,6 +40,23 @@ executors:
     ktl_dan_tu_word: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-dan.dom.tsx'
     ktl_diff: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/diff-trang.dom.tsx && cd ../.. && bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t diff-hash"'
     ktl_lien_ket_tim: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t lien-ket-tim"'
+    msd_nguon_nhan: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-nhan"'
+    msd_nguon_tu_choi: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-tu-choi"'
+    msd_man_tai_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx -t tai-loi"
+    msd_nguon_trung: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-trung"'
+    msd_khong_blob: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-tat.spec.ts && cd ../agent && bun test test/capabilities.spec.ts -t luu-nguon"'
+    msd_man_nguon_tat: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx -t nguon-tat"
+    msd_doc_chu: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-doc-chu.spec.ts"'
+    msd_soan_dat: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-soan.integration.spec.ts -t soan-dat"'
+    msd_duyet_ban_may: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-duyet.spec.ts"'
+    msd_kiem_so: "cd packages/validation && bun test test/tai-lieu-kiem-so.spec.ts && cd ../../apps/agent && bun test test/nop-ban-de-xuat.spec.ts"
+    msd_soan_hong: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-soan.integration.spec.ts -t soan-hong"'
+    msd_soan_lai: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t soan-lai"'
+    msd_man_duyet_may: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-man-duyet-may.dom.tsx"
+    msd_man_hang_nguon: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx -t hang-nguon"
+    msd_nguon_khong_ro: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-khong-ro.spec.ts"'
+    msd_khoa_rieng: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-khoa-rieng.spec.ts"'
+    msd_ranh_gioi: "cd apps/agent && bun test test/tai-lieu-ranh-gioi.spec.ts test/khuon-di-dong.spec.ts"
     ktl_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "packages/ui/src/components/trinh-soan*.tsx" "packages/ui/src/components/diff-trang*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     dmk_ten_kho: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t ten-kho"'
     dmk_tao: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t tao"'
@@ -762,6 +779,15 @@ executors:
     ktl_bo_go_viet: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/bo-go-viet.mjs"'
     ktl_man_duyet: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/man-duyet.mjs"'
     ktl_man_danh_sach: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/man-danh-sach.mjs"'
+    msd_migration_chi_them: "node _acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs"
+    msd_migration_tren_ban_sao: "bun _acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs"
+    msd_man_tai_nguon: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs"'
+    msd_man_duyet_may: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs"'
+    msd_quet_duong_ghi: "node _acceptance/may-soan-de-xuat/rang/quet-duong-ghi.mjs"
+    msd_bien_ba_nha: "node _acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs"
+    msd_blob_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
+    msd_soan_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'
+    msd_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "apps/app/app/(app)/[[]slug]/tai-lieu/**/*.tsx" "packages/ui/src/components/nguon-*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
     rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
     rst_kiem_ke: node _acceptance/ro-slack-tac-nhan/rang/kiem-ke.mjs
