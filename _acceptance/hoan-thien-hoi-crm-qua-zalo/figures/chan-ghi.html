@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chặn ghi · hoan-thien-hoi-crm-qua-zalo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 76ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình chan-ghi · Luồng hai làn · hoan-thien-hoi-crm-qua-zalo</p>
+    <h1>Chặn ghi nằm trong công cụ, bản ghi đè chỉ còn là lớp ẩn</h1>
+    <p class="sub">Hôm nay eve chỉ giữ bản ghi đè của <code>zalo-chi-doc</code> ở bước đầu; từ bước hai nó bỏ qua («not registered») và công cụ ghi gốc về lại tay model. Sau vòng này bộ giải chuyển sang <code>step.started</code> để ẩn công cụ, nhưng lớp chặn thật là dòng đầu <code>execute</code>: <code>assertNotZaloQuestion</code> từ chối trên Zalo, bất kể bước nào. AC-1, AC-2, AC-3, AC-4.</p>
+
+    <svg viewBox="0 0 960 672" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-1 · CHẶN GHI TRONG CÔNG CỤ, BẢN GHI ĐÈ CHỈ CÒN LỚP ẨN</text>
+
+      <rect x="40" y="152" width="416" height="400" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="60" y="176" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HÔM NAY · 26/09</text>
+      <text x="60" y="192" fill="#666666" font-size="9" font-family="'Geist', sans-serif">production, sau #158</text>
+
+      <rect x="504" y="152" width="416" height="400" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="524" y="176" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">SAU VÒNG NÀY</text>
+      <text x="524" y="192" fill="#666666" font-size="9" font-family="'Geist', sans-serif">chặn nằm trong công cụ</text>
+
+      <path d="M 468,112 V 132 Q 468,140 460,140 H 256 Q 248,140 248,148 V 208" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 492,112 V 132 Q 492,140 500,140 H 704 Q 712,140 712,148 V 208" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="248" y1="264" x2="248" y2="304" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="248" y1="360" x2="248" y2="400" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="712" y1="264" x2="712" y2="304" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="720" y="276" width="148" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="724" y="288" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nếu model vẫn gọi công cụ ghi</text>
+
+      <line x1="712" y1="360" x2="712" y2="400" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <rect x="320" y="64" width="320" height="48" rx="24" fill="#fafafa"/>
+      <rect x="320" y="64" width="320" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="480" y="86" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tin Zalo tới, mở phiên eve</text>
+      <text x="480" y="102" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">purpose: zalo · channel:zalo</text>
+
+      <rect x="88" y="208" width="320" height="56" rx="6" fill="#fafafa"/>
+      <rect x="88" y="208" width="320" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="248" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bước 1 · bản ghi đè còn</text>
+      <text x="248" y="248" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">session.started → 22 bản thay</text>
+
+      <rect x="88" y="304" width="320" height="56" rx="6" fill="#fafafa"/>
+      <rect x="88" y="304" width="320" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="248" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bước 2+ · eve bỏ qua bản ghi đè</text>
+      <text x="248" y="344" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">«… not registered — skipping on this step»</text>
+
+      <rect x="88" y="400" width="320" height="56" rx="28" fill="#fafafa"/>
+      <rect x="88" y="400" width="320" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="248" y="424" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Công cụ ghi gốc trong tay model</text>
+      <text x="248" y="440" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không chặn · DB đổi được</text>
+
+      <text x="88" y="492" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">Lời hứa «chỉ đọc» chỉ còn đứng bằng chỉ dẫn —</text>
+      <text x="88" y="510" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">Known limit cũ nay đã xảy ra.</text>
+
+      <rect x="552" y="208" width="320" height="56" rx="6" fill="#fafafa"/>
+      <rect x="552" y="208" width="320" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="712" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mỗi bước · ẩn công cụ khỏi model</text>
+      <text x="712" y="248" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">step.started → ghi ∪ coSanChan</text>
+      <rect x="560" y="200" width="56" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="588" y="212" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">LỚP ẨN</text>
+      <rect x="828" y="200" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="848" y="212" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">AC-4</text>
+
+      <rect x="552" y="304" width="320" height="56" rx="6" fill="#fafafa"/>
+      <rect x="552" y="304" width="320" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="712" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Dòng đầu execute của 20 công cụ ghi</text>
+      <text x="712" y="344" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">assertNotZaloQuestion(ctx)</text>
+      <rect x="828" y="296" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="848" y="308" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">AC-1</text>
+
+      <rect x="552" y="400" width="320" height="56" rx="28" fill="#fafafa"/>
+      <rect x="552" y="400" width="320" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="712" y="424" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối, DB không đổi</text>
+      <text x="712" y="440" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Error(ZALO.hoi.tuChoiGhi)</text>
+      <rect x="808" y="392" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="828" y="404" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">AC-2</text>
+
+      <text x="552" y="480" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CÔNG CỤ CÓ SẴN</text>
+
+      <rect x="552" y="488" width="152" height="44" rx="6" fill="#fafafa"/>
+      <rect x="552" y="488" width="152" height="44" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="564" y="506" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">web_fetch</text>
+      <text x="564" y="522" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bọc tĩnh · cùng chặn</text>
+      <rect x="660" y="480" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="680" y="492" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">AC-3</text>
+
+      <rect x="720" y="488" width="152" height="44" rx="6" fill="#fafafa"/>
+      <rect x="720" y="488" width="152" height="44" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="732" y="506" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">web_search</text>
+      <text x="732" y="522" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nhà cung cấp chạy · chỉ lớp ẩn</text>
+
+      <text x="40" y="588" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">Chặn ở dòng đầu execute không phụ thuộc bước: replay có bỏ qua lớp ẩn thì công cụ vẫn tự từ chối.</text>
+
+      <line x1="40" y1="612" x2="920" y2="612" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="628" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="40" y="640" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="650" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Tin đến / kết cục</text>
+
+      <rect x="200" y="640" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="232" y="650" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước chạy</text>
+
+      <rect x="328" y="640" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="360" y="650" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Lớp ẩn — có thể hỏng</text>
+
+      <rect x="512" y="640" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="544" y="650" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chặn thật — cái được đo</text>
+
+      <line x1="720" y1="646" x2="744" y2="646" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="752" y="650" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Luồng trong một lượt hỏi</text>
+    </svg>
+
+    <footer>chan-ghi · hoan-thien-hoi-crm-qua-zalo · Cổng Phạm vi · thiết kế 2026-09-26</footer>
+  </div>
+</body>
+</html>

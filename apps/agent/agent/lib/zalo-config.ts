@@ -71,11 +71,12 @@ export const ZALO = {
 				"set_chat_title",
 				"set_contact_socials",
 				"set_field_value",
+				"web_fetch",
 				"write_brief",
 				"write_workspace_profile",
 			],
 			tat: ["agent"],
-			coSanChan: ["web_fetch", "web_search", "ask_question"],
+			coSanChan: ["web_search", "ask_question"],
 		},
 	},
 	lenh: { tu: ["xong", "done"], toiDaSo: 20, moi: ["mới", "moi", "/new"] },
@@ -126,5 +127,6 @@ export const ZALO = {
 		daMoi: "Đã bắt đầu cuộc trò chuyện mới.",
 		canHoiLai:
 			"Câu này tôi cần hỏi lại mới trả lời được, mà qua Zalo thì chưa hỏi lại được. Hỏi lại rõ hơn ở đây, hoặc hỏi trong OneHub Center.",
+		chiDocChu: "Tôi chỉ đọc được tin chữ. Gõ câu hỏi của bạn ở đây nhé.",
 	},
 } as const;

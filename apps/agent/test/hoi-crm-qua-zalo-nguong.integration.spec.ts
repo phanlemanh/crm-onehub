@@ -6,6 +6,7 @@ import {
 	expect,
 	test,
 } from "bun:test";
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
 import audit from "../agent/hooks/audit";
@@ -23,6 +24,7 @@ const SCRIPT = resolve(
 	"../../../_acceptance/hoi-crm-qua-zalo/rang/nguong.ts",
 );
 const GIAY_MS = 1_000;
+const TRAN_NGAY_DA_KY = 20;
 let so = 0;
 
 function vn(gio: string, ngay = "2026-10-15"): Date {
@@ -82,6 +84,18 @@ async function hoiVaTra(
 	return ket.yeuCau.hoiId;
 }
 
+async function hoiThat(userId: string, chat: string, luc: Date) {
+	so += 1;
+	return db.$transaction((tx) =>
+		hoiTacTu(
+			tx,
+			{ messageId: `hczn-${Date.now()}-${so}`, chatId: chat, text: "hỏi" },
+			userId,
+			luc,
+		),
+	);
+}
+
 beforeAll(moXuong);
 
 beforeEach(async () => {
@@ -117,34 +131,61 @@ describe("nguong", () => {
 				vn("08:30"),
 			),
 		);
-		await db.zaloHoi.create({
-			data: {
-				messageId: `hczn-tran-${Date.now()}`,
-				crmUserId: A.id,
-				zaloChatId: "ZA",
-				hoiLuc: vn("11:00"),
-				ketQua: "tu-choi-tran-ngay",
-			},
-		});
+		const F = await gieoVai("Phuc", "member");
+		for (let phut = 0; phut < TRAN_NGAY_DA_KY; phut += 1) {
+			await hoiVaTra(F.id, "ZF", vn(`13:${String(phut).padStart(2, "0")}`), 3);
+		}
+		const tran = await hoiThat(F.id, "ZF", vn("13:30"));
+		expect(tran.loai, "tu-choi-tran-ngay 1").not.toBe("hoi");
 		await hoiVaTra(A.id, "ZA", vn("10:00", "2026-10-14"), 1);
-		await db.zaloHoi.create({
-			data: {
-				messageId: `hczn-ban-${Date.now()}`,
-				crmUserId: A.id,
-				zaloChatId: "ZA",
-				hoiLuc: vn("12:00"),
-				ketQua: "dang-ban",
+		const moA = await hoiThat(A.id, "ZA", vn("12:00"));
+		if (moA.loai !== "hoi") throw new Error("A khong mo duoc cau 12:00");
+		const ban = await hoiThat(A.id, "ZA", vn("12:01"));
+		expect(
+			ban.loai,
+			"dang-ban sinh tu cau thu hai khi cau truoc chua xong",
+		).not.toBe("hoi");
+		await moPhienGia(moA.yeuCau, "hczn-ses-a12");
+		await traLoiVe(
+			{ hoiId: moA.yeuCau.hoiId, sessionId: "hczn-ses-a12" },
+			"Trả lời.",
+			{
+				fetcher: zaloGia().fetcher,
+				token: TOKEN,
+				now: () => new Date(vn("12:00").getTime() + 2 * GIAY_MS),
 			},
+		);
+		const ketQua = await db.zaloHoi.groupBy({
+			by: ["ketQua"],
+			where: {
+				crmUserId: { in: [A.id, F.id] },
+				ketQua: { in: ["dang-ban", "tu-choi-tran-ngay"] },
+			},
+			_count: true,
 		});
+		expect(
+			Object.fromEntries(ketQua.map((k) => [k.ketQua, k._count])),
+			"hai hang sinh tu hoiTacTu that",
+		).toEqual({ "dang-ban": 1, "tu-choi-tran-ngay": 1 });
+		const nguon = [
+			readFileSync(import.meta.path, "utf8"),
+			readFileSync(
+				resolve(import.meta.dir, "support/hoi-nguong-gieo.ts"),
+				"utf8",
+			),
+		].join("\n");
+		expect(nguon, "khong chen tay hang zaloHoi").not.toContain(
+			["zaloHoi", "create("].join("."),
+		);
 
 		const dong = await chayScript("2026-10-15", "2026-10-15");
 		expect(dong).toEqual([
-			"so_cau: 8",
-			"so_nguoi: 3",
-			"ti_le_tra_loi: 5/8",
+			"so_cau: 29",
+			"so_nguoi: 4",
+			"ti_le_tra_loi: 26/29",
 			"gui_hong: 1",
-			"do_tre_p50_s: 3.5",
-			"do_tre_p95_s: 31.3",
+			"do_tre_p50_s: 3",
+			"do_tre_p95_s: 4.7",
 			"tu_choi: vai=1 tran-ngay=1",
 			"nguoi_khong_quyen: 1",
 			"token_vao: 300",
@@ -154,7 +195,7 @@ describe("nguong", () => {
 		await db.zaloHoi.delete({ where: { id: cuaE } });
 		const sau = await chayScript("2026-10-15", "2026-10-15");
 		expect(sau).toContain("nguoi_khong_quyen: 0");
-		expect(sau).toContain("ti_le_tra_loi: 4/7");
-		expect(sau).toContain("so_nguoi: 2");
+		expect(sau).toContain("ti_le_tra_loi: 25/28");
+		expect(sau).toContain("so_nguoi: 3");
 	});
 });

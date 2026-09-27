@@ -681,6 +681,13 @@ executors:
     tthz_bien: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tran-thang-hoi-zalo.integration.spec.ts -t bien-300"'
     tthz_thang_vn: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tran-thang-hoi-zalo.integration.spec.ts -t thang-vn"'
     tthz_khong_tinh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tran-thang-hoi-zalo.integration.spec.ts -t khong-tinh"'
+    hth_chan_ghi: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t chan-ghi"'
+    hth_ghi_that: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t ghi-that"'
+    hth_web_fetch: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t web-fetch"'
+    hth_khong_chu: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t khong-chu"'
+    hth_so_tien: 'bun run test -- "cd apps/agent && bun test test/zalo-loc.spec.ts -t \"loc-che|so-tien\""'
+    hth_thuoc_am: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cai-lenh|dang-ban\""'
+    hth_token: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cung-phien|duong-chinh\""'
   script:
     hcz_tai_lieu: bun _acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs
     tthz_tai_lieu: bun _acceptance/ha-tran-thang-hoi-zalo/rang/tai-lieu.mjs

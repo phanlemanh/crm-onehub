@@ -348,10 +348,20 @@ API; the API only reads and writes rows.
   (`channels/zalo.ts`) — lời thuật giữa lượt (`finishReason: "tool-calls"`) bị bỏ —
   tìm câu theo `hoiId` trong thuộc tính phiên, qua `locTraLoi` rồi gửi tối đa ba tin;
   token của bước cuối được cộng lại ở `turn.completed`. Phiên `purpose: "zalo"`
-  nhận chỉ dẫn `lib/zalo-chi-dan.ts`, và `tools/zalo-chi-doc.ts` thay mọi công cụ ghi
-  trong `ZALO.hoi.congCu.ghi` bằng bản từ chối — thêm một tệp công cụ mà không khai
-  đọc hay ghi là `test/zalo-chi-doc.spec.ts` đỏ. `_acceptance/hoi-crm-qua-zalo/rang/nguong.ts`
-  in số đo cho phiên nghiệm thu.
+  nhận chỉ dẫn `lib/zalo-chi-dan.ts`. Chặn ghi nằm trong chính công cụ: mọi công cụ
+  trong `ZALO.hoi.congCu.ghi` gọi `assertNotZaloQuestion(ctx)`
+  (`lib/session-purpose.ts`) ở dòng đầu `execute`, và `web_fetch` là bản bọc tĩnh của
+  `webFetch` mặc định (`tools/web_fetch.ts`) cùng chặn đó. `tools/zalo-chi-doc.ts` chỉ
+  còn là lớp ẩn: ở `step.started` nó thay các công cụ đó cùng `web_search`,
+  `ask_question` bằng bản từ chối để model không thấy chúng. Đừng dựa vào lớp ẩn làm
+  ranh giới quyền — production 26/09 cho thấy eve bỏ qua công cụ động đăng ký ở
+  `session.started` từ bước replay trở đi («references step function … which is not
+  registered — skipping»), và công cụ gốc cùng tên lộ lại. Công cụ ghi mới phải gọi
+  chặn và vào danh sách `ghi`: thêm tệp mà không khai là `test/zalo-chi-doc.spec.ts`
+  đỏ, khai mà quên chặn là `test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts` đỏ.
+  Tin không chữ (sticker, ảnh, tệp, chữ toàn khoảng trắng) của người đã nối nhận
+  `ZALO.loi.chiDocChu`, không mở phiên, không tính trần.
+  `_acceptance/hoi-crm-qua-zalo/rang/nguong.ts` in số đo cho phiên nghiệm thu.
 - **Message text is never logged, and stored only in the assistant's session.**
   Link codes, `xong` commands and the Zalo tables (`ZaloUpdateSeen`, `ZaloLink`,
   `ZaloHoi`) keep no text — only `message_id` and the failure counter. A question to
