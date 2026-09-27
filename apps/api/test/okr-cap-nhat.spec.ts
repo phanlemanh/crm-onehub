@@ -1,4 +1,11 @@
-import { afterAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { readFileSync } from "node:fs";
 import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
 import { db } from "@crm/db";
@@ -15,7 +22,7 @@ import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { OKR } from "../src/okr/okr-config";
 import { OkrSoService } from "../src/okr/okr-so.service";
 import { OkrTraoDoiService } from "../src/okr/okr-trao-doi.service";
-import { sangPha } from "./okr-khep-san";
+import { keoDaiPhien, sangPha } from "./okr-khep-san";
 import {
 	type AiHoacCookie,
 	bpMoi,
@@ -1166,7 +1173,11 @@ async function nhanhKeHoach(cookie: string) {
 }
 
 describe("viec-cua-toi", () => {
+	afterEach(() => setSystemTime());
+
 	test("viec-cua-toi: G, H, F, A so tung phan tu voi viecCanNhac o hai moc now; tRPC bang service; ke hoach tren Tong quan khong doi", async () => {
+		await keoDaiPhien();
+		setSystemTime(new Date("2026-10-14T08:00:00Z"));
 		await caiChuongTrinh();
 		const quy = await kyDangChay("vc");
 		const pb = await pbMoi("vc-p");
