@@ -1,0 +1,21 @@
+{
+  "feature_plain": "Bot Zalo trả lời câu hỏi CRM mà không sửa được dữ liệu kể cả khi eve bỏ qua lớp ẩn công cụ; sticker, ảnh nhận một câu báo; số điện thoại vẫn được che như bản gốc; bộ kiểm của vòng trước thôi xanh giả ở tám chỗ.",
+  "scope_plain": "Không làm lại phần phân biệt số tiền (số từ 1.000 tỷ vẫn bị che một phần), không chặn cứng tra web do nhà cung cấp model chạy, rào đọc mã nguồn của AC-9 chỉ chặn một phần.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260926T154458Z-1", "p": "Đã chọn đặt lớp chặn trong chính từng công cụ, bản ghi đè chỉ còn để giấu — đổi lại công cụ ghi mới phải nhớ gọi chặn (bài đo bắt khi quên)."},
+    {"id": "d-20260926T154458Z-2", "p": "Đã chọn trả một câu cho tin không chữ — đổi lại người vai chỉ OKR gửi sticker cũng nhận câu này."},
+    {"id": "d-20260926T154458Z-3", "p": "KHÔNG làm tên thừa trong danh sách thống kê — vô hại."},
+    {"id": "d-20260926T154458Z-4", "p": "KHÔNG viết đặc tả giao diện — vòng không có màn hình."},
+    {"id": "d-20260926T154458Z-5", "p": "KHÔNG chặn cứng tra web trên Zalo — nhà cung cấp model chạy nó; xem lại nếu log production còn thấy lớp ẩn bị bỏ qua."},
+    {"id": "d-20260926T224636Z-7", "p": "(Đã bị thay ở round 1) Chiều đối chứng web từng gọi thẳng hàm ghi của thư viện."},
+    {"id": "d-20260926T224636Z-8", "p": "Đã chọn đo việc tải trang web bằng cách theo dõi lời gọi vào bộ tải của eve (Zalo 0 lần, web 1 lần) — vì bộ tải của eve không chạy được trong test; đổi lại không chứng lời gọi mạng thật."},
+    {"id": "d-20260926T225135Z-9", "p": "Đã sửa lời AC-7 sau khi duyệt: bảng số đo ngưỡng tính lại bằng tay theo kịch bản thật (29 câu, 4 người) — vì hàng từ chối thật kéo theo các câu hỏi thật."},
+    {"id": "d-20260926T230119Z-10", "p": "Đã sửa phép kiểm tài liệu của hồ sơ Hỏi CRM cũ để nó không đỏ vĩnh viễn sau khi vòng đó vào nhánh chính — chạm thước của một hồ sơ đã ký."},
+    {"id": "d-20260926T232446Z-11", "p": "Đã chọn cho chiều đối chứng web chạy qua chính hai công cụ trong một ngữ cảnh eve thử — đổi lại bộ hỗ trợ test bám khoá toàn cục của eve."},
+    {"id": "d-20260927T000141Z-12", "p": "KHÔNG vá tiếp rào đọc mã nguồn của AC-9 — anh chọn ghi Known limits sau hai round cùng lớp lỗi."},
+    {"id": "d-20260927T000141Z-13", "p": "Đã nâng phạm vi sửa ngay số điện thoại quốc tế viết nhóm bằng dấu chấm theo anh."},
+    {"id": "d-20260927T002330Z-14", "p": "KHÔNG giữ phần số tiền: trả bộ che số về bản gốc sau trần 3 round theo anh — không lộ số điện thoại nào, đổi lại số từ 1.000 tỷ vẫn bị che một phần."},
+    {"id": "d-20260927T002330Z-15", "p": "Anh cho phép round 4 vượt trần để chấm bản đã trả bộ che số."}
+  ]
+}

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e5e7a723d991539cca951cb97b980b2836f44cf3
+verified_commit: bbf1b9586ccd5aedd6683419f70c38a3c57db290
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -291,3 +291,11 @@ Round 2: 18/18 eval (E1–E15, gồm E3b/E4b/E8b) đều PASS và cả 4/4 lện
 ### Re-pin lần 1 — 2026-09-26, do sau ký Cổng 2 hoi-crm-qua-zalo: gộp onehub 40d423bb; lính canh SESSION_PURPOSES 3→4
 run_id: repin-20260926T132219Z-98927
 sha: e5e7a723d991539cca951cb97b980b2836f44cf3 · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12j (E12j không khai paths)
+
+### Re-pin lần 2 — 2026-09-27, do vòng hoan-thien-hoi-crm-qua-zalo sửa test và thước của hồ sơ
+run_id: repin-20260927T005646Z-59185
+sha: 4c2fea427e70e05e52c9bd769b0b8e56b16d7716 · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12j (E12j không khai paths)
+
+### Re-pin lần 3 — 2026-09-27, do gộp onehub f2acca7f (#161, #162, #163)
+run_id: repin-20260927T012809Z-43984
+sha: bbf1b9586ccd5aedd6683419f70c38a3c57db290 · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12j (E12j không khai paths)

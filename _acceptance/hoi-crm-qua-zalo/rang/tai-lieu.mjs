@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const GOC = resolve(import.meta.dirname, "../../..");
-const NHANH_CHINH = "origin/onehub";
+const TRUOC_VONG = "40d423bb686da7d554d7f5b3bd914e818d9ec455";
 const TRANG_THAI = [
 	"chưa mở",
 	"chờ điều kiện",
@@ -80,10 +80,14 @@ function kiemTaiLieu() {
 function kiemMergeBase() {
 	let mb;
 	try {
-		mb = execFileSync("git", ["-C", GOC, "merge-base", "HEAD", NHANH_CHINH], {
-			encoding: "utf8",
-			stdio: ["ignore", "pipe", "ignore"],
-		}).trim();
+		mb = execFileSync(
+			"git",
+			["-C", GOC, "rev-parse", "--verify", `${TRUOC_VONG}^{commit}`],
+			{
+				encoding: "utf8",
+				stdio: ["ignore", "pipe", "ignore"],
+			},
+		).trim();
 	} catch {
 		return null;
 	}
