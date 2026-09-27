@@ -262,6 +262,7 @@ nhảy pha), `toan-canh-okr` (nút Xuất ở đầu Toàn cảnh).
 - Tên mục tiêu, tên KR, tên người, lý do, điều học được mang `translate="no"`.
 - Cách xem «Chấm điểm» nằm trong URL (tham số cách xem của «Theo đơn vị», như «Họp tuần»); mở đường dẫn là vào đúng cách xem.
 - Cách xem «Chấm điểm» chỉ hiện khi chu kỳ đang chọn ở pha chấm điểm hoặc đã đóng.
+- Cổng Phạm vi 2026-09-27 chốt hướng A và nhận hai biến thể mới trong `packages/ui`: kiểu chữ «câu hỏi» cho dòng ghi chú dưới ô (câu hỏi chất lượng), và bộ chọn cách xem thu về danh sách thả xuống dưới `md` (áp cả ba cách xem cũ của «Theo đơn vị»).
 
 ### 5. Xuất xứ component
 

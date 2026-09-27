@@ -25,7 +25,7 @@ evals:
     steps:
       - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
       - "Gieo qua API thật: chu kỳ quý đang chạy, mục tiêu nháp của phòng ban P1 do trưởng T phụ trách, mục tiêu đã công bố có ba KR tăng tới; đăng nhập dev:session T; dọn theo id ở cuối kể cả khi đỏ"
-      - "Mở sheet mục tiêu nháp ở 1440/vi → «Thêm KR», gõ tên «Gọi điện chào mừng mọi đối tác mới», khởi điểm 0, đích 40 → đọc DOM: [data-hoi-chat-luong] dưới ô tên chứa câu kr-la-viec, dưới ô khởi điểm chứa câu thieu-khoi-diem; nút Lưu không disabled → ảnh buoc-hoi"
+      - "Mở sheet mục tiêu nháp ở 1440/vi → «Thêm KR», gõ tên «Gọi điện chào mừng mọi đối tác mới», khởi điểm 0, đích 40 → đọc DOM: [data-hoi-chat-luong] dưới ô tên (dòng ghi chú mang biến thể câu hỏi của packages/ui) chứa câu kr-la-viec, dưới ô khởi điểm chứa câu thieu-khoi-diem; nút Lưu không disabled → ảnh buoc-hoi"
       - "Bấm Lưu → hộp thoại đóng, bảng KR có dòng mới"
       - "Mở sheet mục tiêu ba KR tăng tới → cảnh báo thiếu đối trọng hiện trên bảng KR → ảnh buoc-doi-trong; đăng nhập thành viên chỉ đọc, mở cùng sheet → không có cảnh báo"
       - "Ảnh ở 390 cho buoc-hoi; scrollWidth <= innerWidth"
@@ -129,7 +129,7 @@ evals:
       - "Gõ điều học được, «Lưu điều học được» → toast"
       - "«Mang sang» → hộp thoại nêu chu kỳ kế, KR chép, KR không chép → ảnh buoc-mang-sang; xác nhận → khối mục tiêu hiện «Đã mang sang <chu kỳ>»"
       - "Trạng thái: chặn truy vấn bangCham ở trình duyệt → lỗi + «Thử lại», bấm lại tải được; đơn vị không có mục tiêu công bố → rỗng; đăng nhập vai okr không phụ trách → điểm đọc được, không ô chọn; chu kỳ đã đóng → chỉ đọc"
-      - "Ảnh ở 390 và 1440 cho buoc-cham; scrollWidth <= innerWidth; chữ người nhập mang translate=no"
+      - "Ảnh ở 390 và 1440 cho buoc-cham; scrollWidth <= innerWidth; ở 390 bộ chọn cách xem là danh sách thả xuống (không phải nhóm nút) và chọn «Chấm điểm» từ đó đổi URL; chữ người nhập mang translate=no"
     expected: "Mọi bước đạt, ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao màn bỏ câu «không phải đánh giá nhân sự» → bước buoc-cham đỏ, script in «thiếu câu»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -183,7 +183,7 @@ evals:
     executor: script
     cmd: config:executors.script.kko_san_thiet_ke
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/**, packages/ui/src/components/**, packages/validation/src/**, apps/api/src/okr/**, _acceptance/khep-ky-okr/rang/soi-ma.mjs]
-    expected: "exit 0; soi-ma.mjs --ca thiet-ke suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD và chỉ tính dòng lượt này thêm; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay (bảng docs/design.md); mọi DialogFooter mới có nút Huỷ bọc DialogClose; tệp mới không chú thích mã, không Record<string, unknown>, không useEffect( trần; kiemOkr, OKR_KHEP, goiYDiem chỉ định nghĩa trong packages/validation/src (grep định nghĩa ở apps/ = 0); không số 0.7, 0.1, 500, 2000 trần trong tệp okr mới ngoài okr-khep.ts; in danh sách tệp đã soi (> 0). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và một nút Huỷ không DialogClose → đỏ in hai vi phạm có tên."
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD và chỉ tính dòng lượt này thêm; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay (bảng docs/design.md); mọi DialogFooter mới có nút Huỷ bọc DialogClose; tệp mới không chú thích mã, không Record<string, unknown>, không useEffect( trần; kiemOkr, OKR_KHEP, goiYDiem chỉ định nghĩa trong packages/validation/src (grep định nghĩa ở apps/ = 0); không số 0.7, 0.1, 500, 2000 trần trong tệp okr mới ngoài okr-khep.ts; hai biến thể mới (câu hỏi cho FieldDescription, cách xem thu về Select ở khổ nhỏ) định nghĩa trong packages/ui/src/components và chỗ gọi ở apps/app không tự đặt className đổi màu hay kiểu cho chúng; in danh sách tệp đã soi (> 0). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và một nút Huỷ không DialogClose → đỏ in hai vi phạm có tên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19
