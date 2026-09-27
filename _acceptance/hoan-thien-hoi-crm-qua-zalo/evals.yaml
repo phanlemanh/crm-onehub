@@ -119,11 +119,12 @@ evals:
     expected: |
       Ma tran so tien viet truoc (5 phan tu cua AC-6): locTraLoi("Gia tri: <so>") -> mot phan, chua nguyen <so>,
       khong chua ZALO.hoi.an; dem === 5 (assert mang so).
-      Ma tran so dien thoai lien sau so khac (4 phan tu cua AC-6): moi phan tu -> khong con day 10 chu so nao cua so dien thoai,
-      so lan ZALO.hoi.an === so so dien thoai trong phan tu (2,2,2,1); dem === 4.
+      Ma tran so dien thoai lien sau so khac va so quoc te nhom bang dau cham (cac phan tu cua AC-6, them 27/09:
+      "Goi +84 912.345.678 nhe", "SDT +84.912.345.678", "SDT 0084 912.345.678", "SDT (+84) 912.345.678"): moi phan tu ->
+      khong con day so dien thoai, so lan ZALO.hoi.an === so so dien thoai trong phan tu; dem === so phan tu.
       Doi chung: ca loc-che hien co chay cung lenh, van che du tung phan tu.
       Chieu do: tra regex cu -> do ghim "1.000.000.000.000 đ"; sua bang nhin lui cam "chu so + dau phan cach" -> do ghim
-      "0912345678,0987654321".
+      "0912345678,0987654321"; bo chan dau ma nuoc cua SO_TIEN -> do ghim "Gọi +84 912.345.678 nhé" (Received 0).
   - id: E7
     criterion: AC-7
     executor: test

@@ -136,3 +136,12 @@ error: web ghi duoc mot fact
 error: khong dung `zalo: dung tay
 (fail) cung-phien > cung-phien: su kien kenh trong cung-phien va duong-chinh rut tu send [4.07ms]
 ```
+
+## Sau dừng-vá — số quốc tế nhóm bằng dấu chấm (cây 7ba116e5)
+
+```
+== bo chan dau ma nuoc (exit 1)
+error: Gọi +84 912.345.678 nhé
+Received: 0
+(fail) so-tien > so-tien: so dien thoai lien sau so khac van bi che [0.30ms]
+```
