@@ -9,8 +9,9 @@ cần thiết để máy khác không phải học lại.
 
 **Lượt 0 (nền, không mã) đang làm.** Nghiên cứu xong, bản mẫu xong, một quyết định
 đã chốt, lộ trình và sổ theo dõi đã có. Chưa có dòng mã sản phẩm nào ngoài bản mẫu
-và trình đọc markdown. Phần máy làm được của lượt 0 đã xong 2026-09-27: gói gửi luật sư,
-mẫu kiểm kê và gom tệp Zalo, khuôn mầm bộ vàng. Phần còn lại cần chủ kho.
+và trình đọc markdown. Ngày 2026-09-27 chủ kho bỏ hạng mục pháp lý: lộ trình chỉ theo
+dõi bàn giao phần mềm. Lượt 0 còn duyệt từ điển; việc chuẩn bị pilot chạy song song, máy
+đã soạn mẫu.
 
 | Thứ | Ở đâu |
 | --- | --- |
@@ -45,6 +46,7 @@ Lịch sử nhánh (mới nhất trên cùng):
 | --- | --- | --- |
 | 2026-09-26 | Manh Phan | Theo mẫu LLM Wiki: máy soạn bản đề xuất, chủ trang duyệt, trợ lý AI chỉ đọc bản đang dùng |
 | 2026-09-26 | Manh Phan | **Duyệt mọi thay đổi**, kể cả sửa chính tả và liên kết; không có bậc tự áp dụng; chỉ xét nới sau pilot có số đo bắt lỗi mồi |
+| 2026-09-27 | Manh Phan | **Bỏ hạng mục pháp lý.** Lộ trình chỉ theo dõi bàn giao phần mềm; không lượt nào có cổng luật sư; tuân thủ khi chạy production do chủ kho lo |
 | 2026-09-26 | Máy, chủ kho chưa veto | Mặc định ở mục 10.2 của tài liệu trình bày: Postgres `tsvector` + `unaccent` + `pg_trgm`; CodeMirror 6; callout theo GitHub; phạm vi xem theo vai sẵn có; hạn xác minh 90/180 ngày/12 tháng; nhắc trong ứng dụng cộng email; khoá AI riêng; đồ thị ở lượt 4; pilot một phòng ban |
 
 Ngày trong lộ trình là đề xuất của máy, **chưa chốt**.
@@ -53,16 +55,17 @@ Ngày trong lộ trình là đề xuất của máy, **chưa chốt**.
 
 Theo thứ tự, lấy từ mục 4 của lộ trình:
 
-1. Gửi 12 câu ở mục 10.5 cho luật sư. Câu Q3 hỏi CRM đang chạy đã có hồ sơ chuyển dữ
-   liệu ra nước ngoài chưa (Neon, Vercel): việc này có thể chạm cả CRM hiện tại. Bản gửi
-   được nằm ở `kho-tai-lieu-goi-luat-su.md`; chủ kho điền phụ lục B rồi gửi.
-2. Kiểm kê tài liệu và hỏi giờ duyệt mỗi tuần của các chủ trang tương lai. Mẫu cột và
-   tin hỏi ở `kho-tai-lieu-kiem-ke.md` mục 1–2.
-3. Gom tệp trong các nhóm Zalo, theo `kho-tai-lieu-kiem-ke.md` mục 3.
-4. Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật theo
-   `kho-tai-lieu-bo-vang.md`, dán bảng gom vào phiên để máy chuẩn hoá.
-5. Duyệt tám mục từ điển.
-6. Mở lượt 1a: `/feature-loop:feature-loop kho-tai-lieu — lượt 1a của docs/plan/lo-trinh-kho-tai-lieu.md`.
+Đường bàn giao phần mềm:
+
+1. Duyệt tám mục từ điển ở cuối `CONTEXT.md`.
+2. Mở lượt 1a: `/feature-loop:feature-loop kho-tai-lieu — lượt 1a của docs/plan/lo-trinh-kho-tai-lieu.md`.
+
+Song song, không chặn 1a và 1b (dòng 7 của sổ):
+
+- Gom tệp trong các nhóm Zalo, theo `kho-tai-lieu-kiem-ke.md` mục 3. Gấp: Zalo xoá tệp.
+- Kiểm kê tài liệu và hỏi giờ duyệt, theo `kho-tai-lieu-kiem-ke.md` mục 1–2.
+- Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật theo
+  `kho-tai-lieu-bo-vang.md`, dán bảng gom vào phiên để máy chuẩn hoá.
 
 ## 4. Điều máy đã học mà repo chưa ghi
 

@@ -15,11 +15,11 @@ mới là thứ quyết một lượt được mở hay chưa; ngày trượt th
 
 | Mốc | Ngày đề xuất | Nghĩa là |
 | --- | --- | --- |
-| Nền sẵn sàng | 2026-10-10 | Đã gửi 12 câu cho luật sư, đã kiểm kê tài liệu và giờ duyệt, đã gom tệp Zalo, đã có 50 câu hỏi thật làm mầm bộ đo |
+| Nền sẵn sàng | 2026-10-10 | Tám mục từ điển đã duyệt; lượt 1a mở được |
 | Kho cho người | 2026-11-13 | Một phòng ban viết, duyệt, đọc, tìm trang trong CRM; chưa có AI |
 | Pilot người dùng thật | 2026-11-16 → 2026-12-04 | Một phòng ban, khoảng 20 tài liệu, 25–50 nhân viên; đo chủ trang có theo kịp không |
-| Trợ lý AI đọc kho | sớm nhất 2026-12-07 | Chỉ khi cổng G1–G10 đã qua; chỉ trang lớp P và I |
-| Máy soạn đề xuất | quý 1/2027 | Chỉ khi luật sư đã trả lời và đã đo tiếng Việt trên tệp thật |
+| Trợ lý AI đọc kho | sớm nhất 2026-12-07 | Chỉ khi cổng G1–G10 đã qua |
+| Máy soạn đề xuất | quý 1/2027 | Chỉ khi đã đo tiếng Việt trên tệp thật và biết số người duyệt |
 | Bảo trì và trang luật | quý 2/2027 | Chỉ khi pilot máy soạn cho số đo bắt lỗi mồi |
 
 Chồng lịch với OKR: R2 lên 20/11, R3 lên 18/12 do cùng chủ kho điều phối. Kho tài
@@ -51,7 +51,8 @@ gantt
 - **Chốt 2026-09-26 (Manh Phan): duyệt mọi thay đổi.** Không có bậc tự áp dụng,
   kể cả sửa chính tả và liên kết. Chỉ xét nới sau pilot, khi đã có số đo bắt lỗi mồi.
 - Mỗi lượt có AI chỉ mở khi cổng của nó ở mục 3 đã qua. Ngày không mở cổng.
-- Không lượt nào gửi dữ liệu cá nhân ra nước ngoài trước khi luật sư trả lời.
+- **Chốt 2026-09-27 (Manh Phan): lộ trình chỉ theo dõi việc bàn giao phần mềm.**
+  Pháp lý không phải cổng của lượt nào; tuân thủ khi chạy production do chủ kho lo.
 - Nhãn trên màn theo từ điển: trợ lý AI (không phải «tác nhân»), chủ trang, bản đề
   xuất, bản đang dùng, nguồn, xác minh đến ngày, bậc duyệt.
 
@@ -63,27 +64,34 @@ gantt
 | 1a | `kho-tai-lieu` | T3 | Trang, phiên bản bất biến, con trỏ bản đang dùng, bản đề xuất do người tạo, duyệt bậc 1 và 2, chủ và phó, phạm vi xem, hạn xác minh, nhật ký kiểm toán, trình soạn nguồn | Không | Từ điển duyệt; lược đồ qua Cổng Phạm vi và Cổng 1.5 |
 | 1b | `tim-va-dieu-huong-kho` | T2 | Tìm có dấu và không dấu, ⌘K, backlink kèm ngữ cảnh, xem trước, mục lục, tab Sức khoẻ, xuất Markdown và PDF có phiên bản | Không | 1a đã lên `onehub` |
 | P | Pilot | — | Một phòng ban dùng thật | Không | 1b đã lên; đã chọn phòng ban và 20 tài liệu |
-| 2 | `tro-ly-doc-kho` | T2 | Hỏi đáp có trích nguyên văn, từ chối cố định, báo sai, hàng câu chưa trả lời được | Chỉ đọc, lớp P và I | G1–G10 qua; khoá AI riêng có trần tháng; ZDR và danh sách nhà cung cấp đã thử |
-| 3 | `may-soan-de-xuat` | T3 | Tải nguồn; máy soạn bản đề xuất; màn duyệt nguồn trước, thẻ mâu thuẫn, ô che dữ liệu cá nhân | Soạn, không đăng | Luật sư trả lời Q1–Q5 và Q12; E0–E7 trên tệp thật; biết số người duyệt |
+| 2 | `tro-ly-doc-kho` | T2 | Hỏi đáp có trích nguyên văn, từ chối cố định, báo sai, hàng câu chưa trả lời được | Chỉ đọc | G1–G10 qua; khoá AI riêng có trần tháng; ZDR và danh sách nhà cung cấp đã thử |
+| 3 | `may-soan-de-xuat` | T3 | Tải nguồn; máy soạn bản đề xuất; màn duyệt nguồn trước, thẻ mâu thuẫn, ô che dữ liệu cá nhân | Soạn, không đăng | E0–E7 trên tệp thật; biết số người duyệt |
 | 4 | `bao-tri-trang-luat` | T3 | Soát định kỳ, cờ cũ, theo dõi Công báo, thẻ căn cứ pháp lý đã đổi, đồ thị cục bộ và toàn kho | Đề xuất sửa; lint xác định | Pilot lượt 3 cho số đo bắt lỗi mồi ≥ 70% |
 
 Nguyên tắc «Now / Next / Later»: **Now** là lượt 0. **Next** là 1a, 1b, pilot.
 **Later** là 2, 3, 4.
 
-## 4. Lượt 0 — nền (2026-09-29 → 2026-10-10)
+## 4. Lượt 0 — nền cho lượt 1a (2026-09-29 → 2026-10-10)
 
-Không viết mã. Mỗi dòng ghi ai làm.
+Không viết mã. Chỉ gồm việc mà lượt 1a cần trước khi mở.
 
 | Việc | Ai | Xong khi |
 | --- | --- | --- |
-| Gửi 12 câu ở mục 10.5 của `kho-tai-lieu-viet-nam-va-do-luong.md` cho luật sư; câu Q3 (hồ sơ chuyển dữ liệu của CRM đang chạy) đi trước | Chủ kho | Có ngày luật sư hẹn trả lời |
-| Kiểm kê tài liệu: số tệp, định dạng, tỉ lệ bản quét, nơi đang nằm | Chủ kho, máy soạn bảng mẫu | Có bảng kiểm kê |
-| Hỏi số chủ trang tương lai và giờ duyệt mỗi tuần mỗi người | Chủ kho | Có con số, dù ước |
-| Gom tệp trong các nhóm Zalo trước khi Zalo xoá khỏi máy chủ | Chủ kho | Tệp gốc nằm ở một chỗ, kèm nhóm và ngày |
-| Chọn phòng ban pilot và khoảng 20 tài liệu | Chủ kho | Có danh sách |
-| Viết 50 câu hỏi thật của nhân viên (mầm bộ vàng) | Chủ kho gom, máy chuẩn hoá | 50 câu, mỗi câu có trang vàng dự kiến |
 | Duyệt tám mục từ điển mới trong `CONTEXT.md` | Chủ kho | Mục đổi từ «đề xuất» sang «chốt» |
 | Design-pass bản mẫu `/proto/kho-tai-lieu` (nếu muốn duyệt giao diện trước Cổng Phạm vi) | Máy dựng, chủ kho phản ứng | Gói ảnh đã duyệt |
+
+### Chuẩn bị pilot — song song, không chặn lượt 1a và 1b
+
+Cần xong trước khi mở pilot; 50 câu hỏi còn là mầm bộ vàng của lượt 2. Mẫu ở
+`kho-tai-lieu-kiem-ke.md` và `kho-tai-lieu-bo-vang.md`.
+
+| Việc | Ai | Xong khi |
+| --- | --- | --- |
+| Gom tệp trong các nhóm Zalo trước khi Zalo xoá khỏi máy chủ | Chủ kho | Tệp gốc nằm ở một chỗ, kèm nhóm và ngày |
+| Kiểm kê tài liệu: số tệp, định dạng, tỉ lệ bản quét, nơi đang nằm | Chủ kho, máy soạn bảng mẫu | Có bảng kiểm kê |
+| Hỏi số chủ trang tương lai và giờ duyệt mỗi tuần mỗi người | Chủ kho | Có con số, dù ước |
+| Chọn phòng ban pilot và khoảng 20 tài liệu | Chủ kho | Có danh sách |
+| Viết 50 câu hỏi thật của nhân viên (mầm bộ vàng) | Chủ kho gom, máy chuẩn hoá | 50 câu, mỗi câu có trang vàng dự kiến |
 
 ## 5. Từng lượt
 
@@ -140,8 +148,7 @@ XLSX, bản quét hai máy đọc); sổ khẳng định; kiểm xác định tr
 màn duyệt như bản mẫu (nguồn trước, dải số đổi, thẻ mâu thuẫn, ô che dữ liệu cá
 nhân); tốc độ nạp gắn năng lực người duyệt.
 
-**Cổng trước khi mở.** Luật sư trả lời Q1–Q5 và Q12; E0–E7 trên 30–50 tệp thật; biết
-số chủ trang và giờ duyệt.
+**Cổng trước khi mở.** E0–E7 trên 30–50 tệp thật; biết số chủ trang và giờ duyệt.
 
 ### Lượt 4 — `bao-tri-trang-luat` · T3
 
@@ -156,7 +163,6 @@ hiệu lực văn bản luật (mục 11); bộ theo dõi Công báo chỉ đề
 | Rủi ro | Giảm |
 | --- | --- |
 | Chủ trang không theo kịp hàng duyệt | Trần đề xuất mỗi người; pilot không AI đo trước; dừng lượt 3 nếu trung vị > 5 ngày |
-| Luật sư trả lời chậm | Lượt 1a, 1b, 2 (lớp P và I) không cần câu trả lời; chỉ lượt 3 bị chặn |
 | Chồng lịch với OKR | Kho không AI tới hết năm; cùng người duyệt không nhận hai hàng duyệt mới một lúc |
 | Neon hết hạn mức | Không thêm nhịp thăm dò; tìm kiếm tính lúc ghi, không tính lúc đọc |
 | Nhánh bản mẫu tụt sau `onehub` | Mỗi phiên kéo `onehub` vào trước khi làm (đã làm 2026-09-27) |
@@ -168,6 +174,9 @@ hiệu lực văn bản luật (mục 11); bộ theo dõi Công báo chỉ đề
 - Tự áp dụng sửa cơ học: chủ kho chốt duyệt mọi thay đổi (2026-09-26).
 - Nhắc qua Zalo: chính sách tin ZBS với nhân viên chưa rõ; hỏi Zalo bằng văn bản trước.
 - Chuyển hàng loạt tài liệu cũ: nhập làm nguồn, di chuyển theo nhu cầu.
+- Hạng mục pháp lý (12 câu cho luật sư, cổng pháp lý của lượt 2 và 3): chủ kho bỏ
+  khỏi lộ trình 2026-09-27; tuân thủ khi chạy production do chủ kho lo. Nghiên cứu ở
+  mục 10 của `kho-tai-lieu-viet-nam-va-do-luong.md` giữ nguyên làm tư liệu.
 
 ## 8. Theo dõi — cập nhật sau mỗi hạng mục
 
@@ -180,17 +189,18 @@ sửa dòng của hạng mục đó. Khi dòng ở đây lệch với `PRODUCT-M
 
 | # | Hạng mục | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
-| 0 | Lượt 0 — nền | đang dựng | 2026-09-27 | — | Nghiên cứu nền xong 2026-09-26 (18 luồng, 546 nguồn): ba tệp `kho-tai-lieu-*.md` và hồ sơ `kho-tai-lieu-ho-so/`. Bản mẫu `/proto/kho-tai-lieu` 16 trạng thái, trình đọc `markdown-reader` trong `packages/ui`. Chốt 2026-09-26 (Manh Phan): duyệt mọi thay đổi. Tám mục từ điển thêm dạng đề xuất. Nhánh `proto/kho-tai-lieu` đã kéo `onehub` 2026-09-27 và đẩy lên `origin` để chạy tiếp ở máy khác. Còn: 12 câu luật sư, kiểm kê, giờ duyệt, gom tệp Zalo, chọn pilot, 50 câu hỏi, duyệt từ điển. 2026-09-27: máy soạn gói gửi luật sư `kho-tai-lieu-goi-luat-su.md` (thư, 12 câu xếp theo thứ tự cần trả lời, phụ lục dữ liệu CRM gửi đi đâu tra từ mã, bảng sự thật chủ kho điền); tra ra CRM chạy từ khoảng 31/08–07/09/2026, nên nếu hạn hồ sơ là 60 ngày thì rơi vào đầu tháng 11/2026. Chờ chủ kho điền phụ lục B và gửi. 2026-09-27: máy soạn `kho-tai-lieu-kiem-ke.md` — cột kiểm kê kèm lớp dữ liệu và quy tắc chọn đích, tin mẫu hỏi giờ duyệt, các bước gom tệp Zalo có dấu vân tay `sha256`, bảng số mang về kho. Chờ chủ kho điền. 2026-09-27: máy soạn `kho-tai-lieu-bo-vang.md` — cột gom câu hỏi nguyên văn, sáu bước máy chuẩn hoá và gán tầng S1–S3, S6, S7, nơi giữ; ghi quyết định còn mở trước lượt 2: bộ niêm phong không được nằm trong git vì phiên máy đọc được git. Chờ chủ kho gom câu |
+| 0 | Lượt 0 — nền | đang dựng | 2026-09-27 | — | Nghiên cứu nền xong 2026-09-26 (18 luồng, 546 nguồn): ba tệp `kho-tai-lieu-*.md` và hồ sơ `kho-tai-lieu-ho-so/`. Bản mẫu `/proto/kho-tai-lieu` 16 trạng thái, trình đọc `markdown-reader` trong `packages/ui`. Chốt 2026-09-26 (Manh Phan): duyệt mọi thay đổi. Tám mục từ điển thêm dạng đề xuất. Nhánh `proto/kho-tai-lieu` đã kéo `onehub` 2026-09-27 và đẩy lên `origin` để chạy tiếp ở máy khác. Còn: 12 câu luật sư, kiểm kê, giờ duyệt, gom tệp Zalo, chọn pilot, 50 câu hỏi, duyệt từ điển. 2026-09-27: máy soạn gói gửi luật sư `kho-tai-lieu-goi-luat-su.md` (thư, 12 câu xếp theo thứ tự cần trả lời, phụ lục dữ liệu CRM gửi đi đâu tra từ mã, bảng sự thật chủ kho điền); tra ra CRM chạy từ khoảng 31/08–07/09/2026, nên nếu hạn hồ sơ là 60 ngày thì rơi vào đầu tháng 11/2026. Chờ chủ kho điền phụ lục B và gửi. 2026-09-27: máy soạn `kho-tai-lieu-kiem-ke.md` — cột kiểm kê kèm lớp dữ liệu và quy tắc chọn đích, tin mẫu hỏi giờ duyệt, các bước gom tệp Zalo có dấu vân tay `sha256`, bảng số mang về kho. Chờ chủ kho điền. 2026-09-27: máy soạn `kho-tai-lieu-bo-vang.md` — cột gom câu hỏi nguyên văn, sáu bước máy chuẩn hoá và gán tầng S1–S3, S6, S7, nơi giữ; ghi quyết định còn mở trước lượt 2: bộ niêm phong không được nằm trong git vì phiên máy đọc được git. Chờ chủ kho gom câu. 2026-09-27: Manh Phan bỏ hạng mục pháp lý khỏi lộ trình; xoá `kho-tai-lieu-goi-luat-su.md`. Kiểm kê, giờ duyệt, gom Zalo, chọn pilot, 50 câu chuyển sang dòng 7. Lượt 0 còn: duyệt từ điển, design-pass tuỳ chọn |
 | 1 | Lượt 1a — `kho-tai-lieu` | chưa mở | — | — | T3. Slug hồ sơ trùng slug bản mẫu |
 | 2 | Lượt 1b — `tim-va-dieu-huong-kho` | chưa mở | — | — | T2 |
 | 3 | Pilot một phòng ban | chưa mở | — | — | Không AI |
 | 4 | Lượt 2 — `tro-ly-doc-kho` | chưa mở | — | — | Cổng G1–G10 |
-| 5 | Lượt 3 — `may-soan-de-xuat` | chưa mở | — | — | Chặn bởi trả lời luật sư |
+| 5 | Lượt 3 — `may-soan-de-xuat` | chưa mở | — | — | Chặn bởi trả lời luật sư. 2026-09-27: bỏ cổng luật sư; còn chặn bởi E0–E7 trên tệp thật và số người duyệt |
 | 6 | Lượt 4 — `bao-tri-trang-luat` | chưa mở | — | — | Chặn bởi số đo pilot lượt 3 |
+| 7 | Chuẩn bị pilot | đang dựng | 2026-09-27 | — | Tách từ dòng 0 ngày 2026-09-27. Máy đã soạn mẫu `kho-tai-lieu-kiem-ke.md` và `kho-tai-lieu-bo-vang.md`. Chờ chủ kho: gom tệp Zalo (gấp), kiểm kê, giờ duyệt, chọn phòng ban và 20 tài liệu, 50 câu hỏi |
 
 ## 9. Bắt đầu thế nào
 
 Xem `kho-tai-lieu-ban-giao.md` mục «Chạy tiếp ở máy khác». Tóm gọn: kéo nhánh
-`proto/kho-tai-lieu`, đọc mục 1 và 17 của `kho-tai-lieu-nghien-cuu.md`, làm các việc
-lượt 0 còn lại, rồi mở lượt 1a bằng
+`proto/kho-tai-lieu`, đọc mục 1 và 17 của `kho-tai-lieu-nghien-cuu.md`, duyệt từ điển,
+rồi mở lượt 1a bằng
 `/feature-loop:feature-loop kho-tai-lieu — lượt 1a của docs/plan/lo-trinh-kho-tai-lieu.md`.

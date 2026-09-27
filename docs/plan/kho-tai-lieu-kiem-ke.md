@@ -11,7 +11,7 @@ bảng tính của công ty, chia sẻ hạn chế; kho chỉ nhận con số t�
 ## 1. Kiểm kê tài liệu
 
 Một dòng một tệp. Chưa cần đủ mọi tệp: mục tiêu là biết cỡ, định dạng, tỉ lệ bản quét và
-nơi đang nằm, đủ để chọn 20 tài liệu pilot và trả lời luật sư câu «Kho sẽ nạp lớp nào».
+nơi đang nằm, đủ để chọn 20 tài liệu pilot.
 
 Dòng tiêu đề, chép vào bảng tính:
 
@@ -45,9 +45,7 @@ Kỳ vọng: chỉ khoảng 5–15% tài liệu cũ đáng chuyển ngay. Đó l
 ngoài ngành (mục 13.2), không phải số đo; đừng coi tỉ lệ cao hơn là sai.
 
 Chọn 20 tài liệu pilot trong số MIGRATE-NOW của **một** phòng ban, ưu tiên theo: câu hỏi
-nhân viên hay lặp lại, tệp dùng hằng tuần, tệp kiểm toán từng trích. Tránh lớp S và D
-trong pilot: lượt 1a và 1b chưa có AI, nhưng pilot sạch lớp S thì lượt 2 mở được trên
-đúng những trang đó.
+nhân viên hay lặp lại, tệp dùng hằng tuần, tệp kiểm toán từng trích.
 
 ## 2. Giờ duyệt của chủ trang tương lai
 
