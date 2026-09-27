@@ -30,7 +30,7 @@ export const TAI_LIEU = {
 	lyDo: { min: 1, max: 500 },
 	noiDung: { max: 200_000 },
 	danhSach: { coTrang: 25 },
-	diff: { tranMs: 1_500 },
+	diff: { tranSuaKhoi: 2_000, tranSuaTu: 2_000 },
 	nap: { coKhoi: 4_000 },
 	slugDuPhong: "trang",
 } as const;
@@ -57,6 +57,17 @@ export function sinhSlug(ten: string, daCo: ReadonlySet<string>): string {
 	let n = 2;
 	while (daCo.has(`${g}-${n}`)) n += 1;
 	return `${g}-${n}`;
+}
+
+export function coChuHaySo(ten: string): boolean {
+	return /[\p{L}\p{N}]/u.test(ten);
+}
+
+const DUONG_TRANG =
+	/^(?:\/[^/?#]+)?\/tai-lieu\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?(?:[?#].*)?$/;
+
+export function slugTuDuongDan(den: string): string | null {
+	return DUONG_TRANG.exec(den)?.[1] ?? null;
 }
 
 const deXuatId = z.string().min(1);

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, spyOn, test } from "bun:test";
 import {
 	diffHash,
 	type KhoiDoi,
@@ -133,5 +133,26 @@ describe("tai-lieu-diff", () => {
 		expect(performance.now() - bd).toBeLessThan(2_000);
 		expect(dem(khoi, "them")).toBeGreaterThan(0);
 		expect(dem(khoi, "bo")).toBeGreaterThan(0);
+	});
+
+	test("tat-dinh: dong ho chay nhanh hay cham thi diff va diffHash van y het", async () => {
+		const truoc = vanBanDai("alpha", 7);
+		const sau = vanBanDai("omega", 5);
+		const binhThuong = await diffHash(soSanh(truoc, sau));
+		let gia = Date.now();
+		const dongHo = spyOn(Date, "now").mockImplementation(() => {
+			gia += 60_000;
+			return gia;
+		});
+		try {
+			expect(await diffHash(soSanh(truoc, sau))).toBe(binhThuong);
+			expect(await diffHash(soSanh(TRUOC, SAU))).toBe(
+				await diffHash(soSanh(TRUOC, SAU)),
+			);
+		} finally {
+			dongHo.mockRestore();
+		}
+		const khoi = soSanh(TRUOC, SAU);
+		expect(dem(khoi, "them")).toBe(2);
 	});
 });

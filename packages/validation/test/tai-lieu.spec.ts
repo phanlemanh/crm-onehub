@@ -1,10 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import {
 	chuanNfc,
+	coChuHaySo,
 	LOAI_SU_KIEN,
 	LOAI_TRANG,
 	parseSuKienChiTiet,
 	sinhSlug,
+	slugTuDuongDan,
 	TAI_LIEU,
 	TRANG_THAI_DE_XUAT,
 } from "../src/tai-lieu";
@@ -32,6 +34,26 @@ describe("tai-lieu", () => {
 			"doi-tac-da-nang",
 		));
 
+	test("ten co chu hay so", () => {
+		expect(coChuHaySo("  ✨ !!! ")).toBe(false);
+		expect(coChuHaySo("   ")).toBe(false);
+		expect(coChuHaySo("Đ")).toBe(true);
+		expect(coChuHaySo("2026")).toBe(true);
+		expect(coChuHaySo("日本")).toBe(true);
+	});
+
+	test("slug tu duong dan trang", () => {
+		expect(slugTuDuongDan("/tai-lieu/quy-dinh-hoa-hong")).toBe(
+			"quy-dinh-hoa-hong",
+		);
+		expect(slugTuDuongDan("/onehub/tai-lieu/bieu-mau-2#muc")).toBe(
+			"bieu-mau-2",
+		);
+		expect(slugTuDuongDan("https://vi.wikipedia.org/wiki/Đà_Nẵng")).toBe(null);
+		expect(slugTuDuongDan("/tai-lieu/de-xuat/abc")).toBe(null);
+		expect(slugTuDuongDan("/contacts/abc")).toBe(null);
+	});
+
 	test("nfc", () => {
 		const nfd = "hoà".normalize("NFD");
 		expect(nfd).not.toBe("hoà");
@@ -55,7 +77,7 @@ describe("tai-lieu", () => {
 		expect(TAI_LIEU.ten).toEqual({ min: 1, max: 160 });
 		expect(TAI_LIEU.lyDo).toEqual({ min: 1, max: 500 });
 		expect(TAI_LIEU.noiDung.max).toBe(200_000);
-		expect(TAI_LIEU.diff.tranMs).toBe(1_500);
+		expect(TAI_LIEU.diff).toEqual({ tranSuaKhoi: 2_000, tranSuaTu: 2_000 });
 	});
 
 	test("sự kiện đọc được theo loại", () => {

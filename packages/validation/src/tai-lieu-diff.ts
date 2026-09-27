@@ -72,10 +72,6 @@ function mot(kieu: KieuKhoi, loai: LoaiDoan, chu: string): KhoiDoi {
 	return { kieu, doan: [{ loai, chu }] };
 }
 
-function conLai(het: number): number {
-	return het - Date.now();
-}
-
 function doanTu(thay: ChangeObject<string>[]): DoanDoi[] {
 	return thay
 		.filter((t) => t.value !== "")
@@ -85,12 +81,10 @@ function doanTu(thay: ChangeObject<string>[]): DoanDoi[] {
 		}));
 }
 
-function soTheoTu(truoc: Khoi, sau: Khoi, het: number): KhoiDoi {
-	const han = conLai(het);
-	const thay =
-		han > 0
-			? diffWordsWithSpace(truoc.chu, sau.chu, { timeout: han })
-			: undefined;
+function soTheoTu(truoc: Khoi, sau: Khoi): KhoiDoi {
+	const thay = diffWordsWithSpace(truoc.chu, sau.chu, {
+		maxEditLength: TAI_LIEU.diff.tranSuaTu,
+	});
 	if (!thay)
 		return {
 			kieu: sau.kieu,
@@ -102,13 +96,13 @@ function soTheoTu(truoc: Khoi, sau: Khoi, het: number): KhoiDoi {
 	return { kieu: sau.kieu, doan: doanTu(thay) };
 }
 
-function ghepCum(bo: Khoi[], them: Khoi[], het: number): KhoiDoi[] {
+function ghepCum(bo: Khoi[], them: Khoi[]): KhoiDoi[] {
 	const ra: KhoiDoi[] = [];
 	for (let i = 0; i < Math.max(bo.length, them.length); i += 1) {
 		const b = bo[i];
 		const t = them[i];
 		if (b && t && b.kieu === t.kieu) {
-			ra.push(soTheoTu(b, t, het));
+			ra.push(soTheoTu(b, t));
 			continue;
 		}
 		if (b) ra.push(mot(b.kieu, "bo", b.chu));
@@ -146,16 +140,18 @@ function theoKhoi(truoc: Khoi[], sau: Khoi[]): KhoiDoi[] {
 }
 
 export function soSanh(truoc: string, sau: string): KhoiDoi[] {
-	const het = Date.now() + TAI_LIEU.diff.tranMs;
 	const a = khoiCua(truoc);
 	const b = khoiCua(sau);
-	const thay = diffArrays(a, b, { comparator: giong, timeout: conLai(het) });
+	const thay = diffArrays(a, b, {
+		comparator: giong,
+		maxEditLength: TAI_LIEU.diff.tranSuaKhoi,
+	});
 	if (!thay) return theoKhoi(a, b);
 	const ra: KhoiDoi[] = [];
 	let bo: Khoi[] = [];
 	let them: Khoi[] = [];
 	const xa = () => {
-		ra.push(...ghepCum(bo, them, het));
+		ra.push(...ghepCum(bo, them));
 		bo = [];
 		them = [];
 	};
