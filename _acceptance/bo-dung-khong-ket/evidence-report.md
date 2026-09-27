@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5bffbc1ed04a7fd7d77c0458d85ce45228def5d9
+verified_commit: c1cc61d003840c0965e00fe74fcd02a40d11fc3d
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -212,3 +212,7 @@ Round 2: E6 vẫn FAIL — lần này network truth sạch (clean) và toàn b�
 Round 3: E9 failed — tai-lieu.mjs thấy apps/app/lib/agent-transcript.ts (đã sửa ở vòng này, và cũng tồn tại ở origin/release) chưa có tên trong mục "Chỗ rẽ có tên với bản của hãng" của docs/agent.md; bản merge-base cũng trượt cùng 5 điều kiện nên đối chứng vẫn giữ được. REJECT — đã chạm mốc 3 vòng, cần người quyết bước kế tiếp.
 Round 4: E1–E11 đều PASS (E9 đã hết đỏ sau khi bổ sung tên tệp vào docs/agent.md), nhưng lệnh suite không gắn eval `bun run test` thoát mã 1 dù turbo báo cả 11 task đều thành công (app:test tự báo 5 pass/0 fail) — một hỏng hóc ở tầng suite, không nằm trong bất kỳ AC nào. REJECT — cần chạy lại/định vị nguyên nhân của lệnh suite này trước khi ký vòng kế.
 Round 5: chủ kho gõ "Tiếp tục" sau vòng 4; không sửa mã sản phẩm, các eval không đổi được mang nguyên sang từ vòng 4 (baseline không đo lại). E1–E11 đều PASS; lệnh suite `bun run test` chạy lại thoát mã 0 (11 task thành công, 6m6.846s), xác nhận thoát mã 1 ở vòng 4 là chập chờn dưới tải song song chứ không phải hồi quy thật. PASS.
+
+### Re-pin lần 1 — 2026-09-27, do hoá cũ do gộp onehub (#176, #177) vào nhánh PR #178
+run_id: repin-20260927T151847Z-68302
+sha: c1cc61d003840c0965e00fe74fcd02a40d11fc3d · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E6
