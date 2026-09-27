@@ -496,6 +496,25 @@ nên sửa dòng sau khi ký Cổng Bằng chứng không phải ký lại. Khi 
 `PRODUCT-MAP.md` lệch nhau về cổng của một hồ sơ, theo `PRODUCT-MAP.md` — máy vẽ
 nó từ hồ sơ — rồi sửa dòng.
 
+Trang theo dõi `docs/plan/lo-trinh-okr.html` vẽ sổ này thành một trang: đếm ngược
+tới ngày mở, việc chờ chủ kho, thứ tự chạy, mốc triển khai. Kéo kho về rồi mở tệp
+bằng trình duyệt là xem được; trang đọc bản chụp `docs/plan/lo-trinh-okr.data.js`
+và chỉ để xem. Bản sống, nơi chủ kho đánh dấu việc và ghi chú, ở
+https://claude.ai/artifact/X2YjeuJfqBESPHQPQP7y2b — riêng tư, chủ kho mở được trên
+mọi máy đã đăng nhập. Bản chụp do máy sinh, không sửa tay, và không chép ghi chú
+riêng của chủ kho.
+
+Làm mới trang khi chủ kho nhắn «cập nhật lộ trình OKR»:
+
+1. Đọc lại mục này, mục 7 của `lo-trinh-zalo.md`, `PRODUCT-MAP.md`, các PR đang mở
+   và hồ sơ của các phiên đang chạy.
+2. Ghi kho dữ liệu của trang trong một lượt, mỗi bản ghi ghim phiên bản đã đọc:
+   `hang_muc`, `moc`, `meta` theo sổ; với `viec_chu_kho` chỉ thêm việc mới hoặc sửa
+   việc máy tạo (`nguon: "máy"`) chưa xong; không đụng `ghi_chu`.
+3. Sinh lại bản chụp từ kho dữ liệu, bỏ `ghi_chu`, chuỗi viết bằng ký tự ASCII để
+   trình duyệt nào cũng đọc đúng; định dạng bằng `biome`; đưa vào một PR tài liệu.
+4. Trang đổi thì đăng lại từ tệp này lên đúng link trên, truyền link đó làm `url`.
+
 | # | Slug | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
 | 0 | chuẩn bị | xong | 2026-09-24 | #110 | từ điển · Cổng Đáng của `cau-truc-to-chuc` · design-pass `/proto` OKR. Chốt 2026-09-24 (Manh Phan): mọi phòng ban áp dụng từ quý 4. Từ điển xong: PR #110 gộp 2026-09-24 (`ea4fff80`), thêm mục Bộ phận · Phòng ban · Trưởng đơn vị · vai «chỉ OKR» và các mục OKR. Cổng Đáng `cau-truc-to-chuc` ký 2026-09-24 (Manh Phan) — xem dòng 1. Design-pass bốn màn OKR xong: chủ kho duyệt gói 2026-09-24, PR #113 gộp (`03efe44c`), hồ sơ `_acceptance/ban-mau-okr` với 23 trạng thái, 58 ảnh. Bốn chỗ mở đã chốt: heatmap toàn cảnh theo đơn vị × tuần; mức tự tin ba bậc Cao · Vừa · Thấp (lượt 4 dựng theo); cây căn chỉnh nằm trong «Theo đơn vị»; mọi vai kể cả «chỉ OKR» thấy «Toàn cảnh». 11 biến thể `packages/ui` cho lượt 5 ở mục Nhóm 2 của `design-pass.md`. Việc cho lượt 3: màn «Theo đơn vị» nhập thẳng cây từ module `cau-truc-to-chuc`, bỏ bản chép trong `ban-mau-okr`. Bước chuẩn bị xong |
