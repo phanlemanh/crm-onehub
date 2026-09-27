@@ -63,7 +63,7 @@ function maCua(ds: ViecNhac[]): MucNhac[] {
 
 export async function lenLichNhac(now = new Date()): Promise<{ ghi: number }> {
 	if (!daToiGioNhac(now)) return { ghi: 0 };
-	const viec = await viecCanNhac(db, { now });
+	const viec = await viecCanNhac(db, { now, cuaSo: "buoi-sang" });
 	if (viec.size === 0) return { ghi: 0 };
 	const { count } = await db.agentTask.createMany({
 		data: [...viec].map(([userId, ds]) => ({
@@ -134,7 +134,9 @@ export async function chayNhac(
 	const userId = nguoiCua(hang.subject);
 	const payload = parseNhacPayload(hang.payload);
 	const viec =
-		(await viecCanNhac(db, { now: new Date(), userId })).get(userId) ?? [];
+		(
+			await viecCanNhac(db, { now: new Date(), userId, cuaSo: "buoi-sang" })
+		).get(userId) ?? [];
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
 	const token = await zaloToken();

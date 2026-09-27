@@ -214,7 +214,7 @@ export class OkrTraoDoiService {
 		now = new Date(),
 	): Promise<ViecCuaToiOutput> {
 		const [viec, lien] = await Promise.all([
-			viecCanNhac(this.db, { now, userId }),
+			viecCanNhac(this.db, { now, userId, cuaSo: "truc-tiep" }),
 			lienQuanOkr(this.db, userId),
 		]);
 		return {

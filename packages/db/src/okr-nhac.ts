@@ -1,7 +1,14 @@
 import { z } from "zod";
 import type { Db } from "./client";
 import { parseOkrVet } from "./okr-vet";
-import { dauNgayVN, dauTuanVN, ngayVN, soNgayVN } from "./onboarding-nhac";
+import {
+	type CuaSoNhac,
+	dauNgayVN,
+	dauTuanVN,
+	mocNhac,
+	ngayVN,
+	soNgayVN,
+} from "./onboarding-nhac";
 
 export const OKR_NHAC = {
 	imNgay: 14,
@@ -422,11 +429,12 @@ async function viecTraoDoi(
 
 export async function viecOkrCanNhac(
 	db: Db,
-	chon: { now: Date; userId?: string },
+	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecOkr[]>> {
+	const den = chon.cuaSo === "buoi-sang" ? mocNhac(chon.now) : chon.now;
 	const cuaSo = {
-		gt: new Date(chon.now.getTime() - OKR_NHAC.suKienGio * GIO_MS),
-		lte: chon.now,
+		gt: new Date(den.getTime() - OKR_NHAC.suKienGio * GIO_MS),
+		lte: den,
 	};
 	const phan = await Promise.all([
 		viecKr(db, chon.now),

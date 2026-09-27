@@ -69,7 +69,7 @@ function vn(luc: string): Date {
 
 async function tinh(now: Date) {
 	setSystemTime(now);
-	return viecCanNhac(db, { now });
+	return viecCanNhac(db, { now, cuaSo: "truc-tiep" });
 }
 
 function cua(kq: Map<string, ViecNhac[]>, userId: string): ViecNhac[] {

@@ -105,7 +105,10 @@ function sangSau(luc: Date): Date {
 
 async function viecNhacSang(userId: string, sau: Date) {
 	const now = sangSau(sau);
-	return (await viecCanNhac(db, { now, userId })).get(userId) ?? [];
+	return (
+		(await viecCanNhac(db, { now, userId, cuaSo: "buoi-sang" })).get(userId) ??
+		[]
+	);
 }
 
 async function loiCua(chay: () => Promise<unknown>): Promise<string> {
@@ -196,11 +199,113 @@ describe("vet-khuon", () => {
 		const theX = await goiQuery("okr.viecCuaToi", cX);
 		const theZ = await goiQuery("okr.viecCuaToi", cZ);
 		const tongQuanZ = await goiQuery("dashboard.summary", cZ, { scope: "me" });
+		await db.okrTrail.update({
+			where: { id: dong.id },
+			data: { after: { ownerUserId: X } },
+		});
 		expect({
 			theX: theX.status === 200,
 			theZ: theZ.status === 200,
 			tongQuanZ: tongQuanZ.status === 200,
 		}).toEqual({ theX: false, theZ: false, tongQuanZ: false });
+	});
+});
+
+describe("the-truc-tiep", () => {
+	test("the-truc-tiep: nhac ten 14:00 D hien tren the o 14:05 D, 23:00 D, 08:31 D+1, 13:59 D+1, het o 14:01 D+1; tRPC bang service; ke hoach Tong quan van song", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("tt");
+		const pb = await pbMoi("tt-p");
+		const tp = await truongMoi("department", pb, "tt-tp");
+		const X = await nguoiMoi("tt-x");
+		const cX = await phienCua(X);
+		const o = await mucTieu(
+			quy,
+			{ level: "phong-ban", departmentId: pb },
+			tp.nguoi,
+			tp.cookie,
+		);
+		await taoKr(o, tp.nguoi, tp.cookie);
+		await congBo(o, tp.cookie);
+		const c = ok<{ id: string }>(
+			await goi(
+				"okr.addComment",
+				{ objectiveId: o, body: "nho X", mentionUserIds: [X] },
+				tp.cookie,
+			),
+			"nhac ten X",
+		).id;
+		const ngay = new Intl.DateTimeFormat("en-CA", {
+			timeZone: "Asia/Ho_Chi_Minh",
+			year: "numeric",
+			month: "2-digit",
+			day: "2-digit",
+		}).format(new Date());
+		const luc = new Date(`${ngay}T14:00:00+07:00`);
+		await db.okrComment.update({ where: { id: c }, data: { createdAt: luc } });
+		const svc = ungDung().get(OkrTraoDoiService);
+		const moc: [string, number][] = [
+			["14:05 D", 5 * 60_000],
+			["23:00 D", 9 * GIO_MS],
+			["08:31 D+1", 18 * GIO_MS + 31 * 60_000],
+			["13:59 D+1", 24 * GIO_MS - 60_000],
+			["14:01 D+1", 24 * GIO_MS + 60_000],
+		];
+		const bang: Record<string, boolean> = {};
+		for (const [ten, lech] of moc) {
+			const viec = (await svc.viecCuaToi(X, new Date(luc.getTime() + lech)))
+				.viec;
+			bang[ten] = viec.some(
+				(v) => v.loai === "okr-nhac-ten" && v.commentId === c,
+			);
+		}
+		if (!bang["14:05 D"]) throw new Error("the-truc-tiep: vang luc 14:05 D");
+		expect(bang).toEqual({
+			"14:05 D": true,
+			"23:00 D": true,
+			"08:31 D+1": true,
+			"13:59 D+1": true,
+			"14:01 D+1": false,
+		});
+
+		await db.okrComment.update({
+			where: { id: c },
+			data: { createdAt: new Date(Date.now() - 60_000) },
+		});
+		const quaTrpc = await doc<ViecCuaToiOutput>("okr.viecCuaToi", cX);
+		const quaSvc = await svc.viecCuaToi(X);
+		expect(quaTrpc.viec.map((v) => v.loai)).toEqual(
+			quaSvc.viec.map((v) => v.loai),
+		);
+		expect(
+			quaTrpc.viec.some((v) => v.loai === "okr-nhac-ten" && v.commentId === c),
+		).toBe(true);
+
+		const congTy = await db.company.create({ data: { name: ma("tt-ct") } });
+		const keHoach = await db.onboardingPlan.create({
+			data: {
+				companyId: congTy.id,
+				ownerId: X,
+				startedAt: new Date(Date.now() - 6 * NGAY_MS),
+				targetDays: 30,
+			},
+		});
+		await db.onboardingStep.create({
+			data: {
+				planId: keHoach.id,
+				departmentId: pb,
+				label: "Goi dien",
+				assigneeId: X,
+				dueAt: new Date(Date.now() + 2 * NGAY_MS),
+				position: 0,
+			},
+		});
+		const tongQuan = await doc<{ keHoachCanDeY: { planId: string }[] }>(
+			"dashboard.summary",
+			cX,
+			{ scope: "me" },
+		);
+		expect(tongQuan.keHoachCanDeY.map((k) => k.planId)).toContain(keHoach.id);
 	});
 });
 

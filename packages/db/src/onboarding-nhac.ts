@@ -101,6 +101,15 @@ export function dauTuanVN(now: Date): string {
 	return new Date(hom - lui * DAY_MS).toISOString().slice(0, 10);
 }
 
+export type CuaSoNhac = "buoi-sang" | "truc-tiep";
+
+export function mocNhac(now: Date): Date {
+	return new Date(
+		dauNgayVN(now).getTime() +
+			(NHAC.gio.gio * PHUT_MOI_GIO + NHAC.gio.phut) * PHUT_MS,
+	);
+}
+
 export function daToiGioNhac(now: Date): boolean {
 	const phan = dinhGio.formatToParts(now);
 	const so = (loai: "hour" | "minute") =>
@@ -303,7 +312,7 @@ function gop(
 
 export async function viecCanNhac(
 	db: Db,
-	chon: { now: Date; userId?: string },
+	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecNhac[]>> {
 	const [keHoach, thanhVien, okr] = await Promise.all([
 		docKeHoach(db, chon.userId),

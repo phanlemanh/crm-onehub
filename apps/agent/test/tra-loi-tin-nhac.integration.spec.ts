@@ -158,7 +158,9 @@ describe("danh-so", () => {
 	test("danh-so: tran sat, dong goi y tinh vao tran", async () => {
 		const { A } = await gieoNhac(GOC, { quaHan: 3 }, "Sat");
 		const viec =
-			(await viecCanNhac(db, { now: GOC, userId: A.id })).get(A.id) ?? [];
+			(
+				await viecCanNhac(db, { now: GOC, userId: A.id, cuaSo: "buoi-sang" })
+			).get(A.id) ?? [];
 		expect(viec.length, "du ba viec").toBe(3);
 		const khongLienKet = () => null;
 		const du = dungTin(
