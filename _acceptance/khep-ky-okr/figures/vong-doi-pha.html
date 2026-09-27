@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng đời pha chu kỳ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1040px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · State machine · khep-ky-okr</p>
+    <h1>Vòng đời pha chu kỳ</h1>
+
+    <svg viewBox="0 0 1320 616" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">VÒNG ĐỜI PHA CHU KỲ · AC-3 · AC-4 · AC-5 · AC-7</text>
+
+      <rect x="336" y="120" width="528" height="240" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="356" y="152" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">Đang chạy</text>
+
+      <line x1="200" y1="240" x2="336" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="528" y1="224" x2="672" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="672" y1="256" x2="528" y2="256" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="864" y1="240" x2="1080" y2="240" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="1128" y1="280" x2="1128" y2="440" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="1192" y1="440" x2="1192" y2="280" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="40" y="200" width="160" height="80" rx="8" fill="#fafafa"/>
+      <rect x="40" y="200" width="160" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="120" y="245" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lập kế hoạch</text>
+
+      <rect x="368" y="208" width="160" height="64" rx="8" fill="#fafafa" stroke="#575757" stroke-width="0.8"/>
+      <text x="448" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trong rà giữa kỳ</text>
+
+      <rect x="672" y="208" width="160" height="64" rx="8" fill="#fafafa" stroke="#575757" stroke-width="0.8"/>
+      <text x="752" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ngoài rà</text>
+
+      <rect x="1080" y="200" width="160" height="80" rx="8" fill="#fafafa"/>
+      <rect x="1080" y="200" width="160" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1160" y="245" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chấm điểm</text>
+
+      <rect x="1080" y="440" width="160" height="80" rx="8" fill="#fafafa"/>
+      <rect x="1080" y="440" width="160" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1160" y="485" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đã đóng</text>
+
+      <rect x="212" y="218" width="112" height="14" rx="2" fill="#fafafa"/>
+      <text x="268" y="229" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">quản trị chuyển pha</text>
+
+      <rect x="536" y="184" width="128" height="30" rx="2" fill="#ffffff"/>
+      <text x="600" y="196" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">quản trị mở / đóng rà;</text>
+      <text x="600" y="210" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">hết ngày</text>
+
+      <rect x="896" y="168" width="152" height="64" rx="2" fill="#fafafa"/>
+      <text x="972" y="181" fill="#006B4F" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">từ ngày sau ngày cuối</text>
+      <text x="972" y="195" fill="#006B4F" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">VÀ mọi KR nguồn CRM</text>
+      <text x="972" y="209" fill="#006B4F" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">có số ngày cuối —</text>
+      <text x="972" y="223" fill="#006B4F" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chốt số, máy gợi ý điểm</text>
+
+      <rect x="992" y="352" width="128" height="16" rx="2" fill="#fafafa"/>
+      <text x="1116" y="364" fill="#006B4F" font-size="10" font-family="'Geist', sans-serif" text-anchor="end">chỉ khi mọi KR đã chấm</text>
+
+      <rect x="1200" y="336" width="100" height="46" rx="2" fill="#fafafa"/>
+      <text x="1204" y="348" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mở lại: quản trị,</text>
+      <text x="1204" y="362" fill="#575757" font-size="10" font-family="'Geist', sans-serif">có lý do, để vết;</text>
+      <text x="1204" y="376" fill="#575757" font-size="10" font-family="'Geist', sans-serif">số chốt đứng yên</text>
+
+      <text x="672" y="304" fill="#171717" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">ngoài rà: đổi đích cần lý do,</text>
+      <text x="672" y="320" fill="#171717" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">KR mang nhãn tới lúc chấm</text>
+
+      <text x="1064" y="484" fill="#171717" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="end">Đã đóng: mọi ghi khoá; xuất CSV</text>
+
+      <line x1="40" y1="560" x2="1280" y2="560" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="588" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <line x1="148" y1="585" x2="180" y2="585" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="192" y="588" fill="#575757" font-size="9" font-family="'Geist', sans-serif">cửa có điều kiện</text>
+      <rect x="320" y="576" width="24" height="16" rx="4" fill="#fafafa" stroke="#575757" stroke-width="0.8"/>
+      <text x="356" y="588" fill="#575757" font-size="9" font-family="'Geist', sans-serif">trạng thái con của «Đang chạy»</text>
+      <text x="548" y="588" fill="#171717" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">Aa</text>
+      <text x="572" y="588" fill="#575757" font-size="9" font-family="'Geist', sans-serif">ghi chú bên</text>
+    </svg>
+
+    <footer>khep-ky-okr · vong-doi-pha · spec mục 3 và 6 · 2026-09-27</footer>
+  </div>
+</body>
+</html>
