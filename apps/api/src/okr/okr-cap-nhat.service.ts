@@ -137,8 +137,10 @@ export class OkrCapNhatService {
 					throw new BadRequestException(T.capNhat.kyKhongChay);
 				const chu = kr.ownerUserId === userId;
 				if (
-					!chu &&
-					!this.quyenOkr.suaDuocDonVi(q, userId, donViCua(kr.objective))
+					!this.quyenOkr.ghiDuocKr(q, userId, {
+						ownerUserId: kr.ownerUserId,
+						objective: donViCua(kr.objective),
+					})
 				)
 					throw new ForbiddenException(T.capNhat.khongPhaiChuHayTruong);
 				const may = kr.source !== "tay";

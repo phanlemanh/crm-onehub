@@ -9,7 +9,9 @@ import {
 import { OkrTraoDoiService } from "../src/okr/okr-trao-doi.service";
 import {
 	type AiHoacCookie,
+	bpMoi,
 	CHUONG_TRINH_RONG,
+	datViTri,
 	doc,
 	dungSan,
 	goi,
@@ -208,6 +210,97 @@ describe("vet-khuon", () => {
 			theZ: theZ.status === 200,
 			tongQuanZ: tongQuanZ.status === 200,
 		}).toEqual({ theX: false, theZ: false, tongQuanZ: false });
+	});
+});
+
+describe("mot-luat-ghi", () => {
+	test("mot-luat-ghi: ma tran 5 nguoi x 3 cap KR — canEditKr, sua KR, gui cap nhat tuan cung mot cau tra loi va bang bang viet truoc", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("ml");
+		const bp = await bpMoi("ml-b");
+		const pb = await pbMoi("ml-p", bp);
+		const TB = await truongMoi("division", bp, "ml-tb");
+		const TP = await truongMoi("department", pb, "ml-tp");
+		const C = await nguoiMoi("ml-c");
+		ok(await datViTri(C, pb), "xep C vao P");
+		const Q = await nguoiMoi("ml-q", "admin");
+		const N = await nguoiMoi("ml-n");
+		const cC = await phienCua(C);
+		const nguoi: Record<string, AiHoacCookie> = {
+			C: cC,
+			TP: TP.cookie,
+			TB: TB.cookie,
+			Q: await phienCua(Q),
+			N: await phienCua(N),
+		};
+		const oP = await mucTieu(
+			quy,
+			{ level: "phong-ban", departmentId: pb },
+			TP.nguoi,
+			TP.cookie,
+		);
+		const oB = await mucTieu(
+			quy,
+			{ level: "bo-phan", divisionId: bp },
+			TB.nguoi,
+			TB.cookie,
+		);
+		const oN = await mucTieu(quy, { level: "ca-nhan", personUserId: C }, C, cC);
+		const kr: Record<string, { o: string; k: string }> = {
+			"phong-ban": { o: oP, k: await taoKr(oP, C, TP.cookie) },
+			"bo-phan": { o: oB, k: await taoKr(oB, C, TB.cookie) },
+			"ca-nhan": { o: oN, k: await taoKr(oN, C, cC) },
+		};
+		await congBo(oP, TP.cookie);
+		await congBo(oB, TB.cookie);
+		await congBo(oN, cC);
+
+		const MONG: Record<string, [boolean, boolean, boolean]> = {
+			C: [true, true, true],
+			TP: [true, false, true],
+			TB: [true, true, true],
+			Q: [false, false, false],
+			N: [false, false, false],
+		};
+		const lech: string[] = [];
+		const bang: Record<string, boolean[]> = {};
+		for (const [ten, cookie] of Object.entries(nguoi)) {
+			const hang: boolean[] = [];
+			for (const [cap, { o, k }] of Object.entries(kr)) {
+				const xem = await goiQuery("okr.objective", cookie, { id: o });
+				const a =
+					xem.status === 200 &&
+					(xem.data as { canEditKr: string[] }).canEditKr.includes(k);
+				const sua = await goi(
+					"okr.updateKeyResult",
+					{ id: k, title: ma(`ml ${ten} ${cap}`) },
+					cookie,
+				);
+				const b = sua.status === 200;
+				const truoc = await db.okrCheckIn.count({ where: { keyResultId: k } });
+				const gui = await goi(
+					"okr.guiCapNhat",
+					{
+						sessionId: await moPhien(cookie),
+						items: [{ keyResultId: k, value: 25, confidence: "vua", note: "" }],
+					},
+					cookie,
+				);
+				const c = gui.status === 200;
+				const sau = await db.okrCheckIn.count({ where: { keyResultId: k } });
+				if (sau - truoc !== (c ? 1 : 0)) {
+					lech.push(`${ten} x ${cap} dem ${sau - truoc}`);
+				}
+				const mong = MONG[ten]?.[Object.keys(kr).indexOf(cap)];
+				if (a !== b || b !== c || c !== mong) {
+					lech.push(`${ten} x ${cap} a=${a} b=${b} c=${c}`);
+				}
+				hang.push(a);
+			}
+			bang[ten] = hang;
+		}
+		if (lech.length > 0) throw new Error(`mot-luat: ${lech.join(" | ")}`);
+		expect(bang).toEqual(MONG);
 	});
 });
 
