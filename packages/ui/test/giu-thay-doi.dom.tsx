@@ -1597,3 +1597,84 @@ describe("drawer", () => {
 		);
 	});
 });
+
+function VoDaLuu({ ghi }: { ghi: (mo: boolean) => void }) {
+	const [mo, datMo] = useState(true);
+	const [giaTri, datGiaTri] = useState("");
+	const [banChup, datBanChup] = useState("");
+	return (
+		<Dialog
+			open={mo}
+			onOpenChange={(v) => {
+				ghi(v);
+				datMo(v);
+			}}
+			coThayDoi={giaTri !== banChup}
+		>
+			<DialogContent>
+				<DialogTitle>Cập nhật KR</DialogTitle>
+				<DialogDescription>Lưu rồi sửa tiếp</DialogDescription>
+				<Input
+					aria-label="Tên"
+					value={giaTri}
+					onChange={(e) => datGiaTri(e.target.value)}
+				/>
+				<Button onClick={() => datBanChup(giaTri)}>Lưu</Button>
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+const DUONG_DA_LUU = ["lop-phu", "esc", "x"] as const;
+
+async function diDuongDaLuu(duong: (typeof DUONG_DA_LUU)[number]) {
+	if (duong === "lop-phu") {
+		await bamLopPhu("dialog-overlay");
+		return;
+	}
+	await diDuong(duong);
+}
+
+describe("da-luu", () => {
+	for (const duong of DUONG_DA_LUU) {
+		test(`da-luu: go, Luu, ${duong} thi dong khong hoi`, async () => {
+			const lich: boolean[] = [];
+			dung(<VoDaLuu ghi={(v) => lich.push(v)} />);
+			await go(oTen(), "Doanh thu quý");
+			await bam(nutCo("Lưu"));
+			const sauLuu = { con: noiDung() !== null, goi: lich.length };
+			await diDuongDaLuu(duong);
+			khop(
+				{ sauLuu, con: noiDung() !== null, hoi: hopHoi().length, lich },
+				{ sauLuu: { con: true, goi: 0 }, con: false, hoi: 0, lich: [false] },
+				`da-luu: luu xong van hoi (${duong})`,
+			);
+		});
+	}
+
+	test("da-luu: go, Luu, go tiep roi bam lop phu thi giu lai", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDaLuu ghi={(v) => lich.push(v)} />);
+		await go(oTen(), "Doanh thu quý");
+		await bam(nutCo("Lưu"));
+		await go(oTen(), "Doanh thu quý 4");
+		await bamLopPhu("dialog-overlay");
+		khop(
+			{ con: noiDung() !== null, hoi: hopHoi().length, goi: lich.length },
+			{ con: true, hoi: 0, goi: 0 },
+			"da-luu: go tiep sau Luu ma khong giu",
+		);
+	});
+
+	test("da-luu: doi chung — go chua Luu thi bam lop phu giu", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDaLuu ghi={(v) => lich.push(v)} />);
+		await go(oTen(), "Doanh thu quý");
+		await bamLopPhu("dialog-overlay");
+		khop(
+			{ con: noiDung() !== null, hoi: hopHoi().length, goi: lich.length },
+			{ con: true, hoi: 0, goi: 0 },
+			"da-luu: chua Luu ma khong giu",
+		);
+	});
+});

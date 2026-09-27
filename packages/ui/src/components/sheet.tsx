@@ -42,11 +42,13 @@ function Sheet({
 	onOpenChange,
 	coThayDoi,
 	giuThayDoi,
+	tuNhanThayDoi,
 	children,
 	...props
 }: React.ComponentProps<typeof SheetPrimitive.Root> & {
 	coThayDoi?: boolean;
 	giuThayDoi?: boolean;
+	tuNhanThayDoi?: boolean;
 }) {
 	const g = useGiuGoc({
 		open,
@@ -54,6 +56,7 @@ function Sheet({
 		onOpenChange,
 		coThayDoi,
 		giuThayDoi,
+		tuNhanThayDoi,
 	});
 	return (
 		<GiuContext.Provider value={g.ngucCanh}>

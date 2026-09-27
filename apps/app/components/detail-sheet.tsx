@@ -67,7 +67,7 @@ export function DetailSheet({
 	const content = useRef<HTMLDivElement>(null);
 
 	return (
-		<Sheet open={open} onOpenChange={onOpenChange}>
+		<Sheet open={open} onOpenChange={onOpenChange} tuNhanThayDoi={false}>
 			<SheetContent
 				ref={content}
 				side="right"

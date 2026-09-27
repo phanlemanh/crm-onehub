@@ -30,6 +30,7 @@ type RootProps = {
 	defaultOpen?: boolean;
 	onOpenChange?: (open: boolean) => void;
 	modal?: boolean;
+	tuNhanThayDoi?: boolean;
 	children?: React.ReactNode;
 };
 

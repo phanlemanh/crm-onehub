@@ -2,6 +2,7 @@
 
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { useMessages } from "@crm/ui/components/locale-provider";
+import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import * as React from "react";
 
 export type GiuNguCanh = {
@@ -11,6 +12,7 @@ export type GiuNguCanh = {
 	hoiLai: () => void;
 	boQuaLanToi: () => void;
 	dong: () => void;
+	khai: (id: string, coChu: boolean) => void;
 };
 
 export type GiuGocVao = {
@@ -19,6 +21,7 @@ export type GiuGocVao = {
 	onOpenChange?: (open: boolean) => void;
 	coThayDoi?: boolean;
 	giuThayDoi?: boolean;
+	tuNhanThayDoi?: boolean;
 };
 
 export type GiuGocRa = {
@@ -67,11 +70,14 @@ export function useGiuGoc({
 	onOpenChange,
 	coThayDoi,
 	giuThayDoi,
+	tuNhanThayDoi,
 }: GiuGocVao): GiuGocRa {
 	const msg = useMessages();
 	const [moNoi, datMoNoi] = React.useState(defaultOpen ?? false);
 	const mo = open ?? moNoi;
 	const [tuNhan, datTuNhan] = React.useState(false);
+	const [khaiCon, datKhaiCon] = React.useState<Record<string, boolean>>({});
+	const [khaiTruoc, datKhaiTruoc] = React.useState(coThayDoi);
 	const [moTruoc, datMoTruoc] = React.useState(mo);
 	const [hoi, datHoi] = React.useState(false);
 	const boQua = React.useRef(false);
@@ -79,13 +85,22 @@ export function useGiuGoc({
 	const dangBo = React.useRef(false);
 	if (mo !== moTruoc) {
 		datMoTruoc(mo);
-		if (mo) datTuNhan(false);
-		else datHoi(false);
+		if (mo) {
+			datTuNhan(false);
+			datKhaiCon({});
+		} else datHoi(false);
+	}
+	if (coThayDoi !== khaiTruoc) {
+		datKhaiTruoc(coThayDoi);
+		if (khaiTruoc === true && coThayDoi === false) datTuNhan(false);
 	}
 	const bat = giuThayDoi !== false;
-	const ban = bat && (tuNhan || coThayDoi === true);
+	const nhan = tuNhanThayDoi !== false;
+	const conKhai = Object.values(khaiCon).some(Boolean);
+	const ban = bat && ((nhan && tuNhan) || coThayDoi === true || conKhai);
 	const dongThat = React.useCallback(() => {
 		datTuNhan(false);
+		datKhaiCon({});
 		if (open === undefined) datMoNoi(false);
 		onOpenChange?.(false);
 	}, [open, onOpenChange]);
@@ -109,7 +124,9 @@ export function useGiuGoc({
 		() => ({
 			coThayDoi: ban,
 			danhDau: (t, noi) => {
-				if (bat && !laOLoc(t) && !thuocHopKhac(t, noi)) datTuNhan(true);
+				if (bat && nhan && !laOLoc(t) && !thuocHopKhac(t, noi)) {
+					datTuNhan(true);
+				}
 			},
 			nhoO: (t, noi) => {
 				if (laOGo(t) && !thuocHopKhac(t, noi)) oCuoi.current = t;
@@ -122,8 +139,10 @@ export function useGiuGoc({
 				boQua.current = false;
 				dongThat();
 			},
+			khai: (id, coChu) =>
+				datKhaiCon((cu) => (cu[id] === coChu ? cu : { ...cu, [id]: coChu })),
 		}),
-		[ban, bat, dongThat],
+		[ban, bat, nhan, dongThat],
 	);
 	const hopHoi = (
 		<ConfirmDialog
@@ -156,4 +175,12 @@ export function useGiuGoc({
 
 export function useGiuNoiDung(): GiuNguCanh | null {
 	return React.useContext(GiuContext);
+}
+
+export function useKhaiThayDoi(): (coChu: boolean) => void {
+	const g = React.useContext(GiuContext);
+	const id = React.useId();
+	const khai = g?.khai;
+	useMountEffect(() => () => khai?.(id, false));
+	return React.useCallback((coChu: boolean) => g?.khai(id, coChu), [g, id]);
 }

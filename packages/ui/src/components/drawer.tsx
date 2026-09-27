@@ -37,6 +37,7 @@ function Drawer({
 	onOpenChange,
 	coThayDoi,
 	giuThayDoi,
+	tuNhanThayDoi,
 	dismissible,
 	onDrag,
 	onRelease,
@@ -46,6 +47,7 @@ function Drawer({
 }: React.ComponentProps<typeof DrawerPrimitive.Root> & {
 	coThayDoi?: boolean;
 	giuThayDoi?: boolean;
+	tuNhanThayDoi?: boolean;
 }) {
 	const g = useGiuGoc({
 		open,
@@ -53,6 +55,7 @@ function Drawer({
 		onOpenChange,
 		coThayDoi,
 		giuThayDoi,
+		tuNhanThayDoi,
 	});
 	const keoXa = React.useRef(0);
 	const nguong = closeThreshold ?? KEO.nguongDong;
