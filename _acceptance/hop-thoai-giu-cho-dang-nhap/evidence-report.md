@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: afdcd225cb8892e42a82d8e0ca8f22bdeb17a600
+verified_commit: d3e206a26c0905c77187dc45065ac746f555c3cc
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -246,3 +246,7 @@ none — không có eval nào chạy nhiều lần (runs > 1) trong vòng này; 
 Round 1: round-tally ghi REJECT (kỳ vọng 16, trả về 16, chặn 0) — bộ giữ dùng chung mới thêm chưa qua hết các đường đóng ở vòng triển khai đầu. Quay lại triển khai.
 Round 2: round-tally ghi PASS (kỳ vọng 9, trả về 9) — toàn bộ eval khai ở vòng đó xanh; sau đó Cổng Bằng chứng của Manh Phan mở lại phạm vi thêm AC-13, AC-14 (contract Notes, sổ d-20260927T053525Z-16..18).
 Round 3 (vòng này): E1-E9, E11-E15 xanh (E8 carry-forward từ round 2, delta không chạm paths của eval); bốn lệnh suite xanh; AC-13, AC-14 có phép đo mới (E13, E14, E15) và đạt.
+
+### Re-pin lần 1 — 2026-09-27, do hoá cũ do gộp onehub (#169, #170) trước khi mở PR
+run_id: repin-20260927T063135Z-87968
+sha: d3e206a26c0905c77187dc45065ac746f555c3cc · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · AC không có chốt máy: AC-10
