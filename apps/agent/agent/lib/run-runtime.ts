@@ -13,6 +13,7 @@ import { AGENT_ACTION_EXECUTORS, isAgentActionType } from "./agent-actions";
 import { readCrmHistory } from "./crm";
 import { DISPATCH } from "./dispatch-config";
 import { searchCrm } from "./lookup";
+import { type KetQuaLuot, ketQuaLuot } from "./run-result";
 import {
 	type LockedAgentRun,
 	lockAgentRun,
@@ -32,11 +33,9 @@ const json = z.json();
 
 type Json = z.infer<typeof json>;
 
-const runResult = z.record(z.string(), json);
+export type RunResult = KetQuaLuot;
 
-export type RunResult = z.infer<typeof runResult>;
-
-const storedRunResult = runResult.catch({});
+const storedRunResult = ketQuaLuot.catch({});
 
 export type SlackRunDestination = {
 	kind: "channel" | "user";
@@ -140,7 +139,6 @@ export async function runContext(runId: string) {
 					id: true,
 					number: true,
 					manifest: true,
-					modelId: true,
 					sandboxPolicy: true,
 				},
 			},

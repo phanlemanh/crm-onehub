@@ -6,6 +6,7 @@ import { readAgentTriggerConfig } from "@crm/validation/agent-manifest";
 import type { SendFn } from "eve/channels";
 import { z } from "zod";
 import { DISPATCH } from "./dispatch-config";
+import { modelChoLuot } from "./model";
 import { DEPENDENCY_UNAVAILABLE, runDependencyFailure } from "./run-preflight";
 import {
 	isTerminalRunStatus,
@@ -449,12 +450,12 @@ export async function dispatchAgentRun(runId: string, send: SendFn) {
 			agent: {
 				select: { name: true, createdById: true, status: true },
 			},
-			version: { select: { modelId: true } },
 		},
 	});
 	if (run?.status !== "QUEUED" || run.agent.status !== "LIVE") {
 		throw new Error("Agent run was already claimed or is not live.");
 	}
+	const model = await modelChoLuot();
 
 	const claim = await db.$transaction(async (tx) => {
 		const [agent] = await tx.$queryRaw<Array<{ id: string; status: string }>>`
@@ -480,7 +481,7 @@ export async function dispatchAgentRun(runId: string, send: SendFn) {
 			data: {
 				status: "RUNNING",
 				startedAt: new Date(),
-				modelId: run.version.modelId,
+				modelId: model.id,
 			},
 		});
 		return updated.count === 1
@@ -508,6 +509,7 @@ export async function dispatchAgentRun(runId: string, send: SendFn) {
 					agentId: run.agentId,
 					versionId: run.versionId,
 					userId: principalId,
+					...model.thuocTinh,
 				},
 			},
 			continuationToken: runToken(run.id),

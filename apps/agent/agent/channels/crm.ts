@@ -30,8 +30,8 @@ import {
 	taskAuth,
 } from "../lib/dispatch";
 import { DISPATCH } from "../lib/dispatch-config";
+import { choKetLuot } from "../lib/dong-luot-tac-nhan";
 import { settle } from "../lib/enrichment";
-import { finishRun, runResultOf } from "../lib/run-runtime";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { completeTask, taskSubject } from "../lib/tasks";
@@ -184,25 +184,7 @@ export const crmEvents: ChannelEvents = {
 		const runId = runIdFromToken(channel.continuationToken);
 		if (!runId) return;
 
-		const { db } = await import("@crm/db");
-		const run = await db.agentRun.findUnique({
-			where: { id: runId },
-			select: { status: true, summary: true, result: true },
-		});
-		if (run?.status !== "RUNNING") return;
-
-		try {
-			await finishRun(runId, {
-				summary: run.summary ?? "The agent run completed.",
-				result: runResultOf(run.result),
-			});
-		} catch (error) {
-			await failRun(
-				runId,
-				"NEVER_SETTLED",
-				error instanceof Error ? error.message : String(error),
-			).catch(() => {});
-		}
+		await choKetLuot(runId);
 	},
 
 	async "turn.cancelled"(_data, channel) {

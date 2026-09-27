@@ -1,0 +1,212 @@
+schema_version: 1
+slug: tac-nhan-model-rieng
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnm_khuon_di_dong
+    paths:
+      - "apps/agent/agent/tools/**"
+      - "apps/agent/agent/subagents/**"
+      - "apps/agent/agent/lib/run-result.ts"
+      - "apps/agent/test/khuon-di-dong.spec.ts"
+    expected: |
+      Liet ke tep bang Bun.Glob tren dia (khong go tay danh sach): agent/tools/**/*.ts,
+      agent/subagents/*/tools/**/*.ts, agent/subagents/*/agent.ts. Moi tep import
+      default. Tool co inputSchema -> chuyen bang schema["~standard"].jsonSchema.input(
+      {target: "draft-07"}) dung nhu eve/dist/src/shared/tool-schema.js; agent.ts co
+      outputSchema -> chuyen cung cach.
+      Tep tool KHONG co inputSchema chi duoc xep "da tat" khi ma nguon cua no goi
+      disableTool; khong co khuon ma cung khong co dau tat -> vi pham, neu ten tep.
+      Assert: moi khuon JSON.stringify khong chua "\"$ref\""; danh sach vi pham = []
+      (toEqual), thong diep liet ten tep.
+      So toi thieu theo tung o cua truc A, kiem bang TEN tep co mat trong danh sach da
+      quet (khong chi dem): cong cu goc (>= 20 khuon, gom search_crm, read_crm_history),
+      agent_builder (inspect_context, write_agent_file, save_agent_draft), agent_runner
+      (inspect_run, query_crm, read_crm_record, create_crm_activity, post_slack_message,
+      finish_run), outputSchema cua agent_builder va agent_runner.
+      Doi chung am, cung ham kiem: khuon mau z.object({ result: z.record(z.string(),
+      z.json()) }) -> ham kiem tra ve vi pham "khuon co vong tham chieu: mau-json"
+      (toEqual tren mang vi pham). Doi chung "khong dau tat": mot module gia khong
+      inputSchema, khong disableTool -> vi pham "khong khuon, khong dau tat: <ten>".
+      Chieu do (pha-thu tren ban sao, S3): tra finish_run ve z.json() -> khuon-di-dong
+      do voi thong diep ghim nhac ten "agent_runner/tools/finish_run.ts".
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tnm_goi_that
+    paths:
+      - "apps/agent/agent/subagents/agent_runner/**"
+      - "apps/agent/agent/lib/run-result.ts"
+      - "_acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
+    expected: |
+      Script nap generateText, tool, jsonSchema cua goi "ai" bang createRequire tu
+      package.json cua eve (dung ban eve dung). Bo tool = dung cac tool cua agent_runner
+      (import tu tep, khong chep khuon) + "final_output" mang outputSchema; moi khuon boc
+      bang jsonSchema(schema["~standard"].jsonSchema.input({target:"draft-07"})) nhu
+      toInputSchema cua eve. Model goi bang ma chuoi qua AI Gateway.
+      Moi model (lan luot google/gemini-3.8-flash, zai/glm-5.2-fast, openai/gpt-5-mini):
+      toolChoice {type:"tool", toolName:"finish_run"}, loi nhan yeu cau nop summary va
+      result co dung hai khoa "kiemTra" (chu) va "soDem" (so). Tool execute khong chay
+      (khong co ham execute) — chi doc toolCalls.
+      Assert moi model: toolCalls[0].toolName = "finish_run"; input parse duoc bang khuon
+      ket qua xuat tu lib/run-result.ts (qua finish_run.inputSchema); result co ca
+      "kiemTra" va "soDem". In mot dong "<model> ok" hoac "<model> loi: <200 ky tu>".
+      Exit 0 chi khi ca ba ok. Thieu AI_GATEWAY_API_KEY -> in "thieu AI_GATEWAY_API_KEY"
+      va exit 2 (khong goi gi). Mot model khong ok -> exit 1.
+      Chieu do (cung fixture, co khoa): --khuon-cu thay o result cua finish_run bang
+      z.record(z.string(), z.json()) roi chi goi google -> loi chua "ref loops"; script
+      in "khuon-cu: google tu choi nhu mong doi" va exit 3 (ma rieng cho chieu do dung
+      nhu ky vong); google khong tu choi -> exit 1.
+      Tien model moi luot < $0,02.
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnm_ket_qua_phang
+    paths:
+      - "apps/agent/agent/lib/run-result.ts"
+      - "apps/agent/agent/lib/run-runtime.ts"
+      - "apps/agent/agent/subagents/agent_runner/tools/finish_run.ts"
+      - "apps/agent/agent/subagents/agent_runner/agent.ts"
+      - "apps/agent/test/khuon-di-dong.spec.ts"
+    expected: |
+      Hai ket qua that ngay 27/09 (lay tu tac-nhan-hien-nay.md, dua vao fixture):
+        {"noActionNeeded": "<chu>"} va {"reason": "...", "status": "no_data",
+        "actionTaken": "none", "limitationsNoted": ["..",".."], "searchQueriesUsed":
+        [".."], "totalRecordsFound": 0, "reviewerActionRequired": ".."}
+      -> finish_run.inputSchema.safeParse({summary, result}) thanh cong va result sau
+      parse toEqual dau vao (luu nguyen tung o).
+      Ket qua long {"chiTiet": {"a": 1}} -> safeParse that bai, issue.path chua "chiTiet".
+      Mot khuon: finish_run.inputSchema.shape.result, outputSchema cua agent_runner (o
+      result) va bo doc runResultOf cung tham chieu mot doi tuong khuon xuat tu
+      lib/run-result.ts (toBe tren khuon da unwrap, khong so chuoi).
+      Chieu do (pha-thu, S3): noi khuon cho nhan z.record(z.string(), z.unknown()) ->
+      o "long bi tu choi" do voi thong diep ghim "ket qua long phai bi tu choi".
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnm_bao_loi
+    paths:
+      - "apps/agent/agent/lib/dong-luot-tac-nhan.ts"
+      - "apps/agent/agent/hooks/dong-luot-tac-nhan.ts"
+      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
+      - "apps/agent/agent/channels/crm.ts"
+      - "apps/agent/test/dong-luot-tac-nhan.integration.spec.ts"
+      - "apps/agent/test/fixtures/runner-loi-that.json"
+    expected: |
+      DB that. Fixture su kien = apps/agent/test/fixtures/runner-loi-that.json, chep
+      nguyen van tu dong agentRunEvent type "action.result" cua mot luot eve THAT voi
+      Gemini truoc khi va (chup o S3 tren kho rieng, ghi kem sha va ngay trong tep).
+      Tien de: Tac nhan LIVE + ban + luot QUEUED; dispatchAgentRun(runId, send gia) ->
+      luot RUNNING, bat auth cua lan send. Chay HOOK THAT: default export cua
+      hooks/dong-luot-tac-nhan.ts, goi events["action.result"](su kien, ctx) trong ngu
+      canh eve thu (test/support/eve-ngu-canh.ts) voi ctx.session.auth = auth da bat.
+      O chinh: status FAILED, errorCode "RUNNER_FAILED", errorMessage bang
+      output.message cua fixture; dem agentRunEvent "run.failed" cua luot = 1.
+      Roi choKetLuot(runId) -> van FAILED, dem run.failed van 1.
+      Ma tran viet truoc cho output (moi o mot luot moi, so o = 4 dem trong test):
+        {code, message dai 5000} -> errorMessage dai dung 1000
+        output la chuoi tran "loi"  -> errorMessage "Bộ chạy báo lỗi nhưng không nói lý do."
+        output la {}                -> errorMessage "Bộ chạy báo lỗi nhưng không nói lý do."
+        output la null              -> errorMessage "Bộ chạy báo lỗi nhưng không nói lý do."
+      Doi chung duong (moi o mot luot RUNNING moi): isError false -> RUNNING;
+      subagentName "agent_builder" + isError true -> RUNNING; kind "tool-result" ->
+      RUNNING; ctx purpose "research" voi cung su kien -> RUNNING.
+      Chieu do (pha-thu, S3): bo nhanh isError trong ham xu ly -> o chinh do voi thong
+      diep ghim "bo chay bao loi phai dong luot ngay"; go hook (default export rong) ->
+      o chinh do voi cung thong diep.
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnm_chua_nop
+    paths:
+      - "apps/agent/agent/lib/dong-luot-tac-nhan.ts"
+      - "apps/agent/agent/lib/run-runtime.ts"
+      - "apps/agent/agent/channels/crm.ts"
+      - "apps/agent/test/dong-luot-tac-nhan.integration.spec.ts"
+      - "apps/agent/test/fixtures/runner-loi-that.json"
+    expected: |
+      DB that, hai luot RUNNING cung mot Tac nhan-mau (luot rieng, lan luot):
+        o chua-nop: result null -> choKetLuot(runId) -> status FAILED, errorCode
+          "RUNNER_NO_RESULT", errorMessage "Bộ chạy dừng trước khi nộp kết quả."
+        o da-nop: stageRunResult(runId, {summary: "xong", result: {a: 1}}) truoc ->
+          choKetLuot(runId) -> status SUCCEEDED, result toEqual {a: 1}, summary "xong".
+      Them: channels/crm.ts o nhanh session.completed goi choKetLuot (doc ma nguon bang
+      ts AST hoac import ham duoc xuat; khong grep chuoi tu do).
+      Chieu do (pha-thu, S3): khoi phuc duong runResultOf(null) -> {} -> o chua-nop do
+      voi thong diep ghim "chua nop ket qua phai la Hong".
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnm_doi_sau_khi_dung
+    paths:
+      - "apps/agent/agent/lib/model.ts"
+      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
+      - "apps/agent/agent/subagents/agent_runner/agent.ts"
+      - "apps/agent/test/model-theo-vai.integration.spec.ts"
+    expected: |
+      DB that. appSetting.agentModelId = X ("test/model-x"); dung Tac nhan LIVE voi ban
+      modelId = X, luot QUEUED. Doi appSetting.agentModelId = Y ("test/model-y").
+      Goi dispatchAgentRun(runId, send gia bat doi so) ->
+        auth.attributes.modelId cua lan send = Y;
+        agentRun.modelId doc tu DB = Y;
+        agentVersion.modelId doc tu DB = X;
+        bo giai model cua agent_runner (ham xuat tu subagents/agent_runner/agent.ts hoac
+        lib/model.ts) goi voi ngu canh mang thuoc tinh cua lan send -> tra {model: Y}.
+      Them: quet AST moi tep .ts duoi apps/agent/agent: khong tep nao doc
+      "version.modelId" / truy van chon version { modelId } de chon model chay (danh
+      sach tep vi pham = []). builder-runtime.ts ghi modelId cua ban la hop le (ghi,
+      khong doc de chon).
+      Doi chung: khong doi Cai dat (van X) -> send mang X.
+      Chieu do (pha-thu, S3): agent_runner quay ve doc run.version.modelId -> o chinh do
+      voi thong diep ghim "luot moi phai chay model cua Cai dat".
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnm_bon_phien
+    paths:
+      - "apps/agent/agent/lib/model.ts"
+      - "apps/agent/agent/agent.ts"
+      - "apps/agent/agent/subagents/agent_builder/agent.ts"
+      - "apps/agent/agent/subagents/agent_runner/agent.ts"
+      - "apps/agent/test/model-theo-vai.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc 2 x 4 = 8 o: Cai dat {X, trong} x phien {goc research, goc
+      team-agent, bo dung, bo chay}. Moi o goi dung ham giai ma phien do dung (xuat tu
+      lib/model.ts; bo chay nhan thuoc tinh do dispatch dat) -> X thi {model: X}, trong
+      thi null. So o chay = 8, dem trong test.
+      Them: ba tep agent.ts (goc, agent_builder, agent_runner) import modelTheoVai (hoac
+      ham bao cua no) tu lib/model.ts, va khong tep nao trong apps/agent/agent goi
+      readAgentModel de chon model ngoai lib/model.ts (quet AST; builder-runtime.ts va
+      hooks/telemetry.ts duoc liet ten la ngoai le doc de ghi/bao cao).
+      Chieu do (pha-thu, S3): bo dung quay ve selectedModel cu khong theo vai -> o "bo
+      dung" van xanh nhung kiem import do voi thong diep ghim "moi phien qua modelTheoVai".
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tnm_tai_lieu
+    paths:
+      - "docs/agent.md"
+      - "_acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
+    expected: |
+      Doc docs/agent.md o HEAD va o merge-base HEAD origin/onehub. Tach muc bang tieu de.
+      O HEAD, dat du bon dieu (moi dieu mot ham kiem, in dat/khong dat):
+        (1) muc "## Model" co "theo vai" va noi bo chay khong ghim model theo ban;
+        (2) muc "## Team-agent builder and runner" co ca "RUNNER_FAILED" va
+            "RUNNER_NO_RESULT";
+        (3) luat 2 cua muc "Khi nào thêm" co "ranh giới riêng" trong cau ve model co dinh;
+        (4) co doan "Chỗ rẽ có tên với bản của hãng" va tap tep liet trong doan do BANG
+            giao cua hai tap: tep ma git diff --name-only <merge-base HEAD origin/onehub>
+            HEAD cham, va tep co mat trong origin/release (git ls-tree) — tuc tep cua
+            hang ma nhanh nay sua (so tap, khong so chuoi).
+      Exit 0 khi HEAD dat ca bon VA merge-base khong dat (1), (2), (4).
+      Chieu do tu nhien: chay tren merge-base (co --ref <sha>) -> exit 1 va in ten dieu
+      khong dat.
