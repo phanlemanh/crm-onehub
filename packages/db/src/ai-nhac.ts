@@ -42,7 +42,7 @@ async function viecChung(db: Db, now: Date): Promise<ViecAi[]> {
 	const [cauHinh, chi, doiSoat] = await Promise.all([
 		cauHinhAiLuc(db, now),
 		chiTieuThang(db, thang, now),
-		doiSoatGanNhat(db),
+		doiSoatGanNhat(db, now),
 	]);
 	const ds: ViecAi[] = [];
 	const muc = mocBaoTran(chi.troLyOkrUsd, cauHinh.aiTranThangUsd);

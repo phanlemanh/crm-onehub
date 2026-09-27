@@ -21,6 +21,7 @@ import { PhamViOkrMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middlew
 import { restMeta } from "../trpc/openapi";
 import {
 	addCommentOutput,
+	aiChiTieuOutput,
 	alignmentInput,
 	alignmentTargetsInput,
 	alignmentTargetsOutput,
@@ -92,6 +93,7 @@ import {
 	toanCanhOutput,
 } from "./okr-xem.contracts";
 import { OkrXemService } from "./okr-xem.service";
+import { TroLyOkrService } from "./tro-ly.service";
 
 const TAG = ["OKR"];
 
@@ -104,6 +106,7 @@ export class OkrRouter {
 		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
 		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
 		@Inject(OkrSoService) private readonly so: OkrSoService,
+		@Inject(TroLyOkrService) private readonly troLy: TroLyOkrService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -138,6 +141,14 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof setCyclePhaseInput>,
 	) {
 		return this.okr.setCyclePhase(ctx.user.id, input.id, input.phase);
+	}
+
+	@Query({
+		output: aiChiTieuOutput,
+		meta: restMeta("GET", "/okr/ai-spend", TAG),
+	})
+	aiChiTieu(@Ctx() ctx: AuthedTrpcContext) {
+		return this.troLy.aiChiTieu(ctx.user.id);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })

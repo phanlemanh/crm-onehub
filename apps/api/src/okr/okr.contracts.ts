@@ -1,3 +1,4 @@
+import { doiSoat, nhomViecAi } from "@crm/validation/ai-chi-phi";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import {
 	chuKyInput,
@@ -14,6 +15,7 @@ import {
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
 import { LOAI_NGUON_MAY, okrNguonDong } from "@crm/validation/okr-nguon";
+import { troLySanSang } from "@crm/validation/okr-tro-ly";
 import { HANH_DONG_VET, okrVetSnapshot } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import { OKR } from "./okr-config";
@@ -53,6 +55,28 @@ export const programOutput = okrProgram.extend({
 	canManage: z.boolean(),
 });
 export const setProgramInput = okrProgramSua;
+
+export const aiChiTieuOutput = z.object({
+	thang: z.string(),
+	theoNhom: z.array(
+		z.object({
+			nhom: nhomViecAi,
+			soBuoc: z.number().int().nonnegative(),
+			usd: z.number().nonnegative(),
+		}),
+	),
+	tongUsd: z.number().nonnegative(),
+	troLyOkr: z.object({
+		chiUsd: z.number().nonnegative(),
+		tranUsd: z.number().positive(),
+		phanTram: z.number().nonnegative(),
+	}),
+	sanSang: troLySanSang,
+	dangKiem: z.boolean(),
+	doiSoat: doiSoat.nullable(),
+});
+
+export type AiChiTieuOutput = z.infer<typeof aiChiTieuOutput>;
 export const okrAccessOutput = z.object({
 	canManageProgram: z.boolean(),
 	headOf: z.object({

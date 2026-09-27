@@ -152,8 +152,14 @@ export async function ghiDoiSoat(
 	});
 }
 
-export async function doiSoatGanNhat(db: DbHoacTx): Promise<DoiSoatDoc | null> {
-	const row = await db.aiDoiSoat.findFirst({ orderBy: { thang: "desc" } });
+export async function doiSoatGanNhat(
+	db: DbHoacTx,
+	now: Date = new Date(),
+): Promise<DoiSoatDoc | null> {
+	const row = await db.aiDoiSoat.findFirst({
+		where: { thang: { lt: thangVN(now) } },
+		orderBy: { thang: "desc" },
+	});
 	if (!row) return null;
 	return {
 		thang: row.thang,

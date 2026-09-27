@@ -58,6 +58,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { z } from "zod";
+import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
@@ -278,6 +279,7 @@ export class OkrService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(AgentTriggerService) private readonly trigger: AgentTriggerService,
 	) {}
 
 	async access(userId: string) {
@@ -425,11 +427,16 @@ export class OkrService {
 
 	async setProgram(userId: string, input: OkrProgramSua) {
 		await this.quyenOkr.assertQuanTri(userId);
-		return this.db.$transaction(async (tx) => {
+		const ket = await this.db.$transaction(async (tx) => {
 			const { version, ...cu } = await this.program(tx);
 			const moi = okrProgram.parse({ ...cu, ...input });
 			const row = await tx.okrProgramConfig.create({
-				data: { ...moi, version: version + 1, createdById: userId },
+				data: {
+					...moi,
+					version: version + 1,
+					createdById: userId,
+					createdAt: new Date(),
+				},
 			});
 			await this.vet(
 				tx,
@@ -439,8 +446,16 @@ export class OkrService {
 				{ version },
 				{ ...moi, version: row.version },
 			);
-			return { ...moi, version: row.version, canManage: true };
+			return {
+				...moi,
+				version: row.version,
+				canManage: true,
+				vuaBatAi: moi.aiOn && !cu.aiOn,
+			};
 		});
+		const { vuaBatAi, ...tra } = ket;
+		if (vuaBatAi) await this.trigger.okrKiemSanSang();
+		return tra;
 	}
 
 	async assertKyGhiDuoc(tx: Tx | Db, cycleId: string) {
