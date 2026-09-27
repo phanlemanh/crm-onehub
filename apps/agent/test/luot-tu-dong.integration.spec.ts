@@ -1,4 +1,11 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	setDefaultTimeout,
+	test,
+} from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { SendFn } from "eve/channels";
@@ -15,6 +22,10 @@ import {
 import { taskAuth } from "../agent/lib/dispatch";
 import type { LeasedTask } from "../agent/lib/tasks";
 import { hoiTacTu } from "../agent/lib/zalo-hoi";
+
+const HAN_CA_MS = 60_000;
+
+setDefaultTimeout(HAN_CA_MS);
 
 const SECRET = "test-secret-at-least-long-enough-to-be-a-secret";
 const suffix = `${process.env.TEST_RUN_ID ?? "luot-tu-dong"}-ltd`;

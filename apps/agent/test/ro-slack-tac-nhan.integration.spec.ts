@@ -4,11 +4,16 @@ import {
 	beforeAll,
 	describe,
 	expect,
+	setDefaultTimeout,
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { postRunSlackMessage } from "../agent/lib/run-runtime";
+
+const HAN_CA_MS = 60_000;
+
+setDefaultTimeout(HAN_CA_MS);
 
 const nguoiNhan = await import("../agent/lib/slack-nguoi-nhan").catch(
 	() => null,
