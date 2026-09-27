@@ -1,49 +1,21 @@
 {
-  "feature_plain": "Tin nhắc buổi sáng không còn đi giữa trưa rồi lặp lại sáng hôm sau; bốn chỗ dễ lệch quanh cập nhật tuần và nhắc OKR được khoá lại.",
-  "will_do": [
-    {"id": "AC-4", "p": "Sẽ đưa mỗi sự kiện vào đúng một tin sáng: xảy ra tới hết 08:30 thì vào tin sáng hôm đó, sau 08:30 thì vào tin sáng hôm sau."},
-    {"id": "AC-6", "p": "Sẽ chào «sáng nay» khi tin đi trước 12:00 và «hôm nay» khi tin đi từ 12:00, theo giờ Việt Nam lúc gửi thật, cả Slack lẫn Zalo."},
-    {"id": "AC-8", "p": "Sẽ hiện mục «Cập nhật» trên từng KR ở sheet mục tiêu đúng theo quyền máy chủ trả về, không tự tính lại."},
-    {"id": "AC-9", "p": "Sẽ giữ nguyên ai được cập nhật tuần và sửa KR (bảng 15 ô người × cấp mục tiêu), và ba chỗ trả lời câu đó luôn khớp nhau."},
-    {"id": "AC-10", "p": "Sẽ từ chối cả lần gửi cập nhật tuần nếu một KR có mặt hai lần, báo «Mỗi KR chỉ gửi một lần trong một lần cập nhật.», và cho gửi lại ngay."},
-    {"id": "AC-14", "p": "Sẽ dùng một khuôn duy nhất cho mục nhắc OKR ở cả bộ sinh, hàng nhắc và thẻ «Việc của bạn»; thêm loại mới mà quên thứ tự hiển thị thì bản dựng báo lỗi."}
-  ],
-  "wont_do": [
-    {"id": "AC-1", "p": "Sẽ KHÔNG gửi tin giữa ngày cho người chưa có tin sáng chỉ vì vừa được nhắc tên, được giao, hay mục tiêu đang theo dõi có cập nhật."},
-    {"id": "AC-2", "p": "Sẽ KHÔNG lặp lại mục đó: nó có mặt đúng một lần trong tin sáng hôm sau, rồi thôi."},
-    {"id": "AC-3", "p": "Sẽ KHÔNG gửi tin thứ hai trong ngày cho người đã nhận tin sáng; sự kiện giữa ngày chờ tin sáng hôm sau."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG nhét thêm sự kiện mới vào một tin sáng bị gửi muộn trong ngày."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG làm thẻ «Việc của bạn» chậm lại: nhắc tên lúc 14:00 vẫn hiện trên thẻ lúc 14:05 như hôm nay."},
-    {"id": "AC-11", "p": "Sẽ KHÔNG lặng lẽ bỏ việc «Được giao» khi một dòng lịch sử bị sửa tay sai khuôn — báo lỗi có mã dòng, và lỗi lan tới tin sáng, thẻ «Việc của bạn», phần kế hoạch trên Tổng quan của mọi người cho tới khi dòng được sửa."},
-    {"id": "AC-12", "p": "Sẽ KHÔNG để loại nhắc OKR nào hỏng giữa đường: cả năm loại đi trọn từ lúc sinh tới tin Slack, tin Zalo và thẻ «Việc của bạn»."},
-    {"id": "AC-13", "p": "Chặn việc một mục nhắc bị bỏ khỏi tin mà không dấu vết: loại không có chỗ trong tin thì báo lỗi nêu tên loại."}
-  ],
+  "feature_plain": "Tin nhắc buổi sáng không còn đi giữa trưa rồi lặp lại sáng hôm sau; bốn chỗ dễ lệch quanh cập nhật tuần và nhắc OKR đã khoá lại — cả 16 phép đo đạt.",
   "scope_plain": "Không dời giờ tạo tin, không nhớ «đã gửi» từng sự kiện, không đổi màn cập nhật tuần hay hình của sheet, không xử lý tin tồn qua đêm; hằng số rời trong bộ nhắc để lại như đã chọn ở lượt 4.",
-  "coverage_plain": [
-    {"i": 0, "p": "Giờ sự kiện so với mốc 08:30 — trước, đúng, ngay sau mốc, sau mốc hôm trước, cũ hơn: phủ bằng AC-1 (không tin giữa ngày), AC-2 (một lần sáng sau), AC-4 (biên mốc); thước là nhịp nhắc mỗi phút của máy và cách các bản tin gom theo lịch (Jira digest)."},
-    {"i": 1, "p": "Người nhận hôm đó — chưa có tin sáng, đã có tin, tin tạo sáng mà gửi muộn: AC-1, AC-3 (không tin thứ hai), AC-5 (gửi muộn không thêm việc)."},
-    {"i": 2, "p": "Nơi đọc việc — tin sáng, thẻ «Việc của bạn», Tổng quan: tin sáng đổi cách tính; thẻ giữ nguyên nhịp sống (AC-7); Tổng quan chỉ đọc việc kế hoạch nên không chạm."},
-    {"i": 3, "p": "Năm loại nhắc OKR — cập nhật tuần, KR im, được giao, nhắc tên, đang theo dõi: AC-12 (đi trọn đường), AC-13 (không rơi im), AC-14 (một khuôn)."},
-    {"i": 4, "p": "Người × cấp mục tiêu cho quyền cập nhật — 15 ô: AC-9 (bảng quyền viết sẵn, không ô nào đổi), AC-8 (sheet theo máy chủ)."},
-    {"i": 5, "p": "Giả định chờ anh gạch: tin đi sau 12:00 hiếm đủ để chỉ đổi «sáng nay» thành «hôm nay», không cần giải thích vì sao tin đến muộn."},
-    {"i": 6, "p": "Giả định chờ anh gạch: dòng lịch sử hỏng chỉ đến từ tay người sửa cơ sở dữ liệu, nên để nhắc của mọi người dừng tới khi sửa là chấp nhận được."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Câu chào mới chỉ được đo trên hàm dựng tin, chưa đo trên đường gửi thật và chưa đo khi máy chủ chạy giờ UTC. Đã sửa: thêm ca gửi thật lúc 14:02 (phải «hôm nay») và 10:00 (phải «sáng nay»), mọi ca có giờ chạy dưới giờ UTC."},
-    {"i": 1, "p": "Bảng quyền 15 ô chỉ được nhắc tên, không viết ra, nên khi gộp luật về một chỗ có thể đổi quyền của ai đó mà bài đo vẫn xanh. Đã sửa: viết đủ 15 ô vào tiêu chí và bài đo; ba luật hôm nay cho cùng bảng nên không ô nào phải quyết. Không chạy thêm bản so trên mã cũ — bảng viết sẵn đã chặn đổi quyền."},
-    {"i": 2, "p": "Chưa nói một dòng lịch sử hỏng làm hỏng tới đâu. Đã ghi thẳng vào tiêu chí: nhắc của mọi người dừng, thẻ và Tổng quan báo lỗi tới khi sửa; bài đo nối tới tin sáng và thẻ thật. Phạm vi lan này là thứ anh quyết ở cổng này."},
-    {"i": 3, "p": "Ba bài đo lấy kỳ vọng từ chính bảng của mã, nên mã khai thiếu mã KR vẫn xanh. Đã sửa: bảng khoá năm loại viết tay trong bài đo; bỏ phép đếm sẽ đỏ oan khi lượt 9a thêm hai loại nhắc AI."},
-    {"i": 4, "p": "Trục «Tổng quan» không có tiêu chí riêng. Không sửa: phần kế hoạch trên Tổng quan chỉ đọc việc kế hoạch, không đọc mục OKR, nên cách tính cửa sổ không chạm nó."}
-  ],
+  "analyst_plain": "",
   "decisions_plain": [
     {"id": "d-20260927T092257Z-1", "p": "Tin sáng lấy sự kiện từ sau 08:30 hôm trước tới hết 08:30 hôm nay; thẻ «Việc của bạn» vẫn 24 giờ gần nhất — đổi lại mọi chỗ đọc việc phải nói rõ mình dùng cách nào."},
-    {"id": "d-20260927T092257Z-2", "p": "Chào theo giờ gửi thay vì chặn tin giữa ngày — tin giữa ngày vẫn có thể đi (việc kế hoạch mới, máy chậm) nhưng không nói sai buổi."},
+    {"id": "d-20260927T092257Z-2", "p": "Chào theo giờ gửi thay vì chặn tin giữa ngày — tin giữa ngày vẫn có thể đi nhưng không nói sai buổi."},
     {"id": "d-20260927T092257Z-3", "p": "Gói dữ liệu dùng chung được phép có thư viện khuôn, để lịch sử OKR và mục nhắc mỗi thứ chỉ một khuôn — đổi lại gói đó có thêm một phụ thuộc."},
-    {"id": "d-20260927T092257Z-4", "p": "Dòng lịch sử hỏng thì báo lỗi to, không bỏ qua — đổi lại nhắc của mọi người dừng tới khi dòng được sửa (xem hình thứ hai)."},
+    {"id": "d-20260927T092257Z-4", "p": "Dòng lịch sử hỏng thì báo lỗi to, không bỏ qua — đổi lại nhắc của mọi người dừng tới khi dòng được sửa."},
     {"id": "d-20260927T092257Z-5", "p": "Sheet đọc quyền máy chủ đã trả, máy chủ gom luật về một chỗ, không thêm trường mới — đổi lại quyền sửa KR và quyền cập nhật tuần buộc chung một luật."},
-    {"id": "d-20260927T092257Z-6", "p": "KHÔNG làm bản mẫu bấm được — không điểm ảnh nào đổi; cổng duyệt bằng chữ."},
+    {"id": "d-20260927T092257Z-6", "p": "KHÔNG làm bản mẫu bấm được — không điểm ảnh nào đổi."},
     {"id": "d-20260927T092257Z-7", "p": "KHÔNG viết đặc tả trải nghiệm — không màn hay luồng mới."},
     {"id": "d-20260927T092257Z-8", "p": "KHÔNG chụp màn làm bằng chứng — sáu ô quyền của menu đo bằng bài bấm menu thật."},
-    {"id": "d-20260927T092257Z-9", "p": "KHÔNG xử lý tin tồn qua đêm và KHÔNG gom hằng số rời của bộ nhắc — ngoài năm mục đã chọn."}
+    {"id": "d-20260927T092257Z-9", "p": "KHÔNG xử lý tin tồn qua đêm và KHÔNG gom hằng số rời của bộ nhắc."},
+    {"id": "d-20260927T111052Z-11", "p": "Sửa tên thao tác đổi KR trong ba phép đo cho đúng tên thật — kỳ vọng không đổi."},
+    {"id": "d-20260927T111052Z-12", "p": "Viết mã tuần tự trong một phiên, không chia nhiều nhánh song song — đổi lại không tăng tốc được hai việc độc lập."},
+    {"id": "d-20260927T111140Z-13", "p": "Kế hoạch thi công được coi là duyệt khi anh dán dòng /goal sau lời mời, không kèm «sửa»."},
+    {"id": "d-20260927T120010Z-14", "p": "Bảng khoá của mục nhắc viết một lần dưới dạng mặt nạ để luật chống ép kiểu của kho qua được — đổi lại thứ tự các loại nhắc gắn chặt với một chỗ đọc, đảo thứ tự thì kiểm kiểu báo lỗi."},
+    {"id": "d-20260927T120010Z-15", "p": "Hàm đọc lịch sử OKR giữ nguyên cách gọi sau khi dời chỗ, và mang theo đúng miễn trừ luật nó đã có — đổi lại danh sách miễn trừ thêm một dòng."}
   ]
 }
