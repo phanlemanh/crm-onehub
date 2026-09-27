@@ -136,7 +136,7 @@ bộ dựng trả `not_authorized` như thiết kế gốc.
 - Suôn sẻ: người dùng gửi yêu cầu dựng → bộ dựng chạm hạn mức → ô soạn tin đổi thành
   câu hỏi hai nút → bấm «Cấp thêm» → bộ dựng chạy tiếp tới bản nháp (điểm ra: thẻ bản
   nháp như hôm nay).
-- Biên: bấm «Dừng» → bộ dựng dừng, trợ lý báo chưa dựng xong, ô soạn tin trở lại.
+- Biên: bấm «Dừng» → eve huỷ lượt (`turn.cancelled`), bộ dựng dừng, ô soạn tin trở lại; bong bóng «Dừng» của người dùng là dấu vết.
 - Lỗi & quay lại: gửi câu trả lời lỗi → thông báo lỗi (toast) như câu hỏi làm rõ, hai
   nút mở lại để bấm lần nữa.
 

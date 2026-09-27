@@ -250,7 +250,11 @@ evals:
       buoc model sau cau tra loi; co subagent.completed ve goc voi ket qua cua buoc
       do; luot goc khong con input.requested dang cho.
       dung.eval.ts: cung dung nhung optionId "stop" -> phien con khong chay them buoc
-      model nao; goc nhan ket qua subagent co isError; luot goc ket thuc (khong
-      session.waiting voi input.requested moi).
+      model nao (khong co DAU_BUOC_HAI), khong co subagent.completed; luot goc ket thuc
+      bang turn.cancelled; pendingInputRequests rong.
+      Ung dung thu khong import duoc ma ngoai thu muc cua no (eve chup rieng thu muc khi
+      dung), nen cmd chay qua chay.ts: chep NGUYEN VAN builder-delegation.ts,
+      builder-delegation-state.ts, builder-delivery.ts va mau GLM vao agent/_chep roi
+      moi goi eve eval.
       Chieu do (pha-thu S3): tra loi bang requestId sai -> "chay-tiep" do voi thong diep
       ghim "khong chay tiep".

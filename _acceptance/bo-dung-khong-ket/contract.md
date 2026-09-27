@@ -128,8 +128,8 @@ Source input:
   - Then phiên con chạy thêm ít nhất một bước model, rồi `subagent.completed` về gốc
     với kết quả của bước đó.
   - When trả lời `stop`.
-  - Then phiên con không chạy thêm bước model nào, gốc nhận kết quả lỗi của `subagent`,
-    và lượt gốc kết thúc thay vì đỗ tiếp.
+  - Then phiên con không chạy thêm bước model nào và không nộp kết quả, lượt gốc kết
+    thúc bằng `turn.cancelled` thay vì đỗ tiếp, và không còn câu hỏi nào chờ.
 
 ## Coverage
 

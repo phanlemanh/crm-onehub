@@ -801,8 +801,8 @@ executors:
     tnm_goi_that: "bun _acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
     tnm_tai_lieu: "node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
     bdk_tai_lieu: "node _acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
-    bdk_eve_chan_khuon: "cd apps/agent/test/eve-tran && ../../node_modules/.bin/eve eval chan-khuon"
-    bdk_eve_chay_tiep: "cd apps/agent/test/eve-tran && ../../node_modules/.bin/eve eval chay-tiep"
+    bdk_eve_chan_khuon: "bun apps/agent/test/eve-tran/chay.ts chan-khuon"
+    bdk_eve_chay_tiep: "bun apps/agent/test/eve-tran/chay.ts chay-tiep"
     bdk_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/components/agent-session-limit-composer.tsx" --mode static'
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"
