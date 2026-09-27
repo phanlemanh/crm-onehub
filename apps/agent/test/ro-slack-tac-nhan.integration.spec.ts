@@ -66,9 +66,7 @@ function giaSlack(kb: KichBan) {
 	dem = {};
 	cursors = {};
 	globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
-		const url = new URL(
-			input instanceof Request ? input.url : String(input),
-		);
+		const url = new URL(input instanceof Request ? input.url : String(input));
 		const method = url.pathname.replace("/api/", "");
 		dem[method] = (dem[method] ?? 0) + 1;
 		const body = init?.body ? JSON.parse(String(init.body)) : {};
@@ -107,7 +105,7 @@ function giaSlack(kb: KichBan) {
 function nguoiSlack(
 	id: string,
 	email: string | null,
-	extra: Record<string, unknown> = {},
+	extra: { is_bot?: boolean; deleted?: boolean } = {},
 ) {
 	return { id, name: id.toLowerCase(), profile: { email }, ...extra };
 }
@@ -393,7 +391,9 @@ describe("ro-slack-tac-nhan", () => {
 		giaSlack({ kenh: kenhHaiNguoi(NGUOI.okr.slack), danhBa: lech });
 		tuChoiVi(await dang(agentKenh), TU_CHOI, KHONG_KIEM);
 
-		await db.slackMemberMatch.deleteMany({ where: { crmUserId: NGUOI.okr.id } });
+		await db.slackMemberMatch.deleteMany({
+			where: { crmUserId: NGUOI.okr.id },
+		});
 		giaSlack({ kenh: kenhHaiNguoi(NGUOI.okr.slack), danhBa: lech });
 		await dang(agentKenh);
 		expect(

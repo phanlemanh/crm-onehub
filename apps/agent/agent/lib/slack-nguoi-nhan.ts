@@ -62,21 +62,27 @@ function ketTrang<T>(
 	};
 }
 
-function trangKenh(value: unknown): Trang<string> {
+async function trangKenh(response: Response): Promise<Trang<string>> {
 	const method = "conversations.members";
-	return ketTrang(parse(trangThanhVienKenh, value, `Slack ${method}`), method);
+	return ketTrang(
+		parse(trangThanhVienKenh, await response.json(), `Slack ${method}`),
+		method,
+	);
 }
 
-function trangNguoi(value: unknown): Trang<NguoiSlack> {
+async function trangNguoi(response: Response): Promise<Trang<NguoiSlack>> {
 	const method = "users.list";
-	return ketTrang(parse(trangDanhBa, value, `Slack ${method}`), method);
+	return ketTrang(
+		parse(trangDanhBa, await response.json(), `Slack ${method}`),
+		method,
+	);
 }
 
 async function docMoiTrang<T>(
 	token: string,
 	method: string,
 	params: Record<string, string>,
-	docTrang: (value: unknown) => Trang<T>,
+	docTrang: (response: Response) => Promise<Trang<T>>,
 ): Promise<T[]> {
 	const members: T[] = [];
 	let cursor = "";
@@ -92,7 +98,7 @@ async function docMoiTrang<T>(
 			signal: AbortSignal.timeout(SLACK.request.timeoutMs),
 		});
 		if (!response.ok) throw new Error(`Slack ${method} failed.`);
-		const page = docTrang(await response.json());
+		const page = await docTrang(response);
 		members.push(...page.members);
 		cursor = page.next;
 	} while (cursor);

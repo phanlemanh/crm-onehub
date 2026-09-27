@@ -7,7 +7,7 @@ import {
 	BRIDGE_ISSUER,
 	repFromCrm,
 } from "../agent/channels/eve";
-import { sensitiveWrite } from "../agent/lib/approval";
+import { type isAutomated, sensitiveWrite } from "../agent/lib/approval";
 import {
 	builderSessionAuthFromRow,
 	dispatchAgentRun,
@@ -92,17 +92,27 @@ function task(): LeasedTask {
 	};
 }
 
-function chinhSach(auth: unknown) {
-	return sensitiveWrite("Ask a person.")({
+type PhienAuth = NonNullable<
+	Parameters<typeof isAutomated>[0]["auth"]["current"]
+>;
+
+async function chinhSach(auth: PhienAuth | null): Promise<string> {
+	const ket = await sensitiveWrite("Ask a person.")({
 		session: { auth: { current: auth, initiator: null } },
 	} as never);
+	return JSON.stringify(ket);
 }
 
 type AuthGhiLai = {
 	authenticator: string;
+	principalId: string;
 	principalType: string;
 	attributes: Record<string, string>;
 };
+
+const XIN_DUYET = '"user-approval"';
+
+const TU_CHOI = '"type":"denied"';
 
 async function giaoLuot(initiatedById: string | null): Promise<AuthGhiLai> {
 	const run = await db.agentRun.create({
@@ -118,8 +128,8 @@ async function giaoLuot(initiatedById: string | null): Promise<AuthGhiLai> {
 		},
 		select: { id: true },
 	});
-	let auth: unknown = null;
-	const send = (async (_message: string, options: { auth: unknown }) => {
+	let auth: AuthGhiLai | null = null;
+	const send = (async (_message: string, options: { auth: AuthGhiLai }) => {
 		auth = options.auth;
 		return { id: `ltd-session-${run.id}` };
 	}) as unknown as SendFn;
@@ -128,7 +138,8 @@ async function giaoLuot(initiatedById: string | null): Promise<AuthGhiLai> {
 		where: { id: run.id },
 		data: { status: "CANCELLED", finishedAt: new Date() },
 	});
-	return auth as AuthGhiLai;
+	if (!auth) throw new Error("dispatchAgentRun khong goi send");
+	return auth;
 }
 
 beforeAll(async () => {
@@ -234,11 +245,9 @@ describe("luot-tu-dong", () => {
 			authenticator: "crm-schedule",
 			attributes: { purpose: "team-agent" },
 		});
-		const ket = chinhSach(auth);
-		expect(ket, `chinh sach tra ve: ${JSON.stringify(ket)}`).toMatchObject({
-			type: "denied",
-		});
-		expect(JSON.stringify(ket)).toContain("Not something to do unattended");
+		const ket = await chinhSach(auth);
+		expect(ket, `chinh sach tra ve: ${ket}`).toContain(TU_CHOI);
+		expect(ket).toContain("Not something to do unattended");
 	});
 
 	test("nguoi-bam: luot do nguoi bam chay cung la tu dong", async () => {
@@ -247,10 +256,8 @@ describe("luot-tu-dong", () => {
 			authenticator: "crm-user",
 			principalType: "user",
 		});
-		const ket = chinhSach(auth);
-		expect(ket, `chinh sach tra ve: ${JSON.stringify(ket)}`).toMatchObject({
-			type: "denied",
-		});
+		const ket = await chinhSach(auth);
+		expect(ket, `chinh sach tra ve: ${ket}`).toContain(TU_CHOI);
 	});
 
 	test("giu-nguyen: phien co nguoi ngoi van xin duyet, viec nen van tu dong", async () => {
@@ -274,20 +281,16 @@ describe("luot-tu-dong", () => {
 			),
 		);
 		expect(zalo.loai).toBe("hoi");
-		const maTran: Array<[string, unknown, string | { type: string }]> = [
-			["cau-noi", cauNoi, "user-approval"],
-			["builder", builder, "user-approval"],
-			["zalo", zalo.loai === "hoi" ? zalo.yeuCau.auth : null, "user-approval"],
-			["viec-nen", taskAuth(task()), { type: "denied" }],
+		const maTran: Array<[string, PhienAuth | null, string]> = [
+			["cau-noi", cauNoi, XIN_DUYET],
+			["builder", builder, XIN_DUYET],
+			["zalo", zalo.loai === "hoi" ? zalo.yeuCau.auth : null, XIN_DUYET],
+			["viec-nen", taskAuth(task()), TU_CHOI],
 		];
 		let soHang = 0;
 		for (const [ten, auth, mongDoi] of maTran) {
-			const ket = chinhSach(auth);
-			if (typeof mongDoi === "string") {
-				expect(ket, `${ten}: ${JSON.stringify(ket)}`).toBe(mongDoi);
-			} else {
-				expect(ket, `${ten}: ${JSON.stringify(ket)}`).toMatchObject(mongDoi);
-			}
+			const ket = await chinhSach(auth);
+			expect(ket, `${ten}: ${ket}`).toContain(mongDoi);
 			soHang += 1;
 		}
 		expect(soHang).toBe(4);
