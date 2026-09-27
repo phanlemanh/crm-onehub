@@ -19,6 +19,7 @@ import {
 	runTerminalEventId,
 } from "./run-state";
 import { slackAccessToken } from "./slack-connection";
+import { kiemNguoiNhanSlack, laTuChoiNguoiNhan } from "./slack-nguoi-nhan";
 
 const ACTION_LEASE_MS = DISPATCH.run.actionLeaseMs;
 const NO_ACTION_TRIGGER_TYPES = new Set<AgentTriggerType>(
@@ -439,6 +440,7 @@ export async function postRunSlackMessage(
 		}
 		const accessToken = await slackAccessToken();
 		if (!accessToken) throw new Error("Slack is not connected.");
+		await kiemNguoiNhanSlack(accessToken, destination);
 
 		const posted = await sendSlackMessage(
 			accessToken,
@@ -730,6 +732,7 @@ async function slackApiRequest(
 }
 
 function slackActionErrorCode(message: string): string {
+	if (laTuChoiNguoiNhan(message)) return "ACTION_REJECTED";
 	return message === "Slack is not connected." ||
 		message.includes("additional permission")
 		? "NOT_AUTHORISED"

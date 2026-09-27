@@ -677,6 +677,16 @@ executors:
     hcz_chi_dan: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t chi-dan"'
     hcz_nguong: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo-nguong.integration.spec.ts"'
     hcz_telemetry: 'bun run test -- "cd apps/api && bun test test/telemetry-zalo-hoi.spec.ts"'
+    rst_khop_email: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t khop-email"'
+    rst_khop_bang: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t khop-bang"'
+    rst_tin_truc_tiep: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t tin-truc-tiep"'
+    rst_vai_song: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t vai-song"'
+    rst_doi_chung: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t doi-chung"'
+    rst_doc_loi: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t doc-loi"'
+    rst_phan_trang: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts -t phan-trang"'
+    rst_lich: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t lich"'
+    rst_nguoi_bam: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t nguoi-bam"'
+    rst_giu_nguyen: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t giu-nguyen"'
     hth_chan_ghi: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t chan-ghi"'
     hth_ghi_that: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t ghi-that"'
     hth_web_fetch: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t web-fetch"'
@@ -685,6 +695,9 @@ executors:
     hth_thuoc_am: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cai-lenh|dang-ban\""'
     hth_token: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cung-phien|duong-chinh\""'
   script:
+    rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
+    rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
+    rst_kiem_ke: node _acceptance/ro-slack-tac-nhan/rang/kiem-ke.mjs
     hcz_tai_lieu: bun _acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs
     dmk_dau_cuoi: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs dau-cuoi
     dmk_don_khi_do: bun _acceptance/do-man-tren-kho-rieng/rang/phien.mjs don-khi-do

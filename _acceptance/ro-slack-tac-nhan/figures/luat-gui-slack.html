@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luật gửi Slack của Tác nhân</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 70ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · AC-1…AC-7</p>
+    <h1>Tác nhân đăng Slack: kiểm ai ở đích ngay lúc gửi</h1>
+    <p class="sub">Mỗi lần Tác nhân sắp đăng một tin Slack, máy kiểm người nhận theo đúng thứ tự dưới đây. Không kiểm được thì từ chối, không đoán.</p>
+
+    <svg viewBox="0 0 1000 704" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+      <title id="t">Luật gửi Slack của Tác nhân</title>
+      <desc id="d">Bốn bước nối tiếp từ lời gọi đăng tới đăng đúng một lần; hai ô từ chối và một nhánh cho qua người Slack không có trong CRM.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="1000" height="704" fill="#fafafa"/>
+
+      <line x1="440" y1="80" x2="440" y2="112" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="200" x2="440" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="328" x2="440" y2="368" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="456" x2="440" y2="536" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <line x1="592" y1="156" x2="736" y2="156" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="592" y1="284" x2="736" y2="284" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="592" y1="412" x2="736" y2="412" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 288 412 H 72 Q 64 412 64 420 V 556 Q 64 564 72 564 H 360" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="620" y="132" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="664" y="144" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không đọc được</text>
+
+      <rect x="620" y="260" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="664" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không đọc được</text>
+
+      <rect x="604" y="388" width="120" height="16" rx="2" fill="#fafafa"/>
+      <text x="664" y="400" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">có người vai chỉ OKR</text>
+
+      <rect x="452" y="488" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="456" y="500" fill="#575757" font-size="10" font-family="'Geist', sans-serif">còn lại</text>
+
+      <rect x="84" y="388" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="176" y="400" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">người Slack không có trong CRM</text>
+
+      <text x="88" y="596" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">cho qua — quyết định d-…-2,</text>
+      <text x="88" y="616" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">mở lại khi có khớp tay</text>
+
+      <rect x="320" y="32" width="240" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="440" y="60" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tác nhân gọi đăng Slack</text>
+
+      <rect x="288" y="112" width="304" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ai ở đích?</text>
+      <text x="440" y="160" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kênh: đọc thành viên mọi trang</text>
+      <text x="440" y="176" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">tin trực tiếp: một người</text>
+
+      <rect x="288" y="240" width="304" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="268" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Họ là ai trong Slack?</text>
+      <text x="440" y="288" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">danh bạ mọi trang;</text>
+      <text x="440" y="304" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bỏ bot, tài khoản đã xoá</text>
+
+      <rect x="288" y="368" width="304" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Họ là ai trong CRM?</text>
+      <text x="440" y="416" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">vai đọc lúc gửi; khớp bằng</text>
+      <text x="440" y="432" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bảng khớp Slack hoặc email</text>
+
+      <rect x="360" y="536" width="160" height="56" rx="28" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="440" y="568" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đăng đúng một lần</text>
+
+      <rect x="736" y="120" width="240" height="200" rx="12" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1.2"/>
+      <text x="856" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối: không kiểm được</text>
+      <text x="856" y="212" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">người nhận</text>
+      <text x="856" y="240" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ghi vào lịch sử lượt: hành động</text>
+      <text x="856" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bị từ chối, không có tin nào đi ra</text>
+
+      <rect x="736" y="352" width="240" height="120" rx="12" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1.2"/>
+      <text x="856" y="388" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối: kênh có N người</text>
+      <text x="856" y="404" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không đọc được dữ liệu đối tác</text>
+      <text x="856" y="432" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ghi vào lịch sử lượt: hành động</text>
+      <text x="856" y="448" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bị từ chối, không có tin nào đi ra</text>
+
+      <line x1="32" y1="648" x2="968" y2="648" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="676" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="120" y="664" width="28" height="16" rx="8" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="156" y="676" fill="#575757" font-size="10" font-family="'Geist', sans-serif">bắt đầu</text>
+
+      <rect x="232" y="664" width="28" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="268" y="676" fill="#575757" font-size="10" font-family="'Geist', sans-serif">bước kiểm</text>
+
+      <rect x="360" y="664" width="28" height="16" rx="4" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1.2"/>
+      <text x="396" y="676" fill="#575757" font-size="10" font-family="'Geist', sans-serif">từ chối</text>
+
+      <rect x="472" y="664" width="28" height="16" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="508" y="676" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đăng</text>
+
+      <line x1="572" y1="672" x2="604" y2="672" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="612" y="676" fill="#575757" font-size="10" font-family="'Geist', sans-serif">rẽ nhánh</text>
+
+      <line x1="700" y1="672" x2="732" y2="672" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="740" y="676" fill="#575757" font-size="10" font-family="'Geist', sans-serif">cho qua, vẫn đăng</text>
+    </svg>
+  </div>
+</body>
+</html>
