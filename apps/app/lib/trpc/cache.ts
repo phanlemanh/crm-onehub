@@ -28,6 +28,7 @@ export type CrmCache = {
 	plan(id?: string, options?: Options): Promise<void>;
 	workTransferred(options?: Options): Promise<void>;
 	okr(id?: string, options?: Options): Promise<void>;
+	taiLieu(slug?: string, options?: Options): Promise<void>;
 	campaign(id?: string, options?: Options): Promise<void>;
 	campaignList(options?: Options): Promise<void>;
 	fields(entity?: RecordKind, options?: Options): Promise<void>;
@@ -279,6 +280,21 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.lichSuSo.queryKey(),
 					trpc.okr.banGhiChiSo.queryKey(),
 					trpc.okr.xemTruocChiSo.queryKey(),
+				],
+				options,
+			),
+
+		taiLieu: (slug, options) =>
+			run(
+				[
+					slug
+						? trpc.taiLieu.get.queryKey({ slug })
+						: trpc.taiLieu.get.queryKey(),
+				],
+				[
+					trpc.taiLieu.list.queryKey(),
+					trpc.taiLieu.proposals.queryKey(),
+					trpc.taiLieu.proposal.queryKey(),
 				],
 				options,
 			),

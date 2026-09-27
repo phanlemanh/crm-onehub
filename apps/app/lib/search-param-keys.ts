@@ -56,6 +56,10 @@ export const SEARCH_PARAM = {
 		kr: "krOkr",
 		tu: "tu",
 	},
+	taiLieu: {
+		tab: "tabTaiLieu",
+		loai: "loai",
+	},
 } as const;
 
 export const RESERVED_SEARCH_PARAM_KEYS: ReadonlySet<string> = new Set(

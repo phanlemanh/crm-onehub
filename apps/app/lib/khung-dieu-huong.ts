@@ -10,6 +10,7 @@ export type MucRailKey =
 	| "campaigns"
 	| "onboarding"
 	| "okr"
+	| "taiLieu"
 	| "settings";
 
 export type MucRail = {
@@ -28,6 +29,7 @@ export const MUC_RAIL: readonly MucRail[] = [
 	{ key: "campaigns", href: "/campaigns", match: "prefix" },
 	{ key: "onboarding", href: "/onboarding", match: "prefix" },
 	{ key: "okr", href: "/okr", match: "prefix" },
+	{ key: "taiLieu", href: "/tai-lieu", match: "prefix" },
 	{ key: "settings", href: "/settings", match: "prefix" },
 ];
 

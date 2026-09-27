@@ -55,6 +55,8 @@ const KHONG_DAU = new Set([
 	"kenh.tenViDu",
 	"headers.email",
 	"tabs.emails",
+	"tab.trang",
+	"cot.trang",
 	"contact.emails",
 	"type.email",
 	"type.url",

@@ -1,5 +1,6 @@
 "use client";
 
+import Book from "@carbon/icons-react/es/Book";
 import Building from "@carbon/icons-react/es/Building";
 import Bullhorn from "@carbon/icons-react/es/Bullhorn";
 import Close from "@carbon/icons-react/es/Close";
@@ -54,6 +55,7 @@ const ICON = {
 	campaigns: Bullhorn,
 	onboarding: Roadmap,
 	okr: Target,
+	taiLieu: Book,
 	settings: Settings,
 } satisfies Record<MucRailKey, CarbonIcon>;
 
