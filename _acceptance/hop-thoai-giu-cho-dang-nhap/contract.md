@@ -5,7 +5,7 @@ slug: hop-thoai-giu-cho-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-27T05:47:09Z
 design_doc: docs/superpowers/specs/2026-09-27-hop-thoai-giu-cho-dang-nhap-design.md
