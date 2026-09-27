@@ -3,6 +3,10 @@ import { db } from "@crm/db";
 import { LOAI_NHAC_OKR } from "@crm/db/okr-nhac";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
 import {
+	guiCapNhatInput,
+	LOI_KHUON_CAP_NHAT,
+} from "@crm/validation/okr-cap-nhat";
+import {
 	type ViecCuaToiOutput,
 	viecCuaToiOutput,
 } from "../src/okr/okr.contracts";
@@ -210,6 +214,90 @@ describe("vet-khuon", () => {
 			theZ: theZ.status === 200,
 			tongQuanZ: tongQuanZ.status === 200,
 		}).toEqual({ theX: false, theZ: false, tongQuanZ: false });
+	});
+});
+
+describe("kr-trung", () => {
+	test("kr-trung: lo co cung KR hai lan bi tu choi ca lo, khong ghi gi, phien van gui lai duoc; ma tran khuon 4 lo; doi chung lo hai KR khac nhau", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("kt");
+		const pb = await pbMoi("kt-p");
+		const tp = await truongMoi("department", pb, "kt-tp");
+		const M = await nguoiMoi("kt-m");
+		const cM = await phienCua(M);
+		const o = await mucTieu(
+			quy,
+			{ level: "phong-ban", departmentId: pb },
+			tp.nguoi,
+			tp.cookie,
+		);
+		const K1 = await taoKr(o, M, tp.cookie);
+		const K2 = await taoKr(o, M, tp.cookie);
+		await congBo(o, tp.cookie);
+		const muc = (keyResultId: string, value: number, confidence: string) => ({
+			keyResultId,
+			value,
+			confidence,
+			note: "",
+		});
+		const phien = await moPhien(cM);
+		const dem = async () => ({
+			capNhat: await db.okrCheckIn.count({
+				where: { keyResultId: { in: [K1, K2] } },
+			}),
+			vet: await db.okrTrail.count({
+				where: { keyResultId: { in: [K1, K2] }, action: "cap-nhat-tuan" },
+			}),
+			k1: Number(
+				(await db.okrKeyResult.findUniqueOrThrow({ where: { id: K1 } }))
+					.currentValue,
+			),
+		});
+		const truoc = await dem();
+		const trung = await goi(
+			"okr.guiCapNhat",
+			{ sessionId: phien, items: [muc(K1, 7, "cao"), muc(K1, 8, "vua")] },
+			cM,
+		);
+		const sau = await dem();
+		const conMo = (
+			await db.okrCheckInSession.findUniqueOrThrow({ where: { id: phien } })
+		).submittedAt;
+		if (
+			trung.status !== 400 ||
+			!trung.loi.includes(LOI_KHUON_CAP_NHAT.trungKr)
+		) {
+			throw new Error(
+				`kr-trung: lo [K1,K1] lot khuon (${trung.status} ${trung.loi})`,
+			);
+		}
+		expect({ sau, conMo }).toEqual({ sau: truoc, conMo: null });
+
+		const khuon: [string, string[], boolean][] = [
+			["[K1,K1]", ["k1", "k1"], false],
+			["[K1,K2,K1]", ["k1", "k2", "k1"], false],
+			["[K1,K2]", ["k1", "k2"], true],
+			["[K1]", ["k1"], true],
+		];
+		expect(
+			khuon.map(([ten, ds]) => [
+				ten,
+				guiCapNhatInput.safeParse({
+					sessionId: "phien",
+					items: ds.map((k) => muc(k, 1, "cao")),
+				}).success,
+			]),
+		).toEqual(khuon.map(([ten, , hop]) => [ten, hop]));
+
+		ok(
+			await goi(
+				"okr.guiCapNhat",
+				{ sessionId: phien, items: [muc(K1, 7, "cao"), muc(K2, 1, "vua")] },
+				cM,
+			),
+			"lo hai KR khac nhau",
+		);
+		expect(await db.okrCheckIn.count({ where: { sessionId: phien } })).toBe(2);
 	});
 });
 
