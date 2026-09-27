@@ -1,50 +1,42 @@
 {
-  "feature_plain": "Quản trị thấy tháng này AI tiêu bao nhiêu cho từng việc và bật được Trợ lý OKR theo từng việc, từng đơn vị; trợ lý chạy riêng, chỉ đọc OKR, chỉ gửi tới nhà cung cấp cam kết không lưu dữ liệu — người dùng chưa thấy gì.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ ghi mỗi bước gọi mô hình của mọi phiên AI — kể cả phiên con của Tác nhân và Trợ lý OKR — vào sổ chi phí, gắn đúng một trong năm việc có tên, không ghi trùng."},
-    {"id": "AC-3", "p": "Sẽ không mở phiên Trợ lý OKR nào khi trần tháng bằng 0 hoặc đã chạm trần — kiểm lúc xếp việc và kiểm lại ngay trước khi mở phiên."},
-    {"id": "AC-4", "p": "Sẽ đóng một việc của Trợ lý OKR bị hỏng ngay khi có lỗi (hoặc trong 90 giây nếu phiên chết im), kèm lý do, và không chạy lại lần hai."},
-    {"id": "AC-6", "p": "Sẽ giữ trợ lý AI chung không đọc được một chữ OKR nào: việc chuyển sang nó chỉ mang câu cố định và mã, kết quả trả về chỉ là mã."},
-    {"id": "AC-7", "p": "Sẽ khoá cứng Trợ lý OKR vào một mô hình có cam kết không lưu dữ liệu, mức suy nghĩ thấp, một công cụ duy nhất là nộp đề xuất, không mạng ngoài."},
-    {"id": "AC-12", "p": "Sẽ cho biết đúng lý do Trợ lý OKR chưa chạy được (tắt, việc tắt, đơn vị chưa bật, hết trần, chưa có khoá mô hình, chưa nối tác tử) và tự kiểm khoá mô hình khi quản trị bật."},
-    {"id": "AC-13", "p": "Sẽ báo quản trị trong Nhắc buổi sáng một lần khi Trợ lý OKR tiêu tới 80%, một lần khi chạm trần, và một lần khi đối soát tháng lệch."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Chặn sổ chi phí lệch âm thầm: đối soát mỗi tháng với báo cáo của AI Gateway, lệch quá 10% thì báo, không đối soát được thì nói lý do."},
-    {"id": "AC-5", "p": "Chặn trợ lý AI chung gọi bất cứ công cụ nào khác Trợ lý OKR trong một việc OKR — công cụ bị chặn trước khi chạy; và chặn mọi phiên khác gọi Trợ lý OKR."},
-    {"id": "AC-8", "p": "Chặn lệnh chèn trong chữ OKR: ba lần chạy thật liền, người vai «chỉ OKR» yêu cầu góp ý trên một Mục tiêu có câu dụ đọc thoả thuận, không lần nào lọt dữ liệu đối tác."},
-    {"id": "AC-9", "p": "Chặn một lời gọi mô hình chạy quá dài vượt trần — nếu không chặn được thì nói rõ và ghi thành giới hạn đã biết."},
-    {"id": "AC-10", "p": "Sẽ KHÔNG hiện hai khối Trợ lý OKR và Sổ chi phí AI cho thành viên thường hay người vai «chỉ OKR», ở màn lẫn qua API và khoá API; quản trị thấy đủ và số trên màn bằng số trong sổ."},
-    {"id": "AC-11", "p": "Sẽ KHÔNG sửa hay xoá dữ liệu cũ: chỉ thêm sáu bảng, bảy cột, mặc định là Trợ lý OKR tắt."},
-    {"id": "AC-14", "p": "Sẽ KHÔNG đổi cách tính tiến độ OKR khi dời hàm tính sang gói dùng chung."}
-  ],
-  "scope_plain": "Nút góp ý, tóm tắt tuần, hỏi OKR trong chat, mô hình rẻ hơn cho trợ lý chung, trần cho nghiên cứu danh bạ — để các lượt sau.",
-  "coverage_plain": [
-    {"i": 0, "p": "Đã phủ bảy phần của nền: sổ chi phí, trần và sẵn sàng, đóng việc, cách ly, màn cài đặt, báo và đối soát, dời hàm và tài liệu — đủ theo mười điểm phạm vi của thiết kế."},
-    {"i": 1, "p": "Mỗi phần được hỏi năm kiểu hỏng: tính sai, không chạy, lọt dữ liệu, vượt tiền, lộ sớm cho người dùng."},
-    {"i": 2, "p": "Mỗi đường vào có phép đo: quản trị qua màn; thành viên và vai «chỉ OKR» qua màn, API, khoá API; máy qua nhịp chạy nền."},
-    {"i": 3, "p": "Đối chiếu ngành: báo cáo chi tiêu theo khoá của AI Gateway, công tắc và bảng mức dùng AI kiểu Atlassian Rovo, Notion AI."},
-    {"i": 4, "p": "Giả định chờ anh gạch: người nhận báo trần là chủ sở hữu và quản trị của không gian làm việc."},
-    {"i": 5, "p": "Giả định chờ anh gạch: trần tính theo tháng giờ Việt Nam; đối soát tính theo ngày quốc tế vì báo cáo Gateway tính vậy."},
-    {"i": 6, "p": "Giả định chờ anh gạch: trần bằng 0 nghĩa là Trợ lý OKR không chạy; không có mức «không giới hạn»."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Phép đo sổ chi phí dùng dữ liệu tự dựng nên không bắt được phiên con của Tác nhân ghi thiếu; hàng việc trong phép đo cũng gieo tay. Đã sửa: thêm một lượt chạy thật trên agent mẫu để lấy sự kiện thật làm dữ liệu thử, và mọi hàng việc đi qua đúng hàm xếp việc."},
-    {"i": 1, "p": "Hai câu đo ngưỡng (phiên mở khi hết trần, việc treo) chưa chạy lần nào và có lỗ: việc treo chưa đóng không bị đếm, phiên hợp lệ làm tháng vượt nhẹ bị đếm oan. Đã sửa câu và thêm phép chạy chúng trên dữ liệu thật với bốn ca ghim."},
-    {"i": 2, "p": "Trần mỗi lời gọi chỉ đo ngoài phiên thật, nên có thể bị ghi đè trong phiên. Đã sửa: đo thêm trong phiên thật và trên mọi bước của lần chạy đầu-cuối."},
-    {"i": 3, "p": "Ca biên tháng không phân biệt được giờ Việt Nam với giờ quốc tế. Đã sửa bằng cặp giờ 00:30 và 06:30 ngày 1, dùng cho cả màn lẫn phép kiểm trần."},
-    {"i": 4, "p": "Chưa có phép đo trạng thái sẵn sàng và dòng đối soát hiện đúng trên màn và qua API. Đã thêm."}
+  "feature_plain": "Quản trị thấy tháng này AI tiêu bao nhiêu cho từng việc, đặt trần tháng cho Trợ lý OKR và bật tắt nó theo việc và theo đơn vị; trợ lý chạy riêng, chỉ đọc OKR, chỉ gửi tới nhà cung cấp cam kết không lưu dữ liệu — người dùng thường chưa thấy gì.",
+  "scope_plain": "Nút góp ý và danh sách đề xuất (lượt 9b), tóm tắt tuần (lượt 9c), hỏi đáp OKR qua chat (lượt 10), model rẻ hơn cho tác tử gốc, trần cho làn nghiên cứu danh bạ, và sửa chỗ đếm thiếu tiền của Tác nhân (gửi lên hãng).",
+  "decisions": [
+    {
+      "id": "E24",
+      "q": "Từ điển và luật dữ liệu đã ghi đủ và đúng điều đã duyệt chưa?",
+      "why": "Hội đồng chấm không đọc được hai tài liệu luật trong gói đầu vào nên để «chưa chắc»; anh tự mở bốn tài liệu và đối chiếu."
+    }
   ],
   "decisions_plain": [
-    {"id": "d-20260927T071248Z-1", "p": "Chọn bật theo từng việc, mỗi việc một phạm vi đơn vị — đổi lại thêm việc thứ ba sau này phải thêm cột."},
-    {"id": "d-20260927T071248Z-2", "p": "Chọn ẩn hai khối mới với người không phải quản trị (lệch luật trang cài đặt là khoá chứ không giấu) — đổi lại thành viên không biết trang có phần AI; xem lại ở 9b."},
-    {"id": "d-20260927T071248Z-3", "p": "KHÔNG làm công cụ nộp tóm tắt ở lượt này — để 9c cùng phần tóm tắt."},
-    {"id": "d-20260927T071248Z-4", "p": "Chọn dựng sẵn một đường chạy trọn cho góp ý (không nút, không API) để phép đo cách ly chạy thật — đổi lại lượt này lớn hơn."},
-    {"id": "d-20260927T071248Z-5", "p": "Chọn thêm tệp ghi sổ vào thư mục hai phiên con của Tác nhân (thuộc hãng) để sổ đếm đủ — đổi lại bản rẽ dày thêm hai tệp, ghi thành chỗ rẽ."},
-    {"id": "d-20260927T071248Z-6", "p": "Chọn hứa «đóng trong 90 giây» cho phiên chết im thay cho «một phút» của lộ trình, vì nhịp chạy nền là mỗi phút — đổi lại chậm hơn tối đa 30 giây."},
-    {"id": "d-20260927T071248Z-7", "p": "Chọn đối soát theo khoá mô hình đang dùng; production chạy không khoá riêng thì màn ghi «chưa đối soát được» — đổi lại production cần một khoá AI Gateway riêng."},
-    {"id": "d-20260927T071248Z-8", "p": "Chọn mô hình Gemini 3.8 Flash cho Trợ lý OKR (cùng production, đã đo giữ kín dữ liệu và cùng giá) — đổi lại bộ nhớ đệm kém chắc hơn bản 3.7."},
-    {"id": "d-20260927T071248Z-9", "p": "Chọn duyệt màn cài đặt trên bản bấm được trước cổng — đổi lại thêm một bản mẫu trong kho."},
-    {"id": "d-20260927T072458Z-10", "p": "Chọn để sổ của phiên con tự biết mình thuộc việc nào theo thư mục, không dựa vào phiên cha — đổi lại mỗi phiên con mới phải khai việc của nó."}
+    {"id": "d-20260927T071248Z-1", "p": "Quản trị chọn phạm vi riêng cho từng việc của trợ lý — đổi lại thêm việc thứ ba là thêm cột dữ liệu."},
+    {"id": "d-20260927T071248Z-2", "p": "Hai khối AI chỉ hiện với quản trị — đổi lại thành viên không biết trang có phần AI."},
+    {"id": "d-20260927T071248Z-3", "p": "KHÔNG làm công cụ nộp tóm tắt ở lượt này, để sang 9c — đổi lại 9c phải kiểm cách ly thêm một công cụ."},
+    {"id": "d-20260927T071248Z-4", "p": "Việc góp ý chạy trọn từ đầu tới cuối nhưng chưa có nút — đổi lại lượt này lớn hơn."},
+    {"id": "d-20260927T071248Z-5", "p": "Sổ chi phí đếm cả hai phiên con của hãng — đổi lại bản rẽ chạm thêm hai tệp của hãng."},
+    {"id": "d-20260927T071248Z-6", "p": "Việc của trợ lý chết im thì đóng trong tối đa 90 giây thay vì một phút — đổi lại chậm hơn lộ trình tối đa 30 giây."},
+    {"id": "d-20260927T071248Z-7", "p": "Đối soát chỉ so với tiền của đúng khoá đang dùng — đổi lại production cần một khoá AI riêng mới đối soát được."},
+    {"id": "d-20260927T071248Z-8", "p": "Trợ lý dùng cùng model với production (Gemini 3.8 Flash) — đổi lại tiết kiệm nhờ bộ nhớ đệm kém chắc hơn."},
+    {"id": "d-20260927T071248Z-9", "p": "Duyệt hai khối mới trên bản mẫu bấm được trước Cổng Phạm vi — đổi lại kho có thêm một bản mẫu."},
+    {"id": "d-20260927T072458Z-10", "p": "Mỗi phiên con tự biết mình thuộc việc nào để ghi sổ — đổi lại thêm phiên con mới phải khai thêm việc."},
+    {"id": "d-20260927T080308Z-12", "p": "Việc của trợ lý giữ chỗ 30 giây và được gia hạn khi phiên còn chạy — đổi lại một bước con dài có thể bị đóng giữa chừng."},
+    {"id": "d-20260927T080308Z-13", "p": "Chặn độ dài mỗi lời gọi model của trợ lý ở 2.000 token — đổi lại phải đo thêm rằng cờ không lưu dữ liệu vẫn đi kèm."},
+    {"id": "d-20260927T080308Z-14", "p": "Báo 80%, 100% và đối soát lệch đi qua Nhắc buổi sáng — đổi lại quản trị chưa nối kênh nào chỉ thấy trên màn."},
+    {"id": "d-20260927T080411Z-15", "p": "Kế hoạch được duyệt khi chủ kho dán lệnh chạy tiếp — đổi lại đoạn viết mã tới chấm máy chạy không dừng."},
+    {"id": "d-20260927T100112Z-16", "p": "Danh mục việc AI đặt ở gói dữ liệu để tránh vòng phụ thuộc — đổi lại nó không nằm cùng gói kiểm dữ liệu."},
+    {"id": "d-20260927T100112Z-17", "p": "Trần và trạng thái sẵn sàng đọc cấu hình có hiệu lực tại lúc mở phiên — đổi lại có hai cách đọc «cấu hình hiện tại»."},
+    {"id": "d-20260927T100112Z-18", "p": "Phép quét «trợ lý không ghi OKR» chỉ soi mã của trợ lý — đổi lại không phủ toàn bộ tác tử."},
+    {"id": "d-20260927T100112Z-19", "p": "Đối soát gọi thẳng báo cáo của Gateway lọc theo khoá, độ lệch tính trên số của sổ — đổi lại phụ thuộc một đường không có trong bộ thư viện."},
+    {"id": "d-20260927T100112Z-20", "p": "Trong phiên OKR, mọi công cụ của tác tử gốc bị thay bằng bản từ chối — đổi lại không chặn được việc gọi lại phiên con."},
+    {"id": "d-20260927T100112Z-21", "p": "Phiên con tìm việc của mình qua phiên gốc — đổi lại phụ thuộc cách đặt mã phiên của phiên bản eve hiện tại."},
+    {"id": "d-20260927T100112Z-22", "p": "Cờ không lưu dữ liệu được gắn vào từng lời gọi model; trước khi vá vài lượt đo đã gửi dữ liệu mẫu (không phải dữ liệu người dùng) thiếu cờ — đổi lại khai báo trên phiên con chỉ còn để quét."},
+    {"id": "d-20260927T100112Z-23", "p": "Thêm một câu dặn trợ lý trả lời ngay để hết trả rỗng (5/8 xuống 0/24) — đổi lại phải đo lại khi đổi model."},
+    {"id": "d-20260927T100112Z-24", "p": "Đối soát thật so từng lượt sinh với Gateway thay vì báo cáo theo giờ — đổi lại không đo phần chi tiêu không ghi bước."},
+    {"id": "d-20260927T100112Z-25", "p": "Tên đối tác mẫu chỉ được xuất hiện khi chép nguyên văn «vì sao lúc này» của Mục tiêu — đổi lại lệch chữ của tiêu chí cách ly."},
+    {"id": "d-20260927T100112Z-26", "p": "Phép đo mô phỏng lúc nhận việc thay vì gọi hàm nhận việc thật — đổi lại không đi qua đúng hàm đó."},
+    {"id": "d-20260927T100112Z-27", "p": "Form cấu hình cũ chỉ lưu sáu trường của nó — đổi lại mỗi lần lưu một khối là một phiên bản mới."},
+    {"id": "d-20260927T112853Z-28", "p": "Vòng chấm 1 bị trả lại: bảng kỳ vọng sổ chi phí viết lại bằng tay, năm bài dò quyền được thêm thời gian — đổi lại thêm loại phiên phải sửa bảng tay."},
+    {"id": "d-20260927T144301Z-29", "p": "Vòng chấm 2 bị trả lại vì bộ kiểm đỏ khi chạy chung với phép đo; chủ kho chọn đổi cách chấm, không sửa mã — đổi lại vòng 3 là vòng cuối."},
+    {"id": "d-20260927T220817Z-30", "p": "Vòng chấm 3 bị trả lại vì hai lỗi màn Cài đặt; chủ kho cho sửa và chấm thêm vòng 4, vượt trần ba vòng — đổi lại vòng 4 nằm ngoài trần của bộ kit."}
   ]
 }
