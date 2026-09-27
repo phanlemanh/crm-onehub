@@ -5,7 +5,7 @@ slug: ro-slack-tac-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-27T02:59:29Z
 design_doc: docs/superpowers/specs/2026-09-27-ro-slack-tac-nhan-design.md
