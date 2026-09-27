@@ -184,3 +184,37 @@ export function useKhaiThayDoi(): (coChu: boolean) => void {
 	useMountEffect(() => () => khai?.(id, false));
 	return React.useCallback((coChu: boolean) => g?.khai(id, coChu), [g, id]);
 }
+
+export function hrefNoiBo(e: MouseEvent): string | null {
+	if (e.defaultPrevented || e.button !== 0) return null;
+	if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return null;
+	if (!(e.target instanceof Element)) return null;
+	const a = e.target.closest("a[href]");
+	if (!(a instanceof HTMLAnchorElement)) return null;
+	if (a.target !== "" && a.target !== "_self") return null;
+	if (a.hasAttribute("download")) return null;
+	if (a.closest("[contenteditable='true']")) return null;
+	const den = new URL(a.href, window.location.href);
+	const day = window.location;
+	if (den.origin !== day.origin) return null;
+	if (den.pathname === day.pathname && den.search === day.search) return null;
+	return `${den.pathname}${den.search}${den.hash}`;
+}
+
+export function useChanLienKet(
+	bat: boolean,
+	chan: (href: string) => void,
+): void {
+	React.useEffect(() => {
+		if (!bat) return;
+		const nghe = (e: MouseEvent) => {
+			const href = hrefNoiBo(e);
+			if (href === null) return;
+			e.preventDefault();
+			e.stopPropagation();
+			chan(href);
+		};
+		document.addEventListener("click", nghe, true);
+		return () => document.removeEventListener("click", nghe, true);
+	}, [bat, chan]);
+}

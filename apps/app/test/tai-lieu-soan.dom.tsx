@@ -148,6 +148,7 @@ const SUA: Vao = {
 };
 
 const HOI_LAI = "Bỏ những gì vừa nhập?";
+const LIEN_KET_RAIL = "/x/okr";
 
 let dangMo: Root[] = [];
 
@@ -178,6 +179,16 @@ async function mo(vao: Vao): Promise<void> {
 		root.render(
 			<QueryClientProvider client={client}>
 				<LocaleProvider locale="vi">
+					<a
+						data-lien-ket-rail=""
+						href={LIEN_KET_RAIL}
+						onClick={(e) => {
+							e.preventDefault();
+							goi.den.push(LIEN_KET_RAIL);
+						}}
+					>
+						Mục tiêu
+					</a>
 					<ManSoan vao={vao} />
 				</LocaleProvider>
 			</QueryClientProvider>,
@@ -251,6 +262,21 @@ function loiDuoiTen(): string | null {
 const guiDuyet = () => nut("Gửi duyệt");
 const chuaDoiHien = () =>
 	document.body.textContent?.includes("Chưa có thay đổi") ?? false;
+
+async function bamLienKet(): Promise<boolean> {
+	const a = document.body.querySelector<HTMLAnchorElement>(
+		"[data-lien-ket-rail]",
+	);
+	if (!a) throw new Error("khong thay lien ket rail");
+	let diTiep = true;
+	await act(async () => {
+		diTiep = a.dispatchEvent(
+			new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }),
+		);
+	});
+	for (let i = 0; i < 4; i += 1) await nhip();
+	return diTiep;
+}
 
 describe("tai-lieu man soan", () => {
 	test("tao-loi: ten trong, bam Gui duyet -> loi duoi o ten, focus o ten, khong goi", async () => {
@@ -327,5 +353,23 @@ describe("tai-lieu man soan", () => {
 		await bam(nut("Huỷ"));
 		expect(document.body.textContent?.includes(HOI_LAI)).toBe(false);
 		expect(goi.den).toEqual(["/ws/tai-lieu/quy-dinh-hoa-hong"]);
+	});
+
+	test("giu-thay-doi: co thay doi, bam lien ket trong app -> hop hoi lai hien, chua dieu huong; Bo thi di toi lien ket", async () => {
+		await mo(SUA);
+		await goNoiDung("x");
+		await bamLienKet();
+		if (!document.body.textContent?.includes(HOI_LAI) || goi.den.length > 0)
+			throw new Error("roi man qua lien ket khong hoi lai");
+
+		await bam(nut("Bỏ"));
+		expect(goi.den).toEqual([LIEN_KET_RAIL]);
+	});
+
+	test("giu-thay-doi doi chung: khong thay doi, bam lien ket -> dieu huong thang, khong hoi", async () => {
+		await mo(SUA);
+		await bamLienKet();
+		expect(document.body.textContent?.includes(HOI_LAI)).toBe(false);
+		expect(goi.den).toEqual([LIEN_KET_RAIL]);
 	});
 });

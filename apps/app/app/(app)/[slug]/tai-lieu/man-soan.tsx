@@ -11,6 +11,7 @@ import {
 } from "@crm/ui/components/field";
 import {
 	GiuContext,
+	useChanLienKet,
 	useGiuGoc,
 	useKhaiThayDoi,
 } from "@crm/ui/components/giu-thay-doi";
@@ -33,7 +34,14 @@ import {
 import { chuanHoa } from "@crm/validation/tai-lieu-markdown";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+	useCallback,
+	useEffect,
+	useId,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import {
 	PageShellContent,
@@ -76,10 +84,15 @@ export function ManSoan({ vao }: { vao: ManSoanVao }) {
 		return () => window.removeEventListener("beforeunload", hoi);
 	}, [coThayDoi]);
 
-	const roi = (toi: string) => {
-		dich.current = toi;
-		giu.onOpenChange(false);
-	};
+	const doiMo = giu.onOpenChange;
+	const roi = useCallback(
+		(toi: string) => {
+			dich.current = toi;
+			doiMo(false);
+		},
+		[doiMo],
+	);
+	useChanLienKet(coThayDoi, roi);
 
 	return (
 		<GiuContext.Provider value={giu.ngucCanh}>
