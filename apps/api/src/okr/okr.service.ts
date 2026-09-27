@@ -1,6 +1,15 @@
 import type { Db, Prisma } from "@crm/db";
+import {
+	chonChuKyHienTai,
+	kyVongTheoNgay,
+	tienDoMucTieu,
+} from "@crm/db/okr-tien-do";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	capDichCanChinh,
+	chuKyDichCanChinh,
+} from "@crm/validation/okr-can-chinh";
 import {
 	type ChuKyInput,
 	ghiDuocOPha,
@@ -67,7 +76,6 @@ import {
 	type Quyen,
 } from "./okr-access.service";
 import { OKR } from "./okr-config";
-import { chonChuKyHienTai, kyVongTheoNgay, tienDoMucTieu } from "./tien-do";
 
 const T = OKR.thongDiep;
 type Tx = Prisma.TransactionClient;
@@ -997,17 +1005,16 @@ export class OkrService {
 			},
 		});
 		if (!nguon) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
-		const hang = HANG_CAP[capMucTieu.parse(nguon.level)];
+		const nguonCanChinh = {
+			level: capMucTieu.parse(nguon.level),
+			cycleId: nguon.cycleId,
+			cycleParentId: nguon.cycle.parentId,
+		};
 		const rows = await this.db.okrObjective.findMany({
 			where: {
 				status: "cong-bo",
-				level: { in: CAP_MUC_TIEU.filter((c) => HANG_CAP[c] < hang) },
-				cycleId: {
-					in: [
-						nguon.cycleId,
-						...(nguon.cycle.parentId ? [nguon.cycle.parentId] : []),
-					],
-				},
+				level: { in: capDichCanChinh(nguonCanChinh.level) },
+				cycleId: { in: chuKyDichCanChinh(nguonCanChinh) },
 			},
 			select: {
 				id: true,

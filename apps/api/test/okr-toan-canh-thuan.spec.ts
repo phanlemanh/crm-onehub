@@ -1,4 +1,9 @@
 import { describe, expect, test } from "bun:test";
+import {
+	type ChuKyNgan,
+	chonChuKyHienTai,
+	kyVongTheoNgay,
+} from "@crm/db/okr-tien-do";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { dienBienKr, tuanCapNhatDau } from "../src/okr/dien-bien";
 import {
@@ -7,11 +12,6 @@ import {
 	soTuanCuaNhom,
 	xepHopTuan,
 } from "../src/okr/hop-tuan";
-import {
-	type ChuKyNgan,
-	chonChuKyHienTai,
-	kyVongTheoNgay,
-} from "../src/okr/tien-do";
 import {
 	type CayGon,
 	gopToanCanh,

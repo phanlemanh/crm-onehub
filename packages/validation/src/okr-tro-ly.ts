@@ -1,72 +1,45 @@
+import {
+	AI_PHAM_VI,
+	KET_QUA_KIEM_SAN_SANG,
+	LY_DO_KHONG_SAN_SANG,
+	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_TRAN,
+	VIEC_TRO_LY,
+} from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
 import { ngayLich } from "./okr-chu-ky";
 
-export const TRO_LY_OKR_TRAN = {
-	chu: {
-		tenMucTieu: 200,
-		tenKr: 200,
-		viSao: 500,
-		lyDo: 200,
-		cauHoi: 200,
-		cauTomTat: 280,
-	},
-	soDongDeXuat: 8,
-	soCauTomTat: 6,
-	soNguonMoiCau: 4,
-	tranThangMacDinhUsd: 9,
-	tranThangToiDaUsd: 20,
-} as const;
-
-export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
+export {
+	AI_PHAM_VI,
+	type AiPhamVi,
+	type CauHinhAi,
+	DON_VI_ONEHUB,
+	type DonViMucTieu,
+	donViDuocBat,
+	KET_QUA_KIEM_SAN_SANG,
+	type KetQuaKiemSanSang,
+	LY_DO_KHONG_SAN_SANG,
+	type LyDoKhongSanSang,
+	phamViCuaViec,
+	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_TRAN,
+	type TroLySanSang,
+	VIEC_TRO_LY,
+	type ViecTroLy,
+} from "@crm/db/okr-tro-ly-danh-muc";
 
 export const viecTroLy = z.enum(VIEC_TRO_LY);
 
-export type ViecTroLy = z.infer<typeof viecTroLy>;
-
-export const AI_PHAM_VI = ["tat", "toan-cong-ty", "danh-sach"] as const;
-
 export const aiPhamVi = z.enum(AI_PHAM_VI);
-
-export type AiPhamVi = z.infer<typeof aiPhamVi>;
-
-export const TRANG_THAI_DE_XUAT = [
-	"cho",
-	"nhan",
-	"sua",
-	"bac",
-	"het-han",
-	"da-sua-theo",
-	"bo-qua",
-] as const;
 
 export const trangThaiDeXuat = z.enum(TRANG_THAI_DE_XUAT);
 
-export const LY_DO_KHONG_SAN_SANG = [
-	"tat",
-	"viec-tat",
-	"don-vi-chua-bat",
-	"het-tran-thang",
-	"het-tran-ngay",
-	"chua-noi-tac-tu",
-	"chua-co-khoa-mo-hinh",
-	"het-tran-gateway",
-] as const;
-
 export const lyDoKhongSanSang = z.enum(LY_DO_KHONG_SAN_SANG);
-
-export type LyDoKhongSanSang = z.infer<typeof lyDoKhongSanSang>;
 
 export const troLySanSang = z.discriminatedUnion("bat", [
 	z.object({ bat: z.literal(true), conLaiUsd: z.number() }),
 	z.object({ bat: z.literal(false), lyDo: lyDoKhongSanSang }),
 ]);
-
-export type TroLySanSang = z.infer<typeof troLySanSang>;
-
-export const KET_QUA_KIEM_SAN_SANG = [
-	"san-sang",
-	"chua-co-khoa-mo-hinh",
-] as const;
 
 export const ketQuaKiemSanSang = z.enum(KET_QUA_KIEM_SAN_SANG);
 

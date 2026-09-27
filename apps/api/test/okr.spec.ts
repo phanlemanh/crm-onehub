@@ -5,11 +5,11 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import { db } from "@crm/db";
+import { chonChuKyHienTai } from "@crm/db/okr-tien-do";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import type { NutCanChinh } from "../src/okr/okr.contracts";
 import { OkrAccessService } from "../src/okr/okr-access.service";
 import { OKR } from "../src/okr/okr-config";
-import { chonChuKyHienTai } from "../src/okr/tien-do";
 import {
 	type AiHoacCookie,
 	bpMoi,

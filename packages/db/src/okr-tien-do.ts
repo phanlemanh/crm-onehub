@@ -1,4 +1,4 @@
-import { soNgayVN } from "@crm/db/onboarding-nhac";
+import { soNgayVN } from "./onboarding-nhac";
 
 export type ChuKyNgan = {
 	id: string;
