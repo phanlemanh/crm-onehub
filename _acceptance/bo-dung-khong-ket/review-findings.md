@@ -1,23 +1,28 @@
 ## Trong hợp đồng
 
-- **Hình dạng 5 (tuyên quét LỚP nhưng chỉ có điểm-case): E6 hứa 'không có chữ tiếng Anh của eve' nhưng chỉ liệt kê hai chuỗi**
-  Phần expected của E6 (dòng 156-157) tuyên bố cả một lớp: không có chữ tiếng Anh nào của eve trên màn. Nhưng nó chỉ kể hai điểm, "output-token limit" và "Approve". Không có ma trận viết trước gồm mọi chuỗi tiếng Anh mà request thật mang theo. Fixture thật apps/agent/test/fixtures/session-limit-that.json, và dòng input.requested trong rang/luong-het-han-muc-that.ndjson mà tác tử giả mới phát lại, có một tập hữu hạn đã biết: nhãn "Approve" và "Stop"; mô tả "Grant a fresh token budget" và "Stop now"; câu prompt ("This session has hit...", "guardrail", "just approve to keep going"); tên tool session_limit_continuation. Với khuôn hiện tại, số assert (2) nhỏ hơn số phần tử của lớp. Chỗ hở này đã lộ ra ở vòng 1. Evidence-report ghi dòng "Session limit continuation" (tên tool eve được định dạng lại) hiện giữa thân hội thoại trong E6-het-han-muc-1440.png. Người chấm vẫn để qua vì "không phải 1 trong 2 chuỗi cấm nêu trong Expected". Nhãn "Stop" và các mô tả option cũng sẽ lọt qua theo cùng cách. Vậy phép đo sẽ không bắt được lời hứa "không lộ chữ eve" khi nó hỏng với bất kỳ chuỗi nào ngoài hai chuỗi đã kể. Vòng này sửa steps của E6 (thêm tác tử giả) nhưng giữ nguyên danh sách hai điểm này.
-  file: `_acceptance/bo-dung-khong-ket/evals.yaml:156`
-  severity: high
-  source: measurement
-  AC: AC-4
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The fake agent sends a stream end marker one past the last event, unlike real eve**
+- **Hiding the session-limit row in the shared toTranscript leaves the record-sheet Agent tab with no sign that the agent is waiting**
+  Người dùng thấy gì: Nếu một cuộc trò chuyện tác nhân ở tab Agent trên trang hồ sơ (không phải màn dựng tác nhân) hết hạn mức phiên, người dùng sẽ thấy khung chat trống như bình thường mà không biết tác nhân đang treo lại, và không có cách nào để trả lời cho nó chạy tiếp.
+  file: `apps/app/lib/agent-transcript.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 — assertion âm tính một mình: đối chứng không chứng minh luồng thật có sinh ra phần session_limit_continuation**
+  Người dùng thấy gì: Nếu sau này bản eve đổi cách sinh câu hỏi hết hạn mức, bộ test đo dòng dấu vết vẫn có thể báo xanh dù tính năng đã hỏng thật, khiến lỗi lọt ra ngoài mà không ai phát hiện qua bộ test này.
+  file: `apps/app/test/het-han-muc.dom.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **The fake agent sends a stream end marker one past the last event, unlike real eve (r2)**
   Người dùng thấy gì: Công cụ đo dùng để chụp bằng chứng có thể không lặp lại đúng hệt cách hội thoại thật kết thúc, nên phần bằng chứng thu được có thể không phản ánh đầy đủ trải nghiệm thật, dù giao diện người dùng thật không bị ảnh hưởng.
   file: `_acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Fake agent reports x-eve-stream-tail-index one past the last event, so every snapshot stalls ~7.75s on empty reconnects**
+- **Fake agent reports x-eve-stream-tail-index one past the last event, so every snapshot stalls ~7.75s on empty reconnects (r2)**
   Người dùng thấy gì: Mỗi lần phép đo mở lại đoạn hội thoại, nó có thể mất thêm vài giây chờ trước khi hiện đúng, nên một ảnh chụp làm bằng chứng có nguy cơ chụp nhằm lúc màn chưa kịp hiện xong, dù người dùng thật không gặp độ trễ này.
   file: `_acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts`
   severity: medium
@@ -52,18 +57,6 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/agent/agent/lib/builder-input.ts`
   severity: medium
   Đề xuất: new-contract
-
-- **Shape 2 (hand-written fixture, no writer→reader round-trip): the answer-bubble test feeds a hand-written {kind, optionId} straight into sessionLimitAnswerLabel (r1)**
-  Người dùng thấy gì: Nếu cách lưu nhãn câu trả lời thay đổi trong tương lai, người dùng có thể thấy lại nhãn tiếng Anh thay vì tiếng Việt mà không phép thử nào phát hiện trước khi phát hành.
-  file: `apps/app/test/het-han-muc.dom.tsx`
-  severity: high
-  Đề xuất: known-limits
-
-- **Shape 4 (negative assertion alone): 'gui loi thi hai nut mo lai' only checks disabled=false and never shows the buttons locked while sending (r1)**
-  Người dùng thấy gì: Nếu khoá hai nút trong lúc gửi bị bỏ sót trong lần sửa sau, người dùng có thể bấm hai lần liên tiếp mà không phép thử nào bắt được.
-  file: `apps/app/test/het-han-muc.dom.tsx`
-  severity: medium
-  Đề xuất: known-limits
 
 - **Shape 2 (hand-written fixture): the dispatch test and the chay-tiep evals build the submission by hand instead of taking the message the API writes (r1)**
   Người dùng thấy gì: Nếu cách hai phần hệ thống trao đổi câu trả lời lệch nhau trong tương lai, lỗi có thể chỉ lộ ra khi người dùng thật gặp phải, vì phép thử hiện không đi qua đường thật.
