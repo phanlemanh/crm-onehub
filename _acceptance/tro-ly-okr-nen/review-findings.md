@@ -1,50 +1,178 @@
-# Review Findings: tro-ly-okr-nen (round 2)
-
 ## Trong hợp đồng
 
-(không có finding nào round này)
+- **The monthly AI cap check rejects valid 2-decimal amounts because of floating-point rounding (8.2, 1.1, 9.2, 2.3...)**
+  file: `packages/validation/src/okr-chuong-trinh.ts:18`
+  severity: high
+  source: bugs
+  AC: AC-10
+  detail: tranThangUsd uses `.refine((n) => Math.round(n * 100) === n * 100)`. In IEEE-754, n*100 is often not an integer even for exact 2-decimal amounts: 8.2*100 = 819.9999999999999, 1.1*100 = 110.00000000000001, 0.29*100 = 28.999999999999996. Measured over 0.00-20.00 in 0.01 steps, 271 of 2001 valid values are rejected, including 1.1, 2.2, 2.3, 4.1, 4.4, 4.6, 4.9, 5.1, 8.2, 8.3, 8.7, 8.8, 9.2, 9.3, 9.7, 9.8, 10.2, 16.1... The schema sits in okrProgram, so it breaks three places: (1) the settings card's docTran (the-tro-ly-okr.tsx:83) returns null → admin types «8,2» and sees «trần không hợp lệ» and Lưu stays disabled; (2) docTranUsd has the same fault; (3) the server's setProgramInput = okrProgram.partial() → 400 even when the client is bypassed. Fix: compare with a tolerance (Math.abs(n*100 - Math.round(n*100)) < 1e-9) or parse the string as integer cents.
+  rationale: AC-10 hứa quản trị bật và lưu thì Chương trình OKR có thêm phiên bản mang đúng các trường AI đã chọn; lỗi làm tròn số khiến việc lưu thất bại ngay bây giờ với một phần lớn giá trị trần hợp lệ.
+
+- **The /settings/okr page switched to fetchQuery for program: a transient error now crashes the whole page instead of showing the retry card**
+  file: `apps/app/app/(app)/[slug]/settings/okr/page.tsx:78`
+  severity: low
+  source: bugs
+  AC: AC-10
+  detail: The old code used prefetchQuery (which swallows errors), so FormCauHinh/TheTroLyOkr showed LoiThe with a Thử lại button when okr.program failed. Now `queryClient.fetchQuery(trpc.okr.program.queryOptions())` throws on error to read canManage, so the whole NoiDung (server component) throws and the user gets Next's error page. The program.isError branch in the-tro-ly-okr.tsx and the error state of FormCauHinh can no longer be reached from the first render. Catch the fetchQuery error (default canManage=false and let the client query handle the error) to keep the old behaviour.
+  rationale: AC-10 nói rõ mọi khối phải có trạng thái tải, rỗng và lỗi; một lỗi tạm thời hiện làm sập cả trang thay vì hiện trạng thái lỗi của khối, trực tiếp làm sai Then này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Assistant status stays on «Checking…» forever when no agent picks up the readiness task**
+- **The 80% / 100% spending-cap alert levels are defined in four places that can drift apart**
+  Người dùng thấy gì: Nếu sau này có người đổi mốc báo 80% hoặc 100% ở một chỗ, phần khác của hệ thống có thể không theo kịp, khiến quản trị nhận nhắc nhở ở một mức phần trăm còn màn cài đặt lại hiển thị mức khác.
+  file: `packages/db/src/ai-chi-phi-danh-muc.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The settings card writes its own parser for the monthly cap and ignores the shared parser in validation**
+  Người dùng thấy gì: Màn cài đặt tự kiểm tra số tiền trần nhập vào theo cách riêng, tách khỏi cách kiểm chung của hệ thống; nếu sau này quy định về cách nhập số tiền đổi, màn này có thể không cập nhật theo.
+  file: `apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The reconciliation `lyDo` schema accepts any string, but only a few coded values are actually stored, and the client decodes them by string prefix**
+  Người dùng thấy gì: Nếu sau này có thêm một lý do đối soát lỗi mới, màn cài đặt có thể lặng lẽ hiển thị nhầm thành «không rõ lý do» mà không ai nhận ra.
+  file: `packages/validation/src/ai-chi-phi.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The cost ledger silently treats an unreadable step event as a step with no usage**
+  Người dùng thấy gì: Nếu công cụ AI nền tảng đổi cách báo mức dùng, sổ chi phí AI có thể lặng lẽ ghi 0 đồng cho mọi lượt gọi mà không có cảnh báo nào, khiến trần chi tiêu không bao giờ bị xem là đã chạm dù thực tế đã vượt.
+  file: `apps/agent/agent/lib/so-chi-phi.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Time units are re-derived by hand instead of from one base, and the OKR lease setting is split across two packages**
+  Người dùng thấy gì: Các mốc thời gian chờ của Trợ lý OKR nằm rải ở nhiều nơi khác nhau trong hệ thống; ai muốn chỉnh thời gian chờ phải tìm đúng từng chỗ, dễ sửa thiếu.
+  file: `apps/agent/agent/lib/okr/config.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **New tunable constants sit next to their first use instead of in the area's existing config module**
+  Người dùng thấy gì: Vài con số làm tròn tiền và cấu hình OKR được viết lặp ở nhiều chỗ khác nhau; nếu một nơi được sửa mà nơi khác không theo, số tiền hiển thị trên các màn có thể lệch nhau.
+  file: `apps/api/src/okr/tro-ly.service.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **The OKR task lease (30 s) is renewed only by a hook on the parent session; the parent's hooks do not fire while the subagent tro_ly_okr runs → the task is closed «hong:het-lease» mid-run and nop_de_xuat refuses**
+  Người dùng thấy gì: Có nguy cơ Trợ lý OKR đã làm xong việc góp ý và tốn chi phí AI, nhưng hệ thống lại coi việc đó là hết hạn và huỷ bỏ, khiến đề xuất bị mất mà quản trị không biết vì sao.
+  file: `apps/agent/agent/hooks/okr-uy-quyen.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **The «key ready» check sticks: after the model key is added, Trợ lý OKR stays blocked at «chua-co-khoa-mo-hinh» until an admin turns AI off and on again**
+  Người dùng thấy gì: Sau khi bộ phận kỹ thuật bổ sung khoá mô hình AI, màn cài đặt vẫn có thể tiếp tục báo «chưa có khoá mô hình» cho tới khi có người vào tắt rồi bật lại Trợ lý OKR, dù khoá đã sẵn sàng.
+  file: `packages/db/src/okr-tro-ly.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **ketQuaKiemGanNhat throws on any outcome outside the list (e.g. RETIRED_OUTCOME) → readiness, okr.aiChiTieu and every OKR task all break**
+  Người dùng thấy gì: Trong một tình huống rất hiếm, toàn bộ màn Trợ lý OKR và Sổ chi phí AI có thể báo lỗi cho tới khi có người tắt rồi bật lại Trợ lý OKR.
+  file: `packages/db/src/okr-tro-ly.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **chayDoiSoat: the catch covers the DB writes after the Gateway call succeeded → a correct «khop/lech» row is overwritten as «khong-doi-soat-duoc: loi-gateway:PrismaClient…»**
+  Người dùng thấy gì: Nếu có một sự cố kỹ thuật nhỏ ngay sau khi đối soát tháng đã tính đúng, kết quả đúng có thể bị ghi đè thành «Gateway lỗi», khiến quản trị nhìn thấy báo lỗi đối soát dù tháng đó thực ra khớp.
+  file: `apps/agent/agent/lib/ai-doi-soat.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 4 (âm tính một mình): E8 chấm «đếm 0» ở lượt okr mà không ghim lượt hook đứng một mình. Chính lượt đó đếm 1**
+  Người dùng thấy gì: Có một phép đo được dùng để chứng minh việc chặn công cụ trước khi chạy hoạt động đúng, nhưng cách đo hiện tại chưa chắc thật sự chứng minh được điều đó.
+  file: `_acceptance/tro-ly-okr-nen/rang/hook-chan-truoc.mjs`
+  severity: high
+  Đề xuất: new-contract
+
+- **Hình dạng 2 (fixture viết tay): E18 «hàng cấu hình cũ sau migration» là object viết tay chép sẵn mặc định mới**
+  Người dùng thấy gì: Chưa có bằng chứng độc lập rằng một chương trình OKR cũ, sau khi nâng cấp, thực sự hiện đúng các giá trị mặc định đã hứa.
+  file: `packages/validation/test/okr-tro-ly.spec.ts`
+  severity: high
+  Đề xuất: new-contract
+
+- **Hình dạng 2 (fixture viết tay): cấu hình AI gieo bằng db.create với version âm và createdAt tự đặt, đúng khuôn bộ đọc sắp theo createdAt**
+  Người dùng thấy gì: Vài phép đo dựng dữ liệu thử theo cách không đi qua đường ghi thật của hệ thống, nên chưa chắc phản ánh đúng những gì xảy ra khi dùng thật.
+  file: `apps/agent/test/support/tro-ly-gieo.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (fixture viết tay): thân báo cáo Gateway giả mang đúng khuôn `results[].total_cost` của bộ đọc, và không lượt thật nào đi qua bộ đọc này**
+  Người dùng thấy gì: Phép đo đối soát tháng dùng một báo cáo giả khớp sẵn với cách đọc của hệ thống; nếu báo cáo thật từ AI Gateway sau này có dạng khác, phép đo này sẽ không phát hiện ra.
+  file: `apps/agent/test/ai-doi-soat.integration.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (fixture viết tay): ô okr.tom-tat của E2 tiêm tay thuộc tính okrViec vào ngữ cảnh phiên con, khác bản ghi thật**
+  Người dùng thấy gì: Phép đo cho việc phân loại tóm tắt tuần gán sẵn một thông tin mà hệ thống thật chưa chắc truyền được, nên chưa có bằng chứng chắc chắn việc phân loại này hoạt động đúng trong thực tế.
+  file: `apps/agent/test/so-chi-phi.integration.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): nửa «06:30 ngày 1 tháng sau KHÔNG tính» của cặp biên E13 không thể đỏ, vì đã bị cắt tại thời điểm hiện tại**
+  Người dùng thấy gì: Một phần của phép đo về ranh giới thời gian tháng không thể thật sự phát hiện lỗi vì cách tính đã loại bỏ tình huống đó từ trước, nên nửa phép đo này chưa chứng minh được điều nó hứa.
+  file: `apps/api/test/tro-ly-okr-chi-tieu.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): tập tool của phiên con và phép «không lọt Zeta» trong E9 xanh cả khi rỗng, còn chiều đỏ là tự kiểm trên mảng viết tay**
+  Người dùng thấy gì: Phép đo kiểm tra rằng phiên phụ không gọi nhầm dữ liệu ngoài phạm vi vẫn báo đạt cả khi phiên đó không làm gì cả, nên chưa chắc chứng minh được điều đó.
+  file: `apps/agent/evals/okr/cach-ly.eval.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 5 (tuyên quét lớp, chỉ soi tầng ngoài): kiểm «ketQuaTroLy không có chuỗi tự do» chỉ nhìn `type` ở tầng đầu, bỏ qua anyOf của trường nullable**
+  Người dùng thấy gì: Phép đo kiểm tra kết quả trả về không chứa chữ tự do chỉ nhìn lớp ngoài cùng, nên có thể bỏ sót một trường ẩn bên trong nếu sau này trường đó đổi dạng.
+  file: `apps/agent/test/okr-chuyen-tiep.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 2 (fixture viết tay): lượt nhận việc (claim) và lượt mở phiên được giả bằng db.agentTask.update, ghi đúng các cột bộ đọc cần**
+  Người dùng thấy gì: Vài phép đo về việc nhận và mở một tác vụ tự dựng sẵn dữ liệu thay vì đi qua đường nhận việc thật, nên chưa chắc phản ánh đúng thực tế khi hệ thống nhận việc.
+  file: `apps/agent/test/duong-do-tro-ly.integration.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+CARRIED (từ round trước, tệp không đổi nên round này không chấm lại):
+
+- **Assistant status stays on «Checking…» forever when no agent picks up the readiness task (r2)**
   Người dùng thấy gì: Màn Cài đặt có thể hiện «Đang kiểm tra…» mãi mãi thay vì báo đúng lý do (ví dụ chưa nối được tác tử), khiến quản trị không biết chắc Trợ lý OKR có dùng được hay không.
   file: `apps/api/src/okr/okr.service.ts`
   severity: high
   Đề xuất: known-limits
 
-- **E15-network.txt claims more than the script captured**
+- **E15-network.txt claims more than the script captured (r2)**
   Người dùng thấy gì: Báo cáo bằng chứng nói không có yêu cầu mạng lạ nào trong bước Lưu, nhưng cách đo chỉ nhìn đúng một loại yêu cầu nên không thể phát hiện nếu thật ra có vấn đề.
   file: `_acceptance/tro-ly-okr-nen/evidence/E15-network.txt`
   severity: medium
   Đề xuất: known-limits
 
-- **Member-page check swallows the load timeout and passed on a page that had not finished loading**
+- **Member-page check swallows the load timeout and passed on a page that had not finished loading (r2)**
   Người dùng thấy gì: Bằng chứng «thành viên thường không thấy các khối chỉ-quản-trị» có thể đã tính là đạt dù trang thực ra bị lỗi hoặc chưa tải xong, nên chưa chắc đã kiểm đúng điều cần kiểm.
   file: `_acceptance/tro-ly-okr-nen/rang/man-cai-dat.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **E25 no longer refreshes the fixture E2 reads, but evals.yaml still says it does**
+- **E25 no longer refreshes the fixture E2 reads, but evals.yaml still says it does (r2)**
   Người dùng thấy gì: Tệp dữ liệu mẫu dùng để kiểm chi phí AI có thể dần lệch với dữ liệu thật mà không ai nhận ra, vì tài liệu nói có một bài kiểm sẽ tự làm mới nó nhưng thực ra không còn làm nữa.
   file: `_acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 2 (fixture không round-trip): E2 đọc một fixture đã đóng băng, E25 không còn làm mới nó**
+- **Hình dạng 2 (fixture không round-trip): E2 đọc một fixture đã đóng băng, E25 không còn làm mới nó (r2)**
   Người dùng thấy gì: Bài kiểm sổ chi phí có thể tiếp tục báo xanh dựa trên một bản dữ liệu mẫu cũ, dù cách hệ thống thật ghi sổ đã thay đổi, mà không ai biết hai bên đã lệch nhau.
   file: `_acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs`
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 5 (tuyên quét lớp nhưng trục phiên con là danh sách tay): ma-tran-viec không rút từ SUBAGENT_CO_SO × VIEC_TRO_LY**
+- **Hình dạng 5 (tuyên quét lớp nhưng trục phiên con là danh sách tay): ma-tran-viec không rút từ SUBAGENT_CO_SO × VIEC_TRO_LY (r2)**
   Người dùng thấy gì: Nếu sau này có thêm một việc trợ lý mới hay một loại phiên con mới, hệ thống có thể âm thầm tính sai chi phí của việc đó vào nhóm khác mà không ai được cảnh báo.
   file: `packages/validation/test/ai-chi-phi.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (khẳng định âm không thể đỏ): «request duy nhất là POST okr.setProgram» đo qua bộ lọc chỉ nhận setProgram**
+- **Hình dạng 4 (khẳng định âm không thể đỏ): «request duy nhất là POST okr.setProgram» đo qua bộ lọc chỉ nhận setProgram (r2)**
   Người dùng thấy gì: Bằng chứng nói chỉ có đúng một yêu cầu mạng xảy ra khi Lưu, nhưng cách đo chỉ nhìn một loại yêu cầu nên câu đó luôn đúng bất kể thực tế — không phải bằng chứng thật rằng mạng sạch.
   file: `_acceptance/tro-ly-okr-nen/evidence/E15-network.txt`
   severity: low
@@ -182,4 +310,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 2/7 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-nen/evidence/E15-network.txt) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 2/21 lỗi rơi vào file không bộ đo nào phủ (packages/db/src/ai-chi-phi-danh-muc.ts, apps/agent/test/support/tro-ly-gieo.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

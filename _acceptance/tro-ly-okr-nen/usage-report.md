@@ -91,3 +91,31 @@ wall: 998s
 - **claude-opus-5-5**: 3 agent · 57 calls · out 29,652 · in 114 · cache_read 5,918,510 · cache_create 299,589
 - **claude-haiku-4-5-20251001**: 7 agent · 15 calls · out 7,675 · in 134 · cache_read 555,607 · cache_create 217,126
 
+### S4 round 3 — wf_d266f0a7-923 (12 agent, 161,826 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 36,754 | 4 | 124,267 | 382 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 62 | 35,617 | 124 | 10,307,027 | 675 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 2 | 32,510 | 4 | 81,090 | 395 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 34 | 27,002 | 68 | 5,054,426 | 374 |
+| [Workflow harness — user request] The harness re | claude-opus-5-5 | 17 | 15,205 | 34 | 2,057,931 | 195 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 9 | 4,829 | 18 | 668,184 | 171 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 9 | 3,198 | 18 | 606,846 | 67 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 3 | 1,816 | 26 | 48,666 | 508 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 6 | 1,703 | 50 | 293,830 | 29 |
+| [Workflow harness — user request] The harness re | claude-sonnet-5 | 4 | 1,608 | 8 | 218,562 | 24 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 968 | 18 | 75,815 | 27 |
+| [Workflow harness — user request] The harness re | claude-haiku-4-5-20251001 | 2 | 616 | 18 | 75,813 | 12 |
+
+
+wall: 1654s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| [Workflow harness — user request] The harness re | 12 | 161,826 | 19,612,457 | 1654 | 14:43:35 | 15:11:09 |
+
+- **claude-sonnet-5**: 5 agent · 26 calls · out 78,899 · in 52 · cache_read 1,698,949 · cache_create 435,750
+- **claude-opus-5-5**: 3 agent · 113 calls · out 77,824 · in 226 · cache_read 17,419,384 · cache_create 575,247
+- **claude-haiku-4-5-20251001**: 4 agent · 13 calls · out 5,103 · in 112 · cache_read 494,124 · cache_create 198,613
+
