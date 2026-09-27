@@ -578,6 +578,122 @@ the backend factory** so it cannot be forgotten per session. Costs nothing —
 **Never give the sandbox `DATABASE_URL`.** CRM access is authored tools. A shell with
 credentials and network is exfiltration-shaped; with neither it is a text processor.
 
+## Khi nào thêm mã, `tool`, `skill`, `subagent` hay Tác nhân
+
+Chốt 2026-09-27 (Manh Phan). Mục này là luật cho mọi việc AI mới trong
+`apps/agent`. Bằng chứng nền:
+`docs/reports/2026-09-26-tro-ly-okr/tac-nhan-hien-nay.md` (PR #165).
+
+### Tên dùng trong mục này
+
+| Tên | Là gì | Ở đâu |
+| --- | --- | --- |
+| **Mã** | Hàm tính tất định, không gọi model | `agent/lib/`, `@crm/*` |
+| **`tool`** | Một cửa đọc hoặc ghi có kiểu. Quyền nằm ở đây | `agent/tools/`, `agent/subagents/<tên>/tools/` |
+| **`skill`** | Cách làm hoặc kiến thức, nạp vào ngữ cảnh khi cần | `agent/skills/` |
+| **`subagent`** | Một `subagent` khai báo của eve: model, `tool`, sandbox, `limits` và hook riêng, không thừa kế gì từ agent gốc | `agent/subagents/<tên>/` |
+| **eve `connection`** | Một họ `tool` từ xa, qua MCP hoặc OpenAPI. Kho chưa dùng | `agent/connections/` |
+| **Agent gốc** | Agent chính; người dùng gọi nó là **trợ lý AI** | `agent/agent.ts` |
+| **Tác nhân** | Việc tự động người dùng tự ghép trong CRM, chạy trên `agent_runner` | mục «Team-agent builder and runner» |
+| **Ranh giới** | Bộ bốn điều: phạm vi dữ liệu được đọc; nơi dữ liệu được gửi tới (nhà cung cấp model, kênh ngoài); trần tiền; ai được xem kết quả | — |
+
+- «Kết nối» Gmail, Lịch, Slack ở `/settings/connections` là tài khoản đã uỷ quyền.
+  Nó **không phải** eve `connection`. Một kết nối chỉ thành nguồn dữ liệu khi có
+  `tool` đọc nó.
+- Không dùng «connector», «plugin» hay «bot» cho bất kỳ thứ nào ở trên.
+
+### Thứ tự quyết định
+
+Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
+
+1. **Tính được bằng luật không?** → Mã.
+2. **Ranh giới có khác với agent đang nhận việc không?** → `subagent` mới.
+3. **Chỉ thiếu một nguồn dữ liệu hay một hành động, trong cùng ranh giới?** →
+   `tool`, gắn vào agent đang có ranh giới đó.
+4. **Chỉ thiếu cách làm hay kiến thức?** → `skill`.
+5. **Người dùng muốn tự đặt một việc lặp lại, trên dữ liệu và hành động đã có trong
+   danh mục của Tác nhân?** → Tác nhân. Đây là cấu hình, không cần mã mới.
+
+### Luật
+
+1. **Việc tính được thì là mã, không phải model.** Ví dụ: phát hiện KR trượt, KR
+   im, khoảng nghỉ giữa hai lần báo, mọi con số. Model chỉ viết chữ diễn giải cho
+   kết quả mã đã tính. Con số model viết ra phải được mã kiểm lại trước khi ghi.
+
+2. **Ranh giới khác thì phải là một `subagent` khác.**
+   - `tool` của `subagent` đó chỉ gồm đúng các cửa nó được dùng.
+   - Mọi `tool` dựng sẵn không cần đều bị tắt; sandbox để `deny-all`.
+   - Model, cờ ZDR và `limits` đặt cố định ở cấp `subagent`. **Không đọc model từ
+     `AppSetting`**: đọc hỏng thì rơi về model mặc định, và model đó không mang cờ
+     ZDR.
+   - Tiền lệ: `agent_builder`, `agent_runner`, và `tro_ly_okr` của lượt 9a.
+
+3. **Không tạo `subagent` khi ranh giới không đổi.** Mỗi tầng thêm một phiên model.
+   N0 đo được bước chuyển tiếp ở gốc tốn $0,007–0,018 mỗi việc, mà không thêm ranh
+   giới nào.
+
+4. **Quyền nằm ở `tool`, không bao giờ ở lời dặn.**
+   - Mỗi `tool` tự kiểm purpose và quyền trong `execute`. Việc ghi nhạy cảm mang
+     policy `approval`.
+   - Một câu cấm trong `skill` hay `instructions` **không** thay được một `tool`
+     thiếu hoặc một kiểm quyền thiếu.
+   - Bằng chứng 27/09: bộ dựng Tác nhân được dặn không hứa năng lực không có, vẫn
+     hứa đọc Mục tiêu và KR, và Tác nhân vẫn được Đưa vào chạy.
+
+5. **`skill` không bao giờ mang quyền hay ranh giới.** Theo eve: *«Loading a skill
+   adds instructions, never a new execution surface»*
+   (`apps/agent/node_modules/eve/docs/skills.mdx`). `skill` chỉ nâng chất lượng việc
+   agent đã được phép làm.
+
+6. **Khuôn của `tool` và `outputSchema` không có kiểu đệ quy.** Không dùng
+   `z.json()` hay `z.lazy()` ở đầu vào model thấy. Model Google từ chối cả lời gọi,
+   và phiên con hỏng ngay ở bước đầu.
+   - Bằng chứng: `agent_runner/tools/finish_run.ts` làm hỏng mọi lượt Tác nhân trên
+     Gemini 3.7 và 3.8.
+   - Mỗi `subagent` mới phải có test ghim rằng mọi khuôn của nó chuyển được sang
+     JSON Schema không có vòng `$ref`.
+
+7. **Việc hỏng phải hiện là hỏng.** Agent gốc không hỏng khi `subagent` hỏng (N0).
+   - Đóng việc theo `isError` của `action.result`, không chờ `turn.failed`.
+   - Không được ghi «xong» cho một việc mà `subagent` chưa nộp kết quả.
+
+8. **Mọi `subagent` mới có sổ chi phí của chính nó.** Hook của agent gốc không chạy
+   trong phiên con. `AgentRun.costUsd` hôm nay chỉ ghi được 21–46% tiền thật của một
+   lượt vì thiếu hook này.
+
+9. **eve `connection` chỉ gắn vào agent mà mọi `tool` nó lộ ra đều nằm trong ranh
+   giới của agent đó.**
+   - Không gắn một eve `connection` vào agent gốc chỉ để dùng một `tool` trong số
+     đó.
+   - Muốn mở CRM ra ngoài bằng MCP thì chỉ làm khi có số đo đòi, như lộ trình Trợ lý
+     OKR đã ghi.
+
+10. **Tác nhân là cấu hình của người dùng, không phải đơn vị mở rộng của sản
+    phẩm.**
+    - Tính năng AI của sản phẩm không dựng thành Tác nhân.
+    - Muốn Tác nhân làm thêm một loại việc thì thêm vào danh mục của nó, tối thiểu ở
+      các chỗ sau: `tool` trong `agent_runner`; loại mới trong
+      `packages/validation/src/agent-manifest.ts` và
+      `subagents/agent_builder/lib/draft-input.ts`; ánh xạ trong
+      `lib/agent-actions.ts`; mô tả trong `inspect_context`; kiểm lúc chạy trong
+      `lib/run-runtime.ts`. Không bao giờ chỉ bằng lời dặn.
+    - Yêu cầu nằm ngoài danh mục thì bộ dựng phải nói không làm được. Hôm nay bộ dựng
+      chưa làm điều này; đó là một lỗi cần vá, không phải cách dùng.
+
+11. **Dữ liệu OKR không vào Tác nhân** cho tới khi có miền thứ hai và một `tool` đọc
+    OKR có ranh giới riêng. Đây là bước «rút khung chung» của
+    `docs/plan/lo-trinh-tro-ly-okr.md`.
+
+### Áp dụng hôm nay
+
+| Việc | Viên gạch | Theo luật |
+| --- | --- | --- |
+| Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
+| Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
+| Trợ lý OKR (9b, 9c) | `subagent` `tro_ly_okr`, cộng `skill` phương pháp OKR, cộng `tool` chỉ đọc OKR, cộng mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
+| Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
+| Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
+
 ## Team-agent builder and runner
 
 `agent_builder` and `agent_runner` are declared subagents with independent
