@@ -29,7 +29,7 @@ import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { cn } from "@crm/ui/lib/utils";
 import { type ReactNode, useEffect, useState } from "react";
 import { PageShellTitle } from "@/components/page-shell";
-import { NHOM, TRANG } from "./du-lieu";
+import { LOAI_TRANG, type PhamVi, TRANG } from "./du-lieu";
 
 export type Muc = "tai-lieu" | "chat";
 
@@ -135,9 +135,9 @@ function TimNhanh({ moSan }: { moSan: boolean }) {
 						<CommandEmpty>
 							Không có trang nào khớp. Câu hỏi này sẽ vào hàng «chưa có trang».
 						</CommandEmpty>
-						{NHOM.map((n) => (
+						{LOAI_TRANG.map((n) => (
 							<CommandGroup heading={n.nhan} key={n.id}>
-								{TRANG.filter((t) => t.nhom === n.id).map((t) => (
+								{TRANG.filter((t) => t.loai === n.id).map((t) => (
 									<CommandItem
 										key={t.id}
 										onSelect={() => setMo(false)}
@@ -165,12 +165,14 @@ function boDau(chu: string): string {
 }
 
 export function DauKho({
+	phamVi,
 	tab,
 	soChoDuyet,
 	onTab,
 	hanhDong,
 	moTimNhanh = false,
 }: {
+	phamVi: PhamVi;
 	tab: TabKho | null;
 	soChoDuyet: number;
 	onTab: (tab: TabKho) => void;
@@ -182,7 +184,7 @@ export function DauKho({
 			<div className="flex flex-wrap items-center gap-3">
 				<PageShellTitle>Tài liệu</PageShellTitle>
 				<div className="ml-auto flex items-center gap-2">
-					<TimNhanh moSan={moTimNhanh} />
+					{phamVi === "day-du" ? <TimNhanh moSan={moTimNhanh} /> : null}
 					{hanhDong}
 				</div>
 			</div>
@@ -203,8 +205,12 @@ export function DauKho({
 							</Badge>
 						) : null}
 					</TabsTrigger>
-					<TabsTrigger value="nguon">Nguồn</TabsTrigger>
-					<TabsTrigger value="suc-khoe">Sức khoẻ</TabsTrigger>
+					{phamVi === "day-du" ? (
+						<>
+							<TabsTrigger value="nguon">Nguồn</TabsTrigger>
+							<TabsTrigger value="suc-khoe">Sức khoẻ</TabsTrigger>
+						</>
+					) : null}
 				</TabsList>
 			</Tabs>
 		</div>

@@ -1,111 +1,194 @@
-export type Nhom = "quy-dinh" | "chinh-sach" | "quy-trinh" | "bieu-mau";
+export type PhamVi = "luot-1" | "day-du";
 
-export const NHOM: { id: Nhom; nhan: string }[] = [
+export type LoaiTrang = "quy-dinh" | "chinh-sach" | "quy-trinh" | "bieu-mau";
+
+export const LOAI_TRANG: { id: LoaiTrang; nhan: string }[] = [
 	{ id: "quy-dinh", nhan: "Quy định" },
 	{ id: "chinh-sach", nhan: "Chính sách" },
 	{ id: "quy-trinh", nhan: "Quy trình" },
 	{ id: "bieu-mau", nhan: "Biểu mẫu" },
 ];
 
-export function nhanNhom(id: Nhom): string {
-	return NHOM.find((n) => n.id === id)?.nhan ?? id;
+export function nhanLoai(id: LoaiTrang): string {
+	return LOAI_TRANG.find((n) => n.id === id)?.nhan ?? id;
 }
+
+export const DON_VI: { id: string; nhan: string }[] = [
+	{ id: "kinh-doanh", nhan: "Phòng Kinh doanh" },
+	{ id: "van-hanh", nhan: "Phòng Vận hành" },
+	{ id: "cham-soc", nhan: "Chăm sóc khách hàng" },
+	{ id: "cong-nghe", nhan: "Phòng Công nghệ" },
+	{ id: "tai-chinh", nhan: "Phòng Tài chính" },
+	{ id: "nhan-su", nhan: "Phòng Nhân sự" },
+];
+
+export const CHU_TRANG_CHON: { id: string; nhan: string }[] = [
+	{ id: "ban", nhan: "Bạn" },
+	{ id: "ha", nhan: "Nguyễn Thu Hà" },
+	{ id: "vinh", nhan: "Lê Quang Vinh" },
+	{ id: "duc", nhan: "Trần Minh Đức" },
+];
 
 export type TrangMau = {
 	id: string;
 	ten: string;
-	nhom: Nhom;
-	nguoiGiu: string;
+	loai: LoaiTrang;
+	chuTrang: string;
+	donVi: string | null;
 	pham: string;
 	phienBan: number;
-	capNhat: string;
-	coDeXuat: boolean;
+	duyetLuc: string;
 };
 
 export const TRANG: TrangMau[] = [
 	{
 		id: "hoa-hong",
 		ten: "Chính sách hoa hồng cho công ty đối tác",
-		nhom: "chinh-sach",
-		nguoiGiu: "Nguyễn Thu Hà",
+		loai: "chinh-sach",
+		chuTrang: "Nguyễn Thu Hà",
+		donVi: "Phòng Kinh doanh",
 		pham: "Toàn công ty",
 		phienBan: 5,
-		capNhat: "22/09",
-		coDeXuat: true,
+		duyetLuc: "01/07/2026",
 	},
 	{
 		id: "30-ngay",
 		ten: "Đưa công ty mới vào guồng trong 30 ngày",
-		nhom: "quy-trinh",
-		nguoiGiu: "Lê Quang Vinh",
+		loai: "quy-trinh",
+		chuTrang: "Lê Quang Vinh",
+		donVi: "Phòng Vận hành",
 		pham: "Toàn công ty",
 		phienBan: 3,
-		capNhat: "20/09",
-		coDeXuat: false,
+		duyetLuc: "20/09/2026",
 	},
 	{
 		id: "khieu-nai",
 		ten: "Xử lý khiếu nại của cá nhân",
-		nhom: "quy-trinh",
-		nguoiGiu: "Trần Minh Đức",
+		loai: "quy-trinh",
+		chuTrang: "Trần Minh Đức",
+		donVi: "Chăm sóc khách hàng",
 		pham: "Toàn công ty",
 		phienBan: 2,
-		capNhat: "18/09",
-		coDeXuat: true,
+		duyetLuc: "18/09/2026",
 	},
 	{
 		id: "bao-mat",
 		ten: "Bảo mật dữ liệu khách hàng",
-		nhom: "quy-dinh",
-		nguoiGiu: "Phạm Ngọc Anh",
+		loai: "quy-dinh",
+		chuTrang: "Phạm Ngọc Anh",
+		donVi: "Phòng Công nghệ",
 		pham: "Toàn công ty",
 		phienBan: 4,
-		capNhat: "02/09",
-		coDeXuat: false,
+		duyetLuc: "02/09/2026",
 	},
 	{
 		id: "zalo",
 		ten: "Dùng Zalo khi làm việc với đối tác",
-		nhom: "quy-dinh",
-		nguoiGiu: "Phạm Ngọc Anh",
+		loai: "quy-dinh",
+		chuTrang: "Phạm Ngọc Anh",
+		donVi: "Phòng Kinh doanh",
 		pham: "Toàn công ty",
 		phienBan: 1,
-		capNhat: "28/05",
-		coDeXuat: true,
+		duyetLuc: "28/05/2026",
 	},
 	{
 		id: "duyet-chi",
 		ten: "Duyệt chi dưới 20 triệu",
-		nhom: "quy-trinh",
-		nguoiGiu: "Nguyễn Thu Hà",
+		loai: "quy-trinh",
+		chuTrang: "Nguyễn Thu Hà",
+		donVi: "Phòng Tài chính",
 		pham: "Chỉ phòng Tài chính",
 		phienBan: 2,
-		capNhat: "11/09",
-		coDeXuat: false,
+		duyetLuc: "11/09/2026",
 	},
 	{
 		id: "nghi-phep",
 		ten: "Nghỉ phép năm",
-		nhom: "chinh-sach",
-		nguoiGiu: "Vũ Thanh Mai",
+		loai: "chinh-sach",
+		chuTrang: "Vũ Thanh Mai",
+		donVi: "Phòng Nhân sự",
 		pham: "Toàn công ty",
 		phienBan: 6,
-		capNhat: "01/08",
-		coDeXuat: false,
+		duyetLuc: "01/08/2026",
 	},
 	{
 		id: "hop-dong",
 		ten: "Hợp đồng hợp tác mẫu",
-		nhom: "bieu-mau",
-		nguoiGiu: "Lê Quang Vinh",
+		loai: "bieu-mau",
+		chuTrang: "Lê Quang Vinh",
+		donVi: null,
 		pham: "Toàn công ty",
 		phienBan: 2,
-		capNhat: "15/07",
-		coDeXuat: false,
+		duyetLuc: "15/07/2026",
 	},
 ];
 
 export const [TRANG_DANG_DOC] = TRANG as [TrangMau, ...TrangMau[]];
+
+export const TRANG_MOI: TrangMau = {
+	id: "ho-so-moi",
+	ten: "Tiếp nhận hồ sơ cá nhân mới",
+	loai: "quy-trinh",
+	chuTrang: "Nguyễn Thu Hà",
+	donVi: "Chăm sóc khách hàng",
+	pham: "Toàn công ty",
+	phienBan: 0,
+	duyetLuc: "",
+};
+
+export const THAN_TRANG_MOI = `## Mục đích
+
+Quy trình này giúp mọi người tiếp nhận hồ sơ của một cá nhân mới theo cùng một cách, để không sót giấy tờ và khách **không phải nộp lại lần hai**.
+
+## Các bước
+
+1. Kiểm tra giấy tờ tuỳ thân còn hạn.
+2. Chụp và tải hồ sơ lên CRM ngay trong ngày.
+3. Gửi tin nhắn xác nhận cho khách.
+
+## Giấy tờ cần có
+
+| Giấy tờ | Bản gốc | Bản sao |
+| --- | --- | ---: |
+| Căn cước công dân | Xem tại chỗ | 1 |
+| Giấy xác nhận cư trú | Không cần | 1 |
+
+## Lưu ý
+
+- Hồ sơ thiếu giấy tờ thì *chưa* tạo tài khoản cho khách.
+- Hỏi trưởng nhóm khi giấy tờ có dấu hiệu bị sửa.`;
+
+export const THAN_TRANG_LUOT_1 = `## Áp dụng cho ai
+
+Mọi công ty đối tác đã ký hợp đồng hợp tác và đã qua 30 ngày đầu. Công ty còn trong 30 ngày đầu hưởng mức của tầng 1, bất kể doanh số.
+
+## Mức hoa hồng theo tầng
+
+| Tầng | Doanh số quý | Hoa hồng |
+| --- | --- | ---: |
+| Tầng 1 | dưới 2 tỷ | 0,8% |
+| Tầng 2 | 2 – 10 tỷ | 1,2% |
+| Tầng 3 | trên 10 tỷ | 1,6% |
+
+Tầng được xét lại vào **ngày làm việc đầu tiên của mỗi quý**, theo doanh số quý trước.
+
+### Ví dụ
+
+Công ty ở tầng 2 có giao dịch 3 tỷ được xác nhận: hoa hồng là 3 tỷ × 1,2% = **36 triệu**.
+
+## Khi nào chi
+
+1. Giao dịch được xác nhận trên nền tảng.
+2. Phòng Tài chính đối soát trong 5 ngày làm việc.
+3. Chi vào ngày 15 của tháng kế tiếp.
+
+Giao dịch chưa đối soát xong trước ngày 10 thì chuyển sang kỳ chi sau.
+
+## Không áp dụng
+
+- Giao dịch bị huỷ trong thời gian cam kết.
+- Giao dịch giữa hai đối tác cùng chủ sở hữu.
+- Thưởng theo quý.`;
 
 export const THAN_TRANG = `## Áp dụng cho ai
 
@@ -244,13 +327,13 @@ export const LICH_SU = [
 	{
 		ban: 5,
 		ai: "Máy soạn · Nguyễn Thu Hà duyệt",
-		khi: "22/09",
+		khi: "01/07",
 		vi: "Thêm mục Không áp dụng theo biên bản 15-05",
 	},
 	{
 		ban: 4,
 		ai: "Nguyễn Thu Hà sửa",
-		khi: "03/07",
+		khi: "12/06",
 		vi: "Đổi ngày chi từ 10 sang 15",
 	},
 	{
@@ -281,6 +364,13 @@ export type KhangDinhMau = {
 	coSo: boolean;
 };
 
+export type DoanDoi = { loai: "giu" | "bo" | "them"; chu: string };
+
+export type KhoiTrinhBay =
+	| { id: string; the: "h2"; doan: DoanDoi[] }
+	| { id: string; the: "p"; doan: DoanDoi[] }
+	| { id: string; the: "ol" | "ul"; muc: { id: string; doan: DoanDoi[] }[] };
+
 export type SuKienDoi = { nhan: string; truoc: string; sau: string };
 
 export type PhiaXungDot = {
@@ -305,6 +395,7 @@ export type DeXuatMau = {
 	suKienDoi: SuKienDoi[];
 	xungDot: { cu: PhiaXungDot; moi: PhiaXungDot } | null;
 	dong: DongKhac[];
+	trinhBay?: KhoiTrinhBay[];
 	baseDaDoi?: string;
 	theLuat?: TheLuat;
 };
@@ -394,7 +485,7 @@ export const DE_XUAT: DeXuatMau[] = [
 		id: "dx-khieu-nai",
 		trang: "Xử lý khiếu nại của cá nhân",
 		tu: "nguoi",
-		ai: "Trần Minh Đức",
+		ai: "Vũ Thanh Mai",
 		vi: "Rút thời hạn phản hồi đầu tiên",
 		khi: "Hôm qua",
 		bac: 1,
@@ -417,6 +508,131 @@ export const DE_XUAT: DeXuatMau[] = [
 			{ loai: "giu", chu: "## Phản hồi đầu tiên" },
 			{ loai: "bo", chu: "Trong 48 giờ kể từ khi nhận khiếu nại." },
 			{ loai: "them", chu: "Trong 24 giờ kể từ khi nhận khiếu nại." },
+		],
+		trinhBay: [
+			{
+				id: "h-phan-hoi",
+				the: "h2",
+				doan: [{ loai: "giu", chu: "Phản hồi đầu tiên" }],
+			},
+			{
+				id: "p-phan-hoi",
+				the: "p",
+				doan: [
+					{ loai: "giu", chu: "Trong " },
+					{ loai: "bo", chu: "48 giờ" },
+					{ loai: "them", chu: "24 giờ" },
+					{
+						loai: "giu",
+						chu: " kể từ khi nhận khiếu nại, người phụ trách gọi cho khách để xác nhận đã nhận.",
+					},
+				],
+			},
+			{
+				id: "h-cac-buoc",
+				the: "h2",
+				doan: [{ loai: "giu", chu: "Các bước xử lý" }],
+			},
+			{
+				id: "ol-cac-buoc",
+				the: "ol",
+				muc: [
+					{
+						id: "b1",
+						doan: [
+							{ loai: "giu", chu: "Ghi khiếu nại vào hồ sơ của cá nhân." },
+						],
+					},
+					{
+						id: "b2",
+						doan: [
+							{ loai: "giu", chu: "Chuyển cho trưởng nhóm " },
+							{ loai: "bo", chu: "trong 2 ngày" },
+							{ loai: "them", chu: "ngay trong ngày" },
+							{ loai: "giu", chu: "." },
+						],
+					},
+					{
+						id: "b3",
+						doan: [
+							{
+								loai: "them",
+								chu: "Gửi tin nhắn xác nhận cho khách ngay khi nhận khiếu nại.",
+							},
+						],
+					},
+				],
+			},
+		],
+	},
+	{
+		id: "dx-hoa-hong-sua",
+		trang: "Chính sách hoa hồng cho công ty đối tác",
+		tu: "nguoi",
+		ai: "Lê Quang Vinh",
+		vi: "Rút thời gian đối soát, nói rõ ngày chi rơi vào ngày nghỉ",
+		khi: "Hôm nay 11:20",
+		bac: 1,
+		nguoiDuyet: ["Nguyễn Thu Hà"],
+		nguon: null,
+		doanNguon: null,
+		khangDinh: [],
+		suKienDoi: [
+			{
+				nhan: "Thời gian đối soát",
+				truoc: "5 ngày làm việc",
+				sau: "3 ngày làm việc",
+			},
+		],
+		xungDot: null,
+		dong: [],
+		trinhBay: [
+			{
+				id: "h-khi-nao-chi",
+				the: "h2",
+				doan: [{ loai: "giu", chu: "Khi nào chi" }],
+			},
+			{
+				id: "ol-khi-nao-chi",
+				the: "ol",
+				muc: [
+					{
+						id: "c1",
+						doan: [
+							{ loai: "giu", chu: "Giao dịch được xác nhận trên nền tảng." },
+						],
+					},
+					{
+						id: "c2",
+						doan: [
+							{ loai: "giu", chu: "Phòng Tài chính đối soát trong " },
+							{ loai: "bo", chu: "5" },
+							{ loai: "them", chu: "3" },
+							{ loai: "giu", chu: " ngày làm việc." },
+						],
+					},
+					{
+						id: "c3",
+						doan: [
+							{ loai: "giu", chu: "Chi vào ngày 15 của tháng kế tiếp." },
+							{
+								loai: "them",
+								chu: " Nếu ngày 15 rơi vào ngày nghỉ, chi vào ngày làm việc liền sau.",
+							},
+						],
+					},
+				],
+			},
+			{
+				id: "p-chuyen-ky",
+				the: "p",
+				doan: [
+					{
+						loai: "giu",
+						chu: "Giao dịch chưa đối soát xong trước ngày 10 thì chuyển sang kỳ chi sau.",
+					},
+				],
+			},
 		],
 	},
 	{
@@ -486,6 +702,12 @@ export const DE_XUAT: DeXuatMau[] = [
 	},
 ];
 
+export function deXuatTheoPhamVi(phamVi: PhamVi): DeXuatMau[] {
+	return phamVi === "luot-1"
+		? DE_XUAT.filter((d) => d.tu === "nguoi")
+		: DE_XUAT;
+}
+
 export const HOI_THOAI = {
 	hoi: "Công ty Wise đang ở tầng 2. Giao dịch 3 tỷ xác nhận hôm nay thì hoa hồng bao nhiêu, bao giờ chi?",
 	tra: `Theo **Chính sách hoa hồng cho công ty đối tác** (phiên bản 5), tầng 2 hưởng **1,2%**, tức **36 triệu** cho giao dịch 3 tỷ.
@@ -497,13 +719,13 @@ Lưu ý: đang có một bản đề xuất chờ duyệt nâng tầng 2 lên 1,
 		{
 			trang: "Chính sách hoa hồng cho công ty đối tác",
 			muc: "Mức hoa hồng theo tầng",
-			ban: "Phiên bản 5 · Nguyễn Thu Hà duyệt 22/09",
+			ban: "Phiên bản 5 · Nguyễn Thu Hà duyệt 01/07",
 			doan: "| Tầng 2 | 2 – 10 tỷ | 1,2% |",
 		},
 		{
 			trang: "Chính sách hoa hồng cho công ty đối tác",
 			muc: "Khi nào chi",
-			ban: "Phiên bản 5 · Nguyễn Thu Hà duyệt 22/09",
+			ban: "Phiên bản 5 · Nguyễn Thu Hà duyệt 01/07",
 			doan: "Chi vào ngày 15 của tháng kế tiếp.",
 		},
 	],

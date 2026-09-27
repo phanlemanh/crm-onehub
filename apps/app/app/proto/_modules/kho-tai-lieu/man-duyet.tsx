@@ -6,8 +6,14 @@ import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { Card, CardContent } from "@crm/ui/components/card";
 import { Checkbox } from "@crm/ui/components/checkbox";
-import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import Bot from "@crm/ui/components/icons/bot";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
@@ -23,8 +29,12 @@ import { useState } from "react";
 import {
 	DE_XUAT,
 	type DeXuatMau,
+	type DoanDoi,
+	deXuatTheoPhamVi,
+	type KhoiTrinhBay,
 	NGUON,
 	type NguonMau,
+	type PhamVi,
 	type PhiaXungDot,
 	type TheLuat,
 } from "./du-lieu";
@@ -60,6 +70,7 @@ type TrangThaiDuyet = {
 	daDoiChieu: string[];
 	xungDot: LuaChonXungDot | null;
 	lyDo: string;
+	loiLyDo: boolean;
 	ketQua: KetQua | null;
 };
 
@@ -70,10 +81,92 @@ const TRANG_THAI_DAU: TrangThaiDuyet = {
 	daDoiChieu: [],
 	xungDot: null,
 	lyDo: "",
+	loiLyDo: false,
 	ketQua: null,
 };
 
 const [DE_DAU] = DE_XUAT as [DeXuatMau, ...DeXuatMau[]];
+
+function Doan({ d }: { d: DoanDoi }) {
+	if (d.loai === "them")
+		return (
+			<ins className="bg-muted underline underline-offset-4">
+				<span className="sr-only">Thêm: </span>
+				{d.chu}
+			</ins>
+		);
+	if (d.loai === "bo")
+		return (
+			<del className="text-muted-foreground line-through">
+				<span className="sr-only">Bỏ: </span>
+				{d.chu}
+			</del>
+		);
+	return <>{d.chu}</>;
+}
+
+function CacDoan({ doan }: { doan: DoanDoi[] }) {
+	return (
+		<>
+			{doan.map((d, i) => (
+				<span key={`${d.loai}:${d.chu}`}>
+					{d.loai === "them" && doan[i - 1]?.loai === "bo" ? " " : null}
+					<Doan d={d} />
+				</span>
+			))}
+		</>
+	);
+}
+
+function KhoiDoi({ khoi }: { khoi: KhoiTrinhBay }) {
+	if (khoi.the === "h2")
+		return (
+			<h2 className="mt-4 font-semibold text-lg tracking-tight first:mt-0">
+				<CacDoan doan={khoi.doan} />
+			</h2>
+		);
+	if (khoi.the === "p")
+		return (
+			<p className="text-pretty text-sm/7">
+				<CacDoan doan={khoi.doan} />
+			</p>
+		);
+	const DanhSach = khoi.the;
+	return (
+		<DanhSach
+			className={cn(
+				"space-y-1.5 pl-5 text-sm/7 marker:text-muted-foreground",
+				khoi.the === "ol" ? "list-decimal" : "list-disc",
+			)}
+		>
+			{khoi.muc.map((m) => (
+				<li className="pl-1" key={m.id}>
+					<CacDoan doan={m.doan} />
+				</li>
+			))}
+		</DanhSach>
+	);
+}
+
+function ThayDoiTrinhBay({ khoi }: { khoi: KhoiTrinhBay[] }) {
+	return (
+		<div className="flex flex-col gap-2" data-thay-doi-trinh-bay="">
+			<h4 className="font-medium text-sm">Thay đổi trong trang</h4>
+			<p className="text-muted-foreground text-xs">
+				Chữ thêm được tô nền, chữ bỏ bị gạch ngang.
+			</p>
+			<Card>
+				<CardContent>
+					<div className="flex max-w-prose flex-col gap-4" translate="no">
+						{khoi.map((k) => (
+							<KhoiDoi key={k.id} khoi={k} />
+						))}
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	);
+}
 
 function TheXungDot({ phia }: { phia: PhiaXungDot }) {
 	return (
@@ -146,22 +239,42 @@ function QuyetDinh({
 	doi,
 	duyetDuoc,
 	lyDoKhoa,
+	luot1,
+	cu,
 }: {
 	dx: DeXuatMau;
 	tt: TrangThaiDuyet;
 	doi: (sua: Partial<TrangThaiDuyet>) => void;
 	duyetDuoc: boolean;
 	lyDoKhoa: string;
+	luot1: boolean;
+	cu: boolean;
 }) {
+	const cuaNguoi = dx.tu === "nguoi";
+	const idLyDo = `${dx.id}-ly-do`;
 	const duyet = () => {
 		const nguoiHai = dx.nguoiDuyet[1];
 		doi({
 			ketQua:
-				dx.bac === 2 && nguoiHai
+				!luot1 && dx.bac === 2 && nguoiHai
 					? { loai: "cho-nguoi-hai", nguoi: nguoiHai }
 					: { loai: "da-dang" },
 		});
 	};
+	const traLai = () => {
+		const lyDo = tt.lyDo.trim();
+		if (lyDo === "") {
+			doi({ loiLyDo: true });
+			document.getElementById(idLyDo)?.focus();
+			return;
+		}
+		doi({ ketQua: { loai: "tra-lai", lyDo } });
+	};
+	const nhanDuyet = luot1
+		? "Duyệt"
+		: dx.bac === 2
+			? "Duyệt, chuyển người thứ hai"
+			: "Duyệt và đăng";
 	return (
 		<>
 			{dx.tu === "may" ? (
@@ -188,46 +301,51 @@ function QuyetDinh({
 						{tt.ketQua.loai === "cho-nguoi-hai"
 							? "Đã ghi duyệt của bạn"
 							: tt.ketQua.loai === "da-dang"
-								? "Đã duyệt và đăng phiên bản mới"
-								: "Đã trả lại cho máy soạn"}
+								? luot1
+									? "Đã duyệt"
+									: "Đã duyệt và đăng phiên bản mới"
+								: cuaNguoi
+									? `Đã trả lại cho ${dx.ai}`
+									: "Đã trả lại cho máy soạn"}
 					</AlertTitle>
 					<AlertDescription translate="no">
 						{tt.ketQua.loai === "cho-nguoi-hai"
 							? `Trang bậc 2 cần người kiểm thứ hai. Đang chờ ${tt.ketQua.nguoi}; bản đang dùng chưa đổi.`
 							: tt.ketQua.loai === "da-dang"
-								? "Trợ lý AI trả lời theo bản này từ bây giờ."
-								: `Lý do sẽ đi vào lần soạn sau: «${tt.ketQua.lyDo}». Máy không đề xuất lại đúng thay đổi này.`}
+								? luot1
+									? "Mọi người đọc bản này từ bây giờ."
+									: "Trợ lý AI trả lời theo bản này từ bây giờ."
+								: cuaNguoi
+									? `Lý do: «${tt.ketQua.lyDo}». Bản đang dùng không đổi.`
+									: `Lý do sẽ đi vào lần soạn sau: «${tt.ketQua.lyDo}». Máy không đề xuất lại đúng thay đổi này.`}
 					</AlertDescription>
 				</Alert>
 			) : (
 				<div className="flex flex-col gap-3" data-quyet-dinh="">
-					<Field>
-						<FieldLabel htmlFor={`${dx.id}-ly-do`}>
-							Lý do, nếu trả lại
-						</FieldLabel>
+					<Field data-invalid={tt.loiLyDo || undefined}>
+						<FieldLabel htmlFor={idLyDo}>Lý do, nếu trả lại</FieldLabel>
 						<Textarea
-							id={`${dx.id}-ly-do`}
-							onChange={(e) => doi({ lyDo: e.target.value })}
+							aria-invalid={tt.loiLyDo || undefined}
+							id={idLyDo}
+							maxLength={500}
+							onChange={(e) =>
+								doi({
+									lyDo: e.target.value,
+									loiLyDo: tt.loiLyDo && e.target.value.trim() === "",
+								})
+							}
 							value={tt.lyDo}
 						/>
+						{tt.loiLyDo ? <FieldError>Nhập lý do trả lại.</FieldError> : null}
 					</Field>
 					<div className="flex flex-wrap items-center gap-2">
 						<Button disabled={!duyetDuoc} onClick={duyet}>
-							{dx.bac === 2 ? "Duyệt, chuyển người thứ hai" : "Duyệt và đăng"}
+							{nhanDuyet}
 						</Button>
-						<Button
-							disabled={tt.lyDo.trim() === ""}
-							onClick={() =>
-								doi({ ketQua: { loai: "tra-lai", lyDo: tt.lyDo.trim() } })
-							}
-							variant="outline"
-						>
-							Trả lại cho máy soạn
+						<Button onClick={traLai} variant="outline">
+							{cuaNguoi ? "Trả lại" : "Trả lại cho máy soạn"}
 						</Button>
-						{dx.baseDaDoi ? (
-							<Button variant="outline">Soạn lại trên bản mới</Button>
-						) : null}
-						{duyetDuoc || dx.baseDaDoi ? null : (
+						{duyetDuoc || cu ? null : (
 							<span className="text-muted-foreground text-xs">{lyDoKhoa}</span>
 						)}
 					</div>
@@ -255,14 +373,20 @@ function MotDeXuat({
 	dx,
 	tt,
 	doi,
+	phamVi,
+	cu,
 }: {
 	dx: DeXuatMau;
 	tt: TrangThaiDuyet;
 	doi: (sua: Partial<TrangThaiDuyet>) => void;
+	phamVi: PhamVi;
+	cu: boolean;
 }) {
+	const luot1 = phamVi === "luot-1";
 	const canNguon = dx.doanNguon !== null;
 	const moDeXuat = !canNguon || tt.daDocNguon;
-	const batBuoc = dx.khangDinh.filter((k) => k.coSo).map((k) => k.id);
+	const khangDinh = luot1 ? [] : dx.khangDinh;
+	const batBuoc = khangDinh.filter((k) => k.coSo).map((k) => k.id);
 	const conThieu = batBuoc.filter((id) => !tt.daDoiChieu.includes(id)).length;
 	const thieuXungDot = dx.xungDot !== null && tt.xungDot === null;
 	const canChe = dx.tu === "may";
@@ -274,17 +398,18 @@ function MotDeXuat({
 		!thieuXungDot &&
 		!thieuChe &&
 		!thieuLuat &&
-		dx.baseDaDoi === undefined;
+		!cu;
 
 	return (
 		<section
 			aria-label="Bản đang xem"
 			className="flex min-w-0 max-w-3xl flex-1 flex-col gap-5 p-6"
+			data-de-xuat={dx.id}
 		>
 			<div className="flex flex-col gap-1">
 				<span className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">
 					{dx.ai} · {dx.khi}
-					<Badge variant="outline">{NHAN_BAC[dx.bac]}</Badge>
+					{luot1 ? null : <Badge variant="outline">{NHAN_BAC[dx.bac]}</Badge>}
 				</span>
 				<h3 className="font-semibold text-lg" translate="no">
 					{dx.trang}
@@ -295,13 +420,15 @@ function MotDeXuat({
 				</p>
 			</div>
 
-			{dx.baseDaDoi ? (
-				<Alert data-de-xuat-cu="" role="note">
+			{cu ? (
+				<Alert data-de-xuat-cu="" role="note" variant="warning">
 					<Icon icon={WarningAlt} />
-					<AlertTitle>Đề xuất này đã cũ</AlertTitle>
-					<AlertDescription>
-						{dx.baseDaDoi} Duyệt bây giờ sẽ đè lên sửa đổi đó, nên nút duyệt bị
-						khoá. Cho máy soạn lại trên bản mới.
+					<AlertTitle>
+						Bản đề xuất này đã cũ: trang đã được sửa sau khi nó được tạo.
+					</AlertTitle>
+					<AlertDescription translate="no">
+						{dx.baseDaDoi} Duyệt bây giờ sẽ đè lên sửa đổi đó, nên nút Duyệt bị
+						khoá. {dx.ai} cần sửa lại trên bản mới.
 					</AlertDescription>
 				</Alert>
 			) : null}
@@ -392,11 +519,11 @@ function MotDeXuat({
 						</div>
 					) : null}
 
-					{dx.khangDinh.length > 0 ? (
+					{khangDinh.length > 0 ? (
 						<div className="flex flex-col gap-2" data-khang-dinh="">
 							<h4 className="font-medium text-sm">Đối chiếu từng khẳng định</h4>
 							<ul className="flex flex-col gap-2">
-								{dx.khangDinh.map((k) => {
+								{khangDinh.map((k) => {
 									const da = tt.daDoiChieu.includes(k.id);
 									return (
 										<li key={k.id}>
@@ -432,7 +559,9 @@ function MotDeXuat({
 						</div>
 					) : null}
 
-					{dx.dong.length > 0 ? (
+					{dx.trinhBay ? <ThayDoiTrinhBay khoi={dx.trinhBay} /> : null}
+
+					{!dx.trinhBay && dx.dong.length > 0 ? (
 						<div className="flex flex-col gap-2">
 							<h4 className="font-medium text-sm">Thay đổi trong trang</h4>
 							<div className="overflow-x-auto rounded-lg border font-mono text-xs">
@@ -466,9 +595,11 @@ function MotDeXuat({
 					) : null}
 
 					<QuyetDinh
+						cu={cu}
 						doi={doi}
 						duyetDuoc={duyetDuoc}
 						dx={dx}
+						luot1={luot1}
 						lyDoKhoa={lyDoKhoa({ conThieu, thieuXungDot, thieuLuat, thieuChe })}
 						tt={tt}
 					/>
@@ -478,14 +609,24 @@ function MotDeXuat({
 	);
 }
 
-export function ChoDuyet({ chonDau }: { chonDau: string }) {
+export function ChoDuyet({
+	chonDau,
+	phamVi,
+	cu,
+}: {
+	chonDau: string;
+	phamVi: PhamVi;
+	cu: boolean;
+}) {
+	const danhSach = deXuatTheoPhamVi(phamVi);
 	const [chon, setChon] = useState(chonDau);
 	const [theoDx, setTheoDx] = useState<Record<string, TrangThaiDuyet>>({});
-	const dx = DE_XUAT.find((d) => d.id === chon) ?? DE_DAU;
+	const dx = danhSach.find((d) => d.id === chon) ?? danhSach[0] ?? DE_DAU;
 	const tt = theoDx[dx.id] ?? TRANG_THAI_DAU;
 	const doi = (sua: Partial<TrangThaiDuyet>) =>
 		setTheoDx((s) => ({ ...s, [dx.id]: { ...tt, ...sua } }));
-	const conLai = DE_XUAT.filter((d) => !theoDx[d.id]?.ketQua).length;
+	const conLai = danhSach.filter((d) => !theoDx[d.id]?.ketQua).length;
+	const luot1 = phamVi === "luot-1";
 
 	return (
 		<div className="flex min-w-0 flex-1 flex-col lg:flex-row">
@@ -495,13 +636,13 @@ export function ChoDuyet({ chonDau }: { chonDau: string }) {
 					26/09).
 				</p>
 				<ul aria-label="Bản chờ duyệt" className="flex flex-col">
-					{DE_XUAT.map((d) => (
+					{danhSach.map((d) => (
 						<li key={d.id}>
 							<button
-								aria-current={d.id === chon ? "true" : undefined}
+								aria-current={d.id === dx.id ? "true" : undefined}
 								className={cn(
 									"flex w-full flex-col gap-1 border-b px-4 py-3 text-left hover:bg-muted",
-									d.id === chon && "bg-muted",
+									d.id === dx.id && "bg-muted",
 									theoDx[d.id]?.ketQua && "opacity-50",
 								)}
 								onClick={() => setChon(d.id)}
@@ -509,19 +650,27 @@ export function ChoDuyet({ chonDau }: { chonDau: string }) {
 							>
 								<span className="flex items-center gap-2 text-muted-foreground text-xs">
 									{d.tu === "nguoi" ? null : <Icon icon={Bot} />}
-									{NHAN_TU[d.tu]}
+									{luot1 ? d.ai : NHAN_TU[d.tu]}
 									<span className="ml-auto">{d.khi}</span>
 								</span>
 								<span className="font-medium text-sm" translate="no">
 									{d.trang}
 								</span>
 								<span className="text-muted-foreground text-xs">{d.vi}</span>
-								<span className="flex flex-wrap gap-1">
-									<Badge variant="outline">Bậc {d.bac}</Badge>
-									{d.xungDot ? (
-										<Badge variant="outline">Có mâu thuẫn</Badge>
-									) : null}
-								</span>
+								{luot1 ? (
+									cu && d.id === chonDau ? (
+										<span className="flex flex-wrap gap-1">
+											<Badge variant="outline">Đã cũ</Badge>
+										</span>
+									) : null
+								) : (
+									<span className="flex flex-wrap gap-1">
+										<Badge variant="outline">Bậc {d.bac}</Badge>
+										{d.xungDot ? (
+											<Badge variant="outline">Có mâu thuẫn</Badge>
+										) : null}
+									</span>
+								)}
 							</button>
 						</li>
 					))}
@@ -530,7 +679,14 @@ export function ChoDuyet({ chonDau }: { chonDau: string }) {
 					</li>
 				</ul>
 			</div>
-			<MotDeXuat doi={doi} dx={dx} key={dx.id} tt={tt} />
+			<MotDeXuat
+				cu={cu && dx.id === chonDau}
+				doi={doi}
+				dx={dx}
+				key={dx.id}
+				phamVi={phamVi}
+				tt={tt}
+			/>
 		</div>
 	);
 }

@@ -1,0 +1,445 @@
+schema_version: 1
+slug: kho-tai-lieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ktl_migration_chi_them
+    paths:
+      - "packages/db/prisma/migrations/**"
+      - "_acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no; doc moi thu muc migration co tren nhanh ma chua co o
+      merge-base voi origin/onehub. Moi cau lenh thuoc tap viet truoc: CREATE TABLE, CREATE INDEX va
+      CREATE UNIQUE INDEX tren bang moi, ALTER TABLE <bang moi> ADD CONSTRAINT ... FOREIGN KEY,
+      CREATE TYPE, CREATE EXTENSION IF NOT EXISTS (chi unaccent, pg_trgm). Cam UPDATE, DELETE, DROP,
+      ALTER COLUMN, RENAME, va moi ALTER TABLE tren bang da co. In so cau lenh doc duoc (> 0).
+      CHIEU DO: ba tep gia trong tmpdir ("DROP TABLE contact", "ALTER TABLE department ADD COLUMN x
+      TEXT NOT NULL", "CREATE EXTENSION vector") -> ca ba exit 1 voi thong diep ghim
+      "migration khong chi them: <loai>".
+
+  - id: E1b
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ktl_migration_tren_ban_sao
+    paths:
+      - "packages/db/prisma/**"
+      - "_acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
+    expected: |
+      Tao co so du lieu tam rieng, ap migration tai merge-base, gieo 3 cong ty, 2 phong ban, 2
+      thanh vien bang SQL cua luoc do cu, doc anh chup [so dong tung bang]; ap migration cua nhanh;
+      so lai: moi bang cu giu dung so dong (ma tran viet truoc 5 bang x so dong); extension unaccent
+      va pg_trgm co trong pg_extension; SELECT unaccent('Quy định') = 'Quy dinh'. Xoa co so du lieu
+      tam o finally. CHIEU DO: migration gia them "DELETE FROM department" -> exit 1, thong diep
+      ghim "bang cu mat dong: department 2 -> 0".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_tao_trang
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/validation/src/tai-lieu*.ts"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Goi taiLieu.create that qua tRPC bang phien cua mot member va mot nguoi vai okr. Ma tran slug
+      viet truoc (6 ca): "Quy định hoa hồng" -> quy-dinh-hoa-hong; "Đối tác Đà Nẵng" -> doi-tac-da-nang;
+      trung ten lan hai -> -2; lan ba -> -3; ten chi co dau cach va ky tu dac biet -> tu choi;
+      ten 161 ky tu -> BAD_REQUEST voi thong diep ghim, khong dong nao duoc ghi (dem truoc = sau).
+      Noi dung gui o dang NFD -> ban de xuat luu dang NFC (so sanh byte). Trang moi co
+      banDangDungId null va dung mot de xuat CHO_DUYET. Doi chung duong: ten hop le 160 ky tu -> tao
+      duoc. CHIEU DO: ban sao service bo buoc NFC -> "noi dung khong NFC".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_khong_ro
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-khong-ro.spec.ts"
+    expected: |
+      Ma tran viet truoc toan phan: 6 nguoi (T nguoi tao de xuat, C chu trang, O owner, A admin, K thanh
+      vien khac, R vai okr) x 5 trang thai (S1 chua tung duyet co ban cho; S2 chua tung duyet co ban bi
+      tra lai; S3 dang dung; S4 dang dung co ban cho; S5 dang dung co ban bi tra lai) x 4 thu tuc
+      (list, get, proposals, proposal) = 120 khang dinh, moi khang dinh in mot dong.
+      Bang thay trang (list co dong + get tra du lieu), viet truoc:
+        S1: T C O A thay; K R khong.   S2: T C O A thay; K R khong.
+        S3, S4, S5: ca 6 nguoi thay ban dang dung.
+      Bang thay de xuat (proposals co dong va dem + proposal tra noi dung, coBanCho cua get):
+        S1, S4 (ban cho): T C O A thay; K R khong.
+        S2, S5 (ban tra lai): T C O A thay ly do va noi dung; K R khong; khong vao so dem cho duyet.
+        S3: khong co de xuat -> proposals rong voi ca 6.
+      "Khong thay" = list khong dong, total va facetCounts khong dem, get/proposal tra NOT_FOUND. Voi nguoi
+      khong duoc thay: get va proposal tra NOT_FOUND voi DUNG ma va thong diep nhu slug/id khong ton
+      tai (so sanh hai loi); list khong co dong do va total, facetCounts khong dem no. Doi chung
+      duong: nguoi duoc thay nhan du lieu; ban dang dung doc duoc voi ca 5 nguoi. CHIEU DO: ban sao
+      quyen.ts cho moi nguoi thay de xuat -> do voi thong diep ghim "ro de xuat: <nguoi> x <trang thai>".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_duyet
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Chu trang duyet de xuat dau (diffHash dung): TaiLieuPhienBan so 1 ton tai voi noi dung dung
+      byte cua de xuat; banDangDungId tro toi no; de xuat DA_DUYET; mot TaiLieuSuKien loai DUYET voi
+      chiTiet parse duoc bang schema. Sua va duyet lan hai -> so 2, phien ban 1 van con nguyen byte.
+      Get bang phien thanh vien khac tra noi dung moi va so phien ban 2. Doc generated/server.ts:
+      khong thu tuc nao trong taiLieu.* ghi vao TaiLieuPhienBan hay TaiLieuSuKien ngoai create,
+      propose, approve, reject (danh sach viet truoc). CHIEU DO: ban sao service ghi phien ban ngoai
+      giao dich roi nem loi o buoc dat con tro -> do "phien ban mo coi sau loi".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_quyen_duyet
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-quyen.spec.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      Ma tran viet truoc 7 ca approve: chu trang voi ban nguoi khac tao (duoc), chu trang voi ban
+      chinh minh tao (duoc), owner (duoc), admin (duoc), nguoi tao khong phai chu trang (FORBIDDEN),
+      thanh vien khac (FORBIDDEN), vai okr (FORBIDDEN); moi ca FORBIDDEN dem so phien ban truoc = sau.
+      reject cung ma tran. vai-chi-okr.spec van xanh voi danh sach thu tuc da them taiLieu doc.
+      CHIEU DO: ban sao quyenDuyet tra true cho nguoi tao -> "nguoi tao tu duyet duoc".
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_man_duyet_quyen
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-man-duyet.dom.tsx"
+    expected: |
+      Dung thanh phan man duyet voi du lieu cua nguoi co quyen va khong quyen: co quyen -> nut
+      "Duyet" va "Tra lai" hien; khong quyen -> khong co nut nao trong hai nut. CHIEU DO: truyen
+      coQuyen=false ma ban sao van ve nut -> do "nut duyet hien cho nguoi khong quyen".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_so_va_dat
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Bon ca viet truoc: (a) hai de xuat A, B cung ban goc; duyet A -> B chuyen CU trong cung giao
+      dich, approve B tra CONFLICT, so phien ban khong doi; (b) diffHash gui len sai mot ky tu ->
+      CONFLICT, khong ghi gi; (c) de xuat co banGocId khac banDangDungId -> proposal tra cu=true;
+      (d) doi chung duong: hash dung, ban goc dung -> duyet duoc. CHIEU DO: ban sao bo kiem banGoc
+      -> "de xuat cu van duyet duoc".
+
+  - id: E6b
+    criterion: AC-6
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_man_de_xuat_cu
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-man-duyet.dom.tsx"
+    expected: |
+      Man duyet voi de xuat cu hien Alert co chu "Ban de xuat nay da cu" va nut "Duyet" disabled;
+      de xuat thuong: khong Alert, nut bat. CHIEU DO: ban sao bo co cu -> "nut duyet bat voi de xuat cu".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_tra_lai
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      reject voi ly do rong va 501 ky tu -> BAD_REQUEST, de xuat van CHO_DUYET; ly do 500 ky tu ->
+      TRA_LAI, lyDo luu dung; nguoi tao doc proposal thay lyDo; banDangDungId va so phien ban khong
+      doi. CHIEU DO: ban sao zod bo min(1) -> "tra lai khong ly do duoc chap nhan".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_sua_trang
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Trang dang dung phien ban 1; thanh vien khac propose -> de xuat moi banGocId = phien ban 1;
+      get boi nguoi thu ba tra noi dung phien ban 1, coBanCho=false; get boi nguoi tao va chu trang
+      tra coBanCho=true. CHIEU DO: ban sao get tra coBanCho cho moi nguoi -> "lo co ban cho".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_trinh_soan_nut
+    paths:
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "packages/ui/test/trinh-soan.dom.tsx"
+    expected: |
+      Ma tran viet truoc 9 nut (H2, H3, dam, nghieng, danh sach so, danh sach cham, bang, lien ket,
+      hoan tac): bam moi nut tren doan chon -> markdown lien quan xuat hien (9 khang dinh); go "1. " va
+      "- " dau dong -> danh sach (2); moi nut co aria-label khong rong (9); khong nut nao co ten anh,
+      mau, co chu (tap nut dung bang danh sach viet truoc). CHIEU DO: ban sao bo aria-label nut bang
+      -> "nut thieu nhan: bang".
+
+  - id: E9b
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_soan_giu_thay_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-soan.dom.tsx"
+    expected: |
+      Man soan co thay doi chua gui: yeu cau roi man -> hop hoi lai hien; khong thay doi -> khong hoi.
+      CHIEU DO: ban sao khong noi bo giu thay doi -> "roi man khong hoi lai".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_khu_hoi
+    paths:
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "packages/validation/src/tai-lieu-markdown.ts"
+      - "packages/ui/test/trinh-soan-khu-hoi.dom.tsx"
+      - "packages/ui/test/fixtures/tai-lieu/**"
+    expected: |
+      Ma tran viet truoc 12 tai lieu mau trong fixtures/tai-lieu (moi loai nut, danh sach long, bang
+      co o trong, lien ket co dau, chu NFD): nap -> tuan tu hoa lan 1 -> nap lai -> lan 2; khang dinh
+      lan2 === lan1 tung byte cho ca 12 (12 khang dinh). Doi chung: mot mau sua mot chu -> khac.
+      CHIEU DO: ban sao cau hinh tuan tu hoa doi dau danh sach "-" <-> "*" giua hai lan -> do voi ten
+      mau va dong dau tien khac.
+
+  - id: E10b
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_de_xuat_trung
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      propose voi noi dung trung ban goc sau chuan hoa -> BAD_REQUEST voi thong diep ghim, khong de
+      xuat nao duoc tao; noi dung khac mot ky tu -> tao duoc. CHIEU DO: ban sao bo kiem trung ->
+      "de xuat trung ban goc duoc tao".
+
+  - id: E10c
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_bat_dong_qua_may_chu
+    paths:
+      - "packages/validation/src/tai-lieu-markdown.ts"
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-bat-dong.spec.ts"
+      - "packages/ui/test/fixtures/tai-lieu/**"
+    expected: |
+      Voi tung mau trong 12 mau cua E10: propose qua tRPC that, doc noiDung da luu tu DB, nap vao ham
+      nap cua trinh soan (cung ham TrinhSoan dung) roi tuan tu hoa -> === noiDung da luu tung byte
+      (12 khang dinh, in ten mau). CHIEU DO: ban sao bo chuan hoa phia may chu doi dau danh sach "-"
+      thanh "*" -> do "diem bat dong vo: <ten mau>".
+
+  - id: E10d
+    criterion: AC-10
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_man_sua_chua_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-soan.dom.tsx"
+    expected: |
+      Man sua mo voi noi dung ban dang dung: nut "Gửi duyệt" disabled va chu "Chưa có thay đổi" hien;
+      go mot ky tu -> nut bat, chu bien mat; hoan tac ve nguyen ban -> nut khoa lai. CHIEU DO: ban sao
+      so sanh bang tham chieu thay vi noi dung -> "nut gui bat khi chua doi".
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_man_tao_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-soan.dom.tsx"
+    expected: |
+      Man tao, ten trong, bam "Gửi duyệt": co loi "Nhập tên trang." ngay duoi o ten, document.activeElement
+      la o ten, khong goi mutation (dem goi = 0); ten 161 ky tu -> loi do dai, khong goi. Doi chung:
+      ten hop le -> goi mutation 1 lan. CHIEU DO: ban sao bo focus -> "o loi khong nhan focus".
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_man_tra_lai
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-man-duyet.dom.tsx"
+    expected: |
+      Bam "Trả lại" voi ly do trong -> loi duoi o ly do, khong goi mutation (dem = 0); ly do co chu ->
+      goi 1 lan voi dung ly do. CHIEU DO: ban sao bo kiem -> "tra lai goi khi ly do trong".
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_man_sua_va_nhan
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-man-sua.spec.ts"
+    expected: |
+      Gieo qua tRPC that trang dang dung phien ban 2 va mot de xuat cho. (a) Du lieu trang /sua lay tu
+      loader server cua man sua -> noi dung dua vao trinh soan === noiDung phien ban 2 (khong phai de
+      xuat). (b) Dung man doc voi du lieu get cua tung nguoi: nhan "Có 1 bản chờ duyệt" hien voi nguoi
+      tao va chu trang, vang voi thanh vien khac (3 khang dinh). CHIEU DO: ban sao loader lay de xuat
+      moi nhat -> "man sua mo ban de xuat thay ban dang dung".
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_dan_tu_word
+    paths:
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "packages/ui/test/trinh-soan-dan.dom.tsx"
+      - "packages/ui/test/fixtures/tai-lieu/clipboard-*.html"
+    expected: |
+      Hai tep HTML clipboard that (clipboard-word.html chep tu Word 365, clipboard-gdocs.html chep tu
+      Google Docs, luu trong fixtures, KHONG viet tay), moi tep co mot tep markdown ky vong viet truoc
+      canh no (clipboard-word.md, clipboard-gdocs.md: 2 tieu de, danh sach 2 cap long dung cha con,
+      bang 3x3, dung mot chu dam, mot lien ket). Dan vao trinh soan -> markdown === tep ky vong tung
+      byte (2 khang dinh). Am tinh kem doi chung: markdown khong chua "Mso", "o:p", "style=", "color",
+      "font" (5 x 2), trong khi HTML nguon CO chua cac chuoi do (doi chung duong: fixture that su
+      ban). CHIEU DO: (a) ban sao bo bo loc dan -> "con Mso trong markdown: clipboard-word"; (b) ban
+      sao giu the b boc ngoai cua Google Docs -> "dam tran: clipboard-gdocs".
+
+  - id: E12
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktl_bo_go_viet
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs); dang nhap dev:session mot member"
+      - "Buoc 1 (1440): mo /tai-lieu/moi, go ten, focus o soan; phat chuoi su kien composition cua Telex cho 'Quy định về hoa hồng đối tác' (compositionstart, compositionupdate tung buoc 'Quy dinh' -> 'Quy định', compositionend) -> anh ktl-bo-go-1.png"
+      - "Buoc 2: dang composition do 'hoa' -> 'hoà' thi nhan Enter -> dong moi, khong mat khong nhan doi chu"
+      - "Buoc 3: go '- ' roi 'mục một', Enter, 'mục hai' bang composition -> danh sach hai muc -> anh ktl-bo-go-2.png"
+      - "Doc noi dung trinh soan va markdown tuan tu hoa; so voi chuoi mong doi dang NFC; khong loi console"
+    paths:
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "_acceptance/kho-tai-lieu/rang/bo-go-viet.mjs"
+    expected: "exit 0; bo-go-viet.mjs chay trong phien do rieng, Chrome that qua puppeteer-core (CDP Input.imeSetComposition va Input.insertText), in 'buoc N: dat' cho 3 buoc; markdown cuoi dung byte chuoi mong doi NFC. Anh ghi vao .acceptance-runs/kho-tai-lieu/evidence/. CHIEU DO: --chieu-do chay tren ban sao trinh soan tat xu ly composition (chen tung ky tu tho) -> in 'buoc 1: sai chu' ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_diff
+    paths:
+      - "packages/ui/src/components/diff-trang*.tsx"
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "packages/ui/test/diff-trang.dom.tsx"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Hai ban mau (them mot cau, bo mot cau, doi "48 giờ" -> "24 giờ"): DOM co dung 2 ins va 2 del
+      (hoac so viet truoc theo tach tu), moi cai co nhan an "Thêm:"/"Bỏ:"; khong co ky tu "+"/"−" dau
+      dong va khong class font-mono; dai so doi liet ke dung "48 giờ → 24 giờ". diffHash client (ham
+      trong packages/validation) === diffHash server tinh qua proposal cua API tren cung hai ban.
+      Doi chung: hai ban giong nhau -> 0 ins, 0 del, dai so rong. CHIEU DO: ban sao bo nhan an ->
+      "ins thieu nhan cho trinh doc man hinh".
+
+  - id: E13b
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktl_man_duyet
+    steps:
+      - "Canh cay; phien do rieng; gieo qua tRPC that mot trang dang dung va mot de xuat doi '48 giờ' -> '24 giờ', them mot cau, bo mot cau; dang nhap chu trang"
+      - "Buoc 1 (1440): mo tab Cho duyet -> de xuat -> anh ktl-duyet-1440.png; doc DOM: ins co mau nen tinh toan khac trong suot, del co text-decoration line-through"
+      - "Buoc 2 (390): cung man -> anh ktl-duyet-390.png, khong cuon ngang trang"
+      - "Buoc 3: bam Duyet -> ve man doc, dong 'Phiên bản 2 · duyệt dd/mm/yyyy' -> anh ktl-doc-sau-duyet.png"
+    paths:
+      - "packages/ui/src/components/diff-trang*.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "_acceptance/kho-tai-lieu/rang/man-duyet.mjs"
+    expected: "exit 0; man-duyet.mjs in 'buoc N: dat' cho 3 buoc, anh o .acceptance-runs/kho-tai-lieu/evidence/, khong loi console. Vong S4 chep ktl-duyet-1440.png, ktl-duyet-390.png, ktl-doc-sau-duyet.png sang _acceptance/kho-tai-lieu/evidence/ (hanh vi cua vong, khong cua lenh) cho E14j doc. CHIEU DO: --chieu-do tren ban sao bo bien the mau ins -> 'buoc 1: ins khong co nen', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E14
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktl_man_danh_sach
+    steps:
+      - "Canh cay; phien do rieng; kho rong; dang nhap member"
+      - "Buoc 1 (1440): bam muc Tai lieu tren thanh bieu tuong -> 'Chưa có trang nào' va nut 'Viết trang đầu tiên' -> anh ktl-kho-rong.png"
+      - "Buoc 2: gieo 5 trang dang dung o 3 nhom va 2 de xuat cho nguoi nay duyet -> danh sach, so dem nhom, tab 'Chờ duyệt' so 2 -> anh ktl-danh-sach-1440.png"
+      - "Buoc 3 (390): danh sach va man doc -> anh ktl-danh-sach-390.png, ktl-doc-390.png"
+      - "Buoc 4 (1440): man doc co muc luc, chu trang, dong phien ban -> anh ktl-doc-1440.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/components/app-icon-rail.tsx"
+      - "_acceptance/kho-tai-lieu/rang/man-danh-sach.mjs"
+    expected: "exit 0; man-danh-sach.mjs in 'buoc N: dat' cho 4 buoc; so dem tab Cho duyet doc tu DOM = 2; anh o .acceptance-runs/kho-tai-lieu/evidence/; vong S4 chep 5 anh ktl-kho-rong, ktl-danh-sach-1440, ktl-danh-sach-390, ktl-doc-390, ktl-doc-1440 sang _acceptance/kho-tai-lieu/evidence/ cho E14j doc. CHIEU DO: --chieu-do tren ban sao dem ca de xuat nguoi khac -> 'buoc 2: so cho duyet 3 != 2', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E14j
+    criterion: AC-14
+    executor: judgment
+    inputs:
+      - "_acceptance/kho-tai-lieu/evidence/ktl-kho-rong.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-danh-sach-1440.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-danh-sach-390.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-doc-390.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-doc-1440.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-duyet-1440.png"
+      - "docs/superpowers/specs/2026-09-27-kho-tai-lieu-design.md"
+    expected: |
+      Mot nhan vien van phong quen Word va Google Docs, khong biet markdown, nhin cac anh: hieu duoc
+      trang nao dang dung, trang nao cho duyet, can bam gi de viet trang moi va de duyet; man duyet
+      doc nhu Track Changes (chu them to, chu bo gach) chu khong nhu man cua lap trinh vien; khong
+      nhan nao dung tu ky thuat (markdown, slug, diff, hash). Bo cuc 390 dung duoc.
+      Thieu bat ky anh dau vao nao -> UNCERTAIN ghi ro "thieu anh: <ten>", khong cham tu tai lieu thiet ke.
+
+  - id: E15
+    criterion: AC-15
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_lien_ket_tim
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      De xuat co 2 lien ket toi hai trang; duyet -> TaiLieuLienKet dung 2 dong; duyet ban sau con 1
+      lien ket -> dung 1 dong (thay tron). Truy van SQL tren timKiem voi 'hoa hong' (khong dau) tim
+      thay trang co 'hoa hồng'. De xuat bi tra lai co lien ket moi -> khong dong nao them; de xuat
+      cho -> khong. CHIEU DO: ban sao ghi lien ket luc propose -> "lien ket tu de xuat chua duyet".
+
+  - id: E16
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktl_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "packages/ui/src/components/diff-trang*.tsx"
+    expected: |
+      Chay design-gate che do static tren moi tep giao dien moi cua khu tai-lieu va hai thanh phan
+      moi cua packages/ui; exit 0 (khong vi pham P0 cua san thiet ke: mau, goc, khoang cach literal,
+      h1/h2 tu dat co chu, table tay).

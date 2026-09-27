@@ -12,35 +12,43 @@ export type ProtoCatalogEntry = {
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
 		slug: "kho-tai-lieu",
-		ten: "Kho tài liệu — người viết, máy soạn, người duyệt",
+		ten: "Kho tài liệu — lượt 1 viết, duyệt, đọc; các lượt sau",
 		states: [
 			{ id: "ST-danh-sach", nhan: "Lượt 1 — Danh sách trang" },
-			{ id: "ST-doc-trang", nhan: "Lượt 1 — Đọc một trang" },
-			{ id: "ST-viet-trang", nhan: "Lượt 1 — Viết trang mới" },
+			{ id: "ST-doc-trang", nhan: "Lượt 1 — Đọc một trang đã duyệt" },
+			{
+				id: "ST-doc-cho-lan-dau",
+				nhan: "Lượt 1 — Trang mới chờ duyệt lần đầu",
+			},
+			{ id: "ST-viet-trang", nhan: "Lượt 1 — Viết trang mới như Word" },
 			{ id: "ST-kho-rong", nhan: "Lượt 1 — Kho còn trống" },
 			{ id: "ST-dang-tai", nhan: "Lượt 1 — Đang tải" },
-			{ id: "ST-tim-nhanh", nhan: "Lượt 1 — Tìm nhanh ⌘K, có dấu hay không" },
-			{ id: "ST-suc-khoe", nhan: "Lượt 1 — Sức khoẻ kho: việc của chủ trang" },
 			{
-				id: "ST-khong-co-quyen",
-				nhan: "Lượt 1 — Trang bị hạn chế: 404 như nhau",
+				id: "ST-duyet-thuong",
+				nhan: "Lượt 1 — Duyệt bản người sửa: chữ thêm tô, chữ bỏ gạch",
 			},
+			{ id: "ST-de-xuat-cu", nhan: "Lượt 1 — Đề xuất cũ vì trang đã sửa" },
+			{ id: "ST-tai-nguon", nhan: "Lượt 2 — Tải nguồn lên" },
+			{
+				id: "ST-duyet-ban-may-soan",
+				nhan: "Lượt 2 — Duyệt bản máy soạn: nguồn trước, đối chiếu từng số",
+			},
+			{ id: "ST-tim-nhanh", nhan: "Lượt 3 — Tìm nhanh ⌘K, có dấu hay không" },
+			{ id: "ST-suc-khoe", nhan: "Lượt 3 — Sức khoẻ kho: việc của chủ trang" },
 			{
 				id: "ST-tac-nhan-tra-loi",
-				nhan: "Lượt 2 — Trợ lý AI trả lời theo kho",
+				nhan: "Lượt 4 — Trợ lý AI trả lời theo kho",
 			},
 			{
 				id: "ST-tac-nhan-tu-choi",
-				nhan: "Lượt 2 — Trợ lý AI từ chối, không đoán",
+				nhan: "Lượt 4 — Trợ lý AI từ chối, không đoán",
 			},
-			{ id: "ST-tai-nguon", nhan: "Lượt 3 — Tải nguồn lên" },
+			{ id: "ST-soat-dinh-ky", nhan: "Để sau — Soát định kỳ, vẫn qua duyệt" },
+			{ id: "ST-the-cu-phap-ly", nhan: "Để sau — Căn cứ pháp lý đã đổi" },
 			{
-				id: "ST-duyet-ban-may-soan",
-				nhan: "Lượt 3 — Duyệt: nguồn trước, đối chiếu từng số",
+				id: "ST-khong-co-quyen",
+				nhan: "Để sau — Trang bị hạn chế: 404 như nhau",
 			},
-			{ id: "ST-de-xuat-cu", nhan: "Lượt 3 — Đề xuất cũ vì trang đã sửa" },
-			{ id: "ST-soat-dinh-ky", nhan: "Lượt 4 — Soát định kỳ, vẫn qua duyệt" },
-			{ id: "ST-the-cu-phap-ly", nhan: "Lượt 4 — Căn cứ pháp lý đã đổi" },
 		],
 	},
 	{

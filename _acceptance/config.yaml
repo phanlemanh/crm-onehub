@@ -19,6 +19,28 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    ktl_bat_dong_qua_may_chu: 'bun run test -- "cd apps/api && bun test test/tai-lieu-bat-dong.spec.ts"'
+    ktl_man_sua_chua_doi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-soan.dom.tsx -t chua-doi"
+    ktl_man_tao_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-soan.dom.tsx -t tao-loi"
+    ktl_man_tra_lai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-man-duyet.dom.tsx -t tra-lai"
+    ktl_man_sua_va_nhan: 'bun run test -- "cd apps/api && bun test test/tai-lieu-man-sua.spec.ts"'
+    ktl_tao_trang: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t tao-trang"'
+    ktl_khong_ro: 'bun run test -- "cd apps/api && bun test test/tai-lieu-khong-ro.spec.ts -t khong-ro"'
+    ktl_duyet: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t duyet-tao-phien-ban"'
+    ktl_quyen_duyet: 'bun run test -- "cd apps/api && bun test test/tai-lieu-quyen.spec.ts test/vai-chi-okr.spec.ts"'
+    ktl_man_duyet_quyen: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-man-duyet.dom.tsx -t quyen"
+    ktl_so_va_dat: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t so-va-dat"'
+    ktl_man_de_xuat_cu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-man-duyet.dom.tsx -t de-xuat-cu"
+    ktl_tra_lai: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t tra-lai"'
+    ktl_sua_trang: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t sua-trang"'
+    ktl_trinh_soan_nut: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan.dom.tsx'
+    ktl_soan_giu_thay_doi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-soan.dom.tsx"
+    ktl_khu_hoi: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-khu-hoi.dom.tsx'
+    ktl_de_xuat_trung: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t de-xuat-trung"'
+    ktl_dan_tu_word: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-dan.dom.tsx'
+    ktl_diff: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/diff-trang.dom.tsx && cd ../.. && bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t diff-hash"'
+    ktl_lien_ket_tim: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t lien-ket-tim"'
+    ktl_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "packages/ui/src/components/trinh-soan*.tsx" "packages/ui/src/components/diff-trang*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     dmk_ten_kho: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t ten-kho"'
     dmk_tao: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t tao"'
     dmk_kho_mau: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t kho-mau"'
@@ -715,6 +737,11 @@ executors:
     hth_thuoc_am: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cai-lenh|dang-ban\""'
     hth_token: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cung-phien|duong-chinh\""'
   script:
+    ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
+    ktl_migration_tren_ban_sao: "bun _acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
+    ktl_bo_go_viet: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/bo-go-viet.mjs"'
+    ktl_man_duyet: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/man-duyet.mjs"'
+    ktl_man_danh_sach: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/man-danh-sach.mjs"'
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
     rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
     rst_kiem_ke: node _acceptance/ro-slack-tac-nhan/rang/kiem-ke.mjs
