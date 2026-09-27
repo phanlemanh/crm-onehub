@@ -5,6 +5,7 @@ import Close from "@carbon/icons-react/es/Close";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -163,9 +164,9 @@ export function SavedViewsMenu({
 						</Field>
 					</div>
 					<DialogFooter>
-						<Button variant="outline" onClick={closeDialog}>
-							{m.sheet.cancel}
-						</Button>
+						<DialogClose asChild>
+							<Button variant="outline">{m.sheet.cancel}</Button>
+						</DialogClose>
 						<Button
 							disabled={name.trim() === "" || create.isPending}
 							onClick={() =>

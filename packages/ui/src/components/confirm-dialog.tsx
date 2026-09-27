@@ -21,6 +21,7 @@ export function ConfirmDialog({
 	onConfirm,
 	pending,
 	tone,
+	onCloseAutoFocus,
 }: {
 	tieuDe: string;
 	than: string;
@@ -31,15 +32,15 @@ export function ConfirmDialog({
 	onConfirm: () => void;
 	pending: boolean;
 	tone?: "destructive" | "default";
+	onCloseAutoFocus?: (event: Event) => void;
 }) {
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
-			<AlertDialogContent>
+			<AlertDialogContent onCloseAutoFocus={onCloseAutoFocus}>
 				<AlertDialogHeader>
 					<AlertDialogTitle>{tieuDe}</AlertDialogTitle>
 					<AlertDialogDescription>{than}</AlertDialogDescription>
 				</AlertDialogHeader>
-
 				<AlertDialogFooter>
 					<AlertDialogCancel disabled={pending}>{thoi}</AlertDialogCancel>
 					<AlertDialogAction

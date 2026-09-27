@@ -60,7 +60,7 @@ export function DatePicker({
 					/>
 				</button>
 			</PopoverTrigger>
-			<PopoverContent size="fit" align="start">
+			<PopoverContent size="fit" align="start" data-khong-giu>
 				<Calendar
 					locale={locale === "vi" ? viLich : undefined}
 					labels={{

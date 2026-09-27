@@ -4,6 +4,7 @@ import Upload from "@carbon/icons-react/es/Upload";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -123,11 +124,6 @@ export function HopThoaiNhapOkr({
 		dangGui.current = true;
 		setLoi(null);
 		ghi.mutate({ cycleId, unit, text: ketQua.chu, congBo });
-	};
-
-	const veDanhSach = () => {
-		void datUrl({ [SEARCH_PARAM.okr.xem]: null });
-		dong();
 	};
 
 	const tom = ketQua?.xem.summary;
@@ -361,10 +357,16 @@ export function HopThoaiNhapOkr({
 					) : null}
 					{buoc === 3 ? (
 						<>
-							<Button variant="outline" onClick={dong}>
-								{m.dongHop}
-							</Button>
-							<Button onClick={veDanhSach}>{m.xemDanhSach}</Button>
+							<DialogClose asChild dongNgay>
+								<Button variant="outline">{m.dongHop}</Button>
+							</DialogClose>
+							<DialogClose asChild dongNgay>
+								<Button
+									onClick={() => void datUrl({ [SEARCH_PARAM.okr.xem]: null })}
+								>
+									{m.xemDanhSach}
+								</Button>
+							</DialogClose>
 						</>
 					) : null}
 				</DialogFooter>

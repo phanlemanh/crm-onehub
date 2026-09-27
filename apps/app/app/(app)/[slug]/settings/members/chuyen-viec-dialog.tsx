@@ -4,6 +4,7 @@ import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -130,9 +131,11 @@ export function ChuyenViecDialog({
 					</p>
 				) : null}
 				<DialogFooter>
-					<Button disabled={chuyen.isPending} onClick={dong} variant="outline">
-						{k.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button disabled={chuyen.isPending} variant="outline">
+							{k.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						disabled={!coViec || nhan === "" || chuyen.isPending}
 						onClick={() => {

@@ -8,6 +8,7 @@ import { Button } from "@crm/ui/components/button";
 import { Calendar } from "@crm/ui/components/calendar";
 import { Checkbox } from "@crm/ui/components/checkbox";
 import { Combobox } from "@crm/ui/components/combobox";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -27,7 +28,6 @@ import { formatDay, fromDay, toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { InlineSelectField } from "@/components/crm/inline-field";
 import {
 	DetailSheetBody,

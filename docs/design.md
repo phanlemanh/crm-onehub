@@ -68,6 +68,7 @@ Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả 
 | chữ phụ `<p className="text-muted-foreground text-xs">` cạnh ô nhập | `FieldDescription` |
 | `navigator.clipboard` | `CopyValue` |
 | `AlertDialog` ráp tay để hỏi lại | `ConfirmDialog` |
+| Nút Huỷ trong hộp thoại gọi thẳng hàm đóng | Bọc bằng `DialogClose asChild` (`SheetClose`, `DrawerClose`) để bộ giữ thay đổi thấy được |
 | `className` đổi màu, góc, khoảng cách của một component `@crm/ui` | biến thể mới trong `packages/ui` |
 
 Bảng này sẽ thành một luật `anti-slop` trong `tools/oxlint`. Tới lúc đó, nó được

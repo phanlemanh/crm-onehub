@@ -5,6 +5,7 @@ import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -106,15 +107,28 @@ export function HopThoaiMucTieu({
 		yeuCau.loai === "sua"
 			? yeuCau.mucTieu.level
 			: CAP_THEO_DON[yeuCau.don.loai];
-	const [cap, setCap] = useState<CapMucTieu>(capGoc);
-	const [ten, setTen] = useState(cu?.title ?? "");
-	const [loai, setLoai] = useState<LoaiMucTieu>(cu?.kind ?? "cam-ket");
-	const [chuChon, setChuChon] = useState(cu?.owner.id ?? "");
-	const [thamGia, setThamGia] = useState<string[]>(
-		cu?.participants.map((p) => p.id) ?? [],
-	);
-	const [viSao, setViSao] = useState(cu?.whyNow ?? "");
+	const [dau] = useState(() => ({
+		cap: capGoc,
+		ten: cu?.title ?? "",
+		loai: cu?.kind ?? "cam-ket",
+		chuChon: cu?.owner.id ?? "",
+		thamGia: cu?.participants.map((p) => p.id) ?? [],
+		viSao: cu?.whyNow ?? "",
+	}));
+	const [cap, setCap] = useState<CapMucTieu>(dau.cap);
+	const [ten, setTen] = useState(dau.ten);
+	const [loai, setLoai] = useState<LoaiMucTieu>(dau.loai);
+	const [chuChon, setChuChon] = useState(dau.chuChon);
+	const [thamGia, setThamGia] = useState<string[]>(dau.thamGia);
+	const [viSao, setViSao] = useState(dau.viSao);
 	const [loi, setLoi] = useState<string | null>(null);
+	const coThayDoi =
+		cap !== dau.cap ||
+		ten !== dau.ten ||
+		loai !== dau.loai ||
+		chuChon !== dau.chuChon ||
+		!cungTapHop(thamGia, dau.thamGia) ||
+		viSao !== dau.viSao;
 
 	const chu = chuChon || me.data?.id || "";
 	const tenNguoi = (id: string) =>
@@ -219,6 +233,7 @@ export function HopThoaiMucTieu({
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
+			coThayDoi={coThayDoi}
 		>
 			<DialogContent data-hop-thoai-muc-tieu={cu?.id ?? "moi"}>
 				<DialogHeader>
@@ -377,9 +392,11 @@ export function HopThoaiMucTieu({
 					</form>
 				</div>
 				<DialogFooter>
-					<Button variant="outline" onClick={dong} disabled={dangLuu}>
-						{h.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button variant="outline" disabled={dangLuu}>
+							{h.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						type="submit"
 						form={`${ma}-form`}

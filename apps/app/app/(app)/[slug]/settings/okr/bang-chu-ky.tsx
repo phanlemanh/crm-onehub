@@ -11,6 +11,7 @@ import {
 	CardTitle,
 } from "@crm/ui/components/card";
 import { CardTableEmpty } from "@crm/ui/components/card-table";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -36,7 +37,6 @@ import { useQueryState } from "nuqs";
 import { useState } from "react";
 import { toast } from "sonner";
 import { CELL, type ChuKy } from "@/app/(app)/[slug]/okr/kieu";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { okrMessages } from "@/lib/messages/okr";
 import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";

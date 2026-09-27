@@ -3,6 +3,7 @@
 import Close from "@carbon/icons-react/es/Close";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Progress } from "@crm/ui/components/progress";
@@ -13,7 +14,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { type Bac, OBac } from "@/app/(app)/[slug]/onboarding/[planId]/o-bac";
 import { ThemMoiGioi } from "@/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import {
 	DetailSheetBody,
 	DetailSheetEmpty,

@@ -6,6 +6,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
 import type * as React from "react";
+import {
+	GiuContext,
+	useGiuGoc,
+	useGiuNoiDung,
+} from "@crm/ui/components/giu-thay-doi";
 import { useMessages } from "@crm/ui/components/locale-provider";
 
 const sheetContentVariants = cva(
@@ -31,8 +36,41 @@ export type SheetSize = NonNullable<
 	VariantProps<typeof sheetContentVariants>["size"]
 >;
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-	return <SheetPrimitive.Root data-slot="sheet" {...props} />;
+function Sheet({
+	open,
+	defaultOpen,
+	onOpenChange,
+	coThayDoi,
+	giuThayDoi,
+	tuNhanThayDoi,
+	children,
+	...props
+}: React.ComponentProps<typeof SheetPrimitive.Root> & {
+	coThayDoi?: boolean;
+	giuThayDoi?: boolean;
+	tuNhanThayDoi?: boolean;
+}) {
+	const g = useGiuGoc({
+		open,
+		defaultOpen,
+		onOpenChange,
+		coThayDoi,
+		giuThayDoi,
+		tuNhanThayDoi,
+	});
+	return (
+		<GiuContext.Provider value={g.ngucCanh}>
+			<SheetPrimitive.Root
+				data-slot="sheet"
+				open={g.open}
+				onOpenChange={g.onOpenChange}
+				{...props}
+			>
+				{children}
+			</SheetPrimitive.Root>
+			{g.hopHoi}
+		</GiuContext.Provider>
+	);
 }
 
 function SheetTrigger({
@@ -42,9 +80,23 @@ function SheetTrigger({
 }
 
 function SheetClose({
+	dongNgay,
+	onClick,
 	...props
-}: React.ComponentProps<typeof SheetPrimitive.Close>) {
-	return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
+}: React.ComponentProps<typeof SheetPrimitive.Close> & {
+	dongNgay?: boolean;
+}) {
+	const g = useGiuNoiDung();
+	return (
+		<SheetPrimitive.Close
+			data-slot="sheet-close"
+			onClick={(e) => {
+				onClick?.(e);
+				if (dongNgay && !e.defaultPrevented) g?.boQuaLanToi();
+			}}
+			{...props}
+		/>
+	);
 }
 
 function SheetPortal({
@@ -75,6 +127,9 @@ function SheetContent({
 	side = "right",
 	size,
 	showCloseButton = true,
+	onInputCapture,
+	onFocusCapture,
+	onInteractOutside,
 	...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
 	side?: "top" | "right" | "bottom" | "left";
@@ -82,6 +137,7 @@ function SheetContent({
 	showCloseButton?: boolean;
 }) {
 	const msg = useMessages();
+	const g = useGiuNoiDung();
 	return (
 		<SheetPortal>
 			<SheetOverlay />
@@ -89,6 +145,18 @@ function SheetContent({
 				data-slot="sheet-content"
 				data-side={side}
 				className={cn(sheetContentVariants({ size }), className)}
+				onInputCapture={(e) => {
+					g?.danhDau(e.target, e.currentTarget);
+					onInputCapture?.(e);
+				}}
+				onFocusCapture={(e) => {
+					g?.nhoO(e.target, e.currentTarget);
+					onFocusCapture?.(e);
+				}}
+				onInteractOutside={(e) => {
+					onInteractOutside?.(e);
+					if (g?.coThayDoi) e.preventDefault();
+				}}
 				{...props}
 			>
 				{children}

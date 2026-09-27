@@ -446,7 +446,6 @@ function SheetKeHoach({ hinh }: { hinh: Hinh }) {
 				note={
 					hinh.dong ? <Badge variant="secondary">Đã đóng 30/09</Badge> : null
 				}
-				onClose={() => undefined}
 				title={<span translate="no">{KE_HOACH.doiTac}</span>}
 			/>
 			{hinh.dangTai ? (

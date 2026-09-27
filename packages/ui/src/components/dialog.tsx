@@ -5,12 +5,45 @@ import { cn } from "@crm/ui/lib/utils";
 import { XIcon } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type * as React from "react";
+import {
+	GiuContext,
+	useGiuGoc,
+	useGiuNoiDung,
+} from "@crm/ui/components/giu-thay-doi";
 import { useMessages } from "@crm/ui/components/locale-provider";
 
 function Dialog({
+	open,
+	defaultOpen,
+	onOpenChange,
+	coThayDoi,
+	giuThayDoi,
+	children,
 	...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
-	return <DialogPrimitive.Root data-slot="dialog" {...props} />;
+}: React.ComponentProps<typeof DialogPrimitive.Root> & {
+	coThayDoi?: boolean;
+	giuThayDoi?: boolean;
+}) {
+	const g = useGiuGoc({
+		open,
+		defaultOpen,
+		onOpenChange,
+		coThayDoi,
+		giuThayDoi,
+	});
+	return (
+		<GiuContext.Provider value={g.ngucCanh}>
+			<DialogPrimitive.Root
+				data-slot="dialog"
+				open={g.open}
+				onOpenChange={g.onOpenChange}
+				{...props}
+			>
+				{children}
+			</DialogPrimitive.Root>
+			{g.hopHoi}
+		</GiuContext.Provider>
+	);
 }
 
 function DialogTrigger({
@@ -26,9 +59,23 @@ function DialogPortal({
 }
 
 function DialogClose({
+	dongNgay,
+	onClick,
 	...props
-}: React.ComponentProps<typeof DialogPrimitive.Close>) {
-	return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
+}: React.ComponentProps<typeof DialogPrimitive.Close> & {
+	dongNgay?: boolean;
+}) {
+	const g = useGiuNoiDung();
+	return (
+		<DialogPrimitive.Close
+			data-slot="dialog-close"
+			onClick={(e) => {
+				onClick?.(e);
+				if (dongNgay && !e.defaultPrevented) g?.boQuaLanToi();
+			}}
+			{...props}
+		/>
+	);
 }
 
 function DialogOverlay({
@@ -52,12 +99,16 @@ function DialogContent({
 	children,
 	showCloseButton = true,
 	size,
+	onInputCapture,
+	onFocusCapture,
+	onInteractOutside,
 	...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
 	showCloseButton?: boolean;
 	size?: "default" | "wide" | "table";
 }) {
 	const msg = useMessages();
+	const g = useGiuNoiDung();
 	return (
 		<DialogPortal>
 			<DialogOverlay />
@@ -70,6 +121,18 @@ function DialogContent({
 					size === "table" && "sm:max-w-(--container-page-wide)",
 					className,
 				)}
+				onInputCapture={(e) => {
+					g?.danhDau(e.target, e.currentTarget);
+					onInputCapture?.(e);
+				}}
+				onFocusCapture={(e) => {
+					g?.nhoO(e.target, e.currentTarget);
+					onFocusCapture?.(e);
+				}}
+				onInteractOutside={(e) => {
+					onInteractOutside?.(e);
+					if (g?.coThayDoi) e.preventDefault();
+				}}
 				{...props}
 			>
 				{children}
