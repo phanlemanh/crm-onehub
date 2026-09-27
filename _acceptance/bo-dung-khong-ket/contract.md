@@ -189,6 +189,17 @@ Không gian đủ nhỏ để kê trục bằng tay; ô và trục dưới đây
   - «chỉ nói đã tạo khi có `draft_ready` kèm `versionId`».
 
   Không AC nào đo câu chữ của chỉ dẫn. Lưới là móc kiểm của AC-5.
+- **Lái thật ở S3 (27/09, phiên đo `crm_friendly_liskov_8d4458_do`).**
+  - Gieo qua `persistBuilderInputRequest` với mẫu Gemini thật.
+  - Khổ 1440 và 375, ngôn ngữ `vi`: câu tiếng Việt và hai nút hiện thay ô soạn tin.
+  - Ở khổ 375, bản đầu ép câu thành cột hẹp. Đã sửa: hai nút xếp dưới câu bằng
+    `ItemFooter`.
+  - Bấm «Cấp thêm» / «Dừng»: bong bóng hiện đúng nhãn tiếng Việt, ô soạn tin trở lại.
+  - Không chạy máy chủ tác nhân trong lần lái này. Nửa «eve chạy tiếp» đo ở E11.
+- **Dòng dấu vết công cụ vẫn tiếng Anh.** Hội thoại hiện «Session limit continuation»
+  cho bước eve cấp thêm hạn mức, cùng lối với mọi dòng dấu vết khác («Named this
+  chat», «Wrote instructions»). `apps/app/lib/agent-tool-display.ts` chỉ có nhãn tiếng
+  Anh; vòng này không đổi.
 - **Không `migration`.** `pendingInputRequest` là cột `Json` sẵn có; khuôn đọc mở rộng thêm
   một loại.
 - **Đường nền 27/09 đỏ, không do kho** (`duong-nen.md`):

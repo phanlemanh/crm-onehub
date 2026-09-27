@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { schemas } from "@crm/validation";
+import { type InputRequest, schemas } from "@crm/validation";
 import {
 	builderQuestion,
 	buildPendingInputRequest,
@@ -24,7 +24,7 @@ if (yeuCau?.kind !== "session-limit") {
 	throw new Error("mau session-limit-that.json khong con la session-limit");
 }
 
-function cauHoiQuaDuongThat(request: object) {
+function cauHoiQuaDuongThat(request: InputRequest) {
 	const cauHoi = builderQuestion.parse(buildPendingInputRequest(request, true));
 	if (!cauHoi) throw new Error("reader cua API khong doc duoc cau hoi");
 	return cauHoi;
@@ -40,7 +40,7 @@ afterEach(() => {
 });
 
 function ve(
-	request: object,
+	request: InputRequest,
 	{
 		pending = false,
 		onAnswer = async () => {},
@@ -147,6 +147,12 @@ describe("het-han-muc", () => {
 			kind: "question",
 			requestId: "cau-hoi-1",
 			prompt: "Which channel should receive this?",
+			action: {
+				kind: "tool-call",
+				callId: "call-cau-hoi-1",
+				toolName: "ask_question",
+				input: { prompt: "Which channel should receive this?" },
+			},
 			display: "text",
 			options: [],
 		});

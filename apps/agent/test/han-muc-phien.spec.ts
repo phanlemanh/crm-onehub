@@ -10,10 +10,6 @@ const GOC_APP = join(dirname(fileURLToPath(import.meta.url)), "..");
 const NGAY_MS = 24 * 60 * 60 * 1000;
 const SO_VIET_TAY = /TokensPerSession:\s*\d/;
 
-type CoHanMuc = { limits?: Record<string, unknown> };
-
-const hanMuc = (agent: unknown) => (agent as CoHanMuc).limits;
-
 export function soHanMucViet(nguon: string, ten: string): string[] {
 	return SO_VIET_TAY.test(nguon) ? [ten] : [];
 }
@@ -49,20 +45,20 @@ describe("han-muc", () => {
 	for (const vai of VAI) {
 		it(`han-muc: ${vai.ten} maxInputTokensPerSession`, () => {
 			expect(
-				hanMuc(vai.agent)?.maxInputTokensPerSession,
+				vai.agent.limits?.maxInputTokensPerSession,
 				`${vai.ten} maxInputTokensPerSession`,
 			).toBe(vai.vao);
 		});
 
 		it(`han-muc: ${vai.ten} maxOutputTokensPerSession`, () => {
 			expect(
-				hanMuc(vai.agent)?.maxOutputTokensPerSession,
+				vai.agent.limits?.maxOutputTokensPerSession,
 				`${vai.ten} maxOutputTokensPerSession`,
 			).toBe(vai.ra);
 		});
 
 		it(`han-muc: ${vai.ten} doc dung o SESSION_LIMITS`, () => {
-			expect(hanMuc(vai.agent)).toEqual(vai.o);
+			expect(vai.agent.limits).toEqual(vai.o);
 			expect(vai.o.sessionTimeoutMs).toBe(vai.hetGio);
 		});
 	}

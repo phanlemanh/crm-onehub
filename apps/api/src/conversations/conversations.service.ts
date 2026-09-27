@@ -575,7 +575,7 @@ export class ConversationsService {
 			? {
 					requestId: input.requestId,
 					optionId: input.optionId,
-					...(question.kind === "session-limit" ? { kind: question.kind } : {}),
+					kind: question.kind,
 				}
 			: { requestId: input.requestId, text: input.text };
 		try {

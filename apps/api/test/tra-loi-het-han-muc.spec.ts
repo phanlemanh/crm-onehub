@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { workspaceSlug } from "@crm/db/workspace";
-import { schemas } from "@crm/validation";
+import { type InputRequest, schemas } from "@crm/validation";
 import {
 	buildPendingInputRequest,
 	SESSION_LIMIT_OPTION_IDS,
@@ -23,7 +23,7 @@ if (yeuCau?.kind !== "session-limit") {
 
 let service: ConversationsService;
 
-async function hoiThoaiDangCho(pending: object) {
+async function hoiThoaiDangCho(pending: InputRequest) {
 	const hoi = await service.createBuilder(
 		{
 			clientRequestId: crypto.randomUUID(),
@@ -185,6 +185,12 @@ describe("tra-loi", () => {
 			kind: "question",
 			requestId: `cau-hoi-${suffix}`,
 			prompt: "Ten kenh?",
+			action: {
+				kind: "tool-call",
+				callId: `call-cau-hoi-${suffix}`,
+				toolName: "ask_question",
+				input: { prompt: "Ten kenh?" },
+			},
 			display: "text",
 			options: [],
 		});
