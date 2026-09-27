@@ -84,7 +84,7 @@ trình Trợ lý OKR», cuối mục 5.
 | 4 | `cap-nhat-tuan-okr` | «Sáng thứ Hai tôi được nhắc và cập nhật mọi KR của mình trong một phút» | T3 | lượt 3 |
 | 5 | `toan-canh-okr` | «Cả công ty nhìn được toàn cảnh và họp tuần trên cùng một màn» | T2 | lượt 4 |
 | 6 | `so-okr-tu-chay` | «Số của KR tự chảy từ CRM, bấm vào là ra bản ghi» | T3 | lượt 3 |
-| 7 | `khep-ky-okr` | «Kỳ được rà, chấm, nhìn lại và mang sang trong công cụ» | T2 | lượt 4, 6 |
+| 7 | `khep-ky-okr` | «Kỳ được rà, chấm, nhìn lại và mang sang trong công cụ» | T2 | lượt 4, 6 · 27/09 chủ kho cho viết mã khi 9a chưa lên onehub; gộp onehub tới #177 (4n). S3 xong 28/09 ~00:15: 17 việc, mỗi việc một tác tử kèm một người soát (14 lượt soát ĐẠT, một lượt CẦN SỬA đã vá); vá thêm ngoài kế hoạch: mang sang bỏ người tham gia đã rời và giao KR của người đã rời cho người phụ trách mục tiêu; bài «việc của tôi» của lượt 4 phụ thuộc giờ chạy (đỏ cả trên onehub khi now+1h rơi vào thứ Hai) sửa cho tất định trong nhánh. Năm lệnh chứng xanh. Sang S4 |
 | 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 · tách 8a, 8b | lượt 3 · 8a sau bốn tuần dùng quý 4 |
 | — | vá lối rò Slack | «Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai chỉ OKR» | T3 | lượt 6 đã gộp; xong trước ngày mở cho cả công ty |
 | 9 | `tro-ly-okr` | «Trợ lý giúp tôi viết cho sắc và tóm tắt tuần cho đơn vị» | 9a T3 · 9b, 9c T2 | 9a sau vá Slack · 9b lượt 3 và luật lượt 7 · 9c sau 9b, ≥ 3 tuần Cập nhật tuần thật |
