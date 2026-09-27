@@ -145,3 +145,12 @@ error: Gọi +84 912.345.678 nhé
 Received: 0
 (fail) so-tien > so-tien: so dien thoai lien sau so khac van bi che [0.30ms]
 ```
+
+## Sau trần 3 round — bộ che số trả về bản gốc (cây 1296b995)
+
+```
+== ap lai bo che round 3 (exit 1)
+error: Gọi +84  912.345.678
+Received: 0
+(fail) so-tien > so-tien: so dien thoai lien sau so khac van bi che [0.30ms]
+```
