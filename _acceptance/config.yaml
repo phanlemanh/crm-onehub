@@ -192,6 +192,12 @@ executors:
     tnm_chua_nop: 'bun run test -- "cd apps/agent && bun test test/dong-luot-tac-nhan.integration.spec.ts -t chua-nop"'
     tnm_doi_sau_khi_dung: 'bun run test -- "cd apps/agent && bun test test/model-theo-vai.integration.spec.ts -t doi-sau-khi-dung"'
     tnm_bon_phien: 'bun run test -- "cd apps/agent && bun test test/model-theo-vai.integration.spec.ts -t bon-phien"'
+    bdk_han_muc: 'bun run test -- "cd apps/agent && bun test test/han-muc-phien.spec.ts -t han-muc"'
+    bdk_luu_cau_hoi: 'bun run test -- "cd apps/agent && bun test test/cau-hoi-het-han-muc.integration.spec.ts -t luu-cau-hoi"'
+    bdk_tra_loi_api: 'bun run test -- "cd apps/api && bun test test/tra-loi-het-han-muc.spec.ts -t tra-loi"'
+    bdk_tra_loi_dieu_phoi: 'bun run test -- "cd apps/agent && bun test test/cau-hoi-het-han-muc.integration.spec.ts -t dieu-phoi"'
+    bdk_man_het_han_muc: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/het-han-muc.dom.tsx"
+    bdk_chan_khuon: 'bun run test -- "cd apps/agent && bun test test/chan-khuon-bo-dung.spec.ts -t chan-khuon"'
     vco_ma_tran_trpc: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     vco_ma_tran_khoa_rest: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-khoa-rest"'
     vco_doi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t doi-chung"'
@@ -794,6 +800,10 @@ executors:
     lint_slop: "bun run lint:slop"
     tnm_goi_that: "bun _acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
     tnm_tai_lieu: "node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
+    bdk_tai_lieu: "node _acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
+    bdk_eve_chan_khuon: "cd apps/agent/test/eve-tran && ../../node_modules/.bin/eve eval chan-khuon"
+    bdk_eve_chay_tiep: "cd apps/agent/test/eve-tran && ../../node_modules/.bin/eve eval chay-tiep"
+    bdk_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/components/agent-session-limit-composer.tsx" --mode static'
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
