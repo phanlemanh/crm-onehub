@@ -61,6 +61,20 @@ import {
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import {
+	banGhiChiSoInput,
+	banGhiChiSoOutput,
+	chiSoOutput,
+	datNguonKrOutput,
+	datNguonKrVao,
+	ghiSoKrInput,
+	ghiSoKrOutput,
+	lichSuSoInput,
+	lichSuSoOutput,
+	xemTruocChiSoInput,
+	xemTruocChiSoOutput,
+} from "./okr-so.contracts";
+import { OkrSoService } from "./okr-so.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import {
 	cayCanChinhOutput,
@@ -89,6 +103,7 @@ export class OkrRouter {
 		@Inject(OkrXemService) private readonly xem: OkrXemService,
 		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
 		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
+		@Inject(OkrSoService) private readonly so: OkrSoService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -540,5 +555,64 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof transferOkrInput>,
 	) {
 		return this.traoDoi.transferWork(ctx.user.id, input);
+	}
+
+	@Query({ output: chiSoOutput, meta: restMeta("GET", "/okr/metrics", TAG) })
+	chiSo() {
+		return this.so.chiSo();
+	}
+
+	@Query({
+		input: xemTruocChiSoInput,
+		output: xemTruocChiSoOutput,
+		meta: restMeta("POST", "/okr/metrics/preview", TAG),
+	})
+	xemTruocChiSo(@Input() input: z.infer<typeof xemTruocChiSoInput>) {
+		return this.so.xemTruocChiSo(input);
+	}
+
+	@Mutation({
+		input: datNguonKrVao,
+		output: datNguonKrOutput,
+		meta: restMeta("POST", "/okr/key-results/{keyResultId}/source", TAG),
+	})
+	datNguonKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof datNguonKrVao>,
+	) {
+		return this.so.datNguonKr(ctx.user.id, input);
+	}
+
+	@Query({
+		input: lichSuSoInput,
+		output: lichSuSoOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/snapshots", TAG),
+	})
+	lichSuSo(@Input() input: z.infer<typeof lichSuSoInput>) {
+		return this.so.lichSuSo(input.keyResultId);
+	}
+
+	@Query({
+		input: banGhiChiSoInput,
+		output: banGhiChiSoOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/records", TAG),
+	})
+	banGhiChiSo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof banGhiChiSoInput>,
+	) {
+		return this.so.banGhiChiSo(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ghiSoKrInput,
+		output: ghiSoKrOutput,
+		meta: restMeta("POST", "/okr/key-results/{id}/value", TAG),
+	})
+	ghiSoKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ghiSoKrInput>,
+	) {
+		return this.so.ghiSoKr(ctx.user.id, input);
 	}
 }

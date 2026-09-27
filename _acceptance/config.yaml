@@ -229,6 +229,20 @@ executors:
     tco_ui_heatmap: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/heatmap.dom.tsx'
     tco_ui_chon_ky: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/period-select.dom.tsx'
     tco_chu: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/render-diff.spec.tsx'
+    sot_danh_muc: 'cd packages/validation && bun test test/okr-chi-so.spec.ts'
+    sot_chu: 'cd apps/app && bun test test/okr-so-chu.spec.ts test/messages-guard.spec.ts'
+    sot_dem: 'bun run test -- "cd apps/api && bun test test/okr-chi-so.spec.ts -t dem"'
+    sot_dat_nguon: 'bun run test -- "cd apps/api && bun test test/okr-nguon.spec.ts -t dat-nguon"'
+    sot_khoa_cong_bo: 'bun run test -- "cd apps/api && bun test test/okr-nguon.spec.ts -t khoa-cong-bo"'
+    sot_chup: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chup.integration.spec.ts -t chup-moi-ngay"'
+    sot_chup_hieu_nang: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 PRISMA_LOG_QUERIES=true bun test test/okr-chup-hieu-nang.integration.spec.ts"'
+    sot_khong_doi: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chup.integration.spec.ts -t lich-su-khong-doi && cd ../api && bun test test/okr-nguon.spec.ts -t lich-su-khong-doi-api"'
+    sot_ban_ghi: 'bun run test -- "cd apps/api && bun test test/okr-nguon.spec.ts -t ban-ghi"'
+    sot_khoa_api: 'bun run test -- "cd apps/api && bun test test/okr-khoa-api.spec.ts"'
+    sot_sheets: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-sheets.spec.ts && bun test test/okr-chup.integration.spec.ts -t sheets"'
+    sot_sheets_api: 'bun run test -- "cd apps/api && bun test test/okr-nguon.spec.ts -t sheets"'
+    sot_cap_nhat_may: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t kr-may"'
+    sot_pham_vi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran && bun test test/vai-chi-okr.spec.ts -t pham-vi-so"'
     cnt_gui_lo: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t gui-lo"'
     cnt_khuon: 'bun run test -- "cd packages/validation && bun test test/okr-cap-nhat.spec.ts"'
     cnt_phien_giay: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t phien-giay"'
@@ -1067,6 +1081,12 @@ executors:
     dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
     tco_man_chrome: 'DATABASE_URL="$(sed -n -e "s#^DATABASE_URL=##p" .env | head -1 | tr -d "\\042" | sed "s#/crm?#/crm_toan_canh_okr_do?#")" NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3930} API_URL=${API_URL:-http://localhost:3931} CUA_CHAN_URL=${CUA_CHAN_URL:-http://localhost:3932} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
     tco_soi_ma: "bun _acceptance/toan-canh-okr/rang/soi-ma.mjs"
+    sot_soi_chi_them: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them"
+    sot_san_thiet_ke: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca thiet-ke"
+    sot_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs"'
+    sot_tin_so: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/tin-so.mjs --san"'
+    sot_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/ty-le.mjs"'
+    sot_migration_chi_them: "node _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs"
     tco_san_thiet_ke: "bun _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs"
     cnt_duong_do: "bun _acceptance/cap-nhat-tuan-okr/rang/duong-do.mjs"
     cnt_man_chrome: 'DATABASE_URL="$(sed -n -e "s#^DATABASE_URL=##p" .env | head -1 | tr -d "\\042" | sed "s#/crm?#/crm_cnt_dev_do?#")" NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3920} API_URL=${API_URL:-http://localhost:3921} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"'

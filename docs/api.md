@@ -562,18 +562,100 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   check-in and is allowed only when the caller is the KR owner's unit head or an
   OneHub admin (`OkrAccessService.suaDuocDonVi`) — a fellow KR owner cannot submit
   for another owner.
-- **A running KR's `currentValue` only moves through a weekly update.**
-  `updateKeyResult` refuses any `currentValue` change
+- **A running KR's `currentValue` only moves through a weekly update — unless a
+  machine writes it.** `updateKeyResult` refuses any `currentValue` change
   (`OKR.thongDiep.hienTaiQuaCapNhat`) once the objective is `cong-bo` and its cycle
   is `dang-chay` — every other field (title, `targetValue`, `unit`, owner…) still
   writes normally. `okr.objective`'s per-KR `hienTaiQuaCapNhat` flag is exactly that
   same condition, so the sheet can lock the field before the write is even tried,
-  not just after a 400.
+  not just after a 400. The exception is a KR whose effective `source` is not `tay`:
+  there `updateKeyResult` refuses a `currentValue` change in every phase
+  (`OKR.thongDiep.so.hienTaiCuaMay`), because the number comes from the agent's daily
+  snapshot (`crm`, `bang-tinh`) or from `ghiSoKr` (`api`). `guiCapNhat` on such a KR
+  ignores the value sent, records the machine's current value on the check-in and
+  leaves `currentValue` alone; confidence and note are still required.
 - **`removeKeyResult` refuses once a KR has history.** A KR with at least one
   `OkrCheckIn` row cannot be deleted (`krDaCapNhat`) — only edited; a KR another
   objective aligns to (`OkrAlignment.targetKeyResultId`) is refused the same way
   (`krDangLaDich`). Both checks run inside the same lock as the delete, so a
   check-in written mid-transaction cannot race past them.
+- **A KR's number has a source, and the source locks at publication.**
+  `okrKeyResult.source` is the effective source (`tay` · `crm` · `api` · `bang-tinh`) —
+  the one that drives `currentValue` and progress. A machine source's settings are one
+  `OkrNguonKr` row per KR, parsed at the read by `@crm/validation/okr-nguon`.
+  `datNguonKr` sets, changes or removes it: on a draft objective the change takes effect
+  at once (`source := loai`, the row overwritten, `tay` deletes it). Once the objective
+  is published the effective source is locked like the start value — a `tay` KR may add
+  a **side measurement** (an `OkrNguonKr` row while `source` stays `tay`: the agent
+  snapshots it and the screen shows it beside the hand number, progress still follows
+  the hand number; `soMay` on `okr.objective` and `okr.capNhatTuan` is the newest
+  snapshot only when its `nguon` is the configured machine type, so switching a side
+  measurement from `crm` to `api` shows no number until the first `api` write), and changing or removing a machine KR's source is refused
+  (`OKR.thongDiep.so.nguonDaKhoa`). A CRM metric is a count, so `crm` — as the effective
+  source or as a side measurement — is refused for a `moc` or `phan-tram` KR
+  (`OKR.thongDiep.so.crmKhongHopKieu`, rule `crmHopKieu` in
+  `@crm/validation/okr-nguon`); `api` and `bang-tinh` stay open to them, and the value
+  they bring is checked against the kind instead. `updateKeyResult` holds the same line
+  from the other side: changing the kind of a KR that takes `crm` (effective or side
+  measurement) to `moc` or `phan-tram` is refused with the same message. A unit in the scope must exist and be live, a person
+  must be a member, a Sheets link must be `docs.google.com/spreadsheets` with an A1
+  cell, and Sheets is refused while `GOOGLE_SHEETS_EMAIL` or `GOOGLE_SHEETS_KHOA` is
+  missing. Every call leaves one `doi-nguon` trail row (before → after; a side
+  measurement notes «đo cạnh») and is phase-locked like the other writes. A Sheets
+  source queues an `okr-doc-sheet` `AgentTask` for a trial read — the API never calls
+  Google.
+- **Seven CRM metrics, one definition each.** The catalog is `CHI_SO_OKR`, defined in
+  `@crm/db/okr-chi-so-danh-muc` and re-exported with its Zod shapes by
+  `@crm/validation/okr-chi-so`: what is counted, which date puts a record in the
+  period, who is credited, what record sits behind it and which scopes it accepts
+  (company, division, department, person; `ghi-danh-dat-bac` also needs `bac`). There
+  is no query builder. `@crm/db/okr-chi-so` holds the one `dieuKienChiSo` that builds
+  the Prisma `where`; `demChiSo` counts with it and `banGhiChiSo` lists with it, so a
+  number and its list cannot disagree. A division or department scope reads each
+  credited person's primary department at the time of counting
+  (`buoc-xong-dung-han` reads the step's department). The period is the objective's
+  cycle, from `startsOn` 00:00 to the end of the snapshot day in Vietnam time, capped
+  at `endsOn`. Caps and timings live in `OKR_SO` (`packages/db/src/okr-so-config.ts`).
+  `_acceptance/so-okr-tu-chay/rang/tin-so.mjs --ky <tu>..<den>` compares five of them,
+  read-only, with a hand-written count (`dem-doc-lap.sql`) against the tolerances
+  declared in `lech-khai-truoc.md`; `ty-le-kr-co-nguon.sql` gives the share of
+  published KRs with an effective CRM source, with a CRM side measurement, and the
+  share of side-measured check-ins that took the machine number (`SET okr.chu_ky` and
+  `SET okr.bo_phan = '<id>,<id>'` first).
+- **`okrSoChup` is append-only history.** One row per KR per day for `crm` and
+  `bang-tinh` (the partial unique index `okrSoChup_may_mot_ngay`), any number per day for `api` (the newest is
+  that day's number). Each row copies the definition it was counted with (`chiSo`,
+  `phamVi`, `bac`), so history describes itself after the source changes. Nothing
+  updates or deletes a row: the foreign key to the KR is `ON DELETE RESTRICT`,
+  `removeKeyResult` refuses a KR that has a snapshot (`OKR.thongDiep.so.krDaCoSoChup`),
+  and `_acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them` fails on any
+  `okrSoChup.update*` / `delete*` or raw SQL that does either outside tests. Rows are
+  written in three places only: the agent's daily snapshot, the shared `chupKrCrm`, and
+  `ghiSoKr`.
+- **Another system writes a number with an API key.** `okr.ghiSoKr` is also
+  `POST /rest/okr/key-results/{id}/value` with `x-api-key` — a member's key
+  (`enableSessionForAPIKeys`); the service checks that member with
+  `OkrAccessService.assertSuaKr` (the KR's owner, or a head who edits the objective's unit),
+  so the «chỉ OKR» role may call it. It takes `giaTri` and an optional `ghiChu`; it
+  refuses a KR whose source is not `api` (`OKR.thongDiep.so.khongNhanApi`), a value
+  that does not fit the KR's kind, a locked phase, any call while today in Vietnam is
+  still before `startsOn` (`OKR.thongDiep.so.kyChuaToi`), and any call once today is
+  past `endsOn` (`OKR.thongDiep.so.kyDaQua`), even before the phase moves. It writes
+  one `okrSoChup` row (`nguon: api`, `tacGiaUserId`), updates `currentValue` when the
+  effective source is `api`, and leaves one `ghi-so-api` trail row.
+- **Clicking a number opens the records behind it.** `okr.lichSuSo` returns the
+  snapshot rows, newest first, read from the table — never recounted.
+  `okr.banGhiChiSo({ keyResultId, ngay?, trang })` recounts **with the definition copied
+  into that day's snapshot**, not the KR's current settings (a KR with no snapshot yet
+  uses its current settings). It returns the definition, the date range, the number
+  snapshotted for `ngay` (the latest day by default), the number counted now for the
+  same range (the list's own total — one count, not a second one), a `lech` flag when the
+  two differ, and one page (`OKR_SO.banGhi.coTrang`)
+  of `{ loai, id, ten, ngay }` rows the sheet opens as a stacked record. An `api` KR
+  returns its writes (`lanGhi`) instead. The list is partner data: the «chỉ OKR» role
+  gets `403` with `OKR.thongDiep.so.danhSachDoiTac`, while it can still read the number
+  through `lichSuSo`. `okr.chiSo` returns the catalog and whether Sheets is on;
+  `okr.xemTruocChiSo` counts up to now for the dialog and writes nothing.
 - **Comments, mentions and follow live on the objective, not the KR.**
   `addComment` may tag one KR of that same objective (`keyResultId`, refused with
   `krKhacMucTieu` if the KR belongs to a different objective) and every mention
@@ -613,7 +695,8 @@ Read it before touching any amount, total, chart or rate.
   `cache.company(id)`, `cache.contact(id)`, `cache.activity()`. **A new mutation adds a
   call there, not a new list of keys.**
 - **A new query a screen reads joins the list its writes refresh.** Every `okr.*`
-  query an OKR screen reads is in `cache.okr`, except `okr.access` and `okr.thanhVien`;
+  query an OKR screen reads is in `cache.okr`, except `okr.access`, `okr.thanhVien`
+  and `okr.chiSo` (the metric catalogue and whether Sheets is on — no OKR write changes it);
   `apps/app/test/okr-lam-moi.spec.ts` reads both sides and fails on the one left out.
 - **A deletion is `cache.removed(ref)`** — one wide fan-out, and the only place
   `refetchType: "none"` is right: the deleted record's `byId` query is still mounted

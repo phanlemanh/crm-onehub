@@ -366,14 +366,19 @@ export function DetailSheetEmpty({
 	title,
 	description,
 	action,
+	compact,
 }: {
 	icon: CarbonIcon;
 	title: string;
 	description: string;
 	action?: ReactNode;
+	compact?: boolean;
 }) {
 	return (
-		<Empty className="flex-1">
+		<Empty
+			className={compact ? undefined : "flex-1"}
+			size={compact ? "compact" : undefined}
+		>
 			<EmptyHeader>
 				<EmptyMedia variant="icon">
 					<Icon icon={icon} />

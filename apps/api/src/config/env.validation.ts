@@ -58,6 +58,14 @@ export class EnvironmentVariables {
 
 	@IsOptional()
 	@IsString()
+	GOOGLE_SHEETS_EMAIL?: string;
+
+	@IsOptional()
+	@IsString()
+	GOOGLE_SHEETS_KHOA?: string;
+
+	@IsOptional()
+	@IsString()
 	MICROSOFT_CLIENT_ID?: string;
 
 	@IsOptional()

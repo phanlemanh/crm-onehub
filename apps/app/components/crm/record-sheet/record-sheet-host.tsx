@@ -10,6 +10,7 @@ import { DealSheet } from "./deal-sheet";
 import { ObjectiveSheet } from "./objective-sheet";
 import { PlanSheet } from "./plan-sheet";
 import { type RecordRef, recordKey, useRecordStack } from "./record-stack";
+import { SoKrSheet } from "./so-kr-sheet";
 
 export function RecordSheetHost() {
 	const { stack, top, closeAll } = useRecordStack();
@@ -45,6 +46,10 @@ export function RecordSheetHost() {
 
 				{shown?.kind === "objective" ? (
 					<ObjectiveSheet key={recordKey(shown)} objectiveId={shown.id} />
+				) : null}
+
+				{shown?.kind === "so-kr" ? (
+					<SoKrSheet key={recordKey(shown)} keyResultId={shown.id} />
 				) : null}
 			</DetailSheet>
 

@@ -8,6 +8,7 @@ import {
 } from "../lib/custom-agent-dispatch";
 import { brief, drainAll, taskAuth } from "../lib/dispatch";
 import { lenLichNhac } from "../lib/nhac-ke-hoach";
+import { chupSoOkr } from "../lib/okr-chup";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { kiemBot } from "../lib/zalo-bot";
 import { dongHoiQuaHan } from "../lib/zalo-hoi";
@@ -19,6 +20,7 @@ export default defineSchedule({
 			Promise.all([
 				sweepBlankFacts(),
 				lenLichNhac(),
+				chupSoOkr(),
 				kiemBot(),
 				dongHoiQuaHan(),
 

@@ -359,6 +359,66 @@ API; the API only reads and writes rows.
   like every other assistant conversation, and that is where a manual review reads
   them. Log lines carry `message_id`, `hoiId` and `zaloChatId`, never text.
 
+### Chụp số OKR mỗi ngày
+
+Nhịp dispatch chụp số OKR qua `chupSoOkr` (`lib/okr-chup.ts`), cạnh `lenLichNhac` —
+không có lịch riêng. Mỗi nhịp chụp số của **hôm qua** theo giờ VN cho mọi KR có nguồn máy
+chưa có dòng của ngày đó; phần lớn các nhịp chỉ là một câu truy vấn trả rỗng.
+
+- **Chọn KR:** có `OkrNguonKr` loại `crm` hoặc `bang-tinh`, mục tiêu đã `cong-bo` (mục tiêu
+  nháp chưa có số máy — hộp thoại KR dùng «đọc thử» và «tới hôm nay» thay cho nó), chu kỳ
+  ở pha ghi được (`PHA_GHI_DUOC`), hôm qua nằm trong `[startsOn, endsOn]`, và chưa có dòng
+  `okrSoChup` máy cho hôm qua. Tối đa `OKR_SO.chup.toiDaMoiNhip` KR một nhịp; phần còn lại
+  nhịp sau.
+- **`crm`** đi qua `chupKrCrm` (`@crm/db/okr-chi-so`) — cùng `demChiSo` mà API dùng cho
+  bấm vào số, đếm từ đầu kỳ tới hết hôm qua. **`bang-tinh`** đọc ô (mục dưới); đọc lỗi
+  thì ghi `docLoi` và `thuLuc`, bỏ KR đó tới khi qua `OKR_SO.sheets.thuLaiMs`.
+- **Ghi bằng `createMany … skipDuplicates`**, dựa trên chỉ mục duy nhất một phần
+  `(keyResultId, ngay)` cho dòng máy: nhịp chạy lại hay hai lượt chồng nhau không thêm
+  dòng. Dòng chép định nghĩa lúc đếm (`chiSo`, `phamVi`, `bac`).
+- **`currentValue` chỉ đổi khi nguồn hiệu lực bằng loại nguồn** (`source = crm` với KR
+  crm, `source = bang-tinh` với KR Sheets), trong cùng giao dịch, và chỉ khi không có
+  dòng máy nào mới hơn. KR đo cạnh (`source = tay`) có dòng chụp nhưng `currentValue` là
+  của người.
+- **Ngày đã chụp không bao giờ chụp lại.** Lưu trữ bản ghi, mở lại thoả thuận, chuyển
+  người sang phòng khác hay đổi tiền tệ báo cáo sau đó không đổi số đã chụp; KR của chu
+  kỳ đã qua `endsOn` hay đã khoá thì không được chọn nữa, nên `currentValue` đứng yên.
+  Bảng chụp là vết của số máy — không có dòng `OkrTrail` mỗi ngày.
+- **Cả lượt có trần thời gian.** Không bắt đầu một lần đọc Sheets nếu thời gian đã trôi
+  cộng `OKR_SO.sheets.tranMs` vượt `OKR_SO.chup.hanNhipMs`, và tối đa
+  `OKR_SO.sheets.toiDaMoiNhip` lần đọc một nhịp — Google treo không làm trễ nhắc buổi sáng
+  hay hàng việc cùng nhịp. Lỗi của một KR ghi log bằng tên lỗi và không dừng các KR khác.
+
+### Đọc Google Sheets (OKR)
+
+`lib/okr-sheets.ts` đọc một ô cho KR nguồn `bang-tinh`, bằng tài khoản dịch vụ chỉ đọc
+(`GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA`; thiếu một trong hai thì trả `tat`, không
+gọi mạng — năng lực «Google Sheets» trong `capabilities.ts`).
+
+- **JWT RS256 ký bằng Web Crypto**, đổi lấy token ở `OKR_SO.sheets.tokenUrl` (phạm vi
+  `spreadsheets.readonly`). Token giữ theo từng hàm `fetch` trong `OKR_SO.sheets.tokenDungMs`;
+  401 xoá nó.
+- **`values/<ô>?valueRenderOption=UNFORMATTED_VALUE`**. Một lần đọc gọi `fetch` tối đa
+  `OKR_SO.sheets.soLanThu` lần — lời xin token, khi phải xin, là một trong số đó — và mỗi lời
+  gọi có `tranMs / soLanThu`, nên cả lần đọc nằm trong `OKR_SO.sheets.tranMs`. Chỉ 5xx, 429,
+  401 và lỗi mạng thử lại. 403 → `chua-chia-se`, 404 → `khong-thay`, khác 2xx → `google-loi`; ô vắng hay rỗng →
+  `o-trong`; chữ qua `docSoOkr` («1.240» → 1240), `#REF!`, đúng/sai, số ngoài `soKr` →
+  `khong-phai-so`. Số đọc được còn phải hợp kiểu KR (`kiemGiaTriTheoKieu`: mốc chỉ 0 hay 1,
+  phần trăm trong 0–100) — không hợp thì `khong-hop-kieu`: ghi `docLoi`, không ghi dòng
+  `okrSoChup`, `currentValue` đứng yên. Luật này chạy ở cả nhịp chụp lẫn «đọc thử».
+- **Không qua `@crm/db/safe-fetch`.** `safe-fetch` chặn địa chỉ do người nhập trỏ vào mạng
+  trong. Ở đây hai máy chủ là hằng số của Google trong `OKR_SO.sheets`; người chỉ góp mã
+  bảng tính (đã lọc bằng biểu thức ở `sheetIdTuUrl`) và ô, cả hai mã hoá làm một đoạn đường
+  dẫn. `OKR_SHEETS_TOKEN_URL`/`OKR_SHEETS_API_URL` ghi đè hai máy chủ đó chỉ khi `NODE_ENV`
+  khác `production`, cho phiên đo trỏ tới Google giả.
+- **Hai lối vào.** Nhịp chụp (`chupSoOkr`) đọc tối đa `OKR_SO.sheets.toiDaMoiNhip` ô và không
+  bắt đầu một lần đọc nếu thời gian đã trôi cộng `tranMs` vượt `OKR_SO.chup.hanNhipMs`. Việc
+  `okr-doc-sheet` (làn trực tiếp, `PRIORITY.okrSheet`) là «đọc thử» khi đặt nguồn hay bấm «Đọc
+  lại»: `chayDocSheet` ghi `docLuc/docGiaTri/docLoi`, không ghi `okrSoChup`, và đóng việc bằng
+  `đọc ô: được` hoặc `đọc ô: <lý do>`.
+- **Log không có giá trị ô, mã bảng tính, khoá hay token** — chỉ lý do, mã HTTP hoặc tên lỗi.
+  Lỗi của `fetch` trong Bun mang theo URL, nên không in đối tượng lỗi.
+
 ### Backfills
 
 Sign-in sweep covers records never looked up (10 credits/company);

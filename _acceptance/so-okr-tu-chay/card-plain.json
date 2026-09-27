@@ -1,0 +1,93 @@
+{
+ "feature_plain": "KR của khối kinh doanh tự lấy số từ bảy chỉ số CRM có định nghĩa cố định, mỗi sáng chụp số thành lịch sử không sửa được, bấm vào số thấy các bản ghi làm nên nó; KR ngoài CRM nhận số qua khoá API hoặc một ô Google Sheets.",
+ "scope_plain": "Tám thứ để kỳ sau: giá trị tiền, chỉ số tự định nghĩa, máy chọn mức tự tin, kỳ đo tự chọn, sửa bản chụp, ghi ngược Sheets, đổi nguồn sau công bố, cảnh báo lệch số.",
+ "decisions": [
+  {
+   "id": "E24",
+   "q": "Phần soi thiết kế và kiến trúc của lượt này có đạt không?",
+   "why": "Ba giám khảo báo «chưa chắc» vì chỉ được đưa bản thiết kế, không được đưa mã. Phần đo được bằng máy của cùng tiêu chí (E23, soi mã theo bảng dấu hiệu vẽ tay) đã xanh, và lượt soát cuối toàn nhánh không còn lỗi luật kho nào. Máy nghiêng về Đạt."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260926T132639Z-1",
+   "p": "Đã chọn một định nghĩa đếm dùng chung cho cả con số lẫn danh sách bản ghi — đổi lại tầng dữ liệu có thêm một mô-đun đọc bảy loại bản ghi."
+  },
+  {
+   "id": "d-20260926T132639Z-2",
+   "p": "Đã chọn chụp số ngay trên nhịp chạy sẵn của tác tử, mỗi KR một dòng mỗi ngày — đổi lại lượt chụp không hiện trong hàng việc của tác tử."
+  },
+  {
+   "id": "d-20260926T132639Z-3",
+   "p": "Đã chọn tính lại danh sách bản ghi lúc bấm và nói rõ khi lệch với số đã chụp — đổi lại danh sách của một ngày cũ là danh sách hôm nay."
+  },
+  {
+   "id": "d-20260926T132639Z-4",
+   "p": "Đã chọn đọc Google Sheets bằng một tài khoản dịch vụ chỉ đọc — đổi lại chủ kho phải tạo tài khoản đó và người dùng phải chia sẻ bảng tính cho nó."
+  },
+  {
+   "id": "d-20260926T132639Z-5",
+   "p": "Đã chọn khoá nguồn số khi công bố, sau đó chỉ thêm được số đo cạnh — đổi lại KR đã công bố muốn chạy bằng số máy phải đợi kỳ sau."
+  },
+  {
+   "id": "d-20260926T132639Z-6",
+   "p": "KHÔNG làm bản mẫu bấm được trước khi duyệt phạm vi — thay bằng ảnh màn thật ở Cổng Bằng chứng; đổi lại lệch thẩm mỹ chỉ lộ ở cổng này."
+  },
+  {
+   "id": "d-20260926T132639Z-7",
+   "p": "KHÔNG làm kỳ đo tự chọn theo tháng hay tuần — số cộng dồn từ đầu chu kỳ; đổi lại KR «mỗi tháng» phải đặt thành đích cộng dồn của quý."
+  },
+  {
+   "id": "d-20260926T134542Z-9",
+   "p": "Đã chọn để bài kiểm ghi lịch sử qua đúng đường ghi thật của tác tử — đổi lại tầng dữ liệu có thêm một hàm ghi."
+  },
+  {
+   "id": "d-20260926T134542Z-10",
+   "p": "Đã chọn cho phép đo màn dùng Google giả qua hai biến chỉ có hiệu lực ngoài production — đổi lại có hai biến chỉ để đo."
+  },
+  {
+   "id": "d-20260926T143607Z-11",
+   "p": "Bản duyệt kế hoạch cũ qua phiên điều phối — đã thay bằng bản chủ kho duyệt trực tiếp ngay dưới."
+  },
+  {
+   "id": "d-20260926T144011Z-12",
+   "p": "Đã mở lại Cổng Phạm vi để đi đúng thứ tự: quyết có làm trước, duyệt phạm vi sau — đổi lại thêm hai lượt gõ của chủ kho."
+  },
+  {
+   "id": "d-20260926T144613Z-14",
+   "p": "Đã chấp nhận nền máy đỏ sẵn vì dùng Node 22, lượt chấm chạy bằng Node 24 — đổi lại mọi lượt chấm phải nhớ điều đó."
+  },
+  {
+   "id": "d-20260926T144729Z-15",
+   "p": "Chủ kho duyệt kế hoạch mười bốn việc, mỗi việc một tác nhân và một người soát — đổi lại tốn thêm một ngữ cảnh mỗi việc."
+  },
+  {
+   "id": "d-20260926T152001Z-16",
+   "p": "Đã dời danh mục chỉ số xuống tầng dữ liệu và dời dữ liệu gieo sang quý 2 năm 2026 — đổi lại danh mục sống khác chỗ thiết kế viết."
+  },
+  {
+   "id": "d-20260926T160256Z-17",
+   "p": "Đã chỉnh ba chỗ đo cho khớp đường ghi thật, lời hứa giữ nguyên — đổi lại lần đọc Sheets thứ hai khi Google chậm chỉ còn nửa thời gian."
+  },
+  {
+   "id": "d-20260926T163213Z-18",
+   "p": "Đã thêm hạn thời gian cho cả lượt chụp và chặn ghi số vào mục tiêu đã bỏ — đổi lại hai câu tiêu chí đổi chữ, lời hứa giữ nguyên."
+  },
+  {
+   "id": "d-20260926T172058Z-19",
+   "p": "Mức lệch cho phép trên production (0 đến 2 bản ghi, thư gửi ra 10%) là đề xuất của máy, chủ kho chốt ở cổng này — đổi lại nợ cũ của kho không được lượt này dọn."
+  },
+  {
+   "id": "d-20260926T182051Z-20",
+   "p": "Đã đo màn cập nhật tuần theo hành vi có từ lượt 4 (nút Gửi tắt khi chưa chọn mức tự tin) — đổi lại lỗi thanh Gửi không sát đáy chưa được sửa."
+  },
+  {
+   "id": "d-20260926T185404Z-21",
+   "p": "Mục tiêu nháp không được chụp số, KR mốc hay phần trăm không lấy được số đếm CRM, số từ Sheets phải hợp kiểu KR — đổi lại bản nháp không có số máy hằng ngày."
+  },
+  {
+   "id": "d-20260926T192603Z-22",
+   "p": "KR đang lấy số CRM không đổi được sang mốc hay phần trăm — đổi lại người phải đổi nguồn trước rồi mới đổi kiểu."
+  }
+ ]
+}

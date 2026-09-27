@@ -13,6 +13,7 @@ import {
 	mucTieuUpdate,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
+import { LOAI_NGUON_MAY, okrNguonDong } from "@crm/validation/okr-nguon";
 import { HANH_DONG_VET, okrVetSnapshot } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import { OKR } from "./okr-config";
@@ -73,6 +74,17 @@ export const krOutput = z.object({
 	dueOn: ngay.nullable(),
 	weight: z.number(),
 	source: z.enum(NGUON_KR),
+	doCanh: z.boolean(),
+	soMay: z
+		.object({
+			giaTri: z.number(),
+			ngay,
+			nguon: z.enum(LOAI_NGUON_MAY),
+		})
+		.nullable(),
+	nguonMay: okrNguonDong
+		.extend({ docLuc: z.string().nullable(), docGiaTri: z.number().nullable() })
+		.nullable(),
 	startLocked: z.boolean(),
 	progress: z.number(),
 	laCuaToi: z.boolean(),
@@ -246,6 +258,15 @@ export const capNhatTuanOutput = z.object({
 			lastConfidence: z.enum(MUC_TU_TIN).nullable(),
 			lastAt: z.string().nullable(),
 			updatedThisWeek: z.boolean(),
+			nguon: z.enum(NGUON_KR),
+			doCanh: z.boolean(),
+			soMay: z
+				.object({
+					giaTri: z.number(),
+					ngay,
+					nguon: z.enum(LOAI_NGUON_MAY),
+				})
+				.nullable(),
 		}),
 	),
 	weekStart: ngay,
