@@ -27,6 +27,7 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `7bdfa9d7` | Mẫu kiểm kê, tin hỏi giờ duyệt, các bước gom tệp Zalo |
 | `e131ad28` | Gói gửi luật sư: thư, 12 câu theo thứ tự cần trả lời, phụ lục dữ liệu CRM gửi đi đâu |
 | `7d85c530` | Kéo `onehub` mới vào (366 commit), gỡ đụng độ ở `catalog.ts` giữ cả hai phía |
 | `e43c7c1f` | Bản mẫu: các việc còn lại ở mục 16, từ điển, `[[Trang#Mục]]` |
@@ -56,7 +57,8 @@ Theo thứ tự, lấy từ mục 4 của lộ trình:
 2. Kiểm kê tài liệu và hỏi giờ duyệt mỗi tuần của các chủ trang tương lai. Mẫu cột và
    tin hỏi ở `kho-tai-lieu-kiem-ke.md` mục 1–2.
 3. Gom tệp trong các nhóm Zalo, theo `kho-tai-lieu-kiem-ke.md` mục 3.
-4. Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật.
+4. Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật theo
+   `kho-tai-lieu-bo-vang.md`, dán bảng gom vào phiên để máy chuẩn hoá.
 5. Duyệt tám mục từ điển.
 6. Mở lượt 1a: `/feature-loop:feature-loop kho-tai-lieu — lượt 1a của docs/plan/lo-trinh-kho-tai-lieu.md`.
 
