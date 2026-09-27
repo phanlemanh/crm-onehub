@@ -5,7 +5,7 @@ slug: hoan-thien-hoi-crm-qua-zalo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-09-26T22:38:41Z
 design_doc: docs/superpowers/specs/2026-09-26-hoan-thien-hoi-crm-qua-zalo-design.md
