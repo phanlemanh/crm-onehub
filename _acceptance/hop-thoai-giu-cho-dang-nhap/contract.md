@@ -5,7 +5,7 @@ slug: hop-thoai-giu-cho-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-27T05:47:09Z
 design_doc: docs/superpowers/specs/2026-09-27-hop-thoai-giu-cho-dang-nhap-design.md
@@ -80,3 +80,11 @@ Known limits — Cổng Bằng chứng (Manh Phan 2026-09-27, định đoạt m�
 
 - Ngoài-1 (`_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs`): phép soát nút Huỷ chỉ soát những phần hiện trong ngăn đã liệt kê tay; một nút đóng nằm trong thành phần dùng chung khác (phần đầu hay chân của hộp) hiện bên trong hộp lúc chạy có thể lọt phép soát.
 - Ngoài-5 (`packages/ui/test/messages-guard.spec.ts`): phép kiểm chữ đi vào nhóm lồng nhau chỉ có khẳng định rỗng, chưa có đối chứng dương chứng rằng nó thật sự quét tới các nhóm đó.
+
+Known limits — Cổng Bằng chứng vòng 3 (Manh Phan 2026-09-27; sổ d-20260927T062348Z-23 … -30):
+
+- Ngoài-3 (`apps/app/test/ngan-ban-ghi-giu.dom.tsx`): phép kiểm ô trao đổi của ngăn bản ghi dựng một bản chép cách khai, không dựng ô trao đổi thật; ô thật bỏ lời khai thì phép kiểm không bắt được.
+- Ngoài-4 (`apps/app/test/ngan-ban-ghi-giu.dom.tsx`): ca điện thoại chỉ chứng ngăn đóng sau ô tự lưu; chưa có ca dương chứng ngăn được giữ khi ô trao đổi còn chữ, và chưa thử vuốt.
+- Ngoài-5, Ngoài-7: là hai hạn chế đã ghi ở vòng 2 phía trên (phép soát nút Huỷ liệt kê tay; messages-guard chỉ khẳng định rỗng).
+- Ngoài-6 (hộp KR nguồn bảng tính lưu xong vẫn hỏi): đã sửa ở AC-13, E13 đạt vòng 3 — mục mang sang từ vòng 1 không chấm lại; không còn hạn chế.
+- Ngoài-1, Ngoài-2 tách thành hợp đồng mới: biểu mẫu tạo trường dữ liệu tuỳ chỉnh, thêm nhanh liên hệ/thoả thuận và thêm bước trong ngăn chi tiết chưa được giữ, vì ngăn chi tiết tắt tự nhận; không tệ hơn bản trước tính năng.

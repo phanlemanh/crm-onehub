@@ -1,5 +1,5 @@
 {
- "feature_plain": "Hộp thoại, ngăn trượt và drawer có ô nhập không còn mất chữ đang gõ dở: lỡ bấm ra ngoài thì hộp đứng yên, còn cố ý đóng (Esc, dấu X, Huỷ, vuốt) thì hỏi «Bỏ những gì vừa nhập?».",
+ "feature_plain": "Hộp thoại, ngăn trượt và drawer có ô nhập không còn mất chữ đang gõ dở: lỡ bấm ra ngoài thì hộp đứng yên, còn cố ý đóng (Esc, dấu X, Huỷ, vuốt) thì hỏi «Bỏ những gì vừa nhập?»; lưu xong mà hộp còn mở thì đóng thẳng, và ngăn chi tiết bản ghi chỉ được giữ khi ô trao đổi còn chữ chưa gửi.",
  "will_do": [
   {
    "id": "AC-1",
