@@ -1,24 +1,26 @@
 ## Trong hợp đồng
 
-- **Hình dạng 4 — assertion âm tính đứng một mình: bang-dung-so-o không có expect nào và không kiểm bảng có được vẽ**
-  file: `packages/ui/test/diff-trang.dom.tsx:268`
-  severity: medium
-  AC: AC-13
-  source: measurement
-  rationale: Finding đích danh AC-13 (trang hiện ở dạng đã trình bày, ins/del) và chỉ ra test không có đối chứng dương nào cho việc bảng vẫn được vẽ đúng khi diff, để hồi quy AC-13 lọt qua.
-  detail: Hai test `bang-dung-so-o: them-chu-cuoi-o` và `bo-chu-cuoi-o` (dòng 268-277) không gọi `expect` lần nào. Chúng chỉ `throw` bên trong vòng `for (const tr of goc.querySelectorAll("tbody tr"))`, với `soCot = goc.querySelectorAll("thead th").length`. Nếu DiffTrang không vẽ bảng (ví dụ nhóm hang-bang hồi quy thành `<p>`, hoặc không còn `<thead>`/`<tbody>`), vòng lặp chạy 0 lần, soCot = 0 và test vẫn xanh. Không có đối chứng dương nào kiểu `expect(soCot).toBe(2)` hay `expect(tbody tr).length === 2`, và không ghim ô mang ins nào. Kho không có bunfig nào bật hasAssertions. Test `doi-so-cot` (dòng 278-288) cùng dạng: vòng kiểm dấu `|` trên `td, th` trống nếu không có ô nào, còn `del>0`/`ins>0` vẫn đúng khi diff được vẽ thành đoạn văn chứ không phải bảng. Kết quả: chính hồi quy AC-13 (hàng bị gộp hoặc không thành bảng) có thể lọt qua.
-
-- **Hình dạng 3 — chỉ kiểm dấu ngăn có mặt trong khi lời hứa là quan hệ ô-với-ô**
-  file: `packages/validation/test/tai-lieu-diff.spec.ts:166`
-  severity: medium
-  AC: AC-13
-  source: measurement
-  rationale: Finding trích thẳng lời hứa AC-13 ("so từng ô") và chỉ ra test chỉ kiểm dấu ngăn `|` có mặt chứ không ghim quan hệ ô-với-ô, nên một lỗi lệch chỉ số ô vẫn qua được test cho AC-13.
-  detail: Theo commit 2bc61eae, lời hứa AC-13 là "so từng ô": chữ đổi phải nằm đúng ô của nó. Test `bang-giu-dau-ngan-o` (dòng 166-175) chỉ kiểm hai điều: đoạn chứa `|` là `giu` và bằng ` | `, và số đoạn như vậy bằng 1. Vì `soHangBang` luôn tự đẩy `{loai:"giu", chu:NGAN_O_BANG}` giữa các ô, bất kể nội dung ô được so với ô nào, nên một lỗi lệch chỉ số (ví dụ so `oSau[0]` với `oTruoc[1]`) vẫn giữ nguyên dấu ngăn và vẫn cho `hang.length === 1`. Test không ghim `them "x"` đứng trước dấu ngăn ở ca `them-chu-cuoi-o`, cũng không ghim `bo "c"` ở ô 0 và `them "d"` ở ô 1 ở ca `bo-chu-cuoi-o`. Test DOM tương ứng (packages/ui/test/diff-trang.dom.tsx dòng 272-276) cũng chỉ kiểm không còn `|` và số td >= số cột, không kiểm chữ của ins/del rơi vào td nào.
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **Test helper hand-types the diff segment shape instead of importing the exported DoanDoi type**
+  Người dùng thấy gì: Đây là vấn đề kỹ thuật bên trong bài kiểm thử, không ảnh hưởng gì tới người dùng đang xem hay duyệt trang.
+  file: `packages/validation/test/tai-lieu-diff.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Changing the column count puts the new header row in the table body; the new doi-so-cot test does not catch it**
+  Người dùng thấy gì: Khi một bản đề xuất sửa thêm hoặc bớt cột trong một bảng, người duyệt có thể thấy dòng tiêu đề mới của bảng bị xếp lẫn vào phần dữ liệu, khiến bảng trông rối và khó nhận ra đúng thay đổi trước khi bấm Duyệt.
+  file: `packages/ui/src/components/diff-trang.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (assert chuỗi có mặt thay vì quan hệ): ca 'bang-dung-so-o: doi-so-cot' không ghim số ô theo hàng**
+  Người dùng thấy gì: Bài kiểm thử cho trường hợp bảng đổi số cột hiện chưa kiểm tra chặt đúng cấu trúc bảng, nên một lỗi hiển thị bảng sai (như lỗi ở trên) có thể lọt qua mà không ai phát hiện trước khi phát hành.
+  file: `packages/ui/test/diff-trang.dom.tsx`
+  severity: medium
+  Đề xuất: wont-fix
 
 - **Cột chuỗi loai/trangThai bị ép kiểu bằng `as` thay vì parse, lệch với cách OKR đang làm (r1)**
   Người dùng thấy gì: Nếu dữ liệu loại tài liệu hoặc trạng thái đề xuất trong hệ thống bị sai định dạng, người dùng có thể gặp lỗi chung chung khó hiểu thay vì thông báo rõ ràng.
@@ -115,7 +117,5 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/agent/test/model-theo-vai.integration.spec.ts`
   severity: low
   Đề xuất: known-limits
-
-## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
