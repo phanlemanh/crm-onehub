@@ -4,7 +4,10 @@ import type { Evidence, EvidenceKind } from "../lib/evidence";
 import { WEIGHTS } from "../lib/evidence";
 import { writeBrief } from "../lib/facts";
 import { focusOn } from "../lib/focus";
-import { assertResearchPurpose } from "../lib/session-purpose";
+import {
+	assertNotZaloQuestion,
+	assertResearchPurpose,
+} from "../lib/session-purpose";
 
 const MAX_NARRATIVE = 400;
 
@@ -49,6 +52,7 @@ export default defineTool({
 		sourceUrl: z.string().optional(),
 	}),
 	async execute(input, ctx) {
+		assertNotZaloQuestion(ctx);
 		assertResearchPurpose(ctx);
 		focusOn({ contactId: input.contactId });
 

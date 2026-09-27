@@ -1,0 +1,133 @@
+schema_version: 1
+feature_slug: ro-slack-tac-nhan
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_khop_email
+    expected: "exit 0; gieo thật trong cơ sở dữ liệu của lượt kiểm: người vai okr (email Hoa@...) và người vai member, một agentDefinition LIVE + agentVersion DEPLOYED có dataScope chứa slack:workspace và đúng một action slack.message.post đích channel, một agentRun RUNNING, một account providerId slack có accessToken. Chỉ giả lập globalThis.fetch cho slack.com, đếm lời gọi theo phương thức; conversations.members trả hai người, users.list trả email ' hoa@... ' viết hoa khác và có khoảng trắng. Tệp kiểm KHÔNG nhập tĩnh slack-nguoi-nhan.ts — nạp bằng import() động có dự phòng, để tệp chạy được trên mã trước vá (E11); trả lời giả theo đúng hình Slack Web API (thành viên ở mảng members, con trỏ ở response_metadata.next_cursor, email ở profile.email, cờ is_bot/deleted). Gọi postRunSlackMessage THẬT. Khẳng định ĐẦU TIÊN của ca là số lời gọi chat.postMessage === 0, thông điệp lỗi in 'chat.postMessage=<n>'; rồi promise reject với thông điệp chứa hằng TU_CHOI_NGUOI_NHAN, chứa số người bị chặn '1', KHÔNG chứa hằng KHONG_KIEM_DUOC_NGUOI_NHAN; hai hằng khác rỗng và không hằng nào chứa hằng kia; hàng agentAction của runId đọc lại: status FAILED, errorCode 'ACTION_REJECTED', errorMessage chứa TU_CHOI_NGUOI_NHAN và KHÔNG chứa tên hay email của người okr. Chiều đỏ trên cùng dựng cảnh: đổi vai người đó thành member thì cùng bài phải thấy đúng 1 chat.postMessage (bài có vế này làm đối chứng trong cùng test); trên mã trước vá (E11) ca này đỏ, thông điệp in số lời gọi chat.postMessage."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, packages/validation/src/vai-workspace.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_khop_bang
+    expected: "exit 0; cùng dựng cảnh E1 nhưng users.list trả email Slack khác hẳn email CRM của người okr, và dòng slackMemberMatch của người okr có slackUserId trỏ đúng id Slack đó. Khẳng định đầu tiên chat.postMessage === 0; reject với TU_CHOI_NGUOI_NHAN, không chứa KHONG_KIEM_DUOC_NGUOI_NHAN; agentAction FAILED/ACTION_REJECTED. Đối chứng trong cùng test: xoá dòng slackMemberMatch thì cùng kênh đăng được đúng 1 lần (người đó thành người ngoài CRM) — chứng minh chính bảng khớp là thứ chặn, không phải email."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_tin_truc_tiep
+    expected: "exit 0; agentVersion có đích slack.message.post kind 'user' trỏ id Slack của người okr. khẳng định đầu tiên số lời gọi conversations.open === 0 và chat.postMessage === 0 (in cả hai số); rồi reject với TU_CHOI_NGUOI_NHAN, không chứa KHONG_KIEM_DUOC_NGUOI_NHAN; agentAction FAILED/ACTION_REJECTED. Đối chứng trong cùng test: đích user trỏ người member thì có đúng 1 conversations.open và 1 chat.postMessage. Trên mã trước vá (E11) ca này đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_vai_song
+    expected: "exit 0; người vai member có slackMemberMatch và ở kênh đích; lượt 1 đăng được (1 chat.postMessage). Rồi db.member.update đổi role thành 'okr' — KHÔNG gọi runSlackPeopleMatch, KHÔNG đổi slackMemberMatch; lượt 2 (lượt mới, callId mới) chat.postMessage không tăng, reject TU_CHOI_NGUOI_NHAN và không chứa KHONG_KIEM_DUOC_NGUOI_NHAN. Rồi đổi về 'member'; lượt 3 đăng được, chat.postMessage tăng đúng 1. Ba vế trên cùng một dựng cảnh; thông điệp lỗi in vai đang gieo và số chat.postMessage."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_doi_chung
+    expected: "exit 0; kênh có bốn người Slack khớp member, admin, owner (gieo thật ba vai) + một bot (is_bot true) + một tài khoản deleted true mang email của người okr + một người Slack có email không thuộc CRM. postRunSlackMessage resolve với replayed false; chat.postMessage === 1; agentAction SUCCEEDED với externalId 'channel:ts'. Gọi lại cùng runId + callId: resolve replayed true, tổng số lời gọi tới slack.com KHÔNG tăng (phát lại không đọc lại thành viên). Chiều đỏ: một bản vá coi bot, tài khoản đã xoá hay người ngoài CRM là chặn thì ca này đỏ, thông điệp in errorMessage của agentAction."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_doc_loi
+    expected: "exit 0; MA TRẬN viết trước bốn hàng, mỗi hàng một lượt mới trên kênh chỉ có người member: (a) conversations.members {ok:false,error:'missing_scope'}; (b) users.list {ok:false,error:'ratelimited'} ở mọi lần thử; (c) fetch tới conversations.members ném TypeError mạng; (d) conversations.members trả JSON không đúng khuôn (members không phải mảng). Mỗi hàng: khẳng định đầu tiên chat.postMessage === 0; reject với thông điệp chứa hằng KHONG_KIEM_DUOC_NGUOI_NHAN (nạp bằng import() động như E1) và KHÔNG chứa TU_CHOI_NGUOI_NHAN, agentAction FAILED/ACTION_REJECTED. Số hàng khẳng định === 4 (assert đếm, chống ma trận rỗng xanh). Đối chứng dương là E5 cùng tệp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rst_phan_trang
+    expected: "exit 0; trả lời giả theo hình Slack Web API: conversations.members trang 1 {ok:true, members:[id member], response_metadata:{next_cursor:'c2'}} rồi trang 2 {members:[id okr], response_metadata:{next_cursor:''}}; users.list trang 1 không có người okr rồi trang 2 có người okr với profile.email; không trả lời giả nào có khoá next_cursor ở cấp ngoài cùng (bài khẳng định điều này trên chính dữ liệu giả). Khẳng định đầu tiên chat.postMessage === 0; reject chứa TU_CHOI_NGUOI_NHAN và KHÔNG chứa KHONG_KIEM_DUOC_NGUOI_NHAN (không phải rơi vào nhánh đọc lỗi); số lời gọi conversations.members >= 2 VÀ users.list >= 2; lời gọi trang 2 của mỗi phương thức mang cursor=c2 (đọc từ URL hoặc body). Đối chứng dương trong cùng bài: trang 2 chỉ có người member thì đăng đúng 1 lần. Chiều đỏ: bỏ vòng phân trang thì ca này đăng được và đỏ, thông điệp in số lời gọi từng phương thức."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.rst_lich
+    expected: "exit 0; gieo agentDefinition LIVE + agentVersion DEPLOYED + agentRun QUEUED KHÔNG có initiatedById. Gọi dispatchAgentRun THẬT với send giả chỉ ghi lại options.auth và trả {id}. Lấy auth ĐÃ GHI (khứ hồi từ bên ghi thật, không tự dựng khuôn) đặt vào session.auth.current, gọi sensitiveWrite('x') THẬT với {session}: kết quả là object type 'denied' và reason chứa 'Not something to do unattended'. Khẳng định phụ: auth ghi lại có authenticator 'crm-schedule' và attributes.purpose 'team-agent' (để biết đang đo đúng đường). Trên mã trước vá (E11) ca này đỏ, thông điệp in kết quả chính sách ('user-approval')."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/approval.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/test/luot-tu-dong.integration.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.rst_nguoi_bam
+    expected: "exit 0; như E8 nhưng agentRun có initiatedById là một người gieo thật. auth ghi lại có authenticator 'crm-user', principalType 'user'; sensitiveWrite trên đúng auth đó trả type 'denied'. Chiều đỏ: một bản vá chỉ nhận principalType 'runtime' thì ca này đỏ, thông điệp in kết quả chính sách."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/approval.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/test/luot-tu-dong.integration.spec.ts]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.rst_giu_nguyen
+    expected: "exit 0; MA TRẬN viết trước bốn hàng, mỗi auth lấy từ bên dựng THẬT của đường đó: (1) cầu nối — repFromCrm(secret) với token HS256 đúc thật cho người member gieo thật → sensitiveWrite trả 'user-approval'; (2) builder — dispatchBuilderSubmission thật với send giả ghi options.auth (authenticator 'crm-builder') → 'user-approval'; (3) Zalo — auth do hàm dựng principal Zalo thật của apps/agent/agent/lib (zalo-config/zalo-hoi) → 'user-approval'; (4) việc nền — taskAuth(task) thật → type 'denied'. Số hàng khẳng định === 4. Chiều đỏ: một bản vá coi mọi principal không phải APP_AUTH là tự động thì hàng 1–3 đỏ, thông điệp in tên hàng và kết quả."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/approval.ts, apps/agent/agent/channels/eve.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/lib/dispatch.ts, apps/agent/test/luot-tu-dong.integration.spec.ts]
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.rst_do_truoc_khi_va
+    expected: "exit 0; script dựng bản gương bằng git worktree add --detach tại merge-base(HEAD, origin/onehub) trong os.tmpdir() (không ghi gì vào cây đang xét), chép hai tệp kiểm từ cây đang xét vào đó, nối node_modules (gốc và từng gói có node_modules), packages/db/src/generated và .env của cây đang xét; chạy 'bun run test -- \"cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test <hai tệp>\"' trong bản gương, đòi exit != 0 VÀ đầu ra có dòng (fail) cho ba tên ca ghim: khop-email, tin-truc-tiep, lich, VÀ đầu ra có 'chat.postMessage=1' (tin đã đi ra — đỏ vì còn rò, không phải đỏ vì thiếu mô-đun) VÀ đầu ra KHÔNG có 'Cannot find module'; rồi chạy cùng lệnh ở cây đang xét, đòi exit 0 và 0 dòng (fail). Luôn gỡ worktree tạm (finally). Thông điệp đỏ ghim: 'TRUOC VA KHONG DO: <ca>' khi một ca ghim không đỏ trước vá, 'SAU VA CON DO' khi cây đang xét đỏ. Chiều đỏ tự thân: chỉ định --base HEAD (bản gương = cây đang xét) thì script phải exit 1 với 'TRUOC VA KHONG DO'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/**, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts, apps/agent/test/luot-tu-dong.integration.spec.ts, _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs]
+
+  - id: E12
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.rst_cho_re
+    expected: "exit 0; script lấy git diff --name-only merge-base(HEAD, origin/onehub)..HEAD, loại _acceptance/**, docs/**, **/*.md; giữ tệp tồn tại ở origin/release (git cat-file -e origin/release:<path>) = tập tệp của hãng bị sửa; đọc mục có tiêu đề bắt đầu bằng '## Chỗ rẽ' trong docs/agent.md, rút mọi đường dẫn trong backtick có dạng apps/.../*.ts rồi GIỮ những đường có ở origin/release (cùng bộ lọc git cat-file -e như phía diff — tệp mới của bản rẽ được nêu mà không làm lệch); khẳng định hai tập BẰNG nhau (so tập đã sắp) và mục có câu chứa 'gỡ'. Đối chứng: mục có nêu apps/agent/agent/lib/slack-nguoi-nhan.ts vẫn xanh. Thông điệp đỏ ghim in 'THUA:' tệp của hãng bị sửa mà mục không nêu, 'THIEU:' tệp mục nêu mà diff không sửa. Chiều đỏ: chạy với --ref-doc trỏ bản docs/agent.md của origin/onehub (chưa có mục) thì exit 1 với 'THUA: apps/agent/agent/lib/approval.ts'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/**, apps/api/**, apps/app/**, packages/**, docs/agent.md, _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs]
+
+  - id: E14
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.rst_kiem_ke
+    expected: "exit 0; script đứng ở gốc kho suy từ vị trí của chính nó (không hardcode), quét apps/agent/agent/**/*.ts (trừ test) lấy hai tập: (a) chỗ dựng danh tính = dòng có 'authenticator:' theo sau là chuỗi hoặc biểu thức (không phải khai kiểu ': string') cộng lời gọi thanhVienPrincipal( ngoài chính định nghĩa của nó; (b) chỗ gửi Slack = lời gọi sendSlackMessage( ngoài định nghĩa, và chuỗi \"chat.postMessage\". Mỗi phần tử khoá bằng <tệp>#<tên hàm bao quanh>, không bằng số dòng. Danh sách viết trước trong script, mỗi khoá gắn AC-8/AC-9/AC-10/AC-1..7 hoặc lý do ngoài phạm vi (tin nhắc buổi sáng gửi riêng cho chính người nhận: nhac-ke-hoach.ts#guiSlackRieng). Khẳng định tập tìm được BẰNG danh sách (số khẳng định = số phần tử), thông điệp đỏ ghim 'CHUA XEP: <khoa>' và 'KHONG CON: <khoa>'. Chiều đỏ: chạy với --them <tệp tạm trong os.tmpdir() có một lời gọi sendSlackMessage> thì exit 1 với 'CHUA XEP'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/**, _acceptance/ro-slack-tac-nhan/rang/kiem-ke.mjs]
+
+  - id: E13
+    criterion: AC-13
+    executor: judgment
+    question: >-
+      Thay đổi của lượt này có mở đường công bố lỗ hổng cho hãng qua kênh công khai không —
+      chữ nào hướng tới PR hay issue công khai lên kho của hãng, và phần mô tả chỗ rẽ có
+      kể lỗ hổng theo cách người ngoài dùng lại được không?
+    inputs:
+      - docs/agent.md
+      - _acceptance/ro-slack-tac-nhan/contract.md
+      - docs/superpowers/specs/2026-09-27-ro-slack-tac-nhan-design.md
+    paths:
+      - docs/agent.md
+      - docs/superpowers/specs/2026-09-27-ro-slack-tac-nhan-design.md
+    expected: >-
+      Không có câu nào đề nghị hay tự động gửi PR hay issue công khai lên kho của hãng. Mục
+      chỗ rẽ nói việc báo cho hãng đi qua kênh bảo mật riêng và cần chủ kho cho phép. Phần
+      mô tả đủ để người trong kho gỡ chỗ rẽ đúng lúc, không kèm cách khai thác từng bước.
+    evidence_required: [run_id, verifier, verified_at, output]
