@@ -7,22 +7,21 @@ cần thiết để máy khác không phải học lại.
 
 ## 1. Đang ở đâu
 
-**Lượt 0 (nền, không mã) đang làm.** Nghiên cứu xong, bản mẫu xong, một quyết định
-đã chốt, lộ trình và sổ theo dõi đã có. Chưa có dòng mã sản phẩm nào ngoài bản mẫu
-và trình đọc markdown. Ngày 2026-09-27 chủ kho bỏ hạng mục pháp lý: lộ trình chỉ theo
-dõi bàn giao phần mềm. Lượt 0 còn duyệt từ điển; việc chuẩn bị pilot chạy song song, máy
-đã soạn mẫu.
+**Lượt 0 xong; lượt 1 `kho-tai-lieu` sẵn sàng mở.** Nghiên cứu xong, bản mẫu xong, lộ
+trình đã sắp lại theo output ngày 2026-09-27 (năm lượt, chạy thật mọi phòng ban, một
+lượt sửa). Chưa có dòng mã sản phẩm nào ngoài bản mẫu và trình đọc markdown. Tám mục
+từ điển được chốt ngay tại Cổng 1 của lượt 1, không có bước riêng.
 
 | Thứ | Ở đâu |
 | --- | --- |
-| Lộ trình và sổ theo dõi | `docs/plan/lo-trinh-kho-tai-lieu.md` (mục 8 là sổ) |
+| Lộ trình và sổ theo dõi | `docs/plan/lo-trinh-kho-tai-lieu.md` (mục 8 là sổ, mục 6 là bảng phủ trạng thái bản mẫu) |
 | Nghiên cứu nền, bản thiết kế | `docs/plan/kho-tai-lieu-nghien-cuu.md` (mục 0–9, 14–17) |
 | Việt Nam, pháp lý, đo lường | `docs/plan/kho-tai-lieu-viet-nam-va-do-luong.md` (mục 10–13, gồm 12 câu cho luật sư) |
 | 546 nguồn | `docs/plan/kho-tai-lieu-nguon.md` |
 | Hồ sơ 17 luồng research | `docs/plan/kho-tai-lieu-ho-so/` |
 | Tài liệu trình bày (Claude Doc) | https://claude.ai/artifact/8B5uoGwQd4eyGb8wCNw8CN — riêng tư, mở được trên mọi máy đã đăng nhập tài khoản chủ kho |
 | Trang theo dõi tiến độ (artifact) | https://claude.ai/artifact/12sCbWrWgx6td1vqzR63Yg — dữ liệu trong kho dữ liệu của artifact; phiên máy cập nhật bằng `ArtifactData` sau mỗi hạng mục, cùng lúc với mục 8 |
-| Bản mẫu bấm được | `apps/app/app/proto/_modules/kho-tai-lieu/`, 16 trạng thái, đường `/proto/kho-tai-lieu` |
+| Bản mẫu bấm được | `apps/app/app/proto/_modules/kho-tai-lieu/`, 15 trạng thái khai ở `apps/app/app/proto/catalog.ts`, đường `/proto/kho-tai-lieu` |
 | Trình đọc markdown | `packages/ui/src/components/markdown-reader.tsx` |
 | Từ điển | Tám mục mới ở cuối `CONTEXT.md`, dạng «đề xuất, chưa qua Cổng Phạm vi» |
 
@@ -49,6 +48,7 @@ Lịch sử nhánh (mới nhất trên cùng):
 | --- | --- | --- |
 | 2026-09-26 | Manh Phan | Theo mẫu LLM Wiki: máy soạn bản đề xuất, chủ trang duyệt, trợ lý AI chỉ đọc bản đang dùng |
 | 2026-09-26 | Manh Phan | **Duyệt mọi thay đổi**, kể cả sửa chính tả và liên kết; không có bậc tự áp dụng; chỉ xét nới sau pilot có số đo bắt lỗi mồi |
+| 2026-09-27 | Manh Phan | **Lộ trình theo output**, năm lượt sát trần 15 AC, không cổng đo giữa lượt, chạy thật mọi phòng ban hai tuần rồi sửa một lượt. Năm điểm: đợt đầu mọi trang cả công ty đọc được, phạm vi xem theo trang làm sau · nạp nguồn và máy soạn ở lượt 2 · hỏi trong CRM và qua Zalo · ngưỡng Cổng Đáng ở mục 5 lộ trình · tệp nguồn ở Vercel Blob |
 | 2026-09-27 | Manh Phan | **Bỏ hạng mục pháp lý.** Lộ trình chỉ theo dõi bàn giao phần mềm; không lượt nào có cổng luật sư; tuân thủ khi chạy production do chủ kho lo |
 | 2026-09-26 | Máy, chủ kho chưa veto | Mặc định ở mục 10.2 của tài liệu trình bày: Postgres `tsvector` + `unaccent` + `pg_trgm`; CodeMirror 6; callout theo GitHub; phạm vi xem theo vai sẵn có; hạn xác minh 90/180 ngày/12 tháng; nhắc trong ứng dụng cộng email; khoá AI riêng; đồ thị ở lượt 4; pilot một phòng ban |
 
@@ -58,17 +58,22 @@ Ngày trong lộ trình là đề xuất của máy, **chưa chốt**.
 
 Theo thứ tự, lấy từ mục 4 của lộ trình:
 
-Đường bàn giao phần mềm:
+Đường bàn giao phần mềm, theo mục 3 của lộ trình:
 
-1. Duyệt tám mục từ điển ở cuối `CONTEXT.md`.
-2. Mở lượt 1a: `/feature-loop:feature-loop kho-tai-lieu — lượt 1a của docs/plan/lo-trinh-kho-tai-lieu.md`.
+1. Mở lượt 1: `/feature-loop:feature-loop kho-tai-lieu — lượt 1 của docs/plan/lo-trinh-kho-tai-lieu.md`.
+   Tám mục từ điển chốt tại Cổng 1 của lượt này.
+2. Lượt 2 `may-soan-de-xuat`, lượt 3 `tim-va-dieu-huong-kho`, lượt 4 `tro-ly-doc-kho`, mỗi
+   lượt mở khi lượt trước đã lên `onehub`; làm S0–S1 của lượt sau khi lượt trước còn ở S4.
+3. Chạy thật mọi phòng ban hai tuần, rồi lượt 5 `sua-sau-chay-that`.
 
-Song song, không chặn 1a và 1b (dòng 7 của sổ):
+Việc của chủ kho, song song (dòng 7 của sổ):
 
-- Gom tệp trong các nhóm Zalo, theo `kho-tai-lieu-kiem-ke.md` mục 3. Gấp: Zalo xoá tệp.
-- Kiểm kê tài liệu và hỏi giờ duyệt, theo `kho-tai-lieu-kiem-ke.md` mục 1–2.
-- Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật theo
-  `kho-tai-lieu-bo-vang.md`, dán bảng gom vào phiên để máy chuẩn hoá.
+- Trước lượt 2: viết trang «quy tắc viết» (một chủ đề mỗi trang, số liệu chính xác, nêu
+  đối tượng và giới hạn) — máy soạn đọc nó làm lời dặn.
+- Trước lượt 4: gom 50 câu hỏi thật theo `kho-tai-lieu-bo-vang.md`, dán bảng gom vào
+  phiên để máy chuẩn hoá.
+- Trước chạy thật: nói với các phòng ban tự tải tệp lên; gom tệp Zalo sớm vì Zalo xoá tệp
+  (`kho-tai-lieu-kiem-ke.md` mục 3).
 
 ## 4. Điều máy đã học mà repo chưa ghi
 
@@ -101,6 +106,14 @@ Chép từ trí nhớ của phiên trên máy cũ. Mỗi dòng đã kiểm lại
 - **Research nhiều tác nhân** cạn hạn mức tìm web 200 lượt giữa chừng. Chia workflow
   nhỏ; không đọc thô kết quả 1 MB; kiểm lại mọi khẳng định của tác nhân về mã kho.
 - **Chủ kho nhắc tiết kiệm token**: không mở workflow lớn khi chưa được đồng ý.
+- **`tac-nhan-model-rieng` không cho khoá AI riêng**, chỉ cho model giải theo vai. Trần
+  tiền riêng cho kho là một khoá AI Gateway thứ hai (biến môi trường tuỳ chọn), làm ở lượt 2.
+- **Design-pass của lượt 2–4 cần mục catalog riêng**: `PROTO_COMPONENTS` là `Map` slug →
+  module, nên mỗi lượt thêm một mục `catalog.ts` trỏ module `kho-tai-lieu` với tập trạng
+  thái của lượt đó; phép đo catalog chỉ đòi id trạng thái duy nhất trong một mục.
+- **Nhịp thật của kho**: 15 vòng gần nhất 8–16 AC, một vòng S4, 1–2 ngày mỗi vòng; khuôn
+  hợp đồng 5–15 AC, S4 tối đa ba vòng. Lộ trình dài hơn nhịp đó là lộ trình hình nghiên
+  cứu, không phải hình bàn giao.
 
 ## 5. Chạy tiếp ở máy khác
 

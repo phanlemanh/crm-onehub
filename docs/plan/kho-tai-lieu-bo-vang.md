@@ -1,13 +1,14 @@
 # Kho tài liệu — mầm bộ vàng: 50 câu hỏi thật
 
-Soạn 2026-09-27 cho việc «Viết 50 câu hỏi thật của nhân viên» của lượt 0
-(`lo-trinh-kho-tai-lieu.md` mục 4): chủ kho gom, máy chuẩn hoá. Đặc tả bộ vàng đầy đủ
+Soạn 2026-09-27 cho việc «Viết 50 câu hỏi thật của nhân viên», cần trước lượt 4
+`tro-ly-doc-kho` (`lo-trinh-kho-tai-lieu.md` mục 4): chủ kho gom, máy chuẩn hoá. Đặc tả bộ vàng đầy đủ
 (khoảng 470 mục, chín tầng S1–S9) ở mục 12.6 của `kho-tai-lieu-viet-nam-va-do-luong.md`.
 Năm mươi câu này là mầm của nó: bộ vàng đòi ít nhất 30% câu tầng S1 viết từ câu hỏi thật,
 và chỉ câu thật mới cho biết nhân viên hỏi bằng chữ gì.
 
-Mầm này dùng ở ba chỗ: chọn 20 tài liệu pilot (tài liệu nào trả lời được nhiều câu nhất),
-đo pilot không AI (người tìm có ra trang không), và là lõi bộ vàng khi mở lượt 2.
+Mầm này là evals của lượt 4: một script chấm «trả lời có trích đúng trang mong đợi» trên
+cả 50 câu, cộng 10–15 eval judgment cho câu khó và câu phải từ chối. Nó cũng cho biết
+phòng ban nào nên nạp tài liệu nào trước khi chạy thật.
 
 ## 1. Chủ kho gom
 

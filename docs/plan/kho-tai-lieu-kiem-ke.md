@@ -1,8 +1,9 @@
 # Kho tài liệu — kiểm kê, giờ duyệt, gom tệp Zalo
 
-Soạn 2026-09-27 cho ba việc của lượt 0 (`lo-trinh-kho-tai-lieu.md` mục 4): kiểm kê tài
-liệu, hỏi giờ duyệt của chủ trang tương lai, gom tệp trong các nhóm Zalo. Máy soạn
-mẫu; chủ kho điền. Cột và quy tắc lấy từ mục 13.1–13.2 và 10.3 của
+Soạn 2026-09-27 cho việc chuẩn bị chạy thật (`lo-trinh-kho-tai-lieu.md` mục 5, dòng 7
+của sổ): kiểm kê tài liệu, hỏi giờ duyệt của chủ trang tương lai, gom tệp trong các nhóm
+Zalo. Từ 2026-09-27 đây là việc mỗi phòng ban tự làm khi chạy thật; chủ kho chỉ cần đưa
+mẫu này cho họ và gom tệp Zalo sớm. Cột và quy tắc lấy từ mục 13.1–13.2 và 10.3 của
 `kho-tai-lieu-viet-nam-va-do-luong.md`.
 
 Bảng điền **không vào kho này**: tên tệp và tên người là dữ liệu nội bộ. Điền trong một
