@@ -1,0 +1,106 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · hop-thoai-giu-cho-dang-nhap</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Hộp thoại và ngăn trượt không mất chữ đang nhập dở — thành phần dùng chung tự biết có thay đổi; bấm ra ngoài khi đã nhập thì không đóng; Esc, dấu X, nút Huỷ và vuốt xuống hỏi lại «Bỏ những gì vừa nhập?»</h1><div class="sub">Trang bằng chứng · <span class="mono">hop-thoai-giu-cho-dang-nhap</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E1-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E2-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E3-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E4-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E5-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E6-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E7-r2</td><td class="mono">2026-09-27T04:15:46Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E8-r2</td><td class="mono">2026-09-27T04:15:46Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E9-r2</td><td class="mono">2026-09-27T04:15:46Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-10</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">crm_compassionate_hofstadter_928035_do</td><td class="mono">2026-09-27T04:15:46Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E11-r2</td><td class="mono">2026-09-27T04:15:46Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-12</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-hop-thoai-giu-cho-dang-nhap-E12-r1</td><td class="mono">2026-09-27T03:47:29Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given một `Dialog` của `packages/ui` có ô gõ bên trong, When người dùng gõ ít nhất một ký tự rồi bấm vào lớp phủ bên ngoài, Then hộp vẫn mở, chữ trong ô còn nguyên và `onOpenChange` của chỗ gọi không được gọi; và When chưa gõ gì mà bấm lớp phủ, Then hộp đóng và `onOpenChange(false)` được gọi đúng một lần như trước lượt này.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E1-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_bam_ngoai</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given một `Dialog` đã có chữ gõ vào, When người dùng nhấn Esc hoặc bấm dấu X, Then hộp hỏi lại hiện với tiêu đề «Bỏ những gì vừa nhập?» và hai nút «Tiếp tục sửa», «Bỏ», hộp đang sửa vẫn mở và `onOpenChange` chưa được gọi; When chọn «Tiếp tục sửa» hoặc nhấn Esc trên hộp hỏi, Then hộp hỏi đóng, chữ còn nguyên và focus về lại ô đang gõ; When chọn «Bỏ», Then hộp đóng và `onOpenChange(false)` được gọi đúng một lần; và When hộp chưa có thay đổi, Esc hoặc X đóng ngay không hỏi.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E2-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_hoi_lai</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given một `Sheet` của `packages/ui` có ô gõ bên trong, When đi lần lượt bốn đường bấm lớp phủ, Esc, dấu X và một nút bọc `SheetClose`, mỗi đường ở hai trạng thái chưa gõ và đã gõ, Then kết quả từng ô bằng bảng viết trước của AC-1 và AC-2 (bấm ngoài khi đã gõ không làm gì; ba đường còn lại khi đã gõ thì hỏi; chưa gõ thì đóng ngay).</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E3-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_sheet</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given một `Drawer` của `packages/ui` (ngăn bản ghi ở khổ điện thoại) có ô gõ bên trong, When đã gõ rồi bấm lớp phủ, Then drawer không đóng, chữ còn nguyên và không hỏi; When đã gõ rồi nhấn Esc hoặc kéo tay nắm drawer xuống quá ngưỡng đóng, Then drawer quay về vị trí mở và nằm trọn trong màn hình, chữ còn nguyên, hộp hỏi lại hiện, và sau «Tiếp tục sửa» trang vẫn bấm được; và When chưa gõ, Then cả ba đường đóng drawer như trước lượt này.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E4-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_drawer</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5: Given một hộp thoại đã có chữ gõ vào, When chỗ gọi tự đóng hộp (đặt `open` về `false` sau khi lưu thành công, hoặc gỡ hộp), hoặc người bấm một nút bọc `DialogClose`/`SheetClose` có prop `dongNgay` (nút lưu của hộp không kiểm soát), Then hộp đóng và không hộp hỏi lại nào hiện; When mở lại hộp đó, Then hộp ở trạng thái chưa có thay đổi (bấm ngoài đóng ngay); và Given một hộp không kiểm soát (mở bằng `DialogTrigger`, chỗ gọi không truyền `open`), When đã gõ rồi bấm ngoài, Esc, hoặc bấm nút `DialogClose` không có `dongNgay`, Then hành vi giống hệt hộp có kiểm soát ở AC-1 và AC-2.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E5-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_may_dong</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given một hộp thoại đã có chữ gõ vào đang mở một ô chọn con (`Select`, `Combobox` hoặc lịch của `DatePicker`), When nhấn Esc, Then chỉ ô chọn con đóng, hộp thoại vẫn mở và không hộp hỏi lại nào hiện.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E6-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_lop_con</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-7: Given một hộp thoại mà chỗ gọi khai `coThayDoi` là `true` (chưa gõ ký tự nào, vd mới đổi một ô chọn), When bấm lớp phủ hoặc nhấn Esc, Then hành vi như hộp đã có thay đổi (bấm ngoài không làm gì, Esc hỏi); và trên màn thật, ở hộp thoại KR, hộp thoại mục tiêu và hộp thoại đơn vị trong `apps/app`, When chỉ đổi một ô chọn (không gõ ký tự nào) rồi bấm ra ngoài, Then hộp vẫn mở với giá trị vừa chọn.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E7-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_tu_khai</b></span><span>verified_at <b>2026-09-27T04:15:46Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out"> 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [532.00ms]</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · script</h3><p class="crit">AC-8: Given `ConfirmDialog`, When đọc cây mã sau lượt này, Then thành phần nằm ở `packages/ui/src/components/confirm-dialog.tsx` với API cũ, tệp `apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx` không còn, cả 13 chỗ dùng cũ nhập từ `@crm/ui/components/confirm-dialog`, và bộ kiểm có sẵn của các chỗ đó vẫn xanh.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E8-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.hg_confirm_chung</b></span><span>verified_at <b>2026-09-27T04:15:46Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out"> 0 fail
+ 590 expect() calls
+Ran 101 tests across 1 file. [496.00ms]</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-9: Given danh sách 25 tệp hộp thoại, ngăn trượt và drawer có ô nhập (viết trước trong phép soát), When phép soát tĩnh chạy, Then tập tệp máy tự rút từ `apps/app` (không kể `/proto`) bằng đúng danh sách viết trước — tệp mới xuất hiện hay tệp biến mất đều in ra và làm soát đỏ; và trong mỗi tệp, không nút nào nằm bên trong `DialogContent`, `SheetContent` hay `DrawerContent` gọi thẳng hàm đóng — mọi nút Huỷ đi qua `DialogClose`/`SheetClose`/`DrawerClose` (`asChild`); và `docs/design.md` có dòng tương ứng trong bảng «Dấu hiệu vẽ tay».</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E9-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.hg_huy_qua_nut_dong</b></span><span>verified_at <b>2026-09-27T04:15:46Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">huy: 26/26 tep, 0 vi pham, 27 nut qua nut dong
+huy: khai tay 1 tep ngoai bo rut may
+huy: phan hien trong ngan apps/app/components/detail-sheet.tsx: 0 vi pham, 1 nut qua nut dong</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · ui-check</h3><p class="crit">AC-10: Given phiên đo riêng của cây này, When mở màn thật ở khổ 1440 và 390 trong trình duyệt, Then: hộp thoại «Thêm KR» gõ tên rồi bấm ra ngoài vẫn mở với chữ còn nguyên, nhấn Esc thấy hộp hỏi lại với chữ tiếng Việt đúng bảng trạng thái, «Tiếp tục sửa» về hộp, «Bỏ» đóng hộp; ngăn «Tạo thoả thuận» gõ tên rồi bấm nút Huỷ thấy hộp hỏi lại; ngăn bản ghi ở khổ 390 (drawer) gõ vào ô trao đổi rồi đóng thấy drawer giữ chỗ và hộp hỏi lại.</p>
+<div class="kv"><span>run_id <b>crm_compassionate_hofstadter_928035_do</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.hg_man_that</b></span><span>verified_at <b>2026-09-27T04:15:46Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="flag fred">Không có screenshot — ui-check có thể đã downgrade sang judgment (không có browser).</div>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-11: Given các tệp lượt này thêm hoặc sửa, When chạy cổng thiết kế tĩnh và soi mã, Then không vi phạm P0; không `className` đổi màu, góc, khoảng cách của thành phần `@crm/ui` ở chỗ gọi; không prop `variant`/`tone`/`size` có mặc định chuỗi trong tham số; không chú thích mã mới; không `useEffect` trần trong tệp mới; chữ mới của hộp hỏi lại có bản vi và en khác nhau trong `packages/ui/src/lib/messages.ts`.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E11-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.hg_san_thiet_ke</b></span><span>verified_at <b>2026-09-27T04:15:46Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out"> 0 fail
+ 38 expect() calls
+Ran 17 tests across 2 files. [104.00ms]</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · test</h3><p class="crit">AC-12: Given một hộp thoại có ô tìm hoặc ô lọc (`input[type=search]`, ô `role=combobox` như ô lọc của `Combobox` và `Command`), When chỉ gõ vào ô đó rồi bấm ra ngoài, Then hộp đóng như trước lượt này (ô lọc không phải dữ liệu); When chỗ gọi truyền `giuThayDoi={false}` cho `Dialog`, `Sheet` hoặc `Drawer`, Then hộp đó không giữ dù đã gõ vào ô thường; và `PickListDialog` của `packages/ui` gõ vào ô tìm rồi bấm ngoài thì đóng.</p>
+<div class="kv"><span>run_id <b>minted-hop-thoai-giu-cho-dang-nhap-E12-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.hg_o_loc</b></span><span>verified_at <b>2026-09-27T03:47:29Z</b></span></div>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">carried tu round 1 — baseline không đo lại round này
+none — danh sách &quot;không phân biệt&quot; trống; baseline không đo lại ở round này (mọi eval máy ghi baseline: n-a), nên không có eval nào bị xếp loại green-on-both round này. Lệnh suite (test/lint/lint:slop/build) xanh cả hai phía là regression-guard bình thường, không liệt kê ở đây.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: E10 failed — nút X trên hộp &quot;Sửa KR&quot; đóng thẳng không qua bộ giữ (không hỏi lại), và bug selector khiến bước gõ tên lạc sang ô &quot;Đơn vị đo&quot;. Returned to implementation.</li><li>Round 2: E7, E8, E9, E11 chạy lại và E10 đo lại trên màn thật đều đạt (bug nút X và bug selector đã sửa); E1–E6, E12 carry-forward từ round 1 (delta không chạm paths của các eval đó); toàn bộ lệnh suite (test/lint/lint:slop/build) xanh. Verdict: PASS.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

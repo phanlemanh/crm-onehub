@@ -1,118 +1,6 @@
 {
- "feature_plain": "Mọi hộp thoại, ngăn trượt và drawer có ô nhập sẽ không còn mất chữ đang gõ dở: lỡ bấm ra ngoài thì hộp đứng yên, còn cố ý đóng thì hỏi lại một câu.",
- "will_do": [
-  {
-   "id": "AC-1",
-   "p": "Sẽ giữ hộp thoại mở và giữ nguyên chữ khi người đã gõ mà lỡ bấm ra ngoài; hộp chưa gõ gì vẫn đóng ngay như cũ."
-  },
-  {
-   "id": "AC-2",
-   "p": "Sẽ hỏi «Bỏ những gì vừa nhập?» khi người đã gõ mà nhấn Esc hay bấm dấu X; «Tiếp tục sửa» đưa về đúng ô đang gõ, «Bỏ» mới đóng."
-  },
-  {
-   "id": "AC-3",
-   "p": "Sẽ áp cùng luật cho ngăn trượt (tạo thoả thuận, liên hệ, công ty, chiến dịch, khoá API…) ở cả bốn đường đóng."
-  },
-  {
-   "id": "AC-4",
-   "p": "Sẽ giữ drawer trên điện thoại khi người đã gõ mà vuốt xuống hay nhấn Esc: drawer trở về chỗ, chữ còn, hộp hỏi lại hiện."
-  },
-  {
-   "id": "AC-5",
-   "p": "Sẽ đóng ngay không hỏi khi lưu thành công, và lần mở sau hộp lại sạch; hộp mở bằng nút mở (không kiểm soát) cũng được giữ như mọi hộp."
-  },
-  {
-   "id": "AC-6",
-   "p": "Sẽ chỉ đóng ô chọn con (danh sách, lịch) khi nhấn Esc lúc ô con đang mở, không đụng tới hộp đang sửa."
-  },
-  {
-   "id": "AC-7",
-   "p": "Sẽ giữ cả khi người chỉ đổi một ô chọn mà chưa gõ chữ, ở hộp thoại KR, mục tiêu và đơn vị."
-  },
-  {
-   "id": "AC-8",
-   "p": "Sẽ dùng một hộp hỏi lại chung cho cả ứng dụng, chuyển vào thư viện giao diện; 13 chỗ đang dùng hộp hỏi lại cũ đổi sang bản chung."
-  },
-  {
-   "id": "AC-10",
-   "p": "Sẽ có ảnh màn thật ở khổ 1440 và 390 cho hộp thoại KR, ngăn tạo thoả thuận và drawer ngăn bản ghi, kể cả một cú vuốt thật."
-  }
- ],
- "wont_do": [
-  {
-   "id": "AC-9",
-   "p": "Chặn mọi nút Huỷ gọi thẳng lệnh đóng trong 25 hộp có ô nhập; phép soát cũng báo khi xuất hiện hộp mới chưa có trong danh sách."
-  },
-  {
-   "id": "AC-11",
-   "p": "Chặn chỗ gọi tự đổi màu, góc, khoảng cách của thành phần dùng chung, chặn chú thích mã mới, và chặn chữ hộp hỏi lại thiếu bản tiếng Anh."
-  },
-  {
-   "id": "AC-12",
-   "p": "Sẽ KHÔNG giữ hộp chỉ vì người gõ vào ô tìm hay ô lọc; hộp nào không cần giữ thì chỗ gọi tắt được."
-  }
- ],
+ "feature_plain": "Hộp thoại, ngăn trượt và drawer có ô nhập không còn mất chữ đang gõ dở: lỡ bấm ra ngoài thì hộp đứng yên, còn cố ý đóng (Esc, dấu X, Huỷ, vuốt) thì hỏi «Bỏ những gì vừa nhập?».",
  "scope_plain": "Chưa làm: lưu nháp mở lại lần sau, chặn khi đổi trang hay đóng tab, so giá trị từng ô, hộp hiện khoá API một lần, bản mẫu /proto.",
- "coverage_plain": [
-  {
-   "i": 0,
-   "p": "Mọi đường người có thể đóng hộp — bấm ngoài, Esc, dấu X, nút Huỷ, vuốt — đều có tiêu chí (AC-1 tới AC-4, AC-9)."
-  },
-  {
-   "i": 1,
-   "p": "Bốn trạng thái bên trong hộp: sạch và đã gõ đều có tiêu chí; đổi ô chọn có tiêu chí ở ba hộp tự khai (AC-7); «gõ rồi xoá về như cũ» để sau."
-  },
-  {
-   "i": 2,
-   "p": "Cả ba khung — hộp thoại, ngăn trượt, drawer điện thoại — đều được đo, kèm màn thật (AC-1 tới AC-4, AC-10)."
-  },
-  {
-   "i": 3,
-   "p": "Ba cách trả lời hộp hỏi lại — Tiếp tục sửa, Bỏ, Esc — đều có tiêu chí (AC-2)."
-  },
-  {
-   "i": 4,
-   "p": "Việc chung cho mọi ô: máy đóng không hỏi (AC-5), ô chọn con (AC-6), hộp hỏi lại dùng chung (AC-8), ô tìm và cách tắt (AC-12), chữ hai thứ tiếng (AC-11)."
-  },
-  {
-   "i": 5,
-   "p": "Giả định cần anh gạch: bấm ra ngoài khi đã gõ thì im lặng giữ hộp, không hỏi."
-  },
-  {
-   "i": 6,
-   "p": "Giả định cần anh gạch: đổi ô chọn chỉ được giữ ở hộp thoại KR, mục tiêu, đơn vị; 22 hộp còn lại chỉ giữ khi có gõ chữ."
-  },
-  {
-   "i": 7,
-   "p": "Giả định cần anh gạch: gõ rồi xoá về như cũ vẫn tính là có thay đổi, hỏi thừa một lần."
-  },
-  {
-   "i": 8,
-   "p": "Giả định cần anh gạch: gõ vào ô tìm, ô lọc không tính là thay đổi; chọn một giá trị trong ô chọn có tìm chỉ được giữ ở chỗ tự khai."
-  }
- ],
- "gap_probe_plain": [
-  {
-   "i": 0,
-   "p": "Vuốt drawer chưa được đo thật, và hợp đồng tự mâu thuẫn về vuốt — đã sửa: vuốt thì drawer trở về và hỏi, đo bằng cú kéo thật ở khổ 390."
-  },
-  {
-   "i": 1,
-   "p": "Hộp mở bằng nút mở mà chỗ gọi không cầm trạng thái chưa được đo, và nút lưu có thể bị hỏi oan — đã sửa: thêm tiêu chí và đường «đóng ngay» cho nút lưu."
-  },
-  {
-   "i": 2,
-   "p": "Phép đo chỉ thấy chỗ gọi có khai, chưa thấy đổi ô chọn thật được giữ — đã sửa: đo trên màn thật ở ba hộp."
-  },
-  {
-   "i": 3,
-   "p": "Phép soát nút Huỷ sót drawer, sót nút ngoài chân hộp, và danh sách không tự cập nhật — đã sửa cả ba."
-  },
-  {
-   "i": 4,
-   "p": "Sửa ở thành phần chung thì hộp có ô tìm cũng bị giữ oan, và không có cách tắt — đã sửa: ô tìm, ô lọc không tính, có cách tắt từng hộp."
-  }
- ],
  "decisions_plain": [
   {
    "id": "d-20260927T004515Z-1",
@@ -124,11 +12,47 @@
   },
   {
    "id": "d-20260927T004515Z-3",
-   "p": "KHÔNG làm bản mẫu bấm được trước cổng này — thứ hiện thêm duy nhất là hộp hỏi lại đã có; đổi lại anh duyệt giao diện bằng chữ, ảnh màn thật đến ở Cổng Bằng chứng."
+   "p": "KHÔNG làm bản mẫu bấm được trước Cổng Phạm vi — đổi lại anh duyệt giao diện qua ảnh màn thật ở cổng này."
   },
   {
    "id": "d-20260927T004515Z-4",
-   "p": "Đã chọn nối 14 nút Huỷ qua nút đóng của khung kèm phép soát tự động — đổi lại lượt này sửa 14 tệp."
+   "p": "Đã chọn nối các nút Huỷ qua nút đóng của khung kèm phép soát tự động — đổi lại lượt này sửa nhiều tệp gọi."
+  },
+  {
+   "id": "d-20260927T020955Z-6",
+   "p": "Drawer đã có thay đổi thì không cho vuốt đóng, cú vuốt quá ngưỡng thì hỏi lại — đổi lại drawer không trượt theo ngón tay."
+  },
+  {
+   "id": "d-20260927T020955Z-7",
+   "p": "Bộ giữ nằm trong nhóm thành phần của thư viện giao diện, hộp hỏi lại thêm cách trả con trỏ về ô đang gõ — đổi lại vài câu tiêu chí đổi đường dẫn."
+  },
+  {
+   "id": "d-20260927T024101Z-8",
+   "p": "Phép đo bấm ngoài có hai chiều đỏ vì bộ giữ chặn ở hai lớp — lời hứa không đổi."
+  },
+  {
+   "id": "d-20260927T030210Z-9",
+   "p": "Drawer tự đo cú vuốt vì thư viện vuốt không kéo khi bị khoá — drawer đứng yên dưới ngón tay, thả tay mới hỏi."
+  },
+  {
+   "id": "d-20260927T032824Z-10",
+   "p": "Danh sách hộp được soát nâng từ 25 lên 26 (thêm hộp thoại vị trí bị sót); hợp đồng vẫn ghi 25 — cần anh phê con số này."
+  },
+  {
+   "id": "d-20260927T033911Z-11",
+   "p": "Hộp cập nhật KR hằng tuần cũng hỏi lại khi bấm Huỷ lúc đang gõ ghi chú — thêm vào phép soát như một hộp khai tay."
+  },
+  {
+   "id": "d-20260927T033911Z-12",
+   "p": "Phép soát chỉ coi lệnh đặt trạng thái mở/đóng là lệnh đóng, để không bắt nhầm nút «Về theo trưởng» — đổi lại nút đóng đặt tên lạ vẫn lọt."
+  },
+  {
+   "id": "d-20260927T034726Z-13",
+   "p": "Phép đo màn thật khai đủ sáu bước; mở ngăn bằng cách bấm tên mục tiêu thay vì đường dẫn (tránh lỗi hydrat có từ trước)."
+  },
+  {
+   "id": "d-20260927T041533Z-14",
+   "p": "Nút X của ngăn chi tiết bản ghi nay đi qua bộ giữ như Esc — đổi lại mọi ngăn chi tiết đóng qua bộ giữ, nên lỗi cờ thay đổi ở Ngoài-4 cũng lộ ở nút X."
   }
  ]
 }
