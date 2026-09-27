@@ -5,7 +5,7 @@ slug: ha-tran-thang-hoi-zalo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -53,3 +53,12 @@ Source input: prompt (chủ kho, 27/09) · `~/dev/nghien-cuu-crm/2026-09-26-ai-o
 - Mọi ca hành vi (AC-2 tới AC-4) đi qua `hoiTacTu` — đường thật — với giờ hiện tại truyền vào cố định trong tháng 10/2026; hàng do chính đường đó ghi mang giờ đó, nên đếm và ghi cùng một đồng hồ.
 - Thước tài liệu của hồ sơ đã ký (`hcz_tai_lieu`) không dùng làm bằng chứng ở đây: nó so với `merge-base`, nên đỏ trên mọi nhánh sau khi chính hồ sơ đó đã gộp (đo 27/09, trước khi sửa gì).
 - Ở 300 câu, chi phí ước tính $4,7/tháng với Gemini, $11,6/tháng với GLM. Model production chưa biết cho tới khi chủ kho chạy `N0-truy-van-production.sql`.
+- Known limits (Cổng Bằng chứng 27/09, Manh Phan):
+  - Ngoài-1: thước không-chạm-hồ-sơ-đã-ký (E7) so với đầu `origin/onehub` chứ không so với chỗ tách nhánh, nên có thể đỏ giả khi nhánh chính ghim lại hồ sơ `hoi-crm-qua-zalo`.
+  - Ngoài-2: phần trước-gộp của E7 báo «ok» khi `pre-merge-check.sh` thoát lỗi nội tại (mã 2, 127) mà không in dòng VIOLATION.
+  - Ngoài-3: cùng gốc với Ngoài-1 — đỏ giả khi nhánh chính đổi tệp của hồ sơ đã ký sau khi tách nhánh.
+  - Ngoài-5: ca `khong-tinh` phủ bốn trạng thái không tính và hai trạng thái có tính, chưa phủ `tu-choi-vai`, `tu-choi-tran-thang` và `dang-hoi`.
+  - Ngoài-6: dữ liệu gieo ghi trạng thái bằng chuỗi tự do, nên gõ nhầm tên trạng thái không bị bắt.
+  - Ngoài-7: đối chứng bản gốc trong thước tài liệu nhận bất kỳ lỗi nào, không ghim đúng lỗi «còn số 1.500».
+  - Ngoài-8: dòng 4b của bảng theo dõi được kiểm bằng bốn chuỗi rời, không kiểm chiều quyết định (1.500 → 300).
+- Ngoài-4 (E7 báo «không vi phạm» khi trước-gộp không chạy): mở hợp đồng mới, theo quyết định Cổng Bằng chứng 27/09.
