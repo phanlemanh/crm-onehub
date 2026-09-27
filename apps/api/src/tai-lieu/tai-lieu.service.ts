@@ -371,6 +371,7 @@ export class TaiLieuService {
 				banGocId: true,
 				taoBoiId: true,
 				taoBoi: NGUOI,
+				createdAt: true,
 				banGoc: { select: { noiDung: true } },
 				trang: {
 					select: { slug: true, chuTrangId: true, banDangDungId: true },
@@ -386,6 +387,7 @@ export class TaiLieuService {
 			trangThai: dx.trangThai as TrangThaiDeXuat,
 			lyDo: dx.lyDo,
 			taoBoi: dx.taoBoi,
+			taoLuc: dx.createdAt.toISOString(),
 			banGoc,
 			noiDung: dx.noiDung,
 			diffHash: await diffHash(soSanh(banGoc, dx.noiDung)),

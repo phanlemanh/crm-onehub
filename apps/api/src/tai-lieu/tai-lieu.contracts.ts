@@ -109,6 +109,7 @@ export const taiLieuProposalOutput = z.object({
 	trangThai,
 	lyDo: z.string().nullable(),
 	taoBoi: nguoi,
+	taoLuc: z.string(),
 	banGoc: z.string(),
 	noiDung: z.string(),
 	diffHash: z.string(),

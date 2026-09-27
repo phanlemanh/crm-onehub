@@ -108,6 +108,7 @@ const THUONG: DeXuat = {
 	slug: "quy-dinh-hoa-hong",
 	ten: "Quy định hoa hồng",
 	taoBoi: "Trần An",
+	taoLuc: "2026-09-26T20:30:00.000Z",
 	trangThai: "CHO_DUYET",
 	lyDo: null,
 	cu: false,
@@ -267,6 +268,14 @@ describe("tai-lieu man duyet", () => {
 		await bam(nut("Duyệt"));
 		expect(goi.duyet).toEqual([{ id: "dx-1", diffHash: await diffHash(KHOI) }]);
 		expect(goi.den).toEqual(["/ws/tai-lieu/quy-dinh-hoa-hong"]);
+	});
+
+	test("ngay-gui: dau man hien nguoi gui va ngay gui dd/mm/yyyy theo gio Viet Nam", async () => {
+		await mo(THUONG);
+		const moTa = document.body.querySelector("p")?.textContent ?? "";
+		if (!moTa.includes("27/09/2026"))
+			throw new Error("man duyet thieu ngay gui");
+		expect(moTa).toBe("Bản đề xuất · Trần An · 27/09/2026");
 	});
 
 	test("xung-dot: may chu tra CONFLICT -> bao ban de xuat vua thay doi va lam moi", async () => {

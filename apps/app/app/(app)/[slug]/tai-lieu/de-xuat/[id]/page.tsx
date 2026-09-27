@@ -49,6 +49,7 @@ async function NoiDung({ params }: { params: Params }) {
 					slug: dx.slug,
 					ten: dx.ten,
 					taoBoi: dx.taoBoi.name,
+					taoLuc: dx.taoLuc,
 					trangThai: dx.trangThai,
 					lyDo: dx.lyDo,
 					cu: dx.cu,

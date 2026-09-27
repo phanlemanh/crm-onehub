@@ -547,6 +547,21 @@ describe("diff-hash", () => {
 	});
 });
 
+describe("de-xuat-ngay", () => {
+	test("de-xuat-ngay: proposal tra taoLuc la luc tao ban de xuat", async () => {
+		const { deXuatId } = await taoTrang("Ngày gửi thử", "Nội dung.");
+		const p = ok<{ taoLuc: string }>(
+			await hoi("taiLieu.proposal", { id: deXuatId }, "chu"),
+			"proposal",
+		);
+		const { createdAt } = await db.taiLieuDeXuat.findUniqueOrThrow({
+			where: { id: deXuatId },
+			select: { createdAt: true },
+		});
+		expect(p.taoLuc, "proposal thieu ngay gui").toBe(createdAt.toISOString());
+	});
+});
+
 describe("duyet-dong-thoi", () => {
 	test("duyet-dong-thoi: hai nguoi duyet hai de xuat cung ban goc cung luc, dung mot thanh phien ban", async () => {
 		for (let vong = 0; vong < 5; vong += 1) {

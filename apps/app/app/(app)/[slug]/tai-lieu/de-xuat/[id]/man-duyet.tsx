@@ -32,7 +32,7 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
-import { duongTrang } from "@/lib/tai-lieu-man";
+import { duongTrang, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -42,6 +42,7 @@ export type DeXuatDuyet = {
 	slug: string;
 	ten: string;
 	taoBoi: string;
+	taoLuc: string;
 	trangThai: TrangThaiDeXuat;
 	lyDo: string | null;
 	cu: boolean;
@@ -56,7 +57,8 @@ type LoiMay = {
 };
 
 export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
-	const t = taiLieuMessages(useLocale());
+	const locale = useLocale();
+	const t = taiLieuMessages(locale);
 	const m = t.duyet;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -154,7 +156,8 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 				<PageShellHeading>
 					<PageShellTitle translate="no">{deXuat.ten}</PageShellTitle>
 					<PageShellDescription>
-						{m.tieuDe} · <span translate="no">{deXuat.taoBoi}</span>
+						{m.tieuDe} · <span translate="no">{deXuat.taoBoi}</span> ·{" "}
+						<span data-ngay-gui="">{ngayTaiLieu(deXuat.taoLuc, locale)}</span>
 					</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
