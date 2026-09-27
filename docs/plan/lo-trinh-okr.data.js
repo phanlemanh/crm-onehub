@@ -1,15 +1,15 @@
 window.LO_TRINH_OKR_DATA = {
-	chup_luc: "2026-09-27T14:16:52+07:00",
+	chup_luc: "2026-09-27T15:56:21+07:00",
 	ban_song: "https://claude.ai/artifact/X2YjeuJfqBESPHQPQP7y2b",
 	hang_muc: {
 		"ai-9a": {
 			buoc_ke:
-				"Anh \u0111\u00e3 k\u00fd C\u1ed5ng \u0110\u00e1ng (build); phi\u00ean \u0111ang ch\u1ea1y design-pass cho hai kh\u1ed1i C\u00e0i \u0111\u1eb7t \u203a Ch\u01b0\u01a1ng tr\u00ecnh OKR, r\u1ed3i m\u1eddi anh duy\u1ec7t C\u1ed5ng Ph\u1ea1m vi",
+				"\u0110ang vi\u1ebft m\u00e3 tu\u1ea7n t\u1ef1 theo k\u1ebf ho\u1ea1ch; xong th\u00ec ch\u1ea5m, r\u1ed3i anh k\u00fd C\u1ed5ng B\u1eb1ng ch\u1ee9ng",
 			cau_giao:
 				"\u00abQu\u1ea3n tr\u1ecb th\u1ea5y th\u00e1ng n\u00e0y AI ti\u00eau bao nhi\u00eau cho t\u1eebng vi\u1ec7c, v\u00e0 b\u1eadt t\u1eaft \u0111\u01b0\u1ee3c Tr\u1ee3 l\u00fd OKR theo \u0111\u01a1n v\u1ecb\u00bb",
 			chan_boi: ["ai-s"],
 			chay_khi:
-				"V\u00e1 Slack \u0111\u00e3 g\u1ed9p (27/09 13:04); ZDR \u0111\u1ea1t \u1edf N0",
+				"C\u1ed5ng \u0110\u00e1ng (build), C\u1ed5ng Ph\u1ea1m vi 14:58 (15 ti\u00eau ch\u00ed, 26 ph\u00e9p \u0111o), C\u1ed5ng 1.5 15:10 \u2014 \u0111\u1ec1u do anh k\u00fd",
 			cho_ai: "m\u00e1y",
 			ghi_chu:
 				"Model c\u1ee7a tr\u1ee3 l\u00fd: gemini-3.8-flash, c\u00f9ng model production, ZDR \u0111\u1ea1t. S\u1ed1ng khi trong 30 ng\u00e0y \u0111\u1ea7u s\u1ed5 chi ph\u00ed AI l\u1ec7ch b\u00e1o c\u00e1o Gateway kh\u00f4ng qu\u00e1 10%; ch\u1ebft khi l\u1ec7ch qu\u00e1 25% ho\u1eb7c c\u00f3 phi\u00ean m\u1edf khi \u0111\u00e3 t\u1eaft hay ch\u1ea1m tr\u1ea7n. Ng\u01b0\u1eddi d\u00f9ng ch\u01b0a th\u1ea5y g\u00ec; qu\u1ea3n tr\u1ecb th\u1ea5y s\u1ed5 chi ph\u00ed AI, tr\u1ea7n $9 m\u1ed7i th\u00e1ng, b\u1eadt t\u1eaft theo \u0111\u01a1n v\u1ecb.",
@@ -24,7 +24,7 @@ window.LO_TRINH_OKR_DATA = {
 			ten: "N\u1ec1n Tr\u1ee3 l\u00fd OKR",
 			ten_ngan: "N\u1ec1n tr\u1ee3 l\u00fd",
 			thu_tu: 220,
-			trang_thai: "C\u1ed5ng Ph\u1ea1m vi",
+			trang_thai: "\u0111ang d\u1ef1ng",
 		},
 		"ai-9b": {
 			buoc_ke:
@@ -736,12 +736,12 @@ window.LO_TRINH_OKR_DATA = {
 			],
 		},
 		tong: {
-			cap_nhat_luc: "2026-09-27T14:15:50+07:00",
+			cap_nhat_luc: "2026-09-27T15:55:42+07:00",
 			ngay_mo: "2026-10-26",
 			nguon:
 				"m\u1ee5c 10 l\u1ed9 tr\u00ecnh OKR \u00b7 m\u1ee5c 4 l\u1ed9 tr\u00ecnh Tr\u1ee3 l\u00fd OKR \u00b7 m\u1ee5c 7 l\u1ed9 tr\u00ecnh Zalo \u00b7 b\u1ea3n \u0111\u1ed3 s\u1ea3n ph\u1ea9m \u00b7 PR \u0111ang m\u1edf",
 			nhan_ngay_mo: "C\u1ea3 c\u00f4ng ty v\u00e0o CRM l\u1ea7n \u0111\u1ea7u",
-			onehub: "e46955cd",
+			onehub: "1f34aeac",
 		},
 	},
 };
