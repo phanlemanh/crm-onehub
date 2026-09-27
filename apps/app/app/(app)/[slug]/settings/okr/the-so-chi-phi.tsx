@@ -26,10 +26,7 @@ import { TableCell } from "@crm/ui/components/table";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
-import {
-	type TroLyOkrMessages,
-	troLyOkrMessages,
-} from "@/lib/messages/tro-ly-okr";
+import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
 import { useTRPC } from "@/lib/trpc/client";
 
 const CELL = "px-3 py-2.5 align-middle";
@@ -54,17 +51,6 @@ export function thangHien(thang: string): string {
 	return `${so}/${nam}`;
 }
 
-function lyDoDoiSoat(
-	lyDo: string | null,
-	d: TroLyOkrMessages["so"]["doiSoat"],
-) {
-	if (lyDo === "khong-co-khoa-rieng") return d.khongCoKhoaRieng;
-	if (lyDo?.startsWith("loi-gateway:")) {
-		return d.loiGateway(lyDo.slice("loi-gateway:".length));
-	}
-	return d.khongRo;
-}
-
 export function dongDoiSoat(
 	doiSoat: DoiSoatHien | null,
 	locale: Locale,
@@ -77,7 +63,14 @@ export function dongDoiSoat(
 	}).format(doiSoat.lechPhanTram ?? 0);
 	if (doiSoat.ketQua === "khop") return d.khop(thang, lech);
 	if (doiSoat.ketQua === "lech") return d.lech(thang, lech);
-	return d.khongDuoc(thang, lyDoDoiSoat(doiSoat.lyDo, d));
+	const lyDo = doiSoat.lyDo ?? "";
+	const cauLyDo =
+		lyDo === "khong-co-khoa-rieng"
+			? d.khongCoKhoaRieng
+			: lyDo.startsWith("loi-gateway:")
+				? d.loiGateway(lyDo.slice("loi-gateway:".length))
+				: d.khongRo;
+	return d.khongDuoc(thang, cauLyDo);
 }
 
 export function TheSoChiPhi() {

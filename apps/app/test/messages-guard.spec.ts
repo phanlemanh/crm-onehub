@@ -118,6 +118,7 @@ const KHONG_DAU = new Set([
 	"dau.crm",
 	"dau.api",
 	"dau.bangTinh",
+	"hop.onehub",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -128,6 +129,41 @@ function mienDau(khoa: string): boolean {
 function hienRa(v: GiaTri): string {
 	return v instanceof Function ? v("X", "Y", "Z") : v;
 }
+
+const GHIM_TRO_LY_OKR = {
+	"tro-ly-okr:so.doiSoat.khongDuoc": [
+		"Đối soát tháng 1: chưa đối soát được — A.",
+		"Đối soát tháng 12: chưa đối soát được — A.",
+	],
+	"tro-ly-okr:so.doiSoat.khop": [
+		"Đối soát tháng 1 với AI Gateway: khớp (lệch A%).",
+		"Đối soát tháng 12 với AI Gateway: khớp (lệch A%).",
+	],
+	"tro-ly-okr:so.doiSoat.lech": [
+		"Đối soát tháng 1 với AI Gateway: lệch A%.",
+		"Đối soát tháng 12 với AI Gateway: lệch A%.",
+	],
+	"tro-ly-okr:so.doiSoat.loiGateway": [
+		"AI Gateway trả lỗi 1",
+		"AI Gateway trả lỗi 12",
+	],
+	"tro-ly-okr:so.rongMoTa": [
+		"Trần của Trợ lý OKR: 1.",
+		"Trần của Trợ lý OKR: 12.",
+	],
+	"tro-ly-okr:troLy.donViBat": ["Đơn vị bật 1", "Đơn vị bật 12"],
+	"tro-ly-okr:troLy.hop.goiYPhongBan": ["Phòng ban · 1", "Phòng ban · 12"],
+	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị cho «1»", "Đơn vị cho «12»"],
+	"tro-ly-okr:troLy.hop.xacNhan": ["Chọn 1 đơn vị", "Chọn 12 đơn vị"],
+	"tro-ly-okr:troLy.sanSang.chuaSanSang": [
+		"Chưa sẵn sàng — 1",
+		"Chưa sẵn sàng — 12",
+	],
+	"tro-ly-okr:troLy.sanSang.hetTran": [
+		"Đã chạm trần tháng — tạm nghỉ tới 1",
+		"Đã chạm trần tháng — tạm nghỉ tới 12",
+	],
+} satisfies Record<string, [string, string]>;
 
 const CHUA_NOI_KHAI: readonly string[] = [
 	"record-sheet.tabs.details",
@@ -769,6 +805,7 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"okr-so:trangThai.capNhat.soTu": ["Số từ 1 · A", "Số từ 12 · A"],
 			"okr-so:trangThai.capNhat.soMay": ["Số máy: 1 · A", "Số máy: 12 · A"],
+			...GHIM_TRO_LY_OKR,
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];
