@@ -2,6 +2,7 @@ import {
 	LOI_KHUON_CAP_NHAT,
 	type LoiGiaTri,
 } from "@crm/validation/okr-cap-nhat";
+import { OKR_KHEP } from "@crm/validation/okr-khep";
 
 export const OKR = {
 	tenGoc: "OneHub",
@@ -101,6 +102,38 @@ export const OKR = {
 			danhSachDoiTac:
 				"Danh sách bản ghi thuộc dữ liệu đối tác — vai «chỉ OKR» chỉ xem được con số.",
 			ghiChuDoCanh: "đo cạnh",
+		},
+		khep: {
+			raChiKhiDangChay: "Chỉ mở rà giữa kỳ khi chu kỳ đang chạy.",
+			raNgoaiKy: "Khoảng rà phải nằm trong ngày đầu và ngày cuối của chu kỳ.",
+			raChong: "Khoảng rà chồng ngày với một cửa sổ rà đang mở của chu kỳ này.",
+			raDaDong: "Cửa sổ rà này đã đóng.",
+			lyDoDoiDich: "Đổi đích ngoài rà giữa kỳ cần lý do.",
+			khongCoCuaSoRa: (id: string) => `Không có cửa sổ rà nào mang mã ${id}.`,
+			phaTungBuoc:
+				"Pha đi từng bước: lập kế hoạch, đang chạy, chấm điểm, đã đóng.",
+			chamTuNgaySau: "Sang chấm điểm từ ngày sau ngày cuối của chu kỳ.",
+			thieuSoNgayCuoi: (n: number) =>
+				`Còn ${n} KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
+			conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm.`,
+			krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
+			krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",
+			chiChamKhiChamDiem: "Chỉ chấm KR khi chu kỳ ở pha chấm điểm.",
+			khongCoDiemKr:
+				"KR này không có dòng điểm cuối kỳ — chỉ KR của mục tiêu đã công bố lúc sang chấm được chấm.",
+			ngoaiLuoi: (buoc: string, cuoi: string) =>
+				`Điểm ngoài lưới — chọn bội của ${buoc} từ 0 tới ${cuoi}.`,
+			canLyDoCham: `Điểm khác gợi ý cần lý do ${OKR_KHEP.lyDo.toiThieu}–${OKR_KHEP.lyDo.toiDa} ký tự.`,
+			nhinLaiChiKhi: "Điều học được ghi ở pha đang chạy hoặc chấm điểm.",
+			bangChamChuaCo: "Bảng chấm có từ pha chấm điểm.",
+			kyDaDong:
+				"Chu kỳ đã đóng — quản trị mở lại kỳ thì mới sửa được điểm hay điều học được.",
+			chiMoLaiKhiDong: "Chỉ mở lại được chu kỳ đã đóng.",
+			chuaCoKyKe: "Chưa có chu kỳ kế để mang sang — quản trị mở chu kỳ trước.",
+			daMangSang: "Mục tiêu này đã mang sang chu kỳ kế rồi.",
+			mangSangChiCongBo: "Chỉ mang sang được mục tiêu đã công bố.",
+			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
+			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

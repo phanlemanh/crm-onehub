@@ -27,6 +27,7 @@ const QUY: ChuKyOutput = {
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 };
 
 function kr(thay: Partial<KrOutput>): KrOutput {
@@ -62,6 +63,8 @@ function mucTieu(
 		id: "mt-1",
 		cycleId: QUY.id,
 		cycleName: QUY.name,
+		mangSangToi: null,
+		mangSangTu: null,
 		level: "phong-ban",
 		unitId: "pb-1",
 		unitName: "Kinh doanh vùng 1",

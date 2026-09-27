@@ -6,6 +6,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram } from "@crm/validation/okr-chuong-trinh";
+import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import { KIEU_KR, krInput, NGUON_KR } from "@crm/validation/okr-kr";
 import {
 	CAP_MUC_TIEU,
@@ -28,6 +29,12 @@ export const nguoiOkr = z.object({
 	email: z.string(),
 });
 
+export const cuaSoRaOutput = z.object({
+	id: z.string(),
+	tuNgay: ngay,
+	denNgay: ngay,
+});
+
 export const chuKyOutput = z.object({
 	id: z.string(),
 	kind: z.enum(LOAI_CHU_KY),
@@ -39,6 +46,7 @@ export const chuKyOutput = z.object({
 	breakStartsOn: ngay.nullable(),
 	breakEndsOn: ngay.nullable(),
 	updateWeekday: z.number(),
+	cuaSoRa: cuaSoRaOutput.nullable(),
 });
 export const cyclesOutput = z.object({
 	cycles: z.array(chuKyOutput),
@@ -149,8 +157,14 @@ export const okrCountByUnitOutput = z.record(z.string(), z.number());
 export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({ objectives: z.array(mucTieuOutput) });
 export const objectiveInput = z.object({ id: ma });
+export const lienKetMangSang = z
+	.object({ objectiveId: z.string(), cycleName: z.string() })
+	.nullable();
+
 export const objectiveOutput = mucTieuOutput.extend({
 	cycleName: z.string(),
+	mangSangToi: lienKetMangSang,
+	mangSangTu: lienKetMangSang,
 	trail: z.array(vetOutput),
 	canEditKr: z.array(z.string()),
 });
@@ -162,7 +176,9 @@ export const okOutput = z.object({
 	canhBao: z.string().nullable(),
 });
 export const createKrInput = krInput.extend({ objectiveId: ma });
-export const updateKrInput = krInput.partial().extend({ id: ma });
+export const updateKrInput = krInput
+	.partial()
+	.extend({ id: ma, lyDoDoiDich: lyDoDoiDich.optional() });
 export const alignmentInput = z.object({
 	objectiveId: ma,
 	targetObjectiveId: ma.nullable(),

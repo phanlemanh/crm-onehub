@@ -557,6 +557,33 @@ Vì sao: điểm mà quyết lương thì người ta đặt đích thấp và l
 thành một bảng chỉ tiêu nữa. Hoa hồng đã gắn doanh số; điểm cuối kỳ để học, không
 để trả công.
 
+**Số chốt**: giá trị của một KR lúc chu kỳ sang pha «Chấm điểm» — con số máy dùng để
+gợi ý điểm cuối kỳ, và đứng yên sau đó, kể cả khi kỳ mở lại. Đề xuất 2026-09-27 (lượt
+7 lộ trình OKR), chốt tại Cổng Phạm vi.
+_Avoid_: số cuối, số thực tế, kết quả
+Vì sao: «số cuối» gợi số của ngày cuối kỳ, mà số chốt là số lúc chấm; «kết quả» đã là
+chữ trong tên KR.
+
+**Rà giữa kỳ**: khoảng ngày quản trị mở cho cả một chu kỳ đang chạy để các đơn vị
+chỉnh đích KR mà không cần lý do. Ngoài khoảng đó, sửa đích của mục tiêu đã công bố
+phải ghi lý do, và KR mang nhãn **đích sửa ngoài rà** tới lúc chấm. Đề xuất
+2026-09-27, chốt tại Cổng Phạm vi.
+_Avoid_: review giữa kỳ, đánh giá giữa kỳ, điều chỉnh mục tiêu
+Vì sao: «đánh giá» là chữ từ điển tránh cho OKR; «điều chỉnh mục tiêu» gợi sửa câu mục
+tiêu, còn thứ được mở ở đây là đích của KR.
+
+**Điều học được**: một ô chữ mỗi mục tiêu, người sửa được mục tiêu ghi — thường lúc chấm —
+đơn vị sẽ làm gì khác ở kỳ sau. Ai mở được mục tiêu đều đọc được. Không bắt buộc để đóng kỳ. Đề xuất
+2026-09-27, chốt tại Cổng Phạm vi.
+_Avoid_: bài học, rút kinh nghiệm, retro
+Vì sao: «rút kinh nghiệm» mang giọng kiểm điểm người; ô này nói về cách làm của đơn vị.
+
+**Mang sang (OKR)**: tạo một bản nháp của mục tiêu dở ở chu kỳ kế — cùng đơn vị, loại,
+người phụ trách; KR chưa trọn đi theo với khởi điểm bằng số chốt. Mục tiêu gốc và điểm
+của nó giữ nguyên, hai bên nối nhau. Đề xuất 2026-09-27, chốt tại Cổng Phạm vi.
+_Avoid_: chuyển kỳ, kéo dài, sao chép
+Vì sao: «chuyển» gợi mục tiêu rời kỳ cũ; «kéo dài» gợi kỳ cũ chưa khép.
+
 **Vai «chỉ OKR»**: vai trong workspace cho người vào CRM chỉ để làm OKR — hôm nay
 là người ngoài khối kinh doanh. Họ đăng nhập, thấy khu OKR và hồ sơ của chính
 mình, nhưng không đọc được cá nhân, công ty, thoả thuận hợp tác, chiến dịch hay kế

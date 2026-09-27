@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thứ tự thi công — khep-ky-okr</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-paper:  #fafafa;
+    --color-ink:    #171717;
+    --color-muted:  #575757;
+    --color-soft:   #666666;
+    --color-accent: #006B4F;
+    --font-sans:    'Geist', system-ui, sans-serif;
+    --font-serif:   'Lora', serif;
+    --font-mono:    'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1900px; width: 100%; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 2vw + 0.7rem, 1.9rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--color-ink);
+    margin-bottom: 1.5rem;
+  }
+  svg { width: 100%; min-width: 1100px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Sơ đồ phụ thuộc · khep-ky-okr</p>
+  <h1>Thứ tự thi công 17 việc</h1>
+
+  <svg viewBox="0 0 1900 1340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ================= ARROWS (drawn first, behind boxes) ================= -->
+    <g fill="none" stroke="#575757" stroke-width="1.2">
+      <!-- START -> 1,2,3,4 (single shared bus, no per-branch crossing) -->
+      <path d="M655,104 L655,120"/>
+      <path d="M190,120 L1110,120"/>
+      <path d="M190,120 L190,160"/>
+      <path d="M500,120 L500,160"/>
+      <path d="M810,120 L810,160"/>
+      <path d="M1110,120 L1110,160"/>
+
+      <!-- 4 -> 5,7 -->
+      <path d="M1040,224 L1040,248 Q1040,256 1032,256 L1008,256 Q1000,256 1000,264 L1000,320"/>
+      <path d="M1180,224 L1180,264 Q1180,272 1188,272 L1392,272 Q1400,272 1400,280 L1400,320"/>
+
+      <!-- 5 -> 6 (straight) -->
+      <path d="M1000,384 L1000,480"/>
+      <!-- 7 -> 8 (straight) -->
+      <path d="M1400,384 L1400,480"/>
+
+      <!-- 8 -> 9,10,11,14 -->
+      <path d="M1290,544 L1290,558 Q1290,566 1282,566 L1058,566 Q1050,566 1050,574 L1050,640"/>
+      <path d="M1350,544 L1350,640"/>
+      <path d="M1410,544 L1410,586 Q1410,594 1418,594 L1642,594 Q1650,594 1650,602 L1650,640"/>
+      <path d="M1470,544 L1470,720 Q1470,728 1462,728 L608,728 Q600,728 600,736 L600,800"/>
+
+      <!-- 9,10,11 -> 12 -->
+      <path d="M1000,704 L1000,712 Q1000,720 1008,720 L1112,720 Q1120,720 1120,728 L1120,800"/>
+      <path d="M1300,704 L1300,732 Q1300,740 1292,740 L1208,740 Q1200,740 1200,748 L1200,800"/>
+      <path d="M1600,704 L1600,752 Q1600,760 1592,760 L1288,760 Q1280,760 1280,768 L1280,800"/>
+
+      <!-- 9,11 -> 15 -->
+      <path d="M1100,704 L1100,776 Q1100,784 1092,784 L878,784 Q870,784 870,792 L870,800"/>
+      <path d="M1700,704 L1700,768 Q1700,776 1692,776 L938,776 Q930,776 930,784 L930,800"/>
+
+      <!-- 1,3,5,6 -> 13 -->
+      <path d="M190,224 L190,282 Q190,290 198,290 L422,290 Q430,290 430,298 L430,632"/>
+      <path d="M790,224 L790,282 Q790,290 782,290 L498,290 Q490,290 490,298 L490,632"/>
+      <path d="M940,384 L940,392 Q940,400 932,400 L558,400 Q550,400 550,408 L550,632"/>
+      <path d="M1000,544 L1000,582 Q1000,590 992,590 L618,590 Q610,590 610,598 L610,632"/>
+
+      <!-- 3 -> 14, 10 -> 14, 13 -> 14 -->
+      <path d="M830,224 L830,732 Q830,740 822,740 L398,740 Q390,740 390,748 L390,800"/>
+      <path d="M1400,704 L1400,784 Q1400,792 1392,792 L538,792 Q530,792 530,800"/>
+      <path d="M550,720 L550,752 Q550,760 542,760 L468,760 Q460,760 460,768 L460,800"/>
+
+      <!-- 5,7 -> 15 -->
+      <path d="M1060,384 L1060,400 Q1060,408 1052,408 L758,408 Q750,408 750,416 L750,800"/>
+      <path d="M1470,384 L1470,416 Q1470,424 1462,424 L818,424 Q810,424 810,432 L810,800"/>
+
+      <!-- 2 -> 16 -->
+      <path d="M500,224 L500,262 Q500,270 492,270 L348,270 Q340,270 340,278 L340,912 Q340,920 348,920 L742,920 Q750,920 750,928 L750,960"/>
+      <!-- 14 -> 16 -->
+      <path d="M490,864 L490,892 Q490,900 498,900 L802,900 Q810,900 810,908 L810,960"/>
+      <!-- 15 -> 16 -->
+      <path d="M850,864 L850,912 Q850,920 858,920 L862,920 Q870,920 870,928 L870,960"/>
+      <!-- 12 -> 16 -->
+      <path d="M1200,864 L1200,932 Q1200,940 1192,940 L938,940 Q930,940 930,948 L930,960"/>
+
+      <!-- 16 -> 17 -> END (straight) -->
+      <path d="M850,1024 L850,1080"/>
+      <path d="M850,1144 L850,1200"/>
+    </g>
+    <!-- arrowheads (separate thin pass so markers align cleanly at box edges) -->
+    <g fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)">
+      <path d="M190,158 L190,160"/>
+      <path d="M500,158 L500,160"/>
+      <path d="M810,158 L810,160"/>
+      <path d="M1110,158 L1110,160"/>
+      <path d="M1000,318 L1000,320"/>
+      <path d="M1400,318 L1400,320"/>
+      <path d="M1000,478 L1000,480"/>
+      <path d="M1400,478 L1400,480"/>
+      <path d="M1050,638 L1050,640"/>
+      <path d="M1350,638 L1350,640"/>
+      <path d="M1650,638 L1650,640"/>
+      <path d="M600,798 L600,800"/>
+      <path d="M1120,798 L1120,800"/>
+      <path d="M1200,798 L1200,800"/>
+      <path d="M1280,798 L1280,800"/>
+      <path d="M870,798 L870,800"/>
+      <path d="M930,798 L930,800"/>
+      <path d="M430,630 L430,632"/>
+      <path d="M490,630 L490,632"/>
+      <path d="M550,630 L550,632"/>
+      <path d="M610,630 L610,632"/>
+      <path d="M390,798 L390,800"/>
+      <path d="M530,798 L530,800"/>
+      <path d="M460,798 L460,800"/>
+      <path d="M750,798 L750,800"/>
+      <path d="M810,798 L810,800"/>
+      <path d="M750,958 L750,960"/>
+      <path d="M810,958 L810,960"/>
+      <path d="M870,958 L870,960"/>
+      <path d="M930,958 L930,960"/>
+      <path d="M850,1078 L850,1080"/>
+      <path d="M850,1198 L850,1200"/>
+    </g>
+
+    <!-- ================= NODES ================= -->
+
+    <!-- START (oval) -->
+    <rect x="465" y="32" width="380" height="72" rx="36" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.32)" stroke-width="1"/>
+    <text x="655" y="60" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chờ chủ kho cho viết mã</text>
+    <text x="655" y="78" fill="#575757" font-size="10.5" font-family="'Geist', sans-serif" text-anchor="middle">→ gộp onehub, cài gói,</text>
+    <text x="655" y="94" fill="#575757" font-size="10.5" font-family="'Geist', sans-serif" text-anchor="middle">soát lại kế hoạch</text>
+
+    <!-- Node template comment: paper mask + box + tag + name -->
+
+    <!-- N1 -->
+    <rect x="80" y="160" width="220" height="64" rx="6" fill="#fafafa"/>
+    <rect x="80" y="160" width="220" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="98" y="180" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">1</text>
+    <text x="190" y="198" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Luật chất lượng</text>
+    <text x="190" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khi đặt</text>
+
+    <!-- N2 -->
+    <rect x="370" y="160" width="260" height="64" rx="6" fill="#fafafa"/>
+    <rect x="370" y="160" width="260" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="388" y="180" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">2</text>
+    <text x="500" y="198" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Điểm, lưới và khuôn</text>
+    <text x="500" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đầu vào dùng chung</text>
+
+    <!-- N3 -->
+    <rect x="700" y="160" width="220" height="64" rx="6" fill="#fafafa"/>
+    <rect x="700" y="160" width="220" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="718" y="180" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">3</text>
+    <text x="810" y="198" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hai biến thể</text>
+    <text x="810" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">giao diện</text>
+
+    <!-- N4 -->
+    <rect x="990" y="160" width="240" height="64" rx="6" fill="#fafafa"/>
+    <rect x="990" y="160" width="240" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1008" y="180" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">4</text>
+    <text x="1110" y="198" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Năm bảng mới và</text>
+    <text x="1110" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">migration</text>
+
+    <!-- N5 -->
+    <rect x="890" y="320" width="220" height="64" rx="6" fill="#fafafa"/>
+    <rect x="890" y="320" width="220" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="908" y="340" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">5</text>
+    <text x="1000" y="358" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cửa sổ rà</text>
+    <text x="1000" y="374" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">giữa kỳ</text>
+
+    <!-- N7 -->
+    <rect x="1270" y="320" width="260" height="64" rx="6" fill="#fafafa"/>
+    <rect x="1270" y="320" width="260" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1288" y="340" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">7</text>
+    <text x="1400" y="358" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Luật pha, sang</text>
+    <text x="1400" y="374" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chấm và chốt số</text>
+
+    <!-- N6 -->
+    <rect x="870" y="480" width="260" height="64" rx="6" fill="#fafafa"/>
+    <rect x="870" y="480" width="260" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="888" y="500" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">6</text>
+    <text x="1000" y="518" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đổi đích trong</text>
+    <text x="1000" y="534" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">và ngoài rà</text>
+
+    <!-- N8 -->
+    <rect x="1270" y="480" width="260" height="64" rx="6" fill="#fafafa"/>
+    <rect x="1270" y="480" width="260" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1288" y="500" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">8</text>
+    <text x="1400" y="518" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chấm, điều học</text>
+    <text x="1400" y="534" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">được, bảng chấm</text>
+
+    <!-- N13 (3 lines, taller box) -->
+    <rect x="400" y="632" width="300" height="88" rx="6" fill="#fafafa"/>
+    <rect x="400" y="632" width="300" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="418" y="652" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">13</text>
+    <text x="550" y="672" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chữ, hộp thoại KR,</text>
+    <text x="550" y="688" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cảnh báo đối trọng,</text>
+    <text x="550" y="704" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dải kỳ</text>
+
+    <!-- N9 -->
+    <rect x="920" y="640" width="260" height="64" rx="6" fill="#fafafa"/>
+    <rect x="920" y="640" width="260" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="938" y="660" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">9</text>
+    <text x="1050" y="678" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đóng, mở lại và</text>
+    <text x="1050" y="694" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khoá sau đóng</text>
+
+    <!-- N10 -->
+    <rect x="1260" y="640" width="180" height="64" rx="6" fill="#fafafa"/>
+    <rect x="1260" y="640" width="180" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1278" y="660" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">10</text>
+    <text x="1350" y="680" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mang sang</text>
+
+    <!-- N11 -->
+    <rect x="1540" y="640" width="220" height="64" rx="6" fill="#fafafa"/>
+    <rect x="1540" y="640" width="220" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1558" y="660" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">11</text>
+    <text x="1650" y="678" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xuất kỳ</text>
+    <text x="1650" y="694" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đã đóng</text>
+
+    <!-- N14 -->
+    <rect x="350" y="800" width="280" height="64" rx="6" fill="#fafafa"/>
+    <rect x="350" y="800" width="280" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="368" y="820" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">14</text>
+    <text x="490" y="838" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn Chấm điểm và</text>
+    <text x="490" y="854" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hộp thoại mang sang</text>
+
+    <!-- N15 -->
+    <rect x="710" y="800" width="280" height="64" rx="6" fill="#fafafa"/>
+    <rect x="710" y="800" width="280" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="728" y="820" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">15</text>
+    <text x="850" y="838" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Điều khiển chu kỳ ở</text>
+    <text x="850" y="854" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cài đặt và nút Xuất</text>
+
+    <!-- N12 -->
+    <rect x="1070" y="800" width="260" height="64" rx="6" fill="#fafafa"/>
+    <rect x="1070" y="800" width="260" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1088" y="820" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">12</text>
+    <text x="1200" y="838" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ma trận phạm vi</text>
+    <text x="1200" y="854" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">vai chỉ OKR</text>
+
+    <!-- N16 -->
+    <rect x="710" y="960" width="280" height="64" rx="6" fill="#fafafa"/>
+    <rect x="710" y="960" width="280" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="728" y="980" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">16</text>
+    <text x="850" y="998" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thước còn lại</text>
+    <text x="850" y="1014" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">và soi mã</text>
+
+    <!-- N17 -->
+    <rect x="700" y="1080" width="300" height="64" rx="6" fill="#fafafa"/>
+    <rect x="700" y="1080" width="300" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="718" y="1100" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace">17</text>
+    <text x="850" y="1118" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tài liệu và</text>
+    <text x="850" y="1134" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">năm lệnh chứng</text>
+
+    <!-- END (oval, accent — focal) -->
+    <rect x="720" y="1200" width="260" height="56" rx="28" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="850" y="1224" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">S4 chấm máy</text>
+    <text x="850" y="1240" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐIỂM KẾT</text>
+
+    <!-- ================= LEGEND ================= -->
+    <line x1="40" y1="1290" x2="1860" y2="1290" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="1306" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">LEGEND</text>
+
+    <rect x="150" y="1296" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.32)" stroke-width="1"/>
+    <text x="182" y="1306" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Điều kiện bắt đầu / kết thúc (oval)</text>
+
+    <rect x="480" y="1296" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="512" y="1306" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Việc (số thứ tự trong đề mục)</text>
+
+    <line x1="800" y1="1302" x2="828" y2="1302" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <text x="836" y="1306" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Phụ thuộc — việc sau chờ việc trước</text>
+
+    <rect x="1160" y="1296" width="24" height="12" rx="14" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="1192" y="1306" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Điểm kết của kế hoạch</text>
+  </svg>
+</div>
+</body>
+</html>

@@ -315,6 +315,17 @@ executors:
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
     hd_bang_ba_dong: "cd packages/auth && bun test test/hosted-domain.spec.ts"
+    kko_luat: "cd packages/validation && bun test test/okr-kiem.spec.ts"
+    kko_chu: "cd apps/app && bun test test/okr-khep-chu.spec.ts test/messages-guard.spec.ts"
+    kko_ra: 'bun run test -- "cd apps/api && bun test test/okr-khep.spec.ts -t cua-so-ra"'
+    kko_doi_dich: 'bun run test -- "cd apps/api && bun test test/okr-khep.spec.ts -t doi-dich"'
+    kko_sang_cham: 'bun run test -- "cd apps/api && bun test test/okr-khep.spec.ts -t sang-cham"'
+    kko_cham: 'bun run test -- "cd apps/api && bun test test/okr-khep.spec.ts -t cham-va-nhin-lai"'
+    kko_dong: 'bun run test -- "cd apps/api && bun test test/okr-khep.spec.ts -t dong-mo-lai"'
+    kko_mang_sang: 'bun run test -- "cd apps/api && bun test test/okr-khep.spec.ts -t mang-sang"'
+    kko_xuat: 'bun run test -- "cd apps/api && bun test test/okr-khep-xuat.spec.ts"'
+    kko_pham_vi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran && bun test test/vai-chi-okr.spec.ts -t pham-vi-khep"'
+    kko_bang_cham_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-khep-cham.dom.tsx"
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
     hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"
@@ -1175,6 +1186,10 @@ executors:
     sot_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs"'
     sot_tin_so: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/tin-so.mjs --san"'
     sot_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/ty-le.mjs"'
+    kko_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khep-ky-okr/rang/man-khep-ky.mjs"'
+    kko_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khep-ky-okr/rang/ty-le.mjs"'
+    kko_san_thiet_ke: "bun _acceptance/khep-ky-okr/rang/soi-ma.mjs --ca thiet-ke"
+    kko_migration_chi_them: "bun _acceptance/khep-ky-okr/rang/migration-chi-them.mjs"
     sot_migration_chi_them: "node _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs"
     tco_san_thiet_ke: "bun _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs"
     cnt_duong_do: "bun _acceptance/cap-nhat-tuan-okr/rang/duong-do.mjs"

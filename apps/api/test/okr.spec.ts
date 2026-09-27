@@ -10,6 +10,7 @@ import type { NutCanChinh } from "../src/okr/okr.contracts";
 import { OkrAccessService } from "../src/okr/okr-access.service";
 import { OKR } from "../src/okr/okr-config";
 import { chonChuKyHienTai } from "../src/okr/tien-do";
+import { sangPha } from "./okr-khep-san";
 import {
 	type AiHoacCookie,
 	bpMoi,
@@ -903,6 +904,7 @@ describe("cong-bo", () => {
 				id: k1,
 				startValue: 10,
 				targetValue: 60,
+				lyDoDoiDich: "doi dich ngoai ra giua ky",
 			}),
 			"doi dich",
 		);
@@ -979,8 +981,8 @@ describe("cong-bo", () => {
 			});
 		const truoc = await chup();
 		const ketQua: Json[] = [];
-		for (const pha of ["cham-diem", "da-dong"]) {
-			ok(await goi("okr.setCyclePhase", { id: quy, phase: pha }), pha);
+		for (const pha of ["cham-diem", "da-dong"] as const) {
+			ok(await sangPha(quy, pha), pha);
 			for (const t of THU_TUC_GHI) {
 				const r = await goi(`okr.${t.ten}`, t.vao(f2));
 				ketQua.push([t.ten, pha, r.status, r.loi]);
@@ -1168,10 +1170,7 @@ describe("vet-okr", () => {
 		);
 		expect(await db.activity.count()).toBe(activityTruoc);
 
-		ok(
-			await goi("okr.setCyclePhase", { id: quy, phase: "cham-diem" }),
-			"cham diem",
-		);
+		ok(await sangPha(quy, "cham-diem"), "cham diem");
 		expect((await docVet()).length).toBe(vet.length + 1);
 	});
 });

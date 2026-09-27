@@ -71,6 +71,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
+	const homNay = homNayVn(new Date());
 
 	await Promise.all([
 		queryClient.prefetchQuery(trpc.okr.cycles.queryOptions()),
@@ -82,7 +83,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 			<DauTrang tieuDe={tieuDe} moTa={moTa} lyDo={<LyDoKhongQuyen />} />
 			<PageShellContent>
 				<div className="flex flex-col gap-6">
-					<BangChuKy goiY={goiYChuKy(homNayVn(new Date()))} />
+					<BangChuKy goiY={goiYChuKy(homNay)} homNay={homNay} />
 					<FormCauHinh />
 				</div>
 			</PageShellContent>
