@@ -6,6 +6,7 @@ import {
 	mangSangInput,
 	moLaiKyInput,
 	moRaInput,
+	xuatKyInput,
 } from "@crm/validation/okr-khep";
 import {
 	addCommentInput,
@@ -73,6 +74,7 @@ import {
 	bangChamInput,
 	bangChamOutput,
 	mangSangOutput,
+	xuatKyOutput,
 } from "./okr-khep.contracts";
 import { OkrKhepService } from "./okr-khep.service";
 import {
@@ -189,6 +191,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof bangChamInput>,
 	) {
 		return this.khep.bangCham(ctx.user.id, input);
+	}
+
+	@Query({
+		input: xuatKyInput,
+		output: xuatKyOutput,
+		meta: restMeta("GET", "/okr/cycles/{cycleId}/export", TAG),
+	})
+	xuatKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof xuatKyInput>,
+	) {
+		return this.khep.xuatKy(ctx.user.id, input);
 	}
 
 	@Mutation({

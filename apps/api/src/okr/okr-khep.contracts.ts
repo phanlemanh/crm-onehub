@@ -68,8 +68,38 @@ export const mangSangOutput = z.object({
 	canhBao: z.string().nullable(),
 });
 
+export const COT_XUAT = [
+	"Chu kỳ",
+	"Cấp",
+	"Đơn vị",
+	"Mục tiêu",
+	"Loại",
+	"Trạng thái",
+	"Người phụ trách mục tiêu",
+	"KR",
+	"Kiểu",
+	"Đơn vị đo",
+	"Người phụ trách KR",
+	"Khởi điểm",
+	"Đích",
+	"Số chốt",
+	"Điểm gợi ý",
+	"Điểm",
+	"Lý do chỉnh",
+	"Số lần đổi đích ngoài rà",
+	"Điểm mục tiêu",
+	"Điều học được",
+	"Mang sang tới",
+] as const;
+
+export const xuatKyOutput = z.object({
+	tenTep: z.string(),
+	noiDung: z.string(),
+});
+
 export type BangChamInput = z.infer<typeof bangChamInput>;
 export type BangChamOutput = z.infer<typeof bangChamOutput>;
 export type KrCham = z.infer<typeof krCham>;
 export type MucTieuCham = z.infer<typeof mucTieuCham>;
 export type MangSangOutput = z.infer<typeof mangSangOutput>;
+export type XuatKyOutput = z.infer<typeof xuatKyOutput>;

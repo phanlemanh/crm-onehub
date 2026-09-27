@@ -15,6 +15,7 @@ import {
 	moLaiKyInput,
 	OKR_KHEP,
 	type ThangCham,
+	type xuatKyInput,
 } from "@crm/validation/okr-khep";
 import {
 	kiemSoTheoKieu,
@@ -30,16 +31,20 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { tenDonVi } from "./don-vi";
 import { kiemDongKy, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
 import { OkrService } from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
-import type {
-	BangChamInput,
-	BangChamOutput,
-	MangSangOutput,
-	MucTieuCham,
+import {
+	type BangChamInput,
+	type BangChamOutput,
+	COT_XUAT,
+	type MangSangOutput,
+	type MucTieuCham,
+	type XuatKyOutput,
 } from "./okr-khep.contracts";
+import { dungCsv, type OCsv, tenTepXuat } from "./okr-khep.csv";
 import { OkrXemService } from "./okr-xem.service";
 
 const T = OKR.thongDiep;
@@ -48,6 +53,7 @@ const loaiMucTieu = z.enum(LOAI_MUC_TIEU);
 type GhiDieuHocDuocInput = z.infer<typeof ghiDieuHocDuocInput>;
 type MoLaiKyInput = z.infer<typeof moLaiKyInput>;
 type MangSangInput = z.infer<typeof mangSangInput>;
+type XuatKyInput = z.infer<typeof xuatKyInput>;
 const soThap = (v: number) => String(v).replace(".", ",");
 
 const chonBangCham = {
@@ -98,6 +104,99 @@ const chonBangCham = {
 		},
 	},
 } satisfies Prisma.OkrObjectiveSelect;
+
+const chonXuat = {
+	id: true,
+	level: true,
+	status: true,
+	title: true,
+	kind: true,
+	owner: { select: { name: true } },
+	division: { select: { name: true } },
+	department: { select: { name: true } },
+	person: { select: { name: true } },
+	nhinLai: { select: { dieuHocDuoc: true } },
+	mangSangDi: {
+		orderBy: { luc: "desc" },
+		take: 1,
+		select: { sangCycle: { select: { name: true } } },
+	},
+	keyResults: {
+		where: { objective: { status: "da-bo" } },
+		orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+		select: {
+			title: true,
+			kind: true,
+			unit: true,
+			startValue: true,
+			targetValue: true,
+			owner: { select: { name: true } },
+			_count: { select: { doiDich: { where: { ngoaiRa: true } } } },
+		},
+	},
+} satisfies Prisma.OkrObjectiveSelect;
+
+type MucTieuXuat = Prisma.OkrObjectiveGetPayload<{ select: typeof chonXuat }>;
+
+const KR_TRONG: OCsv[] = Array.from({ length: 11 }, () => null);
+
+function dongXuat(
+	ky: string,
+	m: MucTieuXuat,
+	cham: MucTieuCham | undefined,
+): OCsv[][] {
+	const dau: OCsv[] = [ky, m.level, tenDonVi(m), m.title, m.kind, m.status];
+	if (cham) {
+		const cuoi: OCsv[] = [
+			cham.diem,
+			cham.dieuHocDuoc,
+			cham.mangSangToi?.cycleName ?? null,
+		];
+		const krs = cham.krs.map((k): OCsv[] => [
+			k.title,
+			k.kind,
+			k.unit,
+			k.ownerName,
+			k.startValue,
+			k.targetValue,
+			k.soChot,
+			k.diemGoiY,
+			k.diem,
+			k.lyDo,
+			k.doiDichNgoaiRa.length,
+		]);
+		return (krs.length ? krs : [KR_TRONG]).map((k) => [
+			...dau,
+			cham.ownerName,
+			...k,
+			...cuoi,
+		]);
+	}
+	const cuoi: OCsv[] = [
+		null,
+		m.nhinLai?.dieuHocDuoc ?? null,
+		m.mangSangDi[0]?.sangCycle.name ?? null,
+	];
+	const krs = m.keyResults.map((k): OCsv[] => [
+		k.title,
+		k.kind,
+		k.unit,
+		k.owner.name,
+		Number(k.startValue),
+		Number(k.targetValue),
+		null,
+		null,
+		null,
+		null,
+		k._count.doiDich,
+	]);
+	return (krs.length ? krs : [KR_TRONG]).map((k) => [
+		...dau,
+		m.owner.name,
+		...k,
+		...cuoi,
+	]);
+}
 
 @Injectable()
 export class OkrKhepService {
@@ -556,6 +655,42 @@ export class OkrKhepService {
 			conLai: dongKy.conLai,
 			chuaCham: dongKy.theoDonVi,
 			mucTieu,
+		};
+	}
+
+	async xuatKy(userId: string, input: XuatKyInput): Promise<XuatKyOutput> {
+		const c = await this.db.okrCycle.findUnique({
+			where: { id: input.cycleId },
+			select: { name: true, phase: true },
+		});
+		if (!c) throw new NotFoundException(T.khongCoChuKy(input.cycleId));
+		if (c.phase !== "da-dong")
+			throw new BadRequestException(T.khep.xuatChiKhiDong);
+		const [bang, mts] = await Promise.all([
+			this.bangCham(userId, { cycleId: input.cycleId }),
+			this.db.okrObjective.findMany({
+				where: {
+					cycleId: input.cycleId,
+					status: { in: ["cong-bo", "da-bo"] },
+				},
+				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+				select: chonXuat,
+			}),
+		]);
+		const cham = new Map(bang.mucTieu.map((m) => [m.id, m]));
+		const dong = mts
+			.map((m) => ({ hang: HANG_CAP[donViCua(m).level], m }))
+			.sort((a, b) => a.hang - b.hang)
+			.flatMap(({ m }) =>
+				dongXuat(
+					c.name,
+					m,
+					m.status === "cong-bo" ? cham.get(m.id) : undefined,
+				),
+			);
+		return {
+			tenTep: tenTepXuat(c.name, ngayVN(new Date())),
+			noiDung: dungCsv(COT_XUAT, dong),
 		};
 	}
 }

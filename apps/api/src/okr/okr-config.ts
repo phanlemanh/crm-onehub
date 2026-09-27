@@ -133,6 +133,7 @@ export const OKR = {
 			daMangSang: "Mục tiêu này đã mang sang chu kỳ kế rồi.",
 			mangSangChiCongBo: "Chỉ mang sang được mục tiêu đã công bố.",
 			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
+			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
