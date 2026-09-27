@@ -572,7 +572,11 @@ export class ConversationsService {
 
 		const displayText = selected?.label ?? answer;
 		const inputResponse = input.optionId
-			? { requestId: input.requestId, optionId: input.optionId }
+			? {
+					requestId: input.requestId,
+					optionId: input.optionId,
+					kind: question.kind,
+				}
 			: { requestId: input.requestId, text: input.text };
 		try {
 			const submission = await this.db.$transaction(async (tx) => {

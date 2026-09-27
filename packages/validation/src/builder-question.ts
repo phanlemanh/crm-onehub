@@ -11,9 +11,14 @@ const builderQuestionOption = z.object({
 
 export type BuilderQuestionOption = z.infer<typeof builderQuestionOption>;
 
+export const SESSION_LIMIT_OPTION_IDS = {
+	continue: "continue",
+	stop: "stop",
+} as const;
+
 const askedQuestion = z
 	.object({
-		kind: z.literal("question"),
+		kind: z.enum(["question", "session-limit"]),
 		requestId: z.string().min(1),
 		prompt: z.string().min(1),
 		display: z
@@ -33,9 +38,10 @@ const askedQuestion = z
 		display: question.display,
 		options: question.options,
 		allowFreeform:
-			question.allowFreeform === true ||
-			question.display === "text" ||
-			question.options.length === 0,
+			question.kind === "question" &&
+			(question.allowFreeform === true ||
+				question.display === "text" ||
+				question.options.length === 0),
 	}));
 
 export type BuilderQuestion = z.infer<typeof askedQuestion>;

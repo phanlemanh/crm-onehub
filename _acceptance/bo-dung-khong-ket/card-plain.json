@@ -1,0 +1,21 @@
+{
+  "feature_plain": "Khi bộ dựng tác nhân dùng hết hạn mức, màn hội thoại hỏi «cấp thêm hay dừng» bằng hai nút thay vì đứng im; và trợ lý không còn báo «đã tạo» khi chưa có bản nháp thật.",
+  "scope_plain": "Để sau: câu hiển thị riêng cho lượt hỏng, chỉnh mức suy nghĩ theo model, gỡ các hội thoại đã kẹt trước bản vá, loại câu hỏi duyệt công cụ, kiểm lời văn của trợ lý bằng máy, gửi bản vá lên hãng.",
+  "decisions_plain": [
+    {"id": "d-20260927T112310Z-1", "p": "Nâng hạn mức bộ dựng lên 500 nghìn token vào / 128 nghìn token ra, vẫn giữ cầu dao — đổi lại một phiên lặp tệ nhất tốn cỡ $0,6–0,7"},
+    {"id": "d-20260927T112310Z-2", "p": "Trợ lý gọi bộ dựng kèm khuôn kết quả thì lượt hỏng ngay — đổi lại người dùng thấy lượt hỏng thay vì thành công giả"},
+    {"id": "d-20260927T112310Z-3", "p": "Câu hỏi hết hạn mức là câu + hai nút, không dùng bảng chọn rồi Gửi — một bấm cho một quyết định"},
+    {"id": "d-20260927T112310Z-4", "p": "KHÔNG chạy phiên thiết kế riêng — khối hai nút nằm trong khung ô soạn tin có sẵn; đổi lại Cổng Phạm vi duyệt giao diện bằng chữ"},
+    {"id": "d-20260927T112310Z-5", "p": "KHÔNG chạy công cụ quét độ phủ — không gian tiêu chí nhỏ, kê trục bằng tay"},
+    {"id": "d-20260927T112310Z-6", "p": "KHÔNG bảo đảm bằng máy lời văn của trợ lý — chỉ bảo đảm không có kết quả dựng giả"},
+    {"id": "d-20260927T112310Z-7", "p": "KHÔNG gỡ các hội thoại đã kẹt trước bản vá — người dùng mở hội thoại mới"},
+    {"id": "d-20260927T113139Z-9", "p": "Sau khi chốt phạm vi: màn đọc câu hỏi từ dữ liệu API chứ không từ luồng sự kiện, nên phép đo màn đi đúng đường dữ liệu thật; câu trả lời hết hạn mức ghi thêm loại để bong bóng hiện nhãn tiếng Việt"},
+    {"id": "d-20260927T113139Z-10", "p": "Viết mã tuần tự trong một luồng, không chia song song — đổi lại chậm hơn một chút"},
+    {"id": "d-20260927T115146Z-11", "p": "Bấm «Dừng» thì nền tảng huỷ lượt chứ không báo lỗi cho trợ lý — sau khi dừng người dùng chỉ thấy bong bóng «Dừng» và ô soạn tin trở lại"},
+    {"id": "d-20260927T115146Z-12", "p": "Ứng dụng thử của nền tảng chép mã của kho vào trước mỗi lượt đo — đổi lại một bước chép, và một hàm gửi câu trả lời được tách ra tệp riêng"},
+    {"id": "d-20260927T130236Z-13", "p": "Vòng chấm 1: phép đo màn thiếu máy chủ phía sau nên nhận lỗi 502 — sửa phép đo bằng tác nhân giả phát lại luồng thật, không sửa sản phẩm"},
+    {"id": "d-20260927T132642Z-14", "p": "Vòng chấm 2: dòng chữ tiếng Anh «Session limit continuation» lọt lên màn — ẩn dòng đó thay vì dịch một nhãn lẻ"},
+    {"id": "d-20260927T134715Z-15", "p": "Chủ kho mở vòng 4: chỉ màn dựng ẩn dòng đó, tab Tác nhân trên trang hồ sơ vẫn giữ dòng báo đang chờ; tệp của hãng về nguyên trạng"},
+    {"id": "d-20260927T142307Z-16", "p": "Vòng 4 đủ 11/11 phép đo nhưng bộ test chập chờn một lần dưới tải — chạy vòng 5 không sửa mã, vòng 5 xanh"}
+  ]
+}
