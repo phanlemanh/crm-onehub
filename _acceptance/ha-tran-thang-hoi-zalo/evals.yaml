@@ -68,7 +68,7 @@ evals:
     expected: |
       exit 0; stdout moi dong "ok: <kiem>": (1) muc Zalo cua agent.md (tu "#### Zalo: webhook" toi tieu de "###" ke)
       co "300 câu mỗi tháng"; (2) muc do khong con so khop /1[.,]?500(?![.,]?\d)/ nao; (3) lo-trinh-zalo muc 7 co dong
-      bat dau "| 4b | `ha-tran-thang-hoi-zalo`" chua "300", "1.500", "27/09" va "N0"; (4) doi chung tu ban that:
+      bat dau "| 4c | `ha-tran-thang-hoi-zalo`" chua "300", "1.500", "27/09" va "N0"; (4) doi chung tu ban that:
       cung ham kiem (1)+(2) chay tren `git show ad7c8ed0:docs/agent.md` phai HONG — neu khong hong thi exit 1 voi
       "hong: doi chung ban goc khong do". Ham kiem nhan van ban lam doi so, goc kho suy tu vi tri script.
       Chieu do: agent.md con "1.500 câu mỗi tháng" hay "1500" trong muc Zalo -> exit 1, stdout ghim "hong: muc Zalo con so 1.500".

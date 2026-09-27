@@ -7,7 +7,7 @@ const COMMIT_GOC = "ad7c8ed0";
 const DAU_MUC = "#### Zalo: webhook";
 const CAU_MOI = "300 câu mỗi tháng";
 const SO_CU = /1[.,]?500(?![.,]?\d)/;
-const DONG_4B = "| 4b | `ha-tran-thang-hoi-zalo`";
+const DONG_4C = "| 4c | `ha-tran-thang-hoi-zalo`";
 const DONG_4B_CAN = ["300", "1.500", "27/09", "N0"];
 
 function mucZalo(vanBan) {
@@ -28,17 +28,17 @@ function kiemAgent(vanBan) {
 }
 
 function kiemLoTrinh(vanBan) {
-	const dong = vanBan.split("\n").find((d) => d.startsWith(DONG_4B));
-	if (!dong) return "hong: lo-trinh-zalo thieu dong 4b";
+	const dong = vanBan.split("\n").find((d) => d.startsWith(DONG_4C));
+	if (!dong) return "hong: lo-trinh-zalo thieu dong 4c";
 	const thieu = DONG_4B_CAN.filter((t) => !dong.includes(t));
-	return thieu.length ? `hong: dong 4b thieu ${thieu.join(", ")}` : null;
+	return thieu.length ? `hong: dong 4c thieu ${thieu.join(", ")}` : null;
 }
 
 const ket = [];
 const agent = kiemAgent(readFileSync(resolve(GOC, "docs/agent.md"), "utf8"));
 ket.push(["agent.md muc Zalo ghi 300, khong con 1.500", agent]);
 ket.push([
-	"lo-trinh-zalo dong 4b",
+	"lo-trinh-zalo dong 4c",
 	kiemLoTrinh(readFileSync(resolve(GOC, "docs/plan/lo-trinh-zalo.md"), "utf8")),
 ]);
 const goc = execFileSync(

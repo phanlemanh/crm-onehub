@@ -22,7 +22,7 @@ task nào `independent`.
 
 ## Task 3 — Tài liệu và thước tài liệu (phục vụ E5)
 
-- Files: `docs/agent.md` (mục Zalo), `docs/plan/lo-trinh-zalo.md` (dòng `4b`),
+- Files: `docs/agent.md` (mục Zalo), `docs/plan/lo-trinh-zalo.md` (dòng `4c`),
   `_acceptance/ha-tran-thang-hoi-zalo/rang/tai-lieu.mjs` (mới).
 - Verify: `config:executors.script.tthz_tai_lieu` exit 0; bản sao có «1.500 câu mỗi tháng»
   → exit 1 đúng thông điệp. `independent: false`.
