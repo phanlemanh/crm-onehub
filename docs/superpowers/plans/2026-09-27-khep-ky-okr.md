@@ -863,7 +863,7 @@ Verify per-task: `bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khep-ky
 
 ---
 
-### Task 17: Tài liệu và bốn lệnh chứng
+### Task 17: Tài liệu và năm lệnh chứng
 
 **independent: false** (cuối) · phục vụ AC-14
 
