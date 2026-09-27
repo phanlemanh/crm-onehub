@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: ro-slack-tac-nhan
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 81976d711ddc65e4c49391ddabe1c55d49752ff9
-human_signoff:
+human_signoff: Manh Phan 2026-09-27
 ---
 
 # Evidence Report: ro-slack-tac-nhan
@@ -170,7 +170,7 @@ human_signoff:
     - domain-correctness: PASS — Cả ba tài liệu (docs/agent.md mục «Chỗ rẽ», contract.md phần Out of scope, và design doc) đều nói cùng một điều rõ ràng: việc báo cho hãng chỉ đi qua "kênh bảo mật riêng của hãng", cần chủ kho cho phép, và tường minh "không qua PR hay issue công khai" / "không PR công khai, không issue công khai trên kho MIT" — không có chữ nào trong ba file này hướng tới việc mở PR hay issue công khai lên kho của hãng. Mục «Chỗ rẽ» trong docs/agent.md chỉ mô tả ở mức kỹ thuật thông thường (hai tệp, hàm nào, lý do, điều kiện gỡ) phục vụ bảo trì bản rẽ nội bộ, không phải một bản mô tả lỗ hổng kiểu hướng dẫn khai thác cho người ngoài.
     - operational-feasibility: PASS — Cả ba tài liệu được cấp (contract.md, design.md, và mục "Chỗ rẽ" trong docs/agent.md) đều nói cùng một điều, lặp lại nhất quán: việc báo lỗ hổng cho hãng đi qua "kênh bảo mật riêng của hãng", cần "chủ kho cho phép", và tường minh loại trừ "không PR công khai, không issue công khai trên kho MIT" (design.md); contract.md liệt "Gửi báo cáo lỗ hổng cho hãng" vào mục Out of scope, giao cho chủ kho làm sau, qua kênh riêng. Mục "Chỗ rẽ" trong docs/agent.md mô tả cơ chế vá (tên hàm, tên tệp của bản rẽ) ở mức đủ cho kỹ sư nội bộ hiểu vì sao rẽ, không phải một bài mô tả khai thác có bước tái hiện hay ví dụ tấn công nhắm người ngoài dùng lại được; và văn bản này nằm trong docs của kho riêng (không thuộc hai tệp chạm-hãng theo AC-12) nên không tự động tới tay hãng. Không có chữ nào trong ba tệp hướng tới việc nộp PR hay mở issue công khai.
     - spec-alignment: PASS — Cả ba tài liệu trong phạm vi đều nói ngược lại điều AC-13 lo ngại: contract.md mục Out of scope ghi "Gửi báo cáo lỗ hổng cho hãng — việc của chủ kho, sau lượt này, qua kênh bảo mật riêng"; design doc mục "Báo cho hãng" ghi rõ "không PR công khai, không issue công khai trên kho MIT... máy không gửi gì cho tới khi chủ kho cho phép. Lượt này không gửi gì ra ngoài kho"; và docs/agent.md mục "Chỗ rẽ: người nhận Slack và lượt tự động của Tác nhân" lặp lại "Việc báo cho hãng đi qua kênh bảo mật riêng của hãng và cần chủ kho cho phép; không qua PR hay issue công khai." Không có chữ nào trong ba tệp hướng tới việc mở PR/issue công khai lên kho hãng, và phần mô tả chỗ rẽ trong docs/agent.md chỉ nêu tên hai tệp bị sửa cùng lý do kỹ thuật ngắn gọn (không mô tả chi tiết cách khai thác theo kiểu dùng lại được), nên không có căn cứ nào trong phạm vi cho phép để FAIL hay UNCERTAIN.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Manh Phan 2026-09-27
 
 - eval: E14
   run_id: minted-ro-slack-tac-nhan-E14-r1

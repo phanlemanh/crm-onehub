@@ -5,7 +5,7 @@ slug: ro-slack-tac-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-27T02:59:29Z
 design_doc: docs/superpowers/specs/2026-09-27-ro-slack-tac-nhan-design.md
@@ -70,3 +70,14 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 - Hạng T3 theo lộ trình (cửa quyền); theo đường dẫn thì không tệp nào nằm trong `t3_paths`.
 - Chỗ rẽ: `apps/agent/agent/lib/approval.ts`, `apps/agent/agent/lib/run-runtime.ts`; gỡ khi hãng có bản sửa tương đương.
+
+### Known limits (Cổng Bằng chứng sau S4 round 1, 2026-09-27, chủ kho chọn (a))
+
+- Ngoài-1: vai của phiên được đọc thẳng từ thuộc tính, không qua bộ đọc chung `purposeOf`; thuộc tính `purpose` rỗng hoặc thừa khoảng trắng ở phiên hiện tại mà phiên khởi có `team-agent` thì lượt vẫn xin duyệt thay vì bị từ chối.
+- Ngoài-2: kết nối Slack bị thu hồi hoặc thiếu quyền thì lượt đăng hiện «bị từ chối» (`ACTION_REJECTED`) thay vì hướng dẫn kết nối lại; bộ đọc Slack viết lại trong tệp của bản rẽ nên có hai khuôn đọc `users.list`.
+- Ngoài-3: bước kiểm người nhận không thử lại khi Slack báo `ratelimited`, và không nhận tín hiệu huỷ của lượt — lượt bị huỷ vẫn đọc hết các trang.
+- Ngoài-5: phép đo đỏ-trước-xanh-sau (E11) và phép đo chỗ rẽ (E12) lấy mốc bằng `merge-base HEAD origin/onehub`; sau khi gộp, mốc đó đã chứa bản vá nên hai phép đo đỏ khi chạy lại — lượt ghim lại hồ sơ này về sau phải truyền `--base` cố định (mã trước vá `21a66d54`) hoặc sửa phép đo trước.
+- Ngoài-6: phép kiểm «lời từ chối không lộ danh tính» chỉ dò email và mã CRM đúng chữ thường, không dò email viết hoa hay mã và tên phía Slack, và không có đối chứng dương.
+- Ngoài-7: phép kiểm «không có `next_cursor` ở cấp ngoài cùng» soi dữ liệu giả khai trong bài chứ không soi bản trả lời giả thật sự gửi đi.
+- Ngoài-8: số người bị chặn chỉ được ghim bằng «thông điệp chứa chữ số 1», không ghim vị trí.
+- Ngoài-4 không vào danh sách này: chủ kho chọn mở hợp đồng mới — kết nối Slack thiếu quyền đọc email thì bước kiểm không thấy email, không khớp được người vai «chỉ OKR», và cho tin đi mà không báo lỗi.
