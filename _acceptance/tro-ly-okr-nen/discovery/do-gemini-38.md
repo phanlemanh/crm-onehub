@@ -1,8 +1,9 @@
 # Đo lại trên Gemini 3.8 Flash trước Cổng Phạm vi
 
 Đo 2026-09-27 trên máy local, khoá `onehub-crm-local`, chỉ dữ liệu giả (cùng câu và
-cùng gói giả của N0). Kịch bản: `do-38.ts` (chép từ `apps/agent/n0/do-mo-hinh.ts` của
-nhánh nháp N0, đổi model). Số thô: `do-38.jsonl`, 15 lời gọi, tổng $0,054.
+cùng gói giả của N0). Kịch bản chép từ `apps/agent/n0/do-mo-hinh.ts` của nhánh nháp N0
+(commit `f148b2bb`), chỉ đổi model; không giữ trong kho vì là mã đo dùng một lần. Số thô:
+`do-38.jsonl`, 15 lời gọi, tổng $0,054.
 
 Lý do đo lại: production đặt Gemini 3.8 Flash (báo cáo `tac-nhan-hien-nay.md`), còn
 N0 đo trên 3.7.
