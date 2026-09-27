@@ -21,6 +21,14 @@ Không bắt đầu Task 1 trước khi chủ kho dán «được viết mã, k�
 3. Soát lại kế hoạch với mã mới: dòng số trong `okr.service.ts`, tên hàm cấu hình chương trình (9a có thể đổi `program()`), `HANH_DONG_VET` (9a có thể thêm hành động), mốc `migration` mới nhất, bảng `vai-chi-okr`. Ghi mọi chỗ lệch vào `decisions.jsonl` (`type: "fix"`, `stage: "S3"`).
 4. Soát hạng: vẫn T3 (chạm `packages/db/prisma`).
 
+## Soát lại sau gộp onehub (2026-09-27, `a3d57bb0`)
+
+- Đã gộp `origin/onehub` tới `13477d5f` (#176 `no-sau-luot-4-okr`, #177 kit 2.18.5). **9a `tro-ly-okr-nen` chưa lên onehub** — chủ kho cho viết mã trước; khi 9a gộp sau, gộp lại và soát `schema.prisma` (9a thêm bảng quanh Chương trình OKR) và `HANH_DONG_VET`.
+- `HANH_DONG_VET` nay sống ở `packages/db/src/okr-vet.ts`; `packages/validation/src/okr-vet.ts` chỉ tái xuất. Task 2 sửa tệp ở `packages/db`, và thêm nhãn vi/en cho bảy hành động vào bảng nhãn vết của `apps/app/lib/messages/okr.ts` (mục `vet`), nếu không màn tab Vết thiếu chữ.
+- `OkrAccessService` có `ghiDuocKr(q, userId, kr)` (người phụ trách KR hoặc người sửa được đơn vị) — Task 8 dùng hàm này cho cờ `suaDuoc` của từng KR trong `bangCham`, không tự tính lại.
+- `setCyclePhase`, `updateKeyResult`, `cycles`, `program()` không đổi; mốc `migration` mới nhất vẫn `20260929010000_okr_so_tu_chay` — `migration` lượt này lấy mốc sau đó và sau mốc của 9a nếu 9a gộp trước.
+- Hạng vẫn T3.
+
 ## Global Constraints
 
 - Không viết chú thích trong mã (mới hay sửa).
@@ -212,7 +220,7 @@ Verify per-task: `cd packages/validation && bun test test/okr-kiem.spec.ts && bu
 - Create: `packages/validation/src/okr-khep.ts`
 - Create: `packages/validation/test/okr-khep.spec.ts`
 - Modify: `packages/validation/package.json` (`"./okr-khep": "./src/okr-khep.ts"`)
-- Modify: `packages/validation/src/okr-vet.ts` (bảy hành động mới, cuối mảng, đúng thứ tự: `mo-ra`, `dong-ra`, `doi-dich`, `cham-kr`, `nhin-lai`, `mang-sang`, `mo-lai-ky`)
+- Modify: `packages/db/src/okr-vet.ts` (bảy hành động mới, cuối mảng, đúng thứ tự: `mo-ra`, `dong-ra`, `doi-dich`, `cham-kr`, `nhin-lai`, `mang-sang`, `mo-lai-ky`) và `apps/app/lib/messages/okr.ts` (nhãn vi/en cho bảy hành động ở bảng nhãn vết)
 
 **Interfaces:**
 - Consumes: `tienDoKr`, `KieuKr` (`okr-kr`); `THANG_CHAM` (`okr-chuong-trinh`); `LOAI_MUC_TIEU` (`okr-muc-tieu`); `ngayLich` (`okr-chu-ky`).
