@@ -2376,6 +2376,7 @@ type MangSangRa = {
 	chep: string[];
 	khongChep: { keyResultId: string; lyDo: string }[];
 	boThamGia: string[];
+	doiPhuTrachKr: string[];
 	canhBao: string | null;
 };
 type MucTieuDoc = { mangSangToi: LienKet; mangSangTu: LienKet };
@@ -2405,7 +2406,10 @@ const anhNguon = async (objectiveId: string) =>
 const tenKy = async (id: string) =>
 	(await db.okrCycle.findUniqueOrThrow({ where: { id } })).name;
 
-async function gieoMangSang(chuM2: "truong" | "tg2" = "truong") {
+async function gieoMangSang(
+	chuM2: "truong" | "tg2" = "truong",
+	chuKr: { b?: "tg1" | "tg2"; c?: "tg1" | "tg2" } = {},
+) {
 	luc(LUC.gieo);
 	await keoDaiPhien();
 	await datChuongTrinh("0-1", true);
@@ -2440,6 +2444,7 @@ async function gieoMangSang(chuM2: "truong" | "tg2" = "truong") {
 		targetValue: number,
 		currentValue: number,
 		weight = 1,
+		chu: "truong" | "tg1" | "tg2" = "truong",
 	) =>
 		idCua(
 			await goi(
@@ -2448,7 +2453,7 @@ async function gieoMangSang(chuM2: "truong" | "tg2" = "truong") {
 					objectiveId: m,
 					title: ma(`ms kr ${nhan}`),
 					kind,
-					ownerUserId: truong.nguoi,
+					ownerUserId: chu === "tg1" ? tg1 : chu === "tg2" ? tg2 : truong.nguoi,
 					startValue,
 					targetValue,
 					currentValue,
@@ -2461,8 +2466,8 @@ async function gieoMangSang(chuM2: "truong" | "tg2" = "truong") {
 			`kr ${nhan}`,
 		);
 	const a = await taoKr("A", "giu-tren", 80, 90, 95);
-	const b = await taoKr("B", "tang-toi", 60, 80, 78, 3);
-	const c = await taoKr("C", "moc", 0, 1, 0);
+	const b = await taoKr("B", "tang-toi", 60, 80, 78, 3, chuKr.b);
+	const c = await taoKr("C", "moc", 0, 1, 0, 1, chuKr.c);
 	const d = await taoKr("D", "tang-toi", 10, 20, 25);
 	ok(
 		await goi(
@@ -2578,6 +2583,7 @@ describe("mang-sang", () => {
 			chep: [f.kr.b, f.kr.c].sort(),
 			khongChep: [{ keyResultId: f.kr.d, lyDo: "dich-phai-lon-hon-khoi-diem" }],
 			boThamGia: [],
+			doiPhuTrachKr: [],
 			canhBao: null,
 		});
 
@@ -2806,5 +2812,51 @@ describe("mang-sang", () => {
 			400,
 			CAU_MANG.khongPhaiThanhVien(f.tg2),
 		);
+	}, 90_000);
+	test("mang-sang: nguoi phu trach KR da roi workspace — ban chep giao cho nguoi phu trach muc tieu, dau ra va vet liet KR; KR co nguoi phu trach con hoat dong giu nguyen", async () => {
+		const f = await gieoMangSang("truong", { b: "tg1", c: "tg2" });
+		await gieoKyQuy({ ...KY_KE, pha: "lap-ke-hoach" });
+		await datChuongTrinh("0-1", false);
+		await db.member.deleteMany({
+			where: { organizationId: WORKSPACE_ID, userId: f.tg1 },
+		});
+
+		const ra = ok<MangSangRa>(
+			await goi("okr.mangSang", { objectiveId: f.m }, f.truong.cookie),
+			"mang sang khi chu KR B da roi",
+		);
+		const tieuDe = async (id: string) =>
+			(await db.okrKeyResult.findUniqueOrThrow({ where: { id } })).title;
+		const chuBanChep = async (id: string) =>
+			(
+				await db.okrKeyResult.findFirstOrThrow({
+					where: { objectiveId: ra.id, title: await tieuDe(id) },
+				})
+			).ownerUserId;
+		const vet = await db.okrTrail.findFirstOrThrow({
+			where: { objectiveId: f.m, action: "mang-sang" },
+		});
+		expect({
+			chep: [...ra.chep].sort(),
+			boThamGia: ra.boThamGia,
+			doiPhuTrachKr: ra.doiPhuTrachKr,
+			chuB: await chuBanChep(f.kr.b),
+			chuC: await chuBanChep(f.kr.c),
+			chuNguonB: (
+				await db.okrKeyResult.findUniqueOrThrow({ where: { id: f.kr.b } })
+			).ownerUserId,
+			vet: vet.after,
+		}).toEqual({
+			chep: [f.kr.b, f.kr.c].sort(),
+			boThamGia: [f.tg1],
+			doiPhuTrachKr: [f.kr.b],
+			chuB: f.truong.nguoi,
+			chuC: f.tg2,
+			chuNguonB: f.tg1,
+			vet: expect.objectContaining({
+				boThamGia: [f.tg1],
+				doiPhuTrachKr: [f.kr.b],
+			}),
+		});
 	}, 90_000);
 });

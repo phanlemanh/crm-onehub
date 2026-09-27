@@ -66,6 +66,7 @@ export const mangSangOutput = z.object({
 		z.object({ keyResultId: z.string(), lyDo: z.enum(LOI_SO_THEO_KIEU) }),
 	),
 	boThamGia: z.array(z.string()),
+	doiPhuTrachKr: z.array(z.string()),
 	canhBao: z.string().nullable(),
 });
 

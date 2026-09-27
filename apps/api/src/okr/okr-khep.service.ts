@@ -453,6 +453,11 @@ export class OkrKhepService {
 				tx,
 				nguon.participants.map((p) => p.userId),
 			);
+			const { bo: roiKr } = await this.okr.locThanhVien(
+				tx,
+				nguon.keyResults.map((k) => k.ownerUserId),
+			);
+			const chuDaRoi = new Set(roiKr);
 			const canhBao = await this.okr.kiemTranMucTieu(tx, dich.id, mt, 1);
 			const viTri = await tx.okrObjective.count({
 				where: { cycleId: dich.id },
@@ -473,6 +478,7 @@ export class OkrKhepService {
 				},
 			});
 			const chep: string[] = [];
+			const doiPhuTrachKr: string[] = [];
 			const khongChep: { keyResultId: string; lyDo: LoiSoTheoKieu }[] = [];
 			for (const k of nguon.keyResults) {
 				const d = k.diemKr;
@@ -493,7 +499,9 @@ export class OkrKhepService {
 						objectiveId: moi.id,
 						title: k.title,
 						kind: k.kind,
-						ownerUserId: k.ownerUserId,
+						ownerUserId: chuDaRoi.has(k.ownerUserId)
+							? nguon.ownerUserId
+							: k.ownerUserId,
 						startValue: d.soChot,
 						targetValue: k.targetValue,
 						currentValue: d.soChot,
@@ -505,6 +513,7 @@ export class OkrKhepService {
 					},
 				});
 				chep.push(k.id);
+				if (chuDaRoi.has(k.ownerUserId)) doiPhuTrachKr.push(k.id);
 			}
 			await tx.okrMangSang.create({
 				data: {
@@ -526,6 +535,7 @@ export class OkrKhepService {
 					chep,
 					khongChep: khongChep.map((x) => x.keyResultId),
 					boThamGia,
+					doiPhuTrachKr,
 				},
 			);
 			await this.okr.vet(
@@ -548,6 +558,7 @@ export class OkrKhepService {
 				chep,
 				khongChep,
 				boThamGia,
+				doiPhuTrachKr,
 				canhBao,
 			};
 		});
