@@ -27,6 +27,7 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `e131ad28` | Gói gửi luật sư: thư, 12 câu theo thứ tự cần trả lời, phụ lục dữ liệu CRM gửi đi đâu |
 | `7d85c530` | Kéo `onehub` mới vào (366 commit), gỡ đụng độ ở `catalog.ts` giữ cả hai phía |
 | `e43c7c1f` | Bản mẫu: các việc còn lại ở mục 16, từ điển, `[[Trang#Mục]]` |
 | `6e30cbe3` | Bản mẫu: duyệt mọi thay đổi |
@@ -52,8 +53,9 @@ Theo thứ tự, lấy từ mục 4 của lộ trình:
 1. Gửi 12 câu ở mục 10.5 cho luật sư. Câu Q3 hỏi CRM đang chạy đã có hồ sơ chuyển dữ
    liệu ra nước ngoài chưa (Neon, Vercel): việc này có thể chạm cả CRM hiện tại. Bản gửi
    được nằm ở `kho-tai-lieu-goi-luat-su.md`; chủ kho điền phụ lục B rồi gửi.
-2. Kiểm kê tài liệu và hỏi giờ duyệt mỗi tuần của các chủ trang tương lai.
-3. Gom tệp trong các nhóm Zalo.
+2. Kiểm kê tài liệu và hỏi giờ duyệt mỗi tuần của các chủ trang tương lai. Mẫu cột và
+   tin hỏi ở `kho-tai-lieu-kiem-ke.md` mục 1–2.
+3. Gom tệp trong các nhóm Zalo, theo `kho-tai-lieu-kiem-ke.md` mục 3.
 4. Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật.
 5. Duyệt tám mục từ điển.
 6. Mở lượt 1a: `/feature-loop:feature-loop kho-tai-lieu — lượt 1a của docs/plan/lo-trinh-kho-tai-lieu.md`.
