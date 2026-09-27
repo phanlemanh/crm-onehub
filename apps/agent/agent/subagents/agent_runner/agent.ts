@@ -3,6 +3,7 @@ import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
 import { modelChoBoChay } from "../../lib/model";
 import { ketQuaLuot } from "../../lib/run-result";
+import { SESSION_LIMITS } from "../../lib/dispatch-config";
 
 export default defineAgent({
 	description:
@@ -17,9 +18,5 @@ export default defineAgent({
 		summary: z.string().min(1).max(1000),
 		result: ketQuaLuot.nullable(),
 	}),
-	limits: {
-		maxInputTokensPerSession: 500_000,
-		maxOutputTokensPerSession: 40_000,
-		sessionTimeoutMs: 24 * 60 * 60 * 1000,
-	},
+	limits: SESSION_LIMITS.runner,
 });

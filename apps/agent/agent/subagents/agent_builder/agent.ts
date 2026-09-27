@@ -3,6 +3,7 @@ import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
 import { modelChoBoDung } from "../../lib/model";
 import { BUILDER_STATUS } from "./lib/authorization";
+import { SESSION_LIMITS } from "../../lib/dispatch-config";
 
 export default defineAgent({
 	description:
@@ -33,9 +34,5 @@ export default defineAgent({
 				});
 			}
 		}),
-	limits: {
-		maxInputTokensPerSession: 100_000,
-		maxOutputTokensPerSession: 10_000,
-		sessionTimeoutMs: 24 * 60 * 60 * 1000,
-	},
+	limits: SESSION_LIMITS.builder,
 });
