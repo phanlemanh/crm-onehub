@@ -5,7 +5,7 @@ slug: kho-tai-lieu
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-27-kho-tai-lieu-design.md
 approved_by: Mạnh
 approved_at: 2026-09-27
@@ -79,4 +79,22 @@ mục 4–7), cắt về lượt 1.
 - Router `taiLieu` ở phạm vi chung: danh sách thủ tục ghim của `apps/api/test/vai-chi-okr.spec.ts` sửa có ý thức.
 - Nền hạ tầng đỏ lúc mở vòng (`duong-nen.md`): 4 test `apps/api` đỏ sẵn trên `onehub`, không phải lỗi của vòng; sửa trong nhánh trước S3.
 - Ngưỡng Cổng Đáng của cả sản phẩm (đo lúc chạy thật, `lo-trinh-kho-tai-lieu.md` mục 5): mỗi phòng ban tham gia ≥ 10 trang đã duyệt; ≥ 70% câu hỏi được trả lời có trích; trung vị thời gian duyệt ≤ 5 ngày làm việc.
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-28 (Mạnh), từ mục ngoài hợp đồng của S4 round 1–3:
+  - Ngoài-2: bản đề xuất thêm hay bớt cột của một bảng làm dòng tiêu đề mới rơi vào phần dữ liệu trên màn duyệt, bảng trông rối.
+  - Ngoài-4: `loai` và `trangThai` đọc từ cơ sở dữ liệu bằng ép kiểu `as` thay vì parse; dữ liệu sai định dạng cho lỗi chung chung.
+  - Ngoài-5: router `taiLieu` ở phạm vi chung mở quyền ghi cho mọi vai; `docs/api.md` và phép thử ghi-chung chưa cập nhật theo.
+  - Ngoài-6: danh sách trang dùng `SimpleTable` với nút phân trang tự làm thay vì `DataTable`, khác các danh sách khác.
+  - Ngoài-7: gõ dấu `|` trong một ô bảng làm mất dữ liệu bảng khi lưu, không cảnh báo.
+  - Ngoài-8: danh sách đề xuất lấy tối đa 25 dòng kể cả bản đã trả lại hay đã cũ, không phân trang; đề xuất chờ duyệt cũ hơn không mở được.
+  - Ngoài-9: màn đọc nuốt lỗi khi tải đề xuất, hiện số bản chờ duyệt sai và mất đường vào màn duyệt.
+  - Ngoài-10: mục lục dựng từ markdown đã tuần tự hoá; tiêu đề có `&`, `<` hay ký tự thoát hiện thô và neo không khớp.
+  - Ngoài-11: liên kết `http://` được trình soạn và bộ lọc dán nhận nhưng bị bỏ khi đọc trang, không cảnh báo.
+  - Ngoài-12: form trang mới giấu lỗi tải danh sách thành viên và cây đơn vị sau danh sách rỗng.
+  - Ngoài-13: E8b chỉ gọi `taiLieu.get`, không chạm loader màn sửa lẫn nhãn «Có 1 bản chờ duyệt» trên màn đọc.
+  - Ngoài-14: E11 hứa giữ liên kết khi dán, nhưng hai mẫu dán thật không có liên kết nào.
+  - Ngoài-15: E4 đọc tệp sinh `generated/server.ts` thay cho router đang chạy, và chỉ đếm tên mutation.
+  - Ngoài-16: E10c tuần tự hoá bằng `tuanTuHoa(nap())`, bỏ qua đường ProseMirror mà trình soạn thật đi.
+  - Ngoài-17: E3 tuyên 6×5×4 = 120 khẳng định nhưng test không đếm, và bỏ trống ô S3 × đề xuất.
+  - Ngoài-18: phép quét tìm đường sửa hay gỡ phiên bản trong `tai-lieu.service.ts` không có đối chứng dương.
+  - Ngoài-19: hai phép quét AST về mô hình AI theo vai không có đối chứng dương.
 - Từ điển: «loại trang» (Quy định · Chính sách · Quy trình · Biểu mẫu) thay cho «nhóm», vì «nhóm» là chữ tránh của Bộ phận; «quản trị» thay cho «admin» ở lời, mã vai giữ `owner`, `admin`. «Chờ duyệt» dùng theo nghĩa của mục Bản đề xuất («chờ chủ trang duyệt»), không phải nghĩa lời mời vào workspace — cảnh báo W6 của lint cho chữ này và cho «trạng thái» là trùng chữ khác nghĩa, giữ nguyên.

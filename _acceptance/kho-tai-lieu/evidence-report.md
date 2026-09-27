@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: kho-tai-lieu
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 679a58b85c1ccfb1c16617ac9811a432ddb20b20
-human_signoff:
+human_signoff: Mạnh 2026-09-28
 ---
 
 # Evidence Report: kho-tai-lieu
@@ -354,7 +354,7 @@ human_signoff:
     - domain-correctness: PASS — nhãn "Có bản chờ duyệt" và tab "Chờ duyệt" phân biệt trang đang dùng/chờ; nút viết/duyệt rõ; màn duyệt đọc như Track Changes chứ không như màn lập trình viên; bản 390 giữ đủ thông tin không tràn/mất nhãn.
     - operational-feasibility: PASS — tín hiệu tự nhiên không thuật ngữ kỹ thuật, tab "Chờ duyệt (2)" và nút "+ Trang mới" nổi bật, màn duyệt ở cả 1440 và 390 hiện đúng kiểu Track Changes với nút Duyệt/Trả lại rõ ràng, bố cục 390 đọc được không tràn.
     - spec-alignment: PASS — bảy ảnh cho đủ chuỗi tự nhiên bằng nhãn thuần Việt, danh sách/tab phân biệt trạng thái, nút Trang mới rõ, màn duyệt đúng kiểu Track Changes kèm dải "Con số và ngày bị đổi" và hai nút Duyệt/Trả lại; bố cục 390 giữ đủ yếu tố này.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Mạnh 2026-09-28
 
 ## Known limits
 
