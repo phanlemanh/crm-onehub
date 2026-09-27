@@ -1,11 +1,18 @@
 import { spawnSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	renameSync,
+	writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import { AGENT, duongPath, RA, taoKho, xoaKho } from "./mau-chung.mjs";
 
 const KHO = "tln-e9";
 const TONG_KET = join(RA, "e9-tong-ket.jsonl");
+const TAM = `${TONG_KET}.dang-chay`;
 const EVE = join(AGENT, "node_modules/.bin/eve");
 const LAN = Number(process.argv[process.argv.indexOf("--lan") + 1] ?? 3) || 3;
 
@@ -21,7 +28,7 @@ let ma = 1;
 try {
 	const url = taoKho(KHO);
 	mkdirSync(RA, { recursive: true });
-	writeFileSync(TONG_KET, "");
+	writeFileSync(TAM, "");
 	const r = spawnSync(EVE, ["eval", "okr/cach-ly", "--verbose"], {
 		cwd: AGENT,
 		encoding: "utf8",
@@ -30,7 +37,7 @@ try {
 			PATH: duongPath(),
 			DATABASE_URL: url,
 			AGENT_BRIDGE_SECRET: randomBytes(24).toString("hex"),
-			TLN_TONG_KET: TONG_KET,
+			TLN_TONG_KET: TAM,
 			TLN_LAN: String(LAN),
 			ZALO_BOT_TOKEN: "",
 			CRM_TELEMETRY_DISABLED: "1",
@@ -38,8 +45,8 @@ try {
 		timeout: 1_200_000,
 	});
 	writeFileSync(join(RA, "e9-eve.log"), `${r.stdout}\n${r.stderr}`);
-	const dong = existsSync(TONG_KET)
-		? readFileSync(TONG_KET, "utf8").split("\n").filter(Boolean)
+	const dong = existsSync(TAM)
+		? readFileSync(TAM, "utf8").split("\n").filter(Boolean)
 		: [];
 	const ket = `${r.stdout}`
 		.split("\n")
@@ -47,6 +54,7 @@ try {
 	console.log(ket.join("\n"));
 	console.log(dong.join("\n"));
 	if (r.status === 0 && dong.length === LAN) {
+		renameSync(TAM, TONG_KET);
 		console.log(`pass ${LAN}/${LAN}`);
 		ma = 0;
 	} else {
