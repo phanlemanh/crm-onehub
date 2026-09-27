@@ -211,7 +211,10 @@ describe("bao-loi", () => {
 		for (const [data, doiThuocTinh] of doiChung) {
 			const luot = await luotDangChay();
 			await chayHook(data, doiThuocTinh(luot.thuocTinh));
-			expect((await docLuot(luot.id)).status).toBe("RUNNING");
+			expect(
+				(await docLuot(luot.id)).status,
+				"chi loi cua bo chay moi dong luot",
+			).toBe("RUNNING");
 			await db.agentRun.update({
 				where: { id: luot.id },
 				data: { status: "CANCELLED", finishedAt: new Date() },
