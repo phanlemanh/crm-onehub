@@ -4,7 +4,7 @@ feature: Nền Trợ lý OKR — quản trị thấy tháng này AI tiêu bao nh
 slug: tro-ly-okr-nen
 owner: phanlemanh@gmail.com
 risk_tier: T3
-surfaces: [api, agent, db, ui]
+surfaces: [api, ui]
 status: draft
 design_doc: docs/superpowers/specs/2026-09-27-tro-ly-okr-nen-design.md
 ---
