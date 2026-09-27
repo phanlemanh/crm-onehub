@@ -14,7 +14,7 @@ import {
 	SETTINGS_ID,
 	writeAgentModel,
 } from "@crm/db/settings";
-import { selectedModel } from "../agent/lib/model";
+import { modelTheoVai } from "../agent/lib/model";
 
 async function clear() {
 	await db.appSetting.deleteMany({ where: { id: SETTINGS_ID } });
@@ -45,7 +45,7 @@ describe("the configured model", () => {
 		expect(setting.id).toBe(DEFAULT_AGENT_MODEL.id);
 		expect(setting.isDefault).toBe(true);
 
-		expect(await selectedModel()).toBeNull();
+		expect(await modelTheoVai("tro-ly")).toBeNull();
 	});
 
 	it("returns the chosen model with its own context window", async () => {
@@ -54,7 +54,7 @@ describe("the configured model", () => {
 			contextWindowTokens: 200_000,
 		});
 
-		expect(await selectedModel()).toEqual({
+		expect(await modelTheoVai("tro-ly")).toEqual({
 			model: "anthropic/claude-sonnet-5",
 			modelContextWindowTokens: 200_000,
 		});
@@ -67,7 +67,7 @@ describe("the configured model", () => {
 		});
 		await writeAgentModel(db, null);
 
-		expect(await selectedModel()).toBeNull();
+		expect(await modelTheoVai("tro-ly")).toBeNull();
 		expect((await readAgentModel(db)).isDefault).toBe(true);
 	});
 

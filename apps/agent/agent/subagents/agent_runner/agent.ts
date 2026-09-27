@@ -1,9 +1,8 @@
-import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL } from "@crm/db/settings";
 import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
+import { modelChoBoChay } from "../../lib/model";
 import { ketQuaLuot } from "../../lib/run-result";
-import { attribute, purposeOf } from "../../lib/session-purpose";
 
 export default defineAgent({
 	description:
@@ -11,26 +10,7 @@ export default defineAgent({
 	model: defineDynamic({
 		fallback: DEFAULT_AGENT_MODEL.id,
 		events: {
-			"session.started": async (_event, ctx) => {
-				if (purposeOf(ctx) !== "team-agent") return null;
-				const runId = attribute(ctx, "runId");
-				if (!runId) return null;
-
-				const run = await db.agentRun.findUnique({
-					where: { id: runId },
-					select: {
-						version: {
-							select: { modelId: true, modelContextWindowTokens: true },
-						},
-					},
-				});
-				return run
-					? {
-							model: run.version.modelId,
-							modelContextWindowTokens: run.version.modelContextWindowTokens,
-						}
-					: null;
-			},
+			"session.started": (_event, ctx) => modelChoBoChay(ctx),
 		},
 	}),
 	outputSchema: z.object({

@@ -138,7 +138,6 @@ export async function runContext(runId: string) {
 					id: true,
 					number: true,
 					manifest: true,
-					modelId: true,
 					sandboxPolicy: true,
 				},
 			},

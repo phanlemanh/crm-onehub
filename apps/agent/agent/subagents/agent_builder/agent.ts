@@ -1,7 +1,7 @@
 import { DEFAULT_AGENT_MODEL } from "@crm/db/settings";
 import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
-import { selectedModel } from "../../lib/model";
+import { modelChoBoDung } from "../../lib/model";
 import { BUILDER_STATUS } from "./lib/authorization";
 
 export default defineAgent({
@@ -9,7 +9,7 @@ export default defineAgent({
 		"Turn one private CRM builder-chat request into a validated, reviewable team-agent version without deploying it.",
 	model: defineDynamic({
 		fallback: DEFAULT_AGENT_MODEL.id,
-		events: { "session.started": () => selectedModel() },
+		events: { "session.started": () => modelChoBoDung() },
 	}),
 	outputSchema: z
 		.object({
