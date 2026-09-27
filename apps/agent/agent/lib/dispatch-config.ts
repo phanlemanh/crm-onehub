@@ -1,4 +1,7 @@
 const MINUTE_MS = 60_000;
+const HOUR_MS = 60 * MINUTE_MS;
+const DAY_MS = 24 * HOUR_MS;
+const THOUSAND_TOKENS = 1_000;
 
 export const DISPATCH = {
 	visible: {
@@ -46,5 +49,23 @@ export const DISPATCH = {
 		itemTimeoutMs: 2 * MINUTE_MS,
 		maxAbandoned: 1,
 		abandonGraceMs: 15 * MINUTE_MS,
+	},
+} as const;
+
+export const SESSION_LIMITS = {
+	root: {
+		maxInputTokensPerSession: 500 * THOUSAND_TOKENS,
+		maxOutputTokensPerSession: 50 * THOUSAND_TOKENS,
+		sessionTimeoutMs: 30 * DAY_MS,
+	},
+	builder: {
+		maxInputTokensPerSession: 500 * THOUSAND_TOKENS,
+		maxOutputTokensPerSession: 128 * THOUSAND_TOKENS,
+		sessionTimeoutMs: DAY_MS,
+	},
+	runner: {
+		maxInputTokensPerSession: 500 * THOUSAND_TOKENS,
+		maxOutputTokensPerSession: 40 * THOUSAND_TOKENS,
+		sessionTimeoutMs: DAY_MS,
 	},
 } as const;

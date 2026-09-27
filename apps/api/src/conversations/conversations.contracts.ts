@@ -22,7 +22,7 @@ const agentManifestSummaryOutput = z.object({
 
 const builderQuestionOutput = z
 	.object({
-		kind: z.literal("question"),
+		kind: z.enum(["question", "session-limit"]),
 		requestId: z.string(),
 		prompt: z.string(),
 		display: z.enum(["confirmation", "select", "text"]).optional(),

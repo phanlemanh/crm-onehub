@@ -214,6 +214,12 @@ executors:
     tnm_chua_nop: 'bun run test -- "cd apps/agent && bun test test/dong-luot-tac-nhan.integration.spec.ts -t chua-nop"'
     tnm_doi_sau_khi_dung: 'bun run test -- "cd apps/agent && bun test test/model-theo-vai.integration.spec.ts -t doi-sau-khi-dung"'
     tnm_bon_phien: 'bun run test -- "cd apps/agent && bun test test/model-theo-vai.integration.spec.ts -t bon-phien"'
+    bdk_han_muc: 'bun run test -- "cd apps/agent && bun test test/han-muc-phien.spec.ts -t han-muc"'
+    bdk_luu_cau_hoi: 'bun run test -- "cd apps/agent && bun test test/cau-hoi-het-han-muc.integration.spec.ts -t luu-cau-hoi"'
+    bdk_tra_loi_api: 'bun run test -- "cd apps/api && bun test test/tra-loi-het-han-muc.spec.ts -t tra-loi"'
+    bdk_tra_loi_dieu_phoi: 'bun run test -- "cd apps/agent && bun test test/cau-hoi-het-han-muc.integration.spec.ts -t dieu-phoi"'
+    bdk_man_het_han_muc: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/het-han-muc.dom.tsx"
+    bdk_chan_khuon: 'bun run test -- "cd apps/agent && bun test test/chan-khuon-bo-dung.spec.ts -t chan-khuon"'
     vco_ma_tran_trpc: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     vco_ma_tran_khoa_rest: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-khoa-rest"'
     vco_doi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t doi-chung"'
@@ -688,6 +694,20 @@ executors:
     nso_loc_ten: 'cd apps/app && bun test test/loc-okr-ten.spec.ts'
     nso_tai_truoc: 'cd apps/app && bun test test/loc-okr-tai-truoc.spec.ts'
     nso_khoi_tai_lai_nen: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khoi-kr-cua-toi.dom.tsx -t tai-lai-nen'
+    n4_giua_ngay: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t giua-ngay"'
+    n4_sang_sau: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t sang-sau"'
+    n4_da_co_tin: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t da-co-tin"'
+    n4_moc_bien: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t moc-bien"'
+    n4_gui_muon: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t gui-muon"'
+    n4_cau_chao: 'cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/muc-nhac-okr.spec.ts -t cau-chao'
+    n4_cau_chao_gui: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t cau-chao-gui"'
+    n4_the_truc_tiep: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t the-truc-tiep"'
+    n4_sheet_quyen: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/sheet-quyen-cap-nhat.dom.tsx -t sheet-quyen'
+    n4_mot_luat_ghi: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t mot-luat-ghi"'
+    n4_kr_trung: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t kr-trung"'
+    n4_vet_khuon: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t vet-khuon && cd ../agent && CRM_TELEMETRY_DISABLED=1 bun test test/muc-nhac-okr.integration.spec.ts -t vet-khuon"'
+    n4_du_duong: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t du-duong && cd ../agent && CRM_TELEMETRY_DISABLED=1 bun test test/muc-nhac-okr.integration.spec.ts -t du-duong"'
+    n4_loai_la: 'cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/muc-nhac-okr.spec.ts -t loai-la'
     hcz_duong_chinh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t duong-chinh"'
     hcz_cung_phien: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts test/zalo-lenh.spec.ts -t cung-phien"'
     hcz_tu_choi_vai: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t tu-choi-vai"'
@@ -821,6 +841,10 @@ executors:
     lint_slop: "bun run lint:slop"
     tnm_goi_that: "bun _acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
     tnm_tai_lieu: "node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
+    bdk_tai_lieu: "node _acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
+    bdk_eve_chan_khuon: "bun apps/agent/test/eve-tran/chay.ts chan-khuon"
+    bdk_eve_chay_tiep: "bun apps/agent/test/eve-tran/chay.ts chay-tiep"
+    bdk_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/components/agent-session-limit-composer.tsx" --mode static'
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
@@ -1216,6 +1240,7 @@ executors:
     kcb_khong_noi_tran: "bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs khong-noi-tran"
     kcb_tuan_tu: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs bo-qua-lo && bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs tuan-tu"'
     nso_do_man: 'NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3960} API_URL=${API_URL:-http://localhost:3961} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs"'
+    n4_mot_khuon: "bun _acceptance/no-sau-luot-4-okr/rang/mot-khuon.mjs"
     hg_confirm_chung: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca confirm && cd apps/app && bun test test/messages-guard.spec.ts"
     hg_huy_qua_nut_dong: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca huy"
     hg_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'

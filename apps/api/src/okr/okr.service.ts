@@ -62,7 +62,9 @@ import type {
 	UpdateKrInput,
 } from "./okr.contracts";
 import {
+	chonDonVi,
 	type DonViCuaMucTieu,
+	donViCua as donViCuaDong,
 	OkrAccessService,
 	type Quyen,
 } from "./okr-access.service";
@@ -1402,7 +1404,7 @@ export class OkrService {
 		const q = await this.quyenOkr.quyen(userId);
 		const [mt] = await this.docMucTieu(this.db, { id }, userId, q);
 		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
-		const [vet, ky] = await Promise.all([
+		const [vet, ky, donVi] = await Promise.all([
 			this.db.okrTrail.findMany({
 				where: { objectiveId: id },
 				orderBy: [{ at: "asc" }, { id: "asc" }],
@@ -1411,7 +1413,12 @@ export class OkrService {
 				where: { id: mt.cycleId },
 				select: { name: true },
 			}),
+			this.db.okrObjective.findUniqueOrThrow({
+				where: { id },
+				select: chonDonVi,
+			}),
 		]);
+		const objective = donViCuaDong(donVi);
 		const nguoi = await this.db.user.findMany({
 			where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
 			select: chonNguoi,
@@ -1430,7 +1437,12 @@ export class OkrService {
 				note: v.note,
 			})),
 			canEditKr: mt.keyResults
-				.filter((k) => mt.canEdit || k.laCuaToi)
+				.filter((k) =>
+					this.quyenOkr.ghiDuocKr(q, userId, {
+						ownerUserId: k.owner.id,
+						objective,
+					}),
+				)
 				.map((k) => k.id),
 		};
 	}

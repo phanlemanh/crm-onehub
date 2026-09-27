@@ -1,0 +1,41 @@
+{
+	"data": {
+		"requests": [
+			{
+				"action": {
+					"callId": "wrun_01M3H2PGTFST847726MF3VBXJQ:limit:output:23589",
+					"input": { "kind": "output", "limit": 10000, "usedTokens": 23589 },
+					"kind": "tool-call",
+					"toolName": "session_limit_continuation"
+				},
+				"allowFreeform": false,
+				"display": "confirmation",
+				"kind": "session-limit",
+				"options": [
+					{
+						"description": "Grant a fresh token budget",
+						"id": "continue",
+						"label": "Approve",
+						"style": "primary"
+					},
+					{
+						"description": "Stop now",
+						"id": "stop",
+						"label": "Stop",
+						"style": "danger"
+					}
+				],
+				"prompt": "This session has hit the output-token limit (10K) per session. This is a guardrail against defective long-running sessions. If session activity looks fine, just approve to keep going.",
+				"requestId": "wrun_01M3H2PGTFST847726MF3VBXJQ:limit:output:23589"
+			}
+		],
+		"sequence": 0,
+		"stepIndex": 3,
+		"turnId": "turn_0"
+	},
+	"type": "input.requested",
+	"meta": {
+		"at": "2026-09-27T09:23:50.713Z",
+		"id": "evt_01M3H2V2SS39KD9TEPSM5S7W6T"
+	}
+}

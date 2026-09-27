@@ -20,8 +20,13 @@ export const THU_TU_NHAC = [
 	"okr-theo-doi",
 ] as const satisfies readonly (LoaiNhac | LoaiNhacOkr)[];
 
+type ThieuThuTu = Exclude<ViecNhac["loai"], (typeof THU_TU_NHAC)[number]>;
+
+export const THU_TU_DU: [ThieuThuTu] extends [never] ? true : ThieuThuTu = true;
+
 export const NHAC = {
 	gio: { gio: 8, phut: 30 },
+	trua: { gio: 12, phut: 0 },
 	muiGio: "Asia/Ho_Chi_Minh",
 	sapHanNgay: 3,
 	imSauNgay: 7,
@@ -97,14 +102,28 @@ export function dauTuanVN(now: Date): string {
 	return new Date(hom - lui * DAY_MS).toISOString().slice(0, 10);
 }
 
-export function daToiGioNhac(now: Date): boolean {
-	const phan = dinhGio.formatToParts(now);
+export type CuaSoNhac = "buoi-sang" | "truc-tiep";
+
+export function mocNhac(now: Date): Date {
+	return new Date(
+		dauNgayVN(now).getTime() +
+			(NHAC.gio.gio * PHUT_MOI_GIO + NHAC.gio.phut) * PHUT_MS,
+	);
+}
+
+function phutTrongNgayVN(luc: Date): number {
+	const phan = dinhGio.formatToParts(luc);
 	const so = (loai: "hour" | "minute") =>
 		Number(phan.find((p) => p.type === loai)?.value ?? 0);
-	return (
-		so("hour") * PHUT_MOI_GIO + so("minute") >=
-		NHAC.gio.gio * PHUT_MOI_GIO + NHAC.gio.phut
-	);
+	return so("hour") * PHUT_MOI_GIO + so("minute");
+}
+
+export function daToiGioNhac(now: Date): boolean {
+	return phutTrongNgayVN(now) >= NHAC.gio.gio * PHUT_MOI_GIO + NHAC.gio.phut;
+}
+
+export function laBuoiSang(luc: Date): boolean {
+	return phutTrongNgayVN(luc) < NHAC.trua.gio * PHUT_MOI_GIO + NHAC.trua.phut;
 }
 
 export type ViecKeHoach = {
@@ -299,7 +318,7 @@ function gop(
 
 export async function viecCanNhac(
 	db: Db,
-	chon: { now: Date; userId?: string },
+	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecNhac[]>> {
 	const [keHoach, thanhVien, okr] = await Promise.all([
 		docKeHoach(db, chon.userId),

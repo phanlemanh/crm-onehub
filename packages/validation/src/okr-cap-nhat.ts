@@ -13,6 +13,7 @@ export const LOI_KHUON_CAP_NHAT = {
 	tuTin: "Chọn mức tự tin cho từng KR: cao, vừa hoặc thấp.",
 	giaTri: "Giá trị của KR phải là một số.",
 	ghiChu: `Ghi chú tối đa ${GHI_CHU_TOI_DA} ký tự.`,
+	trungKr: "Mỗi KR chỉ gửi một lần trong một lần cập nhật.",
 } as const;
 
 export const mucCapNhat = z
@@ -30,7 +31,11 @@ export const moCapNhatInput = z.object({ entry: z.enum(LOI_VAO) }).strict();
 export type MoCapNhatInput = z.infer<typeof moCapNhatInput>;
 export const guiCapNhatInput = z
 	.object({ sessionId: ma, items: z.array(mucCapNhat).min(1).max(50) })
-	.strict();
+	.strict()
+	.refine(
+		(v) => new Set(v.items.map((m) => m.keyResultId)).size === v.items.length,
+		{ error: LOI_KHUON_CAP_NHAT.trungKr, path: ["items"] },
+	);
 export type GuiCapNhatInput = z.infer<typeof guiCapNhatInput>;
 
 export type LoiGiaTri = "moc-chi-0-1" | "phan-tram-ngoai-0-100";

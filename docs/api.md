@@ -496,13 +496,17 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   objectives, and a KR's owner edits that KR. Admins are not heads by role — they
   manage cycles, the program config and OneHub-level objectives, and may import
   into any unit. The screen asks `canEdit` / `canEditKr` from the API; it never
-  re-derives them.
+  re-derives them — the sheet shows a KR's «Cập nhật» item from `canEditKr` too.
+  «KR owner, or can edit the objective's unit» is one function,
+  `OkrAccessService.ghiDuocKr`, used by `assertSuaKr`, by `guiCapNhat` and by
+  `canEditKr`, so the three cannot drift.
 - **Eleven writes are locked by cycle phase.** Every objective, key-result and
   alignment write, plus `previewImport` and `applyImport`, calls
   `assertKyGhiDuoc` first: only `lap-ke-hoach` and `dang-chay` accept writes. Phase
   only moves forward (`setCyclePhase`).
 - **Every write leaves one `OkrTrail` row, never an `Activity`.** The trail holds
-  the action and a typed `before`/`after` snapshot (`@crm/validation/okr-vet`);
+  the action and a typed `before`/`after` snapshot (`@crm/validation/okr-vet`, which re-exports the one schema in
+  `@crm/db/okr-vet` so the reminder generator in `@crm/db` parses with it too);
   `okr.objective` returns the rows for that objective. The import row is cycle-level
   (`objectiveId` null, `after` carries the unit and the counts) and each imported
   objective gets its own `tao` row.
@@ -560,8 +564,10 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `capNhatTuan` reads the latest one per KR (`distinct: ["keyResultId"]`,
   newest `createdAt` first). Writing for someone else sets `onBehalf: true` on the
   check-in and is allowed only when the caller is the KR owner's unit head or an
-  OneHub admin (`OkrAccessService.suaDuocDonVi`) — a fellow KR owner cannot submit
-  for another owner.
+  OneHub admin (`OkrAccessService.ghiDuocKr`) — a fellow KR owner cannot submit
+  for another owner. A batch that names the same KR twice is refused whole by
+  `guiCapNhatInput` («Mỗi KR chỉ gửi một lần trong một lần cập nhật.»): nothing is
+  written and the session stays open.
 - **A running KR's `currentValue` only moves through a weekly update — unless a
   machine writes it.** `updateKeyResult` refuses any `currentValue` change
   (`OKR.thongDiep.hienTaiQuaCapNhat`) once the objective is `cong-bo` and its cycle
@@ -668,7 +674,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   separate from who can edit.
 - **`okr.viecCuaToi` is one call for the caller's own OKR row.** `viec` is the
   caller's pending OKR items, filtered from the same `viecCanNhac` queue plan items
-  share; `lienQuanOkr` (`@crm/db/okr-nhac`) is the objectives and KRs the caller
+  share, with `cuaSo: "truc-tiep"` (events of the last 24 hours up to now, not the
+  morning reminder's 08:30-anchored window); its item schema is `viecOkr` from
+  `@crm/db/okr-nhac`, not a copy; `lienQuanOkr` (`@crm/db/okr-nhac`) is the objectives and KRs the caller
   owns or participates in at the running cycle, so a screen can show "your OKR"
   even on a week nothing is due.
 - **`transferPreview`/`transferWork` move a leaver's OKR ownership** — admin-only

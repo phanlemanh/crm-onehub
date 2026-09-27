@@ -1,6 +1,7 @@
 import { db } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
 import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
+import { KHOA_MUC_OKR, laViecOkr } from "@crm/db/okr-nhac";
 import {
 	daToiGioNhac,
 	ngayVN,
@@ -11,7 +12,6 @@ import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type MucNhac,
 	mucNhac,
-	type NhacPayload,
 	parseNhacPayload,
 } from "@crm/validation/nhac-ke-hoach";
 import { sendSlackMessage } from "./run-runtime";
@@ -48,33 +48,22 @@ function nguoiCua(subject: string | null): string {
 }
 
 function maViec(v: ViecNhac): MucNhac {
-	switch (v.loai) {
-		case "okr-cap-nhat":
-			return { loai: v.loai, krIds: v.krIds };
-		case "okr-kr-im":
-			return { loai: v.loai, keyResultId: v.keyResultId };
-		case "okr-duoc-giao":
-			return {
-				loai: v.loai,
-				objectiveId: v.objectiveId,
-				keyResultId: v.keyResultId,
-			};
-		case "okr-nhac-ten":
-			return { loai: v.loai, commentId: v.commentId };
-		case "okr-theo-doi":
-			return { loai: v.loai, objectiveId: v.objectiveId };
-		default:
-			return { loai: v.loai, planId: v.planId, stepId: v.stepId };
+	if (!laViecOkr(v)) {
+		return mucNhac.parse({ loai: v.loai, planId: v.planId, stepId: v.stepId });
 	}
+	const khoa = Object.keys(KHOA_MUC_OKR[v.loai]);
+	return mucNhac.parse(
+		Object.fromEntries(Object.entries(v).filter(([k]) => khoa.includes(k))),
+	);
 }
 
-function maCua(ds: ViecNhac[]): NhacPayload["muc"] {
-	return ds.map((v) => mucNhac.parse(maViec(v)));
+function maCua(ds: ViecNhac[]): MucNhac[] {
+	return ds.map(maViec);
 }
 
 export async function lenLichNhac(now = new Date()): Promise<{ ghi: number }> {
 	if (!daToiGioNhac(now)) return { ghi: 0 };
-	const viec = await viecCanNhac(db, { now });
+	const viec = await viecCanNhac(db, { now, cuaSo: "buoi-sang" });
 	if (viec.size === 0) return { ghi: 0 };
 	const { count } = await db.agentTask.createMany({
 		data: [...viec].map(([userId, ds]) => ({
@@ -145,7 +134,9 @@ export async function chayNhac(
 	const userId = nguoiCua(hang.subject);
 	const payload = parseNhacPayload(hang.payload);
 	const viec =
-		(await viecCanNhac(db, { now: new Date(), userId })).get(userId) ?? [];
+		(
+			await viecCanNhac(db, { now: new Date(), userId, cuaSo: "buoi-sang" })
+		).get(userId) ?? [];
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
 	const token = await zaloToken();
@@ -194,6 +185,7 @@ async function guiQuaZalo(
 	}
 	const { text, daGui } = dungTin(
 		ten,
+		new Date(),
 		viec,
 		lienKet,
 		"tron",
@@ -216,7 +208,7 @@ async function guiQuaSlack(
 	if (!token || !slackUserId) {
 		throw new Error("kenh Slack duoc chon ma thieu token hoac nguoi khop");
 	}
-	const { text, daGui } = dungTin(ten, viec, lienKet);
+	const { text, daGui } = dungTin(ten, new Date(), viec, lienKet);
 	await guiSlackRieng(token, slackUserId, ten, text, taskId, deps.fetcher);
 	return daGui;
 }
