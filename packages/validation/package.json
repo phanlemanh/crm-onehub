@@ -23,6 +23,7 @@
 		"./okr-chi-so": "./src/okr-chi-so.ts",
 		"./okr-chu-ky": "./src/okr-chu-ky.ts",
 		"./okr-chuong-trinh": "./src/okr-chuong-trinh.ts",
+		"./okr-kiem": "./src/okr-kiem.ts",
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-muc-tieu": "./src/okr-muc-tieu.ts",
 		"./okr-nguon": "./src/okr-nguon.ts",
