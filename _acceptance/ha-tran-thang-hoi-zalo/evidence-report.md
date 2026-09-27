@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ab69d77a15e367ab02819face8acdbfa6fdf0fa1
+verified_commit: 8ebeedb366e166c32b17e086e565f94825b3f73b
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -140,3 +140,7 @@ Round 1: E1-E7 cùng bốn lệnh suite (test/lint/lint:slop/build) đều xanh 
 ### Re-pin lần 1 — 2026-09-27, do gộp origin/onehub (86 commit, có migration so-tu-chay) trước khi mở PR
 run_id: repin-20260927T023047Z-49311
 sha: ab69d77a15e367ab02819face8acdbfa6fdf0fa1 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-27, do gộp origin/onehub d0d89274 (vòng hoan-thien-hoi-crm-qua-zalo #166) để PR #168 hết xung đột
+run_id: repin-20260927T024228Z-52592
+sha: 8ebeedb366e166c32b17e086e565f94825b3f73b · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
