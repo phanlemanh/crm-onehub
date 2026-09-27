@@ -156,6 +156,12 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.currency",
 	"crm.standard.closeDate",
 	"crm.standard.stage",
+	"okr-khep.cachDoc.tot",
+	"okr-khep.cachDoc.duoi-muc-tot",
+	"okr-khep.cachDoc.dat",
+	"okr-khep.cachDoc.chua-tron",
+	"okr-khep.khongPhaiDanhGia.tieuDe",
+	"okr-khep.khongPhaiDanhGia.moTa",
 ];
 
 describe("kho chuoi cua vong ③a", () => {
@@ -769,6 +775,10 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"okr-so:trangThai.capNhat.soTu": ["Số từ 1 · A", "Số từ 12 · A"],
 			"okr-so:trangThai.capNhat.soMay": ["Số máy: 1 · A", "Số máy: 12 · A"],
+			"okr-khep:dai.ra": [
+				"Đang rà giữa kỳ tới hết 1",
+				"Đang rà giữa kỳ tới hết 12",
+			],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

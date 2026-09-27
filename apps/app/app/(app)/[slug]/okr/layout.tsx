@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ChonChuKy } from "./chon-chu-ky";
+import { DaiKy } from "./dai-ky";
 import { DauTrangOkr } from "./thanh-tab";
 
 export default function OkrLayout({
@@ -38,6 +39,7 @@ async function DauTrang() {
 	return (
 		<HydrateClient>
 			<DauTrangOkr chonChuKy={<ChonChuKy />} />
+			<DaiKy />
 		</HydrateClient>
 	);
 }
