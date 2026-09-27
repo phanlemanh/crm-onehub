@@ -7,7 +7,7 @@ cần thiết để máy khác không phải học lại.
 
 ## 1. Đang ở đâu
 
-**Lượt 1 `kho-tai-lieu` đang ở Cổng Phạm vi** (thẻ `_acceptance/kho-tai-lieu/card.html`; duyệt bằng `/acceptance-gate:approve kho-tai-lieu`).
+**Lượt 1 `kho-tai-lieu` đã ký Cổng Bằng chứng 2026-09-28**, chờ merge PR vào `onehub` (merge commit, không squash). Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
 Lượt 0 xong. Nghiên cứu xong, bản mẫu xong, lộ
 trình đã sắp lại theo output ngày 2026-09-27 (năm lượt, chạy thật mọi phòng ban, một
 lượt sửa). Chưa có dòng mã sản phẩm nào ngoài bản mẫu và trình đọc markdown. Tám mục
@@ -30,6 +30,22 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `17cf2463` | Ghim lại hồ sơ sau khi gộp `onehub` |
+| `cea37af8` | Kéo `onehub` mới vào (55 commit, không `migration`), vẽ lại bản đồ sản phẩm |
+| `9c6c6e18` | Ký Cổng Bằng chứng: E14j đạt, 17 hạn chế đã biết |
+| `0b81caae` | Thẻ Cổng Bằng chứng và trang bằng chứng |
+| `74f6889d` | S4 lượt 3: 28/28 phép đo, 4/4 bộ kiểm, E14j panel đề xuất đạt |
+| `f7c4fc60` | S4 lượt 2: test bảng có đối chứng dương, ảnh màn duyệt 390 |
+| `2bc61eae` | S4 lượt 1 bị trả lại: sửa bảng trong màn duyệt và hai lệnh kiểm đỏ |
+| `ca8a68e7` | S3 xong: mười task, mẫu dán thật, năm lệnh chứng |
+| `fd459b2c`, `01bd5f24` | Lọc dán từ Word và Google Docs theo mẫu dán thật |
+| `eb7ed901` | Răng đo màn: bộ gõ Telex, màn duyệt, danh sách, màn đọc |
+| `2198dd00`…`4ce4e5a9` | Năm màn trong app, mục «Tài liệu», màn soạn và màn duyệt |
+| `1e201566`, `b58bfd5b` | Máy chủ: quyền, tạo, đề xuất, đọc, duyệt, trả lại, so-và-đặt, liên kết, tìm |
+| `584e6caa`, `4eb4ad08` | `TrinhSoan` và `DiffTrang` trong `packages/ui` |
+| `de18b025`…`4998dec0` | Luật chung, markdown, diff, lược đồ |
+| `bfcad061` | S2: kế hoạch thi công 10 task |
+| `1c4fd98b` | Duyệt Cổng Phạm vi lượt 1 |
 | `5526d5ef` | Lượt 1: thẻ Cổng Phạm vi |
 | `b16a6f03` | Lượt 1 S1: thiết kế, hợp đồng, evals, gap-probe, design-pass bản mẫu, hai hình |
 | `7acbffec` | Sửa 4 test api đỏ sẵn (đồng hồ Postgres–Node, khoá env đặt muộn) |
@@ -66,8 +82,9 @@ Theo thứ tự, lấy từ mục 4 của lộ trình:
 
 Đường bàn giao phần mềm, theo mục 3 của lộ trình:
 
-1. Mở lượt 1: `/feature-loop:feature-loop kho-tai-lieu — lượt 1 của docs/plan/lo-trinh-kho-tai-lieu.md`.
-   Tám mục từ điển chốt tại Cổng 1 của lượt này.
+1. Merge PR lượt 1 vào `onehub` bằng merge commit. Hai mục người dùng sẽ gặp trong 17 hạn
+   chế đã biết — dấu `|` trong ô bảng làm mất dữ liệu, danh sách đề xuất trần 25 dòng — nên
+   vào đầu lượt 3 thay vì chờ lượt sửa.
 2. Lượt 2 `may-soan-de-xuat`, lượt 3 `tim-va-dieu-huong-kho`, lượt 4 `tro-ly-doc-kho`, mỗi
    lượt mở khi lượt trước đã lên `onehub`; làm S0–S1 của lượt sau khi lượt trước còn ở S4.
 3. Chạy thật mọi phòng ban hai tuần, rồi lượt 5 `sua-sau-chay-that`.
