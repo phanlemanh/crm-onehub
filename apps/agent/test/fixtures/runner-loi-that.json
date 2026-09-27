@@ -1,0 +1,29 @@
+{
+	"sha": "4cfe61135b6db611239db4aa89b68547e0cb4702",
+	"ngay": "2026-09-27",
+	"model": "google/gemini-3.8-flash",
+	"nguon": "agentRunEvent action.result cua mot luot eve that, truoc khi va",
+	"su_kien": {
+		"type": "action.result",
+		"data": {
+			"error": {
+				"code": "SUBAGENT_EXECUTION_FAILED",
+				"message": "ref loops are only supported if they include optional or nullable property values, or a potentially-zero-length array items, but a ref loop of required fields was found at definitions.__schema0.anyOf.5.additionalProperties"
+			},
+			"result": {
+				"kind": "subagent-result",
+				"callId": "call_faf5a8848de24366bacc0db0",
+				"output": {
+					"code": "SUBAGENT_EXECUTION_FAILED",
+					"message": "ref loops are only supported if they include optional or nullable property values, or a potentially-zero-length array items, but a ref loop of required fields was found at definitions.__schema0.anyOf.5.additionalProperties"
+				},
+				"isError": true,
+				"subagentName": "agent_runner"
+			},
+			"status": "failed",
+			"turnId": "turn_0",
+			"sequence": 0,
+			"stepIndex": 0
+		}
+	}
+}
