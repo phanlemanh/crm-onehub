@@ -13,3 +13,5 @@ export const HAN_MUC_THU = {
 } as const;
 
 export const CUA_SO_THU = 128_000;
+
+export const CHO_TRA_LOI_MS = 20_000;
