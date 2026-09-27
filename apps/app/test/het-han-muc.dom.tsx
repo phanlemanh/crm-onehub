@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
 import { type InputRequest, schemas } from "@crm/validation";
 import {
 	builderQuestion,
@@ -14,9 +15,32 @@ const { BuilderQuestionComposer, sessionLimitAnswerLabel } = await import(
 	"@/components/agent-builder/builder-question-composer"
 );
 const { oSoanMessages } = await import("@/lib/messages/agent-builder-o-soan");
+const { EVE_SESSION_LIMIT_TOOL, messagesFromEvents, toTranscript } =
+	await import("@/lib/agent-transcript");
+
+const LUONG_THAT = readFileSync(
+	new URL(
+		"../../../_acceptance/bo-dung-khong-ket/rang/luong-het-han-muc-that.ndjson",
+		import.meta.url,
+	),
+	"utf8",
+)
+	.split("\n")
+	.filter((dong) => dong.trim().length > 0)
+	.map((dong) => JSON.parse(dong));
 
 const t = oSoanMessages("vi");
-const CHU_EVE = ["output-token limit", "Approve"];
+function chuTiengAnhCuaEve(request: InputRequest): string[] {
+	return [
+		request.prompt,
+		...(request.options ?? []).flatMap((option) => [
+			option.label,
+			option.description ?? "",
+		]),
+		request.action.toolName,
+		"Session limit continuation",
+	].filter((chu) => chu.length > 0);
+}
 
 const yeuCau = schemas.agents.inputRequested.parse(mauHetHanMuc.data)
 	.requests[0];
@@ -94,7 +118,9 @@ describe("het-han-muc", () => {
 		expect(nut(o, "Dừng")).toBeTruthy();
 		expect(o.querySelectorAll("button")).toHaveLength(2);
 		expect(o.querySelector("input, textarea")).toBeNull();
-		for (const chu of CHU_EVE) expect(o.textContent).not.toContain(chu);
+		const lop = chuTiengAnhCuaEve(yeuCau);
+		expect(lop.length).toBeGreaterThanOrEqual(7);
+		for (const chu of lop) expect(o.textContent).not.toContain(chu);
 		expect(tenDocDuoc(o)).not.toContain(t.oSoan.dangGui);
 	});
 
@@ -176,5 +202,21 @@ describe("het-han-muc", () => {
 		).toBe("Dừng");
 		expect(sessionLimitAnswerLabel({ optionId: "crm-task" }, t)).toBeNull();
 		expect(sessionLimitAnswerLabel(null, t)).toBeNull();
+	});
+	test("het-han-muc: dong dau vet khong lo chu tieng Anh cua eve", () => {
+		const banGhi = toTranscript(messagesFromEvents(LUONG_THAT));
+		const muc = banGhi.flatMap((dong) => dong.items);
+		const cacCongCu = muc.flatMap((item) =>
+			item.kind === "did" ? [item.tool] : [],
+		);
+		expect(
+			cacCongCu.length,
+			"doi chung: luong that van co dong dau vet",
+		).toBeGreaterThan(0);
+		expect(cacCongCu, "session-limit").not.toContain(EVE_SESSION_LIMIT_TOOL);
+		const chuTrenMan = JSON.stringify(muc);
+		for (const chu of chuTiengAnhCuaEve(yeuCau)) {
+			expect(chuTrenMan, `lo chu eve: ${chu}`).not.toContain(chu);
+		}
 	});
 });

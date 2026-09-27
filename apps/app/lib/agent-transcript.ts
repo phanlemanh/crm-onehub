@@ -46,6 +46,8 @@ export type AgentTurnFailure = {
 
 type ToolVerbs = Record<string, string>;
 
+export const EVE_SESSION_LIMIT_TOOL = "session_limit_continuation";
+
 const VERBS: ToolVerbs = {
 	read_crm_history: "Read our emails and meetings with them",
 	read_company_history: "Read everything we have on the company",
@@ -231,6 +233,12 @@ export function toTranscript(
 					const request = part.toolMetadata?.eve?.inputRequest;
 					if (request?.kind === "question") {
 						return [{ kind: "asked", id, question: request }];
+					}
+					if (
+						request?.kind === "session-limit" ||
+						toolName(part) === EVE_SESSION_LIMIT_TOOL
+					) {
+						return [];
 					}
 				}
 
