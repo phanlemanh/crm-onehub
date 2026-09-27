@@ -1,14 +1,11 @@
+import {
+	SESSION_PURPOSES,
+	type SessionPurpose,
+} from "@crm/validation/phien-tac-tu";
 import { z } from "zod";
 import { ZALO } from "./zalo-config";
 
-export const SESSION_PURPOSES = [
-	"builder",
-	"team-agent",
-	"research",
-	"zalo",
-] as const;
-
-export type SessionPurpose = (typeof SESSION_PURPOSES)[number];
+export { SESSION_PURPOSES, type SessionPurpose };
 
 type SessionAttributes = Readonly<Record<string, string | readonly string[]>>;
 

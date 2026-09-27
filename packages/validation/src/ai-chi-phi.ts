@@ -1,0 +1,136 @@
+import { z } from "zod";
+
+export const TINH_NANG = [
+	"crm.nghien-cuu",
+	"crm.hoi-dap",
+	"zalo.hoi-crm",
+	"crm.dung-tac-nhan",
+	"crm.tac-nhan",
+	"okr.chuyen-tiep",
+	"okr.de-xuat",
+	"okr.tom-tat",
+	"khac",
+] as const;
+
+export const tinhNang = z.enum(TINH_NANG);
+
+export type TinhNang = z.infer<typeof tinhNang>;
+
+export const NHOM_VIEC_AI = [
+	"nghien-cuu-danh-ba",
+	"tro-ly-ai",
+	"hoi-crm-zalo",
+	"tac-nhan",
+	"tro-ly-okr",
+	"chua-gan",
+] as const;
+
+export const nhomViecAi = z.enum(NHOM_VIEC_AI);
+
+export type NhomViecAi = z.infer<typeof nhomViecAi>;
+
+export const NHOM_CUA_TINH_NANG = {
+	"crm.nghien-cuu": "nghien-cuu-danh-ba",
+	"crm.hoi-dap": "tro-ly-ai",
+	"zalo.hoi-crm": "hoi-crm-zalo",
+	"crm.dung-tac-nhan": "tac-nhan",
+	"crm.tac-nhan": "tac-nhan",
+	"okr.chuyen-tiep": "tro-ly-okr",
+	"okr.de-xuat": "tro-ly-okr",
+	"okr.tom-tat": "tro-ly-okr",
+	khac: "chua-gan",
+} as const satisfies Record<TinhNang, NhomViecAi>;
+
+export const TINH_NANG_TRO_LY_OKR = [
+	"okr.chuyen-tiep",
+	"okr.de-xuat",
+	"okr.tom-tat",
+] as const satisfies readonly TinhNang[];
+
+export const SUBAGENT_CO_SO = [
+	"tro_ly_okr",
+	"agent_runner",
+	"agent_builder",
+] as const;
+
+export type SubagentCoSo = (typeof SUBAGENT_CO_SO)[number];
+
+const VIEC_CUA_SUBAGENT = {
+	agent_runner: "crm.tac-nhan",
+	agent_builder: "crm.dung-tac-nhan",
+} as const satisfies Record<Exclude<SubagentCoSo, "tro_ly_okr">, TinhNang>;
+
+const VIEC_CUA_PURPOSE = {
+	okr: "okr.chuyen-tiep",
+	builder: "crm.dung-tac-nhan",
+	"team-agent": "crm.tac-nhan",
+	zalo: "zalo.hoi-crm",
+	research: "crm.nghien-cuu",
+} as const satisfies Record<string, TinhNang>;
+
+export type NguonBuoc = {
+	kenh: string | null;
+	purpose: string | null;
+	subagent: string | null;
+	okrViec: string | null;
+};
+
+export function tinhNangCua(nguon: NguonBuoc): TinhNang {
+	if (nguon.subagent === "tro_ly_okr") {
+		return nguon.okrViec === "tom-tat-tuan" ? "okr.tom-tat" : "okr.de-xuat";
+	}
+	if (nguon.subagent === "agent_runner" || nguon.subagent === "agent_builder") {
+		return VIEC_CUA_SUBAGENT[nguon.subagent];
+	}
+	if (nguon.subagent) return "khac";
+	if (nguon.kenh === "eve") return "crm.hoi-dap";
+	if (nguon.kenh === "zalo") return "zalo.hoi-crm";
+	const purpose = nguon.purpose ?? "research";
+	return purpose in VIEC_CUA_PURPOSE
+		? VIEC_CUA_PURPOSE[purpose as keyof typeof VIEC_CUA_PURPOSE]
+		: "khac";
+}
+
+export const MOC_BAO_TRAN = [80, 100] as const;
+
+export type MocBaoTran = 0 | (typeof MOC_BAO_TRAN)[number];
+
+export function mocBaoTran(chiUsd: number, tranUsd: number): MocBaoTran {
+	if (tranUsd <= 0 || chiUsd >= tranUsd) return 100;
+	return chiUsd / tranUsd >= 0.8 ? 80 : 0;
+}
+
+export const KET_QUA_DOI_SOAT = [
+	"khop",
+	"lech",
+	"khong-doi-soat-duoc",
+] as const;
+
+export const ketQuaDoiSoatEnum = z.enum(KET_QUA_DOI_SOAT);
+
+export const NGUONG_LECH_DOI_SOAT = 0.1;
+
+export function ketQuaDoiSoat(
+	soSo: number,
+	soGateway: number,
+	nguong: number = NGUONG_LECH_DOI_SOAT,
+): { ketQua: "khop" | "lech"; lechPhanTram: number } {
+	const lon = Math.max(soSo, soGateway);
+	const lech = lon === 0 ? 0 : Math.abs(soSo - soGateway) / lon;
+	return {
+		ketQua: lech <= nguong + 1e-9 ? "khop" : "lech",
+		lechPhanTram: Math.round(lech * 1000) / 10,
+	};
+}
+
+export const doiSoat = z.object({
+	thang: z.string().regex(/^\d{4}-\d{2}$/),
+	soSoUsd: z.number(),
+	soGatewayUsd: z.number().nullable(),
+	lechPhanTram: z.number().nullable(),
+	ketQua: ketQuaDoiSoatEnum,
+	lyDo: z.string().nullable(),
+	luc: z.date(),
+});
+
+export type DoiSoat = z.infer<typeof doiSoat>;
