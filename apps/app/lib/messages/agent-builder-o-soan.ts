@@ -31,6 +31,11 @@ const en = {
 	the: {
 		go: (ten: string) => `Remove ${ten}`,
 	},
+	hetHanMuc: {
+		cau: "The builder used up this session's budget. Grant more to keep going, or stop.",
+		capThem: "Grant more",
+		dung: "Stop",
+	},
 };
 
 export type OSoanMessages = typeof en;
@@ -66,6 +71,11 @@ const vi = {
 	},
 	the: {
 		go: (ten: string) => `Gỡ ${ten}`,
+	},
+	hetHanMuc: {
+		cau: "Bộ dựng đã dùng hết hạn mức của phiên này. Cấp thêm để làm tiếp, hoặc dừng.",
+		capThem: "Cấp thêm",
+		dung: "Dừng",
 	},
 } satisfies OSoanMessages;
 

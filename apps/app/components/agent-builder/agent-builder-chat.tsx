@@ -48,10 +48,6 @@ import Link from "next/link";
 import { Fragment, type ReactNode, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import {
-	AgentClarificationComposer,
-	type ClarificationResponse,
-} from "@/components/agent-clarification-composer";
 import { LocalDateTime } from "@/components/local-date-time";
 import {
 	consumeBuilderCommand,
@@ -77,6 +73,7 @@ import {
 	toTranscript,
 } from "@/lib/agent-transcript";
 import { isSharedChatToken } from "@/lib/chat-route";
+import { oSoanMessages } from "@/lib/messages/agent-builder-o-soan";
 import {
 	type TroChuyenMessages,
 	troChuyenMessages,
@@ -93,6 +90,10 @@ import {
 } from "./agent-result";
 import { AgentScopeBadges } from "./agent-scope-badges";
 import { BuilderFailureCard } from "./builder-failure-card";
+import {
+	BuilderQuestionComposer,
+	sessionLimitAnswerLabel,
+} from "./builder-question-composer";
 import {
 	ChatAttachmentChip,
 	ChatCommandChip,
@@ -142,7 +143,11 @@ const builderMessage = z
 			.array(z.union([storedAttachment, uploadAttachment]))
 			.catch([]),
 		inputResponse: z
-			.object({ requestId: z.string().min(1) })
+			.object({
+				requestId: z.string().min(1),
+				optionId: z.string().optional().catch(undefined),
+				kind: z.string().optional().catch(undefined),
+			})
 			.nullable()
 			.catch(null),
 	})
@@ -557,11 +562,11 @@ export function AgentBuilderChat({
 			<div className="min-h-0 shrink overflow-y-auto overscroll-contain border-t px-4 py-3 sm:px-5">
 				<div className="mx-auto w-full max-w-3xl">
 					{question ? (
-						<AgentClarificationComposer
+						<BuilderQuestionComposer
 							key={question.requestId}
 							question={question}
 							pending={answerQuestion.isPending}
-							onSubmit={async (response: ClarificationResponse) => {
+							onAnswer={async (response) => {
 								await answerQuestion.mutateAsync({
 									id: conversationId,
 									clientRequestId: crypto.randomUUID(),
@@ -837,15 +842,19 @@ function UserSubmission({
 	error: string | null;
 	sending?: boolean;
 }) {
-	const t = troChuyenMessages(useLocale());
+	const locale = useLocale();
+	const t = troChuyenMessages(locale);
 	const message = submission.message;
 	const messageText = message.text ?? t.man.tinKhongMo;
 	const command =
 		submission.commandType === "CREATE_AGENT"
 			? consumeBuilderCommand(messageText)
 			: null;
-	const text = command?.body ?? messageText;
 	const response = message.inputResponse;
+	const text =
+		sessionLimitAnswerLabel(response, oSoanMessages(locale)) ??
+		command?.body ??
+		messageText;
 
 	return (
 		<div
