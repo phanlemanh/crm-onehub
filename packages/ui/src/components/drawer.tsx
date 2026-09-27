@@ -22,6 +22,11 @@ const drawerTitleVariants = cva("font-heading font-medium text-foreground", {
 	},
 });
 
+const KEO = {
+	nguongDong: 0.25,
+	lechBatDauPx: 2,
+} as const;
+
 const ThaKeoContext = React.createContext<((tiLe: number) => void) | null>(
 	null,
 );
@@ -50,7 +55,7 @@ function Drawer({
 		giuThayDoi,
 	});
 	const keoXa = React.useRef(0);
-	const nguong = closeThreshold ?? 0.25;
+	const nguong = closeThreshold ?? KEO.nguongDong;
 	const thaKeo = (tiLe: number) => {
 		if (g.coThayDoi && tiLe >= nguong) g.ngucCanh.hoiLai();
 	};
@@ -132,19 +137,32 @@ function DrawerOverlay({
 	);
 }
 
-function laChoKeo(target: EventTarget | null): target is HTMLElement {
-	if (!(target instanceof HTMLElement)) return false;
-	if (target.isContentEditable) return false;
+function laChoKeo(target: EventTarget | null, noi: Element): target is Element {
+	if (!(target instanceof Element) || !noi.contains(target)) return false;
+	if (target instanceof HTMLElement && target.isContentEditable) return false;
 	return target.closest("input, textarea, select, [data-vaul-no-drag]") === null;
 }
 
-function tiLeKeo(noi: HTMLElement, dx: number, dy: number): number {
+function keoTheoHuong(noi: Element, dx: number, dy: number) {
+	const huong = noi.getAttribute("data-vaul-drawer-direction");
+	if (huong === "top") return { doc: -dy, ngang: dx };
+	if (huong === "left") return { doc: -dx, ngang: dy };
+	if (huong === "right") return { doc: dx, ngang: dy };
+	return { doc: dy, ngang: dx };
+}
+
+function tiLeKeo(noi: Element, dx: number, dy: number): number {
 	const khung = noi.getBoundingClientRect();
 	const huong = noi.getAttribute("data-vaul-drawer-direction");
-	if (huong === "top") return -dy / khung.height;
-	if (huong === "left") return -dx / khung.width;
-	if (huong === "right") return dx / khung.width;
-	return dy / khung.height;
+	const co = huong === "left" || huong === "right" ? khung.width : khung.height;
+	if (co === 0) return 0;
+	return keoTheoHuong(noi, dx, dy).doc / co;
+}
+
+function saiHuong(noi: Element, dx: number, dy: number): boolean | null {
+	const { doc, ngang } = keoTheoHuong(noi, dx, dy);
+	if (Math.max(Math.abs(doc), Math.abs(ngang)) <= KEO.lechBatDauPx) return null;
+	return doc <= Math.abs(ngang);
 }
 
 function DrawerContent({
@@ -154,13 +172,18 @@ function DrawerContent({
 	onFocusCapture,
 	onEscapeKeyDown,
 	onPointerDown,
+	onPointerMove,
 	onPointerUp,
 	onPointerCancel,
 	...props
 }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
 	const g = useGiuNoiDung();
 	const thaKeo = React.useContext(ThaKeoContext);
-	const diemDau = React.useRef<{ x: number; y: number } | null>(null);
+	const diemDau = React.useRef<{
+		x: number;
+		y: number;
+		daChot: boolean;
+	} | null>(null);
 	return (
 		<DrawerPortal data-slot="drawer-portal">
 			<DrawerOverlay />
@@ -184,9 +207,21 @@ function DrawerContent({
 				onPointerDown={(e) => {
 					onPointerDown?.(e);
 					diemDau.current = null;
-					if (!g?.coThayDoi || !laChoKeo(e.target)) return;
+					if (!g?.coThayDoi || !laChoKeo(e.target, e.currentTarget)) return;
 					e.target.setPointerCapture(e.pointerId);
-					diemDau.current = { x: e.pageX, y: e.pageY };
+					diemDau.current = { x: e.pageX, y: e.pageY, daChot: false };
+				}}
+				onPointerMove={(e) => {
+					onPointerMove?.(e);
+					const dau = diemDau.current;
+					if (!dau || dau.daChot) return;
+					const sai = saiHuong(
+						e.currentTarget,
+						e.pageX - dau.x,
+						e.pageY - dau.y,
+					);
+					if (sai === null) return;
+					diemDau.current = sai ? null : { ...dau, daChot: true };
 				}}
 				onPointerUp={(e) => {
 					onPointerUp?.(e);

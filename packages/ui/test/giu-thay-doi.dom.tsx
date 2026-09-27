@@ -1127,9 +1127,11 @@ describe("long-nhau", () => {
 function VoDrawer({
 	ghi,
 	giuThayDoi,
+	children,
 }: {
 	ghi: (mo: boolean) => void;
 	giuThayDoi?: boolean;
+	children?: ReactNode;
 }) {
 	const [mo, datMo] = useState(true);
 	return (
@@ -1152,6 +1154,7 @@ function VoDrawer({
 				<DrawerClose asChild dongNgay>
 					<Button>Lưu</Button>
 				</DrawerClose>
+				{children}
 			</DrawerContent>
 		</Drawer>
 	);
@@ -1208,19 +1211,22 @@ async function choVaulMo() {
 	});
 }
 
-async function keoThat(dy: number) {
+const CAO_DRAWER_PX = 600;
+
+async function keoThat(buoc: [number, number][], tay?: Element | null) {
 	const noi = document.querySelector(
 		"[data-slot='drawer-content']",
 	) as HTMLElement | null;
 	if (!noi) throw new Error("khong thay noi dung drawer");
-	const tay = noi.firstElementChild ?? noi;
-	const suKien = (loai: string, y: number) =>
+	const dich = tay ?? noi.firstElementChild ?? noi;
+	const suKien = (loai: string, [dx, dy]: [number, number]) =>
 		new PointerEvent(loai, {
 			bubbles: true,
 			button: 0,
 			pointerId: 1,
 			pointerType: "mouse",
-			clientY: y,
+			clientX: 100 + dx,
+			clientY: 100 + dy,
 		});
 	const goc = window.getComputedStyle;
 	window.getComputedStyle = (el, gia) =>
@@ -1231,22 +1237,30 @@ async function keoThat(dy: number) {
 				return v instanceof Function ? v.bind(kieu) : v;
 			},
 		});
+	noi.getBoundingClientRect = () => new DOMRect(0, 0, 390, CAO_DRAWER_PX);
+	const cuoi = buoc.at(-1) ?? [0, 0];
+	const chuoi: [string, [number, number]][] = [
+		["pointerdown", [0, 0]],
+		...buoc.map((b): [string, [number, number]] => ["pointermove", b]),
+		["pointerup", cuoi],
+	];
 	try {
-		for (const [loai, y] of [
-			["pointerdown", 100],
-			["pointermove", 100 + dy / 2],
-			["pointermove", 100 + dy],
-			["pointerup", 100 + dy],
-		] as const) {
+		for (const [loai, diem] of chuoi) {
 			await act(async () => {
-				tay.dispatchEvent(suKien(loai, y));
+				dich.dispatchEvent(suKien(loai, diem));
 			});
 		}
 	} finally {
 		window.getComputedStyle = goc;
+		Reflect.deleteProperty(noi, "getBoundingClientRect");
 	}
 	await cho();
 }
+
+const KEO_300: [number, number][] = [
+	[0, 150],
+	[0, 300],
+];
 
 function maTran(bien: string): string {
 	const m = bien.match(
@@ -1331,7 +1345,7 @@ describe("drawer", () => {
 		dung(<VoDrawer ghi={(v) => lich.push(v)} />);
 		await choVaulMo();
 		await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
-		await keoThat(300);
+		await keoThat(KEO_300);
 		const sauKeo = soDrawer(lich);
 		khop(
 			sauKeo,
@@ -1345,6 +1359,102 @@ describe("drawer", () => {
 			soDrawer(lich),
 			{ mo: true, chu: "Gọi lại thứ Hai", hoi: 0, goi: 0 },
 			"drawer: tiep tuc sua sau khi vuot lam mat drawer",
+		);
+	});
+
+	test("drawer: da go · keo that khong du nguong hoac sai huong thi khong hoi", async () => {
+		const CA: { ca: string; buoc: [number, number][] }[] = [
+			{
+				ca: "xuong-100",
+				buoc: [
+					[0, 50],
+					[0, 100],
+				],
+			},
+			{
+				ca: "ngang-300",
+				buoc: [
+					[150, 0],
+					[300, 0],
+				],
+			},
+			{
+				ca: "len-300",
+				buoc: [
+					[0, -150],
+					[0, -300],
+				],
+			},
+			{
+				ca: "len-roi-xuong-300",
+				buoc: [
+					[0, -20],
+					[0, 150],
+					[0, 300],
+				],
+			},
+			{ ca: "bam-nut-thuong", buoc: [] },
+		];
+		const thucTe: { ca: string; mo: boolean; hoi: number; goi: number }[] = [];
+		for (const { ca, buoc } of CA) {
+			const lich: boolean[] = [];
+			dung(
+				<VoDrawer ghi={(v) => lich.push(v)}>
+					<Button>Đính kèm</Button>
+				</VoDrawer>,
+			);
+			await choVaulMo();
+			await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+			if (ca === "bam-nut-thuong") {
+				const nut = nutCo("Đính kèm");
+				await keoThat(buoc, nut);
+				await bam(nut);
+			} else {
+				await keoThat(buoc);
+			}
+			thucTe.push({
+				ca,
+				mo: co("drawer-content"),
+				hoi: hopHoi().length,
+				goi: lich.length,
+			});
+			goKhoiCay();
+		}
+		const lech = thucTe.filter((d) => d.hoi !== 0 || !d.mo).map((d) => d.ca);
+		khop(
+			thucTe,
+			CA.map(({ ca }) => ({ ca, mo: true, hoi: 0, goi: 0 })),
+			`drawer: keo that khong qua nguong ma hoi (${lech.join(", ")})`,
+		);
+	});
+
+	test("drawer: da go · keo trong hop con mo tu drawer thi drawer khong hoi", async () => {
+		const lich: boolean[] = [];
+		const hop: boolean[] = [];
+		dung(
+			<VoDrawer ghi={(v) => lich.push(v)}>
+				<Dialog defaultOpen onOpenChange={(v) => hop.push(v)}>
+					<DialogContent>
+						<DialogTitle>Thêm KR</DialogTitle>
+						<DialogDescription>Kết quả then chốt mới</DialogDescription>
+						<p data-vung-keo>Kéo ở đây</p>
+					</DialogContent>
+				</Dialog>
+			</VoDrawer>,
+		);
+		await choVaulMo();
+		await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+		await keoThat(KEO_300, document.querySelector("[data-vung-keo]"));
+		khop(
+			{
+				hoi: hopHoi().length,
+				hopCon: noiDung() !== null,
+				drawerCon: co("drawer-content"),
+				lich,
+				hop,
+			},
+			{ hoi: 0, hopCon: true, drawerCon: true, lich: [], hop: [] },
+			"drawer: keo trong hop con lam drawer hoi",
 		);
 	});
 
@@ -1388,7 +1498,7 @@ describe("drawer", () => {
 			else await cho();
 			if (duong === "lop-phu") await bamLopPhu("drawer-overlay");
 			if (duong === "esc") await esc(oTrong("drawer-content", "Trao đổi"));
-			if (duong === "vuot") await keoThat(300);
+			if (duong === "vuot") await keoThat(KEO_300);
 			thucTe.push({
 				duong,
 				mo: co("drawer-content"),
