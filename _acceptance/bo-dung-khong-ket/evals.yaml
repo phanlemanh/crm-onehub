@@ -138,15 +138,18 @@ evals:
       - "apps/app/lib/agent-transcript.ts"
       - "apps/app/lib/messages/agent-builder-*.ts"
       - "_acceptance/bo-dung-khong-ket/rang/gieo-het-han-muc.ts"
+      - "_acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts"
+      - "_acceptance/bo-dung-khong-ket/rang/luong-het-han-muc-that.ndjson"
     steps:
-      - "Chay trong phien do cua kho (tien-de / do:man, docs/setup.md muc Screen measurements) — KHONG dung kho chung crm; APP_URL va API_URL cua phien do"
+      - "Truoc phien do: chay tac tu gia cua CAY DANG XET `TAC_TU_GIA_PORT=<cong trong> bun _acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts` (no phat lai luong su kien eve THAT cua luot Gemini 27/09, rang/luong-het-han-muc-that.ndjson, dung giao thuc ndjson cua eve) va giu PID; ghi dong AGENT_URL no in ra"
+      - "Chay trong phien do cua kho voi AGENT_URL do: `AGENT_URL=<AGENT_URL> bun run do:man --chay \"...\"` (docs/setup.md muc Screen measurements) — KHONG dung kho chung crm; APP_URL va API_URL cua phien do. Khong co tac tu gia thi hoi thoai gieo khong co may chu nao phia sau va man nhan 502 — do la loi cua phep do, khong phai cua man"
       - "Chan cay: dat dau moc vao apps/app/public roi xin lai qua APP_URL; khong nhan lai -> thoat ma 2, goi ten cay dang xet, khong chup"
       - "Dang nhap: chay bun run dev:session <NGUOI cua phien do> trong apps/api cua cay dang xet voi DATABASE_URL cua phien, dat cookie crm.session_token in ra vao trinh duyet; dat them cookie lang=vi (cau tieng Viet duoc do, khong dua vao ngon ngu may)"
       - "Gieo: bun _acceptance/bo-dung-khong-ket/rang/gieo-het-han-muc.ts — tao hoi thoai dung co sessionId, roi goi CHINH persistBuilderInputRequest voi apps/agent/test/fixtures/session-limit-that.json (cam ghi tay pendingInputRequest hay agentEvent), in URL hoi thoai"
       - "Mo URL o kho 1440: chup E6-het-han-muc-1440.png. Lap lai kho 375: E6-het-han-muc-375.png"
       - "Bam 'Cấp thêm'. Cho toi khi bong bong nguoi dung 'Cấp thêm' hien (khong cho theo giay): chup E6-sau-bam-1440.png"
       - "Gieo lai mot hoi thoai moi, bam 'Dừng'. Cho toi khi bong bong 'Dừng' hien: chup E6-sau-dung-1440.png"
-      - "Moi anh ghi o _acceptance/bo-dung-khong-ket/evidence/. Xoa dau moc, tat may chu da dung bang PID"
+      - "Moi anh ghi o _acceptance/bo-dung-khong-ket/evidence/. Xoa dau moc, tat tac tu gia va may chu da dung bang PID"
     expected: |
       E6-het-han-muc (1440, 375): cau "Bộ dựng đã dùng hết hạn mức của phiên này. Cấp
       thêm để làm tiếp, hoặc dừng."; hai nut "Cấp thêm" (to dac, mau chinh) va "Dừng";
