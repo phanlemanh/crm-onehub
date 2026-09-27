@@ -3,7 +3,10 @@ import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { spend } from "../lib/focus";
 import { runPortrait } from "../lib/portrait";
-import { assertResearchPurpose } from "../lib/session-purpose";
+import {
+	assertNotZaloQuestion,
+	assertResearchPurpose,
+} from "../lib/session-purpose";
 
 export default defineTool({
 	description:
@@ -16,6 +19,7 @@ export default defineTool({
 			.describe("Replace an existing photo. Only when a rep asked."),
 	}),
 	async execute({ contactId, force }, ctx) {
+		assertNotZaloQuestion(ctx);
 		assertResearchPurpose(ctx);
 		if (!blobEnabled()) {
 			return {

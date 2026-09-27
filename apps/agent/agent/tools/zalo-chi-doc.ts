@@ -5,7 +5,7 @@ import { ZALO } from "../lib/zalo-config";
 
 export default defineDynamic({
 	events: {
-		"session.started": (_event, ctx) =>
+		"step.started": (_event, ctx) =>
 			purposeOf(ctx) === ZALO.hoi.purpose
 				? Object.fromEntries(
 						[...ZALO.hoi.congCu.ghi, ...ZALO.hoi.congCu.coSanChan].map(

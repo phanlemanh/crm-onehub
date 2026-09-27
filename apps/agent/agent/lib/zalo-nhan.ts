@@ -75,6 +75,7 @@ async function khongMa(
 			token: tokenPhien(chatId, lienKet.crmUserId, now),
 		};
 	}
+	if (!text.trim()) return gui(ZALO.loi.chiDocChu);
 	const ket = await hoiTacTu(
 		tx,
 		{ messageId: tin.message_id, chatId, text },

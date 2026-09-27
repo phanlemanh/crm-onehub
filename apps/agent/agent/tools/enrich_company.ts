@@ -2,7 +2,10 @@ import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { runBrand } from "../lib/brand";
 import { spend } from "../lib/focus";
-import { assertResearchPurpose } from "../lib/session-purpose";
+import {
+	assertNotZaloQuestion,
+	assertResearchPurpose,
+} from "../lib/session-purpose";
 
 export default defineTool({
 	description:
@@ -17,6 +20,7 @@ export default defineTool({
 			),
 	}),
 	async execute({ companyId, fresh }, ctx) {
+		assertNotZaloQuestion(ctx);
 		assertResearchPurpose(ctx);
 		const result = await runBrand({ companyId, fresh, spend });
 

@@ -5,6 +5,7 @@ import {
 	beforeEach,
 	describe,
 	expect,
+	setSystemTime,
 	spyOn,
 	test,
 } from "bun:test";
@@ -12,6 +13,12 @@ import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
 import { ghiSai, taoMaLienKet } from "@crm/db/zalo-lien-ket";
+import { z } from "zod";
+import {
+	BRIDGE_AUDIENCE,
+	BRIDGE_ISSUER,
+	repFromCrm,
+} from "../agent/channels/eve";
 import { zaloEvents } from "../agent/channels/zalo";
 import audit from "../agent/hooks/audit";
 import taskInstructions from "../agent/instructions/task";
@@ -40,12 +47,61 @@ import type {
 import { phienAudit } from "./support/eve-kieu";
 import { boThanhVien, donHoi, gieoVai } from "./support/hoi-gieo";
 import { donDep, moXuong } from "./support/nhac-gieo";
-import { DU_BIEN, noiZalo, TOKEN } from "./support/tra-loi-gieo";
+import { lucVN, NGAY_NHAC, PHUT_SAU } from "./support/nhac-gui-gieo";
+import {
+	batBot,
+	buocCuaMuc,
+	buocXongLuc,
+	DU_BIEN,
+	donTraLoi,
+	gieoNhac,
+	guiNhac,
+	noiZalo,
+	TOKEN,
+} from "./support/tra-loi-gieo";
 import { zaloGia } from "./support/zalo-gia";
 import { zaloMayChu } from "./support/zalo-may-chu";
 import { thanWebhook, yeuCauWebhook } from "./support/zalo-tin";
 
 const GOC_AGENT = resolve(import.meta.dir, "..");
+
+const BI_MAT_CAU_NOI = "hcz-bi-mat-cau-noi-du-dai-de-ky-jwt";
+
+async function kyCauNoi(sub: string): Promise<string> {
+	const now = Math.floor(Date.now() / 1000);
+	const ma = (v: Readonly<Record<string, string | number>>) =>
+		Buffer.from(JSON.stringify(v)).toString("base64url");
+	const vao = `${ma({ alg: "HS256", typ: "JWT" })}.${ma({
+		iss: BRIDGE_ISSUER,
+		aud: BRIDGE_AUDIENCE,
+		sub,
+		email: `${sub}@thu.test`,
+		name: sub,
+		iat: now,
+		nbf: now - 5,
+		exp: now + 120,
+	})}`;
+	const khoa = await crypto.subtle.importKey(
+		"raw",
+		new TextEncoder().encode(BI_MAT_CAU_NOI),
+		{ name: "HMAC", hash: "SHA-256" },
+		false,
+		["sign"],
+	);
+	const ky = await crypto.subtle.sign(
+		"HMAC",
+		khoa,
+		new TextEncoder().encode(vao),
+	);
+	return `${vao}.${Buffer.from(ky).toString("base64url")}`;
+}
+
+function yeuCauCauNoi(token: string): Request {
+	return new Request("https://agent.example.com/eve/v1/session", {
+		method: "POST",
+		headers: { authorization: `Bearer ${token}` },
+	});
+}
 
 beforeAll(async () => {
 	await moXuong();
@@ -78,13 +134,28 @@ describe("tu-choi-vai", () => {
 		expect(await thanhVienPrincipal(C.id, "zalo")).toBeNull();
 	});
 
-	test("tu-choi-vai: cau noi web va kenh Zalo goi cung mot ham cong vai", () => {
-		const eve = readFileSync(
-			resolve(GOC_AGENT, "agent/channels/eve.ts"),
-			"utf8",
-		);
-		expect(eve).toContain("thanhVienPrincipal(");
-		expect(eve).not.toContain("laVaiChiOkr");
+	test("tu-choi-vai: khung chat web va Zalo cho cung ket qua voi tung vai", async () => {
+		const nguoi = [
+			{ ten: "kinh doanh", u: await gieoVai("Vkd", "member"), mo: true },
+			{ ten: "chi OKR", u: await gieoVai("Vokr", "okr"), mo: false },
+			{ ten: "mat member", u: await gieoVai("Vmat", "member"), mo: false },
+		];
+		const mat = nguoi[2];
+		if (!mat) throw new Error("thieu nguoi mat member");
+		await boThanhVien(mat.u.id);
+		const cong = repFromCrm(BI_MAT_CAU_NOI);
+		let dem = 0;
+		for (const [i, { ten, u, mo }] of nguoi.entries()) {
+			const web = await cong(yeuCauCauNoi(await kyCauNoi(u.id)));
+			expect(web === null ? null : web.principalId, `${ten} o web`).toBe(
+				mo ? u.id : null,
+			);
+			dem += 1;
+			const zalo = await hoi(`ZV${i}`, u.id, new Date());
+			expect(zalo.loai === "hoi", `${ten} o Zalo`).toBe(mo);
+			dem += 1;
+		}
+		expect(dem).toBe(6);
 	});
 });
 
@@ -457,19 +528,63 @@ function ctxZalo(sessionId: string, hoiId: string, chatId: string): Ctx {
 	};
 }
 
-async function suKien(
-	ten:
-		| "message.completed"
-		| "turn.failed"
-		| "session.failed"
-		| "turn.completed",
+type TenSuKien =
+	| "message.completed"
+	| "turn.failed"
+	| "session.failed"
+	| "turn.completed";
+
+async function suKienVoi(
+	ten: TenSuKien,
 	data: DuLieuSuKienKenh,
-	chatId: string,
+	continuationToken: string,
 	ctx?: Ctx,
 ): Promise<void> {
 	const xuLy = (zaloEvents as unknown as Record<string, XuLySuKienKenh>)[ten];
 	if (!xuLy) throw new Error(`kenh zalo khong co su kien ${ten}`);
-	await xuLy(data, { continuationToken: `zalo:chat:${chatId}` }, ctx);
+	await xuLy(data, { continuationToken }, ctx);
+}
+
+async function suKien(
+	ten: TenSuKien,
+	data: DuLieuSuKienKenh,
+	chatId: string,
+	ctx?: Ctx,
+): Promise<void> {
+	await suKienVoi(ten, data, `zalo:chat:${chatId}`, ctx);
+}
+
+const goiAuth = z.object({
+	attributes: z.record(z.string(), z.string()),
+});
+
+function phienTuSend(eve: Eve, i: number): Ctx {
+	const goi = eve.send[i];
+	if (!goi) throw new Error(`eve gia chua co send ${i}`);
+	return {
+		session: {
+			id: `ses-gia-${i + 1}`,
+			auth: {
+				current: { attributes: goiAuth.parse(goi.auth).attributes },
+				initiator: null,
+			},
+		},
+	};
+}
+
+function tokenTuSend(eve: Eve, i: number): string {
+	const goi = eve.send[i];
+	if (!goi) throw new Error(`eve gia chua co send ${i}`);
+	return `zalo:${goi.continuationToken}`;
+}
+
+async function suKienTuSend(
+	ten: TenSuKien,
+	data: DuLieuSuKienKenh,
+	eve: Eve,
+	i: number,
+): Promise<void> {
+	await suKienVoi(ten, data, tokenTuSend(eve, i), phienTuSend(eve, i));
 }
 
 let mayChu: ReturnType<typeof zaloMayChu> | null = null;
@@ -571,12 +686,7 @@ describe("duong-chinh", () => {
 			{ inputTokens: null, outputTokens: null },
 		]);
 		const T = "Có hai thoả thuận sắp hạn: Acme (30/10) và Beta (02/11).";
-		await suKien(
-			"message.completed",
-			{ message: T },
-			"ZA",
-			ctxZalo("ses-gia-1", hang?.id ?? "", "ZA"),
-		);
+		await suKienTuSend("message.completed", { message: T }, eve, 0);
 		expect(guiMayChu("ZA")).toEqual([T]);
 		const cuoi = await hangCua(w.messageId);
 		expect(cuoi?.ketQua).toBe("da-tra-loi");
@@ -593,6 +703,35 @@ describe("duong-chinh", () => {
 });
 
 describe("cung-phien", () => {
+	test("cung-phien: su kien kenh trong cung-phien va duong-chinh rut tu send", () => {
+		const nguon = readFileSync(import.meta.path, "utf8");
+		const khoi = ["cung-phien", "duong-chinh"].flatMap((ten) =>
+			nguon
+				.split(`describe("${ten}", () => {`)
+				.slice(1)
+				.map((phan) => phan.split("\ndescribe(")[0] ?? ""),
+		);
+		expect(khoi.length, "du khoi").toBe(5);
+		const cam = [
+			...["ctxZalo", "suKien", "suKienVoi"].map((ten) => `${ten}(`),
+			...['"', "`"].map((nhay) => `${nhay}zalo${":"}`),
+		];
+		const tenToken = ["continuation", "Token:"].join("");
+		const dongToken = new RegExp(`${tenToken}\\s*[^,\\n]+`, "g");
+		const tuSend = new RegExp(`^${tenToken}\\s*tokenTuSend\\(`);
+		let soToken = 0;
+		for (const doan of khoi) {
+			for (const tu of cam) {
+				expect(doan.split(tu).length - 1, `khong dung ${tu} dung tay`).toBe(0);
+			}
+			for (const t of doan.match(dongToken) ?? []) {
+				expect(t, "token rut tu send").toMatch(tuSend);
+				soToken += 1;
+			}
+		}
+		expect(soToken, "co dong token de quet").toBeGreaterThan(0);
+	});
+
 	test("cung-phien: cau hai cung token, moi thi reset, moi khi dang hoi thi bao dang tra loi", async () => {
 		const A = await gieoVai("An", "member");
 		await noiZalo(A.id, "ZA");
@@ -601,12 +740,8 @@ describe("cung-phien", () => {
 		const w1 = await guiWebhook("ZA", "Câu một", { eve });
 		await eve.xong();
 		const h1 = await hangCua(w1.messageId);
-		await suKien(
-			"message.completed",
-			{ message: "Trả lời một" },
-			"ZA",
-			ctxZalo("ses-gia-1", h1?.id ?? "", "ZA"),
-		);
+		expect(h1?.ketQua).toBe("dang-hoi");
+		await suKienTuSend("message.completed", { message: "Trả lời một" }, eve, 0);
 		await guiWebhook("ZA", "Câu hai", { eve });
 		await eve.xong();
 		expect(
@@ -621,15 +756,7 @@ describe("cung-phien", () => {
 		expect(eve.reset, "moi khi con cau dang hoi khong reset").toEqual([]);
 		expect(dangHoi.tra()).toEqual([ZALO.loi.dangTraLoi]);
 
-		const h2 = await db.zaloHoi.findFirst({
-			where: { crmUserId: A.id, ketQua: "dang-hoi" },
-		});
-		await suKien(
-			"message.completed",
-			{ message: "Trả lời hai" },
-			"ZA",
-			ctxZalo("ses-gia-2", h2?.id ?? "", "ZA"),
-		);
+		await suKienTuSend("message.completed", { message: "Trả lời hai" }, eve, 1);
 		const moi = await guiWebhook("ZA", "mới", { eve });
 		await eve.xong();
 		expect(eve.reset).toEqual([eve.send[0]?.continuationToken]);
@@ -661,10 +788,23 @@ describe("luat-cu", () => {
 
 		const A = await gieoVai("An", "member");
 		await noiZalo(A.id, "ZA");
-		const xong = await guiWebhook("ZA", "xong 2", { eve });
-		expect(xong.tra().join(" "), "o (c) xong di duong danh dau").toContain(
-			"Hôm nay chưa có tin nhắc qua Zalo",
-		);
+		await donTraLoi();
+		await batBot();
+		const gocNhac = lucVN(NGAY_NHAC, PHUT_SAU);
+		const { A: L } = await gieoNhac(gocNhac, { quaHan: 1 }, "Luat");
+		await noiZalo(L.id, "ZL");
+		const nhac = await guiNhac(L.id, gocNhac).finally(() => setSystemTime());
+		const buoc = buocCuaMuc(nhac.daGui, 1);
+		expect(await buocXongLuc(buoc), "o (c) buoc chua xong truoc").toBeNull();
+		await guiWebhook("ZL", "xong 1", {
+			eve,
+			luc: lucVN(NGAY_NHAC, PHUT_SAU + 30),
+		});
+		expect(
+			await buocXongLuc(buoc),
+			"o (c) buoc da xong trong DB",
+		).not.toBeNull();
+		await donTraLoi();
 		soO += 1;
 
 		for (let i = 0; i < 5; i += 1) await ghiSai(db, "Z-chan", new Date());
@@ -755,9 +895,10 @@ describe("cai-lenh", () => {
 
 		const hoatDong = await db.activity.count();
 		const deal = await db.deal.findFirst({ select: { id: true, stage: true } });
-		const ban = await (
-			chiDoc.events["session.started"] as unknown as GiaiCongCu
-		)({}, ctxZalo("ses-gia-1", h?.id ?? "", "ZA"));
+		const ban = await (chiDoc.events["step.started"] as unknown as GiaiCongCu)(
+			{},
+			ctxZalo("ses-gia-1", h?.id ?? "", "ZA"),
+		);
 		for (const ten of ["set_field_value", "record_fact"]) {
 			expect(
 				await ban?.[ten]?.execute(
@@ -787,7 +928,10 @@ describe("cai-lenh", () => {
 			"ZA",
 			ctxZalo("ses-gia-1", h?.id ?? "", "ZA"),
 		);
-		const ra = guiMayChu("ZA").join(" ");
+		const gui = guiMayChu("ZA");
+		expect(gui.length, "da co tin gui di").toBe(1);
+		expect(gui[0], "tin gui di da che so").toContain(ZALO.hoi.an);
+		const ra = gui.join(" ");
 		expect(ra).not.toMatch(/\d{9,}/);
 		expect(ra).not.toContain("987 654 321");
 
@@ -953,13 +1097,14 @@ describe("dang-ban", () => {
 			A.id,
 			new Date(goc.getTime() - ZALO.hoi.hanTraLoiMs - GIAY_MS),
 		);
+		expect(cu.loai, "loai hoi").toBe("hoi");
 		await dongHoiQuaHan({
 			now: () => goc,
 			fetcher: zalo.fetcher,
 			token: TOKEN,
 		});
 		const moi = await hoi("ZA", A.id, goc);
-		expect(moi.loai).toBe("hoi");
+		expect(moi.loai, "cau moi mo phien").toBe("hoi");
 		moMayChu();
 		const loiIn: string[] = [];
 		const bat = spyOn(console, "error").mockImplementation(
@@ -968,30 +1113,28 @@ describe("dang-ban", () => {
 			},
 		);
 		try {
-			if (cu.loai === "hoi") {
-				await suKien(
-					"message.completed",
-					{ message: "Trả lời muộn" },
-					"ZA",
-					ctxZalo("ses-cu", cu.yeuCau.hoiId, "ZA"),
-				);
-				expect(guiMayChu("ZA"), "tra loi muon khong gui").toEqual([]);
-				expect(
-					(await db.zaloHoi.findUnique({ where: { id: cu.yeuCau.hoiId } }))
-						?.ketQua,
-				).toBe("loi");
-				expect(
-					loiIn.some(
-						(d) => d.includes(cu.yeuCau.hoiId) || d.includes("zaloChatId=ZA"),
-					),
-				).toBe(true);
-			}
-			if (moi.loai === "hoi") {
-				expect(
-					(await db.zaloHoi.findUnique({ where: { id: moi.yeuCau.hoiId } }))
-						?.ketQua,
-				).toBe("dang-hoi");
-			}
+			if (cu.loai !== "hoi" || moi.loai !== "hoi") return;
+			await suKien(
+				"message.completed",
+				{ message: "Trả lời muộn" },
+				"ZA",
+				ctxZalo("ses-cu", cu.yeuCau.hoiId, "ZA"),
+			);
+			expect(guiMayChu("ZA"), "tra loi muon khong gui").toEqual([]);
+			expect(
+				(await db.zaloHoi.findUnique({ where: { id: cu.yeuCau.hoiId } }))
+					?.ketQua,
+			).toBe("loi");
+			expect(
+				loiIn.filter((d) =>
+					d.includes(`khong con cau dang hoi hoiId=${cu.yeuCau.hoiId}`),
+				),
+				"log ghim dung hoiId cua cau muon",
+			).toHaveLength(1);
+			expect(
+				(await db.zaloHoi.findUnique({ where: { id: moi.yeuCau.hoiId } }))
+					?.ketQua,
+			).toBe("dang-hoi");
 		} finally {
 			bat.mockRestore();
 		}
@@ -1033,24 +1176,22 @@ describe("duong-chinh", () => {
 		const eve = eveGia();
 		const w = await guiWebhook("ZA", "Thoả thuận nào sắp hạn?", { eve });
 		await eve.xong();
-		const h = await hangCua(w.messageId);
-		const ctx = ctxZalo("ses-gia-1", h?.id ?? "", "ZA");
-		await suKien(
+		await suKienTuSend(
 			"message.completed",
 			{
 				message: "Để tôi tra danh sách thoả thuận.",
 				finishReason: "tool-calls",
 			},
-			"ZA",
-			ctx,
+			eve,
+			0,
 		);
 		expect(guiMayChu("ZA"), "cau dan khong toi Zalo").toEqual([]);
 		expect((await hangCua(w.messageId))?.ketQua).toBe("dang-hoi");
-		await suKien(
+		await suKienTuSend(
 			"message.completed",
 			{ message: "Acme hết hạn 30/10.", finishReason: "stop" },
-			"ZA",
-			ctx,
+			eve,
+			0,
 		);
 		expect(guiMayChu("ZA")).toEqual(["Acme hết hạn 30/10."]);
 		expect((await hangCua(w.messageId))?.ketQua).toBe("da-tra-loi");
@@ -1086,15 +1227,17 @@ describe("cung-phien", () => {
 		await xuLy?.(
 			{ kind: "session-limit" },
 			{
-				continuationToken: `zalo:${eve.send[0]?.continuationToken}`,
+				continuationToken: tokenTuSend(eve, 0),
 				setContinuationToken: (t) => doi.push(t),
 			},
-			ctxZalo("ses-gia-1", h?.id ?? "", "ZA"),
+			phienTuSend(eve, 0),
 		);
 		expect((await hangCua(w.messageId))?.ketQua).toBe("loi");
 		expect(guiMayChu("ZA")).toEqual([ZALO.loi.canHoiLai]);
 		expect(doi.length, "doi dia chi phien ket").toBe(1);
-		expect(doi[0]).not.toBe(eve.send[0]?.continuationToken);
+		expect(doi[0], "token bo dung hoiId").toBe(
+			`${ZALO.hoi.tienToBo}${h?.id ?? ""}`,
+		);
 	});
 });
 
@@ -1122,14 +1265,12 @@ describe("duong-chinh", () => {
 		const eve = eveGia();
 		const w = await guiWebhook("ZA", "Một câu", { eve });
 		await eve.xong();
-		const h = await hangCua(w.messageId);
-		const ctx = ctxZalo("ses-gia-1", h?.id ?? "", "ZA");
 		await gieoBuoc("ses-gia-1", [{ inputTokens: 100, outputTokens: 20 }]);
-		await suKien(
+		await suKienTuSend(
 			"message.completed",
 			{ message: "Trả lời.", finishReason: "stop" },
-			"ZA",
-			ctx,
+			eve,
+			0,
 		);
 		await gieoBuoc("ses-gia-1-cuoi", []);
 		const xuLy = audit.events["*"] as unknown as XuLyAudit;
@@ -1144,7 +1285,7 @@ describe("duong-chinh", () => {
 			},
 			phienAudit("ses-gia-1", ZALO.hoi.purpose),
 		);
-		await suKien("turn.completed", {}, "ZA", ctx);
+		await suKienTuSend("turn.completed", {}, eve, 0);
 		const cuoi = await hangCua(w.messageId);
 		expect(cuoi?.ketQua).toBe("da-tra-loi");
 		expect(cuoi?.tokenVao, "token buoc cuoi duoc cong").toBe(150);
