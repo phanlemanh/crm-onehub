@@ -64,9 +64,11 @@ Source input:
   - Given hội thoại dựng đang treo câu hỏi `session-limit` của AC-2.
   - When người dùng trả lời qua `conversations.answerBuilderQuestion` với `optionId`
     `continue`.
-  - Then có đúng một bài nộp mang `inputResponse` `{ requestId, optionId: "continue" }`
-    và `inputRequestId` bằng `requestId`; điều phối gửi bài nộp đó tới eve dưới dạng
-    `inputResponses`. Điều tương tự đúng với `stop`.
+  - Then có đúng một bài nộp mang `inputResponse`
+    `{ requestId, optionId: "continue", kind: "session-limit" }` và `inputRequestId` bằng
+    `requestId`; `builderById` trả `pendingQuestion` loại `session-limit` trước khi trả
+    lời; điều phối gửi bài nộp đó tới eve dưới dạng `inputResponses`. Điều tương tự đúng
+    với `stop`.
   - When trả lời bằng chữ tự do, bằng một `optionId` không có, hay bằng `requestId` cũ.
   - Then API từ chối với đúng câu lỗi hiện có của từng ca, và không tạo bài nộp nào.
 - **AC-4:**
@@ -80,7 +82,8 @@ Source input:
   - When bấm «Cấp thêm» (hoặc «Dừng»).
   - Then màn gọi trả lời với đúng `requestId` và `optionId` `continue` (hoặc `stop`), và
     hai nút khoá trong lúc gửi.
-  - Sau khi câu trả lời được nhận, hai nút biến mất.
+  - Sau khi câu trả lời được nhận, hai nút biến mất, và bong bóng câu trả lời hiện
+    «Cấp thêm» (hoặc «Dừng»), không hiện nhãn «Approve» / «Stop» của eve.
   - Và:
     - gửi lỗi thì hai nút mở lại để bấm lần nữa;
     - câu hỏi loại `question` vẫn hiện bằng ô trả lời cũ.

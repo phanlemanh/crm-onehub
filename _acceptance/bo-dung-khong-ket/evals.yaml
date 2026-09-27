@@ -69,9 +69,11 @@ evals:
       fixtures/session-limit-that.json — round-trip, khong go tay khuon), kem
       continuationToken va sessionId.
       Ma tran truc C viet truoc, 5 o:
+      Truoc khi tra loi: builderById tra pendingQuestion kind "session-limit" dung
+      requestId, options ids ["continue","stop"] (qua contract output that cua router).
       continue -> tra ve {id}, dung 1 agentConversationSubmission voi
-      message.inputResponse toEqual {requestId, optionId:"continue"}, inputRequestId =
-      requestId; stop -> tuong tu voi "stop";
+      message.inputResponse toEqual {requestId, optionId:"continue",
+      kind:"session-limit"}, inputRequestId = requestId; stop -> tuong tu voi "stop";
       text "ok" -> BadRequest "Choose one of the available answers for this question.",
       0 bai nop; optionId "khac" -> "That answer is not available for this question.",
       0 bai nop; requestId cu -> "That follow-up question is no longer active.", 0 bai
@@ -108,10 +110,10 @@ evals:
       - "apps/app/lib/messages/agent-builder-*.ts"
       - "apps/app/test/het-han-muc.dom.tsx"
     expected: |
-      DOM test (setup-dom cua packages/ui). Thong diep eve dung input.requested lay tu
-      apps/agent/test/fixtures/session-limit-that.json dua qua CHINH messagesFromEvents
-      cua app (khong tu dung part) -> pendingQuestion tra request kind session-limit.
-      Ve khoi tra loi cho request do: co cau tieng Viet dung chuoi trong messages; hai
+      DOM test (setup-dom cua packages/ui), locale vi. Dau vao la pendingQuestion dung
+      duong that: request lay tu apps/agent/test/fixtures/session-limit-that.json ->
+      buildPendingInputRequest (writer cua kenh) -> builderQuestion.parse (reader cua
+      API) — khong go tay khuon. Ve khoi tra loi cho request do: co cau tieng Viet dung chuoi trong messages; hai
       nut ten "Cấp thêm" va "Dừng" (getByRole button); KHONG co chuoi "output-token
       limit" hay "Approve" trong DOM.
       Bam "Cấp thêm" -> onSubmit goi dung 1 lan toEqual {requestId, optionId:"continue"};
@@ -119,8 +121,8 @@ evals:
       nut disabled; onSubmit reject -> ca hai nut het disabled (bam lai duoc); sau khi
       requestId nam trong answeredQuestionIds (cau tra loi da duoc nhan) khoi hai nut
       khong con ve.
-      Nguon dau vao: su kien eve tho la dung duong song (liveStream) ma man dung khi
-      nguoi dung dang xem; duong luu kho duoc E6 phu.
+      Bong bong cau tra loi: submission co inputResponse kind session-limit, optionId
+      continue -> hien "Cấp thêm", khong co "Approve"; stop -> "Dừng".
       Doi chung: request kind question (dung mau cau hoi co san) van ve
       AgentClarificationComposer (co o nhap), khong ve hai nut tren.
       Chieu do (pha-thu S3): pendingQuestion bo session-limit -> do voi thong diep ghim
