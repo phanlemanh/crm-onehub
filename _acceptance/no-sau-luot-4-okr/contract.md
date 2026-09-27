@@ -5,7 +5,9 @@ slug: no-sau-luot-4-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-27T11:06:21Z
 design_doc: docs/superpowers/specs/2026-09-27-no-sau-luot-4-okr-design.md
 ---
 
