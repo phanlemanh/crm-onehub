@@ -4,16 +4,10 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hiding the session-limit row in the shared toTranscript leaves the record-sheet Agent tab with no sign that the agent is waiting**
-  Người dùng thấy gì: Nếu một cuộc trò chuyện tác nhân ở tab Agent trên trang hồ sơ (không phải màn dựng tác nhân) hết hạn mức phiên, người dùng sẽ thấy khung chat trống như bình thường mà không biết tác nhân đang treo lại, và không có cách nào để trả lời cho nó chạy tiếp.
-  file: `apps/app/lib/agent-transcript.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — assertion âm tính một mình: đối chứng không chứng minh luồng thật có sinh ra phần session_limit_continuation**
-  Người dùng thấy gì: Nếu sau này bản eve đổi cách sinh câu hỏi hết hạn mức, bộ test đo dòng dấu vết vẫn có thể báo xanh dù tính năng đã hỏng thật, khiến lỗi lọt ra ngoài mà không ai phát hiện qua bộ test này.
+- **Hình dạng 4 — assertion âm tính một mình: 5/7 chuỗi của lớp chữ eve không bao giờ có mặt trong bản ghi, kể cả khi chưa lọc**
+  Người dùng thấy gì: Bài kiểm chỉ chứng minh được một phần rằng chữ tiếng Anh gốc của trợ lý không hiện trên màn khi có câu hỏi hết hạn mức; một vài trường hợp lẽ ra cần kiểm chưa thực sự được kiểm chứng đầy đủ, dù kết quả nhìn thấy trên màn vẫn đúng như mong đợi.
   file: `apps/app/test/het-han-muc.dom.tsx`
-  severity: low
+  severity: medium
   Đề xuất: known-limits
 
 - **The fake agent sends a stream end marker one past the last event, unlike real eve (r2)**
@@ -25,12 +19,6 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
 - **Fake agent reports x-eve-stream-tail-index one past the last event, so every snapshot stalls ~7.75s on empty reconnects (r2)**
   Người dùng thấy gì: Mỗi lần phép đo mở lại đoạn hội thoại, nó có thể mất thêm vài giây chờ trước khi hiện đúng, nên một ảnh chụp làm bằng chứng có nguy cơ chụp nhằm lúc màn chưa kịp hiện xong, dù người dùng thật không gặp độ trễ này.
   file: `_acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Stored builder answer JSON (now with `kind`) is read by two apps, each with its own loose schema, not one shared schema in packages/validation (r1)**
-  Người dùng thấy gì: Dữ liệu bộ dựng lưu lại có thể được hai phần của hệ thống hiểu hơi khác nhau; một giá trị bất thường có thể bị bỏ qua âm thầm thay vì báo lỗi rõ ràng.
-  file: `apps/app/components/agent-builder/agent-builder-chat.tsx`
   severity: medium
   Đề xuất: known-limits
 
