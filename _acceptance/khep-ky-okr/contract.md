@@ -5,7 +5,7 @@ slug: khep-ky-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-27T13:49:54Z
 design_doc: docs/superpowers/specs/2026-09-27-khep-ky-okr-design.md
