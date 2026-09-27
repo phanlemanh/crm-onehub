@@ -118,6 +118,8 @@ const KHONG_DAU = new Set([
 	"dau.crm",
 	"dau.api",
 	"dau.bangTinh",
+	"cham.mangSang",
+	"mangSang.xacNhan",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -156,13 +158,575 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.currency",
 	"crm.standard.closeDate",
 	"crm.standard.stage",
-	"okr-khep.cachDoc.tot",
-	"okr-khep.cachDoc.duoi-muc-tot",
-	"okr-khep.cachDoc.dat",
-	"okr-khep.cachDoc.chua-tron",
-	"okr-khep.khongPhaiDanhGia.tieuDe",
-	"okr-khep.khongPhaiDanhGia.moTa",
 ];
+
+const GHIM = {
+	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
+	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
+	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
+	"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
+	"auth:datMatKhau.description": [
+		"Liên kết này dùng được một lần, còn hạn 1 phút.",
+		"Liên kết này dùng được một lần, còn hạn 12 phút.",
+	],
+	"auth:datMatKhau.loi.quaNgan": [
+		"Mật khẩu phải có ít nhất 1 ký tự.",
+		"Mật khẩu phải có ít nhất 12 ký tự.",
+	],
+	"auth:quenMatKhau.quaLuot": [
+		"Bạn đã xin quá nhiều lần. Chờ 1 phút rồi thử lại.",
+		"Bạn đã xin quá nhiều lần. Chờ 12 phút rồi thử lại.",
+	],
+	"auth:quenMatKhau.xong.description": [
+		"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+		"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+	],
+	"auth:datMatKhau.toiThieu": [
+		"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
+		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
+	],
+	"companies:bulk.reassigned": [
+		"Đã đổi người phụ trách cho 1.",
+		"Đã đổi người phụ trách cho 12.",
+	],
+	"companies:bulk.enriching": [
+		"Đang tra cứu 1 — bảng sẽ tự cập nhật.",
+		"Đang tra cứu 12 — bảng sẽ tự cập nhật.",
+	],
+	"companies:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"companies:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"companies:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
+	"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+	"crm:views.remove": ["Xoá 1", "Xoá 12"],
+	"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
+	"record-sheet:company.manyDeals": [
+		"Cả 1 thoả thuận của công ty",
+		"Cả 12 thoả thuận của công ty",
+	],
+	"record-sheet:company.manyPeople": ["1 người", "12 người"],
+	"crm:sheet.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+	"contacts:created": ["Đã thêm 1.", "Đã thêm 12."],
+	"contacts:bulk.reassigned": [
+		"Đã đổi người phụ trách cho 1.",
+		"Đã đổi người phụ trách cho 12.",
+	],
+	"contacts:bulk.moved": [
+		"Đã chuyển 1 sang công ty khác.",
+		"Đã chuyển 12 sang công ty khác.",
+	],
+	"contacts:bulk.enriching": [
+		"Đang tra cứu 1 — bảng sẽ tự cập nhật.",
+		"Đang tra cứu 12 — bảng sẽ tự cập nhật.",
+	],
+	"contacts:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"contacts:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"contacts:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
+	"contacts:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+	"deals:meta.count": ["1 thoả thuận", "12 thoả thuận"],
+	"deals:meta.notCounted": [
+		"1 chưa tính (thiếu tỉ giá A)",
+		"12 chưa tính (thiếu tỉ giá A)",
+	],
+	"deals:created": ["Đã thêm 1.", "Đã thêm 12."],
+	"deals:board.pickedUp": ["Đã nhấc 1.", "Đã nhấc 12."],
+	"deals:board.over": ["Đang ở trên 1.", "Đang ở trên 12."],
+	"deals:board.dropped": ["Đã thả vào 1.", "Đã thả vào 12."],
+	"deals:bulk.reassigned": [
+		"Đã đổi người phụ trách cho 1.",
+		"Đã đổi người phụ trách cho 12.",
+	],
+	"deals:bulk.moved": [
+		"Đã chuyển 1 sang công ty khác.",
+		"Đã chuyển 12 sang công ty khác.",
+	],
+	"deals:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"deals:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"deals:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
+	"deals:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+	"deals:bulk.closeLost": ["Chốt 1 là không thành", "Chốt 12 là không thành"],
+	"deals:bulk.markUnqualified": [
+		"Đánh dấu 1 là chưa phù hợp",
+		"Đánh dấu 12 là chưa phù hợp",
+	],
+	"record-sheet:company.noContactsBody": [
+		"Mọi người bạn trao đổi ở 1 nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.",
+		"Mọi người bạn trao đổi ở 12 nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.",
+	],
+	"record-sheet:company.noDealsBody": [
+		"Chưa có thoả thuận hợp tác nào với 1. Mở một thoả thuận thì nó vào phần đang theo dõi và vào dự báo.",
+		"Chưa có thoả thuận hợp tác nào với 12. Mở một thoả thuận thì nó vào phần đang theo dõi và vào dự báo.",
+	],
+	"record-sheet:company.deleteDeals": [
+		"1 và mọi thứ gắn với công ty này mất theo.",
+		"12 và mọi thứ gắn với công ty này mất theo.",
+	],
+	"record-sheet:company.deleteContacts": [
+		"1 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
+		"12 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
+	],
+	"record-sheet:company.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"record-sheet:company.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"record-sheet:company.purged": [
+		"Đã xoá vĩnh viễn 1.",
+		"Đã xoá vĩnh viễn 12.",
+	],
+	"record-sheet:contact.primaryAt": ["Đầu mối chính ở 1", "Đầu mối chính ở 12"],
+	"record-sheet:contact.roles": ["1 vị trí", "12 vị trí"],
+	"record-sheet:contact.neverReplied": [
+		"1 chưa trả lời lần nào",
+		"12 chưa trả lời lần nào",
+	],
+	"record-sheet:contact.notOnDealsBody": [
+		"1 chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.",
+		"12 chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.",
+	],
+	"record-sheet:contact.added": ["Đã thêm 1.", "Đã thêm 12."],
+	"record-sheet:deal.inCurrency": ["Quy đổi 1", "Quy đổi 12"],
+	"record-sheet:deal.currencyGone": [
+		"1 — không còn hỗ trợ",
+		"12 — không còn hỗ trợ",
+	],
+	"record-sheet:deal.descriptionHint": [
+		"1 đang cần gì, vì sao là lúc này, và còn vướng gì.",
+		"12 đang cần gì, vì sao là lúc này, và còn vướng gì.",
+	],
+	"record-sheet:deal.roleOnDeal": [
+		"Vai trò của 1 trong thoả thuận này",
+		"Vai trò của 12 trong thoả thuận này",
+	],
+	"record-sheet:deal.noContactsBody": [
+		"Chưa ai từ 1 được gắn vào. Thêm những người bạn đang trao đổi vào thoả thuận thì biết cần theo ai.",
+		"Chưa ai từ 12 được gắn vào. Thêm những người bạn đang trao đổi vào thoả thuận thì biết cần theo ai.",
+	],
+	"record-sheet:deal.onDeal": ["1 đã vào thoả thuận.", "12 đã vào thoả thuận."],
+	"record-sheet:deal.everybodyOn": [
+		"Mọi người ở 1 đã ở trong rồi",
+		"Mọi người ở 12 đã ở trong rồi",
+	],
+	"record-sheet:deal.created": ["Đã tạo 1.", "Đã tạo 12."],
+	"record-sheet:deal.deleteWarning": [
+		"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
+		"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
+	],
+	"crm:timeline.composer.log": ["Ghi 1", "Ghi 12"],
+	"crm:timeline.messages": ["1 thư", "12 thư"],
+	"crm:time.minutes": ["1 phút", "12 phút"],
+	"crm:time.hours": ["1 giờ", "12 giờ"],
+	"crm:time.days": ["1 ngày", "12 ngày"],
+	"crm:time.ahead": ["sau 1 nữa", "sau 12 nữa"],
+	"crm:time.ago": ["1 trước", "12 trước"],
+	"crm:fields.stillToGo": ["Còn 1 nữa", "Còn 12 nữa"],
+	"crm:fields.optionCount": ["1 lựa chọn", "12 lựa chọn"],
+	"crm:fields.option": ["Lựa chọn 1", "Lựa chọn 12"],
+	"crm:fields.filledOn": ["Đã điền cho 1 trên A B", "Đã điền cho 12 trên A B"],
+	"crm:sheet.restore": ["Khôi phục 1", "Khôi phục 12"],
+	"crm:sheet.archive": ["Lưu trữ 1", "Lưu trữ 12"],
+	"crm:sheet.deleteForever": ["Xoá vĩnh viễn 1", "Xoá vĩnh viễn 12"],
+	"crm:sheet.fallbackName": ["1 này", "12 này"],
+	"crm:sheet.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"crm:sheet.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"crm:sheet.deletedForever": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
+	"crm:web.views": ["1 lượt xem", "12 lượt xem"],
+	"crm:fields.removeOption": ["Bỏ 1", "Bỏ 12"],
+	"crm:fields.moreFor": ["Thêm hành động cho 1", "Thêm hành động cho 12"],
+	"crm:fields.archiveTitle": ["Lưu trữ 1?", "Lưu trữ 12?"],
+	"crm:fields.filledOf": ["1 · đã điền A/B", "12 · đã điền A/B"],
+	"record-sheet:company.unconverted": ["+1 chưa quy đổi", "+12 chưa quy đổi"],
+	"record-sheet:deal.nobodyAttached": [
+		"Chưa ai từ 1 được gắn vào.",
+		"Chưa ai từ 12 được gắn vào.",
+	],
+	"record-sheet:deal.noRate": [
+		"Không có tỷ giá 1 — không tính vào tổng",
+		"Không có tỷ giá 12 — không tính vào tổng",
+	],
+	"crm:timeline.openIn": ["Mở trong 1", "Mở trong 12"],
+	"record-sheet:deal.takeOffNamed": [
+		"Gỡ 1 khỏi thoả thuận này",
+		"Gỡ 12 khỏi thoả thuận này",
+	],
+	"record-sheet:deal.namePlaceholder": ["1 — OneHub", "12 — OneHub"],
+	"settings:chep.hong": [
+		"Không chép được 1. Bôi đen rồi chép tay.",
+		"Không chép được 12. Bôi đen rồi chép tay.",
+	],
+	"settings:model.gia": [
+		"1 vào · A ra trên 1 triệu token",
+		"12 vào · A ra trên 1 triệu token",
+	],
+	"settings:model.nguCanhTrieu": [
+		"ngữ cảnh 1 triệu token",
+		"ngữ cảnh 12 triệu token",
+	],
+	"settings:model.nguCanhNghin": [
+		"ngữ cảnh 1 nghìn token",
+		"ngữ cảnh 12 nghìn token",
+	],
+	"settings:model.khongVoiToi": [
+		"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 1.",
+		"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 12.",
+	],
+	"settings:tienTe.daDoi": [
+		"Từ giờ mọi tổng báo cáo bằng 1.",
+		"Từ giờ mọi tổng báo cáo bằng 12.",
+	],
+	"settings:tienTe.khongQuyDoiDuoc": [
+		"1 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+		"12 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+	],
+	"settings-theo-doi:kiemTra.khongCoScriptMoTa": [
+		"Trang trả lời trong 1 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
+		"Trang trả lời trong 12 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
+	],
+	"settings-theo-doi:kiemTra.cungDocContainer": [
+		" Đã đọc cả container Tag Manager 1, và thẻ cũng không có trong đó.",
+		" Đã đọc cả container Tag Manager 12, và thẻ cũng không có trong đó.",
+	],
+	"settings-theo-doi:kiemTra.gtmRoiSiteIdMoTa": [
+		"Container 1 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
+		"Container 12 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
+	],
+	"settings-theo-doi:kiemTra.thayMoTaDau": [
+		"Trả lời trong 1 ms. Site ID",
+		"Trả lời trong 12 ms. Site ID",
+	],
+	"settings-ket-noi:chung.daXoa": [
+		"Đã xoá 1 mục đã kéo về.",
+		"Đã xoá 12 mục đã kéo về.",
+	],
+	"settings-ket-noi:danhSach.daCamVoi": ["Đã cắm vào 1", "Đã cắm vào 12"],
+	"nhac-qua-zalo:khoiZalo.nhanMaCho": [
+		"Nhắn mã này cho 1 trên Zalo.",
+		"Nhắn mã này cho 12 trên Zalo.",
+	],
+	"nhac-qua-zalo:khoiZalo.hetHanLuc": ["Hết hạn lúc 1", "Hết hạn lúc 12"],
+	"nhac-qua-zalo:ketNoi.daLuu": ["Đã bật 1.", "Đã bật 12."],
+	"nhac-qua-zalo:ketNoi.daLuuChuaNhanTin": [
+		"Đã lưu 1, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.",
+		"Đã lưu 12, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.",
+	],
+	"nhac-qua-zalo:ketNoi.traLoiLanCuoi": [
+		"trả lời lần cuối lúc 1",
+		"trả lời lần cuối lúc 12",
+	],
+	"nhac-qua-zalo:ketNoi.imTieuDe": [
+		"Bot không trả lời từ 1",
+		"Bot không trả lời từ 12",
+	],
+	"nhac-qua-zalo:ketNoi.daNoiSo": [
+		"1/A người đã nối Zalo",
+		"12/A người đã nối Zalo",
+	],
+	"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
+	"settings-ket-noi:google.dongBoHong": ["Đồng bộ hỏng: 1", "Đồng bộ hỏng: 12"],
+	"settings-ket-noi:slack.daKhopNguoi": [
+		"Đã khớp 1 trên A người đã soát.",
+		"Đã khớp 12 trên A người đã soát.",
+	],
+	"settings-ket-noi:slack.thieuQuyen": [
+		"Slack giữ lại 1 quyền",
+		"Slack giữ lại 12 quyền",
+	],
+	"settings-ket-noi:slack.camHongMac": [
+		"Không cắm được Slack (1).",
+		"Không cắm được Slack (12).",
+	],
+	"settings-ket-noi:slack.goHoi": ["Gỡ 1?", "Gỡ 12?"],
+	"settings-ket-noi:quyen.dem": ["1 rộng trên A", "12 rộng trên A"],
+	"settings-ket-noi:kenh.chonKenh": ["Chọn kênh #1", "Chọn kênh #12"],
+	"settings-ket-noi:kenh.soNguoi": [" · 1 người", " · 12 người"],
+	"khung-ung-dung:enrichment.enrichingCount": [
+		"Đang tra cứu 1",
+		"Đang tra cứu 12",
+	],
+	"khung-ung-dung:enrichment.bookedMany": [
+		"1 bản ghi hẹn tra cứu sau",
+		"12 bản ghi hẹn tra cứu sau",
+	],
+	"khung-ung-dung:enrichment.bookedMore": [
+		"Còn 1 bản ghi nữa chưa liệt kê ở đây",
+		"Còn 12 bản ghi nữa chưa liệt kê ở đây",
+	],
+	"khung-ung-dung:enrichment.moreQueued": [
+		"Còn 1 đang xếp hàng",
+		"Còn 12 đang xếp hàng",
+	],
+	"tong-quan:stats.closedWonDesc": ["1 · A tháng trước", "12 · A tháng trước"],
+	"tong-quan:stats.openPipelineDesc": [
+		"1 đang mở · A hạn chốt tháng này",
+		"12 đang mở · A hạn chốt tháng này",
+	],
+	"tong-quan:stats.winRate": ["Tỷ lệ chốt (1 ngày)", "Tỷ lệ chốt (12 ngày)"],
+	"tong-quan:stats.wonLost": [
+		"1 chốt được · A không thành",
+		"12 chốt được · A không thành",
+	],
+	"tong-quan:stats.avgDeal": [
+		"Trung bình mỗi thoả thuận (1 ngày)",
+		"Trung bình mỗi thoả thuận (12 ngày)",
+	],
+	"tong-quan:stats.avgCycle": [
+		"Chu kỳ trung bình 1 ngày",
+		"Chu kỳ trung bình 12 ngày",
+	],
+	"tong-quan:unconverted.sentence": [
+		"Mọi con số trên đây tính bằng B. 1 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
+		"Mọi con số trên đây tính bằng B. 12 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
+	],
+	"tong-quan:tasks.pastDue": ["1 quá hạn", "12 quá hạn"],
+	"settings-ket-noi:kenh.khongKhop": [
+		"Không kênh nào khớp “1”.",
+		"Không kênh nào khớp “12”.",
+	],
+	"settings-ket-noi:kenh.themHoi": [
+		"Thêm OneHub vào #1?",
+		"Thêm OneHub vào #12?",
+	],
+	"settings-ket-noi:kenh.nhoThemMoTa": [
+		"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #1 phải chạy lệnh này.",
+		"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #12 phải chạy lệnh này.",
+	],
+	"settings-ket-noi:nguoi.demKhop": ["Đã khớp 1 trên A", "Đã khớp 12 trên A"],
+	"settings-khoa-api:thuHoi.choKhoa": ["Thu hồi 1", "Thu hồi 12"],
+	"settings-sso:bang.maClient": [" · mã client …1", " · mã client …12"],
+	"settings-sso:go.choNha": ["Gỡ 1", "Gỡ 12"],
+	"settings-sso:them.daLuu": ["Đã lưu 1.", "Đã lưu 12."],
+	"settings-thanh-vien:bang.doiVaiTro": [
+		"Đổi vai trò của 1",
+		"Đổi vai trò của 12",
+	],
+	"settings-thanh-vien:phatChia.moTa": [
+		"Gửi cho 1. Liên kết dùng được một lần, hết hạn sau một giờ.",
+		"Gửi cho 12. Liên kết dùng được một lần, hết hạn sau một giờ.",
+	],
+	"settings-thanh-vien:phatChia.daChep": [
+		"Đã chép. Dán vào Zalo gửi cho 1.",
+		"Đã chép. Dán vào Zalo gửi cho 12.",
+	],
+	"settings-thanh-vien:dem": ["1 · A", "12 · A"],
+	"settings-thanh-vien:duocPhepVao.menu": [
+		"Hành động với 1",
+		"Hành động với 12",
+	],
+	"settings-thanh-vien:phatChia.vet": [
+		"1 đã phát liên kết · A",
+		"12 đã phát liên kết · A",
+	],
+	"agent-builder-khung:doi.soLuotChay": ["1 lượt chạy", "12 lượt chạy"],
+	"agent-builder-khung:nha.chaoHoi": [
+		"1 cần gì hôm nay?",
+		"12 cần gì hôm nay?",
+	],
+	"agent-builder-tac-nhan:chiTiet.daXoa": ["Đã xoá 1.", "Đã xoá 12."],
+	"agent-builder-tac-nhan:chiTiet.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+	"agent-builder-tac-nhan:kenh.slackGoiLa": [
+		"Slack sẽ gọi nó là #1.",
+		"Slack sẽ gọi nó là #12.",
+	],
+	"agent-builder-tac-nhan:moi.daOTrong": [
+		"OneHub đã ở trong #1 rồi.",
+		"OneHub đã ở trong #12 rồi.",
+	],
+	"agent-builder-tac-nhan:moi.seVao": [
+		"OneHub chưa ở trong #1. Nó vào khi bạn tạo cái này.",
+		"OneHub chưa ở trong #12. Nó vào khi bạn tạo cái này.",
+	],
+	"agent-builder-tac-nhan:viec.chuyenKenh": [
+		"Chuyển từ #1 sang #A",
+		"Chuyển từ #12 sang #A",
+	],
+	"agent-builder-tac-nhan:viec.go": ["Gỡ 1", "Gỡ 12"],
+	"agent-builder-tac-nhan:viec.vaoKenh": [
+		"OneHub vào #1 và ở lại #1 cho tới khi bạn gỡ.",
+		"OneHub vào #12 và ở lại #12 cho tới khi bạn gỡ.",
+	],
+	"agent-builder-ket-qua:ma.soTep": ["1 tệp", "12 tệp"],
+	"agent-builder-ket-qua:ma.soTepDoi": [
+		"1 tệp đã đổi. Lưu là ghi thành một bản mới.",
+		"12 tệp đã đổi. Lưu là ghi thành một bản mới.",
+	],
+	"agent-builder-ket-qua:thoaThuan.duongOng": ["1 đang mở", "12 đang mở"],
+	"agent-builder-ket-qua:thoaThuan.tongGiaTri": ["tổng 1", "tổng 12"],
+	"agent-builder-ket-qua:thoaThuan.ngayNamIm": [
+		"nằm im từ 1 ngày",
+		"nằm im từ 12 ngày",
+	],
+	"agent-builder-ket-qua:thoaThuan.soThoaThuan": [
+		"1 thoả thuận",
+		"12 thoả thuận",
+	],
+	"agent-builder-tro-chuyen:luot.soHieu": ["Lượt #1", "Lượt #12"],
+	"agent-builder-tro-chuyen:luot.banSo": ["· Bản 1", "· Bản 12"],
+	"agent-builder-tro-chuyen:luot.soViecNgoai": [
+		"1 việc ra ngoài",
+		"12 việc ra ngoài",
+	],
+	"agent-builder-tro-chuyen:luot.catBot": [
+		"Đang hiện 1 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
+		"Đang hiện 12 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
+	],
+	"agent-builder-tro-chuyen:dung.dangGhi": ["Đang ghi 1", "Đang ghi 12"],
+	"agent-builder-tro-chuyen:dung.tienDo": ["1 trên 4", "12 trên 4"],
+	"agent-builder-tro-chuyen:man.chiaSeBoi": ["1 chia sẻ", "12 chia sẻ"],
+	"agent-builder-tro-chuyen:tacNhanSong.daSong": [
+		"1 đã vào chạy.",
+		"12 đã vào chạy.",
+	],
+	"agent-builder-o-soan:tep.rong": ["1 rỗng.", "12 rỗng."],
+	"agent-builder-o-soan:tep.quaLon": ["1 lớn hơn 2 MB.", "12 lớn hơn 2 MB."],
+	"agent-builder-o-soan:tep.loaiKhongNhan": [
+		"1 thuộc loại tệp không nhận được.",
+		"12 thuộc loại tệp không nhận được.",
+	],
+	"agent-builder-o-soan:tep.khongDocDuoc": [
+		"1 đọc không được.",
+		"12 đọc không được.",
+	],
+	"agent-builder-o-soan:tep.kiloByte": ["1 KB", "12 KB"],
+	"agent-builder-o-soan:tep.megaByte": ["1 MB", "12 MB"],
+	"agent-builder-o-soan:the.go": ["Gỡ 1", "Gỡ 12"],
+	"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
+	"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+	"okr:demMucTieu": ["1 mục tiêu", "12 mục tiêu"],
+	"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
+	"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
+	"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
+	"okr:caiDat.chuKy.chuyenSang": ["Chuyển sang 1", "Chuyển sang 12"],
+	"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
+	"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
+	"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
+	"cua-vao:buoc.choPhep.moTa": ["Ở 1.", "Ở 12."],
+	"cua-vao:buoc.nutNgoai.tieuDe": [
+		"Đăng nhập bằng 1, đúng địa chỉ đó",
+		"Đăng nhập bằng 12, đúng địa chỉ đó",
+	],
+	"cua-vao:buoc.matKhauPhu.moTa": [
+		"Quản trị viên phát liên kết ở 1. Liên kết dùng một lần, hết hạn sau A phút.",
+		"Quản trị viên phát liên kết ở 12. Liên kết dùng một lần, hết hạn sau A phút.",
+	],
+	"okr:capNhat.dauTrang": [
+		"1 KR bạn phụ trách · hạn hết Chủ nhật A. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.",
+		"12 KR bạn phụ trách · hạn hết Chủ nhật A. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.",
+	],
+	"okr:capNhat.soVoi": ["1 so với a", "12 so với a"],
+	"okr:capNhat.loiSo": ["Nhập một số, ví dụ 1", "Nhập một số, ví dụ 12"],
+	"okr:capNhat.thanh.loiSo": [
+		"1 KR có số chưa hợp lệ — sửa rồi gửi.",
+		"12 KR có số chưa hợp lệ — sửa rồi gửi.",
+	],
+	"okr:capNhat.thanh.du": ["Đủ 1/A KR.", "Đủ 12/A KR."],
+	"okr:capNhat.thanh.chon": [
+		"Đã chọn mức tự tin 1/A KR. KR chưa chọn sẽ chờ lần gửi sau.",
+		"Đã chọn mức tự tin 12/A KR. KR chưa chọn sẽ chờ lần gửi sau.",
+	],
+	"okr:capNhat.gui": ["Gửi 1 cập nhật", "Gửi 12 cập nhật"],
+	"okr:capNhat.guiLai": ["Gửi lại 1 cập nhật", "Gửi lại 12 cập nhật"],
+	"okr:capNhat.daGui.title": [
+		"Đã gửi 1 cập nhật lúc A · mất B giây",
+		"Đã gửi 12 cập nhật lúc A · mất B giây",
+	],
+	"okr:capNhat.daGui.keTiep": [
+		"Lần kế tiếp: thứ Hai 1 — tin nhắc buổi sáng sẽ dẫn thẳng về đây.",
+		"Lần kế tiếp: thứ Hai 12 — tin nhắc buổi sáng sẽ dẫn thẳng về đây.",
+	],
+	"okr:capNhat.daGui.conCho": [
+		"1 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
+		"12 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
+	],
+	"okr:capNhat.tuTinNhan": ["Tự tin 1", "Tự tin 12"],
+	"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
+	"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
+	"okr-toan-canh:toanCanh.leRa": ["Lẽ ra đã tới 1%", "Lẽ ra đã tới 12%"],
+	"okr-toan-canh:toanCanh.chuaDat": ["1 chưa đặt", "12 chưa đặt"],
+	"okr-toan-canh:tienDoLeRa": [
+		"Tiến độ 1: A%, lẽ ra đã tới B%",
+		"Tiến độ 12: A%, lẽ ra đã tới B%",
+	],
+	"okr-toan-canh:hopTuan.tuan": ["Tuần 1", "Tuần 12"],
+	"okr-toan-canh:hopTuan.daCapNhat": [
+		"đã cập nhật 1/A KR",
+		"đã cập nhật 12/A KR",
+	],
+	"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
+	"okr-toan-canh:hopTuan.tut": ["Tụt từ 1 xuống A", "Tụt từ 12 xuống A"],
+	"okr-toan-canh:hopTuan.im": ["Im 1 ngày", "Im 12 ngày"],
+	"okr-toan-canh:hopTuan.conLai": [
+		"Còn lại 1 KR — không có gì mới",
+		"Còn lại 12 KR — không có gì mới",
+	],
+	"okr-toan-canh:toanCanh.soTuanTruoc": ["Tuần trước 1", "Tuần trước 12"],
+	"okr-toan-canh:toanCanh.banTut": [
+		"1 KR tụt mức tự tin",
+		"12 KR tụt mức tự tin",
+	],
+	"okr-toan-canh:toanCanh.banIm": ["1 KR im lâu", "12 KR im lâu"],
+	"okr-toan-canh:toanCanh.banGhiChu": [
+		"1 KR có ghi chú mới",
+		"12 KR có ghi chú mới",
+	],
+	"okr-toan-canh:dienBien.bieuDo": [
+		"Diễn biến của 1 theo tuần",
+		"Diễn biến của 12 theo tuần",
+	],
+	"okr-toan-canh:dienBien.dich": ["Đích 1", "Đích 12"],
+	"okr-toan-canh:dienBien.chuaCoMoTa": [
+		"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 1.",
+		"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 12.",
+	],
+	"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
+	"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
+		"Cả đội · 1",
+		"Cả đội · 12",
+	],
+	"okr-so:donVi.buoc": ["1 bước", "12 bước"],
+	"okr-so:donVi.ca-nhan": ["1 cá nhân", "12 cá nhân"],
+	"okr-so:donVi.cuoc-goi": ["1 cuộc gọi", "12 cuộc gọi"],
+	"okr-so:donVi.thoa-thuan": ["1 thoả thuận", "12 thoả thuận"],
+	"okr-so:donVi.thu": ["1 thư", "12 thư"],
+	"okr-so:trangThai.hopThoai.xemTruoc.toiHomNay": [
+		"Tới hôm nay: 1",
+		"Tới hôm nay: 12",
+	],
+	"okr-so:trangThai.hopThoai.sheets.chiaSe": [
+		"Chia sẻ bảng tính cho 1",
+		"Chia sẻ bảng tính cho 12",
+	],
+	"okr-so:trangThai.hopThoai.sheets.docDuoc": [
+		"Đọc được 1 lúc A",
+		"Đọc được 12 lúc A",
+	],
+	"okr-so:trangThai.bangKr.doCanh": ["1 tay · A máy", "12 tay · A máy"],
+	"okr-so:trangThai.bangKr.moSo": [
+		"Xem bản ghi làm nên số của 1",
+		"Xem bản ghi làm nên số của 12",
+	],
+	"okr-so:trangThai.so.khoang": ["Từ 1 đến A", "Từ 12 đến A"],
+	"okr-so:trangThai.so.daChup": ["Đã chụp 1 ngày A", "Đã chụp 12 ngày A"],
+	"okr-so:trangThai.so.lech": [
+		"Đã chụp 1 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
+		"Đã chụp 12 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
+	],
+	"okr-so:trangThai.capNhat.soTu": ["Số từ 1 · A", "Số từ 12 · A"],
+	"okr-so:trangThai.capNhat.soMay": ["Số máy: 1 · A", "Số máy: 12 · A"],
+	"okr-khep:dai.ra": [
+		"Đang rà giữa kỳ tới hết 1",
+		"Đang rà giữa kỳ tới hết 12",
+	],
+	"okr-khep:cham.daCham": ["Đã chấm 1/A KR", "Đã chấm 12/A KR"],
+	"okr-khep:cham.daChamHet": [
+		"Đã chấm cả 1 KR của đơn vị. Quản trị đóng kỳ khi mọi đơn vị xong.",
+		"Đã chấm cả 12 KR của đơn vị. Quản trị đóng kỳ khi mọi đơn vị xong.",
+	],
+	"okr-khep:mangSang.moTa": [
+		"Tạo một mục tiêu nháp ở 1, cùng đơn vị, loại và người phụ trách. Mục tiêu và điểm ở A giữ nguyên.",
+		"Tạo một mục tiêu nháp ở 12, cùng đơn vị, loại và người phụ trách. Mục tiêu và điểm ở A giữ nguyên.",
+	],
+	"okr-khep:mangSang.chep": ["Chép 1 KR chưa trọn", "Chép 12 KR chưa trọn"],
+	"okr-khep:mangSang.khoiDiemMoi": [
+		"Khởi điểm mới 1 (số chốt) · đích A",
+		"Khởi điểm mới 12 (số chốt) · đích A",
+	],
+} satisfies Record<string, [string, string]>;
 
 describe("kho chuoi cua vong ③a", () => {
 	for (const [ten, lay] of MODULE) {
@@ -191,596 +755,6 @@ describe("kho chuoi cua vong ③a", () => {
 	}
 
 	it("moi ham ghep bien co khang dinh, va so ham bang so khang dinh", () => {
-		const GHIM = {
-			"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
-			"crm:views.inUse": [
-				"Đang là phân khúc của 1",
-				"Đang là phân khúc của 12",
-			],
-			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
-			"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
-			"auth:datMatKhau.description": [
-				"Liên kết này dùng được một lần, còn hạn 1 phút.",
-				"Liên kết này dùng được một lần, còn hạn 12 phút.",
-			],
-			"auth:datMatKhau.loi.quaNgan": [
-				"Mật khẩu phải có ít nhất 1 ký tự.",
-				"Mật khẩu phải có ít nhất 12 ký tự.",
-			],
-			"auth:quenMatKhau.quaLuot": [
-				"Bạn đã xin quá nhiều lần. Chờ 1 phút rồi thử lại.",
-				"Bạn đã xin quá nhiều lần. Chờ 12 phút rồi thử lại.",
-			],
-			"auth:quenMatKhau.xong.description": [
-				"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 1 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
-				"Nếu địa chỉ này vào được OneHub Center, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn 12 phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
-			],
-			"auth:datMatKhau.toiThieu": [
-				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
-				"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
-			],
-			"companies:bulk.reassigned": [
-				"Đã đổi người phụ trách cho 1.",
-				"Đã đổi người phụ trách cho 12.",
-			],
-			"companies:bulk.enriching": [
-				"Đang tra cứu 1 — bảng sẽ tự cập nhật.",
-				"Đang tra cứu 12 — bảng sẽ tự cập nhật.",
-			],
-			"companies:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
-			"companies:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
-			"companies:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
-			"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
-			"crm:views.remove": ["Xoá 1", "Xoá 12"],
-			"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
-			"record-sheet:company.manyDeals": [
-				"Cả 1 thoả thuận của công ty",
-				"Cả 12 thoả thuận của công ty",
-			],
-			"record-sheet:company.manyPeople": ["1 người", "12 người"],
-			"crm:sheet.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
-			"contacts:created": ["Đã thêm 1.", "Đã thêm 12."],
-			"contacts:bulk.reassigned": [
-				"Đã đổi người phụ trách cho 1.",
-				"Đã đổi người phụ trách cho 12.",
-			],
-			"contacts:bulk.moved": [
-				"Đã chuyển 1 sang công ty khác.",
-				"Đã chuyển 12 sang công ty khác.",
-			],
-			"contacts:bulk.enriching": [
-				"Đang tra cứu 1 — bảng sẽ tự cập nhật.",
-				"Đang tra cứu 12 — bảng sẽ tự cập nhật.",
-			],
-			"contacts:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
-			"contacts:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
-			"contacts:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
-			"contacts:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
-			"deals:meta.count": ["1 thoả thuận", "12 thoả thuận"],
-			"deals:meta.notCounted": [
-				"1 chưa tính (thiếu tỉ giá A)",
-				"12 chưa tính (thiếu tỉ giá A)",
-			],
-			"deals:created": ["Đã thêm 1.", "Đã thêm 12."],
-			"deals:board.pickedUp": ["Đã nhấc 1.", "Đã nhấc 12."],
-			"deals:board.over": ["Đang ở trên 1.", "Đang ở trên 12."],
-			"deals:board.dropped": ["Đã thả vào 1.", "Đã thả vào 12."],
-			"deals:bulk.reassigned": [
-				"Đã đổi người phụ trách cho 1.",
-				"Đã đổi người phụ trách cho 12.",
-			],
-			"deals:bulk.moved": [
-				"Đã chuyển 1 sang công ty khác.",
-				"Đã chuyển 12 sang công ty khác.",
-			],
-			"deals:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
-			"deals:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
-			"deals:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
-			"deals:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
-			"deals:bulk.closeLost": [
-				"Chốt 1 là không thành",
-				"Chốt 12 là không thành",
-			],
-			"deals:bulk.markUnqualified": [
-				"Đánh dấu 1 là chưa phù hợp",
-				"Đánh dấu 12 là chưa phù hợp",
-			],
-			"record-sheet:company.noContactsBody": [
-				"Mọi người bạn trao đổi ở 1 nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.",
-				"Mọi người bạn trao đổi ở 12 nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.",
-			],
-			"record-sheet:company.noDealsBody": [
-				"Chưa có thoả thuận hợp tác nào với 1. Mở một thoả thuận thì nó vào phần đang theo dõi và vào dự báo.",
-				"Chưa có thoả thuận hợp tác nào với 12. Mở một thoả thuận thì nó vào phần đang theo dõi và vào dự báo.",
-			],
-			"record-sheet:company.deleteDeals": [
-				"1 và mọi thứ gắn với công ty này mất theo.",
-				"12 và mọi thứ gắn với công ty này mất theo.",
-			],
-			"record-sheet:company.deleteContacts": [
-				"1 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
-				"12 làm việc ở đó vẫn ở lại OneHub Center, nhưng không thuộc công ty nào.",
-			],
-			"record-sheet:company.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
-			"record-sheet:company.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
-			"record-sheet:company.purged": [
-				"Đã xoá vĩnh viễn 1.",
-				"Đã xoá vĩnh viễn 12.",
-			],
-			"record-sheet:contact.primaryAt": [
-				"Đầu mối chính ở 1",
-				"Đầu mối chính ở 12",
-			],
-			"record-sheet:contact.roles": ["1 vị trí", "12 vị trí"],
-			"record-sheet:contact.neverReplied": [
-				"1 chưa trả lời lần nào",
-				"12 chưa trả lời lần nào",
-			],
-			"record-sheet:contact.notOnDealsBody": [
-				"1 chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.",
-				"12 chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.",
-			],
-			"record-sheet:contact.added": ["Đã thêm 1.", "Đã thêm 12."],
-			"record-sheet:deal.inCurrency": ["Quy đổi 1", "Quy đổi 12"],
-			"record-sheet:deal.currencyGone": [
-				"1 — không còn hỗ trợ",
-				"12 — không còn hỗ trợ",
-			],
-			"record-sheet:deal.descriptionHint": [
-				"1 đang cần gì, vì sao là lúc này, và còn vướng gì.",
-				"12 đang cần gì, vì sao là lúc này, và còn vướng gì.",
-			],
-			"record-sheet:deal.roleOnDeal": [
-				"Vai trò của 1 trong thoả thuận này",
-				"Vai trò của 12 trong thoả thuận này",
-			],
-			"record-sheet:deal.noContactsBody": [
-				"Chưa ai từ 1 được gắn vào. Thêm những người bạn đang trao đổi vào thoả thuận thì biết cần theo ai.",
-				"Chưa ai từ 12 được gắn vào. Thêm những người bạn đang trao đổi vào thoả thuận thì biết cần theo ai.",
-			],
-			"record-sheet:deal.onDeal": [
-				"1 đã vào thoả thuận.",
-				"12 đã vào thoả thuận.",
-			],
-			"record-sheet:deal.everybodyOn": [
-				"Mọi người ở 1 đã ở trong rồi",
-				"Mọi người ở 12 đã ở trong rồi",
-			],
-			"record-sheet:deal.created": ["Đã tạo 1.", "Đã tạo 12."],
-			"record-sheet:deal.deleteWarning": [
-				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
-				"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
-			],
-			"crm:timeline.composer.log": ["Ghi 1", "Ghi 12"],
-			"crm:timeline.messages": ["1 thư", "12 thư"],
-			"crm:time.minutes": ["1 phút", "12 phút"],
-			"crm:time.hours": ["1 giờ", "12 giờ"],
-			"crm:time.days": ["1 ngày", "12 ngày"],
-			"crm:time.ahead": ["sau 1 nữa", "sau 12 nữa"],
-			"crm:time.ago": ["1 trước", "12 trước"],
-			"crm:fields.stillToGo": ["Còn 1 nữa", "Còn 12 nữa"],
-			"crm:fields.optionCount": ["1 lựa chọn", "12 lựa chọn"],
-			"crm:fields.option": ["Lựa chọn 1", "Lựa chọn 12"],
-			"crm:fields.filledOn": [
-				"Đã điền cho 1 trên A B",
-				"Đã điền cho 12 trên A B",
-			],
-			"crm:sheet.restore": ["Khôi phục 1", "Khôi phục 12"],
-			"crm:sheet.archive": ["Lưu trữ 1", "Lưu trữ 12"],
-			"crm:sheet.deleteForever": ["Xoá vĩnh viễn 1", "Xoá vĩnh viễn 12"],
-			"crm:sheet.fallbackName": ["1 này", "12 này"],
-			"crm:sheet.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
-			"crm:sheet.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
-			"crm:sheet.deletedForever": [
-				"Đã xoá vĩnh viễn 1.",
-				"Đã xoá vĩnh viễn 12.",
-			],
-			"crm:web.views": ["1 lượt xem", "12 lượt xem"],
-			"crm:fields.removeOption": ["Bỏ 1", "Bỏ 12"],
-			"crm:fields.moreFor": ["Thêm hành động cho 1", "Thêm hành động cho 12"],
-			"crm:fields.archiveTitle": ["Lưu trữ 1?", "Lưu trữ 12?"],
-			"crm:fields.filledOf": ["1 · đã điền A/B", "12 · đã điền A/B"],
-			"record-sheet:company.unconverted": [
-				"+1 chưa quy đổi",
-				"+12 chưa quy đổi",
-			],
-			"record-sheet:deal.nobodyAttached": [
-				"Chưa ai từ 1 được gắn vào.",
-				"Chưa ai từ 12 được gắn vào.",
-			],
-			"record-sheet:deal.noRate": [
-				"Không có tỷ giá 1 — không tính vào tổng",
-				"Không có tỷ giá 12 — không tính vào tổng",
-			],
-			"crm:timeline.openIn": ["Mở trong 1", "Mở trong 12"],
-			"record-sheet:deal.takeOffNamed": [
-				"Gỡ 1 khỏi thoả thuận này",
-				"Gỡ 12 khỏi thoả thuận này",
-			],
-			"record-sheet:deal.namePlaceholder": ["1 — OneHub", "12 — OneHub"],
-			"settings:chep.hong": [
-				"Không chép được 1. Bôi đen rồi chép tay.",
-				"Không chép được 12. Bôi đen rồi chép tay.",
-			],
-			"settings:model.gia": [
-				"1 vào · A ra trên 1 triệu token",
-				"12 vào · A ra trên 1 triệu token",
-			],
-			"settings:model.nguCanhTrieu": [
-				"ngữ cảnh 1 triệu token",
-				"ngữ cảnh 12 triệu token",
-			],
-			"settings:model.nguCanhNghin": [
-				"ngữ cảnh 1 nghìn token",
-				"ngữ cảnh 12 nghìn token",
-			],
-			"settings:model.khongVoiToi": [
-				"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 1.",
-				"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 12.",
-			],
-			"settings:tienTe.daDoi": [
-				"Từ giờ mọi tổng báo cáo bằng 1.",
-				"Từ giờ mọi tổng báo cáo bằng 12.",
-			],
-			"settings:tienTe.khongQuyDoiDuoc": [
-				"1 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
-				"12 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
-			],
-			"settings-theo-doi:kiemTra.khongCoScriptMoTa": [
-				"Trang trả lời trong 1 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
-				"Trang trả lời trong 12 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
-			],
-			"settings-theo-doi:kiemTra.cungDocContainer": [
-				" Đã đọc cả container Tag Manager 1, và thẻ cũng không có trong đó.",
-				" Đã đọc cả container Tag Manager 12, và thẻ cũng không có trong đó.",
-			],
-			"settings-theo-doi:kiemTra.gtmRoiSiteIdMoTa": [
-				"Container 1 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
-				"Container 12 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
-			],
-			"settings-theo-doi:kiemTra.thayMoTaDau": [
-				"Trả lời trong 1 ms. Site ID",
-				"Trả lời trong 12 ms. Site ID",
-			],
-			"settings-ket-noi:chung.daXoa": [
-				"Đã xoá 1 mục đã kéo về.",
-				"Đã xoá 12 mục đã kéo về.",
-			],
-			"settings-ket-noi:danhSach.daCamVoi": ["Đã cắm vào 1", "Đã cắm vào 12"],
-			"nhac-qua-zalo:khoiZalo.nhanMaCho": [
-				"Nhắn mã này cho 1 trên Zalo.",
-				"Nhắn mã này cho 12 trên Zalo.",
-			],
-			"nhac-qua-zalo:khoiZalo.hetHanLuc": ["Hết hạn lúc 1", "Hết hạn lúc 12"],
-			"nhac-qua-zalo:ketNoi.daLuu": ["Đã bật 1.", "Đã bật 12."],
-			"nhac-qua-zalo:ketNoi.daLuuChuaNhanTin": [
-				"Đã lưu 1, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.",
-				"Đã lưu 12, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.",
-			],
-			"nhac-qua-zalo:ketNoi.traLoiLanCuoi": [
-				"trả lời lần cuối lúc 1",
-				"trả lời lần cuối lúc 12",
-			],
-			"nhac-qua-zalo:ketNoi.imTieuDe": [
-				"Bot không trả lời từ 1",
-				"Bot không trả lời từ 12",
-			],
-			"nhac-qua-zalo:ketNoi.daNoiSo": [
-				"1/A người đã nối Zalo",
-				"12/A người đã nối Zalo",
-			],
-			"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
-			"settings-ket-noi:google.dongBoHong": [
-				"Đồng bộ hỏng: 1",
-				"Đồng bộ hỏng: 12",
-			],
-			"settings-ket-noi:slack.daKhopNguoi": [
-				"Đã khớp 1 trên A người đã soát.",
-				"Đã khớp 12 trên A người đã soát.",
-			],
-			"settings-ket-noi:slack.thieuQuyen": [
-				"Slack giữ lại 1 quyền",
-				"Slack giữ lại 12 quyền",
-			],
-			"settings-ket-noi:slack.camHongMac": [
-				"Không cắm được Slack (1).",
-				"Không cắm được Slack (12).",
-			],
-			"settings-ket-noi:slack.goHoi": ["Gỡ 1?", "Gỡ 12?"],
-			"settings-ket-noi:quyen.dem": ["1 rộng trên A", "12 rộng trên A"],
-			"settings-ket-noi:kenh.chonKenh": ["Chọn kênh #1", "Chọn kênh #12"],
-			"settings-ket-noi:kenh.soNguoi": [" · 1 người", " · 12 người"],
-			"khung-ung-dung:enrichment.enrichingCount": [
-				"Đang tra cứu 1",
-				"Đang tra cứu 12",
-			],
-			"khung-ung-dung:enrichment.bookedMany": [
-				"1 bản ghi hẹn tra cứu sau",
-				"12 bản ghi hẹn tra cứu sau",
-			],
-			"khung-ung-dung:enrichment.bookedMore": [
-				"Còn 1 bản ghi nữa chưa liệt kê ở đây",
-				"Còn 12 bản ghi nữa chưa liệt kê ở đây",
-			],
-			"khung-ung-dung:enrichment.moreQueued": [
-				"Còn 1 đang xếp hàng",
-				"Còn 12 đang xếp hàng",
-			],
-			"tong-quan:stats.closedWonDesc": [
-				"1 · A tháng trước",
-				"12 · A tháng trước",
-			],
-			"tong-quan:stats.openPipelineDesc": [
-				"1 đang mở · A hạn chốt tháng này",
-				"12 đang mở · A hạn chốt tháng này",
-			],
-			"tong-quan:stats.winRate": [
-				"Tỷ lệ chốt (1 ngày)",
-				"Tỷ lệ chốt (12 ngày)",
-			],
-			"tong-quan:stats.wonLost": [
-				"1 chốt được · A không thành",
-				"12 chốt được · A không thành",
-			],
-			"tong-quan:stats.avgDeal": [
-				"Trung bình mỗi thoả thuận (1 ngày)",
-				"Trung bình mỗi thoả thuận (12 ngày)",
-			],
-			"tong-quan:stats.avgCycle": [
-				"Chu kỳ trung bình 1 ngày",
-				"Chu kỳ trung bình 12 ngày",
-			],
-			"tong-quan:unconverted.sentence": [
-				"Mọi con số trên đây tính bằng B. 1 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
-				"Mọi con số trên đây tính bằng B. 12 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
-			],
-			"tong-quan:tasks.pastDue": ["1 quá hạn", "12 quá hạn"],
-			"settings-ket-noi:kenh.khongKhop": [
-				"Không kênh nào khớp “1”.",
-				"Không kênh nào khớp “12”.",
-			],
-			"settings-ket-noi:kenh.themHoi": [
-				"Thêm OneHub vào #1?",
-				"Thêm OneHub vào #12?",
-			],
-			"settings-ket-noi:kenh.nhoThemMoTa": [
-				"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #1 phải chạy lệnh này.",
-				"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #12 phải chạy lệnh này.",
-			],
-			"settings-ket-noi:nguoi.demKhop": [
-				"Đã khớp 1 trên A",
-				"Đã khớp 12 trên A",
-			],
-			"settings-khoa-api:thuHoi.choKhoa": ["Thu hồi 1", "Thu hồi 12"],
-			"settings-sso:bang.maClient": [" · mã client …1", " · mã client …12"],
-			"settings-sso:go.choNha": ["Gỡ 1", "Gỡ 12"],
-			"settings-sso:them.daLuu": ["Đã lưu 1.", "Đã lưu 12."],
-			"settings-thanh-vien:bang.doiVaiTro": [
-				"Đổi vai trò của 1",
-				"Đổi vai trò của 12",
-			],
-			"settings-thanh-vien:phatChia.moTa": [
-				"Gửi cho 1. Liên kết dùng được một lần, hết hạn sau một giờ.",
-				"Gửi cho 12. Liên kết dùng được một lần, hết hạn sau một giờ.",
-			],
-			"settings-thanh-vien:phatChia.daChep": [
-				"Đã chép. Dán vào Zalo gửi cho 1.",
-				"Đã chép. Dán vào Zalo gửi cho 12.",
-			],
-			"settings-thanh-vien:dem": ["1 · A", "12 · A"],
-			"settings-thanh-vien:duocPhepVao.menu": [
-				"Hành động với 1",
-				"Hành động với 12",
-			],
-			"settings-thanh-vien:phatChia.vet": [
-				"1 đã phát liên kết · A",
-				"12 đã phát liên kết · A",
-			],
-			"agent-builder-khung:doi.soLuotChay": ["1 lượt chạy", "12 lượt chạy"],
-			"agent-builder-khung:nha.chaoHoi": [
-				"1 cần gì hôm nay?",
-				"12 cần gì hôm nay?",
-			],
-			"agent-builder-tac-nhan:chiTiet.daXoa": ["Đã xoá 1.", "Đã xoá 12."],
-			"agent-builder-tac-nhan:chiTiet.xoaHoi": ["Xoá 1?", "Xoá 12?"],
-			"agent-builder-tac-nhan:kenh.slackGoiLa": [
-				"Slack sẽ gọi nó là #1.",
-				"Slack sẽ gọi nó là #12.",
-			],
-			"agent-builder-tac-nhan:moi.daOTrong": [
-				"OneHub đã ở trong #1 rồi.",
-				"OneHub đã ở trong #12 rồi.",
-			],
-			"agent-builder-tac-nhan:moi.seVao": [
-				"OneHub chưa ở trong #1. Nó vào khi bạn tạo cái này.",
-				"OneHub chưa ở trong #12. Nó vào khi bạn tạo cái này.",
-			],
-			"agent-builder-tac-nhan:viec.chuyenKenh": [
-				"Chuyển từ #1 sang #A",
-				"Chuyển từ #12 sang #A",
-			],
-			"agent-builder-tac-nhan:viec.go": ["Gỡ 1", "Gỡ 12"],
-			"agent-builder-tac-nhan:viec.vaoKenh": [
-				"OneHub vào #1 và ở lại #1 cho tới khi bạn gỡ.",
-				"OneHub vào #12 và ở lại #12 cho tới khi bạn gỡ.",
-			],
-			"agent-builder-ket-qua:ma.soTep": ["1 tệp", "12 tệp"],
-			"agent-builder-ket-qua:ma.soTepDoi": [
-				"1 tệp đã đổi. Lưu là ghi thành một bản mới.",
-				"12 tệp đã đổi. Lưu là ghi thành một bản mới.",
-			],
-			"agent-builder-ket-qua:thoaThuan.duongOng": ["1 đang mở", "12 đang mở"],
-			"agent-builder-ket-qua:thoaThuan.tongGiaTri": ["tổng 1", "tổng 12"],
-			"agent-builder-ket-qua:thoaThuan.ngayNamIm": [
-				"nằm im từ 1 ngày",
-				"nằm im từ 12 ngày",
-			],
-			"agent-builder-ket-qua:thoaThuan.soThoaThuan": [
-				"1 thoả thuận",
-				"12 thoả thuận",
-			],
-			"agent-builder-tro-chuyen:luot.soHieu": ["Lượt #1", "Lượt #12"],
-			"agent-builder-tro-chuyen:luot.banSo": ["· Bản 1", "· Bản 12"],
-			"agent-builder-tro-chuyen:luot.soViecNgoai": [
-				"1 việc ra ngoài",
-				"12 việc ra ngoài",
-			],
-			"agent-builder-tro-chuyen:luot.catBot": [
-				"Đang hiện 1 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
-				"Đang hiện 12 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
-			],
-			"agent-builder-tro-chuyen:dung.dangGhi": ["Đang ghi 1", "Đang ghi 12"],
-			"agent-builder-tro-chuyen:dung.tienDo": ["1 trên 4", "12 trên 4"],
-			"agent-builder-tro-chuyen:man.chiaSeBoi": ["1 chia sẻ", "12 chia sẻ"],
-			"agent-builder-tro-chuyen:tacNhanSong.daSong": [
-				"1 đã vào chạy.",
-				"12 đã vào chạy.",
-			],
-			"agent-builder-o-soan:tep.rong": ["1 rỗng.", "12 rỗng."],
-			"agent-builder-o-soan:tep.quaLon": [
-				"1 lớn hơn 2 MB.",
-				"12 lớn hơn 2 MB.",
-			],
-			"agent-builder-o-soan:tep.loaiKhongNhan": [
-				"1 thuộc loại tệp không nhận được.",
-				"12 thuộc loại tệp không nhận được.",
-			],
-			"agent-builder-o-soan:tep.khongDocDuoc": [
-				"1 đọc không được.",
-				"12 đọc không được.",
-			],
-			"agent-builder-o-soan:tep.kiloByte": ["1 KB", "12 KB"],
-			"agent-builder-o-soan:tep.megaByte": ["1 MB", "12 MB"],
-			"agent-builder-o-soan:the.go": ["Gỡ 1", "Gỡ 12"],
-			"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
-			"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
-			"okr:demMucTieu": ["1 mục tiêu", "12 mục tiêu"],
-			"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
-			"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
-			"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
-			"okr:caiDat.chuKy.chuyenSang": ["Chuyển sang 1", "Chuyển sang 12"],
-			"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
-			"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
-			"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
-			"cua-vao:buoc.choPhep.moTa": ["Ở 1.", "Ở 12."],
-			"cua-vao:buoc.nutNgoai.tieuDe": [
-				"Đăng nhập bằng 1, đúng địa chỉ đó",
-				"Đăng nhập bằng 12, đúng địa chỉ đó",
-			],
-			"cua-vao:buoc.matKhauPhu.moTa": [
-				"Quản trị viên phát liên kết ở 1. Liên kết dùng một lần, hết hạn sau A phút.",
-				"Quản trị viên phát liên kết ở 12. Liên kết dùng một lần, hết hạn sau A phút.",
-			],
-			"okr:capNhat.dauTrang": [
-				"1 KR bạn phụ trách · hạn hết Chủ nhật A. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.",
-				"12 KR bạn phụ trách · hạn hết Chủ nhật A. Số đã điền sẵn từ lần cập nhật gần nhất — chỉ sửa chỗ đã đổi, rồi chọn mức tự tin.",
-			],
-			"okr:capNhat.soVoi": ["1 so với a", "12 so với a"],
-			"okr:capNhat.loiSo": ["Nhập một số, ví dụ 1", "Nhập một số, ví dụ 12"],
-			"okr:capNhat.thanh.loiSo": [
-				"1 KR có số chưa hợp lệ — sửa rồi gửi.",
-				"12 KR có số chưa hợp lệ — sửa rồi gửi.",
-			],
-			"okr:capNhat.thanh.du": ["Đủ 1/A KR.", "Đủ 12/A KR."],
-			"okr:capNhat.thanh.chon": [
-				"Đã chọn mức tự tin 1/A KR. KR chưa chọn sẽ chờ lần gửi sau.",
-				"Đã chọn mức tự tin 12/A KR. KR chưa chọn sẽ chờ lần gửi sau.",
-			],
-			"okr:capNhat.gui": ["Gửi 1 cập nhật", "Gửi 12 cập nhật"],
-			"okr:capNhat.guiLai": ["Gửi lại 1 cập nhật", "Gửi lại 12 cập nhật"],
-			"okr:capNhat.daGui.title": [
-				"Đã gửi 1 cập nhật lúc A · mất B giây",
-				"Đã gửi 12 cập nhật lúc A · mất B giây",
-			],
-			"okr:capNhat.daGui.keTiep": [
-				"Lần kế tiếp: thứ Hai 1 — tin nhắc buổi sáng sẽ dẫn thẳng về đây.",
-				"Lần kế tiếp: thứ Hai 12 — tin nhắc buổi sáng sẽ dẫn thẳng về đây.",
-			],
-			"okr:capNhat.daGui.conCho": [
-				"1 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
-				"12 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
-			],
-			"okr:capNhat.tuTinNhan": ["Tự tin 1", "Tự tin 12"],
-			"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
-			"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
-			"okr-toan-canh:toanCanh.leRa": ["Lẽ ra đã tới 1%", "Lẽ ra đã tới 12%"],
-			"okr-toan-canh:toanCanh.chuaDat": ["1 chưa đặt", "12 chưa đặt"],
-			"okr-toan-canh:tienDoLeRa": [
-				"Tiến độ 1: A%, lẽ ra đã tới B%",
-				"Tiến độ 12: A%, lẽ ra đã tới B%",
-			],
-			"okr-toan-canh:hopTuan.tuan": ["Tuần 1", "Tuần 12"],
-			"okr-toan-canh:hopTuan.daCapNhat": [
-				"đã cập nhật 1/A KR",
-				"đã cập nhật 12/A KR",
-			],
-			"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
-			"okr-toan-canh:hopTuan.tut": ["Tụt từ 1 xuống A", "Tụt từ 12 xuống A"],
-			"okr-toan-canh:hopTuan.im": ["Im 1 ngày", "Im 12 ngày"],
-			"okr-toan-canh:hopTuan.conLai": [
-				"Còn lại 1 KR — không có gì mới",
-				"Còn lại 12 KR — không có gì mới",
-			],
-			"okr-toan-canh:toanCanh.soTuanTruoc": ["Tuần trước 1", "Tuần trước 12"],
-			"okr-toan-canh:toanCanh.banTut": [
-				"1 KR tụt mức tự tin",
-				"12 KR tụt mức tự tin",
-			],
-			"okr-toan-canh:toanCanh.banIm": ["1 KR im lâu", "12 KR im lâu"],
-			"okr-toan-canh:toanCanh.banGhiChu": [
-				"1 KR có ghi chú mới",
-				"12 KR có ghi chú mới",
-			],
-			"okr-toan-canh:dienBien.bieuDo": [
-				"Diễn biến của 1 theo tuần",
-				"Diễn biến của 12 theo tuần",
-			],
-			"okr-toan-canh:dienBien.dich": ["Đích 1", "Đích 12"],
-			"okr-toan-canh:dienBien.chuaCoMoTa": [
-				"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 1.",
-				"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 12.",
-			],
-			"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
-			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
-				"Cả đội · 1",
-				"Cả đội · 12",
-			],
-			"okr-so:donVi.buoc": ["1 bước", "12 bước"],
-			"okr-so:donVi.ca-nhan": ["1 cá nhân", "12 cá nhân"],
-			"okr-so:donVi.cuoc-goi": ["1 cuộc gọi", "12 cuộc gọi"],
-			"okr-so:donVi.thoa-thuan": ["1 thoả thuận", "12 thoả thuận"],
-			"okr-so:donVi.thu": ["1 thư", "12 thư"],
-			"okr-so:trangThai.hopThoai.xemTruoc.toiHomNay": [
-				"Tới hôm nay: 1",
-				"Tới hôm nay: 12",
-			],
-			"okr-so:trangThai.hopThoai.sheets.chiaSe": [
-				"Chia sẻ bảng tính cho 1",
-				"Chia sẻ bảng tính cho 12",
-			],
-			"okr-so:trangThai.hopThoai.sheets.docDuoc": [
-				"Đọc được 1 lúc A",
-				"Đọc được 12 lúc A",
-			],
-			"okr-so:trangThai.bangKr.doCanh": ["1 tay · A máy", "12 tay · A máy"],
-			"okr-so:trangThai.bangKr.moSo": [
-				"Xem bản ghi làm nên số của 1",
-				"Xem bản ghi làm nên số của 12",
-			],
-			"okr-so:trangThai.so.khoang": ["Từ 1 đến A", "Từ 12 đến A"],
-			"okr-so:trangThai.so.daChup": ["Đã chụp 1 ngày A", "Đã chụp 12 ngày A"],
-			"okr-so:trangThai.so.lech": [
-				"Đã chụp 1 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
-				"Đã chụp 12 · tính lại lúc này A — dữ liệu đã đổi sau khi chụp",
-			],
-			"okr-so:trangThai.capNhat.soTu": ["Số từ 1 · A", "Số từ 12 · A"],
-			"okr-so:trangThai.capNhat.soMay": ["Số máy: 1 · A", "Số máy: 12 · A"],
-			"okr-khep:dai.ra": [
-				"Đang rà giữa kỳ tới hết 1",
-				"Đang rà giữa kỳ tới hết 12",
-			],
-		} satisfies Record<string, [string, string]>;
-
 		const ham: string[] = [];
 		for (const [ten, lay] of MODULE) {
 			for (const [k, v] of phang(lay("vi"))) {

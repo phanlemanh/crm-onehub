@@ -11,16 +11,19 @@ import {
 } from "@crm/ui/components/card";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { ViewSwitch } from "@crm/ui/components/view-switch";
+import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { type ReactNode, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
+import { ChamDiem } from "../cham-diem";
 import { useChuKy } from "../chon-chu-ky";
 import { HopThoaiMucTieu } from "../hop-thoai-muc-tieu";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
@@ -40,6 +43,7 @@ import {
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 
 const GOC: DonChonOkr = { loai: "goc" };
+const PHA_CO_CHAM: readonly PhaChuKy[] = ["cham-diem", "da-dong"];
 
 type DonDaGiai = { ten: string; truong: string | null; coTruong: boolean };
 
@@ -139,6 +143,7 @@ export function TheoDonVi() {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
+	const mk = okrKhepMessages(locale);
 	const trpc = useTRPC();
 	const [url, datUrl] = useQueryStates(okrParsers);
 	const loc: LocOkrGiaTri = locOkr(url);
@@ -158,8 +163,12 @@ export function TheoDonVi() {
 			[SEARCH_PARAM.okr.tuTin]: null,
 		});
 	const don = url[SEARCH_PARAM.okr.don] ?? GOC;
-	const xem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
 	const { cycles, currentId } = useChuKy();
+	const phaKy =
+		cycles.data?.cycles.find((c) => c.id === currentId)?.phase ?? null;
+	const coCham = phaKy !== null && PHA_CO_CHAM.includes(phaKy);
+	const xinXem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
+	const xem: CachXem = xinXem === "cham" && !coCham ? "danh-sach" : xinXem;
 	const [themMo, setThemMo] = useState(false);
 	const [nhapMo, setNhapMo] = useState(false);
 	const cay = useQuery(trpc.org.tree.queryOptions());
@@ -208,7 +217,15 @@ export function TheoDonVi() {
 	const soKr = objectives.reduce((t, mt) => t + mt.keyResults.length, 0);
 
 	let noiDung: ReactNode;
-	if (xem === "hop-tuan") {
+	if (xem === "cham") {
+		noiDung = (
+			<ChamDiem
+				cycleId={currentId}
+				key={`${currentId}:${khoaDon(don)}`}
+				unit={don}
+			/>
+		);
+	} else if (xem === "hop-tuan") {
 		noiDung = (
 			<HopTuan
 				cycleId={currentId}
@@ -277,12 +294,16 @@ export function TheoDonVi() {
 								</CardDescription>
 							</CardHeader>
 							<div className="flex flex-wrap items-center gap-2" data-hang-nut>
-								<ToggleGroup
-									aria-label={m.cachXem}
-									type="single"
-									variant="outline"
-									size="sm"
-									spacing={0}
+								<ViewSwitch
+									items={[
+										{ value: "danh-sach", label: m.danhSach },
+										{ value: "cay", label: m.cayCanChinh },
+										{ value: "hop-tuan", label: mt.hopTuan.cachXem },
+										...(coCham
+											? [{ value: "cham", label: mk.cham.cachXem }]
+											: []),
+									]}
+									label={m.cachXem}
 									value={xem}
 									onValueChange={(v) => {
 										const moi = CACH_XEM.find((c) => c === v);
@@ -292,15 +313,7 @@ export function TheoDonVi() {
 													moi === "danh-sach" ? null : moi,
 											});
 									}}
-								>
-									<ToggleGroupItem value="danh-sach">
-										{m.danhSach}
-									</ToggleGroupItem>
-									<ToggleGroupItem value="cay">{m.cayCanChinh}</ToggleGroupItem>
-									<ToggleGroupItem value="hop-tuan">
-										{mt.hopTuan.cachXem}
-									</ToggleGroupItem>
-								</ToggleGroup>
+								/>
 								{xem === "danh-sach" ? (
 									<LocOkr
 										boLoc={boLoc}
