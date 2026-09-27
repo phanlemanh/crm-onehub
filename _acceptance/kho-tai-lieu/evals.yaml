@@ -401,6 +401,8 @@ evals:
   - id: E14j
     criterion: AC-14
     executor: judgment
+    question: "Mot nhan vien van phong quen Word va Google Docs, khong biet markdown, nhin cac anh co tu biet trang nao dang dung, trang nao cho duyet, bam dau de viet trang moi va de duyet, va doc man duyet nhu Track Changes (chu them to, chu bo gach) khong — voi khong nhan nao dung tu ky thuat va bo cuc 390 dung duoc?"
+    evidence_required: [judged_by, verdict, rationale]
     inputs:
       - "_acceptance/kho-tai-lieu/evidence/ktl-kho-rong.png"
       - "_acceptance/kho-tai-lieu/evidence/ktl-danh-sach-1440.png"
