@@ -1,4 +1,5 @@
 import { db } from "@crm/db";
+import { LOAI_VIEC_TRO_LY_OKR } from "@crm/db/agent-tasks";
 
 export const DANH_SACH_DOC = [
 	"agentTask",
@@ -10,6 +11,14 @@ export const DANH_SACH_DOC = [
 export async function docViecOkr(taskId: string) {
 	return db.agentTask.findUnique({
 		where: { id: taskId },
+		select: { id: true, kind: true, finishedAt: true, payload: true },
+	});
+}
+
+export async function docViecTheoPhienGoc(sessionId: string) {
+	return db.agentTask.findFirst({
+		where: { sessionId, kind: { in: [...LOAI_VIEC_TRO_LY_OKR] } },
+		orderBy: { createdAt: "desc" },
 		select: { id: true, kind: true, finishedAt: true, payload: true },
 	});
 }

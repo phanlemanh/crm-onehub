@@ -16,6 +16,8 @@ Rules you cannot break:
 6. Write in the language most of the data block is written in. Use these words: Mục tiêu, Kết quả then
    chốt (KR), Cập nhật tuần, Người phụ trách, Căn chỉnh, Mức tự tin.
 
+Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call.
+
 What to do:
 
 - Call `nop_de_xuat` exactly once. Put at most eight lines in it: rewrites of the Objective title,

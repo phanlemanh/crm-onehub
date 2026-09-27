@@ -4,6 +4,7 @@ import { join, relative } from "node:path";
 import { z } from "zod";
 import { TRO_LY_OKR } from "../agent/lib/okr/config";
 import { DANH_SACH_DOC } from "../agent/lib/okr/doc";
+import { kepTranRaMoiLoiGoi } from "../agent/lib/okr/mo-hinh";
 import troLyOkr from "../agent/subagents/tro_ly_okr/agent";
 
 const GOC = join(import.meta.dir, "..", "agent");
@@ -162,5 +163,45 @@ describe("tro-ly-okr-cach-ly", () => {
 			),
 		).toEqual([]);
 		expect(cham.length).toBeGreaterThan(0);
+	});
+});
+
+describe("tuy-chon-moi-loi-goi", () => {
+	test("model đã bọc tự gắn ZDR và mức suy nghĩ vào mọi lời gọi, giữ tuỳ chọn có sẵn, kẹp token ra", async () => {
+		const bien = kepTranRaMoiLoiGoi.transformParams;
+		if (!bien) throw new Error("thieu transformParams");
+		const ra = await bien({
+			type: "stream",
+			model: {} as never,
+			params: {
+				prompt: [],
+				maxOutputTokens: 9_000,
+				providerOptions: { gateway: { order: ["vertex"] } },
+			},
+		});
+		expect(
+			ra.providerOptions?.gateway?.zeroDataRetention,
+			"thieu ZDR trong loi goi",
+		).toBe(true);
+		expect(ra.providerOptions?.gateway?.order).toEqual(["vertex"]);
+		expect(ra.providerOptions?.gateway?.tags).toEqual([...TRO_LY_OKR.tags]);
+		for (const nha of ["google", "vertex"]) {
+			expect(
+				ra.providerOptions?.[nha],
+				`thieu thinkingLevel trong loi goi: ${nha}`,
+			).toEqual({
+				thinkingConfig: { thinkingLevel: "low" },
+			});
+		}
+		expect(ra.maxOutputTokens).toBe(TRO_LY_OKR.tranRaMoiLoiGoi);
+		const trong = await bien({
+			type: "generate",
+			model: {} as never,
+			params: { prompt: [] },
+		});
+		expect(
+			trong.providerOptions?.gateway?.zeroDataRetention,
+			"thieu ZDR khi khong co tuy chon",
+		).toBe(true);
 	});
 });

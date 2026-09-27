@@ -2,6 +2,7 @@ import { db } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import { tinhNangCua } from "@crm/db/ai-chi-phi-danh-muc";
 import { z } from "zod";
+import { type NguCanhKenh, phienChaCua } from "./phien-con";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
 
 const soDem = z.number().refine(Number.isFinite).nullable().catch(null);
@@ -29,21 +30,10 @@ const buoc = z
 	.nullable()
 	.catch(null);
 
-const TOKEN_PHIEN_CON = /^subagent:([^:]+):/;
-
-export function phienChaCua(ctx: NguCanhSo): string | null {
-	return (
-		TOKEN_PHIEN_CON.exec(ctx.channel?.continuationToken ?? "")?.[1] ?? null
-	);
-}
-
-export type NguCanhSo = PurposeContext & {
-	readonly channel?: {
-		readonly kind?: string;
-		readonly continuationToken?: string;
+export type NguCanhSo = PurposeContext &
+	NguCanhKenh & {
+		readonly session: PurposeContext["session"] & { readonly id: string };
 	};
-	readonly session: PurposeContext["session"] & { readonly id: string };
-};
 
 export async function ghiBuoc(
 	event: unknown,

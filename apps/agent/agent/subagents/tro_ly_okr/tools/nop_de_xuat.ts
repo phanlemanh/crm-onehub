@@ -1,9 +1,9 @@
 import { db } from "@crm/db";
 import { nopDeXuat, okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { defineTool } from "eve/tools";
-import { docViecOkr, soLanNop } from "../../../lib/okr/doc";
+import { soLanNop } from "../../../lib/okr/doc";
 import { dungGoiDeXuat, idTrongGoi } from "../../../lib/okr/goi-ngu-canh";
-import { attribute, purposeOf } from "../../../lib/session-purpose";
+import { viecCuaPhienCon } from "../../../lib/okr/viec-con";
 
 const tuChoi = (lyDo: string) => ({
 	ketQua: "tu-choi" as const,
@@ -17,11 +17,10 @@ export default defineTool({
 		"Submit the proposals for this Trợ lý OKR task. Call exactly once. Lines must use ids from the data block.",
 	inputSchema: nopDeXuat,
 	async execute(input, ctx) {
-		if (purposeOf(ctx) !== "okr") return tuChoi("not an OKR session");
-		const taskId = attribute(ctx, "okrTaskId");
-		if (!taskId) return tuChoi("missing task");
-		const hang = await docViecOkr(taskId);
-		if (hang?.kind !== "okr-de-xuat" || hang.finishedAt) {
+		const hang = await viecCuaPhienCon(ctx);
+		if (!hang) return tuChoi("not an OKR session");
+		const taskId = hang.id;
+		if (hang.kind !== "okr-de-xuat" || hang.finishedAt) {
 			return tuChoi("task is not running");
 		}
 		const doc = okrTroLyViec.safeParse(hang.payload);

@@ -1,16 +1,12 @@
 import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { defineDynamic, defineInstructions } from "eve/instructions";
-import { docViecOkr } from "../../../lib/okr/doc";
 import { dungGoiDeXuat, goiThanhChiDan } from "../../../lib/okr/goi-ngu-canh";
-import { attribute, purposeOf } from "../../../lib/session-purpose";
+import { viecCuaPhienCon } from "../../../lib/okr/viec-con";
 
 export default defineDynamic({
 	events: {
 		"session.started": async (_event, ctx) => {
-			if (purposeOf(ctx) !== "okr") return null;
-			const taskId = attribute(ctx, "okrTaskId");
-			if (!taskId) return null;
-			const hang = await docViecOkr(taskId);
+			const hang = await viecCuaPhienCon(ctx);
 			if (hang?.kind !== "okr-de-xuat" || hang.finishedAt) return null;
 			const viec = okrTroLyViec.safeParse(hang.payload);
 			if (!viec.success || viec.data.viec !== "de-xuat") return null;
