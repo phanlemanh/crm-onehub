@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai là tự động</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 70ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    .grid { stroke: rgba(23,23,23,0.12); stroke-width: 0.8; }
+    .head { font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 600; fill: #171717; }
+    .head-soft { font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 500; fill: #575757; }
+    .row { font-family: 'Geist', sans-serif; font-size: 12px; fill: #171717; }
+    .cell { font-family: 'Geist', sans-serif; font-size: 10px; text-anchor: middle; }
+    .chip-open { fill: none; stroke: #575757; stroke-width: 1; stroke-dasharray: 4,3; }
+    .chip-deny { fill: #171717; stroke: #171717; stroke-width: 1; }
+    .chip-ask { fill: #ffffff; stroke: #171717; stroke-width: 1; }
+    .t-open { fill: #575757; }
+    .t-deny { fill: #fafafa; font-weight: 500; }
+    .t-ask { fill: #171717; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Bảng quyết định · AC-8, AC-9, AC-10</p>
+    <h1>Ai là tự động: lượt Tác nhân thôi xin người duyệt khi không ai ngồi</h1>
+    <p class="sub">Hàng là cách một phiên được khởi. Ô là điều xảy ra khi phiên đó định làm một thao tác ghi nhạy cảm.</p>
+
+    <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+      <title id="t">Ai là tự động</title>
+      <desc id="d">Bảy cách khởi phiên, hai cột hôm nay và sau vá. Ba hàng Tác nhân đổi từ xin người duyệt khi không ai ngồi sang từ chối có lý do; bốn hàng còn lại giữ nguyên.</desc>
+
+      <rect width="1000" height="480" fill="#fafafa"/>
+
+      <rect x="672" y="76" width="296" height="136" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+
+      <line class="grid" x1="352" y1="40" x2="352" y2="408"/>
+      <line class="grid" x1="664" y1="40" x2="664" y2="408"/>
+
+      <line class="grid" x1="32" y1="72" x2="976" y2="72"/>
+      <line class="grid" x1="32" y1="120" x2="976" y2="120"/>
+      <line class="grid" x1="32" y1="168" x2="976" y2="168"/>
+      <line x1="32" y1="216" x2="976" y2="216" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <line class="grid" x1="32" y1="264" x2="976" y2="264"/>
+      <line class="grid" x1="32" y1="312" x2="976" y2="312"/>
+      <line class="grid" x1="32" y1="360" x2="976" y2="360"/>
+      <line class="grid" x1="32" y1="408" x2="976" y2="408"/>
+
+      <text class="head-soft" x="32" y="60">Cách khởi phiên</text>
+      <text class="head" x="508" y="60" text-anchor="middle">Hôm nay</text>
+      <text class="head" x="820" y="60" text-anchor="middle">Sau vá</text>
+
+      <text class="row" x="32" y="100">Tác nhân theo lịch</text>
+      <rect class="chip-open" x="396" y="84" width="224" height="24" rx="4"/>
+      <text class="cell t-open" x="508" y="100">xin người duyệt (không ai ngồi)</text>
+      <rect class="chip-deny" x="708" y="84" width="224" height="24" rx="4"/>
+      <text class="cell t-deny" x="820" y="100">từ chối, có lý do</text>
+
+      <text class="row" x="32" y="148">Tác nhân theo sự kiện</text>
+      <rect class="chip-open" x="396" y="132" width="224" height="24" rx="4"/>
+      <text class="cell t-open" x="508" y="148">xin người duyệt (không ai ngồi)</text>
+      <rect class="chip-deny" x="708" y="132" width="224" height="24" rx="4"/>
+      <text class="cell t-deny" x="820" y="148">từ chối, có lý do</text>
+
+      <text class="row" x="32" y="196">Tác nhân do người bấm chạy</text>
+      <rect class="chip-open" x="396" y="180" width="224" height="24" rx="4"/>
+      <text class="cell t-open" x="508" y="196">xin người duyệt (không ai ngồi)</text>
+      <rect class="chip-deny" x="708" y="180" width="224" height="24" rx="4"/>
+      <text class="cell t-deny" x="820" y="196">từ chối, có lý do</text>
+
+      <text class="row" x="32" y="244">Việc nền của hàng việc</text>
+      <rect class="chip-deny" x="396" y="228" width="224" height="24" rx="4"/>
+      <text class="cell t-deny" x="508" y="244">từ chối, có lý do</text>
+      <rect class="chip-deny" x="708" y="228" width="224" height="24" rx="4"/>
+      <text class="cell t-deny" x="820" y="244">từ chối, có lý do</text>
+
+      <text class="row" x="32" y="292">Trợ lý AI trong app (cầu nối)</text>
+      <rect class="chip-ask" x="396" y="276" width="224" height="24" rx="4"/>
+      <text class="cell t-ask" x="508" y="292">xin người duyệt (có người ngồi)</text>
+      <rect class="chip-ask" x="708" y="276" width="224" height="24" rx="4"/>
+      <text class="cell t-ask" x="820" y="292">xin người duyệt (có người ngồi)</text>
+
+      <text class="row" x="32" y="340">Builder dựng Tác nhân</text>
+      <rect class="chip-ask" x="396" y="324" width="224" height="24" rx="4"/>
+      <text class="cell t-ask" x="508" y="340">xin người duyệt (có người ngồi)</text>
+      <rect class="chip-ask" x="708" y="324" width="224" height="24" rx="4"/>
+      <text class="cell t-ask" x="820" y="340">xin người duyệt (có người ngồi)</text>
+
+      <text class="row" x="32" y="388">Hỏi CRM qua Zalo</text>
+      <rect class="chip-ask" x="396" y="372" width="224" height="24" rx="4"/>
+      <text class="cell t-ask" x="508" y="388">xin người duyệt (có người ngồi)</text>
+      <rect class="chip-ask" x="708" y="372" width="224" height="24" rx="4"/>
+      <text class="cell t-ask" x="820" y="388">xin người duyệt (có người ngồi)</text>
+
+      <text x="968" y="444" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="end">Ba hàng Tác nhân đổi sang từ chối, có lý do; bốn hàng còn lại giữ nguyên.</text>
+    </svg>
+  </div>
+</body>
+</html>

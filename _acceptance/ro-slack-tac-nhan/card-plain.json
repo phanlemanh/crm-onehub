@@ -1,0 +1,45 @@
+{
+  "feature_plain": "Tác nhân chạy nền thôi đăng dữ liệu đối tác vào kênh Slack hay tin nhắn có người vai «chỉ OKR», và thôi xin duyệt những thao tác nhạy cảm trong lúc không ai ngồi xem — nó từ chối thẳng, có lý do.",
+  "will_do": [
+    {"id": "AC-8", "p": "Sẽ coi lượt Tác nhân chạy theo lịch (và theo sự kiện) là tự động: thao tác ghi nhạy cảm bị từ chối có lý do, không treo chờ người duyệt."},
+    {"id": "AC-9", "p": "Sẽ coi lượt Tác nhân do một người bấm chạy cũng là tự động, vì người bấm không ngồi duyệt từng bước."},
+    {"id": "AC-10", "p": "Sẽ giữ nguyên Trợ lý AI trong app, builder dựng Tác nhân và hỏi CRM qua Zalo: vẫn xin người đang ngồi duyệt; việc nền vẫn từ chối như hôm nay."},
+    {"id": "AC-11", "p": "Sẽ có một phép đo chạy lại được: cùng bộ kiểm đỏ trên mã trước vá (tin đã lọt ra Slack) và xanh trên mã sau vá."},
+    {"id": "AC-12", "p": "Sẽ ghi đúng hai tệp của hãng bị sửa thành chỗ rẽ có tên trong tài liệu Tác nhân, kèm điều kiện gỡ khi hãng có bản sửa."},
+    {"id": "AC-14", "p": "Sẽ kiểm kê mọi chỗ mở phiên và mọi chỗ gửi Slack của Tác nhân; một lối mới chưa ai xếp làm phép đo đỏ."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn tin vào kênh có người vai «chỉ OKR» (nhận ra qua email Slack): không tin nào đi ra, lịch sử lượt ghi «bị từ chối» kèm số người, không nêu tên."},
+    {"id": "AC-2", "p": "Chặn cả khi email Slack khác email CRM mà bảng khớp người Slack vẫn chỉ đúng người đó."},
+    {"id": "AC-3", "p": "Chặn tin nhắn trực tiếp tới người vai «chỉ OKR» — không mở cả hội thoại."},
+    {"id": "AC-4", "p": "Chặn ngay lượt kế khi quản trị vừa đổi ai đó sang «chỉ OKR», không đợi đồng bộ Slack; đổi ngược lại thì đăng lại được."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG chặn nhầm kênh hợp lệ (thành viên, quản trị, bot, người ngoài CRM): vẫn đăng đúng một lần, và gọi lại không đăng lần hai."},
+    {"id": "AC-6", "p": "Chặn khi không đọc được ai đang ở kênh (Slack báo lỗi, thiếu quyền, mất mạng): thà hỏng một lượt có lý do còn hơn lọt tin."},
+    {"id": "AC-7", "p": "Chặn cả khi người vai «chỉ OKR» nằm ở trang sau của danh sách thành viên kênh đông người."}
+  ],
+  "scope_plain": "Chưa chặn người Slack không có trong CRM, chưa chặn ở bước dựng Tác nhân, không che từng trường trong tin, không gửi báo cáo cho hãng.",
+  "coverage_plain": [
+    {"i": 0, "p": "Lối ra: kênh Slack, tin nhắn trực tiếp và thao tác ghi nhạy cảm đều có tiêu chí; bằng chứng đủ là bản kiểm kê mọi chỗ gửi Slack (AC-14 kiểm kê lối ra)."},
+    {"i": 1, "p": "Người ở nơi nhận: vai đầy đủ, «chỉ OKR» nhận qua email hoặc bảng khớp, vai vừa đổi, người ngoài CRM, bot — mỗi loại có ca riêng (AC-1 đến AC-5)."},
+    {"i": 2, "p": "Ai khởi lượt: lịch, sự kiện, người bấm, phiên có người ngồi, việc nền — đủ bảy hàng, đo trên danh tính thật do từng đường dựng (AC-8 đến AC-10)."},
+    {"i": 3, "p": "Nguồn Slack: một trang, nhiều trang, lỗi và gọi lại đều có ca (AC-5 gọi lại, AC-6 lỗi, AC-7 nhiều trang)."},
+    {"i": 4, "p": "Đối chiếu ngành: công cụ agent của Microsoft và ClickUp có đúng lớp lỗi này — lượt nền mượn quyền người dựng, nơi nhận không lọc theo từng người."},
+    {"i": 5, "p": "Giả định chờ anh gạch: mọi tin Slack của Tác nhân đều coi là dữ liệu đối tác, không phân loại từng tin."},
+    {"i": 6, "p": "Giả định chờ anh gạch: người Slack không khớp được thành viên CRM nào thì cho qua, như hôm nay."},
+    {"i": 7, "p": "Giả định chờ anh gạch: mọi phiên đánh dấu là lượt Tác nhân đều không có người ngồi — hôm nay chỉ bộ giao lượt Tác nhân đánh dấu như vậy."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo «đỏ trước» có thể đỏ vì thiếu tệp mới thay vì vì tin còn lọt. Đã sửa: bộ kiểm nạp phần mới một cách mềm, và phép đo đòi thấy tin đã đi ra trên mã cũ."},
+    {"i": 1, "p": "Trả lời giả của Slack có thể theo khuôn người viết mã tự nghĩ, không theo Slack thật, nên đọc trang sau sai mà vẫn xanh. Đã sửa: ghim đúng hình trả lời của Slack, và dùng lại bộ đọc danh bạ Slack đang chạy thật."},
+    {"i": 2, "p": "Lời từ chối vì người nhận và lời từ chối vì đọc lỗi có thể lẫn nhau. Đã sửa: hai câu phải khác nhau, không câu nào chứa câu kia, và ca nhiều trang có đối chứng đăng được."},
+    {"i": 3, "p": "Hai trục độ phủ khai là «quét mọi chỗ» mà không phép đo nào quét thật. Đã sửa: thêm tiêu chí kiểm kê mọi chỗ mở phiên và gửi Slack (AC-14)."},
+    {"i": 4, "p": "Phép đo chỗ rẽ có thể đỏ oan khi tài liệu nêu thêm tệp mới của bản rẽ. Đã sửa: chỉ so các tệp vốn của hãng."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260927T023512Z-1", "p": "KHÔNG viết đặc tả màn hình — việc này không đổi màn nào; đổi lại lời từ chối dùng câu có sẵn ở lịch sử lượt."},
+    {"id": "d-20260927T023512Z-2", "p": "KHÔNG chặn người Slack không có trong CRM — tránh chặn nhầm kênh có anh (email CRM là gmail); đổi lại khách hay người chưa vào CRM vẫn nhận tin như hôm nay, mở lại khi có khớp tay."},
+    {"id": "d-20260927T023512Z-3", "p": "Nhận ra lượt Tác nhân bằng dấu «đây là lượt Tác nhân» của phiên — không phải sửa tệp thứ ba của hãng; đổi lại phiên nào tự gắn dấu đó chỉ bị chặn nhiều hơn."},
+    {"id": "d-20260927T023512Z-4", "p": "Đọc cả danh bạ Slack một lượt thay vì hỏi từng người — kênh đông không bị Slack giới hạn tốc độ; đổi lại mỗi lần đăng đọc vài trang danh bạ."},
+    {"id": "d-20260927T023512Z-5", "p": "Từ chối theo đường báo lỗi sẵn có — chỗ sửa trong tệp của hãng nhỏ nhất; đổi lại Tác nhân có thể thử lại vài lần, lần nào cũng bị từ chối và ghi lại."}
+  ]
+}
