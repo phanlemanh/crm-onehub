@@ -68,7 +68,7 @@ export const aiChiTieuOutput = z.object({
 	tongUsd: z.number().nonnegative(),
 	troLyOkr: z.object({
 		chiUsd: z.number().nonnegative(),
-		tranUsd: z.number().positive(),
+		tranUsd: z.number().nonnegative(),
 		phanTram: z.number().nonnegative(),
 	}),
 	sanSang: troLySanSang,

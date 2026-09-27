@@ -16,6 +16,13 @@ const SAU_SO = 1e6;
 
 const tron = (usd: number) => Math.round(usd * SAU_SO) / SAU_SO;
 
+const TRAM = 100;
+
+function phanTramTran(chi: number, tran: number): number {
+	if (tran > 0) return Math.round((chi / tran) * TRAM);
+	return chi > 0 ? TRAM : 0;
+}
+
 @Injectable()
 export class TroLyOkrService {
 	constructor(
@@ -56,7 +63,7 @@ export class TroLyOkrService {
 			troLyOkr: {
 				chiUsd: tron(chi.troLyOkrUsd),
 				tranUsd,
-				phanTram: Math.round((chi.troLyOkrUsd / tranUsd) * 100),
+				phanTram: phanTramTran(chi.troLyOkrUsd, tranUsd),
 			},
 			sanSang,
 			dangKiem: dangKiem > 0,

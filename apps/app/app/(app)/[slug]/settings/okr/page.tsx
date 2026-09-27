@@ -19,6 +19,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { BangChuKy } from "./bang-chu-ky";
 import { FormCauHinh } from "./form-cau-hinh";
+import { KhoiTroLyOkr } from "./khoi-tro-ly-okr";
 import { LyDoKhongQuyen } from "./trang-thai-cai-dat";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -72,10 +73,16 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 
-	await Promise.all([
+	const [, program] = await Promise.all([
 		queryClient.prefetchQuery(trpc.okr.cycles.queryOptions()),
-		queryClient.prefetchQuery(trpc.okr.program.queryOptions()),
+		queryClient.fetchQuery(trpc.okr.program.queryOptions()),
 	]);
+	if (program.canManage) {
+		await Promise.all([
+			queryClient.prefetchQuery(trpc.okr.aiChiTieu.queryOptions()),
+			queryClient.prefetchQuery(trpc.org.tree.queryOptions()),
+		]);
+	}
 
 	return (
 		<HydrateClient>
@@ -84,6 +91,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 				<div className="flex flex-col gap-6">
 					<BangChuKy goiY={goiYChuKy(homNayVn(new Date()))} />
 					<FormCauHinh />
+					<KhoiTroLyOkr />
 				</div>
 			</PageShellContent>
 		</HydrateClient>
