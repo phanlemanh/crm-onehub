@@ -21,6 +21,7 @@ dõi bàn giao phần mềm. Lượt 0 còn duyệt từ điển; việc chuẩn
 | 546 nguồn | `docs/plan/kho-tai-lieu-nguon.md` |
 | Hồ sơ 17 luồng research | `docs/plan/kho-tai-lieu-ho-so/` |
 | Tài liệu trình bày (Claude Doc) | https://claude.ai/artifact/8B5uoGwQd4eyGb8wCNw8CN — riêng tư, mở được trên mọi máy đã đăng nhập tài khoản chủ kho |
+| Trang theo dõi tiến độ (artifact) | https://claude.ai/artifact/12sCbWrWgx6td1vqzR63Yg — dữ liệu trong kho dữ liệu của artifact; phiên máy cập nhật bằng `ArtifactData` sau mỗi hạng mục, cùng lúc với mục 8 |
 | Bản mẫu bấm được | `apps/app/app/proto/_modules/kho-tai-lieu/`, 16 trạng thái, đường `/proto/kho-tai-lieu` |
 | Trình đọc markdown | `packages/ui/src/components/markdown-reader.tsx` |
 | Từ điển | Tám mục mới ở cuối `CONTEXT.md`, dạng «đề xuất, chưa qua Cổng Phạm vi» |
@@ -151,4 +152,5 @@ bun run check-types && bun run lint && bun run lint:slop && bun run test && bun 
 > https://claude.ai/artifact/8B5uoGwQd4eyGb8wCNw8CN. Nói cho tôi đang ở lượt nào và
 > việc kế tiếp là gì, rồi làm.
 
-Sau mỗi hạng mục, sửa dòng của nó ở mục 8 của lộ trình và cột «Commit» ở mục 1 tệp này.
+Sau mỗi hạng mục, sửa dòng của nó ở mục 8 của lộ trình, cột «Commit» ở mục 1 tệp này, và
+các bản ghi tương ứng trên trang theo dõi tiến độ (`hang-muc`, `viec`, `nhat-ky`, `meta/tong`).
