@@ -11,12 +11,16 @@ import { createRoot, type Root } from "react-dom/client";
 import mauHetHanMuc from "../../agent/test/fixtures/session-limit-that.json";
 
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
-const { BuilderQuestionComposer, sessionLimitAnswerLabel } = await import(
-	"@/components/agent-builder/builder-question-composer"
-);
+const {
+	BuilderQuestionComposer,
+	EVE_SESSION_LIMIT_TOOL,
+	sessionLimitAnswerLabel,
+	withoutSessionLimitSteps,
+} = await import("@/components/agent-builder/builder-question-composer");
 const { oSoanMessages } = await import("@/lib/messages/agent-builder-o-soan");
-const { EVE_SESSION_LIMIT_TOOL, messagesFromEvents, toTranscript } =
-	await import("@/lib/agent-transcript");
+const { messagesFromEvents, toTranscript } = await import(
+	"@/lib/agent-transcript"
+);
 
 const LUONG_THAT = readFileSync(
 	new URL(
@@ -203,18 +207,26 @@ describe("het-han-muc", () => {
 		expect(sessionLimitAnswerLabel({ optionId: "crm-task" }, t)).toBeNull();
 		expect(sessionLimitAnswerLabel(null, t)).toBeNull();
 	});
-	test("het-han-muc: dong dau vet khong lo chu tieng Anh cua eve", () => {
-		const banGhi = toTranscript(messagesFromEvents(LUONG_THAT));
-		const muc = banGhi.flatMap((dong) => dong.items);
-		const cacCongCu = muc.flatMap((item) =>
-			item.kind === "did" ? [item.tool] : [],
-		);
+	test("het-han-muc: dong dau vet — man dung an buoc het han muc, ban dung chung giu lai", () => {
+		const banDungChung = toTranscript(messagesFromEvents(LUONG_THAT));
+		const congCu = (ban: typeof banDungChung) =>
+			ban.flatMap((dong) =>
+				dong.items.flatMap((item) => (item.kind === "did" ? [item.tool] : [])),
+			);
 		expect(
-			cacCongCu.length,
-			"doi chung: luong that van co dong dau vet",
+			congCu(banDungChung),
+			"doi chung: luong that sinh ra buoc session-limit va ban dung chung giu no",
+		).toContain(EVE_SESSION_LIMIT_TOOL);
+
+		const banManDung = banDungChung.map(withoutSessionLimitSteps);
+		expect(
+			congCu(banManDung).length,
+			"doi chung: con dong dau vet khac",
 		).toBeGreaterThan(0);
-		expect(cacCongCu, "session-limit").not.toContain(EVE_SESSION_LIMIT_TOOL);
-		const chuTrenMan = JSON.stringify(muc);
+		expect(congCu(banManDung), "session-limit").not.toContain(
+			EVE_SESSION_LIMIT_TOOL,
+		);
+		const chuTrenMan = JSON.stringify(banManDung);
 		for (const chu of chuTiengAnhCuaEve(yeuCau)) {
 			expect(chuTrenMan, `lo chu eve: ${chu}`).not.toContain(chu);
 		}

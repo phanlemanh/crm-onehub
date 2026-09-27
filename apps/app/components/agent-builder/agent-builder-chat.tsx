@@ -93,6 +93,7 @@ import { BuilderFailureCard } from "./builder-failure-card";
 import {
 	BuilderQuestionComposer,
 	sessionLimitAnswerLabel,
+	withoutSessionLimitSteps,
 } from "./builder-question-composer";
 import {
 	ChatAttachmentChip,
@@ -918,8 +919,9 @@ function AssistantMessage({
 	message: EveMessage;
 	answeredQuestionIds: ReadonlySet<string>;
 }) {
-	const [transcript] = toTranscript([message]);
-	if (!transcript || transcript.mine) return null;
+	const [raw] = toTranscript([message]);
+	if (!raw || raw.mine) return null;
+	const transcript = withoutSessionLimitSteps(raw);
 
 	const textParts: string[] = [];
 	for (const item of transcript.items) {
