@@ -131,7 +131,7 @@ Schema sự kiện: `z.discriminatedUnion("loai", [...])` với `DUYET: { deXuat
 - [ ] **Step 4:** chạy lại → PASS; thêm phá-thử: bỏ `.replace(/đ/g,"d")` trên bản sao → ca «Đối tác Đà Nẵng» đỏ.
 - [ ] **Step 5:** commit `feat(tai-lieu): luật chung — loại trang, slug, NFC, sự kiện`.
 
-### Task 2: Bộ markdown dùng chung
+#### Task 1b (cùng nhánh Task 1): Bộ markdown dùng chung
 
 Phục vụ: E10 (khứ hồi), E10c (điểm bất động), E15 (rút liên kết). `independent: true`.
 
@@ -150,7 +150,7 @@ Phục vụ: E10 (khứ hồi), E10c (điểm bất động), E15 (rút liên k�
 - [ ] **Step 4:** PASS 12/12; phá-thử: bản sao đổi dấu danh sách giữa hai lần gọi → ca đỏ nêu tên mẫu.
 - [ ] **Step 5:** commit.
 
-### Task 3: Bộ diff dùng chung
+#### Task 1c (cùng nhánh Task 1): Bộ diff dùng chung
 
 Phục vụ: E13 (ins/del, dải số, `diffHash` khớp), E6 (hash lệch). `independent: true`.
 
@@ -316,4 +316,4 @@ Phục vụ: E12, E13b, E14. `independent: false` (cần Task 9).
 
 ## Thứ tự và song song
 
-Task 1, 2, 3, 4 độc lập — chạy song song. Task 7 và 8 độc lập với máy chủ — chạy song song với Task 5, 6. Task 9 sau 5–8; Task 10 sau 9.
+Task 1 (gồm 1b, 1c, làm tuần tự trong một nhánh) và Task 4 chạy song song; phụ thuộc và exports đã thêm sẵn ở commit chuẩn bị `8ecf6093`. Task 7 và 8 độc lập với máy chủ — chạy song song với Task 5, 6. Task 9 sau 5–8; Task 10 sau 9.
