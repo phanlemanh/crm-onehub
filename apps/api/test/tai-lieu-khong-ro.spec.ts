@@ -5,12 +5,12 @@ import {
 	type Ai,
 	deXuat,
 	dungSan,
-	duyetQuaDb,
+	duyet,
 	hoi,
 	ok,
 	type TraLoi,
 	taoTrang,
-	traLaiQuaDb,
+	traLai,
 } from "./tai-lieu-san";
 
 dungSan();
@@ -37,6 +37,21 @@ const THAY_TRANG = {
 	S5: MOI_NGUOI,
 } satisfies Record<TrangThai, readonly Ai[]>;
 
+const THAY_DE_XUAT = {
+	S1: NGUOI_DUYET_VA_TAO,
+	S2: NGUOI_DUYET_VA_TAO,
+	S3: [],
+	S4: NGUOI_DUYET_VA_TAO,
+	S5: NGUOI_DUYET_VA_TAO,
+} satisfies Record<TrangThai, readonly Ai[]>;
+
+const DUYET_DUOC = ["chu", "owner", "admin"] as const;
+const CO_BAN_CHO = ["S1", "S4"] as const;
+const BI_TRA_LAI = ["S2", "S5"] as const;
+
+type HangCho = { rows: { id: string }[]; choToiDuyet: number };
+type DeXuatDoc = { noiDung: string; lyDo: string | null; trangThai: string };
+
 type Dong = { slug: string };
 type DanhSach = {
 	rows: Dong[];
@@ -46,6 +61,9 @@ type DanhSach = {
 
 const slugCua = {} as Record<TrangThai, string>;
 const nenCua = {} as Record<Ai, DanhSach>;
+const deXuatCua = {} as Record<TrangThai, { id: string; noiDung: string }>;
+const daDuyetS3 = { id: "" };
+const nenCho = {} as Record<Ai, number>;
 
 function in1(dong: string): void {
 	process.stdout.write(`khong-ro: ${dong}\n`);
@@ -69,10 +87,12 @@ async function toanBo(ai: Ai): Promise<DanhSach> {
 }
 
 async function gieo(trangThai: TrangThai): Promise<string> {
+	const noiDungDau = `Nội dung ${trangThai}.`;
+	const noiDungSua = `Nội dung ${trangThai} sửa.`;
 	const ten = `Không rò ${trangThai} ${Date.now().toString(36)}`;
 	const { slug, deXuatId } = await taoTrang(
 		ten,
-		`Nội dung ${trangThai}.`,
+		noiDungDau,
 		"tao",
 		"chu",
 		LOAI_CUA[trangThai],
@@ -81,17 +101,29 @@ async function gieo(trangThai: TrangThai): Promise<string> {
 	expect(`${trangThai} tao thay trang vua tao: ${tao}`).toBe(
 		`${trangThai} tao thay trang vua tao: 200`,
 	);
-	if (trangThai === "S2") await traLaiQuaDb(deXuatId, "chu");
-	if (trangThai === "S1" || trangThai === "S2") return slug;
-	await duyetQuaDb(deXuatId, "chu");
-	if (trangThai === "S3") return slug;
-	const moi = await deXuat(slug, `Nội dung ${trangThai} sửa.`, "tao");
-	if (trangThai === "S5") await traLaiQuaDb(moi, "chu");
+	if (trangThai === "S2") await traLai(deXuatId, "chu");
+	if (trangThai === "S1" || trangThai === "S2") {
+		deXuatCua[trangThai] = { id: deXuatId, noiDung: noiDungDau };
+		return slug;
+	}
+	await duyet(deXuatId, "chu");
+	if (trangThai === "S3") {
+		daDuyetS3.id = deXuatId;
+		return slug;
+	}
+	const moi = await deXuat(slug, noiDungSua, "tao");
+	if (trangThai === "S5") await traLai(moi, "chu");
+	deXuatCua[trangThai] = { id: moi, noiDung: noiDungSua };
 	return slug;
 }
 
 beforeAll(async () => {
 	for (const ai of AI) nenCua[ai] = await toanBo(ai);
+	for (const ai of AI)
+		nenCho[ai] = ok<HangCho>(
+			await hoi("taiLieu.proposals", undefined, ai),
+			`proposals ${ai}`,
+		).choToiDuyet;
 	for (const s of TRANG_THAI) slugCua[s] = await gieo(s);
 });
 
@@ -101,6 +133,42 @@ function thay(bang: Record<TrangThai, readonly Ai[]>, ai: Ai, s: TrangThai) {
 
 function cungKhongCo(g: TraLoi, khongCo: TraLoi): boolean {
 	return g.status === khongCo.status && g.loi === khongCo.loi;
+}
+
+async function kiemDeXuat(
+	ai: Ai,
+	s: TrangThai,
+	idTrongHang: ReadonlySet<string>,
+	khongCo: TraLoi,
+): Promise<string[]> {
+	const sai: string[] = [];
+	const dx = deXuatCua[s];
+	const mong = thay(THAY_DE_XUAT, ai, s);
+	const trongHang = idTrongHang.has(dx.id);
+	in1(`${ai} x ${s} x proposals -> ${trongHang ? "thay" : "khong"}`);
+	if (trongHang !== mong)
+		sai.push(`${mong ? "thieu" : "ro"} de xuat: ${ai} x ${s} (proposals)`);
+	const p = await hoi("taiLieu.proposal", { id: dx.id }, ai);
+	in1(`${ai} x ${s} x proposal -> ${p.status}`);
+	if (mong) {
+		const doc = p.status === 200 ? (p.data as DeXuatDoc) : null;
+		if (doc?.noiDung !== dx.noiDung)
+			sai.push(`thieu de xuat: ${ai} x ${s} (proposal ${p.status})`);
+		const coLyDo = (BI_TRA_LAI as readonly string[]).includes(s);
+		if (coLyDo && !doc?.lyDo) sai.push(`thieu ly do: ${ai} x ${s}`);
+	} else if (!cungKhongCo(p, khongCo)) {
+		sai.push(`ro de xuat: ${ai} x ${s} (proposal ${p.status} ${p.loi})`);
+	}
+	if (!thay(THAY_TRANG, ai, s)) return sai;
+	const g = ok<{ coBanCho: boolean }>(
+		await hoi("taiLieu.get", { slug: slugCua[s] }, ai),
+		`get ${ai} ${s}`,
+	);
+	const mongCho = mong && (CO_BAN_CHO as readonly string[]).includes(s);
+	in1(`${ai} x ${s} x coBanCho -> ${g.coBanCho}`);
+	if (g.coBanCho !== mongCho)
+		sai.push(`${mongCho ? "thieu" : "ro"} de xuat: ${ai} x ${s} (coBanCho)`);
+	return sai;
 }
 
 describe("khong-ro", () => {
@@ -158,5 +226,40 @@ describe("khong-ro", () => {
 				);
 			}
 		}
+	});
+
+	test("khong-ro: proposals, proposal va coBanCho theo ma tran sau nguoi x nam trang thai", async () => {
+		const khongCo = await hoi(
+			"taiLieu.proposal",
+			{ id: "khong-co-that" },
+			"tao",
+		);
+		expect(khongCo.status).toBe(404);
+		const sai: string[] = [];
+		for (const ai of AI) {
+			const hang = ok<HangCho>(
+				await hoi("taiLieu.proposals", undefined, ai),
+				`proposals ${ai}`,
+			);
+			const idTrongHang = new Set(hang.rows.map((r) => r.id));
+			if (idTrongHang.has(daDuyetS3.id))
+				sai.push(`ro de xuat: ${ai} x S3 (ban da duyet con trong hang)`);
+			in1(
+				`${ai} x S3 x proposals -> ${idTrongHang.has(daDuyetS3.id) ? "co" : "rong"}`,
+			);
+			for (const s of TRANG_THAI) {
+				if (s === "S3") continue;
+				sai.push(...(await kiemDeXuat(ai, s, idTrongHang, khongCo)));
+			}
+			const tangCho = (DUYET_DUOC as readonly Ai[]).includes(ai)
+				? CO_BAN_CHO.length
+				: 0;
+			in1(`${ai} x choToiDuyet -> ${hang.choToiDuyet - nenCho[ai]}`);
+			if (hang.choToiDuyet !== nenCho[ai] + tangCho)
+				sai.push(
+					`dem cho duyet ${ai}: ${hang.choToiDuyet} != ${nenCho[ai]} + ${tangCho}`,
+				);
+		}
+		expect(sai).toEqual([]);
 	});
 });

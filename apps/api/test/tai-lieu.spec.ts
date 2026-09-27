@@ -1,16 +1,27 @@
 import { describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { db } from "@crm/db";
+import { parseSuKienChiTiet } from "@crm/validation/tai-lieu";
+import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import { TAI_LIEU_API } from "../src/tai-lieu/tai-lieu-config";
+import { gieoThanhVien, mintPhien } from "./phien-thu";
 import {
+	type DeXuatDoc,
 	demTaiLieu,
 	deXuat,
 	donTaiLieu,
 	dungSan,
-	duyetQuaDb,
+	duyet,
 	goi,
+	goiBang,
+	hashCua,
 	hoi,
+	ma,
 	ok,
+	phien,
 	taoTrang,
+	traLai,
 } from "./tai-lieu-san";
 
 dungSan();
@@ -131,7 +142,7 @@ describe("sua-trang", () => {
 			"Sửa trang thử",
 			"Bản một.\n",
 		);
-		await duyetQuaDb(deXuatId, "chu");
+		await duyet(deXuatId, "chu");
 		const banMot = await db.taiLieuTrang.findUniqueOrThrow({
 			where: { id: trangId },
 			select: { banDangDungId: true },
@@ -186,7 +197,7 @@ describe("de-xuat-trung", () => {
 	test("de-xuat-trung: noi dung trung ban goc sau chuan hoa bi tu choi, khac mot ky tu thi tao duoc", async () => {
 		const goc = "## Mục\n\n- một\n- hai\n\nĐối tác hoà giải.\n";
 		const { slug, trangId, deXuatId } = await taoTrang("Trùng bản gốc", goc);
-		await duyetQuaDb(deXuatId, "chu");
+		await duyet(deXuatId, "chu");
 		const demDeXuat = () => db.taiLieuDeXuat.count({ where: { trangId } });
 		const truoc = await demDeXuat();
 		const trung = goc.normalize("NFD").replace(/^- /gm, "* ");
@@ -209,5 +220,425 @@ describe("de-xuat-trung", () => {
 			"khac",
 		);
 		ok(doiTen, "chi doi ten");
+	});
+});
+
+async function soPhienBan(trangId: string): Promise<number> {
+	return db.taiLieuPhienBan.count({ where: { trangId } });
+}
+
+async function trangDangDung(ten: string, noiDung: string) {
+	const t = await taoTrang(ten, noiDung);
+	await duyet(t.deXuatId, "chu");
+	return t;
+}
+
+const THU_TUC_GHI = ["approve", "create", "propose", "reject"];
+
+function thuTucTaiLieu(): { ten: string; loai: string }[] {
+	const nguon = readFileSync(
+		join(import.meta.dir, "..", "src", "generated", "server.ts"),
+		"utf8",
+	);
+	const dau = nguon.indexOf("taiLieu: t.router({");
+	expect(dau).toBeGreaterThan(-1);
+	const khoi = nguon.slice(dau, nguon.indexOf("}),", dau));
+	return [
+		...khoi.matchAll(/(\w+): publicProcedure[\s\S]*?\.(query|mutation)\(/g),
+	].map((m) => ({ ten: m[1] ?? "", loai: m[2] ?? "" }));
+}
+
+describe("duyet-tao-phien-ban", () => {
+	test("duyet-tao-phien-ban: duyet tao phien ban bat bien, dat con tro, ghi su kien; lan hai so 2", async () => {
+		const { slug, trangId, deXuatId } = await taoTrang(
+			"Duyệt tạo phiên bản",
+			"## Một\n\nBản đầu.",
+		);
+		const dx1 = await db.taiLieuDeXuat.findUniqueOrThrow({
+			where: { id: deXuatId },
+		});
+		expect(await duyet(deXuatId, "chu")).toBe(1);
+		const v1 = await db.taiLieuPhienBan.findUniqueOrThrow({
+			where: { trangId_so: { trangId, so: 1 } },
+		});
+		expect(Buffer.from(v1.noiDung).equals(Buffer.from(dx1.noiDung))).toBe(true);
+		expect(v1.deXuatId).toBe(deXuatId);
+		expect(v1.duyetBoiId).toBe(phien.chu.nguoi);
+		const trang = await db.taiLieuTrang.findUniqueOrThrow({
+			where: { id: trangId },
+		});
+		expect(trang.banDangDungId).toBe(v1.id);
+		const sauDuyet = await db.taiLieuDeXuat.findUniqueOrThrow({
+			where: { id: deXuatId },
+		});
+		expect(sauDuyet.trangThai).toBe("DA_DUYET");
+		const suKien = await db.taiLieuSuKien.findMany({
+			where: { trangId, loai: "DUYET" },
+		});
+		expect(suKien).toHaveLength(1);
+		expect(parseSuKienChiTiet(suKien[0]?.chiTiet)).toMatchObject({
+			loai: "DUYET",
+			deXuatId,
+			phienBan: 1,
+		});
+
+		const hai = await deXuat(slug, "## Một\n\nBản hai.", "khac");
+		expect(await duyet(hai, "chu")).toBe(2);
+		const v1Sau = await db.taiLieuPhienBan.findUniqueOrThrow({
+			where: { id: v1.id },
+		});
+		expect(Buffer.from(v1Sau.noiDung).equals(Buffer.from(v1.noiDung))).toBe(
+			true,
+		);
+		expect(v1Sau.ten).toBe(v1.ten);
+		for (const ai of ["khac", "okr"] as const) {
+			const g = ok<Get>(await hoi("taiLieu.get", { slug }, ai), `get ${ai}`);
+			expect(`${ai}: ${g.phienBan?.so} ${g.noiDung}`).toBe(
+				`${ai}: 2 ## Một\n\nBản hai.`,
+			);
+		}
+	});
+
+	test("duyet-tao-phien-ban: chi create, propose, approve, reject ghi; khong duong sua hay go phien ban, su kien", () => {
+		expect(
+			thuTucTaiLieu()
+				.filter((t) => t.loai === "mutation")
+				.map((t) => t.ten)
+				.sort(),
+		).toEqual(THU_TUC_GHI);
+		const nguon = readFileSync(
+			join(import.meta.dir, "..", "src", "tai-lieu", "tai-lieu.service.ts"),
+			"utf8",
+		);
+		expect(
+			nguon.match(
+				/taiLieu(PhienBan|SuKien)\.(update|updateMany|upsert|delete|deleteMany)\b|(UPDATE|DELETE FROM)\s+"taiLieu(PhienBan|SuKien)"/g,
+			) ?? [],
+			"duong sua hay go phien ban, su kien",
+		).toEqual([]);
+	});
+});
+
+describe("so-va-dat", () => {
+	test("so-va-dat: duyet A lam B cu trong cung lan ghi; approve B tra CONFLICT", async () => {
+		const { slug, trangId } = await trangDangDung("So và đặt a", "Gốc a.");
+		const a = await deXuat(slug, "Bản A.", "khac");
+		const b = await deXuat(slug, "Bản B.", "okr");
+		const hashB = await hashCua(b, "chu");
+		await duyet(a, "chu");
+		const bSau = await db.taiLieuDeXuat.findUniqueOrThrow({ where: { id: b } });
+		expect(bSau.trangThai).toBe("CU");
+		const truoc = await soPhienBan(trangId);
+		const tra = await goi("taiLieu.approve", { id: b, diffHash: hashB }, "chu");
+		expect(`${tra.status} ${tra.loi}`, "de xuat cu van duyet duoc").toBe(
+			`409 ${T.cu}`,
+		);
+		expect(await soPhienBan(trangId)).toBe(truoc);
+		const p = ok<DeXuatDoc>(
+			await hoi("taiLieu.proposal", { id: b }, "okr"),
+			"proposal b",
+		);
+		expect(p.cu).toBe(true);
+	});
+
+	test("so-va-dat: diffHash sai mot ky tu tra CONFLICT va khong ghi gi", async () => {
+		const { slug, trangId } = await trangDangDung("So và đặt b", "Gốc b.");
+		const c = await deXuat(slug, "Bản C.", "khac");
+		const dung = await hashCua(c, "chu");
+		const sai = `${dung.slice(0, -1)}${dung.endsWith("0") ? "1" : "0"}`;
+		const truoc = await demTaiLieu();
+		const tra = await goi("taiLieu.approve", { id: c, diffHash: sai }, "chu");
+		expect(`${tra.status} ${tra.loi}`).toBe(`409 ${T.daDoi}`);
+		expect(await demTaiLieu()).toEqual(truoc);
+		const cSau = await db.taiLieuDeXuat.findUniqueOrThrow({ where: { id: c } });
+		expect(cSau.trangThai).toBe("CHO_DUYET");
+		expect(await soPhienBan(trangId)).toBe(1);
+	});
+
+	test("so-va-dat: de xuat co ban goc khac ban dang dung bi coi la cu, approve danh dau CU", async () => {
+		const { slug, trangId } = await trangDangDung("So và đặt c", "Gốc c.");
+		const d = await deXuat(slug, "Bản D.", "khac");
+		const hashD = await hashCua(d, "chu");
+		const e = await deXuat(slug, "Bản E.", "okr");
+		await duyet(e, "chu");
+		await db.taiLieuDeXuat.update({
+			where: { id: d },
+			data: { trangThai: "CHO_DUYET", xuLyLuc: null },
+		});
+		const p = ok<DeXuatDoc>(
+			await hoi("taiLieu.proposal", { id: d }, "chu"),
+			"proposal d",
+		);
+		expect(p.trangThai).toBe("CHO_DUYET");
+		expect(p.cu).toBe(true);
+		const truoc = await soPhienBan(trangId);
+		const tra = await goi("taiLieu.approve", { id: d, diffHash: hashD }, "chu");
+		expect(`${tra.status} ${tra.loi}`, "de xuat cu van duyet duoc").toBe(
+			`409 ${T.cu}`,
+		);
+		expect(await soPhienBan(trangId)).toBe(truoc);
+		const dSau = await db.taiLieuDeXuat.findUniqueOrThrow({ where: { id: d } });
+		expect(dSau.trangThai).toBe("CU");
+		const cu = await db.taiLieuSuKien.findMany({
+			where: { trangId, loai: "CU" },
+		});
+		expect(cu.map((c) => parseSuKienChiTiet(c.chiTiet).deXuatId)).toContain(d);
+	});
+
+	test("so-va-dat: doi chung duong, hash dung va ban goc dung thi duyet duoc", async () => {
+		const { slug, trangId } = await trangDangDung("So và đặt d", "Gốc d.");
+		const f = await deXuat(slug, "Bản F.", "khac");
+		expect(await duyet(f, "chu")).toBe(2);
+		expect(await soPhienBan(trangId)).toBe(2);
+	});
+});
+
+describe("tra-lai", () => {
+	test("tra-lai: ly do rong va 501 ky tu bi tu choi; 500 ky tu tra lai duoc, nguoi tao doc duoc ly do", async () => {
+		const { slug, trangId } = await trangDangDung("Trả lại thử", "Gốc.");
+		const g = await deXuat(slug, "Bản G.", "khac");
+		const truocTrang = await db.taiLieuTrang.findUniqueOrThrow({
+			where: { id: trangId },
+		});
+		for (const lyDo of ["", "   ", "x".repeat(501)]) {
+			const tra = await goi("taiLieu.reject", { id: g, lyDo }, "chu");
+			expect(
+				`${lyDo.length}: ${tra.status}`,
+				"tra lai khong ly do duoc chap nhan",
+			).toBe(`${lyDo.length}: 400`);
+			const dx = await db.taiLieuDeXuat.findUniqueOrThrow({ where: { id: g } });
+			expect(dx.trangThai).toBe("CHO_DUYET");
+		}
+		const lyDo = `Thiếu ${"x".repeat(494)}`;
+		expect(lyDo.length).toBe(500);
+		ok(await goi("taiLieu.reject", { id: g, lyDo }, "chu"), "tra lai 500");
+		const dx = await db.taiLieuDeXuat.findUniqueOrThrow({ where: { id: g } });
+		expect(dx.trangThai).toBe("TRA_LAI");
+		expect(dx.lyDo).toBe(lyDo);
+		const p = ok<DeXuatDoc>(
+			await hoi("taiLieu.proposal", { id: g }, "khac"),
+			"nguoi tao doc",
+		);
+		expect(p.lyDo).toBe(lyDo);
+		const sauTrang = await db.taiLieuTrang.findUniqueOrThrow({
+			where: { id: trangId },
+		});
+		expect(sauTrang.banDangDungId).toBe(truocTrang.banDangDungId);
+		expect(await soPhienBan(trangId)).toBe(1);
+		const lai = await goi(
+			"taiLieu.approve",
+			{ id: g, diffHash: "0".repeat(64) },
+			"chu",
+		);
+		expect(`${lai.status} ${lai.loi}`).toBe(`409 ${T.daXuLy}`);
+	});
+});
+
+describe("lien-ket-tim", () => {
+	test("lien-ket-tim: lien ket thay tron luc duyet, cot tim bo dau, de xuat cho hay bi tra lai khong de lai gi", async () => {
+		const dich1 = await trangDangDung("Liên kết đích một", "Đích một.");
+		const dich2 = await trangDangDung("Liên kết đích hai", "Đích hai.");
+		const noiDung = `Quy định hoa hồng: xem [đích một](/tai-lieu/${dich1.slug}) và [đích hai](/tai-lieu/${dich2.slug}), thêm [ngoài](https://vi.wikipedia.org/wiki/Hoa).`;
+		const { slug, trangId, deXuatId } = await taoTrang(
+			"Liên kết nguồn",
+			noiDung,
+		);
+		const lienKet = () =>
+			db.taiLieuLienKet.findMany({
+				where: { tuTrangId: trangId },
+				orderBy: { denSlug: "asc" },
+				select: { denSlug: true, vanBan: true },
+			});
+		expect(await lienKet(), "lien ket tu de xuat chua duyet").toEqual([]);
+		await duyet(deXuatId, "chu");
+		expect(await lienKet()).toEqual(
+			[
+				{ denSlug: dich1.slug, vanBan: "đích một" },
+				{ denSlug: dich2.slug, vanBan: "đích hai" },
+			].sort((a, b) => a.denSlug.localeCompare(b.denSlug)),
+		);
+		const tim = await db.$queryRaw<{ id: string }[]>`
+			SELECT id FROM "taiLieuTrang"
+			WHERE "timKiem" @@ plainto_tsquery('simple', unaccent('hoa hong'))
+		`;
+		expect(tim.map((t) => t.id)).toContain(trangId);
+		const conMot = `Chỉ còn [đích hai](/tai-lieu/${dich2.slug}).`;
+		const biTraLai = await deXuat(
+			slug,
+			`${conMot} Và [lạ](/tai-lieu/trang-la-moi) nữa.`,
+			"khac",
+		);
+		await traLai(biTraLai, "chu");
+		const cho = await deXuat(slug, `${conMot} Đang chờ.`, "okr");
+		expect(
+			(await lienKet()).map((l) => l.denSlug),
+			"lien ket tu de xuat chua duyet",
+		).toEqual([dich1.slug, dich2.slug].sort());
+		const timCho = await db.$queryRaw<{ id: string }[]>`
+			SELECT id FROM "taiLieuTrang"
+			WHERE id = ${trangId} AND "timKiem" @@ plainto_tsquery('simple', unaccent('dang cho'))
+		`;
+		expect(timCho, "tu tim kiem tu de xuat chua duyet").toEqual([]);
+		await duyet(cho, "chu");
+		expect(await lienKet()).toEqual([
+			{ denSlug: dich2.slug, vanBan: "đích hai" },
+		]);
+		const timSau = await db.$queryRaw<{ id: string }[]>`
+			SELECT id FROM "taiLieuTrang"
+			WHERE id = ${trangId} AND "timKiem" @@ plainto_tsquery('simple', unaccent('dang cho'))
+		`;
+		expect(timSau).toHaveLength(1);
+	});
+});
+
+const TRUOC_DIFF = `## Thời hạn chi trả
+
+Hoa hồng được chi trả trong vòng 48 giờ kể từ khi ký.
+
+Đối tác gửi chứng từ đầy đủ cho vận hành.
+
+Mọi thắc mắc gửi về bộ phận vận hành.
+`;
+
+const SAU_DIFF = `## Thời hạn chi trả
+
+Hoa hồng được chi trả trong vòng 24 giờ kể từ khi ký.
+
+Mọi thắc mắc gửi về bộ phận vận hành.
+
+Bản này áp dụng cho mọi đối tác.
+`;
+
+describe("diff-hash", () => {
+	test("diff-hash: diffHash client tren cung hai ban === diffHash may chu tra qua proposal", async () => {
+		const { slug } = await trangDangDung("Diff hash thử", TRUOC_DIFF);
+		const id = await deXuat(slug, SAU_DIFF, "khac");
+		const p = ok<DeXuatDoc>(
+			await hoi("taiLieu.proposal", { id }, "chu"),
+			"proposal",
+		);
+		const client = await diffHash(soSanh(TRUOC_DIFF, SAU_DIFF));
+		expect(p.diffHash).toBe(client);
+		expect(await diffHash(soSanh(p.banGoc, p.noiDung))).toBe(client);
+		ok(
+			await goi("taiLieu.approve", { id, diffHash: client }, "chu"),
+			"duyet bang hash client",
+		);
+	});
+});
+
+describe("duyet-dong-thoi", () => {
+	test("duyet-dong-thoi: hai nguoi duyet hai de xuat cung ban goc cung luc, dung mot thanh phien ban", async () => {
+		for (let vong = 0; vong < 5; vong += 1) {
+			const { slug, trangId } = await trangDangDung(
+				`Duyệt đồng thời ${vong}`,
+				"Gốc.",
+			);
+			const a = await deXuat(slug, `Bản A ${vong}.`, "khac");
+			const b = await deXuat(slug, `Bản B ${vong}.`, "okr");
+			const [hashA, hashB] = await Promise.all([
+				hashCua(a, "chu"),
+				hashCua(b, "admin"),
+			]);
+			const ket = await Promise.all([
+				goi("taiLieu.approve", { id: a, diffHash: hashA }, "chu"),
+				goi("taiLieu.approve", { id: b, diffHash: hashB }, "admin"),
+			]);
+			expect(ket.map((k) => k.status).sort(), JSON.stringify(ket)).toEqual([
+				200, 409,
+			]);
+			const ban = await db.taiLieuPhienBan.findMany({
+				where: { trangId },
+				select: { so: true },
+			});
+			expect(ban.map((v) => v.so).sort()).toEqual([1, 2]);
+			const trangThai = await db.taiLieuDeXuat.findMany({
+				where: { id: { in: [a, b] } },
+				select: { trangThai: true },
+			});
+			expect(trangThai.map((t) => t.trangThai).sort()).toEqual([
+				"CU",
+				"DA_DUYET",
+			]);
+		}
+	});
+
+	test("duyet-dong-thoi: trang chua tung duyet, hai ban dau duyet cung luc", async () => {
+		const { slug, trangId, deXuatId } = await taoTrang(
+			"Đồng thời lần đầu",
+			"Bản một.",
+		);
+		const hai = await deXuat(slug, "Bản hai.", "chu");
+		const [h1, h2] = await Promise.all([
+			hashCua(deXuatId, "chu"),
+			hashCua(hai, "owner"),
+		]);
+		const ket = await Promise.all([
+			goi("taiLieu.approve", { id: deXuatId, diffHash: h1 }, "chu"),
+			goi("taiLieu.approve", { id: hai, diffHash: h2 }, "owner"),
+		]);
+		expect(ket.map((k) => k.status).sort(), JSON.stringify(ket)).toEqual([
+			200, 409,
+		]);
+		expect(await soPhienBan(trangId)).toBe(1);
+	});
+});
+
+describe("chu-trang-roi-di", () => {
+	test("chu-trang-roi-di: chu trang roi workspace, trang van doc duoc, quan tri van duyet, nguoi do khong duyet duoc", async () => {
+		const chuDi = ma("chu-di");
+		await gieoThanhVien(chuDi, "member");
+		const cookieChuDi = (await mintPhien(chuDi)).cookie;
+		const tao = ok<{ slug: string }>(
+			await goi(
+				"taiLieu.create",
+				{
+					ten: "Trang chủ rời đi",
+					loai: "quy-trinh",
+					chuTrangId: chuDi,
+					noiDung: "Bản một.",
+				},
+				"tao",
+			),
+			"tao",
+		);
+		const dau = await db.taiLieuDeXuat.findFirstOrThrow({
+			where: { trang: { slug: tao.slug } },
+		});
+		ok(
+			await goiBang(cookieChuDi, "taiLieu.approve", {
+				id: dau.id,
+				diffHash: await diffHash(soSanh("", dau.noiDung)),
+			}),
+			"chu trang duyet khi con o",
+		);
+		const moi = await deXuat(tao.slug, "Bản hai.", "khac");
+		await db.member.deleteMany({ where: { userId: chuDi } });
+		for (const ai of ["khac", "okr", "admin"] as const) {
+			const g = ok<Get>(
+				await hoi("taiLieu.get", { slug: tao.slug }, ai),
+				`get ${ai}`,
+			);
+			expect(`${ai}: ${g.noiDung}`).toBe(`${ai}: Bản một.`);
+		}
+		const hash = await hashCua(moi, "admin");
+		const chuThu = await goiBang(cookieChuDi, "taiLieu.approve", {
+			id: moi,
+			diffHash: hash,
+		});
+		expect(chuThu.status).toBe(403);
+		const conCho = await db.taiLieuDeXuat.findUniqueOrThrow({
+			where: { id: moi },
+		});
+		expect(conCho.trangThai).toBe("CHO_DUYET");
+		ok(
+			await goi("taiLieu.approve", { id: moi, diffHash: hash }, "admin"),
+			"quan tri duyet thay",
+		);
+		const g = ok<Get>(
+			await hoi("taiLieu.get", { slug: tao.slug }, "khac"),
+			"get sau",
+		);
+		expect(`${g.phienBan?.so} ${g.noiDung}`).toBe("2 Bản hai.");
 	});
 });

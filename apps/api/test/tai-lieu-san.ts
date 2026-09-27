@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, expect } from "bun:test";
-import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import type { LoaiTrang } from "@crm/validation/tai-lieu";
+import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import request from "supertest";
@@ -153,54 +153,47 @@ export async function deXuat(
 	).deXuatId;
 }
 
-export async function duyetQuaDb(deXuatId: string, ai: Ai): Promise<number> {
-	return db.$transaction(async (tx) => {
-		const dx = await tx.taiLieuDeXuat.findUniqueOrThrow({
-			where: { id: deXuatId },
-		});
-		const lon = await tx.taiLieuPhienBan.aggregate({
-			where: { trangId: dx.trangId },
-			_max: { so: true },
-		});
-		const so = (lon._max.so ?? 0) + 1;
-		const ban = await tx.taiLieuPhienBan.create({
-			data: {
-				trangId: dx.trangId,
-				so,
-				ten: dx.ten,
-				noiDung: dx.noiDung,
-				noiDungHash: createHash("sha256").update(dx.noiDung).digest("hex"),
-				deXuatId,
-				duyetBoiId: phien[ai].nguoi,
-				duyetLuc: new Date(),
-			},
-		});
-		await tx.taiLieuTrang.update({
-			where: { id: dx.trangId },
-			data: { banDangDungId: ban.id, ten: dx.ten },
-		});
-		await tx.taiLieuDeXuat.update({
-			where: { id: deXuatId },
-			data: {
-				trangThai: "DA_DUYET",
-				xuLyBoiId: phien[ai].nguoi,
-				xuLyLuc: new Date(),
-			},
-		});
-		return so;
-	});
+export type DeXuatDoc = {
+	id: string;
+	slug: string;
+	ten: string;
+	trangThai: string;
+	lyDo: string | null;
+	banGoc: string;
+	noiDung: string;
+	diffHash: string;
+	cu: boolean;
+	duyetDuoc: boolean;
+};
+
+export async function hashCua(deXuatId: string, ai: Ai): Promise<string> {
+	const p = ok<DeXuatDoc>(
+		await hoi("taiLieu.proposal", { id: deXuatId }, ai),
+		`proposal ${deXuatId} ${ai}`,
+	);
+	return diffHash(soSanh(p.banGoc, p.noiDung));
 }
 
-export async function traLaiQuaDb(deXuatId: string, ai: Ai): Promise<void> {
-	await db.taiLieuDeXuat.update({
-		where: { id: deXuatId },
-		data: {
-			trangThai: "TRA_LAI",
-			lyDo: "thieu so lieu",
-			xuLyBoiId: phien[ai].nguoi,
-			xuLyLuc: new Date(),
-		},
-	});
+export async function duyet(deXuatId: string, ai: Ai): Promise<number> {
+	return ok<{ so: number }>(
+		await goi(
+			"taiLieu.approve",
+			{ id: deXuatId, diffHash: await hashCua(deXuatId, ai) },
+			ai,
+		),
+		`duyet ${deXuatId} ${ai}`,
+	).so;
+}
+
+export async function traLai(
+	deXuatId: string,
+	ai: Ai,
+	lyDo = "Thiếu số liệu.",
+): Promise<void> {
+	ok(
+		await goi("taiLieu.reject", { id: deXuatId, lyDo }, ai),
+		`tra lai ${deXuatId} ${ai}`,
+	);
 }
 
 export async function demTaiLieu() {

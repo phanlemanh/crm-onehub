@@ -14,13 +14,20 @@ import { restMeta } from "../trpc/openapi";
 import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import type { NguoiGoi } from "./quyen";
 import {
+	taiLieuApproveInput,
+	taiLieuApproveOutput,
 	taiLieuCreateInput,
 	taiLieuCreateOutput,
 	taiLieuGetOutput,
+	taiLieuIdInput,
 	taiLieuListInput,
 	taiLieuListOutput,
+	taiLieuOkOutput,
+	taiLieuProposalOutput,
+	taiLieuProposalsOutput,
 	taiLieuProposeInput,
 	taiLieuProposeOutput,
+	taiLieuRejectInput,
 	taiLieuSlugInput,
 } from "./tai-lieu.contracts";
 import { TaiLieuService } from "./tai-lieu.service";
@@ -84,5 +91,49 @@ export class TaiLieuRouter {
 		@Input() input: z.infer<typeof taiLieuProposeInput>,
 	) {
 		return this.taiLieu.propose(nguoiGoi(ctx), input);
+	}
+
+	@Query({
+		output: taiLieuProposalsOutput,
+		meta: restMeta("GET", "/tai-lieu/de-xuat", TAG),
+	})
+	proposals(@Ctx() ctx: AuthedTrpcContext) {
+		return this.taiLieu.proposals(nguoiGoi(ctx));
+	}
+
+	@Query({
+		input: taiLieuIdInput,
+		output: taiLieuProposalOutput,
+		meta: restMeta("GET", "/tai-lieu/de-xuat/{id}", TAG),
+	})
+	proposal(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuIdInput>,
+	) {
+		return this.taiLieu.proposal(nguoiGoi(ctx), input.id);
+	}
+
+	@Mutation({
+		input: taiLieuApproveInput,
+		output: taiLieuApproveOutput,
+		meta: restMeta("POST", "/tai-lieu/de-xuat/{id}/duyet", TAG),
+	})
+	approve(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuApproveInput>,
+	) {
+		return this.taiLieu.approve(nguoiGoi(ctx), input);
+	}
+
+	@Mutation({
+		input: taiLieuRejectInput,
+		output: taiLieuOkOutput,
+		meta: restMeta("POST", "/tai-lieu/de-xuat/{id}/tra-lai", TAG),
+	})
+	reject(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuRejectInput>,
+	) {
+		return this.taiLieu.reject(nguoiGoi(ctx), input);
 	}
 }

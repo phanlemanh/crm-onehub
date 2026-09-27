@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { deXuat, dungSan, duyetQuaDb, hoi, ok, taoTrang } from "./tai-lieu-san";
+import { deXuat, dungSan, duyet, hoi, ok, taoTrang } from "./tai-lieu-san";
 
 dungSan();
 
@@ -12,9 +12,9 @@ type Get = {
 describe("man-sua", () => {
 	test("man-sua: get tra noi dung phien ban dang dung cho moi nguoi, khong bao gio noi dung de xuat cho", async () => {
 		const { slug, deXuatId } = await taoTrang("Màn sửa thử", "Bản một.");
-		await duyetQuaDb(deXuatId, "chu");
+		await duyet(deXuatId, "chu");
 		const hai = await deXuat(slug, "Bản hai.", "khac");
-		await duyetQuaDb(hai, "chu");
+		await duyet(hai, "chu");
 		await deXuat(slug, "Bản ba đang chờ.", "tao");
 		const MONG = [
 			["tao", true],
