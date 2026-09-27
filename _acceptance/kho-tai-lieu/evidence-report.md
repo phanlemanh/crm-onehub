@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 679a58b85c1ccfb1c16617ac9811a432ddb20b20
+verified_commit: cea37af8b3b2e75f555c7322086cc57cb67571b2
 human_signoff: Mạnh 2026-09-28
 ---
 
@@ -374,3 +374,7 @@ none — every multi-run eval is uniform
 Round 1: E13b (bảng trong màn duyệt) sai và hai lệnh suite (`bun run lint:slop`, `bunx turbo run build --force`) đỏ — REJECT, quay lại implementation.
 Round 2: sửa bảng trong màn duyệt, thêm đối chứng dương cho ca đổi-số-cột, ghim đúng ô; E14j bổ sung ảnh ktl-duyet-390. Vẫn PENDING-JUDGMENT vì T3 chờ human_override cho E14j.
 Round 3: toàn bộ eval máy PASS (E5, E16 không phân biệt với baseline, xem Analyst); judge panel đề xuất PASS cho E14j — verdict tổng vẫn PENDING-JUDGMENT vì T3 bắt buộc human_override trên MỌI mục judgment, bất kể phiếu của judge.
+
+### Re-pin lần 1 — 2026-09-27, do gộp onehub (55 commit) trước khi mở PR
+run_id: repin-20260927T214203Z-71497
+sha: cea37af8b3b2e75f555c7322086cc57cb67571b2 · suites: 4 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13b, E14, E14j (E14j không khai paths) · AC không có chốt máy: AC-12, AC-14
