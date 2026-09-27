@@ -1,0 +1,29 @@
+[
+	{
+		"noActionNeeded": "Manual trigger fired without a specific OKR record attached as input, and no OKR-related records exist in the workspace CRM scope to review."
+	},
+	{
+		"reason": "Không tìm thấy dữ liệu OKR nào trong workspace CRM (OneHub Center) để tóm tắt. Tất cả truy vấn tìm kiếm đều trả về 0 bản ghi.",
+		"status": "no_data",
+		"actionTaken": "none",
+		"limitationsNoted": [
+			"Không có cơ chế phân loại OKR theo phòng ban — 'Phòng Kinh doanh X' chưa được ánh xạ tới phạm vi cụ thể",
+			"Không có cấu trúc/nguồn dữ liệu OKR riêng trong CRM",
+			"Không có bản ghi nào trong workspace — contacts, companies, deals đều rỗng"
+		],
+		"searchQueriesUsed": [
+			"OKR",
+			"Key Results",
+			"confidence",
+			"objective",
+			"Phòng Kinh doanh",
+			"Kinh doanh",
+			"Sales Team X",
+			"deal",
+			"company",
+			"contact"
+		],
+		"totalRecordsFound": 0,
+		"reviewerActionRequired": "Xác nhận ánh xạ phòng ban, vị trí/cấu trúc dữ liệu OKR, và cơ chế dẫn nguồn trước lượt chạy kế tiếp."
+	}
+]

@@ -2,6 +2,7 @@ import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL } from "@crm/db/settings";
 import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
+import { ketQuaLuot } from "../../lib/run-result";
 import { attribute, purposeOf } from "../../lib/session-purpose";
 
 export default defineAgent({
@@ -34,7 +35,7 @@ export default defineAgent({
 	}),
 	outputSchema: z.object({
 		summary: z.string().min(1).max(1000),
-		result: z.record(z.string(), z.unknown()).nullable(),
+		result: ketQuaLuot.nullable(),
 	}),
 	limits: {
 		maxInputTokensPerSession: 500_000,
