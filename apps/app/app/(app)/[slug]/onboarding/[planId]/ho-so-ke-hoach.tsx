@@ -9,6 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	Empty,
 	EmptyContent,
@@ -21,7 +22,6 @@ import { Progress } from "@crm/ui/components/progress";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 import { huy, type LuongXoa, luongXoaMoi, moHoi, xacNhan } from "../luong-xoa";

@@ -8,6 +8,7 @@ import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -41,7 +42,6 @@ import {
 	NhanTinhTrang,
 	NhanTrangThai,
 } from "@/app/(app)/[slug]/okr/tien-do-kr";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import {
 	DetailSheetBody,
