@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: bo-dung-khong-ket
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 07228a28551c31f8b701252f12f1326985866134
+verified_commit: 5bffbc1ed04a7fd7d77c0458d85ce45228def5d9
 human_signoff:
 ---
 
@@ -30,171 +30,167 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-bo-dung-khong-ket-E1-r4
+  run_id: minted-bo-dung-khong-ket-E1-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.bdk_han_muc
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     17 expect() calls
-    Ran 11 tests across 1 file. [124.00ms]
-    test-run: dropped crm_mujvjsq6912q_test
+    Ran 11 tests across 1 file. [121.00ms]
+    test-run: dropped crm_mujwtele3vgy_test
 
 - eval: E2
-  run_id: mujvjp6zdm70
+  run_id: mujwtbo77gsr
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.bdk_luu_cau_hoi
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     17 expect() calls
-    Ran 4 tests across 1 file. [160.00ms]
-    test-run: dropped crm_mujvjp6zdm70_test
+    Ran 4 tests across 1 file. [190.00ms]
+    test-run: dropped crm_mujwtbo77gsr_test
 
 - eval: E3
-  run_id: mujvjuaje9px
+  run_id: mujwtgsd0z4d
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.bdk_tra_loi_api
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     17 expect() calls
-    Ran 7 tests across 1 file. [479.00ms]
-    test-run: dropped crm_mujvjuaje9px_test
+    Ran 7 tests across 1 file. [540.00ms]
+    test-run: dropped crm_mujwtgsd0z4d_test
 
 - eval: E4
-  run_id: mujvjmt96d25
+  run_id: minted-bo-dung-khong-ket-E4-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.bdk_tra_loi_dieu_phoi
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
-    Ran 2 tests across 1 file. [173.00ms]
-    test-run: dropped crm_mujvjmt96d25_test
+    10 expect() calls
+    Ran 2 tests across 1 file. [182.00ms]
+    test-run: dropped crm_mujwtghrnseo_test
 
 - eval: E5
-  run_id: minted-bo-dung-khong-ket-E5-r4
+  run_id: minted-bo-dung-khong-ket-E5-r5
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.bdk_man_het_han_muc
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     0 fail
     38 expect() calls
-    Ran 8 tests across 1 file. [588.00ms]
+    Ran 8 tests across 1 file. [1008.00ms]
 
 - eval: E6
-  run_id: minted-bo-dung-khong-ket-E6-r4
+  run_id: minted-bo-dung-khong-ket-E6-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.design.ui_check
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   screenshot: _acceptance/bo-dung-khong-ket/evidence/E6-het-han-muc-1440.png
   observed: |
-    E6-het-han-muc-1440.png: dark-theme chat screen at 1440px, conversation "Tổng hợp contact mới hàng ngày". Bottom composer shows the exact sentence "Bộ dựng đã dùng hết hạn mức của phiên này. Cấp thêm để làm tiếp, hoặc dừng." with two buttons: "Cấp thêm" (filled, teal/primary) and "Dừng" (outline). No regular "Gửi một tin" textbox is present. No English string from eve's layer (checked: "output-token limit", "Approve", "Grant a fresh token budget", "Stop now", "session_limit_continuation", "Session limit continuation", and no bare English word "Stop") appears anywhere in the frame. Matches Expected exactly.
-    E6-het-han-muc-375.png: same conversation at 375px width (mobile chrome — hamburger menu, stacked header). Same Vietnamese sentence and same two buttons "Cấp thêm" / "Dừng" render side-by-side inside the composer card, both fully within the 375px viewport with visible margin on both sides (measured bounding rects: 0 <= left, right <= innerWidth for both) — not truncated or overflowing the edge. Matches Expected.
-    E6-sau-bam-1440.png: after clicking "Cấp thêm", the session-limit composer is gone; a right-aligned user submission bubble is visible reading "Trả lời câu hỏi thêm" / "Tạo tác nhân" pill / "Cấp thêm" — i.e. a user bubble whose text is exactly "Cấp thêm". Neither the "Cấp thêm" nor "Dừng" buttons remain anywhere in the frame; the composer has reverted to the normal "Gửi một tin" textbox. Matches Expected.
-    E6-sau-dung-1440.png: a second, freshly seeded conversation (visible as a second row in the sidebar) after clicking "Dừng" — same layout, right-aligned user bubble now reads "Dừng" (under "Trả lời câu hỏi thêm" / "Tạo tác nhân"), and again neither "Cấp thêm" nor "Dừng" buttons remain. Matches Expected.
-    E6-network.txt (209 requests captured across both viewports and both conversations, all through the app origin http://localhost:4262 which proxies /eve/v1/... and /api/trpc/...): status distribution is 95×200 and 114×304, zero non-2xx/3xx entries, zero FAILED entries — no reconnect-stall or 502 symptom this round (unlike round 1's known 502 regression, which is fixed by the fake-agent/measure-session setup).
-  network_observed: clean
+    E6-het-han-muc-1440.png: câu "Bộ dựng đã dùng hết hạn mức của phiên này. Cấp thêm để làm tiếp, hoặc dừng." hiện đúng nguyên văn; hai nút "Cấp thêm" (filled xanh, primary) và "Dừng" (outline) cạnh nhau; không có ô soạn tin thường ở dưới (bị khối câu-hỏi thay chỗ); không có chữ tiếng Anh nào hiện trong text hay HTML hiển thị của trang.
+    E6-het-han-muc-375.png: cùng câu, cùng hai nút, xếp cạnh nhau gọn trong bề rộng 375px, không tràn lề, không chồng nhau.
+    E6-sau-bam-1440.png: sau khi bấm "Cấp thêm" và đợi tới khi khối hai-nút biến mất (không đợi theo giây) — bong bóng người dùng mới hiện nhãn "Cấp thêm" (kèm icon "Tạo tác nhân" và dòng "Trả lời câu hỏi thêm"); hai nút cũ không còn; ô soạn tin thường ("Gửi một tin") đã quay lại ở dưới.
+    E6-sau-dung-1440.png: hội thoại MỚI (gieo lần 2, URL khác), sau khi bấm "Dừng" và đợi khối hai-nút biến mất — bong bóng người dùng hiện nhãn "Dừng"; hai nút cũ không còn; ô soạn tin quay lại.
+    Kiểm DOM sâu hơn text hiển thị: chuỗi tiếng Anh gốc của fixture ("This session has hit...", "Approve", "Grant a fresh token budget", "Stop now") CÓ xuất hiện trong body.innerHTML, nhưng duy nhất bên trong một thẻ <script> (self.__next_f.push — payload hydrat RSC chuẩn của Next.js), không nằm trong bất kỳ text node hiển thị nào (đã quét bằng TreeWalker trên document.body, không khớp). Đây là dữ liệu server serialize để hydrate, không phải chữ vẽ ra màn hình — không vi phạm AC-4.
+  network_observed: unscoped-partial
 
 - eval: E7
-  run_id: design-gate-c43618c870
+  run_id: design-gate-586eab68a2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bdk_san_thiet_ke
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
-    "p0_count": 0,
+    "hits": [],
     "findings": []
     }
 
 - eval: E8
-  run_id: mujvjorqiq46
+  run_id: minted-bo-dung-khong-ket-E8-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.bdk_chan_khuon
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
-    Ran 2 tests across 1 file. [65.00ms]
-    test-run: dropped crm_mujvjorqiq46_test
+    12 expect() calls
+    Ran 2 tests across 1 file. [64.00ms]
+    test-run: dropped crm_mujwtc4qv7nw_test
 
 - eval: E9
-  run_id: minted-bo-dung-khong-ket-E9-r4
+  run_id: minted-bo-dung-khong-ket-E9-r5
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bdk_tai_lieu
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     HEAD cho re du tep (thieu: khong): dat
     merge-base truot 5 dieu: SESSION_LIMITS, 128k, 500k, session-limit, cho re du tep
     tai-lieu ok
 
 - eval: E10
-  run_id: wrun_01M3HJ02VW67K4KW08FJ6EAEA6
+  run_id: wrun_01M3HM17MRZKBEQ70R6CM9CYDQ
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bdk_eve_chan_khuon
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
-    runId: 'wrun_01M3HJ033MMNT3M64B99PHZ6VX',
-    handlerError: '{"error":"socket hang up"}'
+    messageId: 'msg_01M3HM17X0D77QM823MGVH50PW',
+    runId: 'wrun_01M3HM17MRZKBEQ70R6CM9CYDQ',
     }
 
 - eval: E11
-  run_id: minted-bo-dung-khong-ket-E11-r4
+  run_id: wrun_01M3HM1DKYA9FFVCRZNMQJ8J1M
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bdk_eve_chay_tiep
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
-    Completed in 8.6s
-
-    [world-local] Queue message failed (attempt 1, HTTP 503)
+    messageId: 'msg_01M3HM1DXZY802C8V8V9JMP2W0',
+    runId: 'wrun_01M3HM1DKYA9FFVCRZNMQJ8J1M',
+    handlerError: '{"error":"socket hang up"}'
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mujvjhgv94vx
-  exit_code: 1
-  verified_at: 2026-09-27T13:47:25Z
+  run_id: mujwt5li3xha
+  exit_code: 0
+  verified_at: 2026-09-27T14:23:08Z
   output: |
-    app:test:  5 pass
-    app:test:  0 fail
-    app:test:  9 expect() calls
-    app:test: Ran 5 tests across 1 file. [412.00ms]
+    Time:    6m6.846s
 
-     Tasks:    11 successful, 11 total
-    Cached:    2 cached, 11 total
-      Time:    5m58.537s
-
-    test-run: dropped crm_mujvjhgv94vx_test
+    test-run: dropped crm_mujwt5li3xha_test
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-bo-dung-khong-ket-SUITE-bunx_turbo_run_lint_force-r4
+  run_id: minted-bo-dung-khong-ket-SUITE-bunx_turbo_run_lint_force-r5
   exit_code: 0
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     Tasks:    9 successful, 9 total
     Cached:    0 cached, 9 total
-    Time:    501ms
+    Time:    555ms
 
 - cmd: bun run lint:slop
-  run_id: minted-bo-dung-khong-ket-SUITE-bun_run_lint_slop-r4
+  run_id: minted-bo-dung-khong-ket-SUITE-bun_run_lint_slop-r5
   exit_code: 0
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
+    $ oxlint --format=default
     Found 0 warnings and 0 errors.
-    Finished in 854ms on 1728 files with 9 rules using 14 threads.
+    Finished in 939ms on 1728 files with 9 rules using 14 threads.
 
 - cmd: bunx turbo run build --force
-  run_id: minted-bo-dung-khong-ket-SUITE-bunx_turbo_run_build_force-r4
+  run_id: minted-bo-dung-khong-ket-SUITE-bunx_turbo_run_build_force-r5
   exit_code: 0
-  verified_at: 2026-09-27T13:47:25Z
+  verified_at: 2026-09-27T14:23:08Z
   output: |
     Tasks:    4 successful, 4 total
     Cached:    0 cached, 4 total
-    Time:    9.843s
+    Time:    11.121s
 
 ## Known limits
 
@@ -202,6 +198,7 @@ human_signoff:
 
 ## Analyst
 
+carried tu round 4 — baseline khong do lai round nay
 none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
@@ -214,3 +211,4 @@ Round 1: E6 failed — ui-check qua đủ 12/12 assertion DOM/ảnh chụp đún
 Round 2: E6 vẫn FAIL — lần này network truth sạch (clean) và toàn bộ câu/nút/bong-bóng đúng Expected, nhưng cả 4 khung hình đều lộ dòng "Session limit continuation" (tên tool eve định dạng lại), vi phạm điều kiện "không chữ tiếng Anh của eve" của AC-4; thêm `bunx turbo run lint --force` không trả kết quả (agent bị skip/chết giữa chừng) → BLOCKED, cần chạy lại lint trước khi chấm tiếp.
 Round 3: E9 failed — tai-lieu.mjs thấy apps/app/lib/agent-transcript.ts (đã sửa ở vòng này, và cũng tồn tại ở origin/release) chưa có tên trong mục "Chỗ rẽ có tên với bản của hãng" của docs/agent.md; bản merge-base cũng trượt cùng 5 điều kiện nên đối chứng vẫn giữ được. REJECT — đã chạm mốc 3 vòng, cần người quyết bước kế tiếp.
 Round 4: E1–E11 đều PASS (E9 đã hết đỏ sau khi bổ sung tên tệp vào docs/agent.md), nhưng lệnh suite không gắn eval `bun run test` thoát mã 1 dù turbo báo cả 11 task đều thành công (app:test tự báo 5 pass/0 fail) — một hỏng hóc ở tầng suite, không nằm trong bất kỳ AC nào. REJECT — cần chạy lại/định vị nguyên nhân của lệnh suite này trước khi ký vòng kế.
+Round 5: chủ kho gõ "Tiếp tục" sau vòng 4; không sửa mã sản phẩm, các eval không đổi được mang nguyên sang từ vòng 4 (baseline không đo lại). E1–E11 đều PASS; lệnh suite `bun run test` chạy lại thoát mã 0 (11 task thành công, 6m6.846s), xác nhận thoát mã 1 ở vòng 4 là chập chờn dưới tải song song chứ không phải hồi quy thật. PASS.

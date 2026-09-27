@@ -4,7 +4,13 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 4 — assertion âm tính một mình: 5/7 chuỗi của lớp chữ eve không bao giờ có mặt trong bản ghi, kể cả khi chưa lọc**
+- **Hình dạng 4 — assertion âm-tính-một-mình: E6 khẳng định 'không có dòng dấu vết Session limit continuation' trên một khung không có dòng dấu vết nào**
+  Người dùng thấy gì: Bằng chứng chụp màn hiện tại không phân biệt được giữa hai khả năng khi hết hạn mức: dòng thông báo tạm ẩn đúng như thiết kế, hoặc trợ lý không hiển thị gì cả; nếu là ca sau, người dùng có thể thấy màn trống mà không có phản hồi nào.
+  file: `_acceptance/bo-dung-khong-ket/evidence/E6-het-han-muc-1440.png`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 — assertion âm tính một mình: 5/7 chuỗi của lớp chữ eve không bao giờ có mặt trong bản ghi, kể cả khi chưa lọc (r4)**
   Người dùng thấy gì: Bài kiểm chỉ chứng minh được một phần rằng chữ tiếng Anh gốc của trợ lý không hiện trên màn khi có câu hỏi hết hạn mức; một vài trường hợp lẽ ra cần kiểm chưa thực sự được kiểm chứng đầy đủ, dù kết quả nhìn thấy trên màn vẫn đúng như mong đợi.
   file: `apps/app/test/het-han-muc.dom.tsx`
   severity: medium

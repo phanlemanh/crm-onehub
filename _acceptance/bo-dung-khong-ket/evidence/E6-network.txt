@@ -1,209 +1,39 @@
-200	GET	http://localhost:4262/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2
-200	GET	http://localhost:4262/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2
-200	GET	http://localhost:4262/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2
-200	GET	http://localhost:4262/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2
-200	GET	http://localhost:4262/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js
-200	GET	http://localhost:4262/_next/static/chunks/%5Broot-of-the-server%5D__0l8ykhc._.css
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js
-200	GET	http://localhost:4262/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_1anvha4._.js
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_08d-hqc._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_1gtctp1._.js
-200	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js
-200	GET	http://localhost:4262/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js
-200	GET	http://localhost:4262/onehub-center/chat/cmujvz23d0000yjcfrmtlovhj
-200	GET	http://localhost:4262/_next/static/media/7178b3e590c64307-s.21jp631_3pja2.woff2
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js
-200	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js
-200	GET	http://localhost:4262/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js
-200	GET	http://localhost:4262/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js
-200	GET	http://localhost:4262/_next/static/chunks/_1uh5i2t._.js
-200	GET	http://localhost:4262/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js
-200	GET	http://localhost:4262/_next/static/chunks/072g_streamdown_dist_0x9u7vr._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_timeline_1-ot9mv._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_fields_184omea._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_0xuvzno._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_components_17xkrfe._.js
-200	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0nq_nv5._.js
-200	GET	http://localhost:4262/_next/static/chunks/13z9_zod_v4_0--tbhe._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_lib_0d5vfiz._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_record-sheet_07960dg._.js
-200	GET	http://localhost:4262/_next/static/chunks/1rp1_%40carbon_icons-react_es_0ywm73s._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_app_(app)_%5Bslug%5D_1of0cm0._.js
-200	GET	http://localhost:4262/_next/static/chunks/1m3o_next_1fqcc15._.js
-200	GET	http://localhost:4262/_next/static/chunks/05cx_framer-motion_dist_es_1hp694k._.js
-200	GET	http://localhost:4262/_next/static/chunks/18oq_%40dnd-kit_core_dist_core_esm_0q7k3ym.js
-200	GET	http://localhost:4262/_next/static/chunks/107c_micromark_dev_lib_190-11a._.js
-200	GET	http://localhost:4262/_next/static/chunks/0da4_micromark-core-commonmark_dev_lib_1_ah9fh._.js
-200	GET	http://localhost:4262/_next/static/chunks/packages_1ilh86-._.js
-200	GET	http://localhost:4262/_next/static/chunks/0ch2_motion-dom_dist_es_05ag043._.js
-200	GET	http://localhost:4262/_next/static/chunks/021h_parse5_dist_1mtcf8o._.js
-200	GET	http://localhost:4262/_next/static/chunks/072g_streamdown_dist_0ov_yc8._.js
-200	GET	http://localhost:4262/_next/static/chunks/0nox_date-fns_1x_qo5w._.js
-200	GET	http://localhost:4262/_next/static/chunks/0t6z_%40shadcn_react_dist_1807_q6._.js
-200	GET	http://localhost:4262/_next/static/chunks/08t5_react-day-picker_dist_esm_1cbf8bs._.js
-200	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_util_05c2oei._.js
-200	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_component_1vss1di._.js
-200	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_cartesian_0krn0t7._.js
-200	GET	http://localhost:4262/_next/static/chunks/apps_app_components_agent-builder_agent-builder-shell_tsx_1wd59zs._.js
-200	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_state_024_29z._.js
-200	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_1jaiiq8._.js
-200	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0pydnfw._.js
-200	GET	http://localhost:4262/_next/static/chunks/0ifb_eve_dist_src_08_xyxf._.js
-200	GET	http://localhost:4262/_next/static/chunks/_07z5yww._.js
-200	GET	http://localhost:4262/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js
-200	GET	http://localhost:4262/_next/static/chunks/00mc_%40pierre_trees_dist_19o_d16._.js
-200	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_1sltnk5._.js
-200	GET	http://localhost:4262/_next/static/chunks/06qm_%40pierre_diffs_dist_02kwpt1._.js
-200	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0j92-ks._.js
-200	GET	http://localhost:4262/favicon.svg
-200	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_1emqd7n._.js
-200	GET	http://localhost:4262/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
-200	GET	http://localhost:4262/api/trpc/conversations.events?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmujvz23d0000yjcfrmtlovhj%22%2C%22limit%22%3A5000%7D%7D
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-ed6ad6ab-05f0-4c3b-96c4-c6556061ebd1/stream?includeTailIndex=1
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-ed6ad6ab-05f0-4c3b-96c4-c6556061ebd1/stream?startIndex=12
-200	GET	http://localhost:4262/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2
-200	GET	http://localhost:4262/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2
-200	GET	http://localhost:4262/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2
-200	GET	http://localhost:4262/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2
-304	GET	http://localhost:4262/_next/static/chunks/%5Broot-of-the-server%5D__0l8ykhc._.css
-304	GET	http://localhost:4262/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_08d-hqc._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_1anvha4._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_1gtctp1._.js
-304	GET	http://localhost:4262/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js
-304	GET	http://localhost:4262/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js
-304	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js
-304	GET	http://localhost:4262/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js
-304	GET	http://localhost:4262/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js
-304	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js
-304	GET	http://localhost:4262/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js
-304	GET	http://localhost:4262/_next/static/chunks/072g_streamdown_dist_0x9u7vr._.js
-304	GET	http://localhost:4262/_next/static/chunks/_1uh5i2t._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_timeline_1-ot9mv._.js
-304	GET	http://localhost:4262/_next/static/chunks/13z9_zod_v4_0--tbhe._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_fields_184omea._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0nq_nv5._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_0xuvzno._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_17xkrfe._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_record-sheet_07960dg._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_lib_0d5vfiz._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_1fqcc15._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_app_(app)_%5Bslug%5D_1of0cm0._.js
-304	GET	http://localhost:4262/_next/static/chunks/1rp1_%40carbon_icons-react_es_0ywm73s._.js
-304	GET	http://localhost:4262/_next/static/chunks/05cx_framer-motion_dist_es_1hp694k._.js
-304	GET	http://localhost:4262/_next/static/chunks/packages_1ilh86-._.js
-304	GET	http://localhost:4262/_next/static/chunks/0ch2_motion-dom_dist_es_05ag043._.js
-304	GET	http://localhost:4262/_next/static/chunks/107c_micromark_dev_lib_190-11a._.js
-304	GET	http://localhost:4262/_next/static/chunks/0t6z_%40shadcn_react_dist_1807_q6._.js
-304	GET	http://localhost:4262/_next/static/chunks/18oq_%40dnd-kit_core_dist_core_esm_0q7k3ym.js
-304	GET	http://localhost:4262/_next/static/chunks/0da4_micromark-core-commonmark_dev_lib_1_ah9fh._.js
-304	GET	http://localhost:4262/_next/static/chunks/021h_parse5_dist_1mtcf8o._.js
-304	GET	http://localhost:4262/_next/static/chunks/072g_streamdown_dist_0ov_yc8._.js
-304	GET	http://localhost:4262/_next/static/chunks/0nox_date-fns_1x_qo5w._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_component_1vss1di._.js
-304	GET	http://localhost:4262/_next/static/chunks/08t5_react-day-picker_dist_esm_1cbf8bs._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_util_05c2oei._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_cartesian_0krn0t7._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_state_024_29z._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_1jaiiq8._.js
-304	GET	http://localhost:4262/_next/static/chunks/0ifb_eve_dist_src_08_xyxf._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_agent-builder_agent-builder-shell_tsx_1wd59zs._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0pydnfw._.js
-304	GET	http://localhost:4262/_next/static/chunks/_07z5yww._.js
-304	GET	http://localhost:4262/_next/static/chunks/00mc_%40pierre_trees_dist_19o_d16._.js
-304	GET	http://localhost:4262/_next/static/chunks/06qm_%40pierre_diffs_dist_02kwpt1._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_1sltnk5._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0j92-ks._.js
-304	GET	http://localhost:4262/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js
-200	GET	http://localhost:4262/onehub-center/chat/cmujvz23d0000yjcfrmtlovhj
-304	GET	http://localhost:4262/favicon.svg
-200	GET	http://localhost:4262/_next/static/media/7178b3e590c64307-s.21jp631_3pja2.woff2
-304	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_1emqd7n._.js
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-ed6ad6ab-05f0-4c3b-96c4-c6556061ebd1/stream?startIndex=12
-200	GET	http://localhost:4262/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-ed6ad6ab-05f0-4c3b-96c4-c6556061ebd1/stream?includeTailIndex=1
-200	GET	http://localhost:4262/api/trpc/conversations.events?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmujvz23d0000yjcfrmtlovhj%22%2C%22limit%22%3A5000%7D%7D
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-ed6ad6ab-05f0-4c3b-96c4-c6556061ebd1/stream?startIndex=12
-200	POST	http://localhost:4262/api/trpc/conversations.answerBuilderQuestion?batch=1
-200	GET	http://localhost:4262/api/trpc/conversations.builderById,conversations.builderList,conversations.events?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmujvz23d0000yjcfrmtlovhj%22%7D%2C%222%22%3A%7B%22id%22%3A%22cmujvz23d0000yjcfrmtlovhj%22%2C%22limit%22%3A5000%7D%7D
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-ed6ad6ab-05f0-4c3b-96c4-c6556061ebd1/stream?includeTailIndex=1
-200	GET	http://localhost:4262/api/trpc/conversations.builderResources,google.status?batch=1&input=%7B%220%22%3A%7B%22q%22%3A%22%22%7D%7D
-200	GET	http://localhost:4262/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2
-200	GET	http://localhost:4262/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2
-200	GET	http://localhost:4262/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2
-200	GET	http://localhost:4262/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js
-304	GET	http://localhost:4262/_next/static/chunks/%5Broot-of-the-server%5D__0l8ykhc._.css
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js
-304	GET	http://localhost:4262/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js
-200	GET	http://localhost:4262/_next/static/media/7178b3e590c64307-s.21jp631_3pja2.woff2
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_1anvha4._.js
-304	GET	http://localhost:4262/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_dist_08d-hqc._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_1gtctp1._.js
-304	GET	http://localhost:4262/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js
-304	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js
-304	GET	http://localhost:4262/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js
-304	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js
-304	GET	http://localhost:4262/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js
-304	GET	http://localhost:4262/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js
-304	GET	http://localhost:4262/_next/static/chunks/072g_streamdown_dist_0x9u7vr._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_timeline_1-ot9mv._.js
-304	GET	http://localhost:4262/_next/static/chunks/_1uh5i2t._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_fields_184omea._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_0xuvzno._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_17xkrfe._.js
-304	GET	http://localhost:4262/_next/static/chunks/13z9_zod_v4_0--tbhe._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_crm_record-sheet_07960dg._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0nq_nv5._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_lib_0d5vfiz._.js
-304	GET	http://localhost:4262/_next/static/chunks/1m3o_next_1fqcc15._.js
-304	GET	http://localhost:4262/_next/static/chunks/1rp1_%40carbon_icons-react_es_0ywm73s._.js
-304	GET	http://localhost:4262/_next/static/chunks/0ch2_motion-dom_dist_es_05ag043._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_app_(app)_%5Bslug%5D_1of0cm0._.js
-304	GET	http://localhost:4262/_next/static/chunks/packages_1ilh86-._.js
-304	GET	http://localhost:4262/_next/static/chunks/05cx_framer-motion_dist_es_1hp694k._.js
-304	GET	http://localhost:4262/_next/static/chunks/0da4_micromark-core-commonmark_dev_lib_1_ah9fh._.js
-304	GET	http://localhost:4262/_next/static/chunks/18oq_%40dnd-kit_core_dist_core_esm_0q7k3ym.js
-304	GET	http://localhost:4262/_next/static/chunks/021h_parse5_dist_1mtcf8o._.js
-304	GET	http://localhost:4262/_next/static/chunks/107c_micromark_dev_lib_190-11a._.js
-304	GET	http://localhost:4262/_next/static/chunks/072g_streamdown_dist_0ov_yc8._.js
-304	GET	http://localhost:4262/_next/static/chunks/0t6z_%40shadcn_react_dist_1807_q6._.js
-304	GET	http://localhost:4262/_next/static/chunks/0nox_date-fns_1x_qo5w._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_component_1vss1di._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_util_05c2oei._.js
-304	GET	http://localhost:4262/_next/static/chunks/08t5_react-day-picker_dist_esm_1cbf8bs._.js
-304	GET	http://localhost:4262/_next/static/chunks/apps_app_components_agent-builder_agent-builder-shell_tsx_1wd59zs._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_state_024_29z._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_cartesian_0krn0t7._.js
-304	GET	http://localhost:4262/_next/static/chunks/1eln_recharts_es6_1jaiiq8._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0pydnfw._.js
-304	GET	http://localhost:4262/_next/static/chunks/0ifb_eve_dist_src_08_xyxf._.js
-304	GET	http://localhost:4262/_next/static/chunks/_07z5yww._.js
-304	GET	http://localhost:4262/_next/static/chunks/00mc_%40pierre_trees_dist_19o_d16._.js
-304	GET	http://localhost:4262/_next/static/chunks/06qm_%40pierre_diffs_dist_02kwpt1._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_1sltnk5._.js
-304	GET	http://localhost:4262/_next/static/chunks/node_modules__bun_0j92-ks._.js
-304	GET	http://localhost:4262/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js
-200	GET	http://localhost:4262/onehub-center/chat/cmujvz57b0000z4cfjvf2thlf
-304	GET	http://localhost:4262/favicon.svg
-304	GET	http://localhost:4262/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_1emqd7n._.js
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-52e6edcc-6e35-4118-b018-a41ec5d2c4ed/stream?includeTailIndex=1
-200	GET	http://localhost:4262/api/trpc/enrichment.queue,conversations.events?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%2C%221%22%3A%7B%22id%22%3A%22cmujvz57b0000z4cfjvf2thlf%22%2C%22limit%22%3A5000%7D%7D
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-52e6edcc-6e35-4118-b018-a41ec5d2c4ed/stream?startIndex=12
-200	POST	http://localhost:4262/api/trpc/conversations.answerBuilderQuestion?batch=1
-200	GET	http://localhost:4262/api/trpc/conversations.builderById,conversations.builderList,conversations.events?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmujvz57b0000z4cfjvf2thlf%22%7D%2C%222%22%3A%7B%22id%22%3A%22cmujvz57b0000z4cfjvf2thlf%22%2C%22limit%22%3A5000%7D%7D
-200	GET	http://localhost:4262/eve/v1/session/gieo-het-han-muc-52e6edcc-6e35-4118-b018-a41ec5d2c4ed/stream?includeTailIndex=1
-200	GET	http://localhost:4262/api/trpc/conversations.builderResources,google.status?batch=1&input=%7B%220%22%3A%7B%22q%22%3A%22%22%7D%7D
+E6 (AC-4) network truth — round 5 independent re-verify, 2026-09-27
+
+Driver: mcp__Claude_Browser (preview-local), read_network_requests + read_console_messages.
+
+Scope note: config.yaml declares dev_server.url=http://localhost:3000 and
+api_base=[http://localhost:3001]. This eval runs inside a per-tree "phien do"
+measure session (docs/setup.md, mục Screen measurements), which assigns its
+own dynamic ports instead — this run got APP_URL=http://localhost:4372 and
+API_URL=http://localhost:4891 (kho crm_friendly_liskov_8d4458_do). All observed
+traffic is to these dynamic ports, which are outside the config's literal
+declared scope by construction (the doc explicitly says "cảnh cây mới với tới
+APP_URL" — the declared ports are only defaults the session's real APP_URL/
+API_URL override). Classifying as unscoped-partial (note-only) rather than a
+fail for that reason alone.
+
+Full request list read after navigating to the seeded "Dừng" conversation
+(cmujxa1ok0000jpcfduz1rmxv) at 1440px, cleared beforehand: 498 requests, ALL
+200 OK. No 4xx/5xx, no connection-error/timeout on this port. Includes:
+  - GET /eve/v1/session/gieo-het-han-muc-e15a4275.../stream?includeTailIndex=1 → 200 OK
+  - repeated GET /eve/v1/session/.../stream?startIndex=12 → 200 OK  (fake agent tac-tu-gia.ts replay)
+  - GET /api/trpc/conversations.* , agents.list, workspace.get, enrichment.queue → 200 OK
+  - static _next/* chunks and fonts → 200 OK
+
+Earlier in the same tool session (before this tree's measure session was up,
+mixed leftover entries from a stale prior localhost:4709/localhost:4120
+navigation still cached in the pane) there were 502/ERR_CONNECTION_REFUSED
+entries against those OTHER ports — not this run's app/api origin (4372/4891),
+so out of scope for this eval; note-only, not counted against E6.
+
+Console errors: one recurring Next.js dev-mode diagnostic on every navigation
+of the shared `/[slug]` layout —
+  "Route "/[slug]": Next.js encountered uncached data during prerendering..."
+  at ApiOriginProvider / MobileNavProvider / AppLayout
+This is a pre-existing dev-mode-only warning about the layout's own data
+fetching (unrelated to eve, to the session-limit prompt, or to AC-4); it does
+not block rendering (screenshots confirm the page renders correctly) and is
+not a network request failure.
+
+networkObserved: unscoped-partial
