@@ -60,10 +60,12 @@ try {
 		join(RA, "fixture-so-chi-phi.json"),
 		`${JSON.stringify(fixture, null, "\t")}\n`,
 	);
-	writeFileSync(
-		join(AGENT, "test/fixtures/so-chi-phi-that.json"),
-		`${JSON.stringify(fixture, null, "\t")}\n`,
-	);
+	if (process.argv.includes("--ghi-fixture")) {
+		writeFileSync(
+			join(AGENT, "test/fixtures/so-chi-phi-that.json"),
+			`${JSON.stringify(fixture, null, "\t")}\n`,
+		);
+	}
 	console.log(
 		JSON.stringify({
 			phienGoc: goc,

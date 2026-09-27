@@ -1,0 +1,16 @@
+Driver: puppeteer nhung trong _acceptance/tro-ly-okr-nen/rang/man-cai-dat.mjs
+(khong phai Claude_Browser MCP) — script tu gan p.on('console') va
+p.on('requestfinished') tren trang quan tri trong buoc Luu.
+
+Dump tho (nguyen van tu stdout cua lan chay):
+NHAT KY truoc bam {"tat":false,"form":"okr-tro-ly","coForm":true,"tran":"7,5","congTac":"true","phamVi":"Toàn công ty","diem":"BUTTON.button.luu-tro-ly body-pe=auto"}
+NHAT KY mang POST http://localhost:4741/api/trpc/okr.setProgram?batch=1 200
+
+Khong co dong "console error" / "console warn" nao duoc ghi trong ca luot chay
+(script chi push dong do khi c.type() la 'error' hoac 'warn').
+
+Scope: app dong tren chinh cong duoc phien-do cap phat (localhost:4741) —
+tuong duong dev_server.url cua config.yaml (localhost:3000) trong phien do
+rieng; API tren localhost:4110 tuong duong dev_server.api_base
+(localhost:3001). Request duy nhat bat duoc la POST okr.setProgram, app-scope,
+status 200.
