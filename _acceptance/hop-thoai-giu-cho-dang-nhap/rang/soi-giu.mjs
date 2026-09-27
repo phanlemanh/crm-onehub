@@ -210,6 +210,8 @@ const SLUG = "apps/app/app/(app)/[slug]";
 
 const KHAI_TAY = [`${SLUG}/okr/hop-thoai-cap-nhat-kr.tsx`];
 
+const PHAN_TRONG_NGAN = ["apps/app/components/detail-sheet.tsx"];
+
 const DANH_SACH = [
 	`${SLUG}/okr/hop-thoai-can-chinh.tsx`,
 	`${SLUG}/okr/hop-thoai-kr.tsx`,
@@ -322,7 +324,7 @@ function laHamDong(bieuThuc) {
 	return false;
 }
 
-function soiNut(sf) {
+function soiNut(sf, caTep = false) {
 	const viPham = [];
 	let quaNutDong = 0;
 	const di = (n, trongHop, trongNutDong) => {
@@ -351,7 +353,7 @@ function soiNut(sf) {
 		const vaoNutDong = trongNutDong || (ten !== null && NUT_DONG.has(ten));
 		ts.forEachChild(n, (c) => di(c, vaoHop, vaoNutDong));
 	};
-	di(sf, false, false);
+	di(sf, caTep, false);
 	return { viPham, quaNutDong };
 }
 
@@ -492,6 +494,20 @@ function caHuy(goc) {
 		`huy: ${khop}/${DANH_SACH.length} tep, ${viPham} vi pham, ${quaNutDong} nut qua nut dong`,
 	);
 	console.log(`huy: khai tay ${KHAI_TAY.length} tep ngoai bo rut may`);
+	for (const rel of PHAN_TRONG_NGAN) {
+		if (!existsSync(join(goc, rel))) {
+			hong.push(`huy: thieu ${rel} (phan hien trong ngan, khong ton tai)`);
+			continue;
+		}
+		const kq = soiNut(cay(join(goc, rel)), true);
+		for (const dong of kq.viPham)
+			hong.push(
+				`huy: ${rel}:${dong} goi thang ham dong (phan hien trong ngan)`,
+			);
+		console.log(
+			`huy: phan hien trong ngan ${rel}: ${kq.viPham.length} vi pham, ${kq.quaNutDong} nut qua nut dong`,
+		);
+	}
 	return hong;
 }
 
@@ -529,6 +545,21 @@ function phaVaCham({ tien, rels, rel, pha, cham, ghim }) {
 }
 
 function caHuyChieuDo() {
+	if (process.argv.includes("--ngan")) {
+		phaVaCham({
+			tien: "soi-giu-huy-ngan-",
+			rels: [...DANH_SACH, ...KHAI_TAY, ...PHAN_TRONG_NGAN, DESIGN_MD],
+			rel: PHAN_TRONG_NGAN[0],
+			pha: (chu) =>
+				chu.replace(
+					/<SheetClose asChild>\s*<Button variant="ghost" size="icon-sm">([\s\S]*?)<\/Button>\s*<\/SheetClose>/,
+					'<Button variant="ghost" size="icon-sm" onClick={onClose}>$1</Button>',
+				),
+			cham: caHuy,
+			ghim: /^huy: apps\/app\/components\/detail-sheet\.tsx:\d+ goi thang ham dong \(phan hien trong ngan\)$/,
+		});
+		return;
+	}
 	phaVaCham({
 		tien: "soi-giu-huy-",
 		rels: [...DANH_SACH, DESIGN_MD],

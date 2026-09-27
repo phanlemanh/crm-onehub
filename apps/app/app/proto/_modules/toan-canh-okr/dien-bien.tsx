@@ -213,7 +213,6 @@ export function SheetDienBien({ hinh }: { hinh: HinhDienBien }) {
 					</span>
 				}
 				note={<LoaiMucTieuNhan loai={MT_CSKH_1.loai} />}
-				onClose={() => undefined}
 				title={<span translate="no">{MT_CSKH_1.ten}</span>}
 			/>
 			<DetailSheetStats>

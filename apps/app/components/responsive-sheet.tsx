@@ -2,6 +2,7 @@
 
 import {
 	Drawer,
+	DrawerClose,
 	DrawerContent,
 	DrawerDescription,
 	DrawerHeader,
@@ -10,6 +11,7 @@ import {
 import {
 	type SheetSize,
 	Sheet as UISheet,
+	SheetClose as UISheetClose,
 	SheetContent as UISheetContent,
 	SheetDescription as UISheetDescription,
 	SheetHeader as UISheetHeader,
@@ -114,4 +116,16 @@ function SheetDescription(props: {
 	);
 }
 
-export { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle };
+function SheetClose(props: React.ComponentProps<typeof UISheetClose>) {
+	if (useResponsive()) return <DrawerClose {...props} />;
+	return <UISheetClose {...props} />;
+}
+
+export {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+};

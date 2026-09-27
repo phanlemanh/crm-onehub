@@ -463,7 +463,7 @@ async function buoc1va2() {
 		`${NGAN} [data-nut='them-kr']`,
 	);
 	await bamSel(t, `${NGAN} [data-nut='them-kr']`);
-	const o = `[data-hop-thoai-kr='moi'] input`;
+	const o = `[data-hop-thoai-kr='moi'] input[id$='-ten']`;
 	await goVao(t, o, TEN.krGo);
 	await bamNgoai(t);
 	const con = await coHien(t, "[data-hop-thoai-kr='moi']");

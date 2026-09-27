@@ -572,7 +572,6 @@ function SheetMucTieu({ mt }: { mt: MucTieuMau }) {
 					</span>
 				}
 				note={<LoaiMucTieuNhan loai={mt.loai} />}
-				onClose={() => undefined}
 				title={<span translate="no">{mt.ten}</span>}
 			/>
 			<DetailSheetStats>
