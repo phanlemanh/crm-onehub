@@ -1,10 +1,11 @@
-import { copyFileSync, mkdirSync, rmSync } from "node:fs";
+import { cpSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const DAY = dirname(fileURLToPath(import.meta.url));
 const LIB = join(DAY, "../../agent/lib");
-const CHEP = join(DAY, "agent/_chep");
+const LUOT = join(DAY, ".chay", crypto.randomUUID());
+const CHEP = join(LUOT, "agent/_chep");
 
 const TEP = [
 	[join(LIB, "builder-delegation.ts"), "builder-delegation.ts"],
@@ -16,12 +17,28 @@ const TEP = [
 	],
 ] as const;
 
-rmSync(CHEP, { recursive: true, force: true });
+mkdirSync(LUOT, { recursive: true });
+for (const phan of ["agent", "evals", "package.json"]) {
+	cpSync(join(DAY, phan), join(LUOT, phan), {
+		recursive: true,
+		filter: (nguon) => !nguon.includes("/_chep"),
+	});
+}
 mkdirSync(CHEP, { recursive: true });
-for (const [nguon, dich] of TEP) copyFileSync(nguon, join(CHEP, dich));
+for (const [nguon, dich] of TEP) cpSync(nguon, join(CHEP, dich));
 
-const eve = Bun.spawn(
-	[join(DAY, "../../node_modules/.bin/eve"), "eval", ...process.argv.slice(2)],
-	{ cwd: DAY, stdio: ["inherit", "inherit", "inherit"] },
-);
-process.exit(await eve.exited);
+let ma = 1;
+try {
+	const eve = Bun.spawn(
+		[
+			join(DAY, "../../node_modules/.bin/eve"),
+			"eval",
+			...process.argv.slice(2),
+		],
+		{ cwd: LUOT, stdio: ["inherit", "inherit", "inherit"] },
+	);
+	ma = await eve.exited;
+} finally {
+	rmSync(LUOT, { recursive: true, force: true });
+}
+process.exit(ma);

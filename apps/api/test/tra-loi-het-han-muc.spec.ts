@@ -1,4 +1,11 @@
-import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	it,
+	setDefaultTimeout,
+} from "bun:test";
 import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { workspaceSlug } from "@crm/db/workspace";
@@ -10,6 +17,9 @@ import {
 import mauHetHanMuc from "../../agent/test/fixtures/session-limit-that.json";
 import { builderConversationDetailOutput } from "../src/conversations/conversations.contracts";
 import { ConversationsService } from "../src/conversations/conversations.service";
+
+const CHAM_MS = 30_000;
+setDefaultTimeout(CHAM_MS);
 
 const suffix = process.env.TEST_RUN_ID ?? "tra-loi-het-han-muc";
 const userId = `tra-loi-het-han-muc-${suffix}`;

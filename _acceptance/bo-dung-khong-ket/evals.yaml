@@ -253,7 +253,7 @@ evals:
       model nao (khong co DAU_BUOC_HAI), khong co subagent.completed; luot goc ket thuc
       bang turn.cancelled; pendingInputRequests rong.
       Ung dung thu khong import duoc ma ngoai thu muc cua no (eve chup rieng thu muc khi
-      dung), nen cmd chay qua chay.ts: chep NGUYEN VAN builder-delegation.ts,
+      dung), nen cmd chay qua chay.ts: moi luot chay mot ban sao rieng o .chay/<id>, chep NGUYEN VAN builder-delegation.ts,
       builder-delegation-state.ts, builder-delivery.ts va mau GLM vao agent/_chep roi
       moi goi eve eval.
       Chieu do (pha-thu S3): tra loi bang requestId sai -> "chay-tiep" do voi thong diep

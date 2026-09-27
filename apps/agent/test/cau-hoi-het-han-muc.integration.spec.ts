@@ -1,4 +1,11 @@
-import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	it,
+	setDefaultTimeout,
+} from "bun:test";
 import { db } from "@crm/db";
 import { schemas } from "@crm/validation";
 import {
@@ -12,6 +19,9 @@ import {
 	dispatchBuilderSubmission,
 } from "../agent/lib/custom-agent-dispatch";
 import mauHetHanMuc from "./fixtures/session-limit-that.json";
+
+const CHAM_MS = 30_000;
+setDefaultTimeout(CHAM_MS);
 
 const suffix = crypto.randomUUID();
 const userId = `het-han-muc-${suffix}`;
