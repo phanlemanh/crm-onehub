@@ -1,5 +1,6 @@
 import { EnrichmentStatus } from "@crm/db";
 import { fieldBackfillPayload } from "@crm/validation/field-backfill";
+import { chayDoiSoat } from "./ai-doi-soat";
 import { APP_AUTH, type AppAuth } from "./app-auth";
 import { brandOutcome, runBrand } from "./brand";
 import { queueEventAgentRuns } from "./custom-agent-dispatch";
@@ -8,6 +9,7 @@ import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
 import { TRO_LY_OKR } from "./okr/config";
+import { chayKiemSanSang } from "./okr/kiem-san-sang";
 import {
 	giaHanLease,
 	laViecTroLyOkr,
@@ -144,6 +146,16 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 
 	if (task.kind === "okr-doc-sheet") {
 		await chayDocSheet(task);
+		return;
+	}
+
+	if (task.kind === "okr-kiem-san-sang") {
+		await chayKiemSanSang(task);
+		return;
+	}
+
+	if (task.kind === "ai-doi-soat") {
+		await chayDoiSoat(task);
 		return;
 	}
 

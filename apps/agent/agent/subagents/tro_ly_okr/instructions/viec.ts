@@ -11,7 +11,7 @@ export default defineDynamic({
 			const taskId = attribute(ctx, "okrTaskId");
 			if (!taskId) return null;
 			const hang = await docViecOkr(taskId);
-			if (!hang || hang.kind !== "okr-de-xuat" || hang.finishedAt) return null;
+			if (hang?.kind !== "okr-de-xuat" || hang.finishedAt) return null;
 			const viec = okrTroLyViec.safeParse(hang.payload);
 			if (!viec.success || viec.data.viec !== "de-xuat") return null;
 			const goi = await dungGoiDeXuat(viec.data.objectiveId);

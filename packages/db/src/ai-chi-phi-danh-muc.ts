@@ -113,8 +113,8 @@ export function ketQuaDoiSoat(
 	soGateway: number,
 	nguong: number = NGUONG_LECH_DOI_SOAT,
 ): { ketQua: "khop" | "lech"; lechPhanTram: number } {
-	const lon = Math.max(soSo, soGateway);
-	const lech = lon === 0 ? 0 : Math.abs(soSo - soGateway) / lon;
+	const khac = Math.abs(soSo - soGateway);
+	const lech = soSo === 0 ? (khac === 0 ? 0 : 1) : khac / soSo;
 	return {
 		ketQua: lech <= nguong + 1e-9 ? "khop" : "lech",
 		lechPhanTram: Math.round(lech * 1000) / 10,

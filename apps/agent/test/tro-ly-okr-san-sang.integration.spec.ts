@@ -1,8 +1,10 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
+import { DIRECT_KINDS } from "@crm/db/agent-tasks";
 import { chiTieuThang } from "@crm/db/ai-chi-phi";
 import { troLyOkrSanSang, xepViecTroLy } from "@crm/db/okr-tro-ly";
-import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
+import { chayKiemSanSang } from "../agent/lib/okr/kiem-san-sang";
+import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
 import {
 	donOkr,
 	gieoBoPhan,
@@ -205,4 +207,57 @@ describe("tro-ly-okr-san-sang", () => {
 		]);
 		expect(hang[0]?.reason).toBe("okr-de-xuat");
 	}, 30_000);
+});
+
+describe("kiem-san-sang", () => {
+	const khoa = {
+		AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
+		VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
+	};
+
+	afterAll(() => {
+		for (const [k, v] of Object.entries(khoa)) {
+			if (v === undefined) delete process.env[k];
+			else process.env[k] = v;
+		}
+	});
+
+	async function chay() {
+		const hang = await db.agentTask.create({
+			data: {
+				kind: "okr-kiem-san-sang",
+				reason: "okr-kiem-san-sang",
+				subject: `${TIEN_TO}kiem-that`,
+				dueAt: new Date(),
+				budget: 0,
+			},
+		});
+		await chayKiemSanSang(hang);
+		return db.agentTask.findUniqueOrThrow({
+			where: { id: hang.id },
+			select: { outcome: true, finishedAt: true, sessionId: true },
+		});
+	}
+
+	test("là việc trực tiếp: không mở phiên, không gửi gì sang tác tử", () => {
+		expect(DIRECT_KINDS).toContain("okr-kiem-san-sang");
+	});
+
+	test("không có khoá nào thì ra chua-co-khoa-mo-hinh", async () => {
+		delete process.env.AI_GATEWAY_API_KEY;
+		delete process.env.VERCEL_OIDC_TOKEN;
+		const r = await chay();
+		expect(r.outcome).toBe("chua-co-khoa-mo-hinh");
+		expect(r.finishedAt).not.toBeNull();
+		expect(r.sessionId).toBeNull();
+	});
+
+	test("có khoá Gateway hay OIDC thì ra san-sang", async () => {
+		process.env.AI_GATEWAY_API_KEY = "khoa-gia";
+		delete process.env.VERCEL_OIDC_TOKEN;
+		expect((await chay()).outcome).toBe("san-sang");
+		delete process.env.AI_GATEWAY_API_KEY;
+		process.env.VERCEL_OIDC_TOKEN = "oidc-gia";
+		expect((await chay()).outcome).toBe("san-sang");
+	});
 });

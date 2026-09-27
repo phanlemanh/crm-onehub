@@ -120,16 +120,18 @@ describe("moc-bao-tran", () => {
 });
 
 describe("doi-soat", () => {
-	test("khớp trong 10%, lệch ngoài 10%, biên 10% là khớp", () => {
-		expect(ketQuaDoiSoat(1, 1.08)).toEqual({
-			ketQua: "khop",
-			lechPhanTram: 7.4,
-		});
+	test("lệch tính trên số của sổ: khớp trong 10%, lệch ngoài 10%, biên 10% là khớp", () => {
+		expect(ketQuaDoiSoat(1, 1.08)).toEqual({ ketQua: "khop", lechPhanTram: 8 });
 		expect(ketQuaDoiSoat(1, 1.12)).toEqual({
 			ketQua: "lech",
-			lechPhanTram: 10.7,
+			lechPhanTram: 12,
 		});
-		expect(ketQuaDoiSoat(0.9, 1).ketQua).toBe("khop");
+		expect(ketQuaDoiSoat(1, 1.1).ketQua).toBe("khop");
+		expect(ketQuaDoiSoat(1, 0.88).ketQua).toBe("lech");
 		expect(ketQuaDoiSoat(0, 0)).toEqual({ ketQua: "khop", lechPhanTram: 0 });
+		expect(ketQuaDoiSoat(0, 0.2)).toEqual({
+			ketQua: "lech",
+			lechPhanTram: 100,
+		});
 	});
 });

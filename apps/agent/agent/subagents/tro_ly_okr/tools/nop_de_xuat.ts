@@ -21,7 +21,7 @@ export default defineTool({
 		const taskId = attribute(ctx, "okrTaskId");
 		if (!taskId) return tuChoi("missing task");
 		const hang = await docViecOkr(taskId);
-		if (!hang || hang.kind !== "okr-de-xuat" || hang.finishedAt) {
+		if (hang?.kind !== "okr-de-xuat" || hang.finishedAt) {
 			return tuChoi("task is not running");
 		}
 		const doc = okrTroLyViec.safeParse(hang.payload);
