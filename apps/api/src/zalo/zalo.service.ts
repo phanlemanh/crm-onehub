@@ -31,15 +31,15 @@ export const ZALO_THONG_DIEP = {
 		"Đây không phải Bot Token. Bot Token có dạng <số>:<chuỗi> (vd 1234567890:AbC…), khác Secret Token.",
 	cauNoi: {
 		"thieu-cau-noi": () =>
-			"CRM chưa được nối với dịch vụ nhắc việc. Báo người cài đặt CRM.",
+			"OneHub Center chưa được nối với dịch vụ nhắc việc. Báo người cài đặt OneHub Center.",
 		"khong-toi-duoc": () =>
 			"Không gọi được dịch vụ nhắc việc — có thể nó đang tắt hoặc đang khởi động. Thử lại sau ít phút.",
 		"sai-khoa": () =>
-			"Dịch vụ nhắc việc không nhận khoá của CRM. Báo người cài đặt CRM.",
+			"Dịch vụ nhắc việc không nhận khoá của OneHub Center. Báo người cài đặt OneHub Center.",
 		"tac-tu-loi": (status?: number) =>
-			`Dịch vụ nhắc việc gặp lỗi (mã ${status}). Thử lại; nếu vẫn lỗi, báo người cài đặt CRM.`,
+			`Dịch vụ nhắc việc gặp lỗi (mã ${status}). Thử lại; nếu vẫn lỗi, báo người cài đặt OneHub Center.`,
 		"sai-khuon": () =>
-			"Dịch vụ nhắc việc trả lời theo khuôn CRM không đọc được — có thể hai bên đang chạy hai phiên bản khác nhau. Báo người cài đặt CRM.",
+			"Dịch vụ nhắc việc trả lời theo khuôn OneHub Center không đọc được — có thể hai bên đang chạy hai phiên bản khác nhau. Báo người cài đặt OneHub Center.",
 	} satisfies Record<NguyenNhanCauNoi, (status?: number) => string>,
 	guiHong: {
 		zalo: "Zalo chưa nhận tin thử. Thử lại sau ít phút.",

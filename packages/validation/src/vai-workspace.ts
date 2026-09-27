@@ -9,7 +9,7 @@ export const PHAM_VI_DU_LIEU = ["doi-tac", "to-chuc", "okr", "chung"] as const;
 export type PhamViDuLieu = (typeof PHAM_VI_DU_LIEU)[number];
 
 export const KHONG_TRONG_PHAM_VI =
-	"Your role does not include this part of the CRM.";
+	"Your role does not include this part of OneHub Center.";
 
 const PHAM_VI_CUA_CHI_OKR: readonly PhamViDuLieu[] = [
 	"okr",

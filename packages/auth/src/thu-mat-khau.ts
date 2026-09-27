@@ -7,7 +7,7 @@ const SECONDS_PER_MINUTE = 60;
 
 export const THU_MAT_KHAU = {
 	xin: {
-		tieuDe: "Đặt lại mật khẩu CRM OneHub",
+		tieuDe: "Đặt lại mật khẩu OneHub Center",
 		than: (lienKet: string, phut: number) =>
 			[
 				"Có người vừa xin đặt lại mật khẩu cho tài khoản này.",
@@ -19,7 +19,7 @@ export const THU_MAT_KHAU = {
 			].join("\n"),
 	},
 	daDoi: {
-		tieuDe: "Mật khẩu CRM OneHub vừa được đổi",
+		tieuDe: "Mật khẩu OneHub Center vừa được đổi",
 		than: (luc: string) =>
 			[
 				`Mật khẩu của tài khoản này vừa được đổi lúc ${luc}.`,

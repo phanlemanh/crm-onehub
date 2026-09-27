@@ -31,6 +31,7 @@ import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhas
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
+import { chiSoOutput, xemTruocChiSoInput, xemTruocChiSoOutput, datNguonKrVao, datNguonKrOutput, lichSuSoInput, lichSuSoOutput, banGhiChiSoInput, banGhiChiSoOutput, ghiSoKrInput, ghiSoKrOutput } from "../okr/okr-so.contracts";
 import { accessOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
@@ -782,6 +783,29 @@ const appRouter = t.router({
     transferWork: publicProcedure
       .input(transferOkrInput)
       .output(transferOkrOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    chiSo: publicProcedure
+      .output(chiSoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xemTruocChiSo: publicProcedure
+      .input(xemTruocChiSoInput)
+      .output(xemTruocChiSoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    datNguonKr: publicProcedure
+      .input(datNguonKrVao)
+      .output(datNguonKrOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    lichSuSo: publicProcedure
+      .input(lichSuSoInput)
+      .output(lichSuSoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    banGhiChiSo: publicProcedure
+      .input(banGhiChiSoInput)
+      .output(banGhiChiSoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    ghiSoKr: publicProcedure
+      .input(ghiSoKrInput)
+      .output(ghiSoKrOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   onboarding: t.router({

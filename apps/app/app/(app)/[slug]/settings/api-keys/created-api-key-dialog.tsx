@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
+import { CopyValue } from "@crm/ui/components/copy-value";
 import {
 	Dialog,
 	DialogContent,
@@ -17,7 +18,6 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { khoaApiMessages } from "@/lib/messages/settings-khoa-api";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { CopyValue } from "../copy-value";
 
 type CreatedApiKey = RouterOutputs["apiKeys"]["create"];
 
@@ -46,7 +46,7 @@ export function CreatedApiKeyDialog({
 						value={apiKey?.key ?? ""}
 						readOnly
 						translate="no"
-						className="font-mono"
+						mono
 					/>
 					<InputGroupAddon align="inline-end">
 						<CopyValue value={apiKey?.key ?? ""} label={t.daTao.nhanChep} />

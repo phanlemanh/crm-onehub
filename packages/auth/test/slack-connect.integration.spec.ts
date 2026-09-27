@@ -226,7 +226,7 @@ describe("the Slack callback that writes the connection", () => {
 		const response = await completeConnect();
 
 		expect(response.status).toBe(401);
-		expect(await messageOf(response)).toContain("Sign in to the CRM");
+		expect(await messageOf(response)).toContain("Sign in to OneHub Center");
 	});
 
 	it("turns away a member", async () => {

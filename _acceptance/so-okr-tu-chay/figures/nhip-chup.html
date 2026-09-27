@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhịp chụp · Hình 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 920px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 720px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình 2 · Luồng tuần tự · so-okr-tu-chay</p>
+    <h1>Một nhịp chụp số</h1>
+    <p class="sub">Tác tử chụp trên nhịp dispatch sẵn có, không lịch mới. Mỗi KR được một dòng mỗi ngày; nhịp nào tới sau trong ngày thì không còn gì để làm.</p>
+
+    <svg viewBox="0 0 880 744" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÌNH 2 · MỘT NHỊP CHỤP SỐ · AC-4 · AC-5 · AC-10</text>
+
+      <line x1="400" y1="112" x2="400" y2="142" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="400" y1="192" x2="400" y2="222" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M360,304 V328 Q360,336 352,336 H248 Q240,336 240,344 V366" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M440,304 V328 Q440,336 448,336 H552 Q560,336 560,344 V366" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M240,448 V472 Q240,480 248,480 H352 Q360,480 360,488 V510" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M560,448 V472 Q560,480 552,480 H448 Q440,480 440,488 V510" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="400" y1="568" x2="400" y2="598" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M560,264 H600" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="560" cy="264" r="2" fill="#171717"/>
+      <text x="608" y="260" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Nhịp sau cùng ngày: không còn KR nào</text>
+      <text x="608" y="280" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">→ một câu truy vấn</text>
+
+      <rect x="296" y="64" width="208" height="48" rx="24" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="92" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nhịp dispatch mỗi phút</text>
+
+      <rect x="240" y="144" width="320" height="48" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="400" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ngày = hôm qua (giờ VN)</text>
+
+      <rect x="240" y="224" width="320" height="80" rx="6" fill="#fafafa"/>
+      <rect x="240" y="224" width="320" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="400" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chọn KR nguồn CRM/Sheets,</text>
+      <text x="400" y="268" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">chu kỳ đang ghi được,</text>
+      <text x="400" y="284" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">chưa có dòng của ngày</text>
+
+      <rect x="104" y="368" width="272" height="80" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="240" y="404" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">CRM:</text>
+      <text x="240" y="420" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">đếm từ đầu kỳ tới hết ngày</text>
+
+      <rect x="424" y="368" width="272" height="80" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="560" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Sheets: đọc ô</text>
+      <text x="560" y="412" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">(trần mỗi nhịp; lỗi ghi nguyên nhân,</text>
+      <text x="560" y="428" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">thử lại sau)</text>
+
+      <rect x="240" y="512" width="320" height="56" rx="6" fill="#fafafa"/>
+      <rect x="240" y="512" width="320" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="400" y="544" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ghi một dòng lịch sử (chỉ thêm)</text>
+
+      <rect x="200" y="600" width="400" height="64" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="400" y="628" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">KR có nguồn hiệu lực máy: cập nhật số hiện tại ·</text>
+      <text x="400" y="644" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">KR đo cạnh: không đụng</text>
+
+      <line x1="40" y1="696" x2="840" y2="696" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="724" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="136" y="714" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="168" y="724" fill="#575757" font-size="10" font-family="'Geist', sans-serif">một dòng mỗi KR mỗi ngày (sổ d-…-2)</text>
+      <rect x="416" y="714" width="24" height="12" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="448" y="724" fill="#575757" font-size="10" font-family="'Geist', sans-serif">điểm vào</text>
+    </svg>
+
+    <footer>Hình 2 · so-okr-tu-chay · Cổng Phạm vi · sổ d-…-2 · giả định 4 · gap-probe P1 #4 · 2026-09-26</footer>
+  </div>
+</body>
+</html>

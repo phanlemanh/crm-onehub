@@ -8,7 +8,7 @@ const MAN_OKR = [
 	"app/(app)/[slug]/settings/okr",
 	"components/crm/record-sheet",
 ];
-const KHONG_DOI_KHI_GHI_OKR = new Set(["access", "thanhVien"]);
+const KHONG_DOI_KHI_GHI_OKR = new Set(["access", "thanhVien", "chiSo"]);
 
 function diCay(thuMuc: string, ra: string[]): string[] {
 	for (const ten of readdirSync(thuMuc)) {

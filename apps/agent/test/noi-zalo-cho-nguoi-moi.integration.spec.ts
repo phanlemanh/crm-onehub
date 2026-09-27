@@ -726,7 +726,7 @@ describe("cau-noi", () => {
 			});
 			const guiU = z.guiToi("ZU");
 			expect(guiU.length, "U mot sendMessage").toBe(1);
-			expect(guiU[0]?.body.text ?? "").toContain("Tin thử từ CRM");
+			expect(guiU[0]?.body.text ?? "").toContain("Tin thử từ OneHub Center");
 			expect(z.soGoi("sendMessage"), "chi U nhan Zalo").toBe(1);
 			expect(
 				s.goi

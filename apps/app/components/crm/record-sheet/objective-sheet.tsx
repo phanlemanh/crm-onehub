@@ -326,6 +326,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 			) : hop ? (
 				<HopThoaiKr
 					objectiveId={mt.id}
+					mucTieu={mt}
 					kr={hop.loai === "sua" ? hop.kr : null}
 					chuMacDinh={mt.owner.id}
 					suaDuocCot={mt.canEdit}

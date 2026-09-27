@@ -4,7 +4,7 @@ const en = {
 	trang: {
 		tieuDeTab: "API Keys",
 		tieuDe: "API Keys",
-		moTa: "Personal keys for calling the CRM API. Each one acts as you — anything it can read or change is exactly what you can.",
+		moTa: "Personal keys for calling the API of OneHub Center. Each one acts as you — anything it can read or change is exactly what you can.",
 	},
 	bang: {
 		ten: "Name",
@@ -58,7 +58,7 @@ const vi = {
 	trang: {
 		tieuDeTab: "Khoá API",
 		tieuDe: "Khoá API",
-		moTa: "Khoá cá nhân để gọi API của CRM. Mỗi khoá hành động thay bạn — nó đọc và sửa được đúng những gì bạn đọc và sửa được.",
+		moTa: "Khoá cá nhân để gọi API của OneHub Center. Mỗi khoá hành động thay bạn — nó đọc và sửa được đúng những gì bạn đọc và sửa được.",
 	},
 	bang: {
 		ten: "Tên",

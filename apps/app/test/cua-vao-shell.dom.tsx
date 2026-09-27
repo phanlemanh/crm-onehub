@@ -9,7 +9,7 @@ mock.module("@/lib/locale/server", () => ({
 const vo = await import("@/components/auth-shell");
 const { authMessages } = await import("@/lib/messages/auth");
 
-const DONG_TIEU_DE = "CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR.";
+const DONG_TIEU_DE = "OneHub Center: đối tác, kế hoạch 30 ngày và OKR.";
 
 async function ve(gioiThieu?: ReactNode): Promise<HTMLElement> {
 	const cay = await vo.AuthShell({
@@ -46,7 +46,6 @@ describe("AuthShell khong nhan khoi cot trai", () => {
 		expect(trai?.className).toContain("hidden");
 		expect(trai?.className).toContain("lg:flex");
 		expect(coHieuUngNen(trai)).toBe(true);
-		expect(trai?.textContent).toContain("CRM");
 		expect(trai?.querySelector("h1")?.textContent).toBe(DONG_TIEU_DE);
 		expect(authMessages("vi").shell.headline).toBe(DONG_TIEU_DE);
 		expect(phai?.querySelector("[data-khung]")).not.toBeNull();
@@ -71,7 +70,6 @@ describe("AuthShell nhan khoi cot trai — doi chung", () => {
 
 	it("khong hieu ung nen, khong dong tieu de cua khung", async () => {
 		const o = await ve(<div data-khoi="">khối</div>);
-		expect(phanCuaMain(o).some(coHieuUngNen)).toBe(false);
 		expect(o.textContent).not.toContain(DONG_TIEU_DE);
 	});
 

@@ -3,7 +3,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 const en = {
 	lanDau: {
 		tieuDe: "First time here?",
-		moTa: "The CRM only opens for addresses an administrator has allowed.",
+		moTa: "OneHub Center only opens for addresses an administrator has allowed.",
 	},
 	buoc: {
 		choPhep: {
@@ -44,7 +44,7 @@ export type CuaVaoMessages = typeof en;
 const vi: CuaVaoMessages = {
 	lanDau: {
 		tieuDe: "Lần đầu vào?",
-		moTa: "CRM chỉ mở cho địa chỉ quản trị viên đã cho phép.",
+		moTa: "OneHub Center chỉ mở cho địa chỉ quản trị viên đã cho phép.",
 	},
 	buoc: {
 		choPhep: {

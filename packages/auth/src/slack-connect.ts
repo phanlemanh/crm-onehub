@@ -39,7 +39,7 @@ export async function canhSlackConnect(ctx: CtxTruoc): Promise<void> {
 	const session = await getSessionFromCtx(ctx, { disableCookieCache: true });
 	if (!session) {
 		throw new APIError("UNAUTHORIZED", {
-			message: "Sign in to the CRM before you connect Slack.",
+			message: "Sign in to OneHub Center before you connect Slack.",
 		});
 	}
 

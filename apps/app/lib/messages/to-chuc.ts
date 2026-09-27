@@ -2,7 +2,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
 	title: "Tổ chức",
-	moTa: "Bộ phận, phòng ban, người và trưởng — một cây dùng chung cho cả CRM.",
+	moTa: "Bộ phận, phòng ban, người và trưởng — một cây dùng chung cho cả OneHub Center.",
 	goc: "Toàn công ty",
 	loading: "Đang tải cây tổ chức…",
 	loi: {
@@ -35,7 +35,7 @@ const vi = {
 		viTriCua: "Vị trí trong tổ chức của {ten}",
 		quanLy: "Quản lý: {ten}",
 		chonTrongPhongBan: "Chọn trong số người của phòng ban này.",
-		chonBatKy: "Chọn được bất kỳ thành viên nào của CRM.",
+		chonBatKy: "Chọn được bất kỳ thành viên nào của OneHub Center.",
 		themNguoiTruoc:
 			"Thêm người vào phòng ban trước, rồi chọn trưởng trong số họ.",
 		chuaCoNguoiDeChon: "Chưa có người để chọn",
@@ -45,7 +45,7 @@ const vi = {
 		keo: "Kéo để sắp thứ tự, hoặc dùng phím Space rồi mũi tên lên xuống.",
 		pbTrong: {
 			title: "Phòng ban chưa có ai",
-			body: "Thêm người từ danh sách thành viên CRM, hoặc nhập cả phòng ban từ bảng tính.",
+			body: "Thêm người từ danh sách thành viên OneHub Center, hoặc nhập cả phòng ban từ bảng tính.",
 		},
 		bpTrong: "Bộ phận chưa có phòng ban nào.",
 		gocTrong: "Chưa có bộ phận nào.",
@@ -202,7 +202,7 @@ type ToChucMessages = typeof vi;
 
 const en: ToChucMessages = {
 	title: "Organization",
-	moTa: "Divisions, departments, people and heads — one tree shared across the CRM.",
+	moTa: "Divisions, departments, people and heads — one tree shared across OneHub Center.",
 	goc: "Whole company",
 	loading: "Loading the organization tree…",
 	loi: {
@@ -235,7 +235,7 @@ const en: ToChucMessages = {
 		viTriCua: "{ten}'s place in the organization",
 		quanLy: "Manager: {ten}",
 		chonTrongPhongBan: "Pick from this department's people.",
-		chonBatKy: "Any CRM member can be picked.",
+		chonBatKy: "Any OneHub Center member can be picked.",
 		themNguoiTruoc:
 			"Add people to the department first, then pick the head from them.",
 		chuaCoNguoiDeChon: "No one to pick yet",
@@ -245,7 +245,7 @@ const en: ToChucMessages = {
 		keo: "Drag to reorder, or press Space then the up and down arrows.",
 		pbTrong: {
 			title: "No one in this department yet",
-			body: "Add people from the CRM member list, or import the whole department from a spreadsheet.",
+			body: "Add people from the member list, or import the whole department from a spreadsheet.",
 		},
 		bpTrong: "This division has no departments yet.",
 		gocTrong: "No division yet.",

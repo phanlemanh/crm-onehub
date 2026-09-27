@@ -97,7 +97,7 @@ export const API_KEY_PLUGIN_OPTIONS: ApiKeyConfigurationOptions = {
 };
 
 export const auth = betterAuth({
-	appName: "CRM",
+	appName: "OneHub Center",
 	baseURL: env.apiUrl,
 
 	database: prismaAdapter(db, {

@@ -20,6 +20,7 @@ import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
 import { ContextLogger } from "../src/logging/context-logger";
+import { OKR } from "../src/okr/okr-config";
 import { AuthMiddleware } from "../src/trpc/middlewares/auth.middleware";
 import { PhamViChungMiddleware } from "../src/trpc/middlewares/pham-vi-du-lieu.middleware";
 import { WorkspaceService } from "../src/workspace/workspace.service";
@@ -121,6 +122,8 @@ const DAU_VAO_HOP_LE = {
 	},
 	"org.previewImport": { text: "" },
 	"org.applyImport": { text: "" },
+	"okr.datNguonKr": { keyResultId: "khong-co", loai: "api" },
+	"okr.ghiSoKr": { id: "khong-co", giaTri: 1 },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -793,4 +796,152 @@ describe("vai-chi-okr", () => {
 		},
 		CHO_MA_TRAN_MS,
 	);
+
+	describe("pham-vi-so", () => {
+		test(
+			"bon vai goi nam thu tuc so tren KR cua minh; rieng banGhiChiSo chan vai okr dung cau ghim",
+			async () => {
+				const VAI_SO = ["owner", "admin", "member", "okr"] as const;
+				const nguoi = {} as Record<
+					(typeof VAI_SO)[number],
+					{ userId: string; cookie: string }
+				>;
+				for (const vai of VAI_SO) {
+					const { userId, email } = await gieoNguoi(`so-${vai}`, vai);
+					nguoi[vai] = { userId, cookie: await dangNhap(email) };
+				}
+				const cycle = await db.okrCycle.create({
+					data: {
+						kind: "quy",
+						name: id("ky-pham-vi-so"),
+						startsOn: new Date("2000-01-01T00:00:00Z"),
+						endsOn: new Date("2100-01-01T00:00:00Z"),
+						phase: "dang-chay",
+					},
+				});
+				const mucTieuId: string[] = [];
+				const krCua = {} as Record<(typeof VAI_SO)[number], string>;
+				try {
+					for (const vai of VAI_SO) {
+						const { userId } = nguoi[vai];
+						const mt = await db.okrObjective.create({
+							data: {
+								cycleId: cycle.id,
+								level: "ca-nhan",
+								personUserId: userId,
+								ownerUserId: userId,
+								kind: "cam-ket",
+								status: "nhap",
+								title: id(`mt-so-${vai}`),
+							},
+						});
+						mucTieuId.push(mt.id);
+						const kr = await db.okrKeyResult.create({
+							data: {
+								objectiveId: mt.id,
+								title: id(`kr-so-${vai}`),
+								kind: "tang-toi",
+								ownerUserId: userId,
+								startValue: 0,
+								targetValue: 100,
+								currentValue: 0,
+								source: "tay",
+							},
+						});
+						krCua[vai] = kr.id;
+					}
+					for (const vai of VAI_SO) {
+						const { cookie } = nguoi[vai];
+						const keyResultId = krCua[vai];
+						const chiSo = await goiTrpc(app, "okr.chiSo", "query", undefined, {
+							cookie,
+						});
+						expect(chiSo.status, `${vai} okr.chiSo`).toBe(200);
+
+						const xemTruocVao = encodeURIComponent(
+							JSON.stringify({
+								chiSo: "thoa-thuan-chot-duoc",
+								phamVi: { kieu: "toan-cong-ty" },
+								cycleId: cycle.id,
+							}),
+						);
+						const xemTruoc = await gan(
+							request(app.getHttpServer()).get(
+								`/api/trpc/okr.xemTruocChiSo?input=${xemTruocVao}`,
+							),
+							{ cookie },
+						);
+						expect(xemTruoc.status, `${vai} okr.xemTruocChiSo`).toBe(200);
+
+						const datNguon = await goiTrpc(
+							app,
+							"okr.datNguonKr",
+							"mutation",
+							{ keyResultId, loai: "api" },
+							{ cookie },
+						);
+						expect(
+							datNguon.status,
+							`${vai} okr.datNguonKr ${JSON.stringify(datNguon.body)}`,
+						).toBe(200);
+
+						const lichSu = await goiTrpc(
+							app,
+							"okr.lichSuSo",
+							"query",
+							{ keyResultId },
+							{ cookie },
+						);
+						expect(lichSu.status, `${vai} okr.lichSuSo`).toBe(200);
+
+						const ghi = await goiTrpc(
+							app,
+							"okr.ghiSoKr",
+							"mutation",
+							{ id: keyResultId, giaTri: 5 },
+							{ cookie },
+						);
+						expect(
+							ghi.status,
+							`${vai} okr.ghiSoKr ${JSON.stringify(ghi.body)}`,
+						).toBe(200);
+
+						const banGhi = await goiTrpc(
+							app,
+							"okr.banGhiChiSo",
+							"query",
+							{ keyResultId, trang: 1 },
+							{ cookie },
+						);
+						if (vai === "okr") {
+							expect(banGhi.status, `${vai} okr.banGhiChiSo`).toBe(403);
+							expect(
+								banGhi.body?.error?.message,
+								`${vai} okr.banGhiChiSo message`,
+							).toBe(OKR.thongDiep.so.danhSachDoiTac);
+						} else {
+							expect(
+								banGhi.status,
+								`${vai} okr.banGhiChiSo ${JSON.stringify(banGhi.body)}`,
+							).toBe(200);
+						}
+					}
+				} finally {
+					const krIds = Object.values(krCua);
+					await db.okrSoChup.deleteMany({
+						where: { keyResultId: { in: krIds } },
+					});
+					await db.okrNguonKr.deleteMany({
+						where: { keyResultId: { in: krIds } },
+					});
+					await db.okrKeyResult.deleteMany({ where: { id: { in: krIds } } });
+					await db.okrObjective.deleteMany({
+						where: { id: { in: mucTieuId } },
+					});
+					await db.okrCycle.deleteMany({ where: { id: cycle.id } });
+				}
+			},
+			CHO_MA_TRAN_MS,
+		);
+	});
 });

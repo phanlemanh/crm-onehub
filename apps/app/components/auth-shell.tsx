@@ -1,7 +1,7 @@
 import { LogoLockup } from "@crm/ui/components/logo-lockup";
+import { LuoiCham } from "@crm/ui/components/luoi-cham";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { AuthShader } from "@/components/auth-shader";
 import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
 
@@ -30,11 +30,14 @@ export async function AuthShell({
 		return (
 			<main className="grid min-h-svh bg-background text-foreground lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
 				{khungDangNhap}
-				<section className="flex flex-col gap-8 bg-muted px-6 py-10 sm:px-10 lg:order-first lg:min-h-svh lg:justify-between lg:p-8 xl:p-12">
-					<div className="flex max-lg:hidden">
+				<section className="relative flex flex-col gap-10 bg-muted px-6 py-10 sm:px-10 lg:order-first lg:min-h-svh lg:p-8 xl:p-12">
+					<LuoiCham />
+					<div className="relative flex max-lg:hidden">
 						<LogoLockup aria-hidden="true" className="h-5 w-auto shrink-0" />
 					</div>
-					{gioiThieu}
+					<div className="relative flex flex-1 flex-col justify-center gap-14">
+						{gioiThieu}
+					</div>
 				</section>
 			</main>
 		);
@@ -43,7 +46,7 @@ export async function AuthShell({
 	return (
 		<main className="grid min-h-svh bg-background text-foreground lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
 			<section className="relative hidden min-h-svh overflow-hidden bg-muted p-8 lg:flex lg:flex-col lg:justify-between xl:p-12">
-				<AuthShader />
+				<LuoiCham />
 
 				<div className="relative flex gap-2 text-sm/5">
 					<Link href="/" aria-label={m.homepage} className="flex">
@@ -53,12 +56,6 @@ export async function AuthShell({
 
 				<div className="relative flex max-w-lg flex-col gap-8">
 					<div className="flex flex-col gap-4">
-						<p
-							className="font-mono text-xs/4 text-muted-foreground uppercase"
-							translate="no"
-						>
-							{m.eyebrow}
-						</p>
 						<h1 className="max-w-[14ch] text-5xl/14 font-semibold text-balance">
 							{m.headline}
 						</h1>
