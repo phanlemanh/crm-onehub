@@ -98,3 +98,4 @@
 {"ts":"2026-09-27T00:24:04Z","sha":"15de4717d025553354c1bb1e1a0558618f9440c8","round":4,"kind":"round-tally","verdict":"PASS","expected":15,"returned":15,"blocked":0}
 {"ts":"2026-09-27T00:24:04Z","sha":"15de4717d025553354c1bb1e1a0558618f9440c8","round":4,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":15}
 {"kind":"thuoc-vat","ts":"2026-09-27T00:35:11Z","round":4,"san":"4b94d036ee67a02fed08ad6149efaa57176a9256","vat":[81,56],"thuoc":[6,7],"ho_so":[86,4],"nhat":1,"lan":1,"tep_thuoc":["_acceptance/hoan-thien-hoi-crm-qua-zalo/evals.yaml"]}
+{"ts":"2026-09-27T01:28:09Z","kind":"repin","run_id":"repin-20260927T012809Z-43984","sha":"bbf1b9586ccd5aedd6683419f70c38a3c57db290","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E9":0,"E10":0,"E11":0}}

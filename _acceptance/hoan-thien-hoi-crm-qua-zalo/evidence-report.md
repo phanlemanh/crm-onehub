@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 15de4717d025553354c1bb1e1a0558618f9440c8
+verified_commit: bbf1b9586ccd5aedd6683419f70c38a3c57db290
 human_signoff: Phan Le Manh 2026-09-27
 ---
 
@@ -188,3 +188,7 @@ none — every multi-run eval is uniform
 Round 1–2: iterated the Zalo write-guard, thresholds and token contract (E1–E5, E7–E11 lines) across the earlier passes tracked in prior evidence rounds.
 Round 3: 11/11 eval PASS, 4/4 suite green, but REJECT — an out-of-contract finding on AC-6 (the money amount right after "(1) " was being masked) hit the 3-round ceiling (commit b0619b1c).
 Round 4 (this round — ceiling exception approved by chủ kho per explicit user request "Trần 3 round: (a) trả bộ che số về bản gốc, bỏ vế số tiền khỏi AC-6, cho phép round 4"): reverted the number-masking filter to its pre-round-3 original and dropped the money-amount clause from AC-6 (commits 1296b995, 15de4717); re-verified — 11/11 eval PASS, 4/4 suite green → PASS.
+
+### Re-pin lần 1 — 2026-09-27, do gộp onehub f2acca7f (#161, #162, #163)
+run_id: repin-20260927T012809Z-43984
+sha: bbf1b9586ccd5aedd6683419f70c38a3c57db290 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng
