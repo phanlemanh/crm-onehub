@@ -1976,6 +1976,9 @@ model OkrCycle {
   breakEndsOn   DateTime?      @db.Date
   updateWeekday Int            @default(1)
   objectives    OkrObjective[]
+  cuaSoRa       OkrCuaSoRa[]
+  diemKr        OkrDiemKr[]
+  mangSangToi   OkrMangSang[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2025,6 +2028,9 @@ model OkrObjective {
   alignedBy    OkrAlignment[]   @relation("OkrAlignmentTargetObjective")
   comments     OkrComment[]
   followers    OkrFollow[]
+  nhinLai      OkrNhinLai?
+  mangSangDi   OkrMangSang[]    @relation("OkrMangSangTu")
+  mangSangTu   OkrMangSang?     @relation("OkrMangSangSang")
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
@@ -2070,6 +2076,8 @@ model OkrKeyResult {
   comments      OkrComment[]
   nguonMay      OkrNguonKr?
   soChup        OkrSoChup[]
+  doiDich       OkrDoiDich[]
+  diemKr        OkrDiemKr?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2223,4 +2231,85 @@ model OkrSoChup {
   @@unique([keyResultId, ngay], map: "okrSoChup_may_mot_ngay", where: raw("nguon = ANY (ARRAY['crm'::text, 'bang-tinh'::text])"))
   @@index([keyResultId, ngay])
   @@map("okrSoChup")
+}
+
+model OkrCuaSoRa {
+  id            String       @id @default(cuid())
+  cycleId       String
+  cycle         OkrCycle     @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  tuNgay        DateTime     @db.Date
+  denNgay       DateTime     @db.Date
+  moBoiUserId   String
+  dongLuc       DateTime?
+  dongBoiUserId String?
+  doiDich       OkrDoiDich[]
+  createdAt     DateTime     @default(now())
+
+  @@index([cycleId])
+  @@map("okrCuaSoRa")
+}
+
+model OkrDoiDich {
+  id           String       @id @default(cuid())
+  keyResultId  String
+  keyResult    OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  truoc        Decimal      @db.Decimal(18, 4)
+  sau          Decimal      @db.Decimal(18, 4)
+  lyDo         String       @default("")
+  ngoaiRa      Boolean
+  cuaSoRaId    String?
+  cuaSoRa      OkrCuaSoRa?  @relation(fields: [cuaSoRaId], references: [id], onDelete: Restrict)
+  tacGiaUserId String
+  luc          DateTime     @default(now())
+
+  @@index([keyResultId, luc])
+  @@map("okrDoiDich")
+}
+
+model OkrDiemKr {
+  id                  String       @id @default(cuid())
+  keyResultId         String       @unique
+  keyResult           OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  cycleId             String
+  cycle               OkrCycle     @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  soChot              Decimal      @db.Decimal(18, 4)
+  diemGoiY            Decimal      @db.Decimal(3, 2)
+  diem                Decimal?     @db.Decimal(3, 2)
+  lyDo                String?
+  thang               String
+  trongSoBat          Boolean
+  phienBanChuongTrinh Int
+  chamBoiUserId       String?
+  chamLuc             DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@index([cycleId])
+  @@map("okrDiemKr")
+}
+
+model OkrNhinLai {
+  id           String       @id @default(cuid())
+  objectiveId  String       @unique
+  objective    OkrObjective @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
+  dieuHocDuoc  String
+  suaBoiUserId String
+  suaLuc       DateTime     @updatedAt
+
+  @@map("okrNhinLai")
+}
+
+model OkrMangSang {
+  id              String       @id @default(cuid())
+  tuObjectiveId   String
+  tuObjective     OkrObjective @relation("OkrMangSangTu", fields: [tuObjectiveId], references: [id], onDelete: Restrict)
+  sangObjectiveId String       @unique
+  sangObjective   OkrObjective @relation("OkrMangSangSang", fields: [sangObjectiveId], references: [id], onDelete: Restrict)
+  sangCycleId     String
+  sangCycle       OkrCycle     @relation(fields: [sangCycleId], references: [id], onDelete: Restrict)
+  boiUserId       String
+  luc             DateTime     @default(now())
+
+  @@unique([tuObjectiveId, sangCycleId])
+  @@map("okrMangSang")
 }
