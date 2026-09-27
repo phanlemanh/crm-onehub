@@ -5,7 +5,7 @@ slug: bo-dung-khong-ket
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -207,3 +207,26 @@ Không gian đủ nhỏ để kê trục bằng tay; ô và trục dưới đây
     khi eve đòi Node 24.
   - `test.api` đỏ ở bốn ca `@crm/auth` hết trần 5 giây khi máy tải nặng.
   - «THIEU merge-base» là lỗi đã biết của kit.
+
+### Known limits (Cổng Bằng chứng, 2026-09-27)
+
+- Ngoài-1: ảnh chụp màn E6 không phân biệt «ẩn đúng dòng hết hạn mức» với «trợ lý
+  không vẽ gì». E5 có đối chứng dương cho phần này ở lớp mã.
+- Ngoài-2: năm trong bảy chuỗi tiếng Anh của eve không bao giờ vào bản ghi dòng dấu
+  vết, nên phép so ở đó chỉ thật sự đo hai chuỗi.
+- Ngoài-3: tác tử giả của phép đo màn báo điểm cuối luồng lệch một so với eve thật.
+- Ngoài-4: vì lệch một, mỗi lần phép đo mở hội thoại thì chờ thêm vài giây.
+- Ngoài-5: `builderDeliveryMessage` tách sang `builder-delivery.ts`, thêm chỗ rẽ trong
+  `custom-agent-dispatch.ts` của hãng.
+- Ngoài-6: câu hỏi hết hạn mức dùng thẻ `p` tự đặt cỡ chữ thay vì ô chữ của `Item`.
+- Ngoài-9: phép đo điều phối và ứng dụng eve thử dựng bài nộp theo khuôn, không lấy
+  đúng hàng do API ghi.
+- Ngoài-10: thước tài liệu chỉ kiểm từ khoá có mặt, không kiểm hai con số hạn mức đứng
+  đúng chỗ.
+
+Tách thành việc riêng (mở hợp đồng mới):
+
+- Ngoài-7: hạn mức 128k của bộ dựng thực chất bị trần 50k của trợ lý chính chặn
+  (eve lấy min của hạn mức khai và phần còn lại của phiên cha), phần còn lại mòn dần
+  qua các lần dựng.
+- Ngoài-8: câu hỏi hết hạn mức lần thứ hai trong cùng hội thoại có thể bị bỏ rơi.
