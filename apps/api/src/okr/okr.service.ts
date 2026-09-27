@@ -7,6 +7,7 @@ import {
 	LOAI_CHU_KY,
 	PHA_CHU_KY,
 	type PhaChuKy,
+	phaSau,
 } from "@crm/validation/okr-chu-ky";
 import {
 	OKR_PROGRAM_MAC_DINH,
@@ -51,7 +52,15 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
-import { type CuaSoRa, cuaSoHieuLuc, cuaSoRaRa, hieuLucHomNay } from "./khep";
+import { khoaDonViDong, tenDonVi } from "./don-vi";
+import {
+	type CuaSoRa,
+	chotKyCham,
+	cuaSoHieuLuc,
+	cuaSoRaRa,
+	hieuLucHomNay,
+	kiemDongKy,
+} from "./khep";
 import { dongLoOkr, phanTichLoOkr } from "./nhap";
 import type {
 	ChuKyOutput,
@@ -148,26 +157,6 @@ const chonMucTieu = {
 	...quanHeDonVi,
 } satisfies Prisma.OkrObjectiveInclude;
 
-type TenDonVi = {
-	level: string;
-	division: { name: string } | null;
-	department: { name: string } | null;
-	person: { name: string } | null;
-};
-
-export function tenDonVi(r: TenDonVi): string {
-	switch (capMucTieu.parse(r.level)) {
-		case "onehub":
-			return OKR.tenGoc;
-		case "bo-phan":
-			return r.division?.name ?? "";
-		case "phong-ban":
-			return r.department?.name ?? "";
-		case "ca-nhan":
-			return r.person?.name ?? "";
-	}
-}
-
 function donViCua(unit: DonViMucTieu): DonViCuaMucTieu {
 	return {
 		level: unit.level,
@@ -192,24 +181,6 @@ function donViChon(unit: DonViChon): DonViCuaMucTieu {
 
 function khoaDonVi(unit: DonViChon): string {
 	return unit.loai === "goc" ? unit.loai : `${unit.loai}:${unit.id}`;
-}
-
-function khoaDonViDong(r: {
-	level: string;
-	divisionId: string | null;
-	departmentId: string | null;
-	personUserId: string | null;
-}): string {
-	switch (capMucTieu.parse(r.level)) {
-		case "onehub":
-			return "goc";
-		case "bo-phan":
-			return `bp:${r.divisionId}`;
-		case "phong-ban":
-			return `pb:${r.departmentId}`;
-		case "ca-nhan":
-			return `nguoi:${r.personUserId}`;
-	}
 }
 
 const soKr = (d: Prisma.Decimal | number) => Number(d);
@@ -372,12 +343,25 @@ export class OkrService {
 	async setCyclePhase(userId: string, id: string, phase: PhaChuKy) {
 		await this.quyenOkr.assertQuanTri(userId);
 		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${id} FOR UPDATE`;
 			const c = await tx.okrCycle.findUnique({ where: { id } });
 			if (!c) throw new NotFoundException(T.khongCoChuKy(id));
 			const phaCu = phaChuKy.parse(c.phase);
 			if (phaCu === "da-dong") throw new BadRequestException(T.phaCuoi);
-			if (PHA_CHU_KY.indexOf(phase) <= PHA_CHU_KY.indexOf(phaCu))
+			if (PHA_CHU_KY.indexOf(phase) < PHA_CHU_KY.indexOf(phaCu))
 				throw new BadRequestException(T.phaChiDiToi);
+			if (phaSau(phaCu) !== phase)
+				throw new BadRequestException(T.khep.phaTungBuoc);
+			if (phase === "cham-diem") {
+				if (ngay(new Date()) <= ngay(c.endsOn))
+					throw new BadRequestException(T.khep.chamTuNgaySau);
+				await chotKyCham(tx, c, await this.program(tx), userId);
+			}
+			if (phase === "da-dong") {
+				const { conLai } = await kiemDongKy(tx, id);
+				if (conLai > 0)
+					throw new BadRequestException(T.khep.conKrChuaCham(conLai));
+			}
 			await tx.okrCycle.update({ where: { id }, data: { phase } });
 			await this.vet(
 				tx,
@@ -907,6 +891,10 @@ export class OkrService {
 				throw new BadRequestException(T.krDaCapNhat);
 			if ((await tx.okrSoChup.count({ where: { keyResultId: kr.id } })) > 0)
 				throw new BadRequestException(T.so.krDaCoSoChup);
+			if ((await tx.okrDoiDich.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.khep.krCoDoiDich);
+			if ((await tx.okrDiemKr.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.khep.krCoDiem);
 			await tx.okrNguonKr.deleteMany({ where: { keyResultId: kr.id } });
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(

@@ -8,23 +8,33 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import type { KieuKr } from "@crm/validation/okr-kr";
+import { chupSoOkr } from "../../agent/agent/lib/okr-chup";
+import { kiemDongKy } from "../src/okr/khep";
+import { OKR } from "../src/okr/okr-config";
 import {
 	donSanKhep,
 	gieoKyQuy,
 	gieoMucTieuCongBo,
+	guiSo,
+	type KrGieo,
 	keoDaiPhien,
 	luc,
 } from "./okr-khep-san";
 import {
 	type Ai,
+	CHUONG_TRINH_RONG,
 	doc,
 	dungSan,
 	goi,
 	type Json,
 	ma,
+	nguoiMoi,
 	ok,
+	pbMoi,
 	phien,
 	type TraLoi,
+	truongMoi,
 } from "./okr-san";
 
 dungSan();
@@ -37,6 +47,12 @@ const CAU = {
 	daDong: "Cửa sổ rà này đã đóng.",
 	nguocNgay: "tuNgay <= denNgay",
 	lyDoDoiDich: "Đổi đích ngoài rà giữa kỳ cần lý do",
+	chamTuNgaySau: "Sang chấm điểm từ ngày sau ngày cuối của chu kỳ",
+	thieuSoNgayCuoi: (n: number) => `Còn ${n} KR nguồn CRM chưa có số ngày cuối`,
+	tungBuoc: "Pha đi từng bước",
+	conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm`,
+	krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
+	krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",
 } as const;
 
 const KY = { tu: "2026-10-01", den: "2026-12-31" } as const;
@@ -543,5 +559,626 @@ describe("doi-dich", () => {
 			);
 		}
 		expect(thay).toEqual(mong);
+	});
+});
+
+type O = {
+	nhan: string;
+	kind: KieuKr;
+	startValue: number;
+	targetValue: number;
+	chot: number;
+	goiY: number;
+	nguon?: "crm" | "api";
+};
+
+const SO_CHOT_CRM = 2;
+
+const BANG_20: readonly O[] = [
+	{
+		nhan: "tang-toi 60→80 chot 70",
+		kind: "tang-toi",
+		startValue: 60,
+		targetValue: 80,
+		chot: 70,
+		goiY: 0.5,
+	},
+	{
+		nhan: "tang-toi 60→80 chot 80",
+		kind: "tang-toi",
+		startValue: 60,
+		targetValue: 80,
+		chot: 80,
+		goiY: 1,
+	},
+	{
+		nhan: "tang-toi 60→80 chot 90",
+		kind: "tang-toi",
+		startValue: 60,
+		targetValue: 80,
+		chot: 90,
+		goiY: 1,
+	},
+	{
+		nhan: "tang-toi 0→100 chot 84",
+		kind: "tang-toi",
+		startValue: 0,
+		targetValue: 100,
+		chot: 84,
+		goiY: 0.8,
+	},
+	{
+		nhan: "tang-toi 0→100 chot 85",
+		kind: "tang-toi",
+		startValue: 0,
+		targetValue: 100,
+		chot: 85,
+		goiY: 0.9,
+	},
+	{
+		nhan: "tang-toi 0→100 chot 86",
+		kind: "tang-toi",
+		startValue: 0,
+		targetValue: 100,
+		chot: 86,
+		goiY: 0.9,
+	},
+	{
+		nhan: "giam-xuong 8→2 chot 5",
+		kind: "giam-xuong",
+		startValue: 8,
+		targetValue: 2,
+		chot: 5,
+		goiY: 0.5,
+	},
+	{
+		nhan: "giam-xuong 8→2 chot 2 (nguon crm)",
+		kind: "giam-xuong",
+		startValue: 8,
+		targetValue: 2,
+		chot: SO_CHOT_CRM,
+		goiY: 1,
+		nguon: "crm",
+	},
+	{
+		nhan: "giam-xuong 8→2 chot 1",
+		kind: "giam-xuong",
+		startValue: 8,
+		targetValue: 2,
+		chot: 1,
+		goiY: 1,
+	},
+	{
+		nhan: "giu-tren 90 chot 85",
+		kind: "giu-tren",
+		startValue: 80,
+		targetValue: 90,
+		chot: 85,
+		goiY: 0,
+	},
+	{
+		nhan: "giu-tren 90 chot 90",
+		kind: "giu-tren",
+		startValue: 80,
+		targetValue: 90,
+		chot: 90,
+		goiY: 1,
+	},
+	{
+		nhan: "giu-tren 90 chot 95 (nguon api)",
+		kind: "giu-tren",
+		startValue: 80,
+		targetValue: 90,
+		chot: 95,
+		goiY: 1,
+		nguon: "api",
+	},
+	{
+		nhan: "giu-duoi 5 chot 6",
+		kind: "giu-duoi",
+		startValue: 7,
+		targetValue: 5,
+		chot: 6,
+		goiY: 0,
+	},
+	{
+		nhan: "giu-duoi 5 chot 5",
+		kind: "giu-duoi",
+		startValue: 7,
+		targetValue: 5,
+		chot: 5,
+		goiY: 1,
+	},
+	{
+		nhan: "giu-duoi 5 chot 4",
+		kind: "giu-duoi",
+		startValue: 7,
+		targetValue: 5,
+		chot: 4,
+		goiY: 1,
+	},
+	{
+		nhan: "moc chot 0",
+		kind: "moc",
+		startValue: 0,
+		targetValue: 1,
+		chot: 0,
+		goiY: 0,
+	},
+	{
+		nhan: "moc chot 1",
+		kind: "moc",
+		startValue: 0,
+		targetValue: 1,
+		chot: 1,
+		goiY: 1,
+	},
+	{
+		nhan: "phan-tram 20→80 chot 50",
+		kind: "phan-tram",
+		startValue: 20,
+		targetValue: 80,
+		chot: 50,
+		goiY: 0.5,
+	},
+	{
+		nhan: "phan-tram 20→80 chot 80",
+		kind: "phan-tram",
+		startValue: 20,
+		targetValue: 80,
+		chot: 80,
+		goiY: 0.8,
+	},
+	{
+		nhan: "phan-tram 20→80 chot 100",
+		kind: "phan-tram",
+		startValue: 20,
+		targetValue: 80,
+		chot: 100,
+		goiY: 1,
+	},
+];
+
+const LUC = {
+	gieo: "2026-12-20T03:00:00Z",
+	ngayCuoi2300: "2026-12-31T16:00:00Z",
+	homSau0002: "2026-12-31T17:02:00Z",
+	homSau0005: "2026-12-31T17:05:00Z",
+	homSau0010: "2026-12-31T17:10:00Z",
+	sauKy: "2027-01-02T03:00:00Z",
+} as const;
+
+const sangCham = (id: string, ai: Ai = "quan") =>
+	goi("okr.setCyclePhase", { id, phase: "cham-diem" }, ai);
+
+const phaCua = async (id: string) =>
+	(await db.okrCycle.findUniqueOrThrow({ where: { id } })).phase;
+
+const soDongDiem = (cycleId: string) =>
+	db.okrDiemKr.count({ where: { cycleId } });
+
+const tuChoi = (tra: TraLoi) => `${tra.status} ${tra.loi}`;
+
+const kr1 = (): KrGieo[] => [
+	{ startValue: 0, targetValue: 100, currentValue: 0 },
+];
+
+const san = { nguoiBan: "" };
+
+async function gieoThoaThuan(): Promise<void> {
+	san.nguoiBan = await nguoiMoi("khep-ban");
+	const cty = await db.company.create({ data: { name: ma("khep-cty") } });
+	await db.deal.createMany({
+		data: Array.from({ length: SO_CHOT_CRM }, () => ({
+			name: ma("khep-thoa-thuan"),
+			companyId: cty.id,
+			ownerId: san.nguoiBan,
+			stage: "CLOSED_WON" as const,
+			closedAt: new Date("2026-11-10T03:00:00Z"),
+		})),
+	});
+}
+
+function nguonGieo(o: O): KrGieo["nguon"] {
+	if (o.nguon === "crm")
+		return {
+			loai: "crm",
+			chiSo: "thoa-thuan-chot-duoc",
+			phamVi: { kieu: "nguoi", id: san.nguoiBan },
+		};
+	if (o.nguon === "api") return { loai: "api" };
+	return undefined;
+}
+
+function krGieo(o: O): KrGieo {
+	const kr: KrGieo = {
+		kind: o.kind,
+		startValue: o.startValue,
+		targetValue: o.targetValue,
+		currentValue: o.startValue,
+	};
+	const nguon = nguonGieo(o);
+	if (nguon) kr.nguon = nguon;
+	return kr;
+}
+
+async function chayBoSangCham(thang: "0-1" | "0-100") {
+	luc(LUC.gieo);
+	await keoDaiPhien();
+	const weightsOn = thang === "0-100";
+	const version = ok<{ version: number }>(
+		await goi("okr.setProgram", {
+			...CHUONG_TRINH_RONG,
+			scoreScale: thang,
+			weightsOn,
+		}),
+		`chuong trinh ${thang}`,
+	).version;
+	const quy = await gieoKyQuy(KY);
+	const camKet = await gieoMucTieuCongBo(
+		quy,
+		BANG_20.slice(0, 10).map(krGieo),
+		{
+			kind: "cam-ket",
+		},
+	);
+	const thamVong = await gieoMucTieuCongBo(quy, BANG_20.slice(10).map(krGieo), {
+		kind: "tham-vong",
+	});
+	const ids = [...camKet.krIds, ...thamVong.krIds];
+	const theoId = new Map(BANG_20.map((o, i) => [ids[i] ?? "", o]));
+	const krCrm = ids[BANG_20.findIndex((o) => o.nguon === "crm")] ?? "";
+	const krApi = ids[BANG_20.findIndex((o) => o.nguon === "api")] ?? "";
+
+	const krNhap = await mucTieuNhap(quy);
+	const bo = await gieoMucTieuCongBo(quy, kr1());
+	ok(await goi("okr.dropObjective", { id: bo.objectiveId }), "bo muc tieu");
+	idCua(await moRa(quy, "2026-12-20", KY.den), "mo ra truoc cham");
+
+	await guiSo(
+		BANG_20.flatMap((o, i) =>
+			o.nguon ? [] : [{ keyResultId: ids[i] ?? "", value: o.chot }],
+		),
+	);
+	ok(await goi("okr.ghiSoKr", { id: krApi, giaTri: 95 }), "ghi so api");
+
+	luc(LUC.ngayCuoi2300);
+	const truocNgay = await sangCham(quy);
+	expect({
+		ca: `${thang} 23:00 VN ngay cuoi`,
+		tra: tuChoi(truocNgay).includes(CAU.chamTuNgaySau)
+			? "cau ghim"
+			: tuChoi(truocNgay),
+		status: truocNgay.status,
+		pha: await phaCua(quy),
+		dongDiem: await soDongDiem(quy),
+	}).toEqual({
+		ca: `${thang} 23:00 VN ngay cuoi`,
+		tra: "cau ghim",
+		status: 400,
+		pha: "dang-chay",
+		dongDiem: 0,
+	});
+
+	luc(LUC.homSau0002);
+	const thieuChup = await sangCham(quy);
+	expect({
+		ca: `${thang} 00:02 VN thieu ban chup`,
+		tra: tuChoi(thieuChup).includes(CAU.thieuSoNgayCuoi(1))
+			? "cau ghim"
+			: tuChoi(thieuChup),
+		status: thieuChup.status,
+		pha: await phaCua(quy),
+		dongDiem: await soDongDiem(quy),
+		apiCoChupNgayCuoi: await db.okrSoChup.count({
+			where: { keyResultId: krApi, ngay: new Date(`${KY.den}T00:00:00Z`) },
+		}),
+	}).toEqual({
+		ca: `${thang} 00:02 VN thieu ban chup`,
+		tra: "cau ghim",
+		status: 400,
+		pha: "dang-chay",
+		dongDiem: 0,
+		apiCoChupNgayCuoi: 0,
+	});
+
+	await chupSoOkr(new Date(LUC.homSau0005), {
+		docO: async () => ({ loi: "tat" }),
+	});
+	expect(
+		await db.okrSoChup.count({
+			where: { keyResultId: krCrm, ngay: new Date(`${KY.den}T00:00:00Z`) },
+		}),
+	).toBe(1);
+
+	luc(LUC.homSau0010);
+	const truoc = new Map(
+		(
+			await db.okrKeyResult.findMany({
+				where: { id: { in: ids } },
+				select: { id: true, currentValue: true },
+			})
+		).map((k) => [k.id, Number(k.currentValue)]),
+	);
+	ok(await sangCham(quy), `${thang} sang cham 00:10 VN`);
+
+	expect(await phaCua(quy)).toBe("cham-diem");
+	expect(
+		(await db.okrCuaSoRa.findMany({ where: { cycleId: quy } })).map(
+			(r) => r.dongLuc !== null,
+		),
+	).toEqual([true]);
+	const dong = await db.okrDiemKr.findMany({ where: { cycleId: quy } });
+	expect(dong.map((d) => d.keyResultId).sort()).toEqual([...ids].sort());
+	expect(dong.some((d) => d.keyResultId === krNhap)).toBe(false);
+	const thay = dong
+		.map((d) => ({
+			o: theoId.get(d.keyResultId)?.nhan ?? d.keyResultId,
+			soChot: Number(d.soChot),
+			diemGoiY: Number(d.diemGoiY),
+			diem: d.diem,
+			thang: d.thang,
+			trongSoBat: d.trongSoBat,
+			phienBanChuongTrinh: d.phienBanChuongTrinh,
+		}))
+		.sort((a, b) => a.o.localeCompare(b.o));
+	const mong = ids
+		.map((id) => {
+			const o = theoId.get(id) as O;
+			return {
+				o: o.nhan,
+				soChot: truoc.get(id) ?? Number.NaN,
+				diemGoiY: o.goiY,
+				diem: null,
+				thang,
+				trongSoBat: weightsOn,
+				phienBanChuongTrinh: version,
+			};
+		})
+		.sort((a, b) => a.o.localeCompare(b.o));
+	expect(thay).toEqual(mong);
+	expect(
+		BANG_20.map((o, i) => `${o.nhan}: ${truoc.get(ids[i] ?? "")}`),
+	).toEqual(BANG_20.map((o) => `${o.nhan}: ${o.chot}`));
+	const vetPha = await db.okrTrail.findMany({
+		where: { cycleId: quy, action: "doi-pha" },
+		orderBy: { at: "asc" },
+	});
+	expect(vetPha.map((v) => v.after)).toEqual([
+		{ phase: "dang-chay" },
+		{ phase: "cham-diem" },
+	]);
+}
+
+describe("sang-cham", () => {
+	beforeAll(async () => {
+		await keoDaiPhien();
+		await gieoThoaThuan();
+	});
+	afterAll(async () => {
+		setSystemTime();
+		await donSanKhep();
+	});
+
+	test(
+		"sang-cham: thang 0-1 — 23:00 VN ngay cuoi tu choi, 00:02 VN thieu ban chup CRM tu choi, chupSoOkr roi 00:10 VN sinh dung 20 dong diem theo bang viet truoc",
+		() => chayBoSangCham("0-1"),
+		60_000,
+	);
+
+	test(
+		"sang-cham: lap ca bo tren thang 0-100 — cung diemGoiY chuan 0-1, thang 0-100",
+		() => chayBoSangCham("0-100"),
+		60_000,
+	);
+
+	test("sang-cham: ba ca nhay pha tu choi «Pha đi từng bước», pha va vet khong doi", async () => {
+		luc(LUC.gieo);
+		const keHoach = await gieoKyQuy({ ...KY, pha: "lap-ke-hoach" });
+		const chay = await gieoKyQuy(KY);
+		luc(LUC.sauKy);
+		const ca = [
+			{
+				ten: "lap-ke-hoach → cham-diem",
+				id: keHoach,
+				phase: "cham-diem",
+				pha: "lap-ke-hoach",
+			},
+			{
+				ten: "dang-chay → da-dong",
+				id: chay,
+				phase: "da-dong",
+				pha: "dang-chay",
+			},
+			{
+				ten: "lap-ke-hoach → da-dong",
+				id: keHoach,
+				phase: "da-dong",
+				pha: "lap-ke-hoach",
+			},
+		] as const;
+		const soVet = await db.okrTrail.count();
+		const thay: string[] = [];
+		for (const c of ca) {
+			const tra = await goi("okr.setCyclePhase", { id: c.id, phase: c.phase });
+			thay.push(
+				`${c.ten}: ${tra.status} ${tra.loi.includes(CAU.tungBuoc) ? "cau ghim" : tra.loi} · pha ${await phaCua(c.id)} · dong diem ${await soDongDiem(c.id)}`,
+			);
+		}
+		expect(thay).toEqual(
+			ca.map((c) => `${c.ten}: 400 cau ghim · pha ${c.pha} · dong diem 0`),
+		);
+		expect(await db.okrTrail.count()).toBe(soVet);
+	}, 30_000);
+
+	test("sang-cham: hai quan tri bam sang cham cung luc — mot thanh cong, mot «Pha đi từng bước», dung 20 dong diem", async () => {
+		luc(LUC.gieo);
+		const quy = await gieoKyQuy(KY);
+		await gieoMucTieuCongBo(
+			quy,
+			Array.from({ length: 10 }, (_, i) => ({
+				startValue: 0,
+				targetValue: 100,
+				currentValue: i,
+			})),
+		);
+		await gieoMucTieuCongBo(
+			quy,
+			Array.from({ length: 10 }, (_, i) => ({
+				startValue: 0,
+				targetValue: 100,
+				currentValue: 10 + i,
+			})),
+			{ kind: "tham-vong" },
+		);
+		luc(LUC.sauKy);
+		const hai = await Promise.all([
+			sangCham(quy, "quan"),
+			sangCham(quy, "chu"),
+		]);
+		expect(
+			hai
+				.map((t) =>
+					t.status === 200
+						? "200"
+						: `${t.status} ${t.loi.includes(CAU.tungBuoc) ? "cau ghim" : t.loi}`,
+				)
+				.sort(),
+		).toEqual(["200", "400 cau ghim"]);
+		expect(await soDongDiem(quy)).toBe(20);
+		expect(await phaCua(quy)).toBe("cham-diem");
+		expect(
+			await db.okrTrail.count({
+				where: {
+					cycleId: quy,
+					action: "doi-pha",
+					after: { equals: { phase: "cham-diem" } },
+				},
+			}),
+		).toBe(1);
+	}, 30_000);
+
+	test("sang-cham: da-dong chi khi moi dong diem co diem — «Còn N KR chưa chấm», kiemDongKy dem theo don vi", async () => {
+		luc(LUC.gieo);
+		const quy = await gieoKyQuy(KY);
+		const pb = await pbMoi("khep-pb");
+		const truong = await truongMoi("department", pb, "khep-truong");
+		const goc = await gieoMucTieuCongBo(quy, [
+			{ startValue: 0, targetValue: 100, currentValue: 0 },
+			{ startValue: 0, targetValue: 100, currentValue: 0 },
+		]);
+		const phong = await gieoMucTieuCongBo(
+			quy,
+			[
+				{
+					startValue: 0,
+					targetValue: 100,
+					currentValue: 0,
+					ownerUserId: truong.nguoi,
+				},
+			],
+			{
+				unit: { level: "phong-ban", departmentId: pb },
+				ownerUserId: truong.nguoi,
+				ai: truong.cookie,
+			},
+		);
+		luc(LUC.sauKy);
+		await keoDaiPhien();
+		ok(await sangCham(quy), "sang cham");
+		const tenPb = (await db.department.findUniqueOrThrow({ where: { id: pb } }))
+			.name;
+
+		const lan1 = await goi("okr.setCyclePhase", { id: quy, phase: "da-dong" });
+		expect(
+			`${lan1.status} ${lan1.loi.includes(CAU.conKrChuaCham(3)) ? "cau ghim" : lan1.loi}`,
+		).toBe("400 cau ghim");
+		expect(await phaCua(quy)).toBe("cham-diem");
+		const dem = await kiemDongKy(db, quy);
+		expect({
+			conLai: dem.conLai,
+			theoDonVi: [...dem.theoDonVi].sort((a, b) =>
+				a.khoa.localeCompare(b.khoa),
+			),
+		}).toEqual({
+			conLai: 3,
+			theoDonVi: [
+				{ khoa: "goc", ten: OKR.tenGoc, conLai: 2 },
+				{ khoa: `pb:${pb}`, ten: tenPb, conLai: 1 },
+			].sort((a, b) => a.khoa.localeCompare(b.khoa)),
+		});
+
+		await db.okrDiemKr.updateMany({
+			where: { keyResultId: { in: [...goc.krIds] } },
+			data: { diem: 1 },
+		});
+		const lan2 = await goi("okr.setCyclePhase", { id: quy, phase: "da-dong" });
+		expect(
+			`${lan2.status} ${lan2.loi.includes(CAU.conKrChuaCham(1)) ? "cau ghim" : lan2.loi}`,
+		).toBe("400 cau ghim");
+		expect(await phaCua(quy)).toBe("cham-diem");
+
+		await db.okrDiemKr.updateMany({
+			where: { keyResultId: { in: [...phong.krIds] } },
+			data: { diem: 0.5 },
+		});
+		ok(
+			await goi("okr.setCyclePhase", { id: quy, phase: "da-dong" }),
+			"dong ky",
+		);
+		expect(await phaCua(quy)).toBe("da-dong");
+	}, 30_000);
+});
+
+describe("xoa-kr-khep", () => {
+	beforeAll(keoDaiPhien);
+	afterAll(async () => {
+		setSystemTime();
+		await donSanKhep();
+	});
+
+	async function tuChoiXoa(ca: string, k: string, cau: string) {
+		const soVet = await db.okrTrail.count();
+		const tra = await goi("okr.removeKeyResult", { id: k });
+		expect({
+			ca,
+			tra: `${tra.status} ${tra.loi}`,
+			con: await db.okrKeyResult.count({ where: { id: k } }),
+			soVet: await db.okrTrail.count(),
+		}).toEqual({ ca, tra: `400 ${cau}`, con: 1, soVet });
+	}
+
+	test("xoa-kr-khep: KR da co dong okrDoiDich — tu choi bang cau ghim, khong loi 500", async () => {
+		luc(TRONG_RA);
+		const quy = await gieoKyQuy(KY);
+		const {
+			krIds: [k = ""],
+		} = await gieoMucTieuCongBo(quy, [
+			{ startValue: 60, targetValue: 80, currentValue: 60 },
+			{ startValue: 0, targetValue: 100, currentValue: 0 },
+		]);
+		idCua(await moRa(quy, RA.tu, RA.den), "mo ra xoa kr");
+		ok(await doiDichKr(k, { targetValue: 85 }), "doi dich trong ra");
+		expect(await db.okrDoiDich.count({ where: { keyResultId: k } })).toBe(1);
+		await tuChoiXoa("co doi dich", k, CAU.krCoDoiDich);
+	});
+
+	test("xoa-kr-khep: KR da co dong okrDiemKr — tu choi bang cau ghim, khong loi 500", async () => {
+		luc(LUC.gieo);
+		const quy = await gieoKyQuy(KY);
+		const {
+			krIds: [k = ""],
+		} = await gieoMucTieuCongBo(quy, [
+			{ startValue: 0, targetValue: 100, currentValue: 0 },
+			{ startValue: 0, targetValue: 100, currentValue: 0 },
+		]);
+		luc(LUC.sauKy);
+		ok(await sangCham(quy), "sang cham xoa kr");
+		expect(await db.okrDiemKr.count({ where: { keyResultId: k } })).toBe(1);
+		await db.okrCycle.update({
+			where: { id: quy },
+			data: { phase: "dang-chay" },
+		});
+		await tuChoiXoa("co diem", k, CAU.krCoDiem);
 	});
 });

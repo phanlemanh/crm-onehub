@@ -15,6 +15,7 @@ import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { OKR } from "../src/okr/okr-config";
 import { OkrSoService } from "../src/okr/okr-so.service";
 import { OkrTraoDoiService } from "../src/okr/okr-trao-doi.service";
+import { sangPha } from "./okr-khep-san";
 import {
 	type AiHoacCookie,
 	bpMoi,
@@ -205,10 +206,7 @@ describe("gui-lo", () => {
 		const cham = await mucTieu(quyCham, dvP, tp.nguoi, tp.cookie);
 		const kCham = await taoKr(cham, m, tp.cookie);
 		await congBo(cham, tp.cookie);
-		ok(
-			await goi("okr.setCyclePhase", { id: quyCham, phase: "cham-diem" }),
-			"cham diem",
-		);
+		ok(await sangPha(quyCham, "cham-diem"), "cham diem");
 
 		const baKr = [k1, k2, k3];
 		const truocGui = await doc<{ items: DongCapNhat[] }>(
@@ -1372,11 +1370,8 @@ describe("viec-cua-toi", () => {
 			await theoDoiMt(oDong, true, await phienCua(nguoi.theoDong)),
 			"theo dong",
 		);
-		for (const phase of ["cham-diem", "da-dong"])
-			ok(
-				await goi("okr.setCyclePhase", { id: quyDong, phase }),
-				`dong ${phase}`,
-			);
+		for (const phase of ["cham-diem", "da-dong"] as const)
+			ok(await sangPha(quyDong, phase), `dong ${phase}`);
 
 		const co = async (userId: string) =>
 			(await doc<ViecCuaToiOutput>("okr.viecCuaToi", await phienCua(userId)))
@@ -1567,11 +1562,8 @@ describe("chuyen-okr", () => {
 		const OD = await mucTieu(quyDong, dvP, tp.nguoi, tp.cookie);
 		const KR3 = await taoKr(OD, H, tp.cookie);
 		await congBo(OD, tp.cookie);
-		for (const phase of ["cham-diem", "da-dong"])
-			ok(
-				await goi("okr.setCyclePhase", { id: quyDong, phase }),
-				`dong ${phase}`,
-			);
+		for (const phase of ["cham-diem", "da-dong"] as const)
+			ok(await sangPha(quyDong, phase), `dong ${phase}`);
 		await db.okrTrail.updateMany({
 			where: { objectiveId: OD },
 			data: { at: new Date(Date.now() - 3 * NGAY_MS) },

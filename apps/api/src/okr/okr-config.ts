@@ -109,6 +109,14 @@ export const OKR = {
 			raDaDong: "Cửa sổ rà này đã đóng.",
 			lyDoDoiDich: "Đổi đích ngoài rà giữa kỳ cần lý do.",
 			khongCoCuaSoRa: (id: string) => `Không có cửa sổ rà nào mang mã ${id}.`,
+			phaTungBuoc:
+				"Pha đi từng bước: lập kế hoạch, đang chạy, chấm điểm, đã đóng.",
+			chamTuNgaySau: "Sang chấm điểm từ ngày sau ngày cuối của chu kỳ.",
+			thieuSoNgayCuoi: (n: number) =>
+				`Còn ${n} KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
+			conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm.`,
+			krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
+			krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

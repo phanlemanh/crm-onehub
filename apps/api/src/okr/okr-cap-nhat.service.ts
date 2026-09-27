@@ -16,13 +16,13 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { tenDonVi } from "./don-vi";
 import type { CapNhatTuanOutput } from "./okr.contracts";
 import {
 	chonSoMay,
 	chonTenDonVi,
 	doCanhVaSoMay,
 	OkrService,
-	tenDonVi,
 } from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";

@@ -9,6 +9,7 @@ import {
 	ok,
 	phien,
 	TIEN_TO,
+	type TraLoi,
 	taoNam,
 	taoQuy,
 } from "./okr-san";
@@ -44,6 +45,7 @@ export type KrGieo = {
 	currentValue?: number;
 	weight?: number;
 	ownerUserId?: string;
+	nguon?: { [khoa: string]: Json };
 };
 
 export async function gieoMucTieuCongBo(
@@ -76,36 +78,82 @@ export async function gieoMucTieuCongBo(
 	).id;
 	const krIds: string[] = [];
 	for (const kr of krs) {
-		krIds.push(
-			ok<{ id: string }>(
-				await goi(
-					"okr.createKeyResult",
-					{
-						objectiveId,
-						title: ma("kr khep"),
-						kind: kr.kind ?? "tang-toi",
-						ownerUserId: kr.ownerUserId ?? chu,
-						startValue: kr.startValue ?? 0,
-						targetValue: kr.targetValue ?? 100,
-						currentValue: kr.currentValue ?? kr.startValue ?? 0,
-						unit: "",
-						dueOn: null,
-						weight: kr.weight ?? 1,
-					},
-					ai,
-				),
-				"tao kr khep",
-			).id,
-		);
+		const id = ok<{ id: string }>(
+			await goi(
+				"okr.createKeyResult",
+				{
+					objectiveId,
+					title: ma("kr khep"),
+					kind: kr.kind ?? "tang-toi",
+					ownerUserId: kr.ownerUserId ?? chu,
+					startValue: kr.startValue ?? 0,
+					targetValue: kr.targetValue ?? 100,
+					currentValue: kr.currentValue ?? kr.startValue ?? 0,
+					unit: "",
+					dueOn: null,
+					weight: kr.weight ?? 1,
+				},
+				ai,
+			),
+			"tao kr khep",
+		).id;
+		if (kr.nguon)
+			ok(
+				await goi("okr.datNguonKr", { ...kr.nguon, keyResultId: id }, ai),
+				"dat nguon kr khep",
+			);
+		krIds.push(id);
 	}
 	ok(await goi("okr.publishObjective", { id: objectiveId }, ai), "cong bo");
 	return { objectiveId, krIds };
+}
+
+export async function guiSo(
+	so: { keyResultId: string; value: number }[],
+	ai: AiHoacCookie = "quan",
+): Promise<void> {
+	const sessionId = ok<{ sessionId: string }>(
+		await goi("okr.moCapNhat", { entry: "tab" }, ai),
+		"mo phien cap nhat khep",
+	).sessionId;
+	ok(
+		await goi(
+			"okr.guiCapNhat",
+			{
+				sessionId,
+				items: so.map((m) => ({ ...m, confidence: "vua", note: "" })),
+			},
+			ai,
+		),
+		"gui cap nhat khep",
+	);
+}
+
+export async function sangPha(
+	id: string,
+	phase: "cham-diem" | "da-dong",
+): Promise<TraLoi> {
+	if (phase === "da-dong") {
+		await db.$executeRaw`UPDATE "okrDiemKr" SET diem = "diemGoiY" WHERE "cycleId" = ${id} AND diem IS NULL`;
+		return goi("okr.setCyclePhase", { id, phase });
+	}
+	const c = await db.okrCycle.findUniqueOrThrow({ where: { id } });
+	const homSau = new Date(c.endsOn);
+	homSau.setUTCDate(homSau.getUTCDate() + 1);
+	await keoDaiPhien();
+	luc(`${homSau.toISOString().slice(0, 10)}T03:00:00Z`);
+	try {
+		return await goi("okr.setCyclePhase", { id, phase });
+	} finally {
+		setSystemTime();
+	}
 }
 
 export async function donSanKhep(): Promise<void> {
 	const cuaSan = { name: { startsWith: TIEN_TO } };
 	const kr = { objective: { cycle: cuaSan } };
 	await db.okrDoiDich.deleteMany({ where: { keyResult: kr } });
+	await db.okrSoChup.deleteMany({ where: { keyResult: kr } });
 	await db.okrDiemKr.deleteMany({ where: { cycle: cuaSan } });
 	await db.okrNhinLai.deleteMany({ where: { objective: { cycle: cuaSan } } });
 	await db.okrMangSang.deleteMany({
