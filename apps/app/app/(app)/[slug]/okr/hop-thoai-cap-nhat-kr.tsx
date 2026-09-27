@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -210,9 +211,11 @@ export function HopThoaiCapNhatKr({
 					</FieldGroup>
 				</form>
 				<DialogFooter>
-					<Button disabled={khoa} onClick={dong} variant="outline">
-						{m.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button disabled={khoa} variant="outline">
+							{m.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						data-nut="gui-cap-nhat-kr"
 						disabled={!sanSang || khoa}

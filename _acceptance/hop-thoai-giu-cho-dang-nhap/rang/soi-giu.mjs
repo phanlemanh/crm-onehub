@@ -9,6 +9,7 @@ import {
 	statSync,
 	writeFileSync,
 } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -28,7 +29,8 @@ const LOAI_TRU = new Set([
 	".turbo",
 ]);
 
-const DUONG_CU = "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx";
+const DUONG_CU =
+	"apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx";
 const DUONG_MOI_REL = "packages/ui/src/components/confirm-dialog.tsx";
 const NHAP_MOI = "@crm/ui/components/confirm-dialog";
 const NHAP_CU_DAU_HIEU = "members/confirm-dialog";
@@ -206,6 +208,8 @@ function caConfirmChieuDo() {
 
 const SLUG = "apps/app/app/(app)/[slug]";
 
+const KHAI_TAY = [`${SLUG}/okr/hop-thoai-cap-nhat-kr.tsx`];
+
 const DANH_SACH = [
 	`${SLUG}/okr/hop-thoai-can-chinh.tsx`,
 	`${SLUG}/okr/hop-thoai-kr.tsx`,
@@ -241,7 +245,11 @@ const BA_HOP = [
 	`${SLUG}/settings/organization/hop-thoai-don-vi.tsx`,
 ];
 
-const NOI_DUNG_HOP = new Set(["DialogContent", "SheetContent", "DrawerContent"]);
+const NOI_DUNG_HOP = new Set([
+	"DialogContent",
+	"SheetContent",
+	"DrawerContent",
+]);
 const NUT_DONG = new Set(["DialogClose", "SheetClose", "DrawerClose"]);
 const O_NHAP = new Set([
 	"Input",
@@ -327,8 +335,15 @@ function soiNut(sf) {
 					(a) => ts.isJsxAttribute(a) && a.name.getText(sf) === "onClick",
 				);
 				const bt = onClick?.initializer;
-				if (bt && ts.isJsxExpression(bt) && bt.expression && laHamDong(bt.expression)) {
-					viPham.push(sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1);
+				if (
+					bt &&
+					ts.isJsxExpression(bt) &&
+					bt.expression &&
+					laHamDong(bt.expression)
+				) {
+					viPham.push(
+						sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1,
+					);
 				}
 			}
 		}
@@ -433,16 +448,22 @@ function caHuy(goc) {
 	const rut = rutTap(goc);
 	const viet = new Set(DANH_SACH);
 	for (const rel of [...rut].sort()) {
-		if (!viet.has(rel)) hong.push(`huy: thua ${rel} (may rut ra, danh sach viet truoc khong co)`);
+		if (!viet.has(rel))
+			hong.push(`huy: thua ${rel} (may rut ra, danh sach viet truoc khong co)`);
 	}
 	let khop = 0;
 	for (const rel of DANH_SACH) {
-		if (!existsSync(join(goc, rel))) hong.push(`huy: thieu ${rel} (khong ton tai)`);
+		if (!existsSync(join(goc, rel)))
+			hong.push(`huy: thieu ${rel} (khong ton tai)`);
 		else if (!rut.has(rel)) hong.push(`huy: thieu ${rel} (may khong rut ra)`);
 		else khop += 1;
 	}
 
-	const soi = [...new Set([...DANH_SACH, ...rut])]
+	for (const rel of KHAI_TAY) {
+		if (!existsSync(join(goc, rel)))
+			hong.push(`huy: thieu ${rel} (khai tay, khong ton tai)`);
+	}
+	const soi = [...new Set([...DANH_SACH, ...KHAI_TAY, ...rut])]
 		.filter((rel) => existsSync(join(goc, rel)))
 		.sort();
 	const nhan = nhanTep(soi);
@@ -458,7 +479,9 @@ function caHuy(goc) {
 	}
 
 	if (!bangVeTayCoDialogClose(goc)) {
-		hong.push(`huy: ${DESIGN_MD} thieu dong DialogClose trong bang «Dấu hiệu vẽ tay»`);
+		hong.push(
+			`huy: ${DESIGN_MD} thieu dong DialogClose trong bang «Dấu hiệu vẽ tay»`,
+		);
 	}
 
 	const duong = doiChungDuong();
@@ -468,6 +491,7 @@ function caHuy(goc) {
 	console.log(
 		`huy: ${khop}/${DANH_SACH.length} tep, ${viPham} vi pham, ${quaNutDong} nut qua nut dong`,
 	);
+	console.log(`huy: khai tay ${KHAI_TAY.length} tep ngoai bo rut may`);
 	return hong;
 }
 
@@ -530,7 +554,8 @@ function giaTriHang(khoiTao) {
 		k === ts.SyntaxKind.NullKeyword ||
 		k === ts.SyntaxKind.NumericLiteral ||
 		k === ts.SyntaxKind.StringLiteral ||
-		(ts.isIdentifier(khoiTao.expression) && khoiTao.expression.text === "undefined")
+		(ts.isIdentifier(khoiTao.expression) &&
+			khoiTao.expression.text === "undefined")
 	);
 }
 
@@ -592,10 +617,303 @@ function caTuKhaiChieuDo() {
 	});
 }
 
+const MOC = "origin/onehub";
+const TEP_CHU = "packages/ui/src/lib/messages.ts";
+const KHOA_HOI = ["tieuDe", "than", "tiepTuc", "bo"];
+const LOP_DOI_KIEU =
+	/(^|\s)(bg-\S+|text-(?!xs\b|sm\b|base\b|lg\b|xl\b|left\b|right\b|center\b|wrap\b|nowrap\b|balance\b|pretty\b)\S+|border-\S+|rounded-\S+|p[xytrbl]?-\S+|m[xytrbl]?-\S+|gap-\S+|space-[xy]-\S+)/;
+const TEN_PROP_KIEU = new Set(["variant", "tone", "size"]);
+
+const git = (...a) =>
+	execFileSync("git", ["-C", GOC, ...a], {
+		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
+	}).trim();
+
+function tepDiffTK(loc) {
+	return git(
+		"diff",
+		"--name-only",
+		"--no-renames",
+		`--diff-filter=${loc}`,
+		`${MOC}...HEAD`,
+	)
+		.split("\n")
+		.filter(Boolean);
+}
+
+let GOC_SO = null;
+function dongThemTK(rel, duong) {
+	GOC_SO ??= git("merge-base", "HEAD", MOC);
+	const thu = mkdtempSync(join(tmpdir(), "soi-giu-dong-them-"));
+	try {
+		const cu = join(thu, "cu");
+		const r0 = spawnSync("git", ["-C", GOC, "show", `${GOC_SO}:${rel}`], {
+			encoding: "utf8",
+			maxBuffer: 64 * 1024 * 1024,
+		});
+		writeFileSync(cu, r0.status === 0 ? r0.stdout : "");
+		const r = spawnSync(
+			"git",
+			["diff", "--no-index", "-U0", "--no-color", cu, duong],
+			{
+				encoding: "utf8",
+				maxBuffer: 64 * 1024 * 1024,
+			},
+		);
+		const them = new Set();
+		for (const m of (r.stdout ?? "").matchAll(
+			/^@@ -\S+ \+(\d+)(?:,(\d+))? @@/gm,
+		)) {
+			const dau = Number(m[1]);
+			const so = m[2] === undefined ? 1 : Number(m[2]);
+			for (let k = 0; k < so; k += 1) them.add(dau + k);
+		}
+		return them;
+	} finally {
+		rmSync(thu, { recursive: true, force: true });
+	}
+}
+
+const dongCuaTK = (sf, pos) => sf.getLineAndCharacterOfPosition(pos).line + 1;
+
+function chuThichMoi(sf, them) {
+	const chu = sf.text;
+	const gap = new Map();
+	const nhan = (r) => {
+		if (r) for (const c of r) gap.set(c.pos, c);
+	};
+	const di = (n) => {
+		if (n.kind === ts.SyntaxKind.JsxText) return;
+		nhan(ts.getLeadingCommentRanges(chu, n.pos));
+		nhan(ts.getTrailingCommentRanges(chu, n.pos));
+		for (const c of n.getChildren(sf)) di(c);
+	};
+	di(sf);
+	return [...gap.values()]
+		.map((c) => dongCuaTK(sf, c.pos))
+		.filter((d) => them.has(d))
+		.sort((a, b) => a - b);
+}
+
+function thanhPhanUi(sf) {
+	const ten = new Set();
+	for (const st of sf.statements) {
+		if (!ts.isImportDeclaration(st)) continue;
+		const nguon = st.moduleSpecifier.text;
+		if (!nguon.startsWith("@crm/ui/components/")) continue;
+		const b = st.importClause?.namedBindings;
+		if (b && ts.isNamedImports(b))
+			for (const e of b.elements) ten.add(e.name.text);
+	}
+	return ten;
+}
+
+function soiKieu(sf, them, laApp) {
+	const hong = [];
+	const ui = laApp ? thanhPhanUi(sf) : new Set();
+	const di = (n) => {
+		const dong = dongCuaTK(sf, n.getStart(sf));
+		if (
+			laApp &&
+			(ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) &&
+			ui.has(n.tagName.getText(sf))
+		) {
+			for (const a of n.attributes.properties) {
+				if (
+					!ts.isJsxAttribute(a) ||
+					a.name.getText(sf) !== "className" ||
+					!a.initializer
+				)
+					continue;
+				const dongA = dongCuaTK(sf, a.getStart(sf));
+				if (!them.has(dongA)) continue;
+				const giaTri = a.initializer.getText(sf);
+				const khop = giaTri.match(LOP_DOI_KIEU);
+				if (khop)
+					hong.push({
+						dong: dongA,
+						cau: `className doi kieu «${khop[2]}» tren ${n.tagName.getText(sf)}`,
+					});
+			}
+		}
+		if (
+			ts.isBindingElement(n) &&
+			ts.isIdentifier(n.name) &&
+			TEN_PROP_KIEU.has(n.name.text) &&
+			n.initializer &&
+			ts.isStringLiteral(n.initializer) &&
+			them.has(dong)
+		)
+			hong.push({ dong, cau: `mac dinh chuoi cho ${n.name.text}` });
+		ts.forEachChild(n, di);
+	};
+	di(sf);
+	return hong;
+}
+
+function coUseEffect(sf) {
+	const dong = [];
+	const di = (n) => {
+		if (ts.isCallExpression(n)) {
+			const e = n.expression;
+			if (
+				(ts.isIdentifier(e) && e.text === "useEffect") ||
+				(ts.isPropertyAccessExpression(e) && e.name.text === "useEffect")
+			)
+				dong.push(dongCuaTK(sf, n.getStart(sf)));
+		}
+		ts.forEachChild(n, di);
+	};
+	di(sf);
+	return dong;
+}
+
+function goiKitTK() {
+	return (
+		process.env.CLAUDE_PLUGIN_ROOT ??
+		execFileSync(
+			"node",
+			[
+				join(GOC, "scripts", "resolve-plugin.mjs"),
+				"--plugin",
+				"acceptance-gate",
+				"--require",
+				"scripts/design-gate.mjs",
+			],
+			{ encoding: "utf8" },
+		).trim()
+	);
+}
+
+function chuHoiLai(duong) {
+	const chu = readFileSync(duong, "utf8");
+	const khoi = [...chu.matchAll(/boThayDoi:\s*\{([^}]*)\}/g)].map((m) => {
+		const o = {};
+		for (const k of m[1].matchAll(/(\w+):\s*"([^"]*)"/g)) o[k[1]] = k[2];
+		return o;
+	});
+	return khoi;
+}
+
+function caThietKe(thay = new Map()) {
+	const duongCua = (t) => thay.get(t) ?? join(GOC, t);
+	const hong = [];
+	const moi = new Set(tepDiffTK("A"));
+	const doi = tepDiffTK("AM").filter((t) => existsSync(join(GOC, t)));
+	const laThu = (t) =>
+		/\/(test|tests|__tests__|proto)\//.test(t) ||
+		/\.(spec|test|dom)\.tsx?$/.test(t);
+	const giaoDien = doi
+		.filter(
+			(t) => /^(apps\/app|packages\/ui\/src)\/.*\.tsx$/.test(t) && !laThu(t),
+		)
+		.sort();
+	const tepMa = doi
+		.filter(
+			(t) =>
+				/\.(ts|tsx)$/.test(t) &&
+				!t.split("/").includes("generated") &&
+				!laThu(t),
+		)
+		.sort();
+	console.log(`thiet-ke: dai so sanh ${MOC}...HEAD`);
+	console.log(
+		`thiet-ke: ${giaoDien.length} tep giao dien, ${tepMa.length} tep ma, ${[...moi].filter((t) => tepMa.includes(t)).length} tep moi`,
+	);
+	const kit = giaoDien.length > 0 ? goiKitTK() : null;
+	for (const t of giaoDien) {
+		const r = spawnSync(
+			"node",
+			[
+				join(kit, "scripts", "design-gate.mjs"),
+				"--target",
+				thay.has(t) ? duongCua(t) : t,
+				"--mode",
+				"static",
+			],
+			{
+				cwd: GOC,
+				encoding: "utf8",
+			},
+		);
+		const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+		const p0 = Number(ra.match(/"p0_count":\s*(\d+)/)?.[1] ?? Number.NaN);
+		if (r.status !== 0 || p0 !== 0)
+			hong.push(`thiet-ke: design-gate P0 o ${t} (ma ${r.status}, p0 ${p0})`);
+	}
+	for (const t of tepMa) {
+		const duong = duongCua(t);
+		const sf = cay(duong);
+		const them = dongThemTK(t, duong);
+		for (const d of chuThichMoi(sf, them))
+			hong.push(`thiet-ke: chu thich moi o ${t}:${d}`);
+		for (const k of soiKieu(sf, them, t.startsWith("apps/app/")))
+			hong.push(`thiet-ke: ${k.cau} o ${t}:${k.dong}`);
+		if (moi.has(t))
+			for (const d of coUseEffect(sf))
+				hong.push(`thiet-ke: useEffect tran trong tep moi ${t}:${d}`);
+	}
+	const khoi = chuHoiLai(duongCua(TEP_CHU));
+	if (khoi.length !== 2)
+		hong.push(
+			`thiet-ke: ${TEP_CHU} co ${khoi.length} khoi dialog.boThayDoi, can 2 (en, vi)`,
+		);
+	else {
+		const [en, vi] = khoi;
+		for (const k of KHOA_HOI) {
+			if (!en[k] || !vi[k]) hong.push(`thiet-ke: thieu dialog.boThayDoi.${k}`);
+			else if (en[k] === vi[k])
+				hong.push(`thiet-ke: vi=en o dialog.boThayDoi.${k}`);
+		}
+	}
+	console.log(
+		`thiet-ke: design-gate ${giaoDien.length} tep, chu hoi lai ${khoi.length === 2 ? "du 4 khoa vi/en" : "loi"}`,
+	);
+	return hong;
+}
+
+function caThietKeChieuDo() {
+	const thuMuc = mkdtempSync(join(tmpdir(), "soi-giu-thiet-ke-"));
+	try {
+		const tepMoi = "packages/ui/src/components/giu-thay-doi.tsx";
+		const sao1 = join(thuMuc, "giu-thay-doi.tsx");
+		writeFileSync(sao1, `${readFileSync(join(GOC, tepMoi), "utf8")}\n// x\n`);
+		const sao2 = join(thuMuc, "messages.ts");
+		writeFileSync(
+			sao2,
+			readFileSync(join(GOC, TEP_CHU), "utf8").replace(
+				'bo: "Discard"',
+				'bo: "Bỏ"',
+			),
+		);
+		const ca1 = caThietKe(new Map([[tepMoi, sao1]]));
+		const ca2 = caThietKe(new Map([[TEP_CHU, sao2]]));
+		for (const h of [...ca1, ...ca2]) console.log(`HONG ${h}`);
+		const ghim1 = ca1.find((h) =>
+			h.startsWith(`thiet-ke: chu thich moi o ${tepMoi}:`),
+		);
+		const ghim2 = ca2.find(
+			(h) => h === "thiet-ke: vi=en o dialog.boThayDoi.bo",
+		);
+		if (ghim1 && ghim2) {
+			console.log(`chieu do: bat, in «${ghim1}» va «${ghim2}»`);
+			process.exit(1);
+		}
+		console.log(
+			`chieu do: LOT (chu thich ${Boolean(ghim1)}, vi=en ${Boolean(ghim2)})`,
+		);
+		process.exit(2);
+	} finally {
+		rmSync(thuMuc, { recursive: true, force: true });
+	}
+}
+
 const CAC_CA = {
 	confirm: { chay: () => caConfirm(GOC), chieuDo: caConfirmChieuDo },
 	huy: { chay: () => caHuy(GOC), chieuDo: caHuyChieuDo },
 	"tu-khai": { chay: () => caTuKhai(GOC), chieuDo: caTuKhaiChieuDo },
+	"thiet-ke": { chay: () => caThietKe(), chieuDo: caThietKeChieuDo },
 };
 
 const ca = doiSo("--ca");
