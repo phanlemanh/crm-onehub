@@ -4,7 +4,7 @@ import {
 	LOAI_CHU_KY,
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
-import { okrProgram } from "@crm/validation/okr-chuong-trinh";
+import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
 import { KIEU_KR, krInput, NGUON_KR } from "@crm/validation/okr-kr";
 import {
 	CAP_MUC_TIEU,
@@ -52,7 +52,7 @@ export const programOutput = okrProgram.extend({
 	version: z.number(),
 	canManage: z.boolean(),
 });
-export const setProgramInput = okrProgram;
+export const setProgramInput = okrProgramSua;
 export const okrAccessOutput = z.object({
 	canManageProgram: z.boolean(),
 	headOf: z.object({

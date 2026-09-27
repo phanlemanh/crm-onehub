@@ -20,6 +20,7 @@ import {
 import {
 	OKR_PROGRAM_MAC_DINH,
 	type OkrProgram,
+	type OkrProgramSua,
 	okrProgram,
 } from "@crm/validation/okr-chuong-trinh";
 import {
@@ -411,27 +412,34 @@ export class OkrService {
 				scoreScale: row.scoreScale,
 				weightsOn: row.weightsOn,
 				personalOn: row.personalOn,
+				aiOn: row.aiOn,
+				aiDeXuatPhamVi: row.aiDeXuatPhamVi,
+				aiDeXuatDonVi: row.aiDeXuatDonVi,
+				aiTomTatPhamVi: row.aiTomTatPhamVi,
+				aiTomTatDonVi: row.aiTomTatDonVi,
+				aiTranThangUsd: row.aiTranThangUsd.toNumber(),
 			}),
 			version: row.version,
 		};
 	}
 
-	async setProgram(userId: string, input: OkrProgram) {
+	async setProgram(userId: string, input: OkrProgramSua) {
 		await this.quyenOkr.assertQuanTri(userId);
 		return this.db.$transaction(async (tx) => {
-			const cu = await this.program(tx);
+			const { version, ...cu } = await this.program(tx);
+			const moi = okrProgram.parse({ ...cu, ...input });
 			const row = await tx.okrProgramConfig.create({
-				data: { ...input, version: cu.version + 1, createdById: userId },
+				data: { ...moi, version: version + 1, createdById: userId },
 			});
 			await this.vet(
 				tx,
 				userId,
 				"cau-hinh",
 				{},
-				{ version: cu.version },
-				{ ...input, version: row.version },
+				{ version },
+				{ ...moi, version: row.version },
 			);
-			return { ...input, version: row.version, canManage: true };
+			return { ...moi, version: row.version, canManage: true };
 		});
 	}
 

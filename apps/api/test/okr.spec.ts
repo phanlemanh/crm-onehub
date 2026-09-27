@@ -56,6 +56,12 @@ type ChuongTrinh = {
 	scoreScale: string;
 	weightsOn: boolean;
 	personalOn: boolean;
+	aiOn: boolean;
+	aiDeXuatPhamVi: string;
+	aiDeXuatDonVi: string[];
+	aiTomTatPhamVi: string;
+	aiTomTatDonVi: string[];
+	aiTranThangUsd: number;
 	version: number;
 	canManage: boolean;
 };
@@ -278,7 +284,7 @@ describe("chuong-trinh", () => {
 			weightsOn: false,
 			personalOn: true,
 		} as const;
-		const v1 = ok<{ version: number }>(
+		const v1 = ok<ChuongTrinh>(
 			await goi("okr.setProgram", dau),
 			"cau hinh dau",
 		);
@@ -294,11 +300,24 @@ describe("chuong-trinh", () => {
 			weightsOn: true,
 			personalOn: false,
 		} as const;
+		const aiGiuNguyen = {
+			aiOn: v1.aiOn,
+			aiDeXuatPhamVi: v1.aiDeXuatPhamVi,
+			aiDeXuatDonVi: v1.aiDeXuatDonVi,
+			aiTomTatPhamVi: v1.aiTomTatPhamVi,
+			aiTomTatDonVi: v1.aiTomTatDonVi,
+			aiTranThangUsd: v1.aiTranThangUsd,
+		};
 		const v2 = ok<ChuongTrinh>(
 			await goi("okr.setProgram", moi),
 			"cau hinh moi",
 		);
-		expect(v2).toEqual({ ...moi, version: v1.version + 1, canManage: true });
+		expect(v2).toEqual({
+			...aiGiuNguyen,
+			...moi,
+			version: v1.version + 1,
+			canManage: true,
+		});
 
 		const hai = await db.okrProgramConfig.findMany({
 			orderBy: { version: "desc" },
@@ -309,11 +328,13 @@ describe("chuong-trinh", () => {
 		expect(hai[0]?.createdById).toBe(phien.quan.nguoi);
 
 		expect(await doc<ChuongTrinh>("okr.program")).toEqual({
+			...aiGiuNguyen,
 			...moi,
 			version: v1.version + 1,
 			canManage: true,
 		});
 		expect(await doc<ChuongTrinh>("okr.program", "thuong")).toEqual({
+			...aiGiuNguyen,
 			...moi,
 			version: v1.version + 1,
 			canManage: false,
