@@ -6,7 +6,7 @@ evals:
     executor: test
     cmd: config:executors.test.hg_bam_ngoai
     paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
-    expected: "exit 0; bài dựng một Dialog thật của packages/ui (Radix, không giả) có một Input, onOpenChange là hàm đếm. Ca đã gõ: userEvent gõ «Hợp đồng» vào ô, bắn pointerdown lên lớp phủ [data-slot=dialog-overlay] → [data-slot=dialog-content] vẫn có trong DOM, ô vẫn mang giá trị «Hợp đồng», số lời gọi onOpenChange = 0, không phần tử [role=alertdialog] nào. Đối chứng dương cùng fixture: chưa gõ, bấm lớp phủ → nội dung rời DOM, onOpenChange được gọi đúng 1 lần với false. CHIỀU ĐỎ: bản sao dialog.tsx bỏ nhánh preventDefault ở onInteractOutside → ca đã gõ đỏ, bài in «bam-ngoai: hop dong du da go (onOpenChange goi 1 lan)»."
+    expected: "exit 0; bài dựng một Dialog thật của packages/ui (Radix, không giả) có một Input, onOpenChange là hàm đếm. Ca đã gõ: userEvent gõ «Hợp đồng» vào ô, bắn pointerdown lên lớp phủ [data-slot=dialog-overlay] → [data-slot=dialog-content] vẫn có trong DOM, ô vẫn mang giá trị «Hợp đồng», số lời gọi onOpenChange = 0, không phần tử [role=alertdialog] nào. Đối chứng dương cùng fixture: chưa gõ, bấm lớp phủ → nội dung rời DOM, onOpenChange được gọi đúng 1 lần với false. CHIỀU ĐỎ: (1) bản sao dialog.tsx gỡ hẳn bộ giữ (gốc và phần nội dung) → ca đã gõ đỏ, bài in «bam-ngoai: hop dong du da go (onOpenChange goi 1 lan)»; (2) bản sao chỉ bỏ nhánh preventDefault ở onInteractOutside → hộp vẫn không đóng nhưng hỏi lại, ca đã gõ đỏ, bài in «bam-ngoai: bam ngoai ma hoi lai»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
