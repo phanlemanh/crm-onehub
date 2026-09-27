@@ -673,7 +673,7 @@ executors:
     n4_gui_muon: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t gui-muon"'
     n4_cau_chao: 'cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/muc-nhac-okr.spec.ts -t cau-chao'
     n4_cau_chao_gui: 'bun run test -- "cd apps/agent && TZ=UTC CRM_TELEMETRY_DISABLED=1 bun test test/nhac-moc-sang.integration.spec.ts -t cau-chao-gui"'
-    n4_the_truc_tiep:'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t the-truc-tiep"'
+    n4_the_truc_tiep: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t the-truc-tiep"'
     n4_sheet_quyen: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/sheet-quyen-cap-nhat.dom.tsx -t sheet-quyen'
     n4_mot_luat_ghi: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t mot-luat-ghi"'
     n4_kr_trung: 'bun run test -- "cd apps/api && bun test test/no-sau-luot-4-okr.spec.ts -t kr-trung"'
