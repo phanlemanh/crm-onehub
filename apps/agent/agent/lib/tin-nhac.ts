@@ -108,6 +108,11 @@ export function dungTin(
 	tranKyTu: number = Number.POSITIVE_INFINITY,
 	dongCuoi: string | null = null,
 ): TinNhac {
+	const thuTu: readonly string[] = THU_TU_NHAC;
+	const la = viec.find((v) => !thuTu.includes(v.loai));
+	if (la) {
+		throw new Error(`loại nhắc không có thứ tự trong tin: ${la.loai}`);
+	}
 	const theoThuTu = THU_TU_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
 	);

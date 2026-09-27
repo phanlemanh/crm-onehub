@@ -1,6 +1,7 @@
 import { db } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
 import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
+import { KHOA_MUC_OKR, laViecOkr } from "@crm/db/okr-nhac";
 import {
 	daToiGioNhac,
 	ngayVN,
@@ -11,7 +12,6 @@ import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type MucNhac,
 	mucNhac,
-	type NhacPayload,
 	parseNhacPayload,
 } from "@crm/validation/nhac-ke-hoach";
 import { sendSlackMessage } from "./run-runtime";
@@ -47,28 +47,17 @@ function nguoiCua(subject: string | null): string {
 	return khop[1];
 }
 
-function maViec(v: ViecNhac): MucNhac {
-	switch (v.loai) {
-		case "okr-cap-nhat":
-			return { loai: v.loai, krIds: v.krIds };
-		case "okr-kr-im":
-			return { loai: v.loai, keyResultId: v.keyResultId };
-		case "okr-duoc-giao":
-			return {
-				loai: v.loai,
-				objectiveId: v.objectiveId,
-				keyResultId: v.keyResultId,
-			};
-		case "okr-nhac-ten":
-			return { loai: v.loai, commentId: v.commentId };
-		case "okr-theo-doi":
-			return { loai: v.loai, objectiveId: v.objectiveId };
-		default:
-			return { loai: v.loai, planId: v.planId, stepId: v.stepId };
+function maViec(v: ViecNhac): unknown {
+	if (!laViecOkr(v)) {
+		return { loai: v.loai, planId: v.planId, stepId: v.stepId };
 	}
+	const khoa: readonly string[] = KHOA_MUC_OKR[v.loai];
+	return Object.fromEntries(
+		Object.entries(v).filter(([k]) => k === "loai" || khoa.includes(k)),
+	);
 }
 
-function maCua(ds: ViecNhac[]): NhacPayload["muc"] {
+function maCua(ds: ViecNhac[]): MucNhac[] {
 	return ds.map((v) => mucNhac.parse(maViec(v)));
 }
 

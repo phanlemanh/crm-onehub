@@ -1,7 +1,7 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
-import { LOAI_NHAC_OKR, lienQuanOkr, type ViecOkr } from "@crm/db/okr-nhac";
-import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
+import { laViecOkr, lienQuanOkr } from "@crm/db/okr-nhac";
+import { viecCanNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
 import type {
@@ -31,8 +31,6 @@ import { OKR } from "./okr-config";
 const T = OKR.thongDiep;
 type Tx = Prisma.TransactionClient;
 const chonNguoi = { id: true, name: true, email: true } as const;
-const laViecOkr = (v: ViecNhac): v is ViecOkr =>
-	(LOAI_NHAC_OKR as readonly string[]).includes(v.loai);
 
 function dieuKienChuyen(fromUserId: string) {
 	const conGhi = {

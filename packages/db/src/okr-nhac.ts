@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { Db } from "./client";
 import { jsonObject, jsonText } from "./json";
 import { dauNgayVN, dauTuanVN, ngayVN, soNgayVN } from "./onboarding-nhac";
@@ -8,46 +9,75 @@ export const OKR_NHAC = {
 	suKienGio: 24,
 } as const;
 
-export const LOAI_NHAC_OKR = [
-	"okr-cap-nhat",
-	"okr-kr-im",
-	"okr-duoc-giao",
-	"okr-nhac-ten",
-	"okr-theo-doi",
-] as const;
+const maMuc = z.string().min(1);
 
-export type LoaiNhacOkr = (typeof LOAI_NHAC_OKR)[number];
+export const viecOkr = z.discriminatedUnion("loai", [
+	z.object({
+		loai: z.literal("okr-cap-nhat"),
+		krIds: z.array(maMuc).min(1),
+		nhan: z.string(),
+		soKr: z.number(),
+	}),
+	z.object({
+		loai: z.literal("okr-kr-im"),
+		keyResultId: maMuc,
+		objectiveId: maMuc,
+		nhan: z.string(),
+		soNgay: z.number(),
+		chuTen: z.string().nullable(),
+	}),
+	z.object({
+		loai: z.literal("okr-duoc-giao"),
+		objectiveId: maMuc,
+		keyResultId: maMuc.optional(),
+		nhan: z.string(),
+	}),
+	z.object({
+		loai: z.literal("okr-nhac-ten"),
+		commentId: maMuc,
+		objectiveId: maMuc,
+		nhan: z.string(),
+		nguoiTen: z.string(),
+	}),
+	z.object({
+		loai: z.literal("okr-theo-doi"),
+		objectiveId: maMuc,
+		nhan: z.string(),
+		capNhat: z.number(),
+		binhLuan: z.number(),
+	}),
+]);
 
-export type ViecOkr =
-	| { loai: "okr-cap-nhat"; krIds: string[]; nhan: string; soKr: number }
-	| {
-			loai: "okr-kr-im";
-			keyResultId: string;
-			objectiveId: string;
-			nhan: string;
-			soNgay: number;
-			chuTen: string | null;
-	  }
-	| {
-			loai: "okr-duoc-giao";
-			objectiveId: string;
-			keyResultId?: string;
-			nhan: string;
-	  }
-	| {
-			loai: "okr-nhac-ten";
-			commentId: string;
-			objectiveId: string;
-			nhan: string;
-			nguoiTen: string;
-	  }
-	| {
-			loai: "okr-theo-doi";
-			objectiveId: string;
-			nhan: string;
-			capNhat: number;
-			binhLuan: number;
-	  };
+export type ViecOkr = z.infer<typeof viecOkr>;
+
+export type LoaiNhacOkr = ViecOkr["loai"];
+
+export const KHOA_MUC_OKR = {
+	"okr-cap-nhat": ["krIds"],
+	"okr-kr-im": ["keyResultId"],
+	"okr-duoc-giao": ["objectiveId", "keyResultId"],
+	"okr-nhac-ten": ["commentId"],
+	"okr-theo-doi": ["objectiveId"],
+} as const satisfies {
+	[K in LoaiNhacOkr]: readonly (keyof Extract<ViecOkr, { loai: K }>)[];
+};
+
+type ChonKhoa<T, K> = { [P in keyof T as P extends K ? P : never]: T[P] };
+
+export type MucOkr = {
+	[K in LoaiNhacOkr]: ChonKhoa<
+		Extract<ViecOkr, { loai: K }>,
+		"loai" | (typeof KHOA_MUC_OKR)[K][number]
+	>;
+}[LoaiNhacOkr];
+
+export const LOAI_NHAC_OKR = Object.keys(KHOA_MUC_OKR) as LoaiNhacOkr[];
+
+export function laViecOkr<T extends { loai: string }>(
+	v: T,
+): v is Extract<T, { loai: LoaiNhacOkr }> {
+	return Object.hasOwn(KHOA_MUC_OKR, v.loai);
+}
 
 const PHUT_MS = 60 * 1000;
 

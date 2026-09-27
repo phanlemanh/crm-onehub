@@ -20,6 +20,10 @@ export const THU_TU_NHAC = [
 	"okr-theo-doi",
 ] as const satisfies readonly (LoaiNhac | LoaiNhacOkr)[];
 
+type ThieuThuTu = Exclude<ViecNhac["loai"], (typeof THU_TU_NHAC)[number]>;
+
+export const THU_TU_DU: [ThieuThuTu] extends [never] ? true : ThieuThuTu = true;
+
 export const NHAC = {
 	gio: { gio: 8, phut: 30 },
 	muiGio: "Asia/Ho_Chi_Minh",
