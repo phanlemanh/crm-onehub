@@ -1,11 +1,7 @@
 import { defineEval } from "eve/evals";
 import { equals } from "eve/evals/expect";
 import { builderDeliveryMessage } from "../../agent/_chep/builder-delivery";
-import {
-	CHO_TRA_LOI_MS,
-	DAU_BUOC_HAI,
-	KICH_BAN,
-} from "../../agent/kich-ban";
+import { CHO_TRA_LOI_MS, DAU_BUOC_HAI, KICH_BAN } from "../../agent/kich-ban";
 
 export default defineEval({
 	description:
@@ -28,7 +24,9 @@ export default defineEval({
 			},
 		});
 		if (Array.isArray(tin) || !("inputResponses" in tin)) {
-			throw new Error("khong chay tiep: builderDeliveryMessage khong tra inputResponses");
+			throw new Error(
+				"khong chay tiep: builderDeliveryMessage khong tra inputResponses",
+			);
 		}
 		try {
 			await t.send({ ...tin, signal: AbortSignal.timeout(CHO_TRA_LOI_MS) });

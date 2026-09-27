@@ -24,8 +24,9 @@ export default defineEval({
 		}
 		await t.send(tin);
 
-		t.eventsSatisfy("phien con khong chay buoc hai", (events) =>
-			!JSON.stringify(events).includes(DAU_BUOC_HAI),
+		t.eventsSatisfy(
+			"phien con khong chay buoc hai",
+			(events) => !JSON.stringify(events).includes(DAU_BUOC_HAI),
 		);
 		t.check(t.pendingInputRequests.length, equals(0));
 		t.event("turn.cancelled").label("luot goc bi huy, khong do tiep");

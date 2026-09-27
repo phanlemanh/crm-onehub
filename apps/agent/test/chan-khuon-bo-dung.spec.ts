@@ -104,7 +104,9 @@ describe("chan-khuon", () => {
 			});
 			const daGhi = trangThai.callIds.includes(goiThat.callId);
 			const phaiGhi =
-				!ca.chan && ca.purpose === "builder" && ca.o !== "subagent khac kem outputSchema";
+				!ca.chan &&
+				ca.purpose === "builder" &&
+				ca.o !== "subagent khac kem outputSchema";
 			expect({ o: ca.o, daGhi }).toEqual({ o: ca.o, daGhi: phaiGhi });
 		}
 	});

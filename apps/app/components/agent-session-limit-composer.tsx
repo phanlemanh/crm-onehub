@@ -2,7 +2,12 @@
 
 import { AsyncButtonContent } from "@crm/ui/components/async-action";
 import { Button } from "@crm/ui/components/button";
-import { Item, ItemActions, ItemContent } from "@crm/ui/components/item";
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemFooter,
+} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SESSION_LIMIT_OPTION_IDS } from "@crm/validation/builder-question";
 import { useState } from "react";
@@ -50,35 +55,37 @@ export function AgentSessionLimitComposer({
 				<ItemContent>
 					<p className="text-sm">{t.hetHanMuc.cau}</p>
 				</ItemContent>
-				<ItemActions>
-					<Button
-						size="sm"
-						disabled={locked}
-						aria-busy={sending === SESSION_LIMIT_OPTION_IDS.continue}
-						onClick={() => void answer(SESSION_LIMIT_OPTION_IDS.continue)}
-					>
-						<AsyncButtonContent
-							status={status(SESSION_LIMIT_OPTION_IDS.continue)}
-							pendingLabel={t.oSoan.dangGui}
+				<ItemFooter>
+					<ItemActions>
+						<Button
+							size="sm"
+							disabled={locked}
+							aria-busy={sending === SESSION_LIMIT_OPTION_IDS.continue}
+							onClick={() => void answer(SESSION_LIMIT_OPTION_IDS.continue)}
 						>
-							{t.hetHanMuc.capThem}
-						</AsyncButtonContent>
-					</Button>
-					<Button
-						size="sm"
-						variant="outline"
-						disabled={locked}
-						aria-busy={sending === SESSION_LIMIT_OPTION_IDS.stop}
-						onClick={() => void answer(SESSION_LIMIT_OPTION_IDS.stop)}
-					>
-						<AsyncButtonContent
-							status={status(SESSION_LIMIT_OPTION_IDS.stop)}
-							pendingLabel={t.oSoan.dangGui}
+							<AsyncButtonContent
+								status={status(SESSION_LIMIT_OPTION_IDS.continue)}
+								pendingLabel={t.oSoan.dangGui}
+							>
+								{t.hetHanMuc.capThem}
+							</AsyncButtonContent>
+						</Button>
+						<Button
+							size="sm"
+							variant="outline"
+							disabled={locked}
+							aria-busy={sending === SESSION_LIMIT_OPTION_IDS.stop}
+							onClick={() => void answer(SESSION_LIMIT_OPTION_IDS.stop)}
 						>
-							{t.hetHanMuc.dung}
-						</AsyncButtonContent>
-					</Button>
-				</ItemActions>
+							<AsyncButtonContent
+								status={status(SESSION_LIMIT_OPTION_IDS.stop)}
+								pendingLabel={t.oSoan.dangGui}
+							>
+								{t.hetHanMuc.dung}
+							</AsyncButtonContent>
+						</Button>
+					</ItemActions>
+				</ItemFooter>
 			</Item>
 		</div>
 	);

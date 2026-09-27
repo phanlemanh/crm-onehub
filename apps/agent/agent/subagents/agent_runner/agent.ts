@@ -1,9 +1,9 @@
 import { DEFAULT_AGENT_MODEL } from "@crm/db/settings";
 import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
+import { SESSION_LIMITS } from "../../lib/dispatch-config";
 import { modelChoBoChay } from "../../lib/model";
 import { ketQuaLuot } from "../../lib/run-result";
-import { SESSION_LIMITS } from "../../lib/dispatch-config";
 
 export default defineAgent({
 	description:

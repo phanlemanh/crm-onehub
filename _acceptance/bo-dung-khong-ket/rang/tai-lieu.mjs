@@ -61,12 +61,13 @@ function kiem(noiDung, tapRe) {
 	const trongMuc = tapTrongMucRe(noiDung);
 	const thieu = tapRe.filter((tep) => !trongMuc.has(tep));
 	return {
-		"SESSION_LIMITS": boDung.includes("SESSION_LIMITS"),
+		SESSION_LIMITS: boDung.includes("SESSION_LIMITS"),
 		"128k": /128k|128 000|128\.000/.test(boDung),
 		"500k": /500k|500 000|500\.000/.test(boDung),
 		"session-limit": boDung.includes("session-limit"),
 		outputSchema: boDung.includes("outputSchema"),
-		[`cho re du tep (thieu: ${thieu.join(", ") || "khong"})`]: thieu.length === 0,
+		[`cho re du tep (thieu: ${thieu.join(", ") || "khong"})`]:
+			thieu.length === 0,
 	};
 }
 

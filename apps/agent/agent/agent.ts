@@ -4,8 +4,8 @@ import { DEFAULT_AGENT_MODEL } from "@crm/db/settings";
 import { onTelemetryProblem, syncVersion } from "@crm/telemetry";
 import { defineAgent, defineDynamic } from "eve";
 import { logCapabilities } from "./lib/capabilities";
-import { modelChoPhienGoc } from "./lib/model";
 import { SESSION_LIMITS } from "./lib/dispatch-config";
+import { modelChoPhienGoc } from "./lib/model";
 
 void logCapabilities();
 

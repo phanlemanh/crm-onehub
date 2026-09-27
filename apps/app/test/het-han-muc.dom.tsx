@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { schemas } from "@crm/validation";
 import {
-	buildPendingInputRequest,
 	builderQuestion,
+	buildPendingInputRequest,
 	SESSION_LIMIT_OPTION_IDS,
 } from "@crm/validation/builder-question";
 import { act } from "react";
@@ -20,7 +20,7 @@ const CHU_EVE = ["output-token limit", "Approve"];
 
 const yeuCau = schemas.agents.inputRequested.parse(mauHetHanMuc.data)
 	.requests[0];
-if (!yeuCau || yeuCau.kind !== "session-limit") {
+if (yeuCau?.kind !== "session-limit") {
 	throw new Error("mau session-limit-that.json khong con la session-limit");
 }
 
@@ -68,7 +68,10 @@ function ve(
 }
 
 function tenDocDuoc(node: Node): string {
-	if (node instanceof HTMLElement && node.getAttribute("aria-hidden") === "true") {
+	if (
+		node instanceof HTMLElement &&
+		node.getAttribute("aria-hidden") === "true"
+	) {
 		return "";
 	}
 	if (node.nodeType === Node.TEXT_NODE) return node.textContent ?? "";

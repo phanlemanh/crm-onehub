@@ -1,1 +1,83 @@
-{"data":{"actions":[{"callId":"call_b50ef16f312e4c1098e871e7","description":"Turn one private CRM builder-chat request into a validated, reviewable team-agent version without deploying it.","input":{"message":"Build a recurring CRM agent that runs once per day and produces a daily summary of new contacts that still need research.\n\nPURPOSE\nEach day, surface a concise \"new contacts\" digest so a rep can see what entered the queue overnight and what research is still pending. This is a read-only summarization agent — it must NOT mutate any CRM record (no writing briefs, no setting socials, no scheduling rechecks).\n\nWHAT IT SHOULD DO (each run)\n1. Call list_outstanding_work with limit 25. This returns CRM contacts that still lack research: missing real name, missing a Background brief, or socials never looked for. Each row includes id, fullName, email, title, companyName, companyDomain, linkedinUrl, and a \"needs\" object with booleans {identity, brief, socials}.\n2. If the response's count equals the limit (25), it is likely truncated — note this in the output so a rep knows the queue may be larger.\n\nOUTPUT SHAPE (the agent must return this structured summary)\n- totalContacts: number — the count returned by list_outstanding_work.\n- possiblyTruncated: boolean — true when count equals the requested limit (25), meaning more may exist.\n- byTitle: array of { title: string, count: number } — group contacts by their title, sorted descending by count.\n- byCompany: array of { company: string, count: number } — group contacts by companyName, sorted descending by count.\n- byMissingWork: object with three counts:\n    - missingIdentity: number (contacts where needs.identity is true)\n    - missingBrief: number (contacts where needs.brief is true)\n    - missingSocials: number (contacts where needs.socials is true)\n- notables: array of { fullName: string, title: string, company: string, email: string } — the contacts the rep should look at first: any whose title is one of {CTO, COO, Chief of Staff, Head of Security, Head of Legal, IT Director, Head of Platform}, capped at 10 entries. If fewer than 10 match, do not pad with lower-priority titles.\n- vietnamRealEstateFlag: boolean — true when any contact's companyDomain ends in \".vn\" AND companyName contains BĐS/real-estate keywords in Vietnamese (e.g. \"Địa ốc\", \"Bất Động Sản\", \"Nhà Đất\", \"Sàn Giao Dịch\"). Include the matching contact names in a field vietnamRealEstateContacts: array of { fullName, company }.\n\nCONSTRAINTS\n- Read-only. No CRM mutation tools, no research_person, no web_search, no enrich_company. The single data source is list_outstanding_work.\n- Output must be in Vietnamese for any free-text labels, but field names and company/title values stay as-is from the CRM.\n- Keep the run cheap: one list_outstanding_work call per run. Do not paginate further.\n- The agent runs on a daily schedule; design it to finish quickly.","outputSchema":{"type":"object","properties":{"totalContacts":{"type":"number"},"possiblyTruncated":{"type":"boolean"},"byTitle":{"type":"array","items":{"type":"object","properties":{"title":{"type":"string"},"count":{"type":"number"}}}},"byCompany":{"type":"array","items":{"type":"object","properties":{"company":{"type":"string"},"count":{"type":"number"}}}},"byMissingWork":{"type":"object","properties":{"missingIdentity":{"type":"number"},"missingBrief":{"type":"number"},"missingSocials":{"type":"number"}}},"notables":{"type":"array","items":{"type":"object","properties":{"fullName":{"type":"string"},"title":{"type":"string"},"company":{"type":"string"},"email":{"type":"string"}}}},"vietnamRealEstateFlag":{"type":"boolean"},"vietnamRealEstateContacts":{"type":"array","items":{"type":"object","properties":{"fullName":{"type":"string"},"company":{"type":"string"}}}}}}},"kind":"subagent-call","name":"agent_builder","nodeId":"subagents/agent_builder","subagentName":"agent_builder"}],"sequence":1,"stepIndex":1,"turnId":"turn_1"},"type":"actions.requested","meta":{"at":"2026-09-27T09:30:12.753Z","id":"evt_01M3H36QWHQ17TY4W5YQD4XSMF"}}
+{
+	"data": {
+		"actions": [
+			{
+				"callId": "call_b50ef16f312e4c1098e871e7",
+				"description": "Turn one private CRM builder-chat request into a validated, reviewable team-agent version without deploying it.",
+				"input": {
+					"message": "Build a recurring CRM agent that runs once per day and produces a daily summary of new contacts that still need research.\n\nPURPOSE\nEach day, surface a concise \"new contacts\" digest so a rep can see what entered the queue overnight and what research is still pending. This is a read-only summarization agent — it must NOT mutate any CRM record (no writing briefs, no setting socials, no scheduling rechecks).\n\nWHAT IT SHOULD DO (each run)\n1. Call list_outstanding_work with limit 25. This returns CRM contacts that still lack research: missing real name, missing a Background brief, or socials never looked for. Each row includes id, fullName, email, title, companyName, companyDomain, linkedinUrl, and a \"needs\" object with booleans {identity, brief, socials}.\n2. If the response's count equals the limit (25), it is likely truncated — note this in the output so a rep knows the queue may be larger.\n\nOUTPUT SHAPE (the agent must return this structured summary)\n- totalContacts: number — the count returned by list_outstanding_work.\n- possiblyTruncated: boolean — true when count equals the requested limit (25), meaning more may exist.\n- byTitle: array of { title: string, count: number } — group contacts by their title, sorted descending by count.\n- byCompany: array of { company: string, count: number } — group contacts by companyName, sorted descending by count.\n- byMissingWork: object with three counts:\n    - missingIdentity: number (contacts where needs.identity is true)\n    - missingBrief: number (contacts where needs.brief is true)\n    - missingSocials: number (contacts where needs.socials is true)\n- notables: array of { fullName: string, title: string, company: string, email: string } — the contacts the rep should look at first: any whose title is one of {CTO, COO, Chief of Staff, Head of Security, Head of Legal, IT Director, Head of Platform}, capped at 10 entries. If fewer than 10 match, do not pad with lower-priority titles.\n- vietnamRealEstateFlag: boolean — true when any contact's companyDomain ends in \".vn\" AND companyName contains BĐS/real-estate keywords in Vietnamese (e.g. \"Địa ốc\", \"Bất Động Sản\", \"Nhà Đất\", \"Sàn Giao Dịch\"). Include the matching contact names in a field vietnamRealEstateContacts: array of { fullName, company }.\n\nCONSTRAINTS\n- Read-only. No CRM mutation tools, no research_person, no web_search, no enrich_company. The single data source is list_outstanding_work.\n- Output must be in Vietnamese for any free-text labels, but field names and company/title values stay as-is from the CRM.\n- Keep the run cheap: one list_outstanding_work call per run. Do not paginate further.\n- The agent runs on a daily schedule; design it to finish quickly.",
+					"outputSchema": {
+						"type": "object",
+						"properties": {
+							"totalContacts": { "type": "number" },
+							"possiblyTruncated": { "type": "boolean" },
+							"byTitle": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"title": { "type": "string" },
+										"count": { "type": "number" }
+									}
+								}
+							},
+							"byCompany": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"company": { "type": "string" },
+										"count": { "type": "number" }
+									}
+								}
+							},
+							"byMissingWork": {
+								"type": "object",
+								"properties": {
+									"missingIdentity": { "type": "number" },
+									"missingBrief": { "type": "number" },
+									"missingSocials": { "type": "number" }
+								}
+							},
+							"notables": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"fullName": { "type": "string" },
+										"title": { "type": "string" },
+										"company": { "type": "string" },
+										"email": { "type": "string" }
+									}
+								}
+							},
+							"vietnamRealEstateFlag": { "type": "boolean" },
+							"vietnamRealEstateContacts": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"fullName": { "type": "string" },
+										"company": { "type": "string" }
+									}
+								}
+							}
+						}
+					}
+				},
+				"kind": "subagent-call",
+				"name": "agent_builder",
+				"nodeId": "subagents/agent_builder",
+				"subagentName": "agent_builder"
+			}
+		],
+		"sequence": 1,
+		"stepIndex": 1,
+		"turnId": "turn_1"
+	},
+	"type": "actions.requested",
+	"meta": {
+		"at": "2026-09-27T09:30:12.753Z",
+		"id": "evt_01M3H36QWHQ17TY4W5YQD4XSMF"
+	}
+}

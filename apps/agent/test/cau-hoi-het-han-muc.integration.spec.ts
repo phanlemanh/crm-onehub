@@ -19,7 +19,7 @@ const hoiThoai: string[] = [];
 
 const suKien = schemas.agents.inputRequested.parse(mauHetHanMuc.data);
 const yeuCau = suKien.requests[0];
-if (!yeuCau || yeuCau.kind !== "session-limit") {
+if (yeuCau?.kind !== "session-limit") {
 	throw new Error("mau session-limit-that.json khong con la session-limit");
 }
 
@@ -43,7 +43,9 @@ const chiDuyetCongCu = {
 	requestId: `duyet-${suffix}`,
 };
 
-async function taoHoiThoai(sessionId: string | null = `phien-${crypto.randomUUID()}`) {
+async function taoHoiThoai(
+	sessionId: string | null = `phien-${crypto.randomUUID()}`,
+) {
 	const hang = await db.agentConversation.create({
 		data: { kind: "BUILDER", userId, sessionId },
 		select: { id: true },
@@ -221,4 +223,3 @@ describe("dieu-phoi", () => {
 		});
 	}
 });
-

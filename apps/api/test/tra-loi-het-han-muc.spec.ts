@@ -17,7 +17,7 @@ const memberId = `tra-loi-het-han-muc-member-${suffix}`;
 
 const yeuCau = schemas.agents.inputRequested.parse(mauHetHanMuc.data)
 	.requests[0];
-if (!yeuCau || yeuCau.kind !== "session-limit") {
+if (yeuCau?.kind !== "session-limit") {
 	throw new Error("mau session-limit-that.json khong con la session-limit");
 }
 

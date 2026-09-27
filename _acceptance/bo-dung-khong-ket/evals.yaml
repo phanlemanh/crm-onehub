@@ -141,7 +141,7 @@ evals:
     steps:
       - "Chay trong phien do cua kho (tien-de / do:man, docs/setup.md muc Screen measurements) — KHONG dung kho chung crm; APP_URL va API_URL cua phien do"
       - "Chan cay: dat dau moc vao apps/app/public roi xin lai qua APP_URL; khong nhan lai -> thoat ma 2, goi ten cay dang xet, khong chup"
-      - "Dang nhap bang bun run dev:session trong apps/api cua cay dang xet"
+      - "Dang nhap: chay bun run dev:session <NGUOI cua phien do> trong apps/api cua cay dang xet voi DATABASE_URL cua phien, dat cookie crm.session_token in ra vao trinh duyet; dat them cookie lang=vi (cau tieng Viet duoc do, khong dua vao ngon ngu may)"
       - "Gieo: bun _acceptance/bo-dung-khong-ket/rang/gieo-het-han-muc.ts — tao hoi thoai dung co sessionId, roi goi CHINH persistBuilderInputRequest voi apps/agent/test/fixtures/session-limit-that.json (cam ghi tay pendingInputRequest hay agentEvent), in URL hoi thoai"
       - "Mo URL o kho 1440: chup E6-het-han-muc-1440.png. Lap lai kho 375: E6-het-han-muc-375.png"
       - "Bam 'Cấp thêm'. Cho toi khi bong bong nguoi dung 'Cấp thêm' hien (khong cho theo giay): chup E6-sau-bam-1440.png"
