@@ -1,5 +1,8 @@
 import { setSystemTime } from "bun:test";
 import { db } from "@crm/db";
+import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
+import { diemTheoThang } from "@crm/validation/okr-khep";
+import { z } from "zod";
 import {
 	type AiHoacCookie,
 	dangChay,
@@ -8,12 +11,14 @@ import {
 	ma,
 	ok,
 	phien,
+	phienCua,
 	TIEN_TO,
 	type TraLoi,
 	taoNam,
 	taoQuy,
 } from "./okr-san";
 
+const thangCham = z.enum(THANG_CHAM);
 const PHIEN_XA = new Date("2099-01-01T00:00:00Z");
 
 export async function keoDaiPhien(): Promise<void> {
@@ -129,12 +134,41 @@ export async function guiSo(
 	);
 }
 
+export async function chamHetBangGoiY(cycleId: string): Promise<void> {
+	const chua = await db.okrDiemKr.findMany({
+		where: { cycleId, diem: null },
+		select: {
+			keyResultId: true,
+			diemGoiY: true,
+			thang: true,
+			keyResult: { select: { ownerUserId: true } },
+		},
+	});
+	const phienChu = new Map<string, string>();
+	for (const d of chua) {
+		const chu = d.keyResult.ownerUserId;
+		const cookie = phienChu.get(chu) ?? (await phienCua(chu));
+		phienChu.set(chu, cookie);
+		ok(
+			await goi(
+				"okr.chamKr",
+				{
+					keyResultId: d.keyResultId,
+					diem: diemTheoThang(Number(d.diemGoiY), thangCham.parse(d.thang)),
+				},
+				cookie,
+			),
+			"cham bang goi y",
+		);
+	}
+}
+
 export async function sangPha(
 	id: string,
 	phase: "cham-diem" | "da-dong",
 ): Promise<TraLoi> {
 	if (phase === "da-dong") {
-		await db.$executeRaw`UPDATE "okrDiemKr" SET diem = "diemGoiY" WHERE "cycleId" = ${id} AND diem IS NULL`;
+		await chamHetBangGoiY(id);
 		return goi("okr.setCyclePhase", { id, phase });
 	}
 	const c = await db.okrCycle.findUniqueOrThrow({ where: { id } });

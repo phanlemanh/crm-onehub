@@ -2,6 +2,7 @@ import {
 	LOI_KHUON_CAP_NHAT,
 	type LoiGiaTri,
 } from "@crm/validation/okr-cap-nhat";
+import { OKR_KHEP } from "@crm/validation/okr-khep";
 
 export const OKR = {
 	tenGoc: "OneHub",
@@ -117,6 +118,14 @@ export const OKR = {
 			conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm.`,
 			krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
 			krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",
+			chiChamKhiChamDiem: "Chỉ chấm KR khi chu kỳ ở pha chấm điểm.",
+			khongCoDiemKr:
+				"KR này không có dòng điểm cuối kỳ — chỉ KR của mục tiêu đã công bố lúc sang chấm được chấm.",
+			ngoaiLuoi: (buoc: string, cuoi: string) =>
+				`Điểm ngoài lưới — chọn bội của ${buoc} từ 0 tới ${cuoi}.`,
+			canLyDoCham: `Điểm khác gợi ý cần lý do ${OKR_KHEP.lyDo.toiThieu}–${OKR_KHEP.lyDo.toiDa} ký tự.`,
+			nhinLaiChiKhi: "Điều học được ghi ở pha đang chạy hoặc chấm điểm.",
+			bangChamChuaCo: "Bảng chấm có từ pha chấm điểm.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

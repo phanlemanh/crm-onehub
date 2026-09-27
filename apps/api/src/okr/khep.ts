@@ -1,5 +1,6 @@
 import type { Db, Prisma } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import type { OkrProgram } from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { kieuKr } from "@crm/validation/okr-kr";
@@ -8,6 +9,15 @@ import { khoaDonViDong, tenDonVi } from "./don-vi";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep.khep;
+
+export const PHA_NHIN_LAI: readonly string[] = [
+	"dang-chay",
+	"cham-diem",
+] satisfies PhaChuKy[];
+export const PHA_CO_DIEM: readonly string[] = [
+	"cham-diem",
+	"da-dong",
+] satisfies PhaChuKy[];
 
 export type CuaSoRa = { id: string; tuNgay: string; denNgay: string };
 

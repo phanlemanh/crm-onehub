@@ -1,5 +1,10 @@
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
-import { dongRaInput, moRaInput } from "@crm/validation/okr-khep";
+import {
+	chamKrInput,
+	dongRaInput,
+	ghiDieuHocDuocInput,
+	moRaInput,
+} from "@crm/validation/okr-khep";
 import {
 	addCommentInput,
 	commentsInput,
@@ -62,6 +67,7 @@ import {
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { bangChamInput, bangChamOutput } from "./okr-khep.contracts";
 import { OkrKhepService } from "./okr-khep.service";
 import {
 	banGhiChiSoInput,
@@ -165,6 +171,42 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof dongRaInput>,
 	) {
 		return this.khep.dongRa(ctx.user.id, input.id);
+	}
+
+	@Query({
+		input: bangChamInput,
+		output: bangChamOutput,
+		meta: restMeta("POST", "/okr/cycles/{cycleId}/scores", TAG),
+	})
+	bangCham(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof bangChamInput>,
+	) {
+		return this.khep.bangCham(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: chamKrInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/key-results/{keyResultId}/score", TAG),
+	})
+	chamKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof chamKrInput>,
+	) {
+		return this.khep.chamKr(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ghiDieuHocDuocInput,
+		output: okOutput,
+		meta: restMeta("PUT", "/okr/objectives/{objectiveId}/lessons", TAG),
+	})
+	ghiDieuHocDuoc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ghiDieuHocDuocInput>,
+	) {
+		return this.khep.ghiDieuHocDuoc(ctx.user.id, input);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })

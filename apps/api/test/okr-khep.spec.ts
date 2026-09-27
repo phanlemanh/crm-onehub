@@ -8,6 +8,7 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import { OKR_KHEP } from "@crm/validation/okr-khep";
 import type { KieuKr } from "@crm/validation/okr-kr";
 import { chupSoOkr } from "../../agent/agent/lib/okr-chup";
 import { kiemDongKy } from "../src/okr/khep";
@@ -23,6 +24,7 @@ import {
 } from "./okr-khep-san";
 import {
 	type Ai,
+	type AiHoacCookie,
 	CHUONG_TRINH_RONG,
 	doc,
 	dungSan,
@@ -53,6 +55,13 @@ const CAU = {
 	conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm`,
 	krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
 	krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",
+	chiChamKhiChamDiem: "Chỉ chấm KR khi chu kỳ ở pha chấm điểm.",
+	ngoaiLuoi: "Điểm ngoài lưới",
+	canLyDoCham: "Điểm khác gợi ý cần lý do",
+	khongSuaDuocKr:
+		"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới sửa KR này.",
+	khongSuaDuocDonVi: "Bạn không sửa được OKR của đơn vị này",
+	nhinLaiChiKhi: "Điều học được ghi ở pha đang chạy hoặc chấm điểm.",
 } as const;
 
 const KY = { tu: "2026-10-01", den: "2026-12-31" } as const;
@@ -1128,6 +1137,679 @@ describe("sang-cham", () => {
 		);
 		expect(await phaCua(quy)).toBe("da-dong");
 	}, 30_000);
+});
+
+type Thang = "0-1" | "0-100";
+
+type KrCham = {
+	id: string;
+	soChot: number;
+	diemGoiY: number;
+	diem: number | null;
+	lyDo: string | null;
+	suaDuoc: boolean;
+	doiDichNgoaiRa: { luc: string; truoc: number; sau: number; lyDo: string }[];
+};
+
+type MucTieuCham = {
+	id: string;
+	kind: string;
+	suaDuoc: boolean;
+	diem: number | null;
+	cachDoc: string | null;
+	dieuHocDuoc: string;
+	krs: KrCham[];
+};
+
+type BangCham = {
+	thang: Thang | null;
+	conLai: number;
+	chuaCham: { khoa: string; ten: string; conLai: number }[];
+	mucTieu: MucTieuCham[];
+};
+
+const LY_DO_15 = "khach doi ke ho";
+const CHU_40 = "Demo tre nen chot cham; quy sau hen som.";
+
+const LUC_CHAM = {
+	k1: "2027-01-02T04:00:00.000Z",
+	k2: "2027-01-02T05:00:00.000Z",
+	k3: "2027-01-02T06:00:00.000Z",
+	k1Lai: "2027-01-02T07:00:00.000Z",
+	k2Lai: "2027-01-02T08:00:00.000Z",
+} as const;
+
+const theoThang = (thang: Thang, d: number) =>
+	thang === "0-100" ? Math.round(d * 100) : d;
+
+const chamKr = (
+	keyResultId: string,
+	diem: number,
+	ai: AiHoacCookie,
+	lyDo?: string,
+) =>
+	goi(
+		"okr.chamKr",
+		lyDo === undefined ? { keyResultId, diem } : { keyResultId, diem, lyDo },
+		ai,
+	);
+
+const dongDiemKr = async (keyResultId: string) => {
+	const d = await db.okrDiemKr.findUnique({ where: { keyResultId } });
+	return d === null
+		? null
+		: {
+				diem: d.diem === null ? null : Number(d.diem),
+				lyDo: d.lyDo,
+				chamBoiUserId: d.chamBoiUserId,
+				chamLuc: d.chamLuc?.toISOString() ?? null,
+			};
+};
+
+const vetCham = async (keyResultId: string) =>
+	(
+		await db.okrTrail.findMany({
+			where: { keyResultId, action: "cham-kr" },
+			orderBy: { at: "asc" },
+		})
+	).map((v) => ({ actor: v.actorUserId, before: v.before, after: v.after }));
+
+const bangCham = (cycleId: string, ai: AiHoacCookie = "quan") =>
+	doc<BangCham>("okr.bangCham", ai, { cycleId });
+
+async function datChuongTrinh(thang: Thang, weightsOn: boolean) {
+	ok(
+		await goi("okr.setProgram", {
+			...CHUONG_TRINH_RONG,
+			scoreScale: thang,
+			weightsOn,
+		}),
+		`chuong trinh ${thang} ${weightsOn}`,
+	);
+}
+
+async function gieoBaKy(thang: Thang) {
+	luc(LUC.gieo);
+	const pb = await pbMoi("cham-pb");
+	const truong = await truongMoi("department", pb, "cham-truong");
+	await keoDaiPhien();
+	await datChuongTrinh(thang, false);
+	const quy = await gieoKyQuy(KY);
+	const chay = await gieoKyQuy(KY);
+	const dong = await gieoKyQuy(KY);
+	const phong = await gieoMucTieuCongBo(
+		quy,
+		[
+			{
+				startValue: 0,
+				targetValue: 100,
+				currentValue: 50,
+				ownerUserId: phien.thuong.nguoi,
+			},
+			{
+				startValue: 0,
+				targetValue: 100,
+				currentValue: 70,
+				ownerUserId: truong.nguoi,
+			},
+		],
+		{
+			unit: { level: "phong-ban", departmentId: pb },
+			ownerUserId: truong.nguoi,
+			ai: truong.cookie,
+		},
+	);
+	const goc = await gieoMucTieuCongBo(quy, [
+		{
+			startValue: 0,
+			targetValue: 100,
+			currentValue: 100,
+			ownerUserId: truong.nguoi,
+		},
+	]);
+	const mtChay = await gieoMucTieuCongBo(chay, kr1());
+	const mtDong = await gieoMucTieuCongBo(dong, kr1());
+	luc(LUC.sauKy);
+	ok(await sangCham(quy), "sang cham quy");
+	ok(await sangCham(dong), "sang cham ky se dong");
+	ok(
+		await chamKr(mtDong.krIds[0] ?? "", theoThang(thang, 0), "quan"),
+		"cham ky se dong",
+	);
+	ok(await goi("okr.setCyclePhase", { id: dong, phase: "da-dong" }), "dong ky");
+	return { quy, truong, phong, goc, mtChay, mtDong };
+}
+
+type CaTuChoi = {
+	ten: string;
+	kr: string;
+	diem: number;
+	ai: AiHoacCookie;
+	lyDo?: string;
+	status: number;
+	cau: string;
+};
+
+async function tuChoiCham(thang: Thang, ds: readonly CaTuChoi[]) {
+	for (const ca of ds) {
+		const ten = `${thang} ${ca.ten}`;
+		const truoc = {
+			ca: ten,
+			dong: await dongDiemKr(ca.kr),
+			soVet: await db.okrTrail.count(),
+		};
+		const tra = await chamKr(ca.kr, ca.diem, ca.ai, ca.lyDo);
+		expect({
+			ca: ten,
+			dong: await dongDiemKr(ca.kr),
+			soVet: await db.okrTrail.count(),
+		}).toEqual(truoc);
+		expect(`${ten}: ${tra.status}`).toBe(`${ten}: ${ca.status}`);
+		expect(tra.loi, ten).toContain(ca.cau);
+	}
+}
+
+async function chayMaTranCham(thang: Thang) {
+	const d = (x: number) => theoThang(thang, x);
+	const { quy, truong, phong, goc, mtChay, mtDong } = await gieoBaKy(thang);
+	const [k1 = "", k2 = ""] = phong.krIds;
+	const [k3 = ""] = goc.krIds;
+	const thuong = phien.thuong.nguoi;
+
+	const hopLe = [
+		{
+			nhan: "phu trach K1 bang goi y",
+			kr: k1,
+			diem: d(0.5),
+			lyDo: undefined,
+			ai: "thuong",
+			nguoi: thuong,
+			luc: LUC_CHAM.k1,
+			mong: { diem: 0.5, lyDo: null },
+		},
+		{
+			nhan: "truong don vi K2 khac goi y, ly do 15 ky tu",
+			kr: k2,
+			diem: d(0.9),
+			lyDo: LY_DO_15,
+			ai: truong.cookie,
+			nguoi: truong.nguoi,
+			luc: LUC_CHAM.k2,
+			mong: { diem: 0.9, lyDo: LY_DO_15 },
+		},
+		{
+			nhan: "quan tri K3 bang goi y",
+			kr: k3,
+			diem: d(1),
+			lyDo: undefined,
+			ai: "quan",
+			nguoi: phien.quan.nguoi,
+			luc: LUC_CHAM.k3,
+			mong: { diem: 1, lyDo: null },
+		},
+		{
+			nhan: "phu trach cham lai K1",
+			kr: k1,
+			diem: d(0.6),
+			lyDo: LY_DO_15,
+			ai: "thuong",
+			nguoi: thuong,
+			luc: LUC_CHAM.k1Lai,
+			mong: { diem: 0.6, lyDo: LY_DO_15 },
+		},
+	] satisfies {
+		nhan: string;
+		kr: string;
+		diem: number;
+		lyDo: string | undefined;
+		ai: AiHoacCookie;
+		nguoi: string;
+		luc: string;
+		mong: { diem: number; lyDo: string | null };
+	}[];
+	const krCham = { keyResultId: { in: [k1, k2, k3] }, action: "cham-kr" };
+	for (const [i, l] of hopLe.entries()) {
+		const ca = `${thang} ${l.nhan}`;
+		luc(l.luc);
+		ok(await chamKr(l.kr, l.diem, l.ai, l.lyDo), ca);
+		expect({
+			ca,
+			dong: await dongDiemKr(l.kr),
+			vet: await db.okrTrail.count({ where: krCham }),
+		}).toEqual({
+			ca,
+			dong: { ...l.mong, chamBoiUserId: l.nguoi, chamLuc: l.luc },
+			vet: i + 1,
+		});
+	}
+	expect(await db.okrDiemKr.count({ where: { keyResultId: k1 } })).toBe(1);
+	expect(await vetCham(k1)).toEqual([
+		{
+			actor: thuong,
+			before: { diem: null, lyDo: null },
+			after: { diem: 0.5, lyDo: null },
+		},
+		{
+			actor: thuong,
+			before: { diem: 0.5, lyDo: null },
+			after: { diem: 0.6, lyDo: LY_DO_15 },
+		},
+	]);
+
+	const tuChoi: readonly CaTuChoi[] = [
+		{
+			ten: "khac goi y khong ly do",
+			kr: k1,
+			diem: d(0.8),
+			ai: "thuong",
+			status: 400,
+			cau: CAU.canLyDoCham,
+		},
+		{
+			ten: "diem 0.75 ngoai luoi",
+			kr: k1,
+			diem: d(0.75),
+			ai: "thuong",
+			lyDo: LY_DO_15,
+			status: 400,
+			cau: CAU.ngoaiLuoi,
+		},
+		{
+			ten: "diem 1.1 ngoai luoi",
+			kr: k1,
+			diem: d(1.1),
+			ai: "thuong",
+			lyDo: LY_DO_15,
+			status: 400,
+			cau: CAU.ngoaiLuoi,
+		},
+		{
+			ten: "thanh vien khong sua duoc KR",
+			kr: k3,
+			diem: d(1),
+			ai: "thuong",
+			status: 403,
+			cau: CAU.khongSuaDuocKr,
+		},
+		{
+			ten: "vai okr khong phu trach KR",
+			kr: k3,
+			diem: d(1),
+			ai: "okr",
+			status: 403,
+			cau: CAU.khongSuaDuocKr,
+		},
+		{
+			ten: "pha dang-chay",
+			kr: mtChay.krIds[0] ?? "",
+			diem: d(0),
+			ai: "quan",
+			status: 400,
+			cau: CAU.chiChamKhiChamDiem,
+		},
+		{
+			ten: "pha da-dong",
+			kr: mtDong.krIds[0] ?? "",
+			diem: d(0),
+			ai: "quan",
+			status: 400,
+			cau: CAU.chiChamKhiChamDiem,
+		},
+	];
+	expect(tuChoi).toHaveLength(7);
+	await tuChoiCham(thang, tuChoi);
+
+	luc(LUC_CHAM.k2Lai);
+	const gui08 = `${thang} gui ${d(0.8)}`;
+	ok(await chamKr(k2, d(0.8), truong.cookie, LY_DO_15), gui08);
+	expect({ ca: gui08, dong: await dongDiemKr(k2) }).toEqual({
+		ca: gui08,
+		dong: {
+			diem: 0.8,
+			lyDo: LY_DO_15,
+			chamBoiUserId: truong.nguoi,
+			chamLuc: LUC_CHAM.k2Lai,
+		},
+	});
+	if (thang === "0-100")
+		await tuChoiCham(thang, [
+			{
+				ten: "gui 85 ngoai luoi",
+				kr: k2,
+				diem: 85,
+				ai: truong.cookie,
+				lyDo: LY_DO_15,
+				status: 400,
+				cau: CAU.ngoaiLuoi,
+			},
+			{
+				ten: "gui 0.8 ngoai luoi",
+				kr: k2,
+				diem: 0.8,
+				ai: truong.cookie,
+				lyDo: LY_DO_15,
+				status: 400,
+				cau: CAU.ngoaiLuoi,
+			},
+		]);
+
+	const gon = (m: MucTieuCham | undefined) =>
+		m && {
+			diem: m.diem,
+			cachDoc: m.cachDoc,
+			suaDuoc: m.suaDuoc,
+			krs: m.krs.map((k) => ({
+				id: k.id,
+				soChot: k.soChot,
+				diemGoiY: k.diemGoiY,
+				diem: k.diem,
+				lyDo: k.lyDo,
+				suaDuoc: k.suaDuoc,
+			})),
+		};
+	const bang = await bangCham(quy, truong.cookie);
+	expect({
+		thang: bang.thang,
+		conLai: bang.conLai,
+		chuaCham: bang.chuaCham,
+		phong: gon(bang.mucTieu.find((m) => m.id === phong.objectiveId)),
+		goc: gon(bang.mucTieu.find((m) => m.id === goc.objectiveId)),
+	}).toEqual({
+		thang,
+		conLai: 0,
+		chuaCham: [],
+		phong: {
+			diem: d(0.7),
+			cachDoc: "chua-tron",
+			suaDuoc: true,
+			krs: [
+				{
+					id: k1,
+					soChot: 50,
+					diemGoiY: d(0.5),
+					diem: d(0.6),
+					lyDo: LY_DO_15,
+					suaDuoc: true,
+				},
+				{
+					id: k2,
+					soChot: 70,
+					diemGoiY: d(0.7),
+					diem: d(0.8),
+					lyDo: LY_DO_15,
+					suaDuoc: true,
+				},
+			],
+		},
+		goc: {
+			diem: d(1),
+			cachDoc: "dat",
+			suaDuoc: false,
+			krs: [
+				{
+					id: k3,
+					soChot: 100,
+					diemGoiY: d(1),
+					diem: d(1),
+					lyDo: null,
+					suaDuoc: true,
+				},
+			],
+		},
+	});
+	const ten = new Map([
+		[k1, "K1"],
+		[k2, "K2"],
+		[k3, "K3"],
+	]);
+	expect(
+		(await bangCham(quy, "thuong")).mucTieu
+			.flatMap((m) => m.krs.map((k) => `${ten.get(k.id)} ${k.suaDuoc}`))
+			.sort(),
+	).toEqual(["K1 true", "K2 false", "K3 false"]);
+}
+
+describe("cham-va-nhin-lai", () => {
+	beforeAll(keoDaiPhien);
+	afterAll(async () => {
+		setSystemTime();
+		await datChuongTrinh(CHUONG_TRINH_RONG.scoreScale, false);
+		await donSanKhep();
+	});
+
+	test(
+		"cham-va-nhin-lai: thang 0-1 — ba nguoi cham, cham lai, bay ca tu choi viet truoc, bangCham theo thang cua dong",
+		() => chayMaTranCham("0-1"),
+		60_000,
+	);
+
+	test(
+		"cham-va-nhin-lai: lap tren thang 0-100 — gui 80 luu 0.8 chuan, bangCham tra 80; 85 va 0.8 ngoai luoi",
+		() => chayMaTranCham("0-100"),
+		60_000,
+	);
+
+	test("cham-va-nhin-lai: ghiDieuHocDuoc nam ca — chu 40 ky tu, rong, qua tran, pha da-dong, nguoi khong sua duoc; moi lan hop le mot vet nhin-lai", async () => {
+		const { quy, truong, phong, mtChay, mtDong } = await gieoBaKy("0-1");
+		expect(CHU_40).toHaveLength(40);
+		const ghi = (objectiveId: string, noiDung: string, ai: AiHoacCookie) =>
+			goi("okr.ghiDieuHocDuoc", { objectiveId, noiDung }, ai);
+		const nhinLai = async (objectiveId: string) => {
+			const r = await db.okrNhinLai.findUnique({ where: { objectiveId } });
+			return r && { dieuHocDuoc: r.dieuHocDuoc, suaBoiUserId: r.suaBoiUserId };
+		};
+		const vetNhinLai = async (objectiveId: string) =>
+			(
+				await db.okrTrail.findMany({
+					where: { objectiveId, action: "nhin-lai" },
+					orderBy: { at: "asc" },
+				})
+			).map((v) => ({ actor: v.actorUserId, after: v.after }));
+
+		luc(LUC_CHAM.k1);
+		ok(await ghi(phong.objectiveId, CHU_40, truong.cookie), "ghi 40 ky tu");
+		expect(await nhinLai(phong.objectiveId)).toEqual({
+			dieuHocDuoc: CHU_40,
+			suaBoiUserId: truong.nguoi,
+		});
+		expect(
+			(await bangCham(quy)).mucTieu.find((m) => m.id === phong.objectiveId)
+				?.dieuHocDuoc,
+		).toBe(CHU_40);
+
+		luc(LUC_CHAM.k2);
+		ok(await ghi(phong.objectiveId, "", truong.cookie), "ghi rong");
+		expect(await nhinLai(phong.objectiveId)).toEqual({
+			dieuHocDuoc: "",
+			suaBoiUserId: truong.nguoi,
+		});
+
+		const caTuChoi = [
+			{
+				ten: `${OKR_KHEP.dieuHocDuoc.toiDa + 1} ky tu`,
+				obj: phong.objectiveId,
+				noiDung: "a".repeat(OKR_KHEP.dieuHocDuoc.toiDa + 1),
+				ai: truong.cookie,
+				status: 400,
+				cau: "",
+			},
+			{
+				ten: "pha da-dong",
+				obj: mtDong.objectiveId,
+				noiDung: CHU_40,
+				ai: "quan",
+				status: 400,
+				cau: CAU.nhinLaiChiKhi,
+			},
+			{
+				ten: "nguoi khong sua duoc muc tieu",
+				obj: phong.objectiveId,
+				noiDung: CHU_40,
+				ai: "thuong",
+				status: 403,
+				cau: CAU.khongSuaDuocDonVi,
+			},
+		] as const;
+		for (const ca of caTuChoi) {
+			const truoc = {
+				ca: ca.ten,
+				dong: await nhinLai(ca.obj),
+				soVet: await db.okrTrail.count(),
+			};
+			const tra = await ghi(ca.obj, ca.noiDung, ca.ai);
+			expect({
+				ca: ca.ten,
+				dong: await nhinLai(ca.obj),
+				soVet: await db.okrTrail.count(),
+			}).toEqual(truoc);
+			expect(`${ca.ten}: ${tra.status}`).toBe(`${ca.ten}: ${ca.status}`);
+			expect(tra.loi, ca.ten).toContain(ca.cau);
+		}
+
+		expect(await vetNhinLai(phong.objectiveId)).toEqual([
+			{ actor: truong.nguoi, after: { dieuHocDuoc: CHU_40 } },
+			{ actor: truong.nguoi, after: { dieuHocDuoc: "" } },
+		]);
+
+		ok(await ghi(mtChay.objectiveId, CHU_40, "quan"), "doi chung dang-chay");
+		expect(await nhinLai(mtChay.objectiveId)).toEqual({
+			dieuHocDuoc: CHU_40,
+			suaBoiUserId: phien.quan.nguoi,
+		});
+	}, 60_000);
+
+	test("cham-va-nhin-lai: bangCham — diem muc tieu va cau doc so bang viet truoc 6 ca, trong so va thang doc tu dong diem, doi dich ngoai ra dung mot dong", async () => {
+		luc("2026-12-05T03:00:00Z");
+		await keoDaiPhien();
+		await datChuongTrinh("0-1", false);
+		const quy = await gieoKyQuy(KY);
+		const mt = (kind: "cam-ket" | "tham-vong", krs: [number, number][]) =>
+			gieoMucTieuCongBo(
+				quy,
+				krs.map(([currentValue, weight]) => ({
+					startValue: 0,
+					targetValue: 100,
+					currentValue,
+					weight,
+				})),
+				{ kind },
+			);
+		const tot = await mt("tham-vong", [[70, 1]]);
+		const duoiTot = await mt("tham-vong", [
+			[60, 3],
+			[70, 1],
+		]);
+		const dat = await mt("cam-ket", [[100, 1]]);
+		const chuaTron = await mt("cam-ket", [[90, 1]]);
+		const chuaHet = await mt("cam-ket", [
+			[100, 1],
+			[50, 1],
+		]);
+		const quyTrongSo = await gieoKyQuy(KY);
+		const coTrongSo = await gieoMucTieuCongBo(
+			quyTrongSo,
+			[
+				{ startValue: 0, targetValue: 100, currentValue: 100, weight: 3 },
+				{ startValue: 0, targetValue: 100, currentValue: 20, weight: 1 },
+			],
+			{ kind: "cam-ket" },
+		);
+
+		const krDoi = dat.krIds[0] ?? "";
+		idCua(await moRa(quy, "2026-12-01", "2026-12-10"), "mo ra bang cham");
+		ok(await doiDichKr(krDoi, { targetValue: 120 }), "doi dich trong ra");
+		luc(LUC.gieo);
+		ok(
+			await doiDichKr(krDoi, { targetValue: 100, lyDoDoiDich: LY_DO_15 }),
+			"doi dich ngoai ra",
+		);
+		expect((await dongDoiDich(krDoi)).map((x) => x.ngoaiRa)).toEqual([
+			false,
+			true,
+		]);
+
+		luc(LUC.sauKy);
+		await keoDaiPhien();
+		ok(await sangCham(quy), "sang cham trong so tat");
+		await datChuongTrinh("0-1", true);
+		ok(await sangCham(quyTrongSo), "sang cham trong so bat");
+		await datChuongTrinh("0-100", true);
+
+		const chuaChamId = chuaHet.krIds[1] ?? "";
+		const canCham = [
+			...tot.krIds,
+			...duoiTot.krIds,
+			...dat.krIds,
+			...chuaTron.krIds,
+			...chuaHet.krIds.filter((id) => id !== chuaChamId),
+			...coTrongSo.krIds,
+		];
+		for (const id of canCham) {
+			const d = await db.okrDiemKr.findUniqueOrThrow({
+				where: { keyResultId: id },
+			});
+			ok(await chamKr(id, Number(d.diemGoiY), "quan"), "cham bang goi y");
+		}
+
+		const bang = await bangCham(quy);
+		const bangTrongSo = await bangCham(quyTrongSo);
+		const moi = [...bang.mucTieu, ...bangTrongSo.mucTieu];
+		const BANG = [
+			{ ca: "tham vong 0.7", id: tot.objectiveId, diem: 0.7, doc: "tot" },
+			{
+				ca: "tham vong 0.6 va 0.7 (trong so 3/1, dong diem tat trong so)",
+				id: duoiTot.objectiveId,
+				diem: 0.65,
+				doc: "duoi-muc-tot",
+			},
+			{ ca: "cam ket 1", id: dat.objectiveId, diem: 1, doc: "dat" },
+			{
+				ca: "cam ket 0.9",
+				id: chuaTron.objectiveId,
+				diem: 0.9,
+				doc: "chua-tron",
+			},
+			{
+				ca: "chua cham het",
+				id: chuaHet.objectiveId,
+				diem: null,
+				doc: null,
+			},
+			{
+				ca: "trong so bat 3/1: 1 va 0.2",
+				id: coTrongSo.objectiveId,
+				diem: 0.8,
+				doc: "chua-tron",
+			},
+		] as const;
+		expect(
+			BANG.map((b) => {
+				const m = moi.find((x) => x.id === b.id);
+				return { ca: b.ca, diem: m?.diem, doc: m?.cachDoc };
+			}),
+		).toEqual(BANG.map((b) => ({ ca: b.ca, diem: b.diem, doc: b.doc })));
+		expect({
+			thang: [bang.thang, bangTrongSo.thang],
+			conLai: bang.conLai,
+			chuaCham: bang.chuaCham,
+		}).toEqual({
+			thang: ["0-1", "0-1"],
+			conLai: 1,
+			chuaCham: [{ khoa: "goc", ten: OKR.tenGoc, conLai: 1 }],
+		});
+		const doiDich = moi
+			.flatMap((m) => m.krs)
+			.filter((k) => k.doiDichNgoaiRa.length > 0)
+			.map((k) => ({ id: k.id, doiDich: k.doiDichNgoaiRa }));
+		expect(doiDich).toEqual([
+			{
+				id: krDoi,
+				doiDich: [
+					{ luc: expect.any(String), truoc: 120, sau: 100, lyDo: LY_DO_15 },
+				],
+			},
+		]);
+	}, 60_000);
 });
 
 describe("xoa-kr-khep", () => {

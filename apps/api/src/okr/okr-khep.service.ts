@@ -1,19 +1,93 @@
-import type { Db } from "@crm/db";
+import type { Db, Prisma } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
-import type { MoRaInput } from "@crm/validation/okr-khep";
+import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
+import {
+	type ChamKrInput,
+	cachDoc,
+	diemChuan,
+	diemMucTieu,
+	diemTheoThang,
+	ghiDieuHocDuocInput,
+	luoiDiem,
+	type MoRaInput,
+	OKR_KHEP,
+	type ThangCham,
+} from "@crm/validation/okr-khep";
+import { kieuKr } from "@crm/validation/okr-kr";
+import { HANG_CAP, LOAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import {
 	BadRequestException,
 	Inject,
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
+import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
-import { ngayLuu } from "./khep";
+import { kiemDongKy, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
 import { OkrService } from "./okr.service";
-import { OkrAccessService } from "./okr-access.service";
+import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
+import type {
+	BangChamInput,
+	BangChamOutput,
+	MucTieuCham,
+} from "./okr-khep.contracts";
+import { OkrXemService } from "./okr-xem.service";
 
 const T = OKR.thongDiep;
+const thangCham = z.enum(THANG_CHAM);
+const loaiMucTieu = z.enum(LOAI_MUC_TIEU);
+type GhiDieuHocDuocInput = z.infer<typeof ghiDieuHocDuocInput>;
+const soThap = (v: number) => String(v).replace(".", ",");
+
+const chonBangCham = {
+	...chonDonVi,
+	title: true,
+	kind: true,
+	owner: { select: { name: true } },
+	nhinLai: { select: { dieuHocDuoc: true } },
+	mangSangDi: {
+		orderBy: { luc: "desc" },
+		take: 1,
+		select: { sangObjectiveId: true, sangCycle: { select: { name: true } } },
+	},
+	mangSangTu: {
+		select: {
+			tuObjectiveId: true,
+			tuObjective: { select: { cycle: { select: { name: true } } } },
+		},
+	},
+	keyResults: {
+		where: { diemKr: { isNot: null } },
+		orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+		select: {
+			id: true,
+			title: true,
+			kind: true,
+			ownerUserId: true,
+			owner: { select: { name: true } },
+			unit: true,
+			startValue: true,
+			targetValue: true,
+			weight: true,
+			diemKr: {
+				select: {
+					soChot: true,
+					diemGoiY: true,
+					diem: true,
+					lyDo: true,
+					thang: true,
+					trongSoBat: true,
+				},
+			},
+			doiDich: {
+				where: { ngoaiRa: true },
+				orderBy: { luc: "asc" },
+				select: { luc: true, truoc: true, sau: true, lyDo: true },
+			},
+		},
+	},
+} satisfies Prisma.OkrObjectiveSelect;
 
 @Injectable()
 export class OkrKhepService {
@@ -21,6 +95,7 @@ export class OkrKhepService {
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(OkrXemService) private readonly xem: OkrXemService,
 	) {}
 
 	async moRa(userId: string, input: MoRaInput) {
@@ -83,5 +158,207 @@ export class OkrKhepService {
 			);
 			return { id, canhBao: null };
 		});
+	}
+
+	async chamKr(userId: string, input: ChamKrInput) {
+		const kr = await this.quyenOkr.assertSuaKr(userId, input.keyResultId);
+		const cycleId = kr.objective.cycleId;
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${cycleId} FOR SHARE`;
+			const c = await tx.okrCycle.findUniqueOrThrow({
+				where: { id: cycleId },
+				select: { phase: true },
+			});
+			if (c.phase !== "cham-diem")
+				throw new BadRequestException(T.khep.chiChamKhiChamDiem);
+			const dong = await tx.okrDiemKr.findUnique({
+				where: { keyResultId: kr.id },
+			});
+			if (!dong) throw new BadRequestException(T.khep.khongCoDiemKr);
+			const thang = thangCham.parse(dong.thang);
+			const chuan = diemChuan(input.diem, thang);
+			if (chuan === null) {
+				const luoi = luoiDiem(thang);
+				throw new BadRequestException(
+					T.khep.ngoaiLuoi(soThap(luoi[1] ?? 0), soThap(luoi.at(-1) ?? 0)),
+				);
+			}
+			const lyDo = input.lyDo ?? "";
+			if (
+				chuan !== Number(dong.diemGoiY) &&
+				lyDo.length < OKR_KHEP.lyDo.toiThieu
+			)
+				throw new BadRequestException(T.khep.canLyDoCham);
+			await tx.okrDiemKr.update({
+				where: { id: dong.id },
+				data: {
+					diem: chuan,
+					lyDo: lyDo || null,
+					chamBoiUserId: userId,
+					chamLuc: new Date(),
+				},
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"cham-kr",
+				{ cycleId, objectiveId: kr.objectiveId, keyResultId: kr.id },
+				{
+					diem: dong.diem === null ? null : Number(dong.diem),
+					lyDo: dong.lyDo,
+				},
+				{ diem: chuan, lyDo: lyDo || null },
+			);
+			return { id: kr.id, canhBao: null };
+		});
+	}
+
+	async ghiDieuHocDuoc(userId: string, input: GhiDieuHocDuocInput) {
+		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${mt.cycleId} FOR SHARE`;
+			const c = await tx.okrCycle.findUniqueOrThrow({
+				where: { id: mt.cycleId },
+				select: { phase: true },
+			});
+			if (!PHA_NHIN_LAI.includes(c.phase))
+				throw new BadRequestException(T.khep.nhinLaiChiKhi);
+			const cu = await tx.okrNhinLai.findUnique({
+				where: { objectiveId: mt.id },
+			});
+			await tx.okrNhinLai.upsert({
+				where: { objectiveId: mt.id },
+				create: {
+					objectiveId: mt.id,
+					dieuHocDuoc: input.noiDung,
+					suaBoiUserId: userId,
+				},
+				update: { dieuHocDuoc: input.noiDung, suaBoiUserId: userId },
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"nhin-lai",
+				{ cycleId: mt.cycleId, objectiveId: mt.id },
+				cu ? { dieuHocDuoc: cu.dieuHocDuoc } : null,
+				{ dieuHocDuoc: input.noiDung },
+			);
+			return { id: mt.id, canhBao: null };
+		});
+	}
+
+	async bangCham(
+		userId: string,
+		input: BangChamInput,
+	): Promise<BangChamOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const c = await this.db.okrCycle.findUnique({
+			where: { id: input.cycleId },
+			select: { phase: true },
+		});
+		if (!c) throw new NotFoundException(T.khongCoChuKy(input.cycleId));
+		if (!PHA_CO_DIEM.includes(c.phase))
+			throw new BadRequestException(T.khep.bangChamChuaCo);
+		const where: Prisma.OkrObjectiveWhereInput = {
+			AND: [
+				{ cycleId: input.cycleId, status: "cong-bo" },
+				input.donVi ? this.xem.dieuKienDonVi(input.donVi, q) : {},
+			],
+		};
+		const [mts, dauDong, dongKy] = await Promise.all([
+			this.db.okrObjective.findMany({
+				where,
+				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+				select: chonBangCham,
+			}),
+			this.db.okrDiemKr.findFirst({
+				where: { cycleId: input.cycleId },
+				select: { thang: true },
+			}),
+			kiemDongKy(this.db, input.cycleId),
+		]);
+		const thangKy = dauDong ? thangCham.parse(dauDong.thang) : null;
+		const mucTieu = mts
+			.map((m): MucTieuCham & { hang: number } => {
+				const dv = donViCua(m);
+				const krs = m.keyResults.flatMap((k) => {
+					const d = k.diemKr;
+					if (!d) return [];
+					const thang = thangCham.parse(d.thang);
+					const diem = d.diem === null ? null : Number(d.diem);
+					return [
+						{
+							thang,
+							trongSoBat: d.trongSoBat,
+							chuan: diem,
+							weight: Number(k.weight),
+							ra: {
+								id: k.id,
+								title: k.title,
+								kind: kieuKr.parse(k.kind),
+								ownerName: k.owner.name,
+								unit: k.unit,
+								startValue: Number(k.startValue),
+								targetValue: Number(k.targetValue),
+								soChot: Number(d.soChot),
+								diemGoiY: diemTheoThang(Number(d.diemGoiY), thang),
+								diem: diem === null ? null : diemTheoThang(diem, thang),
+								lyDo: d.lyDo,
+								suaDuoc: this.quyenOkr.ghiDuocKr(q, userId, {
+									ownerUserId: k.ownerUserId,
+									objective: dv,
+								}),
+								doiDichNgoaiRa: k.doiDich.map((x) => ({
+									luc: x.luc.toISOString(),
+									truoc: Number(x.truoc),
+									sau: Number(x.sau),
+									lyDo: x.lyDo,
+								})),
+							},
+						},
+					];
+				});
+				const dau = krs[0];
+				const loai = loaiMucTieu.parse(m.kind);
+				const diem = diemMucTieu(
+					krs.map((k) => ({ diem: k.chuan, weight: k.weight })),
+					dau?.trongSoBat ?? false,
+				);
+				const thang: ThangCham | null = dau?.thang ?? thangKy;
+				const toi = m.mangSangDi[0];
+				return {
+					hang: HANG_CAP[dv.level],
+					id: m.id,
+					title: m.title,
+					kind: loai,
+					ownerName: m.owner.name,
+					suaDuoc: this.quyenOkr.suaDuocDonVi(q, userId, dv),
+					diem:
+						diem === null || thang === null ? null : diemTheoThang(diem, thang),
+					cachDoc: diem === null ? null : cachDoc(loai, diem),
+					dieuHocDuoc: m.nhinLai?.dieuHocDuoc ?? "",
+					mangSangToi: toi
+						? {
+								objectiveId: toi.sangObjectiveId,
+								cycleName: toi.sangCycle.name,
+							}
+						: null,
+					mangSangTu: m.mangSangTu
+						? {
+								objectiveId: m.mangSangTu.tuObjectiveId,
+								cycleName: m.mangSangTu.tuObjective.cycle.name,
+							}
+						: null,
+					krs: krs.map((k) => k.ra),
+				};
+			})
+			.sort((a, b) => a.hang - b.hang)
+			.map(({ hang: _, ...m }) => m);
+		return {
+			thang: thangKy,
+			conLai: dongKy.conLai,
+			chuaCham: dongKy.theoDonVi,
+			mucTieu,
+		};
 	}
 }
