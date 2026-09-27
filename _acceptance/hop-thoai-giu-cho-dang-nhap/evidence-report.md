@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d3e206a26c0905c77187dc45065ac746f555c3cc
+verified_commit: d6f32ed0324c03d6980771fe1c8d195322b50765
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -250,3 +250,7 @@ Round 3 (vòng này): E1-E9, E11-E15 xanh (E8 carry-forward từ round 2, delta 
 ### Re-pin lần 1 — 2026-09-27, do hoá cũ do gộp onehub (#169, #170) trước khi mở PR
 run_id: repin-20260927T063135Z-87968
 sha: d3e206a26c0905c77187dc45065ac746f555c3cc · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · AC không có chốt máy: AC-10
+
+### Re-pin lần 2 — 2026-09-27, do hoá cũ do gộp onehub (#168) sau khi mở PR
+run_id: repin-20260927T064247Z-42463
+sha: d6f32ed0324c03d6980771fe1c8d195322b50765 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · AC không có chốt máy: AC-10
