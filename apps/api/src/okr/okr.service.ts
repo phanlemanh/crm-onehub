@@ -30,6 +30,11 @@ import {
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
 import {
+	crmHopKieu,
+	LOAI_NGUON_MAY,
+	parseOkrNguon,
+} from "@crm/validation/okr-nguon";
+import {
 	HANH_DONG_VET,
 	type HanhDongVet,
 	type OkrVetSnapshot,
@@ -73,6 +78,7 @@ const capMucTieu = z.enum(CAP_MUC_TIEU);
 const loaiMucTieu = z.enum(LOAI_MUC_TIEU);
 const trangThaiMucTieu = z.enum(TRANG_THAI_MUC_TIEU);
 const nguonKr = z.enum(NGUON_KR);
+const loaiNguonMay = z.enum(LOAI_NGUON_MAY);
 const hanhDongVet = z.enum(HANH_DONG_VET);
 
 const chonNguoi = { id: true, name: true, email: true } as const;
@@ -82,6 +88,26 @@ const quanHeDonVi = {
 	person: { select: { name: true } },
 } as const;
 export const chonTenDonVi = { level: true, ...quanHeDonVi } as const;
+export const chonSoMay = {
+	nguonMay: {
+		select: {
+			loai: true,
+			chiSo: true,
+			phamVi: true,
+			bac: true,
+			sheetId: true,
+			sheetO: true,
+			docLuc: true,
+			docGiaTri: true,
+			docLoi: true,
+		},
+	},
+	soChup: {
+		orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
+		take: 1,
+		select: { ngay: true, giaTri: true, nguon: true },
+	},
+} satisfies Prisma.OkrKeyResultInclude;
 const chonMucTieu = {
 	owner: { select: chonNguoi },
 	participants: {
@@ -89,7 +115,10 @@ const chonMucTieu = {
 		orderBy: { createdAt: "asc" },
 	},
 	keyResults: {
-		include: { owner: { select: chonNguoi } },
+		include: {
+			owner: { select: chonNguoi },
+			...chonSoMay,
+		},
 		orderBy: { position: "asc" },
 	},
 	alignments: {
@@ -197,6 +226,30 @@ function ghiKhac(
 
 const ngay = (d: Date) => ngayVN(d);
 const toDate = (s: string) => new Date(`${s}T00:00:00Z`);
+
+type ChupGanNhat = {
+	ngay: Date;
+	giaTri: Prisma.Decimal | number;
+	nguon: string;
+};
+
+export function doCanhVaSoMay(
+	nguon: string,
+	nguonMay: { loai: string } | null,
+	chup: ChupGanNhat | undefined,
+) {
+	return {
+		doCanh: nguon === "tay" && nguonMay !== null,
+		soMay:
+			nguonMay !== null && chup && chup.nguon === nguonMay.loai
+				? {
+						giaTri: soKr(chup.giaTri),
+						ngay: ngay(chup.ngay),
+						nguon: loaiNguonMay.parse(chup.nguon),
+					}
+				: null,
+	};
+}
 
 type ChuKyDong = {
 	id: string;
@@ -681,6 +734,20 @@ export class OkrService {
 			await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${quyen.id} FOR UPDATE`;
 			const kr = await tx.okrKeyResult.findUnique({ where: { id: quyen.id } });
 			if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
+			if (
+				input.currentValue !== undefined &&
+				input.currentValue !== soKr(kr.currentValue) &&
+				nguonKr.parse(kr.source) !== "tay"
+			)
+				throw new BadRequestException(T.so.hienTaiCuaMay);
+			if (input.kind !== undefined && !crmHopKieu(input.kind)) {
+				const may = await tx.okrNguonKr.findUnique({
+					where: { keyResultId: kr.id },
+					select: { loai: true },
+				});
+				if (kr.source === "crm" || may?.loai === "crm")
+					throw new BadRequestException(T.so.crmKhongHopKieu);
+			}
 			const trangThai = await this.trangThai(tx, kr.objectiveId);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
 			const dangChay =
@@ -787,6 +854,9 @@ export class OkrService {
 				throw new BadRequestException(T.krDangLaDich);
 			if ((await tx.okrCheckIn.count({ where: { keyResultId: kr.id } })) > 0)
 				throw new BadRequestException(T.krDaCapNhat);
+			if ((await tx.okrSoChup.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.so.krDaCoSoChup);
+			await tx.okrNguonKr.deleteMany({ where: { keyResultId: kr.id } });
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(
 				tx,
@@ -1033,6 +1103,8 @@ export class OkrService {
 				const startValue = soKr(k.startValue);
 				const targetValue = soKr(k.targetValue);
 				const currentValue = soKr(k.currentValue);
+				const source = nguonKr.parse(k.source);
+				const chup = k.soChup[0];
 				return {
 					id: k.id,
 					objectiveId: k.objectiveId,
@@ -1045,7 +1117,18 @@ export class OkrService {
 					unit: k.unit,
 					dueOn: k.dueOn ? ngay(k.dueOn) : null,
 					weight: soKr(k.weight),
-					source: nguonKr.parse(k.source),
+					source,
+					...doCanhVaSoMay(source, k.nguonMay, chup),
+					nguonMay: k.nguonMay
+						? {
+								...parseOkrNguon(k.nguonMay),
+								docLuc: k.nguonMay.docLuc?.toISOString() ?? null,
+								docGiaTri:
+									k.nguonMay.docGiaTri === null
+										? null
+										: soKr(k.nguonMay.docGiaTri),
+							}
+						: null,
 					startLocked: k.startLockedAt !== null,
 					progress: tienDoKr(kind, startValue, targetValue, currentValue),
 					laCuaToi: k.ownerUserId === viewerId,

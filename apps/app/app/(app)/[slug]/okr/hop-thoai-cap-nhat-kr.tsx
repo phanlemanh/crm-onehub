@@ -61,6 +61,9 @@ export function krCapNhatTuSheet(mt: ChiTiet, kr: KetQua): KrCapNhat {
 		lastConfidence: tuTin.success ? tuTin.data : null,
 		lastAt: lanCuoi?.at ?? null,
 		updatedThisWeek: false,
+		nguon: kr.source,
+		doCanh: kr.doCanh,
+		soMay: kr.soMay,
 	};
 }
 

@@ -1,21 +1,33 @@
 import { db } from "@crm/db";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
+import type {
+	BacGhiDanh,
+	MaChiSo,
+	PhamViChiSo,
+} from "@crm/validation/okr-chi-so";
+import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
+import type { KieuKr } from "@crm/validation/okr-kr";
 import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
 import { donDep, ma, TIEN_TO } from "./nhac-gieo";
 
 export const GIO_MS = 60 * 60 * 1000;
 
+export type KyGieo = { tu: string; den: string };
+
+const QUY_4: KyGieo = { tu: "2026-10-01", den: "2026-12-31" };
+
 export async function gieoChuKy(
-	phase: "dang-chay" | "lap-ke-hoach",
+	phase: PhaChuKy,
 	updateWeekday = 1,
+	ky: KyGieo = QUY_4,
 ): Promise<string> {
 	const ck = await db.okrCycle.create({
 		data: {
 			kind: "quy",
 			name: ma(),
-			startsOn: new Date("2026-10-01T00:00:00Z"),
-			endsOn: new Date("2026-12-31T00:00:00Z"),
+			startsOn: new Date(`${ky.tu}T00:00:00Z`),
+			endsOn: new Date(`${ky.den}T00:00:00Z`),
 			phase,
 			updateWeekday,
 		},
@@ -59,22 +71,57 @@ export async function gieoKr(k: {
 	tieuDe?: string;
 	khoa: Date | null;
 	viTri?: number;
+	nguon?: "tay" | "crm" | "api" | "bang-tinh";
+	giaTri?: number;
+	kieu?: KieuKr;
 }): Promise<string> {
 	const kr = await db.okrKeyResult.create({
 		data: {
 			objectiveId: k.objectiveId,
 			title: k.tieuDe ?? ma(),
-			kind: "tang-toi",
+			kind: k.kieu ?? "tang-toi",
 			ownerUserId: k.chu,
 			startValue: 0,
 			targetValue: 100,
-			currentValue: 0,
+			currentValue: k.giaTri ?? 0,
+			source: k.nguon ?? "tay",
 			position: k.viTri ?? 0,
 			startLockedAt: k.khoa,
 			createdAt: k.khoa ?? new Date(),
 		},
 	});
 	return kr.id;
+}
+
+export type NguonGieo =
+	| { loai: "crm"; chiSo: MaChiSo; phamVi: PhamViChiSo; bac?: BacGhiDanh }
+	| { loai: "bang-tinh"; sheetId: string; o: string; thuLuc?: Date };
+
+export async function gieoNguonKr(
+	keyResultId: string,
+	taoBoi: string,
+	n: NguonGieo,
+): Promise<void> {
+	await db.okrNguonKr.create({
+		data:
+			n.loai === "crm"
+				? {
+						keyResultId,
+						loai: n.loai,
+						chiSo: n.chiSo,
+						phamVi: n.phamVi,
+						bac: n.bac ?? null,
+						taoBoiUserId: taoBoi,
+					}
+				: {
+						keyResultId,
+						loai: n.loai,
+						sheetId: n.sheetId,
+						sheetO: n.o,
+						thuLuc: n.thuLuc ?? null,
+						taoBoiUserId: taoBoi,
+					},
+	});
 }
 
 export async function guiCapNhat(
@@ -227,6 +274,9 @@ export async function donOkr(): Promise<void> {
 	});
 	await db.okrTrail.deleteMany({
 		where: { actorUserId: { startsWith: TIEN_TO } },
+	});
+	await db.okrSoChup.deleteMany({
+		where: { keyResult: { objective: cuaSan } },
 	});
 	await db.okrKeyResult.deleteMany({ where: { objective: cuaSan } });
 	await db.okrObjective.deleteMany({ where: cuaSan });

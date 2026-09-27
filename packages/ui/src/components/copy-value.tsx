@@ -3,13 +3,13 @@
 import Copy from "@carbon/icons-react/es/Copy";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
-import { useLocale } from "@crm/ui/components/locale-provider";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import { toast } from "sonner";
-import { settingsMessages } from "@/lib/messages/settings";
 
 export function CopyValue({ value, label }: { value: string; label: string }) {
-	const t = settingsMessages(useLocale());
-	const unavailable = () => toast.error(t.chep.hong(label.toLowerCase()));
+	const msg = useMessages();
+	const ten = label.toLowerCase();
+	const unavailable = () => toast.error(msg.chep.hong(ten));
 
 	return (
 		<Button
@@ -26,14 +26,12 @@ export function CopyValue({ value, label }: { value: string; label: string }) {
 
 				clipboard
 					.writeText(value)
-					.then(() => toast.success(t.chep.xong(label)))
+					.then(() => toast.success(msg.chep.xong(label)))
 					.catch(unavailable);
 			}}
 		>
 			<Icon icon={Copy} />
-			<span className="sr-only">
-				{t.chep.nhan} {label.toLowerCase()}
-			</span>
+			<span className="sr-only">{msg.chep.nhan(ten)}</span>
 		</Button>
 	);
 }

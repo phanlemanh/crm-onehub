@@ -131,6 +131,16 @@ single place that knows what is set.
 | `ZALO_BOT_TOKEN` | Fallback Bot Token. Người quản trị dán token ở Kết nối › Zalo, lưu trong `AppSetting`, và giá trị đó thắng biến này — see `agent.md` and `connections.md` |
 | `ZALO_WEBHOOK_SECRET` | Fallback webhook secret. Khi bot bật trên màn, tác tử sinh khoá và lưu trong `AppSetting`, giá trị đó thắng biến này; không có cả hai thì `/zalo/webhook` trả 404 — see `agent.md` |
 | `ZALO_API_URL` | Base URL of the Zalo Bot API; empty means the real one. Only for running against a fake Zalo in tests |
+| `OKR_SHEETS_TOKEN_URL`, `OKR_SHEETS_API_URL` | Google token endpoint and Sheets API root for the OKR Sheets reader; empty means the real ones (`OKR_SO.sheets`). Read only when `NODE_ENV` is not `production` — for a measuring session against a fake Google |
+
+**`GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA`** are the read-only service account behind
+the Google Sheets source of an OKR key result. Set both or the source is off: `okr.chiSo`
+answers `sheetsBat: false`, the dialog hides the option and `okr.datNguonKr` refuses it
+(`OKR.thongDiep.so.sheetsTat`) — nothing throws. The API only checks that both are set and
+hands the email to the screen, so people know whom to share the sheet with; it never calls
+Google (`apps/api/src/okr/okr-so.service.ts`). The agent reads the key and does the reading.
+Both are in `env.validation.ts`, `turbo.json` `globalPassThroughEnv` and the agent's `dev`
+pass-through.
 
 `ZALO_BOT_TOKEN` and `ZALO_WEBHOOK_SECRET` are read by `apps/agent` only, so they
 are not in `env.validation.ts`. Both are in `turbo.json` `globalPassThroughEnv` — secrets, so never

@@ -35,29 +35,67 @@ import {
 	kiemSoTheoKieu,
 	krInput,
 } from "@crm/validation/okr-kr";
+import { crmHopKieu } from "@crm/validation/okr-nguon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
+import { KHOA_NGUON } from "./nguon-so";
+import { type MucTieuNguon, NguonSo, useNguonSo } from "./o-nguon-so";
 
 export function hienSo(so: number, locale: Locale): string {
 	const chu = locale === "vi" ? String(so).replace(".", ",") : String(so);
 	return docSoOkr(chu) === so ? chu : `${chu}0`;
 }
 
+type ONhap = {
+	ten: string;
+	kieu: KieuKr;
+	chu: string;
+	soKhoi: number | null;
+	soDich: number | null;
+	soHien: number | null;
+	donVi: string;
+	han: string | null;
+	soTrongSo: number | null;
+	coTrongSo: boolean;
+	khoaHien: boolean;
+};
+
+function khac<T>(moi: T | null, cu: T): T | undefined {
+	return moi === null || moi === cu ? undefined : moi;
+}
+
+function doiCuaKr(goc: KetQua, o: ONhap) {
+	return {
+		title: o.ten.trim() === goc.title ? undefined : o.ten,
+		kind: khac(o.kieu, goc.kind),
+		ownerUserId: khac(o.chu, goc.owner.id),
+		startValue: khac(o.soKhoi, goc.startValue),
+		targetValue: khac(o.soDich, goc.targetValue),
+		currentValue: o.khoaHien ? undefined : khac(o.soHien, goc.currentValue),
+		unit: o.donVi.trim() === goc.unit ? undefined : o.donVi,
+		dueOn: o.han === goc.dueOn ? undefined : o.han,
+		weight: o.coTrongSo ? khac(o.soTrongSo, goc.weight) : undefined,
+	};
+}
+
 export function HopThoaiKr({
 	objectiveId,
+	mucTieu,
 	kr,
 	chuMacDinh,
 	suaDuocCot,
 	dong,
 }: {
 	objectiveId: string;
+	mucTieu: MucTieuNguon;
 	kr: KetQua | null;
 	chuMacDinh: string;
 	suaDuocCot: boolean;
@@ -66,12 +104,15 @@ export function HopThoaiKr({
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const h = m.hopThoai;
+	const so = okrSoMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const url = useWorkspaceUrl();
 	const ma = useId();
 	const users = useQuery(trpc.users.list.queryOptions());
 	const program = useQuery(trpc.okr.program.queryOptions());
+
+	const [daLuuMot, setDaLuuMot] = useState(false);
 
 	const [ten, setTen] = useState(kr?.title ?? "");
 	const [kieu, setKieu] = useState<KieuKr>(kr?.kind ?? "tang-toi");
@@ -83,22 +124,16 @@ export function HopThoaiKr({
 	const [han, setHan] = useState<string | null>(kr?.dueOn ?? null);
 	const [trongSo, setTrongSo] = useState(kr ? hienSo(kr.weight, locale) : "1");
 	const [loi, setLoi] = useState<string | null>(null);
+	const n = useNguonSo({ objectiveId, kr, mucTieu, baoLoi: setLoi });
+	const goc = n.goc;
 
-	const xong = {
-		onSuccess: (kq: { canhBao: string | null }) => {
-			if (kq.canhBao) toast.warning(kq.canhBao);
-			toast.success(kr ? h.daLuu : h.daThemKr);
-			void cache.okr(objectiveId);
-			dong();
-		},
-		onError: (e: { message: string }) => setLoi(e.message),
-	};
-	const tao = useMutation(trpc.okr.createKeyResult.mutationOptions(xong));
-	const sua = useMutation(trpc.okr.updateKeyResult.mutationOptions(xong));
-	const dangLuu = tao.isPending || sua.isPending;
+	const tao = useMutation(trpc.okr.createKeyResult.mutationOptions());
+	const sua = useMutation(trpc.okr.updateKeyResult.mutationOptions());
+	const dangLuu = tao.isPending || sua.isPending || n.dangGui;
 
-	const khoaKhoi = kr?.startLocked === true || !suaDuocCot;
-	const khoaHien = kr?.hienTaiQuaCapNhat === true;
+	const khoaKhoi = goc?.startLocked === true || !suaDuocCot;
+	const khoaMay = goc !== null && goc.source !== "tay";
+	const khoaHien = goc?.hienTaiQuaCapNhat === true || khoaMay;
 	const coTrongSo = program.data?.weightsOn === true;
 	const soKhoi = docSoOkr(khoi);
 	const soDich = docSoOkr(dich);
@@ -120,32 +155,30 @@ export function HopThoaiKr({
 		soKhoi !== null &&
 		soDich !== null &&
 		soHien !== null &&
-		loiKieu === null;
+		loiKieu === null &&
+		n.hopLe &&
+		(n.gia.loai !== "crm" || crmHopKieu(kieu)) &&
+		!n.dangCho;
 
-	const doi = kr
-		? {
-				title: ten.trim() === kr.title ? undefined : ten,
-				kind: kieu === kr.kind ? undefined : kieu,
-				ownerUserId: chu === kr.owner.id ? undefined : chu,
-				startValue:
-					soKhoi === null || soKhoi === kr.startValue ? undefined : soKhoi,
-				targetValue:
-					soDich === null || soDich === kr.targetValue ? undefined : soDich,
-				currentValue:
-					khoaHien || soHien === null || soHien === kr.currentValue
-						? undefined
-						: soHien,
-				unit: donVi.trim() === kr.unit ? undefined : donVi,
-				dueOn: han === kr.dueOn ? undefined : han,
-				weight:
-					coTrongSo && soTrongSo !== null && soTrongSo !== kr.weight
-						? soTrongSo
-						: undefined,
-			}
+	const doi = goc
+		? doiCuaKr(goc, {
+				ten,
+				kieu,
+				chu,
+				soKhoi,
+				soDich,
+				soHien,
+				donVi,
+				han,
+				soTrongSo,
+				coTrongSo,
+				khoaHien,
+			})
 		: null;
-	const daSua = doi === null || Object.values(doi).some((v) => v !== undefined);
+	const doiKr = doi !== null && Object.values(doi).some((v) => v !== undefined);
+	const daSua = doi === null || doiKr || n.doiNguon;
 
-	const gui = () => {
+	const gui = async () => {
 		if (
 			dangLuu ||
 			!sanSang ||
@@ -156,22 +189,42 @@ export function HopThoaiKr({
 		)
 			return;
 		setLoi(null);
-		if (!kr || !doi) {
-			tao.mutate({
-				objectiveId,
-				title: ten,
-				kind: kieu,
-				ownerUserId: chu,
-				startValue: soKhoi,
-				targetValue: soDich,
-				currentValue: soHien,
-				unit: donVi,
-				dueOn: han,
-				weight: coTrongSo && soTrongSo !== null ? soTrongSo : 1,
-			});
+		let id = n.krId;
+		let giuMo = false;
+		try {
+			if (id === null) {
+				const kq = await tao.mutateAsync({
+					objectiveId,
+					title: ten,
+					kind: kieu,
+					ownerUserId: chu,
+					startValue: soKhoi,
+					targetValue: soDich,
+					currentValue: soHien,
+					unit: donVi,
+					dueOn: han,
+					weight: coTrongSo && soTrongSo !== null ? soTrongSo : 1,
+				});
+				if (kq.canhBao) toast.warning(kq.canhBao);
+				id = kq.id;
+				n.datKrId(kq.id);
+			} else if (doi && doiKr) {
+				const kq = await sua.mutateAsync({ id, ...doi });
+				if (kq.canhBao) toast.warning(kq.canhBao);
+			}
+			giuMo = await n.luu(id);
+		} catch (e) {
+			setLoi(e instanceof Error ? e.message : String(e));
+			void cache.okr(objectiveId);
 			return;
 		}
-		sua.mutate({ id: kr.id, ...doi });
+		toast.success(goc ? h.daLuu : h.daThemKr);
+		void cache.okr(objectiveId);
+		if (giuMo) {
+			setDaLuuMot(true);
+			return;
+		}
+		dong();
 	};
 
 	const nguoi = (users.data ?? []).map((u) => ({
@@ -190,16 +243,16 @@ export function HopThoaiKr({
 				if (!mo && !dangLuu) dong();
 			}}
 		>
-			<DialogContent data-hop-thoai-kr={kr?.id ?? "moi"}>
+			<DialogContent data-hop-thoai-kr={n.krId ?? "moi"}>
 				<DialogHeader>
-					<DialogTitle>{kr ? h.suaKr : h.themKr}</DialogTitle>
+					<DialogTitle>{n.krId ? h.suaKr : h.themKr}</DialogTitle>
 				</DialogHeader>
 				<div className="-m-1 max-h-[70svh] overflow-y-auto p-1" data-cuon-hop>
 					<form
 						id={`${ma}-form`}
 						onSubmit={(e) => {
 							e.preventDefault();
-							gui();
+							void gui();
 						}}
 					>
 						<FieldGroup>
@@ -287,7 +340,11 @@ export function HopThoaiKr({
 										data-o-hien-tai
 										onChange={(e) => setHien(e.target.value)}
 									/>
-									{khoaHien ? (
+									{khoaMay && goc ? (
+										<FieldDescription id={`${ma}-hien-mo-ta`}>
+											{so.nguon[KHOA_NGUON[goc.source]].moTa}
+										</FieldDescription>
+									) : khoaHien ? (
 										<FieldDescription id={`${ma}-hien-mo-ta`}>
 											{h.hienTaiDoiO}{" "}
 											<Link href={url("/okr/cap-nhat-tuan")}>
@@ -308,6 +365,18 @@ export function HopThoaiKr({
 									{h.quyUocSo}
 								</FieldDescription>
 							)}
+							<NguonSo
+								kr={goc}
+								kieu={kieu}
+								objective={n.mucTieu}
+								khoa={n.mucTieu.status !== "nhap"}
+								gia={n.gia}
+								datGia={n.datGia}
+								phamVi={n.phamVi}
+								docThu={n.docThu}
+								docLai={n.docLai}
+								dangDocLai={n.dangGui}
+							/>
 							<div className="grid items-start gap-3 sm:grid-cols-2">
 								<Field>
 									<FieldLabel htmlFor={`${ma}-don-vi`}>{h.donViDo}</FieldLabel>
@@ -368,13 +437,13 @@ export function HopThoaiKr({
 									</Field>
 								) : null}
 							</div>
-							{loi ? <FieldError>{loi}</FieldError> : null}
+							{loi ? <FieldError data-loi-may-chu>{loi}</FieldError> : null}
 						</FieldGroup>
 					</form>
 				</div>
 				<DialogFooter>
 					<Button variant="outline" onClick={dong} disabled={dangLuu}>
-						{h.huy}
+						{daLuuMot ? so.trangThai.hopThoai.dong : h.huy}
 					</Button>
 					<Button
 						type="submit"
@@ -383,7 +452,7 @@ export function HopThoaiKr({
 						data-nut="gui-kr"
 					>
 						{dangLuu ? <Spinner /> : null}
-						{kr ? h.luu : h.themKr}
+						{n.krId ? h.luu : h.themKr}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
