@@ -57,9 +57,25 @@ try {
 	const buoc = r.ghi.filter(
 		(g) => g.ten === "dai_mau" && g.event?.type === "step.completed",
 	);
+	const maSinh = buoc
+		.map((b) => b.event.data?.providerMetadata?.gateway?.generationId)
+		.filter(Boolean);
+	const tt = [];
+	for (const id of maSinh) {
+		for (let lan = 0; lan < 30; lan += 1) {
+			try {
+				tt.push(await gateway.getGenerationInfo({ id }));
+				break;
+			} catch {
+				await new Promise((r) => setTimeout(r, 10_000));
+			}
+		}
+	}
 	trongEve = {
 		soBuoc: buoc.length,
 		outputTokens: buoc.map((b) => b.event.data?.usage?.outputTokens ?? null),
+		nhaCungCap: [...new Set(tt.map((g) => g.providerName))],
+		suyNghi: tt.map((g) => g.reasoningTokens),
 	};
 } finally {
 	xoaKho(KHO);
@@ -85,6 +101,13 @@ if (daBoc.zdr !== true || daBoc.nhaCungCap !== "vertex") {
 if (!trongEve || trongEve.soBuoc === 0) {
 	console.log("khong dung duoc agent mau cho luot trong eve");
 	process.exit(2);
+}
+if (
+	trongEve.nhaCungCap.length === 0 ||
+	trongEve.nhaCungCap.some((n) => n !== "vertex")
+) {
+	console.log(`trong eve khong qua vertex: ${trongEve.nhaCungCap.join(", ")}`);
+	process.exit(1);
 }
 if (trongEve.outputTokens.some((t) => t === null || t > TRAN)) {
 	console.log("khong chan duoc trong eve");
