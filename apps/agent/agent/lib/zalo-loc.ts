@@ -11,8 +11,6 @@ const SO_DIEN_THOAI = new RegExp(
 		.join("|"),
 	"gu",
 );
-const SO_TIEN =
-	/(?<![\d+])(?<!(?:\+|00)\d{1,3}[\s.-]?)(?<!\(\+?\d{1,3}\)[\s.-]?)[1-9]\d{0,2}([.,])\d{3}(?:\1\d{3})+(?!\d)/gu;
 const CHU_SO = /\d/gu;
 const THU = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/gu;
 const DONG_KE_BANG = /^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$/u;
@@ -24,20 +22,12 @@ function laSoDienThoai(khop: string): boolean {
 	return so >= ZALO.hoi.soChuSo.min && so <= ZALO.hoi.soChuSo.max;
 }
 
-function cheSo(text: string): string {
-	return text.replace(SO_DIEN_THOAI, (khop) =>
-		laSoDienThoai(khop) ? ZALO.hoi.an : khop,
-	);
-}
-
 function che(text: string): string {
-	let ra = "";
-	let tu = 0;
-	for (const khop of text.matchAll(SO_TIEN)) {
-		ra += cheSo(text.slice(tu, khop.index)) + khop[0];
-		tu = khop.index + khop[0].length;
-	}
-	return (ra + cheSo(text.slice(tu))).replace(THU, ZALO.hoi.an);
+	return text
+		.replace(SO_DIEN_THOAI, (khop) =>
+			laSoDienThoai(khop) ? ZALO.hoi.an : khop,
+		)
+		.replace(THU, ZALO.hoi.an);
 }
 
 function boBang(text: string): string {

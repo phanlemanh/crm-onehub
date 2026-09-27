@@ -115,6 +115,12 @@ ba chữ số nối bằng cùng một dấu chấm hoặc phẩy — và chỉ 
 số điện thoại đứng liền sau số khác viết trước, và ma trận `loc-che` hiện có chạy lại làm đối
 chứng.
 
+**Cập nhật 27/09 sau trần 3 round:** cách tách số tiền ở trên đã thử ba round và đều đổi lỗi
+này lấy lỗi khác; bản cuối làm lộ ba dạng số điện thoại quốc tế («+84  912.345.678», «0084 -
+912.345.678», «(0084) 912.345.678») mà bản gốc vẫn che. Chủ kho chọn trả `zalo-loc.ts` về
+`f9932858` và bỏ vế số tiền khỏi AC-6; số tiền từ 1.000 tỷ trở lên vẫn bị che một phần (Known
+limits). AC-6 giữ ma trận số điện thoại, thêm ba dạng đã lộ làm lưới chống hồi quy.
+
 ## C — siết thước hồ sơ cũ
 
 Mỗi mục sửa trong tệp test của hồ sơ `hoi-crm-qua-zalo`; mọi mục có chiều đỏ chạy thật ở S3
