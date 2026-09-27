@@ -1,5 +1,5 @@
 window.LO_TRINH_OKR_DATA = {
-	chup_luc: "2026-09-27T13:22:19+07:00",
+	chup_luc: "2026-09-27T13:33:22+07:00",
 	ban_song: "https://claude.ai/artifact/X2YjeuJfqBESPHQPQP7y2b",
 	hang_muc: {
 		"ai-9a": {
@@ -397,13 +397,13 @@ window.LO_TRINH_OKR_DATA = {
 			trang_thai: "ch\u01b0a m\u1edf",
 		},
 		"zalo-4c": {
-			buoc_ke: "G\u1ed9p PR #168: ba ki\u1ec3m tra \u0111\u00e3 xanh",
+			buoc_ke: "",
 			cau_giao: "",
 			chan_boi: [],
 			chay_khi: "",
-			cho_ai: "ch\u1ee7 kho",
+			cho_ai: "",
 			ghi_chu:
-				"Theo s\u1ed1 \u0111o N0: m\u1ed9t c\u00e2u t\u1ed1n $0,016 v\u1edbi Gemini; 1.500 c\u00e2u m\u1ed7i th\u00e1ng m\u1ed9t m\u00ecnh \u0111\u00e3 v\u01b0\u1ee3t $20 c\u1ee7a c\u1ea3 team.",
+				"G\u1ed9p 27/09 13:30 (9dc1a037). Theo s\u1ed1 \u0111o N0: m\u1ed9t c\u00e2u t\u1ed1n $0,016 v\u1edbi Gemini; 1.500 c\u00e2u m\u1ed7i th\u00e1ng m\u1ed9t m\u00ecnh \u0111\u00e3 v\u01b0\u1ee3t $20 c\u1ee7a c\u1ea3 team.",
 			han: "",
 			hang: "T2",
 			ma: "4c",
@@ -416,7 +416,7 @@ window.LO_TRINH_OKR_DATA = {
 			ten: "H\u1ea1 tr\u1ea7n th\u00e1ng h\u1ecfi CRM qua Zalo xu\u1ed1ng 300 c\u00e2u",
 			ten_ngan: "H\u1ea1 tr\u1ea7n Zalo",
 			thu_tu: 310,
-			trang_thai: "C\u1ed5ng B\u1eb1ng ch\u1ee9ng",
+			trang_thai: "\u0111\u00e3 l\u00ean onehub",
 		},
 		"zalo-t": {
 			buoc_ke:
@@ -427,7 +427,7 @@ window.LO_TRINH_OKR_DATA = {
 			chay_khi: "V\u00f2ng 1\u20132 Zalo \u0111\u00e3 l\u00ean",
 			cho_ai: "ch\u1ee7 kho",
 			ghi_chu:
-				"Nh\u1eafc bu\u1ed5i s\u00e1ng qua Zalo c\u1ea7n vi\u1ec7c n\u00e0y tr\u01b0\u1edbc ng\u00e0y m\u1edf. N\u1ebfu 9a ch\u01b0a g\u1ed9p th\u00ec gi\u1eef tr\u1ea7n 300 c\u00e2u h\u1ecfi CRM qua Zalo m\u1ed7i th\u00e1ng.",
+				"Nh\u1eafc bu\u1ed5i s\u00e1ng qua Zalo c\u1ea7n vi\u1ec7c n\u00e0y tr\u01b0\u1edbc ng\u00e0y m\u1edf. Tr\u1ea7n 300 c\u00e2u h\u1ecfi CRM qua Zalo m\u1ed7i th\u00e1ng \u0111\u00e3 l\u00ean onehub (#168), n\u00ean tri\u1ec3n khai tr\u01b0\u1edbc 9a v\u1eabn gi\u1eef \u0111\u01b0\u1ee3c chi ph\u00ed.",
 			han: "2026-10-26",
 			hang: "",
 			ma: "T",
@@ -460,8 +460,8 @@ window.LO_TRINH_OKR_DATA = {
 			nguon: "m\u00e1y",
 			thu_tu: 20,
 			viec: "G\u1ed9p PR h\u1ea1 tr\u1ea7n th\u00e1ng h\u1ecfi CRM qua Zalo (#168)",
-			xong: false,
-			xong_luc: null,
+			xong: true,
+			xong_luc: "2026-09-27T13:30:45+07:00",
 		},
 		"t-gop-170": {
 			ghi: "Ch\u1edd \u0111\u1ee7 ba ki\u1ec3m tra xanh tr\u00ean \u0111\u1ea7u nh\u00e1nh; g\u1ed9p xong th\u00ec 9a m\u1edf \u0111\u01b0\u1ee3c.",
@@ -736,12 +736,12 @@ window.LO_TRINH_OKR_DATA = {
 			],
 		},
 		tong: {
-			cap_nhat_luc: "2026-09-27T13:21:27+07:00",
+			cap_nhat_luc: "2026-09-27T13:32:50+07:00",
 			ngay_mo: "2026-10-26",
 			nguon:
 				"m\u1ee5c 10 l\u1ed9 tr\u00ecnh OKR \u00b7 m\u1ee5c 4 l\u1ed9 tr\u00ecnh Tr\u1ee3 l\u00fd OKR \u00b7 m\u1ee5c 7 l\u1ed9 tr\u00ecnh Zalo \u00b7 b\u1ea3n \u0111\u1ed3 s\u1ea3n ph\u1ea9m \u00b7 PR \u0111ang m\u1edf",
 			nhan_ngay_mo: "C\u1ea3 c\u00f4ng ty v\u00e0o CRM l\u1ea7n \u0111\u1ea7u",
-			onehub: "d8fd171f",
+			onehub: "9dc1a037",
 		},
 	},
 };
