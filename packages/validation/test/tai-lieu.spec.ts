@@ -1,0 +1,95 @@
+import { describe, expect, test } from "bun:test";
+import {
+	chuanNfc,
+	LOAI_SU_KIEN,
+	LOAI_TRANG,
+	parseSuKienChiTiet,
+	sinhSlug,
+	TAI_LIEU,
+	TRANG_THAI_DE_XUAT,
+} from "../src/tai-lieu";
+
+const SLUG: [string, string[], string][] = [
+	["Quy định hoa hồng", [], "quy-dinh-hoa-hong"],
+	["Đối tác Đà Nẵng", [], "doi-tac-da-nang"],
+	["Quy định hoa hồng", ["quy-dinh-hoa-hong"], "quy-dinh-hoa-hong-2"],
+	[
+		"Quy định hoa hồng",
+		["quy-dinh-hoa-hong", "quy-dinh-hoa-hong-2"],
+		"quy-dinh-hoa-hong-3",
+	],
+	["  ✨ !!! ", [], "trang"],
+	["  ✨ !!! ", ["trang"], "trang-2"],
+];
+
+describe("tai-lieu", () => {
+	for (const [ten, daCo, mong] of SLUG)
+		test(`slug ${ten} ${daCo.length}`, () =>
+			expect(sinhSlug(ten, new Set(daCo))).toBe(mong));
+
+	test("slug từ tên NFD giống tên NFC", () =>
+		expect(sinhSlug("Đối tác Đà Nẵng".normalize("NFD"), new Set())).toBe(
+			"doi-tac-da-nang",
+		));
+
+	test("nfc", () => {
+		const nfd = "hoà".normalize("NFD");
+		expect(nfd).not.toBe("hoà");
+		expect(chuanNfc(nfd)).toBe("hoà");
+	});
+
+	test("hằng số", () => {
+		expect(LOAI_TRANG).toEqual([
+			"quy-dinh",
+			"chinh-sach",
+			"quy-trinh",
+			"bieu-mau",
+		]);
+		expect(TRANG_THAI_DE_XUAT).toEqual([
+			"CHO_DUYET",
+			"DA_DUYET",
+			"TRA_LAI",
+			"CU",
+		]);
+		expect(LOAI_SU_KIEN).toEqual(["TAO", "DE_XUAT", "DUYET", "TRA_LAI", "CU"]);
+		expect(TAI_LIEU.ten).toEqual({ min: 1, max: 160 });
+		expect(TAI_LIEU.lyDo).toEqual({ min: 1, max: 500 });
+		expect(TAI_LIEU.noiDung.max).toBe(200_000);
+		expect(TAI_LIEU.diff.tranMs).toBe(1_500);
+	});
+
+	test("sự kiện đọc được theo loại", () => {
+		expect(
+			parseSuKienChiTiet({
+				loai: "DUYET",
+				deXuatId: "dx1",
+				phienBan: 2,
+				diffHash: "ab",
+			}),
+		).toEqual({ loai: "DUYET", deXuatId: "dx1", phienBan: 2, diffHash: "ab" });
+		expect(
+			parseSuKienChiTiet({ loai: "TRA_LAI", deXuatId: "dx1", lyDo: "thiếu" }),
+		).toEqual({ loai: "TRA_LAI", deXuatId: "dx1", lyDo: "thiếu" });
+		expect(
+			parseSuKienChiTiet({ loai: "CU", deXuatId: "dx1", vi: "dx2" }).loai,
+		).toBe("CU");
+		expect(parseSuKienChiTiet({ loai: "TAO", deXuatId: "dx1" }).loai).toBe(
+			"TAO",
+		);
+		expect(parseSuKienChiTiet({ loai: "DE_XUAT", deXuatId: "dx1" }).loai).toBe(
+			"DE_XUAT",
+		);
+	});
+
+	test("sự kiện hỏng thì ném, không nuốt", () => {
+		expect(() =>
+			parseSuKienChiTiet({ loai: "DUYET", deXuatId: "dx1", phienBan: "2" }),
+		).toThrow("sự kiện tài liệu không đọc được");
+		expect(() => parseSuKienChiTiet({ loai: "XOA", deXuatId: "dx1" })).toThrow(
+			"sự kiện tài liệu không đọc được",
+		);
+		expect(() => parseSuKienChiTiet(null)).toThrow(
+			"sự kiện tài liệu không đọc được",
+		);
+	});
+});
