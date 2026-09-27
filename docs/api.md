@@ -517,6 +517,14 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   ones. An objective title that already exists for that unit and cycle is a broken
   row, so pasting the same batch twice writes nothing. Caps and messages live in
   `OKR` (`okr-config.ts`).
+- **Đề xuất (`OkrDeXuat`) và Tóm tắt tuần (`OkrTomTat`) nằm ngoài luật vết.** Chúng
+  không phải bản ghi OKR nên không ghi `OkrTrail`; chỉ khi người nhận một đề xuất thì
+  vết ghi lần sửa của người đó. Máy không ghi vào bản ghi OKR nào.
+- **`okr.aiChiTieu` (`GET /okr/ai-spend`) chỉ quản trị.** `TroLyOkrService` đọc sổ chi
+  phí tháng giờ Việt Nam theo sáu nhóm việc, trạng thái sẵn sàng qua
+  `troLyOkrSanSang` và lần đối soát gần nhất của tháng đã qua; mọi vai khác nhận 403
+  qua tRPC lẫn REST. API chỉ đọc sổ và ghi `AgentTask`: bật Trợ lý OKR ở
+  `okr.setProgram` xếp một việc `okr-kiem-san-sang`, không gọi model.
 - **Reading views live in `OkrXemService`, not in `OkrService`.** `okr.danhSach`
   filters a unit's list on the server — owner, kind and status become one Prisma
   `where`, a division includes its departments, and the facet counts are counted

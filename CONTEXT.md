@@ -590,3 +590,37 @@ hỏi qua bot thì trợ lý AI trả lời, chỉ đọc). Chốt 2026-09-24, t
 _Avoid_: agent, eve, bot, chatbot
 Vì sao: «agent» và «eve» là tên kỹ thuật trong mã; «bot» đã là bot Zalo; «trợ lý»
 một mình thì lẫn với hai thứ kia — luôn viết đủ «trợ lý AI».
+
+**Trợ lý OKR**: phần AI của khu OKR — góp ý khi người bấm trên một Mục tiêu hay KR, và
+tóm tắt tuần cho phòng ban. Chạy riêng khỏi trợ lý AI: chỉ đọc dữ liệu OKR, không đọc
+được dữ liệu đối tác, không tự ghi vào OKR — mọi thay đổi là người bấm nhận. Nội dung
+OKR chỉ gửi tới nhà cung cấp model có cam kết không lưu dữ liệu (ZDR). Quản trị bật theo
+từng việc và từng đơn vị ở Cài đặt › Chương trình OKR; mặc định tắt.
+_Avoid_: trợ lý AI (khi nói về OKR), AI OKR, bot OKR, copilot
+Vì sao: «trợ lý AI» đã là thứ đọc dữ liệu đối tác; gọi chung một tên thì người mang vai
+«chỉ OKR» không biết mình được dùng cái nào. «bot» đã là bot Zalo.
+
+**Đề xuất**: một dòng Trợ lý OKR đưa ra trên một Mục tiêu hay KR — câu viết lại (câu cũ
+cạnh câu mới), một câu hỏi về chất lượng, hoặc một chỗ Căn chỉnh nên gắn. Người nhận,
+sửa rồi nhận, hay bác từng dòng; dòng đã bác thì không mời lại. Đề xuất không phải bản
+ghi OKR nên không để vết; nhận một đề xuất thì vết ghi sửa của người, «theo đề xuất của
+Trợ lý OKR».
+_Avoid_: gợi ý, khuyến nghị, suggestion
+Vì sao: «Gợi ý» đã là câu hướng xử lý đi kèm nhắc kế hoạch im; «khuyến nghị» nghe như
+đã được duyệt.
+
+**Tóm tắt tuần**: vài câu Trợ lý OKR viết cho một phòng ban sau ngày cập nhật, gom các
+lần Cập nhật tuần của tuần đó. Câu nào cũng dẫn tới lần cập nhật gốc; số nào cũng được
+máy kiểm lại, sai thì câu bị bỏ. Hiện ở đầu Họp tuần; không nêu tên người.
+_Avoid_: báo cáo tuần, bản tin tuần, digest
+Vì sao: «báo cáo tuần» là thứ người viết gửi lên để duyệt; «bản tin» gợi một tin gửi đi
+cho nhiều người, còn tóm tắt nằm trên màn và lọc theo người xem.
+
+**Sổ chi phí AI**: sổ ghi mỗi bước gọi model của mọi việc AI trong CRM — việc nào, bao
+nhiêu token, bao nhiêu tiền. Quản trị đọc tổng tháng này theo từng việc (nghiên cứu danh
+bạ, trợ lý AI, hỏi CRM qua Zalo, Tác nhân, Trợ lý OKR) ở Cài đặt › Chương trình OKR. Trần
+tháng của Trợ lý OKR kiểm trên sổ này trước khi xếp việc. Mỗi tháng máy đối soát sổ với
+báo cáo của AI Gateway và báo khi lệch quá 10%.
+_Avoid_: hoá đơn AI, billing, nhật ký chi phí
+Vì sao: «hoá đơn» là chứng từ của nhà cung cấp, còn sổ là số của chính CRM để đối soát
+với hoá đơn đó.

@@ -52,12 +52,20 @@ agent and the API both need it.
 | **Visible** | `brand`, `portrait` | Directly — no `receive`, no model | 60, six at a time |
 | **Research** | everything else | One eve session per row | 12 |
 
+Trợ lý OKR thêm năm loại. `okr-kiem-san-sang` (có khoá mô hình không),
+`okr-tom-tat-xep` và `ai-doi-soat` (đối soát sổ chi phí với báo cáo AI Gateway, ngày 2
+mỗi tháng) là việc trực tiếp, không mở phiên. `okr-de-xuat` và `okr-tom-tat-tuan` đi
+làn nghiên cứu với `purpose: "okr"`: một lần thử, lease 30 giây do hook gia hạn, kiểm
+lại trần và công tắc ngay trước khi gửi, hỏng là đóng với mã (`VIEC_OKR`,
+`lib/okr/viec.ts`).
+
 **Neither visible kind has anything to decide**, and through a session they queued
 behind sixty LLM runs for 25 minutes (`test/lanes.integration.spec.ts`). **The row says
 what the work is; the lane only says whether it needs a conversation.**
 
-**Priority**: `brand` 900 · `portrait` 800 · `workspace` 500 · `requested` 300 ·
-`meeting` 200 · `identify` 100 · `nhac` 60 · `sweep` 50 · `companyProfile` 40 · `recheck` 0. The
+**Priority**: `okrKiem` 940 · `brand` 900 · `portrait` 800 · `okrBam` 600 · `workspace` 500 ·
+`requested` 300 · `meeting` 200 · `identify` 100 · `okrNen` 90 · `nhac` 60 · `sweep` 50 ·
+`aiDoiSoat` 45 · `companyProfile` 40 · `recheck` 0. The
 top two are what a rep reads *before* deciding what to open.
 
 **`claimDue` sorts what it claims** — Postgres does not order `UPDATE … RETURNING` by
@@ -578,6 +586,10 @@ egress:
    outside the CRM's retention and audit, which is why the line sits here.
    `locTraLoi` (`lib/zalo-loc.ts`) masks phone numbers and emails on the way
    out; verbatim mail is held back by the session's instructions only.
+5. Trợ lý OKR: nhà cung cấp model là bên nhận; nội dung OKR chỉ gửi đi khi có ZDR, kể cả eval. Cờ ZDR và mức suy nghĩ do model đã bọc của
+   `tro_ly_okr` tự gắn vào từng lời gọi (`lib/okr/mo-hinh.ts`), không trông vào
+   `modelOptions` — eve 0.29.4 không chuyển `modelOptions.providerOptions` cho model
+   là đối tượng. Phiên gốc của một việc `okr-*` chỉ thấy câu hằng, không thấy chữ OKR.
 
 `skills/data-boundaries.md` is the agent's copy. Keep them in step.
 
@@ -702,7 +714,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | --- | --- | --- |
 | Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
 | Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
-| Trợ lý OKR (9b, 9c) | `subagent` `tro_ly_okr`, cộng `skill` phương pháp OKR, cộng `tool` chỉ đọc OKR, cộng mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
+| Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — từ 9a chỉ có một tool sống `nop_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng; 9b, 9c thêm `skill` phương pháp OKR và mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
 
@@ -879,6 +891,55 @@ hai tệp kiểm `apps/agent/test/ro-slack-tac-nhan.integration.spec.ts` và
 `apps/agent/test/luot-tu-dong.integration.spec.ts` — chúng phải còn xanh trên mã
 của hãng. Việc báo cho hãng đi qua kênh bảo mật riêng của hãng và cần chủ kho cho
 phép; không qua PR hay issue công khai.
+
+## Chỗ rẽ: Trợ lý OKR (lượt 9a)
+
+Bản rẽ OneHub chạm thêm các tệp của hãng dưới đây. Mỗi chỗ là một nhánh mới hay một
+tệp mới, không đổi hành vi của hãng cho các loại việc cũ.
+
+- `apps/agent/agent/lib/session-purpose.ts` — `SESSION_PURPOSES` lấy từ
+  `@crm/validation/phien-tac-tu`, có thêm `okr`.
+- `apps/agent/agent/instructions/task.ts` — nhánh `okr` trả câu hằng
+  `TRO_LY_OKR.chiDanGoc`, đứng trước nhánh nghiên cứu, không gọi `sessionPreamble`.
+- `apps/agent/agent/lib/dispatch.ts` — `taskAuth` thêm thuộc tính `okr`; `beginResearch`
+  kiểm lại trần và công tắc trước khi gửi; `handleDirect` thêm `okr-kiem-san-sang` và
+  `ai-doi-soat`.
+- `apps/agent/agent/channels/crm.ts` — việc `okr-*` gửi ở chế độ task; `turn.failed`,
+  `session.waiting`, `session.completed` đóng việc `okr-*` với mã.
+- `apps/agent/agent/lib/tasks.ts` — thiết kế dự kiến chạm; lượt này không phải sửa,
+  vì số lần thử theo loại việc nằm ở `packages/db/src/agent-tasks.ts`.
+- `apps/agent/agent/lib/stale-tasks.ts` — việc `okr-*` hết lease thì đóng
+  `hong:het-lease`, không về hàng chờ.
+- `apps/agent/agent/lib/capabilities.ts` — năng lực «AI model».
+- `apps/agent/agent/schedules/dispatch.ts` — xếp việc đối soát tháng.
+- `packages/db/src/agent-tasks.ts` — năm loại việc, bốn mức ưu tiên, số lần thử theo
+  loại (`soLanThuToiDa`).
+- `packages/db/prisma/schema.prisma` — sáu bảng và bảy cột, `migration` chỉ thêm.
+- `apps/api/src/agent/agent-trigger.service.ts` — `okrKiemSanSang()`;
+  `apps/api/src/enrichment/enrichment-copy.ts` — nhãn của năm loại việc;
+  `apps/app/lib/trpc/cache.ts` — làm mới `okr.aiChiTieu` khi lưu.
+- Tệp mới trong thư mục của hãng: `hooks/so-chi-phi.ts` ở gốc và ở
+  `subagents/agent_runner`, `subagents/agent_builder` (sổ chi phí của phiên con),
+  `tools/okr-chi-tro-ly.ts` (bản thay từ chối mọi tool của gốc trong phiên `okr`).
+
+Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế ngược lại:
+
+- **Hook chỉ quan sát.** Ném lỗi ở `actions.requested` làm lượt hỏng nhưng tool đã xin
+  vẫn chạy (agent mẫu: đếm 1). Chặn thật một tool bằng bản thay động cùng tên, khuôn
+  `tools/zalo-chi-doc.ts`; bản thay không đè được một `subagent` — phiên con vẫn chạy,
+  nên lần gọi `tro_ly_okr` thứ hai hay gọi `agent_runner` chỉ làm lượt hỏng, và dữ liệu
+  được giữ bằng kiểm ở tool của phiên con (`nop_de_xuat` từ chối khi việc đã đóng).
+- **Phiên con không thừa kế thuộc tính phiên.** Tool và chỉ dẫn động của `tro_ly_okr`
+  tìm việc qua phiên gốc: `ctx.session.parent.rootSessionId` ở tool, token
+  `subagent:<phiên cha>:<callId>` ở chỉ dẫn động và ở hook (`lib/phien-con.ts`), rồi
+  đọc hàng `okr-*` có `sessionId` đó.
+- **`modelOptions.providerOptions` không tới model là đối tượng.** Model đã bọc tự trộn
+  ZDR, thẻ và `thinkingLevel` trong middleware. Với lời gọi eve dựng cho phiên con,
+  Gemini 3.8 Flash có lúc suy nghĩ tới trần 2.000 token rồi trả rỗng (5/8); câu «Act at
+  once…» đầu phần việc trong `instructions.md` đưa về 0/24.
+
+Gỡ khi hãng có bản tương đương: hook chi phí trong subagent và số lần thử theo loại
+việc là phần nên gửi lên hãng — chưa gửi ở lượt này.
 
 ## The bridge
 
