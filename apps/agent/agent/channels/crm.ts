@@ -27,10 +27,13 @@ import {
 	DRAIN_TIMEOUT_MS,
 	dispatchHealth,
 	drainAll,
+	guiTuyChon,
 	taskAuth,
 } from "../lib/dispatch";
 import { DISPATCH } from "../lib/dispatch-config";
 import { settle } from "../lib/enrichment";
+import { TRO_LY_OKR } from "../lib/okr/config";
+import { dongViecOkr, laHangTroLyOkr } from "../lib/okr/viec";
 import { finishRun, runResultOf } from "../lib/run-runtime";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
@@ -90,6 +93,13 @@ export async function closeTask(
 	return true;
 }
 
+async function dongViecOkrChuaNop(token: string | undefined): Promise<boolean> {
+	const taskId = taskFromToken(token);
+	if (!taskId || !(await laHangTroLyOkr(taskId))) return false;
+	await dongViecOkr(taskId, TRO_LY_OKR.ketThuc.khongNop);
+	return true;
+}
+
 function logBuilderFailure(
 	conversationId: string,
 	event: "turn.failed" | "session.failed",
@@ -122,6 +132,7 @@ export const crmEvents: ChannelEvents = {
 	},
 
 	async "session.waiting"(_data, channel) {
+		if (await dongViecOkrChuaNop(channel.continuationToken)) return;
 		if (await closeTask(channel.continuationToken, "ran")) return;
 
 		const conversationId = builderIdFromToken(channel.continuationToken);
@@ -141,6 +152,10 @@ export const crmEvents: ChannelEvents = {
 			eveTurnFailure.parse(data).message ?? "The agent turn failed.";
 
 		if (taskId) {
+			if (await laHangTroLyOkr(taskId)) {
+				await dongViecOkr(taskId, TRO_LY_OKR.ketThuc.turnFailed);
+				return;
+			}
 			const subject = await taskSubject(taskId);
 			if (subject) await settle(subject, EnrichmentStatus.FAILED, reason);
 			return;
@@ -169,6 +184,7 @@ export const crmEvents: ChannelEvents = {
 	},
 
 	async "session.completed"(_data, channel) {
+		if (await dongViecOkrChuaNop(channel.continuationToken)) return;
 		if (await closeTask(channel.continuationToken, "ran")) return;
 
 		const conversationId = builderIdFromToken(channel.continuationToken);
@@ -308,6 +324,7 @@ export default defineChannel({
 						send(brief(task), {
 							auth: taskAuth(task),
 							continuationToken: taskToken(task.id),
+							...guiTuyChon(task),
 						}),
 					);
 					await drainAgentRuns(send);
@@ -423,6 +440,9 @@ export default defineChannel({
 			continuationToken: target.taskId
 				? taskToken(target.taskId)
 				: `crm:adhoc:${crypto.randomUUID()}`,
+			...(input.auth?.attributes?.purpose === "okr"
+				? { mode: "task" as const }
+				: {}),
 		});
 	},
 });

@@ -7,6 +7,13 @@ import { settledWithin } from "./deadline";
 import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
+import { TRO_LY_OKR } from "./okr/config";
+import {
+	giaHanLease,
+	laViecTroLyOkr,
+	lyDoChanTruocKhiGui,
+	okrAuthAttributes,
+} from "./okr/viec";
 import { chayDocSheet } from "./okr-sheets";
 import { collapsing, runLimited } from "./pool";
 import { runPortrait } from "./portrait";
@@ -173,10 +180,21 @@ type StartOutcome =
 	| { accepted: true; sessionId: string }
 	| { accepted: false; reason: string };
 
-async function beginResearch(
+export async function beginResearch(
 	task: LeasedTask,
 	start: (task: LeasedTask) => Promise<{ id: string }>,
 ): Promise<void> {
+	if (laViecTroLyOkr(task.kind)) {
+		const chan = await lyDoChanTruocKhiGui(task).catch(
+			(error: unknown) => `hong:${reasonOf(error).slice(0, 80)}`,
+		);
+		if (chan) {
+			await completeTask(task.id, chan);
+			return;
+		}
+		await giaHanLease(task.id);
+	}
+
 	try {
 		await markRunning(task);
 	} catch (error) {
@@ -268,8 +286,13 @@ export function taskAuth(task: LeasedTask, base: AppAuth = APP_AUTH): AppAuth {
 			reason: task.reason,
 			budget: String(task.budget),
 			...records,
+			...(laViecTroLyOkr(task.kind) ? okrAuthAttributes(task) : {}),
 		},
 	};
+}
+
+export function guiTuyChon(task: Pick<LeasedTask, "kind">): { mode?: "task" } {
+	return laViecTroLyOkr(task.kind) ? { mode: "task" } : {};
 }
 
 export const DRAIN_TIMEOUT_MS = DISPATCH.sweep.timeoutMs;
@@ -401,6 +424,7 @@ export const drainAll = collapsing(
 );
 
 export function brief(task: LeasedTask): string {
+	if (laViecTroLyOkr(task.kind)) return TRO_LY_OKR.brief;
 	const again =
 		task.attempts > 1
 			? `This is attempt ${task.attempts}; the earlier one did not finish. Carry on from what is already in this thread rather than starting again. `
