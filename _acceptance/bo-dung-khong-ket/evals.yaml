@@ -109,6 +109,7 @@ evals:
       - "apps/app/lib/agent-transcript.ts"
       - "apps/app/lib/messages/agent-builder-*.ts"
       - "apps/app/test/het-han-muc.dom.tsx"
+      - "_acceptance/bo-dung-khong-ket/rang/luong-het-han-muc-that.ndjson"
     expected: |
       DOM test (setup-dom cua packages/ui), locale vi. Dau vao la pendingQuestion dung
       duong that: request lay tu apps/agent/test/fixtures/session-limit-that.json ->
@@ -121,6 +122,12 @@ evals:
       nut disabled; onSubmit reject -> ca hai nut het disabled (bam lai duoc); sau khi
       requestId nam trong answeredQuestionIds (cau tra loi da duoc nhan) khoi hai nut
       khong con ve.
+      Lop chu tieng Anh cua eve (prompt, nhan va mo ta option, ten cong cu, dang viet lai
+      "Session limit continuation") rut tu CHINH request that, khong go tay: khong chuoi
+      nao co trong khoi tra loi, va toTranscript(messagesFromEvents(luong that
+      rang/luong-het-han-muc-that.ndjson)) khong co dong dau vet session_limit_continuation
+      va khong chua chuoi nao cua lop; doi chung: luong that van cho ra it nhat mot dong
+      dau vet khac.
       Bong bong cau tra loi: submission co inputResponse kind session-limit, optionId
       continue -> hien "Cấp thêm", khong co "Approve"; stop -> "Dừng".
       Doi chung: request kind question (dung mau cau hoi co san) van ve
@@ -153,8 +160,12 @@ evals:
     expected: |
       E6-het-han-muc (1440, 375): cau "Bộ dựng đã dùng hết hạn mức của phiên này. Cấp
       thêm để làm tiếp, hoặc dừng."; hai nut "Cấp thêm" (to dac, mau chinh) va "Dừng";
-      khong co o soan tin thuong; khong co chu tieng Anh cua eve ("output-token limit",
-      "Approve"). O kho 375 hai nut khong tran le.
+      khong co o soan tin thuong; khong co chu tieng Anh cua eve — CA LOP, ke het tu
+      yeu cau that apps/agent/test/fixtures/session-limit-that.json: cau prompt ("This
+      session has hit the output-token limit..."), nhan option "Approve" va "Stop", mo ta
+      option "Grant a fresh token budget" va "Stop now", ten cong cu
+      "session_limit_continuation" va dang viet lai "Session limit continuation" o dong
+      dau vet. O kho 375 hai nut khong tran le.
       E6-sau-bam: co bong bong nguoi dung "Cấp thêm"; hai nut khong con.
       E6-sau-dung: co bong bong nguoi dung "Dừng"; hai nut khong con.
     inputs:
