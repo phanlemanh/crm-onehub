@@ -136,11 +136,10 @@ export async function gieoKeHoach(input: {
 		})),
 	});
 	if (input.imNgay !== undefined) {
-		await db.$executeRawUnsafe(
-			`UPDATE "onboardingStep" SET "updatedAt" = now() - ($2::int * interval '1 day') WHERE "planId" = $1`,
-			plan.id,
-			input.imNgay,
-		);
+		await db.onboardingStep.updateMany({
+			where: { planId: plan.id },
+			data: { updatedAt: new Date(Date.now() - input.imNgay * DAY_MS) },
+		});
 	}
 	return { plan, congTy };
 }

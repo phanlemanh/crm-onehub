@@ -23,6 +23,8 @@ const blank = (key: string) => {
 blank("MICROSOFT_CLIENT_ID");
 blank("MICROSOFT_CLIENT_SECRET");
 
+process.env.LISTING_INGEST_SECRET = "test-listing-ingest-secret";
+
 afterAll(async () => {
 	if (!process.env.DATABASE_URL) return;
 	const { db } = await import("@crm/db");

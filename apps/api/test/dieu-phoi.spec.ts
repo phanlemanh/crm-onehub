@@ -335,10 +335,10 @@ async function gieoKeHoachCoBuoc(input: {
 		});
 	}
 	if (input.imNgay !== undefined) {
-		await db.$executeRawUnsafe(
-			`UPDATE "onboardingStep" SET "updatedAt" = now() - interval '${input.imNgay} days' WHERE "planId" = $1`,
-			plan.id,
-		);
+		await db.onboardingStep.updateMany({
+			where: { planId: plan.id },
+			data: { updatedAt: new Date(Date.now() - input.imNgay * 86_400_000) },
+		});
 	}
 	return { plan, dep, steps };
 }
