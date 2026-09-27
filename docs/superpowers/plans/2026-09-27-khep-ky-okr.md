@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-27-khep-ky-okr-design.md` · hợp đồng `_acceptance/khep-ky-okr/contract.md` (đã duyệt 2026-09-27) · phép đo `_acceptance/khep-ky-okr/evals.yaml`.
 
+**Cổng 1.5:** duyệt 2026-09-27 bởi Manh Phan — chạy subagent-driven.
+
 ## Điều kiện trước S3 (luật điều phối)
 
 Không bắt đầu Task 1 trước khi chủ kho dán «được viết mã, kéo onehub về trước». Khi đó, theo thứ tự:
