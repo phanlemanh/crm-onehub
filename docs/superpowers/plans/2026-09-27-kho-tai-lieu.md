@@ -236,7 +236,7 @@ Phục vụ: E2, E3, E8, E8b, E10b. `independent: false` (cần Task 1, 2, 4).
 - [ ] **Step 4:** PASS; chiều đỏ của E3 (bản sao `thayDeXuat` trả `true`) và E8 đỏ đúng thông điệp.
 - [ ] **Step 5:** commit.
 
-### Task 6: Máy chủ — duyệt, trả lại, so-và-đặt, liên kết, tìm
+#### Task 5b (cùng nhánh Task 5): Máy chủ — duyệt, trả lại, so-và-đặt, liên kết, tìm
 
 Phục vụ: E4, E5, E6, E7, E10c, E13 (phía máy chủ), E15. `independent: false` (cần Task 3, 5).
 
