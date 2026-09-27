@@ -13,6 +13,7 @@ import {
 	type CardTableColumn,
 	CardTableEmpty,
 } from "@crm/ui/components/card-table";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -35,7 +36,6 @@ import {
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { ConfirmDialog } from "./confirm-dialog";
 import { PhatChiaButton } from "./phat-chia-button";
 import { VetLine } from "./vet-line";
 

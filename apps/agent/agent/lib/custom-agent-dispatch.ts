@@ -4,8 +4,9 @@ import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { crmEventTask } from "@crm/validation/agent-events";
 import { readAgentTriggerConfig } from "@crm/validation/agent-manifest";
 import type { SendFn } from "eve/channels";
-import { z } from "zod";
+import { builderDeliveryMessage } from "./builder-delivery";
 import { DISPATCH } from "./dispatch-config";
+import { modelChoLuot } from "./model";
 import { DEPENDENCY_UNAVAILABLE, runDependencyFailure } from "./run-preflight";
 import {
 	isTerminalRunStatus,
@@ -19,32 +20,6 @@ const RUN_BATCH = DISPATCH.run.batch;
 const MAX_BUILDER_ATTEMPTS = DISPATCH.builder.maxAttempts;
 const BUILDER_LEASE_MS = DISPATCH.builder.leaseMs;
 const RUN_DELIVERY_LEASE_MS = DISPATCH.run.deliveryLeaseMs;
-
-type BuilderMessageParts = Extract<Parameters<SendFn>[0], readonly unknown[]>;
-
-const trimmedText = z.string().trim().catch("");
-
-const builderInputResponse = z
-	.object({
-		requestId: trimmedText,
-		optionId: trimmedText,
-		text: trimmedText,
-	})
-	.catch({ requestId: "", optionId: "", text: "" });
-
-const builderSubmissionMessage = z
-	.object({
-		text: z.string().catch(""),
-		resources: z
-			.array(z.object({ label: z.string().catch("") }).catch({ label: "" }))
-			.catch([]),
-		inputResponse: builderInputResponse,
-	})
-	.catch({
-		text: "",
-		resources: [],
-		inputResponse: { requestId: "", optionId: "", text: "" },
-	});
 
 export async function pendingBuilderSubmissionIds(): Promise<string[]> {
 	await recoverBuilderSubmissions();
@@ -449,12 +424,12 @@ export async function dispatchAgentRun(runId: string, send: SendFn) {
 			agent: {
 				select: { name: true, createdById: true, status: true },
 			},
-			version: { select: { modelId: true } },
 		},
 	});
 	if (run?.status !== "QUEUED" || run.agent.status !== "LIVE") {
 		throw new Error("Agent run was already claimed or is not live.");
 	}
+	const model = await modelChoLuot();
 
 	const claim = await db.$transaction(async (tx) => {
 		const [agent] = await tx.$queryRaw<Array<{ id: string; status: string }>>`
@@ -480,7 +455,7 @@ export async function dispatchAgentRun(runId: string, send: SendFn) {
 			data: {
 				status: "RUNNING",
 				startedAt: new Date(),
-				modelId: run.version.modelId,
+				modelId: model.id,
 			},
 		});
 		return updated.count === 1
@@ -508,6 +483,7 @@ export async function dispatchAgentRun(runId: string, send: SendFn) {
 					agentId: run.agentId,
 					versionId: run.versionId,
 					userId: principalId,
+					...model.thuocTinh,
 				},
 			},
 			continuationToken: runToken(run.id),
@@ -815,51 +791,6 @@ async function recoverAgentRuns() {
 	}
 }
 
-export function builderDeliveryMessage(
-	submissionId: string,
-	value: Prisma.JsonValue,
-	attachments: readonly BuilderDeliveryAttachment[] = [],
-): Parameters<SendFn>[0] {
-	const message = builderSubmissionMessage.parse(value);
-	const { requestId, optionId, text: responseText } = message.inputResponse;
-	if (requestId && (optionId || responseText)) {
-		return {
-			inputResponses: [
-				{
-					requestId,
-					...(optionId ? { optionId } : { text: responseText }),
-				},
-			],
-		};
-	}
-
-	const labels = message.resources
-		.map((resource) => resource.label)
-		.filter(Boolean);
-	const context = [
-		`Submission id: ${submissionId}`,
-		message.resources.length > 0
-			? `Tagged resources: ${labels.join(", ")}`
-			: null,
-	]
-		.filter(Boolean)
-		.join("\n");
-	const parts: BuilderMessageParts = [
-		{ type: "text", text: `${context}\n\n${message.text}` },
-	];
-
-	for (const attachment of attachments) {
-		parts.push({
-			type: "file",
-			data: attachment.content,
-			mediaType: attachment.mediaType,
-			filename: attachment.name,
-		});
-	}
-
-	return parts;
-}
-
 export type BuilderSessionAttributes = {
 	purpose: "builder";
 	commandType: string;
@@ -918,12 +849,6 @@ export function builderSessionAuthFromRow(
 	};
 }
 
-type BuilderDeliveryAttachment = {
-	name: string;
-	mediaType: string;
-	content: Uint8Array;
-};
-
 function advance(from: Date, intervalMinutes: number, now: Date): Date {
 	const intervalMs = intervalMinutes * 60_000;
 	const missed = Math.max(
@@ -940,3 +865,5 @@ function idFromToken(token: string | undefined, marker: string): string | null {
 	const id = token.slice(index + marker.length);
 	return id || null;
 }
+
+export { builderDeliveryMessage };

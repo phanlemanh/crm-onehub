@@ -8,6 +8,7 @@ import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -41,7 +42,6 @@ import {
 	NhanTinhTrang,
 	NhanTrangThai,
 } from "@/app/(app)/[slug]/okr/tien-do-kr";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import {
 	DetailSheetBody,
@@ -210,7 +210,7 @@ function MenuKr({
 	xoa: () => void;
 }) {
 	const m = okrMessages(useLocale()).sheet;
-	const capNhatDuoc = kr.hienTaiQuaCapNhat && (kr.laCuaToi || mt.canEdit);
+	const capNhatDuoc = kr.hienTaiQuaCapNhat && mt.canEditKr.includes(kr.id);
 	const suaDuoc = mt.status !== "da-bo" && mt.canEditKr.includes(kr.id);
 	const xoaDuoc = ghiDuoc(mt);
 	if (!capNhatDuoc && !suaDuoc && !xoaDuoc) return null;
@@ -232,7 +232,9 @@ function MenuKr({
 					</DropdownMenuItem>
 				) : null}
 				{suaDuoc ? (
-					<DropdownMenuItem onSelect={sua}>{m.suaKr}</DropdownMenuItem>
+					<DropdownMenuItem data-muc="sua-kr" onSelect={sua}>
+						{m.suaKr}
+					</DropdownMenuItem>
 				) : null}
 				{xoaDuoc ? (
 					<DropdownMenuItem variant="destructive" onSelect={xoa}>
@@ -284,6 +286,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 				kind={mt.kind}
 				expected={mt.expected}
 				danhDauCuaToi={false}
+				hoiDoiTrong={ghiDuoc(mt)}
 				nhanHanhDong={m.cotThaoTac}
 				hanhDong={
 					coMenu

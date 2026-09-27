@@ -1,5 +1,14 @@
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import {
+	chamKrInput,
+	dongRaInput,
+	ghiDieuHocDuocInput,
+	mangSangInput,
+	moLaiKyInput,
+	moRaInput,
+	xuatKyInput,
+} from "@crm/validation/okr-khep";
+import {
 	addCommentInput,
 	commentsInput,
 	followInput,
@@ -63,6 +72,13 @@ import {
 import { OkrService } from "./okr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
 import {
+	bangChamInput,
+	bangChamOutput,
+	mangSangOutput,
+	xuatKyOutput,
+} from "./okr-khep.contracts";
+import { OkrKhepService } from "./okr-khep.service";
+import {
 	banGhiChiSoInput,
 	banGhiChiSoOutput,
 	chiSoOutput,
@@ -107,6 +123,7 @@ export class OkrRouter {
 		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
 		@Inject(OkrSoService) private readonly so: OkrSoService,
 		@Inject(TroLyOkrService) private readonly troLy: TroLyOkrService,
+		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -149,6 +166,102 @@ export class OkrRouter {
 	})
 	aiChiTieu(@Ctx() ctx: AuthedTrpcContext) {
 		return this.troLy.aiChiTieu(ctx.user.id);
+	}
+
+	@Mutation({
+		input: moRaInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/cycles/{cycleId}/review-window", TAG),
+	})
+	moRa(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moRaInput>,
+	) {
+		return this.khep.moRa(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: dongRaInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/review-windows/{id}/close", TAG),
+	})
+	dongRa(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dongRaInput>,
+	) {
+		return this.khep.dongRa(ctx.user.id, input.id);
+	}
+
+	@Query({
+		input: bangChamInput,
+		output: bangChamOutput,
+		meta: restMeta("POST", "/okr/cycles/{cycleId}/scores", TAG),
+	})
+	bangCham(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof bangChamInput>,
+	) {
+		return this.khep.bangCham(ctx.user.id, input);
+	}
+
+	@Query({
+		input: xuatKyInput,
+		output: xuatKyOutput,
+		meta: restMeta("GET", "/okr/cycles/{cycleId}/export", TAG),
+	})
+	xuatKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof xuatKyInput>,
+	) {
+		return this.khep.xuatKy(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: chamKrInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/key-results/{keyResultId}/score", TAG),
+	})
+	chamKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof chamKrInput>,
+	) {
+		return this.khep.chamKr(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ghiDieuHocDuocInput,
+		output: okOutput,
+		meta: restMeta("PUT", "/okr/objectives/{objectiveId}/lessons", TAG),
+	})
+	ghiDieuHocDuoc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ghiDieuHocDuocInput>,
+	) {
+		return this.khep.ghiDieuHocDuoc(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: moLaiKyInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/cycles/{id}/reopen", TAG),
+	})
+	moLaiKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moLaiKyInput>,
+	) {
+		return this.khep.moLaiKy(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: mangSangInput,
+		output: mangSangOutput,
+		meta: restMeta("POST", "/okr/objectives/{objectiveId}/carry-over", TAG),
+	})
+	mangSang(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof mangSangInput>,
+	) {
+		return this.khep.mangSang(ctx.user.id, input);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })

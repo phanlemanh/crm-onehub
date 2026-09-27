@@ -4,6 +4,7 @@ import Checkmark from "@carbon/icons-react/es/Checkmark";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -195,13 +196,11 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 					<p className="mr-auto text-muted-foreground text-xs">
 						{t.moi.chuaGuiGi}
 					</p>
-					<Button
-						disabled={create.isPending}
-						onClick={() => setOpen(false)}
-						variant="outline"
-					>
-						{t.moi.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button disabled={create.isPending} variant="outline">
+							{t.moi.huy}
+						</Button>
+					</DialogClose>
 					<Button disabled={!ready || create.isPending} onClick={hand}>
 						{create.isPending ? t.moi.dangTraoTay : t.moi.traoTay}
 					</Button>

@@ -11,8 +11,8 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>91 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>17 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>95 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>18 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -44,6 +44,7 @@ flowchart TD
 - Đổi tên sản phẩm trên mọi chữ người đọc từ «CRM» sang «OneHub Center» (trùng tên miền onehub.center), và làm lại cột trái /sign-in theo hướng A — nền lưới chấm bằng token cho năm trang AuthShell, dòng neo cỡ lớn, ba bước nối bằng đường dọc, không Card (`doi-ten-onehub-center`)
 - Người đã nối Zalo nhắn một câu hỏi cho bot thì trợ lý AI của CRM trả lời bằng chữ, chỉ đọc, theo đúng cổng vai của người hỏi và trong ranh giới dữ liệu A; có trần theo người và theo xưởng (`hoi-crm-qua-zalo`)
 - Kế hoạch 30 ngày là một bản ghi làm việc được — mở như thoả thuận, giao bước, đánh dấu xong, đổi cầm trịch, ghi chú, và mọi thay đổi để lại vết (`ke-hoach-la-mot-ban-ghi`)
+- Khép kỳ OKR — quản trị mở cửa sổ rà giữa kỳ; cuối kỳ máy gợi ý điểm từ số chốt, người chỉnh được kèm lý do; mỗi mục tiêu có ô điều học được; kỳ chỉ đóng khi mọi KR đã chấm; mục tiêu dở mang sang kỳ sau; số kỳ đã đóng bị khoá và xuất được; kiểm chất lượng khi đặt bằng luật (`khep-ky-okr`)
 - Máy nhắc thay người canh — mỗi sáng một tin Slack riêng gom bước quá hạn, bước sắp hạn, kế hoạch im và mốc ngày 7 · 14 · 30; thẻ Tasks hiện cùng danh sách; ai cũng tự theo dõi được một kế hoạch (`may-nhac-truoc-nguoi`)
 - Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, mục 30 ngày đầu ở sheet Cá nhân, bước giao cho tôi trong thẻ Tasks, lọc và chia cột theo người được giao, chuyển việc 30 ngày khi một người nghỉ (`moi-phia-deu-thay-ke-hoach`)
 - Số OKR tự chảy — KR của khối kinh doanh lấy số từ danh mục chỉ số CRM có định nghĩa cố định; mỗi ngày chụp giá trị thành lịch sử không đổi; bấm vào con số ra danh sách bản ghi đằng sau; KR ngoài CRM nhận số qua khoá API và Google Sheets (`so-okr-tu-chay`)
@@ -61,6 +62,7 @@ flowchart TD
 - Bảng cột danh mục 30 ngày đầu báo lỗi kèm nút tải lại, và giữ nhãn cột đúng với dữ liệu đang hiện khi đổi cách chia (`bang-cot-loi-va-nhan`)
 - Trang Cài đặt › Thành viên giữ đủ hàng của bảng thành viên và cuộn như một trang khi danh sách «Được phép vào» dài — không khối nào đè lên bảng, menu đổi vai mở được (`bang-thanh-vien-giu-hang`)
 - Bộ dựng chung nhận chuỗi từ ngoài — một component hiện đúng tiếng người đọc mà chỗ gọi không phải truyền gì (`bo-dung-chung-nhan-chuoi`)
+- Bộ dựng tác nhân không còn kẹt im lặng — hạn mức phiên đủ cho model có suy nghĩ, câu hỏi «hết hạn mức» hiện trên màn với hai nút và trả lời được, trợ lý không gửi được khuôn kết quả vào bộ dựng nên không còn thành công giả (`bo-dung-khong-ket`)
 - Chỉ chủ và quản trị đổi được khoá nghiên cứu, model của trợ lý và số ngày giữ mục đã lưu trữ — thành viên thường vẫn xem được, mọi đường đổi đều khoá cả trên màn lẫn khi gọi thẳng máy chủ, và không bị nhốt ở màn cắm khoá (`cai-dat-chung-chi-quan-tri`)
 - Cài đặt còn lại nói tiếng Việt — năm cụm Theo dõi, Kết nối, Khoá API, SSO, Thành viên đọc đúng tiếng của người quản trị, và mọi đoạn mã người chép giữ nguyên từng byte (`cai-dat-con-lai-noi-tieng-viet`)
 - Chân lái từng component ra màn — đo lớp chữ tiếng Anh nằm ở giá trị mặc định của tham số, và giải toả bảng mười dòng của vòng trước bằng đo thay vì khai (`chan-lai-component-ra-man`)
@@ -86,6 +88,7 @@ flowchart TD
 - Tham số hd của Google phải theo hình dạng danh sách cho phép, không theo domain đầu tiên — để vế «cộng một người ngoài» mà tài liệu và test đã công bố chạy được thật (`hd-theo-danh-sach`)
 - Lưới tự đối chiếu với bản khai hình của nó, thay vì chờ người nghĩ ra đòn tấn công kế tiếp (`hinh-cua-luoi`)
 - Hỏi CRM qua Zalo giữ lời hứa «chỉ đọc» bằng chặn trong chính công cụ, bỏ qua tin không chữ bằng một câu báo, không che nhầm số tiền, và bộ đo của hồ sơ cũ thôi xanh giả (`hoan-thien-hoi-crm-qua-zalo`)
+- Hộp thoại và ngăn trượt không mất chữ đang nhập dở — thành phần dùng chung tự biết có thay đổi; bấm ra ngoài khi đã nhập thì không đóng; Esc, dấu X, nút Huỷ và vuốt xuống hỏi lại «Bỏ những gì vừa nhập?» (`hop-thoai-giu-cho-dang-nhap`)
 - Kéo thả thoả thuận giữa các giai đoạn trên màn Thoả thuận (cách xem bảng cột) (`keo-tha-thoa-thuan`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Đoạn tiếng Anh do máy ghi trên tấm hồ sơ tự khai lang="en", để trình đọc màn hình không đọc nó bằng giọng tiếng Việt (`khai-lang-gioi-thieu`) — đã chấm bởi thực tế
 - Cho khẳng định về đăng nhập Microsoft có răng, thay vì tự tính kỳ vọng từ chính môi trường nó đo (`khang-dinh-microsoft-co-rang`)
@@ -114,6 +117,7 @@ flowchart TD
 - Ngày gieo của test «bước của tôi» tính theo ngày giờ VN như sản phẩm, ghim bằng hai mốc giờ (`ngay-gieo-theo-gio-vn`)
 - Nhắc buổi sáng qua Zalo — mỗi người nối Zalo bằng mã 6 số gửi cho bot, tự chọn nhận nhắc qua Tự động · Zalo · Slack trên trang «Thông báo của bạn»; trang kết nối Zalo cho thấy bot sống và ai đã nối (`nhac-qua-zalo`)
 - Nhãn ứng dụng nói tiếng Việt trên ba luồng của ngưỡng — thêm công ty, ghi hoạt động, cập nhật thoả thuận (`nhan-ung-dung-noi-tieng-viet`) — đã chấm bởi thực tế
+- Nợ sau lượt 4 OKR — nhắc OKR theo sự kiện đi đúng một lần vào sáng hôm sau và không gửi giữa ngày với câu «sáng nay»; sheet dùng quyền cập nhật máy chủ trả về; một lần gửi không nhận một KR hai lần; bộ nhắc đọc vết bằng khuôn và báo lỗi khi vết hỏng; khuôn mục nhắc OKR một nguồn, không loại nào rơi khỏi tin (`no-sau-luot-4-okr`)
 - Nợ sau lượt 5 OKR — khối «OKR của bạn» báo lỗi kèm Thử lại khi không tải được chu kỳ hay KR, bộ lọc người phụ trách luôn hiện tên thay cho mã, trang Theo đơn vị dùng được bản tải trước danh sách ở máy chủ (`no-sau-luot-5-okr`)
 - Người điều phối tạo được bộ phận, khuôn, kế hoạch và ghi danh môi giới ngay trên màn — bốn nút đang trần nay làm đúng việc của nó (`noi-bon-nut-dieu-phoi`)
 - Quản trị viên bật bot Zalo ngay trên màn (dán Bot Token, tác tử tự đăng ký webhook); người mới nối theo ba bước có tên bot thật và gửi thử được nhắc ngay; bot nhận ra người đã nối; tin lỗi giữa chừng không mất; người rời xưởng bị gỡ liên kết (`noi-zalo-cho-nguoi-moi`)
@@ -129,6 +133,7 @@ flowchart TD
 - Vá lối rò Slack — Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai «chỉ OKR», và lượt chạy nền của Tác nhân được coi là tự động nên mọi thao tác ghi nhạy cảm bị từ chối (`ro-slack-tac-nhan`) — đã giao — không đo, khai ở Cổng Đáng
 - Người quản trị sửa, sắp xếp, lưu trữ và khôi phục bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — chỉ quản trị được đổi cấu hình (`sua-luu-tru-dieu-phoi`)
 - Sửa hai lỗi môi trường làm suite test đỏ, và nối dây cổng nghiệm thu vào bản kit đang cài (`sua-test-do-thu-tu-nap`)
+- Tác nhân chạy đúng với mọi model trong danh mục — khuôn model thấy di động giữa các nhà cung cấp, model giải theo vai lúc chạy thay vì ghim theo bản Tác nhân, lượt mà bộ chạy hỏng hoặc chưa nộp kết quả thì ghi Hỏng (`tac-nhan-model-rieng`)
 - Một tên cho đồng tiền báo cáo ở mọi câu người dùng thấy, có mục trong từ điển sản phẩm (`ten-dong-tien-bao-cao`)
 - Test api không để lại dòng AgentTask vô chủ cho gói agent (`test-api-khong-de-viec-vo-chu`) — đã giao — máy thông, cửa veto còn mở
 - Trang Cài đặt › Thành viên — hai khối «Đã vào» và «Được phép vào» dùng chung khuôn section Card → CardHeader → bảng; nút «Cho phép một địa chỉ» lên đầu trang; «Rút» vào menu «…» (`thanh-vien-hai-khoi-cung-khuon`)

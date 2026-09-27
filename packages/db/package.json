@@ -31,6 +31,7 @@
 		"./okr-tien-do": "./src/okr-tien-do.ts",
 		"./okr-tro-ly": "./src/okr-tro-ly.ts",
 		"./okr-tro-ly-danh-muc": "./src/okr-tro-ly-danh-muc.ts",
+		"./okr-vet": "./src/okr-vet.ts",
 		"./onboarding-buoc": "./src/onboarding-buoc.ts",
 		"./onboarding-nhac": "./src/onboarding-nhac.ts",
 		"./safe-fetch": "./src/safe-fetch.ts",
@@ -62,7 +63,8 @@
 		"@crm/env": "workspace:*",
 		"@prisma/adapter-pg": "^7.9.1",
 		"@prisma/client": "^7.9.1",
-		"@vercel/blob": "^2.6.1"
+		"@vercel/blob": "^2.6.1",
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@crm/typescript-config": "workspace:*",

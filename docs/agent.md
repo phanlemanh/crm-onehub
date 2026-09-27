@@ -16,6 +16,20 @@ agent and the API both need it.
 
 - **A row (`AppSetting`), not an env var**, via `defineDynamic` on `session.started`.
   Open conversations keep their model — prompt caches are per model.
+- **Model giải theo vai, lúc chạy.** `lib/model.ts` có một bộ giải duy nhất
+  `modelTheoVai(vai)`, hai vai `tro-ly` và `tac-nhan`; hôm nay cả hai cùng đọc
+  `AppSetting.agentModelId`. Phiên gốc gọi qua `modelChoPhienGoc` (purpose `builder`,
+  `team-agent` là vai `tac-nhan`), bộ dựng qua `modelChoBoDung`. Tách hai vai sang hai ô
+  Cài đặt chỉ khi có số đo đòi — lúc đó chỉ sửa bộ giải.
+- **Bộ chạy không ghim model theo bản.** `dispatchAgentRun` giải model một lần
+  (`modelChoLuot`), ghi vào `AgentRun.modelId` và truyền cho bộ chạy qua thuộc tính
+  phiên `modelId`, `modelContextWindowTokens`; `agent_runner` đọc chúng bằng
+  `modelChoBoChay`. Đổi model ở Cài đặt thì lượt kế tiếp của mọi Tác nhân chạy model
+  mới. `AgentVersion.modelId` chỉ còn nghĩa «bản này dựng bằng model nào».
+- **Khuôn model thấy phải di động.** Không khuôn nào — đầu vào `tool`, `outputSchema`
+  của `subagent`, kể cả `tool` động — được có `$ref` khi chuyển như eve chuyển
+  (`~standard.jsonSchema.input({ target: "draft-07" })`). `z.json()` và `z.lazy()` đệ quy
+  bị Google từ chối cả lời gọi. `test/khuon-di-dong.spec.ts` quét mọi tệp.
 - **`lib/model.ts` always sends `modelContextWindowTokens`**; eve never inherits it.
 - **A failed read logs and keeps the compiled fallback.** Never throws.
 - **The chooser offers only `tool-use` models** (`ModelCatalogService`).
@@ -175,6 +189,15 @@ underlying bug getting worse.
 nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi hàng `AgentTask` loại
 `nhac-ke-hoach` cho mỗi người có việc.
 
+- **Việc theo sự kiện lấy trong cửa sổ neo mốc, không 24 giờ trượt.** `viecCanNhac`
+  nhận `cuaSo` bắt buộc. Nhắc buổi sáng (`lenLichNhac`, `chayNhac`) dùng
+  `"buoi-sang"`: được giao, nhắc tên, đang theo dõi lấy trong `(mốc hôm trước, mốc
+  hôm nay]`, mốc là `mocNhac(now)` — 08:30 giờ VN của ngày chứa `now`. Mỗi sự kiện
+  vào đúng một tin sáng: xảy ra tới hết 08:30:00.000 thì vào tin hôm đó, sau đó thì
+  chờ tin hôm sau, kể cả khi nhịp tạo hàng chạy lúc 14:00 hay hàng gửi muộn lúc
+  10:00. Thẻ «Việc của bạn» và Tổng quan dùng `"truc-tiep"`: 24 giờ tính tới `now`,
+  để nhắc tên lúc 14:00 hiện trên thẻ lúc 14:05.
+
 - **Một hàng mỗi người mỗi ngày.** `subject` là `user:<userId>:<ngày VN>`, và chỉ
   mục duy nhất một phần `agentTask_nhac_mot_ngay` cùng `createMany … skipDuplicates`
   giữ điều đó — quét lại trong ngày, hay hai lượt chạy chồng nhau, không thêm hàng.
@@ -213,9 +236,23 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
   «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi bốn loại OKR còn lại. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
-  nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Khuôn Zalo
+  nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Chữ «sáng nay»
+  theo giờ VN lúc dựng tin (`dungTin(ten, luc, …)`, `laBuoiSang`): từ `NHAC.trua`
+  (12:00) trở đi thành «hôm nay» — tin đi giữa ngày khi việc kế hoạch phát sinh giữa
+  ngày hay khi máy chậm. `THU_TU_NHAC` được kiểm đủ ở kiểu (`THU_TU_DU`): thêm một
+  loại nhắc mà quên thứ tự thì `check-types` đỏ, và `dungTin` gặp loại không có thứ
+  tự thì ném nêu tên loại, không bỏ im. Khuôn Zalo
   đánh số mọi dòng theo vị trí trong `daGui`, kể cả dòng OKR — `xong` trỏ vào một
   số OKR bị từ chối như dòng «kế hoạch im»/«mốc ngày», không đánh dấu bước nào.
+- **Khuôn mục nhắc OKR là `viecOkr` (Zod, `@crm/db/okr-nhac`), một nguồn.**
+  `ViecOkr` suy từ nó; API «Việc của bạn» dùng chính nó; `KHOA_MUC_OKR` khai trường
+  mã của từng loại, và nhánh OKR của `mucNhac` cùng `maViec` suy từ bảng đó.
+- **Vết hỏng khuôn làm nhịp nhắc ném.** `viecGiao` đọc `OkrTrail.after` bằng
+  `parseOkrVet` (`@crm/db/okr-vet`); dòng không đọc được, hay `ownerUserId` không phải
+  chuỗi, ném «Vết OKR <id> không đọc được: …». Bộ sinh đọc mọi dòng vết trong cửa sổ
+  trước khi lọc người, nên một dòng hỏng dừng nhắc của mọi người, và thẻ «Việc của
+  bạn», phần kế hoạch trên Tổng quan báo lỗi, tới khi dòng được sửa. Bên ghi thật chỉ
+  ghi đúng khuôn — dòng hỏng chỉ đến từ tay người sửa cơ sở dữ liệu.
 - **`mucNhac` (`@crm/validation/nhac-ke-hoach`) là một hợp, không phải trường mới
   thêm vào khuôn cũ.** Việc kế hoạch giữ nguyên hình `{loai, planId, stepId?}` như
   trước khi có OKR; mỗi loại OKR có hình riêng của nó —
@@ -647,9 +684,12 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 2. **Ranh giới khác thì phải là một `subagent` khác.**
    - `tool` của `subagent` đó chỉ gồm đúng các cửa nó được dùng.
    - Mọi `tool` dựng sẵn không cần đều bị tắt; sandbox để `deny-all`.
-   - Model, cờ ZDR và `limits` đặt cố định ở cấp `subagent`. **Không đọc model từ
-     `AppSetting`**: đọc hỏng thì rơi về model mặc định, và model đó không mang cờ
-     ZDR.
+   - `subagent` có ranh giới riêng về nơi gửi (ZDR) đặt model, cờ ZDR và `limits`
+     cố định ở cấp `subagent`. **Không đọc model từ `AppSetting`**: đọc hỏng thì rơi
+     về model mặc định, và model đó không mang cờ ZDR.
+   - `subagent` cùng ranh giới nơi gửi với agent gốc — `agent_builder`,
+     `agent_runner` — dùng bộ giải theo vai `modelTheoVai` (mục «Model»), không ghim
+     một model trong mã.
    - Tiền lệ: `agent_builder`, `agent_runner`, và `tro_ly_okr` của lượt 9a.
 
 3. **Không tạo `subagent` khi ranh giới không đổi.** Mỗi tầng thêm một phiên model.
@@ -675,7 +715,8 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
    - Bằng chứng: `agent_runner/tools/finish_run.ts` làm hỏng mọi lượt Tác nhân trên
      Gemini 3.7 và 3.8.
    - Mỗi `subagent` mới phải có test ghim rằng mọi khuôn của nó chuyển được sang
-     JSON Schema không có vòng `$ref`.
+     JSON Schema không có vòng `$ref`. `test/khuon-di-dong.spec.ts` đã quét mọi tệp
+     `tools/`, `subagents/*/tools/` và `outputSchema`; tệp mới tự vào phép quét.
 
 7. **Việc hỏng phải hiện là hỏng.** Agent gốc không hỏng khi `subagent` hỏng (N0).
    - Đóng việc theo `isError` của `action.result`, không chờ `turn.failed`.
@@ -843,6 +884,40 @@ delegation paths for custom agents.
   that is not `RUNNING`, so a cancel that never reaches the agent still means
   nothing further is written. The poke only stops it spending tokens, and an unset
   `AGENT_BRIDGE_SECRET` costs exactly that and nothing more.
+- **Hỏng hiện là hỏng.** Gốc không hỏng khi `agent_runner` hỏng, nên lượt đóng theo
+  kết quả của bộ chạy, không theo `turn.failed`. Hook `hooks/dong-luot-tac-nhan.ts` bắt
+  `action.result` của `agent_runner` có `isError` và gọi `failRun` ngay với mã
+  `RUNNER_FAILED`, lý do là `output.message` cắt `DISPATCH.run.failureReasonMaxChars`
+  (không có thì «Bộ chạy báo lỗi nhưng không nói lý do.»). `session.completed` gọi
+  `choKetLuot`: lượt RUNNING mà `result` còn `null` — bộ chạy chưa gọi `finish_run` —
+  đóng bằng `RUNNER_NO_RESULT`, «Bộ chạy dừng trước khi nộp kết quả.». Kết quả lượt là
+  khuôn phẳng `ketQuaLuot` (`lib/run-result.ts`), dùng chung cho `finish_run`,
+  `outputSchema` của bộ chạy và bộ đọc `AgentRun.result`.
+- **Hạn mức phiên của bộ dựng: 500k vào, 128k ra.** Ba tác nhân đọc hạn mức từ
+  `SESSION_LIMITS` trong `lib/dispatch-config.ts`, không viết số trong `agent.ts`. Model
+  có suy nghĩ tính token suy nghĩ vào phần viết ra: Gemini 3.8 Flash dùng 23.589 token
+  trước khi viết xong tệp chỉ dẫn (27/09), nên trần 10k cũ đỗ phiên giữa chừng. Vòng lặp
+  công cụ đã bị ngân sách 12 lời gọi và 2 lần lưu trong `execution-state.ts` chặn riêng;
+  trần token chỉ còn là cầu dao cuối.
+- **Hết hạn mức là một câu hỏi, không phải treo.** eve đỗ phiên con và đẩy lên gốc một
+  `input.requested` loại `session-limit` với hai lựa chọn `continue` / `stop`. Kênh `crm`
+  lưu nó vào `pendingInputRequest` như câu hỏi `question`; `builderById` trả nó, và màn
+  hội thoại dựng thay ô soạn tin bằng câu «Bộ dựng đã dùng hết hạn mức của phiên này…»
+  cùng hai nút «Cấp thêm» / «Dừng» (`BuilderQuestionComposer`). Câu trả lời đi đường của
+  câu hỏi làm rõ: `answerBuilderQuestion` ghi bài nộp có `inputResponse` (kèm `kind`),
+  điều phối gửi `inputResponses`. «Cấp thêm» cấp thêm một hạn mức và phiên con chạy
+  tiếp; «Dừng» làm eve huỷ lượt (`turn.cancelled`). Loại `tool-approval` vẫn bị bỏ qua —
+  bộ dựng không dùng công cụ cần duyệt.
+- **Lời gọi bộ dựng kèm `outputSchema` làm hỏng lượt.** Công cụ `subagent` của eve nhận
+  `{ message, outputSchema? }`, và khuôn người gọi đưa thắng khuôn riêng của bộ dựng: bộ
+  dựng điền khuôn lạ mà không qua kiểm quyền hay chốt lưu bản nháp. GLM 5.2 Fast làm
+  đúng như vậy ngày 27/09 và trợ lý báo «đã tạo» khi không có bản nháp nào.
+  `recordBuilderDelegation` ném `BUILDER_OUTPUT_SCHEMA_MESSAGE` khi lời gọi
+  `agent_builder` có khoá `outputSchema` (kể cả `{}`); móc ném thì lượt thành
+  `turn.failed` và không phiên con nào được tạo. Ứng dụng eve thử ở
+  `apps/agent/test/eve-tran/` đo điều đó, và đo cả hai nhánh câu hỏi hết hạn mức, bằng
+  `mockModel` — chạy qua `bun apps/agent/test/eve-tran/chay.ts`, vì eve chụp riêng thư
+  mục ứng dụng và script phải chép mã của kho vào đó trước.
 - **Cancelling is not undoing.** eve keeps side effects that already completed, so
   a note, task or Slack message the run already made stays. The dialog says so.
 - **Whoever started it can stop it**, plus the creator and workspace admins.
@@ -891,6 +966,50 @@ hai tệp kiểm `apps/agent/test/ro-slack-tac-nhan.integration.spec.ts` và
 `apps/agent/test/luot-tu-dong.integration.spec.ts` — chúng phải còn xanh trên mã
 của hãng. Việc báo cho hãng đi qua kênh bảo mật riêng của hãng và cần chủ kho cho
 phép; không qua PR hay issue công khai.
+
+### Chỗ rẽ có tên với bản của hãng
+
+Vòng `tac-nhan-model-rieng` (27/09) sửa các tệp dưới đây của hãng: khuôn kết quả phẳng,
+model giải theo vai, và luật hỏng-hiện-hỏng. Chủ kho chọn không gửi hãng. Kéo bản mới
+của hãng về `release` mà thấy `finish_run` quay lại `z.json()`, bộ chạy đọc lại
+`version.modelId`, hay `session.completed` quay lại `runResultOf(null)` thì đó là chỗ
+rẽ này bị ghi đè, không phải sót merge — giữ bản của kho và chạy lại
+`test/khuon-di-dong.spec.ts`, `test/model-theo-vai.integration.spec.ts`,
+`test/dong-luot-tac-nhan.integration.spec.ts`.
+
+- `apps/agent/agent/agent.ts`
+- `apps/agent/agent/channels/crm.ts`
+- `apps/agent/agent/lib/custom-agent-dispatch.ts`
+- `apps/agent/agent/lib/dispatch-config.ts`
+- `apps/agent/agent/lib/model.ts`
+- `apps/agent/agent/lib/run-runtime.ts`
+- `apps/agent/agent/subagents/agent_builder/agent.ts`
+- `apps/agent/agent/subagents/agent_runner/agent.ts`
+- `apps/agent/agent/subagents/agent_runner/tools/finish_run.ts`
+- `apps/agent/test/durable-agent-runtime.integration.spec.ts`
+- `apps/agent/test/model.integration.spec.ts`
+- `docs/agent.md`
+
+### Chỗ rẽ có tên — vòng bo-dung-khong-ket
+
+Vòng `bo-dung-khong-ket` (27/09) sửa thêm các tệp của hãng dưới đây: hạn mức phiên,
+câu hỏi `session-limit` qua ba lớp, và chốt `outputSchema`. Kéo bản mới của hãng mà
+thấy bộ dựng quay về `maxOutputTokensPerSession: 10_000` hay `builder-input.ts` chỉ lưu
+loại `question` thì đó là chỗ rẽ bị ghi đè — chạy lại `test/han-muc-phien.spec.ts`,
+`test/cau-hoi-het-han-muc.integration.spec.ts` và `bun apps/agent/test/eve-tran/chay.ts
+chan-khuon`.
+
+- `apps/agent/agent/instructions/task.ts`
+- `apps/agent/agent/lib/builder-delegation.ts`
+- `apps/agent/agent/lib/builder-input.ts`
+- `apps/api/src/conversations/conversations.contracts.ts`
+- `apps/api/src/conversations/conversations.service.ts`
+- `apps/app/components/agent-builder/agent-builder-chat.tsx`
+- `packages/validation/src/builder-question.ts`
+
+Vòng này còn sửa thêm `agent.ts`, `custom-agent-dispatch.ts`, `dispatch-config.ts` và
+hai `agent.ts` của bộ dựng, bộ chạy — đã liệt ở mục trên từ vòng
+`tac-nhan-model-rieng`.
 
 ## Chỗ rẽ: Trợ lý OKR (lượt 9a)
 

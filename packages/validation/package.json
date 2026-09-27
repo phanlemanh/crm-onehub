@@ -27,6 +27,8 @@
 		"./okr-chuong-trinh": "./src/okr-chuong-trinh.ts",
 		"./okr-tro-ly": "./src/okr-tro-ly.ts",
 		"./phien-tac-tu": "./src/phien-tac-tu.ts",
+		"./okr-khep": "./src/okr-khep.ts",
+		"./okr-kiem": "./src/okr-kiem.ts",
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-muc-tieu": "./src/okr-muc-tieu.ts",
 		"./okr-nguon": "./src/okr-nguon.ts",

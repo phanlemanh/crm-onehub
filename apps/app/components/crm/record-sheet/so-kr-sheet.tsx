@@ -362,7 +362,7 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 	const s = okrSoMessages(locale);
 	const t = s.trangThai.so;
 	const trpc = useTRPC();
-	const { stack, close, closeAll } = useRecordStack();
+	const { stack, close } = useRecordStack();
 	const { ngay: ngayUrl, chon } = useNgaySo();
 	const ngay = ngayUrl && NGAY.test(ngayUrl) ? ngayUrl : undefined;
 	const [trang, setTrang] = useState({ ngay, so: 1 });
@@ -421,7 +421,6 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 				title={dl ? <span translate="no">{dl.tenKr}</span> : t.tieuDe}
 				description={dl ? <DinhNghia dl={dl} /> : undefined}
 				onBack={stack.length > 1 ? close : undefined}
-				onClose={closeAll}
 			/>
 			{loi ? (
 				<DetailSheetEmpty

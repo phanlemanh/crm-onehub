@@ -1,8 +1,11 @@
 "use client";
 
+import Help from "@carbon/icons-react/es/Help";
+import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { CardTableEmpty } from "@crm/ui/components/card-table";
+import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -17,10 +20,12 @@ import {
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
 import type { Locale } from "@crm/ui/lib/locale";
+import { kiemOkr } from "@crm/validation/okr-kiem";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 import type { ReactNode } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { CELL, type KetQua } from "./kieu";
 import {
@@ -143,6 +148,34 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 	);
 }
 
+function thieuDoiTrong(keyResults: KetQua[]): boolean {
+	return kiemOkr({
+		title: "",
+		whyNow: "",
+		keyResults: keyResults.map((k) => ({
+			title: k.title,
+			kind: k.kind,
+			startValue: k.startValue,
+			targetValue: k.targetValue,
+		})),
+	}).some((h) => h.ma === "thieu-doi-trong");
+}
+
+function CanhBaoDoiTrong() {
+	const mk = okrKhepMessages(useLocale());
+	return (
+		<div className="px-5 py-3" data-canh-bao-doi-trong>
+			<Alert variant="warning">
+				<Icon icon={Help} />
+				<AlertTitle>{mk.doiTrong.tieuDe}</AlertTitle>
+				<AlertDescription>
+					{mk.luat["thieu-doi-trong"]} {mk.doiTrong.khongChan}
+				</AlertDescription>
+			</Alert>
+		</div>
+	);
+}
+
 export function BangKr({
 	keyResults,
 	kind,
@@ -150,6 +183,7 @@ export function BangKr({
 	danhDauCuaToi,
 	hanhDong,
 	nhanHanhDong,
+	hoiDoiTrong,
 }: {
 	keyResults: KetQua[];
 	kind: LoaiMucTieu;
@@ -157,9 +191,11 @@ export function BangKr({
 	danhDauCuaToi: boolean;
 	hanhDong?: (kr: KetQua) => ReactNode;
 	nhanHanhDong?: string;
+	hoiDoiTrong?: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
+	const canhBao = hoiDoiTrong === true && thieuDoiTrong(keyResults);
 	const xem = useXemDuocBanGhi();
 	const cot: SimpleTableColumn[] = [
 		{ id: "ten", header: m.cot.kr },
@@ -172,55 +208,58 @@ export function BangKr({
 	];
 
 	return (
-		<SimpleTable columns={cot}>
-			{keyResults.map((kr) => (
-				<SimpleTableRow key={kr.id} data-kr={kr.id} data-kr-hang={kr.id}>
-					<TableCell className={CELL}>
-						<span className="flex min-w-0 flex-col gap-1">
-							<span className="whitespace-normal" translate="no">
-								{kr.title}
+		<>
+			{canhBao ? <CanhBaoDoiTrong /> : null}
+			<SimpleTable columns={cot}>
+				{keyResults.map((kr) => (
+					<SimpleTableRow key={kr.id} data-kr={kr.id} data-kr-hang={kr.id}>
+						<TableCell className={CELL}>
+							<span className="flex min-w-0 flex-col gap-1">
+								<span className="whitespace-normal" translate="no">
+									{kr.title}
+								</span>
+								<span className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">
+									{m.kieu[kr.kind]}
+									{danhDauCuaToi && kr.laCuaToi ? (
+										<Badge variant="outline" data-cua-toi>
+											{m.cuaToi}
+										</Badge>
+									) : null}
+								</span>
 							</span>
-							<span className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">
-								{m.kieu[kr.kind]}
-								{danhDauCuaToi && kr.laCuaToi ? (
-									<Badge variant="outline" data-cua-toi>
-										{m.cuaToi}
-									</Badge>
-								) : null}
-							</span>
-						</span>
-					</TableCell>
-					<TableCell className={CELL}>
-						<span translate="no">{kr.owner.name}</span>
-					</TableCell>
-					<TableCell className={CELL}>
-						<TienDoKr
-							ten={kr.title}
-							progress={kr.progress}
-							expected={expected}
-							kind={kind}
-							laMoc={kr.kind === "moc"}
-						/>
-					</TableCell>
-					<TableCell
-						className={`${CELL} text-right tabular-nums`}
-						data-nguon={kr.source}
-						data-do-canh={kr.doCanh ? "" : undefined}
-					>
-						<SoCuaKr kr={kr} xem={xem} />
-					</TableCell>
-					{hanhDong ? (
-						<TableCell className={CELL}>{hanhDong(kr)}</TableCell>
-					) : null}
-				</SimpleTableRow>
-			))}
-			{keyResults.length === 0 ? (
-				<SimpleTableRow>
-					<TableCell colSpan={cot.length} className="p-0">
-						<CardTableEmpty>{m.chuaCoKr}</CardTableEmpty>
-					</TableCell>
-				</SimpleTableRow>
-			) : null}
-		</SimpleTable>
+						</TableCell>
+						<TableCell className={CELL}>
+							<span translate="no">{kr.owner.name}</span>
+						</TableCell>
+						<TableCell className={CELL}>
+							<TienDoKr
+								ten={kr.title}
+								progress={kr.progress}
+								expected={expected}
+								kind={kind}
+								laMoc={kr.kind === "moc"}
+							/>
+						</TableCell>
+						<TableCell
+							className={`${CELL} text-right tabular-nums`}
+							data-nguon={kr.source}
+							data-do-canh={kr.doCanh ? "" : undefined}
+						>
+							<SoCuaKr kr={kr} xem={xem} />
+						</TableCell>
+						{hanhDong ? (
+							<TableCell className={CELL}>{hanhDong(kr)}</TableCell>
+						) : null}
+					</SimpleTableRow>
+				))}
+				{keyResults.length === 0 ? (
+					<SimpleTableRow>
+						<TableCell colSpan={cot.length} className="p-0">
+							<CardTableEmpty>{m.chuaCoKr}</CardTableEmpty>
+						</TableCell>
+					</SimpleTableRow>
+				) : null}
+			</SimpleTable>
+		</>
 	);
 }

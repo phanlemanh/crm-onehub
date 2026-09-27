@@ -158,11 +158,14 @@ describe("danh-so", () => {
 	test("danh-so: tran sat, dong goi y tinh vao tran", async () => {
 		const { A } = await gieoNhac(GOC, { quaHan: 3 }, "Sat");
 		const viec =
-			(await viecCanNhac(db, { now: GOC, userId: A.id })).get(A.id) ?? [];
+			(
+				await viecCanNhac(db, { now: GOC, userId: A.id, cuaSo: "buoi-sang" })
+			).get(A.id) ?? [];
 		expect(viec.length, "du ba viec").toBe(3);
 		const khongLienKet = () => null;
 		const du = dungTin(
 			"Sat",
+			GOC,
 			viec,
 			khongLienKet,
 			"tron",
@@ -170,7 +173,15 @@ describe("danh-so", () => {
 			ZALO.loi.goiY,
 		);
 		const tran = du.text.length - 1;
-		const sat = dungTin("Sat", viec, khongLienKet, "tron", tran, ZALO.loi.goiY);
+		const sat = dungTin(
+			"Sat",
+			GOC,
+			viec,
+			khongLienKet,
+			"tron",
+			tran,
+			ZALO.loi.goiY,
+		);
 		expect(
 			sat.text.length,
 			"khong vuot tran khi tin sat tran",

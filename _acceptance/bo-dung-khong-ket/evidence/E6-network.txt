@@ -1,0 +1,39 @@
+E6 (AC-4) network truth — round 5 independent re-verify, 2026-09-27
+
+Driver: mcp__Claude_Browser (preview-local), read_network_requests + read_console_messages.
+
+Scope note: config.yaml declares dev_server.url=http://localhost:3000 and
+api_base=[http://localhost:3001]. This eval runs inside a per-tree "phien do"
+measure session (docs/setup.md, mục Screen measurements), which assigns its
+own dynamic ports instead — this run got APP_URL=http://localhost:4372 and
+API_URL=http://localhost:4891 (kho crm_friendly_liskov_8d4458_do). All observed
+traffic is to these dynamic ports, which are outside the config's literal
+declared scope by construction (the doc explicitly says "cảnh cây mới với tới
+APP_URL" — the declared ports are only defaults the session's real APP_URL/
+API_URL override). Classifying as unscoped-partial (note-only) rather than a
+fail for that reason alone.
+
+Full request list read after navigating to the seeded "Dừng" conversation
+(cmujxa1ok0000jpcfduz1rmxv) at 1440px, cleared beforehand: 498 requests, ALL
+200 OK. No 4xx/5xx, no connection-error/timeout on this port. Includes:
+  - GET /eve/v1/session/gieo-het-han-muc-e15a4275.../stream?includeTailIndex=1 → 200 OK
+  - repeated GET /eve/v1/session/.../stream?startIndex=12 → 200 OK  (fake agent tac-tu-gia.ts replay)
+  - GET /api/trpc/conversations.* , agents.list, workspace.get, enrichment.queue → 200 OK
+  - static _next/* chunks and fonts → 200 OK
+
+Earlier in the same tool session (before this tree's measure session was up,
+mixed leftover entries from a stale prior localhost:4709/localhost:4120
+navigation still cached in the pane) there were 502/ERR_CONNECTION_REFUSED
+entries against those OTHER ports — not this run's app/api origin (4372/4891),
+so out of scope for this eval; note-only, not counted against E6.
+
+Console errors: one recurring Next.js dev-mode diagnostic on every navigation
+of the shared `/[slug]` layout —
+  "Route "/[slug]": Next.js encountered uncached data during prerendering..."
+  at ApiOriginProvider / MobileNavProvider / AppLayout
+This is a pre-existing dev-mode-only warning about the layout's own data
+fetching (unrelated to eve, to the session-limit prompt, or to AC-4); it does
+not block rendering (screenshots confirm the page renders correctly) and is
+not a network request failure.
+
+networkObserved: unscoped-partial

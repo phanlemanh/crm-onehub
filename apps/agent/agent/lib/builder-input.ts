@@ -53,7 +53,8 @@ export async function persistBuilderInputRequest(
 		BUILDER_INPUT.eventType,
 	);
 	const question = event.requests.find(
-		(request) => request.kind === "question",
+		(request) =>
+			request.kind === "question" || request.kind === "session-limit",
 	);
 	if (!question) return false;
 

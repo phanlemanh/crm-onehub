@@ -114,6 +114,16 @@ export class OkrAccessService {
 		}
 	}
 
+	ghiDuocKr(
+		q: Quyen,
+		userId: string,
+		kr: { ownerUserId: string; objective: DonViCuaMucTieu },
+	): boolean {
+		return (
+			kr.ownerUserId === userId || this.suaDuocDonVi(q, userId, kr.objective)
+		);
+	}
+
 	async quanTriChuongTrinh(userId: string): Promise<boolean> {
 		return canManageSettings(await workspaceRoleOf(userId));
 	}
@@ -158,7 +168,7 @@ export class OkrAccessService {
 		const objective = donViCua(kr.objective);
 		if (kr.ownerUserId === userId) return { ...kr, objective };
 		const q = await this.quyen(userId);
-		if (!this.suaDuocDonVi(q, userId, objective))
+		if (!this.ghiDuocKr(q, userId, { ownerUserId: kr.ownerUserId, objective }))
 			throw new ForbiddenException(OKR.thongDiep.khongSuaDuocKr);
 		return { ...kr, objective };
 	}

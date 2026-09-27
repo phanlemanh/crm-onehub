@@ -5,6 +5,7 @@ import { Combobox } from "@crm/ui/components/combobox";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -27,7 +28,10 @@ import {
 	SelectValue,
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
+import { Textarea } from "@crm/ui/components/textarea";
 import type { Locale } from "@crm/ui/lib/locale";
+import { OKR_KHEP } from "@crm/validation/okr-khep";
+import { kiemOkr, type TruongKiem } from "@crm/validation/okr-kiem";
 import {
 	docSoOkr,
 	KIEU_KR,
@@ -41,12 +45,14 @@ import Link from "next/link";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
 import { KHOA_NGUON } from "./nguon-so";
+import { nhapNguonKhac } from "./nguon-so-luat";
 import { type MucTieuNguon, NguonSo, useNguonSo } from "./o-nguon-so";
 
 export function hienSo(so: number, locale: Locale): string {
@@ -67,6 +73,46 @@ type ONhap = {
 	coTrongSo: boolean;
 	khoaHien: boolean;
 };
+
+type OKr = {
+	ten: string;
+	kieu: KieuKr;
+	khoi: string;
+	dich: string;
+	hien: string;
+	donVi: string;
+	chu: string;
+	han: string | null;
+	trongSo: string;
+};
+
+function oKrDau(kr: KetQua | null, chuMacDinh: string, locale: Locale): OKr {
+	return {
+		ten: kr?.title ?? "",
+		kieu: kr?.kind ?? "tang-toi",
+		khoi: kr ? hienSo(kr.startValue, locale) : "0",
+		dich: kr ? hienSo(kr.targetValue, locale) : "",
+		hien: kr ? hienSo(kr.currentValue, locale) : "",
+		donVi: kr?.unit ?? "",
+		chu: kr?.owner.id ?? chuMacDinh,
+		han: kr?.dueOn ?? null,
+		trongSo: kr ? hienSo(kr.weight, locale) : "1",
+	};
+}
+
+function oKrKhac(a: OKr, b: OKr): boolean {
+	return (
+		a.ten !== b.ten ||
+		a.kieu !== b.kieu ||
+		a.khoi !== b.khoi ||
+		a.dich !== b.dich ||
+		a.hien !== b.hien ||
+		a.donVi !== b.donVi ||
+		a.chu !== b.chu ||
+		a.han !== b.han ||
+		a.trongSo !== b.trongSo
+	);
+}
 
 function khac<T>(moi: T | null, cu: T): T | undefined {
 	return moi === null || moi === cu ? undefined : moi;
@@ -95,7 +141,7 @@ export function HopThoaiKr({
 	dong,
 }: {
 	objectiveId: string;
-	mucTieu: MucTieuNguon;
+	mucTieu: MucTieuNguon & { title: string };
 	kr: KetQua | null;
 	chuMacDinh: string;
 	suaDuocCot: boolean;
@@ -105,27 +151,45 @@ export function HopThoaiKr({
 	const m = okrMessages(locale);
 	const h = m.hopThoai;
 	const so = okrSoMessages(locale);
+	const mk = okrKhepMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const url = useWorkspaceUrl();
 	const ma = useId();
 	const users = useQuery(trpc.users.list.queryOptions());
 	const program = useQuery(trpc.okr.program.queryOptions());
+	const cycles = useQuery(trpc.okr.cycles.queryOptions());
 
 	const [daLuuMot, setDaLuuMot] = useState(false);
 
-	const [ten, setTen] = useState(kr?.title ?? "");
-	const [kieu, setKieu] = useState<KieuKr>(kr?.kind ?? "tang-toi");
-	const [khoi, setKhoi] = useState(kr ? hienSo(kr.startValue, locale) : "0");
-	const [dich, setDich] = useState(kr ? hienSo(kr.targetValue, locale) : "");
-	const [hien, setHien] = useState(kr ? hienSo(kr.currentValue, locale) : "");
-	const [donVi, setDonVi] = useState(kr?.unit ?? "");
-	const [chu, setChu] = useState(kr?.owner.id ?? chuMacDinh);
-	const [han, setHan] = useState<string | null>(kr?.dueOn ?? null);
-	const [trongSo, setTrongSo] = useState(kr ? hienSo(kr.weight, locale) : "1");
+	const [dau, setDau] = useState(() => oKrDau(kr, chuMacDinh, locale));
+	const [ten, setTen] = useState(dau.ten);
+	const [kieu, setKieu] = useState<KieuKr>(dau.kieu);
+	const [khoi, setKhoi] = useState(dau.khoi);
+	const [dich, setDich] = useState(dau.dich);
+	const [hien, setHien] = useState(dau.hien);
+	const [donVi, setDonVi] = useState(dau.donVi);
+	const [chu, setChu] = useState(dau.chu);
+	const [han, setHan] = useState<string | null>(dau.han);
+	const [trongSo, setTrongSo] = useState(dau.trongSo);
+	const [lyDo, setLyDo] = useState("");
 	const [loi, setLoi] = useState<string | null>(null);
 	const n = useNguonSo({ objectiveId, kr, mucTieu, baoLoi: setLoi });
+	const [nguonDau, setNguonDau] = useState(n.gia);
 	const goc = n.goc;
+	const oHienTai: OKr = {
+		ten,
+		kieu,
+		khoi,
+		dich,
+		hien,
+		donVi,
+		chu,
+		han,
+		trongSo,
+	};
+	const coThayDoi =
+		oKrKhac(dau, oHienTai) || nhapNguonKhac(nguonDau, n.gia) || lyDo !== "";
 
 	const tao = useMutation(trpc.okr.createKeyResult.mutationOptions());
 	const sua = useMutation(trpc.okr.updateKeyResult.mutationOptions());
@@ -143,6 +207,40 @@ export function HopThoaiKr({
 		soKhoi !== null && soDich !== null
 			? kiemSoTheoKieu(kieu, soKhoi, soDich)
 			: null;
+	const hoi = kiemOkr({
+		title: mucTieu.title,
+		whyNow: "",
+		keyResults: [
+			{
+				title: ten,
+				kind: kieu,
+				startValue: soKhoi ?? 0,
+				targetValue: soDich ?? 0,
+			},
+		],
+	}).filter(
+		(h) =>
+			(h.truong !== "startValue" || !khoaKhoi) &&
+			(h.truong !== "targetValue" || soDich !== null),
+	);
+	const hoiDuoi = (truong: TruongKiem) =>
+		hoi
+			.filter((c) => c.truong === truong)
+			.map((c) => (
+				<FieldDescription variant="hoi" data-hoi-chat-luong={c.ma} key={c.ma}>
+					{mk.luat[c.ma]}
+				</FieldDescription>
+			));
+	const chuKy =
+		cycles.data?.cycles.find((c) => c.id === mucTieu.cycleId) ?? null;
+	const canLyDo =
+		goc !== null &&
+		mucTieu.status === "cong-bo" &&
+		chuKy?.phase === "dang-chay" &&
+		chuKy.cuaSoRa === null &&
+		soDich !== null &&
+		soDich !== goc.targetValue;
+	const lyDoDu = lyDo.trim().length >= OKR_KHEP.lyDo.toiThieu;
 	const tenHopLe = krInput.shape.title.safeParse(ten).success;
 	const donViHopLe = krInput.shape.unit.safeParse(donVi).success;
 	const trongSoHopLe =
@@ -183,6 +281,7 @@ export function HopThoaiKr({
 			dangLuu ||
 			!sanSang ||
 			!daSua ||
+			(canLyDo && !lyDoDu) ||
 			soKhoi === null ||
 			soDich === null ||
 			soHien === null
@@ -209,7 +308,11 @@ export function HopThoaiKr({
 				id = kq.id;
 				n.datKrId(kq.id);
 			} else if (doi && doiKr) {
-				const kq = await sua.mutateAsync({ id, ...doi });
+				const kq = await sua.mutateAsync({
+					id,
+					...doi,
+					lyDoDoiDich: canLyDo ? lyDo.trim() : undefined,
+				});
 				if (kq.canhBao) toast.warning(kq.canhBao);
 			}
 			giuMo = await n.luu(id);
@@ -221,6 +324,9 @@ export function HopThoaiKr({
 		toast.success(goc ? h.daLuu : h.daThemKr);
 		void cache.okr(objectiveId);
 		if (giuMo) {
+			setDau(oHienTai);
+			setNguonDau(n.gia);
+			setLyDo("");
 			setDaLuuMot(true);
 			return;
 		}
@@ -242,6 +348,7 @@ export function HopThoaiKr({
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
+			coThayDoi={coThayDoi}
 		>
 			<DialogContent data-hop-thoai-kr={n.krId ?? "moi"}>
 				<DialogHeader>
@@ -266,6 +373,7 @@ export function HopThoaiKr({
 									translate="no"
 									onChange={(e) => setTen(e.target.value)}
 								/>
+								{hoiDuoi("title")}
 							</Field>
 							<Field data-disabled={!suaDuocCot}>
 								<FieldLabel htmlFor={`${ma}-kieu`}>{h.kieuKr}</FieldLabel>
@@ -313,6 +421,7 @@ export function HopThoaiKr({
 											{h.daKhoa}
 										</FieldDescription>
 									) : null}
+									{hoiDuoi("startValue")}
 								</Field>
 								<Field data-invalid={loiKieu !== null || soHong(dich)}>
 									<FieldLabel htmlFor={`${ma}-dich`}>{h.dich}</FieldLabel>
@@ -325,6 +434,15 @@ export function HopThoaiKr({
 										data-o-dich
 										onChange={(e) => setDich(e.target.value)}
 									/>
+									{canLyDo && goc ? (
+										<FieldDescription>
+											{mk.lyDoDich.dichTruoc}{" "}
+											<span className="tabular-nums">
+												{hienSo(goc.targetValue, locale)}
+											</span>
+										</FieldDescription>
+									) : null}
+									{hoiDuoi("targetValue")}
 								</Field>
 								<Field>
 									<FieldLabel htmlFor={`${ma}-hien`}>{h.hienTai}</FieldLabel>
@@ -365,6 +483,26 @@ export function HopThoaiKr({
 									{h.quyUocSo}
 								</FieldDescription>
 							)}
+							{canLyDo ? (
+								<Field data-o-ly-do-dich>
+									<FieldLabel htmlFor={`${ma}-ly-do-dich`}>
+										{mk.lyDoDich.nhan}
+									</FieldLabel>
+									<Textarea
+										id={`${ma}-ly-do-dich`}
+										value={lyDo}
+										rows={2}
+										maxLength={OKR_KHEP.lyDo.toiDa}
+										translate="no"
+										required
+										aria-describedby={`${ma}-ly-do-dich-mo-ta`}
+										onChange={(e) => setLyDo(e.target.value)}
+									/>
+									<FieldDescription id={`${ma}-ly-do-dich-mo-ta`}>
+										{mk.lyDoDich.moTa}
+									</FieldDescription>
+								</Field>
+							) : null}
 							<NguonSo
 								kr={goc}
 								kieu={kieu}
@@ -442,13 +580,15 @@ export function HopThoaiKr({
 					</form>
 				</div>
 				<DialogFooter>
-					<Button variant="outline" onClick={dong} disabled={dangLuu}>
-						{daLuuMot ? so.trangThai.hopThoai.dong : h.huy}
-					</Button>
+					<DialogClose asChild dongNgay={daLuuMot && !coThayDoi}>
+						<Button variant="outline" disabled={dangLuu}>
+							{daLuuMot ? so.trangThai.hopThoai.dong : h.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						type="submit"
 						form={`${ma}-form`}
-						disabled={dangLuu || !sanSang || !daSua}
+						disabled={dangLuu || !sanSang || !daSua || (canLyDo && !lyDoDu)}
 						data-nut="gui-kr"
 					>
 						{dangLuu ? <Spinner /> : null}

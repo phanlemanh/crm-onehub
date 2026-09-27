@@ -1439,14 +1439,15 @@ describe("trang-thai", () => {
 				"[data-slot='field-error']",
 			) as HTMLElement;
 			const o = loi.closest("[data-slot='field']");
-			thay.push(
-				`${ten}: loi=${loi.textContent === `${LOI} ${ten}`} con-tro=${o?.contains(document.activeElement) === true}`,
-			);
+			const dong = `${ten}: loi=${loi.textContent === `${LOI} ${ten}`} con-tro=${o?.contains(document.activeElement) === true}`;
 			await act(async () => {
 				hop().dispatchEvent(
 					new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
 				);
 			});
+			const hoi = document.body.querySelector("[role='alertdialog']");
+			thay.push(`${dong} hoi=${hoi !== null}`);
+			if (hoi) await bam(nutTheoChu(hoi, "Bỏ")[0]);
 			await doiDong();
 		};
 
@@ -1480,11 +1481,12 @@ describe("trang-thai", () => {
 		await bamNhuNguoi(nutTheoChu(hop(), "Gắn 1 phòng ban")[0]);
 		await do_("attachDepartments");
 
-		expect(thay).toEqual(
-			["createDivision", "setPlacement", "addPeople", "attachDepartments"].map(
-				(ten) => `${ten}: loi=true con-tro=true`,
-			),
-		);
+		expect(thay).toEqual([
+			"createDivision: loi=true con-tro=true hoi=true",
+			"setPlacement: loi=true con-tro=true hoi=false",
+			"addPeople: loi=true con-tro=true hoi=false",
+			"attachDepartments: loi=true con-tro=true hoi=false",
+		]);
 	});
 });
 

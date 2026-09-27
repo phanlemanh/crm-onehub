@@ -1,0 +1,229 @@
+schema_version: 1
+feature_slug: khep-ky-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kko_luat
+    paths: [packages/validation/src/okr-kiem.ts, packages/validation/src/okr-khep.ts, packages/validation/test/okr-kiem.spec.ts]
+    expected: "exit 0; BẢNG CA VIẾT TRƯỚC ≥ 24 ca (mỗi luật ≥ 3 bắt, ≥ 3 không bắt), mỗi ca so toEqual cả mảng đầu ra {ma, truong, krIndex} — không đếm phần tử: kr-la-viec bắt «Gọi điện chào mừng…», «goi 50 cuoc» (không dấu), «Launch the new portal» (tiếng Anh), không bắt «Tỷ lệ đối tác gọi lại…», không bắt KR mốc «Hoàn thành chuyển kho»; thieu-khoi-diem bắt tăng tới / phần trăm / giữ trên khởi điểm 0, không bắt mốc khởi điểm 0; dich-bang-khoi-diem bắt giữ trên / giữ dưới / phần trăm đích = khởi điểm, không bắt tăng tới (lượt 3 đã chặn — ca ghi rõ); thieu-doi-trong bắt mục tiêu ba KR tăng tới, không bắt khi có một KR giữ dưới, không bắt khi chỉ một KR. Một ca gộp: mục tiêu hai KR vừa kr-la-viec vừa thieu-khoi-diem → mảng đúng thứ tự khai. Danh sách mã so toEqual với MA_LUAT_OKR theo thứ tự. Bài đọc mã nguồn okr-kiem.ts bằng AST: không import @crm/db, prisma, fetch. CHIỀU ĐỎ: bản sao kiemOkr bỏ bước bỏ dấu → ca «goi 50 cuoc» đỏ, bài in tên ca và đầu ra nhận."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kko_chu
+    paths: [apps/app/lib/messages/okr-khep.ts, apps/app/test/messages-guard.spec.ts, apps/app/test/okr-khep-chu.spec.ts]
+    expected: "exit 0; okr-khep-chu.spec rút danh sách mã từ MA_LUAT_OKR (không chép tay) và khẳng định mỗi mã có câu hỏi vi và en, vi khác en, vi có dấu; cùng bài cho câu đọc theo loại (bốn câu) và câu «không phải đánh giá nhân sự»; messages-guard xanh với tệp chữ mới. CHIỀU ĐỎ: bản sao tệp chữ thiếu câu en của thieu-doi-trong → bài đỏ in mã thiếu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kko_man_chrome
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Gieo qua API thật: chu kỳ quý đang chạy, mục tiêu nháp của phòng ban P1 do trưởng T phụ trách, mục tiêu đã công bố có ba KR tăng tới; đăng nhập dev:session T; dọn theo id ở cuối kể cả khi đỏ"
+      - "Mở sheet mục tiêu nháp ở 1440/vi → «Thêm KR», gõ tên «Gọi điện chào mừng mọi đối tác mới», khởi điểm 0, đích 40 → đọc DOM: [data-hoi-chat-luong] dưới ô tên (dòng ghi chú mang biến thể câu hỏi của packages/ui) chứa câu kr-la-viec, dưới ô khởi điểm chứa câu thieu-khoi-diem; nút Lưu không disabled → ảnh buoc-hoi"
+      - "Bấm Lưu → hộp thoại đóng, bảng KR có dòng mới"
+      - "Mở sheet mục tiêu ba KR tăng tới → cảnh báo thiếu đối trọng hiện trên bảng KR → ảnh buoc-doi-trong; đăng nhập thành viên chỉ đọc, mở cùng sheet → không có cảnh báo"
+      - "Ảnh ở 390 cho buoc-hoi; scrollWidth <= innerWidth"
+    expected: "Mọi bước đạt; ảnh lưu ở evidence/; câu trên màn bằng câu của tệp chữ cho đúng mã. CHIỀU ĐỎ: --chieu-do chạy với bản sao hộp thoại khoá Lưu khi có câu hỏi → bước Lưu đỏ, script in «câu hỏi chặn lưu»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kko_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/okr/**", packages/validation/src/okr-kiem.ts, _acceptance/khep-ky-okr/rang/man-khep-ky.mjs]
+    expected: "Cùng lần chạy với E3: sau Lưu đọc DB có đúng một okrKeyResult mới với tên, khởi điểm 0, đích 40 như gõ; publishObjective của mục tiêu ba KR tăng tới trả thành công và DB đọc status cong-bo — luật không chặn máy chủ. CHIỀU ĐỎ: bản sao createKeyResult gọi kiemOkr và ném khi có mã → bước Lưu đỏ, script in thông điệp máy chủ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_ra
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, packages/validation/src/okr-vet.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; now đóng băng 2026-11-18 VN, chu kỳ quý 2026-10-01 → 2026-12-31 pha dang-chay: moRa(16/11, 22/11) → đọc DB một dòng okrCuaSoRa đúng hai ngày, người mở; okr.cycles trả cuaSoRa {tuNgay, denNgay}; dongRa → dòng có dongLuc, okr.cycles trả cuaSoRa null; đúng 2 dòng vết mo-ra, dong-ra. Biên giờ VN: now 2026-11-22 23:59 VN còn trong rà, 2026-11-23 00:00 VN ngoài rà. Ma trận từ chối viết trước 7 ca, mỗi ca ghim thông điệp và khẳng định số dòng okrCuaSoRa và okrTrail không đổi: ngày trước startsOn; ngày sau endsOn; tuNgay > denNgay; chồng cửa sổ còn hiệu lực; pha lap-ke-hoach; thành viên thường; vai okr. Đối chứng dương: cùng đầu vào, quản trị, pha dang-chay, không chồng → ghi được. CHIỀU ĐỎ: bản sao moRa bỏ kiểm chồng ngày → ca chồng đỏ, bài in hai cửa sổ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_doi_dich
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; bốn ca viết trước trên KR K của mục tiêu đã công bố, pha dang-chay: (a) trong rà, updateKeyResult(targetValue 80 → 85) không lý do → ghi được, okrDoiDich một dòng {truoc 80, sau 85, ngoaiRa false, cuaSoRaId}; (b) ngoài rà không lý do → 400 câu ghim «Đổi đích ngoài rà giữa kỳ cần lý do», targetValue đọc lại 85, số dòng okrDoiDich không đổi; (c) ngoài rà lý do 9 ký tự → 400; lý do 12 ký tự → ghi được, dòng {truoc 85, sau 80, ngoaiRa true, lyDo, tacGiaUserId}; (d) KR của mục tiêu nháp đổi đích → không dòng okrDoiDich, vết sua-kr như cũ. updateKeyResult chỉ đổi tên hay đơn vị ngoài rà → không đòi lý do, không dòng okrDoiDich. CHIỀU ĐỎ: bản sao lấy ranh giới rà theo UTC → ca now 23:59 ngày cuối rà đỏ, bài in ngày đọc được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kko_man_chrome
+    steps:
+      - "Cùng phiên đo E3; KR của mục tiêu đã công bố, ngoài cửa sổ rà (cửa sổ rà đã đóng)"
+      - "Mở «Sửa KR», đổi đích → ô «Lý do đổi đích» hiện, nút Lưu disabled → ảnh buoc-ly-do-dich"
+      - "Gõ lý do 12 ký tự → Lưu bật; Lưu → hộp thoại đóng"
+      - "Mở lại hộp thoại trong rà (phiên đo mở cửa sổ qua API) → đổi đích không hiện ô lý do; dải «Đang rà giữa kỳ tới <ngày>» hiện ở đầu khu OKR → ảnh buoc-dai-ra"
+    expected: "Mọi bước đạt; sau Lưu ngoài rà, DB có một dòng okrDoiDich ngoaiRa true mang đúng lý do đã gõ (script đọc DB). CHIỀU ĐỎ: bản sao hộp thoại luôn ẩn ô lý do → bước đầu đỏ, script in «thiếu ô lý do»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_sang_cham
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, packages/validation/src/okr-kr.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; sàn gieo chu kỳ quý kết thúc 2026-12-31 có mục tiêu cam kết và tham vọng công bố với 20 KR (bảng 20 ô dưới), một mục tiêu nháp có KR, một mục tiêu đã bỏ có KR, cửa sổ rà đang mở. now 2026-12-31 23:00 VN → setCyclePhase cham-diem 400 câu ghim «Sang chấm điểm từ ngày sau ngày cuối của chu kỳ», pha đọc lại dang-chay, 0 dòng okrDiemKr. now 2027-01-01 00:02 VN, một KR nguồn crm chưa có okrSoChup ngày 2026-12-31 → 400 câu ghim «Còn 1 KR nguồn CRM chưa có số ngày cuối», 0 dòng okrDiemKr; KR nguồn api không có bản chụp không gác (đối chứng). Chạy chupSoOkr thật với now 00:05 rồi now 2027-01-01 00:10 VN → ghi được: pha cham-diem, okrCuaSoRa.dongLuc có, okrDiemKr đúng 20 dòng (tập keyResultId bằng tập viết trước, không KR nháp / đã bỏ), mỗi dòng soChot bằng currentValue đọc trước khi chuyển, diem null, thang và phienBanChuongTrinh bằng cấu hình đang áp; MA TRẬN VIẾT TRƯỚC 20 ô diemGoiY so toBe, đủ trong expected này: tăng tới 60→80 chốt 70 → 0.5, chốt 80 → 1, chốt 90 → 1; tăng tới 0→100 chốt 84 → 0.8, chốt 85 → 0.9, chốt 86 → 0.9; giảm xuống 8→2 chốt 5 → 0.5, chốt 2 → 1, chốt 1 → 1; giữ trên đích 90 chốt 85 → 0, chốt 90 → 1, chốt 95 → 1; giữ dưới đích 5 chốt 6 → 0, chốt 5 → 1, chốt 4 → 1; mốc chốt 0 → 0, chốt 1 → 1; phần trăm 20→80 chốt 50 → 0.5, chốt 80 → 0.8, chốt 100 → 1. Lặp cả bộ với chương trình thang 0-100: cùng diemGoiY chuẩn 0–1, thang '0-100'. Ma trận nhảy pha: lap-ke-hoach → cham-diem, dang-chay → da-dong, lap-ke-hoach → da-dong đều 400 câu ghim «Pha đi từng bước». CHIỀU ĐỎ: bản sao sinh dòng cho mọi mục tiêu không lọc status → tập keyResultId đỏ in hai KR thừa; bản sao làm tròn xuống → ô chốt 86 đỏ (0.8); bản sao làm tròn lên → ô chốt 84 đỏ (0.9); bản sao tính phần trăm theo khởi điểm–đích → ô phần trăm chốt 80 đỏ (1); bản sao bỏ điều kiện bản chụp ngày cuối → ca 00:02 đỏ in số dòng okrDiemKr."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_cham
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; chu kỳ pha cham-diem; ba người gọi chamKr hợp lệ (người phụ trách K1 bằng gợi ý; trưởng đơn vị K2 khác gợi ý có lý do 15 ký tự; quản trị K3 bằng gợi ý) → đọc DB okrDiemKr {diem, lyDo, chamBoiUserId, chamLuc} đúng từng lần, đúng 3 dòng vết cham-kr; chấm lại K1 → dòng cập nhật, vết thứ tư. Ma trận từ chối viết trước 7 ca, mỗi ca ghim thông điệp và dòng okrDiemKr không đổi: khác gợi ý không lý do; diem 0.75 ngoài lưới; diem 1.1; thành viên không sửa được KR; vai okr không phụ trách KR; pha dang-chay; pha da-dong. ghiDieuHocDuoc: chữ 40 ký tự → okrNhinLai đọc lại đúng; rỗng → đọc lại rỗng; 2001 ký tự → 400; pha da-dong → 400; người không sửa được mục tiêu → 403; mỗi lần hợp lệ một vết nhin-lai. bangCham: điểm mục tiêu và câu đọc so bảng viết trước 6 ca (tham vọng 0.7 → tot; tham vọng 0.65 → duoi-muc-tot; cam kết 1 → dat; cam kết 0.9 → chua-tron; chưa chấm hết → null; trọng số bật với trọng số 3/1 → trung bình có trọng số); KR có hai dòng okrDoiDich (một trong rà, một ngoài rà) → danh sách đổi đích ngoài rà có đúng một dòng. Lặp ma trận chấm trên chương trình thang 0–100 (sang pha chấm với cấu hình 0-100): chamKr gửi 80 → diem đọc lại 0.8 chuẩn, bangCham trả 80; gửi 85 → 400 ngoài lưới; gửi 0.8 → 400 ngoài lưới. CHIỀU ĐỎ: bản sao chamKr không so với diemGoiY → ca không lý do đỏ, bài in dòng đã ghi; bản sao lưu điểm thang 0–100 không chia → ca gửi 80 đỏ in diem 80."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_dong
+    paths: [apps/api/src/okr/**, apps/agent/agent/lib/okr-chup.ts, packages/validation/src/okr-khep.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; chu kỳ pha cham-diem, P1 còn 2 KR chưa chấm, P2 còn 1 → setCyclePhase da-dong 400 câu ghim «Còn 3 KR chưa chấm»; bangCham trả chuaCham [{P1, 2}, {P2, 1}]; pha đọc lại cham-diem. Chấm hết → da-dong ghi được. Ở da-dong: MA TRẬN VIẾT TRƯỚC mười bảy thủ tục ghi (mười một của lượt 3, guiCapNhat, ghiSoKr, chamKr, ghiDieuHocDuoc, moRa, dongRa; mangSang không khoá vì ghi sang chu kỳ kế — E11), mỗi thủ tục 400 câu ghim khoá pha và bản ghi đích đọc lại không đổi; chupSoOkr chạy với now sau ngày cuối → 0 dòng okrSoChup mới cho KR của chu kỳ. moLaiKy: không lý do → 400; lý do 9 ký tự → 400; thành viên thường → 403; quản trị lý do 20 ký tự → pha cham-diem, một vết mo-lai-ky với note bằng lý do, mọi okrDiemKr.soChot và diemGoiY đọc lại không đổi; moLaiKy khi pha cham-diem → 400. Đóng lại → da-dong. CHIỀU ĐỎ: bản sao setCyclePhase không đếm diem null → lần đóng đầu đỏ, bài in pha đọc được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_mang_sang
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; mục tiêu M (công bố, cam kết, hai người tham gia, một căn chỉnh) ở quý 4 pha cham-diem với bốn KR: A điểm 1; B tăng tới 60→80 chốt 78 điểm 0.9; C mốc chưa xong điểm 0; D tăng tới 10→20 chốt 25 người chấm 0.8; quý 1 cùng loại pha lap-ke-hoach. mangSang(M) → quý 1 có đúng một mục tiêu nháp: cấp, đơn vị, kind, ownerUserId, tập người tham gia, title, whyNow bằng M; 0 okrAlignment; KR đúng tập {B, C} viết trước với startValue = soChot, targetValue giữ, currentValue = startValue, source tay, dueOn null; đầu ra khongChep = [{D, 'dich-phai-lon-hon-khoi-diem'}]; okrMangSang một dòng nối M → M'; bangCham(M) và objective(M') trả liên kết; M, bốn KR và bốn okrDiemKr đọc lại byte-cho-byte như trước; một vết mang-sang. Lần hai → 400 câu ghim, số mục tiêu quý 1 không đổi. Ma trận từ chối 4 ca: không có chu kỳ kế; chu kỳ kế da-dong; trần chan đã đầy ở đơn vị đích; người không sửa được M — mỗi ca 0 dòng mới ở okrObjective, okrKeyResult, okrMangSang. Mang sang từ quý 4 pha da-dong → ghi được (đối chứng). CHIỀU ĐỎ: bản sao chép cả KR điểm 1 → tập KR đỏ in A thừa."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_xuat
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, apps/api/test/okr-khep-xuat.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; chu kỳ da-dong gieo qua thủ tục thật có mục tiêu công bố (điểm, lý do chỉnh chứa dấu phẩy và ngoặc kép, một lần đổi đích ngoài rà, điều học được hai dòng, mang sang), mục tiêu đã bỏ. xuatKy bằng quản trị, thành viên, vai okr → ba đầu ra giống nhau; noiDung bắt đầu bằng BOM; tách CSV bằng một bộ đọc chuẩn (không split dấu phẩy) → dòng tiêu đề toEqual danh sách cột viết trước; BẢNG VIẾT TRƯỚC mỗi ô của mỗi dòng so toBe, kể cả ô lý do có dấu phẩy / ngoặc kép và ô điều học được xuống dòng; mục tiêu đã bỏ có dòng, cột điểm rỗng; không cột nào mang tên bảng đối tác (contact, company, deal, campaign). Ô điểm của dòng thuộc kỳ thang 0–100 viết 80. Sau đó setProgram bật trọng số và đổi thang → xuatKy và bangCham của kỳ đã đóng giống lần trước từng byte. xuatKy ở cham-diem và dang-chay → 400 câu ghim. CHIỀU ĐỎ: bản sao nối ô bằng dấu phẩy không bọc ngoặc → dòng có lý do chứa phẩy đỏ, bài in số cột đọc được; bản sao đọc cấu hình chương trình hiện tại → ca đổi cấu hình đỏ, bài in điểm mục tiêu hai lần gọi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kko_man_chrome
+    steps:
+      - "Cùng phiên đo E3; gieo qua API thật chu kỳ đã sang cham-diem (hai mục tiêu công bố của P1, một KR có đổi đích ngoài rà), chu kỳ kế cùng loại lap-ke-hoach; đăng nhập trưởng P1"
+      - "Mở {APP_URL}/<slug>/okr/theo-don-vi, chọn P1, cách xem «Chấm điểm» → URL giữ tham số cách xem; màn có câu «Điểm cuối kỳ không phải đánh giá nhân sự», «Đã chấm 0/N KR», mỗi ô điểm chọn sẵn gợi ý, nhãn «Đích sửa ngoài rà» cạnh đúng KR → ảnh buoc-cham"
+      - "Chọn điểm khác gợi ý cho một KR, bấm «Lưu điểm» → lỗi dưới ô lý do; gõ lý do 15 ký tự, lưu → «Đã chấm 1/N»"
+      - "Gõ điều học được, «Lưu điều học được» → toast"
+      - "«Mang sang» → hộp thoại nêu chu kỳ kế, KR chép, KR không chép → ảnh buoc-mang-sang; xác nhận → khối mục tiêu hiện «Đã mang sang <chu kỳ>»"
+      - "Trạng thái: chặn truy vấn bangCham ở trình duyệt → lỗi + «Thử lại», bấm lại tải được; đơn vị không có mục tiêu công bố → rỗng; đăng nhập vai okr không phụ trách → điểm đọc được, không ô chọn; chu kỳ đã đóng → chỉ đọc"
+      - "Ảnh ở 390 và 1440 cho buoc-cham; scrollWidth <= innerWidth; ở 390 bộ chọn cách xem là danh sách thả xuống (không phải nhóm nút) và chọn «Chấm điểm» từ đó đổi URL; chữ người nhập mang translate=no"
+    expected: "Mọi bước đạt, ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao màn bỏ câu «không phải đánh giá nhân sự» → bước buoc-cham đỏ, script in «thiếu câu»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-10
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kko_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/khep-ky-okr/rang/man-khep-ky.mjs]
+    expected: "Cùng lần chạy với E13: sau «Lưu điểm» có lý do, DB okrDiemKr của KR đó có diem và lyDo đúng như chọn và gõ; điều học được đọc DB bằng chữ đã gõ; sau mang sang, DB có okrMangSang và mục tiêu nháp ở chu kỳ kế; số «Đã chấm N/M» trên màn bằng số dòng okrDiemKr có diem của đơn vị. CHIỀU ĐỎ: bản sao màn gửi diemGoiY thay cho điểm đã chọn → so DB đỏ, script in hai số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kko_man_chrome
+    steps:
+      - "Cùng phiên đo; đăng nhập quản trị; mở {APP_URL}/<slug>/settings/okr"
+      - "Menu dòng quý đang chạy → «Mở rà giữa kỳ», chọn hai ngày, gửi → dòng hiện «Rà giữa kỳ: <từ> – <đến>» → ảnh buoc-mo-ra; mở khu OKR → dải «Đang rà giữa kỳ tới <ngày>»"
+      - "«Sang chấm điểm» khi now còn trong chu kỳ → toast mang câu ghim của máy chủ"
+      - "Phiên đo đẩy now qua ngày cuối; «Sang chấm điểm» → pha đổi; «Đóng kỳ» khi còn KR chưa chấm → hộp thoại liệt đơn vị và số, nút đóng disabled → ảnh buoc-dong-chan"
+      - "Chấm hết qua API; «Đóng kỳ» → xác nhận → pha «Đã đóng»"
+      - "«Mở lại kỳ» → nút disabled khi ô lý do trống; gõ lý do, xác nhận → pha «Chấm điểm» → ảnh buoc-mo-lai; đóng lại"
+      - "Mở Toàn cảnh kỳ đã đóng → «Xuất» → tệp tải về tên .csv, dòng đầu (bỏ BOM) bằng dòng tiêu đề viết trước"
+      - "Đăng nhập thành viên thường → mục menu tắt, dòng giải thích dưới tiêu đề"
+      - "Ảnh 390 cho buoc-dong-chan; scrollWidth <= innerWidth"
+    expected: "Mọi bước đạt; pha trên bảng sau mỗi bước bằng phase đọc DB (script đọc). CHIỀU ĐỎ: bản sao hộp thoại đóng không tắt nút khi còn KR chưa chấm → bước buoc-dong-chan đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kko_pham_vi
+    paths: [apps/api/src/okr/**, apps/api/test/vai-chi-okr.spec.ts, apps/api/test/ma-tran-thu.ts]
+    expected: "exit 0; vai-chi-okr ma-tran-trpc và ma-tran-khoa-rest xanh; bài tự dò thủ tục (soThuTuc) và khẳng định tám tên mới có mặt trong danh sách dò được (so tập, không đếm) và DAU_VAO_HOP_LE có đầu vào hợp lệ cho cả tám; ca mới pham-vi-khep: vai okr gọi bangCham, xuatKy (kỳ đóng) được; chamKr, ghiDieuHocDuoc, mangSang được với bản ghi của mình, 403 với bản ghi người khác; moRa, dongRa, moLaiKy → 403 theo vai quản trị; không đầu ra nào chứa khoá contactId, companyId, dealId. CHIỀU ĐỎ: bản sao bangCham trả thêm dealId → ca pham-vi-khep đỏ in khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-13
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kko_ty_le
+    paths: [_acceptance/khep-ky-okr/rang/khep-ky.sql, _acceptance/khep-ky-okr/rang/ty-le.mjs, apps/api/src/okr/**]
+    expected: "exit 0; trên kho đo (phiên đo tự dựng): gieo qua thủ tục thật (publishObjective, setCyclePhase, chamKr, ghiDieuHocDuoc, mangSang — không chèn bảng tay) chu kỳ C1: 10 mục tiêu công bố, 30 KR, 8 có điều học được, 3 mang sang, 6 KR điểm khác gợi ý, đóng; chu kỳ C2 pha cham-diem 12 KR, 5 đã chấm. Trong C1, đơn vị U1 chấm dồn: mọi chamKr bằng một người trong năm phút; đơn vị U2 chấm rải hai ngày, hai người. Chạy khep-ky.sql với C1 → toEqual {pha da-dong, mucTieu 10, krCoDiem 30, krTong 30, coHocDuoc 8, mangSang 3, khacGoiY 6, chamDon 1}; với C2 → krCoDiem 5, krTong 12. Script tự kiểm SQL chỉ SELECT (đọc tệp). CHIỀU ĐỎ: --chieu-do chạy bản sao SQL đếm cả mục tiêu đã bỏ → mucTieu 11, exit 1 in hai kết quả."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.kko_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/**, packages/ui/src/components/**, packages/validation/src/**, apps/api/src/okr/**, _acceptance/khep-ky-okr/rang/soi-ma.mjs]
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD và chỉ tính dòng lượt này thêm; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay (bảng docs/design.md); mọi DialogFooter mới có nút Huỷ bọc DialogClose; tệp mới không chú thích mã, không Record<string, unknown>, không useEffect( trần; kiemOkr, OKR_KHEP, goiYDiem chỉ định nghĩa trong packages/validation/src (grep định nghĩa ở apps/ = 0); không số 0.7, 0.1, 500, 2000 trần trong tệp okr mới ngoài okr-khep.ts; hai biến thể mới (câu hỏi cho FieldDescription, cách xem thu về Select ở khổ nhỏ) định nghĩa trong packages/ui/src/components và chỗ gọi ở apps/app không tự đặt className đổi màu hay kiểu cho chúng; in danh sách tệp đã soi (> 0). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và một nút Huỷ không DialogClose → đỏ in hai vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-14
+    executor: judgment
+    question: >-
+      Nhìn diff của lượt này: luật chất lượng có là hàm thuần ở packages/validation,
+      trả mã ổn định mà lượt 9b đọc lại được, và màn chỉ hỏi chứ không chặn; mọi đầu
+      vào mới có được parse ở biên bằng Zod (không truyền Record<string, unknown>);
+      màn chấm, hộp thoại mang sang, điều khiển chu kỳ có dựng bằng thành phần
+      packages/ui (bậc 1–2) thay vì vẽ tay, và câu «không phải đánh giá nhân sự» có
+      đứng trên màn chấm như bản mẫu đã duyệt?
+    inputs: [docs/superpowers/specs/2026-09-27-khep-ky-okr-design.md, _acceptance/khep-ky-okr/contract.md, _acceptance/khep-ky-okr/design-pass.md]
+    expected: >-
+      PASS khi cả bốn vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
+      tệp và dòng. FAIL khi một vế sai.
+    evidence_required: [run_id, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-15
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kko_migration_chi_them
+    paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/khep-ky-okr/rang/migration-chi-them.mjs]
+    expected: "exit 0; script (khuôn so-okr-tu-chay/rang/migration-chi-them.mjs) đọc mọi thư mục migration mới so với origin/onehub; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE (UNIQUE) INDEX trên bảng MỚI, ALTER TABLE <bảng mới> ADD CONSTRAINT … FOREIGN KEY; cấm UPDATE/DELETE/DROP/ALTER COLUMN/RENAME/ADD COLUMN trên bảng có sẵn; số câu > 0 in ra; năm model mới liền nhau và là các model cuối của schema.prisma; mọi khoá ngoại tới okrCycle, okrObjective, okrKeyResult là ON DELETE RESTRICT. Trên cơ sở dữ liệu tạm: gieo OKR, cập nhật tuần, bản chụp số bằng lược đồ trước, chạy migration mới, đọc lại số dòng từng bảng cũ không đổi. CHIỀU ĐỎ: 4 tệp giả trong tmpdir (ADD COLUMN trên okrCycle; DROP INDEX; model mới đặt giữa tệp; ON DELETE CASCADE tới okrKeyResult) → exit 1 thông điệp ghim từng loại. Đối chứng dương: tệp chỉ CREATE TABLE, CREATE UNIQUE INDEX, ADD CONSTRAINT … ON DELETE RESTRICT → exit 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.kko_bang_cham_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/test/okr-khep-cham.dom.tsx]
+    expected: "exit 0; bài DOM dựng bảng chấm với dữ liệu viết trước (hai mục tiêu, một KR có đổi đích ngoài rà, một KR không sửa được): ô điểm chọn sẵn gợi ý; chọn khác gợi ý → ô lý do hiện; bấm lưu không lý do → FieldError với câu ghim, mutation không được gọi; KR không sửa được → không có ô chọn, có chữ điểm; nhãn «Đích sửa ngoài rà» chỉ ở đúng một dòng; câu «không phải đánh giá nhân sự» có mặt. CHIỀU ĐỎ: bản sao thành phần luôn gọi mutation → ca không lý do đỏ in số lần gọi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E22
+    criterion: AC-11
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kko_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/khep-ky-okr/rang/man-khep-ky.mjs]
+    expected: "Cùng lần chạy với E15: sau «Mở rà giữa kỳ» DB có một dòng okrCuaSoRa bằng hai ngày đã chọn; sau «Sang chấm điểm» sớm, okrCycle.phase vẫn dang-chay và 0 dòng okrDiemKr; sau «Đóng kỳ» khi còn KR chưa chấm, phase vẫn cham-diem; sau «Đóng kỳ» khi đủ, phase da-dong; sau «Mở lại kỳ», phase cham-diem và okrTrail có đúng một dòng mo-lai-ky với note bằng lý do đã gõ; tệp xuất tải về có số dòng dữ liệu bằng số KR của chu kỳ đọc DB. CHIỀU ĐỎ: bản sao hộp thoại mở lại không gửi lý do → bước mở lại đỏ, script in note đọc được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

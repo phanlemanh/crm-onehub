@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model theo vai · tac-nhan-model-rieng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-1 · Luồng · tac-nhan-model-rieng</p>
+    <h1>Model của Tác nhân được chọn lúc chạy, không ghim theo bản</h1>
+    <p class="sub">Hôm nay quản trị đổi model trong Cài đặt mà Tác nhân đã dựng vẫn chạy model cũ. Sau vòng này, mỗi lượt hỏi Cài đặt lúc bắt đầu và ghi lại model đã chạy. AC-6, AC-7.</p>
+
+    <svg viewBox="0 0 1160 440" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="20" y="40" fill="#575757" font-size="13" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">HÔM NAY · MODEL GHIM THEO BẢN</text>
+
+      <path d="M 276 104 L 308 104" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 564 104 L 596 104" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 852 104 L 884 104" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="20" y="56" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="20" y="56" width="256" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="148" y="98" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị chọn model</text>
+      <text x="148" y="120" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ở Cài đặt</text>
+
+      <rect x="308" y="56" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="308" y="56" width="256" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="436" y="98" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lưu bản nháp: Tác nhân</text>
+      <text x="436" y="120" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chụp model vào bản</text>
+
+      <rect x="596" y="56" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="596" y="56" width="256" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="724" y="98" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mỗi lượt chạy đọc</text>
+      <text x="724" y="120" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">model của bản</text>
+
+      <rect x="884" y="56" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="884" y="56" width="256" height="96" rx="6" fill="#f2f2f2" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="1012" y="98" fill="#575757" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đổi Cài đặt không</text>
+      <text x="1012" y="120" fill="#575757" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">có tác dụng</text>
+
+      <text x="20" y="200" fill="#006B4F" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.12em">SAU VÒNG NÀY · MODEL GIẢI THEO VAI LÚC CHẠY</text>
+
+      <path d="M 276 264 L 308 264" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 564 264 L 596 264" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 852 264 L 884 264" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="20" y="216" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="20" y="216" width="256" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="148" y="258" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị chọn model</text>
+      <text x="148" y="280" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ở Cài đặt</text>
+
+      <rect x="308" y="216" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="308" y="216" width="256" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="436" y="258" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Điều phối lượt hỏi bộ giải</text>
+      <text x="436" y="280" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">theo vai «Tác nhân»</text>
+
+      <rect x="596" y="216" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="596" y="216" width="256" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="724" y="258" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ghi model vào lượt và</text>
+      <text x="724" y="280" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">giao cho bộ chạy</text>
+
+      <rect x="884" y="216" width="256" height="96" rx="6" fill="#fafafa"/>
+      <rect x="884" y="216" width="256" height="96" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1012" y="248" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ chạy chạy đúng</text>
+      <text x="1012" y="270" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">model đó</text>
+      <text x="1012" y="296" fill="#575757" font-size="14" font-family="'Geist', sans-serif" text-anchor="middle">bản chỉ ghi «dựng bằng»</text>
+
+      <line x1="20" y1="336" x2="1140" y2="336" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="20" y="364" fill="#575757" font-size="13" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="128" y="352" width="24" height="16" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="164" y="365" fill="#575757" font-size="14" font-family="'Geist', sans-serif">Chỗ vòng này đổi</text>
+      <rect x="320" y="352" width="24" height="16" rx="4" fill="#f2f2f2" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="356" y="365" fill="#575757" font-size="14" font-family="'Geist', sans-serif">Không có tác dụng</text>
+
+      <text x="20" y="400" fill="#575757" font-size="13" font-family="'Geist Mono', monospace">Tên kỹ thuật: Cài đặt = AppSetting.agentModelId · bộ giải theo vai = modelTheoVai("tac-nhan"), apps/agent/agent/lib/model.ts</text>
+      <text x="20" y="420" fill="#575757" font-size="13" font-family="'Geist Mono', monospace">model của lượt = AgentRun.modelId · «dựng bằng» = AgentVersion.modelId, không migration · AC-6, AC-7</text>
+    </svg>
+
+    <footer>d-1 · tac-nhan-model-rieng · model giải theo vai, bộ chạy thôi ghim theo bản · thiết kế 2026-09-27</footer>
+  </div>
+</body>
+</html>

@@ -16,13 +16,13 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { tenDonVi } from "./don-vi";
 import type { CapNhatTuanOutput } from "./okr.contracts";
 import {
 	chonSoMay,
 	chonTenDonVi,
 	doCanhVaSoMay,
 	OkrService,
-	tenDonVi,
 } from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
@@ -137,8 +137,10 @@ export class OkrCapNhatService {
 					throw new BadRequestException(T.capNhat.kyKhongChay);
 				const chu = kr.ownerUserId === userId;
 				if (
-					!chu &&
-					!this.quyenOkr.suaDuocDonVi(q, userId, donViCua(kr.objective))
+					!this.quyenOkr.ghiDuocKr(q, userId, {
+						ownerUserId: kr.ownerUserId,
+						objective: donViCua(kr.objective),
+					})
 				)
 					throw new ForbiddenException(T.capNhat.khongPhaiChuHayTruong);
 				const may = kr.source !== "tay";

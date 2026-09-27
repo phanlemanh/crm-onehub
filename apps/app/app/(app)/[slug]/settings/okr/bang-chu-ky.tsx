@@ -11,6 +11,7 @@ import {
 	CardTitle,
 } from "@crm/ui/components/card";
 import { CardTableEmpty } from "@crm/ui/components/card-table";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -36,13 +37,21 @@ import { useQueryState } from "nuqs";
 import { useState } from "react";
 import { toast } from "sonner";
 import { CELL, type ChuKy } from "@/app/(app)/[slug]/okr/kieu";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { parseMoChuKy, THAM_SO_MO_CHU_KY } from "./okr-settings-search-params";
+import { HopThoaiDongKy } from "./hop-thoai-dong-ky";
+import { HopThoaiMoLai } from "./hop-thoai-mo-lai";
+import {
+	parseMoChuKy,
+	parseMoRa,
+	THAM_SO_MO_CHU_KY,
+	THAM_SO_MO_RA,
+} from "./okr-settings-search-params";
 import { SheetMoChuKy } from "./sheet-mo-chu-ky";
+import { SheetMoRa } from "./sheet-mo-ra";
 import { DangTaiThe, LoiThe, useQuyenChuongTrinh } from "./trang-thai-cai-dat";
 
 const TONE_PHA = {
@@ -51,6 +60,8 @@ const TONE_PHA = {
 	"cham-diem": "warning",
 	"da-dong": "neutral",
 } as const satisfies Record<PhaChuKy, StatusTone>;
+
+type Hoi = "chuyen" | "dong" | "mo-lai" | null;
 
 function theoNam(cycles: ChuKy[]): ChuKy[] {
 	const nam = cycles.filter((c) => c.kind === "nam");
@@ -64,9 +75,16 @@ function theoNam(cycles: ChuKy[]): ChuKy[] {
 	];
 }
 
-export function BangChuKy({ goiY }: { goiY: GoiYChuKy }) {
+export function BangChuKy({
+	goiY,
+	homNay,
+}: {
+	goiY: GoiYChuKy;
+	homNay: string;
+}) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
+	const k = okrKhepMessages(locale).caiDat;
 	const c = m.caiDat;
 	const trpc = useTRPC();
 	const cycles = useQuery(trpc.okr.cycles.queryOptions());
@@ -112,8 +130,21 @@ export function BangChuKy({ goiY }: { goiY: GoiYChuKy }) {
 				<SimpleTable columns={cot}>
 					{ds.map((ky) => (
 						<SimpleTableRow key={ky.id} data-chu-ky={ky.id}>
-							<TableCell className={CELL}>
-								<span translate="no">{ky.name}</span>
+							<TableCell className={`${CELL} whitespace-normal`}>
+								<span className="flex flex-col gap-0.5">
+									<span translate="no">{ky.name}</span>
+									{ky.cuaSoRa ? (
+										<span
+											className="text-muted-foreground text-xs tabular-nums"
+											data-dong-ra={ky.cuaSoRa.id}
+										>
+											{k.dongPhu(
+												formatDay(ky.cuaSoRa.tuNgay, locale),
+												formatDay(ky.cuaSoRa.denNgay, locale),
+											)}
+										</span>
+									) : null}
+								</span>
 							</TableCell>
 							<TableCell className={`${CELL} text-muted-foreground`}>
 								{m.loaiChuKy[ky.kind]}
@@ -144,6 +175,7 @@ export function BangChuKy({ goiY }: { goiY: GoiYChuKy }) {
 				cacNam={ds.filter((ky) => ky.kind === "nam")}
 				goiY={goiY}
 			/>
+			<SheetMoRa canManage={canManage} cycles={ds} homNay={homNay} />
 		</Card>
 	);
 }
@@ -159,21 +191,67 @@ function MenuChuKy({
 }) {
 	const m = okrMessages(useLocale());
 	const c = m.caiDat;
+	const k = okrKhepMessages(useLocale()).caiDat;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
-	const [hoi, setHoi] = useState(false);
+	const [hoi, setHoi] = useState<Hoi>(null);
+	const [, setMoRa] = useQueryState(THAM_SO_MO_RA, parseMoRa);
 	const ke = phaSau(ky.phase);
+	const dong = () => setHoi(null);
 
 	const chuyen = useMutation(
 		trpc.okr.setCyclePhase.mutationOptions({
 			onSuccess: async () => {
 				await cache.okr();
-				if (ke) toast.success(c.chuKy.daChuyen(ky.name, c.pha[ke]));
-				setHoi(false);
+				if (ke === "cham-diem") toast.success(k.sangCham.daSang(ky.name));
+				else if (ke) toast.success(c.chuKy.daChuyen(ky.name, c.pha[ke]));
+				setHoi(null);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
 	);
+
+	const dongRa = useMutation(
+		trpc.okr.dongRa.mutationOptions({
+			onSuccess: async () => {
+				await cache.okr();
+				toast.success(k.daDongRa(ky.name));
+			},
+			onError: (error) => toast.error(error.message),
+		}),
+	);
+
+	const muc = (ten: string, viec: string, chon: () => void) => (
+		<DropdownMenuItem
+			key={viec}
+			disabled={!canManage}
+			data-viec-chu-ky={viec}
+			onSelect={chon}
+		>
+			{ten}
+		</DropdownMenuItem>
+	);
+
+	const cacMuc =
+		ky.phase === "lap-ke-hoach"
+			? [
+					muc(c.chuKy.chuyenSang(c.pha["dang-chay"]), "chay", () =>
+						setHoi("chuyen"),
+					),
+				]
+			: ky.phase === "dang-chay"
+				? [
+						ky.cuaSoRa === null
+							? muc(k.menu.moRa, "mo-ra", () => void setMoRa(ky.id))
+							: muc(k.menu.dongRa, "dong-ra", () => {
+									if (ky.cuaSoRa && !dongRa.isPending)
+										dongRa.mutate({ id: ky.cuaSoRa.id });
+								}),
+						muc(k.menu.sangCham, "sang-cham", () => setHoi("chuyen")),
+					]
+				: ky.phase === "cham-diem"
+					? [muc(k.menu.dongKy, "dong-ky", () => setHoi("dong"))]
+					: [muc(k.menu.moLai, "mo-lai", () => setHoi("mo-lai"))];
 
 	return (
 		<>
@@ -184,34 +262,50 @@ function MenuChuKy({
 						aria-describedby={lyDo}
 						size="icon-sm"
 						variant="ghost"
-						disabled={!canManage || ke === null}
+						disabled={!canManage}
 						data-menu-chu-ky={ky.id}
 					>
 						<Icon icon={OverflowMenuHorizontal} />
 					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end">
-					{ke ? (
-						<DropdownMenuItem onSelect={() => setHoi(true)}>
-							{c.chuKy.chuyenSang(c.pha[ke])}
-						</DropdownMenuItem>
-					) : null}
-				</DropdownMenuContent>
+				<DropdownMenuContent align="end">{cacMuc}</DropdownMenuContent>
 			</DropdownMenu>
-			{ke ? (
+			{ke === "dang-chay" || ke === "cham-diem" ? (
 				<ConfirmDialog
 					tone="default"
-					tieuDe={c.chuKy.hoi.title(ky.name, c.pha[ke])}
-					than={c.chuKy.hoi.body}
-					nut={c.chuKy.hoi.action}
-					thoi={c.chuKy.hoi.cancel}
-					open={hoi}
+					tieuDe={
+						ke === "cham-diem"
+							? k.sangCham.tieuDe(ky.name)
+							: c.chuKy.hoi.title(ky.name, c.pha[ke])
+					}
+					than={ke === "cham-diem" ? k.sangCham.than : c.chuKy.hoi.body}
+					nut={ke === "cham-diem" ? k.sangCham.nut : c.chuKy.hoi.action}
+					thoi={ke === "cham-diem" ? k.sangCham.huy : c.chuKy.hoi.cancel}
+					open={hoi === "chuyen"}
 					pending={chuyen.isPending}
 					onOpenChange={(mo) => {
-						if (!mo && !chuyen.isPending) setHoi(false);
+						if (!mo && !chuyen.isPending) dong();
 					}}
 					onConfirm={() => {
 						if (!chuyen.isPending) chuyen.mutate({ id: ky.id, phase: ke });
+					}}
+				/>
+			) : null}
+			{ky.phase === "cham-diem" ? (
+				<HopThoaiDongKy
+					ky={ky}
+					open={hoi === "dong"}
+					onOpenChange={(mo) => {
+						if (!mo) dong();
+					}}
+				/>
+			) : null}
+			{ky.phase === "da-dong" ? (
+				<HopThoaiMoLai
+					ky={ky}
+					open={hoi === "mo-lai"}
+					onOpenChange={(mo) => {
+						if (!mo) dong();
 					}}
 				/>
 			) : null}

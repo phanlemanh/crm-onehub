@@ -1,7 +1,8 @@
 import { DEFAULT_AGENT_MODEL } from "@crm/db/settings";
 import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
-import { selectedModel } from "../../lib/model";
+import { SESSION_LIMITS } from "../../lib/dispatch-config";
+import { modelChoBoDung } from "../../lib/model";
 import { BUILDER_STATUS } from "./lib/authorization";
 
 export default defineAgent({
@@ -9,7 +10,7 @@ export default defineAgent({
 		"Turn one private CRM builder-chat request into a validated, reviewable team-agent version without deploying it.",
 	model: defineDynamic({
 		fallback: DEFAULT_AGENT_MODEL.id,
-		events: { "session.started": () => selectedModel() },
+		events: { "session.started": () => modelChoBoDung() },
 	}),
 	outputSchema: z
 		.object({
@@ -33,9 +34,5 @@ export default defineAgent({
 				});
 			}
 		}),
-	limits: {
-		maxInputTokensPerSession: 100_000,
-		maxOutputTokensPerSession: 10_000,
-		sessionTimeoutMs: 24 * 60 * 60 * 1000,
-	},
+	limits: SESSION_LIMITS.builder,
 });

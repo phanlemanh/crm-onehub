@@ -30,6 +30,7 @@ const QUY: ChuKyOutput = {
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 };
 
 function kr(id: string, startLocked: boolean): KrOutput {
@@ -82,6 +83,8 @@ function mucTieu(
 		id: "mt-1",
 		cycleId: QUY.id,
 		cycleName: QUY.name,
+		mangSangToi: null,
+		mangSangTu: null,
 		level: "phong-ban",
 		unitId: "pb-1",
 		unitName: "Kinh doanh vùng 1",
@@ -126,6 +129,8 @@ type CamSheets = { sheetsBat: boolean; emailSheets: string | null };
 const SHEETS_TAT: CamSheets = { sheetsBat: false, emailSheets: null };
 let sheets = SHEETS_TAT;
 let origin: string | null = null;
+let cuaSoRa: ChuKyOutput["cuaSoRa"] = null;
+const TRONG_RA = { id: "ra-1", tuNgay: "2026-11-16", denNgay: "2026-11-22" };
 
 function thuTuc<TRa, TKet = { id: string; canhBao: string | null }>(
 	duong: string,
@@ -159,7 +164,7 @@ mock.module("@/lib/trpc/client", () => ({
 		okr: {
 			objective: thuTuc("okr.objective", () => chiTiet),
 			cycles: thuTuc("okr.cycles", () => ({
-				cycles: [QUY],
+				cycles: [{ ...QUY, cuaSoRa }],
 				currentId: QUY.id,
 			})),
 			program: thuTuc("okr.program", () => ({
@@ -390,6 +395,7 @@ beforeEach(() => {
 	binhLuan = [];
 	sheets = SHEETS_TAT;
 	origin = null;
+	cuaSoRa = null;
 	chiTiet = mucTieu("nhap", false);
 });
 
@@ -692,6 +698,7 @@ async function moMenu(nhan: string, muc: string): Promise<void> {
 describe("hop-thoai-sua-va-cuon", () => {
 	test("hop-thoai-sua-va-cuon: sua KR — Luu tat toi khi doi mot o, chan hop nam ngoai khung cuon, chi gui truong da doi", async () => {
 		chiTiet = mucTieu("cong-bo", true);
+		cuaSoRa = TRONG_RA;
 		await mo();
 		await moMenu("Thao tác với KR kr-1", m.sheet.suaKr);
 		await cho(() => hop() !== null, "hop thoai KR");
@@ -961,9 +968,73 @@ describe("sheet-cap-nhat-mot-kr", () => {
 	});
 });
 
+describe("ly-do-doi-dich", () => {
+	test("ly-do-doi-dich: ngoai ra — doi dich hien o ly do, Luu tat toi du ly do, gui lyDoDoiDich", async () => {
+		chiTiet = mucTieu("cong-bo", true);
+		await mo();
+		await moMenu("Thao tác với KR kr-1", m.sheet.suaKr);
+		await cho(() => hop() !== null, "hop thoai KR");
+		const h = hop();
+		if (!h) throw new Error("khong co hop");
+		const gui = () => h.querySelector<HTMLButtonElement>('[data-nut="gui-kr"]');
+		const coOTruoc = h.querySelector("[data-o-ly-do-dich]") !== null;
+		await go(h.querySelector("[data-o-dich]"), "60");
+		const coOSau = h.querySelector("[data-o-ly-do-dich]") !== null;
+		const tatKhiTrong = gui()?.disabled;
+		await goVung(h.querySelector("[data-o-ly-do-dich] textarea"), "ngắn quá");
+		const tatKhiNgan = gui()?.disabled;
+		await goVung(
+			h.querySelector("[data-o-ly-do-dich] textarea"),
+			"Khách đổi kế hoạch",
+		);
+		const tatKhiDu = gui()?.disabled;
+		const btn = gui();
+		if (!btn) throw new Error("khong co nut gui");
+		await bam(btn);
+		await cho(() => daGoi.length > 0, "goi sua KR");
+		expect({
+			coOTruoc,
+			coOSau,
+			tatKhiTrong,
+			tatKhiNgan,
+			tatKhiDu,
+			goi: daGoi,
+		}).toEqual({
+			coOTruoc: false,
+			coOSau: true,
+			tatKhiTrong: true,
+			tatKhiNgan: true,
+			tatKhiDu: false,
+			goi: [
+				{
+					duong: "okr.updateKeyResult",
+					dauVao: {
+						id: "kr-1",
+						targetValue: 60,
+						lyDoDoiDich: "Khách đổi kế hoạch",
+					},
+				},
+			],
+		});
+	});
+
+	test("ly-do-doi-dich: trong ra — doi dich khong hien o ly do", async () => {
+		chiTiet = mucTieu("cong-bo", true);
+		cuaSoRa = TRONG_RA;
+		await mo();
+		await moMenu("Thao tác với KR kr-1", m.sheet.suaKr);
+		await cho(() => hop() !== null, "hop thoai KR");
+		const h = hop();
+		if (!h) throw new Error("khong co hop");
+		await go(h.querySelector("[data-o-dich]"), "60");
+		expect(h.querySelector("[data-o-ly-do-dich]")).toBeNull();
+	});
+});
+
 describe("sheet-hien-tai-chi-doc", () => {
 	test("sheet-hien-tai-chi-doc: KR dang chay — o Hien tai readonly khong disabled, co lien ket Cap nhat tuan, khong gui currentValue", async () => {
 		chiTiet = dangChay({ laCuaToi: false });
+		cuaSoRa = TRONG_RA;
 		await mo();
 		await moMenu("Thao tác với KR kr-1", m.sheet.suaKr);
 		await cho(() => hop() !== null, "hop thoai KR");

@@ -8,6 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DataTable,
 	type DataTableColumn,
@@ -39,7 +40,6 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ChuyenOkrDialog } from "./chuyen-okr-dialog";
 import { ChuyenViecDialog } from "./chuyen-viec-dialog";
-import { ConfirmDialog } from "./confirm-dialog";
 import { membersSearchParams } from "./members-search-params";
 import { PhatChiaButton } from "./phat-chia-button";
 import { VetLine } from "./vet-line";

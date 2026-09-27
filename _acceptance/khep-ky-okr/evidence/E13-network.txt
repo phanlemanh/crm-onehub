@@ -1,0 +1,4 @@
+2026-09-27T17:06:28.643Z 500 GET http://localhost:4857/api/trpc/okr.bangCham?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22cmuk2ls4m000izrcfcwtl9xdi%22%2C%22donVi%22%3A%7B%22loai%22%3A%22pb%22%2C%22id%22%3A%22cmuk2ls0d0000zrcf46x6h0tn%22%7D%7D%7D
+2026-09-27T17:06:28.643Z console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+2026-09-27T17:06:29.646Z 500 GET http://localhost:4857/api/trpc/okr.bangCham?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22cmuk2ls4m000izrcfcwtl9xdi%22%2C%22donVi%22%3A%7B%22loai%22%3A%22pb%22%2C%22id%22%3A%22cmuk2ls0d0000zrcf46x6h0tn%22%7D%7D%7D
+2026-09-27T17:06:29.646Z console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)

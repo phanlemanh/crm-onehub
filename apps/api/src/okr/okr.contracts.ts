@@ -1,4 +1,5 @@
 import { doiSoat, nhomViecAi } from "@crm/validation/ai-chi-phi";
+import { viecOkr } from "@crm/validation/nhac-ke-hoach";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import {
 	chuKyInput,
@@ -6,6 +7,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
+import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import { KIEU_KR, krInput, NGUON_KR } from "@crm/validation/okr-kr";
 import {
 	CAP_MUC_TIEU,
@@ -29,6 +31,12 @@ export const nguoiOkr = z.object({
 	email: z.string(),
 });
 
+export const cuaSoRaOutput = z.object({
+	id: z.string(),
+	tuNgay: ngay,
+	denNgay: ngay,
+});
+
 export const chuKyOutput = z.object({
 	id: z.string(),
 	kind: z.enum(LOAI_CHU_KY),
@@ -40,6 +48,7 @@ export const chuKyOutput = z.object({
 	breakStartsOn: ngay.nullable(),
 	breakEndsOn: ngay.nullable(),
 	updateWeekday: z.number(),
+	cuaSoRa: cuaSoRaOutput.nullable(),
 });
 export const cyclesOutput = z.object({
 	cycles: z.array(chuKyOutput),
@@ -172,8 +181,14 @@ export const okrCountByUnitOutput = z.record(z.string(), z.number());
 export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({ objectives: z.array(mucTieuOutput) });
 export const objectiveInput = z.object({ id: ma });
+export const lienKetMangSang = z
+	.object({ objectiveId: z.string(), cycleName: z.string() })
+	.nullable();
+
 export const objectiveOutput = mucTieuOutput.extend({
 	cycleName: z.string(),
+	mangSangToi: lienKetMangSang,
+	mangSangTu: lienKetMangSang,
 	trail: z.array(vetOutput),
 	canEditKr: z.array(z.string()),
 });
@@ -185,7 +200,9 @@ export const okOutput = z.object({
 	canhBao: z.string().nullable(),
 });
 export const createKrInput = krInput.extend({ objectiveId: ma });
-export const updateKrInput = krInput.partial().extend({ id: ma });
+export const updateKrInput = krInput
+	.partial()
+	.extend({ id: ma, lyDoDoiDich: lyDoDoiDich.optional() });
 export const alignmentInput = z.object({
 	objectiveId: ma,
 	targetObjectiveId: ma.nullable(),
@@ -321,44 +338,8 @@ export const followOutput = z.object({
 	following: z.boolean(),
 	followerCount: z.number(),
 });
-export const viecOkrOutput = z.discriminatedUnion("loai", [
-	z.object({
-		loai: z.literal("okr-cap-nhat"),
-		krIds: z.array(z.string()),
-		nhan: z.string(),
-		soKr: z.number(),
-	}),
-	z.object({
-		loai: z.literal("okr-kr-im"),
-		keyResultId: z.string(),
-		objectiveId: z.string(),
-		nhan: z.string(),
-		soNgay: z.number(),
-		chuTen: z.string().nullable(),
-	}),
-	z.object({
-		loai: z.literal("okr-duoc-giao"),
-		objectiveId: z.string(),
-		keyResultId: z.string().optional(),
-		nhan: z.string(),
-	}),
-	z.object({
-		loai: z.literal("okr-nhac-ten"),
-		commentId: z.string(),
-		objectiveId: z.string(),
-		nhan: z.string(),
-		nguoiTen: z.string(),
-	}),
-	z.object({
-		loai: z.literal("okr-theo-doi"),
-		objectiveId: z.string(),
-		nhan: z.string(),
-		capNhat: z.number(),
-		binhLuan: z.number(),
-	}),
-]);
 export const viecCuaToiOutput = z.object({
-	viec: z.array(viecOkrOutput),
+	viec: z.array(viecOkr),
 	lienQuanOkr: z.boolean(),
 });
 export const transferOkrOutput = z.object({
@@ -380,7 +361,7 @@ export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
 export type CommentsOutput = z.infer<typeof commentsOutput>;
 export type FollowOutput = z.infer<typeof followOutput>;
 export type ThanhVienOutput = z.infer<typeof thanhVienOutput>;
-export type ViecOkrOutput = z.infer<typeof viecOkrOutput>;
+export type ViecOkrOutput = z.infer<typeof viecOkr>;
 export type ViecCuaToiOutput = z.infer<typeof viecCuaToiOutput>;
 export type TransferOkrOutput = z.infer<typeof transferOkrOutput>;
 export type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";

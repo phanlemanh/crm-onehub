@@ -3,6 +3,7 @@
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -49,21 +50,23 @@ export function HopThoaiDonVi({
 	const maO = useId();
 	const dangGui = useRef(false);
 
-	const coTen = yeuCau.loai === "doi-ten" ? yeuCau.name : "";
-	const [ten, setTen] = useState(coTen);
-	const [loi, setLoi] = useState<string | null>(null);
-
 	const truongHienTai =
 		yeuCau.loai === "truong"
 			? yeuCau.don === "bo-phan"
 				? cay.divisions.find((d) => d.id === yeuCau.id)?.head?.id
 				: moiPhongBan(cay).find((d) => d.id === yeuCau.id)?.head?.id
 			: undefined;
-	const [chon, setChon] = useState<string>(
-		yeuCau.loai === "chuyen"
-			? (yeuCau.divisionId ?? KHONG_CHON)
-			: (truongHienTai ?? KHONG_CHON),
-	);
+	const [dau] = useState(() => ({
+		ten: yeuCau.loai === "doi-ten" ? yeuCau.name : "",
+		chon:
+			yeuCau.loai === "chuyen"
+				? (yeuCau.divisionId ?? KHONG_CHON)
+				: (truongHienTai ?? KHONG_CHON),
+	}));
+	const [ten, setTen] = useState(dau.ten);
+	const [loi, setLoi] = useState<string | null>(null);
+	const [chon, setChon] = useState<string>(dau.chon);
+	const coThayDoi = ten !== dau.ten || chon !== dau.chon;
 
 	useEffect(() => {
 		if (loi) document.getElementById(maO)?.focus();
@@ -176,6 +179,7 @@ export function HopThoaiDonVi({
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
+			coThayDoi={coThayDoi}
 		>
 			<DialogContent>
 				<DialogHeader>
@@ -233,9 +237,11 @@ export function HopThoaiDonVi({
 					)}
 				</form>
 				<DialogFooter>
-					<Button variant="outline" onClick={dong} disabled={dangLuu}>
-						{m.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button variant="outline" disabled={dangLuu}>
+							{m.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						type="submit"
 						form={`${maO}-form`}

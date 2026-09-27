@@ -19,6 +19,7 @@ const QUY: ChuKyOutput = {
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 };
 
 type Json =
