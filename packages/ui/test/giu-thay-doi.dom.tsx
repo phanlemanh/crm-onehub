@@ -1,6 +1,13 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { act, type ReactElement, type ReactNode, useState } from "react";
+import {
+	act,
+	type ComponentProps,
+	type ReactElement,
+	type ReactNode,
+	useState,
+} from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { Drawer as DrawerVaul } from "vaul";
 import { Button } from "../src/components/button";
 import { Combobox } from "../src/components/combobox";
 import {
@@ -20,6 +27,13 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "../src/components/dialog";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerDescription,
+	DrawerTitle,
+} from "../src/components/drawer";
 import { Input } from "../src/components/input";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
@@ -29,6 +43,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../src/components/select";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetTitle,
+} from "../src/components/sheet";
+import { Textarea } from "../src/components/textarea";
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -201,6 +223,14 @@ function soLieu() {
 	};
 }
 
+function thongDiepBamNgoai(con: boolean, hoi: number, goi: number): string {
+	if (!con) return `bam-ngoai: hop dong du da go (onOpenChange goi ${goi} lan)`;
+	if (hoi > 0) {
+		return `bam-ngoai: bam ngoai ma hoi lai (hoi=${hoi}, onOpenChange goi ${goi} lan)`;
+	}
+	return `bam-ngoai: hop con mo, khong hoi, nhung da bao dong len cha (onOpenChange goi ${goi} lan)`;
+}
+
 describe("bam-ngoai", () => {
 	test("bam-ngoai: da go thi hop dung yen, chu con, khong goi dong", async () => {
 		const lich: boolean[] = [];
@@ -213,9 +243,7 @@ describe("bam-ngoai", () => {
 		khop(
 			{ con, chu: o.value, goi: lich.length, hoi },
 			{ con: true, chu: "Hợp đồng", goi: 0, hoi: 0 },
-			con
-				? `bam-ngoai: bam ngoai ma hoi lai (hoi=${hoi}, onOpenChange goi ${lich.length} lan)`
-				: `bam-ngoai: hop dong du da go (onOpenChange goi ${lich.length} lan)`,
+			thongDiepBamNgoai(con, hoi, lich.length),
 		);
 	});
 
@@ -397,7 +425,8 @@ type DongMaTran = {
 	ca: string;
 	con: boolean;
 	hoi: number;
-	sauBo?: { con: boolean; hoi: number };
+	lich: boolean[];
+	sauBo?: { con: boolean; hoi: number; lich: boolean[] };
 };
 
 function VoKhongKiemSoat({ ghi }: { ghi: (mo: boolean) => void }) {
@@ -524,14 +553,21 @@ describe("may-dong", () => {
 
 	test("may-dong: hop khong kiem soat, ma tran 4 ca viet truoc", async () => {
 		const MONG_DOI: DongMaTran[] = [
-			{ ca: "lop-phu", con: true, hoi: 0 },
-			{ ca: "esc", con: true, hoi: 1, sauBo: { con: false, hoi: 0 } },
-			{ ca: "huy", con: true, hoi: 1 },
-			{ ca: "luu-dongNgay", con: false, hoi: 0 },
+			{ ca: "lop-phu", con: true, hoi: 0, lich: [true] },
+			{
+				ca: "esc",
+				con: true,
+				hoi: 1,
+				lich: [true],
+				sauBo: { con: false, hoi: 0, lich: [true, false] },
+			},
+			{ ca: "huy", con: true, hoi: 1, lich: [true] },
+			{ ca: "luu-dongNgay", con: false, hoi: 0, lich: [true, false] },
 		];
 		const thucTe: DongMaTran[] = [];
 		for (const ca of ["lop-phu", "esc", "huy", "luu-dongNgay"] as const) {
-			dung(<VoKhongKiemSoat ghi={() => {}} />);
+			const lich: boolean[] = [];
+			dung(<VoKhongKiemSoat ghi={(v) => lich.push(v)} />);
 			await bam(nutCo("Mở hộp"));
 			await go(oTen(), "Hợp đồng");
 			if (ca === "lop-phu") await bamLopPhu("dialog-overlay");
@@ -542,10 +578,15 @@ describe("may-dong", () => {
 				ca,
 				con: noiDung() !== null,
 				hoi: hopHoi().length,
+				lich: [...lich],
 			};
 			if (ca === "esc") {
 				await bam(nutCo("Bỏ"));
-				dong.sauBo = { con: noiDung() !== null, hoi: hopHoi().length };
+				dong.sauBo = {
+					con: noiDung() !== null,
+					hoi: hopHoi().length,
+					lich: [...lich],
+				};
 			}
 			thucTe.push(dong);
 			act(() => root?.unmount());
@@ -793,6 +834,31 @@ describe("o-loc", () => {
 		);
 	});
 
+	test("o-loc: (4) Sheet giuThayDoi={false} thi go vao Input thuong van dong", async () => {
+		const lich: boolean[] = [];
+		dung(<VoSheet ghi={(v) => lich.push(v)} giuThayDoi={false} />);
+		await go(oTrong("sheet-content", "Tên"), "Hợp đồng");
+		await bamLopPhu("sheet-overlay");
+		khop(
+			{ con: co("sheet-content"), lich },
+			{ con: false, lich: [false] },
+			"o-loc: giu du giuThayDoi=false (sheet)",
+		);
+	});
+
+	test("o-loc: (4) Drawer giuThayDoi={false} thi go vao Input thuong van dong", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDrawer ghi={(v) => lich.push(v)} giuThayDoi={false} />);
+		await go(oTrong("drawer-content", "Tên"), "Hợp đồng");
+		const dismissible = propGocVaul().dismissible;
+		await bamLopPhu("drawer-overlay");
+		khop(
+			{ dismissible, con: co("drawer-content"), lich },
+			{ dismissible: undefined, con: false, lich: [false] },
+			"o-loc: giu du giuThayDoi=false (drawer)",
+		);
+	});
+
 	test("o-loc: doi chung — go vao Input thuong, giuThayDoi mac dinh thi giu", async () => {
 		const lich: boolean[] = [];
 		dung(
@@ -806,6 +872,539 @@ describe("o-loc", () => {
 			{ con: noiDung() !== null, goi: lich.length },
 			{ con: true, goi: 0 },
 			"o-loc: doi chung khong giu",
+		);
+	});
+});
+
+function oTrong(slot: string, nhan: string): HTMLInputElement {
+	const o = document.querySelector(
+		`[data-slot='${slot}'] [aria-label='${nhan}']`,
+	) as HTMLInputElement | null;
+	if (!o) throw new Error(`khong thay o ${nhan} trong ${slot}`);
+	return o;
+}
+
+function co(slot: string): boolean {
+	return document.querySelector(`[data-slot='${slot}']`) !== null;
+}
+
+function nutX(slot: string): HTMLButtonElement | null {
+	return (
+		[
+			...document.querySelectorAll<HTMLButtonElement>(
+				`[data-slot='${slot}'] button`,
+			),
+		].find((b) => b.querySelector(".sr-only")?.textContent === "Đóng") ?? null
+	);
+}
+
+function goKhoiCay() {
+	act(() => root?.unmount());
+	root = null;
+	khung?.remove();
+	khung = null;
+	document.body.innerHTML = "";
+	document.body.removeAttribute("style");
+}
+
+function VoSheet({
+	ghi,
+	giuThayDoi,
+}: {
+	ghi: (mo: boolean) => void;
+	giuThayDoi?: boolean;
+}) {
+	const [mo, datMo] = useState(true);
+	return (
+		<Sheet
+			open={mo}
+			onOpenChange={(v) => {
+				ghi(v);
+				datMo(v);
+			}}
+			giuThayDoi={giuThayDoi}
+		>
+			<SheetContent>
+				<SheetTitle>Tạo thoả thuận</SheetTitle>
+				<SheetDescription>Thoả thuận mới</SheetDescription>
+				<Input aria-label="Tên" />
+				<SheetClose asChild>
+					<Button>Huỷ</Button>
+				</SheetClose>
+			</SheetContent>
+		</Sheet>
+	);
+}
+
+const DUONG_SHEET = ["lop-phu", "esc", "x", "nut-sheet-close"] as const;
+
+type DongSheet = {
+	duong: (typeof DUONG_SHEET)[number];
+	trangThai: "da-go" | "chua-go";
+	mo: boolean;
+	hoi: boolean;
+	goi: number;
+};
+
+const BANG_SHEET: DongSheet[] = [
+	{ duong: "lop-phu", trangThai: "da-go", mo: true, hoi: false, goi: 0 },
+	{ duong: "esc", trangThai: "da-go", mo: true, hoi: true, goi: 0 },
+	{ duong: "x", trangThai: "da-go", mo: true, hoi: true, goi: 0 },
+	{ duong: "nut-sheet-close", trangThai: "da-go", mo: true, hoi: true, goi: 0 },
+	{ duong: "lop-phu", trangThai: "chua-go", mo: false, hoi: false, goi: 1 },
+	{ duong: "esc", trangThai: "chua-go", mo: false, hoi: false, goi: 1 },
+	{ duong: "x", trangThai: "chua-go", mo: false, hoi: false, goi: 1 },
+	{
+		duong: "nut-sheet-close",
+		trangThai: "chua-go",
+		mo: false,
+		hoi: false,
+		goi: 1,
+	},
+];
+
+async function diDuongSheet(duong: (typeof DUONG_SHEET)[number]) {
+	if (duong === "lop-phu") {
+		await bamLopPhu("sheet-overlay");
+		return;
+	}
+	if (duong === "esc") {
+		await esc(oTrong("sheet-content", "Tên"));
+		return;
+	}
+	if (duong === "x") {
+		await bam(nutX("sheet-content"));
+		return;
+	}
+	await bam(nutCo("Huỷ"));
+}
+
+describe("sheet-ma-tran", () => {
+	test("sheet-ma-tran: 4 duong x 2 trang thai khop bang viet truoc", async () => {
+		const thucTe: DongSheet[] = [];
+		for (const trangThai of ["da-go", "chua-go"] as const) {
+			for (const duong of DUONG_SHEET) {
+				const lich: boolean[] = [];
+				dung(<VoSheet ghi={(v) => lich.push(v)} />);
+				if (trangThai === "da-go") {
+					await go(oTrong("sheet-content", "Tên"), "Hợp đồng");
+				} else {
+					await cho();
+				}
+				await diDuongSheet(duong);
+				thucTe.push({
+					duong,
+					trangThai,
+					mo: co("sheet-content"),
+					hoi: hopHoi().length > 0,
+					goi: lich.length,
+				});
+				goKhoiCay();
+			}
+		}
+		const lech = thucTe
+			.filter((d, i) => !Bun.deepEquals(d, BANG_SHEET[i]))
+			.map((d) => `${d.duong} · ${d.trangThai}`);
+		khop(
+			thucTe,
+			BANG_SHEET,
+			`sheet-ma-tran: lech bang viet truoc o ${lech.join(", ")}`,
+		);
+	});
+});
+
+describe("sheet-dong-ngay", () => {
+	test("sheet-dong-ngay: da go, nut Luu boc SheetClose dongNgay thi dong khong hoi", async () => {
+		const lich: boolean[] = [];
+		dung(
+			<Sheet
+				defaultOpen
+				onOpenChange={(v) => {
+					lich.push(v);
+				}}
+			>
+				<SheetContent>
+					<SheetTitle>Tạo thoả thuận</SheetTitle>
+					<SheetDescription>Thoả thuận mới</SheetDescription>
+					<Input aria-label="Tên" />
+					<SheetClose asChild dongNgay>
+						<Button>Lưu</Button>
+					</SheetClose>
+				</SheetContent>
+			</Sheet>,
+		);
+		await go(oTrong("sheet-content", "Tên"), "Hợp đồng");
+		const theoDoi = theoDoiHopHoi();
+		await bam(nutCo("Lưu"));
+		khop(
+			{ mo: co("sheet-content"), tungHoi: theoDoi.thay(), lich },
+			{ mo: false, tungHoi: false, lich: [false] },
+			"sheet-dong-ngay: dongNgay van hoi",
+		);
+	});
+});
+
+function SheetCoHop({
+	ghiNgan,
+	ghiHop,
+}: {
+	ghiNgan: (mo: boolean) => void;
+	ghiHop: (mo: boolean) => void;
+}) {
+	const [moNgan, datMoNgan] = useState(true);
+	const [moHop, datMoHop] = useState(false);
+	return (
+		<Sheet
+			open={moNgan}
+			onOpenChange={(v) => {
+				ghiNgan(v);
+				datMoNgan(v);
+			}}
+		>
+			<SheetContent>
+				<SheetTitle>Mục tiêu</SheetTitle>
+				<SheetDescription>Ngăn bản ghi</SheetDescription>
+				<Button onClick={() => datMoHop(true)}>Mở hộp KR</Button>
+				<Dialog
+					open={moHop}
+					onOpenChange={(v) => {
+						ghiHop(v);
+						datMoHop(v);
+					}}
+				>
+					<DialogContent>
+						<DialogTitle>Thêm KR</DialogTitle>
+						<DialogDescription>Kết quả then chốt mới</DialogDescription>
+						<Input aria-label="Tên" />
+					</DialogContent>
+				</Dialog>
+			</SheetContent>
+		</Sheet>
+	);
+}
+
+describe("long-nhau", () => {
+	test("long-nhau: Dialog trong Sheet — Esc chi hoi cho Dialog, Sheet van sach", async () => {
+		const ngan: boolean[] = [];
+		const hop: boolean[] = [];
+		dung(
+			<SheetCoHop ghiNgan={(v) => ngan.push(v)} ghiHop={(v) => hop.push(v)} />,
+		);
+		await bam(nutCo("Mở hộp KR"));
+		await go(oTen(), "Hợp đồng");
+		await esc(oTen());
+		khop(
+			{
+				hoi: hopHoi().length,
+				hopCon: noiDung() !== null,
+				nganCon: co("sheet-content"),
+				ngan: [...ngan],
+				hop: [...hop],
+			},
+			{ hoi: 1, hopCon: true, nganCon: true, ngan: [], hop: [] },
+			"long-nhau: esc trong hop con khong chi hoi cho hop con",
+		);
+		await bam(nutCo("Bỏ"));
+		const sauBo = {
+			hoi: hopHoi().length,
+			hopCon: noiDung() !== null,
+			nganCon: co("sheet-content"),
+			hop: [...hop],
+		};
+		await bamLopPhu("sheet-overlay");
+		khop(
+			{ sauBo, nganCon: co("sheet-content"), ngan },
+			{
+				sauBo: { hoi: 0, hopCon: false, nganCon: true, hop: [false] },
+				nganCon: false,
+				ngan: [false],
+			},
+			"long-nhau: go trong hop con danh dau ca ngan cha",
+		);
+	});
+});
+
+function VoDrawer({
+	ghi,
+	giuThayDoi,
+}: {
+	ghi: (mo: boolean) => void;
+	giuThayDoi?: boolean;
+}) {
+	const [mo, datMo] = useState(true);
+	return (
+		<Drawer
+			open={mo}
+			onOpenChange={(v) => {
+				ghi(v);
+				datMo(v);
+			}}
+			giuThayDoi={giuThayDoi}
+		>
+			<DrawerContent>
+				<DrawerTitle>Trao đổi</DrawerTitle>
+				<DrawerDescription>Ghi chú của bản ghi</DrawerDescription>
+				<Textarea aria-label="Trao đổi" />
+				<Input aria-label="Tên" />
+				<DrawerClose asChild>
+					<Button>Huỷ</Button>
+				</DrawerClose>
+				<DrawerClose asChild dongNgay>
+					<Button>Lưu</Button>
+				</DrawerClose>
+			</DrawerContent>
+		</Drawer>
+	);
+}
+
+type GocVaul = ComponentProps<typeof DrawerVaul.Root>;
+
+type SoiFiber = {
+	type: object | string | null;
+	child: SoiFiber | null;
+	sibling: SoiFiber | null;
+	stateNode: { current?: SoiFiber } | null;
+	memoizedProps: GocVaul;
+};
+
+function propGocVaul(): GocVaul {
+	if (!khung) throw new Error("chua dung cay React");
+	const khoa = Object.keys(khung).find((k) =>
+		k.startsWith("__reactContainer$"),
+	);
+	const goc: SoiFiber | null = khoa ? Reflect.get(khung, khoa) : null;
+	const ngan: SoiFiber[] = goc?.stateNode?.current
+		? [goc.stateNode.current]
+		: [];
+	for (let f = ngan.pop(); f; f = ngan.pop()) {
+		if (f.type === DrawerVaul.Root) return f.memoizedProps;
+		if (f.sibling) ngan.push(f.sibling);
+		if (f.child) ngan.push(f.child);
+	}
+	throw new Error("khong thay goc vaul trong cay React hien tai");
+}
+
+function suKienKeo(): Parameters<NonNullable<GocVaul["onDrag"]>>[0] {
+	return new PointerEvent("pointermove", {
+		bubbles: true,
+	}) as unknown as Parameters<NonNullable<GocVaul["onDrag"]>>[0];
+}
+
+async function keoQuaGoc(tiLe: number) {
+	const goc = propGocVaul();
+	await act(async () => {
+		goc.onDrag?.(suKienKeo(), tiLe / 2);
+		goc.onDrag?.(suKienKeo(), tiLe);
+		goc.onRelease?.(suKienKeo(), false);
+	});
+	await cho();
+}
+
+const CHO_VAUL_MO_MS = 550;
+
+async function choVaulMo() {
+	await act(async () => {
+		await new Promise((xong) => setTimeout(xong, CHO_VAUL_MO_MS));
+	});
+}
+
+async function keoThat(dy: number) {
+	const noi = document.querySelector(
+		"[data-slot='drawer-content']",
+	) as HTMLElement | null;
+	if (!noi) throw new Error("khong thay noi dung drawer");
+	const tay = noi.firstElementChild ?? noi;
+	const suKien = (loai: string, y: number) =>
+		new PointerEvent(loai, {
+			bubbles: true,
+			button: 0,
+			pointerId: 1,
+			pointerType: "mouse",
+			clientY: y,
+		});
+	const goc = window.getComputedStyle;
+	window.getComputedStyle = (el, gia) =>
+		new Proxy(goc.call(window, el, gia), {
+			get: (kieu, khoa) => {
+				if (khoa === "transform") return maTran(kieu.transform);
+				const v = Reflect.get(kieu, khoa);
+				return v instanceof Function ? v.bind(kieu) : v;
+			},
+		});
+	try {
+		for (const [loai, y] of [
+			["pointerdown", 100],
+			["pointermove", 100 + dy / 2],
+			["pointermove", 100 + dy],
+			["pointerup", 100 + dy],
+		] as const) {
+			await act(async () => {
+				tay.dispatchEvent(suKien(loai, y));
+			});
+		}
+	} finally {
+		window.getComputedStyle = goc;
+	}
+	await cho();
+}
+
+function maTran(bien: string): string {
+	const m = bien.match(
+		/^translate3d\((-?[\d.]+)(?:px)?, (-?[\d.]+)(?:px)?, -?[\d.]+(?:px)?\)$/,
+	);
+	return m ? `matrix(1, 0, 0, 1, ${m[1]}, ${m[2]})` : bien;
+}
+
+function soDrawer(lich: boolean[]) {
+	return {
+		mo: co("drawer-content"),
+		chu: document.querySelector<HTMLTextAreaElement>(
+			"[data-slot='drawer-content'] [aria-label='Trao đổi']",
+		)?.value,
+		hoi: hopHoi().length,
+		goi: lich.length,
+	};
+}
+
+describe("drawer", () => {
+	test("drawer: da go · bam lop phu thi giu, chu con, khong hoi", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+		await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+		await bamLopPhu("drawer-overlay");
+		khop(
+			soDrawer(lich),
+			{ mo: true, chu: "Gọi lại thứ Hai", hoi: 0, goi: 0 },
+			"drawer: bam lop phu da go ma khong giu",
+		);
+	});
+
+	test("drawer: da go · Esc thi hoi, khong goi dong", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+		const o = oTrong("drawer-content", "Trao đổi");
+		await go(o, "Gọi lại thứ Hai");
+		await esc(o);
+		khop(
+			soDrawer(lich),
+			{ mo: true, chu: "Gọi lại thứ Hai", hoi: 1, goi: 0 },
+			"drawer: esc da go khong hoi",
+		);
+	});
+
+	test("drawer: da go · goc vaul nhan dismissible=false, onRelease qua nguong (qua onDrag) thi hoi", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+		await cho();
+		const truoc = propGocVaul().dismissible;
+		await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+		const sau = propGocVaul().dismissible;
+		await keoQuaGoc(0.4);
+		khop(
+			{ truoc, sau, ...soDrawer(lich) },
+			{
+				truoc: undefined,
+				sau: false,
+				mo: true,
+				chu: "Gọi lại thứ Hai",
+				hoi: 1,
+				goi: 0,
+			},
+			"drawer: onRelease qua nguong ma khong hoi",
+		);
+	});
+
+	test("drawer: da go · onRelease duoi nguong thi khong hoi", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+		await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+		await keoQuaGoc(0.1);
+		khop(
+			soDrawer(lich),
+			{ mo: true, chu: "Gọi lại thứ Hai", hoi: 0, goi: 0 },
+			"drawer: keo duoi nguong ma hoi",
+		);
+	});
+
+	test("drawer: da go · keo that qua nguong thi hoi, drawer con, Tiep tuc sua ve cho cu", async () => {
+		const lich: boolean[] = [];
+		dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+		await choVaulMo();
+		await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+		await keoThat(300);
+		const sauKeo = soDrawer(lich);
+		khop(
+			sauKeo,
+			{ mo: true, chu: "Gọi lại thứ Hai", hoi: 1, goi: 0 },
+			sauKeo.mo
+				? "drawer: vuot qua nguong ma khong hoi (keo that)"
+				: "drawer: dong khi vuot da go",
+		);
+		await bam(nutCo("Tiếp tục sửa"));
+		khop(
+			soDrawer(lich),
+			{ mo: true, chu: "Gọi lại thứ Hai", hoi: 0, goi: 0 },
+			"drawer: tiep tuc sua sau khi vuot lam mat drawer",
+		);
+	});
+
+	test("drawer: da go · DrawerClose khong dongNgay thi hoi, co dongNgay thi dong", async () => {
+		const thucTe: { nut: string; mo: boolean; hoi: number; lich: boolean[] }[] =
+			[];
+		for (const nut of ["Huỷ", "Lưu"]) {
+			const lich: boolean[] = [];
+			dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+			await go(oTrong("drawer-content", "Trao đổi"), "Gọi lại thứ Hai");
+			await bam(nutCo(nut));
+			thucTe.push({
+				nut,
+				mo: co("drawer-content"),
+				hoi: hopHoi().length,
+				lich: [...lich],
+			});
+			goKhoiCay();
+		}
+		khop(
+			thucTe,
+			[
+				{ nut: "Huỷ", mo: true, hoi: 1, lich: [] },
+				{ nut: "Lưu", mo: false, hoi: 0, lich: [false] },
+			],
+			"drawer: DrawerClose lech ma tran",
+		);
+	});
+
+	test("drawer: chua go · lop phu, Esc, keo that deu dong, moi duong goi mot lan", async () => {
+		const thucTe: {
+			duong: string;
+			mo: boolean;
+			hoi: number;
+			lich: boolean[];
+		}[] = [];
+		for (const duong of ["lop-phu", "esc", "vuot"] as const) {
+			const lich: boolean[] = [];
+			dung(<VoDrawer ghi={(v) => lich.push(v)} />);
+			if (duong === "vuot") await choVaulMo();
+			else await cho();
+			if (duong === "lop-phu") await bamLopPhu("drawer-overlay");
+			if (duong === "esc") await esc(oTrong("drawer-content", "Trao đổi"));
+			if (duong === "vuot") await keoThat(300);
+			thucTe.push({
+				duong,
+				mo: co("drawer-content"),
+				hoi: hopHoi().length,
+				lich: [...lich],
+			});
+			goKhoiCay();
+		}
+		khop(
+			thucTe,
+			[
+				{ duong: "lop-phu", mo: false, hoi: 0, lich: [false] },
+				{ duong: "esc", mo: false, hoi: 0, lich: [false] },
+				{ duong: "vuot", mo: false, hoi: 0, lich: [false] },
+			],
+			"drawer: chua go ma khong dong",
 		);
 	});
 });

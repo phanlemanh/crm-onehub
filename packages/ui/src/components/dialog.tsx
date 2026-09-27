@@ -122,11 +122,11 @@ function DialogContent({
 					className,
 				)}
 				onInputCapture={(e) => {
-					g?.danhDau(e.target);
+					g?.danhDau(e.target, e.currentTarget);
 					onInputCapture?.(e);
 				}}
 				onFocusCapture={(e) => {
-					g?.nhoO(e.target);
+					g?.nhoO(e.target, e.currentTarget);
 					onFocusCapture?.(e);
 				}}
 				onInteractOutside={(e) => {

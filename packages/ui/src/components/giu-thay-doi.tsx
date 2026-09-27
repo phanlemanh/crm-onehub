@@ -6,10 +6,11 @@ import * as React from "react";
 
 export type GiuNguCanh = {
 	coThayDoi: boolean;
-	danhDau: (target: EventTarget | null) => void;
-	nhoO: (target: EventTarget | null) => void;
+	danhDau: (target: EventTarget | null, noi: EventTarget | null) => void;
+	nhoO: (target: EventTarget | null, noi: EventTarget | null) => void;
 	hoiLai: () => void;
 	boQuaLanToi: () => void;
+	dong: () => void;
 };
 
 export type GiuGocVao = {
@@ -37,6 +38,18 @@ export function laOLoc(target: EventTarget | null): boolean {
 	}
 	if (target.getAttribute("role") === "combobox") return true;
 	return target.closest("[data-khong-giu]") !== null;
+}
+
+const NOI_DUNG_HOP =
+	"[data-slot=dialog-content],[data-slot=sheet-content],[data-slot=drawer-content]";
+
+function thuocHopKhac(
+	target: EventTarget | null,
+	noi: EventTarget | null,
+): boolean {
+	if (!(target instanceof Element)) return false;
+	const hop = target.closest(NOI_DUNG_HOP);
+	return hop !== null && hop !== noi;
 }
 
 function laOGo(target: EventTarget | null): target is HTMLElement {
@@ -95,18 +108,22 @@ export function useGiuGoc({
 	const ngucCanh = React.useMemo<GiuNguCanh>(
 		() => ({
 			coThayDoi: ban,
-			danhDau: (t) => {
-				if (bat && !laOLoc(t)) datTuNhan(true);
+			danhDau: (t, noi) => {
+				if (bat && !laOLoc(t) && !thuocHopKhac(t, noi)) datTuNhan(true);
 			},
-			nhoO: (t) => {
-				if (laOGo(t)) oCuoi.current = t;
+			nhoO: (t, noi) => {
+				if (laOGo(t) && !thuocHopKhac(t, noi)) oCuoi.current = t;
 			},
 			hoiLai: () => datHoi(true),
 			boQuaLanToi: () => {
 				boQua.current = true;
 			},
+			dong: () => {
+				boQua.current = false;
+				dongThat();
+			},
 		}),
-		[ban, bat],
+		[ban, bat, dongThat],
 	);
 	const hopHoi = (
 		<ConfirmDialog
