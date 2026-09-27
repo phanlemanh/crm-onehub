@@ -7,7 +7,8 @@ cần thiết để máy khác không phải học lại.
 
 ## 1. Đang ở đâu
 
-**Lượt 0 xong; lượt 1 `kho-tai-lieu` sẵn sàng mở.** Nghiên cứu xong, bản mẫu xong, lộ
+**Lượt 1 `kho-tai-lieu` đang ở Cổng Phạm vi** (thẻ `_acceptance/kho-tai-lieu/card.html`; duyệt bằng `/acceptance-gate:approve kho-tai-lieu`).
+Lượt 0 xong. Nghiên cứu xong, bản mẫu xong, lộ
 trình đã sắp lại theo output ngày 2026-09-27 (năm lượt, chạy thật mọi phòng ban, một
 lượt sửa). Chưa có dòng mã sản phẩm nào ngoài bản mẫu và trình đọc markdown. Tám mục
 từ điển được chốt ngay tại Cổng 1 của lượt 1, không có bước riêng.
@@ -29,6 +30,9 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `5526d5ef` | Lượt 1: thẻ Cổng Phạm vi |
+| `b16a6f03` | Lượt 1 S1: thiết kế, hợp đồng, evals, gap-probe, design-pass bản mẫu, hai hình |
+| `7acbffec` | Sửa 4 test api đỏ sẵn (đồng hồ Postgres–Node, khoá env đặt muộn) |
 | `924056fa` | Sắp lại lộ trình theo output: năm lượt, chạy thật mọi phòng ban, lượt sửa; bảng phủ 15 trạng thái; sổ thêm dòng 8, 9 |
 | `12c27b30` | Trỏ bàn giao tới trang theo dõi tiến độ |
 | `ad55da4c` | Bỏ hạng mục pháp lý, xoá gói gửi luật sư, tách chuẩn bị pilot khỏi lượt 0 |
