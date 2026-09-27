@@ -593,43 +593,43 @@ một mình thì lẫn với hai thứ kia — luôn viết đủ «trợ lý AI
 
 **Kho tài liệu**: nơi giữ quy định, chính sách, quy trình và biểu mẫu nội bộ của
 OneHub. Người viết và đọc trang; máy chỉ soạn bản đề xuất; trợ lý AI trả lời chỉ
-từ bản đang dùng. Đề xuất 2026-09-26, chưa qua Cổng Phạm vi.
+từ bản đang dùng. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: wiki, knowledge base, tài liệu nội bộ
 Vì sao: «wiki» gợi ai cũng sửa thẳng, ở đây mọi thay đổi đều qua duyệt; «knowledge
 base» là tên kỹ thuật; «tài liệu nội bộ» trùng với tệp người tải lên (nguồn).
 
 **Trang tài liệu**: một mục trong kho tài liệu, có một chủ trang, nhiều phiên bản
-và đúng một bản đang dùng. Trong màn kho gọi ngắn là «trang». Đề xuất 2026-09-26.
+và đúng một bản đang dùng. Trong màn kho gọi ngắn là «trang». Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: bài viết, article, tài liệu
 Vì sao: «tài liệu» đã là cả kho và cả tệp nguồn; ba nghĩa một chữ thì người đọc
 không biết đang nói cái nào.
 
 **Nguồn**: tệp gốc người tải vào kho tài liệu (quyết định, biên bản, bản quét),
 không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn mang một lớp dữ liệu
-(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm). Đề xuất 2026-09-26.
+(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm). Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: raw source, tài liệu gốc, file
 Vì sao: trang nói «theo nguồn X» phải trỏ tới đúng một thứ bất biến.
 
 **Bản đề xuất**: một thay đổi cho trang tài liệu, do máy soạn hoặc người sửa, chờ
 chủ trang duyệt. Không ai đọc được nó ngoài người duyệt; trợ lý AI không bao giờ
-đọc nó. Đề xuất 2026-09-26.
+đọc nó. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: bản nháp, draft, proposal
 Vì sao: «bản nháp» gợi thứ còn đang viết dở; bản đề xuất đã xong và đang chờ quyết.
 
 **Bản đang dùng**: phiên bản trang tài liệu đã được duyệt và đang hiện cho mọi
-người, là thứ duy nhất trợ lý AI đọc. Đề xuất 2026-09-26.
+người, là thứ duy nhất trợ lý AI đọc. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: bản chính thức, bản mới nhất, published
 Vì sao: «mới nhất» có thể là một bản đề xuất chưa duyệt — đúng lỗ hổng mà màn
 duyệt phải chặn.
 
 **Chủ trang**: người duy nhất chịu trách nhiệm một trang tài liệu còn đúng, duyệt
 mọi bản đề xuất của trang. Mỗi trang có thêm một người phó, chỉ nhận việc khi chủ
-trang quá hạn hoặc vắng. Đề xuất 2026-09-26.
+trang quá hạn hoặc vắng. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: người giữ trang, owner, người phụ trách
 Vì sao: «người phụ trách» đã là người sở hữu một thoả thuận.
 
 **Xác minh đến ngày**: hạn chủ trang phải xác nhận trang còn đúng. Quá hạn thì
-trang hiện «quá hạn xác minh» và trợ lý AI trả lời kèm cảnh báo. Đề xuất 2026-09-26.
+trang hiện «quá hạn xác minh» và trợ lý AI trả lời kèm cảnh báo. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: hết hạn, expiry
 Vì sao: «hết hạn» nghe như quy định hết hiệu lực — đó là chuyện khác, của văn bản
 pháp luật.
