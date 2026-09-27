@@ -51,7 +51,7 @@ Quét bằng `morphological-scan` trong phiên (bản quét: `coverage-scan.md`)
 - Trục B — trạng thái người nhận ngày D: chưa có tin sáng, không việc khác | đã có tin sáng | hàng tạo sáng nhưng gửi muộn [thước CE: SUY-TỪ-REPO `apps/agent/agent/lib/nhac-ke-hoach.ts` (khoá `user:<id>:<ngày>`, `chayNhac` tính lại lúc gửi)]
 - Trục C — nơi đọc việc: tin buổi sáng | thẻ «Việc của bạn» | Tổng quan kế hoạch [thước CE: SUY-TỪ-REPO bốn chỗ gọi `viecCanNhac`]
 - Trục D — loại mục nhắc OKR: cập nhật tuần | KR im | được giao | nhắc tên | đang theo dõi [thước CE: SUY-TỪ-REPO `LOAI_NHAC_OKR` trong `packages/db/src/okr-nhac.ts`]
-- Trục E — người × KR cho quyền cập nhật: chủ KR | trưởng phòng ban | trưởng bộ phận | quản trị | người khác × cấp phòng ban | bộ phận | cá nhân [thước CE: SUY-TỪ-REPO `suaDuocDonVi` trong `apps/api/src/okr/okr-access.service.ts`]
+- Trục E — người × KR cho quyền cập nhật: người phụ trách KR | trưởng phòng ban | trưởng bộ phận | quản trị | người khác × cấp phòng ban | bộ phận | cá nhân [thước CE: SUY-TỪ-REPO `suaDuocDonVi` trong `apps/api/src/okr/okr-access.service.ts`]
 - [GIẢ ĐỊNH] Tin gửi sau 12:00 là đủ hiếm để câu «hôm nay» không cần nói thêm vì sao tin đến muộn.
 - [GIẢ ĐỊNH] Dòng vết hỏng khuôn chỉ đến từ sửa tay cơ sở dữ liệu; nhịp nhắc báo lỗi cả nhịp khi gặp nó là chấp nhận được.
 
