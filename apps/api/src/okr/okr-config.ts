@@ -126,6 +126,9 @@ export const OKR = {
 			canLyDoCham: `Điểm khác gợi ý cần lý do ${OKR_KHEP.lyDo.toiThieu}–${OKR_KHEP.lyDo.toiDa} ký tự.`,
 			nhinLaiChiKhi: "Điều học được ghi ở pha đang chạy hoặc chấm điểm.",
 			bangChamChuaCo: "Bảng chấm có từ pha chấm điểm.",
+			kyDaDong:
+				"Chu kỳ đã đóng — quản trị mở lại kỳ thì mới sửa được điểm hay điều học được.",
+			chiMoLaiKhiDong: "Chỉ mở lại được chu kỳ đã đóng.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

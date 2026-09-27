@@ -3,6 +3,7 @@ import {
 	chamKrInput,
 	dongRaInput,
 	ghiDieuHocDuocInput,
+	moLaiKyInput,
 	moRaInput,
 } from "@crm/validation/okr-khep";
 import {
@@ -207,6 +208,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof ghiDieuHocDuocInput>,
 	) {
 		return this.khep.ghiDieuHocDuoc(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: moLaiKyInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/cycles/{id}/reopen", TAG),
+	})
+	moLaiKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moLaiKyInput>,
+	) {
+		return this.khep.moLaiKy(ctx.user.id, input);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })

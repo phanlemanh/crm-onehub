@@ -10,6 +10,7 @@ import {
 	ghiDieuHocDuocInput,
 	luoiDiem,
 	type MoRaInput,
+	moLaiKyInput,
 	OKR_KHEP,
 	type ThangCham,
 } from "@crm/validation/okr-khep";
@@ -38,6 +39,7 @@ const T = OKR.thongDiep;
 const thangCham = z.enum(THANG_CHAM);
 const loaiMucTieu = z.enum(LOAI_MUC_TIEU);
 type GhiDieuHocDuocInput = z.infer<typeof ghiDieuHocDuocInput>;
+type MoLaiKyInput = z.infer<typeof moLaiKyInput>;
 const soThap = (v: number) => String(v).replace(".", ",");
 
 const chonBangCham = {
@@ -169,6 +171,7 @@ export class OkrKhepService {
 				where: { id: cycleId },
 				select: { phase: true },
 			});
+			if (c.phase === "da-dong") throw new BadRequestException(T.khep.kyDaDong);
 			if (c.phase !== "cham-diem")
 				throw new BadRequestException(T.khep.chiChamKhiChamDiem);
 			const dong = await tx.okrDiemKr.findUnique({
@@ -221,6 +224,7 @@ export class OkrKhepService {
 				where: { id: mt.cycleId },
 				select: { phase: true },
 			});
+			if (c.phase === "da-dong") throw new BadRequestException(T.khep.kyDaDong);
 			if (!PHA_NHIN_LAI.includes(c.phase))
 				throw new BadRequestException(T.khep.nhinLaiChiKhi);
 			const cu = await tx.okrNhinLai.findUnique({
@@ -244,6 +248,34 @@ export class OkrKhepService {
 				{ dieuHocDuoc: input.noiDung },
 			);
 			return { id: mt.id, canhBao: null };
+		});
+	}
+
+	async moLaiKy(userId: string, input: MoLaiKyInput) {
+		await this.quyenOkr.assertQuanTri(userId);
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.id} FOR UPDATE`;
+			const c = await tx.okrCycle.findUnique({
+				where: { id: input.id },
+				select: { phase: true },
+			});
+			if (!c) throw new NotFoundException(T.khongCoChuKy(input.id));
+			if (c.phase !== "da-dong")
+				throw new BadRequestException(T.khep.chiMoLaiKhiDong);
+			await tx.okrCycle.update({
+				where: { id: input.id },
+				data: { phase: "cham-diem" },
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"mo-lai-ky",
+				{ cycleId: input.id },
+				{ phase: "da-dong" },
+				{ phase: "cham-diem" },
+				input.lyDo,
+			);
+			return { id: input.id, canhBao: null };
 		});
 	}
 
