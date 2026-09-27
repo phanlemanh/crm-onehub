@@ -6,6 +6,7 @@ import {
 	setSystemTime,
 	test,
 } from "bun:test";
+import { WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
@@ -2362,6 +2363,8 @@ const CAU_MANG = {
 	daMangSang: "Mục tiêu này đã mang sang chu kỳ kế rồi.",
 	vuotTran: "Đơn vị này đã có 1 mục tiêu — vượt trần chương trình.",
 	khongSuaDuocDonVi: CAU.khongSuaDuocDonVi,
+	khongPhaiThanhVien: (id: string) =>
+		`Người ${id} không phải thành viên đang hoạt động.`,
 } as const;
 const KY_KE = { tu: "2027-01-01", den: "2027-03-31" } as const;
 const WHY_NOW = "Quý sau đối tác mới đổ về nhiều.";
@@ -2372,6 +2375,7 @@ type MangSangRa = {
 	cycleId: string;
 	chep: string[];
 	khongChep: { keyResultId: string; lyDo: string }[];
+	boThamGia: string[];
 	canhBao: string | null;
 };
 type MucTieuDoc = { mangSangToi: LienKet; mangSangTu: LienKet };
@@ -2401,7 +2405,7 @@ const anhNguon = async (objectiveId: string) =>
 const tenKy = async (id: string) =>
 	(await db.okrCycle.findUniqueOrThrow({ where: { id } })).name;
 
-async function gieoMangSang() {
+async function gieoMangSang(chuM2: "truong" | "tg2" = "truong") {
 	luc(LUC.gieo);
 	await keoDaiPhien();
 	await datChuongTrinh("0-1", true);
@@ -2476,7 +2480,11 @@ async function gieoMangSang() {
 	const m2 = await gieoMucTieuCongBo(
 		q4Dong,
 		[{ startValue: 0, targetValue: 100, currentValue: 50 }],
-		{ unit, ownerUserId: truong.nguoi, ai: truong.cookie },
+		{
+			unit,
+			ownerUserId: chuM2 === "tg2" ? tg2 : truong.nguoi,
+			ai: truong.cookie,
+		},
 	);
 	luc(LUC.sauKy);
 	await keoDaiPhien();
@@ -2569,6 +2577,7 @@ describe("mang-sang", () => {
 			cycleId: q1,
 			chep: [f.kr.b, f.kr.c].sort(),
 			khongChep: [{ keyResultId: f.kr.d, lyDo: "dich-phai-lon-hon-khoi-diem" }],
+			boThamGia: [],
 			canhBao: null,
 		});
 
@@ -2756,5 +2765,46 @@ describe("mang-sang", () => {
 			khongChep: [],
 			phaNguon: "da-dong",
 		});
+	}, 90_000);
+	test("mang-sang: nguoi tham gia da roi workspace bi bo khoi ban nhap, dau ra liet id; nguoi phu trach da roi van bi chan bang cau ghim", async () => {
+		const f = await gieoMangSang("tg2");
+		await gieoKyQuy({ ...KY_KE, pha: "lap-ke-hoach" });
+		await datChuongTrinh("0-1", false);
+		const roi = (userId: string) =>
+			db.member.deleteMany({
+				where: { organizationId: WORKSPACE_ID, userId },
+			});
+
+		await roi(f.tg1);
+		const ra = ok<MangSangRa>(
+			await goi("okr.mangSang", { objectiveId: f.m }, f.truong.cookie),
+			"mang sang khi tg1 da roi",
+		);
+		const nhap = await db.okrObjective.findUniqueOrThrow({
+			where: { id: ra.id },
+			include: { participants: true },
+		});
+		expect({
+			boThamGia: ra.boThamGia,
+			thamGia: nhap.participants.map((p) => p.userId).sort(),
+			nguonThamGia: (
+				await db.okrParticipant.findMany({ where: { objectiveId: f.m } })
+			)
+				.map((p) => p.userId)
+				.sort(),
+		}).toEqual({
+			boThamGia: [f.tg1],
+			thamGia: [f.tg2],
+			nguonThamGia: [f.tg1, f.tg2].sort(),
+		});
+
+		await roi(f.tg2);
+		await tuChoiMangSang(
+			"nguoi phu trach da roi",
+			f.m2.objectiveId,
+			f.truong.cookie,
+			400,
+			CAU_MANG.khongPhaiThanhVien(f.tg2),
+		);
 	}, 90_000);
 });

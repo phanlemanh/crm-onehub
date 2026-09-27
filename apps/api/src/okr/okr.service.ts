@@ -455,17 +455,28 @@ export class OkrService {
 		});
 	}
 
+	async locThanhVien(tx: Tx | Db, ids: string[]) {
+		const can = [...new Set(ids)];
+		const co = new Set(
+			(
+				await tx.member.findMany({
+					where: { organizationId: WORKSPACE_ID, userId: { in: can } },
+					select: { userId: true },
+				})
+			).map((m) => m.userId),
+		);
+		return {
+			giu: can.filter((id) => co.has(id)),
+			bo: can.filter((id) => !co.has(id)),
+		};
+	}
+
 	async assertThanhVien(
 		tx: Tx | Db,
 		ids: string[],
 		loi: (id: string) => string = T.khongPhaiThanhVien,
 	) {
-		const can = [...new Set(ids)];
-		const co = await tx.member.findMany({
-			where: { organizationId: WORKSPACE_ID, userId: { in: can } },
-			select: { userId: true },
-		});
-		const thieu = can.find((id) => !co.some((m) => m.userId === id));
+		const [thieu] = (await this.locThanhVien(tx, ids)).bo;
 		if (thieu) throw new BadRequestException(loi(thieu));
 	}
 

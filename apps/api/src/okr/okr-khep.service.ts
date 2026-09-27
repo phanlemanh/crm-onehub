@@ -445,12 +445,14 @@ export class OkrKhepService {
 			if (daCo) throw new BadRequestException(T.khep.daMangSang);
 			if (mt.level === "ca-nhan" && !(await this.okr.program(tx)).personalOn)
 				throw new BadRequestException(T.caNhanTat);
-			const thamGia = nguon.participants.map((p) => p.userId);
 			await this.okr.assertThanhVien(tx, [
 				nguon.ownerUserId,
-				...thamGia,
 				...(mt.personUserId ? [mt.personUserId] : []),
 			]);
+			const { giu: thamGia, bo: boThamGia } = await this.okr.locThanhVien(
+				tx,
+				nguon.participants.map((p) => p.userId),
+			);
 			const canhBao = await this.okr.kiemTranMucTieu(tx, dich.id, mt, 1);
 			const viTri = await tx.okrObjective.count({
 				where: { cycleId: dich.id },
@@ -523,6 +525,7 @@ export class OkrKhepService {
 					sangCycleId: dich.id,
 					chep,
 					khongChep: khongChep.map((x) => x.keyResultId),
+					boThamGia,
 				},
 			);
 			await this.okr.vet(
@@ -539,7 +542,14 @@ export class OkrKhepService {
 					tuObjectiveId: mt.id,
 				},
 			);
-			return { id: moi.id, cycleId: dich.id, chep, khongChep, canhBao };
+			return {
+				id: moi.id,
+				cycleId: dich.id,
+				chep,
+				khongChep,
+				boThamGia,
+				canhBao,
+			};
 		});
 	}
 
