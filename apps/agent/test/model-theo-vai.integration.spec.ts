@@ -265,7 +265,10 @@ describe("doi-sau-khi-dung", () => {
 	});
 
 	it("doi-sau-khi-dung: khong tep nao doc model cua ban de chon model chay", () => {
-		expect(tepDocModelCuaBan()).toEqual([]);
+		expect(
+			tepDocModelCuaBan(),
+			"luot moi phai chay model cua Cai dat",
+		).toEqual([]);
 	});
 });
 
