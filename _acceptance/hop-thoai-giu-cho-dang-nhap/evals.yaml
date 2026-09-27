@@ -5,7 +5,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.hg_bam_ngoai
-    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
+    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; bài dựng một Dialog thật của packages/ui (Radix, không giả) có một Input, onOpenChange là hàm đếm. Ca đã gõ: userEvent gõ «Hợp đồng» vào ô, bắn pointerdown lên lớp phủ [data-slot=dialog-overlay] → [data-slot=dialog-content] vẫn có trong DOM, ô vẫn mang giá trị «Hợp đồng», số lời gọi onOpenChange = 0, không phần tử [role=alertdialog] nào. Đối chứng dương cùng fixture: chưa gõ, bấm lớp phủ → nội dung rời DOM, onOpenChange được gọi đúng 1 lần với false. CHIỀU ĐỎ: bản sao dialog.tsx bỏ nhánh preventDefault ở onInteractOutside → ca đã gõ đỏ, bài in «bam-ngoai: hop dong du da go (onOpenChange goi 1 lan)»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -13,7 +13,7 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.hg_hoi_lai
-    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/confirm-dialog.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/src/lib/messages.ts, packages/ui/test/giu-thay-doi.dom.tsx]
+    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/confirm-dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/src/lib/messages.ts, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; cùng fixture E1, locale vi. MA TRẬN VIẾT TRƯỚC 2 đường (Esc trên ô đang gõ, bấm [data-slot=dialog-close]) × 3 trả lời (Tiếp tục sửa, Esc trên hộp hỏi, Bỏ) = 6 ca đã gõ, cộng 2 ca chưa gõ. Mỗi ca đã gõ: sau đường đóng có đúng một [role=alertdialog] với tiêu đề «Bỏ những gì vừa nhập?» và hai nút «Tiếp tục sửa», «Bỏ»; hộp đang sửa còn trong DOM; onOpenChange = 0. Tiếp tục sửa và Esc trên hộp hỏi: alertdialog rời DOM, ô vẫn «Hợp đồng», document.activeElement là ô đó, onOpenChange = 0. Bỏ: cả hai rời DOM, onOpenChange gọi đúng 1 lần với false. Ca chưa gõ: Esc và X đóng ngay, không alertdialog, onOpenChange = 1. CHIỀU ĐỎ: bản sao lớp gốc báo thẳng onOpenChange(false) không qua bộ giữ → ca Esc-đã-gõ đỏ, bài in «hoi-lai: dong khong hoi (esc)»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -21,7 +21,7 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.hg_sheet
-    paths: [packages/ui/src/components/sheet.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
+    paths: [packages/ui/src/components/sheet.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; Sheet thật của packages/ui có một Input và một Button bọc SheetClose asChild. BẢNG VIẾT TRƯỚC 4 đường (lớp phủ [data-slot=sheet-overlay], Esc, [data-slot=sheet-close], nút SheetClose) × 2 trạng thái = 8 ca, mỗi ca khẳng định ba trường (hộp còn mở?, có alertdialog?, số lời gọi onOpenChange) so toEqual với bảng: đã gõ → (mở, không, 0) cho lớp phủ và (mở, có, 0) cho ba đường còn lại; chưa gõ → (đóng, không, 1) cho cả bốn. Bài so cả bảng 8 dòng, không đếm riêng. CHIỀU ĐỎ: bản sao sheet.tsx không cắm bộ nhận vào SheetContent → dòng «nút SheetClose · đã gõ» đỏ, bài in bảng thực tế cạnh bảng viết trước."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -29,15 +29,15 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.hg_drawer
-    paths: [packages/ui/src/components/drawer.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
-    expected: "exit 0; Drawer thật (vaul) của packages/ui mở có kiểm soát, có một Textarea. Ca đã gõ: bấm lớp phủ [data-slot=drawer-overlay] → drawer còn mở, chữ còn, onOpenChange = 0, không alertdialog; Esc → alertdialog hiện, onOpenChange = 0; gọi lời đóng mà vaul phát khi vuốt (onOpenChange(false) của gốc vaul, lấy qua prop của Root thật, không gọi thẳng hàm của bài) → alertdialog hiện, drawer còn mở, chữ còn. Đối chứng: chưa gõ, cùng ba đường → đóng, onOpenChange = 1 mỗi đường. Bài này KHÔNG phải cú vuốt thật (DOM giả không có cử chỉ vaul); cú vuốt thật do E10 bước 5 đo. CHIỀU ĐỎ: bản sao drawer.tsx bỏ bộ giữ ở gốc → ca vuốt-đã-gõ đỏ, bài in «drawer: dong khi vuot da go»."
+    paths: [packages/ui/src/components/drawer.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
+    expected: "exit 0; Drawer thật (vaul) của packages/ui mở có kiểm soát, có một Textarea. Ca đã gõ: bấm lớp phủ [data-slot=drawer-overlay] → drawer còn mở, chữ còn, onOpenChange = 0, không alertdialog; Esc → alertdialog hiện, onOpenChange = 0; gọi onRelease của gốc vaul thật với tỉ lệ kéo đã vượt ngưỡng đóng (qua onDrag, lấy từ prop của Root thật, không gọi hàm của bài) → alertdialog hiện, drawer còn mở, chữ còn; và khi đã gõ, gốc vaul nhận dismissible=false. Đối chứng: chưa gõ, cùng ba đường → đóng, onOpenChange = 1 mỗi đường. Bài này KHÔNG phải cú vuốt thật (DOM giả không có cử chỉ vaul); cú vuốt thật do E10 bước 5 đo. CHIỀU ĐỎ: bản sao drawer.tsx bỏ bộ giữ ở gốc → ca vuốt-đã-gõ đỏ, bài in «drawer: dong khi vuot da go»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
     criterion: AC-5
     executor: test
     cmd: config:executors.test.hg_may_dong
-    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
+    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; Dialog có kiểm soát trong một cha có nút «Lưu» đặt open=false. Đã gõ rồi bấm Lưu → nội dung rời DOM, không [role=alertdialog] nào xuất hiện trong suốt quá trình (bài theo dõi bằng MutationObserver), onOpenChange = 0. Mở lại → bấm lớp phủ đóng ngay (trạng thái sạch). Ca gỡ hẳn Dialog khỏi cây khi đã gõ → không alertdialog, không lỗi console. Ca nút lưu bọc DialogClose có dongNgay: đã gõ, bấm → đóng, không alertdialog. HỘP KHÔNG KIỂM SOÁT (DialogTrigger, không truyền open, ma trận viết trước 4 ca): đã gõ + bấm lớp phủ → còn mở, không alertdialog; đã gõ + Esc → alertdialog, Bỏ → đóng; đã gõ + nút DialogClose không dongNgay → alertdialog; đã gõ + nút DialogClose có dongNgay → đóng không hỏi. CHIỀU ĐỎ: bản sao bộ giữ không xoá cờ khi open chuyển về true → ca mở lại đỏ, bài in «may-dong: mo lai van ban»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -45,7 +45,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.hg_lop_con
-    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
+    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; Dialog đã gõ chứa Select, Combobox và DatePicker thật của packages/ui. MA TRẬN VIẾT TRƯỚC 3 ca (mỗi loại ô con): mở ô con → nhấn Esc → ô con đóng ([role=listbox]/[role=dialog] của lịch rời DOM), Dialog còn mở, không alertdialog, onOpenChange = 0; nhấn Esc lần hai → alertdialog hiện (đối chứng dương: bộ giữ vẫn sống sau khi ô con đóng). CHIỀU ĐỎ: bản sao bộ giữ nghe keydown Escape ở document thay vì đi qua onEscapeKeyDown của Radix → ca Select đỏ, bài in «lop-con: esc dong ca hop (select)»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -53,7 +53,7 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.hg_tu_khai
-    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/settings/organization/hop-thoai-don-vi.tsx", _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs]
+    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, packages/ui/test/giu-thay-doi.dom.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/settings/organization/hop-thoai-don-vi.tsx", _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs]
     expected: "exit 0; (a) DOM: Dialog khai coThayDoi=true, chưa gõ gì → bấm lớp phủ không đóng (onOpenChange = 0), Esc → alertdialog; đối chứng coThayDoi=false chưa gõ → đóng ngay; coThayDoi=false nhưng đã gõ → vẫn giữ (tự nhận HOẶC tự khai). (b) soi-giu.mjs --ca tu-khai đọc ba tệp viết trước (hộp thoại KR, mục tiêu, đơn vị) bằng TypeScript AST: phần tử <Dialog> gốc của mỗi tệp có thuộc tính coThayDoi mà giá trị không phải hằng; in «tu-khai: 3/3» — vế này chỉ bắt chỗ quên khai; quan hệ «đổi riêng một ô chọn thì được giữ» do E10 bước 6 đo trên màn thật. CHIỀU ĐỎ: (a) bản sao bộ giữ bỏ vế tự khai → ca coThayDoi=true đỏ; (b) bản sao hop-thoai-kr.tsx gỡ prop → soi-giu in «tu-khai: thieu coThayDoi o hop-thoai-kr.tsx», mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -62,7 +62,7 @@ evals:
     executor: script
     cmd: config:executors.script.hg_confirm_chung
     paths: [packages/ui/src/components/confirm-dialog.tsx, "apps/app/app/(app)/[slug]/settings/**", "apps/app/app/(app)/[slug]/**/*.tsx", _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs]
-    expected: "exit 0; soi-giu.mjs --ca confirm: packages/ui/src/components/confirm-dialog.tsx tồn tại và xuất ConfirmDialog với đúng 9 prop viết trước (tieuDe, than, nut, thoi, open, onOpenChange, onConfirm, pending, tone); tệp settings/members/confirm-dialog.tsx không còn; DANH SÁCH VIẾT TRƯỚC 13 tệp đang dùng — mỗi tệp nhập ConfirmDialog từ «@crm/ui/components/confirm-dialog» và không tệp nào trong apps/app còn nhập từ đường cũ; in «confirm: 13/13». Kèm messages-guard của apps/app xanh. CHIỀU ĐỎ: bản sao một tệp dùng trỏ lại đường cũ → in «confirm: nhap duong cu o <tệp>», mã 1."
+    expected: "exit 0; soi-giu.mjs --ca confirm: packages/ui/src/components/confirm-dialog.tsx tồn tại và xuất ConfirmDialog mà 9 prop viết trước (tieuDe, than, nut, thoi, open, onOpenChange, onConfirm, pending, tone) còn nguyên tên và bắt buộc/tuỳ chọn như bản cũ (thêm prop tuỳ chọn được, bớt hay đổi thì đỏ); tệp settings/members/confirm-dialog.tsx không còn; DANH SÁCH VIẾT TRƯỚC 13 tệp đang dùng — mỗi tệp nhập ConfirmDialog từ «@crm/ui/components/confirm-dialog» và không tệp nào trong apps/app còn nhập từ đường cũ; in «confirm: 13/13». Kèm messages-guard của apps/app xanh. CHIỀU ĐỎ: bản sao một tệp dùng trỏ lại đường cũ → in «confirm: nhap duong cu o <tệp>», mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -78,7 +78,7 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.hg_man_that
-    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/sheet.tsx, packages/ui/src/components/drawer.tsx, packages/ui/src/components/confirm-dialog.tsx, packages/ui/src/lib/giu-thay-doi.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/responsive-sheet.tsx, _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs]
+    paths: [packages/ui/src/components/dialog.tsx, packages/ui/src/components/sheet.tsx, packages/ui/src/components/drawer.tsx, packages/ui/src/components/confirm-dialog.tsx, packages/ui/src/components/giu-thay-doi.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/responsive-sheet.tsx, _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs]
     expected: "exit 0; man-giu-cho.mjs chạy trong phiên đo riêng (tien-de.mjs, kho _do, API và app của chính cây), Chrome thật qua puppeteer-core, khổ 1440 và 390, chỉ đếm phần tử đang hiện. Bước 1 (1440): mở «Thêm KR» ở một mục tiêu nháp gieo sẵn, gõ tên, bấm tọa độ lớp phủ ngoài hộp → hộp còn, ô còn tên; ảnh hg-kr-giu.png. Bước 2: Esc → alertdialog với chữ đúng «Bỏ những gì vừa nhập?», «Tiếp tục sửa», «Bỏ»; ảnh hg-hoi-lai-1440.png; bấm Tiếp tục sửa → focus về ô tên; Esc lại → Bỏ → hộp đóng, không KR nào mới trong DB. Bước 3: ngăn «Tạo thoả thuận» gõ tên → nút Huỷ → alertdialog; ảnh hg-deal-huy.png. Bước 4 (390): mở ngăn bản ghi của mục tiêu (drawer), gõ vào ô trao đổi, đóng bằng Esc → drawer còn, alertdialog hiện; ảnh hg-drawer-390.png. Bước 5 (390): cùng drawer đã gõ, kéo tay nắm drawer xuống 320 px bằng chuỗi sự kiện chuột/cảm ứng thật của Chrome rồi thả → alertdialog hiện; getBoundingClientRect của [data-slot=drawer-content] nằm trọn trong viewport; chữ trong ô trao đổi còn; bấm Tiếp tục sửa → document.elementFromPoint ở giữa ô trao đổi trả về chính ô đó (trang còn bấm được); ảnh hg-drawer-vuot-390.png. Bước 6 (1440): ở hộp thoại KR, hộp thoại mục tiêu và hộp thoại đơn vị, mở hộp, CHỈ đổi một ô chọn (không gõ ký tự), bấm ra ngoài → hộp còn mở, ô chọn giữ giá trị mới; ma trận viết trước 3 ca. Mỗi bước in «buoc N: dat» hoặc lý do; không lỗi console app. Ảnh ghi vào .acceptance-runs/hop-thoai-giu-cho-dang-nhap/evidence/. CHIỀU ĐỎ: --chieu-do chạy bước 1 trên bản sao app có dialog.tsx bỏ bộ giữ → in «buoc 1: hop dong sau khi bam ngoai», mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
 
@@ -94,6 +94,6 @@ evals:
     criterion: AC-12
     executor: test
     cmd: config:executors.test.hg_o_loc
-    paths: [packages/ui/src/lib/giu-thay-doi.tsx, packages/ui/src/components/dialog.tsx, packages/ui/src/components/sheet.tsx, packages/ui/src/components/drawer.tsx, packages/ui/src/components/pick-list-dialog.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
+    paths: [packages/ui/src/components/giu-thay-doi.tsx, packages/ui/src/components/dialog.tsx, packages/ui/src/components/sheet.tsx, packages/ui/src/components/drawer.tsx, packages/ui/src/components/pick-list-dialog.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; MA TRẬN VIẾT TRƯỚC 5 ca trên Dialog thật: (1) chỉ gõ vào input[type=search] → bấm lớp phủ đóng, onOpenChange = 1; (2) chỉ gõ vào ô lọc của Combobox thật (role=combobox) → đóng; (3) chỉ gõ vào CommandInput của Command thật → đóng; (4) giuThayDoi={false} + gõ vào Input thường → đóng; (5) PickListDialog thật của packages/ui gõ vào ô tìm → bấm ngoài đóng. Đối chứng dương cùng fixture: gõ vào Input thường, giuThayDoi mặc định → giữ, onOpenChange = 0. Cùng ca (4) lặp cho Sheet và Drawer. CHIỀU ĐỎ: bản sao bộ giữ bỏ bộ lọc ô tìm → ca (1) đỏ, bài in «o-loc: giu vi o tim (search)»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

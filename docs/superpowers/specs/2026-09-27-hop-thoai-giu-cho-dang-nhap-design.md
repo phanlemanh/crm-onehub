@@ -25,7 +25,7 @@ Bấm ra ngoài khi đang nhập không hỏi mà im lặng giữ hộp, theo Li
 
 ## 3. Kiến trúc
 
-**Một bộ giữ dùng chung cho ba khung.** Một mô-đun mới trong `packages/ui` (tên làm việc `giu-thay-doi`) cấp: ngữ cảnh «hộp này có thay đổi chưa», hàm đánh dấu, và lớp chặn `onOpenChange`. `Dialog`, `Sheet`, `Drawer` bọc gốc Radix/vaul bằng lớp đó; phần nội dung (`DialogContent`, `SheetContent`, `DrawerContent`) cắm bộ nhận.
+**Một bộ giữ dùng chung cho ba khung.** Một mô-đun mới `packages/ui/src/components/giu-thay-doi.tsx` cấp: ngữ cảnh «hộp này có thay đổi chưa», hàm đánh dấu, và lớp chặn `onOpenChange`. `Dialog`, `Sheet`, `Drawer` bọc gốc Radix/vaul bằng lớp đó; phần nội dung (`DialogContent`, `SheetContent`, `DrawerContent`) cắm bộ nhận.
 
 - **Tự nhận có thay đổi.** Phần nội dung nghe sự kiện `input` nổi bọt (pha bắt) từ mọi ô gõ bên trong. Gõ một ký tự là đủ đánh dấu. Ô không gõ (Select, Combobox, lịch, bật tắt) không phát `input` nên không tự nhận được. Ô tìm và ô lọc — `input[type=search]` và ô `role=combobox` (ô lọc của `Combobox`, `CommandInput`) — bị bỏ qua: gõ để lọc không phải dữ liệu.
 - **Tắt bộ giữ.** Gốc nhận `giuThayDoi?: boolean` (mặc định bật). Hộp mà ô gõ chỉ là công cụ (bảng lệnh, danh sách chọn) truyền `false`; `PickListDialog` đánh dấu ô tìm của nó là `type=search` nên không cần tắt.
@@ -34,7 +34,7 @@ Bấm ra ngoài khi đang nhập không hỏi mà im lặng giữ hộp, theo Li
 - **Gốc không kiểm soát.** Chỗ dùng `DialogTrigger` không truyền `open`: lớp gốc tự giữ trạng thái mở để chặn được.
 - **Máy đóng không bị chặn.** Lưu xong, chỗ gọi đặt `open={false}` hay gỡ hộp — không đi qua `onOpenChange`, nên không hỏi. Hộp không kiểm soát thường lưu bằng nút bọc `DialogClose`; nút đó mang prop `dongNgay` để bỏ qua bộ giữ. Mở lại là trạng thái sạch.
 - **Lớp con.** Esc khi một ô chọn con (Select, Combobox, lịch) đang mở do Radix xử ở lớp trên cùng trước, nên chỉ đóng ô con; bộ giữ không can thiệp.
-- **Vuốt xuống.** Bộ giữ chặn `onOpenChange(false)` của vaul khi có thay đổi; drawer phải quay về vị trí mở, nằm trọn trong màn, và trang còn bấm được sau «Tiếp tục sửa». Cú vuốt thật chỉ đo được trên trình duyệt thật (E10 bước 5). Nếu vaul không trả drawer về chỗ, S3 dừng và trình người — không tự hạ lời hứa.
+- **Vuốt xuống.** Khi có thay đổi, gốc vaul nhận `dismissible={false}` nên vuốt bật về và bấm lớp phủ không đóng; bộ giữ theo dõi tỉ lệ kéo qua `onDrag` và mở hộp hỏi lại ở `onRelease` khi cú vuốt vượt ngưỡng đóng; Esc hỏi qua `onEscapeKeyDown`. Drawer phải quay về vị trí mở, nằm trọn trong màn, và trang còn bấm được sau «Tiếp tục sửa». Cú vuốt thật chỉ đo được trên trình duyệt thật (E10 bước 5). Nếu vaul không trả drawer về chỗ, S3 dừng và trình người — không tự hạ lời hứa.
 
 **Hộp hỏi lại là `ConfirmDialog`.** Chuyển từ `apps/app/.../settings/members/confirm-dialog.tsx` vào `packages/ui/src/components/confirm-dialog.tsx`, giữ nguyên API; 13 tệp đang mượn chuyển sang nhập từ `@crm/ui`; tệp cũ xoá. Đây là luật sẵn có của `docs/design.md`: thành phần tính năng được dùng lần thứ hai thì vào `packages/ui` trước.
 
