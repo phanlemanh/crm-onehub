@@ -3,10 +3,10 @@ schema_version: 1
 slug: tro-ly-okr-nen
 feature: Nền Trợ lý OKR — quản trị thấy tháng này AI tiêu bao nhiêu cho từng việc và bật tắt được Trợ lý OKR theo việc và theo đơn vị; trợ lý chạy riêng, chỉ đọc OKR, chỉ gửi tới nhà cung cấp có ZDR, và chưa hiện gì với người dùng
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-27T06:59:07Z
 prototype:
   base_commit: 9dc1a037c6a1e1c4cc9d0eb03eaef5bbe5c2f6cc
   disposition: archive
@@ -51,9 +51,9 @@ mục 4 và 6.3; số đo `N0-ket-qua.md`; báo cáo `tac-nhan-hien-nay.md`; lu�
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: sau khi lên production, quản trị có tin được con số «tháng này AI tiêu bao nhiêu cho từng việc» không, và trần của Trợ lý OKR có giữ bằng mã không?
-- Kết quả nào là SỐNG: [đề xuất] trong 30 ngày đầu trên production, tổng sổ chi phí AI lệch báo cáo Gateway của khoá production không quá 10%; phần tiền không gán được vào một việc có tên không quá 5%; không phiên nào của Trợ lý OKR mở khi trợ lý tắt hoặc khi đã chạm trần tháng.
-- Kết quả nào là CHẾT: [đề xuất] lần đối soát đầu lệch quá 25%; hoặc có một phiên Trợ lý OKR mở khi tắt hay khi đã chạm trần; hoặc một việc của Trợ lý OKR hỏng mà treo quá một phút không đóng.
-- Timebox: [đề xuất] đọc lần đối soát tự động đầu tiên, 30 ngày sau ngày lượt này lên production.
+- Kết quả nào là SỐNG: trong 30 ngày đầu trên production, tổng sổ chi phí AI lệch báo cáo Gateway của khoá production không quá 10%; phần tiền không gán được vào một việc có tên không quá 5%; không phiên nào của Trợ lý OKR mở khi trợ lý tắt hoặc khi đã chạm trần tháng.
+- Kết quả nào là CHẾT: lần đối soát đầu lệch quá 25%; hoặc có một phiên Trợ lý OKR mở khi tắt hay khi đã chạm trần; hoặc một việc của Trợ lý OKR hỏng mà treo quá một phút không đóng.
+- Timebox: đọc lần đối soát tự động đầu tiên, 30 ngày sau ngày lượt này lên production.
 
 ## Kết quả prototype
 
@@ -112,9 +112,9 @@ với hoá đơn đó.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: lộ trình Trợ lý OKR mục 4 (thứ tự chạy) và mục 5 «9a»; điều kiện mở đã đủ — vá lối rò Slack gộp 2026-09-27 (#170), ZDR đạt ở N0 và đạt lại trên Gemini 3.8 hôm nay.
+- **decision = build.** Căn cứ: lộ trình Trợ lý OKR mục 4 (thứ tự chạy) và mục 5 «9a»; điều kiện mở đã đủ — vá lối rò Slack gộp 2026-09-27 (#170), ZDR đạt ở N0 và đạt lại trên Gemini 3.8 hôm nay. Quyết 2026-09-27 bởi Manh Phan trong phiên lượt 9a, bằng `/acceptance-gate:start tro-ly-okr-nen`; câu gõ nguyên văn: «quyết: build; ngưỡng: gỡ nhãn đề xuất ; từ điển: giữ bốn mục».
 - **disposition = archive.** Căn cứ: không có mã bản mẫu.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho SỐNG, CHẾT và timebox như section Ngưỡng. Bốn mục từ điển giữ nguyên văn như section «Bốn mục từ điển mới».
 
 ## Thước đo thành công → ứng viên criterion
 
