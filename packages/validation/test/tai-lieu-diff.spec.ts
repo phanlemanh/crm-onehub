@@ -155,4 +155,34 @@ describe("tai-lieu-diff", () => {
 		const khoi = soSanh(TRUOC, SAU);
 		expect(dem(khoi, "them")).toBe(2);
 	});
+
+	const BANG = (hang: string) => `| Mục | Tỉ lệ |\n| --- | --- |\n${hang}\n`;
+	const HANG_BANG: [string, string, string][] = [
+		["them-chu-cuoi-o", "| a | 5% |", "| a x | 5% |"],
+		["bo-chu-cuoi-o", "| b c | 7 |", "| b | 7 d |"],
+		["doi-o-sau", "| a | 5% |", "| a | 6% |"],
+	];
+	for (const [ten, truoc, sau] of HANG_BANG)
+		test(`bang-giu-dau-ngan-o: ${ten}`, () => {
+			const hang = soSanh(BANG(truoc), BANG(sau)).filter(
+				(k) => k.kieu === "hang-bang" && k.doan.some((d) => d.loai !== "giu"),
+			);
+			expect(hang.length).toBe(1);
+			const ngan = hang[0]?.doan.filter((d) => d.chu.includes("|")) ?? [];
+			if (ngan.some((d) => d.loai !== "giu" || d.chu !== " | "))
+				throw new Error(`dau ngan o bi cat: ${ten}`);
+			expect(ngan.length).toBe(1);
+		});
+	test("bang-doi-so-cot: hang cu bo va hang moi them tach rieng", () => {
+		const hang = soSanh(
+			"| Mục | Tỉ lệ |\n| --- | --- |\n| a | 5% |\n",
+			"| Mục | Tỉ lệ | Ghi chú |\n| --- | --- | --- |\n| a | 5% | x |\n",
+		).filter((k) => k.kieu === "hang-bang");
+		const loai = hang.map((k) =>
+			[...new Set(k.doan.map((d) => d.loai))].join(","),
+		);
+		if (loai.some((l) => l.includes(",")))
+			throw new Error("hang doi so cot bi gop bo va them");
+		expect(loai).toEqual(["bo", "them", "bo", "them"]);
+	});
 });

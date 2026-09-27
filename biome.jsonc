@@ -15,6 +15,7 @@
 			"!**/.next",
 			"!**/dist",
 			"!**/*.svg",
+			"!**/test/fixtures/**/clipboard-*.html",
 			"!.claude",
 			"!.agents",
 			"!tools/oxlint/anti-slop",

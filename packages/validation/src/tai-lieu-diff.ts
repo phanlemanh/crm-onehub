@@ -81,7 +81,37 @@ function doanTu(thay: ChangeObject<string>[]): DoanDoi[] {
 		}));
 }
 
+function cungSoO(truoc: Khoi, sau: Khoi): boolean {
+	return (
+		truoc.chu.split(NGAN_O_BANG).length === sau.chu.split(NGAN_O_BANG).length
+	);
+}
+
+function soHangBang(truoc: Khoi, sau: Khoi): KhoiDoi {
+	const oTruoc = truoc.chu.split(NGAN_O_BANG);
+	const oSau = sau.chu.split(NGAN_O_BANG);
+	const doan: DoanDoi[] = [];
+	oSau.forEach((o, i) => {
+		if (i > 0) doan.push({ loai: "giu", chu: NGAN_O_BANG });
+		const cu = oTruoc[i] ?? "";
+		if (cu === o) {
+			if (o !== "") doan.push({ loai: "giu", chu: o });
+			return;
+		}
+		const thay = diffWordsWithSpace(cu, o, {
+			maxEditLength: TAI_LIEU.diff.tranSuaTu,
+		});
+		if (thay) doan.push(...doanTu(thay));
+		else {
+			if (cu !== "") doan.push({ loai: "bo", chu: cu });
+			if (o !== "") doan.push({ loai: "them", chu: o });
+		}
+	});
+	return { kieu: sau.kieu, doan };
+}
+
 function soTheoTu(truoc: Khoi, sau: Khoi): KhoiDoi {
+	if (sau.kieu === "hang-bang") return soHangBang(truoc, sau);
 	const thay = diffWordsWithSpace(truoc.chu, sau.chu, {
 		maxEditLength: TAI_LIEU.diff.tranSuaTu,
 	});
@@ -101,7 +131,8 @@ function ghepCum(bo: Khoi[], them: Khoi[]): KhoiDoi[] {
 	for (let i = 0; i < Math.max(bo.length, them.length); i += 1) {
 		const b = bo[i];
 		const t = them[i];
-		if (b && t && b.kieu === t.kieu) {
+		const khacCot = b?.kieu === "hang-bang" && t && !cungSoO(b, t);
+		if (b && t && b.kieu === t.kieu && !khacCot) {
 			ra.push(soTheoTu(b, t));
 			continue;
 		}

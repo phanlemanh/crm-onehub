@@ -27,7 +27,7 @@ function doc(mau: string): string {
 describe("tai-lieu-markdown", () => {
 	test("thư mục có đúng 12 mẫu viết trước", () => {
 		const co = readdirSync(THU_MUC)
-			.filter((t) => t.endsWith(".md"))
+			.filter((t) => t.endsWith(".md") && !t.startsWith("clipboard-"))
 			.map((t) => t.slice(0, -3))
 			.sort();
 		expect(co).toEqual([...MAU].sort());

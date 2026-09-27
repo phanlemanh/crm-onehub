@@ -258,4 +258,32 @@ describe("token --diff-them, --diff-bo", () => {
 		expect(GLOBALS).toContain("--color-diff-them: var(--diff-them);");
 		expect(GLOBALS).toContain("--color-diff-bo: var(--diff-bo);");
 	});
+
+	const BANG = (hang: string) =>
+		`| Mục | Tỉ lệ |\n| --- | --- |\n${hang}\n| giữ | 1 |\n`;
+	for (const [ten, truoc, sau] of [
+		["them-chu-cuoi-o", "| a | 5% |", "| a x | 5% |"],
+		["bo-chu-cuoi-o", "| b c | 7 |", "| b | 7 d |"],
+	] as const)
+		test(`bang-dung-so-o: ${ten}`, () => {
+			const goc = ve(BANG(truoc), BANG(sau));
+			const soCot = goc.querySelectorAll("thead th").length;
+			for (const tr of goc.querySelectorAll("tbody tr")) {
+				const o = [...tr.querySelectorAll("td")];
+				if (o.some((td) => chuHien(td).includes("|")))
+					throw new Error(`o bang con dau ngan: ${ten}`);
+				if (o.length < soCot) throw new Error(`hang bang gop o: ${ten}`);
+			}
+		});
+	test("bang-dung-so-o: doi-so-cot", () => {
+		const goc = ve(
+			"| Mục | Tỉ lệ |\n| --- | --- |\n| a | 5% |\n",
+			"| Mục | Tỉ lệ | Ghi chú |\n| --- | --- | --- |\n| a | 5% | x |\n",
+		);
+		for (const o of goc.querySelectorAll("td, th"))
+			if (chuHien(o).includes("|"))
+				throw new Error("o bang con dau ngan: doi-so-cot");
+		expect(goc.querySelectorAll("del").length).toBeGreaterThan(0);
+		expect(goc.querySelectorAll("ins").length).toBeGreaterThan(0);
+	});
 });
