@@ -538,3 +538,14 @@ Expected: sáu dòng «buoc N: dat», mã 0.
 - [ ] **Step 3: Năm lệnh chứng** — `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build` đều mã 0.
 
 - [ ] **Step 4: Commit** — `hop-thoai-giu-cho-dang-nhap: sàn thiết kế và phép đo màn thật`
+
+### Task 6: Mở lại phạm vi — lưu xong hết giữ (AC-13), ngăn bản ghi (AC-14)
+
+**Files:**
+- Modify: `packages/ui/src/components/giu-thay-doi.tsx` — xoá cờ tự nhận khi `coThayDoi` chuyển true→false; tham số `tuNhanThayDoi`; khai của thành phần con (`khai(id, coChu)`, `useKhaiThayDoi()`).
+- Modify: `packages/ui/src/components/sheet.tsx`, `packages/ui/src/components/drawer.tsx`, `apps/app/components/responsive-sheet.tsx` — truyền `tuNhanThayDoi`.
+- Modify: `apps/app/components/detail-sheet.tsx` — `tuNhanThayDoi={false}`.
+- Modify: `apps/app/components/crm/record-sheet/objective-trao-doi.tsx` — khai khi gõ, khai false khi gửi xong.
+- Test: `packages/ui/test/giu-thay-doi.dom.tsx` nhóm `da-luu` (E13); `apps/app/test/ngan-ban-ghi-giu.dom.tsx` (E14); bước 7 và `--chieu-do-ngan` của `rang/man-giu-cho.mjs` (E15).
+
+**Verify:** `-t da-luu` 5 ca; `ngan-ban-ghi-giu.dom.tsx` 5 ca; `CHI_BUOC=7` qua `tien-de.mjs`; mỗi phép có chiều đỏ in đúng câu ghim của `evals.yaml`.

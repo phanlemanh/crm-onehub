@@ -20,7 +20,9 @@ const BANG_CHUNG =
 	process.env.BANG_CHUNG ?? join(GOC, ".acceptance-runs", HO_SO, "evidence");
 const LENH_DO = `bun scripts/lan-do/tien-de.mjs --chay "bun ${relative(GOC, TEP_NAY)}"`;
 
-const CAY_DO = {
+const CAY_DO_HOP = {
+	nhan: "ban sao dialog.tsx go bo giu o goc va phan noi dung",
+	chiBuoc: "1",
 	tep: "packages/ui/src/components/dialog.tsx",
 	cam: (s) =>
 		s
@@ -30,6 +32,16 @@ const CAY_DO = {
 			)
 			.replace("if (g?.coThayDoi) e.preventDefault();", ""),
 	ghim: /buoc 1: hop dong sau khi bam ngoai/,
+	conSot: "open={g.open}",
+};
+
+const CAY_DO_NGAN = {
+	nhan: "ban sao detail-sheet.tsx bo cach tat tu nhan",
+	chiBuoc: "7",
+	tep: "apps/app/components/detail-sheet.tsx",
+	cam: (s) => s.replace(" tuNhanThayDoi={false}", ""),
+	ghim: /buoc 7: ngan khong dong sau khi o tu luu/,
+	conSot: "tuNhanThayDoi={false}",
 };
 
 function readlinkOr(p) {
@@ -40,10 +52,8 @@ function readlinkOr(p) {
 	}
 }
 
-async function chieuDo() {
-	console.log(
-		"== chieu do: ban sao dialog.tsx go bo giu o goc va phan noi dung",
-	);
+async function chieuDo(CAY_DO) {
+	console.log(`== chieu do: ${CAY_DO.nhan}`);
 	const tam = mkdtempSync(join(tmpdir(), "hg-chieu-do-"));
 	const sao = join(tam, "crm");
 	let con = null;
@@ -70,7 +80,7 @@ async function chieuDo() {
 		const tep = join(sao, CAY_DO.tep);
 		const truoc = readFileSync(tep, "utf8");
 		const sau = CAY_DO.cam(truoc);
-		if (sau === truoc || sau.includes("open={g.open}")) {
+		if (sau === truoc || sau.includes(CAY_DO.conSot)) {
 			ket = { ma: 2, cau: `vet khong cam duoc vao ${CAY_DO.tep}` };
 			return;
 		}
@@ -86,7 +96,7 @@ async function chieuDo() {
 		])
 			delete moiTruong[k];
 		moiTruong.PHIEN_DO_TEN_CAY = "hg-chieu-do";
-		moiTruong.CHI_BUOC = "1";
+		moiTruong.CHI_BUOC = CAY_DO.chiBuoc;
 		let ra = "";
 		const ma = await new Promise((xong) => {
 			con = spawn("bash", ["-c", LENH_DO], {
@@ -130,7 +140,8 @@ async function chieuDo() {
 	}
 }
 
-if (process.argv.includes("--chieu-do")) await chieuDo();
+if (process.argv.includes("--chieu-do-ngan")) await chieuDo(CAY_DO_NGAN);
+if (process.argv.includes("--chieu-do")) await chieuDo(CAY_DO_HOP);
 
 const { default: puppeteer } = await import("puppeteer-core");
 const { db } = await import("../../../packages/db/src/index.ts");
@@ -165,6 +176,7 @@ const CHU = {
 	menuDonVi: "Thao tác với {ten}",
 	chuyenDonVi: "Chuyển sang bộ phận khác",
 	huy: "Huỷ",
+	chucDanh: "Chức danh",
 };
 
 mkdirSync(BANG_CHUNG, { recursive: true });
@@ -194,6 +206,8 @@ const TEN = {
 	krGo: "Buổi gặp khách hàng mới",
 	dealGo: "Hợp đồng kho lạnh Cần Thơ",
 	traoDoiGo: "Tuần này chốt thêm hai hợp đồng ở Hải Phòng",
+	lienHe: `Lan ${MA}`,
+	chucDanh: "Trưởng phòng mua hàng",
 };
 
 const phienCua = (email) =>
@@ -320,6 +334,9 @@ async function gieo() {
 	K.B = (await taoMt(TEN.B)).id;
 	K.Kb = (await taoKr(K.B, TEN.Kb)).id;
 	await lam(c, "okr.publishObjective", { id: K.B });
+	K.lienHe = (
+		await lam(a, "contacts.create", { firstName: TEN.lienHe, lastName: "Võ" })
+	).id;
 }
 
 const hong = [];
@@ -688,6 +705,56 @@ async function buoc6() {
 	dat(6, ca.length === 0, ca.join(" · "));
 }
 
+async function buoc7() {
+	const t = await moTrang(cookie.admin, RONG, "/contacts");
+	await doi(
+		t,
+		(ten) => window.__tim("tbody tr").some((r) => r.innerText.includes(ten)),
+		TEN.lienHe,
+	);
+	const hang = await t.evaluateHandle(
+		(ten) => window.__tim("tbody tr").find((r) => r.innerText.includes(ten)),
+		TEN.lienHe,
+	);
+	await hang.click();
+	await doi(t, (s) => window.__tim(s).length > 0, NGAN);
+	await cho(800);
+	const nut = await t.evaluateHandle(
+		(ngan, nhan) =>
+			window
+				.__tim(`${ngan} label`)
+				.find((l) => l.innerText.trim() === nhan)
+				?.parentElement?.querySelector("button"),
+		NGAN,
+		CHU.chucDanh,
+	);
+	if (!nut.asElement()) throw new Error("khong thay o Chuc danh trong ngan");
+	await nut.click();
+	await doi(t, (s) => window.__tim(s).length > 0, `${NGAN} input:focus`);
+	await t.keyboard.type(TEN.chucDanh, { delay: 10 });
+	await t.keyboard.press("Tab");
+	await t.waitForNetworkIdle({ idleTime: 500, timeout: CHO }).catch(() => null);
+	await doi(
+		t,
+		(ngan, chu) =>
+			window.__tim(`${ngan} button`).some((b) => b.innerText.trim() === chu),
+		NGAN,
+		TEN.chucDanh,
+	);
+	await chup(t, "hg-ngan-ban-ghi-tu-luu.png");
+	await bamNgoai(t);
+	await cho(600);
+	const con = await coHien(t, NGAN);
+	const hoi = await coHien(t, HOI);
+	await chup(t, "hg-ngan-ban-ghi-da-dong.png");
+	dat(
+		7,
+		con === 0 && hoi === 0,
+		`ngan khong dong sau khi o tu luu (con=${con}, hoi=${hoi})`,
+	);
+	await t.close();
+}
+
 let ma = 0;
 try {
 	for (const k of Object.keys(NGUOI)) {
@@ -706,6 +773,7 @@ try {
 		[[3], buoc3],
 		[[4, 5], buoc4va5],
 		[[6], buoc6],
+		[[7], buoc7],
 	];
 	for (const [so, ham] of buoc) {
 		if (!so.some(chay)) continue;
