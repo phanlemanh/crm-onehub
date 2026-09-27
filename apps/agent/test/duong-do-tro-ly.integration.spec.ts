@@ -141,13 +141,16 @@ describe("duong-do", () => {
 		setSystemTime();
 		const bayGio = Date.now();
 		const truoc = (giay: number) => new Date(bayGio - giay * GIAY);
-		await gieoCauHinhAi(truoc(3600), {
-			aiOn: true,
-			aiDeXuatPhamVi: "toan-cong-ty",
-			aiTranThangUsd: 9,
-		});
+		const batNgay = (luc: Date) =>
+			gieoCauHinhAi(new Date(luc.getTime() - 1), {
+				aiOn: true,
+				aiDeXuatPhamVi: "toan-cong-ty",
+				aiTranThangUsd: 9,
+			});
+		await batNgay(truoc(200));
 		const treo = await xep(2, truoc(200));
 		await mo(treo, truoc(120));
+		await batNgay(truoc(20));
 		const nhanh = await xep(3, truoc(20));
 		await mo(nhanh, truoc(10));
 		setSystemTime();
