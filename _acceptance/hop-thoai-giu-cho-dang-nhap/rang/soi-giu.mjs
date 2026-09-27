@@ -232,6 +232,7 @@ const DANH_SACH = [
 	`${SLUG}/deals/deals-bulk-actions.tsx`,
 	`${SLUG}/settings/connections/slack/slack-channels.tsx`,
 	"apps/app/components/crm/fields/field-editor.tsx",
+	`${SLUG}/settings/organization/hop-thoai-vi-tri.tsx`,
 ];
 
 const BA_HOP = [
@@ -251,7 +252,7 @@ const O_NHAP = new Set([
 	"DatePicker",
 ]);
 const TEN_HAM_DONG = /^(dong|close|onClose)([A-Z]\w*)?$/;
-const SET_MO = /^set(\w*Open|Mo|Mo[A-Z]\w*)$/;
+const SET_MO = /^set(\w*Open|Mo|Mo[A-Z]\w*|Closing|Dong\w*)$/;
 const DESIGN_MD = "docs/design.md";
 const MUC_VE_TAY = "### Dấu hiệu vẽ tay";
 
@@ -282,8 +283,11 @@ function laGoiDong(goi) {
 	if (ten === null) return false;
 	if (TEN_HAM_DONG.test(ten)) return true;
 	const dau = goi.arguments[0];
-	const laFalse = dau !== undefined && dau.kind === ts.SyntaxKind.FalseKeyword;
-	return laFalse && (ten === "onOpenChange" || SET_MO.test(ten));
+	if (dau === undefined) return false;
+	if (dau.kind === ts.SyntaxKind.FalseKeyword) {
+		return ten === "onOpenChange" || SET_MO.test(ten);
+	}
+	return dau.kind === ts.SyntaxKind.NullKeyword && SET_MO.test(ten);
 }
 
 function thanGoiDong(than) {

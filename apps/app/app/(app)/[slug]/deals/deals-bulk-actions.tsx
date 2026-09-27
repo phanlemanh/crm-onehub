@@ -6,6 +6,7 @@ import type { DealStage } from "@crm/db/enums";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -269,15 +270,9 @@ export function DealsBulkActions({
 							{setStage.isPending ? <Spinner /> : null}
 							{m.bulk.save}
 						</Button>
-						<Button
-							variant="outline"
-							onClick={() => {
-								setClosing(null);
-								setReason("");
-							}}
-						>
-							{m.bulk.cancel}
-						</Button>
+						<DialogClose asChild>
+							<Button variant="outline">{m.bulk.cancel}</Button>
+						</DialogClose>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
