@@ -12,7 +12,10 @@ import { donTroLy, gieoCauHinhAi } from "./support/tro-ly-gieo";
 const DAU = "DAU-OKR-4417";
 let goiMoDau = 0;
 
+const moDauThat = { ...(await import("../agent/lib/preamble")) };
+
 mock.module("../agent/lib/preamble", () => ({
+	...moDauThat,
 	sessionPreamble: async () => {
 		goiMoDau += 1;
 		return { markdown: "mo dau nghien cuu", focus: {} };
@@ -70,6 +73,7 @@ beforeAll(async () => {
 }, 30_000);
 
 afterAll(async () => {
+	mock.module("../agent/lib/preamble", () => moDauThat);
 	await donTroLy();
 	await donOkr();
 	await donDep();
