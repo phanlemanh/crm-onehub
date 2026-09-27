@@ -55,7 +55,31 @@ const Q3 = ky(
 	"2026-09-30",
 );
 
+const Q2 = ky(
+	"q2-26",
+	"quy",
+	"Quý 2/2026",
+	"cham-diem",
+	NAM.id,
+	"2026-04-01",
+	"2026-06-30",
+);
+
 let coQuyen: boolean;
+let conLai: number;
+
+const bangCham = () => ({
+	thang: "0-1",
+	conLai,
+	chuaCham:
+		conLai === 0
+			? []
+			: [
+					{ khoa: "pb:ban-hang", ten: "Phòng Bán hàng", conLai: conLai - 1 },
+					{ khoa: "pb:doi-tac", ten: "Phòng Đối tác", conLai: 1 },
+				],
+	mucTieu: [],
+});
 
 const chuongTrinh = () => ({
 	objectiveCap: 5,
@@ -105,12 +129,16 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
 			cycles: thuTuc("okr.cycles", () => ({
-				cycles: [Q4, Q3, NAM],
+				cycles: [Q4, Q3, Q2, NAM],
 				currentId: null,
 			})),
 			program: thuTuc("okr.program", chuongTrinh),
 			createCycle: thuTuc("okr.createCycle"),
 			setCyclePhase: thuTuc("okr.setCyclePhase"),
+			moRa: thuTuc("okr.moRa"),
+			dongRa: thuTuc("okr.dongRa"),
+			moLaiKy: thuTuc("okr.moLaiKy"),
+			bangCham: thuTuc("okr.bangCham", bangCham),
 			setProgram: thuTuc("okr.setProgram"),
 		},
 	}),
@@ -150,9 +178,12 @@ const { PageShellHeader, PageShellHeading, PageShellTitle } = await import(
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { okrKhepMessages } = await import("@/lib/messages/okr-khep");
 const { goiYChuKy } = await import("@/lib/okr-chu-ky-nhan");
+const { formatDay } = await import("@crm/ui/lib/format");
 
 const m = okrMessages("vi").caiDat;
+const k = okrKhepMessages("vi").caiDat;
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -181,7 +212,7 @@ async function mo(thamSo = ""): Promise<void> {
 									<LyDoKhongQuyen />
 								</PageShellHeading>
 							</PageShellHeader>
-							<BangChuKy goiY={goiYChuKy("2026-09-25")} />
+							<BangChuKy goiY={goiYChuKy("2026-09-25")} homNay="2026-09-25" />
 							<FormCauHinh />
 						</TooltipProvider>
 					</LocaleProvider>
@@ -233,9 +264,12 @@ async function bam(o: Element): Promise<void> {
 }
 
 async function go(o: Element | null, chu: string): Promise<void> {
-	if (!(o instanceof HTMLInputElement)) throw new Error("khong phai o nhap");
+	if (!(o instanceof HTMLInputElement || o instanceof HTMLTextAreaElement))
+		throw new Error("khong phai o nhap");
 	const dat = Object.getOwnPropertyDescriptor(
-		HTMLInputElement.prototype,
+		o instanceof HTMLInputElement
+			? HTMLInputElement.prototype
+			: HTMLTextAreaElement.prototype,
 		"value",
 	)?.set;
 	await act(async () => {
@@ -260,6 +294,7 @@ function dieuKhien() {
 
 beforeEach(() => {
 	coQuyen = true;
+	conLai = 3;
 	daGoi = [];
 	daLamMoi = 0;
 	url = [];
@@ -293,8 +328,8 @@ describe("cai-dat-khong-quyen-khoa-dieu-khien", () => {
 			lyDo: lyDo.map((o) => [o.id, o.textContent]),
 		}).toEqual({
 			tieuDeThe: [m.chuKy.tieuDe, m.cauHinh.tieuDe],
-			soHangChuKy: 3,
-			soDieuKhien: 11,
+			soHangChuKy: 4,
+			soDieuKhien: 12,
 			moiCaiKhoa: true,
 			moiCaiTroLyDo: true,
 			lyDo: [[LY_DO_KHONG_QUYEN, m.khongQuyen]],
@@ -368,7 +403,7 @@ describe("cai-dat-luu-bat-khi-sua", () => {
 });
 
 describe("cai-dat-chuyen-pha-hoi-lai", () => {
-	test("cai-dat-chuyen-pha-hoi-lai: menu tat o pha cuoi, chuyen pha hoi lai roi goi dung thu tuc", async () => {
+	test("cai-dat-chuyen-pha-hoi-lai: menu mo o moi pha, chuyen pha hoi lai roi goi dung thu tuc", async () => {
 		await mo();
 		const hang = tatCa("[data-chu-ky]").map((o) => [
 			o.getAttribute("data-chu-ky"),
@@ -377,7 +412,8 @@ describe("cai-dat-chuyen-pha-hoi-lai", () => {
 		expect(hang).toEqual([
 			[NAM.id, false],
 			[Q4.id, false],
-			[Q3.id, true],
+			[Q3.id, false],
+			[Q2.id, false],
 		]);
 
 		const menu = q(`[data-menu-chu-ky="${Q4.id}"]`);
@@ -422,6 +458,138 @@ describe("cai-dat-chuyen-pha-hoi-lai", () => {
 			url: "?moChuKy=true",
 			truoc: true,
 			chiCoTen: true,
+			daGoi: [],
+		});
+	});
+});
+
+async function moMenu(id: string): Promise<string[]> {
+	const menu = q(`[data-menu-chu-ky="${id}"]`);
+	if (!menu) throw new Error(`khong co menu ${id}`);
+	await bam(menu);
+	await cho(() => q('[role="menuitem"]') !== null, `menu ${id} mo`);
+	return tatCa('[role="menuitem"]').map((o) => o.textContent ?? "");
+}
+
+async function chonMuc(viec: string): Promise<void> {
+	const muc = q(`[data-viec-chu-ky="${viec}"]`);
+	if (!muc) throw new Error(`khong co muc ${viec}`);
+	await bam(muc);
+}
+
+describe("cai-dat-dieu-khien-khep-ky", () => {
+	test("cai-dat-dieu-khien-khep-ky: menu theo pha", async () => {
+		await mo();
+		const theoPha: [string, string[]][] = [];
+		for (const c of [NAM, Q2, Q3]) {
+			theoPha.push([c.phase, await moMenu(c.id)]);
+			await act(async () => {
+				document.dispatchEvent(
+					new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+				);
+			});
+			await cho(() => q('[role="menuitem"]') === null, "menu dong");
+		}
+		expect(theoPha).toEqual([
+			["dang-chay", [k.menu.moRa, k.menu.sangCham]],
+			["cham-diem", [k.menu.dongKy]],
+			["da-dong", [k.menu.moLai]],
+		]);
+	});
+
+	test("cai-dat-dieu-khien-khep-ky: Dong ky khi con KR chua cham liet don vi va so, nut dong tat", async () => {
+		await mo();
+		await moMenu(Q2.id);
+		await chonMuc("dong-ky");
+		await cho(() => q("[data-don-vi-chua-cham]") !== null, "hop dong ky");
+		expect({
+			donVi: tatCa("[data-don-vi-chua-cham]").map((o) => [
+				o.getAttribute("data-don-vi-chua-cham"),
+				o.textContent,
+			]),
+			nut: tat(q('[data-nut="dong-ky"]')),
+			alert: q('[role="alertdialog"]'),
+			daGoi,
+		}).toEqual({
+			donVi: [
+				["pb:ban-hang", `Phòng Bán hàng${k.dong.soKr("2")}`],
+				["pb:doi-tac", `Phòng Đối tác${k.dong.soKr("1")}`],
+			],
+			nut: true,
+			alert: null,
+			daGoi: [],
+		});
+	});
+
+	test("cai-dat-dieu-khien-khep-ky: Dong ky khi du hoi lai roi chuyen sang da-dong", async () => {
+		conLai = 0;
+		await mo();
+		await moMenu(Q2.id);
+		await chonMuc("dong-ky");
+		await cho(() => q('[role="alertdialog"]') !== null, "hoi dong ky");
+		const xacNhan = [
+			...(q('[role="alertdialog"]')?.querySelectorAll("button") ?? []),
+		].find((b) => b.textContent === k.dong.nut);
+		if (!xacNhan) throw new Error("khong co nut Dong ky");
+		await bam(xacNhan);
+		await cho(() => daLamMoi > 0, "lam moi sau dong ky");
+		expect(daGoi).toEqual([
+			{ duong: "okr.setCyclePhase", dauVao: { id: Q2.id, phase: "da-dong" } },
+		]);
+	});
+
+	test("cai-dat-dieu-khien-khep-ky: Mo lai ky can ly do du dai, Huy boc DialogClose", async () => {
+		await mo();
+		await moMenu(Q3.id);
+		await chonMuc("mo-lai");
+		await cho(() => q("[data-o-ly-do-mo-lai]") !== null, "hop mo lai");
+		const nut = () => tat(q('[data-nut="mo-lai-ky"]'));
+		const ra: [string, boolean | null][] = [["trong", nut()]];
+		await go(q("[data-o-ly-do-mo-lai]"), "ngắn");
+		ra.push(["ngan", nut()]);
+		await go(q("[data-o-ly-do-mo-lai]"), "Chấm nhầm thang điểm");
+		ra.push(["du", nut()]);
+		expect({
+			ra,
+			khongDich: q("[data-o-ly-do-mo-lai]")?.getAttribute("translate"),
+			huy: q("[data-hop-mo-lai] [data-slot='dialog-close']")?.textContent,
+		}).toEqual({
+			ra: [
+				["trong", true],
+				["ngan", true],
+				["du", false],
+			],
+			khongDich: "no",
+			huy: k.moLai.huy,
+		});
+		const gui = q('[data-nut="mo-lai-ky"]');
+		if (!gui) throw new Error("khong co nut Mo lai");
+		await bam(gui);
+		await cho(() => daLamMoi > 0, "lam moi sau mo lai");
+		expect(daGoi).toEqual([
+			{
+				duong: "okr.moLaiKy",
+				dauVao: { id: Q3.id, lyDo: "Chấm nhầm thang điểm" },
+			},
+		]);
+	});
+
+	test("cai-dat-dieu-khien-khep-ky: Mo ra giua ky ghi len URL, tu ngay mac dinh hom nay, nut gui tat khi chua co den ngay", async () => {
+		await mo();
+		await moMenu(NAM.id);
+		await chonMuc("mo-ra");
+		await cho(() => q(`[data-sheet-mo-ra="${NAM.id}"]`) !== null, "sheet ra");
+		expect({
+			url: url.at(-1),
+			gui: tat(q('[data-nut="gui-mo-ra"]')),
+			ngay: tatCa(
+				`[data-sheet-mo-ra="${NAM.id}"] [data-slot="date-picker-trigger"]`,
+			).map((o) => o.textContent),
+			daGoi,
+		}).toEqual({
+			url: `?moRa=${NAM.id}`,
+			gui: true,
+			ngay: [formatDay("2026-09-25", "vi"), "Chọn ngày"],
 			daGoi: [],
 		});
 	});

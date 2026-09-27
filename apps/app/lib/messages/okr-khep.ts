@@ -109,6 +109,67 @@ const vi = {
 		dong: "Đóng",
 		daXong: "Đã tạo mục tiêu nháp ở kỳ kế",
 	},
+	caiDat: {
+		menu: {
+			moRa: "Mở rà giữa kỳ",
+			dongRa: "Đóng rà sớm",
+			sangCham: "Sang chấm điểm",
+			dongKy: "Đóng kỳ",
+			moLai: "Mở lại kỳ",
+		},
+		dongPhu: (tu: string, den: string) => `Rà giữa kỳ: ${tu} – ${den}`,
+		daDongRa: (ten: string) => `Đã đóng rà giữa kỳ của ${ten}.`,
+		sangCham: {
+			tieuDe: (ten: string) => `Sang chấm điểm ${ten}?`,
+			than: "Số của mọi KR đã công bố chốt ở giá trị lúc này, và mỗi KR nhận một điểm gợi ý. Pha chỉ đi tới.",
+			nut: "Sang chấm điểm",
+			huy: "Huỷ",
+			daSang: (ten: string) => `${ten} đã sang chấm điểm.`,
+		},
+		ra: {
+			tieuDe: (ten: string) => `Mở rà giữa kỳ · ${ten}`,
+			moTa: "Trong khoảng này, sửa đích của KR đã công bố không cần lý do. Ngoài khoảng này, sửa đích phải ghi lý do và KR mang nhãn «đích sửa ngoài rà» tới lúc chấm.",
+			tu: "Từ ngày",
+			den: "Đến hết ngày",
+			moTaNgay: (dau: string, cuoi: string) =>
+				`Hai ngày nằm trong chu kỳ, từ ${dau} đến ${cuoi}. Đóng sớm được từ menu của dòng.`,
+			loiThuTu: "Ngày bắt đầu rà phải trước hoặc trùng ngày kết thúc.",
+			loiNgoaiKy: (dau: string, cuoi: string) =>
+				`Khoảng rà phải nằm trong chu kỳ, từ ${dau} đến ${cuoi}.`,
+			huy: "Huỷ",
+			gui: "Mở rà giữa kỳ",
+			daMo: (ten: string) => `Đã mở rà giữa kỳ của ${ten}.`,
+		},
+		dong: {
+			chanTieuDe: (ten: string) => `Chưa đóng được ${ten}`,
+			chanMoTa: (n: string) =>
+				`Kỳ chỉ đóng khi mọi KR của mục tiêu đã công bố có điểm. Còn ${n} KR chưa chấm:`,
+			soKr: (n: string) => `${n} KR`,
+			dangDem: "Đang đếm KR chưa chấm…",
+			loi: "Không đếm được KR chưa chấm. Đóng hộp thoại rồi thử lại.",
+			dongHop: "Đóng hộp thoại",
+			nut: "Đóng kỳ",
+			hoiTieuDe: (ten: string) => `Đóng ${ten}?`,
+			hoiThan: (ten: string) =>
+				`Mọi KR đã chấm. Sau khi đóng, số, điểm và điều học được của ${ten} chỉ còn để đọc; mở lại cần lý do và để vết.`,
+			huy: "Huỷ",
+			daDong: (ten: string) => `Đã đóng ${ten}.`,
+		},
+		moLai: {
+			tieuDe: (ten: string) => `Mở lại ${ten}`,
+			moTa: "Kỳ về pha «Chấm điểm»: điểm và điều học được sửa được lại. Số chốt giữ nguyên. Lý do nằm trong vết của chu kỳ.",
+			nhan: "Lý do mở lại",
+			moTaO: `Từ ${LY_DO.toiThieu} đến ${LY_DO.toiDa} ký tự.`,
+			huy: "Huỷ",
+			nut: "Mở lại kỳ",
+			daMo: (ten: string) => `${ten} đã về pha chấm điểm.`,
+		},
+	},
+	xuat: {
+		tieuDe: "Tải cả kỳ",
+		moTa: "Tệp CSV một dòng mỗi KR: đơn vị, mục tiêu, KR, khởi điểm, đích, số chốt, điểm gợi ý, điểm, lý do chỉnh, số lần đổi đích ngoài rà, điều học được, mang sang tới.",
+		nut: "Xuất",
+	},
 };
 
 type OkrKhepMessages = typeof vi;
@@ -216,6 +277,67 @@ const en: OkrKhepMessages = {
 		huy: "Cancel",
 		dong: "Close",
 		daXong: "Draft objective created in the next cycle",
+	},
+	caiDat: {
+		menu: {
+			moRa: "Open mid-cycle review",
+			dongRa: "End review early",
+			sangCham: "Start scoring",
+			dongKy: "Close cycle",
+			moLai: "Reopen cycle",
+		},
+		dongPhu: (tu: string, den: string) => `Mid-cycle review: ${tu} – ${den}`,
+		daDongRa: (ten: string) => `Mid-cycle review of ${ten} ended.`,
+		sangCham: {
+			tieuDe: (ten: string) => `Start scoring ${ten}?`,
+			than: "Every published key result keeps its current number as the closing number and gets a suggested score. Phases only move forward.",
+			nut: "Start scoring",
+			huy: "Cancel",
+			daSang: (ten: string) => `${ten} is now being scored.`,
+		},
+		ra: {
+			tieuDe: (ten: string) => `Open mid-cycle review · ${ten}`,
+			moTa: "Inside this range, targets of published key results change without a reason. Outside it, a new target needs a reason and the key result carries a «target changed outside review» label until scoring.",
+			tu: "From",
+			den: "Through",
+			moTaNgay: (dau: string, cuoi: string) =>
+				`Both days fall inside the cycle, ${dau} to ${cuoi}. End it early from the row menu.`,
+			loiThuTu: "The review has to start on or before the day it ends.",
+			loiNgoaiKy: (dau: string, cuoi: string) =>
+				`The review has to fall inside the cycle, ${dau} to ${cuoi}.`,
+			huy: "Cancel",
+			gui: "Open review",
+			daMo: (ten: string) => `Mid-cycle review of ${ten} is open.`,
+		},
+		dong: {
+			chanTieuDe: (ten: string) => `${ten} cannot close yet`,
+			chanMoTa: (n: string) =>
+				`A cycle closes only when every key result of a published objective has a score. ${n} key results are not scored:`,
+			soKr: (n: string) => `${n} key results`,
+			dangDem: "Counting unscored key results…",
+			loi: "Could not count unscored key results. Close this dialog and try again.",
+			dongHop: "Close dialog",
+			nut: "Close cycle",
+			hoiTieuDe: (ten: string) => `Close ${ten}?`,
+			hoiThan: (ten: string) =>
+				`Every key result is scored. Once closed, the numbers, scores and lessons of ${ten} are read-only; reopening needs a reason and leaves a trail.`,
+			huy: "Cancel",
+			daDong: (ten: string) => `${ten} is closed.`,
+		},
+		moLai: {
+			tieuDe: (ten: string) => `Reopen ${ten}`,
+			moTa: "The cycle goes back to scoring: scores and lessons can be edited again. Closing numbers stay. The reason goes into the cycle's trail.",
+			nhan: "Reason for reopening",
+			moTaO: `${LY_DO.toiThieu} to ${LY_DO.toiDa} characters.`,
+			huy: "Cancel",
+			nut: "Reopen cycle",
+			daMo: (ten: string) => `${ten} is back in scoring.`,
+		},
+	},
+	xuat: {
+		tieuDe: "Download the whole cycle",
+		moTa: "A CSV file with one row per key result: unit, objective, key result, start, target, closing number, suggested score, score, reason for the change, target changes outside review, lessons, carried over to.",
+		nut: "Export",
 	},
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import ChartLine from "@carbon/icons-react/es/ChartLine";
+import Download from "@carbon/icons-react/es/Download";
 import Renew from "@carbon/icons-react/es/Renew";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -26,12 +27,20 @@ import {
 	type SimpleTableColumn,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
+import { Spinner } from "@crm/ui/components/spinner";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { TableCell } from "@crm/ui/components/table";
 import { cn } from "@crm/ui/lib/utils";
-import { skipToken, useQuery } from "@tanstack/react-query";
+import {
+	skipToken,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
+import { toast } from "sonner";
+import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -143,6 +152,58 @@ function DongDonVi({ h, toi }: { h: HangToanCanh; toi: string }) {
 	);
 }
 
+function taiTep(tenTep: string, noiDung: string) {
+	const url = URL.createObjectURL(
+		new Blob([noiDung], { type: "text/csv;charset=utf-8" }),
+	);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = tenTep;
+	document.body.appendChild(a);
+	a.click();
+	a.remove();
+	URL.revokeObjectURL(url);
+}
+
+function XuatKy({ cycleId }: { cycleId: string }) {
+	const mk = okrKhepMessages(useLocale()).xuat;
+	const trpc = useTRPC();
+	const queryClient = useQueryClient();
+	const xuat = useMutation({
+		mutationFn: () =>
+			queryClient.fetchQuery({
+				...trpc.okr.xuatKy.queryOptions({ cycleId }),
+				staleTime: 0,
+			}),
+		onSuccess: (tep) => taiTep(tep.tenTep, tep.noiDung),
+		onError: (error) => toast.error(error.message),
+	});
+	return (
+		<Card data-khoi="xuat-ky">
+			<CardHeader>
+				<CardTitle>{mk.tieuDe}</CardTitle>
+				<CardDescription>{mk.moTa}</CardDescription>
+				<CardAction>
+					<Button
+						size="sm"
+						variant="outline"
+						disabled={xuat.isPending}
+						data-nut="xuat-ky"
+						onClick={() => xuat.mutate()}
+					>
+						{xuat.isPending ? (
+							<Spinner data-icon="inline-start" />
+						) : (
+							<Icon icon={Download} data-icon="inline-start" />
+						)}
+						{mk.nut}
+					</Button>
+				</CardAction>
+			</CardHeader>
+		</Card>
+	);
+}
+
 export function ToanCanh() {
 	const mt = okrToanCanhMessages(useLocale());
 	const trpc = useTRPC();
@@ -157,6 +218,8 @@ export function ToanCanh() {
 		),
 	);
 	const quanTri = access.data?.canManageProgram === true;
+	const daDong =
+		cycles.data?.cycles.find((c) => c.id === currentId)?.phase === "da-dong";
 	const kem = (p: Record<string, string>) => {
 		const q = new URLSearchParams(ky ? { ...p, [SEARCH_PARAM.okr.ky]: ky } : p);
 		const s = q.toString();
@@ -217,6 +280,7 @@ export function ToanCanh() {
 			className="flex flex-col gap-6"
 			data-trang-thai={tuanDau ? "ST-toancanh-tuandau" : "ST-toancanh-codulieu"}
 		>
+			{daDong && currentId !== null ? <XuatKy cycleId={currentId} /> : null}
 			<StatGroup>
 				<StatCard
 					description={

@@ -3,6 +3,7 @@ import {
 	existsSync,
 	mkdirSync,
 	mkdtempSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
 	symlinkSync,
@@ -18,7 +19,7 @@ const TEP_NAY = fileURLToPath(import.meta.url);
 const HO_SO = "khep-ky-okr";
 const BANG_CHUNG =
 	process.env.BANG_CHUNG ?? join(GOC, ".acceptance-runs", HO_SO, "evidence");
-const MOI_EVAL = ["E3", "E4", "E7", "E13", "E14"];
+const MOI_EVAL = ["E3", "E4", "E7", "E13", "E14", "E15", "E22"];
 const LENH_DO =
 	'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khep-ky-okr/rang/man-khep-ky.mjs"';
 
@@ -43,6 +44,7 @@ const chon = (evals) => CHON.size === 0 || evals.some((e) => CHON.has(e));
 
 const TEP_HOP = "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx";
 const TEP_CHAM = "apps/app/app/(app)/[slug]/okr/cham-diem.tsx";
+const TEP_CAI_DAT = "apps/app/app/(app)/[slug]/settings/okr";
 const VET = {
 	E3: {
 		tep: TEP_HOP,
@@ -87,6 +89,26 @@ const VET = {
 		cam: (s) =>
 			s.replace("const diem = Number(tt.chon);", "const diem = k.diemGoiY;"),
 		ghim: /diem da chon [\d.]+ nhung DB [\d.]+/,
+	},
+	E15: {
+		tep: `${TEP_CAI_DAT}/hop-thoai-dong-ky.tsx`,
+		mo: "ban sao hop thoai dong ky khong tat nut khi con KR chua cham",
+		cam: (s) =>
+			s.replace(
+				'<Button disabled data-nut="dong-ky">',
+				'<Button data-nut="dong-ky">',
+			),
+		ghim: /nút đóng kỳ bật khi còn \d+ KR chưa chấm/,
+	},
+	E22: {
+		tep: `${TEP_CAI_DAT}/hop-thoai-mo-lai.tsx`,
+		mo: "ban sao hop thoai mo lai khong gui ly do da go",
+		cam: (s) =>
+			s.replace(
+				"moLai.mutate({ id: ky.id, lyDo: lyDo.trim() });",
+				'moLai.mutate({ id: ky.id, lyDo: "Mở lại theo mặc định" });',
+			),
+		ghim: /note doc duoc «[^»]*» khac ly do da go/,
 	},
 };
 
@@ -223,6 +245,13 @@ const { formatDay } = await import("../../../packages/ui/src/lib/format.ts");
 const { okrKhepMessages } = await import(
 	"../../../apps/app/lib/messages/okr-khep.ts"
 );
+const { okrMessages } = await import("../../../apps/app/lib/messages/okr.ts");
+const { OKR: OKR_API } = await import(
+	"../../../apps/api/src/okr/okr-config.ts"
+);
+const { COT_XUAT } = await import(
+	"../../../apps/api/src/okr/okr-khep.contracts.ts"
+);
 const { canhCay } = await import(
 	"../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs"
 );
@@ -249,6 +278,7 @@ const DO = {
 const MA = `k${Date.now().toString(36).slice(-6)}`;
 const LOI_BO_QUA = /Download the React DevTools/;
 const CHU = okrKhepMessages("vi");
+const CHU_OKR = okrMessages("vi");
 
 console.log(
 	CHON.size === 0
@@ -565,6 +595,7 @@ async function moTrang(c, rong, duong, truocKhiMo = null) {
 		if (LOI_BO_QUA.test(t)) return;
 		if (process.env.CHIEU_DO && /status of 400/.test(t)) return;
 		if (trang.boQua500 && /status of 500/.test(t)) return;
+		if (trang.boQua400 && /status of 400/.test(t)) return;
 		loiConsole.push(`${tenNhom} ${duong}: console.error ${t.slice(0, 200)}`);
 	});
 	trang.on("requestfailed", (r) =>
@@ -1655,6 +1686,619 @@ async function buocCham() {
 	if (chon(["E13"])) await buocChamTrangThai();
 }
 
+const e15 = (nhan, dat) => (chon(["E15"]) ? kiem(`E15 ${nhan}`, dat) : dat);
+const e22 = (nhan, dat) => (chon(["E22"]) ? kiem(`E22 ${nhan}`, dat) : dat);
+
+const TEN_KHEP = {
+	P3: `Phòng Vận hành khép kỳ ${MA}`,
+	X: "Đối tác mới được đón trọn tuần đầu",
+	Y: "Vận hành đơn đối tác không trễ hạn",
+	x1: "Đối tác mới ký trong quý",
+	x2: "Buổi đào tạo đối tác đã xong",
+	y1: "Đơn đối tác giao đúng hạn",
+	lyDo: "Chấm nhầm thang điểm của phòng Đối tác",
+};
+
+const quyLui = (n) => {
+	const so = NAM * 4 + (QUY - 1) - n;
+	return { nam: Math.floor(so / 4), quy: (so % 4) + 1 };
+};
+const congNgay = (s, n) => {
+	const d = new Date(`${s}T00:00:00Z`);
+	d.setUTCDate(d.getUTCDate() + n);
+	return d.toISOString().slice(0, 10);
+};
+const ngayDb = (d) => d.toISOString().slice(0, 10);
+const CUOI_THANG = ngay(
+	NAM,
+	Number(HOM_NAY.slice(5, 7)),
+	cuoiThang(NAM, Number(HOM_NAY.slice(5, 7))),
+);
+const DEN_RA = [congNgay(HOM_NAY, 3), CUOI_THANG, CUOI_QUY].sort()[0];
+const HANG = (ky) => `[data-chu-ky='${ky}']`;
+
+async function namCua(y) {
+	if (y === NAM) return G.ky[0];
+	const ten = `Năm ${y} ${MA}`;
+	const co = await db.okrCycle.findFirst({ where: { name: ten } });
+	if (co) return co.id;
+	const nam = await lam(cookie.admin, "okr.createCycle", {
+		kind: "nam",
+		name: ten,
+		parentId: null,
+		startsOn: ngay(y, 1, 1),
+		endsOn: ngay(y, 12, 31),
+		breakStartsOn: null,
+		breakEndsOn: null,
+		updateWeekday: 1,
+	});
+	G.ky.push(nam.id);
+	return nam.id;
+}
+
+async function gieoKhep() {
+	const mo = await db.okrCuaSoRa.findMany({
+		where: { cycleId: K.quy, dongLuc: null },
+		select: { id: true },
+	});
+	for (const r of mo) await lam(cookie.admin, "okr.dongRa", { id: r.id });
+	const pb3 = await lam(cookie.admin, "org.createDepartment", {
+		name: TEN_KHEP.P3,
+		divisionId: null,
+	});
+	G.pb.push(pb3.id);
+	K.P3 = pb3.id;
+	await lam(cookie.admin, "org.setPlacement", {
+		userId: id.admin,
+		primaryDepartmentId: K.P3,
+		secondaryDepartmentIds: [],
+		managerUserId: null,
+	});
+	await lam(cookie.admin, "org.setHead", {
+		kind: "department",
+		id: K.P3,
+		userId: id.admin,
+	});
+	const t = quyLui(2);
+	const ten = `Quý ${t.quy}/${t.nam} ${MA}`;
+	const qua = await lam(cookie.admin, "okr.createCycle", {
+		kind: "quy",
+		name: ten,
+		parentId: await namCua(t.nam),
+		startsOn: ngay(t.nam, t.quy * 3 - 2, 1),
+		endsOn: ngay(t.nam, t.quy * 3, cuoiThang(t.nam, t.quy * 3)),
+		breakStartsOn: null,
+		breakEndsOn: null,
+		updateWeekday: 1,
+	});
+	G.ky.push(qua.id);
+	K.qua = qua.id;
+	K.tenQua = ten;
+	await lam(cookie.admin, "okr.setCyclePhase", {
+		id: qua.id,
+		phase: "dang-chay",
+	});
+	const taoMt = async (c, khoa, donVi, owner) => {
+		const r = await lam(c, "okr.createObjective", {
+			cycleId: K.qua,
+			unit: { level: "phong-ban", departmentId: donVi },
+			title: TEN_KHEP[khoa],
+			kind: "cam-ket",
+			ownerUserId: owner,
+			participantIds: [],
+			whyNow: "",
+		});
+		G.mt.push(r.id);
+		K[khoa] = r.id;
+	};
+	await taoMt(cookie.truong, "X", K.P, id.truong);
+	await taoMt(cookie.admin, "Y", K.P3, id.admin);
+	for (const [c, khoa, mt, owner, khoi, dich, hien] of [
+		[cookie.truong, "x1", "X", id.truong, 0, 10, 6],
+		[cookie.truong, "x2", "X", id.truong, 0, 4, 4],
+		[cookie.admin, "y1", "Y", id.admin, 80, 95, 90],
+	]) {
+		const r = await lam(c, "okr.createKeyResult", {
+			objectiveId: K[mt],
+			title: TEN_KHEP[khoa],
+			kind: "tang-toi",
+			ownerUserId: owner,
+			startValue: khoi,
+			targetValue: dich,
+			currentValue: hien,
+			unit: "",
+			dueOn: null,
+			weight: 1,
+		});
+		G.kr.push(r.id);
+		K[khoa] = r.id;
+	}
+	await lam(cookie.truong, "okr.publishObjective", { id: K.X });
+	await lam(cookie.admin, "okr.publishObjective", { id: K.Y });
+	console.log(
+		`  gieo khep: ${ten} ${K.qua} (dang-chay, da qua ngay cuoi), X=${K.X} (2 KR, P), Y=${K.Y} (1 KR, P3), dong ${mo.length} cua so ra con mo cua ${K.quy}`,
+	);
+}
+
+async function bamThu(trang, sel, i) {
+	const tay = await trang.evaluateHandle(
+		(s, n) => window.__tim(s)[n] ?? null,
+		sel,
+		i,
+	);
+	const el = tay.asElement();
+	if (!el) return kiem(`khong thay ${sel}[${i}] de bam`, false);
+	await el.click();
+	return true;
+}
+
+const hetLich = (t) =>
+	thayNgay(t, () => window.__tim("[data-slot='popover-content']").length === 0);
+
+async function chonNgay(t, sheet, i, ngayChon) {
+	const nut = `${sheet} [data-slot='date-picker-trigger']`;
+	const o = `[data-slot='popover-content'] button[data-day='${ngayChon}']`;
+	const mong = formatDay(ngayChon, "vi");
+	for (let lan = 0; lan < 3; lan += 1) {
+		await hetLich(t);
+		await bamThu(t, nut, i);
+		if (!(await thayNgay(t, (s) => window.__tim(s).length > 0, o))) continue;
+		await cho(DO.choHydrateMs);
+		const ngayO = (
+			await t.evaluateHandle((s) => window.__tim(s)[0] ?? null, o)
+		).asElement();
+		if (!ngayO) continue;
+		await ngayO.click().catch(() => null);
+		await hetLich(t);
+		const thay = await t.evaluate(
+			(s, n) => window.__tim(s)[n]?.innerText.trim() ?? "",
+			nut,
+			i,
+		);
+		if (thay === mong) return true;
+	}
+	return kiem(`E15: chon ngay ${ngayChon} vao o thu ${i} cua sheet ra`, false);
+}
+
+async function moMenu(t, ky, viec) {
+	await bam(t, `[data-menu-chu-ky='${ky}']`);
+	const muc = `[data-viec-chu-ky='${viec}']`;
+	if (!(await coMat(t, muc, `E15: menu ${ky} co muc ${viec}`))) return false;
+	await bam(t, muc);
+	return true;
+}
+
+async function phaDb(ky) {
+	return (await db.okrCycle.findUnique({ where: { id: ky } }))?.phase ?? null;
+}
+
+async function phaKhop(t, ky, nhan) {
+	const db_ = await phaDb(ky);
+	const mong = db_ ? CHU_OKR.caiDat.pha[db_] : "";
+	const ok = await thayNgay(
+		t,
+		(s, m) => (window.__tim(s)[0]?.innerText ?? "").includes(m),
+		HANG(ky),
+		mong,
+	);
+	const thay = await chuSel(t, HANG(ky));
+	e15(
+		`${nhan}: pha tren bang «${mong}» bang phase DB ${db_} (dong: «${thay}»)`,
+		ok,
+	);
+	return db_;
+}
+
+async function moCaiDat(c, rong = DO.rong) {
+	const t = await moTrang(c, rong, "/settings/okr");
+	t.boQua400 = true;
+	await coMat(t, "[data-chu-ky]", "E15: bang chu ky");
+	return t;
+}
+
+function docCsv(chu) {
+	const dong = [];
+	let o = "";
+	let hang = [];
+	let trongNhay = false;
+	for (let i = 0; i < chu.length; i += 1) {
+		const k = chu[i];
+		if (trongNhay) {
+			if (k === '"' && chu[i + 1] === '"') {
+				o += '"';
+				i += 1;
+			} else if (k === '"') trongNhay = false;
+			else o += k;
+		} else if (k === '"') trongNhay = true;
+		else if (k === ",") {
+			hang.push(o);
+			o = "";
+		} else if (k === "\n" || k === "\r") {
+			if (k === "\r" && chu[i + 1] === "\n") i += 1;
+			hang.push(o);
+			dong.push(hang);
+			hang = [];
+			o = "";
+		} else o += k;
+	}
+	if (o !== "" || hang.length > 0) {
+		hang.push(o);
+		dong.push(hang);
+	}
+	return dong;
+}
+
+async function buocMoRa() {
+	const t = await moCaiDat(cookie.admin);
+	if (!(await moMenu(t, K.quy, "mo-ra"))) return t.close();
+	const sheet = `[data-sheet-mo-ra='${K.quy}']`;
+	if (!(await coMat(t, sheet, "E15 buoc 1: sheet Mo ra giua ky")))
+		return t.close();
+	const tuMacDinh = await chuSel(
+		t,
+		`${sheet} [data-slot='date-picker-trigger']`,
+	);
+	e15(
+		`buoc 1: tu ngay mac dinh la hom nay ${formatDay(HOM_NAY, "vi")} (thay «${tuMacDinh}»)`,
+		tuMacDinh === formatDay(HOM_NAY, "vi"),
+	);
+	if (DEN_RA > HOM_NAY) {
+		await chonNgay(t, sheet, 1, HOM_NAY);
+		await chonNgay(t, sheet, 0, DEN_RA);
+		const chan = await thayNgay(
+			t,
+			(s) => window.__tim(`${s} [data-loi-ra='thu-tu']`).length > 0,
+			sheet,
+		);
+		const loi = await chuSel(t, `${sheet} [data-loi-ra]`);
+		e15(
+			`buoc 1: tu ${DEN_RA} sau den ${HOM_NAY} -> man bao «${CHU.caiDat.ra.loiThuTu}» (thay «${loi}»)`,
+			chan && loi === CHU.caiDat.ra.loiThuTu,
+		);
+		e15(
+			"buoc 1: tu sau den -> nut Mo ra tat, khong gui",
+			(await nutTat(t, "[data-nut='gui-mo-ra']")) === true,
+		);
+		await chonNgay(t, sheet, 0, HOM_NAY);
+	} else
+		console.log(
+			`  E15 buoc 1: bo qua kiem tu > den (hom nay ${HOM_NAY} la ngay cuoi thang)`,
+		);
+	await chonNgay(t, sheet, 1, DEN_RA);
+	await doi(
+		t,
+		"E15 buoc 1: du hai ngay -> nut Mo ra bat",
+		() => window.__tim("[data-nut='gui-mo-ra']")[0]?.disabled === false,
+	);
+	await bam(t, "[data-nut='gui-mo-ra']");
+	await thayNgay(t, (s) => window.__tim(s).length === 0, sheet);
+	const mong = CHU.caiDat.dongPhu(
+		formatDay(HOM_NAY, "vi"),
+		formatDay(DEN_RA, "vi"),
+	);
+	const coDong = await thayNgay(
+		t,
+		(s) => window.__tim(s).length > 0,
+		`${HANG(K.quy)} [data-dong-ra]`,
+	);
+	const dongPhu = await chuSel(t, `${HANG(K.quy)} [data-dong-ra]`);
+	e15(
+		`buoc 1: dong phu «${mong}» (thay «${dongPhu}»)`,
+		coDong && dongPhu === mong,
+	);
+	await chup(t, "buoc-mo-ra.png");
+	const ra = await db.okrCuaSoRa.findMany({
+		where: { cycleId: K.quy, dongLuc: null },
+		select: { tuNgay: true, denNgay: true },
+	});
+	const raDoc = ra.map((r) => [ngayDb(r.tuNgay), ngayDb(r.denNgay)]);
+	console.log(`  E22 DB okrCuaSoRa mo cua ${K.quy}: ${JSON.stringify(raDoc)}`);
+	e22(
+		`sau Mo ra: DB co mot okrCuaSoRa ${HOM_NAY}..${DEN_RA} (thay ${JSON.stringify(raDoc)})`,
+		raDoc.length === 1 && raDoc[0][0] === HOM_NAY && raDoc[0][1] === DEN_RA,
+	);
+	await t.close();
+
+	const t2 = await moTrang(cookie.truong, DO.rong, "/okr");
+	const coDai = await coMat(
+		t2,
+		"[data-dai-ky='ra']",
+		"E15 buoc 1: dai ra giua ky o khu OKR",
+	);
+	if (coDai) {
+		const tieuDe = await chuSel(
+			t2,
+			"[data-dai-ky='ra'] [data-slot='alert-title']",
+		);
+		const mongDai = CHU.dai.ra(formatDay(DEN_RA, "vi"));
+		e15(`buoc 1: dai «${mongDai}» (thay «${tieuDe}»)`, tieuDe === mongDai);
+	}
+	await t2.close();
+}
+
+async function buocSangChamSom() {
+	const t = await moCaiDat(cookie.admin);
+	if (await moMenu(t, K.quy, "sang-cham")) {
+		await coMat(t, "[role='alertdialog']", "E15 buoc 2: hoi Sang cham diem");
+		await bamTheoChu(t, "[role='alertdialog'] button", CHU.caiDat.sangCham.nut);
+		await coToast(t, OKR_API.thongDiep.khep.chamTuNgaySau);
+	}
+	await phaKhop(t, K.quy, "buoc 2");
+	const pha = await phaDb(K.quy);
+	const diem = await db.okrDiemKr.count({ where: { cycleId: K.quy } });
+	console.log(`  E22 DB sau sang cham som: phase ${pha}, okrDiemKr ${diem}`);
+	e22(
+		`sau Sang cham som: phase van dang-chay va 0 dong okrDiemKr (thay ${pha}, ${diem})`,
+		pha === "dang-chay" && diem === 0,
+	);
+	await t.close();
+}
+
+async function buocSangChamDongKy() {
+	const t = await moCaiDat(cookie.admin);
+	if (await moMenu(t, K.qua, "sang-cham")) {
+		await coMat(t, "[role='alertdialog']", "E15 buoc 3: hoi Sang cham diem");
+		await bamTheoChu(t, "[role='alertdialog'] button", CHU.caiDat.sangCham.nut);
+		await coToast(t, CHU.caiDat.sangCham.daSang(K.tenQua));
+	}
+	const pha = await phaKhop(t, K.qua, "buoc 3");
+	const soDong = await db.okrDiemKr.count({ where: { cycleId: K.qua } });
+	e15(
+		`buoc 3: sang cham diem ky da qua ngay cuoi -> phase cham-diem, 3 dong diem (thay ${pha}, ${soDong})`,
+		pha === "cham-diem" && soDong === 3,
+	);
+
+	if (await moMenu(t, K.qua, "dong-ky")) {
+		const hop = `[data-hop-dong-ky='${K.qua}']`;
+		await coMat(
+			t,
+			`${hop} [data-don-vi-chua-cham]`,
+			"E15 buoc 4: hop dong ky liet don vi",
+		);
+		const dsMan = await t.evaluate(
+			(h) =>
+				window
+					.__tim(`${h} [data-don-vi-chua-cham]`)
+					.map((e) => [
+						e.getAttribute("data-don-vi-chua-cham"),
+						e.innerText.replace(/\s+/g, " ").trim(),
+					]),
+			hop,
+		);
+		const conDb = await db.okrDiemKr.findMany({
+			where: { cycleId: K.qua, diem: null },
+			select: {
+				keyResult: {
+					select: { objective: { select: { departmentId: true } } },
+				},
+			},
+		});
+		const theoPb = {};
+		for (const d of conDb) {
+			const pb = d.keyResult.objective.departmentId;
+			theoPb[pb] = (theoPb[pb] ?? 0) + 1;
+		}
+		console.log(
+			`  E15 buoc 4: man ${JSON.stringify(dsMan)}; DB con ${JSON.stringify(theoPb)}`,
+		);
+		const khop =
+			dsMan.length === Object.keys(theoPb).length &&
+			Object.entries(theoPb).every(([pb, n]) =>
+				dsMan.some(
+					([khoa, chu]) =>
+						khoa?.endsWith(pb) && chu.endsWith(CHU.caiDat.dong.soKr(String(n))),
+				),
+			);
+		e15(
+			`buoc 4: hop dong liet dung don vi va so KR chua cham theo DB (${JSON.stringify(theoPb)})`,
+			khop,
+		);
+		const tat = await nutTat(t, `${hop} [data-nut='dong-ky']`);
+		if (tat !== true) {
+			console.log(
+				`  E15 buoc 4: nút đóng kỳ bật khi còn ${conDb.length} KR chưa chấm`,
+			);
+		}
+		e15(`buoc 4: nut Dong ky tat (thay disabled=${tat})`, tat === true);
+		await chup(t, "buoc-dong-chan.png");
+		await t.setViewport({ width: DO.hep, height: DO.cao });
+		await cho(500);
+		await chup(t, "buoc-dong-chan-390.png");
+		await t.setViewport({ width: DO.rong, height: DO.cao });
+		const phaSau = await phaDb(K.qua);
+		console.log(`  E22 DB sau Dong ky khi con KR chua cham: phase ${phaSau}`);
+		e22(
+			`sau Dong ky khi con KR chua cham: phase van cham-diem (thay ${phaSau})`,
+			phaSau === "cham-diem",
+		);
+	}
+	await t.close();
+
+	const dong = await db.okrDiemKr.findMany({
+		where: { cycleId: K.qua },
+		select: { keyResultId: true, diemGoiY: true, thang: true },
+	});
+	for (const d of dong)
+		await lam(
+			d.keyResultId === K.y1 ? cookie.admin : cookie.truong,
+			"okr.chamKr",
+			{
+				keyResultId: d.keyResultId,
+				diem:
+					d.thang === "0-100"
+						? Math.round(Number(d.diemGoiY) * 100)
+						: Number(d.diemGoiY),
+			},
+		);
+
+	const t2 = await moCaiDat(cookie.admin);
+	if (await moMenu(t2, K.qua, "dong-ky")) {
+		const hoi = await coMat(
+			t2,
+			"[role='alertdialog']",
+			"E15 buoc 5: du diem -> hoi dong ky",
+		);
+		if (hoi) {
+			await bamTheoChu(t2, "[role='alertdialog'] button", CHU.caiDat.dong.nut);
+			await coToast(t2, CHU.caiDat.dong.daDong(K.tenQua));
+		}
+	}
+	const phaDong = await phaKhop(t2, K.qua, "buoc 5");
+	console.log(`  E22 DB sau Dong ky khi du: phase ${phaDong}`);
+	e22(
+		`sau Dong ky khi du: phase da-dong (thay ${phaDong})`,
+		phaDong === "da-dong",
+	);
+	await t2.close();
+}
+
+async function buocMoLai() {
+	const t = await moCaiDat(cookie.admin);
+	if (await moMenu(t, K.qua, "mo-lai")) {
+		const hop = `[data-hop-mo-lai='${K.qua}']`;
+		await coMat(t, `${hop} [data-o-ly-do-mo-lai]`, "E15 buoc 6: hop mo lai");
+		e15(
+			"buoc 6: nut Mo lai tat khi ly do trong",
+			(await nutTat(t, `${hop} [data-nut='mo-lai-ky']`)) === true,
+		);
+		await go(t, `${hop} [data-o-ly-do-mo-lai]`, "ngắn");
+		e15(
+			"buoc 6: nut Mo lai tat khi ly do duoi toi thieu",
+			(await nutTat(t, `${hop} [data-nut='mo-lai-ky']`)) === true,
+		);
+		await go(t, `${hop} [data-o-ly-do-mo-lai]`, TEN_KHEP.lyDo);
+		await doi(
+			t,
+			"E15 buoc 6: go ly do du -> nut Mo lai bat",
+			(h) => window.__tim(`${h} [data-nut='mo-lai-ky']`)[0]?.disabled === false,
+			hop,
+		);
+		await chup(t, "buoc-mo-lai-ly-do.png");
+		await bam(t, `${hop} [data-nut='mo-lai-ky']`);
+		await coToast(t, CHU.caiDat.moLai.daMo(K.tenQua));
+	}
+	const pha = await phaKhop(t, K.qua, "buoc 6");
+	await chup(t, "buoc-mo-lai.png");
+	const vet = await db.okrTrail.findMany({
+		where: { cycleId: K.qua, action: "mo-lai-ky" },
+		select: { note: true },
+	});
+	const note = vet.map((v) => v.note);
+	console.log(
+		`  E22 DB sau Mo lai: phase ${pha}, vet mo-lai-ky ${JSON.stringify(note)}`,
+	);
+	if (vet.length === 1 && note[0] !== TEN_KHEP.lyDo)
+		console.log(
+			`  E22: note doc duoc «${note[0]}» khac ly do da go «${TEN_KHEP.lyDo}»`,
+		);
+	e22(
+		`sau Mo lai: phase cham-diem va dung mot dong okrTrail mo-lai-ky note bang ly do da go (thay ${pha}, ${JSON.stringify(note)})`,
+		pha === "cham-diem" && vet.length === 1 && note[0] === TEN_KHEP.lyDo,
+	);
+	await t.close();
+	await lam(cookie.admin, "okr.setCyclePhase", {
+		id: K.qua,
+		phase: "da-dong",
+	});
+}
+
+async function buocXuat() {
+	const thuMuc = mkdtempSync(join(tmpdir(), "khep-ky-xuat-"));
+	try {
+		const t = await moTrang(
+			cookie.truong,
+			DO.rong,
+			`/okr/toan-canh?kyOkr=${K.qua}`,
+		);
+		const cdp = await t.createCDPSession();
+		await cdp.send("Browser.setDownloadBehavior", {
+			behavior: "allow",
+			downloadPath: thuMuc,
+		});
+		if (
+			await coMat(
+				t,
+				"[data-nut='xuat-ky']",
+				"E15 buoc 7: nut Xuat o Toan canh ky da dong",
+			)
+		) {
+			await bam(t, "[data-nut='xuat-ky']");
+			let tep = null;
+			for (let i = 0; i < DO.choMs / 200 && !tep; i += 1) {
+				tep =
+					readdirSync(thuMuc).find((f) => !f.endsWith(".crdownload")) ?? null;
+				if (!tep) await cho(200);
+			}
+			e15(
+				`buoc 7: tai ve tep .csv (thay ${tep})`,
+				tep?.endsWith(".csv") === true,
+			);
+			if (tep) {
+				const chu = readFileSync(join(thuMuc, tep), "utf8").replace(/^﻿/, "");
+				const dong = docCsv(chu);
+				const dau = dong[0]?.join(",") ?? "";
+				e15(
+					`buoc 7: dong dau bang COT_XUAT (thay «${dau.slice(0, 160)}»)`,
+					dau === COT_XUAT.join(","),
+				);
+				const soKr = await db.okrKeyResult.count({
+					where: {
+						objective: { cycleId: K.qua, status: { in: ["cong-bo", "da-bo"] } },
+					},
+				});
+				console.log(
+					`  E22 tep xuat ${tep}: ${dong.length - 1} dong du lieu, DB ${soKr} KR`,
+				);
+				e22(
+					`tep xuat co so dong du lieu bang so KR doc DB (thay ${dong.length - 1}, DB ${soKr})`,
+					dong.length - 1 === soKr,
+				);
+			}
+		}
+		await chup(t, "buoc-xuat.png");
+		await t.close();
+	} finally {
+		rmSync(thuMuc, { recursive: true, force: true });
+	}
+}
+
+async function buocKhongQuyen() {
+	const t = await moCaiDat(cookie.docOnly);
+	const ra = await t.evaluate((lyDoId) => {
+		const menu = window.__tim("[data-menu-chu-ky]");
+		const lyDo = window.__tim("[data-ly-do-khong-quyen]")[0];
+		return {
+			soMenu: menu.length,
+			moiTat: menu.every((e) => e.disabled),
+			moiTro: menu.every((e) =>
+				(e.getAttribute("aria-describedby") ?? "").split(" ").includes(lyDoId),
+			),
+			lyDo: lyDo?.innerText.trim() ?? null,
+			lyDoId: lyDo?.id ?? null,
+		};
+	}, "okr-cai-dat-ly-do");
+	e15(
+		`buoc 8: thanh vien thuong: moi menu chu ky tat, tro toi dong giai thich «${CHU_OKR.caiDat.khongQuyen}» (thay ${JSON.stringify(ra)})`,
+		ra.soMenu > 0 &&
+			ra.moiTat &&
+			ra.moiTro &&
+			ra.lyDo === CHU_OKR.caiDat.khongQuyen,
+	);
+	await chup(t, "buoc-khong-quyen.png");
+	await t.close();
+}
+
+async function buocKhep() {
+	nhom = "E15/E22";
+	await gieoKhep();
+	await buocMoRa();
+	await buocSangChamSom();
+	await buocSangChamDongKy();
+	await buocMoLai();
+	await buocXuat();
+	await buocKhongQuyen();
+}
+
 trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });
 datTrinhDuyet(trinhDuyet);
 
@@ -1706,6 +2350,13 @@ try {
 			hong.push(`E13/E14: nem ${String(e).slice(0, 400)}`),
 		);
 		console.log(`  nhom E13/E14: ${Math.round((Date.now() - b) / 1000)} s`);
+	}
+	if (chon(["E15", "E22"])) {
+		const b = Date.now();
+		await buocKhep().catch((e) =>
+			hong.push(`E15/E22: nem ${String(e).slice(0, 400)}`),
+		);
+		console.log(`  nhom E15/E22: ${Math.round((Date.now() - b) / 1000)} s`);
 	}
 	kiem(
 		`khong loi console (${loiConsole.length}): ${loiConsole.slice(0, 6).join(" || ")}`,

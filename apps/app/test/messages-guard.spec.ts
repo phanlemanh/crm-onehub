@@ -43,6 +43,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"dong.soKr",
 	"hopThoaiChoPhep.choDoi",
 	"chiaSe.xong",
 	"tep.kiloByte",
@@ -725,6 +726,49 @@ const GHIM = {
 	"okr-khep:mangSang.khoiDiemMoi": [
 		"Khởi điểm mới 1 (số chốt) · đích A",
 		"Khởi điểm mới 12 (số chốt) · đích A",
+	],
+	"okr-khep:caiDat.dongPhu": ["Rà giữa kỳ: 1 – A", "Rà giữa kỳ: 12 – A"],
+	"okr-khep:caiDat.daDongRa": [
+		"Đã đóng rà giữa kỳ của 1.",
+		"Đã đóng rà giữa kỳ của 12.",
+	],
+	"okr-khep:caiDat.sangCham.tieuDe": [
+		"Sang chấm điểm 1?",
+		"Sang chấm điểm 12?",
+	],
+	"okr-khep:caiDat.sangCham.daSang": [
+		"1 đã sang chấm điểm.",
+		"12 đã sang chấm điểm.",
+	],
+	"okr-khep:caiDat.ra.tieuDe": ["Mở rà giữa kỳ · 1", "Mở rà giữa kỳ · 12"],
+	"okr-khep:caiDat.ra.moTaNgay": [
+		"Hai ngày nằm trong chu kỳ, từ 1 đến A. Đóng sớm được từ menu của dòng.",
+		"Hai ngày nằm trong chu kỳ, từ 12 đến A. Đóng sớm được từ menu của dòng.",
+	],
+	"okr-khep:caiDat.ra.loiNgoaiKy": [
+		"Khoảng rà phải nằm trong chu kỳ, từ 1 đến A.",
+		"Khoảng rà phải nằm trong chu kỳ, từ 12 đến A.",
+	],
+	"okr-khep:caiDat.ra.daMo": [
+		"Đã mở rà giữa kỳ của 1.",
+		"Đã mở rà giữa kỳ của 12.",
+	],
+	"okr-khep:caiDat.dong.chanTieuDe": ["Chưa đóng được 1", "Chưa đóng được 12"],
+	"okr-khep:caiDat.dong.chanMoTa": [
+		"Kỳ chỉ đóng khi mọi KR của mục tiêu đã công bố có điểm. Còn 1 KR chưa chấm:",
+		"Kỳ chỉ đóng khi mọi KR của mục tiêu đã công bố có điểm. Còn 12 KR chưa chấm:",
+	],
+	"okr-khep:caiDat.dong.soKr": ["1 KR", "12 KR"],
+	"okr-khep:caiDat.dong.hoiTieuDe": ["Đóng 1?", "Đóng 12?"],
+	"okr-khep:caiDat.dong.hoiThan": [
+		"Mọi KR đã chấm. Sau khi đóng, số, điểm và điều học được của 1 chỉ còn để đọc; mở lại cần lý do và để vết.",
+		"Mọi KR đã chấm. Sau khi đóng, số, điểm và điều học được của 12 chỉ còn để đọc; mở lại cần lý do và để vết.",
+	],
+	"okr-khep:caiDat.dong.daDong": ["Đã đóng 1.", "Đã đóng 12."],
+	"okr-khep:caiDat.moLai.tieuDe": ["Mở lại 1", "Mở lại 12"],
+	"okr-khep:caiDat.moLai.daMo": [
+		"1 đã về pha chấm điểm.",
+		"12 đã về pha chấm điểm.",
 	],
 } satisfies Record<string, [string, string]>;
 
