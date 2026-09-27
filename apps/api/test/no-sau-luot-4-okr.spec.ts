@@ -314,13 +314,6 @@ describe("mot-luat-ghi", () => {
 		const Q = await nguoiMoi("ml-q", "admin");
 		const N = await nguoiMoi("ml-n");
 		const cC = await phienCua(C);
-		const nguoi: Record<string, AiHoacCookie> = {
-			C: cC,
-			TP: TP.cookie,
-			TB: TB.cookie,
-			Q: await phienCua(Q),
-			N: await phienCua(N),
-		};
 		const oP = await mucTieu(
 			quy,
 			{ level: "phong-ban", departmentId: pb },
@@ -334,27 +327,27 @@ describe("mot-luat-ghi", () => {
 			TB.cookie,
 		);
 		const oN = await mucTieu(quy, { level: "ca-nhan", personUserId: C }, C, cC);
-		const kr: Record<string, { o: string; k: string }> = {
-			"phong-ban": { o: oP, k: await taoKr(oP, C, TP.cookie) },
-			"bo-phan": { o: oB, k: await taoKr(oB, C, TB.cookie) },
-			"ca-nhan": { o: oN, k: await taoKr(oN, C, cC) },
-		};
+		const kr = [
+			["phong-ban", oP, await taoKr(oP, C, TP.cookie)],
+			["bo-phan", oB, await taoKr(oB, C, TB.cookie)],
+			["ca-nhan", oN, await taoKr(oN, C, cC)],
+		] as const;
 		await congBo(oP, TP.cookie);
 		await congBo(oB, TB.cookie);
 		await congBo(oN, cC);
 
-		const MONG: Record<string, [boolean, boolean, boolean]> = {
-			C: [true, true, true],
-			TP: [true, false, true],
-			TB: [true, true, true],
-			Q: [false, false, false],
-			N: [false, false, false],
-		};
+		const nguoi = [
+			["C", cC, [true, true, true]],
+			["TP", TP.cookie, [true, false, true]],
+			["TB", TB.cookie, [true, true, true]],
+			["Q", await phienCua(Q), [false, false, false]],
+			["N", await phienCua(N), [false, false, false]],
+		] as const;
 		const lech: string[] = [];
 		const bang: Record<string, boolean[]> = {};
-		for (const [ten, cookie] of Object.entries(nguoi)) {
+		for (const [ten, cookie, mongHang] of nguoi) {
 			const hang: boolean[] = [];
-			for (const [cap, { o, k }] of Object.entries(kr)) {
+			for (const [i, [cap, o, k]] of kr.entries()) {
 				const xem = await goiQuery("okr.objective", cookie, { id: o });
 				const a =
 					xem.status === 200 &&
@@ -379,7 +372,7 @@ describe("mot-luat-ghi", () => {
 				if (sau - truoc !== (c ? 1 : 0)) {
 					lech.push(`${ten} x ${cap} dem ${sau - truoc}`);
 				}
-				const mong = MONG[ten]?.[Object.keys(kr).indexOf(cap)];
+				const mong = mongHang[i];
 				if (a !== b || b !== c || c !== mong) {
 					lech.push(`${ten} x ${cap} a=${a} b=${b} c=${c}`);
 				}
@@ -388,7 +381,11 @@ describe("mot-luat-ghi", () => {
 			bang[ten] = hang;
 		}
 		if (lech.length > 0) throw new Error(`mot-luat: ${lech.join(" | ")}`);
-		expect(bang).toEqual(MONG);
+		expect(bang).toEqual(
+			Object.fromEntries(
+				nguoi.map(([ten, , mongHang]) => [ten, [...mongHang]]),
+			),
+		);
 	});
 });
 

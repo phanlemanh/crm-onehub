@@ -8,7 +8,7 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
-import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
+import { type MucNhac, parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
 import { chayNhac, lenLichNhac } from "../agent/lib/nhac-ke-hoach";
 import { TIEU_DE } from "../agent/lib/tin-nhac";
 import {
@@ -58,7 +58,7 @@ type LoaiOkr = keyof typeof KHOA_VIET_TAY;
 
 const LOAI = Object.keys(KHOA_VIET_TAY) as LoaiOkr[];
 
-type Gieo = { id: string; ma: Record<LoaiOkr, Record<string, unknown>> };
+type Gieo = { id: string; ma: Record<LoaiOkr, MucNhac> };
 
 async function gieoNamLoai(ten: string, chay: string): Promise<Gieo> {
 	const P = await gieoNguoi(ten);
@@ -209,8 +209,8 @@ describe("du-duong", () => {
 		setSystemTime(goc);
 		await lenLichNhac(goc);
 
-		const bang: Record<string, unknown> = {};
-		const mong: Record<string, unknown> = {};
+		const bang: Record<string, string> = {};
+		const mong: Record<string, string> = {};
 		for (const [ten, g] of [
 			["Z", Z],
 			["S", S],
@@ -218,13 +218,12 @@ describe("du-duong", () => {
 			const muc = parseNhacPayload((await hangCua(g.id)).payload).muc;
 			for (const loai of LOAI) {
 				const cua = muc.filter((m) => m.loai === loai);
-				bang[`${ten} ${loai} muc`] = cua.map((m) => ({
-					khoa: Object.keys(m).sort(),
-					gia: m,
-				}));
-				mong[`${ten} ${loai} muc`] = [
+				bang[`${ten} ${loai} muc`] = JSON.stringify(
+					cua.map((m) => ({ khoa: Object.keys(m).sort(), gia: m })),
+				);
+				mong[`${ten} ${loai} muc`] = JSON.stringify([
 					{ khoa: [...KHOA_VIET_TAY[loai]], gia: g.ma[loai] },
-				];
+				]);
 			}
 		}
 
@@ -246,10 +245,12 @@ describe("du-duong", () => {
 		const tinSlack =
 			s.goi.find((g) => g.url.endsWith("chat.postMessage"))?.body.text ?? "";
 		for (const loai of LOAI) {
-			bang[`zalo ${loai}`] = dongDuoi(tinZalo, TIEU_DE[loai]).length;
-			bang[`slack ${loai}`] = dongDuoi(tinSlack, `*${TIEU_DE[loai]}*`).length;
-			mong[`zalo ${loai}`] = 1;
-			mong[`slack ${loai}`] = 1;
+			bang[`zalo ${loai}`] = String(dongDuoi(tinZalo, TIEU_DE[loai]).length);
+			bang[`slack ${loai}`] = String(
+				dongDuoi(tinSlack, `*${TIEU_DE[loai]}*`).length,
+			);
+			mong[`zalo ${loai}`] = "1";
+			mong[`slack ${loai}`] = "1";
 		}
 		if (JSON.stringify(bang) !== JSON.stringify(mong)) {
 			const lech = Object.keys(mong).filter(

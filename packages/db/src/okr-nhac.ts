@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Db } from "./client";
+import type { JsonValue } from "./json";
 import { parseOkrVet } from "./okr-vet";
 import {
 	type CuaSoNhac,
@@ -60,13 +61,15 @@ export type ViecOkr = z.infer<typeof viecOkr>;
 export type LoaiNhacOkr = ViecOkr["loai"];
 
 export const KHOA_MUC_OKR = {
-	"okr-cap-nhat": ["krIds"],
-	"okr-kr-im": ["keyResultId"],
-	"okr-duoc-giao": ["objectiveId", "keyResultId"],
-	"okr-nhac-ten": ["commentId"],
-	"okr-theo-doi": ["objectiveId"],
+	"okr-cap-nhat": { loai: true, krIds: true },
+	"okr-kr-im": { loai: true, keyResultId: true },
+	"okr-duoc-giao": { loai: true, objectiveId: true, keyResultId: true },
+	"okr-nhac-ten": { loai: true, commentId: true },
+	"okr-theo-doi": { loai: true, objectiveId: true },
 } as const satisfies {
-	[K in LoaiNhacOkr]: readonly (keyof Extract<ViecOkr, { loai: K }>)[];
+	[K in LoaiNhacOkr]: {
+		readonly [P in keyof Extract<ViecOkr, { loai: K }>]?: true;
+	};
 };
 
 type ChonKhoa<T, K> = { [P in keyof T as P extends K ? P : never]: T[P] };
@@ -74,7 +77,7 @@ type ChonKhoa<T, K> = { [P in keyof T as P extends K ? P : never]: T[P] };
 export type MucOkr = {
 	[K in LoaiNhacOkr]: ChonKhoa<
 		Extract<ViecOkr, { loai: K }>,
-		"loai" | (typeof KHOA_MUC_OKR)[K][number]
+		keyof (typeof KHOA_MUC_OKR)[K]
 	>;
 }[LoaiNhacOkr];
 
@@ -250,14 +253,14 @@ async function viecKr(db: Db, now: Date): Promise<Gui[]> {
 	return [...capNhat, ...im];
 }
 
-function nguoiSauCua(v: { id: string; after: unknown }): string | null {
+const nguoiSauVet = z.string().min(1).nullish();
+
+function nguoiSauCua(v: {
+	id: string;
+	after: JsonValue | undefined;
+}): string | null {
 	try {
-		const nguoi = parseOkrVet(v.after)?.ownerUserId;
-		if (nguoi === undefined || nguoi === null) return null;
-		if (typeof nguoi !== "string") {
-			throw new Error("ownerUserId không phải chuỗi");
-		}
-		return nguoi;
+		return nguoiSauVet.parse(parseOkrVet(v.after)?.ownerUserId) ?? null;
 	} catch (e) {
 		throw new Error(
 			`Vết OKR ${v.id} không đọc được: ${e instanceof Error ? e.message : String(e)}`,

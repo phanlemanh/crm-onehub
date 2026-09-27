@@ -89,7 +89,12 @@ function mucTieu(
 
 let chiTiet: ObjectiveOutput;
 
-type DauVao = Record<string, unknown> | undefined;
+type DauVao = { readonly id?: string } | undefined;
+
+type TuyChonGhi = {
+	onSuccess?: (kq: { id: string; canhBao: string | null }) => unknown;
+	onError?: (e: Error) => void;
+};
 
 function thuTuc<TRa>(duong: string, doc: () => TRa = () => null as TRa) {
 	return {
@@ -99,7 +104,7 @@ function thuTuc<TRa>(duong: string, doc: () => TRa = () => null as TRa) {
 			queryKey: [duong, vao ?? null],
 			queryFn: async () => doc(),
 		}),
-		mutationOptions: (chon?: object) => ({
+		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
 			mutationFn: async () => ({ id: "ok", canhBao: null }),

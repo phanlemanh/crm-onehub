@@ -47,18 +47,18 @@ function nguoiCua(subject: string | null): string {
 	return khop[1];
 }
 
-function maViec(v: ViecNhac): unknown {
+function maViec(v: ViecNhac): MucNhac {
 	if (!laViecOkr(v)) {
-		return { loai: v.loai, planId: v.planId, stepId: v.stepId };
+		return mucNhac.parse({ loai: v.loai, planId: v.planId, stepId: v.stepId });
 	}
-	const khoa: readonly string[] = KHOA_MUC_OKR[v.loai];
-	return Object.fromEntries(
-		Object.entries(v).filter(([k]) => k === "loai" || khoa.includes(k)),
+	const khoa = Object.keys(KHOA_MUC_OKR[v.loai]);
+	return mucNhac.parse(
+		Object.fromEntries(Object.entries(v).filter(([k]) => khoa.includes(k))),
 	);
 }
 
 function maCua(ds: ViecNhac[]): MucNhac[] {
-	return ds.map((v) => mucNhac.parse(maViec(v)));
+	return ds.map(maViec);
 }
 
 export async function lenLichNhac(now = new Date()): Promise<{ ghi: number }> {

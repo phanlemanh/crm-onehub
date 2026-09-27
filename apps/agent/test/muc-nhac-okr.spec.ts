@@ -13,7 +13,7 @@ const im: ViecNhac = {
 	chuTen: null,
 };
 
-const MAU: { [K in ViecNhac["loai"]]: Extract<ViecNhac, { loai: K }> } = {
+const MAU = {
 	"okr-cap-nhat": {
 		loai: "okr-cap-nhat",
 		krIds: ["kr-1"],
@@ -80,7 +80,7 @@ const MAU: { [K in ViecNhac["loai"]]: Extract<ViecNhac, { loai: K }> } = {
 		capNhat: 1,
 		binhLuan: 2,
 	},
-};
+} satisfies { [K in ViecNhac["loai"]]: Extract<ViecNhac, { loai: K }> };
 
 describe("loai-la", () => {
 	test("loai-la: muc loai okr-moi lam dungTin nem, thong diep neu ten loai", () => {

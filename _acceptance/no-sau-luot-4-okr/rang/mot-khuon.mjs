@@ -46,7 +46,7 @@ if (nhanhOkr.length !== db.LOAI_NHAC_OKR.length)
 for (const o of nhanhOkr) {
 	const loai = o.shape.loai.value;
 	const co = Object.keys(o.shape).sort().join(",");
-	const mong = ["loai", ...db.KHOA_MUC_OKR[loai]].sort().join(",");
+	const mong = Object.keys(db.KHOA_MUC_OKR[loai]).sort().join(",");
 	console.log(`b: ${loai} khoa [${co}] mong [${mong}]`);
 	if (co !== mong) bao("b", `${loai} có khoá [${co}], bảng khai [${mong}]`);
 }

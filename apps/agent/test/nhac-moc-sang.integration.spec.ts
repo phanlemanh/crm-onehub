@@ -183,8 +183,8 @@ afterAll(async () => {
 describe("giua-ngay", () => {
 	test("giua-ngay: ma tran 3 su kien x 3 nhip trong ngay D — khong hang, khong muc; doi chung truc-tiep thay ca ba", async () => {
 		const g = await gieoSuKien(vn(NGAY.D, "14:00:00"));
-		const bang: Record<string, unknown> = {};
-		const mong: Record<string, unknown> = {};
+		const bang: Record<string, string> = {};
+		const mong: Record<string, string> = {};
 		for (const gio of ["14:01:00", "17:00:00", "23:59:00"]) {
 			const luc = vn(NGAY.D, gio);
 			await nhip(luc);
@@ -192,8 +192,8 @@ describe("giua-ngay", () => {
 			const viec = await nhacSang(g.X, luc);
 			for (const loai of SU_KIEN) {
 				const co = viec.some((v) => v.loai === loai);
-				bang[`${loai} luc ${gio}`] = { soHang, co };
-				mong[`${loai} luc ${gio}`] = { soHang: 0, co: false };
+				bang[`${loai} luc ${gio}`] = JSON.stringify({ soHang, co });
+				mong[`${loai} luc ${gio}`] = JSON.stringify({ soHang: 0, co: false });
 			}
 		}
 		const lech = Object.keys(mong).filter(
@@ -220,25 +220,25 @@ describe("sang-sau", () => {
 		await nhip(vn(NGAY.sau2, "08:31:00"));
 		const d2 = await gui(g.X, NGAY.sau2, vn(NGAY.sau2, "08:32:00"));
 		const tinSau = d1.tin[0] ?? "";
-		const bang: Record<string, unknown> = {};
-		const mong: Record<string, unknown> = {};
+		const bang: Record<string, string> = {};
+		const mong: Record<string, string> = {};
 		for (const loai of SU_KIEN) {
 			const cungMa = (m: MucNhac) =>
 				JSON.stringify(m) === JSON.stringify(g.ma[loai]);
-			bang[`${loai}`] = {
+			bang[`${loai}`] = JSON.stringify({
 				hangSau: hangSau.length,
 				mucSau: d1.muc.filter(cungMa).length,
 				dongDuoiTieuDe: dongDuoi(tinSau, TIEU_DE[loai]).length,
 				tinCoMuc: [...d.daGui, ...d1.daGui, ...d2.daGui].filter(cungMa).length,
 				vangSau2: d2.muc.filter(cungMa).length === 0,
-			};
-			mong[`${loai}`] = {
+			});
+			mong[`${loai}`] = JSON.stringify({
 				hangSau: 1,
 				mucSau: 1,
 				dongDuoiTieuDe: 1,
 				tinCoMuc: 1,
 				vangSau2: true,
-			};
+			});
 		}
 		const lech = Object.keys(mong).filter(
 			(k) => JSON.stringify(bang[k]) !== JSON.stringify(mong[k]),
