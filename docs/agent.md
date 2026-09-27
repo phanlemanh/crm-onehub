@@ -16,6 +16,20 @@ agent and the API both need it.
 
 - **A row (`AppSetting`), not an env var**, via `defineDynamic` on `session.started`.
   Open conversations keep their model — prompt caches are per model.
+- **Model giải theo vai, lúc chạy.** `lib/model.ts` có một bộ giải duy nhất
+  `modelTheoVai(vai)`, hai vai `tro-ly` và `tac-nhan`; hôm nay cả hai cùng đọc
+  `AppSetting.agentModelId`. Phiên gốc gọi qua `modelChoPhienGoc` (purpose `builder`,
+  `team-agent` là vai `tac-nhan`), bộ dựng qua `modelChoBoDung`. Tách hai vai sang hai ô
+  Cài đặt chỉ khi có số đo đòi — lúc đó chỉ sửa bộ giải.
+- **Bộ chạy không ghim model theo bản.** `dispatchAgentRun` giải model một lần
+  (`modelChoLuot`), ghi vào `AgentRun.modelId` và truyền cho bộ chạy qua thuộc tính
+  phiên `modelId`, `modelContextWindowTokens`; `agent_runner` đọc chúng bằng
+  `modelChoBoChay`. Đổi model ở Cài đặt thì lượt kế tiếp của mọi Tác nhân chạy model
+  mới. `AgentVersion.modelId` chỉ còn nghĩa «bản này dựng bằng model nào».
+- **Khuôn model thấy phải di động.** Không khuôn nào — đầu vào `tool`, `outputSchema`
+  của `subagent`, kể cả `tool` động — được có `$ref` khi chuyển như eve chuyển
+  (`~standard.jsonSchema.input({ target: "draft-07" })`). `z.json()` và `z.lazy()` đệ quy
+  bị Google từ chối cả lời gọi. `test/khuon-di-dong.spec.ts` quét mọi tệp.
 - **`lib/model.ts` always sends `modelContextWindowTokens`**; eve never inherits it.
 - **A failed read logs and keeps the compiled fallback.** Never throws.
 - **The chooser offers only `tool-use` models** (`ModelCatalogService`).
@@ -635,9 +649,12 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 2. **Ranh giới khác thì phải là một `subagent` khác.**
    - `tool` của `subagent` đó chỉ gồm đúng các cửa nó được dùng.
    - Mọi `tool` dựng sẵn không cần đều bị tắt; sandbox để `deny-all`.
-   - Model, cờ ZDR và `limits` đặt cố định ở cấp `subagent`. **Không đọc model từ
-     `AppSetting`**: đọc hỏng thì rơi về model mặc định, và model đó không mang cờ
-     ZDR.
+   - `subagent` có ranh giới riêng về nơi gửi (ZDR) đặt model, cờ ZDR và `limits`
+     cố định ở cấp `subagent`. **Không đọc model từ `AppSetting`**: đọc hỏng thì rơi
+     về model mặc định, và model đó không mang cờ ZDR.
+   - `subagent` cùng ranh giới nơi gửi với agent gốc — `agent_builder`,
+     `agent_runner` — dùng bộ giải theo vai `modelTheoVai` (mục «Model»), không ghim
+     một model trong mã.
    - Tiền lệ: `agent_builder`, `agent_runner`, và `tro_ly_okr` của lượt 9a.
 
 3. **Không tạo `subagent` khi ranh giới không đổi.** Mỗi tầng thêm một phiên model.
@@ -663,7 +680,8 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
    - Bằng chứng: `agent_runner/tools/finish_run.ts` làm hỏng mọi lượt Tác nhân trên
      Gemini 3.7 và 3.8.
    - Mỗi `subagent` mới phải có test ghim rằng mọi khuôn của nó chuyển được sang
-     JSON Schema không có vòng `$ref`.
+     JSON Schema không có vòng `$ref`. `test/khuon-di-dong.spec.ts` đã quét mọi tệp
+     `tools/`, `subagents/*/tools/` và `outputSchema`; tệp mới tự vào phép quét.
 
 7. **Việc hỏng phải hiện là hỏng.** Agent gốc không hỏng khi `subagent` hỏng (N0).
    - Đóng việc theo `isError` của `action.result`, không chờ `turn.failed`.
@@ -831,6 +849,15 @@ delegation paths for custom agents.
   that is not `RUNNING`, so a cancel that never reaches the agent still means
   nothing further is written. The poke only stops it spending tokens, and an unset
   `AGENT_BRIDGE_SECRET` costs exactly that and nothing more.
+- **Hỏng hiện là hỏng.** Gốc không hỏng khi `agent_runner` hỏng, nên lượt đóng theo
+  kết quả của bộ chạy, không theo `turn.failed`. Hook `hooks/dong-luot-tac-nhan.ts` bắt
+  `action.result` của `agent_runner` có `isError` và gọi `failRun` ngay với mã
+  `RUNNER_FAILED`, lý do là `output.message` cắt `DISPATCH.run.failureReasonMaxChars`
+  (không có thì «Bộ chạy báo lỗi nhưng không nói lý do.»). `session.completed` gọi
+  `choKetLuot`: lượt RUNNING mà `result` còn `null` — bộ chạy chưa gọi `finish_run` —
+  đóng bằng `RUNNER_NO_RESULT`, «Bộ chạy dừng trước khi nộp kết quả.». Kết quả lượt là
+  khuôn phẳng `ketQuaLuot` (`lib/run-result.ts`), dùng chung cho `finish_run`,
+  `outputSchema` của bộ chạy và bộ đọc `AgentRun.result`.
 - **Cancelling is not undoing.** eve keeps side effects that already completed, so
   a note, task or Slack message the run already made stays. The dialog says so.
 - **Whoever started it can stop it**, plus the creator and workspace admins.
@@ -879,6 +906,29 @@ hai tệp kiểm `apps/agent/test/ro-slack-tac-nhan.integration.spec.ts` và
 `apps/agent/test/luot-tu-dong.integration.spec.ts` — chúng phải còn xanh trên mã
 của hãng. Việc báo cho hãng đi qua kênh bảo mật riêng của hãng và cần chủ kho cho
 phép; không qua PR hay issue công khai.
+
+### Chỗ rẽ có tên với bản của hãng
+
+Vòng `tac-nhan-model-rieng` (27/09) sửa các tệp dưới đây của hãng: khuôn kết quả phẳng,
+model giải theo vai, và luật hỏng-hiện-hỏng. Chủ kho chọn không gửi hãng. Kéo bản mới
+của hãng về `release` mà thấy `finish_run` quay lại `z.json()`, bộ chạy đọc lại
+`version.modelId`, hay `session.completed` quay lại `runResultOf(null)` thì đó là chỗ
+rẽ này bị ghi đè, không phải sót merge — giữ bản của kho và chạy lại
+`test/khuon-di-dong.spec.ts`, `test/model-theo-vai.integration.spec.ts`,
+`test/dong-luot-tac-nhan.integration.spec.ts`.
+
+- `apps/agent/agent/agent.ts`
+- `apps/agent/agent/channels/crm.ts`
+- `apps/agent/agent/lib/custom-agent-dispatch.ts`
+- `apps/agent/agent/lib/dispatch-config.ts`
+- `apps/agent/agent/lib/model.ts`
+- `apps/agent/agent/lib/run-runtime.ts`
+- `apps/agent/agent/subagents/agent_builder/agent.ts`
+- `apps/agent/agent/subagents/agent_runner/agent.ts`
+- `apps/agent/agent/subagents/agent_runner/tools/finish_run.ts`
+- `apps/agent/test/durable-agent-runtime.integration.spec.ts`
+- `apps/agent/test/model.integration.spec.ts`
+- `docs/agent.md`
 
 ## The bridge
 

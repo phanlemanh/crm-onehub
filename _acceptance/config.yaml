@@ -186,6 +186,12 @@ executors:
     trg_khoa_bo_dau: "cd packages/db && bun test test/fields.spec.ts"
     trg_khoa_tham_so: "cd apps/app && bun test lib/search-param-keys.test.ts"
     api: "bun run test"
+    tnm_khuon_di_dong: 'bun run test -- "cd apps/agent && bun test test/khuon-di-dong.spec.ts -t khuon-di-dong"'
+    tnm_ket_qua_phang: 'bun run test -- "cd apps/agent && bun test test/khuon-di-dong.spec.ts -t ket-qua-phang"'
+    tnm_bao_loi: 'bun run test -- "cd apps/agent && bun test test/dong-luot-tac-nhan.integration.spec.ts -t bao-loi"'
+    tnm_chua_nop: 'bun run test -- "cd apps/agent && bun test test/dong-luot-tac-nhan.integration.spec.ts -t chua-nop"'
+    tnm_doi_sau_khi_dung: 'bun run test -- "cd apps/agent && bun test test/model-theo-vai.integration.spec.ts -t doi-sau-khi-dung"'
+    tnm_bon_phien: 'bun run test -- "cd apps/agent && bun test test/model-theo-vai.integration.spec.ts -t bon-phien"'
     vco_ma_tran_trpc: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     vco_ma_tran_khoa_rest: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-khoa-rest"'
     vco_doi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t doi-chung"'
@@ -786,6 +792,8 @@ executors:
     lint_khong_cache: "bunx turbo run lint --force"
     vco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3810} API_URL=${API_URL:-http://localhost:3811} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vai-chi-okr/rang/man-chi-okr.mjs"'
     lint_slop: "bun run lint:slop"
+    tnm_goi_that: "bun _acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
+    tnm_tai_lieu: "node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"

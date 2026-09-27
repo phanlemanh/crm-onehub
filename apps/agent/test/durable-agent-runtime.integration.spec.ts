@@ -1,5 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
+import { readAgentModel } from "@crm/db/settings";
 import type { SendFn } from "eve/channels";
 import { z } from "zod";
 import audit from "../agent/hooks/audit";
@@ -332,7 +333,7 @@ describe("durable custom-agent runtime", () => {
 		expect(persisted).toMatchObject({
 			status: "RUNNING",
 			sessionId,
-			modelId: "test/model",
+			modelId: (await readAgentModel(db)).id,
 		});
 	});
 

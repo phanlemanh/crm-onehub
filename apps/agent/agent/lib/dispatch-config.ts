@@ -26,6 +26,8 @@ export const DISPATCH = {
 		actionLeaseMs: 5 * MINUTE_MS,
 		executionTimeoutMs: 20 * MINUTE_MS,
 		noActionTriggerTypes: ["EVENT", "SCHEDULE", "WEBHOOK"],
+		resultListMax: 50,
+		failureReasonMaxChars: 1000,
 	},
 
 	task: {
