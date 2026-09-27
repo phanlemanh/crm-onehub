@@ -1,9 +1,9 @@
 import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
 import { CACH_DOC } from "@crm/validation/okr-khep";
-import { KIEU_KR } from "@crm/validation/okr-kr";
+import { KIEU_KR, LOI_SO_THEO_KIEU } from "@crm/validation/okr-kr";
 import { LOAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import { z } from "zod";
-import { donViChon } from "./okr.contracts";
+import { donViChon, lienKetMangSang } from "./okr.contracts";
 
 const ma = z.string().trim().min(1).max(120);
 
@@ -11,10 +11,6 @@ export const bangChamInput = z.object({
 	cycleId: ma,
 	donVi: donViChon.optional(),
 });
-
-const lienKetMangSang = z
-	.object({ objectiveId: z.string(), cycleName: z.string() })
-	.nullable();
 
 export const krCham = z.object({
 	id: z.string(),
@@ -62,7 +58,18 @@ export const bangChamOutput = z.object({
 	mucTieu: z.array(mucTieuCham),
 });
 
+export const mangSangOutput = z.object({
+	id: z.string(),
+	cycleId: z.string(),
+	chep: z.array(z.string()),
+	khongChep: z.array(
+		z.object({ keyResultId: z.string(), lyDo: z.enum(LOI_SO_THEO_KIEU) }),
+	),
+	canhBao: z.string().nullable(),
+});
+
 export type BangChamInput = z.infer<typeof bangChamInput>;
 export type BangChamOutput = z.infer<typeof bangChamOutput>;
 export type KrCham = z.infer<typeof krCham>;
 export type MucTieuCham = z.infer<typeof mucTieuCham>;
+export type MangSangOutput = z.infer<typeof mangSangOutput>;

@@ -129,6 +129,10 @@ export const OKR = {
 			kyDaDong:
 				"Chu kỳ đã đóng — quản trị mở lại kỳ thì mới sửa được điểm hay điều học được.",
 			chiMoLaiKhiDong: "Chỉ mở lại được chu kỳ đã đóng.",
+			chuaCoKyKe: "Chưa có chu kỳ kế để mang sang — quản trị mở chu kỳ trước.",
+			daMangSang: "Mục tiêu này đã mang sang chu kỳ kế rồi.",
+			mangSangChiCongBo: "Chỉ mang sang được mục tiêu đã công bố.",
+			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

@@ -3,6 +3,7 @@ import {
 	chamKrInput,
 	dongRaInput,
 	ghiDieuHocDuocInput,
+	mangSangInput,
 	moLaiKyInput,
 	moRaInput,
 } from "@crm/validation/okr-khep";
@@ -68,7 +69,11 @@ import {
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
-import { bangChamInput, bangChamOutput } from "./okr-khep.contracts";
+import {
+	bangChamInput,
+	bangChamOutput,
+	mangSangOutput,
+} from "./okr-khep.contracts";
 import { OkrKhepService } from "./okr-khep.service";
 import {
 	banGhiChiSoInput,
@@ -220,6 +225,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof moLaiKyInput>,
 	) {
 		return this.khep.moLaiKy(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: mangSangInput,
+		output: mangSangOutput,
+		meta: restMeta("POST", "/okr/objectives/{objectiveId}/carry-over", TAG),
+	})
+	mangSang(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof mangSangInput>,
+	) {
+		return this.khep.mangSang(ctx.user.id, input);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })

@@ -10,6 +10,7 @@ export const OKR_KHEP = {
 	lyDo: { toiThieu: 10, toiDa: 500 },
 	dieuHocDuoc: { toiDa: 2000 },
 	chamDon: { phut: 10 },
+	mangSang: { diemTron: 1 },
 } as const;
 
 export type ThangCham = (typeof THANG_CHAM)[number];

@@ -469,7 +469,7 @@ export class OkrService {
 		if (thieu) throw new BadRequestException(loi(thieu));
 	}
 
-	private async kiemTranMucTieu(
+	async kiemTranMucTieu(
 		tx: Tx,
 		cycleId: string,
 		dv: DonViCuaMucTieu,
@@ -1441,7 +1441,7 @@ export class OkrService {
 		const q = await this.quyenOkr.quyen(userId);
 		const [mt] = await this.docMucTieu(this.db, { id }, userId, q);
 		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
-		const [vet, ky, donVi] = await Promise.all([
+		const [vet, ky, donVi, toi, tu] = await Promise.all([
 			this.db.okrTrail.findMany({
 				where: { objectiveId: id },
 				orderBy: [{ at: "asc" }, { id: "asc" }],
@@ -1454,6 +1454,21 @@ export class OkrService {
 				where: { id },
 				select: chonDonVi,
 			}),
+			this.db.okrMangSang.findFirst({
+				where: { tuObjectiveId: id },
+				orderBy: { luc: "desc" },
+				select: {
+					sangObjectiveId: true,
+					sangCycle: { select: { name: true } },
+				},
+			}),
+			this.db.okrMangSang.findUnique({
+				where: { sangObjectiveId: id },
+				select: {
+					tuObjectiveId: true,
+					tuObjective: { select: { cycle: { select: { name: true } } } },
+				},
+			}),
 		]);
 		const objective = donViCuaDong(donVi);
 		const nguoi = await this.db.user.findMany({
@@ -1463,6 +1478,15 @@ export class OkrService {
 		return {
 			...mt,
 			cycleName: ky.name,
+			mangSangToi: toi
+				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
+				: null,
+			mangSangTu: tu
+				? {
+						objectiveId: tu.tuObjectiveId,
+						cycleName: tu.tuObjective.cycle.name,
+					}
+				: null,
 			trail: vet.map((v) => ({
 				id: v.id,
 				at: v.at.toISOString(),

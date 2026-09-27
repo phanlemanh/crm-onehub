@@ -157,8 +157,14 @@ export const okrCountByUnitOutput = z.record(z.string(), z.number());
 export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({ objectives: z.array(mucTieuOutput) });
 export const objectiveInput = z.object({ id: ma });
+export const lienKetMangSang = z
+	.object({ objectiveId: z.string(), cycleName: z.string() })
+	.nullable();
+
 export const objectiveOutput = mucTieuOutput.extend({
 	cycleName: z.string(),
+	mangSangToi: lienKetMangSang,
+	mangSangTu: lienKetMangSang,
 	trail: z.array(vetOutput),
 	canEditKr: z.array(z.string()),
 });
