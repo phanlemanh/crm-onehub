@@ -60,6 +60,9 @@ const DAU_WORD = /mso-list\s*:\s*ignore/i;
 const DAU_SO = /^\s*(\d+|[a-z]{1,3})[.)]/i;
 const TRANG = /^\s*$/;
 const KHOI_CHU = "p, h2, h3, li, td, th";
+const THE_KHOI = new Set(["P", "H2", "H3", "UL", "OL", "TABLE"]);
+const KIEU_TIEU_DE_2 = /(heading\s*1\b|heading1\b|^msotitle$)/i;
+const KIEU_TIEU_DE_3 = /(heading|^msosubtitle$)/i;
 
 function kieu(el: Element): string {
 	return el.getAttribute("style") ?? "";
@@ -218,6 +221,31 @@ function boDoanRong(goc: Element): void {
 	}
 }
 
+function tieuDeKieuWord(goc: Element): void {
+	for (const p of Array.from(goc.querySelectorAll("p[class]"))) {
+		const lop = p.getAttribute("class") ?? "";
+		if (KIEU_TIEU_DE_2.test(lop)) doiThe(p, "h2");
+		else if (KIEU_TIEU_DE_3.test(lop)) doiThe(p, "h3");
+	}
+}
+
+function gomChuTran(goc: Element): void {
+	let nhom: ChildNode[] = [];
+	const dong = (): void => {
+		if (nhom.some((n) => !TRANG.test(n.textContent ?? ""))) {
+			const p = goc.ownerDocument.createElement("p");
+			nhom[0]?.before(p);
+			p.append(...nhom);
+		} else for (const n of nhom) n.remove();
+		nhom = [];
+	};
+	for (const n of Array.from(goc.childNodes)) {
+		if (n instanceof Element && THE_KHOI.has(n.tagName)) dong();
+		else nhom.push(n);
+	}
+	dong();
+}
+
 function boDinhDangTieuDe(goc: Element): void {
 	for (const el of Array.from(
 		goc.querySelectorAll("h2 strong, h3 strong, h2 em, h3 em"),
@@ -257,12 +285,14 @@ export function locDan(html: string): string {
 		if (DAU_WORD.test(kieu(el))) el.remove();
 	}
 	boBocGoogleDocs(goc);
+	tieuDeKieuWord(goc);
 	kieuThanhThe(goc);
 	longDanhSach(goc);
 	dauBangLaTieuDe(goc);
 	lamSach(goc);
 	boDinhDangTieuDe(goc);
 	boDoanRong(goc);
+	gomChuTran(goc);
 	gonKhoangTrang(goc);
 	return goc.innerHTML;
 }
