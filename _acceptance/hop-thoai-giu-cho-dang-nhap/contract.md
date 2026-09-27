@@ -5,9 +5,7 @@ slug: hop-thoai-giu-cho-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
-approved_by: Manh Phan
-approved_at: 2026-09-27T02:07:44Z
+status: draft
 design_doc: docs/superpowers/specs/2026-09-27-hop-thoai-giu-cho-dang-nhap-design.md
 ---
 
@@ -37,10 +35,12 @@ vẽ tay») · `_acceptance/hop-thoai-giu-cho-dang-nhap/coverage-scan.md`.
 - AC-6: Given một hộp thoại đã có chữ gõ vào đang mở một ô chọn con (`Select`, `Combobox` hoặc lịch của `DatePicker`), When nhấn Esc, Then chỉ ô chọn con đóng, hộp thoại vẫn mở và không hộp hỏi lại nào hiện.
 - AC-7: Given một hộp thoại mà chỗ gọi khai `coThayDoi` là `true` (chưa gõ ký tự nào, vd mới đổi một ô chọn), When bấm lớp phủ hoặc nhấn Esc, Then hành vi như hộp đã có thay đổi (bấm ngoài không làm gì, Esc hỏi); và trên màn thật, ở hộp thoại KR, hộp thoại mục tiêu và hộp thoại đơn vị trong `apps/app`, When chỉ đổi một ô chọn (không gõ ký tự nào) rồi bấm ra ngoài, Then hộp vẫn mở với giá trị vừa chọn.
 - AC-8: Given `ConfirmDialog`, When đọc cây mã sau lượt này, Then thành phần nằm ở `packages/ui/src/components/confirm-dialog.tsx` với API cũ, tệp `apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx` không còn, cả 13 chỗ dùng cũ nhập từ `@crm/ui/components/confirm-dialog`, và bộ kiểm có sẵn của các chỗ đó vẫn xanh.
-- AC-9: Given danh sách 25 tệp hộp thoại, ngăn trượt và drawer có ô nhập (viết trước trong phép soát), When phép soát tĩnh chạy, Then tập tệp máy tự rút từ `apps/app` (không kể `/proto`) bằng đúng danh sách viết trước — tệp mới xuất hiện hay tệp biến mất đều in ra và làm soát đỏ; và trong mỗi tệp, không nút nào nằm bên trong `DialogContent`, `SheetContent` hay `DrawerContent` gọi thẳng hàm đóng — mọi nút Huỷ đi qua `DialogClose`/`SheetClose`/`DrawerClose` (`asChild`); và `docs/design.md` có dòng tương ứng trong bảng «Dấu hiệu vẽ tay».
+- AC-9: Given danh sách 26 tệp hộp thoại, ngăn trượt và drawer có ô nhập (viết trước trong phép soát), cộng danh sách khai tay các hộp có ô nhập nằm trong thành phần con (hộp cập nhật KR hằng tuần) và các phần hiện bên trong ngăn (phần đầu ngăn chi tiết bản ghi), When phép soát tĩnh chạy, Then tập tệp máy tự rút từ `apps/app` (không kể `/proto`) bằng đúng danh sách 26 tệp — tệp mới xuất hiện hay tệp biến mất đều in ra và làm soát đỏ; và trong mỗi tệp, không nút nào nằm bên trong `DialogContent`, `SheetContent` hay `DrawerContent` gọi thẳng hàm đóng — mọi nút Huỷ đi qua `DialogClose`/`SheetClose`/`DrawerClose` (`asChild`); và `docs/design.md` có dòng tương ứng trong bảng «Dấu hiệu vẽ tay».
 - AC-10: Given phiên đo riêng của cây này, When mở màn thật ở khổ 1440 và 390 trong trình duyệt, Then: hộp thoại «Thêm KR» gõ tên rồi bấm ra ngoài vẫn mở với chữ còn nguyên, nhấn Esc thấy hộp hỏi lại với chữ tiếng Việt đúng bảng trạng thái, «Tiếp tục sửa» về hộp, «Bỏ» đóng hộp; ngăn «Tạo thoả thuận» gõ tên rồi bấm nút Huỷ thấy hộp hỏi lại; ngăn bản ghi ở khổ 390 (drawer) gõ vào ô trao đổi rồi đóng thấy drawer giữ chỗ và hộp hỏi lại.
 - AC-11: Given các tệp lượt này thêm hoặc sửa, When chạy cổng thiết kế tĩnh và soi mã, Then không vi phạm P0; không `className` đổi màu, góc, khoảng cách của thành phần `@crm/ui` ở chỗ gọi; không prop `variant`/`tone`/`size` có mặc định chuỗi trong tham số; không chú thích mã mới; không `useEffect` trần trong tệp mới; chữ mới của hộp hỏi lại có bản vi và en khác nhau trong `packages/ui/src/lib/messages.ts`.
 - AC-12: Given một hộp thoại có ô tìm hoặc ô lọc (`input[type=search]`, ô `role=combobox` như ô lọc của `Combobox` và `Command`), When chỉ gõ vào ô đó rồi bấm ra ngoài, Then hộp đóng như trước lượt này (ô lọc không phải dữ liệu); When chỗ gọi truyền `giuThayDoi={false}` cho `Dialog`, `Sheet` hoặc `Drawer`, Then hộp đó không giữ dù đã gõ vào ô thường; và `PickListDialog` của `packages/ui` gõ vào ô tìm rồi bấm ngoài thì đóng.
+- AC-13: Given một hộp thoại mà chỗ gọi khai `coThayDoi` từ trạng thái form (hộp KR, hộp mục tiêu, hộp đơn vị) và người đã gõ vào đó, When lưu thành công mà hộp vẫn mở (vd hộp KR nguồn bảng tính) nên `coThayDoi` của chỗ gọi chuyển từ `true` về `false`, Then cờ «đã gõ» của bộ giữ cũng được xoá — bấm lớp phủ, Esc và dấu X đóng hộp ngay, không hộp hỏi lại nào hiện; và When sau đó người gõ tiếp, Then hộp lại được giữ như AC-1 và AC-2.
+- AC-14: Given ngăn chi tiết bản ghi (`DetailSheet`: ngăn trượt ở máy tính, drawer ở điện thoại), When người chỉ sửa một ô tự lưu khi rời ô (ô trong bảng thuộc tính của liên hệ, thoả thuận, công ty) và ô đã lưu, hoặc vừa gửi xong một bình luận ở ô trao đổi (ô trống lại), Then ngăn cư xử như chưa có thay đổi — bấm lớp phủ đóng ngăn, Esc và dấu X đóng không hỏi, drawer vuốt đóng được; When ô trao đổi còn chữ chưa gửi, Then ngăn được giữ như AC-4 và AC-10; và trên màn thật ở khổ 1440, ngăn một liên hệ: sửa một ô tự lưu, rời ô, bấm ra ngoài → ngăn đóng, không hộp hỏi lại.
 
 ## Coverage
 
@@ -50,11 +50,12 @@ Nguồn: `coverage-scan.md` (preset test-matrix, 2026-09-27).
 - **Trục B — trạng thái bên trong:** sạch · đã gõ chữ · đã đổi ô không gõ · gõ rồi xoá về như cũ  [thước CE: bảy loại ô nhập trong 25 chỗ] → AC-1, AC-2, AC-7; «gõ rồi xoá về» ở Later
 - **Trục C — khung:** Dialog · Sheet · Drawer điện thoại  [thước CE: ba khung của packages/ui] → AC-1..AC-4, AC-10
 - **Trục D — trả lời hộp hỏi:** Tiếp tục sửa · Bỏ · Esc trên hộp hỏi  [thước CE: AlertDialog hai nút + Esc — NGÀNH: Material Design Dialogs] → AC-2
-- **Cross-cutting:** máy đóng và hộp không kiểm soát (AC-5) · lớp con (AC-6) · hộp hỏi lại là `ConfirmDialog` dùng chung (AC-8) · ô tìm, ô lọc và cách tắt (AC-12) · chữ vi/en, sàn thiết kế (AC-11)
+- **Cross-cutting:** máy đóng và hộp không kiểm soát (AC-5) · lớp con (AC-6) · hộp hỏi lại là `ConfirmDialog` dùng chung (AC-8) · ô tìm, ô lọc và cách tắt (AC-12) · chữ vi/en, sàn thiết kế (AC-11) · đã lưu mà hộp còn mở (AC-13) · ngăn bản ghi có ô tự lưu và ô trao đổi (AC-14)
 - [GIẢ ĐỊNH] Bấm ra ngoài khi đã nhập thì im lặng giữ hộp, không hỏi (theo Linear, GitHub, Apple HIG).
 - [GIẢ ĐỊNH] Ô không gõ chỉ được giữ ở chỗ tự khai; lượt này khai ở hộp thoại KR, mục tiêu, đơn vị — 22 chỗ còn lại chỉ giữ khi có gõ chữ.
 - [GIẢ ĐỊNH] Gõ rồi xoá về như cũ vẫn tính là có thay đổi (hỏi thừa một lần thay vì so giá trị từng ô).
 - [GIẢ ĐỊNH] Ô tìm và ô lọc (`input[type=search]`, `role=combobox`) không tính là thay đổi; chọn một giá trị trong `Combobox` chỉ được giữ ở chỗ tự khai.
+- [GIẢ ĐỊNH] Ngăn chi tiết bản ghi chỉ giữ khi ô trao đổi còn chữ chưa gửi; ô tự lưu khi rời ô không bao giờ làm ngăn bị giữ.
 
 ## Out of scope
 
@@ -71,3 +72,9 @@ Nguồn: `coverage-scan.md` (preset test-matrix, 2026-09-27).
 - Vuốt drawer: nếu S3 thấy vaul không trả drawer về chỗ khi lời đóng bị chặn, S3 dừng và trình người (không tự hạ lời hứa AC-4).
 - Không có `opportunity.md` (vòng không đi từ Cổng Đáng) → không mục «Đường đo», ship thẳng sau cổng.
 - Nền hạ tầng (`duong-nen.md`): hai dòng «THIEU merge-base» là báo giả của bộ kit; `build_khong_cache` đỏ vì shell đăng nhập nhận Node 22 — làn S4 chạy với PATH Node 24 như các lượt OKR; hai dòng «cây bẩn sau suite» là tệp S1 viết trong lúc suite chạy.
+- Mở lại hợp đồng 2026-09-27 theo quyết định Cổng Bằng chứng của Manh Phan: Ngoài-2, 3, 4 nâng phạm vi thành AC-13, AC-14 (sổ d-20260927T053525Z-16 … -18); AC-9 nâng 25 lên 26 tệp theo quyết định treo đã phê (d-20260927T032824Z-10).
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-27, định đoạt mục ngoài hợp đồng của vòng chấm 2; sổ d-20260927T053525Z-15, -19):
+
+- Ngoài-1 (`_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs`): phép soát nút Huỷ chỉ soát những phần hiện trong ngăn đã liệt kê tay; một nút đóng nằm trong thành phần dùng chung khác (phần đầu hay chân của hộp) hiện bên trong hộp lúc chạy có thể lọt phép soát.
+- Ngoài-5 (`packages/ui/test/messages-guard.spec.ts`): phép kiểm chữ đi vào nhóm lồng nhau chỉ có khẳng định rỗng, chưa có đối chứng dương chứng rằng nó thật sự quét tới các nhóm đó.

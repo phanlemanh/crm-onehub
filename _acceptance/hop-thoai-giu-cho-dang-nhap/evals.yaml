@@ -70,7 +70,7 @@ evals:
     executor: script
     cmd: config:executors.script.hg_huy_qua_nut_dong
     paths: ["apps/app/app/(app)/[slug]/**/*.tsx", apps/app/components/**/*.tsx, docs/design.md, _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs]
-    expected: "exit 0; soi-giu.mjs --ca huy đọc DANH SÁCH VIẾT TRƯỚC 26 tệp (liệt kê nguyên văn trong script) và so với tập máy tự rút từ apps/app (không kể /proto): tệp .tsx chứa DialogContent, SheetContent hoặc DrawerContent cùng một ô nhập (Input, Textarea, InputGroupInput, Combobox, Select, DatePicker) — hai tập phải bằng nhau, lệch thì in từng tệp thừa/thiếu, mã 1; cộng DANH SÁCH KHAI TAY các tệp có hộp mà ô nhập nằm trong thành phần con nên bộ rút không thấy (hiện: okr/hop-thoai-cap-nhat-kr.tsx), soát nút như danh sách chính, in «huy: khai tay 1 tep ngoai bo rut may». Trong mỗi tệp, đọc bằng TypeScript AST: mọi Button nằm bên trong DialogContent/SheetContent/DrawerContent (không riêng chân hộp) có onClick là tham chiếu hoặc lời gọi hàm đóng (dong, onClose, close theo tiền tố; setX(false)/setX(null) khi X là hàm đặt trạng thái mở hay đóng như setOpen, setMo, setClosing; onOpenChange(false)) mà không nằm trong DialogClose/SheetClose/DrawerClose asChild là vi phạm; in «huy: 26/26 tep, 0 vi pham» và số nút Huỷ đã qua nút đóng. docs/design.md có dòng bảng «Dấu hiệu vẽ tay» nhắc DialogClose cho nút Huỷ. Đối chứng dương: một fixture tạm trong tmpdir có nút gọi thẳng dong → script bắt đúng 1 vi phạm. CHIỀU ĐỎ: bản sao hop-thoai-kr.tsx trả nút Huỷ về onClick={dong} → in «huy: hop-thoai-kr.tsx:<dòng> goi thang ham dong», mã 1."
+    expected: "exit 0; soi-giu.mjs --ca huy đọc DANH SÁCH VIẾT TRƯỚC 26 tệp (liệt kê nguyên văn trong script) và so với tập máy tự rút từ apps/app (không kể /proto): tệp .tsx chứa DialogContent, SheetContent hoặc DrawerContent cùng một ô nhập (Input, Textarea, InputGroupInput, Combobox, Select, DatePicker) — hai tập phải bằng nhau, lệch thì in từng tệp thừa/thiếu, mã 1; cộng DANH SÁCH KHAI TAY các tệp có hộp mà ô nhập nằm trong thành phần con nên bộ rút không thấy (hiện: okr/hop-thoai-cap-nhat-kr.tsx), soát nút như danh sách chính, in «huy: khai tay 1 tep ngoai bo rut may». Trong mỗi tệp, đọc bằng TypeScript AST: mọi Button nằm bên trong DialogContent/SheetContent/DrawerContent (không riêng chân hộp) có onClick là tham chiếu hoặc lời gọi hàm đóng (dong, onClose, close theo tiền tố; setX(false)/setX(null) khi X là hàm đặt trạng thái mở hay đóng như setOpen, setMo, setClosing; onOpenChange(false)) mà không nằm trong DialogClose/SheetClose/DrawerClose asChild là vi phạm; in «huy: 26/26 tep, 0 vi pham» và số nút Huỷ đã qua nút đóng. docs/design.md có dòng bảng «Dấu hiệu vẽ tay» nhắc DialogClose cho nút Huỷ. Cộng DANH SÁCH PHẦN HIỆN TRONG NGÂN (hiện: apps/app/components/detail-sheet.tsx — phần đầu ngăn chi tiết bản ghi): soát mọi Button trong cả tệp, in «huy: phan hien trong ngan <tệp>: N vi pham, M nut qua nut dong». Đối chứng dương: một fixture tạm trong tmpdir có nút gọi thẳng dong → script bắt đúng 1 vi phạm. CHIỀU ĐỎ: (1) bản sao hop-thoai-kr.tsx trả nút Huỷ về onClick={dong} → in «huy: hop-thoai-kr.tsx:<dòng> goi thang ham dong», mã 1; (2) --chieu-do --ngan: bản sao detail-sheet.tsx trả nút X về onClick={onClose} → in «huy: apps/app/components/detail-sheet.tsx:<dòng> goi thang ham dong (phan hien trong ngan)», mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
@@ -106,3 +106,32 @@ evals:
     paths: [packages/ui/src/components/giu-thay-doi.tsx, packages/ui/src/components/dialog.tsx, packages/ui/src/components/sheet.tsx, packages/ui/src/components/drawer.tsx, packages/ui/src/components/pick-list-dialog.tsx, packages/ui/test/giu-thay-doi.dom.tsx]
     expected: "exit 0; MA TRẬN VIẾT TRƯỚC 5 ca trên Dialog thật: (1) chỉ gõ vào input[type=search] → bấm lớp phủ đóng, onOpenChange = 1; (2) chỉ gõ vào ô lọc của Combobox thật (role=combobox) → đóng; (3) chỉ gõ vào CommandInput của Command thật → đóng; (4) giuThayDoi={false} + gõ vào Input thường → đóng; (5) PickListDialog thật của packages/ui gõ vào ô tìm → bấm ngoài đóng. Đối chứng dương cùng fixture: gõ vào Input thường, giuThayDoi mặc định → giữ, onOpenChange = 0. Cùng ca (4) lặp cho Sheet và Drawer. CHIỀU ĐỎ: bản sao bộ giữ bỏ bộ lọc ô tìm → ca (1) đỏ, bài in «o-loc: giu vi o tim (search)»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.hg_da_luu
+    paths: [packages/ui/src/components/giu-thay-doi.tsx, packages/ui/src/components/dialog.tsx, packages/ui/test/giu-thay-doi.dom.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx"]
+    expected: "exit 0; Dialog thật có Input, cha giữ coThayDoi theo so sánh giá trị ô với bản chụp và nút «Lưu» cập nhật bản chụp mà KHÔNG đóng hộp. MA TRẬN VIẾT TRƯỚC 4 ca sau khi gõ rồi bấm Lưu: bấm lớp phủ → hộp đóng, onOpenChange gọi 1 lần với false, không alertdialog; Esc → đóng, không alertdialog; dấu X → đóng, không alertdialog; gõ tiếp một ký tự sau Lưu rồi bấm lớp phủ → hộp còn, onOpenChange = 0. Đối chứng dương cùng fixture: gõ nhưng chưa Lưu → bấm lớp phủ giữ hộp. CHIỀU ĐỎ: bản sao bộ giữ bỏ nhánh xoá cờ khi coThayDoi chuyển true→false → ca Esc sau Lưu đỏ, bài in «da-luu: luu xong van hoi (esc)»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.hg_ngan_ban_ghi
+    paths: [packages/ui/src/components/giu-thay-doi.tsx, packages/ui/src/components/sheet.tsx, packages/ui/src/components/drawer.tsx, apps/app/components/detail-sheet.tsx, apps/app/components/responsive-sheet.tsx, apps/app/components/crm/record-sheet/objective-trao-doi.tsx, apps/app/test/ngan-ban-ghi-giu.dom.tsx]
+    expected: "exit 0; dựng DetailSheet thật của apps/app (khổ máy tính) chứa một ô tự lưu kiểu InlineField (Input gõ rồi blur gọi onSave) và một ô trao đổi dùng đúng cách khai của objective-trao-doi. MA TRẬN VIẾT TRƯỚC 5 ca: (1) gõ vào ô tự lưu, blur (đã lưu), bấm lớp phủ → ngăn đóng, không alertdialog; (2) như (1) rồi Esc → đóng, không alertdialog; (3) gõ vào ô trao đổi (chưa gửi), bấm lớp phủ → ngăn còn, không alertdialog; Esc → alertdialog; (4) gõ vào ô trao đổi rồi gửi (ô trống lại), bấm lớp phủ → đóng; (5) như (1) ở khổ điện thoại (Drawer) → Drawer không nhận dismissible=false, Esc đóng không hỏi. CHIỀU ĐỎ: bản sao DetailSheet bỏ cách tắt tự nhận → ca (1) đỏ, bài in «ngan-ban-ghi: o tu luu giu ngan»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hg_man_ban_ghi
+    steps:
+      - "Cảnh cây và phiên đo riêng như E10; gieo một công ty và một liên hệ qua tRPC thật"
+      - "Bước 7 (1440/vi): mở ngăn liên hệ bằng cách bấm tên trên danh sách liên hệ, sửa một ô tự lưu (vd chức danh), rời ô, chờ lưu xong → bấm góc lớp phủ → ngăn đóng, không hộp hỏi lại → ảnh hg-ngan-ban-ghi-tu-luu.png trước khi bấm ngoài"
+      - "Không lỗi console của app; in «buoc 7: dat» hoặc lý do"
+    paths: [packages/ui/src/components/giu-thay-doi.tsx, apps/app/components/detail-sheet.tsx, apps/app/components/responsive-sheet.tsx, apps/app/components/crm/inline-field.tsx, _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs]
+    expected: "exit 0; CHI_BUOC=7 man-giu-cho.mjs trong phiên đo riêng in «buoc 7: dat»; ảnh ở .acceptance-runs/hop-thoai-giu-cho-dang-nhap/evidence/. CHIỀU ĐỎ: --chieu-do-ngan dựng bản sao có DetailSheet bỏ cách tắt tự nhận → in «buoc 7: ngan khong dong sau khi o tu luu», mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]

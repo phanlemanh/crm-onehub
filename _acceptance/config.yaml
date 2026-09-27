@@ -684,6 +684,8 @@ executors:
     hg_may_dong: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx -t may-dong"
     hg_lop_con: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx -t lop-con"
     hg_o_loc: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx -t o-loc"
+    hg_da_luu: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx -t da-luu"
+    hg_ngan_ban_ghi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu.dom.tsx"
     hg_tu_khai: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca tu-khai && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx -t tu-khai"
   script:
     hcz_tai_lieu: bun _acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs
@@ -1156,6 +1158,7 @@ executors:
     hg_confirm_chung: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca confirm && cd apps/app && bun test test/messages-guard.spec.ts"
     hg_huy_qua_nut_dong: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca huy"
     hg_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
+    hg_man_ban_ghi: 'CHI_BUOC=7 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     hg_san_thiet_ke: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca thiet-ke && cd packages/ui && bun test test/messages-guard.spec.ts test/locale-messages.spec.tsx"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"

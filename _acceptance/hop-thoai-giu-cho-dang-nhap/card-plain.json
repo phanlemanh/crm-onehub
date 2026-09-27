@@ -1,6 +1,109 @@
 {
  "feature_plain": "Hộp thoại, ngăn trượt và drawer có ô nhập không còn mất chữ đang gõ dở: lỡ bấm ra ngoài thì hộp đứng yên, còn cố ý đóng (Esc, dấu X, Huỷ, vuốt) thì hỏi «Bỏ những gì vừa nhập?».",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ giữ hộp thoại mở và giữ nguyên chữ khi người đã gõ mà lỡ bấm ra ngoài; hộp chưa gõ gì vẫn đóng ngay như cũ."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ hỏi «Bỏ những gì vừa nhập?» khi người đã gõ mà nhấn Esc hay bấm dấu X; «Tiếp tục sửa» đưa về đúng ô đang gõ, «Bỏ» mới đóng."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ áp cùng luật cho ngăn trượt ở cả bốn đường đóng."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ giữ drawer trên điện thoại khi người đã gõ mà vuốt xuống hay nhấn Esc: drawer đứng yên, chữ còn, hộp hỏi lại hiện."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ đóng ngay không hỏi khi lưu thành công rồi đóng hộp; hộp mở bằng nút mở cũng được giữ như mọi hộp."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ chỉ đóng ô chọn con khi nhấn Esc lúc ô con đang mở, không đụng tới hộp đang sửa."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ giữ cả khi người chỉ đổi một ô chọn mà chưa gõ chữ, ở hộp thoại KR, mục tiêu và đơn vị."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ dùng một hộp hỏi lại chung cho cả ứng dụng, 13 chỗ đang dùng bản cũ đổi sang bản chung."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ có ảnh màn thật ở khổ 1440 và 390 cho hộp «Thêm KR», ngăn tạo thoả thuận và drawer ngăn bản ghi, kể cả cú vuốt thật."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ thôi giữ hộp khi đã lưu xong mà hộp vẫn mở (vd hộp KR nguồn bảng tính): bấm ngoài, Esc, dấu X đóng ngay; gõ tiếp thì lại được giữ."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ không giữ ngăn chi tiết bản ghi vì các ô tự lưu hay bình luận đã gửi; chỉ giữ khi ô trao đổi còn chữ chưa gửi."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-9",
+   "p": "Chặn mọi nút Huỷ và nút X gọi thẳng lệnh đóng trong 26 hộp có ô nhập, hộp cập nhật KR và phần đầu ngăn bản ghi; phép soát báo khi có hộp mới."
+  },
+  {
+   "id": "AC-11",
+   "p": "Chặn chỗ gọi tự đổi màu, góc, khoảng cách của thành phần dùng chung, chặn chú thích mã mới, và chặn chữ hộp hỏi lại thiếu bản tiếng Anh."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ KHÔNG giữ hộp chỉ vì người gõ vào ô tìm hay ô lọc; hộp nào không cần giữ thì chỗ gọi tắt được."
+  }
+ ],
  "scope_plain": "Chưa làm: lưu nháp mở lại lần sau, chặn khi đổi trang hay đóng tab, so giá trị từng ô, hộp hiện khoá API một lần, bản mẫu /proto.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Mọi đường người có thể đóng hộp — bấm ngoài, Esc, dấu X, nút Huỷ, vuốt — đều có tiêu chí (AC-1 tới AC-4, AC-9)."
+  },
+  {
+   "i": 1,
+   "p": "Bốn trạng thái bên trong hộp: sạch và đã gõ có tiêu chí; đổi ô chọn có tiêu chí ở ba hộp tự khai; «gõ rồi xoá về» để sau."
+  },
+  {
+   "i": 2,
+   "p": "Cả ba khung đều được đo, kèm màn thật (AC-1 tới AC-4, AC-10)."
+  },
+  {
+   "i": 3,
+   "p": "Ba cách trả lời hộp hỏi lại đều có tiêu chí (AC-2)."
+  },
+  {
+   "i": 4,
+   "p": "Việc chung: máy đóng, ô chọn con, hộp hỏi lại dùng chung, ô tìm và cách tắt, chữ hai thứ tiếng, và mới thêm: đã lưu mà hộp còn mở (AC-13), ngăn bản ghi (AC-14)."
+  },
+  {
+   "i": 5,
+   "p": "Giả định: bấm ra ngoài khi đã gõ thì im lặng giữ hộp, không hỏi."
+  },
+  {
+   "i": 6,
+   "p": "Giả định: đổi ô chọn chỉ được giữ ở hộp thoại KR, mục tiêu, đơn vị."
+  },
+  {
+   "i": 7,
+   "p": "Giả định: gõ rồi xoá về như cũ vẫn hỏi một lần."
+  },
+  {
+   "i": 8,
+   "p": "Giả định: gõ vào ô tìm, ô lọc không tính là thay đổi."
+  },
+  {
+   "i": 9,
+   "p": "Giả định mới cần anh gạch: ngăn chi tiết bản ghi chỉ giữ khi ô trao đổi còn chữ chưa gửi; ô tự lưu không bao giờ làm ngăn bị giữ."
+  }
+ ],
+ "gap_probe_plain": [],
  "decisions_plain": [
   {
    "id": "d-20260927T004515Z-1",
@@ -53,6 +156,34 @@
   {
    "id": "d-20260927T041533Z-14",
    "p": "Nút X của ngăn chi tiết bản ghi nay đi qua bộ giữ như Esc — đổi lại mọi ngăn chi tiết đóng qua bộ giữ, nên lỗi cờ thay đổi ở Ngoài-4 cũng lộ ở nút X."
+  },
+  {
+   "id": "d-20260927T053525Z-15",
+   "p": "Ngoài-1 ghi hạn chế đã biết: phép soát nút Huỷ chỉ soát những phần hiện trong ngăn đã liệt kê tay."
+  },
+  {
+   "id": "d-20260927T053525Z-16",
+   "p": "Ngoài-2 nâng phạm vi: hộp lưu xong mà vẫn mở thì thôi bị coi là đang nhập dở — thành AC-13."
+  },
+  {
+   "id": "d-20260927T053525Z-17",
+   "p": "Ngoài-3 nâng phạm vi: hộp KR nguồn bảng tính lưu xong vẫn mở thì Esc, X đóng không hỏi — gộp vào AC-13."
+  },
+  {
+   "id": "d-20260927T053525Z-18",
+   "p": "Ngoài-4 nâng phạm vi: ngăn bản ghi có ô tự lưu không còn hỏi oan — thành AC-14."
+  },
+  {
+   "id": "d-20260927T053525Z-19",
+   "p": "Ngoài-5 ghi hạn chế đã biết: phép kiểm chữ ở nhóm lồng nhau chưa có đối chứng dương."
+  },
+  {
+   "id": "d-20260927T053525Z-20",
+   "p": "Anh đồng ý phần cắt/hoãn và phê chín quyết định treo (gồm 26 tệp soát, drawer đứng yên khi vuốt); chữ ký chờ sau vòng chấm mới."
+  },
+  {
+   "id": "d-20260927T053707Z-21",
+   "p": "Đã chọn: hộp xoá cờ «đã gõ» khi chỗ gọi báo đã lưu; ngăn bản ghi chỉ giữ khi ô trao đổi còn chữ — đổi lại thư viện giao diện có thêm một prop và một hook."
   }
  ]
 }
