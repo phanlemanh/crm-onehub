@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: khep-ky-okr
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason: 
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 23a11f32852faa1dffcb5fbe3b5eac4ef1686809
-human_signoff: 
+human_signoff: Manh Phan 2026-09-28
 ---
 
 # Evidence Report: khep-ky-okr
@@ -294,7 +294,7 @@ human_signoff:
         - Chạy AC-14 như contract mô tả: cổng thiết kế tĩnh + bộ quét 'Dấu hiệu vẽ tay' + soi mã trên diff thực của lượt này, đính kèm output/exit-code cho thấy không có <table>, <h1>, <h2>, divide-y, rounded-lg border tự dựng, navigator.clipboard, AlertDialog ráp tay trong apps/app, và không có bản sao kiemOkr/OKR_KHEP ngoài packages/validation
         - grep -rn 'Record<string, unknown>' và tìm định nghĩa Zod schema cho mọi input mới (moRa, dongRa, chamKr, ghiDieuHocDuoc, moLaiKy, mangSang...) trong diff của lượt này, để xác nhận parse ở biên
         - Ảnh chụp hoặc DOM output thực tế của màn Chấm điểm (route /proto/khep-ky-okr?state=ST-cham-donvi hoặc màn thật apps/app) cho thấy câu 'Điểm cuối kỳ không phải đánh giá nhân sự' thực sự hiển thị trên màn, không chỉ là đặc tả
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-09-28 — Đạt
 
 - eval: E20
   run_id: minted-khep-ky-okr-E20-r1

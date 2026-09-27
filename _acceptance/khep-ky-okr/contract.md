@@ -5,7 +5,7 @@ slug: khep-ky-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-27T13:49:54Z
 design_doc: docs/superpowers/specs/2026-09-27-khep-ky-okr-design.md
@@ -97,3 +97,16 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Hạn cứng: production trước 2026-12-14.
 - Hồ sơ đã ký có thể phải ghim lại: `dat-okr-trong-crm` (pha đi đúng một bước; `updateKeyResult` thêm luật đổi đích; hộp thoại KR), `vai-chi-okr` (tám thủ tục mới trong ma trận), `so-okr-tu-chay` (nếu bài của nó nhảy pha), `toan-canh-okr` (nút Xuất ở đầu Toàn cảnh), `cap-nhat-tuan-okr` (khoá pha đã đóng).
 - Nền hạ tầng (`duong-nen.md`, 2026-09-27 trên `1f34aeac`): năm lớp xanh; lượt đầu đỏ giả vì tệp hồ sơ ghi vào cây giữa lúc bộ kiểm chạy, đã chạy lại trên cây sạch.
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-28, định đoạt mục ngoài hợp đồng của vòng chấm 1; sổ d-20260927T211240Z-32 … -41):
+
+- Ngoài-2 (`apps/app/app/(app)/[slug]/okr/hop-thoai-mang-sang.tsx`): Luật chọn KR được mang sang, chọn kỳ kế và tập pha có bảng chấm được viết ở cả màn lẫn máy chủ; nếu một bên đổi mà bên kia không, hộp thoại xem trước mang sang có thể nói khác với thứ hệ thống thật sự ghi.
+- Ngoài-4 (`apps/api/test/okr-khep.spec.ts`): Ba ca từ chối (điều học được quá dài, mở lại thiếu lý do, lý do 9 ký tự) chỉ kiểm mã lỗi và bản ghi không đổi, không kiểm câu báo; câu báo đổi sai thì bài vẫn đạt.
+- Ngoài-5 (`apps/app/test/okr-khep-cham.dom.tsx`): Bài màn chấm của kỳ đã đóng chỉ kiểm các ô sửa đã ẩn, không kiểm điểm chỉ đọc vẫn hiện; màn trống vẫn đạt (phép đo màn thật E13 có kiểm trạng thái đã đóng).
+- Ngoài-6 (`packages/validation/test/okr-kiem.spec.ts`): Lời hứa «luật chất lượng là hàm thuần» được kiểm bằng tìm chuỗi trong mã nguồn, không phân tích cấu trúc mã; một cách nhập né chuỗi có thể lọt.
+- Ngoài-7 (`packages/ui/test/khep-ky-bien-the.dom.tsx`): Bài bộ chọn cách xem so tên lớp CSS, không đo khổ nào hiện lối nào (phép đo màn thật E13 đo đúng ở khổ 390).
+
+Mở hợp đồng mới — gom một vòng «Nợ sau lượt 7 OKR», xong trước 2026-12-14:
+
+- Ngoài-1 (`apps/api/src/okr/okr-khep.service.ts`): Mang sang chọn chu kỳ đích rồi mới khoá, không kiểm lại pha; quản trị đổi pha kỳ đích đúng lúc đó thì bản nháp có thể rơi vào kỳ đã sang chấm điểm.
+- Ngoài-3 (`apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx`): Đợt rà có ngày bắt đầu ở tương lai không hiện «Đóng rà» và chặn mở đợt thay thế cho tới ngày bắt đầu.
