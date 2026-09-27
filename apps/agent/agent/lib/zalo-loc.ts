@@ -11,7 +11,8 @@ const SO_DIEN_THOAI = new RegExp(
 		.join("|"),
 	"gu",
 );
-const SO_TIEN = /(?<![\d+])[1-9]\d{0,2}([.,])\d{3}(?:\1\d{3})+(?!\d)/gu;
+const SO_TIEN =
+	/(?<![\d+])(?<!(?:\+|00)\d{1,3}[\s.-]?)(?<!\(\+?\d{1,3}\)[\s.-]?)[1-9]\d{0,2}([.,])\d{3}(?:\1\d{3})+(?!\d)/gu;
 const CHU_SO = /\d/gu;
 const THU = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/gu;
 const DONG_KE_BANG = /^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$/u;
