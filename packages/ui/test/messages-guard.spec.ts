@@ -4,10 +4,30 @@ import { DAU_TIENG_VIET, DU_LIEU, KHONG_DAU_CHO_PHEP } from "./du-lieu";
 
 type Cap = { khoa: string; en: string; vi: string };
 
-type GiaTri = string | ((...doi_so: string[]) => string);
+type Chu = string | ((...doi_so: string[]) => string);
+type GiaTri = Chu | Nhom;
 
-function chuoiHoa(v: GiaTri): string {
+function chuoiHoa(v: Chu): string {
 	return v instanceof Function ? v("X", "Y", "Z") : v;
+}
+
+type Nhom = { [khoa: string]: GiaTri };
+
+function laNhom(v: GiaTri): v is Nhom {
+	return v instanceof Object && !(v instanceof Function);
+}
+
+function lat(khoa: string, x: GiaTri, y: GiaTri | undefined, ra: Cap[]) {
+	if (y === undefined) return;
+	if (laNhom(x) || laNhom(y)) {
+		if (!laNhom(x) || !laNhom(y)) return;
+		for (const con of Object.keys(x)) {
+			const a = x[con];
+			if (a !== undefined) lat(`${khoa}.${con}`, a, y[con], ra);
+		}
+		return;
+	}
+	ra.push({ khoa, en: chuoiHoa(x), vi: chuoiHoa(y) });
 }
 
 function trai(): Cap[] {
@@ -15,18 +35,7 @@ function trai(): Cap[] {
 	const vi = messages("vi");
 	const ra: Cap[] = [];
 	for (const nhom of Object.keys(en) as (keyof Messages)[]) {
-		const a = en[nhom] as Record<string, GiaTri>;
-		const b = vi[nhom] as Record<string, GiaTri>;
-		for (const khoa of Object.keys(a)) {
-			const x = a[khoa];
-			const y = b[khoa];
-			if (x === undefined || y === undefined) continue;
-			ra.push({
-				khoa: `${String(nhom)}.${khoa}`,
-				en: chuoiHoa(x),
-				vi: chuoiHoa(y),
-			});
-		}
+		lat(String(nhom), en[nhom] as GiaTri, vi[nhom] as GiaTri, ra);
 	}
 	return ra;
 }

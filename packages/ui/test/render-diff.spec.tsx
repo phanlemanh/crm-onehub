@@ -284,6 +284,20 @@ const CA: Ca[] = [
 		),
 	},
 	{
+		ten: "GiuThayDoi",
+		ve: () => (
+			<Dialog open coThayDoi>
+				<DialogContent>
+					<DialogTitle>Ghi chú của tôi</DialogTitle>
+				</DialogContent>
+			</Dialog>
+		),
+		bam: () =>
+			document.querySelector(
+				"[data-slot='dialog-content'] [data-slot='dialog-close']",
+			),
+	},
+	{
 		ten: "Sheet",
 		ve: () => (
 			<Sheet open>
