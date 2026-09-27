@@ -124,10 +124,11 @@ evals:
       khong con ve.
       Lop chu tieng Anh cua eve (prompt, nhan va mo ta option, ten cong cu, dang viet lai
       "Session limit continuation") rut tu CHINH request that, khong go tay: khong chuoi
-      nao co trong khoi tra loi, va toTranscript(messagesFromEvents(luong that
-      rang/luong-het-han-muc-that.ndjson)) khong co dong dau vet session_limit_continuation
-      va khong chua chuoi nao cua lop; doi chung: luong that van cho ra it nhat mot dong
-      dau vet khac.
+      nao co trong khoi tra loi. Dong dau vet: toTranscript(messagesFromEvents(luong that
+      rang/luong-het-han-muc-that.ndjson)) — ban dung chung, tab Tac nhan cua trang ho so
+      dung — PHAI con dong session_limit_continuation (doi chung duong); qua
+      withoutSessionLimitSteps (chi man dung dung) thi khong con dong do, khong chua
+      chuoi nao cua lop, va van con it nhat mot dong dau vet khac.
       Bong bong cau tra loi: submission co inputResponse kind session-limit, optionId
       continue -> hien "Cấp thêm", khong co "Approve"; stop -> "Dừng".
       Doi chung: request kind question (dung mau cau hoi co san) van ve
