@@ -5,10 +5,10 @@ slug: tac-nhan-model-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-09-27-tac-nhan-model-rieng-design.md
-approved_by:
-approved_at:
+approved_by: Manh Phan
+approved_at: 2026-09-27T06:52:54Z
 ---
 
 # Acceptance Contract: tac-nhan-model-rieng
