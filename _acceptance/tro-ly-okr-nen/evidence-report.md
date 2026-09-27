@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: tro-ly-okr-nen
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8e4f4551bf37557d658d640972e365f303972bd4
-human_signoff:
+human_signoff: Manh Phan 2026-09-28
 ---
 
 # Evidence Report: tro-ly-okr-nen
@@ -262,7 +262,7 @@ human_signoff:
     - spec-alignment: UNCERTAIN (r2)
   required_evidence:
     - (xem round 2 — inputs không đổi, không chấm lại)
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Manh Phan 2026-09-28
 
 - eval: E25
   run_id: minted-tro-ly-okr-nen-E25-r2

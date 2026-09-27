@@ -5,7 +5,7 @@ slug: tro-ly-okr-nen
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-27T07:58:26Z
 design_doc: docs/superpowers/specs/2026-09-27-tro-ly-okr-nen-design.md
@@ -79,5 +79,44 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 ## Notes
 
 - Đường nền đầu vòng đỏ ở lệnh dựng vì bước chạy dùng shell đăng nhập có Node 22 (eve cần Node ≥ 24) — đỏ giả đã biết, chip sang kho kit đã mở 25/09. Tự chứng bằng Node 24 trên `9c5d7741`: `bun run lint:slop` mã 0, `bunx turbo run build --force` mã 0. Hai lệnh kiểm của hồ sơ Zalo báo thiếu `merge-base` ở bộ kiểm công cụ của đường nền — không thuộc lượt này.
+- known-limits (Ngoài-1, Cổng Bằng chứng 2026-09-28): Nếu sau này có người đổi mốc báo 80% hoặc 100% ở một chỗ, phần khác của hệ thống có thể không theo kịp, khiến quản trị nhận nhắc nhở ở một mức phần trăm còn màn cài đặt lại hiển thị mức khác.
+- known-limits (Ngoài-2, Cổng Bằng chứng 2026-09-28): Màn cài đặt tự kiểm tra số tiền trần nhập vào theo cách riêng, tách khỏi cách kiểm chung của hệ thống; nếu sau này quy định về cách nhập số tiền đổi, màn này có thể không cập nhật theo.
+- known-limits (Ngoài-3, Cổng Bằng chứng 2026-09-28): Nếu sau này có thêm một lý do đối soát lỗi mới, màn cài đặt có thể lặng lẽ hiển thị nhầm thành «không rõ lý do» mà không ai nhận ra.
+- known-limits (Ngoài-4, Cổng Bằng chứng 2026-09-28): Nếu công cụ AI nền tảng đổi cách báo mức dùng, sổ chi phí AI có thể lặng lẽ ghi 0 đồng cho mọi lượt gọi mà không có cảnh báo nào, khiến trần chi tiêu không bao giờ bị xem là đã chạm dù thực tế đã vượt.
+- known-limits (Ngoài-5, Cổng Bằng chứng 2026-09-28): Các mốc thời gian chờ của Trợ lý OKR nằm rải ở nhiều nơi khác nhau trong hệ thống; ai muốn chỉnh thời gian chờ phải tìm đúng từng chỗ, dễ sửa thiếu.
+- known-limits (Ngoài-6, Cổng Bằng chứng 2026-09-28): Vài con số làm tròn tiền và cấu hình OKR được viết lặp ở nhiều chỗ khác nhau; nếu một nơi được sửa mà nơi khác không theo, số tiền hiển thị trên các màn có thể lệch nhau.
+- known-limits (Ngoài-12, Cổng Bằng chứng 2026-09-28): Vài phép đo dựng dữ liệu thử theo cách không đi qua đường ghi thật của hệ thống, nên chưa chắc phản ánh đúng những gì xảy ra khi dùng thật.
+- known-limits (Ngoài-13, Cổng Bằng chứng 2026-09-28): Phép đo đối soát tháng dùng một báo cáo giả khớp sẵn với cách đọc của hệ thống; nếu báo cáo thật từ AI Gateway sau này có dạng khác, phép đo này sẽ không phát hiện ra.
+- known-limits (Ngoài-14, Cổng Bằng chứng 2026-09-28): Phép đo cho việc phân loại tóm tắt tuần gán sẵn một thông tin mà hệ thống thật chưa chắc truyền được, nên chưa có bằng chứng chắc chắn việc phân loại này hoạt động đúng trong thực tế.
+- known-limits (Ngoài-15, Cổng Bằng chứng 2026-09-28): Một phần của phép đo về ranh giới thời gian tháng không thể thật sự phát hiện lỗi vì cách tính đã loại bỏ tình huống đó từ trước, nên nửa phép đo này chưa chứng minh được điều nó hứa.
+- known-limits (Ngoài-18, Cổng Bằng chứng 2026-09-28): Vài phép đo về việc nhận và mở một tác vụ tự dựng sẵn dữ liệu thay vì đi qua đường nhận việc thật, nên chưa chắc phản ánh đúng thực tế khi hệ thống nhận việc.
+- known-limits (Ngoài-19, Cổng Bằng chứng 2026-09-28): Màn Cài đặt có thể hiện «Đang kiểm tra…» mãi mãi thay vì báo đúng lý do (ví dụ chưa nối được tác tử), khiến quản trị không biết chắc Trợ lý OKR có dùng được hay không.
+- known-limits (Ngoài-20, Cổng Bằng chứng 2026-09-28): Báo cáo bằng chứng nói không có yêu cầu mạng lạ nào trong bước Lưu, nhưng cách đo chỉ nhìn đúng một loại yêu cầu nên không thể phát hiện nếu thật ra có vấn đề.
+- known-limits (Ngoài-21, Cổng Bằng chứng 2026-09-28): Bằng chứng «thành viên thường không thấy các khối chỉ-quản-trị» có thể đã tính là đạt dù trang thực ra bị lỗi hoặc chưa tải xong, nên chưa chắc đã kiểm đúng điều cần kiểm.
+- known-limits (Ngoài-22, Cổng Bằng chứng 2026-09-28): Tệp dữ liệu mẫu dùng để kiểm chi phí AI có thể dần lệch với dữ liệu thật mà không ai nhận ra, vì tài liệu nói có một bài kiểm sẽ tự làm mới nó nhưng thực ra không còn làm nữa.
+- known-limits (Ngoài-23, Cổng Bằng chứng 2026-09-28): Bài kiểm sổ chi phí có thể tiếp tục báo xanh dựa trên một bản dữ liệu mẫu cũ, dù cách hệ thống thật ghi sổ đã thay đổi, mà không ai biết hai bên đã lệch nhau.
+- known-limits (Ngoài-24, Cổng Bằng chứng 2026-09-28): Nếu sau này có thêm một việc trợ lý mới hay một loại phiên con mới, hệ thống có thể âm thầm tính sai chi phí của việc đó vào nhóm khác mà không ai được cảnh báo.
+- known-limits (Ngoài-25, Cổng Bằng chứng 2026-09-28): Bằng chứng nói chỉ có đúng một yêu cầu mạng xảy ra khi Lưu, nhưng cách đo chỉ nhìn một loại yêu cầu nên câu đó luôn đúng bất kể thực tế — không phải bằng chứng thật rằng mạng sạch.
+- known-limits (Ngoài-26, Cổng Bằng chứng 2026-09-28): Số phần trăm hiển thị trên thẻ ngân sách có thể không khớp với tin nhắn nhắc gửi cho quản trị, ví dụ khi trần đặt bằng 0 hoặc chi tiêu vừa vượt 80%.
+- known-limits (Ngoài-27, Cổng Bằng chứng 2026-09-28): Khi có dữ liệu bất thường từ hệ thống AI, một số chi phí có thể không được ghi vào sổ mà không có cảnh báo, khiến số tiền hiển thị thấp hơn thực tế.
+- known-limits (Ngoài-28, Cổng Bằng chứng 2026-09-28): Nếu sau này bật hay tắt khả năng dùng AI ở một chỗ mà quên chỗ còn lại, quản trị có thể thấy hai thông tin trái ngược nhau về việc AI có sẵn sàng hay không.
+- known-limits (Ngoài-29, Cổng Bằng chứng 2026-09-28): Các con số thời gian chờ và lịch chạy nằm rải rác trong mã, nên người muốn chỉnh sau này khó tìm đúng chỗ và dễ sửa sót.
+- known-limits (Ngoài-30, Cổng Bằng chứng 2026-09-28): Có hai cách đọc trần chi tiêu USD người nhập cùng tồn tại; nếu một bên được sửa mà quên bên kia, ô nhập trần có thể chấp nhận hoặc từ chối sai giá trị người gõ.
+- known-limits (Ngoài-31, Cổng Bằng chứng 2026-09-28): Lý do xếp việc AI được viết lặp ở nhiều nơi trong mã; sửa ở một chỗ mà quên chỗ khác có thể khiến nhật ký vận hành ghi lý do không nhất quán.
+- known-limits (Ngoài-32, Cổng Bằng chứng 2026-09-28): Một đề xuất AI đang được soạn có thể bị huỷ giữa chừng và mất trắng nếu bước xử lý mất hơn khoảng 30 đến 90 giây, dù việc soạn vẫn đang diễn ra bình thường.
+- known-limits (Ngoài-33, Cổng Bằng chứng 2026-09-28): Nếu quản trị bật Trợ lý OKR trước khi cắm khoá kết nối AI, tính năng có thể vẫn báo chưa sẵn sàng cho tới khi tắt rồi bật lại, dù khoá đã được cắm đúng sau đó.
+- known-limits (Ngoài-34, Cổng Bằng chứng 2026-09-28): Khi có trục trặc kỹ thuật nhất thời ngay sau khi đối chiếu chi tiêu AI với nhà cung cấp đã tính đúng, hệ thống có thể ghi đè kết quả đúng bằng một thông báo lỗi sai, khiến báo cáo trông như bị lỗi dù thực ra đã khớp.
+- known-limits (Ngoài-35, Cổng Bằng chứng 2026-09-28): Khi một việc AI không gửi được do lỗi kỹ thuật, hệ thống có thể báo lý do chung chung là hết thời gian chờ thay vì lý do thật, gây khó khăn khi cần chẩn đoán sự cố.
+- known-limits (Ngoài-36, Cổng Bằng chứng 2026-09-28): Trong một số tình huống hiếm, một đề xuất AI có thể được ghi nhận hai lần thay vì một.
+- known-limits (Ngoài-37, Cổng Bằng chứng 2026-09-28): Phép đo tự động đối soát chi tiêu AI với nhà cung cấp chưa từng được thử với dữ liệu phản hồi thật, nên chưa chắc hoạt động đúng khi triển khai thật.
+- known-limits (Ngoài-38, Cổng Bằng chứng 2026-09-28): Chưa có bằng chứng độc lập rằng việc phân loại đúng loại chi phí AI hoạt động đúng với dữ liệu ngữ cảnh thật, chỉ mới đúng với dữ liệu bài kiểm tự dựng.
+- known-limits (Ngoài-39, Cổng Bằng chứng 2026-09-28): Chưa có bằng chứng độc lập rằng một việc AI thật sự sống đúng khoảng thời gian quy định và không bị nhận nhầm lần hai.
+- known-limits (Ngoài-40, Cổng Bằng chứng 2026-09-28): Dữ liệu cấu hình AI dùng để kiểm thử được tạo khác cách admin thật lưu cấu hình, nên bài kiểm có thể bỏ sót một số lỗi thật khi hai đường ghi và đọc lệch nhau.
+- known-limits (Ngoài-41, Cổng Bằng chứng 2026-09-28): Phép đo lệch chi tiêu giữa sổ nội bộ và nhà cung cấp AI có thể bỏ sót đúng loại lỗi nghiêm trọng nhất, khi một lượt gọi bị thiếu ở cả hai vế cùng lúc.
+- known-limits (Ngoài-42, Cổng Bằng chứng 2026-09-28): Phép đo rằng hệ thống chặn AI truy cập ngoài phạm vi có thể báo đạt dù cơ chế chặn thật không hoạt động, vì bài kiểm dùng công cụ giả tạo ra cùng kết quả.
+- known-limits (Ngoài-43, Cổng Bằng chứng 2026-09-28): Phép đo rằng tác nhân AI phụ chỉ dùng đúng công cụ được phép có thể báo đạt một cách giả tạo nếu hệ thống không đọc được danh sách công cụ đã dùng.
+- known-limits (Ngoài-44, Cổng Bằng chứng 2026-09-28): Phép đo rằng thành viên thường không thấy khối cài đặt AI có thể báo đạt ngay cả khi trang bị lỗi hoặc chuyển hướng, không thật sự chứng minh việc ẩn đúng theo quyền.
+- known-limits (Ngoài-45, Cổng Bằng chứng 2026-09-28): Phép đo rằng kết quả AI trả về gốc chỉ chứa mã, không chữ tự do, hiện chưa quét hết các trường lồng bên trong, dù hiện tại chưa có rò rỉ chữ tự do nào xảy ra.
+- known-limits (Ngoài-46, Cổng Bằng chứng 2026-09-28): Phép đo rằng khu vực chạy AI bị khoá mạng hoàn toàn chỉ đếm chữ trong mã nguồn thay vì kiểm tra chính sách mạng thật, nên một thay đổi làm hở chính sách mạng sau này có thể không bị phát hiện.
 
 ## Iterations
