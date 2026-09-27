@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cea37af8b3b2e75f555c7322086cc57cb67571b2
+verified_commit: 455047df0485976db93f549ae9c3b810f38b5314
 human_signoff: Mạnh 2026-09-28
 ---
 
@@ -378,3 +378,7 @@ Round 3: toàn bộ eval máy PASS (E5, E16 không phân biệt với baseline, 
 ### Re-pin lần 1 — 2026-09-27, do gộp onehub (55 commit) trước khi mở PR
 run_id: repin-20260927T214203Z-71497
 sha: cea37af8b3b2e75f555c7322086cc57cb67571b2 · suites: 4 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13b, E14, E14j (E14j không khai paths) · AC không có chốt máy: AC-12, AC-14
+
+### Re-pin lần 2 — 2026-09-27, do gộp onehub #178 #179, dời migration sang 20261001010000, trần diff-trang-dai 6 giây trên CI
+run_id: repin-20260927T230826Z-11703
+sha: 455047df0485976db93f549ae9c3b810f38b5314 · suites: 4 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13b, E14, E14j (E14j không khai paths) · AC không có chốt máy: AC-12, AC-14
