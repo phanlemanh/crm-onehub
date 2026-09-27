@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 23a11f32852faa1dffcb5fbe3b5eac4ef1686809
+verified_commit: a93384d5e34ab5e56af0e1d95d728d15d45755bb
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -365,3 +365,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: toàn bộ 21 eval máy (E1–E18, E20–E22) đạt ngay từ lượt đầu, kể cả các ca "chiều đỏ" (chạy `--chieu-do` trên bản sao lỗi cố ý) đều bắt đúng lỗi tiêm vào như `expected` mô tả. Duy nhất E19 (AC-14, judgment) là UNCERTAIN ở cả ba lens vì bộ input cấp cho hội đồng chỉ là hồ sơ thiết kế/kế hoạch, không phải bằng chứng về mã đã viết — verdict tổng dừng ở PENDING-JUDGMENT, chờ người tự xem diff/ảnh chụp thật ở Cổng 2 rồi điền `human_override`.
+
+### Re-pin lần 1 — 2026-09-27, do gộp onehub #178 trước khi gộp PR #179
+run_id: repin-20260927T221723Z-27965
+sha: a93384d5e34ab5e56af0e1d95d728d15d45755bb · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E3 (E3 không khai paths), E7 (E7 không khai paths), E13 (E13 không khai paths), E15 (E15 không khai paths), E19 (E19 không khai paths)
