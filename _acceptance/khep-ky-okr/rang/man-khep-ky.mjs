@@ -1253,10 +1253,7 @@ async function gieoCham() {
 	);
 }
 
-const chuDiem = (d) =>
-	K.thang === "0-100"
-		? String(Math.round(d * 100))
-		: String(d).replace(".", ",");
+const chuDiem = (d) => String(d).replace(".", ",");
 const theoThang = (d) => (K.thang === "0-100" ? Math.round(d * 100) : d);
 const duongCham = (don, xem = "&xemOkr=cham") =>
 	`/okr/theo-don-vi?kyOkr=${K.truoc}&donOkr=${don}${xem}`;
