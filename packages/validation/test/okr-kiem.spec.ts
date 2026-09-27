@@ -112,6 +112,21 @@ const CA: [string, MucTieuKiem, ReturnType<typeof kiemOkr>][] = [
 		[{ ma: "thieu-doi-trong", truong: "keyResults", krIndex: null }],
 	],
 	[
+		"thiếu đối trọng đúng ngưỡng hai tăng tới",
+		mt(kr("Thoả thuận mới", "tang-toi"), kr("Đối tác mới ký", "tang-toi")),
+		[{ ma: "thieu-doi-trong", truong: "keyResults", krIndex: null }],
+	],
+	[
+		"thiếu đối trọng bốn tăng tới",
+		mt(
+			kr("Thoả thuận mới", "tang-toi"),
+			kr("Cuộc gọi hẹn được", "tang-toi"),
+			kr("Đối tác mới ký", "tang-toi"),
+			kr("Doanh số quý", "tang-toi"),
+		),
+		[{ ma: "thieu-doi-trong", truong: "keyResults", krIndex: null }],
+	],
+	[
 		"có giữ dưới thì không hỏi đối trọng",
 		mt(kr("Thoả thuận mới", "tang-toi"), kr("Tỷ lệ huỷ", "giu-duoi", 5, 4)),
 		[],
