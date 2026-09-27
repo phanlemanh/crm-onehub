@@ -1,5 +1,7 @@
 "use client";
 
+import Help from "@carbon/icons-react/es/Help";
+import { Icon } from "@crm/ui/components/icon";
 import { Label } from "@crm/ui/components/label";
 import { Separator } from "@crm/ui/components/separator";
 
@@ -128,23 +130,48 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
 	);
 }
 
+const fieldDescriptionVariants = cva(
+	[
+		"text-left text-xs/relaxed leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5",
+		"last:mt-0 nth-last-2:-mt-1",
+		"[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+	],
+	{
+		variants: {
+			variant: {
+				default: "",
+				hoi: "[&>svg]:mr-1 [&>svg]:inline [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:align-text-bottom",
+			},
+		},
+		defaultVariants: {
+			variant: "default",
+		},
+	},
+);
+
 function FieldDescription({
 	className,
 	breakAnywhere,
+	variant,
+	children,
 	...props
-}: React.ComponentProps<"p"> & { breakAnywhere?: boolean }) {
+}: React.ComponentProps<"p"> &
+	VariantProps<typeof fieldDescriptionVariants> & { breakAnywhere?: boolean }) {
+	const bien = variant ?? "default";
 	return (
 		<p
 			data-slot="field-description"
+			data-variant={bien}
 			className={cn(
-				"text-left text-xs/relaxed leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5",
-				"last:mt-0 nth-last-2:-mt-1",
-				"[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+				fieldDescriptionVariants({ variant: bien }),
 				breakAnywhere && "wrap-anywhere",
 				className,
 			)}
 			{...props}
-		/>
+		>
+			{bien === "hoi" && <Icon icon={Help} motion="none" />}
+			{children}
+		</p>
 	);
 }
 

@@ -239,6 +239,13 @@ const vi = {
 		"mo-hop-tuan": "Mở bảng họp tuần",
 		"doi-nguon": "Đổi nguồn số",
 		"ghi-so-api": "Ghi số qua khoá API",
+		"mo-ra": "Mở rà giữa kỳ",
+		"dong-ra": "Đóng rà giữa kỳ",
+		"doi-dich": "Đổi đích KR",
+		"cham-kr": "Chấm KR",
+		"nhin-lai": "Ghi điều học được",
+		"mang-sang": "Mang sang kỳ sau",
+		"mo-lai-ky": "Mở lại kỳ",
 	},
 	vet: {
 		cot: {
@@ -771,6 +778,13 @@ const en: OkrMessages = {
 		"mo-hop-tuan": "Opened the weekly meeting board",
 		"doi-nguon": "Changed number source",
 		"ghi-so-api": "Value written via API key",
+		"mo-ra": "Opened mid-cycle review",
+		"dong-ra": "Closed mid-cycle review",
+		"doi-dich": "Changed KR target",
+		"cham-kr": "Scored KR",
+		"nhin-lai": "Wrote what was learned",
+		"mang-sang": "Carried over to next cycle",
+		"mo-lai-ky": "Reopened cycle",
 	},
 	vet: {
 		cot: {

@@ -81,6 +81,7 @@ const QUY: ChuKyOutput = {
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 };
 
 function kr(id: string, objectiveId: string): KrOutput {
@@ -528,7 +529,7 @@ describe("theo-don-vi-bien", () => {
 			wrap: true,
 			trongDau: false,
 			cardAction: 0,
-			nut: 6,
+			nut: 7,
 			tinhTrang: "Chưa có kỳ vọng",
 		});
 	});
