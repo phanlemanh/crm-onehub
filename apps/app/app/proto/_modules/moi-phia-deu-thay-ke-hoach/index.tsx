@@ -198,7 +198,6 @@ function SheetCongTy({ tab, hinh }: { tab: string; hinh: TabKeHoach }) {
 			<DetailSheetHeader
 				description={`${CONG_TY.linhVuc} · ${CONG_TY.thanhPho}`}
 				media={<EntityLogo name={CONG_TY.ten} size="lg" />}
-				onClose={() => undefined}
 				title={<span translate="no">{CONG_TY.ten}</span>}
 			/>
 			<DetailSheetTabs onValueChange={setDang} tabs={tabs} value={dang} />
@@ -211,7 +210,6 @@ function SheetCaNhan() {
 		<DetailSheet onOpenChange={() => undefined} open>
 			<DetailSheetHeader
 				description="Môi giới · Nhà Xanh"
-				onClose={() => undefined}
 				title={<span translate="no">Trịnh Cẩm Thương</span>}
 			/>
 			<DetailSheetBody>

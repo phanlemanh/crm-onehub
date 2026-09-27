@@ -345,8 +345,10 @@ API; the API only reads and writes rows.
     `repFromCrm` dùng — người không còn hàng `member` hay mang vai `okr` bị từ chối
     trước khi có phiên;
   - ba trần trong `ZALO.hoi.tran`: 3 câu mỗi phút, 20 câu mỗi ngày của một người,
-    1.500 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
-    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần;
+    300 câu mỗi tháng của cả xưởng, ngày và tháng tính theo giờ Việt Nam; chỉ câu
+    đã mở phiên (`dang-hoi`, `da-tra-loi`, `gui-hong`) tính vào trần. Trần tháng hạ
+    ngày 27/09 theo số đo giá một câu ($0,016 với Gemini 3.7 Flash, $0,039 với GLM
+    5.2 Fast): ở mức cũ, riêng kênh này đủ tiêu hết ngân sách AI $20 của cả team;
   - một câu một lúc: còn câu `dang-hoi` chưa quá `ZALO.hoi.hanTraLoiMs` thì câu mới
     nhận «đang trả lời câu trước»; tick dispatch đóng câu quá hạn (`dongHoiQuaHan`)
     và báo lỗi đúng một lần;
@@ -879,6 +881,31 @@ HTTP channel. It creates an isolated private conversation, dispatches the builde
 asserts the declared subagent path, verifies a READY side-effect-free manifest, and
 cleans up its rows. It skips visibly when the database, bridge secret or model
 credential is unavailable.
+
+## Chỗ rẽ: người nhận Slack và lượt tự động của Tác nhân
+
+Bản rẽ OneHub sửa hai tệp của hãng để lượt Tác nhân tôn trọng vai «chỉ OKR»:
+
+- `apps/agent/agent/lib/run-runtime.ts` — `postRunSlackMessage` hỏi
+  `kiemNguoiNhanSlack` ngay trước khi gửi; lời từ chối mang mã `ACTION_REJECTED`,
+  nên màn lịch sử Tác nhân dùng câu sẵn có của mã đó.
+- `apps/agent/agent/lib/approval.ts` — `isAutomated` coi phiên mang
+  `purpose: "team-agent"` là tự động. Lượt Tác nhân chạy ở chế độ task, không dừng
+  chờ người được, nên thao tác ghi nhạy cảm bị từ chối có lý do thay vì xin duyệt.
+
+Phần lõi nằm ở tệp của bản rẽ `apps/agent/agent/lib/slack-nguoi-nhan.ts`: đọc ai ở
+đích Slack (mọi trang), khớp họ với thành viên bằng bảng khớp Slack hoặc email, đọc
+vai lúc gửi, và từ chối khi có người không đọc được dữ liệu đối tác
+(`docDuocPhamVi`), hoặc khi không đọc được ai ở đích. Bot và tài khoản Slack đã xoá
+không tính. Người Slack không khớp thành viên nào thì cho qua — mở lại khi có khớp
+tay. Bộ đọc Slack viết lại ở đây, cùng khuôn với `slack-people.ts`, để không chạm
+thêm tệp của hãng.
+
+Gỡ chỗ rẽ khi hãng có bản sửa tương đương: bỏ hai chỗ sửa trên cùng tệp lõi, giữ
+hai tệp kiểm `apps/agent/test/ro-slack-tac-nhan.integration.spec.ts` và
+`apps/agent/test/luot-tu-dong.integration.spec.ts` — chúng phải còn xanh trên mã
+của hãng. Việc báo cho hãng đi qua kênh bảo mật riêng của hãng và cần chủ kho cho
+phép; không qua PR hay issue công khai.
 
 ### Chỗ rẽ có tên với bản của hãng
 

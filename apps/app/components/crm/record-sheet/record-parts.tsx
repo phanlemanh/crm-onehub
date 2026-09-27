@@ -48,7 +48,7 @@ export function RecordSheetFrame({
 	onTabChange: (tab: string) => void;
 }) {
 	const m = crmMessages(useLocale());
-	const { stack, close, closeAll } = useRecordStack();
+	const { stack, close } = useRecordStack();
 
 	return (
 		<>
@@ -59,7 +59,6 @@ export function RecordSheetFrame({
 				note={note}
 				actions={actions}
 				onBack={stack.length > 1 ? close : undefined}
-				onClose={closeAll}
 			/>
 
 			{loading ? (

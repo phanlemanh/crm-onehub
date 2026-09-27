@@ -3,6 +3,7 @@
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -109,14 +110,11 @@ export function AllowDialog({
 					</div>
 
 					<DialogFooter>
-						<Button
-							type="button"
-							variant="outline"
-							disabled={pending}
-							onClick={() => onOpenChange(false)}
-						>
-							{t.hopThoaiChoPhep.thoi}
-						</Button>
+						<DialogClose asChild>
+							<Button type="button" variant="outline" disabled={pending}>
+								{t.hopThoaiChoPhep.thoi}
+							</Button>
+						</DialogClose>
 						<Button type="submit" disabled={pending}>
 							{t.hopThoaiChoPhep.gui}
 						</Button>

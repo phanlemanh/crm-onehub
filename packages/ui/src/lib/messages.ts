@@ -53,6 +53,12 @@ const en = {
 	},
 	dialog: {
 		close: "Close",
+		boThayDoi: {
+			tieuDe: "Discard what you typed?",
+			than: "What you typed in this box will be lost.",
+			tiepTuc: "Keep editing",
+			bo: "Discard",
+		},
 	},
 	carousel: {
 		itemRole: "item",
@@ -225,6 +231,12 @@ const vi = {
 	},
 	dialog: {
 		close: "Đóng",
+		boThayDoi: {
+			tieuDe: "Bỏ những gì vừa nhập?",
+			than: "Những gì bạn vừa nhập trong hộp này sẽ mất.",
+			tiepTuc: "Tiếp tục sửa",
+			bo: "Bỏ",
+		},
 	},
 	carousel: {
 		itemRole: "mục",

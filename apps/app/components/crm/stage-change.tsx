@@ -5,6 +5,7 @@ import type { DealStage } from "@crm/db/enums";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -189,9 +190,9 @@ export function CloseReasonDialog() {
 						{setStage.isPending ? <Spinner /> : null}
 						{m.close.save}
 					</Button>
-					<Button variant="outline" onClick={close}>
-						{m.sheet.cancel}
-					</Button>
+					<DialogClose asChild>
+						<Button variant="outline">{m.sheet.cancel}</Button>
+					</DialogClose>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

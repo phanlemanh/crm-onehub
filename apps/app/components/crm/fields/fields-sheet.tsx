@@ -20,13 +20,11 @@ function FieldsSheetBody({
 	field,
 	onEntity,
 	onEdit,
-	onClose,
 }: {
 	kind: EntityKind;
 	field: string | null;
 	onEntity: (kind: EntityKind) => void;
 	onEdit: (key: string | null) => void;
-	onClose: () => void;
 }) {
 	const trpc = useTRPC();
 	const locale = useLocale();
@@ -69,7 +67,6 @@ function FieldsSheetBody({
 							: entityLabel
 					}
 					onBack={() => onEdit(null)}
-					onClose={onClose}
 				/>
 				{editingKey && query.isPending ? (
 					<div className="flex min-h-0 flex-1 items-center justify-center">
@@ -92,7 +89,6 @@ function FieldsSheetBody({
 			<DetailSheetHeader
 				title={copy.sheetTitle}
 				description={subtitleFor(kind, locale)}
-				onClose={onClose}
 				note={
 					<Tabs
 						value={kind}
@@ -135,7 +131,6 @@ export function FieldsSheetHost() {
 					field={field}
 					onEntity={open}
 					onEdit={edit}
-					onClose={close}
 				/>
 			) : null}
 		</DetailSheet>

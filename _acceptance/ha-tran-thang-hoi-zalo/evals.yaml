@@ -1,0 +1,99 @@
+schema_version: 1
+slug: ha-tran-thang-hoi-zalo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tthz_gia_tri
+    paths:
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/tran-thang-hoi-zalo.integration.spec.ts"
+    expected: |
+      Ca "gia-tri": ZALO.hoi.tran toEqual {phut: 3, ngay: 20, thang: 300} — ba so viet tay trong test,
+      khong doc lai tu hang. Chieu do (pha-thu tren ban sao cay): dat thang = 1_500 -> ca do,
+      thong diep ghim "tran thang phai la 300 (quyet dinh 27/09)"; dat ngay = 21 -> ca do cung thong diep ghim.
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tthz_bien
+    paths:
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/tran-thang-hoi-zalo.integration.spec.ts"
+    expected: |
+      Ca "bien-300": gieo 299 hang da-tra-loi (so viet tay, khong suy tu hang) trong thang 10 gio VN tu A va D.
+      Cau 300 cua A (qua hoiTacTu, duong that, gio co dinh 2026-10-20 10:00 VN) -> loai "hoi" (doi chung duong);
+      hang cau 300 co hoiLuc trong thang 10 gio VN; dong cau do (da-tra-loi) -> xuong du 300.
+      Cau 301 -> {loai: "tra-loi", text: ZALO.loi.hetTranThang}, hang cuoi cua A ketQua "tu-choi-tran-thang",
+      va so hang dang-hoi cua A khong tang. Chieu do: dat thang = 1_500 -> cau 301 mo phien -> do voi
+      thong diep ghim "cau 301 phai bi chan theo tran thang".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tthz_thang_vn
+    paths:
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/tran-thang-hoi-zalo.integration.spec.ts"
+    expected: |
+      Ca "thang-vn" (qua hoiTacTu, duong that, gio hien tai truyen vao co dinh): gieo 300 hang da-tra-loi trong thang 10 gio VN. Cau luc 2026-10-31T16:59Z (23:59 VN)
+      -> tu choi theo tran thang (text hetTranThang); cau luc 2026-10-31T17:01Z (00:01 VN ngay 1/11) -> "hoi".
+      Hai chieu cung fixture: 23:59 bi chan (am), 00:01 mo (duong). Chieu do: dem thang theo UTC
+      -> cau 00:01 VN van thang 10 UTC -> do voi thong diep ghim "thang xuong dem lai luc 00:00 ngay 1 gio VN".
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tthz_khong_tinh
+    paths:
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/tran-thang-hoi-zalo.integration.spec.ts"
+    expected: |
+      Ca "khong-tinh" (qua hoiTacTu, duong that, gio co dinh 2026-10-20 10:00 VN): gieo 299 hang da-tra-loi + 4 tu-choi-tran-ngay + 4 tu-choi-tran-phut + 3 loi + 3 dang-ban
+      trong thang 10 gio VN (tong 313 > 300). Cau cua A -> "hoi" (dem 299 < 300). Doi chung cung fixture:
+      gieo them 1 hang gui-hong -> cau ke bi chan theo tran thang (dem 300). Chieu do: dem ca hang loi
+      -> cau dau bi chan -> do voi thong diep ghim "hang khong mo phien khong tinh vao tran thang".
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tthz_tai_lieu
+    paths:
+      - "docs/agent.md"
+      - "docs/plan/lo-trinh-zalo.md"
+      - "_acceptance/ha-tran-thang-hoi-zalo/rang/tai-lieu.mjs"
+    expected: |
+      exit 0; stdout moi dong "ok: <kiem>": (1) muc Zalo cua agent.md (tu "#### Zalo: webhook" toi tieu de "###" ke)
+      co "300 câu mỗi tháng"; (2) muc do khong con so khop /1[.,]?500(?![.,]?\d)/ nao; (3) lo-trinh-zalo muc 7 co dong
+      bat dau "| 4c | `ha-tran-thang-hoi-zalo`" chua "300", "1.500", "27/09" va "N0"; (4) doi chung tu ban that:
+      cung ham kiem (1)+(2) chay tren `git show ad7c8ed0:docs/agent.md` phai HONG — neu khong hong thi exit 1 voi
+      "hong: doi chung ban goc khong do". Ham kiem nhan van ban lam doi so, goc kho suy tu vi tri script.
+      Chieu do: agent.md con "1.500 câu mỗi tháng" hay "1500" trong muc Zalo -> exit 1, stdout ghim "hong: muc Zalo con so 1.500".
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hcz_tran
+    paths:
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-hoi.ts"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+    expected: "Cac ca tran (a)-(d) cua ho so da ky hoi-crm-qua-zalo chay xanh tren cay nay voi tran thang 300 (ca (d) suy so tu hang)."
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tthz_khong_cham_da_ky
+    paths:
+      - "_acceptance/hoi-crm-qua-zalo/**"
+      - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
+      - "_acceptance/ha-tran-thang-hoi-zalo/rang/khong-cham-da-ky.mjs"
+    expected: |
+      exit 0; (a) `git diff --name-only origin/onehub` (gom ca cay lam viec) khong co duong nao duoi
+      _acceptance/hoi-crm-qua-zalo/ va khong co apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts -> "ok: khong cham ho so da ky";
+      (b) `bash scripts/pre-merge-check.sh . --base origin/onehub` — loc bo dong mang "[ha-tran-thang-hoi-zalo]";
+      con dong VIOLATION nao thi exit 1 in nguyen dong; khong con -> "ok: truoc-gop khong vi pham ho so khac".
+      Khong lay ma thoat cua pre-merge (no bao ca verdict cua chinh ho so nay). Chieu do (a): pha-thu them mot dong
+      vao _acceptance/hoi-crm-qua-zalo/contract.md tren cay -> exit 1, stdout ghim "hong: cham ho so da ky _acceptance/hoi-crm-qua-zalo/contract.md".

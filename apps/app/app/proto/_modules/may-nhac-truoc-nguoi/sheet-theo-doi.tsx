@@ -184,7 +184,6 @@ export function SheetTheoDoi({
 					</>
 				}
 				media={<EntityLogo name={KE_HOACH.congTy} size="lg" />}
-				onClose={onClose}
 				title={<span translate="no">{KE_HOACH.congTy}</span>}
 			/>
 			{loi ? (

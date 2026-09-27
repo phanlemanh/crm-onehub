@@ -4,6 +4,7 @@ import { Button } from "@crm/ui/components/button";
 import { CopyValue } from "@crm/ui/components/copy-value";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -54,7 +55,9 @@ export function CreatedApiKeyDialog({
 				</InputGroup>
 
 				<DialogFooter>
-					<Button onClick={() => onOpenChange(false)}>{t.daTao.xong}</Button>
+					<DialogClose asChild dongNgay>
+						<Button>{t.daTao.xong}</Button>
+					</DialogClose>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

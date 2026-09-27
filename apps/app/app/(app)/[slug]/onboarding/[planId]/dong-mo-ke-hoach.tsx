@@ -2,11 +2,11 @@
 
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 

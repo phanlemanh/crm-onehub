@@ -6,6 +6,7 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -295,9 +296,11 @@ export function HopThoaiViTri({
 				</Field>
 
 				<DialogFooter>
-					<Button variant="outline" onClick={dong} disabled={luu.isPending}>
-						{v.huy}
-					</Button>
+					<DialogClose asChild>
+						<Button variant="outline" disabled={luu.isPending}>
+							{v.huy}
+						</Button>
+					</DialogClose>
 					<Button onClick={gui} disabled={luu.isPending}>
 						{luu.isPending ? <Spinner /> : null}
 						{v.luu}
