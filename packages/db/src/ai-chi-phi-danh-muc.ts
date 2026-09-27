@@ -108,6 +108,19 @@ export type KetQuaDoiSoat = (typeof KET_QUA_DOI_SOAT)[number];
 
 export const NGUONG_LECH_DOI_SOAT = 0.1;
 
+const XU_MOI_USD = 100;
+
+export function dinhUsd(usd: number): string {
+	const xu = Math.round(usd * XU_MOI_USD);
+	const tron = xu % XU_MOI_USD === 0;
+	return new Intl.NumberFormat("vi", {
+		style: "currency",
+		currency: "USD",
+		minimumFractionDigits: tron ? 0 : 2,
+		maximumFractionDigits: tron ? 0 : 2,
+	}).format(xu / XU_MOI_USD);
+}
+
 export function ketQuaDoiSoat(
 	soSo: number,
 	soGateway: number,

@@ -1,3 +1,4 @@
+import { type LoaiNhacAi, type ViecAi, viecAiCanNhac } from "./ai-nhac";
 import type { Db } from "./client";
 import { type LoaiNhacOkr, type ViecOkr, viecOkrCanNhac } from "./okr-nhac";
 import { WORKSPACE_ID } from "./workspace";
@@ -18,7 +19,9 @@ export const THU_TU_NHAC = [
 	"okr-duoc-giao",
 	"okr-nhac-ten",
 	"okr-theo-doi",
-] as const satisfies readonly (LoaiNhac | LoaiNhacOkr)[];
+	"ai-tran",
+	"ai-doi-soat-lech",
+] as const satisfies readonly (LoaiNhac | LoaiNhacOkr | LoaiNhacAi)[];
 
 export const NHAC = {
 	gio: { gio: 8, phut: 30 },
@@ -121,7 +124,7 @@ export type ViecKeHoach = {
 	targetDays?: number;
 };
 
-export type ViecNhac = ViecKeHoach | ViecOkr;
+export type ViecNhac = ViecKeHoach | ViecOkr | ViecAi;
 
 function docKeHoach(db: Db, userId: string | undefined) {
 	return db.onboardingPlan.findMany({
@@ -281,16 +284,18 @@ function gom(gui: Gui[]): Map<string, ViecKeHoach[]> {
 function gop(
 	keHoach: Map<string, ViecKeHoach[]>,
 	okr: Map<string, ViecOkr[]>,
+	ai: Map<string, ViecAi[]>,
 	thanhVien: Set<string>,
 ): Map<string, ViecNhac[]> {
-	const nguoi = [...new Set([...keHoach.keys(), ...okr.keys()])].filter((u) =>
-		thanhVien.has(u),
-	);
+	const nguoi = [
+		...new Set([...keHoach.keys(), ...okr.keys(), ...ai.keys()]),
+	].filter((u) => thanhVien.has(u));
 	return new Map(
 		nguoi.map((userId) => {
 			const ds: ViecNhac[] = [
 				...(keHoach.get(userId) ?? []),
 				...(okr.get(userId) ?? []),
+				...(ai.get(userId) ?? []),
 			];
 			return [userId, ds.sort(soSanh)];
 		}),
@@ -301,7 +306,7 @@ export async function viecCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string },
 ): Promise<Map<string, ViecNhac[]>> {
-	const [keHoach, thanhVien, okr] = await Promise.all([
+	const [keHoach, thanhVien, okr, ai] = await Promise.all([
 		docKeHoach(db, chon.userId),
 		db.member.findMany({
 			where: {
@@ -311,7 +316,13 @@ export async function viecCanNhac(
 			select: { userId: true },
 		}),
 		viecOkrCanNhac(db, chon),
+		viecAiCanNhac(db, chon),
 	]);
 	const tap = new Set(thanhVien.map((m) => m.userId));
-	return gop(gom(keHoach.flatMap((k) => guiCua(k, tap, chon.now))), okr, tap);
+	return gop(
+		gom(keHoach.flatMap((k) => guiCua(k, tap, chon.now))),
+		okr,
+		ai,
+		tap,
+	);
 }

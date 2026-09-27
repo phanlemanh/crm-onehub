@@ -5,6 +5,8 @@ export { LOAI_NHAC, type LoaiNhac } from "@crm/db/onboarding-nhac";
 
 const ma = z.string().min(1);
 
+const thangMa = z.string().regex(/^\d{4}-\d{2}$/);
+
 export const mucNhac = z.union([
 	z
 		.object({ loai: z.enum(LOAI_NHAC), planId: ma, stepId: ma.optional() })
@@ -22,6 +24,14 @@ export const mucNhac = z.union([
 		.strict(),
 	z.object({ loai: z.literal("okr-nhac-ten"), commentId: ma }).strict(),
 	z.object({ loai: z.literal("okr-theo-doi"), objectiveId: ma }).strict(),
+	z
+		.object({
+			loai: z.literal("ai-tran"),
+			thang: thangMa,
+			muc: z.union([z.literal(80), z.literal(100)]),
+		})
+		.strict(),
+	z.object({ loai: z.literal("ai-doi-soat-lech"), thang: thangMa }).strict(),
 ]);
 
 export type MucNhac = z.infer<typeof mucNhac>;
