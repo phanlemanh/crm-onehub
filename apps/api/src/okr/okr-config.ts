@@ -107,6 +107,7 @@ export const OKR = {
 			raNgoaiKy: "Khoảng rà phải nằm trong ngày đầu và ngày cuối của chu kỳ.",
 			raChong: "Khoảng rà chồng ngày với một cửa sổ rà đang mở của chu kỳ này.",
 			raDaDong: "Cửa sổ rà này đã đóng.",
+			lyDoDoiDich: "Đổi đích ngoài rà giữa kỳ cần lý do.",
 			khongCoCuaSoRa: (id: string) => `Không có cửa sổ rà nào mang mã ${id}.`,
 		},
 		daCongBo: "Mục tiêu này đã công bố.",

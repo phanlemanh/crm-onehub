@@ -6,6 +6,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram } from "@crm/validation/okr-chuong-trinh";
+import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import { KIEU_KR, krInput, NGUON_KR } from "@crm/validation/okr-kr";
 import {
 	CAP_MUC_TIEU,
@@ -169,7 +170,9 @@ export const okOutput = z.object({
 	canhBao: z.string().nullable(),
 });
 export const createKrInput = krInput.extend({ objectiveId: ma });
-export const updateKrInput = krInput.partial().extend({ id: ma });
+export const updateKrInput = krInput
+	.partial()
+	.extend({ id: ma, lyDoDoiDich: lyDoDoiDich.optional() });
 export const alignmentInput = z.object({
 	objectiveId: ma,
 	targetObjectiveId: ma.nullable(),

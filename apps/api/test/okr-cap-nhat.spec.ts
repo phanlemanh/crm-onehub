@@ -45,6 +45,7 @@ const C = T.capNhat;
 dungSan();
 
 const tuChoi = (r: TraLoi) => `${r.status} ${r.loi}`;
+const LY_DO_DOI_DICH = "doi dich ngoai ra giua ky";
 
 const caiChuongTrinh = async () =>
 	ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
@@ -738,7 +739,9 @@ describe("hien-tai-khoa", () => {
 					const vetTruoc = await demVet(id);
 					const r = await goi(
 						"okr.updateKeyResult",
-						{ id, [doi]: moi[doi] },
+						doi === "targetValue"
+							? { id, [doi]: moi[doi], lyDoDoiDich: LY_DO_DOI_DICH }
+							: { id, [doi]: moi[doi] },
 						ai,
 					);
 					const sau = await docKr(id);
@@ -788,6 +791,7 @@ describe("hien-tai-khoa", () => {
 				id: a,
 				currentValue: Number(sauTron.currentValue),
 				targetValue: Number(sauTron.targetValue) + 9,
+				lyDoDoiDich: LY_DO_DOI_DICH,
 			},
 			tp.cookie,
 		);

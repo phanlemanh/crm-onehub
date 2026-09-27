@@ -903,6 +903,7 @@ describe("cong-bo", () => {
 				id: k1,
 				startValue: 10,
 				targetValue: 60,
+				lyDoDoiDich: "doi dich ngoai ra giua ky",
 			}),
 			"doi dich",
 		);

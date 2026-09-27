@@ -51,7 +51,7 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
-import { type CuaSoRa, cuaSoRaRa, hieuLucHomNay } from "./khep";
+import { type CuaSoRa, cuaSoHieuLuc, cuaSoRaRa, hieuLucHomNay } from "./khep";
 import { dongLoOkr, phanTichLoOkr } from "./nhap";
 import type {
 	ChuKyOutput,
@@ -785,6 +785,30 @@ export class OkrService {
 			);
 			if (input.ownerUserId)
 				await this.assertThanhVien(tx, [input.ownerUserId]);
+			const dichCu = soKr(kr.targetValue);
+			let doiDich: Prisma.OkrDoiDichUncheckedCreateInput | null = null;
+			if (
+				dangChay &&
+				input.targetValue !== undefined &&
+				input.targetValue !== dichCu
+			) {
+				const ra = await cuaSoHieuLuc(
+					tx,
+					quyen.objective.cycleId,
+					ngay(new Date()),
+				);
+				if (ra === null && !input.lyDoDoiDich)
+					throw new BadRequestException(T.khep.lyDoDoiDich);
+				doiDich = {
+					keyResultId: kr.id,
+					truoc: dichCu,
+					sau: input.targetValue,
+					lyDo: input.lyDoDoiDich ?? "",
+					ngoaiRa: ra === null,
+					cuaSoRaId: ra?.id ?? null,
+					tacGiaUserId: userId,
+				};
+			}
 			const truoc: OkrVetSnapshot = {};
 			const sau: OkrVetSnapshot = {};
 			ghiKhac(truoc, sau, "title", kr.title, input.title);
@@ -841,6 +865,22 @@ export class OkrService {
 				truoc,
 				sau,
 			);
+			if (doiDich) {
+				await tx.okrDoiDich.create({ data: doiDich });
+				await this.vet(
+					tx,
+					userId,
+					"doi-dich",
+					{
+						cycleId: quyen.objective.cycleId,
+						objectiveId: kr.objectiveId,
+						keyResultId: kr.id,
+					},
+					{ targetValue: dichCu },
+					{ targetValue: Number(doiDich.sau), ngoaiRa: doiDich.ngoaiRa },
+					doiDich.lyDo || null,
+				);
+			}
 			return { id: kr.id, canhBao: null };
 		});
 	}
