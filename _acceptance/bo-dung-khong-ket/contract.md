@@ -5,7 +5,7 @@ slug: bo-dung-khong-ket
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
