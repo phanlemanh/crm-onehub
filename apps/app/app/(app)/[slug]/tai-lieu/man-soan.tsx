@@ -141,6 +141,8 @@ function FormSoan({
 	const tenSach = chuanNfc(ten).trim();
 	const chuaDoi =
 		sua && tenSach === chuanNfc(tenGoc).trim() && noiDungChuan === gocChuan;
+	const chuaCoNoiDung = noiDungChuan.trim() === "";
+	const khoaGui = chuaDoi || chuaCoNoiDung;
 	const coThayDoi = sua ? !chuaDoi : tenSach !== "" || noiDung.trim() !== "";
 
 	useEffect(() => {
@@ -184,7 +186,7 @@ function FormSoan({
 	};
 
 	const gui = () => {
-		if (dangGui || chuaDoi) return;
+		if (dangGui || khoaGui) return;
 		const loi = kiemTen();
 		setLoiTen(loi);
 		if (loi) {
@@ -332,7 +334,7 @@ function FormSoan({
 					<div className="flex flex-wrap items-center gap-2">
 						<Button
 							data-gui-duyet=""
-							disabled={dangGui || chuaDoi}
+							disabled={dangGui || khoaGui}
 							onClick={gui}
 						>
 							{dangGui ? m.dangGui : m.guiDuyet}
@@ -353,6 +355,13 @@ function FormSoan({
 						{chuaDoi ? (
 							<span className="text-muted-foreground text-xs" data-chua-doi="">
 								{m.chuaDoi}
+							</span>
+						) : chuaCoNoiDung ? (
+							<span
+								className="text-muted-foreground text-xs"
+								data-chua-co-noi-dung=""
+							>
+								{m.chuaCoNoiDung}
 							</span>
 						) : null}
 					</div>

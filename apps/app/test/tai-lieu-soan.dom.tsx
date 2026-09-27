@@ -281,6 +281,7 @@ async function bamLienKet(): Promise<boolean> {
 describe("tai-lieu man soan", () => {
 	test("tao-loi: ten trong, bam Gui duyet -> loi duoi o ten, focus o ten, khong goi", async () => {
 		await mo(MOI);
+		await goNoiDung("Nội dung trang.");
 		await bam(guiDuyet());
 		expect(loiDuoiTen()).toBe("Nhập tên trang.");
 		expect(oTen().getAttribute("aria-invalid")).toBe("true");
@@ -291,6 +292,7 @@ describe("tai-lieu man soan", () => {
 
 	test("tao-loi: ten 161 ky tu -> loi do dai, khong goi", async () => {
 		await mo(MOI);
+		await goNoiDung("Nội dung trang.");
 		await goTen("a".repeat(161));
 		await bam(guiDuyet());
 		expect(loiDuoiTen()).toBe("Tên trang dài quá 160 ký tự.");
@@ -301,6 +303,7 @@ describe("tai-lieu man soan", () => {
 
 	test("tao-loi doi chung: ten hop le -> goi tao mot lan, khong loi", async () => {
 		await mo(MOI);
+		await goNoiDung("Nội dung trang.");
 		await goTen("Quy định mới");
 		await bam(guiDuyet());
 		expect(loiDuoiTen()).toBeNull();
@@ -325,6 +328,24 @@ describe("tai-lieu man soan", () => {
 
 		await bam(guiDuyet());
 		expect(goi.deXuat.length).toBe(0);
+	});
+
+	test("chua-doi: man tao noi dung trong -> Gui duyet khoa voi 'Chua co noi dung'; go noi dung -> bat", async () => {
+		await mo(MOI);
+		await goTen("Quy định mới");
+		if (!guiDuyet().disabled)
+			throw new Error("nut gui bat khi chua co noi dung");
+		expect(document.body.textContent).toContain("Chưa có nội dung");
+		await bam(guiDuyet());
+		expect(goi.tao.length).toBe(0);
+
+		await goNoiDung("   ");
+		if (!guiDuyet().disabled)
+			throw new Error("nut gui bat khi chua co noi dung");
+
+		await goNoiDung("Có chữ.");
+		expect(guiDuyet().disabled).toBe(false);
+		expect(document.body.textContent?.includes("Chưa có nội dung")).toBe(false);
 	});
 
 	test("chua-doi doi chung: sua xong gui -> goi de xuat mot lan voi noi dung moi", async () => {
