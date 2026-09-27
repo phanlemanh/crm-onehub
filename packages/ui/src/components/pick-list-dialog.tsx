@@ -6,6 +6,7 @@ import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -86,6 +87,7 @@ function PickListDialog({
 						</InputGroupAddon>
 						<InputGroupInput
 							ref={oTim}
+							type="search"
 							aria-label={searchPlaceholder}
 							placeholder={searchPlaceholder}
 							value={tim}
@@ -130,13 +132,11 @@ function PickListDialog({
 					</ul>
 				)}
 				<DialogFooter>
-					<Button
-						variant="outline"
-						disabled={pending}
-						onClick={() => onOpenChange(false)}
-					>
-						{cancelLabel}
-					</Button>
+					<DialogClose asChild>
+						<Button variant="outline" disabled={pending}>
+							{cancelLabel}
+						</Button>
+					</DialogClose>
 					<Button
 						disabled={pending || selected.length === 0}
 						onClick={onConfirm}

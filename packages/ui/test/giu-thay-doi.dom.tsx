@@ -36,6 +36,7 @@ import {
 } from "../src/components/drawer";
 import { Input } from "../src/components/input";
 import { LocaleProvider } from "../src/components/locale-provider";
+import { PickListDialog } from "../src/components/pick-list-dialog";
 import {
 	Select,
 	SelectContent,
@@ -859,6 +860,57 @@ describe("o-loc", () => {
 		);
 	});
 
+	test("o-loc: (5) PickListDialog that, go vao o tim thi bam ngoai dong", async () => {
+		const lich: boolean[] = [];
+		dung(<VoPickList ghi={(v) => lich.push(v)} />);
+		await go(
+			document.querySelector(
+				"[data-slot='pick-list-dialog'] input[aria-label='Tìm theo tên']",
+			) as HTMLInputElement,
+			"bình",
+		);
+		await bamLopPhu("dialog-overlay");
+		khop(
+			{
+				con: document.querySelector("[data-slot='pick-list-dialog']") !== null,
+				lich,
+			},
+			{ con: false, lich: [false] },
+			"o-loc: (5) PickListDialog giu vi o tim",
+		);
+	});
+
+	test("o-loc: lat thang trong o ngay (select goc cua lich) thi bam ngoai van dong", async () => {
+		const lich: boolean[] = [];
+		dung(
+			<Vo ghi={(v) => lich.push(v)}>
+				<LopCon loai="date" />
+			</Vo>,
+		);
+		await moLopCon("date");
+		const thang = document.querySelector(
+			"[data-slot='popover-content'] select[aria-label='Chọn tháng']",
+		) as HTMLSelectElement | null;
+		if (!thang) throw new Error("khong thay o chon thang trong lich");
+		const thangDau = thang.value;
+		await act(async () => {
+			thang.focus();
+			thang.value = String((Number(thangDau) + 1) % 12);
+			thang.dispatchEvent(new Event("input", { bubbles: true }));
+			thang.dispatchEvent(new Event("change", { bubbles: true }));
+		});
+		await cho();
+		const daLat = thang.value !== thangDau;
+		await esc(document.activeElement);
+		const lichDong = !lopConMo("date");
+		await bamLopPhu("dialog-overlay");
+		khop(
+			{ daLat, lichDong, con: noiDung() !== null, lich },
+			{ daLat: true, lichDong: true, con: false, lich: [false] },
+			"o-loc: lat thang trong o ngay danh dau hop",
+		);
+	});
+
 	test("o-loc: doi chung — go vao Input thuong, giuThayDoi mac dinh thi giu", async () => {
 		const lich: boolean[] = [];
 		dung(
@@ -875,6 +927,33 @@ describe("o-loc", () => {
 		);
 	});
 });
+
+function VoPickList({ ghi }: { ghi: (mo: boolean) => void }) {
+	const [mo, datMo] = useState(true);
+	const [chon, datChon] = useState<string[]>([]);
+	return (
+		<PickListDialog
+			open={mo}
+			onOpenChange={(v) => {
+				ghi(v);
+				datMo(v);
+			}}
+			title="Thêm người"
+			description="Chọn người vào phòng ban"
+			searchPlaceholder="Tìm theo tên"
+			items={[
+				{ id: "a", label: "An" },
+				{ id: "b", label: "Bình" },
+			]}
+			selected={chon}
+			onSelectedChange={datChon}
+			confirmLabel={(n) => `Thêm ${n} người`}
+			cancelLabel="Huỷ"
+			emptyLabel="Không còn ai để thêm"
+			onConfirm={() => {}}
+		/>
+	);
+}
 
 function oTrong(slot: string, nhan: string): HTMLInputElement {
 	const o = document.querySelector(

@@ -102,6 +102,18 @@ export function vaoDatNguon(
 	return r.success ? r.data : null;
 }
 
+export function nhapNguonKhac(a: NhapNguon, b: NhapNguon): boolean {
+	return (
+		a.loai !== b.loai ||
+		a.chiSo !== b.chiSo ||
+		a.kieuPhamVi !== b.kieuPhamVi ||
+		a.idPhamVi !== b.idPhamVi ||
+		a.bac !== b.bac ||
+		a.url !== b.url ||
+		a.o !== b.o
+	);
+}
+
 export function nguonDaDoi(kr: KetQua | null, g: NhapNguon): boolean {
 	const n = kr?.nguonMay ?? null;
 	if (n === null) return g.loai !== "tay";

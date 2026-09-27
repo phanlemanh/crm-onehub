@@ -204,8 +204,394 @@ function caConfirmChieuDo() {
 	}
 }
 
+const SLUG = "apps/app/app/(app)/[slug]";
+
+const DANH_SACH = [
+	`${SLUG}/okr/hop-thoai-can-chinh.tsx`,
+	`${SLUG}/okr/hop-thoai-kr.tsx`,
+	`${SLUG}/okr/hop-thoai-muc-tieu.tsx`,
+	`${SLUG}/okr/hop-thoai-nhap.tsx`,
+	`${SLUG}/settings/api-keys/created-api-key-dialog.tsx`,
+	`${SLUG}/settings/members/allow-dialog.tsx`,
+	`${SLUG}/settings/members/chuyen-okr-dialog.tsx`,
+	`${SLUG}/settings/members/chuyen-viec-dialog.tsx`,
+	`${SLUG}/settings/members/phat-chia-dialog.tsx`,
+	`${SLUG}/settings/organization/hop-thoai-don-vi.tsx`,
+	`${SLUG}/settings/organization/hop-thoai-nhap.tsx`,
+	"apps/app/components/agent-builder/create-channel-dialog.tsx",
+	"apps/app/components/agent-builder/new-agent-dialog.tsx",
+	"apps/app/components/crm/stage-change.tsx",
+	"apps/app/components/data-table/saved-views-menu.tsx",
+	`${SLUG}/campaigns/create-campaign-sheet.tsx`,
+	`${SLUG}/companies/create-company-sheet.tsx`,
+	`${SLUG}/contacts/create-contact-sheet.tsx`,
+	`${SLUG}/deals/create-deal-sheet.tsx`,
+	`${SLUG}/settings/api-keys/create-api-key-sheet.tsx`,
+	`${SLUG}/settings/okr/sheet-mo-chu-ky.tsx`,
+	`${SLUG}/settings/sso/add-sso-provider-sheet.tsx`,
+	`${SLUG}/deals/deals-bulk-actions.tsx`,
+	`${SLUG}/settings/connections/slack/slack-channels.tsx`,
+	"apps/app/components/crm/fields/field-editor.tsx",
+];
+
+const BA_HOP = [
+	`${SLUG}/okr/hop-thoai-kr.tsx`,
+	`${SLUG}/okr/hop-thoai-muc-tieu.tsx`,
+	`${SLUG}/settings/organization/hop-thoai-don-vi.tsx`,
+];
+
+const NOI_DUNG_HOP = new Set(["DialogContent", "SheetContent", "DrawerContent"]);
+const NUT_DONG = new Set(["DialogClose", "SheetClose", "DrawerClose"]);
+const O_NHAP = new Set([
+	"Input",
+	"Textarea",
+	"InputGroupInput",
+	"Combobox",
+	"Select",
+	"DatePicker",
+]);
+const TEN_HAM_DONG = /^(dong|close|onClose)([A-Z]\w*)?$/;
+const SET_MO = /^set(\w*Open|Mo|Mo[A-Z]\w*)$/;
+const DESIGN_MD = "docs/design.md";
+const MUC_VE_TAY = "### Dấu hiệu vẽ tay";
+
+const tenThe = (n, sf) =>
+	ts.isJsxElement(n)
+		? n.openingElement.tagName.getText(sf)
+		: ts.isJsxSelfClosingElement(n)
+			? n.tagName.getText(sf)
+			: null;
+
+const thuocTinh = (n) =>
+	(ts.isJsxElement(n) ? n.openingElement : n).attributes.properties;
+
+const laHam = (n) =>
+	ts.isArrowFunction(n) ||
+	ts.isFunctionExpression(n) ||
+	ts.isFunctionDeclaration(n) ||
+	ts.isMethodDeclaration(n);
+
+function tenGoi(bieuThuc) {
+	if (ts.isIdentifier(bieuThuc)) return bieuThuc.text;
+	if (ts.isPropertyAccessExpression(bieuThuc)) return bieuThuc.name.text;
+	return null;
+}
+
+function laGoiDong(goi) {
+	const ten = tenGoi(goi.expression);
+	if (ten === null) return false;
+	if (TEN_HAM_DONG.test(ten)) return true;
+	const dau = goi.arguments[0];
+	const laFalse = dau !== undefined && dau.kind === ts.SyntaxKind.FalseKeyword;
+	return laFalse && (ten === "onOpenChange" || SET_MO.test(ten));
+}
+
+function thanGoiDong(than) {
+	let co = false;
+	const di = (n) => {
+		if (co) return;
+		if (ts.isCallExpression(n) && laGoiDong(n)) {
+			co = true;
+			return;
+		}
+		if (laHam(n)) return;
+		ts.forEachChild(n, di);
+	};
+	di(than);
+	return co;
+}
+
+function laHamDong(bieuThuc) {
+	const ten = tenGoi(bieuThuc);
+	if (ten !== null) return TEN_HAM_DONG.test(ten);
+	if (ts.isArrowFunction(bieuThuc) || ts.isFunctionExpression(bieuThuc)) {
+		return thanGoiDong(bieuThuc.body);
+	}
+	return false;
+}
+
+function soiNut(sf) {
+	const viPham = [];
+	let quaNutDong = 0;
+	const di = (n, trongHop, trongNutDong) => {
+		const ten = tenThe(n, sf);
+		if (ten === "Button" && trongHop) {
+			if (trongNutDong) {
+				quaNutDong += 1;
+			} else {
+				const onClick = thuocTinh(n).find(
+					(a) => ts.isJsxAttribute(a) && a.name.getText(sf) === "onClick",
+				);
+				const bt = onClick?.initializer;
+				if (bt && ts.isJsxExpression(bt) && bt.expression && laHamDong(bt.expression)) {
+					viPham.push(sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1);
+				}
+			}
+		}
+		const vaoHop = trongHop || (ten !== null && NOI_DUNG_HOP.has(ten));
+		const vaoNutDong = trongNutDong || (ten !== null && NUT_DONG.has(ten));
+		ts.forEachChild(n, (c) => di(c, vaoHop, vaoNutDong));
+	};
+	di(sf, false, false);
+	return { viPham, quaNutDong };
+}
+
+const CHU_HOP = /DialogContent|SheetContent|DrawerContent/;
+
+function coHopVaONhap(duong) {
+	const chu = readFileSync(duong, "utf8");
+	if (!CHU_HOP.test(chu)) return false;
+	const sf = cay(duong, chu);
+	let o = false;
+	const di = (n) => {
+		if (o) return;
+		const ten = tenThe(n, sf);
+		if (ten !== null && O_NHAP.has(ten)) {
+			o = true;
+			return;
+		}
+		ts.forEachChild(n, di);
+	};
+	di(sf);
+	return o;
+}
+
+function rutTap(goc) {
+	const ra = new Set();
+	for (const duong of diCay(join(goc, "apps/app"), /\.tsx$/, [])) {
+		const rel = tuongDoi(duong, goc);
+		if (rel.startsWith("apps/app/app/proto/")) continue;
+		if (coHopVaONhap(duong)) ra.add(rel);
+	}
+	return ra;
+}
+
+function nhanTep(rels) {
+	const dem = new Map();
+	for (const rel of rels) {
+		const ten = rel.split("/").at(-1);
+		dem.set(ten, (dem.get(ten) ?? 0) + 1);
+	}
+	return (rel) => {
+		const phan = rel.split("/");
+		const ten = phan.at(-1);
+		return dem.get(ten) === 1 ? ten : phan.slice(-2).join("/");
+	};
+}
+
+function bangVeTayCoDialogClose(goc) {
+	const duong = join(goc, DESIGN_MD);
+	if (!existsSync(duong)) return false;
+	const chu = readFileSync(duong, "utf8");
+	const dau = chu.indexOf(MUC_VE_TAY);
+	if (dau === -1) return false;
+	const sau = chu.slice(dau + MUC_VE_TAY.length);
+	const cuoi = sau.search(/\n#{1,3} /);
+	const muc = cuoi === -1 ? sau : sau.slice(0, cuoi);
+	return muc
+		.split("\n")
+		.some((dong) => dong.startsWith("|") && dong.includes("DialogClose"));
+}
+
+const FIXTURE_DUONG = `"use client";
+import { Button } from "@crm/ui/components/button";
+import { Dialog, DialogClose, DialogContent, DialogFooter } from "@crm/ui/components/dialog";
+import { Input } from "@crm/ui/components/input";
+export function Hop({ dong, luu }: { dong: () => void; luu: () => void }) {
+	return (
+		<Dialog open onOpenChange={(mo) => { if (!mo) dong(); }}>
+			<DialogContent>
+				<Input />
+				<DialogFooter>
+					<Button variant="outline" onClick={dong}>Huỷ</Button>
+					<DialogClose asChild><Button variant="outline">Thôi</Button></DialogClose>
+					<Button onClick={luu}>Lưu</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
+}
+`;
+
+function doiChungDuong() {
+	const thuMuc = mkdtempSync(join(tmpdir(), "soi-giu-huy-duong-"));
+	try {
+		const duong = join(thuMuc, "hop-goi-thang.tsx");
+		writeFileSync(duong, FIXTURE_DUONG);
+		return soiNut(cay(duong)).viPham.length;
+	} finally {
+		rmSync(thuMuc, { recursive: true, force: true });
+	}
+}
+
+function caHuy(goc) {
+	const hong = [];
+	const rut = rutTap(goc);
+	const viet = new Set(DANH_SACH);
+	for (const rel of [...rut].sort()) {
+		if (!viet.has(rel)) hong.push(`huy: thua ${rel} (may rut ra, danh sach viet truoc khong co)`);
+	}
+	let khop = 0;
+	for (const rel of DANH_SACH) {
+		if (!existsSync(join(goc, rel))) hong.push(`huy: thieu ${rel} (khong ton tai)`);
+		else if (!rut.has(rel)) hong.push(`huy: thieu ${rel} (may khong rut ra)`);
+		else khop += 1;
+	}
+
+	const soi = [...new Set([...DANH_SACH, ...rut])]
+		.filter((rel) => existsSync(join(goc, rel)))
+		.sort();
+	const nhan = nhanTep(soi);
+	let viPham = 0;
+	let quaNutDong = 0;
+	for (const rel of soi) {
+		const kq = soiNut(cay(join(goc, rel)));
+		quaNutDong += kq.quaNutDong;
+		for (const dong of kq.viPham) {
+			viPham += 1;
+			hong.push(`huy: ${nhan(rel)}:${dong} goi thang ham dong`);
+		}
+	}
+
+	if (!bangVeTayCoDialogClose(goc)) {
+		hong.push(`huy: ${DESIGN_MD} thieu dong DialogClose trong bang «Dấu hiệu vẽ tay»`);
+	}
+
+	const duong = doiChungDuong();
+	if (duong === 1) console.log("huy: doi chung duong bat 1/1 vi pham");
+	else hong.push(`huy: doi chung duong bat ${duong} vi pham, can dung 1`);
+
+	console.log(
+		`huy: ${khop}/${DANH_SACH.length} tep, ${viPham} vi pham, ${quaNutDong} nut qua nut dong`,
+	);
+	return hong;
+}
+
+function banSao(rels, thuMuc) {
+	for (const rel of rels) {
+		mkdirSync(dirname(join(thuMuc, rel)), { recursive: true });
+		copyFileSync(join(GOC, rel), join(thuMuc, rel));
+	}
+}
+
+function phaVaCham({ tien, rels, rel, pha, cham, ghim }) {
+	const thuMuc = mkdtempSync(join(tmpdir(), tien));
+	try {
+		banSao(rels, thuMuc);
+		const duong = join(thuMuc, rel);
+		const truoc = readFileSync(duong, "utf8");
+		const sau = pha(truoc);
+		if (sau === truoc) {
+			console.log(`KHONG DO DUOC: pha khong doi gi o ${rel}`);
+			process.exit(2);
+		}
+		writeFileSync(duong, sau);
+		const hong = cham(thuMuc);
+		for (const h of hong) console.log(`HONG ${h}`);
+		const trung = hong.find((h) => ghim.test(h));
+		if (trung) {
+			console.log(`chieu do: bat, in «${trung}»`);
+			process.exit(1);
+		}
+		console.log(`chieu do: LOT, khong thay ${ghim}`);
+		process.exit(2);
+	} finally {
+		rmSync(thuMuc, { recursive: true, force: true });
+	}
+}
+
+function caHuyChieuDo() {
+	phaVaCham({
+		tien: "soi-giu-huy-",
+		rels: [...DANH_SACH, DESIGN_MD],
+		rel: BA_HOP[0],
+		pha: (chu) =>
+			chu.replace(
+				/<DialogClose asChild[^>]*>\s*(<Button variant="outline")([\s\S]*?<\/Button>)\s*<\/DialogClose>/,
+				"$1 onClick={dong}$2",
+			),
+		cham: caHuy,
+		ghim: /^huy: hop-thoai-kr\.tsx:\d+ goi thang ham dong$/,
+	});
+}
+
+function giaTriHang(khoiTao) {
+	if (khoiTao === undefined) return true;
+	if (ts.isStringLiteral(khoiTao)) return true;
+	if (!ts.isJsxExpression(khoiTao) || !khoiTao.expression) return true;
+	const k = khoiTao.expression.kind;
+	return (
+		k === ts.SyntaxKind.TrueKeyword ||
+		k === ts.SyntaxKind.FalseKeyword ||
+		k === ts.SyntaxKind.NullKeyword ||
+		k === ts.SyntaxKind.NumericLiteral ||
+		k === ts.SyntaxKind.StringLiteral ||
+		(ts.isIdentifier(khoiTao.expression) && khoiTao.expression.text === "undefined")
+	);
+}
+
+function dialogGoc(sf) {
+	let ra = null;
+	const di = (n) => {
+		if (ra) return;
+		if (tenThe(n, sf) === "Dialog") {
+			ra = n;
+			return;
+		}
+		ts.forEachChild(n, di);
+	};
+	di(sf);
+	return ra;
+}
+
+function caTuKhai(goc) {
+	const hong = [];
+	let dat = 0;
+	for (const rel of BA_HOP) {
+		const ten = rel.split("/").at(-1);
+		const duong = join(goc, rel);
+		if (!existsSync(duong)) {
+			hong.push(`tu-khai: tep khong ton tai ${rel}`);
+			continue;
+		}
+		const sf = cay(duong);
+		const dialog = dialogGoc(sf);
+		if (!dialog) {
+			hong.push(`tu-khai: khong thay <Dialog> o ${ten}`);
+			continue;
+		}
+		const prop = thuocTinh(dialog).find(
+			(a) => ts.isJsxAttribute(a) && a.name.getText(sf) === "coThayDoi",
+		);
+		if (!prop) {
+			hong.push(`tu-khai: thieu coThayDoi o ${ten}`);
+			continue;
+		}
+		if (giaTriHang(prop.initializer)) {
+			hong.push(`tu-khai: coThayDoi la hang o ${ten}`);
+			continue;
+		}
+		dat += 1;
+	}
+	console.log(`tu-khai: ${dat}/${BA_HOP.length}`);
+	return hong;
+}
+
+function caTuKhaiChieuDo() {
+	phaVaCham({
+		tien: "soi-giu-tu-khai-",
+		rels: BA_HOP,
+		rel: BA_HOP[0],
+		pha: (chu) => chu.replace(/\s+coThayDoi=\{[^}]*\}/, ""),
+		cham: caTuKhai,
+		ghim: /^tu-khai: thieu coThayDoi o hop-thoai-kr\.tsx$/,
+	});
+}
+
 const CAC_CA = {
 	confirm: { chay: () => caConfirm(GOC), chieuDo: caConfirmChieuDo },
+	huy: { chay: () => caHuy(GOC), chieuDo: caHuyChieuDo },
+	"tu-khai": { chay: () => caTuKhai(GOC), chieuDo: caTuKhaiChieuDo },
 };
 
 const ca = doiSo("--ca");

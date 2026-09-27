@@ -5,6 +5,7 @@ import { Combobox } from "@crm/ui/components/combobox";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -47,6 +48,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { KetQua } from "./kieu";
 import { KHOA_NGUON } from "./nguon-so";
+import { nhapNguonKhac } from "./nguon-so-luat";
 import { type MucTieuNguon, NguonSo, useNguonSo } from "./o-nguon-so";
 
 export function hienSo(so: number, locale: Locale): string {
@@ -67,6 +69,46 @@ type ONhap = {
 	coTrongSo: boolean;
 	khoaHien: boolean;
 };
+
+type OKr = {
+	ten: string;
+	kieu: KieuKr;
+	khoi: string;
+	dich: string;
+	hien: string;
+	donVi: string;
+	chu: string;
+	han: string | null;
+	trongSo: string;
+};
+
+function oKrDau(kr: KetQua | null, chuMacDinh: string, locale: Locale): OKr {
+	return {
+		ten: kr?.title ?? "",
+		kieu: kr?.kind ?? "tang-toi",
+		khoi: kr ? hienSo(kr.startValue, locale) : "0",
+		dich: kr ? hienSo(kr.targetValue, locale) : "",
+		hien: kr ? hienSo(kr.currentValue, locale) : "",
+		donVi: kr?.unit ?? "",
+		chu: kr?.owner.id ?? chuMacDinh,
+		han: kr?.dueOn ?? null,
+		trongSo: kr ? hienSo(kr.weight, locale) : "1",
+	};
+}
+
+function oKrKhac(a: OKr, b: OKr): boolean {
+	return (
+		a.ten !== b.ten ||
+		a.kieu !== b.kieu ||
+		a.khoi !== b.khoi ||
+		a.dich !== b.dich ||
+		a.hien !== b.hien ||
+		a.donVi !== b.donVi ||
+		a.chu !== b.chu ||
+		a.han !== b.han ||
+		a.trongSo !== b.trongSo
+	);
+}
 
 function khac<T>(moi: T | null, cu: T): T | undefined {
 	return moi === null || moi === cu ? undefined : moi;
@@ -114,18 +156,32 @@ export function HopThoaiKr({
 
 	const [daLuuMot, setDaLuuMot] = useState(false);
 
-	const [ten, setTen] = useState(kr?.title ?? "");
-	const [kieu, setKieu] = useState<KieuKr>(kr?.kind ?? "tang-toi");
-	const [khoi, setKhoi] = useState(kr ? hienSo(kr.startValue, locale) : "0");
-	const [dich, setDich] = useState(kr ? hienSo(kr.targetValue, locale) : "");
-	const [hien, setHien] = useState(kr ? hienSo(kr.currentValue, locale) : "");
-	const [donVi, setDonVi] = useState(kr?.unit ?? "");
-	const [chu, setChu] = useState(kr?.owner.id ?? chuMacDinh);
-	const [han, setHan] = useState<string | null>(kr?.dueOn ?? null);
-	const [trongSo, setTrongSo] = useState(kr ? hienSo(kr.weight, locale) : "1");
+	const [dau, setDau] = useState(() => oKrDau(kr, chuMacDinh, locale));
+	const [ten, setTen] = useState(dau.ten);
+	const [kieu, setKieu] = useState<KieuKr>(dau.kieu);
+	const [khoi, setKhoi] = useState(dau.khoi);
+	const [dich, setDich] = useState(dau.dich);
+	const [hien, setHien] = useState(dau.hien);
+	const [donVi, setDonVi] = useState(dau.donVi);
+	const [chu, setChu] = useState(dau.chu);
+	const [han, setHan] = useState<string | null>(dau.han);
+	const [trongSo, setTrongSo] = useState(dau.trongSo);
 	const [loi, setLoi] = useState<string | null>(null);
 	const n = useNguonSo({ objectiveId, kr, mucTieu, baoLoi: setLoi });
+	const [nguonDau, setNguonDau] = useState(n.gia);
 	const goc = n.goc;
+	const oHienTai: OKr = {
+		ten,
+		kieu,
+		khoi,
+		dich,
+		hien,
+		donVi,
+		chu,
+		han,
+		trongSo,
+	};
+	const coThayDoi = oKrKhac(dau, oHienTai) || nhapNguonKhac(nguonDau, n.gia);
 
 	const tao = useMutation(trpc.okr.createKeyResult.mutationOptions());
 	const sua = useMutation(trpc.okr.updateKeyResult.mutationOptions());
@@ -221,6 +277,8 @@ export function HopThoaiKr({
 		toast.success(goc ? h.daLuu : h.daThemKr);
 		void cache.okr(objectiveId);
 		if (giuMo) {
+			setDau(oHienTai);
+			setNguonDau(n.gia);
 			setDaLuuMot(true);
 			return;
 		}
@@ -242,6 +300,7 @@ export function HopThoaiKr({
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
+			coThayDoi={coThayDoi}
 		>
 			<DialogContent data-hop-thoai-kr={n.krId ?? "moi"}>
 				<DialogHeader>
@@ -442,9 +501,11 @@ export function HopThoaiKr({
 					</form>
 				</div>
 				<DialogFooter>
-					<Button variant="outline" onClick={dong} disabled={dangLuu}>
-						{daLuuMot ? so.trangThai.hopThoai.dong : h.huy}
-					</Button>
+					<DialogClose asChild dongNgay={daLuuMot && !coThayDoi}>
+						<Button variant="outline" disabled={dangLuu}>
+							{daLuuMot ? so.trangThai.hopThoai.dong : h.huy}
+						</Button>
+					</DialogClose>
 					<Button
 						type="submit"
 						form={`${ma}-form`}
