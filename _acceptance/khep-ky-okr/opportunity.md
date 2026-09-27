@@ -3,10 +3,10 @@ schema_version: 1
 slug: khep-ky-okr
 feature: Khép kỳ OKR — quản trị mở cửa sổ rà giữa kỳ; cuối kỳ máy gợi ý điểm từ số chốt, người chỉnh được kèm lý do; mỗi mục tiêu có ô điều học được; kỳ chỉ đóng khi mọi KR đã chấm; mục tiêu dở mang sang kỳ sau; số kỳ đã đóng bị khoá và xuất được; kiểm chất lượng khi đặt bằng luật
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-27T11:05:07Z
 prototype:
   base_commit: 1f34aeac21b632206bf92586efc2b3400cfa8257
   disposition: keep
@@ -58,7 +58,7 @@ luật chưa bắt); `CONTEXT.md` mục «Điểm cuối kỳ», «Chu kỳ», �
 | 2 | Máy gợi ý điểm theo kiểu KR, trên thang chương trình đang áp lúc sang pha chấm (0–1 bước 0,1 hoặc 0–100 bước 10): dùng đúng hàm tiến độ của thanh tiến độ (tăng tới / giảm xuống theo phần đi được từ khởi điểm tới đích, cắt trong [0, 1]; giữ trên / giữ dưới đạt thì 1, không đạt thì 0; mốc xong 1, chưa 0; phần trăm = số chốt / 100 như thanh tiến độ hôm nay), làm tròn tới bậc gần nhất, nửa bậc làm tròn lên | Người không tin điểm gợi ý và chỉnh gần hết | Hỏi tại Cổng Phạm vi; đọc tỷ lệ chỉnh sau quý 4 | [đề xuất] |
 | 3 | Người chấm là người sửa được KR (người phụ trách KR, trưởng đơn vị, quản trị); chỉnh khác gợi ý thì bắt lý do | Người phụ trách tự chấm cao cho mình | Hỏi tại Cổng Phạm vi | [đề xuất] |
 | 4 | Cửa sổ rà giữa kỳ do quản trị mở cho cả chu kỳ, một khoảng ngày trong pha «Đang chạy». Trong cửa sổ sửa đích như hôm nay (có vết); ngoài cửa sổ, sửa đích của mục tiêu đã công bố bắt lý do và KR mang nhãn «đích sửa ngoài rà» tới lúc chấm | Đơn vị bị chặn sửa đích hợp lý giữa kỳ | Hỏi tại Cổng Phạm vi | [đề xuất] |
-| 5 | Kỳ chỉ đóng khi mọi KR của mục tiêu đã công bố (không tính mục tiêu đã bỏ) có điểm người xác nhận; ô «điều học được» không bắt buộc để đóng | Kỳ kẹt vì một đơn vị không nhìn lại; hoặc ngược lại, đóng mà không ai nhìn lại | Chủ kho chọn tại Cổng Đáng | [đề xuất] không bắt buộc |
+| 5 | Kỳ chỉ đóng khi mọi KR của mục tiêu đã công bố (không tính mục tiêu đã bỏ) có điểm người xác nhận; ô «điều học được» không bắt buộc để đóng | Kỳ kẹt vì một đơn vị không nhìn lại; hoặc ngược lại, đóng mà không ai nhìn lại | Chủ kho chọn tại Cổng Đáng | Chốt tại Cổng Đáng: không bắt buộc |
 | 6 | Mang sang = tạo bản nháp ở chu kỳ kế (cùng cấp, đơn vị, loại, người phụ trách; KR giữ đích, khởi điểm bằng số chốt), nối hai chiều với mục tiêu gốc; mục tiêu gốc và điểm của nó không đổi | Bản sao mất dấu nguồn, hoặc số quý cũ bị sửa theo | Hỏi tại Cổng Phạm vi | [đề xuất] |
 | 7 | Mở lại: quản trị, lý do bắt buộc, «Đã đóng» → «Chấm điểm», để vết; số chốt không tính lại | Mở lại làm lệch số đã báo lên ban lãnh đạo | Hỏi tại Cổng Phạm vi | [đề xuất] |
 | 8 | Xuất: tệp CSV một dòng mỗi KR của kỳ đã đóng, cho mọi vai đọc được OKR (kể cả «chỉ OKR»), không kèm dữ liệu đối tác | Bảng lãnh đạo cần định dạng khác | Hỏi tại Cổng Phạm vi | [đề xuất] |
@@ -68,8 +68,8 @@ luật chưa bắt); `CONTEXT.md` mục «Điểm cuối kỳ», «Chu kỳ», �
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: quý 4/2026 có được khép trọn trong công cụ không — chấm, nhìn lại, mang sang — thay cho bảng tính?
-- Kết quả nào là SỐNG: [đề xuất] chu kỳ quý 4/2026 ở pha «Đã đóng» trong CRM trước 2027-01-15, nghĩa là mọi KR của mục tiêu đã công bố có điểm người xác nhận trong công cụ; ≥ 70% mục tiêu đã công bố có «điều học được» không trống; đọc kèm (không ngưỡng) tỷ lệ mục tiêu dở được mang sang quý 1 qua công cụ và tỷ lệ điểm người chỉnh khác gợi ý.
-- Kết quả nào là CHẾT: [đề xuất] tới 2027-01-31 quý 4 chưa đóng trong CRM, hoặc đơn vị chấm trên bảng tính ngoài rồi gõ lại; hoặc < 40% mục tiêu đã công bố có «điều học được»; hoặc phải mở lại kỳ vì lỗi của công cụ.
+- Kết quả nào là SỐNG: chu kỳ quý 4/2026 ở pha «Đã đóng» trong CRM trước 2027-01-15, nghĩa là mọi KR của mục tiêu đã công bố có điểm người xác nhận trong công cụ; ≥ 70% mục tiêu đã công bố có «điều học được» không trống; đọc kèm (không ngưỡng) tỷ lệ mục tiêu dở được mang sang quý 1 qua công cụ và tỷ lệ điểm người chỉnh khác gợi ý.
+- Kết quả nào là CHẾT: tới 2027-01-31 quý 4 chưa đóng trong CRM, hoặc đơn vị chấm trên bảng tính ngoài rồi gõ lại; hoặc < 40% mục tiêu đã công bố có «điều học được»; hoặc phải mở lại kỳ vì lỗi của công cụ.
 - Timebox: công cụ lên production trước 2026-12-14; đọc số 2027-01-15, đọc lần cuối 2027-01-31.
 
 ## Kết quả prototype
@@ -89,9 +89,9 @@ Chưa dựng. Bản mẫu OKR đã duyệt (`/proto/ban-mau-okr`, PR #113) và b
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: lộ trình OKR mục 5 «Lượt 7», hạn cứng 2026-12-14 để đóng quý 4; lượt 4 và 6 đã lên nên chân đứng đủ.
+- **decision = build.** Căn cứ: lộ trình OKR mục 5 «Lượt 7», hạn cứng 2026-12-14 để đóng quý 4; lượt 4 và 6 đã lên nên chân đứng đủ. Quyết 2026-09-27 bởi Manh Phan trong phiên lượt 7.
 - **disposition = keep.** Căn cứ: bản mẫu `ban-mau-okr` và `toan-canh-okr` ở lại kho (`docs/proto.md`); lượt này thêm bản mẫu `khep-ky-okr`, không xoá gì.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho SỐNG và CHẾT như section Ngưỡng; «điều học được» không bắt buộc để đóng kỳ; đọc số 2027-01-15, đọc lần cuối 2027-01-31.
 
 ## Thước đo thành công → ứng viên criterion
 
