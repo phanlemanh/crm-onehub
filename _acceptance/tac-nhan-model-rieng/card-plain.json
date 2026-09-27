@@ -1,0 +1,49 @@
+{
+  "feature_plain": "Tác nhân chạy được với mọi model trong danh sách chọn, đổi model ở Cài đặt là mọi Tác nhân đổi theo, và lượt nào hỏng thì hiện đúng là Hỏng kèm lý do.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ gọi thật tới Google, z.ai và OpenAI bằng đúng bộ công cụ của Tác nhân, và cả ba phải nộp được kết quả có nội dung"},
+    {"id": "AC-4", "p": "Sẽ đóng lượt thành Hỏng ngay khi Tác nhân báo lỗi, kèm lý do của nhà cung cấp model"},
+    {"id": "AC-5", "p": "Sẽ ghi Hỏng cho lượt kết thúc mà Tác nhân chưa nộp kết quả, và vẫn ghi Xong cho lượt đã nộp"},
+    {"id": "AC-6", "p": "Sẽ chạy Tác nhân đã dựng bằng model đang đặt ở Cài đặt, không bằng model lúc dựng"},
+    {"id": "AC-7", "p": "Sẽ để trợ lý AI, bộ dựng và bộ chạy Tác nhân cùng hỏi một chỗ chọn model"},
+    {"id": "AC-8", "p": "Sẽ ghi luật mới và danh sách tệp rẽ khỏi bản của hãng vào tài liệu tác nhân"}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn mọi khuôn dữ liệu có vòng lặp mà model phải đọc — một phép kiểm quét hết, không cần khoá"},
+    {"id": "AC-3", "p": "Chặn kết quả lồng nhiều tầng; Tác nhân chỉ nộp được bảng phẳng gồm chữ, số, đúng/sai và danh sách"}
+  ],
+  "scope_plain": "Để sau: ô chọn model riêng cho Tác nhân, ZDR, lối rò Slack, cổng chạy thử trước khi đưa vào chạy, gửi bản vá lên hãng.",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi khuôn dữ liệu model đọc: công cụ của trợ lý AI, của bộ dựng, của bộ chạy, và khuôn kết quả — đủ vì phép quét lấy danh sách tệp từ đĩa"},
+    {"i": 1, "p": "Ba nhà cung cấp model khác nhau: Google, z.ai, OpenAI — đủ vì là ba nhóm lớn trong danh sách chọn model"},
+    {"i": 2, "p": "Năm kết cục của một lượt: nộp, báo lỗi, chưa nộp, gốc hỏng, bị huỷ — đủ vì khớp ba đường đóng lượt đang có"},
+    {"i": 3, "p": "Ba tình huống ở Cài đặt: đặt một model, để trống, đổi sau khi Tác nhân đã dựng"},
+    {"i": 4, "p": "Từng ô được bảo đảm bởi tiêu chí nào:"},
+    {"i": 5, "p": "Mọi khuôn không có vòng lặp → AC-1 (quét khuôn)"},
+    {"i": 6, "p": "Bộ chạy với cả ba nhà cung cấp → AC-2 (gọi thật)"},
+    {"i": 7, "p": "Kết quả phẳng → AC-3 (khuôn kết quả)"},
+    {"i": 8, "p": "Báo lỗi → AC-4 (đóng lượt ngay)"},
+    {"i": 9, "p": "Chưa nộp và đã nộp → AC-5 (chốt cuối)"},
+    {"i": 10, "p": "Đổi model sau khi dựng → AC-6 (lượt mới chạy model mới)"},
+    {"i": 11, "p": "Đặt hoặc để trống, cho cả bốn loại phiên → AC-7 (một chỗ chọn model)"},
+    {"i": 12, "p": "Tài liệu và tệp rẽ khỏi hãng → AC-8 (tài liệu)"},
+    {"i": 13, "p": "Không đo lại: gốc hỏng lượt và bị huỷ — hai đường này đã có và vòng này không đổi"},
+    {"i": 14, "p": "Giả định: lỗi Tác nhân gửi về có dạng mã kèm câu lỗi, như lần đo 27/09. Phép đo dùng một lỗi chép từ lượt thật; sai dạng thì vẫn Hỏng, kèm câu «không nói lý do»"},
+    {"i": 15, "p": "Giả định: cách máy đo đổi khuôn giống cách nền tảng tác nhân gửi đi. Phép gọi thật AC-2 đi qua đúng thư viện nền tảng dùng, nên kiểm lại được"}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo đóng lượt từng chỉ gọi thẳng hàm với dữ liệu gõ tay — nay đi qua đúng móc mà nền tảng gọi, với lỗi chép từ một lượt thật"},
+    {"i": 1, "p": "Phép gọi thật từng tự ráp yêu cầu và chỉ nhìn mã trả về — nay đi qua thư viện nền tảng dùng, bắt model nộp kết quả có hai ô đặt tên"},
+    {"i": 2, "p": "Chưa chốt câu hiện ra khi lỗi không kèm lý do — nay chốt một câu và có bốn ca đo"},
+    {"i": 3, "p": "Thiết kế và tiêu chí nói ngược nhau về OpenAI — nay chốt: cả ba nhà cung cấp đều bắt buộc"},
+    {"i": 4, "p": "Phép quét khuôn có thể bỏ sót công cụ của trợ lý AI — nay kiểm theo tên từng nhóm, và tệp nào không rõ là đã tắt thì báo lỗi"}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260927T064140Z-1", "p": "Chọn model theo vai lúc chạy, bỏ ghim model vào từng Tác nhân — đổi lại Tác nhân đổi model theo Cài đặt mà người dựng không được báo"},
+    {"id": "d-20260927T064140Z-2", "p": "Sửa tận gốc bằng khuôn dữ liệu mọi nhà cung cấp đều nhận, thay vì chọn model chịu được khuôn cũ — đổi lại kết quả không lồng nhiều tầng được"},
+    {"id": "d-20260927T064140Z-3", "p": "KHÔNG viết đặc tả màn hình — vòng này không đổi màn nào"},
+    {"id": "d-20260927T064140Z-4", "p": "KHÔNG tách ô chọn model riêng cho Tác nhân — xem lại khi có số đo cho thấy cần"},
+    {"id": "d-20260927T064140Z-5", "p": "KHÔNG gửi bản vá lên hãng, theo lựa chọn của chủ kho — đổi lại thêm tệp rẽ khỏi bản của hãng"},
+    {"id": "d-20260927T064140Z-6", "p": "Đo bằng lời gọi thật tới ba nhà cung cấp — đổi lại mỗi lượt đo tốn khoảng một xu và cần khoá"}
+  ]
+}
