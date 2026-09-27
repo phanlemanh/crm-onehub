@@ -234,7 +234,6 @@ describe("chi-tieu", () => {
 			tongUsd: cong(...DONG.slice(0, 11).map((d) => d[2])),
 			troLyOkr: { chiUsd: 2.500001, tranUsd: 5, phanTram: 50 },
 			dangKiem: false,
-			doiSoat: null,
 		});
 		expect(c.sanSang).toEqual(await truc());
 		expect(c.sanSang).toEqual({ bat: true, conLaiUsd: 2.499999 });
