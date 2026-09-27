@@ -181,6 +181,15 @@ underlying bug getting worse.
 nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi hàng `AgentTask` loại
 `nhac-ke-hoach` cho mỗi người có việc.
 
+- **Việc theo sự kiện lấy trong cửa sổ neo mốc, không 24 giờ trượt.** `viecCanNhac`
+  nhận `cuaSo` bắt buộc. Nhắc buổi sáng (`lenLichNhac`, `chayNhac`) dùng
+  `"buoi-sang"`: được giao, nhắc tên, đang theo dõi lấy trong `(mốc hôm trước, mốc
+  hôm nay]`, mốc là `mocNhac(now)` — 08:30 giờ VN của ngày chứa `now`. Mỗi sự kiện
+  vào đúng một tin sáng: xảy ra tới hết 08:30:00.000 thì vào tin hôm đó, sau đó thì
+  chờ tin hôm sau, kể cả khi nhịp tạo hàng chạy lúc 14:00 hay hàng gửi muộn lúc
+  10:00. Thẻ «Việc của bạn» và Tổng quan dùng `"truc-tiep"`: 24 giờ tính tới `now`,
+  để nhắc tên lúc 14:00 hiện trên thẻ lúc 14:05.
+
 - **Một hàng mỗi người mỗi ngày.** `subject` là `user:<userId>:<ngày VN>`, và chỉ
   mục duy nhất một phần `agentTask_nhac_mot_ngay` cùng `createMany … skipDuplicates`
   giữ điều đó — quét lại trong ngày, hay hai lượt chạy chồng nhau, không thêm hàng.
@@ -219,9 +228,23 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
   «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi bốn loại OKR còn lại. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
-  nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Khuôn Zalo
+  nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Chữ «sáng nay»
+  theo giờ VN lúc dựng tin (`dungTin(ten, luc, …)`, `laBuoiSang`): từ `NHAC.trua`
+  (12:00) trở đi thành «hôm nay» — tin đi giữa ngày khi việc kế hoạch phát sinh giữa
+  ngày hay khi máy chậm. `THU_TU_NHAC` được kiểm đủ ở kiểu (`THU_TU_DU`): thêm một
+  loại nhắc mà quên thứ tự thì `check-types` đỏ, và `dungTin` gặp loại không có thứ
+  tự thì ném nêu tên loại, không bỏ im. Khuôn Zalo
   đánh số mọi dòng theo vị trí trong `daGui`, kể cả dòng OKR — `xong` trỏ vào một
   số OKR bị từ chối như dòng «kế hoạch im»/«mốc ngày», không đánh dấu bước nào.
+- **Khuôn mục nhắc OKR là `viecOkr` (Zod, `@crm/db/okr-nhac`), một nguồn.**
+  `ViecOkr` suy từ nó; API «Việc của bạn» dùng chính nó; `KHOA_MUC_OKR` khai trường
+  mã của từng loại, và nhánh OKR của `mucNhac` cùng `maViec` suy từ bảng đó.
+- **Vết hỏng khuôn làm nhịp nhắc ném.** `viecGiao` đọc `OkrTrail.after` bằng
+  `parseOkrVet` (`@crm/db/okr-vet`); dòng không đọc được, hay `ownerUserId` không phải
+  chuỗi, ném «Vết OKR <id> không đọc được: …». Bộ sinh đọc mọi dòng vết trong cửa sổ
+  trước khi lọc người, nên một dòng hỏng dừng nhắc của mọi người, và thẻ «Việc của
+  bạn», phần kế hoạch trên Tổng quan báo lỗi, tới khi dòng được sửa. Bên ghi thật chỉ
+  ghi đúng khuôn — dòng hỏng chỉ đến từ tay người sửa cơ sở dữ liệu.
 - **`mucNhac` (`@crm/validation/nhac-ke-hoach`) là một hợp, không phải trường mới
   thêm vào khuôn cũ.** Việc kế hoạch giữ nguyên hình `{loai, planId, stepId?}` như
   trước khi có OKR; mỗi loại OKR có hình riêng của nó —
