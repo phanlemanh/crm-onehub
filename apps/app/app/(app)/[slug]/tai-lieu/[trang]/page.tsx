@@ -1,0 +1,68 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { PageShell, PageShellLoading } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { taiLieuMessages } from "@/lib/messages/tai-lieu";
+import { requireSession } from "@/lib/session";
+import { HydrateClient } from "@/lib/trpc/hydrate";
+import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { nullIfMissing } from "../../(agent-builder)/missing-record";
+import { ManDoc } from "./man-doc";
+
+type Params = Promise<{ slug: string; trang: string }>;
+
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: taiLieuMessages(await getLocale()).metadata.danhSach };
+}
+
+export default function TrangTaiLieuPage({ params }: { params: Params }) {
+	return (
+		<PageShell>
+			<Suspense fallback={<PageShellLoading />}>
+				<NoiDung params={params} />
+			</Suspense>
+		</PageShell>
+	);
+}
+
+async function NoiDung({ params }: { params: Params }) {
+	await requireSession();
+
+	const { trang: slug } = await params;
+	const trpc = getServerTrpc();
+	const queryClient = getServerQueryClient();
+	const [trang, cho] = await Promise.all([
+		nullIfMissing(
+			queryClient.fetchQuery(trpc.taiLieu.get.queryOptions({ slug })),
+		),
+		queryClient
+			.fetchQuery(trpc.taiLieu.proposals.queryOptions())
+			.catch(() => null),
+	]);
+	if (!trang) notFound();
+
+	const choCuaTrang = (cho?.rows ?? []).filter(
+		(r) => r.slug === trang.slug && r.trangThai === "CHO_DUYET" && !r.cu,
+	);
+	const soBanCho = trang.coBanCho ? Math.max(1, choCuaTrang.length) : 0;
+
+	return (
+		<HydrateClient>
+			<ManDoc
+				trang={{
+					slug: trang.slug,
+					ten: trang.ten,
+					loai: trang.loai,
+					chuTrang: trang.chuTrang.name,
+					donVi: trang.donVi?.name ?? null,
+					phienBan: trang.phienBan,
+					noiDung: trang.noiDung ?? "",
+					choLanDau: trang.choLanDau !== null,
+					soBanCho,
+					deXuatChoId: choCuaTrang[0]?.id ?? null,
+				}}
+			/>
+		</HydrateClient>
+	);
+}
