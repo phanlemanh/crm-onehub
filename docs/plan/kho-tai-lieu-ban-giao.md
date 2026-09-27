@@ -29,6 +29,8 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `924056fa` | Sắp lại lộ trình theo output: năm lượt, chạy thật mọi phòng ban, lượt sửa; bảng phủ 15 trạng thái; sổ thêm dòng 8, 9 |
+| `12c27b30` | Trỏ bàn giao tới trang theo dõi tiến độ |
 | `ad55da4c` | Bỏ hạng mục pháp lý, xoá gói gửi luật sư, tách chuẩn bị pilot khỏi lượt 0 |
 | `aa210027` | Kéo `onehub` mới vào (19 commit, không `migration`) |
 | `ab55edae` | Khuôn mầm bộ vàng 50 câu hỏi thật |
