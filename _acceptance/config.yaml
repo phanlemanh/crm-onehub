@@ -712,6 +712,7 @@ executors:
     tln_san_sang: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-san-sang.integration.spec.ts"
     tln_bao_tran: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ai-bao-tran.integration.spec.ts"
     tln_tien_do_api: bun run test -- "cd apps/api && bun test test/okr.spec.ts test/okr-toan-canh-thuan.spec.ts"
+    tln_duong_do: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/duong-do-tro-ly.integration.spec.ts"
   script:
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
     rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
@@ -1194,6 +1195,7 @@ executors:
     tln_migration_chi_them: node _acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs
     tln_tien_do_doi: node _acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs
     tln_tu_dien_luat: node _acceptance/tro-ly-okr-nen/rang/tu-dien-luat.mjs
+    tln_so_phien_con_that: bun _acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

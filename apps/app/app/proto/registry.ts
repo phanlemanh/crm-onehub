@@ -14,6 +14,7 @@ import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
 import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
+import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
 import { PROTO_CATALOG } from "./catalog";
 
@@ -31,6 +32,7 @@ const BANG_GHEP = {
 	"khung-trang-cai-dat": KhungTrangCaiDatMau,
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
 	"toan-canh-okr": ToanCanhOkrMau,
+	"tro-ly-okr-nen": TroLyOkrNenMau,
 	"may-nhac-truoc-nguoi": MayNhacTruocNguoiMau,
 	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
 	"nhac-qua-zalo": NhacQuaZaloMau,

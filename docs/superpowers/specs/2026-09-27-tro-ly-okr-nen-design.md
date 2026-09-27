@@ -211,6 +211,10 @@ sequenceDiagram
 
   Bảng này là một ma trận toàn phần trong test: mọi purpose × mọi kênh × mọi subagent có
   một dòng, thêm purpose mới mà quên dòng là test đỏ.
+- **Hook của phiên con suy việc từ hằng của chính thư mục subagent**, không từ thuộc tính
+  phiên: eve không bảo đảm phiên con thấy `purpose` của gốc trong hook. `phienCha` lấy từ
+  phiên cha mà eve gắn cho phiên con. Phép đo chạy hook thật dưới eve (agent mẫu, model giả)
+  và ghi lại sự kiện thật làm fixture cho bài kiểm nhanh.
 - **Hook bọc lỗi rồi cảnh báo**, như `audit.ts`: ghi sổ hỏng không làm hỏng việc. Chỗ bắt
   chuyện đếm thiếu là đối soát.
 - **Trần:** `chiTieuThang` cộng mọi `okr.*` trong tháng giờ Việt Nam. `troLyOkrSanSang`
@@ -257,7 +261,7 @@ sequenceDiagram
 | ST-troly-loi-luu | Khối Trợ lý OKR | Thông báo lỗi; ô giữ giá trị | Sửa, lưu lại |
 | ST-sochiphi-dang-tai | Khối Sổ chi phí AI | Khung xương năm dòng | Chờ |
 | ST-sochiphi-rong | Khối Sổ chi phí AI | «Tháng này chưa có lượt AI nào» | — |
-| ST-sochiphi-co-so | Khối Sổ chi phí AI | Bảng năm việc: số bước, tiền; dòng tổng; thanh Trợ lý OKR «$x / $9 (y%)»; dòng «Chưa gán việc» chỉ khi > 0 | Đọc |
+| ST-sochiphi-co-so | Khối Sổ chi phí AI | Bảng năm việc với tiền tháng này; dòng tổng; thanh Trợ lý OKR «$x / $9 (y%)»; dòng «Chưa gán việc» chỉ khi > 0 | Đọc |
 | ST-sochiphi-80 | Khối Sổ chi phí AI | Thanh Trợ lý OKR ở mức cảnh báo, «Đã dùng 80% trần» | Cân nhắc nâng trần |
 | ST-sochiphi-100 | Khối Sổ chi phí AI | Thanh ở mức đỏ, «Đã chạm trần» | Nâng trần hoặc chờ |
 | ST-sochiphi-doi-soat | Khối Sổ chi phí AI | Dòng «Đối soát tháng MM với AI Gateway: khớp (lệch 3%)» / «lệch 14%» / «chưa đối soát được — <lý do>» / «chưa có lần đối soát nào» | Đọc |
@@ -271,6 +275,8 @@ sequenceDiagram
 - Công tắc tổng tắt thì hai dòng việc khoá, nhưng giữ giá trị đã chọn.
 - Số tiền: `Intl.NumberFormat` theo tiếng đang dùng, `tabular-nums`, căn phải.
 - Tên đơn vị là dữ liệu người nhập: `translate="no"`.
+- Chỉ báo sẵn sàng nằm đầu thân thẻ, không nằm trong mô tả của thẻ (mô tả ẩn trên điện thoại) — rút từ design-pass.
+- Tiền dùng bộ định dạng tiền sẵn có của app (`docs/currency.md`), không tự gọi `Intl` ở màn.
 
 ### 5. Xuất xứ component
 
@@ -279,7 +285,8 @@ sequenceDiagram
 | `Card`, `CardHeader`, `CardTitle`, `CardAction`, `CardContent` | dùng | Mỗi khối là một thẻ, theo `docs/settings.md` |
 | `Field orientation="horizontal"` + `Switch` | dùng | Dòng công tắc có nhãn và mô tả |
 | `Select` | dùng | Phạm vi của một việc: tắt / toàn công ty / chọn đơn vị |
-| Chọn nhiều đơn vị | ghép hoặc dùng — tra `packages/ui` (combobox nhiều giá trị) rồi ReUI trước khi dựng | Chọn danh sách bộ phận và phòng ban |
+| Chọn nhiều đơn vị | dùng `PickListDialog` nếu nhận được cây Bộ phận › Phòng ban; không thì tra ReUI trước khi dựng | Chọn danh sách bộ phận và phòng ban |
+| `Badge variant="token"` | dùng | Hiện đơn vị đã chọn |
 | `Input` | dùng | Trần tháng |
 | `SimpleTable` | dùng | Bảng năm việc, số cột ít |
 | `Progress` | dùng nếu có trong `packages/ui`, không thì tra ReUI | Thanh đã dùng trên trần |
