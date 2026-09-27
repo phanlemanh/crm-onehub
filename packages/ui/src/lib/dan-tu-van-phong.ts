@@ -59,6 +59,7 @@ const MUC_WORD = /mso-list\s*:\s*l(\d+)\s+level(\d+)/i;
 const DAU_WORD = /mso-list\s*:\s*ignore/i;
 const DAU_SO = /^\s*(\d+|[a-z]{1,3})[.)]/i;
 const TRANG = /^\s*$/;
+const KHOI_CHU = "p, h2, h3, li, td, th";
 
 function kieu(el: Element): string {
 	return el.getAttribute("style") ?? "";
@@ -217,6 +218,36 @@ function boDoanRong(goc: Element): void {
 	}
 }
 
+function boDinhDangTieuDe(goc: Element): void {
+	for (const el of Array.from(
+		goc.querySelectorAll("h2 strong, h3 strong, h2 em, h3 em"),
+	)) {
+		goBoc(el);
+	}
+}
+
+function nutChu(khoi: Element): Text[] {
+	const duyet = khoi.ownerDocument.createTreeWalker(khoi, NodeFilter.SHOW_TEXT);
+	const ra: Text[] = [];
+	for (let n = duyet.nextNode(); n; n = duyet.nextNode()) {
+		if (n instanceof Text) ra.push(n);
+	}
+	return ra;
+}
+
+function gonKhoangTrang(goc: Element): void {
+	for (const t of nutChu(goc)) {
+		t.data = t.data.replace(/\u00a0/g, " ").replace(/ {2,}/g, " ");
+	}
+	for (const khoi of Array.from(goc.querySelectorAll(KHOI_CHU))) {
+		const chu = nutChu(khoi);
+		const dau = chu[0];
+		const cuoi = chu.at(-1);
+		if (dau) dau.data = dau.data.replace(/^\s+/, "");
+		if (cuoi) cuoi.data = cuoi.data.replace(/\s+$/, "");
+	}
+}
+
 export function locDan(html: string): string {
 	const tai = new DOMParser().parseFromString(html, "text/html");
 	const goc = tai.body;
@@ -230,6 +261,8 @@ export function locDan(html: string): string {
 	longDanhSach(goc);
 	dauBangLaTieuDe(goc);
 	lamSach(goc);
+	boDinhDangTieuDe(goc);
 	boDoanRong(goc);
+	gonKhoangTrang(goc);
 	return goc.innerHTML;
 }
