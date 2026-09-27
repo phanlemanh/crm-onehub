@@ -1,0 +1,222 @@
+{
+ "feature_plain": "Cuối quý, đơn vị chấm và nhìn lại OKR ngay trong CRM, mang mục tiêu dở sang quý sau, quản trị đóng kỳ khi đủ điểm và xuất ra được; lúc đặt OKR, máy hỏi lại khi câu rơi vào bốn lỗi quen.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ hỏi lại người đặt khi câu rơi vào bốn lỗi quen: KR là việc làm, thiếu khởi điểm, đích bằng khởi điểm, cả bộ KR không có đối trọng — bằng một bộ luật cố định mà trợ lý OKR sau này dùng lại."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ hiện câu hỏi ngay dưới ô trong hộp thoại KR và trên sheet mục tiêu, nhưng vẫn cho lưu và công bố."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho quản trị mở và đóng một khoảng «rà giữa kỳ» cho cả chu kỳ đang chạy."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ bắt ghi lý do khi đổi đích của mục tiêu đã công bố ngoài khoảng rà, và gắn nhãn «đích sửa ngoài rà» cho KR tới lúc chấm."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ chốt số mọi KR đã công bố khi kỳ sang pha chấm, và máy gợi ý điểm theo đúng cách tính của thanh tiến độ."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ cho người sửa được KR xác nhận hoặc chỉnh điểm (chỉnh thì kèm lý do), cho người sửa được mục tiêu ghi «điều học được», và đọc điểm theo loại mục tiêu — tham vọng 0,7 là tốt."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ chỉ đóng kỳ khi mọi KR đã chấm, khoá mọi ghi sau khi đóng, và cho quản trị mở lại kèm lý do, số chốt đứng yên."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ mang mục tiêu dở sang chu kỳ kế thành bản nháp — KR chưa trọn đi theo với khởi điểm bằng số chốt — và nối hai phía với nhau."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ cho mọi người đọc được OKR tải kỳ đã đóng ra một tệp bảng tính, số không đổi khi chương trình đổi cấu hình về sau."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ có màn «Chấm điểm» cho cả đơn vị, ghi rõ «Điểm cuối kỳ không phải đánh giá nhân sự», chạy đúng trên điện thoại và máy tính."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ có điều khiển ở Cài đặt cho quản trị: mở rà, sang chấm, đóng kỳ (liệt đơn vị còn thiếu điểm), mở lại, và nút «Xuất» ở Toàn cảnh."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ giữ người mang vai «chỉ OKR» làm được việc OKR của mình mà không thấy dữ liệu đối tác qua các chức năng mới."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ có một câu đếm cho ngày đọc số: pha của quý 4, tỷ lệ KR có điểm, tỷ lệ có điều học được, tỷ lệ mang sang, tỷ lệ chỉnh khác gợi ý, dấu hiệu chấm dồn."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ dựng màn bằng thành phần dùng chung của kho, không vẽ tay; bộ luật chất lượng nằm ở gói dùng chung."
+  },
+  {
+   "id": "AC-15",
+   "p": "Sẽ chỉ thêm bảng mới vào cơ sở dữ liệu, không sửa bảng hay dữ liệu cũ."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-5",
+   "p": "Chặn sang pha chấm trước ngày sau ngày cuối, hoặc khi KR lấy số CRM chưa có số của ngày cuối; chặn nhảy pha quá một bước."
+  },
+  {
+   "id": "AC-7",
+   "p": "Chặn đóng kỳ khi còn KR chưa chấm; chặn mọi sửa số, điểm, điều học được sau khi đóng; chặn mở lại khi thiếu lý do."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ KHÔNG lưu điểm khác gợi ý khi chưa có lý do; vai «chỉ OKR» không phụ trách KR thì chỉ đọc."
+  }
+ ],
+ "scope_plain": "Chưa làm: kiểm bằng mô hình (lượt 9b), nhắc qua Slack/Zalo, kiểm ở màn nhập bảng tính, định dạng xuất khác CSV.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Phủ đủ tám khâu cuối kỳ (rà, sang chấm, chấm, nhìn lại, mang sang, đóng và mở lại, xuất, kiểm khi đặt) — thước là sáu ý định và bốn gạch phạm vi của lộ trình lượt 7."
+  },
+  {
+   "i": 1,
+   "p": "Phủ năm kiểu người: quản trị, người sửa được mục tiêu, người phụ trách KR, thành viên không sửa được, vai «chỉ OKR»."
+  },
+  {
+   "i": 2,
+   "p": "Phủ năm trạng thái của kỳ: lập kế hoạch, đang chạy trong rà, đang chạy ngoài rà, chấm điểm, đã đóng."
+  },
+  {
+   "i": 3,
+   "p": "Phủ sáu kiểu KR, cả nhập tay lẫn lấy số máy."
+  },
+  {
+   "i": 4,
+   "p": "Mọi thao tác ghi để vết; mọi màn có đang tải, rỗng, lỗi, chạy ở 390 và 1440, hai thứ tiếng; cơ sở dữ liệu chỉ thêm bảng."
+  },
+  {
+   "i": 5,
+   "p": "Đối chiếu ngành: Perdoo đóng OKR để ghi điều học được; Google re:Work chấm 0–1, tham vọng 0,7 là tốt; mooncamp và okrstool mang sang, viết lại hay bỏ từng mục tiêu."
+  },
+  {
+   "i": 6,
+   "p": "Giả định: số chốt là con số lúc sang pha chấm, chỉ sang được từ ngày sau ngày cuối khi KR lấy số CRM đã có số ngày cuối."
+  },
+  {
+   "i": 7,
+   "p": "Giả định: điểm gợi ý dùng đúng cách tính của thanh tiến độ, nửa bậc làm tròn lên; KR «phần trăm» 20 → 80 đạt 80 thì gợi ý 0,8 như thanh tiến độ hôm nay."
+  },
+  {
+   "i": 8,
+   "p": "Giả định: trên thang 0–100 người gõ 80; kỳ đã chấm đọc theo cấu hình chương trình lúc sang chấm."
+  },
+  {
+   "i": 9,
+   "p": "Giả định: ai sửa được KR thì chấm KR đó; chỉnh khác gợi ý phải ghi lý do."
+  },
+  {
+   "i": 10,
+   "p": "Giả định: khoảng rà áp cho cả chu kỳ, chỉ gác việc đổi đích."
+  },
+  {
+   "i": 11,
+   "p": "Giả định: «điều học được» không bắt buộc để đóng kỳ."
+  },
+  {
+   "i": 12,
+   "p": "Giả định: đổi pha từ nay đi đúng một bước — hôm nay nhảy được nhiều bước."
+  },
+  {
+   "i": 13,
+   "p": "Giả định: chỉ KR chưa trọn đi sang kỳ kế; căn chỉnh không đi theo; mang sang được cả khi kỳ cũ đã đóng."
+  },
+  {
+   "i": 14,
+   "p": "Giả định: tệp xuất là CSV, chỉ cho kỳ đã đóng, ai đọc được OKR đều tải được."
+  },
+  {
+   "i": 15,
+   "p": "Giả định: luật «việc làm» bỏ qua KR mốc; luật «đối trọng» chỉ hỏi khi mọi KR đều đẩy tăng."
+  },
+  {
+   "i": 16,
+   "p": "Giả định: màn chấm là cách xem thứ tư của «Theo đơn vị» (hướng A); hướng B là tab trong sheet mục tiêu."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Nặng nhất: điểm gợi ý từng được tả ba cách ở ba tài liệu, và bài đo chỉ ghi 5 trên 18 ô. Đã sửa: một câu chung cho mọi tài liệu, bài đo ghi đủ 20 ô, có ô bắt được làm tròn sai."
+  },
+  {
+   "i": 1,
+   "p": "Đổi cấu hình chương trình cho quý sau có thể làm điểm quý đã đóng tự đổi. Đã sửa: kỳ đã chấm đọc theo cấu hình lúc sang chấm, bài đo xuất lại sau khi đổi cấu hình phải giống từng byte."
+  },
+  {
+   "i": 2,
+   "p": "Thang 0–100 chưa được đo từ đầu tới cuối — có thể không ai chấm được. Đã sửa: nói rõ người gõ 80, bài đo chấm lặp lại trên thang 0–100."
+  },
+  {
+   "i": 3,
+   "p": "Sang chấm lúc 00:02 có thể chốt thiếu số ngày cuối của KR lấy số CRM. Đã sửa: chỉ sang được khi số ngày cuối đã có."
+  },
+  {
+   "i": 4,
+   "p": "Ngưỡng chết «chấm ngoài bảng tính rồi gõ lại» chưa có cách đo. Đã sửa: câu đếm thêm cột đơn vị chấm dồn, cộng câu hỏi ở phiên nghiệm thu."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260927T093613Z-1",
+   "p": "Đã chạy thiết kế trên bản bấm được trước khi duyệt — đổi lại bản mẫu là mã sống trong kho."
+  },
+  {
+   "id": "d-20260927T093613Z-2",
+   "p": "Bộ luật chất lượng ở gói dùng chung, chỉ hỏi ở màn — đổi lại máy chủ không chặn câu kém."
+  },
+  {
+   "id": "d-20260927T093613Z-3",
+   "p": "Thêm năm bảng mới thay vì thêm cột vào bảng cũ — đổi lại đọc bảng chấm phải nối thêm bảng."
+  },
+  {
+   "id": "d-20260927T093613Z-4",
+   "p": "Số chốt là con số lúc sang chấm — đổi lại quản trị không sang chấm được trước ngày cuối."
+  },
+  {
+   "id": "d-20260927T093613Z-5",
+   "p": "Điểm gợi ý dùng đúng cách tính của thanh tiến độ — đổi lại KR giữ và mốc chỉ gợi ý 0 hoặc 1."
+  },
+  {
+   "id": "d-20260927T093613Z-6",
+   "p": "Đổi đích ghi vào một bảng riêng — nhãn lúc chấm đọc từ bảng có khuôn, không từ vết."
+  },
+  {
+   "id": "d-20260927T093613Z-7",
+   "p": "Mở lại kỳ là một thao tác riêng có lý do — đổi pha vẫn không lùi được."
+  },
+  {
+   "id": "d-20260927T093613Z-8",
+   "p": "Đổi pha đi đúng một bước — đổi lại hồ sơ đặt OKR có thể phải ghim lại."
+  },
+  {
+   "id": "d-20260927T093613Z-9",
+   "p": "Xuất CSV — đổi lại không định dạng ô."
+  },
+  {
+   "id": "d-20260927T093613Z-10",
+   "p": "KHÔNG kiểm luật ở màn nhập bảng tính lượt này — xem lại trước mùa quý 1."
+  },
+  {
+   "id": "d-20260927T093613Z-11",
+   "p": "KHÔNG nhắc chấm hay nhắc rà qua Slack, Zalo lượt này."
+  },
+  {
+   "id": "d-20260927T093613Z-12",
+   "p": "Khuyên đặt màn chấm trong «Theo đơn vị» (hướng A); hướng B còn mở tới cổng này."
+  }
+ ]
+}
