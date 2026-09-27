@@ -29,6 +29,8 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `ad55da4c` | Bỏ hạng mục pháp lý, xoá gói gửi luật sư, tách chuẩn bị pilot khỏi lượt 0 |
+| `aa210027` | Kéo `onehub` mới vào (19 commit, không `migration`) |
 | `ab55edae` | Khuôn mầm bộ vàng 50 câu hỏi thật |
 | `7bdfa9d7` | Mẫu kiểm kê, tin hỏi giờ duyệt, các bước gom tệp Zalo |
 | `e131ad28` | Gói gửi luật sư: thư, 12 câu theo thứ tự cần trả lời, phụ lục dữ liệu CRM gửi đi đâu |
