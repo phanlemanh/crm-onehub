@@ -9,7 +9,8 @@ cần thiết để máy khác không phải học lại.
 
 **Lượt 0 (nền, không mã) đang làm.** Nghiên cứu xong, bản mẫu xong, một quyết định
 đã chốt, lộ trình và sổ theo dõi đã có. Chưa có dòng mã sản phẩm nào ngoài bản mẫu
-và trình đọc markdown.
+và trình đọc markdown. Phần máy làm được của lượt 0 đã xong 2026-09-27: gói gửi luật sư,
+mẫu kiểm kê và gom tệp Zalo, khuôn mầm bộ vàng. Phần còn lại cần chủ kho.
 
 | Thứ | Ở đâu |
 | --- | --- |
@@ -27,6 +28,7 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `ab55edae` | Khuôn mầm bộ vàng 50 câu hỏi thật |
 | `7bdfa9d7` | Mẫu kiểm kê, tin hỏi giờ duyệt, các bước gom tệp Zalo |
 | `e131ad28` | Gói gửi luật sư: thư, 12 câu theo thứ tự cần trả lời, phụ lục dữ liệu CRM gửi đi đâu |
 | `7d85c530` | Kéo `onehub` mới vào (366 commit), gỡ đụng độ ở `catalog.ts` giữ cả hai phía |
