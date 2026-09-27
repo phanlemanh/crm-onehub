@@ -51,6 +51,7 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
+import { type CuaSoRa, cuaSoRaRa, hieuLucHomNay } from "./khep";
 import { dongLoOkr, phanTichLoOkr } from "./nhap";
 import type {
 	ChuKyOutput,
@@ -284,7 +285,7 @@ export class OkrService {
 		};
 	}
 
-	private chuKyRa(c: ChuKyDong): ChuKyOutput {
+	private chuKyRa(c: ChuKyDong, cuaSoRa: CuaSoRa | null): ChuKyOutput {
 		return {
 			id: c.id,
 			kind: loaiChuKy.parse(c.kind),
@@ -296,14 +297,22 @@ export class OkrService {
 			breakStartsOn: c.breakStartsOn ? ngay(c.breakStartsOn) : null,
 			breakEndsOn: c.breakEndsOn ? ngay(c.breakEndsOn) : null,
 			updateWeekday: c.updateWeekday,
+			cuaSoRa,
 		};
 	}
 
 	async cycles(homNay = new Date()) {
-		const rows = await this.db.okrCycle.findMany({
-			orderBy: [{ startsOn: "desc" }, { kind: "asc" }],
-		});
-		const cycles = rows.map((c) => this.chuKyRa(c));
+		const [rows, cuaSo] = await Promise.all([
+			this.db.okrCycle.findMany({
+				orderBy: [{ startsOn: "desc" }, { kind: "asc" }],
+			}),
+			this.db.okrCuaSoRa.findMany({
+				where: hieuLucHomNay(ngay(homNay)),
+				orderBy: { tuNgay: "asc" },
+			}),
+		]);
+		const theoKy = new Map(cuaSo.map((r) => [r.cycleId, cuaSoRaRa(r)]));
+		const cycles = rows.map((c) => this.chuKyRa(c, theoKy.get(c.id) ?? null));
 		return {
 			cycles,
 			currentId: chonChuKyHienTai(cycles, ngay(homNay))?.id ?? null,

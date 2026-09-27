@@ -24,6 +24,7 @@ const ky = (
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 });
 
 const NAM = ky(

@@ -28,6 +28,12 @@ export const nguoiOkr = z.object({
 	email: z.string(),
 });
 
+export const cuaSoRaOutput = z.object({
+	id: z.string(),
+	tuNgay: ngay,
+	denNgay: ngay,
+});
+
 export const chuKyOutput = z.object({
 	id: z.string(),
 	kind: z.enum(LOAI_CHU_KY),
@@ -39,6 +45,7 @@ export const chuKyOutput = z.object({
 	breakStartsOn: ngay.nullable(),
 	breakEndsOn: ngay.nullable(),
 	updateWeekday: z.number(),
+	cuaSoRa: cuaSoRaOutput.nullable(),
 });
 export const cyclesOutput = z.object({
 	cycles: z.array(chuKyOutput),

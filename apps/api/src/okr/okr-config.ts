@@ -102,6 +102,13 @@ export const OKR = {
 				"Danh sách bản ghi thuộc dữ liệu đối tác — vai «chỉ OKR» chỉ xem được con số.",
 			ghiChuDoCanh: "đo cạnh",
 		},
+		khep: {
+			raChiKhiDangChay: "Chỉ mở rà giữa kỳ khi chu kỳ đang chạy.",
+			raNgoaiKy: "Khoảng rà phải nằm trong ngày đầu và ngày cuối của chu kỳ.",
+			raChong: "Khoảng rà chồng ngày với một cửa sổ rà đang mở của chu kỳ này.",
+			raDaDong: "Cửa sổ rà này đã đóng.",
+			khongCoCuaSoRa: (id: string) => `Không có cửa sổ rà nào mang mã ${id}.`,
+		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
 		soTheoKieu: {

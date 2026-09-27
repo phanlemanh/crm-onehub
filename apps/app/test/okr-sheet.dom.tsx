@@ -30,6 +30,7 @@ const QUY: ChuKyOutput = {
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 };
 
 function kr(id: string, startLocked: boolean): KrOutput {

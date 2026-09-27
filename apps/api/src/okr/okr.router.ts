@@ -1,4 +1,5 @@
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import { dongRaInput, moRaInput } from "@crm/validation/okr-khep";
 import {
 	addCommentInput,
 	commentsInput,
@@ -61,6 +62,7 @@ import {
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrKhepService } from "./okr-khep.service";
 import {
 	banGhiChiSoInput,
 	banGhiChiSoOutput,
@@ -104,6 +106,7 @@ export class OkrRouter {
 		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
 		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
 		@Inject(OkrSoService) private readonly so: OkrSoService,
+		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -138,6 +141,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof setCyclePhaseInput>,
 	) {
 		return this.okr.setCyclePhase(ctx.user.id, input.id, input.phase);
+	}
+
+	@Mutation({
+		input: moRaInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/cycles/{cycleId}/review-window", TAG),
+	})
+	moRa(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moRaInput>,
+	) {
+		return this.khep.moRa(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: dongRaInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/review-windows/{id}/close", TAG),
+	})
+	dongRa(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dongRaInput>,
+	) {
+		return this.khep.dongRa(ctx.user.id, input.id);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })
