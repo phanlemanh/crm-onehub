@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8ebeedb366e166c32b17e086e565f94825b3f73b
+verified_commit: 417e1f6fcb908b59262c47ee423a79e346938400
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -144,3 +144,7 @@ sha: ab69d77a15e367ab02819face8acdbfa6fdf0fa1 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-27, do gộp origin/onehub d0d89274 (vòng hoan-thien-hoi-crm-qua-zalo #166) để PR #168 hết xung đột
 run_id: repin-20260927T024228Z-52592
 sha: 8ebeedb366e166c32b17e086e565f94825b3f73b · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 3 — 2026-09-27, do đổi dòng bảng theo dõi 4b → 4c theo chủ kho; thước tài liệu E5 đổi theo
+run_id: repin-20260927T025506Z-99597
+sha: 417e1f6fcb908b59262c47ee423a79e346938400 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
