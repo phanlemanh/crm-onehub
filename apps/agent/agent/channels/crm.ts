@@ -5,7 +5,13 @@ import {
 	type EveTurnFailure,
 	eveTurnFailure,
 } from "@crm/validation/eve-stream";
-import { type ChannelEvents, defineChannel, GET, POST } from "eve/channels";
+import {
+	type ChannelEvents,
+	defineChannel,
+	GET,
+	POST,
+	type SendOptions,
+} from "eve/channels";
 import { z } from "zod";
 import { recordBuilderInputRequest } from "../lib/builder-input";
 import { authorised } from "../lib/cau-noi-auth";
@@ -435,15 +441,14 @@ export default defineChannel({
 			return dispatchAgentRun(target.runId, send);
 		}
 
-		return send(input.message, {
+		const tuyChon: SendOptions = {
 			auth: input.auth,
 			continuationToken: target.taskId
 				? taskToken(target.taskId)
 				: `crm:adhoc:${crypto.randomUUID()}`,
-			...(input.auth?.attributes?.purpose === "okr"
-				? { mode: "task" as const }
-				: {}),
-		});
+		};
+		if (input.auth?.attributes?.purpose === "okr") tuyChon.mode = "task";
+		return send(input.message, tuyChon);
 	},
 });
 

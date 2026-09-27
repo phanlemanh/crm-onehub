@@ -29,10 +29,13 @@ const banGhi = z.array(
 );
 
 type BanGhi = z.infer<typeof banGhi>[number];
-type XuLy = (event: unknown, ctx: unknown) => Promise<void>;
+type SuKienBuoc = Omit<BanGhi["event"], "data"> & {
+	data: { usage: BanGhi["event"]["data"]["usage"] | null };
+};
+type XuLy = (event: SuKienBuoc, ctx: BanGhi["ctx"]) => Promise<void>;
 
-const xuLy = (hook: { events: Record<string, unknown> }) =>
-	hook.events["step.completed"] as XuLy;
+const xuLy = (hook: typeof hookGoc) =>
+	hook.events?.["step.completed"] as unknown as XuLy;
 
 const HOOK = {
 	goc: xuLy(hookGoc),

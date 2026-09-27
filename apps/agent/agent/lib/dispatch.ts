@@ -198,7 +198,7 @@ export async function beginResearch(
 ): Promise<void> {
 	if (laViecTroLyOkr(task.kind)) {
 		const chan = await lyDoChanTruocKhiGui(task).catch(
-			(error: unknown) => `hong:${reasonOf(error).slice(0, 80)}`,
+			(error) => `hong:${reasonOf(error).slice(0, 80)}`,
 		);
 		if (chan) {
 			await completeTask(task.id, chan);
@@ -291,6 +291,9 @@ export function taskAuth(task: LeasedTask, base: AppAuth = APP_AUTH): AppAuth {
 		if (parsed.success) records.fieldKeys = parsed.data.keys.join(",");
 	}
 
+	if (laViecTroLyOkr(task.kind))
+		Object.assign(records, okrAuthAttributes(task));
+
 	return {
 		...base,
 		attributes: {
@@ -298,7 +301,6 @@ export function taskAuth(task: LeasedTask, base: AppAuth = APP_AUTH): AppAuth {
 			reason: task.reason,
 			budget: String(task.budget),
 			...records,
-			...(laViecTroLyOkr(task.kind) ? okrAuthAttributes(task) : {}),
 		},
 	};
 }

@@ -59,10 +59,10 @@ const payloadDoiSoat = z.object({ thang: z.string().regex(/^\d{4}-\d{2}$/) });
 
 const ngay = (d: Date) => d.toISOString().slice(0, 10);
 
-function maLoi(loi: unknown): string {
+function maLoi(loi: Error | null): string {
 	if (loi instanceof KhongCoKhoaRieng) return "khong-co-khoa-rieng";
 	if (loi instanceof LoiGateway) return `loi-gateway:${loi.ma}`;
-	return `loi-gateway:${loi instanceof Error ? loi.name : "khong-ro"}`;
+	return `loi-gateway:${loi ? loi.name : "khong-ro"}`;
 }
 
 export async function chayDoiSoat(
@@ -93,7 +93,7 @@ export async function chayDoiSoat(
 		});
 		await completeTask(task.id, `doi-soat:${kq.ketQua}`);
 	} catch (loi) {
-		const lyDo = maLoi(loi);
+		const lyDo = maLoi(loi instanceof Error ? loi : null);
 		await ghiDoiSoat(db, {
 			thang,
 			soSoUsd: soSo,

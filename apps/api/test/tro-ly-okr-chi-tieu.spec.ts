@@ -12,6 +12,10 @@ import { db, Prisma } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import { troLyOkrSanSang } from "@crm/db/okr-tro-ly";
+import type {
+	OkrProgram,
+	OkrProgramSua,
+} from "@crm/validation/okr-chuong-trinh";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { AgentTriggerService } from "../src/agent/agent-trigger.service";
@@ -67,7 +71,7 @@ const cong = (...so: string[]) =>
 async function goiTrpc(
 	thuTuc: string,
 	ai: keyof typeof cookie,
-	vao?: unknown,
+	vao?: OkrProgramSua,
 ): Promise<{ status: number; data: unknown }> {
 	const r =
 		vao === undefined
@@ -177,10 +181,7 @@ describe("chi-tieu", () => {
 			aiTranThangUsd: 5,
 		});
 		expect(r.status).toBe(200);
-		const sau = (await goiTrpc("okr.program", "quan")).data as Record<
-			string,
-			unknown
-		>;
+		const sau = (await goiTrpc("okr.program", "quan")).data as OkrProgram;
 		expect(sau).toMatchObject({
 			version: truoc.version + 1,
 			aiOn: true,

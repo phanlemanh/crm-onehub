@@ -57,7 +57,7 @@ export async function laHangTroLyOkr(taskId: string): Promise<boolean> {
 
 export function okrAuthAttributes(
 	task: Pick<LeasedTask, "id" | "kind" | "payload">,
-): Record<string, string> {
+) {
 	const viec = okrTroLyViec.safeParse(task.payload);
 	return {
 		purpose: "okr",

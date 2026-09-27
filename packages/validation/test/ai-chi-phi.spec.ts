@@ -18,13 +18,13 @@ const PHIEN_CON = [
 	{ subagent: "agent_builder", okrViec: null },
 ] as const;
 
-const VIEC_GOC: Record<string, TinhNang> = {
-	builder: "crm.dung-tac-nhan",
-	"team-agent": "crm.tac-nhan",
-	research: "crm.nghien-cuu",
-	zalo: "zalo.hoi-crm",
-	okr: "okr.chuyen-tiep",
-};
+const VIEC_GOC = new Map<string, TinhNang>([
+	["builder", "crm.dung-tac-nhan"],
+	["team-agent", "crm.tac-nhan"],
+	["research", "crm.nghien-cuu"],
+	["zalo", "zalo.hoi-crm"],
+	["okr", "okr.chuyen-tiep"],
+]);
 
 function kyVong(
 	purpose: string,
@@ -37,7 +37,7 @@ function kyVong(
 	if (con.subagent === "agent_builder") return "crm.dung-tac-nhan";
 	if (kenh === "eve") return "crm.hoi-dap";
 	if (kenh === "zalo") return "zalo.hoi-crm";
-	return VIEC_GOC[purpose];
+	return VIEC_GOC.get(purpose);
 }
 
 function kiemMaTran(purposes: readonly string[]) {

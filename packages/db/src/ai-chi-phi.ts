@@ -60,11 +60,13 @@ function dauThangVN(thang: string): Date {
 	return dauNgayVN(new Date(`${thang}-01T12:00:00+07:00`));
 }
 
-export function khungThangVN(thang: string): { tu: Date; den: Date } {
+export type KhungThang = { tu: Date; den: Date };
+
+export function khungThangVN(thang: string): KhungThang {
 	return { tu: dauThangVN(thang), den: dauThangVN(thangSau(thang)) };
 }
 
-export function khungThangUTC(thang: string): { tu: Date; den: Date } {
+export function khungThangUTC(thang: string): KhungThang {
 	return {
 		tu: new Date(`${thang}-01T00:00:00Z`),
 		den: new Date(`${thangSau(thang)}-01T00:00:00Z`),

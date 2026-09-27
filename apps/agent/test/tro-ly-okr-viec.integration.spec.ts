@@ -14,6 +14,11 @@ import hook from "../agent/hooks/okr-uy-quyen";
 import { beginResearch, taskAuth } from "../agent/lib/dispatch";
 import { reconcileStaleTasks } from "../agent/lib/stale-tasks";
 import type { LeasedTask } from "../agent/lib/tasks";
+import type {
+	XuLyKetQuaHanhDong,
+	XuLySuKienKenh,
+	XuLySuKienPhien,
+} from "./support/eve-kieu";
 import { trongNguCanhEve } from "./support/eve-ngu-canh";
 import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
 import { donOkr, gieoChuKy, gieoMucTieu } from "./support/okr-gieo";
@@ -126,7 +131,7 @@ describe("tran-khong", () => {
 			aiTranThangUsd: 9,
 		});
 		const hang2 = await hangMoi(1);
-		const thuocTinh: Record<string, unknown>[] = [];
+		const thuocTinh: ReturnType<typeof taskAuth>["attributes"][] = [];
 		await beginResearch(hang2, async (t) => {
 			gui += 1;
 			thuocTinh.push(taskAuth(t).attributes);
@@ -152,10 +157,7 @@ describe("dong-viec", () => {
 
 		const a = await hangMoi(2);
 		await trongNguCanhEve(async () => {
-			const moc = hook.events["action.result"] as unknown as (
-				e: unknown,
-				c: unknown,
-			) => Promise<void>;
+			const moc = hook.events["action.result"] as unknown as XuLyKetQuaHanhDong;
 			await moc(
 				{
 					type: "action.result",
@@ -176,19 +178,13 @@ describe("dong-viec", () => {
 				ctxOkr(a.id),
 			);
 		});
-		const cham = crmEvents["session.completed"] as unknown as (
-			d: unknown,
-			c: unknown,
-		) => Promise<void>;
+		const cham = crmEvents["session.completed"] as unknown as XuLySuKienKenh;
 		await cham({}, { continuationToken: taskToken(a.id) });
 		const ra = await ketQua(a.id);
 		expect(ra.outcome).toBe("hong:SUBAGENT_EXECUTION_FAILED");
 
 		const b = await hangMoi(3);
-		const hong = crmEvents["turn.failed"] as unknown as (
-			d: unknown,
-			c: unknown,
-		) => Promise<void>;
+		const hong = crmEvents["turn.failed"] as unknown as XuLySuKienKenh;
 		const t0 = Date.now();
 		await hong(
 			{ code: "MODEL_ERROR", message: "boom" },
@@ -221,10 +217,7 @@ describe("dong-viec", () => {
 			data: { leasedUntil: new Date(Date.now() + 1_000) },
 		});
 		await trongNguCanhEve(async () => {
-			const moi = hook.events["*"] as unknown as (
-				e: unknown,
-				c: unknown,
-			) => Promise<void>;
+			const moi = hook.events["*"] as unknown as XuLySuKienPhien;
 			await moi({ type: "step.completed", data: {} }, ctxOkr(d.id));
 		});
 		const rd = await ketQua(d.id);

@@ -64,31 +64,44 @@ async function kiemTapTool(thuMuc: string): Promise<string[]> {
 	return loi;
 }
 
+type CauHinhNha = {
+	zeroDataRetention?: boolean;
+	thinkingConfig?: { thinkingLevel?: string };
+};
+
+const GIOI_HAN = [
+	"maxInputTokensPerSession",
+	"maxOutputTokensPerSession",
+	"sessionTimeoutMs",
+] as const;
+
+const soGioiHan = z.number();
+
 function kiemMoHinh(dinhNghia: {
 	model: unknown;
-	modelOptions?: { providerOptions?: Record<string, Record<string, unknown>> };
-	limits?: Record<string, unknown>;
+	modelOptions?: {
+		providerOptions?: {
+			gateway?: CauHinhNha;
+			google?: CauHinhNha;
+			vertex?: CauHinhNha;
+		};
+	};
+	limits?: Partial<Record<(typeof GIOI_HAN)[number], number>>;
 }): string[] {
 	const loi: string[] = [];
 	const model = dinhNghia.model as { modelId?: string; kind?: string };
-	if (model?.kind === "eve:dynamic" || typeof dinhNghia.model === "function")
+	if (model?.kind === "eve:dynamic" || dinhNghia.model instanceof Function)
 		loi.push("model dong");
 	if (model?.modelId !== TRO_LY_OKR.model)
 		loi.push(`model la: ${model?.modelId}`);
 	const po = dinhNghia.modelOptions?.providerOptions ?? {};
 	if (po.gateway?.zeroDataRetention !== true) loi.push("thieu ZDR");
-	for (const nha of ["google", "vertex"]) {
-		const cfg = po[nha]?.thinkingConfig as
-			| { thinkingLevel?: string }
-			| undefined;
-		if (cfg?.thinkingLevel !== "low") loi.push(`thieu thinkingLevel: ${nha}`);
+	for (const nha of ["google", "vertex"] as const) {
+		if (po[nha]?.thinkingConfig?.thinkingLevel !== "low")
+			loi.push(`thieu thinkingLevel: ${nha}`);
 	}
-	for (const k of [
-		"maxInputTokensPerSession",
-		"maxOutputTokensPerSession",
-		"sessionTimeoutMs",
-	]) {
-		if (typeof dinhNghia.limits?.[k] !== "number")
+	for (const k of GIOI_HAN) {
+		if (!soGioiHan.safeParse(dinhNghia.limits?.[k]).success)
 			loi.push(`thieu limit: ${k}`);
 	}
 	return loi;

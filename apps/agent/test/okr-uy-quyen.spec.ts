@@ -1,14 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import hook from "../agent/hooks/okr-uy-quyen";
 import { LOI_UY_QUYEN, quyetUyQuyen } from "../agent/lib/okr/uy-quyen";
+import type {
+	HanhDongYeuCau as HanhDong,
+	XuLyYeuCauHanhDong,
+} from "./support/eve-kieu";
 import { trongNguCanhEve } from "./support/eve-ngu-canh";
-
-type HanhDong = {
-	kind: string;
-	callId: string;
-	subagentName?: string;
-	toolName?: string;
-};
 
 const troLy = (callId: string): HanhDong => ({
 	kind: "subagent-call",
@@ -39,10 +36,9 @@ function ctx(purpose: string) {
 
 async function chay(purpose: string, loat: HanhDong[][]): Promise<string> {
 	return trongNguCanhEve(async () => {
-		const moc = hook.events["actions.requested"] as unknown as (
-			e: unknown,
-			c: unknown,
-		) => void;
+		const moc = hook.events[
+			"actions.requested"
+		] as unknown as XuLyYeuCauHanhDong;
 		try {
 			for (const [i, actions] of loat.entries()) {
 				moc(

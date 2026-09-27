@@ -27,13 +27,15 @@ const sau = () => {
 	return new Date(luc);
 };
 
-let muc: {
+type MucGieo = {
 	phongTrongB: string;
 	phongNgoai: string;
 	caNhan: string;
 	onehub: string;
 	boPhanB: string;
 };
+
+let muc: MucGieo;
 
 beforeAll(async () => {
 	await moXuong();

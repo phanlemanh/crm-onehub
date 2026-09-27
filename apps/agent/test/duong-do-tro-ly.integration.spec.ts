@@ -10,6 +10,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
 import { xepViecTroLy } from "@crm/db/okr-tro-ly";
+import { z } from "zod";
 import { completeTask } from "../agent/lib/tasks";
 import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
 import { donOkr, gieoChuKy, gieoMucTieu } from "./support/okr-gieo";
@@ -24,12 +25,20 @@ const khoaCu = process.env.AI_GATEWAY_API_KEY;
 let nguoi = "";
 let mucTieu: string[] = [];
 
-async function cauSql(tep: string): Promise<Record<string, unknown>[]> {
-	return db.$queryRawUnsafe(readFileSync(resolve(RANG, tep), "utf8"));
+const dongId = z.object({ id: z.string() });
+const dongTyLe = z.object({ thang: z.string(), tyLe: z.coerce.number() });
+
+async function cauSql<T extends z.ZodType>(
+	tep: string,
+	dong: T,
+): Promise<z.infer<T>[]> {
+	return z
+		.array(dong)
+		.parse(await db.$queryRawUnsafe(readFileSync(resolve(RANG, tep), "utf8")));
 }
 
 async function idCua(tep: string): Promise<string[]> {
-	return (await cauSql(tep)).map((d) => String(d.id));
+	return (await cauSql(tep, dongId)).map((d) => d.id);
 }
 
 async function xep(i: number, luc: Date): Promise<string> {
@@ -165,9 +174,9 @@ describe("duong-do", () => {
 			0.45,
 		);
 		await gieoChiPhi(new Date("2032-02-12T10:00:00+07:00"), "khac", 0.05);
-		const dong = (await cauSql("ty-le-chua-gan.sql")).find(
+		const dong = (await cauSql("ty-le-chua-gan.sql", dongTyLe)).find(
 			(d) => d.thang === "2032-02",
 		);
-		expect(Number(dong?.tyLe), "ty-le-chua-gan.sql: thang 2032-02").toBe(0.05);
+		expect(dong?.tyLe, "ty-le-chua-gan.sql: thang 2032-02").toBe(0.05);
 	});
 });

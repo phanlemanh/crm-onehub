@@ -1,6 +1,7 @@
 import { db } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import { tinhNangCua } from "@crm/db/ai-chi-phi-danh-muc";
+import type { HookEvent } from "eve/hooks";
 import { z } from "zod";
 import { type NguCanhKenh, phienChaCua } from "./phien-con";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
@@ -36,7 +37,7 @@ export type NguCanhSo = PurposeContext &
 	};
 
 export async function ghiBuoc(
-	event: unknown,
+	event: HookEvent<"step.completed">,
 	ctx: NguCanhSo,
 	subagent: string | null,
 ): Promise<boolean> {

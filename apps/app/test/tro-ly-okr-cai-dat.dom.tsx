@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import type { OkrProgramSua } from "@crm/validation/okr-chuong-trinh";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -78,7 +79,7 @@ const CAY = {
 	coverage: { members: 0, withPrimary: 0, departmentsWithoutHead: 0 },
 };
 
-type DauVao = Record<string, unknown> | undefined;
+type DauVao = OkrProgramSua | undefined;
 let daGoi: { duong: string; dauVao: DauVao }[] = [];
 let daDoc: string[] = [];
 let daLamMoi = 0;

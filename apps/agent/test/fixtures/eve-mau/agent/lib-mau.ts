@@ -1,4 +1,5 @@
 import { appendFileSync } from "node:fs";
+import type { HookContext, HookEvent } from "eve/hooks";
 import { z } from "zod";
 
 const thuocTinh = z
@@ -17,7 +18,11 @@ const nguCanh = z.object({
 	agent: z.looseObject({}).nullable().catch(null),
 });
 
-export function ghiLai(ten: string, event: unknown, ctx: unknown): void {
+export function ghiLai(
+	ten: string,
+	event: HookEvent<"step.completed">,
+	ctx: HookContext,
+): void {
 	const tep = process.env.MAU_GHI;
 	if (!tep) return;
 	const doc = nguCanh.safeParse(ctx);

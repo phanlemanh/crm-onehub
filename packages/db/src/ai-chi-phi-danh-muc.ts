@@ -106,6 +106,11 @@ export const KET_QUA_DOI_SOAT = [
 
 export type KetQuaDoiSoat = (typeof KET_QUA_DOI_SOAT)[number];
 
+export type SoSanhDoiSoat = {
+	ketQua: Exclude<KetQuaDoiSoat, "khong-doi-soat-duoc">;
+	lechPhanTram: number;
+};
+
 export const NGUONG_LECH_DOI_SOAT = 0.1;
 
 const XU_MOI_USD = 100;
@@ -125,7 +130,7 @@ export function ketQuaDoiSoat(
 	soSo: number,
 	soGateway: number,
 	nguong: number = NGUONG_LECH_DOI_SOAT,
-): { ketQua: "khop" | "lech"; lechPhanTram: number } {
+): SoSanhDoiSoat {
 	const khac = Math.abs(soSo - soGateway);
 	const lech = soSo === 0 ? (khac === 0 ? 0 : 1) : khac / soSo;
 	return {
