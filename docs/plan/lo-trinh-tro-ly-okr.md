@@ -88,7 +88,7 @@ của «mở rộng khung Tác nhân». Lý do đầy đủ ở mục 4.1 của 
 
 ## 4. Thứ tự chạy
 
-1. **Lượt 6** đang dựng. **N0 đã xong** (2026-09-27).
+1. **Lượt 6** đã lên `onehub` (#162, 2026-09-27). **N0 đã xong** (2026-09-27).
 2. **Vá lối rò Slack**: chạy khi lượt 6 đã gộp. Phải xong trước ngày mở cho cả
    công ty.
 3. **9a**: chạy khi vá Slack đã gộp. Điều kiện ZDR của N0 đã đạt. Sau 9a, chủ kho
@@ -313,18 +313,8 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
 5. ZDR đã xác nhận trên production, kể cả cho judge của eval.
 6. Có trang «Trợ lý OKR làm gì, không làm gì» cho Trưởng đơn vị.
 
-## 9. Theo dõi — cập nhật sau mỗi hạng mục
+## 9. Theo dõi
 
-Một dòng một hạng mục. Cột Trạng thái chỉ nhận một trong các giá trị: chưa mở ·
-Cổng Đáng · Cổng Phạm vi · đang dựng · Cổng Bằng chứng · đã lên `onehub` · Cổng
-Giá trị · xong. Không sửa dòng cũ, chỉ nối thêm ở cột Ghi chú.
-
-| Hạng mục | Trạng thái | PR | Ghi chú |
-| --- | --- | --- | --- |
-| N0 đo trước khi dựng | xong | — | 2026-09-27, $0,59; nhánh nháp `spike/n0-do-truoc` không đẩy; kết quả ở `docs/reports/2026-09-26-tro-ly-okr/N0-ket-qua.md` · chờ chủ kho chạy truy vấn production |
-| Vá lối rò Slack | chưa mở | — | chip đã mở 2026-09-26 |
-| 9a `tro-ly-okr-nen` | chưa mở | — | ZDR đạt ở N0; chờ vá Slack |
-| N1 golden cases | chưa mở | — | chờ OKR quý 4 công bố |
-| 9b `tro-ly-okr-de-xuat` | chưa mở | — | — |
-| 9c `tro-ly-okr-tom-tat` | chưa mở | — | — |
-| 10 `okr-trong-chat` | chưa mở | — | chat bằng eve app riêng (N0 phép 5) |
+Từ 2026-09-27, các hạng mục của lộ trình này theo dõi ở mục 10 của
+`docs/plan/lo-trinh-okr.md`: dòng N0, S (vá lối rò Slack), 9a, N1, 9b, 9c và 10.
+Nội dung bảng cũ ở đây đã chuyển sang đó.
