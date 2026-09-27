@@ -50,7 +50,8 @@ Ngày trong lộ trình là đề xuất của máy, **chưa chốt**.
 Theo thứ tự, lấy từ mục 4 của lộ trình:
 
 1. Gửi 12 câu ở mục 10.5 cho luật sư. Câu Q3 hỏi CRM đang chạy đã có hồ sơ chuyển dữ
-   liệu ra nước ngoài chưa (Neon, Vercel): việc này có thể chạm cả CRM hiện tại.
+   liệu ra nước ngoài chưa (Neon, Vercel): việc này có thể chạm cả CRM hiện tại. Bản gửi
+   được nằm ở `kho-tai-lieu-goi-luat-su.md`; chủ kho điền phụ lục B rồi gửi.
 2. Kiểm kê tài liệu và hỏi giờ duyệt mỗi tuần của các chủ trang tương lai.
 3. Gom tệp trong các nhóm Zalo.
 4. Chọn phòng ban pilot, khoảng 20 tài liệu; gom 50 câu hỏi thật.
