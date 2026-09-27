@@ -88,7 +88,7 @@ của «mở rộng khung Tác nhân». Lý do đầy đủ ở mục 4.1 của 
 
 ## 4. Thứ tự chạy
 
-1. **Lượt 6** đang dựng. **N0 đã xong** (2026-09-27).
+1. **Lượt 6** đã lên `onehub` (#162, 2026-09-27). **N0 đã xong** (2026-09-27).
 2. **Vá lối rò Slack**: chạy khi lượt 6 đã gộp. Phải xong trước ngày mở cho cả
    công ty.
 3. **9a**: chạy khi vá Slack đã gộp. Điều kiện ZDR của N0 đã đạt. Sau 9a, chủ kho
@@ -322,7 +322,7 @@ Giá trị · xong. Không sửa dòng cũ, chỉ nối thêm ở cột Ghi chú
 | Hạng mục | Trạng thái | PR | Ghi chú |
 | --- | --- | --- | --- |
 | N0 đo trước khi dựng | xong | — | 2026-09-27, $0,59; nhánh nháp `spike/n0-do-truoc` không đẩy; kết quả ở `docs/reports/2026-09-26-tro-ly-okr/N0-ket-qua.md` · chờ chủ kho chạy truy vấn production |
-| Vá lối rò Slack | chưa mở | — | chip đã mở 2026-09-26 |
+| Vá lối rò Slack | chưa mở | — | chip đã mở 2026-09-26 · đủ điều kiện chạy từ 2026-09-27: lượt 6 đã gộp (#162) |
 | 9a `tro-ly-okr-nen` | chưa mở | — | ZDR đạt ở N0; chờ vá Slack |
 | N1 golden cases | chưa mở | — | chờ OKR quý 4 công bố |
 | 9b `tro-ly-okr-de-xuat` | chưa mở | — | — |
