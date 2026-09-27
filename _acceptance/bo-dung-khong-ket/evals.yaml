@@ -1,0 +1,275 @@
+schema_version: 1
+slug: bo-dung-khong-ket
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bdk_han_muc
+    paths:
+      - "apps/agent/agent/lib/dispatch-config.ts"
+      - "apps/agent/agent/agent.ts"
+      - "apps/agent/agent/subagents/*/agent.ts"
+      - "apps/agent/test/han-muc-phien.spec.ts"
+    expected: |
+      Import default cua ba agent.ts that (goc, agent_builder, agent_runner) va
+      SESSION_LIMITS tu lib/dispatch-config.ts. Ma tran toan phan viet truoc, 3 vai x 2
+      truong = 6 assert toEqual:
+      builder {maxInputTokensPerSession: 500000, maxOutputTokensPerSession: 128000},
+      goc {500000, 50000}, runner {500000, 40000} — so tren gia tri doc tu defineAgent
+      (khong chi so voi SESSION_LIMITS), va moi vai bang dung o tuong ung cua
+      SESSION_LIMITS. sessionTimeoutMs cua builder van 24h.
+      Quet ma nguon: liet ke agent.ts bang Bun.Glob (agent/agent.ts,
+      agent/subagents/*/agent.ts); khong tep nao chua chuoi so hang nghin sau
+      "TokensPerSession:" (regex /TokensPerSession:\s*\d/) — danh sach vi pham = [],
+      thong diep neu ten tep.
+      Doi chung am cung ham quet: mot chuoi mau "maxOutputTokensPerSession: 10_000" ->
+      ham quet tra ve vi pham ten mau.
+      Chieu do (pha-thu S3, ban sao): tra builder ve 10_000 -> E1 do voi thong diep
+      ghim "agent_builder maxOutputTokensPerSession".
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bdk_luu_cau_hoi
+    paths:
+      - "apps/agent/agent/lib/builder-input.ts"
+      - "packages/validation/src/builder-question.ts"
+      - "apps/agent/test/cau-hoi-het-han-muc.integration.spec.ts"
+      - "apps/agent/test/fixtures/session-limit-that.json"
+    expected: |
+      Kho test that (bun run test). Gieo hoi thoai BUILDER co sessionId. Doc mau
+      fixtures/session-limit-that.json (su kien eve that, khong go tay), goi
+      persistBuilderInputRequest(data, builderToken(id), id, true).
+      Assert (toEqual tren doi tuong doc lai tu kho qua builderQuestion parse):
+      kind "session-limit", requestId bang requestId cua mau, options ids
+      ["continue","stop"], allowFreeform false; continuationToken = builderToken(id);
+      dung 1 hang agentEvent co id bat dau "builder-input:<id>:".
+      Ma tran truc A viet truoc (3 o): question -> luu (tra true); session-limit ->
+      luu (true); chi tool-approval -> tra false, pendingInputRequest van null, 0
+      agentEvent. Mau question dung khuon cua mot cau hoi ask_question that neu co
+      trong fixtures, khong thi dung builder-runtime.integration.spec.ts hien co.
+      Phat lai: goi lan hai cung su kien -> tra false, van 1 agentEvent.
+      Chieu do (pha-thu S3): bo "session-limit" khoi bo loc cua builder-input.ts -> ca
+      session-limit do voi thong diep ghim "session-limit khong duoc luu".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bdk_tra_loi_api
+    paths:
+      - "apps/api/src/conversations/**"
+      - "packages/validation/src/builder-question.ts"
+      - "apps/api/test/tra-loi-het-han-muc.spec.ts"
+      - "apps/agent/test/fixtures/session-limit-that.json"
+    expected: |
+      Kho test that. pendingInputRequest gieo bang CHINH writer that
+      (buildPendingInputRequest tu @crm/validation/builder-question tren request lay tu
+      fixtures/session-limit-that.json — round-trip, khong go tay khuon), kem
+      continuationToken va sessionId.
+      Ma tran truc C viet truoc, 5 o:
+      Truoc khi tra loi: builderById tra pendingQuestion kind "session-limit" dung
+      requestId, options ids ["continue","stop"] (qua contract output that cua router).
+      continue -> tra ve {id}, dung 1 agentConversationSubmission voi
+      message.inputResponse toEqual {requestId, optionId:"continue",
+      kind:"session-limit"}, inputRequestId = requestId; stop -> tuong tu voi "stop";
+      text "ok" -> BadRequest "Choose one of the available answers for this question.",
+      0 bai nop; optionId "khac" -> "That answer is not available for this question.",
+      0 bai nop; requestId cu -> "That follow-up question is no longer active.", 0 bai
+      nop. Moi o reset kho.
+      Doi chung duong: mot cau hoi question co allowFreeform van nhan text (luat cu
+      khong gay).
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bdk_tra_loi_dieu_phoi
+    paths:
+      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
+      - "apps/agent/agent/lib/builder-*.ts"
+      - "apps/agent/test/cau-hoi-het-han-muc.integration.spec.ts"
+    expected: |
+      Kho test that. Bai nop do API tao o E3 (tao bang cung khuon: message.inputResponse
+      {requestId, optionId:"continue"}) duoc dispatchBuilderSubmission gui qua mot send
+      gia ghi lai doi so. Assert doi so gui toEqual chua inputResponses
+      [{requestId, optionId:"continue"}] (dung khoa ma eve doc), continuationToken =
+      builderToken(id); bai nop thanh ACCEPTED, pendingInputRequest ve null.
+      Ma tran 2 o viet truoc: continue va stop, moi o mot bai nop rieng, cung assert.
+      Chieu do (pha-thu S3): bo inputResponse khoi builderDeliveryMessage -> do voi
+      thong diep ghim "inputResponses".
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bdk_man_het_han_muc
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "apps/app/components/agent-session-limit-composer.tsx"
+      - "apps/app/lib/agent-transcript.ts"
+      - "apps/app/lib/messages/agent-builder-*.ts"
+      - "apps/app/test/het-han-muc.dom.tsx"
+      - "_acceptance/bo-dung-khong-ket/rang/luong-het-han-muc-that.ndjson"
+    expected: |
+      DOM test (setup-dom cua packages/ui), locale vi. Dau vao la pendingQuestion dung
+      duong that: request lay tu apps/agent/test/fixtures/session-limit-that.json ->
+      buildPendingInputRequest (writer cua kenh) -> builderQuestion.parse (reader cua
+      API) — khong go tay khuon. Ve khoi tra loi cho request do: co cau tieng Viet dung chuoi trong messages; hai
+      nut ten "Cấp thêm" va "Dừng" (getByRole button); KHONG co chuoi "output-token
+      limit" hay "Approve" trong DOM.
+      Bam "Cấp thêm" -> onSubmit goi dung 1 lan toEqual {requestId, optionId:"continue"};
+      bam "Dừng" (render moi) -> {requestId, optionId:"stop"}; khi pending=true ca hai
+      nut disabled; onSubmit reject -> ca hai nut het disabled (bam lai duoc); sau khi
+      requestId nam trong answeredQuestionIds (cau tra loi da duoc nhan) khoi hai nut
+      khong con ve.
+      Lop chu tieng Anh cua eve (prompt, nhan va mo ta option, ten cong cu, dang viet lai
+      "Session limit continuation") rut tu CHINH request that, khong go tay: khong chuoi
+      nao co trong khoi tra loi. Dong dau vet: toTranscript(messagesFromEvents(luong that
+      rang/luong-het-han-muc-that.ndjson)) — ban dung chung, tab Tac nhan cua trang ho so
+      dung — PHAI con dong session_limit_continuation (doi chung duong); qua
+      withoutSessionLimitSteps (chi man dung dung) thi khong con dong do, khong chua
+      chuoi nao cua lop, va van con it nhat mot dong dau vet khac.
+      Bong bong cau tra loi: submission co inputResponse kind session-limit, optionId
+      continue -> hien "Cấp thêm", khong co "Approve"; stop -> "Dừng".
+      Doi chung: request kind question (dung mau cau hoi co san) van ve
+      AgentClarificationComposer (co o nhap), khong ve hai nut tren.
+      Chieu do (pha-thu S3): pendingQuestion bo session-limit -> do voi thong diep ghim
+      "session-limit".
+  - id: E6
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "apps/app/components/agent-session-limit-composer.tsx"
+      - "apps/app/lib/agent-transcript.ts"
+      - "apps/app/lib/messages/agent-builder-*.ts"
+      - "_acceptance/bo-dung-khong-ket/rang/gieo-het-han-muc.ts"
+      - "_acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts"
+      - "_acceptance/bo-dung-khong-ket/rang/luong-het-han-muc-that.ndjson"
+    steps:
+      - "Truoc phien do: chay tac tu gia cua CAY DANG XET `TAC_TU_GIA_PORT=<cong trong> bun _acceptance/bo-dung-khong-ket/rang/tac-tu-gia.ts` (no phat lai luong su kien eve THAT cua luot Gemini 27/09, rang/luong-het-han-muc-that.ndjson, dung giao thuc ndjson cua eve) va giu PID; ghi dong AGENT_URL no in ra"
+      - "Chay trong phien do cua kho voi AGENT_URL do: `AGENT_URL=<AGENT_URL> bun run do:man --chay \"...\"` (docs/setup.md muc Screen measurements) — KHONG dung kho chung crm; APP_URL va API_URL cua phien do. Khong co tac tu gia thi hoi thoai gieo khong co may chu nao phia sau va man nhan 502 — do la loi cua phep do, khong phai cua man"
+      - "Chan cay: dat dau moc vao apps/app/public roi xin lai qua APP_URL; khong nhan lai -> thoat ma 2, goi ten cay dang xet, khong chup"
+      - "Dang nhap: chay bun run dev:session <NGUOI cua phien do> trong apps/api cua cay dang xet voi DATABASE_URL cua phien, dat cookie crm.session_token in ra vao trinh duyet; dat them cookie lang=vi (cau tieng Viet duoc do, khong dua vao ngon ngu may)"
+      - "Gieo: bun _acceptance/bo-dung-khong-ket/rang/gieo-het-han-muc.ts — tao hoi thoai dung co sessionId, roi goi CHINH persistBuilderInputRequest voi apps/agent/test/fixtures/session-limit-that.json (cam ghi tay pendingInputRequest hay agentEvent), in URL hoi thoai"
+      - "Mo URL o kho 1440: chup E6-het-han-muc-1440.png. Lap lai kho 375: E6-het-han-muc-375.png"
+      - "Bam 'Cấp thêm'. Cho toi khi bong bong nguoi dung 'Cấp thêm' hien (khong cho theo giay): chup E6-sau-bam-1440.png"
+      - "Gieo lai mot hoi thoai moi, bam 'Dừng'. Cho toi khi bong bong 'Dừng' hien: chup E6-sau-dung-1440.png"
+      - "Moi anh ghi o _acceptance/bo-dung-khong-ket/evidence/. Xoa dau moc, tat tac tu gia va may chu da dung bang PID"
+    expected: |
+      E6-het-han-muc (1440, 375): cau "Bộ dựng đã dùng hết hạn mức của phiên này. Cấp
+      thêm để làm tiếp, hoặc dừng."; hai nut "Cấp thêm" (to dac, mau chinh) va "Dừng";
+      khong co o soan tin thuong; khong co chu tieng Anh cua eve — CA LOP, ke het tu
+      yeu cau that apps/agent/test/fixtures/session-limit-that.json: cau prompt ("This
+      session has hit the output-token limit..."), nhan option "Approve" va "Stop", mo ta
+      option "Grant a fresh token budget" va "Stop now", ten cong cu
+      "session_limit_continuation" va dang viet lai "Session limit continuation" o dong
+      dau vet. O kho 375 hai nut khong tran le.
+      E6-sau-bam: co bong bong nguoi dung "Cấp thêm"; hai nut khong con.
+      E6-sau-dung: co bong bong nguoi dung "Dừng"; hai nut khong con.
+    inputs:
+      - _acceptance/bo-dung-khong-ket/evidence/
+  - id: E7
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bdk_san_thiet_ke
+    paths:
+      - "apps/app/components/agent-session-limit-composer.tsx"
+    expected: |
+      design-gate --mode static tren apps/app/components/agent-session-limit-composer.tsx
+      exit 0 (khong loi nen P0).
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bdk_chan_khuon
+    paths:
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/test/chan-khuon-bo-dung.spec.ts"
+      - "apps/agent/test/fixtures/goi-bo-dung-kem-khuon-that.json"
+    expected: |
+      Doc su kien that fixtures/goi-bo-dung-kem-khuon-that.json. Goi qua CHINH hook
+      that (layHook cua test/tran-uy-thac/chuoi-cuong-che, phien purpose builder) — khong
+      goi ham trong ruot.
+      Ma tran truc D viet truoc, 5 o:
+      (1) nguyen mau (co outputSchema) -> nem, message toBe
+      BUILDER_OUTPUT_SCHEMA_MESSAGE, va toBe "Call agent_builder with message only; it
+      returns its own result."; trang thai uy thac khong ghi callId do;
+      (2) cung mau, xoa khoa outputSchema -> khong nem, trang thai ghi callId;
+      (3) outputSchema {} -> nem cung cau;
+      (4) doi subagentName thanh "agent_runner", giu outputSchema -> khong nem;
+      (5) phien purpose research -> khong nem, trang thai khong doi.
+      Chieu do (pha-thu S3): bo cho kiem outputSchema -> o (1) do voi thong diep ghim
+      "outputSchema".
+  - id: E9
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bdk_tai_lieu
+    paths:
+      - "docs/agent.md"
+      - "_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua no. Doc docs/agent.md o HEAD va o
+      git merge-base HEAD origin/onehub.
+      Muc "Team-agent builder and runner" (cat bang tieu de) phai co: "SESSION_LIMITS",
+      "128k" hoac "128 000"/"128.000", "500k"/"500.000", "session-limit", va
+      "outputSchema".
+      Danh sach "Chỗ rẽ có tên với bản của hãng": moi tep ma git diff --name-only
+      origin/release...HEAD cham VA ton tai o origin/release phai co ten trong muc do
+      (chi xet tep ma nhanh nay sua, tinh tu merge-base voi origin/onehub).
+      Ban merge-base phai TRUOT it nhat mot dieu kien (in dieu kien truot). In
+      "tai-lieu ok" va exit 0 khi HEAD dat va ban goc truot; nguoc lai exit 1 va in
+      dieu kien vi pham.
+  - id: E10
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bdk_eve_chan_khuon
+    paths:
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/eve-tran/**"
+      - "apps/agent/test/fixtures/goi-bo-dung-kem-khuon-that.json"
+    expected: |
+      Ung dung eve thu o apps/agent/test/eve-tran (eve 0.29.4 cua apps/agent). Goc co
+      subagent "agent_builder" (model gia, tra ket qua ngay); mockModel cua goc phat
+      dung loi goi subagent doc tu fixtures/goi-bo-dung-kem-khuon-that.json (message va
+      outputSchema nguyen van). Moc actions.requested cua goc goi CHINH
+      recordBuilderDelegation import tu apps/agent/agent/lib/builder-delegation.ts.
+      Thu muc evals/chan-khuon/ (eve eval chan-khuon chay ca thu muc). co-khuon.eval.ts: t.send mot luot; assert co su kien turn.failed; KHONG co
+      su kien subagent.called nao; message loi chua BUILDER_OUTPUT_SCHEMA_MESSAGE.
+      Doi chung duong, khong-khuon.eval.ts cung thu muc: loi goi bo outputSchema
+      -> co subagent.called va subagent.completed, luot khong failed.
+      Exit cua eve eval: 0 khi ca hai eval dat.
+  - id: E11
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bdk_eve_chay_tiep
+    paths:
+      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
+      - "apps/agent/agent/lib/builder-*.ts"
+      - "apps/agent/test/eve-tran/**"
+    expected: |
+      Cung ung dung eve thu. Subagent "bo_dung_thu" co limits.maxOutputTokensPerSession
+      nho (vd 100); mockModel cua no bao usage outputTokens vuot han muc o buoc dau va
+      dem so buoc model da chay.
+      Thu muc evals/chay-tiep/. tiep.eval.ts: t.send -> t.requireInputRequest kind session-limit, option ids
+      toEqual ["continue","stop"]; tra loi goc bang inputResponses lay tu CHINH
+      builderDeliveryMessage cua kho (dung mot bai nop {text, inputResponse {requestId,
+      optionId:"continue"}}) — khong go tay khuon. Assert: phien con chay them >= 1
+      buoc model sau cau tra loi; co subagent.completed ve goc voi ket qua cua buoc
+      do; luot goc khong con input.requested dang cho.
+      dung.eval.ts: cung dung nhung optionId "stop" -> phien con khong chay them buoc
+      model nao (khong co DAU_BUOC_HAI), khong co subagent.completed; luot goc ket thuc
+      bang turn.cancelled; pendingInputRequests rong.
+      Ung dung thu khong import duoc ma ngoai thu muc cua no (eve chup rieng thu muc khi
+      dung), nen cmd chay qua chay.ts: moi luot chay mot ban sao rieng o .chay/<id>, chep NGUYEN VAN builder-delegation.ts,
+      builder-delegation-state.ts, builder-delivery.ts va mau GLM vao agent/_chep roi
+      moi goi eve eval.
+      Chieu do (pha-thu S3): tra loi bang requestId sai -> "chay-tiep" do voi thong diep
+      ghim "khong chay tiep".
