@@ -3,8 +3,8 @@
 <title>Chụp nội dung dán</title>
 <style>
 body{font:15px/1.5 system-ui,sans-serif;max-width:760px;margin:32px auto;padding:0 16px;color:#111}
-#o{border:2px dashed #006b4f;border-radius:8px;min-height:120px;padding:16px;outline:none}
-textarea{width:100%;height:220px;font:12px ui-monospace,monospace;margin-top:8px}
+#o{width:100%;box-sizing:border-box;border:2px dashed #006b4f;border-radius:8px;height:120px;padding:16px;outline:none;font:inherit}
+#t{width:100%;height:220px;font:12px ui-monospace,monospace;margin-top:8px}
 button{margin-top:8px;padding:6px 14px;border-radius:5px;border:1px solid #ccc;background:#fff;cursor:pointer}
 </style>
 <h1>Chụp nội dung dán từ Word và Google Docs</h1>
@@ -13,11 +13,11 @@ button{margin-top:8px;padding:6px 14px;border-radius:5px;border:1px solid #ccc;b
 <li>Bấm vào khung nét đứt dưới đây rồi dán (⌘V).</li>
 <li>Bấm «Chép mã» và gửi lại cho Claude, ghi rõ «Word». Làm lại với Google Docs, ghi «Google Docs».</li>
 </ol>
-<div id="o" contenteditable="true">Bấm vào đây rồi dán</div>
+<textarea id="o" aria-label="Ô dán" placeholder="Bấm vào đây rồi dán"></textarea>
 <textarea id="t" readonly placeholder="Mã HTML của lần dán hiện ở đây"></textarea>
 <button id="b" type="button">Chép mã</button>
 <script>
 const o=document.getElementById("o"),t=document.getElementById("t");
-o.addEventListener("paste",e=>{e.preventDefault();t.value=e.clipboardData.getData("text/html")||"(không có HTML — hãy chép từ Word hoặc Google Docs)";o.textContent="Đã nhận, xem mã bên dưới";});
+o.addEventListener("paste",e=>{e.preventDefault();t.value=e.clipboardData.getData("text/html")||"(không có HTML — hãy chép từ Word hoặc Google Docs)";o.value="";o.placeholder="Đã nhận, xem mã bên dưới";});
 document.getElementById("b").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(t.value);}catch{t.select();}});
 </script>
