@@ -5,7 +5,7 @@ slug: hoan-thien-hoi-crm-qua-zalo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-26T22:38:41Z
 design_doc: docs/superpowers/specs/2026-09-26-hoan-thien-hoi-crm-qua-zalo-design.md
@@ -85,3 +85,11 @@ thiểu, chặn ở phía công cụ chứ không ở lời nhắc) và `[NGÀNH
 ### Known limits (trần 3 round, 2026-09-27, chủ kho chọn (a))
 
 - Số tiền từ 1.000 tỷ trở lên (Ngoài-7 của `hoi-crm-qua-zalo`) vẫn bị che một phần, ví dụ «1.000.000.000.000 đ» thành «1.[đã ẩn] đ». Ba round vá bằng phép nhìn lùi trong regex đều đổi lỗi này lấy lỗi khác, và bản cuối làm lộ ba dạng số điện thoại quốc tế mà bản gốc vẫn che; chủ kho chọn trả bộ che về bản gốc (`f9932858`) — riêng tư trước, thẩm mỹ sau. Làm lại phần phân biệt số tiền là một hợp đồng riêng.
+
+### Known limits (Cổng Bằng chứng, 2026-09-27, Phan Le Manh)
+
+- Ngoài-1 (low): E6 hứa «zalo-loc.ts trùng byte với f9932858» nhưng lệnh của E6 không kiểm điều đó (`_acceptance/hoan-thien-hoi-crm-qua-zalo/evals.yaml`).
+- Ngoài-2 (low): ca `so-tien` so `dem` với `DIEN_THOAI_LIEN.length` — phép so tự quy, không ghim 13 phần tử (`apps/agent/test/zalo-loc.spec.ts`).
+- Ngoài-3 (medium): `archive_field` và `record_job_change` có `approval: sensitiveWrite` — trên Zalo lượt dừng ở `input.requested` (người hỏi nhận `canHoiLai`) trước khi tới chặn trong `execute`; không ghi nhầm được gì (`apps/agent/agent/tools/archive_field.ts`).
+- Ngoài-4 (low): `assertNotZaloQuestion` so với chuỗi `"zalo"` viết tay thay vì `ZALO.hoi.purpose` (`apps/agent/agent/lib/session-purpose.ts`).
+
