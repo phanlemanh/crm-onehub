@@ -5,7 +5,7 @@ slug: no-sau-luot-4-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-27T11:06:21Z
 design_doc: docs/superpowers/specs/2026-09-27-no-sau-luot-4-okr-design.md
@@ -71,3 +71,12 @@ Quét bằng `morphological-scan` trong phiên (bản quét: `coverage-scan.md`)
 - Đường nền 27/09: `duong-nen.md` đỏ ở `build_khong_cache` vì làn chạy qua `bash -lc` rơi về Node 22 (eve đòi ≥ 24); chạy lại `bunx turbo run build --force` với Node 24.15.0 ở cây này: 4/4 tác vụ, mã 0. Hai dòng «THIEU merge-base» là khoá công cụ của hồ sơ khác. Đỏ môi trường, không phải lỗi kho.
 - Viết mã chỉ bắt đầu khi chủ kho cho phép trong phiên và sau khi gộp `origin/onehub` (lượt 9a `tro-ly-okr-nen` đang chạm cùng vùng — design doc mục 4).
 - Chạm tệp mà eval của hồ sơ đã ký theo dõi (`cap-nhat-tuan-okr`, `may-nhac-truoc-nguoi` và các hồ sơ nhắc buổi sáng khác) — S5 ghim lại các hồ sơ bị chạm.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-27)
+
+- Ngoài-1 và Ngoài-4 (cùng một lỗi): khoá `n4_the_truc_tiep` trong `_acceptance/config.yaml` thiếu dấu cách sau dấu hai chấm, tệp không còn là YAML hợp lệ với bộ đọc chuẩn; bộ đọc riêng của kit vẫn lấy được lệnh. Phải sửa trước lượt ghim lại các hồ sơ bị chạm ở S5, vì thước của nhiều hồ sơ đã ký đọc tệp bằng bộ đọc YAML chuẩn.
+- Ngoài-2: `okr.objective` đọc thêm một lần hàng đơn vị của mục tiêu để gọi `ghiDuocKr`, dù kết quả trùng luật cũ.
+- Ngoài-3: khuôn vết và khuôn mục nhắc OKR sống ở `@crm/db` (tái xuất ở `@crm/validation`), lệch chữ «khuôn chung sống ở `packages/validation/src`» của `AGENTS.md`; lối rẽ đã ghi sổ `d-20260927T092257Z-3`.
+- Ngoài-5: phần lan lỗi của E12 chỉ kiểm HTTP khác 200 ở thẻ và Tổng quan, không ghim câu «Vết OKR <id>» và không có đối chứng dương.
+- Ngoài-6: E2 không đo cột «tin D+1 — đúng 1 tin gửi đi» bằng số tin fetch giả nhận.
+- Ngoài-7: `mot-khuon` (b) so nhánh mã với chính bảng khoá dựng ra nó; phần đo đầu ra thật nằm ở E13.
