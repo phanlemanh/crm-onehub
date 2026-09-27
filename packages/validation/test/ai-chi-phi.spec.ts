@@ -11,51 +11,92 @@ import {
 import { KENH_TAC_TU, SESSION_PURPOSES } from "../src/phien-tac-tu";
 
 const PHIEN_CON = [
-	{ subagent: null, okrViec: null },
-	{ subagent: "tro_ly_okr", okrViec: "de-xuat" },
-	{ subagent: "tro_ly_okr", okrViec: "tom-tat-tuan" },
-	{ subagent: "agent_runner", okrViec: null },
-	{ subagent: "agent_builder", okrViec: null },
+	{ ma: "-", subagent: null, okrViec: null },
+	{ ma: "tro_ly_okr/de-xuat", subagent: "tro_ly_okr", okrViec: "de-xuat" },
+	{
+		ma: "tro_ly_okr/tom-tat-tuan",
+		subagent: "tro_ly_okr",
+		okrViec: "tom-tat-tuan",
+	},
+	{ ma: "agent_runner", subagent: "agent_runner", okrViec: null },
+	{ ma: "agent_builder", subagent: "agent_builder", okrViec: null },
 ] as const;
 
-const VIEC_GOC = new Map<string, TinhNang>([
-	["builder", "crm.dung-tac-nhan"],
-	["team-agent", "crm.tac-nhan"],
-	["research", "crm.nghien-cuu"],
-	["zalo", "zalo.hoi-crm"],
-	["okr", "okr.chuyen-tiep"],
+const BANG = new Map<string, TinhNang>([
+	["crm|builder|-", "crm.dung-tac-nhan"],
+	["crm|team-agent|-", "crm.tac-nhan"],
+	["crm|research|-", "crm.nghien-cuu"],
+	["crm|okr|-", "okr.chuyen-tiep"],
+	["eve|research|-", "crm.hoi-dap"],
+	["zalo|zalo|-", "zalo.hoi-crm"],
+	["crm|okr|tro_ly_okr/de-xuat", "okr.de-xuat"],
+	["crm|okr|tro_ly_okr/tom-tat-tuan", "okr.tom-tat"],
+	["crm|team-agent|agent_runner", "crm.tac-nhan"],
+	["crm|builder|agent_builder", "crm.dung-tac-nhan"],
 ]);
 
-function kyVong(
-	purpose: string,
-	kenh: string,
-	con: (typeof PHIEN_CON)[number],
-): TinhNang | undefined {
-	if (con.subagent === "tro_ly_okr")
-		return con.okrViec === "tom-tat-tuan" ? "okr.tom-tat" : "okr.de-xuat";
-	if (con.subagent === "agent_runner") return "crm.tac-nhan";
-	if (con.subagent === "agent_builder") return "crm.dung-tac-nhan";
-	if (kenh === "eve") return "crm.hoi-dap";
-	if (kenh === "zalo") return "zalo.hoi-crm";
-	return VIEC_GOC.get(purpose);
-}
+const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
+	{
+		khop: /^crm\|zalo\|/,
+		lyDo: "phiên purpose zalo chỉ mở từ kênh zalo",
+	},
+	{
+		khop: /^eve\|(builder|team-agent|okr|zalo)\|/,
+		lyDo: "khung hội thoại eve không mang purpose; purposeOf trả research",
+	},
+	{
+		khop: /^zalo\|(builder|team-agent|research|okr)\|/,
+		lyDo: "kênh zalo luôn gắn purpose zalo",
+	},
+	{
+		khop: /^(crm|eve|zalo)\|(builder|team-agent|research|zalo)\|tro_ly_okr\//,
+		lyDo: "tro_ly_okr chỉ được gọi từ phiên okr — hook uỷ quyền chặn nơi khác",
+	},
+	{
+		khop: /^(eve|zalo)\|okr\|tro_ly_okr\//,
+		lyDo: "phiên okr chỉ mở từ kênh crm",
+	},
+	{
+		khop: /^(crm|eve|zalo)\|(builder|research|zalo|okr)\|agent_runner$/,
+		lyDo: "agent_runner chỉ chạy dưới lượt Tác nhân (purpose team-agent)",
+	},
+	{
+		khop: /^(eve|zalo)\|team-agent\|agent_runner$/,
+		lyDo: "lượt Tác nhân chỉ mở từ kênh crm",
+	},
+	{
+		khop: /^(crm|eve|zalo)\|(team-agent|research|zalo|okr)\|agent_builder$/,
+		lyDo: "agent_builder chỉ chạy dưới hội thoại dựng Tác nhân (purpose builder)",
+	},
+	{
+		khop: /^(eve|zalo)\|builder\|agent_builder$/,
+		lyDo: "hội thoại dựng Tác nhân chỉ mở từ kênh crm",
+	},
+];
 
 function kiemMaTran(purposes: readonly string[]) {
-	const o: { nguon: NguonBuoc; mong: TinhNang }[] = [];
+	const o: { o: string; nguon: NguonBuoc; mong: TinhNang }[] = [];
 	for (const purpose of purposes) {
 		for (const kenh of KENH_TAC_TU) {
 			for (const con of PHIEN_CON) {
-				const mong = kyVong(purpose, kenh, con);
-				if (!mong) throw new Error(`thieu dong suy viec: ${purpose}`);
-				o.push({
-					nguon: {
-						kenh,
-						purpose,
-						subagent: con.subagent,
-						okrViec: con.okrViec,
-					},
-					mong,
-				});
+				const khoa = `${kenh}|${purpose}|${con.ma}`;
+				const mong = BANG.get(khoa);
+				const ngoai = NGOAI.filter((n) => n.khop.test(khoa)).length;
+				if (mong && ngoai > 0)
+					throw new Error(`o vua co nghia vua ngoai: ${khoa}`);
+				if (!mong && ngoai === 0)
+					throw new Error(`thieu dong suy viec: ${purpose} (${khoa})`);
+				if (mong)
+					o.push({
+						o: khoa,
+						nguon: {
+							kenh,
+							purpose,
+							subagent: con.subagent,
+							okrViec: con.okrViec,
+						},
+						mong,
+					});
 			}
 		}
 	}
@@ -63,13 +104,20 @@ function kiemMaTran(purposes: readonly string[]) {
 }
 
 describe("ma-tran-viec", () => {
-	test("mọi mục đích phiên × kênh × phiên con có đúng một việc có tên", () => {
+	test("mọi mục đích phiên × kênh × phiên con nằm đúng một trong bảng có nghĩa hoặc bảng ngoài, mỗi ô có nghĩa đúng việc viết trước", () => {
 		const o = kiemMaTran(SESSION_PURPOSES);
-		expect(o.length).toBe(
-			SESSION_PURPOSES.length * KENH_TAC_TU.length * PHIEN_CON.length,
+		const tongO =
+			SESSION_PURPOSES.length * KENH_TAC_TU.length * PHIEN_CON.length;
+		console.log(
+			`ma-tran-viec: ${tongO} to hop, ${o.length} o co nghia, ${tongO - o.length} o ngoai`,
 		);
+		expect(o.length).toBe(BANG.size);
 		const lech = o
-			.map(({ nguon, mong }) => ({ nguon, mong, that: tinhNangCua(nguon) }))
+			.map(({ o: khoa, nguon, mong }) => ({
+				khoa,
+				mong,
+				that: tinhNangCua(nguon),
+			}))
 			.filter((x) => x.that !== x.mong);
 		expect(lech).toEqual([]);
 		expect(o.filter(({ nguon }) => tinhNangCua(nguon) === "khac")).toEqual([]);

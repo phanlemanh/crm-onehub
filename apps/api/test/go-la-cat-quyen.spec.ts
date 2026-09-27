@@ -150,6 +150,8 @@ async function theoLo<T, R>(
 	return kq;
 }
 
+const TRAN_MA_TRAN_MS = 60_000;
+
 async function maTranTrpc(dau: Dau, lo?: number): Promise<HangMaTran[]> {
 	return theoLo(
 		soThuTuc(),
@@ -451,107 +453,130 @@ describe("go-la-cat-quyen", () => {
 	const go = async () =>
 		workspace.removeMember(chu, { memberId: await memberId(bi) });
 
-	test("ma-tran-dang-nhap-lai: bi go roi dang nhap lai thi moi thu tuc ngoai ngoai le tu choi ve tu cach", async () => {
-		await go();
-		const cookie = await dangNhap(emailBi);
-		const tatCa = soThuTuc();
-		expect(
-			tatCa.length,
-			"so router rong hoac qua it — ma tran se xanh cam",
-		).toBeGreaterThanOrEqual(SAN_THU_TUC);
-		const hang = await maTranTrpc({ cookie });
-		expect(hang.length).toBe(tatCa.length);
-		expect(
-			hangLot(hang, laNgoaiLeTrpc),
-			"thu tuc khong tu choi nguoi da bi go ve tu cach",
-		).toEqual([]);
-	});
+	test(
+		"ma-tran-dang-nhap-lai: bi go roi dang nhap lai thi moi thu tuc ngoai ngoai le tu choi ve tu cach",
+		async () => {
+			await go();
+			const cookie = await dangNhap(emailBi);
+			const tatCa = soThuTuc();
+			expect(
+				tatCa.length,
+				"so router rong hoac qua it — ma tran se xanh cam",
+			).toBeGreaterThanOrEqual(SAN_THU_TUC);
+			const hang = await maTranTrpc({ cookie });
+			expect(hang.length).toBe(tatCa.length);
+			expect(
+				hangLot(hang, laNgoaiLeTrpc),
+				"thu tuc khong tu choi nguoi da bi go ve tu cach",
+			).toEqual([]);
+		},
+		TRAN_MA_TRAN_MS,
+	);
 
-	test("ngoai-le-dung-tap-khai: tap thu tuc khong chan nguoi bi go bang dung tap khai", async () => {
-		await go();
-		const cookie = await dangNhap(emailBi);
-		const hang = await maTranTrpc({ cookie });
-		const khongChan = hang
-			.filter((h) => !biChanVeTuCach(h))
-			.map((h) => h.ten)
-			.sort();
-		expect(khongChan, "tap ngoai le lech tap khai").toEqual([...NGOAI_LE]);
-		const res = await goiTrpc("workspace.get", "query", undefined, { cookie });
-		expect(res.status, "workspace.get phai tra 200 cho proxy").toBe(200);
-		expect(res.body.result.data.viewerRole).toBe(null);
-	});
+	test(
+		"ngoai-le-dung-tap-khai: tap thu tuc khong chan nguoi bi go bang dung tap khai",
+		async () => {
+			await go();
+			const cookie = await dangNhap(emailBi);
+			const hang = await maTranTrpc({ cookie });
+			const khongChan = hang
+				.filter((h) => !biChanVeTuCach(h))
+				.map((h) => h.ten)
+				.sort();
+			expect(khongChan, "tap ngoai le lech tap khai").toEqual([...NGOAI_LE]);
+			const res = await goiTrpc("workspace.get", "query", undefined, {
+				cookie,
+			});
+			expect(res.status, "workspace.get phai tra 200 cho proxy").toBe(200);
+			expect(res.body.result.data.viewerRole).toBe(null);
+		},
+		TRAN_MA_TRAN_MS,
+	);
 
-	test("doi-chung-thanh-vien: thanh vien khong bao gio nhan thong diep tu cach", async () => {
-		const cookie = await dangNhap(emailBi);
-		const hang = await maTranTrpc({ cookie });
-		expect(
-			hang.filter(biChanVeTuCach).map((h) => h.ten),
-			"thanh vien bi chan oan ve tu cach",
-		).toEqual([]);
-		for (const { ten, input } of THU_TUC_MAU) {
-			const res = await goiTrpc(ten, "query", input, { cookie });
-			expect(res.status, `${ten} phai tra 200 cho thanh vien`).toBe(200);
-		}
-	});
+	test(
+		"doi-chung-thanh-vien: thanh vien khong bao gio nhan thong diep tu cach",
+		async () => {
+			const cookie = await dangNhap(emailBi);
+			const hang = await maTranTrpc({ cookie });
+			expect(
+				hang.filter(biChanVeTuCach).map((h) => h.ten),
+				"thanh vien bi chan oan ve tu cach",
+			).toEqual([]);
+			for (const { ten, input } of THU_TUC_MAU) {
+				const res = await goiTrpc(ten, "query", input, { cookie });
+				expect(res.status, `${ten} phai tra 200 cho thanh vien`).toBe(200);
+			}
+		},
+		TRAN_MA_TRAN_MS,
+	);
 
-	test("tab-dang-mo: cookie bo dem phien mat quyen ngay khi bi go", async () => {
-		const cookie = await dangNhap(emailBi);
-		expect(
-			cookie,
-			"phep do dang hoi thieu cookie bo dem phien — dung loi cua phep do cu",
-		).toContain("session_data");
-		expect(
-			(await goiTrpc("contacts.list", "query", {}, { cookie })).status,
-			"doi chung: tab con doc duoc truoc luot go",
-		).toBe(200);
-		await go();
-		const hang = await maTranTrpc({ cookie });
-		expect(
-			hangLot(hang, laNgoaiLeTrpc),
-			"tab dang mo cua nguoi da bi go van qua duoc",
-		).toEqual([]);
-	});
+	test(
+		"tab-dang-mo: cookie bo dem phien mat quyen ngay khi bi go",
+		async () => {
+			const cookie = await dangNhap(emailBi);
+			expect(
+				cookie,
+				"phep do dang hoi thieu cookie bo dem phien — dung loi cua phep do cu",
+			).toContain("session_data");
+			expect(
+				(await goiTrpc("contacts.list", "query", {}, { cookie })).status,
+				"doi chung: tab con doc duoc truoc luot go",
+			).toBe(200);
+			await go();
+			const hang = await maTranTrpc({ cookie });
+			expect(
+				hangLot(hang, laNgoaiLeTrpc),
+				"tab dang mo cua nguoi da bi go van qua duoc",
+			).toEqual([]);
+		},
+		TRAN_MA_TRAN_MS,
+	);
 
-	test("khoa-con-bat: khoa con bat cua nguoi khong con trong kho bi tu choi qua tRPC va REST", async () => {
-		const khoa = await taoKhoa(bi, "khoa-con-bat");
-		const dau = { [API_KEY_HEADER]: khoa.key };
-		expect(
-			(await goiTrpc("contacts.list", "query", {}, dau)).status,
-			"doi chung tRPC: khoa doc duoc khi con la thanh vien",
-		).toBe(200);
-		const restTruoc = await request(app.getHttpServer())
-			.post(`${REST_BRIDGE_PATH}/contacts/search`)
-			.set(API_KEY_HEADER, khoa.key)
-			.set("content-type", "application/json")
-			.send("{}");
-		expect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);
-		await db.member.delete({ where: { id: await memberId(bi) } });
-		expect(
-			await khoaBat(khoa.id),
-			"khoa phai con bat de 403 khong den tu tang khoa",
-		).toBe(true);
-		const hangTrpc = await maTranTrpc(dau, LO_SONG_SONG);
-		expect(
-			hangTrpc.map((h) => h.ten),
-			"ma tran tRPC song song lech danh sach thu tuc",
-		).toEqual(soThuTuc().map((t) => t.ten));
-		expect(
-			hangLot(hangTrpc, laNgoaiLeTrpc),
-			"tRPC: khoa con bat cua nguoi ngoai van qua duoc",
-		).toEqual([]);
-		const rest = await maTranRest(dau, LO_SONG_SONG);
-		expect(rest.length, "ma tran REST rong hoac qua it").toBeGreaterThanOrEqual(
-			SAN_DUONG_REST,
-		);
-		expect(
-			rest.map((h) => h.ten),
-			"ma tran REST song song lech danh sach duong",
-		).toEqual(duongRest().map(tenDuong));
-		expect(
-			hangLot(rest, laNgoaiLeRest),
-			"REST: khoa con bat cua nguoi ngoai van qua duoc",
-		).toEqual([]);
-	});
+	test(
+		"khoa-con-bat: khoa con bat cua nguoi khong con trong kho bi tu choi qua tRPC va REST",
+		async () => {
+			const khoa = await taoKhoa(bi, "khoa-con-bat");
+			const dau = { [API_KEY_HEADER]: khoa.key };
+			expect(
+				(await goiTrpc("contacts.list", "query", {}, dau)).status,
+				"doi chung tRPC: khoa doc duoc khi con la thanh vien",
+			).toBe(200);
+			const restTruoc = await request(app.getHttpServer())
+				.post(`${REST_BRIDGE_PATH}/contacts/search`)
+				.set(API_KEY_HEADER, khoa.key)
+				.set("content-type", "application/json")
+				.send("{}");
+			expect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);
+			await db.member.delete({ where: { id: await memberId(bi) } });
+			expect(
+				await khoaBat(khoa.id),
+				"khoa phai con bat de 403 khong den tu tang khoa",
+			).toBe(true);
+			const hangTrpc = await maTranTrpc(dau, LO_SONG_SONG);
+			expect(
+				hangTrpc.map((h) => h.ten),
+				"ma tran tRPC song song lech danh sach thu tuc",
+			).toEqual(soThuTuc().map((t) => t.ten));
+			expect(
+				hangLot(hangTrpc, laNgoaiLeTrpc),
+				"tRPC: khoa con bat cua nguoi ngoai van qua duoc",
+			).toEqual([]);
+			const rest = await maTranRest(dau, LO_SONG_SONG);
+			expect(
+				rest.length,
+				"ma tran REST rong hoac qua it",
+			).toBeGreaterThanOrEqual(SAN_DUONG_REST);
+			expect(
+				rest.map((h) => h.ten),
+				"ma tran REST song song lech danh sach duong",
+			).toEqual(duongRest().map(tenDuong));
+			expect(
+				hangLot(rest, laNgoaiLeRest),
+				"REST: khoa con bat cua nguoi ngoai van qua duoc",
+			).toEqual([]);
+		},
+		TRAN_MA_TRAN_MS,
+	);
 
 	test("go-tat-khoa: luot go tat moi khoa cua nguoi bi go, khong cham khoa nguoi khac", async () => {
 		const [b1, b2] = [await taoKhoa(bi, "b1"), await taoKhoa(bi, "b2")];
