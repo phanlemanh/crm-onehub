@@ -95,6 +95,19 @@ describe("tran-nhap", () => {
 			["7,5", "7.50", "0", "20", "-1", "abc", "21", "7,555"].map(docTranUsd),
 		).toEqual([7.5, 7.5, 0, 20, null, null, null, null]);
 	});
+
+	test("mọi trần hai số lẻ từ 0 tới 20 đều lưu được", () => {
+		const hong = Array.from({ length: 2001 }, (_, i) => i / 100).filter(
+			(n) => !okrProgram.shape.aiTranThangUsd.safeParse(n).success,
+		);
+		expect(hong).toEqual([]);
+		expect(["8,2", "1,1", "9.2", "2,3"].map(docTranUsd)).toEqual([
+			8.2, 1.1, 9.2, 2.3,
+		]);
+		expect(okrProgram.shape.aiTranThangUsd.safeParse(1.005).success).toBe(
+			false,
+		);
+	});
 });
 
 describe("don-vi-duoc-bat", () => {

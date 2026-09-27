@@ -15,7 +15,7 @@ const tranThangUsd = z
 	.number()
 	.min(0)
 	.max(TRO_LY_OKR_TRAN.tranThangToiDaUsd)
-	.refine((n) => Math.round(n * 100) === n * 100);
+	.refine((n) => Number(n.toFixed(2)) === n);
 
 export const okrProgram = z.object({
 	objectiveCap: z.int().min(1).max(50),

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_rethrow } from "next/navigation";
 import type * as React from "react";
 import { Suspense } from "react";
 import {
@@ -67,6 +68,17 @@ export default async function CaiDatChuongTrinhOkrPage() {
 	);
 }
 
+async function loadProgram() {
+	try {
+		return await getServerQueryClient().fetchQuery(
+			getServerTrpc().okr.program.queryOptions(),
+		);
+	} catch (error) {
+		unstable_rethrow(error);
+		return null;
+	}
+}
+
 async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	await requireSession();
 
@@ -75,9 +87,9 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 
 	const [, program] = await Promise.all([
 		queryClient.prefetchQuery(trpc.okr.cycles.queryOptions()),
-		queryClient.fetchQuery(trpc.okr.program.queryOptions()),
+		loadProgram(),
 	]);
-	if (program.canManage) {
+	if (program?.canManage) {
 		await Promise.all([
 			queryClient.prefetchQuery(trpc.okr.aiChiTieu.queryOptions()),
 			queryClient.prefetchQuery(trpc.org.tree.queryOptions()),
