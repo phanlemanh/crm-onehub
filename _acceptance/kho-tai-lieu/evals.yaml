@@ -410,6 +410,7 @@ evals:
       - "_acceptance/kho-tai-lieu/evidence/ktl-doc-390.png"
       - "_acceptance/kho-tai-lieu/evidence/ktl-doc-1440.png"
       - "_acceptance/kho-tai-lieu/evidence/ktl-duyet-1440.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-duyet-390.png"
       - "docs/superpowers/specs/2026-09-27-kho-tai-lieu-design.md"
     expected: |
       Mot nhan vien van phong quen Word va Google Docs, khong biet markdown, nhin cac anh: hieu duoc

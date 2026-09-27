@@ -157,21 +157,34 @@ describe("tai-lieu-diff", () => {
 	});
 
 	const BANG = (hang: string) => `| Mục | Tỉ lệ |\n| --- | --- |\n${hang}\n`;
-	const HANG_BANG: [string, string, string][] = [
-		["them-chu-cuoi-o", "| a | 5% |", "| a x | 5% |"],
-		["bo-chu-cuoi-o", "| b c | 7 |", "| b | 7 d |"],
-		["doi-o-sau", "| a | 5% |", "| a | 6% |"],
+	const HANG_BANG: [string, string, string, string[][]][] = [
+		["them-chu-cuoi-o", "| a | 5% |", "| a x | 5% |", [["them:x"], []]],
+		["bo-chu-cuoi-o", "| b c | 7 |", "| b | 7 d |", [["bo:c"], ["them:d"]]],
+		["doi-o-sau", "| a | 5% |", "| a | 6% |", [[], ["bo:5", "them:6"]]],
 	];
-	for (const [ten, truoc, sau] of HANG_BANG)
+	const doiTheoO = (doan: { loai: string; chu: string }[]): string[][] => {
+		const o: string[][] = [[]];
+		for (const d of doan) {
+			if (d.loai === "giu" && d.chu === " | ") o.push([]);
+			else if (d.loai !== "giu" && d.chu.trim() !== "")
+				o[o.length - 1]?.push(`${d.loai}:${d.chu.trim()}`);
+		}
+		return o;
+	};
+	for (const [ten, truoc, sau, mong] of HANG_BANG)
 		test(`bang-giu-dau-ngan-o: ${ten}`, () => {
 			const hang = soSanh(BANG(truoc), BANG(sau)).filter(
 				(k) => k.kieu === "hang-bang" && k.doan.some((d) => d.loai !== "giu"),
 			);
 			expect(hang.length).toBe(1);
-			const ngan = hang[0]?.doan.filter((d) => d.chu.includes("|")) ?? [];
+			const doan = hang[0]?.doan ?? [];
+			const ngan = doan.filter((d) => d.chu.includes("|"));
 			if (ngan.some((d) => d.loai !== "giu" || d.chu !== " | "))
 				throw new Error(`dau ngan o bi cat: ${ten}`);
 			expect(ngan.length).toBe(1);
+			const thucTe = doiTheoO(doan);
+			if (JSON.stringify(thucTe) !== JSON.stringify(mong))
+				throw new Error(`chu doi lech o: ${ten} ${JSON.stringify(thucTe)}`);
 		});
 	test("bang-doi-so-cot: hang cu bo va hang moi them tach rieng", () => {
 		const hang = soSanh(

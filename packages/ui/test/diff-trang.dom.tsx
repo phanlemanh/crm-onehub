@@ -261,27 +261,51 @@ describe("token --diff-them, --diff-bo", () => {
 
 	const BANG = (hang: string) =>
 		`| Mục | Tỉ lệ |\n| --- | --- |\n${hang}\n| giữ | 1 |\n`;
-	for (const [ten, truoc, sau] of [
-		["them-chu-cuoi-o", "| a | 5% |", "| a x | 5% |"],
-		["bo-chu-cuoi-o", "| b c | 7 |", "| b | 7 d |"],
-	] as const)
+	const O_DOI: [string, string, string, [string, string][]][] = [
+		[
+			"them-chu-cuoi-o",
+			"| a | 5% |",
+			"| a x | 5% |",
+			[
+				["a x", "5%"],
+				["giữ", "1"],
+			],
+		],
+		[
+			"bo-chu-cuoi-o",
+			"| b c | 7 |",
+			"| b | 7 d |",
+			[
+				["b c", "7 d"],
+				["giữ", "1"],
+			],
+		],
+	];
+	for (const [ten, truoc, sau, mong] of O_DOI)
 		test(`bang-dung-so-o: ${ten}`, () => {
 			const goc = ve(BANG(truoc), BANG(sau));
-			const soCot = goc.querySelectorAll("thead th").length;
-			for (const tr of goc.querySelectorAll("tbody tr")) {
-				const o = [...tr.querySelectorAll("td")];
-				if (o.some((td) => chuHien(td).includes("|")))
-					throw new Error(`o bang con dau ngan: ${ten}`);
-				if (o.length < soCot) throw new Error(`hang bang gop o: ${ten}`);
-			}
+			expect(goc.querySelectorAll("thead th").length).toBe(2);
+			const hang = [...goc.querySelectorAll("tbody tr")].map((tr) =>
+				[...tr.querySelectorAll("td")].map((td) =>
+					chuHien(td).replace(/\s+/g, " ").trim(),
+				),
+			);
+			for (const o of hang.flat())
+				if (o.includes("|")) throw new Error(`o bang con dau ngan: ${ten}`);
+			if (hang.some((h) => h.length !== 2))
+				throw new Error(`hang bang gop o: ${ten}`);
+			expect(hang).toEqual(mong);
 		});
 	test("bang-dung-so-o: doi-so-cot", () => {
 		const goc = ve(
 			"| Mục | Tỉ lệ |\n| --- | --- |\n| a | 5% |\n",
 			"| Mục | Tỉ lệ | Ghi chú |\n| --- | --- | --- |\n| a | 5% | x |\n",
 		);
-		for (const o of goc.querySelectorAll("td, th"))
-			if (chuHien(o).includes("|"))
+		expect(goc.querySelectorAll("table").length).toBe(1);
+		const o = [...goc.querySelectorAll("td, th")];
+		expect(o.length).toBeGreaterThan(0);
+		for (const td of o)
+			if (chuHien(td).includes("|"))
 				throw new Error("o bang con dau ngan: doi-so-cot");
 		expect(goc.querySelectorAll("del").length).toBeGreaterThan(0);
 		expect(goc.querySelectorAll("ins").length).toBeGreaterThan(0);
