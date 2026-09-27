@@ -37,8 +37,10 @@ Một mô-đun mới của bản rẽ, `apps/agent/agent/lib/slack-nguoi-nhan.ts
    `conversations.members` phân trang tới hết `next_cursor`.
 2. **Họ là ai trong Slack.** `users.list` phân trang (một lượt đọc cho cả workspace,
    thay vì một `users.info` mỗi người — kênh `#chung` hàng trăm người sẽ chạm trần tốc
-   độ). Dùng lại bộ đọc sẵn có `listSlackMembers` của `lib/slack-people.ts` (đã chạy
-   thật ở đồng bộ người Slack) thay vì viết khuôn đọc thứ hai. Bỏ bot và tài khoản đã xoá.
+   độ). Bộ đọc viết cùng khuôn với `listSlackMembers` của `lib/slack-people.ts` (đã chạy
+   thật ở đồng bộ người Slack: `users.list`, con trỏ ở `response_metadata.next_cursor`,
+   email ở `profile.email`) nhưng nằm trong tệp của bản rẽ — `slack-people.ts` là tệp
+   của hãng, xuất hàm từ đó là chạm tệp thứ ba. Bỏ bot và tài khoản đã xoá.
 3. **Họ là ai trong CRM.** Đọc sống bảng `member` của workspace cùng email người dùng và
    dòng `slackMemberMatch`. Một người Slack là «chỉ OKR» khi `slackUserId` của họ nằm
    trong bảng khớp của một thành viên vai `okr`, **hoặc** email Slack (chữ thường, bỏ
