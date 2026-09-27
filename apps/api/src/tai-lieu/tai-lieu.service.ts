@@ -4,6 +4,7 @@ import type { Db, Prisma } from "@crm/db";
 import {
 	chuanNfc,
 	coChuHaySo,
+	gocSlug,
 	LOAI_TRANG,
 	type LoaiTrang,
 	type SuKienChiTiet,
@@ -244,7 +245,7 @@ export class TaiLieuService {
 		if (departmentId) await this.kiemDonVi(departmentId);
 		return this.db.$transaction(async (tx) => {
 			await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${TAI_LIEU_API.khoaSlug}))`;
-			const goc = sinhSlug(ten, new Set());
+			const goc = gocSlug(ten);
 			const daCo = await tx.taiLieuTrang.findMany({
 				where: { OR: [{ slug: goc }, { slug: { startsWith: `${goc}-` } }] },
 				select: { slug: true },

@@ -24,10 +24,25 @@ const SLUG: [string, string[], string][] = [
 	["  ✨ !!! ", ["trang"], "trang-2"],
 ];
 
+const SLUG_TRUNG_ROUTE: [string, string[], string][] = [
+	["Mới", [], "moi-2"],
+	["Mới", ["moi-2"], "moi-3"],
+	["Đề xuất", [], "de-xuat-2"],
+	["Mới quy định", [], "moi-quy-dinh"],
+];
+
 describe("tai-lieu", () => {
 	for (const [ten, daCo, mong] of SLUG)
 		test(`slug ${ten} ${daCo.length}`, () =>
 			expect(sinhSlug(ten, new Set(daCo))).toBe(mong));
+
+	for (const [ten, daCo, mong] of SLUG_TRUNG_ROUTE)
+		test(`slug trung route ${ten} ${daCo.length}`, () => {
+			const ra = sinhSlug(ten, new Set(daCo));
+			if (TAI_LIEU.slugGiuTruoc.some((s) => s === ra))
+				throw new Error(`slug trung route: ${ra}`);
+			expect(ra).toBe(mong);
+		});
 
 	test("slug từ tên NFD giống tên NFC", () =>
 		expect(sinhSlug("Đối tác Đà Nẵng".normalize("NFD"), new Set())).toBe(

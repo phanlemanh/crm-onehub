@@ -39,6 +39,7 @@ const SLUG_TAO = [
 	"quy-dinh-hoa-hong-2",
 	"quy-dinh-hoa-hong-3",
 	"doi-tac-da-nang",
+	"moi-2",
 ];
 
 describe("tao-trang", () => {
@@ -86,6 +87,25 @@ describe("tao-trang", () => {
 			"ten 160",
 		);
 		expect(dai.slug).toBe(`d${"a".repeat(159)}`);
+	});
+
+	test("tao-trang: ten «Mới» khong trung route tinh, get bang slug tra ve duoc", async () => {
+		await donTaiLieu({ slug: { in: SLUG_TAO } });
+		const { slug } = ok<{ slug: string }>(
+			await goi(
+				"taiLieu.create",
+				{ ten: "Mới", loai: "quy-dinh", noiDung: "Nội dung." },
+				"tao",
+			),
+			"Mới",
+		);
+		if (slug === "moi") throw new Error("slug trung route: moi");
+		expect(slug).toBe("moi-2");
+		const g = ok<{ slug: string }>(
+			await hoi("taiLieu.get", { slug }, "tao"),
+			"get moi-2",
+		);
+		expect(g.slug).toBe("moi-2");
 	});
 
 	test("tao-trang: noi dung NFD luu thanh NFC, trang moi chua co ban dang dung va dung mot de xuat cho", async () => {

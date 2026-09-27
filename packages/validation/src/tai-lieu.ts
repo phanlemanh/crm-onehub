@@ -34,13 +34,14 @@ export const TAI_LIEU = {
 	nap: { coKhoi: 4_000 },
 	soan: { bangMoi: { hang: 3, cot: 3 } },
 	slugDuPhong: "trang",
+	slugGiuTruoc: ["moi", "de-xuat"],
 } as const;
 
 export function chuanNfc(s: string): string {
 	return s.normalize("NFC");
 }
 
-function goc(ten: string): string {
+export function gocSlug(ten: string): string {
 	const s = ten
 		.normalize("NFD")
 		.replace(/\p{M}/gu, "")
@@ -52,11 +53,16 @@ function goc(ten: string): string {
 	return s === "" ? TAI_LIEU.slugDuPhong : s;
 }
 
+function laGiuTruoc(slug: string): boolean {
+	return TAI_LIEU.slugGiuTruoc.some((s) => s === slug);
+}
+
 export function sinhSlug(ten: string, daCo: ReadonlySet<string>): string {
-	const g = goc(ten);
-	if (!daCo.has(g)) return g;
+	const g = gocSlug(ten);
+	const trung = (s: string) => daCo.has(s) || laGiuTruoc(s);
+	if (!trung(g)) return g;
 	let n = 2;
-	while (daCo.has(`${g}-${n}`)) n += 1;
+	while (trung(`${g}-${n}`)) n += 1;
 	return `${g}-${n}`;
 }
 
