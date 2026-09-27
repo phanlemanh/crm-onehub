@@ -26,6 +26,7 @@ export const THU_TU_DU: [ThieuThuTu] extends [never] ? true : ThieuThuTu = true;
 
 export const NHAC = {
 	gio: { gio: 8, phut: 30 },
+	trua: { gio: 12, phut: 0 },
 	muiGio: "Asia/Ho_Chi_Minh",
 	sapHanNgay: 3,
 	imSauNgay: 7,
@@ -110,14 +111,19 @@ export function mocNhac(now: Date): Date {
 	);
 }
 
-export function daToiGioNhac(now: Date): boolean {
-	const phan = dinhGio.formatToParts(now);
+function phutTrongNgayVN(luc: Date): number {
+	const phan = dinhGio.formatToParts(luc);
 	const so = (loai: "hour" | "minute") =>
 		Number(phan.find((p) => p.type === loai)?.value ?? 0);
-	return (
-		so("hour") * PHUT_MOI_GIO + so("minute") >=
-		NHAC.gio.gio * PHUT_MOI_GIO + NHAC.gio.phut
-	);
+	return so("hour") * PHUT_MOI_GIO + so("minute");
+}
+
+export function daToiGioNhac(now: Date): boolean {
+	return phutTrongNgayVN(now) >= NHAC.gio.gio * PHUT_MOI_GIO + NHAC.gio.phut;
+}
+
+export function laBuoiSang(luc: Date): boolean {
+	return phutTrongNgayVN(luc) < NHAC.trua.gio * PHUT_MOI_GIO + NHAC.trua.phut;
 }
 
 export type ViecKeHoach = {

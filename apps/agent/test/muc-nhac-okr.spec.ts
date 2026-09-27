@@ -2,6 +2,8 @@ import { describe, expect, test } from "bun:test";
 import type { ViecNhac } from "@crm/db/onboarding-nhac";
 import { dungTin, TIEU_DE } from "../agent/lib/tin-nhac";
 
+const SANG = new Date("2026-10-13T08:31:00+07:00");
+
 const im: ViecNhac = {
 	loai: "okr-kr-im",
 	keyResultId: "kr-1",
@@ -85,7 +87,7 @@ describe("loai-la", () => {
 		const la = { ...im, loai: "okr-moi" } as unknown as ViecNhac;
 		let loi = "";
 		try {
-			dungTin("An", [im, la], () => null);
+			dungTin("An", SANG, [im, la], () => null);
 		} catch (e) {
 			loi = e instanceof Error ? e.message : String(e);
 		}
@@ -95,7 +97,7 @@ describe("loai-la", () => {
 	});
 
 	test("loai-la: doi chung bo muc la -> dung mot dong KR im", () => {
-		const { text } = dungTin("An", [im], () => null);
+		const { text } = dungTin("An", SANG, [im], () => null);
 		expect(
 			text.split("\n").filter((d) => d.includes("«Doanh thu» im 15 ngày")),
 		).toHaveLength(1);
@@ -103,7 +105,7 @@ describe("loai-la", () => {
 
 	test("loai-la: moi loai co mau dung mot tin mot muc, khong nem, mot dong duoi tieu de cua no", () => {
 		for (const v of Object.values(MAU)) {
-			const { text, daGui } = dungTin("An", [v], () => null);
+			const { text, daGui } = dungTin("An", SANG, [v], () => null);
 			const dong = text.split("\n");
 			const tieuDe = dong.indexOf(`*${TIEU_DE[v.loai]}*`);
 			expect({
@@ -113,5 +115,43 @@ describe("loai-la", () => {
 			}).toEqual({ loai: v.loai, daGui: 1, coTieuDe: true });
 			expect(dong[tieuDe + 1]?.startsWith("• ")).toBe(true);
 		}
+	});
+});
+
+describe("cau-chao", () => {
+	test("cau-chao: ma tran 4 gio dung x 2 loai tin x 2 khuon = 16 o dong dau", () => {
+		const ten = "An & Bình";
+		const gio = ["08:30:00", "11:59:59", "12:00:00", "17:00:00"];
+		const loai = {
+			okr: { viec: MAU["okr-kr-im"], duoi: "việc cần bạn để ý." },
+			"ke-hoach": {
+				viec: MAU["buoc-sap-han"],
+				duoi: "việc 30 ngày đầu cần bạn để ý.",
+			},
+		} as const;
+		const bang: Record<string, string> = {};
+		const mong: Record<string, string> = {};
+		for (const g of gio) {
+			const luc = new Date(`2026-10-13T${g}+07:00`);
+			const buoi = g < "12:00:00" ? "sáng nay" : "hôm nay";
+			for (const [tenLoai, l] of Object.entries(loai)) {
+				for (const khuon of ["slack", "tron"] as const) {
+					const o = `${g} ${tenLoai} ${khuon}`;
+					bang[o] =
+						dungTin(ten, luc, [l.viec], () => null, khuon).text.split(
+							"\n",
+						)[0] ?? "";
+					const tenHien = khuon === "slack" ? "An &amp; Bình" : ten;
+					mong[o] = `Chào ${tenHien}, ${buoi} có 1 ${l.duoi}`;
+				}
+			}
+		}
+		for (const o of Object.keys(mong)) {
+			if (bang[o] !== mong[o]) {
+				throw new Error(`cau-chao: ${o} — «${bang[o]}»`);
+			}
+		}
+		expect(Object.keys(bang)).toHaveLength(16);
+		expect(bang).toEqual(mong);
 	});
 });

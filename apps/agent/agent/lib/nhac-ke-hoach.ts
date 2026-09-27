@@ -185,6 +185,7 @@ async function guiQuaZalo(
 	}
 	const { text, daGui } = dungTin(
 		ten,
+		new Date(),
 		viec,
 		lienKet,
 		"tron",
@@ -207,7 +208,7 @@ async function guiQuaSlack(
 	if (!token || !slackUserId) {
 		throw new Error("kenh Slack duoc chon ma thieu token hoac nguoi khop");
 	}
-	const { text, daGui } = dungTin(ten, viec, lienKet);
+	const { text, daGui } = dungTin(ten, new Date(), viec, lienKet);
 	await guiSlackRieng(token, slackUserId, ten, text, taskId, deps.fetcher);
 	return daGui;
 }

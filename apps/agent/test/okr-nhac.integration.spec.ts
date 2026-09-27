@@ -684,6 +684,7 @@ describe("mot-tin", () => {
 		});
 		const tin = dungTin(
 			"Giang",
+			lucVN(NGAY_NHAC, PHUT_SAU),
 			[...cua(kq, G.id), ...cua(kq, F.id)],
 			() => null,
 			"tron",

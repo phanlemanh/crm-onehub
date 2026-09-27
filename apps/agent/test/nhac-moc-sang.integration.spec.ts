@@ -12,7 +12,7 @@ import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import { type MucNhac, parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
 import { chayNhac, lenLichNhac } from "../agent/lib/nhac-ke-hoach";
 import { TIEU_DE } from "../agent/lib/tin-nhac";
-import { gieoNguoi, moXuong, slackGia } from "./support/nhac-gieo";
+import { gieoKeHoach, gieoNguoi, moXuong, slackGia } from "./support/nhac-gieo";
 import {
 	batBot,
 	binhLuan,
@@ -401,5 +401,57 @@ describe("gui-muon", () => {
 		const ket = { D: binhLuanCua(d.daGui), "D+1": binhLuanCua(d1.daGui) };
 		if (ket.D.includes(N2)) throw new Error("gui-muon: them su kien sau moc");
 		expect(ket).toEqual({ D: [N1], "D+1": [N2] });
+	});
+});
+
+describe("cau-chao-gui", () => {
+	test("cau-chao-gui: ma tran 3 o [gio tao hang, gio gui] qua chayNhac duoi TZ=UTC", async () => {
+		const chay = await gieoChuKy("dang-chay", 1);
+		const W = await gieoNguoi("Wan");
+		const V = await gieoNguoi("Van");
+		await noiZalo(W.id, "ZW");
+		await noiZalo(V.id, "ZV");
+		await batBot();
+		const truoc20 = new Date(vn(NGAY.D, "08:31:00").getTime() - 20 * NGAY_MS);
+		const O = await gieoMucTieu({ cycleId: chay, chu: V.id, congBo: truoc20 });
+		await gieoKr({ objectiveId: O, chu: V.id, khoa: truoc20 });
+		const dongDau = (tin: string[]) => tin.map((t) => t.split("\n")[0] ?? "");
+
+		await nhip(vn(NGAY.D, "08:31:00"));
+		const b = await gui(V.id, NGAY.D, vn(NGAY.D, "14:02:00"));
+		await gieoKeHoach({
+			camTrich: W.id,
+			batDau: vn(NGAY.D, "13:00:00"),
+			buoc: [
+				{ nhan: "Gui bao gia", giao: W.id, han: vn(NGAY.sau, "09:00:00") },
+			],
+		});
+		await nhip(vn(NGAY.D, "14:01:00"));
+		const a = await gui(W.id, NGAY.D, vn(NGAY.D, "14:02:00"));
+		await nhip(vn(NGAY.sau, "08:31:00"));
+		const c = await gui(V.id, NGAY.sau, vn(NGAY.sau, "10:00:00"));
+
+		const bang = {
+			"a 14:01 -> 14:02": dongDau(a.tin),
+			"b 08:31 -> 14:02": dongDau(b.tin),
+			"c 08:31 -> 10:00": dongDau(c.tin),
+		};
+		const mong = {
+			"a 14:01 -> 14:02": "hôm nay",
+			"b 08:31 -> 14:02": "hôm nay",
+			"c 08:31 -> 10:00": "sáng nay",
+		};
+		for (const [o, buoi] of Object.entries(mong)) {
+			const dong = bang[o as keyof typeof bang];
+			const khac = buoi === "hôm nay" ? "sáng nay" : "hôm nay";
+			if (
+				dong.length !== 1 ||
+				!dong[0]?.includes(buoi) ||
+				dong[0]?.includes(khac)
+			) {
+				throw new Error(`cau-chao-gui: ${o} — ${JSON.stringify(dong)}`);
+			}
+		}
+		expect(Object.values(bang).map((d) => d.length)).toEqual([1, 1, 1]);
 	});
 });
