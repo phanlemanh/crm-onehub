@@ -338,7 +338,10 @@ export class DashboardService {
 	}
 
 	private async keHoachCanDeY(userId: string, now: Date) {
-		const ds = (await viecCanNhac(this.db, { now, userId })).get(userId) ?? [];
+		const ds =
+			(await viecCanNhac(this.db, { now, userId, cuaSo: "truc-tiep" })).get(
+				userId,
+			) ?? [];
 		return ds
 			.filter(laNhacKeHoach)
 			.slice(0, NHAC.tran)

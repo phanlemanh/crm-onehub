@@ -1,3 +1,4 @@
+import { viecOkr } from "@crm/validation/nhac-ke-hoach";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import {
 	chuKyInput,
@@ -297,44 +298,8 @@ export const followOutput = z.object({
 	following: z.boolean(),
 	followerCount: z.number(),
 });
-export const viecOkrOutput = z.discriminatedUnion("loai", [
-	z.object({
-		loai: z.literal("okr-cap-nhat"),
-		krIds: z.array(z.string()),
-		nhan: z.string(),
-		soKr: z.number(),
-	}),
-	z.object({
-		loai: z.literal("okr-kr-im"),
-		keyResultId: z.string(),
-		objectiveId: z.string(),
-		nhan: z.string(),
-		soNgay: z.number(),
-		chuTen: z.string().nullable(),
-	}),
-	z.object({
-		loai: z.literal("okr-duoc-giao"),
-		objectiveId: z.string(),
-		keyResultId: z.string().optional(),
-		nhan: z.string(),
-	}),
-	z.object({
-		loai: z.literal("okr-nhac-ten"),
-		commentId: z.string(),
-		objectiveId: z.string(),
-		nhan: z.string(),
-		nguoiTen: z.string(),
-	}),
-	z.object({
-		loai: z.literal("okr-theo-doi"),
-		objectiveId: z.string(),
-		nhan: z.string(),
-		capNhat: z.number(),
-		binhLuan: z.number(),
-	}),
-]);
 export const viecCuaToiOutput = z.object({
-	viec: z.array(viecOkrOutput),
+	viec: z.array(viecOkr),
 	lienQuanOkr: z.boolean(),
 });
 export const transferOkrOutput = z.object({
@@ -356,7 +321,7 @@ export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
 export type CommentsOutput = z.infer<typeof commentsOutput>;
 export type FollowOutput = z.infer<typeof followOutput>;
 export type ThanhVienOutput = z.infer<typeof thanhVienOutput>;
-export type ViecOkrOutput = z.infer<typeof viecOkrOutput>;
+export type ViecOkrOutput = z.infer<typeof viecOkr>;
 export type ViecCuaToiOutput = z.infer<typeof viecCuaToiOutput>;
 export type TransferOkrOutput = z.infer<typeof transferOkrOutput>;
 export type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";

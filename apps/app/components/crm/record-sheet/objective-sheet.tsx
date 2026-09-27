@@ -210,7 +210,7 @@ function MenuKr({
 	xoa: () => void;
 }) {
 	const m = okrMessages(useLocale()).sheet;
-	const capNhatDuoc = kr.hienTaiQuaCapNhat && (kr.laCuaToi || mt.canEdit);
+	const capNhatDuoc = kr.hienTaiQuaCapNhat && mt.canEditKr.includes(kr.id);
 	const suaDuoc = mt.status !== "da-bo" && mt.canEditKr.includes(kr.id);
 	const xoaDuoc = ghiDuoc(mt);
 	if (!capNhatDuoc && !suaDuoc && !xoaDuoc) return null;
@@ -232,7 +232,9 @@ function MenuKr({
 					</DropdownMenuItem>
 				) : null}
 				{suaDuoc ? (
-					<DropdownMenuItem onSelect={sua}>{m.suaKr}</DropdownMenuItem>
+					<DropdownMenuItem data-muc="sua-kr" onSelect={sua}>
+						{m.suaKr}
+					</DropdownMenuItem>
 				) : null}
 				{xoaDuoc ? (
 					<DropdownMenuItem variant="destructive" onSelect={xoa}>

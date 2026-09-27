@@ -89,7 +89,7 @@ function ngayTu(soNgay: number): Date {
 
 async function tinhLucNhac(): Promise<KetQua> {
 	setSystemTime(LUC_NHAC);
-	return viecCanNhac(db, { now: new Date() });
+	return viecCanNhac(db, { now: new Date(), cuaSo: "truc-tiep" });
 }
 
 afterEach(() => {
@@ -398,7 +398,7 @@ describe("nua-dem", () => {
 
 	test("nua-dem: 00:30 VN ngay 11 thi buoc qua han va ke hoach sang ngay thu 15", async () => {
 		setSystemTime(new Date("2026-10-10T17:30:00Z"));
-		const kq = await viecCanNhac(db, { now: new Date() });
+		const kq = await viecCanNhac(db, { now: new Date(), cuaSo: "truc-tiep" });
 		expect(tap(kq, g.E.id), "00:30 VN ngay 11 thi da qua han").toContain(
 			`buoc-qua-han:${g.buoc.id}`,
 		);
@@ -410,7 +410,7 @@ describe("nua-dem", () => {
 
 	test("nua-dem: 23:30 VN ngay 10 thi buoc chua qua han va ke hoach ngay thu 14", async () => {
 		setSystemTime(new Date("2026-10-10T16:30:00Z"));
-		const kq = await viecCanNhac(db, { now: new Date() });
+		const kq = await viecCanNhac(db, { now: new Date(), cuaSo: "truc-tiep" });
 		expect(tap(kq, g.E.id), "23:30 VN ngay 10 thi chua qua han").not.toContain(
 			`buoc-qua-han:${g.buoc.id}`,
 		);
