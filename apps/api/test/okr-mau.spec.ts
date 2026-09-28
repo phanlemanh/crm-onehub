@@ -128,7 +128,7 @@ afterAll(async () => {
 	setSystemTime();
 	await lamSachOkr();
 	await xoaBoOkrMau(db);
-});
+}, CHO);
 
 describe("to-chuc-mau", () => {
 	async function soVoiTep() {
