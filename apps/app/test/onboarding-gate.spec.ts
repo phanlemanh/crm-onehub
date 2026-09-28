@@ -593,3 +593,118 @@ describe("ccq-cong-nghien-cuu", () => {
 		).toBe("quan tri: /onboarding/research");
 	});
 });
+
+describe("proxy and a dead session", () => {
+	it("het-phien: sends the rep to sign in from every gated path", async () => {
+		marketing(undefined);
+		hetPhien();
+		const duong = [
+			"/",
+			`/${SLUG}/companies`,
+			"/companies",
+			"/onboarding",
+			"/onboarding/research",
+		];
+		const sai: string[] = [];
+
+		for (const d of duong) {
+			if (redirectedTo(await proxy(request(d, [SESSION_COOKIE]))) !== "/sign-in") {
+				sai.push(`${d}: cookie chet van lot qua proxy`);
+			}
+		}
+
+		expect(duong.length).toBe(5);
+		expect(sai).toEqual([]);
+	});
+
+	it("het-phien: leaves a live session where it is", async () => {
+		setup();
+
+		expect(
+			redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			),
+		).toBeNull();
+	});
+
+	it("giu-mo: keeps failing open when the API only fails", async () => {
+		const ca: [string, () => void][] = [
+			[
+				"loi mang",
+				() =>
+					stub(async () => {
+						throw new Error("connect ECONNREFUSED");
+					}),
+			],
+			[
+				"het gio",
+				() =>
+					stub(async () => {
+						throw new DOMException("timed out", "TimeoutError");
+					}),
+			],
+			[
+				"500",
+				() => answerWith({ error: { message: "INTERNAL_SERVER_ERROR" } }, 500),
+			],
+			[
+				"503",
+				() => answerWith({ error: { message: "SERVICE_UNAVAILABLE" } }, 503),
+			],
+			["403", () => answerWith({ error: { message: "FORBIDDEN" } }, 403)],
+		];
+		const sai: string[] = [];
+
+		for (const [ten, dung] of ca) {
+			dung();
+			const dich = redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			);
+			if (dich !== null) sai.push(`${ten}: proxy day ve /sign-in du API chi loi`);
+		}
+
+		expect(ca.length).toBe(5);
+		expect(sai).toEqual([]);
+	});
+
+	it("khong-dung: never touches the paths that skip the gate", async () => {
+		marketing(undefined);
+		const duong = [
+			"/sign-in",
+			"/t/crm.js",
+			"/proto/x",
+			"/dat-mat-khau/abc",
+			"/quen-mat-khau",
+			"/grant-access",
+			"/eve/v1/info",
+			"/het-quyen",
+		];
+		const sai: string[] = [];
+
+		for (const d of duong) {
+			const calls = hetPhien();
+			const dich = redirectedTo(await proxy(request(d, [SESSION_COOKIE])));
+			if (dich !== null || calls.count !== 0) {
+				sai.push(`${d}: proxy dung vao duong khong co cong`);
+			}
+		}
+
+		marketing("true");
+		hetPhien();
+		if (redirectedTo(await proxy(request("/", [SESSION_COOKIE]))) !== null) {
+			sai.push("marketing bat: / bi day ve /sign-in");
+		}
+
+		marketing(undefined);
+		const doiChung = hetPhien();
+		expect(
+			redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			),
+		).toBe("/sign-in");
+		expect(doiChung.count).toBeGreaterThan(0);
+
+		expect(duong.length + 1).toBe(9);
+		expect(sai).toEqual([]);
+	});
+});
