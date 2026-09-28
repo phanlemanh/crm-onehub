@@ -122,7 +122,8 @@ function nhapTu(ct: Luu, locale: string): Nhap {
 }
 
 function phuBoiBat(bat: Dong, boPhanCua: ReadonlyMap<string, string>): PhuBoi {
-	if (bat.phamVi !== "danh-sach") return () => false;
+	if (bat.phamVi === "tat") return () => false;
+	if (bat.phamVi === "toan-cong-ty") return () => true;
 	return (id) => {
 		const boPhan = boPhanCua.get(id);
 		return (
@@ -132,23 +133,29 @@ function phuBoiBat(bat: Dong, boPhanCua: ReadonlyMap<string, string>): PhuBoi {
 	};
 }
 
-function donViAn(d: Record<Nac, Dong>, phu: PhuBoi): string[] {
-	return d.an.donVi.filter((id) => !phu(id));
+function anHieuLuc(d: Record<Nac, Dong>, phu: PhuBoi): Dong {
+	if (d.bat.phamVi === "toan-cong-ty") return { phamVi: "tat", donVi: [] };
+	return {
+		phamVi: d.an.phamVi,
+		donVi: d.an.donVi.filter((id) => !phu(id)),
+	};
 }
 
 function goiLuu(nhap: Nhap, tran: number, phu: PhuTheoViec): Luu {
 	const deXuat = nhap.dong["de-xuat"];
 	const tomTat = nhap.dong["tom-tat-tuan"];
+	const anDeXuat = anHieuLuc(deXuat, phu["de-xuat"]);
+	const anTomTat = anHieuLuc(tomTat, phu["tom-tat-tuan"]);
 	return {
 		aiOn: nhap.aiOn,
 		aiDeXuatPhamVi: deXuat.bat.phamVi,
 		aiDeXuatDonVi: deXuat.bat.donVi,
 		aiTomTatPhamVi: tomTat.bat.phamVi,
 		aiTomTatDonVi: tomTat.bat.donVi,
-		aiDeXuatAnPhamVi: deXuat.an.phamVi,
-		aiDeXuatAnDonVi: donViAn(deXuat, phu["de-xuat"]),
-		aiTomTatAnPhamVi: tomTat.an.phamVi,
-		aiTomTatAnDonVi: donViAn(tomTat, phu["tom-tat-tuan"]),
+		aiDeXuatAnPhamVi: anDeXuat.phamVi,
+		aiDeXuatAnDonVi: anDeXuat.donVi,
+		aiTomTatAnPhamVi: anTomTat.phamVi,
+		aiTomTatAnDonVi: anTomTat.donVi,
 		aiTranThangUsd: tran,
 	};
 }
@@ -249,7 +256,9 @@ function DongNac({
 	const moTa =
 		khoaChu ??
 		(phamVi === "danh-sach" && daChon.length === 0
-			? t.chuaChonDonVi
+			? nac === "bat"
+				? t.chuaChonDonVi
+				: t.chuaChonDonViAn
 			: nac === "bat"
 				? tenViec.moTa
 				: tenViec.moTaAn);
@@ -440,12 +449,10 @@ export function TheTroLyOkr() {
 					}
 				: cu,
 		);
-	const hienDonVi = (viec: Viec, nac: Nac) =>
-		nac === "bat"
-			? nhap.dong[viec].bat.donVi
-			: donViAn(nhap.dong[viec], phu[viec]);
+	const hienDong = (viec: Viec, nac: Nac): Dong =>
+		nac === "bat" ? nhap.dong[viec].bat : anHieuLuc(nhap.dong[viec], phu[viec]);
 	const moChon = (viec: Viec, nac: Nac) => {
-		setChonTam(hienDonVi(viec, nac));
+		setChonTam(hienDong(viec, nac).donVi);
 		setDangChon({ viec, nac });
 	};
 
@@ -507,8 +514,8 @@ export function TheTroLyOkr() {
 										key={nac}
 										viec={viec}
 										nac={nac}
-										phamVi={nhap.dong[viec][nac].phamVi}
-										donVi={hienDonVi(viec, nac)}
+										phamVi={hienDong(viec, nac).phamVi}
+										donVi={hienDong(viec, nac).donVi}
 										tenDonVi={tenDonVi}
 										khoa={khoa || !nhap.aiOn}
 										khoaChu={

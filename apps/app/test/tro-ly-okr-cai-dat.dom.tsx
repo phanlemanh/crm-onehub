@@ -674,6 +674,35 @@ describe("nac", () => {
 		).toEqual({ khoa: true, moTa: m.troLy.khoaAn });
 	});
 
+	test("nac: bật toàn công ty rồi Lưu — gói gửi chế độ ẩn tắt, không mang danh sách ẩn cũ", async () => {
+		aiOn = true;
+		cauHinh = { aiDeXuatAnPhamVi: "danh-sach", aiDeXuatAnDonVi: ["pb-mk"] };
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		const bat = q('[data-pham-vi="de-xuat"]');
+		if (!bat) throw new Error("khong co o bat");
+		await chonLuaChon(bat, m.troLy.phamVi["toan-cong-ty"]);
+		await cho(
+			() =>
+				chuCua('[data-pham-vi="de-xuat"]') === m.troLy.phamVi["toan-cong-ty"],
+			"bat toan cong ty",
+		);
+		const luu = q('[data-nut="luu-tro-ly"]');
+		if (!luu) throw new Error("khong co nut luu");
+		await bam(luu);
+		await cho(() => daLamMoi > 0, "lam moi sau khi luu");
+		const vao = daGoi[0]?.dauVao;
+		expect(
+			{
+				bat: vao?.aiDeXuatPhamVi,
+				an: vao?.aiDeXuatAnPhamVi,
+				anDonVi: vao?.aiDeXuatAnDonVi,
+			},
+			"an con song khi bat toan",
+		).toEqual({ bat: "toan-cong-ty", an: "tat", anDonVi: [] });
+		expect(chuCua('[data-pham-vi-an="de-xuat"]')).toBe(m.troLy.phamVi.tat);
+	});
+
 	test("nac: danh sách chế độ ẩn không cho chọn đơn vị đã ở danh sách bật", async () => {
 		aiOn = true;
 		cauHinh = {
@@ -704,6 +733,11 @@ describe("nac", () => {
 			() => q('[data-nut="chon-don-vi-an-de-xuat"]') !== null,
 			"nut chon don vi an",
 		);
+		expect(
+			chuCua(
+				'[data-viec="de-xuat"] [data-nac="an"] [data-slot="field-description"]',
+			),
+		).toBe(m.troLy.chuaChonDonViAn);
 		await moHopAn("de-xuat");
 		expect(nhanTrongHop()).toEqual(["onehub", "bp-kd"]);
 		const hop = q('[data-slot="pick-list-item"][data-id="bp-kd"] button');

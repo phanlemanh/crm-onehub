@@ -187,6 +187,10 @@ const GHIM_TRO_LY_OKR = {
 	],
 	"tro-ly-okr:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
 	"tro-ly-okr:soDo.dongBiLoai": ["(+1 bị loại)", "(+12 bị loại)"],
+	"tro-ly-okr:soDo.hang.hoanTac": [
+		"Hoàn tác trong 1 ngày",
+		"Hoàn tác trong 12 ngày",
+	],
 	"tro-ly-okr:troLy.donViCua": ["Đơn vị 1 a", "Đơn vị 12 a"],
 	"tro-ly-okr:troLy.hop.goiYPhongBan": ["Phòng ban · 1", "Phòng ban · 12"],
 	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị 1 «A»", "Đơn vị 12 «A»"],

@@ -20,10 +20,10 @@ import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,
-	ItemActions,
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
+	ItemHeader,
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -40,7 +40,7 @@ import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { formatPercent } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
-import { MA_LOAI_DE_XUAT } from "@crm/validation/okr-tro-ly";
+import { MA_LOAI_DE_XUAT, TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import type { ReactNode } from "react";
@@ -130,7 +130,7 @@ function BangSo({ soDo }: { soDo: SoDo }) {
 		},
 		{
 			id: "hoanTac",
-			nhan: hang.hoanTac,
+			nhan: hang.hoanTac(String(TRO_LY_OKR_TRAN.hoanTacNgay)),
 			...cot((n) => phanTram(n.tyLeHoanTac, locale)),
 		},
 		{ id: "p50", nhan: hang.p50, ...cot((n) => giay(n.p50Ms, locale)) },
@@ -170,11 +170,8 @@ function BangSo({ soDo }: { soDo: SoDo }) {
 				]}
 			>
 				{dong.map((h) => (
-					<SimpleTableRow key={h.id} data-so-do={h.id}>
-						<TableCell
-							className={h.phu ? `${CELL} pl-6 text-muted-foreground` : CELL}
-							data-cot="nhan"
-						>
+					<SimpleTableRow key={h.id} sub={h.phu} data-so-do={h.id}>
+						<TableCell className={CELL} data-cot="nhan">
 							{h.nhan}
 						</TableCell>
 						<TableCell
@@ -238,7 +235,11 @@ function BangLuot({
 									moLuot(l.taskId);
 								}}
 							>
-								<span translate="no">{l.tenMucTieu ?? m.mucTieuMat}</span>
+								{l.tenMucTieu ? (
+									<span translate="no">{l.tenMucTieu}</span>
+								) : (
+									<span>{m.mucTieuMat}</span>
+								)}
 							</Button>
 						</TableCell>
 						<TableCell className={CELL} data-cot="nac">
@@ -274,28 +275,28 @@ function DongNgan({ d }: { d: DongLuot }) {
 			: m.trangThai[d.trangThai];
 	return (
 		<Item variant="outline" data-dong={d.id}>
-			<ItemContent>
+			<ItemHeader>
 				<ItemTitle>{loai}</ItemTitle>
-				{d.truoc ? (
-					<ItemDescription data-truoc translate="no">
-						<del>{d.truoc}</del>
-					</ItemDescription>
-				) : null}
-				{d.sau ? (
-					<p data-sau translate="no">
-						{d.sau}
-					</p>
-				) : null}
-				<ItemDescription>{d.lyDo}</ItemDescription>
-			</ItemContent>
-			<ItemActions>
 				<StatusIndicator
 					size="sm"
 					tone={d.trangThai === "bi-loai" ? "warning" : "neutral"}
 					label={trangThai}
 					data-trang-thai-dong
 				/>
-			</ItemActions>
+			</ItemHeader>
+			<ItemContent>
+				{d.truoc ? (
+					<ItemDescription data-truoc translate="no">
+						<del>{d.truoc}</del>
+					</ItemDescription>
+				) : null}
+				{d.sau ? (
+					<ItemDescription data-sau translate="no">
+						<ins>{d.sau}</ins>
+					</ItemDescription>
+				) : null}
+				<ItemDescription>{d.lyDo}</ItemDescription>
+			</ItemContent>
 		</Item>
 	);
 }
@@ -314,9 +315,11 @@ function NganLuot({ luot, dong }: { luot: Luot | null; dong: () => void }) {
 				{luot ? (
 					<>
 						<SheetHeader>
-							<SheetTitle translate="no">
-								{luot.tenMucTieu ?? m.mucTieuMat}
-							</SheetTitle>
+							{luot.tenMucTieu ? (
+								<SheetTitle translate="no">{luot.tenMucTieu}</SheetTitle>
+							) : (
+								<SheetTitle>{m.mucTieuMat}</SheetTitle>
+							)}
 							<SheetDescription>
 								{m.nacTen[luot.nac]} · {giay(luot.doTreMs, locale)} ·{" "}
 								{tienLe(luot.chiPhiUsd, locale)}
@@ -324,7 +327,11 @@ function NganLuot({ luot, dong }: { luot: Luot | null; dong: () => void }) {
 						</SheetHeader>
 						<div className="flex-1 overflow-y-auto px-4 pb-4">
 							{luot.dong.length === 0 ? (
-								<p className="text-muted-foreground">{m.khongDong}</p>
+								<Empty data-trang-thai="luot-rong">
+									<EmptyHeader>
+										<EmptyTitle>{m.khongDong}</EmptyTitle>
+									</EmptyHeader>
+								</Empty>
 							) : (
 								<ItemGroup>
 									{luot.dong.map((d) => (

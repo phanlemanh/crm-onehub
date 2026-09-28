@@ -31,6 +31,9 @@ const ALIGN_CLASS = {
 	center: "text-center",
 } as const;
 
+const ROW_SUB =
+	"text-muted-foreground [&>[data-slot=table-cell]:first-child]:pl-6";
+
 const PANEL_SURFACE = {
 	popover: "bg-popover [&_th]:bg-popover",
 	page: "bg-background [&_th]:bg-background",
@@ -117,6 +120,7 @@ export function SimpleTableRow({
 	expandable,
 	invalid,
 	selected,
+	sub,
 	className,
 	...props
 }: ComponentProps<typeof TableRow> & {
@@ -124,13 +128,16 @@ export function SimpleTableRow({
 	expandable?: boolean;
 	invalid?: boolean;
 	selected?: boolean;
+	sub?: boolean;
 }) {
 	return (
 		<TableRow
 			data-invalid={invalid ? "" : undefined}
 			data-state={selected ? "selected" : undefined}
+			data-sub={sub ? "" : undefined}
 			className={cn(
 				"hover:bg-transparent",
+				sub && ROW_SUB,
 				clickable && (expandable ? ROW_ACCENT_EXPANDABLE : ROW_ACCENT),
 				selected && !invalid && ROW_SELECTED,
 				invalid && ROW_INVALID,

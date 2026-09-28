@@ -417,6 +417,12 @@ describe("co-so", () => {
 		expect(chuCua('[data-so-do="ma-so-moi"] [data-cot="nhan"]')).toBe(
 			m.maLoai["so-moi"],
 		);
+		expect(chuCua('[data-so-do="hoanTac"] [data-cot="nhan"]')).toBe(
+			"Hoàn tác trong 7 ngày",
+		);
+		expect(
+			tatCa("[data-so-do][data-sub]").map((o) => o.getAttribute("data-so-do")),
+		).toEqual(["ma-so-moi", "ma-tu-cam"]);
 	});
 
 	test("bảng lượt gần đây: cả hai nấc, mới nhất trước, đếm dòng bị loại riêng", async () => {

@@ -37,6 +37,7 @@ const vi = {
 			`Đơn vị ${nac.toLowerCase()} ${viec.toLowerCase()}`,
 		chonDonVi: "Chọn đơn vị…",
 		chuaChonDonVi: "Chưa chọn đơn vị nào — việc này chưa chạy ở đâu.",
+		chuaChonDonViAn: "Chưa chọn đơn vị nào — chế độ ẩn chưa chạy ở đâu.",
 		hop: {
 			tieuDe: (nac: string, viec: string) =>
 				`Đơn vị ${nac.toLowerCase()} «${viec}»`,
@@ -125,7 +126,7 @@ const vi = {
 			sua: "Sửa rồi nhận",
 			bac: "Bác",
 			boQua: "Bỏ qua câu hỏi",
-			hoanTac: "Hoàn tác trong 7 ngày",
+			hoanTac: (ngay: string) => `Hoàn tác trong ${ngay} ngày`,
 			p50: "Độ trễ p50",
 			p90: "Độ trễ p90",
 			biLoai: "Câu bị bộ kiểm loại",
@@ -217,6 +218,7 @@ const en: TroLyOkrMessages = {
 			`Units ${nac.toLowerCase()} ${viec.toLowerCase()}`,
 		chonDonVi: "Choose units…",
 		chuaChonDonVi: "No unit chosen — this runs nowhere yet.",
+		chuaChonDonViAn: "No unit chosen — hidden mode runs nowhere yet.",
 		hop: {
 			tieuDe: (nac: string, viec: string) =>
 				`Units ${nac.toLowerCase()} “${viec}”`,
@@ -306,7 +308,7 @@ const en: TroLyOkrMessages = {
 			sua: "Edited then accepted",
 			bac: "Rejected",
 			boQua: "Questions skipped",
-			hoanTac: "Undone within 7 days",
+			hoanTac: (ngay: string) => `Undone within ${ngay} days`,
 			p50: "Latency p50",
 			p90: "Latency p90",
 			biLoai: "Lines dropped by the checker",
