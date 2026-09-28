@@ -34,11 +34,12 @@ const vi = {
 			"kr.title": "Tên KR",
 		},
 		boQua: "Bỏ qua",
-		daBoQua: "Đã bỏ qua",
-		nhanBanSua: "Nhận bản đã sửa",
-		huySua: "Huỷ",
+		ket: {
+			accepted: "Đã nhận",
+			dismissed: "Đã bác",
+			skipped: "Đã bỏ qua",
+		},
 		khoaODangSua: "Lưu hoặc hoàn lại ô này trước",
-		khongConBat: "Trợ lý OKR không còn bật cho Mục tiêu này",
 	},
 	toast: {
 		daNhan: "Đã nhận",
@@ -89,11 +90,12 @@ const en: OkrGopYMessages = {
 			"kr.title": "KR title",
 		},
 		boQua: "Skip",
-		daBoQua: "Skipped",
-		nhanBanSua: "Accept edited version",
-		huySua: "Cancel",
+		ket: {
+			accepted: "Accepted",
+			dismissed: "Rejected",
+			skipped: "Skipped",
+		},
 		khoaODangSua: "Save or revert this field first",
-		khongConBat: "The OKR assistant is no longer on for this objective",
 	},
 	toast: {
 		daNhan: "Accepted",

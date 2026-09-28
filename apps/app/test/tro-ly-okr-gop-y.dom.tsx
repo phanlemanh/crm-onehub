@@ -36,6 +36,7 @@ type TuyChonGhi = {
 };
 
 let daGoi: LoiGoi[] = [];
+let daLamMoi: string[] = [];
 const duLieu = new Map<string, Lay>();
 
 function dat(duong: string, lay: Lay): void {
@@ -75,7 +76,15 @@ const trpcGia = new Proxy(
 mock.module("@/lib/trpc/client", () => ({ useTRPC: () => trpcGia }));
 
 mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () => new Proxy({}, { get: () => async () => {} }),
+	useCrmCache: () =>
+		new Proxy(
+			{},
+			{
+				get: (_g, ten: string) => async (id?: string) => {
+					daLamMoi.push(`${ten}:${id ?? ""}`);
+				},
+			},
+		),
 }));
 
 mock.module("next/navigation", () => ({
@@ -298,7 +307,18 @@ type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
 let dongHoGia = false;
 
+async function moToaster(): Promise<void> {
+	const o = document.createElement("div");
+	document.body.appendChild(o);
+	const root = createRoot(o);
+	await act(async () => {
+		root.render(<Toaster />);
+	});
+	dangMo.push({ o, root });
+}
+
 async function mo(man: ReactElement): Promise<void> {
+	if (dangMo.length === 0) await moToaster();
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -310,10 +330,7 @@ async function mo(man: ReactElement): Promise<void> {
 			<NuqsTestingAdapter hasMemory searchParams="">
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
-						<TooltipProvider>
-							{man}
-							<Toaster />
-						</TooltipProvider>
+						<TooltipProvider>{man}</TooltipProvider>
 					</LocaleProvider>
 				</QueryClientProvider>
 			</NuqsTestingAdapter>,
@@ -413,9 +430,9 @@ const dongCua = (id: string) =>
 	document.body.querySelector<HTMLElement>(`[data-dong="${id}"]`);
 const goiCua = (duong: string) => daGoi.filter((g) => g.duong === duong);
 
-async function moHopMucTieu(): Promise<void> {
+async function moHopMucTieu(dong: () => void = () => {}): Promise<void> {
 	await mo(
-		<HopThoaiMucTieu yeuCau={{ loai: "sua", mucTieu: MT }} dong={() => {}} />,
+		<HopThoaiMucTieu yeuCau={{ loai: "sua", mucTieu: MT }} dong={dong} />,
 	);
 	await cho(() => hopMucTieu() !== null, "hop Muc tieu mo");
 }
@@ -451,12 +468,41 @@ const oTenMucTieu = () =>
 const nutLuuMucTieu = () =>
 	document.body.querySelector<HTMLButtonElement>('[data-nut="gui-muc-tieu"]');
 
+function oSua(goc: ParentNode): HTMLTextAreaElement | null {
+	return goc.querySelector<HTMLTextAreaElement>(
+		'[data-slot="suggestion-edit"]',
+	);
+}
+
+function nutCuaDong(dong: ParentNode): string[] {
+	return [...dong.querySelectorAll("button")].map(
+		(b) => b.textContent?.trim() ?? "",
+	);
+}
+
+async function bamEsc(o: Element | null): Promise<void> {
+	if (!o) throw new Error("khong co cho bam Esc");
+	await act(async () => {
+		o.dispatchEvent(
+			new KeyboardEvent("keydown", {
+				key: "Escape",
+				bubbles: true,
+				cancelable: true,
+			}),
+		);
+	});
+	await nhip(3);
+}
+
+const HOI_BO = "Bỏ những gì vừa nhập?";
+
 function chu(o: Element | null): string {
 	return o?.textContent?.replace(/\s+/g, " ").trim() ?? "";
 }
 
 beforeEach(() => {
 	daGoi = [];
+	daLamMoi = [];
 	duLieu.clear();
 	datMacDinh();
 });
@@ -621,7 +667,7 @@ const CA = {
 			[...(ten?.querySelectorAll("button") ?? [])].map((b) =>
 				b.textContent?.trim(),
 			),
-		).toEqual(["Chấp nhận gợi ý", "Sửa", "Từ chối gợi ý"]);
+		).toEqual(["Nhận", "Sửa", "Bác"]);
 		const hoi = dongCua(D_HOI.id);
 		expect(
 			[...(hoi?.querySelectorAll("button") ?? [])].map((b) =>
@@ -636,7 +682,7 @@ const CA = {
 			[...(can?.querySelectorAll("button") ?? [])].map((b) =>
 				b.textContent?.trim(),
 			),
-		).toEqual(["Chấp nhận gợi ý", "Từ chối gợi ý"]);
+		).toEqual(["Nhận", "Bác"]);
 		expect(chu(can)).toContain(D_CAN.tenDich ?? "");
 		expect(hopMucTieu()?.getAttribute("data-size")).toBe("wide");
 	},
@@ -646,13 +692,16 @@ const CA = {
 		const ten = dongCua(D_TEN.id);
 		if (!ten) throw new Error("khong thay dong ten");
 		await bam(nut("Sửa", ten));
-		const o = ten.querySelector("input");
+		const o = oSua(ten);
+		expect(o?.tagName).toBe("TEXTAREA");
+		expect(o?.getAttribute("translate")).toBe("no");
 		expect(o?.value).toBe(D_TEN.sau ?? "");
 		expect(document.activeElement).toBe(o);
+		expect(chu(ten.querySelector("del"))).toBe(D_TEN.truoc ?? "");
+		expect(nutCuaDong(ten)).toEqual(["Nhận bản đã sửa", "Huỷ"]);
 		await go(o, "Không thoả thuận nào của miền Bắc bị bỏ sót");
-		expect(nutCo(m.dong.nhanBanSua, ten)).not.toBeNull();
-		expect(nutCo(m.dong.huySua, ten)).not.toBeNull();
-		await bam(nut(m.dong.nhanBanSua, ten));
+		expect(nutCuaDong(ten)).toEqual(["Nhận bản đã sửa", "Huỷ"]);
+		await bam(nut("Nhận bản đã sửa", ten));
 		await cho(() => goiCua("okr.troLyQuyet").length === 1, "quyet sua");
 		expect(goiCua("okr.troLyQuyet")[0]?.dauVao).toEqual({
 			deXuatId: D_TEN.id,
@@ -665,17 +714,23 @@ const CA = {
 			"o ten lay ban da sua",
 		);
 		expect(nutLuuMucTieu()?.disabled).toBe(true);
+		await cho(
+			() => chu(dongCua(D_TEN.id)) === "Tên Mục tiêu — Đã nhận",
+			"dong thu gon",
+		);
 	},
 
 	"ST-muctieu-da-quyet": async () => {
 		await moCotCoDong();
 		const ten = dongCua(D_TEN.id);
 		if (!ten) throw new Error("khong thay dong ten");
-		await bam(nut("Chấp nhận gợi ý", ten));
+		await bam(nut("Nhận", ten));
 		await cho(
-			() => chu(dongCua(D_TEN.id)).includes("Đã nhận"),
-			"dong ten da nhan",
+			() => chu(dongCua(D_TEN.id)) === "Tên Mục tiêu — Đã nhận",
+			"dong ten thu gon da nhan",
 		);
+		expect(dongCua(D_TEN.id)?.getAttribute("data-da-quyet")).toBe("accepted");
+		expect(dongCua(D_TEN.id)?.querySelector("del, ins")).toBeNull();
 		expect(goiCua("okr.troLyQuyet")[0]?.dauVao).toEqual({
 			deXuatId: D_TEN.id,
 			cach: "nhan",
@@ -685,8 +740,8 @@ const CA = {
 		expect(dongCua(D_TEN.id)?.querySelectorAll("button")).toHaveLength(0);
 		const can = dongCua(D_CAN.id);
 		if (!can) throw new Error("khong thay dong can chinh");
-		await bam(nut("Từ chối gợi ý", can));
-		await cho(() => chu(dongCua(D_CAN.id)).includes("Đã bác"), "da bac");
+		await bam(nut("Bác", can));
+		await cho(() => chu(dongCua(D_CAN.id)) === "Căn chỉnh — Đã bác", "da bac");
 		expect(goiCua("okr.troLyQuyet")[1]?.dauVao).toEqual({
 			deXuatId: D_CAN.id,
 			cach: "bac",
@@ -723,7 +778,7 @@ const CA = {
 		await moCotCoDong();
 		const ten = dongCua(D_TEN.id);
 		if (!ten) throw new Error("khong thay dong ten");
-		await bam(nut("Chấp nhận gợi ý", ten));
+		await bam(nut("Nhận", ten));
 		await cho(
 			() => dongCua(D_TEN.id)?.querySelector('[role="alert"]') !== null,
 			"loi duoi dong",
@@ -731,9 +786,7 @@ const CA = {
 		expect(
 			chu(dongCua(D_TEN.id)?.querySelector('[role="alert"]') ?? null),
 		).toBe("Chu kỳ đã khoá sửa");
-		expect(
-			nutCo("Chấp nhận gợi ý", dongCua(D_TEN.id) ?? document),
-		).not.toBeNull();
+		expect(nutCo("Nhận", dongCua(D_TEN.id) ?? document)).not.toBeNull();
 		expect(oTenMucTieu()?.value).toBe(MT.title);
 	},
 
@@ -894,7 +947,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		await moCotCoDong();
 		const ten = dongCua(D_TEN.id);
 		if (!ten) throw new Error("khong thay dong ten");
-		await bam(nut("Chấp nhận gợi ý", ten));
+		await bam(nut("Nhận", ten));
 		await cho(() => nutCo(m.toast.hoanTac) !== null, "toast hoan tac");
 		expect(chu(document.body)).toContain(m.toast.daNhan);
 		await bam(nut(m.toast.hoanTac));
@@ -916,7 +969,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		await moCotCoDong();
 		const kr = dongCua(D_KR.id);
 		if (!kr) throw new Error("khong thay dong KR");
-		await bam(nut("Chấp nhận gợi ý", kr));
+		await bam(nut("Nhận", kr));
 		await cho(() => nutCo(m.toast.hoanTac) !== null, "toast hoan tac");
 		await bam(nut(m.toast.hoanTac));
 		await cho(() => goiCua("okr.updateKeyResult").length > 0, "gui KR");
@@ -931,20 +984,135 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		await moCotCoDong();
 		await go(oTenMucTieu(), `${MT.title} (bản nháp)`);
 		const ten = dongCua(D_TEN.id);
-		const nhanTen = nut("Chấp nhận gợi ý", ten ?? document);
+		const nhanTen = nut("Nhận", ten ?? document);
 		expect(nhanTen.disabled).toBe(true);
 		expect(
 			chu(
 				document.getElementById(nhanTen.getAttribute("aria-describedby") ?? ""),
 			),
 		).toBe("Lưu hoặc hoàn lại ô này trước");
-		expect(
-			nut("Chấp nhận gợi ý", dongCua(D_VI_SAO.id) ?? document).disabled,
-		).toBe(false);
-		expect(nut("Chấp nhận gợi ý", dongCua(D_KR.id) ?? document).disabled).toBe(
-			false,
-		);
+		expect(nut("Nhận", dongCua(D_VI_SAO.id) ?? document).disabled).toBe(false);
+		expect(nut("Nhận", dongCua(D_KR.id) ?? document).disabled).toBe(false);
 		await bam(nhanTen);
 		expect(goiCua("okr.troLyQuyet")).toHaveLength(0);
+	});
+
+	test("trang-thai esc-trong-o-sua: Esc trong o sua dong o sua, hop Muc tieu van mo, khong hoi bo thay doi", async () => {
+		await moCotCoDong();
+		const ten = dongCua(D_TEN.id);
+		if (!ten) throw new Error("khong thay dong ten");
+		await bam(nut("Sửa", ten));
+		await go(oSua(ten), "Bản đang gõ dở");
+		await bamEsc(oSua(ten));
+		expect(oSua(document.body)).toBeNull();
+		expect(hopMucTieu()).not.toBeNull();
+		expect(chu(document.body)).not.toContain(HOI_BO);
+		expect(nutCuaDong(dongCua(D_TEN.id) ?? document)).toEqual([
+			"Nhận",
+			"Sửa",
+			"Bác",
+		]);
+	});
+
+	test("trang-thai khong-giu-o-sua: go o sua roi Nhan ban da sua, dong hop khong hoi bo thay doi", async () => {
+		let daDong = 0;
+		await moHopMucTieu(() => {
+			daDong += 1;
+		});
+		await bamNho();
+		await cho(() => dongCua(D_TEN.id) !== null, "cot co dong");
+		const ten = dongCua(D_TEN.id);
+		if (!ten) throw new Error("khong thay dong ten");
+		expect(cot()?.hasAttribute("data-khong-giu")).toBe(true);
+		await bam(nut("Sửa", ten));
+		await go(oSua(ten), "Không thoả thuận nào bị bỏ sót");
+		await bam(nut("Nhận bản đã sửa", ten));
+		await cho(() => goiCua("okr.troLyQuyet").length === 1, "quyet sua");
+		await nhip(5);
+		const huy = hopMucTieu()?.querySelector<HTMLButtonElement>(
+			'[data-slot="dialog-footer"] button',
+		);
+		if (!huy) throw new Error("khong thay nut Huy cua hop");
+		await bam(huy);
+		await nhip(5);
+		expect(chu(document.body)).not.toContain(HOI_BO);
+		expect(daDong).toBe(1);
+	});
+
+	test("trang-thai mo-lai-khi-dang-soan: tro ly dang soan khi mo hop — cot hien, van hoi lai, qua 30 000 ms thanh loi", async () => {
+		jest.useFakeTimers();
+		dongHoGia = true;
+		truocKhiBam = dangSoan;
+		await moHopMucTieu();
+		await cho(() => cot() !== null, "cot tu hien khi dang soan");
+		expect(chu(cot())).toContain("Trợ lý OKR đang đọc Mục tiêu này…");
+		const luc0 = goiCua("okr.troLyDanhSach").length;
+		await troi(3000);
+		expect(goiCua("okr.troLyDanhSach").length - luc0).toBe(2);
+		await bam(nut(m.nut.nho));
+		expect(goiCua("okr.troLyDeXuat")).toHaveLength(0);
+		await troi(27_000 + BIEN_HEN_GIO_MS);
+		const soLan = goiCua("okr.troLyDanhSach").length - luc0;
+		if (!nutCo("Thử lại"))
+			throw new Error(
+				`mo lai khi dang soan: sau 30000 ms chua co Thu lai — da hoi ${soLan} lan`,
+			);
+		expect(soLan).toBeGreaterThanOrEqual(19);
+		await troi(6000);
+		expect(goiCua("okr.troLyDanhSach").length - luc0).toBe(soLan);
+	});
+
+	test("trang-thai hoan-tac-sau-khi-dong: Nhan, dong hop, bam Hoan tac — van gui truoc, lam moi va bao da hoan tac", async () => {
+		await moCotCoDong();
+		const ten = dongCua(D_TEN.id);
+		if (!ten) throw new Error("khong thay dong ten");
+		await bam(nut("Nhận", ten));
+		await cho(() => nutCo(m.toast.hoanTac) !== null, "toast hoan tac");
+		const hop = dangMo[1];
+		if (!hop) throw new Error("khong thay goc cua hop");
+		await act(async () => hop.root.unmount());
+		hop.o.remove();
+		dangMo = dangMo.filter((s) => s !== hop);
+		expect(hopMucTieu()).toBeNull();
+		daLamMoi = [];
+		await bam(nut(m.toast.hoanTac));
+		await cho(() => goiCua("okr.updateObjective").length === 1, "gui hoan tac");
+		expect(goiCua("okr.updateObjective")[0]?.dauVao).toEqual({
+			id: MT.id,
+			title: MT.title,
+		});
+		await cho(() => daLamMoi.includes(`okr:${MT.id}`), "lam moi sau hoan tac");
+		await cho(
+			() => chu(document.body).includes(m.toast.daHoanTac),
+			"toast da hoan tac",
+		);
+	});
+
+	test("trang-thai xung-dot: nhan dong da cu (Conflict) thi lam moi danh sach, dong bien khoi cot, khong hien loi", async () => {
+		dat("okr.troLyQuyet", () => {
+			sauKhiBam = xong([D_KR, D_HOI, D_CAN]);
+			throw Object.assign(new Error("Câu đã đổi, đề xuất này đã cũ"), {
+				data: { code: "CONFLICT" },
+			});
+		});
+		await moCotCoDong();
+		const truoc = goiCua("okr.troLyDanhSach").length;
+		await bam(nut("Nhận", dongCua(D_TEN.id) ?? document));
+		await cho(() => dongCua(D_TEN.id) === null, "dong cu bien mat");
+		expect(goiCua("okr.troLyDanhSach").length).toBeGreaterThan(truoc);
+		expect(cot()?.querySelector('[role="alert"]')).toBeNull();
+	});
+
+	test("trang-thai chua-san-sang-khi-nhan: {ok:false} hien ly do co ten duoi dong", async () => {
+		dat("okr.troLyQuyet", () => ({ ok: false, lyDo: "het-tran-ngay" }));
+		await moCotCoDong();
+		await bam(nut("Nhận", dongCua(D_TEN.id) ?? document));
+		await cho(
+			() => dongCua(D_TEN.id)?.querySelector('[role="alert"]') !== null,
+			"loi co ten",
+		);
+		expect(
+			chu(dongCua(D_TEN.id)?.querySelector('[role="alert"]') ?? null),
+		).toBe("Chưa sẵn sàng — Đã chạm trần ngày");
 	});
 });

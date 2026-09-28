@@ -32,9 +32,13 @@ import {
 	type TruongVietLai,
 } from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { type KeyboardEvent, type ReactNode, useId, useState } from "react";
+import { type ReactNode, useId, useState } from "react";
 import { toast } from "sonner";
-import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
+import {
+	type OkrGopYMessages,
+	okrGopYMessages,
+} from "@/lib/messages/okr-gop-y";
+import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
 import { homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -43,7 +47,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 type DongHien = RouterOutputs["okr"]["troLyDanhSach"]["dong"][number];
 type Cach = "nhan" | "sua" | "bac" | "bo-qua";
 type KetQuyet = SuggestionDecision | "skipped";
-type DaQuyet = { dong: DongHien; ket: KetQuyet; giaTri: string | null };
+type DaQuyet = { dong: DongHien; ket: KetQuyet };
 
 export type GiaTriDaNhan = {
 	truong: TruongVietLai;
@@ -111,6 +115,7 @@ type TrangThaiNut =
 	| { loai: "an" }
 	| { loai: "khoa"; vi: LyDoKhoa | "sua" }
 	| { loai: "nho" }
+	| { loai: "mo" }
 	| { loai: "cho"; so: number };
 
 type SanSang =
@@ -122,6 +127,7 @@ function trangThaiNut(
 	sanSang: SanSang,
 	coSuaChuaLuu: boolean,
 	soCho: number,
+	dangSoan: boolean,
 ): TrangThaiNut {
 	if (!sanSang) return { loai: "an" };
 	if (!sanSang.bat) {
@@ -129,13 +135,18 @@ function trangThaiNut(
 		return hien === "vang" ? { loai: "an" } : { loai: "khoa", vi: hien };
 	}
 	if (coSuaChuaLuu) return { loai: "khoa", vi: "sua" };
-	return soCho > 0 ? { loai: "cho", so: soCho } : { loai: "nho" };
+	if (soCho > 0) return { loai: "cho", so: soCho };
+	return dangSoan ? { loai: "mo" } : { loai: "nho" };
 }
 
 function nhipHoiLai(batDau: number | null, bayGio: number): number | false {
 	return batDau !== null && bayGio - batDau < TRO_LY_OKR_TRAN.tranChoMs
 		? TRO_LY_OKR_TRAN.hoiLaiMs
 		: false;
+}
+
+function boQuaChuDangGo(_chu: string) {
+	return undefined;
 }
 
 function cuonToi(o: HTMLElement | null) {
@@ -153,7 +164,9 @@ export function useGopY({
 	coSuaChuaLuu: boolean;
 	onDaNhan: (nhan: GiaTriDaNhan) => void;
 }) {
-	const m = okrGopYMessages(useLocale());
+	const locale = useLocale();
+	const m = okrGopYMessages(locale);
+	const mTroLy = troLyOkrMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const dich = { objectiveId: objectiveId ?? "", keyResultId };
@@ -175,19 +188,56 @@ export function useGopY({
 		enabled: coDich && bat,
 		retry: false,
 		refetchInterval: (q) =>
-			cotMoTay === true && q.state.data?.dangSoan === true
-				? nhipHoiLai(batDau, Date.now())
+			cotMoTay !== false && q.state.data?.dangSoan === true
+				? nhipHoiLai(batDau ?? q.state.dataUpdatedAt, Date.now())
 				: false,
 	});
 	const deXuat = useMutation(trpc.okr.troLyDeXuat.mutationOptions());
 	const quyetDong = useMutation(trpc.okr.troLyQuyet.mutationOptions());
-	const suaMucTieu = useMutation(trpc.okr.updateObjective.mutationOptions());
-	const suaKr = useMutation(trpc.okr.updateKeyResult.mutationOptions());
+	const daHoanTac = (nhan: GiaTriDaNhan, objectiveId: string) => {
+		onDaNhan(nhan);
+		toast.success(m.toast.daHoanTac);
+		void cache.okr(objectiveId);
+	};
+	const loiHoanTac = (e: { message: string }) => toast.error(e.message);
+	const suaMucTieu = useMutation(
+		trpc.okr.updateObjective.mutationOptions({
+			onSuccess: (_kq, vao) => {
+				if (vao.title !== undefined) {
+					daHoanTac(
+						{ truong: "title", keyResultId: null, giaTri: vao.title },
+						vao.id,
+					);
+				} else if (vao.whyNow !== undefined) {
+					daHoanTac(
+						{ truong: "whyNow", keyResultId: null, giaTri: vao.whyNow },
+						vao.id,
+					);
+				}
+			},
+			onError: loiHoanTac,
+		}),
+	);
+	const suaKr = useMutation(
+		trpc.okr.updateKeyResult.mutationOptions({
+			onSuccess: (_kq, vao) => {
+				if (vao.title === undefined || objectiveId === null) return;
+				daHoanTac(
+					{ truong: "kr.title", keyResultId: vao.id, giaTri: vao.title },
+					objectiveId,
+				);
+			},
+			onError: loiHoanTac,
+		}),
+	);
 
 	const ds = danhSach.data;
 	const dongCho = ds?.dong ?? [];
 	const dangSoan = ds?.dangSoan === true;
 	const cotMo = bat && (cotMoTay ?? (dongCho.length > 0 || dangSoan));
+	if (batDau === null && dangSoan && danhSach.dataUpdatedAt > 0) {
+		setBatDau(danhSach.dataUpdatedAt);
+	}
 	const moi = batDau === null || danhSach.dataUpdatedAt >= batDau;
 	const quaHan =
 		batDau !== null &&
@@ -209,7 +259,7 @@ export function useGopY({
 					dong.length === 0 &&
 					maKetThuc !== null &&
 					maKetThuc !== DA_NOP)));
-	const nut = trangThaiNut(sanSang.data, coSuaChuaLuu, soCho);
+	const nut = trangThaiNut(sanSang.data, coSuaChuaLuu, soCho, dangSoan);
 
 	const nho = () => {
 		if (!coDich || !bat || coSuaChuaLuu || deXuat.isPending) return;
@@ -235,23 +285,14 @@ export function useGopY({
 	const hoanTac = (d: DongHien) => {
 		const truoc = d.truoc;
 		if (d.truong === null || truoc === null) return;
-		const xong = {
-			onSuccess: () => {
-				baoNhan(d, truoc);
-				toast.success(m.toast.daHoanTac);
-				void cache.okr(d.objectiveId);
-			},
-			onError: (e: { message: string }) => toast.error(e.message),
-		};
 		if (d.truong === "kr.title" && d.keyResultId) {
-			suaKr.mutate({ id: d.keyResultId, title: truoc }, xong);
+			suaKr.mutate({ id: d.keyResultId, title: truoc });
 			return;
 		}
 		suaMucTieu.mutate(
 			d.truong === "title"
 				? { id: d.objectiveId, title: truoc }
 				: { id: d.objectiveId, whyNow: truoc },
-			xong,
 		);
 	};
 
@@ -266,14 +307,15 @@ export function useGopY({
 			{
 				onSuccess: (kq) => {
 					if (!kq.ok) {
-						setLoiDong((cu) => ({ ...cu, [d.id]: m.dong.khongConBat }));
+						const s = mTroLy.troLy.sanSang;
+						setLoiDong((cu) => ({
+							...cu,
+							[d.id]: s.chuaSanSang(s.lyDo[kq.lyDo]),
+						}));
 						return;
 					}
 					const cuoi = giaTri ?? d.sau;
-					setDaQuyet((cu) => [
-						...cu,
-						{ dong: d, ket: KET_CUA_CACH[cach], giaTri: cuoi },
-					]);
+					setDaQuyet((cu) => [...cu, { dong: d, ket: KET_CUA_CACH[cach] }]);
 					void cache.okr(d.objectiveId);
 					if (cach !== "nhan" && cach !== "sua") return;
 					if (d.loai === "viet-lai" && cuoi !== null) {
@@ -285,7 +327,13 @@ export function useGopY({
 					}
 					toast.success(m.toast.daNhan);
 				},
-				onError: (e) => setLoiDong((cu) => ({ ...cu, [d.id]: e.message })),
+				onError: (e) => {
+					if (e.data?.code === "CONFLICT") {
+						void danhSach.refetch();
+						return;
+					}
+					setLoiDong((cu) => ({ ...cu, [d.id]: e.message }));
+				},
 				onSettled: () => setDangQuyet(null),
 			},
 		);
@@ -298,7 +346,10 @@ export function useGopY({
 		laKr: keyResultId !== undefined,
 		nut,
 		cotMo,
-		moCot: () => setCotMoTay(true),
+		moCot: () => {
+			setCotMoTay(true);
+			if (dangSoan) void danhSach.refetch();
+		},
 		dongCot: () => setCotMoTay(false),
 		nho,
 		dangGui: deXuat.isPending,
@@ -348,11 +399,29 @@ export function NutGopY({ gopY }: { gopY: GopY }) {
 				type="button"
 				variant="outline"
 				disabled={gopY.dangGui}
-				onClick={nut.loai === "cho" ? gopY.moCot : gopY.nho}
+				onClick={nut.loai === "nho" ? gopY.nho : gopY.moCot}
 			>
 				{nut.loai === "cho" ? m.nut.dangCho(String(nut.so)) : m.nut.nho}
 			</Button>
 		</div>
+	);
+}
+
+function nhanO(d: DongHien, m: OkrGopYMessages): string {
+	if (d.loai === "viet-lai" && d.truong) return m.dong.truong[d.truong];
+	return m.dong.loai[d.loai];
+}
+
+function DongDaQuyet({ dong, ket }: { dong: DongHien; ket: KetQuyet }) {
+	const m = okrGopYMessages(useLocale());
+	return (
+		<Item size="xs" variant="muted" data-dong={dong.id} data-da-quyet={ket}>
+			<ItemContent>
+				<ItemDescription>
+					{nhanO(dong, m)} — {m.dong.ket[ket]}
+				</ItemDescription>
+			</ItemContent>
+		</Item>
 	);
 }
 
@@ -366,59 +435,27 @@ function DongVietLai({
 	khoaNhan: boolean;
 }) {
 	const m = okrGopYMessages(useLocale());
-	const [banSua, setBanSua] = useState<string | null>(null);
-	const [lanMo, setLanMo] = useState(0);
-	const daQuyet = gopY.ketCua(dong.id);
-	const ket = daQuyet?.ket;
-	const huySua = () => {
-		setBanSua(null);
-		setLanMo((n) => n + 1);
+	const nhanBanSua = (giaTri: string) => {
+		const chu = giaTri.trim();
+		if (khoaNhan || chu === "") return;
+		gopY.quyet(dong, "sua", chu);
 	};
-	const escTrongOSua = (su: KeyboardEvent<HTMLDivElement>) => {
-		if (su.key === "Escape" && su.target instanceof HTMLInputElement) {
-			setBanSua(null);
-		}
-	};
-	const nhan = `${m.dong.loai["viet-lai"]} · ${dong.truong ? m.dong.truong[dong.truong] : ""}`;
 	return (
-		<Item
-			size="sm"
-			variant="outline"
-			data-dong={dong.id}
-			onKeyDownCapture={escTrongOSua}
-		>
+		<Item size="sm" variant="outline" data-dong={dong.id}>
 			<ItemContent>
 				<Suggestion
-					key={`${lanMo}-${ket ?? "cho"}`}
-					label={nhan}
+					label={`${m.dong.loai["viet-lai"]} · ${nhanO(dong, m)}`}
 					before={dong.truoc ?? ""}
-					value={daQuyet?.giaTri ?? dong.sau ?? ""}
+					value={dong.sau ?? ""}
 					rationale={dong.lyDo}
 					pending={gopY.dangQuyet === dong.id}
-					decided={ket === "skipped" ? undefined : ket}
 					error={gopY.loiDong[dong.id]}
 					acceptDisabledReason={khoaNhan ? m.dong.khoaODangSua : undefined}
 					onAccept={() => gopY.quyet(dong, "nhan")}
 					onDismiss={() => gopY.quyet(dong, "bac")}
-					onEdit={setBanSua}
+					onEdit={boQuaChuDangGo}
+					onAcceptEdited={nhanBanSua}
 				/>
-				{banSua !== null && ket === undefined ? (
-					<ItemActions>
-						<Button
-							type="button"
-							size="sm"
-							disabled={
-								khoaNhan || banSua.trim() === "" || gopY.dangQuyet !== null
-							}
-							onClick={() => gopY.quyet(dong, "sua", banSua.trim())}
-						>
-							{m.dong.nhanBanSua}
-						</Button>
-						<Button type="button" size="sm" variant="ghost" onClick={huySua}>
-							{m.dong.huySua}
-						</Button>
-					</ItemActions>
-				) : null}
 			</ItemContent>
 		</Item>
 	);
@@ -426,7 +463,6 @@ function DongVietLai({
 
 function DongCauHoi({ dong, gopY }: { dong: DongHien; gopY: GopY }) {
 	const m = okrGopYMessages(useLocale());
-	const ket = gopY.ketCua(dong.id)?.ket;
 	const loi = gopY.loiDong[dong.id];
 	return (
 		<Item size="sm" variant="outline" data-dong={dong.id}>
@@ -434,21 +470,17 @@ function DongCauHoi({ dong, gopY }: { dong: DongHien; gopY: GopY }) {
 				<ItemDescription>{m.dong.loai.hoi}</ItemDescription>
 				<p translate="no">{dong.sau ?? dong.lyDo}</p>
 				{dong.sau ? <ItemDescription>{dong.lyDo}</ItemDescription> : null}
-				{ket ? (
-					<ItemDescription>{m.dong.daBoQua}</ItemDescription>
-				) : (
-					<ItemActions>
-						<Button
-							type="button"
-							size="sm"
-							variant="outline"
-							disabled={gopY.dangQuyet !== null}
-							onClick={() => gopY.quyet(dong, "bo-qua")}
-						>
-							{m.dong.boQua}
-						</Button>
-					</ItemActions>
-				)}
+				<ItemActions>
+					<Button
+						type="button"
+						size="sm"
+						variant="outline"
+						disabled={gopY.dangQuyet !== null}
+						onClick={() => gopY.quyet(dong, "bo-qua")}
+					>
+						{m.dong.boQua}
+					</Button>
+				</ItemActions>
 				{loi ? <FieldError>{loi}</FieldError> : null}
 			</ItemContent>
 		</Item>
@@ -457,7 +489,6 @@ function DongCauHoi({ dong, gopY }: { dong: DongHien; gopY: GopY }) {
 
 function DongCanChinh({ dong, gopY }: { dong: DongHien; gopY: GopY }) {
 	const m = okrGopYMessages(useLocale());
-	const ket = gopY.ketCua(dong.id)?.ket;
 	return (
 		<Item size="sm" variant="outline" data-dong={dong.id}>
 			<ItemContent>
@@ -466,7 +497,6 @@ function DongCanChinh({ dong, gopY }: { dong: DongHien; gopY: GopY }) {
 					value={dong.tenDich ?? ""}
 					rationale={dong.lyDo}
 					pending={gopY.dangQuyet === dong.id}
-					decided={ket === "skipped" ? undefined : ket}
 					error={gopY.loiDong[dong.id]}
 					onAccept={() => gopY.quyet(dong, "nhan")}
 					onDismiss={() => gopY.quyet(dong, "bac")}
@@ -491,6 +521,7 @@ function KhungCot({
 			aria-label={m.cot.tieuDe}
 			aria-busy={ban}
 			data-cot-gop-y
+			data-khong-giu
 			ref={cuonToi}
 		>
 			<Item size="xs">
@@ -575,8 +606,11 @@ export function CotGopY({
 		<KhungCot gopY={gopY} ban={gopY.dangSoan}>
 			<ItemDescription>{m.cot.soDong(String(conCho.length))}</ItemDescription>
 			<ItemGroup>
-				{gopY.dong.map((d) =>
-					d.loai === "hoi" ? (
+				{gopY.dong.map((d) => {
+					const ket = gopY.ketCua(d.id)?.ket;
+					return ket ? (
+						<DongDaQuyet key={d.id} dong={d} ket={ket} />
+					) : d.loai === "hoi" ? (
 						<DongCauHoi key={d.id} dong={d} gopY={gopY} />
 					) : d.loai === "can-chinh" ? (
 						<DongCanChinh key={d.id} dong={d} gopY={gopY} />
@@ -587,8 +621,8 @@ export function CotGopY({
 							gopY={gopY}
 							khoaNhan={d.truong !== null && oDangSua.has(d.truong)}
 						/>
-					),
-				)}
+					);
+				})}
 			</ItemGroup>
 		</KhungCot>
 	);
