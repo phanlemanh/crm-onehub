@@ -307,6 +307,7 @@ export function useGopY({
 			{
 				onSuccess: (kq) => {
 					if (!kq.ok) {
+						void sanSang.refetch();
 						const s = mTroLy.troLy.sanSang;
 						setLoiDong((cu) => ({
 							...cu,
@@ -412,6 +413,16 @@ function nhanO(d: DongHien, m: OkrGopYMessages): string {
 	return m.dong.loai[d.loai];
 }
 
+function lyDoDongKhac(
+	gopY: GopY,
+	dong: DongHien,
+	m: OkrGopYMessages,
+): string | undefined {
+	return gopY.dangQuyet !== null && gopY.dangQuyet !== dong.id
+		? m.dong.dangGhiKhac
+		: undefined;
+}
+
 function DongDaQuyet({ dong, ket }: { dong: DongHien; ket: KetQuyet }) {
 	const m = okrGopYMessages(useLocale());
 	return (
@@ -450,7 +461,9 @@ function DongVietLai({
 					rationale={dong.lyDo}
 					pending={gopY.dangQuyet === dong.id}
 					error={gopY.loiDong[dong.id]}
-					acceptDisabledReason={khoaNhan ? m.dong.khoaODangSua : undefined}
+					acceptDisabledReason={
+						khoaNhan ? m.dong.khoaODangSua : lyDoDongKhac(gopY, dong, m)
+					}
 					onAccept={() => gopY.quyet(dong, "nhan")}
 					onDismiss={() => gopY.quyet(dong, "bac")}
 					onEdit={boQuaChuDangGo}
@@ -498,6 +511,7 @@ function DongCanChinh({ dong, gopY }: { dong: DongHien; gopY: GopY }) {
 					rationale={dong.lyDo}
 					pending={gopY.dangQuyet === dong.id}
 					error={gopY.loiDong[dong.id]}
+					acceptDisabledReason={lyDoDongKhac(gopY, dong, m)}
 					onAccept={() => gopY.quyet(dong, "nhan")}
 					onDismiss={() => gopY.quyet(dong, "bac")}
 				/>

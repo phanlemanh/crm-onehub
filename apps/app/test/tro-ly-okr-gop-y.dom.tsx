@@ -997,21 +997,59 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		expect(goiCua("okr.troLyQuyet")).toHaveLength(0);
 	});
 
-	test("trang-thai esc-trong-o-sua: Esc trong o sua dong o sua, hop Muc tieu van mo, khong hoi bo thay doi", async () => {
-		await moCotCoDong();
+	test("trang-thai esc-trong-o-sua: Esc trong o sua chi dong o sua, khong dong hop; Esc ngoai o sua dong hop", async () => {
+		let daDong = 0;
+		await moHopMucTieu(() => {
+			daDong += 1;
+		});
+		await bamNho();
+		await cho(() => dongCua(D_TEN.id) !== null, "cot co dong");
 		const ten = dongCua(D_TEN.id);
 		if (!ten) throw new Error("khong thay dong ten");
 		await bam(nut("Sửa", ten));
 		await go(oSua(ten), "Bản đang gõ dở");
 		await bamEsc(oSua(ten));
 		expect(oSua(document.body)).toBeNull();
-		expect(hopMucTieu()).not.toBeNull();
+		if (daDong !== 0)
+			throw new Error(`esc trong o sua dong hop: daDong = ${daDong}`);
 		expect(chu(document.body)).not.toContain(HOI_BO);
 		expect(nutCuaDong(dongCua(D_TEN.id) ?? document)).toEqual([
 			"Nhận",
 			"Sửa",
 			"Bác",
 		]);
+		await bamEsc(
+			hopMucTieu()?.querySelector('[data-slot="dialog-title"]') ?? null,
+		);
+		expect(daDong).toBe(1);
+	});
+
+	test("trang-thai mo-dong-khac: dang ghi mot dong thi Nhan cua dong khac khoa, co ly do", async () => {
+		let tha: (() => void) | null = null;
+		dat(
+			"okr.troLyQuyet",
+			() =>
+				new Promise((giai) => {
+					tha = () => giai({ ok: true });
+				}),
+		);
+		await moCotCoDong();
+		await bam(nut("Nhận", dongCua(D_TEN.id) ?? document));
+		const nhanCan = nut("Nhận", dongCua(D_CAN.id) ?? document);
+		expect(nhanCan.disabled).toBe(true);
+		expect(
+			chu(
+				document.getElementById(nhanCan.getAttribute("aria-describedby") ?? ""),
+			),
+		).toBe("Đang ghi một đề xuất khác");
+		expect(nut("Nhận", dongCua(D_KR.id) ?? document).disabled).toBe(true);
+		const giaiNgay: () => void = tha ?? (() => {});
+		await act(async () => giaiNgay());
+		await cho(
+			() => chu(dongCua(D_TEN.id)) === "Tên Mục tiêu — Đã nhận",
+			"da nhan",
+		);
+		expect(nut("Nhận", dongCua(D_CAN.id) ?? document).disabled).toBe(false);
 	});
 
 	test("trang-thai khong-giu-o-sua: go o sua roi Nhan ban da sua, dong hop khong hoi bo thay doi", async () => {
@@ -1114,6 +1152,10 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		expect(
 			chu(dongCua(D_TEN.id)?.querySelector('[role="alert"]') ?? null),
 		).toBe("Chưa sẵn sàng — Đã chạm trần ngày");
+		await cho(
+			() => goiCua("okr.troLySanSang").length >= 2,
+			"lam moi san sang sau ok:false",
+		);
 	});
 
 	test("trang-thai o-dang-sua-khi-sua: o co sua chua luu thi Nhan ban da sua cung khoa, co ly do", async () => {

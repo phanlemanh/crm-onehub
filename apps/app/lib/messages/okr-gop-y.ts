@@ -40,6 +40,7 @@ const vi = {
 			skipped: "Đã bỏ qua",
 		},
 		khoaODangSua: "Lưu hoặc hoàn lại ô này trước",
+		dangGhiKhac: "Đang ghi một đề xuất khác",
 	},
 	toast: {
 		daNhan: "Đã nhận",
@@ -96,6 +97,7 @@ const en: OkrGopYMessages = {
 			skipped: "Skipped",
 		},
 		khoaODangSua: "Save or revert this field first",
+		dangGhiKhac: "Saving another suggestion",
 	},
 	toast: {
 		daNhan: "Accepted",
