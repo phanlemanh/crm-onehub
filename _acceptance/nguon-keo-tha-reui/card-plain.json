@@ -1,0 +1,22 @@
+{
+  "feature_plain": "Người tải tệp quy định lên kho tài liệu thấy vùng kéo-thả mới theo mẫu ReUI: một hàng viền đứt có nút «Chọn tệp», mọi cách từ chối tệp sai và khoá khi chưa bật vẫn như cũ.",
+  "scope_plain": "Những việc cố ý để ngoài vòng này:",
+  "decisions_plain": [
+    {
+      "id": "d-20260928T112927Z-1",
+      "p": "Chỉ lấy phần xử lý kéo-thả của ReUI rồi dựng vùng theo mẫu của họ — đổi lại vùng trông khác bản cũ, người ký nhìn ảnh hộp tải để xét."
+    },
+    {
+      "id": "d-20260928T112927Z-2",
+      "p": "KHÔNG chạy phiên thiết kế riêng — bản xem trước của ReUI thay cho bản bấm được, ảnh hộp tải ở 1440 và 390 là chỗ nhìn."
+    },
+    {
+      "id": "d-20260928T112927Z-3",
+      "p": "KHÔNG đo riêng tệp rỗng và thả nhiều tệp một lúc — hai cách đó giữ như bản cũ, chưa phép đo nào canh."
+    },
+    {
+      "id": "d-20260928T114032Z-5",
+      "p": "Sửa thêm ba dòng trong phần lấy từ ReUI để kho kiểm lỗi và kiểm kiểu xanh — đổi lại cập nhật bản ReUI về sau phải làm lại ba dòng này."
+    }
+  ]
+}
