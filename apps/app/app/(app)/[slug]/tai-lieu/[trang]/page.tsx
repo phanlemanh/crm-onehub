@@ -61,6 +61,7 @@ async function NoiDung({ params }: { params: Params }) {
 					choLanDau: trang.choLanDau !== null,
 					soBanCho,
 					deXuatChoId: choCuaTrang[0]?.id ?? null,
+					nguon: trang.nguon,
 				}}
 			/>
 		</HydrateClient>

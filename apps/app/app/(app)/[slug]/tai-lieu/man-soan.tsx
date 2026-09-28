@@ -17,20 +17,8 @@ import {
 } from "@crm/ui/components/giu-thay-doi";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@crm/ui/components/select";
 import { TrinhSoan } from "@crm/ui/components/trinh-soan";
-import {
-	chuanNfc,
-	LOAI_TRANG,
-	type LoaiTrang,
-	TAI_LIEU,
-} from "@crm/validation/tai-lieu";
+import { chuanNfc, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { chuanHoa } from "@crm/validation/tai-lieu-markdown";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -50,20 +38,27 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
-import { duongDanhSach, duongTrang, TAI_LIEU_MAN } from "@/lib/tai-lieu-man";
+import { duongDanhSach, duongTrang } from "@/lib/tai-lieu-man";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-
-export type LuaChon = { id: string; ten: string };
+import {
+	donViDaChon,
+	type LuaChon,
+	type TrangMoiChon,
+	TruongTrangMoi,
+	trangMoiMacDinh,
+} from "./truong-trang-moi";
 
 export type ManSoanVao =
 	| { kieu: "moi"; toiId: string; chuTrang: LuaChon[]; donVi: LuaChon[] }
-	| { kieu: "sua"; slug: string; ten: string; banGoc: string };
-
-function laLoai(v: string): v is LoaiTrang {
-	return LOAI_TRANG.some((l) => l === v);
-}
+	| {
+			kieu: "sua";
+			slug: string;
+			ten: string;
+			banGoc: string;
+			tuDeXuatId?: string;
+	  };
 
 export function ManSoan({ vao }: { vao: ManSoanVao }) {
 	const router = useRouter();
@@ -120,9 +115,6 @@ function FormSoan({
 	const id = {
 		ten: `${ma}-ten`,
 		loiTen: `${ma}-loi-ten`,
-		loai: `${ma}-loai`,
-		donVi: `${ma}-don-vi`,
-		chuTrang: `${ma}-chu-trang`,
 		noiDung: `${ma}-noi-dung`,
 		goiY: `${ma}-goi-y`,
 	};
@@ -132,9 +124,9 @@ function FormSoan({
 	const gocChuan = useMemo(() => chuanHoa(banGoc), [banGoc]);
 	const [ten, setTen] = useState(tenGoc);
 	const [noiDung, setNoiDung] = useState(banGoc);
-	const [loai, setLoai] = useState<LoaiTrang>(LOAI_TRANG[0]);
-	const [donVi, setDonVi] = useState<string>(TAI_LIEU_MAN.khongDonVi);
-	const [chuTrang, setChuTrang] = useState(vao.kieu === "moi" ? vao.toiId : "");
+	const [trangMoi, setTrangMoi] = useState<TrangMoiChon>(() =>
+		trangMoiMacDinh(vao.kieu === "moi" ? vao.toiId : ""),
+	);
 	const [loiTen, setLoiTen] = useState<string | null>(null);
 	const oTen = useRef<HTMLInputElement>(null);
 	const noiDungChuan = useMemo(() => chuanHoa(noiDung), [noiDung]);
@@ -194,14 +186,23 @@ function FormSoan({
 			return;
 		}
 		if (vao.kieu === "sua") {
-			deXuat.mutate({ slug: vao.slug, ten: tenSach, noiDung });
+			deXuat.mutate(
+				vao.tuDeXuatId
+					? {
+							slug: vao.slug,
+							ten: tenSach,
+							noiDung,
+							tuDeXuatId: vao.tuDeXuatId,
+						}
+					: { slug: vao.slug, ten: tenSach, noiDung },
+			);
 			return;
 		}
 		tao.mutate({
 			ten: tenSach,
-			loai,
-			departmentId: donVi === TAI_LIEU_MAN.khongDonVi ? null : donVi,
-			chuTrangId: chuTrang,
+			loai: trangMoi.loai,
+			departmentId: donViDaChon(trangMoi.donVi),
+			chuTrangId: trangMoi.chuTrang,
 			noiDung,
 		});
 	};
@@ -237,67 +238,13 @@ function FormSoan({
 						{loiTen ? <FieldError id={id.loiTen}>{loiTen}</FieldError> : null}
 					</Field>
 					{vao.kieu === "moi" ? (
-						<div className="grid gap-4 sm:grid-cols-3">
-							<Field>
-								<FieldLabel htmlFor={id.loai}>{m.loaiTrang}</FieldLabel>
-								<Select
-									onValueChange={(v) => {
-										if (laLoai(v)) setLoai(v);
-									}}
-									value={loai}
-								>
-									<SelectTrigger id={id.loai}>
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										{LOAI_TRANG.map((l) => (
-											<SelectItem key={l} value={l}>
-												{t.loai[l]}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</Field>
-							<Field>
-								<FieldLabel htmlFor={id.donVi}>{m.donVi}</FieldLabel>
-								<Select onValueChange={setDonVi} value={donVi}>
-									<SelectTrigger id={id.donVi}>
-										<SelectValue placeholder={m.chonDonVi} />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value={TAI_LIEU_MAN.khongDonVi}>
-											{m.khongDonVi}
-										</SelectItem>
-										{vao.donVi.map((d) => (
-											<SelectItem key={d.id} translate="no" value={d.id}>
-												{d.ten}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</Field>
-							<Field>
-								<FieldLabel htmlFor={id.chuTrang}>{m.chuTrang}</FieldLabel>
-								<Select onValueChange={setChuTrang} value={chuTrang}>
-									<SelectTrigger id={id.chuTrang}>
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										{vao.chuTrang.map((c) =>
-											c.id === vao.toiId ? (
-												<SelectItem key={c.id} value={c.id}>
-													{m.ban}
-												</SelectItem>
-											) : (
-												<SelectItem key={c.id} translate="no" value={c.id}>
-													{c.ten}
-												</SelectItem>
-											),
-										)}
-									</SelectContent>
-								</Select>
-							</Field>
-						</div>
+						<TruongTrangMoi
+							chuTrang={vao.chuTrang}
+							donVi={vao.donVi}
+							giaTri={trangMoi}
+							onDoi={setTrangMoi}
+							toiId={vao.toiId}
+						/>
 					) : null}
 					<Field>
 						<FieldTitle>{m.noiDung}</FieldTitle>

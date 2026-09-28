@@ -1,10 +1,20 @@
 import { Module } from "@nestjs/common";
+import { AgentModule } from "../agent/agent.module";
 import { TrpcModule } from "../trpc/trpc.module";
+import { khoNguonProvider } from "./kho-nguon";
 import { TaiLieuRouter } from "./tai-lieu.router";
 import { TaiLieuService } from "./tai-lieu.service";
+import { TaiLieuNguonRouter } from "./tai-lieu-nguon.router";
+import { TaiLieuNguonService } from "./tai-lieu-nguon.service";
 
 @Module({
-	imports: [TrpcModule],
-	providers: [TaiLieuService, TaiLieuRouter],
+	imports: [TrpcModule, AgentModule],
+	providers: [
+		TaiLieuService,
+		TaiLieuRouter,
+		khoNguonProvider,
+		TaiLieuNguonService,
+		TaiLieuNguonRouter,
+	],
 })
 export class TaiLieuModule {}

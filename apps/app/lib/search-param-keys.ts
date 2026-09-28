@@ -60,6 +60,7 @@ export const SEARCH_PARAM = {
 	taiLieu: {
 		tab: "tabTaiLieu",
 		loai: "loai",
+		tuDeXuat: "tuDeXuat",
 	},
 } as const;
 

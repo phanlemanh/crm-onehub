@@ -1,0 +1,2 @@
+driver: script noi bo (man-lib.mjs dieu khien trinh duyet headless qua tien-de.mjs/phien-do.mjs), khong phai cong cu browser MCP nen khong doc duoc network/console tu day.
+networkObserved: n-a (driver)
