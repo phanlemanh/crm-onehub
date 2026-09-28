@@ -28,6 +28,8 @@ export type DongSo = { so: string; trich: string | null };
 export type BanMay = {
 	tenTep: string;
 	chuNguon: string;
+	noiDung: string;
+	coBanGoc: boolean;
 	doanTrich: string[];
 	dong: DongSo[];
 };

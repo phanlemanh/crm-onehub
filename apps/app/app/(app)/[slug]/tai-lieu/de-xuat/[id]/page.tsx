@@ -47,6 +47,8 @@ async function NoiDung({ params }: { params: Params }) {
 		? {
 				tenTep: dx.nguon.tenTep,
 				chuNguon,
+				noiDung: dx.noiDung,
+				coBanGoc: dx.banGoc.trim() !== "",
 				doanTrich: dx.trichDoan.map((t) => doanTrongNguon(chuNguon, t.trich)),
 				dong: dongSoMay(dx.soMoi, dx.trichDoan).map((d) => ({
 					so: d.so,

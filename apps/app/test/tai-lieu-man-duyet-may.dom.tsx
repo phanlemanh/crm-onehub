@@ -130,6 +130,8 @@ const MAY: DeXuat = {
 	may: {
 		tenTep: "quyet-dinh-12.docx",
 		chuNguon: CHU_NGUON,
+		noiDung: BAN_MAY,
+		coBanGoc: false,
 		doanTrich: [...TRICH],
 		dong: [
 			{ so: "01/10/2026", trich: TRICH[0] },
@@ -144,12 +146,26 @@ const MAY_KHONG_SO: DeXuat = {
 	may: {
 		tenTep: "quyet-dinh-12.docx",
 		chuNguon: CHU_NGUON,
+		noiDung: BAN_MAY,
+		coBanGoc: false,
 		doanTrich: [],
 		dong: [],
 	},
 };
 
 const NGUOI_VIET: DeXuat = { ...MAY, id: "dx-tay", may: undefined };
+
+const BAN_GOC = "## Hoa hồng\n\nMức cũ: tầng hai hưởng 1,2% kể từ quý trước.";
+const KHOI_CO_GOC = soSanh(BAN_GOC, BAN_MAY);
+const MAY_CO_GOC: DeXuat = {
+	...MAY,
+	id: "dx-may-goc",
+	khoi: KHOI_CO_GOC,
+	dai: suKienDoi(KHOI_CO_GOC),
+	may: MAY.may ? { ...MAY.may, coBanGoc: true } : undefined,
+};
+const CAU_BAN_MAY =
+	"Từ ngày 01/10/2026, tầng hai hưởng 1,5% và tầng ba hưởng 1,8%.";
 
 const DA_DOC = "Đã đọc nguồn, xem bản máy soạn";
 const BA_NUT = ["Duyệt", "Trả lại", "Sửa bản này"] as const;
@@ -330,6 +346,27 @@ describe("man-duyet-may", () => {
 		}
 		expect(laNutQuyetDinh(document.activeElement)).toBe(false);
 		expect(document.body.querySelectorAll("mark").length).toBe(3);
+	});
+
+	test("man-duyet-may buoc 2: cot ban may doc lien mach, thay doi so voi ban dang dung o khoi rieng", async () => {
+		await mo(MAY_CO_GOC);
+		await bam(nut(DA_DOC));
+		const buoc2 = document.querySelector('[data-buoc-duyet="2"]');
+		const chu = (buoc2?.textContent ?? "").replace(/\s+/g, " ");
+		expect(chu.includes(CAU_BAN_MAY), "ban may bi xao tron").toBe(true);
+		expect(
+			buoc2?.querySelector("del, ins, s"),
+			"ban may bi xao tron",
+		).toBeNull();
+		const soVoiBan = document.querySelector("[data-so-voi-ban]");
+		expect(soVoiBan?.textContent).toContain("Thay đổi so với bản đang dùng");
+		expect(soVoiBan?.textContent).toContain("1,2%");
+	});
+
+	test("man-duyet-may buoc 2: trang moi khong co khoi so voi ban dang dung", async () => {
+		await mo(MAY);
+		await bam(nut(DA_DOC));
+		expect(document.querySelector("[data-so-voi-ban]")).toBeNull();
 	});
 
 	test("man-duyet-may tick: 0/3, 1/3, 2/3 khoa; 3/3 mo; bo mot o khoa lai", async () => {

@@ -22,8 +22,10 @@ export function tokenMaySoan(nguonId: string): string {
 }
 
 export function nguonTuToken(token: string | null | undefined): string | null {
-	if (!token?.startsWith(TIEN_TO_TOKEN)) return null;
-	return token.slice(TIEN_TO_TOKEN.length) || null;
+	if (!token) return null;
+	const moc = token.lastIndexOf(TIEN_TO_TOKEN);
+	if (moc === -1) return null;
+	return token.slice(moc + TIEN_TO_TOKEN.length) || null;
 }
 
 export async function nguonChoSoan(lo: number = CFG.lo): Promise<string[]> {

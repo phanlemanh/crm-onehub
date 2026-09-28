@@ -167,6 +167,7 @@ const en = {
 		banMay: "Drafted proposal",
 		suaBanNay: "Edit this draft",
 		khoaDuyet: "Check every number against the source before approving",
+		soVoiBan: "Changes against the page in use",
 	},
 	nguon: {
 		nutTai: "Upload a source",
@@ -400,6 +401,7 @@ const vi: TaiLieuMessages = {
 		banMay: "Bản máy soạn",
 		suaBanNay: "Sửa bản này",
 		khoaDuyet: "Đối chiếu từng con số với nguồn rồi mới duyệt được",
+		soVoiBan: "Thay đổi so với bản đang dùng",
 	},
 	nguon: {
 		nutTai: "Tải nguồn lên",

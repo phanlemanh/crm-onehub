@@ -4,6 +4,12 @@ import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@crm/ui/components/card";
 import { DiffTrang } from "@crm/ui/components/diff-trang";
 import {
 	Field,
@@ -13,6 +19,7 @@ import {
 } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { MarkdownReader } from "@crm/ui/components/markdown-reader";
 import { Textarea } from "@crm/ui/components/textarea";
 import {
 	chuanNfc,
@@ -234,7 +241,18 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 					) : null}
 					{may ? (
 						<BanMayDuyet
-							banTrinhBay={diff}
+							banTrinhBay={
+								<div translate="no">
+									<MarkdownReader
+										calloutLabels={t.doc.ghiChu}
+										missingLabel={t.doc.chuaCoTrang}
+										sourceBackLabel={t.doc.veChoTrich}
+										sourcesLabel={t.doc.nguon}
+									>
+										{may.noiDung}
+									</MarkdownReader>
+								</div>
+							}
 							daDoc={daDoc}
 							docXong={() => setDaDoc(true)}
 							may={may}
@@ -243,6 +261,14 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 					) : (
 						diff
 					)}
+					{may?.coBanGoc && daDoc ? (
+						<Card data-so-voi-ban="">
+							<CardHeader>
+								<CardTitle>{mm.soVoiBan}</CardTitle>
+							</CardHeader>
+							<CardContent>{diff}</CardContent>
+						</Card>
+					) : null}
 					<div aria-live="polite">
 						{thongBao ? (
 							<Alert data-thong-bao="" role="status">

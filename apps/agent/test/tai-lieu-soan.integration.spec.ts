@@ -18,6 +18,7 @@ import { parseTrichDoan } from "@crm/validation/tai-lieu-trich-doan";
 import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
 import type { BanNop } from "../agent/lib/tai-lieu-nop";
 import {
+	dongKhiPhienHong,
 	dongKhiPhienXong,
 	dongMaySoanQuaHan,
 	guiMaySoan,
@@ -412,6 +413,24 @@ describe("soan-hong", () => {
 		});
 		expect(hang).toEqual({ trangThai: "LOI", lyDo: LY_DO.khongNop });
 		expect(await demDeXuat(p.trangId)).toBe(0);
+	});
+
+	test("soan-hong: phien hong bao qua token kenh crm co tien to thi nguon mang ly do that", async () => {
+		const p = await moPhien({});
+		expect(
+			await dongKhiPhienHong(
+				`crm:${tokenMaySoan(p.nguonId)}`,
+				"500 Internal Server Error",
+			),
+		).toBe(true);
+		const hang = await db.taiLieuNguon.findUniqueOrThrow({
+			where: { id: p.nguonId },
+			select: { trangThai: true, lyDo: true },
+		});
+		expect(hang).toEqual({
+			trangThai: "LOI",
+			lyDo: LY_DO.loiModel("500 Internal Server Error"),
+		});
 	});
 
 	test("soan-hong: doi chung duong, ca dat trong cung tep ghi 1 de xuat", async () => {
