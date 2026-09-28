@@ -1,5 +1,6 @@
-Driver: script noi bo (Puppeteer qua bun _acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs,
-qua scripts/lan-do/tien-de.mjs + scripts/lan-do/phien-do.mjs), khong phai browser tool cua phien nay.
-Verifier (phien nay) khong co duong doc network/console truc tiep tren trinh duyet ma script
-noi bo dieu khien -> khong dump duoc failed requests/console errors thuc.
-networkObserved = "n-a (driver)"
+NETWORK TRUTH: n-a (driver)
+Driver la puppeteer chay ben trong _acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs (goi qua tien-de.mjs),
+khong phai browser tool co duong doc network (read_network_requests/read_console_messages).
+Script tu ghi console.error cua trang vao mang loiConsole va cong vao 'hong' o ham ket() —
+lan chay nay khong co loi console app (khong thay dong 'loi console app' trong output),
+nen khong co dau hieu console-error o app-scope. Khong co bang ghi request tho.
