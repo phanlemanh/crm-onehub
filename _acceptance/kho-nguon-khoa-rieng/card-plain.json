@@ -1,41 +1,13 @@
 {
   "feature_plain": "Kho tài liệu có khoá lưu tệp riêng, nên bật được việc tải tệp nguồn trên bản thật mà không đẩy logo và ảnh vào kho riêng tư.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ bật việc tải tệp nguồn chỉ khi có khoá kho nguồn, và bật việc lưu logo chỉ khi có khoá logo — khoá để trống hay toàn dấu cách tính là không có."},
-    {"id": "AC-2", "p": "Sẽ gửi đúng khoá kho nguồn mỗi lần ký tải lên, ký tải về hay xoá tệp nguồn, không bao giờ gửi khoá logo."},
-    {"id": "AC-3", "p": "Sẽ giữ nút «Tải nguồn lên» khoá và trả câu «Chưa bật lưu tệp nguồn» khi bản thật mới chỉ đặt khoá logo; phần kho tài liệu có sẵn chạy như cũ."},
-    {"id": "AC-4", "p": "Sẽ để trợ lý AI biết mình giữ được tệp nguồn chỉ khi có khoá kho nguồn, và giữ được ảnh chỉ khi có khoá logo."},
-    {"id": "AC-5", "p": "Sẽ khai khoá mới ở đủ mọi chỗ cấu hình và tài liệu, kèm dặn «store riêng tư, không gắn vào dự án»; trợ lý AI đọc tệp nguồn không dùng khoá logo."},
-    {"id": "AC-6", "p": "Sẽ chứng tải lên, tải về và chặn đọc không ký trên kho riêng tư thật bằng khoá mới, không in giá trị khoá ra đâu cả."},
-    {"id": "AC-7", "p": "Sẽ để bàn chụp màn tải nguồn chạy với khoá kho nguồn giả, nên việc chụp màn vẫn làm được như trước."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "Sẽ KHÔNG đặt khoá lên các dự án Vercel — máy hỏi anh sau khi gộp."},
-    {"id": "OOS-2", "p": "Sẽ KHÔNG dùng tạm khoá logo cho kho nguồn khi thiếu khoá riêng."},
-    {"id": "OOS-3", "p": "Sẽ KHÔNG đếm số bản cài bật kho nguồn trong số liệu sử dụng."},
-    {"id": "OOS-4", "p": "Sẽ KHÔNG đổi cách lưu logo và ảnh, không dời tệp đã có."},
-    {"id": "OOS-5", "p": "Sẽ KHÔNG tự kiểm lúc khởi động xem kho là công khai hay riêng tư."}
-  ],
-  "scope_plain": "Năm việc để ngoài vòng này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi tổ hợp có/không của hai khoá, cộng khoá trống và khoá toàn dấu cách, đều có kỳ vọng viết trước (AC-1, AC-3, AC-4 — bật tắt đúng khoá)."},
-    {"i": 1, "p": "Mọi nơi đọc khoá — tải nguồn, trợ lý AI soạn từ nguồn, bảng năng lực của trợ lý, logo, hai bàn đo — đều có phép đo; đủ là so với danh sách tìm được trong mã hôm nay (AC-1 tới AC-7)."},
-    {"i": 2, "p": "Mọi chỗ phải khai một biến mới theo luật của kho đều được quét (AC-5 — khai đủ chỗ)."},
-    {"i": 3, "p": "Bốn điều người thấy được — bật tắt, khoá nào đi ra ngoài, câu báo, khởi động không lỗi — đều có phép đo (AC-1 tới AC-4)."},
-    {"i": 4, "p": "Để sau: đếm số bản cài bật kho nguồn, và tự kiểm kiểu kho lúc khởi động."},
-    {"i": 5, "p": "Không làm: dùng tạm khoá logo cho kho nguồn (anh đã chốt), và đổi tên khoá logo (Vercel tự đặt tên đó)."},
-    {"i": 6, "p": "Giả định chưa thử: kho công khai của logo từ chối nhận tệp riêng tư — đây là lý do chọn không dùng tạm khoá logo; anh gạch hoặc sửa dòng này."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Tiêu chí hứa khoá trống hay toàn dấu cách tính là không có, nhưng bảng kỳ vọng chưa có hai ô đó — khoá dán kèm dấu cách sẽ mở nút rồi mọi lượt tải hỏng. Đã sửa: bảng đủ sáu ô, có phép phá thử."},
-    {"i": 1, "p": "Phép thử trên kho thật không phân biệt được khoá đi từ tên mới hay tên cũ. Đã sửa: lượt thử ép khoá logo là giá trị giả, nên chỉ khoá mới qua được."},
-    {"i": 2, "p": "Phép quét tài liệu chỉ kiểm tên mục có mặt, mục đó vốn đã có nên luôn đạt; ghi chú cấu hình thiếu lời dặn «không gắn dự án». Đã sửa: kiểm nội dung mục và ghim lời dặn, có phép phá thử."},
-    {"i": 3, "p": "Đường trợ lý AI đọc tệp nguồn khi soạn chưa có phép đo nào. Đã sửa: quét mọi chỗ trợ lý đọc nguồn, có phép phá thử."}
-  ],
+  "scope_plain": "Năm việc để ngoài vòng này, như đã duyệt ở Cổng Phạm vi:",
   "decisions_plain": [
-    {"id": "d-20260928T120055Z-1", "p": "Thiếu khoá kho nguồn thì nút tải khoá êm, không dùng tạm khoá logo — đổi lại máy dev phải thêm một dòng cấu hình."},
+    {"id": "d-20260928T120055Z-1", "p": "Thiếu khoá kho nguồn thì nút tải khoá êm, không dùng tạm khoá logo — đổi lại máy dev phải có một dòng cấu hình riêng."},
     {"id": "d-20260928T120055Z-2", "p": "Mở việc mới thay tiêu chí cũ, không sửa hợp đồng đã ký — đổi lại việc cũ phải chấm lại ở cuối nhánh."},
     {"id": "d-20260928T120055Z-3", "p": "KHÔNG làm đặc tả màn hình — vòng này không đổi màn nào."},
-    {"id": "d-20260928T120055Z-4", "p": "KHÔNG làm đếm số bản cài bật kho nguồn và kiểm kiểu kho lúc khởi động — để sau khi cần."}
+    {"id": "d-20260928T120055Z-4", "p": "KHÔNG làm đếm số bản cài bật kho nguồn và kiểm kiểu kho lúc khởi động — để sau khi cần."},
+    {"id": "d-20260928T122100Z-6", "p": "Làm năm phần việc lần lượt, không chia song song — mỗi phần vài phút nên chia ra tốn hơn làm."},
+    {"id": "d-20260928T122613Z-7", "p": "Lệnh thử trên kho thật ép khoá logo thành giá trị giả, để chỉ khoá mới qua được — đổi lại lệnh của một phép đo đã ký ở việc cũ đổi chữ."},
+    {"id": "d-20260928T131736Z-8", "p": "Sửa ca kiểm «chỉ có khoá logo» cho dựng đúng tình huống đó — vòng chấm đầu phát hiện ca cũ đang kiểm tình huống «không có khoá nào»."}
   ]
 }
