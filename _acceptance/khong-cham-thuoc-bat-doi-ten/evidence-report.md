@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d396c87d065ff5bb77bb79882c1bb576b46bc30a
+verified_commit: a831f519f7ab792b1411655cbc78cbcf0ed20097
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -108,3 +108,7 @@ Round 1: E1, E2, E3, E4 cùng bốn lệnh suite (bun run test, bunx turbo run l
 ### Re-pin lần 1 — 2026-09-28, do gộp onehub sau #197 làm hai hồ sơ hoá cũ
 run_id: repin-20260928T150205Z-95412
 sha: d396c87d065ff5bb77bb79882c1bb576b46bc30a · suites: 4 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-28, do gộp onehub sau #198 làm hai hồ sơ hoá cũ
+run_id: repin-20260928T153556Z-55843
+sha: a831f519f7ab792b1411655cbc78cbcf0ed20097 · suites: 4 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng

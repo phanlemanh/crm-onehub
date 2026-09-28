@@ -12,3 +12,4 @@
 {"ts":"2026-09-28T14:20:17Z","sha":"e2fb53925947104b79f95dc07d4077e37581cb9c","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":8}
 {"kind":"thuoc-vat","ts":"2026-09-28T14:29:44Z","round":1,"san":"e2fb53925947104b79f95dc07d4077e37581cb9c","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}
 {"ts":"2026-09-28T15:02:05Z","kind":"repin","run_id":"repin-20260928T150205Z-95412","sha":"d396c87d065ff5bb77bb79882c1bb576b46bc30a","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0}}
+{"ts":"2026-09-28T15:35:56Z","kind":"repin","run_id":"repin-20260928T153556Z-55843","sha":"a831f519f7ab792b1411655cbc78cbcf0ed20097","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0}}
