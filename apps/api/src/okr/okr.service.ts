@@ -63,7 +63,12 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
-import { vetSangKienChoVai } from "./canh-kr";
+import {
+	anhVetViec,
+	chonHangViec,
+	hangViec,
+	vetSangKienChoVai,
+} from "./canh-kr";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
 import {
 	type CuaSoRa,
@@ -940,6 +945,25 @@ export class OkrService {
 				throw new BadRequestException(T.khep.krCoDoiDich);
 			if ((await tx.okrDiemKr.count({ where: { keyResultId: kr.id } })) > 0)
 				throw new BadRequestException(T.khep.krCoDiem);
+			if ((await tx.okrBangChung.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.canhKr.krCoBangChung);
+			if ((await tx.okrGhiNhan.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.canhKr.krCoGhiNhan);
+			const viec = await tx.okrViecKr.findMany({
+				where: { keyResultId: kr.id },
+				orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
+				select: chonHangViec,
+			});
+			await tx.okrViecKr.deleteMany({ where: { keyResultId: kr.id } });
+			for (const v of viec)
+				await this.vet(
+					tx,
+					userId,
+					"go-viec",
+					{ objectiveId: mt.id, keyResultId: kr.id },
+					anhVetViec(hangViec(v)),
+					null,
+				);
 			await tx.okrNguonKr.deleteMany({ where: { keyResultId: kr.id } });
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(

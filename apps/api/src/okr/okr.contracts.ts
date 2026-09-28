@@ -376,6 +376,7 @@ export const viecCuaToiOutput = z.object({
 export const transferOkrOutput = z.object({
 	kr: z.number(),
 	mucTieu: z.number(),
+	viec: z.number(),
 });
 
 export const mauInput = z.object({

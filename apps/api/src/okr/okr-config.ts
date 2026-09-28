@@ -109,6 +109,9 @@ export const OKR = {
 			khongCoGhiNhan: (id: string) => `Không có ghi nhận nào mang mã ${id}.`,
 			khongGoDuocGhiNhan:
 				"Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
+			krCoBangChung:
+				"KR đã có bằng chứng — gỡ bằng chứng trước rồi mới xoá được.",
+			krCoGhiNhan: "KR đã có ghi nhận gắn vào — không xoá được.",
 		},
 		mau: {
 			canQuanTri:

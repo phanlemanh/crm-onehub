@@ -42,24 +42,26 @@ function dieuKienChuyen(fromUserId: string) {
 		status: { not: "da-bo" },
 		cycle: { phase: { in: [...PHA_GHI_DUOC] } },
 	} satisfies Prisma.OkrObjectiveWhereInput;
-	return {
-		kr: {
-			ownerUserId: fromUserId,
-			objective: {
-				...conGhi,
-				NOT: { level: "ca-nhan", personUserId: fromUserId },
-			},
+	const krConGhi = {
+		objective: {
+			...conGhi,
+			NOT: { level: "ca-nhan", personUserId: fromUserId },
 		},
+	} satisfies Prisma.OkrKeyResultWhereInput;
+	return {
+		kr: { ownerUserId: fromUserId, ...krConGhi },
 		mucTieu: {
 			ownerUserId: fromUserId,
 			level: { not: "ca-nhan" },
 			...conGhi,
 		},
 		thamGia: { userId: fromUserId, objective: conGhi },
+		viec: { nguoiLamUserId: fromUserId, xongLuc: null, keyResult: krConGhi },
 	} satisfies {
 		kr: Prisma.OkrKeyResultWhereInput;
 		mucTieu: Prisma.OkrObjectiveWhereInput;
 		thamGia: Prisma.OkrParticipantWhereInput;
+		viec: Prisma.OkrViecKrWhereInput;
 	};
 }
 
@@ -283,11 +285,12 @@ export class OkrTraoDoiService {
 	): Promise<TransferOkrOutput> {
 		await this.yeuCauQuanTri(userId);
 		const dk = dieuKienChuyen(input.fromUserId);
-		const [kr, mucTieu] = await Promise.all([
+		const [kr, mucTieu, viec] = await Promise.all([
 			this.db.okrKeyResult.count({ where: dk.kr }),
 			this.db.okrObjective.count({ where: dk.mucTieu }),
+			this.db.okrViecKr.count({ where: dk.viec }),
 		]);
-		return { kr, mucTieu };
+		return { kr, mucTieu, viec };
 	}
 
 	async transferWork(
@@ -300,7 +303,7 @@ export class OkrTraoDoiService {
 		return this.db.$transaction(async (tx) => {
 			await this.okr.assertThanhVien(tx, [input.toUserId]);
 			const dk = dieuKienChuyen(input.fromUserId);
-			const [krs, mucTieu] = await Promise.all([
+			const [krs, mucTieu, viec] = await Promise.all([
 				tx.okrKeyResult.findMany({
 					where: dk.kr,
 					select: { id: true, objectiveId: true },
@@ -309,6 +312,15 @@ export class OkrTraoDoiService {
 				tx.okrObjective.findMany({
 					where: dk.mucTieu,
 					select: { id: true },
+					orderBy: { id: "asc" },
+				}),
+				tx.okrViecKr.findMany({
+					where: dk.viec,
+					select: {
+						id: true,
+						keyResultId: true,
+						keyResult: { select: { objectiveId: true } },
+					},
 					orderBy: { id: "asc" },
 				}),
 			]);
@@ -339,8 +351,22 @@ export class OkrTraoDoiService {
 					sau,
 				);
 			}
+			for (const v of viec) {
+				await tx.okrViecKr.update({
+					where: { id: v.id },
+					data: { nguoiLamUserId: input.toUserId },
+				});
+				await this.okr.vet(
+					tx,
+					userId,
+					"chuyen-viec",
+					{ objectiveId: v.keyResult.objectiveId, keyResultId: v.keyResultId },
+					{ viecId: v.id, nguoiLamUserId: input.fromUserId },
+					{ viecId: v.id, nguoiLamUserId: input.toUserId },
+				);
+			}
 			await tx.okrParticipant.deleteMany({ where: dk.thamGia });
-			return { kr: krs.length, mucTieu: mucTieu.length };
+			return { kr: krs.length, mucTieu: mucTieu.length, viec: viec.length };
 		});
 	}
 }

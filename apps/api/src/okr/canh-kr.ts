@@ -1,5 +1,5 @@
-import type { CampaignStatus } from "@crm/db";
-import type { LoaiViecKr } from "@crm/validation/okr-canh-kr";
+import type { CampaignStatus, Prisma } from "@crm/db";
+import { LOAI_VIEC_KR, type LoaiViecKr } from "@crm/validation/okr-canh-kr";
 import { ngayLich } from "@crm/validation/okr-chu-ky";
 import type { HanhDongVet, OkrVetSnapshot } from "@crm/validation/okr-vet";
 import {
@@ -23,6 +23,26 @@ export type HangViec = {
 	campaignId: string | null;
 	planId: string | null;
 };
+
+export const chonHangViec = {
+	id: true,
+	keyResultId: true,
+	loai: true,
+	tieuDe: true,
+	nguoiLamUserId: true,
+	hanNgay: true,
+	xongLuc: true,
+	campaignId: true,
+	planId: true,
+} as const;
+
+type HangViecDb = Prisma.OkrViecKrGetPayload<{ select: typeof chonHangViec }>;
+
+const loaiViecKr = z.enum(LOAI_VIEC_KR);
+
+export function hangViec(h: HangViecDb): HangViec & { keyResultId: string } {
+	return { ...h, loai: loaiViecKr.parse(h.loai) };
+}
 
 export type BoiCanhDong = {
 	userId: string;

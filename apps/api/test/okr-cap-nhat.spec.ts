@@ -1980,8 +1980,8 @@ describe("chuyen-okr", () => {
 				fromUserId: H,
 			}),
 		}).toEqual({
-			xemTruoc: { kr: 2, mucTieu: 1 },
-			chuyen: { kr: 2, mucTieu: 1 },
+			xemTruoc: { kr: 2, mucTieu: 1, viec: 0 },
+			chuyen: { kr: 2, mucTieu: 1, viec: 0 },
 			anh: {
 				KR1: Tn,
 				KR2: Tn,
@@ -2005,7 +2005,7 @@ describe("chuyen-okr", () => {
 				`okr-duoc-giao - ${KR2} ${OA} -`,
 				`okr-duoc-giao - - ${O1} -`,
 			].sort(),
-			xemTruocSau: { kr: 0, mucTieu: 0 },
+			xemTruocSau: { kr: 0, mucTieu: 0, viec: 0 },
 		});
 
 		expect({

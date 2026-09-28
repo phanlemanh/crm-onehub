@@ -26,9 +26,10 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import {
 	anhVetViec,
+	chonHangViec,
 	cotNgay,
 	dongViecTu,
-	type HangViec,
+	hangViec,
 	lienKetChoVai,
 } from "./canh-kr";
 import { OkrService } from "./okr.service";
@@ -44,22 +45,7 @@ import { OKR } from "./okr-config";
 const T = OKR.thongDiep;
 type Tx = Prisma.TransactionClient;
 
-const loaiViecKr = z.enum(LOAI_VIEC_KR);
 const phaChuKy = z.enum(PHA_CHU_KY);
-
-const chonHangViec = {
-	id: true,
-	keyResultId: true,
-	loai: true,
-	tieuDe: true,
-	nguoiLamUserId: true,
-	hanNgay: true,
-	xongLuc: true,
-	campaignId: true,
-	planId: true,
-} as const;
-
-type HangViecDb = Prisma.OkrViecKrGetPayload<{ select: typeof chonHangViec }>;
 
 const chonHangCanh = {
 	...chonHangViec,
@@ -72,10 +58,6 @@ const chonHangCanh = {
 		},
 	},
 } as const;
-
-function hangViec(h: HangViecDb): HangViec & { keyResultId: string } {
-	return { ...h, loai: loaiViecKr.parse(h.loai) };
-}
 
 @Injectable()
 export class OkrCanhKrService {

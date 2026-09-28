@@ -1,6 +1,7 @@
+import { ensureWorkspaceMembership } from "@crm/auth";
 import { db } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
-import { gieoKyQuy, gieoMucTieuCongBo } from "./okr-khep-san";
+import { gieoKyQuy, gieoMucTieuCongBo, sangPha } from "./okr-khep-san";
 import {
 	type AiHoacCookie,
 	datViTri,
@@ -74,17 +75,108 @@ export async function gieoCanhKr(): Promise<SanCanhKr> {
 	};
 }
 
-export async function nguoiDaRoi(ten: string): Promise<string> {
-	const id = await nguoiMoi(ten);
+export async function roiKhoi(userId: string): Promise<void> {
 	const thanhVien = await db.member.findFirstOrThrow({
-		where: { userId: id },
+		where: { userId },
 		select: { id: true },
 	});
 	ok(
 		await goi("workspace.removeMember", { memberId: thanhVien.id }),
-		`go thanh vien ${ten}`,
+		`go thanh vien ${userId}`,
 	);
+}
+
+export async function vaoLai(userId: string): Promise<void> {
+	const { email } = await db.user.findUniqueOrThrow({
+		where: { id: userId },
+		select: { email: true },
+	});
+	ok(
+		await goi("workspace.allowEmail", { email, role: "member" }),
+		`cho ${userId} vao lai`,
+	);
+	await ensureWorkspaceMembership(userId, email);
+}
+
+export async function nguoiDaRoi(ten: string): Promise<string> {
+	const id = await nguoiMoi(ten);
+	await roiKhoi(id);
 	return id;
+}
+
+export type TinhHuongKhoa = "cham-diem" | "da-dong" | "da-bo";
+
+export type SanKhoa = {
+	ky: string;
+	mt: string;
+	kr: string;
+	krMoc: string;
+	viec: string;
+	bangChung: string;
+};
+
+export async function gieoKhoa(
+	san: SanCanhKr,
+	tinhHuong: TinhHuongKhoa,
+): Promise<SanKhoa> {
+	const { A, B, T } = san.nguoi;
+	const ky = tinhHuong === "da-bo" ? san.ky : await gieoKyQuy(KY_CANH);
+	const { objectiveId, krIds } = await gieoMucTieuCongBo(
+		ky,
+		[
+			{ ownerUserId: A.id },
+			{
+				kind: "moc",
+				startValue: 0,
+				targetValue: 1,
+				currentValue: 1,
+				ownerUserId: A.id,
+			},
+		],
+		{
+			unit: { level: "phong-ban", departmentId: san.p1 },
+			ownerUserId: T.id,
+			ai: T.cookie,
+		},
+	);
+	const [kr, krMoc] = krIds;
+	if (kr === undefined || krMoc === undefined)
+		throw new Error(`gieoKhoa ${tinhHuong}: thieu KR`);
+	const viec = idTra(
+		await goi(
+			"okr.themViec",
+			{
+				keyResultId: kr,
+				tieuDe: `Việc trước khi khoá ${tinhHuong}`,
+				nguoiLamUserId: B.id,
+				hanNgay: null,
+			},
+			A.cookie,
+		),
+		`them viec ${tinhHuong}`,
+	);
+	const bangChung = idTra(
+		await goi(
+			"okr.themBangChung",
+			{
+				keyResultId: krMoc,
+				url: "https://drive.google.com/truoc-khoa",
+				ghiChu: "",
+			},
+			A.cookie,
+		),
+		`dinh bang chung ${tinhHuong}`,
+	);
+	if (tinhHuong === "da-bo")
+		ok(
+			await goi("okr.dropObjective", { id: objectiveId }, T.cookie),
+			"bo muc tieu",
+		);
+	else {
+		ok(await sangPha(ky, "cham-diem"), `cham diem ${tinhHuong}`);
+		if (tinhHuong === "da-dong") ok(await sangPha(ky, "da-dong"), "da dong");
+	}
+	return { ky, mt: objectiveId, kr, krMoc, viec, bangChung };
 }
 
 export async function mucTieuNhap(

@@ -594,8 +594,11 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `OkrCheckIn` row cannot be deleted (`krDaCapNhat`) — only edited; a KR another
   objective aligns to (`OkrAlignment.targetKeyResultId`) is refused the same way
   (`krDangLaDich`), and so is a KR with a target change (`okrDoiDich`) or a score row
-  (`okrDiemKr`). The checks run inside the same lock as the delete, so a
-  check-in written mid-transaction cannot race past them.
+  (`okrDiemKr`), evidence (`okrBangChung`, `krCoBangChung`) or a recognition tied to
+  it (`okrGhiNhan`, `krCoGhiNhan`). The checks run inside the same lock as the
+  delete, so a check-in written mid-transaction cannot race past them. The KR's
+  việc and sáng kiến rows (`okrViecKr`) go in the same transaction, one `go-viec`
+  trail row each, before the `xoa-kr` row.
 - **A KR's number has a source, and the source locks at publication.**
   `okrKeyResult.source` is the effective source (`tay` · `crm` · `api` · `bang-tinh`) —
   the one that drives `currentValue` and progress. A machine source's settings are one
@@ -733,10 +736,13 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   (`canManageOnboarding`), a separate action from the 30-day work transfer. Both
   share `dieuKienChuyen(fromUserId)`: a KR or objective only moves while its cycle
   is still writable (`PHA_GHI_DUOC`, i.e. not `da-bo`), and a personal objective
-  (`level: "ca-nhan"`) owned by the person leaving never moves. `transferWork`
-  re-points `ownerUserId`, drops the leaver from every `OkrParticipant` row, and
-  writes one `chuyen-viec` `OkrTrail` row per KR and objective moved;
-  `transferPreview` returns the same `{kr, mucTieu}` counts without writing anything.
+  (`level: "ca-nhan"`) owned by the person leaving never moves. The leaver's open
+  việc (`okrViecKr.nguoiLamUserId`, `xongLuc` null) on a KR under the same rule move
+  too; a việc already done keeps its người làm. `transferWork` re-points
+  `ownerUserId` and `nguoiLamUserId`, drops the leaver from every `OkrParticipant`
+  row, and writes one `chuyen-viec` `OkrTrail` row per KR, objective and việc moved;
+  `transferPreview` returns the same `{kr, mucTieu, viec}` counts without writing
+  anything.
 
 ## Money
 
