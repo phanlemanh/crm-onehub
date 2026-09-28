@@ -456,19 +456,19 @@ evals:
       - "packages/db/src/blob-nguon.ts"
       - "apps/api/test/tai-lieu-nguon-cua-ai.spec.ts"
     expected: |
-      Kho Blob gia; nguon N1 cua nguoi tai T da luu (co blobPathname P1). Ma tran viet truoc 6 ca goi
-      taiLieuNguon.nhan, moi ca dem TaiLieuNguon, AgentTask va danh sach tep Blob gia da xoa truoc = sau
-      tru ca doi chung:
-        thanh vien khac K goi nhan voi P1 va dich sai -> tu choi, P1 khong bi xoa;
-        K goi nhan voi P1 va dich dung (trung byte) -> tu choi, P1 khong bi xoa;
-        vai okr goi nhan voi P1 -> tu choi, P1 khong bi xoa;
-        K goi nhan voi mot duong luu dung khuon nhung chua tung duoc cap -> tu choi, khong xoa gi;
-        K goi nhan voi duong luu vua cap cho T -> tu choi, khong xoa gi;
-        doi chung duong: K xin cho roi nhan dung duong luu cua minh voi dich sai -> tu choi va chi
-          duong luu vua cap cho K bi xoa.
-      Sau ma tran: taiVe(N1) boi T tra URL ky, byte doc ve tu Blob gia co sha256 bang hang N1 (duong
-      doc cua may soan khong ve LOI "khong tai duoc"). CHIEU DO: ban sao bo kiem duong luu -> ca dau do voi thong diep ghim
-      "xoa tep nguon cua nguoi khac".
+      Kho Blob gia; nguon N1 cua nguoi tai T da luu (duong luu P1, phieu cua T con han). Ma tran viet
+      truoc 10 ca goi taiLieuNguon.nhan; moi ca dem TaiLieuNguon, AgentTask va danh sach tep Blob gia da
+      xoa truoc = sau (tru tep vua tai cua chinh nguoi goi trong ca doi chung):
+        thanh vien khac K voi P1 va dich sai; K voi P1 va dich dung; vai okr voi P1; K voi duong luu
+          chua tung cap; K voi duong luu va phieu cap cho T -> deu tu choi, khong xoa gi;
+        T dung lai chinh phieu cua N1 voi dich sai, va voi dich dung (trung byte) -> tu choi, P1 con;
+        doi chung duong, K tu xin cho roi nhan: dich sai -> tu choi; tep anh (sai loai) -> tu choi;
+          dung byte cua N1 (trung byte) -> tra nguon cu -> ca ba chi xoa duong luu vua cap cho K.
+      Ca song song: T gui ba lan nhan dong thoi cung mot phieu -> dung mot lan duoc nhan, duong luu co
+      hang va tep con nguyen. Sau ma tran: taiVe(N1) tra URL ky tro dung P1, byte doc qua duong doc cua
+      kho (duong ma may soan dung) co sha256 bang hang N1. CHIEU DO (hai ban sao): bo chan «duong luu
+      da thuoc mot nguon» -> do voi thong diep ghim "xoa tep nguon cua nguoi khac"; bo khoa theo duong
+      luu -> do voi thong diep ghim "xoa tep nguon vua ghi khi gui song song".
 
   - id: E14
     criterion: AC-14
