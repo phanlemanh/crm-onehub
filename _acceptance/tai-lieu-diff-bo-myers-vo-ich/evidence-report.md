@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3d85348ce7573f98e2113b794eeb0e7611ebd32b
+verified_commit: 5e5a0c32a8a798e95484ff0cac5e3ab32d13a2ef
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -148,3 +148,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1–E8 pass ngay từ lần chạy đầu (tất cả eval phân biệt đúng với baseline khai, trừ E6/E7 là regression-guard có chủ ý của hồ sơ kho-tai-lieu); bốn lệnh suite (test, lint, lint:slop, build) đều xanh. Không có vòng trước.
+
+### Re-pin lần 1 — 2026-09-28, do hoá cũ do gộp onehub (#197) trước khi merge
+run_id: repin-20260928T145743Z-47512
+sha: 5e5a0c32a8a798e95484ff0cac5e3ab32d13a2ef · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng

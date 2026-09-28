@@ -16,3 +16,4 @@
 {"ts":"2026-09-28T14:12:34Z","sha":"3d85348ce7573f98e2113b794eeb0e7611ebd32b","round":1,"kind":"round-tally","verdict":"PASS","expected":12,"returned":12,"blocked":0}
 {"ts":"2026-09-28T14:12:34Z","sha":"3d85348ce7573f98e2113b794eeb0e7611ebd32b","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":12}
 {"kind":"thuoc-vat","ts":"2026-09-28T14:23:46Z","round":1,"san":"5dd8c899cc84c06882fc3ac45f5eb5ce161a1ad1","vat":[0,0],"thuoc":[5,2],"ho_so":[0,0],"nhat":1,"lan":0,"tep_thuoc":["_acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/cat-thuoc.mjs"]}
+{"ts":"2026-09-28T14:57:43Z","kind":"repin","run_id":"repin-20260928T145743Z-47512","sha":"5e5a0c32a8a798e95484ff0cac5e3ab32d13a2ef","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0}}
