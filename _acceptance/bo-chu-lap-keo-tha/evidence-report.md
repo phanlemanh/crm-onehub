@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 416be5a721401b9799a8f0316c62af292d9f2d5a
+verified_commit: d396c87d065ff5bb77bb79882c1bb576b46bc30a
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -143,3 +143,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: tất cả tám eval (E1-E6u) và bốn lệnh suite (bun run test, turbo lint, lint:slop, turbo build) xanh ngay từ vòng đầu; không có vòng sửa nào.
+
+### Re-pin lần 1 — 2026-09-28, do gộp onehub sau #197 làm hai hồ sơ hoá cũ
+run_id: repin-20260928T150205Z-95412
+sha: d396c87d065ff5bb77bb79882c1bb576b46bc30a · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E6u · AC không có chốt máy: AC-6
