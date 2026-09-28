@@ -56,7 +56,6 @@ export function doiThamSoBa(nguon, tenCa, moi) {
 	const trung = loiGoiTest(sf).filter((n) => n.arguments[0].text === tenCa);
 	if (trung.length !== 1 || !trung[0].arguments[2]) return null;
 	const [, hai, ba] = trung[0].arguments;
-	if (moi === null)
-		return `${nguon.slice(0, hai.end)}${nguon.slice(ba.end)}`;
+	if (moi === null) return `${nguon.slice(0, hai.end)}${nguon.slice(ba.end)}`;
 	return `${nguon.slice(0, ba.getStart(sf))}${moi}${nguon.slice(ba.end)}`;
 }

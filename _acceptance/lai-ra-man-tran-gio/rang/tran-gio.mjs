@@ -61,17 +61,37 @@ function datTran(nguon, gt) {
 
 function coMat(nguon) {
 	const that = soi(nguon);
-	if (that.ca.length === 0) return { ma: 2, dong: ["KHONG DO DUOC: 0 loi goi test(...) trong spec"] };
-	const dong = [`da soi ${that.ca.length} ca:`, ...that.ca.map((c) => `  ${c.ten} — tham so thu ba: ${c.thuBa ?? "(vang)"}`)];
+	if (that.ca.length === 0)
+		return { ma: 2, dong: ["KHONG DO DUOC: 0 loi goi test(...) trong spec"] };
+	const dong = [
+		`da soi ${that.ca.length} ca:`,
+		...that.ca.map(
+			(c) => `  ${c.ten} — tham so thu ba: ${c.thuBa ?? "(vang)"}`,
+		),
+	];
 	const loi = loiCoMat(that);
 	if (loi.length > 0) return { ma: 1, dong: [...dong, ...loi] };
 	const pha = doiThamSoBa(nguon, CAU_HINH.tenCa.chuoi, null);
 	if (pha === null)
-		return { ma: 2, dong: [...dong, "KHONG DO DUOC: moc tran cua ca chuoi da va khong tim thay"] };
+		return {
+			ma: 2,
+			dong: [
+				...dong,
+				"KHONG DO DUOC: moc tran cua ca chuoi da va khong tim thay",
+			],
+		};
 	const loiPha = loiCoMat(soi(pha));
-	const bat = loiPha.some((l) => l === `ca khong co tran tuong minh: ${CAU_HINH.tenCa.chuoi}`);
+	const bat = loiPha.some(
+		(l) => l === `ca khong co tran tuong minh: ${CAU_HINH.tenCa.chuoi}`,
+	);
 	if (!bat)
-		return { ma: 1, dong: [...dong, `chieu do KHONG bi bat: bo tran ca chuoi da va -> ${JSON.stringify(loiPha)}`] };
+		return {
+			ma: 1,
+			dong: [
+				...dong,
+				`chieu do KHONG bi bat: bo tran ca chuoi da va -> ${JSON.stringify(loiPha)}`,
+			],
+		};
 	return { ma: 0, dong: [...dong, `chieu do da bat: ${loiPha.join(" · ")}`] };
 }
 
@@ -80,7 +100,9 @@ function canCu(nguon) {
 	if (luot.length < CAU_HINH.soLuotToiThieu || hong.length > 0)
 		return {
 			ma: 2,
-			dong: [`KHONG DO DUOC: bang do ${luot.length} luot (can >= ${CAU_HINH.soLuotToiThieu}), ${hong.length} luot thieu run_id/attempt/ket qua`],
+			dong: [
+				`KHONG DO DUOC: bang do ${luot.length} luot (can >= ${CAU_HINH.soLuotToiThieu}), ${hong.length} luot thieu run_id/attempt/ket qua`,
+			],
 		};
 	const m = mocCua(luot);
 	const { tran } = soi(nguon);
@@ -95,10 +117,18 @@ function canCu(nguon) {
 	const hong2 = [];
 	for (const gt of [5000, 25000]) {
 		const pha = datTran(nguon, gt);
-		if (pha === null) return { ma: 2, dong: [...dong, "KHONG DO DUOC: moc `const TRAN_LAI_MS = …;` khong tim thay"] };
+		if (pha === null)
+			return {
+				ma: 2,
+				dong: [
+					...dong,
+					"KHONG DO DUOC: moc `const TRAN_LAI_MS = …;` khong tim thay",
+				],
+			};
 		const l = loiCanCu(soi(pha).tran, m);
 		const mong = `tran ${gt} ms duoi ${CAU_HINH.heSo} lan moc ${m.moc.lai_tung.ms} ms`;
-		if (l === null || !l.startsWith(mong)) hong2.push(`chieu do ${gt} KHONG bi bat: ${l}`);
+		if (l === null || !l.startsWith(mong))
+			hong2.push(`chieu do ${gt} KHONG bi bat: ${l}`);
 		else dong.push(`chieu do da bat: ${l}`);
 	}
 	if (hong2.length > 0) return { ma: 1, dong: [...dong, ...hong2] };
