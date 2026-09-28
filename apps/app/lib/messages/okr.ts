@@ -468,7 +468,7 @@ const vi = {
 		dangTai: "Đang tải KR của bạn…",
 	},
 	traoDoi: {
-		danhSach: "Các bình luận",
+		danhSach: "Bình luận và ghi nhận",
 		rong: {
 			title: "Chưa có trao đổi nào",
 			body: "Hỏi, trả lời hoặc nhắc tên người cần biết — ai mở mục tiêu này cũng đọc được.",
@@ -1020,7 +1020,7 @@ const en: OkrMessages = {
 		dangTai: "Loading your key results…",
 	},
 	traoDoi: {
-		danhSach: "Comments",
+		danhSach: "Comments and recognitions",
 		rong: {
 			title: "No discussion yet",
 			body: "Ask, answer or mention someone who should know — anyone who opens this objective can read it.",

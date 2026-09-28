@@ -192,7 +192,14 @@ mock.module("@/lib/trpc/client", () => ({
 			removeKeyResult: thuTuc("okr.removeKeyResult"),
 			addAlignment: thuTuc("okr.addAlignment"),
 			removeAlignment: thuTuc("okr.removeAlignment"),
-			comments: thuTuc("okr.comments", () => ({ comments: binhLuan })),
+			comments: thuTuc("okr.comments", () => ({
+				comments: binhLuan,
+				dong: binhLuan.map((c) => ({
+					loai: "binh-luan" as const,
+					id: c.id,
+					createdAt: c.createdAt,
+				})),
+			})),
 			thanhVien: thuTuc("okr.thanhVien", () => [HUNG, LAN]),
 			chiSo: thuTuc("okr.chiSo", () => ({
 				chiSo: ["thoa-thuan-chot-duoc", "ghi-danh-dat-bac"],
@@ -210,6 +217,8 @@ mock.module("@/lib/trpc/client", () => ({
 				(vao) => ({ id: String(vao?.keyResultId), doCanh: false }),
 			),
 			addComment: thuTuc("okr.addComment"),
+			guiGhiNhan: thuTuc("okr.guiGhiNhan"),
+			goGhiNhan: thuTuc("okr.goGhiNhan"),
 			follow: thuTuc(
 				"okr.follow",
 				() => null,

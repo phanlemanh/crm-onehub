@@ -2,6 +2,7 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type { CommentsOutput } from "../../api/src/okr/okr.contracts";
 import type { CanhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 
 type Dong = CanhKrOutput["dong"][number];
@@ -568,5 +569,336 @@ describe("bang KR: o Viec «—» cua nguoi chi doc van mo khung KR", () => {
 		await bam(nut);
 		await cho(() => san.url().get("record") === "kr:kr-3", "record=kr:kr-3");
 		expect(san.url().get("record")).toBe("kr:kr-3");
+	});
+});
+
+type DongTraoDoi = CommentsOutput["dong"][number];
+
+const NGUOI_TRAO_DOI = [
+	["an", "Nguyễn An"],
+	["binh", "Trần Bình"],
+	["chi", "Lê Chi"],
+	["dung", "Phạm Dũng"],
+	["giang", "Võ Giang"],
+	["ha", "Đỗ Hà"],
+	["khoa", "Bùi Khoa"],
+] as const;
+
+const LUA_CHON = [...NGUOI_TRAO_DOI, ["em", "Hồ Em"] as const].map(
+	([value, label]) => ({
+		value,
+		label,
+		hint: `${value}@onehub.vn`,
+		keywords: [`${value}@onehub.vn`],
+	}),
+);
+
+const { OSoanTraoDoi, DongThoiGian } = await import(
+	"@/components/crm/record-sheet/objective-trao-doi"
+);
+type BinhLuanVao =
+	import("@/components/crm/record-sheet/objective-trao-doi").BinhLuanVao;
+type GhiNhanVao =
+	import("@/components/crm/record-sheet/objective-trao-doi").GhiNhanVao;
+
+type GoiSoan = {
+	binhLuan: ReturnType<typeof mock>;
+	ghiNhan: ReturnType<typeof mock>;
+};
+
+function taoGoiSoan(): GoiSoan {
+	return {
+		binhLuan: mock((_vao: BinhLuanVao, datLai: () => void) => datLai()),
+		ghiNhan: mock((_vao: GhiNhanVao, datLai: () => void) => datLai()),
+	};
+}
+
+function soan(goi: GoiSoan): ReactElement {
+	return (
+		<OSoanTraoDoi
+			keyResults={[{ id: "kr-1", title: "Tăng 40 đối tác hoạt động" }]}
+			thanhVien={LUA_CHON}
+			thanhVienDangTai={false}
+			toiId="giang"
+			ghiNhanDuoc
+			dangGui={false}
+			loi={null}
+			onGuiBinhLuan={goi.binhLuan}
+			onGuiGhiNhan={goi.ghiNhan}
+		/>
+	);
+}
+
+async function goVung(o: HTMLTextAreaElement, chu: string): Promise<void> {
+	const dat = Object.getOwnPropertyDescriptor(
+		HTMLTextAreaElement.prototype,
+		"value",
+	)?.set;
+	await act(async () => {
+		dat?.call(o, chu);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+}
+
+async function sangGhiNhan(o: HTMLElement): Promise<void> {
+	const nut = [...o.querySelectorAll('[data-o-loai-tin] [role="radio"]')].find(
+		(n) => n.textContent === m.ghiNhan.cheDo.ghiNhan,
+	);
+	if (!nut) throw new Error("khong co nut Ghi nhan o o soan");
+	await bam(nut);
+}
+
+async function chonNguoiNhan(o: HTMLElement, ten: string): Promise<void> {
+	await bam(motCai(o, "[data-o-nguoi-nhan]"));
+	await cho(
+		() => document.body.querySelectorAll("[cmdk-item]").length > 0,
+		"danh sach nguoi nhan",
+	);
+	const muc = [...document.body.querySelectorAll("[cmdk-item]")].find((i) =>
+		i.textContent?.includes(ten),
+	);
+	if (!muc) throw new Error(`khong thay ${ten}`);
+	await bam(muc);
+	await cho(
+		() => document.body.querySelectorAll("[cmdk-item]").length === 0,
+		"danh sach nguoi nhan dong",
+	);
+}
+
+function nutGuiGhiNhan(o: HTMLElement): HTMLButtonElement {
+	return motCai<HTMLButtonElement>(o, '[data-nut="gui-ghi-nhan"]');
+}
+
+describe("trao doi: o soan che do Ghi nhan", () => {
+	test("chua co nguoi nhan: nut gui khoa du da co loi; chon mot nguoi thi mo", async () => {
+		const goi = taoGoiSoan();
+		const o = await dung(soan(goi));
+		await sangGhiNhan(o);
+		await goVung(
+			motCai<HTMLTextAreaElement>(o, "[data-o-loi-nhan]"),
+			"Cảm ơn hai bạn đã giữ ca tối.",
+		);
+		expect(nutGuiGhiNhan(o).disabled).toBe(true);
+		await chonNguoiNhan(o, "Trần Bình");
+		expect(nutGuiGhiNhan(o).disabled).toBe(false);
+		expect(o.querySelector('[data-nut="gui-binh-luan"]')).toBeNull();
+	});
+
+	test("sau nguoi nhan: cau «Tối đa 5 người.» va nut khoa; bo mot nguoi thi het loi, nut mo", async () => {
+		const goi = taoGoiSoan();
+		const o = await dung(soan(goi));
+		await sangGhiNhan(o);
+		await goVung(
+			motCai<HTMLTextAreaElement>(o, "[data-o-loi-nhan]"),
+			"Cảm ơn cả nhóm.",
+		);
+		for (const [ma, ten] of NGUOI_TRAO_DOI)
+			if (ma !== "giang") await chonNguoiNhan(o, ten);
+		expect(o.querySelectorAll("[data-token-nguoi-nhan]").length).toBe(6);
+		const loi = motCai(o, '[data-truong-nguoi-nhan] [data-slot="field-error"]');
+		expect(loi.textContent).toBe("Tối đa 5 người.");
+		expect(nutGuiGhiNhan(o).disabled).toBe(true);
+		await bam(motCai(o, '[data-token-nguoi-nhan="ha"] [data-slot="button"]'));
+		expect(
+			o.querySelector('[data-truong-nguoi-nhan] [data-slot="field-error"]'),
+		).toBeNull();
+		expect(nutGuiGhiNhan(o).disabled).toBe(false);
+		await bam(nutGuiGhiNhan(o));
+		expect(goi.ghiNhan).toHaveBeenCalledTimes(1);
+	});
+
+	test("gui: onGuiGhiNhan nhan dung mang id theo thu tu chon, loi da cat, KR trong; xong thi o soan tro ve trong", async () => {
+		const goi = taoGoiSoan();
+		const o = await dung(soan(goi));
+		await sangGhiNhan(o);
+		await chonNguoiNhan(o, "Lê Chi");
+		await chonNguoiNhan(o, "Nguyễn An");
+		await chonNguoiNhan(o, "Bùi Khoa");
+		await goVung(
+			motCai<HTMLTextAreaElement>(o, "[data-o-loi-nhan]"),
+			"  Cảm ơn ba bạn đã giữ ca tối suốt tuần cao điểm.  ",
+		);
+		await bam(nutGuiGhiNhan(o));
+		expect(goi.binhLuan).toHaveBeenCalledTimes(0);
+		expect(goi.ghiNhan.mock.calls.map((c) => c[0])).toEqual([
+			{
+				nguoiNhan: ["chi", "an", "khoa"],
+				loiNhan: "Cảm ơn ba bạn đã giữ ca tối suốt tuần cao điểm.",
+				keyResultId: null,
+			},
+		]);
+		await cho(
+			() => o.querySelectorAll("[data-token-nguoi-nhan]").length === 0,
+			"nguoi nhan xoa sau khi gui",
+		);
+		expect(motCai<HTMLTextAreaElement>(o, "[data-o-loi-nhan]").value).toBe("");
+	});
+
+	test("nguoi nhan va loi mang translate=no; dem ky tu hien duoi o", async () => {
+		const goi = taoGoiSoan();
+		const o = await dung(soan(goi));
+		await sangGhiNhan(o);
+		await chonNguoiNhan(o, "Trần Bình");
+		await goVung(motCai<HTMLTextAreaElement>(o, "[data-o-loi-nhan]"), "Cảm ơn");
+		expect(
+			motCai(o, '[data-token-nguoi-nhan="binh"]').getAttribute("translate"),
+		).toBe("no");
+		expect(motCai(o, "[data-o-loi-nhan]").getAttribute("translate")).toBe("no");
+		expect(motCai(o, "[data-dem-loi-nhan]").textContent).toBe("6/500 ký tự.");
+	});
+
+	test("nguoi dang dung (toiId) khong co trong danh sach nguoi nhan", async () => {
+		const o = await dung(soan(taoGoiSoan()));
+		await sangGhiNhan(o);
+		await bam(motCai(o, "[data-o-nguoi-nhan]"));
+		await cho(
+			() => document.body.querySelectorAll("[cmdk-item]").length > 0,
+			"danh sach nguoi nhan",
+		);
+		const ten = [...document.body.querySelectorAll("[cmdk-item]")].map(
+			(i) => i.textContent ?? "",
+		);
+		expect(ten.length).toBe(LUA_CHON.length - 1);
+		expect(ten.some((t) => t.includes("Võ Giang"))).toBe(false);
+	});
+
+	test("muc tieu chua cong bo: khong co lua chon Ghi nhan", async () => {
+		const o = await dung(
+			<OSoanTraoDoi
+				keyResults={[]}
+				thanhVien={LUA_CHON}
+				thanhVienDangTai={false}
+				toiId={null}
+				ghiNhanDuoc={false}
+				dangGui={false}
+				loi={null}
+				onGuiBinhLuan={mock(() => {})}
+				onGuiGhiNhan={mock(() => {})}
+			/>,
+		);
+		expect(o.querySelector("[data-o-loai-tin]")).toBeNull();
+		expect(o.querySelector('[data-nut="gui-binh-luan"]')).not.toBeNull();
+	});
+});
+
+const BINH_LUAN_1: CommentsOutput["comments"][number] = {
+	id: "bl-1",
+	author: { id: "binh", name: "Trần Bình", email: "binh@onehub.vn" },
+	keyResultId: null,
+	keyResultTitle: null,
+	body: "Tuần này ca tối thiếu người.",
+	createdAt: "2026-09-20T02:00:00.000Z",
+	mentions: [],
+};
+
+function ghiNhan(
+	id: string,
+	doi: Partial<Extract<DongTraoDoi, { loai: "ghi-nhan" }>>,
+): DongTraoDoi {
+	return {
+		loai: "ghi-nhan",
+		id,
+		createdAt: "2026-09-21T02:00:00.000Z",
+		nguoiGui: { id: "an", name: "Nguyễn An", email: "an@onehub.vn" },
+		nguoiNhan: [
+			{ id: "binh", name: "Trần Bình", email: "binh@onehub.vn" },
+			{ id: "chi", name: "Lê Chi", email: "chi@onehub.vn" },
+		],
+		keyResultId: "kr-1",
+		keyResultTitle: "Tăng 40 đối tác hoạt động",
+		loiNhan: "Cảm ơn hai bạn đã giữ ca tối suốt tuần cao điểm.",
+		goDuoc: true,
+		...doi,
+	};
+}
+
+function traoDoi(dong: DongTraoDoi[]): CommentsOutput {
+	return { comments: [BINH_LUAN_1], dong };
+}
+
+describe("trao doi: dong ghi nhan xen giua binh luan", () => {
+	test("dong theo thu tu cua `dong`; dong ghi nhan khac dong binh luan: data-ghi-nhan, bieu tuong, mot cau «X ghi nhận Y, Z», KR, loi translate=no", async () => {
+		const o = await dung(
+			<DongThoiGian
+				duLieu={traoDoi([
+					ghiNhan("gn-0", { createdAt: "2026-09-19T02:00:00.000Z" }),
+					{ loai: "binh-luan", id: "bl-1", createdAt: BINH_LUAN_1.createdAt },
+					ghiNhan("gn-1", {}),
+				])}
+				onGoGhiNhan={mock(async () => {})}
+			/>,
+		);
+		const thuTu = [
+			...o.querySelectorAll("[data-binh-luan], [data-ghi-nhan]"),
+		].map(
+			(d) =>
+				d.getAttribute("data-ghi-nhan") ??
+				`bl:${d.getAttribute("data-binh-luan")}`,
+		);
+		expect(thuTu).toEqual(["gn-0", "bl:bl-1", "gn-1"]);
+		const d = motCai(o, '[data-ghi-nhan="gn-1"]');
+		expect(d.hasAttribute("data-binh-luan")).toBe(false);
+		expect(d.querySelector('[data-slot="item-media"] svg')).not.toBeNull();
+		expect(motCai(d, '[data-slot="item-title"]').textContent).toBe(
+			"Nguyễn An ghi nhận Trần Bình, Lê Chi",
+		);
+		for (const ten of d.querySelectorAll("[data-ten-nguoi]"))
+			expect(ten.getAttribute("translate")).toBe("no");
+		expect(motCai(d, "[data-chip-kr]").textContent).toBe(
+			"Tăng 40 đối tác hoạt động",
+		);
+		const loi = motCai(d, "[data-loi-ghi-nhan]");
+		expect(loi.textContent).toBe(
+			"Cảm ơn hai bạn đã giữ ca tối suốt tuần cao điểm.",
+		);
+		expect(loi.getAttribute("translate")).toBe("no");
+		expect(
+			motCai(o, '[data-binh-luan="bl-1"]').querySelector("[data-loi-ghi-nhan]"),
+		).toBeNull();
+	});
+
+	test("nguoi gui (goDuoc) thay «Gỡ ghi nhận», xac nhan thi onGoGhiNhan nhan dung id", async () => {
+		const goGhiNhan = mock(async (_id: string) => {});
+		const o = await dung(
+			<DongThoiGian
+				duLieu={traoDoi([ghiNhan("gn-1", { goDuoc: true })])}
+				onGoGhiNhan={goGhiNhan}
+			/>,
+		);
+		await bam(
+			motCai(o, '[data-ghi-nhan="gn-1"] [data-nut="thao-tac-ghi-nhan"]'),
+		);
+		await cho(
+			() => document.body.querySelector('[role="menuitem"]') !== null,
+			"menu ghi nhan mo",
+		);
+		const go = [...document.body.querySelectorAll('[role="menuitem"]')].find(
+			(i) => i.textContent === m.ghiNhan.go,
+		);
+		if (!go) throw new Error("khong co muc Go ghi nhan");
+		expect(go.textContent).toBe("Gỡ ghi nhận");
+		await bam(go);
+		await cho(
+			() => document.body.querySelector('[role="alertdialog"]') !== null,
+			"hoi go",
+		);
+		const xacNhan = [
+			...document.body.querySelectorAll('[role="alertdialog"] button'),
+		].find((b) => b.textContent === m.ghiNhan.hoiGo.nut);
+		if (!xacNhan) throw new Error("khong co nut xac nhan go");
+		await bam(xacNhan);
+		expect(goGhiNhan.mock.calls).toEqual([["gn-1"]]);
+	});
+
+	test("nguoi khac (goDuoc false) khong co menu go", async () => {
+		const o = await dung(
+			<DongThoiGian
+				duLieu={traoDoi([ghiNhan("gn-1", { goDuoc: false })])}
+				onGoGhiNhan={mock(async () => {})}
+			/>,
+		);
+		expect(motCai(o, '[data-ghi-nhan="gn-1"]')).not.toBeNull();
+		expect(o.querySelector('[data-nut="thao-tac-ghi-nhan"]')).toBeNull();
+		expect(o.textContent).not.toContain(m.ghiNhan.go);
 	});
 });

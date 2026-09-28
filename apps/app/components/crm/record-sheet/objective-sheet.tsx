@@ -555,9 +555,10 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 				{
 					value: "trao-doi",
 					label: m.tabTraoDoi,
-					count: binhLuan.data?.comments.length ?? null,
+					count: binhLuan.data?.dong.length ?? null,
 					content: (
 						<TabTraoDoi
+							ghiNhanDuoc={mt.status === "cong-bo"}
 							objectiveId={mt.id}
 							keyResults={mt.keyResults.map((k) => ({
 								id: k.id,

@@ -148,7 +148,7 @@ mock.module("@/lib/trpc/client", () => ({
 			removeKeyResult: thuTuc("okr.removeKeyResult"),
 			addAlignment: thuTuc("okr.addAlignment"),
 			removeAlignment: thuTuc("okr.removeAlignment"),
-			comments: thuTuc("okr.comments", () => ({ comments: [] })),
+			comments: thuTuc("okr.comments", () => ({ comments: [], dong: [] })),
 			thanhVien: thuTuc("okr.thanhVien", () => [HUNG]),
 			chiSo: thuTuc("okr.chiSo", () => ({
 				chiSo: [],
