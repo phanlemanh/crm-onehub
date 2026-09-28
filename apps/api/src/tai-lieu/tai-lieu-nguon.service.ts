@@ -141,7 +141,30 @@ export class TaiLieuNguonService {
 			Date.now(),
 		);
 		if (!cuaNguoiGoi) throw new BadRequestException(T.phieuSai);
-		const daCo = await this.db.taiLieuNguon.findUnique({
+		try {
+			const kq = await this.db.$transaction(
+				(tx) => this.nhanTrongKhoa(tx, nguoi, input),
+				{ timeout: TAI_LIEU_API.nhanNguon.timeoutMs },
+			);
+			if (!kq.trung) this.agent.danhThucMaySoan();
+			return kq;
+		} catch (loi) {
+			if (!(loi instanceof Error) || !laTrung(loi)) throw loi;
+			const sha256 = await this.bamCua(input.pathname);
+			const trung = sha256 ? await this.nguonTheoBam(sha256) : null;
+			if (!trung) throw loi;
+			await this.xoaNeuMoCoi(input.pathname);
+			return { nguonId: trung, trung: true };
+		}
+	}
+
+	private async nhanTrongKhoa(
+		tx: Tx,
+		nguoi: NguoiGoi,
+		input: TaiLieuNguonNhanInput,
+	): Promise<{ nguonId: string; trung: boolean }> {
+		await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${TAI_LIEU_API.nhanNguon.khoa}:${input.pathname}`}))`;
+		const daCo = await tx.taiLieuNguon.findUnique({
 			where: { blobPathname: input.pathname },
 			select: { id: true },
 		});
@@ -152,21 +175,48 @@ export class TaiLieuNguonService {
 			const kieu = this.kiemTep(byte);
 			const dich = await this.kiemDich(nguoi, input.dich);
 			const sha256 = createHash("sha256").update(byte).digest("hex");
-			const kq = await this.ghiNguon(nguoi, {
-				sha256,
-				kieu,
-				kichThuoc: byte.length,
-				tenTep: input.tenTep.normalize("NFC"),
-				pathname: input.pathname,
-				dich,
+			const trung = await tx.taiLieuNguon.findUnique({
+				where: { sha256 },
+				select: { id: true },
 			});
-			if (kq.trung) await this.kho.xoa(input.pathname);
-			else this.agent.danhThucMaySoan();
-			return kq;
+			if (trung) {
+				await this.kho.xoa(input.pathname);
+				return { nguonId: trung.id, trung: true };
+			}
+			const trangId = await this.trangDich(tx, nguoi, dich);
+			const nguon = await tx.taiLieuNguon.create({
+				data: {
+					sha256,
+					tenTep: input.tenTep.normalize("NFC"),
+					kieu,
+					kichThuoc: byte.length,
+					blobPathname: input.pathname,
+					taiBoiId: nguoi.id,
+					trangId,
+				},
+				select: { id: true },
+			});
+			await this.agent.soanTuNguon(nguon.id, tx);
+			return { nguonId: nguon.id, trung: false };
 		} catch (loi) {
-			await this.kho.xoa(input.pathname);
+			if (!(loi instanceof Error) || !laTrung(loi)) {
+				await this.kho.xoa(input.pathname);
+			}
 			throw loi;
 		}
+	}
+
+	private async bamCua(pathname: string): Promise<string | null> {
+		const byte = await this.kho.doc(pathname);
+		return byte ? createHash("sha256").update(byte).digest("hex") : null;
+	}
+
+	private async xoaNeuMoCoi(pathname: string): Promise<void> {
+		const cuaHang = await this.db.taiLieuNguon.findUnique({
+			where: { blobPathname: pathname },
+			select: { id: true },
+		});
+		if (!cuaHang) await this.kho.xoa(pathname);
 	}
 
 	private kiemTep(byte: Uint8Array): KieuNguonTep {
@@ -195,45 +245,6 @@ export class TaiLieuNguonService {
 		});
 		if (!trang?.banDangDungId) throw new BadRequestException(T.dichChuaDung);
 		return { loai: "cap-nhat", trangId: trang.id };
-	}
-
-	private async ghiNguon(
-		nguoi: NguoiGoi,
-		vao: {
-			sha256: string;
-			kieu: KieuNguonTep;
-			kichThuoc: number;
-			tenTep: string;
-			pathname: string;
-			dich: DichSach;
-		},
-	): Promise<{ nguonId: string; trung: boolean }> {
-		const daCo = await this.nguonTheoBam(vao.sha256);
-		if (daCo) return { nguonId: daCo, trung: true };
-		try {
-			return await this.db.$transaction(async (tx) => {
-				const trangId = await this.trangDich(tx, nguoi, vao.dich);
-				const nguon = await tx.taiLieuNguon.create({
-					data: {
-						sha256: vao.sha256,
-						tenTep: vao.tenTep,
-						kieu: vao.kieu,
-						kichThuoc: vao.kichThuoc,
-						blobPathname: vao.pathname,
-						taiBoiId: nguoi.id,
-						trangId,
-					},
-					select: { id: true },
-				});
-				await this.agent.soanTuNguon(nguon.id, tx);
-				return { nguonId: nguon.id, trung: false };
-			});
-		} catch (loi) {
-			if (!(loi instanceof Error) || !laTrung(loi)) throw loi;
-			const trung = await this.nguonTheoBam(vao.sha256);
-			if (!trung) throw loi;
-			return { nguonId: trung, trung: true };
-		}
 	}
 
 	private async nguonTheoBam(sha256: string): Promise<string | null> {

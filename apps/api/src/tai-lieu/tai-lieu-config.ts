@@ -12,6 +12,7 @@ export const TAI_LIEU_API = {
 	},
 	deXuat: { coTrang: TAI_LIEU.danhSach.coTrang },
 	dangDung: { toiDa: 500 },
+	nhanNguon: { khoa: "kho-tai-lieu:nhan-nguon", timeoutMs: 2 * PHUT_MS },
 	phieuNguon: { tienTo: "kho-tai-lieu:phieu-nguon", hanMs: 60 * PHUT_MS },
 	khoaSlug: "tai-lieu-slug",
 	suKienCu: "ban-goc-da-doi",
