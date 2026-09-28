@@ -1,0 +1,9 @@
+{
+  "feature_plain": "Phép kiểm «vòng này không chạm hồ sơ đã ký» giờ báo đỏ cả khi một tệp đã ký bị đổi tên hay dời đi, không chỉ khi bị sửa nội dung.",
+  "scope_plain": "Vòng này chỉ vá một phép kiểm; những thứ dưới đây cố ý để nguyên.",
+  "decisions_plain": [
+    {"id": "d-20260928T140848Z-1", "p": "KHÔNG chạy lượt quét độ phủ tự động — ba trục đều có tập giá trị đóng, liệt tay đủ; đổi lại không có bằng chứng quét."},
+    {"id": "d-20260928T140848Z-2", "p": "KHÔNG viết đặc tả giao diện — vòng không chạm màn hình nào."},
+    {"id": "d-20260928T140848Z-3", "p": "Vá tại chỗ phép kiểm của hồ sơ đã ký rồi ghim lại hồ sơ đó, thay vì dựng phép kiểm thứ hai — đổi lại phải ghim lại một hồ sơ đã ký."}
+  ]
+}

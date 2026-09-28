@@ -46,7 +46,7 @@ function tepDoi() {
 	const den = doiSo("--den");
 	if (tu || den) {
 		if (!tu || !den) khongDo("--tu va --den phai di cung nhau");
-		return git("diff", "--name-only", sha(tu), sha(den));
+		return git("diff", "--name-only", "--no-renames", sha(tu), sha(den));
 	}
 	const diemRe = (() => {
 		try {
@@ -56,7 +56,7 @@ function tepDoi() {
 		}
 	})();
 	return (
-		git("diff", "--name-only", diemRe) +
+		git("diff", "--name-only", "--no-renames", diemRe) +
 		git("ls-files", "--others", "--exclude-standard")
 	);
 }
