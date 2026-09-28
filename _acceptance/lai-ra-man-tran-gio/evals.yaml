@@ -107,6 +107,14 @@ evals:
     criterion: AC-5
     executor: judgment
     cmd: judgment
+    question: |
+      Doc bang do CI "truoc" va ghi chep "sau". Ba cau: (1) luot CI cua PR #191 co xanh
+      voi ca lai duoi TRAN_LAI_MS = 30000 ms khong, va co luot nao ma tran cu 5000 ms se
+      lam do khong? (2) Hai nhanh do-thu ep tran ca lai 500 ms co cho thay dieu hop dong
+      hua khong — nhanh co ban va chi do dung ca lai, nhanh chua va do them it nhat mot
+      ca khac — va co bang chung nao cho thay render-diff chay SAU lai-ra-man trong cung
+      tien trinh (neu khong, "khong do sang tep khac" chua duoc do)? (3) So lieu co doi
+      chieu duoc ve run id / attempt cu the, hay co con so nao dung mot minh khong nguon?
     inputs:
       - _acceptance/lai-ra-man-tran-gio/rang/bang-do-ci.json
       - _acceptance/lai-ra-man-tran-gio/evidence/do-ci.md
