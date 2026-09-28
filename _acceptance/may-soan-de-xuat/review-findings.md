@@ -4,26 +4,14 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **nhan holds an interactive transaction across blob I/O and still reads through this.db, unlike the validate-then-transact pattern**
-  Người dùng thấy gì: Khi nhiều người tải tệp quy định lên cùng lúc (khoảng mười người trở lên), toàn bộ hệ thống có thể bị treo tạm thời tới hai phút cho mọi người dùng, không riêng người đang tải.
-  file: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **nhan holds a transaction connection while kiemDich and kiemTrangMoi borrow a second connection from the same pool, which can deadlock under concurrent load**
-  Người dùng thấy gì: Trong tình huống nhiều người tải tệp cùng lúc, tệp vừa tải lên hợp lệ của một người có thể bị hệ thống tự xoá nhầm vì chờ xử lý quá lâu, dù người đó không làm gì sai.
-  file: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **Shape 3: E16 promises 'returns the old source' for the tu-xin-trung-byte case, but the test only checks that the status is below 400**
-  Người dùng thấy gì: Bộ kiểm thử tự động hiện chưa chắc chắn phát hiện được nếu hệ thống lỡ trả về nhầm một nguồn tài liệu khác khi ai đó tải lại đúng tệp đã có sẵn, nghĩa là lỗi loại này có thể lọt qua mà không ai hay biết.
+- **E16 red direction for 'remove the per-path lock' can no longer produce its pinned message 'xoa tep nguon vua ghi khi gui song song'**
+  Người dùng thấy gì: Bai kiem tu dong dung de chung minh tinh nang chan ghi de tep nguon co the bao loi bang mot cau khac voi cau da hua truoc do, nhung ban than tinh nang bao ve tep nguon cho nguoi dung van hoat dong dung nhu thiet ke.
   file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 4: the pinned message GHIM_SONG_SONG ('file deleted when sent in parallel') also sits on the success-count assert, so the red run does not prove a file was deleted**
-  Người dùng thấy gì: Khi hai người tải cùng một tệp cùng lúc và lớp bảo vệ liên quan bị hỏng, thông báo lỗi hiện tại không đủ rõ để phân biệt giữa hai sự cố khác nhau — 'bị chấp nhận trùng lặp' và 'tệp gốc bị xoá mất' — nên đội vận hành khó biết chính xác chuyện gì đã xảy ra.
+- **Hình dạng 4 (không ghim thông điệp): khi bỏ khoá theo đường lưu, assert đỏ đầu tiên không còn mang thông điệp ghim mà E16 hứa**
+  Người dùng thấy gì: Cach may tu kiem tra tinh nang chan ghi de tep nguon co the hien mot thong bao loi khac voi thong bao da duoc hua truoc, nhung nguoi dung khong bi anh huong vi tinh nang van chan dung nhu mong doi.
   file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts`
   severity: medium
   Đề xuất: known-limits
