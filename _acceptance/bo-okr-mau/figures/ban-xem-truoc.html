@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bỏ bản xem trước</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1100px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">AC-9</p>
+    <h1>Bỏ bản xem trước</h1>
+
+    <svg viewBox="0 40 1000 416" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect y="40" width="1000" height="416" fill="#fafafa"/>
+
+      <line x1="40" y1="64" x2="960" y2="64" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="40" y1="312" x2="960" y2="312" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <line x1="40" y1="440" x2="960" y2="440" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="176" y1="64" x2="176" y2="440" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+
+      <text x="56" y="192" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HÔM NAY</text>
+      <text x="56" y="372" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">SAU KHI</text>
+      <text x="56" y="388" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHỦ KHO TÁCH</text>
+
+      <line x1="368" y1="120" x2="550" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="368" y1="264" x2="422" y2="264" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="592" y1="264" x2="646" y2="264" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M336 144 L336 184 Q336 192 344 192 L752 192 Q760 192 760 200 L760 208" fill="none" stroke="#006B4F" stroke-width="1.4"/>
+      <line x1="752" y1="212" x2="768" y2="228" stroke="#006B4F" stroke-width="1.6"/>
+      <line x1="768" y1="212" x2="752" y2="228" stroke="#006B4F" stroke-width="1.6"/>
+
+      <line x1="368" y1="360" x2="422" y2="360" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="592" y1="360" x2="646" y2="360" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="400" y="96" width="120" height="16" rx="2" fill="#fafafa"/>
+      <text x="460" y="108" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">lệnh nạp chạy được</text>
+
+      <rect x="448" y="168" width="200" height="16" rx="2" fill="#fafafa"/>
+      <text x="548" y="180" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">từ chối — không phải máy cục bộ</text>
+
+      <rect x="200" y="96" width="168" height="48" rx="6" fill="#fafafa"/>
+      <rect x="200" y="96" width="168" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="284" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Máy dev</text>
+
+      <rect x="552" y="96" width="184" height="48" rx="6" fill="#fafafa"/>
+      <rect x="552" y="96" width="184" height="48" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="644" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cơ sở dữ liệu cục bộ</text>
+
+      <rect x="200" y="240" width="168" height="48" rx="6" fill="#fafafa"/>
+      <rect x="200" y="240" width="168" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="284" y="268" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bản xem trước (app)</text>
+
+      <rect x="424" y="240" width="168" height="48" rx="6" fill="#fafafa"/>
+      <rect x="424" y="240" width="168" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="508" y="268" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">API production</text>
+
+      <rect x="648" y="240" width="224" height="48" rx="6" fill="#fafafa"/>
+      <rect x="648" y="240" width="224" height="48" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="760" y="262" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cơ sở dữ liệu production</text>
+      <text x="760" y="278" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">(Neon)</text>
+
+      <rect x="200" y="336" width="168" height="48" rx="6" fill="#fafafa"/>
+      <rect x="200" y="336" width="168" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="284" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bản xem trước (app)</text>
+
+      <rect x="424" y="336" width="168" height="48" rx="6" fill="#fafafa"/>
+      <rect x="424" y="336" width="168" height="48" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="508" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">API bản xem trước</text>
+
+      <rect x="648" y="336" width="224" height="48" rx="6" fill="#fafafa"/>
+      <rect x="648" y="336" width="224" height="48" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="760" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cơ sở dữ liệu bản xem trước</text>
+
+      <path d="M424 392 L424 400 L872 400 L872 392" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="648" y="424" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="middle">việc Vercel/Neon của chủ kho, ngoài hạng mục</text>
+    </svg>
+  </div>
+</body>
+</html>

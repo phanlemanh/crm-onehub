@@ -1,0 +1,54 @@
+{
+	"id": "gy-23",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Doanh thu hợp đồng mới đạt 14 tỷ đồng",
+		"whyNow": "Theo chỉ tiêu khối.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Doanh thu hợp đồng mới đạt 14 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 14,
+			"unit": "tỷ đồng"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Khối Kinh doanh về đích doanh thu quý 4",
+			"whyNow": "Quý 4 là quý chốt ngân sách năm sau.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 14 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 14,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": ["muc-tieu-la-so"],
+		"vietLai": ["title"],
+		"khongGopY": false,
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu chép KR cấp trên; không đề xuất chép tiếp KR cấp trên xuống."
+}

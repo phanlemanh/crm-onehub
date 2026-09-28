@@ -1,0 +1,31 @@
+{
+	"id": "gy-14",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Sản phẩm số"
+	},
+	"mucTieu": {
+		"title": "Đội kinh doanh bán được tính năng mới",
+		"whyNow": "Tính năng theo dõi đơn ra tháng 11.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tổ chức 3 buổi đào tạo sản phẩm",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 3,
+			"unit": "buổi"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "KR là việc; kết quả là số đối tác dùng tính năng."
+}

@@ -1,0 +1,38 @@
+{
+	"id": "gy-17",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Mở rộng tệp đối tác hàng lạnh",
+		"whyNow": "Kho lạnh Bình Dương đã chạy.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Số đối tác hàng lạnh mới ký",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 10,
+			"unit": "đối tác"
+		},
+		{
+			"title": "Số hợp đồng mới với đối tác hàng lạnh mới",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 10,
+			"unit": "hợp đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["trung-y"],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Hai KR là một ý."
+}

@@ -1,0 +1,38 @@
+{
+	"id": "gy-12",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Đối tác chọn chúng tôi cho mùa Tết",
+		"whyNow": "Mùa Tết quyết định hợp đồng cả năm sau.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Đối tác ký hợp đồng mùa Tết đạt 30",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 30,
+			"unit": "đối tác"
+		},
+		{
+			"title": "Giữ tỷ lệ đơn Tết giao đúng hẹn trên 95%",
+			"kind": "giu-tren",
+			"startValue": 90,
+			"targetValue": 95,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Câu đã tốt, có đối trọng; không đề xuất gì."
+}

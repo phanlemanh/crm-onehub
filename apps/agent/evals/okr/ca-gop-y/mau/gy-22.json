@@ -1,0 +1,38 @@
+{
+	"id": "gy-22",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Nhân sự"
+	},
+	"mucTieu": {
+		"title": "Người mới làm được việc từ tuần đầu",
+		"whyNow": "Người mới mất ba tuần mới tự nhận ca.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Thời gian tự nhận ca giảm từ 21 xuống 10 ngày",
+			"kind": "giam-xuong",
+			"startValue": 21,
+			"targetValue": 10,
+			"unit": "ngày"
+		},
+		{
+			"title": "Giữ tỷ lệ nghỉ việc 60 ngày đầu dưới 10%",
+			"kind": "giu-duoi",
+			"startValue": 18,
+			"targetValue": 10,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Câu đã tốt."
+}

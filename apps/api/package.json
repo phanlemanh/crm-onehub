@@ -14,6 +14,7 @@
 		"dev:trpc": "nestjs-trpc watch -e src/app.module.ts -r \"**/*.router.ts\" -o src/generated",
 		"dev:grant-needed": "bun scripts/dev-grant-needed.ts",
 		"dev:session": "bun scripts/dev-session.ts",
+		"okr:mau": "bun scripts/okr-mau.ts",
 		"lint": "biome check .",
 		"postinstall": "node scripts/chmod-trpc-binary.mjs",
 		"start": "bun src/main.ts",
@@ -26,6 +27,7 @@
 	"dependencies": {
 		"@crm/auth": "workspace:*",
 		"@crm/db": "workspace:*",
+		"@crm/env": "workspace:*",
 		"@crm/telemetry": "workspace:*",
 		"@crm/validation": "workspace:*",
 		"@keyv/redis": "^5.1.6",

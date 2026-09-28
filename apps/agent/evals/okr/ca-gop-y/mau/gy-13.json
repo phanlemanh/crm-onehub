@@ -1,0 +1,38 @@
+{
+	"id": "gy-13",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kho vận"
+	},
+	"mucTieu": {
+		"title": "Kho không để đơn nào chờ quá một ngày",
+		"whyNow": "Đơn tồn qua đêm làm đối tác gọi hỏi liên tục.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Đơn tồn quá 24 giờ giảm từ 120 xuống 10",
+			"kind": "giam-xuong",
+			"startValue": 120,
+			"targetValue": 10,
+			"unit": "đơn"
+		},
+		{
+			"title": "Giữ tỷ lệ xuất sai dưới 0,5%",
+			"kind": "giu-duoi",
+			"startValue": 1,
+			"targetValue": 0.5,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Câu đã tốt; không đề xuất gì."
+}

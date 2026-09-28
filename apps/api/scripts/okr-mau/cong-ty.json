@@ -1,0 +1,1760 @@
+{
+	"congTy": "Hải Đăng Logistics",
+	"chuKy": {
+		"nam": {
+			"ten": "Năm · mẫu"
+		},
+		"quy3": {
+			"ten": "Quý 3 · mẫu"
+		},
+		"quy4": {
+			"ten": "Quý 4 · mẫu"
+		}
+	},
+	"boPhan": [
+		{
+			"ma": "kinh-doanh",
+			"ten": "Khối Kinh doanh",
+			"truong": "tran-quoc-bao"
+		},
+		{
+			"ma": "van-hanh",
+			"ten": "Khối Vận hành",
+			"truong": "chu-van-hung"
+		},
+		{
+			"ma": "ho-tro",
+			"ten": "Khối Hỗ trợ",
+			"truong": "doan-thi-thu"
+		}
+	],
+	"phongBan": [
+		{
+			"ma": "kd-bac",
+			"ten": "Kinh doanh miền Bắc",
+			"boPhan": "kinh-doanh",
+			"truong": "nguyen-thi-lan"
+		},
+		{
+			"ma": "kd-nam",
+			"ten": "Kinh doanh miền Nam",
+			"boPhan": "kinh-doanh",
+			"truong": "ly-thanh-tam"
+		},
+		{
+			"ma": "cham-soc",
+			"ten": "Chăm sóc đối tác",
+			"boPhan": "kinh-doanh",
+			"truong": "vu-thu-ha"
+		},
+		{
+			"ma": "marketing",
+			"ten": "Marketing",
+			"boPhan": "kinh-doanh",
+			"truong": "trinh-hoai-nam"
+		},
+		{
+			"ma": "kho-van",
+			"ten": "Kho vận",
+			"boPhan": "van-hanh",
+			"truong": "dinh-cong-son"
+		},
+		{
+			"ma": "dieu-phoi",
+			"ten": "Điều phối vận tải",
+			"boPhan": "van-hanh",
+			"truong": "nghiem-thu-uyen"
+		},
+		{
+			"ma": "san-pham",
+			"ten": "Sản phẩm số",
+			"boPhan": "van-hanh",
+			"truong": "pham-thu-trang"
+		},
+		{
+			"ma": "tai-chinh",
+			"ten": "Tài chính",
+			"boPhan": "ho-tro",
+			"truong": "thai-minh-chau"
+		},
+		{
+			"ma": "nhan-su",
+			"ten": "Nhân sự",
+			"boPhan": "ho-tro",
+			"truong": "tong-bich-ngoc"
+		},
+		{
+			"ma": "phap-che",
+			"ten": "Pháp chế",
+			"boPhan": "ho-tro",
+			"truong": "an-khanh-linh"
+		}
+	],
+	"nguoi": [
+		{
+			"ma": "le-hai-dang",
+			"ten": "Lê Hải Đăng",
+			"vai": "admin",
+			"phongBan": "san-pham"
+		},
+		{
+			"ma": "pham-thu-trang",
+			"ten": "Phạm Thu Trang",
+			"vai": "member",
+			"phongBan": "san-pham"
+		},
+		{
+			"ma": "vo-duc-anh",
+			"ten": "Võ Đức Anh",
+			"vai": "member",
+			"phongBan": "san-pham"
+		},
+		{
+			"ma": "dang-ngoc-mai",
+			"ten": "Đặng Ngọc Mai",
+			"vai": "member",
+			"phongBan": "san-pham"
+		},
+		{
+			"ma": "bui-quang-huy",
+			"ten": "Bùi Quang Huy",
+			"vai": "member",
+			"phongBan": "san-pham"
+		},
+		{
+			"ma": "tran-quoc-bao",
+			"ten": "Trần Quốc Bảo",
+			"vai": "member",
+			"phongBan": "kd-bac"
+		},
+		{
+			"ma": "nguyen-thi-lan",
+			"ten": "Nguyễn Thị Lan",
+			"vai": "member",
+			"phongBan": "kd-bac"
+		},
+		{
+			"ma": "do-minh-khoa",
+			"ten": "Đỗ Minh Khoa",
+			"vai": "member",
+			"phongBan": "kd-bac"
+		},
+		{
+			"ma": "hoang-yen-nhi",
+			"ten": "Hoàng Yến Nhi",
+			"vai": "member",
+			"phongBan": "kd-bac"
+		},
+		{
+			"ma": "ngo-van-toan",
+			"ten": "Ngô Văn Toàn",
+			"vai": "member",
+			"phongBan": "kd-bac"
+		},
+		{
+			"ma": "ly-thanh-tam",
+			"ten": "Lý Thanh Tâm",
+			"vai": "member",
+			"phongBan": "kd-nam"
+		},
+		{
+			"ma": "truong-bao-ngoc",
+			"ten": "Trương Bảo Ngọc",
+			"vai": "member",
+			"phongBan": "kd-nam"
+		},
+		{
+			"ma": "huynh-gia-phuc",
+			"ten": "Huỳnh Gia Phúc",
+			"vai": "member",
+			"phongBan": "kd-nam"
+		},
+		{
+			"ma": "phan-kim-chi",
+			"ten": "Phan Kim Chi",
+			"vai": "member",
+			"phongBan": "kd-nam"
+		},
+		{
+			"ma": "duong-tuan-kiet",
+			"ten": "Dương Tuấn Kiệt",
+			"vai": "member",
+			"phongBan": "kd-nam"
+		},
+		{
+			"ma": "vu-thu-ha",
+			"ten": "Vũ Thu Hà",
+			"vai": "member",
+			"phongBan": "cham-soc"
+		},
+		{
+			"ma": "mai-duc-long",
+			"ten": "Mai Đức Long",
+			"vai": "member",
+			"phongBan": "cham-soc"
+		},
+		{
+			"ma": "cao-thanh-van",
+			"ten": "Cao Thanh Vân",
+			"vai": "member",
+			"phongBan": "cham-soc"
+		},
+		{
+			"ma": "lam-quynh-anh",
+			"ten": "Lâm Quỳnh Anh",
+			"vai": "member",
+			"phongBan": "cham-soc"
+		},
+		{
+			"ma": "trinh-hoai-nam",
+			"ten": "Trịnh Hoài Nam",
+			"vai": "member",
+			"phongBan": "marketing"
+		},
+		{
+			"ma": "ta-my-linh",
+			"ten": "Tạ Mỹ Linh",
+			"vai": "member",
+			"phongBan": "marketing"
+		},
+		{
+			"ma": "kieu-anh-tuan",
+			"ten": "Kiều Anh Tuấn",
+			"vai": "member",
+			"phongBan": "marketing"
+		},
+		{
+			"ma": "luu-phuong-thao",
+			"ten": "Lưu Phương Thảo",
+			"vai": "member",
+			"phongBan": "marketing"
+		},
+		{
+			"ma": "dinh-cong-son",
+			"ten": "Đinh Công Sơn",
+			"vai": "member",
+			"phongBan": "kho-van"
+		},
+		{
+			"ma": "ha-van-thanh",
+			"ten": "Hà Văn Thành",
+			"vai": "member",
+			"phongBan": "kho-van"
+		},
+		{
+			"ma": "to-thi-hong",
+			"ten": "Tô Thị Hồng",
+			"vai": "member",
+			"phongBan": "kho-van"
+		},
+		{
+			"ma": "quach-minh-tri",
+			"ten": "Quách Minh Trí",
+			"vai": "member",
+			"phongBan": "kho-van"
+		},
+		{
+			"ma": "la-hoang-phuc",
+			"ten": "La Hoàng Phúc",
+			"vai": "member",
+			"phongBan": "kho-van"
+		},
+		{
+			"ma": "chu-van-hung",
+			"ten": "Chu Văn Hùng",
+			"vai": "member",
+			"phongBan": "dieu-phoi"
+		},
+		{
+			"ma": "nghiem-thu-uyen",
+			"ten": "Nghiêm Thu Uyên",
+			"vai": "member",
+			"phongBan": "dieu-phoi"
+		},
+		{
+			"ma": "khuc-dinh-nam",
+			"ten": "Khúc Đình Nam",
+			"vai": "member",
+			"phongBan": "dieu-phoi"
+		},
+		{
+			"ma": "au-gia-bao",
+			"ten": "Âu Gia Bảo",
+			"vai": "member",
+			"phongBan": "dieu-phoi"
+		},
+		{
+			"ma": "doan-thi-thu",
+			"ten": "Đoàn Thị Thu",
+			"vai": "okr",
+			"phongBan": "tai-chinh"
+		},
+		{
+			"ma": "thai-minh-chau",
+			"ten": "Thái Minh Châu",
+			"vai": "okr",
+			"phongBan": "tai-chinh"
+		},
+		{
+			"ma": "giang-hai-yen",
+			"ten": "Giang Hải Yến",
+			"vai": "okr",
+			"phongBan": "tai-chinh"
+		},
+		{
+			"ma": "tong-bich-ngoc",
+			"ten": "Tống Bích Ngọc",
+			"vai": "okr",
+			"phongBan": "nhan-su"
+		},
+		{
+			"ma": "vuong-duc-tai",
+			"ten": "Vương Đức Tài",
+			"vai": "okr",
+			"phongBan": "nhan-su"
+		},
+		{
+			"ma": "ninh-thao-vy",
+			"ten": "Ninh Thảo Vy",
+			"vai": "okr",
+			"phongBan": "nhan-su"
+		},
+		{
+			"ma": "an-khanh-linh",
+			"ten": "An Khánh Linh",
+			"vai": "okr",
+			"phongBan": "phap-che"
+		},
+		{
+			"ma": "lu-quoc-viet",
+			"ten": "Lữ Quốc Việt",
+			"vai": "okr",
+			"phongBan": "phap-che"
+		}
+	],
+	"mucTieu": [
+		{
+			"ma": "n1",
+			"chuKy": "nam",
+			"cap": "onehub",
+			"chu": "le-hai-dang",
+			"kieu": "tham-vong",
+			"ten": "Trở thành đối tác logistics được chọn đầu tiên ở hai miền",
+			"viSao": "Hai đối thủ lớn vừa rút khỏi phân khúc hàng lạnh; ai ký trước năm nay giữ đối tác nhiều năm.",
+			"krs": [
+				{
+					"ma": "n1-k1",
+					"ten": "Doanh thu hợp đồng mới đạt 48 tỷ đồng",
+					"kieu": "tang-toi",
+					"chu": "tran-quoc-bao",
+					"khoi": 0,
+					"dich": 48,
+					"donVi": "tỷ đồng",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "n1-k2",
+					"ten": "Giữ tỷ lệ đối tác gia hạn trên 85%",
+					"kieu": "giu-tren",
+					"chu": "vu-thu-ha",
+					"khoi": 82,
+					"dich": 85,
+					"donVi": "%",
+					"kichBan": "cham"
+				},
+				{
+					"ma": "n1-k3",
+					"ten": "Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30",
+					"kieu": "tang-toi",
+					"chu": "ly-thanh-tam",
+					"khoi": 12,
+					"dich": 30,
+					"donVi": "đối tác",
+					"kichBan": "deu"
+				}
+			]
+		},
+		{
+			"ma": "n2",
+			"chuKy": "nam",
+			"cap": "onehub",
+			"chu": "le-hai-dang",
+			"kieu": "cam-ket",
+			"ten": "Giao đúng hẹn ở mọi tuyến",
+			"viSao": "Giao trễ là lý do số một đối tác bỏ đi trong các cuộc phỏng vấn quý 2.",
+			"krs": [
+				{
+					"ma": "n2-k1",
+					"ten": "Tỷ lệ đơn giao đúng hẹn",
+					"kieu": "phan-tram",
+					"chu": "chu-van-hung",
+					"khoi": 88,
+					"dich": 97,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "n2-k2",
+					"ten": "Chi phí vận tải trên mỗi đơn giảm từ 42 xuống 36 nghìn đồng",
+					"kieu": "giam-xuong",
+					"chu": "nghiem-thu-uyen",
+					"khoi": 42,
+					"dich": 36,
+					"donVi": "nghìn đồng",
+					"kichBan": "cham"
+				},
+				{
+					"ma": "n2-k3",
+					"ten": "Giữ số khiếu nại mỗi tháng dưới 20",
+					"kieu": "giu-duoi",
+					"chu": "vu-thu-ha",
+					"khoi": 26,
+					"dich": 20,
+					"donVi": "khiếu nại",
+					"kichBan": "deu"
+				}
+			]
+		},
+		{
+			"ma": "n3",
+			"chuKy": "nam",
+			"cap": "onehub",
+			"chu": "le-hai-dang",
+			"kieu": "cam-ket",
+			"ten": "Đội ngũ đủ người, đủ sức cho mùa cao điểm",
+			"viSao": "Mùa Tết năm ngoái thiếu 30% nhân lực kho, trễ hơn 400 đơn.",
+			"krs": [
+				{
+					"ma": "n3-k1",
+					"ten": "Tuyển đủ 25 người cho mùa cao điểm",
+					"kieu": "tang-toi",
+					"chu": "tong-bich-ngoc",
+					"khoi": 0,
+					"dich": 25,
+					"donVi": "người",
+					"kichBan": "ghi-chu",
+					"ghiChu": {
+						"6": "Đã chốt 11 offer, còn chờ phía kho xác nhận ca đêm"
+					}
+				},
+				{
+					"ma": "n3-k2",
+					"ten": "Ra mắt ứng dụng theo dõi đơn cho đối tác",
+					"kieu": "moc",
+					"chu": "pham-thu-trang",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "n3-k3",
+					"ten": "Giữ tỷ lệ nghỉ việc dưới 3% mỗi quý",
+					"kieu": "giu-duoi",
+					"chu": "tong-bich-ngoc",
+					"khoi": 4,
+					"dich": 3,
+					"donVi": "%",
+					"kichBan": "deu"
+				}
+			]
+		},
+		{
+			"ma": "q3-kd-bac",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "nguyen-thi-lan",
+			"kieu": "cam-ket",
+			"ten": "Mở rộng tệp đối tác bán lẻ miền Bắc",
+			"viSao": "Bán lẻ miền Bắc tăng trưởng nhanh nhất quý 2.",
+			"krs": [
+				{
+					"ma": "q3-kd-bac-k1",
+					"ten": "Ký 15 hợp đồng bán lẻ mới",
+					"kieu": "tang-toi",
+					"chu": "do-minh-khoa",
+					"khoi": 0,
+					"dich": 15,
+					"donVi": "hợp đồng",
+					"chot": 11,
+					"diem": 0.7
+				},
+				{
+					"ma": "q3-kd-bac-k2",
+					"ten": "Giá trị hợp đồng mới đạt 9 tỷ đồng",
+					"kieu": "tang-toi",
+					"chu": "hoang-yen-nhi",
+					"khoi": 0,
+					"dich": 9,
+					"donVi": "tỷ đồng",
+					"chot": 9.5,
+					"diem": 1.0
+				}
+			],
+			"donVi": "kd-bac",
+			"dieuHocDuoc": "Đối tác bán lẻ ra quyết định nhanh khi có bảng giá theo tuyến; tuần nào gửi bảng giá sớm thì ký được."
+		},
+		{
+			"ma": "q3-kd-nam",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "ly-thanh-tam",
+			"kieu": "tham-vong",
+			"ten": "Chiếm lĩnh hàng lạnh ở Đông Nam Bộ",
+			"viSao": "Đối thủ lớn nhất vừa đóng kho lạnh ở Bình Dương.",
+			"krs": [
+				{
+					"ma": "q3-kd-nam-k1",
+					"ten": "Ký 8 đối tác hàng lạnh mới",
+					"kieu": "tang-toi",
+					"chu": "truong-bao-ngoc",
+					"khoi": 0,
+					"dich": 8,
+					"donVi": "đối tác",
+					"chot": 5,
+					"diem": 0.6
+				},
+				{
+					"ma": "q3-kd-nam-k2",
+					"ten": "Doanh thu hàng lạnh đạt 6 tỷ đồng",
+					"kieu": "tang-toi",
+					"chu": "huynh-gia-phuc",
+					"khoi": 0,
+					"dich": 6,
+					"donVi": "tỷ đồng",
+					"chot": 3.6,
+					"diem": 0.6
+				},
+				{
+					"ma": "q3-kd-nam-k3",
+					"ten": "Chạy thử kho lạnh Bình Dương",
+					"kieu": "moc",
+					"chu": "ly-thanh-tam",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"chot": 1,
+					"diem": 1.0
+				}
+			],
+			"donVi": "kd-nam",
+			"dieuHocDuoc": "Hàng lạnh cần đi kèm cam kết nhiệt độ bằng số; đối tác không tin lời hứa miệng."
+		},
+		{
+			"ma": "q3-cham-soc",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "vu-thu-ha",
+			"kieu": "cam-ket",
+			"ten": "Không để đối tác nào phải chờ",
+			"viSao": "Thời gian phản hồi trung bình quý 2 là 9 giờ.",
+			"krs": [
+				{
+					"ma": "q3-cham-soc-k1",
+					"ten": "Thời gian phản hồi giảm từ 9 xuống 2 giờ",
+					"kieu": "giam-xuong",
+					"chu": "mai-duc-long",
+					"khoi": 9,
+					"dich": 2,
+					"donVi": "giờ",
+					"chot": 3.4,
+					"diem": 0.8
+				},
+				{
+					"ma": "q3-cham-soc-k2",
+					"ten": "Giữ điểm hài lòng trên 4,5",
+					"kieu": "giu-tren",
+					"chu": "cao-thanh-van",
+					"khoi": 4.3,
+					"dich": 4.5,
+					"donVi": "điểm",
+					"chot": 4.4,
+					"diem": 0.0
+				}
+			],
+			"donVi": "cham-soc",
+			"dieuHocDuoc": "Trả lời nhanh chưa đủ; đối tác chấm thấp khi phải kể lại vấn đề cho người thứ hai."
+		},
+		{
+			"ma": "q3-marketing",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "trinh-hoai-nam",
+			"kieu": "tham-vong",
+			"ten": "Để đối tác tìm tới chúng tôi trước",
+			"viSao": "Chín trên mười đối tác mới đến từ giới thiệu, chưa có kênh tự đến.",
+			"krs": [
+				{
+					"ma": "q3-marketing-k1",
+					"ten": "Khách tiềm năng từ web đạt 300",
+					"kieu": "tang-toi",
+					"chu": "ta-my-linh",
+					"khoi": 0,
+					"dich": 300,
+					"donVi": "khách",
+					"chot": 210,
+					"diem": 0.7
+				},
+				{
+					"ma": "q3-marketing-k2",
+					"ten": "Tỷ lệ khách tiềm năng thành cuộc hẹn",
+					"kieu": "phan-tram",
+					"chu": "kieu-anh-tuan",
+					"khoi": 8,
+					"dich": 20,
+					"donVi": "%",
+					"chot": 14,
+					"diem": 0.5,
+					"lyDo": "Tỷ lệ tính trên cả khách rác từ quảng cáo; trên khách thật tỷ lệ là 21%, nên đội chấm cao hơn gợi ý."
+				}
+			],
+			"donVi": "marketing",
+			"dieuHocDuoc": "Bài viết theo tuyến đường mang về khách tốt hơn quảng cáo theo từ khoá."
+		},
+		{
+			"ma": "q3-kho-van",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "dinh-cong-son",
+			"kieu": "cam-ket",
+			"ten": "Kho chạy không lỗi trong mùa hè",
+			"viSao": "Quý 2 có 3 lần lệch tồn kho quá 2%.",
+			"krs": [
+				{
+					"ma": "q3-kho-van-k1",
+					"ten": "Giữ lệch tồn kho dưới 0,5%",
+					"kieu": "giu-duoi",
+					"chu": "ha-van-thanh",
+					"khoi": 1.2,
+					"dich": 0.5,
+					"donVi": "%",
+					"chot": 0.4,
+					"diem": 1.0
+				},
+				{
+					"ma": "q3-kho-van-k2",
+					"ten": "Thời gian xuất kho giảm từ 50 xuống 30 phút",
+					"kieu": "giam-xuong",
+					"chu": "to-thi-hong",
+					"khoi": 50,
+					"dich": 30,
+					"donVi": "phút",
+					"chot": 36,
+					"diem": 0.7
+				}
+			],
+			"donVi": "kho-van",
+			"dieuHocDuoc": "Kiểm kê cuốn chiếu mỗi ngày rẻ hơn kiểm kê tổng cuối tháng."
+		},
+		{
+			"ma": "q3-dieu-phoi",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "nghiem-thu-uyen",
+			"kieu": "cam-ket",
+			"ten": "Mỗi chuyến xe chở đầy hơn",
+			"viSao": "Xe chạy rỗng chiều về chiếm 40% chuyến.",
+			"krs": [
+				{
+					"ma": "q3-dieu-phoi-k1",
+					"ten": "Tỷ lệ lấp đầy xe tăng từ 60 lên 80%",
+					"kieu": "tang-toi",
+					"chu": "khuc-dinh-nam",
+					"khoi": 60,
+					"dich": 80,
+					"donVi": "%",
+					"chot": 74,
+					"diem": 0.7
+				},
+				{
+					"ma": "q3-dieu-phoi-k2",
+					"ten": "Chuyến rỗng chiều về giảm từ 40 xuống 25%",
+					"kieu": "giam-xuong",
+					"chu": "au-gia-bao",
+					"khoi": 40,
+					"dich": 25,
+					"donVi": "%",
+					"chot": 31,
+					"diem": 0.6
+				}
+			],
+			"donVi": "dieu-phoi",
+			"dieuHocDuoc": "Ghép chuyến chiều về cần đối tác chấp nhận khung giờ rộng hơn; phải bán điều đó từ lúc ký."
+		},
+		{
+			"ma": "q3-san-pham",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "pham-thu-trang",
+			"kieu": "tham-vong",
+			"ten": "Đối tác tự theo dõi đơn không cần gọi điện",
+			"viSao": "Một phần ba cuộc gọi đến là hỏi đơn đang ở đâu.",
+			"krs": [
+				{
+					"ma": "q3-san-pham-k1",
+					"ten": "Ra bản thử ứng dụng theo dõi đơn",
+					"kieu": "moc",
+					"chu": "vo-duc-anh",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"chot": 0,
+					"diem": 0.3,
+					"lyDo": "Bản thử đã chạy nội bộ nhưng chưa tới tay đối tác; chấm 0,3 cho phần đã xong."
+				},
+				{
+					"ma": "q3-san-pham-k2",
+					"ten": "Cuộc gọi hỏi đơn giảm từ 1.200 xuống 600 mỗi tháng",
+					"kieu": "giam-xuong",
+					"chu": "dang-ngoc-mai",
+					"khoi": 1200,
+					"dich": 600,
+					"donVi": "cuộc",
+					"chot": 1000,
+					"diem": 0.3
+				}
+			],
+			"donVi": "san-pham",
+			"dieuHocDuoc": "Làm ứng dụng trước khi có số liệu trạng thái đơn sạch là làm ngược."
+		},
+		{
+			"ma": "q3-tai-chinh",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "thai-minh-chau",
+			"kieu": "cam-ket",
+			"ten": "Thu tiền đúng hạn",
+			"viSao": "Công nợ quá hạn chiếm 18% doanh thu quý 2.",
+			"krs": [
+				{
+					"ma": "q3-tai-chinh-k1",
+					"ten": "Công nợ quá hạn giảm từ 18 xuống 10%",
+					"kieu": "giam-xuong",
+					"chu": "giang-hai-yen",
+					"khoi": 18,
+					"dich": 10,
+					"donVi": "%",
+					"chot": 12,
+					"diem": 0.8
+				},
+				{
+					"ma": "q3-tai-chinh-k2",
+					"ten": "Chốt sổ tháng trong 5 ngày làm việc",
+					"kieu": "giu-duoi",
+					"chu": "thai-minh-chau",
+					"khoi": 8,
+					"dich": 5,
+					"donVi": "ngày",
+					"chot": 5,
+					"diem": 1.0
+				}
+			],
+			"donVi": "tai-chinh",
+			"dieuHocDuoc": "Gọi nhắc trước hạn ba ngày hiệu quả hơn gửi thư sau hạn."
+		},
+		{
+			"ma": "q3-nhan-su",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "tong-bich-ngoc",
+			"kieu": "cam-ket",
+			"ten": "Người mới làm được việc ngay tuần đầu",
+			"viSao": "Người mới mất trung bình ba tuần mới tự nhận ca.",
+			"krs": [
+				{
+					"ma": "q3-nhan-su-k1",
+					"ten": "Ra bộ tài liệu hội nhập cho kho",
+					"kieu": "moc",
+					"chu": "vuong-duc-tai",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"chot": 1,
+					"diem": 1.0
+				},
+				{
+					"ma": "q3-nhan-su-k2",
+					"ten": "Thời gian tự nhận ca giảm từ 21 xuống 10 ngày",
+					"kieu": "giam-xuong",
+					"chu": "ninh-thao-vy",
+					"khoi": 21,
+					"dich": 10,
+					"donVi": "ngày",
+					"chot": 15,
+					"diem": 0.6
+				}
+			],
+			"donVi": "nhan-su",
+			"dieuHocDuoc": "Người mới học nhanh nhất khi đi kèm một người cụ thể, không phải khi đọc tài liệu."
+		},
+		{
+			"ma": "q3-phap-che",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"chu": "an-khanh-linh",
+			"kieu": "cam-ket",
+			"ten": "Hợp đồng không kẹt ở khâu pháp chế",
+			"viSao": "Hợp đồng chờ pháp chế trung bình 6 ngày.",
+			"krs": [
+				{
+					"ma": "q3-phap-che-k1",
+					"ten": "Thời gian duyệt hợp đồng giảm từ 6 xuống 2 ngày",
+					"kieu": "giam-xuong",
+					"chu": "lu-quoc-viet",
+					"khoi": 6,
+					"dich": 2,
+					"donVi": "ngày",
+					"chot": 2.5,
+					"diem": 0.9
+				},
+				{
+					"ma": "q3-phap-che-k2",
+					"ten": "Ra bộ mẫu hợp đồng chuẩn",
+					"kieu": "moc",
+					"chu": "an-khanh-linh",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"chot": 1,
+					"diem": 1.0
+				}
+			],
+			"donVi": "phap-che",
+			"dieuHocDuoc": "Mẫu chuẩn chỉ giúp khi kinh doanh không sửa điều khoản thanh toán."
+		},
+		{
+			"ma": "q4-kd",
+			"chuKy": "quy4",
+			"cap": "bo-phan",
+			"chu": "tran-quoc-bao",
+			"kieu": "cam-ket",
+			"ten": "Khối Kinh doanh về đích doanh thu quý 4",
+			"viSao": "Quý 4 là quý chốt ngân sách năm sau của đối tác.",
+			"krs": [
+				{
+					"ma": "q4-kd-k1",
+					"ten": "Giá trị hợp đồng chốt được trong quý đạt 14 tỷ đồng",
+					"kieu": "tang-toi",
+					"chu": "tran-quoc-bao",
+					"khoi": 0,
+					"dich": 14,
+					"donVi": "tỷ đồng",
+					"kichBan": "deu",
+					"nguon": {
+						"chiSo": "thoa-thuan-chot-duoc",
+						"phamVi": {
+							"kieu": "bo-phan",
+							"ma": "kinh-doanh"
+						}
+					}
+				},
+				{
+					"ma": "q4-kd-k2",
+					"ten": "Giữ số thoả thuận mới mỗi tuần trên 12",
+					"kieu": "giu-tren",
+					"chu": "tran-quoc-bao",
+					"khoi": 9,
+					"dich": 12,
+					"donVi": "thoả thuận",
+					"kichBan": "cham"
+				}
+			],
+			"donVi": "kinh-doanh",
+			"canChinh": {
+				"mucTieu": "n1"
+			}
+		},
+		{
+			"ma": "q4-vh",
+			"chuKy": "quy4",
+			"cap": "bo-phan",
+			"chu": "chu-van-hung",
+			"kieu": "cam-ket",
+			"ten": "Vận hành sẵn sàng cho mùa Tết",
+			"viSao": "Tết Đinh Mùi rơi vào đầu tháng 2, đơn dồn từ giữa tháng 12.",
+			"krs": [
+				{
+					"ma": "q4-vh-k1",
+					"ten": "Kịch bản cao điểm được diễn tập đủ ba kho",
+					"kieu": "moc",
+					"chu": "chu-van-hung",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-vh-k2",
+					"ten": "Bước kế hoạch xong đúng hạn đạt 90",
+					"kieu": "tang-toi",
+					"chu": "chu-van-hung",
+					"khoi": 0,
+					"dich": 90,
+					"donVi": "bước",
+					"kichBan": "cham",
+					"nguon": {
+						"chiSo": "buoc-xong-dung-han",
+						"phamVi": {
+							"kieu": "bo-phan",
+							"ma": "van-hanh"
+						}
+					}
+				}
+			],
+			"donVi": "van-hanh",
+			"canChinh": {
+				"mucTieu": "n2"
+			}
+		},
+		{
+			"ma": "q4-kd-bac-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "nguyen-thi-lan",
+			"kieu": "cam-ket",
+			"ten": "Giữ đà tăng trưởng bán lẻ miền Bắc",
+			"viSao": "Quý 3 ký được 11 hợp đồng; mùa mua sắm cuối năm là lúc đối tác cần kho nhất.",
+			"krs": [
+				{
+					"ma": "q4-kd-bac-1-k1",
+					"ten": "Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng",
+					"kieu": "tang-toi",
+					"chu": "do-minh-khoa",
+					"khoi": 0,
+					"dich": 6,
+					"donVi": "tỷ đồng",
+					"kichBan": "deu",
+					"nguon": {
+						"chiSo": "thoa-thuan-chot-duoc",
+						"phamVi": {
+							"kieu": "phong-ban",
+							"ma": "kd-bac"
+						}
+					}
+				},
+				{
+					"ma": "q4-kd-bac-1-k2",
+					"ten": "Số cuộc hẹn gặp đối tác mới đạt 60",
+					"kieu": "tang-toi",
+					"chu": "hoang-yen-nhi",
+					"khoi": 0,
+					"dich": 60,
+					"donVi": "cuộc hẹn",
+					"kichBan": "tut",
+					"ghiChu": {
+						"6": "Hai đối tác lớn dời lịch gặp sang tháng sau"
+					}
+				},
+				{
+					"ma": "q4-kd-bac-1-k3",
+					"ten": "Tỷ lệ báo giá thành hợp đồng",
+					"kieu": "phan-tram",
+					"chu": "ngo-van-toan",
+					"khoi": 20,
+					"dich": 35,
+					"donVi": "%",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "kd-bac",
+			"canChinh": {
+				"kr": "n1-k1"
+			}
+		},
+		{
+			"ma": "q4-kd-bac-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "nguyen-thi-lan",
+			"kieu": "cam-ket",
+			"ten": "Mở rộng tệp đối tác bán lẻ miền Bắc",
+			"viSao": "Bán lẻ miền Bắc tăng trưởng nhanh nhất quý 2.",
+			"krs": [
+				{
+					"ma": "q4-kd-bac-2-k1",
+					"ten": "Ký 15 hợp đồng bán lẻ mới",
+					"kieu": "tang-toi",
+					"chu": "do-minh-khoa",
+					"khoi": 11,
+					"dich": 15,
+					"donVi": "hợp đồng",
+					"kichBan": "cham"
+				}
+			],
+			"donVi": "kd-bac",
+			"mangSangTu": "q3-kd-bac",
+			"canChinh": {
+				"kr": "n1-k1"
+			}
+		},
+		{
+			"ma": "q4-kd-nam-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "ly-thanh-tam",
+			"kieu": "tham-vong",
+			"ten": "Hàng lạnh Đông Nam Bộ thành mảng chủ lực",
+			"viSao": "Kho lạnh Bình Dương đã chạy thử xong quý 3.",
+			"krs": [
+				{
+					"ma": "q4-kd-nam-1-k1",
+					"ten": "Đối tác hàng lạnh mới đạt 10",
+					"kieu": "tang-toi",
+					"chu": "truong-bao-ngoc",
+					"khoi": 0,
+					"dich": 10,
+					"donVi": "đối tác",
+					"kichBan": "vuot"
+				},
+				{
+					"ma": "q4-kd-nam-1-k2",
+					"ten": "Thoả thuận mới hàng lạnh đạt 25",
+					"kieu": "tang-toi",
+					"chu": "phan-kim-chi",
+					"khoi": 0,
+					"dich": 25,
+					"donVi": "thoả thuận",
+					"kichBan": "deu",
+					"nguon": {
+						"chiSo": "thoa-thuan-moi",
+						"phamVi": {
+							"kieu": "phong-ban",
+							"ma": "kd-nam"
+						}
+					}
+				},
+				{
+					"ma": "q4-kd-nam-1-k3",
+					"ten": "Giữ công suất kho lạnh trên 70%",
+					"kieu": "giu-tren",
+					"chu": "duong-tuan-kiet",
+					"khoi": 55,
+					"dich": 70,
+					"donVi": "%",
+					"kichBan": "tut"
+				}
+			],
+			"donVi": "kd-nam",
+			"canChinh": {
+				"kr": "n1-k3"
+			}
+		},
+		{
+			"ma": "q4-kd-nam-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "ly-thanh-tam",
+			"kieu": "tham-vong",
+			"ten": "Chiếm lĩnh hàng lạnh ở Đông Nam Bộ",
+			"viSao": "Đối thủ lớn nhất vừa đóng kho lạnh ở Bình Dương.",
+			"krs": [
+				{
+					"ma": "q4-kd-nam-2-k1",
+					"ten": "Ký 8 đối tác hàng lạnh mới",
+					"kieu": "tang-toi",
+					"chu": "truong-bao-ngoc",
+					"khoi": 5,
+					"dich": 8,
+					"donVi": "đối tác",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-kd-nam-2-k2",
+					"ten": "Doanh thu hàng lạnh đạt 6 tỷ đồng",
+					"kieu": "tang-toi",
+					"chu": "huynh-gia-phuc",
+					"khoi": 3.6,
+					"dich": 6,
+					"donVi": "tỷ đồng",
+					"kichBan": "bo"
+				}
+			],
+			"donVi": "kd-nam",
+			"mangSangTu": "q3-kd-nam",
+			"canChinh": {
+				"mucTieu": "n1"
+			}
+		},
+		{
+			"ma": "q4-cham-soc-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "vu-thu-ha",
+			"kieu": "cam-ket",
+			"ten": "Đối tác chỉ kể vấn đề một lần",
+			"viSao": "Quý 3 cho thấy điểm hài lòng tụt khi đối tác phải kể lại vấn đề.",
+			"krs": [
+				{
+					"ma": "q4-cham-soc-1-k1",
+					"ten": "Giữ điểm hài lòng trên 4,5",
+					"kieu": "giu-tren",
+					"chu": "cao-thanh-van",
+					"khoi": 4.4,
+					"dich": 4.5,
+					"donVi": "điểm",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-cham-soc-1-k2",
+					"ten": "Ca chuyển người xử lý giảm từ 30 xuống 10%",
+					"kieu": "giam-xuong",
+					"chu": "lam-quynh-anh",
+					"khoi": 30,
+					"dich": 10,
+					"donVi": "%",
+					"kichBan": "cham",
+					"ghiChu": {
+						"3": "Thiếu một người trực ca tối"
+					}
+				},
+				{
+					"ma": "q4-cham-soc-1-k3",
+					"ten": "Gọi hẹn lại được với đối tác đạt 120 cuộc",
+					"kieu": "tang-toi",
+					"chu": "mai-duc-long",
+					"khoi": 0,
+					"dich": 120,
+					"donVi": "cuộc gọi",
+					"kichBan": "deu",
+					"nguon": {
+						"chiSo": "goi-hen-duoc",
+						"phamVi": {
+							"kieu": "phong-ban",
+							"ma": "cham-soc"
+						}
+					}
+				}
+			],
+			"donVi": "cham-soc",
+			"canChinh": {
+				"kr": "n1-k2"
+			}
+		},
+		{
+			"ma": "q4-cham-soc-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "vu-thu-ha",
+			"kieu": "tham-vong",
+			"ten": "Khiếu nại được xử lý trong ngày",
+			"viSao": "Khiếu nại qua đêm là nguồn giận dữ lớn nhất.",
+			"krs": [
+				{
+					"ma": "q4-cham-soc-2-k1",
+					"ten": "Giữ khiếu nại tồn qua đêm dưới 5",
+					"kieu": "giu-duoi",
+					"chu": "mai-duc-long",
+					"khoi": 12,
+					"dich": 5,
+					"donVi": "khiếu nại",
+					"kichBan": "bo"
+				},
+				{
+					"ma": "q4-cham-soc-2-k2",
+					"ten": "Ra quy trình xử lý khiếu nại trong ngày",
+					"kieu": "moc",
+					"chu": "vu-thu-ha",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "cham-soc",
+			"canChinh": {
+				"kr": "n2-k3"
+			}
+		},
+		{
+			"ma": "q4-marketing-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "trinh-hoai-nam",
+			"kieu": "tham-vong",
+			"ten": "Kênh tự đến thành nguồn khách thứ hai",
+			"viSao": "Bài viết theo tuyến mang về khách tốt nhất trong quý 3.",
+			"krs": [
+				{
+					"ma": "q4-marketing-1-k1",
+					"ten": "Khách tiềm năng từ web đạt 500",
+					"kieu": "tang-toi",
+					"chu": "ta-my-linh",
+					"khoi": 0,
+					"dich": 500,
+					"donVi": "khách",
+					"kichBan": "ghi-chu",
+					"ghiChu": {
+						"5": "Landing page tuyến Hà Nội – Hải Phòng convert tốt",
+						"6": "Traffic tăng nhưng lead quality chưa ổn, cần sync với team Sales"
+					}
+				},
+				{
+					"ma": "q4-marketing-1-k2",
+					"ten": "Tỷ lệ khách tiềm năng thành cuộc hẹn",
+					"kieu": "phan-tram",
+					"chu": "kieu-anh-tuan",
+					"khoi": 14,
+					"dich": 25,
+					"donVi": "%",
+					"kichBan": "cham"
+				},
+				{
+					"ma": "q4-marketing-1-k3",
+					"ten": "Thư chào gửi ra đạt 2.000",
+					"kieu": "tang-toi",
+					"chu": "luu-phuong-thao",
+					"khoi": 0,
+					"dich": 2000,
+					"donVi": "thư",
+					"kichBan": "deu",
+					"nguon": {
+						"chiSo": "email-gui-ra",
+						"phamVi": {
+							"kieu": "phong-ban",
+							"ma": "marketing"
+						}
+					}
+				}
+			],
+			"donVi": "marketing",
+			"canChinh": {
+				"mucTieu": "n1"
+			}
+		},
+		{
+			"ma": "q4-marketing-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "trinh-hoai-nam",
+			"kieu": "cam-ket",
+			"ten": "Ra mắt bộ nhận diện hàng lạnh",
+			"viSao": "Kinh doanh miền Nam cần tài liệu bán hàng riêng cho hàng lạnh.",
+			"krs": [
+				{
+					"ma": "q4-marketing-2-k1",
+					"ten": "Ra bộ tài liệu bán hàng hàng lạnh",
+					"kieu": "moc",
+					"chu": "luu-phuong-thao",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "vuot"
+				},
+				{
+					"ma": "q4-marketing-2-k2",
+					"ten": "Case study đối tác hàng lạnh đạt 4",
+					"kieu": "tang-toi",
+					"chu": "ta-my-linh",
+					"khoi": 0,
+					"dich": 4,
+					"donVi": "bài",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "marketing",
+			"canChinh": {
+				"kr": "n1-k3"
+			}
+		},
+		{
+			"ma": "q4-kho-van-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "dinh-cong-son",
+			"kieu": "cam-ket",
+			"ten": "Kho sẵn sàng gấp đôi sản lượng Tết",
+			"viSao": "Tết năm ngoái kho quá tải từ ngày 20 tháng Chạp.",
+			"krs": [
+				{
+					"ma": "q4-kho-van-1-k1",
+					"ten": "Giữ lệch tồn kho dưới 0,5%",
+					"kieu": "giu-duoi",
+					"chu": "ha-van-thanh",
+					"khoi": 0.6,
+					"dich": 0.5,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-kho-van-1-k2",
+					"ten": "Thời gian xuất kho giảm từ 36 xuống 25 phút",
+					"kieu": "giam-xuong",
+					"chu": "to-thi-hong",
+					"khoi": 36,
+					"dich": 25,
+					"donVi": "phút",
+					"kichBan": "tut",
+					"ghiChu": {
+						"6": "Máy quét mã vạch kho 2 hỏng, đang chờ thay"
+					}
+				},
+				{
+					"ma": "q4-kho-van-1-k3",
+					"ten": "Mở thêm 2.000 m² kho tạm",
+					"kieu": "moc",
+					"chu": "quach-minh-tri",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "kho-van",
+			"canChinh": {
+				"mucTieu": "n2"
+			}
+		},
+		{
+			"ma": "q4-kho-van-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "dinh-cong-son",
+			"kieu": "tham-vong",
+			"ten": "Xuất kho nhanh như đối thủ tốt nhất",
+			"viSao": "Đối thủ dẫn đầu xuất kho trong 20 phút; quý 3 mình còn 36.",
+			"krs": [
+				{
+					"ma": "q4-kho-van-2-k1",
+					"ten": "Giữ tỷ lệ đơn xuất kho trong 30 phút trên 80%",
+					"kieu": "giu-tren",
+					"chu": "la-hoang-phuc",
+					"khoi": 62,
+					"dich": 80,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-kho-van-2-k2",
+					"ten": "Đơn xuất sai hàng giảm từ 25 xuống 8 mỗi tháng",
+					"kieu": "giam-xuong",
+					"chu": "to-thi-hong",
+					"khoi": 25,
+					"dich": 8,
+					"donVi": "đơn",
+					"kichBan": "cham"
+				}
+			],
+			"donVi": "kho-van",
+			"canChinh": {
+				"kr": "n2-k1"
+			}
+		},
+		{
+			"ma": "q4-dieu-phoi-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "nghiem-thu-uyen",
+			"kieu": "cam-ket",
+			"ten": "Xe chạy đầy cả hai chiều",
+			"viSao": "Ghép chuyến chiều về đã chứng minh được ở tuyến Bắc – Nam.",
+			"krs": [
+				{
+					"ma": "q4-dieu-phoi-1-k1",
+					"ten": "Tỷ lệ lấp đầy xe tăng từ 74 lên 85%",
+					"kieu": "tang-toi",
+					"chu": "khuc-dinh-nam",
+					"khoi": 74,
+					"dich": 85,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-dieu-phoi-1-k2",
+					"ten": "Chuyến rỗng chiều về giảm từ 31 xuống 20%",
+					"kieu": "giam-xuong",
+					"chu": "au-gia-bao",
+					"khoi": 31,
+					"dich": 20,
+					"donVi": "%",
+					"kichBan": "cham"
+				},
+				{
+					"ma": "q4-dieu-phoi-1-k3",
+					"ten": "Bước điều phối xong đúng hạn đạt 150",
+					"kieu": "tang-toi",
+					"chu": "nghiem-thu-uyen",
+					"khoi": 0,
+					"dich": 150,
+					"donVi": "bước",
+					"kichBan": "deu",
+					"nguon": {
+						"chiSo": "buoc-xong-dung-han",
+						"phamVi": {
+							"kieu": "phong-ban",
+							"ma": "dieu-phoi"
+						}
+					}
+				}
+			],
+			"donVi": "dieu-phoi",
+			"canChinh": {
+				"kr": "n2-k2"
+			}
+		},
+		{
+			"ma": "q4-dieu-phoi-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "nghiem-thu-uyen",
+			"kieu": "tham-vong",
+			"ten": "Không chuyến nào trễ vì thiếu tài xế",
+			"viSao": "Tháng 9 có 14 chuyến trễ vì tài xế nghỉ đột xuất.",
+			"krs": [
+				{
+					"ma": "q4-dieu-phoi-2-k1",
+					"ten": "Giữ chuyến trễ vì thiếu tài xế dưới 3 mỗi tháng",
+					"kieu": "giu-duoi",
+					"chu": "khuc-dinh-nam",
+					"khoi": 14,
+					"dich": 3,
+					"donVi": "chuyến",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-dieu-phoi-2-k2",
+					"ten": "Lập đội tài xế dự phòng",
+					"kieu": "moc",
+					"chu": "au-gia-bao",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "cham"
+				}
+			],
+			"donVi": "dieu-phoi",
+			"canChinh": {
+				"kr": "n2-k1"
+			}
+		},
+		{
+			"ma": "q4-san-pham-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "pham-thu-trang",
+			"kieu": "tham-vong",
+			"ten": "Dữ liệu trạng thái đơn sạch trước khi ra ứng dụng",
+			"viSao": "Quý 3 học được: làm ứng dụng trước dữ liệu sạch là làm ngược.",
+			"krs": [
+				{
+					"ma": "q4-san-pham-1-k1",
+					"ten": "Tỷ lệ đơn có trạng thái đúng thời gian thực",
+					"kieu": "phan-tram",
+					"chu": "vo-duc-anh",
+					"khoi": 60,
+					"dich": 95,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-san-pham-1-k2",
+					"ten": "Ra bản thử ứng dụng cho 5 đối tác",
+					"kieu": "moc",
+					"chu": "bui-quang-huy",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "san-pham",
+			"canChinh": {
+				"kr": "n3-k2"
+			}
+		},
+		{
+			"ma": "q4-san-pham-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "pham-thu-trang",
+			"kieu": "tham-vong",
+			"ten": "Đối tác tự theo dõi đơn không cần gọi điện",
+			"viSao": "Một phần ba cuộc gọi đến là hỏi đơn đang ở đâu.",
+			"krs": [
+				{
+					"ma": "q4-san-pham-2-k1",
+					"ten": "Ra bản thử ứng dụng theo dõi đơn",
+					"kieu": "moc",
+					"chu": "vo-duc-anh",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "tut"
+				},
+				{
+					"ma": "q4-san-pham-2-k2",
+					"ten": "Cuộc gọi hỏi đơn giảm từ 1.200 xuống 600 mỗi tháng",
+					"kieu": "giam-xuong",
+					"chu": "dang-ngoc-mai",
+					"khoi": 1000,
+					"dich": 600,
+					"donVi": "cuộc",
+					"kichBan": "cham"
+				}
+			],
+			"donVi": "san-pham",
+			"mangSangTu": "q3-san-pham",
+			"canChinh": {
+				"mucTieu": "n3"
+			}
+		},
+		{
+			"ma": "q4-tai-chinh-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "thai-minh-chau",
+			"kieu": "cam-ket",
+			"ten": "Dòng tiền đủ cho mùa Tết",
+			"viSao": "Tháng Chạp phải ứng lương, thưởng và tiền thuê kho tạm cùng lúc.",
+			"krs": [
+				{
+					"ma": "q4-tai-chinh-1-k1",
+					"ten": "Công nợ quá hạn giảm từ 12 xuống 8%",
+					"kieu": "giam-xuong",
+					"chu": "giang-hai-yen",
+					"khoi": 12,
+					"dich": 8,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-tai-chinh-1-k2",
+					"ten": "Giữ số ngày chốt sổ tháng dưới 5",
+					"kieu": "giu-duoi",
+					"chu": "thai-minh-chau",
+					"khoi": 6,
+					"dich": 5,
+					"donVi": "ngày",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "tai-chinh",
+			"canChinh": {
+				"mucTieu": "n2"
+			}
+		},
+		{
+			"ma": "q4-tai-chinh-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "thai-minh-chau",
+			"kieu": "tham-vong",
+			"ten": "Báo cáo lãi lỗ theo tuyến mỗi tuần",
+			"viSao": "Chưa biết tuyến nào lỗ cho tới cuối quý.",
+			"krs": [
+				{
+					"ma": "q4-tai-chinh-2-k1",
+					"ten": "Tuyến có báo cáo lãi lỗ hằng tuần",
+					"kieu": "phan-tram",
+					"chu": "giang-hai-yen",
+					"khoi": 0,
+					"dich": 100,
+					"donVi": "%",
+					"kichBan": "cham"
+				},
+				{
+					"ma": "q4-tai-chinh-2-k2",
+					"ten": "Ra mẫu báo cáo lãi lỗ theo tuyến",
+					"kieu": "moc",
+					"chu": "doan-thi-thu",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "tai-chinh",
+			"canChinh": {
+				"kr": "n2-k2"
+			}
+		},
+		{
+			"ma": "q4-nhan-su-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "tong-bich-ngoc",
+			"kieu": "cam-ket",
+			"ten": "Đủ người cho mùa cao điểm",
+			"viSao": "Thiếu người kho là nguyên nhân trễ đơn Tết năm ngoái.",
+			"krs": [
+				{
+					"ma": "q4-nhan-su-1-k1",
+					"ten": "Tuyển đủ 25 người thời vụ",
+					"kieu": "tang-toi",
+					"chu": "vuong-duc-tai",
+					"khoi": 0,
+					"dich": 25,
+					"donVi": "người",
+					"kichBan": "tut",
+					"ghiChu": {
+						"6": "Ứng viên rút vì bên khác trả cao hơn 10%"
+					}
+				},
+				{
+					"ma": "q4-nhan-su-1-k2",
+					"ten": "Người mới tự nhận ca trong 10 ngày",
+					"kieu": "giu-duoi",
+					"chu": "ninh-thao-vy",
+					"khoi": 15,
+					"dich": 10,
+					"donVi": "ngày",
+					"kichBan": "bo"
+				}
+			],
+			"donVi": "nhan-su",
+			"canChinh": {
+				"kr": "n3-k1"
+			}
+		},
+		{
+			"ma": "q4-nhan-su-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "tong-bich-ngoc",
+			"kieu": "tham-vong",
+			"ten": "Mỗi người mới có một người kèm",
+			"viSao": "Quý 3 cho thấy người mới học nhanh nhất khi có người kèm.",
+			"krs": [
+				{
+					"ma": "q4-nhan-su-2-k1",
+					"ten": "Người mới có người kèm",
+					"kieu": "phan-tram",
+					"chu": "ninh-thao-vy",
+					"khoi": 40,
+					"dich": 100,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
+					"ma": "q4-nhan-su-2-k2",
+					"ten": "Giữ tỷ lệ nghỉ việc trong 60 ngày đầu dưới 10%",
+					"kieu": "giu-duoi",
+					"chu": "vuong-duc-tai",
+					"khoi": 18,
+					"dich": 10,
+					"donVi": "%",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "nhan-su",
+			"canChinh": {
+				"kr": "n3-k3"
+			}
+		},
+		{
+			"ma": "q4-phap-che-1",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "an-khanh-linh",
+			"kieu": "cam-ket",
+			"ten": "Hợp đồng mùa Tết không kẹt ở pháp chế",
+			"viSao": "Quý 4 dồn gần gấp đôi số hợp đồng cần duyệt.",
+			"krs": [
+				{
+					"ma": "q4-phap-che-1-k1",
+					"ten": "Giữ thời gian duyệt hợp đồng dưới 2 ngày",
+					"kieu": "giu-duoi",
+					"chu": "an-khanh-linh",
+					"khoi": 2.5,
+					"dich": 2,
+					"donVi": "ngày",
+					"kichBan": "chua-gui"
+				},
+				{
+					"ma": "q4-phap-che-1-k2",
+					"ten": "Tỷ lệ hợp đồng dùng mẫu chuẩn",
+					"kieu": "phan-tram",
+					"chu": "an-khanh-linh",
+					"khoi": 30,
+					"dich": 80,
+					"donVi": "%",
+					"kichBan": "chua-gui"
+				}
+			],
+			"donVi": "phap-che",
+			"canChinh": {
+				"mucTieu": "n1"
+			}
+		},
+		{
+			"ma": "q4-phap-che-2",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "an-khanh-linh",
+			"kieu": "tham-vong",
+			"ten": "Kinh doanh tự trả lời được câu hỏi pháp lý thường gặp",
+			"viSao": "Nửa số câu hỏi gửi pháp chế lặp lại.",
+			"krs": [
+				{
+					"ma": "q4-phap-che-2-k1",
+					"ten": "Ra bộ câu hỏi thường gặp cho kinh doanh",
+					"kieu": "moc",
+					"chu": "an-khanh-linh",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "chua-gui"
+				},
+				{
+					"ma": "q4-phap-che-2-k2",
+					"ten": "Câu hỏi lặp lại gửi pháp chế giảm từ 40 xuống 15 mỗi tháng",
+					"kieu": "giam-xuong",
+					"chu": "lu-quoc-viet",
+					"khoi": 40,
+					"dich": 15,
+					"donVi": "câu hỏi",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "phap-che",
+			"canChinh": {
+				"mucTieu": "n1"
+			}
+		},
+		{
+			"ma": "q4-marketing-nhap",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "trinh-hoai-nam",
+			"kieu": "cam-ket",
+			"ten": "Thử kênh video ngắn",
+			"viSao": "Đang cân nhắc, chưa công bố.",
+			"krs": [
+				{
+					"ma": "q4-marketing-nhap-k1",
+					"ten": "Video ngắn đăng đạt 20",
+					"kieu": "tang-toi",
+					"chu": "kieu-anh-tuan",
+					"khoi": 0,
+					"dich": 20,
+					"donVi": "video",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "marketing",
+			"trangThai": "nhap"
+		},
+		{
+			"ma": "q4-kho-van-bo",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"chu": "dinh-cong-son",
+			"kieu": "cam-ket",
+			"ten": "Thuê kho thứ tư ở Long An",
+			"viSao": "Đã bỏ: chủ kho rút lại báo giá.",
+			"krs": [
+				{
+					"ma": "q4-kho-van-bo-k1",
+					"ten": "Ký thuê kho Long An",
+					"kieu": "moc",
+					"chu": "dinh-cong-son",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"kichBan": "deu"
+				}
+			],
+			"donVi": "kho-van",
+			"trangThai": "da-bo"
+		}
+	]
+}

@@ -24,6 +24,64 @@ run needs `db:migrate` only for the seed that follows it. When the database and
 they do not match — reconcile with `db:migrate`, or `db:reset` when the divergence
 is an edited migration that has already been applied.
 
+## Bộ OKR mẫu
+
+Một công ty giả — «Hải Đăng Logistics», 40 người, ba bộ phận, mười phòng ban — đang
+chạy OKR ở tuần 6 của quý: OKR năm cấp OneHub, OKR quý 4 mọi phòng ban (đủ sáu kiểu
+KR, bảy KR lấy số từ CRM), sáu tuần Cập nhật tuần có KR tụt, KR im và một người chưa
+gửi tuần này, một quý 3 đã khép (điểm, điều học được, ba mục tiêu mang sang). Mọi lượt
+OKR dựng và đo trên bộ này, để số của hai lượt so được với nhau.
+
+```sh
+bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
+bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó
+bun run okr:mau --xoa                # gỡ bộ mẫu, không đụng gì khác
+bun run okr:mau --tep <tệp.json>     # nạp một bản công ty khác cùng khuôn
+```
+
+Dữ liệu viết tay ở `apps/api/scripts/okr-mau/cong-ty.json`, đọc qua khuôn của chính
+sản phẩm (luật số theo kiểu KR, trần mục tiêu, nguồn CRM) trước khi ghi. Không `--moc`
+thì tuần 6 là tuần chứa hôm nay theo giờ Việt Nam: «đáng bàn» của họp tuần tính theo
+hôm nay, nên bộ ghim lịch cố định sẽ hết KR đáng bàn sau một tuần. Mọi hàng của bộ
+mẫu có mã bắt đầu `mau-okr-`; người mẫu có thư đuôi `@mau.onehub.test`.
+
+Lệnh từ chối và trả mã riêng cho từng ca:
+
+- **mã thoát 2** — `DATABASE_URL` không trỏ máy cục bộ (`localhost`, `127.0.0.1`,
+  `::1`, hoặc ổ cắm unix) — kể cả máy chủ nêu trong tham số `host` hay `hostaddr` của
+  chuỗi kết nối, vì driver Postgres dùng chúng thay cho tên máy — hoặc `NODE_ENV=production`, hoặc `VERCEL_ENV` là `production` hay
+  `preview`. Chặn trước khi mở kết nối, và **không có cờ vượt** — `ALLOW_REMOTE_DB`
+  không có tác dụng ở đây. `VERCEL_ENV=development` do `vercel env pull` ghi không bị
+  chặn; máy chủ cục bộ mới là điều kiện.
+- **mã thoát 3** — kho đã có chu kỳ, mục tiêu hay KR không thuộc bộ mẫu. Bộ mẫu không
+  trộn vào OKR thật; dùng một kho đo riêng.
+- **mã thoát 4** — tham số sai (`--moc` không phải ngày), tệp công ty sai khuôn (lệnh
+  nêu đúng trường hỏng), hoặc kho chưa có workspace — workspace sinh ở lần đăng nhập
+  đầu, `db:seed` không tạo nó.
+- **mã thoát 5** — `--xoa` hay nạp lại gặp dữ liệu ngoài bộ mẫu đang trỏ vào người hay
+  đơn vị mẫu (vd một thoả thuận giao cho người mẫu). Không hàng nào đổi; gỡ liên kết
+  đó rồi chạy lại.
+
+Xoá đi theo quan hệ: lần cập nhật, phiên, vết và phiên đăng nhập mà sản phẩm ghi lên
+người, KR hay chu kỳ mẫu sau khi nạp cũng đi theo.
+
+**Đăng nhập làm người mẫu:** `cd apps/api && bun run dev:session nguyen-thi-lan@mau.onehub.test`
+(trưởng Kinh doanh miền Bắc), `le-hai-dang@…` (quản trị), `an-khanh-linh@…` (trưởng
+Pháp chế, vai «chỉ OKR», chưa gửi Cập nhật tuần này).
+
+**Trong phiên đo:** kho mẫu của phiên đo (`crm_<cây>__mau_do`) không có bộ mẫu — các
+thước đã ký cần kho không có chu kỳ. Lượt nào cần thì nạp trong tiền đề của nó:
+`bun run do:man --chay "bun run okr:mau && <lệnh đo>"`.
+
+**Bản xem trước không có bộ mẫu:** preview dùng chung cơ sở dữ liệu và api với
+production (mục dưới), nên nạp vào đó là nạp vào production. Bản xem trước có bộ mẫu
+khi nó có cơ sở dữ liệu và api riêng.
+
+**Ca góp ý của Trợ lý OKR:** 30 ca mẫu ở `apps/agent/evals/okr/ca-gop-y/mau/`, mỗi tệp
+một ca, khuôn `@crm/validation/okr-ca-gop-y`. Ca thật của N1 — OKR thật đã thay tên —
+đặt ở `apps/agent/evals/okr/ca-gop-y/that/`, thư mục bị git bỏ qua; eval đọc cả hai
+bằng `docBoCaGopY(<thư mục>)`, nên đổi mẫu sang thật chỉ là đổi thư mục.
+
 ## Google Cloud
 
 - **Enable the Gmail API and the Google Calendar API** on the project.
