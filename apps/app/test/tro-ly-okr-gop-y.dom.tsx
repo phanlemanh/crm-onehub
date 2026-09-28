@@ -1115,4 +1115,21 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 			chu(dongCua(D_TEN.id)?.querySelector('[role="alert"]') ?? null),
 		).toBe("Chưa sẵn sàng — Đã chạm trần ngày");
 	});
+
+	test.todo("trang-thai o-dang-sua-khi-sua: o co sua chua luu thi Nhan ban da sua cung khoa, co ly do (cho commit packages/ui)", async () => {
+		await moCotCoDong();
+		await go(oTenMucTieu(), `${MT.title} (bản nháp)`);
+		const ten = dongCua(D_TEN.id);
+		if (!ten) throw new Error("khong thay dong ten");
+		await bam(nut("Sửa", ten));
+		const nhanSua = nut("Nhận bản đã sửa", ten);
+		expect(nhanSua.disabled).toBe(true);
+		expect(
+			chu(
+				document.getElementById(nhanSua.getAttribute("aria-describedby") ?? ""),
+			),
+		).toBe("Lưu hoặc hoàn lại ô này trước");
+		await bam(nhanSua);
+		expect(goiCua("okr.troLyQuyet")).toHaveLength(0);
+	});
 });
