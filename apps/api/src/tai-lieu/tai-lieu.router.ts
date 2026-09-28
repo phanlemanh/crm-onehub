@@ -18,6 +18,7 @@ import {
 	taiLieuApproveOutput,
 	taiLieuCreateInput,
 	taiLieuCreateOutput,
+	taiLieuDangDungOutput,
 	taiLieuGetOutput,
 	taiLieuIdInput,
 	taiLieuListInput,
@@ -55,6 +56,14 @@ export class TaiLieuRouter {
 		@Input() input: z.infer<typeof taiLieuListInput>,
 	) {
 		return this.taiLieu.list(nguoiGoi(ctx), input);
+	}
+
+	@Query({
+		output: taiLieuDangDungOutput,
+		meta: restMeta("GET", "/tai-lieu/dang-dung", TAG),
+	})
+	dangDung(@Ctx() ctx: AuthedTrpcContext) {
+		return this.taiLieu.dangDung(nguoiGoi(ctx));
 	}
 
 	@Query({

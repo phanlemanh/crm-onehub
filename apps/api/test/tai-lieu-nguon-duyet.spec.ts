@@ -9,6 +9,7 @@ import {
 	dungSan,
 	goi,
 	hashCua,
+	hoi,
 	type Json,
 	ma,
 	ok,
@@ -23,6 +24,8 @@ dungSan(gia);
 const T = TAI_LIEU_API.thongDiep;
 const NOI_DUNG =
 	"## Hoa hồng\n\nTừ ngày 01/10/2026, tầng hai hưởng 1,5% và tầng ba hưởng 1,8%.";
+const CHU_NGUON =
+	"Quyết định số 12. Kể từ ngày 01/10/2026, mức hoa hồng tầng 2 là 1,5% và tầng 3 là 1,8%.";
 const TRICH = [
 	{ menhDe: "Áp dụng từ 01/10/2026", trich: "Kể từ ngày 01/10/2026" },
 	{ menhDe: "Tầng 2 hưởng 1,5%", trich: "tầng 2 là 1,5%" },
@@ -53,6 +56,7 @@ async function banMay(): Promise<{
 			taiBoiId: phien.tao.nguoi,
 			trangId,
 			trangThai: "DA_SOAN",
+			chu: CHU_NGUON,
 		},
 		select: { id: true },
 	});
@@ -95,7 +99,70 @@ async function nguonCuaBanDangDung(slug: string): Promise<string | null> {
 	return trang.banDangDung?.deXuat.nguonId ?? null;
 }
 
+type BanDuyet = {
+	noiDung: string;
+	nguon: { id: string; tenTep: string } | null;
+	trichDoan: { menhDe: string; trich: string }[];
+	chuNguon: string | null;
+	soMoi: string[];
+};
+
+function phanNguon(b: BanDuyet) {
+	return {
+		nguon: b.nguon,
+		trichDoan: b.trichDoan,
+		chuNguon: b.chuNguon,
+		soMoi: b.soMoi,
+	};
+}
+
 describe("duyet-ban-may", () => {
+	test("duyet-ban-may: man duyet nhan nguon, trich doan, chu nguon va so moi do may chu tinh", async () => {
+		const { deXuatId, nguonId, slug } = await banMay();
+		const mong = {
+			nguon: { id: nguonId, tenTep: "quyet-dinh.docx" },
+			trichDoan: TRICH,
+			chuNguon: CHU_NGUON,
+			soMoi: ["01/10/2026", "1,5%", "1,8%"],
+		};
+		for (const ai of ["chu", "tao", "admin"] as const) {
+			const ban = ok<BanDuyet>(
+				await hoi("taiLieu.proposal", { id: deXuatId }, ai),
+				`doc ban may ${ai}`,
+			);
+			expect(phanNguon(ban)).toEqual(mong);
+		}
+		for (const ai of ["khac", "okr"] as const) {
+			const tra = await hoi("taiLieu.proposal", { id: deXuatId }, ai);
+			expect(`${ai} ${tra.status}`).toBe(`${ai} 404`);
+		}
+		const truocDuyet = ok<{ nguon: unknown }>(
+			await hoi("taiLieu.get", { slug }, "chu"),
+			"get truoc duyet",
+		);
+		expect(truocDuyet.nguon).toBeNull();
+		ok(await duyetBan(deXuatId, "chu", 3), "duyet");
+		const sauDuyet = ok<{ nguon: unknown }>(
+			await hoi("taiLieu.get", { slug }, "khac"),
+			"get sau duyet",
+		);
+		expect(sauDuyet.nguon).toEqual(mong.nguon);
+	});
+
+	test("duyet-ban-may: doi chung, ban nguoi viet khong co phan nguon", async () => {
+		const { deXuatId } = await taoTrang(ma("Viet tay doc"), NOI_DUNG);
+		const ban = ok<BanDuyet>(
+			await hoi("taiLieu.proposal", { id: deXuatId }, "chu"),
+			"doc ban nguoi viet",
+		);
+		expect(phanNguon(ban)).toEqual({
+			nguon: null,
+			trichDoan: [],
+			chuNguon: null,
+			soMoi: [],
+		});
+	});
+
 	test("duyet-ban-may: chu trang, owner, admin duyet duoc; nguoi tai, khac, okr thi khong", async () => {
 		for (const ai of ["chu", "owner", "admin"] as const) {
 			const { deXuatId, nguonId, slug } = await banMay();
@@ -132,12 +199,17 @@ describe("duyet-ban-may", () => {
 		const { deXuatId, nguonId, slug } = await banMay();
 		const truocTaiVe = await goi("taiLieuNguon.taiVe", { id: nguonId }, "khac");
 		expect(truocTaiVe.status).toBe(404);
+		const manSua = ok<BanDuyet>(
+			await hoi("taiLieu.proposal", { id: deXuatId }, "chu"),
+			"loader man sua",
+		);
+		expect(manSua.nguon?.id).toBe(nguonId);
 		const sua = ok<{ deXuatId: string }>(
 			await goi(
 				"taiLieu.propose",
 				{
 					slug,
-					noiDung: NOI_DUNG.replace("hưởng 1,5%", "được hưởng 1,5%"),
+					noiDung: manSua.noiDung.replace("hưởng 1,5%", "được hưởng 1,5%"),
 					tuDeXuatId: deXuatId,
 				},
 				"chu",

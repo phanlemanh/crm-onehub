@@ -10,6 +10,7 @@ export const TAI_LIEU_API = {
 		ma: 120,
 	},
 	deXuat: { coTrang: TAI_LIEU.danhSach.coTrang },
+	dangDung: { toiDa: 500 },
 	khoaSlug: "tai-lieu-slug",
 	suKienCu: "ban-goc-da-doi",
 	thongDiep: {

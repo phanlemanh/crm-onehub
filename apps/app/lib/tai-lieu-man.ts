@@ -1,7 +1,10 @@
 import { dateFormat } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
-export const TAB_TAI_LIEU = ["trang", "cho-duyet"] as const;
+const GIAY_MS = 1000;
+
+export const TAB_TAI_LIEU = ["trang", "cho-duyet", "nguon"] as const;
 export type TabTaiLieu = (typeof TAB_TAI_LIEU)[number];
 
 export const TAI_LIEU_MAN = {
@@ -9,6 +12,15 @@ export const TAI_LIEU_MAN = {
 	goc: "/tai-lieu",
 	khongDonVi: "khong-don-vi",
 	dangTai: { soDong: 6 },
+	nguon: {
+		chapNhan: ".docx,.pdf",
+		kieuNoiDung: {
+			docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			pdf: "application/pdf",
+		},
+		neo: "nguon-",
+		lamMoiMs: 5 * GIAY_MS,
+	},
 } as const;
 
 export function duongDanhSach(): string {
@@ -25,6 +37,24 @@ export function duongTrang(slug: string): string {
 
 export function duongSuaTrang(slug: string): string {
 	return `${duongTrang(slug)}/sua`;
+}
+
+export function duongSuaTuDeXuat(slug: string, deXuatId: string): string {
+	const q = new URLSearchParams({ [SEARCH_PARAM.taiLieu.tuDeXuat]: deXuatId });
+	return `${duongSuaTrang(slug)}?${q.toString()}`;
+}
+
+export function duongTabNguon(): string {
+	const q = new URLSearchParams({ [SEARCH_PARAM.taiLieu.tab]: "nguon" });
+	return `${TAI_LIEU_MAN.goc}?${q.toString()}`;
+}
+
+export function neoNguon(id: string): string {
+	return `${TAI_LIEU_MAN.nguon.neo}${id}`;
+}
+
+export function duongNguon(id: string): string {
+	return `${duongTabNguon()}#${encodeURIComponent(neoNguon(id))}`;
 }
 
 export function duongDeXuat(id: string): string {

@@ -6,9 +6,11 @@ import { PageShell, PageShellLoading } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { requireSession } from "@/lib/session";
+import { doanTrongNguon, dongSoMay } from "@/lib/tai-lieu-ban-may";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../../(agent-builder)/missing-record";
+import type { BanMay } from "./ban-may";
 import { ManDuyet } from "./man-duyet";
 
 type Params = Promise<{ slug: string; id: string }>;
@@ -40,6 +42,18 @@ async function NoiDung({ params }: { params: Params }) {
 	if (!dx) notFound();
 
 	const khoi = soSanh(dx.banGoc, dx.noiDung);
+	const chuNguon = dx.chuNguon ?? "";
+	const may: BanMay | undefined = dx.nguon
+		? {
+				tenTep: dx.nguon.tenTep,
+				chuNguon,
+				doanTrich: dx.trichDoan.map((t) => doanTrongNguon(chuNguon, t.trich)),
+				dong: dongSoMay(dx.soMoi, dx.trichDoan).map((d) => ({
+					so: d.so,
+					trich: d.trich === null ? null : doanTrongNguon(chuNguon, d.trich),
+				})),
+			}
+		: undefined;
 
 	return (
 		<HydrateClient>
@@ -56,6 +70,7 @@ async function NoiDung({ params }: { params: Params }) {
 					duyetDuoc: dx.duyetDuoc,
 					khoi,
 					dai: suKienDoi(khoi),
+					may,
 				}}
 				key={`${dx.id}-${dx.trangThai}-${dx.cu}`}
 			/>

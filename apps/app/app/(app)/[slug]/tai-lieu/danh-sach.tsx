@@ -52,7 +52,9 @@ import {
 } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { BangNguon } from "./bang-nguon";
 import { DangTaiDanhSach } from "./dang-tai";
+import { type LuaChonTai, NutTaiNguon } from "./hop-tai-nguon";
 
 const TAT_CA = "tat-ca";
 
@@ -71,7 +73,12 @@ function laLoai(v: string): v is LoaiTrang {
 	return LOAI_TRANG.some((l) => l === v);
 }
 
-export function DanhSach({ tab, loai, page }: Loc) {
+export function DanhSach({
+	tab,
+	loai,
+	page,
+	luaChon,
+}: Loc & { luaChon: LuaChonTai }) {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
 	const trpc = useTRPC();
@@ -89,6 +96,7 @@ export function DanhSach({ tab, loai, page }: Loc) {
 					<PageShellDescription>{m.moTa}</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
+					<NutTaiNguon luaChon={luaChon} />
 					<Button asChild>
 						<Link href={url(duongTrangMoi())}>
 							<Icon icon={Add} />
@@ -121,11 +129,22 @@ export function DanhSach({ tab, loai, page }: Loc) {
 							) : null}
 						</Link>
 					</TabsTrigger>
+					<TabsTrigger asChild value="nguon">
+						<Link
+							aria-current={tab === "nguon" ? "page" : undefined}
+							data-tab-nguon=""
+							href={toi({ tab: "nguon", loai: null, page: 1 })}
+						>
+							{m.tab.nguon}
+						</Link>
+					</TabsTrigger>
 				</TabsList>
 			</Tabs>
 			<PageShellContent>
 				{tab === "cho-duyet" ? (
 					<ChoDuyet />
+				) : tab === "nguon" ? (
+					<BangNguon />
 				) : (
 					<DanhSachTrang loai={loai} page={page} toi={toi} />
 				)}

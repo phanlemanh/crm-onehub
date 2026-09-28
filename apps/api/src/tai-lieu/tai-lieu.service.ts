@@ -17,7 +17,10 @@ import {
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
 import { soMoi } from "@crm/validation/tai-lieu-so";
-import { danhSachTrichDoan } from "@crm/validation/tai-lieu-trich-doan";
+import {
+	danhSachTrichDoan,
+	parseTrichDoan,
+} from "@crm/validation/tai-lieu-trich-doan";
 import {
 	BadRequestException,
 	ConflictException,
@@ -38,6 +41,7 @@ import {
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
+	TaiLieuDangDungOutput,
 	TaiLieuGetOutput,
 	TaiLieuListInput,
 	TaiLieuListOutput,
@@ -68,6 +72,7 @@ export type TrangMoiSach = {
 
 const NGUOI = { select: { id: true, name: true } } as const;
 const DON_VI = { select: { id: true, name: true } } as const;
+const NGUON_NGAN = { select: { id: true, tenTep: true } } as const;
 
 export function kiemTen(ten: string): string {
 	const sach = chuanNfc(ten).trim();
@@ -143,6 +148,16 @@ export class TaiLieuService {
 		return { trangThai: "CHO_DUYET", ...dieuKienThayDeXuat(nguoi) };
 	}
 
+	async dangDung(nguoi: NguoiGoi): Promise<TaiLieuDangDungOutput> {
+		const rows = await this.db.taiLieuTrang.findMany({
+			where: { AND: [dieuKienThay(nguoi), { banDangDungId: { not: null } }] },
+			orderBy: [{ ten: "asc" }, { id: "asc" }],
+			take: TAI_LIEU_API.dangDung.toiDa,
+			select: { slug: true, ten: true },
+		});
+		return { rows };
+	}
+
 	async list(
 		nguoi: NguoiGoi,
 		input: TaiLieuListInput,
@@ -210,7 +225,12 @@ export class TaiLieuService {
 				chuTrang: NGUOI,
 				department: DON_VI,
 				banDangDung: {
-					select: { so: true, duyetLuc: true, noiDung: true },
+					select: {
+						so: true,
+						duyetLuc: true,
+						noiDung: true,
+						deXuat: { select: { nguon: NGUON_NGAN } },
+					},
 				},
 				deXuat: { distinct: ["taoBoiId"], select: { taoBoiId: true } },
 				_count: { select: { deXuat: { where: this.coBanCho(nguoi) } } },
@@ -231,6 +251,7 @@ export class TaiLieuService {
 			coBanCho: t._count.deXuat > 0,
 			choLanDau: ban ? null : { chuTrang: t.chuTrang },
 			suaDuoc: true,
+			nguon: ban?.deXuat.nguon ?? null,
 		};
 	}
 
@@ -423,10 +444,13 @@ export class TaiLieuService {
 				trang: {
 					select: { slug: true, chuTrangId: true, banDangDungId: true },
 				},
+				trichDoan: true,
+				nguon: { select: { id: true, tenTep: true, chu: true } },
 			},
 		});
 		if (!dx || !thayDeXuat(nguoi, dx, dx.trang)) throw khongCo();
 		const banGoc = dx.banGoc?.noiDung ?? "";
+		const nguon = dx.nguon;
 		return {
 			id: dx.id,
 			slug: dx.trang.slug,
@@ -440,6 +464,10 @@ export class TaiLieuService {
 			diffHash: await diffHash(soSanh(banGoc, dx.noiDung)),
 			cu: laCu(dx.trangThai, dx.banGocId, dx.trang.banDangDungId),
 			duyetDuoc: duyetDuoc(nguoi, dx.trang),
+			nguon: nguon ? { id: nguon.id, tenTep: nguon.tenTep } : null,
+			trichDoan: nguon ? parseTrichDoan(dx.trichDoan) : [],
+			chuNguon: nguon?.chu ?? null,
+			soMoi: nguon ? soMoi(dx.noiDung, dx.banGoc?.noiDung ?? null) : [],
 		};
 	}
 

@@ -68,7 +68,7 @@ export function chiaDoanTrich(chu: string, doanTrich: string[]): DoanNguon[] {
 	return ra;
 }
 
-function ChuNguon({
+export function ChuNguon({
 	chuNguon,
 	doanTrich,
 }: Pick<NguonCanhNhauProps, "chuNguon" | "doanTrich">) {
