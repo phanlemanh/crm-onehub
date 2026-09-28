@@ -1,17 +1,20 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
 	chup_luc: "2026-09-28T15:30:00+07:00",
-	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8, cộng hồ sơ _acceptance/may-soan-de-xuat trên nhánh feat/may-soan-de-xuat",
+	nguon:
+		"docs/plan/lo-trinh-kho-tai-lieu.md mục 8, cộng hồ sơ _acceptance/may-soan-de-xuat trên nhánh feat/may-soan-de-xuat",
 	moc: [
 		{
 			ten: "Kho cho người",
-			nghia: "Nhân viên viết trang, chủ trang duyệt, cả công ty đọc bản đang dùng",
+			nghia:
+				"Nhân viên viết trang, chủ trang duyệt, cả công ty đọc bản đang dùng",
 			de_xuat: "2026-10-01",
 			that: "2026-09-28",
 			hang_muc: "l1",
 		},
 		{
 			ten: "Nội dung vào nhanh",
-			nghia: "Phòng ban tải tệp đang có lên, máy soạn thành trang, chủ trang duyệt",
+			nghia:
+				"Phòng ban tải tệp đang có lên, máy soạn thành trang, chủ trang duyệt",
 			de_xuat: "2026-10-06",
 			that: "",
 			hang_muc: "l2",
@@ -59,7 +62,8 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			cau_giao: "Nghiên cứu nền, bản mẫu bấm được, trình đọc markdown",
 			buoc_ke: "",
 			chan_boi: [],
-			ghi_chu: "18 luồng nghiên cứu, 546 nguồn; bản mẫu /proto/kho-tai-lieu 15 trạng thái; chốt duyệt mọi thay đổi.",
+			ghi_chu:
+				"18 luồng nghiên cứu, 546 nguồn; bản mẫu /proto/kho-tai-lieu 15 trạng thái; chốt duyệt mọi thay đổi.",
 		},
 		{
 			id: "l1",
@@ -70,10 +74,12 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "đã lên onehub",
 			ngay: "2026-09-28",
 			pr: [180, 181],
-			cau_giao: "«Tôi viết được một trang, gửi chủ trang duyệt, cả công ty đọc được bản đang dùng»",
+			cau_giao:
+				"«Tôi viết được một trang, gửi chủ trang duyệt, cả công ty đọc được bản đang dùng»",
 			buoc_ke: "Cổng Giá trị đóng ở đợt chạy thật",
 			chan_boi: [],
-			ghi_chu: "Merge c1e37b73 ngày 28/09, sớm ba ngày so với đề xuất. 17 hạn chế đã biết; hai mục người dùng gặp trước (dấu | trong ô bảng mất dữ liệu, danh sách đề xuất trần 25 dòng) vào đầu lượt 3. migration dời thành 20261001010000_kho_tai_lieu.",
+			ghi_chu:
+				"Merge c1e37b73 ngày 28/09, sớm ba ngày so với đề xuất. 17 hạn chế đã biết; hai mục người dùng gặp trước (dấu | trong ô bảng mất dữ liệu, danh sách đề xuất trần 25 dòng) vào đầu lượt 3. migration dời thành 20261001010000_kho_tai_lieu.",
 		},
 		{
 			id: "l2",
@@ -84,11 +90,14 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "Cổng Bằng chứng",
 			ngay: "2026-09-28",
 			pr: [],
-			cau_giao: "«Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt»",
-			buoc_ke: "Anh ký Cổng Bằng chứng; phiên lượt 2 gộp onehub, ghim lại, mở PR",
+			cau_giao:
+				"«Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt»",
+			buoc_ke:
+				"Anh ký Cổng Bằng chứng; phiên lượt 2 gộp onehub, ghim lại, mở PR",
 			cho_anh: true,
 			chan_boi: [],
-			ghi_chu: "Vòng chấm BLOCKED ở một phép đo: E2t (AC-12) thiếu BLOB_READ_WRITE_TOKEN thật, không phải lỗi mã. 29/30 phép đo máy đạt. E15j (ba bản soạn từ văn bản Vinhomes): hai giám khảo đạt, một chưa chắc vì ảnh bước 2 chụp lúc đã cuộn. migration 20261003010000_may_soan_de_xuat. Nhánh thiếu 44 commit so với onehub.",
+			ghi_chu:
+				"Vòng chấm BLOCKED ở một phép đo: E2t (AC-12) thiếu BLOB_READ_WRITE_TOKEN thật, không phải lỗi mã. 29/30 phép đo máy đạt. E15j (ba bản soạn từ văn bản Vinhomes): hai giám khảo đạt, một chưa chắc vì ảnh bước 2 chụp lúc đã cuộn. migration 20261003010000_may_soan_de_xuat. Nhánh thiếu 44 commit so với onehub.",
 		},
 		{
 			id: "l3",
@@ -99,10 +108,12 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "chưa mở",
 			ngay: "",
 			pr: [],
-			cau_giao: "«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
+			cau_giao:
+				"«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
 			buoc_ke: "Mở được ngay: điều kiện «lượt 1 đã lên» đã đủ",
 			chan_boi: [],
-			ghi_chu: "Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ.",
+			ghi_chu:
+				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ.",
 		},
 		{
 			id: "l4",
@@ -113,10 +124,12 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "chưa mở",
 			ngay: "",
 			pr: [],
-			cau_giao: "«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
+			cau_giao:
+				"«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
 			buoc_ke: "Chờ lượt 3 lên và 50 câu hỏi thật",
 			chan_boi: ["l3", "cb"],
-			ghi_chu: "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2.",
+			ghi_chu:
+				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2.",
 		},
 		{
 			id: "ct",
@@ -127,10 +140,12 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "chưa mở",
 			ngay: "",
 			pr: [],
-			cau_giao: "Mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ",
+			cau_giao:
+				"Mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ",
 			buoc_ke: "Chờ lượt 4 lên",
 			chan_boi: ["l4"],
-			ghi_chu: "Bốn số: trang đã duyệt theo đơn vị ≥ 10, câu hỏi có trích ≥ 70%, trung vị đề xuất tới duyệt ≤ 5 ngày làm việc, số lần «báo sai».",
+			ghi_chu:
+				"Bốn số: trang đã duyệt theo đơn vị ≥ 10, câu hỏi có trích ≥ 70%, trung vị đề xuất tới duyệt ≤ 5 ngày làm việc, số lần «báo sai».",
 		},
 		{
 			id: "cb",
@@ -145,7 +160,8 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			buoc_ke: "Gom 50 câu hỏi thật trước lượt 4",
 			cho_anh: true,
 			chan_boi: [],
-			ghi_chu: "Trang «Quy tắc viết» đã có trong hồ sơ lượt 2. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
+			ghi_chu:
+				"Trang «Quy tắc viết» đã có trong hồ sơ lượt 2. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
 		},
 		{
 			id: "l5",
@@ -170,7 +186,8 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "để sau",
 			ngay: "",
 			pr: [],
-			cau_giao: "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
+			cau_giao:
+				"Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
 			buoc_ke: "Mở ngay sau chạy thật nếu trung vị duyệt vượt 5 ngày",
 			chan_boi: ["ct"],
 			ghi_chu: "",
@@ -184,7 +201,8 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			trang_thai: "để sau",
 			ngay: "",
 			pr: [],
-			cau_giao: "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
+			cau_giao:
+				"Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
 			buoc_ke: "Quyết bằng số đo chạy thật",
 			chan_boi: ["ct"],
 			ghi_chu: "",
@@ -192,25 +210,70 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 	],
 	cho_anh: [
 		{ viec: "Ký Cổng Bằng chứng lượt 2 (may-soan-de-xuat)", hang_muc: "l2" },
-		{ viec: "Quyết E2t: nạp token Vercel Blob thật cho phiên đo, hay ký kèm hạn chế «chưa đo Blob thật»", hang_muc: "l2" },
-		{ viec: "Xem ba bản máy soạn và ảnh màn duyệt, quyết E15j đạt hay không", hang_muc: "l2" },
-		{ viec: "Kiểm production của lượt 1: bản triển khai crm-onehub-api và migration 20261001010000", hang_muc: "l1" },
-		{ viec: "Gom 50 câu hỏi thật theo kho-tai-lieu-bo-vang.md trước lượt 4", hang_muc: "cb" },
+		{
+			viec: "Quyết E2t: nạp token Vercel Blob thật cho phiên đo, hay ký kèm hạn chế «chưa đo Blob thật»",
+			hang_muc: "l2",
+		},
+		{
+			viec: "Xem ba bản máy soạn và ảnh màn duyệt, quyết E15j đạt hay không",
+			hang_muc: "l2",
+		},
+		{
+			viec: "Kiểm production của lượt 1: bản triển khai crm-onehub-api và migration 20261001010000",
+			hang_muc: "l1",
+		},
+		{
+			viec: "Gom 50 câu hỏi thật theo kho-tai-lieu-bo-vang.md trước lượt 4",
+			hang_muc: "cb",
+		},
 	],
 	da_chot: [
-		{ ngay: "2026-09-26", viec: "Theo mẫu LLM Wiki: máy soạn bản đề xuất, chủ trang duyệt, trợ lý AI chỉ đọc bản đang dùng" },
-		{ ngay: "2026-09-26", viec: "Duyệt mọi thay đổi, kể cả sửa chính tả và liên kết; không có bậc tự áp dụng" },
-		{ ngay: "2026-09-27", viec: "Lộ trình theo output: năm lượt, chạy thật mọi phòng ban hai tuần, một lượt sửa" },
+		{
+			ngay: "2026-09-26",
+			viec: "Theo mẫu LLM Wiki: máy soạn bản đề xuất, chủ trang duyệt, trợ lý AI chỉ đọc bản đang dùng",
+		},
+		{
+			ngay: "2026-09-26",
+			viec: "Duyệt mọi thay đổi, kể cả sửa chính tả và liên kết; không có bậc tự áp dụng",
+		},
+		{
+			ngay: "2026-09-27",
+			viec: "Lộ trình theo output: năm lượt, chạy thật mọi phòng ban hai tuần, một lượt sửa",
+		},
 		{ ngay: "2026-09-27", viec: "Bỏ hạng mục pháp lý khỏi lộ trình" },
-		{ ngay: "2026-09-28", viec: "Lượt 2: khoá nút Duyệt tới khi tick hết từng con số mới" },
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 2: khoá nút Duyệt tới khi tick hết từng con số mới",
+		},
 	],
 	nhat_ky: [
-		{ ngay: "2026-09-28", viec: "Lượt 2 chấm ba vòng; vòng cuối BLOCKED ở E2t vì thiếu Blob thật; thẻ Cổng Bằng chứng đã trình" },
-		{ ngay: "2026-09-28", viec: "Lượt 2 qua Cổng Đáng, Cổng Phạm vi (hai lần), Cổng 1.5; dựng đủ 12 task" },
-		{ ngay: "2026-09-28", viec: "#181: sổ theo dõi dòng 1 sang «đã lên onehub»" },
-		{ ngay: "2026-09-28", viec: "#180 merge c1e37b73: lượt 1 lên onehub và production, sau hai lần CI đỏ vì test đo giờ trên máy GitHub" },
-		{ ngay: "2026-09-28", viec: "Lượt 1: anh ký Cổng Bằng chứng sau ba vòng chấm (28/28 phép đo)" },
-		{ ngay: "2026-09-27", viec: "Lượt 1 qua Cổng Phạm vi và Cổng 1.5; dựng năm màn, trình soạn Tiptap, màn duyệt Track Changes" },
-		{ ngay: "2026-09-27", viec: "Lượt 0 xong: nghiên cứu nền, bản mẫu, trình đọc markdown" },
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 2 chấm ba vòng; vòng cuối BLOCKED ở E2t vì thiếu Blob thật; thẻ Cổng Bằng chứng đã trình",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 2 qua Cổng Đáng, Cổng Phạm vi (hai lần), Cổng 1.5; dựng đủ 12 task",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "#181: sổ theo dõi dòng 1 sang «đã lên onehub»",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "#180 merge c1e37b73: lượt 1 lên onehub và production, sau hai lần CI đỏ vì test đo giờ trên máy GitHub",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 1: anh ký Cổng Bằng chứng sau ba vòng chấm (28/28 phép đo)",
+		},
+		{
+			ngay: "2026-09-27",
+			viec: "Lượt 1 qua Cổng Phạm vi và Cổng 1.5; dựng năm màn, trình soạn Tiptap, màn duyệt Track Changes",
+		},
+		{
+			ngay: "2026-09-27",
+			viec: "Lượt 0 xong: nghiên cứu nền, bản mẫu, trình đọc markdown",
+		},
 	],
 };
