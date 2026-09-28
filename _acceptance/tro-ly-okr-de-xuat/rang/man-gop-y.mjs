@@ -485,7 +485,7 @@ async function buocGopY(tl) {
 		id: MT,
 		title: E4.bat.tenYeu,
 	});
-	await trpc(API, tl).lam("okr.createKr", {
+	await trpc(API, tl).lam("okr.createKeyResult", {
 		objectiveId: MT,
 		...E4.bat.krYeu,
 		ownerUserId: idMau("nguoi", E4.bat.truong),

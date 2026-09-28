@@ -4,24 +4,56 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const TEP_CONTEXT = join(GOC, "CONTEXT.md");
-const TEP_API = join(GOC, "docs", "api.md");
-const TEP_AGENT = join(GOC, "docs", "agent.md");
-const TEP_ROUTER = join(GOC, "apps", "api", "src", "okr", "okr.router.ts");
 
-const MUC_CHE_DO_AN = "**Chế độ ẩn**";
-const MUC_CHO_RE_9B = "## Chỗ rẽ: Trợ lý OKR (lượt 9b)";
+const TAI_LIEU = {
+	tep: {
+		context: join(GOC, "CONTEXT.md"),
+		api: join(GOC, "docs", "api.md"),
+		agent: join(GOC, "docs", "agent.md"),
+		router:
+			process.env.TAI_LIEU_ROUTER ??
+			join(GOC, "apps", "api", "src", "okr", "okr.router.ts"),
+	},
+	ref: {
+		onehub: process.env.TAI_LIEU_REF_ONEHUB ?? "origin/onehub",
+		release: process.env.TAI_LIEU_REF_RELEASE ?? "origin/release",
+	},
+	muc: {
+		cheDoAn: "**Chế độ ẩn**",
+		choRe9b: "## Chỗ rẽ: Trợ lý OKR (lượt 9b)",
+		okr: "## OKR",
+	},
+	thuTuc: /^\t(troLy[A-Za-z]+|xuHuongKr)\(/,
+	trangTri: /^\t@(Query|Mutation)\(/,
+	thanTrangTri: /^\t\t|^\t\}\)/,
+	thongDiep: {
+		routerRong: "tai lieu: router khong rut duoc thu tuc nao",
+		thieuRef: (ten) => `tai lieu: khong do duoc cho re 9b — thieu ref ${ten}`,
+	},
+};
+
+class KhongDo extends Error {}
 
 function doc(tep) {
 	return readFileSync(tep, "utf8");
 }
 
 function git(...thamSo) {
-	return execFileSync("git", ["-C", GOC, ...thamSo], { encoding: "utf8" });
+	return execFileSync("git", ["-C", GOC, ...thamSo], {
+		encoding: "utf8",
+		stdio: ["ignore", "pipe", "pipe"],
+	});
 }
 
-// Cắt một mục H2 (hoặc một đoạn bắt đầu bằng một chuỗi bất kỳ) tới ranh giới kế
-// tiếp cùng cấp hoặc cao hơn — dùng cho cả tiêu đề "## " và tiêu đề từ điển "**".
+function coRef(ten) {
+	try {
+		git("rev-parse", "--verify", "--quiet", `${ten}^{commit}`);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 function muc(noiDung, tieuDe, ranhGioi) {
 	const batDau = noiDung.indexOf(tieuDe);
 	if (batDau === -1) return null;
@@ -33,105 +65,121 @@ function mucH2(noiDung, tieuDe) {
 	const dong = noiDung.split("\n");
 	const batDau = dong.findIndex((d) => d.startsWith(tieuDe));
 	if (batDau === -1) return null;
-	let ket = dong.length;
-	for (let i = batDau + 1; i < dong.length; i += 1) {
-		if (/^## /.test(dong[i])) {
-			ket = i;
-			break;
-		}
-	}
+	const sau = dong.slice(batDau + 1).findIndex((d) => /^## /.test(d));
+	const ket = sau === -1 ? dong.length : batDau + 1 + sau;
 	return dong.slice(batDau, ket).join("\n");
 }
 
-// 1. CONTEXT.md — mục «Chế độ ẩn» phải có, kèm dòng _Avoid_ bên trong đúng mục đó
-// (không phải _Avoid_ của mục từ điển kế tiếp).
 function kiemContext() {
-	const doan = muc(doc(TEP_CONTEXT), MUC_CHE_DO_AN, "\n\n**");
-	if (doan === null) {
-		return ["CONTEXT.md thieu muc «Che do an»"];
-	}
-	if (!doan.includes("_Avoid_")) {
+	const doan = muc(doc(TAI_LIEU.tep.context), TAI_LIEU.muc.cheDoAn, "\n\n**");
+	if (doan === null) return ["CONTEXT.md thieu muc «Che do an»"];
+	if (!doan.includes("_Avoid_"))
 		return ["CONTEXT.md muc «Che do an» thieu dong _Avoid_"];
-	}
 	return [];
 }
 
-// 2. Danh sách thủ tục rút từ okr.router.ts lúc chạy, không chép tay: mọi
-// phương thức tên troLy* hoặc xuHuongKr được định nghĩa trong router (dòng bắt
-// đầu bằng một tab rồi tới tên rồi dấu ngoặc mở — đúng khuôn `nestjs-trpc`
-// dùng cho toàn bộ `okr.router.ts`).
-function tenThuTucTuRouter() {
-	const noiDung = doc(TEP_ROUTER);
-	const ten = new Set();
-	for (const m of noiDung.matchAll(/^\t(troLy[A-Za-z]+|xuHuongKr)\(/gm)) {
-		ten.add(m[1]);
-	}
-	return ten;
+function duoiTrangTri(dong, i) {
+	let j = i - 1;
+	while (j >= 0 && TAI_LIEU.thanTrangTri.test(dong[j])) j -= 1;
+	return j >= 0 && TAI_LIEU.trangTri.test(dong[j]);
 }
 
-// docs/api.md §OKR phải nêu đủ tên của từng thủ tục đó.
-function kiemApiMd() {
-	const okr = mucH2(doc(TEP_API), "## OKR");
-	if (okr === null) return ["docs/api.md thieu muc «## OKR»"];
-	const thieu = [...tenThuTucTuRouter()].filter((ten) => !okr.includes(ten));
-	return thieu
+function thuTucTuRouter() {
+	const dong = doc(TAI_LIEU.tep.router).split("\n");
+	const thay = dong
+		.map((d, i) => ({ ten: TAI_LIEU.thuTuc.exec(d)?.[1], i }))
+		.filter((t) => t.ten);
+	return {
+		ten: new Set(thay.map((t) => t.ten)),
+		lac: thay.filter((t) => !duoiTrangTri(dong, t.i)).map((t) => t.ten),
+	};
+}
+
+function kiemApiMd(thuTuc) {
+	const lac = thuTuc.lac.map(
+		(ten) =>
+			`tai lieu: ${ten} khong dung ngay duoi @Query/@Mutation trong router`,
+	);
+	const okr = mucH2(doc(TAI_LIEU.tep.api), TAI_LIEU.muc.okr);
+	if (okr === null) return [...lac, "docs/api.md thieu muc «## OKR»"];
+	const thieu = [...thuTuc.ten]
+		.filter((ten) => !okr.includes(ten))
 		.sort()
 		.map((ten) => `tai lieu thieu thu tuc: ${ten}`);
+	return [...lac, ...thieu];
 }
 
-// 3. Tệp của hãng trong diff của lượt: git diff so với merge-base(HEAD,
-// origin/onehub), giao với danh sách tệp có ở origin/release. CI checkout nông
-// có thể thiếu một trong hai ref — khi đó bỏ qua phần kiểm này, không đỏ giả.
 function tapTepHangTrongDiff() {
-	try {
-		const goc = git("merge-base", "HEAD", "origin/onehub").trim();
-		const doi = git("diff", "--name-only", goc, "HEAD")
-			.split("\n")
-			.filter(Boolean);
-		const coORelease = new Set(
-			git("ls-tree", "-r", "--name-only", "origin/release")
-				.split("\n")
-				.filter(Boolean),
-		);
-		return new Set(doi.filter((tep) => coORelease.has(tep)));
-	} catch (loi) {
-		console.warn(
-			`tai-lieu: khong tinh duoc git diff giao release (${String(loi.message ?? loi).split("\n")[0]}) — bo qua kiem cho re 9b`,
-		);
-		return null;
+	const thieuRef = Object.values(TAI_LIEU.ref).filter((ten) => !coRef(ten));
+	if (thieuRef.length > 0) {
+		if (process.env.CI) {
+			console.warn(
+				`tai-lieu: CI thieu ref ${thieuRef.join(", ")} (checkout nong) — bo qua kiem cho re 9b`,
+			);
+			return null;
+		}
+		throw new KhongDo(TAI_LIEU.thongDiep.thieuRef(thieuRef.join(", ")));
 	}
+	const goc = git("merge-base", "HEAD", TAI_LIEU.ref.onehub).trim();
+	const doi = git("diff", "--name-only", goc, "HEAD")
+		.split("\n")
+		.filter(Boolean);
+	const coORelease = new Set(
+		git("ls-tree", "-r", "--name-only", TAI_LIEU.ref.release)
+			.split("\n")
+			.filter(Boolean),
+	);
+	return new Set(doi.filter((tep) => coORelease.has(tep)));
 }
 
 function tapTepTrongMucChoRe(noiDung) {
-	const doan = mucH2(noiDung, MUC_CHO_RE_9B);
+	const doan = mucH2(noiDung, TAI_LIEU.muc.choRe9b);
 	if (doan === null) return null;
 	return new Set([...doan.matchAll(/^- `([^`]+)`/gm)].map((m) => m[1]));
 }
 
-// docs/agent.md phải có mục chỗ rẽ 9b, và mục đó phải liệt đúng — không thiếu,
-// không thừa — tập tệp của hãng mà lượt này chạm.
 function kiemAgentMd() {
-	const tapDoc = tapTepTrongMucChoRe(doc(TEP_AGENT));
-	if (tapDoc === null) {
-		return [`docs/agent.md thieu muc «${MUC_CHO_RE_9B}»`];
-	}
+	const tapDoc = tapTepTrongMucChoRe(doc(TAI_LIEU.tep.agent));
+	if (tapDoc === null)
+		return [`docs/agent.md thieu muc «${TAI_LIEU.muc.choRe9b}»`];
 	const tapDiff = tapTepHangTrongDiff();
 	if (tapDiff === null) return [];
 	const thieu = [...tapDiff].filter((t) => !tapDoc.has(t));
 	const thua = [...tapDoc].filter((t) => !tapDiff.has(t));
 	return [
 		...thieu.map((t) => `tai lieu thieu tep hang: ${t}`),
-		...thua.map((t) => `tai lieu thua tep hang (khong con trong diff giao release): ${t}`),
+		...thua.map(
+			(t) => `tai lieu thua tep hang (khong con trong diff giao release): ${t}`,
+		),
 	];
 }
 
-const loi = [...kiemContext(), ...kiemApiMd(), ...kiemAgentMd()];
-
-if (loi.length > 0) {
-	for (const dong of loi) console.error(dong);
-	process.exit(1);
+function main() {
+	const thuTuc = thuTucTuRouter();
+	if (thuTuc.ten.size === 0) {
+		console.error(TAI_LIEU.thongDiep.routerRong);
+		return 1;
+	}
+	let loi;
+	try {
+		loi = [...kiemContext(), ...kiemApiMd(thuTuc), ...kiemAgentMd()];
+	} catch (e) {
+		const cau = String(e?.message ?? e).split("\n")[0];
+		console.error(
+			e instanceof KhongDo
+				? cau
+				: `tai lieu: khong do duoc cho re 9b — git loi: ${cau}`,
+		);
+		return 2;
+	}
+	if (loi.length > 0) {
+		for (const dong of loi) console.error(dong);
+		return 1;
+	}
+	console.log(
+		`tai-lieu: CONTEXT.md, docs/api.md (${thuTuc.ten.size} thu tuc), docs/agent.md deu du.`,
+	);
+	return 0;
 }
 
-console.log(
-	`tai-lieu: CONTEXT.md, docs/api.md (${tenThuTucTuRouter().size} thu tuc), docs/agent.md deu du.`,
-);
+process.exit(main());

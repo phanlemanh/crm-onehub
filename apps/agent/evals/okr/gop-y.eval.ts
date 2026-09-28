@@ -28,6 +28,11 @@ const GOP_Y_EVAL = {
 		"Câu đề xuất giữ ý của người viết câu gốc, không đổi sang mục tiêu khác.",
 		"Câu đề xuất trả lời theo ngôn ngữ chiếm đa số trong nội dung câu gốc.",
 	],
+	nhanTruong: {
+		title: "tên Mục tiêu",
+		whyNow: "vì sao lúc này",
+		"kr.title": "tên KR",
+	},
 	caMauTuGoc: ["evals/okr/ca-gop-y/mau", "apps/agent/evals/okr/ca-gop-y/mau"],
 	env: TRO_LY_OKR.danhGia.env,
 } as const;
@@ -211,10 +216,33 @@ async function cho<T>(
 	return null;
 }
 
+const NHAN_TRUONG = new Map<string, string>(
+	Object.entries(GOP_Y_EVAL.nhanTruong),
+);
+
+type DongJudge = {
+	truong: string | null;
+	truoc: string | null;
+	maVanDe: string | null;
+	lyDo: string;
+};
+
+function tieuChiJudge(ca: CaGopY, d: DongJudge): string {
+	const truong = NHAN_TRUONG.get(d.truong ?? "") ?? d.truong ?? "";
+	return [
+		`Trợ lý OKR đề xuất viết lại ${truong} của một OKR. Bài nộp là câu đề xuất thay cho câu gốc.`,
+		`Nội dung OKR gốc — Mục tiêu: «${ca.mucTieu.title}»; vì sao lúc này: «${ca.mucTieu.whyNow}»; KR: ${ca.krs.map((k) => `«${k.title}»`).join(", ")}.`,
+		`Câu gốc (${truong}): «${d.truoc ?? ""}».`,
+		`Vấn đề Trợ lý nêu${d.maVanDe ? ` (${d.maVanDe})` : ""}: ${d.lyDo}`,
+		"Ngôn ngữ chiếm đa số tính trên toàn bộ nội dung OKR gốc ở trên.",
+		`Bài nộp đạt khi đúng cả ba ý: ${GOP_Y_EVAL.tieuChi.join(" ")}`,
+	].join("\n");
+}
+
 function motCa(ca: CaGopY, stt: number) {
 	return defineEval({
 		description: `Trợ lý OKR góp ý — ca ${ca.id} (${ca.bo}, ${ca.ngonNgu}): ${ca.ghiChu}`,
-		tags: ["okr", "gop-y", ca.bo],
+		tags: ["okr", "gop-y", ca.bo, ca.id],
 		timeoutMs: GOP_Y_EVAL.timeoutMs,
 		judge: {
 			model: TRO_LY_OKR.judge.model,
@@ -306,9 +334,8 @@ function motCa(ca: CaGopY, stt: number) {
 			if (ca.bo !== "viet-lai") return;
 			for (const d of dong) {
 				if (d.loai !== "viet-lai" || d.trangThai !== "cho") continue;
-				const cap = `Câu gốc (${d.truong}): ${d.truoc ?? ""}\nCâu đề xuất: ${d.sau ?? ""}`;
 				t.judge.autoevals
-					.closedQA(GOP_Y_EVAL.tieuChi.join(" "), { on: cap })
+					.closedQA(tieuChiJudge(ca, d), { on: d.sau ?? "" })
 					.label(`${ca.id} ${d.id}`)
 					.atLeast(TRO_LY_OKR.judge.nguong);
 			}

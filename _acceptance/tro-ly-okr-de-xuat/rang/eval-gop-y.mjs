@@ -81,6 +81,21 @@ const E22 = {
 			"Ca đối chứng: Mục tiêu nói việc làm, kỳ vọng khongGopY cố ý sai — bài phải bắt được.",
 	},
 	eval: ["okr/gop-y", "okr/ng"],
+	evalCuaBo: { "viet-lai": "okr/gop-y", ng: "okr/ng" },
+	thamSoCa: "--ca",
+	tuKiem: [
+		{ van: "Nâng chất lượng dịch vụ", cum: "lương", khop: false },
+		{ van: "Nâng chất lượng dịch vụ", cum: "chat", khop: false },
+		{ van: "Không bàn chuyện tăng lương", cum: "lương", khop: true },
+		{ van: "Tăng lương, thưởng quý", cum: "thưởng", khop: true },
+		{ van: "Xếp loại nhân viên cuối năm", cum: "xếp loại", khop: true },
+	],
+	tuKiemTen: [
+		{ van: "Anh Nguyễn Văn An phụ trách", ten: "Nguyễn Văn An", khop: true },
+		{ van: "Tăng doanh thu an toàn", ten: "Văn An", khop: false },
+		{ van: "Phạm Thị Hoa", ten: "Thị Hoa", khop: true },
+		{ van: "Phạm Thị Hoan", ten: "Thị Hoa", khop: false },
+	],
 	nhanJudge: "judge.autoevals.closedQA [",
 	thongDiep: {
 		doiChung: "ca doi chung khong bat duoc",
@@ -130,8 +145,6 @@ if (MA_CAM_NG.length === 0) {
 
 const RUN_ID = new Date().toISOString().replace(/[:.]/g, "-");
 const THU_MUC = join(RA, "e22");
-const TONG_KET = join(THU_MUC, "tong-ket.jsonl");
-const CA_THEM = join(THU_MUC, "ca-them");
 const HIEU_CHINH = join(
 	GOC,
 	"_acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md",
@@ -143,6 +156,17 @@ const SO_MOI_LOT = join(
 const EVE = join(AGENT, "node_modules/.bin/eve");
 
 const chiDungKho = process.argv.includes("--kho");
+const chiCa = (() => {
+	const i = process.argv.indexOf(E22.thamSoCa);
+	if (i < 0) return null;
+	const id = `${process.argv[i + 1] ?? ""}`.trim();
+	if (!/^[a-z0-9-]+$/.test(id)) {
+		console.log(`KHONG DO DUOC: ${E22.thamSoCa} can ma ca, vi du gy-06`);
+		process.exit(2);
+	}
+	return id;
+})();
+const THU_MUC_LUOT = chiCa ? join(RA, `e22-ca-${chiCa}`) : THU_MUC;
 const tranUsd = (() => {
 	const i = process.argv.indexOf("--tran-usd");
 	if (i < 0) return TRO_LY_OKR.danhGia.tranUsdMacDinh;
@@ -156,10 +180,18 @@ const tranUsd = (() => {
 	return so;
 })();
 
+function caDon() {
+	if (chiCa === E22.caDoiChung.id) return E22.caDoiChung;
+	return docBoCaGopY(THU_MUC_CA_MAU).find((c) => c.id === chiCa) ?? null;
+}
+
 function khongDo(cau) {
 	console.log(`KHONG DO DUOC: ${cau}`);
 	return 2;
 }
+
+const TONG_KET = join(THU_MUC_LUOT, "tong-ket.jsonl");
+const CA_THEM = join(THU_MUC_LUOT, "ca-them");
 
 const boDau = (chu) =>
 	`${chu ?? ""}`
@@ -170,6 +202,33 @@ const boDau = (chu) =>
 		.toLowerCase()
 		.replace(/\s+/g, " ")
 		.trim();
+
+const chuanTu = (chu) =>
+	`${chu ?? ""}`
+		.normalize("NFC")
+		.toLowerCase()
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter(Boolean)
+		.join(" ");
+
+const coNguyenTu = (van, cum) => cum !== "" && ` ${van} `.includes(` ${cum} `);
+
+const coTuCam = (van, tu) => coNguyenTu(chuanTu(van), chuanTu(tu));
+
+const coTen = (van, ten) =>
+	coNguyenTu(chuanTu(boDau(van)), chuanTu(boDau(ten)));
+
+function tuKiemSo() {
+	const sai = [
+		...E22.tuKiem
+			.filter((c) => coTuCam(c.van, c.cum) !== c.khop)
+			.map((c) => `tu-cam «${c.cum}» trong «${c.van}» phai ${c.khop}`),
+		...E22.tuKiemTen
+			.filter((c) => coTen(c.van, c.ten) !== c.khop)
+			.map((c) => `noi-ve-nguoi «${c.ten}» trong «${c.van}» phai ${c.khop}`),
+	];
+	return sai;
+}
 
 function napVaoKho(url) {
 	const env = { ...process.env, DATABASE_URL: url };
@@ -200,7 +259,10 @@ function chayEve(url) {
 		`${JSON.stringify(E22.caDoiChung, null, "\t")}\n`,
 	);
 	const batDau = Date.now();
-	const r = spawnSync(EVE, ["eval", ...E22.eval, "--verbose"], {
+	const lenh = chiCa
+		? ["eval", E22.evalCuaBo[caDon().bo], "--tag", chiCa, "--verbose"]
+		: ["eval", ...E22.eval, "--verbose"];
+	const r = spawnSync(EVE, lenh, {
 		cwd: AGENT,
 		encoding: "utf8",
 		env: {
@@ -216,8 +278,8 @@ function chayEve(url) {
 		},
 		timeout: E22.timeoutMs,
 	});
-	writeFileSync(join(THU_MUC, "eve.log"), `${r.stdout}\n${r.stderr}`);
-	return { ma: r.status, batDau };
+	writeFileSync(join(THU_MUC_LUOT, "eve.log"), `${r.stdout}\n${r.stderr}`);
+	return { ma: r.status, batDau, lenh: lenh.join(" ") };
 }
 
 function docTongKet() {
@@ -283,15 +345,19 @@ async function tenThanhVien(url) {
 		`SELECT u.name FROM member m JOIN "user" u ON u.id = m."userId"`,
 	);
 	return ds
-		.map((d) => boDau(d.name))
-		.filter((t) => t.split(" ").length >= TRO_LY_OKR_TRAN.soChuHoTenToiThieu);
+		.map((d) => d.name)
+		.filter(
+			(t) =>
+				chuanTu(boDau(t)).split(" ").length >=
+				TRO_LY_OKR_TRAN.soChuHoTenToiThieu,
+		);
 }
 
-const chuCua = (d) => boDau(`${d.sau ?? ""} ${d.lyDo ?? ""}`);
+const chuCua = (d) => `${d.sau ?? ""} ${d.lyDo ?? ""}`;
 
 function kiemNg(ca, ghi, cho, ten) {
 	const loi = [];
-	const cam = ghi.dong.filter((d) => MA_CAM_NG.includes(d.maLoai));
+	const cam = cho.filter((d) => MA_CAM_NG.includes(d.maLoai));
 	if (cam.length > 0)
 		loi.push(`ng co dong ${cam.map((d) => `${d.maLoai}:${d.id}`).join(", ")}`);
 	const capTren = (ghi.capTrenKr ?? []).map(boDau);
@@ -303,18 +369,16 @@ function kiemNg(ca, ghi, cho, ten) {
 	);
 	if (chep.length > 0)
 		loi.push(`ng chep-cap-tren: ${chep.map((d) => d.id).join(", ")}`);
-	const nguoi = cho.filter((d) => ten.some((t) => chuCua(d).includes(t)));
+	const nguoi = cho.filter((d) => ten.some((t) => coTen(chuCua(d), t)));
 	if (nguoi.length > 0)
 		loi.push(`ng noi-ve-nguoi: ${nguoi.map((d) => d.id).join(", ")}`);
-	const dauVao = boDau(
-		[ca.mucTieu.title, ca.mucTieu.whyNow, ...ca.krs.map((k) => k.title)].join(
-			" ",
-		),
-	);
-	const cum = TRO_LY_OKR_TRAN.tuCam
-		.map(boDau)
-		.filter((c) => !dauVao.includes(c));
-	const tuCam = cho.filter((d) => cum.some((c) => chuCua(d).includes(c)));
+	const dauVao = [
+		ca.mucTieu.title,
+		ca.mucTieu.whyNow,
+		...ca.krs.map((k) => k.title),
+	].join(" ");
+	const cum = TRO_LY_OKR_TRAN.tuCam.filter((c) => !coTuCam(dauVao, c));
+	const tuCam = cho.filter((d) => cum.some((c) => coTuCam(chuCua(d), c)));
 	if (tuCam.length > 0)
 		loi.push(`ng tu-cam: ${tuCam.map((d) => d.id).join(", ")}`);
 	return loi;
@@ -346,7 +410,42 @@ function kiemCa(ca, ghi, lotSoMoi, ten) {
 	return loi;
 }
 
+async function tongKetMotCa(url, eve) {
+	const c = caDon();
+	const ghi = docTongKet();
+	const diem = docJudge(eve.batDau);
+	const ten = await tenThanhVien(url);
+	const g = ghi.get(c.id);
+	const lotSoMoi = chaySoMoiLot(url, g ? [g.objectiveId] : []);
+	const loi = kiemCa(c, g, lotSoMoi, ten);
+	console.log(
+		loi.length === 0 ? `DUNG ${c.id}` : `SAI ${c.id}: ${loi.join(" · ")}`,
+	);
+	for (const d of g?.dong ?? []) {
+		const nhan = `${c.id} ${d.id}`;
+		console.log(
+			`dong ${d.id} ${d.loai} ${d.truong ?? "-"} ${d.trangThai}${d.maLoai ? ` ${d.maLoai}` : ""}: «${d.truoc ?? ""}» → «${d.sau ?? ""}»${diem.has(nhan) ? ` · judge ${diem.get(nhan)}` : ""}`,
+		);
+	}
+	const [chi] = await truyVan(
+		url,
+		`SELECT coalesce(sum("costUsd"), 0)::float8 AS usd FROM "aiChiPhi"`,
+	);
+	console.log(
+		`chi: ${Number(chi.usd).toFixed(6)} USD / tran ${tranUsd} USD · judge: ${diem.size} cap co diem`,
+	);
+	console.log(
+		`${E22.thamSoCa} ${c.id}: khong ghi ${HIEU_CHINH.slice(GOC.length + 1)}, khong chay ca doi chung — log o ${THU_MUC_LUOT.slice(GOC.length + 1)}/eve.log`,
+	);
+	if (eve.ma === null || eve.ma === 2)
+		return khongDo(
+			`eve eval ${eve.ma === null ? "sap hay het gio" : "bao loi cau hinh (ma 2)"} — xem ${THU_MUC_LUOT.slice(GOC.length + 1)}/eve.log`,
+		);
+	return loi.length === 0 ? 0 : 1;
+}
+
 async function tongKet(url, eve) {
+	if (chiCa) return tongKetMotCa(url, eve);
 	const ca = docBoCaGopY(THU_MUC_CA_MAU);
 	const ghi = docTongKet();
 	const diem = docJudge(eve.batDau);
@@ -449,13 +548,21 @@ async function trongKho(url) {
 		return 0;
 	}
 	const eve = chayEve(url);
-	console.log(`eve eval ${E22.eval.join(" ")} thoat ${eve.ma}`);
+	console.log(`eve ${eve.lenh} thoat ${eve.ma}`);
 	return tongKet(url, eve);
 }
 
 async function main() {
+	const saiTuKiem = tuKiemSo();
+	if (saiTuKiem.length > 0)
+		return khongDo(`tu kiem thuoc so sai: ${saiTuKiem.join(" · ")}`);
+	console.log(
+		`tu kiem thuoc so: ${E22.tuKiem.length + E22.tuKiemTen.length} ca dung (nguyen tu, giu dau)`,
+	);
+	if (chiCa && !caDon())
+		return khongDo(`${E22.thamSoCa} ${chiCa}: khong co ca nay trong bo mau`);
 	if (!chiDungKho && !coKhoaMoHinh()) return khongDo(cauThieuKhoa());
-	mkdirSync(THU_MUC, { recursive: true });
+	mkdirSync(THU_MUC_LUOT, { recursive: true });
 	let url;
 	try {
 		url = taoKho(E22.kho);
