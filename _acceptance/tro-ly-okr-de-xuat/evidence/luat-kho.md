@@ -1,6 +1,6 @@
 # Luật kho trên diff của lượt tro-ly-okr-de-xuat
 
-Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `d8a1cdcb6cfe` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 87 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14593 dòng thêm.
+Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `8ebc64360133` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 89 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14876 dòng thêm.
 
 ## 1. Chú thích trong dòng thêm
 
@@ -95,7 +95,7 @@ git diff -U0 7db7cea33309 HEAD -- apps packages   rồi grep từng mẫu số t
 Kết quả:
 
 ```
-# packages/db/src/okr-tro-ly-danh-muc.ts (dòng 5–48)
+# packages/db/src/okr-tro-ly-danh-muc.ts (dòng 5–77)
 export const TRO_LY_OKR_TRAN = {
 	chu: {
 		tenMucTieu: 200,
@@ -130,6 +130,35 @@ export const TRO_LY_OKR_TRAN = {
 		"task",
 		"nhiệm vụ",
 	],
+	soBangChu: {
+		hauToCo: [
+			"tỷ",
+			"tỉ",
+			"triệu",
+			"nghìn",
+			"ngàn",
+			"trăm",
+			"mươi",
+			"%",
+			"phần trăm",
+		],
+		namSauCum: [
+			"cuối",
+			"đầu",
+			"giữa",
+			"trong",
+			"mỗi",
+			"hằng",
+			"hàng",
+			"cả",
+			"nửa",
+			"của",
+			"chỉ tiêu",
+			"kế hoạch",
+		],
+		namTruocCum: ["nay", "tới", "sau", "trước", "ngoái", "học", "tài chính"],
+		dauCau: [".", "!", "?", ";", ":"],
+	},
 	soChuHoTenToiThieu: 2,
 	troLyNgayMoiNguoi: 20,
 	luotAnMoiNgay: 40,
@@ -187,22 +216,14 @@ Kết quả:
 
 ```
 # tệp apps/app/**/*.tsx của lượt: 15
-# className= trên component nhập từ @crm/ui, màn sản phẩm: 15
-apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:597: <Skeleton> <Skeleton className="h-20 w-full" data-khung-dong />
-apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:598: <Skeleton> <Skeleton className="h-20 w-full" data-khung-dong />
-apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:599: <Skeleton> <Skeleton className="h-14 w-full" data-khung-dong />
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:174: <TableCell> <TableCell className={CELL} data-cot="nhan">
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:178: <TableCell> className={`${CELL} text-right tabular-nums`}
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:184: <TableCell> className={`${CELL} text-right tabular-nums`}
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:228: <TableCell> <TableCell className={CELL}>
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:245: <TableCell> <TableCell className={CELL} data-cot="nac">
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:249: <TableCell> className={`${CELL} text-right tabular-nums`}
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:256: <TableCell> <TableCell className={`${CELL} text-right tabular-nums`}>
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:400: <CardContent> <CardContent className="flex flex-col gap-3">
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:402: <Skeleton> <Skeleton key={hang} className="h-6 w-full" />
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:433: <CardContent> <CardContent className="flex flex-col gap-6">
-apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx:417: <Skeleton> <Skeleton className="h-9 w-full" />
-apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx:418: <Skeleton> <Skeleton className="h-9 w-full" />
+# className= trên component nhập từ @crm/ui, màn sản phẩm: 6 — bảng phân loại (a = bố cục hay hình dạng hợp lệ, b = đổi màu/góc/khoảng cách/chữ, ? = biểu thức, đọc tay)
+tệp:dòng · thành phần · lớp · loại · lý do
+apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:597 · <Skeleton> · h-20 w-full · a · hình dạng của Skeleton (chỉ cao/rộng)
+apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:598 · <Skeleton> · h-20 w-full · a · hình dạng của Skeleton (chỉ cao/rộng)
+apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:599 · <Skeleton> · h-14 w-full · a · hình dạng của Skeleton (chỉ cao/rộng)
+apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:389 · <Skeleton> · h-6 w-full · a · hình dạng của Skeleton (chỉ cao/rộng)
+apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx:417 · <Skeleton> · h-9 w-full · a · hình dạng của Skeleton (chỉ cao/rộng)
+apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx:418 · <Skeleton> · h-9 w-full · a · hình dạng của Skeleton (chỉ cao/rộng)
 # className= trên component nhập từ @crm/ui, bản mẫu /proto: 20
 apps/app/app/proto/_modules/tro-ly-okr-de-xuat/cai-dat.tsx:93: <SelectTrigger> <SelectTrigger id={`nac-${ma}`} className="w-full sm:w-56">
 apps/app/app/proto/_modules/tro-ly-okr-de-xuat/cai-dat.tsx:134: <CardContent> <CardContent className="flex flex-col gap-6">
@@ -227,7 +248,7 @@ apps/app/app/proto/_modules/tro-ly-okr-de-xuat/hop-thoai.tsx:402: <Button> <Butt
 # className= trên thẻ HTML hay component cục bộ: 22
 apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx:399: <div> className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
 apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx:278: <div> className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
-apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:328: <div> <div className="flex-1 overflow-y-auto px-4 pb-4">
+apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:315: <div> <div className="flex-1 overflow-y-auto px-4 pb-4">
 apps/app/app/proto/_modules/tro-ly-okr-de-xuat/cai-dat.tsx:105: <div> <div className="flex flex-wrap items-center gap-2">
 apps/app/app/proto/_modules/tro-ly-okr-de-xuat/cai-dat.tsx:106: <ul> <ul className="flex flex-wrap gap-1.5" aria-label={nhan}>
 apps/app/app/proto/_modules/tro-ly-okr-de-xuat/cai-dat.tsx:308: <span> <span className="block text-muted-foreground" translate="no">
@@ -250,4 +271,4 @@ apps/app/app/proto/_modules/tro-ly-okr-de-xuat/index.tsx:52: <div> className="ml
 # <table hay divide-y: 0
 ```
 
-Kết luận: 15 className trên component @crm/ui ở màn sản phẩm và 20 ở bản mẫu /proto, 0 dòng bảng/danh sách vẽ tay — đọc từng dòng: cỡ Skeleton, khoảng trong ô bảng và bố cục CardContent là chỗ hội đồng phải cân với luật «không đè class».
+Kết luận: màn sản phẩm: 6 className trên component @crm/ui, cả 6 thuộc loại (a) bố cục hay hình dạng; 0 loại (b); không <table> hay divide-y tự dựng. 20 chỗ ở bản mẫu /proto nằm ngoài vật, không phân loại.
