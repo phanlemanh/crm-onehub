@@ -1,10 +1,8 @@
 import type { Db } from "./client";
 import type { OkrDeXuat, Prisma } from "./generated/prisma/client";
-import { motTrong } from "./okr-tro-ly-danh-muc";
+import { motTrong, TRUONG_VIET_LAI } from "./okr-tro-ly-danh-muc";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
-
-const TRUONG_VIET_LAI = ["title", "whyNow", "kr.title"] as const;
 
 export type KiemLai = (
 	hang: OkrDeXuat,

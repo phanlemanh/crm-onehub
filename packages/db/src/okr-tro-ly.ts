@@ -157,6 +157,8 @@ export async function canKiemLaiKhoa(
 	return dangCho === 0;
 }
 
+type NacXep = "bat" | "an";
+
 const khong = (lyDo: LyDoKhongSanSang): TroLySanSang => ({ bat: false, lyDo });
 
 async function nacCuaMucTieu(
@@ -223,6 +225,7 @@ export async function troLyOkrSanSang(
 		keyResultId?: string;
 		donVi?: DonViMucTieu;
 		nguoiYeuCau?: string;
+		nacViec?: NacXep;
 		now?: Date;
 		coTacTu?: boolean;
 	},
@@ -230,8 +233,8 @@ export async function troLyOkrSanSang(
 	const now = v.now ?? new Date();
 	const ct = await cauHinhAiLuc(db, now);
 	const nac = await nacCuaMucTieu(db, ct, v.viec, v);
-	if (nac === "an") return khong("don-vi-chua-bat");
-	if (nac !== "bat") return khong(nac);
+	if (nac === "an" && v.nacViec !== "an") return khong("don-vi-chua-bat");
+	if (nac !== "bat" && nac !== "an") return khong(nac);
 	const chung = await quaTranChung(db, ct, now);
 	if (!chung.bat) return chung;
 	if (
@@ -253,8 +256,6 @@ export const LY_DO_VIEC_OKR = {
 	"okr-tom-tat-xep": "okr-tom-tat-xep",
 	"ai-doi-soat": "ai-doi-soat",
 } as const;
-
-type NacXep = "bat" | "an";
 
 type KetQuaTao<L extends string> =
 	| { tao: true; taskId: string; dungLai: boolean }

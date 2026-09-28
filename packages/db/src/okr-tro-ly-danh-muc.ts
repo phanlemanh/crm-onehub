@@ -248,6 +248,10 @@ export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
 
 export type ViecTroLy = (typeof VIEC_TRO_LY)[number];
 
+export const TRUONG_VIET_LAI = ["title", "whyNow", "kr.title"] as const;
+
+export type TruongVietLai = (typeof TRUONG_VIET_LAI)[number];
+
 export const AI_PHAM_VI = ["tat", "toan-cong-ty", "danh-sach"] as const;
 
 export type AiPhamVi = (typeof AI_PHAM_VI)[number];

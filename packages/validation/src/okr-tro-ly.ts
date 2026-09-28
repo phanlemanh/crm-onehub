@@ -6,6 +6,7 @@ import {
 	NAC_TRO_LY,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
+	TRUONG_VIET_LAI,
 	VIEC_TRO_LY,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
@@ -29,7 +30,9 @@ export {
 	phamViCuaViec,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
+	TRUONG_VIET_LAI,
 	type TroLySanSang,
+	type TruongVietLai,
 	VIEC_TRO_LY,
 	type ViecTroLy,
 } from "@crm/db/okr-tro-ly-danh-muc";
@@ -72,8 +75,6 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 ]);
 
 export type OkrTroLyViec = z.infer<typeof okrTroLyViec>;
-
-const TRUONG_VIET_LAI = ["title", "whyNow", "kr.title"] as const;
 
 const TRAN_CUA_TRUONG = {
 	title: TRO_LY_OKR_TRAN.chu.tenMucTieu,
