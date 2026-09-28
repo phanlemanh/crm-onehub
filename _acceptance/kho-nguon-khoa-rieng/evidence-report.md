@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c66166fe7cdc1bccd902a057e8b486e66072fdac
+verified_commit: 095f1dc10bcb70d6a424ec7f9743e7983a964442
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -140,3 +140,7 @@ none — every multi-run eval is uniform
 
 Round 1: E1–E7 và bốn lệnh suite (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) đều pass tại verified_commit 01325d56ff8e204761826f372684ae4815a96a1b — một lần chạy đầu bị BLOCKED vì E2 vắng kết quả trả về, resume ngay trong round 1 trả đủ 11/11 pass; không có vòng sửa code.
 Round 2: E1–E7 và bốn lệnh suite pass lại tại verified_commit c66166fe7cdc1bccd902a057e8b486e66072fdac — không sửa code, chỉ xác nhận lại bằng chứng; baseline không đo lại (carried từ round 1, evals.yaml không đổi).
+
+### Re-pin lần 1 — 2026-09-28, do gộp onehub và vòng kho-nguon-khoa-rieng chạm thước; E1 của may-soan-de-xuat neo vào migration của hồ sơ
+run_id: repin-20260928T140638Z-39911
+sha: 095f1dc10bcb70d6a424ec7f9743e7983a964442 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
