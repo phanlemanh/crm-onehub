@@ -1,0 +1,228 @@
+schema_version: 1
+slug: phien-chet-ve-dang-nhap
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.pcd_proxy_het_phien
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      Test trong apps/app/test/onboarding-gate.spec.ts, ten co the "het-phien". Bo tra loi gia
+      dung chung (ham hetPhien()) tra workspace.get va settings.researchKey HTTP 401 voi phong bi
+      tRPC that {"error":{"message":"UNAUTHORIZED","code":-32001,"data":{"code":"UNAUTHORIZED",
+      "httpStatus":401,...}}} (chep tu phep do production 28/09). Ma tran viet truoc 5 duong, so
+      assert = 5: "/", "/comp-ai/companies", "/companies", "/onboarding", "/onboarding/research",
+      IS_MARKETING tat, cookie SESSION_COOKIE -> redirectedTo = "/sign-in". Thong diep ghim:
+      "<duong>: cookie chet van lot qua proxy".
+      DOI CHUNG DUONG cung tep, cung cookie: bo tra loi 200 settled -> "/comp-ai/companies" khong
+      chuyen (null) — thuoc khong phai luon-do.
+      CHIEU DO: cay chua sua (proxy khong doc 401) -> "/: cookie chet van lot qua proxy".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.pcd_proxy_giu_mo
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      Test ten co the "giu-mo", cung tep va cung ham dung request/cookie voi E1. Ma tran viet truoc
+      5 ca, so assert = 5: fetch nem loi mang; fetch nem AbortError (het gio); 500; 503; 403 — moi
+      ca tren "/comp-ai/companies" -> redirectedTo KHONG phai "/sign-in" (bang null, dung hanh vi
+      cu). Thong diep ghim: "<ca>: proxy day ve /sign-in du API chi loi".
+      CHIEU DO (pha-thu o S3 tren ban sao): doi dieu kien trong read() tu "=== 401" thanh "!ok"
+      -> "500: proxy day ve /sign-in du API chi loi".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.pcd_proxy_khong_dung
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/proxy-paths.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      Test ten co the "khong-dung". Bo tra loi hetPhien() (401) co bo dem so lan goi. Ma tran viet
+      truoc 9 ca, so assert redirect = 9, so assert dem = 8: tam duong thoat som "/sign-in",
+      "/t/crm.js", "/proto/x", "/dat-mat-khau/abc", "/quen-mat-khau", "/grant-access",
+      "/eve/v1/info", "/het-quyen" -> redirectedTo null VA bo dem goi API = 0 (thong diep ghim
+      "<duong>: proxy dung vao duong khong co cong"). Ca thu 9: IS_MARKETING="true", "/" ->
+      redirectedTo null, KHONG assert bo dem (ca nay di qua buoc doc cong nhu truoc vong nay; thong
+      diep ghim "marketing bat: / bi day ve /sign-in").
+      DOI CHUNG DUONG cung bo tra loi: "/comp-ai/companies" -> "/sign-in" va bo dem = 1 (bo dem
+      dem that).
+      CHIEU DO (pha-thu tren ban sao): bo dieu kien !isPublic trong nhanh het phien ->
+      "marketing bat: / bi day ve /sign-in"; dua "/het-quyen" ra khoi UNGATED -> "/het-quyen: proxy
+      dung vao duong khong co cong".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.pcd_doc_401
+    paths:
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      Test ten co the "doc-401", goi readWorkspaceGate that. Ma tran viet truoc 7 ca, so assert = 7,
+      moi ca so SANH TOAN BO doi tuong bang toEqual: 401 -> {gate:"unknown", slug:null,
+      inWorkspace:null, viewerRole:null, hetPhien:true}; 200 settled -> {gate:"settled",
+      slug:"comp-ai", inWorkspace:true, viewerRole:"owner", hetPhien:false}; 403, 500, loi mang,
+      het gio -> {gate:"unknown", slug:null, inWorkspace:null, viewerRole:null, hetPhien:false};
+      request khong cookie -> nhu ca loi, hetPhien:false va fetch khong duoc goi.
+      Thong diep ghim: "<ca>: hetPhien sai".
+      CHIEU DO: cay chua sua -> "401: hetPhien sai" (truong vang).
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.pcd_trang_goc_khong_phien
+    paths:
+      - "apps/app/app/(landing)/page.tsx"
+      - "apps/app/lib/trang-goc.ts"
+      - "apps/app/test/phien-chet-trang-goc.dom.tsx"
+    expected: |
+      Tep RIENG apps/app/test/phien-chet-trang-goc.dom.tsx (runner test:dom chay moi tep mot tien
+      trinh — mock.module khong ro). Mock "@/lib/session" (getSession), "@/lib/trpc/server"
+      (getServerQueryClient, getServerTrpc) va "next/navigation" (redirect nem mot loi danh dau
+      mang duong). Import page.tsx THAT, goi Home(). Test ten co the "khong-phien": IS_MARKETING
+      tat, getSession -> null => Home() nem loi danh dau voi duong "/sign-in", workspace.get khong
+      duoc goi. Thong diep ghim: "/: khong phien ma khong ve /sign-in".
+      DOI CHUNG DUONG cung tep: IS_MARKETING="true" -> Home() tra ve phan tu (xem E7).
+      CHIEU DO: cay chua sua (page khong kiem) -> Home() tra ve landing, "/: khong phien ma khong
+      ve /sign-in".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.pcd_trang_goc_con_phien
+    paths:
+      - "apps/app/app/(landing)/page.tsx"
+      - "apps/app/lib/trang-goc.ts"
+      - "apps/app/test/phien-chet-trang-goc.dom.tsx"
+    expected: |
+      Cung tep voi E5, ten co the "con-phien". Ma tran viet truoc 3 ca, so assert chinh = 3:
+      (a) getSession -> phien, workspace.get tra slug "comp-ai" -> loi danh dau duong "/comp-ai";
+      (b) getSession -> phien, fetchQuery nem Error("API chet") -> Home() tu choi voi CHINH loi do,
+      redirect khong duoc goi lan nao; (c) getSession -> phien, workspace.get tra slug null ->
+      Home() tu choi voi loi khong phai loi danh dau, redirect khong duoc goi.
+      Thong diep ghim: "(a) con phien khong vao workspace" / "(b) API loi ma van chuyen huong" /
+      "(c) khong slug ma van chuyen huong".
+      CHIEU DO (pha-thu tren ban sao): doi nhanh API loi thanh redirect("/sign-in") ->
+      "(b) API loi ma van chuyen huong".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.pcd_trang_goc_marketing
+    paths:
+      - "apps/app/app/(landing)/page.tsx"
+      - "apps/app/lib/trang-goc.ts"
+      - "apps/app/test/phien-chet-trang-goc.dom.tsx"
+    expected: |
+      Cung tep voi E5, ten co the "marketing-bat": IS_MARKETING="true" -> Home() tra ve phan tu
+      React co con la Hero (so danh tinh ham nhap tu "@/components/landing/hero"), getSession va
+      redirect khong duoc goi lan nao. Thong diep ghim: "marketing bat: landing khong con" /
+      "marketing bat: trang doc phien".
+      CHIEU DO (pha-thu tren ban sao): goi getSession truoc khi xet co -> "marketing bat: trang doc
+      phien".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.pcd_het_quyen
+    paths:
+      - "apps/app/app/(landing)/het-quyen/page.tsx"
+      - "apps/app/test/phien-chet-het-quyen.dom.tsx"
+    expected: |
+      Tep RIENG apps/app/test/phien-chet-het-quyen.dom.tsx. Mock "@/lib/session", "@/lib/locale/server"
+      (getLocale -> "vi") va "next/navigation". Hai ca, so assert = 2 nhom: getSession -> null =>
+      HetQuyenPage() nem loi danh dau duong "/sign-in"; getSession -> phien => render ket qua,
+      chu h1 BANG thanhVienMessages("vi").hetQuyen.tieuDe (doc tu tep, khong go lai) va co nut
+      mang chu hetQuyen.dangXuat. Thong diep ghim: "het-quyen: khong phien ma khong ve /sign-in" /
+      "het-quyen: nguoi con phien mat trang".
+      CHIEU DO: cay chua sua -> "het-quyen: khong phien ma khong ve /sign-in".
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.pcd_do_man
+    steps:
+      - "Lenh cua pcd_do_man di mot-luot.sh -> tien-de: tu dung phien do tren CSDL rieng cua cay (crm_<cay>_do), API va app o cong tu do. Khong giet tien trinh cua phien khac"
+      - "Chay O TIEN CANH, Bash timeout 600000, dat BANG_CHUNG=_acceptance/phien-chet-ve-dang-nhap/evidence tuong minh"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/phien-chet-ve-dang-nhap/evidence/
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/lib/trang-goc.ts"
+      - "apps/app/app/(landing)/page.tsx"
+      - "apps/app/app/(landing)/het-quyen/page.tsx"
+      - "_acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs"
+    expected: |
+      Script _acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs che do "man" (goc kho suy tu vi tri
+      script, khong hardcode). Tao phien that bang phien() (dev:session — chi in MOT cookie
+      crm.session_token, khong co crm.session_data) roi XOA hang Session khoi CSDL cua phien do
+      (phien bi thu hoi, cookie ky dung). Trinh duyet chi mang dung HAI cookie, script in ten ca
+      hai: crm.session_token (phien do) va lang=vi (LANG_COOKIE cua lib/locale — khoa locale, khong
+      phu thuoc Accept-Language cua puppeteer). TIEN DE truoc man dau: fetch API workspace.get voi
+      dung bo cookie do phai ra 401; khong ra 401 -> thoat ma 2 "khong do duoc: phien chua chet".
+      Puppeteer, 1280x800 light: mo "/", "/<slug>/companies", "/<slug>/agents", "/onboarding",
+      "/het-quyen" — 5 dong, moi dong: duong cuoi = "/sign-in", html[lang] = "vi", document.title
+      BANG authMessages("vi").docTitle.signIn + " · OneHub Center" (rut tu tep), innerText KHONG chua
+      metadata.title cua (landing)/page.tsx (rut tu nguon, khong go lai). Dong thu 6: "/" o 375x812
+      cung ket qua. Dong thu 7 (doi chung duong): phien SONG moi tao, "/" -> duong cuoi khac
+      "/sign-in" va khong chu landing. Anh: pcd-{trang-goc,cong,agents,onboarding,het-quyen}-1280.png,
+      pcd-trang-goc-375.png, pcd-song-1280.png. Nhin anh: 6 anh dau la man dang nhap OneHub Center
+      (logo OneHub, «Lần đầu vào?», nut Google/o email), KHONG co «The CRM built for Agents», logo
+      Comp AI hay nut Star on GitHub; anh song la man trong workspace (hoac man khai bao), khong
+      phai man dang nhap. Thieu anh nao -> khong dat.
+      CHIEU DO: cay chua sua -> dong "/" SAI voi "/: hien landing cu (The CRM for agents)".
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.pcd_do_api
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/app/(landing)/page.tsx"
+      - "_acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs"
+    expected: |
+      Cung script, che do "api", tu tao phien RIENG (khong dung chung voi E9), chi mang cookie
+      crm.session_token va lang=vi. Khong trinh duyet, fetch redirect:"manual". Sau khi xoa hang
+      Session: API workspace.get voi cookie do -> 401; APP "/<slug>/agents" -> 307, Location ket
+      thuc bang "/sign-in", than KHONG chua "NEXT_REDIRECT" (duong CHI proxy quyet: trang agents,
+      layout (agent-builder) va layout [slug] khong tu kiem phien — da tra 28/09); APP "/" -> 307
+      Location "/sign-in"; APP "/het-quyen" -> trang
+      chuyen (UNGATED nen proxy khong cham): 307 Location "/sign-in", HOAC 200 ma than chua
+      "NEXT_REDIRECT;replace;/sign-in" (Next stream — cung khuon da do tren production cho
+      /onboarding 28/09). Doi chung duong: truoc khi xoa hang Session, cung cookie -> API
+      workspace.get 200 va APP "/<slug>/agents" khong chuyen toi "/sign-in". So dong = 6, dong KET
+      LUAN ma 0/1/2 nhu E9. Thong diep ghim: "api: <buoc> SAI — <gia tri do duoc>".
+      CHIEU DO: cay chua sua -> "api: / voi phien thu hoi SAI — 200". Pha-thu o S3 tren ban sao: go
+      nhanh hetPhien trong proxy() nhung GIU A va /het-quyen -> "api: /<slug>/agents voi phien thu
+      hoi SAI — 200" (chung minh E10 do rieng B tren stack that, khong chi A).
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.pcd_cong_cu
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      Chay TRON tep apps/app/test/onboarding-gate.spec.ts: moi test co tu truoc vong nay xanh,
+      so test = so test cua merge-base cong so test moi cua vong (E1–E4), khong test nao bi xoa
+      hay .skip. Test "carries the slug the app is served under" nay ghim them hetPhien:false.
+      CHIEU DO (pha-thu tren ban sao): chuyen /sign-in cho moi gate "unknown" thay vi chi 401 ->
+      test cu "fails open when the API is unreachable" do, bun in ten test do.
