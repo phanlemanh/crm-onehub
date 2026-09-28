@@ -308,3 +308,63 @@ wall: 1289s
 - **claude-opus-5-5**: 3 agent · 26 calls · out 20,526 · in 52 · cache_read 3,148,752 · cache_create 389,522
 - **claude-haiku-4-5-20251001**: 29 agent · 60 calls · out 49,345 · in 538 · cache_read 3,181,049 · cache_create 1,957,893
 
+### S4 round 4 — wf_08351241-769 (38 agent, 167,235 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 5 | 37,180 | 10 | 630,332 | 379 |
+| baseline:diffBase | claude-sonnet-5 | 46 | 20,891 | 92 | 6,587,210 | 650 |
+| ui:E2u | claude-sonnet-5 | 19 | 13,248 | 38 | 2,614,946 | 591 |
+| ui:E11u | claude-sonnet-5 | 19 | 12,838 | 38 | 2,612,053 | 578 |
+| review:bugs | claude-opus-5-5 | 13 | 12,147 | 26 | 1,676,947 | 150 |
+| review:measurement | claude-opus-5-5 | 9 | 9,979 | 18 | 1,080,551 | 121 |
+| review:conventions | claude-opus-5-5 | 9 | 8,904 | 18 | 1,054,357 | 106 |
+| triage | claude-sonnet-5 | 2 | 4,368 | 4 | 112,320 | 59 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 4,281 | 18 | 106,541 | 46 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 3,777 | 18 | 106,510 | 52 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 3,575 | 18 | 106,542 | 40 |
+| machine:bun run test -- "cd apps/agent && TZ=Asi | claude-haiku-4-5-20251001 | 3 | 2,030 | 28 | 195,512 | 28 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 2,010 | 18 | 106,538 | 27 |
+| machine:bun run test -- "cd apps/agent && TZ=Asi | claude-haiku-4-5-20251001 | 2 | 1,992 | 18 | 106,557 | 28 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,808 | 18 | 106,510 | 24 |
+| machine:bash _acceptance/tieu-de-cot-doc-tron/ra | claude-haiku-4-5-20251001 | 2 | 1,786 | 18 | 49,904 | 371 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 2 | 1,627 | 18 | 24,952 | 350 |
+| machine:node _acceptance/may-soan-de-xuat/rang/b | claude-haiku-4-5-20251001 | 2 | 1,582 | 18 | 106,536 | 18 |
+| machine:bun run test -- "cd apps/agent && bun te | claude-haiku-4-5-20251001 | 2 | 1,571 | 18 | 106,536 | 25 |
+| machine:cd packages/validation && bun test test/ | claude-haiku-4-5-20251001 | 2 | 1,485 | 18 | 106,561 | 22 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,424 | 18 | 106,560 | 24 |
+| machine:node _acceptance/may-soan-de-xuat/rang/m | claude-haiku-4-5-20251001 | 2 | 1,393 | 18 | 106,535 | 17 |
+| machine:bash _acceptance/tieu-de-cot-doc-tron/ra | claude-haiku-4-5-20251001 | 2 | 1,346 | 18 | 106,562 | 23 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,282 | 18 | 106,540 | 18 |
+| machine:bun _acceptance/may-soan-de-xuat/rang/mi | claude-haiku-4-5-20251001 | 2 | 1,232 | 18 | 106,541 | 21 |
+| machine:cd apps/agent && bun test test/tai-lieu- | claude-haiku-4-5-20251001 | 2 | 1,193 | 18 | 106,544 | 15 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-4-5-20251001 | 2 | 1,111 | 18 | 106,550 | 15 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-4-5-20251001 | 2 | 1,101 | 18 | 106,548 | 15 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,100 | 18 | 106,542 | 21 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-4-5-20251001 | 2 | 1,095 | 18 | 106,550 | 15 |
+| machine:node _acceptance/may-soan-de-xuat/rang/q | claude-haiku-4-5-20251001 | 2 | 1,071 | 18 | 106,538 | 15 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,053 | 18 | 106,540 | 18 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,023 | 18 | 106,544 | 20 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-4-5-20251001 | 2 | 1,015 | 18 | 106,551 | 15 |
+| machine:bun run test -- "cd apps/agent && bun te | claude-haiku-4-5-20251001 | 2 | 962 | 18 | 106,538 | 16 |
+| capture:provenance | claude-sonnet-5 | 2 | 962 | 4 | 108,790 | 15 |
+| machine:for t in $(git ls-files "apps/app/app/(a | claude-haiku-4-5-20251001 | 2 | 952 | 18 | 106,641 | 23 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 841 | 18 | 106,508 | 13 |
+
+
+wall: 1090s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 20,891 | 6,587,210 | 650 | 09:02:50 | 09:13:39 |
+| machine | 29 | 46,718 | 3,040,531 | 438 | 09:02:50 | 09:10:08 |
+| ui | 2 | 26,086 | 5,226,999 | 591 | 09:03:36 | 09:13:27 |
+| review | 3 | 31,030 | 3,811,855 | 152 | 09:03:40 | 09:06:12 |
+| triage | 1 | 4,368 | 112,320 | 59 | 09:13:27 | 09:14:27 |
+| capture | 1 | 962 | 108,790 | 15 | 09:14:27 | 09:14:41 |
+| synthesize | 1 | 37,180 | 630,332 | 379 | 09:14:41 | 09:21:00 |
+
+- **claude-sonnet-5**: 6 agent · 93 calls · out 89,487 · in 186 · cache_read 12,665,651 · cache_create 1,193,707
+- **claude-opus-5-5**: 3 agent · 31 calls · out 31,030 · in 62 · cache_read 3,811,855 · cache_create 386,706
+- **claude-haiku-4-5-20251001**: 29 agent · 59 calls · out 46,718 · in 532 · cache_read 3,040,531 · cache_create 2,005,402
+

@@ -1,51 +1,32 @@
 ## Trong hợp đồng
 
-### Hai lượt nhận đồng thời với cùng pathname/phiếu vẫn xoá được tệp của nguồn vừa tạo (kiểm rồi mới làm, không nguyên tử)
-- file: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts:141`
-- severity: medium
-- AC: AC-16
-
-Vòng này thêm vào `nhan` bước `findUnique({ where: { blobPathname } })` để từ chối pathname đã thuộc về một TaiLieuNguon. Dòng mới trong docs/api.md mô tả bước này là «refuses a pathname that already belongs to a TaiLieuNguon, before it reads or deletes anything». Nhưng đây là kiểm rồi mới làm, không nguyên tử. Giữa lúc kiểm và lúc ghi còn một lượt đọc blob qua mạng (`kho.doc`), nên khoảng hở khá rộng.
-
-Cách xảy ra: người dùng A gửi hai lần `taiLieuNguon.nhan` với cùng `{pathname: P, phieu}` hợp lệ, ví dụ do bấm hai lần hoặc client gửi lại.
-- Lượt 1 qua bước kiểm `daCo` rồi tạo hàng TaiLieuNguon có blobPathname = P.
-- Lượt 2 đã qua bước kiểm `daCo` trước khi lượt 1 commit. Nó đọc cùng bytes, cùng sha256, rồi rơi vào một trong hai nhánh: `nguonTheoBam` trả hàng của lượt 1, được `{trung: true}`, và dòng 163 gọi `kho.xoa(P)`; hoặc `create` chạm unique `sha256`/`blobPathname`, rơi vào `catch` ở ghiNguon rồi `nhan` (dòng 166-167), cũng gọi `kho.xoa(P)`.
-
-Kết quả: hàng TaiLieuNguon của lượt 1 còn đó nhưng blob đã bị xoá. Máy soạn và nút tải về sẽ không đọc được tệp. Như vậy bất biến AC-16 mà docs/api.md vừa ghi («knowing a source's pathname is not enough to delete its file») chỉ đúng khi các lượt gọi chạy tuần tự.
-
-Muốn nguyên tử cần một trong hai cách: dùng phiếu một lần (đánh dấu đã tiêu phiếu trong cùng giao dịch), hoặc chỉ xoá blob khi chắc chắn pathname P không thuộc hàng nào (kiểm lại blobPathname ngay trước `kho.xoa`, hay bắt P2002 trên `blobPathname` riêng rồi không xoá).
-
-### nhan: TOCTOU giữa kiểm 'đường lưu chưa thuộc nguồn nào' và nhánh trung → xoá tệp Blob của nguồn vừa ghi (AC-16 hở khi gọi đồng thời)
-- file: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts:144`
-- severity: medium
-- AC: AC-16
-
-Chặn AC-16 mới dựa vào `findUnique({ where: { blobPathname } })` ở dòng 144-148, chạy TRƯỚC `kho.doc` (một lần đọc qua mạng) và `kiemDich`. Việc kiểm và việc ghi không được khoá chung. Kịch bản: cùng một người gửi hai lời `taiLieuNguon.nhan` đồng thời với cùng pathname và phiếu hợp lệ của chính họ (gửi lại, hay cố ý phát lại; phiếu còn hạn 60 phút và không dùng một lần). Cả hai lời qua được `daCo` (lúc đó chưa có hàng nào). Lời A commit `TaiLieuNguon{blobPathname: P, sha256: S}`. Lời B sau đó đi vào `ghiNguon`: hoặc `nguonTheoBam(S)` thấy hàng của A, hoặc `create` ném P2002 (trùng `sha256`/`blobPathname`) rồi nhánh bắt lỗi dòng 232-235 lại tìm ra A. Kết quả B là `{ trung: true }`, nên dòng 163 `await this.kho.xoa(input.pathname)` xoá đúng tệp P, tức tệp của nguồn A vừa ghi. Hàng A còn trong CSDL nhưng tệp Blob đã mất: `taiVe` trả URL ký tới một tệp không còn, và máy soạn đọc nguồn thì hỏng. Đây đúng là lớp lỗi AC-16 hứa chặn («nhận nguồn không xoá tệp của nguồn đã có»); test `tai-lieu-nguon-cua-ai.spec.ts` chỉ chạy tuần tự nên không bắt được. Nhánh trung chỉ nên xoá khi hàng tìm thấy có `blobPathname !== input.pathname`; hoặc coi P2002 trên `blobPathname` là từ chối mà không xoá; hoặc dùng phiếu một lần.
-
-### Hình dạng 5 (tuyên quét lớp nhưng thiếu ô): lớp «đường lưu đã thuộc về một nguồn có sẵn» của AC-16 không có ô nào đi qua được phiếu, nên chặn daCo không được đo
-- file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts:87`
-- severity: high
-- AC: AC-16
-
-AC-16 hứa hai lớp từ chối riêng: (a) đường lưu đã thuộc về một nguồn có sẵn, (b) đường lưu không do lần xin chỗ của chính người gọi cấp. Service có hai chặn tương ứng: kiemPhieu (tai-lieu-nguon.service.ts:137-143) và `findUnique({ where: { blobPathname } }) → if (daCo) throw` (144-148). Cả 6 ca trong mảng CA (dòng 87-141) đều gọi nhan không có phiếu hợp lệ: p1 = { pathname } không mang phiếu, nên nhan gửi PHIEU_GIA; «khac-chua-cap» cũng dùng PHIEU_GIA; «khac-phieu-cua-tao» là phiếu của T mà K gửi. Ca nào cũng bị kiemPhieu bác trước khi tới daCo. Ma trận không có ô người tải T gọi lại nhan bằng chính choN1 (phiếu hợp lệ, còn hạn 60 phút, dòng 75) với đích sai hay trùng byte. Đây là ô duy nhất mà chỉ daCo cứu được P1: bỏ chặn này thì luồng catch gọi kho.xoa(P1). Vì vậy xoá riêng chặn daCo thì E16 vẫn xanh. CHIỀU ĐỎ khai ở evals.yaml:470 («bản sao bỏ kiểm đường lưu → ca đầu đỏ với thông điệp ghim 'xoa tep nguon cua nguoi khac'») cũng không xảy ra khi bỏ một chặn đơn lẻ. Bỏ daCo: ca đầu bị phiếu bác, vẫn xanh. Bỏ kiemPhieu: ca đầu bị daCo bác, vẫn xanh; chỉ «khac-chua-cap» đỏ với 'xoa la …', không phải thông điệp ghim. Thông điệp ghim chỉ hiện khi bỏ cả hai chặn.
-
-### Hình dạng 3 (chỉ kiểm có chuỗi trong khi lời hứa là quan hệ): taiVe chỉ được kiểm URL khác rỗng; byte đọc lén từ kho giả; không đo đường đọc của máy soạn
-- file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts:166`
-- severity: medium
-- AC: AC-16
-
-AC-16 hứa tệp của nguồn có sẵn «tải về đúng byte có mã băm của hàng, và máy soạn vẫn đọc được tệp đó». evals.yaml E16 ghi «taiVe(N1) boi T tra URL ky, byte doc ve ... co sha256 bang hang N1 (duong doc cua may soan khong ve LOI 'khong tai duoc')». Test chỉ có `expect(ve.url.length).toBeGreaterThan(0)` ở dòng 166. URL do taiVe trả về không được nối với byte nào: không kiểm URL trỏ tới hangN1.blobPathname (kho giả trả `${GOC_GIA}/get/${pathname}`, kiểm được mà test không kiểm). Byte ở dòng 167 lấy thẳng bằng `gia.doc(hangN1.blobPathname)`, tức đọc Map bên trong kho giả, đi vòng qua đầu ra của taiVe. Nếu taiVe ký nhầm đường lưu hay trả URL của tệp khác, test vẫn xanh. Vế «máy soạn vẫn đọc được» không có lời gọi nào tới đường đọc của apps/agent, mà eval lại ghi là có đo.
-
-### Hình dạng 5 (tuyên quét lớp nhưng thiếu ô): vế «chỉ xoá tệp vừa tải» của AC-16 nêu ba lý do (sai loại, đích sai, trùng byte) nhưng E16 chỉ có ô đích sai
-- file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts:129`
-- severity: medium
-- AC: AC-16
-
-AC-16 hứa: «khi một lần nhận hợp lệ của chính người gọi bị từ chối vì lý do khác (sai loại, đích sai, trùng byte), máy chỉ xoá tệp vừa tải trong chính lượt đó». Trong E16, ca duy nhất có lần nhận hợp lệ của chính người gọi là «doi-chung-khac-tu-xin» (dòng 129), với DICH_SAI. Chỉ ca này có phép kiểm tính độc nhất (`daXoa.filter((x) => x !== duocXoa)`). Ca «khac-p1-trung-byte» mang tên trùng byte nhưng bị phiếu bác trước khi tới nhánh trùng, nên không đi qua đường `if (kq.trung) await this.kho.xoa(...)`. Không ô nào có sai loại. Các ca sai loại và trùng byte cũ ở tai-lieu-nguon.spec.ts (nguon-tu-choi, nguon-trung) chỉ kiểm `expect(gia.daXoa).toContain(pathname)`. Chúng không kiểm tệp của nguồn N1 có sẵn còn nguyên, cũng không kiểm không xoá gì ngoài tệp vừa tải. Lớp ba lý do mới đo được một ô.
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **nhan holds an interactive transaction across blob I/O and still reads through this.db, unlike the validate-then-transact pattern**
+  Người dùng thấy gì: Khi nhiều người tải tệp quy định lên cùng lúc (khoảng mười người trở lên), toàn bộ hệ thống có thể bị treo tạm thời tới hai phút cho mọi người dùng, không riêng người đang tải.
+  file: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **nhan holds a transaction connection while kiemDich and kiemTrangMoi borrow a second connection from the same pool, which can deadlock under concurrent load**
+  Người dùng thấy gì: Trong tình huống nhiều người tải tệp cùng lúc, tệp vừa tải lên hợp lệ của một người có thể bị hệ thống tự xoá nhầm vì chờ xử lý quá lâu, dù người đó không làm gì sai.
+  file: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Shape 3: E16 promises 'returns the old source' for the tu-xin-trung-byte case, but the test only checks that the status is below 400**
+  Người dùng thấy gì: Bộ kiểm thử tự động hiện chưa chắc chắn phát hiện được nếu hệ thống lỡ trả về nhầm một nguồn tài liệu khác khi ai đó tải lại đúng tệp đã có sẵn, nghĩa là lỗi loại này có thể lọt qua mà không ai hay biết.
+  file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Shape 4: the pinned message GHIM_SONG_SONG ('file deleted when sent in parallel') also sits on the success-count assert, so the red run does not prove a file was deleted**
+  Người dùng thấy gì: Khi hai người tải cùng một tệp cùng lúc và lớp bảo vệ liên quan bị hỏng, thông báo lỗi hiện tại không đủ rõ để phân biệt giữa hai sự cố khác nhau — 'bị chấp nhận trùng lặp' và 'tệp gốc bị xoá mất' — nên đội vận hành khó biết chính xác chuyện gì đã xảy ra.
+  file: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
 
 - **soan-that.mjs silently drops console and page errors from the review-screen captures (r2)**
   Người dùng thấy gì: Nếu màn duyệt gặp lỗi ẩn khi hiển thị, phép đo vẫn báo đạt và ảnh chụp vẫn được tính là bằng chứng sạch, nên một lỗi thật ở màn duyệt có thể không ai phát hiện.
