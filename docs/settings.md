@@ -103,10 +103,12 @@ Không dùng `SaveBar` ở Cài đặt: các section độc lập với nhau.
 - **Không đủ quyền**: điều khiển bị khoá, và một dòng dưới tiêu đề trang nói vì
   sao. Không ẩn section, không ẩn nút — thứ biến mất thì người dùng không biết
   mình thiếu quyền.
-  - Ngoại lệ duy nhất: hai khối «Trợ lý OKR» và «Sổ chi phí AI» ở Chương trình OKR
-    ẩn với người không phải quản trị — sổ chi phí là số tiền của cả công ty, không
-    phải cấu hình người đó thiếu quyền sửa. Chốt ở Cổng Phạm vi của
-    `tro-ly-okr-nen` (`_acceptance/tro-ly-okr-nen/decisions.jsonl`).
+  - Ngoại lệ duy nhất: ba khối «Trợ lý OKR», «Góp ý của Trợ lý OKR» và «Sổ chi
+    phí AI» ở Chương trình OKR ẩn với người không phải quản trị — sổ chi phí là
+    số tiền của cả công ty, không phải cấu hình người đó thiếu quyền sửa. Chốt
+    ở Cổng Phạm vi của `tro-ly-okr-nen` (`_acceptance/tro-ly-okr-nen/decisions.jsonl`);
+    khối thứ hai («Góp ý của Trợ lý OKR», `TheGopYSoDo`) thêm ở lượt 9b vì cùng
+    lý do.
 
 ## Đợt
 

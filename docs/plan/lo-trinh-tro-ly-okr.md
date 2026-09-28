@@ -223,7 +223,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   - không dòng nào có số mới lọt qua bộ kiểm;
   - golden cases đạt;
   - đủ mọi trạng thái rỗng, lỗi và tắt.
-- **Chạy khi:** 9a và lượt 7 đã lên; N1 có ít nhất 12 ca. Từ 2026-09-28: 9a và M đã gộp; N1 thành điều kiện bật. 9b dựng thêm nấc «chạy bóng» cho công tắc.
+- **Chạy khi:** 9a và lượt 7 đã lên; N1 có ít nhất 12 ca. Từ 2026-09-28: 9a và M đã gộp; N1 thành điều kiện bật. 9b dựng thêm nấc «chế độ ẩn» cho công tắc.
 - **Bật khi:** N1 có ít nhất 12 ca thật đạt cùng ngưỡng như ca mẫu; cấp OneHub được bật trước mùa OKR năm; mọi phòng ban được bật trước
   mùa quý 1.
 
@@ -247,7 +247,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   - câu bị bỏ ≤ 10%;
   - không số lệch nào lọt qua;
   - tỷ lệ tắt nhắc không tăng.
-- **Chạy khi:** 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật. Từ 2026-09-28: 9b đã gộp; ba tuần Cập nhật tuần thật thành điều kiện bật — chạy bóng ba tuần, đạt ngưỡng ký thì bật.
+- **Chạy khi:** 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật. Từ 2026-09-28: 9b đã gộp; ba tuần Cập nhật tuần thật thành điều kiện bật — ở chế độ ẩn ba tuần, đạt ngưỡng ký thì bật.
 
 ### Lượt 10 · OKR trong chat · T3 — AI-06, AI-07, NH-06
 
@@ -304,7 +304,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
 | 9a chưa gộp khi tới lúc triển khai Zalo | Hỏi CRM qua Zalo mở mà chưa có sổ chi phí | Hạ trần hỏi CRM qua Zalo xuống mức N0 đề xuất |
 | 9a hoặc lượt 7 chưa xong trước đóng băng | Làm sau đóng băng | Vá Slack vẫn phải xong trước ngày mở; nếu cần thì đi trước mọi lượt khác |
 | 9b chưa xong trước mùa OKR năm | Cấp OneHub đặt OKR năm mà không có trợ lý | Giữ đích cho mùa quý 1 |
-| Chưa đủ 3 tuần Cập nhật tuần thật | Từ 2026-09-28: 9c đã dựng xong, chạy bóng tiếp, chưa bật | 9c bật khi đủ ba tuần bóng đạt ngưỡng |
+| Chưa đủ 3 tuần Cập nhật tuần thật | Từ 2026-09-28: 9c đã dựng xong, ở chế độ ẩn tiếp, chưa bật | 9c bật khi đủ ba tuần ở chế độ ẩn đạt ngưỡng |
 | Production dùng GLM cho agent gốc | Trần $9 không giữ được | Chuyển agent gốc sang Gemini, hoặc bỏ bước chuyển tiếp (nấc 3 ở mục 4.10 của thiết kế), hoặc chủ kho nâng trần |
 
 ## 8. Kiểm «sẵn sàng cho mùa đặt OKR quý 1»

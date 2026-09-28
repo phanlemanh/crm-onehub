@@ -737,6 +737,40 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   re-points `ownerUserId`, drops the leaver from every `OkrParticipant` row, and
   writes one `chuyen-viec` `OkrTrail` row per KR and objective moved;
   `transferPreview` returns the same `{kr, mucTieu}` counts without writing anything.
+- **Bảy thủ tục của `TroLyOkrService` cho lượt 9b «Góp ý khi bấm».** `troLySanSang`,
+  `troLyDeXuat`, `troLyDanhSach`, `troLyQuyet`, `troLyAn`, `troLySoDo` và
+  `xuHuongKr` — đọc thẳng `okr.router.ts` để lấy danh sách hiện hành, dòng này
+  không phải nguồn thật. `troLySanSang` (`GET .../objectives/{objectiveId}/assistant`)
+  và `troLyDeXuat` (`POST .../assistant/run`) đòi `assertSuaMucTieu` hoặc
+  `assertSuaKr` trên đích, và nấc của đơn vị (`nacCuaDonVi`) phải là `bat`;
+  `troLyDanhSach` (`GET .../assistant/suggestions`) theo cùng điều kiện, còn
+  `troLyQuyet` (`POST .../assistant/suggestions/{deXuatId}/decision`) kiểm lại
+  nấc một lần nữa bên trong transaction, vì nấc có thể đổi giữa lúc màn đọc
+  danh sách và lúc người dùng quyết. `troLyAn` (`GET /okr/assistant/runs`) và
+  `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
+  `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
+  và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.
+- **Chế độ ẩn kích từ chính lần lưu, không từ lịch.** `OkrService.updateObjective`,
+  `updateKeyResult` và `createKeyResult` gọi `kichLuotAn` sau khi transaction của
+  lần lưu đã commit; hàm này gọi `xepLuotAnSauKhiLuu` (`@crm/db/okr-tro-ly`) và
+  tự bắt lỗi — xếp lượt ẩn hỏng chỉ ghi log cảnh báo, không lùi lại lần lưu OKR
+  đã thành công. `xepLuotAnSauKhiLuu` chỉ xếp việc khi lần lưu thật sự đổi
+  `title`/`whyNow` (Mục tiêu) hay `title` (KR) — cờ `doiChu` — và nấc của đơn vị
+  là `an`, không bao giờ khi đã `bat` (đơn vị đã `bat` thì đề xuất đến từ người
+  dùng bấm, không phải từ chế độ ẩn). Việc trùng được gộp theo một `sha256` của
+  id Mục tiêu, id KR và `updatedAt` của mọi dòng liên quan (`inputHash` trong
+  `taoViecDeXuat`), nên hai lần lưu ra cùng nội dung dùng chung một `AgentTask`
+  thay vì xếp hai lượt. Hai trần chỉ áp cho chế độ ẩn, cùng nằm trong
+  `TRO_LY_OKR_TRAN`: một lượt ẩn mỗi Mục tiêu mỗi `nhipAnMucTieuMs` (30 phút),
+  và `luotAnMoiNgay` (40) lượt ẩn toàn công ty mỗi ngày; cả hai vẫn tính vào
+  cùng `aiTranThangUsd` (9 USD mặc định) như mọi chi tiêu khác của Trợ lý OKR.
+  `troLyQuyet` ghi giá trị đã nhận hay đã sửa qua
+  `OkrService.updateObjectiveTrong`/`updateKeyResultTrong`/`addAlignmentTrong`
+  trong cùng transaction, với `note: "tro-ly-okr:" + deXuatId` — một dòng
+  `OkrTrail`, giống hệt một lần sửa tay; quyết một đề xuất đến từ chế độ ẩn để
+  lại đúng hình dạng vết đó. Chế độ ẩn không hiện gì cho người dùng: chỉ quản
+  trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt › Chương
+  trình OKR.
 
 ## Kho tài liệu: nguồn
 
