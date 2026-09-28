@@ -91,10 +91,14 @@ evals:
       packages/ui/test truoc/sau luot phai trung (lech -> ma 2); sha256 tao pham cua
       chan-lai-component-ra-man khong doi (lech -> ma 2).
       CAP HAI CHIEU tren CUNG fixture, mot dot bien cho MOI tep:
-      (a) ban sao moi bo "button" khoi NUT_LAI -> phai bao "ban ve lech: ve-that.json"
-      kem khoa dau tien lech;
-      (b) ban sao moi bo dong `for (const c of b.mo) chu.add(c);` cua ca "mo tung
-      nguyen ban" -> phai bao "ban ve lech: mo-nguyen-ban.json" kem khoa dau tien lech.
+      (a) ban sao moi cho ca lai ve bang locale "vi" thay "en"
+      (`laiMotFile(f, "vi", tin)`) -> phai bao "ban ve lech: ve-that.json" kem khoa
+      dau tien lech;
+      (b) ban sao moi cho ca "mo tung nguyen ban" luon dat loi = "khong co xuat nao ve
+      duoc" -> phai bao "ban ve lech: mo-nguyen-ban.json" kem khoa dau tien lech.
+      (Hai dot bien ke hoach ban dau — bo "button", bo gom chu trang thai mo — khong
+      lam lech ban ve nao: do tai cho, chu dong = chu mo = 141 va moi dong cua
+      mo-nguyen-ban.json deu chu rong; so quyet dinh ghi lai.)
       Dot bien nao khong bao dung ten tep -> ma 1.
       git show that bai, moc dot bien khong tim thay dung mot lan, hay luot nao khong
       ghi tao pham -> ma 2, KHONG xanh.
