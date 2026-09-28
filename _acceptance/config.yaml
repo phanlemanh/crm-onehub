@@ -65,7 +65,7 @@ executors:
     knr_chi_khoa_logo: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-khoa-logo.spec.ts && cd ../../packages/db && bun test test/blob-nguon.spec.ts -t kho-nguon-tat"'
     knr_nang_luc: 'bun run test -- "cd apps/agent && bun test test/capabilities.spec.ts -t luu-nguon"'
     tdk_tim_ma_tran: 'bun run test -- "cd apps/api && bun test test/tai-lieu-tim.spec.ts -t tim-ma-tran"'
-    tdk_tim_vai_okr: 'bun run test -- "cd apps/api && bun test test/tai-lieu-tim.spec.ts test/vai-chi-okr.spec.ts -t vai-okr"'
+    tdk_tim_vai_okr: 'bun run test -- "cd apps/api && bun test test/tai-lieu-tim.spec.ts -t vai-okr && bun test test/vai-chi-okr.spec.ts"'
     tdk_khong_ro: 'bun run test -- "cd apps/api && bun test test/tai-lieu-tim-khong-ro.spec.ts"'
     tdk_cmdk: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-cmdk.dom.tsx"
     tdk_chen_lien_ket_ui: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-lien-ket.dom.tsx"

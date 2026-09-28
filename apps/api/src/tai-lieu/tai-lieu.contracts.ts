@@ -136,6 +136,38 @@ export const taiLieuApproveOutput = z.object({
 });
 export const taiLieuOkOutput = z.object({ ok: z.literal(true) });
 
+export const taiLieuTimInput = z.object({
+	q: z.string().max(TAI_LIEU.tim.toiDa * 3),
+});
+const doanTrich = z.object({
+	truoc: z.string(),
+	khop: z.string(),
+	sau: z.string(),
+});
+export const taiLieuTimOutput = z.object({
+	rows: z.array(
+		z.object({
+			slug: z.string(),
+			ten: z.string(),
+			loai: loaiTrang,
+			chuTrang: nguoi,
+			phienBan: z.number().int(),
+			doanTrich,
+		}),
+	),
+});
+export const taiLieuNhacToiOutput = z.object({
+	rows: z.array(
+		z.object({
+			slug: z.string(),
+			ten: z.string(),
+			cau: z.string(),
+			vanBan: z.string(),
+			soLan: z.number().int(),
+		}),
+	),
+});
+
 export type TaiLieuListInput = z.infer<typeof taiLieuListInput>;
 export type TaiLieuCreateInput = z.infer<typeof taiLieuCreateInput>;
 export type TaiLieuProposeInput = z.infer<typeof taiLieuProposeInput>;
@@ -146,3 +178,5 @@ export type TaiLieuDangDungOutput = z.infer<typeof taiLieuDangDungOutput>;
 export type TaiLieuGetOutput = z.infer<typeof taiLieuGetOutput>;
 export type TaiLieuProposalsOutput = z.infer<typeof taiLieuProposalsOutput>;
 export type TaiLieuProposalOutput = z.infer<typeof taiLieuProposalOutput>;
+export type TaiLieuTimOutput = z.infer<typeof taiLieuTimOutput>;
+export type TaiLieuNhacToiOutput = z.infer<typeof taiLieuNhacToiOutput>;

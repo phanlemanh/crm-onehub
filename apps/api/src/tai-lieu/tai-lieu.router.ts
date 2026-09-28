@@ -23,6 +23,7 @@ import {
 	taiLieuIdInput,
 	taiLieuListInput,
 	taiLieuListOutput,
+	taiLieuNhacToiOutput,
 	taiLieuOkOutput,
 	taiLieuProposalOutput,
 	taiLieuProposalsOutput,
@@ -30,8 +31,11 @@ import {
 	taiLieuProposeOutput,
 	taiLieuRejectInput,
 	taiLieuSlugInput,
+	taiLieuTimInput,
+	taiLieuTimOutput,
 } from "./tai-lieu.contracts";
 import { TaiLieuService } from "./tai-lieu.service";
+import { TaiLieuTimService } from "./tai-lieu-tim.service";
 
 const TAG = ["Documents"];
 
@@ -44,7 +48,29 @@ function nguoiGoi(ctx: AuthedTrpcContext): NguoiGoi {
 export class TaiLieuRouter {
 	constructor(
 		@Inject(TaiLieuService) private readonly taiLieu: TaiLieuService,
+		@Inject(TaiLieuTimService) private readonly timKiem: TaiLieuTimService,
 	) {}
+
+	@Query({
+		input: taiLieuTimInput,
+		output: taiLieuTimOutput,
+		meta: restMeta("GET", "/tai-lieu/tim", TAG),
+	})
+	tim(@Input() input: z.infer<typeof taiLieuTimInput>) {
+		return this.timKiem.tim(input.q);
+	}
+
+	@Query({
+		input: taiLieuSlugInput,
+		output: taiLieuNhacToiOutput,
+		meta: restMeta("GET", "/tai-lieu/trang/{slug}/nhac-toi", TAG),
+	})
+	nhacToi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuSlugInput>,
+	) {
+		return this.timKiem.nhacToi(nguoiGoi(ctx), input.slug);
+	}
 
 	@Query({
 		input: taiLieuListInput,
