@@ -20,6 +20,7 @@ dungSan(gia);
 
 const GHIM = "xoa tep nguon cua nguoi khac";
 const GHIM_SONG_SONG = "xoa tep nguon vua ghi khi gui song song";
+const TRAN_DONG_THOI_GIAY = 30;
 const PHIEU_GIA = `${Date.now() + 60_000}.phieu-tu-che`;
 
 type Cho = { pathname: string; phieu?: string };
@@ -67,7 +68,12 @@ async function dem() {
 	return { nguon, viec };
 }
 
-type KetCa = { tra: TraLoi; duocXoa: string | null; mongNhan?: boolean };
+type KetCa = {
+	tra: TraLoi;
+	duocXoa: string | null;
+	mongNhan?: boolean;
+	mongNguonId?: string;
+};
 type Ca = { ca: string; chay: () => Promise<KetCa> };
 
 describe("nguon-cua-ai", () => {
@@ -96,6 +102,7 @@ describe("nguon-cua-ai", () => {
 				tra: await nhan(ai, cho, dich),
 				duocXoa: cho.pathname,
 				mongNhan,
+				mongNguonId: mongNhan ? n1.nguonId : undefined,
 			};
 		};
 		const khongXoa = async (tra: Promise<TraLoi>): Promise<KetCa> => ({
@@ -151,11 +158,16 @@ describe("nguon-cua-ai", () => {
 		for (const c of CA) {
 			const truoc = await dem();
 			const xoaTruoc = gia.daXoa.length;
-			const { tra, duocXoa, mongNhan } = await c.chay();
+			const { tra, duocXoa, mongNhan, mongNguonId } = await c.chay();
 			const sau = await dem();
 			const daXoa = gia.daXoa.slice(xoaTruoc);
 			if (!mongNhan && tra.status < 400)
 				loi.push(`${c.ca}: duoc nhan (${tra.status})`);
+			if (mongNguonId) {
+				const dl = tra.data as { nguonId?: string; trung?: boolean } | null;
+				if (dl?.nguonId !== mongNguonId || dl?.trung !== true)
+					loi.push(`${c.ca}: khong tra nguon cu`);
+			}
 			if (mongNhan && tra.status >= 400)
 				loi.push(`${c.ca}: bi tu choi (${tra.status})`);
 			if (daXoa.includes(p1.pathname)) loi.push(`${GHIM}: ${c.ca}`);
@@ -189,7 +201,10 @@ describe("nguon-cua-ai", () => {
 			nhan("tao", cho, dichMoi()),
 			nhan("tao", cho, dichMoi()),
 		]);
-		expect(ket.filter((k) => k.status < 400).length, GHIM_SONG_SONG).toBe(1);
+		expect(
+			ket.filter((k) => k.status < 400).length,
+			"song song: nhan nhieu hon mot lan",
+		).toBe(1);
 		const hang = await db.taiLieuNguon.findUnique({
 			where: { blobPathname: cho.pathname },
 			select: { id: true },
@@ -201,4 +216,27 @@ describe("nguon-cua-ai", () => {
 		).toBe(false);
 		expect(await gia.doc(cho.pathname), GHIM_SONG_SONG).not.toBeNull();
 	});
+
+	test("nguon-cua-ai: muoi hai luot nhan dong thoi cua nhieu nguoi khong treo", async () => {
+		const AI_TAI: Ai[] = ["tao", "chu", "owner", "admin", "khac", "okr"];
+		const cho = await Promise.all(
+			Array.from({ length: 12 }, (_, i) =>
+				xinCho(
+					AI_TAI[i % AI_TAI.length] ?? "tao",
+					`dong-thoi-${i}.docx`,
+					moi(`Dong thoi ${i}`),
+				).then((c) => ({ ai: AI_TAI[i % AI_TAI.length] ?? "tao", c })),
+			),
+		);
+		const batDau = Date.now();
+		const ket = await Promise.all(
+			cho.map(({ ai, c }) => nhan(ai, c, dichMoi())),
+		);
+		const giay = (Date.now() - batDau) / 1000;
+		expect(
+			giay < TRAN_DONG_THOI_GIAY,
+			"nhan treo khi nhieu nguoi tai cung luc",
+		).toBe(true);
+		expect(ket.filter((k) => k.status < 400).length).toBe(12);
+	}, 150_000);
 });

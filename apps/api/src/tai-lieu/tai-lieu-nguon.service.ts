@@ -141,16 +141,33 @@ export class TaiLieuNguonService {
 			Date.now(),
 		);
 		if (!cuaNguoiGoi) throw new BadRequestException(T.phieuSai);
+		const daCo = await this.db.taiLieuNguon.findUnique({
+			where: { blobPathname: input.pathname },
+			select: { id: true },
+		});
+		if (daCo) throw new BadRequestException(T.phieuSai);
+		let dich: DichSach;
+		try {
+			dich = await this.kiemDich(nguoi, input.dich);
+		} catch (loi) {
+			if (loi instanceof BadRequestException) {
+				await this.xoaNeuMoCoi(input.pathname);
+			}
+			throw loi;
+		}
 		try {
 			const kq = await this.db.$transaction(
-				(tx) => this.nhanTrongKhoa(tx, nguoi, input),
+				(tx) => this.nhanTrongKhoa(tx, nguoi, input, dich),
 				{ timeout: TAI_LIEU_API.nhanNguon.timeoutMs },
 			);
 			if (!kq.trung) this.agent.danhThucMaySoan();
 			return kq;
 		} catch (loi) {
 			if (!(loi instanceof Error) || !laTrung(loi)) throw loi;
-			const sha256 = await this.bamCua(input.pathname);
+			const byte = await this.kho.doc(input.pathname);
+			const sha256 = byte
+				? createHash("sha256").update(byte).digest("hex")
+				: null;
 			const trung = sha256 ? await this.nguonTheoBam(sha256) : null;
 			if (!trung) throw loi;
 			await this.xoaNeuMoCoi(input.pathname);
@@ -158,12 +175,17 @@ export class TaiLieuNguonService {
 		}
 	}
 
+	private async khoaDuongLuu(tx: Tx, pathname: string): Promise<void> {
+		await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${TAI_LIEU_API.nhanNguon.khoa}:${pathname}`}))`;
+	}
+
 	private async nhanTrongKhoa(
 		tx: Tx,
 		nguoi: NguoiGoi,
 		input: TaiLieuNguonNhanInput,
+		dich: DichSach,
 	): Promise<{ nguonId: string; trung: boolean }> {
-		await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${TAI_LIEU_API.nhanNguon.khoa}:${input.pathname}`}))`;
+		await this.khoaDuongLuu(tx, input.pathname);
 		const daCo = await tx.taiLieuNguon.findUnique({
 			where: { blobPathname: input.pathname },
 			select: { id: true },
@@ -173,7 +195,6 @@ export class TaiLieuNguonService {
 		if (!byte) throw new BadRequestException(T.chuaTai);
 		try {
 			const kieu = this.kiemTep(byte);
-			const dich = await this.kiemDich(nguoi, input.dich);
 			const sha256 = createHash("sha256").update(byte).digest("hex");
 			const trung = await tx.taiLieuNguon.findUnique({
 				where: { sha256 },
@@ -199,24 +220,25 @@ export class TaiLieuNguonService {
 			await this.agent.soanTuNguon(nguon.id, tx);
 			return { nguonId: nguon.id, trung: false };
 		} catch (loi) {
-			if (!(loi instanceof Error) || !laTrung(loi)) {
+			if (loi instanceof BadRequestException) {
 				await this.kho.xoa(input.pathname);
 			}
 			throw loi;
 		}
 	}
 
-	private async bamCua(pathname: string): Promise<string | null> {
-		const byte = await this.kho.doc(pathname);
-		return byte ? createHash("sha256").update(byte).digest("hex") : null;
-	}
-
 	private async xoaNeuMoCoi(pathname: string): Promise<void> {
-		const cuaHang = await this.db.taiLieuNguon.findUnique({
-			where: { blobPathname: pathname },
-			select: { id: true },
-		});
-		if (!cuaHang) await this.kho.xoa(pathname);
+		await this.db.$transaction(
+			async (tx) => {
+				await this.khoaDuongLuu(tx, pathname);
+				const cuaHang = await tx.taiLieuNguon.findUnique({
+					where: { blobPathname: pathname },
+					select: { id: true },
+				});
+				if (!cuaHang) await this.kho.xoa(pathname);
+			},
+			{ timeout: TAI_LIEU_API.nhanNguon.timeoutMs },
+		);
 	}
 
 	private kiemTep(byte: Uint8Array): KieuNguonTep {
