@@ -5,7 +5,7 @@ slug: man-chu-theo-khoa-kho-nguon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
