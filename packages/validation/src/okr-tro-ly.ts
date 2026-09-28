@@ -125,6 +125,41 @@ export const dongDeXuat = z
 
 export type DongDeXuat = z.infer<typeof dongDeXuat>;
 
+export const dichDeXuat = z.object({
+	targetObjectiveId: z.string().min(1).nullable(),
+	targetKeyResultId: z.string().min(1).nullable(),
+});
+
+export type HangDeXuat = {
+	loai: string;
+	objectiveId: string;
+	keyResultId: string | null;
+	truong: string | null;
+	truoc: string | null;
+	sau: string | null;
+	maVanDe: string | null;
+	dich: unknown;
+	lyDo: string;
+};
+
+export function dongTuHang(hang: HangDeXuat): DongDeXuat {
+	const dich =
+		hang.dich === null
+			? { targetObjectiveId: null, targetKeyResultId: null }
+			: dichDeXuat.parse(hang.dich);
+	return dongDeXuat.parse({
+		loai: hang.loai,
+		objectiveId: hang.objectiveId,
+		keyResultId: hang.keyResultId,
+		truong: hang.truong,
+		truoc: hang.truoc,
+		sau: hang.sau,
+		maVanDe: hang.maVanDe,
+		...dich,
+		lyDo: hang.lyDo,
+	});
+}
+
 export const nopDeXuat = z.object({
 	dong: z.array(dongDeXuat).max(TRO_LY_OKR_TRAN.soDongDeXuat),
 });
