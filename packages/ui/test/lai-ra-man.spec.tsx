@@ -301,7 +301,7 @@ test(
 			.filter((b) => b.loi_dong === null);
 		expect(veDuoc.length).toBeGreaterThan(0);
 	},
-	TRAN_LAI_MS,
+	500,
 );
 
 test(
