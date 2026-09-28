@@ -5,7 +5,7 @@ slug: slack-thieu-quyen-email
 owner: manh@mstar.vn
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-28T04:36:43Z
 design_doc: docs/superpowers/specs/2026-09-28-slack-thieu-quyen-email-design.md
@@ -67,3 +67,12 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Hạng T3 theo lộ trình (cửa quyền); theo đường dẫn thì không tệp nào nằm trong `t3_paths`.
 - Không tệp nào của hãng bị sửa; phần lõi ở tệp của bản rẽ `apps/agent/agent/lib/slack-nguoi-nhan.ts`, chỗ rẽ đã có tên ở `docs/agent.md` từ #170.
 - Không có hồ sơ cơ hội: ship thẳng, không phiên nghiệm thu.
+
+### Known limits (Cổng Bằng chứng sau S4 round 2, 2026-09-28, chủ kho chọn (a))
+
+- Ngoài-1: mô tả PR (`mo-ta-pr.md`) ghi «không tệp nào của hãng bị sửa» trong khi `docs/agent.md` là tệp của hãng — chỉ mục chỗ rẽ của bản rẽ trong đó đổi; câu đúng theo nghĩa hẹp của AC-10 (tệp mã).
+- Ngoài-3: đoạn «Gỡ chỗ rẽ» trong `docs/agent.md` chưa nhắc tệp kiểm mới `apps/agent/test/slack-thieu-quyen-email.integration.spec.ts`; gỡ tệp lõi mà giữ tệp này thì bảy ca của nó đỏ trên mã của hãng.
+- Ngoài-5: phép đo «không sửa tệp của hãng» (E10) coi mọi lỗi đọc `origin/release` là «tệp không có ở hãng», nên máy chấm chưa fetch `origin/release` thì phép đo xanh mà không kiểm được gì.
+- Ngoài-6: cùng lỗ ấy, nhìn từ phía phép đo — lượt chấm thường không có đối chứng dương chứng minh nguồn tra `origin/release` đọc được; đối chứng `--gia-tep` chỉ chạy khi truyền cờ.
+- Ngoài-2 không vào danh sách này: chủ kho chọn mở hợp đồng mới — E11 chấm bản mô tả PR trong hồ sơ, chưa có gì buộc thân PR thật khớp với nó.
+- Ngoài-4 không vào danh sách này: chủ kho chấp nhận, không sửa — một dòng trong mục chỗ rẽ không ngắt dòng như phần còn lại.
