@@ -309,6 +309,7 @@ function NoiDungHop({
 					loi={loiTep ?? undefined}
 					moTa={m.keoThaMoTa}
 					nhan={m.keoTha}
+					nutChon={m.keoThaNut}
 					onChon={chon}
 					onTuChoi={(f) => chon(f)}
 					toiDaByte={NGUON.toiDaByte}

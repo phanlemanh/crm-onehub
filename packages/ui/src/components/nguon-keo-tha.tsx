@@ -1,22 +1,27 @@
 "use client";
 
-import CloudUpload from "@carbon/icons-react/es/CloudUpload";
+import Add from "@carbon/icons-react/es/Add";
+import { Button } from "@crm/ui/components/button";
 import {
 	Field,
 	FieldDescription,
 	FieldError,
 } from "@crm/ui/components/field";
-import { EmptyMedia } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
+import {
+	type FileWithPreview,
+	useFileUpload,
+} from "@crm/ui/hooks/use-file-upload";
 import { cn } from "@crm/ui/lib/utils";
 import { cva } from "class-variance-authority";
-import { type ChangeEvent, type DragEvent, useId, useState } from "react";
+import { useId } from "react";
 
 export type LyDoTuChoi = "loai" | "co";
 
 export type NguonKeoThaProps = {
 	nhan: string;
 	moTa: string;
+	nutChon: string;
 	chapNhan: string;
 	toiDaByte: number;
 	tat?: { lyDo: string };
@@ -26,14 +31,14 @@ export type NguonKeoThaProps = {
 };
 
 const vungKeoThaVariants = cva(
-	"flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-input border-dashed bg-card px-6 py-10 text-center transition-colors hover:bg-muted/50 has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/60",
+	"flex flex-wrap items-center gap-3 rounded-lg border border-input border-dashed bg-card p-4 transition-colors",
 	{
 		variants: {
 			trangThai: {
-				thuong: "",
+				thuong: "hover:bg-muted/50",
 				keo: "border-ring bg-muted/50",
 				loi: "border-destructive",
-				tat: "cursor-not-allowed opacity-50 hover:bg-card",
+				tat: "opacity-50",
 			},
 		},
 		defaultVariants: { trangThai: "thuong" },
@@ -71,6 +76,7 @@ export function lyDoTuChoiTep(
 export function NguonKeoTha({
 	nhan,
 	moTa,
+	nutChon,
 	chapNhan,
 	toiDaByte,
 	tat,
@@ -79,78 +85,74 @@ export function NguonKeoTha({
 	loi,
 }: NguonKeoThaProps) {
 	const goc = useId();
-	const idO = `${goc}-o`;
 	const idMoTa = `${goc}-mo-ta`;
 	const idTat = `${goc}-tat`;
 	const idLoi = `${goc}-loi`;
-	const [dangKeo, datDangKeo] = useState(false);
 	const biTat = tat !== undefined;
 
-	const nhanTep = (tep: File | undefined) => {
-		if (!tep || biTat) return;
+	const nhanTep = (them: FileWithPreview[]) => {
+		const tep = them[0]?.file;
+		if (!(tep instanceof File)) return;
 		const lyDo = lyDoTuChoiTep(tep, chapNhan, toiDaByte);
 		if (lyDo) onTuChoi?.(tep, lyDo);
 		else onChon(tep);
 	};
 
-	const khiDoi = (e: ChangeEvent<HTMLInputElement>) => {
-		nhanTep(e.target.files?.[0]);
-		e.target.value = "";
-	};
-
-	const khiKeoVao = (e: DragEvent<HTMLLabelElement>) => {
-		e.preventDefault();
-		if (!biTat) datDangKeo(true);
-	};
-
-	const khiKeoRa = (e: DragEvent<HTMLLabelElement>) => {
-		if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
-		datDangKeo(false);
-	};
-
-	const khiTha = (e: DragEvent<HTMLLabelElement>) => {
-		e.preventDefault();
-		datDangKeo(false);
-		nhanTep(e.dataTransfer?.files?.[0]);
-	};
+	const [
+		{ isDragging },
+		{
+			handleDragEnter,
+			handleDragLeave,
+			handleDragOver,
+			handleDrop,
+			openFileDialog,
+			getInputProps,
+		},
+	] = useFileUpload({ onFilesAdded: nhanTep });
 
 	const moTaBoi = [idMoTa, biTat ? idTat : null, loi ? idLoi : null]
 		.filter(Boolean)
 		.join(" ");
-
+	const dangKeo = isDragging && !biTat;
 	const trangThai = biTat ? "tat" : dangKeo ? "keo" : loi ? "loi" : "thuong";
 
 	return (
 		<Field data-disabled={biTat || undefined} data-invalid={!!loi || undefined}>
-			<label
+			<div
 				className={cn(vungKeoThaVariants({ trangThai }))}
 				data-keo={dangKeo}
 				data-slot="nguon-keo-tha"
 				data-tat={biTat}
-				htmlFor={idO}
-				onDragEnter={khiKeoVao}
-				onDragLeave={khiKeoRa}
-				onDragOver={khiKeoVao}
-				onDrop={khiTha}
+				onDragEnter={handleDragEnter}
+				onDragLeave={handleDragLeave}
+				onDragOver={handleDragOver}
+				onDrop={handleDrop}
 			>
-				<EmptyMedia variant="icon">
-					<Icon icon={CloudUpload} />
-				</EmptyMedia>
-				<span className="font-medium text-sm">{nhan}</span>
-				<span className="text-muted-foreground text-xs" id={idMoTa}>
-					{moTa}
-				</span>
 				<input
-					accept={chapNhan}
+					{...getInputProps({ accept: chapNhan })}
 					aria-describedby={moTaBoi}
 					aria-invalid={loi ? true : undefined}
+					aria-label={nutChon}
 					className="sr-only"
 					disabled={biTat}
-					id={idO}
-					onChange={khiDoi}
-					type="file"
+					tabIndex={-1}
 				/>
-			</label>
+				<Button
+					aria-describedby={moTaBoi}
+					disabled={biTat}
+					onClick={openFileDialog}
+					size="sm"
+					type="button"
+					variant="outline"
+				>
+					<Icon icon={Add} />
+					{nutChon}
+				</Button>
+				<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+					<span className="font-medium text-sm">{nhan}</span>
+					<FieldDescription id={idMoTa}>{moTa}</FieldDescription>
+				</div>
+			</div>
 			{tat ? <FieldDescription id={idTat}>{tat.lyDo}</FieldDescription> : null}
 			<FieldError id={idLoi}>{loi}</FieldError>
 		</Field>
