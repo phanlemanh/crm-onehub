@@ -1,0 +1,10 @@
+{
+  "feature_plain": "So hai phiên bản tài liệu khác nhau nhiều nay trả nhanh hơn khoảng 35–40%, kết quả so y hệt trước, và ca kiểm «đồng hồ chạy nhanh hay chậm» hết đỏ chập chờn trên CI.",
+  "decisions_plain": [
+    {"id": "d-20260928T135124Z-1", "p": "Chọn sửa gốc: bỏ lượt dò vô ích khi hai bản chắc chắn khác quá nhiều — KHÔNG nới trần thời gian cho ca kiểm; đổi lại phần đọc tài liệu (~60% thời gian) vẫn còn, CI dự kiến ~3,2 giây so với trần 5 giây."},
+    {"id": "d-20260928T135124Z-2", "p": "KHÔNG chạy lưới quét độ phủ tiêu chí — bài toán chỉ có một trục, ba ô đã liệt kê tay trong hợp đồng; đổi lại không có bằng chứng quét tự động."},
+    {"id": "d-20260928T135124Z-3", "p": "KHÔNG viết đặc tả giao diện — việc này không đổi màn hình nào."},
+    {"id": "d-20260928T135124Z-4", "p": "KHÔNG bỏ lần đọc tài liệu thứ hai và KHÔNG tăng tốc so từng chữ — hai việc đó có thể đổi dấu vân tay của bản so đã lưu; đổi lại ca một đoạn rất dài không nhanh hơn."}
+  ],
+  "analyst_plain": "Hai phép kiểm lấy từ hồ sơ kho tài liệu đã ký xanh cả trước lẫn sau thay đổi — đó là chủ ý: chúng canh không làm hỏng việc cũ, không chứng minh phần tăng tốc."
+}
