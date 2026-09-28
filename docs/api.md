@@ -755,12 +755,22 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   cả đơn vị (`suaDuocDonVi`); không thì lọc xuống đúng tập KR người gọi sửa
   được (`ghiDuocKr`) và chỉ trả đề xuất của tập đó thay vì chặn cả dòng —
   `troLyDanhSach` chỉ ném 403 (`khongSuaDuocDonVi`) khi không sửa được KR nào
-  trong Mục tiêu. `troLyQuyet`
+  trong Mục tiêu. Gọi kèm một `keyResultId` không thuộc Mục tiêu thì
+  `troLyDanhSach` trả danh sách rỗng thành công (`lyDo: null`), không 403 —
+  khác `troLySanSang` và `troLyDeXuat`, hai thủ tục này ném `krKhacMucTieu`
+  (400). Mục tiêu đã bỏ (`da-bo`) hay đã xoá cũng trả rỗng, không ném; với Mục
+  tiêu đã bỏ, cổng quyền đứng trước nên người không sửa được vẫn nhận 403, còn
+  Mục tiêu đã xoá thì không còn đơn vị để kiểm và ai gọi cũng nhận rỗng.
+  `troLyQuyet`
   (`POST .../assistant/suggestions/{deXuatId}/decision`) kiểm quyền trên đích
   của chính dòng đề xuất (`assertSuaDong`: KR nếu dòng gắn với một KR, Mục
   tiêu nếu không), rồi mới kiểm lại nấc của đơn vị (`nacCuaDonVi`, phải `bat`)
   một lần nữa bên trong transaction, vì nấc có thể đổi giữa lúc màn đọc danh
-  sách và lúc người dùng quyết. `troLyAn` (`GET /okr/assistant/runs`) và
+  sách và lúc người dùng quyết. Transaction đó khoá dòng `okrObjective` của Mục
+  tiêu (`FOR UPDATE`) trước khi đọc dòng đề xuất, nên mọi lần quyết trên một Mục
+  tiêu đi tuần tự: hai dòng viết lại khác chữ của cùng một trường được nhận cùng
+  lúc thì lượt sau thấy `truoc` đã cũ và nhận `ConflictException` (`daCu`),
+  không đè lượt trước. `troLyAn` (`GET /okr/assistant/runs`) và
   `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
   `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
   và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.

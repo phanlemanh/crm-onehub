@@ -1102,11 +1102,12 @@ mỗi lần chạy và so với mục này; không hơn, không kém.
 - `packages/ui/src/components/sheet.tsx` — cùng chặn Esc như `dialog.tsx`,
   dùng chung `laEscTuOSuaDeXuat`.
 - `packages/ui/src/components/simple-table.tsx` — prop `sub` mới cho
-  `SimpleTableRow`, làm mờ dòng phụ khi một dòng khác trong bảng đang được
-  quyết.
-- `packages/ui/src/components/suggestion.tsx` — thành phần `Suggestion` của
-  ReUI, mở rộng cho ba cách (nhận · sửa · bác) và khoá nút khi có
-  `acceptDisabledReason`.
+  `SimpleTableRow`: dòng phụ thụt lề ở ô đầu và chữ mờ (`ROW_SUB`), dùng cho
+  các hàng theo mã loại dưới hàng «bị loại» trong bảng số đo góp ý ở Cài đặt.
+- `packages/ui/src/components/suggestion.tsx` — thành phần `Suggestion` chung
+  của `packages/ui`, có sẵn từ hãng (không phải ReUI, cũng không phải
+  `Suggestion` gợi ý câu hỏi của AI Elements trong `docs/chat-ui.md`), mở rộng
+  cho ba cách (nhận · sửa · bác) và khoá nút khi có `acceptDisabledReason`.
 - `packages/ui/src/lib/utils.ts` — `laEscTuOSuaDeXuat`, dùng ở `dialog.tsx` và
   `sheet.tsx` phía trên.
 - `packages/validation/package.json` — một subpath export mới:
