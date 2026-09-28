@@ -67,7 +67,10 @@ const en = {
 	},
 	suggestion: {
 		accept: "Accept",
+		edit: "Edit",
 		dismiss: "Dismiss",
+		accepted: "Accepted",
+		dismissed: "Dismissed",
 	},
 	spinner: {
 		loading: "Loading",
@@ -245,7 +248,10 @@ const vi = {
 	},
 	suggestion: {
 		accept: "Chấp nhận gợi ý",
+		edit: "Sửa",
 		dismiss: "Từ chối gợi ý",
+		accepted: "Đã nhận",
+		dismissed: "Đã bác",
 	},
 	spinner: {
 		loading: "Đang tải",
