@@ -5,7 +5,9 @@ slug: slack-thieu-quyen-email
 owner: manh@mstar.vn
 risk_tier: T3
 surfaces: [api]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-28T04:36:43Z
 design_doc: docs/superpowers/specs/2026-09-28-slack-thieu-quyen-email-design.md
 ---
 
