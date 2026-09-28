@@ -187,6 +187,8 @@ mock.module("@/lib/trpc/client", () => ({
 			dropObjective: thuTuc("okr.dropObjective"),
 			updateObjective: thuTuc("okr.updateObjective"),
 			createObjective: thuTuc("okr.createObjective"),
+			mau: thuTuc("okr.mau", () => ({ mau: [], quanTri: false })),
+			taoTuMau: thuTuc("okr.taoTuMau"),
 			createKeyResult: thuTuc("okr.createKeyResult"),
 			updateKeyResult: thuTuc("okr.updateKeyResult"),
 			removeKeyResult: thuTuc("okr.removeKeyResult"),

@@ -8,3 +8,9 @@ export const parseMoChuKy = parseAsBoolean.withDefault(false);
 export const THAM_SO_MO_RA = SEARCH_PARAM.okr.moRa;
 
 export const parseMoRa = parseAsString;
+
+export const THAM_SO_MAU = SEARCH_PARAM.okr.mau;
+
+export const MAU_MOI = "moi";
+
+export const parseMau = parseAsString;
