@@ -32,11 +32,12 @@ evals:
       - "_acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs"
     expected: |
       Tao co so du lieu tam rieng, ap migration tai merge-base voi origin/onehub, gieo bang SQL cua luoc do cu:
-      2 trang, 3 phien ban, 4 de xuat (cho, tra lai, cu, da duyet), 2 su kien, 1 lien ket; doc anh chup
+      2 trang, 3 phien ban, 6 de xuat (3 da duyet — moi phien ban mot de xuat rieng vi deXuatId duy nhat —
+      cong cho, tra lai, cu), 2 su kien, 1 lien ket; doc anh chup
       [so dong tung bang]; ap migration cua nhanh; so lai: ma tran viet truoc 5 bang TaiLieu* x so dong
       giu nguyen; moi de xuat cu co nguonId NULL va trichDoan NULL; bang TaiLieuNguon ton tai va rong.
       Xoa co so du lieu tam o finally. CHIEU DO: migration gia them "DELETE FROM \"TaiLieuDeXuat\" WHERE
-      \"trangThai\"='CU'" -> exit 1, thong diep ghim "bang cu mat dong: TaiLieuDeXuat 4 -> 3".
+      \"trangThai\"='CU'" -> exit 1, thong diep ghim "bang cu mat dong: TaiLieuDeXuat 6 -> 5".
 
   - id: E2
     criterion: AC-2
