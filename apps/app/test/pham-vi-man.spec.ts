@@ -9,11 +9,16 @@ import {
 } from "@/lib/pham-vi-man";
 
 describe("pham vi man theo vai", () => {
-	it("rail: okr ba muc, settings tro thang khoa api; vai khac du chin muc", () => {
+	it("rail: okr bon muc gom tai lieu, settings tro thang khoa api; vai khac du muoi muc", () => {
 		const okr = mucRailChoVai("okr");
-		expect(okr.map((m) => m.key)).toEqual(["overview", "okr", "settings"]);
-		expect(okr[2]?.href).toBe("/settings/api-keys");
-		expect(okr[2]?.related).toContain("/settings");
+		expect(okr.map((m) => m.key)).toEqual([
+			"overview",
+			"okr",
+			"taiLieu",
+			"settings",
+		]);
+		expect(okr[3]?.href).toBe("/settings/api-keys");
+		expect(okr[3]?.related).toContain("/settings");
 		expect(mucRailChoVai("member")).toBe(MUC_RAIL);
 		expect(mucRailChoVai(null)).toBe(MUC_RAIL);
 	});
