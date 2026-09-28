@@ -21,6 +21,9 @@ const args = process.argv.slice(2);
 const git = (...a) =>
 	execFileSync("git", ["-C", ROOT, ...a], { encoding: "utf8" });
 const base = args.includes("--base") ? args[args.indexOf("--base") + 1] : MOC;
+const GHIM = args.includes("--ghim")
+	? args[args.indexOf("--ghim") + 1]
+	: "chat.postMessage=1";
 
 const lenh = `cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test ${TEP.map((t) => t.replace("apps/agent/", "")).join(" ")}`;
 
@@ -32,6 +35,17 @@ function chay(cwd) {
 		maxBuffer: 256 * 1024 * 1024,
 	});
 	return { status: r.status, out: `${r.stdout ?? ""}${r.stderr ?? ""}` };
+}
+
+function khoiDo(out, ca) {
+	const dong = out.split("\n");
+	const cuoi = dong.findIndex(
+		(d) => d.trim().startsWith("(fail)") && d.includes(ca),
+	);
+	if (cuoi < 0) return null;
+	let dau = cuoi - 1;
+	while (dau >= 0 && !/^\((pass|fail|skip)\)/.test(dong[dau].trim())) dau--;
+	return dong.slice(dau + 1, cuoi).join("\n");
 }
 
 const coNodeModules = [
@@ -73,12 +87,12 @@ try {
 	if (truoc.status === 0)
 		loi.push("TRUOC VA KHONG DO: bo kiem xanh tren ma truoc va");
 	for (const ca of CA_GHIM) {
-		if (!new RegExp(`\\(fail\\)[^\\n]*${ca}`).test(truoc.out)) {
+		const khoi = khoiDo(truoc.out, ca);
+		if (khoi === null) {
 			loi.push(`TRUOC VA KHONG DO: ${ca}`);
+		} else if (!khoi.includes(GHIM)) {
+			loi.push(`TRUOC VA DO SAI LY DO: ${ca} khong thay ${GHIM}`);
 		}
-	}
-	if (!truoc.out.includes("chat.postMessage=1")) {
-		loi.push("TRUOC VA KHONG DO: khong thay tin da di ra (chat.postMessage=1)");
 	}
 	if (truoc.out.includes("Cannot find module")) {
 		loi.push("TRUOC VA DO SAI LY DO: Cannot find module");

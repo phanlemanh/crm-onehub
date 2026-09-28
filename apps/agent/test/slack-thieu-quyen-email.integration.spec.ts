@@ -387,10 +387,12 @@ describe("slack-thieu-quyen-email", () => {
 	test("stqe-tin-rieng: tin rieng toi nguoi chi OKR chua khop khong mo hoi thoai", async () => {
 		giaSlack({ kenh: {}, danhBa: danhBaThieu() });
 		const ket = await dang(agentTinOkr);
-		expect({ open: dem["conversations.open"] ?? 0, post: soPost() }).toEqual({
-			open: 0,
-			post: 0,
-		});
+		const moi = { open: dem["conversations.open"] ?? 0, post: soPost() };
+		if (moi.open !== 0 || moi.post !== 0) {
+			throw new Error(
+				`conversations.open=${moi.open} chat.postMessage=${moi.post}`,
+			);
+		}
 		tuChoiKhongRo(ket, 1);
 
 		await khop(NGUOI.okr);
