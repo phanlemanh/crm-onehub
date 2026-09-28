@@ -740,13 +740,27 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
 - **Bảy thủ tục của `TroLyOkrService` cho lượt 9b «Góp ý khi bấm».** `troLySanSang`,
   `troLyDeXuat`, `troLyDanhSach`, `troLyQuyet`, `troLyAn`, `troLySoDo` và
   `xuHuongKr` — đọc thẳng `okr.router.ts` để lấy danh sách hiện hành, dòng này
-  không phải nguồn thật. `troLySanSang` (`GET .../objectives/{objectiveId}/assistant`)
-  và `troLyDeXuat` (`POST .../assistant/run`) đòi `assertSuaMucTieu` hoặc
-  `assertSuaKr` trên đích, và nấc của đơn vị (`nacCuaDonVi`) phải là `bat`;
-  `troLyDanhSach` (`GET .../assistant/suggestions`) theo cùng điều kiện, còn
-  `troLyQuyet` (`POST .../assistant/suggestions/{deXuatId}/decision`) kiểm lại
-  nấc một lần nữa bên trong transaction, vì nấc có thể đổi giữa lúc màn đọc
-  danh sách và lúc người dùng quyết. `troLyAn` (`GET /okr/assistant/runs`) và
+  không phải nguồn thật. Ba thủ tục người dùng không đi qua cùng một cổng
+  quyền. `troLySanSang` (`GET .../objectives/{objectiveId}/assistant`) và
+  `troLyDeXuat` (`POST .../assistant/run`) đòi `assertSuaMucTieu` hoặc
+  `assertSuaKr` trên đúng đích được truyền — toàn hay không, không có tập con:
+  không sửa được đích thì `ForbiddenException` luôn, không có KR nào để lọc
+  xuống. Cả ba thủ tục — `troLySanSang`, `troLyDeXuat` và `troLyDanhSach` —
+  còn đòi nấc của đơn vị (`nacCuaDonVi`) đang là `bat`; không đạt thì trả về
+  lý do (`LyDoKhongSanSang`), không phải một lỗi 403. `troLyDanhSach`
+  (`GET .../assistant/suggestions`) không cùng cổng quyền với hai thủ tục
+  kia — nó lọc qua `tapDuocDoc` (`tro-ly.service.ts`): gọi kèm `keyResultId` thì
+  vẫn toàn-hay-không trên đúng KR đó, nhưng gọi cho cả Mục tiêu (không truyền
+  `keyResultId`) thì `tapDuocDoc` trả `"moi"` (mọi KR) khi người gọi sửa được
+  cả đơn vị (`suaDuocDonVi`); không thì lọc xuống đúng tập KR người gọi sửa
+  được (`ghiDuocKr`) và chỉ trả đề xuất của tập đó thay vì chặn cả dòng —
+  `troLyDanhSach` chỉ ném 403 (`khongSuaDuocDonVi`) khi không sửa được KR nào
+  trong Mục tiêu. `troLyQuyet`
+  (`POST .../assistant/suggestions/{deXuatId}/decision`) kiểm quyền trên đích
+  của chính dòng đề xuất (`assertSuaDong`: KR nếu dòng gắn với một KR, Mục
+  tiêu nếu không), rồi mới kiểm lại nấc của đơn vị (`nacCuaDonVi`, phải `bat`)
+  một lần nữa bên trong transaction, vì nấc có thể đổi giữa lúc màn đọc danh
+  sách và lúc người dùng quyết. `troLyAn` (`GET /okr/assistant/runs`) và
   `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
   `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
   và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.
