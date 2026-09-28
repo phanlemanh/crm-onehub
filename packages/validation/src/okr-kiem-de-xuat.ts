@@ -60,6 +60,7 @@ const CHU_SO_CHINH_XAC = 15;
 const SO_BANG_CHU = TRO_LY_OKR_TRAN.soBangChu;
 const CHU_CAN_NGU_CANH = new Set(["một", "năm"]);
 const NAM_LICH = /^\d{4}$/;
+const DAU_CAU = new Set<string>(SO_BANG_CHU.dauCau);
 
 type SoDoc = { giaTri: number; goc: number; heSo: number };
 type Doc = { giaTri: number; het: number };
@@ -126,7 +127,7 @@ function laSoBangChu(t: string[], i: number): boolean {
 	if (truocCum(t, i, SO_BANG_CHU.hauToCo)) return true;
 	if (tu === "một") return false;
 	const sau = t[i + 1];
-	if (sau === undefined || SO_BANG_CHU.dauCau.includes(sau)) return false;
+	if (sau === undefined || DAU_CAU.has(sau)) return false;
 	if (NAM_LICH.test(sau)) return false;
 	return (
 		!sauCum(t, i, SO_BANG_CHU.namSauCum) &&
