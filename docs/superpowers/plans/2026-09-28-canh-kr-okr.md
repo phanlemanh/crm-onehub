@@ -21,6 +21,12 @@ Không bắt đầu Task 1 trước khi chủ kho dán «được viết mã, k�
 3. Soát kế hoạch với mã mới: mốc `migration` mới nhất (hôm nay `20261002010000_tro_ly_okr_nen` → lượt này `20261003010000_okr_canh_kr`, lấy mốc sau mốc mới nhất nếu đã có mốc khác), model cuối `schema.prisma` (hôm nay `AiBaoTran`), dòng số của `removeKeyResult` (L914), `vet` (L466), `createKeyResult` (L703), `guiCapNhat` (`okr-cap-nhat.service.ts` L112), `comments` và `addComment` (`okr-trao-doi.service.ts` L91, L134), tệp của M dưới `apps/api/scripts/okr-mau/` và `apps/api/test/okr-mau*.ts`. Mọi chỗ lệch ghi vào `decisions.jsonl` (`type: "fix"`, `stage: "S3"`).
 4. Soát hạng: vẫn T3.
 
+## Soát lại sau gộp onehub (2026-09-28, `e2cffe32`)
+
+- Đã gộp `origin/onehub` tới `7784cadd` (#186 bộ OKR mẫu, #187 `slack-thieu-quyen-email`, #188 bản chụp lộ trình). Xung đột duy nhất là `PRODUCT-MAP.md`, vẽ lại bằng máy.
+- Không chỗ nào lệch: mốc `migration` mới nhất vẫn `20261002010000_tro_ly_okr_nen`; model cuối vẫn `AiBaoTran`; `vet` L466, `createKeyResult` L703, `removeKeyResult` L914, `objective` L1481, `guiCapNhat` L112, `comments` L91, `addComment` L134, `transferWork` L244 đúng như kế hoạch; tệp của M ở `apps/api/scripts/okr-mau/` và `apps/api/test/okr-mau*.ts` có đủ.
+- Hạng vẫn T3.
+
 ## Global Constraints
 
 - Không viết chú thích trong mã (mới hay sửa).
