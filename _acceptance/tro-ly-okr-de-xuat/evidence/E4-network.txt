@@ -1,0 +1,1 @@
+driver: puppeteer-core ben trong man-gop-y.mjs — khong co read_network_requests/read_console_messages; networkObserved = n-a (driver)

@@ -1,0 +1,52 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_crm_do · app http://localhost:4334 · api http://localhost:4560
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- API cua phien nay khong noi tac tu (thieu AGENT_BRIDGE_SECRET/AGENT_URL) — mo phien do rieng co tac tu
+-- phien do co tac tu: cay crm-tro-ly · tac tu cong 49533
+phien-do: kho crm_crm_tro_ly_do · app http://localhost:4713 · api http://localhost:4800
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+NAP okr:mau --moc 2026-09-29: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-29T05:00:00.000Z): 40 người, 3 bộ phận, 10 phòng ban, 3 chu kỳ, 37 mục tiêu, 81 KR, 420 lần cập nhật trong 296 phiên, 42 bản chụp số, 21 điểm quý 3.
+DUNG setProgram: aiOn true, de xuat danh-sach [mau-okr-pb-kd-bac]
+DUNG ST-caidat-nac 1440: the Tro ly OKR da tai
+DUNG ST-caidat-nac 1440: con lan dua [data-the="tro-ly-okr"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-caidat-nac-1440.png
+DUNG ST-caidat-nac 1440: scrollWidth <= clientWidth (trang 1440/1440)
+DUNG ST-caidat-nac 390: the Tro ly OKR da tai
+DUNG ST-caidat-nac 390: con lan dua [data-the="tro-ly-okr"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-caidat-nac-390.png
+DUNG ST-caidat-nac 390: scrollWidth <= clientWidth (trang 390/390)
+DUNG ST-muctieu-nut 1440: nut «Nhờ Trợ lý OKR góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-1440.png
+DUNG ST-muctieu-nut 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 384/384)
+DUNG ST-muctieu-nut-khoa-sua 1440: nut tat true, co «Lưu thay đổi trước khi nhờ góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-khoa-sua-1440.png
+DUNG ST-muctieu-nut-khoa-sua 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 384/384)
+DUNG hoan lai chu da go 1440: nut mo lai
+DUNG ST-muctieu-nut 390: nut «Nhờ Trợ lý OKR góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-390.png
+DUNG ST-muctieu-nut 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 358/358)
+DUNG ST-muctieu-nut-khoa-sua 390: nut tat true, co «Lưu thay đổi trước khi nhờ góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-khoa-sua-390.png
+DUNG ST-muctieu-nut-khoa-sua 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 358/358)
+DUNG hoan lai chu da go 390: nut mo lai
+DUNG ST-kr-xu-huong 1440: «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61»
+DUNG ST-kr-xu-huong 1440: con lan dua [data-hop-thoai-kr] [data-xu-huong] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-kr-xu-huong-1440.png
+DUNG ST-kr-xu-huong 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 384/384)
+DUNG ST-kr-xu-huong 390: «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61»
+DUNG ST-kr-xu-huong 390: con lan dua [data-hop-thoai-kr] [data-xu-huong] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-kr-xu-huong-390.png
+DUNG ST-kr-xu-huong 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 358/358)
+KHONG DO DUOC: buoc gop-y: okr.createKr tra 404: {"error":{"message":"No procedure found on path \"okr.createKr\"","code":-32004,"data":{"code":"NOT_FOUND","httpStatus":404,"stack":"TRPCError: No procedure found on path \"okr.createKr\"\n    at <anonymous> (/Users/manh-macmini/dev/crm/node_modules/.bun/@trpc+server@11.18.0+1fb4c65d43e298b9/node_mo
+KET LUAN: 23 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 2
+EXIT:2
