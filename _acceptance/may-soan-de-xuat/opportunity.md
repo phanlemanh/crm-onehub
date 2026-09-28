@@ -3,10 +3,10 @@ schema_version: 1
 slug: may-soan-de-xuat
 feature: Máy soạn bản đề xuất — tải tệp quy định đang có (Word, PDF có chữ) lên kho tài liệu, máy soạn thành bản đề xuất có trích đoạn nguồn, chủ trang đọc nguồn cạnh nhau rồi duyệt
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-28T01:37:36Z
 prototype:
   base_commit: 5e3e35b9fea42458726a9b16da8dba72f05689bc
   disposition: keep
@@ -42,9 +42,9 @@ Vật liệu nền: lộ trình mục 4 «Lượt 2», nghiên cứu `kho-tai-li
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: trong hai tuần chạy thật, tải tệp lên cho máy soạn có thành đường chính để nội dung vào kho, mà không để một con số sai lọt qua duyệt không?
-- Kết quả nào là SỐNG: [đề xuất] ≥ 50% bản máy soạn được duyệt (có hoặc không sửa trước khi duyệt) và ≥ 60% trang đã duyệt trong chạy thật đi từ một nguồn — cả hai đếm từ `TaiLieuDeXuat` (`nguonId`, `trangThai`); chi phí trung bình ≤ 0,2 USD mỗi nguồn, đếm từ sự kiện `MAY_SOAN`.
-- Kết quả nào là CHẾT: [đề xuất] ≥ 1 bản máy soạn thành bản đang dùng mà không qua «Duyệt»; hoặc ≥ 1 con số sai trong bản đang dùng đi từ nguồn được báo lại trong chạy thật; hoặc < 25% bản máy soạn được duyệt; hoặc ≥ 50% nguồn tải lên bị «cần gõ tay».
-- Timebox: [đề xuất] đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
+- Kết quả nào là SỐNG: ≥ 50% bản máy soạn được duyệt (có hoặc không sửa trước khi duyệt) và ≥ 60% trang đã duyệt trong chạy thật đi từ một nguồn — cả hai đếm từ `TaiLieuDeXuat` (`nguonId`, `trangThai`); chi phí trung bình ≤ 0,2 USD mỗi nguồn, đếm từ sự kiện `MAY_SOAN`.
+- Kết quả nào là CHẾT: ≥ 1 bản máy soạn thành bản đang dùng mà không qua «Duyệt»; hoặc ≥ 1 con số sai trong bản đang dùng đi từ nguồn được báo lại trong chạy thật; hoặc < 25% bản máy soạn được duyệt; hoặc ≥ 50% nguồn tải lên bị «cần gõ tay».
+- Timebox: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
 
 ## Kết quả prototype
 
@@ -65,9 +65,9 @@ của lượt ghi chúng thành phát hiện. Không đo số nào trên bản m
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: lộ trình mục 3 đặt lượt 2 trước tìm và trợ lý vì nó nạp nội dung cho chạy thật; điều kiện mở «lượt 1 đã lên `onehub`» chỉ chặn S2 trở đi, S0–S1 được làm khi lượt 1 còn chờ merge (lộ trình mục 2).
+- **decision = build.** Căn cứ: lộ trình mục 3 đặt lượt 2 trước tìm và trợ lý vì nó nạp nội dung cho chạy thật; điều kiện mở «lượt 1 đã lên `onehub`» chỉ chặn S2 trở đi, S0–S1 được làm khi lượt 1 còn chờ merge (lộ trình mục 2).
 - **disposition = keep.** Căn cứ: bản mẫu ở lại kho vĩnh viễn; lượt này thêm một mục `catalog.ts` trỏ cùng module, không xoá gì.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** SỐNG ≥ 50% bản máy soạn được duyệt và ≥ 60% trang đã duyệt trong chạy thật đi từ một nguồn, chi phí trung bình ≤ 0,2 USD mỗi nguồn; CHẾT ≥ 1 bản máy soạn thành bản đang dùng không qua «Duyệt», hoặc ≥ 1 số sai trong bản đang dùng đi từ nguồn được báo lại, hoặc < 25% bản máy soạn được duyệt, hoặc ≥ 50% nguồn «cần gõ tay»; đo 2026-10-14 → 2026-10-28, đọc 2026-10-29 — chốt tại Cổng Đáng 2026-09-28, Phan Le Manh («build, ngưỡng giữ nguyên»).
 
 ## Thước đo thành công → ứng viên criterion
 
