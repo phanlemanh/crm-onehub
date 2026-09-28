@@ -1,5 +1,6 @@
 import { EnrichmentStatus } from "@crm/db";
 import { fieldBackfillPayload } from "@crm/validation/field-backfill";
+import { chayDoiSoat } from "./ai-doi-soat";
 import { APP_AUTH, type AppAuth } from "./app-auth";
 import { brandOutcome, runBrand } from "./brand";
 import { queueEventAgentRuns } from "./custom-agent-dispatch";
@@ -7,6 +8,14 @@ import { settledWithin } from "./deadline";
 import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
+import { TRO_LY_OKR } from "./okr/config";
+import { chayKiemSanSang } from "./okr/kiem-san-sang";
+import {
+	giaHanLease,
+	laViecTroLyOkr,
+	lyDoChanTruocKhiGui,
+	okrAuthAttributes,
+} from "./okr/viec";
 import { chayDocSheet } from "./okr-sheets";
 import { collapsing, runLimited } from "./pool";
 import { runPortrait } from "./portrait";
@@ -140,6 +149,16 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 		return;
 	}
 
+	if (task.kind === "okr-kiem-san-sang") {
+		await chayKiemSanSang(task);
+		return;
+	}
+
+	if (task.kind === "ai-doi-soat") {
+		await chayDoiSoat(task);
+		return;
+	}
+
 	await completeTask(task.id, "The record this names is gone.");
 }
 
@@ -173,10 +192,21 @@ type StartOutcome =
 	| { accepted: true; sessionId: string }
 	| { accepted: false; reason: string };
 
-async function beginResearch(
+export async function beginResearch(
 	task: LeasedTask,
 	start: (task: LeasedTask) => Promise<{ id: string }>,
 ): Promise<void> {
+	if (laViecTroLyOkr(task.kind)) {
+		const chan = await lyDoChanTruocKhiGui(task).catch(
+			(error) => `hong:${reasonOf(error).slice(0, 80)}`,
+		);
+		if (chan) {
+			await completeTask(task.id, chan);
+			return;
+		}
+		await giaHanLease(task.id);
+	}
+
 	try {
 		await markRunning(task);
 	} catch (error) {
@@ -261,6 +291,9 @@ export function taskAuth(task: LeasedTask, base: AppAuth = APP_AUTH): AppAuth {
 		if (parsed.success) records.fieldKeys = parsed.data.keys.join(",");
 	}
 
+	if (laViecTroLyOkr(task.kind))
+		Object.assign(records, okrAuthAttributes(task));
+
 	return {
 		...base,
 		attributes: {
@@ -270,6 +303,10 @@ export function taskAuth(task: LeasedTask, base: AppAuth = APP_AUTH): AppAuth {
 			...records,
 		},
 	};
+}
+
+export function guiTuyChon(task: Pick<LeasedTask, "kind">): { mode?: "task" } {
+	return laViecTroLyOkr(task.kind) ? { mode: "task" } : {};
 }
 
 export const DRAIN_TIMEOUT_MS = DISPATCH.sweep.timeoutMs;
@@ -401,6 +438,7 @@ export const drainAll = collapsing(
 );
 
 export function brief(task: LeasedTask): string {
+	if (laViecTroLyOkr(task.kind)) return TRO_LY_OKR.brief;
 	const again =
 		task.attempts > 1
 			? `This is attempt ${task.attempts}; the earlier one did not finish. Carry on from what is already in this thread rather than starting again. `

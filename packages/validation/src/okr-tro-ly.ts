@@ -1,0 +1,144 @@
+import {
+	AI_PHAM_VI,
+	KET_QUA_KIEM_SAN_SANG,
+	LY_DO_KHONG_SAN_SANG,
+	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_TRAN,
+	VIEC_TRO_LY,
+} from "@crm/db/okr-tro-ly-danh-muc";
+import { z } from "zod";
+import { ngayLich } from "./okr-chu-ky";
+
+export {
+	AI_PHAM_VI,
+	type AiPhamVi,
+	type CauHinhAi,
+	DON_VI_ONEHUB,
+	type DonViMucTieu,
+	donViDuocBat,
+	KET_QUA_KIEM_SAN_SANG,
+	type KetQuaKiemSanSang,
+	LY_DO_KHONG_SAN_SANG,
+	type LyDoKhongSanSang,
+	phamViCuaViec,
+	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_TRAN,
+	type TroLySanSang,
+	VIEC_TRO_LY,
+	type ViecTroLy,
+} from "@crm/db/okr-tro-ly-danh-muc";
+
+export const viecTroLy = z.enum(VIEC_TRO_LY);
+
+export const aiPhamVi = z.enum(AI_PHAM_VI);
+
+export const trangThaiDeXuat = z.enum(TRANG_THAI_DE_XUAT);
+
+export const lyDoKhongSanSang = z.enum(LY_DO_KHONG_SAN_SANG);
+
+export const troLySanSang = z.discriminatedUnion("bat", [
+	z.object({ bat: z.literal(true), conLaiUsd: z.number() }),
+	z.object({ bat: z.literal(false), lyDo: lyDoKhongSanSang }),
+]);
+
+export const ketQuaKiemSanSang = z.enum(KET_QUA_KIEM_SAN_SANG);
+
+export const okrTroLyViec = z.discriminatedUnion("viec", [
+	z.object({
+		viec: z.literal("de-xuat"),
+		objectiveId: z.string().min(1),
+		keyResultId: z.string().min(1).nullable(),
+		nguoiYeuCau: z.string().min(1),
+		inputHash: z.string().min(1),
+	}),
+	z.object({
+		viec: z.literal("tom-tat-tuan"),
+		departmentId: z.string().min(1),
+		cycleId: z.string().min(1),
+		tuan: ngayLich,
+		inputHash: z.string().min(1),
+	}),
+]);
+
+export type OkrTroLyViec = z.infer<typeof okrTroLyViec>;
+
+const TRUONG_VIET_LAI = ["title", "whyNow", "kr.title"] as const;
+
+const TRAN_CUA_TRUONG = {
+	title: TRO_LY_OKR_TRAN.chu.tenMucTieu,
+	whyNow: TRO_LY_OKR_TRAN.chu.viSao,
+	"kr.title": TRO_LY_OKR_TRAN.chu.tenKr,
+} as const satisfies Record<(typeof TRUONG_VIET_LAI)[number], number>;
+
+export const MA_VAN_DE = [
+	"kr-la-viec",
+	"thieu-doi-trong",
+	"khong-do-duoc",
+	"trung-y",
+	"muc-tieu-la-so",
+] as const;
+
+export const dongDeXuat = z
+	.object({
+		loai: z.enum(["viet-lai", "hoi", "can-chinh"]),
+		objectiveId: z.string().min(1),
+		keyResultId: z.string().min(1).nullable(),
+		truong: z.enum(TRUONG_VIET_LAI).nullable(),
+		truoc: z.string().nullable(),
+		sau: z.string().trim().nullable(),
+		maVanDe: z.enum(MA_VAN_DE).nullable(),
+		targetObjectiveId: z.string().min(1).nullable(),
+		targetKeyResultId: z.string().min(1).nullable(),
+		lyDo: z.string().trim().min(1).max(TRO_LY_OKR_TRAN.chu.lyDo),
+	})
+	.superRefine((d, ctx) => {
+		const loi = (message: string) => ctx.addIssue({ code: "custom", message });
+		if (d.loai === "viet-lai") {
+			if (!d.truong || d.truoc === null || !d.sau) {
+				loi("viet-lai can truong, truoc, sau");
+				return;
+			}
+			if (d.sau.length < 3 || d.sau.length > TRAN_CUA_TRUONG[d.truong]) {
+				loi(`sau vuot tran cua ${d.truong}`);
+			}
+		}
+		if (d.loai === "hoi" && !d.maVanDe) loi("hoi can maVanDe");
+		if (
+			d.loai === "can-chinh" &&
+			Boolean(d.targetObjectiveId) === Boolean(d.targetKeyResultId)
+		) {
+			loi("can-chinh can dung mot dich");
+		}
+	});
+
+export type DongDeXuat = z.infer<typeof dongDeXuat>;
+
+export const nopDeXuat = z.object({
+	dong: z.array(dongDeXuat).max(TRO_LY_OKR_TRAN.soDongDeXuat),
+});
+
+export type NopDeXuat = z.infer<typeof nopDeXuat>;
+
+export const cauTomTat = z.object({
+	vanBan: z.string().trim().min(5).max(TRO_LY_OKR_TRAN.chu.cauTomTat),
+	nguon: z.array(z.string().min(1)).min(1).max(TRO_LY_OKR_TRAN.soNguonMoiCau),
+});
+
+export const nopTomTat = z.object({
+	cau: z.array(cauTomTat).max(TRO_LY_OKR_TRAN.soCauTomTat),
+});
+
+export const MA_LOI_TRO_LY = [
+	"thieu-du-lieu",
+	"khuon-hong",
+	"sai-viec",
+	"het-han-muc",
+	"tu-choi",
+] as const;
+
+export const ketQuaTroLy = z.object({
+	trangThai: z.enum(["da-nop", "khong-lam-duoc"]),
+	maLoi: z.enum(MA_LOI_TRO_LY).nullable(),
+});
+
+export type KetQuaTroLy = z.infer<typeof ketQuaTroLy>;

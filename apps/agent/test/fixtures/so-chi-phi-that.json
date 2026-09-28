@@ -1,0 +1,300 @@
+[
+	{
+		"ten": "goc",
+		"event": {
+			"data": {
+				"finishReason": "tool-calls",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 97,
+					"outputTokens": 18,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.053Z",
+				"id": "evt_01M3H1V4NNWTV04X2VYRJRV1WC"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4JV1V7X3FF4A9AANBZC",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "http",
+				"continuationToken": "eve:eve:d4a44740-4b1b-4569-bb99-db477d648bcf"
+			},
+			"agent": {
+				"name": "eve-mau"
+			}
+		}
+	},
+	{
+		"ten": "con_tro_ly",
+		"event": {
+			"data": {
+				"finishReason": "stop",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 121,
+					"outputTokens": 1,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.256Z",
+				"id": "evt_01M3H1V4W05MJM6A7Y63HVDV8H"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4R5QFQ7NEZVEBZ63T23",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "subagent",
+				"continuationToken": "subagent:wrun_01M3H1V4JV1V7X3FF4A9AANBZC:mock-tool-call-1-0-1"
+			},
+			"agent": {
+				"name": "con_tro_ly",
+				"nodeId": "subagents/con_tro_ly"
+			}
+		}
+	},
+	{
+		"ten": "con_runner",
+		"event": {
+			"data": {
+				"finishReason": "stop",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 121,
+					"outputTokens": 1,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.268Z",
+				"id": "evt_01M3H1V4WCWMC2FXJWW7PBH8RD"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4R9C75YTHQC77T18QV8",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "subagent",
+				"continuationToken": "subagent:wrun_01M3H1V4JV1V7X3FF4A9AANBZC:mock-tool-call-1-0-2"
+			},
+			"agent": {
+				"name": "con_runner",
+				"nodeId": "subagents/con_runner"
+			}
+		}
+	},
+	{
+		"ten": "con_builder",
+		"event": {
+			"data": {
+				"finishReason": "stop",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 122,
+					"outputTokens": 1,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.273Z",
+				"id": "evt_01M3H1V4WH88A7T4881NV3Z0M9"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4RJWTFNF4E507BA7V2Z",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "subagent",
+				"continuationToken": "subagent:wrun_01M3H1V4JV1V7X3FF4A9AANBZC:mock-tool-call-1-0-3"
+			},
+			"agent": {
+				"name": "con_builder",
+				"nodeId": "subagents/con_builder"
+			}
+		}
+	},
+	{
+		"ten": "con_khong_so",
+		"event": {
+			"data": {
+				"finishReason": "stop",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 122,
+					"outputTokens": 1,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.278Z",
+				"id": "evt_01M3H1V4WPZYG575VBMPQ68S63"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4RQ7X6ERQZHZ9GYVPYM",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "subagent",
+				"continuationToken": "subagent:wrun_01M3H1V4JV1V7X3FF4A9AANBZC:mock-tool-call-1-0-4"
+			},
+			"agent": {
+				"name": "con_khong_so",
+				"nodeId": "subagents/con_khong_so"
+			}
+		}
+	},
+	{
+		"ten": "goc",
+		"event": {
+			"data": {
+				"finishReason": "stop",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 99,
+					"outputTokens": 1,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.372Z",
+				"id": "evt_01M3H1V4ZMJJJ5J04X5XH00W8J"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4JV1V7X3FF4A9AANBZC",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "http",
+				"continuationToken": "eve:eve:d4a44740-4b1b-4569-bb99-db477d648bcf"
+			},
+			"agent": {
+				"name": "eve-mau"
+			}
+		}
+	},
+	{
+		"ten": "goc",
+		"event": {
+			"data": {
+				"finishReason": "stop",
+				"sequence": 0,
+				"stepIndex": 0,
+				"turnId": "turn_0",
+				"usage": {
+					"inputTokens": 99,
+					"outputTokens": 1,
+					"cacheReadTokens": 0,
+					"cacheWriteTokens": 0
+				}
+			},
+			"type": "step.completed",
+			"meta": {
+				"at": "2026-09-27T09:06:24.389Z",
+				"id": "evt_01M3H1V5059K212JF85MWFZQV8"
+			}
+		},
+		"ctx": {
+			"session": {
+				"id": "wrun_01M3H1V4JV1V7X3FF4A9AANBZC",
+				"auth": {
+					"current": {
+						"attributes": {}
+					},
+					"initiator": {
+						"attributes": {}
+					}
+				}
+			},
+			"channel": {
+				"kind": "http",
+				"continuationToken": "eve:eve:d4a44740-4b1b-4569-bb99-db477d648bcf"
+			},
+			"agent": {
+				"name": "eve-mau"
+			}
+		}
+	}
+]

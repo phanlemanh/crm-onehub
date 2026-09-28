@@ -1,5 +1,6 @@
 import { db } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
+import { ghiDaBaoAi, LOAI_NHAC_AI, type ViecAi } from "@crm/db/ai-nhac";
 import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import { KHOA_MUC_OKR, laViecOkr } from "@crm/db/okr-nhac";
 import {
@@ -48,6 +49,13 @@ function nguoiCua(subject: string | null): string {
 }
 
 function maViec(v: ViecNhac): MucNhac {
+	if (laViecAi(v)) {
+		return mucNhac.parse(
+			v.loai === "ai-tran"
+				? { loai: v.loai, thang: v.thang, muc: v.muc }
+				: { loai: v.loai, thang: v.thang },
+		);
+	}
 	if (!laViecOkr(v)) {
 		return mucNhac.parse({ loai: v.loai, planId: v.planId, stepId: v.stepId });
 	}
@@ -103,6 +111,7 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 	return (v) => {
 		if ("planId" in v)
 			return `${ctx.appUrl}/${ctx.slug}?record=plan:${v.planId}`;
+		if (laViecAi(v)) return `${ctx.appUrl}/${ctx.slug}/settings/okr`;
 		if (v.loai === "okr-cap-nhat") {
 			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
 		}
@@ -116,6 +125,10 @@ export async function lienKetKeHoach(): Promise<
 	const ctx = await xuongSlug(appUrlMacDinh());
 	if (!ctx) return () => null;
 	return (planId) => `${ctx.appUrl}/${ctx.slug}?record=plan:${planId}`;
+}
+
+function laViecAi(v: ViecNhac): v is ViecAi {
+	return (LOAI_NHAC_AI as readonly string[]).includes(v.loai);
 }
 
 async function dong(taskId: string, ket: KetQuaNhac): Promise<KetQuaNhac> {
@@ -168,6 +181,7 @@ export async function chayNhac(
 			},
 		},
 	});
+	await ghiDaBaoAi(db, userId, daGui.filter(laViecAi));
 	await completeTask(task.id, `da-gui:${daGui.length}`);
 	return "da-gui";
 }
