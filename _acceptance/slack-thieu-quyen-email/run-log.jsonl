@@ -46,3 +46,4 @@
 {"ts":"2026-09-28T05:15:52Z","sha":"9399756cd9c97bfbc792102c4f4ce2678bd863f2","round":2,"kind":"round-tally","verdict":"PENDING-JUDGMENT","expected":13,"returned":13,"blocked":0}
 {"ts":"2026-09-28T05:15:52Z","sha":"9399756cd9c97bfbc792102c4f4ce2678bd863f2","round":2,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":1,"bypass_ack":0,"verified_at":13}
 {"kind":"thuoc-vat","ts":"2026-09-28T05:26:56Z","round":2,"san":"2fdd1ef0d01f2665a3af63f80a202c20474b1a36","vat":[6,4],"thuoc":[22,5],"ho_so":[24,0],"nhat":1,"lan":1,"tep_thuoc":["_acceptance/slack-thieu-quyen-email/evals.yaml","_acceptance/slack-thieu-quyen-email/rang/do-truoc-khi-va.mjs"]}
+{"ts":"2026-09-28T06:36:06Z","kind":"repin","run_id":"repin-20260928T063606Z-38913","sha":"df6047ba8b341f101e875b075cbb555fa357c405","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E9":0,"E10":0},"evals_not_machine":["E11"]}

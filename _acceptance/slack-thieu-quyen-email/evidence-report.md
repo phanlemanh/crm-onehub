@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9399756cd9c97bfbc792102c4f4ce2678bd863f2
+verified_commit: df6047ba8b341f101e875b075cbb555fa357c405
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -184,3 +184,7 @@ none — every multi-run eval is uniform (không có eval runs > 1 ở vòng nà
 
 Round 1: PENDING-JUDGMENT — mọi eval máy PASS, một lỗi trong hợp đồng ghi nhận ở review-findings round 1; E9 và E11 được sửa (E9 ghim lý do đỏ từng ca, E11 đọc mô tả PR) trước khi sang round 2.
 Round 2 (hiện tại): E1-E7, E9, E10 chạy lại và xanh; E8 carry-forward từ round 1 (delta không chạm paths của eval); panel E11 đề xuất PASS trên cả ba lens — verdict tổng vẫn PENDING-JUDGMENT, chờ human_override cho E11 ở Cổng Bằng chứng.
+
+### Re-pin lần 1 — 2026-09-28, do gộp onehub (#184) trước khi mở PR
+run_id: repin-20260928T063606Z-38913
+sha: df6047ba8b341f101e875b075cbb555fa357c405 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E11 · AC không có chốt máy: AC-11
