@@ -1,0 +1,427 @@
+schema_version: 1
+slug: tim-va-dieu-huong-kho
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_tim_ma_tran
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/validation/src/tai-lieu*.ts"
+      - "apps/api/test/tai-lieu-tim.spec.ts"
+    expected: |
+      Postgres that (kho rieng cua luot bun run test). Gieo 4 trang qua duong duyet that cua lot 1
+      (taiLieu.create roi taiLieu.approve), khong ghi thang cot timKiem: "Quy định hoa hồng đối tác",
+      "Đào tạo nhân viên mới", "Bảo mật dữ liệu khách hàng" (noi dung co "Điều 3" va "QUY TRÌNH"),
+      "Nghỉ phép năm" (noi dung co "hoa hồng" mot lan). Ma tran viet truoc 14 truy van -> tap slug
+      mong doi, test dem dung 14 khang dinh tap + 7 khang dinh cap co-dau/khong-dau cung tap:
+      "quy định"/"quy dinh"/"QUY ĐỊNH" -> {quy-dinh-hoa-hong...}; "quy đ"/"quy d" (go do) -> cung tap;
+      "đào tạo"/"dao tao" -> {dao-tao...}; "hoa hồng"/"hoa hong" -> {quy-dinh..., nghi-phep...} va
+      quy-dinh dung truoc (trung ten); "hoa ho" -> cung tap; "điều 3"/"dieu 3" -> {bao-mat...} (chi co
+      trong noi dung); "xyzkhongco" -> rong; "q" -> rong; "!!!" -> rong khong nem. Moi dong co ket qua:
+      (i) doanTrich.khop la chuoi con NGUYEN VAN co dau cua chu thuong ban dang dung; (ii) QUAN HE voi
+      truy van: boDau(lower(khop)) bang mot tu cua truy van, hoac bat dau bang tu cuoi khi go do — vd
+      "hoa ho" -> khop bo dau la "hoa" hoac bat dau "ho"; (iii) truoc+khop+sau la chuoi con lien mach.
+      Test dem 3 khang dinh moi dong tra ve. CHIEU DO: ban sao bo unaccent phia truy van -> do ghim
+      "tim-ma-tran: 'quy dinh' khong ra quy-dinh-hoa-hong-doi-tac"; ban sao bo ':*' -> do ghim
+      "tim-ma-tran: go do 'quy đ' ra rong"; ban sao doi chi so khop them 1 ky tu -> do ghim
+      "tim-ma-tran: khop khong ung tu truy van".
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_khong_ro
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/db/src/tai-lieu*.ts"
+      - "apps/api/test/tai-lieu-tim-khong-ro.spec.ts"
+    expected: |
+      Ma tran viet truoc 6 nguoi (nguoi tao, chu trang, owner, admin, member khac, vai okr) x 4 trang
+      thai x 3 duong (tim, nhacToi, sucKhoe) = 72 o, MOI O CO KY VONG RIENG viet truoc trong mot bang
+      trong test (khong phu dinh trum). Trang thai: S1 "Trang nhap S1" chua tung duyet, co ban cho
+      mang tu "tulapcho"; S2 dang dung co ban cho mang "tulapcho2"; S3 dang dung co ban tra lai mang
+      "tulaptralai"; S4 dang dung khong ban cho mang "tulapdung". Them trang dich D va nguon A da duyet
+      (A lien ket toi D), va ban cho cua S2 cung lien ket toi D. Khong trang da duyet nao lien ket toi
+      S1 (ca do E7 do). Ky vong tung o: tim("tulapcho"/"tulapcho2"/"tulaptralai") rong voi ca 6;
+      tim("tulapdung") ra S4 voi ca 6 (DOI CHUNG DUONG). nhacToi(D) thanh cong va rows = {A} voi ca 6,
+      khong co S2 (DOI CHUNG DUONG + am). sucKhoe: moCoi chua S4 voi ca 6 (DOI CHUNG DUONG); choDuyet =
+      {S1 (so 1), S2 (so 1)} voi nguoi tao, chu trang, owner, admin; choDuyet rong voi member khac va
+      okr; "Trang nhap S1" chi xuat hien trong choDuyet cua bon nguoi dau va khong o dau khac; chuoi
+      "tulapcho", "tulapcho2", "tulaptralai" khong xuat hien o bat ky JSON nao. Test dem dung 72 o.
+      CHIEU DO: (a) ban sao cho tim doc them TaiLieuDeXuat.noiDung -> do ghim "khong-ro: tim lo
+      tulapcho cho member-khac"; (b) ban sao cho nhacToi tra rong -> do ghim "khong-ro: nhacToi mat
+      nguon A"; (c) ban sao bo dieuKienThayDeXuat trong choDuyet -> do ghim "khong-ro: member-khac
+      thay Trang nhap S1".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_tim_vai_okr
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-tim.spec.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      Qua tRPC that voi phien vai okr: taiLieu.tim tra dong (khong FORBIDDEN), search.quick tra
+      FORBIDDEN KHONG_TRONG_PHAM_VI. vai-chi-okr.spec.ts: tap thu tuc vai okr duoc goi co them dung
+      taiLieu.tim, taiLieu.nhacToi, taiLieu.sucKhoe, taiLieu.boLoc (so sanh bang tap, khong includes).
+      CHIEU DO: ban sao gan PhamViDoiTacMiddleware cho thu tuc tim -> do ghim "vai-okr: taiLieu.tim
+      bi tu choi".
+
+  - id: E3d
+    criterion: AC-3
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_cmdk
+    paths:
+      - "apps/app/components/crm/quick-switcher.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/tai-lieu-cmdk.dom.tsx"
+    expected: |
+      Render QuickSwitcher that voi tRPC gia tai cong fetch. Ba ca viet truoc: (a) member: search.quick
+      tra 1 cong ty, taiLieu.tim tra 2 trang -> co heading "Tài liệu" voi 2 dong, doan trich co <strong>
+      bao dung chu khop; Enter tren dong dau goi router.push("/<ws>/tai-lieu/<slug>") dung slug;
+      (b) vai okr: search.quick tra FORBIDDEN -> khong heading cong ty/nguoi/thoa thuan, khong phan tu
+      role=alert, co heading "Tài liệu"; (c) taiLieu.tim tra loi mang -> nhom Tai lieu co chu "Không tìm
+      được lúc này. Thử lại." va KHONG co "Không có trang nào khớp.". Nut "Tìm nhanh ⌘K" o dau Kho dat
+      tham so dialog.switcher. CHIEU DO: ban sao nuot loi tim thanh mang rong -> do ghim "cmdk: loi tim
+      hien thanh khong-khop".
+
+  - id: E3u
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tdk_man_tim
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs); gieo qua duong duyet that 5 trang co lien ket giua nhau; dang nhap dev:session mot member"
+      - "Buoc 1 (1440): tu Tong quan nhan Meta+K, go 'quy dinh hoa hong' -> nhom 'Tài liệu' co trang 'Quy định hoa hồng đối tác' -> anh tdk-cmdk-1440.png; Enter -> URL la /<ws>/tai-lieu/quy-dinh-hoa-hong-doi-tac"
+      - "Buoc 2: dang nhap nguoi vai okr, Meta+K, go 'dao tao' -> chi nhom 'Tài liệu', khong alert -> anh tdk-cmdk-okr-1440.png"
+      - "Buoc 3 (390): cung hop voi member -> anh tdk-cmdk-390.png, khong cuon ngang"
+    paths:
+      - "apps/app/components/crm/quick-switcher.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/tim-va-dieu-huong-kho/rang/man-tim.mjs"
+    expected: "exit 0; man-tim.mjs in 'buoc N: dat' cho buoc 1-3 (va 4-5 cua E4u/E5u trong cung lan chay); chu doc tu DOM bang innerText (khong page.content); anh o .acceptance-runs/tim-va-dieu-huong-kho/evidence/, vong S4 chep sang _acceptance/tim-va-dieu-huong-kho/evidence/ cho E12j. CHIEU DO: --chieu-do tren ban sao bo nhom Tai lieu khoi QuickSwitcher -> 'buoc 1: khong thay nhom Tai lieu', ma 1."
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_chen_lien_ket_ui
+    paths:
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
+    expected: |
+      TrinhSoan that trong happy-dom voi prop timTrang gia. Bon ca: (a) khong prop timTrang -> khong
+      co nut "Liên kết tới trang"; (b) chon chu "quy dinh o day", bam nut (aria-label dung), go "hoa",
+      Enter -> tuan tu hoa ra markdown chua "[quy dinh o day](/ws/tai-lieu/quy-dinh-hoa-hong-doi-tac)";
+      (c) khong chon chu -> chen "[Quy định hoa hồng đối tác](/ws/tai-lieu/quy-dinh-hoa-hong-doi-tac)";
+      (d) Esc dong hop va document.activeElement nam trong trinh soan. Markdown ra di qua slugTuDuongDan
+      tra dung slug. CHIEU DO: ban sao chen href khong co workspace ("/tai-lieu/x") thay vi dang day du
+      -> ca (b) do ghim "chen-lien-ket: href khong phai /<ws>/tai-lieu/<slug>".
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_chen_lien_ket_api
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/validation/src/tai-lieu*.ts"
+      - "apps/api/test/tai-lieu-nhac-toi.spec.ts"
+    expected: |
+      Dung dung chuoi markdown ma E4 ca (b) sinh ra (test import cung ham tao lien ket cua packages/ui,
+      khong viet tay chuoi), gui taiLieu.propose roi taiLieu.approve qua tRPC -> taiLieu.nhacToi cua
+      trang dich co dung 1 dong la trang vua viet; truoc approve nhacToi rong. CHIEU DO: ban sao bo
+      buoc ghi lien ket trong approve -> do ghim "chen-lien-ket: dich khong thay trang nguon sau duyet".
+
+  - id: E4u
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tdk_man_tim
+    steps:
+      - "Buoc 4 (1440): member mo 'Sửa trang' cua 'Đào tạo nhân viên mới', chon mot doan chu, bam 'Liên kết tới trang', go 'bao mat' -> hop chon co trang 'Bảo mật dữ liệu khách hàng' -> anh tdk-chen-lien-ket-1440.png; Enter -> doan chu thanh lien ket (doc DOM: a[href$='/tai-lieu/bao-mat-du-lieu-khach-hang'])"
+    paths:
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "_acceptance/tim-va-dieu-huong-kho/rang/man-tim.mjs"
+    expected: "exit 0; man-tim.mjs in 'buoc 4: dat'. CHIEU DO: --chieu-do tren ban sao an nut Lien ket toi trang -> 'buoc 4: khong thay nut Lien ket toi trang', ma 1."
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_nhac_toi
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/validation/src/tai-lieu-markdown.ts"
+      - "apps/api/test/tai-lieu-nhac-toi.spec.ts"
+    expected: |
+      Gieo qua duong duyet that: dich D; nguon A lien ket trong doan van, B trong muc danh sach, C trong
+      o bang, E trong tieu de, F nhac D hai lan voi HAI CHU LIEN KET KHAC NHAU ("lan dau", "lan hai") o
+      hai doan khac nhau, D tu nhac chinh no, G la ban de xuat chua duyet co lien ket toi D. Ma tran viet
+      truoc: nhacToi(D) tra dung tap {A,B,C,E,F} (so bang tap), xep theo ten; voi moi nguon, cau BANG
+      (so ===, khong includes) chuoi ky vong viet truoc trong test, lay tu khoi chua lan nhac dau tien;
+      F co soLan = 2 va cau la cau chua "lan dau"; khong dong D, khong dong G. Dich khong nguon -> rows
+      rong. Dich chua tung duyet goi boi member khac -> NOT_FOUND giong het slug khong ton tai. CHIEU DO:
+      ban sao bo dieu kien tuTrangId khac dich -> do ghim "nhac-toi: trang tu nhac chinh no co dong";
+      ban sao lay lan nhac cuoi -> do ghim "nhac-toi: F lay cau cua lan hai".
+
+  - id: E5d
+    criterion: AC-5
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_man_nhac_toi
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-nhac-toi.dom.tsx"
+    expected: |
+      Render man doc voi tRPC gia: (a) nhacToi tra 2 dong -> heading "Trang nhắc tới trang này (2)", moi
+      dong la Item co lien ket toi trang nguon va cau co <strong> bao dung chu lien ket; (b) rows rong ->
+      "Chưa trang nào nhắc tới trang này."; (c) nhacToi tra loi -> co "Không tải được các trang nhắc tới
+      trang này." va nut "Thử lại", KHONG co "Chưa trang nào nhắc tới trang này."; bam Thu lai goi lai
+      thu tuc. CHIEU DO: ban sao nuot loi thanh mang rong -> do ghim "man-nhac-toi: loi hien thanh rong".
+  - id: E5u
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tdk_man_tim
+    steps:
+      - "Buoc 5 (1440): member mo man doc 'Bảo mật dữ liệu khách hàng' -> khoi 'Trang nhắc tới trang này (N)' voi N >= 2, moi dong co ten trang nguon va cau co <strong> -> anh tdk-nhac-toi-1440.png; bam dong dau -> URL doi sang trang nguon"
+      - "Buoc 6 (390): cung man doc -> khoi nam duoi noi dung, khong cuon ngang -> anh tdk-nhac-toi-390.png"
+      - "Buoc 7: man doc trang khong ai nhac -> chu 'Chưa trang nào nhắc tới trang này.' -> anh tdk-nhac-toi-rong.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/tim-va-dieu-huong-kho/rang/man-tim.mjs"
+    expected: "exit 0; man-tim.mjs in 'buoc 5: dat', 'buoc 6: dat', 'buoc 7: dat'. CHIEU DO: --chieu-do tren ban sao bo khoi nhac toi khoi man doc -> 'buoc 5: khong thay khoi Trang nhac toi', ma 1."
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_loc
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-loc.spec.ts"
+    expected: |
+      Gieo 8 trang tren 3 don vi (mot trang khong don vi) x 4 loai x 3 chu trang, mot trang chua tung
+      duyet cua chu thu 3 thuoc don vi thu 3. Ma tran viet truoc 8 to hop loc (khong loc, tung loc rieng,
+      tung cap, ca ba) x tap slug mong doi, test dem 8 khang dinh tap + 8 khang dinh facetCounts (so
+      bang doi tuong day du 4 loai). boLoc voi member khac: don vi thu 3 va chu thu 3 chi xuat hien neu
+      co trang nguoi do thay (trang chua duyet khong tinh). CHIEU DO: ban sao facetCounts bo loc don vi
+      -> do ghim "loc: facetCounts khong theo don vi da chon".
+
+  - id: E6d
+    criterion: AC-6
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_man_loc
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-loc.dom.tsx"
+    expected: |
+      Render danh sach Kho voi nuqs adapter test va tRPC gia: chon don vi -> URL co tham so don vi va
+      page ve 1; chon them chu -> tRPC list nhan ca hai; ket qua rong -> "Không có trang nào khớp bộ lọc"
+      va nut "Bỏ lọc" xoa ca ba tham so; boLoc tra loi -> co loi va nut "Thử lại", khong hien bo loc
+      trong. CHIEU DO: ban sao khong dat lai page khi doi loc -> do ghim "man-loc: doi loc khong ve
+      trang 1"; ban sao nuot loi boLoc thanh mang rong -> do ghim "man-loc: loi bo loc hien thanh rong".
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_suc_khoe_lien_ket
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/db/src/tai-lieu*.ts"
+      - "apps/api/test/tai-lieu-suc-khoe.spec.ts"
+    expected: |
+      Do thi viet truoc gieo qua duong duyet that: trang da duyet P1..P6, trang chua tung duyet N1,
+      slug khong co trang "chua-co-a", "chua-co-b". Canh: P1->P2, P2->P1, P3->P2, P4->chua-co-a,
+      P5->chua-co-a, P5->N1, P6->P6 (tu nhac), P1->chua-co-b. Mong doi viet truoc: moCoi = {P3, P4, P5,
+      P6} (P6 tu nhac khong tinh); gay = {P1: [chua-co-b], P4: [chua-co-a], P5: [chua-co-a, n1]};
+      chuaCo = {chua-co-a: 2 trang, chua-co-b: 1, n1: 1}. So bang tap cho ca ba danh sach, goi voi
+      nguoi tao N1 va voi member khac cho cung ket qua. CHIEU DO: ban sao coi trang co ban cho la "da
+      co" -> do ghim "suc-khoe: n1 bien khoi chuaCo voi nguoi tao".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_suc_khoe_trang_thai
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/api/test/tai-lieu-suc-khoe.spec.ts"
+    expected: |
+      Dong ho gia (setSystemTime, afterEach tra lai) dat 2026-10-15T23:30:00Z (06:30 16/10 gio VN) va
+      TZ=UTC tren may test. Trang xacMinhDen: 15/10 VN (qua han), 16/10 VN 00:00 (hom nay, khong qua han),
+      17/10 (khong), null (khong). quaHan = dung {15/10} kem ngay; mot ban sao mo phong tinh ngay theo
+      UTC phai do. choDuyet cho chu trang X: dung trang cua X co ban cho kem so ban; cho admin: moi trang
+      co ban cho. Moi dong cua ca nam danh sach co chuTrang.ten khong rong. CHIEU DO: ban sao so sanh
+      xacMinhDen voi new Date() thay dau ngay VN -> do ghim "suc-khoe: 16/10 VN bi tinh qua han".
+
+  - id: E8d
+    criterion: AC-8
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_man_suc_khoe
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-suc-khoe.dom.tsx"
+    expected: |
+      Render tab Suc khoe voi tRPC gia: (a) du lieu du nam danh sach -> nam CardTitle dung nhan va so;
+      (b) sucKhoe tra loi -> co "Không tải được sức khoẻ kho." va nut "Thử lại", KHONG co "Không có
+      trang nào."; bam Thu lai goi lai thu tuc. CHIEU DO: ban sao nuot loi thanh danh sach rong -> do
+      ghim "man-suc-khoe: loi hien thanh rong".
+
+  - id: E8u
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tdk_man_suc_khoe
+    steps:
+      - "Canh cay; phien do rieng; gieo do thi cua E7 va hai trang qua han xac minh qua duong ghi that; dang nhap chu trang"
+      - "Buoc 1 (1440): Kho -> tab 'Sức khoẻ' -> nam khoi voi dung so -> anh tdk-suc-khoe-1440.png"
+      - "Buoc 2 (390): cung tab -> mot cot, khong cuon ngang -> anh tdk-suc-khoe-390.png"
+      - "Buoc 3 (1440): tab 'Trang', chon don vi va chu -> URL mang loc, danh sach thu hep -> anh tdk-loc-1440.png; tai lai trang giu loc"
+      - "Buoc 4: gieo 30 ban cho; tab 'Chờ duyệt' -> 25 dong, bam trang 2 -> 5 dong -> anh tdk-cho-duyet-trang-2.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/tim-va-dieu-huong-kho/rang/man-suc-khoe.mjs"
+    expected: "exit 0; man-suc-khoe.mjs in 'buoc N: dat' cho 4 buoc; so cua tung khoi doc tu DOM bang innerText khop mong doi cua do thi E7. CHIEU DO: --chieu-do tren ban sao an tab Suc khoe -> 'buoc 1: khong thay tab Suc khoe', ma 1."
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_nhac_sang
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/tin-nhac.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "packages/db/src/tai-lieu*.ts"
+      - "packages/validation/src/nhac-ke-hoach.ts"
+      - "apps/agent/test/tai-lieu-nhac.spec.ts"
+    expected: |
+      TZ=Asia/Ho_Chi_Minh, Postgres that, dong ho gia 09:00 VN (afterEach tra dong ho). Ma tran viet
+      truoc 4 nguoi, N ky vong viet truoc: chu trang X (2 CHO_DUYET + 1 CU + 1 TRA_LAI, co viec ke hoach)
+      -> muc tai-lieu-cho-duyet so 2; admin -> so = tong CHO_DUYET cua kho (viet truoc: 3); member khong
+      duyet duoc ban nao -> khong muc, va neu khong viec khac thi khong hang AgentTask; chu trang Y chi
+      co 1 CHO_DUYET -> co hang nhac-ke-hoach va tin gui (Zalo gia qua cong) co dong "1 bản đề xuất chờ
+      bạn duyệt" va duong "<APP_URL>/<ws>/tai-lieu?tab=cho-duyet". Ban CU va TRA_LAI deu tao qua duong
+      ghi that (duyet ban khac cung ban goc; tra lai). payload.daGui co {loai: "tai-lieu-cho-duyet", so}
+      va khong chua ten trang. Tra loi "xong <so dong>" tren Zalo gia -> tu choi, khong doi bang nao (dem
+      hang truoc/sau). CHIEU DO: ban sao dem ca ban TRA_LAI va CU -> do ghim "nhac-sang: X nhan 4 thay
+      vi 2".
+  - id: E9b
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_nhac_bang_tab
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/tai-lieu*.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/api/test/tai-lieu-nhac-bang-tab.spec.ts"
+    expected: |
+      Voi tung nguoi trong 4 nguoi cua E9 (cung fixture, co ban CU va TRA_LAI): so choToiDuyet tra ve tu
+      taiLieu.proposals qua tRPC == so cua muc tai-lieu-cho-duyet trong viecCanNhac(db, {cuaSo:
+      "buoi-sang"}) == so tren the "Viec cua ban" (dashboard, cua so "truc-tiep") == N viet truoc cua
+      E9; test dem 4x4 khang dinh. Quet ma: apps/api/src/tai-lieu/quyen.ts khong con tu dinh nghia
+      dieu kien duyet ma goi ham cua packages/db (doc AST, co doi chung duong tren ban goc truoc sua).
+      CHIEU DO: ban sao de tab dem ca ban CU con viecCanNhac thi khong -> do ghim "nhac-bang-tab: tab
+      khac nhac o chu trang X".
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.tdk_ong_dung
+    paths:
+      - "packages/validation/src/tai-lieu-markdown.ts"
+      - "packages/ui/src/components/trinh-soan*.tsx"
+      - "packages/ui/test/trinh-soan-khu-hoi.dom.tsx"
+    expected: |
+      Ma tran viet truoc 6 mau (o co "a|b"; o bat dau "|x"; o ket thuc "x|"; o co "\|" go nguyen van;
+      "**a|b**" trong o; doan van ngoai bang "a | b"). Moi mau di dung duong ProseMirror cua trinh soan
+      that (nap vao editor, getJSON, tuanTuHoa), khong goi tuanTuHoa(nap()) tat: lan 2 == lan 1 tung byte;
+      so o moi dong va chu tung o (doc tu JSON editor sau nap lai) bang viet truoc. Test dem 6x3 khang
+      dinh. CHIEU DO: ban tuan tu hoa goc (truoc sua) -> mau "a|b" do voi thong diep ghim "ong-dung:
+      o 'a|b' tach thanh 2 o".
+
+  - id: E10d
+    criterion: AC-10
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_ong_dung_doc
+    paths:
+      - "packages/ui/src/components/markdown-reader.tsx"
+      - "packages/ui/src/components/diff-trang*.tsx"
+      - "packages/ui/test/ong-dung-doc.dom.tsx"
+    expected: |
+      Markdown do E10 sinh cho mau "a|b" va "\|" render qua MarkdownReader va DiffTrang: o bang chua
+      textContent "a|b" va "\|" nguyen van nhu nguoi go, khong "\" thua. CHIEU DO: ban sao reader bo
+      qua thoat -> do ghim "ong-dung-doc: o hien 'a\|b'".
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tdk_de_xuat_phan_trang
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Gieo qua duong ghi that 30 ban CHO_DUYET (ngay tao tang dan), 6 ban TRA_LAI (tra lai that) va 4
+      ban CU (duyet mot ban khac cung ban goc) cho mot chu trang. proposals {nhom: "cho", page: 1} -> 25
+      dong, tat ca CHO_DUYET, total 30; page 2 -> 5 dong, hop hai trang = dung tap 30 id (so bang tap);
+      ban cu nhat mo duoc bang taiLieu.proposal. nhom "da-xu-ly" -> dung tap 10 id TRA_LAI va CU, total
+      10. CHIEU DO: ban sao giu take 25 khong skip -> do ghim "phan-trang: trang 2 lap lai trang 1"; ban
+      sao xep CU vao nhom cho -> do ghim "phan-trang: nhom cho co ban CU".
+  - id: E11d
+    criterion: AC-11
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.tdk_man_cho_duyet
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-cho-duyet.dom.tsx"
+    expected: |
+      Tab Cho duyet voi tRPC gia tra total 30: co TablePagination, bam trang 2 goi proposals page 2 va
+      hien 5 dong; tong hien "30". CHIEU DO: ban sao an phan trang -> do ghim "man-cho-duyet: khong co
+      phan trang khi total > 25".
+
+  - id: E0s
+    criterion: AC-12
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tdk_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/components/crm/quick-switcher.tsx"
+      - "packages/ui/src/components/trinh-soan*.tsx"
+    expected: "design-gate --mode static tren moi tsx cua Kho tai lieu, quick-switcher va trinh soan: exit 0, khong P0 (mau la, goc la, className de mau). CHIEU DO: ban sao them className='bg-red-500' vao mot the -> exit 1 neu ten tep."
+
+  - id: E12j
+    criterion: AC-12
+    executor: judgment
+    question: "Mot nhan vien van phong nhin cac anh chup hop ⌘K, khoi 'Trang nhắc tới trang này', danh sach Kho co loc, tab 'Sức khoẻ', hop chen lien ket va tab Cho duyet trang 2 o kho 390 va 1440: co hieu moi man de lam gi ma khong can giai thich, nhan co theo tu dien CONTEXT.md (chu trang, ban de xuat, ban dang dung, xac minh den ngay), co cho nao cuon ngang hay chu de len nhau khong?"
+    evidence_required: [judged_by, verdict, rationale]
+    inputs:
+      - "CONTEXT.md"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cmdk-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cmdk-okr-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cmdk-390.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-chen-lien-ket-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-nhac-toi-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-nhac-toi-390.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-suc-khoe-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-suc-khoe-390.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-loc-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cho-duyet-trang-2.png"
