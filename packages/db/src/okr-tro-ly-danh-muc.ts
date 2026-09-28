@@ -378,6 +378,13 @@ export function nacCuaDonVi(
 	return "don-vi-chua-bat";
 }
 
+export function nacCuaViec(ct: CauHinhAi, viec: ViecTroLy): NacCuaDonVi {
+	if (!ct.aiOn) return "tat";
+	if (phamViCuaViec(ct, viec).phamVi !== "tat") return "bat";
+	if (phamViAnCuaViec(ct, viec).phamVi !== "tat") return "an";
+	return "viec-tat";
+}
+
 export function motTrong<T extends string>(
 	danhSach: readonly T[],
 	giaTri: string,

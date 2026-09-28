@@ -165,6 +165,7 @@ export class TroLyOkrService {
 			cauHinhAiLuc(this.db, now),
 			troLyOkrSanSang(this.db, {
 				viec: "de-xuat",
+				nacViec: "an",
 				now,
 				coTacTu: this.trigger.canReachAgent(),
 			}),
@@ -471,6 +472,12 @@ export class TroLyOkrService {
 		now = new Date(),
 	): Promise<TroLyQuyetOutput> {
 		return this.db.$transaction(async (tx) => {
+			const moc = await tx.okrDeXuat.findUnique({
+				where: { id: input.deXuatId },
+				select: { objectiveId: true },
+			});
+			if (moc)
+				await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${moc.objectiveId} FOR UPDATE`;
 			const hang = await tx.okrDeXuat.findUnique({
 				where: { id: input.deXuatId },
 			});

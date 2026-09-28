@@ -288,6 +288,52 @@ describe("quyet", () => {
 	);
 
 	test(
+		"(E9) Hai dòng viết lại khác chữ cùng trường nhận đồng thời: một thành công, một lỗi đã cũ, một hàng vết",
+		async () => {
+			await doiDauVao(app, cookieTruong, K3);
+			const ten = (
+				await db.okrObjective.findUniqueOrThrow({
+					where: { id: MT },
+					select: { title: true },
+				})
+			).title;
+			const cau = [`${ten}, rõ từng quý`, `${ten}, đo được hằng tháng`];
+			const ids = await gieoDong(
+				MT,
+				null,
+				cau.map((sau) =>
+					dongMau({
+						loai: "viet-lai",
+						objectiveId: MT,
+						truong: "title",
+						truoc: ten,
+						sau,
+					}),
+				),
+			);
+			expect(ids).toHaveLength(2);
+			const truoc = await soVet(MT);
+			const kq = await Promise.all(
+				ids.map((id) => quyet(id, "nhan", cookieTruong)),
+			);
+			const thang = kq.flatMap((r, i) => (r.status === 200 ? [i] : []));
+			expect(thang.length, "quyet cheo hai lan").toBe(1);
+			const loi = kq.find((r) => r.status !== 200);
+			expect({ status: loi?.status, loi: loi?.loi }).toEqual({
+				status: 409,
+				loi: OKR.thongDiep.troLy.daCu,
+			});
+			expect(await soVet(MT)).toBe(truoc + 1);
+			const sau = await db.okrObjective.findUniqueOrThrow({
+				where: { id: MT },
+				select: { title: true },
+			});
+			expect(sau.title).toBe(cau[thang[0] ?? -1] ?? "");
+		},
+		CHO_DB,
+	);
+
+	test(
 		"(quyet-lai) thẻ A nhận rồi thẻ B nhận cùng dòng: B nhận lỗi gọn, không hàng vết thứ hai",
 		async () => {
 			await doiDauVao(app, cookieTruong, K3);

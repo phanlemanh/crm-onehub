@@ -452,6 +452,95 @@ describe("ma-tran-quyen", () => {
 	);
 
 	test(
+		"mat-muc-tieu: Mục tiêu đã bỏ hay đã xoá → troLyDanhSach trả rỗng, không ném; người không sửa được vẫn 403 trước",
+		async () => {
+			await ghiCauHinh(app, cookieQuanTri, NAC_CAU_HINH.bat);
+			const goc = await db.okrObjective.findUniqueOrThrow({
+				where: { id: mt("q4-kd-bac-1") },
+				select: {
+					cycleId: true,
+					level: true,
+					divisionId: true,
+					departmentId: true,
+					personUserId: true,
+					ownerUserId: true,
+					kind: true,
+				},
+			});
+			const taoCoDong = async (ma: string) => {
+				const moi = await db.okrObjective.create({
+					data: {
+						...goc,
+						id: mt(ma),
+						status: "cong-bo",
+						title: `Mục tiêu thử ${ma}`,
+					},
+				});
+				const ids = await gieoDong(moi.id, null, [
+					dongMau({
+						loai: "viet-lai",
+						objectiveId: moi.id,
+						truong: "title",
+						truoc: moi.title,
+						sau: `${moi.title}, rõ từng tuần`,
+					}),
+				]);
+				return { objectiveId: moi.id, ids };
+			};
+			const truong = cookie["truong-phong-ban"];
+			const rong = { dong: [], dangSoan: false, maKetThuc: null, lyDo: null };
+
+			const bo = await taoCoDong("mat-da-bo");
+			ok(
+				await goi(
+					app,
+					"okr.dropObjective",
+					"mutation",
+					{ id: bo.objectiveId },
+					truong,
+				),
+				"bo muc tieu",
+			);
+			const xoa = await taoCoDong("mat-da-xoa");
+			await db.okrObjective.delete({ where: { id: xoa.objectiveId } });
+
+			for (const m of [bo, xoa]) {
+				const vao = { objectiveId: m.objectiveId };
+				for (const tra of [
+					await goi(app, "okr.troLyDanhSach", "query", vao, truong),
+					await goiRest(app, "GET", REST.troLyDanhSach[1], vao, truong),
+				]) {
+					expect(`${tra.status} ${tra.loi}`, "muc tieu mat ma nem").toBe(
+						"200 ",
+					);
+					expect(tra.data).toEqual(rong);
+				}
+				for (const id of m.ids) expect(await trangThaiDong(id)).toBe("cho");
+			}
+
+			const khongSua = cookie["thanh-vien"];
+			const boKhongSua = await goi(
+				app,
+				"okr.troLyDanhSach",
+				"query",
+				{ objectiveId: bo.objectiveId },
+				khongSua,
+			);
+			expect(boKhongSua.status, "da-bo: 403 dung truoc rong").toBe(403);
+			const xoaKhongSua = await goi(
+				app,
+				"okr.troLyDanhSach",
+				"query",
+				{ objectiveId: xoa.objectiveId },
+				khongSua,
+			);
+			expect(xoaKhongSua.status).toBe(200);
+			expect(xoaKhongSua.data).toEqual(rong);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"du-tru: mọi dòng dự trữ vẫn 'cho' sau ma trận",
 		async () => {
 			for (const dich of Object.keys(DICH) as Dich[]) {

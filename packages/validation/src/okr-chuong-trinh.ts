@@ -5,6 +5,7 @@ export {
 	DON_VI_ONEHUB,
 	type DonViMucTieu,
 	nacCuaDonVi,
+	nacCuaViec,
 	phamViCuaViec,
 } from "@crm/db/okr-tro-ly-danh-muc";
 

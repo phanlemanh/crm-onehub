@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
 	docTranUsd,
 	nacCuaDonVi,
+	nacCuaViec,
 	OKR_PROGRAM_MAC_DINH,
 	type OkrProgram,
 	okrProgram,
@@ -302,6 +303,25 @@ describe("nac", () => {
 		expect(lech).toEqual([]);
 		expect(soKhangDinh).toBe(soO);
 		expect(soO).toBe(VIEC_TRO_LY.length * 2 * 5 * 5 * 5);
+	});
+
+	test("nac: không có đơn vị, việc chỉ bật chế độ ẩn đọc là ẩn, không là việc tắt", () => {
+		const ct = (p: Partial<OkrProgram>) =>
+			okrProgram.parse({ ...OKR_PROGRAM_MAC_DINH, aiOn: true, ...p });
+		expect([
+			nacCuaViec(
+				ct({ aiOn: false, aiDeXuatPhamVi: "toan-cong-ty" }),
+				"de-xuat",
+			),
+			nacCuaViec(ct({ aiDeXuatPhamVi: "toan-cong-ty" }), "de-xuat"),
+			nacCuaViec(
+				ct({ aiDeXuatPhamVi: "danh-sach", aiDeXuatDonVi: ["onehub"] }),
+				"de-xuat",
+			),
+			nacCuaViec(ct({ aiDeXuatAnPhamVi: "toan-cong-ty" }), "de-xuat"),
+			nacCuaViec(ct({ aiDeXuatAnPhamVi: "toan-cong-ty" }), "tom-tat-tuan"),
+			nacCuaViec(ct({}), "de-xuat"),
+		]).toEqual(["tat", "bat", "bat", "an", "viec-tat", "viec-tat"]);
 	});
 
 	test("nac: hàng cấu hình cũ không có bốn trường ẩn đọc ra cả hai việc tắt", () => {

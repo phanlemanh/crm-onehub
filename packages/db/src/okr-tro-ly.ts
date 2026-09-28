@@ -14,7 +14,7 @@ import {
 	motTrong,
 	type NacCuaDonVi,
 	nacCuaDonVi,
-	phamViCuaViec,
+	nacCuaViec,
 	TRO_LY_OKR_TRAN,
 	type TroLySanSang,
 	type ViecTroLy,
@@ -180,8 +180,7 @@ async function nacCuaMucTieu(
 	const donVi =
 		v.donVi ?? (objectiveId ? await donViCuaMucTieu(db, objectiveId) : null);
 	if (donVi) return nacCuaDonVi(ct, viec, donVi);
-	if (!ct.aiOn) return "tat";
-	return phamViCuaViec(ct, viec).phamVi === "tat" ? "viec-tat" : "bat";
+	return nacCuaViec(ct, viec);
 }
 
 async function quaTranChung(
