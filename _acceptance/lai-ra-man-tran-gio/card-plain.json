@@ -1,0 +1,17 @@
+{
+  "feature_plain": "Người mở PR không còn bị CI đỏ ngẫu nhiên vì bài kiểm «lái từng component ra màn» chạy quá 5 giây; và nếu nó có quá hạn thì chỉ riêng nó đỏ, không kéo đỏ thêm hơn hai chục bài kiểm khác.",
+  "scope_plain": "Vòng này chỉ đặt trần giờ và dừng vòng lái khi hết giờ; những việc dưới đây cố ý để ngoài:",
+  "decisions_plain": [
+    {"id": "d-20260928T065229Z-1", "p": "Chọn một trần 30 giây cho cả ba bài kiểm, cộng tín hiệu dừng khi hết giờ — đổi lại trần này chỉ chặn treo, không bắt được việc bài kiểm chậm dần."},
+    {"id": "d-20260928T065229Z-2", "p": "KHÔNG tách bài kiểm lái thành mỗi component một bài — giữ nguyên hình dạng thước của hồ sơ đã ký, đổi lại bài kiểm vẫn là một khối ~5 giây trên máy CI chậm."},
+    {"id": "d-20260928T065229Z-3", "p": "KHÔNG làm vòng thiết kế trên bản bấm được — vòng này không đổi màn hình nào."},
+    {"id": "d-20260928T065229Z-4", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn hình, chỉ có bài kiểm."},
+    {"id": "d-20260928T065229Z-5", "p": "KHÔNG chạy bộ quét độ phủ tiêu chí — bốn trục nhỏ liệt tay; đổi lại có thể sót trục."},
+    {"id": "d-20260928T070033Z-7", "p": "Phép đo cô lập nhận biết «quá hạn» qua loại lỗi TimeoutError trong báo cáo máy, vì bun không ghi chữ «timed out» vào đó — cùng lời hứa, đổi cách đọc."},
+    {"id": "d-20260928T070658Z-8", "p": "Đổi hai phép phá thử của phép đo «bản vẽ không đổi»: hai phép cũ không làm lệch bản vẽ nào (đã đo), hai phép mới lệch thật — nhờ vậy phép đo đỏ được."},
+    {"id": "d-20260928T074658Z-9", "p": "Thêm câu hỏi tường minh cho hội đồng chấm phần số đo CI — không đổi lời hứa."},
+    {"id": "d-20260928T074803Z-10", "p": "Phép đo cô lập chỉ hỏi bản sao do chính nó tạo có còn sót không, thay vì so cả thư mục — vì các phép đo chạy song song cũng tạo bản sao ở đó; đổi lại tệp lạ do tiến trình khác bỏ lại không bị bắt."},
+    {"id": "d-20260928T080339Z-11", "p": "Đính chính: lượt CI đỏ gốc kéo đỏ 21 bài kiểm bản vẽ, không phải 20 như tài liệu đã ghi; không đổi tiêu chí nào, và bổ sung trích log gốc mà một giám khảo đòi."}
+  ],
+  "analyst_plain": ""
+}
