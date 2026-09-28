@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { taoDeXuatTaiLieu } from "@crm/db/tai-lieu-de-xuat";
 import {
 	chuanNfc,
 	coChuHaySo,
@@ -262,19 +263,13 @@ export class TaiLieuService {
 				},
 				select: { id: true },
 			});
-			const deXuat = await tx.taiLieuDeXuat.create({
-				data: {
-					trangId: trang.id,
-					banGocId: null,
-					ten,
-					noiDung,
-					taoBoiId: nguoi.id,
-				},
-				select: { id: true },
-			});
-			await ghiSuKien(tx, trang.id, nguoi.id, {
-				loai: "TAO",
-				deXuatId: deXuat.id,
+			await taoDeXuatTaiLieu(tx, {
+				trangId: trang.id,
+				banGocId: null,
+				ten,
+				noiDung,
+				taoBoiId: nguoi.id,
+				suKien: "TAO",
 			});
 			return { slug };
 		});
@@ -305,21 +300,14 @@ export class TaiLieuService {
 			const goc = trang.banDangDung;
 			if (goc && goc.ten === ten && chuanHoa(goc.noiDung) === noiDung)
 				throw new BadRequestException(T.chuaDoi);
-			const deXuat = await tx.taiLieuDeXuat.create({
-				data: {
-					trangId: trang.id,
-					banGocId: trang.banDangDungId,
-					ten,
-					noiDung,
-					taoBoiId: nguoi.id,
-				},
-				select: { id: true },
+			return taoDeXuatTaiLieu(tx, {
+				trangId: trang.id,
+				banGocId: trang.banDangDungId,
+				ten,
+				noiDung,
+				taoBoiId: nguoi.id,
+				suKien: "DE_XUAT",
 			});
-			await ghiSuKien(tx, trang.id, nguoi.id, {
-				loai: "DE_XUAT",
-				deXuatId: deXuat.id,
-			});
-			return { deXuatId: deXuat.id };
 		});
 	}
 

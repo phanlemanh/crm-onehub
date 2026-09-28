@@ -233,6 +233,7 @@ export async function donTaiLieu(where: {
 	});
 	await db.taiLieuPhienBan.deleteMany({ where: { trangId } });
 	await db.taiLieuDeXuat.deleteMany({ where: { trangId } });
+	await db.taiLieuNguon.deleteMany({ where: { trangId } });
 	await db.taiLieuTrang.deleteMany({ where: { id: trangId } });
 }
 
