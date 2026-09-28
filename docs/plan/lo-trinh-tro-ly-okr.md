@@ -81,12 +81,14 @@ của «mở rộng khung Tác nhân». Lý do đầy đủ ở mục 4.1 của 
 | Việc không viết mã sản phẩm | 2 | N0 đo trước khi dựng (**xong**); N1 golden cases |
 | Lượt phải có trước | 1 | Vá lối rò Slack |
 | **Lượt của Trợ lý OKR, tới mùa đặt OKR quý 1** | **4** | 9a nền · 9b góp ý · 9c tóm tắt tuần · lượt 10 |
-| Lượt sau mùa, có điều kiện | 2–3 | Nháp «điều học được» · tóm tắt cấp bộ phận · chat OKR (lượt riêng) |
+| Lượt sau mùa, có điều kiện | 2–3 | Nháp «điều học được» · tóm tắt cấp bộ phận · chat OKR (lượt riêng) — từ 2026-09-28 dựng ngay: L, T, C ở «Dựng hết bằng dữ liệu mẫu» ở cuối mục 5 của `lo-trinh-okr.md` |
 | Mở rộng sau Cổng Giá trị | 3 | Miền thứ hai · knowledge tài liệu · MCP |
 | Lượt OKR gốc chạy xen giữa (không có AI) | 4 | 6 · 7 · 8a · 8b |
 | Việc của chủ kho | 3 | Chạy truy vấn production của N0; triển khai Zalo; khai ngưỡng ở Cổng Đáng 9a và 9b |
 
 ## 4. Thứ tự chạy
+
+**Từ 2026-09-28 thứ tự dưới đây đã thay.** Chủ kho quyết dựng mọi hạng mục còn lại bằng dữ liệu mẫu và kiểm lại bằng dữ liệu thật; thứ tự mới, hai làn viết mã, đóng băng cho việc gộp và bảng «bật khi» ở «Dựng hết bằng dữ liệu mẫu» ở cuối mục 5 của `lo-trinh-okr.md`. Danh sách dưới giữ để đọc lại lý do cũ.
 
 1. **Lượt 6** đã lên `onehub` (#162, 2026-09-27). **N0 đã xong** (2026-09-27).
 2. **Vá lối rò Slack**: chạy khi lượt 6 đã gộp. Phải xong trước ngày mở cho cả
@@ -198,6 +200,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   tác, cộng các ca trộn Anh–Việt. Lưu ngoài git, trong thư mục bị gitignore trên
   máy chủ kho.
 - **Chạy khi:** các phòng ban đã công bố OKR quý 4.
+- **Từ 2026-09-28:** N1 không còn chặn việc dựng 9b; nó là bộ kiểm để bật 9b và C. Ca mẫu cùng khuôn nằm trong hạng mục M `bo-okr-mau`.
 
 ### 9b · Góp ý khi bấm · T2 — AI-01, AI-02, AI-03 (phần AI), AI-05, DO-06
 
@@ -220,8 +223,8 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   - không dòng nào có số mới lọt qua bộ kiểm;
   - golden cases đạt;
   - đủ mọi trạng thái rỗng, lỗi và tắt.
-- **Chạy khi:** 9a và lượt 7 đã lên; N1 có ít nhất 12 ca.
-- **Bật khi:** cấp OneHub được bật trước mùa OKR năm; mọi phòng ban được bật trước
+- **Chạy khi:** 9a và lượt 7 đã lên; N1 có ít nhất 12 ca. Từ 2026-09-28: 9a và M đã gộp; N1 thành điều kiện bật. 9b dựng thêm nấc «chạy bóng» cho công tắc.
+- **Bật khi:** N1 có ít nhất 12 ca thật đạt cùng ngưỡng như ca mẫu; cấp OneHub được bật trước mùa OKR năm; mọi phòng ban được bật trước
   mùa quý 1.
 
 ### 9c · Tóm tắt tuần · T2 — AI-04
@@ -244,7 +247,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   - câu bị bỏ ≤ 10%;
   - không số lệch nào lọt qua;
   - tỷ lệ tắt nhắc không tăng.
-- **Chạy khi:** 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật.
+- **Chạy khi:** 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật. Từ 2026-09-28: 9b đã gộp; ba tuần Cập nhật tuần thật thành điều kiện bật — chạy bóng ba tuần, đạt ngưỡng ký thì bật.
 
 ### Lượt 10 · OKR trong chat · T3 — AI-06, AI-07, NH-06
 
@@ -267,6 +270,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   sau mùa; cảnh báo và nút trong Slack vẫn ở lượt 10.
 - **Chạy khi:** số đo của lượt 4 đạt điều kiện của `lo-trinh-okr.md`. Đề nghị tách
   chat và cảnh báo khỏi điều kiện này, ở Cổng Đáng của lượt 10.
+- **Từ 2026-09-28:** chạy khi 8a và 9c đã gộp; hỏi đáp (AI-07) tách thành hạng mục C `hoi-dap-okr`, dựng ngay; số đo lượt 4 thành điều kiện bật nút trong Slack.
 
 ### Sau mùa đặt OKR quý 1, có điều kiện
 
@@ -291,6 +295,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
 | 9 | Vá lối rò Slack | Không có | Lượt T3 riêng, xong trước ngày mở cho cả công ty |
 | 10 | Đóng băng | Không có | Quanh ngày mở cho cả công ty, và trong mùa đặt OKR quý 1; chỉ vá lỗi |
 | 11 | Điều kiện mở lượt 9 | Dòng 9: gửi tới nhà cung cấp đang dùng, trần workspace $20 | Thêm ZDR bắt buộc (kể cả eval), và trần $9 cho khu OKR |
+| 12 | Điều kiện của mọi lượt còn lại | Chờ dữ liệu thật mới dựng (N1, ba tuần Cập nhật tuần, bốn tuần dùng quý 4, số đo lượt 4) | Dựng ngay trên bộ OKR mẫu; dữ liệu thật thành điều kiện bật. Thêm M, S2, 7n, C, L, T. Chủ kho quyết 2026-09-28 |
 
 ## 7. Nếu một điều kiện không đạt
 
@@ -299,7 +304,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
 | 9a chưa gộp khi tới lúc triển khai Zalo | Hỏi CRM qua Zalo mở mà chưa có sổ chi phí | Hạ trần hỏi CRM qua Zalo xuống mức N0 đề xuất |
 | 9a hoặc lượt 7 chưa xong trước đóng băng | Làm sau đóng băng | Vá Slack vẫn phải xong trước ngày mở; nếu cần thì đi trước mọi lượt khác |
 | 9b chưa xong trước mùa OKR năm | Cấp OneHub đặt OKR năm mà không có trợ lý | Giữ đích cho mùa quý 1 |
-| Chưa đủ 3 tuần Cập nhật tuần thật | 9c chờ; lượt 8a hoặc 10 đi trước | 9c vẫn chạy được khi đủ dữ liệu |
+| Chưa đủ 3 tuần Cập nhật tuần thật | Từ 2026-09-28: 9c đã dựng xong, chạy bóng tiếp, chưa bật | 9c bật khi đủ ba tuần bóng đạt ngưỡng |
 | Production dùng GLM cho agent gốc | Trần $9 không giữ được | Chuyển agent gốc sang Gemini, hoặc bỏ bước chuyển tiếp (nấc 3 ở mục 4.10 của thiết kế), hoặc chủ kho nâng trần |
 
 ## 8. Kiểm «sẵn sàng cho mùa đặt OKR quý 1»
