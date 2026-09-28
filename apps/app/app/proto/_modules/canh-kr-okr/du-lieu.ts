@@ -185,10 +185,10 @@ export const DONG_K1: DongCanh[] = [
 export const DONG_GOC_MAT: DongCanh[] = [
 	{
 		id: "s2",
-		loai: "chien-dich",
-		ten: "Chiến dịch — Gọi lại đối tác quý 3",
+		loai: "ke-hoach",
+		ten: "Kế hoạch 30 ngày — Công ty Địa ốc Phú Gia",
 		trangThai: "da-luu-tru",
-		chiTiet: "Chiến dịch đã lưu trữ",
+		chiTiet: "Công ty đã lưu trữ",
 	},
 	{
 		id: "s3",

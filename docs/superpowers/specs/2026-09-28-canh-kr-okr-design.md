@@ -82,7 +82,7 @@ Màn hỏi `canEditKr`, `coTheGanSangKien`, `laNguoiLam` từ API, không tự s
 
 **Không lộ dữ liệu đối tác.** Hàng sáng kiến chỉ lưu mã bản ghi gốc. Mọi thủ tục trả hàng
 sáng kiến đi qua một hàm `lienKetChoVai(role, hang)`: vai có phạm vi đối tác nhận
-`{ loai, id, ten, trangThai }` đọc sống từ bản ghi gốc (`campaign.status`,
+`{ loai, id, ten, trangThai }` đọc sống từ bản ghi gốc (`campaign.status`: DRAFT → chưa chạy, RUNNING → đang chạy, FINISHED → đã đóng;
 `onboardingPlan.closedAt`, tên công ty của kế hoạch); vai «chỉ OKR» nhận `{ loai,
 coQuyen: false }` — không mã, không tên, không trạng thái. Áp ở mọi đường vào: tRPC, cầu
 REST, khoá API. Bộ chọn chiến dịch hay kế hoạch dùng thủ tục danh sách **có sẵn** của hai
@@ -184,7 +184,7 @@ chỉ đã công bố); đọc kèm `viecXong / viecTong`, `sangKienKeHoach / sa
 | ST-khungkr-loi | Khung KR | `Empty` «Không tải được việc của KR này» + «Thử lại» | thử lại |
 | ST-khungkr-co-viec | Khung KR | `Item` mỗi việc: ô đánh dấu, tiêu đề, người làm, hạn (quá hạn đỏ chữ), menu «…»; sáng kiến: biểu tượng loại, tên, `StatusIndicator` trạng thái | đánh dấu, sửa, gỡ, mở bản ghi |
 | ST-khungkr-chi-okr | Khung KR | sáng kiến gắn sẵn: «Một kế hoạch 30 ngày — bạn không có quyền xem» không đường mở | — |
-| ST-khungkr-goc-mat | Khung KR | «Kế hoạch đã xoá» / «Chiến dịch đã lưu trữ» | gỡ sáng kiến |
+| ST-khungkr-goc-mat | Khung KR | «Kế hoạch đã xoá» / «Công ty của kế hoạch đã lưu trữ» (chiến dịch không có lưu trữ; chiến dịch xong đọc «Đã đóng», nháp đọc «Chưa chạy») | gỡ sáng kiến |
 | ST-khungkr-khoa | Khung KR | mọi nút ghi khoá, dòng «Kỳ đang chấm điểm — việc chỉ đọc» | — |
 | ST-khungkr-nguoi-roi | Khung KR | tên người làm kèm «đã rời» | giao lại |
 | ST-bangchung-rong | Tab Bằng chứng | `Empty` «Chưa có bằng chứng» + «Đính bằng chứng» | đính |
