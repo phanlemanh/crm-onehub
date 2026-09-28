@@ -2,8 +2,8 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
-import { authMessages } from "../../../apps/app/lib/messages/auth.ts";
 import { LANG_COOKIE } from "../../../apps/app/lib/locale/locale.ts";
+import { authMessages } from "../../../apps/app/lib/messages/auth.ts";
 import { db } from "../../../packages/db/src/client.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
 import {
@@ -17,8 +17,7 @@ import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const RA = resolve(
 	GOC,
-	process.env.BANG_CHUNG ??
-		".acceptance-runs/phien-chet-ve-dang-nhap/evidence",
+	process.env.BANG_CHUNG ?? ".acceptance-runs/phien-chet-ve-dang-nhap/evidence",
 );
 const NGUOI = process.env.NGUOI ?? PHIEN_DO.nguoi;
 const SIGN_IN = "/sign-in";
@@ -123,7 +122,9 @@ async function doApi(slug) {
 
 	const sau = await layApp(cookie, agents);
 	ghi(
-		sau.status === 307 && sau.toi === SIGN_IN && !sau.than.includes("NEXT_REDIRECT"),
+		sau.status === 307 &&
+			sau.toi === SIGN_IN &&
+			!sau.than.includes("NEXT_REDIRECT"),
 		`api: ${agents} voi phien thu hoi`,
 		`${sau.status} -> ${sau.toi}`,
 	);
@@ -158,10 +159,18 @@ async function moTrang(trinh, cookie, duong, kho, choDangNhap) {
 	});
 	if (choDangNhap) {
 		await trang
-			.waitForFunction((d) => location.pathname === d, { timeout: CHO_CHUYEN_MS }, SIGN_IN)
+			.waitForFunction(
+				(d) => location.pathname === d,
+				{ timeout: CHO_CHUYEN_MS },
+				SIGN_IN,
+			)
 			.catch(() => undefined);
 		await trang
-			.waitForFunction((t) => document.title === t, { timeout: CHO_CHUYEN_MS }, TIEU_DE_DANG_NHAP)
+			.waitForFunction(
+				(t) => document.title === t,
+				{ timeout: CHO_CHUYEN_MS },
+				TIEU_DE_DANG_NHAP,
+			)
 			.catch(() => undefined);
 	}
 	return trang;

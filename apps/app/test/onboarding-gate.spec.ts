@@ -72,7 +72,9 @@ function hetPhien() {
 		calls.count += 1;
 		return json(
 			loiPhien(
-				url.includes("workspace.get") ? "workspace.get" : "settings.researchKey",
+				url.includes("workspace.get")
+					? "workspace.get"
+					: "settings.researchKey",
 			),
 			401,
 		);
@@ -608,7 +610,9 @@ describe("proxy and a dead session", () => {
 		const sai: string[] = [];
 
 		for (const d of duong) {
-			if (redirectedTo(await proxy(request(d, [SESSION_COOKIE]))) !== "/sign-in") {
+			if (
+				redirectedTo(await proxy(request(d, [SESSION_COOKIE]))) !== "/sign-in"
+			) {
 				sai.push(`${d}: cookie chet van lot qua proxy`);
 			}
 		}
@@ -660,7 +664,8 @@ describe("proxy and a dead session", () => {
 			const dich = redirectedTo(
 				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
 			);
-			if (dich !== null) sai.push(`${ten}: proxy day ve /sign-in du API chi loi`);
+			if (dich !== null)
+				sai.push(`${ten}: proxy day ve /sign-in du API chi loi`);
 		}
 
 		expect(ca.length).toBe(5);

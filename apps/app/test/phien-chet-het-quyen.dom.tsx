@@ -50,7 +50,10 @@ describe("het-quyen", () => {
 		const o = document.createElement("div");
 		o.innerHTML = renderToStaticMarkup((await HetQuyenPage()) as ReactElement);
 		const nut = [...o.querySelectorAll("button")].map((b) => b.textContent);
-		if (o.querySelector("h1")?.textContent !== t.tieuDe || !nut.includes(t.dangXuat)) {
+		if (
+			o.querySelector("h1")?.textContent !== t.tieuDe ||
+			!nut.includes(t.dangXuat)
+		) {
 			sai.push("het-quyen: nguoi con phien mat trang");
 		}
 

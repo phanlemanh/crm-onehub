@@ -11,7 +11,9 @@ type Phien = { user: { id: string } };
 
 const may = {
 	phien: null as Phien | null,
-	workspace: async (): Promise<{ slug: string | null }> => ({ slug: "comp-ai" }),
+	workspace: async (): Promise<{ slug: string | null }> => ({
+		slug: "comp-ai",
+	}),
 	goiPhien: 0,
 	goiWorkspace: 0,
 	chuyen: [] as string[],
