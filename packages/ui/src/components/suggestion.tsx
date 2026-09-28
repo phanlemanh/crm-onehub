@@ -3,10 +3,18 @@
 import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Close from "@carbon/icons-react/es/Close";
 import { Button } from "@crm/ui/components/button";
+import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
-import { useId, useState, type ReactNode } from "react";
+import {
+	useEffect,
+	useId,
+	useRef,
+	useState,
+	type KeyboardEvent,
+	type ReactNode,
+} from "react";
 import { useMessages } from "@crm/ui/components/locale-provider";
 
 export type SuggestionDecision = "accepted" | "dismissed";
@@ -41,6 +49,14 @@ export function Suggestion({
 	const msg = useMessages();
 	const [moSuaTaiCho, datMoSuaTaiCho] = useState(false);
 	const idLyDoKhoa = useId();
+	const oSuaRef = useRef<HTMLInputElement>(null);
+	const dangSua = editing ?? moSuaTaiCho;
+	const dangSuaTruoc = useRef(dangSua);
+
+	useEffect(() => {
+		if (dangSua && !dangSuaTruoc.current) oSuaRef.current?.focus();
+		dangSuaTruoc.current = dangSua;
+	}, [dangSua]);
 
 	const dangDangMoi =
 		before !== undefined ||
@@ -92,9 +108,14 @@ export function Suggestion({
 		);
 	}
 
-	const dangSua = editing ?? moSuaTaiCho;
 	const chuMoi = typeof value === "string" ? value : "";
 	const dangQuyet = pending || decided !== undefined;
+
+	function huyPhimTrongOSua(su: KeyboardEvent<HTMLInputElement>) {
+		if (su.key !== "Escape") return;
+		su.stopPropagation();
+		datMoSuaTaiCho(false);
+	}
 
 	return (
 		<div
@@ -110,9 +131,11 @@ export function Suggestion({
 							aria-label={msg.suggestion.edit}
 							defaultValue={chuMoi}
 							onChange={(su) => onEdit?.(su.target.value)}
+							onKeyDown={huyPhimTrongOSua}
+							ref={oSuaRef}
 						/>
 					) : (
-						<p className="text-pretty">
+						<p className="text-pretty" translate="no">
 							{before !== undefined ? (
 								<>
 									<del className="text-muted-foreground line-through decoration-diff-bo">
@@ -172,11 +195,7 @@ export function Suggestion({
 					) : null}
 				</div>
 			</div>
-			{error ? (
-				<p className="text-xs font-normal text-destructive" role="alert">
-					{error}
-				</p>
-			) : null}
+			{error ? <FieldError>{error}</FieldError> : null}
 		</div>
 	);
 }

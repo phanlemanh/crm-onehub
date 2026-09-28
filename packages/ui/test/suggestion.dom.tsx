@@ -103,6 +103,20 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		expect(than?.textContent).toContain("→");
 	});
 
+	test("đoạn câu cũ/câu mới không bị trình duyệt tự dịch", () => {
+		const goc = ve(
+			<Suggestion
+				before="Tăng 10%"
+				value="Tăng 20%"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+			/>,
+		);
+		const doan = goc.querySelector("del")?.parentElement;
+		expect(doan?.tagName).toBe("P");
+		expect(doan?.getAttribute("translate")).toBe("no");
+	});
+
 	test("label hiển thị phía trên dòng đề xuất", () => {
 		const goc = ve(
 			<Suggestion
@@ -163,6 +177,67 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		expect(o).not.toBeNull();
 		expect((o as HTMLInputElement).value).toBe("b");
 		expect(goc.querySelector("del, ins")).toBeNull();
+	});
+
+	test("bấm Sửa: con trỏ vào ngay ô sửa (focus)", () => {
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+				onEdit={() => {}}
+			/>,
+		);
+		const nutSua = [...goc.querySelectorAll('button[data-slot="button"]')].find(
+			(b) => b.textContent === "Sửa",
+		);
+		click(nutSua);
+		const o = goc.querySelector("input");
+		expect(o).not.toBeNull();
+		expect(document.activeElement).toBe(o);
+	});
+
+	test("Esc trong ô sửa: đóng ô sửa, không gọi onDismiss, không lọt ra Dialog cha", () => {
+		let boQua = 0;
+		let lotRaCha = 0;
+		const nghePhimCha = () => {
+			lotRaCha += 1;
+		};
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {
+					boQua += 1;
+				}}
+				onEdit={() => {}}
+			/>,
+		);
+		document.addEventListener("keydown", nghePhimCha);
+		try {
+			const nutSua = [
+				...goc.querySelectorAll('button[data-slot="button"]'),
+			].find((b) => b.textContent === "Sửa");
+			click(nutSua);
+			const o = goc.querySelector("input") as HTMLInputElement;
+			expect(o).not.toBeNull();
+			act(() => {
+				o.dispatchEvent(
+					new KeyboardEvent("keydown", {
+						key: "Escape",
+						bubbles: true,
+						cancelable: true,
+					}),
+				);
+			});
+			expect(goc.querySelector("input")).toBeNull();
+			expect(boQua).toBe(0);
+			expect(lotRaCha).toBe(0);
+		} finally {
+			document.removeEventListener("keydown", nghePhimCha);
+		}
 	});
 
 	test("editing=true truyền sẵn: ô sửa mở ngay không cần bấm", () => {
