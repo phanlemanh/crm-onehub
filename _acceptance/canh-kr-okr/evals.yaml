@@ -99,7 +99,7 @@ evals:
     steps:
       - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
       - "Phiên đo nạp bộ OKR mẫu; gieo thêm qua API thật trên một mục tiêu công bố của phòng P1: KR K1 có hai việc (một xong), KR mốc K2 đã xong có một bằng chứng, KR K3 chưa có gì; một kế hoạch 30 ngày P; đăng nhập dev:session trưởng P1; dọn theo id ở cuối kể cả khi đỏ"
-      - "Mở khung mục tiêu ở 1440/vi → bảng KR có cột «Việc»: K1 «1/2», K3 «—»; K2 có dấu «Có bằng chứng» → ảnh buoc-bang-kr"
+      - "Mở khung mục tiêu ở 1440/vi → bảng KR có cột «Việc»: K1 «1/2», K3 «Thêm» (trưởng P1 sửa được KR; người chỉ đọc thấy «—», cả hai đều mở được khung KR — d-14); K2 có dấu «Có bằng chứng» → ảnh buoc-bang-kr"
       - "Bấm «1/2» của K1 → khung KR mở chồng, URL chứa record=kr:<K1>, tab «Việc và sáng kiến» chọn sẵn, không có tab «Bằng chứng» → ảnh buoc-khung-kr"
       - "«Thêm việc» → gõ «Gọi lại 20 đối tác cũ», chọn người làm, Enter → dòng mới; đánh dấu xong dòng đó → cột «Việc» của K1 thành «2/3» sau khi đóng khung KR"
       - "Khung KR của K1 → «Gắn…» › «Kế hoạch 30 ngày» → hộp chọn có tìm, chọn P → dòng sáng kiến có tên công ty của P và StatusIndicator → ảnh buoc-sang-kien"
@@ -157,7 +157,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.ckr_man_chrome
     steps:
-      - "Cùng phiên đo; đăng nhập quản trị mẫu → {APP_URL}/<slug>/settings/okr → khối «Mẫu OKR» liệt ba mẫu của bộ mẫu kèm cấp, số đơn vị, số KR, «đã dùng N lần» → ảnh buoc-mau-danh-sach"
+      - "Cùng phiên đo; đăng nhập quản trị mẫu → {APP_URL}/<slug>/settings/okr → khối «Mẫu OKR» liệt ba mẫu của bộ mẫu kèm cấp, số đơn vị, số KR, «đã dùng N lần» hoặc «chưa dùng» khi N = 0 (d-17) → ảnh buoc-mau-danh-sach"
       - "«Thêm mẫu» → sheet mở, URL mang trạng thái mở; «Lưu» tắt khi trống; điền tên, cấp phòng ban, chọn hai phòng ban, câu mục tiêu, hai KR mẫu (một KR tăng tới đích < khởi điểm) → lỗi dưới đúng ô KR, Lưu tắt; sửa số → Lưu → sheet đóng, danh sách có mẫu mới → ảnh buoc-mau-sheet"
       - "Đăng nhập thành viên thường → cùng trang: danh sách đọc được, nút khoá, một dòng lý do dưới tiêu đề"
       - "Đăng nhập trưởng một phòng ban vừa chọn → Theo đơn vị › «Đặt mục tiêu» → «Bắt đầu từ mẫu» → chọn mẫu mới → form điền sẵn câu mục tiêu và hai KR, ô số trống; bấm «Tạo bản nháp» → ô trống viền lỗi; điền đủ → tạo → khung mục tiêu nháp mở → ảnh buoc-tu-mau"
