@@ -5,7 +5,7 @@ slug: canh-kr-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-28T07:58:30Z
 design_doc: docs/superpowers/specs/2026-09-28-canh-kr-okr-design.md
