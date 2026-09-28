@@ -44,6 +44,7 @@ executors:
     msd_nguon_tu_choi: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-tu-choi"'
     msd_man_tai_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx -t tai-loi"
     msd_nguon_trung: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-trung"'
+    msd_nguon_cua_ai: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-cua-ai.spec.ts"'
     msd_khong_blob: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-tat.spec.ts && cd ../agent && bun test test/capabilities.spec.ts -t luu-nguon"'
     msd_man_nguon_tat: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx -t nguon-tat"
     msd_doc_chu: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-doc-chu.spec.ts"'

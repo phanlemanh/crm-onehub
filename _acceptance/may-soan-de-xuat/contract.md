@@ -5,10 +5,10 @@ slug: may-soan-de-xuat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: signed-off
+status: draft
 design_doc: docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-09-28
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: may-soan-de-xuat
@@ -44,6 +44,7 @@ subagent»; bản mẫu `/proto/kho-tai-lieu`; hợp đồng lượt 1 `_accepta
 - AC-13: Given `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` đặt hoặc không, When máy soạn chạy một lượt, Then khoá đặt thì model của `subagent` dựng bằng khoá đó, vắng thì bằng đường Gateway chung, không lỗi; And mỗi lượt ghi một sự kiện `MAY_SOAN` có mã model, nhãn khoá `rieng`/`chung`, token vào, token ra, chi phí USD tính từ bảng giá ghim theo mã model trong cấu hình của khu, số lần bị bác; And biến có mặt ở `.env.example`, `globalPassThroughEnv` của `turbo.json` và bảng năng lực của agent, không ở `env` của turbo.
 - AC-14: Given `subagent` `may_soan`, When đọc khai báo của nó, Then tập `tool` đúng bằng `{ nop_ban_de_xuat }`, mọi `tool` dựng sẵn tắt, sandbox `deny-all`, không `web_fetch` hay `web_search`; And mã model là hằng trong cấu hình của khu, không đọc `AppSetting`; And khuôn đầu vào của `nop_ban_de_xuat` chuyển được sang JSON Schema không có `$ref` vòng; And chữ nguồn tới model nằm trong khối dữ liệu có dấu phân cách, tách khỏi lời dặn.
 - AC-15: Given ba tệp mẫu thật trong hồ sơ (một quyết định về hoa hồng `.docx`, một quy trình PDF có chữ, một biểu mẫu `.docx`) và trang «Quy tắc viết» của chủ kho, When máy soạn chạy một lượt thật với model đã chọn và đầu ra được lưu vào hồ sơ, Then mỗi bản máy soạn giữ một chủ đề, chép số liệu chính xác, nêu đối tượng áp dụng và giới hạn như nguồn nói, không thêm quy định nào nguồn không có, và theo lời dặn của trang «Quy tắc viết». (judgment)
+- AC-16: Given một nguồn đã lưu và một thành viên bất kỳ (kể cả vai `okr`, kể cả người đã tải về được nguồn đó nên biết đường lưu của nó), When gọi thủ tục nhận nguồn với một đường lưu đã thuộc về một nguồn có sẵn, hoặc một đường lưu không phải do lần xin chỗ của chính người đó cấp (của người khác, hay chưa từng cấp), Then thủ tục từ chối trước khi đọc hay xoá bất cứ tệp nào; And tệp của nguồn có sẵn còn nguyên — tải về đúng byte có mã băm của hàng, và máy soạn vẫn đọc được tệp đó; And khi một lần nhận hợp lệ của chính người gọi bị từ chối vì lý do khác (sai loại, đích sai, trùng byte), máy chỉ xoá tệp vừa tải trong chính lượt đó. (cross-layer)
 
 ## Coverage
 
@@ -54,7 +55,7 @@ duyệt rồi mới đăng; tra 2026-09-28), nghiên cứu mục 6.
 
 - Trục A — tệp vào: docx lành · PDF có chữ · PDF quét · PDF lớp chữ hỏng · tệp hỏng hay có mật khẩu · sai loại, rỗng, quá cỡ · trùng byte · bản mới của nguồn cũ (AC-2, AC-3, AC-4, AC-6). [thước CE: nghiên cứu mục 6.6 bảng «Nạp theo định dạng»; `.doc`, `.xlsx`, ảnh, TCVN3 cắt ra Later]
 - Trục B — kết cục máy soạn: đạt · cần gõ tay · model lỗi · hết giờ · rỗng · sai khuôn · trượt kiểm số · quá dài · thiếu Quy tắc viết · hash lệch (AC-6, AC-7, AC-9, AC-10). [thước CE: nghiên cứu mục 6.2 «Thất bại phải to tiếng» và 6.3]
-- Trục C — người: người tải · chủ trang đích · `owner` · `admin` · thành viên khác · vai `okr` (AC-8, AC-10, AC-12). [thước CE: `packages/validation/src/vai-workspace.ts`, ma trận AC-3 và AC-5 của lượt 1]
+- Trục C — người: người tải · chủ trang đích · `owner` · `admin` · thành viên khác · vai `okr` (AC-8, AC-10, AC-12, AC-16). [thước CE: `packages/validation/src/vai-workspace.ts`, ma trận AC-3 và AC-5 của lượt 1]
 - Trục D — cấu hình: Blob bật/tắt · khoá AI thứ hai có/không · trang Quy tắc viết có/không (AC-5, AC-10, AC-13). [thước CE: `docs/environment.md` «Optional: what the agent can do»; `AGENTS.md` «must never throw»]
 - Cross-cutting — ranh giới máy soạn và đường ghi: không mạng, một `tool`, không đường tới bản đang dùng (AC-8, AC-14); màn duyệt đưa thông tin không đưa khuyến nghị (AC-11). [thước CE: `docs/agent.md` luật 1–8; nghiên cứu mục 8.4, 9.1]
 - [GIẢ ĐỊNH] Ngưỡng «cần gõ tay» (tỉ lệ ký tự hỏng, số ký tự tối thiểu mỗi trang) đặt từ nghiên cứu mục 6.6 và bộ tệp mẫu, chưa thử trên tệp thật của OneHub; chạy thật đếm tỉ lệ cờ để chỉnh.
@@ -116,3 +117,4 @@ duyệt rồi mới đăng; tra 2026-09-28), nghiên cứu mục 6.
   - Ngoài-13 — phép kiểm «không nơi nào sửa tên tệp, mã băm, đường lưu, người tải» chỉ quét một cách viết mã.
   - Ngoài-14 — ca «PDF lớp chữ hỏng kiểu cid» dùng tệp tổng hợp chưa đúng dạng hỏng thật.
   - Ngoài-15 — phép kiểm «máy soạn không ra mạng» đếm chữ trong mã thay vì đọc cấu hình lúc chạy.
+- **Mở lại Cổng Phạm vi 2026-09-28 (Cổng Bằng chứng, Ngoài-1 và Ngoài-6 «nâng phạm vi sửa ngay»):** vòng chấm tìm ra thủ tục nhận nguồn có thể xoá tệp của một nguồn đã có (người biết đường lưu gọi lại với đích sai hay tệp trùng). Merge vào `onehub` là lên production, nên chủ kho chọn sửa trong lượt này: thêm AC-16 và E16, duyệt lại Cổng Phạm vi rồi mới sửa mã.
