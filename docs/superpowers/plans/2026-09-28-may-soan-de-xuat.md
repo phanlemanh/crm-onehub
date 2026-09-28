@@ -41,6 +41,7 @@
 - Blob đã PUT nhưng `nhan` bị từ chối hay trùng — người mong không để rác trong Blob. Test ở Task 5 (Blob giả ghi nhận `del`).
 - Phiên soạn đang chạy thì người bấm «Soạn lại» — người mong không có hai bản đề xuất máy cho một nguồn. Test ở Task 5 (`CONFLICT` khi `DANG_SOAN`).
 - Bản đang dùng của trang đích đổi trong lúc máy soạn — người mong bản máy thành «cũ» theo luật lượt 1, không đè. Test ở Task 7 (bản gốc lấy lúc soạn; duyệt bản khác trước → bản máy «cũ»).
+- Thêm thành phần vào `packages/ui` làm test «lai tung component ra man» vượt trần 5 giây trên CI — người mong CI không đỏ vì một test không liên quan. Đo ở Task 8 bước 3.
 - Tệp `.docx` có theo dõi thay đổi (`w:ins`/`w:del`) — người mong chữ đọc ra là bản đã chấp nhận, không lẫn chữ bị xoá. Test ở Task 6 (thêm tệp mẫu `theo-doi.docx` vào ma trận E6 như ca thứ 9).
 
 ---
@@ -306,7 +307,8 @@ export function NguonCanhNhau(props: { chuNguon: string; doanTrich: string[]; ba
 
 - [ ] **Step 1:** Tra năm bậc: `packages/ui` hiện có → shadcn chưa cài → ReUI (`search` «file upload», «dropzone»; `get_component`; `--dry-run`) → ghi câu tra vào mô tả PR. Viết test DOM: `mark` đủ số đoạn, `translate="no"` trên chữ nguồn, hai thẻ khi `matchMedia` hẹp. Chạy → đỏ.
 - [ ] **Step 2:** Dựng/cài, chạy test, `cd packages/ui && bun run lint`.
-- [ ] **Step 3:** Commit `feat(ui): vùng kéo thả tệp và khung nguồn cạnh nhau`.
+- [ ] **Step 3:** Đo trần thời gian của `packages/ui/test/lai-ra-man.spec.tsx` («lai tung component ra man» lai mọi component xuất khẩu, chạy sát trần 5 giây trên CI — báo của phiên lộ trình 2026-09-28). Nền tại chỗ 2026-09-28: cả tệp 1,8–2,0 giây. Chạy `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/lai-ra-man.spec.tsx` trước và sau khi thêm hai thành phần; tăng quá 0,5 giây tại chỗ thì dừng và trình người (tách thành phần nặng thành nạp động, hoặc nâng trần của test là sửa phép đo — có dòng sổ `approach`). Ghi hai con số vào mô tả commit.
+- [ ] **Step 4:** Commit `feat(ui): vùng kéo thả tệp và khung nguồn cạnh nhau`.
 
 Phục vụ: E11, E11s, E2u · `independent: true` (chỉ `packages/ui`, dùng props giả)
 
