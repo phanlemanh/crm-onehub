@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-28T18:24:00+07:00",
+	chup_luc: "2026-09-29T05:24:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -88,14 +88,15 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			hang: "T3",
 			trang_thai: "đã lên onehub",
 			ngay: "2026-09-28",
-			pr: [194],
+			pr: [194, 195, 196, 197, 198, 200],
 			cau_giao:
 				"«Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt»",
-			buoc_ke: "Cổng Giá trị đóng ở đợt chạy thật",
-			cho_anh: false,
+			buoc_ke:
+				"Anh thử tải một tệp Word thật trên production, rồi chạy phiên nghiệm thu",
+			cho_anh: true,
 			chan_boi: [],
 			ghi_chu:
-				"Merge 8b76152a ngày 28/09, sớm tám ngày so với đề xuất. Chấm năm vòng: round 2 BLOCKED ở E2t vì thiếu Blob thật; Cổng Bằng chứng mở lại Cổng Phạm vi thêm AC-16 (thủ tục nhận nguồn có thể xoá tệp của nguồn đã có); round 3 REJECT chạm trần ba vòng; round 5 đạt, E2t chạy trên kho Blob riêng tư thật kho-tai-lieu-nguon (sin1, chưa gắn dự án). Bốn hạn chế đã biết ở Notes của hợp đồng. migration 20261003010000_may_soan_de_xuat.",
+				"Merge 8b76152a ngày 28/09, sớm tám ngày so với đề xuất. Chấm năm vòng: round 2 BLOCKED ở E2t vì thiếu Blob thật; Cổng Bằng chứng mở lại Cổng Phạm vi thêm AC-16 (thủ tục nhận nguồn có thể xoá tệp của nguồn đã có); round 3 REJECT chạm trần ba vòng; round 5 đạt, E2t chạy trên kho Blob riêng tư thật kho-tai-lieu-nguon (sin1, chưa gắn dự án). Bốn hạn chế đã biết ở Notes của hợp đồng. migration 20261003010000_may_soan_de_xuat. Sau merge: #195 vùng kéo-thả dựng trên móc ReUI; #196 sửa câu gợi ý; #197 kho nguồn đọc khoá riêng KHO_TAI_LIEU_BLOB_TOKEN (đặt tay trên Production của api và agent, kho không gắn dự án); #198 diff bỏ vòng Myers mức khối, hết sát trần CI; #200 thước màn chữ theo khoá mới. Hộp «Tải nguồn lên» đã mở trên production, chưa tải tệp thật nào.",
 		},
 		{
 			id: "l3",
@@ -213,7 +214,11 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			hang_muc: "l3",
 		},
 		{
-			viec: "Kiểm production có BLOB_READ_WRITE_TOKEN chưa: kho kho-tai-lieu-nguon chưa gắn dự án nào; thiếu token thì nút «Tải nguồn lên» khoá",
+			viec: "Thử tải một tệp Word quy định thật lên production: lần ghi vào kho riêng tư đầu tiên chưa được đo ở production",
+			hang_muc: "l2",
+		},
+		{
+			viec: "Chạy phiên nghiệm thu máy soạn (uat-session may-soan-de-xuat)",
 			hang_muc: "l2",
 		},
 		{
@@ -258,8 +263,32 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ngay: "2026-09-28",
 			viec: "Lượt 2: sửa ngay lỗi nhận nguồn xoá nhầm tệp (thêm AC-16) thay vì để lượt sau, vì merge là lên production",
 		},
+		{
+			ngay: "2026-09-28",
+			viec: "Kho nguồn dùng khoá Blob riêng, không lùi về khoá logo; không gắn kho riêng tư vào dự án",
+		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-09-28",
+			viec: "#200: thước màn chữ của hộp kéo-thả theo khoá kho nguồn mới",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "#198: diff bỏ vòng Myers mức khối vô ích, ca tat-dinh hết sát trần CI",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "#197: kho nguồn dùng khoá riêng KHO_TAI_LIEU_BLOB_TOKEN; đặt trên Production api và agent, hộp tải nguồn mở",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "#195, #196: vùng kéo-thả tệp nguồn dựng trên móc ReUI; sửa câu gợi ý",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "#193: trang theo dõi lộ trình trong kho; vẽ lại PRODUCT-MAP.md đang lệch",
+		},
 		{
 			ngay: "2026-09-28",
 			viec: "#194 merge 8b76152a: lượt 2 lên onehub và production",
