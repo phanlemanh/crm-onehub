@@ -1111,6 +1111,11 @@ mỗi lần chạy và so với mục này; không hơn, không kém.
   `sheet.tsx` phía trên.
 - `packages/validation/package.json` — một subpath export mới:
   `./okr-kiem-de-xuat`.
+- `docs/api.md` — cũng có đường dẫn ở `release` (hãng để chỗ cho tài liệu
+  riêng), nhưng OneHub đã thay hẳn nội dung từ lượt trước; vào danh sách này
+  chỉ vì phép giao thấy đường dẫn trùng, không phải một hành vi hãng bị chạm.
+- `docs/agent.md` — chính tệp đang đọc; cùng lý do với `docs/api.md` ngay trên,
+  tự liệt tên mình cho đủ phép giao.
 
 Phần việc lớn của lượt này nằm ở tệp OneHub tự dựng, không có đường dẫn trùng
 ở `release` nên không vào bảng trên: `apps/agent/agent/lib/okr/{viec,goi-ngu-canh,doc}.ts`
