@@ -78,7 +78,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_okr_that
     paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
-    expected: "exit 0; ba ca riêng trên kho _test: có một OkrCycle thật; có một OkrObjective thật trong chu kỳ mẫu đã nạp; có một OkrKeyResult thật gắn vào mục tiêu mẫu → nạp và --xoa đều thoát 3, stderr chứa câu ghim «workspace đã có OKR thật» và đúng số đếm (1 chu kỳ / 1 mục tiêu / 1 KR), dấu vân tay toàn kho (mọi bảng bộ mẫu + bảng okr*) trước và sau toEqual. Đối chứng dương: xoá hàng thật → nạp thoát 0."
+    expected: "exit 0; ba ca riêng trên kho _test: có một OkrCycle thật; có một OkrObjective thật trong chu kỳ mẫu đã nạp; có một OkrKeyResult thật gắn vào mục tiêu mẫu → nạp và --xoa đều thoát 3, stderr chứa câu ghim «workspace đã có OKR thật» và đúng số đếm (1 chu kỳ / 1 mục tiêu / 1 KR), dấu vân tay toàn kho (mọi bảng bộ mẫu + bảng okr*) trước và sau toEqual. Đối chứng dương: xoá hàng thật → nạp thoát 0; kho chỉ có bộ mẫu của lần nạp trước → nạp lại thoát 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
@@ -94,7 +94,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_thu_tuc_that
     paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
-    expected: "exit 0; sau nạp (mốc thứ Năm), phiên của người kịch bản chua-gui gọi okr.moCapNhat rồi okr.guiCapNhat cho một KR tay của mình với giá trị mới → thành công; đọc lại DB: currentValue = giá trị mới; số OkrCheckIn tuần T của KR đó trước 0, sau 1, weekStart = thứ Hai tuần T viết tay; phiên mới có submittedAt; phiên người vai okr mẫu gọi okr.toanCanh quý 4 → trả 10 phòng ban; rồi nạp lại → thoát 0 và số hàng bộ mẫu bằng lần nạp đầu (lần cập nhật thật trên KR mẫu bị thay cùng bộ)."
+    expected: "exit 0; sau nạp (mốc thứ Năm), phiên của người kịch bản chua-gui gọi okr.moCapNhat rồi okr.guiCapNhat cho một KR tay của mình với giá trị mới → thành công; đọc lại DB: currentValue = giá trị mới; số OkrCheckIn tuần T của KR đó trước 0, sau 1, weekStart = thứ Hai tuần T viết tay; phiên mới có submittedAt; phiên người vai okr mẫu gọi okr.toanCanh quý 4 → trả 10 phòng ban, gọi deals.list → bị từ chối FORBIDDEN (đối chứng: phiên quản trị mẫu gọi deals.list được); rồi nạp lại → thoát 0 và số hàng bộ mẫu bằng lần nạp đầu (lần cập nhật thật trên KR mẫu bị thay cùng bộ)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
@@ -136,3 +136,11 @@ evals:
     inputs: [docs/setup.md, CONTEXT.md, docs/superpowers/specs/2026-09-28-bo-okr-mau-design.md, apps/api/scripts/okr-mau.ts]
     rubric: "Một phiên lượt sau chỉ đọc docs/setup.md và CONTEXT.md có tự nạp được bộ mẫu vào máy dev và vào phiên đo, ghim ngày, xoá, đăng nhập làm người mẫu, biết chỗ đặt ca thật N1 và biết vì sao bản xem trước không có bộ mẫu không? Lệnh trong tài liệu có khớp tên cờ và mã thoát của okr-mau.ts không? Có chữ tự đúc hay thuật ngữ chưa có mục từ điển không?"
     evidence_required: [run_id, verdict, judges, verified_at]
+
+  - id: E17
+    criterion: AC-15
+    executor: test
+    cmd: config:executors.test.bom_tai_lieu
+    paths: [docs/setup.md, CONTEXT.md, apps/api/scripts/okr-mau.ts, apps/api/scripts/okr-mau/cau-hinh.ts, apps/api/test/okr-mau-chan.spec.ts]
+    expected: "exit 0; rút danh sách cờ (--moc, --xoa) và bảng mã thoát (2, 3, 4, 5) từ hằng OKR_MAU của lệnh — không chép tay — rồi khẳng định mục «Bộ OKR mẫu» của docs/setup.md nêu từng cờ và từng mã thoát, nêu «bun run okr:mau», «do:man --chay», «dev:session», đường thư mục ca thật ca-gop-y/that; CONTEXT.md có tiêu đề mục «Bộ OKR mẫu». CHIỀU ĐỎ: bản sao tài liệu thiếu mã 5 → bài đỏ ghim «mã thoát 5»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

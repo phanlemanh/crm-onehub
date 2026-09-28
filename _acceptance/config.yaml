@@ -793,7 +793,8 @@ executors:
     bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
     bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
     bom_thu_tuc_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t thu-tuc-that-mau"'
-    bom_chan_production: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts"
+    bom_chan_production: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t chan-production"
+    bom_tai_lieu: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t tai-lieu"
     bom_ca_gop_y: "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-ca-gop-y.spec.ts"
   script:
     ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
