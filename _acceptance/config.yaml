@@ -58,6 +58,10 @@ executors:
     msd_nguon_khong_ro: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-khong-ro.spec.ts"'
     msd_khoa_rieng: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-khoa-rieng.spec.ts"'
     msd_ranh_gioi: "cd apps/agent && bun test test/tai-lieu-ranh-gioi.spec.ts test/khuon-di-dong.spec.ts"
+    knr_hai_bien: 'bun run test -- "cd packages/db && bun test test/blob-nguon.spec.ts -t hai-bien"'
+    knr_token_gui_di: 'bun run test -- "cd packages/db && bun test test/blob-nguon.spec.ts -t token-gui-di"'
+    knr_chi_khoa_logo: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-khoa-logo.spec.ts && cd ../../packages/db && bun test test/blob-nguon.spec.ts -t kho-nguon-tat"'
+    knr_nang_luc: 'bun run test -- "cd apps/agent && bun test test/capabilities.spec.ts -t luu-nguon"'
     ktl_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "packages/ui/src/components/trinh-soan*.tsx" "packages/ui/src/components/diff-trang*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     dmk_ten_kho: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t ten-kho"'
     dmk_tao: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t tao"'
@@ -857,7 +861,8 @@ executors:
     msd_man_duyet_may: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs"'
     msd_quet_duong_ghi: "node _acceptance/may-soan-de-xuat/rang/quet-duong-ghi.mjs"
     msd_bien_ba_nha: "node _acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs"
-    msd_blob_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
+    msd_blob_that: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_logo_gia_khong_dung bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
+    knr_bien_cac_nha: "node _acceptance/kho-nguon-khoa-rieng/rang/bien-cac-nha.mjs"
     msd_soan_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'
     msd_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "apps/app/app/(app)/[[]slug]/tai-lieu/**/*.tsx" "packages/ui/src/components/nguon-*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs

@@ -125,7 +125,8 @@ single place that knows what is set.
 | --- | --- |
 | `PERPLEXITY_API_KEY` | Open-web research with citations; finds a LinkedIn slug |
 | `GITHUB_TOKEN` | Raises the GitHub rate limit from 60/hour |
-| `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into Blob; keeps the Word and PDF sources of the document library and reads them back for drafting. Without it nothing can be uploaded to the library |
+| `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into a public Blob store |
+| `KHO_TAI_LIEU_BLOB_TOKEN` | Keeps the Word and PDF sources of the document library in a private Blob store and reads them back for drafting. Without it nothing can be uploaded to the library |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document-drafting machine (`may_soan`), so its spend is billed apart. Without it drafting runs on the key above |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
@@ -157,6 +158,19 @@ checks all three homes).
 `BLOB_READ_WRITE_TOKEN` is also in `env.validation.ts` and `apps/api/turbo.json`
 because the API and the seed write pictures too. The Next.js app is deliberately
 excluded — recognising our URL for the image optimizer needs no token.
+
+**`KHO_TAI_LIEU_BLOB_TOKEN` is the document library's own store, not a second name for
+the one above.** A Vercel Blob store is either public or private and the token does not
+say which: the pictures live in a public store, the Word and PDF sources in a private one
+(`kho-tai-lieu-nguon`), so one variable cannot serve both. There is **no fallback** to
+`BLOB_READ_WRITE_TOKEN` — falling back would switch the upload button on against the
+public store the day someone sets the logo token, and every upload would then fail.
+**Keep the private store connected to no Vercel project**: connecting it makes Vercel set
+`BLOB_READ_WRITE_TOKEN` to the private token, and pictures would be written into it. Read
+by the API (`env.validation.ts`) and the agent, both through `packages/db/src/blob-nguon.ts`;
+declared in `turbo.json` `globalPassThroughEnv` and in the `dev`, `test` and `dev:headless`
+pass-through of `apps/api` and `apps/agent`, never `env`
+(`_acceptance/kho-nguon-khoa-rieng/rang/bien-cac-nha.mjs` checks every home).
 
 ### The Context key is asked for, not configured
 

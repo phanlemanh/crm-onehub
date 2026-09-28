@@ -11,8 +11,9 @@ evals:
       - "packages/db/prisma/migrations/**"
       - "_acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs"
     expected: |
-      Script suy goc kho tu vi tri cua chinh no; doc moi thu muc migration co tren nhanh ma chua co o
-      merge-base voi origin/onehub (luot 1 da nam trong onehub tu c1e37b73). Tap cau lenh viet truoc:
+      Script suy goc kho tu vi tri cua chinh no; doc dung migration cua ho so
+      (20261003010000_may_soan_de_xuat, neo theo ten tu 2026-09-28 vi migration da vao onehub nen so voi
+      merge-base khong con gi de doc; thieu thu muc -> exit 2 neu ten). Tap cau lenh viet truoc:
       CREATE TABLE "TaiLieuNguon"; CREATE INDEX / CREATE UNIQUE INDEX tren TaiLieuNguon va tren cot
       moi cua TaiLieuDeXuat; ALTER TABLE "TaiLieuDeXuat" ADD COLUMN <cot> <kieu> (khong NOT NULL, khong
       DEFAULT); ALTER TABLE ... ADD CONSTRAINT ... FOREIGN KEY. Cam UPDATE, DELETE, DROP, ALTER COLUMN,
