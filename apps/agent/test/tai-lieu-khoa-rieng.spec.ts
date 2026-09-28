@@ -149,7 +149,7 @@ describe("khoa-rieng", () => {
 			["rieng", { [BIEN]: KHOA }],
 			["chung", {}],
 		] as const) {
-			const daGoi: { providerOptions?: Record<string, unknown> }[] = [];
+			const daGoi: Parameters<MockLanguageModelV4["doGenerate"]>[0][] = [];
 			const gia = new MockLanguageModelV4({
 				doGenerate: async (vao) => {
 					daGoi.push(vao);
@@ -162,11 +162,11 @@ describe("khoa-rieng", () => {
 				prompt: [],
 				providerOptions: { gateway: { order: ["vertex"] } },
 			});
-			const gw = daGoi[0]?.providerOptions?.gateway as
-				| { zeroDataRetention?: boolean; order?: string[] }
-				| undefined;
+			const gw = daGoi[0]?.providerOptions?.gateway;
 			if (gw?.zeroDataRetention !== true) loi.push(`thieu ZDR: ${ten}`);
-			if (gw?.order?.[0] !== "vertex") loi.push(`mat tuy chon cu: ${ten}`);
+			const order = gw?.order;
+			if (!Array.isArray(order) || order[0] !== "vertex")
+				loi.push(`mat tuy chon cu: ${ten}`);
 		}
 		expect(loi).toEqual([]);
 		const ra = await ganZdr.transformParams?.({
