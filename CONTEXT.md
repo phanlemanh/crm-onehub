@@ -584,6 +584,46 @@ của nó giữ nguyên, hai bên nối nhau. Đề xuất 2026-09-27, chốt t�
 _Avoid_: chuyển kỳ, kéo dài, sao chép
 Vì sao: «chuyển» gợi mục tiêu rời kỳ cũ; «kéo dài» gợi kỳ cũ chưa khép.
 
+**Việc (KR)**: một dòng đơn vị tự ghi dưới một KR — việc sẽ làm để đẩy KR đó, có
+một người làm, hạn tuỳ chọn, xong hay chưa. Người sửa được KR thêm, sửa, gỡ; người làm
+tự đánh dấu xong. Việc không góp vào tiến độ: KR vẫn đo kết quả. Đề xuất 2026-09-28
+(lượt 8a lộ trình OKR), chốt tại Cổng Phạm vi.
+_Avoid_: nhiệm vụ, task, đầu việc, bước
+Vì sao: «bước» đã là việc trong kế hoạch 30 ngày; «nhiệm vụ» gợi việc được giao từ
+trên xuống, còn việc (KR) do đơn vị tự đặt ra như một giả thuyết.
+
+**Sáng kiến (KR)**: một chiến dịch hay một kế hoạch 30 ngày có sẵn trong CRM, gắn
+vào một KR để nói nó đang đẩy KR đó. Chỉ lưu liên kết; tên và trạng thái đọc từ bản
+ghi gốc. Người mang vai «chỉ OKR» chỉ thấy «một chiến dịch» hay «một kế hoạch 30
+ngày», không tên. Việc (KR) và sáng kiến chung một danh sách «Việc và sáng kiến» của
+KR. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: initiative, dự án, chương trình
+Vì sao: «chương trình» đã là Chương trình OKR; «dự án» gợi một thứ mới phải lập,
+còn sáng kiến ở đây là việc đã có trong CRM được nối vào KR.
+
+**Bằng chứng (KR mốc)**: một đường dẫn kèm ghi chú đính vào KR kiểu mốc, cho thấy
+mốc đã xong dựa vào đâu — người chấm cuối kỳ đọc được. Không bắt buộc để đánh dấu
+xong; không tải tệp. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: tệp đính kèm, minh chứng, attachment
+Vì sao: «tệp đính kèm» hứa tải tệp lên, mà bằng chứng chỉ là đường dẫn; «minh chứng»
+mang giọng hồ sơ thi đua.
+
+**Ghi nhận (OKR)**: lời một người gửi tới một đến năm đồng nghiệp trên một mục tiêu
+đã công bố, tuỳ gắn một KR — cảm ơn phần họ đã góp. Hiện trong tab «Trao đổi» và báo
+tới người nhận qua việc OKR của họ. Mọi vai gửi được, kể cả «chỉ OKR». Không đếm,
+không xếp hạng người theo ghi nhận. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: khen thưởng, kudos, tuyên dương, điểm thưởng
+Vì sao: «khen thưởng», «tuyên dương» gợi quyết định của cấp trên có kèm lợi ích;
+đếm hay đổi điểm biến lời cảm ơn thành bảng thi đua — thứ lộ trình đã để ở «Chưa làm».
+
+**Mẫu OKR**: khung mục tiêu và KR quản trị soạn sẵn cho một cấp (bộ phận, phòng
+ban, cá nhân) và, tuỳ, cho vài đơn vị cụ thể — câu mục tiêu gợi ý, loại, KR mẫu.
+Người đặt mục tiêu chọn mẫu rồi điền số của mình; mục tiêu tạo ra là bản nháp, nhớ nó
+sinh từ mẫu nào, và không đổi khi mẫu đổi. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: template, khuôn, bộ khung
+Vì sao: «khuôn» đã là Khuôn kế hoạch của kế hoạch 30 ngày; «template» là chữ tiếng
+Anh trong mã.
+
 **Vai «chỉ OKR»**: vai trong workspace cho người vào CRM chỉ để làm OKR — hôm nay
 là người ngoài khối kinh doanh. Họ đăng nhập, thấy khu OKR và hồ sơ của chính
 mình, nhưng không đọc được cá nhân, công ty, thoả thuận hợp tác, chiến dịch hay kế
