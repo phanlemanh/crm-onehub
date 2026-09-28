@@ -287,7 +287,8 @@ async function thayApi(blob) {
 		env: {
 			...process.env,
 			PORT: String(cong),
-			BLOB_READ_WRITE_TOKEN: TOKEN_GIA,
+			KHO_TAI_LIEU_BLOB_TOKEN: TOKEN_GIA,
+			BLOB_READ_WRITE_TOKEN: "",
 			VERCEL_BLOB_API_URL: blob.url,
 			BLOB_GIA_URL: blob.url,
 		},
@@ -319,7 +320,7 @@ let tatApi = null;
 try {
 	tatApi = await thayApi(blob);
 	console.log(
-		`-- blob gia ${blob.url}; api phien chay lai voi BLOB_READ_WRITE_TOKEN gia`,
+		`-- blob gia ${blob.url}; api phien chay lai voi KHO_TAI_LIEU_BLOB_TOKEN gia`,
 	);
 } catch (e) {
 	blob.dung();
@@ -408,6 +409,13 @@ async function chonLoai(t, chu) {
 
 try {
 	const nguoi = await d.nguoiMoi("t", "member", "Lê Thu Trang");
+	const trangThai = await d.hoi(nguoi.cookie, "taiLieuNguon.trangThai");
+	if (trangThai?.bat !== true) {
+		console.log("kho nguon tat tren api phien");
+		await donHet();
+		process.exit(1);
+	}
+	console.log("kho nguon bat tren api phien");
 	await d.batTrinhDuyet(nguoi.cookie);
 
 	let trang = null;
