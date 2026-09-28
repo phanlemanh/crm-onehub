@@ -19,6 +19,7 @@ const KEYS = [
 	"AI_GATEWAY_API_KEY",
 	"VERCEL_OIDC_TOKEN",
 	"KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
+	"KHO_TAI_LIEU_BLOB_TOKEN",
 ] as const;
 
 const saved: Record<string, string | undefined> = {};
@@ -38,12 +39,69 @@ afterEach(() => {
 });
 
 describe("capabilities", () => {
-	it("luu-nguon: tat khi thieu khoa luu tep, khong nem; bat khi co khoa", () => {
-		const tat = capabilitiesFrom(null).find((c) => c.id === LUU_NGUON);
-		expect(tat?.enabled).toBe(false);
-		process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_gia";
-		const bat = capabilitiesFrom(null).find((c) => c.id === LUU_NGUON);
-		expect(bat?.enabled).toBe(true);
+	it("luu-nguon: 6 o hai bien x 2 muc = 12 ky vong viet truoc, khong nem", () => {
+		const VANG = undefined;
+		const BANG = [
+			{
+				o: "co-co",
+				kho: "vercel_blob_rw_nguon_gia",
+				logo: "vercel_blob_rw_logo_gia",
+				nguon: true,
+				anh: true,
+			},
+			{
+				o: "co-vang",
+				kho: "vercel_blob_rw_nguon_gia",
+				logo: VANG,
+				nguon: true,
+				anh: false,
+			},
+			{
+				o: "vang-co",
+				kho: VANG,
+				logo: "vercel_blob_rw_logo_gia",
+				nguon: false,
+				anh: true,
+			},
+			{ o: "vang-vang", kho: VANG, logo: VANG, nguon: false, anh: false },
+			{
+				o: "trang-co",
+				kho: "   ",
+				logo: "vercel_blob_rw_logo_gia",
+				nguon: false,
+				anh: true,
+			},
+			{
+				o: "co-rong",
+				kho: "vercel_blob_rw_nguon_gia",
+				logo: "",
+				nguon: true,
+				anh: false,
+			},
+		] as const;
+		const dat = (ten: string, gt: string | undefined) => {
+			if (gt === undefined) delete process.env[ten];
+			else process.env[ten] = gt;
+		};
+		let so = 0;
+		for (const o of BANG) {
+			dat("KHO_TAI_LIEU_BLOB_TOKEN", o.kho);
+			dat("BLOB_READ_WRITE_TOKEN", o.logo);
+			const bang = capabilitiesFrom(null);
+			const nguon = bang.find((c) => c.id === LUU_NGUON);
+			const anh = bang.find((c) => c.id === "BLOB_READ_WRITE_TOKEN");
+			if (o.kho === "   " && nguon?.enabled)
+				throw new Error(`khoang trang tinh la co khoa: o ${o.o}`);
+			if (!o.nguon && nguon?.enabled)
+				throw new Error(`luu nguon bat bang khoa logo: o ${o.o}`);
+			if (o.nguon && !nguon?.enabled)
+				throw new Error(`luu nguon tat du co khoa rieng: o ${o.o}`);
+			expect(nguon?.from).toBe("KHO_TAI_LIEU_BLOB_TOKEN");
+			expect(nguon?.enabled).toBe(o.nguon);
+			expect(anh?.enabled).toBe(o.anh);
+			so += 2;
+		}
+		expect(so).toBe(BANG.length * 2);
 	});
 
 	it("reports everything off on a bare install", async () => {

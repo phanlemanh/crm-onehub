@@ -1,6 +1,7 @@
 import "@crm/env/load";
 
 import { db } from "@crm/db";
+import { BLOB_NGUON } from "@crm/db/blob-nguon";
 import { readContextDevKey } from "@crm/db/settings";
 
 export const CONTEXT_DEV = "CONTEXT_DEV";
@@ -76,11 +77,11 @@ export function capabilitiesFrom(
 		},
 		{
 			id: LUU_NGUON,
-			from: "BLOB_READ_WRITE_TOKEN",
+			from: BLOB_NGUON.bienKhoa,
 			label: "Document sources",
 			gives:
 				"somewhere to keep the Word and PDF files people upload to the document library, and to read them back for drafting. Without it nothing can be uploaded and no page is drafted from a file",
-			enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim()),
+			enabled: Boolean(process.env[BLOB_NGUON.bienKhoa]?.trim()),
 		},
 		{
 			...fromEnv("KHO_TAI_LIEU_AI_GATEWAY_API_KEY"),

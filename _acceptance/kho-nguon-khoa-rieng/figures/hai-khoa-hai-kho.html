@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hai khoá, hai kho · Hình d-1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-1 · Luồng so sánh · kho-nguon-khoa-rieng</p>
+    <h1>Không lùi sang tên chung: thiếu khoá riêng thì kho nguồn tắt, không ghi nhầm kho</h1>
+    <p class="sub">Mỗi bên đọc đúng một biến và ghi vào đúng một store. Chọn B thêm một đường lùi: khi biến riêng vắng, kho nguồn mượn khoá logo. Dưới mỗi cột là cùng một kịch bản — production chỉ đặt khoá logo. AC-1, AC-3.</p>
+
+    <svg viewBox="0 0 1080 712" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="24" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-1 · BÊN NÀO ĐỌC KHOÁ NÀO, GHI VÀO STORE NÀO</text>
+
+      <rect x="24" y="72" width="504" height="552" rx="8" fill="none" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="40" y="100" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CHỌN A · KHÔNG LÙI</text>
+      <text x="512" y="100" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em" text-anchor="end">CHỦ KHO ĐÃ CHỐT</text>
+
+      <rect x="552" y="72" width="504" height="552" rx="8" fill="none" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="568" y="100" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CHỌN B · LÙI SANG TÊN CHUNG</text>
+      <text x="1040" y="100" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em" text-anchor="end">BỊ LOẠI</text>
+
+      <line x1="152" y1="180" x2="152" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="400" y1="180" x2="400" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="152" y1="284" x2="152" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="400" y1="284" x2="400" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="680" y1="180" x2="680" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="928" y1="180" x2="928" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="680" y1="284" x2="680" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="928" y1="284" x2="928" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 856 180 L 856 196 A 8 8 0 0 1 848 204 L 744 204 A 8 8 0 0 0 736 212 L 736 224" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <path d="M 736 284 L 736 304 A 8 8 0 0 0 744 312 L 864 312 A 8 8 0 0 1 872 320 L 872 336" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="756" y="186" width="80" height="12" rx="2" fill="#fafafa"/>
+      <text x="796" y="195" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LÙI KHI VẮNG</text>
+      <rect x="760" y="294" width="96" height="12" rx="2" fill="#fafafa"/>
+      <text x="808" y="303" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GHI TỆP PRIVATE</text>
+
+      <rect x="40" y="124" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="40" y="124" width="224" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="48" y="130" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="64" y="139" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BIẾN</text>
+      <text x="152" y="156" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">KHO_TAI_LIEU_BLOB_TOKEN</text>
+      <text x="152" y="171" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">khoá store private, không gắn dự án</text>
+
+      <rect x="288" y="124" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="288" y="124" width="224" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="296" y="130" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="312" y="139" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BIẾN</text>
+      <text x="400" y="156" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">BLOB_READ_WRITE_TOKEN</text>
+      <text x="400" y="171" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">khoá store public, Vercel tự đặt</text>
+
+      <rect x="568" y="124" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="568" y="124" width="224" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="576" y="130" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="592" y="139" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BIẾN</text>
+      <text x="680" y="156" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">KHO_TAI_LIEU_BLOB_TOKEN</text>
+      <text x="680" y="171" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">khoá store private, không gắn dự án</text>
+
+      <rect x="816" y="124" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="816" y="124" width="224" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="824" y="130" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="840" y="139" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BIẾN</text>
+      <text x="928" y="156" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">BLOB_READ_WRITE_TOKEN</text>
+      <text x="928" y="171" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">khoá store public, Vercel tự đặt</text>
+
+      <rect x="40" y="228" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="40" y="228" width="224" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="48" y="234" width="24" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="60" y="243" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÃ</text>
+      <text x="152" y="260" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Kho nguồn</text>
+      <text x="152" y="275" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">packages/db/src/blob-nguon.ts</text>
+
+      <rect x="288" y="228" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="288" y="228" width="224" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="296" y="234" width="24" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="308" y="243" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÃ</text>
+      <text x="400" y="260" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Logo, ảnh</text>
+      <text x="400" y="275" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">packages/db/src/blob.ts</text>
+
+      <rect x="568" y="228" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="568" y="228" width="224" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="576" y="234" width="24" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="588" y="243" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÃ</text>
+      <text x="680" y="260" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Kho nguồn</text>
+      <text x="680" y="275" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">packages/db/src/blob-nguon.ts</text>
+
+      <rect x="816" y="228" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="816" y="228" width="224" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="824" y="234" width="24" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="836" y="243" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÃ</text>
+      <text x="928" y="260" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Logo, ảnh</text>
+      <text x="928" y="275" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">packages/db/src/blob.ts</text>
+
+      <rect x="40" y="340" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="40" y="340" width="224" height="56" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="48" y="346" width="40" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="68" y="355" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STORE</text>
+      <text x="152" y="372" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Store private</text>
+      <text x="152" y="387" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kho-tai-lieu-nguon · sin1</text>
+
+      <rect x="288" y="340" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="288" y="340" width="224" height="56" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="296" y="346" width="40" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="316" y="355" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STORE</text>
+      <text x="400" y="372" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Store public</text>
+      <text x="400" y="387" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">kho logo, ảnh</text>
+
+      <rect x="568" y="340" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="568" y="340" width="224" height="56" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="576" y="346" width="40" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="596" y="355" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STORE</text>
+      <text x="680" y="372" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Store private</text>
+      <text x="680" y="387" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kho-tai-lieu-nguon · sin1</text>
+
+      <rect x="816" y="340" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="816" y="340" width="224" height="56" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="824" y="346" width="40" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="844" y="355" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">STORE</text>
+      <text x="928" y="372" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Store public</text>
+      <text x="928" y="387" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">kho logo, ảnh</text>
+
+      <line x1="40" y1="420" x2="512" y2="420" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="444" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">KỊCH BẢN · PRODUCTION CHỈ ĐẶT KHOÁ LOGO</text>
+      <text x="40" y="460" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">BLOB_READ_WRITE_TOKEN có · KHO_TAI_LIEU_BLOB_TOKEN vắng</text>
+
+      <line x1="568" y1="420" x2="1040" y2="420" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="568" y="444" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">KỊCH BẢN · PRODUCTION CHỈ ĐẶT KHOÁ LOGO</text>
+      <text x="568" y="460" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">BLOB_READ_WRITE_TOKEN có · KHO_TAI_LIEU_BLOB_TOKEN vắng</text>
+
+      <rect x="40" y="476" width="224" height="80" rx="6" fill="#fafafa"/>
+      <rect x="40" y="476" width="224" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="152" y="500" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nút tải nguồn khoá</text>
+      <text x="152" y="516" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">kho nguồn tắt êm, không ném lỗi</text>
+      <text x="152" y="532" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">PRECONDITION_FAILED</text>
+      <text x="152" y="548" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1 · AC-3</text>
+
+      <rect x="288" y="476" width="224" height="80" rx="6" fill="#fafafa"/>
+      <rect x="288" y="476" width="224" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="500" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Logo, ảnh chạy</text>
+      <text x="400" y="516" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đọc khoá logo như cũ</text>
+      <text x="400" y="548" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+
+      <rect x="568" y="476" width="224" height="80" rx="6" fill="#fafafa"/>
+      <rect x="568" y="476" width="224" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+      <text x="680" y="500" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nút mở, mọi lượt tải hỏng</text>
+      <text x="680" y="516" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">kho nguồn ghi tệp private vào store public</text>
+      <text x="680" y="532" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">[GIẢ ĐỊNH] store public từ chối</text>
+      <text x="680" y="548" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1 · AC-3</text>
+
+      <rect x="816" y="476" width="224" height="80" rx="6" fill="#fafafa"/>
+      <rect x="816" y="476" width="224" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="928" y="500" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Logo, ảnh chạy</text>
+      <text x="928" y="516" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đọc khoá logo như cũ</text>
+      <text x="928" y="548" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+
+      <text x="40" y="588" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Muốn bật kho nguồn thì đặt biến riêng; khoá logo không đổi.</text>
+      <text x="40" y="606" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Người thấy nút khoá, không thấy lỗi.</text>
+      <text x="568" y="588" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Giả định chưa thử trên store public thật —</text>
+      <text x="568" y="606" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">nó là lý do chọn A, không phải phép đo.</text>
+
+      <line x1="24" y1="648" x2="1056" y2="648" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="668" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="24" y="684" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="56" y="694" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Biến môi trường</text>
+      <rect x="160" y="684" width="24" height="12" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="192" y="694" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Mã đọc khoá</text>
+      <rect x="280" y="684" width="24" height="12" rx="2" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="312" y="694" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Store Vercel Blob</text>
+      <line x1="424" y1="690" x2="460" y2="690" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4"/>
+      <text x="468" y="694" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đường chỉ có ở B</text>
+      <rect x="580" y="684" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+      <text x="612" y="694" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hỏng</text>
+      <rect x="664" y="684" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="696" y="694" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kết quả đã chốt</text>
+    </svg>
+
+    <footer>d-1 · kho-nguon-khoa-rieng · hai khoá, hai kho, không lùi · thiết kế 2026-09-28</footer>
+  </div>
+</body>
+</html>
