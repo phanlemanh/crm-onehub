@@ -106,6 +106,7 @@ function DongMau({
 			variant="outline"
 			role="listitem"
 			data-mau={mau.id}
+			data-da-dung={mau.daDung}
 			data-luu-tru={mau.luuTru || undefined}
 		>
 			<ItemMedia variant="icon">
