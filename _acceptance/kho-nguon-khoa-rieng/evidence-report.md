@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 095f1dc10bcb70d6a424ec7f9743e7983a964442
+verified_commit: fe33822dc1e4ffc081efeb7ac94d00018bd26912
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -144,3 +144,7 @@ Round 2: E1–E7 và bốn lệnh suite pass lại tại verified_commit c66166f
 ### Re-pin lần 1 — 2026-09-28, do gộp onehub và vòng kho-nguon-khoa-rieng chạm thước; E1 của may-soan-de-xuat neo vào migration của hồ sơ
 run_id: repin-20260928T140638Z-39911
 sha: 095f1dc10bcb70d6a424ec7f9743e7983a964442 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-28, do gộp onehub lần hai (#196) trước khi mở PR
+run_id: repin-20260928T141942Z-73088
+sha: fe33822dc1e4ffc081efeb7ac94d00018bd26912 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng

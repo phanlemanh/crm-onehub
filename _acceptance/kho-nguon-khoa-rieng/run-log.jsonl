@@ -50,3 +50,4 @@
 {"ts":"2026-09-28T13:17:38Z","sha":"c66166fe7cdc1bccd902a057e8b486e66072fdac","round":2,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":11}
 {"kind":"thuoc-vat","ts":"2026-09-28T13:27:17Z","round":2,"san":"01325d56ff8e204761826f372684ae4815a96a1b","vat":[5,1],"thuoc":[0,0],"ho_so":[35,0],"nhat":0,"lan":0,"tep_thuoc":[]}
 {"ts":"2026-09-28T14:06:38Z","kind":"repin","run_id":"repin-20260928T140638Z-39911","sha":"095f1dc10bcb70d6a424ec7f9743e7983a964442","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0}}
+{"ts":"2026-09-28T14:19:42Z","kind":"repin","run_id":"repin-20260928T141942Z-73088","sha":"fe33822dc1e4ffc081efeb7ac94d00018bd26912","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0}}
