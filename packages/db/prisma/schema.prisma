@@ -72,6 +72,13 @@ model User {
   okrKeyResultsOwned  OkrKeyResult[]   @relation("OkrKeyResultOwner")
   okrParticipations   OkrParticipant[]
 
+  okrViecKrLam       OkrViecKr[]      @relation("OkrViecKrNguoiLam")
+  okrViecKrTao       OkrViecKr[]      @relation("OkrViecKrTaoBoi")
+  okrBangChungTacGia OkrBangChung[]   @relation("OkrBangChungTacGia")
+  okrGhiNhanTacGia   OkrGhiNhan[]     @relation("OkrGhiNhanTacGia")
+  okrGhiNhanNhanDuoc OkrGhiNhanNhan[] @relation("OkrGhiNhanNhan")
+  okrMauTaoBoi       OkrMau[]         @relation("OkrMauTaoBoi")
+
   taiLieuChuTrang   TaiLieuTrang[]    @relation("TaiLieuChuTrang")
   taiLieuTaoBoi     TaiLieuTrang[]    @relation("TaiLieuTaoBoi")
   taiLieuDuyet      TaiLieuPhienBan[] @relation("TaiLieuDuyetBoi")
@@ -1194,6 +1201,8 @@ model Campaign {
 
   touches CampaignTouch[]
 
+  okrViecKr OkrViecKr[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -1823,6 +1832,7 @@ model OnboardingPlan {
   enrollments OnboardingEnrollment[]
   activities  Activity[]
   watches     OnboardingWatch[]
+  okrViecKr   OkrViecKr[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2046,6 +2056,8 @@ model OkrObjective {
   nhinLai      OkrNhinLai?
   mangSangDi   OkrMangSang[]    @relation("OkrMangSangTu")
   mangSangTu   OkrMangSang?     @relation("OkrMangSangSang")
+  ghiNhan      OkrGhiNhan[]
+  mucTieuTuMau OkrMucTieuTuMau?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
@@ -2093,6 +2105,9 @@ model OkrKeyResult {
   soChup        OkrSoChup[]
   doiDich       OkrDoiDich[]
   diemKr        OkrDiemKr?
+  viecKr        OkrViecKr[]
+  bangChung     OkrBangChung[]
+  ghiNhan       OkrGhiNhan[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2521,4 +2536,102 @@ model AiBaoTran {
 
   @@id([thang, muc, userId])
   @@map("aiBaoTran")
+}
+
+model OkrViecKr {
+  id             String          @id @default(cuid())
+  keyResultId    String
+  keyResult      OkrKeyResult    @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  loai           String
+  tieuDe         String          @default("")
+  nguoiLamUserId String?
+  nguoiLam       User?           @relation("OkrViecKrNguoiLam", fields: [nguoiLamUserId], references: [id], onDelete: Restrict)
+  hanNgay        DateTime?       @db.Date
+  xongLuc        DateTime?
+  campaignId     String?
+  campaign       Campaign?       @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  planId         String?
+  plan           OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+  taoBoiUserId   String
+  taoBoi         User            @relation("OkrViecKrTaoBoi", fields: [taoBoiUserId], references: [id], onDelete: Restrict)
+  position       Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@unique([keyResultId, campaignId])
+  @@unique([keyResultId, planId])
+  @@index([keyResultId, position])
+  @@index([nguoiLamUserId])
+  @@map("okrViecKr")
+}
+
+model OkrBangChung {
+  id           String       @id @default(cuid())
+  keyResultId  String
+  keyResult    OkrKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  url          String
+  ghiChu       String       @default("")
+  tacGiaUserId String
+  tacGia       User         @relation("OkrBangChungTacGia", fields: [tacGiaUserId], references: [id], onDelete: Restrict)
+  createdAt    DateTime     @default(now())
+
+  @@index([keyResultId, createdAt])
+  @@map("okrBangChung")
+}
+
+model OkrGhiNhan {
+  id           String           @id @default(cuid())
+  objectiveId  String
+  objective    OkrObjective     @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
+  keyResultId  String?
+  keyResult    OkrKeyResult?    @relation(fields: [keyResultId], references: [id], onDelete: Restrict)
+  loiNhan      String
+  tacGiaUserId String
+  tacGia       User             @relation("OkrGhiNhanTacGia", fields: [tacGiaUserId], references: [id], onDelete: Restrict)
+  createdAt    DateTime         @default(now())
+  nhan         OkrGhiNhanNhan[]
+
+  @@index([objectiveId, createdAt])
+  @@index([createdAt])
+  @@map("okrGhiNhan")
+}
+
+model OkrGhiNhanNhan {
+  ghiNhanId String
+  ghiNhan   OkrGhiNhan @relation(fields: [ghiNhanId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User       @relation("OkrGhiNhanNhan", fields: [userId], references: [id], onDelete: Restrict)
+
+  @@id([ghiNhanId, userId])
+  @@index([userId])
+  @@map("okrGhiNhanNhan")
+}
+
+model OkrMau {
+  id           String            @id @default(cuid())
+  ten          String
+  cap          String
+  donViIds     String[]          @default([])
+  noiDung      Json
+  archivedAt   DateTime?
+  taoBoiUserId String
+  taoBoi       User              @relation("OkrMauTaoBoi", fields: [taoBoiUserId], references: [id], onDelete: Restrict)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  mucTieu      OkrMucTieuTuMau[]
+
+  @@index([cap, archivedAt])
+  @@map("okrMau")
+}
+
+model OkrMucTieuTuMau {
+  id          String       @id @default(cuid())
+  objectiveId String       @unique
+  objective   OkrObjective @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
+  mauId       String
+  mau         OkrMau       @relation(fields: [mauId], references: [id], onDelete: Restrict)
+  createdAt   DateTime     @default(now())
+
+  @@index([mauId])
+  @@map("okrMucTieuTuMau")
 }
