@@ -28,6 +28,8 @@ export const lyDoVao = z
 
 export const taiLieuListInput = z.object({
 	loai: z.enum(LOAI_TRANG).optional(),
+	donViId: ma.optional(),
+	chuTrangId: ma.optional(),
 	page: z.number().int().min(1).default(1),
 });
 export const taiLieuSlugInput = z.object({ slug: ma });
@@ -168,6 +170,16 @@ export const taiLieuNhacToiOutput = z.object({
 	),
 });
 
+const muaLoc = z.object({
+	id: z.string(),
+	ten: z.string(),
+	so: z.number().int(),
+});
+export const taiLieuBoLocOutput = z.object({
+	donVi: z.array(muaLoc),
+	chuTrang: z.array(muaLoc),
+});
+
 export type TaiLieuListInput = z.infer<typeof taiLieuListInput>;
 export type TaiLieuCreateInput = z.infer<typeof taiLieuCreateInput>;
 export type TaiLieuProposeInput = z.infer<typeof taiLieuProposeInput>;
@@ -180,3 +192,4 @@ export type TaiLieuProposalsOutput = z.infer<typeof taiLieuProposalsOutput>;
 export type TaiLieuProposalOutput = z.infer<typeof taiLieuProposalOutput>;
 export type TaiLieuTimOutput = z.infer<typeof taiLieuTimOutput>;
 export type TaiLieuNhacToiOutput = z.infer<typeof taiLieuNhacToiOutput>;
+export type TaiLieuBoLocOutput = z.infer<typeof taiLieuBoLocOutput>;

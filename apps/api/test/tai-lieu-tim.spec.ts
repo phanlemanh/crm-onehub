@@ -150,6 +150,11 @@ describe("vai-okr", () => {
 	test("vai-okr: nguoi chi OKR tim duoc tai lieu, khong goi duoc tim doi tac", async () => {
 		const thay = await tim("quy dinh", "okr");
 		expect(thay.map((d) => d.slug)).toEqual([slugCua.get("P1") as string]);
+		ok(await hoi("taiLieu.boLoc", undefined, "okr"), "okr boLoc");
+		ok(
+			await hoi("taiLieu.nhacToi", { slug: slugCua.get("P1") }, "okr"),
+			"okr nhacToi",
+		);
 		const doiTac = await hoi("search.quick", { q: "ab" }, "okr");
 		expect(`${doiTac.status} ${doiTac.loi}`).toBe(`403 ${KHONG_TRONG_PHAM_VI}`);
 	});

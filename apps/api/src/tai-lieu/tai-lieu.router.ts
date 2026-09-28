@@ -16,6 +16,7 @@ import type { NguoiGoi } from "./quyen";
 import {
 	taiLieuApproveInput,
 	taiLieuApproveOutput,
+	taiLieuBoLocOutput,
 	taiLieuCreateInput,
 	taiLieuCreateOutput,
 	taiLieuDangDungOutput,
@@ -58,6 +59,14 @@ export class TaiLieuRouter {
 	})
 	tim(@Input() input: z.infer<typeof taiLieuTimInput>) {
 		return this.timKiem.tim(input.q);
+	}
+
+	@Query({
+		output: taiLieuBoLocOutput,
+		meta: restMeta("GET", "/tai-lieu/bo-loc", TAG),
+	})
+	boLoc(@Ctx() ctx: AuthedTrpcContext) {
+		return this.timKiem.boLoc(nguoiGoi(ctx));
 	}
 
 	@Query({

@@ -159,7 +159,13 @@ export class TaiLieuService {
 		nguoi: NguoiGoi,
 		input: TaiLieuListInput,
 	): Promise<TaiLieuListOutput> {
-		const thay = dieuKienThay(nguoi);
+		const thay: Prisma.TaiLieuTrangWhereInput = {
+			AND: [
+				dieuKienThay(nguoi),
+				...(input.donViId ? [{ departmentId: input.donViId }] : []),
+				...(input.chuTrangId ? [{ chuTrangId: input.chuTrangId }] : []),
+			],
+		};
 		const where: Prisma.TaiLieuTrangWhereInput = input.loai
 			? { AND: [thay, { loai: input.loai }] }
 			: thay;

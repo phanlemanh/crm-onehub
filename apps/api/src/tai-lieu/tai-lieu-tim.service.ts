@@ -1,4 +1,5 @@
 import type { Db } from "@crm/db";
+import { dieuKienThay } from "@crm/db/tai-lieu-quyen";
 import { type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { cauChuaLienKet, chuThuong } from "@crm/validation/tai-lieu-markdown";
 import { doanTrich, dungTruyVan } from "@crm/validation/tai-lieu-tim";
@@ -6,6 +7,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import { type NguoiGoi, thayTrang } from "./quyen";
 import type {
+	TaiLieuBoLocOutput,
 	TaiLieuNhacToiOutput,
 	TaiLieuTimOutput,
 } from "./tai-lieu.contracts";
@@ -102,5 +104,47 @@ export class TaiLieuTimService {
 		});
 		rows.sort((a, b) => a.ten.localeCompare(b.ten, "vi"));
 		return { rows: rows.slice(0, TIM.nhacToiToiDa) };
+	}
+
+	async boLoc(nguoi: NguoiGoi): Promise<TaiLieuBoLocOutput> {
+		const thay = dieuKienThay(nguoi);
+		const [theoDonVi, theoChu] = await Promise.all([
+			this.db.taiLieuTrang.groupBy({
+				by: ["departmentId"],
+				where: { AND: [thay, { departmentId: { not: null } }] },
+				_count: { _all: true },
+			}),
+			this.db.taiLieuTrang.groupBy({
+				by: ["chuTrangId"],
+				where: thay,
+				_count: { _all: true },
+			}),
+		]);
+		const [donVi, chu] = await Promise.all([
+			this.db.department.findMany({
+				where: {
+					id: { in: theoDonVi.flatMap((d) => d.departmentId ?? []) },
+				},
+				select: { id: true, name: true },
+			}),
+			this.db.user.findMany({
+				where: { id: { in: theoChu.map((c) => c.chuTrangId) } },
+				select: { id: true, name: true },
+			}),
+		]);
+		const soDonVi = new Map(
+			theoDonVi.map((d) => [d.departmentId, d._count._all]),
+		);
+		const soChu = new Map(theoChu.map((c) => [c.chuTrangId, c._count._all]));
+		const theoTen = (a: { ten: string }, b: { ten: string }) =>
+			a.ten.localeCompare(b.ten, "vi");
+		return {
+			donVi: donVi
+				.map((d) => ({ id: d.id, ten: d.name, so: soDonVi.get(d.id) ?? 0 }))
+				.sort(theoTen),
+			chuTrang: chu
+				.map((c) => ({ id: c.id, ten: c.name, so: soChu.get(c.id) ?? 0 }))
+				.sort(theoTen),
+		};
 	}
 }
