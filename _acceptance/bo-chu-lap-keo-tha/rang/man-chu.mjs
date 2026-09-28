@@ -30,7 +30,7 @@ if (process.argv.includes("--chieu-do")) await lib.chieuDo(TEP_NAY, CAY_DO);
 
 if (!process.env.PHIEN_DO || !process.env.API_URL) {
 	console.log(
-		'KHONG DO DUOC: chay qua phien do — BLOB_READ_WRITE_TOKEN=<khoa gia> bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"',
+		'KHONG DO DUOC: chay qua phien do — KHO_TAI_LIEU_BLOB_TOKEN=<khoa gia> bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"',
 	);
 	process.exit(2);
 }
@@ -48,7 +48,7 @@ async function moHop(t) {
 	);
 	if (khoa)
 		throw new Error(
-			"nut tai nguon khoa — phien do thieu BLOB_READ_WRITE_TOKEN",
+			"nut tai nguon khoa — phien do thieu KHO_TAI_LIEU_BLOB_TOKEN",
 		);
 	await d.bamSel(t, `${NUT_TAI}:not([disabled])`);
 	await d.doi(t, (s) => document.querySelector(s) !== null, VUNG);

@@ -848,7 +848,10 @@ executors:
     bclkt_thuoc_da_ky: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx && bun test --preload ./test/setup-dom.ts ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nguon-keo-tha-chu.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx
   script:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
-    bclkt_man_chu: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
+    bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
+    mctkkn_khoa_rong: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/khoa-rong.mjs
+    mctkkn_chieu_do: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/chieu-do-can-khoa.mjs
+    mctkkn_ten_khoa: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/ten-khoa.mjs
     kct_doi_ten_commit: node _acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs --ca C1,C2
     kct_doi_ten_stage: node _acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs --ca C3
     kct_khong_hoi_quy: node _acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs --ca C4,C5,C6
