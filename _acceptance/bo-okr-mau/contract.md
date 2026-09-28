@@ -5,7 +5,7 @@ slug: bo-okr-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, cli]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-28T04:35:17Z
 design_doc: docs/superpowers/specs/2026-09-28-bo-okr-mau-design.md
@@ -75,3 +75,23 @@ sổ theo dõi mục 10 ghi lượt nào nạp bộ mẫu trong tiền đề c�
 
 - Bộ mẫu không chứa dữ liệu thật nên nằm trong git; ca thật của N1 nằm ở
   `apps/agent/evals/okr/ca-gop-y/that/`, ngoài git.
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-28, định đoạt mục ngoài hợp đồng của vòng chấm 1 và 2; sổ d-20260928T062725Z-12 … -28):
+
+- Ngoài-1 (`apps/api/scripts/okr-mau/chan.ts`): Nếu ai gõ nhầm địa chỉ cơ sở dữ liệu với một ký tự mã hoá bị hỏng, lệnh nạp dừng lại với một thông báo lỗi kỹ thuật khó hiểu thay vì lời từ chối rõ ràng — nhưng máy vẫn không kết nối tới cơ sở dữ liệu nào nên không có rủi ro mất hay lộ dữ liệu.
+- Ngoài-2 (`apps/api/scripts/okr-mau/chan.ts`): Nếu ai gõ nhầm địa chỉ cơ sở dữ liệu với một ký tự mã hoá bị hỏng, lệnh nạp dừng lại với một thông báo lỗi kỹ thuật khó hiểu thay vì lời từ chối rõ ràng — nhưng máy vẫn không kết nối tới cơ sở dữ liệu nào nên không có rủi ro mất hay lộ dữ liệu.
+- Ngoài-3 (`apps/api/test/okr-mau-chan.spec.ts`): Bộ kiểm tra chưa thử hết mọi trường hợp bị từ chối cùng với cờ cho phép máy chủ ngoài, nên nếu sau này có thay đổi vô tình mở lại đường vòng đó, không phép thử nào báo động kịp.
+- Ngoài-4 (`apps/api/test/okr-mau-chan.spec.ts`): Bảng kiểm tra các cách viết địa chỉ máy chủ dựa trên quy tắc tự đặt ra thay vì cách trình điều khiển cơ sở dữ liệu thật sự đọc chúng, nên phép thử này không chắc phản ánh đúng liệu máy chủ ngoài có thật sự bị chặn trong mọi trường hợp hay không.
+- Ngoài-5 (`apps/api/scripts/okr-mau/khuon.ts`): Nếu sau này tệp công ty mẫu dùng chỉ số ghi danh mà không khai bậc, lệnh nạp có thể ghi dữ liệu mà sản phẩm sau đó từ chối đếm, gây lỗi khi tính điểm chỉ số đó.
+- Ngoài-6 (`apps/api/scripts/okr-mau/nap.ts`): Không có tác động thấy được ngay với người dùng hiện tại; đây là một rủi ro kỹ thuật nội bộ nếu sau này hình dạng dữ liệu phạm vi thay đổi mà không ai để ý.
+- Ngoài-7 (`apps/api/scripts/okr-mau/nap.ts`): Không ảnh hưởng người dùng hiện tại; các con số thời gian cấu hình nằm rải rác ở nhiều chỗ khiến việc chỉnh sửa sau này dễ sót.
+- Ngoài-8 (`apps/api/scripts/okr-mau/khuon.ts`): Không ảnh hưởng người dùng hiện tại; đây là một chỗ kiểm kiểu lỏng có thể để lọt lỗi dữ liệu tệp mẫu hỏng dưới một hình dạng khác trong tương lai.
+- Ngoài-9 (`apps/api/scripts/okr-mau/lenh.ts`): Nếu gõ thiếu đường dẫn tệp sau cờ chọn tệp, lệnh sẽ âm thầm nạp bộ công ty mặc định và báo thành công, khiến người chạy lệnh tưởng nhầm đã nạp đúng tệp của mình.
+- Ngoài-10 (`apps/api/scripts/okr-mau/khuon.ts`): Nếu tệp công ty mẫu có lỗi hiếm gặp (hai mục tiêu quý 4 cùng kế thừa từ một mục tiêu quý 3), lệnh nạp có thể dừng giữa chừng với thông báo lỗi khó hiểu thay vì báo rõ chỗ sai và thoát gọn gàng.
+- Ngoài-11 (`apps/api/scripts/okr-mau/lenh.ts`): Nếu gõ thiếu đường dẫn tệp sau cờ chọn tệp, lệnh sẽ âm thầm nạp bộ công ty mặc định và báo thành công, khiến người chạy lệnh tưởng nhầm đã nạp đúng tệp của mình.
+- Ngoài-12 (`apps/agent/evals/okr/ca-gop-y.ts`): Nếu thư mục ca thật đang rỗng hoặc tên tệp đặt sai, phép đánh giá vẫn coi như đã chạy xong và báo đạt dù không kiểm tra ca nào thật sự.
+- Ngoài-13 (`apps/api/scripts/okr-mau/nap.ts`): Nếu sau này ai đó thêm một KR nguồn CRM vào quý 3 của bộ mẫu, các bản ghi tiến độ tuần của KR đó có thể bị đóng dấu ngày sai quý và trễ hơn mốc thời gian cho phép.
+- Ngoài-14 (`apps/api/test/okr-mau.spec.ts`): Bài kiểm tra cho tình huống 'nạp mà quên bước xoá dữ liệu cũ' chỉ xác nhận có lỗi xảy ra chứ không xác nhận đúng loại lỗi, nên một trục trặc khác hẳn (ví dụ treo quá giờ) cũng có thể khiến bài kiểm tra báo đạt nhầm.
+- Ngoài-15 (`apps/api/test/okr-mau.spec.ts`): Bài kiểm tra cho quy tắc 'mỗi người mỗi tuần chỉ một phiên cập nhật' chỉ phát hiện được trường hợp trùng phiên, không phát hiện được trường hợp thiếu phiên, nên một lỗi thiếu phiên có thể lọt qua mà không ai biết.
+- Ngoài-16 (`apps/api/test/okr-mau-san.ts`): Danh sách bảng dùng để đếm dữ liệu bộ mẫu được gõ tay và đã thiếu một bảng thật sự được ghi; nếu sau này bộ mẫu thêm người tham gia, lỗi ghi trùng ở bảng đó có thể không bị phát hiện.
+- Ngoài-17 (`apps/api/test/okr-mau.spec.ts`): Bài kiểm tra cho tình huống 'kho chưa có workspace' không chạy qua đúng đường lệnh thật mà người dùng sẽ gõ, nên nếu đường lệnh thật bị hỏng ở chỗ này, bài kiểm tra vẫn có thể báo đạt.

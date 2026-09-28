@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: bo-okr-mau
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0cc186649b9d94a119eeb16e2d65a8726684a3cb
-human_signoff:
+human_signoff: Manh Phan 2026-09-28
 ---
 
 # Evidence Report: bo-okr-mau
@@ -196,7 +196,6 @@ human_signoff:
     __EXIT=0
 
 - eval: E16
-  run_id: minted-bo-okr-mau-E16-r2
   judged_by: panel (domain-correctness, operational-feasibility, spec-alignment)
   verdict: UNCERTAIN
   verified_at: 2026-09-28T05:25:07Z
@@ -209,7 +208,7 @@ human_signoff:
     - Confirm CONTEXT.md (full file, already read in this eval) has no 'N1' entry anywhere — it does not — which is the concrete gap; adding an 'N1' entry to CONTEXT.md's dictionary, or rewriting the docs/setup.md line to spell out what N1 refers to in plain language instead of the bare code, would flip this to PASS.
     - apps/api/scripts/okr-mau/chan.ts (hàm kiemDuocNap) — để xác nhận logic có thật sự nhận diện «ổ cắm unix» và đọc tham số host/hostaddr trong chuỗi kết nối như docs/setup.md mô tả cho mã thoát 2, hay tài liệu nói rộng hơn code.
     - apps/api/scripts/okr-mau/cong-ty.json — để xác nhận ba email ví dụ trong docs/setup.md (nguyen-thi-lan@mau.onehub.test = trưởng KD miền Bắc, le-hai-dang@... = quản trị, an-khanh-linh@... = trưởng Pháp chế vai «chỉ OKR», chưa gửi Cập nhật tuần này) đúng là dữ liệu có trong bộ mẫu.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-09-28 — Đạt
 
 - eval: E17
   run_id: minted-bo-okr-mau-E17-r2
