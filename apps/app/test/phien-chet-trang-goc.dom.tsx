@@ -63,17 +63,20 @@ function datLai(marketing: string | undefined) {
 
 afterEach(() => datLai(coThat));
 
-const bat = (p: unknown) =>
-	Promise.resolve(p).then(
-		() => null,
-		(loi: unknown) => loi,
-	);
+async function bat(chay: () => Promise<unknown>): Promise<Error | null> {
+	try {
+		await chay();
+		return null;
+	} catch (loi) {
+		return loi instanceof Error ? loi : new Error(String(loi));
+	}
+}
 
 describe("trang goc", () => {
 	it("khong-phien: sends a stranger to sign in", async () => {
 		datLai(undefined);
 
-		const loi = await bat(Home());
+		const loi = await bat(() => Home());
 		const dung =
 			loi instanceof ChuyenHuong &&
 			loi.dich === "/sign-in" &&
@@ -87,7 +90,7 @@ describe("trang goc", () => {
 
 		datLai(undefined);
 		may.phien = { user: { id: "u" } };
-		const a = await bat(Home());
+		const a = await bat(() => Home());
 		if (!(a instanceof ChuyenHuong && a.dich === "/comp-ai")) {
 			sai.push("(a) con phien khong vao workspace");
 		}
@@ -98,7 +101,7 @@ describe("trang goc", () => {
 		may.workspace = async () => {
 			throw apiChet;
 		};
-		const b = await bat(Home());
+		const b = await bat(() => Home());
 		if (b !== apiChet || may.chuyen.length !== 0) {
 			sai.push("(b) API loi ma van chuyen huong");
 		}
@@ -106,7 +109,7 @@ describe("trang goc", () => {
 		datLai(undefined);
 		may.phien = { user: { id: "u" } };
 		may.workspace = async () => ({ slug: null });
-		const c = await bat(Home());
+		const c = await bat(() => Home());
 		if (
 			!(c instanceof Error) ||
 			c instanceof ChuyenHuong ||

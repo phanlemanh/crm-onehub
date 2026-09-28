@@ -38,10 +38,12 @@ describe("het-quyen", () => {
 		const sai: string[] = [];
 
 		may.phien = null;
-		const loi = await Promise.resolve(HetQuyenPage()).then(
-			() => null,
-			(e: unknown) => e,
-		);
+		let loi: Error | null = null;
+		try {
+			await HetQuyenPage();
+		} catch (e) {
+			loi = e instanceof Error ? e : new Error(String(e));
+		}
 		if (!(loi instanceof ChuyenHuong && loi.dich === "/sign-in")) {
 			sai.push("het-quyen: khong phien ma khong ve /sign-in");
 		}
