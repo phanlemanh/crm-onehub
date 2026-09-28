@@ -849,6 +849,9 @@ executors:
   script:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
+    kct_doi_ten_commit: node _acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs --ca C1,C2
+    kct_doi_ten_stage: node _acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs --ca C3
+    kct_khong_hoi_quy: node _acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs --ca C4,C5,C6
     ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
     ktl_migration_tren_ban_sao: "bun _acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
     ktl_bo_go_viet: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/bo-go-viet.mjs"'
