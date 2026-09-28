@@ -1,6 +1,15 @@
 import type { Db, Prisma } from "@crm/db";
+import {
+	chonChuKyHienTai,
+	kyVongTheoNgay,
+	tienDoMucTieu,
+} from "@crm/db/okr-tien-do";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	capDichCanChinh,
+	chuKyDichCanChinh,
+} from "@crm/validation/okr-can-chinh";
 import {
 	type ChuKyInput,
 	ghiDuocOPha,
@@ -12,6 +21,7 @@ import {
 import {
 	OKR_PROGRAM_MAC_DINH,
 	type OkrProgram,
+	type OkrProgramSua,
 	okrProgram,
 } from "@crm/validation/okr-chuong-trinh";
 import {
@@ -49,6 +59,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { z } from "zod";
+import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
@@ -79,7 +90,6 @@ import {
 	type Quyen,
 } from "./okr-access.service";
 import { OKR } from "./okr-config";
-import { chonChuKyHienTai, kyVongTheoNgay, tienDoMucTieu } from "./tien-do";
 
 const T = OKR.thongDiep;
 type Tx = Prisma.TransactionClient;
@@ -243,6 +253,7 @@ export class OkrService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(AgentTriggerService) private readonly trigger: AgentTriggerService,
 	) {}
 
 	async access(userId: string) {
@@ -398,28 +409,48 @@ export class OkrService {
 				scoreScale: row.scoreScale,
 				weightsOn: row.weightsOn,
 				personalOn: row.personalOn,
+				aiOn: row.aiOn,
+				aiDeXuatPhamVi: row.aiDeXuatPhamVi,
+				aiDeXuatDonVi: row.aiDeXuatDonVi,
+				aiTomTatPhamVi: row.aiTomTatPhamVi,
+				aiTomTatDonVi: row.aiTomTatDonVi,
+				aiTranThangUsd: row.aiTranThangUsd.toNumber(),
 			}),
 			version: row.version,
 		};
 	}
 
-	async setProgram(userId: string, input: OkrProgram) {
+	async setProgram(userId: string, input: OkrProgramSua) {
 		await this.quyenOkr.assertQuanTri(userId);
-		return this.db.$transaction(async (tx) => {
-			const cu = await this.program(tx);
+		const ket = await this.db.$transaction(async (tx) => {
+			const { version, ...cu } = await this.program(tx);
+			const moi = okrProgram.parse({ ...cu, ...input });
 			const row = await tx.okrProgramConfig.create({
-				data: { ...input, version: cu.version + 1, createdById: userId },
+				data: {
+					...moi,
+					version: version + 1,
+					createdById: userId,
+					createdAt: new Date(),
+				},
 			});
 			await this.vet(
 				tx,
 				userId,
 				"cau-hinh",
 				{},
-				{ version: cu.version },
-				{ ...input, version: row.version },
+				{ version },
+				{ ...moi, version: row.version },
 			);
-			return { ...input, version: row.version, canManage: true };
+			return {
+				...moi,
+				version: row.version,
+				canManage: true,
+				vuaBatAi: moi.aiOn && !cu.aiOn,
+			};
 		});
+		const { vuaBatAi, ...tra } = ket;
+		if (vuaBatAi) await this.trigger.okrKiemSanSang();
+		return tra;
 	}
 
 	async assertKyGhiDuoc(tx: Tx | Db, cycleId: string) {
@@ -1047,17 +1078,16 @@ export class OkrService {
 			},
 		});
 		if (!nguon) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
-		const hang = HANG_CAP[capMucTieu.parse(nguon.level)];
+		const nguonCanChinh = {
+			level: capMucTieu.parse(nguon.level),
+			cycleId: nguon.cycleId,
+			cycleParentId: nguon.cycle.parentId,
+		};
 		const rows = await this.db.okrObjective.findMany({
 			where: {
 				status: "cong-bo",
-				level: { in: CAP_MUC_TIEU.filter((c) => HANG_CAP[c] < hang) },
-				cycleId: {
-					in: [
-						nguon.cycleId,
-						...(nguon.cycle.parentId ? [nguon.cycle.parentId] : []),
-					],
-				},
+				level: { in: capDichCanChinh(nguonCanChinh.level) },
+				cycleId: { in: chuKyDichCanChinh(nguonCanChinh) },
 			},
 			select: {
 				id: true,

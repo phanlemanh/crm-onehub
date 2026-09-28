@@ -43,7 +43,26 @@ import { DangTaiThe, LoiThe, useQuyenChuongTrinh } from "./trang-thai-cai-dat";
 
 const FORM = "okr-program";
 
-type Nhap = Omit<OkrProgram, "objectiveCap" | "krCap"> & {
+const luatChung = okrProgram.pick({
+	objectiveCap: true,
+	krCap: true,
+	capMode: true,
+	scoreScale: true,
+	weightsOn: true,
+	personalOn: true,
+});
+
+type LuatChung = Pick<
+	OkrProgram,
+	| "objectiveCap"
+	| "krCap"
+	| "capMode"
+	| "scoreScale"
+	| "weightsOn"
+	| "personalOn"
+>;
+
+type Nhap = Omit<LuatChung, "objectiveCap" | "krCap"> & {
 	objectiveCap: string;
 	krCap: string;
 };
@@ -54,8 +73,11 @@ const soNguyen = (chu: string) =>
 const tranHong = (chu: string) =>
 	!okrProgram.shape.objectiveCap.safeParse(soNguyen(chu)).success;
 
-const nhapTu = (ct: OkrProgram): Nhap => ({
-	...ct,
+const nhapTu = (ct: LuatChung): Nhap => ({
+	capMode: ct.capMode,
+	scoreScale: ct.scoreScale,
+	weightsOn: ct.weightsOn,
+	personalOn: ct.personalOn,
 	objectiveCap: String(ct.objectiveCap),
 	krCap: String(ct.krCap),
 });
@@ -85,7 +107,7 @@ export function FormCauHinh() {
 	);
 
 	const ketQua = nhap
-		? okrProgram.safeParse({
+		? luatChung.safeParse({
 				...nhap,
 				objectiveCap: soNguyen(nhap.objectiveCap),
 				krCap: soNguyen(nhap.krCap),

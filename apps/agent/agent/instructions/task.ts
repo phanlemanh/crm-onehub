@@ -1,6 +1,7 @@
 import { defineDynamic, defineInstructions } from "eve/instructions";
 import { z } from "zod";
 import { focusOn, setBudget } from "../lib/focus";
+import { TRO_LY_OKR } from "../lib/okr/config";
 import { sessionPreamble } from "../lib/preamble";
 import { RESEARCH_INSTRUCTIONS } from "../lib/research-instructions";
 import { attribute, purposeOf } from "../lib/session-purpose";
@@ -22,6 +23,10 @@ export default defineDynamic({
 			const purpose = purposeOf(ctx);
 			if (purpose === "builder") {
 				return builderInstructions(ctx);
+			}
+
+			if (purpose === "okr") {
+				return defineInstructions({ markdown: TRO_LY_OKR.chiDanGoc });
 			}
 
 			if (purpose === ZALO.hoi.purpose) {

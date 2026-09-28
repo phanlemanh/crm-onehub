@@ -17,6 +17,11 @@ const STEPS = {
 	"agent-event": "Reacting to a change",
 	"nhac-ke-hoach": "Sending the morning reminder",
 	"okr-doc-sheet": "Reading the Google Sheet",
+	"okr-de-xuat": "Reviewing an objective",
+	"okr-tom-tat-tuan": "Writing the weekly summary",
+	"okr-kiem-san-sang": "Checking the AI model key",
+	"okr-tom-tat-xep": "Queuing weekly summaries",
+	"ai-doi-soat": "Reconciling AI spend",
 } satisfies Record<TaskKind, string>;
 
 const STEP_BY_KIND = new Map<string, string>(Object.entries(STEPS));

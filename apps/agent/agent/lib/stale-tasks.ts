@@ -1,11 +1,14 @@
 import { db, EnrichmentStatus, type Prisma } from "@crm/db";
 import {
+	laViecTroLyOkr,
 	MAX_ATTEMPTS,
 	ownsCompanyStatus,
 	ownsContactStatus,
+	soLanThuToiDa,
 } from "@crm/db/agent-tasks";
 import { DISPATCH } from "./dispatch-config";
 import { settle } from "./enrichment";
+import { TRO_LY_OKR } from "./okr/config";
 import { retireExhausted, type TaskSubject } from "./tasks";
 
 const SCAN = DISPATCH.reconcile.scan;
@@ -120,6 +123,7 @@ async function runSweep(sweep: StaleTaskSweep): Promise<void> {
 	const landed: string[] = [];
 	const untargeted: string[] = [];
 	const dead: string[] = [];
+	const okrHetLease: string[] = [];
 
 	for (const task of tasks) {
 		if (isUntargetedFieldBackfill(task)) {
@@ -129,6 +133,14 @@ async function runSweep(sweep: StaleTaskSweep): Promise<void> {
 
 		if (finishedElsewhere(task, completed)) {
 			landed.push(task.id);
+			continue;
+		}
+
+		if (
+			laViecTroLyOkr(task.kind) &&
+			task.attempts >= soLanThuToiDa(task.kind)
+		) {
+			if (task.leasedUntil !== null) okrHetLease.push(task.id);
 			continue;
 		}
 
@@ -159,6 +171,19 @@ async function runSweep(sweep: StaleTaskSweep): Promise<void> {
 				OR: [{ leasedUntil: null }, { leasedUntil: { lt: now } }],
 			},
 			data: { finishedAt: now, outcome: UNTARGETED_OUTCOME },
+		});
+
+		sweep.closed += count;
+	}
+
+	if (okrHetLease.length > 0) {
+		const { count } = await db.agentTask.updateMany({
+			where: {
+				id: { in: okrHetLease },
+				finishedAt: null,
+				leasedUntil: { lt: now },
+			},
+			data: { finishedAt: now, outcome: TRO_LY_OKR.ketThuc.hetLease },
 		});
 
 		sweep.closed += count;
