@@ -2375,6 +2375,12 @@ describe("khoa-pha", () => {
 					hang[tt] = oCua(await goiKhoa(tt, khoa[t], san, chienDich));
 				nhan[t] = hang;
 			}
+			const lech = TINH_HUONG_KHOA.flatMap((t) =>
+				THAO_TAC_KHOA.filter((tt) => nhan[t][tt] !== MA_TRAN_KHOA[t][tt]).map(
+					(tt) => `${t} × ${tt}: ${nhan[t][tt]}`,
+				),
+			);
+			expect(lech, "o lech khoi ma tran khoa").toEqual([]);
 			expect(nhan).toEqual(MA_TRAN_KHOA);
 			expect(await anhKhoa(krIds)).toEqual(truoc);
 		},
