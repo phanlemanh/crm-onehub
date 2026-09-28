@@ -753,6 +753,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   user, pathname and expiry (`phieu-nguon.ts`, key derived from `BETTER_AUTH_SECRET`, one hour).
   `nhan` checks it, and refuses a pathname that already belongs to a `TaiLieuNguon`, before it reads
   or deletes anything — knowing a source's pathname is not enough to delete its file (AC-16).
+  The destination is validated first; then one transaction takes an advisory lock on the pathname,
+  re-checks, reads the file and writes the row, using only `tx` — never a second pooled connection,
+  which is what hung the API under ten concurrent uploads. Only a known rejection deletes the file.
 - **A rejected or duplicate upload deletes its blob.** Same bytes as an existing source
   answer `{ trung: true, nguonId }` of the old row; the unique index on `sha256` catches
   the race the pre-check misses.

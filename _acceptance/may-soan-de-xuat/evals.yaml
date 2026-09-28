@@ -465,10 +465,12 @@ evals:
         doi chung duong, K tu xin cho roi nhan: dich sai -> tu choi; tep anh (sai loai) -> tu choi;
           dung byte cua N1 (trung byte) -> tra nguon cu -> ca ba chi xoa duong luu vua cap cho K.
       Ca song song: T gui ba lan nhan dong thoi cung mot phieu -> dung mot lan duoc nhan, duong luu co
-      hang va tep con nguyen. Sau ma tran: taiVe(N1) tra URL ky tro dung P1, byte doc qua duong doc cua
+      hang va tep con nguyen. Ca trung byte cua K tra dung nguonId cua N1 voi trung = true. Ca tai:
+      12 luot nhan dong thoi cua sau nguoi deu duoc nhan trong 30 giay (khong treo cho het ket noi). Sau ma tran: taiVe(N1) tra URL ky tro dung P1, byte doc qua duong doc cua
       kho (duong ma may soan dung) co sha256 bang hang N1. CHIEU DO (hai ban sao): bo chan «duong luu
       da thuoc mot nguon» -> do voi thong diep ghim "xoa tep nguon cua nguoi khac"; bo khoa theo duong
-      luu -> do voi thong diep ghim "xoa tep nguon vua ghi khi gui song song".
+      luu -> do voi thong diep ghim "xoa tep nguon vua ghi khi gui song song"; kiem trang dich trong giao
+      dich -> do voi thong diep ghim "nhan treo khi nhieu nguoi tai cung luc".
 
   - id: E14
     criterion: AC-14
