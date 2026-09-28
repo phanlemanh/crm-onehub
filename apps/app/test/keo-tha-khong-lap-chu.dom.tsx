@@ -74,11 +74,14 @@ const LUA_CHON: LuaChonTai = {
 };
 const SO_NHIP = 4;
 
-const CHU_VUNG: Record<NgonNgu, readonly [string, string, string]> = {
+const CHU_VUNG = {
 	vi: ["Chọn tệp", "Kéo tệp vào đây", "Word (.docx) hoặc PDF, tới 20 MB"],
 	en: ["Choose file", "Drag a file here", "Word (.docx) or PDF, up to 20 MB"],
-};
-const DONG_TU_NUT: Record<NgonNgu, string> = { vi: "chọn", en: "choose" };
+} as const satisfies Record<NgonNgu, readonly [string, string, string]>;
+const DONG_TU_NUT = { vi: "chọn", en: "choose" } as const satisfies Record<
+	NgonNgu,
+	string
+>;
 const NGON_NGU: readonly NgonNgu[] = ["vi", "en"];
 
 let dangMo: Root[] = [];
@@ -140,10 +143,7 @@ async function docVung(
 async function kiemChu(ngonNgu: NgonNgu): Promise<void> {
 	const { chu, goiY } = await docVung(ngonNgu);
 	const thongDiep = `chu vung keo tha ${ngonNgu} lech`;
-	ghim(
-		chu === CHU_VUNG[ngonNgu].join(""),
-		`${thongDiep}: «${chu}»`,
-	);
+	ghim(chu === CHU_VUNG[ngonNgu].join(""), `${thongDiep}: «${chu}»`);
 	ghim(
 		goiY === taiLieuMessages(ngonNgu).nguon.hop.keoTha,
 		`${thongDiep}: goi y «${goiY}» khong lay tu tep chu`,
@@ -164,10 +164,7 @@ describe("keo-tha-khong-lap-chu — câu gợi ý không lặp chữ của nút"
 		for (const l of NGON_NGU) {
 			const m = taiLieuMessages(l).nguon.hop;
 			const dongTu = (m.keoThaNut.split(" ")[0] ?? "").toLocaleLowerCase(l);
-			ghim(
-				dongTu === DONG_TU_NUT[l],
-				`nhan nut doi: ${l} «${m.keoThaNut}»`,
-			);
+			ghim(dongTu === DONG_TU_NUT[l], `nhan nut doi: ${l} «${m.keoThaNut}»`);
 			ghim(
 				!m.keoTha.toLocaleLowerCase(l).includes(dongTu),
 				`cau goi y ${l} lap dong tu cua nut: ${dongTu}`,
