@@ -109,7 +109,7 @@ export type HinhKhungKr =
 const CELL = "px-3 py-2 align-top";
 
 function SoViec({ kr, sua }: { kr: KrCanh; sua: boolean }) {
-	const d = DEM_VIEC[kr.id];
+	const d = DEM_VIEC.get(kr.id);
 	if (!d || d.tong + d.sangKien === 0) {
 		return sua ? (
 			<Button size="sm" variant="ghost" data-mo-khung-kr={kr.id}>

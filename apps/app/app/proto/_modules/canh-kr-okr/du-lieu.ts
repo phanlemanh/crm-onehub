@@ -118,15 +118,12 @@ export const KR_CANH: KrCanh[] = [
 	},
 ];
 
-export const DEM_VIEC: Record<
-	string,
-	{ xong: number; tong: number; sangKien: number }
-> = {
-	k1: { xong: 2, tong: 4, sangKien: 1 },
-	k2: { xong: 0, tong: 1, sangKien: 1 },
-	k3: { xong: 1, tong: 1, sangKien: 0 },
-	k4: { xong: 0, tong: 0, sangKien: 0 },
-};
+export const DEM_VIEC = new Map([
+	["k1", { xong: 2, tong: 4, sangKien: 1 }],
+	["k2", { xong: 0, tong: 1, sangKien: 1 }],
+	["k3", { xong: 1, tong: 1, sangKien: 0 }],
+	["k4", { xong: 0, tong: 0, sangKien: 0 }],
+]);
 
 export const BANG_CHUNG_K3: BangChungMau[] = [
 	{
