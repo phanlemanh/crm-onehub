@@ -43,7 +43,10 @@ if (!/_do(\?|$)/.test(process.env.DATABASE_URL ?? "")) {
 	);
 }
 
-const { db } = await import(tuAgent("@crm/db"));
+process.env.BANG_CHUNG ??= RA;
+const { HEP, moDo, RONG } = await import("../../kho-tai-lieu/rang/man-lib.mjs");
+const man = await moDo();
+const { db } = man;
 const { taoDeXuatTaiLieu } = await import(tuAgent("@crm/db/tai-lieu-de-xuat"));
 const { khoNguonGia } = await import(
 	join(GOC, "packages/db/test/blob-nguon-gia.ts")
@@ -103,14 +106,8 @@ async function datBanDangDung(trangId, nguoiId, ten, noiDung) {
 }
 
 async function gieo() {
-	const nguoiId = `soan-that-${moc}`;
-	await db.user.create({
-		data: {
-			id: nguoiId,
-			name: "Chủ kho (lượt đo)",
-			email: `${nguoiId}@lan-do.test`,
-		},
-	});
+	const chu = await man.nguoiMoi("soan", "member", "Chủ kho (lượt đo)");
+	const nguoiId = chu.id;
 	const cu = await db.taiLieuTrang.findUnique({
 		where: { slug: SOAN.slugQuyTacViet },
 		select: { id: true },
@@ -127,7 +124,7 @@ async function gieo() {
 	});
 	const noiDung = readFileSync(QUY_TAC, "utf8").normalize("NFC");
 	await datBanDangDung(quyTac.id, nguoiId, "Quy tắc viết", noiDung);
-	return nguoiId;
+	return chu;
 }
 
 function congCuThat(nguonId, phien, bac) {
@@ -217,11 +214,11 @@ async function soanMot(tep, nguoiId, kho) {
 async function ghiRa(tep, nguonId, trangId, bac) {
 	const nguon = await db.taiLieuNguon.findUniqueOrThrow({
 		where: { id: nguonId },
-		select: { trangThai: true, lyDo: true, soTrang: true },
+		select: { trangThai: true, lyDo: true, soTrang: true, chu: true },
 	});
 	const dx = await db.taiLieuDeXuat.findFirst({
 		where: { nguonId },
-		select: { ten: true, noiDung: true, trichDoan: true },
+		select: { id: true, ten: true, noiDung: true, trichDoan: true },
 	});
 	const so = await db.taiLieuSuKien.findFirst({
 		where: { trangId, loai: "MAY_SOAN" },
@@ -250,6 +247,12 @@ async function ghiRa(tep, nguonId, trangId, bac) {
 			(t) => `- **${t.menhDe}** — «${t.trich}»`,
 		),
 		"",
+		"## Chữ nguồn máy đọc được",
+		"",
+		"```text",
+		nguon.chu ?? "(không đọc được chữ)",
+		"```",
+		"",
 	];
 	mkdirSync(RA, { recursive: true });
 	const duong = join(RA, `soan-that-${ten}.md`);
@@ -258,17 +261,57 @@ async function ghiRa(tep, nguonId, trangId, bac) {
 	console.log(
 		`${tep}: ${nguon.trangThai}${dx ? " · co de xuat" : ""} · bac ${bac.length} · chi phi ${chiPhi ?? "chua co gia"} · ${duong}`,
 	);
-	return { dat: nguon.trangThai === "DA_SOAN" && dx !== null, chiPhi };
+	return {
+		dat: nguon.trangThai === "DA_SOAN" && dx !== null,
+		chiPhi,
+		ten,
+		deXuatId: dx?.id ?? null,
+	};
 }
 
-const nguoiId = await gieo();
+async function chupManDuyet(chu, ket) {
+	const loi = [];
+	await man.batTrinhDuyet(chu.cookie);
+	const docXong = async (t) => {
+		await man.bamSel(t, "[data-da-doc-nguon]");
+		await man.doi(t, () =>
+			document.querySelector("[data-slot='nguon-canh-nhau']"),
+		);
+	};
+	for (const k of ket.filter((x) => x.deXuatId)) {
+		const duong = `/tai-lieu/de-xuat/${k.deXuatId}`;
+		try {
+			const r = await man.moTrang(chu.cookie, RONG, duong);
+			await man.doi(r, () => document.querySelector("[data-buoc-duyet='1']"));
+			await man.chup(r, `soan-that-${k.ten}-b1-1440.png`);
+			await docXong(r);
+			await man.chup(r, `soan-that-${k.ten}-b2-1440.png`);
+			await r.close();
+			const h = await man.moTrang(chu.cookie, HEP, duong);
+			await docXong(h);
+			const tran = await man.cuonNgang(h);
+			await man.chup(h, `soan-that-${k.ten}-b2-390.png`);
+			await h.close();
+			if (tran.length > 0)
+				loi.push(`${k.ten}: cuon ngang o 390 ${tran.join(", ")}`);
+		} catch (e) {
+			loi.push(`${k.ten}: ${String(e).slice(0, 200)}`);
+		}
+	}
+	return loi;
+}
+
+const chu = await gieo();
+const nguoiId = chu.id;
 const kho = khoNguonGia();
 const ket = [];
 for (const tep of TEP_THAT) ket.push(await soanMot(tep, nguoiId, kho));
+const loiChup = await chupManDuyet(chu, ket);
+for (const l of loiChup) console.log(`chup man duyet: ${l}`);
 const tong = ket.reduce((s, k) => s + (k.chiPhi ?? 0), 0);
 console.log(`chi phi tong: ${tong.toFixed(6)} USD (${SOAN.maModel})`);
 console.log(
 	"duong model: generateText truc tiep voi loi dan, tool va kiem so that — khong qua runtime eve",
 );
 await db.$disconnect();
-process.exit(ket.every((k) => k.dat) ? 0 : 1);
+process.exit(ket.every((k) => k.dat) && loiChup.length === 0 ? 0 : 1);

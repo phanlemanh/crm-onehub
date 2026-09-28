@@ -1,0 +1,5 @@
+Driver: script noi bo (Puppeteer qua bun _acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs,
+qua scripts/lan-do/tien-de.mjs + scripts/lan-do/phien-do.mjs), khong phai browser tool cua phien nay.
+Verifier (phien nay) khong co duong doc network/console truc tiep tren trinh duyet ma script
+noi bo dieu khien -> khong dump duoc failed requests/console errors thuc.
+networkObserved = "n-a (driver)"
