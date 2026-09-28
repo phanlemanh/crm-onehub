@@ -33,6 +33,7 @@ function goiTuCa(ca: CaGopY): GoiKiem {
 		startValue: k.startValue,
 		targetValue: k.targetValue,
 		currentValue: k.startValue,
+		unit: k.unit,
 	}));
 	const tren = ca.capTren;
 	const dichCanChinh: GoiKiem["dichCanChinh"] = tren
@@ -119,8 +120,8 @@ function vietLaiTen(goi: GoiKiem, sau: string, them: Partial<DongDeXuat> = {}) {
 	});
 }
 
-function vietLaiKr(goi: GoiKiem, sau: string) {
-	const kr = goi.krs[0];
+function vietLaiKr(goi: GoiKiem, sau: string, thu = 0) {
+	const kr = goi.krs[thu];
 	if (!kr) throw new Error("goi khong co kr");
 	return dong({
 		loai: "viet-lai",
@@ -313,6 +314,19 @@ describe("ma-tran-bo-kiem", () => {
 			kiemDongDeXuat(canChinh(G, null, dichCua(G, "muc-tieu")), G),
 		).toEqual({ qua: false, maLoai: "dich-ngoai-tap" });
 	});
+
+	test("KR không có trong gói là id-ngoai-goi", () => {
+		const hoi = dong({
+			loai: "hoi",
+			objectiveId: G.mucTieu.id,
+			keyResultId: "kr-khong-co",
+			maVanDe: "khong-do-duoc",
+		});
+		expect(kiemDongDeXuat(hoi, G)).toEqual({
+			qua: false,
+			maLoai: "id-ngoai-goi",
+		});
+	});
 });
 
 describe("so-viet-kieu-viet", () => {
@@ -386,6 +400,8 @@ describe("so-viet-kieu-viet", () => {
 				"1,2 triệu và 3 nghìn",
 				"miền Nam và miền Bắc",
 				"từ 40 xuống 25 ngày",
+				"năm trăm triệu",
+				"hai trăm năm mươi đối tác",
 			].map(trichSo),
 		).toEqual([
 			[5e9],
@@ -397,7 +413,84 @@ describe("so-viet-kieu-viet", () => {
 			[1_200_000, 3000],
 			[],
 			[40, 25],
+			[5e8],
+			[250],
 		]);
+	});
+});
+
+describe("so-doi-co", () => {
+	const CA_KR_DON_VI = caDau(
+		(c) => c.krs.some((k) => /tỷ/.test(k.unit) && !coSo(k.title)),
+		"ca co kr don vi ty, ten khong so",
+	);
+	const K = goiTuCa(CA_KR_DON_VI);
+	const thuKrTy = CA_KR_DON_VI.krs.findIndex(
+		(k) => /tỷ/.test(k.unit) && !coSo(k.title),
+	);
+	const krTy = K.krs[thuKrTy];
+	const L = goiTuCa(CA_LUAT);
+	const G500TR = doiKr(G, { targetValue: 500_000_000 });
+
+	const cap: { ten: string; goi: GoiKiem; do: DongDeXuat; lanh: DongDeXuat }[] =
+		[
+			{
+				ten: "14 tỷ thành 14 triệu",
+				goi: G,
+				do: vietLaiTen(G, "Doanh thu hợp đồng mới đạt 14 triệu đồng"),
+				lanh: vietLaiTen(G, SAU_LANH),
+			},
+			{
+				ten: "14 tỷ thành 14%",
+				goi: G,
+				do: vietLaiTen(G, "Doanh thu hợp đồng mới tăng 14%"),
+				lanh: vietLaiTen(G, SAU_LANH),
+			},
+			{
+				ten: "ô số KR đếm cuộc không cho số tỷ",
+				goi: L,
+				do: vietLaiKr(L, "Mang về 50 tỷ đồng từ đối tác mới"),
+				lanh: vietLaiKr(L, "Đối tác mới nhận 50 cuộc gọi mỗi tuần"),
+			},
+			{
+				ten: `${krTy?.targetValue} tỷ khi KR ghi ${krTy?.targetValue}, đơn vị tỷ`,
+				goi: K,
+				do: vietLaiKr(
+					K,
+					`${krTy?.title} đạt ${krTy?.targetValue} triệu đồng`,
+					thuKrTy,
+				),
+				lanh: vietLaiKr(
+					K,
+					`${krTy?.title} đạt ${krTy?.targetValue} tỷ đồng`,
+					thuKrTy,
+				),
+			},
+			{
+				ten: "năm trăm triệu",
+				goi: G500TR,
+				do: vietLaiKr(G500TR, "Doanh thu hợp đồng mới đạt năm trăm tỷ đồng"),
+				lanh: vietLaiKr(
+					G500TR,
+					"Doanh thu hợp đồng mới đạt năm trăm triệu đồng",
+				),
+			},
+		];
+
+	test("số đổi cỡ là số mới; số gốc chỉ khớp ô KR có đơn vị cùng cỡ", () => {
+		expect(krTy).toBeDefined();
+		const lot: string[] = [];
+		const sai: string[] = [];
+		for (const c of cap) {
+			const r = kiemDongDeXuat(c.do, c.goi);
+			if (r.qua) lot.push(c.ten);
+			else if (r.maLoai !== "so-moi") sai.push(`${c.ten}: do ra ${r.maLoai}`);
+			const l = kiemDongDeXuat(c.lanh, c.goi);
+			if (!l.qua) sai.push(`${c.ten}: lanh ra ${l.maLoai}`);
+		}
+		if (lot.length > 0)
+			throw new Error(`lot so doi co: ${lot.length} (${lot.join(" · ")})`);
+		expect(sai).toEqual([]);
 	});
 });
 

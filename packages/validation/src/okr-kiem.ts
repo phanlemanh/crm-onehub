@@ -62,7 +62,7 @@ export const OKR_KIEM = {
 	doiTrongToiThieuKr: 2,
 } as const;
 
-function boDau(s: string): string {
+export function boDau(s: string): string {
 	return s
 		.normalize("NFD")
 		.replace(/\p{Diacritic}/gu, "")

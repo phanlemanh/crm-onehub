@@ -1,4 +1,4 @@
-import type { MaLuatOkr } from "./okr-kiem";
+import { boDau, type MaLuatOkr } from "./okr-kiem";
 import { docSoOkr } from "./okr-kr";
 import {
 	type DongDeXuat,
@@ -14,6 +14,7 @@ export type GoiKiem = {
 		startValue: number;
 		targetValue: number;
 		currentValue: number;
+		unit?: string;
 	}[];
 	dichCanChinh: { id: string; loai: "muc-tieu" | "kr"; title: string }[];
 	luatDaHoi: { ma: MaLuatOkr; keyResultId: string | null }[];
@@ -52,7 +53,7 @@ const HE_SO = new Map([
 
 const CHU_SO_CHINH_XAC = 15;
 
-type SoDoc = { giaTri: number; goc: number };
+type SoDoc = { giaTri: number; goc: number; heSo: number };
 type Doc = { giaTri: number; het: number };
 
 function tachSo(chu: string): string[] {
@@ -71,17 +72,36 @@ function theoSauChuc(t: string[], j: number, coSo: number): Doc {
 		: { giaTri: coSo + donVi, het: j + 1 };
 }
 
-function docMotSo(t: string[], i: number): Doc | null {
+function docChuViet(t: string[], i: number): Doc | null {
 	const tu = t[i] ?? "";
-	if (/^\d/.test(tu)) {
-		const so = docSoOkr(tu);
-		return so === null ? null : { giaTri: so, het: i + 1 };
-	}
 	if (tu === "mười") return theoSauChuc(t, i + 1, 10);
 	const don = SO_DON.get(tu);
 	if (don === undefined) return null;
 	if (t[i + 1] === "mươi") return theoSauChuc(t, i + 2, don * 10);
 	return { giaTri: don, het: i + 1 };
+}
+
+function theoSauTram(t: string[], so: Doc): Doc {
+	if (t[so.het] !== "trăm") return so;
+	const tram = so.giaTri * 100;
+	const j = so.het + 1;
+	const le = SO_DON.get(t[j + 1] ?? "");
+	if ((t[j] === "linh" || t[j] === "lẻ") && le !== undefined)
+		return { giaTri: tram + le, het: j + 2 };
+	const phan = docChuViet(t, j);
+	return phan && phan.giaTri < 100
+		? { giaTri: tram + phan.giaTri, het: phan.het }
+		: { giaTri: tram, het: j };
+}
+
+function docChuSo(t: string[], i: number): Doc | null {
+	const so = docSoOkr(t[i] ?? "");
+	return so === null ? null : { giaTri: so, het: i + 1 };
+}
+
+function docMotSo(t: string[], i: number): Doc | null {
+	const so = /^\d/.test(t[i] ?? "") ? docChuSo(t, i) : docChuViet(t, i);
+	return so ? theoSauTram(t, so) : null;
 }
 
 function docHeSo(t: string[], j: number) {
@@ -104,6 +124,7 @@ function docSo(chu: string): SoDoc[] {
 		ra.push({
 			giaTri: Number((so.giaTri * heSo).toPrecision(CHU_SO_CHINH_XAC)),
 			goc: so.giaTri,
+			heSo,
 		});
 		i = het;
 	}
@@ -123,14 +144,8 @@ function chuanHoa(s: string): string {
 		.join(" ");
 }
 
-function boDau(s: string): string {
-	return chuanHoa(
-		s
-			.normalize("NFD")
-			.replace(/\p{Diacritic}/gu, "")
-			.replace(/đ/g, "d")
-			.replace(/Đ/g, "d"),
-	);
+function khongDau(s: string): string {
+	return chuanHoa(boDau(s));
 }
 
 function coCum(van: string, cum: string): boolean {
@@ -177,15 +192,22 @@ function khongDoi(dong: DongDeXuat): boolean {
 	);
 }
 
+function heSoCuaKr(kr: GoiKiem["krs"][number]): number[] {
+	return tachSo(`${kr.unit ?? ""} ${kr.title}`)
+		.map((tu) => HE_SO.get(tu))
+		.filter((h): h is number => h !== undefined && h !== 1);
+}
+
 function soMoi(dong: DongDeXuat, goi: GoiKiem): boolean {
 	if (dong.loai !== "viet-lai") return false;
 	const kr = goi.krs.find((k) => k.id === dong.keyResultId);
-	const phep = [
-		...docSo(dong.truoc ?? "").flatMap((s) => [s.giaTri, s.goc]),
-		...(kr ? [kr.startValue, kr.targetValue, kr.currentValue] : []),
-	];
+	const oKr = kr ? [kr.startValue, kr.targetValue, kr.currentValue] : [];
+	const coKr = kr ? heSoCuaKr(kr) : [];
+	const phep = [...docSo(dong.truoc ?? "").map((s) => s.giaTri), ...oKr];
 	return docSo(dong.sau ?? "").some(
-		(s) => !phep.includes(s.giaTri) && !phep.includes(s.goc),
+		(s) =>
+			!phep.includes(s.giaTri) &&
+			!(coKr.includes(s.heSo) && oKr.includes(s.goc)),
 	);
 }
 
@@ -204,9 +226,9 @@ function tuCam(dong: DongDeXuat, goi: GoiKiem): boolean {
 }
 
 function noiVeNguoi(dong: DongDeXuat, goi: GoiKiem): boolean {
-	const chu = chuCuaDong(dong).map(boDau);
+	const chu = chuCuaDong(dong).map(khongDau);
 	return goi.tenThanhVien
-		.map(boDau)
+		.map(khongDau)
 		.filter(
 			(ten) => ten.split(" ").length >= TRO_LY_OKR_TRAN.soChuHoTenToiThieu,
 		)
