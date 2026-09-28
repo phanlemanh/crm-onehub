@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8e4f4551bf37557d658d640972e365f303972bd4
+verified_commit: 65a5ccf2e2f1939b72cb2a20ac7f3444ae6ecc59
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -321,3 +321,7 @@ none — every multi-run eval is uniform
 Round 2: bộ kiểm đỏ dưới tải chấm, chạy riêng xanh 11/11 — REJECT do tải chấm song song, không phải do feature. Quay lại chấm bằng lượt mới.
 Round 3: bộ kiểm xanh; hai lỗi trong hợp đồng ở AC-10 (trần hai chữ số thập phân bị từ chối, trang cài đặt sập khi đọc chương trình lỗi) — REJECT. Trả về triển khai.
 Round 4: sửa hai lỗi AC-10 (trần AI hai số lẻ lưu được; trang Cài đặt OKR không sập khi đọc chương trình lỗi) — toàn bộ eval máy và bộ kiểm hồi quy xanh; verdict PENDING-JUDGMENT vì E24 (judgment, carried) vẫn UNCERTAIN ở cả ba lens, chờ người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-09-28, do hoá cũ do gộp onehub (khép kỳ OKR) vào nhánh
+run_id: repin-20260928T014617Z-57015
+sha: 65a5ccf2e2f1939b72cb2a20ac7f3444ae6ecc59 · suites: 4 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E15, E24 · diff chạm vật đo ngoài làn máy: E15, E24 — chưa chứng lại, đi vòng S4 delta
