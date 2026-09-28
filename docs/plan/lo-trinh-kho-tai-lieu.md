@@ -224,7 +224,7 @@ chưa mở · Cổng Đáng · Cổng Phạm vi · đang dựng · Cổng Bằng
 Cổng Giá trị · xong · đã thay. Ngày là ngày đổi trạng thái gần nhất. Cột Ghi chú chỉ nối
 thêm, không sửa chữ cũ. PR của hạng mục nào tự sửa dòng của hạng mục đó. Khi dòng ở đây
 lệch với `PRODUCT-MAP.md`, theo `PRODUCT-MAP.md` rồi sửa dòng. Trang theo dõi tiến độ
-(artifact, đường dẫn ở `kho-tai-lieu-ban-giao.md`) là bản đọc nhanh của bảng này.
+(artifact, đường dẫn ở `kho-tai-lieu-ban-giao.md`) là bản đọc nhanh của bảng này. Trang `lo-trinh-kho-tai-lieu.html` cạnh tệp này vẽ bảng thành một trang mở được trên mọi máy; dữ liệu của nó ở `lo-trinh-kho-tai-lieu.data.js`, chụp tay từ bảng này — sửa bảng trước, rồi sửa tệp dữ liệu cùng commit.
 
 | # | Hạng mục | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
