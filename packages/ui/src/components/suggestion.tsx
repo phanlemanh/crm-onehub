@@ -181,6 +181,10 @@ export function Suggestion({
 						) : dangSua ? (
 							<>
 								<Button
+									aria-describedby={
+										acceptDisabledReason ? idLyDoKhoa : undefined
+									}
+									disabled={!!acceptDisabledReason}
 									onClick={() => onAcceptEdited?.(chuDangSua)}
 									size="xs"
 									variant="ghost"
@@ -219,7 +223,7 @@ export function Suggestion({
 							</>
 						)}
 					</div>
-					{!dangQuyet && !dangSua && acceptDisabledReason ? (
+					{!dangQuyet && acceptDisabledReason ? (
 						<p id={idLyDoKhoa}>{acceptDisabledReason}</p>
 					) : null}
 				</div>

@@ -417,6 +417,30 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		expect(moTa?.textContent).toBe("Cần xác nhận thêm trước khi nhận");
 	});
 
+	test("acceptDisabledReason: đang sửa thì «Nhận bản đã sửa» cũng khoá, cùng lý do", () => {
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				acceptDisabledReason="Form còn sửa chưa lưu"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+				onEdit={() => {}}
+			/>,
+		);
+		click(nutTheo(goc, "Sửa"));
+		const nutNhanBanDaSua = nutTheo(
+			goc,
+			"Nhận bản đã sửa",
+		) as HTMLButtonElement;
+		expect(nutNhanBanDaSua.disabled).toBe(true);
+		const idMoTa = nutNhanBanDaSua.getAttribute("aria-describedby");
+		expect(idMoTa).toBeTruthy();
+		const moTa = goc.querySelector(`#${idMoTa}`);
+		expect(moTa?.textContent).toBe("Form còn sửa chưa lưu");
+		expect(nutTheo(goc, "Huỷ")).not.toBeUndefined();
+	});
+
 	test("bấm Nhận và Bác gọi đúng callback", () => {
 		let nhan = 0;
 		let boQua = 0;
