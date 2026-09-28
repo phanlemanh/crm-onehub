@@ -102,7 +102,8 @@ trong phạm vi bóng) và điểm ra (chỉ quản trị đọc, qua `okr.troLy
   `aiDeXuatBongDonVi String[] @default([])`, `aiTomTatBongPhamVi String @default("tat")`,
   `aiTomTatBongDonVi String[] @default([])`. Hai việc cùng thêm để 9c (tóm tắt chạy bóng
   ba tuần trước khi bật) không phải thêm cột.
-- `OkrDeXuat`: `nac String @default("bat")` (`bat` · `bong`) và `maLoai String?` (mã bộ
+- `OkrDeXuat`: `hienLuc DateTime?` (lúc dòng lần đầu được `troLyDanhSach` trả cho người —
+  mẫu số của tỷ lệ nhận), `nac String @default("bat")` (`bat` · `bong`) và `maLoai String?` (mã bộ
   kiểm đã loại dòng). `TRANG_THAI_DE_XUAT` thêm `bi-loai` (cột chuỗi sẵn có, parse bằng enum).
 - Không bảng mới. Mọi cột chuỗi mới parse bằng enum Zod lúc đọc; parse hỏng là lỗi có tên.
 
@@ -156,7 +157,7 @@ bao giờ tới người dùng — để quản trị đọc được «câu b�
 | `maLoai` | Áp cho | Luật |
 | --- | --- | --- |
 | `id-ngoai-goi` | mọi dòng | Mục tiêu, KR, đích Căn chỉnh phải có trong gói |
-| `so-moi` | viết lại | Mọi con số trong `sau` (đọc bằng `docSoOkr`) phải có trong `truoc` hoặc ô số của chính KR đó |
+| `so-moi` | viết lại | Mọi con số trong `sau` phải có trong `truoc` hoặc ô số của chính KR đó; đọc cả chữ số kiểu Việt (`docSoOkr`), hậu tố tỷ/triệu/nghìn/%, và số viết bằng chữ |
 | `tu-cam` | mọi chữ | Từ tránh của `CONTEXT.md` và danh sách NG-01, NG-02, NG-07 (lương, thưởng, xếp loại, xếp hạng, đánh giá nhân viên…); chỉ tính chữ không có sẵn trong đầu vào |
 | `noi-ve-nguoi` | mọi chữ | Chứa họ tên đầy đủ của một thành viên (so không dấu) |
 | `chep-cap-tren` | viết lại tên Mục tiêu | `sau` trùng (sau chuẩn hoá) tên một KR của đích Căn chỉnh — NG-06 |
@@ -198,7 +199,8 @@ Thẻ «Góp ý của Trợ lý OKR» ở Cài đặt › Chương trình OKR (c
 nấc bật và nấc bóng: số lượt; số đề xuất đã hiện; nhận · sửa · bác · bỏ qua theo phần
 trăm; hoàn tác trong 7 ngày trên số đã nhận; độ trễ p50 và p90 (từ lúc ghi hàng việc tới
 dòng đề xuất đầu tiên, hay tới lúc việc đóng nếu không có dòng); câu bị bộ kiểm loại trên
-tổng câu model nộp, theo mã; chi phí mỗi đề xuất được nhận. Dưới đó là danh sách lượt gần
+tổng câu model nộp, theo mã; chi phí mỗi đề xuất được nhận (cột Bật, chỉ tiền của việc nấc
+bật) và chi phí mỗi lượt (cột Bóng). «Đã hiện» là dòng có `hienLuc`. Dưới đó là danh sách lượt gần
 đây (bóng và bật); bấm một lượt mở ngăn xem từng dòng, kể cả dòng bị loại và mã loại.
 Mỗi con số có một câu SQL cùng định nghĩa ở `rang/` để phiên nghiệm thu đọc thẳng DB.
 

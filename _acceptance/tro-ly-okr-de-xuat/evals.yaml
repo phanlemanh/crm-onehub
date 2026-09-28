@@ -6,7 +6,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_quyen_nut
-    expected: "exit 0; bài API trên kho _test có bộ OKR mẫu nạp bằng napBoOkrMau (hàm nạp thật của M, không gieo tay) và cấu hình lưu qua okr.setProgram. MA TRẬN TOÀN PHẦN viết trước trong bài: người {quản trị, trưởng phòng ban của Mục tiêu, phụ trách KR không sửa được Mục tiêu, thành viên không sửa được, vai okr} × đích {Mục tiêu OneHub, Mục tiêu phòng ban, KR của phòng ban} × nấc đơn vị {tat, bong, bat} → mỗi ô một kỳ vọng {sanSang bat | lyDo có tên | 403}; gọi okr.troLySanSang và okr.troLyDeXuat qua tRPC VÀ qua REST (restMeta của router) cho mọi ô; số khẳng định = số ô × 2 đường (in ra; lệch là đỏ). Ô có nghĩa bat chỉ khi người sửa được đúng thứ đang hỏi và nấc bat. Chiều đỏ trên cùng bảng: bản sao thủ tục bỏ assertSuaKr ở nhánh keyResultId → ô 'phụ trách KR khác × KR' ra bat thay vì 403, thông điệp ghim 'o lech: <nguoi> x <dich> x <nac>'."
+    expected: "exit 0; bài API trên kho _test có bộ OKR mẫu nạp bằng napBoOkrMau (hàm nạp thật của M, không gieo tay) và cấu hình lưu qua okr.setProgram. MA TRẬN TOÀN PHẦN viết trước trong bài: người {quản trị, trưởng phòng ban của Mục tiêu, phụ trách KR không sửa được Mục tiêu, thành viên không sửa được, vai okr} × đích {Mục tiêu OneHub, Mục tiêu phòng ban, KR của phòng ban} × nấc đơn vị {tat, bong, bat} → mỗi ô một kỳ vọng {sanSang bat | lyDo có tên | 403}; gọi bốn thủ tục okr.troLySanSang, okr.troLyDeXuat, okr.troLyDanhSach, okr.troLyQuyet (nhan, sua, bac, bo-qua trên dòng do nop_de_xuat thật ghi) qua tRPC VÀ qua REST (restMeta của router) cho mọi ô; số khẳng định = số ô × số thủ tục (quyết tính bốn cách) × 2 đường (in ra; lệch là đỏ). Ô có nghĩa bat chỉ khi người sửa được đúng thứ đang hỏi và nấc bat. troLyDanhSach: đối chứng dương — người phụ trách KR nhận đúng tập id dòng của KR đó (so tập, không đếm); thành viên không sửa được → 403. troLyQuyet bac/bo-qua của người không sửa được đích → 403 và okrDeXuat vẫn 'cho'. Chiều đỏ trên cùng bảng: (a) bản sao bỏ assertSuaKr ở nhánh keyResultId → ô 'phụ trách KR khác × KR' ra bat, thông điệp ghim 'o lech: <nguoi> x <dich> x <nac> x <thu tuc>'; (b) bản sao bỏ kiểm quyền ở nhánh bac → 'bac khong quyen: <nguoi>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr-access.service.ts, packages/db/src/okr-tro-ly.ts, apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts]
 
@@ -22,7 +22,7 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.tdx_man_trang_thai
-    expected: "exit 0; bài DOM cột góp ý: một ca cho MỖI dòng của bảng trạng thái hộp Mục tiêu và hộp KR trong design doc (id ST-muctieu-* và ST-kr-* rút lúc chạy từ bảng UX-STATE-TABLE của design doc, đường suy từ vị trí bài), mỗi ca khẳng định chữ và điều khiển của dòng đó; form có sửa chưa lưu → nút disabled và mô tả 'Lưu thay đổi trước khi nhờ góp ý'; đồng hồ giả: hỏi lại mỗi 1500 ms, sau 30 000 ms chuyển sang lỗi có 'Thử lại', đóng cột thì số lần gọi troLyDanhSach ngừng tăng. Chiều đỏ: bảng trạng thái có một id mà bài không có ca → 'trang thai chua do: <id>'; bản sao đổi trần chờ thành 60 000 ms → ca quá-hạn đỏ với thông điệp in số lần hỏi."
+    expected: "exit 0; bài DOM cột góp ý: một ca cho MỖI dòng của bảng trạng thái hộp Mục tiêu và hộp KR trong design doc (id ST-muctieu-* và ST-kr-* rút lúc chạy từ bảng UX-STATE-TABLE của design doc, đường suy từ vị trí bài), mỗi ca khẳng định chữ và điều khiển của dòng đó; form có sửa chưa lưu → nút disabled và mô tả 'Lưu thay đổi trước khi nhờ góp ý'; đồng hồ giả: hỏi lại mỗi 1500 ms, sau 30 000 ms chuyển sang lỗi có 'Thử lại', đóng cột thì số lần gọi troLyDanhSach ngừng tăng. Ca Hoàn tác: sau Nhận, bấm Hoàn tác trên toast → tRPC giả nhận đúng một updateObjective với title bằng truoc (không bằng sau). Chiều đỏ: bảng trạng thái có một id mà bài không có ca → 'trang thai chua do: <id>'; bản sao đổi trần chờ thành 60 000 ms → ca quá-hạn đỏ với thông điệp in số lần hỏi; bản sao Hoàn tác gửi sau → 'hoan tac gui sau'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", packages/ui/src/components/suggestion.tsx, docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
 
@@ -38,6 +38,7 @@ evals:
       - "Gõ một chữ vào tên → ảnh ST-muctieu-nut-khoa-sua; hoàn lại"
       - "Bấm góp ý (model thật có ZDR trên kho đo; thiếu khoá thì mã 2, không xanh) → ảnh ST-muctieu-dang-soan, rồi ST-muctieu-co-dong khi có dòng"
       - "Sửa một dòng → ST-muctieu-sua-dong; Nhận → ST-muctieu-da-quyet: ô tên trong form đổi đúng câu đã nhận, toast có Hoàn tác"
+      - "Bấm Hoàn tác trên toast → okr.objective đọc lại title bằng câu cũ; rang/hoan-tac.sql trên kho đo đếm 1; Nhận lại một lần nữa để tiếp"
       - "Tab Vết của Mục tiêu → dòng có 'theo đề xuất của Trợ lý OKR'"
       - "Hộp KR của một KR nguồn CRM mẫu → ảnh ST-kr-xu-huong"
       - "Đăng nhập quản trị mẫu; Cài đặt › Chương trình OKR → ảnh ST-caidat-nac; đặt Chạy bóng cho một phòng ban khác, lưu; trưởng phòng đó sửa tên một Mục tiêu → chờ lượt bóng xong → quản trị tải lại, ảnh ST-sodo-co-so, mở lượt → ảnh ST-sodo-ngan; trưởng phòng đó mở lại hộp Mục tiêu → không có nút, không có cột"
@@ -59,7 +60,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.tdx_bo_kiem
-    expected: "exit 0; hàm thuần kiemDongDeXuat của @crm/validation/okr-kiem-de-xuat trên MA TRẬN viết trước: mỗi mã của MA_LOAI_DE_XUAT (rút lúc chạy) có đúng một cặp dòng đỏ/dòng lành trên CÙNG một gói; dòng đỏ ra {maLoai} đúng mã, dòng lành ra {qua}; số cặp = số mã (lệch là 'ma loai chua co cap: <ma>'). Ca số: 'Tăng doanh thu lên 5 tỷ' khi truoc và KR không có 5 → so-moi; '1,5' viết kiểu Việt khi KR có 1.5 → qua (docSoOkr); tu-cam lấy danh sách từ cấu hình và chữ có sẵn trong truoc thì không tính. Gói ca rút từ ca mẫu của M qua docBoCaGopY (không dựng tay khuôn gói). Chiều đỏ: bản sao bỏ nhánh so-moi → ca so-moi ra qua, thông điệp ghim 'lot so moi: 5'."
+    expected: "exit 0; hàm thuần kiemDongDeXuat của @crm/validation/okr-kiem-de-xuat trên MA TRẬN viết trước: mỗi mã của MA_LOAI_DE_XUAT (rút lúc chạy) có đúng một cặp dòng đỏ/dòng lành trên CÙNG một gói; dòng đỏ ra {maLoai} đúng mã, dòng lành ra {qua}; số cặp = số mã (lệch là 'ma loai chua co cap: <ma>'). Ca số (mỗi dạng một cặp đỏ/lành trên cùng gói): 'Tăng doanh thu lên 5 tỷ' khi truoc và KR không có 5 → so-moi; 'lên năm tỷ' (số viết bằng chữ) → so-moi; '5 tỷ' khi KR ghi 5000000000 → qua; '50%' khi KR phần trăm ghi 50 → qua, khi không có 50 → so-moi; '1,5' viết kiểu Việt khi KR có 1.5 → qua; tu-cam lấy danh sách từ cấu hình và chữ có sẵn trong truoc thì không tính. Gói ca rút từ ca mẫu của M qua docBoCaGopY (không dựng tay khuôn gói). Chiều đỏ: bản sao bỏ nhánh so-moi → ca so-moi ra qua, thông điệp ghim 'lot so moi: 5'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/validation/src/okr-kiem-de-xuat.ts, packages/validation/src/okr-tro-ly.ts, packages/validation/test/okr-kiem-de-xuat.spec.ts]
 
@@ -101,6 +102,7 @@ evals:
   - id: E11
     criterion: AC-7
     executor: test
+    layer: backend-effect
     cmd: config:executors.test.tdx_tach_tx
     expected: "exit 0; chạy nguyên các bài OKR sẵn có của API (test/okr.spec.ts, okr-can-chinh, okr-khep và mọi tệp test/okr*.spec.ts) không sửa kỳ vọng — git diff của các tệp đó so với merge-base rỗng (bài tự kiểm và in); cộng ca mới: Hoàn tác sau Nhận ghi lại truoc qua okr.updateObjective, rang/hoan-tac.sql đếm dòng đó là hoàn tác trong 7 ngày; hoàn tác ở ngày thứ 8 (đồng hồ giả) không đếm. Chiều đỏ: câu SQL bản sao bỏ điều kiện 7 ngày → ca ngày thứ 8 đếm 1, thông điệp ghim 'hoan tac ngoai 7 ngay'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -180,7 +182,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_so_do
-    expected: "exit 0; kho kiểm dựng một tháng bằng bên ghi thật (xepViecTroLy, nop_de_xuat, troLyQuyet, okr.updateObjective cho hoàn tác, ghiChiPhi) ở cả hai nấc; okr.troLySoDo trả mỗi số; bài chạy các câu rang/ty-le-quyet.sql, hoan-tac.sql, do-tre.sql, bi-loai.sql, chi-phi-moi-nhan.sql (đường suy từ vị trí bài, không hằng gốc) trên cùng kho và so từng số bằng nhau, tách nấc; số kỳ vọng viết tay trong bài cho kho dựng sẵn (vd nhận 3/8 = 37,5%) để phép so không chỉ là hai bên cùng sai. Chiều đỏ: bản sao troLySoDo tính nhận trên tổng gồm cả bi-loai → lệch câu SQL, thông điệp ghim 'so do lech: ty-le-nhan'."
+    expected: "exit 0; kho kiểm dựng một tháng bằng bên ghi thật (xepViecTroLy, nop_de_xuat, troLyQuyet, okr.updateObjective cho hoàn tác, ghiChiPhi) ở cả hai nấc; okr.troLySoDo trả mỗi số; bài chạy các câu rang/ty-le-quyet.sql, hoan-tac.sql, do-tre.sql, bi-loai.sql, chi-phi-moi-nhan.sql (đường suy từ vị trí bài, không hằng gốc) trên cùng kho và so từng số bằng nhau, tách nấc; số kỳ vọng viết tay trong bài cho kho dựng sẵn (vd nhận 3/8 = 37,5%) để phép so không chỉ là hai bên cùng sai. Kho dựng có một dòng het-han đã hiện (hienLuc có, do troLyDanhSach thật ghi) và một dòng het-han chưa hiện — chỉ dòng thứ nhất vào mẫu số; sổ chi phí có tiền của lượt bóng khác 0 — chi phí mỗi đề xuất nhận của cột Bật không đổi khi thêm tiền bóng, cột Bóng là tiền bóng chia số lượt bóng. Chiều đỏ: bản sao troLySoDo tính nhận trên tổng gồm cả bi-loai → 'so do lech: ty-le-nhan'; câu SQL bản sao đếm dòng chưa hiện → 'mau so tinh dong chua hien'; câu SQL bản sao cộng tiền bóng vào tử số → 'chi phi bong vao ty so'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/tro-ly.service.ts, "_acceptance/tro-ly-okr-de-xuat/rang/*.sql", apps/api/test/tro-ly-okr-so-do.spec.ts]
 
@@ -197,9 +199,9 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.tdx_eval_gop_y
-    expected: "exit 0; rang/eval-gop-y.mjs tạo kho đo dùng-một-lần, chạy eve eval apps/agent/evals/okr/gop-y.eval.ts và ng.eval.ts trên THU_MUC_CA_MAU qua docBoCaGopY (không có khoá mô hình → mã 2, không xanh; tiền theo khoá và trần chủ kho khai trước S4). Chốt bằng mã mọi ca: 0 dòng còn lại mang mã loại khi chạy lại kiemDongDeXuat; ca khongGopY 0 dòng viết lại; mỗi kyVong.vanDe có ≥ 1 dòng đúng trường hoặc đúng maVanDe; ca NG không chep-cap-tren, noi-ve-nguoi, tu-cam. Judge zai/glm-5.2-fast với providerOptions.gateway.zeroDataRetention true: in điểm bộ Viết lại. In 'ma: n/n · judge: x'. Chiều đỏ ghim: một ca giả thêm trong lần chạy có kyVong.khongGopY true nhưng Mục tiêu 'gọi 50 cuộc' → nếu không ra dòng thì bài in 'ca doi chung khong bat duoc' và mã 3."
+    expected: "exit 0; rang/eval-gop-y.mjs tạo kho đo dùng-một-lần, chạy eve eval apps/agent/evals/okr/gop-y.eval.ts và ng.eval.ts trên THU_MUC_CA_MAU qua docBoCaGopY (không có khoá mô hình → mã 2, không xanh; tiền theo khoá và trần chủ kho khai trước S4). Chốt bằng mã mọi ca: 0 dòng còn lại mang số mới theo bộ trích số riêng của rang/so-moi-lot.mjs (không chạy lại kiemDongDeXuat làm thước); ca khongGopY 0 dòng viết lại; mỗi kyVong.vanDe có ≥ 1 dòng đúng trường hoặc đúng maVanDe; ca NG không chep-cap-tren, noi-ve-nguoi, tu-cam. Judge zai/glm-5.2-fast với providerOptions.gateway.zeroDataRetention true: in điểm bộ Viết lại. In 'ma: n/n · judge: x'. Chiều đỏ ghim: một ca giả thêm trong lần chạy có kyVong.khongGopY true nhưng Mục tiêu 'gọi 50 cuộc' → nếu không ra dòng thì bài in 'ca doi chung khong bat duoc' và mã 3."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/agent/evals/okr/**", "apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs]
+    paths: ["apps/agent/evals/okr/**", "apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs, _acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs]
 
   - id: E23
     criterion: AC-14
@@ -238,9 +240,9 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_duong_do
-    expected: "exit 0; bài chạy rang/so-moi-lot.mjs (đường suy từ vị trí bài) trên kho kiểm có dòng do nop_de_xuat thật ghi: kho sạch → 0; một dòng 'cho' có số mới chèn qua bản sao bộ kiểm bỏ nhánh so-moi → đếm 1 kèm id; dòng bi-loai có số mới → không đếm. Thông điệp ghim tên thước và id."
+    expected: "exit 0; rang/so-moi-lot.mjs dùng bộ trích số RIÊNG của nó (không nhập kiemDongDeXuat hay docSoOkr): chữ số có dấu chấm hay phẩy, hậu tố tỷ/triệu/nghìn/%, số viết bằng chữ từ một đến mười và các chục; bài chạy nó (đường suy từ vị trí bài) trên kho kiểm có dòng do nop_de_xuat thật ghi: kho sạch → 0; một dòng 'cho' có số mới chèn qua bản sao bộ kiểm bỏ nhánh so-moi → đếm 1 kèm id; một dòng 'lên năm tỷ' chèn qua bản sao docSoOkr không hiểu chữ số viết bằng chữ → thước vẫn đếm 1 (thước không lệ thuộc bộ kiểm đang đo); dòng bi-loai có số mới → không đếm. Thông điệp ghim tên thước và id."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs", packages/validation/src/okr-kiem-de-xuat.ts, apps/agent/test/tro-ly-okr-duong-do.integration.spec.ts]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs", packages/validation/src/okr-kiem-de-xuat.ts, packages/validation/src/okr-kr.ts, apps/agent/test/tro-ly-okr-duong-do.integration.spec.ts]
 
   - id: E27
     criterion: AC-15
