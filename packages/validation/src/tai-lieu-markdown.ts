@@ -1,13 +1,35 @@
-import { type AnyExtension, type JSONContent, Node } from "@tiptap/core";
+import {
+	type AnyExtension,
+	type JSONContent,
+	type MarkdownRendererHelpers,
+	Node,
+} from "@tiptap/core";
 import Link from "@tiptap/extension-link";
 import { OrderedList } from "@tiptap/extension-list";
-import { TableKit } from "@tiptap/extension-table";
+import {
+	renderTableToMarkdown,
+	Table,
+	TableKit,
+} from "@tiptap/extension-table";
 import { MarkdownManager } from "@tiptap/markdown";
 import StarterKit from "@tiptap/starter-kit";
 import { z } from "zod";
 import { chuanNfc, slugTuDuongDan, TAI_LIEU } from "./tai-lieu";
 
 export const CAP_TIEU_DE = [2, 3] as const;
+
+function thoatOng(h: MarkdownRendererHelpers): MarkdownRendererHelpers {
+	return {
+		...h,
+		renderChildren: (...thamSo: Parameters<typeof h.renderChildren>) =>
+			h.renderChildren(...thamSo).replace(/\|/g, "\\|"),
+	};
+}
+
+const BangThoatOng = Table.extend({
+	renderMarkdown: (nut: JSONContent, h: MarkdownRendererHelpers) =>
+		renderTableToMarkdown(nut, thoatOng(h)),
+});
 
 export const PHAN_MO_RONG: AnyExtension[] = [
 	StarterKit.configure({
@@ -22,7 +44,8 @@ export const PHAN_MO_RONG: AnyExtension[] = [
 		heading: { levels: [...CAP_TIEU_DE] },
 	}),
 	Node.create({ ...OrderedList.config, markdownTokenizer: undefined }),
-	TableKit,
+	TableKit.configure({ table: false }),
+	BangThoatOng,
 	Link.configure({ openOnClick: false }),
 ];
 
