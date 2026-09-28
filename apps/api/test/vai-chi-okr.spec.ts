@@ -1615,6 +1615,7 @@ describe("sang-kien-an", () => {
 					await db.onboardingPlan.deleteMany({
 						where: { companyId: congTyX },
 					});
+					await db.agentTask.deleteMany({ where: { companyId: congTyX } });
 					await db.company.deleteMany({ where: { id: congTyX } });
 				}
 			}
