@@ -37,8 +37,16 @@ Máy suy thêm (gạch ở Cổng Phạm vi nếu sai):
   mẫu có thư điện tử đuôi `@mau.onehub.test` (miền `.test` không bao giờ nhận thư).
   «OKR thật» = bất kỳ chu kỳ, mục tiêu hay KR nào **không** mang tiền tố đó. Máy dev
   hôm nay có 0 chu kỳ, 2 phòng ban, 22 người (đếm 2026-09-28) — nạp được ngay.
+- **Workspace đích là workspace duy nhất của kho** (`WORKSPACE_ID`). Không có hàng
+  `Organization` đó thì thoát kèm câu ghim bảo chạy `db:seed` trước. Bộ nạp không đánh
+  dấu onboard — đó là việc của `db:seed` và của phiên đo. Phòng ban và người sẵn có của
+  kho giữ nguyên, đứng cạnh phòng ban mẫu (máy dev hôm nay: 12 phòng ban sau khi nạp).
 - **Nạp là nạp lại.** Mỗi lần nạp xoá bộ mẫu cũ rồi ghi bộ mới trong một giao dịch;
-  `--xoa` chỉ gỡ. Hàng ngoài bộ mẫu không bị đụng.
+  `--xoa` chỉ gỡ. Hàng ngoài bộ mẫu không bị đụng. Xoá đi theo **quan hệ tới thực thể
+  mẫu**, không theo tiền tố: lần cập nhật, phiên cập nhật, vết, phiên đăng nhập mà dịch
+  vụ thật ghi lên người, KR hay chu kỳ mẫu sau khi nạp cũng đi theo. Một hàng ngoài bộ
+  mẫu trỏ vào thực thể mẫu (vd thoả thuận giao cho người mẫu) thì giao dịch cuộn lại và
+  lệnh nêu bảng đang giữ.
 
 ## Bản xem trước — không nạp được mà không nạp vào production
 
@@ -76,7 +84,7 @@ khó đảo, ngoài kho. Đây là điểm quyết định duy nhất ở Cổng
 | Đơn vị | Chỗ | Việc |
 | --- | --- | --- |
 | Hằng số | `apps/api/scripts/okr-mau/cau-hinh.ts` | `OKR_MAU`: tiền tố mã, miền thư, số tuần, độ dài quý, máy chủ cục bộ |
-| Chặn | `apps/api/scripts/okr-mau/chan.ts` | `kiemDuocNap(env)`: máy chủ của `DATABASE_URL` (đúng biến mà Prisma client đọc) phải cục bộ, `NODE_ENV`/`VERCEL_ENV` không phải `production`. Chạy **trước** khi nạp module `@crm/db` |
+| Chặn | `apps/api/scripts/okr-mau/chan.ts` | `kiemDuocNap(env)`: máy chủ của `DATABASE_URL` (đúng biến mà Prisma client đọc) phải cục bộ; `NODE_ENV` không phải `production`; `VERCEL_ENV` không phải `production` hay `preview`. Chạy **trước** khi nạp module `@crm/db` |
 | Khuôn bộ mẫu | `apps/api/scripts/okr-mau/khuon.ts` | Zod cho `cong-ty.json`: người, cây, chu kỳ, mục tiêu, KR, kịch bản, quý 3 |
 | Dữ liệu | `apps/api/scripts/okr-mau/cong-ty.json` | Công ty «Hải Đăng Logistics» giả — xem dưới |
 | Diễn biến | `apps/api/scripts/okr-mau/dien-bien.ts` | Hàm thuần: kịch bản + 6 tuần → giá trị, mức tự tin, ghi chú từng tuần |
@@ -113,7 +121,10 @@ thái.
 **Sáu tuần Cập nhật tuần** — mỗi người phụ trách một phiên mỗi tuần, mỗi KR một lần. Kịch
 bản mỗi KR: `deu` (đều, tự tin cao), `cham` (chậm, cao → vừa), `tut` (tụt đúng tuần 6:
 vừa → thấp — thành «đáng bàn» lý do tụt), `bo` (ngừng sau tuần 3 — «đáng bàn» lý do
-im, ≥ 14 ngày), `vuot` (vượt đích), `ghi-chu` (ghi chú tuần 6). Vài ghi chú trộn Anh–Việt
+im, ≥ 14 ngày), `vuot` (vượt đích), `ghi-chu` (ghi chú tuần 6). Mọi KR của một người phụ trách mẫu
+(trưởng Pháp chế) chưa gửi tuần 6 — kịch bản `chua-gui`: có người để lượt 4 nhắc và để
+phép đo gửi Cập nhật tuần thật. Lần cập nhật tuần k đặt lúc 09:00 thứ Hai tuần đó giờ
+Việt Nam, không muộn hơn mốc. Vài ghi chú trộn Anh–Việt
 để tóm tắt tuần (9c) có ca khó.
 
 **Quý 3 mẫu** (pha «Đã đóng») — mỗi phòng ban 1 mục tiêu, 2–3 KR; số chốt, điểm gợi ý
@@ -145,8 +156,10 @@ thật = đổi thư mục truyền vào `docBoCaGopY`.
 
 ## Lỗi và chặn
 
-- Máy chủ không cục bộ, hoặc môi trường production → thoát 2, câu ghim, **trước** khi
-  mở kết nối; không có biến vượt (khác `ALLOW_REMOTE_DB` của `db:seed`).
+- Máy chủ không cục bộ, hoặc `NODE_ENV=production`, hoặc `VERCEL_ENV` là `production`
+  hay `preview` → thoát 2, câu ghim, **trước** khi mở kết nối; không có biến vượt (khác
+  `ALLOW_REMOTE_DB` của `db:seed`). `VERCEL_ENV=development` (do `vercel env pull` ghi)
+  không chặn — máy chủ cục bộ mới là điều kiện.
 - Có OKR thật → thoát 3, nêu số chu kỳ/mục tiêu thật, 0 hàng ghi.
 - Tệp bộ mẫu sai khuôn hay trái luật sản phẩm → thoát 4, nêu đường dẫn trường hỏng,
   0 hàng ghi.

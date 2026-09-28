@@ -6,7 +6,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_to_chuc
     paths: [apps/api/scripts/okr-mau/**, apps/api/scripts/okr-mau.ts, apps/api/test/okr-mau.spec.ts, apps/api/test/okr-mau-san.ts]
-    expected: "exit 0; nạp vào kho _test sạch rồi đọc lại qua tRPC toChuc.tree và bảng Member/OrgPlacement, so toEqual với bảng VIẾT TRƯỚC rút từ cong-ty.json đã parse (không đếm phần tử rời): tập tên 3 bộ phận, tập tên 10 phòng ban theo bộ phận, trưởng của từng đơn vị, phòng ban chính của từng người mẫu, vai của từng người (okr cho đúng tập người của Tài chính/Nhân sự/Pháp chế, admin một người, member phần còn lại); mọi email mẫu khớp /@mau\\.onehub\\.test$/. Đối chứng dương: bảng so rút từ tệp, không chép tay. CHIỀU ĐỎ: bản sao bộ mẫu trong bài đổi trưởng phòng Pháp chế sang người phòng Nhân sự → bài đỏ ghim «trưởng không thuộc phòng» (bị chặn ở bước parse — ca này cũng là ca AC-11)."
+    expected: "exit 0; nạp vào kho _test sạch rồi đọc lại qua tRPC toChuc.tree và bảng Member/OrgPlacement, so toEqual với bảng VIẾT TRƯỚC rút từ cong-ty.json đã parse (không đếm phần tử rời): tập tên 3 bộ phận, tập tên 10 phòng ban theo bộ phận, trưởng của từng đơn vị, phòng ban chính của từng người mẫu, vai của từng người (okr cho đúng tập người của Tài chính/Nhân sự/Pháp chế, admin một người, member phần còn lại); mọi email mẫu khớp /@mau\\.onehub\\.test$/. Chạy hai lượt: kho _test sạch, và kho có sẵn một người và hai phòng ban ngoài bộ mẫu (fixture của E7) — lượt hai phần mẫu vẫn toEqual bảng rút từ tệp và hai phòng ban sẵn có đứng nguyên; kho bị xoá hàng Organization WORKSPACE_ID → lệnh con thoát 4, stderr chứa «db:seed», 0 hàng ghi. Đối chứng dương: bảng so rút từ tệp, không chép tay. CHIỀU ĐỎ: bản sao bộ mẫu trong bài đổi trưởng phòng Pháp chế sang người phòng Nhân sự → bài đỏ ghim «trưởng không thuộc phòng» (bị chặn ở bước parse — ca này cũng là ca AC-11)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -14,7 +14,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_toan_canh
     paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts, apps/api/test/okr-mau-san.ts]
-    expected: "exit 0; sau khi nạp, gọi qua tRPC bằng phiên quản trị mẫu: okr.cycles trả đúng ba chu kỳ mẫu — kind nam; quý 3 phase da-dong; quý 4 phase dang-chay; startsOn/endsOn quý nằm trong năm, hai quý không chồng; okr.toanCanh của quý 4 có 10 phòng ban mẫu, mỗi phòng ≥ 1 mục tiêu cong-bo; ba mục tiêu level onehub của năm cong-bo; okr.cayCanChinh: mọi mục tiêu phong-ban cong-bo có đích căn chỉnh là mục tiêu hoặc KR level onehub; đúng một mục tiêu nhap và một da-bo trong quý 4; với mỗi đơn vị số mục tiêu ≤ OKR_PROGRAM_MAC_DINH.objectiveCap và mỗi mục tiêu số KR ≤ krCap. CHIỀU ĐỎ: bài xoá liên kết căn chỉnh của một mục tiêu phòng ban trong kho _test rồi chạy lại khẳng định → đỏ ghim tên mục tiêu thiếu căn chỉnh."
+    expected: "exit 0; sau khi nạp, gọi qua tRPC bằng phiên quản trị mẫu: okr.cycles trả đúng ba chu kỳ mẫu — kind nam; quý 3 phase da-dong; quý 4 phase dang-chay; startsOn/endsOn quý nằm trong năm, hai quý không chồng; okr.toanCanh của quý 4 có 10 phòng ban mẫu, mỗi phòng ≥ 1 mục tiêu cong-bo — chạy cả trên kho có phòng ban ngoài bộ mẫu; ba mục tiêu level onehub của năm cong-bo; okr.cayCanChinh: mọi mục tiêu phong-ban cong-bo có đích căn chỉnh là mục tiêu hoặc KR level onehub; đúng một mục tiêu nhap và một da-bo trong quý 4; với mỗi đơn vị số mục tiêu ≤ OKR_PROGRAM_MAC_DINH.objectiveCap và mỗi mục tiêu số KR ≤ krCap. CHIỀU ĐỎ: bài xoá liên kết căn chỉnh của một mục tiêu phòng ban trong kho _test rồi chạy lại khẳng định → đỏ ghim tên mục tiêu thiếu căn chỉnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -30,7 +30,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_sau_tuan
     paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts, apps/api/src/okr/hop-tuan.ts]
-    expected: "exit 0; nạp với --moc cố định (thứ Năm), đặt đồng hồ bài bằng mốc (setSystemTime) rồi gọi okr.hopTuan qua tRPC cho từng phòng ban: tập weekStart của lần cập nhật đầu mỗi KR đang chạy = {thứ Hai tuần T−5}; KR kịch bản deu có đúng 6 lần, weekStart là 6 thứ Hai liên tiếp tới T; ≥ 3 KR có chuỗi confidence không tăng đi qua cao, vua, thap; gộp dangBan toàn công ty: ≥ 2 KR có lyDo loai 'tut' và ≥ 2 KR có lyDo loai 'im' với soNgay ≥ OKR_NHAC.imNgay (rút hằng, không chép 14); tập KR 'tut' và 'im' so toEqual với tập KR kịch bản tut và bo rút từ cong-ty.json — quan hệ, không đếm; currentValue mỗi KR tay = value lần cập nhật cuối; mỗi (người phụ trách, tuần) đúng một OkrCheckInSession có submittedAt. Hàm dien-bien thuần có ca riêng: bảng viết trước kịch bản × 6 tuần → (value, confidence). CHIỀU ĐỎ: đặt đồng hồ bài sang tuần T+1 → không còn KR 'tut' (lời hứa là quan hệ theo hôm nay) — bài khẳng định đúng chiều này để chứng thước không hằng-đúng."
+    expected: "exit 0; BẢNG MỐC VIẾT TRƯỚC ba dòng — 2026-11-09T00:30+07:00 (thứ Hai), 2026-11-12T15:00+07:00 (thứ Năm), 2026-11-15T23:30+07:00 (Chủ nhật; là chiều Chủ nhật UTC) — mỗi dòng kèm weekStart tuần 6 VIẾT TAY (2026-11-09 cả ba), không gọi dauTuanVN. Với mỗi mốc: nạp với mốc đó, đặt đồng hồ bài bằng mốc (setSystemTime) rồi gọi okr.hopTuan qua tRPC cho từng phòng ban; mọi OkrCheckIn.createdAt, OkrCheckInSession.submittedAt ≤ mốc và mọi OkrSoChup.ngay ≤ ngày của mốc; tập weekStart của lần cập nhật đầu mỗi KR đang chạy = {thứ Hai tuần T−5}; KR kịch bản deu có đúng 6 lần, weekStart là 6 thứ Hai liên tiếp tới T; KR của người kịch bản chua-gui có 5 lần, lần cuối tuần T−1; ≥ 3 KR có chuỗi confidence không tăng đi qua cao, vua, thap; gộp dangBan toàn công ty: ≥ 2 KR có lyDo loai 'tut' và ≥ 2 KR có lyDo loai 'im' với soNgay ≥ OKR_NHAC.imNgay (rút hằng, không chép 14); tập KR 'tut' và 'im' so toEqual với tập KR kịch bản tut và bo rút từ cong-ty.json — quan hệ, không đếm; currentValue mỗi KR tay = value lần cập nhật cuối; mỗi (người phụ trách, tuần có lần cập nhật) đúng một OkrCheckInSession có submittedAt. Hàm dien-bien thuần có ca riêng: bảng viết trước kịch bản × 6 tuần → (value, confidence). CHIỀU ĐỎ: đặt đồng hồ bài sang tuần T+1 → không còn KR 'tut' (lời hứa là quan hệ theo hôm nay) — bài khẳng định đúng chiều này để chứng thước không hằng-đúng."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
@@ -62,7 +62,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_xoa
     paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
-    expected: "exit 0; sau nạp rồi --xoa: với mỗi bảng trong OKR_MAU.bang, count(id bắt đầu 'mau-okr-') = 0 và count(user email đuôi @mau.onehub.test) = 0; hàng ngoài bộ mẫu toEqual ảnh chụp; --xoa trên kho không có bộ mẫu thoát 0, stdout chứa «không có bộ mẫu». Đối chứng dương: trước --xoa các count > 0."
+    expected: "exit 0; MA TRẬN RÚT TỪ SCHEMA, không từ bộ nạp: duyệt mọi model của Prisma DMMF (Prisma.dmmf.datamodel.models), với mỗi model đếm hàng có id thuộc tập id thực thể mẫu, hoặc có một cột vô hướng tên kết thúc bằng Id/UserId (vd userId, ownerUserId, actorUserId, cycleId, objectiveId, keyResultId, departmentId, divisionId, sessionId) mang giá trị thuộc tập id thực thể mẫu (tập chụp TRƯỚC khi xoá: người, bộ phận, phòng ban, chu kỳ, mục tiêu, KR). Chuỗi «dùng rồi mới xoá»: nạp → quản trị mẫu gọi okr.hopTuan (ghi vết) → dev:session của một người mẫu → okr.moCapNhat + okr.guiCapNhat của người kịch bản chua-gui → --xoa thoát 0 → mọi model đếm 0; hàng ngoài bộ mẫu toEqual ảnh chụp; nạp lại sau chuỗi đó thoát 0. Đối chứng dương: ngay trước --xoa, đếm > 0 ở okrTrail, okrCheckInSession, session và mọi bảng bộ mẫu ghi. Ca giữ: thêm một deal ngoài bộ mẫu ownerId = người mẫu → --xoa thoát 5, stderr nêu tên bảng giữ, dấu vân tay kho trước/sau toEqual. --xoa trên kho không có bộ mẫu thoát 0, stdout chứa «không có bộ mẫu»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -70,7 +70,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_chan_production
     paths: [apps/api/scripts/okr-mau/chan.ts, apps/api/scripts/okr-mau.ts, apps/api/scripts/okr-mau/cau-hinh.ts, apps/api/test/okr-mau-chan.spec.ts]
-    expected: "exit 0; bảng ca VIẾT TRƯỚC cho kiemDuocNap(env): ep-x.us-east-1.aws.neon.tech, db.example.com, 10.0.0.5, 203.0.113.9, [2001:db8::1] → từ chối lý do may-chu; localhost/127.0.0.1/::1/[::1] → cho; localhost + NODE_ENV=production → từ chối lý do moi-truong; localhost + VERCEL_ENV=preview → từ chối; mọi ca từ chối kèm ALLOW_REMOTE_DB=1 vẫn từ chối; mỗi ca so toEqual {cho, lyDo}. Tiến trình con: bun scripts/okr-mau.ts (và --xoa) với DATABASE_URL=postgresql://u:p@ep-khong-ton-tai.invalid/db → thoát 2 trong < 5 s, stderr chứa «ep-khong-ton-tai.invalid» và câu ghim «không phải máy cục bộ», KHÔNG chứa chữ của lỗi kết nối (ECONNREFUSED/ENOTFOUND/P1001) — chứng bước chặn chạy trước khi mở kết nối. Bài AST: okr-mau.ts gọi kiemDuocNap trước dòng import động @crm/db. CHIỀU ĐỎ: bản sao kiemDuocNap đọc ALLOW_REMOTE_DB → ca neon + ALLOW_REMOTE_DB đỏ ghim tên ca."
+    expected: "exit 0; bảng ca VIẾT TRƯỚC cho kiemDuocNap(env): ep-x.us-east-1.aws.neon.tech, db.example.com, 10.0.0.5, 203.0.113.9, [2001:db8::1] → từ chối lý do may-chu; localhost/127.0.0.1/::1/[::1] → cho; localhost + NODE_ENV=production → từ chối lý do moi-truong; localhost + VERCEL_ENV=preview và =production → từ chối lý do moi-truong; localhost + VERCEL_ENV=development và VERCEL_ENV rỗng → cho; mọi ca từ chối kèm ALLOW_REMOTE_DB=1 vẫn từ chối; mỗi ca so toEqual {cho, lyDo}. Tiến trình con: bun scripts/okr-mau.ts (và --xoa) với DATABASE_URL=postgresql://u:p@ep-khong-ton-tai.invalid/db → thoát 2 trong < 5 s, stderr chứa «ep-khong-ton-tai.invalid» và câu ghim «không phải máy cục bộ», KHÔNG chứa chữ của lỗi kết nối (ECONNREFUSED/ENOTFOUND/P1001) — chứng bước chặn chạy trước khi mở kết nối; thêm tiến trình con với DATABASE_URL của kho _test (cục bộ) và VERCEL_ENV=development → không thoát 2. Bài AST: okr-mau.ts gọi kiemDuocNap trước dòng import động @crm/db. CHIỀU ĐỎ: bản sao kiemDuocNap đọc ALLOW_REMOTE_DB → ca neon + ALLOW_REMOTE_DB đỏ ghim tên ca."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
@@ -94,7 +94,7 @@ evals:
     executor: test
     cmd: config:executors.test.bom_thu_tuc_that
     paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
-    expected: "exit 0; sau nạp, phiên của người phụ trách một KR tay kịch bản deu gọi okr.moCapNhat rồi okr.guiCapNhat với giá trị mới → thành công; đọc lại DB: currentValue = giá trị mới, thêm đúng một OkrCheckIn; phiên người vai okr mẫu gọi okr.toanCanh quý 4 → trả 10 phòng ban; rồi nạp lại → thoát 0 và số hàng bộ mẫu bằng lần nạp đầu (lần cập nhật thật trên KR mẫu bị thay cùng bộ)."
+    expected: "exit 0; sau nạp (mốc thứ Năm), phiên của người kịch bản chua-gui gọi okr.moCapNhat rồi okr.guiCapNhat cho một KR tay của mình với giá trị mới → thành công; đọc lại DB: currentValue = giá trị mới; số OkrCheckIn tuần T của KR đó trước 0, sau 1, weekStart = thứ Hai tuần T viết tay; phiên mới có submittedAt; phiên người vai okr mẫu gọi okr.toanCanh quý 4 → trả 10 phòng ban; rồi nạp lại → thoát 0 và số hàng bộ mẫu bằng lần nạp đầu (lần cập nhật thật trên KR mẫu bị thay cùng bộ)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
@@ -115,6 +115,7 @@ evals:
       - "Chạy qua tien-de: phiên đo riêng của cây; cảnh cây trước màn đầu"
       - "bun run okr:mau trong phiên (kho _do) → thoát 0"
       - "dev:session bằng thư của trưởng phòng KD miền Bắc mẫu"
+      - "Sau đăng nhập: URL không chứa /onboarding"
       - "Mở /<slug>/okr Toàn cảnh quý 4 mẫu ở 1440 → đếm tên 10 phòng ban mẫu hiện trên màn (so tập tên rút từ cong-ty.json) → ảnh toan-canh"
       - "Mở bảng họp tuần của phòng mình → khối đáng bàn có ≥ 1 KR mà tên thuộc tập KR kịch bản tut/bo → ảnh hop-tuan"
     expected: "Mọi bước đạt; ảnh ở .acceptance-runs/bo-okr-mau/evidence/. CHIỀU ĐỎ: --chieu-do bỏ bước nạp → bước đếm phòng ban đỏ, script in «thiếu phòng ban mẫu»."
