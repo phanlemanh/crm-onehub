@@ -19,6 +19,7 @@ CREATE TABLE "taiLieuNguon" (
     "soTrang" INTEGER,
     "soanLuc" TIMESTAMP(3),
     "banGocId" TEXT,
+    "phienId" TEXT,
 
     CONSTRAINT "taiLieuNguon_pkey" PRIMARY KEY ("id")
 );
@@ -34,6 +35,9 @@ CREATE INDEX "taiLieuNguon_trangId_idx" ON "taiLieuNguon"("trangId");
 
 -- CreateIndex
 CREATE INDEX "taiLieuNguon_taiBoiId_idx" ON "taiLieuNguon"("taiBoiId");
+
+-- CreateIndex
+CREATE INDEX "taiLieuNguon_phienId_idx" ON "taiLieuNguon"("phienId");
 
 -- CreateIndex
 CREATE INDEX "taiLieuDeXuat_nguonId_idx" ON "taiLieuDeXuat"("nguonId");

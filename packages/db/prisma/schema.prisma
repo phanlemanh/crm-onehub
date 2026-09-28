@@ -2342,10 +2342,12 @@ model TaiLieuNguon {
   soTrang      Int?
   soanLuc      DateTime?
   banGocId     String?
+  phienId      String?
   deXuat       TaiLieuDeXuat[]
 
   @@index([trangId])
   @@index([taiBoiId])
+  @@index([phienId])
   @@map("taiLieuNguon")
 }
 

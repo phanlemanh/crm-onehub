@@ -164,6 +164,7 @@ export async function gieoNguon(input: {
 	trangThai?: string;
 	chu?: string;
 	banGocId?: string | null;
+	phienId?: string | null;
 }): Promise<{ id: string; pathname: string; byte: Uint8Array }> {
 	const byte = input.byte ?? docMau(input.tep);
 	const pathname = ma("blob");
@@ -179,6 +180,7 @@ export async function gieoNguon(input: {
 			trangThai: input.trangThai ?? "CHO_DOC",
 			chu: input.chu ?? null,
 			banGocId: input.banGocId ?? null,
+			phienId: input.phienId ?? null,
 		},
 		select: { id: true },
 	});

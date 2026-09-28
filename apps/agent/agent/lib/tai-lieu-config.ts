@@ -44,5 +44,5 @@ export const TAI_LIEU_AGENT = {
 		daSoan: "Đã soạn bản đề xuất.",
 		choSoan: "Đã đọc chữ, chờ máy soạn.",
 	},
-	phien: { lo: 6, chiToiDa: 200 },
+	phien: { lo: 6, chiToiDa: 200, timNguon: { soLan: 8, cachMs: 250 } },
 } as const;

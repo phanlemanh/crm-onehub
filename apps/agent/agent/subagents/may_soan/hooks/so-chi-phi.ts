@@ -7,7 +7,7 @@ export default defineHook({
 		async "step.completed"(event, ctx) {
 			try {
 				const usage = event.data.usage;
-				await ghiSoMaySoan(nguonCuaPhien(ctx), ctx.session.id, {
+				await ghiSoMaySoan(await nguonCuaPhien(ctx), ctx.session.id, {
 					tokenVao: usage?.inputTokens ?? 0,
 					tokenRa: usage?.outputTokens ?? 0,
 				});

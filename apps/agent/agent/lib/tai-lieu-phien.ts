@@ -2,6 +2,7 @@ import { db } from "@crm/db";
 import type { SendFn } from "eve/channels";
 import { z } from "zod";
 import { APP_AUTH } from "./app-auth";
+import { type NguCanhKenh, phienGocCua } from "./phien-con";
 import {
 	attribute,
 	type PurposeContext,
@@ -38,7 +39,7 @@ export async function nguonChoSoan(lo: number = CFG.lo): Promise<string[]> {
 async function nhanMot(nguonId: string): Promise<{ taiBoiId: string } | null> {
 	const [n] = await db.$queryRaw<{ taiBoiId: string }[]>`
 		UPDATE "taiLieuNguon" n
-		SET "trangThai" = 'DANG_SOAN', "soanLuc" = now(), "lyDo" = NULL,
+		SET "trangThai" = 'DANG_SOAN', "soanLuc" = now(), "lyDo" = NULL, "phienId" = NULL,
 			"banGocId" = (SELECT t."banDangDungId" FROM "taiLieuTrang" t WHERE t.id = n."trangId")
 		WHERE n.id = ${nguonId} AND n."trangThai" = 'CHO_SOAN'
 		RETURNING n."taiBoiId"
@@ -57,7 +58,7 @@ export async function guiMaySoan(
 	const n = await nhanMot(nguonId);
 	if (!n) throw new Error("This source is not waiting to be drafted.");
 	try {
-		return await send(tinMaySoan(nguonId), {
+		const phien = await send(tinMaySoan(nguonId), {
 			auth: {
 				...APP_AUTH,
 				attributes: {
@@ -70,6 +71,11 @@ export async function guiMaySoan(
 			title: "Máy soạn bản đề xuất",
 			mode: "task",
 		});
+		await db.taiLieuNguon.updateMany({
+			where: { id: nguonId, trangThai: "DANG_SOAN" },
+			data: { phienId: phien.id },
+		});
+		return phien;
 	} catch (error) {
 		await dongNguon(nguonId, LY_DO.loiGui);
 		throw error;
@@ -127,13 +133,30 @@ export function laPhienMaySoan(ctx: PurposeContext): boolean {
 	return purposeOf(ctx) === PURPOSE_MAY_SOAN;
 }
 
-export function nguonCuaPhien(ctx: PurposeContext): string {
-	if (!laPhienMaySoan(ctx)) {
-		throw new Error("This session is not a drafting session.");
+export type NguCanhMaySoan = PurposeContext & NguCanhKenh;
+
+export async function nguonCuaPhien(
+	ctx: NguCanhMaySoan,
+	cho: (ms: number) => Promise<void> = (ms) =>
+		new Promise((r) => setTimeout(r, ms)),
+): Promise<string> {
+	if (laPhienMaySoan(ctx)) {
+		const id = attribute(ctx, "nguonId");
+		if (!id) throw new Error("This drafting session is missing nguonId.");
+		return id;
 	}
-	const id = attribute(ctx, "nguonId");
-	if (!id) throw new Error("This drafting session is missing nguonId.");
-	return id;
+	const goc = phienGocCua(ctx);
+	if (!goc) throw new Error("This session is not a drafting session.");
+	const { soLan, cachMs } = CFG.timNguon;
+	for (let lan = 0; lan < soLan; lan += 1) {
+		const n = await db.taiLieuNguon.findFirst({
+			where: { phienId: goc },
+			select: { id: true },
+		});
+		if (n) return n.id;
+		await cho(cachMs);
+	}
+	throw new Error("This session is not a drafting session.");
 }
 
 const loiCoCau = z.object({ message: z.string().trim().min(1) });

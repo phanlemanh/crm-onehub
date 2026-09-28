@@ -26,6 +26,7 @@ import {
 import { chaySoanTuNguon } from "../agent/lib/tai-lieu-soan";
 import {
 	type CtxMaySoan,
+	ctxCon,
 	ketQua,
 	loiDanNhan,
 	nop,
@@ -67,6 +68,7 @@ type Phien = {
 	trangId: string;
 	taskId: string;
 	ctx: CtxMaySoan | null;
+	con: CtxMaySoan | null;
 };
 
 async function moPhien(input: {
@@ -89,13 +91,24 @@ async function moPhien(input: {
 		select: { trangThai: true },
 	});
 	if (hang.trangThai === "CHO_SOAN") await guiMaySoan(nguon.id, model.send);
-	const ctx = model.goi.length > truoc ? (model.goi.at(-1)?.ctx ?? null) : null;
-	return { nguonId: nguon.id, trangId, taskId: task.id, ctx };
+	const moi = model.goi.length > truoc ? model.goi.at(-1) : undefined;
+	return {
+		nguonId: nguon.id,
+		trangId,
+		taskId: task.id,
+		ctx: moi?.ctx ?? null,
+		con: moi?.con ?? null,
+	};
 }
 
 async function canCtx(p: Phien): Promise<CtxMaySoan> {
 	if (!p.ctx) throw new Error("phien may soan khong mo");
 	return p.ctx;
+}
+
+async function canCon(p: Phien): Promise<CtxMaySoan> {
+	if (!p.con) throw new Error("phien may soan khong mo");
+	return p.con;
 }
 
 async function demDeXuat(trangId: string): Promise<number> {
@@ -117,13 +130,14 @@ afterAll(async () => {
 
 async function kiemDat(p: Phien, banGocMongDoi: string | null) {
 	const ctx = await canCtx(p);
+	const con = await canCon(p);
 	const trangTruoc = await db.taiLieuTrang.findUniqueOrThrow({
 		where: { id: p.trangId },
 		select: { banDangDungId: true },
 	});
-	const loiDan = await loiDanNhan(ctx);
+	const loiDan = await loiDanNhan(con);
 	expect(loiDan, "loi dan thieu quy tac viet").toContain(MOC_QUY_TAC);
-	expect(await nop(BAN_DAT, ctx)).toBeNull();
+	expect(await nop(BAN_DAT, con)).toBeNull();
 	await ketQua(ctx, false);
 	await dongKhiPhienXong(tokenMaySoan(p.nguonId));
 	const deXuat = await db.taiLieuDeXuat.findMany({
@@ -209,7 +223,7 @@ describe("soan-dat", () => {
 			})
 		).banDangDungId;
 		const p = await moPhien({ trangId });
-		const ctx = await canCtx(p);
+		const con = await canCon(p);
 		await datBanDangDung(trangId, nguoiId, "## Hoa hồng\n\nMức B2.");
 		const b2 = (
 			await db.taiLieuTrang.findUniqueOrThrow({
@@ -218,10 +232,10 @@ describe("soan-dat", () => {
 			})
 		).banDangDungId;
 		expect(b2).not.toBe(b1);
-		const loiDan = await loiDanNhan(ctx);
+		const loiDan = await loiDanNhan(con);
 		expect(loiDan).toContain("Mức B1.");
 		expect(loiDan).not.toContain("Mức B2.");
-		expect(await nop(BAN_DAT, ctx)).toBeNull();
+		expect(await nop(BAN_DAT, con)).toBeNull();
 		const dx = await db.taiLieuDeXuat.findFirstOrThrow({
 			where: { nguonId: p.nguonId },
 		});
@@ -229,12 +243,26 @@ describe("soan-dat", () => {
 		expect(dx.trangThai === "CHO_DUYET" && dx.banGocId !== b2).toBe(true);
 	});
 
+	test("soan-dat: phien con tim nguon qua phien goc, phien la bi tu choi", async () => {
+		const p = await moPhien({});
+		const hang = await db.taiLieuNguon.findUniqueOrThrow({
+			where: { id: p.nguonId },
+			select: { phienId: true },
+		});
+		expect(hang.phienId).toBe((await canCtx(p)).session.id);
+		const la = ctxCon("phien-khong-co-nguon");
+		expect(await nop(BAN_DAT, la)).toBe(
+			"This session is not a drafting session.",
+		);
+		expect(await nop(BAN_DAT, await canCon(p))).toBeNull();
+	});
+
 	test("soan-dat: may soan chi ghi qua ham ghi chung voi API", async () => {
 		const spy = spyOn(deXuatChung, "taoDeXuatTaiLieu");
 		try {
 			const truoc = spy.mock.calls.length;
 			const p = await moPhien({});
-			expect(await nop(BAN_DAT, await canCtx(p))).toBeNull();
+			expect(await nop(BAN_DAT, await canCon(p))).toBeNull();
 			expect(
 				spy.mock.calls.length - truoc,
 				"may soan khong di duong ghi chung",
@@ -254,7 +282,7 @@ type Ca = { ca: string; lyDo: string; chay: () => Promise<Phien> };
 
 async function nopRoiXong(p: Phien, ban: BanNop): Promise<Phien> {
 	const ctx = await canCtx(p);
-	await nop(ban, ctx);
+	await nop(ban, await canCon(p));
 	await ketQua(ctx, false);
 	await dongKhiPhienXong(tokenMaySoan(p.nguonId));
 	return p;
@@ -307,7 +335,8 @@ const CA_HONG: Ca[] = [
 		chay: async () => {
 			const p = await moPhien({});
 			const ctx = await canCtx(p);
-			for (let i = 0; i < SOAN.tranBuoc; i += 1) await nop(BAN_BI_BAC, ctx);
+			const con = await canCon(p);
+			for (let i = 0; i < SOAN.tranBuoc; i += 1) await nop(BAN_BI_BAC, con);
 			await ketQua(ctx, false);
 			return p;
 		},

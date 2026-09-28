@@ -2,7 +2,6 @@ import { db } from "@crm/db";
 import type { SendFn } from "eve/channels";
 import hookDong from "../../agent/hooks/dong-may-soan";
 import type { BanNop } from "../../agent/lib/tai-lieu-nop";
-import { PURPOSE_MAY_SOAN } from "../../agent/lib/tai-lieu-phien";
 import hookSo from "../../agent/subagents/may_soan/hooks/so-chi-phi";
 import loiDanMaySoan from "../../agent/subagents/may_soan/instructions";
 import nopBanDeXuat from "../../agent/subagents/may_soan/tools/nop_ban_de_xuat";
@@ -12,6 +11,7 @@ type ThuocTinh = Record<string, string>;
 export type CtxMaySoan = {
 	session: {
 		id: string;
+		parent?: { sessionId: string; rootSessionId: string } | null;
 		auth: {
 			current: { attributes: ThuocTinh };
 			initiator: { attributes: ThuocTinh };
@@ -23,6 +23,7 @@ export type GoiGia = {
 	nguonId: string;
 	trangThaiLucGoi: string;
 	ctx: CtxMaySoan;
+	con: CtxMaySoan;
 };
 
 export type ModelGia = { send: SendFn; goi: GoiGia[] };
@@ -46,6 +47,7 @@ export function sendGia(loi?: Error): ModelGia {
 		goi.push({
 			nguonId,
 			trangThaiLucGoi: n.trangThai,
+			con: ctxCon(id),
 			ctx: {
 				session: {
 					id,
@@ -61,14 +63,17 @@ export function sendGia(loi?: Error): ModelGia {
 	return { send, goi };
 }
 
-export function ctxMaySoan(nguonId: string, phien: string): CtxMaySoan {
-	const thuocTinh = { purpose: PURPOSE_MAY_SOAN, nguonId, userId: "x" };
+let demCon = 0;
+
+export function ctxCon(phienGoc: string): CtxMaySoan {
+	demCon += 1;
 	return {
 		session: {
-			id: phien,
+			id: `ses-con-${phienGoc}-${demCon}`,
+			parent: { sessionId: phienGoc, rootSessionId: phienGoc },
 			auth: {
-				current: { attributes: thuocTinh },
-				initiator: { attributes: thuocTinh },
+				current: { attributes: {} },
+				initiator: { attributes: {} },
 			},
 		},
 	};

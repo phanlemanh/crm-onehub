@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { BanNop } from "../agent/lib/tai-lieu-nop";
-import { ctxMaySoan, nop } from "./support/may-soan-gia";
+import { ctxCon, nop } from "./support/may-soan-gia";
 import {
 	datBanDangDung,
 	donTaiLieu,
@@ -124,7 +124,8 @@ async function banGocCho(noiDung: string): Promise<string> {
 
 async function chayCa(c: Ca): Promise<string | null> {
 	const banGocId = c.banGoc ? await banGocCho(c.banGoc) : null;
-	const nguon = await gieoNguon({
+	const phienGoc = ma("goc");
+	await gieoNguon({
 		tep: "quyet-dinh.docx",
 		trangId,
 		taiBoiId: nguoiId,
@@ -132,6 +133,7 @@ async function chayCa(c: Ca): Promise<string | null> {
 		trangThai: "DANG_SOAN",
 		chu: c.chu ?? NGUON,
 		banGocId,
+		phienId: phienGoc,
 	});
 	const ban: BanNop = {
 		ten: `Trang ${c.ca}`,
@@ -142,7 +144,7 @@ async function chayCa(c: Ca): Promise<string | null> {
 		})),
 	};
 	const truoc = await db.taiLieuDeXuat.count();
-	const loi = await nop(ban, ctxMaySoan(nguon.id, ma("phien")));
+	const loi = await nop(ban, ctxCon(phienGoc));
 	const sau = await db.taiLieuDeXuat.count();
 	if (loi !== null && sau !== truoc) return `bac ma van ghi: ${c.ca}`;
 	if (loi === null && sau !== truoc + 1) return `dat ma khong ghi: ${c.ca}`;

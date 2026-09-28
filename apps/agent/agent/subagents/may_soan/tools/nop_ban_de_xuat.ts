@@ -12,7 +12,11 @@ export default defineTool({
 		trichDoan: z.array(z.object({ menhDe: z.string(), trich: z.string() })),
 	}),
 	async execute(input, ctx) {
-		const kq = await nopBanDeXuat(nguonCuaPhien(ctx), ctx.session.id, input);
+		const kq = await nopBanDeXuat(
+			await nguonCuaPhien(ctx),
+			ctx.session.id,
+			input,
+		);
 		if (!kq.ok) throw new Error(kq.loi);
 		return { daNop: true, deXuatId: kq.deXuatId };
 	},

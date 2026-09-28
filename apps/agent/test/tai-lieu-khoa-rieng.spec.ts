@@ -14,7 +14,7 @@ import { MOT_TRIEU, TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
 import { nhanKhoaMaySoan } from "../agent/lib/tai-lieu-model";
 import { chiPhiUsd } from "../agent/lib/tai-lieu-nop";
 import maySoan from "../agent/subagents/may_soan/agent";
-import { buocXong, ctxMaySoan, nop } from "./support/may-soan-gia";
+import { buocXong, ctxCon, nop } from "./support/may-soan-gia";
 import {
 	donTaiLieu,
 	gieoNguoi,
@@ -88,16 +88,18 @@ describe("khoa-rieng", () => {
 	});
 
 	test("khoa-rieng: mot luot bao usage 1200/340 ghi dung mot su kien MAY_SOAN co chi phi", async () => {
-		const nguon = await gieoNguon({
+		const phienGoc = ma("goc");
+		await gieoNguon({
 			tep: "quyet-dinh.docx",
 			trangId,
 			taiBoiId: nguoiId,
 			bamKhai: ma("sha"),
 			trangThai: "DANG_SOAN",
 			chu: "Kể từ ngày 01/10/2026, tầng hai hưởng 1,5%.",
+			phienId: phienGoc,
 		});
-		const phien = ma("phien");
-		const ctx = ctxMaySoan(nguon.id, phien);
+		const ctx = ctxCon(phienGoc);
+		const phien = ctx.session.id;
 		await buocXong(ctx, { inputTokens: 1000, outputTokens: 300 });
 		await buocXong(ctx, { inputTokens: 200, outputTokens: 40 });
 		expect(
