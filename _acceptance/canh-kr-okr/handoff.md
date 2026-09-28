@@ -65,6 +65,8 @@ Dán kèm dòng `/goal` của vòng (có trong thẻ Cổng Phạm vi, `_accepta
 
 ## Bẫy đã gặp
 
+- Bài dọn dữ liệu xoá công ty phải xoá trước các `agentTask` gắn `companyId` (`companies.create` tự xếp việc tác nhân, không có khoá ngoại để xoá dây chuyền). Quên là bài `enrichment-queue.spec.ts` đỏ khi chạy cả bộ — đã sửa ở `f664b5e5`; bài mới nào tạo công ty qua thủ tục thật phải dọn giống vậy.
+
 - Tác tử con có thể chết vì lỗi mạng (`ENOTFOUND`) giữa chừng: kiểm `git status`, gửi tin cho chính tác tử đó để làm nốt, đừng giao lại từ đầu.
 - `timeout` không có trên macOS — bọc lệnh bằng nó thì lệnh in rỗng, trông như xanh.
 - Máy chủ bản mẫu (`PROTO_ROUTE=1 bunx next dev -p 3217` trong `apps/app`) đã tắt; ảnh design-pass ở `evidence/design-pass/`.

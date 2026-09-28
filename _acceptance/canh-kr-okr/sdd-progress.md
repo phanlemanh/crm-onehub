@@ -48,3 +48,5 @@ Task 5: minor (deferred): ghiBangChung tính lại quyen mỗi mục; themBangCh
 Task 5: fix round 1/5 (3 addressed, 0 open — cổng xong theo giaTri; timeout 30 s; ca ghi chú 301; commits d0bf4751)
 Task 5: complete (commits 65a1545d..d0bf4751, review clean)
 Task 6: CHƯA BẮT ĐẦU — lần giao đầu bị người dừng để bàn giao sang máy khác (2026-09-28); chỉnh sửa dở ở okr-canh-kr-san.ts đã bỏ. Chạy lại từ đầu.
+Controller (bàn giao): pre-push đỏ 3 ca enrichment-queue — nguyên nhân: dungSan() (okr-san.ts) và finally của sang-kien-an (vai-chi-okr.spec) xoá công ty mà không xoá agentTask gắn companyId (companies.create xếp việc tác nhân); đã sửa ở f664b5e5, 63/63 xanh bốn tệp chung
+Deferred minor: okr-canh-kr.spec in log lỗi unique của Prisma ở ca gắn lần hai / song song (ca âm cố ý) — đầu ra bài chưa sạch
