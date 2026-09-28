@@ -1,8 +1,7 @@
-import { execFileSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import {
 	existsSync,
 	mkdtempSync,
-	readdirSync,
 	readFileSync,
 	rmSync,
 	writeFileSync,
@@ -17,9 +16,7 @@ const THU_MUC = "packages/db/prisma/migrations";
 const BANG_MOI = "taiLieuNguon";
 const BANG_THEM_COT = "taiLieuDeXuat";
 const THONG_DIEP = "migration khong chi them";
-
-const git = (...d) =>
-	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
+const MIGRATION_HO_SO = ["20261003010000_may_soan_de_xuat"];
 
 function cauLenh(sql) {
 	return sql
@@ -156,16 +153,14 @@ if (bat !== CA_DO.length) {
 }
 console.log(`doi chung: do dung ${bat}/${CA_DO.length}`);
 
-const base = git("merge-base", "HEAD", "origin/onehub");
-const cu = new Set(
-	git("ls-tree", "--name-only", `${base}:${THU_MUC}`).split("\n"),
-);
 const goc = join(GOC, THU_MUC);
-const dsTep = readdirSync(goc, { withFileTypes: true })
-	.filter((d) => d.isDirectory() && !cu.has(d.name))
-	.map((d) => d.name)
-	.sort()
-	.filter((t) => existsSync(join(goc, t, "migration.sql")))
-	.map((t) => [t, readFileSync(join(goc, t, "migration.sql"), "utf8")]);
-console.log(`merge-base: ${base.slice(0, 12)}`);
+const dsTep = MIGRATION_HO_SO.map((t) => {
+	const tep = join(goc, t, "migration.sql");
+	if (!existsSync(tep)) {
+		console.log(`KHONG DO DUOC: thieu migration cua ho so: ${THU_MUC}/${t}`);
+		process.exit(2);
+	}
+	return [t, readFileSync(tep, "utf8")];
+});
+console.log(`migration cua ho so: ${MIGRATION_HO_SO.join(", ")}`);
 process.exit(ketLuan(dsTep));

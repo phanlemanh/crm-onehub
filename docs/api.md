@@ -817,7 +817,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
 - **A rejected or duplicate upload deletes its blob.** Same bytes as an existing source
   answer `{ trung: true, nguonId }` of the old row; the unique index on `sha256` catches
   the race the pre-check misses.
-- **No `BLOB_READ_WRITE_TOKEN` switches the area off, never throws.** `trangThai` answers
+- **No `KHO_TAI_LIEU_BLOB_TOKEN` switches the area off, never throws.** The store is its
+  own private one, apart from the public store the logos use, and there is no fallback to
+  the logos' variable (`docs/environment.md`). `trangThai` answers
   `{ bat: false }`, the screen locks «Tải nguồn lên», and `xinCho`, `nhan`, `taiVe` answer
   `PRECONDITION_FAILED` with `NGUON.thongDiep.tat`. `DomainErrorMiddleware` maps 412 to
   `PRECONDITION_FAILED`.

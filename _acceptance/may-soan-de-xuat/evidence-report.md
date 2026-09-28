@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4a28ff7de6fffda9f3198987b198f4d3ab7c0967
+verified_commit: fe33822dc1e4ffc081efeb7ac94d00018bd26912
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -351,3 +351,11 @@ none — every multi-run eval is uniform (không eval nào có runs > 1 trong v�
 Round 3: E2t (AC-12) đỏ vì thiếu BLOB_READ_WRITE_TOKEN thật trong phiên đo riêng; lệnh suite "bun run test" cũng đỏ với 19 ca ngoài phạm vi tính năng — mọi test riêng của may-soan-de-xuat đều pass. Verdict: REJECT.
 Round 4: E2t (AC-12) vẫn đỏ, cùng nguyên nhân — thiếu BLOB_READ_WRITE_TOKEN thật trong phiên đo riêng (mã thoát 2, không phải mã nguồn bị đổi để né); mọi eval khác (E1…E16, panel E15j carried) và cả bốn lệnh suite (bun run test, turbo lint, lint:slop, turbo build) đều thoát mã 0. Verdict: REJECT — chỉ vướng E2t.
 Round 5 (vòng này): E2t (AC-12) đã xanh sau khi sổ ghi sửa trước round 5 (commit 4a28ff7d, dọn tệp thử bằng @vercel/blob của packages/db) — phiên đo riêng có BLOB_READ_WRITE_TOKEN thật, phien-do báo "xong — mã 0". Mọi eval khác (E1…E16) và cả bốn lệnh suite đều thoát mã 0. Panel E15j (AC-15) vẫn carried từ round 2 — lens operational-feasibility còn UNCERTAIN, chờ human_override. Verdict: PENDING-JUDGMENT — chỉ còn vướng phán quyết người ở E15j.
+
+### Re-pin lần 1 — 2026-09-28, do gộp onehub và vòng kho-nguon-khoa-rieng chạm thước; E1 của may-soan-de-xuat neo vào migration của hồ sơ
+run_id: repin-20260928T140638Z-39911
+sha: 095f1dc10bcb70d6a424ec7f9743e7983a964442 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · ngoài làn máy: E2u, E11u, E15j (E15j không khai paths) · diff chạm vật đo ngoài làn máy: E2u, E11u — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-09-28, do gộp onehub lần hai (#196) trước khi mở PR
+run_id: repin-20260928T141942Z-73088
+sha: fe33822dc1e4ffc081efeb7ac94d00018bd26912 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · ngoài làn máy: E2u, E11u, E15j (E15j không khai paths)
