@@ -73,7 +73,7 @@ evals:
   - id: E3d
     criterion: AC-3
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_cmdk
     paths:
       - "apps/app/components/crm/quick-switcher.tsx"
@@ -110,7 +110,7 @@ evals:
   - id: E4
     criterion: AC-4
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_chen_lien_ket_ui
     paths:
       - "packages/ui/src/components/trinh-soan*.tsx"
@@ -175,7 +175,7 @@ evals:
   - id: E5d
     criterion: AC-5
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_man_nhac_toi
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
@@ -220,7 +220,7 @@ evals:
   - id: E6d
     criterion: AC-6
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_man_loc
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
@@ -269,7 +269,7 @@ evals:
   - id: E8d
     criterion: AC-8
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_man_suc_khoe
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
@@ -358,7 +358,7 @@ evals:
   - id: E10d
     criterion: AC-10
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_ong_dung_doc
     paths:
       - "packages/ui/src/components/markdown-reader.tsx"
@@ -387,7 +387,7 @@ evals:
   - id: E11d
     criterion: AC-11
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tdk_man_cho_duyet
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"

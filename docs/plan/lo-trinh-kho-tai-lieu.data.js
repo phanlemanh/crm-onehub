@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-29T06:40:00+07:00",
+	chup_luc: "2026-09-29T06:35:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -103,16 +103,16 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ten: "Lượt 3",
 			slug: "tim-va-dieu-huong-kho",
 			hang: "T2",
-			trang_thai: "Cổng Phạm vi",
+			trang_thai: "đang dựng",
 			ngay: "2026-09-29",
 			pr: [],
 			cau_giao:
 				"«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
 			buoc_ke:
-				"Anh ký Cổng Đáng, chọn tách lịch sử, khôi phục, lưu trữ sang 3b hay gộp, rồi duyệt Cổng Phạm vi",
+				"Máy lập kế hoạch thi công rồi dựng; anh còn ký Cổng Đáng (opportunity.md)",
 			chan_boi: [],
 			ghi_chu:
-				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration.",
+				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b.",
 			cho_anh: true,
 		},
 		{
@@ -210,7 +210,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 	],
 	cho_anh: [
 		{
-			viec: "Lượt 3: ký Cổng Đáng (opportunity.md), chọn tách lịch sử, khôi phục, lưu trữ sang 3b hay gộp, duyệt Cổng Phạm vi",
+			viec: "Lượt 3: ký Cổng Đáng (opportunity.md: decision, decided_by, decided_at, stage decided, gỡ [đề xuất] ở ngưỡng)",
 			hang_muc: "l3",
 		},
 		{
@@ -261,6 +261,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3: Cổng Phạm vi duyệt, nhận tách lịch sử, khôi phục, lưu trữ sang 3b; vào S2",
+		},
 		{
 			ngay: "2026-09-29",
 			viec: "Lượt 3 mở: S1 xong, 12 AC, 25 eval, chờ Cổng Đáng và Cổng Phạm vi",

@@ -5,10 +5,10 @@ slug: tim-va-dieu-huong-kho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-09-29-tim-va-dieu-huong-kho-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-09-29
 ---
 
 # Acceptance Contract: tim-va-dieu-huong-kho
@@ -81,3 +81,4 @@ dẫn.
 - Thủ tục mới `taiLieu.tim`, `taiLieu.nhacToi`, `taiLieu.sucKhoe`, `taiLieu.boLoc` nằm dưới `taiLieu` ở phạm vi chung: danh sách thủ tục ghim của `apps/api/test/vai-chi-okr.spec.ts` sửa có ý thức.
 - `QuickSwitcher` đang giữ ⌘K cho cả ứng dụng; lượt này không thêm bộ nghe phím thứ hai.
 - Ngưỡng Cổng Đáng của lượt ở `opportunity.md`; ngưỡng của cả sản phẩm ở lộ trình mục 5.
+- Từ điển: lint W6 báo «chờ duyệt», «trạng thái», «sức khoẻ», «kết quả», «thông báo», «nhóm», «tài liệu», «khối» là chữ tránh của mục khác (Được phép vào, Bậc, Tình trạng KR, Số chốt, Nhắc buổi sáng, Bộ phận, Trang tài liệu). Ở hợp đồng này chúng mang nghĩa của Kho tài liệu (tab «Chờ duyệt», tab «Sức khoẻ», nhóm trong hộp ⌘K, kết quả tìm) — trùng chữ khác nghĩa, giữ nguyên như lượt 1.
