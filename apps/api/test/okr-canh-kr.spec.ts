@@ -1,7 +1,13 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
+import { ngayVN } from "@crm/db/onboarding-nhac";
 import { OKR_CANH_KR } from "@crm/validation/okr-canh-kr";
 import { parseOkrVet } from "@crm/validation/okr-vet";
+import {
+	type BoiCanhDong,
+	dongViecTu,
+	type HangViec,
+} from "../src/okr/canh-kr";
 import type { CanhKrOutput } from "../src/okr/okr-canh-kr.contracts";
 import {
 	dem,
@@ -25,6 +31,9 @@ const CAU = {
 const HANH_DONG_VIEC = ["them-viec", "sua-viec", "xong-viec", "go-viec"];
 const CHO_MS = 30_000;
 const CHO_MA_TRAN_MS = 120_000;
+const NGAY_MS = 24 * 60 * 60 * 1000;
+const ngayCach = (soNgay: number) =>
+	ngayVN(new Date(Date.now() + soNgay * NGAY_MS));
 
 type ThaoTac = "them" | "sua" | "danh-dau" | "go";
 const THAO_TAC: ThaoTac[] = ["them", "sua", "danh-dau", "go"];
@@ -81,7 +90,7 @@ describe("viec-vong-doi", () => {
 	beforeAll(async () => {
 		san = await gieoCanhKr();
 	}, CHO_MS);
-	afterAll(donSanCanhKr);
+	afterAll(donSanCanhKr, CHO_MS);
 
 	test(
 		"viec-vong-doi: them, sua, xong, chua xong, go — doc DB sau tung buoc, vet dung thu tu",
@@ -251,12 +260,18 @@ describe("viec-vong-doi", () => {
 	);
 
 	test(
-		"viec-doc-canh: canhKr tra dong viec, quyen theo nguoi, co khoa",
+		"viec-doc-canh: canhKr tra dong viec, qua han theo ngay VN, quyen theo nguoi, co khoa",
 		async () => {
 			const { A, B, O, T } = san.nguoi;
+			const hanToi = ngayCach(30);
+			const hanQua = ngayCach(-1);
 			const id = idCua(
-				await themViec(san, T.cookie, { hanNgay: "2026-11-20" }),
+				await themViec(san, T.cookie, { hanNgay: hanToi }),
 				"them viec doc",
+			);
+			const idQua = idCua(
+				await themViec(san, T.cookie, { hanNgay: hanQua }),
+				"them viec qua han",
 			);
 			const cuaB = await doc<CanhKrOutput>("okr.canhKr", B.cookie, {
 				keyResultId: san.kr,
@@ -269,11 +284,17 @@ describe("viec-vong-doi", () => {
 				loai: "viec",
 				tieuDe: "Gọi lại 20 đối tác cũ",
 				nguoiLam: { id: B.id, name: B.id, daRoi: false },
-				hanNgay: "2026-11-20",
+				hanNgay: hanToi,
 				quaHan: false,
 				xong: false,
 				laNguoiLam: true,
 			});
+			expect(
+				cuaB.dong.flatMap((d) =>
+					d.id === idQua && d.loai === "viec" ? [[d.hanNgay, d.quaHan]] : [],
+				),
+			).toEqual([[hanQua, true]]);
+			ok(await goi("okr.goViec", { id: idQua }, T.cookie), "don viec qua han");
 			const quyen: Record<string, Json> = {};
 			for (const [ten, n] of [
 				["A", A],
@@ -303,7 +324,7 @@ describe("viec-quyen", () => {
 	beforeAll(async () => {
 		san = await gieoCanhKr();
 	}, CHO_MS);
-	afterAll(donSanCanhKr);
+	afterAll(donSanCanhKr, CHO_MS);
 
 	const viecMoi = async (nguoiLamUserId: string) =>
 		idCua(
@@ -373,4 +394,50 @@ describe("viec-quyen", () => {
 		},
 		CHO_MS,
 	);
+});
+
+describe("viec-qua-han", () => {
+	const HOM_NAY = "2026-11-20";
+	const boiCanh: BoiCanhDong = {
+		userId: "u-b",
+		homNay: HOM_NAY,
+		tenNguoi: new Map([["u-b", "B"]]),
+		conThanhVien: new Set(["u-b"]),
+	};
+	const hang = (hanNgay: string | null, xong: boolean): HangViec => ({
+		id: "v",
+		loai: "viec",
+		tieuDe: "Gọi lại",
+		nguoiLamUserId: "u-b",
+		hanNgay: hanNgay === null ? null : new Date(`${hanNgay}T00:00:00.000Z`),
+		xongLuc: xong ? new Date("2026-11-01T03:00:00.000Z") : null,
+		campaignId: null,
+		planId: null,
+	});
+
+	test("viec-qua-han: han truoc hom nay VN va chua xong moi qua han; xong khong bao gio qua han", () => {
+		const CA: [string | null, boolean, boolean][] = [
+			["2026-11-19", false, true],
+			["2026-11-20", false, false],
+			["2026-11-21", false, false],
+			[null, false, false],
+			["2026-11-19", true, false],
+			["2026-01-01", true, false],
+		];
+		expect(
+			CA.map(([han, xong]) => dongViecTu(hang(han, xong), boiCanh).quaHan),
+		).toEqual(CA.map(([, , k]) => k));
+	});
+
+	test("viec-qua-han: nguoi lam roi thi daRoi, laNguoiLam theo nguoi goi", () => {
+		const roi = dongViecTu(hang(null, false), {
+			...boiCanh,
+			userId: "u-a",
+			conThanhVien: new Set(),
+		});
+		expect([roi.nguoiLam, roi.laNguoiLam]).toEqual([
+			{ id: "u-b", name: "B", daRoi: true },
+			false,
+		]);
+	});
 });
