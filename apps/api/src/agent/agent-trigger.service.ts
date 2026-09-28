@@ -362,6 +362,10 @@ export class AgentTriggerService {
 		this.poke();
 	}
 
+	troLyOkrDaXep(): void {
+		this.poke();
+	}
+
 	async okrDocSheet(keyResultId: string): Promise<void> {
 		const payload = { keyResultId } satisfies DocSheetPayload;
 		await this.db.agentTask.create({

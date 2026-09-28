@@ -642,7 +642,7 @@ export class OkrService {
 		input: MucTieuUpdate,
 		opts?: GhiTrong,
 	) {
-		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.id);
+		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.id, tx);
 		await this.assertKyGhiDuoc(tx, mt.cycleId);
 		const cu = await tx.okrObjective.findUniqueOrThrow({
 			where: { id: mt.id },
@@ -838,7 +838,7 @@ export class OkrService {
 		input: UpdateKrInput,
 		opts?: GhiTrong,
 	) {
-		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id);
+		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id, tx);
 		const doiCot =
 			input.kind !== undefined ||
 			input.ownerUserId !== undefined ||
@@ -1069,6 +1069,7 @@ export class OkrService {
 		const nguon = await this.quyenOkr.assertSuaMucTieu(
 			userId,
 			input.objectiveId,
+			tx,
 		);
 		await this.assertKyGhiDuoc(tx, nguon.cycleId);
 		await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;

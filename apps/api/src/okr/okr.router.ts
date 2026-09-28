@@ -65,9 +65,21 @@ import {
 	setProgramInput,
 	thanhVienOutput,
 	transferOkrOutput,
+	troLyAnInput,
+	troLyAnOutput,
+	troLyDanhSachOutput,
+	troLyDeXuatOutput,
+	troLyDichInput,
+	troLyQuyetInput,
+	troLyQuyetOutput,
+	troLySanSangOutput,
+	troLySoDoInput,
+	troLySoDoOutput,
 	updateKrInput,
 	updateObjectiveInput,
 	viecCuaToiOutput,
+	xuHuongKrInput,
+	xuHuongKrOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
@@ -166,6 +178,95 @@ export class OkrRouter {
 	})
 	aiChiTieu(@Ctx() ctx: AuthedTrpcContext) {
 		return this.troLy.aiChiTieu(ctx.user.id);
+	}
+
+	@Query({
+		input: troLyDichInput,
+		output: troLySanSangOutput,
+		meta: restMeta("GET", "/okr/objectives/{objectiveId}/assistant", TAG),
+	})
+	troLySanSang(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyDichInput>,
+	) {
+		return this.troLy.troLySanSang(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: troLyDichInput,
+		output: troLyDeXuatOutput,
+		meta: restMeta("POST", "/okr/objectives/{objectiveId}/assistant/run", TAG),
+	})
+	troLyDeXuat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyDichInput>,
+	) {
+		return this.troLy.troLyDeXuat(ctx.user.id, input);
+	}
+
+	@Query({
+		input: troLyDichInput,
+		output: troLyDanhSachOutput,
+		meta: restMeta(
+			"GET",
+			"/okr/objectives/{objectiveId}/assistant/suggestions",
+			TAG,
+		),
+	})
+	troLyDanhSach(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyDichInput>,
+	) {
+		return this.troLy.troLyDanhSach(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: troLyQuyetInput,
+		output: troLyQuyetOutput,
+		meta: restMeta(
+			"POST",
+			"/okr/assistant/suggestions/{deXuatId}/decision",
+			TAG,
+		),
+	})
+	troLyQuyet(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyQuyetInput>,
+	) {
+		return this.troLy.troLyQuyet(ctx.user.id, input);
+	}
+
+	@Query({
+		input: troLyAnInput,
+		output: troLyAnOutput,
+		meta: restMeta("GET", "/okr/assistant/runs", TAG),
+	})
+	troLyAn(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyAnInput>,
+	) {
+		return this.troLy.troLyAn(ctx.user.id, input);
+	}
+
+	@Query({
+		input: troLySoDoInput,
+		output: troLySoDoOutput,
+		meta: restMeta("GET", "/okr/assistant/metrics", TAG),
+	})
+	troLySoDo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLySoDoInput>,
+	) {
+		return this.troLy.troLySoDo(ctx.user.id, input);
+	}
+
+	@Query({
+		input: xuHuongKrInput,
+		output: xuHuongKrOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/trend", TAG),
+	})
+	xuHuongKr(@Input() input: z.infer<typeof xuHuongKrInput>) {
+		return this.troLy.xuHuongKr(input.keyResultId);
 	}
 
 	@Mutation({
