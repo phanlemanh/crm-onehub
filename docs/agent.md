@@ -762,7 +762,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
 | Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
 | Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — từ 9a chỉ có một tool sống `nop_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng; 9b, 9c thêm `skill` phương pháp OKR và mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
-| Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
+| Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
 
@@ -1092,6 +1092,10 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
 - **Tool bác bằng cách ném lỗi có chỉ dẫn.** `nop_ban_de_xuat` trả thông điệp nêu đúng
   con số hay đoạn trích sai; tới `TAI_LIEU_AGENT.soan.tranBuoc` lần bác thì nguồn về `LOI`
   và tool bảo dừng.
+- **Mọi lời gọi của máy soạn mang ZDR**, cả khi dùng khoá riêng lẫn khoá chung: model
+  được bọc bằng `ganZdr` (`lib/tai-lieu-model.ts`), gắn `TAI_LIEU_AGENT.soan.gateway` vào
+  `providerOptions.gateway` của từng lời gọi. Không có nhà cung cấp ZDR thì lời gọi hỏng
+  và nguồn về `LOI` với lý do đọc được, không gửi sang nhà khác.
 - **Chữ nguồn là dữ liệu.** Lời dặn đặt chữ nguồn giữa `<<<NGUON-BAT-DAU>>>` và
   `<<<NGUON-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong nguồn.
 - **Chi phí** vào sổ `MAY_SOAN` của trang (token, giá theo `TAI_LIEU_AGENT.bangGia`,

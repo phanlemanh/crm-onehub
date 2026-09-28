@@ -9,9 +9,14 @@ import {
 } from "bun:test";
 import * as gateway from "@ai-sdk/gateway";
 import { db } from "@crm/db";
+import { MockLanguageModelV4 } from "ai/test";
 import { parseSuKienChiTiet } from "@crm/validation/tai-lieu";
 import { MOT_TRIEU, TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
-import { nhanKhoaMaySoan } from "../agent/lib/tai-lieu-model";
+import {
+	ganZdr,
+	modelMaySoan,
+	nhanKhoaMaySoan,
+} from "../agent/lib/tai-lieu-model";
 import { chiPhiUsd } from "../agent/lib/tai-lieu-nop";
 import maySoan from "../agent/subagents/may_soan/agent";
 import { buocXong, ctxCon, nop } from "./support/may-soan-gia";
@@ -72,7 +77,10 @@ function kiemKhoa(): string[] {
 			nem = true;
 		}
 		if (nem) loi.push("vang bien thi nem");
-		if (spy.mock.calls.length > 0 || khongKhoa !== null) {
+		const coApiKey = spy.mock.calls.some(
+			([cauHinh]) => (cauHinh as { apiKey?: string } | undefined)?.apiKey,
+		);
+		if (coApiKey || khongKhoa === null || khongKhoa === undefined) {
 			loi.push("vang bien van goi createGateway voi apiKey");
 		}
 		if (nhanKhoaMaySoan() !== "chung") loi.push("vang bien khong nhan chung");
@@ -133,6 +141,40 @@ describe("khoa-rieng", () => {
 		expect(ct.phien).toBe(phien);
 		expect(ct.deXuatId).not.toBeNull();
 		expect(ct.chiPhiUsd).toBeCloseTo(mongDoi, 12);
+	});
+
+	test("khoa-rieng: moi loi goi cua may soan mang co ZDR, ca khoa rieng lan khoa chung", async () => {
+		const loi: string[] = [];
+		for (const [ten, env] of [
+			["rieng", { [BIEN]: KHOA }],
+			["chung", {}],
+		] as const) {
+			const daGoi: { providerOptions?: Record<string, unknown> }[] = [];
+			const gia = new MockLanguageModelV4({
+				doGenerate: async (vao) => {
+					daGoi.push(vao);
+					return {} as never;
+				},
+			});
+			const tao = (() => () => gia) as unknown as typeof gateway.createGateway;
+			const { model } = modelMaySoan(env, tao);
+			await (model as unknown as MockLanguageModelV4).doGenerate({
+				prompt: [],
+				providerOptions: { gateway: { order: ["vertex"] } },
+			});
+			const gw = daGoi[0]?.providerOptions?.gateway as
+				| { zeroDataRetention?: boolean; order?: string[] }
+				| undefined;
+			if (gw?.zeroDataRetention !== true) loi.push(`thieu ZDR: ${ten}`);
+			if (gw?.order?.[0] !== "vertex") loi.push(`mat tuy chon cu: ${ten}`);
+		}
+		expect(loi).toEqual([]);
+		const ra = await ganZdr.transformParams?.({
+			type: "generate",
+			model: {} as never,
+			params: { prompt: [] },
+		});
+		expect(ra?.providerOptions?.gateway?.zeroDataRetention).toBe(true);
 	});
 
 	test("khoa-rieng: ma model chua co trong bang gia thi chi phi null, khong nem", () => {

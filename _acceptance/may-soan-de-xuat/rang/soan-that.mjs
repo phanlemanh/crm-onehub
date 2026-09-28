@@ -49,7 +49,6 @@ const { khoNguonGia } = await import(
 	join(GOC, "packages/db/test/blob-nguon-gia.ts")
 );
 const { generateText, stepCountIs, tool } = await import(tuAgent("ai"));
-const { createGateway } = await import(tuAgent("@ai-sdk/gateway"));
 const { TAI_LIEU_AGENT } = await import(join(AGENT, "lib/tai-lieu-config.ts"));
 const { chaySoanTuNguon } = await import(join(AGENT, "lib/tai-lieu-soan.ts"));
 const { dungLoiDan } = await import(join(AGENT, "lib/tai-lieu-loi-dan.ts"));
@@ -146,12 +145,6 @@ function congCuThat(nguonId, phien, bac) {
 	});
 }
 
-function modelThat() {
-	const rieng = modelMaySoan();
-	if (rieng) return rieng.model;
-	return createGateway()(SOAN.maModel);
-}
-
 async function soanMot(tep, nguoiId, kho) {
 	const byte = new Uint8Array(readFileSync(join(THU_MUC_THAT, tep)));
 	const ten = basename(tep, extname(tep));
@@ -201,7 +194,7 @@ async function soanMot(tep, nguoiId, kho) {
 		await guiMaySoan(nguon.id, async () => {
 			const { loiDan, khoiDuLieu } = await dungLoiDan(nguon.id);
 			await generateText({
-				model: modelThat(),
+				model: modelMaySoan().model,
 				system: `${loiDan}\n\n${khoiDuLieu}`,
 				prompt: tinMaySoan(nguon.id),
 				tools: { nop_ban_de_xuat: congCuThat(nguon.id, phien, bac) },

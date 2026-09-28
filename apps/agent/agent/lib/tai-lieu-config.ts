@@ -14,6 +14,7 @@ export const TAI_LIEU_AGENT = {
 		thoiGianMs: 4 * MINUTE_MS,
 		slugQuyTacViet: "quy-tac-viet",
 		bienKhoaRieng: "KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
+		gateway: { zeroDataRetention: true },
 		gioiHan: {
 			maxInputTokensPerSession: 400 * NGHIN,
 			maxOutputTokensPerSession: 60 * NGHIN,
