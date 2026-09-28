@@ -6,6 +6,7 @@ import {
 	OKR_PROGRAM_MAC_DINH,
 	type OkrProgram,
 	okrProgram,
+	okrProgramSua,
 } from "../src/okr-chuong-trinh";
 import {
 	ketQuaTroLy,
@@ -167,5 +168,34 @@ describe("don-vi-duoc-bat", () => {
 			donViDuocBat(c, "de-xuat", phongA),
 			donViDuocBat(c, "tom-tat-tuan", phongA),
 		]).toEqual(["don-vi-chua-bat", "bat"]);
+	});
+});
+
+describe("nac", () => {
+	test("nac: hàng cấu hình cũ không có bốn trường ẩn đọc ra cả hai việc tắt", () => {
+		const ct = okrProgram.parse(HANG_CU);
+		expect({
+			deXuat: [ct.aiDeXuatPhamVi, ct.aiDeXuatAnPhamVi, ct.aiDeXuatAnDonVi],
+			tomTat: [ct.aiTomTatPhamVi, ct.aiTomTatAnPhamVi, ct.aiTomTatAnDonVi],
+		}).toEqual({ deXuat: ["tat", "tat", []], tomTat: ["tat", "tat", []] });
+		expect(ct).toEqual(OKR_PROGRAM_MAC_DINH);
+	});
+
+	test("nac: sửa một phần không tự đặt lại bốn trường ẩn", () => {
+		expect(okrProgramSua.parse({ aiOn: true })).toEqual({ aiOn: true });
+	});
+
+	test("nac: việc đề xuất cũ không mang nấc đọc là bật; nấc tắt không nhận", () => {
+		const viec = {
+			viec: "de-xuat",
+			objectiveId: "mt",
+			keyResultId: null,
+			nguoiYeuCau: "u",
+			inputHash: "h",
+		};
+		const cu = okrTroLyViec.parse(viec);
+		expect(cu.viec === "de-xuat" ? cu.nac : null).toBe("bat");
+		expect(okrTroLyViec.safeParse({ ...viec, nac: "an" }).success).toBe(true);
+		expect(okrTroLyViec.safeParse({ ...viec, nac: "tat" }).success).toBe(false);
 	});
 });

@@ -2,6 +2,8 @@ import {
 	AI_PHAM_VI,
 	KET_QUA_KIEM_SAN_SANG,
 	LY_DO_KHONG_SAN_SANG,
+	MA_LOAI_DE_XUAT,
+	NAC_TRO_LY,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
 	VIEC_TRO_LY,
@@ -20,6 +22,10 @@ export {
 	type KetQuaKiemSanSang,
 	LY_DO_KHONG_SAN_SANG,
 	type LyDoKhongSanSang,
+	MA_LOAI_DE_XUAT,
+	type MaLoaiDeXuat,
+	NAC_TRO_LY,
+	type NacTroLy,
 	phamViCuaViec,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
@@ -33,6 +39,10 @@ export const viecTroLy = z.enum(VIEC_TRO_LY);
 export const aiPhamVi = z.enum(AI_PHAM_VI);
 
 export const trangThaiDeXuat = z.enum(TRANG_THAI_DE_XUAT);
+
+export const nacTroLy = z.enum(NAC_TRO_LY);
+
+export const maLoaiDeXuat = z.enum(MA_LOAI_DE_XUAT);
 
 export const lyDoKhongSanSang = z.enum(LY_DO_KHONG_SAN_SANG);
 
@@ -50,6 +60,7 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 		keyResultId: z.string().min(1).nullable(),
 		nguoiYeuCau: z.string().min(1),
 		inputHash: z.string().min(1),
+		nac: nacTroLy.exclude(["tat"]).default("bat"),
 	}),
 	z.object({
 		viec: z.literal("tom-tat-tuan"),

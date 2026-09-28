@@ -17,7 +17,10 @@ const tranThangUsd = z
 	.max(TRO_LY_OKR_TRAN.tranThangToiDaUsd)
 	.refine((n) => Number(n.toFixed(2)) === n);
 
-export const okrProgram = z.object({
+const phamVi = z.enum(AI_PHAM_VI);
+const donViAi = z.array(z.string().min(1)).max(200);
+
+const okrProgramGoc = z.object({
 	objectiveCap: z.int().min(1).max(50),
 	krCap: z.int().min(1).max(50),
 	capMode: z.enum(CHE_DO_TRAN),
@@ -25,16 +28,27 @@ export const okrProgram = z.object({
 	weightsOn: z.boolean(),
 	personalOn: z.boolean(),
 	aiOn: z.boolean(),
-	aiDeXuatPhamVi: z.enum(AI_PHAM_VI),
-	aiDeXuatDonVi: z.array(z.string().min(1)).max(200),
-	aiTomTatPhamVi: z.enum(AI_PHAM_VI),
-	aiTomTatDonVi: z.array(z.string().min(1)).max(200),
+	aiDeXuatPhamVi: phamVi,
+	aiDeXuatDonVi: donViAi,
+	aiTomTatPhamVi: phamVi,
+	aiTomTatDonVi: donViAi,
+	aiDeXuatAnPhamVi: phamVi,
+	aiDeXuatAnDonVi: donViAi,
+	aiTomTatAnPhamVi: phamVi,
+	aiTomTatAnDonVi: donViAi,
 	aiTranThangUsd: tranThangUsd,
+});
+
+export const okrProgram = okrProgramGoc.extend({
+	aiDeXuatAnPhamVi: phamVi.default("tat"),
+	aiDeXuatAnDonVi: donViAi.default(() => []),
+	aiTomTatAnPhamVi: phamVi.default("tat"),
+	aiTomTatAnDonVi: donViAi.default(() => []),
 });
 
 export type OkrProgram = z.infer<typeof okrProgram>;
 
-export const okrProgramSua = okrProgram.partial();
+export const okrProgramSua = okrProgramGoc.partial();
 
 export type OkrProgramSua = z.infer<typeof okrProgramSua>;
 
@@ -50,6 +64,10 @@ export const OKR_PROGRAM_MAC_DINH: OkrProgram = {
 	aiDeXuatDonVi: [],
 	aiTomTatPhamVi: "tat",
 	aiTomTatDonVi: [],
+	aiDeXuatAnPhamVi: "tat",
+	aiDeXuatAnDonVi: [],
+	aiTomTatAnPhamVi: "tat",
+	aiTomTatAnDonVi: [],
 	aiTranThangUsd: TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
 };
 
