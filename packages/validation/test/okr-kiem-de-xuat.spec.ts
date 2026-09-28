@@ -558,6 +558,17 @@ describe("tu-cam-va-nguoi", () => {
 		).toEqual({ qua: true });
 	});
 
+	test("chữ thường của câu OKR không còn là từ cấm", () => {
+		for (const tu of ["thành công", "kết nối", "khối", "chỉ tiêu"])
+			expect(TRO_LY_OKR_TRAN.tuCam as readonly string[]).not.toContain(tu);
+		expect(
+			kiemDongDeXuat(
+				vietLaiTen(G, "Tăng số cuộc kết nối thành công mỗi ngày"),
+				G,
+			),
+		).toEqual({ qua: true });
+	});
+
 	test("một tên riêng không phải họ tên đầy đủ", () => {
 		const goi = { ...G, tenThanhVien: ["Bình"] };
 		expect(

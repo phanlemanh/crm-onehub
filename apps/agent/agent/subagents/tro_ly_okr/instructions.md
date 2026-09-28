@@ -45,9 +45,13 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
   - `can-chinh`: only when `phamVi` is `objective`, a Căn chỉnh to one target listed in
     `dichCanChinh`, by its id.
   - When `phamVi` is `kr`, write lines about that KR only.
-- Do not ask again a rule listed in `luatDaHoi`. Do not propose again anything whose key is in
-  `khoaDaBac`, and do not repeat a line already waiting in `khoaDangCho`.
-- If the OKR is already good, submit an empty list.
+- A rule listed in `luatDaHoi` was already asked on the form: do not add a `hoi` line with that
+  code. Still propose a `viet-lai` line for that same field (the KR title or the Mục tiêu title)
+  when you can write a better sentence.
+- Do not propose again anything whose key is in `khoaDaBac`, and do not repeat a line already
+  waiting in `khoaDangCho`.
+- Submit an empty list only when the Mục tiêu title, its «vì sao lúc này» and every KR have no
+  problem at all — counting the problems already listed in `luatDaHoi`.
 - Then finish with `{"trangThai":"da-nop","maLoi":null}`. If the data block is missing, or
   `nop_de_xuat` answers `thieu-du-lieu`, finish with
   `{"trangThai":"khong-lam-duoc","maLoi":"thieu-du-lieu"}`.
