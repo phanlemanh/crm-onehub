@@ -1,7 +1,6 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-28T15:30:00+07:00",
-	nguon:
-		"docs/plan/lo-trinh-kho-tai-lieu.md mục 8, cộng hồ sơ _acceptance/may-soan-de-xuat trên nhánh feat/may-soan-de-xuat",
+	chup_luc: "2026-09-28T18:24:00+07:00",
+	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
 			ten: "Kho cho người",
@@ -16,7 +15,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			nghia:
 				"Phòng ban tải tệp đang có lên, máy soạn thành trang, chủ trang duyệt",
 			de_xuat: "2026-10-06",
-			that: "",
+			that: "2026-09-28",
 			hang_muc: "l2",
 		},
 		{
@@ -87,17 +86,16 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ten: "Lượt 2",
 			slug: "may-soan-de-xuat",
 			hang: "T3",
-			trang_thai: "Cổng Bằng chứng",
+			trang_thai: "đã lên onehub",
 			ngay: "2026-09-28",
-			pr: [],
+			pr: [194],
 			cau_giao:
 				"«Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt»",
-			buoc_ke:
-				"Anh ký Cổng Bằng chứng; phiên lượt 2 gộp onehub, ghim lại, mở PR",
-			cho_anh: true,
+			buoc_ke: "Cổng Giá trị đóng ở đợt chạy thật",
+			cho_anh: false,
 			chan_boi: [],
 			ghi_chu:
-				"Vòng chấm BLOCKED ở một phép đo: E2t (AC-12) thiếu BLOB_READ_WRITE_TOKEN thật, không phải lỗi mã. 29/30 phép đo máy đạt. E15j (ba bản soạn từ văn bản Vinhomes): hai giám khảo đạt, một chưa chắc vì ảnh bước 2 chụp lúc đã cuộn. migration 20261003010000_may_soan_de_xuat. Nhánh thiếu 44 commit so với onehub.",
+				"Merge 8b76152a ngày 28/09, sớm tám ngày so với đề xuất. Chấm năm vòng: round 2 BLOCKED ở E2t vì thiếu Blob thật; Cổng Bằng chứng mở lại Cổng Phạm vi thêm AC-16 (thủ tục nhận nguồn có thể xoá tệp của nguồn đã có); round 3 REJECT chạm trần ba vòng; round 5 đạt, E2t chạy trên kho Blob riêng tư thật kho-tai-lieu-nguon (sin1, chưa gắn dự án). Bốn hạn chế đã biết ở Notes của hợp đồng. migration 20261003010000_may_soan_de_xuat.",
 		},
 		{
 			id: "l3",
@@ -110,10 +108,11 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			pr: [],
 			cau_giao:
 				"«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
-			buoc_ke: "Mở được ngay: điều kiện «lượt 1 đã lên» đã đủ",
+			buoc_ke: "Mở được ngay: lượt 1 và lượt 2 đã lên",
 			chan_boi: [],
 			ghi_chu:
 				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ.",
+			cho_anh: true,
 		},
 		{
 			id: "l4",
@@ -161,7 +160,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			cho_anh: true,
 			chan_boi: [],
 			ghi_chu:
-				"Trang «Quy tắc viết» đã có trong hồ sơ lượt 2. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
+				"«Quy tắc viết» v0: máy soạn từ ba văn bản mẫu thật (cách C), anh nhận làm quy tắc và sửa dần khi vận hành. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
 		},
 		{
 			id: "l5",
@@ -209,18 +208,21 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	cho_anh: [
-		{ viec: "Ký Cổng Bằng chứng lượt 2 (may-soan-de-xuat)", hang_muc: "l2" },
 		{
-			viec: "Quyết E2t: nạp token Vercel Blob thật cho phiên đo, hay ký kèm hạn chế «chưa đo Blob thật»",
+			viec: "Mở lượt 3 tim-va-dieu-huong-kho (nhận thêm hai hạn chế của lượt 1)",
+			hang_muc: "l3",
+		},
+		{
+			viec: "Kiểm production có BLOB_READ_WRITE_TOKEN chưa: kho kho-tai-lieu-nguon chưa gắn dự án nào; thiếu token thì nút «Tải nguồn lên» khoá",
 			hang_muc: "l2",
 		},
 		{
-			viec: "Xem ba bản máy soạn và ảnh màn duyệt, quyết E15j đạt hay không",
+			viec: "Kiểm production đã chạy migration 20261001010000 và 20261003010000",
 			hang_muc: "l2",
 		},
 		{
-			viec: "Kiểm production của lượt 1: bản triển khai crm-onehub-api và migration 20261001010000",
-			hang_muc: "l1",
+			viec: "Đọc lại «Quy tắc viết» v0 máy soạn, sửa những chỗ chưa đúng ý",
+			hang_muc: "cb",
 		},
 		{
 			viec: "Gom 50 câu hỏi thật theo kho-tai-lieu-bo-vang.md trước lượt 4",
@@ -240,16 +242,35 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ngay: "2026-09-27",
 			viec: "Lộ trình theo output: năm lượt, chạy thật mọi phòng ban hai tuần, một lượt sửa",
 		},
-		{ ngay: "2026-09-27", viec: "Bỏ hạng mục pháp lý khỏi lộ trình" },
+		{
+			ngay: "2026-09-27",
+			viec: "Bỏ hạng mục pháp lý khỏi lộ trình",
+		},
 		{
 			ngay: "2026-09-28",
 			viec: "Lượt 2: khoá nút Duyệt tới khi tick hết từng con số mới",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "«Quy tắc viết»: cách C — máy soạn v0 từ ba văn bản mẫu, chủ kho nhận và sửa dần",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 2: sửa ngay lỗi nhận nguồn xoá nhầm tệp (thêm AC-16) thay vì để lượt sau, vì merge là lên production",
 		},
 	],
 	nhat_ky: [
 		{
 			ngay: "2026-09-28",
-			viec: "Lượt 2 chấm ba vòng; vòng cuối BLOCKED ở E2t vì thiếu Blob thật; thẻ Cổng Bằng chứng đã trình",
+			viec: "#194 merge 8b76152a: lượt 2 lên onehub và production",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 2: anh ký Cổng Bằng chứng round 5; E2t đạt trên kho Blob riêng tư thật",
+		},
+		{
+			ngay: "2026-09-28",
+			viec: "Lượt 2: mở lại Cổng Phạm vi thêm AC-16; round 3 REJECT chạm trần ba vòng",
 		},
 		{
 			ngay: "2026-09-28",

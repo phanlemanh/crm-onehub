@@ -7,7 +7,7 @@ cần thiết để máy khác không phải học lại.
 
 ## 1. Đang ở đâu
 
-**Lượt 1 `kho-tai-lieu` đã lên `onehub` 2026-09-28** (PR #180, merge commit `c1e37b73`). Lượt 2 `may-soan-de-xuat` đang ở S0–S1. Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
+**Lượt 1 `kho-tai-lieu` đã lên `onehub` 2026-09-28** (PR #180, merge commit `c1e37b73`). **Lượt 2 `may-soan-de-xuat` đã lên `onehub` 2026-09-28** (PR #194, merge commit `8b76152a`). Kế tiếp: lượt 3 `tim-va-dieu-huong-kho`. Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
 Lượt 0 xong. Nghiên cứu xong, bản mẫu xong, lộ
 trình đã sắp lại theo output ngày 2026-09-27 (năm lượt, chạy thật mọi phòng ban, một
 lượt sửa). Chưa có dòng mã sản phẩm nào ngoài bản mẫu và trình đọc markdown. Tám mục
