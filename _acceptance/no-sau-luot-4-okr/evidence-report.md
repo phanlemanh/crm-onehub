@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cbd0a876e500b066d6a15d6e62b0a9e8f642df27
+verified_commit: ea972f18ca8ac5c667bcaa507a1e31e66a17561c
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -246,3 +246,7 @@ none — không có eval nào mang runs > 1 trong vòng này; mọi kết quả 
 ## Iterations
 
 Round 1: toàn bộ 16 eval (E1–E16) pass ngay từ lần chạy đầu, phân biệt được với baseline (đỏ trên diffBase). 4 lệnh suite hồi quy (bun run test, turbo lint, lint:slop, turbo build) đều xanh. Không có vòng sửa nào.
+
+### Re-pin lần 1 — 2026-09-28, do vet-khuon tất định theo mocNhac (hết phút đỏ 08:30–08:31 giờ VN, CI run 36365903944); E9 neo cặp sha của merge #176
+run_id: repin-20260928T025855Z-34963
+sha: ea972f18ca8ac5c667bcaa507a1e31e66a17561c · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng
