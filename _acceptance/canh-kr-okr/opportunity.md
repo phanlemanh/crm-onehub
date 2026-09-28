@@ -3,10 +3,10 @@ schema_version: 1
 slug: canh-kr-okr
 feature: Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR — lượt 8a của lộ trình OKR (SK-01, SK-02, CI-05, CI-06, MT-07)
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-28T07:57:10Z
 prototype:
   base_commit: 8cce633822a079a88dcfd797b63a7c8bbbad1cd7
   disposition: keep
@@ -81,21 +81,21 @@ xuất. Thứ tự làn B đề xuất: 8a → 8c → 7n → 10 → 8b (8c đi s
 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
-| 1 | Nghĩa 11 mã rút đúng theo thứ tự câu «Ý định» lượt 8 | Dựng sai thứ bản phạm vi riêng tư mô tả | Chủ kho soi bảng chia mã tại Cổng Đáng | [đề xuất] |
-| 2 | «Việc» là dòng tự gõ (tiêu đề, người làm, hạn tuỳ, xong/chưa); «sáng kiến» là một chiến dịch hay kế hoạch 30 ngày có sẵn gắn vào KR. Hai thứ nằm chung một danh sách «Việc và sáng kiến» của KR | Người muốn một sáng kiến tự gõ lớn hơn một việc (có việc con) | Hỏi tại Cổng Phạm vi; đọc tỷ lệ dùng sau quý 4 | [đề xuất] |
-| 3 | Sáng kiến gắn sẵn lưu mã bản ghi gốc, không chép tên; vai «chỉ OKR» thấy «một chiến dịch» hay «một kế hoạch 30 ngày», không tên, không trạng thái, không đường mở | Lộ dữ liệu đối tác qua khu OKR | Ma trận bốn đường vào như lượt 2 | [đề xuất] |
-| 4 | Bằng chứng là một đường dẫn (http, https) kèm ghi chú, không tải tệp | Người cần tải ảnh chụp, biên bản | Hỏi tại Cổng Phạm vi; tệp là vòng riêng khi có chỗ lưu riêng tư | [đề xuất] |
-| 5 | Bằng chứng không bắt buộc để đánh dấu mốc xong | Mốc «xong» không căn cứ vẫn nhiều | Đọc tỷ lệ mốc xong có bằng chứng sau quý 4 | [đề xuất] |
-| 6 | Ghi nhận gửi được trên mục tiêu đã công bố ở mọi pha (kể cả chấm điểm và đã đóng — lúc khép kỳ là lúc hay khen nhất); mọi vai gửi được; không đếm, không xếp hạng | Ghi nhận thành điểm thi đua (NG-07) | Từ điển và «Chưa làm» mục 9 | [đề xuất] |
-| 7 | «Loại đơn vị» của mẫu = quản trị chọn cấp (bộ phận, phòng ban, cá nhân) và, tuỳ, danh sách đơn vị áp dụng; trống là mọi đơn vị cấp đó. Cây tổ chức không thêm trường «loại» | Quản trị phải chọn lại từng phòng ban cho mỗi mẫu | Hỏi tại Cổng Phạm vi | [đề xuất] |
-| 8 | Dùng mẫu chỉ điền sẵn bản nháp; mẫu đổi sau đó không đổi mục tiêu đã tạo; mục tiêu nhớ nó sinh từ mẫu nào để đo tỷ lệ dùng | Không đo được mẫu có dùng hay không | Đường đo ở hợp đồng | [đề xuất] |
+| 1 | Nghĩa 11 mã rút đúng theo thứ tự câu «Ý định» lượt 8 | Dựng sai thứ bản phạm vi riêng tư mô tả | Chủ kho soi bảng chia mã tại Cổng Đáng | Chốt tại Cổng Đáng 2026-09-28 |
+| 2 | «Việc» là dòng tự gõ (tiêu đề, người làm, hạn tuỳ, xong/chưa); «sáng kiến» là một chiến dịch hay kế hoạch 30 ngày có sẵn gắn vào KR. Hai thứ nằm chung một danh sách «Việc và sáng kiến» của KR | Người muốn một sáng kiến tự gõ lớn hơn một việc (có việc con) | Hỏi tại Cổng Phạm vi; đọc tỷ lệ dùng sau quý 4 | Chốt tại Cổng Phạm vi 2026-09-28 |
+| 3 | Sáng kiến gắn sẵn lưu mã bản ghi gốc, không chép tên; vai «chỉ OKR» thấy «một chiến dịch» hay «một kế hoạch 30 ngày», không tên, không trạng thái, không đường mở | Lộ dữ liệu đối tác qua khu OKR | Ma trận bốn đường vào như lượt 2 | Chốt tại Cổng Phạm vi 2026-09-28 |
+| 4 | Bằng chứng là một đường dẫn (http, https) kèm ghi chú, không tải tệp | Người cần tải ảnh chụp, biên bản | Hỏi tại Cổng Phạm vi; tệp là vòng riêng khi có chỗ lưu riêng tư | Chốt tại Cổng Phạm vi 2026-09-28 |
+| 5 | Bằng chứng không bắt buộc để đánh dấu mốc xong | Mốc «xong» không căn cứ vẫn nhiều | Đọc tỷ lệ mốc xong có bằng chứng sau quý 4 | Chốt tại Cổng Phạm vi 2026-09-28 |
+| 6 | Ghi nhận gửi được trên mục tiêu đã công bố ở mọi pha (kể cả chấm điểm và đã đóng — lúc khép kỳ là lúc hay khen nhất); mọi vai gửi được; không đếm, không xếp hạng | Ghi nhận thành điểm thi đua (NG-07) | Từ điển và «Chưa làm» mục 9 | Chốt tại Cổng Phạm vi 2026-09-28 |
+| 7 | «Loại đơn vị» của mẫu = quản trị chọn cấp (bộ phận, phòng ban, cá nhân) và, tuỳ, danh sách đơn vị áp dụng; trống là mọi đơn vị cấp đó. Cây tổ chức không thêm trường «loại» | Quản trị phải chọn lại từng phòng ban cho mỗi mẫu | Hỏi tại Cổng Phạm vi | Chốt tại Cổng Phạm vi 2026-09-28 |
+| 8 | Dùng mẫu chỉ điền sẵn bản nháp; mẫu đổi sau đó không đổi mục tiêu đã tạo; mục tiêu nhớ nó sinh từ mẫu nào để đo tỷ lệ dùng | Không đo được mẫu có dùng hay không | Đường đo ở hợp đồng | Chốt tại Cổng Phạm vi 2026-09-28 |
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] trong quý 4 thật, các đơn vị có dùng những thứ nằm cạnh KR — việc và sáng kiến, bằng chứng, ghi nhận — và mùa quý 1 có dùng mẫu không; phần nào không ai dùng thì không mài tiếp.
-- Kết quả nào là SỐNG: [đề xuất] tới 2026-12-01, ≥ 40% mục tiêu đã công bố của quý 4 có ít nhất một việc hoặc sáng kiến; ≥ 60% KR mốc đã xong có bằng chứng; có ghi nhận ở ít nhất một nửa số phòng ban; tới 2027-01-11, ≥ 30% mục tiêu quý 1 của phòng ban sinh từ mẫu. Đọc kèm (không ngưỡng) tỷ lệ việc đã xong và tỷ lệ sáng kiến là kế hoạch 30 ngày.
-- Kết quả nào là CHẾT: [đề xuất] tới 2026-12-01, < 15% mục tiêu đã công bố có việc hay sáng kiến và < 10 ghi nhận toàn công ty; hoặc mẫu không được dùng cho mục tiêu quý 1 nào — phần đó xếp lại, không mài.
-- Timebox: [đề xuất] dựng và đo trên bộ OKR mẫu; gộp sau khi M đã gộp, ngoài đóng băng (từ 19/10 tới khi các phòng ban công bố OKR quý 4); đọc số 2026-12-01 và 2027-01-11, đọc lần cuối 2027-01-31.
+- Câu hỏi phép đo trả lời: trong quý 4 thật, các đơn vị có dùng những thứ nằm cạnh KR — việc và sáng kiến, bằng chứng, ghi nhận — và mùa quý 1 có dùng mẫu không; phần nào không ai dùng thì không mài tiếp.
+- Kết quả nào là SỐNG: tới 2026-12-01, ≥ 40% mục tiêu đã công bố của quý 4 có ít nhất một việc hoặc sáng kiến; ≥ 60% KR mốc đã xong có bằng chứng; có ghi nhận ở ít nhất một nửa số phòng ban; tới 2027-01-11, ≥ 30% mục tiêu quý 1 của phòng ban sinh từ mẫu. Đọc kèm (không ngưỡng) tỷ lệ việc đã xong và tỷ lệ sáng kiến là kế hoạch 30 ngày.
+- Kết quả nào là CHẾT: tới 2026-12-01, < 15% mục tiêu đã công bố có việc hay sáng kiến và < 10 ghi nhận toàn công ty; hoặc mẫu không được dùng cho mục tiêu quý 1 nào — phần đó xếp lại, không mài.
+- Timebox: dựng và đo trên bộ OKR mẫu; gộp sau khi M đã gộp, ngoài đóng băng (từ 19/10 tới khi các phòng ban công bố OKR quý 4); đọc số 2026-12-01 và 2027-01-11, đọc lần cuối 2027-01-31.
 
 ## Kết quả prototype
 
@@ -113,9 +113,9 @@ bằng design-pass không đồng bộ trên `/proto/canh-kr-okr`.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
-- **disposition = …** Căn cứ: …
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **decision = build.** Căn cứ: lộ trình OKR mục 5 «Lượt 8» và «Dựng hết bằng dữ liệu mẫu» (chủ kho quyết 2026-09-28: dựng cả 11 mã, không chờ bốn tuần dùng quý 4). Chia mã theo bảng ở trên: 8a = SK-01, SK-02, CI-05, CI-06, MT-07; MT-06, QT-02, TC-06 thành lượt 8c (T3); 8b = XEM-08, XEM-09, NH-05 (T3 vì cần hai chỗ lưu). Thứ tự làn B: 8a → 8c → 7n → 10 → 8b. Quyết 2026-09-28 bởi Manh Phan trong phiên lượt 8a.
+- **disposition = keep.** Căn cứ: bản mẫu `ban-mau-okr`, `khep-ky-okr` ở lại kho (`docs/proto.md`); lượt này thêm bản mẫu `canh-kr-okr`, không xoá gì.
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho câu hỏi, SỐNG, CHẾT và timebox như section Ngưỡng; đọc số 2026-12-01 và 2027-01-11, đọc lần cuối 2027-01-31.
 
 ## Thước đo thành công → ứng viên criterion
 
