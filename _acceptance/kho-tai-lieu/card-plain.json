@@ -1,0 +1,30 @@
+{
+  "feature_plain": "Nhân viên viết trang quy định, quy trình ngay trong CRM bằng ô soạn giống Word, gửi chủ trang duyệt trên bản thay đổi kiểu Track Changes, rồi cả công ty đọc bản đang dùng.",
+  "decisions": [
+    {"id": "E14j", "q": "Nhân viên văn phòng nhìn các màn này có tự viết và duyệt được không?", "why": "Hội đồng ba ống kính cùng đề xuất ĐẠT sau khi có ảnh màn duyệt khổ 390; lượt T3 nên chữ ký trên câu chấm bằng mắt là của anh."}
+  ],
+  "scope_plain": "Lịch sử phiên bản, khôi phục, lưu trữ, tìm kiếm và liên kết trang để lượt 3; phạm vi xem theo trang, người phó, nhắc duyệt và mọi phần AI để các lượt sau.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260927T111509Z-1", "p": "Chọn ô soạn giống Google Docs và bản thay đổi kiểu Track Changes thay cho ô gõ ký hiệu — đổi lại phải đo kỹ bộ gõ tiếng Việt và việc lưu không làm đổi chữ."},
+    {"id": "d-20260927T111509Z-2", "p": "KHÔNG làm lịch sử phiên bản, khôi phục và lưu trữ ở lượt này — dời lượt 3; dữ liệu phiên bản vẫn giữ đủ."},
+    {"id": "d-20260927T111509Z-3", "p": "KHÔNG có ô «Ai xem được»: mọi trang cả công ty đọc — tài liệu nhân sự, tài chính đứng ngoài đợt đầu."},
+    {"id": "d-20260927T111509Z-4", "p": "Chọn cho quản trị duyệt thay khi chủ trang vắng thay vì có người phó — chưa có thang leo tự động."},
+    {"id": "d-20260927T111509Z-5", "p": "Chọn duyệt giao diện trên bản bấm được trước Cổng Phạm vi — tốn thêm một lượt dựng bản mẫu."},
+    {"id": "d-20260927T120150Z-7", "p": "Chọn cách so chữ theo khối rồi theo từ bằng thư viện jsdiff thay cho cách thiết kế ghi — chạy giống nhau ở trình duyệt và máy chủ; đổi lại so theo âm tiết trong khối."},
+    {"id": "d-20260927T120150Z-8", "p": "Chọn lưu loại trang và trạng thái bằng chữ kèm danh sách giá trị hợp lệ thay cho kiểu liệt kê của cơ sở dữ liệu, theo lệ OKR — thêm giá trị không cần đổi lược đồ; đổi lại cơ sở dữ liệu không tự chặn giá trị lạ."},
+    {"id": "d-20260927T120150Z-9", "p": "Chọn đo phần dán bằng mẫu chép thật từ Word và Google Docs — anh phải dán tay một lần."},
+    {"id": "d-20260927T125154Z-11", "p": "Chọn thêm thư viện một lần trước khi chạy song song và gộp ba việc luật chung thành một nhánh — các nhánh không đụng nhau khi gộp."},
+    {"id": "d-20260927T130806Z-12", "p": "Chọn cắt trang dài thành khối khi đọc vì bộ đọc markdown rất chậm với trang dài — kết quả y hệt đọc một lần."},
+    {"id": "d-20260927T130806Z-13", "p": "Ghi nhận danh sách lồng ba cấp bị kéo lên một cấp — đã sửa ở mục sau, dòng này là vết lịch sử."},
+    {"id": "d-20260927T130806Z-14", "p": "Ghi nhận khối mã bị bỏ khi đọc — lượt này không ảnh hưởng vì ô soạn không tạo được khối mã; phải xử lý khi mở lượt máy soạn."},
+    {"id": "d-20260927T133251Z-15", "p": "Chọn bộ tách danh sách mặc định để danh sách lồng ba cấp giữ đúng cấp — thêm một thư viện vào gói luật chung."},
+    {"id": "d-20260927T143846Z-16", "p": "Sửa bộ lọc dán theo mẫu Google Docs thật: bỏ chữ đậm thừa ở tiêu đề và khoảng trắng thừa — bản kỳ vọng được máy soát với nguồn, không viết độc lập từ trước."},
+    {"id": "d-20260927T144101Z-17", "p": "Sửa bộ lọc dán theo mẫu Word thật: nhận tiêu đề kiểu riêng và giữ dấu cách ở chữ ngoài đoạn — mười ca «không còn chuỗi cấm» luôn xanh, phép đo thật là hai ca so từng chữ."},
+    {"id": "d-20260927T144130Z-18", "p": "Thêm câu hỏi chấm cho eval nhìn bằng mắt vì lúc lập hợp đồng viết thiếu — không đổi phạm vi."},
+    {"id": "d-20260927T150723Z-19", "p": "Sửa lỗi màn duyệt gộp sai ô bảng: so từng ô một — hàng đổi số cột hiện thành hàng bỏ và hàng thêm."},
+    {"id": "d-20260927T150723Z-20", "p": "Sửa hai lệnh kiểm tra đỏ: test đếm mẫu chỉ đếm mẫu khứ hồi, và hai tệp HTML dán thật đứng ngoài bộ lint vì phải giữ nguyên văn."},
+    {"id": "d-20260927T152602Z-21", "p": "Làm chặt test bảng: kiểm bảng có đúng số cột, số hàng và chữ đổi rơi đúng ô."},
+    {"id": "d-20260927T152602Z-22", "p": "Thêm ảnh màn duyệt khổ điện thoại vào bộ ảnh chấm bằng mắt — không đổi câu hỏi."}
+  ]
+}

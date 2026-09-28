@@ -24,7 +24,7 @@ describe("khung dieu huong", () => {
 	});
 
 	it("tam muc, nhan vi co dau va khac nhan en", () => {
-		expect(MUC_RAIL).toHaveLength(9);
+		expect(MUC_RAIL).toHaveLength(10);
 		for (const m of MUC_RAIL) {
 			const vi = nhanRail(m, "vi");
 			expect(vi).not.toBe(nhanRail(m, "en"));
@@ -47,7 +47,7 @@ describe("khung dieu huong", () => {
 		expect(dieuPhoi.match).toBe("prefix");
 		expect(MUC_RAIL.indexOf(dieuPhoi)).toBe(MUC_RAIL.indexOf(muc("okr")) - 1);
 		expect(MUC_RAIL.indexOf(muc("okr"))).toBe(
-			MUC_RAIL.indexOf(muc("settings")) - 1,
+			MUC_RAIL.indexOf(muc("taiLieu")) - 1,
 		);
 	});
 
@@ -59,10 +59,21 @@ describe("khung dieu huong", () => {
 			MUC_RAIL.indexOf(muc("onboarding")) + 1,
 		);
 		expect(MUC_RAIL.indexOf(mucTieu)).toBe(
-			MUC_RAIL.indexOf(muc("settings")) - 1,
+			MUC_RAIL.indexOf(muc("taiLieu")) - 1,
 		);
 		expect(nhanRail(mucTieu, "vi")).toBe("Mục tiêu");
 		expect(nhanRail(mucTieu, "en")).toBe("Objectives");
+	});
+
+	it("tai-lieu: sau muc tieu, ngay truoc cai dat, nhan Tai lieu/Documents", () => {
+		const taiLieu = muc("taiLieu");
+		expect(taiLieu.href).toBe("/tai-lieu");
+		expect(taiLieu.match).toBe("prefix");
+		expect(MUC_RAIL.indexOf(taiLieu)).toBe(
+			MUC_RAIL.indexOf(muc("settings")) - 1,
+		);
+		expect(nhanRail(taiLieu, "vi")).toBe("Tài liệu");
+		expect(nhanRail(taiLieu, "en")).toBe("Documents");
 	});
 
 	it("danh-dau-dang-mo: 30 ngay dau sang o danh muc va ho so, khong o cai dat", () => {

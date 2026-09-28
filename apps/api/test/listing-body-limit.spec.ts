@@ -7,9 +7,7 @@ import request from "supertest";
 import { LISTING_INGEST } from "../src/listings/listings-config";
 
 const suffix = `listing-body-limit-${process.env.TEST_RUN_ID ?? "local"}`;
-const SECRET = `bi-mat-tran-than-${suffix}`;
-
-process.env.LISTING_INGEST_SECRET = SECRET;
+const SECRET = process.env.LISTING_INGEST_SECRET;
 
 const INGEST = "/internal/listings/ingest";
 

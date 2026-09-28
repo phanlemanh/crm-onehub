@@ -50,6 +50,8 @@
 	--code-foreground: var(--ds-gray-1000);
 	--code-accent: var(--ds-red-900);
 	--code-string: var(--primary);
+	--diff-them: var(--ds-green-900);
+	--diff-bo: var(--ds-red-900);
 	--sidebar: var(--ds-background-100);
 	--sidebar-foreground: var(--ds-gray-1000);
 	--sidebar-primary: #006b4f;
@@ -78,6 +80,8 @@
 	--sidebar-ring: #40be96;
 	--code-string: #40be96;
 	--code-accent: var(--ds-red-900);
+	--diff-them: var(--ds-green-900);
+	--diff-bo: var(--ds-red-900);
 	--success-foreground: var(--ds-background-100);
 	--warning-foreground: var(--ds-background-100);
 }
@@ -140,6 +144,8 @@
 	--color-code-foreground: var(--code-foreground);
 	--color-code-accent: var(--code-accent);
 	--color-code-string: var(--code-string);
+	--color-diff-them: var(--diff-them);
+	--color-diff-bo: var(--diff-bo);
 	--color-sidebar: var(--sidebar);
 	--color-sidebar-foreground: var(--sidebar-foreground);
 	--color-sidebar-primary: var(--sidebar-primary);

@@ -38,7 +38,10 @@
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
 		"./zalo-hoi": "./src/zalo-hoi.ts",
 		"./zalo-update": "./src/zalo-update.ts",
-		"./zalo-webhook": "./src/zalo-webhook.ts"
+		"./zalo-webhook": "./src/zalo-webhook.ts",
+		"./tai-lieu": "./src/tai-lieu.ts",
+		"./tai-lieu-markdown": "./src/tai-lieu-markdown.ts",
+		"./tai-lieu-diff": "./src/tai-lieu-diff.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
@@ -49,7 +52,14 @@
 	},
 	"dependencies": {
 		"@crm/db": "workspace:*",
-		"zod": "^4.4.3"
+		"zod": "^4.4.3",
+		"@tiptap/core": "3.31.3",
+		"@tiptap/markdown": "3.31.3",
+		"@tiptap/starter-kit": "3.31.3",
+		"@tiptap/extension-table": "3.31.3",
+		"@tiptap/extension-link": "3.31.3",
+		"diff": "^8.0.4",
+		"@tiptap/extension-list": "3.31.3"
 	},
 	"devDependencies": {
 		"@crm/typescript-config": "workspace:*",

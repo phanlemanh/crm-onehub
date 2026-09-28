@@ -10,6 +10,7 @@ const en = {
 		campaigns: "Campaigns",
 		onboarding: "First 30 days",
 		okr: "Objectives",
+		taiLieu: "Documents",
 		settings: "Settings",
 	},
 	nav: {
@@ -70,6 +71,7 @@ const vi = {
 		campaigns: "Chiến dịch",
 		onboarding: "30 ngày đầu",
 		okr: "Mục tiêu",
+		taiLieu: "Tài liệu",
 		settings: "Cài đặt",
 	},
 	nav: {

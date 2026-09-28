@@ -72,6 +72,13 @@ model User {
   okrKeyResultsOwned  OkrKeyResult[]   @relation("OkrKeyResultOwner")
   okrParticipations   OkrParticipant[]
 
+  taiLieuChuTrang   TaiLieuTrang[]    @relation("TaiLieuChuTrang")
+  taiLieuTaoBoi     TaiLieuTrang[]    @relation("TaiLieuTaoBoi")
+  taiLieuDuyet      TaiLieuPhienBan[] @relation("TaiLieuDuyetBoi")
+  taiLieuDeXuatTao  TaiLieuDeXuat[]   @relation("TaiLieuDeXuatTaoBoi")
+  taiLieuDeXuatXuLy TaiLieuDeXuat[]   @relation("TaiLieuDeXuatXuLyBoi")
+  taiLieuSuKien     TaiLieuSuKien[]   @relation("TaiLieuSuKienAi")
+
   @@unique([email])
   @@map("user")
 }
@@ -1725,6 +1732,7 @@ model Department {
   primaryOf        OrgPlacement[]           @relation("PrimaryDepartment")
   secondaryMembers OrgSecondaryDepartment[]
   okrObjectives    OkrObjective[]
+  taiLieuTrang     TaiLieuTrang[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2231,6 +2239,102 @@ model OkrSoChup {
   @@unique([keyResultId, ngay], map: "okrSoChup_may_mot_ngay", where: raw("nguon = ANY (ARRAY['crm'::text, 'bang-tinh'::text])"))
   @@index([keyResultId, ngay])
   @@map("okrSoChup")
+}
+
+model TaiLieuTrang {
+  id            String                   @id @default(cuid())
+  slug          String                   @unique
+  ten           String
+  loai          String
+  departmentId  String?
+  department    Department?              @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  chuTrangId    String
+  chuTrang      User                     @relation("TaiLieuChuTrang", fields: [chuTrangId], references: [id], onDelete: Restrict)
+  xacMinhDen    DateTime?
+  banDangDungId String?                  @unique
+  banDangDung   TaiLieuPhienBan?         @relation("TaiLieuBanDangDung", fields: [banDangDungId], references: [id], onDelete: Restrict)
+  timKiem       Unsupported("tsvector")?
+  taoBoiId      String
+  taoBoi        User                     @relation("TaiLieuTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+  phienBan      TaiLieuPhienBan[]        @relation("TaiLieuPhienBanCuaTrang")
+  deXuat        TaiLieuDeXuat[]
+  suKien        TaiLieuSuKien[]
+  lienKet       TaiLieuLienKet[]
+
+  @@index([loai])
+  @@index([chuTrangId])
+  @@index([timKiem], type: Gin)
+  @@map("taiLieuTrang")
+}
+
+model TaiLieuPhienBan {
+  id          String          @id @default(cuid())
+  trangId     String
+  trang       TaiLieuTrang    @relation("TaiLieuPhienBanCuaTrang", fields: [trangId], references: [id], onDelete: Restrict)
+  so          Int
+  ten         String
+  noiDung     String
+  noiDungHash String
+  deXuatId    String          @unique
+  deXuat      TaiLieuDeXuat   @relation("TaiLieuPhienBanTuDeXuat", fields: [deXuatId], references: [id], onDelete: Restrict)
+  duyetBoiId  String
+  duyetBoi    User            @relation("TaiLieuDuyetBoi", fields: [duyetBoiId], references: [id], onDelete: Restrict)
+  duyetLuc    DateTime
+  dangDungO   TaiLieuTrang?   @relation("TaiLieuBanDangDung")
+  laBanGocCua TaiLieuDeXuat[] @relation("TaiLieuDeXuatBanGoc")
+
+  @@unique([trangId, so])
+  @@map("taiLieuPhienBan")
+}
+
+model TaiLieuDeXuat {
+  id        String           @id @default(cuid())
+  trangId   String
+  trang     TaiLieuTrang     @relation(fields: [trangId], references: [id], onDelete: Restrict)
+  banGocId  String?
+  banGoc    TaiLieuPhienBan? @relation("TaiLieuDeXuatBanGoc", fields: [banGocId], references: [id], onDelete: Restrict)
+  ten       String
+  noiDung   String
+  taoBoiId  String
+  taoBoi    User             @relation("TaiLieuDeXuatTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  trangThai String           @default("CHO_DUYET")
+  lyDo      String?
+  xuLyBoiId String?
+  xuLyBoi   User?            @relation("TaiLieuDeXuatXuLyBoi", fields: [xuLyBoiId], references: [id], onDelete: SetNull)
+  xuLyLuc   DateTime?
+  createdAt DateTime         @default(now())
+  phienBan  TaiLieuPhienBan? @relation("TaiLieuPhienBanTuDeXuat")
+
+  @@index([trangId, trangThai])
+  @@map("taiLieuDeXuat")
+}
+
+model TaiLieuSuKien {
+  id      String       @id @default(cuid())
+  trangId String
+  trang   TaiLieuTrang @relation(fields: [trangId], references: [id], onDelete: Restrict)
+  loai    String
+  aiId    String
+  ai      User         @relation("TaiLieuSuKienAi", fields: [aiId], references: [id], onDelete: Restrict)
+  luc     DateTime     @default(now())
+  chiTiet Json
+
+  @@index([trangId, luc])
+  @@map("taiLieuSuKien")
+}
+
+model TaiLieuLienKet {
+  id        String       @id @default(cuid())
+  tuTrangId String
+  tuTrang   TaiLieuTrang @relation(fields: [tuTrangId], references: [id], onDelete: Cascade)
+  denSlug   String
+  vanBan    String
+
+  @@index([denSlug])
+  @@index([tuTrangId])
+  @@map("taiLieuLienKet")
 }
 
 model OkrCuaSoRa {
