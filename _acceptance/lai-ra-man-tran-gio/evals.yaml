@@ -57,8 +57,8 @@ evals:
       trong thu muc tao pham cua chan-lai-component-ra-man khong doi, va danh sach tep
       cua packages/ui/test khong doi; lech -> ma 2, in "tao pham ho so da ky bi ghi"
       hoac ten tep thua.
-      chieu xanh — tran cua RIENG ca lai ep 300 ms: ca lai do va dong loi cua no co
-      "timed out"; "mo tung nguyen ban" va "chuoi da va den man" xanh. Rang doc ket qua
+      chieu xanh — tran cua RIENG ca lai ep 300 ms: ca lai do vi qua han (junit ghi
+      `<failure type="TimeoutError"/>` — bun khong ghi chu "timed out" vao junit); "mo tung nguyen ban" va "chuoi da va den man" xanh. Rang doc ket qua
       tung ca qua --reporter=junit, khong doc chuoi tong.
       chieu do — cung ban sao, bo hai loi goi `luot.abort()`, chay 3 lan: ca 3 lan
       "chuoi da va den man" do; rang in "vong lai het gio van ve tiep: chuoi da va den
