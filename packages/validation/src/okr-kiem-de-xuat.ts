@@ -51,6 +51,10 @@ const HE_SO = new Map([
 	["%", 1],
 ]);
 
+const DAU_TY = new Set(["tỷ", "tỉ"]);
+
+const SAU_TY_KHONG_PHAI_SO = new Set(["lệ", "trọng", "suất"]);
+
 const CHU_SO_CHINH_XAC = 15;
 
 type SoDoc = { giaTri: number; goc: number; heSo: number };
@@ -104,9 +108,16 @@ function docMotSo(t: string[], i: number): Doc | null {
 	return so ? theoSauTram(t, so) : null;
 }
 
+function heSoTai(t: string[], j: number): number | undefined {
+	const tu = t[j] ?? "";
+	if (DAU_TY.has(tu) && SAU_TY_KHONG_PHAI_SO.has(t[j + 1] ?? ""))
+		return undefined;
+	return HE_SO.get(tu);
+}
+
 function docHeSo(t: string[], j: number) {
 	if (t[j] === "phần" && t[j + 1] === "trăm") return { heSo: 1, het: j + 2 };
-	const heSo = HE_SO.get(t[j] ?? "");
+	const heSo = heSoTai(t, j);
 	return heSo === undefined ? { heSo: 1, het: j } : { heSo, het: j + 1 };
 }
 
@@ -193,8 +204,10 @@ function khongDoi(dong: DongDeXuat): boolean {
 }
 
 function heSoCuaKr(kr: GoiKiem["krs"][number]): number[] {
-	return tachSo(`${kr.unit ?? ""} ${kr.title}`)
-		.map((tu) => HE_SO.get(tu))
+	const donVi = kr.unit?.trim() ?? "";
+	const t = tachSo(donVi === "" ? kr.title : donVi);
+	return t
+		.map((_, j) => heSoTai(t, j))
 		.filter((h): h is number => h !== undefined && h !== 1);
 }
 

@@ -402,6 +402,7 @@ describe("so-viet-kieu-viet", () => {
 				"từ 40 xuống 25 ngày",
 				"năm trăm triệu",
 				"hai trăm năm mươi đối tác",
+				"tăng 3 tỷ lệ chuyển đổi",
 			].map(trichSo),
 		).toEqual([
 			[5e9],
@@ -415,6 +416,7 @@ describe("so-viet-kieu-viet", () => {
 			[40, 25],
 			[5e8],
 			[250],
+			[3],
 		]);
 	});
 });
@@ -431,6 +433,35 @@ describe("so-doi-co", () => {
 	const krTy = K.krs[thuKrTy];
 	const L = goiTuCa(CA_LUAT);
 	const G500TR = doiKr(G, { targetValue: 500_000_000 });
+	const laTyLe = (k: CaGopY["krs"][number]) =>
+		k.kind === "phan-tram" &&
+		k.title.toLowerCase().startsWith("tỷ lệ") &&
+		!coSo(k.title);
+	const CA_TY_LE = caDau(
+		(c) => c.krs.some(laTyLe),
+		"ca co kr phan tram ten ty le",
+	);
+	const thuTyLe = CA_TY_LE.krs.findIndex(laTyLe);
+	const T = goiTuCa(CA_TY_LE);
+	const krTyLe = T.krs[thuTyLe];
+	const TKhongDonVi: GoiKiem = {
+		...T,
+		krs: T.krs.map((k) => ({ ...k, unit: "" })),
+	};
+	const capTyLe = (goi: GoiKiem, ten: string) => ({
+		ten,
+		goi,
+		do: vietLaiKr(
+			goi,
+			`${krTyLe?.title} đạt ${krTyLe?.targetValue} tỷ đồng`,
+			thuTyLe,
+		),
+		lanh: vietLaiKr(
+			goi,
+			`${krTyLe?.title} đạt ${krTyLe?.targetValue}%`,
+			thuTyLe,
+		),
+	});
 
 	const cap: { ten: string; goi: GoiKiem; do: DongDeXuat; lanh: DongDeXuat }[] =
 		[
@@ -475,10 +506,14 @@ describe("so-doi-co", () => {
 					"Doanh thu hợp đồng mới đạt năm trăm triệu đồng",
 				),
 			},
+			capTyLe(T, "KR phần trăm tên «Tỷ lệ» không cho số tỷ"),
+			capTyLe(TKhongDonVi, "KR tên «Tỷ lệ» không đơn vị không cho số tỷ"),
 		];
 
 	test("số đổi cỡ là số mới; số gốc chỉ khớp ô KR có đơn vị cùng cỡ", () => {
 		expect(krTy).toBeDefined();
+		expect(krTyLe).toBeDefined();
+		expect(cap.length).toBe(7);
 		const lot: string[] = [];
 		const sai: string[] = [];
 		for (const c of cap) {
