@@ -1,8 +1,18 @@
+import {
+	MA_LOAI_DE_XUAT,
+	type MaLoaiDeXuat,
+} from "@crm/db/okr-tro-ly-danh-muc";
+
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
 const MO_HINH = "google/gemini-3.8-flash";
 const MO_HINH_JUDGE = "zai/glm-5.2-fast";
 const THE = ["onehub:tro-ly-okr"] as const;
+const MA_CAM_NG = [
+	"chep-cap-tren",
+	"noi-ve-nguoi",
+	"tu-cam",
+] as const satisfies readonly MaLoaiDeXuat[];
 
 export const TRO_LY_OKR = {
 	model: MO_HINH,
@@ -13,6 +23,18 @@ export const TRO_LY_OKR = {
 			providerOptions: {
 				gateway: { zeroDataRetention: true, tags: [...THE] },
 			},
+		},
+		nguong: 0.7,
+	},
+	danhGia: {
+		tranUsdMacDinh: 2,
+		maCamNg: MA_LOAI_DE_XUAT.filter((ma) =>
+			(MA_CAM_NG as readonly string[]).includes(ma),
+		),
+		env: {
+			tongKet: "TDX_TONG_KET",
+			tranUsd: "TDX_TRAN_USD",
+			thuMucThem: "TDX_THU_MUC_THEM",
 		},
 	},
 	cuaSoNguCanh: 1_048_576,

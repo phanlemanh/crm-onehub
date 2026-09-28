@@ -16,10 +16,7 @@ import {
 	docBoCaGopY,
 	THU_MUC_CA_MAU,
 } from "../../../apps/agent/evals/okr/ca-gop-y.ts";
-import {
-	MA_LOAI_DE_XUAT,
-	TRO_LY_OKR_TRAN,
-} from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
+import { TRO_LY_OKR_TRAN } from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
 import { ghiHieuChinh } from "./hieu-chinh.mjs";
 import {
@@ -44,12 +41,9 @@ const PHUT_MS = 60_000;
 
 const E22 = {
 	kho: "tdx-e22",
-	tranUsdMacDinh: 2,
-	nguongJudge: 0.7,
 	timeoutMs: 120 * PHUT_MS,
 	boViet: "viet-lai",
 	boNg: "ng",
-	maCamNg: ["chep-cap-tren", "noi-ve-nguoi", "tu-cam"],
 	truongCuaVanDe: {
 		"kr-la-viec": ["kr.title"],
 		"khong-do-duoc": ["kr.title"],
@@ -92,11 +86,7 @@ const E22 = {
 		doiChung: "ca doi chung khong bat duoc",
 		doiChungKhongGhi: "ca doi chung khong co ban ghi",
 	},
-	env: {
-		tongKet: "TDX_TONG_KET",
-		tranUsd: "TDX_TRAN_USD",
-		thuMucThem: "TDX_THU_MUC_THEM",
-	},
+	env: TRO_LY_OKR.danhGia.env,
 };
 
 const dongGhi = z.object({
@@ -132,11 +122,9 @@ const tomTatEve = z.object({
 	),
 });
 
-const MA_CAM_LA = E22.maCamNg.filter((ma) => !MA_LOAI_DE_XUAT.includes(ma));
-if (MA_CAM_LA.length > 0) {
-	console.log(
-		`KHONG DO DUOC: ma cam NG khong con trong MA_LOAI_DE_XUAT: ${MA_CAM_LA.join(", ")}`,
-	);
+const MA_CAM_NG = TRO_LY_OKR.danhGia.maCamNg;
+if (MA_CAM_NG.length === 0) {
+	console.log("KHONG DO DUOC: ma cam NG rong sau khi loc theo MA_LOAI_DE_XUAT");
 	process.exit(2);
 }
 
@@ -157,7 +145,7 @@ const EVE = join(AGENT, "node_modules/.bin/eve");
 const chiDungKho = process.argv.includes("--kho");
 const tranUsd = (() => {
 	const i = process.argv.indexOf("--tran-usd");
-	if (i < 0) return E22.tranUsdMacDinh;
+	if (i < 0) return TRO_LY_OKR.danhGia.tranUsdMacDinh;
 	const so = Number(process.argv[i + 1]);
 	if (!Number.isFinite(so) || so <= 0) {
 		console.log(
@@ -303,7 +291,7 @@ const chuCua = (d) => boDau(`${d.sau ?? ""} ${d.lyDo ?? ""}`);
 
 function kiemNg(ca, ghi, cho, ten) {
 	const loi = [];
-	const cam = ghi.dong.filter((d) => E22.maCamNg.includes(d.maLoai));
+	const cam = ghi.dong.filter((d) => MA_CAM_NG.includes(d.maLoai));
 	if (cam.length > 0)
 		loi.push(`ng co dong ${cam.map((d) => `${d.maLoai}:${d.id}`).join(", ")}`);
 	const capTren = (ghi.capTrenKr ?? []).map(boDau);
@@ -432,7 +420,7 @@ async function tongKet(url, eve) {
 			: `hieu chinh: ${hc.soCap} cap → ${hc.tep.slice(GOC.length + 1)}`,
 	);
 	console.log(
-		`ma: ${dat}/${ca.length} · judge: ${judge === null ? "—" : judge.toFixed(2)} (${coDiem.length} cap, nguong ${E22.nguongJudge})`,
+		`ma: ${dat}/${ca.length} · judge: ${judge === null ? "—" : judge.toFixed(2)} (${coDiem.length} cap, nguong ${TRO_LY_OKR.judge.nguong})`,
 	);
 
 	if (eve.ma === null || eve.ma === 2)

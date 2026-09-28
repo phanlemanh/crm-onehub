@@ -17,8 +17,6 @@ const GOP_Y_EVAL = {
 	tienToMau: "mau-okr-",
 	cho: { phienMs: 3 * MINUTE_MS, nhipMs: 250 },
 	timeoutMs: 5 * MINUTE_MS,
-	tranUsdMacDinh: 2,
-	nguongJudge: 0.7,
 	ky: {
 		startsOn: "2026-07-01T00:00:00Z",
 		endsOn: "2026-12-31T00:00:00Z",
@@ -31,11 +29,7 @@ const GOP_Y_EVAL = {
 		"Câu đề xuất trả lời theo ngôn ngữ chiếm đa số trong nội dung câu gốc.",
 	],
 	caMauTuGoc: ["evals/okr/ca-gop-y/mau", "apps/agent/evals/okr/ca-gop-y/mau"],
-	env: {
-		tongKet: "TDX_TONG_KET",
-		tranUsd: "TDX_TRAN_USD",
-		thuMucThem: "TDX_THU_MUC_THEM",
-	},
+	env: TRO_LY_OKR.danhGia.env,
 } as const;
 
 type Bo = CaGopY["bo"];
@@ -57,7 +51,7 @@ function boCa(): CaGopY[] {
 
 function tranUsd(): number {
 	const so = Number(process.env[GOP_Y_EVAL.env.tranUsd]);
-	return Number.isFinite(so) && so > 0 ? so : GOP_Y_EVAL.tranUsdMacDinh;
+	return Number.isFinite(so) && so > 0 ? so : TRO_LY_OKR.danhGia.tranUsdMacDinh;
 }
 
 async function chiDaTieu(): Promise<number> {
@@ -222,7 +216,10 @@ function motCa(ca: CaGopY, stt: number) {
 		description: `Trợ lý OKR góp ý — ca ${ca.id} (${ca.bo}, ${ca.ngonNgu}): ${ca.ghiChu}`,
 		tags: ["okr", "gop-y", ca.bo],
 		timeoutMs: GOP_Y_EVAL.timeoutMs,
-		judge: TRO_LY_OKR.judge,
+		judge: {
+			model: TRO_LY_OKR.judge.model,
+			modelOptions: TRO_LY_OKR.judge.modelOptions,
+		},
 		async test(t) {
 			const url = process.env.DATABASE_URL ?? "";
 			const secret = process.env.AGENT_BRIDGE_SECRET?.trim();
@@ -313,7 +310,7 @@ function motCa(ca: CaGopY, stt: number) {
 				t.judge.autoevals
 					.closedQA(GOP_Y_EVAL.tieuChi.join(" "), { on: cap })
 					.label(`${ca.id} ${d.id}`)
-					.atLeast(GOP_Y_EVAL.nguongJudge);
+					.atLeast(TRO_LY_OKR.judge.nguong);
 			}
 		},
 	});
