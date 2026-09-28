@@ -29,7 +29,13 @@ function stub(handler: (url: string) => Promise<Response>) {
 
 type GateResponse =
 	| { result: { data: unknown } }
-	| { error: { message: string } };
+	| {
+			error: {
+				message: string;
+				code?: number;
+				data?: { code: string; httpStatus: number; path: string };
+			};
+	  };
 
 function json(body: GateResponse, status = 200) {
 	return new Response(JSON.stringify(body), {
@@ -50,6 +56,38 @@ const workspace = (data: {
 }) => ({
 	result: { data: { slug: SLUG, viewerRole: "owner", ...data } },
 });
+
+const loiPhien = (path: string): GateResponse => ({
+	error: {
+		message: "UNAUTHORIZED",
+		code: -32001,
+		data: { code: "UNAUTHORIZED", httpStatus: 401, path },
+	},
+});
+
+function hetPhien() {
+	const calls = { count: 0 };
+
+	stub(async (url) => {
+		calls.count += 1;
+		return json(
+			loiPhien(
+				url.includes("workspace.get") ? "workspace.get" : "settings.researchKey",
+			),
+			401,
+		);
+	});
+
+	return calls;
+}
+
+const KHONG_BIET = {
+	gate: "unknown",
+	slug: null,
+	inWorkspace: null,
+	viewerRole: null,
+	hetPhien: false,
+};
 
 function researchKey(configured: boolean, canManage: boolean | null = true) {
 	const hint = configured ? "••••9876" : null;
@@ -124,6 +162,7 @@ describe("readWorkspaceGate", () => {
 			slug: SLUG,
 			inWorkspace: true,
 			viewerRole: "owner",
+			hetPhien: false,
 		});
 	});
 
@@ -137,6 +176,7 @@ describe("readWorkspaceGate", () => {
 			slug: SLUG,
 			inWorkspace: false,
 			viewerRole: null,
+			hetPhien: false,
 		});
 	});
 
@@ -164,6 +204,72 @@ describe("readWorkspaceGate", () => {
 
 		answerWith({ result: { data: { nothing: "useful" } } });
 		expect(await gateOf("/")).toBe("unknown");
+	});
+});
+
+describe("readWorkspaceGate and a dead session", () => {
+	it("doc-401: flags only a 401 as a dead session", async () => {
+		const ca: [string, () => void, unknown][] = [
+			["401", () => hetPhien(), { ...KHONG_BIET, hetPhien: true }],
+			[
+				"200",
+				() => answerWith(workspace({ onboarded: true, canRename: true })),
+				{
+					gate: "settled",
+					slug: SLUG,
+					inWorkspace: true,
+					viewerRole: "owner",
+					hetPhien: false,
+				},
+			],
+			[
+				"403",
+				() => answerWith({ error: { message: "FORBIDDEN" } }, 403),
+				KHONG_BIET,
+			],
+			[
+				"500",
+				() => answerWith({ error: { message: "INTERNAL_SERVER_ERROR" } }, 500),
+				KHONG_BIET,
+			],
+			[
+				"loi mang",
+				() =>
+					stub(async () => {
+						throw new Error("connect ECONNREFUSED");
+					}),
+				KHONG_BIET,
+			],
+			[
+				"het gio",
+				() =>
+					stub(async () => {
+						throw new DOMException("timed out", "TimeoutError");
+					}),
+				KHONG_BIET,
+			],
+		];
+		const sai: string[] = [];
+
+		for (const [ten, dung, mong] of ca) {
+			dung();
+			const that = await readWorkspaceGate(request("/", [SESSION_COOKIE]));
+			if (JSON.stringify(that) !== JSON.stringify(mong)) {
+				sai.push(`${ten}: hetPhien sai`);
+			}
+		}
+
+		const calls = hetPhien();
+		const khongCookie = await readWorkspaceGate(request("/"));
+		if (
+			JSON.stringify(khongCookie) !== JSON.stringify(KHONG_BIET) ||
+			calls.count !== 0
+		) {
+			sai.push("khong cookie: hetPhien sai");
+		}
+
+		expect(ca.length + 1).toBe(7);
+		expect(sai).toEqual([]);
 	});
 });
 
