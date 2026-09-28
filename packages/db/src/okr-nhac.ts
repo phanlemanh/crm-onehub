@@ -48,6 +48,13 @@ export const viecOkr = z.discriminatedUnion("loai", [
 		nguoiTen: z.string(),
 	}),
 	z.object({
+		loai: z.literal("okr-ghi-nhan"),
+		ghiNhanId: maMuc,
+		objectiveId: maMuc,
+		nhan: z.string(),
+		nguoiGui: z.string(),
+	}),
+	z.object({
 		loai: z.literal("okr-theo-doi"),
 		objectiveId: maMuc,
 		nhan: z.string(),
@@ -65,6 +72,7 @@ export const KHOA_MUC_OKR = {
 	"okr-kr-im": { loai: true, keyResultId: true },
 	"okr-duoc-giao": { loai: true, objectiveId: true, keyResultId: true },
 	"okr-nhac-ten": { loai: true, commentId: true },
+	"okr-ghi-nhan": { loai: true, ghiNhanId: true },
 	"okr-theo-doi": { loai: true, objectiveId: true },
 } as const satisfies {
 	[K in LoaiNhacOkr]: {
@@ -343,7 +351,7 @@ async function viecTraoDoi(
 	db: Db,
 	cuaSo: { gt: Date; lte: Date },
 ): Promise<Gui[]> {
-	const [binhLuan, capNhat] = await Promise.all([
+	const [binhLuan, capNhat, ghiNhan] = await Promise.all([
 		db.okrComment.findMany({
 			where: { createdAt: cuaSo, objective: { status: { not: DA_BO } } },
 			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
@@ -364,6 +372,18 @@ async function viecTraoDoi(
 			select: {
 				authorUserId: true,
 				keyResult: { select: { objectiveId: true } },
+			},
+		}),
+		db.okrGhiNhan.findMany({
+			where: { createdAt: cuaSo, objective: { status: { not: DA_BO } } },
+			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+			select: {
+				id: true,
+				objectiveId: true,
+				tacGiaUserId: true,
+				objective: { select: { title: true } },
+				tacGia: { select: { name: true } },
+				nhan: { select: { userId: true }, orderBy: { userId: "asc" } },
 			},
 		}),
 	]);
@@ -404,6 +424,22 @@ async function viecTraoDoi(
 				}),
 			),
 	);
+	const duocGhiNhan = ghiNhan.flatMap((g) =>
+		g.nhan
+			.filter((n) => n.userId !== g.tacGiaUserId)
+			.map(
+				(n): Gui => ({
+					userId: n.userId,
+					viec: {
+						loai: "okr-ghi-nhan",
+						ghiNhanId: g.id,
+						objectiveId: g.objectiveId,
+						nhan: g.objective.title,
+						nguoiGui: g.tacGia.name,
+					},
+				}),
+			),
+	);
 	const theo = theoDoi.flatMap((f): Gui[] => {
 		const soCapNhat = capNhat.filter(
 			(c) =>
@@ -427,7 +463,7 @@ async function viecTraoDoi(
 			},
 		];
 	});
-	return [...nhacTen, ...theo];
+	return [...nhacTen, ...duocGhiNhan, ...theo];
 }
 
 export async function viecOkrCanNhac(

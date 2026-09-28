@@ -16,6 +16,7 @@ import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	danhDauViecInput,
 	ganSangKienInput,
+	guiGhiNhanInput,
 	idInput,
 	suaViecInput,
 	themBangChungInput,
@@ -184,6 +185,13 @@ const DAU_VAO_HOP_LE = {
 		ghiChu: "",
 	},
 	"okr.goBangChung": { id: "khong-co" },
+	"okr.guiGhiNhan": {
+		objectiveId: "khong-co",
+		keyResultId: null,
+		nguoiNhan: ["khong-co"],
+		loiNhan: "Cảm ơn đã chốt kho mới",
+	},
+	"okr.goGhiNhan": { id: "khong-co" },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -208,6 +216,8 @@ const THU_TUC_CANH_KR = {
 	"okr.ganSangKien": ganSangKienInput,
 	"okr.themBangChung": themBangChungInput,
 	"okr.goBangChung": idInput,
+	"okr.guiGhiNhan": guiGhiNhanInput,
+	"okr.goGhiNhan": idInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

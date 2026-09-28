@@ -20,6 +20,7 @@ export const TIEU_DE = {
 	"okr-kr-im": "KR im",
 	"okr-duoc-giao": "Được giao",
 	"okr-nhac-ten": "Nhắc tên",
+	"okr-ghi-nhan": "Ghi nhận",
 	"okr-theo-doi": "Đang theo dõi",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",
@@ -76,6 +77,8 @@ function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
 				: `Bạn phụ trách mục tiêu «${chu(v.nhan)}»`;
 		case "okr-nhac-ten":
 			return `${chu(v.nguoiTen)} nhắc tên bạn ở «${chu(v.nhan)}»`;
+		case "okr-ghi-nhan":
+			return `${chu(v.nguoiGui)} ghi nhận bạn ở «${chu(v.nhan)}»`;
 		case "okr-theo-doi":
 			return `«${chu(v.nhan)}» có ${v.capNhat} cập nhật, ${v.binhLuan} bình luận mới`;
 	}

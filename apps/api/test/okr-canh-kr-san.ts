@@ -71,6 +71,61 @@ export async function gieoCanhKr(): Promise<SanCanhKr> {
 	};
 }
 
+export async function nguoiDaRoi(ten: string): Promise<string> {
+	const id = await nguoiMoi(ten);
+	const thanhVien = await db.member.findFirstOrThrow({
+		where: { userId: id },
+		select: { id: true },
+	});
+	ok(
+		await goi("workspace.removeMember", { memberId: thanhVien.id }),
+		`go thanh vien ${ten}`,
+	);
+	return id;
+}
+
+export async function mucTieuNhap(
+	san: SanCanhKr,
+): Promise<{ mt: string; kr: string }> {
+	const { T } = san.nguoi;
+	const mt = idTra(
+		await goi(
+			"okr.createObjective",
+			{
+				cycleId: san.ky,
+				unit: { level: "phong-ban", departmentId: san.p1 },
+				title: ma("canh muc tieu nhap"),
+				kind: "cam-ket",
+				ownerUserId: T.id,
+				participantIds: [],
+				whyNow: "",
+			},
+			T.cookie,
+		),
+		"tao muc tieu nhap",
+	);
+	const kr = idTra(
+		await goi(
+			"okr.createKeyResult",
+			{
+				objectiveId: mt,
+				title: ma("canh kr nhap"),
+				kind: "tang-toi",
+				ownerUserId: T.id,
+				startValue: 0,
+				targetValue: 100,
+				currentValue: 0,
+				unit: "",
+				dueOn: null,
+				weight: 1,
+			},
+			T.cookie,
+		),
+		"tao kr nhap",
+	);
+	return { mt, kr };
+}
+
 export const TEN_C = "Gọi lại quý 4";
 export const TEN_C_MOI = "Gọi lại Q4";
 
@@ -179,7 +234,12 @@ export async function gieoSangKien(san: SanCanhKr): Promise<SanSangKien> {
 	return { C, P, congTyX: x.congTy, tenX: x.ten, tenPhuTrachC };
 }
 
-export type BangDem = "okrViecKr" | "okrTrail" | "okrBangChung" | "okrGhiNhan";
+export type BangDem =
+	| "okrViecKr"
+	| "okrTrail"
+	| "okrBangChung"
+	| "okrGhiNhan"
+	| "okrGhiNhanNhan";
 
 const cuaSan = { cycle: { name: { startsWith: TIEN_TO } } };
 
@@ -199,6 +259,10 @@ export async function dem(bang: BangDem): Promise<number> {
 			});
 		case "okrGhiNhan":
 			return db.okrGhiNhan.count({ where: { objective: cuaSan } });
+		case "okrGhiNhanNhan":
+			return db.okrGhiNhanNhan.count({
+				where: { ghiNhan: { objective: cuaSan } },
+			});
 	}
 }
 

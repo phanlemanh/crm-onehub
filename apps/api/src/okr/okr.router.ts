@@ -1,6 +1,7 @@
 import {
 	danhDauViecInput,
 	ganSangKienInput,
+	guiGhiNhanInput,
 	suaViecInput,
 	themBangChungInput,
 	themViecInput,
@@ -81,6 +82,7 @@ import {
 	canhKrInput,
 	canhKrOutput,
 	goBangChungInput,
+	goGhiNhanInput,
 	goViecInput,
 	idOutput,
 } from "./okr-canh-kr.contracts";
@@ -645,8 +647,11 @@ export class OkrRouter {
 		output: commentsOutput,
 		meta: restMeta("GET", "/okr/objectives/{objectiveId}/comments", TAG),
 	})
-	comments(@Input() input: z.infer<typeof commentsInput>) {
-		return this.traoDoi.comments(input.objectiveId);
+	comments(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof commentsInput>,
+	) {
+		return this.traoDoi.comments(ctx.user.id, input.objectiveId);
 	}
 
 	@Mutation({
@@ -755,6 +760,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof goBangChungInput>,
 	) {
 		return this.canh.goBangChung(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: guiGhiNhanInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/objectives/{objectiveId}/ghi-nhan", TAG),
+	})
+	guiGhiNhan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof guiGhiNhanInput>,
+	) {
+		return this.canh.guiGhiNhan(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: goGhiNhanInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/ghi-nhan/{id}/go", TAG),
+	})
+	goGhiNhan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof goGhiNhanInput>,
+	) {
+		return this.canh.goGhiNhan(ctx.user.id, input);
 	}
 
 	@Mutation({

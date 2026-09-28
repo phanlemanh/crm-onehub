@@ -16,6 +16,10 @@ import {
 	lienKetChoVai,
 	vetSangKienChoVai,
 } from "../src/okr/canh-kr";
+import type {
+	CommentsOutput,
+	ViecCuaToiOutput,
+} from "../src/okr/okr.contracts";
 import type { CanhKrOutput, LienKet } from "../src/okr/okr-canh-kr.contracts";
 import {
 	chienDichMoi,
@@ -25,6 +29,8 @@ import {
 	gieoCanhKr,
 	gieoSangKien,
 	keHoachMoi,
+	mucTieuNhap,
+	nguoiDaRoi,
 	type SanCanhKr,
 	type SanSangKien,
 	TEN_C,
@@ -38,6 +44,7 @@ import {
 	goiQuery,
 	type Json,
 	ok,
+	phien,
 	type TraLoi,
 } from "./okr-san";
 
@@ -55,6 +62,14 @@ const CAU = {
 	tieuDeDai: `tieuDe: Too big: expected string to have <=${OKR_CANH_KR.tieuDe.max} characters`,
 	chiMocXongDinhDuoc:
 		"Chỉ đính được bằng chứng cho KR kiểu «mốc» đã đánh dấu xong.",
+	tuGhiNhan: "Không tự ghi nhận chính mình — chọn người khác.",
+	nguoiNhanRoi: "Người nhận phải là thành viên còn trong không gian làm việc.",
+	nguoiNhanNhieu: `nguoiNhan: Too big: expected array to have <=${OKR_CANH_KR.nguoiNhan.max} items`,
+	krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
+	ghiNhanChiCongBo: "Chỉ ghi nhận được trên mục tiêu đã công bố.",
+	loiTrong: `loiNhan: Too small: expected string to have >=${OKR_CANH_KR.loiNhan.min} characters`,
+	loiDai: `loiNhan: Too big: expected string to have <=${OKR_CANH_KR.loiNhan.max} characters`,
+	khongGoDuocGhiNhan: "Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
 } as const;
 
 const HANH_DONG_VIEC = ["them-viec", "sua-viec", "xong-viec", "go-viec"];
@@ -1094,6 +1109,342 @@ describe("bang-chung", () => {
 				khongTonTai: "404 true",
 			});
 			ok(await goi("okr.goBangChung", { id }, A.cookie), "don bang chung");
+		},
+		CHO_MS,
+	);
+});
+
+const LOI_CAM_ON = "Cảm ơn đã chốt kho mới";
+
+async function guiGhiNhan(
+	ai: string,
+	vao: {
+		objectiveId: string;
+		keyResultId?: string | null;
+		nguoiNhan: string[];
+		loiNhan?: string;
+	},
+): Promise<TraLoi> {
+	return goi(
+		"okr.guiGhiNhan",
+		{
+			objectiveId: vao.objectiveId,
+			keyResultId: vao.keyResultId ?? null,
+			nguoiNhan: vao.nguoiNhan,
+			loiNhan: vao.loiNhan ?? LOI_CAM_ON,
+		},
+		ai,
+	);
+}
+
+async function demGhiNhan(): Promise<{
+	ghiNhan: number;
+	nhan: number;
+	vet: number;
+}> {
+	return {
+		ghiNhan: await dem("okrGhiNhan"),
+		nhan: await dem("okrGhiNhanNhan"),
+		vet: await dem("okrTrail"),
+	};
+}
+
+describe("ghi-nhan-gui", () => {
+	let san: SanCanhKr;
+	let nhap: { mt: string; kr: string };
+	let roi: string;
+	beforeAll(async () => {
+		san = await gieoCanhKr();
+		nhap = await mucTieuNhap(san);
+		roi = await nguoiDaRoi("canh-R");
+	}, CHO_MS);
+	afterAll(donSanCanhKr, CHO_MS);
+
+	test(
+		"ghi-nhan-gui: O (vai okr) gui cho A, B kem KR — DB mot ghi nhan hai nguoi nhan, mot vet; Trao doi xen binh luan t1 < ghi nhan t2 < binh luan t3",
+		async () => {
+			const { A, B, O } = san.nguoi;
+			const c1 = idCua(
+				await goi(
+					"okr.addComment",
+					{ objectiveId: san.mt, body: "t1", mentionUserIds: [] },
+					A.cookie,
+				),
+				"binh luan t1",
+			);
+			const g = idCua(
+				await guiGhiNhan(O.cookie, {
+					objectiveId: san.mt,
+					keyResultId: san.kr,
+					nguoiNhan: [A.id, B.id],
+				}),
+				"gui ghi nhan",
+			);
+			const c3 = idCua(
+				await goi(
+					"okr.addComment",
+					{ objectiveId: san.mt, body: "t3", mentionUserIds: [] },
+					B.cookie,
+				),
+				"binh luan t3",
+			);
+
+			const hang = await db.okrGhiNhan.findUniqueOrThrow({
+				where: { id: g },
+				select: {
+					objectiveId: true,
+					keyResultId: true,
+					loiNhan: true,
+					tacGiaUserId: true,
+					nhan: { select: { userId: true }, orderBy: { userId: "asc" } },
+				},
+			});
+			expect({ ...hang, nhan: hang.nhan.map((n) => n.userId) }).toEqual({
+				objectiveId: san.mt,
+				keyResultId: san.kr,
+				loiNhan: LOI_CAM_ON,
+				tacGiaUserId: O.id,
+				nhan: [A.id, B.id].sort(),
+			});
+
+			const vet = await db.okrTrail.findMany({
+				where: { objectiveId: san.mt, action: "ghi-nhan" },
+				select: { actorUserId: true, keyResultId: true, after: true },
+			});
+			expect(vet.map((v) => ({ ...v, after: parseOkrVet(v.after) }))).toEqual([
+				{
+					actorUserId: O.id,
+					keyResultId: san.kr,
+					after: { ghiNhanId: g, nguoiNhan: [A.id, B.id] },
+				},
+			]);
+
+			const doc1 = await doc<CommentsOutput>("okr.comments", O.cookie, {
+				objectiveId: san.mt,
+			});
+			expect(doc1.dong.map((d) => d.loai)).toEqual([
+				"binh-luan",
+				"ghi-nhan",
+				"binh-luan",
+			]);
+			expect(doc1.dong.map((d) => d.id)).toEqual([c1, g, c3]);
+			const dongG = doc1.dong[1];
+			expect(dongG?.loai === "ghi-nhan" ? dongG : null).toEqual({
+				loai: "ghi-nhan",
+				id: g,
+				createdAt: expect.any(String),
+				nguoiGui: { id: O.id, name: O.id, email: expect.any(String) },
+				nguoiNhan: [A.id, B.id].sort().map((id) => ({
+					id,
+					name: id,
+					email: expect.any(String),
+				})),
+				keyResultId: san.kr,
+				keyResultTitle: expect.any(String),
+				loiNhan: LOI_CAM_ON,
+				goDuoc: true,
+			});
+			const goDuocTheoNguoi = async (ai: string) => {
+				const d = await doc<CommentsOutput>("okr.comments", ai, {
+					objectiveId: san.mt,
+				});
+				return d.dong.flatMap((x) => (x.loai === "ghi-nhan" ? [x.goDuoc] : []));
+			};
+			expect({
+				A: await goDuocTheoNguoi(A.cookie),
+				quan: await goDuocTheoNguoi("quan"),
+			}).toEqual({ A: [false], quan: [true] });
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ghi-nhan-gui: bay ca tu choi viet truoc — moi ca cau ghim, dem hang khong doi",
+		async () => {
+			const { A, B, T, M, O } = san.nguoi;
+			const ca: [string, () => Promise<TraLoi>, string][] = [
+				[
+					"tu minh",
+					() =>
+						guiGhiNhan(O.cookie, { objectiveId: san.mt, nguoiNhan: [O.id] }),
+					CAU.tuGhiNhan,
+				],
+				[
+					"nguoi da roi",
+					() =>
+						guiGhiNhan(O.cookie, {
+							objectiveId: san.mt,
+							nguoiNhan: [A.id, roi],
+						}),
+					CAU.nguoiNhanRoi,
+				],
+				[
+					"sau nguoi nhan",
+					() =>
+						guiGhiNhan(O.cookie, {
+							objectiveId: san.mt,
+							nguoiNhan: [A.id, B.id, T.id, M.id, roi, `${roi}-6`],
+						}),
+					CAU.nguoiNhanNhieu,
+				],
+				[
+					"KR cua muc tieu khac",
+					() =>
+						guiGhiNhan(O.cookie, {
+							objectiveId: san.mt,
+							keyResultId: nhap.kr,
+							nguoiNhan: [A.id],
+						}),
+					CAU.krKhacMucTieu,
+				],
+				[
+					"muc tieu nhap",
+					() =>
+						guiGhiNhan(O.cookie, { objectiveId: nhap.mt, nguoiNhan: [A.id] }),
+					CAU.ghiNhanChiCongBo,
+				],
+				[
+					"loi trong",
+					() =>
+						guiGhiNhan(O.cookie, {
+							objectiveId: san.mt,
+							nguoiNhan: [A.id],
+							loiNhan: "   ",
+						}),
+					CAU.loiTrong,
+				],
+				[
+					"loi 501 ky tu",
+					() =>
+						guiGhiNhan(O.cookie, {
+							objectiveId: san.mt,
+							nguoiNhan: [A.id],
+							loiNhan: "x".repeat(OKR_CANH_KR.loiNhan.max + 1),
+						}),
+					CAU.loiDai,
+				],
+			];
+			const nhan: string[] = [];
+			for (const [ten, lam, cau] of ca) {
+				const truoc = await demGhiNhan();
+				const tra = await lam();
+				const sau = await demGhiNhan();
+				nhan.push(
+					`${ten}: ${tra.status} ${tra.loi === cau ? "cau-ghim" : tra.loi} ${JSON.stringify(sau) === JSON.stringify(truoc) ? "khong-doi" : JSON.stringify({ truoc, sau })}`,
+				);
+			}
+			expect(nhan).toEqual(ca.map(([ten]) => `${ten}: 400 cau-ghim khong-doi`));
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ghi-nhan-gui: goGhiNhan — A (nguoi nhan) 403; O go cua minh 0 hang, vet go-ghi-nhan; quan tri go ghi nhan cua B",
+		async () => {
+			const { A, B, O } = san.nguoi;
+			const g1 = idCua(
+				await guiGhiNhan(O.cookie, { objectiveId: san.mt, nguoiNhan: [A.id] }),
+				"O gui g1",
+			);
+			const g2 = idCua(
+				await guiGhiNhan(B.cookie, { objectiveId: san.mt, nguoiNhan: [A.id] }),
+				"B gui g2",
+			);
+			const truoc = await demGhiNhan();
+			const traA = await goi("okr.goGhiNhan", { id: g1 }, A.cookie);
+			const sauA = await demGhiNhan();
+			expect(
+				`${traA.status} ${traA.loi} ${JSON.stringify(sauA) === JSON.stringify(truoc) ? "khong-doi" : JSON.stringify({ truoc, sauA })}`,
+			).toBe(`403 ${CAU.khongGoDuocGhiNhan} khong-doi`);
+
+			ok(await goi("okr.goGhiNhan", { id: g1 }, O.cookie), "O go g1");
+			ok(await goi("okr.goGhiNhan", { id: g2 }, "quan"), "quan tri go g2");
+			const conLai = async (id: string) => ({
+				ghiNhan: await db.okrGhiNhan.count({ where: { id } }),
+				nhan: await db.okrGhiNhanNhan.count({ where: { ghiNhanId: id } }),
+			});
+			expect({ g1: await conLai(g1), g2: await conLai(g2) }).toEqual({
+				g1: { ghiNhan: 0, nhan: 0 },
+				g2: { ghiNhan: 0, nhan: 0 },
+			});
+			const vet = await db.okrTrail.findMany({
+				where: { objectiveId: san.mt, action: "go-ghi-nhan" },
+				orderBy: [{ at: "asc" }, { id: "asc" }],
+				select: { actorUserId: true, before: true, after: true },
+			});
+			expect(
+				vet.map((v) => ({
+					actorUserId: v.actorUserId,
+					before: parseOkrVet(v.before),
+					after: parseOkrVet(v.after),
+				})),
+			).toEqual([
+				{
+					actorUserId: O.id,
+					before: { ghiNhanId: g1, nguoiNhan: [A.id] },
+					after: null,
+				},
+				{
+					actorUserId: phien.quan.nguoi,
+					before: { ghiNhanId: g2, nguoiNhan: [A.id] },
+					after: null,
+				},
+			]);
+		},
+		CHO_MS,
+	);
+});
+
+describe("ghi-nhan-bao", () => {
+	let san: SanCanhKr;
+	beforeAll(async () => {
+		san = await gieoCanhKr();
+	}, CHO_MS);
+	afterAll(donSanCanhKr, CHO_MS);
+
+	test(
+		"ghi-nhan-bao: O gui cho A, B — viecCuaToi cua A va B moi nguoi dung mot muc okr-ghi-nhan, cua O khong muc nao, khong okr-nhac-ten tu ghi nhan",
+		async () => {
+			const { A, B, O } = san.nguoi;
+			const g = idCua(
+				await guiGhiNhan(O.cookie, {
+					objectiveId: san.mt,
+					nguoiNhan: [A.id, B.id],
+				}),
+				"gui ghi nhan",
+			);
+			const mt = await db.okrObjective.findUniqueOrThrow({
+				where: { id: san.mt },
+				select: { title: true },
+			});
+			const theoNguoi = async (ai: string) => {
+				const viec = (await doc<ViecCuaToiOutput>("okr.viecCuaToi", ai)).viec;
+				return {
+					ghiNhan: viec.filter((v) => v.loai === "okr-ghi-nhan"),
+					nhacTen: viec.filter((v) => v.loai === "okr-nhac-ten").length,
+				};
+			};
+			const mong = {
+				ghiNhan: [
+					{
+						loai: "okr-ghi-nhan" as const,
+						ghiNhanId: g,
+						objectiveId: san.mt,
+						nhan: mt.title,
+						nguoiGui: O.id,
+					},
+				],
+				nhacTen: 0,
+			};
+			expect({
+				A: await theoNguoi(A.cookie),
+				B: await theoNguoi(B.cookie),
+				O: await theoNguoi(O.cookie),
+			}).toEqual({
+				A: mong,
+				B: mong,
+				O: { ghiNhan: [], nhacTen: 0 },
+			});
 		},
 		CHO_MS,
 	);

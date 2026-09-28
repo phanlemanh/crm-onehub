@@ -100,6 +100,13 @@ export const OKR = {
 				"Chỉ đính được bằng chứng cho KR kiểu «mốc» đã đánh dấu xong.",
 			khongCoBangChung: (id: string) =>
 				`Không có bằng chứng nào mang mã ${id}.`,
+			ghiNhanChiCongBo: "Chỉ ghi nhận được trên mục tiêu đã công bố.",
+			tuGhiNhan: "Không tự ghi nhận chính mình — chọn người khác.",
+			nguoiNhanKhongConThanhVien:
+				"Người nhận phải là thành viên còn trong không gian làm việc.",
+			khongCoGhiNhan: (id: string) => `Không có ghi nhận nào mang mã ${id}.`,
+			khongGoDuocGhiNhan:
+				"Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

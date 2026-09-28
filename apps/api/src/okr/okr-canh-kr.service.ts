@@ -5,6 +5,7 @@ import {
 	type BangChungVao,
 	type DanhDauViecInput,
 	type GanSangKienInput,
+	type GuiGhiNhanInput,
 	type IdInput,
 	LOAI_VIEC_KR,
 	type SuaViecInput,
@@ -467,6 +468,93 @@ export class OkrCanhKrService {
 				},
 				input,
 			);
+		});
+	}
+
+	async guiGhiNhan(
+		userId: string,
+		input: GuiGhiNhanInput,
+		now = new Date(),
+	): Promise<{ id: string }> {
+		return this.db.$transaction(async (tx) => {
+			const mt = await tx.okrObjective.findUnique({
+				where: { id: input.objectiveId },
+				select: { id: true, status: true },
+			});
+			if (!mt) throw new NotFoundException(T.khongCoMucTieu(input.objectiveId));
+			if (mt.status !== "cong-bo")
+				throw new BadRequestException(T.canhKr.ghiNhanChiCongBo);
+			if (input.nguoiNhan.includes(userId))
+				throw new BadRequestException(T.canhKr.tuGhiNhan);
+			if (input.keyResultId !== null) {
+				const kr = await tx.okrKeyResult.findUnique({
+					where: { id: input.keyResultId },
+					select: { objectiveId: true },
+				});
+				if (!kr) throw new NotFoundException(T.khongCoKr(input.keyResultId));
+				if (kr.objectiveId !== mt.id)
+					throw new BadRequestException(T.traoDoi.krKhacMucTieu);
+			}
+			await this.okr.assertThanhVien(
+				tx,
+				input.nguoiNhan,
+				() => T.canhKr.nguoiNhanKhongConThanhVien,
+			);
+			const row = await tx.okrGhiNhan.create({
+				data: {
+					objectiveId: mt.id,
+					keyResultId: input.keyResultId,
+					loiNhan: input.loiNhan,
+					tacGiaUserId: userId,
+					createdAt: now,
+					nhan: { create: input.nguoiNhan.map((id) => ({ userId: id })) },
+				},
+				select: { id: true },
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"ghi-nhan",
+				{
+					objectiveId: mt.id,
+					keyResultId: input.keyResultId ?? undefined,
+				},
+				null,
+				{ ghiNhanId: row.id, nguoiNhan: input.nguoiNhan },
+			);
+			return { id: row.id };
+		});
+	}
+
+	async goGhiNhan(userId: string, input: IdInput): Promise<{ id: string }> {
+		const q = await this.access.quyen(userId);
+		return this.db.$transaction(async (tx) => {
+			const row = await tx.okrGhiNhan.findUnique({
+				where: { id: input.id },
+				select: {
+					id: true,
+					objectiveId: true,
+					keyResultId: true,
+					tacGiaUserId: true,
+					nhan: { select: { userId: true }, orderBy: { userId: "asc" } },
+				},
+			});
+			if (!row) throw new NotFoundException(T.canhKr.khongCoGhiNhan(input.id));
+			if (row.tacGiaUserId !== userId && !q.quanTri)
+				throw new ForbiddenException(T.canhKr.khongGoDuocGhiNhan);
+			await tx.okrGhiNhan.delete({ where: { id: row.id } });
+			await this.okr.vet(
+				tx,
+				userId,
+				"go-ghi-nhan",
+				{
+					objectiveId: row.objectiveId,
+					keyResultId: row.keyResultId ?? undefined,
+				},
+				{ ghiNhanId: row.id, nguoiNhan: row.nhan.map((n) => n.userId) },
+				null,
+			);
+			return { id: row.id };
 		});
 	}
 

@@ -1,4 +1,8 @@
-import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
+import {
+	canManageOnboarding,
+	isWorkspaceAdmin,
+	workspaceRoleOf,
+} from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { laViecOkr, lienQuanOkr } from "@crm/db/okr-nhac";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
@@ -20,6 +24,7 @@ import {
 import { InjectDatabase } from "../database/database.constants";
 import type {
 	CommentsOutput,
+	DongTraoDoi,
 	FollowOutput,
 	ThanhVienOutput,
 	TransferOkrOutput,
@@ -88,23 +93,43 @@ export class OkrTraoDoiService {
 			);
 	}
 
-	async comments(objectiveId: string): Promise<CommentsOutput> {
+	async comments(userId: string, objectiveId: string): Promise<CommentsOutput> {
 		await this.mucTieuCo(this.db, objectiveId);
-		const rows = await this.db.okrComment.findMany({
-			where: { objectiveId },
-			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-			include: {
-				keyResult: { select: { title: true } },
-				mentions: { select: { userId: true } },
-			},
-		});
+		const [rows, ghiNhan, role] = await Promise.all([
+			this.db.okrComment.findMany({
+				where: { objectiveId },
+				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+				include: {
+					keyResult: { select: { title: true } },
+					mentions: { select: { userId: true } },
+				},
+			}),
+			this.db.okrGhiNhan.findMany({
+				where: { objectiveId },
+				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+				select: {
+					id: true,
+					createdAt: true,
+					keyResultId: true,
+					loiNhan: true,
+					tacGiaUserId: true,
+					keyResult: { select: { title: true } },
+					nhan: { select: { userId: true } },
+				},
+			}),
+			workspaceRoleOf(userId),
+		]);
 		const ids = [
-			...new Set(
-				rows.flatMap((r) => [
+			...new Set([
+				...rows.flatMap((r) => [
 					r.authorUserId,
 					...r.mentions.map((m) => m.userId),
 				]),
-			),
+				...ghiNhan.flatMap((g) => [
+					g.tacGiaUserId,
+					...g.nhan.map((n) => n.userId),
+				]),
+			]),
 		];
 		const nguoi = await this.db.user.findMany({
 			where: { id: { in: ids } },
@@ -116,6 +141,31 @@ export class OkrTraoDoiService {
 				name: T.traoDoi.nguoiKhongCon,
 				email: "",
 			};
+		const theoTen = (a: { name: string }, b: { name: string }) =>
+			a.name.localeCompare(b.name, "vi");
+		const quanTri = isWorkspaceAdmin(role);
+		const dong: DongTraoDoi[] = [
+			...rows.map(
+				(r): DongTraoDoi => ({
+					loai: "binh-luan",
+					id: r.id,
+					createdAt: r.createdAt.toISOString(),
+				}),
+			),
+			...ghiNhan.map(
+				(g): DongTraoDoi => ({
+					loai: "ghi-nhan",
+					id: g.id,
+					createdAt: g.createdAt.toISOString(),
+					nguoiGui: ai(g.tacGiaUserId),
+					nguoiNhan: g.nhan.map((n) => ai(n.userId)).sort(theoTen),
+					keyResultId: g.keyResultId,
+					keyResultTitle: g.keyResult?.title ?? null,
+					loiNhan: g.loiNhan,
+					goDuoc: g.tacGiaUserId === userId || quanTri,
+				}),
+			),
+		].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 		return {
 			comments: rows.map((r) => ({
 				id: r.id,
@@ -124,10 +174,9 @@ export class OkrTraoDoiService {
 				keyResultTitle: r.keyResult?.title ?? null,
 				body: r.body,
 				createdAt: r.createdAt.toISOString(),
-				mentions: r.mentions
-					.map((m) => ai(m.userId))
-					.sort((a, b) => a.name.localeCompare(b.name, "vi")),
+				mentions: r.mentions.map((m) => ai(m.userId)).sort(theoTen),
 			})),
+			dong,
 		};
 	}
 

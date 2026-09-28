@@ -319,6 +319,25 @@ export const guiCapNhatOutput = z.object({
 	seconds: z.number(),
 });
 
+export const dongTraoDoi = z.discriminatedUnion("loai", [
+	z.object({
+		loai: z.literal("binh-luan"),
+		id: z.string(),
+		createdAt: z.string(),
+	}),
+	z.object({
+		loai: z.literal("ghi-nhan"),
+		id: z.string(),
+		createdAt: z.string(),
+		nguoiGui: nguoiOkr,
+		nguoiNhan: z.array(nguoiOkr),
+		keyResultId: z.string().nullable(),
+		keyResultTitle: z.string().nullable(),
+		loiNhan: z.string(),
+		goDuoc: z.boolean(),
+	}),
+]);
+
 export const commentsOutput = z.object({
 	comments: z.array(
 		z.object({
@@ -331,6 +350,7 @@ export const commentsOutput = z.object({
 			mentions: z.array(nguoiOkr),
 		}),
 	),
+	dong: z.array(dongTraoDoi),
 });
 export const addCommentOutput = z.object({ id: z.string() });
 export const thanhVienOutput = z.array(nguoiOkr);
@@ -359,6 +379,7 @@ export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
 export type CommentsOutput = z.infer<typeof commentsOutput>;
+export type DongTraoDoi = z.infer<typeof dongTraoDoi>;
 export type FollowOutput = z.infer<typeof followOutput>;
 export type ThanhVienOutput = z.infer<typeof thanhVienOutput>;
 export type ViecOkrOutput = z.infer<typeof viecOkr>;

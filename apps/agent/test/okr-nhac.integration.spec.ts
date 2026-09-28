@@ -30,12 +30,14 @@ import {
 	NGAY_NHAC,
 	ngayCach,
 	PHUT_SAU,
+	PHUT_TRUOC,
 } from "./support/nhac-gui-gieo";
 import {
 	batBot,
 	binhLuan,
 	donOkr,
 	GIO_MS,
+	ghiNhan,
 	gieoBoPhan,
 	gieoChuKy,
 	gieoKr,
@@ -61,6 +63,7 @@ const KHOA_MA = [
 	"keyResultId",
 	"objectiveId",
 	"commentId",
+	"ghiNhanId",
 ];
 
 function vn(luc: string): Date {
@@ -965,5 +968,85 @@ describe("su-kien", () => {
 			N: [],
 			D: "khong trong Map",
 		});
+	});
+});
+
+describe("ghi-nhan", () => {
+	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+	const TEN_MUC_TIEU = "Chốt kho mới quý 4";
+
+	async function gieoBa() {
+		const O = await gieoNguoi("Oanh");
+		const A = await gieoNguoi("An");
+		const B = await gieoNguoi("Binh");
+		await noiZalo(A.id, "ZA");
+		await batBot();
+		const chay = await gieoChuKy("dang-chay", 1);
+		const mt = await gieoMucTieu({
+			cycleId: chay,
+			chu: O.id,
+			tieuDe: TEN_MUC_TIEU,
+			congBo: ngayCach(goc, -20),
+		});
+		return { O, A, B, mt };
+	}
+
+	test("ghi-nhan: tin sang co dung mot dong — O gui cho A, B trong cua so; A nhan mot dong ten O va ten muc tieu, B co muc, O khong hang", async () => {
+		const g = await gieoBa();
+		const id = await ghiNhan({
+			objectiveId: g.mt,
+			tacGia: g.O.id,
+			nhan: [g.A.id, g.B.id],
+			luc: new Date(goc.getTime() - 2 * GIO_MS),
+		});
+		setSystemTime(goc);
+		await lenLichNhac(goc);
+		const mucCua = async (userId: string) =>
+			(await hangCuaNguoi(userId)).map((h) => parseNhacPayload(h.payload).muc);
+		const mucB = await mucCua(g.B.id);
+		const soHangO = (await hangCuaNguoi(g.O.id)).length;
+		const r = await guiQuaZalo(g.A.id, goc);
+		const text = r.z.guiToi("ZA")[0]?.body.text ?? "";
+		const dongGhiNhan = text
+			.split("\n")
+			.filter((d) => d.includes("ghi nhận bạn"));
+		expect({
+			ket: r.ket,
+			tieuDe: text.split("\n").includes(TIEU_DE["okr-ghi-nhan"]),
+			soDong: dongGhiNhan.length,
+			coTenO: dongGhiNhan.map((d) => d.includes("Oanh")),
+			coTenMucTieu: dongGhiNhan.map((d) => d.includes(TEN_MUC_TIEU)),
+			daGui: r.payload.daGui,
+			mucB,
+			soHangO,
+		}).toEqual({
+			ket: "da-gui",
+			tieuDe: true,
+			soDong: 1,
+			coTenO: [true],
+			coTenMucTieu: [true],
+			daGui: [{ loai: "okr-ghi-nhan", ghiNhanId: id }],
+			mucB: [[{ loai: "okr-ghi-nhan", ghiNhanId: id }]],
+			soHangO: 0,
+		});
+	});
+
+	test("ghi-nhan: ngoai cua so — 08:29 hom qua va 08:30:00.001 hom nay — khong dong, A khong hang", async () => {
+		const g = await gieoBa();
+		await ghiNhan({
+			objectiveId: g.mt,
+			tacGia: g.O.id,
+			nhan: [g.A.id],
+			luc: ngayCach(lucVN(NGAY_NHAC, PHUT_TRUOC), HOM_QUA),
+		});
+		await ghiNhan({
+			objectiveId: g.mt,
+			tacGia: g.O.id,
+			nhan: [g.A.id],
+			luc: new Date(lucVN(NGAY_NHAC, 0).getTime() + 1),
+		});
+		setSystemTime(goc);
+		await lenLichNhac(goc);
+		expect((await hangCuaNguoi(g.A.id)).length).toBe(0);
 	});
 });
