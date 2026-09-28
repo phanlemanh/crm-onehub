@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0cc186649b9d94a119eeb16e2d65a8726684a3cb
+verified_commit: 6f4df16c98497b4149bb0d84159da52316abd38b
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -259,3 +259,7 @@ none — every multi-run eval is uniform
 
 Round 1: E9 chưa chặn máy chủ ngoài trỏ qua tham số truy vấn host/hostaddr; E16 thiếu trường question theo khuôn bộ chấm — cả hai đã sửa (chan.ts thêm nhánh đọc tham số host/hostaddr; contract thêm question cho E16). Returned to implementation.
 Round 2: Toàn bộ eval máy (E1–E12, E15, E17) và ui-check E14 PASS trên commit 0cc18664; E13 carry-forward từ round 1 (delta không chạm paths của eval). E16 (judgment) — hội đồng chia phiếu: domain-correctness FAIL (thiếu mục từ điển "N1" ở CONTEXT.md), operational-feasibility PASS, spec-alignment UNCERTAIN (thiếu chan.ts và cong-ty.json trong input để kiểm) — đề xuất tổng UNCERTAIN, chờ human_override ở Cổng 2. Verdict tổng: PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-09-28, do gộp onehub (#184) sau chữ ký
+run_id: repin-20260928T064127Z-26827
+sha: 6f4df16c98497b4149bb0d84159da52316abd38b · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E14, E16 (E16 không khai paths)
