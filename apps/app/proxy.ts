@@ -69,6 +69,10 @@ export async function proxy(request: NextRequest) {
 		readResearchGate(request),
 	]);
 
+	if (workspace.hetPhien && !isPublic(pathname)) {
+		return NextResponse.redirect(new URL(SIGN_IN_PATH, request.nextUrl));
+	}
+
 	if (workspace.inWorkspace === false) {
 		return sendTo(NO_WORKSPACE_PATH, request);
 	}

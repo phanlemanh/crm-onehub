@@ -767,6 +767,15 @@ executors:
     hth_so_tien: 'bun run test -- "cd apps/agent && bun test test/zalo-loc.spec.ts -t \"loc-che|so-tien\""'
     hth_thuoc_am: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cai-lenh|dang-ban\""'
     hth_token: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cung-phien|duong-chinh\""'
+    pcd_proxy_het_phien: cd apps/app && bun test ./test/onboarding-gate.spec.ts -t het-phien
+    pcd_proxy_giu_mo: cd apps/app && bun test ./test/onboarding-gate.spec.ts -t giu-mo
+    pcd_proxy_khong_dung: cd apps/app && bun test ./test/onboarding-gate.spec.ts -t khong-dung
+    pcd_doc_401: cd apps/app && bun test ./test/onboarding-gate.spec.ts -t doc-401
+    pcd_cong_cu: cd apps/app && bun test ./test/onboarding-gate.spec.ts
+    pcd_trang_goc_khong_phien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/phien-chet-trang-goc.dom.tsx -t khong-phien
+    pcd_trang_goc_con_phien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/phien-chet-trang-goc.dom.tsx -t con-phien
+    pcd_trang_goc_marketing: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/phien-chet-trang-goc.dom.tsx -t marketing-bat
+    pcd_het_quyen: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/phien-chet-het-quyen.dom.tsx
     tln_ma_tran_viec: cd packages/validation && bun test test/ai-chi-phi.spec.ts -t ma-tran-viec
     tln_so_moi_phien: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/so-chi-phi.integration.spec.ts -t moi-phien"
     tln_doi_soat: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ai-doi-soat.integration.spec.ts"
@@ -1302,6 +1311,8 @@ executors:
     hg_man_ban_ghi: 'CHI_BUOC=7 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     hg_san_thiet_ke: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca thiet-ke && cd packages/ui && bun test test/messages-guard.spec.ts test/locale-messages.spec.tsx"
     bom_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-mau/rang/man-bo-mau.mjs"'
+    pcd_do_man: GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-ci-only-google-client-id} GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-ci-only-google-client-secret} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs man"
+    pcd_do_api: GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-ci-only-google-client-id} GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-ci-only-google-client-secret} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs api"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
