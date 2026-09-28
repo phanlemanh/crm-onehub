@@ -604,7 +604,7 @@ function goiKit() {
 		khongDoDuoc(
 			`khong tim duoc design-gate.mjs cua bo kit acceptance-gate: ${(r.stderr ?? "").trim()}`,
 		);
-	return process.env.CLAUDE_PLUGIN_ROOT ?? r.stdout.trim();
+	return r.stdout.trim();
 }
 
 function caThietKe(gocSo, thay = new Map()) {
