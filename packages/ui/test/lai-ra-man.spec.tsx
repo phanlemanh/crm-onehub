@@ -284,25 +284,21 @@ function ghi(ten: string, gt: Record<string, BanVe[]> | MoNguyenBan) {
 	);
 }
 
-test(
-	"lai tung component ra man, doc chu ban ve that su ve",
-	async () => {
-		const tin = luot.signal;
-		const macDinh = MOI_MAC_DINH.docMacDinh(GOC_KHO);
-		const file = [...new Set(macDinh.map((m) => m.file))].sort();
-		expect(file.length).toBeGreaterThan(0);
+test("lai tung component ra man, doc chu ban ve that su ve", async () => {
+	const tin = luot.signal;
+	const macDinh = MOI_MAC_DINH.docMacDinh(GOC_KHO);
+	const file = [...new Set(macDinh.map((m) => m.file))].sort();
+	expect(file.length).toBeGreaterThan(0);
 
-		const banVe: Record<string, BanVe[]> = {};
-		for (const f of file) banVe[f] = await laiMotFile(f, "en", tin);
-		ghi("ve-that.json", banVe);
+	const banVe: Record<string, BanVe[]> = {};
+	for (const f of file) banVe[f] = await laiMotFile(f, "en", tin);
+	ghi("ve-that.json", banVe);
 
-		const veDuoc = Object.values(banVe)
-			.flat()
-			.filter((b) => b.loi_dong === null);
-		expect(veDuoc.length).toBeGreaterThan(0);
-	},
-	500,
-);
+	const veDuoc = Object.values(banVe)
+		.flat()
+		.filter((b) => b.loi_dong === null);
+	expect(veDuoc.length).toBeGreaterThan(0);
+}, 500);
 
 test(
 	"mo tung nguyen ban cua bang gioi han vong truoc",
