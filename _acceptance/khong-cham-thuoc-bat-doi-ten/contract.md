@@ -5,7 +5,7 @@ slug: khong-cham-thuoc-bat-doi-ten
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-28-khong-cham-thuoc-bat-doi-ten-design.md
 approved_by:
 approved_at:
@@ -53,3 +53,7 @@ Không gian liệt tay:
 
 - Vòng chạm `rang/` của hồ sơ đã ký `bo-chu-lap-keo-tha`, nên hồ sơ đó được ghim lại bằng `repin-lane.mjs` ở đỉnh nhánh sau khi gộp `origin/onehub`.
 - Phép đo C1–C6 dựng worktree tạm từ HEAD, nên thước đo là bản ĐÃ COMMIT; sửa thước mà chưa commit thì phép đo vẫn chạy bản cũ.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-28 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1 (sổ d-20260928T143111Z-5):
+
+- Ngoài-1: ca C6 của `doi-ten.mjs` chấp nhận mọi lối mã 2 «KHONG DO DUOC» của thước (ref hỏng, thiếu một trong cặp `--tu/--den`, merge-base hỏng), không ghim riêng thông điệp «khong phan giai duoc <ref>» mà AC-3 hứa.
