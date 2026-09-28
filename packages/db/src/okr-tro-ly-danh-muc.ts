@@ -1,3 +1,7 @@
+export const MINUTE_MS = 60_000;
+
+const SECOND_MS = MINUTE_MS / 60;
+
 export const TRO_LY_OKR_TRAN = {
 	chu: {
 		tenMucTieu: 200,
@@ -230,6 +234,14 @@ export const TRO_LY_OKR_TRAN = {
 		"tier",
 	],
 	soChuHoTenToiThieu: 2,
+	troLyNgayMoiNguoi: 20,
+	luotAnMoiNgay: 40,
+	nhipAnMucTieuMs: 30 * MINUTE_MS,
+	hanKiemKhoaMs: 10 * MINUTE_MS,
+	hoiLaiMs: 1.5 * SECOND_MS,
+	tranChoMs: 30 * SECOND_MS,
+	diemXuHuongToiThieu: 3,
+	hoanTacNgay: 7,
 } as const;
 
 export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
@@ -302,6 +314,10 @@ export type CauHinhAi = {
 	aiDeXuatDonVi: readonly string[];
 	aiTomTatPhamVi: AiPhamVi;
 	aiTomTatDonVi: readonly string[];
+	aiDeXuatAnPhamVi: AiPhamVi;
+	aiDeXuatAnDonVi: readonly string[];
+	aiTomTatAnPhamVi: AiPhamVi;
+	aiTomTatAnDonVi: readonly string[];
 	aiTranThangUsd: number;
 };
 
@@ -320,20 +336,42 @@ export function phamViCuaViec(
 		: { phamVi: ct.aiTomTatPhamVi, donVi: ct.aiTomTatDonVi };
 }
 
-export function donViDuocBat(
+function phamViAnCuaViec(
+	ct: CauHinhAi,
+	viec: ViecTroLy,
+): { phamVi: AiPhamVi; donVi: readonly string[] } {
+	return viec === "de-xuat"
+		? { phamVi: ct.aiDeXuatAnPhamVi, donVi: ct.aiDeXuatAnDonVi }
+		: { phamVi: ct.aiTomTatAnPhamVi, donVi: ct.aiTomTatAnDonVi };
+}
+
+export type NacCuaDonVi = "tat" | "viec-tat" | "don-vi-chua-bat" | "an" | "bat";
+
+function phuDonVi(
+	p: { phamVi: AiPhamVi; donVi: readonly string[] },
+	donVi: DonViMucTieu,
+): boolean {
+	if (p.phamVi === "tat") return false;
+	if (p.phamVi === "toan-cong-ty") return true;
+	return (
+		(donVi.onehub && p.donVi.includes(DON_VI_ONEHUB)) ||
+		(donVi.boPhanId !== null && p.donVi.includes(donVi.boPhanId)) ||
+		(donVi.phongBanId !== null && p.donVi.includes(donVi.phongBanId))
+	);
+}
+
+export function nacCuaDonVi(
 	ct: CauHinhAi,
 	viec: ViecTroLy,
 	donVi: DonViMucTieu,
-): "tat" | "viec-tat" | "don-vi-chua-bat" | "bat" {
+): NacCuaDonVi {
 	if (!ct.aiOn) return "tat";
-	const { phamVi, donVi: danhSach } = phamViCuaViec(ct, viec);
-	if (phamVi === "tat") return "viec-tat";
-	if (phamVi === "toan-cong-ty") return "bat";
-	const khop =
-		(donVi.onehub && danhSach.includes(DON_VI_ONEHUB)) ||
-		(donVi.boPhanId !== null && danhSach.includes(donVi.boPhanId)) ||
-		(donVi.phongBanId !== null && danhSach.includes(donVi.phongBanId));
-	return khop ? "bat" : "don-vi-chua-bat";
+	const bat = phamViCuaViec(ct, viec);
+	const an = phamViAnCuaViec(ct, viec);
+	if (phuDonVi(bat, donVi)) return "bat";
+	if (phuDonVi(an, donVi)) return "an";
+	if (bat.phamVi === "tat" && an.phamVi === "tat") return "viec-tat";
+	return "don-vi-chua-bat";
 }
 
 export function motTrong<T extends string>(

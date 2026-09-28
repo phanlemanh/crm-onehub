@@ -173,9 +173,10 @@ describe("tro-ly-okr-san-sang", () => {
 			objectiveId: muc.onehub,
 			keyResultId: null,
 			nguoiYeuCau: nguoi,
+			nac: "bat",
 			now: HOM_NAY,
 		});
-		expect(het).toEqual({ xep: false, lyDo: "het-tran-thang" });
+		expect(het).toEqual({ bat: false, lyDo: "het-tran-thang" });
 		expect(await db.agentTask.count({ where: { kind: "okr-de-xuat" } })).toBe(
 			truoc,
 		);
@@ -192,6 +193,7 @@ describe("tro-ly-okr-san-sang", () => {
 					objectiveId: muc.onehub,
 					keyResultId: null,
 					nguoiYeuCau: nguoi,
+					nac: "bat",
 					now: HOM_NAY,
 				}),
 			),
@@ -203,7 +205,7 @@ describe("tro-ly-okr-san-sang", () => {
 			},
 		});
 		expect(hang.length).toBe(1);
-		expect([a?.xep && a.taskId, b?.xep && b.taskId]).toEqual([
+		expect([a?.bat && a.taskId, b?.bat && b.taskId]).toEqual([
 			hang[0]?.id,
 			hang[0]?.id,
 		]);

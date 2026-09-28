@@ -1998,22 +1998,26 @@ model OkrCycle {
 }
 
 model OkrProgramConfig {
-  id             String   @id @default(cuid())
-  version        Int      @unique
-  objectiveCap   Int
-  krCap          Int
-  capMode        String
-  scoreScale     String
-  weightsOn      Boolean
-  personalOn     Boolean
-  aiOn           Boolean  @default(false)
-  aiDeXuatPhamVi String   @default("tat")
-  aiDeXuatDonVi  String[] @default([])
-  aiTomTatPhamVi String   @default("tat")
-  aiTomTatDonVi  String[] @default([])
-  aiTranThangUsd Decimal  @default(9) @db.Decimal(8, 2)
-  createdById    String
-  createdAt      DateTime @default(now())
+  id               String   @id @default(cuid())
+  version          Int      @unique
+  objectiveCap     Int
+  krCap            Int
+  capMode          String
+  scoreScale       String
+  weightsOn        Boolean
+  personalOn       Boolean
+  aiOn             Boolean  @default(false)
+  aiDeXuatPhamVi   String   @default("tat")
+  aiDeXuatDonVi    String[] @default([])
+  aiTomTatPhamVi   String   @default("tat")
+  aiTomTatDonVi    String[] @default([])
+  aiDeXuatAnPhamVi String   @default("tat")
+  aiDeXuatAnDonVi  String[] @default([])
+  aiTomTatAnPhamVi String   @default("tat")
+  aiTomTatAnDonVi  String[] @default([])
+  aiTranThangUsd   Decimal  @default(9) @db.Decimal(8, 2)
+  createdById      String
+  createdAt        DateTime @default(now())
 
   @@map("okrProgramConfig")
 }
@@ -2477,9 +2481,13 @@ model OkrDeXuat {
   nguoiYeuCau String
   nguoiQuyet  String?
   quyetLuc    DateTime?
+  nac         String    @default("bat")
+  maLoai      String?
+  hienLuc     DateTime?
   createdAt   DateTime  @default(now())
 
   @@index([objectiveId, trangThai])
+  @@index([objectiveId, nac, trangThai])
   @@index([taskId])
   @@index([createdAt])
   @@map("okrDeXuat")

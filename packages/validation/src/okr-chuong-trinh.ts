@@ -4,7 +4,7 @@ import { z } from "zod";
 export {
 	DON_VI_ONEHUB,
 	type DonViMucTieu,
-	donViDuocBat,
+	nacCuaDonVi,
 	phamViCuaViec,
 } from "@crm/db/okr-tro-ly-danh-muc";
 
