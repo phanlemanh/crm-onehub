@@ -6,7 +6,12 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const DICH = join(GOC, ".acceptance-runs", "hydrat-thanh-bieu-tuong", "evidence");
+const DICH = join(
+	GOC,
+	".acceptance-runs",
+	"hydrat-thanh-bieu-tuong",
+	"evidence",
+);
 
 const { canhCay } = await import(
 	"../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs"
@@ -24,7 +29,8 @@ const DO = {
 const MIEN_MAU = "mau.onehub.test";
 const QUY4 = "mau-okr-chu-ky-quy4";
 const NGUOI = { quanTri: "le-hai-dang", chiOkr: "doan-thi-thu" };
-const LOI_HYDRAT = /Hydration failed|didn't match|hydrated but some attributes/i;
+const LOI_HYDRAT =
+	/Hydration failed|didn't match|hydrated but some attributes/i;
 const CUA_THANH = /AppIconRail|aria-busy/;
 const NAV_THANH = /<nav\b[^>]*app-rail[^>]*>[\s\S]*?<\/nav>/g;
 
@@ -81,10 +87,15 @@ async function napBoMau() {
 			env: process.env,
 			encoding: "utf8",
 		});
-		const dong = `${nap.stdout ?? ""}${nap.stderr ?? ""}`.trim().split("\n").at(-1);
+		const dong = `${nap.stdout ?? ""}${nap.stderr ?? ""}`
+			.trim()
+			.split("\n")
+			.at(-1);
 		console.log(`  nap bo OKR mau: ma ${nap.status} — ${dong}`);
 		if (nap.status !== 0)
-			await khongDo(`KHONG DO DUOC: nap bo OKR mau thoat ${nap.status}: ${dong}`);
+			await khongDo(
+				`KHONG DO DUOC: nap bo OKR mau thoat ${nap.status}: ${dong}`,
+			);
 	}
 	const mt = await db.okrObjective.findFirst({
 		where: { cycleId: QUY4 },
@@ -108,9 +119,13 @@ async function vaiCua(email) {
 async function suySlug(c) {
 	const res = await fetch(`${APP}/`, { redirect: "manual", headers: mu(c) });
 	const dich = res.headers.get("location") ?? "";
-	const dau = new URL(dich || "/", APP).pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
+	const dau = new URL(dich || "/", APP).pathname
+		.replace(/^\/+|\/+$/g, "")
+		.split("/")[0];
 	if (!dau || ["sign-in", "onboarding", "het-quyen"].includes(dau))
-		await khongDo(`KHONG DO DUOC: ${APP}/ tro ve "${dich}" — khong suy duoc slug`);
+		await khongDo(
+			`KHONG DO DUOC: ${APP}/ tro ve "${dich}" — khong suy duoc slug`,
+		);
 	return dau;
 }
 
@@ -142,7 +157,9 @@ try {
 		const vai = await vaiCua(email);
 		const can = k === "chiOkr" ? "okr" : "admin";
 		if (!vai.includes(can))
-			await khongDo(`KHONG DO DUOC: ${email} co vai [${vai.join(",")}], can ${can}`);
+			await khongDo(
+				`KHONG DO DUOC: ${email} co vai [${vai.join(",")}], can ${can}`,
+			);
 		cookie[k] = phienCua(email);
 	}
 	const slug = await suySlug(cookie.quanTri);
@@ -168,11 +185,16 @@ try {
 				`${nhan}: ${t.lienKet} lien ket thay ${SO_MUC[k]}`,
 				t.lienKet === SO_MUC[k],
 			);
-			console.log(`  ${nhan}: ${t.soNav} nav · ban=${t.ban} · ${t.lienKet} lien ket`);
+			console.log(
+				`  ${nhan}: ${t.soNav} nav · ban=${t.ban} · ${t.lienKet} lien ket`,
+			);
 		}
 	}
 
-	trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });
+	trinhDuyet = await puppeteer.launch({
+		executablePath: CHROME,
+		headless: true,
+	});
 	datTrinhDuyet(trinhDuyet);
 	const host = new URL(APP).hostname;
 	const loiThanh = [];
@@ -230,9 +252,14 @@ try {
 	console.log(`  tai trinh duyet: ${soLuot} luot`);
 	console.log(`  loi hydrat cua thanh: ${loiThanh.length}`);
 	for (const d of loiThanh.slice(0, 5)) console.log(`    ${d}`);
-	console.log(`  loi hydrat khac (ngoai vong, khong tinh hong): ${loiKhac.length}`);
+	console.log(
+		`  loi hydrat khac (ngoai vong, khong tinh hong): ${loiKhac.length}`,
+	);
 	for (const d of loiKhac.slice(0, 5)) console.log(`    ${d}`);
-	kiem(`loi hydrat cua thanh: ${loiThanh.length}/${soLuot} luot`, loiThanh.length === 0);
+	kiem(
+		`loi hydrat cua thanh: ${loiThanh.length}/${soLuot} luot`,
+		loiThanh.length === 0,
+	);
 } catch (e) {
 	hong.push(`nem: ${String(e?.stack ?? e).slice(0, 600)}`);
 } finally {

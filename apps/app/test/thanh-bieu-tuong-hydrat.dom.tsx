@@ -163,10 +163,7 @@ describe("bo nghe loi hydrat bat duoc ca hai kenh", () => {
 	});
 
 	test("e0 lech mot thuoc tinh vao console.error", async () => {
-		const { loi } = await hydratCay(
-			<nav aria-busy="true" />,
-			<nav aria-busy={undefined} />,
-		);
+		const { loi } = await hydratCay(<nav aria-busy="true" />, <nav />);
 		expect(loi.some((t) => t.startsWith("console.error:"))).toBe(true);
 		expect(loi.join("\n")).toContain("aria-busy");
 	});
