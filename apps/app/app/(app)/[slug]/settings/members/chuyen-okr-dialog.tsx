@@ -61,6 +61,7 @@ export function ChuyenOkrDialog({
 					dien(k.xong, {
 						kr: String(kq.kr),
 						mucTieu: String(kq.mucTieu),
+						viec: String(kq.viec),
 						ten: tenNhan,
 					}),
 				);
@@ -72,7 +73,8 @@ export function ChuyenOkrDialog({
 	);
 
 	const so = xemTruoc.data;
-	const coViec = so !== undefined && (so.kr > 0 || so.mucTieu > 0);
+	const coViec =
+		so !== undefined && (so.kr > 0 || so.mucTieu > 0 || so.viec > 0);
 	const ten = <span translate="no">{nguoi?.name ?? ""}</span>;
 	const luaChon = (dsNguoi.data ?? [])
 		.filter((u) => u.id !== nguoi?.userId)
@@ -98,6 +100,7 @@ export function ChuyenOkrDialog({
 								ten,
 								kr: String(so.kr),
 								mucTieu: String(so.mucTieu),
+								viec: String(so.viec),
 							})
 						) : (
 							dienNode(k.khongViec, { ten })

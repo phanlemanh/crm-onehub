@@ -32,6 +32,15 @@ KR, bảy KR lấy số từ CRM), sáu tuần Cập nhật tuần có KR tụt,
 gửi tuần này, một quý 3 đã khép (điểm, điều học được, ba mục tiêu mang sang). Mọi lượt
 OKR dựng và đo trên bộ này, để số của hai lượt so được với nhau.
 
+Từ lượt 8a bộ mẫu có thêm phần nằm cạnh KR (khối `canhKr` của `cong-ty.json`, nạp
+bởi `okr-mau/nap-canh-kr.ts`): mỗi phòng ban có việc (KR) — ít nhất một việc xong và
+một việc chưa, hạn tính theo tuần của quý 4 — bốn bằng chứng trên KR mốc đã xong, bảy
+ghi nhận giữa đồng nghiệp, ba mẫu OKR (một cho bộ phận, một cho các phòng kinh doanh,
+một cho các phòng hỗ trợ) và hai mục tiêu quý 4 sinh từ mẫu. Bộ mẫu không gắn sáng kiến
+nào — nó không có chiến dịch hay kế hoạch 30 ngày; phép đo cần sáng kiến tự gieo qua
+thủ tục thật. Nạp lại không nhân đôi hàng nào của sáu bảng mới, `--xoa` gỡ sạch chúng
+cùng phần còn lại của bộ mẫu.
+
 ```sh
 bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
 bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó

@@ -3,6 +3,7 @@ import {
 	type LoiGiaTri,
 } from "@crm/validation/okr-cap-nhat";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
+import { OKR_MAU } from "@crm/validation/okr-mau";
 
 export const OKR = {
 	tenGoc: "OneHub",
@@ -15,6 +16,7 @@ export const OKR = {
 		viSao: 500,
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
+	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
 		kieu: {
@@ -79,6 +81,55 @@ export const OKR = {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
 			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
+		},
+		canhKr: {
+			mucTieuDaBo: "Mục tiêu này đã bỏ — việc cạnh KR chỉ đọc.",
+			khongSuaDuoc:
+				"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới đổi việc của KR này.",
+			khongCoViec: (id: string) => `Không có việc nào mang mã ${id}.`,
+			chiViecTuGo:
+				"Chỉ sửa hay đánh dấu được việc tự gõ — sáng kiến gắn sẵn thì gỡ.",
+			nguoiLamKhongPhaiThanhVien:
+				"Người làm phải là thành viên còn trong không gian làm việc.",
+			khongGanDuoc:
+				"Gắn sáng kiến cần quyền đọc dữ liệu đối tác — vai «chỉ OKR» không gắn được.",
+			daGan: "Sáng kiến này đã gắn vào KR rồi.",
+			khongCoChienDich: (id: string) =>
+				`Không có chiến dịch nào mang mã ${id}.`,
+			khongCoKeHoach: (id: string) =>
+				`Không có kế hoạch 30 ngày nào mang mã ${id}.`,
+			chiMocXongDinhDuoc:
+				"Chỉ đính được bằng chứng cho KR kiểu «mốc» đã đánh dấu xong.",
+			khongCoBangChung: (id: string) =>
+				`Không có bằng chứng nào mang mã ${id}.`,
+			ghiNhanChiCongBo: "Chỉ ghi nhận được trên mục tiêu đã công bố.",
+			tuGhiNhan: "Không tự ghi nhận chính mình — chọn người khác.",
+			nguoiNhanKhongConThanhVien:
+				"Người nhận phải là thành viên còn trong không gian làm việc.",
+			khongCoGhiNhan: (id: string) => `Không có ghi nhận nào mang mã ${id}.`,
+			khongGoDuocGhiNhan:
+				"Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
+			krCoBangChung:
+				"KR đã có bằng chứng — gỡ bằng chứng trước rồi mới xoá được.",
+			krCoGhiNhan: "KR đã có ghi nhận gắn vào — không xoá được.",
+		},
+		mau: {
+			canQuanTri:
+				"Cần quyền quản trị chương trình OKR để soạn, lưu trữ hay khôi phục mẫu.",
+			khongCoMau: (id: string) => `Không có mẫu OKR nào mang mã ${id}.`,
+			daLuuTru: "Mẫu này đã lưu trữ — quản trị khôi phục thì mới dùng được.",
+			khacCap: "Mẫu này dành cho cấp đơn vị khác.",
+			khongApDung: "Mẫu này không áp dụng cho đơn vị này.",
+			donViDaLuuTru: (ten: string) =>
+				`Đơn vị «${ten}» đã lưu trữ — bỏ khỏi mẫu trước khi lưu.`,
+			soKrMau: `Mẫu cần từ 1 tới ${OKR_MAU.krToiDa} KR.`,
+			krMau: (thu: number, cau: string) => `KR mẫu thứ ${thu}: ${cau}`,
+			soKrKhac: (n: number) => `Mẫu này có ${n} KR — gửi số cho đúng ${n} KR.`,
+			thieuSo: (thu: number, ten: string, o: "khởi điểm" | "đích") =>
+				`KR thứ ${thu} «${ten}»: thiếu ${o}.`,
+			krHong: (thu: number, ten: string, cau: string) =>
+				`KR thứ ${thu} «${ten}»: ${cau}`,
+			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

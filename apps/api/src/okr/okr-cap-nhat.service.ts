@@ -25,6 +25,7 @@ import {
 	OkrService,
 } from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
+import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
@@ -39,6 +40,7 @@ export class OkrCapNhatService {
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(OkrCanhKrService) private readonly canhKr: OkrCanhKrService,
 	) {}
 
 	async capNhatTuan(
@@ -180,6 +182,21 @@ export class OkrCapNhatService {
 					{ currentValue: soDb(kr.currentValue) },
 					{ currentValue: giaTri, confidence: m.confidence, onBehalf },
 				);
+				if (m.bangChung) {
+					const kind = kieuKr.parse(kr.kind);
+					await this.canhKr.ghiBangChung(
+						tx,
+						userId,
+						{
+							id: kr.id,
+							ownerUserId: kr.ownerUserId,
+							objective: donViCua(kr.objective),
+							kind,
+							xong: kind === "moc" && giaTri === 1,
+						},
+						m.bangChung,
+					);
+				}
 			}
 			const seconds = Math.max(
 				0,

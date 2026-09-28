@@ -3,11 +3,12 @@
 import Chat from "@carbon/icons-react/es/Chat";
 import Close from "@carbon/icons-react/es/Close";
 import Renew from "@carbon/icons-react/es/Renew";
-import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	Field,
+	FieldDescription,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
@@ -32,13 +33,16 @@ import {
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import {
 	TokenFieldAction,
 	TokenFieldItem,
 } from "@crm/ui/components/token-field";
+import { OKR_CANH_KR } from "@crm/validation/okr-canh-kr";
 import { BINH_LUAN_TOI_DA } from "@crm/validation/okr-trao-doi";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Fragment, useId, useState } from "react";
+import { toast } from "sonner";
 import { luc } from "@/app/(app)/[slug]/okr/bang-vet";
 import {
 	DetailSheetBody,
@@ -46,26 +50,59 @@ import {
 	DetailSheetSection,
 } from "@/components/detail-sheet";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import type { RouterOutputs } from "@/lib/trpc/types";
+import {
+	ChipKr,
+	DongGhiNhan,
+	type NguoiChon,
+	TruongNguoiNhan,
+} from "./objective-ghi-nhan";
 import { dien } from "./plan-copy";
 
 export type KrTraoDoi = { id: string; title: string };
+export type BinhLuanVao = {
+	keyResultId: string | null;
+	body: string;
+	mentionUserIds: string[];
+};
+export type GhiNhanVao = {
+	keyResultId: string | null;
+	nguoiNhan: string[];
+	loiNhan: string;
+};
+type TraoDoi = RouterOutputs["okr"]["comments"];
+type BinhLuanHien = TraoDoi["comments"][number];
 
 const CA_MUC_TIEU = "ca-muc-tieu";
+
+const LOAI_TIN = ["binh-luan", "ghi-nhan"] as const;
+type LoaiTin = (typeof LOAI_TIN)[number];
 
 const KHUNG_TAI = ["mot", "hai"] as const;
 
 export function TabTraoDoi({
 	objectiveId,
 	keyResults,
+	ghiNhanDuoc,
 }: {
 	objectiveId: string;
 	keyResults: KrTraoDoi[];
+	ghiNhanDuoc: boolean;
 }) {
-	const m = okrMessages(useLocale()).traoDoi;
+	const locale = useLocale();
+	const m = okrMessages(locale).traoDoi;
+	const g = okrCanhKrMessages(locale).ghiNhan;
 	const trpc = useTRPC();
+	const cache = useCrmCache();
 	const ds = useQuery(trpc.okr.comments.queryOptions({ objectiveId }));
+	const go = useMutation(
+		trpc.okr.goGhiNhan.mutationOptions({
+			onError: (e) => toast.error(e.message),
+		}),
+	);
 
 	return (
 		<DetailSheetBody>
@@ -99,7 +136,7 @@ export function TabTraoDoi({
 					icon={Chat}
 					title={m.loiTai}
 				/>
-			) : ds.data.comments.length === 0 ? (
+			) : ds.data.dong.length === 0 ? (
 				<div className="contents" data-trang-thai="ST-traodoi-rong">
 					<DetailSheetEmpty
 						description={m.rong.body}
@@ -109,31 +146,81 @@ export function TabTraoDoi({
 				</div>
 			) : (
 				<DetailSheetSection>
-					<ItemGroup
-						aria-label={m.danhSach}
-						data-trang-thai="ST-traodoi-codulieu"
-					>
-						{ds.data.comments.map((c) => (
-							<BinhLuan binhLuan={c} key={c.id} />
-						))}
-					</ItemGroup>
+					<DongThoiGian
+						duLieu={ds.data}
+						onGoGhiNhan={async (id) => {
+							await go.mutateAsync({ id });
+							toast.success(g.daGo);
+							await cache.okr(objectiveId, { settle: "record" });
+						}}
+					/>
 				</DetailSheetSection>
 			)}
 			<DetailSheetSection>
-				<KhungSoan keyResults={keyResults} objectiveId={objectiveId} />
+				<KhungSoan
+					ghiNhanDuoc={ghiNhanDuoc}
+					keyResults={keyResults}
+					objectiveId={objectiveId}
+				/>
 			</DetailSheetSection>
 		</DetailSheetBody>
 	);
 }
 
-type BinhLuanHien = {
-	id: string;
-	author: { name: string };
-	keyResultTitle: string | null;
-	body: string;
-	createdAt: string;
-	mentions: { id: string; name: string }[];
-};
+export function DongThoiGian({
+	duLieu,
+	onGoGhiNhan,
+}: {
+	duLieu: TraoDoi;
+	onGoGhiNhan: (id: string) => Promise<void>;
+}) {
+	const locale = useLocale();
+	const m = okrMessages(locale).traoDoi;
+	const g = okrCanhKrMessages(locale).ghiNhan;
+	const [hoiGo, setHoiGo] = useState<string | null>(null);
+	const [dangGo, setDangGo] = useState(false);
+	const binhLuan = new Map(duLieu.comments.map((c) => [c.id, c]));
+
+	const go = () => {
+		if (hoiGo === null || dangGo) return;
+		setDangGo(true);
+		onGoGhiNhan(hoiGo).then(
+			() => {
+				setDangGo(false);
+				setHoiGo(null);
+			},
+			() => setDangGo(false),
+		);
+	};
+
+	return (
+		<>
+			<ItemGroup aria-label={m.danhSach} data-trang-thai="ST-traodoi-codulieu">
+				{duLieu.dong.map((d) => {
+					if (d.loai === "ghi-nhan")
+						return (
+							<DongGhiNhan ghiNhan={d} key={d.id} onGo={() => setHoiGo(d.id)} />
+						);
+					const c = binhLuan.get(d.id);
+					return c ? <BinhLuan binhLuan={c} key={d.id} /> : null;
+				})}
+			</ItemGroup>
+			<ConfirmDialog
+				nut={g.hoiGo.nut}
+				onConfirm={go}
+				onOpenChange={(mo) => {
+					if (!mo && !dangGo) setHoiGo(null);
+				}}
+				open={hoiGo !== null}
+				pending={dangGo}
+				than={g.hoiGo.than}
+				thoi={g.hoiGo.thoi}
+				tieuDe={g.hoiGo.tieuDe}
+				tone="destructive"
+			/>
+		</>
+	);
+}
 
 function BinhLuan({ binhLuan: c }: { binhLuan: BinhLuanHien }) {
 	const locale = useLocale();
@@ -144,18 +231,7 @@ function BinhLuan({ binhLuan: c }: { binhLuan: BinhLuanHien }) {
 				<ItemTitle translate="no">{c.author.name}</ItemTitle>
 				<ItemDescription>{luc(c.createdAt, locale)}</ItemDescription>
 			</ItemContent>
-			{c.keyResultTitle ? (
-				<div className="flex min-w-0 basis-full">
-					<Badge
-						className="max-w-full"
-						data-chip-kr
-						translate="no"
-						variant="outline"
-					>
-						<span className="truncate">{c.keyResultTitle}</span>
-					</Badge>
-				</div>
-			) : null}
+			{c.keyResultTitle ? <ChipKr ten={c.keyResultTitle} /> : null}
 			<p
 				className="basis-full whitespace-pre-wrap break-words text-sm"
 				data-noi-dung
@@ -183,62 +259,143 @@ function BinhLuan({ binhLuan: c }: { binhLuan: BinhLuanHien }) {
 function KhungSoan({
 	objectiveId,
 	keyResults,
+	ghiNhanDuoc,
 }: {
 	objectiveId: string;
 	keyResults: KrTraoDoi[];
+	ghiNhanDuoc: boolean;
 }) {
-	const t = okrMessages(useLocale());
-	const m = t.traoDoi;
-	const h = t.hopThoai;
+	const m = okrMessages(useLocale()).traoDoi;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
-	const ma = useId();
 	const thanhVien = useQuery(trpc.okr.thanhVien.queryOptions());
-	const [noiDung, setNoiDung] = useState("");
-	const khaiThayDoi = useKhaiThayDoi();
-	const [kr, setKr] = useState(CA_MUC_TIEU);
-	const [nhac, setNhac] = useState<string[]>([]);
-	const them = useMutation(
-		trpc.okr.addComment.mutationOptions({
-			onSuccess: async () => {
-				await cache.okr(objectiveId, { settle: "record" });
-				setNoiDung("");
-				khaiThayDoi(false);
-				setKr(CA_MUC_TIEU);
-				setNhac([]);
-			},
-		}),
-	);
-
-	const tenNguoi = (id: string) =>
-		thanhVien.data?.find((u) => u.id === id)?.name ?? id;
-	const luaChon = (thanhVien.data ?? [])
-		.filter((u) => !nhac.includes(u.id))
-		.map((u) => ({
-			value: u.id,
-			label: u.name,
-			hint: u.email,
-			keywords: [u.email],
-		}));
+	const toi = useQuery(trpc.users.me.queryOptions());
+	const them = useMutation(trpc.okr.addComment.mutationOptions());
+	const gui = useMutation(trpc.okr.guiGhiNhan.mutationOptions());
+	const hong = them.error ?? gui.error;
+	const dangGui = them.isPending || gui.isPending;
 	const loi =
-		them.isError && !them.isPending
+		hong && !dangGui
 			? dien(m.chuaGui, {
 					loi:
-						them.error.data?.httpStatus !== undefined &&
-						them.error.data.httpStatus < 500
-							? them.error.message
+						hong.data?.httpStatus !== undefined && hong.data.httpStatus < 500
+							? hong.message
 							: m.mayChu,
 				})
 			: null;
+	const xong = (datLai: () => void) => async () => {
+		await cache.okr(objectiveId, { settle: "record" });
+		datLai();
+	};
+
+	return (
+		<OSoanTraoDoi
+			dangGui={dangGui}
+			ghiNhanDuoc={ghiNhanDuoc}
+			keyResults={keyResults}
+			loi={loi}
+			onGuiBinhLuan={(vao, datLai) => {
+				gui.reset();
+				them.mutate(
+					{
+						objectiveId,
+						keyResultId: vao.keyResultId ?? undefined,
+						body: vao.body,
+						mentionUserIds: vao.mentionUserIds,
+					},
+					{ onSuccess: xong(datLai) },
+				);
+			}}
+			onGuiGhiNhan={(vao, datLai) => {
+				them.reset();
+				gui.mutate({ objectiveId, ...vao }, { onSuccess: xong(datLai) });
+			}}
+			thanhVien={(thanhVien.data ?? []).map((u) => ({
+				value: u.id,
+				label: u.name,
+				hint: u.email,
+				keywords: [u.email],
+			}))}
+			thanhVienDangTai={thanhVien.isPending || toi.isPending}
+			toiId={toi.data?.id ?? null}
+		/>
+	);
+}
+
+export function OSoanTraoDoi({
+	keyResults,
+	thanhVien,
+	thanhVienDangTai,
+	toiId,
+	ghiNhanDuoc,
+	dangGui,
+	loi,
+	onGuiBinhLuan,
+	onGuiGhiNhan,
+}: {
+	keyResults: KrTraoDoi[];
+	thanhVien: NguoiChon[];
+	thanhVienDangTai: boolean;
+	toiId: string | null;
+	ghiNhanDuoc: boolean;
+	dangGui: boolean;
+	loi: string | null;
+	onGuiBinhLuan: (vao: BinhLuanVao, datLai: () => void) => void;
+	onGuiGhiNhan: (vao: GhiNhanVao, datLai: () => void) => void;
+}) {
+	const locale = useLocale();
+	const t = okrMessages(locale);
+	const m = t.traoDoi;
+	const h = t.hopThoai;
+	const g = okrCanhKrMessages(locale).ghiNhan;
+	const ma = useId();
+	const khaiThayDoi = useKhaiThayDoi();
+	const [loai, setLoai] = useState<LoaiTin>("binh-luan");
+	const [noiDung, setNoiDung] = useState("");
+	const [kr, setKr] = useState(CA_MUC_TIEU);
+	const [nhac, setNhac] = useState<string[]>([]);
+	const [nguoiNhan, setNguoiNhan] = useState<string[]>([]);
+
+	const ghiNhan = ghiNhanDuoc && loai === "ghi-nhan";
+	const loiNhan = noiDung.trim();
+	const loiQuaDai = loiNhan.length > OKR_CANH_KR.loiNhan.max;
+	const guiDuoc = ghiNhan
+		? nguoiNhan.length >= OKR_CANH_KR.nguoiNhan.min &&
+			nguoiNhan.length <= OKR_CANH_KR.nguoiNhan.max &&
+			loiNhan.length >= OKR_CANH_KR.loiNhan.min &&
+			!loiQuaDai
+		: loiNhan !== "";
+
+	const tenNguoi = (id: string) =>
+		thanhVien.find((u) => u.value === id)?.label ?? id;
+	const luaChonNhac = thanhVien.filter((u) => !nhac.includes(u.value));
+	const dem = dien(g.demKyTu, {
+		n: noiDung.length,
+		max: OKR_CANH_KR.loiNhan.max,
+	});
+
+	const datLai = () => {
+		setNoiDung("");
+		setKr(CA_MUC_TIEU);
+		setNhac([]);
+		setNguoiNhan([]);
+		khaiThayDoi(false);
+	};
 
 	const gui = () => {
-		if (them.isPending || noiDung.trim() === "") return;
-		them.mutate({
-			objectiveId,
-			keyResultId: kr === CA_MUC_TIEU ? undefined : kr,
-			body: noiDung,
-			mentionUserIds: nhac,
-		});
+		if (dangGui || !guiDuoc) return;
+		const keyResultId = kr === CA_MUC_TIEU ? null : kr;
+		if (ghiNhan) onGuiGhiNhan({ keyResultId, nguoiNhan, loiNhan }, datLai);
+		else
+			onGuiBinhLuan(
+				{ keyResultId, body: noiDung, mentionUserIds: nhac },
+				datLai,
+			);
+	};
+
+	const doiNguoiNhan = (ds: string[]) => {
+		setNguoiNhan(ds);
+		khaiThayDoi(ds.length > 0 || noiDung.trim() !== "");
 	};
 
 	return (
@@ -250,17 +407,53 @@ function KhungSoan({
 				gui();
 			}}
 		>
-			<FieldGroup>
-				<Field>
-					<FieldLabel htmlFor={`${ma}-noi-dung`}>{m.noiDung}</FieldLabel>
+			<FieldGroup
+				data-trang-thai={ghiNhan ? "ST-traodoi-soan-ghinhan" : undefined}
+			>
+				{ghiNhanDuoc ? (
+					<ToggleGroup
+						aria-label={g.cheDo.nhan}
+						data-o-loai-tin
+						disabled={dangGui}
+						onValueChange={(v) => {
+							const moi = LOAI_TIN.find((x) => x === v);
+							if (moi) setLoai(moi);
+						}}
+						type="single"
+						value={loai}
+						variant="outline"
+					>
+						<ToggleGroupItem value="binh-luan">
+							{g.cheDo.binhLuan}
+						</ToggleGroupItem>
+						<ToggleGroupItem value="ghi-nhan">
+							{g.cheDo.ghiNhan}
+						</ToggleGroupItem>
+					</ToggleGroup>
+				) : null}
+				{ghiNhan ? (
+					<TruongNguoiNhan
+						dangTai={thanhVienDangTai}
+						id={`${ma}-nguoi-nhan`}
+						khoa={dangGui}
+						onChange={doiNguoiNhan}
+						thanhVien={thanhVien.filter((u) => u.value !== toiId)}
+						value={nguoiNhan}
+					/>
+				) : null}
+				<Field data-invalid={ghiNhan && loiQuaDai ? true : undefined}>
+					<FieldLabel htmlFor={`${ma}-noi-dung`}>
+						{ghiNhan ? g.loi : m.noiDung}
+					</FieldLabel>
 					<Textarea
 						aria-describedby={loi ? `${ma}-loi` : undefined}
-						disabled={them.isPending}
+						data-o-loi-nhan={ghiNhan ? true : undefined}
+						disabled={dangGui}
 						id={`${ma}-noi-dung`}
-						maxLength={BINH_LUAN_TOI_DA}
+						maxLength={ghiNhan ? OKR_CANH_KR.loiNhan.max : BINH_LUAN_TOI_DA}
 						onChange={(e) => {
 							setNoiDung(e.target.value);
-							khaiThayDoi(e.target.value.trim() !== "");
+							khaiThayDoi(e.target.value.trim() !== "" || nguoiNhan.length > 0);
 						}}
 						onKeyDown={(e) => {
 							if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
@@ -268,15 +461,22 @@ function KhungSoan({
 								gui();
 							}
 						}}
-						placeholder={m.goiY}
+						placeholder={ghiNhan ? g.goiY : m.goiY}
 						translate="no"
 						value={noiDung}
 					/>
+					{ghiNhan ? (
+						loiQuaDai ? (
+							<FieldError data-dem-loi-nhan>{dem}</FieldError>
+						) : (
+							<FieldDescription data-dem-loi-nhan>{dem}</FieldDescription>
+						)
+					) : null}
 				</Field>
 				<div className="grid items-start gap-3 sm:grid-cols-2">
 					<Field>
 						<FieldLabel htmlFor={`${ma}-kr`}>{m.veKr}</FieldLabel>
-						<Select disabled={them.isPending} onValueChange={setKr} value={kr}>
+						<Select disabled={dangGui} onValueChange={setKr} value={kr}>
 							<SelectTrigger data-o-kr id={`${ma}-kr`}>
 								<SelectValue />
 							</SelectTrigger>
@@ -290,41 +490,43 @@ function KhungSoan({
 							</SelectContent>
 						</Select>
 					</Field>
-					<Field>
-						<FieldLabel htmlFor={`${ma}-nhac`}>{m.nhacTen}</FieldLabel>
-						<Combobox
-							data-o-nhac-ten
-							disabled={thanhVien.isPending || them.isPending}
-							empty={h.khongAi}
-							id={`${ma}-nhac`}
-							onValueChange={(v) => setNhac((ds) => [...ds, v])}
-							options={luaChon}
-							placeholder={thanhVien.isPending ? h.dangTai : m.themNguoi}
-							searchPlaceholder={h.timNguoi}
-							translate="no"
-							value=""
-						/>
-						{nhac.length > 0 ? (
-							<div className="flex flex-wrap gap-1" data-nguoi-nhac>
-								{nhac.map((id) => (
-									<TokenFieldItem key={id}>
-										<span className="truncate px-1" translate="no">
-											{tenNguoi(id)}
-										</span>
-										<TokenFieldAction
-											aria-label={dien(m.boNhac, { ten: tenNguoi(id) })}
-											disabled={them.isPending}
-											onClick={() =>
-												setNhac((ds) => ds.filter((x) => x !== id))
-											}
-										>
-											<Icon icon={Close} />
-										</TokenFieldAction>
-									</TokenFieldItem>
-								))}
-							</div>
-						) : null}
-					</Field>
+					{ghiNhan ? null : (
+						<Field>
+							<FieldLabel htmlFor={`${ma}-nhac`}>{m.nhacTen}</FieldLabel>
+							<Combobox
+								data-o-nhac-ten
+								disabled={thanhVienDangTai || dangGui}
+								empty={h.khongAi}
+								id={`${ma}-nhac`}
+								onValueChange={(v) => setNhac((ds) => [...ds, v])}
+								options={luaChonNhac}
+								placeholder={thanhVienDangTai ? h.dangTai : m.themNguoi}
+								searchPlaceholder={h.timNguoi}
+								translate="no"
+								value=""
+							/>
+							{nhac.length > 0 ? (
+								<div className="flex flex-wrap gap-1" data-nguoi-nhac>
+									{nhac.map((id) => (
+										<TokenFieldItem key={id}>
+											<span className="truncate px-1" translate="no">
+												{tenNguoi(id)}
+											</span>
+											<TokenFieldAction
+												aria-label={dien(m.boNhac, { ten: tenNguoi(id) })}
+												disabled={dangGui}
+												onClick={() =>
+													setNhac((ds) => ds.filter((x) => x !== id))
+												}
+											>
+												<Icon icon={Close} />
+											</TokenFieldAction>
+										</TokenFieldItem>
+									))}
+								</div>
+							) : null}
+						</Field>
+					)}
 				</div>
 				{loi ? (
 					<FieldError data-loi-gui id={`${ma}-loi`}>
@@ -333,12 +535,12 @@ function KhungSoan({
 				) : null}
 				<div>
 					<Button
-						data-nut="gui-binh-luan"
-						disabled={them.isPending || noiDung.trim() === ""}
+						data-nut={ghiNhan ? "gui-ghi-nhan" : "gui-binh-luan"}
+						disabled={dangGui || !guiDuoc}
 						type="submit"
 					>
-						{them.isPending ? <Spinner data-icon="inline-start" /> : null}
-						{m.gui}
+						{dangGui ? <Spinner data-icon="inline-start" /> : null}
+						{ghiNhan ? g.gui : m.gui}
 					</Button>
 				</div>
 			</FieldGroup>

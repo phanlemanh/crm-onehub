@@ -7,9 +7,12 @@ import {
 } from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { z } from "zod";
-import { LoiBoMau, OKR_MAU } from "./cau-hinh";
+import { idMau, LoiBoMau, ngayDb, OKR_MAU } from "./cau-hinh";
 import { dienBien, type LanMau, lanQuy3, lichMau } from "./dien-bien";
 import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
+import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
+
+export { idMau };
 
 type Tx = Prisma.TransactionClient;
 
@@ -24,13 +27,9 @@ export type DemBoMau = {
 	phien: number;
 	soChup: number;
 	diem: number;
-};
+} & DemCanhKr;
 
 type Quy = "quy3" | "quy4";
-
-export function idMau(loai: string, ma: string): string {
-	return `${OKR_MAU.tienTo}${loai}-${ma}`;
-}
 
 export const thuMau = (ma: string) => `${ma}@${OKR_MAU.mienThu}`;
 
@@ -39,8 +38,6 @@ const CHU_KY = {
 	quy3: idMau("chu-ky", "quy3"),
 	quy4: idMau("chu-ky", "quy4"),
 };
-
-const ngayDb = (ngay: string) => new Date(`${ngay}T00:00:00.000Z`);
 
 const PHIEN_GIAY = 90;
 
@@ -112,7 +109,7 @@ function bangGiu(loi: Prisma.PrismaClientKnownRequestError): string {
 	return ten || loi.message.split("\n").at(-1) || "khoá ngoại";
 }
 
-async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
+export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const t = await tapMau(tx);
 	const tong = Object.values(t).reduce((s, ds) => s + ds.length, 0);
 	if (tong === 0) return null;
@@ -120,6 +117,7 @@ async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const C = { in: t.chuKy };
 	const O = { in: t.mucTieu };
 	const K = { in: t.kr };
+	const canhKr = await xoaCanhKr(tx, t);
 	const phien = await tx.okrCheckInSession.findMany({
 		where: { userId: U },
 		select: { id: true },
@@ -184,6 +182,7 @@ async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 		phien: phienXoa.count,
 		soChup: soChup.count,
 		diem: diem.count,
+		...canhKr,
 	};
 }
 
@@ -554,6 +553,8 @@ export async function napTrong(
 			})),
 	});
 
+	const canhKr = await napCanhKr(tx, bo, { lich, lanCua, bayGio });
+
 	return {
 		nguoi: bo.nguoi.length,
 		boPhan: bo.boPhan.length,
@@ -565,6 +566,7 @@ export async function napTrong(
 		phien: phien.size,
 		soChup: chup.length,
 		diem: diem.length,
+		...canhKr,
 	};
 }
 

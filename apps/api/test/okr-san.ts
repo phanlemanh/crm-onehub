@@ -200,6 +200,8 @@ export async function kyDangChay(ten: string): Promise<string> {
 	return quy;
 }
 
+const DON_SAN_MS = 30_000;
+
 export function dungSan(): void {
 	beforeAll(async () => {
 		const { AppModule } = await import("../src/app.module");
@@ -227,6 +229,12 @@ export function dungSan(): void {
 		const mucTieu = (
 			await db.okrObjective.findMany({ where: cuaSan, select: { id: true } })
 		).map((m) => m.id);
+		await db.okrGhiNhanNhan.deleteMany({
+			where: { ghiNhan: { objectiveId: { in: mucTieu } } },
+		});
+		await db.okrGhiNhan.deleteMany({
+			where: { objectiveId: { in: mucTieu } },
+		});
 		await db.okrMention.deleteMany({
 			where: { comment: { objectiveId: { in: mucTieu } } },
 		});
@@ -269,6 +277,9 @@ export function dungSan(): void {
 			where: { keyResult: { objective: cuaSan } },
 		});
 		await db.okrDiemKr.deleteMany({ where: cuaSan });
+		await db.okrBangChung.deleteMany({
+			where: { keyResult: { objective: cuaSan } },
+		});
 		await db.okrKeyResult.deleteMany({ where: { objective: cuaSan } });
 		await db.okrParticipant.deleteMany({ where: { objective: cuaSan } });
 		await db.okrObjective.deleteMany({ where: cuaSan });
@@ -288,6 +299,13 @@ export function dungSan(): void {
 		await db.onboardingPlan.deleteMany({
 			where: { company: { name: { startsWith: TIEN_TO } } },
 		});
+		const congTyXoa = await db.company.findMany({
+			where: { name: { startsWith: TIEN_TO } },
+			select: { id: true },
+		});
+		await db.agentTask.deleteMany({
+			where: { companyId: { in: congTyXoa.map((c) => c.id) } },
+		});
 		await db.company.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 		await db.department.updateMany({
 			where: { name: { startsWith: TIEN_TO } },
@@ -300,5 +318,5 @@ export function dungSan(): void {
 		await db.session.deleteMany({ where: { userId: { startsWith: TIEN_TO } } });
 		await db.member.deleteMany({ where: { userId: { startsWith: TIEN_TO } } });
 		await db.user.deleteMany({ where: { id: { startsWith: TIEN_TO } } });
-	});
+	}, DON_SAN_MS);
 }

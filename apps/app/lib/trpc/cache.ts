@@ -283,6 +283,8 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.xemTruocChiSo.queryKey(),
 					trpc.okr.bangCham.queryKey(),
 					trpc.okr.xuatKy.queryKey(),
+					trpc.okr.canhKr.queryKey(),
+					trpc.okr.mau.queryKey(),
 				],
 				options,
 			),
