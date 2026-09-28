@@ -42,7 +42,7 @@ export async function kiemWorkspace(tx: Tx | Db): Promise<void> {
 	if (!co)
 		throw new LoiBoMau(
 			OKR_MAU.ma.sai,
-			"Kho chưa có workspace: workspace sinh ở lần đăng nhập đầu. Đăng nhập một lần (hoặc `cd apps/api && bun run dev:session <thư của anh>`) rồi nạp lại bộ OKR mẫu.",
+			"Kho chưa có workspace — `bun run db:seed` không tạo nó; workspace sinh ở lần đăng nhập đầu. Đăng nhập một lần (hoặc `cd apps/api && bun run dev:session <thư của anh>`) rồi nạp lại bộ OKR mẫu.",
 		);
 }
 
@@ -149,18 +149,6 @@ async function chuongTrinh(tx: Tx) {
 	return { thang: z.enum(THANG_CHAM).parse(row.scoreScale), trongSo: row.weightsOn, version: row.version };
 }
 
-function quanLyCua(bo: BoOkrMau, ma: string): string | null {
-	const n = bo.nguoi.find((x) => x.ma === ma);
-	if (!n || n.vai === "admin") return null;
-	const laTruongBp = bo.boPhan.some((b) => b.truong === ma);
-	const ceo = bo.nguoi.find((x) => x.vai === "admin")?.ma ?? null;
-	if (laTruongBp) return ceo;
-	const pb = bo.phongBan.find((p) => p.ma === n.phongBan);
-	if (!pb) return ceo;
-	if (pb.truong !== ma) return pb.truong;
-	return bo.boPhan.find((b) => b.ma === pb.boPhan)?.truong ?? ceo;
-}
-
 function donViDb(m: MucTieuMau) {
 	if (m.cap === "phong-ban") return { divisionId: null, departmentId: idMau("pb", m.donVi ?? "") };
 	if (m.cap === "bo-phan") return { divisionId: idMau("bp", m.donVi ?? ""), departmentId: null };
@@ -210,6 +198,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 	await tx.division.createMany({
 		data: bo.boPhan.map((b, i) => ({
 			id: idMau("bp", b.ma),
+			createdAt: bayGio,
 			name: b.ten,
 			position: dauBp + i,
 			headUserId: nguoiId(b.truong),
@@ -219,6 +208,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 	await tx.department.createMany({
 		data: bo.phongBan.map((p, i) => ({
 			id: idMau("pb", p.ma),
+			createdAt: bayGio,
 			name: p.ten,
 			position: dauPb + i,
 			divisionId: idMau("bp", p.boPhan),
@@ -226,14 +216,10 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 		})),
 	});
 	await tx.orgPlacement.createMany({
-		data: bo.nguoi.map((n) => {
-			const ql = quanLyCua(bo, n.ma);
-			return {
-				userId: nguoiId(n.ma),
-				primaryDepartmentId: idMau("pb", n.phongBan),
-				managerUserId: ql ? nguoiId(ql) : null,
-			};
-		}),
+		data: bo.nguoi.map((n) => ({
+			userId: nguoiId(n.ma),
+			primaryDepartmentId: idMau("pb", n.phongBan),
+		})),
 	});
 
 	await tx.okrCycle.create({
@@ -244,6 +230,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			startsOn: ngayDb(lich.nam.tu),
 			endsOn: ngayDb(lich.nam.den),
 			phase: "dang-chay",
+			createdAt: bayGio,
 		},
 	});
 	await tx.okrCycle.createMany({
@@ -256,6 +243,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 				startsOn: ngayDb(lich.quy3.tu),
 				endsOn: ngayDb(lich.quy3.den),
 				phase: "da-dong",
+				createdAt: bayGio,
 			},
 			{
 				id: CHU_KY.quy4,
@@ -265,6 +253,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 				startsOn: ngayDb(lich.quy4.tu),
 				endsOn: ngayDb(lich.quy4.den),
 				phase: "dang-chay",
+				createdAt: bayGio,
 			},
 		],
 	});
@@ -280,6 +269,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			const congBo = m.trangThai !== "nhap";
 			return {
 				id: idMau("mt", m.ma),
+				createdAt: bayGio,
 				cycleId: CHU_KY[m.chuKy],
 				level: m.cap,
 				...donViDb(m),
@@ -295,7 +285,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 		}),
 	});
 	const thamGia = bo.mucTieu.flatMap((m) =>
-		m.thamGia.map((t) => ({ objectiveId: idMau("mt", m.ma), userId: nguoiId(t) })),
+		m.thamGia.map((t) => ({ objectiveId: idMau("mt", m.ma), userId: nguoiId(t), createdAt: bayGio })),
 	);
 	if (thamGia.length) await tx.okrParticipant.createMany({ data: thamGia });
 
@@ -321,6 +311,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			const hien = m.chuKy === "quy3" ? (k.chot ?? k.khoi) : (lan.at(-1)?.giaTri ?? k.khoi);
 			return {
 				id: idMau("kr", k.ma),
+				createdAt: bayGio,
 				objectiveId: idMau("mt", m.ma),
 				title: k.ten,
 				kind: k.kieu,
@@ -343,6 +334,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			.filter((m) => m.canChinh)
 			.map((m) => ({
 				id: idMau("cc", m.ma),
+				createdAt: bayGio,
 				objectiveId: idMau("mt", m.ma),
 				targetObjectiveId: m.canChinh?.mucTieu ? idMau("mt", m.canChinh.mucTieu) : null,
 				targetKeyResultId: m.canChinh?.kr ? idMau("kr", m.canChinh.kr) : null,
@@ -367,6 +359,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			const cuoi = lanCua.get(k.ma)?.lan.at(-1);
 			return {
 				id: idMau("nguon", k.ma),
+				createdAt: bayGio,
 				keyResultId: idMau("kr", k.ma),
 				loai: "crm",
 				chiSo: k.nguon?.chiSo ?? null,
@@ -423,6 +416,7 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			const chot = k.chot ?? k.khoi;
 			return {
 				id: idMau("diem", k.ma),
+				createdAt: bayGio,
 				keyResultId: idMau("kr", k.ma),
 				cycleId: CHU_KY.quy3,
 				soChot: chot,

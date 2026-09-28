@@ -604,8 +604,8 @@
 					"dich": 20,
 					"donVi": "%",
 					"chot": 14,
-					"diem": 0.1,
-					"lyDo": "Chỉ số phần trăm tính trên cả khách rác từ quảng cáo; đội tự chấm thấp hơn gợi ý."
+					"diem": 0.5,
+					"lyDo": "Tỷ lệ tính trên cả khách rác từ quảng cáo; trên khách thật tỷ lệ là 21%, nên đội chấm cao hơn gợi ý."
 				}
 			],
 			"donVi": "marketing",
@@ -1309,23 +1309,32 @@
 			"chuKy": "quy4",
 			"cap": "phong-ban",
 			"chu": "dinh-cong-son",
-			"kieu": "cam-ket",
-			"ten": "Kho chạy không lỗi trong mùa hè",
-			"viSao": "Quý 2 có 3 lần lệch tồn kho quá 2%.",
+			"kieu": "tham-vong",
+			"ten": "Xuất kho nhanh như đối thủ tốt nhất",
+			"viSao": "Đối thủ dẫn đầu xuất kho trong 20 phút; quý 3 mình còn 36.",
 			"krs": [
 				{
+					"ma": "q4-kho-van-2-k1",
+					"ten": "Giữ tỷ lệ đơn xuất kho trong 30 phút trên 80%",
+					"kieu": "giu-tren",
+					"chu": "la-hoang-phuc",
+					"khoi": 62,
+					"dich": 80,
+					"donVi": "%",
+					"kichBan": "deu"
+				},
+				{
 					"ma": "q4-kho-van-2-k2",
-					"ten": "Thời gian xuất kho giảm từ 50 xuống 30 phút",
+					"ten": "Đơn xuất sai hàng giảm từ 25 xuống 8 mỗi tháng",
 					"kieu": "giam-xuong",
 					"chu": "to-thi-hong",
-					"khoi": 36,
-					"dich": 30,
-					"donVi": "phút",
-					"kichBan": "deu"
+					"khoi": 25,
+					"dich": 8,
+					"donVi": "đơn",
+					"kichBan": "cham"
 				}
 			],
 			"donVi": "kho-van",
-			"mangSangTu": "q3-kho-van",
 			"canChinh": {
 				"kr": "n2-k1"
 			}
