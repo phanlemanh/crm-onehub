@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luật từng người · Hình d-3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-3 · Luồng quyết định · slack-thieu-quyen-email</p>
+    <h1>Không email, không dòng khớp thì không xác định — và lượt bị từ chối</h1>
+    <p class="sub">Tác nhân đọc hết danh bạ Slack rồi xét từng người ở đích, sau đó quyết cho cả lượt. Ô «không xác định» là ô mới của lượt này: trước đây người không khớp ai được cho qua. AC-1, AC-3, AC-4, AC-5, AC-6, AC-7.</p>
+
+    <svg viewBox="0 0 1080 880" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="24" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-3 · SAU KHI ĐỌC HẾT DANH BẠ SLACK</text>
+
+      <rect x="24" y="72" width="552" height="720" rx="8" fill="none" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="40" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">1 · XÉT TỪNG NGƯỜI Ở ĐÍCH</text>
+
+      <rect x="600" y="72" width="456" height="720" rx="8" fill="none" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="616" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">2 · QUYẾT CHO CẢ LƯỢT, THEO THỨ TỰ</text>
+
+      <line x1="200" y1="184" x2="200" y2="216" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="308" x2="200" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="428" x2="200" y2="456" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="548" x2="200" y2="576" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="668" x2="200" y2="696" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+
+      <line x1="312" y1="264" x2="396" y2="264" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 312 384 L 472 384 A 8 8 0 0 0 480 376 L 480 296" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="312" y1="504" x2="396" y2="504" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="312" y1="624" x2="396" y2="624" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="712" y1="184" x2="712" y2="216" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="712" y1="308" x2="712" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="712" y1="428" x2="712" y2="456" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="808" y1="264" x2="852" y2="264" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="808" y1="384" x2="852" y2="384" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+
+      <rect x="340" y="244" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="352" y="253" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+      <rect x="328" y="364" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="352" y="373" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">KHÔNG</text>
+      <rect x="340" y="484" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="352" y="493" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+      <rect x="340" y="604" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="352" y="613" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+
+      <rect x="208" y="316" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="212" y="325" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.12em">KHÔNG</text>
+      <rect x="208" y="436" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="212" y="445" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.12em">CÓ</text>
+      <rect x="208" y="556" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="212" y="565" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.12em">KHÔNG</text>
+      <rect x="208" y="676" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="212" y="685" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.12em">KHÔNG</text>
+
+      <rect x="816" y="244" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="828" y="253" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+      <rect x="816" y="364" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="828" y="373" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+      <rect x="720" y="436" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="724" y="445" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.12em">KHÔNG</text>
+      <rect x="720" y="316" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="724" y="325" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.12em">KHÔNG</text>
+
+      <rect x="80" y="136" width="240" height="48" rx="24" fill="#fafafa"/>
+      <rect x="80" y="136" width="240" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="200" y="158" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Một người ở đích</text>
+      <text x="200" y="174" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">mọi thành viên kênh, hoặc người nhận tin</text>
+
+      <polygon points="200,220 312,264 200,308 88,264" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="262" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bot, hay tài khoản</text>
+      <text x="200" y="276" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đã xoá?</text>
+
+      <polygon points="200,340 312,384 200,428 88,384" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="382" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có trong</text>
+      <text x="200" y="396" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">danh bạ Slack?</text>
+
+      <polygon points="200,460 312,504 200,548 88,504" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="500" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Dòng khớp hay email</text>
+      <text x="200" y="514" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trỏ tới «chỉ OKR»?</text>
+
+      <polygon points="200,580 312,624 200,668 88,624" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="620" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có dòng khớp,</text>
+      <text x="200" y="634" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hoặc có email?</text>
+
+      <rect x="400" y="236" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="400" y="236" width="160" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="480" y="260" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không tính</text>
+      <text x="480" y="276" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-6</text>
+
+      <rect x="400" y="476" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="400" y="476" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+      <text x="480" y="498" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chặn</text>
+      <text x="480" y="512" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">người vai «chỉ OKR»</text>
+      <text x="480" y="525" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3 · AC-4</text>
+
+      <rect x="400" y="596" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="400" y="596" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="480" y="618" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cho qua</text>
+      <text x="480" y="632" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">vai đầy đủ, hoặc email ngoài CRM</text>
+      <text x="480" y="645" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3 · AC-6</text>
+
+      <rect x="80" y="700" width="240" height="64" rx="6" fill="#fafafa"/>
+      <rect x="80" y="700" width="240" height="64" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.6"/>
+      <rect x="88" y="708" width="32" height="12" rx="2" fill="#006B4F"/>
+      <text x="104" y="717" fill="#ffffff" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MỚI</text>
+      <text x="200" y="728" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không xác định</text>
+      <text x="200" y="744" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không email đọc được, không dòng khớp</text>
+      <text x="200" y="757" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1 · AC-5</text>
+
+      <rect x="624" y="136" width="176" height="48" rx="24" fill="#fafafa"/>
+      <rect x="624" y="136" width="176" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="712" y="158" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xét xong mọi người</text>
+      <text x="712" y="174" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đếm người chặn, không xác định</text>
+
+      <polygon points="712,220 808,264 712,308 616,264" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="712" y="262" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có người</text>
+      <text x="712" y="276" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bị chặn?</text>
+
+      <polygon points="712,340 808,384 712,428 616,384" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="712" y="382" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có người</text>
+      <text x="712" y="396" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không xác định?</text>
+
+      <rect x="856" y="224" width="184" height="80" rx="6" fill="#fafafa"/>
+      <rect x="856" y="224" width="184" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+      <text x="948" y="248" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+      <text x="948" y="264" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">«có người không đọc được</text>
+      <text x="948" y="277" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">dữ liệu đối tác»</text>
+      <text x="948" y="294" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-4</text>
+
+      <rect x="856" y="328" width="184" height="112" rx="6" fill="#fafafa"/>
+      <rect x="856" y="328" width="184" height="112" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="948" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+      <text x="948" y="368" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">«không kiểm được</text>
+      <text x="948" y="381" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">người nhận»</text>
+      <text x="948" y="398" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">kèm số người không xác định</text>
+      <text x="948" y="411" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">và câu «kết nối lại Slack»</text>
+      <text x="948" y="429" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1 · AC-7</text>
+
+      <rect x="640" y="460" width="144" height="48" rx="24" fill="#fafafa"/>
+      <rect x="640" y="460" width="144" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="712" y="482" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đăng tin</text>
+      <text x="712" y="497" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3 · AC-6</text>
+
+      <text x="624" y="572" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Có cả người bị chặn lẫn người không xác định</text>
+      <text x="624" y="590" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">thì lời chặn thắng.</text>
+      <text x="624" y="628" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Lời từ chối chỉ nêu số người — không nêu tên,</text>
+      <text x="624" y="646" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">email hay mã Slack của ai.</text>
+
+      <line x1="24" y1="816" x2="1056" y2="816" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="836" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="24" y="852" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="56" y="862" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bắt đầu, kết thúc</text>
+      <polygon points="180,852 192,858 180,864 168,858" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="862" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi</text>
+      <rect x="264" y="852" width="24" height="12" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="296" y="862" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Không vào phép đếm</text>
+      <rect x="420" y="852" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="452" y="862" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kết quả</text>
+      <rect x="516" y="852" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+      <text x="548" y="862" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chặn</text>
+      <rect x="600" y="852" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="632" y="862" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Mới ở lượt này</text>
+    </svg>
+
+    <footer>d-3 · slack-thieu-quyen-email · luật xét từng người rồi quyết cho cả lượt · thiết kế 2026-09-28</footer>
+  </div>
+</body>
+</html>
