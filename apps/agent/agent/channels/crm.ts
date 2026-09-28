@@ -5,7 +5,13 @@ import {
 	type EveTurnFailure,
 	eveTurnFailure,
 } from "@crm/validation/eve-stream";
-import { type ChannelEvents, defineChannel, GET, POST } from "eve/channels";
+import {
+	type ChannelEvents,
+	defineChannel,
+	GET,
+	POST,
+	type SendOptions,
+} from "eve/channels";
 import { z } from "zod";
 import { recordBuilderInputRequest } from "../lib/builder-input";
 import { authorised } from "../lib/cau-noi-auth";
@@ -27,11 +33,14 @@ import {
 	DRAIN_TIMEOUT_MS,
 	dispatchHealth,
 	drainAll,
+	guiTuyChon,
 	taskAuth,
 } from "../lib/dispatch";
 import { DISPATCH } from "../lib/dispatch-config";
 import { choKetLuot } from "../lib/dong-luot-tac-nhan";
 import { settle } from "../lib/enrichment";
+import { TRO_LY_OKR } from "../lib/okr/config";
+import { dongViecOkr, laHangTroLyOkr } from "../lib/okr/viec";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { completeTask, taskSubject } from "../lib/tasks";
@@ -90,6 +99,13 @@ export async function closeTask(
 	return true;
 }
 
+async function dongViecOkrChuaNop(token: string | undefined): Promise<boolean> {
+	const taskId = taskFromToken(token);
+	if (!taskId || !(await laHangTroLyOkr(taskId))) return false;
+	await dongViecOkr(taskId, TRO_LY_OKR.ketThuc.khongNop);
+	return true;
+}
+
 function logBuilderFailure(
 	conversationId: string,
 	event: "turn.failed" | "session.failed",
@@ -122,6 +138,7 @@ export const crmEvents: ChannelEvents = {
 	},
 
 	async "session.waiting"(_data, channel) {
+		if (await dongViecOkrChuaNop(channel.continuationToken)) return;
 		if (await closeTask(channel.continuationToken, "ran")) return;
 
 		const conversationId = builderIdFromToken(channel.continuationToken);
@@ -141,6 +158,10 @@ export const crmEvents: ChannelEvents = {
 			eveTurnFailure.parse(data).message ?? "The agent turn failed.";
 
 		if (taskId) {
+			if (await laHangTroLyOkr(taskId)) {
+				await dongViecOkr(taskId, TRO_LY_OKR.ketThuc.turnFailed);
+				return;
+			}
 			const subject = await taskSubject(taskId);
 			if (subject) await settle(subject, EnrichmentStatus.FAILED, reason);
 			return;
@@ -169,6 +190,7 @@ export const crmEvents: ChannelEvents = {
 	},
 
 	async "session.completed"(_data, channel) {
+		if (await dongViecOkrChuaNop(channel.continuationToken)) return;
 		if (await closeTask(channel.continuationToken, "ran")) return;
 
 		const conversationId = builderIdFromToken(channel.continuationToken);
@@ -290,6 +312,7 @@ export default defineChannel({
 						send(brief(task), {
 							auth: taskAuth(task),
 							continuationToken: taskToken(task.id),
+							...guiTuyChon(task),
 						}),
 					);
 					await drainAgentRuns(send);
@@ -400,12 +423,14 @@ export default defineChannel({
 			return dispatchAgentRun(target.runId, send);
 		}
 
-		return send(input.message, {
+		const tuyChon: SendOptions = {
 			auth: input.auth,
 			continuationToken: target.taskId
 				? taskToken(target.taskId)
 				: `crm:adhoc:${crypto.randomUUID()}`,
-		});
+		};
+		if (input.auth?.attributes?.purpose === "okr") tuyChon.mode = "task";
+		return send(input.message, tuyChon);
 	},
 });
 

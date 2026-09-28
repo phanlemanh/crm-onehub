@@ -69,3 +69,50 @@ export type XuLySuKienKenhDoi = (
 	c: { continuationToken: string; setContinuationToken: (t: string) => void },
 	x?: CtxPhien,
 ) => Promise<void>;
+
+export type CtxPhienKenh = CtxPhien & {
+	agent: { name: string };
+	channel: { kind: string; continuationToken?: string };
+};
+
+export type HanhDongYeuCau = {
+	kind: string;
+	callId: string;
+	subagentName?: string;
+	toolName?: string;
+};
+
+export type SuKienYeuCauHanhDong = {
+	type: "actions.requested";
+	data: { actions: HanhDongYeuCau[]; turnId: string; stepIndex: number };
+};
+
+export type XuLyYeuCauHanhDong = (
+	e: SuKienYeuCauHanhDong,
+	c: CtxPhienKenh,
+) => void;
+
+export type SuKienKetQuaHanhDong = {
+	type: "action.result";
+	data: {
+		result: {
+			kind: string;
+			subagentName: string;
+			callId: string;
+			isError: boolean;
+			output: { code: string; message: string };
+		};
+	};
+};
+
+export type XuLyKetQuaHanhDong = (
+	e: SuKienKetQuaHanhDong,
+	c: CtxPhienKenh,
+) => Promise<void>;
+
+export type SuKienPhien = { type: string; data: SuKienTrong };
+
+export type XuLySuKienPhien = (
+	e: SuKienPhien,
+	c: CtxPhienKenh,
+) => Promise<void>;

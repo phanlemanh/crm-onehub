@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luồng việc Trợ lý OKR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · Cổng Phạm vi</p>
+    <h1>Việc của Trợ lý OKR: hai lớp kiểm trần, rồi đóng theo mã</h1>
+    <p class="sub">Liên quan: AC-3 · AC-4 · AC-5 · AC-6</p>
+
+    <svg viewBox="0 0 1184 576" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="40" y1="40" x2="1160" y2="40" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="40" y1="216" x2="1160" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <line x1="40" y1="496" x2="1160" y2="496" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="136" y1="40" x2="136" y2="496" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+
+      <text x="52" y="124" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.16em">MÁY CHỦ</text>
+      <text x="52" y="140" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.16em">DỮ LIỆU</text>
+      <text x="52" y="360" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.16em">TÁC TỬ</text>
+
+      <line x1="320" y1="84" x2="392" y2="84" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="240" y1="112" x2="240" y2="152" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="448" y1="112" x2="448" y2="272" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="520" y1="300" x2="592" y2="300" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="752" y1="300" x2="800" y2="300" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="944" y1="300" x2="1016" y2="300" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="448" y1="328" x2="448" y2="408" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="704" y1="328" x2="704" y2="408" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <path d="M832 328 V420 Q832 428 824 428 H800" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <path d="M904 328 V360 Q904 368 912 368 H1036 Q1044 368 1044 376 V408" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="328" y="60" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="356" y="72" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">sẵn sàng</text>
+
+      <rect x="248" y="124" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="292" y="136" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">không sẵn sàng</text>
+
+      <rect x="524" y="276" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="556" y="288" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">trong trần</text>
+
+      <rect x="948" y="276" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="980" y="288" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">thành công</text>
+
+      <rect x="456" y="352" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="484" y="364" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">hết trần</text>
+
+      <rect x="640" y="352" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="668" y="364" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">lượt hỏng</text>
+
+      <rect x="740" y="372" width="84" height="16" rx="2" fill="#fafafa"/>
+      <text x="782" y="384" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">lỗi phiên con</text>
+
+      <rect x="952" y="344" width="52" height="16" rx="2" fill="#fafafa"/>
+      <text x="978" y="356" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">chết im</text>
+
+      <rect x="160" y="56" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="240" y="80" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xếp việc —</text>
+      <text x="240" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">kiểm sẵn sàng + trần</text>
+
+      <rect x="392" y="56" width="112" height="56" rx="6" fill="#fafafa"/>
+      <rect x="392" y="56" width="112" height="56" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="448" y="88" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hàng việc</text>
+
+      <rect x="176" y="152" width="128" height="40" rx="20" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="240" y="176" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không ghi hàng</text>
+
+      <rect x="376" y="272" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="448" y="296" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nhịp dispatch —</text>
+      <text x="448" y="312" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">kiểm lại</text>
+
+      <rect x="592" y="272" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="672" y="296" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Agent gốc</text>
+      <text x="672" y="312" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chuyển tiếp một lần</text>
+
+      <rect x="800" y="272" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="872" y="296" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trợ lý OKR</text>
+      <text x="872" y="312" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nộp đề xuất</text>
+
+      <rect x="1016" y="272" width="128" height="56" rx="20" fill="#fafafa"/>
+      <rect x="1016" y="272" width="128" height="56" rx="20" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1080" y="296" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đóng việc</text>
+      <text x="1080" y="312" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">theo mã</text>
+
+      <rect x="368" y="408" width="160" height="48" rx="20" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="448" y="428" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đóng: không chạy,</text>
+      <text x="448" y="444" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không mở phiên</text>
+
+      <rect x="640" y="408" width="160" height="40" rx="20" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="720" y="432" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đóng ngay: hỏng + mã</text>
+
+      <rect x="944" y="408" width="200" height="48" rx="20" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="1044" y="428" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Dọn việc treo sau 30 giây</text>
+      <text x="1044" y="444" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">→ đóng: hết lease</text>
+
+      <text x="1044" y="480" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', serif" text-anchor="middle">tối đa 90 giây</text>
+
+      <line x1="40" y1="512" x2="1160" y2="512" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="532" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CHÚ GIẢI</text>
+
+      <rect x="40" y="544" width="16" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="64" y="554" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bước</text>
+
+      <rect x="132" y="544" width="16" height="12" rx="2" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="156" y="554" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Hàng việc</text>
+
+      <rect x="248" y="544" width="24" height="12" rx="6" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="280" y="554" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Kết thúc ở nhánh rẽ</text>
+
+      <rect x="412" y="544" width="24" height="12" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="444" y="554" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Kết thúc thành công</text>
+
+      <line x1="584" y1="550" x2="612" y2="550" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="620" y="554" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Đường chính</text>
+
+      <line x1="720" y1="550" x2="748" y2="550" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="756" y="554" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nhánh rẽ</text>
+    </svg>
+  </div>
+</body>
+</html>

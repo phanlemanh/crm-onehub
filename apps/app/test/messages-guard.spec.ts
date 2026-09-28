@@ -123,6 +123,7 @@ const KHONG_DAU = new Set([
 	"dau.bangTinh",
 	"cham.mangSang",
 	"mangSang.xacNhan",
+	"hop.onehub",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -163,7 +164,43 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.stage",
 ];
 
+const GHIM_TRO_LY_OKR = {
+	"tro-ly-okr:so.doiSoat.khongDuoc": [
+		"Đối soát tháng 1: chưa đối soát được — A.",
+		"Đối soát tháng 12: chưa đối soát được — A.",
+	],
+	"tro-ly-okr:so.doiSoat.khop": [
+		"Đối soát tháng 1 với AI Gateway: khớp (lệch A%).",
+		"Đối soát tháng 12 với AI Gateway: khớp (lệch A%).",
+	],
+	"tro-ly-okr:so.doiSoat.lech": [
+		"Đối soát tháng 1 với AI Gateway: lệch A%.",
+		"Đối soát tháng 12 với AI Gateway: lệch A%.",
+	],
+	"tro-ly-okr:so.doiSoat.loiGateway": [
+		"AI Gateway trả lỗi 1",
+		"AI Gateway trả lỗi 12",
+	],
+	"tro-ly-okr:so.rongMoTa": [
+		"Trần của Trợ lý OKR: 1.",
+		"Trần của Trợ lý OKR: 12.",
+	],
+	"tro-ly-okr:troLy.donViBat": ["Đơn vị bật 1", "Đơn vị bật 12"],
+	"tro-ly-okr:troLy.hop.goiYPhongBan": ["Phòng ban · 1", "Phòng ban · 12"],
+	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị cho «1»", "Đơn vị cho «12»"],
+	"tro-ly-okr:troLy.hop.xacNhan": ["Chọn 1 đơn vị", "Chọn 12 đơn vị"],
+	"tro-ly-okr:troLy.sanSang.chuaSanSang": [
+		"Chưa sẵn sàng — 1",
+		"Chưa sẵn sàng — 12",
+	],
+	"tro-ly-okr:troLy.sanSang.hetTran": [
+		"Đã chạm trần tháng — tạm nghỉ tới 1",
+		"Đã chạm trần tháng — tạm nghỉ tới 12",
+	],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
+	...GHIM_TRO_LY_OKR,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],

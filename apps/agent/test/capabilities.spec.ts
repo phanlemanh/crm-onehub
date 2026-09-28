@@ -15,6 +15,8 @@ const KEYS = [
 	"ZALO_BOT_TOKEN",
 	"GOOGLE_SHEETS_EMAIL",
 	"GOOGLE_SHEETS_KHOA",
+	"AI_GATEWAY_API_KEY",
+	"VERCEL_OIDC_TOKEN",
 ] as const;
 
 const saved: Record<string, string | undefined> = {};
