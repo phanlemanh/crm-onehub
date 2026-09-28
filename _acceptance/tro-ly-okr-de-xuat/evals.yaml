@@ -71,7 +71,7 @@ evals:
     cmd: config:executors.test.tdx_nop_ghi
     expected: "exit 0; tool nop_de_xuat THẬT (execute của subagents/tro_ly_okr/tools/nop_de_xuat.ts) gọi trên kho kiểm với hàng việc do xepViecTroLy ghi và claimDue nhận, ngữ cảnh phiên con dựng theo đúng đường 9a đã đo (lib/phien-con.ts): nộp mười dòng đỏ (một mỗi mã) và ba dòng lành → db.okrDeXuat có 3 dòng 'cho' và 10 dòng 'bi-loai' mang đúng maLoai; okr.troLyDanhSach trả đúng 3 dòng; rồi okr.updateKeyResult đổi startValue để một dòng lành chứa số không còn trong đầu vào → troLyDanhSach trả 2 dòng. Chiều đỏ: bản sao bỏ lần chạy lại bộ kiểm ở troLyDanhSach → 3 dòng, thông điệp ghim 'doc lai khong kiem lai'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/test/tro-ly-okr-nop.integration.spec.ts]
+    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/test/tro-ly-okr-nop.integration.spec.ts, packages/db/src/okr-de-xuat.ts]
 
   - id: E8
     criterion: AC-5
@@ -80,7 +80,7 @@ evals:
     cmd: config:executors.test.tdx_khong_moi_lai
     expected: "exit 0; trên kho kiểm, mọi dòng đi qua nop_de_xuat thật và troLyQuyet thật (không chèn okrDeXuat tay): bác dòng viết lại kr.title, bỏ qua câu hỏi kr-la-viec, bác Căn chỉnh tới đích X; lượt nộp sau nộp lại đúng ba khoá (câu khác chữ) → ba dòng 'bi-loai' maLoai 'da-bac'; okr.updateKeyResult đổi tên KR đó bởi người dùng → lượt sau nộp viết lại kr.title → 'cho'; dòng 'cho' có truoc khác giá trị hiện tại → troLyDanhSach không trả và dòng thành 'het-han'. Chiều đỏ: bản sao khoá viết lại theo câu sau chuẩn hoá thay vì theo (Mục tiêu, KR, trường) → câu khác chữ lọt thành 'cho', thông điệp ghim 'moi lai sau khi bac'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/test/tro-ly-okr-nop.integration.spec.ts]
+    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/test/tro-ly-okr-nop.integration.spec.ts, packages/db/src/okr-de-xuat.ts]
 
   - id: E9
     criterion: AC-6
@@ -184,7 +184,7 @@ evals:
     cmd: config:executors.test.tdx_so_do
     expected: "exit 0; kho kiểm dựng một tháng bằng bên ghi thật (xepViecTroLy, nop_de_xuat, troLyQuyet, okr.updateObjective cho hoàn tác, ghiChiPhi) ở cả hai nấc; okr.troLySoDo trả mỗi số; bài chạy các câu rang/ty-le-quyet.sql, hoan-tac.sql, do-tre.sql, bi-loai.sql, chi-phi-moi-nhan.sql (đường suy từ vị trí bài, không hằng gốc) trên cùng kho và so từng số bằng nhau, tách nấc; số kỳ vọng viết tay trong bài cho kho dựng sẵn (vd nhận 3/8 = 37,5%) để phép so không chỉ là hai bên cùng sai. Kho dựng có một dòng het-han đã hiện (hienLuc có, do troLyDanhSach thật ghi) và một dòng het-han chưa hiện — chỉ dòng thứ nhất vào mẫu số; sổ chi phí có tiền của lượt ẩn khác 0 — chi phí mỗi đề xuất nhận của cột Bật không đổi khi thêm tiền chế độ ẩn, cột Ẩn là tiền chế độ ẩn chia số lượt ẩn. Chiều đỏ: bản sao troLySoDo tính nhận trên tổng gồm cả bi-loai → 'so do lech: ty-le-nhan'; câu SQL bản sao đếm dòng chưa hiện → 'mau so tinh dong chua hien'; câu SQL bản sao cộng tiền chế độ ẩn vào tử số → 'chi phi an vao ty so'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, "_acceptance/tro-ly-okr-de-xuat/rang/*.sql", apps/api/test/tro-ly-okr-so-do.spec.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, "_acceptance/tro-ly-okr-de-xuat/rang/*.sql", apps/api/test/tro-ly-okr-so-do.spec.ts, packages/db/src/okr-de-xuat.ts]
 
   - id: E21
     criterion: AC-13
