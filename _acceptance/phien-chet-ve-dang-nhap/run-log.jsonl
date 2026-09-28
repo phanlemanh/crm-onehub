@@ -24,3 +24,4 @@
 {"ts":"2026-09-28T02:16:52Z","sha":"ee1cbfa47ffad4c908266af4dc7c814ebf3cf68d","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":15}
 {"kind":"thuoc-vat","ts":"2026-09-28T02:30:38Z","round":1,"san":"ee1cbfa47ffad4c908266af4dc7c814ebf3cf68d","vat":[0,0],"thuoc":[0,0],"ho_so":[24,0],"nhat":0,"lan":0,"tep_thuoc":[]}
 {"ts":"2026-09-28T02:41:21Z","kind":"repin","run_id":"repin-20260928T024121Z-51987","sha":"4db09e53f1e24e02cc228305f7cc4d75345abe5a","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E10":0,"E11":0},"evals_not_machine":["E9"]}
+{"ts":"2026-09-28T04:24:12Z","kind":"repin","run_id":"repin-20260928T042412Z-16246","sha":"6fc7350c37a1904329e60f5fb9beee60cf100236","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E10":0,"E11":0},"evals_not_machine":["E9"]}

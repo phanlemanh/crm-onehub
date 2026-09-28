@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4db09e53f1e24e02cc228305f7cc4d75345abe5a
+verified_commit: 6fc7350c37a1904329e60f5fb9beee60cf100236
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -207,3 +207,7 @@ Round 1: toàn bộ 11 eval (E1-E11) và 4 lệnh suite (`bun run test`, `bunx t
 ### Re-pin lần 1 — 2026-09-28, do hoá cũ do gộp origin/onehub (#181, #182) trước khi mở PR
 run_id: repin-20260928T024121Z-51987
 sha: 4db09e53f1e24e02cc228305f7cc4d75345abe5a · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9
+
+### Re-pin lần 2 — 2026-09-28, do hoá cũ do gộp origin/onehub (#185) trước khi merge PR #184
+run_id: repin-20260928T042412Z-16246
+sha: 6fc7350c37a1904329e60f5fb9beee60cf100236 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9
