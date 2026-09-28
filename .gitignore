@@ -60,3 +60,5 @@ __pycache__/
 *.pyc
 
 apps/agent/rang/.tmp/
+
+_acceptance/may-soan-de-xuat/mau/that/
