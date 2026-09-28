@@ -55,6 +55,7 @@ export const taiLieuNguonTaiVeOutput = z.object({
 	hetHan: z.number(),
 });
 export const taiLieuNguonTrangThaiOutput = z.object({ bat: z.boolean() });
+export type TrangThaiKho = z.infer<typeof taiLieuNguonTrangThaiOutput>;
 export const taiLieuNguonOkOutput = z.object({ ok: z.literal(true) });
 
 export type TaiLieuNguonXinChoInput = z.infer<typeof taiLieuNguonXinChoInput>;

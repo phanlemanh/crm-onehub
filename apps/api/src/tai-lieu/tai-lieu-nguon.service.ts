@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import type { Db, Prisma } from "@crm/db";
+import { type Db, type Prisma, Prisma as PrismaNamespace } from "@crm/db";
 import { type KhoNguon, PATHNAME_NGUON } from "@crm/db/blob-nguon";
 import {
 	type DichNguon,
@@ -31,6 +31,7 @@ import type {
 	NguonDong,
 	TaiLieuNguonNhanInput,
 	TaiLieuNguonXinChoInput,
+	TrangThaiKho,
 } from "./tai-lieu-nguon.contracts";
 
 const T = NGUON.thongDiep;
@@ -72,12 +73,10 @@ function kieuTuTen(tenTep: string): KieuNguonTep | null {
 	return null;
 }
 
-function laTrung(loi: unknown): boolean {
+function laTrung(loi: Error): boolean {
 	return (
-		typeof loi === "object" &&
-		loi !== null &&
-		"code" in loi &&
-		(loi as { code: unknown }).code === "P2002"
+		loi instanceof PrismaNamespace.PrismaClientKnownRequestError &&
+		loi.code === "P2002"
 	);
 }
 
@@ -92,7 +91,7 @@ export class TaiLieuNguonService {
 		@Inject(TaiLieuService) private readonly taiLieu: TaiLieuService,
 	) {}
 
-	trangThai(): { bat: boolean } {
+	trangThai(): TrangThaiKho {
 		return { bat: this.kho.bat() };
 	}
 
@@ -202,7 +201,7 @@ export class TaiLieuNguonService {
 				return { nguonId: nguon.id, trung: false };
 			});
 		} catch (loi) {
-			if (!laTrung(loi)) throw loi;
+			if (!(loi instanceof Error) || !laTrung(loi)) throw loi;
 			const trung = await this.nguonTheoBam(vao.sha256);
 			if (!trung) throw loi;
 			return { nguonId: trung, trung: true };

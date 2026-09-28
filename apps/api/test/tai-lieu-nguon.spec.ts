@@ -93,9 +93,22 @@ async function viecCua(nguonId: string): Promise<number> {
 	});
 }
 
-function coUrl(hang: Record<string, unknown>): string[] {
-	return Object.entries(hang)
-		.filter(([, v]) => typeof v === "string" && /https?:/.test(v))
+function coUrl(hang: {
+	tenTep: string;
+	blobPathname: string;
+	sha256: string;
+	lyDo: string | null;
+	chu: string | null;
+}): string[] {
+	const cot = {
+		tenTep: hang.tenTep,
+		blobPathname: hang.blobPathname,
+		sha256: hang.sha256,
+		lyDo: hang.lyDo ?? "",
+		chu: hang.chu ?? "",
+	};
+	return Object.entries(cot)
+		.filter(([, v]) => /https?:/.test(v))
 		.map(([k]) => k);
 }
 

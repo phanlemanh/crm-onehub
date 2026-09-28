@@ -1,4 +1,4 @@
-import type { Prisma } from "./generated/prisma/client";
+import { Prisma } from "./generated/prisma/client";
 
 export type SuKienDeXuat = "TAO" | "DE_XUAT";
 
@@ -33,7 +33,7 @@ export async function taoDeXuatTaiLieu(
 			noiDung: moi.noiDung,
 			taoBoiId: moi.taoBoiId,
 			nguonId: moi.nguonId ?? null,
-			...(moi.trichDoan == null ? {} : { trichDoan: moi.trichDoan }),
+			trichDoan: moi.trichDoan ?? Prisma.DbNull,
 		},
 		select: { id: true },
 	});
