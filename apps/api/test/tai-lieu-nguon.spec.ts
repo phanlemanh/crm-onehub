@@ -44,14 +44,14 @@ async function taiLen(
 	them: Record<string, Json> = {},
 	kichThuocKhai = byte.length,
 ): Promise<{ tra: TraLoi; pathname: string }> {
-	const cho = ok<{ pathname: string }>(
+	const cho = ok<{ pathname: string; phieu: string }>(
 		await xinCho(ai, tenTep, kieu, kichThuocKhai),
 		`xin cho ${tenTep}`,
 	);
 	gia.daPut.set(cho.pathname, byte);
 	const tra = await goi(
 		"taiLieuNguon.nhan",
-		{ pathname: cho.pathname, tenTep, dich, ...them },
+		{ pathname: cho.pathname, tenTep, dich, phieu: cho.phieu, ...them },
 		ai,
 	);
 	return { tra, pathname: cho.pathname };

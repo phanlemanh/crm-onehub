@@ -249,6 +249,7 @@ function NoiDungHop({
 			setBuoc("nhan");
 			const kq = await nhan.mutateAsync({
 				pathname: cho.pathname,
+				phieu: cho.phieu,
 				tenTep: f.name,
 				dich: vao,
 			});

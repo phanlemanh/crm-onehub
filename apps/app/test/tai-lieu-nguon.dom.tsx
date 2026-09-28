@@ -9,7 +9,12 @@ import {
 import { createRoot, type Root } from "react-dom/client";
 
 type VaoXinCho = { tenTep: string; kichThuoc: number; kieu: string };
-type VaoNhan = { pathname: string; tenTep: string; dich: unknown };
+type VaoNhan = {
+	pathname: string;
+	phieu: string;
+	tenTep: string;
+	dich: unknown;
+};
 type TuyChonDotBien<V, R> = { onSuccess?: (r: R, v: V) => unknown };
 
 type HangGia = {
@@ -34,6 +39,7 @@ type HangGia = {
 const MB = 1024 * 1024;
 const PATHNAME = "kho-tai-lieu/nguon/0b6f3c1e-9a4d-4c55-8f0e-2a1b3c4d5e6f";
 const URL_PUT = "https://blob.gia/put";
+const PHIEU = "1790000000000.phieu-gia";
 
 const goi = {
 	xinCho: [] as VaoXinCho[],
@@ -94,6 +100,7 @@ mock.module("@/lib/trpc/client", () => ({
 				pathname: PATHNAME,
 				url: URL_PUT,
 				hetHan: Date.now() + 600_000,
+				phieu: PHIEU,
 			})),
 			nhan: dotBien("taiLieuNguon.nhan", goi.nhan, () => canh.ketNhan),
 			soanLai: dotBien("taiLieuNguon.soanLai", goi.soanLai, () => ({
@@ -381,6 +388,7 @@ describe("tai-loi — hộp tải từ chối tệp sai ở máy khách (E3d)", 
 		expect(goi.nhan).toEqual([
 			{
 				pathname: PATHNAME,
+				phieu: PHIEU,
 				tenTep: "quy-dinh.docx",
 				dich: {
 					loai: "moi",

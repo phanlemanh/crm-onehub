@@ -17,9 +17,12 @@ import {
 	NotFoundException,
 	PreconditionFailedException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
+import type { EnvironmentVariables } from "../config/env.validation";
 import { InjectDatabase } from "../database/database.constants";
 import { KHO_NGUON, nhanKieu } from "./kho-nguon";
+import { kiemPhieu, kyPhieu } from "./phieu-nguon";
 import {
 	dieuKienSoanLai,
 	dieuKienThayNguon,
@@ -27,6 +30,7 @@ import {
 	soanLaiDuoc,
 } from "./quyen";
 import { TaiLieuService, type TrangMoiSach } from "./tai-lieu.service";
+import { TAI_LIEU_API } from "./tai-lieu-config";
 import type {
 	NguonDong,
 	TaiLieuNguonNhanInput,
@@ -89,7 +93,14 @@ export class TaiLieuNguonService {
 		@Inject(KHO_NGUON) private readonly kho: KhoNguon,
 		@Inject(AgentTriggerService) private readonly agent: AgentTriggerService,
 		@Inject(TaiLieuService) private readonly taiLieu: TaiLieuService,
+		@Inject(ConfigService)
+		private readonly config: ConfigService<EnvironmentVariables, true>,
 	) {}
+
+	private khoaPhieu(): string {
+		const bi = this.config.get("BETTER_AUTH_SECRET", { infer: true });
+		return `${TAI_LIEU_API.phieuNguon.tienTo}:${bi}`;
+	}
 
 	trangThai(): TrangThaiKho {
 		return { bat: this.kho.bat() };
@@ -99,7 +110,7 @@ export class TaiLieuNguonService {
 		if (!this.kho.bat()) throw new PreconditionFailedException(T.tat);
 	}
 
-	async xinCho(input: TaiLieuNguonXinChoInput) {
+	async xinCho(nguoi: NguoiGoi, input: TaiLieuNguonXinChoInput) {
 		this.canBat();
 		if (kieuTuTen(input.tenTep) !== input.kieu) {
 			throw new BadRequestException(T.saiLoai);
@@ -113,11 +124,28 @@ export class TaiLieuNguonService {
 			kieu: input.kieu,
 			toiDa: NGUON.toiDaByte,
 		});
-		return { pathname, url: ky.url, hetHan: ky.hetHan };
+		const phieu = kyPhieu(
+			this.khoaPhieu(),
+			{ userId: nguoi.id, pathname },
+			Date.now() + TAI_LIEU_API.phieuNguon.hanMs,
+		);
+		return { pathname, url: ky.url, hetHan: ky.hetHan, phieu };
 	}
 
 	async nhan(nguoi: NguoiGoi, input: TaiLieuNguonNhanInput) {
 		this.canBat();
+		const cuaNguoiGoi = kiemPhieu(
+			this.khoaPhieu(),
+			{ userId: nguoi.id, pathname: input.pathname },
+			input.phieu,
+			Date.now(),
+		);
+		if (!cuaNguoiGoi) throw new BadRequestException(T.phieuSai);
+		const daCo = await this.db.taiLieuNguon.findUnique({
+			where: { blobPathname: input.pathname },
+			select: { id: true },
+		});
+		if (daCo) throw new BadRequestException(T.phieuSai);
 		const byte = await this.kho.doc(input.pathname);
 		if (!byte) throw new BadRequestException(T.chuaTai);
 		try {

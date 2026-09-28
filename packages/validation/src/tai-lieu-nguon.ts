@@ -34,6 +34,7 @@ export const NGUON = {
 			"Chỉ cập nhật được trang đã có bản đang dùng. Chọn «Trang mới» cho trang chưa duyệt lần nào.",
 		dangSoan: "Máy đang soạn nguồn này. Chờ xong rồi mới soạn lại được.",
 		khongCanSoanLai: "Nguồn này không cần soạn lại.",
+		phieuSai: "Không nhận được tệp này. Tải lên lại từ đầu.",
 	},
 	nhanTrangThai: {
 		CHO_DOC: "Máy đang soạn",

@@ -1,6 +1,7 @@
 import { TAI_LIEU } from "@crm/validation/tai-lieu";
 
 const HE_SO_NFD = 3;
+const PHUT_MS = 60_000;
 
 export const TAI_LIEU_API = {
 	vao: {
@@ -11,6 +12,7 @@ export const TAI_LIEU_API = {
 	},
 	deXuat: { coTrang: TAI_LIEU.danhSach.coTrang },
 	dangDung: { toiDa: 500 },
+	phieuNguon: { tienTo: "kho-tai-lieu:phieu-nguon", hanMs: 60 * PHUT_MS },
 	khoaSlug: "tai-lieu-slug",
 	suKienCu: "ban-goc-da-doi",
 	thongDiep: {

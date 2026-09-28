@@ -63,6 +63,7 @@ try {
 
 	const nhan = await d.lam(u.cookie, "taiLieuNguon.nhan", {
 		pathname,
+		phieu: cho.phieu,
 		tenTep: "blob-that.docx",
 		dich: {
 			loai: "moi",

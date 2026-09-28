@@ -18,12 +18,14 @@ export const taiLieuNguonXinChoOutput = z.object({
 	pathname: z.string(),
 	url: z.string(),
 	hetHan: z.number(),
+	phieu: z.string(),
 });
 
 export const taiLieuNguonNhanInput = z.object({
 	pathname: z.string().regex(NGUON.pathname),
 	tenTep: z.string().min(1).max(NGUON.tenTepToiDa),
 	dich: dichNguon,
+	phieu: z.string().min(1).max(TAI_LIEU_API.vao.ma),
 });
 export const taiLieuNguonNhanOutput = z.object({
 	nguonId: z.string(),

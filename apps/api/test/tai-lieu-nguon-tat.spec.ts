@@ -38,6 +38,7 @@ describe("nguon-tat", () => {
 				pathname: "kho-tai-lieu/nguon/00000000-0000-4000-8000-000000000000",
 				tenTep: "a.pdf",
 				dich: { loai: "cap-nhat", slug: "khong-co" },
+				phieu: "0.khong-co-phieu",
 			},
 			"tao",
 		);

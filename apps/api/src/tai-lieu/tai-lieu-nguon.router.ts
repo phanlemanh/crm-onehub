@@ -53,8 +53,11 @@ export class TaiLieuNguonRouter {
 		output: taiLieuNguonXinChoOutput,
 		meta: restMeta("POST", "/tai-lieu/nguon/xin-cho", TAG),
 	})
-	xinCho(@Input() input: z.infer<typeof taiLieuNguonXinChoInput>) {
-		return this.nguon.xinCho(input);
+	xinCho(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuNguonXinChoInput>,
+	) {
+		return this.nguon.xinCho(nguoiGoi(ctx), input);
 	}
 
 	@Mutation({

@@ -44,7 +44,7 @@ type Mau = { nguonId: string; deXuatId: string; sha256: string };
 
 async function nguonThat(): Promise<Mau> {
 	const byte = docxNho(ma("chu"));
-	const cho = ok<{ pathname: string }>(
+	const cho = ok<{ pathname: string; phieu: string }>(
 		await goi(
 			"taiLieuNguon.xinCho",
 			{ tenTep: "q.docx", kieu: "docx", kichThuoc: byte.length },
@@ -57,6 +57,7 @@ async function nguonThat(): Promise<Mau> {
 		"taiLieuNguon.nhan",
 		{
 			pathname: cho.pathname,
+			phieu: cho.phieu,
 			tenTep: "q.docx",
 			dich: {
 				loai: "moi",
