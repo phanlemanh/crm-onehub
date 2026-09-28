@@ -5,7 +5,7 @@ slug: nguon-keo-tha-reui
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-28-nguon-keo-tha-reui-design.md
 approved_by:
 approved_at:
