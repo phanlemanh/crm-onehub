@@ -5,7 +5,7 @@ slug: kho-nguon-khoa-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-28-kho-nguon-khoa-rieng-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-28
@@ -67,3 +67,7 @@ App mục III Config — cấu hình khác nhau thì là biến khác nhau.
   đầu nhánh, sau lần commit cuối.
 - **Tiền đề của AC-6:** chủ kho tự thêm dòng `KHO_TAI_LIEU_BLOB_TOKEN=…` vào `.env` gốc (khoá
   của store `kho-tai-lieu-nguon`); máy không đọc, không in giá trị.
+- **Known limits (chủ kho ký ở Cổng Bằng chứng round 2, 2026-09-28):**
+  - Ngoài-1 — bảng kiểm năng lực lưu nguồn của trợ lý AI có bộ đếm tự so với chính độ dài bảng; lỡ xoá bớt một ca thì phép kiểm vẫn báo đạt.
+  - Ngoài-2 — một câu ở `docs/environment.md` kể sai tên task khai biến (đúng là: api `dev`, `test`; agent `dev`, `dev:headless`); biến vẫn chạy đúng nhờ khai chung ở `turbo.json` gốc.
+  - Ngoài-3 — bảng kiểm 6 ô hai khoá có cùng kiểu bộ đếm tự so; lỡ xoá bớt một ca thì phép kiểm vẫn báo đạt.

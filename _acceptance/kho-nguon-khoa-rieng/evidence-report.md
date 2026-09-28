@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: c66166fe7cdc1bccd902a057e8b486e66072fdac
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-28
 ---
 
 # Evidence Report: kho-nguon-khoa-rieng
