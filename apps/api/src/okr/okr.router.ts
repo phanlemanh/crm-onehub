@@ -1,3 +1,8 @@
+import {
+	danhDauViecInput,
+	suaViecInput,
+	themViecInput,
+} from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import {
 	chamKrInput,
@@ -70,6 +75,13 @@ import {
 	viecCuaToiOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import {
+	canhKrInput,
+	canhKrOutput,
+	goViecInput,
+	idOutput,
+} from "./okr-canh-kr.contracts";
+import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
 import {
 	bangChamInput,
@@ -124,6 +136,7 @@ export class OkrRouter {
 		@Inject(OkrSoService) private readonly so: OkrSoService,
 		@Inject(TroLyOkrService) private readonly troLy: TroLyOkrService,
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
+		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -643,6 +656,66 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof addCommentInput>,
 	) {
 		return this.traoDoi.addComment(ctx.user.id, input);
+	}
+
+	@Query({
+		input: canhKrInput,
+		output: canhKrOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/canh", TAG),
+	})
+	canhKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof canhKrInput>,
+	) {
+		return this.canh.canhKr(ctx.user.id, input.keyResultId);
+	}
+
+	@Mutation({
+		input: themViecInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/key-results/{keyResultId}/viec", TAG),
+	})
+	themViec(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof themViecInput>,
+	) {
+		return this.canh.themViec(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaViecInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/viec/{id}", TAG),
+	})
+	suaViec(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaViecInput>,
+	) {
+		return this.canh.suaViec(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: danhDauViecInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/viec/{id}/xong", TAG),
+	})
+	danhDauViec(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof danhDauViecInput>,
+	) {
+		return this.canh.danhDauViec(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: goViecInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/viec/{id}/go", TAG),
+	})
+	goViec(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof goViecInput>,
+	) {
+		return this.canh.goViec(ctx.user.id, input);
 	}
 
 	@Mutation({

@@ -80,6 +80,16 @@ export const OKR = {
 			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
 		},
+		canhKr: {
+			mucTieuDaBo: "Mục tiêu này đã bỏ — việc cạnh KR chỉ đọc.",
+			khongSuaDuoc:
+				"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới đổi việc của KR này.",
+			khongCoViec: (id: string) => `Không có việc nào mang mã ${id}.`,
+			chiViecTuGo:
+				"Chỉ sửa hay đánh dấu được việc tự gõ — sáng kiến gắn sẵn thì gỡ.",
+			nguoiLamKhongPhaiThanhVien:
+				"Người làm phải là thành viên còn trong không gian làm việc.",
+		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
 			choChinhMinh: "Người nhận phải khác người đang phụ trách.",
