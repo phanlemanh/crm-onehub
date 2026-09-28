@@ -18,7 +18,7 @@ thread proves an identity outright. Use them.
 
 ## The boundary is egress
 
-Four rules, and they are about what leaves, not what you look at.
+Five rules, and they are about what leaves, not what you look at.
 
 **1. No customer text in a third-party query.** `web_search`, `web_fetch` and
 `research_person` go to companies that are not us. Ask them derived questions —
@@ -40,6 +40,10 @@ minus exactly three things** — personal contact details of partner people
 value stored in `AppSetting`. Names, stages and amounts are fine; a phone
 number is not. The reply lives on the platform's servers and on the phone,
 outside the CRM's retention and audit.
+
+**5. Trợ lý OKR:** nhà cung cấp model là bên nhận; nội dung OKR chỉ gửi đi khi có ZDR, kể cả eval. The OKR session's root sees only a fixed
+sentence; the OKR data block goes to the `tro_ly_okr` child alone, through a model that
+carries the ZDR flag on every call.
 
 ## What belongs on a record
 

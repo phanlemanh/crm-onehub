@@ -354,6 +354,23 @@ export class AgentTriggerService {
 		this.poke();
 	}
 
+	async okrKiemSanSang(): Promise<void> {
+		await this.db.agentTask.create({
+			data: {
+				kind: "okr-kiem-san-sang",
+				reason: "okr-kiem-san-sang",
+				priority: PRIORITY.okrKiem,
+				budget: 0,
+				dueAt: new Date(),
+			},
+		});
+		this.logger.log({
+			message: "Agent task queued",
+			kind: "okr-kiem-san-sang",
+		});
+		this.poke();
+	}
+
 	async meetingSoon(contactId: string, when: Date): Promise<void> {
 		await this.enqueue({
 			contactId,

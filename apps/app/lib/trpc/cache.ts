@@ -269,6 +269,7 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.alignmentTargets.queryKey(),
 					trpc.okr.cycles.queryKey(),
 					trpc.okr.program.queryKey(),
+					trpc.okr.aiChiTieu.queryKey(),
 					trpc.okr.danhSach.queryKey(),
 					trpc.okr.cayCanChinh.queryKey(),
 					trpc.okr.toanCanh.queryKey(),

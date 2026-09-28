@@ -1,3 +1,5 @@
+import { dinhUsd } from "@crm/db/ai-chi-phi-danh-muc";
+import type { ViecAi } from "@crm/db/ai-nhac";
 import type { ViecOkr } from "@crm/db/okr-nhac";
 import {
 	laBuoiSang,
@@ -19,6 +21,8 @@ export const TIEU_DE = {
 	"okr-duoc-giao": "Được giao",
 	"okr-nhac-ten": "Nhắc tên",
 	"okr-theo-doi": "Đang theo dõi",
+	"ai-tran": "Ngân sách AI",
+	"ai-doi-soat-lech": "Đối soát AI",
 } as const satisfies { [K in LoaiTin]: string };
 
 function thoat(chu: string): string {
@@ -77,6 +81,40 @@ function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
 	}
 }
 
+function thangNam(thang: string): string {
+	const [nam, so] = thang.split("-");
+	return `${so}/${nam}`;
+}
+
+function thangSauDau(thang: string): string {
+	const [, so] = thang.split("-").map(Number) as [number, number];
+	return so === 12 ? "01/01" : `01/${String(so + 1).padStart(2, "0")}`;
+}
+
+export function noiDungAi(v: ViecAi): string {
+	if (v.loai === "ai-tran") {
+		const so = `${dinhUsd(v.chiUsd)} / ${dinhUsd(v.tranUsd)}`;
+		return v.muc === 100
+			? `Trợ lý OKR đã chạm trần tháng (${so}) — tạm nghỉ tới ${thangSauDau(v.thang)}`
+			: `Trợ lý OKR đã dùng 80% trần tháng (${so})`;
+	}
+	return `Đối soát tháng ${thangNam(v.thang)} với AI Gateway lệch ${String(v.lechPhanTram).replace(".", ",")}% (sổ ${dinhUsd(v.soSoUsd)}, Gateway ${dinhUsd(v.soGatewayUsd)})`;
+}
+
+function dongAi(
+	v: ViecAi,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
+	if (khuon === "tron") {
+		const mo = url ? ` — ${url}` : "";
+		return `${so}. ${noiDungAi(v)}${mo}`;
+	}
+	const mo = url ? ` — <${url}|mở cài đặt OKR>` : "";
+	return `• ${thoat(noiDungAi(v))}${mo}`;
+}
+
 function dongOkr(
 	v: ViecOkr,
 	so: number,
@@ -94,9 +132,11 @@ function dongOkr(
 
 function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	const url = lienKet(v);
-	return "planId" in v
-		? dongKeHoach(v, so, url, khuon)
-		: dongOkr(v, so, url, khuon);
+	if ("planId" in v) return dongKeHoach(v, so, url, khuon);
+	if (v.loai === "ai-tran" || v.loai === "ai-doi-soat-lech") {
+		return dongAi(v, so, url, khuon);
+	}
+	return dongOkr(v, so, url, khuon);
 }
 
 export type TinNhac = { text: string; daGui: ViecNhac[] };

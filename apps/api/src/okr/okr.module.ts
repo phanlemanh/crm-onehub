@@ -10,6 +10,7 @@ import { OkrKhepService } from "./okr-khep.service";
 import { OkrSoService } from "./okr-so.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import { OkrXemService } from "./okr-xem.service";
+import { TroLyOkrService } from "./tro-ly.service";
 
 @Module({
 	imports: [TrpcModule, ToChucModule, AgentModule],
@@ -20,6 +21,7 @@ import { OkrXemService } from "./okr-xem.service";
 		OkrCapNhatService,
 		OkrTraoDoiService,
 		OkrSoService,
+		TroLyOkrService,
 		OkrKhepService,
 		OkrRouter,
 	],
