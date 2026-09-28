@@ -104,7 +104,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_tach_tx
-    expected: "exit 0; chạy nguyên các bài OKR sẵn có của API (test/okr.spec.ts, okr-can-chinh, okr-khep và mọi tệp test/okr*.spec.ts) không sửa kỳ vọng — git diff của các tệp đó so với merge-base rỗng (bài tự kiểm và in); cộng ca mới: Hoàn tác sau Nhận ghi lại truoc qua okr.updateObjective, rang/hoan-tac.sql đếm dòng đó là hoàn tác trong 7 ngày; hoàn tác ở ngày thứ 8 (đồng hồ giả) không đếm. Chiều đỏ: câu SQL bản sao bỏ điều kiện 7 ngày → ca ngày thứ 8 đếm 1, thông điệp ghim 'hoan tac ngoai 7 ngay'."
+    expected: "exit 0; chạy nguyên các bài OKR sẵn có của API (test/okr.spec.ts, okr-can-chinh, okr-khep và mọi tệp test/okr*.spec.ts) không sửa kỳ vọng — git diff của các tệp đó so với merge-base chỉ được THÊM dòng, và mỗi dòng thêm phải nêu một trong bốn trường chế độ ẩn aiDeXuatAnPhamVi · aiDeXuatAnDonVi · aiTomTatAnPhamVi · aiTomTatAnDonVi (bài tự kiểm và in dòng lạ nếu có); cộng ca mới: Hoàn tác sau Nhận ghi lại truoc qua okr.updateObjective, rang/hoan-tac.sql đếm dòng đó là hoàn tác trong 7 ngày; hoàn tác ở ngày thứ 8 (đồng hồ giả) không đếm. Chiều đỏ: câu SQL bản sao bỏ điều kiện 7 ngày → ca ngày thứ 8 đếm 1, thông điệp ghim 'hoan tac ngoai 7 ngay'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/okr.service.ts, "apps/api/test/okr*.spec.ts", "_acceptance/tro-ly-okr-de-xuat/rang/hoan-tac.sql", apps/api/test/tro-ly-okr-hoan-tac.spec.ts]
 
