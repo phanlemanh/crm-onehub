@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 225e8dfb7c5f81cd1a3654ada005fbf93f6b1506
+verified_commit: e23fa3363044c4aa596e45e8acd1852749b6fd66
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -107,3 +107,7 @@ none — không có eval nào chạy nhiều lần (runs=1 cho mọi eval và m�
 ## Iterations
 
 Round 1: E1–E4 (script) và bốn lệnh suite (bun run test, turbo lint, lint:slop, turbo build) đều xanh ngay lần chạy đầu, mỗi eval feature đều đỏ trên baseline (có phân biệt); E5 (judgment) — panel đề xuất PASS, một lens (operational-feasibility) dissent UNCERTAIN vì thiếu trích log gốc, nhưng không chặn verdict tổng vì proposal panel là PASS. Không có round lặp lại.
+
+### Re-pin lần 1 — 2026-09-28, do gộp onehub #186–#188 sau chữ ký — CI kiểm bản đồ trên commit gộp
+run_id: repin-20260928T084508Z-16649
+sha: e23fa3363044c4aa596e45e8acd1852749b6fd66 · suites: 4 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-5
