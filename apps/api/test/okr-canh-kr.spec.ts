@@ -59,6 +59,7 @@ import {
 	ok,
 	pbMoi,
 	phien,
+	TIEN_TO,
 	type TraLoi,
 } from "./okr-san";
 
@@ -1723,13 +1724,22 @@ describe("mau-quan-tri", () => {
 				okrMau: await dem("okrMau"),
 				okrTrail: await dem("okrTrail"),
 			});
+			const hangMauCuaLuot = () =>
+				db.okrMau.findMany({
+					where: { taoBoiUserId: { startsWith: TIEN_TO } },
+					select: { id: true, ten: true, noiDung: true },
+				});
 			const nhan: string[] = [];
 			for (const [ten, lam, , cau] of ca) {
 				const truoc = await demMau();
+				const daCo = new Set((await hangMauCuaLuot()).map((h) => h.id));
 				const tra = await lam();
 				const sau = await demMau();
+				const hangMoi = (await hangMauCuaLuot()).filter((h) => !daCo.has(h.id));
+				const khongDoi =
+					JSON.stringify(sau) === JSON.stringify(truoc) && hangMoi.length === 0;
 				nhan.push(
-					`${ten}: ${tra.status} ${tra.loi === cau ? "cau-ghim" : tra.loi} ${JSON.stringify(sau) === JSON.stringify(truoc) ? "khong-doi" : JSON.stringify({ truoc, sau })}`,
+					`${ten}: ${tra.status} ${tra.loi === cau ? "cau-ghim" : tra.loi} ${khongDoi ? "khong-doi" : JSON.stringify({ truoc, sau, hangMoi })}`,
 				);
 			}
 			expect(nhan).toEqual(
@@ -1843,7 +1853,7 @@ describe("tu-mau", () => {
 	};
 
 	test(
-		"tu-mau: okr.mau loc theo cap va don vi — truong P1 o P1 {M1, M2}, truong P2 o P2 {M1}; quan tri thay ca bon kem M3 luu tru",
+		"tu-mau: okr.mau loc theo cap va don vi — truong P1 o P1 {M1, M2}, truong P2 o P2 {M1}; quan tri co loc nhan dung tap con song hop cap va don vi (khong M3); quan tri khong loc thay ca bon kem M3 luu tru",
 		async () => {
 			const idsCua = async (ai: string, donViId: string) =>
 				cuaTa(
@@ -1861,6 +1871,8 @@ describe("tu-mau", () => {
 			expect({
 				P1: await idsCua(san.T1.cookie, san.p1),
 				P2: await idsCua(san.T2.cookie, san.p2),
+				quanLocP1: await idsCua("quan", san.p1),
+				quanLocP2: await idsCua("quan", san.p2),
 				quan: cuaTa(quan.mau)
 					.map((x) => ({ id: x.id, luuTru: x.luuTru, soKr: x.soKr }))
 					.sort((a, b) => a.id.localeCompare(b.id)),
@@ -1871,6 +1883,8 @@ describe("tu-mau", () => {
 			}).toEqual({
 				P1: [m.M1, m.M2].sort(),
 				P2: [m.M1],
+				quanLocP1: [m.M1, m.M2].sort(),
+				quanLocP2: [m.M1],
 				quan: [
 					{ id: m.M1, luuTru: false, soKr: NOI_DUNG_M1.krs.length },
 					{ id: m.M2, luuTru: false, soKr: NOI_DUNG_M2.krs.length },
