@@ -144,7 +144,9 @@ describe("nguon-nhan", () => {
 				where: { id: nguonId },
 				include: { trang: { select: { banDangDungId: true } } },
 			});
-			expect(hang.sha256).toBe(bam(byte));
+			expect(
+				hang.sha256 === bam(byte) ? "khop" : "sha256 khong khop byte da luu",
+			).toBe("khop");
 			expect(hang.sha256).not.toBe("0".repeat(64));
 			expect(hang.taiBoiId).toBe(phien[ai].nguoi);
 			expect(hang.kieu).toBe(kieu);
@@ -182,6 +184,7 @@ describe("nguon-tu-choi", () => {
 		const chuaDuyet = await taoTrang(ma("Chua duyet"), "## Mot\n\nBan dau.");
 		const truoc = await demNguon();
 		const nhanLoi = async (
+			ca: string,
 			byte: Uint8Array,
 			tenTep: string,
 			kieu: Kieu,
@@ -198,11 +201,21 @@ describe("nguon-tu-choi", () => {
 				{},
 				Math.max(khai, 1),
 			);
-			expect(`${tra.status} ${tra.loi}`).toBe(`400 ${thongDiep}`);
+			expect(
+				tra.status === 400 ? `${ca}: ${tra.loi}` : `nhan tep sai loai: ${ca}`,
+			).toBe(`${ca}: ${thongDiep}`);
 			expect(gia.daXoa).toContain(pathname);
 		};
-		await nhanLoi(pngNho(), "anh.pdf", "pdf", dichMoi(ma("A")), T.saiLoai);
 		await nhanLoi(
+			"png-doi-duoi",
+			pngNho(),
+			"anh.pdf",
+			"pdf",
+			dichMoi(ma("A")),
+			T.saiLoai,
+		);
+		await nhanLoi(
+			"zip-khong-word",
 			zipLuu([["a.txt", "x"]]),
 			"gia.docx",
 			"docx",
@@ -217,8 +230,9 @@ describe("nguon-tu-choi", () => {
 		expect(`${to.status} ${to.loi}`).toBe(`400 ${T.saiLoai}`);
 		const lon = new Uint8Array(NGUON.toiDaByte + 1);
 		lon.set(pdfNho("lon"));
-		await nhanLoi(lon, "lon.pdf", "pdf", dichMoi(ma("C")), T.saiLoai);
+		await nhanLoi("qua-co", lon, "lon.pdf", "pdf", dichMoi(ma("C")), T.saiLoai);
 		await nhanLoi(
+			"dich-chua-dung",
 			docxNho(ma("chu")),
 			"dich.docx",
 			"docx",
@@ -254,7 +268,11 @@ describe("nguon-trung", () => {
 		const truoc = await demNguon();
 		const lan2 = await taiLen("khac", a, "ten-khac.docx", "docx", dich);
 		const n2 = ok<{ nguonId: string; trung: boolean }>(lan2.tra, "lan 2");
-		expect(n2).toEqual({ nguonId: n1.nguonId, trung: true });
+		expect(
+			n2.trung && n2.nguonId === n1.nguonId
+				? "tra nguon cu"
+				: "nguon trung sinh hang moi",
+		).toBe("tra nguon cu");
 		expect(await demNguon()).toEqual(truoc);
 		expect(gia.daXoa).toContain(lan2.pathname);
 		const b = new Uint8Array([...a, 0]);
