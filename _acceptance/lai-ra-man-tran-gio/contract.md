@@ -5,7 +5,7 @@ slug: lai-ra-man-tran-gio
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -58,3 +58,9 @@ dừng theo ca + root trong `finally`, đo trước/sau trên CI bằng hai PR n
 - Mọi bản sao của E3/E4 ghi tạo phẩm vào `.acceptance-runs/lai-ra-man-tran-gio/<eval>-<pid>/`, không vào thư mục tạo phẩm của `chan-lai-component-ra-man`; răng kiểm sha256 tạo phẩm của hồ sơ đó trước/sau lượt và danh sách tệp của `packages/ui/test` trước/sau lượt. E3, E4 và làn ghim lại chạy tuần tự.
 - `unmount` trong `finally` là phần hiện thực của AC-3 (root đang vẽ dở lúc bị dừng phải được tháo), không có eval riêng.
 - Ghim lại `chan-lai-component-ra-man` bằng làn eval ở đỉnh nhánh, đi cuối cùng, và mọi hồ sơ mà `pre-merge-check.sh` (không kèm `--slug`) báo hoá cũ.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-28 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1 (sổ d-20260928T081813Z-12, -15, -17):
+
+- Ngoài-1: răng `can-cu` (`rang/tran-gio.mjs`) thoát 1 (đỏ) thay vì 2 (không đo được) khi bảng đo CI hỏng, trống, hay không có lượt xanh nào. Bảng hiện có 30 lượt xanh nên không ca nào đang sai.
+- Ngoài-4: lỗi đọc/parse ngoài dự kiến ở `co-lap.mjs`, `ban-ve-khong-doi.mjs`, `tran-gio.mjs` (tệp spec vắng, tệp đỡ vắng, JSON hỏng) thoát 1 thay vì 2 — không ca nào xanh nhầm, chỉ sai loại đỏ.
+- Ngoài-6: `rang/bang-do-ci.json` sinh bằng một lệnh chạy trên log `gh run view --log` không lưu trong kho; không răng nào rút lại bảng từ log để đối chiếu. Mỗi dòng mang `run_id`/`attempt` để người kiểm tay.
