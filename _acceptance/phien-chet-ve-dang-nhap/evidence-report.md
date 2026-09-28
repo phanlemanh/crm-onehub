@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ee1cbfa47ffad4c908266af4dc7c814ebf3cf68d
+verified_commit: 4db09e53f1e24e02cc228305f7cc4d75345abe5a
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -203,3 +203,7 @@ none — không có eval nào mang `runs > 1` trong vòng này; mọi eval là d
 ## Iterations
 
 Round 1: toàn bộ 11 eval (E1-E11) và 4 lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều exit 0 ở lần chạy đầu tiên. Không có eval nào fail, không cần round 2.
+
+### Re-pin lần 1 — 2026-09-28, do hoá cũ do gộp origin/onehub (#181, #182) trước khi mở PR
+run_id: repin-20260928T024121Z-51987
+sha: 4db09e53f1e24e02cc228305f7cc4d75345abe5a · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9
