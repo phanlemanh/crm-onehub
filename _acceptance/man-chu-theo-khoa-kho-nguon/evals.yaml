@@ -1,0 +1,91 @@
+schema_version: 1
+slug: man-chu-theo-khoa-kho-nguon
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bclkt_man_chu
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs qua mot-luot.sh) voi KHO_TAI_LIEU_BLOB_TOKEN gia do lenh dat; dang nhap dev:session mot member"
+      - "Buoc 1 (1440): mo Tai lieu, bam 'Tải nguồn lên', doc chu vung keo tha -> anh bclkt-tai-1440.png"
+      - "Buoc 2 (390): nhu buoc 1, khong cuon ngang -> anh bclkt-tai-390.png"
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"
+      - "packages/db/src/blob-nguon.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+    expected: |
+      exit 0; stdout co 'buoc 1: dat' va 'buoc 2: dat'; khong co 'KHONG DO DUOC'. Anh o
+      .acceptance-runs/bo-chu-lap-keo-tha/evidence/; vong S4 chep bclkt-tai-1440.png va bclkt-tai-390.png
+      sang _acceptance/man-chu-theo-khoa-kho-nguon/evidence/ va doc anh: hop tai nguon mo, vung keo tha
+      hien 'Chọn tệp' + 'Kéo tệp vào đây'. CHIEU DO (cung thuoc, khoa rong): xem E2 — thieu khoa thi ma 2,
+      khong bao gio 'dat'.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.mctkkn_khoa_rong
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"
+      - "_acceptance/man-chu-theo-khoa-kho-nguon/rang/khoa-rong.mjs"
+      - "packages/db/src/blob-nguon.ts"
+    expected: |
+      khoa-rong.mjs doc ten khoa tu BLOB_NGUON.bienKhoa, chay mot-luot.sh "bun <thuoc>" voi bien do = ""
+      tuong minh. Dat khi va chi khi: ma thoat 2 VA stdout chua "nut tai nguon khoa — phien do thieu <ten>"
+      VA khong dong nao khop /buoc \d: dat/. Truoc het phai TOI DUOC NUT: stdout co "nut tai nguon khoa — phien
+      do thieu" (ten nao cung duoc); khong co -> exit 1 "khoa rong lech: khong toi duoc nut" (vd ban sao chet luc
+      nap module). In "khoa rong: dung ghim — ma 2, goi ten <ten>" va exit 0.
+      CHIEU DO (vat that trong ban sao, cung phep kiem): "node khoa-rong.mjs --chieu-do" chep man-chu.mjs sang
+      .acceptance-runs/man-chu-theo-khoa-kho-nguon/sao/ voi thong diep nut khoa giu ten cu BLOB_READ_WRITE_TOKEN,
+      import tuong doi "../../kho-tai-lieu/rang/man-lib.mjs" viet lai thanh file URL tuyet doi, ban sao nam o do sau
+      3 thu muc nhu goc nen GOC cua no dung; chay chinh phep kiem tren ban sao (--tep) -> ban sao toi duoc nut, ra exit 1 voi thong diep ghim
+      "khoa rong lech: thong diep nut khoa khong goi ten KHO_TAI_LIEU_BLOB_TOKEN"; --chieu-do in
+      "chieu do: DO DUNG GHIM" va exit 0 (LOT -> exit 1).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.mctkkn_chieu_do
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"
+      - "_acceptance/kho-tai-lieu/rang/man-lib.mjs"
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "_acceptance/man-chu-theo-khoa-kho-nguon/rang/chieu-do-can-khoa.mjs"
+    expected: |
+      chieu-do-can-khoa.mjs doc ten khoa tu BLOB_NGUON.bienKhoa, chay "bun man-chu.mjs --chieu-do" HAI lan,
+      tuan tu: (1) bien do = khoa gia -> can exit 0 va stdout co
+      "chieu do: DO DUNG GHIM: ma 1, in «chu vung keo tha man that lech»"; (2) bien do = "" tuong minh (DOI
+      CHUNG) -> can exit 2 va stdout co "chieu do: ban sao thoat ma 2 (tien de thieu)". In moi ve "ve <n>: dung"
+      hoac "ve <n>: lech — <ly do>"; ca hai dung -> "chieu do can khoa: 2/2" exit 0; mot ve lech -> exit 1.
+      Ve (2) la chieu do cua chinh phep kiem: chung minh ve (1) dung ghim nho khoa gia, khong nho khoa that .env.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.mctkkn_ten_khoa
+    paths:
+      - "packages/db/src/blob-nguon.ts"
+      - "_acceptance/config.yaml"
+      - "_acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"
+      - "_acceptance/bo-chu-lap-keo-tha/evals.yaml"
+      - "_acceptance/man-chu-theo-khoa-kho-nguon/rang/khoa-nguon.mjs"
+      - "_acceptance/man-chu-theo-khoa-kho-nguon/rang/ten-khoa.mjs"
+    expected: |
+      Ma tran viet truoc 4 o, so dong 'dat:' in ra = 4: [lenh bclkt_man_chu, thong diep tien de man-chu.mjs,
+      thong diep nut khoa man-chu.mjs, khoi E6u bo-chu-lap-keo-tha/evals.yaml].
+      Ten khoa doc tu bienKhoa cua blob-nguon.ts (khong doc duoc -> exit 2 goi ten tep). O lenh dat khi lenh
+      bat dau bang "<ten>=<chu nguyen van khac rong, khong $ ` ' \">" roi khoang trang; o thong diep va o E6u dat khi chua <ten>; moi o con
+      'BLOB_READ_WRITE_TOKEN' la do. Mot o khong tim thay trong tep -> exit 2 goi ten o (khong phai dat).
+      HAI CHIEU MOI LUOT: truoc vat that, script chay chinh no (--goc) tren hai ban sao tmpdir cua bon tep:
+      (a) man-chu.mjs giu ten cu o thong diep nut khoa -> exit 1, dung 1 dong "con ten khoa cu
+      BLOB_READ_WRITE_TOKEN o thong diep nut khoa"; (b) blob-nguon.ts doi bienKhoa thanh KHO_NGUON_DOI_TEN
+      -> exit 1, dung 4 dong "khong goi ten khoa KHO_NGUON_DOI_TEN"; (c) lenh bclkt_man_chu doi gia tri thanh
+      "${KHO_TAI_LIEU_BLOB_TOKEN:-gia}" -> exit 1, dung 1 dong "gia tri khoa khong phai chu nguyen van o lenh
+      bclkt_man_chu". In "doi chung: do dung 3/3"; thieu mot ca -> exit 3 "doi chung: SAI". Roi vat that:
+      "ten khoa KHO_TAI_LIEU_BLOB_TOKEN: 4/4 o dat", exit 0.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
