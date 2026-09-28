@@ -9,6 +9,8 @@ export const RESEARCH_PATH = "/onboarding/research";
 
 const GATE_TIMEOUT_MS = 2_000;
 
+const HTTP_HET_PHIEN = 401;
+
 export type Gate = "settled" | "required" | "unknown";
 
 const procedureResult = z
@@ -24,10 +26,14 @@ const workspaceAnswer = z
 	})
 	.catch({ onboarded: null, canRename: null, slug: null });
 
-async function read(request: NextRequest, procedure: string) {
+type Doc = { hetPhien: boolean; data: unknown };
+
+const KHONG_DOC: Doc = { hetPhien: false, data: null };
+
+async function read(request: NextRequest, procedure: string): Promise<Doc> {
 	const cookie = request.headers.get("cookie");
 
-	if (!cookie) return null;
+	if (!cookie) return KHONG_DOC;
 
 	try {
 		const response = await fetch(`${API_URL}/api/trpc/${procedure}`, {
@@ -36,11 +42,18 @@ async function read(request: NextRequest, procedure: string) {
 			signal: AbortSignal.timeout(GATE_TIMEOUT_MS),
 		});
 
-		if (!response.ok) return null;
+		if (response.status === HTTP_HET_PHIEN) {
+			return { hetPhien: true, data: null };
+		}
 
-		return procedureResult.parse(await response.json()).result.data;
+		if (!response.ok) return KHONG_DOC;
+
+		return {
+			hetPhien: false,
+			data: procedureResult.parse(await response.json()).result.data,
+		};
 	} catch {
-		return null;
+		return KHONG_DOC;
 	}
 }
 
@@ -49,18 +62,26 @@ export type WorkspaceGate = {
 	slug: string | null;
 	inWorkspace: boolean | null;
 	viewerRole: string | null;
+	hetPhien: boolean;
 };
 
 export async function readWorkspaceGate(
 	request: NextRequest,
 ): Promise<WorkspaceGate> {
-	const workspace = workspaceAnswer.parse(await read(request, "workspace.get"));
+	const doc = await read(request, "workspace.get");
+	const workspace = workspaceAnswer.parse(doc.data);
 
 	const slug = workspace.slug;
 	const viewerRole = workspace.viewerRole ?? null;
 
 	if (workspace.onboarded === null) {
-		return { gate: "unknown", slug, inWorkspace: null, viewerRole };
+		return {
+			gate: "unknown",
+			slug,
+			inWorkspace: null,
+			viewerRole,
+			hetPhien: doc.hetPhien,
+		};
 	}
 
 	return {
@@ -72,9 +93,10 @@ export async function readWorkspaceGate(
 		inWorkspace:
 			workspace.viewerRole === undefined ? null : workspace.viewerRole !== null,
 		viewerRole,
+		hetPhien: doc.hetPhien,
 	};
 }
 
 export async function readResearchGate(request: NextRequest): Promise<Gate> {
-	return congNghienCuu(await read(request, "settings.researchKey"));
+	return congNghienCuu((await read(request, "settings.researchKey")).data);
 }

@@ -29,7 +29,13 @@ function stub(handler: (url: string) => Promise<Response>) {
 
 type GateResponse =
 	| { result: { data: unknown } }
-	| { error: { message: string } };
+	| {
+			error: {
+				message: string;
+				code?: number;
+				data?: { code: string; httpStatus: number; path: string };
+			};
+	  };
 
 function json(body: GateResponse, status = 200) {
 	return new Response(JSON.stringify(body), {
@@ -50,6 +56,40 @@ const workspace = (data: {
 }) => ({
 	result: { data: { slug: SLUG, viewerRole: "owner", ...data } },
 });
+
+const loiPhien = (path: string): GateResponse => ({
+	error: {
+		message: "UNAUTHORIZED",
+		code: -32001,
+		data: { code: "UNAUTHORIZED", httpStatus: 401, path },
+	},
+});
+
+function hetPhien() {
+	const calls = { count: 0 };
+
+	stub(async (url) => {
+		calls.count += 1;
+		return json(
+			loiPhien(
+				url.includes("workspace.get")
+					? "workspace.get"
+					: "settings.researchKey",
+			),
+			401,
+		);
+	});
+
+	return calls;
+}
+
+const KHONG_BIET = {
+	gate: "unknown",
+	slug: null,
+	inWorkspace: null,
+	viewerRole: null,
+	hetPhien: false,
+};
 
 function researchKey(configured: boolean, canManage: boolean | null = true) {
 	const hint = configured ? "••••9876" : null;
@@ -124,6 +164,7 @@ describe("readWorkspaceGate", () => {
 			slug: SLUG,
 			inWorkspace: true,
 			viewerRole: "owner",
+			hetPhien: false,
 		});
 	});
 
@@ -137,6 +178,7 @@ describe("readWorkspaceGate", () => {
 			slug: SLUG,
 			inWorkspace: false,
 			viewerRole: null,
+			hetPhien: false,
 		});
 	});
 
@@ -164,6 +206,72 @@ describe("readWorkspaceGate", () => {
 
 		answerWith({ result: { data: { nothing: "useful" } } });
 		expect(await gateOf("/")).toBe("unknown");
+	});
+});
+
+describe("readWorkspaceGate and a dead session", () => {
+	it("doc-401: flags only a 401 as a dead session", async () => {
+		const ca: [string, () => void, unknown][] = [
+			["401", () => hetPhien(), { ...KHONG_BIET, hetPhien: true }],
+			[
+				"200",
+				() => answerWith(workspace({ onboarded: true, canRename: true })),
+				{
+					gate: "settled",
+					slug: SLUG,
+					inWorkspace: true,
+					viewerRole: "owner",
+					hetPhien: false,
+				},
+			],
+			[
+				"403",
+				() => answerWith({ error: { message: "FORBIDDEN" } }, 403),
+				KHONG_BIET,
+			],
+			[
+				"500",
+				() => answerWith({ error: { message: "INTERNAL_SERVER_ERROR" } }, 500),
+				KHONG_BIET,
+			],
+			[
+				"loi mang",
+				() =>
+					stub(async () => {
+						throw new Error("connect ECONNREFUSED");
+					}),
+				KHONG_BIET,
+			],
+			[
+				"het gio",
+				() =>
+					stub(async () => {
+						throw new DOMException("timed out", "TimeoutError");
+					}),
+				KHONG_BIET,
+			],
+		];
+		const sai: string[] = [];
+
+		for (const [ten, dung, mong] of ca) {
+			dung();
+			const that = await readWorkspaceGate(request("/", [SESSION_COOKIE]));
+			if (JSON.stringify(that) !== JSON.stringify(mong)) {
+				sai.push(`${ten}: hetPhien sai`);
+			}
+		}
+
+		const calls = hetPhien();
+		const khongCookie = await readWorkspaceGate(request("/"));
+		if (
+			JSON.stringify(khongCookie) !== JSON.stringify(KHONG_BIET) ||
+			calls.count !== 0
+		) {
+			sai.push("khong cookie: hetPhien sai");
+		}
+
+		expect(ca.length + 1).toBe(7);
+		expect(sai).toEqual([]);
 	});
 });
 
@@ -485,5 +593,123 @@ describe("ccq-cong-nghien-cuu", () => {
 				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
 			)}`,
 		).toBe("quan tri: /onboarding/research");
+	});
+});
+
+describe("proxy and a dead session", () => {
+	it("het-phien: sends the rep to sign in from every gated path", async () => {
+		marketing(undefined);
+		hetPhien();
+		const duong = [
+			"/",
+			`/${SLUG}/companies`,
+			"/companies",
+			"/onboarding",
+			"/onboarding/research",
+		];
+		const sai: string[] = [];
+
+		for (const d of duong) {
+			if (
+				redirectedTo(await proxy(request(d, [SESSION_COOKIE]))) !== "/sign-in"
+			) {
+				sai.push(`${d}: cookie chet van lot qua proxy`);
+			}
+		}
+
+		expect(duong.length).toBe(5);
+		expect(sai).toEqual([]);
+	});
+
+	it("het-phien: leaves a live session where it is", async () => {
+		setup();
+
+		expect(
+			redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			),
+		).toBeNull();
+	});
+
+	it("giu-mo: keeps failing open when the API only fails", async () => {
+		const ca: [string, () => void][] = [
+			[
+				"loi mang",
+				() =>
+					stub(async () => {
+						throw new Error("connect ECONNREFUSED");
+					}),
+			],
+			[
+				"het gio",
+				() =>
+					stub(async () => {
+						throw new DOMException("timed out", "TimeoutError");
+					}),
+			],
+			[
+				"500",
+				() => answerWith({ error: { message: "INTERNAL_SERVER_ERROR" } }, 500),
+			],
+			[
+				"503",
+				() => answerWith({ error: { message: "SERVICE_UNAVAILABLE" } }, 503),
+			],
+			["403", () => answerWith({ error: { message: "FORBIDDEN" } }, 403)],
+		];
+		const sai: string[] = [];
+
+		for (const [ten, dung] of ca) {
+			dung();
+			const dich = redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			);
+			if (dich !== null)
+				sai.push(`${ten}: proxy day ve /sign-in du API chi loi`);
+		}
+
+		expect(ca.length).toBe(5);
+		expect(sai).toEqual([]);
+	});
+
+	it("khong-dung: never touches the paths that skip the gate", async () => {
+		marketing(undefined);
+		const duong = [
+			"/sign-in",
+			"/t/crm.js",
+			"/proto/x",
+			"/dat-mat-khau/abc",
+			"/quen-mat-khau",
+			"/grant-access",
+			"/eve/v1/info",
+			"/het-quyen",
+		];
+		const sai: string[] = [];
+
+		for (const d of duong) {
+			const calls = hetPhien();
+			const dich = redirectedTo(await proxy(request(d, [SESSION_COOKIE])));
+			if (dich !== null || calls.count !== 0) {
+				sai.push(`${d}: proxy dung vao duong khong co cong`);
+			}
+		}
+
+		marketing("true");
+		hetPhien();
+		if (redirectedTo(await proxy(request("/", [SESSION_COOKIE]))) !== null) {
+			sai.push("marketing bat: / bi day ve /sign-in");
+		}
+
+		marketing(undefined);
+		const doiChung = hetPhien();
+		expect(
+			redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			),
+		).toBe("/sign-in");
+		expect(doiChung.count).toBeGreaterThan(0);
+
+		expect(duong.length + 1).toBe(9);
+		expect(sai).toEqual([]);
 	});
 });
