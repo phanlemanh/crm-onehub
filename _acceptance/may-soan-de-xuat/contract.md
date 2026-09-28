@@ -5,7 +5,7 @@ slug: may-soan-de-xuat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-28
@@ -102,3 +102,17 @@ duyệt rồi mới đăng; tra 2026-09-28), nghiên cứu mục 6.
 - Router nguồn nằm dưới `taiLieu` ở phạm vi chung như lượt 1: danh sách thủ tục ghim của
   `apps/api/test/vai-chi-okr.spec.ts` sửa có ý thức.
 - Chạm `packages/db/prisma` → T3, có Cổng 1.5.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-09-28):**
+  - Mù-1 — phép thử kho lưu tệp thật (E2t, AC-12) chưa chạy: máy chưa có kho Blob private; tính năng ship với nút «Tải nguồn lên» khoá cho tới khi có khoá, mở lại E2t khi bàn đo có kho thật.
+  - Ngoài-2 — danh sách nguồn tự làm mới đúng hôm nay; nếu sau này đổi cách làm mới dữ liệu ở nơi khác mà quên chỗ này, người dùng có thể thấy danh sách cũ tới khi tải lại trang.
+  - Ngoài-3 — vài con số và câu thông báo của máy soạn chưa gom về tệp cấu hình của khu; không ảnh hưởng người dùng.
+  - Ngoài-4 — danh sách loại tệp nhận (Word, PDF) khai ở hai nơi; lệch nhau thì người tải chỉ thấy lỗi chung.
+  - Ngoài-7 — máy soạn không mở được phiên thì chỉ có thông báo chung, đội vận hành khó truy nguyên nhân.
+  - Ngoài-8 — lượt soạn hợp lệ có thể bị đánh «hết giờ» sớm hơn một chút so với trần thời gian thật.
+  - Ngoài-9 — phép kiểm «1,5 không khớp 11,5» chưa chứng được sẽ bắt lỗi khi lỗi xảy ra.
+  - Ngoài-10 — việc hai đường tạo đề xuất (người viết và máy soạn) cùng một cách ghi mới được chứng ở phía máy soạn.
+  - Ngoài-11 — chưa có phép kiểm chắc rằng tệp nguồn luôn lưu ở chế độ riêng tư.
+  - Ngoài-12 — phép thử «tệp không đọc được khi không có chữ ký» chưa có chiều đỏ.
+  - Ngoài-13 — phép kiểm «không nơi nào sửa tên tệp, mã băm, đường lưu, người tải» chỉ quét một cách viết mã.
+  - Ngoài-14 — ca «PDF lớp chữ hỏng kiểu cid» dùng tệp tổng hợp chưa đúng dạng hỏng thật.
+  - Ngoài-15 — phép kiểm «máy soạn không ra mạng» đếm chữ trong mã thay vì đọc cấu hình lúc chạy.

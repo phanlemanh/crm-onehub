@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 442dad1a57ffc4a020abfc9f44a82b03c4419a10
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-28
 ---
 
 # Evidence Report: may-soan-de-xuat
@@ -321,7 +321,7 @@ human_signoff:
   required_evidence:
     - Ảnh chụp Bước 2 · Đối chiếu với bản máy soạn của trang bieu-mau ở 1440px NGAY KHI VỪA MỞ (chưa cuộn) — xác nhận cột phải có tiêu đề «Bản máy soạn» và nội dung hiển thị, không phải mảng đen trống, giống cấu trúc đã thấy ở hai ảnh b2-1440 của quyet-dinh-hoa-hong và quy-trinh
     - Một ghi chú hoặc video ngắn xác nhận hai cột Nguồn / Bản máy soạn ở màn duyệt bieu-mau cuộn ĐỘC LẬP với nhau — nếu xác nhận được đây chỉ là draft ngắn hơn nguồn (không phải lỗi hiển thị), verdict đổi thành PASS
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-09-28 — Đạt
 
 ### Lệnh suite (hồi quy)
 
