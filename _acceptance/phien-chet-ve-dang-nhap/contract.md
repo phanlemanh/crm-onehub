@@ -5,7 +5,7 @@ slug: phien-chet-ve-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
