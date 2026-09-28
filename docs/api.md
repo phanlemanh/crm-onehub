@@ -722,6 +722,67 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   idempotent — `skipDuplicates` on repeat-follow, a no-op unfollow writes no trail
   row. Every comment and follow toggle still writes its own `OkrTrail` row via the
   shared `vet()`, never an `Activity`.
+- **Việc (KR) are rows the unit writes under a KR; one table holds them and the
+  sáng kiến.** `OkrCanhKrService` owns `okrViecKr`: `loai: "viec"` is a hand-written
+  action (`tieuDe` 2–200 characters per `OKR_CANH_KR`, a `nguoiLamUserId` who must still be a member,
+  an optional `hanNgay`, `xongLuc` set when done), `loai: "chien-dich"` and
+  `"ke-hoach"` are sáng kiến. `themViec`, `suaViec` and `goViec` need whoever edits
+  the KR (`OkrAccessService.ghiDuocKr`); `danhDauViec` also lets the việc's own người
+  làm mark it done or not done — never edit or remove it. Every write is phase-locked
+  (`assertKyGhiDuoc`: nothing in `cham-diem`, `da-dong`, or on a dropped objective)
+  and leaves one trail row (`them-viec`, `sua-viec`, `xong-viec`, `go-viec`).
+  `okr.canhKr` returns the KR's rows in `position` order with a `quyen` block
+  (`suaDuoc`, `ganDuoc`) and `khoa`, so the sheet asks the server what it may do;
+  `okr.objective` adds each KR's `soViec` (`xong/tong`, `loai: "viec"` only),
+  `soSangKien` and `coBangChung` for the KR table's «Việc» column.
+- **A sáng kiến stores only the source record's id, and one function decides who
+  sees what it points at.** `ganSangKien` (a KR editor whose role reads partner data)
+  writes `campaignId` or `planId` and never copies a name; `@@unique([keyResultId,
+  campaignId])` / `([keyResultId, planId])` refuse the same record twice, an unknown
+  id is 404. Every read resolves the live record: name, status (`chua-chay` ·
+  `dang-chay` · `da-dong` · `da-luu-tru` when the plan's company is archived ·
+  `da-xoa` when the foreign key went `SET NULL`). **`lienKetChoVai` in
+  `apps/api/src/okr/canh-kr.ts` is the only place that turns a row into what a
+  caller sees**: for the «chỉ OKR» role (no `doi-tac` scope) it returns `{ loai,
+  coQuyen: false }` — no name, id, status or owner — and the trail snapshot of a
+  `gan-sang-kien` / `go-viec` row goes through the same function
+  (`vetSangKienChoVai`). A new endpoint that returns sáng kiến rows must call it;
+  `soi-ma.mjs --ca thiet-ke` counts return sites against calls and fails on a gap.
+  The pickers use the partner routers (`onboarding.listPlans`, `campaigns.list`),
+  never a read path inside `okr.*`.
+- **Bằng chứng is a link on a finished milestone KR.** `themBangChung` takes an
+  `http(s)` URL up to 2000 characters (`duongDanBangChung`, `javascript:`/`data:`/
+  empty refused) and a note up to 300 (`OKR_CANH_KR`), only on a `moc` KR whose `currentValue` is 1,
+  by a KR editor; `goBangChung` removes one. Both write a trail row
+  (`dinh-bang-chung`, `go-bang-chung`). `guiCapNhat` accepts an optional
+  `bangChung` per item and writes it through the same `ghiBangChung` inside the
+  check-in transaction, so a bad link refuses the whole submit and the KR does not
+  move. Marking a milestone done never requires evidence.
+- **Ghi nhận is a thank-you on a published objective, readable in the Trao đổi tab
+  and nowhere else.** `guiGhiNhan` (any member, the «chỉ OKR» role included) takes
+  1–5 recipients who are still members and are not the sender, a message of 1–500
+  characters and an optional KR of that same objective; draft and dropped objectives
+  refuse it, scoring and closed cycles do not. `goGhiNhan` is the sender's or an
+  admin's. `okr.comments` returns `dong`, comments and recognitions merged by time on
+  the server, so the screen never merges two lists. Recipients get one
+  `okr-ghi-nhan` reminder each (see `docs/agent.md`); nothing counts or ranks
+  recognitions per person — `soi-ma.mjs --ca dem-theo-nguoi` fails on a `groupBy`,
+  `_count` or raw `GROUP BY "userId"` over `okrGhiNhanNhan`.
+- **Mẫu OKR are admin-authored templates; the objective remembers which one it came
+  from.** `OkrMauService`: `luuMau` creates or edits (`@crm/validation/okr-mau`:
+  name, `cap` bộ phận · phòng ban · cá nhân, `donViIds` of that level or empty for
+  all, `noiDung` = sentence, kind and 1–`OKR_MAU.krToiDa` KRs each checked with
+  `kiemSoTheoKieu`), `luuTruMau` / `khoiPhucMau` archive and restore; each is
+  admin-only and leaves a `sua-mau` trail row. `okr.mau` reads them: **with a `cap`
+  or `donViId` filter every role — admins included — gets only live templates of
+  that level that apply to that unit** (the «Bắt đầu từ mẫu» picker); an admin
+  without a filter gets every template, archived ones too (the settings list); any
+  other role without a filter gets the live ones (d-13). `taoTuMau` builds a draft
+  objective and all its KRs in one transaction through the same rules as a hand-made
+  one (`kiemTranKr` shared with `createKeyResult`), refuses an archived template, a
+  template of another level or unit, and a missing or wrong-kind number without
+  writing a row, and writes one `okrMucTieuTuMau` row pointing at the template.
+  Editing a template later never touches objectives already made from it.
 - **`okr.thanhVien`** lists every workspace member (`id`, `name`, `email`) for the
   mention and transfer pickers — no role filter, since being mentionable is
   separate from who can edit.
