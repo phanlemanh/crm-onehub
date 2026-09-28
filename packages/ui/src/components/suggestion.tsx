@@ -5,8 +5,8 @@ import Close from "@carbon/icons-react/es/Close";
 import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
-import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
+import { Textarea } from "@crm/ui/components/textarea";
 import {
 	useEffect,
 	useId,
@@ -28,6 +28,7 @@ export function Suggestion({
 	before,
 	label,
 	onEdit,
+	onAcceptEdited,
 	editing,
 	decided,
 	error,
@@ -41,6 +42,7 @@ export function Suggestion({
 	before?: ReactNode;
 	label?: ReactNode;
 	onEdit?: (value: string) => void;
+	onAcceptEdited?: (value: string) => void;
 	editing?: boolean;
 	decided?: SuggestionDecision;
 	error?: ReactNode;
@@ -49,14 +51,19 @@ export function Suggestion({
 	const msg = useMessages();
 	const [moSuaTaiCho, datMoSuaTaiCho] = useState(false);
 	const idLyDoKhoa = useId();
-	const oSuaRef = useRef<HTMLInputElement>(null);
+	const oSuaRef = useRef<HTMLTextAreaElement>(null);
+	const chuMoi = typeof value === "string" ? value : "";
 	const dangSua = editing ?? moSuaTaiCho;
 	const dangSuaTruoc = useRef(dangSua);
+	const [chuDangSua, datChuDangSua] = useState(chuMoi);
 
 	useEffect(() => {
-		if (dangSua && !dangSuaTruoc.current) oSuaRef.current?.focus();
+		if (dangSua && !dangSuaTruoc.current) {
+			datChuDangSua(chuMoi);
+			oSuaRef.current?.focus();
+		}
 		dangSuaTruoc.current = dangSua;
-	}, [dangSua]);
+	}, [dangSua, chuMoi]);
 
 	const dangDangMoi =
 		before !== undefined ||
@@ -108,13 +115,17 @@ export function Suggestion({
 		);
 	}
 
-	const chuMoi = typeof value === "string" ? value : "";
 	const dangQuyet = pending || decided !== undefined;
 
-	function huyPhimTrongOSua(su: KeyboardEvent<HTMLInputElement>) {
+	function huySua() {
+		datChuDangSua(chuMoi);
+		datMoSuaTaiCho(false);
+	}
+
+	function huyPhimTrongOSua(su: KeyboardEvent<HTMLTextAreaElement>) {
 		if (su.key !== "Escape") return;
 		su.stopPropagation();
-		datMoSuaTaiCho(false);
+		huySua();
 	}
 
 	return (
@@ -126,24 +137,29 @@ export function Suggestion({
 			{label ? <p className="font-medium text-foreground">{label}</p> : null}
 			<div className="flex min-w-0 items-start gap-2">
 				<div className="min-w-0 flex-1 space-y-1">
+					{before !== undefined ? (
+						<p translate="no">
+							<del className="text-muted-foreground line-through decoration-diff-bo">
+								{before}
+							</del>
+						</p>
+					) : null}
 					{dangSua ? (
-						<Input
+						<Textarea
 							aria-label={msg.suggestion.edit}
-							defaultValue={chuMoi}
-							onChange={(su) => onEdit?.(su.target.value)}
+							data-slot="suggestion-edit"
+							onChange={(su) => {
+								datChuDangSua(su.target.value);
+								onEdit?.(su.target.value);
+							}}
 							onKeyDown={huyPhimTrongOSua}
 							ref={oSuaRef}
+							size="sm"
+							translate="no"
+							value={chuDangSua}
 						/>
 					) : (
-						<p className="text-pretty" translate="no">
-							{before !== undefined ? (
-								<>
-									<del className="text-muted-foreground line-through decoration-diff-bo">
-										{before}
-									</del>{" "}
-									→{" "}
-								</>
-							) : null}
+						<p translate="no">
 							<ins className="bg-diff-them/15 text-foreground underline decoration-diff-them underline-offset-4">
 								{value}
 							</ins>
@@ -162,6 +178,19 @@ export function Suggestion({
 									? msg.suggestion.accepted
 									: msg.suggestion.dismissed}
 							</span>
+						) : dangSua ? (
+							<>
+								<Button
+									onClick={() => onAcceptEdited?.(chuDangSua)}
+									size="xs"
+									variant="ghost"
+								>
+									{msg.suggestion.acceptEdited}
+								</Button>
+								<Button onClick={huySua} size="xs" variant="ghost">
+									{msg.suggestion.cancelEdit}
+								</Button>
+							</>
 						) : (
 							<>
 								<Button
@@ -173,11 +202,11 @@ export function Suggestion({
 									size="xs"
 									variant="ghost"
 								>
-									{msg.suggestion.accept}
+									{msg.suggestion.acceptShort}
 								</Button>
 								{onEdit ? (
 									<Button
-										onClick={() => datMoSuaTaiCho((truoc) => !truoc)}
+										onClick={() => datMoSuaTaiCho(true)}
 										size="xs"
 										variant="ghost"
 									>
@@ -185,12 +214,12 @@ export function Suggestion({
 									</Button>
 								) : null}
 								<Button onClick={onDismiss} size="xs" variant="ghost">
-									{msg.suggestion.dismiss}
+									{msg.suggestion.dismissShort}
 								</Button>
 							</>
 						)}
 					</div>
-					{!dangQuyet && acceptDisabledReason ? (
+					{!dangQuyet && !dangSua && acceptDisabledReason ? (
 						<p id={idLyDoKhoa}>{acceptDisabledReason}</p>
 					) : null}
 				</div>

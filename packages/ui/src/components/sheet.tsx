@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
-import { cn } from "@crm/ui/lib/utils";
+import { cn, laEscTuOSuaDeXuat } from "@crm/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
@@ -130,6 +130,7 @@ function SheetContent({
 	onInputCapture,
 	onFocusCapture,
 	onInteractOutside,
+	onEscapeKeyDown,
 	...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
 	side?: "top" | "right" | "bottom" | "left";
@@ -156,6 +157,10 @@ function SheetContent({
 				onInteractOutside={(e) => {
 					onInteractOutside?.(e);
 					if (g?.coThayDoi) e.preventDefault();
+				}}
+				onEscapeKeyDown={(e) => {
+					onEscapeKeyDown?.(e);
+					if (laEscTuOSuaDeXuat(e)) e.preventDefault();
 				}}
 				{...props}
 			>

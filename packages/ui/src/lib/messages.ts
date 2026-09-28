@@ -71,6 +71,10 @@ const en = {
 		dismiss: "Dismiss",
 		accepted: "Accepted",
 		dismissed: "Dismissed",
+		acceptShort: "Accept",
+		dismissShort: "Reject",
+		acceptEdited: "Accept edited",
+		cancelEdit: "Cancel",
 	},
 	spinner: {
 		loading: "Loading",
@@ -252,6 +256,10 @@ const vi = {
 		dismiss: "Từ chối gợi ý",
 		accepted: "Đã nhận",
 		dismissed: "Đã bác",
+		acceptShort: "Nhận",
+		dismissShort: "Bác",
+		acceptEdited: "Nhận bản đã sửa",
+		cancelEdit: "Huỷ",
 	},
 	spinner: {
 		loading: "Đang tải",

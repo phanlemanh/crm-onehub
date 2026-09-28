@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { act, type ReactElement } from "react";
+import { act, type ReactElement, type ReactNode, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { Dialog, DialogContent, DialogTitle } from "../src/components/dialog";
 import { LocaleProvider } from "../src/components/locale-provider";
 import { Suggestion } from "../src/components/suggestion";
 
@@ -29,6 +30,12 @@ function click(el: Element | null | undefined) {
 	act(() => (el as HTMLElement).click());
 }
 
+function nutTheo(goc: ParentNode, chu: string): HTMLElement | undefined {
+	return [...goc.querySelectorAll('button[data-slot="button"]')].find(
+		(b) => b.textContent === chu,
+	) as HTMLElement | undefined;
+}
+
 describe("Suggestion — dáng cũ giữ nguyên (facts.tsx)", () => {
 	test("chỉ 5 prop cũ: đúng cấu trúc icon-button, không có gì mới", () => {
 		const goc = ve(
@@ -55,7 +62,9 @@ describe("Suggestion — dáng cũ giữ nguyên (facts.tsx)", () => {
 		expect(nut[1]?.textContent?.trim()).toBe("");
 		expect(nut[0]?.querySelector("svg")).not.toBeNull();
 		expect(
-			than?.querySelector("del, ins, input, [data-slot=suggestion-decided]"),
+			than?.querySelector(
+				"del, ins, input, textarea, [data-slot=suggestion-decided]",
+			),
 		).toBeNull();
 		expect(than?.querySelector("label")).toBeNull();
 	});
@@ -84,7 +93,7 @@ describe("Suggestion — dáng cũ giữ nguyên (facts.tsx)", () => {
 });
 
 describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
-	test("câu cũ gạch (diff-bo), câu mới (diff-them), có mũi tên nối", () => {
+	test("câu cũ gạch (diff-bo), câu mới (diff-them), cả hai đều không dịch", () => {
 		const goc = ve(
 			<Suggestion
 				before="Tăng 10%"
@@ -99,24 +108,13 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		expect(cu?.textContent).toBe("Tăng 10%");
 		expect(cu?.className).toContain("line-through");
 		expect(cu?.className).toContain("decoration-diff-bo");
+		expect(cu?.parentElement?.tagName).toBe("P");
+		expect(cu?.parentElement?.getAttribute("translate")).toBe("no");
 		expect(moi?.textContent).toBe("Tăng 20%");
 		expect(moi?.className).toContain("decoration-diff-them");
 		expect(moi?.className).toContain("bg-diff-them/15");
-		expect(than?.textContent).toContain("→");
-	});
-
-	test("đoạn câu cũ/câu mới không bị trình duyệt tự dịch", () => {
-		const goc = ve(
-			<Suggestion
-				before="Tăng 10%"
-				value="Tăng 20%"
-				onAccept={() => {}}
-				onDismiss={() => {}}
-			/>,
-		);
-		const doan = goc.querySelector("del")?.parentElement;
-		expect(doan?.tagName).toBe("P");
-		expect(doan?.getAttribute("translate")).toBe("no");
+		expect(moi?.parentElement?.tagName).toBe("P");
+		expect(moi?.parentElement?.getAttribute("translate")).toBe("no");
 	});
 
 	test("label hiển thị phía trên dòng đề xuất", () => {
@@ -134,7 +132,7 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		);
 	});
 
-	test("có onEdit: ba nút chữ Chấp nhận / Sửa / Từ chối", () => {
+	test("có onEdit: ba nút chữ Nhận / Sửa / Bác — đúng động từ CONTEXT.md", () => {
 		const goc = ve(
 			<Suggestion
 				before="a"
@@ -147,10 +145,10 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		const nut = [...goc.querySelectorAll('button[data-slot="button"]')].map(
 			(b) => b.textContent,
 		);
-		expect(nut).toEqual(["Chấp nhận gợi ý", "Sửa", "Từ chối gợi ý"]);
+		expect(nut).toEqual(["Nhận", "Sửa", "Bác"]);
 	});
 
-	test("không có onEdit: chỉ hai nút, không có nút Sửa", () => {
+	test("không có onEdit: chỉ hai nút Nhận / Bác, không có nút Sửa", () => {
 		const goc = ve(
 			<Suggestion
 				before="a"
@@ -162,10 +160,10 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		const nut = [...goc.querySelectorAll('button[data-slot="button"]')].map(
 			(b) => b.textContent,
 		);
-		expect(nut).toEqual(["Chấp nhận gợi ý", "Từ chối gợi ý"]);
+		expect(nut).toEqual(["Nhận", "Bác"]);
 	});
 
-	test("bấm Sửa: mở ô sửa thay cho câu cũ/câu mới", () => {
+	test("bấm Sửa: ô sửa là Textarea, câu cũ vẫn hiện, câu mới (ins) biến mất, không dịch", () => {
 		const goc = ve(
 			<Suggestion
 				before="a"
@@ -175,15 +173,33 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onEdit={() => {}}
 			/>,
 		);
-		expect(goc.querySelector("input")).toBeNull();
-		const nutSua = [...goc.querySelectorAll('button[data-slot="button"]')].find(
-			(b) => b.textContent === "Sửa",
-		);
-		click(nutSua);
-		const o = goc.querySelector("input");
+		expect(goc.querySelector("textarea")).toBeNull();
+		click(nutTheo(goc, "Sửa"));
+		const o = goc.querySelector("textarea");
 		expect(o).not.toBeNull();
-		expect((o as HTMLInputElement).value).toBe("b");
-		expect(goc.querySelector("del, ins")).toBeNull();
+		expect(o?.tagName).toBe("TEXTAREA");
+		expect((o as HTMLTextAreaElement).value).toBe("b");
+		expect(o?.getAttribute("translate")).toBe("no");
+		expect(o?.getAttribute("data-slot")).toBe("suggestion-edit");
+		expect(goc.querySelector("del")).not.toBeNull();
+		expect(goc.querySelector("ins")).toBeNull();
+	});
+
+	test("đang sửa: hàng nút đổi thành Nhận bản đã sửa / Huỷ, không còn Nhận câu gốc hay Bác", () => {
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+				onEdit={() => {}}
+			/>,
+		);
+		click(nutTheo(goc, "Sửa"));
+		const nut = [...goc.querySelectorAll('button[data-slot="button"]')].map(
+			(b) => b.textContent,
+		);
+		expect(nut).toEqual(["Nhận bản đã sửa", "Huỷ"]);
 	});
 
 	test("bấm Sửa: con trỏ vào ngay ô sửa (focus)", () => {
@@ -196,16 +212,93 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onEdit={() => {}}
 			/>,
 		);
-		const nutSua = [...goc.querySelectorAll('button[data-slot="button"]')].find(
-			(b) => b.textContent === "Sửa",
-		);
-		click(nutSua);
-		const o = goc.querySelector("input");
+		click(nutTheo(goc, "Sửa"));
+		const o = goc.querySelector("textarea");
 		expect(o).not.toBeNull();
 		expect(document.activeElement).toBe(o);
 	});
 
-	test("Esc trong ô sửa: đóng ô sửa, không gọi onDismiss, không lọt ra Dialog cha", () => {
+	test("Nhận bản đã sửa gọi onAcceptEdited với giá trị đang gõ, kể cả khi chưa đổi chữ nào", () => {
+		let nhanDuoc: string | null = null;
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+				onEdit={() => {}}
+				onAcceptEdited={(chu) => {
+					nhanDuoc = chu;
+				}}
+			/>,
+		);
+		click(nutTheo(goc, "Sửa"));
+		click(nutTheo(goc, "Nhận bản đã sửa"));
+		expect(nhanDuoc).toBe("b");
+	});
+
+	test("gõ trong ô sửa rồi Nhận bản đã sửa: nhận đúng chữ vừa gõ, onEdit vẫn được gọi (tương thích)", () => {
+		let daGoiOnEdit: string | null = null;
+		let nhanDuoc: string | null = null;
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+				onEdit={(chu) => {
+					daGoiOnEdit = chu;
+				}}
+				onAcceptEdited={(chu) => {
+					nhanDuoc = chu;
+				}}
+			/>,
+		);
+		click(nutTheo(goc, "Sửa"));
+		const o = goc.querySelector("textarea") as HTMLTextAreaElement;
+		const dat = Object.getOwnPropertyDescriptor(
+			window.HTMLTextAreaElement.prototype,
+			"value",
+		)?.set;
+		act(() => {
+			dat?.call(o, "b sửa lại");
+			o.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+		expect(daGoiOnEdit).toBe("b sửa lại");
+		click(nutTheo(goc, "Nhận bản đã sửa"));
+		expect(nhanDuoc).toBe("b sửa lại");
+	});
+
+	test("Huỷ: đóng ô sửa, trả giá trị về câu mới gốc", () => {
+		const goc = ve(
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+				onEdit={() => {}}
+			/>,
+		);
+		click(nutTheo(goc, "Sửa"));
+		const o = goc.querySelector("textarea") as HTMLTextAreaElement;
+		const dat = Object.getOwnPropertyDescriptor(
+			window.HTMLTextAreaElement.prototype,
+			"value",
+		)?.set;
+		act(() => {
+			dat?.call(o, "b sửa lại");
+			o.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+		click(nutTheo(goc, "Huỷ"));
+		expect(goc.querySelector("textarea")).toBeNull();
+		expect(goc.querySelector("ins")?.textContent).toBe("b");
+		click(nutTheo(goc, "Sửa"));
+		expect((goc.querySelector("textarea") as HTMLTextAreaElement).value).toBe(
+			"b",
+		);
+	});
+
+	test("Esc trong ô sửa: đóng ô sửa (huỷ), không gọi onDismiss, không lọt ra ngoài khi đứng ngoài Dialog", () => {
 		let boQua = 0;
 		let lotRaCha = 0;
 		const nghePhimCha = () => {
@@ -224,11 +317,8 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		);
 		document.addEventListener("keydown", nghePhimCha);
 		try {
-			const nutSua = [
-				...goc.querySelectorAll('button[data-slot="button"]'),
-			].find((b) => b.textContent === "Sửa");
-			click(nutSua);
-			const o = goc.querySelector("input") as HTMLInputElement;
+			click(nutTheo(goc, "Sửa"));
+			const o = goc.querySelector("textarea") as HTMLTextAreaElement;
 			expect(o).not.toBeNull();
 			act(() => {
 				o.dispatchEvent(
@@ -239,7 +329,7 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 					}),
 				);
 			});
-			expect(goc.querySelector("input")).toBeNull();
+			expect(goc.querySelector("textarea")).toBeNull();
 			expect(boQua).toBe(0);
 			expect(lotRaCha).toBe(0);
 		} finally {
@@ -258,36 +348,10 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onEdit={() => {}}
 			/>,
 		);
-		expect(goc.querySelector("input")).not.toBeNull();
+		expect(goc.querySelector("textarea")).not.toBeNull();
 	});
 
-	test("gõ trong ô sửa gọi onEdit với chữ mới", () => {
-		let daGoi: string | null = null;
-		const goc = ve(
-			<Suggestion
-				before="a"
-				value="b"
-				editing={true}
-				onAccept={() => {}}
-				onDismiss={() => {}}
-				onEdit={(chu) => {
-					daGoi = chu;
-				}}
-			/>,
-		);
-		const o = goc.querySelector("input") as HTMLInputElement;
-		const dat = Object.getOwnPropertyDescriptor(
-			window.HTMLInputElement.prototype,
-			"value",
-		)?.set;
-		act(() => {
-			dat?.call(o, "b sửa lại");
-			o.dispatchEvent(new Event("input", { bubbles: true }));
-		});
-		expect(daGoi).toBe("b sửa lại");
-	});
-
-	test("decided=accepted: ẩn ba nút, hiện trạng thái đã quyết", () => {
+	test("decided=accepted: ẩn nút, hiện trạng thái đã quyết", () => {
 		const goc = ve(
 			<Suggestion
 				before="a"
@@ -345,9 +409,7 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onDismiss={() => {}}
 			/>,
 		);
-		const nutNhan = [
-			...goc.querySelectorAll('button[data-slot="button"]'),
-		].find((b) => b.textContent === "Chấp nhận gợi ý") as HTMLButtonElement;
+		const nutNhan = nutTheo(goc, "Nhận") as HTMLButtonElement;
 		expect(nutNhan.disabled).toBe(true);
 		const idMoTa = nutNhan.getAttribute("aria-describedby");
 		expect(idMoTa).toBeTruthy();
@@ -355,7 +417,7 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 		expect(moTa?.textContent).toBe("Cần xác nhận thêm trước khi nhận");
 	});
 
-	test("bấm Chấp nhận và Từ chối gọi đúng callback", () => {
+	test("bấm Nhận và Bác gọi đúng callback", () => {
 		let nhan = 0;
 		let boQua = 0;
 		const goc = ve(
@@ -370,17 +432,85 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				}}
 			/>,
 		);
-		click(
-			[...goc.querySelectorAll('button[data-slot="button"]')].find(
-				(b) => b.textContent === "Chấp nhận gợi ý",
-			),
-		);
-		click(
-			[...goc.querySelectorAll('button[data-slot="button"]')].find(
-				(b) => b.textContent === "Từ chối gợi ý",
-			),
-		);
+		click(nutTheo(goc, "Nhận"));
+		click(nutTheo(goc, "Bác"));
 		expect(nhan).toBe(1);
 		expect(boQua).toBe(1);
+	});
+});
+
+function dialogNoiDung(): HTMLElement | null {
+	return document.querySelector('[data-slot="dialog-content"]');
+}
+
+function HopMoDong({ children }: { children: ReactNode }) {
+	const [mo, datMo] = useState(true);
+	return (
+		<Dialog open={mo} onOpenChange={datMo}>
+			<DialogContent>
+				<DialogTitle>Sửa Mục tiêu</DialogTitle>
+				{children}
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+describe("Suggestion trong Dialog thật — I1 (Esc không lọt ra ngoài)", () => {
+	test("Esc trong ô sửa: ô sửa đóng, Dialog vẫn mở", () => {
+		ve(
+			<HopMoDong>
+				<Suggestion
+					before="a"
+					value="b"
+					onAccept={() => {}}
+					onDismiss={() => {}}
+					onEdit={() => {}}
+				/>
+			</HopMoDong>,
+		);
+		const noiDung = dialogNoiDung();
+		expect(noiDung).not.toBeNull();
+		click(nutTheo(noiDung as HTMLElement, "Sửa"));
+		const o = document.querySelector(
+			'[data-slot="suggestion-edit"]',
+		) as HTMLTextAreaElement;
+		expect(o).not.toBeNull();
+		act(() => {
+			o.dispatchEvent(
+				new KeyboardEvent("keydown", {
+					key: "Escape",
+					bubbles: true,
+					cancelable: true,
+				}),
+			);
+		});
+		expect(document.querySelector('[data-slot="suggestion-edit"]')).toBeNull();
+		expect(dialogNoiDung()).not.toBeNull();
+	});
+
+	test("đối chứng: Esc ngoài ô sửa vẫn đóng Dialog", () => {
+		ve(
+			<HopMoDong>
+				<Suggestion
+					before="a"
+					value="b"
+					onAccept={() => {}}
+					onDismiss={() => {}}
+					onEdit={() => {}}
+				/>
+			</HopMoDong>,
+		);
+		const tieuDe = document.querySelector('[data-slot="dialog-title"]');
+		expect(tieuDe).not.toBeNull();
+		act(() => {
+			(tieuDe as HTMLElement).dispatchEvent(
+				new KeyboardEvent("keydown", {
+					key: "Escape",
+					bubbles: true,
+					cancelable: true,
+				}),
+			);
+		});
+		expect(dialogNoiDung()).toBeNull();
 	});
 });
