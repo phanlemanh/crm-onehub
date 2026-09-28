@@ -127,9 +127,10 @@ const VET = {
 	},
 };
 const MOI_VET = Object.keys(VET);
+const VET_HOA = new Map(MOI_VET.map((k) => [k.toUpperCase(), k]));
 const laChieuDo = process.argv.includes("--chieu-do");
 const laMa = [...CHON].filter((e) =>
-	laChieuDo ? !MOI_VET.includes(e) : !MOI_EVAL.includes(e),
+	laChieuDo ? !VET_HOA.has(e) : !MOI_EVAL.includes(e),
 );
 if (laMa.length > 0) {
 	console.log(
@@ -253,7 +254,8 @@ async function motChieuDo(e) {
 }
 
 async function chieuDo() {
-	const danhSach = CHON.size === 0 ? MOI_VET : [...CHON];
+	const danhSach =
+		CHON.size === 0 ? MOI_VET : [...CHON].map((e) => VET_HOA.get(e));
 	const ket = [];
 	for (const e of danhSach) ket.push(await motChieuDo(e));
 	console.log("\nchieu do — tong ket:");
