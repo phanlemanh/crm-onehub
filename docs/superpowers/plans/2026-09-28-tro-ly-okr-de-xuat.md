@@ -8,6 +8,8 @@
 
 **Tech Stack:** Bun, Turbo, Prisma 7 (Postgres), Zod 4, NestJS + nestjs-trpc, eve 0.29.4, AI SDK (Gateway), Next.js 16, `@crm/ui` (shadcn, AI Elements `Shimmer`), bun:test, puppeteer-core.
 
+**Cổng 1.5:** duyệt 2026-09-28 bởi Manh Phan — chạy subagent-driven.
+
 **Spec:** `docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md` · hợp đồng `_acceptance/tro-ly-okr-de-xuat/contract.md` (duyệt 28/09, Manh Phan) · bộ đo `_acceptance/tro-ly-okr-de-xuat/evals.yaml` · bản mẫu `apps/app/app/proto/_modules/tro-ly-okr-de-xuat/`.
 
 ## Global Constraints
