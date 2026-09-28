@@ -807,12 +807,12 @@ executors:
     ktl_man_danh_sach: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/man-danh-sach.mjs"'
     msd_migration_chi_them: "node _acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs"
     msd_migration_tren_ban_sao: "bun _acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs"
-    msd_man_tai_nguon: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs"'
-    msd_man_duyet_may: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs"'
+    msd_man_tai_nguon: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs"'
+    msd_man_duyet_may: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs"'
     msd_quet_duong_ghi: "node _acceptance/may-soan-de-xuat/rang/quet-duong-ghi.mjs"
     msd_bien_ba_nha: "node _acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs"
-    msd_blob_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
-    msd_soan_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'
+    msd_blob_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
+    msd_soan_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'
     msd_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "apps/app/app/(app)/[[]slug]/tai-lieu/**/*.tsx" "packages/ui/src/components/nguon-*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
     rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
