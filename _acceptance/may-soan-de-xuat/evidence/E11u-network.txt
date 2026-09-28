@@ -1,10 +1,26 @@
 E11u — network truth
-Driver: apps' own harness script (_acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs) drives
-its own headless puppeteer-core instance inside a spawned bun/node process (via
-scripts/lan-do/tien-de.mjs -> phien-do.mjs). This subagent's Bash/Browser tools were not the
-driver of that browser session, so mcp__Claude_Browser read_network_requests /
-read_console_messages have no access to it.
-The harness itself tracks console errors internally (loiConsole array in man-lib.mjs) and
-folds any into the exit code/"loi console app" failure line; none were reported in this run
-(no such line appeared in the log — see /tmp/msd-E11u.log).
+
+Driver: the app's own harness script (_acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs)
+drives its own headless puppeteer-core instance inside a spawned bun process
+(via bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh -> scripts/lan-do/tien-de.mjs ->
+phien-do.mjs, isolated dev session: app http://localhost:4248, api http://localhost:4185).
+This verifier subagent's Bash/Browser tools were not the driver of that browser session, so
+mcp__Claude_Browser read_network_requests / read_console_messages have no access to it.
+
+The harness itself tracks console errors internally (loiConsole array in man-lib.mjs, fed from
+page "console" and "pageerror" events on every tab it opens) and folds any into the final
+"loi console app" failure line before exit. Full run log: /tmp/msd-e11u.log. Tail of that run:
+
+  buoc 1: dat
+  buoc 2: dat
+  buoc 3: dat
+  buoc 4: dat
+  man-duyet-may: dat
+  phien-do: xong — mã 0
+  EXIT=0
+
+No "loi console app" line appeared, so the harness itself observed zero console/pageerror
+events across all four steps (opens/navigations to /tai-lieu, the proposal page at 1440 and
+390, and back to the document page after approval).
+
 networkObserved: n-a (driver)
