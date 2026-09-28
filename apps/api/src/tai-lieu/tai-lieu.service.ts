@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { taoDeXuatTaiLieu } from "@crm/db/tai-lieu-de-xuat";
 import {
 	chuanNfc,
 	coChuHaySo,
@@ -15,6 +16,11 @@ import {
 } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
+import { soMoi } from "@crm/validation/tai-lieu-so";
+import {
+	danhSachTrichDoan,
+	parseTrichDoan,
+} from "@crm/validation/tai-lieu-trich-doan";
 import {
 	BadRequestException,
 	ConflictException,
@@ -35,6 +41,7 @@ import {
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
+	TaiLieuDangDungOutput,
 	TaiLieuGetOutput,
 	TaiLieuListInput,
 	TaiLieuListOutput,
@@ -49,8 +56,23 @@ const T = TAI_LIEU_API.thongDiep;
 
 type Tx = Prisma.TransactionClient;
 
+export type TrangMoiVao = {
+	ten: string;
+	loai: LoaiTrang;
+	chuTrangId?: string | null;
+	departmentId?: string | null;
+};
+
+export type TrangMoiSach = {
+	ten: string;
+	loai: LoaiTrang;
+	chuTrangId: string;
+	departmentId: string | null;
+};
+
 const NGUOI = { select: { id: true, name: true } } as const;
 const DON_VI = { select: { id: true, name: true } } as const;
+const NGUON_NGAN = { select: { id: true, tenTep: true } } as const;
 
 export function kiemTen(ten: string): string {
 	const sach = chuanNfc(ten).trim();
@@ -126,6 +148,16 @@ export class TaiLieuService {
 		return { trangThai: "CHO_DUYET", ...dieuKienThayDeXuat(nguoi) };
 	}
 
+	async dangDung(nguoi: NguoiGoi): Promise<TaiLieuDangDungOutput> {
+		const rows = await this.db.taiLieuTrang.findMany({
+			where: { AND: [dieuKienThay(nguoi), { banDangDungId: { not: null } }] },
+			orderBy: [{ ten: "asc" }, { id: "asc" }],
+			take: TAI_LIEU_API.dangDung.toiDa,
+			select: { slug: true, ten: true },
+		});
+		return { rows };
+	}
+
 	async list(
 		nguoi: NguoiGoi,
 		input: TaiLieuListInput,
@@ -193,7 +225,12 @@ export class TaiLieuService {
 				chuTrang: NGUOI,
 				department: DON_VI,
 				banDangDung: {
-					select: { so: true, duyetLuc: true, noiDung: true },
+					select: {
+						so: true,
+						duyetLuc: true,
+						noiDung: true,
+						deXuat: { select: { nguon: NGUON_NGAN } },
+					},
 				},
 				deXuat: { distinct: ["taoBoiId"], select: { taoBoiId: true } },
 				_count: { select: { deXuat: { where: this.coBanCho(nguoi) } } },
@@ -214,6 +251,7 @@ export class TaiLieuService {
 			coBanCho: t._count.deXuat > 0,
 			choLanDau: ban ? null : { chuTrang: t.chuTrang },
 			suaDuoc: true,
+			nguon: ban?.deXuat.nguon ?? null,
 		};
 	}
 
@@ -233,48 +271,56 @@ export class TaiLieuService {
 		if (!co) throw new BadRequestException(T.donViKhongCo);
 	}
 
+	async kiemTrangMoi(nguoi: NguoiGoi, vao: TrangMoiVao): Promise<TrangMoiSach> {
+		const ten = kiemTen(vao.ten);
+		const chuTrangId = vao.chuTrangId ?? nguoi.id;
+		const departmentId = vao.departmentId ?? null;
+		await this.kiemChuTrang(chuTrangId);
+		if (departmentId) await this.kiemDonVi(departmentId);
+		return { ten, loai: vao.loai, chuTrangId, departmentId };
+	}
+
+	async taoTrangTrong(
+		tx: Tx,
+		nguoi: NguoiGoi,
+		trang: TrangMoiSach,
+	): Promise<{ id: string; slug: string }> {
+		await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${TAI_LIEU_API.khoaSlug}))`;
+		const goc = gocSlug(trang.ten);
+		const daCo = await tx.taiLieuTrang.findMany({
+			where: { OR: [{ slug: goc }, { slug: { startsWith: `${goc}-` } }] },
+			select: { slug: true },
+		});
+		const slug = sinhSlug(trang.ten, new Set(daCo.map((d) => d.slug)));
+		const moi = await tx.taiLieuTrang.create({
+			data: {
+				slug,
+				ten: trang.ten,
+				loai: trang.loai,
+				departmentId: trang.departmentId,
+				chuTrangId: trang.chuTrangId,
+				taoBoiId: nguoi.id,
+			},
+			select: { id: true },
+		});
+		return { id: moi.id, slug };
+	}
+
 	async create(
 		nguoi: NguoiGoi,
 		input: TaiLieuCreateInput,
 	): Promise<{ slug: string }> {
-		const ten = kiemTen(input.ten);
+		const trang = await this.kiemTrangMoi(nguoi, input);
 		const noiDung = kiemNoiDung(input.noiDung);
-		const chuTrangId = input.chuTrangId ?? nguoi.id;
-		const departmentId = input.departmentId ?? null;
-		await this.kiemChuTrang(chuTrangId);
-		if (departmentId) await this.kiemDonVi(departmentId);
 		return this.db.$transaction(async (tx) => {
-			await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${TAI_LIEU_API.khoaSlug}))`;
-			const goc = gocSlug(ten);
-			const daCo = await tx.taiLieuTrang.findMany({
-				where: { OR: [{ slug: goc }, { slug: { startsWith: `${goc}-` } }] },
-				select: { slug: true },
-			});
-			const slug = sinhSlug(ten, new Set(daCo.map((d) => d.slug)));
-			const trang = await tx.taiLieuTrang.create({
-				data: {
-					slug,
-					ten,
-					loai: input.loai,
-					departmentId,
-					chuTrangId,
-					taoBoiId: nguoi.id,
-				},
-				select: { id: true },
-			});
-			const deXuat = await tx.taiLieuDeXuat.create({
-				data: {
-					trangId: trang.id,
-					banGocId: null,
-					ten,
-					noiDung,
-					taoBoiId: nguoi.id,
-				},
-				select: { id: true },
-			});
-			await ghiSuKien(tx, trang.id, nguoi.id, {
-				loai: "TAO",
-				deXuatId: deXuat.id,
+			const { id, slug } = await this.taoTrangTrong(tx, nguoi, trang);
+			await taoDeXuatTaiLieu(tx, {
+				trangId: id,
+				banGocId: null,
+				ten: trang.ten,
+				noiDung,
+				taoBoiId: nguoi.id,
+				suKien: "TAO",
 			});
 			return { slug };
 		});
@@ -305,22 +351,44 @@ export class TaiLieuService {
 			const goc = trang.banDangDung;
 			if (goc && goc.ten === ten && chuanHoa(goc.noiDung) === noiDung)
 				throw new BadRequestException(T.chuaDoi);
-			const deXuat = await tx.taiLieuDeXuat.create({
-				data: {
-					trangId: trang.id,
-					banGocId: trang.banDangDungId,
-					ten,
-					noiDung,
-					taoBoiId: nguoi.id,
-				},
-				select: { id: true },
+			const nguon = await this.nguonCuaBanSua(
+				tx,
+				nguoi,
+				trang.id,
+				input.tuDeXuatId,
+			);
+			return taoDeXuatTaiLieu(tx, {
+				trangId: trang.id,
+				banGocId: trang.banDangDungId,
+				ten,
+				noiDung,
+				taoBoiId: nguoi.id,
+				suKien: "DE_XUAT",
+				...nguon,
 			});
-			await ghiSuKien(tx, trang.id, nguoi.id, {
-				loai: "DE_XUAT",
-				deXuatId: deXuat.id,
-			});
-			return { deXuatId: deXuat.id };
 		});
+	}
+
+	private async nguonCuaBanSua(
+		tx: Tx,
+		nguoi: NguoiGoi,
+		trangId: string,
+		tuDeXuatId: string | undefined,
+	): Promise<{
+		nguonId: string | null;
+		trichDoan: Prisma.InputJsonValue | null;
+	}> {
+		if (tuDeXuatId === undefined) return { nguonId: null, trichDoan: null };
+		const goc = await tx.taiLieuDeXuat.findFirst({
+			where: { AND: [{ id: tuDeXuatId, trangId }, dieuKienThayDeXuat(nguoi)] },
+			select: { nguonId: true, trichDoan: true },
+		});
+		if (!goc) throw khongCo();
+		if (!goc.nguonId) return { nguonId: null, trichDoan: null };
+		return {
+			nguonId: goc.nguonId,
+			trichDoan: danhSachTrichDoan.parse(goc.trichDoan),
+		};
 	}
 
 	async proposals(nguoi: NguoiGoi): Promise<TaiLieuProposalsOutput> {
@@ -376,10 +444,13 @@ export class TaiLieuService {
 				trang: {
 					select: { slug: true, chuTrangId: true, banDangDungId: true },
 				},
+				trichDoan: true,
+				nguon: { select: { id: true, tenTep: true, chu: true } },
 			},
 		});
 		if (!dx || !thayDeXuat(nguoi, dx, dx.trang)) throw khongCo();
 		const banGoc = dx.banGoc?.noiDung ?? "";
+		const nguon = dx.nguon;
 		return {
 			id: dx.id,
 			slug: dx.trang.slug,
@@ -393,6 +464,10 @@ export class TaiLieuService {
 			diffHash: await diffHash(soSanh(banGoc, dx.noiDung)),
 			cu: laCu(dx.trangThai, dx.banGocId, dx.trang.banDangDungId),
 			duyetDuoc: duyetDuoc(nguoi, dx.trang),
+			nguon: nguon ? { id: nguon.id, tenTep: nguon.tenTep } : null,
+			trichDoan: nguon ? parseTrichDoan(dx.trichDoan) : [],
+			chuNguon: nguon?.chu ?? null,
+			soMoi: nguon ? soMoi(dx.noiDung, dx.banGoc?.noiDung ?? null) : [],
 		};
 	}
 
@@ -425,6 +500,7 @@ export class TaiLieuService {
 			where: { id: deXuatId },
 			select: {
 				noiDung: true,
+				nguonId: true,
 				banGoc: { select: { noiDung: true } },
 				trang: { select: { chuTrangId: true } },
 			},
@@ -440,6 +516,15 @@ export class TaiLieuService {
 		input: TaiLieuApproveInput,
 	): Promise<{ slug: string; so: number }> {
 		const truoc = await this.yeuCauDuyet(nguoi, input.id);
+		if (truoc.nguonId) {
+			const canDoiChieu = soMoi(
+				truoc.noiDung,
+				truoc.banGoc?.noiDung ?? null,
+			).length;
+			if ((input.daDoiChieu ?? 0) < canDoiChieu) {
+				throw new BadRequestException(T.chuaDoiChieu);
+			}
+		}
 		const hash = await diffHash(
 			soSanh(truoc.banGoc?.noiDung ?? "", truoc.noiDung),
 		);

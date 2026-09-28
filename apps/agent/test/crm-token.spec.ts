@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { taskFromToken, taskToken } from "../agent/channels/crm";
+import { nguonTuToken, tokenMaySoan } from "../agent/lib/tai-lieu-phien";
 
 const TASK_ID = "cmsdc0a6j004cz96ddzpcgwqr";
 
@@ -25,5 +26,24 @@ describe("taskFromToken", () => {
 		).toBeNull();
 		expect(taskFromToken(undefined)).toBeNull();
 		expect(taskFromToken("crm:task:")).toBeNull();
+	});
+});
+
+const NGUON_ID = "cmuksj35f0005vstyxawpocn0";
+
+describe("nguonTuToken", () => {
+	it("reads back a drafting token this channel minted", () => {
+		expect(nguonTuToken(tokenMaySoan(NGUON_ID))).toBe(NGUON_ID);
+	});
+
+	it("reads the drafting token as the channel context presents it", () => {
+		expect(nguonTuToken(`crm:${tokenMaySoan(NGUON_ID)}`)).toBe(NGUON_ID);
+		expect(nguonTuToken(`crm:crm:may-soan:${NGUON_ID}`)).toBe(NGUON_ID);
+	});
+
+	it("ignores a token that is not a drafting session", () => {
+		expect(nguonTuToken(`crm:${taskToken(NGUON_ID)}`)).toBeNull();
+		expect(nguonTuToken(undefined)).toBeNull();
+		expect(nguonTuToken("crm:may-soan:")).toBeNull();
 	});
 });

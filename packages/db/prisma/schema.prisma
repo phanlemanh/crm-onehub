@@ -85,6 +85,7 @@ model User {
   taiLieuDeXuatTao  TaiLieuDeXuat[]   @relation("TaiLieuDeXuatTaoBoi")
   taiLieuDeXuatXuLy TaiLieuDeXuat[]   @relation("TaiLieuDeXuatXuLyBoi")
   taiLieuSuKien     TaiLieuSuKien[]   @relation("TaiLieuSuKienAi")
+  taiLieuNguonTai   TaiLieuNguon[]    @relation("TaiLieuNguonTaiBoi")
 
   @@unique([email])
   @@map("user")
@@ -2284,6 +2285,7 @@ model TaiLieuTrang {
   deXuat        TaiLieuDeXuat[]
   suKien        TaiLieuSuKien[]
   lienKet       TaiLieuLienKet[]
+  nguon         TaiLieuNguon[]           @relation("TaiLieuNguonCuaTrang")
 
   @@index([loai])
   @@index([chuTrangId])
@@ -2328,9 +2330,40 @@ model TaiLieuDeXuat {
   xuLyLuc   DateTime?
   createdAt DateTime         @default(now())
   phienBan  TaiLieuPhienBan? @relation("TaiLieuPhienBanTuDeXuat")
+  nguonId   String?
+  nguon     TaiLieuNguon?    @relation(fields: [nguonId], references: [id], onDelete: Restrict)
+  trichDoan Json?
 
   @@index([trangId, trangThai])
+  @@index([nguonId])
   @@map("taiLieuDeXuat")
+}
+
+model TaiLieuNguon {
+  id           String          @id @default(cuid())
+  sha256       String          @unique
+  tenTep       String
+  kieu         String
+  kichThuoc    Int
+  blobPathname String          @unique
+  taiBoiId     String
+  taiBoi       User            @relation("TaiLieuNguonTaiBoi", fields: [taiBoiId], references: [id], onDelete: Restrict)
+  taiLuc       DateTime        @default(now())
+  trangId      String
+  trang        TaiLieuTrang    @relation("TaiLieuNguonCuaTrang", fields: [trangId], references: [id], onDelete: Restrict)
+  trangThai    String          @default("CHO_DOC")
+  lyDo         String?
+  chu          String?
+  soTrang      Int?
+  soanLuc      DateTime?
+  banGocId     String?
+  phienId      String?
+  deXuat       TaiLieuDeXuat[]
+
+  @@index([trangId])
+  @@index([taiBoiId])
+  @@index([phienId])
+  @@map("taiLieuNguon")
 }
 
 model TaiLieuSuKien {

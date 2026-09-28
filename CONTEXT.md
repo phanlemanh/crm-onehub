@@ -713,8 +713,10 @@ Vì sao: «tài liệu» đã là cả kho và cả tệp nguồn; ba nghĩa m�
 không biết đang nói cái nào.
 
 **Nguồn**: tệp gốc người tải vào kho tài liệu (quyết định, biên bản, bản quét),
-không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn mang một lớp dữ liệu
-(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm). Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
+không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn sẽ mang một lớp dữ liệu
+(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm) — để sau, chưa gắn lượt; hôm nay nguồn
+chưa lưu lớp nào. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`; sửa câu lớp dữ liệu
+2026-09-28 tại Cổng Phạm vi của `may-soan-de-xuat`.
 _Avoid_: raw source, tài liệu gốc, file
 Vì sao: trang nói «theo nguồn X» phải trỏ tới đúng một thứ bất biến.
 
@@ -723,6 +725,27 @@ chủ trang duyệt. Không ai đọc được nó ngoài người duyệt; tr�
 đọc nó. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: bản nháp, draft, proposal
 Vì sao: «bản nháp» gợi thứ còn đang viết dở; bản đề xuất đã xong và đang chờ quyết.
+
+**Máy soạn**: phần của tác tử đọc chữ một nguồn rồi soạn một bản đề xuất cho trang
+đích, mỗi con số mới kèm đoạn nguồn chứa nó. Máy soạn không duyệt, không đọc gì ngoài
+nguồn, bản đang dùng của trang đích và trang «Quy tắc viết». Trên màn: «Máy đang soạn»,
+«Bản máy soạn». Chốt 2026-09-28 tại Cổng Phạm vi của `may-soan-de-xuat`.
+_Avoid_: AI viết, bot, trợ lý AI
+Vì sao: «trợ lý AI» đã là thứ trả lời câu hỏi từ bản đang dùng; máy soạn chỉ viết bản
+chờ duyệt, gọi chung một tên thì người đọc tưởng câu trả lời của trợ lý là bản đã duyệt.
+
+**Cần gõ tay**: trạng thái của một nguồn mà máy không đọc được chữ (bản quét, lớp chữ
+hỏng); máy không soạn gì, người phải gõ lại nội dung. Chốt 2026-09-28 tại Cổng Phạm vi
+của `may-soan-de-xuat`.
+_Avoid_: lỗi OCR, không hỗ trợ
+Vì sao: lượt này không có OCR; nói «lỗi OCR» là hứa một thứ không tồn tại.
+
+**Quy tắc viết**: trang tài liệu do chủ kho viết, máy soạn đọc làm lời dặn trước mỗi
+lượt soạn. Chưa có bản đang dùng thì máy không soạn. Chốt 2026-09-28 tại Cổng Phạm vi
+của `may-soan-de-xuat`.
+_Avoid_: prompt, lời nhắc hệ thống
+Vì sao: người viết nó là chủ kho, không phải kỹ sư; nó là một trang như mọi trang, có
+duyệt và phiên bản.
 
 **Bản đang dùng**: phiên bản trang tài liệu đã được duyệt và đang hiện cho mọi
 người, là thứ duy nhất trợ lý AI đọc. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.

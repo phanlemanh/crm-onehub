@@ -1,0 +1,386 @@
+{
+  "feature_plain": "Nhân viên tải tệp Word hay PDF quy định đang có lên kho tài liệu, máy soạn thành một bản đề xuất có trích nguyên văn nguồn cho từng con số, chủ trang đọc nguồn cạnh bản máy soạn rồi mới duyệt.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ thêm chỗ lưu nguồn vào cơ sở dữ liệu mà không đụng một dòng nào của trang, phiên bản và đề xuất đã có."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ nhận tệp Word (.docx) hay PDF tới 20 MB cho một trang mới hoặc một trang đang dùng, tự tính dấu vân tay của tệp từ chính bản đã lưu, và giao việc soạn cho máy."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ nhận ra tệp đã tải trước đó và trả về nguồn cũ; tệp khác dù một byte là nguồn mới; không ai sửa hay xoá được một nguồn."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ khoá nút tải kèm một câu giải thích khi kho chưa bật lưu tệp; phần viết, duyệt, đọc trang vẫn chạy như cũ."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ đọc chữ từ Word và PDF có chữ; bản quét hay PDF lỗi chữ thì gắn «cần gõ tay» và không soạn; tệp hỏng hay có mật khẩu thì báo lý do."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ để máy soạn một bản đề xuất chờ duyệt theo lời dặn của trang «Quy tắc viết», ghi đúng người tải, đúng nguồn, và không đổi bản đang dùng."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ bác bản máy soạn có con số mới không nằm trọn trong một đoạn trích, hay có đoạn trích không có trong nguồn — kể cả khi số chỉ trùng một phần số khác."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ cho chủ trang đọc nguồn trước, rồi mới thấy bản máy soạn đặt cạnh nguồn; nút Duyệt khoá tới khi chủ trang tick «Đã đối chiếu» cho từng con số mới, và máy chủ kiểm lại; không nút nào được gợi ý sẵn; bản sửa vẫn giữ nguồn."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ cho người tải và người duyệt thấy và tải về nguồn; khi bản đang dùng trích nguồn đó thì mọi người tải về được; tải về chỉ qua đường dẫn sống 5 phút."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ chạy máy soạn bằng khoá AI riêng của kho khi có, bằng khoá chung khi không, và ghi mỗi lượt tốn bao nhiêu chữ và bao nhiêu tiền."
+    },
+    {
+      "id": "AC-14",
+      "p": "Sẽ nhốt máy soạn trong một phiên không ra mạng, chỉ có đúng một cửa nộp bài, chữ nguồn tách riêng khỏi lời dặn."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Chặn tệp sai loại, rỗng, quá 20 MB, hay đích là trang chưa từng duyệt — không lưu gì và dọn luôn tệp vừa tải."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG để bản máy soạn thành bản đang dùng bằng đường nào khác ngoài nút Duyệt của chủ trang hay quản trị."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ KHÔNG ghi một bản đề xuất rỗng hay nửa vời khi máy soạn hỏng; nguồn hiện «Chưa soạn được» kèm lý do và nút «Soạn lại»."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG đọc bản quét bằng máy nhận chữ — nguồn dừng ở cờ «cần gõ tay»."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG làm thẻ mâu thuẫn giữa các trang hay sổ khẳng định đầy đủ."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG phân lớp dữ liệu (công khai, nội bộ, dữ liệu cá nhân, nhạy cảm) và không che dữ liệu cá nhân."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG để máy tự tìm trang liên quan hay chia một tệp thành nhiều trang — người tải chọn một đích."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG vá theo từng mục; bản máy soạn là cả trang, người duyệt đọc phần đổi như Track Changes."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG nhận tệp .doc cũ, Excel, ảnh, và không chuyển mã chữ TCVN3 hay VNI."
+    },
+    {
+      "id": "OOS-7",
+      "p": "KHÔNG xoá nguồn, không giữ pháp lý."
+    },
+    {
+      "id": "OOS-8",
+      "p": "KHÔNG có người duyệt thứ hai, người phó, hay giảm tốc nạp theo hàng chờ duyệt."
+    },
+    {
+      "id": "OOS-9",
+      "p": "KHÔNG hoàn thiện trang «Quy tắc viết» trong lượt này — chỉ có bản đầu do máy soạn từ ba văn bản mẫu, anh sửa dần khi vận hành."
+    },
+    {
+      "id": "AC-16",
+      "p": "Chặn thủ tục nhận nguồn đụng tới tệp không phải của người gọi: đường lưu thuộc một nguồn đã có, hay không do chính người đó vừa xin chỗ, đều bị từ chối trước khi đọc hay xoá gì; tệp của nguồn cũ còn nguyên để tải về và để máy đọc."
+    }
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Loại tệp vào: Word lành, PDF có chữ, bản quét, PDF lỗi chữ, tệp hỏng hay có mật khẩu, sai loại, trùng, bản mới của nguồn cũ — đủ theo bảng «nạp theo định dạng» của nghiên cứu (AC-2, AC-3, AC-4, AC-6)."
+    },
+    {
+      "i": 1,
+      "p": "Kết cục của máy soạn: soạn được, cần gõ tay, và bảy kiểu hỏng có lý do riêng — đủ theo luật «hỏng phải hiện là hỏng» (AC-6, AC-7, AC-9, AC-10)."
+    },
+    {
+      "i": 2,
+      "p": "Người: người tải, chủ trang, hai vai quản trị, thành viên khác, vai chỉ OKR — cùng bộ sáu người của lượt 1 (AC-8, AC-10, AC-12, AC-16 — không ai xoá được tệp của nguồn người khác)."
+    },
+    {
+      "i": 3,
+      "p": "Cấu hình: có hay không lưu tệp, có hay không khoá AI riêng, có hay không trang Quy tắc viết — theo luật «thiếu khoá thì mất năng lực, không lỗi» (AC-5, AC-10, AC-13)."
+    },
+    {
+      "i": 4,
+      "p": "Xuyên suốt: máy soạn không có mạng, một cửa nộp, không đường tới bản đang dùng; màn duyệt đưa thông tin chứ không khuyên bấm (AC-8, AC-11, AC-14)."
+    },
+    {
+      "i": 5,
+      "p": "Giả định: ngưỡng coi một PDF là «cần gõ tay» lấy từ nghiên cứu và tệp mẫu tự dựng, chưa thử trên tệp thật của OneHub — chạy thật sẽ đếm để chỉnh."
+    },
+    {
+      "i": 6,
+      "p": "Giả định: một tệp soạn thành đúng một trang; tệp gộp nhiều quy định thì người chia tay."
+    },
+    {
+      "i": 7,
+      "p": "Giả định: máy soạn dùng model mặc định hiện nay của trợ lý AI; phép chấm chất lượng (AC-15) là chỗ kiểm nó có đủ cho văn bản quy định tiếng Việt không."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Phép kiểm số chưa chặn trường hợp số bịa trùng một phần số khác trong đoạn trích («20%» lọt nhờ «2026») — đã thêm ba ca bác và yêu cầu so khớp con số trọn vẹn."
+    },
+    {
+      "i": 1,
+      "p": "Mọi phép đo tải lên và tải về đều chạy trên kho tệp giả, chưa ai thử tải thật — đã thêm một phép đo chạy với kho tệp thật, thiếu khoá thì báo rõ chứ không xanh giả."
+    },
+    {
+      "i": 2,
+      "p": "Chưa ghim điều gì xảy ra với nguồn khi chủ trang bấm «Sửa bản này» — đã hứa bản sửa giữ nguồn, và phép đo dựng tình huống bằng nút Duyệt thật thay vì gieo tay."
+    },
+    {
+      "i": 3,
+      "p": "Ba hàng người dùng nhìn thấy (nguồn đã có, chưa soạn được kèm Soạn lại, cần gõ tay) chưa phép đo màn hình nào soi — đã thêm một phép đo màn hình có đối chứng."
+    },
+    {
+      "i": 4,
+      "p": "Hai ngưỡng thành công (chi phí mỗi nguồn, số sai được báo lại) chưa có đường ra số — đã ghi chi phí bằng tiền theo bảng giá, và khai số sai được chủ kho đếm tay trong chạy thật."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260927T232306Z-1",
+      "p": "Đã chọn cho trình duyệt tải thẳng lên kho tệp riêng tư rồi máy chủ tự đọc lại để tính dấu vân tay — đổi lại hai bước và phải dọn tệp thừa khi bị từ chối."
+    },
+    {
+      "id": "d-20260927T232306Z-2",
+      "p": "Đã chọn máy soạn là một phiên riêng không ra mạng, chỉ một cửa nộp, chạy bằng khoá AI thứ hai — đổi lại thêm một khai báo và một bộ đo ranh giới."
+    },
+    {
+      "id": "d-20260927T232306Z-3",
+      "p": "KHÔNG để máy tự tìm trang liên quan hay chia tệp — người tải chọn một đích; xem lại sau lượt tìm kiếm nếu tệp gộp là phổ biến."
+    },
+    {
+      "id": "d-20260927T232306Z-4",
+      "p": "KHÔNG vá theo mục — bản máy là cả trang so với bản gốc; đổi lại máy có thể viết lại đoạn người viết, người duyệt thấy qua phần đổi."
+    },
+    {
+      "id": "d-20260927T232306Z-5",
+      "p": "Đã chọn một hàm tạo đề xuất dùng chung cho người và máy — đổi lại phải rút hàm khỏi mã lượt 1 đã ký, có test lượt 1 canh."
+    },
+    {
+      "id": "d-20260927T232306Z-6",
+      "p": "Đã chọn khi thiếu khoá AI riêng thì máy soạn dùng khoá chung và ghi nhãn — đổi lại tiền kho có thể lẫn vào ngân sách chung nếu quên đặt khoá."
+    },
+    {
+      "id": "d-20260927T232306Z-7",
+      "p": "Đã chọn thiếu trang «Quy tắc viết» thì không soạn — đổi lại máy soạn đứng im cho tới khi chủ kho viết trang."
+    },
+    {
+      "id": "d-20260927T232306Z-8",
+      "p": "Đã chạy phiên thiết kế trên bản bấm được — đổi lại bản mẫu còn vẽ vài thứ ngoài phạm vi, ghi thành phát hiện chứ không sửa."
+    },
+    {
+      "id": "d-20260928T012308Z-10",
+      "p": "Lần duyệt trước là duyệt trần: không tick, từ điển giữ nguyên — dòng này đã được thay bằng dòng kế tiếp."
+    },
+    {
+      "id": "d-20260928T013912Z-11",
+      "p": "Anh chọn khoá nút Duyệt tới khi tick hết từng con số, và sửa từ điển mục Nguồn thành «lớp dữ liệu để sau» — đổi lại người duyệt thêm một cú tick mỗi số."
+    },
+    {
+      "id": "d-20260928T021025Z-14",
+      "p": "Sửa dữ liệu thử của phép đo migration cho đúng với dữ liệu có thể có thật."
+    },
+    {
+      "id": "d-20260928T021514Z-15",
+      "p": "Đường ghi chung kiểm chữ chuẩn hoá thay vì tự chuẩn hoá, vì hai gói không được gọi vòng nhau."
+    },
+    {
+      "id": "d-20260928T023338Z-16",
+      "p": "Kho lưu tệp hiện có là kho công khai và máy chưa có khoá — cần anh chọn kho riêng tư cho nguồn; đây là lý do phép thử kho lưu thật (E2t) chưa chạy được."
+    },
+    {
+      "id": "d-20260928T023458Z-17",
+      "p": "Phép đo chống trùng phải phá cả hai lớp chặn mới thấy đỏ, vì cơ sở dữ liệu là lớp thứ hai."
+    },
+    {
+      "id": "d-20260928T030727Z-18",
+      "p": "Máy soạn chạy hai nhịp: đọc chữ trước, nhịp sau mới mở phiên soạn — một nguồn có thể chờ khoảng một phút."
+    },
+    {
+      "id": "d-20260928T030727Z-19",
+      "p": "Máy nhớ bản đang dùng tại lúc nhận nguồn, nên bản soạn không bị gán nhầm vào bản mới hơn — bản soạn trên bản cũ hiện «cũ» đúng luật."
+    },
+    {
+      "id": "d-20260928T030727Z-20",
+      "p": "Phép đo kiểm số chạy trên kho thử dùng một lần, không ghi vào kho chung."
+    },
+    {
+      "id": "d-20260928T030727Z-21",
+      "p": "«Máy trả rỗng» được đo là máy nộp bản trống và bị bác; máy dừng không nộp gì được đo riêng."
+    },
+    {
+      "id": "d-20260928T030727Z-22",
+      "p": "Model chưa có trong bảng giá thì chi phí để trống, không ghi số bịa."
+    },
+    {
+      "id": "d-20260928T031326Z-23",
+      "p": "Sửa lỗi thật: phiên con của máy soạn không mang thông tin nguồn, nay tìm nguồn qua phiên gốc — nếu không, công cụ nộp sẽ hỏng ngay lần đầu chạy thật."
+    },
+    {
+      "id": "d-20260928T031326Z-24",
+      "p": "Chi phí máy soạn chưa vào đối soát tháng với AI Gateway — cần anh chọn cách ghi khi có khoá riêng."
+    },
+    {
+      "id": "d-20260928T031713Z-25",
+      "p": "Lượt soạn thật gọi model trực tiếp chứ không qua tác tử đang chạy — đo được chất lượng bản soạn, đổi lại đường nối tác tử chỉ được thử bằng mô phỏng."
+    },
+    {
+      "id": "d-20260928T034133Z-26",
+      "p": "Chi phí phiên máy soạn vào sổ chung dưới việc «máy soạn tài liệu», tạm hiện ở nhóm «Chưa gán việc» trên thẻ chi phí."
+    },
+    {
+      "id": "d-20260928T035913Z-27",
+      "p": "Từng dừng ở bước soạn thật vì chưa có trang Quy tắc viết (đã gỡ bằng lựa chọn C bên dưới)."
+    },
+    {
+      "id": "d-20260928T042835Z-28",
+      "p": "Anh chọn bật chế độ nhà cung cấp không lưu dữ liệu cho mọi lời gọi của máy soạn — đổi lại ít đường dự phòng khi nhà cung cấp lỗi."
+    },
+    {
+      "id": "d-20260928T051155Z-29",
+      "p": "Anh chọn để máy soạn bản đầu của trang Quy tắc viết từ ba văn bản mẫu, anh sửa dần khi vận hành — đổi lại lượt chấm đầu dựa trên quy tắc do máy viết."
+    },
+    {
+      "id": "d-20260928T052153Z-30",
+      "p": "Lượt soạn thật lộ hai lỗ kiểm số (đọc sai «0.3%», và trích một con số trơ trọi để lách); đã sửa — máy có thể bị bác thêm một lần ở nguồn nhiều bảng."
+    },
+    {
+      "id": "d-20260928T052807Z-31",
+      "p": "Bốn phép đo có màn thật xếp hàng lần lượt để không giẫm lên nhau — lượt chấm dài thêm vài phút."
+    },
+    {
+      "id": "d-20260928T064459Z-32",
+      "p": "Sửa lỗi trong hợp đồng ở vòng chấm 1: nguồn soạn hỏng nay hiện đúng lý do thật thay vì «hết giờ»."
+    },
+    {
+      "id": "d-20260928T064459Z-33",
+      "p": "Theo góp ý của giám khảo: cột bản máy ở bước 2 hiện liền mạch như một trang; phần khác với bản đang dùng chuyển xuống khối riêng."
+    },
+    {
+      "id": "d-20260928T064459Z-34",
+      "p": "Bổ sung bằng chứng giám khảo đòi: chữ nguồn máy đọc được và ảnh màn duyệt của chính ba bản thật."
+    },
+    {
+      "id": "d-20260928T074742Z-36",
+      "p": "Ngoài-1 (nhận tệp có thể xoá tệp của nguồn đã có): anh chọn sửa ngay trong lượt này."
+    },
+    {
+      "id": "d-20260928T074742Z-37",
+      "p": "Ngoài-2 (danh sách nguồn làm mới bằng khoá tay): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-38",
+      "p": "Ngoài-3 (vài hằng số chưa về tệp cấu hình): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-39",
+      "p": "Ngoài-4 (danh sách loại tệp khai hai nơi): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-40",
+      "p": "Ngoài-5 (nguồn có thể treo ở «đang đọc» khi lỗi thoáng qua): tách thành việc riêng."
+    },
+    {
+      "id": "d-20260928T074742Z-41",
+      "p": "Ngoài-6 (nhận trùng hay nhận lỗi xoá tệp của nguồn cũ): anh chọn sửa ngay trong lượt này."
+    },
+    {
+      "id": "d-20260928T074742Z-42",
+      "p": "Ngoài-7 (lỗi mở phiên máy soạn không ghi nhật ký): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-43",
+      "p": "Ngoài-8 (đánh «hết giờ» sớm hơn trần thật một chút): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-44",
+      "p": "Ngoài-9 (phép kiểm 1,5 với 11,5 chưa chứng đỏ): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-45",
+      "p": "Ngoài-10 (đường ghi chung mới chứng ở phía máy soạn): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-46",
+      "p": "Ngoài-11 (chưa có phép kiểm chắc tệp luôn riêng tư): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-47",
+      "p": "Ngoài-12 (phép thử tải không chữ ký chưa có chiều đỏ): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-48",
+      "p": "Ngoài-13 (quét sửa trường bất biến chỉ một cách viết): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-49",
+      "p": "Ngoài-14 (tệp PDF lớp chữ hỏng là tệp tổng hợp): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-50",
+      "p": "Ngoài-15 (kiểm «không ra mạng» bằng đếm chữ): ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260928T074742Z-35",
+      "p": "Phép thử kho lưu tệp thật (E2t) chưa chạy vì chưa có kho Blob riêng tư: anh chấp nhận ship với hạn chế này, mở lại khi có kho."
+    },
+    {
+      "id": "d-20260928T074742Z-51",
+      "p": "Anh đồng ý giữ nguyên chín mục đã cắt khỏi lượt này."
+    },
+    {
+      "id": "d-20260928T074742Z-52",
+      "p": "Anh phê hết các quyết định máy ghi sau lần duyệt phạm vi trước."
+    },
+    {
+      "id": "d-20260928T074942Z-53",
+      "p": "Mở lại phạm vi để thêm tiêu chí chặn xoá tệp của nguồn đã có (AC-16) — thêm một vòng duyệt, làm và chấm trước khi lên production."
+    },
+    {
+      "id": "d-20260928T081538Z-55",
+      "p": "Chặn xoá nhầm tệp của người khác bằng một phiếu có chữ ký đi kèm mỗi chỗ tải lên — đổi lại không phải thêm bảng mới và việc dọn phiếu hết hạn."
+    },
+    {
+      "id": "d-20260928T085243Z-57",
+      "p": "Round 3 chạm trần ba round vì AC-16 còn lỗi khi gửi song song; anh cho thêm một round hẹp chỉ sửa AC-16 thay vì ship kèm lỗi hay bỏ AC-16."
+    },
+    {
+      "id": "d-20260928T085631Z-58",
+      "p": "Lượt nhận tệp chạy trọn trong một khoá theo đường lưu, và chỉ xoá tệp khi chắc không ai sở hữu nó — đổi lại mỗi lượt nhận giữ một giao dịch lâu hơn."
+    },
+    {
+      "id": "d-20260928T092816Z-59",
+      "p": "Round 4 chỉ vướng việc chưa có kho Blob thật; anh chọn một round hẹp nữa và tự cấp kho riêng tư thật để đo cho đủ."
+    },
+    {
+      "id": "d-20260928T092816Z-60",
+      "p": "Kiểm trang đích trước khi mở giao dịch để lượt tải không giữ hai kết nối, và thêm ca 12 người tải cùng lúc — đổi lại câu báo lỗi của phép thử song song đổi chỗ."
+    },
+    {
+      "id": "d-20260928T102917Z-61",
+      "p": "Trước round 5, sửa bước dọn tệp thử của phép đo kho Blob thật (trước đó chưa từng chạy tới) — lỗi dọn nay hiện cảnh báo thay vì bị giấu."
+    }
+  ]
+}

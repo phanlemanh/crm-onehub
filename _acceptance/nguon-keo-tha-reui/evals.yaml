@@ -1,0 +1,230 @@
+---
+schema_version: 1
+slug: nguon-keo-tha-reui
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.nkt_cai_sach
+    paths:
+      - "packages/ui/src/hooks/use-file-upload.ts"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/package.json"
+      - "packages/ui/src/components/reui/**"
+      - "packages/ui/src/components/examples/**"
+      - "_acceptance/nguon-keo-tha-reui/rang/cai-sach.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no. Ma tran viet truoc 7 kiem x vat, moi o in
+      "kiem <ten> <tep>: dat": moc-co (use-file-upload.ts ton tai, export useFileUpload);
+      khong-chu-thich x {use-file-upload.ts, nguon-keo-tha.tsx} (khong // hay /* ngoai chuoi);
+      khong-cn x {2 tep}; khong-lucide x {2 tep}; goi-khong-cn (package.json cua packages/ui khong co
+      dependency "cn"); nhanh-khong-cham x {button.tsx, alert.tsx, styles/globals.css} (tep TON TAI o
+      HEAD va o merge-base(HEAD, origin/onehub) — thieu o mot phia la do "tep khong ton tai", khong phai
+      dat — va khong nam trong git diff --name-only merge-base..HEAD); khong-them x {components/reui/alert.tsx,
+      components/examples/}. Ref origin/onehub vang -> exit 2 "khong co origin/onehub", khong xanh.
+      In "<n>/<n> o dat", exit 0. Sau khi gop vao onehub, merge-base = HEAD nen nhanh-khong-cham xanh
+      rong — loi hua la cua vong nay (Known limit ghi trong contract).
+      CHIEU DO: --chieu-do dung tmpdir: git worktree tam tu HEAD, pha MOI O mot ban rieng (xoa moc; chen
+      "// x" vao tung tep; chen import cn vao tung tep; chen lucide-react vao tung tep; them "cn" vao
+      dependencies; commit mot dong moi vao button.tsx, alert.tsx, globals.css tung cai; tao reui/alert.tsx;
+      tao examples/c.tsx) -> moi ban pha exit 1 voi thong diep ghim "cai khong sach: <ten kiem> <tep>";
+      ban lanh tren cung worktree tam -> exit 0. Don worktree tam o finally.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.nkt_dung_moc
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "_acceptance/nguon-keo-tha-reui/rang/cai-sach.mjs"
+    expected: |
+      Doc nguon-keo-tha.tsx bang bo phan tich TypeScript (khong regex tren chuoi tho): co lenh goi
+      useFileUpload lay tu module hooks/use-file-upload; bon thuoc tinh JSX onDragEnter, onDragLeave,
+      onDragOver, onDrop tren vung data-slot="nguon-keo-tha" deu la dinh danh rut tu ket qua cua lenh goi
+      useFileUpload (handleDragEnter/handleDragLeave/handleDragOver/handleDrop); o tep trai props tu
+      getInputProps; tep khong import kieu DragEvent tu react. In "kiem moc: dat", exit 0.
+      CHIEU DO: --chieu-do tren ban sao doi onDrop={handleDrop} thanh mot ham tu viet (e) => {} -> exit 1,
+      thong diep ghim "vung tu bat keo-tha: onDrop".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.nkt_hanh_vi_cu
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/src/hooks/use-file-upload.ts"
+      - "packages/ui/test/nguon-canh-nhau.dom.tsx"
+    expected: |
+      Khoi describe "NguonKeoTha" cua nguon-canh-nhau.dom.tsx chay NGUYEN VAN (tep khong nam trong diff
+      cua vong): 5 ca pass — nhan/mo ta/accept; chon .DOCX 1 MB va tha .pdf 20 MB -> onChon [a, b];
+      chieu do trong tep: anh.jpg va lon.pdf 21 MB -> onChon khong goi, onTuChoi [[anh,"loai"],[to,"co"]].
+      CHIEU DO cua eval: ban sao nguon-keo-tha.tsx bo buoc lyDoTuChoiTep (goi thang onChon) -> ca
+      "chiều đỏ: sai loại hay quá cỡ" fail.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.nkt_hanh_vi_cu
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/test/nguon-canh-nhau.dom.tsx"
+    expected: |
+      Ca "có lỗi thì câu lỗi gắn vào ô tệp qua aria-describedby" pass nguyen van (FieldError co cau loi,
+      o tep aria-invalid="true", aria-describedby chua id cua FieldError).
+      CHIEU DO: ban sao bo loi ? idLoi khoi aria-describedby -> ca do fail.
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.nkt_nut_chon
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/test/nguon-keo-tha.dom.tsx"
+    expected: |
+      Ca "nut-chon: nút mang mô tả và câu lỗi": aria-describedby cua nut «Chọn tệp» tach theo khoang
+      trang BANG DUNG tap id cua o tep (so tap, khong so chuoi co mat), va chua id cua FieldError khi co
+      loi. Doi chung duong cung fixture: khong loi -> tap id khong chua id FieldError.
+      CHIEU DO: ban sao bo aria-describedby tren nut -> fail voi thong diep ghim "nut khong mang mo ta".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.nkt_hanh_vi_cu
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/src/hooks/use-file-upload.ts"
+      - "packages/ui/test/nguon-canh-nhau.dom.tsx"
+    expected: |
+      Ca "tắt: ô tệp khoá, lý do hiện ra, thả tệp không gọi onChon" pass nguyen van (o tep disabled, ly do
+      trong chu, tha a.pdf khong goi onChon, data-tat="true").
+      CHIEU DO: ban sao bo disabled khoi o tep -> ca do fail (moc chi chan tha khi o tep disabled).
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.nkt_nut_chon
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/test/nguon-keo-tha.dom.tsx"
+    expected: |
+      Ca "nut-chon: tắt thì nút khoá": co tat -> nut «Chọn tệp» disabled; bam nut khong goi click cua o
+      tep. Doi chung duong cung fixture khong tat -> nut khong disabled.
+      CHIEU DO: ban sao bo disabled tren nut -> fail voi thong diep ghim "nut chon khong khoa khi tat".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.nkt_nut_chon
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/src/hooks/use-file-upload.ts"
+      - "packages/ui/test/nguon-keo-tha.dom.tsx"
+    expected: |
+      Ca "nut-chon: bấm nút mở ô tệp": nut co ten truy cap dung prop nutChon, data-variant="outline"; bam
+      nut -> su kien click toi DUNG o input[type=file] cua vung (dem = 1, bat bang listener tren o, goi
+      preventDefault de khong mo hop that); o tep co tabIndex -1, aria-label bang nutChon, va nut co
+      tabIndex >= 0.
+      Doi chung am: truoc khi bam, dem = 0.
+      CHIEU DO: ban sao bo onClick={openFileDialog} -> fail voi thong diep ghim "nut chon khong mo o tep".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.nkt_dang_keo
+    paths:
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/src/hooks/use-file-upload.ts"
+      - "packages/ui/test/nguon-keo-tha.dom.tsx"
+    expected: |
+      Ma tran viet truoc 5 hang: (thuong) dragenter -> data-keo "true"; dragleave voi relatedTarget ngoai
+      vung -> "false"; dragenter roi drop -> "false"; doi chung dragleave voi relatedTarget la con cua vung
+      -> van "true"; (tat) dragenter -> "false". So assert = 5.
+      CHIEU DO: ban sao bo onDragEnter tren vung -> fail voi thong diep ghim "keo vao khong bat data-keo";
+      ban sao bo dieu kien tat -> fail voi thong diep ghim "vung tat van bat data-keo".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.msd_man_tai_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/src/hooks/use-file-upload.ts"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Khoi "tai-loi" cua tai-lieu-nguon.dom.tsx (E3d cua may-soan-de-xuat) chay nguyen van: 3 ca pass —
+      .jpg va .docx 21 MB bi tu choi voi cau sai loai trong FieldError gan o tep, xinCho khong goi, ten
+      trang giu nguyen; doi chung .docx 1 MB goi xinCho dung 1 lan roi PUT va nhan.
+      CHIEU DO tren tep vong nay doi: ban sao nguon-keo-tha.tsx bo onFilesAdded (tep khong toi onChon) ->
+      ca doi chung .docx 1 MB fail (xinCho goi 0 lan). Chieu do cua ho so goc (ban sao hop-tai-nguon.tsx
+      bo kiemTep -> "goi xinCho voi tep sai loai") van giu. Ghi chu: bo lyDoTuChoiTep trong thanh phan
+      KHONG lam E8 do vi hop con kiemTep — chieu do do thuoc E3.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.msd_man_nguon_tat
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Khoi "nguon-tat" chay nguyen van: 2 ca pass (chua bat -> nut khoa + cau giai thich; doi chung da bat
+      -> nut bam duoc, khong cau). CHIEU DO: ban sao bo disabled cua nut tai -> ca dau fail.
+
+  - id: E9b
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.msd_man_hang_nguon
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Khoi "hang-nguon" chay nguyen van: 5 ca pass, gom ca hop tai nhan { trung: true } -> «Nguồn này đã có»
+      va lien ket toi nguon cu (tep chon qua o tep cua vung moi).
+      CHIEU DO: ban sao bo nhanh kq.trung -> ca trung fail; ban sao nguon-keo-tha.tsx bo onFilesAdded ->
+      ca trung fail (khong co xinCho, khong co bao «Nguồn này đã có»).
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.nkt_chu
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"
+      - "apps/app/test/messages-guard.spec.ts"
+      - "apps/app/test/nguon-keo-tha-chu.dom.tsx"
+    expected: |
+      (1) messages-guard.spec.ts pass. (2) Tep moi nguon-keo-tha-chu.dom.tsx dung hop tai that (NutTaiNguon,
+      tRPC gia) duoi LocaleProvider "vi" roi "en": ten truy cap cua nut trong [data-slot='nguon-keo-tha']
+      BANG TRON chuoi taiLieuMessages(<locale>).nguon.hop.keoThaNut doc tu tep chu (khong viet lai chuoi
+      trong test), va hai gia tri vi/en khac nhau. Ma tran 2 ngon ngu = 2 assert bang + 1 assert khac.
+      CHIEU DO: ban sao hop-tai-nguon.tsx truyen nutChon={m.keoTha} -> fail voi thong diep ghim
+      "nhan nut khong lay tu tep chu"; ban sao xoa khoa o ban en -> messages-guard fail.
+
+  - id: E11u
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.msd_man_tai_nguon
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs); Blob gia qua bien moi truong cua phien do; dang nhap dev:session mot member"
+      - "Buoc 1 (1440): mo Tai lieu, bam 'Tải nguồn lên' -> hop tai co vung keo tha [data-slot='nguon-keo-tha'] voi nut 'Chọn tệp' -> anh msd-tai-1440.png"
+      - "Buoc 2: chon tep mau docx, dien ten, loai, chu trang, bam 'Tải lên' -> tab 'Nguồn' co hang ten tep voi trang thai 'Máy đang soạn'"
+      - "Buoc 3 (390): hop tai va tab Nguon -> anh msd-tai-390.png, msd-nguon-390.png, khong cuon ngang trang"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/src/hooks/use-file-upload.ts"
+    expected: "exit 0; man-tai-nguon.mjs (phep do cua may-soan-de-xuat, chay nguyen van) in 'buoc N: dat' cho 3 buoc; anh o .acceptance-runs/may-soan-de-xuat/evidence/; vong S4 chep anh msd-tai-1440.png va msd-tai-390.png sang _acceptance/nguon-keo-tha-reui/evidence/ de nguoi ky nhin vung moi. CHIEU DO (cua chinh phep do): --chieu-do tren ban sao an tab Nguon -> 'buoc 2: khong thay hang nguon', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E12
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.msd_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+    expected: "exit 0; design-gate --mode static tren moi tep tsx cua khu tai-lieu va packages/ui/src/components/nguon-*.tsx; in ten tung tep dat. CHIEU DO: ban sao chen className mau tho (bg-[#ff0000]) vao nguon-keo-tha.tsx -> exit 1, thong diep cua design-gate nhac tep do."

@@ -1,0 +1,533 @@
+schema_version: 1
+slug: may-soan-de-xuat
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.msd_migration_chi_them
+    paths:
+      - "packages/db/prisma/migrations/**"
+      - "_acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no; doc dung migration cua ho so
+      (20261003010000_may_soan_de_xuat, neo theo ten tu 2026-09-28 vi migration da vao onehub nen so voi
+      merge-base khong con gi de doc; thieu thu muc -> exit 2 neu ten). Tap cau lenh viet truoc:
+      CREATE TABLE "TaiLieuNguon"; CREATE INDEX / CREATE UNIQUE INDEX tren TaiLieuNguon va tren cot
+      moi cua TaiLieuDeXuat; ALTER TABLE "TaiLieuDeXuat" ADD COLUMN <cot> <kieu> (khong NOT NULL, khong
+      DEFAULT); ALTER TABLE ... ADD CONSTRAINT ... FOREIGN KEY. Cam UPDATE, DELETE, DROP, ALTER COLUMN,
+      RENAME, ADD COLUMN ... NOT NULL, moi ALTER TABLE tren bang khac TaiLieuDeXuat/TaiLieuNguon. In so
+      cau lenh doc duoc (> 0). CHIEU DO: bon tep gia trong tmpdir ("DROP TABLE \"TaiLieuDeXuat\"",
+      "ALTER TABLE \"TaiLieuDeXuat\" ADD COLUMN x TEXT NOT NULL", "ALTER TABLE \"TaiLieuTrang\" ADD COLUMN
+      y TEXT", "UPDATE \"TaiLieuDeXuat\" SET ...") -> ca bon exit 1 voi thong diep ghim
+      "migration khong chi them: <loai>".
+
+  - id: E1b
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.msd_migration_tren_ban_sao
+    paths:
+      - "packages/db/prisma/**"
+      - "_acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs"
+    expected: |
+      Tao co so du lieu tam rieng, ap migration tai merge-base voi origin/onehub, gieo bang SQL cua luoc do cu:
+      2 trang, 3 phien ban, 6 de xuat (3 da duyet — moi phien ban mot de xuat rieng vi deXuatId duy nhat —
+      cong cho, tra lai, cu), 2 su kien, 1 lien ket; doc anh chup
+      [so dong tung bang]; ap migration cua nhanh; so lai: ma tran viet truoc 5 bang TaiLieu* x so dong
+      giu nguyen; moi de xuat cu co nguonId NULL va trichDoan NULL; bang TaiLieuNguon ton tai va rong.
+      Xoa co so du lieu tam o finally. CHIEU DO: migration gia them "DELETE FROM \"TaiLieuDeXuat\" WHERE
+      \"trangThai\"='CU'" -> exit 1, thong diep ghim "bang cu mat dong: TaiLieuDeXuat 6 -> 5".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_nguon_nhan
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/db/src/blob*.ts"
+      - "packages/validation/src/tai-lieu*.ts"
+      - "apps/api/test/tai-lieu-nguon.spec.ts"
+    expected: |
+      Goi taiLieu.nguon.xinCho roi taiLieu.nguon.nhan that qua tRPC voi Blob gia cam qua cong
+      (interface) cua service, bang phien member va phien vai okr. Ma tran viet truoc 4 ca: docx x trang
+      moi; docx x cap nhat trang dang dung; pdf x trang moi; pdf x cap nhat. Moi ca: dung 1 TaiLieuNguon
+      (dem truoc/sau), sha256 cua hang = sha256 tinh doc lap tren byte tep mau (khong phai gia tri may
+      khach gui — test gui kem mot sha256 sai qua truong thua va ghim rang hang khong mang no), Blob gia
+      nhan put voi access "private", hang khong co cot nao chua "http"; dung 1 AgentTask kind
+      "soan-tu-nguon" co payload nguonId; trang moi co banDangDungId null. Doi chung duong: 4/4 ca ghi.
+      CHIEU DO: ban sao service bam sha256 tren chuoi tenTep thay vi byte -> do voi thong diep ghim
+      "sha256 khong khop byte da luu".
+
+  - id: E2u
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.msd_man_tai_nguon
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs); Blob gia qua bien moi truong cua phien do; dang nhap dev:session mot member"
+      - "Buoc 1 (1440): mo Tai lieu, bam 'Tải nguồn lên' -> hop tai, vung keo tha, chon dich 'Trang mới' -> anh msd-tai-1440.png"
+      - "Buoc 2: chon tep mau docx, dien ten, loai, chu trang, bam 'Tải lên' -> tab 'Nguồn' co hang ten tep voi trang thai 'Máy đang soạn' -> anh msd-nguon-1440.png"
+      - "Buoc 3 (390): hop tai va tab Nguon -> anh msd-tai-390.png, msd-nguon-390.png, khong cuon ngang trang"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs"
+    expected: "exit 0; man-tai-nguon.mjs in 'buoc N: dat' cho 3 buoc; hang moi doc tu DOM co ten tep va 'Máy đang soạn'; anh o .acceptance-runs/may-soan-de-xuat/evidence/; vong S4 chep 4 anh sang _acceptance/may-soan-de-xuat/evidence/ cho E15j doc. CHIEU DO: --chieu-do tren ban sao an tab Nguon -> 'buoc 2: khong thay hang nguon', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E2t
+    criterion: AC-12
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.msd_blob_that
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/db/src/blob*.ts"
+      - "_acceptance/may-soan-de-xuat/rang/blob-that.mjs"
+    expected: |
+      Chay trong phien do rieng (tien-de.mjs), can BLOB_READ_WRITE_TOKEN that. Goi taiLieu.nguon.xinCho
+      qua tRPC that; fetch PUT tep mau quyet-dinh.docx vao URL tra ve voi header Origin cua APP_URL (dung
+      header ma man that gui); goi nhan; so sha256 cua hang voi bam doc lap cua tep. Goi taiVe; GET bang URL
+      do -> dung byte. GET vao blob khong ky (URL tran cua pathname) -> bi tu choi (khac 200). Don blob o
+      finally. In "buoc N: dat" cho 4 buoc. CHIEU DO: khong co token -> exit 2 voi "thieu BLOB_READ_WRITE_TOKEN
+      that", khong in dat nao; ban sao put access "public" -> buoc 4 do, "blob doc duoc khong ky".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_nguon_tu_choi
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon.spec.ts"
+    expected: |
+      Ma tran viet truoc 6 ca goi nhan: png doi duoi .pdf; zip khong co word/document.xml doi duoi
+      .docx; .doc that; tep 0 byte; tep 20 MB + 1 byte (xinCho tu choi truoc khi ky URL, va nhan tu choi
+      neu blob lon hon khai); dich la trang chua co ban dang dung. Moi ca: BAD_REQUEST voi thong diep
+      ghim theo ca; TaiLieuNguon, AgentTask, TaiLieuTrang dem truoc = sau; Blob gia ghi nhan del cho
+      pathname cua ca do (tru ca xinCho tu choi, khong co blob). Doi chung duong: tep dung 20 MB dung
+      -> nhan duoc. CHIEU DO: ban sao bo kiem chu ky tep -> ca png doi duoi ghi hang, do voi thong diep
+      ghim "nhan tep sai loai: png-doi-duoi".
+
+  - id: E3d
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.msd_man_tai_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Render hop tai voi tRPC gia; chon tep .jpg -> cau "Chỉ nhận Word (.docx) hoặc PDF, tới 20 MB"
+      nam trong FieldError gan voi o chon tep (aria-describedby), khong goi xinCho; dich trang moi da dien
+      van giu nguyen sau loi. Tep 21 MB -> cung cau, khong goi xinCho. Doi chung duong: tep .docx 1 MB
+      -> goi xinCho dung 1 lan. CHIEU DO: ban sao bo kiem duoi -> "goi xinCho voi tep sai loai".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_nguon_trung
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon.spec.ts"
+    expected: |
+      Tai tep mau A lan 1 -> nguon N1, 1 viec. Tai lai dung byte A voi ten khac -> tra N1, co trung
+      = true, TaiLieuNguon va AgentTask dem khong doi, Blob gia ghi nhan del pathname lan 2. Tai tep B
+      (A them mot byte) cho cung trang -> nguon N2 moi, viec moi thu hai. Phep quet router va service
+      nguon (AST): khong thu tuc nao update/delete TaiLieuNguon voi cac cot tenTep, sha256,
+      blobPathname, taiBoiId; doi chung duong cua phep quet: ban sao them mot update tenTep -> quet bao
+      "sua duoc nguon: tenTep". CHIEU DO: ban sao bo kiem trung -> lan 2 ghi hang thu hai, do voi thong
+      diep ghim "nguon trung sinh hang moi".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_khong_blob
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/src/config/env.validation.ts"
+      - "apps/agent/agent/lib/capabilities.ts"
+      - "apps/api/test/tai-lieu-nguon-tat.spec.ts"
+    expected: |
+      Nap AppModule voi BLOB_READ_WRITE_TOKEN rong (dat truoc import dong). xinCho, nhan, taiVe tra
+      PRECONDITION_FAILED voi thong diep ghim "Chưa bật lưu tệp nguồn"; khong 500. Cung phien goi
+      taiLieu.create, propose, list, get, approve cua luot 1 -> chay dung nhu co token (doi chung duong
+      trong cung tep: cung chuoi goi voi token gia -> nguon nhan duoc). taiLieu.nguon.trangThai tra
+      { bat: false }. capabilitiesFrom({}) cua agent co muc luu nguon tat, khong nem. CHIEU DO: ban sao
+      doc token bang process.env.X! -> nem luc khoi dong, do voi thong diep "khong co token lam hong api".
+
+  - id: E5d
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.msd_man_nguon_tat
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Render danh sach trang voi trangThai { bat: false }: nut "Tải nguồn lên" co disabled, cau "Chưa
+      bật lưu tệp nguồn — nhờ quản trị cấu hình" hien canh nut; nut "Viết trang" van bam duoc. Doi chung
+      duong: bat true -> nut bam duoc, khong co cau. CHIEU DO: ban sao bo nhanh tat -> "nut tai van mo
+      khi chua bat".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_doc_chu
+    paths:
+      - "apps/agent/agent/lib/tai-lieu-*.ts"
+      - "apps/agent/agent/lib/dispatch.ts"
+      - "_acceptance/may-soan-de-xuat/mau/**"
+      - "apps/agent/test/tai-lieu-doc-chu.spec.ts"
+    expected: |
+      Ma tran viet truoc toan phan 8 tep mau trong _acceptance/may-soan-de-xuat/mau/ (duong dan suy tu vi
+      tri test, khong hardcode goc): quyet-dinh.docx, quy-trinh.pdf (nhieu trang), theo-doi.docx (co
+      w:ins "1,8%" va w:del "1,6%"), ban-quet.pdf (chi anh), cid.pdf (lop chu "(cid:"), fffd.pdf (U+FFFD),
+      hong.docx (zip cat doi), mat-khau.pdf. Moi tep chay qua trinh xu ly soan-tu-nguon that voi Blob gia
+      va model gia dem so lan goi, 8 dong khang dinh:
+        quyet-dinh.docx, quy-trinh.pdf -> chu NFC chua dung cac chuoi moc viet truoc (vd "1,5%",
+          "01/10/2026", tieu de bang), trangThai DANG_SOAN roi toi model gia.
+        theo-doi.docx -> chu chua "1,8%" (ban da chap nhan) va KHONG chua "1,6%" (chu bi xoa).
+        ban-quet.pdf, cid.pdf, fffd.pdf -> trangThai CAN_GO_TAY, model gia goi 0 lan, 0 de xuat.
+        hong.docx, mat-khau.pdf -> trangThai LOI, lyDo chua ten loi ghim ("tệp hỏng", "có mật khẩu").
+      Ca thu 8: byte tai ve khac sha256 cua hang -> LOI "tệp nguồn không khớp mã băm", model 0 lan.
+      CHIEU DO: ban sao ha nguong ky tu hong ve vo han -> cid.pdf toi model, do voi thong diep ghim
+      "ban loi ma lot qua: cid.pdf".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_soan_dat
+    paths:
+      - "apps/agent/agent/lib/tai-lieu-*.ts"
+      - "apps/agent/agent/subagents/may_soan/**"
+      - "packages/db/src/tai-lieu*.ts"
+      - "apps/api/src/tai-lieu/**"
+      - "apps/agent/test/tai-lieu-soan.integration.spec.ts"
+    expected: |
+      Kho test co trang quy-tac-viet dang dung (noi dung moc "MOC-QUY-TAC-7Q"). Model gia tra kich ban
+      dat qua nop_ban_de_xuat that. Hai ca: dich trang moi; dich trang dang dung. Moi ca: dung 1
+      TaiLieuDeXuat CHO_DUYET; taoBoiId = nguoi tai; nguonId = nguon; parseTrichDoan(trichDoan) khong
+      nem; noiDung la NFC va bang chuanHoa(noiDung) cua luot 1 (khu hoi); ca trang dang dung co banGocId
+      = banDangDungId luc soan; TaiLieuSuKien DE_XUAT co. Loi dan model gia nhan duoc chua
+      "MOC-QUY-TAC-7Q". banDangDungId cua trang dich khong doi. Khu hoi voi writer that: de xuat do
+      propose cua API tao va de xuat do may soan tao cung di qua mot ham (spy dem 2 lan goi cung ham).
+      Ca ban goc doi giua luc soan: may soan lay banGoc B1, trong luc phien chay nguoi duyet mot de xuat
+      khac thanh B2 -> ban may ghi voi banGocId B1 va hien "cu" theo luat luot 1 (khong de len B2).
+      CHIEU DO: ban sao ghi de xuat bang prisma.create truc tiep trong agent (khong qua ham chung) ->
+      do voi thong diep ghim "may soan khong di duong ghi chung".
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.msd_quet_duong_ghi
+    paths:
+      - "apps/agent/agent/**"
+      - "_acceptance/may-soan-de-xuat/rang/quet-duong-ghi.mjs"
+    expected: |
+      Quet AST moi tep apps/agent/agent/** (suy goc tu vi tri script): khong loi goi nao toi
+      taiLieuPhienBan.(create|update|upsert|delete*), khong ghi truong banDangDungId, khong goi
+      "taiLieu.approve" hay ham duyet cua packages/db. In so tep da quet (> 0) va so loi goi Prisma da
+      xet. Doi chung duong: tren ban sao trong tmpdir chen "db.taiLieuPhienBan.create(" vao mot tep
+      tools/ -> exit 1 voi thong diep ghim "may soan ghi ban dang dung: <tep>:<dong>". Chay ca hai chieu
+      trong mot lan goi, in "doi chung: do dung" truoc ket qua that.
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_duyet_ban_may
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon-duyet.spec.ts"
+    expected: |
+      Mot ban may soan (tao qua ham ghi chung voi nguonId) cho trang co chu trang C, nguoi tai T khac C.
+      Ma tran 6 nguoi x approve: C, O, A duyet duoc (moi nguoi tren mot ban rieng, diffHash khop) -> tao
+      phien ban, banDangDungId tro toi no, phien ban truy duoc ve nguonId; T, K, R -> FORBIDDEN, dem
+      TaiLieuPhienBan truoc = sau. Sau mot lan chay soan-tu-nguon day du voi model gia: TaiLieuPhienBan
+      dem khong doi, banDangDungId khong doi. Ca sua: C mo ban may qua dung thu tuc cua luot 1 (loader
+      man sua + taiLieu.propose), sua mot loi chinh ta, gui; de xuat moi cua C co nguonId = nguon va
+      trichDoan = cua ban may; C duyet -> TaiLieuPhienBan -> TaiLieuDeXuat.nguonId khac rong. CHIEU DO
+      (hai ban sao): cho nguoi tai duyet ban may -> "nguoi tai duyet duoc ban may"; duong sua bo nguonId
+      -> "ban sua mat nguon".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.msd_kiem_so
+    paths:
+      - "packages/validation/src/tai-lieu-trich-doan.ts"
+      - "packages/validation/src/tai-lieu-so.ts"
+      - "apps/agent/agent/subagents/may_soan/tools/**"
+      - "packages/validation/test/tai-lieu-kiem-so.spec.ts"
+    expected: |
+      Ma tran viet truoc toan phan 12 ca goi kiemBanMay(noiDung, trichDoan, chuNguon, banGoc) — ham ma
+      nop_ban_de_xuat goi (test goi qua execute cua tool, khong goi thang helper), 12 dong khang dinh:
+        dat -> ok; so moi "2,0%" khong trong trich nao -> bac, thong diep chua "2,0%";
+        trich "tầng 4 là 2%" khong co trong nguon -> bac, thong diep chua doan;
+        trich khac nguon chi o dau thanh ("hoà" vs "hòa") -> ok; khac NBSP -> ok; khac nhay cong/thang -> ok;
+        ngay "01/10/2026" va "1,5%" co trich -> ok; so "48" da co trong banGoc, khong trich -> ok;
+        danh sach "1." "2." "3." khong trich -> ok;
+        bien so (so khop tron ven, khong chuoi con): "20%" voi trich chi co "01/10/2026" -> bac, thong
+          diep chua "20%"; "2%" voi trich chi co "12%" -> bac, chua "2%"; "1,5" voi trich chi co "11,5"
+          -> bac, chua "1,5". Doi chung duong cua nhom bien: "1,5%" voi trich "1,5%" -> ok (ca dat o tren).
+      Moi ca bac: tool tra isError, dem TaiLieuDeXuat truoc = sau. CHIEU DO (hai ban sao): so chuoi tho
+      thay quote_key -> ca dau thanh bi bac, do voi thong diep ghim "bac oan: dau-thanh"; so bang
+      includes tho -> ca "20%" lot, do voi thong diep ghim "so khop mot phan: 20%".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_soan_hong
+    paths:
+      - "apps/agent/agent/lib/tai-lieu-*.ts"
+      - "apps/agent/agent/subagents/may_soan/**"
+      - "apps/agent/test/tai-lieu-soan.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc 7 ca voi model gia: loi 500; het thoi gian (dong ho gia, afterEach tra dong ho);
+      tra rong; sai khuon; bi bac kiem so toi het tran buoc; chu nguon vuot tran do dai; khong co trang
+      quy-tac-viet dang dung. Moi ca: TaiLieuDeXuat dem truoc = sau; nguon trangThai LOI; lyDo bang dung
+      chuoi viet truoc cua ca do (7 chuoi khac nhau); AgentTask co finishedAt. Doi chung duong: ca dat
+      trong cung tep ghi 1 de xuat. CHIEU DO: ban sao ghi de xuat noiDung rong khi model tra rong -> do
+      voi thong diep ghim "ban rong duoc ghi: tra-rong".
+
+  - id: E10b
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_soan_lai
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon.spec.ts"
+    expected: |
+      Nguon o LOI. Ma tran 6 nguoi goi taiLieu.nguon.soanLai: nguoi tai, chu trang, owner, admin -> dung 1
+      AgentTask soan-tu-nguon moi moi lan, nguon ve CHO_DOC; thanh vien khac, vai okr -> NOT_FOUND, dem
+      AgentTask khong doi. Nguon dang DANG_SOAN -> soanLai tra CONFLICT, khong ghi. CHIEU DO: ban sao bo
+      kiem quyen -> "soan lai boi nguoi khong duoc thay".
+
+  - id: E10d
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.msd_man_hang_nguon
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Render tab "Nguồn" voi 4 hang gia viet truoc va hop tai voi ket qua trung. Ma tran 6 khang dinh:
+      hang LOI (lyDo "Chưa có trang Quy tắc viết đã duyệt") hien dung chuoi ly do va nut "Soạn lại" voi
+      nguoi tai; cung hang voi thanh vien khac (quyen tu API gia: coTheSoanLai false) -> khong co nut;
+      hang CAN_GO_TAY hien "Cần gõ tay"; hang DANG_SOAN hien "Máy đang soạn"; hang DA_SOAN (doi chung
+      duong) hien "Đã soạn" va lien ket "Xem bản đề xuất"; hop tai nhan { trung: true, nguonId } hien
+      "Nguồn này đã có" va lien ket toi id nguon cu. Khong hang nao in ma tho (LOI, CAN_GO_TAY). CHIEU DO:
+      ban sao hien nut Soan lai cho moi nguoi -> do voi thong diep ghim "soan lai lo cho nguoi khong
+      duoc thay".
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.msd_man_duyet_may
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+      - "apps/app/test/tai-lieu-man-duyet-may.dom.tsx"
+    expected: |
+      Render man duyet voi ban may gia co 3 so moi va 3 trich. Buoc 1: co chu nguon, 3 mark bao doan
+      trich, bang "Con số và ngày" 3 dong moi dong so -> doan; KHONG co nut "Duyệt" trong DOM;
+      document.activeElement khong phai nut nao cua quyet dinh. Bam "Đã đọc nguồn, xem bản máy soạn" ->
+      co "Duyệt", "Trả lại", "Sửa bản này"; khong nut nao co autofocus, khong nut nao variant primary
+      (doc thuoc tinh data-variant). Tick: 3 o "Đã đối chiếu", ma tran viet truoc 4 ca — 0/3, 1/3, 2/3
+      tick -> "Duyệt" disabled; 3/3 -> bat; bo tick mot o -> disabled lai; ban may khong co so moi nao ->
+      "Duyệt" bat ngay, khong o tick. Tai lai (remount) -> ve buoc 1, tick mat het. CHIEU DO (hai ban sao):
+      hien Duyet ngay buoc 1 -> "duyet truoc khi doc nguon"; bo dieu kien tick -> "duyet khi chua tick het".
+
+  - id: E11b
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_duyet_ban_may
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon-duyet.spec.ts"
+    expected: |
+      Cung tep voi E8b, doc ve AC-11 phia may chu. Ca tick: approve mot ban may co 3 so moi voi
+      daDoiChieu = 2 -> BAD_REQUEST thong diep ghim "chưa đối chiếu hết con số", TaiLieuPhienBan dem khong
+      doi; daDoiChieu = 3 -> duyet duoc; de xuat nguoi viet (khong nguonId) khong can daDoiChieu. Ca
+      "Sửa bản này" — C mo ban may qua loader man sua
+      va taiLieu.propose voi tuDeXuatId cua ban may, sua mot chu, gui -> hang de xuat moi cua C co nguonId
+      = nguon va trichDoan bang dung mang cua ban may (so sau parseTrichDoan); C duyet qua taiLieu.approve
+      voi diffHash khop -> TaiLieuPhienBan.deXuat.nguonId khac rong; K goi nguon.taiVe -> duoc (nguon da
+      duoc ban dang dung trich). Doi chung duong: de xuat nguoi viet khong tuDeXuatId -> nguonId null.
+      CHIEU DO (hai ban sao): duong sua bo nguonId -> "ban sua mat nguon"; approve bo kiem daDoiChieu ->
+      "duyet ban may khi chua doi chieu".
+
+  - id: E11u
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.msd_man_duyet_may
+    steps:
+      - "Canh cay; phien do rieng; gieo qua ham ghi chung mot trang dang dung va mot ban may soan co 3 so moi ('1,5%', '1,8%', '01/10/2026') tu nguon mau; dang nhap chu trang"
+      - "Buoc 1 (1440): tab Cho duyet -> ban may -> buoc 'Nguồn nói gì' -> anh msd-duyet-b1-1440.png; doc DOM: 3 mark co mau nen tinh toan khac trong suot"
+      - "Buoc 2: bam 'Đã đọc nguồn, xem bản máy soạn' -> hai cot canh nhau (hai khoi cung hang, doc getBoundingClientRect) -> anh msd-duyet-b2-1440.png"
+      - "Buoc 3 (390): cung man -> hai the 'Nguồn' / 'Bản máy soạn', khong cuon ngang -> anh msd-duyet-390.png"
+      - "Buoc 4: Duyet dang khoa (doc disabled); tick 3 o 'Đã đối chiếu' -> Duyet mo -> anh msd-duyet-tick-1440.png; bam Duyet -> ve man doc, muc 'Nguồn' co ten tep va nut tai ve -> anh msd-doc-nguon.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs"
+    expected: "exit 0; man-duyet-may.mjs in 'buoc N: dat' cho 4 buoc; anh o .acceptance-runs/may-soan-de-xuat/evidence/; vong S4 chep 4 anh sang _acceptance/may-soan-de-xuat/evidence/ cho E15j doc. CHIEU DO: --chieu-do tren ban sao xep hai cot thanh mot cot o 1440 -> 'buoc 2: khong canh nhau', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E11s
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.msd_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/**"
+    expected: "exit 0; design-gate --mode static tren moi tep tsx cua khu tai-lieu va thanh phan moi cua packages/ui ma luot nay them; in ten tung tep dat. CHIEU DO: ban sao chen mot className mau tho (bg-[#ff0000]) vao mot tep -> exit 1, thong diep cua design-gate nhac tep do."
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_nguon_khong_ro
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon-khong-ro.spec.ts"
+    expected: |
+      Ma tran viet truoc toan phan: 6 nguoi (T nguoi tai, C chu trang dich, O owner, A admin, K thanh
+      vien khac, R vai okr) x 3 trang thai (N1 chua duoc ban dang dung nao trich, co ban may cho; N2 duoc
+      ban dang dung trich; N3 ban may bi tra lai) x 4 thu tuc (nguon.list, nguon.get, nguon.taiVe,
+      taiLieu.proposal cua ban may) = 72 khang dinh, moi khang dinh in mot dong, test dem 72.
+      N2 dung bang taiLieu.approve that cua C tren ban may (khong gieo TaiLieuPhienBan tay).
+      Bang viet truoc: N1, N3: T C O A thay ca 4; K R khong. N2: ca 6 thay nguon.list, nguon.get va taiVe;
+      proposal cua ban may da duyet: T C O A thay, K R NOT_FOUND (luot 1: de xuat chi nguoi tao va nguoi
+      duyet thay, ke ca khi da duyet). "Khong thay" = list khong dong, get/taiVe/
+      proposal tra NOT_FOUND cung ma va thong diep nhu id khong ton tai (so hai loi). taiVe tra URL ky
+      co han <= 300 giay (doc tham so het han cua Blob gia) va tai bang URL do tu Blob gia ra dung byte
+      co sha256 cua hang. CHIEU DO: ban sao cho moi nguoi taiVe N1 -> do voi thong diep ghim
+      "ro nguon: <nguoi> x N1".
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_khoa_rieng
+    paths:
+      - "apps/agent/agent/lib/tai-lieu-*.ts"
+      - "apps/agent/agent/subagents/may_soan/**"
+      - "apps/agent/agent/lib/capabilities.ts"
+      - "apps/agent/test/tai-lieu-khoa-rieng.spec.ts"
+    expected: |
+      Hai ca: KHO_TAI_LIEU_AI_GATEWAY_API_KEY = "khoa-gia-7Q" -> ham dung model cua may_soan goi
+      createGateway voi apiKey "khoa-gia-7Q" (spy), nhan khoa "rieng"; bien vang -> khong goi createGateway
+      voi apiKey, dung duong chung, nhan "chung", khong nem. Sau mot luot voi model gia bao usage
+      { input 1200, output 340 }: dung 1 TaiLieuSuKien MAY_SOAN co maModel, nhanKhoa, tokenVao 1200,
+      tokenRa 340, soLanBac, chiPhiUsd = 1200 x giaVao + 340 x giaRa tu bang gia ghim cua ma model trong
+      tep cau hinh cua khu (so bang so tinh doc lap trong test); ma model khong co trong bang gia ->
+      chiPhiUsd null va su kien ghi "chua co gia", khong nem. CHIEU DO: ban sao bo qua bien -> ca co khoa van nhan "chung", do voi
+      thong diep ghim "khoa rieng khong duoc dung".
+
+  - id: E13b
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.msd_bien_ba_nha
+    paths:
+      - ".env.example"
+      - "turbo.json"
+      - "apps/agent/agent/lib/capabilities.ts"
+      - "_acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs"
+    expected: "exit 0; script doc .env.example, turbo.json (globalPassThroughEnv) va capabilities.ts, in ba dong 'KHO_TAI_LIEU_AI_GATEWAY_API_KEY: co o <nha>'; bien KHONG nam trong mang env nao cua turbo.json. CHIEU DO: tren ban sao trong tmpdir xoa bien khoi globalPassThroughEnv -> exit 1, 'thieu nha: turbo globalPassThroughEnv'; ban sao dua bien vao env -> exit 1, 'bi mat nam trong env'."
+
+  - id: E16
+    criterion: AC-16
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_nguon_cua_ai
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "packages/db/src/blob-nguon.ts"
+      - "apps/api/test/tai-lieu-nguon-cua-ai.spec.ts"
+    expected: |
+      Kho Blob gia; nguon N1 cua nguoi tai T da luu (duong luu P1, phieu cua T con han). Ma tran viet
+      truoc 10 ca goi taiLieuNguon.nhan; moi ca dem TaiLieuNguon, AgentTask va danh sach tep Blob gia da
+      xoa truoc = sau (tru tep vua tai cua chinh nguoi goi trong ca doi chung):
+        thanh vien khac K voi P1 va dich sai; K voi P1 va dich dung; vai okr voi P1; K voi duong luu
+          chua tung cap; K voi duong luu va phieu cap cho T -> deu tu choi, khong xoa gi;
+        T dung lai chinh phieu cua N1 voi dich sai, va voi dich dung (trung byte) -> tu choi, P1 con;
+        doi chung duong, K tu xin cho roi nhan: dich sai -> tu choi; tep anh (sai loai) -> tu choi;
+          dung byte cua N1 (trung byte) -> tra nguon cu -> ca ba chi xoa duong luu vua cap cho K.
+      Ca song song: T gui ba lan nhan dong thoi cung mot phieu -> dung mot lan duoc nhan, duong luu co
+      hang va tep con nguyen. Ca trung byte cua K tra dung nguonId cua N1 voi trung = true. Ca tai:
+      12 luot nhan dong thoi cua sau nguoi deu duoc nhan trong 30 giay (khong treo cho het ket noi). Sau ma tran: taiVe(N1) tra URL ky tro dung P1, byte doc qua duong doc cua
+      kho (duong ma may soan dung) co sha256 bang hang N1. CHIEU DO (hai ban sao): bo chan «duong luu
+      da thuoc mot nguon» -> do voi thong diep ghim "xoa tep nguon cua nguoi khac"; bo khoa theo duong
+      luu -> do voi thong diep ghim "xoa tep nguon vua ghi khi gui song song"; kiem trang dich trong giao
+      dich -> do voi thong diep ghim "nhan treo khi nhieu nguoi tai cung luc".
+
+  - id: E14
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.msd_ranh_gioi
+    paths:
+      - "apps/agent/agent/subagents/may_soan/**"
+      - "apps/agent/test/tai-lieu-ranh-gioi.spec.ts"
+      - "apps/agent/test/khuon-di-dong.spec.ts"
+    expected: |
+      Nap khai bao subagent may_soan: tap ten tool = ["nop_ban_de_xuat"] dung tung phan tu; moi tool
+      dung san tat (doc cau hinh eve cua subagent); sandbox egress "deny-all"; khong web_fetch,
+      web_search. Quet AST agent.ts cua may_soan: khong import doc AppSetting / modelTheoVai; ma model
+      lay tu hang trong tep cau hinh cua khu. khuon-di-dong.spec.ts quet tool moi va khong co $ref vong.
+      Ham dung loi goi model: chu nguon nam giua hai dau phan cach viet truoc, loi dan khong chua chu
+      nguon (moc "NGUON-MOC-7Q" chi xuat hien trong khoi du lieu). CHIEU DO: ban sao them tool
+      web_fetch -> do voi thong diep ghim "may soan co tool ngoai tap: web_fetch".
+
+  - id: E15a
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.msd_soan_that
+    paths:
+      - "apps/agent/agent/lib/tai-lieu-*.ts"
+      - "apps/agent/agent/subagents/may_soan/**"
+      - "_acceptance/may-soan-de-xuat/mau/**"
+      - "_acceptance/may-soan-de-xuat/rang/soan-that.mjs"
+    expected: "Chay trong phien do rieng (tien-de.mjs), can khoa AI Gateway that. Nap trang quy-tac-viet cua chu kho (ban dang dung trong kho do, tu tep _acceptance/may-soan-de-xuat/mau/quy-tac-viet.md chu kho dat vao) va ba tep mau quyet-dinh-hoa-hong.docx, quy-trinh.pdf, bieu-mau.docx; chay soan-tu-nguon that; ghi moi ban may soan (markdown, trichDoan, su kien MAY_SOAN) ra .acceptance-runs/may-soan-de-xuat/evidence/soan-that-<tep>.md. exit 0 khi ca ba co de xuat qua duoc kiem so; in chi phi tong. Vong S4 chep ba tep sang _acceptance/may-soan-de-xuat/evidence/ cho E15j. CHIEU DO: khong co tep quy-tac-viet.md -> exit 2 voi 'thieu trang Quy tac viet cua chu kho', khong goi model."
+
+  - id: E15j
+    criterion: AC-15
+    executor: judgment
+    question: "Mot chu trang doc ba ban may soan canh ba tep nguon va trang Quy tac viet: moi ban co giu mot chu de, chep so lieu chinh xac, neu doi tuong ap dung va gioi han nhu nguon noi, khong them quy dinh nao nguon khong co, theo loi dan Quy tac viet — va cac man tai nguon, man duyet nguon canh nhau co doc duoc cho nguoi van phong khong?"
+    evidence_required: [judged_by, verdict, rationale]
+    inputs:
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong.md"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh.md"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau.md"
+      - "_acceptance/may-soan-de-xuat/mau/quy-tac-viet.md"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-duyet-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-duyet-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-duyet-390.png"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-nguon-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong-b2-390.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh-b2-390.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau-b2-390.png"
+      - "docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md"
+    expected: |
+      Moi ban may soan: mot chu de; moi so, ngay, ty le trung nguon (doi chieu trichDoan va tep nguon);
+      neu doi tuong ap dung va gioi han; khong co quy dinh nao nguon khong noi; van phong theo Quy tac
+      viet. Man duyet: nguoi van phong thay nguon truoc, biet so nao den tu dau, khong bi goi y bam
+      Duyet; khong nhan ky thuat (markdown, hash, blob). Thieu bat ky dau vao nao -> UNCERTAIN ghi ro
+      "thieu dau vao: <ten>", khong cham tu tai lieu thiet ke.

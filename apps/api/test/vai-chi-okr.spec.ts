@@ -77,6 +77,7 @@ const ALIAS_CHO_PHEP = [
 	"org",
 	"okr",
 	"taiLieu",
+	"taiLieuNguon",
 ] as const;
 const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
 const SAN_THU_TUC = 50;

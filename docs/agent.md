@@ -73,12 +73,18 @@ làn nghiên cứu với `purpose: "okr"`: một lần thử, lease 30 giây do 
 lại trần và công tắc ngay trước khi gửi, hỏng là đóng với mã (`VIEC_OKR`,
 `lib/okr/viec.ts`).
 
+Kho tài liệu thêm `soan-tu-nguon`, việc trực tiếp: tải tệp nguồn từ Blob, so `sha256`,
+đọc chữ docx hay PDF (`lib/tai-lieu-doc-chu.ts`), rồi để nguồn ở `CHO_SOAN` hoặc đóng
+với `CAN_GO_TAY` / `LOI`. Không mở phiên trong việc đó: nhịp dispatch kế mới nhận nguồn
+và gửi một phiên `purpose: "may-soan"` qua kênh crm (`lib/tai-lieu-phien.ts`), vì
+`receive` của kênh phải trả một phiên.
+
 **Neither visible kind has anything to decide**, and through a session they queued
 behind sixty LLM runs for 25 minutes (`test/lanes.integration.spec.ts`). **The row says
 what the work is; the lane only says whether it needs a conversation.**
 
 **Priority**: `okrKiem` 940 · `brand` 900 · `portrait` 800 · `okrBam` 600 · `workspace` 500 ·
-`requested` 300 · `meeting` 200 · `identify` 100 · `okrNen` 90 · `nhac` 60 · `sweep` 50 ·
+`requested` 300 · `soanTuNguon` 300 · `meeting` 200 · `identify` 100 · `okrNen` 90 · `nhac` 60 · `sweep` 50 ·
 `aiDoiSoat` 45 · `companyProfile` 40 · `recheck` 0. The
 top two are what a rep reads *before* deciding what to open.
 
@@ -764,6 +770,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
 | Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
 | Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — từ 9a chỉ có một tool sống `nop_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng; 9b, 9c thêm `skill` phương pháp OKR và mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
+| Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
 
@@ -1072,6 +1079,40 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
 
 Gỡ khi hãng có bản tương đương: hook chi phí trong subagent và số lần thử theo loại
 việc là phần nên gửi lên hãng — chưa gửi ở lượt này.
+
+## Chỗ rẽ: Máy soạn của Kho tài liệu (lượt 2)
+
+Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
+
+- `agent/lib/dispatch.ts` — `handleDirect` thêm `soan-tu-nguon`.
+- `agent/schedules/dispatch.ts` — đóng phiên máy soạn quá hạn, gửi nguồn `CHO_SOAN`.
+- `agent/channels/crm.ts` — `receive` nhận `target.nguonId`; `/internal/crm/dispatch`
+  gọi `drainMaySoan`; `turn.failed`, `session.failed`, `session.completed` đóng nguồn
+  theo token `may-soan:<nguonId>` trước mọi nhánh khác.
+- `agent/instructions/task.ts` — nhánh `may-soan` giao việc cho `may_soan`.
+- `agent/lib/capabilities.ts` — «Document sources» và «Drafting key».
+- Tệp mới: `hooks/dong-may-soan.ts` (kết quả của phiên con đóng nguồn), `lib/tai-lieu-*.ts`,
+  `subagents/may_soan/**`.
+
+Điều đo được, đừng thiết kế ngược lại:
+
+- **Phiên con tìm nguồn qua mã phiên gốc.** `guiMaySoan` ghi `session.id` của phiên gốc
+  vào `taiLieuNguon.phienId`; tool, chỉ dẫn động và sổ chi phí của `may_soan` tra theo
+  `ctx.session.parent.rootSessionId` và thử lại vài lần, như Trợ lý OKR.
+- **Bản gốc chụp lúc nhận nguồn.** `taiLieuNguon.banGocId` giữ bản đang dùng ở lúc nhận;
+  lời dặn, kiểm số và `banGocId` của bản nộp cùng đọc nó, nên bản soạn trên B1 không bị
+  đè lên B2 mà hiện «cũ» khi người khác duyệt trước.
+- **Tool bác bằng cách ném lỗi có chỉ dẫn.** `nop_ban_de_xuat` trả thông điệp nêu đúng
+  con số hay đoạn trích sai; tới `TAI_LIEU_AGENT.soan.tranBuoc` lần bác thì nguồn về `LOI`
+  và tool bảo dừng.
+- **Mọi lời gọi của máy soạn mang ZDR**, cả khi dùng khoá riêng lẫn khoá chung: model
+  được bọc bằng `ganZdr` (`lib/tai-lieu-model.ts`), gắn `TAI_LIEU_AGENT.soan.gateway` vào
+  `providerOptions.gateway` của từng lời gọi. Không có nhà cung cấp ZDR thì lời gọi hỏng
+  và nguồn về `LOI` với lý do đọc được, không gửi sang nhà khác.
+- **Chữ nguồn là dữ liệu.** Lời dặn đặt chữ nguồn giữa `<<<NGUON-BAT-DAU>>>` và
+  `<<<NGUON-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong nguồn.
+- **Chi phí** vào sổ `MAY_SOAN` của trang (token, giá theo `TAI_LIEU_AGENT.bangGia`,
+  nhãn khoá `rieng`/`chung`), chưa vào sổ chi phí AI chung.
 
 ## The bridge
 
