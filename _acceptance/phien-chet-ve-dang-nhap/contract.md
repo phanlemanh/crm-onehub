@@ -5,7 +5,7 @@ slug: phien-chet-ve-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -60,3 +60,11 @@ Source input: prompt (phiên 2026-09-28, chủ kho chọn A kèm B và phương 
 
 - Đo lại sau khi lên production: `curl -s -o /dev/null -w "%{http_code} -> %{redirect_url}\n" -H "Cookie: __Secure-crm.session_token=het-han.abc" https://www.onehub.center/` kỳ vọng `307 -> https://www.onehub.center/sign-in`.
 - `cookieCache` 5 phút của better-auth: một phiên vừa bị thu hồi vẫn được app và API coi là sống tới 5 phút — hai bên đồng ý nên không lặp; người thấy workspace tới hết 5 phút như trước vòng này.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-28 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1 (sổ d-20260928T023312Z-7, -9, -10, -11, -12):
+
+- Ngoài-1: API trả 401 cả khi chính nó không đọc được phiên — `apps/api/src/trpc/trpc.context.ts` nuốt mọi lỗi của `getSession()` thành `null` rồi middleware ném `UNAUTHORIZED`. Lúc API lỗi cơ sở dữ liệu, một người còn phiên có thể bị proxy đưa về `/sign-in`.
+- Ngoài-4: cùng gốc với Ngoài-1 — khi app đọc được phiên mà API thì không (hai tiến trình, hai bể kết nối), người còn phiên có thể bị đẩy qua lại giữa `/` và `/sign-in` cho tới khi trình duyệt báo ERR_TOO_MANY_REDIRECTS.
+- Ngoài-3: ca (c) của E6 cho `workspace.get` trả `slug: null`, trạng thái mà schema đầu ra của API không cho phép; nhánh `!workspace.slug` trong `apps/app/lib/trang-goc.ts` chỉ còn đường `""` đạt tới được.
+- Ngoài-5: vế «thân không chứa NEXT_REDIRECT» trên dòng `/<slug>/agents` của E10 không bao giờ đỏ được, vì thân chỉ được đọc khi status 200; việc phân biệt chuyển hướng của proxy với chuyển hướng của trang dựa vào đòi hỏi status 307 và lượt phá-thử ở S3 (gỡ nhánh proxy → dòng đó ra 200).
+- Ngoài-6: lệnh của E2 (`-t giu-mo`) chỉ chạy các khẳng định «không chuyển hướng»; đối chứng dương cùng đường, cùng cookie nằm ở test `het-phien` và `khong-dung`, không cùng lượt chạy với E2.
