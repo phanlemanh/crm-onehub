@@ -3,10 +3,10 @@ schema_version: 1
 slug: tim-va-dieu-huong-kho
 feature: Tìm và điều hướng kho tài liệu — ⌘K có dấu hay không dấu, trang nhắc tới trang này kèm câu, lọc theo đơn vị, loại, chủ, tab Sức khoẻ, dòng «N bản chờ bạn duyệt» trong nhắc sáng
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-28T23:33:48Z
 prototype:
   base_commit: 05664c7aa58cdfdcbcc169c030911c7f33dd8ba2
   disposition: keep
@@ -41,9 +41,9 @@ mục 5.1, 6.7, 7.2; bản mẫu `/proto/kho-tai-lieu` trạng thái `ST-tim-nha
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: sau hai tuần chạy thật, kho có thành mạng các trang dẫn tới nhau và chủ trang có theo kịp hàng duyệt không?
-- Kết quả nào là SỐNG: [đề xuất] ≥ 50% trang đã duyệt không mồ côi (có ít nhất một trang đã duyệt khác dẫn tới), đếm bằng hàm Sức khoẻ cuối chạy thật; trung vị thời gian từ đề xuất tới duyệt ≤ 5 ngày làm việc (chung với lộ trình mục 5).
-- Kết quả nào là CHẾT: [đề xuất] ≥ 1 lần tìm, «trang nhắc tới» hay Sức khoẻ lộ chữ, tên hay slug của bản chưa duyệt được báo lại trong chạy thật; hoặc trung vị duyệt > 10 ngày làm việc; hoặc < 20% trang đã duyệt không mồ côi.
-- Timebox: [đề xuất] đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
+- Kết quả nào là SỐNG: ≥ 50% trang đã duyệt không mồ côi (có ít nhất một trang đã duyệt khác dẫn tới), đếm bằng hàm Sức khoẻ cuối chạy thật; trung vị thời gian từ đề xuất tới duyệt ≤ 5 ngày làm việc (chung với lộ trình mục 5).
+- Kết quả nào là CHẾT: ≥ 1 lần tìm, «trang nhắc tới» hay Sức khoẻ lộ chữ, tên hay slug của bản chưa duyệt được báo lại trong chạy thật; hoặc trung vị duyệt > 10 ngày làm việc; hoặc < 20% trang đã duyệt không mồ côi.
+- Timebox: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
 
 ## Kết quả prototype
 
@@ -65,9 +65,9 @@ danh sách «cụt» để sau. Không đo số nào trên bản mẫu.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: lộ trình mục 3 đặt lượt 3 sau lượt 2 và trước trợ lý AI; điều kiện mở «lượt 1 đã lên» đạt từ 2026-09-28 (#180). Máy khuyên `build`.
+- **decision = build.** Căn cứ: lộ trình mục 3 đặt lượt 3 sau lượt 2 và trước trợ lý AI; điều kiện mở «lượt 1 đã lên» đạt từ 2026-09-28 (#180). Phan Le Manh chọn «build» 2026-09-29.
 - **disposition = keep.** Căn cứ: bản mẫu ở lại kho vĩnh viễn; lượt này thêm một mục `catalog.ts` trỏ cùng module, không xoá gì.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** SỐNG ≥ 50% trang đã duyệt không mồ côi và trung vị duyệt ≤ 5 ngày làm việc; CHẾT ≥ 1 lần tìm, «trang nhắc tới» hay Sức khoẻ lộ chữ, tên hay slug của bản chưa duyệt được báo lại, hoặc trung vị duyệt > 10 ngày làm việc, hoặc < 20% trang đã duyệt không mồ côi; đo 2026-10-14 → 2026-10-28, đọc 2026-10-29 — chốt tại Cổng Đáng 2026-09-29, Phan Le Manh («build», ngưỡng giữ như đề xuất).
 
 ## Thước đo thành công → ứng viên criterion
 

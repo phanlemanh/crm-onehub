@@ -109,11 +109,11 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			cau_giao:
 				"«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
 			buoc_ke:
-				"Máy lập kế hoạch thi công rồi dựng; anh còn ký Cổng Đáng (opportunity.md)",
+				"Máy lập kế hoạch thi công rồi dựng; anh chờ thẻ Cổng Bằng chứng",
 			chan_boi: [],
 			ghi_chu:
-				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b.",
-			cho_anh: true,
+				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất.",
+			cho_anh: false,
 		},
 		{
 			id: "l4",
@@ -210,10 +210,6 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 	],
 	cho_anh: [
 		{
-			viec: "Lượt 3: ký Cổng Đáng (opportunity.md: decision, decided_by, decided_at, stage decided, gỡ [đề xuất] ở ngưỡng)",
-			hang_muc: "l3",
-		},
-		{
 			viec: "Kiểm production có BLOB_READ_WRITE_TOKEN chưa: kho kho-tai-lieu-nguon chưa gắn dự án nào; thiếu token thì nút «Tải nguồn lên» khoá",
 			hang_muc: "l2",
 		},
@@ -261,6 +257,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3: Cổng Đáng ký build, ngưỡng giữ như đề xuất",
+		},
 		{
 			ngay: "2026-09-29",
 			viec: "Lượt 3: Cổng Phạm vi duyệt, nhận tách lịch sử, khôi phục, lưu trữ sang 3b; vào S2",
