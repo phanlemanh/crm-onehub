@@ -2,6 +2,8 @@ import { db } from "@crm/db";
 import { gieoKyQuy, gieoMucTieuCongBo } from "./okr-khep-san";
 import {
 	datViTri,
+	goi,
+	ma,
 	nguoiMoi,
 	ok,
 	pbMoi,
@@ -68,6 +70,86 @@ export async function gieoCanhKr(): Promise<SanCanhKr> {
 	};
 }
 
+export const TEN_C = "Gọi lại quý 4";
+export const TEN_C_MOI = "Gọi lại Q4";
+
+export type SanSangKien = {
+	C: string;
+	P: string;
+	congTyX: string;
+	tenX: string;
+	tenPhuTrachC: string;
+};
+
+const idTra = (tra: Parameters<typeof ok>[0], nhan: string) =>
+	ok<{ id: string }>(tra, nhan).id;
+
+export async function chienDichMoi(
+	ten: string,
+	ai: NguoiCanh,
+	ownerId: string | null = null,
+): Promise<string> {
+	const view = idTra(
+		await goi(
+			"savedViews.create",
+			{
+				entity: "CONTACT",
+				name: ma("canh-goc-nhin"),
+				shared: false,
+				filters: { q: "", sort: "", dir: "asc", archived: false, filters: {} },
+			},
+			ai.cookie,
+		),
+		"tao goc nhin",
+	);
+	return idTra(
+		await goi(
+			"campaigns.create",
+			{ name: ten, savedViewId: view, ownerId },
+			ai.cookie,
+		),
+		`tao chien dich ${ten}`,
+	);
+}
+
+export async function congTyMoi(
+	ten: string,
+	ai: NguoiCanh,
+): Promise<{ congTy: string; ten: string }> {
+	const tenDu = ma(ten);
+	const congTy = idTra(
+		await goi("companies.create", { name: tenDu }, ai.cookie),
+		`tao cong ty ${ten}`,
+	);
+	return { congTy, ten: tenDu };
+}
+
+export async function keHoachMoi(
+	companyId: string,
+	ownerId: string,
+): Promise<string> {
+	const r = await db.onboardingPlan.create({
+		data: { companyId, startedAt: new Date(), targetDays: 30, ownerId },
+		select: { id: true },
+	});
+	return r.id;
+}
+
+export async function gieoSangKien(san: SanCanhKr): Promise<SanSangKien> {
+	const { A } = san.nguoi;
+	const phuTrach = await nguoiMoi("canh-phu-trach-C");
+	const tenPhuTrachC = `Phụ trách ${phuTrach}`;
+	await db.user.update({
+		where: { id: phuTrach },
+		data: { name: tenPhuTrachC },
+	});
+	const C = await chienDichMoi(TEN_C, A, phuTrach);
+	ok(await goi("campaigns.start", { id: C }, A.cookie), "chay chien dich C");
+	const x = await congTyMoi("cong-ty-X", A);
+	const P = await keHoachMoi(x.congTy, phuTrach);
+	return { C, P, congTyX: x.congTy, tenX: x.ten, tenPhuTrachC };
+}
+
 export type BangDem = "okrViecKr" | "okrTrail" | "okrBangChung" | "okrGhiNhan";
 
 const cuaSan = { cycle: { name: { startsWith: TIEN_TO } } };
@@ -101,5 +183,11 @@ export async function donSanCanhKr(): Promise<void> {
 	});
 	await db.okrViecKr.deleteMany({
 		where: { keyResult: { objective: cuaSan } },
+	});
+	await db.campaign.deleteMany({
+		where: { createdById: { startsWith: TIEN_TO } },
+	});
+	await db.savedView.deleteMany({
+		where: { ownerId: { startsWith: TIEN_TO } },
 	});
 }

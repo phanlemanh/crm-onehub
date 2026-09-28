@@ -1,8 +1,9 @@
 import { docDuocPhamVi } from "@crm/auth";
-import type { Db, Prisma } from "@crm/db";
+import { type Db, Prisma } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
 	type DanhDauViecInput,
+	type GanSangKienInput,
 	type IdInput,
 	LOAI_VIEC_KR,
 	type SuaViecInput,
@@ -19,7 +20,13 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
-import { anhVetViec, cotNgay, dongViecTu, type HangViec } from "./canh-kr";
+import {
+	anhVetViec,
+	cotNgay,
+	dongViecTu,
+	type HangViec,
+	lienKetChoVai,
+} from "./canh-kr";
 import { OkrService } from "./okr.service";
 import {
 	chonDonVi,
@@ -27,7 +34,7 @@ import {
 	OkrAccessService,
 	type Quyen,
 } from "./okr-access.service";
-import type { CanhKrOutput } from "./okr-canh-kr.contracts";
+import type { CanhKrOutput, DongCanh } from "./okr-canh-kr.contracts";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
@@ -49,6 +56,18 @@ const chonHangViec = {
 } as const;
 
 type HangViecDb = Prisma.OkrViecKrGetPayload<{ select: typeof chonHangViec }>;
+
+const chonHangCanh = {
+	...chonHangViec,
+	campaign: { select: { id: true, name: true, status: true } },
+	plan: {
+		select: {
+			id: true,
+			closedAt: true,
+			company: { select: { name: true, archivedAt: true } },
+		},
+	},
+} as const;
 
 function hangViec(h: HangViecDb): HangViec & { keyResultId: string } {
 	return { ...h, loai: loaiViecKr.parse(h.loai) };
@@ -133,9 +152,9 @@ export class OkrCanhKrService {
 		const [q, viec, bangChung] = await Promise.all([
 			this.access.quyen(userId),
 			this.db.okrViecKr.findMany({
-				where: { keyResultId, loai: "viec" },
+				where: { keyResultId },
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
-				select: chonHangViec,
+				select: chonHangCanh,
 			}),
 			this.db.okrBangChung.findMany({
 				where: { keyResultId },
@@ -149,7 +168,11 @@ export class OkrCanhKrService {
 				},
 			}),
 		]);
-		const hang = viec.map(hangViec);
+		const hang = viec.map((v) => ({
+			...hangViec(v),
+			campaign: v.campaign,
+			plan: v.plan,
+		}));
 		const nguoiLamIds = [
 			...new Set(hang.flatMap((h) => h.nguoiLamUserId ?? [])),
 		];
@@ -179,7 +202,16 @@ export class OkrCanhKrService {
 				objectiveId: kr.objectiveId,
 				ownerName: kr.owner.name,
 			},
-			dong: hang.map((h) => dongViecTu(h, boiCanh)),
+			dong: hang.map(
+				(h): DongCanh =>
+					h.loai === "viec"
+						? dongViecTu(h, boiCanh)
+						: {
+								id: h.id,
+								loai: h.loai,
+								lienKet: lienKetChoVai(q.role, { ...h, loai: h.loai }),
+							},
+			),
 			bangChung: bangChung.map((b) => ({
 				id: b.id,
 				url: b.url,
@@ -232,6 +264,75 @@ export class OkrCanhKrService {
 			);
 			return { id: row.id };
 		});
+	}
+
+	async ganSangKien(
+		userId: string,
+		input: GanSangKienInput,
+	): Promise<{ id: string }> {
+		const q = await this.access.quyen(userId);
+		try {
+			return await this.db.$transaction(async (tx) => {
+				const kr = await this.krDeGhi(tx, input.keyResultId);
+				if (!docDuocPhamVi(q.role, "doi-tac"))
+					throw new ForbiddenException(T.canhKr.khongGanDuoc);
+				this.assertGhiDuoc(q, userId, kr);
+				const nguon = await this.nguonSangKien(tx, input);
+				const cuoi = await tx.okrViecKr.aggregate({
+					where: { keyResultId: kr.id },
+					_max: { position: true },
+				});
+				const row = await tx.okrViecKr.create({
+					data: {
+						keyResultId: kr.id,
+						loai: input.loai,
+						tieuDe: "",
+						...nguon,
+						taoBoiUserId: userId,
+						position: (cuoi._max.position ?? -1) + 1,
+					},
+					select: chonHangViec,
+				});
+				await this.okr.vet(
+					tx,
+					userId,
+					"gan-sang-kien",
+					{ objectiveId: kr.objective.id, keyResultId: kr.id },
+					null,
+					anhVetViec(hangViec(row)),
+				);
+				return { id: row.id };
+			});
+		} catch (e) {
+			if (
+				e instanceof Prisma.PrismaClientKnownRequestError &&
+				e.code === "P2002"
+			)
+				throw new BadRequestException(T.canhKr.daGan);
+			throw e;
+		}
+	}
+
+	private async nguonSangKien(
+		tx: Tx,
+		input: GanSangKienInput,
+	): Promise<{ campaignId: string } | { planId: string }> {
+		if (input.loai === "chien-dich") {
+			const c = await tx.campaign.findUnique({
+				where: { id: input.banGhiId },
+				select: { id: true },
+			});
+			if (!c)
+				throw new NotFoundException(T.canhKr.khongCoChienDich(input.banGhiId));
+			return { campaignId: c.id };
+		}
+		const p = await tx.onboardingPlan.findUnique({
+			where: { id: input.banGhiId },
+			select: { id: true },
+		});
+		if (!p)
+			throw new NotFoundException(T.canhKr.khongCoKeHoach(input.banGhiId));
+		return { planId: p.id };
 	}
 
 	async suaViec(userId: string, input: SuaViecInput): Promise<{ id: string }> {

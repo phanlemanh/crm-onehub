@@ -1,5 +1,6 @@
 import {
 	danhDauViecInput,
+	ganSangKienInput,
 	suaViecInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
@@ -716,6 +717,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof goViecInput>,
 	) {
 		return this.canh.goViec(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ganSangKienInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/key-results/{keyResultId}/sang-kien", TAG),
+	})
+	ganSangKien(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ganSangKienInput>,
+	) {
+		return this.canh.ganSangKien(ctx.user.id, input);
 	}
 
 	@Mutation({

@@ -89,6 +89,13 @@ export const OKR = {
 				"Chỉ sửa hay đánh dấu được việc tự gõ — sáng kiến gắn sẵn thì gỡ.",
 			nguoiLamKhongPhaiThanhVien:
 				"Người làm phải là thành viên còn trong không gian làm việc.",
+			khongGanDuoc:
+				"Gắn sáng kiến cần quyền đọc dữ liệu đối tác — vai «chỉ OKR» không gắn được.",
+			daGan: "Sáng kiến này đã gắn vào KR rồi.",
+			khongCoChienDich: (id: string) =>
+				`Không có chiến dịch nào mang mã ${id}.`,
+			khongCoKeHoach: (id: string) =>
+				`Không có kế hoạch 30 ngày nào mang mã ${id}.`,
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

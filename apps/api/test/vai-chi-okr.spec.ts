@@ -14,6 +14,13 @@ import { db } from "@crm/db";
 import { readContextDevKey, writeContextDevKey } from "@crm/db/settings";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
+	danhDauViecInput,
+	ganSangKienInput,
+	idInput,
+	suaViecInput,
+	themViecInput,
+} from "@crm/validation/okr-canh-kr";
+import {
 	chamKrInput,
 	dongRaInput,
 	ghiDieuHocDuocInput,
@@ -29,10 +36,15 @@ import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
 import { ContextLogger } from "../src/logging/context-logger";
+import {
+	type CanhKrOutput,
+	canhKrInput,
+} from "../src/okr/okr-canh-kr.contracts";
 import { OKR } from "../src/okr/okr-config";
 import { bangChamInput } from "../src/okr/okr-khep.contracts";
 import { AuthMiddleware } from "../src/trpc/middlewares/auth.middleware";
 import { PhamViChungMiddleware } from "../src/trpc/middlewares/pham-vi-du-lieu.middleware";
+import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 import {
 	type DauVaoHopLe,
@@ -150,6 +162,21 @@ const DAU_VAO_HOP_LE = {
 	"okr.moLaiKy": { id: "khong-co", lyDo: "Chấm nhầm một KR cần sửa" },
 	"okr.mangSang": { objectiveId: "khong-co" },
 	"okr.xuatKy": { cycleId: "khong-co" },
+	"okr.canhKr": { keyResultId: "khong-co" },
+	"okr.themViec": {
+		keyResultId: "khong-co",
+		tieuDe: "Gọi lại đối tác",
+		nguoiLamUserId: "khong-co",
+		hanNgay: null,
+	},
+	"okr.suaViec": { id: "khong-co", tieuDe: "Gọi lại đối tác" },
+	"okr.danhDauViec": { id: "khong-co", xong: true },
+	"okr.goViec": { id: "khong-co" },
+	"okr.ganSangKien": {
+		keyResultId: "khong-co",
+		loai: "chien-dich",
+		banGhiId: "khong-co",
+	},
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -165,6 +192,73 @@ const THU_TUC_KHEP = {
 	"okr.mangSang": mangSangInput,
 	"okr.xuatKy": xuatKyInput,
 } as const;
+const THU_TUC_CANH_KR = {
+	"okr.canhKr": canhKrInput,
+	"okr.themViec": themViecInput,
+	"okr.suaViec": suaViecInput,
+	"okr.danhDauViec": danhDauViecInput,
+	"okr.goViec": idInput,
+	"okr.ganSangKien": ganSangKienInput,
+} as const;
+const THU_TUC_OKR_TRUOC_LUOT = [
+	"access",
+	"addAlignment",
+	"addComment",
+	"aiChiTieu",
+	"alignmentTargets",
+	"alignmentTree",
+	"applyImport",
+	"banGhiChiSo",
+	"bangCham",
+	"byUnit",
+	"capNhatTuan",
+	"cayCanChinh",
+	"chamKr",
+	"chiSo",
+	"comments",
+	"countByUnit",
+	"createCycle",
+	"createKeyResult",
+	"createObjective",
+	"cycles",
+	"danhSach",
+	"datNguonKr",
+	"dienBien",
+	"dongRa",
+	"dropObjective",
+	"follow",
+	"ghiDieuHocDuoc",
+	"ghiSoKr",
+	"guiCapNhat",
+	"hopTuan",
+	"khoiCuaToi",
+	"lichSuSo",
+	"mangSang",
+	"mine",
+	"moCapNhat",
+	"moHopTuan",
+	"moLaiKy",
+	"moRa",
+	"objective",
+	"previewImport",
+	"program",
+	"publishObjective",
+	"removeAlignment",
+	"removeKeyResult",
+	"setCyclePhase",
+	"setProgram",
+	"sucKhoe",
+	"thanhVien",
+	"toanCanh",
+	"transferPreview",
+	"transferWork",
+	"updateKeyResult",
+	"updateObjective",
+	"viecCuaToi",
+	"xemTruocChiSo",
+	"xuatKy",
+].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_CANH_KR = Object.keys(THU_TUC_CANH_KR);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1211,6 +1305,309 @@ describe("pham-vi-khep", () => {
 				await db.okrProgramConfig.deleteMany({
 					where: { id: chuongTrinh.id },
 				});
+			}
+		},
+		CHO_MA_TRAN_MS,
+	);
+});
+
+describe("sang-kien-an", () => {
+	beforeEach(don);
+
+	test("thu tuc okr vai chi OKR voi toi duoc: danh sach viet truoc cong dung thu tuc cua luot; thu tuc canh KR co dau vao hop le", () => {
+		expect(
+			choPhep().filter((t) => t.startsWith("okr.")),
+			"thu tuc okr cua vai chi OKR lech danh sach viet truoc",
+		).toEqual([...THU_TUC_OKR_TRUOC_LUOT, ...THU_TUC_OKR_LUOT_CANH_KR].sort());
+		const hong = Object.entries(THU_TUC_CANH_KR).flatMap(([t, khuon]) => {
+			const vao = dauVaoCua(t);
+			if (vao === undefined) return [`${t}: thieu dau vao`];
+			const doc = khuon.safeParse(vao);
+			return doc.success ? [] : [`${t}: ${doc.error.message}`];
+		});
+		expect(hong, "dau vao hop le cho thu tuc canh KR").toEqual([]);
+	});
+
+	test(
+		"bon duong x hai vai: vai okr khong nhan id, ten, trang thai, nguoi phu trach cua chien dich va ke hoach; member thay ten",
+		async () => {
+			const okr = await gieoNguoi("sk-okr", "okr");
+			const member = await gieoNguoi("sk-member", "member");
+			const phuTrach = await gieoNguoi("sk-phu-trach", "member");
+			const tenC = "Gọi lại quý 4";
+			const tenCongTyX = `Công ty X ${suffix}`;
+			const tenPhuTrachC = `Phụ trách C ${suffix}`;
+			await db.user.update({
+				where: { id: phuTrach.userId },
+				data: { name: tenPhuTrachC },
+			});
+			const dauCua = {
+				okr: { cookie: await dangNhap(okr.email) },
+				member: { cookie: await dangNhap(member.email) },
+			};
+			const khoaCuaVai = {} as Record<"okr" | "member", Dau>;
+			for (const vai of ["okr", "member"] as const) {
+				const tao = await goiTrpc(
+					app,
+					"apiKeys.create",
+					"mutation",
+					{ name: "sang-kien", expiresInDays: null },
+					dauCua[vai],
+				);
+				expect(tao.status, JSON.stringify(tao.body)).toBe(200);
+				khoaCuaVai[vai] = { "x-api-key": tao.body.result.data.key as string };
+			}
+			const cycle = await db.okrCycle.create({
+				data: {
+					kind: "quy",
+					name: id("ky-sang-kien"),
+					startsOn: new Date("2000-01-01T00:00:00Z"),
+					endsOn: new Date("2100-01-01T00:00:00Z"),
+					phase: "dang-chay",
+				},
+			});
+			const mt = await db.okrObjective.create({
+				data: {
+					cycleId: cycle.id,
+					level: "ca-nhan",
+					personUserId: member.userId,
+					ownerUserId: member.userId,
+					kind: "cam-ket",
+					status: "cong-bo",
+					publishedAt: new Date("2000-01-02T00:00:00Z"),
+					title: id("mt-sang-kien"),
+				},
+			});
+			const kr = await db.okrKeyResult.create({
+				data: {
+					objectiveId: mt.id,
+					title: id("kr-sang-kien"),
+					kind: "tang-toi",
+					ownerUserId: member.userId,
+					startValue: 0,
+					targetValue: 100,
+					currentValue: 0,
+					source: "tay",
+				},
+			});
+			const ghi = async (ten: string, vao: DauVaoHopLe) => {
+				const res = await goiTrpc(app, ten, "mutation", vao, dauCua.member);
+				expect(res.status, `${ten} ${JSON.stringify(res.body)}`).toBe(200);
+				return res.body.result.data.id as string;
+			};
+			let idC = "";
+			let congTyX = "";
+			try {
+				const view = (
+					await db.savedView.create({
+						data: {
+							entity: "CONTACT",
+							name: id("goc-nhin-sang-kien"),
+							shared: false,
+							filters: {
+								q: "",
+								sort: "",
+								dir: "asc",
+								archived: false,
+								filters: {},
+							},
+							ownerId: member.userId,
+						},
+						select: { id: true },
+					})
+				).id;
+				idC = await ghi("campaigns.create", {
+					name: tenC,
+					savedViewId: view,
+					ownerId: phuTrach.userId,
+				});
+				await ghi("campaigns.start", { id: idC });
+				congTyX = await ghi("companies.create", { name: tenCongTyX });
+				const idP = (
+					await db.onboardingPlan.create({
+						data: {
+							companyId: congTyX,
+							startedAt: new Date(),
+							targetDays: 30,
+							ownerId: phuTrach.userId,
+						},
+						select: { id: true },
+					})
+				).id;
+				const ganSk = (loai: "chien-dich" | "ke-hoach", banGhiId: string) =>
+					ghi("okr.ganSangKien", { keyResultId: kr.id, loai, banGhiId });
+				await ganSk("chien-dich", idC);
+				await ghi("okr.goViec", { id: await ganSk("ke-hoach", idP) });
+				await ganSk("ke-hoach", idP);
+
+				const CHUOI = {
+					idC,
+					idP,
+					tenC,
+					tenCongTyX,
+					tenPhuTrachC,
+					RUNNING: "RUNNING",
+				} as const;
+				type TenChuoi = keyof typeof CHUOI;
+				const DUONG = [
+					"trpc canhKr",
+					"rest canhKr",
+					"khoa-api rest canhKr",
+					"trpc vet",
+					"rest vet",
+					"khoa-api rest vet",
+				] as const;
+				type Duong = (typeof DUONG)[number];
+				const server = app.getHttpServer();
+				const restCanh = `${REST_BRIDGE_PATH}/okr/key-results/${kr.id}/canh`;
+				const restVet = `${REST_BRIDGE_PATH}/okr/objectives/${mt.id}`;
+				const goiDuong = async (duong: Duong, vai: "okr" | "member") => {
+					switch (duong) {
+						case "trpc canhKr":
+							return goiTrpc(
+								app,
+								"okr.canhKr",
+								"query",
+								{ keyResultId: kr.id },
+								dauCua[vai],
+							);
+						case "rest canhKr":
+							return gan(request(server).get(restCanh), dauCua[vai]);
+						case "khoa-api rest canhKr":
+							return gan(request(server).get(restCanh), khoaCuaVai[vai]);
+						case "trpc vet":
+							return goiTrpc(
+								app,
+								"okr.objective",
+								"query",
+								{ id: mt.id },
+								dauCua[vai],
+							);
+						case "rest vet":
+							return gan(request(server).get(restVet), dauCua[vai]);
+						case "khoa-api rest vet":
+							return gan(request(server).get(restVet), khoaCuaVai[vai]);
+					}
+				};
+				const bang = {} as Record<
+					"okr" | "member",
+					Record<Duong, Record<TenChuoi, number>>
+				>;
+				const lienKetOkr: string[] = [];
+				const vetOkr: string[] = [];
+				for (const vai of ["okr", "member"] as const) {
+					bang[vai] = {} as Record<Duong, Record<TenChuoi, number>>;
+					for (const duong of DUONG) {
+						const res = await goiDuong(duong, vai);
+						expect(
+							res.status,
+							`${vai} ${duong} ${JSON.stringify(res.body).slice(0, 300)}`,
+						).toBe(200);
+						const chu = JSON.stringify(res.body);
+						bang[vai][duong] = Object.fromEntries(
+							Object.entries(CHUOI).map(([ten, c]) => [
+								ten,
+								chu.split(c).length - 1,
+							]),
+						) as Record<TenChuoi, number>;
+						if (vai !== "okr") continue;
+						const data = duong.startsWith("trpc")
+							? res.body.result.data
+							: res.body;
+						if (duong.endsWith("canhKr"))
+							lienKetOkr.push(
+								JSON.stringify(
+									(data as CanhKrOutput).dong.flatMap((d) =>
+										d.loai === "viec" ? [] : [d.lienKet],
+									),
+								),
+							);
+						else
+							vetOkr.push(
+								JSON.stringify(
+									(
+										data as {
+											trail: {
+												action: string;
+												before: unknown;
+												after: unknown;
+											}[];
+										}
+									).trail.flatMap((v) =>
+										v.action === "gan-sang-kien"
+											? [v.after]
+											: v.action === "go-viec"
+												? [v.before]
+												: [],
+									),
+								),
+							);
+					}
+				}
+				const inBang = (vai: "okr" | "member") =>
+					[
+						`vai ${vai} | ${Object.keys(CHUOI).join(" | ")}`,
+						...DUONG.map(
+							(d) => `${d} | ${Object.values(bang[vai][d]).join(" | ")}`,
+						),
+					].join("\n");
+				console.log(`${inBang("okr")}\n\n${inBang("member")}`);
+
+				const khong = Object.fromEntries(Object.keys(CHUOI).map((k) => [k, 0]));
+				const lo = DUONG.flatMap((d) =>
+					Object.entries(bang.okr[d])
+						.filter(([, n]) => n > 0)
+						.map(([c, n]) => `okr ${d} lo ${c} x${n}`),
+				);
+				expect(lo, "vai okr doc duoc du lieu doi tac").toEqual([]);
+				expect(bang.okr).toEqual(
+					Object.fromEntries(DUONG.map((d) => [d, khong])) as Record<
+						Duong,
+						Record<TenChuoi, number>
+					>,
+				);
+				const anDu = JSON.stringify([
+					{ loai: "chien-dich", coQuyen: false },
+					{ loai: "ke-hoach", coQuyen: false },
+				]);
+				expect(lienKetOkr).toEqual([anDu, anDu, anDu]);
+				const vetAn = JSON.stringify([
+					{ loai: "chien-dich", coQuyen: false },
+					{ loai: "ke-hoach", coQuyen: false },
+					{ loai: "ke-hoach", coQuyen: false },
+					{ loai: "ke-hoach", coQuyen: false },
+				]);
+				expect(vetOkr).toEqual([vetAn, vetAn, vetAn]);
+
+				const thieu = [
+					...(
+						["trpc canhKr", "rest canhKr", "khoa-api rest canhKr"] as const
+					).flatMap((d) =>
+						(["tenC", "tenCongTyX", "idC", "idP"] as const).map(
+							(c) => [d, c] as const,
+						),
+					),
+					...(["trpc vet", "rest vet", "khoa-api rest vet"] as const).flatMap(
+						(d) => (["idC", "idP"] as const).map((c) => [d, c] as const),
+					),
+				]
+					.filter(([d, c]) => bang.member[d][c] === 0)
+					.map(([d, c]) => `member ${d} thieu ${c}`);
+				expect(thieu, "doi chung duong: member phai thay").toEqual([]);
+			} finally {
+				await db.okrViecKr.deleteMany({ where: { keyResultId: kr.id } });
+				await db.okrTrail.deleteMany({ where: { objectiveId: mt.id } });
+				await db.okrKeyResult.deleteMany({ where: { id: kr.id } });
+				await db.okrObjective.deleteMany({ where: { id: mt.id } });
+				await db.okrCycle.deleteMany({ where: { id: cycle.id } });
+				if (idC) await db.campaign.deleteMany({ where: { id: idC } });
+				await db.savedView.deleteMany({ where: { ownerId: member.userId } });
+				if (congTyX) {
+					await db.onboardingPlan.deleteMany({
+						where: { companyId: congTyX },
+					});
+					await db.company.deleteMany({ where: { id: congTyX } });
+				}
 			}
 		},
 		CHO_MA_TRAN_MS,

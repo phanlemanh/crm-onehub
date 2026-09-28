@@ -63,6 +63,7 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
+import { vetSangKienChoVai } from "./canh-kr";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
 import {
 	type CuaSoRa,
@@ -1528,16 +1529,18 @@ export class OkrService {
 						cycleName: tu.tuObjective.cycle.name,
 					}
 				: null,
-			trail: vet.map((v) => ({
-				id: v.id,
-				at: v.at.toISOString(),
-				actor: nguoi.find((n) => n.id === v.actorUserId) ?? null,
-				action: hanhDongVet.parse(v.action),
-				keyResultId: v.keyResultId,
-				before: parseOkrVet(v.before),
-				after: parseOkrVet(v.after),
-				note: v.note,
-			})),
+			trail: vet.map((v) =>
+				vetSangKienChoVai(q.role, {
+					id: v.id,
+					at: v.at.toISOString(),
+					actor: nguoi.find((n) => n.id === v.actorUserId) ?? null,
+					action: hanhDongVet.parse(v.action),
+					keyResultId: v.keyResultId,
+					before: parseOkrVet(v.before),
+					after: parseOkrVet(v.after),
+					note: v.note,
+				}),
+			),
 			canEditKr: mt.keyResults
 				.filter((k) =>
 					this.quyenOkr.ghiDuocKr(q, userId, {
