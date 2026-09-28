@@ -1,0 +1,4 @@
+{"id":"d-20260928T140848Z-1","type":"descope","stage":"S1","at":"2026-09-28T14:08:48Z","decision":"bỏ coverage-scan — ba trục đóng (cách chạm × trạng thái git × loại vùng cấm) liệt tay đủ trong Coverage","impact":"đổi lại không có bằng chứng độ phủ từ quét hình thái"}
+{"id":"d-20260928T140848Z-2","type":"descope","stage":"S1","at":"2026-09-28T14:08:48Z","decision":"bỏ đặc-tả-UX — vòng chỉ sửa một thước đo dòng lệnh, không chạm giao diện","impact":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
+{"id":"d-20260928T140848Z-3","type":"approach","stage":"S1","at":"2026-09-28T14:08:48Z","decision":"vá tại chỗ thước của bo-chu-lap-keo-tha rồi ghim lại hồ sơ đó, loại phương án dựng thước thứ hai trong hồ sơ mới","impact":"chạm rang/ của một hồ sơ đã ký, phải ghim lại ở đỉnh nhánh; đổi lại lỗ được vá ở đúng thước còn chạy trong làn ghim lại của mọi nhánh sau"}
+{"id":"d-20260928T141252Z-4","type":"seal","gate":1,"at":"2026-09-28T14:12:52Z"}
