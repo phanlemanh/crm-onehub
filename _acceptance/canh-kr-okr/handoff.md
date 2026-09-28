@@ -28,7 +28,7 @@ git fetch origin && git switch feat/canh-kr-okr
 ```
 
 1. Nếu làm trong worktree: `ln -s <kho gốc>/.env .env` ở gốc worktree (`.env` không vào git).
-2. `bun install`, rồi `cd packages/db && bun run db:generate` (có `migration` mới `20261003010000_okr_canh_kr`).
+2. `bun install`, rồi `cd packages/db && bun run db:generate` (có `migration` mới `20261004010000_okr_canh_kr`).
 3. `bun run db:test --reset` để kho test có sáu bảng mới.
 4. Đặt lại sổ tiến độ cho kỹ năng subagent-driven (thư mục `.superpowers/` bị git bỏ qua):
 

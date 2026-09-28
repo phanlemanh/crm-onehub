@@ -18,7 +18,7 @@ Không bắt đầu Task 1 trước khi chủ kho dán «được viết mã, k�
 
 1. `git fetch origin && git merge origin/onehub`.
 2. `bun install`, rồi `cd packages/db && bun run db:generate`.
-3. Soát kế hoạch với mã mới: mốc `migration` mới nhất (hôm nay `20261002010000_tro_ly_okr_nen` → lượt này `20261003010000_okr_canh_kr`, lấy mốc sau mốc mới nhất nếu đã có mốc khác), model cuối `schema.prisma` (hôm nay `AiBaoTran`), dòng số của `removeKeyResult` (L914), `vet` (L466), `createKeyResult` (L703), `guiCapNhat` (`okr-cap-nhat.service.ts` L112), `comments` và `addComment` (`okr-trao-doi.service.ts` L91, L134), tệp của M dưới `apps/api/scripts/okr-mau/` và `apps/api/test/okr-mau*.ts`. Mọi chỗ lệch ghi vào `decisions.jsonl` (`type: "fix"`, `stage: "S3"`).
+3. Soát kế hoạch với mã mới: mốc `migration` mới nhất (hôm nay `20261002010000_tro_ly_okr_nen` → lượt này `20261004010000_okr_canh_kr`, lấy mốc sau mốc mới nhất nếu đã có mốc khác), model cuối `schema.prisma` (hôm nay `AiBaoTran`), dòng số của `removeKeyResult` (L914), `vet` (L466), `createKeyResult` (L703), `guiCapNhat` (`okr-cap-nhat.service.ts` L112), `comments` và `addComment` (`okr-trao-doi.service.ts` L91, L134), tệp của M dưới `apps/api/scripts/okr-mau/` và `apps/api/test/okr-mau*.ts`. Mọi chỗ lệch ghi vào `decisions.jsonl` (`type: "fix"`, `stage: "S3"`).
 4. Soát hạng: vẫn T3.
 
 ## Soát lại sau gộp onehub (2026-09-28, `e2cffe32`)
@@ -65,7 +65,7 @@ Không bắt đầu Task 1 trước khi chủ kho dán «được viết mã, k�
 | `packages/db/src/okr-vet.ts` | mười hành động vết mới |
 | `packages/db/src/okr-nhac.ts` | loại mục `okr-ghi-nhan` |
 | `packages/db/prisma/schema.prisma` | sáu model mới cuối tệp + trường quan hệ ngược |
-| `packages/db/prisma/migrations/20261003010000_okr_canh_kr/` | `migration` chỉ tạo bảng |
+| `packages/db/prisma/migrations/20261004010000_okr_canh_kr/` | `migration` chỉ tạo bảng |
 | `apps/api/src/okr/canh-kr.ts` (mới) | hàm thuần `lienKetChoVai`, `vetSangKienChoVai`, `demViec` |
 | `apps/api/src/okr/okr-canh-kr.service.ts` (mới) | `canhKr`, việc, sáng kiến, bằng chứng, ghi nhận |
 | `apps/api/src/okr/okr-mau.service.ts` (mới) | `mau`, `luuMau`, `luuTruMau`, `khoiPhucMau`, `taoTuMau` |
@@ -160,7 +160,7 @@ Verify per-task: `cd packages/validation && bun test test/okr-canh-kr.spec.ts te
 
 **Files:**
 - Modify: `packages/db/prisma/schema.prisma` (sáu model cuối tệp, sau `AiBaoTran`; trường quan hệ ngược trên `OkrKeyResult`, `OkrObjective`, `User`, `Campaign`, `OnboardingPlan`)
-- Create: `packages/db/prisma/migrations/20261003010000_okr_canh_kr/migration.sql`
+- Create: `packages/db/prisma/migrations/20261004010000_okr_canh_kr/migration.sql`
 - Create: `_acceptance/canh-kr-okr/rang/migration-chi-them.mjs` (chép khuôn `_acceptance/khep-ky-okr/rang/migration-chi-them.mjs`, đổi bảng khoá ngoại viết trước)
 
 **Interfaces:**
@@ -292,7 +292,7 @@ model OkrMucTieuTuMau {
 }
 ```
 
-- [ ] **Step 3: Sinh migration** — `cd packages/db && bunx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/20261003010000_okr_canh_kr/migration.sql` (dùng kho dùng-một-lần theo `docs/setup.md`); đọc lại tệp, xoá mọi câu chạm bảng cũ nếu có.
+- [ ] **Step 3: Sinh migration** — `cd packages/db && bunx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/20261004010000_okr_canh_kr/migration.sql` (dùng kho dùng-một-lần theo `docs/setup.md`); đọc lại tệp, xoá mọi câu chạm bảng cũ nếu có.
 - [ ] **Step 4:** `bun run db:generate`; `bun run db:test --reset`; chạy `bun _acceptance/canh-kr-okr/rang/migration-chi-them.mjs` → exit 0, in số câu > 0; `--chieu-do` → bốn đỏ đúng thông điệp.
 - [ ] **Step 5: Commit.**
 
