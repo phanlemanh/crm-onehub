@@ -31,6 +31,7 @@ import {
 	moRaInput,
 	xuatKyInput,
 } from "@crm/validation/okr-khep";
+import { taoTuMauInput } from "@crm/validation/okr-mau";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { z } from "zod";
@@ -38,6 +39,7 @@ import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
 import { ContextLogger } from "../src/logging/context-logger";
+import { luuMauVao, mauInput } from "../src/okr/okr.contracts";
 import {
 	type CanhKrOutput,
 	canhKrInput,
@@ -192,6 +194,35 @@ const DAU_VAO_HOP_LE = {
 		loiNhan: "Cảm ơn đã chốt kho mới",
 	},
 	"okr.goGhiNhan": { id: "khong-co" },
+	"okr.mau": { cap: "phong-ban", donViId: "khong-co" },
+	"okr.luuMau": {
+		id: null,
+		ten: "Mẫu doanh thu",
+		cap: "phong-ban",
+		donViIds: [],
+		noiDung: {
+			cauMucTieu: "Tăng doanh thu phòng",
+			loai: "cam-ket",
+			krs: [
+				{
+					title: "Doanh thu mới",
+					kind: "tang-toi",
+					unit: "",
+					startValue: null,
+					targetValue: null,
+				},
+			],
+		},
+	},
+	"okr.luuTruMau": { id: "khong-co" },
+	"okr.khoiPhucMau": { id: "khong-co" },
+	"okr.taoTuMau": {
+		mauId: "khong-co",
+		cycleId: "khong-co",
+		unit: { level: "phong-ban", departmentId: "khong-co" },
+		ownerUserId: "khong-co",
+		krs: [{ startValue: 0, targetValue: 10, ownerUserId: "khong-co" }],
+	},
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -218,6 +249,11 @@ const THU_TUC_CANH_KR = {
 	"okr.goBangChung": idInput,
 	"okr.guiGhiNhan": guiGhiNhanInput,
 	"okr.goGhiNhan": idInput,
+	"okr.mau": mauInput,
+	"okr.luuMau": luuMauVao,
+	"okr.luuTruMau": idInput,
+	"okr.khoiPhucMau": idInput,
+	"okr.taoTuMau": taoTuMauInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

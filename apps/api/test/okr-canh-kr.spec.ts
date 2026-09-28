@@ -3,6 +3,12 @@ import { db, type OkrTrailModel, type OkrViecKrModel } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { OKR_CANH_KR } from "@crm/validation/okr-canh-kr";
 import {
+	type MauKr,
+	type MauNoiDung,
+	OKR_MAU,
+	parseMauNoiDung,
+} from "@crm/validation/okr-mau";
+import {
 	type HanhDongVet,
 	type OkrVetSnapshot,
 	parseOkrVet,
@@ -18,6 +24,7 @@ import {
 } from "../src/okr/canh-kr";
 import type {
 	CommentsOutput,
+	MauOutput,
 	ViecCuaToiOutput,
 } from "../src/okr/okr.contracts";
 import type { CanhKrOutput, LienKet } from "../src/okr/okr-canh-kr.contracts";
@@ -28,22 +35,29 @@ import {
 	donSanCanhKr,
 	gieoCanhKr,
 	gieoSangKien,
+	gieoTuMau,
 	keHoachMoi,
+	luuMau,
+	mauMoi,
 	mucTieuNhap,
 	nguoiDaRoi,
 	type SanCanhKr,
 	type SanSangKien,
+	type SanTuMau,
 	TEN_C,
 	TEN_C_MOI,
 	type TenNguoiCanh,
 } from "./okr-canh-kr-san";
 import {
+	CHUONG_TRINH_RONG,
 	doc,
 	dungSan,
 	goi,
 	goiQuery,
 	type Json,
+	ma,
 	ok,
+	pbMoi,
 	phien,
 	type TraLoi,
 } from "./okr-san";
@@ -1445,6 +1459,730 @@ describe("ghi-nhan-bao", () => {
 				B: mong,
 				O: { ghiNhan: [], nhacTen: 0 },
 			});
+		},
+		CHO_MS,
+	);
+});
+
+const CAU_MAU = {
+	canQuanTri:
+		"Cần quyền quản trị chương trình OKR để soạn, lưu trữ hay khôi phục mẫu.",
+	khongCoDonVi: (id: string) => `Không có đơn vị nào mang mã ${id}.`,
+	donViDaLuuTru: (ten: string) =>
+		`Đơn vị «${ten}» đã lưu trữ — bỏ khỏi mẫu trước khi lưu.`,
+	krMauDichNho: "KR mẫu thứ 2: Kiểu «tăng tới» cần đích lớn hơn khởi điểm.",
+	soKrMau: `Mẫu cần từ 1 tới ${OKR_MAU.krToiDa} KR.`,
+	thieuDich: (thu: number, ten: string) =>
+		`KR thứ ${thu} «${ten}»: thiếu đích.`,
+	dichNho: (thu: number, ten: string) =>
+		`KR thứ ${thu} «${ten}»: Kiểu «tăng tới» cần đích lớn hơn khởi điểm.`,
+	vuotTranKr: (n: number) =>
+		`Mục tiêu này đã có ${n} KR — vượt trần chương trình.`,
+	khongSuaDuocDonVi:
+		"Bạn không sửa được OKR của đơn vị này — chỉ trưởng đơn vị (hoặc trưởng bộ phận chứa nó) sửa được.",
+} as const;
+
+const krMau = (over: Partial<MauKr> = {}): MauKr => ({
+	title: "Doanh thu mới",
+	kind: "tang-toi",
+	unit: "triệu",
+	startValue: null,
+	targetValue: null,
+	...over,
+});
+
+const noiDungMau = (
+	krs: MauKr[],
+	cauMucTieu = "Tăng doanh thu phòng",
+): MauNoiDung => ({ cauMucTieu, loai: "cam-ket", krs });
+
+const NOI_DUNG_M1: MauNoiDung = {
+	cauMucTieu: "Chốt quy trình mới",
+	loai: "tham-vong",
+	krs: [
+		krMau({ title: "Khách quay lại", unit: "khách" }),
+		krMau({ title: "Ra mắt quy trình", kind: "moc", unit: "" }),
+	],
+};
+const KR_M2_DAU = krMau();
+const KR_M2_SAU = krMau({
+	title: "Chi phí mỗi khách",
+	kind: "giam-xuong",
+	unit: "nghìn",
+});
+const NOI_DUNG_M2 = noiDungMau([KR_M2_DAU, KR_M2_SAU]);
+
+const hangMau = async (id: string) => {
+	const r = await db.okrMau.findUniqueOrThrow({
+		where: { id },
+		select: {
+			ten: true,
+			cap: true,
+			donViIds: true,
+			noiDung: true,
+			archivedAt: true,
+		},
+	});
+	return {
+		ten: r.ten,
+		cap: r.cap,
+		donViIds: r.donViIds,
+		noiDung: parseMauNoiDung(r.noiDung),
+		luuTru: r.archivedAt !== null,
+	};
+};
+
+async function vetMau(mauId: string) {
+	const rows = await db.okrTrail.findMany({
+		where: { action: "sua-mau", actorUserId: phien.quan.nguoi },
+		orderBy: { at: "asc" },
+		select: { objectiveId: true, after: true },
+	});
+	return rows
+		.map((r) => ({ objectiveId: r.objectiveId, after: parseOkrVet(r.after) }))
+		.filter((r) => r.after?.mauId === mauId);
+}
+
+describe("mau-quan-tri", () => {
+	let san: SanTuMau;
+	beforeAll(async () => {
+		san = await gieoTuMau();
+	}, CHO_MS);
+	afterAll(donSanCanhKr, CHO_MS);
+
+	test(
+		"mau-quan-tri: luuMau moi, sua ten bo mot KR, luuTruMau, khoiPhucMau — doc DB qua khuon dung tung buoc, bon vet sua-mau co after.mauId",
+		async () => {
+			const noiDung = noiDungMau([
+				krMau(),
+				krMau({ title: "Khách mới", startValue: 0, targetValue: 40 }),
+			]);
+			const ten = ma("mau doanh thu");
+			const id = idCua(
+				await luuMau({
+					id: null,
+					ten,
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung,
+				}),
+				"luu mau moi",
+			);
+			const buoc1 = await hangMau(id);
+
+			const tenMoi = ma("mau doanh thu gon");
+			const noiDungGon = noiDungMau([krMau()]);
+			ok(
+				await luuMau({
+					id,
+					ten: tenMoi,
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung: noiDungGon,
+				}),
+				"sua mau",
+			);
+			const buoc2 = await hangMau(id);
+			ok(await goi("okr.luuTruMau", { id }), "luu tru mau");
+			const buoc3 = await hangMau(id);
+			ok(await goi("okr.khoiPhucMau", { id }), "khoi phuc mau");
+			const buoc4 = await hangMau(id);
+
+			expect([buoc1, buoc2, buoc3, buoc4]).toEqual([
+				{
+					ten,
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung,
+					luuTru: false,
+				},
+				{
+					ten: tenMoi,
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung: noiDungGon,
+					luuTru: false,
+				},
+				{
+					ten: tenMoi,
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung: noiDungGon,
+					luuTru: true,
+				},
+				{
+					ten: tenMoi,
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung: noiDungGon,
+					luuTru: false,
+				},
+			]);
+			expect(await vetMau(id)).toEqual([
+				{ objectiveId: null, after: { mauId: id, ten } },
+				{ objectiveId: null, after: { mauId: id, ten: tenMoi } },
+				{ objectiveId: null, after: { mauId: id, ten: tenMoi, luuTru: true } },
+				{
+					objectiveId: null,
+					after: { mauId: id, ten: tenMoi, luuTru: false },
+				},
+			]);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"mau-quan-tri: tu choi viet truoc — KR trai kieu, qua tran KR, 0 KR, don vi khong co, don vi da luu tru, ba vai khong phai quan tri; moi ca cau ghim, okrMau va vet khong doi",
+		async () => {
+			const luuTru = await pbMoi("mau-pb-luu-tru");
+			ok(
+				await goi("org.archiveDepartment", { id: luuTru }),
+				"luu tru phong ban",
+			);
+			const tenLuuTru = (
+				await db.department.findUniqueOrThrow({
+					where: { id: luuTru },
+					select: { name: true },
+				})
+			).name;
+			const khongCo = ma("pb-khong-co");
+			const vao = (over: { [khoa: string]: Json }) => ({
+				id: null,
+				ten: ma("mau tu choi"),
+				cap: "phong-ban",
+				donViIds: [san.p1],
+				noiDung: NOI_DUNG_M2,
+				...over,
+			});
+			const ca: [string, () => Promise<TraLoi>, number, string][] = [
+				[
+					"KR thu hai tang toi dich nho hon khoi diem",
+					() =>
+						luuMau(
+							vao({
+								noiDung: noiDungMau([
+									krMau(),
+									krMau({ startValue: 40, targetValue: 10 }),
+								]),
+							}),
+						),
+					400,
+					CAU_MAU.krMauDichNho,
+				],
+				[
+					"qua tran KR mau",
+					() =>
+						luuMau(
+							vao({
+								noiDung: noiDungMau(
+									Array.from({ length: OKR_MAU.krToiDa + 1 }, () => krMau()),
+								),
+							}),
+						),
+					400,
+					CAU_MAU.soKrMau,
+				],
+				[
+					"0 KR",
+					() => luuMau(vao({ noiDung: noiDungMau([]) })),
+					400,
+					CAU_MAU.soKrMau,
+				],
+				[
+					"phong ban khong ton tai",
+					() => luuMau(vao({ donViIds: [san.p1, khongCo] })),
+					400,
+					CAU_MAU.khongCoDonVi(khongCo),
+				],
+				[
+					"phong ban da luu tru",
+					() => luuMau(vao({ donViIds: [luuTru] })),
+					400,
+					CAU_MAU.donViDaLuuTru(tenLuuTru),
+				],
+				[
+					"thanh vien thuong",
+					() => luuMau(vao({}), "thuong"),
+					403,
+					CAU_MAU.canQuanTri,
+				],
+				[
+					"truong phong",
+					() => luuMau(vao({}), san.T1.cookie),
+					403,
+					CAU_MAU.canQuanTri,
+				],
+				[
+					"vai okr",
+					() => luuMau(vao({}), san.O.cookie),
+					403,
+					CAU_MAU.canQuanTri,
+				],
+			];
+			const demMau = async () => ({
+				okrMau: await dem("okrMau"),
+				okrTrail: await dem("okrTrail"),
+			});
+			const nhan: string[] = [];
+			for (const [ten, lam, , cau] of ca) {
+				const truoc = await demMau();
+				const tra = await lam();
+				const sau = await demMau();
+				nhan.push(
+					`${ten}: ${tra.status} ${tra.loi === cau ? "cau-ghim" : tra.loi} ${JSON.stringify(sau) === JSON.stringify(truoc) ? "khong-doi" : JSON.stringify({ truoc, sau })}`,
+				);
+			}
+			expect(nhan).toEqual(
+				ca.map(([ten, , ma]) => `${ten}: ${ma} cau-ghim khong-doi`),
+			);
+		},
+		CHO_MS,
+	);
+});
+
+type BonMau = Record<"M1" | "M2" | "M3" | "M4", string>;
+
+describe("tu-mau", () => {
+	let san: SanTuMau;
+	let m: BonMau;
+	const datChuongTrinh = async (vao: { [khoa: string]: Json }) =>
+		ok(await goi("okr.setProgram", vao), "dat chuong trinh");
+	beforeAll(async () => {
+		san = await gieoTuMau();
+		await datChuongTrinh({ ...CHUONG_TRINH_RONG });
+		const M1 = await mauMoi({
+			ten: "mau M1",
+			cap: "phong-ban",
+			donViIds: [],
+			noiDung: NOI_DUNG_M1,
+		});
+		const M2 = await mauMoi({
+			ten: "mau M2",
+			cap: "phong-ban",
+			donViIds: [san.p1],
+			noiDung: NOI_DUNG_M2,
+		});
+		const M3 = await mauMoi({
+			ten: "mau M3",
+			cap: "phong-ban",
+			donViIds: [san.p1],
+			noiDung: NOI_DUNG_M2,
+		});
+		ok(await goi("okr.luuTruMau", { id: M3 }), "luu tru M3");
+		const M4 = await mauMoi({
+			ten: "mau M4",
+			cap: "bo-phan",
+			donViIds: [],
+			noiDung: NOI_DUNG_M2,
+		});
+		m = { M1, M2, M3, M4 };
+	}, CHO_MS);
+	afterAll(async () => {
+		await datChuongTrinh({ ...CHUONG_TRINH_RONG });
+		await donSanCanhKr();
+	}, CHO_MS);
+
+	const cuaTa = (mau: MauOutput["mau"]) => {
+		const ta = new Set(Object.values(m));
+		return mau.filter((x) => ta.has(x.id));
+	};
+
+	const taoTuMau = (
+		mauId: string,
+		ai: string,
+		krs: { startValue: number | null; targetValue: number | null }[],
+		donVi: string = san.p1,
+	) =>
+		goi(
+			"okr.taoTuMau",
+			{
+				mauId,
+				cycleId: san.ky,
+				unit: { level: "phong-ban", departmentId: donVi },
+				ownerUserId: san.T1.id,
+				krs: krs.map((k) => ({ ...k, ownerUserId: san.A.id })),
+			},
+			ai,
+		);
+
+	const docMucTieu = async (id: string) => {
+		const mt = await db.okrObjective.findUniqueOrThrow({
+			where: { id },
+			select: {
+				title: true,
+				kind: true,
+				level: true,
+				departmentId: true,
+				status: true,
+				ownerUserId: true,
+				cycleId: true,
+			},
+		});
+		const krs = await db.okrKeyResult.findMany({
+			where: { objectiveId: id },
+			orderBy: { position: "asc" },
+			select: {
+				title: true,
+				kind: true,
+				unit: true,
+				startValue: true,
+				targetValue: true,
+				currentValue: true,
+				ownerUserId: true,
+			},
+		});
+		return {
+			mt,
+			krs: krs.map((k) => ({
+				...k,
+				startValue: Number(k.startValue),
+				targetValue: Number(k.targetValue),
+				currentValue: Number(k.currentValue),
+			})),
+		};
+	};
+
+	test(
+		"tu-mau: okr.mau loc theo cap va don vi — truong P1 o P1 {M1, M2}, truong P2 o P2 {M1}; quan tri thay ca bon kem M3 luu tru",
+		async () => {
+			const idsCua = async (ai: string, donViId: string) =>
+				cuaTa(
+					(
+						await doc<MauOutput>("okr.mau", ai, {
+							cap: "phong-ban",
+							donViId,
+						})
+					).mau,
+				)
+					.map((x) => x.id)
+					.sort();
+			const quan = await doc<MauOutput>("okr.mau", "quan", {});
+			const T1 = await doc<MauOutput>("okr.mau", san.T1.cookie, {});
+			expect({
+				P1: await idsCua(san.T1.cookie, san.p1),
+				P2: await idsCua(san.T2.cookie, san.p2),
+				quan: cuaTa(quan.mau)
+					.map((x) => ({ id: x.id, luuTru: x.luuTru, soKr: x.soKr }))
+					.sort((a, b) => a.id.localeCompare(b.id)),
+				quanTri: { quan: quan.quanTri, T1: T1.quanTri },
+				T1KhongLoc: cuaTa(T1.mau)
+					.map((x) => x.id)
+					.sort(),
+			}).toEqual({
+				P1: [m.M1, m.M2].sort(),
+				P2: [m.M1],
+				quan: [
+					{ id: m.M1, luuTru: false, soKr: NOI_DUNG_M1.krs.length },
+					{ id: m.M2, luuTru: false, soKr: NOI_DUNG_M2.krs.length },
+					{ id: m.M3, luuTru: true, soKr: NOI_DUNG_M2.krs.length },
+					{ id: m.M4, luuTru: false, soKr: NOI_DUNG_M2.krs.length },
+				].sort((a, b) => a.id.localeCompare(b.id)),
+				quanTri: { quan: true, T1: false },
+				T1KhongLoc: [m.M1, m.M2, m.M4].sort(),
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tu-mau: taoTuMau(M2, P1, hai KR du so) — mot muc tieu nhap, hai KR dung so, mot okrMucTieuTuMau, vet tao co tuMau; sua M2 sau do khong doi muc tieu da tao",
+		async () => {
+			const truoc = {
+				okrObjective: await dem("okrObjective"),
+				okrKeyResult: await dem("okrKeyResult"),
+				okrMucTieuTuMau: await dem("okrMucTieuTuMau"),
+			};
+			const tra = ok<{ id: string; canhBao: string | null }>(
+				await taoTuMau(m.M2, san.T1.cookie, [
+					{ startValue: 0, targetValue: 40 },
+					{ startValue: 120, targetValue: 90 },
+				]),
+				"tao tu mau M2",
+			);
+			const daTao = await docMucTieu(tra.id);
+			expect({
+				canhBao: tra.canhBao,
+				dem: {
+					okrObjective: await dem("okrObjective"),
+					okrKeyResult: await dem("okrKeyResult"),
+					okrMucTieuTuMau: await dem("okrMucTieuTuMau"),
+				},
+				daTao,
+				nguon: await db.okrMucTieuTuMau.findMany({
+					where: { objectiveId: tra.id },
+					select: { objectiveId: true, mauId: true },
+				}),
+				vet: (
+					await db.okrTrail.findMany({
+						where: { objectiveId: tra.id },
+						select: { action: true, actorUserId: true, after: true },
+					})
+				).map((v) => ({ ...v, after: parseOkrVet(v.after) })),
+			}).toEqual({
+				canhBao: null,
+				dem: {
+					okrObjective: truoc.okrObjective + 1,
+					okrKeyResult: truoc.okrKeyResult + 2,
+					okrMucTieuTuMau: truoc.okrMucTieuTuMau + 1,
+				},
+				daTao: {
+					mt: {
+						title: NOI_DUNG_M2.cauMucTieu,
+						kind: NOI_DUNG_M2.loai,
+						level: "phong-ban",
+						departmentId: san.p1,
+						status: "nhap",
+						ownerUserId: san.T1.id,
+						cycleId: san.ky,
+					},
+					krs: [
+						{
+							title: KR_M2_DAU.title,
+							kind: KR_M2_DAU.kind,
+							unit: KR_M2_DAU.unit,
+							startValue: 0,
+							targetValue: 40,
+							currentValue: 0,
+							ownerUserId: san.A.id,
+						},
+						{
+							title: KR_M2_SAU.title,
+							kind: KR_M2_SAU.kind,
+							unit: KR_M2_SAU.unit,
+							startValue: 120,
+							targetValue: 90,
+							currentValue: 120,
+							ownerUserId: san.A.id,
+						},
+					],
+				},
+				nguon: [{ objectiveId: tra.id, mauId: m.M2 }],
+				vet: [
+					{
+						action: "tao",
+						actorUserId: san.T1.id,
+						after: {
+							title: NOI_DUNG_M2.cauMucTieu,
+							kind: NOI_DUNG_M2.loai,
+							level: "phong-ban",
+							status: "nhap",
+							tuMau: m.M2,
+						},
+					},
+				],
+			});
+
+			ok(
+				await luuMau({
+					id: m.M2,
+					ten: ma("mau M2 sua"),
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung: noiDungMau(
+						[
+							krMau({
+								title: "Doanh thu kênh mới",
+								startValue: 0,
+								targetValue: 99,
+							}),
+							krMau({ title: "Khách mới", unit: "khách" }),
+							krMau({ title: "Ra mắt gói", kind: "moc", unit: "" }),
+						],
+						"Câu mục tiêu đã đổi",
+					),
+				}),
+				"sua M2 sau khi tao",
+			);
+			const daDung = cuaTa(
+				(await doc<MauOutput>("okr.mau", "quan", {})).mau,
+			).find((x) => x.id === m.M2)?.daDung;
+			expect({ sauKhiSua: await docMucTieu(tra.id), daDung }).toEqual({
+				sauKhiSua: daTao,
+				daDung: 1,
+			});
+			ok(
+				await luuMau({
+					id: m.M2,
+					ten: ma("mau M2"),
+					cap: "phong-ban",
+					donViIds: [san.p1],
+					noiDung: NOI_DUNG_M2,
+				}),
+				"tra M2 ve noi dung goc",
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tu-mau: mau co KR moc — tao KR 0 -> 1 khong can so",
+		async () => {
+			const tra = ok<{ id: string }>(
+				await taoTuMau(m.M1, san.T1.cookie, [
+					{ startValue: 0, targetValue: 30 },
+					{ startValue: null, targetValue: null },
+				]),
+				"tao tu mau M1",
+			);
+			expect(
+				(await docMucTieu(tra.id)).krs.map((k) => ({
+					kind: k.kind,
+					startValue: k.startValue,
+					targetValue: k.targetValue,
+				})),
+			).toEqual([
+				{ kind: "tang-toi", startValue: 0, targetValue: 30 },
+				{ kind: "moc", startValue: 0, targetValue: 1 },
+			]);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tu-mau: nguyen khoi — bon ca viet truoc (KR thu hai thieu dich, tang toi dich nho hon khoi diem, vuot tran KR o che do chan, truong P2 tao o P1), moi ca dem okrObjective, okrKeyResult, okrMucTieuTuMau khong doi",
+		async () => {
+			const tranNho = NOI_DUNG_M2.krs.length - 1;
+			const ca: {
+				ten: string;
+				truoc?: () => Promise<unknown>;
+				lam: () => Promise<TraLoi>;
+				ma: number;
+				cau: string;
+			}[] = [
+				{
+					ten: "KR thu hai thieu dich",
+					lam: () =>
+						taoTuMau(m.M2, san.T1.cookie, [
+							{ startValue: 0, targetValue: 40 },
+							{ startValue: 120, targetValue: null },
+						]),
+					ma: 400,
+					cau: CAU_MAU.thieuDich(2, KR_M2_SAU.title),
+				},
+				{
+					ten: "tang toi dich nho hon khoi diem",
+					lam: () =>
+						taoTuMau(m.M2, san.T1.cookie, [
+							{ startValue: 40, targetValue: 10 },
+							{ startValue: 120, targetValue: 90 },
+						]),
+					ma: 400,
+					cau: CAU_MAU.dichNho(1, KR_M2_DAU.title),
+				},
+				{
+					ten: "vuot tran KR che do chan",
+					truoc: () => datChuongTrinh({ capMode: "chan", krCap: tranNho }),
+					lam: () =>
+						taoTuMau(m.M2, san.T1.cookie, [
+							{ startValue: 0, targetValue: 40 },
+							{ startValue: 120, targetValue: 90 },
+						]),
+					ma: 400,
+					cau: CAU_MAU.vuotTranKr(tranNho),
+				},
+				{
+					ten: "truong P2 tao o P1",
+					truoc: () => datChuongTrinh({ ...CHUONG_TRINH_RONG }),
+					lam: () =>
+						taoTuMau(m.M2, san.T2.cookie, [
+							{ startValue: 0, targetValue: 40 },
+							{ startValue: 120, targetValue: 90 },
+						]),
+					ma: 403,
+					cau: CAU_MAU.khongSuaDuocDonVi,
+				},
+			];
+			const demBa = async () => ({
+				okrObjective: await dem("okrObjective"),
+				okrKeyResult: await dem("okrKeyResult"),
+				okrMucTieuTuMau: await dem("okrMucTieuTuMau"),
+			});
+			const nhan: string[] = [];
+			try {
+				for (const c of ca) {
+					await c.truoc?.();
+					const truoc = await demBa();
+					const tra = await c.lam();
+					const sau = await demBa();
+					nhan.push(
+						`${c.ten}: ${tra.status} ${tra.loi === c.cau ? "cau-ghim" : tra.loi} ${JSON.stringify(sau) === JSON.stringify(truoc) ? "khong-doi" : JSON.stringify({ truoc, sau })}`,
+					);
+				}
+			} finally {
+				await datChuongTrinh({ ...CHUONG_TRINH_RONG });
+			}
+			expect(nhan).toEqual(
+				ca.map((c) => `${c.ten}: ${c.ma} cau-ghim khong-doi`),
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tu-mau: che do canh bao — vuot tran KR van tao du KR va tra canh bao nhu tao tay",
+		async () => {
+			const tranNho = NOI_DUNG_M2.krs.length - 1;
+			await datChuongTrinh({ capMode: "canh-bao", krCap: tranNho });
+			try {
+				const tay = idCua(
+					await goi(
+						"okr.createObjective",
+						{
+							cycleId: san.ky,
+							unit: { level: "phong-ban", departmentId: san.p1 },
+							title: ma("muc tieu tay"),
+							kind: "cam-ket",
+							ownerUserId: san.T1.id,
+							participantIds: [],
+							whyNow: "",
+						},
+						san.T1.cookie,
+					),
+					"tao muc tieu tay",
+				);
+				const canhBaoTay: (string | null)[] = [];
+				for (const _ of NOI_DUNG_M2.krs) {
+					canhBaoTay.push(
+						ok<{ canhBao: string | null }>(
+							await goi(
+								"okr.createKeyResult",
+								{
+									objectiveId: tay,
+									title: ma("kr tay"),
+									kind: "tang-toi",
+									ownerUserId: san.A.id,
+									startValue: 0,
+									targetValue: 10,
+									currentValue: 0,
+									unit: "",
+									dueOn: null,
+									weight: 1,
+								},
+								san.T1.cookie,
+							),
+							"tao kr tay",
+						).canhBao,
+					);
+				}
+				const tra = ok<{ id: string; canhBao: string | null }>(
+					await taoTuMau(m.M2, san.T1.cookie, [
+						{ startValue: 0, targetValue: 40 },
+						{ startValue: 120, targetValue: 90 },
+					]),
+					"tao tu mau vuot tran",
+				);
+				expect({
+					canhBao: tra.canhBao,
+					soKr: (await docMucTieu(tra.id)).krs.length,
+					canhBaoTayCuoi: canhBaoTay.at(-1),
+				}).toEqual({
+					canhBao: CAU_MAU.vuotTranKr(tranNho),
+					soKr: NOI_DUNG_M2.krs.length,
+					canhBaoTayCuoi: CAU_MAU.vuotTranKr(tranNho),
+				});
+			} finally {
+				await datChuongTrinh({ ...CHUONG_TRINH_RONG });
+			}
 		},
 		CHO_MS,
 	);

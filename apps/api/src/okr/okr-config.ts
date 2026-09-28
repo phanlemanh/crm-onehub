@@ -3,6 +3,7 @@ import {
 	type LoiGiaTri,
 } from "@crm/validation/okr-cap-nhat";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
+import { OKR_MAU } from "@crm/validation/okr-mau";
 
 export const OKR = {
 	tenGoc: "OneHub",
@@ -15,6 +16,7 @@ export const OKR = {
 		viSao: 500,
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
+	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
 		kieu: {
@@ -107,6 +109,24 @@ export const OKR = {
 			khongCoGhiNhan: (id: string) => `Không có ghi nhận nào mang mã ${id}.`,
 			khongGoDuocGhiNhan:
 				"Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
+		},
+		mau: {
+			canQuanTri:
+				"Cần quyền quản trị chương trình OKR để soạn, lưu trữ hay khôi phục mẫu.",
+			khongCoMau: (id: string) => `Không có mẫu OKR nào mang mã ${id}.`,
+			daLuuTru: "Mẫu này đã lưu trữ — quản trị khôi phục thì mới dùng được.",
+			khacCap: "Mẫu này dành cho cấp đơn vị khác.",
+			khongApDung: "Mẫu này không áp dụng cho đơn vị này.",
+			donViDaLuuTru: (ten: string) =>
+				`Đơn vị «${ten}» đã lưu trữ — bỏ khỏi mẫu trước khi lưu.`,
+			soKrMau: `Mẫu cần từ 1 tới ${OKR_MAU.krToiDa} KR.`,
+			krMau: (thu: number, cau: string) => `KR mẫu thứ ${thu}: ${cau}`,
+			soKrKhac: (n: number) => `Mẫu này có ${n} KR — gửi số cho đúng ${n} KR.`,
+			thieuSo: (thu: number, ten: string, o: "khởi điểm" | "đích") =>
+				`KR thứ ${thu} «${ten}»: thiếu ${o}.`,
+			krHong: (thu: number, ten: string, cau: string) =>
+				`KR thứ ${thu} «${ten}»: ${cau}`,
+			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

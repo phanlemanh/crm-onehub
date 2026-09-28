@@ -8,6 +8,7 @@ import { OkrAccessService } from "./okr-access.service";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
 import { OkrKhepService } from "./okr-khep.service";
+import { OkrMauService } from "./okr-mau.service";
 import { OkrSoService } from "./okr-so.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import { OkrXemService } from "./okr-xem.service";
@@ -25,6 +26,7 @@ import { TroLyOkrService } from "./tro-ly.service";
 		TroLyOkrService,
 		OkrKhepService,
 		OkrCanhKrService,
+		OkrMauService,
 		OkrRouter,
 	],
 })

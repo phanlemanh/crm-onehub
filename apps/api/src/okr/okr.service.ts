@@ -168,7 +168,7 @@ const chonMucTieu = {
 	...quanHeDonVi,
 } satisfies Prisma.OkrObjectiveInclude;
 
-function donViCua(unit: DonViMucTieu): DonViCuaMucTieu {
+export function donViCua(unit: DonViMucTieu): DonViCuaMucTieu {
 	return {
 		level: unit.level,
 		divisionId: unit.level === "bo-phan" ? unit.divisionId : null,
@@ -535,6 +535,13 @@ export class OkrService {
 		return T.vuotTranMucTieu(dem);
 	}
 
+	kiemTranKr(ct: OkrProgram, dem: number, them: number): string | null {
+		if (dem + them <= ct.krCap) return null;
+		const loi = T.vuotTranKr(dem + them - 1);
+		if (ct.capMode === "chan") throw new BadRequestException(loi);
+		return loi;
+	}
+
 	private async trangThai(tx: Tx, id: string) {
 		const mt = await tx.okrObjective.findUnique({
 			where: { id },
@@ -717,12 +724,7 @@ export class OkrService {
 				where: { objectiveId: mt.id },
 				_max: { position: true },
 			});
-			let canhBao: string | null = null;
-			if (dem + 1 > ct.krCap) {
-				if (ct.capMode === "chan")
-					throw new BadRequestException(T.vuotTranKr(dem));
-				canhBao = T.vuotTranKr(dem);
-			}
+			const canhBao = this.kiemTranKr(ct, dem, 1);
 			const kr = await tx.okrKeyResult.create({
 				data: {
 					objectiveId: mt.id,

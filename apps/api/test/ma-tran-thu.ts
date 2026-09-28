@@ -19,7 +19,13 @@ export type ThuTuc = {
 };
 export type HangMaTran = { ten: string; status: number; message: string };
 export type Dau = Record<string, string>;
-export type GiaTriDauVao = string | number | boolean | null | readonly string[];
+export type GiaTriDauVao =
+	| string
+	| number
+	| boolean
+	| null
+	| readonly GiaTriDauVao[]
+	| { readonly [khoa: string]: GiaTriDauVao };
 export type DauVaoHopLe = Readonly<Record<string, GiaTriDauVao>>;
 export type DauVao = DauVaoHopLe | undefined;
 

@@ -2,14 +2,17 @@ import { db } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { gieoKyQuy, gieoMucTieuCongBo } from "./okr-khep-san";
 import {
+	type AiHoacCookie,
 	datViTri,
 	goi,
+	type Json,
 	ma,
 	nguoiMoi,
 	ok,
 	pbMoi,
 	phienCua,
 	TIEN_TO,
+	type TraLoi,
 	truongMoi,
 } from "./okr-san";
 
@@ -239,7 +242,11 @@ export type BangDem =
 	| "okrTrail"
 	| "okrBangChung"
 	| "okrGhiNhan"
-	| "okrGhiNhanNhan";
+	| "okrGhiNhanNhan"
+	| "okrObjective"
+	| "okrKeyResult"
+	| "okrMucTieuTuMau"
+	| "okrMau";
 
 const cuaSan = { cycle: { name: { startsWith: TIEN_TO } } };
 
@@ -263,10 +270,75 @@ export async function dem(bang: BangDem): Promise<number> {
 			return db.okrGhiNhanNhan.count({
 				where: { ghiNhan: { objective: cuaSan } },
 			});
+		case "okrObjective":
+			return db.okrObjective.count({ where: cuaSan });
+		case "okrKeyResult":
+			return db.okrKeyResult.count({ where: { objective: cuaSan } });
+		case "okrMucTieuTuMau":
+			return db.okrMucTieuTuMau.count({ where: { objective: cuaSan } });
+		case "okrMau":
+			return db.okrMau.count({
+				where: { taoBoiUserId: { startsWith: TIEN_TO } },
+			});
 	}
 }
 
+export type SanTuMau = {
+	ky: string;
+	p1: string;
+	p2: string;
+	T1: NguoiCanh;
+	T2: NguoiCanh;
+	A: NguoiCanh;
+	O: NguoiCanh;
+};
+
+export async function gieoTuMau(): Promise<SanTuMau> {
+	const p1 = await pbMoi("mau-p1");
+	const p2 = await pbMoi("mau-p2");
+	const t1 = await truongMoi("department", p1, "mau-T1");
+	const t2 = await truongMoi("department", p2, "mau-T2");
+	const A = await nguoiCo("mau-A");
+	const O = await nguoiCo("mau-O", "okr");
+	const ky = await gieoKyQuy(KY_CANH);
+	return {
+		ky,
+		p1,
+		p2,
+		T1: { id: t1.nguoi, cookie: t1.cookie },
+		T2: { id: t2.nguoi, cookie: t2.cookie },
+		A,
+		O,
+	};
+}
+
+export const luuMau = (vao: Json, ai: AiHoacCookie = "quan"): Promise<TraLoi> =>
+	goi("okr.luuMau", vao, ai);
+
+export async function mauMoi(vao: {
+	ten: string;
+	cap: string;
+	donViIds: string[];
+	noiDung: Json;
+}): Promise<string> {
+	return idTra(
+		await luuMau({ id: null, ...vao, ten: ma(vao.ten) }),
+		`luu mau ${vao.ten}`,
+	);
+}
+
 export async function donSanCanhKr(): Promise<void> {
+	await db.okrMucTieuTuMau.deleteMany({
+		where: {
+			OR: [
+				{ objective: cuaSan },
+				{ mau: { taoBoiUserId: { startsWith: TIEN_TO } } },
+			],
+		},
+	});
+	await db.okrMau.deleteMany({
+		where: { taoBoiUserId: { startsWith: TIEN_TO } },
+	});
 	await db.okrGhiNhanNhan.deleteMany({
 		where: { ghiNhan: { objective: cuaSan } },
 	});

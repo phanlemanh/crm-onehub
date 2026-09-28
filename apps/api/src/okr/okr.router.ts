@@ -16,6 +16,7 @@ import {
 	moRaInput,
 	xuatKyInput,
 } from "@crm/validation/okr-khep";
+import { taoTuMauInput } from "@crm/validation/okr-mau";
 import {
 	addCommentInput,
 	commentsInput,
@@ -56,6 +57,9 @@ import {
 	followOutput,
 	guiCapNhatOutput,
 	idInput,
+	luuMauVao,
+	mauInput,
+	mauOutput,
 	mineInput,
 	mineOutput,
 	moCapNhatOutput,
@@ -95,6 +99,7 @@ import {
 	xuatKyOutput,
 } from "./okr-khep.contracts";
 import { OkrKhepService } from "./okr-khep.service";
+import { OkrMauService } from "./okr-mau.service";
 import {
 	banGhiChiSoInput,
 	banGhiChiSoOutput,
@@ -142,6 +147,7 @@ export class OkrRouter {
 		@Inject(TroLyOkrService) private readonly troLy: TroLyOkrService,
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
+		@Inject(OkrMauService) private readonly khuon: OkrMauService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -784,6 +790,63 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof goGhiNhanInput>,
 	) {
 		return this.canh.goGhiNhan(ctx.user.id, input);
+	}
+
+	@Query({
+		input: mauInput,
+		output: mauOutput,
+		meta: restMeta("GET", "/okr/mau", TAG),
+	})
+	mau(@Ctx() ctx: AuthedTrpcContext, @Input() input: z.infer<typeof mauInput>) {
+		return this.khuon.mau(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: luuMauVao,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/mau", TAG),
+	})
+	luuMau(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof luuMauVao>,
+	) {
+		return this.khuon.luuMau(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/mau/{id}/luu-tru", TAG),
+	})
+	luuTruMau(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.khuon.luuTruMau(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/mau/{id}/khoi-phuc", TAG),
+	})
+	khoiPhucMau(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.khuon.khoiPhucMau(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: taoTuMauInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/mau/{mauId}/muc-tieu", TAG),
+	})
+	taoTuMau(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taoTuMauInput>,
+	) {
+		return this.khuon.taoTuMau(ctx.user.id, input);
 	}
 
 	@Mutation({

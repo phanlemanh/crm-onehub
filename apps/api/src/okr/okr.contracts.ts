@@ -8,7 +8,18 @@ import {
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
-import { KIEU_KR, krInput, NGUON_KR } from "@crm/validation/okr-kr";
+import {
+	KIEU_KR,
+	krInput,
+	LOI_SO_THEO_KIEU,
+	NGUON_KR,
+} from "@crm/validation/okr-kr";
+import {
+	CAP_MAU,
+	type LuuMauInput,
+	luuMauInput,
+	mauNoiDung,
+} from "@crm/validation/okr-mau";
 import {
 	CAP_MUC_TIEU,
 	LOAI_MUC_TIEU,
@@ -366,6 +377,62 @@ export const transferOkrOutput = z.object({
 	kr: z.number(),
 	mucTieu: z.number(),
 });
+
+export const mauInput = z.object({
+	cap: z.enum(CAP_MAU).optional(),
+	donViId: ma.optional(),
+});
+export type MauInput = z.infer<typeof mauInput>;
+
+export const mauDong = z.object({
+	id: z.string(),
+	ten: z.string(),
+	cap: z.enum(CAP_MAU),
+	donViIds: z.array(z.string()),
+	soKr: z.number(),
+	daDung: z.number(),
+	luuTru: z.boolean(),
+	noiDung: mauNoiDung,
+});
+export const mauOutput = z.object({
+	mau: z.array(mauDong),
+	quanTri: z.boolean(),
+});
+export type MauOutput = z.infer<typeof mauOutput>;
+
+const loiSoTheoKieu = z.enum(LOI_SO_THEO_KIEU);
+const duongSoKrMau = z.tuple([z.literal("noiDung"), z.literal("krs")]);
+const duongKrMau = z.tuple(
+	[z.literal("noiDung"), z.literal("krs"), z.number()],
+	z.union([z.string(), z.number()]),
+);
+
+function cauLoiMau(duong: readonly PropertyKey[], cau: string): string {
+	if (duongSoKrMau.safeParse(duong).success) return OKR.thongDiep.mau.soKrMau;
+	const kr = duongKrMau.safeParse(duong);
+	if (!kr.success) return cau;
+	const [, , thu, truong] = kr.data;
+	const kieu = loiSoTheoKieu.safeParse(cau);
+	if (kieu.success)
+		return OKR.thongDiep.mau.krMau(
+			thu + 1,
+			OKR.thongDiep.soTheoKieu[kieu.data],
+		);
+	return OKR.thongDiep.mau.krMau(
+		thu + 1,
+		truong === undefined ? `${cau}.` : `${String(truong)}: ${cau}.`,
+	);
+}
+
+export const luuMauVao = luuMauInput
+	.extend({ noiDung: z.unknown() })
+	.transform((vao, ctx): LuuMauInput => {
+		const r = luuMauInput.safeParse(vao);
+		if (r.success) return r.data;
+		for (const loi of r.error.issues)
+			ctx.addIssue({ ...loi, message: cauLoiMau(loi.path, loi.message) });
+		return z.NEVER;
+	});
 
 export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
