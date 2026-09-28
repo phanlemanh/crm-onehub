@@ -121,9 +121,13 @@ describe("khoNguonVercel", () => {
 		expect(await kho.xoa(PATHNAME_NGUON("n1"))).toBeUndefined();
 	});
 
-	it("kho-nguon-tat: thiếu token thì kyPut, kyGet từ chối bằng thông điệp ghim", async () => {
+	it("kho-nguon-tat: chỉ có khoá logo thì kyPut, kyGet từ chối bằng thông điệp ghim", async () => {
 		process.env[KHOA] = "";
+		process.env[LOGO] = KHOA_LOGO_GIA;
+		process.env[API_GIA] = "http://127.0.0.1:9";
 		const kho = khoNguonVercel();
+		if (kho.bat())
+			throw new Error("kho nguon bat bang khoa logo: kho-nguon-tat");
 
 		await expect(
 			kho.kyPut(PATHNAME_NGUON("n1"), { kieu: "docx", toiDa: 1024 }),
