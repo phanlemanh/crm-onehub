@@ -1,0 +1,22 @@
+{
+  "feature_plain": "Trong hộp «Tải nguồn lên», câu gợi ý cạnh nút «Chọn tệp» giờ chỉ còn «Kéo tệp vào đây» (tiếng Anh: «Drag a file here»), thôi nhắc lại việc cái nút đã nói.",
+  "scope_plain": "Vòng này chỉ đổi một câu gợi ý; những thứ dưới đây cố ý để nguyên.",
+  "decisions_plain": [
+    {
+      "id": "d-20260928T123829Z-1",
+      "p": "KHÔNG chạy lượt quét độ phủ tự động — không gian chỉ có hai ngôn ngữ và ba dòng chữ, liệt tay đủ; đổi lại không có bằng chứng quét."
+    },
+    {
+      "id": "d-20260928T123829Z-2",
+      "p": "KHÔNG làm phiên thiết kế trước duyệt — bố cục không đổi; đổi lại người nhìn màn thật qua ảnh 1440 và 390 ở bước kiểm."
+    },
+    {
+      "id": "d-20260928T123829Z-3",
+      "p": "Giữ chữ «tệp» và «a file» thay vì rút còn «Kéo vào đây» — trang còn thứ khác kéo được, và hộp chỉ nhận một tệp."
+    },
+    {
+      "id": "d-20260928T123829Z-4",
+      "p": "Phép đo mới nằm trong tệp riêng của vòng, không thêm vào tệp đo của hồ sơ đã ký — đổi lại có thêm một tệp test gần giống khuôn cũ."
+    }
+  ]
+}

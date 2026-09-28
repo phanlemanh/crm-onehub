@@ -837,7 +837,14 @@ executors:
     nkt_nut_chon: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx -t nut-chon
     nkt_dang_keo: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx -t dang-keo
     nkt_chu: cd apps/app && bun test test/messages-guard.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nguon-keo-tha-chu.dom.tsx
+    bclkt_chu_vi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-khong-lap-chu.dom.tsx -t chu-vi
+    bclkt_chu_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-khong-lap-chu.dom.tsx -t chu-en
+    bclkt_khong_lap: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-khong-lap-chu.dom.tsx -t khong-lap
+    bclkt_guard: cd apps/app && bun test test/messages-guard.spec.ts
+    bclkt_thuoc_da_ky: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx && bun test --preload ./test/setup-dom.ts ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nguon-keo-tha-chu.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx
   script:
+    bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
+    bclkt_man_chu: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
     ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
     ktl_migration_tren_ban_sao: "bun _acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
     ktl_bo_go_viet: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kho-tai-lieu/rang/bo-go-viet.mjs"'
