@@ -9,6 +9,7 @@ import {
 	dungSan,
 	goi,
 	hashCua,
+	type Json,
 	ma,
 	ok,
 	phien,
@@ -76,16 +77,12 @@ async function duyetBan(
 	ai: Ai,
 	daDoiChieu?: number,
 ): Promise<TraLoi> {
-	const hash = await hashCua(deXuatId, "chu");
-	return goi(
-		"taiLieu.approve",
-		{
-			id: deXuatId,
-			diffHash: hash,
-			...(daDoiChieu === undefined ? {} : { daDoiChieu }),
-		},
-		ai,
-	);
+	const diffHash = await hashCua(deXuatId, "chu");
+	const vao: Json =
+		daDoiChieu === undefined
+			? { id: deXuatId, diffHash }
+			: { id: deXuatId, diffHash, daDoiChieu };
+	return goi("taiLieu.approve", vao, ai);
 }
 
 async function nguonCuaBanDangDung(slug: string): Promise<string | null> {
