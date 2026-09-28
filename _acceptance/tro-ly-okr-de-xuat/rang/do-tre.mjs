@@ -80,13 +80,27 @@ async function choXong(url, taskId) {
 async function chonMucTieu(url) {
 	const ds = await truyVan(
 		url,
-		`SELECT id, title FROM "okrObjective"
-		 WHERE "cycleId" = $1 AND status = 'cong-bo'
-		 ORDER BY position, id`,
+		`SELECT o.id, o.title, coalesce(dh.email, vh.email) AS email
+		 FROM "okrObjective" o
+		 LEFT JOIN department d ON d.id = o."departmentId"
+		 LEFT JOIN "user" dh ON dh.id = d."headUserId"
+		 LEFT JOIN division v ON v.id = o."divisionId"
+		 LEFT JOIN "user" vh ON vh.id = v."headUserId"
+		 WHERE o."cycleId" = $1 AND o.status = 'cong-bo'
+		 ORDER BY o.position, o.id`,
 		[idMau("chu-ky", E24.chuKy)],
 	);
-	const khac = [...new Map(ds.map((d) => [d.title, d])).values()];
+	const coTruong = ds.filter((d) => d.email);
+	const khac = [...new Map(coTruong.map((d) => [d.title, d])).values()];
 	return khac.slice(0, lan);
+}
+
+function nguoiGoi(api) {
+	const daCo = new Map();
+	return (email) => {
+		if (!daCo.has(email)) daCo.set(email, trpc(api, phienCookie(email)));
+		return daCo.get(email);
+	};
 }
 
 async function chayLuot(url, qt, mt, i) {
@@ -135,10 +149,6 @@ async function trongPhien() {
 	const url = process.env.DATABASE_URL;
 	const api = process.env.API_URL;
 	if (!api) return khongDo("thieu API_URL — phai chay trong phien do");
-	if (lan > TRO_LY_OKR_TRAN.troLyNgayMoiNguoi)
-		return khongDo(
-			`${lan} luot vuot tran ngay moi nguoi ${TRO_LY_OKR_TRAN.troLyNgayMoiNguoi} cua mot nguoi goi`,
-		);
 	const tacTu = await batTacTu({
 		cong: Number(process.env[PHIEN_TRO_LY.bienCongTacTu]),
 		thuMuc: join(RA, "do-tre"),
@@ -159,12 +169,24 @@ async function trongPhien() {
 			return khongDo(
 				`bo mau chi co ${mt.length} Muc tieu cong-bo ten khac nhau o ${E24.chuKy}, can ${lan}`,
 			);
-		const ss = await qt.hoi("okr.troLySanSang", { objectiveId: mt[0].id });
+		const truong = nguoiGoi(api);
+		const soLuot = new Map();
+		for (const m of mt) soLuot.set(m.email, (soLuot.get(m.email) ?? 0) + 1);
+		const vuot = [...soLuot].filter(
+			([, n]) => n > TRO_LY_OKR_TRAN.troLyNgayMoiNguoi,
+		);
+		if (vuot.length > 0)
+			return khongDo(
+				`vuot tran ngay moi nguoi ${TRO_LY_OKR_TRAN.troLyNgayMoiNguoi}: ${vuot.map(([e, n]) => `${e} ${n}`).join(", ")}`,
+			);
+		const ss = await truong(mt[0].email).hoi("okr.troLySanSang", {
+			objectiveId: mt[0].id,
+		});
 		if (!ss.bat) return khongDo(`troLySanSang tra ${ss.lyDo}`);
 
 		const luot = [];
 		for (const [i, m] of mt.entries()) {
-			const l = await chayLuot(url, qt, m, i);
+			const l = await chayLuot(url, truong(m.email), m, i);
 			console.log(
 				`luot ${i + 1}/${lan}: ${m.id} ${l.taskId ?? "-"}${l.lyDo ? ` (${l.lyDo})` : ""}`,
 			);

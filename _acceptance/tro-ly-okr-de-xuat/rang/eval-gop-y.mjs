@@ -9,14 +9,19 @@ import {
 	statSync,
 	writeFileSync,
 } from "node:fs";
+import { createRequire } from "node:module";
 import { join } from "node:path";
+import { TRO_LY_OKR } from "../../../apps/agent/agent/lib/okr/config.ts";
 import {
 	docBoCaGopY,
 	THU_MUC_CA_MAU,
 } from "../../../apps/agent/evals/okr/ca-gop-y.ts";
-import { TRO_LY_OKR_TRAN } from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
-import { z } from "../../../packages/validation/node_modules/zod/index.js";
+import {
+	MA_LOAI_DE_XUAT,
+	TRO_LY_OKR_TRAN,
+} from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
+import { ghiHieuChinh } from "./hieu-chinh.mjs";
 import {
 	AGENT,
 	cauThieuKhoa,
@@ -31,12 +36,15 @@ import {
 	xoaKho,
 } from "./phien-tro-ly.mjs";
 
+const { z } = createRequire(join(GOC, "packages/validation/package.json"))(
+	"zod",
+);
+
 const PHUT_MS = 60_000;
 
 const E22 = {
 	kho: "tdx-e22",
 	tranUsdMacDinh: 2,
-	soCapHieuChinh: 20,
 	nguongJudge: 0.7,
 	timeoutMs: 120 * PHUT_MS,
 	boViet: "viet-lai",
@@ -82,6 +90,7 @@ const E22 = {
 	nhanJudge: "judge.autoevals.closedQA [",
 	thongDiep: {
 		doiChung: "ca doi chung khong bat duoc",
+		doiChungKhongGhi: "ca doi chung khong co ban ghi",
 	},
 	env: {
 		tongKet: "TDX_TONG_KET",
@@ -123,6 +132,15 @@ const tomTatEve = z.object({
 	),
 });
 
+const MA_CAM_LA = E22.maCamNg.filter((ma) => !MA_LOAI_DE_XUAT.includes(ma));
+if (MA_CAM_LA.length > 0) {
+	console.log(
+		`KHONG DO DUOC: ma cam NG khong con trong MA_LOAI_DE_XUAT: ${MA_CAM_LA.join(", ")}`,
+	);
+	process.exit(2);
+}
+
+const RUN_ID = new Date().toISOString().replace(/[:.]/g, "-");
 const THU_MUC = join(RA, "e22");
 const TONG_KET = join(THU_MUC, "tong-ket.jsonl");
 const CA_THEM = join(THU_MUC, "ca-them");
@@ -340,43 +358,6 @@ function kiemCa(ca, ghi, lotSoMoi, ten) {
 	return loi;
 }
 
-const oBang = (chu) =>
-	`${chu ?? ""}`.replace(/\|/g, "\\|").replace(/\s+/g, " ").trim();
-
-function ghiHieuChinh(cap, diemJudge, soCa) {
-	const chon = cap.slice(0, E22.soCapHieuChinh);
-	const dong = chon.map(
-		(c, i) =>
-			`| ${i + 1} | ${c.ca} | ${c.truong} | ${oBang(c.truoc)} | ${oBang(c.sau)} | ${c.diem === null ? "—" : c.diem.toFixed(2)} | |`,
-	);
-	const thieu =
-		chon.length < E22.soCapHieuChinh
-			? `\nChỉ có ${chon.length} cặp viết lại trong lượt này — thiếu ${E22.soCapHieuChinh - chon.length} cặp so với ${E22.soCapHieuChinh}.\n`
-			: "";
-	writeFileSync(
-		HIEU_CHINH,
-		[
-			"# Hiệu chỉnh judge — bộ Viết lại (E22 → E25)",
-			"",
-			`Sinh bởi \`bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs\` lúc ${new Date().toISOString()}, ${soCa} ca bộ Viết lại, judge \`zai/glm-5.2-fast\` có ZDR, điểm judge trung bình ${diemJudge === null ? "—" : diemJudge.toFixed(2)}.`,
-			"",
-			"Ba ý chấm (judge và chủ kho chấm cùng ba ý):",
-			"",
-			"1. Nói kết quả, không nói việc làm.",
-			"2. Giữ ý người viết.",
-			"3. Trả lời theo ngôn ngữ chiếm đa số của nội dung.",
-			"",
-			"Chủ kho điền cột cuối bằng «Đạt» hoặc «Không đạt» cho từng cặp. Judge Đạt khi điểm bằng 1. Khớp là khi chấm của chủ kho trùng judge; E25 đạt khi khớp ≥ 85% và điểm judge trung bình ≥ 0,7.",
-			thieu,
-			"| # | Ca | Trường | Gốc | Đề xuất | Judge | Chủ kho (Đạt/Không đạt) |",
-			"| --- | --- | --- | --- | --- | --- | --- |",
-			...dong,
-			"",
-		].join("\n"),
-	);
-	return chon.length;
-}
-
 async function tongKet(url, eve) {
 	const ca = docBoCaGopY(THU_MUC_CA_MAU);
 	const ghi = docTongKet();
@@ -428,7 +409,14 @@ async function tongKet(url, eve) {
 		coDiem.length === 0
 			? null
 			: coDiem.reduce((s, d) => s + d, 0) / coDiem.length;
-	const soCap = ghiHieuChinh(cap, judge, boViet.size);
+	const hc = ghiHieuChinh({
+		tep: HIEU_CHINH,
+		cap,
+		judge,
+		soCa: boViet.size,
+		moHinh: TRO_LY_OKR.judge.model,
+		runId: RUN_ID,
+	});
 
 	const [chi] = await truyVan(
 		url,
@@ -438,19 +426,25 @@ async function tongKet(url, eve) {
 	console.log(
 		`chi: ${Number(chi.usd).toFixed(6)} USD / tran ${tranUsd} USD${Number(chi.usd) >= tranUsd ? " — da cham tran, ca con lai bi bo qua" : ""}`,
 	);
-	console.log(`hieu chinh: ${soCap} cap → ${HIEU_CHINH.slice(GOC.length + 1)}`);
+	console.log(
+		hc.giu
+			? `hieu chinh da cham (${hc.daCham} o) — giu nguyen ${HIEU_CHINH.slice(GOC.length + 1)}, ban moi ${hc.soCap} cap → ${hc.tep.slice(GOC.length + 1)}`
+			: `hieu chinh: ${hc.soCap} cap → ${hc.tep.slice(GOC.length + 1)}`,
+	);
 	console.log(
 		`ma: ${dat}/${ca.length} · judge: ${judge === null ? "—" : judge.toFixed(2)} (${coDiem.length} cap, nguong ${E22.nguongJudge})`,
 	);
 
+	if (eve.ma === null || eve.ma === 2)
+		return khongDo(
+			`eve eval ${eve.ma === null ? "sap hay het gio" : "bao loi cau hinh (ma 2)"} — xem .acceptance-runs/tro-ly-okr-de-xuat/e22/eve.log`,
+		);
+	if (!ghi.has(E22.caDoiChung.id))
+		return khongDo(E22.thongDiep.doiChungKhongGhi);
 	if (!batDuoc) {
 		console.log(E22.thongDiep.doiChung);
 		return 3;
 	}
-	if (eve.ma === 2)
-		return khongDo(
-			"eve eval bao loi cau hinh (ma 2) — xem .acceptance-runs/tro-ly-okr-de-xuat/e22/eve.log",
-		);
 	return dat === ca.length ? 0 : 1;
 }
 

@@ -42,6 +42,7 @@ const E4 = {
 		moLaiMs: 5 * GIAY_MS,
 		nhipMs: 500,
 	},
+	conLan: { soLanToiDa: 40, buocPx: 400, lePx: 16, leMinPx: 40, choMs: 250 },
 	quanTri: "le-hai-dang",
 	chuKy: "quy4",
 	bat: {
@@ -49,6 +50,16 @@ const E4 = {
 		truong: "nguyen-thi-lan",
 		mucTieu: "q4-kd-bac-1",
 		tenYeu: "Triển khai CRM cho đội kinh doanh miền Bắc",
+		krYeu: {
+			title: "Gọi điện cho đối tác mới mỗi tuần",
+			kind: "tang-toi",
+			startValue: 0,
+			targetValue: 200,
+			currentValue: 0,
+			unit: "cuộc",
+			dueOn: null,
+			weight: 1,
+		},
 	},
 	an: { phong: "kd-nam", truong: "ly-thanh-tam", mucTieu: "q4-kd-nam-2" },
 	hauToSuaAn: " — bản đo chế độ ẩn",
@@ -141,14 +152,63 @@ async function moiKho(cookie, lam) {
 	}
 }
 
+async function viTriCuon(p, chon) {
+	return p.evaluate((chon) => {
+		const o = [...document.querySelectorAll(chon)].find((x) =>
+			x.checkVisibility(),
+		);
+		if (!o) return null;
+		const cuonDuoc = (x) => {
+			const kieu = getComputedStyle(x).overflowY;
+			return (
+				["auto", "scroll", "overlay"].includes(kieu) &&
+				x.scrollHeight > x.clientHeight
+			);
+		};
+		let hop = o.parentElement;
+		while (hop && hop !== document.body && !cuonDuoc(hop))
+			hop = hop.parentElement;
+		const khung =
+			hop && hop !== document.body
+				? hop.getBoundingClientRect()
+				: { top: 0, left: 0, bottom: innerHeight, right: innerWidth };
+		const tren = Math.max(khung.top, 0);
+		const duoi = Math.min(khung.bottom, innerHeight);
+		const r = o.getBoundingClientRect();
+		return {
+			dinh: r.top,
+			tren,
+			duoi,
+			x: (Math.max(khung.left, 0) + Math.min(khung.right, innerWidth)) / 2,
+			y: (tren + duoi) / 2,
+		};
+	}, chon);
+}
+
+async function cuonBangConLan(p, chon) {
+	for (let i = 0; i < E4.conLan.soLanToiDa; i += 1) {
+		const v = await viTriCuon(p, chon);
+		if (!v) return false;
+		if (v.dinh >= v.tren && v.dinh < v.duoi - E4.conLan.leMinPx) return true;
+		const buoc = Math.max(
+			-E4.conLan.buocPx,
+			Math.min(E4.conLan.buocPx, v.dinh - v.tren - E4.conLan.lePx),
+		);
+		await p.mouse.move(v.x, v.y);
+		await p.mouse.wheel({ deltaY: buoc });
+		await tre(E4.conLan.choMs);
+		const sau = await viTriCuon(p, chon);
+		if (!sau || sau.dinh === v.dinh) return false;
+	}
+	return false;
+}
+
 async function chup({ p, rong }, ten, toi = null) {
 	if (toi)
-		await p.evaluate((chon) => {
-			const o = [...document.querySelectorAll(chon)].find((x) =>
-				x.checkVisibility(),
-			);
-			o?.scrollIntoView({ block: "start" });
-		}, toi);
+		kiem(
+			`${ten} ${rong}: con lan dua ${toi} vao khung nhin`,
+			await cuonBangConLan(p, toi),
+		);
 	await tre(E4.cho.lamMoiMs);
 	await p.evaluate(() => document.fonts.ready);
 	const tran = await p.evaluate(() => {
@@ -425,6 +485,11 @@ async function buocGopY(tl) {
 		id: MT,
 		title: E4.bat.tenYeu,
 	});
+	await trpc(API, tl).lam("okr.createKr", {
+		objectiveId: MT,
+		...E4.bat.krYeu,
+		ownerUserId: idMau("nguoi", E4.bat.truong),
+	});
 	const ds = await moCotHaiKho(tl);
 	for (const t of ds) await chup(t, "ST-muctieu-dang-soan", "[data-cot-gop-y]");
 	for (const t of ds) {
@@ -555,10 +620,14 @@ async function buocCheDoAn(qt, tlAn) {
 		id: mtAn,
 		title: `${cu}${E4.hauToSuaAn}`,
 	});
-	await fetch(`${process.env.AGENT_URL}/internal/crm/dispatch`, {
+	const goi = await fetch(`${process.env.AGENT_URL}/internal/crm/dispatch`, {
 		method: "POST",
 		headers: { authorization: `Bearer ${process.env.AGENT_BRIDGE_SECRET}` },
 	});
+	if (goi.status !== 202)
+		throw new Error(
+			`goi dispatch cua tac tu tra ${goi.status}, khong phai 202`,
+		);
 	const luot = await choLuotAn(url, mtAn, batDau);
 	if (!kiem(`luot an xong (${luot?.outcome ?? "chua dong"})`, Boolean(luot)))
 		return;
@@ -612,28 +681,36 @@ if (!laKhoDo())
 		"DATABASE_URL khong phai kho do rieng — chay qua scripts/lan-do/tien-de.mjs",
 	);
 
-const nap = napBoMau();
-if (nap.ma !== 0)
-	await khongDo(`okr:mau --moc ${nap.moc} thoat ${nap.ma}: ${nap.dong}`);
-dong.push(`NAP okr:mau --moc ${nap.moc}: ${nap.dong}`);
-
 const MT = idMau("mt", E4.bat.mucTieu);
-const qt = phienCookie(thuMau(E4.quanTri));
-const tl = phienCookie(thuMau(E4.bat.truong));
-const tlAn = phienCookie(thuMau(E4.an.truong));
-const slug = await suySlug(qt);
-if (!slug) await khongDo(`${APP}/ khong chuyen toi trang chinh cua workspace`);
-
-await trpc(API, qt).lam("okr.setProgram", {
-	aiOn: true,
-	aiDeXuatPhamVi: "danh-sach",
-	aiDeXuatDonVi: [idMau("pb", E4.bat.phong)],
-});
-const ct = await trpc(API, qt).hoi("okr.program");
-kiem(
-	`setProgram: aiOn ${ct.aiOn}, de xuat ${ct.aiDeXuatPhamVi} [${ct.aiDeXuatDonVi}]`,
-	ct.aiOn === true && ct.aiDeXuatDonVi.includes(idMau("pb", E4.bat.phong)),
-);
+let qt;
+let tl;
+let tlAn;
+let slug;
+try {
+	buoc = "chuan-bi";
+	const nap = napBoMau();
+	if (nap.ma !== 0)
+		throw new Error(`okr:mau --moc ${nap.moc} thoat ${nap.ma}: ${nap.dong}`);
+	dong.push(`NAP okr:mau --moc ${nap.moc}: ${nap.dong}`);
+	qt = phienCookie(thuMau(E4.quanTri));
+	tl = phienCookie(thuMau(E4.bat.truong));
+	tlAn = phienCookie(thuMau(E4.an.truong));
+	slug = await suySlug(qt);
+	if (!slug)
+		throw new Error(`${APP}/ khong chuyen toi trang chinh cua workspace`);
+	await trpc(API, qt).lam("okr.setProgram", {
+		aiOn: true,
+		aiDeXuatPhamVi: "danh-sach",
+		aiDeXuatDonVi: [idMau("pb", E4.bat.phong)],
+	});
+	const ct = await trpc(API, qt).hoi("okr.program");
+	kiem(
+		`setProgram: aiOn ${ct.aiOn}, de xuat ${ct.aiDeXuatPhamVi} [${ct.aiDeXuatDonVi}]`,
+		ct.aiOn === true && ct.aiDeXuatDonVi.includes(idMau("pb", E4.bat.phong)),
+	);
+} catch (loi) {
+	await khongDo(`buoc ${buoc}: ${loi?.message ?? loi}`);
+}
 
 mkdirSync(THU_MUC, { recursive: true });
 trinhDuyet = await puppeteer.launch({

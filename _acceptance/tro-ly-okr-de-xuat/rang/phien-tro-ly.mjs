@@ -43,6 +43,7 @@ export const PHIEN_TRO_LY = {
 	thongDiep: {
 		thieuKhoa: "thieu khoa mo hinh",
 	},
+	maNgat: { SIGINT: 130, SIGTERM: 143, SIGHUP: 129 },
 };
 
 export const tre = (ms) => new Promise((xong) => setTimeout(xong, ms));
@@ -242,13 +243,27 @@ export async function batTacTu({ cong, thuMuc, env = process.env }) {
 			},
 		},
 	);
+	const nghe = Object.entries(PHIEN_TRO_LY.maNgat).map(([tin, ma]) => {
+		const khiNgat = () => {
+			console.error(`-- nhan ${tin}: tat tac tu nhom ${con.pid}`);
+			void tatNhom(con.pid).finally(() => process.exit(ma));
+		};
+		process.once(tin, khiNgat);
+		return [tin, khiNgat];
+	});
+	const dung = async () => {
+		for (const [tin, khiNgat] of nghe) process.off(tin, khiNgat);
+		return tatNhom(con.pid);
+	};
 	const url = `http://127.0.0.1:${cong}`;
 	const han = Date.now() + PHIEN_TRO_LY.cho.tacTuMs;
 	for (;;) {
-		if (con.exitCode !== null || con.signalCode !== null)
+		if (con.exitCode !== null || con.signalCode !== null) {
+			await dung();
 			throw new Error(
 				`tac tu thoat truoc khi san sang (${con.exitCode ?? con.signalCode}):\n    ${duoiNhatKy(nhatKy)}`,
 			);
+		}
 		try {
 			await fetch(`${url}/internal/crm/dispatch-health`, {
 				headers: { authorization: `Bearer ${secret}` },
@@ -257,14 +272,14 @@ export async function batTacTu({ cong, thuMuc, env = process.env }) {
 			break;
 		} catch {}
 		if (Date.now() > han) {
-			await tatNhom(con.pid);
+			await dung();
 			throw new Error(
 				`tac tu khong san sang o ${url} sau ${PHIEN_TRO_LY.cho.tacTuMs / 1000} s:\n    ${duoiNhatKy(nhatKy)}`,
 			);
 		}
 		await tre(PHIEN_TRO_LY.cho.nhipMs);
 	}
-	return { url, nhatKy, dung: () => tatNhom(con.pid) };
+	return { url, nhatKy, pgid: con.pid, dung };
 }
 
 export function trongPhienCoTacTu() {
@@ -316,7 +331,7 @@ export async function chayTrongPhienCoTacTu(lenh) {
 		[join(GOC, "scripts/lan-do/phien-do.mjs"), "--chay", lenh],
 		{ cwd: GOC, stdio: "inherit", env },
 	);
-	const ngat = { SIGINT: 130, SIGTERM: 143, SIGHUP: 129 };
+	const ngat = PHIEN_TRO_LY.maNgat;
 	for (const tin of Object.keys(ngat)) process.on(tin, () => con.kill(tin));
 	return new Promise((xong) => {
 		con.on("error", () => xong(2));
