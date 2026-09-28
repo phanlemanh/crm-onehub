@@ -102,7 +102,15 @@ router đối tác, không mở đường đọc đối tác mới trong router 
   một hàng `OkrMucTieuTuMau`, vết `tao` với `after.tuMau`.
 - Vết: thêm hành động `them-viec`, `sua-viec`, `xong-viec`, `go-viec`, `gan-sang-kien`,
   `dinh-bang-chung`, `go-bang-chung`, `ghi-nhan`, `go-ghi-nhan`, `sua-mau` (mẫu không
-  thuộc mục tiêu: `objectiveId` null, `after = { mauId, ten }`).
+  thuộc mục tiêu: `objectiveId` null, `after = { mauId, ten }`). Vết của sáng kiến gắn
+  sẵn (`gan-sang-kien`, và `go-viec` khi gỡ một sáng kiến) chỉ mang `{ loai, campaignId }`
+  hoặc `{ loai, planId }` — không tên, không trạng thái. Thủ tục đọc vết của mục tiêu
+  (tab «Vết») trả hai hành động đó qua cùng `lienKetChoVai`: vai «chỉ OKR» nhận
+  `{ loai, coQuyen: false }`, không mã.
+- `guiCapNhat` (lượt 4) nhận thêm `bangChung?: { url, ghiChu }` cho KR mốc được gửi là
+  «Xong», parse bằng cùng khuôn của `okr-canh-kr`; hàng `okrBangChung` ghi trong **cùng
+  giao dịch** với lần cập nhật, kèm một vết `dinh-bang-chung`. Đường dẫn sai thì cả lần
+  gửi bị từ chối, KR không đổi — không có đường hai lời gọi rời.
 - Danh sách thủ tục vai «chỉ OKR» với tới được (`vai-chi-okr.spec.ts`) sửa có chủ ý.
 
 ## 6. Báo người nhận ghi nhận
@@ -124,9 +132,10 @@ kiến tự gieo. `--xoa` xoá sạch hàng của sáu bảng mới; nạp lại
 ## 8. Đường đo
 
 `_acceptance/canh-kr-okr/rang/ty-le-canh-kr.sql` (chỉ SELECT, `SET okr.chu_ky`):
-tỷ lệ mục tiêu đã công bố có ít nhất một việc hay sáng kiến; tỷ lệ KR mốc đã xong có bằng
-chứng; số phòng ban có ghi nhận (gửi trên mục tiêu của phòng đó); tỷ lệ mục tiêu sinh từ
-mẫu; đọc kèm tỷ lệ việc đã xong, tỷ lệ sáng kiến là kế hoạch 30 ngày.
+`coViecHaySangKien / mucTieu` (mục tiêu đã công bố có ít nhất một việc hay sáng kiến);
+`mocCoBangChung / mocXong`; `phongBanCoGhiNhan / phongBanTong` (ghi nhận gửi trên mục
+tiêu của phòng đó) và `ghiNhanTong`; `tuMauPhongBan / mucTieuPhongBan` (chỉ cấp phòng ban,
+chỉ đã công bố); đọc kèm `viecXong / viecTong`, `sangKienKeHoach / sangKienTong`.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
 ## Đặc tả UX
@@ -180,6 +189,7 @@ mẫu; đọc kèm tỷ lệ việc đã xong, tỷ lệ sáng kiến là kế h
 | ST-khungkr-nguoi-roi | Khung KR | tên người làm kèm «đã rời» | giao lại |
 | ST-bangchung-rong | Tab Bằng chứng | `Empty` «Chưa có bằng chứng» + «Đính bằng chứng» | đính |
 | ST-bangchung-co | Tab Bằng chứng | `Item`: tên miền, ghi chú, người đính, ngày; mở trong tab mới | mở, gỡ |
+| ST-capnhat-moc | Hộp thoại cập nhật KR mốc | chọn «Xong» → ô «Bằng chứng (tuỳ chọn)» hiện; đường dẫn sai → lỗi dưới ô, «Gửi cập nhật» khoá | gửi |
 | ST-bangchung-sai | Hộp thoại đính | lỗi «Đường dẫn phải bắt đầu bằng http:// hoặc https://» dưới ô | sửa |
 | ST-traodoi-ghinhan | Trao đổi | dòng ghi nhận khác bình luận: biểu tượng, «An ghi nhận Bình, Chi», KR nếu có, lời | gỡ (người gửi) |
 | ST-traodoi-soan-ghinhan | Trao đổi | ô soạn ở chế độ «Ghi nhận»: ô người nhận (tối đa 5), lời, chọn KR | gửi |
