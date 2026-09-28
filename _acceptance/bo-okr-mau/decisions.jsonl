@@ -4,3 +4,4 @@
 {"id":"d-20260928T041839Z-4","type":"descope","stage":"S1","at":"2026-09-28T04:30:00Z","decision":"bỏ design-pass — hạng mục không thêm hay sửa màn nào, chỉ nạp dữ liệu cho màn đã có","impact":"Gate 1 duyệt UI bằng chữ — mất khoảnh khắc visual trước duyệt; bù bằng E14 chụp màn thật sau khi nạp"}
 {"id":"d-20260928T041839Z-5","type":"descope","stage":"S1","at":"2026-09-28T04:30:00Z","decision":"bỏ đặc-tả-UX — không có màn mới, không đổi cấu trúc màn","impact":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
 {"id":"d-20260928T041839Z-6","type":"descope","stage":"S1","at":"2026-09-28T04:30:00Z","decision":"Không gắn bộ mẫu vào kho mẫu của phiên đo; lượt sau gọi okr:mau trong tiền đề của chính nó","impact":"thước đã ký cần kho không chu kỳ vẫn xanh; đổi lại mỗi lượt sau thêm một lệnh vào tiền đề","revisit":"khi đa số thước mới đều gọi okr:mau"}
+{"id":"d-20260928T043529Z-7","type":"seal","gate":1,"at":"2026-09-28T04:35:17Z"}
