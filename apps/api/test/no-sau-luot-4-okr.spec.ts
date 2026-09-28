@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { LOAI_NHAC_OKR } from "@crm/db/okr-nhac";
-import { viecCanNhac } from "@crm/db/onboarding-nhac";
+import { mocNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import {
 	guiCapNhatInput,
 	LOI_KHUON_CAP_NHAT,
@@ -101,14 +101,8 @@ const moPhien = async (ai: AiHoacCookie) =>
 	).sessionId;
 
 function sangSau(luc: Date): Date {
-	const ngay = new Intl.DateTimeFormat("en-CA", {
-		timeZone: "Asia/Ho_Chi_Minh",
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	}).format(luc);
-	const moc = new Date(`${ngay}T08:31:00+07:00`);
-	return moc > luc ? moc : new Date(moc.getTime() + NGAY_MS);
+	const moc = mocNhac(luc);
+	return moc >= luc ? moc : mocNhac(new Date(moc.getTime() + NGAY_MS));
 }
 
 async function viecNhacSang(userId: string, sau: Date) {
