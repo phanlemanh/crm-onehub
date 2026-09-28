@@ -369,6 +369,43 @@ Phục vụ: E13b (biến có tài liệu) · `independent: true`
 
 Phục vụ: E15a, E15j · `independent: false`
 
+### Task 13: Nhận nguồn chỉ nhận đường lưu vừa cấp cho chính người gọi (AC-16, mở lại 2026-09-28)
+
+**Vì sao:** vòng chấm S4 tìm ra `taiLieuNguon.nhan` xoá bất cứ đường lưu nào đúng khuôn khi lượt nhận
+bị từ chối hay trùng byte; ai biết đường lưu của một nguồn đã có (người tải về được nó) có thể làm mất
+tệp đó. Chủ kho chọn sửa trong lượt này (Cổng Bằng chứng, Ngoài-1 và Ngoài-6).
+
+**Cách làm:** `xinCho` trả thêm `phieu` = HMAC-SHA256 trên `${userId}|${pathname}|${hetHan}` bằng khoá
+dẫn từ `BETTER_AUTH_SECRET` (tiền tố riêng `kho-tai-lieu:phieu-nguon`), mã hoá base64url. `nhan` nhận
+thêm `phieu` và, TRƯỚC khi đọc hay xoá gì: (1) tính lại chữ ký với `userId` của người gọi và so bằng
+`timingSafeEqual`; (2) từ chối khi quá `hetHan`; (3) từ chối khi `pathname` đã là `blobPathname` của một
+`TaiLieuNguon`. Chỉ sau ba chốt đó, đường lưu mới được coi là của người gọi và mới được xoá khi lượt
+nhận bị từ chối hay trùng. Không thêm bảng, không đổi `migration`.
+
+**Files:**
+- Modify: `apps/api/src/tai-lieu/tai-lieu-nguon.contracts.ts` (`xinCho` ra thêm `phieu`; `nhan` vào thêm `phieu`)
+- Modify: `apps/api/src/tai-lieu/tai-lieu-nguon.service.ts` (`xinCho` ký phiếu; `nhan` kiểm phiếu và hàng trùng đường lưu trước mọi thao tác)
+- Create: `apps/api/src/tai-lieu/phieu-nguon.ts` (ký và kiểm phiếu, thuần hàm, nhận khoá qua tham số)
+- Modify: `apps/api/src/tai-lieu/tai-lieu-config.ts` (thông điệp `phieuSai`, tiền tố khoá)
+- Modify: `packages/validation/src/tai-lieu-nguon.ts` nếu thông điệp cần hiện ở màn (dùng chung)
+- Modify: `apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx` (gửi `phieu` của `xinCho` sang `nhan`)
+- Modify: `_acceptance/may-soan-de-xuat/rang/blob-that.mjs` (truyền `phieu`)
+- Test: `apps/api/test/tai-lieu-nguon-cua-ai.spec.ts` (E16), sửa helper gọi `nhan` trong `tai-lieu-nguon.spec.ts`,
+  `tai-lieu-nguon-khong-ro.spec.ts`, `tai-lieu-nguon-tat.spec.ts`; `apps/app/test/tai-lieu-nguon.dom.tsx`
+  (giả `xinCho` trả `phieu`, khẳng định `nhan` nhận đúng `phieu`)
+
+**Interfaces:**
+- Produces: `kyPhieu(khoa, { userId, pathname, hetHan }): string`; `kiemPhieu(khoa, { userId, pathname, hetHan, phieu }, bayGio): boolean`
+- Consumes: `NguoiGoi.id` (đã có), `KHO_NGUON` (đã có)
+
+- [ ] **Step 1:** Viết `tai-lieu-nguon-cua-ai.spec.ts` theo E16 (6 ca, đếm hàng và danh sách tệp đã xoá của Blob giả trước = sau; đối chứng dương chỉ xoá tệp của chính người gọi; taiVe N1 ra đúng byte). Chạy qua `bun run test --` → đỏ.
+- [ ] **Step 2:** Viết `phieu-nguon.ts` + test đơn vị (chữ ký đúng; sai người; sai đường lưu; quá hạn; phiếu cụt).
+- [ ] **Step 3:** Sửa `xinCho`/`nhan` và hợp đồng dữ liệu; `bun run trpc:generate`; sửa các test gọi `nhan` và màn tải.
+- [ ] **Step 4:** Chạy E16 → xanh; phá thử (bỏ kiểm phiếu) → đỏ «xoa tep nguon cua nguoi khac», trả lại mã; chạy E2, E3, E4, E5, E12, E3d, E5d, E10d → xanh.
+- [ ] **Step 5:** Năm lệnh (`check-types`, `lint`, `lint:slop`, `test`, `build`). Commit `fix(may-soan): nhận nguồn chỉ nhận đường lưu vừa cấp cho chính người gọi`.
+
+Phục vụ: E16 · giữ E2, E3, E4, E5, E12, E2u · `independent: false`
+
 ---
 
 ## Thứ tự và song song
