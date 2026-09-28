@@ -21,12 +21,8 @@
 		}
 	],
 	"kyVong": {
-		"vanDe": [
-			"khong-do-duoc"
-		],
-		"vietLai": [
-			"kr.title"
-		],
+		"vanDe": ["khong-do-duoc"],
+		"vietLai": ["kr.title"],
 		"khongGopY": false,
 		"khongDuoc": [],
 		"soSai": false

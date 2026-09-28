@@ -47,10 +47,7 @@
 		"vanDe": [],
 		"vietLai": [],
 		"khongGopY": true,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Câu đã tốt; không đề xuất gì."

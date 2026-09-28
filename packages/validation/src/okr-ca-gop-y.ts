@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { CAP_MUC_TIEU, LOAI_MUC_TIEU } from "./okr-muc-tieu";
 import { KIEU_KR, soKr } from "./okr-kr";
+import { CAP_MUC_TIEU, LOAI_MUC_TIEU } from "./okr-muc-tieu";
 import { MA_VAN_DE } from "./okr-tro-ly";
 
 export const BO_CA_GOP_Y = ["viet-lai", "ng"] as const;
@@ -50,13 +50,26 @@ export type CaGopY = z.infer<typeof caGopY>;
 export function parseCaGopY(value: unknown, tep: string): CaGopY {
 	const r = caGopY
 		.superRefine((ca, ctx) => {
-			if (ca.kyVong.khongGopY && (ca.kyVong.vanDe.length > 0 || ca.kyVong.vietLai.length > 0))
-				ctx.addIssue({ code: "custom", path: ["kyVong"], message: "ca không góp ý thì không có vấn đề hay trường viết lại" });
+			if (
+				ca.kyVong.khongGopY &&
+				(ca.kyVong.vanDe.length > 0 || ca.kyVong.vietLai.length > 0)
+			)
+				ctx.addIssue({
+					code: "custom",
+					path: ["kyVong"],
+					message: "ca không góp ý thì không có vấn đề hay trường viết lại",
+				});
 			if (ca.bo === "ng" && !ca.capTren)
-				ctx.addIssue({ code: "custom", path: ["capTren"], message: "ca NG cần mục tiêu cấp trên" });
+				ctx.addIssue({
+					code: "custom",
+					path: ["capTren"],
+					message: "ca NG cần mục tiêu cấp trên",
+				});
 		})
 		.safeParse(value);
 	if (r.success) return r.data;
-	const dong = r.error.issues.map((i) => `${i.path.map(String).join(".")}: ${i.message}`);
+	const dong = r.error.issues.map(
+		(i) => `${i.path.map(String).join(".")}: ${i.message}`,
+	);
 	throw new Error(`Ca góp ý ${tep} sai khuôn — ${dong.join("; ")}`);
 }

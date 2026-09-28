@@ -30,7 +30,8 @@ export function kiemDuocNap(env: MoiTruongNap): KetQuaChan {
 			};
 		}
 	}
-	const url = env.NODE_ENV === "test" ? env.TEST_DATABASE_URL : env.DATABASE_URL;
+	const url =
+		env.NODE_ENV === "test" ? env.TEST_DATABASE_URL : env.DATABASE_URL;
 	if (!url) {
 		return {
 			cho: false,
@@ -39,7 +40,10 @@ export function kiemDuocNap(env: MoiTruongNap): KetQuaChan {
 		};
 	}
 	const mayChu = mayChuCua(url);
-	if (mayChu === null || !(OKR_MAU.mayCucBo as readonly string[]).includes(mayChu)) {
+	if (
+		mayChu === null ||
+		!(OKR_MAU.mayCucBo as readonly string[]).includes(mayChu)
+	) {
 		return {
 			cho: false,
 			lyDo: "may-chu",

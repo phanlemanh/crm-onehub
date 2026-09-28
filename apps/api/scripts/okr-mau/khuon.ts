@@ -1,9 +1,8 @@
-import { PHAM_VI_CHI_SO } from "@crm/validation/okr-chi-so";
+import { MA_CHI_SO, PHAM_VI_CHI_SO } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
-import { MA_CHI_SO } from "@crm/validation/okr-chi-so";
 import { z } from "zod";
 
 const ma = z
@@ -29,7 +28,11 @@ const nguoi = z.strictObject({
 	phongBan: ma,
 });
 
-const boPhan = z.strictObject({ ma, ten: z.string().trim().min(2), truong: ma });
+const boPhan = z.strictObject({
+	ma,
+	ten: z.string().trim().min(2),
+	truong: ma,
+});
 
 const phongBan = z.strictObject({
 	ma,
@@ -58,7 +61,9 @@ const kr = z.strictObject({
 	donVi: z.string().trim().max(24),
 	kichBan: z.enum(KICH_BAN).optional(),
 	nguon: nguonCrm.optional(),
-	ghiChu: z.partialRecord(z.enum(["1", "2", "3", "4", "5", "6"]), z.string().max(200)).optional(),
+	ghiChu: z
+		.partialRecord(z.enum(["1", "2", "3", "4", "5", "6"]), z.string().max(200))
+		.optional(),
 	chot: z.number().optional(),
 	diem: z.number().min(0).max(1).optional(),
 	lyDo: z.string().trim().min(10).max(500).optional(),
@@ -115,7 +120,9 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	const pbTheoMa = new Map(bo.phongBan.map((p) => [p.ma, p]));
 	const bpTheoMa = new Map(bo.boPhan.map((b) => [b.ma, b]));
 	const mtTheoMa = new Map(bo.mucTieu.map((m) => [m.ma, m]));
-	const krTheoMa = new Map(bo.mucTieu.flatMap((m) => m.krs.map((k) => [k.ma, k] as const)));
+	const krTheoMa = new Map(
+		bo.mucTieu.flatMap((m) => m.krs.map((k) => [k.ma, k] as const)),
+	);
 
 	const trungNguoi = trungMa(bo.nguoi);
 	if (trungNguoi) loi(["nguoi"], `mã người trùng: ${trungNguoi}`);
@@ -147,7 +154,8 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	});
 
 	bo.mucTieu.forEach((m, i) => {
-		if (!nguoiTheoMa.has(m.chu)) loi(["mucTieu", i, "chu"], `không có người ${m.chu}`);
+		if (!nguoiTheoMa.has(m.chu))
+			loi(["mucTieu", i, "chu"], `không có người ${m.chu}`);
 		if (m.cap === "onehub" && m.donVi !== undefined)
 			loi(["mucTieu", i, "donVi"], "mục tiêu OneHub không có đơn vị");
 		if (m.cap === "phong-ban" && !pbTheoMa.has(m.donVi ?? ""))
@@ -157,26 +165,34 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 		if (m.krs.length > OKR_PROGRAM_MAC_DINH.krCap)
 			loi(["mucTieu", i, "krs"], `vượt trần ${OKR_PROGRAM_MAC_DINH.krCap} KR`);
 		for (const t of m.thamGia)
-			if (!nguoiTheoMa.has(t)) loi(["mucTieu", i, "thamGia"], `không có người ${t}`);
+			if (!nguoiTheoMa.has(t))
+				loi(["mucTieu", i, "thamGia"], `không có người ${t}`);
 		if (m.canChinh) {
 			const { mucTieu: dichMt, kr: dichKr } = m.canChinh;
 			if ((dichMt === undefined) === (dichKr === undefined))
 				loi(["mucTieu", i, "canChinh"], "căn chỉnh cần đúng một đích");
 			if (dichMt && !mtTheoMa.has(dichMt))
-				loi(["mucTieu", i, "canChinh", "mucTieu"], `không có mục tiêu ${dichMt}`);
+				loi(
+					["mucTieu", i, "canChinh", "mucTieu"],
+					`không có mục tiêu ${dichMt}`,
+				);
 			if (dichKr && !krTheoMa.has(dichKr))
 				loi(["mucTieu", i, "canChinh", "kr"], `không có KR ${dichKr}`);
 		}
 		if (m.mangSangTu) {
 			const tu = mtTheoMa.get(m.mangSangTu);
-			if (!tu || tu.chuKy !== "quy3" || m.chuKy !== "quy4")
+			if (tu?.chuKy !== "quy3" || m.chuKy !== "quy4")
 				loi(["mucTieu", i, "mangSangTu"], "mang sang chỉ từ quý 3 sang quý 4");
 		}
 		if (m.chuKy === "quy3" && m.trangThai === "cong-bo" && !m.dieuHocDuoc)
-			loi(["mucTieu", i, "dieuHocDuoc"], "mục tiêu quý 3 đã khép cần điều học được");
+			loi(
+				["mucTieu", i, "dieuHocDuoc"],
+				"mục tiêu quý 3 đã khép cần điều học được",
+			);
 		m.krs.forEach((k, j) => {
 			const path = ["mucTieu", i, "krs", j];
-			if (!nguoiTheoMa.has(k.chu)) loi([...path, "chu"], `không có người ${k.chu}`);
+			if (!nguoiTheoMa.has(k.chu))
+				loi([...path, "chu"], `không có người ${k.chu}`);
 			const nhap = krInput.safeParse({
 				title: k.ten,
 				kind: k.kieu,
@@ -193,7 +209,10 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 			const soSai = kiemSoTheoKieu(k.kieu, k.khoi, k.dich);
 			if (soSai) loi(path, `KR ${k.ma}: ${soSai}`);
 			if (k.nguon && !crmHopKieu(k.kieu))
-				loi([...path, "nguon"], `KR ${k.ma} kiểu ${k.kieu} không lấy số từ CRM được`);
+				loi(
+					[...path, "nguon"],
+					`KR ${k.ma} kiểu ${k.kieu} không lấy số từ CRM được`,
+				);
 			if (k.nguon && !PHAM_VI_CHI_SO.includes(k.nguon.phamVi.kieu))
 				loi([...path, "nguon", "phamVi"], "phạm vi chỉ số không hợp lệ");
 			if (k.nguon && "ma" in k.nguon.phamVi) {
@@ -219,13 +238,18 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 
 	for (const chuKy of ["nam", "quy3", "quy4"] as const) {
 		const dem = new Map<string, number>();
-		for (const m of bo.mucTieu.filter((x) => x.chuKy === chuKy && x.trangThai !== "da-bo")) {
+		for (const m of bo.mucTieu.filter(
+			(x) => x.chuKy === chuKy && x.trangThai !== "da-bo",
+		)) {
 			const khoa = `${m.cap}:${m.donVi ?? ""}`;
 			dem.set(khoa, (dem.get(khoa) ?? 0) + 1);
 		}
 		for (const [khoa, so] of dem)
 			if (so > OKR_PROGRAM_MAC_DINH.objectiveCap)
-				loi(["mucTieu"], `${chuKy} ${khoa}: ${so} mục tiêu vượt trần ${OKR_PROGRAM_MAC_DINH.objectiveCap}`);
+				loi(
+					["mucTieu"],
+					`${chuKy} ${khoa}: ${so} mục tiêu vượt trần ${OKR_PROGRAM_MAC_DINH.objectiveCap}`,
+				);
 	}
 });
 
@@ -238,6 +262,8 @@ export function docBoOkrMau(json: unknown): BoOkrMau {
 
 export function duongDan(path: readonly PropertyKey[]): string {
 	return path
-		.map((p, i) => (typeof p === "number" ? `[${p}]` : `${i === 0 ? "" : "."}${String(p)}`))
+		.map((p, i) =>
+			typeof p === "number" ? `[${p}]` : `${i === 0 ? "" : "."}${String(p)}`,
+		)
 		.join("");
 }

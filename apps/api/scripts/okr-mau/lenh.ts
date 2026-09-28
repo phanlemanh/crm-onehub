@@ -17,19 +17,42 @@ function giaTriCo(args: string[], co: string): string | undefined {
 }
 
 export function docThamSo(args: string[], bayGio = new Date()): ThamSo {
-	const la = args.filter((a, i) => a.startsWith("--") && !Object.values(OKR_MAU.co).some((c) => c === a) && args[i - 1] !== OKR_MAU.co.moc);
+	const la = args.filter(
+		(a, i) =>
+			a.startsWith("--") &&
+			!Object.values(OKR_MAU.co).some((c) => c === a) &&
+			args[i - 1] !== OKR_MAU.co.moc,
+	);
 	if (la.length)
-		throw new LoiBoMau(OKR_MAU.ma.sai, `Cờ không nhận ra: ${la.join(", ")}. Cờ hợp lệ: ${Object.values(OKR_MAU.co).join(", ")}.`);
+		throw new LoiBoMau(
+			OKR_MAU.ma.sai,
+			`Cờ không nhận ra: ${la.join(", ")}. Cờ hợp lệ: ${Object.values(OKR_MAU.co).join(", ")}.`,
+		);
 	const mocTho = giaTriCo(args, OKR_MAU.co.moc);
 	let moc = bayGio;
 	if (args.includes(OKR_MAU.co.moc)) {
-		const d = mocTho === undefined ? Number.NaN : NGAY.test(mocTho) ? Date.parse(`${mocTho}T12:00:00+07:00`) : Date.parse(mocTho);
-		const hopLe = mocTho !== undefined && Number.isFinite(d) && (!NGAY.test(mocTho) || new Date(d).toISOString().slice(0, 10) === mocTho);
+		const d =
+			mocTho === undefined
+				? Number.NaN
+				: NGAY.test(mocTho)
+					? Date.parse(`${mocTho}T12:00:00+07:00`)
+					: Date.parse(mocTho);
+		const hopLe =
+			mocTho !== undefined &&
+			Number.isFinite(d) &&
+			(!NGAY.test(mocTho) || new Date(d).toISOString().slice(0, 10) === mocTho);
 		if (!hopLe)
-			throw new LoiBoMau(OKR_MAU.ma.sai, `${OKR_MAU.co.moc} cần một ngày dạng YYYY-MM-DD hoặc thời điểm ISO, nhận «${mocTho ?? ""}».`);
+			throw new LoiBoMau(
+				OKR_MAU.ma.sai,
+				`${OKR_MAU.co.moc} cần một ngày dạng YYYY-MM-DD hoặc thời điểm ISO, nhận «${mocTho ?? ""}».`,
+			);
 		moc = new Date(d);
 	}
-	return { xoa: args.includes(OKR_MAU.co.xoa), moc, tep: giaTriCo(args, OKR_MAU.co.tep) ?? TEP_CONG_TY };
+	return {
+		xoa: args.includes(OKR_MAU.co.xoa),
+		moc,
+		tep: giaTriCo(args, OKR_MAU.co.tep) ?? TEP_CONG_TY,
+	};
 }
 
 function docTep(tep: string) {
@@ -37,12 +60,18 @@ function docTep(tep: string) {
 	try {
 		json = JSON.parse(readFileSync(tep, "utf8"));
 	} catch (loi) {
-		throw new LoiBoMau(OKR_MAU.ma.sai, `Không đọc được tệp bộ mẫu ${tep}: ${loi instanceof Error ? loi.message : String(loi)}`);
+		throw new LoiBoMau(
+			OKR_MAU.ma.sai,
+			`Không đọc được tệp bộ mẫu ${tep}: ${loi instanceof Error ? loi.message : String(loi)}`,
+		);
 	}
 	try {
 		return docBoOkrMau(json);
 	} catch (loi) {
-		throw new LoiBoMau(OKR_MAU.ma.sai, `Tệp bộ mẫu ${tep} sai:\n${loi instanceof Error ? loi.message : String(loi)}`);
+		throw new LoiBoMau(
+			OKR_MAU.ma.sai,
+			`Tệp bộ mẫu ${tep} sai:\n${loi instanceof Error ? loi.message : String(loi)}`,
+		);
 	}
 }
 
@@ -54,12 +83,18 @@ export async function chayLenh(args: string[]): Promise<number> {
 		const ts = docThamSo(args);
 		if (ts.xoa) {
 			const dem = await xoaBoOkrMau(db);
-			console.log(dem ? `Đã xoá bộ OKR mẫu: ${tomTat(dem)}.` : "Kho không có bộ mẫu nào — không có gì để xoá.");
+			console.log(
+				dem
+					? `Đã xoá bộ OKR mẫu: ${tomTat(dem)}.`
+					: "Kho không có bộ mẫu nào — không có gì để xoá.",
+			);
 			return 0;
 		}
 		const bo = docTep(ts.tep);
 		const dem = await napBoOkrMau(db, bo, { moc: ts.moc });
-		console.log(`Đã nạp bộ OKR mẫu «${bo.congTy}» (tuần 6 chứa ${ts.moc.toISOString()}): ${tomTat(dem)}.`);
+		console.log(
+			`Đã nạp bộ OKR mẫu «${bo.congTy}» (tuần 6 chứa ${ts.moc.toISOString()}): ${tomTat(dem)}.`,
+		);
 		return 0;
 	} catch (loi) {
 		if (loi instanceof LoiBoMau) {

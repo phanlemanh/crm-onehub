@@ -4,9 +4,18 @@ import type { KieuKr } from "@crm/validation/okr-kr";
 import { OKR_MAU } from "./cau-hinh";
 import type { KichBan } from "./khuon";
 
-export type LanMau = { tuan: number; giaTri: number; tuTin: MucTuTin; ghiChu: string };
+export type LanMau = {
+	tuan: number;
+	giaTri: number;
+	tuTin: MucTuTin;
+	ghiChu: string;
+};
 
-type NhipKichBan = { tuan: number[]; tien: (k: number) => number; tuTin: MucTuTin[] };
+type NhipKichBan = {
+	tuan: number[];
+	tien: (k: number) => number;
+	tuTin: MucTuTin[];
+};
 
 const Q = OKR_MAU.tuan.tuanMoiQuy;
 
@@ -50,7 +59,14 @@ const NHIP: Record<KichBan, NhipKichBan> = {
 
 const tron = (v: number) => Math.round(v * 10) / 10;
 
-function giaTriTheoKieu(kieu: KieuKr, khoi: number, dich: number, tien: number, kichBan: KichBan, tuan: number): number {
+function giaTriTheoKieu(
+	kieu: KieuKr,
+	khoi: number,
+	dich: number,
+	tien: number,
+	kichBan: KichBan,
+	tuan: number,
+): number {
 	switch (kieu) {
 		case "tang-toi":
 		case "giam-xuong":
@@ -79,18 +95,35 @@ export function dienBien(kr: {
 	const nhip = NHIP[kr.kichBan];
 	return nhip.tuan.map((tuan, i) => ({
 		tuan,
-		giaTri: giaTriTheoKieu(kr.kieu, kr.khoi, kr.dich, nhip.tien(tuan), kr.kichBan, tuan),
+		giaTri: giaTriTheoKieu(
+			kr.kieu,
+			kr.khoi,
+			kr.dich,
+			nhip.tien(tuan),
+			kr.kichBan,
+			tuan,
+		),
 		tuTin: nhip.tuTin[i] ?? "vua",
 		ghiChu: kr.ghiChu?.[String(tuan)] ?? "",
 	}));
 }
 
-export function lanQuy3(kr: { kieu: KieuKr; khoi: number; dich: number; chot: number }): LanMau[] {
+export function lanQuy3(kr: {
+	kieu: KieuKr;
+	khoi: number;
+	dich: number;
+	chot: number;
+}): LanMau[] {
 	const tuan = [3, 6, 9, 13];
 	const cuoi = tuan.length;
 	return tuan.map((t, i) => {
 		const phan = (i + 1) / cuoi;
-		const giaTri = kr.kieu === "moc" ? (i === cuoi - 1 ? kr.chot : 0) : tron(kr.khoi + (kr.chot - kr.khoi) * phan);
+		const giaTri =
+			kr.kieu === "moc"
+				? i === cuoi - 1
+					? kr.chot
+					: 0
+				: tron(kr.khoi + (kr.chot - kr.khoi) * phan);
 		return { tuan: t, giaTri, tuTin: "vua", ghiChu: "" };
 	});
 }
@@ -105,7 +138,11 @@ export type LichMau = {
 };
 
 function congNgay(ngay: string, soNgay: number): string {
-	return new Date(Date.parse(`${ngay}T00:00:00Z`) + soNgay * OKR_MAU.thoiGian.ngayMs).toISOString().slice(0, 10);
+	return new Date(
+		Date.parse(`${ngay}T00:00:00Z`) + soNgay * OKR_MAU.thoiGian.ngayMs,
+	)
+		.toISOString()
+		.slice(0, 10);
 }
 
 export function lichMau(moc: Date): LichMau {
@@ -124,7 +161,8 @@ export function lichMau(moc: Date): LichMau {
 		ngay,
 		lucCapNhat: (quy, tuan) => {
 			const luc = new Date(
-				Date.parse(`${ngay(quy, tuan)}T00:00:00Z`) + (gioCapNhat - lechVN) * OKR_MAU.thoiGian.gioMs,
+				Date.parse(`${ngay(quy, tuan)}T00:00:00Z`) +
+					(gioCapNhat - lechVN) * OKR_MAU.thoiGian.gioMs,
 			);
 			return luc.getTime() <= moc.getTime() ? luc : new Date(moc.getTime());
 		},

@@ -44,17 +44,10 @@
 		]
 	},
 	"kyVong": {
-		"vanDe": [
-			"kr-la-viec"
-		],
-		"vietLai": [
-			"kr.title"
-		],
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "KR đo từng người; đề xuất không được biến thành chỉ tiêu người."

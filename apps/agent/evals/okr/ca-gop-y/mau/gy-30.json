@@ -45,14 +45,9 @@
 	},
 	"kyVong": {
 		"vanDe": [],
-		"vietLai": [
-			"title"
-		],
+		"vietLai": ["title"],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Mục tiêu là đánh giá người; OKR không phải công cụ xếp hạng nhân sự."

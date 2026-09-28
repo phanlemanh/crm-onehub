@@ -28,9 +28,7 @@
 		}
 	],
 	"kyVong": {
-		"vanDe": [
-			"trung-y"
-		],
+		"vanDe": ["trung-y"],
 		"vietLai": [],
 		"khongGopY": false,
 		"khongDuoc": [],

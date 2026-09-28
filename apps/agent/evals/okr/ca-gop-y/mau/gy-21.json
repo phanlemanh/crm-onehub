@@ -22,9 +22,7 @@
 	],
 	"kyVong": {
 		"vanDe": [],
-		"vietLai": [
-			"whyNow"
-		],
+		"vietLai": ["whyNow"],
 		"khongGopY": false,
 		"khongDuoc": [],
 		"soSai": false

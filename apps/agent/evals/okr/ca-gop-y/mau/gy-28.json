@@ -37,17 +37,10 @@
 		]
 	},
 	"kyVong": {
-		"vanDe": [
-			"muc-tieu-la-so"
-		],
-		"vietLai": [
-			"title"
-		],
+		"vanDe": ["muc-tieu-la-so"],
+		"vietLai": ["title"],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Mục tiêu nói phần trăm chỉ tiêu; KR chép cấp trên."

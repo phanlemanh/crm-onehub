@@ -8,7 +8,10 @@ export const OKR_MAU = {
 	tuan: { soTuanCapNhat: 6, tuanMoiQuy: 13, gioCapNhat: 9, lechVN: 7 },
 	thoiGian: { phutMs: PHUT_MS, gioMs: GIO_MS, ngayMs: NGAY_MS },
 	mayCucBo: ["localhost", "127.0.0.1", "::1", "[::1]"],
-	moiTruongCam: { NODE_ENV: ["production"], VERCEL_ENV: ["production", "preview"] },
+	moiTruongCam: {
+		NODE_ENV: ["production"],
+		VERCEL_ENV: ["production", "preview"],
+	},
 	co: { moc: "--moc", xoa: "--xoa", tep: "--tep" },
 	ma: { chan: 2, okrThat: 3, sai: 4, dangGiu: 5 },
 	lenh: "bun run okr:mau",

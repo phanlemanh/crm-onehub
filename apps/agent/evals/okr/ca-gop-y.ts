@@ -1,9 +1,12 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { type CaGopY, parseCaGopY } from "@crm/validation/okr-ca-gop-y";
 
-export const THU_MUC_CA_MAU = join(import.meta.dir, "ca-gop-y", "mau");
-export const THU_MUC_CA_THAT = join(import.meta.dir, "ca-gop-y", "that");
+const DAY = dirname(fileURLToPath(import.meta.url));
+
+export const THU_MUC_CA_MAU = join(DAY, "ca-gop-y", "mau");
+export const THU_MUC_CA_THAT = join(DAY, "ca-gop-y", "that");
 
 export function docBoCaGopY(thuMuc: string): CaGopY[] {
 	const tep = readdirSync(thuMuc)
@@ -15,7 +18,9 @@ export function docBoCaGopY(thuMuc: string): CaGopY[] {
 		try {
 			json = JSON.parse(readFileSync(duong, "utf8"));
 		} catch (loi) {
-			throw new Error(`Ca góp ý ${duong} không phải JSON: ${loi instanceof Error ? loi.message : String(loi)}`);
+			throw new Error(
+				`Ca góp ý ${duong} không phải JSON: ${loi instanceof Error ? loi.message : String(loi)}`,
+			);
 		}
 		return parseCaGopY(json, duong);
 	});

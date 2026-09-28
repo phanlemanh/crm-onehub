@@ -38,14 +38,9 @@
 	},
 	"kyVong": {
 		"vanDe": [],
-		"vietLai": [
-			"whyNow"
-		],
+		"vietLai": ["whyNow"],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Câu vì sao đổ lỗi một người; viết lại không nêu người, không nói về hiệu suất người."

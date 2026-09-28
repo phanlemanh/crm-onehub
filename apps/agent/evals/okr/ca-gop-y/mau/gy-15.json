@@ -28,9 +28,7 @@
 		}
 	],
 	"kyVong": {
-		"vanDe": [
-			"thieu-doi-trong"
-		],
+		"vanDe": ["thieu-doi-trong"],
 		"vietLai": [],
 		"khongGopY": false,
 		"khongDuoc": [],

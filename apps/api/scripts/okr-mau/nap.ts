@@ -1,7 +1,10 @@
 import { type Db, Prisma } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { kiemGiaTriTheoKieu } from "@crm/validation/okr-cap-nhat";
-import { OKR_PROGRAM_MAC_DINH, THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
+import {
+	OKR_PROGRAM_MAC_DINH,
+	THANG_CHAM,
+} from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { z } from "zod";
 import { LoiBoMau, OKR_MAU } from "./cau-hinh";
@@ -31,14 +34,21 @@ export function idMau(loai: string, ma: string): string {
 
 export const thuMau = (ma: string) => `${ma}@${OKR_MAU.mienThu}`;
 
-const CHU_KY = { nam: idMau("chu-ky", "nam"), quy3: idMau("chu-ky", "quy3"), quy4: idMau("chu-ky", "quy4") };
+const CHU_KY = {
+	nam: idMau("chu-ky", "nam"),
+	quy3: idMau("chu-ky", "quy3"),
+	quy4: idMau("chu-ky", "quy4"),
+};
 
 const ngayDb = (ngay: string) => new Date(`${ngay}T00:00:00.000Z`);
 
 const PHIEN_GIAY = 90;
 
 export async function kiemWorkspace(tx: Tx | Db): Promise<void> {
-	const co = await tx.organization.findUnique({ where: { id: WORKSPACE_ID }, select: { id: true } });
+	const co = await tx.organization.findUnique({
+		where: { id: WORKSPACE_ID },
+		select: { id: true },
+	});
 	if (!co)
 		throw new LoiBoMau(
 			OKR_MAU.ma.sai,
@@ -64,7 +74,9 @@ async function tapMau(tx: Tx) {
 	const tien = { startsWith: OKR_MAU.tienTo };
 	const [nguoi, boPhan, phongBan, chuKy, mucTieu, kr] = await Promise.all([
 		tx.user.findMany({
-			where: { OR: [{ id: tien }, { email: { endsWith: `@${OKR_MAU.mienThu}` } }] },
+			where: {
+				OR: [{ id: tien }, { email: { endsWith: `@${OKR_MAU.mienThu}` } }],
+			},
 			select: { id: true },
 		}),
 		tx.division.findMany({ where: { id: tien }, select: { id: true } }),
@@ -85,7 +97,11 @@ async function tapMau(tx: Tx) {
 }
 
 function bangGiu(loi: unknown): string | null {
-	if (!(loi instanceof Prisma.PrismaClientKnownRequestError) || loi.code !== "P2003") return null;
+	if (
+		!(loi instanceof Prisma.PrismaClientKnownRequestError) ||
+		loi.code !== "P2003"
+	)
+		return null;
 	const meta = loi.meta ?? {};
 	const ten = [meta.modelName, meta.constraint, meta.field_name]
 		.filter((x): x is string => typeof x === "string")
@@ -101,22 +117,44 @@ async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const C = { in: t.chuKy };
 	const O = { in: t.mucTieu };
 	const K = { in: t.kr };
-	const phien = await tx.okrCheckInSession.findMany({ where: { userId: U }, select: { id: true } });
+	const phien = await tx.okrCheckInSession.findMany({
+		where: { userId: U },
+		select: { id: true },
+	});
 	const P = { in: phien.map((p) => p.id) };
-	const capNhat = await tx.okrCheckIn.deleteMany({ where: { OR: [{ keyResultId: K }, { sessionId: P }] } });
+	const capNhat = await tx.okrCheckIn.deleteMany({
+		where: { OR: [{ keyResultId: K }, { sessionId: P }] },
+	});
 	await tx.okrTrail.deleteMany({
-		where: { OR: [{ cycleId: C }, { objectiveId: O }, { keyResultId: K }, { actorUserId: U }] },
+		where: {
+			OR: [
+				{ cycleId: C },
+				{ objectiveId: O },
+				{ keyResultId: K },
+				{ actorUserId: U },
+			],
+		},
 	});
 	const phienXoa = await tx.okrCheckInSession.deleteMany({ where: { id: P } });
 	const soChup = await tx.okrSoChup.deleteMany({ where: { keyResultId: K } });
-	const diem = await tx.okrDiemKr.deleteMany({ where: { OR: [{ keyResultId: K }, { cycleId: C }] } });
+	const diem = await tx.okrDiemKr.deleteMany({
+		where: { OR: [{ keyResultId: K }, { cycleId: C }] },
+	});
 	await tx.okrDoiDich.deleteMany({ where: { keyResultId: K } });
 	await tx.okrNguonKr.deleteMany({ where: { keyResultId: K } });
-	await tx.okrComment.deleteMany({ where: { OR: [{ objectiveId: O }, { authorUserId: U }] } });
+	await tx.okrComment.deleteMany({
+		where: { OR: [{ objectiveId: O }, { authorUserId: U }] },
+	});
 	await tx.okrMention.deleteMany({ where: { userId: U } });
-	await tx.okrFollow.deleteMany({ where: { OR: [{ objectiveId: O }, { userId: U }] } });
+	await tx.okrFollow.deleteMany({
+		where: { OR: [{ objectiveId: O }, { userId: U }] },
+	});
 	await tx.okrNhinLai.deleteMany({ where: { objectiveId: O } });
-	await tx.okrMangSang.deleteMany({ where: { OR: [{ tuObjectiveId: O }, { sangObjectiveId: O }, { sangCycleId: C }] } });
+	await tx.okrMangSang.deleteMany({
+		where: {
+			OR: [{ tuObjectiveId: O }, { sangObjectiveId: O }, { sangCycleId: C }],
+		},
+	});
 	await tx.okrCuaSoRa.deleteMany({ where: { cycleId: C } });
 	await tx.okrDeXuat.deleteMany({ where: { objectiveId: O } });
 	await tx.okrTomTat.deleteMany({ where: { cycleId: C } });
@@ -125,8 +163,12 @@ async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	await tx.okrCycle.deleteMany({ where: { id: C, parentId: { not: null } } });
 	await tx.okrCycle.deleteMany({ where: { id: C } });
 	await tx.orgPlacement.deleteMany({ where: { userId: U } });
-	const phongBan = await tx.department.deleteMany({ where: { id: { in: t.phongBan } } });
-	const boPhan = await tx.division.deleteMany({ where: { id: { in: t.boPhan } } });
+	const phongBan = await tx.department.deleteMany({
+		where: { id: { in: t.phongBan } },
+	});
+	const boPhan = await tx.division.deleteMany({
+		where: { id: { in: t.boPhan } },
+	});
 	const nguoi = await tx.user.deleteMany({ where: { id: U } });
 	return {
 		nguoi: nguoi.count,
@@ -143,26 +185,43 @@ async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 }
 
 async function chuongTrinh(tx: Tx) {
-	const row = await tx.okrProgramConfig.findFirst({ orderBy: { version: "desc" } });
+	const row = await tx.okrProgramConfig.findFirst({
+		orderBy: { version: "desc" },
+	});
 	if (!row)
-		return { thang: OKR_PROGRAM_MAC_DINH.scoreScale, trongSo: OKR_PROGRAM_MAC_DINH.weightsOn, version: 0 };
-	return { thang: z.enum(THANG_CHAM).parse(row.scoreScale), trongSo: row.weightsOn, version: row.version };
+		return {
+			thang: OKR_PROGRAM_MAC_DINH.scoreScale,
+			trongSo: OKR_PROGRAM_MAC_DINH.weightsOn,
+			version: 0,
+		};
+	return {
+		thang: z.enum(THANG_CHAM).parse(row.scoreScale),
+		trongSo: row.weightsOn,
+		version: row.version,
+	};
 }
 
 function donViDb(m: MucTieuMau) {
-	if (m.cap === "phong-ban") return { divisionId: null, departmentId: idMau("pb", m.donVi ?? "") };
-	if (m.cap === "bo-phan") return { divisionId: idMau("bp", m.donVi ?? ""), departmentId: null };
+	if (m.cap === "phong-ban")
+		return { divisionId: null, departmentId: idMau("pb", m.donVi ?? "") };
+	if (m.cap === "bo-phan")
+		return { divisionId: idMau("bp", m.donVi ?? ""), departmentId: null };
 	return { divisionId: null, departmentId: null };
 }
 
 function phamViDb(k: KrMau): Prisma.InputJsonValue {
 	const pv = k.nguon?.phamVi;
 	if (!pv || pv.kieu === "toan-cong-ty") return { kieu: "toan-cong-ty" };
-	const loai = pv.kieu === "phong-ban" ? "pb" : pv.kieu === "bo-phan" ? "bp" : "nguoi";
+	const loai =
+		pv.kieu === "phong-ban" ? "pb" : pv.kieu === "bo-phan" ? "bp" : "nguoi";
 	return { kieu: pv.kieu, id: idMau(loai, pv.ma) };
 }
 
-export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMau> {
+export async function napTrong(
+	tx: Tx,
+	bo: BoOkrMau,
+	moc: Date,
+): Promise<DemBoMau> {
 	const lich = lichMau(moc);
 	const ct = await chuongTrinh(tx);
 	const bayGio = new Date(moc.getTime());
@@ -259,7 +318,9 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 	});
 
 	const dauChuKy = (m: MucTieuMau) =>
-		m.chuKy === "quy3" ? lich.lucCapNhat("quy3", 1) : lich.lucCapNhat("quy4", 1);
+		m.chuKy === "quy3"
+			? lich.lucCapNhat("quy3", 1)
+			: lich.lucCapNhat("quy4", 1);
 	const viTri = new Map<string, number>();
 	await tx.okrObjective.createMany({
 		data: bo.mucTieu.map((m) => {
@@ -285,7 +346,11 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 		}),
 	});
 	const thamGia = bo.mucTieu.flatMap((m) =>
-		m.thamGia.map((t) => ({ objectiveId: idMau("mt", m.ma), userId: nguoiId(t), createdAt: bayGio })),
+		m.thamGia.map((t) => ({
+			objectiveId: idMau("mt", m.ma),
+			userId: nguoiId(t),
+			createdAt: bayGio,
+		})),
 	);
 	if (thamGia.length) await tx.okrParticipant.createMany({ data: thamGia });
 
@@ -294,9 +359,20 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 		if (m.trangThai !== "cong-bo") continue;
 		for (const k of m.krs) {
 			if (m.chuKy === "quy3") {
-				lanCua.set(k.ma, { quy: "quy3", lan: lanQuy3({ kieu: k.kieu, khoi: k.khoi, dich: k.dich, chot: k.chot ?? k.khoi }) });
+				lanCua.set(k.ma, {
+					quy: "quy3",
+					lan: lanQuy3({
+						kieu: k.kieu,
+						khoi: k.khoi,
+						dich: k.dich,
+						chot: k.chot ?? k.khoi,
+					}),
+				});
 			} else if (k.kichBan) {
-				lanCua.set(k.ma, { quy: "quy4", lan: dienBien({ ...k, kichBan: k.kichBan }) });
+				lanCua.set(k.ma, {
+					quy: "quy4",
+					lan: dienBien({ ...k, kichBan: k.kichBan }),
+				});
 			}
 		}
 	}
@@ -306,9 +382,16 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			const lan = lanCua.get(k.ma)?.lan ?? [];
 			for (const l of lan) {
 				const sai = k.nguon ? null : kiemGiaTriTheoKieu(k.kieu, l.giaTri);
-				if (sai) throw new LoiBoMau(OKR_MAU.ma.sai, `KR ${k.ma} tuần ${l.tuan}: ${sai}`);
+				if (sai)
+					throw new LoiBoMau(
+						OKR_MAU.ma.sai,
+						`KR ${k.ma} tuần ${l.tuan}: ${sai}`,
+					);
 			}
-			const hien = m.chuKy === "quy3" ? (k.chot ?? k.khoi) : (lan.at(-1)?.giaTri ?? k.khoi);
+			const hien =
+				m.chuKy === "quy3"
+					? (k.chot ?? k.khoi)
+					: (lan.at(-1)?.giaTri ?? k.khoi);
 			return {
 				id: idMau("kr", k.ma),
 				createdAt: bayGio,
@@ -336,12 +419,16 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 				id: idMau("cc", m.ma),
 				createdAt: bayGio,
 				objectiveId: idMau("mt", m.ma),
-				targetObjectiveId: m.canChinh?.mucTieu ? idMau("mt", m.canChinh.mucTieu) : null,
+				targetObjectiveId: m.canChinh?.mucTieu
+					? idMau("mt", m.canChinh.mucTieu)
+					: null,
 				targetKeyResultId: m.canChinh?.kr ? idMau("kr", m.canChinh.kr) : null,
 			})),
 	});
 
-	const krCrm = bo.mucTieu.flatMap((m) => m.krs.filter((k) => k.nguon).map((k) => ({ m, k })));
+	const krCrm = bo.mucTieu.flatMap((m) =>
+		m.krs.filter((k) => k.nguon).map((k) => ({ m, k })),
+	);
 	const chup = krCrm.flatMap(({ k }) =>
 		(lanCua.get(k.ma)?.lan ?? []).map((l) => ({
 			id: idMau("chup", `${k.ma}-${l.tuan}`),
@@ -381,7 +468,12 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 			for (const l of muc.lan) {
 				const khoa = `${k.chu}-${muc.quy}-${l.tuan}`;
 				const luc = lich.lucCapNhat(muc.quy, l.tuan);
-				if (!phien.has(khoa)) phien.set(khoa, { id: idMau("phien", khoa), userId: nguoiId(k.chu), luc });
+				if (!phien.has(khoa))
+					phien.set(khoa, {
+						id: idMau("phien", khoa),
+						userId: nguoiId(k.chu),
+						luc,
+					});
 				capNhat.push({
 					id: idMau("cn", `${k.ma}-${muc.quy}-${l.tuan}`),
 					keyResultId: idMau("kr", k.ma),
@@ -409,8 +501,12 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 	});
 	await tx.okrCheckIn.createMany({ data: capNhat });
 
-	const quy3 = bo.mucTieu.filter((m) => m.chuKy === "quy3" && m.trangThai === "cong-bo");
-	const chamLuc = new Date(Date.parse(`${lich.quy4.tu}T03:00:00Z`) + 2 * OKR_MAU.thoiGian.ngayMs);
+	const quy3 = bo.mucTieu.filter(
+		(m) => m.chuKy === "quy3" && m.trangThai === "cong-bo",
+	);
+	const chamLuc = new Date(
+		Date.parse(`${lich.quy4.tu}T03:00:00Z`) + 2 * OKR_MAU.thoiGian.ngayMs,
+	);
 	const diem = quy3.flatMap((m) =>
 		m.krs.map((k) => {
 			const chot = k.chot ?? k.khoi;
@@ -471,7 +567,10 @@ export async function napTrong(tx: Tx, bo: BoOkrMau, moc: Date): Promise<DemBoMa
 
 const GIAO_DICH = { timeout: 120_000, maxWait: 10_000 } as const;
 
-async function trongGiaoDich<T>(db: Db, viec: (tx: Tx) => Promise<T>): Promise<T> {
+async function trongGiaoDich<T>(
+	db: Db,
+	viec: (tx: Tx) => Promise<T>,
+): Promise<T> {
 	try {
 		return await db.$transaction(viec, GIAO_DICH);
 	} catch (loi) {
@@ -485,7 +584,11 @@ async function trongGiaoDich<T>(db: Db, viec: (tx: Tx) => Promise<T>): Promise<T
 	}
 }
 
-export async function napBoOkrMau(db: Db, bo: BoOkrMau, { moc }: { moc: Date }): Promise<DemBoMau> {
+export async function napBoOkrMau(
+	db: Db,
+	bo: BoOkrMau,
+	{ moc }: { moc: Date },
+): Promise<DemBoMau> {
 	return trongGiaoDich(db, async (tx) => {
 		await kiemWorkspace(tx);
 		await kiemOkrThat(tx);
