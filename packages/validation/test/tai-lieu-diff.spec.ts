@@ -158,6 +158,86 @@ describe("tai-lieu-diff", () => {
 		expect(dem(khoi, "them")).toBe(2);
 	});
 
+	const doanDanh = (tu: string, n: number) =>
+		Array.from({ length: n }, (_, i) => `${tu} ${i} cau thu ${i}.`);
+	const md = (ds: string[]) => ds.join("\n\n");
+	const goc1500 = doanDanh("goc", 1500);
+	const sua10 = goc1500.map((d, i) => (i % 150 === 75 ? `${d} da sua` : d));
+	const lap1500 = Array.from({ length: 1500 }, (_, i) =>
+		i % 15 === 0 ? `rieng ${i}.` : "Ghi chú lặp.",
+	);
+	const lapSua = lap1500.map((d, i) =>
+		i % 150 === 45 ? `rieng sua ${i}.` : d,
+	);
+	const CAP = {
+		ngan: [
+			"## Hạn\n\nHoa hồng trong 48 giờ.\n\nGiữ nguyên.",
+			"## Hạn\n\nHoa hồng trong 24 giờ.\n\nGiữ nguyên.\n\nThêm dòng.",
+		],
+		"dai-khac-het": [vanBanDai("alpha", 7), vanBanDai("omega", 5)],
+		"bien-dung-tran": [md(doanDanh("truoc", 1000)), md(doanDanh("sau", 1000))],
+		"bien-qua-tran": [md(doanDanh("truoc", 1001)), md(doanDanh("sau", 1000))],
+		"dao-thu-tu": [md(doanDanh("x", 1100)), md(doanDanh("x", 1100).reverse())],
+		"dai-sua-rai-rac": [md(goc1500), md(sua10)],
+		"lap-khoi": [md(lap1500), md(lapSua)],
+	} satisfies Record<string, [string, string]>;
+	const GHIM: [keyof typeof CAP, string][] = [
+		[
+			"ngan",
+			"5636d2b553bb475d3dad74bb9322b576f6d4ceab68f5e884457a71c3e85c9e4b",
+		],
+		[
+			"dai-khac-het",
+			"f01d85ddf98a6151f62251c8f89af658bce34212c83f095c1c8e3779ff0fb8f6",
+		],
+		[
+			"bien-dung-tran",
+			"dec61e9618ae03e5f514461061b2a2de222f29f206469368e45e27e173a8cb82",
+		],
+		[
+			"bien-qua-tran",
+			"3c8fd026b79d2fc254dea1194282c98e355de5691b92f3666ea87778c777fe84",
+		],
+		[
+			"dao-thu-tu",
+			"4a39a5b4119b1a7fdb2091c26f4a40f3d07eb5946c2a785093d1d70f7a19ab83",
+		],
+		[
+			"dai-sua-rai-rac",
+			"c2d6beb0986b178f9f7313ff91376d300a89957642f9869d576f7ddb5766ef69",
+		],
+		[
+			"lap-khoi",
+			"224acc5122c552b2be73a6597918551aa089c6a1aba59d00e488ca8c18b0e536",
+		],
+	];
+	for (const [ten, ghim] of GHIM)
+		test(`tran-duoi-khoi: ${ten}`, async () => {
+			const bam = await diffHash(soSanh(...CAP[ten]));
+			if (bam !== ghim) throw new Error(`lech ban goc: ${ten} ${bam}`);
+		});
+
+	const demDongHo = (truoc: string, sau: string): number => {
+		const dongHo = spyOn(Date, "now");
+		try {
+			soSanh(truoc, sau);
+			return dongHo.mock.calls.length;
+		} finally {
+			dongHo.mockRestore();
+		}
+	};
+	test("myers-vo-ich: khac het thi khong vao vong Myers muc khoi", () => {
+		const [truoc, sau] = CAP["dai-khac-het"];
+		const n = demDongHo(truoc, sau);
+		if (n !== 0)
+			throw new Error(`myers-vo-ich: vong Myers muc khoi van chay ${n} lan`);
+	});
+	test("myers-vo-ich: doi chung duong, trong tran thi cay dem thay vong Myers", () => {
+		const [truoc, sau] = CAP["dai-sua-rai-rac"];
+		if (demDongHo(truoc, sau) === 0)
+			throw new Error("myers-vo-ich: cay dem khong thay vong Myers");
+	});
+
 	const BANG = (hang: string) => `| Mục | Tỉ lệ |\n| --- | --- |\n${hang}\n`;
 	const HANG_BANG: [string, string, string, string[][]][] = [
 		["them-chu-cuoi-o", "| a | 5% |", "| a x | 5% |", [["them:x"], []]],
