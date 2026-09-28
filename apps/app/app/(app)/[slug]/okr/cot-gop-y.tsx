@@ -437,7 +437,7 @@ function DongVietLai({
 	const m = okrGopYMessages(useLocale());
 	const nhanBanSua = (giaTri: string) => {
 		const chu = giaTri.trim();
-		if (khoaNhan || chu === "") return;
+		if (chu === "") return;
 		gopY.quyet(dong, "sua", chu);
 	};
 	return (

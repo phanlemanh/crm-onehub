@@ -1116,7 +1116,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		).toBe("Chưa sẵn sàng — Đã chạm trần ngày");
 	});
 
-	test.todo("trang-thai o-dang-sua-khi-sua: o co sua chua luu thi Nhan ban da sua cung khoa, co ly do (cho commit packages/ui)", async () => {
+	test("trang-thai o-dang-sua-khi-sua: o co sua chua luu thi Nhan ban da sua cung khoa, co ly do", async () => {
 		await moCotCoDong();
 		await go(oTenMucTieu(), `${MT.title} (bản nháp)`);
 		const ten = dongCua(D_TEN.id);
