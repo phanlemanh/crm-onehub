@@ -81,11 +81,11 @@ duyệt rồi mới đăng; tra 2026-09-28), nghiên cứu mục 6.
 - `.doc`, `.xlsx`, ảnh, chuyển mã TCVN3/VNI.
 - Xoá nguồn, bia mộ, cờ giữ pháp lý.
 - Bậc 2, phó chủ trang, giảm tốc nạp theo hàng đợi duyệt.
-- Viết trang «Quy tắc viết» — việc của chủ kho, tiền đề của S3 (xem Notes).
+- Hoàn thiện trang «Quy tắc viết» — chủ kho sửa dần khi vận hành; lượt này chỉ có bản v0 máy soạn từ ba văn bản mẫu (xem Notes).
 
 ## Notes
 
-- **Tiền đề của S3 — trang «Quy tắc viết» do chủ kho viết, máy không viết thay.** Trang ở
+- **Tiền đề của S3 — trang «Quy tắc viết».** Chủ kho chọn cách C ngày 2026-09-28: máy soạn bản v0 từ ba văn bản mẫu thật (`mau/quy-tac-viet.md`), chủ kho nhận làm quy tắc của mình và sửa dần khi vận hành. Trang ở
   slug `quy-tac-viet`, đã duyệt (có bản đang dùng) trên kho dùng để đo, nội dung theo bàn
   giao mục 3: một chủ đề mỗi trang, số liệu chính xác, nêu đối tượng và giới hạn. Máy soạn
   đọc nó làm lời dặn. Thiếu nó thì AC-7 và AC-15 không đo được; S3 các task còn lại chạy được.
