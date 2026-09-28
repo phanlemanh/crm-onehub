@@ -39,6 +39,7 @@
 		"./settings": "./src/settings.ts",
 		"./slack-inventory": "./src/slack-inventory.ts",
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
+		"./tai-lieu-quyen": "./src/tai-lieu-quyen.ts",
 		"./tracking": "./src/tracking.ts",
 		"./workspace": "./src/workspace.ts",
 		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",

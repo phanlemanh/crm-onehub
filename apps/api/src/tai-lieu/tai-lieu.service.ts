@@ -3,6 +3,11 @@ import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { taoDeXuatTaiLieu } from "@crm/db/tai-lieu-de-xuat";
 import {
+	demChoDuyet,
+	dieuKienThay,
+	dieuKienThayDeXuat,
+} from "@crm/db/tai-lieu-quyen";
+import {
 	chuanNfc,
 	coChuHaySo,
 	gocSlug,
@@ -29,15 +34,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import {
-	dieuKienDuyetDuoc,
-	dieuKienThay,
-	dieuKienThayDeXuat,
-	duyetDuoc,
-	type NguoiGoi,
-	thayDeXuat,
-	thayTrang,
-} from "./quyen";
+import { duyetDuoc, type NguoiGoi, thayDeXuat, thayTrang } from "./quyen";
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
@@ -409,9 +406,7 @@ export class TaiLieuService {
 					trang: { select: { slug: true, banDangDungId: true } },
 				},
 			}),
-			this.db.taiLieuDeXuat.count({
-				where: { AND: [dieuKienDuyetDuoc(nguoi), { trangThai: "CHO_DUYET" }] },
-			}),
+			demChoDuyet(this.db, nguoi),
 		]);
 		return {
 			rows: rows.map((r) => ({

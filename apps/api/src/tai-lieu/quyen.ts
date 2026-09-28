@@ -32,31 +32,6 @@ export function thayTrang(
 	);
 }
 
-export function dieuKienThayDeXuat(
-	nguoi: NguoiGoi,
-): Prisma.TaiLieuDeXuatWhereInput {
-	if (laQuanTri(nguoi.role)) return {};
-	return { OR: [{ taoBoiId: nguoi.id }, { trang: { chuTrangId: nguoi.id } }] };
-}
-
-export function dieuKienDuyetDuoc(
-	nguoi: NguoiGoi,
-): Prisma.TaiLieuDeXuatWhereInput {
-	if (laQuanTri(nguoi.role)) return {};
-	return { trang: { chuTrangId: nguoi.id } };
-}
-
-export function dieuKienThay(nguoi: NguoiGoi): Prisma.TaiLieuTrangWhereInput {
-	if (laQuanTri(nguoi.role)) return {};
-	return {
-		OR: [
-			{ banDangDungId: { not: null } },
-			{ chuTrangId: nguoi.id },
-			{ deXuat: { some: { taoBoiId: nguoi.id } } },
-		],
-	};
-}
-
 export function dieuKienThayNguon(
 	nguoi: NguoiGoi,
 ): Prisma.TaiLieuNguonWhereInput {
