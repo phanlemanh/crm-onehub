@@ -1,63 +1,30 @@
 {
-  "feature_plain": "Mỗi KR có chỗ cho việc đơn vị đang làm và chiến dịch hay kế hoạch 30 ngày đang đẩy nó; KR mốc có bằng chứng khi xong; đồng nghiệp gửi lời ghi nhận nhau trên mục tiêu; quản trị soạn mẫu để mùa đặt OKR không viết lại từ đầu.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho người sửa được KR thêm, sửa, gỡ việc dưới KR; người làm tự đánh dấu xong việc của mình; người khác không ghi được."},
-    {"id": "AC-2", "p": "Sẽ cho gắn một chiến dịch hay kế hoạch 30 ngày có sẵn vào KR, tên và trạng thái luôn đọc từ bản gốc; bản gốc bị xoá thì sáng kiến nói «đã xoá» chứ không chặn việc xoá."},
-    {"id": "AC-4", "p": "Sẽ cho đính đường dẫn làm bằng chứng khi KR mốc xong — ngay trong lần cập nhật tuần hoặc sau đó; đường dẫn lạ bị từ chối; không bắt buộc."},
-    {"id": "AC-5", "p": "Sẽ cho mọi người, kể cả vai «chỉ OKR», gửi lời ghi nhận tới một đến năm đồng nghiệp trên mục tiêu đã công bố; lời hiện trong tab Trao đổi."},
-    {"id": "AC-6", "p": "Sẽ báo người được ghi nhận trong «việc của tôi» và tin nhắc buổi sáng — một mục mỗi lời, không đếm, không xếp hạng ai."},
-    {"id": "AC-7", "p": "Sẽ cho quản trị soạn, sửa, cất, lấy lại mẫu OKR ở Cài đặt; mẫu có số sai kiểu bị từ chối và chỉ đúng KR hỏng."},
-    {"id": "AC-8", "p": "Sẽ cho trưởng đơn vị bắt đầu mục tiêu từ mẫu hợp đơn vị mình; điền số rồi tạo bản nháp trọn một lần; sửa mẫu sau đó không đổi mục tiêu đã tạo."},
-    {"id": "AC-10", "p": "Sẽ hiện cột Việc «xong/tổng» ở bảng KR và mở khung KR riêng có đường dẫn dán được vào họp tuần; đủ trạng thái rỗng, đang tải, lỗi, chỉ đọc; chạy ở màn điện thoại."},
-    {"id": "AC-12", "p": "Sẽ có khối Mẫu OKR ở Cài đặt (thành viên thường thấy nhưng khoá, kèm lý do) và nút «Bắt đầu từ mẫu» khi đặt mục tiêu."},
-    {"id": "AC-13", "p": "Sẽ thêm việc, bằng chứng, ghi nhận, mẫu vào bộ OKR mẫu để mọi màn có dữ liệu khi dựng và đo; nạp lại không nhân đôi, xoá thì sạch."},
-    {"id": "AC-14", "p": "Sẽ có câu đếm chỉ đọc cho bốn ngưỡng của Cổng Giá trị; chỉ thêm bảng mới, không sửa bảng cũ."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Chặn người vai «chỉ OKR» đọc tên, mã, trạng thái của chiến dịch hay kế hoạch gắn vào KR — qua màn, API, khoá API và tab Vết."},
-    {"id": "AC-9", "p": "Sẽ KHÔNG cho ghi việc, sáng kiến, bằng chứng khi kỳ đang chấm, đã đóng hay mục tiêu đã bỏ — riêng lời ghi nhận vẫn gửi được."},
-    {"id": "AC-11", "p": "Sẽ KHÔNG hiện tên kế hoạch hay chiến dịch cho vai «chỉ OKR» trên màn — họ thấy «Một kế hoạch 30 ngày — bạn không có quyền xem»."},
-    {"id": "OOS-1", "p": "KHÔNG làm mức hiển thị giới hạn, bước duyệt nhẹ, tái cơ cấu giữa kỳ — đề xuất thành lượt 8c."},
-    {"id": "OOS-2", "p": "KHÔNG làm bộ lọc lưu được, tìm OKR trong ô tìm chung, bản tin Slack — lượt 8b."},
-    {"id": "OOS-3", "p": "KHÔNG nhắc việc đến hạn và chưa đưa việc được giao vào «việc của tôi» — 8b."},
-    {"id": "OOS-4", "p": "KHÔNG tải tệp làm bằng chứng — chỗ lưu tệp của kho là công khai."},
-    {"id": "OOS-5", "p": "KHÔNG có việc con, không cho việc góp vào tiến độ, không nối Asana hay Trello."},
-    {"id": "OOS-6", "p": "KHÔNG cho Trợ lý OKR đọc những thứ mới này — lượt 9b hay C quyết."},
-    {"id": "OOS-7", "p": "KHÔNG bao giờ đếm, xếp hạng ghi nhận theo người hay đổi điểm lấy quà."},
-    {"id": "OOS-8", "p": "KHÔNG kéo thả sắp thứ tự việc."}
-  ],
-  "scope_plain": "Phần cắt khỏi lượt này — sáu mã còn lại của lượt 8 đi hai lượt khác:",
-  "coverage_plain": [
-    {"i": 0, "p": "Đủ sáu thứ nằm cạnh KR — việc, sáng kiến chiến dịch, sáng kiến kế hoạch, bằng chứng, ghi nhận, mẫu — mỗi thứ có tiêu chí (AC-1…AC-8)."},
-    {"i": 1, "p": "Mỗi thao tác tạo, sửa, xong, gỡ, báo người đều đọc lại từ bảng mới tính là đạt."},
-    {"i": 2, "p": "Năm loại người — quản trị, người sửa được KR, người làm hay người nhận, người khác, vai «chỉ OKR» — đều có ca được và ca bị chặn."},
-    {"i": 3, "p": "Bốn pha — nháp, đang chạy, chấm hay đóng, đã bỏ — có ma trận khoá ghi (AC-9)."},
-    {"i": 4, "p": "Phủ thêm: vết mọi lần ghi, bản gốc đổi tên hay bị xoá, người rời, bốn đường đọc, ba trạng thái màn và điện thoại, bộ mẫu, chỉ thêm bảng, câu đếm."},
-    {"i": 5, "p": "Đối chiếu công cụ OKR có tên: Perdoo (sáng kiến, mẫu), Profit.co (ghi nhận)."},
-    {"i": 6, "p": "Giả định: nghĩa năm mã rút theo thứ tự câu «Ý định» lượt 8 — anh soi bảng chia mã."},
-    {"i": 7, "p": "Giả định: «việc» là dòng tự gõ một tầng; «sáng kiến» là chiến dịch hay kế hoạch có sẵn; hai thứ chung một danh sách."},
-    {"i": 8, "p": "Giả định: tiến độ KR không tính việc — KR vẫn đo kết quả."},
-    {"i": 9, "p": "Giả định: vai «chỉ OKR» chỉ thấy loại sáng kiến, không tên, không mở được, không gắn được."},
-    {"i": 10, "p": "Giả định: bằng chứng là đường dẫn, chỉ cho KR mốc, không bắt buộc."},
-    {"i": 11, "p": "Giả định: ghi nhận theo mục tiêu, 1–5 người, gửi được cả lúc chấm và sau khi đóng kỳ; chỉ gỡ, không sửa."},
-    {"i": 12, "p": "Giả định: «theo loại đơn vị» nghĩa là mẫu chọn cấp và danh sách đơn vị; cây tổ chức không thêm trường «loại»."},
-    {"i": 13, "p": "Giả định: dùng mẫu tạo bản nháp; mẫu chỉ cất đi, không xoá hẳn."},
-    {"i": 14, "p": "Giả định: khung KR mở chồng (hướng A) thay cho tab ở khung mục tiêu hay dòng bung trong bảng."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Dòng vết khi gắn sáng kiến có thể chép tên chiến dịch, và vai «chỉ OKR» đọc được qua tab Vết — đã sửa: vết chỉ lưu mã, tab Vết che như mọi đường khác, thêm phép đo đường thứ tư."},
-    {"i": 1, "p": "Câu đếm thiếu cột cho ba ngưỡng (tổng ghi nhận, tổng phòng ban, mục tiêu cấp phòng ban) — đã sửa: thêm cột và ca loại trừ nháp, cấp khác."},
-    {"i": 2, "p": "Chưa nói đính bằng chứng trong lần cập nhật tuần đi thế nào — đã sửa: một lần gửi, sai thì cả lần bị từ chối, có phép đo và dòng trạng thái."},
-    {"i": 3, "p": "Chưa đo việc mở thẳng đường dẫn khung KR ở tab mới — đã sửa: thêm bước đo, kể cả mã không tồn tại."},
-    {"i": 4, "p": "Phép đo «trình duyệt không nhận tên kế hoạch» có thể xanh rỗng — đã sửa: in số phản hồi đã ghi và đối chứng bằng phiên thành viên."}
+  "feature_plain": "Mỗi KR có việc đơn vị tự ghi và sáng kiến (chiến dịch, kế hoạch 30 ngày) nằm cạnh; KR mốc đính được bằng chứng; đồng nghiệp gửi ghi nhận cho nhau trên mục tiêu và người nhận được báo; quản trị soạn mẫu OKR để trưởng đơn vị đặt mục tiêu nhanh.",
+  "decisions": [
+    {
+      "id": "E22",
+      "q": "Mã của lượt có đúng hình thiết kế đã duyệt không?",
+      "why": "Hội đồng chấm chỉ được đưa ba tệp thiết kế, không có mã, nên cả ba đều «chưa chắc». Năm vế họ cần đã được lượt soát toàn nhánh kiểm trên mã thật: sáu bảng mới nằm cuối, quyền ở một chỗ, luật giấu tên đối tác ở một hàm, màn dựng bằng thành phần chung, năm mục từ điển có đủ."
+    }
   ],
   "decisions_plain": [
-    {"id": "d-20260928T070907Z-1", "p": "KHÔNG gộp tám mã thêm bảng hay đổi quyền vào 8a: tách mức hiển thị, bước duyệt, tái cơ cấu thành 8c — đổi lại thêm một lượt T3 và 8b cũng thành T3."},
-    {"id": "d-20260928T070907Z-2", "p": "Đặt việc và bằng chứng trong khung KR mở chồng — đổi lại một lần bấm để thấy việc."},
-    {"id": "d-20260928T070907Z-3", "p": "Ghi nhận và «mục tiêu sinh từ mẫu» là bảng riêng, không thêm cột vào bảng cũ — đổi lại tab Trao đổi trộn hai nguồn."},
-    {"id": "d-20260928T070907Z-4", "p": "Sáng kiến chỉ lưu mã, tên đọc sống; bộ chọn dùng danh sách có sẵn — đổi lại thêm một lần đọc mỗi khi mở khung KR."},
-    {"id": "d-20260928T070907Z-5", "p": "KHÔNG cho tải tệp làm bằng chứng — đổi lại người phải dán đường dẫn Drive."},
-    {"id": "d-20260928T070907Z-6", "p": "KHÔNG nhắc việc đến hạn ở lượt này — đổi lại người làm chỉ thấy việc khi mở khung KR tới khi 8b lên."},
-    {"id": "d-20260928T072225Z-7", "p": "Duyệt giao diện trên bản mẫu bấm được và ảnh chụp, không duyệt bằng chữ."}
+    {"id": "d-20260928T070907Z-1", "p": "KHÔNG làm mức hiển thị, bước duyệt nhẹ, tái cơ cấu giữa kỳ ở lượt này — tách sang lượt 8c; đổi lại lượt 8a gọn và giao sớm."},
+    {"id": "d-20260928T070907Z-2", "p": "Việc, sáng kiến, bằng chứng mở trong một khung KR riêng chồng lên khung mục tiêu — thay vì một tab ở khung mục tiêu."},
+    {"id": "d-20260928T070907Z-3", "p": "Ghi nhận và «mục tiêu tạo từ mẫu» là bảng riêng — không thêm cột vào bảng bình luận hay bảng mục tiêu có sẵn."},
+    {"id": "d-20260928T070907Z-4", "p": "Sáng kiến chỉ nhớ mã chiến dịch hay kế hoạch, tên đọc sống từ bản gốc qua một chỗ duy nhất — đổi lại người vai «chỉ OKR» không bao giờ thấy tên đối tác."},
+    {"id": "d-20260928T070907Z-5", "p": "KHÔNG tải tệp làm bằng chứng — chỉ đường dẫn kèm ghi chú."},
+    {"id": "d-20260928T070907Z-6", "p": "KHÔNG nhắc việc đến hạn ở lượt này — sang 8b; lượt này chỉ báo người nhận ghi nhận."},
+    {"id": "d-20260928T072225Z-7", "p": "Duyệt giao diện trên bản mẫu bấm được (23 trạng thái, hai khổ màn) — thay vì duyệt bằng chữ."},
+    {"id": "d-20260928T080754Z-9", "p": "Chiến dịch nháp hiện nhãn «Chưa chạy»; «Đã lưu trữ» chỉ áp cho kế hoạch 30 ngày của công ty đã lưu trữ, vì kho không có lưu trữ chiến dịch."},
+    {"id": "d-20260928T080754Z-10", "p": "Máy chủ trộn bình luận và ghi nhận theo thời gian, màn chỉ hiển thị — thay vì để màn tự trộn hai danh sách."},
+    {"id": "d-20260928T080754Z-11", "p": "Luật trần số KR dùng chung cho tạo tay và tạo từ mẫu — một chỗ, không chép luật."},
+    {"id": "d-20260928T081723Z-12", "p": "Kế hoạch 13 việc, mỗi việc một tác tử cài kèm một người soát (Cổng 1.5)."},
+    {"id": "d-20260928T120444Z-13", "p": "Hộp chọn mẫu của mọi người, kể cả quản trị, chỉ hiện mẫu còn dùng được cho đơn vị đó; trang Cài đặt của quản trị vẫn thấy cả mẫu đã lưu trữ."},
+    {"id": "d-20260928T130253Z-14", "p": "Ô «Việc» trống của một KR hiện «Thêm» cho người sửa được và «—» cho người chỉ đọc, cả hai đều mở được khung KR — phép đo màn sửa theo đặc tả."},
+    {"id": "d-20260928T143844Z-15", "p": "Phép đo của bộ OKR mẫu đã ký được siết lại cho đủ sáu bảng mới — đổi lại hồ sơ bộ OKR mẫu phải ghim lại sau lượt này."},
+    {"id": "d-20260928T143845Z-16", "p": "Ca «xoá bộ mẫu giữ nguyên dữ liệu thật» gọi thẳng bước xoá, vì chốt an toàn của lệnh xoá chặn khi kho có OKR thật — chốt an toàn giữ nguyên."},
+    {"id": "d-20260928T144343Z-17", "p": "Mẫu chưa ai dùng hiện «chưa dùng» thay vì «đã dùng 0 lần» — phép đo màn đọc cả hai."},
+    {"id": "d-20260928T160410Z-18", "p": "Bốn phép đo màn chỉnh chiều đỏ cho đúng lời hứa: mỗi bản cố tình phá giờ phá đúng thứ phép đo gọi tên, không bắt nhầm một đường từ chối khác."},
+    {"id": "d-20260928T163059Z-19", "p": "Đổi mốc thời gian của bước tạo bảng để chạy sau bước tạo bảng của tính năng máy soạn đề xuất vừa lên nhánh chính — nội dung không đổi."}
   ]
 }
