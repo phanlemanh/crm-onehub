@@ -77,7 +77,7 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.stqe_do_truoc_khi_va
-    expected: "exit 0; script đứng ở gốc kho suy từ vị trí của chính nó; mốc mặc định CỐ ĐỊNH a62adb16 (không merge-base — bài học Ngoài-5 của #170), đổi được bằng --base. Dựng bản gương bằng git worktree add --detach trong os.tmpdir() (không ghi vào cây đang xét), chép tệp kiểm mới vào đó, nối node_modules (gốc và từng gói có node_modules), packages/db/src/generated và .env; chạy 'bun run test -- \"cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts\"' trong bản gương, đòi exit != 0 VÀ dòng (fail) cho hai ca ghim stqe-kenh và stqe-tin-rieng VÀ đầu ra có 'chat.postMessage=1' (tin đã đi ra — đỏ vì còn rò) VÀ không có 'Cannot find module'; rồi chạy cùng lệnh ở cây đang xét, đòi exit 0 và 0 dòng (fail). Luôn gỡ worktree tạm (finally). Thông điệp đỏ ghim 'TRUOC VA KHONG DO: <ca>' và 'SAU VA CON DO'. Chiều đỏ tự thân: --base HEAD thì exit 1 với 'TRUOC VA KHONG DO'."
+    expected: "exit 0; script đứng ở gốc kho suy từ vị trí của chính nó; mốc mặc định CỐ ĐỊNH a62adb16 (không merge-base — bài học Ngoài-5 của #170), đổi được bằng --base. Dựng bản gương bằng git worktree add --detach trong os.tmpdir() (không ghi vào cây đang xét), chép tệp kiểm mới vào đó, nối node_modules (gốc và từng gói có node_modules), packages/db/src/generated và .env; chạy 'bun run test -- \"cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts\"' trong bản gương, đòi exit != 0 VÀ dòng (fail) cho hai ca ghim stqe-kenh và stqe-tin-rieng VÀ khối đỏ CỦA TỪNG ca (các dòng giữa dòng (pass)/(fail) trước đó và dòng (fail) của ca) có 'chat.postMessage=1' (tin đã đi ra — đỏ vì còn rò, không phải vì lý do khác) VÀ không có 'Cannot find module'; rồi chạy cùng lệnh ở cây đang xét, đòi exit 0 và 0 dòng (fail). Luôn gỡ worktree tạm (finally). Thông điệp đỏ ghim 'TRUOC VA KHONG DO: <ca>', 'TRUOC VA DO SAI LY DO: <ca>' và 'SAU VA CON DO'. Chiều đỏ tự thân: --base HEAD thì exit 1 với 'TRUOC VA KHONG DO'; --ghim chat.postMessage=9 thì exit 1 với 'TRUOC VA DO SAI LY DO: stqe-kenh' và 'TRUOC VA DO SAI LY DO: stqe-tin-rieng'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/agent/agent/lib/**, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts, _acceptance/slack-thieu-quyen-email/rang/do-truoc-khi-va.mjs]
 
@@ -103,11 +103,14 @@ evals:
       - docs/superpowers/specs/2026-09-28-slack-thieu-quyen-email-design.md
       - _acceptance/slack-thieu-quyen-email/contract.md
       - apps/agent/agent/lib/slack-nguoi-nhan.ts
+      - _acceptance/slack-thieu-quyen-email/mo-ta-pr.md
     paths:
       - docs/agent.md
       - docs/superpowers/specs/2026-09-28-slack-thieu-quyen-email-design.md
       - apps/agent/agent/lib/slack-nguoi-nhan.ts
+      - _acceptance/slack-thieu-quyen-email/mo-ta-pr.md
     expected: >-
+      Mô tả PR là tệp mo-ta-pr.md của hồ sơ, dùng nguyên văn làm thân PR ở S5.
       Mục chỗ rẽ nêu luật không-xác-định-thì-từ-chối khớp với mã của slack-nguoi-nhan.ts.
       Không có câu nào đề nghị hay tự động gửi PR hay issue công khai lên kho của hãng; việc
       báo hãng chỉ nhắc kênh bảo mật riêng và sự cho phép của chủ kho. Phần mô tả đủ để người
