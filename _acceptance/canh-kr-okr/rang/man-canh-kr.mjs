@@ -48,6 +48,7 @@ const TEP_MT = "apps/app/components/crm/record-sheet/objective-sheet.tsx";
 const TEP_TRAO_DOI =
 	"apps/app/components/crm/record-sheet/objective-trao-doi.tsx";
 const TEP_TU_MAU = "apps/app/app/(app)/[slug]/okr/tu-mau.tsx";
+const TEP_TAO_TU_MAU = "apps/api/src/okr/okr-mau.service.ts";
 const TEP_LIEN_KET = "apps/api/src/okr/canh-kr.ts";
 const VET = {
 	E11: {
@@ -61,29 +62,13 @@ const VET = {
 	E12: {
 		eval: "E11",
 		tep: TEP_VIEC,
-		mo: "ban sao dong nhap gui tieu de da cat (con 12 ky tu — tieu de E11 chi 21 ky tu nen cat 50 la khong doi)",
+		mo: "ban sao dong nhap gui tieu de cat ngan hon chuoi da go (12 ky tu)",
 		cam: (s) =>
 			s.replace(
 				"await onLuu({ tieuDe: kq.data, nguoiLamUserId: nguoiLam, hanNgay: han });",
 				"await onLuu({ tieuDe: kq.data.slice(0, 12), nguoiLamUserId: nguoiLam, hanNgay: han });",
 			),
 		ghim: /DB tieuDe «[^»]*» khac chuoi da go «[^»]+»/,
-	},
-	E14: {
-		eval: "E14",
-		tep: TEP_VIEC,
-		mo: "ban sao dong sang kien lay ten tu bo chon phia trinh duyet",
-		cam: (s) =>
-			s
-				.replace(
-					'"use client";\n',
-					'"use client";\nimport { useQuery as useQueryChieuDo } from "@tanstack/react-query";\nimport { useTRPC as useTRPCChieuDo } from "@/lib/trpc/client";\n',
-				)
-				.replace(
-					"function NoiDungSangKien({ s, m }: { s: DongSangKien; m: OkrCanhKrMessages }) {\n\tconst lk = s.lienKet;\n\tif (!lk.coQuyen)\n\t\treturn (\n\t\t\t<ItemTitle>\n\t\t\t\t{dien(m.sangKien.khongQuyen, { loai: m.sangKien.loai[s.loai] })}",
-					'function NoiDungSangKien({ s, m }: { s: DongSangKien; m: OkrCanhKrMessages }) {\n\tconst boChon = useQueryChieuDo(useTRPCChieuDo().onboarding.listPlans.queryOptions({ q: "", pageSize: 50 }));\n\tconst lk = s.lienKet;\n\tif (!lk.coQuyen)\n\t\treturn (\n\t\t\t<ItemTitle>\n\t\t\t\t<span translate="no">{boChon.data?.rows[0]?.companyName ?? ""}</span>',
-				),
-		ghim: /E14 buoc-chi-okr: dong sang kien thieu cau «[^»]+»/,
 	},
 	"E15-nhan": {
 		eval: "E14",
@@ -96,16 +81,19 @@ const VET = {
 			),
 		ghim: /tap nguoi nhan DB \[[^\]]*\] khac tap da chon \[[^\]]*\]/,
 	},
-	"E15-lo": {
+	E14: {
 		eval: "E14",
 		tep: TEP_LIEN_KET,
-		mo: "ban sao lienKetChoVai tra ten cho moi vai",
+		mo: "ban sao lienKetChoVai tra ten cho moi vai — mot ban sao lam E14 (DOM lo ten) va E15 (mang lo ten) cung do",
 		cam: (s) =>
 			s.replace(
 				'\tif (!docDuocPhamVi(role, "doi-tac"))\n\t\treturn { loai: hang.loai, coQuyen: false };\n',
 				"\tvoid docDuocPhamVi;\n",
 			),
-		ghim: /vai okr nhan [1-9]\d* phan hoi chua id\/ten cua P/,
+		ghim: [
+			/E14 buoc-chi-okr: ten lo «[^»]+»/,
+			/vai okr nhan [1-9]\d* phan hoi chua id\/ten cua P/,
+		],
 	},
 	E16: {
 		eval: "E16",
@@ -120,10 +108,14 @@ const VET = {
 	},
 	E17: {
 		eval: "E16",
-		tep: TEP_TU_MAU,
-		mo: "ban sao form tao tu mau khong gui mauId",
-		cam: (s) => s.replace("mauId: mauChon.id,", 'mauId: "",'),
-		ghim: /không có hàng mẫu nguồn/,
+		tep: TEP_TAO_TU_MAU,
+		mo: "ban sao taoTuMau (may chu) bo buoc ghi okrMucTieuTuMau",
+		cam: (s) =>
+			s.replace(
+				"\t\t\tawait tx.okrMucTieuTuMau.create({\n\t\t\t\tdata: { objectiveId: objective.id, mauId: mau.id },\n\t\t\t});\n",
+				"",
+			),
+		ghim: /E17: mot muc tieu nhap duoc tao nhung không có hàng mẫu nguồn/,
 	},
 };
 const MOI_VET = Object.keys(VET);
@@ -232,7 +224,8 @@ async function motChieuDo(e) {
 			con.on("error", () => xong(2));
 			con.on("exit", (m) => xong(m ?? 2));
 		});
-		const ghim = ra.match(v.ghim)?.[0] ?? null;
+		const moiGhim = [v.ghim].flat().map((g) => ra.match(g)?.[0] ?? null);
+		const ghim = moiGhim.every((g) => g !== null) ? moiGhim.join(" · ") : null;
 		if (ma === 2)
 			return {
 				e,
@@ -244,7 +237,7 @@ async function motChieuDo(e) {
 		return {
 			e,
 			ket: "LOT",
-			cau: `ma ${ma}, ${ghim ? `co «${ghim}»` : `khong thay cau ghim ${v.ghim}`}`,
+			cau: `ma ${ma}, ${ghim ? `co «${ghim}»` : `khong thay du cau ghim ${[v.ghim].flat().join(" + ")}`}`,
 		};
 	} finally {
 		process.off("SIGINT", ngat);
@@ -1082,6 +1075,33 @@ async function buocBangKr() {
 		chuDoc === "—",
 	);
 	await chup(d, "buoc-bang-kr-chi-doc.png");
+	await bam(d, `[data-cot-viec='${K.K3}'] [data-mo-khung-kr='${K.K3}']`);
+	const moDoc = await thayNgay(
+		d,
+		(k) =>
+			window.__tim(`[data-kr-sheet='${k}'] [data-trang-thai^='ST-khungkr-']`)
+				.length > 0,
+		K.K3,
+	);
+	const trangThaiDoc = await d.evaluate(
+		(k) =>
+			window
+				.__tim(`[data-kr-sheet='${k}'] [data-trang-thai^='ST-khungkr-']`)[0]
+				?.getAttribute("data-trang-thai") ?? null,
+		K.K3,
+	);
+	const recDoc = recordCua(d);
+	console.log(
+		`  E11 buoc 3: nguoi chi doc bam «—» cua K3 -> khung KR ${moDoc ? "mo" : "KHONG mo"} (${trangThaiDoc}, record ${recDoc})`,
+	);
+	kiem(
+		`E11 buoc 3: nguoi chi doc bam «—» cua K3 mo khung KR cua K3 (thay ${trangThaiDoc}, record «${recDoc}»)`,
+		moDoc &&
+			recDoc === `objective:${K.M},kr:${K.K3}` &&
+			trangThaiDoc === "ST-khungkr-rong" &&
+			!(await coSel(d, `[data-kr-sheet='${K.K3}'] [data-nut='them-viec']`)),
+	);
+	await chup(d, "buoc-khung-kr-chi-doc.png");
 	await d.close();
 }
 
@@ -2275,7 +2295,10 @@ async function kiemTuMauDb(truoc) {
 	console.log(
 		`  E17 DB muc tieu moi: ${JSON.stringify(mt.map((m) => ({ id: m.id, status: m.status, departmentId: m.departmentId, kr: m.keyResults.map((k) => [k.title, Number(k.startValue), Number(k.targetValue)]) })))}; nguon ${JSON.stringify(nguon)}`,
 	);
-	if (nguon.length === 0) console.log("  E17: không có hàng mẫu nguồn");
+	if (mt.length === 1 && nguon.length === 0)
+		console.log(
+			"  E17: mot muc tieu nhap duoc tao nhung không có hàng mẫu nguồn",
+		);
 	kiem(
 		"E17: DB co muc tieu nhap o dung phong ban, hai KR dung so da dien, okrMucTieuTuMau tro mau moi",
 		mt.length === 1 &&

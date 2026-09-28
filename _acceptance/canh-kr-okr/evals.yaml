@@ -98,7 +98,7 @@ evals:
     cmd: config:executors.script.ckr_man_chrome
     steps:
       - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
-      - "Phiên đo nạp bộ OKR mẫu; gieo thêm qua API thật trên một mục tiêu công bố của phòng P1: KR K1 có hai việc (một xong), KR mốc K2 đã xong có một bằng chứng, KR K3 chưa có gì; một kế hoạch 30 ngày P; đăng nhập dev:session trưởng P1; dọn theo id ở cuối kể cả khi đỏ"
+      - "Phiên đo nạp bộ OKR mẫu; gieo thêm qua API thật trên một mục tiêu công bố của phòng P1: KR K1 có hai việc (một xong) và một sáng kiến gắn sẵn (kế hoạch 30 ngày Q — ô «Việc» của K1 đọc «1/2 · 1 sáng kiến»), KR mốc K2 đã xong có một bằng chứng, KR K3 chưa có gì; một kế hoạch 30 ngày P; đăng nhập dev:session trưởng P1; dọn theo id ở cuối kể cả khi đỏ"
       - "Mở khung mục tiêu ở 1440/vi → bảng KR có cột «Việc»: K1 «1/2», K3 «Thêm» (trưởng P1 sửa được KR; người chỉ đọc thấy «—», cả hai đều mở được khung KR — d-14); K2 có dấu «Có bằng chứng» → ảnh buoc-bang-kr"
       - "Bấm «1/2» của K1 → khung KR mở chồng, URL chứa record=kr:<K1>, tab «Việc và sáng kiến» chọn sẵn, không có tab «Bằng chứng» → ảnh buoc-khung-kr"
       - "«Thêm việc» → gõ «Gọi lại 20 đối tác cũ», chọn người làm, Enter → dòng mới; đánh dấu xong dòng đó → cột «Việc» của K1 thành «2/3» sau khi đóng khung KR"
@@ -117,7 +117,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.ckr_man_chrome
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/api/src/okr/**, _acceptance/canh-kr-okr/rang/man-canh-kr.mjs]
-    expected: "Cùng lần chạy với E11: sau Enter DB có đúng một okrViecKr mới với tiêu đề đã gõ và người làm đã chọn; sau đánh dấu xong xongLuc khác null; sau gắn P, okrViecKr {loai ke-hoach, planId P}; sau Đính, okrBangChung url bằng chuỗi đã gõ; sau gửi cập nhật K4, okrCheckIn mới và okrBangChung của K4 có cùng thời điểm giao dịch và url https://drive.google.com/bb; số «xong/tổng» trên màn của mỗi KR bằng đếm DB (loai viec). CHIỀU ĐỎ: bản sao dòng nhập gửi tiêu đề đã cắt 50 ký tự → so DB đỏ, script in hai chuỗi."
+    expected: "Cùng lần chạy với E11: sau Enter DB có đúng một okrViecKr mới với tiêu đề đã gõ và người làm đã chọn; sau đánh dấu xong xongLuc khác null; sau gắn P, okrViecKr {loai ke-hoach, planId P}; sau Đính, okrBangChung url bằng chuỗi đã gõ; sau gửi cập nhật K4, okrCheckIn mới và okrBangChung của K4 có cùng thời điểm giao dịch và url https://drive.google.com/bb; số «xong/tổng» trên màn của mỗi KR bằng đếm DB (loai viec). CHIỀU ĐỎ: bản sao dòng nhập gửi tiêu đề cắt ngắn hơn chuỗi đã gõ (12 ký tự) → so DB đỏ, script in hai chuỗi."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
@@ -134,12 +134,12 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.ckr_man_chrome
     steps:
-      - "Cùng phiên đo E11; KR K1 đã có sáng kiến P"
+      - "Cùng phiên đo E11; KR K1 đã có sáng kiến P (gắn ở bước 6 của E11) cạnh sáng kiến Q gieo sẵn — hai dòng kế hoạch 30 ngày"
       - "Đăng nhập người vai «chỉ OKR» mẫu → mở khung KR của K1 → dòng «Một kế hoạch 30 ngày — bạn không có quyền xem», không liên kết, không nút «Gắn…»; DOM không chứa tên công ty của P → ảnh buoc-chi-okr"
       - "Cùng người: khung mục tiêu › Trao đổi → chọn «Ghi nhận» ở ô soạn → chọn hai người nhận, gõ lời, chọn KR K1 → Gửi → dòng ghi nhận hiện với biểu tượng và tên hai người, khác dòng bình luận → ảnh buoc-ghi-nhan"
       - "Đăng nhập thành viên trưởng P1 → khung KR của K1 → dòng sáng kiến có tên, bấm → khung kế hoạch P mở chồng"
       - "Ảnh 390 cho buoc-ghi-nhan; scrollWidth <= innerWidth; lời ghi nhận mang translate=no"
-    expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao dòng sáng kiến lấy tên từ bộ chọn phía trình duyệt → bước buoc-chi-okr đỏ, script in chuỗi tên lộ."
+    expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao máy chủ lienKetChoVai trả tên cho mọi vai → bước buoc-chi-okr đỏ, script in chuỗi tên lộ trong DOM («E14 buoc-chi-okr: ten lo «…»»); cùng một bản sao này làm E15 đỏ (đếm phản hồi lộ của vai okr > 0)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E15
@@ -148,7 +148,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.ckr_man_chrome
     paths: [apps/app/components/crm/record-sheet/**, apps/api/src/okr/**, _acceptance/canh-kr-okr/rang/man-canh-kr.mjs]
-    expected: "Cùng lần chạy với E14: sau Gửi, DB có một okrGhiNhan với tacGiaUserId là người vai okr, keyResultId K1, lời bằng chuỗi đã gõ, và okrGhiNhanNhan đúng hai người đã chọn (so tập); mọi phản hồi mạng tới trình duyệt của người vai okr trong phiên (ghi lại qua CDP) không chứa id và tên của P — đếm = 0, và script in số phản hồi đã ghi (> 0) cùng số phản hồi chứa canhKr (> 0). Đối chứng dương: phiên trưởng P1 ở bước 3 của E14 dùng cùng bộ ghi phải có ≥ 1 phản hồi chứa tên công ty của P. CHIỀU ĐỎ: bản sao ô soạn gửi thiếu người nhận thứ hai → so tập đỏ, script in hai tập; bản sao lienKetChoVai trả tên cho mọi vai → đếm của vai okr > 0, script in phản hồi lộ."
+    expected: "Cùng lần chạy với E14: sau Gửi, DB có một okrGhiNhan với tacGiaUserId là người vai okr, keyResultId K1, lời bằng chuỗi đã gõ, và okrGhiNhanNhan đúng hai người đã chọn (so tập); mọi phản hồi mạng tới trình duyệt của người vai okr trong phiên (ghi lại qua CDP) không chứa id và tên của P — đếm = 0, và script in số phản hồi đã ghi (> 0) cùng số phản hồi chứa canhKr (> 0). Đối chứng dương: phiên trưởng P1 ở bước 3 của E14 dùng cùng bộ ghi phải có ≥ 1 phản hồi chứa tên công ty của P. CHIỀU ĐỎ: bản sao ô soạn gửi thiếu người nhận thứ hai → so tập đỏ, script in hai tập; bản sao lienKetChoVai trả tên cho mọi vai (cùng bản sao làm E14 đỏ) → đếm của vai okr > 0, script in phản hồi lộ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E16
@@ -172,7 +172,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.ckr_man_chrome
     paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/canh-kr-okr/rang/man-canh-kr.mjs]
-    expected: "Cùng lần chạy với E16: sau Lưu, DB có một okrMau với tên, cấp, donViIds bằng hai phòng ban đã chọn (so tập) và noiDung parse ra đúng hai KR đã gõ; sau tạo từ mẫu, DB có mục tiêu nháp ở đúng phòng ban, hai KR đúng số đã điền, và okrMucTieuTuMau trỏ mẫu mới; «đã dùng N lần» trên màn bằng đếm okrMucTieuTuMau của mẫu. CHIỀU ĐỎ: bản sao form tạo từ mẫu không gửi mauId → so DB đỏ, script in «không có hàng mẫu nguồn»."
+    expected: "Cùng lần chạy với E16: sau Lưu, DB có một okrMau với tên, cấp, donViIds bằng hai phòng ban đã chọn (so tập) và noiDung parse ra đúng hai KR đã gõ; sau tạo từ mẫu, DB có mục tiêu nháp ở đúng phòng ban, hai KR đúng số đã điền, và okrMucTieuTuMau trỏ mẫu mới; «đã dùng N lần» trên màn bằng đếm okrMucTieuTuMau của mẫu. CHIỀU ĐỎ: bản sao máy chủ taoTuMau bỏ bước ghi okrMucTieuTuMau → mục tiêu nháp vẫn được tạo, so DB đỏ, script in «không có hàng mẫu nguồn» (chỉ in khi đúng một mục tiêu được tạo mà thiếu hàng mẫu nguồn)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E18
