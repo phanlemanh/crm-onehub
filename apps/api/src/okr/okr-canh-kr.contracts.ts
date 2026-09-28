@@ -17,6 +17,8 @@ export const canhKrInput = z.object({ keyResultId: ma });
 
 export const goViecInput = idInput;
 
+export const goBangChungInput = idInput;
+
 export const idOutput = z.object({ id: z.string() });
 
 export const lienKet = z.discriminatedUnion("coQuyen", [

@@ -53,6 +53,8 @@ const CAU = {
 	nguoiLam: "Người làm phải là thành viên còn trong không gian làm việc.",
 	tieuDeNgan: `tieuDe: Too small: expected string to have >=${OKR_CANH_KR.tieuDe.min} characters`,
 	tieuDeDai: `tieuDe: Too big: expected string to have <=${OKR_CANH_KR.tieuDe.max} characters`,
+	chiMocXongDinhDuoc:
+		"Chỉ đính được bằng chứng cho KR kiểu «mốc» đã đánh dấu xong.",
 } as const;
 
 const HANH_DONG_VIEC = ["them-viec", "sua-viec", "xong-viec", "go-viec"];
@@ -92,6 +94,22 @@ async function themViec(
 			tieuDe: vao.tieuDe ?? "Gọi lại 20 đối tác cũ",
 			nguoiLamUserId: vao.nguoiLamUserId ?? san.nguoi.B.id,
 			hanNgay: vao.hanNgay === undefined ? "2026-11-20" : vao.hanNgay,
+		},
+		ai,
+	);
+}
+
+async function themBangChung(
+	ai: string,
+	keyResultId: string,
+	vao: { url?: string; ghiChu?: string } = {},
+): Promise<TraLoi> {
+	return goi(
+		"okr.themBangChung",
+		{
+			keyResultId,
+			url: vao.url ?? "https://drive.google.com/thu",
+			ghiChu: vao.ghiChu ?? "Bảng số quý 4",
 		},
 		ai,
 	);
@@ -888,4 +906,195 @@ describe("sang-kien", () => {
 			dong("go-viec", anhViec, null),
 		]);
 	});
+});
+
+async function demBC(): Promise<{ bc: number; vet: number }> {
+	return { bc: await dem("okrBangChung"), vet: await dem("okrTrail") };
+}
+
+describe("bang-chung", () => {
+	let san: SanCanhKr;
+	beforeAll(async () => {
+		san = await gieoCanhKr();
+	}, CHO_MS);
+	afterAll(donSanCanhKr, CHO_MS);
+
+	test(
+		"bang-chung-vong-doi: dinh vao KR moc dang xong — DB dung hang, canhKr doc lai, go — 0 hang, vet dung thu tu",
+		async () => {
+			const { A } = san.nguoi;
+			await db.okrKeyResult.update({
+				where: { id: san.krMoc },
+				data: { currentValue: 1 },
+			});
+			const id = idCua(
+				await themBangChung(A.cookie, san.krMoc, {
+					url: "https://drive.google.com/x",
+					ghiChu: "Báo cáo tháng 11",
+				}),
+				"dinh bang chung",
+			);
+			const hang = await db.okrBangChung.findUniqueOrThrow({ where: { id } });
+			expect({
+				keyResultId: hang.keyResultId,
+				url: hang.url,
+				ghiChu: hang.ghiChu,
+				tacGiaUserId: hang.tacGiaUserId,
+			}).toEqual({
+				keyResultId: san.krMoc,
+				url: "https://drive.google.com/x",
+				ghiChu: "Báo cáo tháng 11",
+				tacGiaUserId: A.id,
+			});
+			expect(hang.createdAt).toBeInstanceOf(Date);
+
+			const canh = await doc<CanhKrOutput>("okr.canhKr", A.cookie, {
+				keyResultId: san.krMoc,
+			});
+			expect(canh.bangChung[0]).toEqual({
+				id,
+				url: "https://drive.google.com/x",
+				ghiChu: "Báo cáo tháng 11",
+				nguoiDinh: { id: A.id, name: A.id },
+				dinhLuc: hang.createdAt.toISOString(),
+			});
+
+			ok(await goi("okr.goBangChung", { id }, A.cookie), "go bang chung");
+			expect(await db.okrBangChung.count({ where: { id } })).toBe(0);
+
+			const vet = await db.okrTrail.findMany({
+				where: {
+					keyResultId: san.krMoc,
+					action: { in: ["dinh-bang-chung", "go-bang-chung"] },
+				},
+				orderBy: [{ at: "asc" }, { id: "asc" }],
+				select: {
+					action: true,
+					objectiveId: true,
+					actorUserId: true,
+					before: true,
+					after: true,
+				},
+			});
+			expect(vet.map((v) => v.action)).toEqual([
+				"dinh-bang-chung",
+				"go-bang-chung",
+			]);
+			expect(
+				vet.every((v) => v.objectiveId === san.mt && v.actorUserId === A.id),
+			).toBe(true);
+			expect(parseOkrVet(vet[0]?.after)).toEqual({
+				bangChungId: id,
+				url: "https://drive.google.com/x",
+			});
+			expect(parseOkrVet(vet[1]?.before)).toEqual({
+				bangChungId: id,
+				url: "https://drive.google.com/x",
+				ghiChu: "Báo cáo tháng 11",
+			});
+			expect(parseOkrVet(vet[1]?.after)).toBeNull();
+		},
+		CHO_MS,
+	);
+
+	test(
+		"bang-chung-canh-kr: canhKr tra bangChung moi nhat truoc",
+		async () => {
+			const { A } = san.nguoi;
+			await db.okrKeyResult.update({
+				where: { id: san.krMoc },
+				data: { currentValue: 1 },
+			});
+			const id1 = idCua(
+				await themBangChung(A.cookie, san.krMoc, {
+					url: "https://drive.google.com/1",
+				}),
+				"dinh 1",
+			);
+			const id2 = idCua(
+				await themBangChung(A.cookie, san.krMoc, {
+					url: "https://drive.google.com/2",
+				}),
+				"dinh 2",
+			);
+			const canh = await doc<CanhKrOutput>("okr.canhKr", A.cookie, {
+				keyResultId: san.krMoc,
+			});
+			expect(canh.bangChung.map((b) => b.id)).toEqual([id2, id1]);
+			ok(await goi("okr.goBangChung", { id: id1 }, A.cookie), "go 1");
+			ok(await goi("okr.goBangChung", { id: id2 }, A.cookie), "go 2");
+		},
+		CHO_MS,
+	);
+
+	test(
+		"bang-chung-tu-choi: KR tang-toi, KR moc chua xong, nguoi khong sua duoc — 400/403 cau ghim, bang khong doi",
+		async () => {
+			const { A, B } = san.nguoi;
+			await db.okrKeyResult.update({
+				where: { id: san.krMoc },
+				data: { currentValue: 0 },
+			});
+			const ca: [string, () => Promise<TraLoi>, number, string][] = [
+				[
+					"KR tang toi",
+					() => themBangChung(A.cookie, san.kr),
+					400,
+					CAU.chiMocXongDinhDuoc,
+				],
+				[
+					"KR moc chua xong",
+					() => themBangChung(A.cookie, san.krMoc),
+					400,
+					CAU.chiMocXongDinhDuoc,
+				],
+				[
+					"nguoi khong sua duoc",
+					() => themBangChung(B.cookie, san.krMoc),
+					403,
+					CAU.khongSuaDuoc,
+				],
+			];
+			const nhan: string[] = [];
+			for (const [ten, lam, ma, cau] of ca) {
+				const truoc = await demBC();
+				const tra = await lam();
+				const sau = await demBC();
+				nhan.push(
+					`${ten}: ${tra.status === ma ? ma : `${tra.status}!=${ma}`} ${tra.loi === cau ? "cau-ghim" : tra.loi} ${JSON.stringify(sau) === JSON.stringify(truoc) ? "khong-doi" : JSON.stringify({ truoc, sau })}`,
+				);
+			}
+			expect(nhan).toEqual(
+				ca.map(([ten, , ma]) => `${ten}: ${ma} cau-ghim khong-doi`),
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"bang-chung-go-tu-choi: ma khong ton tai — 404; nguoi khong sua duoc — 403, bang khong doi",
+		async () => {
+			const { A, B } = san.nguoi;
+			await db.okrKeyResult.update({
+				where: { id: san.krMoc },
+				data: { currentValue: 1 },
+			});
+			const id = idCua(await themBangChung(A.cookie, san.krMoc), "dinh de go");
+			const truoc = await demBC();
+			const traB = await goi("okr.goBangChung", { id }, B.cookie);
+			const sauB = await demBC();
+			const maLa = "khong-co-bang-chung";
+			const tra404 = await goi("okr.goBangChung", { id: maLa }, A.cookie);
+			const sau404 = await demBC();
+			expect({
+				khongSuaDuoc: `${traB.status} ${traB.loi} ${JSON.stringify(sauB) === JSON.stringify(truoc)}`,
+				khongTonTai: `${tra404.status} ${JSON.stringify(sau404) === JSON.stringify(sauB)}`,
+			}).toEqual({
+				khongSuaDuoc: `403 ${CAU.khongSuaDuoc} true`,
+				khongTonTai: "404 true",
+			});
+			ok(await goi("okr.goBangChung", { id }, A.cookie), "don bang chung");
+		},
+		CHO_MS,
+	);
 });

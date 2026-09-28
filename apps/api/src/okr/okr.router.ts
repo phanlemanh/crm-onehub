@@ -2,6 +2,7 @@ import {
 	danhDauViecInput,
 	ganSangKienInput,
 	suaViecInput,
+	themBangChungInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
@@ -79,6 +80,7 @@ import { OkrService } from "./okr.service";
 import {
 	canhKrInput,
 	canhKrOutput,
+	goBangChungInput,
 	goViecInput,
 	idOutput,
 } from "./okr-canh-kr.contracts";
@@ -729,6 +731,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof ganSangKienInput>,
 	) {
 		return this.canh.ganSangKien(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: themBangChungInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/key-results/{keyResultId}/bang-chung", TAG),
+	})
+	themBangChung(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof themBangChungInput>,
+	) {
+		return this.canh.themBangChung(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: goBangChungInput,
+		output: idOutput,
+		meta: restMeta("POST", "/okr/bang-chung/{id}/go", TAG),
+	})
+	goBangChung(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof goBangChungInput>,
+	) {
+		return this.canh.goBangChung(ctx.user.id, input);
 	}
 
 	@Mutation({

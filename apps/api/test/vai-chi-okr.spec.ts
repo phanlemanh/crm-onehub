@@ -18,6 +18,7 @@ import {
 	ganSangKienInput,
 	idInput,
 	suaViecInput,
+	themBangChungInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import {
@@ -177,6 +178,12 @@ const DAU_VAO_HOP_LE = {
 		loai: "chien-dich",
 		banGhiId: "khong-co",
 	},
+	"okr.themBangChung": {
+		keyResultId: "khong-co",
+		url: "https://drive.google.com/x",
+		ghiChu: "",
+	},
+	"okr.goBangChung": { id: "khong-co" },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -199,6 +206,8 @@ const THU_TUC_CANH_KR = {
 	"okr.danhDauViec": danhDauViecInput,
 	"okr.goViec": idInput,
 	"okr.ganSangKien": ganSangKienInput,
+	"okr.themBangChung": themBangChungInput,
+	"okr.goBangChung": idInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

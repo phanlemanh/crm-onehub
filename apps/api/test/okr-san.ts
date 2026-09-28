@@ -269,6 +269,9 @@ export function dungSan(): void {
 			where: { keyResult: { objective: cuaSan } },
 		});
 		await db.okrDiemKr.deleteMany({ where: cuaSan });
+		await db.okrBangChung.deleteMany({
+			where: { keyResult: { objective: cuaSan } },
+		});
 		await db.okrKeyResult.deleteMany({ where: { objective: cuaSan } });
 		await db.okrParticipant.deleteMany({ where: { objective: cuaSan } });
 		await db.okrObjective.deleteMany({ where: cuaSan });

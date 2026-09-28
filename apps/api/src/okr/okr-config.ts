@@ -96,6 +96,10 @@ export const OKR = {
 				`Không có chiến dịch nào mang mã ${id}.`,
 			khongCoKeHoach: (id: string) =>
 				`Không có kế hoạch 30 ngày nào mang mã ${id}.`,
+			chiMocXongDinhDuoc:
+				"Chỉ đính được bằng chứng cho KR kiểu «mốc» đã đánh dấu xong.",
+			khongCoBangChung: (id: string) =>
+				`Không có bằng chứng nào mang mã ${id}.`,
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

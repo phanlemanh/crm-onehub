@@ -124,6 +124,7 @@ type Muc = {
 	value: Json;
 	confidence?: string;
 	note: string;
+	bangChung?: { url: string; ghiChu: string };
 };
 
 const gui = (sessionId: string, items: Muc[], ai: AiHoacCookie) =>
@@ -540,6 +541,205 @@ describe("phien-giay", () => {
 				.submittedAt !== null,
 			await dem(),
 		]).toEqual([200, true, 2]);
+	});
+});
+
+describe("bang-chung", () => {
+	test("bang-chung: KR moc xong khong kem bang chung → 0 hang; kem hop le → 1 checkin + 1 bangChung cung giao dich, vet cap-nhat-tuan va dinh-bang-chung", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("bc");
+		const p = await pbMoi("bc-p");
+		const tp = await truongMoi("department", p, "bc-tp");
+		const m = await nguoiMoi("bc-m");
+		ok(await datViTri(m, p), "xep m");
+		const cookieM = await phienCua(m);
+		const a = await mucTieu(
+			quy,
+			{ level: "phong-ban", departmentId: p },
+			tp.nguoi,
+			tp.cookie,
+		);
+		const kMoc = await taoKr(a, m, tp.cookie, {
+			kind: "moc",
+			startValue: 0,
+			targetValue: 1,
+			currentValue: 0,
+		});
+		await congBo(a, tp.cookie);
+
+		const demBC = () => db.okrBangChung.count({ where: { keyResultId: kMoc } });
+		const demCK = () => db.okrCheckIn.count({ where: { keyResultId: kMoc } });
+
+		ok(
+			await gui(
+				await moPhien(cookieM),
+				[{ keyResultId: kMoc, value: 1, confidence: "cao", note: "" }],
+				cookieM,
+			),
+			"xong khong kem",
+		);
+		expect([await demCK(), await demBC()]).toEqual([1, 0]);
+
+		ok(
+			await gui(
+				await moPhien(cookieM),
+				[
+					{
+						keyResultId: kMoc,
+						value: 1,
+						confidence: "cao",
+						note: "",
+						bangChung: {
+							url: "https://drive.google.com/bc",
+							ghiChu: "Ảnh chụp",
+						},
+					},
+				],
+				cookieM,
+			),
+			"xong kem bang chung",
+		);
+		expect([await demCK(), await demBC()]).toEqual([2, 1]);
+
+		const bc = await db.okrBangChung.findFirstOrThrow({
+			where: { keyResultId: kMoc },
+		});
+		expect([bc.url, bc.ghiChu, bc.tacGiaUserId]).toEqual([
+			"https://drive.google.com/bc",
+			"Ảnh chụp",
+			m,
+		]);
+
+		const vetDinh = await db.okrTrail.count({
+			where: { keyResultId: kMoc, action: "dinh-bang-chung" },
+		});
+		const vetCapNhat = await db.okrTrail.count({
+			where: { keyResultId: kMoc, action: "cap-nhat-tuan" },
+		});
+		expect([vetDinh, vetCapNhat]).toEqual([1, 2]);
+	});
+
+	test("bang-chung: url javascript: bi Zod tu choi truoc khi mo giao dich — 0 checkin moi, 0 bangChung, currentValue khong doi, phien van mo", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("bc2");
+		const p = await pbMoi("bc2-p");
+		const tp = await truongMoi("department", p, "bc2-tp");
+		const m = await nguoiMoi("bc2-m");
+		ok(await datViTri(m, p), "xep m");
+		const cookieM = await phienCua(m);
+		const a = await mucTieu(
+			quy,
+			{ level: "phong-ban", departmentId: p },
+			tp.nguoi,
+			tp.cookie,
+		);
+		const kMoc = await taoKr(a, m, tp.cookie, {
+			kind: "moc",
+			startValue: 0,
+			targetValue: 1,
+			currentValue: 0,
+		});
+		await congBo(a, tp.cookie);
+
+		const sid = await moPhien(cookieM);
+		const truocSo = await soHienTai([kMoc]);
+		const truocCK = await demLan([kMoc]);
+		const r = await gui(
+			sid,
+			[
+				{
+					keyResultId: kMoc,
+					value: 1,
+					confidence: "cao",
+					note: "",
+					bangChung: { url: "javascript:x", ghiChu: "" },
+				},
+			],
+			cookieM,
+		);
+		const sauSo = await soHienTai([kMoc]);
+		const sauCK = await demLan([kMoc]);
+		const bc = await db.okrBangChung.count({ where: { keyResultId: kMoc } });
+		const phien = await db.okrCheckInSession.findUniqueOrThrow({
+			where: { id: sid },
+		});
+		expect({
+			status: r.status,
+			so: sauSo,
+			ck: sauCK,
+			bc,
+			submittedAt: phien.submittedAt,
+		}).toEqual({
+			status: 400,
+			so: truocSo,
+			ck: truocCK,
+			bc: 0,
+			submittedAt: null,
+		});
+	});
+
+	test("bang-chung: kem KR khong phai moc hoac moc gui chua xong — 400 cau ghim, bang khong doi", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("bc3");
+		const p = await pbMoi("bc3-p");
+		const tp = await truongMoi("department", p, "bc3-tp");
+		const m = await nguoiMoi("bc3-m");
+		ok(await datViTri(m, p), "xep m");
+		const cookieM = await phienCua(m);
+		const a = await mucTieu(
+			quy,
+			{ level: "phong-ban", departmentId: p },
+			tp.nguoi,
+			tp.cookie,
+		);
+		const kTang = await taoKr(a, m, tp.cookie, {
+			kind: "tang-toi",
+			startValue: 0,
+			targetValue: 10,
+			currentValue: 0,
+		});
+		const kMoc = await taoKr(a, m, tp.cookie, {
+			kind: "moc",
+			startValue: 0,
+			targetValue: 1,
+			currentValue: 0,
+		});
+		await congBo(a, tp.cookie);
+
+		const bcVao = { url: "https://drive.google.com/x", ghiChu: "" };
+		const ca: [string, string, number][] = [
+			["KR tang toi", kTang, 5],
+			["KR moc chua xong", kMoc, 0],
+		];
+		const ket: string[] = [];
+		for (const [ten, kr, value] of ca) {
+			const truocCK = await demLan([kr]);
+			const truocBC = await db.okrBangChung.count({
+				where: { keyResultId: kr },
+			});
+			const r = await gui(
+				await moPhien(cookieM),
+				[
+					{
+						keyResultId: kr,
+						value,
+						confidence: "cao",
+						note: "",
+						bangChung: bcVao,
+					},
+				],
+				cookieM,
+			);
+			const sauCK = await demLan([kr]);
+			const sauBC = await db.okrBangChung.count({ where: { keyResultId: kr } });
+			ket.push(
+				`${ten}: ${tuChoi(r)} · ck +${sauCK - truocCK} · bc +${sauBC - truocBC}`,
+			);
+		}
+		expect(ket).toEqual([
+			`KR tang toi: 400 ${T.canhKr.chiMocXongDinhDuoc} · ck +0 · bc +0`,
+			`KR moc chua xong: 400 ${T.canhKr.chiMocXongDinhDuoc} · ck +0 · bc +0`,
+		]);
 	});
 });
 

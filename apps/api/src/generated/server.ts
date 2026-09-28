@@ -33,8 +33,8 @@ import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
-import { canhKrInput, canhKrOutput, idOutput, goViecInput } from "../okr/okr-canh-kr.contracts";
-import { themViecInput, suaViecInput, danhDauViecInput, ganSangKienInput } from "@crm/validation/okr-canh-kr";
+import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput } from "../okr/okr-canh-kr.contracts";
+import { themViecInput, suaViecInput, danhDauViecInput, ganSangKienInput, themBangChungInput } from "@crm/validation/okr-canh-kr";
 import { chiSoOutput, xemTruocChiSoInput, xemTruocChiSoOutput, datNguonKrVao, datNguonKrOutput, lichSuSoInput, lichSuSoOutput, banGhiChiSoInput, banGhiChiSoOutput, ghiSoKrInput, ghiSoKrOutput } from "../okr/okr-so.contracts";
 import { accessOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
@@ -834,6 +834,14 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     ganSangKien: publicProcedure
       .input(ganSangKienInput)
+      .output(idOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    themBangChung: publicProcedure
+      .input(themBangChungInput)
+      .output(idOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    goBangChung: publicProcedure
+      .input(goBangChungInput)
       .output(idOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     follow: publicProcedure

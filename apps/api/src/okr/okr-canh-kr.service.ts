@@ -2,15 +2,18 @@ import { docDuocPhamVi } from "@crm/auth";
 import { type Db, Prisma } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
+	type BangChungVao,
 	type DanhDauViecInput,
 	type GanSangKienInput,
 	type IdInput,
 	LOAI_VIEC_KR,
 	type SuaViecInput,
+	type ThemBangChungInput,
 	type ThemViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { ghiDuocOPha, PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
-import { kieuKr } from "@crm/validation/okr-kr";
+import { type KieuKr, kieuKr } from "@crm/validation/okr-kr";
+import type { CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -413,4 +416,97 @@ export class OkrCanhKrService {
 			return { id: cu.id };
 		});
 	}
+
+	async ghiBangChung(
+		tx: Tx,
+		userId: string,
+		kr: KrChoBangChung,
+		vao: BangChungVao,
+	): Promise<{ id: string }> {
+		const q = await this.access.quyen(userId);
+		this.assertGhiDuoc(q, userId, kr);
+		if (kr.kind !== "moc" || !kr.xong)
+			throw new BadRequestException(T.canhKr.chiMocXongDinhDuoc);
+		const row = await tx.okrBangChung.create({
+			data: {
+				keyResultId: kr.id,
+				url: vao.url,
+				ghiChu: vao.ghiChu,
+				tacGiaUserId: userId,
+			},
+			select: { id: true, url: true },
+		});
+		await this.okr.vet(
+			tx,
+			userId,
+			"dinh-bang-chung",
+			{ objectiveId: kr.objective.id, keyResultId: kr.id },
+			null,
+			{ bangChungId: row.id, url: row.url },
+		);
+		return { id: row.id };
+	}
+
+	async themBangChung(
+		userId: string,
+		input: ThemBangChungInput,
+	): Promise<{ id: string }> {
+		return this.db.$transaction(async (tx) => {
+			const kr = await this.krDeGhi(tx, input.keyResultId);
+			const full = await tx.okrKeyResult.findUniqueOrThrow({
+				where: { id: kr.id },
+				select: { kind: true, currentValue: true },
+			});
+			return this.ghiBangChung(
+				tx,
+				userId,
+				{
+					...kr,
+					kind: kieuKr.parse(full.kind),
+					xong: Number(full.currentValue) === 1,
+				},
+				input,
+			);
+		});
+	}
+
+	async goBangChung(userId: string, input: IdInput): Promise<{ id: string }> {
+		const q = await this.access.quyen(userId);
+		return this.db.$transaction(async (tx) => {
+			const row = await tx.okrBangChung.findUnique({
+				where: { id: input.id },
+				select: { id: true, url: true, ghiChu: true, keyResultId: true },
+			});
+			if (!row)
+				throw new NotFoundException(T.canhKr.khongCoBangChung(input.id));
+			const kr = await this.krDeGhi(tx, row.keyResultId);
+			this.assertGhiDuoc(q, userId, kr);
+			await tx.okrBangChung.delete({ where: { id: row.id } });
+			await this.okr.vet(
+				tx,
+				userId,
+				"go-bang-chung",
+				{ objectiveId: kr.objective.id, keyResultId: kr.id },
+				{ bangChungId: row.id, url: row.url, ghiChu: row.ghiChu },
+				null,
+			);
+			return { id: row.id };
+		});
+	}
 }
+
+export type KrChoBangChung = {
+	id: string;
+	ownerUserId: string;
+	objective: {
+		id: string;
+		cycleId: string;
+		level: CapMucTieu;
+		divisionId: string | null;
+		departmentId: string | null;
+		personUserId: string | null;
+		status: string;
+	};
+	kind: KieuKr;
+	xong: boolean;
+};
