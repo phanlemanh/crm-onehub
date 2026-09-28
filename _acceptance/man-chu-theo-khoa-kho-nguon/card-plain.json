@@ -1,0 +1,11 @@
+{
+  "feature_plain": "Phép đo màn «Tải nguồn lên» của việc bỏ chữ lặp ở vùng kéo thả chạy lại được trên mọi máy: nó tự mở nút bằng khoá kho nguồn giả, không mượn khoá thật của máy, và báo đúng tên khoá khi thiếu.",
+  "scope_plain": "Vòng này chỉ sửa cái thước, không đụng màn hay kho nguồn.",
+  "decisions_plain": [
+    {"id": "d-20260928T151625Z-1", "p": "KHÔNG viết đặc tả giao diện — vòng này không đổi màn nào, đổi lại người thấy cấu trúc lần đầu trong mã."},
+    {"id": "d-20260928T151625Z-2", "p": "KHÔNG chạy phép quét độ phủ — năm chỗ tên khoá và ba trạng thái khoá liệt kê tay đủ, đổi lại không có bằng chứng độ phủ từ phép quét."},
+    {"id": "d-20260928T151625Z-3", "p": "Chỉ đặt khoá kho nguồn giả, không xoá khoá logo — máy này không có khoá logo và phép đo không đụng logo."},
+    {"id": "d-20260928T151625Z-4", "p": "Sửa luôn lời mô tả phép đo trong hồ sơ đã ký để người chấm sau không dựng phiên sai khoá — đổi lại hồ sơ đó phải ghim lại."},
+    {"id": "d-20260928T151625Z-5", "p": "Thêm một phép kiểm máy bám theo tên khoá thật của kho nguồn, để lần đổi tên sau bị bắt ngay chứ không im như lần này."}
+  ]
+}
