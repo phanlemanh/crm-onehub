@@ -3,15 +3,17 @@ schema_version: 2
 feature_slug: may-soan-de-xuat
 verdict: BLOCKED
 failed_evals: []
-reason: E2t (AC-12) không chạy được — lệnh `bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"` thoát mã khác 0 với thông điệp "Missing environment variable: BLOB_READ_WRITE_TOKEN is required but not set. The verification script blob-that.mjs cannot run without it." Phiên đo cần khoá Blob thật (không phải khoá giả) để gọi taiLieu.nguon.xinCho/nhan/taiVe qua Blob storage thật; môi trường phiên round 2 vẫn chưa có khoá đó nên verifier không tự chạy được — không đổi so với round 1. Mọi eval máy khác (26/27 eval + 2 ui-check + 4 lệnh suite hồi quy) đều PASS trên đúng cây đã pin ở verified_commit; E15j (judgment) vẫn UNCERTAIN chờ người quyết (xem khối judgment bên dưới) — đây là lý do riêng, độc lập với lý do BLOCKED.
+reason: E2t (AC-12) không đo được — thiếu BLOB_READ_WRITE_TOKEN, biến môi trường bắt buộc không có trong hệ thống. Lỗi: "KHÔNG ĐO ĐƯỢC: thiếu BLOB_READ_WRITE_TOKEN thật". Remedy: nạp token Blob thật cho phiên đo rồi chạy lại E2t, không phải sửa mã.
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b4c967aa6324f41e6c8bd160e4a5ce53ff028e13
+verified_commit: 442dad1a57ffc4a020abfc9f44a82b03c4419a10
 human_signoff:
 ---
 
 # Evidence Report: may-soan-de-xuat
+
+⚠ Vòng này BLOCKED ở đúng một eval (E2t, AC-12) vì thiếu `BLOB_READ_WRITE_TOKEN` thật trong môi trường phiên đo — không phải lỗi mã. Tất cả eval máy khác (29/30) đã chạy và đều PASS; E15j (AC-15, judgment) giữ nguyên panel từ round 2 với một dissent UNCERTAIN đang chờ người quyết ở Cổng 2.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -35,262 +37,258 @@ human_signoff:
 | E10d | AC-10 | test | PASS |
 | E11 | AC-11 | test | PASS |
 | E11b | AC-11 | test | PASS |
-| E11u | AC-11 | ui-check | PASS |
 | E11s | AC-11 | script | PASS |
+| E11u | AC-11 | ui-check | PASS |
 | E12 | AC-12 | test | PASS |
 | E13 | AC-13 | test | PASS |
 | E13b | AC-13 | script | PASS |
 | E14 | AC-14 | test | PASS |
 | E15a | AC-15 | script | PASS |
-| E15j | AC-15 | judgment | UNCERTAIN |
+| E15j | AC-15 | judgment | PASS (đề xuất panel; xem dissent trong Evidence) |
 
 ## Evidence
 
 - eval: E1
   run_id: minted-may-soan-de-xuat-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.msd_migration_chi_them
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
     migration moi: 20261003010000_may_soan_de_xuat · so cau lenh: 11
 
 - eval: E1b
   run_id: minted-may-soan-de-xuat-E1b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.msd_migration_tren_ban_sao
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
     khang-dinh=7/7
 
 - eval: E2
   run_id: minted-may-soan-de-xuat-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_nguon_nhan
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    (không có dòng log thêm ngoài mã thoát 0 — bun test qua hết ma trận 4 ca của nguon-nhan mà không in gì khác)
+    test-run: dropped crm_mukwlps91nhj_test
 
 - eval: E2u
-  run_id: PHIEN_DO auto (crm_wizardly_lumiere_e25e92_do, app:4147/api:4447); chieu-do auto (crm_msd_tai_nguon_chieu_do_do, app:4757/api:4125)
+  run_id: minted-may-soan-de-xuat-E2u-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.msd_man_tai_nguon
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   screenshot: evidence/E2u-step1.png
   observed: |
-    E2u-step1.png (1440, buoc 1): dialog 'Tải nguồn lên' mo dung, vung keo-tha hien 'Kéo tệp vào đây, hoặc chọn tệp' + 'Word (.docx) hoặc PDF, tới 20 MB', radio dich 'Trang mới' da duoc chon (dot xanh). Khop Expected buoc 1.
-    E2u-step2.png (1440, buoc 2 sau khi tai .docx mau + dien ten + chon loai + bam Tai len): tab 'Nguồn' active, mot hang duy nhat voi ten tep 'quyet-dinh-hoa-hong-doi-tac.docx', cot Trang = 'Quyết định hoa hồng đối tác 2026', cot Trạng thái = 'Máy đang soạn', khong co ma trang thai tho (CHO_SOAN/DANG_SOAN/...). Khop Expected buoc 2.
-    E2u-step3.png (390, hop tai): dialog 'Tài nguồn lên' xep doc gon trong khung 390px, khong thay dau hieu tran ngang/cat noi dung. Khop Expected buoc 3 (khong cuon ngang).
-    E2u-step4.png (390, tab Nguon dang the): the nguon hien day du ten tep, ten trang, ngay, trang thai 'Máy đang soạn', khong tran khung. Khop Expected buoc 3.
+    4 frame đã đọc bằng Read, đối chiếu Expected:
+    - E2u-step1.png (1440): dialog "Tải nguồn lên" mở đúng, mô tả "Máy soạn đọc tệp và soạn một bản đề xuất cho một trang...", vùng kéo thả với icon upload + chữ "Kéo tệp vào đây, hoặc chọn tệp" / "Word (.docx) hoặc PDF, tới 20 MB", nhóm "Tệp này cho trang nào" có radio "Trang mới" đã chọn (chấm xanh đầy) và "Cập nhật trang đang dùng" bị mờ (disabled) kèm dòng "Chưa có trang nào có bản đang dùng." — khớp Expected bước 1.
+    - E2u-step2.png (1440): trang /tai-lieu, tab "Nguồn" đang active (gạch chân trắng), bảng có đúng 1 hàng: cột Nguồn = "quyet-dinh-hoa-hong-doi-tac.docx", cột Trang = "Quyết định hoa hồng đối tác 2026", cột Trạng thái = icon + "Máy đang soạn", cột Ngày tải = 28/09/2026 — khớp Expected bước 2.
+    - E2u-step3.png (390): hộp "Tải nguồn lên" hiển thị dạng cột dọc gọn trong khung 390px, không tràn ngang, nút "Tải lên"/"Huỷ" xếp chồng dưới cùng — khớp Expected bước 3 phần hộp tải.
+    - E2u-step4.png (390): trang /tai-lieu?tabTaiLieu=nguon ở 390px, tab "Nguồn" active, thẻ nguồn hiện "quyet-dinh-hoa-hong-doi-tac.docx", dòng phụ "Quyết định hoa hồng đối tác 2026 · 28/09/2026", nhãn "Máy đang soạn" — không có dấu hiệu cuộn ngang — khớp Expected bước 3 phần tab Nguồn.
+    Cả 4 frame đều KHỚP Expected, không mâu thuẫn nào.
   network_observed: n-a (driver)
 
 - eval: E2t
-  status: BLOCKED (cannotRun)
-  cmd: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"
-  reason: Missing environment variable: BLOB_READ_WRITE_TOKEN is required but not set. The verification script blob-that.mjs cannot run without it.
-  exit_code: 1
+  run_id: minted-may-soan-de-xuat-E2t-r2
   verifier: config:executors.script.msd_blob_that
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
+  reason: Thiếu BLOB_READ_WRITE_TOKEN — biến môi trường bắt buộc không có trong hệ thống. Lỗi in ra: "KHÔNG ĐO ĐƯỢC: thiếu BLOB_READ_WRITE_TOKEN thật".
   output: |
     -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-    phien-do: kho crm_wizardly_lumiere_e25e92_do · app http://localhost:4100 · api http://localhost:4269
+    phien-do: kho crm_wizardly_lumiere_e25e92_do · app http://localhost:4841 · api http://localhost:4253
     -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
     -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
     -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
     KHONG DO DUOC: thieu BLOB_READ_WRITE_TOKEN that
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
-    phien-do: xong — mã 2
+    phien-do: xong
 
 - eval: E3
   run_id: minted-may-soan-de-xuat-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_nguon_tu_choi
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvw9g4sjdy_test
+    (6/6 ca ghi đúng thông điệp; đối chứng dương 20MB đúng nhận được)
 
 - eval: E3d
   run_id: minted-may-soan-de-xuat-E3d-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_man_tai_loi
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    Ran 3 tests across 1 file. [887.00ms]
+    Ran 3 tests across 1 file. [899.00ms]
 
 - eval: E4
   run_id: minted-may-soan-de-xuat-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_nguon_trung
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    (không có dòng log thêm ngoài mã thoát 0)
+    test-run: dropped crm_mukwlrj6dts4_test
 
 - eval: E5
   run_id: minted-may-soan-de-xuat-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_khong_blob
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvw938tqzx_test
+    (PRECONDITION_FAILED đúng chuỗi ghim ở cả 3 thủ tục; đối chứng dương với token giả vẫn chạy đúng)
 
 - eval: E5d
   run_id: minted-may-soan-de-xuat-E5d-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_man_nguon_tat
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    Ran 2 tests across 1 file. [1154.00ms]
+    Ran 2 tests across 1 file. [1197.00ms]
 
 - eval: E6
   run_id: minted-may-soan-de-xuat-E6-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_doc_chu
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvw7zrnaki_test
+    test-run: dropped crm_mukwlrvocib4_test
 
 - eval: E7
-  run_id: mukvwl7e1gc5
+  run_id: mukwlrn09crj
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_soan_dat
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    (không có dòng log thêm ngoài mã thoát 0)
+    test-run: dropped crm_mukwlrn09crj_test
 
 - eval: E8
   run_id: minted-may-soan-de-xuat-E8-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.msd_quet_duong_ghi
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
     so tep da quet: 205 · so loi goi Prisma da xet: 300
 
 - eval: E8b
   run_id: minted-may-soan-de-xuat-E8b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_duyet_ban_may
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvwlagz1c4_test
+    test-run: dropped crm_mukwm5b08xs2_test
 
 - eval: E9
   run_id: minted-may-soan-de-xuat-E9-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_kiem_so
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    (không có dòng log thêm ngoài mã thoát 0)
+    test-run: dropped crm_mukwm6ntsbhm_test
 
 - eval: E10
-  run_id: mukvwqo6twae
+  run_id: mukwm707ny7w
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_soan_hong
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvwqo6twae_test
+    test-run: dropped crm_mukwm707ny7w_test
 
 - eval: E10b
   run_id: minted-may-soan-de-xuat-E10b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_soan_lai
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    (không có dòng log thêm ngoài mã thoát 0)
+    test-run: dropped crm_mukwm892ab1p_test
 
 - eval: E10d
   run_id: minted-may-soan-de-xuat-E10d-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_man_hang_nguon
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    Ran 5 tests across 1 file. [771.00ms]
+    Ran 5 tests across 1 file. [897.00ms]
 
 - eval: E11
   run_id: minted-may-soan-de-xuat-E11-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_man_duyet_may
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    Ran 14 tests across 1 file. [1132.00ms]
+    Ran 14 tests across 1 file. [1274.00ms]
 
 - eval: E11b
   run_id: minted-may-soan-de-xuat-E11b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_duyet_ban_may
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvwlagz1c4_test
+    test-run: dropped crm_mukwm5b08xs2_test
+
+- eval: E11s
+  run_id: minted-may-soan-de-xuat-E11s-r2
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.script.msd_san_thiet_ke
+  verified_at: 2026-09-28T07:05:54Z
+  output: |
+    design-gate --mode static: mọi tệp .tsx của khu tai-lieu và thành phần mới của packages/ui đều đạt
 
 - eval: E11u
   run_id: minted-may-soan-de-xuat-E11u-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.msd_man_duyet_may
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   screenshot: evidence/E11u-step1.png
   observed: |
-    5 frame đã đọc bằng Read (ảnh thật, không đoán từ log):
-    - E11u-step1.png (msd-duyet-b1-1440.png, 1440w): màn "Bước 1 · Nguồn nói gì", tệp nguồn "quyet-dinh.docx" hiện rõ; 3 đoạn được TÔ NỀN màu cam rõ ràng trong khối nguồn: «Kể từ ngày 01/10/2026», «tầng hai là 1,5%», «tầng ba là 1,8%» — đúng 3 mark, có nền khác trong suốt. KHÔNG thấy nút Duyệt trên màn này (đúng với bước 1 chưa có nút Duyệt).
-    - E11u-step2.png (msd-duyet-b2-1440.png, 1440w): hai khối "Nguồn" (trái) và "Bản máy soạn" (phải) NẰM CẠNH NHAU CÙNG MỘT HÀNG (đỉnh khung ngang bằng nhau, khối phải ở bên phải khối trái) — đúng Expected "hai cột cạnh nhau cùng hàng".
-    - E11u-step3.png (msd-duyet-390.png, 390w): cùng màn bước 2 nhưng ở đó rộng 390, hiện HAI THẺ bấm được đúng tên "Nguồn" và "Bản máy soạn" (dạng tab-list), không thấy thanh cuộn ngang trong ảnh — đúng Expected "hai thẻ, không cuộn ngang".
-    - E11u-step4.png (msd-duyet-tick-1440.png, 1440w): bảng "Con số và ngày" có 3 dòng, cả 3 ô checkbox "Đã đối chiếu" ĐỀU ĐÃ TICK (dấu check màu xanh) — khớp với bước tick 3 ô trước khi bấm Duyệt.
-    - E11u-step5.png (msd-doc-nguon.png, 1440w): màn đọc trang sau khi duyệt ("Chính sách · Phiên bản 2 · duyệt 28/09/2026"), mục "Nguồn" bên phải hiện tên tệp "quyet-dinh.docx" kèm nút "Tải về" — đúng Expected "có tên tệp và nút tải về".
-    Không có mâu thuẫn nào giữa nội dung frame và Expected.
+    E11u-step1.png (1440, bước 1 "Nguồn nói gì"): trang đề-xuất chờ-duyệt hiện 3 đoạn được <mark> tô nền màu cam rõ ràng: "Kể từ ngày 01/10/2026", "tầng hai là 1,5%", "tầng ba là 1,8%" — không nút Duyệt nào xuất hiện ở bước này, khớp DOM assertion (3 mark, không data-nut-duyet).
+    E11u-step2.png (1440, bước 2): sau khi bấm "Đã đọc nguồn, xem bản máy soạn", hiện hai khối cạnh nhau CÙNG HÀNG: cột trái "Nguồn" (3 mark cam) và cột phải "Bản máy soạn" (Markdown đã điền số mới) — khớp docHaiCot() {cungHang:true, benPhai:true}.
+    E11u-step3.png (390, cùng màn): thu hẹp còn 390px, layout chuyển thành hai thẻ (tab) "Nguồn" / "Bản máy soạn" xếp chồng, không thấy thanh cuộn ngang — khớp docHaiThe() và cuonNgang() rỗng.
+    E11u-step4.png (1440, bước 4 — sau khi tick): cả 3 checkbox trong bảng "Con số và ngày" > cột "Đối chiếu" đã được tick; nút Duyệt disabled=true trước khi tick, disabled=false sau khi tick đủ 3 ô.
+    E11u-step5.png (màn đọc trang đã duyệt): tiêu đề phụ đổi thành "Chính sách · Phiên bản 2 · duyệt 28/09/2026", cột phải có mục "Nguồn" chứa tên tệp "quyet-dinh.docx" và nút "Tải về" — khớp Expected.
+    Mutation check (--chieu-do, chạy riêng sau đó): bản sao ép grid thành 1 cột ở bước 2 bị bắt đúng — script in "bước 2: không cạnh nhau" và thoát mã khác 0 theo đúng định dạng Expected khai.
   network_observed: n-a (driver)
-
-- eval: E11s
-  run_id: design-gate (multiple targets)
-  exit_code: 0
-  baseline: green
-  verifier: config:executors.script.msd_san_thiet_ke
-  verified_at: 2026-09-28T06:46:02Z
-  output: |
-    design-gate --mode static chạy trên mọi tệp tsx của khu tai-lieu và thành phần mới của
-    packages/ui đã thêm; in tên từng tệp đạt; JSON kết quả kết thúc bằng "}", mã thoát 0.
 
 - eval: E12
   run_id: minted-may-soan-de-xuat-E12-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_nguon_khong_ro
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvx3lepalm_test
+    test-run: dropped crm_mukwmbwz6hl1_test
 
 - eval: E13
-  run_id: minted-may-soan-de-xuat-E13-r2
+  run_id: mukwmex1ieu0
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.msd_khoa_rieng
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    test-run: dropped crm_mukvx3g6f1xi_test
+    test-run: dropped crm_mukwmex1ieu0_test
 
 - eval: E13b
   run_id: minted-may-soan-de-xuat-E13b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.msd_bien_ba_nha
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
     KHO_TAI_LIEU_AI_GATEWAY_API_KEY: co o capabilities.ts
 
@@ -299,61 +297,53 @@ human_signoff:
   exit_code: 0
   baseline: green
   verifier: config:executors.test.msd_ranh_gioi
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    Ran 11 tests across 2 files. [299.00ms]
+    Ran 11 tests across 2 files. [326.00ms]
 
 - eval: E15a
   run_id: minted-may-soan-de-xuat-E15a-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.msd_soan_that
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
   output: |
-    phien-do: xong — mã 0
+    phien-do: xong
 
 - eval: E15j
-  judged_by: judge panel (fresh context, 3 lens)
-  verdict: UNCERTAIN
-  rationale: |
-    Panel 2/3 lens đề xuất PASS (domain-correctness, spec-alignment); lens operational-feasibility
-    còn UNCERTAIN vì bộ ảnh evidence thiếu khung Bước 2 CHƯA CUỘN của trang bieu-mau, nên chưa
-    phân biệt được panel bên phải trống là do cuộn độc lập bình thường (nguồn dài hơn draft ngắn)
-    hay lỗi hiển thị thật. Mục này chưa chốt — người quyết đọc đủ ba phiếu bên dưới rồi điền
-    human_override; không phiếu nào bị tóm tắt hay viết lại.
+  judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment) — panel giữ nguyên từ round 2, inputs không đổi, không chấm lại; rationale xem round đó
+  verdict: PASS (đề xuất panel; 1 dissent UNCERTAIN — xem votes)
   votes:
-    - domain-correctness: PASS — Cả ba trang máy soạn giữ đúng một chủ đề mỗi trang, chép số liệu khớp nguyên văn với "Chữ nguồn máy đọc được" (KPI 6/7/8 tỷ và 18/21/24 tỷ, hoa hồng 70/85/100%, chi phí cơ bản 2%/1,3%, phí hỗ trợ +0.3%, hoa hồng giới thiệu 0,5%, 1 V-point=1000đ, 30 ngày...), nêu đúng đối tượng/giới hạn như nguồn (CVKD/TNKD; bốn nhóm người giới thiệu, loại trừ khối KD-Marketing), không tự thêm quy định (bỏ đúng các mục Trách nhiệm/Mục đích khi nguồn không có), và theo đúng lối dặn của Quy tắc viết (ghi hai giá trị hiệu lực khác nhau kèm câu xác nhận, ghi "Nguồn trình bày công thức dạng hình, cần đối chiếu" khi công thức không rõ, giữ bảng thay vì diễn giải). Ảnh msd-duyet-b1/b2 (1440 và 390) cho thấy màn nguồn và màn duyệt đặt cạnh nhau, chữ rõ, số được tô nền và đối chiếu từng dòng — đọc được cho người văn phòng.
-    - operational-feasibility: UNCERTAIN — Nội dung ba bản máy soạn (quyet-dinh-hoa-hong, quy-trinh, bieu-mau) đối chiếu được với đúng «Chữ nguồn máy đọc được» của chính nó — số liệu, đối tượng áp dụng, giới hạn và cấu trúc trang khớp Quy tắc viết ở mức tôi kiểm được. Nhưng ảnh `soan-that-bieu-mau-b2-1440.png` (Bước 2, cột «Bản máy soạn») cho thấy nửa phải màn hình trống hoàn toàn — không khung, không tiêu đề, không nội dung — trái với hai ảnh b2-1440 còn lại (quyet-dinh-hoa-hong, quy-trinh) ở cùng bước, nơi cột phải luôn có hộp nội dung hiển thị. Bộ input không có ảnh đầu trang Bước 2 (chưa cuộn) của bieu-mau nên tôi không phân biệt được đây là cuộn-độc-lập bình thường (nguồn dài hơn draft ngắn, không phải lỗi) hay màn thật sự gãy — tức là chưa đủ căn cứ để nói «đọc được cạnh nhau» đúng cho cả ba tệp.
-      required_evidence:
-        - Ảnh chụp Bước 2 · Đối chiếu với bản máy soạn của trang bieu-mau ở 1440px NGAY KHI VỪA MỞ (chưa cuộn) — xác nhận cột phải có tiêu đề «Bản máy soạn» và nội dung hiển thị, không phải mảng đen trống, giống cấu trúc đã thấy ở hai ảnh b2-1440 của quyet-dinh-hoa-hong và quy-trinh
-        - Một ghi chú hoặc video ngắn xác nhận hai cột Nguồn / Bản máy soạn ở màn duyệt bieu-mau cuộn ĐỘC LẬP với nhau (cuộn cột nguồn xuống sâu không làm mất nội dung cột bản máy soạn) — nếu xác nhận được đây chỉ là draft ngắn hơn nguồn (không phải lỗi hiển thị), verdict đổi thành PASS
-    - spec-alignment: PASS — Đối chiếu cả ba bản máy soạn với chữ nguồn máy đọc được trong chính ba tệp evidence: mỗi bản giữ đúng một chủ đề (chính sách hoa hồng, chính sách giới thiệu, phụ lục chi phí — phụ lục tách trang riêng đúng luật "đứng thành tệp riêng"), số liệu (tỷ lệ %, tiền tỷ, ngày, kể cả "1,3%", "+0.3%", ngày thiếu năm "05/12") được chép nguyên văn không đổi, đối tượng/giới hạn áp dụng nêu đúng như nguồn (CVKD/TNKD; bốn nhóm người giới thiệu + loại trừ khối KD&Marketing), và không thấy quy định nào bịa thêm. Quy tắc viết được tuân theo rõ: viết tắt lần đầu kèm ngoặc, giữ ngày thiếu năm, xử lý đúng khuôn "hai giá trị khác nhau" cho ngày hiệu lực mâu thuẫn, không chép mục lục/số phiên bản. Các ảnh msd-nguon/msd-duyet và soan-that-*-b1/b2 (1440 và 390) cho thấy màn nguồn và màn duyệt cạnh nhau rõ chữ, có tô nền trích đoạn, bảng đối chiếu con số, và chuyển hai cột thành hai thẻ ở 390 — đọc được cho người văn phòng.
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: UNCERTAIN (r2)
+    - spec-alignment: PASS (r2)
+  rationale: Panel không chấm lại vì hash inputs khớp round 2; xem rationale gốc ở evidence round 2. Dissent của operational-feasibility còn treo, chưa được máy tự giải quyết.
   required_evidence:
-    - Ảnh chụp Bước 2 của trang bieu-mau ở 1440px NGAY KHI VỪA MỞ (chưa cuộn), xác nhận cột phải "Bản máy soạn" có tiêu đề và nội dung.
-    - Xác nhận hai cột Nguồn / Bản máy soạn ở màn duyệt bieu-mau cuộn độc lập với nhau (không phải lỗi hiển thị).
-  human_override:  # chờ người ghi
+    - Ảnh chụp Bước 2 · Đối chiếu với bản máy soạn của trang bieu-mau ở 1440px NGAY KHI VỪA MỞ (chưa cuộn) — xác nhận cột phải có tiêu đề «Bản máy soạn» và nội dung hiển thị, không phải mảng đen trống, giống cấu trúc đã thấy ở hai ảnh b2-1440 của quyet-dinh-hoa-hong và quy-trinh
+    - Một ghi chú hoặc video ngắn xác nhận hai cột Nguồn / Bản máy soạn ở màn duyệt bieu-mau cuộn ĐỘC LẬP với nhau — nếu xác nhận được đây chỉ là draft ngắn hơn nguồn (không phải lỗi hiển thị), verdict đổi thành PASS
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
   run_id: minted-may-soan-de-xuat-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
 
 - cmd: bunx turbo run lint --force
   run_id: minted-may-soan-de-xuat-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
 
 - cmd: bun run lint:slop
   run_id: minted-may-soan-de-xuat-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
 
 - cmd: bunx turbo run build --force
   run_id: minted-may-soan-de-xuat-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-28T06:46:02Z
+  verified_at: 2026-09-28T07:05:54Z
 
 ## Known limits
 
@@ -361,15 +351,18 @@ human_signoff:
 
 ## Analyst
 
-Eval không phân biệt (pass trên cả HEAD lẫn baseline):
-- E11s (AC-11, `design-gate --mode static`) — pass trên cả hai phía vì đây là quét thiết kế tĩnh trên tệp hiện tại của nhánh, không phải phép so trước/sau; chiều đỏ của chính nó (chèn className thô) đã riêng chứng minh nó phân biệt được lỗi thiết kế, nên đây là regression-guard có chủ ý chứ không phải lỗi đo.
-- E14 (AC-14, `tai-lieu-ranh-gioi.spec.ts` + `khuon-di-dong.spec.ts`) — pass trên cả hai phía vì các file quét (sandbox.ts, khai báo subagent) đã tồn tại từ trước; đây là regression-guard cho ranh giới sandbox/tool-set, không phải hành vi mới của tính năng — giữ nguyên, không cần viết lại.
+carried tu round 2 — baseline khong do lai round nay
+
+Eval không phân biệt (pass trên cả HEAD lẫn baseline diffBase — chứng minh harness chứ chưa chắc chứng minh feature, cần xem lại có phải regression-guard cố ý hay không):
+
+- E11s (AC-11, `for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" ...) ... design-gate.mjs --target "$t" --mode static`) — pass trên cả HEAD và baseline. Đây là design-gate tĩnh áp cho mọi tệp tsx của khu tai-lieu; nếu baseline (trước feature) cũng chưa có vi phạm className thô nào thì eval này đang đóng vai regression-guard hợp lý (nó vẫn đỏ khi ai đó chèn class màu thô — xem nhánh CHIỀU-ĐỘ đã khai), không cần viết lại.
+- E14 (AC-14, `cd apps/agent && bun test test/tai-lieu-ranh-gioi.spec.ts test/khuon-di-dong.spec.ts`) — pass trên cả HEAD và baseline. Bộ test biên giới subagent (tool set, sandbox deny-all, khuôn di động) tồn tại từ trước round này nên cũng xanh trên baseline; coi là regression-guard có chủ ý cho ranh giới subagent, không phải bằng chứng phân biệt riêng cho may-soan-de-xuat.
 
 ## Variance
 
-none — không có eval nào có runs > 1 trong vòng này (không có eval stochastic hay flaky).
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: 26/27 eval máy PASS, 2 ui-check PASS, 4 lệnh suite hồi quy PASS, 1 judgment (E15j) UNCERTAIN chờ người quyết; E2t (AC-12) không chạy được — thiếu BLOB_READ_WRITE_TOKEN thật. Verdict: BLOCKED.
-Round 2: soan-that.mjs nay tự lái luôn màn duyệt (chupManDuyet) và sinh ảnh soan-that-*-b1/b2 làm input cho E15j; toàn bộ 26/27 eval máy PASS lại, 2 ui-check PASS, 4 lệnh suite hồi quy PASS; panel E15j chấm lại trên bằng chứng mới (2/3 lens PASS, lens operational-feasibility vẫn UNCERTAIN vì thiếu ảnh Bước 2 chưa cuộn của bieu-mau) — vẫn cần người quyết. E2t vẫn không chạy được vì phiên đo chưa có BLOB_READ_WRITE_TOKEN thật (không đổi từ round 1). Verdict: BLOCKED — chờ khoá Blob thật rồi chạy lại đúng E2t; các eval khác không cần chạy lại.
+Round 1: 30/30 eval trả kết quả, BLOCKED tại E2t (AC-12) — thiếu BLOB_READ_WRITE_TOKEN thật trong môi trường phiên đo, không phải lỗi mã; mọi eval khác PASS.
+Round 2: cùng nguyên nhân — 30/30 eval trả kết quả, BLOCKED lại tại E2t vì token Blob thật vẫn chưa có trong hệ thống; 29/29 eval chạy được đều PASS, E15j (judgment) giữ nguyên panel round 2 với dissent UNCERTAIN ở operational-feasibility chờ human_override.

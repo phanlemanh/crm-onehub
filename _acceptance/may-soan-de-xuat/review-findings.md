@@ -1,50 +1,10 @@
 ## Trong hợp đồng
 
+(không có phát hiện nào khớp AC trong vòng này)
+
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
-
-- **E15a now drives the review screen, but its `paths` still leave out the screen code and man-lib**
-  Người dùng thấy gì: Ảnh chụp minh chứng ở màn duyệt có thể không được đánh dấu lỗi thời khi giao diện màn đó đổi, khiến người đọc hồ sơ tưởng nhầm ảnh cũ vẫn là bằng chứng đúng cho bản mới.
-  file: `_acceptance/may-soan-de-xuat/evals.yaml`
-  severity: medium
-  Đề xuất: known-limits
-
-- **E15a `expected` no longer matches the script's exit condition**
-  Người dùng thấy gì: Khi phép đo báo lỗi, người đọc báo cáo có thể hiểu nhầm là máy soạn thất bại trong khi thực ra chỉ là bước chụp màn duyệt bị lỗi, gây mất thời gian tra sai chỗ.
-  file: `_acceptance/may-soan-de-xuat/evals.yaml`
-  severity: low
-  Đề xuất: known-limits
-
-- **soan-that.mjs silently drops console and page errors from the review-screen captures**
-  Người dùng thấy gì: Nếu màn duyệt gặp lỗi ẩn khi hiển thị, phép đo vẫn báo đạt và ảnh chụp vẫn được tính là bằng chứng sạch, nên một lỗi thật ở màn duyệt có thể không ai phát hiện.
-  file: `_acceptance/may-soan-de-xuat/rang/soan-that.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **The 'Changes against the page in use' card diffs against banGoc, not the page currently in use**
-  Người dùng thấy gì: Nếu một đề xuất khác được duyệt trong lúc bản máy soạn đang chờ, thẻ 'Thay đổi so với bản đang dùng' có thể vẫn so sánh với bản cũ hơn, khiến người duyệt hiểu sai về những gì thực sự sắp thay đổi.
-  file: `apps/app/app/(app)/[slug]/tai-lieu/de-xuat/[id]/man-duyet.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): cờ coBanGoc được đặt tay, không đi qua page.tsx**
-  Người dùng thấy gì: Chưa có phép đo nào xác nhận máy suy đúng lúc nào cần hiện khối so sánh với bản đang dùng, nên nếu logic đó tính sai trong thực tế, người duyệt có thể không thấy cảnh báo đáng ra phải có.
-  file: `apps/app/test/tai-lieu-man-duyet-may.dom.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (assert «chuỗi có mặt» trong khi lời hứa là quan hệ): khối so với bản đang dùng chỉ được kiểm là có chứa "1,2%"**
-  Người dùng thấy gì: Bằng chứng hiện chỉ xác nhận có chữ '1,2%' xuất hiện đâu đó trên màn, chứ chưa xác nhận đúng số cũ bị gạch bỏ và số mới được thêm vào đúng chỗ, nên một lỗi hiển thị đảo ngược hai giá trị có thể lọt qua mà không ai biết.
-  file: `apps/app/test/tai-lieu-man-duyet-may.dom.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): tiền tố «crm:» của token kênh viết tay, không lấy từ bên viết là eve**
-  Người dùng thấy gì: Giả định về cách hệ thống ghi token phiên có thể không khớp thực tế, và nếu cách ghi đó đổi, việc tự động đóng phiên máy soạn khi gặp lỗi có thể lặng lẽ ngừng hoạt động mà không ai nhận ra ngay.
-  file: `apps/agent/test/crm-token.spec.ts`
-  severity: low
-  Đề xuất: known-limits
 
 - **taiLieuNguon.nhan can delete the stored file of an existing source (r1)**
   Người dùng thấy gì: Một thành viên trong không gian làm việc (không cần quyền quản trị) có thể khiến tệp nguồn của người khác bị xoá khỏi kho lưu trữ, khiến tài liệu đó không còn tải về được và không soạn lại được nữa.
@@ -82,6 +42,12 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: high
   Đề xuất: new-contract
 
+- **drainMaySoan drops every send error without logging it (r1)**
+  Người dùng thấy gì: Nếu máy soạn không mở được phiên làm việc, người dùng chỉ thấy một thông báo lỗi chung; đội vận hành sẽ khó truy ra nguyên nhân thật sự nếu lỗi lặp lại nhiều lần.
+  file: `apps/agent/agent/lib/tai-lieu-phien.ts`
+  severity: low
+  Đề xuất: known-limits
+
 - **Timeout sweep uses the same 4-minute budget as the subagent but starts counting earlier (r1)**
   Người dùng thấy gì: Một bản đang được máy soạn hợp lệ có thể đôi khi bị đánh dấu 'hết giờ' hơi sớm, khiến lượt soạn đó bị bỏ phí dù chưa thực sự quá hạn.
   file: `apps/agent/agent/lib/tai-lieu-config.ts`
@@ -91,6 +57,12 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
 - **Shape 3 (asserts a substring is present when the promise is an exact whole-number match): the bien-1-5 case cannot fail (r1)**
   Người dùng thấy gì: Phép kiểm cho quy tắc 'số 1,5 không được tính là khớp với số 11,5' hiện chưa chắc chắn sẽ bắt được lỗi nếu lỗi đó thật sự xảy ra — nếu có sai sót, bản đề xuất có thể trích nhầm số mà không bị chặn lại.
   file: `apps/agent/test/nop-ban-de-xuat.spec.ts`
+  severity: high
+  Đề xuất: known-limits
+
+- **Shape 1 (reads source code instead of output): the API half of 'both paths go through one write function' is checked by grepping an import string, not by a spy (r1)**
+  Người dùng thấy gì: Chưa có bằng chứng chắc chắn rằng đề xuất tạo từ màn nhập tay và đề xuất do máy soạn tạo luôn được lưu theo đúng cùng một cách — nếu hai nơi lệch nhau, dữ liệu đề xuất có thể không nhất quán mà không ai phát hiện qua phép kiểm hiện tại.
+  file: `apps/agent/test/tai-lieu-soan.integration.spec.ts`
   severity: high
   Đề xuất: known-limits
 
@@ -124,4 +96,8 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 3/7 lỗi rơi vào file không bộ đo nào phủ (_acceptance/may-soan-de-xuat/evals.yaml, apps/agent/test/crm-token.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+## Chưa adversarial-verify (refuter chết)
+
+(không có)
+
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

@@ -1,14 +1,10 @@
-Driver: script noi bo (puppeteer-core qua bun _acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs,
-chay qua `bun scripts/lan-do/tien-de.mjs --chay "..."` -> tu dung phien-do.mjs rieng: kho
-crm_wizardly_lumiere_e25e92_do, app http://localhost:4162, api http://localhost:4230).
-Day KHONG phai browser tool cua phien nay (Claude_Browser) - verifier (phien nay) khong dieu
-khien tab trinh duyet truc tiep nen khong co duong doc network/console (read_network_requests /
-read_console_messages) de dump failed requests hay console errors thuc su.
-
-Ghi chu: ban than script noi bo co tu bat loi console (pageerror/console.error, tru dong
-"Download the React DevTools") va se day vao mang `hong` neu co -> lam buoc do fail. Lan chay
-nay: log khong co dong "loi console app", va "man-duyet-may: dat" (exit 0), tuc script khong
-bat duoc console error nao trong 4 trang da mo. Nhung day la tu-bao-cao cua script bi kiem, khong
-phai network truth doc doc lap boi verifier nay.
-
-networkObserved = "n-a (driver)"
+E11u — network truth
+Driver: apps' own harness script (_acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs) drives
+its own headless puppeteer-core instance inside a spawned bun/node process (via
+scripts/lan-do/tien-de.mjs -> phien-do.mjs). This subagent's Bash/Browser tools were not the
+driver of that browser session, so mcp__Claude_Browser read_network_requests /
+read_console_messages have no access to it.
+The harness itself tracks console errors internally (loiConsole array in man-lib.mjs) and
+folds any into the exit code/"loi console app" failure line; none were reported in this run
+(no such line appeared in the log — see /tmp/msd-E11u.log).
+networkObserved: n-a (driver)
