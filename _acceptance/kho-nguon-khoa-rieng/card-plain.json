@@ -1,0 +1,13 @@
+{
+  "feature_plain": "Kho tài liệu có khoá lưu tệp riêng, nên bật được việc tải tệp nguồn trên bản thật mà không đẩy logo và ảnh vào kho riêng tư.",
+  "scope_plain": "Năm việc để ngoài vòng này, như đã duyệt ở Cổng Phạm vi:",
+  "decisions_plain": [
+    {"id": "d-20260928T120055Z-1", "p": "Thiếu khoá kho nguồn thì nút tải khoá êm, không dùng tạm khoá logo — đổi lại máy dev phải có một dòng cấu hình riêng."},
+    {"id": "d-20260928T120055Z-2", "p": "Mở việc mới thay tiêu chí cũ, không sửa hợp đồng đã ký — đổi lại việc cũ phải chấm lại ở cuối nhánh."},
+    {"id": "d-20260928T120055Z-3", "p": "KHÔNG làm đặc tả màn hình — vòng này không đổi màn nào."},
+    {"id": "d-20260928T120055Z-4", "p": "KHÔNG làm đếm số bản cài bật kho nguồn và kiểm kiểu kho lúc khởi động — để sau khi cần."},
+    {"id": "d-20260928T122100Z-6", "p": "Làm năm phần việc lần lượt, không chia song song — mỗi phần vài phút nên chia ra tốn hơn làm."},
+    {"id": "d-20260928T122613Z-7", "p": "Lệnh thử trên kho thật ép khoá logo thành giá trị giả, để chỉ khoá mới qua được — đổi lại lệnh của một phép đo đã ký ở việc cũ đổi chữ."},
+    {"id": "d-20260928T131736Z-8", "p": "Sửa ca kiểm «chỉ có khoá logo» cho dựng đúng tình huống đó — vòng chấm đầu phát hiện ca cũ đang kiểm tình huống «không có khoá nào»."}
+  ]
+}

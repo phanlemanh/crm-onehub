@@ -1,0 +1,142 @@
+schema_version: 1
+slug: kho-nguon-khoa-rieng
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.knr_hai_bien
+    paths:
+      - "packages/db/src/blob-nguon.ts"
+      - "packages/db/src/blob.ts"
+      - "packages/db/test/blob-nguon.spec.ts"
+    expected: |
+      Ma tran viet truoc 6 o x 2 kho = 12 ky vong ghi san trong mot bang cua tep kiem, so assert = 12:
+      [khoNguonVercel().bat(), blobEnabled()] = (KHO co, BLOB co)->[true,true]; (co, vang)->[true,false];
+      (vang, co)->[false,true]; (vang, vang)->[false,false]; (KHO "   ", BLOB co)->[false,true];
+      (KHO co, BLOB "")->[true,false]. "vang" = xoa khoi process.env. Moi o dat env truoc, tra lai env cu
+      o afterEach. CHIEU DO: ban sao blob-nguon.ts lui sang BLOB_READ_WRITE_TOKEN khi KHO vang ->
+      o (vang,co) do voi thong diep ghim "kho nguon bat bang khoa logo"; ban sao doc nham ten logo ->
+      o (co,vang) do voi "kho nguon tat du co khoa rieng"; ban sao bo trim -> o (KHO "   ", BLOB co)
+      do voi "khoang trang tinh la co khoa".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.knr_token_gui_di
+    paths:
+      - "packages/db/src/blob-nguon.ts"
+      - "packages/db/test/blob-nguon.spec.ts"
+    expected: |
+      Blob API gia (Bun.serve cong 0, VERCEL_BLOB_API_URL tro vao) ghi "<method> <pathname>
+      <authorization>" cua moi yeu cau; tra /signed-token mot delegationToken gia, /delete {}. Dat
+      KHO_TAI_LIEU_BLOB_TOKEN = "vercel_blob_rw_nguon_gia" va BLOB_READ_WRITE_TOKEN =
+      "vercel_blob_rw_logo_gia". Goi kyPut, kyGet, xoa tren khoNguonVercel(). Ky vong: >= 3 yeu cau
+      ghi duoc (2 POST /signed-token, 1 POST /delete); MOI yeu cau mang "Bearer vercel_blob_rw_nguon_gia";
+      KHONG yeu cau nao chua "vercel_blob_rw_logo_gia". Doi chung duong: may chu gia nhan dung so yeu cau
+      (khong phai 0 yeu cau cho ra "khong co cai nao mang khoa logo"). CHIEU DO: ban sao blob-nguon.ts
+      truyen token logo -> do voi thong diep ghim "yeu cau mang khoa logo: POST /signed-token".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.knr_chi_khoa_logo
+    paths:
+      - "packages/db/src/blob-nguon.ts"
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/src/config/env.validation.ts"
+      - "apps/api/test/tai-lieu-nguon-khoa-logo.spec.ts"
+      - "packages/db/test/blob-nguon.spec.ts"
+    expected: |
+      Tep kiem moi apps/api/test/tai-lieu-nguon-khoa-logo.spec.ts: dat BLOB_READ_WRITE_TOKEN =
+      "vercel_blob_rw_logo_gia" va KHO_TAI_LIEU_BLOB_TOKEN = "" TRUOC khi dung san (AppModule nap dong).
+      trangThai -> { bat: false }; xinCho, nhan, taiVe -> "412 <NGUON.thongDiep.tat>" (khong 500);
+      cung phien taiLieu.create, propose, approve, list, get cua luot 1 chay dung. Them o
+      packages/db/test/blob-nguon.spec.ts: KHO vang thi kyPut, kyGet tu choi voi dung chuoi
+      "Kho nguồn chưa bật: thiếu KHO_TAI_LIEU_BLOB_TOKEN". CHIEU DO: ban sao blob-nguon.ts lui sang
+      BLOB_READ_WRITE_TOKEN -> trangThai tra bat true, do voi thong diep ghim "kho nguon bat bang khoa logo".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.knr_nang_luc
+    paths:
+      - "apps/agent/agent/lib/capabilities.ts"
+      - "apps/agent/test/capabilities.spec.ts"
+    expected: |
+      Ma tran 6 o cua AC-1 x 2 muc = 12 ky vong viet truoc, so assert = 12: [LUU_NGUON.enabled,
+      "Picture storage".enabled] theo cung bang chan tri cua E1 (ke ca o KHO "   " va o BLOB "");
+      LUU_NGUON.from === "KHO_TAI_LIEU_BLOB_TOKEN"; capabilitiesFrom(null) khong nem trong o nao. KEYS cua
+      tep kiem co ca KHO_TAI_LIEU_BLOB_TOKEN (xoa truoc moi ca, tra lai sau). CHIEU DO: ban sao
+      capabilities.ts de LUU_NGUON doc BLOB_READ_WRITE_TOKEN -> o (vang,co) do voi thong diep ghim
+      "luu nguon bat bang khoa logo"; ban sao bo trim -> o (KHO "   ", BLOB co) do voi "khoang trang tinh
+      la co khoa".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.knr_bien_cac_nha
+    paths:
+      - ".env.example"
+      - "turbo.json"
+      - "apps/api/turbo.json"
+      - "apps/agent/turbo.json"
+      - "apps/api/src/config/env.validation.ts"
+      - "docs/environment.md"
+      - "docs/api.md"
+      - "packages/db/src/blob-nguon.ts"
+      - "apps/agent/agent/**"
+      - "_acceptance/kho-nguon-khoa-rieng/rang/bien-cac-nha.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no. Danh sach nha viet truoc (7): .env.example (dong
+      "# KHO_TAI_LIEU_BLOB_TOKEN=" va khoi ghi chu ngay tren chua ca "private" lan cum nguyen van
+      "không gắn"), env.validation.ts (thuoc tinh KHO_TAI_LIEU_BLOB_TOKEN), turbo.json globalPassThroughEnv,
+      moi task cua apps/api/turbo.json va apps/agent/turbo.json co BLOB_READ_WRITE_TOKEN trong
+      passThroughEnv thi cung co bien moi (so task doc duoc > 0), docs/environment.md (dong bang bat dau
+      "| `KHO_TAI_LIEU_BLOB_TOKEN`"), docs/api.md: THAN muc "## Kho tài liệu: nguồn" (tu tieu de toi
+      tieu de ## ke) chua KHO_TAI_LIEU_BLOB_TOKEN va KHONG chua BLOB_READ_WRITE_TOKEN. In mot dong
+      "co o <nha>" moi nha. Them: bien khong o globalEnv hay env nao cua ba turbo.json; blob-nguon.ts khong
+      chua "BLOB_READ_WRITE_TOKEN"; moi tep duoi apps/agent/agent/** co goi khoNguonVercel khong chua
+      "BLOB_READ_WRITE_TOKEN" hay "blobEnabled" — in "quet N tep agent doc nguon" voi N > 0 (doi chung
+      duong). CHIEU DO chay san trong script tren ban sao tmpdir, moi ca exit 1 voi thong diep ghim:
+      bo bien khoi globalPassThroughEnv -> "thieu nha: turbo globalPassThroughEnv"; dua bien vao env cua
+      task build -> "bi mat nam trong env"; bo bien khoi task dev cua apps/agent/turbo.json -> "thieu nha:
+      apps/agent/turbo.json dev"; them "BLOB_READ_WRITE_TOKEN" vao blob-nguon.ts -> "kho nguon con doc
+      khoa logo"; xoa ten bien khoi than muc api.md -> "thieu nha: docs/api.md muc nguon"; bo cum
+      "không gắn" -> "ghi chu .env.example thieu khong gan du an"; chen "BLOB_READ_WRITE_TOKEN" vao ban
+      sao dispatch.ts -> "agent doc nguon con doc khoa logo". Chieu do bat thieu mot ca -> exit 3.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.msd_blob_that
+    paths:
+      - "packages/db/src/blob-nguon.ts"
+      - "apps/api/src/tai-lieu/**"
+      - "_acceptance/may-soan-de-xuat/rang/blob-that.mjs"
+    expected: |
+      Chay trong phien do rieng, doc KHO_TAI_LIEU_BLOB_TOKEN (env roi .env goc). Luot xanh dat
+      BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_logo_gia_khong_dung" trong env cua phien do (ghi de gia tri
+      .env), de chi khoa KHO moi qua duoc store that: in "buoc N: dat" cho 4 buoc (PUT ky, sha256, GET ky,
+      GET khong ky != 200), don blob o finally, exit 0. Khong dong nao in gia tri khoa (dau ra khong co
+      "vercel_blob_rw_" ngoai chuoi gia). CHIEU DO: KHO_TAI_LIEU_BLOB_TOKEN="" va BLOB_THAT_ENV tro mot
+      .env tam CO dong BLOB_READ_WRITE_TOKEN=<khoa gia> nhung khong co dong KHO -> exit 2 voi
+      "thieu KHO_TAI_LIEU_BLOB_TOKEN that", khong dong "dat" nao.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.msd_man_tai_nguon
+    paths:
+      - "packages/db/src/blob-nguon.ts"
+      - "_acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs"
+    expected: |
+      Ban do dung lai API phien do voi KHO_TAI_LIEU_BLOB_TOKEN gia va Blob API gia; in dong
+      "-- blob gia <url>; api phien chay lai voi KHO_TAI_LIEU_BLOB_TOKEN gia"; truoc buoc chup dau tien
+      goi taiLieuNguon.trangThai va in "kho nguon bat tren api phien"; ca chuoi chup di het, exit 0.
+      CHIEU DO: ban sao dat BLOB_READ_WRITE_TOKEN gia thay bien moi -> exit 1 truoc buoc chup voi
+      thong diep ghim "kho nguon tat tren api phien".

@@ -3,13 +3,14 @@ const PHUT_GIAY = 60;
 
 export const BLOB_NGUON = {
 	thuMuc: "kho-tai-lieu/nguon",
+	bienKhoa: "KHO_TAI_LIEU_BLOB_TOKEN",
 	kieuNoiDung: {
 		docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		pdf: "application/pdf",
 	},
 	giayKyPut: 10 * PHUT_GIAY,
 	thongDiep: {
-		tat: "Kho nguồn chưa bật: thiếu BLOB_READ_WRITE_TOKEN",
+		tat: "Kho nguồn chưa bật: thiếu KHO_TAI_LIEU_BLOB_TOKEN",
 	},
 } as const;
 
@@ -35,7 +36,7 @@ export function hetHanSau(giay: number, bayGio = Date.now()): number {
 }
 
 function tokenNguon(): string | null {
-	return process.env.BLOB_READ_WRITE_TOKEN?.trim() || null;
+	return process.env[BLOB_NGUON.bienKhoa]?.trim() || null;
 }
 
 function canToken(): string {

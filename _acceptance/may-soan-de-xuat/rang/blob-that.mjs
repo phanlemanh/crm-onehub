@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,19 +8,19 @@ const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const KIEU_DOCX =
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
+const BIEN = "KHO_TAI_LIEU_BLOB_TOKEN";
+
 function tokenThat() {
-	if (process.env.BLOB_READ_WRITE_TOKEN?.trim()) {
-		return process.env.BLOB_READ_WRITE_TOKEN.trim();
-	}
-	const dong = readFileSync(join(GOC, ".env"), "utf8")
-		.split("\n")
-		.find((d) => d.startsWith("BLOB_READ_WRITE_TOKEN="));
+	if (process.env[BIEN]?.trim()) return process.env[BIEN].trim();
+	const tep = process.env.BLOB_THAT_ENV ?? join(GOC, ".env");
+	const van = existsSync(tep) ? readFileSync(tep, "utf8") : "";
+	const dong = van.split("\n").find((d) => d.startsWith(`${BIEN}=`));
 	return dong?.split("=").slice(1).join("=").replace(/"/g, "").trim() ?? "";
 }
 
 const token = tokenThat();
 if (!token) {
-	console.log("KHONG DO DUOC: thieu BLOB_READ_WRITE_TOKEN that");
+	console.log(`KHONG DO DUOC: thieu ${BIEN} that`);
 	process.exit(2);
 }
 
