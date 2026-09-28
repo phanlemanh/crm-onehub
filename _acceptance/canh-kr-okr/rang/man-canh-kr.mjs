@@ -287,6 +287,8 @@ const DO = {
 	choHydrateMs: 800,
 	choKhongHienMs: 1500,
 	choGhiMs: 1500,
+	choMoHopMs: 5000,
+	lanMoHop: 3,
 };
 const MA = `c${Date.now().toString(36).slice(-6)}`;
 const LOI_BO_QUA = /Download the React DevTools/;
@@ -879,16 +881,32 @@ async function go(trang, sel, chu) {
 	return true;
 }
 
-async function chonHop(trang, triggerSel, tenMuc) {
-	if (!(await bam(trang, triggerSel))) return false;
+async function moHop(trang, triggerSel) {
 	if (
 		!(await doi(
 			trang,
-			`${nhom}: hop chon cua ${triggerSel} mo`,
-			() => window.__tim("[role='option']").length > 0,
+			`${nhom}: ${triggerSel} san sang de chon`,
+			(s) => window.__tim(s)[0]?.disabled === false,
+			triggerSel,
 		))
 	)
 		return false;
+	for (let lan = 0; lan < DO.lanMoHop; lan += 1) {
+		if (!(await bam(trang, triggerSel))) return false;
+		const mo = await trang
+			.waitForFunction(() => window.__tim("[role='option']").length > 0, {
+				timeout: DO.choMoHopMs,
+				polling: 200,
+			})
+			.then(() => true)
+			.catch(() => false);
+		if (mo) return true;
+	}
+	return kiem(`${nhom}: hop chon cua ${triggerSel} khong mo`, false);
+}
+
+async function chonHop(trang, triggerSel, tenMuc) {
+	if (!(await moHop(trang, triggerSel))) return false;
 	if (await coSel(trang, "[cmdk-input]")) {
 		await trang.type("[cmdk-input]", tenMuc);
 		await cho(300);
@@ -1720,6 +1738,11 @@ async function buocGhiNhan(o) {
 			.__tim("[data-token-nguoi-nhan]")
 			.map((e) => e.getAttribute("data-token-nguoi-nhan")),
 	);
+	kiem(
+		`E14 buoc 3: o soan mang dung hai nguoi nhan da chon (thay ${JSON.stringify(daChon)})`,
+		JSON.stringify([...daChon].sort()) ===
+			JSON.stringify([id.nhan0, id.nhan1].sort()),
+	);
 	await go(o, "[data-o-loi-nhan]", TEN.loiGhiNhan);
 	await chonHop(o, "[data-o-kr]", TEN.k1);
 	await doi(
@@ -1780,7 +1803,7 @@ async function buocGhiNhan(o) {
 		},
 	});
 	const tapDb = (gnDb[0]?.nhan ?? []).map((n) => n.userId).sort();
-	const tapChon = [id.nhan0, id.nhan1].sort();
+	const tapChon = [...daChon].sort();
 	console.log(
 		`  E15 DB ghi nhan moi: ${JSON.stringify(gnDb.map((g) => ({ ...g, nhan: g.nhan.map((n) => n.userId) })))}; token da chon ${JSON.stringify(daChon)}`,
 	);
