@@ -1098,18 +1098,24 @@ mỗi lần chạy và so với mục này; không hơn, không kém.
   `aiTomTatAnPhamVi`, `aiTomTatAnDonVi`); `migration` chỉ thêm.
 - `packages/ui/src/components/dialog.tsx` — `onEscapeKeyDown` mới chặn Esc
   đóng hộp thoại khi Esc bắt nguồn từ ô «Nhận bản đã sửa» đang mở
-  (`laEscTuOSuaDeXuat`).
-- `packages/ui/src/components/sheet.tsx` — cùng chặn Esc như `dialog.tsx`,
-  dùng chung `laEscTuOSuaDeXuat`.
+  (`laEscTuOSuaDeXuat`); bấm trong vùng thông báo không tính là bấm ngoài hộp
+  (`laTuThongBao`), để nút «Hoàn tác» của thông báo không đóng hộp.
+- `packages/ui/src/components/sheet.tsx` — cùng chặn Esc và cùng bỏ qua bấm
+  trong vùng thông báo như `dialog.tsx`.
 - `packages/ui/src/components/simple-table.tsx` — prop `sub` mới cho
   `SimpleTableRow`: dòng phụ thụt lề ở ô đầu và chữ mờ (`ROW_SUB`), dùng cho
-  các hàng theo mã loại dưới hàng «bị loại» trong bảng số đo góp ý ở Cài đặt.
+  các hàng theo mã loại dưới hàng «bị loại» trong bảng số đo góp ý ở Cài đặt;
+  `SimpleTableCell` mới cho ô thân bảng có đệm ngang khớp tiêu đề cột và
+  `numeric` căn phải chữ số đều, thay cho lớp đệm đè ở chỗ gọi.
+- `packages/ui/src/components/sonner.tsx` — vùng thông báo `pointer-events-auto`:
+  hộp modal của Radix khoá con trỏ trên body, nên thiếu lớp này thì nút
+  «Hoàn tác» sau khi Nhận một dòng góp ý không bấm được khi hộp còn mở.
 - `packages/ui/src/components/suggestion.tsx` — thành phần `Suggestion` chung
   của `packages/ui`, có sẵn từ hãng (không phải ReUI, cũng không phải
   `Suggestion` gợi ý câu hỏi của AI Elements trong `docs/chat-ui.md`), mở rộng
   cho ba cách (nhận · sửa · bác) và khoá nút khi có `acceptDisabledReason`.
-- `packages/ui/src/lib/utils.ts` — `laEscTuOSuaDeXuat`, dùng ở `dialog.tsx` và
-  `sheet.tsx` phía trên.
+- `packages/ui/src/lib/utils.ts` — `laEscTuOSuaDeXuat` và `laTuThongBao`, dùng
+  ở `dialog.tsx` và `sheet.tsx` phía trên.
 - `packages/validation/package.json` — một subpath export mới:
   `./okr-kiem-de-xuat`.
 - `docs/api.md` — cũng có đường dẫn ở `release` (hãng để chỗ cho tài liệu
@@ -1130,6 +1136,8 @@ việc `okr-de-xuat` không đóng sớm khi phiên con chưa nộp xong đề x
 Chế độ ẩn — nấc giữa của công tắc, giữa tắt và bật — không hiện gì cho người
 dùng và không poke dispatch; nó chờ đúng nhịp quét mà `okr-de-xuat` việc
 thường vẫn chờ, nên độ trễ của một lượt ẩn không có gì đảm bảo ngoài nhịp đó.
+Dưới `eve dev` không có cron: hàng ẩn được xếp ngay trong `updateObjective` và
+nằm chờ tới lần gọi `/internal/crm/dispatch` kế tiếp (phép đo E4 tự gọi).
 
 ## Chỗ rẽ: Máy soạn của Kho tài liệu (lượt 2)
 
