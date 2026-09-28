@@ -5,7 +5,7 @@ slug: man-chu-theo-khoa-kho-nguon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -56,3 +56,9 @@ Bỏ quét `morphological-scan` (xem sổ quyết định). Trục viết tay:
 
 - **Vòng này chạm thước của `bo-chu-lap-keo-tha`** (`rang/man-chu.mjs`, `evals.yaml`, lệnh trong `config.yaml`). Ghim lại hồ sơ đó chỉ khi `pre-merge-check` không `--slug` báo hoá cũ; E6u sẽ nằm ở `evals_not_machine_touched` — E1 ở đây chạy đúng lệnh E6u và là bằng chứng màn.
 - Ghi nhớ `hop-tai-nguon-can-khoa-blob-gia.md` (ngoài kho) cập nhật theo tên mới trong vòng này.
+- **Known limits (Phan Le Manh ký ở Cổng Bằng chứng round 1, 2026-09-29):**
+  - Ngoài-1 — sửa phần dùng chung đứng sau tên khoá kho nguồn (`rang/khoa-nguon.mjs`) không làm E2, E3 tự chạy lại; phải chạy tay.
+  - Ngoài-2 — phép đo chiều đỏ (E3) không xếp hàng cùng các phiên đo khác; chạy song song có thể chồng phiên.
+  - Ngoài-3 — vế đối chứng khoá rỗng của E3 nhận mọi lần bản sao thoát mã 2, không đòi thấy nút khoá; lượt round 1 có tới nút.
+  - Ngoài-5 — cùng gốc Ngoài-3: bản sao hỏng vì hạ tầng vẫn qua vế đối chứng.
+  - Ngoài-6 — cùng gốc Ngoài-3: vế đối chứng là phép kiểm âm tính không ghim thông điệp nút khoá.
