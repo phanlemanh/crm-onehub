@@ -532,6 +532,10 @@ describe("sang-kien", () => {
 				where: { id: { in: [idC, idP] } },
 				orderBy: { position: "asc" },
 			});
+			const tenCam = [TEN_C, sk.tenX, sk.tenPhuTrachC];
+			expect(
+				hang.flatMap((h) => chuaChuoi(`okrViecKr ${h.loai}`, h, tenCam)),
+			).toEqual([]);
 			expect(
 				hang.map((h) => ({
 					id: h.id,
@@ -562,11 +566,6 @@ describe("sang-kien", () => {
 					taoBoiUserId: A.id,
 				},
 			]);
-			const tenCam = [TEN_C, sk.tenX, sk.tenPhuTrachC];
-			expect(
-				hang.flatMap((h) => chuaChuoi(`okrViecKr ${h.loai}`, h, tenCam)),
-			).toEqual([]);
-
 			expect(await sangKienCua(san, A.cookie)).toEqual([
 				{
 					id: idC,
@@ -602,6 +601,15 @@ describe("sang-kien", () => {
 				),
 			).toEqual([TEN_C_MOI, sk.tenX]);
 
+			const vetK = await db.okrTrail.findMany({
+				where: { keyResultId: san.kr },
+			});
+			expect(vetK.length).toBeGreaterThanOrEqual(2);
+			expect(
+				vetK.flatMap((v) =>
+					chuaChuoi(`okrTrail ${v.action} ${v.id}`, v, [...tenCam, TEN_C_MOI]),
+				),
+			).toEqual([]);
 			const vet = await db.okrTrail.findMany({
 				where: { keyResultId: san.kr, action: "gan-sang-kien" },
 				orderBy: [{ at: "asc" }, { id: "asc" }],
@@ -633,15 +641,6 @@ describe("sang-kien", () => {
 					after: { loai: "ke-hoach", planId: sk.P },
 				},
 			]);
-			const vetK = await db.okrTrail.findMany({
-				where: { keyResultId: san.kr },
-			});
-			expect(vetK.length).toBeGreaterThanOrEqual(2);
-			expect(
-				vetK.flatMap((v) =>
-					chuaChuoi(`okrTrail ${v.action} ${v.id}`, v, [...tenCam, TEN_C_MOI]),
-				),
-			).toEqual([]);
 		},
 		CHO_MS,
 	);
