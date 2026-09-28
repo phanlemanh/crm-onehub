@@ -1,0 +1,33 @@
+{
+	"id": "gy-21",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Pháp chế"
+	},
+	"mucTieu": {
+		"title": "Hợp đồng không kẹt ở khâu duyệt",
+		"whyNow": "",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Thời gian duyệt hợp đồng giảm từ 6 xuống 2 ngày",
+			"kind": "giam-xuong",
+			"startValue": 6,
+			"targetValue": 2,
+			"unit": "ngày"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"whyNow"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Thiếu vì sao lúc này."
+}

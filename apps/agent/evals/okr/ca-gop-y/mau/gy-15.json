@@ -1,0 +1,40 @@
+{
+	"id": "gy-15",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Điều phối vận tải"
+	},
+	"mucTieu": {
+		"title": "Giảm chi phí vận tải",
+		"whyNow": "Giá dầu tăng 12% từ tháng 8.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Chi phí mỗi đơn giảm từ 42 xuống 36 nghìn đồng",
+			"kind": "giam-xuong",
+			"startValue": 42,
+			"targetValue": 36,
+			"unit": "nghìn đồng"
+		},
+		{
+			"title": "Chi phí thuê xe ngoài giảm từ 800 xuống 500 triệu đồng",
+			"kind": "giam-xuong",
+			"startValue": 800,
+			"targetValue": 500,
+			"unit": "triệu đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"thieu-doi-trong"
+		],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Chỉ cắt chi phí; thiếu KR giữ giao đúng hẹn."
+}

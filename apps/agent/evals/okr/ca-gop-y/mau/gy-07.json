@@ -1,0 +1,40 @@
+{
+	"id": "gy-07",
+	"bo": "viet-lai",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Sản phẩm số"
+	},
+	"mucTieu": {
+		"title": "Launch app v2 cho đối tác",
+		"whyNow": "Đối tác hỏi đơn qua điện thoại quá nhiều.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Release v2 lên App Store",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		},
+		{
+			"title": "Cuộc gọi hỏi đơn giảm từ 1.000 xuống 500",
+			"kind": "giam-xuong",
+			"startValue": 1000,
+			"targetValue": 500,
+			"unit": "cuộc"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Trộn Anh–Việt; trả lời theo ngôn ngữ chiếm đa số (tiếng Việt), giữ nguyên tên riêng App Store."
+}

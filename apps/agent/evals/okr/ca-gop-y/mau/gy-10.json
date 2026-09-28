@@ -1,0 +1,38 @@
+{
+	"id": "gy-10",
+	"bo": "viet-lai",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kho vận"
+	},
+	"mucTieu": {
+		"title": "Ops sẵn sàng cho peak season",
+		"whyNow": "Q4 là peak season, đơn gấp đôi.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Đơn xuất trong 30 phút",
+			"kind": "phan-tram",
+			"startValue": 70,
+			"targetValue": 90,
+			"unit": "%"
+		},
+		{
+			"title": "Giữ lệch tồn kho dưới 0,5%",
+			"kind": "giu-duoi",
+			"startValue": 0.8,
+			"targetValue": 0.5,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Câu đã tốt dù trộn Anh–Việt; trợ lý không được đề xuất gì."
+}

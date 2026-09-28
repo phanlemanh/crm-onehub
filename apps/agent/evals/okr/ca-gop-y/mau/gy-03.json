@@ -1,0 +1,40 @@
+{
+	"id": "gy-03",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Tăng tốc ký hợp đồng",
+		"whyNow": "Cuối năm là lúc đối tác chốt ngân sách.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Số hợp đồng ký mới",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 20,
+			"unit": "hợp đồng"
+		},
+		{
+			"title": "Doanh thu hợp đồng mới",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 8,
+			"unit": "tỷ đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"thieu-doi-trong"
+		],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Chỉ đẩy số lượng; thiếu KR giữ chất lượng như tỷ lệ gia hạn hay biên lợi nhuận."
+}

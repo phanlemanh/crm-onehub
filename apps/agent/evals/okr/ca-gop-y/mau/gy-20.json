@@ -1,0 +1,33 @@
+{
+	"id": "gy-20",
+	"bo": "viet-lai",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "bo-phan",
+		"ten": "Khối Kinh doanh"
+	},
+	"mucTieu": {
+		"title": "Q4 OKR: grow pipeline",
+		"whyNow": "Pipeline quý 4 mỏng hơn năm ngoái.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Pipeline value đạt 30 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 12,
+			"targetValue": 30,
+			"unit": "tỷ đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên mục tiêu mơ hồ, trộn Anh–Việt."
+}

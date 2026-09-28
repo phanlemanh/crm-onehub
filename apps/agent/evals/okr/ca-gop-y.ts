@@ -1,0 +1,29 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { type CaGopY, parseCaGopY } from "@crm/validation/okr-ca-gop-y";
+
+export const THU_MUC_CA_MAU = join(import.meta.dir, "ca-gop-y", "mau");
+export const THU_MUC_CA_THAT = join(import.meta.dir, "ca-gop-y", "that");
+
+export function docBoCaGopY(thuMuc: string): CaGopY[] {
+	const tep = readdirSync(thuMuc)
+		.filter((t) => t.endsWith(".json"))
+		.sort();
+	const ca = tep.map((t) => {
+		const duong = join(thuMuc, t);
+		let json: unknown;
+		try {
+			json = JSON.parse(readFileSync(duong, "utf8"));
+		} catch (loi) {
+			throw new Error(`Ca góp ý ${duong} không phải JSON: ${loi instanceof Error ? loi.message : String(loi)}`);
+		}
+		return parseCaGopY(json, duong);
+	});
+	const thay = new Map<string, string>();
+	for (const [i, c] of ca.entries()) {
+		const truoc = thay.get(c.id);
+		if (truoc) throw new Error(`Mã ca ${c.id} trùng ở ${truoc} và ${tep[i]}`);
+		thay.set(c.id, tep[i] ?? "");
+	}
+	return ca;
+}

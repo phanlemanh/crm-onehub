@@ -1,0 +1,35 @@
+{
+	"id": "gy-08",
+	"bo": "viet-lai",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "bo-phan",
+		"ten": "Khối Kinh doanh"
+	},
+	"mucTieu": {
+		"title": "Tăng MRR mảng SaaS kho",
+		"whyNow": "Khách thuê phần mềm kho tăng nhanh.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "MRR đạt 500 triệu đồng",
+			"kind": "tang-toi",
+			"startValue": 200,
+			"targetValue": 500,
+			"unit": "triệu đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"muc-tieu-la-so"
+		],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu là tên một chỉ số; ca trộn Anh–Việt."
+}

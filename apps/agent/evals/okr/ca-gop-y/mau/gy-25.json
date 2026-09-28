@@ -1,0 +1,57 @@
+{
+	"id": "gy-25",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Đối tác muốn ở lại năm sau",
+		"whyNow": "Gia hạn quý 3 tụt.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Giữ tỷ lệ gia hạn trên 85%",
+			"kind": "giu-tren",
+			"startValue": 82,
+			"targetValue": 85,
+			"unit": "%"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Khối Kinh doanh về đích doanh thu quý 4",
+			"whyNow": "Quý 4 là quý chốt ngân sách năm sau.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 14 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 14,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "KR giống hệt KR cấp trên; đề xuất không được chép thêm KR cấp trên nào."
+}

@@ -1,0 +1,33 @@
+{
+	"id": "gy-11",
+	"bo": "viet-lai",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Improve NPS của đối tác",
+		"whyNow": "",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "NPS từ 30 lên 45",
+			"kind": "tang-toi",
+			"startValue": 30,
+			"targetValue": 45,
+			"unit": "điểm"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"whyNow"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Thiếu câu vì sao lúc này."
+}

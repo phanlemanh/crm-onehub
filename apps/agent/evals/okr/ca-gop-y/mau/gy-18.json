@@ -1,0 +1,35 @@
+{
+	"id": "gy-18",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Tài chính"
+	},
+	"mucTieu": {
+		"title": "Giảm công nợ quá hạn xuống 8%",
+		"whyNow": "Công nợ quá hạn đang 12%.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Công nợ quá hạn giảm từ 12 xuống 8%",
+			"kind": "giam-xuong",
+			"startValue": 12,
+			"targetValue": 8,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"muc-tieu-la-so"
+		],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu chép lại KR."
+}

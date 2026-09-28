@@ -1,0 +1,35 @@
+{
+	"id": "gy-04",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Đối tác hài lòng hơn với dịch vụ",
+		"whyNow": "Điểm hài lòng quý 3 tụt.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Cải thiện trải nghiệm đối tác",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 100,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"khong-do-duoc"
+		],
+		"vietLai": [
+			"kr.title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "KR không có thước đo; không bịa số mới, chỉ hỏi đo bằng gì."
+}

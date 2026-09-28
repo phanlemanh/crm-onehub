@@ -1,0 +1,57 @@
+{
+	"id": "gy-26",
+	"bo": "ng",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kho vận"
+	},
+	"mucTieu": {
+		"title": "Cold chain sẵn sàng cho Tết",
+		"whyNow": "Đơn hàng lạnh Tết gấp ba ngày thường.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Giữ nhiệt độ kho lạnh lệch dưới 1 độ",
+			"kind": "giu-duoi",
+			"startValue": 2,
+			"targetValue": 1,
+			"unit": "độ"
+		},
+		{
+			"title": "Công suất kho lạnh cho Tết đạt 2.000 pallet",
+			"kind": "tang-toi",
+			"startValue": 800,
+			"targetValue": 2000,
+			"unit": "pallet"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Scale mảng kho lạnh",
+			"whyNow": "Đối thủ lớn rút khỏi hàng lạnh.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Đối tác hàng lạnh đạt 30",
+				"kind": "tang-toi",
+				"startValue": 12,
+				"targetValue": 30,
+				"unit": "đối tác"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "Câu đã tốt, căn chỉnh đúng cấp trên; không đề xuất gì."
+}

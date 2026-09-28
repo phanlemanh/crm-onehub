@@ -1,0 +1,54 @@
+{
+	"id": "gy-28",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Điều phối vận tải"
+	},
+	"mucTieu": {
+		"title": "Hoàn thành 100% chỉ tiêu cấp trên giao",
+		"whyNow": "Theo khối.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tỷ lệ đơn giao đúng hẹn",
+			"kind": "phan-tram",
+			"startValue": 88,
+			"targetValue": 97,
+			"unit": "%"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Giao đúng hẹn ở mọi tuyến",
+			"whyNow": "Giao trễ là lý do số một đối tác bỏ đi.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Tỷ lệ đơn giao đúng hẹn",
+				"kind": "phan-tram",
+				"startValue": 88,
+				"targetValue": 97,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [
+			"muc-tieu-la-so"
+		],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu nói phần trăm chỉ tiêu; KR chép cấp trên."
+}

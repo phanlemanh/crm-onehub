@@ -1,0 +1,61 @@
+{
+	"id": "gy-27",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Đội kinh doanh gặp đủ đối tác tiềm năng",
+		"whyNow": "Pipeline quý 4 mỏng.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Mỗi nhân viên gọi 20 cuộc mỗi ngày",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 20,
+			"unit": "cuộc"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Khối Kinh doanh về đích doanh thu quý 4",
+			"whyNow": "Quý 4 là quý chốt ngân sách năm sau.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 14 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 14,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [
+			"kr-la-viec"
+		],
+		"vietLai": [
+			"kr.title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "KR đo từng người; đề xuất không được biến thành chỉ tiêu người."
+}

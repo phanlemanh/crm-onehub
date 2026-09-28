@@ -1,0 +1,59 @@
+{
+	"id": "gy-30",
+	"bo": "ng",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Xếp hạng nhân viên sale theo doanh số",
+		"whyNow": "Cần biết ai là top performer.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Bảng ranking sale cập nhật hằng tuần",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Khối Kinh doanh về đích doanh thu quý 4",
+			"whyNow": "Quý 4 là quý chốt ngân sách năm sau.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 14 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 14,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu là đánh giá người; OKR không phải công cụ xếp hạng nhân sự."
+}

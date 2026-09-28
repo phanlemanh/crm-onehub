@@ -1,0 +1,33 @@
+{
+	"id": "gy-01",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Triển khai CRM cho đội kinh doanh",
+		"whyNow": "Thoả thuận đang nằm rải rác trong ba bảng tính.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tỷ lệ thoả thuận đang chạy có trong CRM",
+			"kind": "phan-tram",
+			"startValue": 20,
+			"targetValue": 90,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu nói việc làm; câu viết lại phải nói kết quả, ví dụ đội nhìn một chỗ là thấy mọi thoả thuận."
+}

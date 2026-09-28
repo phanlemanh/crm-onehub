@@ -1,0 +1,35 @@
+{
+	"id": "gy-02",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Đối tác mới thấy được chăm sóc ngay tháng đầu",
+		"whyNow": "Ba đối tác mới quý 3 bỏ đi trước tháng thứ hai.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Gọi 50 cuộc cho đối tác mới mỗi tuần",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 50,
+			"unit": "cuộc"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"kr-la-viec"
+		],
+		"vietLai": [
+			"kr.title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "KR là việc làm; kết quả là đối tác ở lại."
+}
