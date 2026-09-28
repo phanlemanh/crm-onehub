@@ -19,4 +19,5 @@ export const CAU_HINH = {
 	],
 	taoPhamHoSoKy: ["ve-that.json", "mo-nguyen-ban.json"],
 	raGoc: ".acceptance-runs/lai-ra-man-tran-gio",
+	tranLuotMs: 10 * 60_000,
 };
