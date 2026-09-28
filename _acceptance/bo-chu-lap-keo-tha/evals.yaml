@@ -110,7 +110,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.bclkt_man_chu
     steps:
-      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs qua mot-luot.sh) voi BLOB_READ_WRITE_TOKEN gia de nut 'Tải nguồn lên' mo duoc; dang nhap dev:session mot member"
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs qua mot-luot.sh) voi KHO_TAI_LIEU_BLOB_TOKEN gia de nut 'Tải nguồn lên' mo duoc; dang nhap dev:session mot member"
       - "Buoc 1 (1440): mo Tai lieu, bam 'Tải nguồn lên', doc innerText cua nut va tung con cua cot chu trong [data-hop-tai-nguon] [data-slot='nguon-keo-tha'] -> bang tron ['Chọn tệp','Kéo tệp vào đây','Word (.docx) hoặc PDF, tới 20 MB'] -> anh bclkt-tai-1440.png"
       - "Buoc 2 (390): nhu buoc 1, cong khong cuon ngang trang, hop khong tran -> anh bclkt-tai-390.png"
     paths:
@@ -118,5 +118,5 @@ evals:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
       - "packages/ui/src/components/nguon-keo-tha.tsx"
       - "_acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"
-    expected: "exit 0; man-chu.mjs in 'buoc 1: dat' va 'buoc 2: dat'; anh o .acceptance-runs/bo-chu-lap-keo-tha/evidence/; vong S4 chep bclkt-tai-1440.png va bclkt-tai-390.png sang _acceptance/bo-chu-lap-keo-tha/evidence/ va doc anh: vung keo tha hien 'Kéo tệp vào đây' ngay sau nut 'Chọn tệp', khong co chu 'hoặc chọn tệp'. Nut 'Tải nguồn lên' khoa (phien thieu khoa Blob) -> exit 2 'KHONG DO DUOC: nut tai nguon khoa', khong bao gio 'dat'. CHIEU DO (cung thuoc, vat that tren ban sao): --chieu-do cay ban sao tai-lieu.ts giu cau cu 'Kéo tệp vào đây, hoặc chọn tệp' -> ma 1 voi thong diep ghim 'chu vung keo tha man that lech'."
+    expected: "exit 0; man-chu.mjs in 'buoc 1: dat' va 'buoc 2: dat'; anh o .acceptance-runs/bo-chu-lap-keo-tha/evidence/; vong S4 chep bclkt-tai-1440.png va bclkt-tai-390.png sang _acceptance/bo-chu-lap-keo-tha/evidence/ va doc anh: vung keo tha hien 'Kéo tệp vào đây' ngay sau nut 'Chọn tệp', khong co chu 'hoặc chọn tệp'. Nut 'Tải nguồn lên' khoa (phien thieu KHO_TAI_LIEU_BLOB_TOKEN) -> exit 2 'KHONG DO DUOC: nut tai nguon khoa', khong bao gio 'dat'. CHIEU DO (cung thuoc, vat that tren ban sao): --chieu-do cay ban sao tai-lieu.ts giu cau cu 'Kéo tệp vào đây, hoặc chọn tệp' -> ma 1 voi thong diep ghim 'chu vung keo tha man that lech'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
