@@ -48,7 +48,8 @@ mẫu có mã bắt đầu `mau-okr-`; người mẫu có thư đuôi `@mau.oneh
 Lệnh từ chối và trả mã riêng cho từng ca:
 
 - **mã thoát 2** — `DATABASE_URL` không trỏ máy cục bộ (`localhost`, `127.0.0.1`,
-  `::1`), hoặc `NODE_ENV=production`, hoặc `VERCEL_ENV` là `production` hay
+  `::1`, hoặc ổ cắm unix) — kể cả máy chủ nêu trong tham số `host` hay `hostaddr` của
+  chuỗi kết nối, vì driver Postgres dùng chúng thay cho tên máy — hoặc `NODE_ENV=production`, hoặc `VERCEL_ENV` là `production` hay
   `preview`. Chặn trước khi mở kết nối, và **không có cờ vượt** — `ALLOW_REMOTE_DB`
   không có tác dụng ở đây. `VERCEL_ENV=development` do `vercel env pull` ghi không bị
   chặn; máy chủ cục bộ mới là điều kiện.

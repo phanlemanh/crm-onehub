@@ -28,6 +28,36 @@ const NGOAI = [
 ];
 const CUC_BO = ["localhost", "127.0.0.1", "[::1]"];
 
+const THAM_SO_MAY = [
+	{
+		ten: "cục bộ ?host= ngoài",
+		duong:
+			"postgresql://u:p@localhost:5432/crm?host=ep-x.us-east-1.aws.neon.tech",
+		cho: false,
+	},
+	{
+		ten: "cục bộ ?hostaddr= ngoài",
+		duong: "postgresql://u:p@localhost:5432/crm?hostaddr=203.0.113.9",
+		cho: false,
+	},
+	{
+		ten: "cục bộ ?host= danh sách có máy ngoài",
+		duong: "postgresql://u:p@localhost:5432/crm?host=localhost,db.example.com",
+		cho: false,
+	},
+	{ ten: "không có máy chủ", duong: "postgresql:///crm", cho: false },
+	{
+		ten: "cục bộ ?host= ổ cắm unix",
+		duong: "postgresql://u:p@localhost/crm?host=/tmp",
+		cho: true,
+	},
+	{
+		ten: "cục bộ ?host= localhost",
+		duong: "postgresql://u:p@127.0.0.1:5432/crm?host=localhost",
+		cho: true,
+	},
+];
+
 const BANG: Ca[] = [
 	...NGOAI.flatMap((may) => [
 		{
@@ -41,6 +71,11 @@ const BANG: Ca[] = [
 			ky: { cho: false, lyDo: "may-chu" },
 		},
 	]),
+	...THAM_SO_MAY.map(({ ten, duong, cho }) => ({
+		ten,
+		env: { DATABASE_URL: duong },
+		ky: cho ? { cho: true } : { cho: false, lyDo: "may-chu" },
+	})),
 	...CUC_BO.map((may) => ({
 		ten: `cục bộ ${may}`,
 		env: { DATABASE_URL: url(may) },
@@ -133,6 +168,39 @@ describe("chan-production", () => {
 			...NGOAI.map((may) => `ngoài ${may} + ALLOW_REMOTE_DB`),
 			"cục bộ + VERCEL_ENV preview + ALLOW_REMOTE_DB",
 		]);
+	});
+
+	test("chiều đỏ: bản chặn chỉ đọc tên máy trong URL thì bảng gọi tên các ca tham số host", () => {
+		const banPha = (env: Ca["env"]): KetQuaChan => {
+			const duong = env.DATABASE_URL ?? "";
+			const may = (() => {
+				try {
+					return new URL(duong).hostname;
+				} catch {
+					return "";
+				}
+			})();
+			return env.NODE_ENV === undefined &&
+				env.VERCEL_ENV === undefined &&
+				OKR_MAU.mayCucBo.some((m) => m === may)
+				? { cho: true, mayChu: may }
+				: kiemDuocNap(env);
+		};
+		expect(sai(banPha)).toEqual([
+			"cục bộ ?host= ngoài",
+			"cục bộ ?hostaddr= ngoài",
+			"cục bộ ?host= danh sách có máy ngoài",
+		]);
+	});
+
+	test("lệnh với ?host= trỏ máy ngoài: thoát 2 trước khi kết nối", () => {
+		const r = chay([], {
+			DATABASE_URL:
+				"postgresql://u:p@localhost:5432/crm?host=ep-khong-ton-tai.invalid",
+		});
+		expect(r.ma, r.loi).toBe(OKR_MAU.ma.chan);
+		expect(r.loi).toContain("ep-khong-ton-tai.invalid");
+		expect(r.loi).not.toMatch(/ECONNREFUSED|ENOTFOUND|P1001/);
 	});
 
 	test("lệnh với cơ sở dữ liệu Neon giả: thoát 2 ngay, nêu máy chủ, không thử kết nối", () => {
