@@ -4,6 +4,7 @@ export const TRICH_DOAN = {
 	menhDe: { min: 1, max: 300 },
 	trich: { min: 1, max: 600 },
 	toiDa: 60,
+	tuCoChuToiThieu: 3,
 } as const;
 
 export const trichDoan = z.object({

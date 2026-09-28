@@ -20,6 +20,14 @@ const GIA = new Map<string, { vaoMoiTrieu: number; raMoiTrieu: number }>(
 
 type SoMaySoan = Extract<SuKienChiTiet, { loai: "MAY_SOAN" }>;
 
+const MO_TA_LOI = {
+	"so-khong-trich": (chi: string) =>
+		`số «${chi}» không có trong trích đoạn nào`,
+	"trich-khong-co": (chi: string) => `trích «${chi}» không có trong nguồn`,
+	"trich-ngan": (chi: string) =>
+		`trích «${chi}» quá ngắn — chép cả câu hay cả hàng bảng chứa số`,
+} as const;
+
 export function chiPhiUsd(
 	maModel: string,
 	tokenVao: number,
@@ -187,13 +195,7 @@ export async function nopBanDeXuat(
 		banGoc: banGoc?.noiDung ?? null,
 	});
 	if (!kiem.ok) {
-		const chi = kiem.loi
-			.map((l) =>
-				l.loai === "so-khong-trich"
-					? `số «${l.chi}» không có trong trích đoạn nào`
-					: `trích «${l.chi}» không có trong nguồn`,
-			)
-			.join("; ");
+		const chi = kiem.loi.map((l) => MO_TA_LOI[l.loai](l.chi)).join("; ");
 		return tuChoi(nguonId, phien, LY_DO.biBac(chi), 1);
 	}
 	return db.$transaction(async (tx) => {

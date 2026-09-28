@@ -1,10 +1,10 @@
 import type { JSONContent } from "@tiptap/core";
 import { chuanNfc } from "./tai-lieu";
 import { nap } from "./tai-lieu-markdown";
-import { quoteKey, type TrichDoan } from "./tai-lieu-trich-doan";
+import { quoteKey, TRICH_DOAN, type TrichDoan } from "./tai-lieu-trich-doan";
 
 const SO =
-	/(?<!\d)(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{1,3}(?:\.\d{3})+(?:,\d+)?%?|\d+(?:,\d+)?%?)(?!\d)/g;
+	/(?<!\d)(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{1,3}(?:\.\d{3})+(?:,\d+)?%?|\d+\.\d{1,2}%?|\d+(?:,\d+)?%?)(?!\d)/g;
 
 function gomChu(nut: JSONContent, ra: string[]): void {
 	if (nut.type === "text") {
@@ -53,11 +53,18 @@ export function soMoi(noiDung: string, banGoc: string | null): string[] {
 	return [...new Set(rutSo(noiDung))].filter((s) => !soCu.has(s));
 }
 
+export function demTuCoChu(chu: string): number {
+	return chu.split(/\s+/).filter((tu) => /\p{L}/u.test(tu)).length;
+}
+
 export type KetQuaKiem =
 	| { ok: true }
 	| {
 			ok: false;
-			loi: { loai: "so-khong-trich" | "trich-khong-co"; chi: string }[];
+			loi: {
+				loai: "so-khong-trich" | "trich-khong-co" | "trich-ngan";
+				chi: string;
+			}[];
 	  };
 
 type Loi = Extract<KetQuaKiem, { ok: false }>["loi"][number];
@@ -74,6 +81,9 @@ export function kiemBanMay(input: {
 		.map((t) => ({ ...t, co: t.khoa !== "" && nguon.includes(t.khoa) }));
 	const moi = soMoi(input.noiDung, input.banGoc);
 	const loi: Loi[] = [
+		...trichCo
+			.filter((t) => demTuCoChu(t.khoa) < TRICH_DOAN.tuCoChuToiThieu)
+			.map((t) => ({ loai: "trich-ngan" as const, chi: t.goc })),
 		...trichCo
 			.filter((t) => !t.co)
 			.map((t) => ({ loai: "trich-khong-co" as const, chi: t.goc })),
