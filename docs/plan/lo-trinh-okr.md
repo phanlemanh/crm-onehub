@@ -91,7 +91,7 @@ trình Trợ lý OKR», cuối mục 5.
 | 5 | `toan-canh-okr` | «Cả công ty nhìn được toàn cảnh và họp tuần trên cùng một màn» | T2 | lượt 4 |
 | 6 | `so-okr-tu-chay` | «Số của KR tự chảy từ CRM, bấm vào là ra bản ghi» | T3 | lượt 3 |
 | 7 | `khep-ky-okr` | «Kỳ được rà, chấm, nhìn lại và mang sang trong công cụ» | T2 | lượt 4, 6 |
-| 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 · tách 8a, 8b | lượt 3 và bộ OKR mẫu · từ 2026-09-28 không còn chờ bốn tuần dùng quý 4 |
+| 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 · tách 8a, 8b | lượt 3 và bộ OKR mẫu · từ 2026-09-28 không còn chờ bốn tuần dùng quý 4 | · Cổng Phạm vi chủ kho duyệt 2026-09-28 07:58 (Manh Phan): 15 tiêu chí, 22 phép đo. S2 xong: kế hoạch 13 việc (`docs/superpowers/plans/2026-09-28-canh-kr-okr.md`), chờ Cổng 1.5; viết mã khi M đã gộp và chủ kho cho
 | — | vá lối rò Slack | «Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai chỉ OKR» | T3 | lượt 6 đã gộp; xong trước ngày mở cho cả công ty |
 | 9 | `tro-ly-okr` | «Trợ lý giúp tôi viết cho sắc và tóm tắt tuần cho đơn vị» | 9a T3 · 9b, 9c T2 | 9a sau vá Slack · 9b sau 9a và bộ OKR mẫu · 9c sau 9b; dữ liệu thật là điều kiện bật |
 | 10 | `okr-trong-chat` | «Tôi cập nhật ngay trong Slack hoặc Zalo, và biết sớm KR nào đang trượt» | T3 | lượt 4, 9a và bộ OKR mẫu; số đo của lượt 4 là điều kiện bật |
