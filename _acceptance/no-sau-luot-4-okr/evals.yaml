@@ -76,9 +76,9 @@ evals:
   - id: E9
     criterion: AC-8
     executor: script
-    cmd: config:executors.script.tco_san_thiet_ke
-    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs]
-    expected: "exit 0; thước sàn thiết kế của lượt 5 (dùng lại, không chép) soi mọi .tsx trong apps/app đổi so với origin/onehub: design-gate --mode static không P0, không dấu hiệu vẽ tay; danh sách tệp đã soi chứa objective-sheet.tsx. CHIỀU ĐỎ: --chieu-do của chính thước → đỏ in hai vi phạm có tên."
+    cmd: config:executors.script.n4_san_thiet_ke
+    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, _acceptance/no-sau-luot-4-okr/rang/san-thiet-ke.mjs, _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs]
+    expected: "exit 0; rang/san-thiet-ke.mjs của hồ sơ này lấy các .tsx trong apps/app và packages/ui/src/components mà vòng này đổi, neo cặp sha của merge #176 (merge-base(M^1, M^2) f51b5ba1 ... M^2 056e6293), rồi soi từng tệp bằng thước sàn thiết kế của lượt 5 (gọi --tep của nó, không chép) và design-gate --mode static: không P0, không dấu hiệu vẽ tay; danh sách tệp đã soi chứa objective-sheet.tsx. CHIỀU ĐỎ: --chieu-do của chính thước này đưa một tệp giả qua đúng hàm soi từng tệp → đỏ in hai vi phạm có tên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10

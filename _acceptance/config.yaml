@@ -1192,6 +1192,7 @@ executors:
     kko_migration_chi_them: "bun _acceptance/khep-ky-okr/rang/migration-chi-them.mjs"
     sot_migration_chi_them: "node _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs"
     tco_san_thiet_ke: "bun _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs"
+    n4_san_thiet_ke: "bun _acceptance/no-sau-luot-4-okr/rang/san-thiet-ke.mjs"
     cnt_duong_do: "bun _acceptance/cap-nhat-tuan-okr/rang/duong-do.mjs"
     cnt_man_chrome: 'DATABASE_URL="$(sed -n -e "s#^DATABASE_URL=##p" .env | head -1 | tr -d "\\042" | sed "s#/crm?#/crm_cnt_dev_do?#")" NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3920} API_URL=${API_URL:-http://localhost:3921} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"'
     cnt_san_thiet_ke: "bun _acceptance/cap-nhat-tuan-okr/rang/san-thiet-ke.mjs"
