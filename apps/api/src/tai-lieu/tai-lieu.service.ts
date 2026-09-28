@@ -16,6 +16,7 @@ import {
 } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
+import { soMoi } from "@crm/validation/tai-lieu-so";
 import { danhSachTrichDoan } from "@crm/validation/tai-lieu-trich-doan";
 import {
 	BadRequestException,
@@ -471,6 +472,7 @@ export class TaiLieuService {
 			where: { id: deXuatId },
 			select: {
 				noiDung: true,
+				nguonId: true,
 				banGoc: { select: { noiDung: true } },
 				trang: { select: { chuTrangId: true } },
 			},
@@ -486,6 +488,15 @@ export class TaiLieuService {
 		input: TaiLieuApproveInput,
 	): Promise<{ slug: string; so: number }> {
 		const truoc = await this.yeuCauDuyet(nguoi, input.id);
+		if (truoc.nguonId) {
+			const canDoiChieu = soMoi(
+				truoc.noiDung,
+				truoc.banGoc?.noiDung ?? null,
+			).length;
+			if ((input.daDoiChieu ?? 0) < canDoiChieu) {
+				throw new BadRequestException(T.chuaDoiChieu);
+			}
+		}
 		const hash = await diffHash(
 			soSanh(truoc.banGoc?.noiDung ?? "", truoc.noiDung),
 		);

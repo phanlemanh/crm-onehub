@@ -48,6 +48,11 @@ export function coSoTronVen(chu: string, so: string): boolean {
 	return false;
 }
 
+export function soMoi(noiDung: string, banGoc: string | null): string[] {
+	const soCu = new Set(banGoc === null ? [] : rutSo(banGoc));
+	return [...new Set(rutSo(noiDung))].filter((s) => !soCu.has(s));
+}
+
 export type KetQuaKiem =
 	| { ok: true }
 	| {
@@ -67,13 +72,12 @@ export function kiemBanMay(input: {
 	const trichCo = input.trichDoan
 		.map((t) => ({ goc: t.trich, khoa: quoteKey(t.trich) }))
 		.map((t) => ({ ...t, co: t.khoa !== "" && nguon.includes(t.khoa) }));
-	const soCu = new Set(input.banGoc === null ? [] : rutSo(input.banGoc));
-	const soMoi = [...new Set(rutSo(input.noiDung))].filter((s) => !soCu.has(s));
+	const moi = soMoi(input.noiDung, input.banGoc);
 	const loi: Loi[] = [
 		...trichCo
 			.filter((t) => !t.co)
 			.map((t) => ({ loai: "trich-khong-co" as const, chi: t.goc })),
-		...soMoi
+		...moi
 			.filter((s) => !trichCo.some((t) => t.co && coSoTronVen(t.khoa, s)))
 			.map((s) => ({ loai: "so-khong-trich" as const, chi: s })),
 	];

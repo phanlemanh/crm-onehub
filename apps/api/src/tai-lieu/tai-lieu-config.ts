@@ -28,5 +28,7 @@ export const TAI_LIEU_API = {
 		daDoi:
 			"Nội dung so sánh đã đổi từ lúc mở màn duyệt. Tải lại rồi duyệt lại.",
 		daXuLy: "Bản đề xuất này đã được xử lý.",
+		chuaDoiChieu:
+			"Chưa đối chiếu hết con số với nguồn. Đánh dấu từng con số rồi mới duyệt được.",
 	},
 } as const;

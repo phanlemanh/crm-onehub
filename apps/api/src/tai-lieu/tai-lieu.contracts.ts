@@ -47,6 +47,7 @@ export const taiLieuProposeInput = z.object({
 export const taiLieuApproveInput = z.object({
 	id: ma,
 	diffHash: z.string().regex(/^[0-9a-f]{64}$/),
+	daDoiChieu: z.number().int().nonnegative().optional(),
 });
 export const taiLieuRejectInput = z.object({ id: ma, lyDo: lyDoVao });
 
