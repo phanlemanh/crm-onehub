@@ -49,7 +49,11 @@ const E4 = {
 		phong: "kd-bac",
 		truong: "nguyen-thi-lan",
 		mucTieu: "q4-kd-bac-1",
-		tenYeu: "Triển khai CRM cho đội kinh doanh miền Bắc",
+		tenYeu: "Doanh thu quý 4 miền Bắc",
+		viSaoThu: [
+			"Quý 4 là mùa cao điểm; đội cần giữ đối tác mới ở lại sau đơn đầu.",
+			"Mùa mua sắm cuối năm dồn đơn; đối tác mới cần chạy ổn trước tháng 12.",
+		],
 		krYeu: {
 			title: "Gọi điện cho đối tác mới mỗi tuần",
 			kind: "tang-toi",
@@ -330,6 +334,10 @@ async function moHopMucTieu(p, phong, mtId, { choNut = true } = {}) {
 }
 
 const O_TEN = '[data-hop-thoai-muc-tieu] input[id$="-ten"]';
+const O_CUA_TRUONG = {
+	title: O_TEN,
+	whyNow: '[data-hop-thoai-muc-tieu] textarea[id$="-vi-sao"]',
+};
 
 async function buocCaiDat(qt) {
 	buoc = "ST-caidat-nac";
@@ -404,6 +412,10 @@ async function docTen(cookie, id) {
 	return (await trpc(API, cookie).hoi("okr.objective", { id })).title;
 }
 
+async function docTruong(cookie, id, truong) {
+	return (await trpc(API, cookie).hoi("okr.objective", { id }))[truong] ?? "";
+}
+
 async function choDieuKien(doc, hanMs) {
 	const han = Date.now() + hanMs;
 	while (Date.now() < han) {
@@ -431,15 +443,51 @@ async function moCotHaiKho(tl) {
 	return ds;
 }
 
-async function dongTieuDe(url) {
+async function dongVietLaiMucTieu(url) {
 	const [d] = await truyVan(
 		url,
-		`SELECT id, truoc, sau FROM "okrDeXuat"
-		 WHERE "objectiveId" = $1 AND "trangThai" = 'cho' AND loai = 'viet-lai' AND truong = 'title'
-		 ORDER BY "createdAt" DESC LIMIT 1`,
+		`SELECT id, truong, truoc, sau FROM "okrDeXuat"
+		 WHERE "objectiveId" = $1 AND "keyResultId" IS NULL AND "trangThai" = 'cho'
+		   AND loai = 'viet-lai' AND truong IN ('title', 'whyNow')
+		 ORDER BY (truong = 'title') DESC, "createdAt" DESC LIMIT 1`,
 		[MT],
 	);
 	return d ?? null;
+}
+
+async function choCotCoDong(ds, lan) {
+	for (const t of ds) {
+		const coDong = await t.p
+			.waitForFunction(
+				() =>
+					document.querySelectorAll("[data-cot-gop-y] [data-dong]").length > 0,
+				{ timeout: E4.cho.gopYMs },
+			)
+			.then(() => true)
+			.catch(() => false);
+		kiem(`cot gop y co dong ${t.rong} (lan ${lan})`, coDong);
+		await chup(
+			t,
+			coDong ? "ST-muctieu-co-dong" : "ST-muctieu-khong-dong",
+			"[data-cot-gop-y]",
+		);
+	}
+}
+
+async function luotCoDongMucTieu(tl, url) {
+	let ds = await moCotHaiKho(tl);
+	for (const t of ds) await chup(t, "ST-muctieu-dang-soan", "[data-cot-gop-y]");
+	for (let lan = 1; ; lan += 1) {
+		await choCotCoDong(ds, lan);
+		const d = await dongVietLaiMucTieu(url);
+		if (d || lan > E4.bat.viSaoThu.length) return { ds, d, lan };
+		for (const t of ds) await t.ctx.close();
+		await trpc(API, tl).lam("okr.updateObjective", {
+			id: MT,
+			whyNow: E4.bat.viSaoThu[lan - 1],
+		});
+		ds = await moCotHaiKho(tl);
+	}
 }
 
 async function quyetDongKhac(t, d) {
@@ -490,26 +538,15 @@ async function buocGopY(tl) {
 		...E4.bat.krYeu,
 		ownerUserId: idMau("nguoi", E4.bat.truong),
 	});
-	const ds = await moCotHaiKho(tl);
-	for (const t of ds) await chup(t, "ST-muctieu-dang-soan", "[data-cot-gop-y]");
-	for (const t of ds) {
-		const coDong = await t.p
-			.waitForFunction(
-				() =>
-					document.querySelectorAll("[data-cot-gop-y] [data-dong]").length > 0,
-				{ timeout: E4.cho.gopYMs },
-			)
-			.then(() => true)
-			.catch(() => false);
-		kiem(`cot gop y co dong ${t.rong}`, coDong);
-		await chup(
-			t,
-			coDong ? "ST-muctieu-co-dong" : "ST-muctieu-khong-dong",
-			"[data-cot-gop-y]",
-		);
-	}
-	const d = await dongTieuDe(url);
-	if (!kiem("co dong viet lai ten Muc tieu de nhan", Boolean(d))) return;
+	const { ds, d, lan } = await luotCoDongMucTieu(tl, url);
+	if (
+		!kiem(
+			`co dong viet lai Muc tieu de nhan: ${d ? d.truong : "khong"} sau ${lan} lan thu (toi da ${E4.bat.viSaoThu.length + 1})`,
+			Boolean(d),
+		)
+	)
+		return;
+	const O = O_CUA_TRUONG[d.truong];
 	const hang = `[data-cot-gop-y] [data-dong="${d.id}"]`;
 	for (const t of ds) {
 		await bam(t.p, hang, ui.suggestion.edit);
@@ -522,10 +559,10 @@ async function buocGopY(tl) {
 	}
 
 	const [p1, p2] = ds;
-	const truocNhan = await docTen(tl, MT);
+	const truocNhan = await docTruong(tl, MT, d.truong);
 	if (truocNhan === d.sau) {
 		dong.push(
-			`${E4.thongDiep.nhanKhongDoi}: ten da luu «${truocNhan}» bang cau moi`,
+			`${E4.thongDiep.nhanKhongDoi}: ${d.truong} da luu «${truocNhan}» bang cau moi`,
 		);
 		await ket(3);
 	}
@@ -535,10 +572,10 @@ async function buocGopY(tl) {
 		visible: true,
 		timeout: E4.cho.manMs,
 	});
-	const oTen = await p1.p.$eval(O_TEN, (o) => o.value);
-	const docLai = await docTen(tl, MT);
+	const oTen = await p1.p.$eval(O, (o) => o.value);
+	const docLai = await docTruong(tl, MT, d.truong);
 	kiem(
-		`ST-muctieu-da-quyet: o ten «${oTen}» = okr.objective «${docLai}» = cau da nhan`,
+		`ST-muctieu-da-quyet: o ${d.truong} «${oTen}» = okr.objective «${docLai}» = cau da nhan`,
 		oTen === d.sau && docLai === d.sau,
 	);
 	const toast = await p1.p
@@ -563,10 +600,13 @@ async function buocGopY(tl) {
 
 	await bam(p1.p, "[data-sonner-toast]", g.toast.hoanTac);
 	const veCu = await choDieuKien(
-		async () => (await docTen(tl, MT)) === d.truoc,
+		async () => (await docTruong(tl, MT, d.truong)) === d.truoc,
 		E4.cho.manMs,
 	);
-	kiem(`Hoan tac: okr.objective doc lai «${d.truoc}»`, Boolean(veCu));
+	kiem(
+		`Hoan tac: okr.objective ${d.truong} doc lai «${d.truoc}»`,
+		Boolean(veCu),
+	);
 	const ht = await docSql(url, E4.hoanTacSql, thangVN());
 	const htBat = ht.find((h) => h.nac === "bat");
 	kiem(`hoan-tac.sql dem ${htBat?.hoan_tac}`, htBat?.hoan_tac === 1);
@@ -598,9 +638,9 @@ async function choLuotAn(url, mtAn, batDau) {
 			url,
 			`SELECT id, outcome FROM "agentTask"
 			 WHERE kind = 'okr-de-xuat' AND payload ->> 'objectiveId' = $1
-			   AND payload ->> 'nac' = 'an' AND "createdAt" >= $2 AND "finishedAt" IS NOT NULL
+			   AND payload ->> 'nac' = 'an' AND "createdAt" >= $2::timestamptz AND "finishedAt" IS NOT NULL
 			 ORDER BY "createdAt" DESC LIMIT 1`,
-			[mtAn, batDau],
+			[mtAn, batDau.toISOString()],
 		);
 		return h ?? null;
 	}, E4.cho.luotAnMs);

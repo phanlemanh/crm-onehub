@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { TRO_LY_OKR_TRAN } from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
 
 const TEN = "so-moi-lot";
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -27,6 +28,8 @@ const NHAN = new Map([
 ]);
 const TY_KHONG_NHAN = new Set(["lệ", "trọng", "suất"]);
 const SAI_SO = 1e-9;
+const NGU_CANH = TRO_LY_OKR_TRAN.soBangChu;
+const CAN_NGU_CANH = new Set(["một", "năm"]);
 
 function thamSo() {
 	const i = process.argv.indexOf("--muc-tieu");
@@ -44,7 +47,7 @@ function tachTu(chu) {
 		(chu ?? "")
 			.normalize("NFC")
 			.toLowerCase()
-			.match(/\d+(?:[.,]\d+)*|%|\p{L}+/gu) ?? []
+			.match(/\d+(?:[.,]\d+)*|%|\p{L}+|[.!?;:]/gu) ?? []
 	);
 }
 
@@ -60,6 +63,23 @@ function docChuSo(s) {
 function docSauChuc(t, j, coSo) {
 	const them = SAU_CHUC.get(t[j]);
 	return them === undefined ? [coSo, j] : [coSo + them, j + 1];
+}
+
+function coCumTai(t, tu, cum) {
+	const chu = cum.split(" ");
+	return tu >= 0 && chu.every((c, k) => t[tu + k] === c);
+}
+
+function laSoTheoNguCanh(t, i) {
+	if (!CAN_NGU_CANH.has(t[i])) return true;
+	if (NGU_CANH.hauToCo.some((c) => coCumTai(t, i + 1, c))) return true;
+	if (t[i] === "một") return false;
+	const sau = t[i + 1];
+	if (sau === undefined || NGU_CANH.dauCau.includes(sau)) return false;
+	if (/^\d{4}$/.test(sau)) return false;
+	if (NGU_CANH.namSauCum.some((c) => coCumTai(t, i - c.split(" ").length, c)))
+		return false;
+	return !NGU_CANH.namTruocCum.some((c) => coCumTai(t, i + 1, c));
 }
 
 function docChu(t, i) {
@@ -96,7 +116,11 @@ function cacSo(chu) {
 	const ra = [];
 	let i = 0;
 	while (i < t.length) {
-		const goc = /^\d/.test(t[i]) ? [docChuSo(t[i]), i + 1] : docChu(t, i);
+		const goc = /^\d/.test(t[i])
+			? [docChuSo(t[i]), i + 1]
+			: laSoTheoNguCanh(t, i)
+				? docChu(t, i)
+				: null;
 		if (!goc) {
 			i += 1;
 			continue;
@@ -140,6 +164,14 @@ function soMoiCua(hang) {
 				(nhanKr.includes(s.nhan) && oKr.some((d) => bang(d, s.goc)))
 			),
 	);
+}
+
+const iDoc = process.argv.indexOf("--doc");
+if (iDoc >= 0) {
+	console.log(
+		JSON.stringify(cacSo(process.argv[iDoc + 1] ?? "").map((s) => s.giaTri)),
+	);
+	process.exit(0);
 }
 
 const mucTieu = thamSo();

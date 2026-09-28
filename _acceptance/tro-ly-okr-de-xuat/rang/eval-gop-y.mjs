@@ -17,6 +17,7 @@ import {
 	THU_MUC_CA_MAU,
 } from "../../../apps/agent/evals/okr/ca-gop-y.ts";
 import { TRO_LY_OKR_TRAN } from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
+import { kiemOkr } from "../../../packages/validation/src/okr-kiem.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
 import { ghiHieuChinh } from "./hieu-chinh.mjs";
 import {
@@ -384,6 +385,31 @@ function kiemNg(ca, ghi, cho, ten) {
 	return loi;
 }
 
+function luatLuot7(ca) {
+	return new Set(
+		kiemOkr({
+			title: ca.mucTieu.title,
+			whyNow: ca.mucTieu.whyNow,
+			keyResults: ca.krs.map((k) => ({
+				title: k.title,
+				kind: k.kind,
+				startValue: k.startValue,
+				targetValue: k.targetValue,
+			})),
+		}).map((r) => r.ma),
+	);
+}
+
+function vanDePhuBoiLuot7(ca) {
+	const luat = luatLuot7(ca);
+	return ca.kyVong.vanDe.filter((vd) => luat.has(vd));
+}
+
+function ghiPhu(ca) {
+	const phu = vanDePhuBoiLuot7(ca);
+	return phu.length === 0 ? "" : ` · phu boi luat luot 7: ${phu.join(", ")}`;
+}
+
 function kiemCa(ca, ghi, lotSoMoi, ten) {
 	if (!ghi)
 		return ["khong co ban ghi — eval khong chay toi cuoi (xem eve.log)"];
@@ -396,7 +422,8 @@ function kiemCa(ca, ghi, lotSoMoi, ten) {
 	const vietLai = cho.filter((d) => d.loai === "viet-lai");
 	if (ca.kyVong.khongGopY && vietLai.length > 0)
 		loi.push(`khongGopY nhung co ${vietLai.length} dong viet lai`);
-	for (const vd of ca.kyVong.vanDe) {
+	const phu = vanDePhuBoiLuot7(ca);
+	for (const vd of ca.kyVong.vanDe.filter((v) => !phu.includes(v))) {
 		const truong = E22.truongCuaVanDe[vd] ?? [];
 		const trung = cho.some(
 			(d) =>
@@ -419,7 +446,7 @@ async function tongKetMotCa(url, eve) {
 	const lotSoMoi = chaySoMoiLot(url, g ? [g.objectiveId] : []);
 	const loi = kiemCa(c, g, lotSoMoi, ten);
 	console.log(
-		loi.length === 0 ? `DUNG ${c.id}` : `SAI ${c.id}: ${loi.join(" · ")}`,
+		`${loi.length === 0 ? `DUNG ${c.id}` : `SAI ${c.id}: ${loi.join(" · ")}`}${ghiPhu(c)}`,
 	);
 	for (const d of g?.dong ?? []) {
 		const nhan = `${c.id} ${d.id}`;
@@ -459,7 +486,7 @@ async function tongKet(url, eve) {
 	}));
 	for (const { ca: c, loi } of ketQua) {
 		console.log(
-			loi.length === 0 ? `DUNG ${c.id}` : `SAI ${c.id}: ${loi.join(" · ")}`,
+			`${loi.length === 0 ? `DUNG ${c.id}` : `SAI ${c.id}: ${loi.join(" · ")}`}${ghiPhu(c)}`,
 		);
 	}
 

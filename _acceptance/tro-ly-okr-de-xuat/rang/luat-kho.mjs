@@ -49,6 +49,10 @@ const LUAT_KHO = {
 		tienTo: "apps/app/",
 		mauTay: /<table|divide-y/,
 		nguon: /from\s+"@crm\/ui[^"]*"/,
+		lopHinhDang: /^(h|w|size|min-h|min-w|max-h|max-w)-[\w./[\]()-]+$/,
+		lopBoCuc:
+			/^((sm|md|lg|xl):)?(w-full|w-fit|flex|flex-1|flex-col|flex-row|grid|col-span-\d+|items-\w+|justify-\w+|self-\w+|min-w-0|shrink-0|sr-only|hidden|block)$/,
+		thanhPhanHinhDang: new Set(["Skeleton"]),
 	},
 	cat: 40,
 };
@@ -272,6 +276,31 @@ function theMo(dong, i) {
 	return null;
 }
 
+function phanLoai(c) {
+	const goc = { viTri: c.viTri, the: c.the, lop: c.lop };
+	if (c.lop === null)
+		return {
+			...goc,
+			loai: "?",
+			lyDo: "className là biểu thức, không đọc được lớp tĩnh",
+		};
+	const lop = c.lop.split(/\s+/).filter(Boolean);
+	const hinhDang = LUAT_KHO.ui.thanhPhanHinhDang.has(c.the);
+	const la = (l) =>
+		LUAT_KHO.ui.lopBoCuc.test(l) ||
+		(hinhDang && LUAT_KHO.ui.lopHinhDang.test(l));
+	const khac = lop.filter((l) => !la(l));
+	return khac.length === 0
+		? {
+				...goc,
+				loai: "a",
+				lyDo: hinhDang
+					? `hình dạng của ${c.the} (chỉ cao/rộng)`
+					: "chỉ lớp bố cục",
+			}
+		: { ...goc, loai: "b", lyDo: `lớp ngoài bố cục: ${khac.join(" ")}` };
+}
+
 function mucUi(nen, them) {
 	const tep = [...new Set(them.map((d) => d.tep))].filter(
 		(t) => t.startsWith(LUAT_KHO.ui.tienTo) && t.endsWith(".tsx"),
@@ -290,6 +319,9 @@ function mucUi(nen, them) {
 			const the = theMo(dong, i);
 			cls.push({
 				dong: `${t}:${i + 1}: <${the ?? "?"}> ${d.trim()}`,
+				viTri: `${t}:${i + 1}`,
+				the,
+				lop: /className="([^"]*)"/.exec(d)?.[1] ?? null,
 				ui: the !== null && ui.has(the.split(".")[0]),
 			});
 		});
@@ -297,10 +329,16 @@ function mucUi(nen, them) {
 	const tren = cls.filter((c) => c.ui);
 	const laProto = (c) => khop(c.dong, [/\/proto\//]);
 	const trenSp = tren.filter((c) => !laProto(c));
+	const phan = trenSp.map(phanLoai);
+	const viPham = phan.filter((p) => p.loai !== "a");
 	const ketQua = [
 		`# tệp apps/app/**/*.tsx của lượt: ${tep.length}`,
-		`# className= trên component nhập từ @crm/ui, màn sản phẩm: ${trenSp.length}`,
-		...trenSp.map((c) => c.dong),
+		`# className= trên component nhập từ @crm/ui, màn sản phẩm: ${trenSp.length} — bảng phân loại (a = bố cục hay hình dạng hợp lệ, b = đổi màu/góc/khoảng cách/chữ, ? = biểu thức, đọc tay)`,
+		"tệp:dòng · thành phần · lớp · loại · lý do",
+		...phan.map(
+			(p) =>
+				`${p.viTri} · <${p.the}> · ${p.lop ?? "(biểu thức)"} · ${p.loai} · ${p.lyDo}`,
+		),
 		`# className= trên component nhập từ @crm/ui, bản mẫu /proto: ${tren.length - trenSp.length}`,
 		...tren.filter(laProto).map((c) => c.dong),
 		`# className= trên thẻ HTML hay component cục bộ: ${cls.length - tren.length}`,
@@ -318,9 +356,9 @@ function mucUi(nen, them) {
 			"trên dòng thêm: grep className=, tìm thẻ mở gần nhất, đối chiếu với tên nhập từ \"@crm/ui…\"; grep -E '<table|divide-y'",
 		],
 		ketQua,
-		tren.length === 0 && tay.length === 0
-			? "không className nào đặt trên component @crm/ui, không <table> hay divide-y tự dựng."
-			: `${trenSp.length} className trên component @crm/ui ở màn sản phẩm và ${tren.length - trenSp.length} ở bản mẫu /proto, ${tay.length} dòng bảng/danh sách vẽ tay — đọc từng dòng: cỡ Skeleton, khoảng trong ô bảng và bố cục CardContent là chỗ hội đồng phải cân với luật «không đè class».`,
+		viPham.length === 0 && tay.length === 0
+			? `màn sản phẩm: ${trenSp.length} className trên component @crm/ui, cả ${trenSp.length} thuộc loại (a) bố cục hay hình dạng; 0 loại (b); không <table> hay divide-y tự dựng. ${tren.length - trenSp.length} chỗ ở bản mẫu /proto nằm ngoài vật, không phân loại.`
+			: `màn sản phẩm: ${viPham.length} className loại (b) hay chưa phân loại được trên component @crm/ui (xem bảng), ${tay.length} dòng bảng/danh sách vẽ tay.`,
 	);
 }
 
