@@ -175,7 +175,7 @@ const en = {
 		hop: {
 			tieuDe: "Upload a source",
 			moTa: "The composer reads the file and drafts a proposal for one page. No page changes until its page owner approves.",
-			keoTha: "Drag a file here, or choose a file",
+			keoTha: "Drag a file here",
 			keoThaMoTa: "Word (.docx) or PDF, up to 20 MB",
 			keoThaNut: "Choose file",
 			daChon: "Chosen file",
@@ -410,7 +410,7 @@ const vi: TaiLieuMessages = {
 		hop: {
 			tieuDe: "Tải nguồn lên",
 			moTa: "Máy soạn đọc tệp và soạn một bản đề xuất cho một trang. Không trang nào đổi cho tới khi chủ trang duyệt.",
-			keoTha: "Kéo tệp vào đây, hoặc chọn tệp",
+			keoTha: "Kéo tệp vào đây",
 			keoThaMoTa: "Word (.docx) hoặc PDF, tới 20 MB",
 			keoThaNut: "Chọn tệp",
 			daChon: "Tệp đã chọn",
