@@ -1,0 +1,113 @@
+schema_version: 1
+slug: lai-ra-man-tran-gio
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.lrm_tran_co_mat
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "_acceptance/lai-ra-man-tran-gio/rang/**"
+    expected: |
+      Xanh: doc cay cu phap cua spec bang typescript; in SO LOI GOI test(...) da soi va
+      ten tung ca; moi ca co tham so thu ba la dinh danh TRAN_LAI_MS; TRAN_LAI_MS khai
+      o cap tep bang mot so nguyen. So ca soi duoc phai bang 3 (neo doc lap, ghim o
+      contract Context: ba ca goi laiMotFile).
+      CAP HAI CHIEU tren CUNG fixture, rang tu chay ca hai trong mot luot, tren chuoi
+      nguon trong bo nho (khong ghi dia):
+      chieu xanh — nguon that -> ma 0.
+      chieu do — bo tham so thu ba cua ca "chuoi da va den man" -> rang phai bao
+      "ca khong co tran tuong minh: chuoi da va den man" va phan dinh do; khong bao
+      dung ten do -> ma 1.
+      Khong doc duoc spec hoac 0 loi goi test -> ma 2, KHONG xanh.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.lrm_tran_can_cu
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "_acceptance/lai-ra-man-tran-gio/rang/**"
+    expected: |
+      Xanh: bang do co >= 30 luot, moi luot co run_id va attempt; in so luot, so luot
+      xanh, luot xanh cham nhat (ms, run_id/attempt), can duoi do lon nhat (ms,
+      run_id/attempt — so ms luc bi cat la can duoi cua thoi gian that), moc =
+      max(hai so), TRAN_LAI_MS va he so thuc TRAN_LAI_MS / moc; he so >= 4.
+      CAP HAI CHIEU tren CUNG fixture, trong bo nho, hai chieu do:
+      (a) TRAN_LAI_MS = 5000 -> phai bao "tran 5000 ms duoi 4 lan moc 7469.2 ms";
+      (b) TRAN_LAI_MS = 25000 — qua ve xanh (4 x 4995.92 = 19983.68) nhung truot vi
+      can do — phai bao "tran 25000 ms duoi 4 lan moc 7469.2 ms (can duoi do
+      36371259813/1)". Chieu do nao khong bao dung -> ma 1.
+      Bang rong, duoi 30 luot, hay luot thieu run_id -> ma 2, KHONG xanh.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.lrm_co_lap
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "packages/ui/test/setup-dom.ts"
+      - "_acceptance/lai-ra-man-tran-gio/rang/**"
+    expected: |
+      CAP HAI CHIEU tren CUNG mot ban sao (packages/ui/test/lai-ra-man.co-lap-<pid>.tsx,
+      goi dich danh, xoa trong finally ke ca khi loi). Ban sao doi dich cua ghi(...)
+      sang .acceptance-runs/lai-ra-man-tran-gio/E3-<pid>/ (moc LUOT_CHAY.duongLuot(ten)
+      dung mot lan). Truoc va sau luot: sha256 cua ve-that.json va mo-nguyen-ban.json
+      trong thu muc tao pham cua chan-lai-component-ra-man khong doi, va danh sach tep
+      cua packages/ui/test khong doi; lech -> ma 2, in "tao pham ho so da ky bi ghi"
+      hoac ten tep thua.
+      chieu xanh — tran cua RIENG ca lai ep 300 ms: ca lai do va dong loi cua no co
+      "timed out"; "mo tung nguyen ban" va "chuoi da va den man" xanh. Rang doc ket qua
+      tung ca qua --reporter=junit, khong doc chuoi tong.
+      chieu do — cung ban sao, bo hai loi goi `luot.abort()`, chay 3 lan: ca 3 lan
+      "chuoi da va den man" do; rang in "vong lai het gio van ve tiep: chuoi da va den
+      man do theo (3/3)". Lan nao chieu do ra xanh -> ma 2, in "doi chung khong dua"
+      (thuoc khong phan biet duoc lan do, KHONG ket luan). Chieu xanh co ca sau do ->
+      ma 1, neu ten ca.
+      Moc de pha (dong tran cua ca lai, hai loi goi luot.abort()) khong tim thay dung so
+      lan -> ma 2, KHONG xanh. Ca lai KHONG do o chieu xanh (tran ep khong co tac dung)
+      -> ma 2.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.lrm_ban_ve_khong_doi
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "packages/ui/src/**"
+      - "apps/app/components/**"
+      - "_acceptance/lai-ra-man-tran-gio/rang/**"
+    expected: |
+      Tien kiem: packages/ui/test/setup-dom.ts va rang/luot-chay.mjs, rang/moi-mac-dinh.mjs
+      cua chan-lai-component-ra-man trung voi ban o c895e5bf; lech -> ma 2, neu ten tep
+      ("tep do da doi, phep so khong co lap spec").
+      Xanh: `git show c895e5bf:packages/ui/test/lai-ra-man.spec.tsx` ra ban sao
+      packages/ui/test/lai-ra-man.cu-<pid>.tsx; spec moi chep thanh
+      lai-ra-man.moi-<pid>.tsx; ca hai doi dich ghi(...) sang
+      .acceptance-runs/lai-ra-man-tran-gio/E4-<pid>/{cu,moi}/; chay tren CUNG cay;
+      ve-that.json va mo-nguyen-ban.json cua hai luot trung tung byte. In kich thuoc hai
+      tep va so khoa cua ve-that.json. Ban sao xoa trong finally; danh sach tep cua
+      packages/ui/test truoc/sau luot phai trung (lech -> ma 2); sha256 tao pham cua
+      chan-lai-component-ra-man khong doi (lech -> ma 2).
+      CAP HAI CHIEU tren CUNG fixture, mot dot bien cho MOI tep:
+      (a) ban sao moi bo "button" khoi NUT_LAI -> phai bao "ban ve lech: ve-that.json"
+      kem khoa dau tien lech;
+      (b) ban sao moi bo dong `for (const c of b.mo) chu.add(c);` cua ca "mo tung
+      nguyen ban" -> phai bao "ban ve lech: mo-nguyen-ban.json" kem khoa dau tien lech.
+      Dot bien nao khong bao dung ten tep -> ma 1.
+      git show that bai, moc dot bien khong tim thay dung mot lan, hay luot nao khong
+      ghi tao pham -> ma 2, KHONG xanh.
+
+  - id: E5
+    criterion: AC-5
+    executor: judgment
+    cmd: judgment
+    inputs:
+      - _acceptance/lai-ra-man-tran-gio/rang/bang-do-ci.json
+      - _acceptance/lai-ra-man-tran-gio/evidence/do-ci.md
+    expected: |
+      evidence/do-ci.md liet: run id + attempt cua luot CI cua PR va ms cua ca lai; hai
+      PR nhap do-thu (so PR, run id), danh sach ca do cua tung nhanh. Dat khi: luot CI
+      cua PR xanh, ca lai < TRAN_LAI_MS; nhanh co ban va chi do dung ca lai; nhanh chua
+      va do them it nhat mot ca khac ngoai ca lai. May KHONG cham muc nay.
