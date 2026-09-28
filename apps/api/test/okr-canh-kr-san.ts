@@ -1,4 +1,5 @@
 import { db } from "@crm/db";
+import { ngayVN } from "@crm/db/onboarding-nhac";
 import { gieoKyQuy, gieoMucTieuCongBo } from "./okr-khep-san";
 import {
 	datViTri,
@@ -124,15 +125,43 @@ export async function congTyMoi(
 	return { congTy, ten: tenDu };
 }
 
+const khuonCua = new Map<string, string>();
+
+async function khuonKeHoach(san: SanCanhKr): Promise<string> {
+	const co = khuonCua.get(san.p1);
+	if (co !== undefined) return co;
+	const id = idTra(
+		await goi("onboarding.createTemplate", {
+			name: ma("canh-khuon"),
+			partnerType: null,
+			steps: [
+				{ label: "Gọi chào", departmentId: san.p1, position: 0, offsetDays: 0 },
+			],
+		}),
+		"tao khuon ke hoach",
+	);
+	khuonCua.set(san.p1, id);
+	return id;
+}
+
 export async function keHoachMoi(
+	san: SanCanhKr,
 	companyId: string,
 	ownerId: string,
 ): Promise<string> {
-	const r = await db.onboardingPlan.create({
-		data: { companyId, startedAt: new Date(), targetDays: 30, ownerId },
-		select: { id: true },
-	});
-	return r.id;
+	return idTra(
+		await goi(
+			"onboarding.createFromTemplate",
+			{
+				companyId,
+				templateId: await khuonKeHoach(san),
+				startedAt: ngayVN(new Date()),
+				ownerId,
+			},
+			san.nguoi.A.cookie,
+		),
+		"tao ke hoach",
+	);
 }
 
 export async function gieoSangKien(san: SanCanhKr): Promise<SanSangKien> {
@@ -146,7 +175,7 @@ export async function gieoSangKien(san: SanCanhKr): Promise<SanSangKien> {
 	const C = await chienDichMoi(TEN_C, A, phuTrach);
 	ok(await goi("campaigns.start", { id: C }, A.cookie), "chay chien dich C");
 	const x = await congTyMoi("cong-ty-X", A);
-	const P = await keHoachMoi(x.congTy, phuTrach);
+	const P = await keHoachMoi(san, x.congTy, phuTrach);
 	return { C, P, congTyX: x.congTy, tenX: x.ten, tenPhuTrachC };
 }
 
@@ -189,5 +218,11 @@ export async function donSanCanhKr(): Promise<void> {
 	});
 	await db.savedView.deleteMany({
 		where: { ownerId: { startsWith: TIEN_TO } },
+	});
+	await db.onboardingPlan.deleteMany({
+		where: { template: { name: { startsWith: TIEN_TO } } },
+	});
+	await db.onboardingTemplate.deleteMany({
+		where: { name: { startsWith: TIEN_TO } },
 	});
 }

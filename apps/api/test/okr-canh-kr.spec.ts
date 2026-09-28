@@ -517,15 +517,15 @@ describe("sang-kien", () => {
 	afterAll(donSanCanhKr, CHO_MS);
 
 	test(
-		"sang-kien-gan: hang chi luu ma, tieuDe rong; canhKr doc ten song; vet chi mang loai va ma",
+		"sang-kien-gan: T (truong phong, khong phu trach KR) gan C va P — hang chi luu ma, tieuDe rong; canhKr doc ten song; vet chi mang loai va ma",
 		async () => {
-			const { A } = san.nguoi;
+			const { T } = san.nguoi;
 			const idC = idCua(
-				await ganSangKien(san, A.cookie, "chien-dich", sk.C),
+				await ganSangKien(san, T.cookie, "chien-dich", sk.C),
 				"gan C",
 			);
 			const idP = idCua(
-				await ganSangKien(san, A.cookie, "ke-hoach", sk.P),
+				await ganSangKien(san, T.cookie, "ke-hoach", sk.P),
 				"gan P",
 			);
 			const hang = await db.okrViecKr.findMany({
@@ -554,7 +554,7 @@ describe("sang-kien", () => {
 					planId: null,
 					tieuDe: "",
 					nguoiLamUserId: null,
-					taoBoiUserId: A.id,
+					taoBoiUserId: T.id,
 				},
 				{
 					id: idP,
@@ -563,10 +563,10 @@ describe("sang-kien", () => {
 					planId: sk.P,
 					tieuDe: "",
 					nguoiLamUserId: null,
-					taoBoiUserId: A.id,
+					taoBoiUserId: T.id,
 				},
 			]);
-			expect(await sangKienCua(san, A.cookie)).toEqual([
+			expect(await sangKienCua(san, T.cookie)).toEqual([
 				{
 					id: idC,
 					loai: "chien-dich",
@@ -596,7 +596,7 @@ describe("sang-kien", () => {
 				data: { name: TEN_C_MOI },
 			});
 			expect(
-				(await sangKienCua(san, A.cookie)).map((d) =>
+				(await sangKienCua(san, T.cookie)).map((d) =>
 					d.lienKet.coQuyen ? d.lienKet.ten : null,
 				),
 			).toEqual([TEN_C_MOI, sk.tenX]);
@@ -630,13 +630,13 @@ describe("sang-kien", () => {
 			).toEqual([
 				{
 					objectiveId: san.mt,
-					actorUserId: A.id,
+					actorUserId: T.id,
 					before: null,
 					after: { loai: "chien-dich", campaignId: sk.C },
 				},
 				{
 					objectiveId: san.mt,
-					actorUserId: A.id,
+					actorUserId: T.id,
 					before: null,
 					after: { loai: "ke-hoach", planId: sk.P },
 				},
@@ -650,14 +650,22 @@ describe("sang-kien", () => {
 		async () => {
 			const { A, B, O } = san.nguoi;
 			const x = await congTyMoi("cong-ty-tu-choi", A);
-			const P2 = await keHoachMoi(x.congTy, A.id);
+			const P2 = await keHoachMoi(san, x.congTy, A.id);
 			ok(await ganSangKien(san, A.cookie, "ke-hoach", P2), "gan P2 lan dau");
+			const C3 = await chienDichMoi("Chiến dịch gắn hai lần", A);
+			ok(await ganSangKien(san, A.cookie, "chien-dich", C3), "gan C3 lan dau");
 			const maLa = `khong-co-${sk.C}`;
 			await db.okrKeyResult.update({
 				where: { id: san.krMoc },
 				data: { ownerUserId: O.id },
 			});
 			const ca: [string, () => Promise<TraLoi>, number, string][] = [
+				[
+					"gan C3 lan hai",
+					() => ganSangKien(san, A.cookie, "chien-dich", C3),
+					400,
+					CAU.daGan,
+				],
 				[
 					"gan P2 lan hai",
 					() => ganSangKien(san, A.cookie, "ke-hoach", P2),
@@ -718,7 +726,7 @@ describe("sang-kien", () => {
 		async () => {
 			const { A } = san.nguoi;
 			const x = await congTyMoi("cong-ty-song-song", A);
-			const P3 = await keHoachMoi(x.congTy, A.id);
+			const P3 = await keHoachMoi(san, x.congTy, A.id);
 			const truoc = await demHai();
 			const tra = await Promise.all([
 				ganSangKien(san, A.cookie, "ke-hoach", P3),
@@ -751,7 +759,7 @@ describe("sang-kien", () => {
 			const { A } = san.nguoi;
 			const C2 = await chienDichMoi("Chiến dịch trạng thái", A);
 			const y = await congTyMoi("cong-ty-Y", A);
-			const PY = await keHoachMoi(y.congTy, A.id);
+			const PY = await keHoachMoi(san, y.congTy, A.id);
 			const idC2 = idCua(
 				await ganSangKien(san, A.cookie, "chien-dich", C2),
 				"gan C2",
