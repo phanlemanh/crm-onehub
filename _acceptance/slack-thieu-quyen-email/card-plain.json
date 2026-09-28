@@ -1,0 +1,18 @@
+{
+  "feature_plain": "Khi kết nối Slack không cho app đọc email, Tác nhân không còn đăng dữ liệu đối tác vào kênh hay tin riêng có người mà nó không nhận ra được — nó dừng và nói phải kết nối lại Slack.",
+  "decisions": [
+    {"id": "E11", "q": "Tài liệu chỗ rẽ và mô tả PR nói đúng luật mà không lộ cách khai thác chứ?", "why": "Ba người chấm độc lập cùng đề xuất Đạt: cả hai chỉ tả hành vi sau bản sửa, không nêu tên quyền Slack hay cách lỗ xảy ra, và đều nói việc báo hãng không qua kênh công khai."}
+  ],
+  "scope_plain": "Năm mục cắt ở Cổng Phạm vi vẫn ngoài bản này, không mục nào bị kéo vào.",
+  "decisions_plain": [
+    {"id": "d-20260928T041521Z-1", "p": "KHÔNG dựng bản bấm được — lượt không chạm màn nào."},
+    {"id": "d-20260928T041521Z-2", "p": "KHÔNG viết đặc tả màn — không có màn mới."},
+    {"id": "d-20260928T041521Z-3", "p": "Xét từng người thay vì đọc quyền của kết nối — đổi lại, kết nối thiếu quyền thì mọi kênh có người chưa khớp đều dừng đăng."},
+    {"id": "d-20260928T041521Z-4", "p": "KHÔNG chặn người của tổ chức khác hay người có email ngoài CRM — khách vẫn nhận tin như hôm nay."},
+    {"id": "d-20260928T041521Z-5", "p": "Bộ kiểm riêng cho lượt này — không đổi thước của bản vá đã ký."},
+    {"id": "d-20260928T044042Z-7", "p": "Bốn việc làm lần lượt trong một phiên — đổi lại người soát độc lập duy nhất là lượt chấm tươi."},
+    {"id": "d-20260928T044343Z-8", "p": "Anh đã duyệt kế hoạch bốn việc ở Cổng 1.5."},
+    {"id": "d-20260928T051551Z-9", "p": "Sau vòng chấm 1, máy siết phép đo «lỗ là thật» cho từng ca và đưa bản mô tả PR cho người chấm đọc — đổi lại bộ phép đo đổi sau khi anh duyệt phạm vi, chỉ theo hướng chặt hơn; chờ anh phê."}
+  ],
+  "analyst_plain": ""
+}

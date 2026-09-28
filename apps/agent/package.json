@@ -21,6 +21,7 @@
 		"clean": "rm -rf .turbo .eve node_modules"
 	},
 	"dependencies": {
+		"@ai-sdk/gateway": "4.0.69",
 		"@crm/db": "workspace:*",
 		"@crm/env": "workspace:*",
 		"@crm/telemetry": "workspace:*",
@@ -28,13 +29,17 @@
 		"ai": "^7.0.85",
 		"context.dev": "2.10.0",
 		"eve": "^0.29.4",
+		"mammoth": "1.13.0",
+		"unpdf": "1.8.1",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@crm/typescript-config": "workspace:*",
+		"@pdf-lib/fontkit": "1.1.1",
 		"@types/node": "^24.0.0",
 		"just-bash": "^3.2.0",
 		"microsandbox": "^0.6.8",
+		"pdf-lib": "1.17.1",
 		"typescript": "^5.9.2"
 	}
 }

@@ -11,6 +11,9 @@ export const TU_CHOI_NGUOI_NHAN =
 export const KHONG_KIEM_DUOC_NGUOI_NHAN =
 	"Refused: could not check who is at this Slack destination";
 
+export const KHONG_THAY_EMAIL =
+	"without an email Slack shares with this app; reconnect Slack so it can read email addresses";
+
 export type DichSlack = { kind: "channel" | "user"; id: string };
 
 const conTro = z.object({ next_cursor: z.string().nullish() }).nullish();
@@ -34,7 +37,11 @@ const trangDanhBa = schemas.slack.reply.extend({
 
 type NguoiSlack = z.infer<typeof nguoiSlack>;
 
-type ChiOkr = { emails: Set<string>; slackIds: Set<string> };
+type NhanDien = {
+	emails: Set<string>;
+	slackIds: Set<string>;
+	daKhop: Set<string>;
+};
 
 function chuanEmail(value: string): string {
 	return value.trim().toLowerCase();
@@ -118,7 +125,7 @@ async function nguoiODich(
 	);
 }
 
-async function thanhVienChiOkr(): Promise<ChiOkr> {
+async function nhanDienThanhVien(): Promise<NhanDien> {
 	const members = await db.member.findMany({
 		where: { organizationId: WORKSPACE_ID },
 		select: {
@@ -134,57 +141,71 @@ async function thanhVienChiOkr(): Promise<ChiOkr> {
 	const chan = members.filter(
 		(member) => !docDuocPhamVi(toWorkspaceRole(member.role), "doi-tac"),
 	);
+	const maKhop = (list: typeof members) =>
+		new Set(
+			list.flatMap((member) => member.user.slackMemberMatch?.slackUserId ?? []),
+		);
 	return {
 		emails: new Set(chan.map((member) => chuanEmail(member.user.email))),
-		slackIds: new Set(
-			chan.flatMap((member) => member.user.slackMemberMatch?.slackUserId ?? []),
-		),
+		slackIds: maKhop(chan),
+		daKhop: maKhop(members),
 	};
 }
 
-function demNguoiChan(
+type DemNguoi = { chan: number; khongRo: number };
+
+function demNguoi(
 	nguoiO: string[],
 	danhBa: Map<string, NguoiSlack>,
-	chiOkr: ChiOkr,
-): number {
-	let so = 0;
+	nhanDien: NhanDien,
+): DemNguoi {
+	const dem: DemNguoi = { chan: 0, khongRo: 0 };
 	for (const id of new Set(nguoiO)) {
 		const nguoi = danhBa.get(id);
 		if (nguoi?.is_bot || nguoi?.deleted) continue;
 		const email = nguoi?.profile?.email;
 		if (
-			chiOkr.slackIds.has(id) ||
-			(email && chiOkr.emails.has(chuanEmail(email)))
+			nhanDien.slackIds.has(id) ||
+			(email && nhanDien.emails.has(chuanEmail(email)))
 		) {
-			so += 1;
+			dem.chan += 1;
+		} else if (nguoi && !email && !nhanDien.daKhop.has(id)) {
+			dem.khongRo += 1;
 		}
 	}
-	return so;
+	return dem;
+}
+
+function soNguoi(so: number): string {
+	return `${so} ${so === 1 ? "person" : "people"}`;
 }
 
 export async function kiemNguoiNhanSlack(
 	accessToken: string,
 	destination: DichSlack,
 ): Promise<void> {
-	let so: number;
+	let dem: DemNguoi;
 	try {
-		const [nguoiO, danhBa, chiOkr] = await Promise.all([
+		const [nguoiO, danhBa, nhanDien] = await Promise.all([
 			nguoiODich(accessToken, destination),
 			docMoiTrang(accessToken, "users.list", {}, trangNguoi),
-			thanhVienChiOkr(),
+			nhanDienThanhVien(),
 		]);
-		so = demNguoiChan(
+		dem = demNguoi(
 			nguoiO,
 			new Map(danhBa.map((nguoi) => [nguoi.id, nguoi])),
-			chiOkr,
+			nhanDien,
 		);
 	} catch (error) {
 		const reason = error instanceof Error ? error.message : String(error);
 		throw new Error(`${KHONG_KIEM_DUOC_NGUOI_NHAN} (${reason}).`);
 	}
-	if (so > 0) {
+	if (dem.chan > 0) {
+		throw new Error(`Refused: ${soNguoi(dem.chan)} ${TU_CHOI_NGUOI_NHAN}.`);
+	}
+	if (dem.khongRo > 0) {
 		throw new Error(
-			`Refused: ${so} ${so === 1 ? "person" : "people"} ${TU_CHOI_NGUOI_NHAN}.`,
+			`${KHONG_KIEM_DUOC_NGUOI_NHAN} (${soNguoi(dem.khongRo)} ${KHONG_THAY_EMAIL}).`,
 		);
 	}
 }

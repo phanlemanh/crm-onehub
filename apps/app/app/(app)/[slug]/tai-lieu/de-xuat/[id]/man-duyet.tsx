@@ -4,10 +4,22 @@ import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@crm/ui/components/card";
 import { DiffTrang } from "@crm/ui/components/diff-trang";
-import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { MarkdownReader } from "@crm/ui/components/markdown-reader";
 import { Textarea } from "@crm/ui/components/textarea";
 import {
 	chuanNfc,
@@ -32,10 +44,11 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
-import { duongTrang, ngayTaiLieu } from "@/lib/tai-lieu-man";
+import { duongSuaTuDeXuat, duongTrang, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { type BanMay, BanMayDuyet } from "./ban-may";
 
 export type DeXuatDuyet = {
 	id: string;
@@ -49,6 +62,7 @@ export type DeXuatDuyet = {
 	duyetDuoc: boolean;
 	khoi: KhoiDoi[];
 	dai: SoDoi[];
+	may?: BanMay;
 };
 
 type LoiMay = {
@@ -60,6 +74,7 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 	const locale = useLocale();
 	const t = taiLieuMessages(locale);
 	const m = t.duyet;
+	const mm = t.duyetMay;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const router = useRouter();
@@ -67,11 +82,23 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 	const ma = useId();
 	const idLyDo = `${ma}-ly-do`;
 	const idLoiLyDo = `${ma}-loi-ly-do`;
+	const idKhoaDuyet = `${ma}-khoa-duyet`;
 	const oLyDo = useRef<HTMLTextAreaElement>(null);
 	const [lyDo, setLyDo] = useState("");
 	const [loiLyDo, setLoiLyDo] = useState<string | null>(null);
 	const [thongBao, setThongBao] = useState<string | null>(null);
 	const [dangTinh, setDangTinh] = useState(false);
+	const [daDoc, setDaDoc] = useState(false);
+	const [daTick, setDaTick] = useState<ReadonlySet<number>>(() => new Set());
+	const may = deXuat.may;
+	const chuaTickHet = may !== undefined && daTick.size < may.dong.length;
+	const doiTick = (dong: number, tick: boolean) =>
+		setDaTick((cu) => {
+			const moi = new Set(cu);
+			if (tick) moi.add(dong);
+			else moi.delete(dong);
+			return moi;
+		});
 
 	const baoLoi = async (e: LoiMay) => {
 		if (e.data?.code === "CONFLICT") {
@@ -110,15 +137,21 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 	);
 	const dangLam = dangTinh || duyet.isPending || traLai.isPending;
 	const choDuyet = deXuat.trangThai === "CHO_DUYET";
-	const coQuyetDinh = deXuat.duyetDuoc && (choDuyet || deXuat.cu);
+	const coQuyetDinh =
+		deXuat.duyetDuoc && (choDuyet || deXuat.cu) && (!may || daDoc);
+	const hienKhoaDuyet = chuaTickHet && choDuyet && !deXuat.cu;
 
 	const bamDuyet = async () => {
-		if (dangLam || deXuat.cu) return;
+		if (dangLam || deXuat.cu || chuaTickHet) return;
 		setThongBao(null);
 		setDangTinh(true);
 		const hash = await diffHash(deXuat.khoi);
 		setDangTinh(false);
-		duyet.mutate({ id: deXuat.id, diffHash: hash });
+		duyet.mutate(
+			may
+				? { id: deXuat.id, diffHash: hash, daDoiChieu: daTick.size }
+				: { id: deXuat.id, diffHash: hash },
+		);
 	};
 
 	const bamTraLai = () => {
@@ -138,6 +171,16 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 		}
 		traLai.mutate({ id: deXuat.id, lyDo: sach });
 	};
+
+	const diff = (
+		<DiffTrang
+			dai={deXuat.dai}
+			khoi={deXuat.khoi}
+			nhanBo={m.nhanBo}
+			nhanDaiSo={m.nhanDaiSo}
+			nhanThem={m.nhanThem}
+		/>
+	);
 
 	return (
 		<>
@@ -163,7 +206,11 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 			</PageShellHeader>
 			<PageShellContent>
 				<section
-					className="flex min-w-0 max-w-3xl flex-col gap-5"
+					className={
+						may
+							? "flex min-w-0 flex-col gap-5"
+							: "flex min-w-0 max-w-3xl flex-col gap-5"
+					}
 					data-de-xuat={deXuat.id}
 				>
 					{deXuat.cu ? (
@@ -192,13 +239,36 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 							<AlertTitle>{m.daDuyet}</AlertTitle>
 						</Alert>
 					) : null}
-					<DiffTrang
-						dai={deXuat.dai}
-						khoi={deXuat.khoi}
-						nhanBo={m.nhanBo}
-						nhanDaiSo={m.nhanDaiSo}
-						nhanThem={m.nhanThem}
-					/>
+					{may ? (
+						<BanMayDuyet
+							banTrinhBay={
+								<div translate="no">
+									<MarkdownReader
+										calloutLabels={t.doc.ghiChu}
+										missingLabel={t.doc.chuaCoTrang}
+										sourceBackLabel={t.doc.veChoTrich}
+										sourcesLabel={t.doc.nguon}
+									>
+										{may.noiDung}
+									</MarkdownReader>
+								</div>
+							}
+							daDoc={daDoc}
+							docXong={() => setDaDoc(true)}
+							may={may}
+							tick={{ daTick, doi: doiTick }}
+						/>
+					) : (
+						diff
+					)}
+					{may?.coBanGoc && daDoc ? (
+						<Card data-so-voi-ban="">
+							<CardHeader>
+								<CardTitle>{mm.soVoiBan}</CardTitle>
+							</CardHeader>
+							<CardContent>{diff}</CardContent>
+						</Card>
+					) : null}
 					<div aria-live="polite">
 						{thongBao ? (
 							<Alert data-thong-bao="" role="status">
@@ -207,7 +277,7 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 						) : null}
 					</div>
 					{coQuyetDinh ? (
-						<div className="flex flex-col gap-3" data-quyet-dinh="">
+						<div className="flex max-w-3xl flex-col gap-3" data-quyet-dinh="">
 							<Field data-invalid={loiLyDo ? true : undefined}>
 								<FieldLabel htmlFor={idLyDo}>{m.lyDo}</FieldLabel>
 								<Textarea
@@ -229,9 +299,11 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 							</Field>
 							<div className="flex flex-wrap items-center gap-2">
 								<Button
+									aria-describedby={hienKhoaDuyet ? idKhoaDuyet : undefined}
 									data-nut-duyet=""
-									disabled={deXuat.cu || !choDuyet || dangLam}
+									disabled={deXuat.cu || !choDuyet || dangLam || chuaTickHet}
 									onClick={bamDuyet}
+									variant={may ? "outline" : "default"}
 								>
 									{duyet.isPending || dangTinh ? m.dangDuyet : m.duyet}
 								</Button>
@@ -243,7 +315,19 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 								>
 									{traLai.isPending ? m.dangTraLai : m.traLai}
 								</Button>
+								{may && choDuyet && !deXuat.cu ? (
+									<Button asChild data-nut-sua-ban="" variant="outline">
+										<Link href={url(duongSuaTuDeXuat(deXuat.slug, deXuat.id))}>
+											{mm.suaBanNay}
+										</Link>
+									</Button>
+								) : null}
 							</div>
+							{hienKhoaDuyet ? (
+								<FieldDescription data-khoa-duyet="" id={idKhoaDuyet}>
+									{mm.khoaDuyet}
+								</FieldDescription>
+							) : null}
 						</div>
 					) : null}
 				</section>

@@ -1,0 +1,190 @@
+{
+  "feature_plain": "Một lệnh đổ vào máy dev hoặc phiên đo một công ty giả đang chạy OKR ở tuần 6 của quý, để mọi lượt OKR sau dựng và đo trên cùng một công ty; lệnh không bao giờ ghi vào production.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ tạo 40 người giả trong ba bộ phận, mười phòng ban có trưởng; người Tài chính, Nhân sự, Pháp chế mang vai «chỉ OKR» — đứng cạnh người và phòng ban sẵn có của máy dev, không đè lên."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ có OKR năm cấp OneHub và OKR quý 4 cho cả mười phòng ban, đã công bố và căn chỉnh lên OneHub, không vượt trần mặc định."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ có đủ sáu kiểu KR, mỗi kiểu ít nhất ba, và năm KR lấy số từ CRM có sáu tuần số."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ có sáu tuần Cập nhật tuần với mức tự tin trôi dần, bảng họp tuần có KR đáng bàn vì tụt và vì im, và một người chưa gửi tuần này."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ có quý 3 đã khép: mọi KR đã chấm, mọi mục tiêu có điều học được, ba mục tiêu mang sang quý 4."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ đặt tuần 6 đúng tuần của ngày nạp; ghim ngày thì hai lần nạp ra y hệt nhau."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ nạp lại được bao nhiêu lần cũng không nhân đôi, không đụng dữ liệu khác của máy dev."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ từ chối ngay, trước khi kết nối, mọi cơ sở dữ liệu không nằm trên chính máy — không có cờ nào vượt được."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ từ chối khi máy đã có OKR không phải của công ty giả, và không đổi gì."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ từ chối tệp công ty giả viết sai luật OKR, chỉ đúng chỗ sai, không ghi gì."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ cho người giả gửi Cập nhật tuần thật trên công ty giả, và người vai «chỉ OKR» xem được toàn cảnh."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ có 30 ca góp ý mẫu, có ca trộn Anh–Việt và ca câu đã tốt; ca thật của N1 đặt ở thư mục riêng ngoài git và đọc bằng cùng một cách."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG để sót hàng nào của công ty giả khi xoá, kể cả thứ sinh ra sau khi đã dùng; chặn xoá và nêu bảng khi dữ liệu thật đang trỏ vào người giả."
+    },
+    {
+      "id": "AC-14",
+      "p": "Sẽ KHÔNG đẩy trưởng phòng giả về màn onboarding: đăng nhập là thấy Toàn cảnh mười phòng ban và bảng họp tuần có KR đáng bàn (có ảnh chụp)."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG nạp vào bản xem trước: nó dùng chung dữ liệu và máy chủ với production."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG bao giờ chạy trên production."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG gắn sẵn vào kho của phiên đo — lượt sau tự nạp khi cần."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG có ca tóm tắt tuần và đề xuất AI dựng sẵn — lượt 9b, 9c tự sinh."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG đổi cấu trúc cơ sở dữ liệu hay bộ gieo dữ liệu CRM hiện có."
+    }
+  ],
+  "scope_plain": "Năm thứ cố ý để ngoài hạng mục:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Mọi lớp dữ liệu câu giao nêu — tổ chức, OKR năm, quý 4, sáu tuần cập nhật, quý 3 đã khép, ca góp ý — đều có tiêu chí (AC-1…AC-5 dữ liệu, AC-13 ca góp ý)."
+    },
+    {
+      "i": 1,
+      "p": "Mọi tình huống của lệnh nạp — máy mới, nạp lại, xoá, có OKR thật, không phải máy cục bộ, tệp sai — đều có tiêu chí (AC-7…AC-11)."
+    },
+    {
+      "i": 2,
+      "p": "Công ty giả được đọc bởi đúng những gì sản phẩm dùng: màn đọc, thao tác ghi thật, màn trình duyệt, bộ chấm của Trợ lý OKR (AC-12, AC-13, AC-14)."
+    },
+    {
+      "i": 3,
+      "p": "Thời gian: nạp hôm nay và nạp với ngày ghim, thử cả sáng thứ Hai và tối Chủ nhật (AC-4, AC-6)."
+    },
+    {
+      "i": 4,
+      "p": "Chuẩn ngành: công cụ gieo dữ liệu của Rails, Laravel tự chặn production; kho này chặt hơn — không có cờ vượt."
+    },
+    {
+      "i": 5,
+      "p": "Giả định: quý 4 giả trôi theo ngày nạp, tên chu kỳ theo câu chuyện chứ không theo lịch thật."
+    },
+    {
+      "i": 6,
+      "p": "Giả định: «OKR thật» là mọi chu kỳ, mục tiêu, KR không phải của công ty giả; người và phòng ban sẵn có không chặn nạp."
+    },
+    {
+      "i": 7,
+      "p": "Giả định: hạng mục giao máy dev và phiên đo, bản xem trước để ngoài — đây là điểm cần anh quyết."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Chưa nói công ty giả vào workspace nào, và số đo chỉ thử trên máy trống — đã sửa: vào workspace duy nhất của kho, thử thêm trên máy có sẵn người và phòng ban, và kiểm đăng nhập không bị đẩy về onboarding."
+    },
+    {
+      "i": 1,
+      "p": "Phép thử xoá chỉ quét những bảng chính lệnh nạp khai, và chưa thử xoá sau khi đã dùng — đã sửa: quét mọi bảng của cơ sở dữ liệu, thử xoá sau khi đã mở họp tuần, đăng nhập, gửi cập nhật."
+    },
+    {
+      "i": 2,
+      "p": "Tiêu chí cho mọi người đã gửi tuần này nhưng phép thử lại gửi thêm — đã sửa: thêm một người chưa gửi tuần này, phép thử gửi trên người đó."
+    },
+    {
+      "i": 3,
+      "p": "Chỉ thử một ngày nạp — đã sửa: thử ba ngày (sáng thứ Hai, thứ Năm, tối Chủ nhật), không cập nhật nào nằm sau ngày nạp."
+    },
+    {
+      "i": 4,
+      "p": "Thiết kế và tiêu chí nói khác nhau về môi trường bị chặn — đã sửa: chặn production và bản xem trước, cho máy dev kéo cấu hình từ Vercel."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260928T041839Z-1",
+      "p": "Đã chọn viết tay công ty giả trong một tệp và nạp thẳng, mọi dòng qua luật của sản phẩm — đổi lại phải thử bằng thao tác thật sau khi nạp."
+    },
+    {
+      "id": "d-20260928T041839Z-2",
+      "p": "Đã chọn cho quý giả trôi theo ngày nạp để lúc nào cũng có KR đáng bàn — đổi lại tên quý không khớp lịch thật."
+    },
+    {
+      "id": "d-20260928T041839Z-3",
+      "p": "KHÔNG nạp vào bản xem trước vì làm thế là nạp vào production — bản xem trước chỉ có công ty giả khi anh tách dữ liệu của nó."
+    },
+    {
+      "id": "d-20260928T041839Z-4",
+      "p": "KHÔNG làm vòng thiết kế màn vì không có màn mới — bù bằng ảnh chụp màn thật sau khi nạp."
+    },
+    {
+      "id": "d-20260928T041839Z-5",
+      "p": "KHÔNG viết đặc tả trải nghiệm vì không đổi cấu trúc màn nào."
+    },
+    {
+      "id": "d-20260928T041839Z-6",
+      "p": "KHÔNG gắn công ty giả vào kho mặc định của phiên đo, để các phép đo đã ký vẫn đúng — đổi lại lượt sau tự thêm một lệnh nạp."
+    },
+    {
+      "id": "d-20260928T044926Z-8",
+      "p": "Câu báo thiếu workspace nói thật: dữ liệu mẫu chung không tạo workspace, phải đăng nhập một lần — thay vì bảo chạy lệnh gieo như tiêu chí viết."
+    },
+    {
+      "id": "d-20260928T050851Z-9",
+      "p": "Đổi tên một trường của phép đo tài liệu cho đúng khuôn bộ chấm — không đổi câu hỏi."
+    },
+    {
+      "id": "d-20260928T052435Z-10",
+      "p": "Bước chặn production đọc cả máy chủ giấu trong tham số của chuỗi kết nối — đóng lối vượt mà vòng chấm 1 tìm ra."
+    },
+    {
+      "id": "d-20260928T052435Z-11",
+      "p": "Đưa thêm hai tệp lệnh vào đầu vào của hội đồng chấm tài liệu, đúng thứ hội đồng đòi."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E16",
+      "q": "Tài liệu bộ mẫu đủ để lượt sau tự dùng, dù còn nhắc «N1» trần?",
+      "why": "Máy đối chiếu cờ và mã thoát khớp mã thật; một giám khảo trừ điểm vì chữ «N1» chưa có trong từ điển — sửa là một câu, đảo được bất cứ lúc nào."
+    }
+  ],
+  "analyst_plain": ""
+}

@@ -11,6 +11,7 @@ import { brief, drainAll, taskAuth } from "../lib/dispatch";
 import { lenLichNhac } from "../lib/nhac-ke-hoach";
 import { chupSoOkr } from "../lib/okr-chup";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
+import { dongMaySoanQuaHan, nguonChoSoan } from "../lib/tai-lieu-phien";
 import { kiemBot } from "../lib/zalo-bot";
 import { dongHoiQuaHan } from "../lib/zalo-hoi";
 
@@ -25,6 +26,7 @@ export default defineSchedule({
 				chupSoOkr(),
 				kiemBot(),
 				dongHoiQuaHan(),
+				dongMaySoanQuaHan(),
 
 				(async () => {
 					await reconcileStaleTasks();
@@ -36,9 +38,10 @@ export default defineSchedule({
 						}),
 					);
 					await queueDueAgentRuns();
-					const [builderIds, runIds] = await Promise.all([
+					const [builderIds, runIds, nguonIds] = await Promise.all([
 						pendingBuilderSubmissionIds(),
 						pendingAgentRunIds(),
+						nguonChoSoan(),
 					]);
 
 					await Promise.all([
@@ -53,6 +56,13 @@ export default defineSchedule({
 							receive(crm, {
 								message: "Execute a queued deployed agent run.",
 								target: { runId },
+								auth: appAuth,
+							}),
+						),
+						...nguonIds.map((nguonId) =>
+							receive(crm, {
+								message: "Draft a queued document source.",
+								target: { nguonId },
 								auth: appAuth,
 							}),
 						),

@@ -125,8 +125,9 @@ single place that knows what is set.
 | --- | --- |
 | `PERPLEXITY_API_KEY` | Open-web research with citations; finds a LinkedIn slug |
 | `GITHUB_TOKEN` | Raises the GitHub rate limit from 60/hour |
-| `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into Blob |
+| `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into Blob; keeps the Word and PDF sources of the document library and reads them back for drafting. Without it nothing can be uploaded to the library |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
+| `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document-drafting machine (`may_soan`), so its spend is billed apart. Without it drafting runs on the key above |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
 | `ZALO_BOT_TOKEN` | Fallback Bot Token. Người quản trị dán token ở Kết nối › Zalo, lưu trong `AppSetting`, và giá trị đó thắng biến này — see `agent.md` and `connections.md` |
 | `ZALO_WEBHOOK_SECRET` | Fallback webhook secret. Khi bot bật trên màn, tác tử sinh khoá và lưu trong `AppSetting`, giá trị đó thắng biến này; không có cả hai thì `/zalo/webhook` trả 404 — see `agent.md` |
@@ -147,6 +148,11 @@ are not in `env.validation.ts`. Both are in `turbo.json` `globalPassThroughEnv` 
 `env` — and in the agent's `dev` pass-through, so `bun run dev` at the root hands them to the agent.
 The API learns Zalo is on from `appSetting.zaloBotName`, which the agent writes
 each tick.
+
+`KHO_TAI_LIEU_AI_GATEWAY_API_KEY` is read by `apps/agent` only, so it is not in
+`env.validation.ts`. It is a secret: `turbo.json` `globalPassThroughEnv` and the agent's
+`dev` pass-through, never `env` (`_acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs`
+checks all three homes).
 
 `BLOB_READ_WRITE_TOKEN` is also in `env.validation.ts` and `apps/api/turbo.json`
 because the API and the seed write pictures too. The Next.js app is deliberately

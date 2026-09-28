@@ -1,0 +1,31 @@
+{
+	"id": "gy-19",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Marketing"
+	},
+	"mucTieu": {
+		"title": "Khách tự tìm tới chúng tôi",
+		"whyNow": "Chín trên mười khách đến từ giới thiệu.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Số cuộc hẹn từ web tăng lên",
+			"kind": "tang-toi",
+			"startValue": 50,
+			"targetValue": 40,
+			"unit": "cuộc hẹn"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": true
+	},
+	"ghiChu": "Khởi điểm lớn hơn đích — số sai cố ý; trợ lý không được tự đổi số, chỉ hỏi."
+}

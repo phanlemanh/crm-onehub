@@ -7,7 +7,7 @@ cần thiết để máy khác không phải học lại.
 
 ## 1. Đang ở đâu
 
-**Lượt 1 `kho-tai-lieu` đã lên `onehub` 2026-09-28** (PR #180, merge commit `c1e37b73`). Lượt 2 `may-soan-de-xuat` đang ở S0–S1. Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
+**Lượt 1 `kho-tai-lieu` đã lên `onehub` 2026-09-28** (PR #180, merge commit `c1e37b73`). **Lượt 2 `may-soan-de-xuat` đã lên `onehub` 2026-09-28** (PR #194, merge commit `8b76152a`). Kế tiếp: lượt 3 `tim-va-dieu-huong-kho`. Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
 Lượt 0 xong. Nghiên cứu xong, bản mẫu xong, lộ
 trình đã sắp lại theo output ngày 2026-09-27 (năm lượt, chạy thật mọi phòng ban, một
 lượt sửa). Chưa có dòng mã sản phẩm nào ngoài bản mẫu và trình đọc markdown. Tám mục
@@ -22,6 +22,7 @@ từ điển được chốt ngay tại Cổng 1 của lượt 1, không có bư
 | Hồ sơ 17 luồng research | `docs/plan/kho-tai-lieu-ho-so/` |
 | Tài liệu trình bày (Claude Doc) | https://claude.ai/artifact/8B5uoGwQd4eyGb8wCNw8CN — riêng tư, mở được trên mọi máy đã đăng nhập tài khoản chủ kho |
 | Trang theo dõi tiến độ (artifact) | https://claude.ai/artifact/12sCbWrWgx6td1vqzR63Yg — dữ liệu trong kho dữ liệu của artifact; phiên máy cập nhật bằng `ArtifactData` sau mỗi hạng mục, cùng lúc với mục 8 |
+| Trang theo dõi trong kho | `docs/plan/lo-trinh-kho-tai-lieu.html` — mở bằng trình duyệt trên máy nào cũng xem được; dữ liệu là bản chụp sổ mục 8 ở `docs/plan/lo-trinh-kho-tai-lieu.data.js`, sửa cùng commit với sổ |
 | Bản mẫu bấm được | `apps/app/app/proto/_modules/kho-tai-lieu/`, 15 trạng thái khai ở `apps/app/app/proto/catalog.ts`, đường `/proto/kho-tai-lieu` |
 | Trình đọc markdown | `packages/ui/src/components/markdown-reader.tsx` |
 | Từ điển | Tám mục mới ở cuối `CONTEXT.md`, dạng «đề xuất, chưa qua Cổng Phạm vi» |

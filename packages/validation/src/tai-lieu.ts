@@ -94,6 +94,18 @@ export const suKienChiTiet = z.discriminatedUnion("loai", [
 		lyDo: z.string().min(TAI_LIEU.lyDo.min).max(TAI_LIEU.lyDo.max),
 	}),
 	z.object({ loai: z.literal("CU"), deXuatId, vi: z.string().min(1) }),
+	z.object({
+		loai: z.literal("MAY_SOAN"),
+		deXuatId: deXuatId.nullable(),
+		nguonId: z.string().min(1),
+		phien: z.string().min(1),
+		maModel: z.string().min(1),
+		nhanKhoa: z.enum(["rieng", "chung"]),
+		tokenVao: z.number().int().nonnegative(),
+		tokenRa: z.number().int().nonnegative(),
+		chiPhiUsd: z.number().nonnegative().nullable(),
+		soLanBac: z.number().int().nonnegative(),
+	}),
 ]);
 
 export type SuKienChiTiet = z.infer<typeof suKienChiTiet>;

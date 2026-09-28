@@ -1,0 +1,47 @@
+{
+	"id": "gy-24",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Đối tác hàng lạnh ký nhanh hơn",
+		"whyNow": "Vì anh Toàn xử lý hồ sơ chậm nên quý 3 mất khách.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Thời gian từ gặp tới ký giảm từ 40 xuống 25 ngày",
+			"kind": "giam-xuong",
+			"startValue": 40,
+			"targetValue": 25,
+			"unit": "ngày"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Scale mảng kho lạnh",
+			"whyNow": "Đối thủ lớn rút khỏi hàng lạnh.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Đối tác hàng lạnh đạt 30",
+				"kind": "tang-toi",
+				"startValue": 12,
+				"targetValue": 30,
+				"unit": "đối tác"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": ["whyNow"],
+		"khongGopY": false,
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
+		"soSai": false
+	},
+	"ghiChu": "Câu vì sao đổ lỗi một người; viết lại không nêu người, không nói về hiệu suất người."
+}

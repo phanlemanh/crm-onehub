@@ -1,0 +1,54 @@
+{
+	"id": "gy-29",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Điều phối vận tải"
+	},
+	"mucTieu": {
+		"title": "Tuyến miền Trung giao đúng hẹn như miền Bắc",
+		"whyNow": "Miền Trung trễ gấp đôi miền Bắc.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tỷ lệ giao đúng hẹn tuyến miền Trung",
+			"kind": "phan-tram",
+			"startValue": 85,
+			"targetValue": 95,
+			"unit": "%"
+		},
+		{
+			"title": "Giữ chi phí mỗi đơn miền Trung dưới 45 nghìn đồng",
+			"kind": "giu-duoi",
+			"startValue": 47,
+			"targetValue": 45,
+			"unit": "nghìn đồng"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Giao đúng hẹn ở mọi tuyến",
+			"whyNow": "Giao trễ là lý do số một đối tác bỏ đi.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Tỷ lệ đơn giao đúng hẹn",
+				"kind": "phan-tram",
+				"startValue": 88,
+				"targetValue": 97,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
+		"soSai": false
+	},
+	"ghiChu": "Câu đã tốt; không đề xuất gì."
+}

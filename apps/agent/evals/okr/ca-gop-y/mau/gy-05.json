@@ -1,0 +1,38 @@
+{
+	"id": "gy-05",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Về đích doanh thu cuối năm",
+		"whyNow": "Tháng 12 chiếm 40% doanh thu năm.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Doanh thu quý 4 đạt 10 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 10,
+			"unit": "tỷ đồng"
+		},
+		{
+			"title": "Doanh thu tháng 12 đạt 4 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 4,
+			"unit": "tỷ đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["trung-y"],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Hai KR đo cùng một thứ ở hai khung thời gian."
+}

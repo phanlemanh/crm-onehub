@@ -7,6 +7,7 @@ export const TINH_NANG = [
 	"okr.chuyen-tiep",
 	"okr.de-xuat",
 	"okr.tom-tat",
+	"tai-lieu.may-soan",
 	"khac",
 ] as const;
 
@@ -32,6 +33,7 @@ export const NHOM_CUA_TINH_NANG = {
 	"okr.chuyen-tiep": "tro-ly-okr",
 	"okr.de-xuat": "tro-ly-okr",
 	"okr.tom-tat": "tro-ly-okr",
+	"tai-lieu.may-soan": "chua-gan",
 	khac: "chua-gan",
 } as const satisfies Record<TinhNang, NhomViecAi>;
 
@@ -64,6 +66,7 @@ const VIEC_CUA_PURPOSE = {
 	"team-agent": "crm.tac-nhan",
 	zalo: "zalo.hoi-crm",
 	research: "crm.nghien-cuu",
+	"may-soan": "tai-lieu.may-soan",
 } as const satisfies Record<string, TinhNang>;
 
 export type NguonBuoc = {

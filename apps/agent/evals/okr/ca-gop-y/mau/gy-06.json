@@ -1,0 +1,31 @@
+{
+	"id": "gy-06",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Doanh thu 20 tỷ đồng",
+		"whyNow": "Chỉ tiêu năm.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Doanh thu hợp đồng mới đạt 20 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 20,
+			"unit": "tỷ đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["muc-tieu-la-so"],
+		"vietLai": ["title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Mục tiêu là một con số; câu viết lại nói điều muốn đạt, số để ở KR."
+}

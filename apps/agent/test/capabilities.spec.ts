@@ -5,6 +5,7 @@ import {
 	CONTEXT_DEV_SOURCE,
 	capabilitiesFrom,
 	enabled,
+	LUU_NGUON,
 	markdownFor,
 	unavailable,
 } from "../agent/lib/capabilities";
@@ -17,6 +18,7 @@ const KEYS = [
 	"GOOGLE_SHEETS_KHOA",
 	"AI_GATEWAY_API_KEY",
 	"VERCEL_OIDC_TOKEN",
+	"KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
 ] as const;
 
 const saved: Record<string, string | undefined> = {};
@@ -36,6 +38,14 @@ afterEach(() => {
 });
 
 describe("capabilities", () => {
+	it("luu-nguon: tat khi thieu khoa luu tep, khong nem; bat khi co khoa", () => {
+		const tat = capabilitiesFrom(null).find((c) => c.id === LUU_NGUON);
+		expect(tat?.enabled).toBe(false);
+		process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_gia";
+		const bat = capabilitiesFrom(null).find((c) => c.id === LUU_NGUON);
+		expect(bat?.enabled).toBe(true);
+	});
+
 	it("reports everything off on a bare install", async () => {
 		expect(capabilitiesFrom(null).every((c) => !c.enabled)).toBe(true);
 		expect(await enabled("PERPLEXITY_API_KEY")).toBe(false);

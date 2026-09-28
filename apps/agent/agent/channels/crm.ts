@@ -43,6 +43,12 @@ import { TRO_LY_OKR } from "../lib/okr/config";
 import { dongViecOkr, laHangTroLyOkr } from "../lib/okr/viec";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
+import {
+	dongKhiPhienHong,
+	dongKhiPhienXong,
+	drainMaySoan,
+	guiMaySoan,
+} from "../lib/tai-lieu-phien";
 import { completeTask, taskSubject } from "../lib/tasks";
 
 const TASK_MARKER = "task:";
@@ -67,8 +73,14 @@ const receiveTarget = z
 		builderSubmissionId: z.string().nullable().catch(null),
 		runId: z.string().nullable().catch(null),
 		taskId: z.string().nullable().catch(null),
+		nguonId: z.string().nullable().catch(null),
 	})
-	.catch({ builderSubmissionId: null, runId: null, taskId: null });
+	.catch({
+		builderSubmissionId: null,
+		runId: null,
+		taskId: null,
+		nguonId: null,
+	});
 
 export function taskToken(taskId: string): string {
 	return `${TASK_MARKER}${taskId}`;
@@ -156,6 +168,7 @@ export const crmEvents: ChannelEvents = {
 		const taskId = taskFromToken(channel.continuationToken);
 		const reason =
 			eveTurnFailure.parse(data).message ?? "The agent turn failed.";
+		if (await dongKhiPhienHong(channel.continuationToken, reason)) return;
 
 		if (taskId) {
 			if (await laHangTroLyOkr(taskId)) {
@@ -190,6 +203,7 @@ export const crmEvents: ChannelEvents = {
 	},
 
 	async "session.completed"(_data, channel) {
+		if (await dongKhiPhienXong(channel.continuationToken)) return;
 		if (await dongViecOkrChuaNop(channel.continuationToken)) return;
 		if (await closeTask(channel.continuationToken, "ran")) return;
 
@@ -244,6 +258,9 @@ export const crmEvents: ChannelEvents = {
 	},
 
 	async "session.failed"(data, channel) {
+		if (await dongKhiPhienHong(channel.continuationToken, data.message)) {
+			return;
+		}
 		const conversationId = builderIdFromToken(channel.continuationToken);
 		if (conversationId) {
 			logBuilderFailure(
@@ -316,6 +333,7 @@ export default defineChannel({
 						}),
 					);
 					await drainAgentRuns(send);
+					await drainMaySoan(send);
 				})(),
 			);
 
@@ -421,6 +439,11 @@ export default defineChannel({
 		if (target.runId) {
 			assertInternalDispatchAuth(input.auth);
 			return dispatchAgentRun(target.runId, send);
+		}
+
+		if (target.nguonId) {
+			assertInternalDispatchAuth(input.auth);
+			return guiMaySoan(target.nguonId, send);
 		}
 
 		const tuyChon: SendOptions = {

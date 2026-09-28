@@ -1,0 +1,118 @@
+schema_version: 1
+feature_slug: slack-thieu-quyen-email
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_kenh
+    expected: "exit 0; tệp kiểm mới apps/agent/test/slack-thieu-quyen-email.integration.spec.ts, gieo thật trong cơ sở dữ liệu của lượt kiểm: người vai okr, member, admin, owner; một agentDefinition LIVE + agentVersion DEPLOYED có dataScope chứa slack:workspace và một action slack.message.post đích channel; agentRun RUNNING; một account providerId slack có accessToken. Chỉ giả globalThis.fetch cho slack.com, đếm lời gọi theo phương thức; trả lời giả theo hình Slack Web API (members, response_metadata.next_cursor, profile). Danh bạ trả mọi người với profile KHÔNG có khoá email; kênh có người okr (không dòng khớp) và người member (có dòng slackMemberMatch). Hằng TU_CHOI_NGUOI_NHAN, KHONG_KIEM_DUOC_NGUOI_NHAN nạp bằng import() động có dự phòng để tệp chạy được trên mã trước vá (E9). Gọi postRunSlackMessage THẬT. Khẳng định ĐẦU TIÊN số chat.postMessage === 0, thông điệp in 'chat.postMessage=<n>'; rồi promise reject với thông điệp bắt đầu bằng KHONG_KIEM_DUOC_NGUOI_NHAN theo sau là ' (1 person', chứa 'reconnect Slack', và không chứa TU_CHOI_NGUOI_NHAN (phân biệt luật mới với lối chặn chung khi đọc Slack hỏng); agentAction của runId đọc lại FAILED, errorCode 'ACTION_REJECTED'. Vế phân trang cùng test: users.list trả hai trang (trang 1 có response_metadata.next_cursor 'c2', chỉ có người member), người okr không email, không dòng khớp chỉ có ở trang 2 — cùng các khẳng định trên, và số lời gọi users.list === 2 (in ra). Đối chứng dương trong cùng test, cùng danh bạ thiếu email: kênh chỉ còn người member có dòng khớp thì chat.postMessage === 1. Trên mã trước vá ca này đỏ với 'chat.postMessage=1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_tin_rieng
+    expected: "exit 0; cùng dựng cảnh E1, agentVersion đích kind 'user' trỏ mã Slack của người okr (không dòng khớp), danh bạ thiếu email. Khẳng định đầu tiên {open: conversations.open, post: chat.postMessage} === {0, 0} (in cả hai số); reject bắt đầu bằng KHONG_KIEM_DUOC_NGUOI_NHAN theo sau là ' (1 person' và chứa 'reconnect Slack'; agentAction FAILED/ACTION_REJECTED. Đối chứng dương cùng test: đích user trỏ người member có dòng khớp thì open === 1 và post === 1. Trên mã trước vá ca này đỏ, thông điệp in số lời gọi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_dong_khop
+    expected: "exit 0; danh bạ thiếu email; vế 1: kênh có người member, admin, owner, mỗi người một dòng slackMemberMatch trỏ đúng mã Slack, cộng một bot — postRunSlackMessage resolve, chat.postMessage === 1, agentAction SUCCEEDED. Vế 2 cùng test: thêm dòng khớp cho người okr và thêm người đó vào kênh — chat.postMessage === 0 (khẳng định đầu tiên), reject chứa TU_CHOI_NGUOI_NHAN và KHÔNG chứa KHONG_KIEM_DUOC_NGUOI_NHAN. Chiều đỏ: bản vá coi mọi người không email là không xác định (bỏ qua dòng khớp) thì vế 1 đỏ, thông điệp in errorMessage của agentAction."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_uu_tien
+    expected: "exit 0; kênh có người okr mà danh bạ trả email của họ (profile.email), và một người Slack trong danh bạ không có email và không dòng khớp. Khẳng định đầu tiên chat.postMessage === 0; reject chứa TU_CHOI_NGUOI_NHAN và KHÔNG chứa KHONG_KIEM_DUOC_NGUOI_NHAN. Đối chứng cùng test: bỏ người okr khỏi kênh thì reject bắt đầu bằng KHONG_KIEM_DUOC_NGUOI_NHAN — chứng minh người thứ hai trong cảnh thật sự là người không xác định, nên vế chính đo đúng thứ tự ưu tiên chứ không đo một cảnh chỉ có người bị chặn."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_ba_hinh
+    expected: "exit 0; MA TRẬN viết trước ba hàng, mỗi hàng một lượt mới trên kênh có hai người: người admin có dòng khớp, và người member KHÔNG dòng khớp mà mục danh bạ của họ là (a) profile không khoá email, (b) profile.email null, (c) không có khoá profile. Mỗi hàng: khẳng định đầu tiên chat.postMessage === 0; reject bắt đầu bằng KHONG_KIEM_DUOC_NGUOI_NHAN theo sau là ' (1 person' và chứa 'reconnect Slack' — nên một khuôn phân tích ở biên từ chối hình (b) hay (c) rồi rơi vào lối chặn chung là đỏ; agentAction FAILED/ACTION_REJECTED; thông điệp đỏ in tên hàng và thông điệp đã nhận. Số hàng đã khẳng định === 3 (assert đếm, chống ma trận rỗng xanh). Đối chứng dương cùng test: mục danh bạ của người member có profile.email đúng email CRM thì chat.postMessage === 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_khong_tinh
+    expected: "exit 0; danh bạ theo hình thiếu quyền: người admin có dòng khớp, không email; một bot (is_bot true, không email); một tài khoản deleted true KHÔNG email, không dòng khớp; một tài khoản deleted true khác mang email của người okr; một người có email khach@ngoai.test không thuộc CRM. Kênh có sáu mã: admin, bot, hai tài khoản đã xoá, người ngoài CRM, và một mã UCONNECT KHÔNG có trong danh bạ. postRunSlackMessage resolve replayed false, chat.postMessage === 1, agentAction SUCCEEDED. Chiều đỏ: một bản vá tính bot, tài khoản đã xoá (kể cả xét «không email» trước cờ đã xoá) hay người ngoài danh bạ là không xác định thì ca này đỏ, thông điệp in errorMessage của agentAction."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_loi_nhan
+    expected: "exit 0; kênh thiếu email có bốn người: member và admin không dòng khớp, owner có dòng khớp, và một người có email ngoài CRM → errorMessage của agentAction khớp /^<KHONG_KIEM_DUOC_NGUOI_NHAN> \\(2 people /, và không chứa '4 people' hay '3 people' (đếm đúng người không xác định, không đếm tổng); kênh có một người không dòng khớp cùng owner có dòng khớp → khớp /^<KHONG_KIEM_DUOC_NGUOI_NHAN> \\(1 person /; cả hai chứa chữ 'reconnect Slack' và 'email'. Bộ dò lộ danh tính của bài: với mỗi người gieo, lấy email, mã CRM, tên CRM, mã Slack, tên Slack; hạ chữ thường cả hai phía rồi đòi thông điệp không chứa chuỗi nào. Đối chứng dương của bộ dò trong cùng test: đưa nó thông điệp có email người okr viết HOA và một thông điệp có mã Slack UOKR — cả hai phải bị bắt (hàm dò trả tên chuỗi lộ). Chiều đỏ: bản vá nối email hay mã Slack vào lời từ chối thì ca này đỏ, thông điệp in chuỗi lộ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.stqe_ro_slack_con_xanh
+    expected: "exit 0; chạy trọn tệp apps/agent/test/ro-slack-tac-nhan.integration.spec.ts của #170 trên cây đang xét, 0 dòng (fail). Tệp đó KHÔNG bị sửa ở vòng này (E10 và diff chứng). Chiều đỏ: bản vá coi người Slack có email ngoài CRM hay tài khoản đã xoá là không xác định thì ca doi-chung của tệp đó đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/slack-nguoi-nhan.ts, apps/agent/agent/lib/run-runtime.ts, apps/agent/test/ro-slack-tac-nhan.integration.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.stqe_do_truoc_khi_va
+    expected: "exit 0; script đứng ở gốc kho suy từ vị trí của chính nó; mốc mặc định CỐ ĐỊNH a62adb16 (không merge-base — bài học Ngoài-5 của #170), đổi được bằng --base. Dựng bản gương bằng git worktree add --detach trong os.tmpdir() (không ghi vào cây đang xét), chép tệp kiểm mới vào đó, nối node_modules (gốc và từng gói có node_modules), packages/db/src/generated và .env; chạy 'bun run test -- \"cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts\"' trong bản gương, đòi exit != 0 VÀ dòng (fail) cho hai ca ghim stqe-kenh và stqe-tin-rieng VÀ khối đỏ CỦA TỪNG ca (các dòng giữa dòng (pass)/(fail) trước đó và dòng (fail) của ca) có 'chat.postMessage=1' (tin đã đi ra — đỏ vì còn rò, không phải vì lý do khác) VÀ không có 'Cannot find module'; rồi chạy cùng lệnh ở cây đang xét, đòi exit 0 và 0 dòng (fail). Luôn gỡ worktree tạm (finally). Thông điệp đỏ ghim 'TRUOC VA KHONG DO: <ca>', 'TRUOC VA DO SAI LY DO: <ca>' và 'SAU VA CON DO'. Chiều đỏ tự thân: --base HEAD thì exit 1 với 'TRUOC VA KHONG DO'; --ghim chat.postMessage=9 thì exit 1 với 'TRUOC VA DO SAI LY DO: stqe-kenh' và 'TRUOC VA DO SAI LY DO: stqe-tin-rieng'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/**, apps/agent/test/slack-thieu-quyen-email.integration.spec.ts, _acceptance/slack-thieu-quyen-email/rang/do-truoc-khi-va.mjs]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.stqe_khong_sua_tep_hang
+    expected: "exit 0; script đứng ở gốc kho suy từ vị trí của chính nó; lấy git log --no-merges --grep=slack-thieu-quyen-email a62adb16..HEAD (mốc cố định, không merge-base — chạy lại được sau khi gộp), đòi số commit >= 1 (thông điệp đỏ 'KHONG THAY COMMIT' — chống xanh vì tập rỗng), gom các tệp chúng chạm, loại _acceptance/**, docs/**, **/*.md, giữ tệp có ở origin/release (git cat-file -e) = tập tệp của hãng bị sửa; đòi tập đó rỗng, thông điệp đỏ ghim 'TEP HANG: <tệp>'. Vế chống sót commit: mọi commit không phải gộp trong a62adb16..HEAD mà origin/onehub chưa chứa (git log --no-merges a62adb16..HEAD ^origin/onehub) phải có tên hồ sơ trong thông điệp, không thì đỏ 'COMMIT KHONG TEN: <sha>'; chiều đỏ tự thân: --gia-commit-khong-ten (thêm một sha giả không tên vào tập đó) thì exit 1 với 'COMMIT KHONG TEN'. In số commit và số tệp đã xét. Chiều đỏ tự thân: --gia-tep apps/agent/agent/lib/run-runtime.ts (thêm một tệp giả vào tập đã gom) thì exit 1 với 'TEP HANG: apps/agent/agent/lib/run-runtime.ts'; đối chứng: --gia-tep apps/agent/agent/lib/slack-nguoi-nhan.ts (tệp của bản rẽ) vẫn exit 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/**, packages/**, _acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs]
+
+  - id: E11
+    criterion: AC-11
+    executor: judgment
+    question: >-
+      Mục chỗ rẽ trong docs/agent.md có nói đúng luật mới của bước kiểm người nhận Slack —
+      người trong danh bạ không có email đọc được và không có dòng khớp thì không xác định,
+      và lượt bị từ chối — không? Thay đổi của lượt có chữ nào mở đường báo lỗ hổng cho hãng
+      qua PR hay issue công khai không, và phần mô tả có mô tả lỗ hổng theo cách người ngoài
+      dùng lại được nếu PR vô tình công khai không?
+    inputs:
+      - docs/agent.md
+      - docs/superpowers/specs/2026-09-28-slack-thieu-quyen-email-design.md
+      - _acceptance/slack-thieu-quyen-email/contract.md
+      - apps/agent/agent/lib/slack-nguoi-nhan.ts
+      - _acceptance/slack-thieu-quyen-email/mo-ta-pr.md
+    paths:
+      - docs/agent.md
+      - docs/superpowers/specs/2026-09-28-slack-thieu-quyen-email-design.md
+      - apps/agent/agent/lib/slack-nguoi-nhan.ts
+      - _acceptance/slack-thieu-quyen-email/mo-ta-pr.md
+    expected: >-
+      Mô tả PR là tệp mo-ta-pr.md của hồ sơ, dùng nguyên văn làm thân PR ở S5.
+      Mục chỗ rẽ nêu luật không-xác-định-thì-từ-chối khớp với mã của slack-nguoi-nhan.ts.
+      Không có câu nào đề nghị hay tự động gửi PR hay issue công khai lên kho của hãng; việc
+      báo hãng chỉ nhắc kênh bảo mật riêng và sự cho phép của chủ kho. Phần mô tả đủ để người
+      trong kho gỡ chỗ rẽ đúng lúc, không kèm cách khai thác từng bước.
+    evidence_required: [run_id, verifier, verified_at, output]

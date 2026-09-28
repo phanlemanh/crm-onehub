@@ -1,4 +1,5 @@
 import { EnrichmentStatus } from "@crm/db";
+import { khoNguonVercel } from "@crm/db/blob-nguon";
 import { fieldBackfillPayload } from "@crm/validation/field-backfill";
 import { chayDoiSoat } from "./ai-doi-soat";
 import { APP_AUTH, type AppAuth } from "./app-auth";
@@ -22,6 +23,7 @@ import { runPortrait } from "./portrait";
 import { runSlackChannelJoin } from "./slack-join-task";
 import { runSlackPeopleMatch } from "./slack-people";
 import { staleTaskSweep } from "./stale-tasks";
+import { chaySoanTuNguon } from "./tai-lieu-soan";
 import {
 	claimDue,
 	completeTask,
@@ -141,6 +143,11 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 
 	if (task.kind === LOAI_VIEC_NHAC) {
 		await chayNhac(task);
+		return;
+	}
+
+	if (task.kind === "soan-tu-nguon") {
+		await chaySoanTuNguon(task, khoNguonVercel());
 		return;
 	}
 
