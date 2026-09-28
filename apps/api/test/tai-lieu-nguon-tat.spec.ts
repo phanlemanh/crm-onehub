@@ -13,6 +13,7 @@ import {
 } from "./tai-lieu-san";
 
 process.env.BLOB_READ_WRITE_TOKEN = "";
+process.env.KHO_TAI_LIEU_BLOB_TOKEN = "";
 dungSan();
 
 const TAT = `412 ${NGUON.thongDiep.tat}`;
@@ -57,7 +58,7 @@ describe("nguon-tat", () => {
 	});
 
 	test("nguon-tat: doi chung, dat khoa thi cong bat ngay, doc luc goi", async () => {
-		process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_gia_123";
+		process.env.KHO_TAI_LIEU_BLOB_TOKEN = "vercel_blob_rw_gia_123";
 		try {
 			expect(
 				ok<{ bat: boolean }>(
@@ -66,7 +67,7 @@ describe("nguon-tat", () => {
 				),
 			).toEqual({ bat: true });
 		} finally {
-			process.env.BLOB_READ_WRITE_TOKEN = "";
+			process.env.KHO_TAI_LIEU_BLOB_TOKEN = "";
 		}
 	});
 });
