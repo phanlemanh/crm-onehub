@@ -19,6 +19,7 @@ const gia = khoNguonGia();
 dungSan(gia);
 
 const GHIM = "xoa tep nguon cua nguoi khac";
+const PHIEU_GIA = `${Date.now() + 60_000}.phieu-tu-che`;
 
 type Cho = { pathname: string; phieu?: string };
 
@@ -42,7 +43,7 @@ const nhan = (ai: Ai, cho: Cho, dich: Json): Promise<TraLoi> =>
 			pathname: cho.pathname,
 			tenTep: "hoa-hong.docx",
 			dich,
-			...(cho.phieu ? { phieu: cho.phieu } : {}),
+			phieu: cho.phieu ?? PHIEU_GIA,
 		},
 		ai,
 	);
