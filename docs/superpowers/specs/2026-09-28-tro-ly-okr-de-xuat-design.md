@@ -252,7 +252,7 @@ không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval,
 | ST-muctieu-nut | Hộp Mục tiêu | Nút phụ «Nhờ Trợ lý OKR góp ý» ở đầu thân hộp | Bấm |
 | ST-muctieu-nut-khoa-sua | Hộp Mục tiêu | Nút khoá + «Lưu thay đổi trước khi nhờ góp ý» | Lưu |
 | ST-muctieu-dang-soan | Hộp Mục tiêu | Cột phải: shimmer «Trợ lý OKR đang đọc Mục tiêu này…» trên khung ba dòng | Chờ, hoặc đóng cột |
-| ST-muctieu-co-dong | Hộp Mục tiêu | Các dòng nhóm theo ô: câu cũ gạch → câu mới, lý do, Nhận · Sửa · Bác; câu hỏi với Bỏ qua; Căn chỉnh với Nhận · Bác | Quyết từng dòng |
+| ST-muctieu-co-dong | Hộp Mục tiêu | Các dòng nhóm theo ô: câu cũ gạch → câu mới, lý do, Nhận · Sửa · Bác; câu hỏi với Bỏ qua; Căn chỉnh với Nhận · Bác. Điện thoại: cột xếp dưới form, bấm nút thì cuộn tới cột | Quyết từng dòng |
 | ST-muctieu-sua-dong | Hộp Mục tiêu | Dòng mở ô sửa chứa câu mới, nút «Nhận bản đã sửa» · «Huỷ» | Sửa rồi nhận |
 | ST-muctieu-da-quyet | Hộp Mục tiêu | Dòng thu gọn «Đã nhận» / «Đã bác»; ô form đã đổi theo | Quyết dòng khác |
 | ST-muctieu-rong | Hộp Mục tiêu | «Trợ lý OKR không thấy chỗ nào cần sửa» | Đóng cột |
@@ -264,12 +264,11 @@ không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval,
 | ST-kr-cot | Hộp KR | Cột chỉ dòng của KR này | Quyết |
 | ST-kr-xu-huong | Hộp KR | Dưới ô Đích: «Theo 4 tuần gần nhất (+12/tuần), cuối kỳ ước khoảng 180» | Đặt đích |
 | ST-kr-khong-xu-huong | Hộp KR | KR chưa đủ ba điểm số: không có dòng | — |
-| ST-mobile-cot | Hộp Mục tiêu, điện thoại | Cột xếp dưới form, cuộn tới cột khi bấm | Quyết |
 | ST-caidat-nac | Thẻ Trợ lý OKR | Mỗi việc hai dòng «Bật cho» · «Chạy bóng cho», mỗi dòng chọn không đơn vị nào / toàn công ty / chọn đơn vị | Chọn, lưu |
 | ST-caidat-nac-bat-toan | Thẻ Trợ lý OKR | «Bật cho: toàn công ty» → «Chạy bóng cho» khoá, «mọi đơn vị đã bật» | — |
 | ST-sodo-dang-tai | Thẻ Góp ý | Khung xương | Chờ |
 | ST-sodo-rong | Thẻ Góp ý | «Tháng này chưa có lượt góp ý nào» | — |
-| ST-sodo-co-so | Thẻ Góp ý | Hai cột Bật · Chạy bóng: lượt, nhận/sửa/bác %, hoàn tác %, p50/p90, câu bị loại %, chi phí mỗi đề xuất nhận; danh sách lượt gần đây | Mở một lượt |
+| ST-sodo-co-so | Thẻ Góp ý | Bảng số đo hai cột Bật · Bóng: lượt, đề xuất đã hiện / sinh ra, nhận, sửa rồi nhận, bác, bỏ qua, hoàn tác 7 ngày, p50, p90, câu bị loại, chi phí mỗi đề xuất nhận; bảng lượt gần đây | Mở một lượt |
 | ST-sodo-ngan | Ngăn một lượt | Mục tiêu, nấc, độ trễ, chi phí; từng dòng kể cả dòng bị loại kèm mã loại | Đóng |
 | ST-sodo-loi | Thẻ Góp ý | «Không tải được số đo» + «Thử lại» | Thử lại |
 <!-- UX-STATE-TABLE>>> -->
@@ -295,7 +294,7 @@ không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval,
 | `FieldDescription variant="hoi"` | dùng | Dòng xu hướng dưới ô Đích, cùng chỗ câu hỏi luật lượt 7 |
 | `Empty`, `Alert` | dùng | Rỗng, lỗi |
 | `Select`, `PickListDialog`, `Field` | dùng | Hai dòng nấc ở thẻ cài đặt |
-| `StatCard`/`StatTile`, `DataTable`, `Sheet` | dùng | Thẻ số đo, danh sách lượt, ngăn một lượt |
+| `SimpleTable`, `Sheet`, `StatusIndicator` | dùng | Bảng số đo hai nấc, bảng lượt, ngăn một lượt, nhãn «qua bộ kiểm» / «bị loại» |
 
 ### 6. Khuôn IA đã chọn + căn cứ
 
