@@ -632,8 +632,10 @@ Vì sao: «tài liệu» đã là cả kho và cả tệp nguồn; ba nghĩa m�
 không biết đang nói cái nào.
 
 **Nguồn**: tệp gốc người tải vào kho tài liệu (quyết định, biên bản, bản quét),
-không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn mang một lớp dữ liệu
-(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm). Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
+không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn sẽ mang một lớp dữ liệu
+(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm) — để sau, chưa gắn lượt; hôm nay nguồn
+chưa lưu lớp nào. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`; sửa câu lớp dữ liệu
+2026-09-28 tại Cổng Phạm vi của `may-soan-de-xuat`.
 _Avoid_: raw source, tài liệu gốc, file
 Vì sao: trang nói «theo nguồn X» phải trỏ tới đúng một thứ bất biến.
 

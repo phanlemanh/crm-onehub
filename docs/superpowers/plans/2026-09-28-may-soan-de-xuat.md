@@ -14,7 +14,7 @@
 
 | Tiền đề | Chặn | Ai |
 | --- | --- | --- |
-| PR #180 (lượt 1) đã lên `onehub`; kéo `origin/onehub` vào nhánh | Cả S2–S3 (lộ trình mục 2) | Phiên đang merge #180 |
+| PR #180 (lượt 1) đã lên `onehub`; kéo `origin/onehub` vào nhánh | Đã đạt 2026-09-28 (`c1e37b73`, merge vào nhánh) | — |
 | Trang «Quy tắc viết» do chủ kho viết, đặt ở `_acceptance/may-soan-de-xuat/mau/quy-tac-viet.md` | Task 12 (E15a, E15j); các task khác dùng bản giả trong test | Chủ kho |
 | `BLOB_READ_WRITE_TOKEN` thật trong `.env` gốc | E2t, E15a | Chủ kho |
 | Ba tệp mẫu thật (`quyet-dinh-hoa-hong.docx`, `quy-trinh.pdf`, `bieu-mau.docx`), đã bỏ dữ liệu cá nhân | Task 12 | Chủ kho (máy dùng tệp tự dựng cho E6) |
@@ -49,7 +49,7 @@
 
 **Files:**
 - Modify: `packages/db/prisma/schema.prisma` (khối `TaiLieu*`, dòng ~2236–2330)
-- Create: `packages/db/prisma/migrations/20261001010000_may_soan_de_xuat/migration.sql`
+- Create: `packages/db/prisma/migrations/20261002010000_may_soan_de_xuat/migration.sql`
 - Create: `_acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs`, `_acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs`
 
 **Interfaces:**
@@ -332,19 +332,19 @@ Phục vụ: E2u, E3d, E5d, E10d · `independent: false`
 
 **Files:**
 - Modify: `apps/app/app/(app)/[slug]/tai-lieu/de-xuat/[id]/man-duyet.tsx` (nhánh bản máy: bước 1 → bước 2), `apps/app/app/(app)/[slug]/tai-lieu/man-doc.tsx` (mục «Nguồn» + tải về), `apps/app/app/(app)/[slug]/tai-lieu/[trang]/sua/page.tsx` (gửi `tuDeXuatId` khi mở từ bản máy)
-- Modify: `apps/api/src/tai-lieu/tai-lieu.contracts.ts` (`taiLieuProposalOutput` thêm `nguon: { id, tenTep } | null`, `trichDoan`, `chuNguon` cho người thấy được)
+- Modify: `apps/api/src/tai-lieu/tai-lieu.contracts.ts` (`taiLieuProposalOutput` thêm `nguon: { id, tenTep } | null`, `trichDoan`, `chuNguon`, `soMoi: string[]` cho người thấy được; `taiLieuApproveInput` thêm `daDoiChieu?: number`), `apps/api/src/tai-lieu/tai-lieu.service.ts` (`approve` bản có `nguonId`: tính lại `rutSo` mới so với bản gốc, từ chối khi `daDoiChieu` nhỏ hơn — thông điệp «chưa đối chiếu hết con số»)
 - Create: `_acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs`
 - Test: `apps/app/test/tai-lieu-man-duyet-may.dom.tsx`
 
 **Interfaces:**
 - Consumes: Task 5, Task 8 (`NguonCanhNhau`), Task 3 (`rutSo` cho bảng Con số và ngày).
 
-- [ ] **Step 1:** Test DOM theo E11 (bước 1 không có «Duyệt», `activeElement`, ba nút không `data-variant="default"`, remount về bước 1). Nếu Cổng Phạm vi chọn nhánh B (tick bắt buộc): thêm khẳng định «Duyệt» `disabled` tới khi tick hết các dòng, chiều đỏ «duyet khi chua tick het». Chạy → đỏ.
+- [ ] **Step 1:** Test DOM theo E11 (bước 1 không có «Duyệt», `activeElement`, ba nút không `data-variant="default"`, ma trận tick 4 ca, remount về bước 1 mất tick; hai chiều đỏ). Chạy → đỏ.
 - [ ] **Step 2:** Dựng nhánh bản máy; bỏ «Bậc 2», «Có mâu thuẫn» (design-pass F7); mục «Nguồn» trên màn đọc gọi `nguonTaiVe` rồi mở URL.
 - [ ] **Step 3:** Viết `man-duyet-may.mjs` theo E11u (4 bước, 1440 và 390), chạy `msd_man_duyet_may` (script) → đạt; chiều đỏ một cột.
 - [ ] **Step 4:** Chạy `msd_san_thiet_ke` → xanh. Commit `feat(may-soan): màn duyệt nguồn trước, cạnh nhau, và tải nguồn từ màn đọc`.
 
-Phục vụ: E11, E11u, E11s, E8b (đường sửa) · `independent: false`
+Phục vụ: E11, E11b, E11u, E11s, E8b (đường sửa) · `independent: false`
 
 ### Task 11: Tài liệu, từ điển, sổ
 

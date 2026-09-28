@@ -10,7 +10,7 @@
 | d-6 khoá thứ hai vắng thì dùng đường chung | dưới ngưỡng: 1 nhánh | — |
 | d-7 thiếu Quy tắc viết thì không soạn | dưới ngưỡng: 1 nhánh (có trong hình `duong-nguon`) | — |
 | d-8 chạy design-pass | dưới ngưỡng | — |
-| human-gate1 tick từng khẳng định trước Duyệt | 3 bước nối tiếp (bước 1 nguồn → bước 2 cạnh nhau → Duyệt) + 2 nhánh (có tick / không tick) | `man-duyet` |
+| tick từng khẳng định trước Duyệt — chủ kho chọn B 2026-09-28 | 3 bước nối tiếp (bước 1 nguồn → bước 2 cạnh nhau → Duyệt) + 2 nhánh (có tick / không tick) | `man-duyet` |
 | human-gate1 từ điển mục Nguồn | dưới ngưỡng: sửa một câu | — |
 | [GIẢ ĐỊNH] ngưỡng cần gõ tay, một tệp một trang, model mặc định | dưới ngưỡng: ba giả định rời | — |
 

@@ -12,7 +12,7 @@ evals:
       - "_acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs"
     expected: |
       Script suy goc kho tu vi tri cua chinh no; doc moi thu muc migration co tren nhanh ma chua co o
-      merge-base voi origin/onehub VA chua co o 5e3e35b9 (goc luot 1). Tap cau lenh viet truoc:
+      merge-base voi origin/onehub (luot 1 da nam trong onehub tu c1e37b73). Tap cau lenh viet truoc:
       CREATE TABLE "TaiLieuNguon"; CREATE INDEX / CREATE UNIQUE INDEX tren TaiLieuNguon va tren cot
       moi cua TaiLieuDeXuat; ALTER TABLE "TaiLieuDeXuat" ADD COLUMN <cot> <kieu> (khong NOT NULL, khong
       DEFAULT); ALTER TABLE ... ADD CONSTRAINT ... FOREIGN KEY. Cam UPDATE, DELETE, DROP, ALTER COLUMN,
@@ -31,7 +31,7 @@ evals:
       - "packages/db/prisma/**"
       - "_acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs"
     expected: |
-      Tao co so du lieu tam rieng, ap migration tai 5e3e35b9 (luot 1), gieo bang SQL cua luoc do cu:
+      Tao co so du lieu tam rieng, ap migration tai merge-base voi origin/onehub, gieo bang SQL cua luoc do cu:
       2 trang, 3 phien ban, 4 de xuat (cho, tra lai, cu, da duyet), 2 su kien, 1 lien ket; doc anh chup
       [so dong tung bang]; ap migration cua nhanh; so lai: ma tran viet truoc 5 bang TaiLieu* x so dong
       giu nguyen; moi de xuat cu co nguonId NULL va trichDoan NULL; bang TaiLieuNguon ton tai va rong.
@@ -340,8 +340,10 @@ evals:
       trich, bang "Con số và ngày" 3 dong moi dong so -> doan; KHONG co nut "Duyệt" trong DOM;
       document.activeElement khong phai nut nao cua quyet dinh. Bam "Đã đọc nguồn, xem bản máy soạn" ->
       co "Duyệt", "Trả lại", "Sửa bản này"; khong nut nao co autofocus, khong nut nao variant primary
-      (doc thuoc tinh data-variant). Tai lai (remount) -> ve buoc 1. CHIEU DO: ban sao hien Duyet ngay
-      buoc 1 -> do voi thong diep ghim "duyet truoc khi doc nguon".
+      (doc thuoc tinh data-variant). Tick: 3 o "Đã đối chiếu", ma tran viet truoc 4 ca — 0/3, 1/3, 2/3
+      tick -> "Duyệt" disabled; 3/3 -> bat; bo tick mot o -> disabled lai; ban may khong co so moi nao ->
+      "Duyệt" bat ngay, khong o tick. Tai lai (remount) -> ve buoc 1, tick mat het. CHIEU DO (hai ban sao):
+      hien Duyet ngay buoc 1 -> "duyet truoc khi doc nguon"; bo dieu kien tick -> "duyet khi chua tick het".
 
   - id: E11b
     criterion: AC-11
@@ -352,12 +354,16 @@ evals:
       - "apps/api/src/tai-lieu/**"
       - "apps/api/test/tai-lieu-nguon-duyet.spec.ts"
     expected: |
-      Cung tep voi E8b, doc ve AC-11 phia may chu: ca "Sửa bản này" — C mo ban may qua loader man sua
+      Cung tep voi E8b, doc ve AC-11 phia may chu. Ca tick: approve mot ban may co 3 so moi voi
+      daDoiChieu = 2 -> BAD_REQUEST thong diep ghim "chưa đối chiếu hết con số", TaiLieuPhienBan dem khong
+      doi; daDoiChieu = 3 -> duyet duoc; de xuat nguoi viet (khong nguonId) khong can daDoiChieu. Ca
+      "Sửa bản này" — C mo ban may qua loader man sua
       va taiLieu.propose voi tuDeXuatId cua ban may, sua mot chu, gui -> hang de xuat moi cua C co nguonId
       = nguon va trichDoan bang dung mang cua ban may (so sau parseTrichDoan); C duyet qua taiLieu.approve
       voi diffHash khop -> TaiLieuPhienBan.deXuat.nguonId khac rong; K goi nguon.taiVe -> duoc (nguon da
       duoc ban dang dung trich). Doi chung duong: de xuat nguoi viet khong tuDeXuatId -> nguonId null.
-      CHIEU DO: ban sao duong sua bo nguonId -> do voi thong diep ghim "ban sua mat nguon".
+      CHIEU DO (hai ban sao): duong sua bo nguonId -> "ban sua mat nguon"; approve bo kiem daDoiChieu ->
+      "duyet ban may khi chua doi chieu".
 
   - id: E11u
     criterion: AC-11
@@ -369,7 +375,7 @@ evals:
       - "Buoc 1 (1440): tab Cho duyet -> ban may -> buoc 'Nguồn nói gì' -> anh msd-duyet-b1-1440.png; doc DOM: 3 mark co mau nen tinh toan khac trong suot"
       - "Buoc 2: bam 'Đã đọc nguồn, xem bản máy soạn' -> hai cot canh nhau (hai khoi cung hang, doc getBoundingClientRect) -> anh msd-duyet-b2-1440.png"
       - "Buoc 3 (390): cung man -> hai the 'Nguồn' / 'Bản máy soạn', khong cuon ngang -> anh msd-duyet-390.png"
-      - "Buoc 4: bam Duyet -> ve man doc, muc 'Nguồn' co ten tep va nut tai ve -> anh msd-doc-nguon.png"
+      - "Buoc 4: Duyet dang khoa (doc disabled); tick 3 o 'Đã đối chiếu' -> Duyet mo -> anh msd-duyet-tick-1440.png; bam Duyet -> ve man doc, muc 'Nguồn' co ten tep va nut tai ve -> anh msd-doc-nguon.png"
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
       - "packages/ui/src/components/**"

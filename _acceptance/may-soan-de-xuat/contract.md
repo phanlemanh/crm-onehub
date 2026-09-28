@@ -5,10 +5,10 @@ slug: may-soan-de-xuat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: approved
+status: draft
 design_doc: docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-09-28
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: may-soan-de-xuat
@@ -39,7 +39,7 @@ subagent»; bản mẫu `/proto/kho-tai-lieu`; hợp đồng lượt 1 `_accepta
 - AC-8: Given ma trận mọi đường ghi của máy soạn, When quét mã `apps/agent` và chạy một lượt soạn đạt, Then không đường nào của máy soạn ghi `TaiLieuPhienBan` hay `TaiLieuTrang.banDangDungId` hay gọi thủ tục duyệt; And một bản máy soạn chỉ thành bản đang dùng qua `taiLieu.approve` của người duyệt được (chủ trang, `owner`, `admin`) với `diffHash` khớp, như lượt 1; And người tải không phải chủ trang, thành viên khác và vai `okr` nhận `FORBIDDEN` khi duyệt nó. (cross-layer)
 - AC-9: Given ma trận kịch bản viết trước cho `nop_ban_de_xuat` — đạt; một số mới không nằm trong trích đoạn nào; trích đoạn không có trong chữ nguồn; trích đoạn khác nguồn chỉ ở vị trí dấu thanh (`hoà`/`hóa`), NBSP hay kiểu nháy; ngày và phần trăm kiểu Việt (`01/10/2026`, `1,5%`); số đã có trong bản gốc không trích; số thứ tự danh sách — When công cụ kiểm, Then kịch bản đạt, lệch dấu thanh, số cũ và số thứ tự danh sách được nhận; And con số so khớp trọn vẹn có biên, không so chuỗi con — «20%» không được nhận nhờ «2026», «2%» không nhờ «12%», «1,5» không nhờ «11,5»; And số mới thiếu trích và trích không có trong nguồn bị bác với thông điệp nêu đích danh số hay đoạn, không hàng nào được ghi.
 - AC-10: Given một lượt soạn hỏng — model báo lỗi, hết thời gian, trả rỗng, sai khuôn, bị bác kiểm số tới hết trần bước, chữ nguồn quá trần độ dài, hoặc trang «Quy tắc viết» chưa có bản đang dùng — When việc kết thúc, Then không `TaiLieuDeXuat` nào được ghi (không có bản rỗng hay nửa vời); And nguồn mang trạng thái «Chưa soạn được» với lý do đọc được cho từng ca; And nút «Soạn lại» của người tải hay người duyệt ghi đúng một việc `soan-tu-nguon` mới, người khác không gọi được. (cross-layer)
-- AC-11: Given một bản máy soạn chờ duyệt, When người duyệt mở màn duyệt, Then bước 1 «Nguồn nói gì» hiện chữ nguồn với các đoạn được trích tô nền và bảng «Con số và ngày» nối từng số mới với đoạn nguồn của nó, chưa có nút «Duyệt»; And sau «Đã đọc nguồn, xem bản máy soạn», nguồn và bản máy soạn nằm cạnh nhau ở 1440, hai thẻ ở 390; And không nút nào nhận focus sẵn hay tô là lựa chọn nên bấm; And «Duyệt», «Trả lại», «Sửa bản này» đi đúng luồng của lượt 1; And bản người duyệt sửa từ một bản máy soạn giữ `nguonId` và `trichDoan` của bản máy, nên phiên bản sinh ra từ nó vẫn truy được về nguồn. (cross-layer)
+- AC-11: Given một bản máy soạn chờ duyệt, When người duyệt mở màn duyệt, Then bước 1 «Nguồn nói gì» hiện chữ nguồn với các đoạn được trích tô nền và bảng «Con số và ngày» nối từng số mới với đoạn nguồn của nó, chưa có nút «Duyệt»; And sau «Đã đọc nguồn, xem bản máy soạn», nguồn và bản máy soạn nằm cạnh nhau ở 1440, hai thẻ ở 390; And mỗi dòng của bảng «Con số và ngày» có một ô tick «Đã đối chiếu», nút «Duyệt» khoá tới khi tick hết (bảng không có dòng nào thì không khoá), và máy chủ từ chối `approve` một bản máy soạn khi số dòng đã tick gửi lên ít hơn số con số mới nó tự tính lại; And không nút nào nhận focus sẵn hay tô là lựa chọn nên bấm; And «Duyệt», «Trả lại», «Sửa bản này» đi đúng luồng của lượt 1; And bản người duyệt sửa từ một bản máy soạn giữ `nguonId` và `trichDoan` của bản máy, nên phiên bản sinh ra từ nó vẫn truy được về nguồn. (cross-layer)
 - AC-12: Given ma trận viết trước gồm sáu người (người tải, chủ trang đích, `owner`, `admin`, thành viên khác, vai `okr`) × ba trạng thái nguồn (chưa được bản đang dùng nào trích · được bản đang dùng trích · đề xuất của nó bị trả lại), When mỗi người gọi danh sách nguồn, `nguon.get`, `nguon.taiVe` và mở bản máy soạn, Then người tải và người duyệt được thấy và tải về ở mọi trạng thái; And nguồn được bản đang dùng trích thì mọi thành viên tải về được từ mục «Nguồn» của màn đọc trang; And mọi ca không được thấy trả `NOT_FOUND` giống id không tồn tại; And `taiVe` trả URL ký hết hạn ≤ 5 phút, tải về đúng byte có `sha256` của hàng; And trên Blob thật, trình duyệt PUT được tệp vào URL ký của `xinCho`, `nhan` băm đúng byte đó, GET bằng URL của `taiVe` ra đúng byte, và GET không ký vào blob bị từ chối. (cross-layer)
 - AC-13: Given `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` đặt hoặc không, When máy soạn chạy một lượt, Then khoá đặt thì model của `subagent` dựng bằng khoá đó, vắng thì bằng đường Gateway chung, không lỗi; And mỗi lượt ghi một sự kiện `MAY_SOAN` có mã model, nhãn khoá `rieng`/`chung`, token vào, token ra, chi phí USD tính từ bảng giá ghim theo mã model trong cấu hình của khu, số lần bị bác; And biến có mặt ở `.env.example`, `globalPassThroughEnv` của `turbo.json` và bảng năng lực của agent, không ở `env` của turbo.
 - AC-14: Given `subagent` `may_soan`, When đọc khai báo của nó, Then tập `tool` đúng bằng `{ nop_ban_de_xuat }`, mọi `tool` dựng sẵn tắt, sandbox `deny-all`, không `web_fetch` hay `web_search`; And mã model là hằng trong cấu hình của khu, không đọc `AppSetting`; And khuôn đầu vào của `nop_ban_de_xuat` chuyển được sang JSON Schema không có `$ref` vòng; And chữ nguồn tới model nằm trong khối dữ liệu có dấu phân cách, tách khỏi lời dặn.
@@ -90,9 +90,11 @@ duyệt rồi mới đăng; tra 2026-09-28), nghiên cứu mục 6.
   đọc nó làm lời dặn. Thiếu nó thì AC-7 và AC-15 không đo được; S3 các task còn lại chạy được.
 - **Tiền đề của S2 — lượt 1 đã lên `onehub`** (lộ trình mục 2–3). Nhánh
   `feat/may-soan-de-xuat` cắt từ `origin/proto/kho-tai-lieu` (`5e3e35b9`) vì PR #180 chưa
-  merge lúc mở S1; khi #180 merge, kéo `onehub` vào trước S2.
-- Từ điển: mục **Nguồn** ở `CONTEXT.md` ghi «mỗi nguồn mang một lớp dữ liệu», trong khi lượt
-  này để phân lớp ra ngoài. Người ký Cổng Phạm vi quyết (xem `gap-probe.md` và thẻ).
+  merge lúc mở S1. Đã đạt 2026-09-28: #180 merge (`c1e37b73`), `onehub` đã kéo vào nhánh.
+- Từ điển: mục **Nguồn** ở `CONTEXT.md` từng ghi «mỗi nguồn mang một lớp dữ liệu»; chủ kho
+  chốt 2026-09-28 sửa thành «sẽ mang… (để sau)» vì lượt này không lưu lớp dữ liệu.
+- Tick từng con số trước khi duyệt: chủ kho chọn 2026-09-28 (lựa chọn B của hình `man-duyet`),
+  thêm vào AC-11; mở lại Cổng Phạm vi để duyệt lại.
 - Luật `docs/agent.md` mục «Khi nào thêm mã, tool, skill, subagent» áp đủ: kiểm số là mã
   (luật 1), máy soạn là `subagent` riêng vì ranh giới đọc, tiền và nơi gửi khác agent gốc
   (luật 2), quyền nằm ở `nop_ban_de_xuat` (luật 4), khuôn không đệ quy (luật 6), việc hỏng

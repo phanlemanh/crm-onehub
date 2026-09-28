@@ -211,7 +211,7 @@ Trang «Quy tắc viết» nhận ra bằng slug cố định `quy-tac-viet` (h�
 | ST-nguon-chua-soan-duoc | Tab «Nguồn» | Hàng «Chưa soạn được» + lý do một dòng + «Soạn lại» | Soạn lại / bỏ qua |
 | ST-nguon-tat | Danh sách trang | Nút «Tải nguồn lên» khoá, câu «Chưa bật lưu tệp nguồn — nhờ quản trị cấu hình» | Nhờ quản trị |
 | ST-duyet-ban-may-soan | Màn duyệt | Bước 1 «Nguồn nói gì»: chữ nguồn, đoạn được trích tô nền; bảng «Con số và ngày» (số → đoạn nguồn); nút «Đã đọc nguồn, xem bản máy soạn»; Duyệt chưa hiện | Đọc nguồn, mở bước 2 |
-| ST-duyet-ban-may-soan-buoc-2 | Màn duyệt | Nguồn trái, bản máy soạn phải (≥1024; 390 là hai thẻ «Nguồn» / «Bản máy soạn»); Duyệt, Trả lại, Sửa bản này — không nút nào nhận focus sẵn, không nút nào tô «nên bấm» | Duyệt / trả lại / sửa |
+| ST-duyet-ban-may-soan-buoc-2 | Màn duyệt | Nguồn trái, bản máy soạn phải (≥1024; 390 là hai thẻ «Nguồn» / «Bản máy soạn»); mỗi dòng «Con số và ngày» có ô tick «Đã đối chiếu»; Duyệt khoá tới khi tick hết, kèm câu «Đối chiếu từng con số với nguồn rồi mới duyệt được»; Trả lại, Sửa bản này luôn bấm được — không nút nào nhận focus sẵn, không nút nào tô «nên bấm» | Tick từng số / duyệt / trả lại / sửa |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi
@@ -219,6 +219,9 @@ Trang «Quy tắc viết» nhận ra bằng slug cố định `quy-tac-viet` (h�
 - Tệp nhận: `.docx`, `.pdf`, tới 20 MB; kiểm đuôi ở máy khách, kiểm chữ ký tệp ở máy chủ.
 - Đích «cập nhật trang có sẵn» chỉ liệt trang có bản đang dùng.
 - Bước 2 của màn duyệt chỉ mở sau khi bấm «Đã đọc nguồn»; tải lại trang thì về bước 1.
+- «Duyệt» bản máy soạn khoá tới khi tick hết ô «Đã đối chiếu» của từng con số mới (chốt
+  2026-09-28, nghiên cứu 8.4); máy chủ kiểm lại số dòng đã tick so với số con số mới nó tự tính,
+  không tin máy khách. Tick không lưu: tải lại trang là tick lại.
 - Nhãn trên màn: «máy soạn», «nguồn», «bản đề xuất», «chủ trang» theo `CONTEXT.md`; tên
   tệp và chữ nguồn là dữ liệu người nhập, gắn `translate="no"`.
 - 390: hộp tải thành trang toàn màn; màn duyệt hai thẻ thay hai cột.
