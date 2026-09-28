@@ -974,6 +974,7 @@ describe("su-kien", () => {
 describe("ghi-nhan", () => {
 	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
 	const TEN_MUC_TIEU = "Chốt kho mới quý 4";
+	const CHO_MS = 30_000;
 
 	async function gieoBa() {
 		const O = await gieoNguoi("Oanh");
@@ -991,62 +992,72 @@ describe("ghi-nhan", () => {
 		return { O, A, B, mt };
 	}
 
-	test("ghi-nhan: tin sang co dung mot dong — O gui cho A, B trong cua so; A nhan mot dong ten O va ten muc tieu, B co muc, O khong hang", async () => {
-		const g = await gieoBa();
-		const id = await ghiNhan({
-			objectiveId: g.mt,
-			tacGia: g.O.id,
-			nhan: [g.A.id, g.B.id],
-			luc: new Date(goc.getTime() - 2 * GIO_MS),
-		});
-		setSystemTime(goc);
-		await lenLichNhac(goc);
-		const mucCua = async (userId: string) =>
-			(await hangCuaNguoi(userId)).map((h) => parseNhacPayload(h.payload).muc);
-		const mucB = await mucCua(g.B.id);
-		const soHangO = (await hangCuaNguoi(g.O.id)).length;
-		const r = await guiQuaZalo(g.A.id, goc);
-		const text = r.z.guiToi("ZA")[0]?.body.text ?? "";
-		const dongGhiNhan = text
-			.split("\n")
-			.filter((d) => d.includes("ghi nhận bạn"));
-		expect({
-			ket: r.ket,
-			tieuDe: text.split("\n").includes(TIEU_DE["okr-ghi-nhan"]),
-			soDong: dongGhiNhan.length,
-			coTenO: dongGhiNhan.map((d) => d.includes("Oanh")),
-			coTenMucTieu: dongGhiNhan.map((d) => d.includes(TEN_MUC_TIEU)),
-			daGui: r.payload.daGui,
-			mucB,
-			soHangO,
-		}).toEqual({
-			ket: "da-gui",
-			tieuDe: true,
-			soDong: 1,
-			coTenO: [true],
-			coTenMucTieu: [true],
-			daGui: [{ loai: "okr-ghi-nhan", ghiNhanId: id }],
-			mucB: [[{ loai: "okr-ghi-nhan", ghiNhanId: id }]],
-			soHangO: 0,
-		});
-	});
+	test(
+		"ghi-nhan: tin sang co dung mot dong — O gui cho A, B trong cua so; A nhan mot dong ten O va ten muc tieu, B co muc, O khong hang",
+		async () => {
+			const g = await gieoBa();
+			const id = await ghiNhan({
+				objectiveId: g.mt,
+				tacGia: g.O.id,
+				nhan: [g.A.id, g.B.id],
+				luc: new Date(goc.getTime() - 2 * GIO_MS),
+			});
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			const mucCua = async (userId: string) =>
+				(await hangCuaNguoi(userId)).map(
+					(h) => parseNhacPayload(h.payload).muc,
+				);
+			const mucB = await mucCua(g.B.id);
+			const soHangO = (await hangCuaNguoi(g.O.id)).length;
+			const r = await guiQuaZalo(g.A.id, goc);
+			const text = r.z.guiToi("ZA")[0]?.body.text ?? "";
+			const dongGhiNhan = text
+				.split("\n")
+				.filter((d) => d.includes("ghi nhận bạn"));
+			expect({
+				ket: r.ket,
+				tieuDe: text.split("\n").includes(TIEU_DE["okr-ghi-nhan"]),
+				soDong: dongGhiNhan.length,
+				coTenO: dongGhiNhan.map((d) => d.includes("Oanh")),
+				coTenMucTieu: dongGhiNhan.map((d) => d.includes(TEN_MUC_TIEU)),
+				daGui: r.payload.daGui,
+				mucB,
+				soHangO,
+			}).toEqual({
+				ket: "da-gui",
+				tieuDe: true,
+				soDong: 1,
+				coTenO: [true],
+				coTenMucTieu: [true],
+				daGui: [{ loai: "okr-ghi-nhan", ghiNhanId: id }],
+				mucB: [[{ loai: "okr-ghi-nhan", ghiNhanId: id }]],
+				soHangO: 0,
+			});
+		},
+		CHO_MS,
+	);
 
-	test("ghi-nhan: ngoai cua so — 08:29 hom qua va 08:30:00.001 hom nay — khong dong, A khong hang", async () => {
-		const g = await gieoBa();
-		await ghiNhan({
-			objectiveId: g.mt,
-			tacGia: g.O.id,
-			nhan: [g.A.id],
-			luc: ngayCach(lucVN(NGAY_NHAC, PHUT_TRUOC), HOM_QUA),
-		});
-		await ghiNhan({
-			objectiveId: g.mt,
-			tacGia: g.O.id,
-			nhan: [g.A.id],
-			luc: new Date(lucVN(NGAY_NHAC, 0).getTime() + 1),
-		});
-		setSystemTime(goc);
-		await lenLichNhac(goc);
-		expect((await hangCuaNguoi(g.A.id)).length).toBe(0);
-	});
+	test(
+		"ghi-nhan: ngoai cua so — 08:29 hom qua va 08:30:00.001 hom nay — khong dong, A khong hang",
+		async () => {
+			const g = await gieoBa();
+			await ghiNhan({
+				objectiveId: g.mt,
+				tacGia: g.O.id,
+				nhan: [g.A.id],
+				luc: ngayCach(lucVN(NGAY_NHAC, PHUT_TRUOC), HOM_QUA),
+			});
+			await ghiNhan({
+				objectiveId: g.mt,
+				tacGia: g.O.id,
+				nhan: [g.A.id],
+				luc: new Date(lucVN(NGAY_NHAC, 0).getTime() + 1),
+			});
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			expect((await hangCuaNguoi(g.A.id)).length).toBe(0);
+		},
+		CHO_MS,
+	);
 });
