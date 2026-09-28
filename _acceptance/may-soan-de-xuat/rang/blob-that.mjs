@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -99,8 +100,13 @@ try {
 	console.log(hong.at(-1));
 } finally {
 	if (pathname) {
-		const { del } = await import("@vercel/blob");
-		await del(pathname, { token }).catch(() => undefined);
+		const tuDb = createRequire(join(GOC, "packages", "db", "package.json"));
+		const { del } = await import(tuDb.resolve("@vercel/blob"));
+		await del(pathname, { token }).catch((e) =>
+			console.log(
+				`canh bao: khong don duoc tep thu ${pathname}: ${e instanceof Error ? e.message : String(e)}`,
+			),
+		);
 	}
 	await db.$disconnect();
 }
