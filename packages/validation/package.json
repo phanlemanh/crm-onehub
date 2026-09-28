@@ -51,7 +51,8 @@
 		"./tai-lieu-diff": "./src/tai-lieu-diff.ts",
 		"./tai-lieu-trich-doan": "./src/tai-lieu-trich-doan.ts",
 		"./tai-lieu-so": "./src/tai-lieu-so.ts",
-		"./tai-lieu-nguon": "./src/tai-lieu-nguon.ts"
+		"./tai-lieu-nguon": "./src/tai-lieu-nguon.ts",
+		"./tai-lieu-tim": "./src/tai-lieu-tim.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",

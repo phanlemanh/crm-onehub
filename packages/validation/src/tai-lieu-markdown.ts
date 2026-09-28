@@ -5,7 +5,7 @@ import { TableKit } from "@tiptap/extension-table";
 import { MarkdownManager } from "@tiptap/markdown";
 import StarterKit from "@tiptap/starter-kit";
 import { z } from "zod";
-import { chuanNfc, TAI_LIEU } from "./tai-lieu";
+import { chuanNfc, slugTuDuongDan, TAI_LIEU } from "./tai-lieu";
 
 export const CAP_TIEU_DE = [2, 3] as const;
 
@@ -164,4 +164,79 @@ export function rutLienKet(md: string): LienKet[] {
 	const ra: LienKet[] = [];
 	gomLienKet(nap(chuanNfc(md)), ra);
 	return ra;
+}
+
+const KHOI_CHU = new Set(["paragraph", "heading"]);
+
+function chuCuaKhoi(nut: JSONContent): string {
+	return (nut.content ?? [])
+		.map((con) =>
+			con.type === "text"
+				? (con.text ?? "")
+				: con.type === "hardBreak"
+					? " "
+					: chuCuaKhoi(con),
+		)
+		.join("");
+}
+
+function gomKhoi(nut: JSONContent, ra: JSONContent[]): void {
+	if (nut.type && KHOI_CHU.has(nut.type)) {
+		ra.push(nut);
+		return;
+	}
+	for (const con of nut.content ?? []) gomKhoi(con, ra);
+}
+
+function khoiCua(md: string): JSONContent[] {
+	const ra: JSONContent[] = [];
+	gomKhoi(nap(chuanNfc(md)), ra);
+	return ra;
+}
+
+export function chuThuong(md: string): string {
+	return khoiCua(md)
+		.map(chuCuaKhoi)
+		.filter((dong) => dong.length > 0)
+		.join("\n");
+}
+
+export type CauLienKet = { cau: string; vanBan: string; soLan: number };
+
+function catQuanh(cau: string, vanBan: string): string {
+	const kyTu = Array.from(cau);
+	const tran = TAI_LIEU.tim.cauToiDa;
+	if (kyTu.length <= tran) return cau;
+	const viTri = Array.from(
+		cau.slice(0, Math.max(0, cau.indexOf(vanBan))),
+	).length;
+	const dai = Array.from(vanBan).length;
+	const ben = Math.max(0, Math.floor((tran - dai) / 2));
+	let dau = Math.max(0, viTri - ben);
+	let cuoi = Math.min(kyTu.length, dau + tran);
+	dau = Math.max(0, cuoi - tran);
+	while (dau > 0 && dau < viTri && kyTu[dau - 1] !== " ") dau += 1;
+	while (cuoi < kyTu.length && cuoi > viTri + dai && kyTu[cuoi] !== " ")
+		cuoi -= 1;
+	return kyTu.slice(dau, cuoi).join("").trim();
+}
+
+export function cauChuaLienKet(md: string, denSlug: string): CauLienKet | null {
+	let dau: CauLienKet | null = null;
+	let soLan = 0;
+	for (const khoi of khoiCua(md)) {
+		const lienKet: LienKet[] = [];
+		gomLienKet(khoi, lienKet);
+		const trung = lienKet.filter((l) => slugTuDuongDan(l.den) === denSlug);
+		soLan += trung.length;
+		const dauTien = trung[0];
+		if (!dau && dauTien) {
+			dau = {
+				cau: catQuanh(chuCuaKhoi(khoi), dauTien.vanBan),
+				vanBan: dauTien.vanBan,
+				soLan: 0,
+			};
+		}
+	}
+	return dau ? { ...dau, soLan } : null;
 }

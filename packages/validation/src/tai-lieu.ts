@@ -33,6 +33,15 @@ export const TAI_LIEU = {
 	diff: { tranSuaKhoi: 2_000, tranSuaTu: 2_000 },
 	nap: { coKhoi: 4_000 },
 	soan: { bangMoi: { hang: 3, cot: 3 } },
+	tim: {
+		toiThieu: 2,
+		toiDa: 200,
+		soDong: 20,
+		benTrich: 60,
+		cauToiDa: 160,
+		nhacToiToiDa: 100,
+		sucKhoeToiDa: 200,
+	},
 	slugDuPhong: "trang",
 	slugGiuTruoc: ["moi", "de-xuat"],
 } as const;
