@@ -146,7 +146,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.tdx_man_cai_dat
-    expected: "exit 0; bài DOM thẻ Trợ lý OKR: mỗi việc có hai dòng 'Bật cho' và 'Chế độ ẩn cho'; chọn 'toàn công ty' ở Bật cho khoá Chế độ ẩn cho kèm 'mọi đơn vị đã bật'; danh sách chế độ ẩn không cho chọn đơn vị đã ở danh sách bật; Lưu gửi đúng sáu trường AI; thành viên không thấy thẻ. Chiều đỏ: bản sao không khoá dòng chế độ ẩn khi bật toàn công ty → thông điệp ghim 'an khong khoa khi bat toan'."
+    expected: "exit 0; bài DOM thẻ Trợ lý OKR: mỗi việc có hai dòng 'Bật cho' và 'Chế độ ẩn cho'; chọn 'toàn công ty' ở Bật cho khoá Chế độ ẩn cho kèm 'mọi đơn vị đã bật'; danh sách chế độ ẩn không cho chọn đơn vị đã ở danh sách bật; Lưu gửi đúng mười trường AI (sáu của 9a cộng bốn trường chế độ ẩn); thành viên không thấy thẻ. Chiều đỏ: bản sao không khoá dòng chế độ ẩn khi bật toàn công ty → thông điệp ghim 'an khong khoa khi bat toan'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/test/tro-ly-okr-cai-dat.dom.tsx]
 
