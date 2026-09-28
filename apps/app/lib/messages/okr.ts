@@ -246,6 +246,16 @@ const vi = {
 		"nhin-lai": "Ghi điều học được",
 		"mang-sang": "Mang sang kỳ sau",
 		"mo-lai-ky": "Mở lại kỳ",
+		"them-viec": "Thêm việc",
+		"sua-viec": "Sửa việc",
+		"xong-viec": "Đánh dấu việc",
+		"go-viec": "Gỡ việc",
+		"gan-sang-kien": "Gắn sáng kiến",
+		"dinh-bang-chung": "Đính bằng chứng",
+		"go-bang-chung": "Gỡ bằng chứng",
+		"ghi-nhan": "Ghi nhận",
+		"go-ghi-nhan": "Gỡ ghi nhận",
+		"sua-mau": "Sửa mẫu OKR",
 	},
 	vet: {
 		cot: {
@@ -785,6 +795,16 @@ const en: OkrMessages = {
 		"nhin-lai": "Wrote what was learned",
 		"mang-sang": "Carried over to next cycle",
 		"mo-lai-ky": "Reopened cycle",
+		"them-viec": "Add task",
+		"sua-viec": "Edit task",
+		"xong-viec": "Mark task",
+		"go-viec": "Remove task",
+		"gan-sang-kien": "Link initiative",
+		"dinh-bang-chung": "Attach evidence",
+		"go-bang-chung": "Remove evidence",
+		"ghi-nhan": "Recognition",
+		"go-ghi-nhan": "Remove recognition",
+		"sua-mau": "Edit OKR template",
 	},
 	vet: {
 		cot: {
