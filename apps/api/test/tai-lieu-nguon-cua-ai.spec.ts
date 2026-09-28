@@ -189,7 +189,7 @@ describe("nguon-cua-ai", () => {
 			nhan("tao", cho, dichMoi()),
 			nhan("tao", cho, dichMoi()),
 		]);
-		expect(ket.filter((k) => k.status < 400).length).toBe(1);
+		expect(ket.filter((k) => k.status < 400).length, GHIM_SONG_SONG).toBe(1);
 		const hang = await db.taiLieuNguon.findUnique({
 			where: { blobPathname: cho.pathname },
 			select: { id: true },
