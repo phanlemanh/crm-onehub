@@ -782,6 +782,19 @@ executors:
     tln_bao_tran: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ai-bao-tran.integration.spec.ts"
     tln_tien_do_api: bun run test -- "cd apps/api && bun test test/okr.spec.ts test/okr-toan-canh-thuan.spec.ts"
     tln_duong_do: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/duong-do-tro-ly.integration.spec.ts"
+    bom_to_chuc: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t to-chuc-mau"'
+    bom_toan_canh: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t toan-canh-mau"'
+    bom_kieu_kr: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t kieu-kr-mau"'
+    bom_sau_tuan: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t sau-tuan-mau"'
+    bom_quy_3: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t quy-3-mau"'
+    bom_moc: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t moc-ghim-mau"'
+    bom_nap_lai: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t nap-lai-mau"'
+    bom_xoa: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
+    bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
+    bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
+    bom_thu_tuc_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t thu-tuc-that-mau"'
+    bom_chan_production: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts"
+    bom_ca_gop_y: "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-ca-gop-y.spec.ts"
   script:
     ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
     ktl_migration_tren_ban_sao: "bun _acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
@@ -1287,6 +1300,7 @@ executors:
     hg_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     hg_man_ban_ghi: 'CHI_BUOC=7 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     hg_san_thiet_ke: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca thiet-ke && cd packages/ui && bun test test/messages-guard.spec.ts test/locale-messages.spec.tsx"
+    bom_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-mau/rang/man-bo-mau.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
