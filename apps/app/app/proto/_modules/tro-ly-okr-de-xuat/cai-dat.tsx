@@ -154,14 +154,14 @@ function TheTroLyOkr({ batToan }: { batToan: boolean }) {
 							moTa="Người sửa được Mục tiêu thấy nút «Nhờ Trợ lý OKR góp ý»."
 						/>
 						<DongNac
-							ma="de-xuat-bong"
-							nhan="Chạy bóng cho"
+							ma="de-xuat-an"
+							nhan="Chế độ ẩn cho"
 							phamVi="danh-sach"
 							donVi={["kd-nam", "dieu-phoi"]}
 							moTa="Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới. Tính vào trần tháng."
 							khoa={
 								batToan
-									? "Mọi đơn vị đã bật — không còn đơn vị nào để chạy bóng."
+									? "Mọi đơn vị đã bật — không còn đơn vị nào để chế độ ẩn."
 									: undefined
 							}
 						/>
@@ -176,8 +176,8 @@ function TheTroLyOkr({ batToan }: { batToan: boolean }) {
 							moTa="Mỗi phòng ban nhận một Tóm tắt tuần ở đầu Họp tuần."
 						/>
 						<DongNac
-							ma="tom-tat-bong"
-							nhan="Chạy bóng cho"
+							ma="tom-tat-an"
+							nhan="Chế độ ẩn cho"
 							phamVi="toan-cong-ty"
 							donVi={[]}
 							moTa="Máy tóm tắt sau ngày cập nhật; chỉ quản trị thấy."
@@ -190,31 +190,31 @@ function TheTroLyOkr({ batToan }: { batToan: boolean }) {
 }
 
 function BangSo() {
-	const [bat, bong] = SO_DO;
-	if (!bat || !bong) return null;
-	const hang: { nhan: string; bat: string; bong: string }[] = [
-		{ nhan: "Lượt", bat: String(bat.luot), bong: String(bong.luot) },
+	const [bat, an] = SO_DO;
+	if (!bat || !an) return null;
+	const hang: { nhan: string; bat: string; an: string }[] = [
+		{ nhan: "Lượt", bat: String(bat.luot), an: String(an.luot) },
 		{
 			nhan: "Đề xuất đã hiện / sinh ra",
 			bat: `${bat.daHien} / ${bat.sinhRa}`,
-			bong: `0 / ${bong.sinhRa}`,
+			an: `0 / ${an.sinhRa}`,
 		},
-		{ nhan: "Nhận", bat: `${bat.nhan}%`, bong: "—" },
-		{ nhan: "Sửa rồi nhận", bat: `${bat.sua}%`, bong: "—" },
-		{ nhan: "Bác", bat: `${bat.bac}%`, bong: "—" },
-		{ nhan: "Bỏ qua câu hỏi", bat: `${bat.boQua}%`, bong: "—" },
-		{ nhan: "Hoàn tác trong 7 ngày", bat: `${bat.hoanTac}%`, bong: "—" },
-		{ nhan: "Độ trễ p50", bat: bat.p50, bong: bong.p50 },
-		{ nhan: "Độ trễ p90", bat: bat.p90, bong: bong.p90 },
+		{ nhan: "Nhận", bat: `${bat.nhan}%`, an: "—" },
+		{ nhan: "Sửa rồi nhận", bat: `${bat.sua}%`, an: "—" },
+		{ nhan: "Bác", bat: `${bat.bac}%`, an: "—" },
+		{ nhan: "Bỏ qua câu hỏi", bat: `${bat.boQua}%`, an: "—" },
+		{ nhan: "Hoàn tác trong 7 ngày", bat: `${bat.hoanTac}%`, an: "—" },
+		{ nhan: "Độ trễ p50", bat: bat.p50, an: an.p50 },
+		{ nhan: "Độ trễ p90", bat: bat.p90, an: an.p90 },
 		{
 			nhan: "Câu bị bộ kiểm loại",
 			bat: `${bat.biLoai}%`,
-			bong: `${bong.biLoai}%`,
+			an: `${an.biLoai}%`,
 		},
 		{
 			nhan: "Chi phí mỗi đề xuất được nhận",
 			bat: bat.chiPhiMoiNhan,
-			bong: "—",
+			an: "—",
 		},
 	];
 	return (
@@ -223,7 +223,7 @@ function BangSo() {
 			columns={[
 				{ id: "so", header: "Số đo" },
 				{ id: "bat", header: "Bật", width: "w-20", align: "right" },
-				{ id: "bong", header: "Bóng", width: "w-20", align: "right" },
+				{ id: "an", header: "Ẩn", width: "w-20", align: "right" },
 			]}
 		>
 			{hang.map((h) => (
@@ -233,7 +233,7 @@ function BangSo() {
 						{h.bat}
 					</TableCell>
 					<TableCell className={`${CELL} text-right tabular-nums`}>
-						{h.bong}
+						{h.an}
 					</TableCell>
 				</SimpleTableRow>
 			))}
@@ -246,7 +246,7 @@ function TheSoDo({ hinh }: { hinh: HinhCaiDat }) {
 		<CardHeader>
 			<CardTitle>Góp ý của Trợ lý OKR — tháng này</CardTitle>
 			<CardDescription>
-				Số đo của nấc bật và nấc chạy bóng; bấm một lượt để xem từng dòng.
+				Số đo của nấc bật và chế độ ẩn; bấm một lượt để xem từng dòng.
 			</CardDescription>
 		</CardHeader>
 	);

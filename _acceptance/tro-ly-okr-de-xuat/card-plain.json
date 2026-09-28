@@ -1,59 +1,198 @@
 {
-  "feature_plain": "Người sửa được một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý» ngay trong hộp thoại sửa, thấy vài đề xuất cạnh form (câu cũ gạch, câu mới, lý do) rồi nhận, sửa hay bác từng dòng; quản trị bật theo ba nấc tắt · chạy bóng · bật cho từng đơn vị, và đọc số đo xem góp ý có ăn thua không. Khi gộp, mọi công tắc vẫn tắt — người dùng chưa thấy gì.",
+  "feature_plain": "Người sửa được một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý» ngay trong hộp thoại sửa, thấy vài đề xuất cạnh form (câu cũ gạch, câu mới, lý do) rồi nhận, sửa hay bác từng dòng; quản trị bật theo ba nấc tắt · chế độ ẩn · bật cho từng đơn vị, và đọc số đo xem góp ý có ăn thua không. Khi gộp, mọi công tắc vẫn tắt — người dùng chưa thấy gì.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ chỉ hiện nút góp ý cho người sửa được đúng Mục tiêu hay KR đang mở, ở đơn vị đã bật — và chặn mọi người khác ở cả màn lẫn đường gọi thẳng, kể cả khi họ chỉ muốn bác một đề xuất."},
-    {"id": "AC-2", "p": "Sẽ cho hộp thoại đủ mười hai trạng thái — đang soạn, có đề xuất, không thấy gì cần sửa, lỗi có «Thử lại», hết trần, hết lượt ngày… — ở máy tính lẫn điện thoại, không tràn ngang."},
-    {"id": "AC-3", "p": "Sẽ không gọi mô hình lần hai khi Mục tiêu chưa đổi; mỗi người tối đa 20 lượt gọi mỗi ngày; chạm trần tháng thì Trợ lý tạm nghỉ."},
-    {"id": "AC-6", "p": "Sẽ ghi ngay mỗi đề xuất được nhận qua đúng đường sửa có quyền, để lại một dòng vết «theo đề xuất của Trợ lý OKR»; hai người bấm cùng lúc thì chỉ một lần thành."},
-    {"id": "AC-7", "p": "Sẽ cho «Hoàn tác» ngay sau khi nhận đưa câu về như cũ, và các bài kiểm OKR sẵn có vẫn xanh nguyên."},
-    {"id": "AC-8", "p": "Sẽ hiện dưới ô Đích một dòng xu hướng tính bằng mã (không gọi mô hình) cho KR có nguồn CRM hay KR mang sang có đủ ba điểm số."},
-    {"id": "AC-9", "p": "Sẽ cho quản trị chọn «Bật cho» và «Chạy bóng cho» riêng từng việc; đơn vị đã bật thì không chạy bóng; cấu hình cũ đọc lên là tắt."},
-    {"id": "AC-10", "p": "Sẽ, ở nấc chạy bóng, tự góp ý khi một Mục tiêu được lưu với chữ đổi — tối đa một lượt mỗi 30 phút mỗi Mục tiêu, 40 lượt mỗi ngày — và chỉ quản trị đọc được kết quả."},
-    {"id": "AC-12", "p": "Sẽ tự kiểm lại khoá mô hình sau 10 phút khi lần kiểm trước báo «chưa có khoá», để cắm khoá xong là dùng được mà không ai phải tắt bật."},
-    {"id": "AC-13", "p": "Sẽ cho quản trị một bảng số đo tháng này — nhận, sửa, bác, hoàn tác, độ trễ, câu bị loại, chi phí mỗi đề xuất nhận — tách nấc bật và nấc chạy bóng, số nào cũng khớp câu truy vấn của phiên nghiệm thu."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ chỉ hiện nút góp ý cho người sửa được đúng Mục tiêu hay KR đang mở, ở đơn vị đã bật — và chặn mọi người khác ở cả màn lẫn đường gọi thẳng, kể cả khi họ chỉ muốn bác một đề xuất."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho hộp thoại đủ mười hai trạng thái — đang soạn, có đề xuất, không thấy gì cần sửa, lỗi có «Thử lại», hết trần, hết lượt ngày… — ở máy tính lẫn điện thoại, không tràn ngang."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ không gọi mô hình lần hai khi Mục tiêu chưa đổi; mỗi người tối đa 20 lượt gọi mỗi ngày; chạm trần tháng thì Trợ lý tạm nghỉ."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ ghi ngay mỗi đề xuất được nhận qua đúng đường sửa có quyền, để lại một dòng vết «theo đề xuất của Trợ lý OKR»; hai người bấm cùng lúc thì chỉ một lần thành."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ cho «Hoàn tác» ngay sau khi nhận đưa câu về như cũ, và các bài kiểm OKR sẵn có vẫn xanh nguyên."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ hiện dưới ô Đích một dòng xu hướng tính bằng mã (không gọi mô hình) cho KR có nguồn CRM hay KR mang sang có đủ ba điểm số."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ cho quản trị chọn «Bật cho» và «Chế độ ẩn cho» riêng từng việc; đơn vị đã bật thì không ở chế độ ẩn; cấu hình cũ đọc lên là tắt."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ, ở chế độ ẩn, tự góp ý khi một Mục tiêu được lưu với chữ đổi — tối đa một lượt mỗi 30 phút mỗi Mục tiêu, 40 lượt mỗi ngày — và chỉ quản trị đọc được kết quả."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ tự kiểm lại khoá mô hình sau 10 phút khi lần kiểm trước báo «chưa có khoá», để cắm khoá xong là dùng được mà không ai phải tắt bật."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ cho quản trị một bảng số đo tháng này — nhận, sửa, bác, hoàn tác, độ trễ, câu bị loại, chi phí mỗi đề xuất nhận — tách nấc bật và chế độ ẩn, số nào cũng khớp câu truy vấn của phiên nghiệm thu."
+    }
   ],
   "wont_do": [
-    {"id": "AC-4", "p": "Chặn trước khi tới người mọi đề xuất có số mới, từ cấm, nói về người, chép KR cấp trên, hỏi trùng luật đã hỏi, hay trỏ ra ngoài dữ liệu — vẫn ghi lại kèm lý do để quản trị đọc."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG mời lại đề xuất đã bác, và tự ẩn đề xuất cũ khi người đã tự sửa câu đó."},
-    {"id": "AC-11", "p": "Sẽ KHÔNG đóng giữa chừng một lượt góp ý đang soạn lâu; lượt chết thật thì vẫn đóng trong 90 giây."},
-    {"id": "OOS-1", "p": "Không góp ý trên màn Cập nhật tuần, không góp ý khi đang tạo Mục tiêu mới."},
-    {"id": "OOS-2", "p": "Không tự đánh dấu «đã sửa theo câu hỏi» — số này đếm sau bằng truy vấn."},
-    {"id": "OOS-3", "p": "Không hiệu chỉnh người chấm máy cho bộ ca «không nói về người» ở lượt này — lượt sau."},
-    {"id": "OOS-4", "p": "Không làm lý do «hết ngân sách AI Gateway» — chưa có đường nào sinh ra nó."},
-    {"id": "OOS-5", "p": "Không làm Tóm tắt tuần; chỉ để sẵn chỗ chạy bóng cho nó."},
-    {"id": "OOS-6", "p": "Không bật cho người dùng và không nạp ca thật — việc của chủ kho khi có đủ 12 ca thật."},
-    {"id": "OOS-7", "p": "Không ghi vào OKR khi không ai bấm nhận, không góp ý tự đến với người dùng, không điền số hay mức tự tin, không đọc dữ liệu đối tác."}
+    {
+      "id": "AC-4",
+      "p": "Chặn trước khi tới người mọi đề xuất có số mới, từ cấm, nói về người, chép KR cấp trên, hỏi trùng luật đã hỏi, hay trỏ ra ngoài dữ liệu — vẫn ghi lại kèm lý do để quản trị đọc."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ KHÔNG mời lại đề xuất đã bác, và tự ẩn đề xuất cũ khi người đã tự sửa câu đó."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ KHÔNG đóng giữa chừng một lượt góp ý đang soạn lâu; lượt chết thật thì vẫn đóng trong 90 giây."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không góp ý trên màn Cập nhật tuần, không góp ý khi đang tạo Mục tiêu mới."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không tự đánh dấu «đã sửa theo câu hỏi» — số này đếm sau bằng truy vấn."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không hiệu chỉnh người chấm máy cho bộ ca «không nói về người» ở lượt này — lượt sau."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không làm lý do «hết ngân sách AI Gateway» — chưa có đường nào sinh ra nó."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không làm Tóm tắt tuần; chỉ để sẵn chỗ chế độ ẩn cho nó."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Không bật cho người dùng và không nạp ca thật — việc của chủ kho khi có đủ 12 ca thật."
+    },
+    {
+      "id": "OOS-7",
+      "p": "Không ghi vào OKR khi không ai bấm nhận, không góp ý tự đến với người dùng, không điền số hay mức tự tin, không đọc dữ liệu đối tác."
+    }
   ],
   "scope_plain": "Những thứ cố ý để ngoài lượt này:",
   "coverage_plain": [
-    {"i": 0, "p": "Đủ sáu loại đề xuất — viết lại tên Mục tiêu, «vì sao lúc này», tên KR, câu hỏi chất lượng, Căn chỉnh, dòng xu hướng; thước là danh sách «người dùng thấy» của lộ trình."},
-    {"i": 1, "p": "Đủ vòng đời một đề xuất — sinh, hiện, quyết, hết hạn và không mời lại, đo (AC-3 tới AC-7, AC-13)."},
-    {"i": 2, "p": "Mọi người × mọi nấc — người sửa được, người phụ trách KR, người không sửa được, vai «chỉ OKR», quản trị ở nấc bóng — ở cả màn và đường gọi thẳng (AC-1, AC-9, AC-10)."},
-    {"i": 3, "p": "Năm kiểu hỏng — sai số, chết giữa chừng, rò ra người không được thấy, vượt tiền, mời trùng — mỗi kiểu có tiêu chí và phép đo có chiều đỏ."},
-    {"i": 4, "p": "Đối chiếu ngành: Tability đặt góp ý cạnh bản gốc, nhận hay bỏ từng dòng; «chạy bóng» là cách phát hành mô hình trên dữ liệu thật mà người dùng chưa nhận kết quả."},
-    {"i": 5, "p": "Giả định cần anh gạch: lượt này thành hạng T3 (thêm cột, thêm Cổng 1.5) để chạy bóng được theo từng đơn vị và đọc được câu bị bộ kiểm bỏ trên OKR thật — xem hình 1."},
-    {"i": 6, "p": "Giả định cần anh gạch: ở nấc chạy bóng máy tự góp ý khi Mục tiêu được lưu với chữ đổi, có nhịp 30 phút và trần 40 lượt mỗi ngày — xem hình 2."},
-    {"i": 7, "p": "Giả định cần anh gạch: nhận là ghi ngay từng dòng; nút góp ý khoá khi form còn sửa chưa lưu, vì Trợ lý đọc bản đã lưu."},
-    {"i": 8, "p": "Giả định cần anh gạch: mỗi người 20 lượt gọi mô hình mỗi ngày; lượt trả lại kết quả cũ không tính."},
-    {"i": 9, "p": "Giả định cần anh gạch: dòng xu hướng cũng chỉ hiện khi góp ý đã bật, để lúc gộp người dùng không thấy gì."},
-    {"i": 10, "p": "Giả định cần anh gạch: người chấm máy của eval là một mô hình khác họ Gemini, có cam kết không lưu dữ liệu; anh chấm 20 đầu ra để hiệu chỉnh nó ở bước chấm."}
+    {
+      "i": 0,
+      "p": "Đủ sáu loại đề xuất — viết lại tên Mục tiêu, «vì sao lúc này», tên KR, câu hỏi chất lượng, Căn chỉnh, dòng xu hướng; thước là danh sách «người dùng thấy» của lộ trình."
+    },
+    {
+      "i": 1,
+      "p": "Đủ vòng đời một đề xuất — sinh, hiện, quyết, hết hạn và không mời lại, đo (AC-3 tới AC-7, AC-13)."
+    },
+    {
+      "i": 2,
+      "p": "Mọi người × mọi nấc — người sửa được, người phụ trách KR, người không sửa được, vai «chỉ OKR», quản trị ở chế độ ẩn — ở cả màn và đường gọi thẳng (AC-1, AC-9, AC-10)."
+    },
+    {
+      "i": 3,
+      "p": "Năm kiểu hỏng — sai số, chết giữa chừng, rò ra người không được thấy, vượt tiền, mời trùng — mỗi kiểu có tiêu chí và phép đo có chiều đỏ."
+    },
+    {
+      "i": 4,
+      "p": "Đối chiếu ngành: Tability đặt góp ý cạnh bản gốc, nhận hay bỏ từng dòng; chế độ ẩn (ngành gọi «shadow mode») là cách phát hành mô hình trên dữ liệu thật mà người dùng chưa nhận kết quả."
+    },
+    {
+      "i": 5,
+      "p": "Giả định cần anh gạch: lượt này thành hạng T3 (thêm cột, thêm Cổng 1.5) để bật chế độ ẩn được theo từng đơn vị và đọc được câu bị bộ kiểm bỏ trên OKR thật — xem hình 1."
+    },
+    {
+      "i": 6,
+      "p": "Giả định cần anh gạch: ở chế độ ẩn máy tự góp ý khi Mục tiêu được lưu với chữ đổi, có nhịp 30 phút và trần 40 lượt mỗi ngày — xem hình 2."
+    },
+    {
+      "i": 7,
+      "p": "Giả định cần anh gạch: nhận là ghi ngay từng dòng; nút góp ý khoá khi form còn sửa chưa lưu, vì Trợ lý đọc bản đã lưu."
+    },
+    {
+      "i": 8,
+      "p": "Giả định cần anh gạch: mỗi người 20 lượt gọi mô hình mỗi ngày; lượt trả lại kết quả cũ không tính."
+    },
+    {
+      "i": 9,
+      "p": "Giả định cần anh gạch: dòng xu hướng cũng chỉ hiện khi góp ý đã bật, để lúc gộp người dùng không thấy gì."
+    },
+    {
+      "i": 10,
+      "p": "Giả định cần anh gạch: người chấm máy của eval là một mô hình khác họ Gemini, có cam kết không lưu dữ liệu; anh chấm 20 đầu ra để hiệu chỉnh nó ở bước chấm."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Thiếu: chưa ai đo được ai gọi được danh sách đề xuất và nút bác — một thành viên không sửa được có thể đọc hết đề xuất hoặc bác làm khoá đề xuất mãi. Đã sửa: tiêu chí AC-1 và phép đo E1 phủ đủ bốn đường gọi, có chiều đỏ."},
-    {"i": 1, "p": "Thiếu: «đã hiện» không có nguồn nên tỷ lệ nhận có thể tính hai cách (30% hay 22,5% trên cùng dữ liệu). Đã sửa: ghi thời điểm đề xuất hiện lần đầu; mọi con số dùng đúng một định nghĩa."},
-    {"i": 2, "p": "Thiếu: chi phí mỗi đề xuất nhận lẫn tiền chạy bóng vào, sẽ báo trượt giả. Đã sửa: cột Bật chỉ tính tiền của nấc bật; cột Bóng đọc chi phí mỗi lượt."},
-    {"i": 3, "p": "Thiếu: «Hoàn tác» chỉ được kiểm là có chữ, không kiểm bấm vào có đưa câu về không. Đã sửa: phép đo trên màn thật bấm Hoàn tác rồi đọc lại."},
-    {"i": 4, "p": "Thiếu: phép đo «không số mới lọt» dùng lại chính bộ kiểm đang đo, nên bộ kiểm sai thì không bao giờ đỏ. Đã sửa: một bộ đọc số riêng, độc lập, hiểu cả «năm tỷ», «50%», dấu phẩy thập phân."}
+    {
+      "i": 0,
+      "p": "Thiếu: chưa ai đo được ai gọi được danh sách đề xuất và nút bác — một thành viên không sửa được có thể đọc hết đề xuất hoặc bác làm khoá đề xuất mãi. Đã sửa: tiêu chí AC-1 và phép đo E1 phủ đủ bốn đường gọi, có chiều đỏ."
+    },
+    {
+      "i": 1,
+      "p": "Thiếu: «đã hiện» không có nguồn nên tỷ lệ nhận có thể tính hai cách (30% hay 22,5% trên cùng dữ liệu). Đã sửa: ghi thời điểm đề xuất hiện lần đầu; mọi con số dùng đúng một định nghĩa."
+    },
+    {
+      "i": 2,
+      "p": "Thiếu: chi phí mỗi đề xuất nhận lẫn tiền của chế độ ẩn vào, sẽ báo trượt giả. Đã sửa: cột Bật chỉ tính tiền của nấc bật; cột Ẩn đọc chi phí mỗi lượt."
+    },
+    {
+      "i": 3,
+      "p": "Thiếu: «Hoàn tác» chỉ được kiểm là có chữ, không kiểm bấm vào có đưa câu về không. Đã sửa: phép đo trên màn thật bấm Hoàn tác rồi đọc lại."
+    },
+    {
+      "i": 4,
+      "p": "Thiếu: phép đo «không số mới lọt» dùng lại chính bộ kiểm đang đo, nên bộ kiểm sai thì không bao giờ đỏ. Đã sửa: một bộ đọc số riêng, độc lập, hiểu cả «năm tỷ», «50%», dấu phẩy thập phân."
+    }
   ],
   "decisions_plain": [
-    {"id": "d-20260928T050007Z-1", "p": "Chọn thêm cột (hạng T3) để chạy bóng theo từng đơn vị và ghi được câu bị bộ kiểm bỏ — đổi lại thêm Cổng 1.5 và anh tự chấm mọi mục phán đoán ở Cổng Bằng chứng."},
-    {"id": "d-20260928T050007Z-2", "p": "Chọn để máy tự chạy bóng khi Mục tiêu được lưu, thay vì chỉ khi quản trị bấm — có số đo trên OKR thật mà không ai phải bấm, đổi lại tốn tiền thật trong trần $9."},
-    {"id": "d-20260928T050007Z-3", "p": "Chọn nhận là ghi ngay từng dòng, thay vì điền vào ô rồi chờ «Lưu» — mỗi lần nhận có vết rõ, đổi lại người phải lưu sửa của mình trước khi nhờ góp ý."},
-    {"id": "d-20260928T050007Z-4", "p": "Chọn duyệt giao diện trên bản bấm được — tốn một lượt dựng bản mẫu."},
-    {"id": "d-20260928T050007Z-5", "p": "KHÔNG làm «đã sửa theo câu hỏi» — đỡ một việc chạy nền, số này đếm sau bằng truy vấn."},
-    {"id": "d-20260928T050007Z-6", "p": "KHÔNG hiệu chỉnh người chấm máy cho bộ «không nói về người» ở lượt này — anh chấm 20 đầu ra thay vì 40; bộ đó tạm chặn bằng mã."},
-    {"id": "d-20260928T050007Z-7", "p": "KHÔNG đưa chuỗi Cập nhật tuần cho Trợ lý đọc — rẻ hơn mỗi lượt; đổi lại câu hỏi chất lượng không thấy KR đang trượt."},
-    {"id": "d-20260928T050007Z-8", "p": "Chọn cho dòng xu hướng chờ cùng công tắc góp ý — lúc gộp người dùng không thấy gì; đổi lại một thứ không tốn tiền cũng phải chờ bật."},
-    {"id": "d-20260928T051346Z-9", "p": "Chọn đề xuất đứng thành cột cạnh form (hướng A) thay vì chuyển màn trong hộp (hướng B) — người thấy ô sắp đổi, đổi lại hộp rộng ra và điện thoại phải cuộn."}
+    {
+      "id": "d-20260928T050007Z-1",
+      "p": "Chọn thêm cột (hạng T3) để đặt chế độ ẩn theo từng đơn vị và ghi được câu bị bộ kiểm bỏ — đổi lại thêm Cổng 1.5 và anh tự chấm mọi mục phán đoán ở Cổng Bằng chứng."
+    },
+    {
+      "id": "d-20260928T050007Z-2",
+      "p": "Chọn để máy tự góp ý ở chế độ ẩn khi Mục tiêu được lưu, thay vì chỉ khi quản trị bấm — có số đo trên OKR thật mà không ai phải bấm, đổi lại tốn tiền thật trong trần $9."
+    },
+    {
+      "id": "d-20260928T050007Z-3",
+      "p": "Chọn nhận là ghi ngay từng dòng, thay vì điền vào ô rồi chờ «Lưu» — mỗi lần nhận có vết rõ, đổi lại người phải lưu sửa của mình trước khi nhờ góp ý."
+    },
+    {
+      "id": "d-20260928T050007Z-4",
+      "p": "Chọn duyệt giao diện trên bản bấm được — tốn một lượt dựng bản mẫu."
+    },
+    {
+      "id": "d-20260928T050007Z-5",
+      "p": "KHÔNG làm «đã sửa theo câu hỏi» — đỡ một việc chạy nền, số này đếm sau bằng truy vấn."
+    },
+    {
+      "id": "d-20260928T050007Z-6",
+      "p": "KHÔNG hiệu chỉnh người chấm máy cho bộ «không nói về người» ở lượt này — anh chấm 20 đầu ra thay vì 40; bộ đó tạm chặn bằng mã."
+    },
+    {
+      "id": "d-20260928T050007Z-7",
+      "p": "KHÔNG đưa chuỗi Cập nhật tuần cho Trợ lý đọc — rẻ hơn mỗi lượt; đổi lại câu hỏi chất lượng không thấy KR đang trượt."
+    },
+    {
+      "id": "d-20260928T050007Z-8",
+      "p": "Chọn cho dòng xu hướng chờ cùng công tắc góp ý — lúc gộp người dùng không thấy gì; đổi lại một thứ không tốn tiền cũng phải chờ bật."
+    },
+    {
+      "id": "d-20260928T051346Z-9",
+      "p": "Chọn đề xuất đứng thành cột cạnh form (hướng A) thay vì chuyển màn trong hộp (hướng B) — người thấy ô sắp đổi, đổi lại hộp rộng ra và điện thoại phải cuộn."
+    },
+    {
+      "id": "d-20260928T065713Z-10",
+      "p": "Đổi tên nấc giữa từ «chạy bóng» thành «chế độ ẩn» theo lời anh — một chữ cho màn, từ điển và hợp đồng; lộ trình OKR sẽ đổi theo trong PR của lượt này."
+    }
   ]
 }

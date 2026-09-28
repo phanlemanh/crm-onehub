@@ -6,7 +6,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_quyen_nut
-    expected: "exit 0; bài API trên kho _test có bộ OKR mẫu nạp bằng napBoOkrMau (hàm nạp thật của M, không gieo tay) và cấu hình lưu qua okr.setProgram. MA TRẬN TOÀN PHẦN viết trước trong bài: người {quản trị, trưởng phòng ban của Mục tiêu, phụ trách KR không sửa được Mục tiêu, thành viên không sửa được, vai okr} × đích {Mục tiêu OneHub, Mục tiêu phòng ban, KR của phòng ban} × nấc đơn vị {tat, bong, bat} → mỗi ô một kỳ vọng {sanSang bat | lyDo có tên | 403}; gọi bốn thủ tục okr.troLySanSang, okr.troLyDeXuat, okr.troLyDanhSach, okr.troLyQuyet (nhan, sua, bac, bo-qua trên dòng do nop_de_xuat thật ghi) qua tRPC VÀ qua REST (restMeta của router) cho mọi ô; số khẳng định = số ô × số thủ tục (quyết tính bốn cách) × 2 đường (in ra; lệch là đỏ). Ô có nghĩa bat chỉ khi người sửa được đúng thứ đang hỏi và nấc bat. troLyDanhSach: đối chứng dương — người phụ trách KR nhận đúng tập id dòng của KR đó (so tập, không đếm); thành viên không sửa được → 403. troLyQuyet bac/bo-qua của người không sửa được đích → 403 và okrDeXuat vẫn 'cho'. Chiều đỏ trên cùng bảng: (a) bản sao bỏ assertSuaKr ở nhánh keyResultId → ô 'phụ trách KR khác × KR' ra bat, thông điệp ghim 'o lech: <nguoi> x <dich> x <nac> x <thu tuc>'; (b) bản sao bỏ kiểm quyền ở nhánh bac → 'bac khong quyen: <nguoi>'."
+    expected: "exit 0; bài API trên kho _test có bộ OKR mẫu nạp bằng napBoOkrMau (hàm nạp thật của M, không gieo tay) và cấu hình lưu qua okr.setProgram. MA TRẬN TOÀN PHẦN viết trước trong bài: người {quản trị, trưởng phòng ban của Mục tiêu, phụ trách KR không sửa được Mục tiêu, thành viên không sửa được, vai okr} × đích {Mục tiêu OneHub, Mục tiêu phòng ban, KR của phòng ban} × nấc đơn vị {tat, an, bat} → mỗi ô một kỳ vọng {sanSang bat | lyDo có tên | 403}; gọi bốn thủ tục okr.troLySanSang, okr.troLyDeXuat, okr.troLyDanhSach, okr.troLyQuyet (nhan, sua, bac, bo-qua trên dòng do nop_de_xuat thật ghi) qua tRPC VÀ qua REST (restMeta của router) cho mọi ô; số khẳng định = số ô × số thủ tục (quyết tính bốn cách) × 2 đường (in ra; lệch là đỏ). Ô có nghĩa bat chỉ khi người sửa được đúng thứ đang hỏi và nấc bat. troLyDanhSach: đối chứng dương — người phụ trách KR nhận đúng tập id dòng của KR đó (so tập, không đếm); thành viên không sửa được → 403. troLyQuyet bac/bo-qua của người không sửa được đích → 403 và okrDeXuat vẫn 'cho'. Chiều đỏ trên cùng bảng: (a) bản sao bỏ assertSuaKr ở nhánh keyResultId → ô 'phụ trách KR khác × KR' ra bat, thông điệp ghim 'o lech: <nguoi> x <dich> x <nac> x <thu tuc>'; (b) bản sao bỏ kiểm quyền ở nhánh bac → 'bac khong quyen: <nguoi>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr-access.service.ts, packages/db/src/okr-tro-ly.ts, apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts]
 
@@ -14,7 +14,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.tdx_man_nut
-    expected: "exit 0; bài DOM của hộp thoại Mục tiêu và hộp thoại KR (HopThoaiMucTieu, HopThoaiKr) với tRPC giả trả troLySanSang theo từng lý do của LY_DO_KHONG_SAN_SANG và {bat:true}: nút 'Nhờ Trợ lý OKR góp ý' có mặt khi bat; vắng khi tat, viec-tat, don-vi-chua-bat, chua-co-khoa-mo-hinh, chua-noi-tac-tu, het-tran-gateway, và khi nấc bong; có nhưng disabled kèm câu có tên khi het-tran-thang, het-tran-ngay. Bảng kỳ vọng rút lúc chạy từ LY_DO_KHONG_SAN_SANG (không chép tay); thêm một lý do mới mà không thêm dòng là bài đỏ 'thieu dong ly do: <ma>'."
+    expected: "exit 0; bài DOM của hộp thoại Mục tiêu và hộp thoại KR (HopThoaiMucTieu, HopThoaiKr) với tRPC giả trả troLySanSang theo từng lý do của LY_DO_KHONG_SAN_SANG và {bat:true}: nút 'Nhờ Trợ lý OKR góp ý' có mặt khi bat; vắng khi tat, viec-tat, don-vi-chua-bat, chua-co-khoa-mo-hinh, chua-noi-tac-tu, het-tran-gateway, và khi chế độ ẩn; có nhưng disabled kèm câu có tên khi het-tran-thang, het-tran-ngay. Bảng kỳ vọng rút lúc chạy từ LY_DO_KHONG_SAN_SANG (không chép tay); thêm một lý do mới mà không thêm dòng là bài đỏ 'thieu dong ly do: <ma>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", apps/app/lib/messages/tro-ly-okr.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
 
@@ -41,7 +41,7 @@ evals:
       - "Bấm Hoàn tác trên toast → okr.objective đọc lại title bằng câu cũ; rang/hoan-tac.sql trên kho đo đếm 1; Nhận lại một lần nữa để tiếp"
       - "Tab Vết của Mục tiêu → dòng có 'theo đề xuất của Trợ lý OKR'"
       - "Hộp KR của một KR nguồn CRM mẫu → ảnh ST-kr-xu-huong"
-      - "Đăng nhập quản trị mẫu; Cài đặt › Chương trình OKR → ảnh ST-caidat-nac; đặt Chạy bóng cho một phòng ban khác, lưu; trưởng phòng đó sửa tên một Mục tiêu → chờ lượt bóng xong → quản trị tải lại, ảnh ST-sodo-co-so, mở lượt → ảnh ST-sodo-ngan; trưởng phòng đó mở lại hộp Mục tiêu → không có nút, không có cột"
+      - "Đăng nhập quản trị mẫu; Cài đặt › Chương trình OKR → ảnh ST-caidat-nac; đặt Chế độ ẩn cho một phòng ban khác, lưu; trưởng phòng đó sửa tên một Mục tiêu → chờ lượt ẩn xong → quản trị tải lại, ảnh ST-sodo-co-so, mở lượt → ảnh ST-sodo-ngan; trưởng phòng đó mở lại hộp Mục tiêu → không có nút, không có cột"
       - "Mọi ảnh ở 1440 và 390; đo scrollWidth ≤ clientWidth mỗi ảnh"
     expected: "exit 0; mỗi bước có ảnh trong .acceptance-runs/tro-ly-okr-de-xuat/man/ và một dòng kết quả; ô tên sau Nhận bằng giá trị đọc lại qua okr.objective; hàng OkrTrail mới có note tro-ly-okr:<id>; không bước nào tràn ngang. Chiều đỏ ghim trong script: trước khi bấm Nhận, bản đọc lại tên đã lưu phải KHÁC câu mới (nếu bằng nhau thì bước Nhận không chứng gì, mã 3 'nhan khong doi gi')."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -129,7 +129,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.tdx_nac
-    expected: "exit 0; hàm thuần nacCuaDonVi trên MA TRẬN TOÀN PHẦN viết trước: aiOn {false,true} × Bật cho {tat, toan-cong-ty, danh-sach[], danh-sach[onehub], danh-sach[bộ phận B]} × Chạy bóng cho {cùng năm giá trị} × đơn vị {OneHub, bộ phận B, phòng ban trong B, phòng ban ngoài B, cá nhân có phòng ban chính trong B} → mỗi ô một nấc; số khẳng định = số ô (in ra). Hàng cấu hình cũ (không có bốn trường bóng) parse bằng okrProgram → cả hai việc tắt. Chiều đỏ: bản sao cho bóng thắng bật → ô 'bật OneHub, bóng toàn công ty × OneHub' ra bong, thông điệp in ô."
+    expected: "exit 0; hàm thuần nacCuaDonVi trên MA TRẬN TOÀN PHẦN viết trước: aiOn {false,true} × Bật cho {tat, toan-cong-ty, danh-sach[], danh-sach[onehub], danh-sach[bộ phận B]} × Chế độ ẩn cho {cùng năm giá trị} × đơn vị {OneHub, bộ phận B, phòng ban trong B, phòng ban ngoài B, cá nhân có phòng ban chính trong B} → mỗi ô một nấc; số khẳng định = số ô (in ra). Hàng cấu hình cũ (không có bốn trường ẩn) parse bằng okrProgram → cả hai việc tắt. Chiều đỏ: bản sao cho ẩn thắng bật → ô 'bật OneHub, ẩn toàn công ty × OneHub' ra an, thông điệp in ô."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/db/src/okr-tro-ly-danh-muc.ts, packages/validation/src/okr-chuong-trinh.ts, packages/validation/test/okr-tro-ly.spec.ts]
 
@@ -138,7 +138,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_nac_luu
-    expected: "exit 0; bài API: quản trị okr.setProgram với Bật cho [onehub] và Chạy bóng cho toàn công ty → db.okrProgramConfig có phiên bản mới, bốn cột bóng đúng giá trị, okr.program đọc lại bằng; thành viên và vai okr gọi setProgram qua tRPC và REST → 403, không phiên bản mới; migration mới chỉ thêm (không DROP, không đổi kiểu cột cũ) — bài đọc tệp migration của lượt và kiểm. Chiều đỏ: migration bản sao có ALTER … DROP → 'migration khong chi them'."
+    expected: "exit 0; bài API: quản trị okr.setProgram với Bật cho [onehub] và Chế độ ẩn cho toàn công ty → db.okrProgramConfig có phiên bản mới, bốn cột chế độ ẩn đúng giá trị, okr.program đọc lại bằng; thành viên và vai okr gọi setProgram qua tRPC và REST → 403, không phiên bản mới; migration mới chỉ thêm (không DROP, không đổi kiểu cột cũ) — bài đọc tệp migration của lượt và kiểm. Chiều đỏ: migration bản sao có ALTER … DROP → 'migration khong chi them'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/okr.service.ts, "packages/db/prisma/migrations/**", packages/db/prisma/schema.prisma, apps/api/test/tro-ly-okr-nac.spec.ts]
 
@@ -146,7 +146,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.tdx_man_cai_dat
-    expected: "exit 0; bài DOM thẻ Trợ lý OKR: mỗi việc có hai dòng 'Bật cho' và 'Chạy bóng cho'; chọn 'toàn công ty' ở Bật cho khoá Chạy bóng cho kèm 'mọi đơn vị đã bật'; danh sách bóng không cho chọn đơn vị đã ở danh sách bật; Lưu gửi đúng sáu trường AI; thành viên không thấy thẻ. Chiều đỏ: bản sao không khoá dòng bóng khi bật toàn công ty → thông điệp ghim 'bong khong khoa khi bat toan'."
+    expected: "exit 0; bài DOM thẻ Trợ lý OKR: mỗi việc có hai dòng 'Bật cho' và 'Chế độ ẩn cho'; chọn 'toàn công ty' ở Bật cho khoá Chế độ ẩn cho kèm 'mọi đơn vị đã bật'; danh sách chế độ ẩn không cho chọn đơn vị đã ở danh sách bật; Lưu gửi đúng sáu trường AI; thành viên không thấy thẻ. Chiều đỏ: bản sao không khoá dòng chế độ ẩn khi bật toàn công ty → thông điệp ghim 'an khong khoa khi bat toan'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/test/tro-ly-okr-cai-dat.dom.tsx]
 
@@ -154,10 +154,10 @@ evals:
     criterion: AC-10
     executor: test
     layer: backend-effect
-    cmd: config:executors.test.tdx_chay_bong
-    expected: "exit 0; bài API trên bộ OKR mẫu, đơn vị ở nấc bong (cấu hình qua setProgram): okr.updateObjective đổi tên → db.agentTask có đúng 1 hàng okr-de-xuat payload nac 'bong'; lưu lại trong 30 phút (đồng hồ giả; số phút rút từ cấu hình) → không thêm; lưu khi đã đủ trần bóng ngày → không thêm; lưu chỉ đổi người tham gia (không đổi chữ) → không thêm. Dòng do nop_de_xuat thật ghi cho hàng bóng có nac 'bong'; mọi người dùng gọi troLyDanhSach qua tRPC và REST không thấy dòng nào; quản trị okr.troLyBong thấy lượt đó và dòng của nó; thành viên gọi troLyBong → 403; ghiChiPhi của phiên con lượt bóng làm troLySanSang tính vào trần tháng. Chiều đỏ: bản sao troLyDanhSach bỏ lọc nac → người dùng thấy dòng bóng, thông điệp ghim 'bong lo ra nguoi dung'."
+    cmd: config:executors.test.tdx_che_do_an
+    expected: "exit 0; bài API trên bộ OKR mẫu, đơn vị ở chế độ ẩn (cấu hình qua setProgram): okr.updateObjective đổi tên → db.agentTask có đúng 1 hàng okr-de-xuat payload nac 'an'; lưu lại trong 30 phút (đồng hồ giả; số phút rút từ cấu hình) → không thêm; lưu khi đã đủ trần lượt ẩn ngày → không thêm; lưu chỉ đổi người tham gia (không đổi chữ) → không thêm. Dòng do nop_de_xuat thật ghi cho hàng ẩn có nac 'an'; mọi người dùng gọi troLyDanhSach qua tRPC và REST không thấy dòng nào; quản trị okr.troLyAn thấy lượt đó và dòng của nó; thành viên gọi troLyAn → 403; ghiChiPhi của phiên con lượt ẩn làm troLySanSang tính vào trần tháng. Chiều đỏ: bản sao troLyDanhSach bỏ lọc nac → người dùng thấy dòng chế độ ẩn, thông điệp ghim 'an lo ra nguoi dung'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, packages/db/src/okr-tro-ly.ts, "apps/agent/agent/subagents/tro_ly_okr/**", apps/api/test/tro-ly-okr-chay-bong.spec.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, packages/db/src/okr-tro-ly.ts, "apps/agent/agent/subagents/tro_ly_okr/**", apps/api/test/tro-ly-okr-che-do-an.spec.ts]
 
   - id: E18
     criterion: AC-11
@@ -182,7 +182,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tdx_so_do
-    expected: "exit 0; kho kiểm dựng một tháng bằng bên ghi thật (xepViecTroLy, nop_de_xuat, troLyQuyet, okr.updateObjective cho hoàn tác, ghiChiPhi) ở cả hai nấc; okr.troLySoDo trả mỗi số; bài chạy các câu rang/ty-le-quyet.sql, hoan-tac.sql, do-tre.sql, bi-loai.sql, chi-phi-moi-nhan.sql (đường suy từ vị trí bài, không hằng gốc) trên cùng kho và so từng số bằng nhau, tách nấc; số kỳ vọng viết tay trong bài cho kho dựng sẵn (vd nhận 3/8 = 37,5%) để phép so không chỉ là hai bên cùng sai. Kho dựng có một dòng het-han đã hiện (hienLuc có, do troLyDanhSach thật ghi) và một dòng het-han chưa hiện — chỉ dòng thứ nhất vào mẫu số; sổ chi phí có tiền của lượt bóng khác 0 — chi phí mỗi đề xuất nhận của cột Bật không đổi khi thêm tiền bóng, cột Bóng là tiền bóng chia số lượt bóng. Chiều đỏ: bản sao troLySoDo tính nhận trên tổng gồm cả bi-loai → 'so do lech: ty-le-nhan'; câu SQL bản sao đếm dòng chưa hiện → 'mau so tinh dong chua hien'; câu SQL bản sao cộng tiền bóng vào tử số → 'chi phi bong vao ty so'."
+    expected: "exit 0; kho kiểm dựng một tháng bằng bên ghi thật (xepViecTroLy, nop_de_xuat, troLyQuyet, okr.updateObjective cho hoàn tác, ghiChiPhi) ở cả hai nấc; okr.troLySoDo trả mỗi số; bài chạy các câu rang/ty-le-quyet.sql, hoan-tac.sql, do-tre.sql, bi-loai.sql, chi-phi-moi-nhan.sql (đường suy từ vị trí bài, không hằng gốc) trên cùng kho và so từng số bằng nhau, tách nấc; số kỳ vọng viết tay trong bài cho kho dựng sẵn (vd nhận 3/8 = 37,5%) để phép so không chỉ là hai bên cùng sai. Kho dựng có một dòng het-han đã hiện (hienLuc có, do troLyDanhSach thật ghi) và một dòng het-han chưa hiện — chỉ dòng thứ nhất vào mẫu số; sổ chi phí có tiền của lượt ẩn khác 0 — chi phí mỗi đề xuất nhận của cột Bật không đổi khi thêm tiền chế độ ẩn, cột Ẩn là tiền chế độ ẩn chia số lượt ẩn. Chiều đỏ: bản sao troLySoDo tính nhận trên tổng gồm cả bi-loai → 'so do lech: ty-le-nhan'; câu SQL bản sao đếm dòng chưa hiện → 'mau so tinh dong chua hien'; câu SQL bản sao cộng tiền chế độ ẩn vào tử số → 'chi phi an vao ty so'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/tro-ly.service.ts, "_acceptance/tro-ly-okr-de-xuat/rang/*.sql", apps/api/test/tro-ly-okr-so-do.spec.ts]
 
@@ -190,7 +190,7 @@ evals:
     criterion: AC-13
     executor: test
     cmd: config:executors.test.tdx_man_so_do
-    expected: "exit 0; bài DOM thẻ Góp ý của Trợ lý OKR: đang tải, rỗng, có số (hai cột Bật · Chạy bóng, mỗi số đúng dữ liệu tRPC giả), lỗi có Thử lại; bấm một lượt mở ngăn hiện mọi dòng kể cả dòng bi-loai kèm nhãn mã loại. Bảng nhãn mã loại rút từ MA_LOAI_DE_XUAT; mã mới không nhãn → 'ma loai khong nhan: <ma>'."
+    expected: "exit 0; bài DOM thẻ Góp ý của Trợ lý OKR: đang tải, rỗng, có số (hai cột Bật · Chế độ ẩn, mỗi số đúng dữ liệu tRPC giả), lỗi có Thử lại; bấm một lượt mở ngăn hiện mọi dòng kể cả dòng bi-loai kèm nhãn mã loại. Bảng nhãn mã loại rút từ MA_LOAI_DE_XUAT; mã mới không nhãn → 'ma loai khong nhan: <ma>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx", apps/app/lib/messages/tro-ly-okr.ts, apps/app/test/tro-ly-okr-so-do.dom.tsx]
 
@@ -248,7 +248,7 @@ evals:
     criterion: AC-15
     executor: script
     cmd: config:executors.script.tdx_tai_lieu
-    expected: "exit 0; rang/tai-lieu.mjs: CONTEXT.md có mục '**Chạy bóng**' kèm dòng _Avoid_; docs/api.md §OKR nêu đủ bảy tên thủ tục (troLySanSang, troLyDeXuat, troLyDanhSach, troLyQuyet, troLyBong, troLySoDo, xuHuongKr) — danh sách rút từ okr.router.ts lúc chạy, không chép tay; docs/agent.md có mục chỗ rẽ 9b nêu mọi tệp của hãng trong diff (danh sách tệp của hãng rút bằng git diff so với merge-base giao với danh sách tệp có ở release). Chiều đỏ: bản sao docs/api.md xoá một tên → 'tai lieu thieu thu tuc: <ten>'."
+    expected: "exit 0; rang/tai-lieu.mjs: CONTEXT.md có mục '**Chế độ ẩn**' kèm dòng _Avoid_; docs/api.md §OKR nêu đủ bảy tên thủ tục (troLySanSang, troLyDeXuat, troLyDanhSach, troLyQuyet, troLyAn, troLySoDo, xuHuongKr) — danh sách rút từ okr.router.ts lúc chạy, không chép tay; docs/agent.md có mục chỗ rẽ 9b nêu mọi tệp của hãng trong diff (danh sách tệp của hãng rút bằng git diff so với merge-base giao với danh sách tệp có ở release). Chiều đỏ: bản sao docs/api.md xoá một tên → 'tai lieu thieu thu tuc: <ten>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [CONTEXT.md, docs/api.md, docs/agent.md, apps/api/src/okr/okr.router.ts, _acceptance/tro-ly-okr-de-xuat/rang/tai-lieu.mjs]
 
@@ -256,9 +256,9 @@ evals:
     criterion: AC-15
     executor: judgment
     question: >-
-      Đọc mục «Chạy bóng» của CONTEXT.md, đoạn Trợ lý OKR của docs/api.md và mục chỗ rẽ 9b của
+      Đọc mục «Chế độ ẩn» của CONTEXT.md, đoạn Trợ lý OKR của docs/api.md và mục chỗ rẽ 9b của
       docs/agent.md, rồi diff của lượt: một người trong đội không đọc mã có hiểu đúng rằng
-      chạy bóng không hiện gì cho người dùng, tốn tiền thật trong trần $9, và chỉ quản trị
+      chế độ ẩn không hiện gì cho người dùng, tốn tiền thật trong trần $9, và chỉ quản trị
       đọc được kết quả không? Diff có giữ luật kho: trí khôn ở apps/agent (API chỉ ghi
       AgentTask, đọc sổ và ghi qua OkrService), khuôn parse ở biên trong packages/validation,
       không chú thích trong mã, hằng tinh chỉnh ở một tệp cấu hình mỗi khu, thành phần mới ở

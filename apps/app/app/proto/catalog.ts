@@ -431,7 +431,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	},
 	{
 		slug: "tro-ly-okr-de-xuat",
-		ten: "Góp ý khi bấm — hộp Mục tiêu và KR, nấc chạy bóng, số đo",
+		ten: "Góp ý khi bấm — hộp Mục tiêu và KR, chế độ ẩn, số đo",
 		states: [
 			{
 				id: "ST-muctieu-co-dong",
@@ -473,7 +473,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-kr-khong-xu-huong",
 				nhan: "Hộp KR — không xu hướng",
 			},
-			{ id: "ST-caidat-nac", nhan: "Cài đặt — Bật cho · Chạy bóng cho" },
+			{ id: "ST-caidat-nac", nhan: "Cài đặt — Bật cho · Chế độ ẩn cho" },
 			{
 				id: "ST-caidat-nac-bat-toan",
 				nhan: "Cài đặt — bật toàn công ty",

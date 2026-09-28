@@ -797,7 +797,7 @@ executors:
     tdx_nac: 'cd packages/validation && bun test test/okr-tro-ly.spec.ts -t nac'
     tdx_nac_luu: 'bun run test -- "cd apps/api && bun test test/tro-ly-okr-nac.spec.ts"'
     tdx_man_cai_dat: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-cai-dat.dom.tsx -t nac'
-    tdx_chay_bong: 'bun run test -- "cd apps/api && bun test test/tro-ly-okr-chay-bong.spec.ts"'
+    tdx_che_do_an: 'bun run test -- "cd apps/api && bun test test/tro-ly-okr-che-do-an.spec.ts"'
     tdx_giu_viec: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-giu-viec.integration.spec.ts"'
     tdx_kiem_khoa: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-san-sang.integration.spec.ts -t kiem-khoa-het-han"'
     tdx_so_do: 'bun run test -- "cd apps/api && bun test test/tro-ly-okr-so-do.spec.ts"'

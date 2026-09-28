@@ -69,7 +69,7 @@ export const DON_VI = [
 ];
 
 export type SoDoMau = {
-	nac: "Bật" | "Chạy bóng";
+	nac: "Bật" | "Chế độ ẩn";
 	luot: number;
 	daHien: number;
 	sinhRa: number;
@@ -101,7 +101,7 @@ export const SO_DO: SoDoMau[] = [
 		chiPhiMoiNhan: "$0,014",
 	},
 	{
-		nac: "Chạy bóng",
+		nac: "Chế độ ẩn",
 		luot: 64,
 		daHien: 0,
 		sinhRa: 171,
@@ -122,7 +122,7 @@ export const LUOT = [
 		id: "l1",
 		muc: "Không thoả thuận nào của miền Nam bị mất dấu",
 		donVi: "KD miền Nam",
-		nac: "Chạy bóng",
+		nac: "Chế độ ẩn",
 		dong: 3,
 		biLoai: 1,
 		doTre: "7,4 s",
@@ -132,7 +132,7 @@ export const LUOT = [
 		id: "l2",
 		muc: "Chuyến giao đúng hẹn ở mọi tuyến liên tỉnh",
 		donVi: "Điều phối vận tải",
-		nac: "Chạy bóng",
+		nac: "Chế độ ẩn",
 		dong: 2,
 		biLoai: 0,
 		doTre: "6,2 s",

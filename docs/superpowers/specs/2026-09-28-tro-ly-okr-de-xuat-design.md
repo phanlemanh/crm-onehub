@@ -16,8 +16,8 @@ từng dòng; nhận là ghi ngay, có vết «theo đề xuất của Trợ lý
 làm đúng việc đó trên hộp thoại KR, phạm vi chỉ KR đó. Ô đích của KR có nguồn CRM hay KR
 mang sang từ kỳ trước có một dòng xu hướng tính bằng mã.
 
-Quản trị bật Trợ lý OKR theo ba nấc cho từng việc và từng đơn vị: **tắt · chạy bóng ·
-bật**. Ở nấc chạy bóng, máy tự góp ý mỗi khi một Mục tiêu hay KR trong phạm vi được lưu
+Quản trị bật Trợ lý OKR theo ba nấc cho từng việc và từng đơn vị: **tắt · chế độ ẩn ·
+bật**. Ở chế độ ẩn, máy tự góp ý mỗi khi một Mục tiêu hay KR trong phạm vi được lưu
 với chữ đổi, ghi sổ chi phí và số đo, nhưng **chỉ quản trị thấy** kết quả, ở Cài đặt ›
 Chương trình OKR. Đó là cách đo trên OKR thật trước khi người dùng nhận một đề xuất nào.
 
@@ -28,24 +28,24 @@ ca thật đạt cùng ngưỡng như ca mẫu (chốt 28/09, Manh Phan).
 ## 2. Đã chốt trước lượt này — không mở lại
 
 - ZDR bắt buộc cho mọi lời gọi model mang chữ OKR, kể cả judge của eval (26/09).
-- Trần $9/tháng của khu OKR, trong $20 của workspace (26/09). Chạy bóng tốn tiền thật và
+- Trần $9/tháng của khu OKR, trong $20 của workspace (26/09). Chế độ ẩn tốn tiền thật và
   tính vào $9 (28/09).
 - Kiến trúc của 9a: việc vào bằng một hàng `AgentTask`; gốc chuyển tiếp đúng một lần; subagent
   `tro_ly_okr` chỉ đọc OKR, chỉ ghi `OkrDeXuat`; máy không ghi vào OKR — người bấm nhận.
 - Chỉ «khi bấm» với người dùng; góp ý tự đến khi không ai bấm bị bác ở hồ sơ cơ hội. Chạy
-  bóng không trái điều này: người dùng không nhận gì.
+  ẩn không trái điều này: người dùng không nhận gì.
 
 ## 3. Máy suy thêm — gạch ở Cổng Phạm vi nếu sai
 
-1. **Hạng T3, không phải T2 như lộ trình ghi.** Nấc chạy bóng theo từng đơn vị và chỗ ghi
+1. **Hạng T3, không phải T2 như lộ trình ghi.** Chế độ ẩn theo từng đơn vị và chỗ ghi
    dòng bị bộ kiểm loại cần cột mới (§5), mà `packages/db/prisma` là đường T3. Hai cột
-   9a để sẵn không diễn được «Mục tiêu cấp OneHub bật, phòng ban chạy bóng» — đúng lộ
+   9a để sẵn không diễn được «Mục tiêu cấp OneHub bật, phòng ban ở chế độ ẩn» — đúng lộ
    trình bật của lộ trình (OneHub trước mùa OKR năm, phòng ban trước mùa quý 1), và không
    có chỗ ghi «câu bị bộ kiểm bỏ» mà giả định 4 của hồ sơ cơ hội đòi đọc. Phương án T2 ở §12.
-2. **Chạy bóng do máy kích khi lưu.** Ở nấc bóng không ai thấy nút, nên không ai bấm; máy
-   xếp một lượt góp ý khi một Mục tiêu hay KR trong phạm vi bóng được lưu với tên, «vì sao
-   lúc này» hay tên KR đổi. Gộp theo băm đầu vào, mỗi Mục tiêu tối đa một lượt bóng trong
-   30 phút, cả workspace tối đa 40 lượt bóng mỗi ngày.
+2. **Chế độ ẩn do máy kích khi lưu.** Ở chế độ ẩn không ai thấy nút, nên không ai bấm; máy
+   xếp một lượt góp ý khi một Mục tiêu hay KR trong phạm vi chế độ ẩn được lưu với tên, «vì sao
+   lúc này» hay tên KR đổi. Gộp theo băm đầu vào, mỗi Mục tiêu tối đa một lượt ẩn trong
+   30 phút, cả workspace tối đa 40 lượt ẩn mỗi ngày.
 3. **Nhận là ghi ngay từng dòng**, không đợi nút «Lưu» của form (như «Update» của
    Tability). Vì trợ lý đọc bản đã lưu, nút góp ý khoá khi form còn sửa chưa lưu.
 4. **Cột đề xuất nằm cạnh form trong cùng hộp thoại**; hộp mở rộng khi cột hiện. Điện
@@ -93,44 +93,44 @@ sequenceDiagram
   API->>DB: một tx: OkrService …Trong(tx) + OkrTrail.note + OkrDeXuat có điều kiện «cho»
 ```
 
-Chạy bóng đi cùng đường từ hàng `AgentTask` trở đi; khác ở điểm vào (lưu Mục tiêu hay KR
-trong phạm vi bóng) và điểm ra (chỉ quản trị đọc, qua `okr.troLyBong`).
+Chế độ ẩn đi cùng đường từ hàng `AgentTask` trở đi; khác ở điểm vào (lưu Mục tiêu hay KR
+trong phạm vi chế độ ẩn) và điểm ra (chỉ quản trị đọc, qua `okr.troLyAn`).
 
 ## 5. Dữ liệu — một migration chỉ thêm
 
-- `OkrProgramConfig`: `aiDeXuatBongPhamVi String @default("tat")`,
-  `aiDeXuatBongDonVi String[] @default([])`, `aiTomTatBongPhamVi String @default("tat")`,
-  `aiTomTatBongDonVi String[] @default([])`. Hai việc cùng thêm để 9c (tóm tắt chạy bóng
+- `OkrProgramConfig`: `aiDeXuatAnPhamVi String @default("tat")`,
+  `aiDeXuatAnDonVi String[] @default([])`, `aiTomTatAnPhamVi String @default("tat")`,
+  `aiTomTatAnDonVi String[] @default([])`. Hai việc cùng thêm để 9c (tóm tắt ở chế độ ẩn
   ba tuần trước khi bật) không phải thêm cột.
 - `OkrDeXuat`: `hienLuc DateTime?` (lúc dòng lần đầu được `troLyDanhSach` trả cho người —
-  mẫu số của tỷ lệ nhận), `nac String @default("bat")` (`bat` · `bong`) và `maLoai String?` (mã bộ
+  mẫu số của tỷ lệ nhận), `nac String @default("bat")` (`bat` · `an`) và `maLoai String?` (mã bộ
   kiểm đã loại dòng). `TRANG_THAI_DE_XUAT` thêm `bi-loai` (cột chuỗi sẵn có, parse bằng enum).
 - Không bảng mới. Mọi cột chuỗi mới parse bằng enum Zod lúc đọc; parse hỏng là lỗi có tên.
 
 **Luật nấc.** Với một việc và một đơn vị: đơn vị trong phạm vi bật → `bat`; ngoài đó mà
-trong phạm vi bóng → `bong`; còn lại `tat`. Bật thắng bóng. Công tắc tổng `aiOn` tắt thì
+trong phạm vi chế độ ẩn → `an`; còn lại `tat`. Bật thắng ẩn. Công tắc tổng `aiOn` tắt thì
 mọi việc tắt. Bộ phận kéo theo mọi phòng ban trong nó; Mục tiêu cá nhân theo phòng ban
 chính (luật 9a giữ nguyên). `donViDuocBat` thành `nacCuaDonVi` trả `tat` · `viec-tat` ·
-`don-vi-chua-bat` · `bong` · `bat`; mọi chỗ gọi cũ đọc `bat` như trước.
+`don-vi-chua-bat` · `an` · `bat`; mọi chỗ gọi cũ đọc `bat` như trước.
 
 ## 6. Thành phần
 
 | Đơn vị | Chỗ | Việc |
 | --- | --- | --- |
-| Khuôn | `packages/validation/src/okr-tro-ly.ts`, `okr-chuong-trinh.ts` | `nac` trong `okrTroLyViec`; `bi-loai`, `MA_LOAI_DE_XUAT`; bốn trường bóng của `okrProgram`; đầu vào và đầu ra năm thủ tục mới |
-| Luật nấc, trần | `packages/db/src/okr-tro-ly.ts`, `okr-tro-ly-danh-muc.ts` | `nacCuaDonVi`; `troLyOkrSanSang` nhận người yêu cầu và trả `het-tran-ngay`; `xepViecTroLy` nhận `nac`; hằng mới trong `TRO_LY_OKR_TRAN` (trần ngày, nhịp bóng, trần bóng ngày, nhịp hỏi lại, trần chờ, số điểm xu hướng) |
+| Khuôn | `packages/validation/src/okr-tro-ly.ts`, `okr-chuong-trinh.ts` | `nac` trong `okrTroLyViec`; `bi-loai`, `MA_LOAI_DE_XUAT`; bốn trường ẩn của `okrProgram`; đầu vào và đầu ra năm thủ tục mới |
+| Luật nấc, trần | `packages/db/src/okr-tro-ly.ts`, `okr-tro-ly-danh-muc.ts` | `nacCuaDonVi`; `troLyOkrSanSang` nhận người yêu cầu và trả `het-tran-ngay`; `xepViecTroLy` nhận `nac`; hằng mới trong `TRO_LY_OKR_TRAN` (trần ngày, nhịp lượt ẩn, trần lượt ẩn ngày, nhịp hỏi lại, trần chờ, số điểm xu hướng) |
 | Bộ kiểm | `packages/validation/src/okr-kiem-de-xuat.ts` (mới) | Hàm thuần `kiemDongDeXuat(dong, goi)` → `{ qua } \| { maLoai }` — xem §8 |
 | Xu hướng | `packages/db/src/okr-xu-huong.ts` (mới) | Hàm thuần `xuHuongKr(diem[], ketThucKy)`; đọc bản chụp CRM hay lần cập nhật của KR kỳ trước |
 | Ghi có giao dịch | `apps/api/src/okr/okr.service.ts` | Tách thân `updateObjective`, `updateKeyResult`, `addAlignment` thành `…Trong(tx, …)`; hàm cũ gọi hàm mới, hành vi không đổi |
-| Thủ tục | `apps/api/src/okr/tro-ly.service.ts`, `okr.router.ts` | `troLySanSang`, `troLyDeXuat`, `troLyDanhSach`, `troLyQuyet`, `troLyBong` (quản trị), `troLySoDo` (quản trị), `xuHuongKr`; kích chạy bóng sau khi lưu Mục tiêu hay KR |
+| Thủ tục | `apps/api/src/okr/tro-ly.service.ts`, `okr.router.ts` | `troLySanSang`, `troLyDeXuat`, `troLyDanhSach`, `troLyQuyet`, `troLyAn` (quản trị), `troLySoDo` (quản trị), `xuHuongKr`; kích chế độ ẩn sau khi lưu Mục tiêu hay KR |
 | Subagent | `apps/agent/agent/subagents/tro_ly_okr/` | Gói ngữ cảnh v1 (§7); `nop_de_xuat` chạy bộ kiểm, luật không mời lại, ghi `nac`; hook mới giữ chỗ việc; skill tĩnh phương pháp OKR |
 | Giữ chỗ, kiểm khoá | `apps/agent/agent/subagents/tro_ly_okr/hooks/giu-viec.ts` (mới), `lib/schedules` của dispatch | Lỗi 1 và lỗi 2 — §9 |
 | Màn người dùng | `apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx`, `hop-thoai-kr.tsx`, `cot-gop-y.tsx` (mới), `bang-vet.tsx` | Nút, cột đề xuất, dòng xu hướng, vết «theo đề xuất của Trợ lý OKR» |
-| Màn quản trị | `apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx`, `the-gop-y-so-do.tsx` (mới) | Hai dòng «Bật cho» · «Chạy bóng cho» mỗi việc; thẻ số đo và danh sách lượt chạy bóng |
+| Màn quản trị | `apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx`, `the-gop-y-so-do.tsx` (mới) | Hai dòng «Bật cho» · «Chế độ ẩn cho» mỗi việc; thẻ số đo và danh sách lượt ở chế độ ẩn |
 | Thành phần chung | `packages/ui/src/components/suggestion.tsx` | Biến thể câu cũ → câu mới, hàng nút Nhận · Sửa · Bác, trạng thái đã quyết |
 | Eval | `apps/agent/evals/okr/gop-y.eval.ts`, `ng.eval.ts`, `do-tre.eval.ts` | Ca của M qua `docBoCaGopY`; judge ZDR |
 | Thước | `_acceptance/tro-ly-okr-de-xuat/rang/*.sql` | Tỷ lệ quyết, hoàn tác, độ trễ, câu bị loại, chi phí mỗi đề xuất nhận |
-| Tài liệu | `CONTEXT.md`, `docs/api.md` §OKR, `docs/agent.md` chỗ rẽ | Mục «Chạy bóng»; năm thủ tục; tệp của hãng chạm thêm |
+| Tài liệu | `CONTEXT.md`, `docs/api.md` §OKR, `docs/agent.md` chỗ rẽ | Mục «Chế độ ẩn»; năm thủ tục; tệp của hãng chạm thêm |
 
 ## 7. Gói ngữ cảnh v1 và việc của subagent
 
@@ -196,12 +196,12 @@ OKR». Dòng đã khác `cho` không quyết lại được. Sau «Nhận», toa
 ## 10. Số đo cho chủ kho
 
 Thẻ «Góp ý của Trợ lý OKR» ở Cài đặt › Chương trình OKR (chỉ quản trị), tháng này, tách
-nấc bật và nấc bóng: số lượt; số đề xuất đã hiện; nhận · sửa · bác · bỏ qua theo phần
+nấc bật và chế độ ẩn: số lượt; số đề xuất đã hiện; nhận · sửa · bác · bỏ qua theo phần
 trăm; hoàn tác trong 7 ngày trên số đã nhận; độ trễ p50 và p90 (từ lúc ghi hàng việc tới
 dòng đề xuất đầu tiên, hay tới lúc việc đóng nếu không có dòng); câu bị bộ kiểm loại trên
 tổng câu model nộp, theo mã; chi phí mỗi đề xuất được nhận (cột Bật, chỉ tiền của việc nấc
-bật) và chi phí mỗi lượt (cột Bóng). «Đã hiện» là dòng có `hienLuc`. Dưới đó là danh sách lượt gần
-đây (bóng và bật); bấm một lượt mở ngăn xem từng dòng, kể cả dòng bị loại và mã loại.
+bật) và chi phí mỗi lượt (cột Ẩn). «Đã hiện» là dòng có `hienLuc`. Dưới đó là danh sách lượt gần
+đây (ẩn và bật); bấm một lượt mở ngăn xem từng dòng, kể cả dòng bị loại và mã loại.
 Mỗi con số có một câu SQL cùng định nghĩa ở `rang/` để phiên nghiệm thu đọc thẳng DB.
 
 ## 11. Eval
@@ -223,9 +223,9 @@ Mỗi con số có một câu SQL cùng định nghĩa ở `rang/` để phiên 
 
 ## 12. Phương án T2 (không khuyên)
 
-Nới enum `aiDeXuatPhamVi` thành năm giá trị (`tat` · `bong-toan-cong-ty` ·
-`bong-danh-sach` · `toan-cong-ty` · `danh-sach`), không thêm cột. Mất: một việc chỉ một
-nấc cho cả danh sách đơn vị (không «OneHub bật, phòng ban bóng»), và dòng bị bộ kiểm loại
+Nới enum `aiDeXuatPhamVi` thành năm giá trị (`tat` · `an-toan-cong-ty` ·
+`an-danh-sach` · `toan-cong-ty` · `danh-sach`), không thêm cột. Mất: một việc chỉ một
+nấc cho cả danh sách đơn vị (không «OneHub bật, phòng ban ẩn»), và dòng bị bộ kiểm loại
 không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval, không trên OKR thật.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
@@ -243,8 +243,8 @@ không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval,
 |---|---|---|
 | Hộp thoại sửa Mục tiêu + cột Trợ lý OKR | Nhận hay bác đề xuất cho Mục tiêu này | Theo đơn vị, Của tôi, Toàn cảnh / ở lại |
 | Hộp thoại sửa KR + cột Trợ lý OKR | Nhận hay bác đề xuất cho KR này; đọc xu hướng khi đặt đích | Bảng KR / ở lại |
-| Cài đặt › Chương trình OKR, thẻ Trợ lý OKR | Chọn đơn vị bật và đơn vị chạy bóng cho từng việc | Thanh bên Cài đặt / ở lại |
-| Cài đặt › Chương trình OKR, thẻ Góp ý của Trợ lý OKR | Cho biết góp ý có ăn thua không, và xem lượt chạy bóng | Cùng trang / ngăn một lượt |
+| Cài đặt › Chương trình OKR, thẻ Trợ lý OKR | Chọn đơn vị bật và đơn vị chế độ ẩn cho từng việc | Thanh bên Cài đặt / ở lại |
+| Cài đặt › Chương trình OKR, thẻ Góp ý của Trợ lý OKR | Cho biết góp ý có ăn thua không, và xem lượt ở chế độ ẩn | Cùng trang / ngăn một lượt |
 
 ### 3. Bảng trạng thái
 
@@ -266,11 +266,11 @@ không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval,
 | ST-kr-cot | Hộp KR | Cột chỉ dòng của KR này | Quyết |
 | ST-kr-xu-huong | Hộp KR | Dưới ô Đích: «Theo 4 tuần gần nhất (+12/tuần), cuối kỳ ước khoảng 180» | Đặt đích |
 | ST-kr-khong-xu-huong | Hộp KR | KR chưa đủ ba điểm số: không có dòng | — |
-| ST-caidat-nac | Thẻ Trợ lý OKR | Mỗi việc hai dòng «Bật cho» · «Chạy bóng cho», mỗi dòng chọn không đơn vị nào / toàn công ty / chọn đơn vị | Chọn, lưu |
-| ST-caidat-nac-bat-toan | Thẻ Trợ lý OKR | «Bật cho: toàn công ty» → «Chạy bóng cho» khoá, «mọi đơn vị đã bật» | — |
+| ST-caidat-nac | Thẻ Trợ lý OKR | Mỗi việc hai dòng «Bật cho» · «Chế độ ẩn cho», mỗi dòng chọn không đơn vị nào / toàn công ty / chọn đơn vị | Chọn, lưu |
+| ST-caidat-nac-bat-toan | Thẻ Trợ lý OKR | «Bật cho: toàn công ty» → «Chế độ ẩn cho» khoá, «mọi đơn vị đã bật» | — |
 | ST-sodo-dang-tai | Thẻ Góp ý | Khung xương | Chờ |
 | ST-sodo-rong | Thẻ Góp ý | «Tháng này chưa có lượt góp ý nào» | — |
-| ST-sodo-co-so | Thẻ Góp ý | Bảng số đo hai cột Bật · Bóng: lượt, đề xuất đã hiện / sinh ra, nhận, sửa rồi nhận, bác, bỏ qua, hoàn tác 7 ngày, p50, p90, câu bị loại, chi phí mỗi đề xuất nhận; bảng lượt gần đây | Mở một lượt |
+| ST-sodo-co-so | Thẻ Góp ý | Bảng số đo hai cột Bật · Ẩn: lượt, đề xuất đã hiện / sinh ra, nhận, sửa rồi nhận, bác, bỏ qua, hoàn tác 7 ngày, p50, p90, câu bị loại, chi phí mỗi đề xuất nhận; bảng lượt gần đây | Mở một lượt |
 | ST-sodo-ngan | Ngăn một lượt | Mục tiêu, nấc, độ trễ, chi phí; từng dòng kể cả dòng bị loại kèm mã loại | Đóng |
 | ST-sodo-loi | Thẻ Góp ý | «Không tải được số đo» + «Thử lại» | Thử lại |
 <!-- UX-STATE-TABLE>>> -->
@@ -281,7 +281,7 @@ không có chỗ ghi — tỷ lệ câu bị bỏ chỉ đo được trong eval,
 - Nhận một dòng viết lại: ô tương ứng của form lấy giá trị mới làm giá trị đã lưu (form không bị coi là «có sửa»).
 - Câu cũ và câu mới là chữ người nhập hay máy viết về dữ liệu người nhập: `translate="no"`.
 - Phím: Tab đi qua từng dòng theo thứ tự ô trên form; «Sửa» đặt con trỏ vào ô sửa; Esc trong ô sửa huỷ sửa, không đóng hộp.
-- Tên nấc trên màn: «Bật cho», «Chạy bóng cho»; mô tả dòng bóng: «Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới».
+- Tên nấc trên màn: «Bật cho», «Chế độ ẩn cho»; mô tả dòng chế độ ẩn: «Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới».
 - Hộp rộng (`size="wide"`) chỉ khi cột hiện; ≤ 640px cột xếp dưới.
 
 ### 5. Xuất xứ component
@@ -310,7 +310,7 @@ Căn cứ: tra Mobbin «AI suggestions panel next to a form, accept/dismiss per 
 - Trạng thái `da-sua-theo` cho dòng câu hỏi khi trường đổi trong 7 ngày — đếm được sau bằng thước SQL trên `OkrTrail`.
 - Hiệu chỉnh judge bộ NG với người — lượt kế.
 - Lý do `het-tran-gateway` (hết ngân sách AI Gateway) — enum có từ 9a, chưa đường nào sinh; không thuộc góp ý.
-- Tóm tắt tuần (9c) — lượt này chỉ thêm cột nấc bóng cho nó.
+- Tóm tắt tuần (9c) — lượt này chỉ thêm cột chế độ ẩn cho nó.
 - Biểu đồ tỷ lệ theo tuần ở màn quản trị.
 - Chuyển ca thật của N1 vào và bật cho người dùng — việc của chủ kho sau khi N1 có ca.
 
@@ -318,6 +318,6 @@ Căn cứ: tra Mobbin «AI suggestions panel next to a form, accept/dismiss per 
 
 - Ca mẫu sạch hơn OKR thật; ngưỡng chỉnh trên ca mẫu có thể trượt trên ca thật. Chặn bằng
   công tắc tắt khi gộp và điều kiện bật N1.
-- Chạy bóng tính vào $9; mùa đặt OKR có thể có nhiều lần lưu. Chặn bằng gộp băm, nhịp 30
-  phút mỗi Mục tiêu, trần 40 lượt bóng/ngày, và trần tháng sẵn có.
+- Chế độ ẩn tính vào $9; mùa đặt OKR có thể có nhiều lần lưu. Chặn bằng gộp băm, nhịp 30
+  phút mỗi Mục tiêu, trần 40 lượt ẩn/ngày, và trần tháng sẵn có.
 - Độ trễ bốn bước model ước 6–15 giây (§4.5 thiết kế); nếu trượt ngưỡng, cách giảm ở §4.10.

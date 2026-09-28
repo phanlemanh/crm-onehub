@@ -1,7 +1,7 @@
 ---
 schema_version: 1
 slug: tro-ly-okr-de-xuat
-feature: Góp ý khi bấm — người sửa một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý», nhận vài đề xuất (câu cũ cạnh câu mới, câu hỏi chất lượng, chỗ Căn chỉnh) rồi nhận, sửa hay bác từng dòng; quản trị bật theo ba nấc tắt · chạy bóng · bật
+feature: Góp ý khi bấm — người sửa một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý», nhận vài đề xuất (câu cũ cạnh câu mới, câu hỏi chất lượng, chỗ Căn chỉnh) rồi nhận, sửa hay bác từng dòng; quản trị bật theo ba nấc tắt · chế độ ẩn · bật
 owner: phanlemanh@gmail.com
 stage: discovery
 decision:
@@ -42,9 +42,9 @@ phải điều kiện dựng. Thiết kế tới hết Cổng 1.5 rồi chờ M 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
 | 1 | Người đặt OKR muốn góp ý KHI BẤM, trên đúng Mục tiêu/KR đang sửa — không cần trợ lý tự chạy | Không ai bấm; tính năng chết im | Đếm lượt bấm trên số người sửa Mục tiêu trong 2 tuần bật ở cấp OneHub | Chưa thử |
-| 2 | Chỉ đọc OKR (không dữ liệu đối tác) vẫn đủ để đề xuất có ích | Đề xuất chung chung, bị bác hàng loạt | Chạy bóng trên bộ OKR mẫu + judge chấm; rồi N1 ≥ 12 ca thật | Chưa thử |
-| 3 | Chi phí góp ý của cả mùa nằm trong trần $9/tháng khu OKR | Mùa đặt OKR chạm trần, trợ lý tạm nghỉ đúng lúc cần nhất | Dự báo từ sổ chi phí trong tuần chạy bóng × số Mục tiêu dự kiến | Chưa thử |
-| 4 | Nấc «chạy bóng» (sinh đề xuất, không hiện cho người) đủ để đo chất lượng trước khi bật | Bật mù, lỗi chất lượng lộ thẳng ra người dùng | Chạy bóng ≥ 1 tuần, đọc tỷ lệ câu bị bộ kiểm bỏ | Chưa thử |
+| 2 | Chỉ đọc OKR (không dữ liệu đối tác) vẫn đủ để đề xuất có ích | Đề xuất chung chung, bị bác hàng loạt | Chạy ở chế độ ẩn trên bộ OKR mẫu + judge chấm; rồi N1 ≥ 12 ca thật | Chưa thử |
+| 3 | Chi phí góp ý của cả mùa nằm trong trần $9/tháng khu OKR | Mùa đặt OKR chạm trần, trợ lý tạm nghỉ đúng lúc cần nhất | Dự báo từ sổ chi phí trong tuần chế độ ẩn × số Mục tiêu dự kiến | Chưa thử |
+| 4 | Nấc «chế độ ẩn» (sinh đề xuất, không hiện cho người) đủ để đo chất lượng trước khi bật | Bật mù, lỗi chất lượng lộ thẳng ra người dùng | Chế độ ẩn ≥ 1 tuần, đọc tỷ lệ câu bị bộ kiểm bỏ | Chưa thử |
 | 5 | Độ trễ đủ nhanh để người chờ trong hộp thoại (p50 ≤ 8 s) | Người đóng hộp thoại trước khi có đề xuất | Đo trên phiên thật khi lái thử | Chưa thử |
 
 ## Ngưỡng chết / ngưỡng UAT
@@ -80,7 +80,7 @@ dựng ở S1-D (design-pass) trước Cổng Phạm vi.
 - Chi phí mỗi đề xuất được nhận → AC nối sổ chi phí AI với đề xuất được nhận.
 - Độ trễ p50/p90 → AC ghi thời điểm bấm và thời điểm đề xuất hiện.
 - 0 số mới lọt bộ kiểm → AC bộ kiểm số chạy trước khi đề xuất hiện, eval có chiều đỏ.
-- Chạy bóng không hiện gì cho người → AC nấc ba trạng thái.
+- Chế độ ẩn không hiện gì cho người → AC nấc ba trạng thái.
 
 ## Out of scope từ khám phá
 

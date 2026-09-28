@@ -652,14 +652,16 @@ _Avoid_: hoá đơn AI, billing, nhật ký chi phí
 Vì sao: «hoá đơn» là chứng từ của nhà cung cấp, còn sổ là số của chính CRM để đối soát
 với hoá đơn đó.
 
-**Chạy bóng**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
+**Chế độ ẩn**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
 việc trên OKR thật — góp ý khi một Mục tiêu được lưu, tóm tắt sau ngày cập nhật — ghi sổ
 chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả ở Cài đặt ›
 Chương trình OKR. Tiền của nấc này là tiền thật, tính vào trần tháng. Quản trị chọn đơn vị
-chạy bóng cho từng việc; đơn vị đã bật thì không chạy bóng. Chốt 2026-09-28.
-_Avoid_: thử nghiệm, beta, shadow mode, chế độ ẩn
-Vì sao: «thử nghiệm» và «beta» gợi người dùng đang được thử cho xem; ở nấc này người dùng
-không thấy gì. «Chế độ ẩn» nghe như giấu người dùng một thứ họ đang dùng.
+ở chế độ ẩn cho từng việc; đơn vị đã bật thì không ở chế độ ẩn. Chốt 2026-09-28 (Manh
+Phan).
+_Avoid_: chạy bóng, shadow mode, thử nghiệm, beta
+Vì sao: «chạy bóng» là chữ dịch thẳng của «shadow mode», người không đọc tài liệu kỹ thuật
+khó đoán nghĩa; «thử nghiệm» và «beta» gợi người dùng đang được thử cho xem, trong khi ở
+nấc này người dùng không thấy gì.
 
 **Kho tài liệu**: nơi giữ quy định, chính sách, quy trình và biểu mẫu nội bộ của
 OneHub. Người viết và đọc trang; máy chỉ soạn bản đề xuất; trợ lý AI trả lời chỉ

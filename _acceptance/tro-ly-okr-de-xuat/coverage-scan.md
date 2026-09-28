@@ -14,7 +14,7 @@ risk-premortem và trục nấc công tắc.
 - Chân ngành: góp ý AI đứng cạnh bản gốc, người chọn «Update» hay «Dismiss» từng gợi ý
   [NGÀNH: Tability AI feedback F02 — docs/reports/2026-09-26-tro-ly-okr/01-tability-chinh-chu.md];
   lập kế hoạch có AI gợi ý mà người chốt [NGÀNH: Cascade AI-assisted planning —
-  03-doi-thu-okr.md]; chạy bóng trước khi bật (mô hình mới chạy song song trên lưu lượng
+  03-doi-thu-okr.md]; chế độ ẩn trước khi bật (mô hình mới chạy song song trên lưu lượng
   thật, kết quả không tới người dùng) [NGÀNH: shadow deployment — thực hành phát hành mô
   hình ML, cùng khuôn «dark launch»].
 
@@ -31,12 +31,12 @@ risk-premortem và trục nấc công tắc.
   [thước CE: preset entity-feature «Lifecycle»; bảng «Luật của sổ đề xuất» §4.9]
 - **Trục C — người × nấc:** C1 người sửa được Mục tiêu (chủ, trưởng đơn vị, quản trị ở cấp
   OneHub) · C2 người phụ trách KR · C3 người không sửa được và vai «chỉ OKR» · C4 quản
-  trị chương trình ở nấc chạy bóng · C5 máy (dispatch, dọn việc treo, kiểm sẵn sàng) —
-  mỗi người đứng ở ba nấc tắt · chạy bóng · bật
+  trị chương trình ở chế độ ẩn · C5 máy (dispatch, dọn việc treo, kiểm sẵn sàng) —
+  mỗi người đứng ở ba nấc tắt · chế độ ẩn · bật
   [thước CE: §4.7 bảng «Phạm vi và principal»; AC «một phép đo cho mỗi đường vào» của
   `vai-chi-okr`]
 - **Trục D — kiểu hỏng:** sai (số mới, id ngoài gói, từ cấm, NG) · chết (việc bị đóng giữa
-  chừng, kiểm khoá cũ chặn, quá 30 giây) · rò (lộ ở nấc bóng, người không quyền gọi được) ·
+  chừng, kiểm khoá cũ chặn, quá 30 giây) · rò (lộ ở chế độ ẩn, người không quyền gọi được) ·
   vượt tiền (trần người/ngày, trần tháng, chạy lại khi đầu vào không đổi) · trùng (mời lại
   dòng đã bác, quyết hai lần)
   [thước CE: preset risk-premortem; «Ngoài-32, Ngoài-33, Ngoài-36» của Cổng Bằng chứng 9a]
@@ -45,14 +45,14 @@ risk-premortem và trục nấc công tắc.
 
 | | sai | chết | rò | vượt tiền | trùng |
 |---|---|---|---|---|---|
-| A1–A3 viết lại | **1** số mới, từ cấm, NG | **6** đóng giữa chừng · **7** khoá cũ | **8** bóng lộ ra người · **9** người không sửa được | **10** trần người/ngày, dùng lại theo băm | **4** mời lại đã bác · **5** quyết hai lần |
+| A1–A3 viết lại | **1** số mới, từ cấm, NG | **6** đóng giữa chừng · **7** khoá cũ | **8** ẩn lộ ra người · **9** người không sửa được | **10** trần người/ngày, dùng lại theo băm | **4** mời lại đã bác · **5** quyết hai lần |
 | A4 câu hỏi | **2** hỏi trùng luật lượt 7 | như 6 | như 8 | như 10 | **4** hỏi lại mã đã bỏ qua |
 | A5 Căn chỉnh | **3** đích ngoài tập máy chủ lọc | như 6 | — | — | **4** mời lại đích đã bác |
 | A6 xu hướng | **11** số sai, hiện ở KR không có dữ liệu | — | — | — | — |
 | B2 hiện | **12** đủ trạng thái rỗng, lỗi, tắt, hết trần | **12** quá 30 giây | — | — | — |
 | B3 quyết | **13** ghi qua đường có quyền, một hàng vết | — | **9** | — | **5** |
 | B5 đo | **14** tỷ lệ, độ trễ, chi phí đọc được | — | — | **15** chi phí mỗi đề xuất nhận | — |
-| C4 chạy bóng | **16** máy chạy khi sửa, quản trị chấm | — | **8** | **10** bóng tính vào trần tháng | — |
+| C4 chế độ ẩn | **16** máy chạy khi sửa, quản trị chấm | — | **8** | **10** lượt ẩn tính vào trần tháng | — |
 | Eval | **17** ca mẫu M, judge ZDR | — | **18** judge qua nhà cung cấp không ZDR | — | — |
 
 ## Core → ứng viên AC
@@ -65,10 +65,10 @@ risk-premortem và trục nấc công tắc.
    «theo đề xuất của Trợ lý OKR» (B3) → AC-6, AC-7.
 6. Việc không bị đóng giữa chừng khi phiên con chạy lâu (× chết, Ngoài-32) → AC-10.
 7. Kiểm khoá cũ không chặn sau khi khoá đã cắm (× chết, Ngoài-33) → AC-11.
-8. Nấc bóng: người dùng không thấy gì ở mọi đường vào; quản trị thấy (× rò) → AC-12.
+8. Chế độ ẩn: người dùng không thấy gì ở mọi đường vào; quản trị thấy (× rò) → AC-12.
 9. Nút chỉ với người sửa được; người khác và vai «chỉ OKR» bị từ chối ở tRPC và REST
    (C3 × rò) → AC-1, AC-9.
-10. Trần người/ngày, dùng lại theo băm, bóng tính vào trần tháng (× vượt tiền) → AC-3, AC-12.
+10. Trần người/ngày, dùng lại theo băm, ẩn tính vào trần tháng (× vượt tiền) → AC-3, AC-12.
 11. Dòng xu hướng tính bằng mã, chỉ hiện ở KR có dữ liệu (A6) → AC-8.
 12. Đủ trạng thái của hộp thoại (B2) → AC-2.
 13. Thước nhận · sửa · bác · hoàn tác, độ trễ, chi phí (B5) → AC-13.
@@ -96,5 +96,5 @@ risk-premortem và trục nấc công tắc.
 - ZDR cho mọi lời gọi model, kể cả judge của eval.
 - Trạng thái đang tải, rỗng, lỗi trên mọi bề mặt mới; nhãn mang đủ tên «Trợ lý OKR».
 - Chữ người nhập không dịch, đánh dấu `translate="no"`.
-- Mọi hằng tinh chỉnh được (trần ngày, nhịp hỏi lại, trần chờ, nhịp chạy bóng) ở một tệp
+- Mọi hằng tinh chỉnh được (trần ngày, nhịp hỏi lại, trần chờ, nhịp chế độ ẩn) ở một tệp
   cấu hình theo khu.

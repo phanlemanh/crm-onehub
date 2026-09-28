@@ -146,7 +146,7 @@ Hai hướng cho chỗ đặt đề xuất — tên ổn định, lời khuyên 
   cột hẹp → nút chuyển xuống dưới nội dung trong cùng `Item`.
 - Nhãn loại dòng bằng `Badge` cạnh tên ô xếp chồng khó đọc → một dòng mô tả «Viết lại ·
   Tên Mục tiêu».
-- Thẻ số đo: ô số lớn làm «31% · 12% · 40%» gãy ba dòng → bảng hai cột Bật · Bóng, mỗi số
+- Thẻ số đo: ô số lớn làm «31% · 12% · 40%» gãy ba dòng → bảng hai cột Bật · Ẩn, mỗi số
   một hàng.
 - Dòng xu hướng dưới ô Đích mang biểu tượng câu hỏi của luật lượt 7, dù nó không phải câu
   hỏi → `FieldDescription` thường.
