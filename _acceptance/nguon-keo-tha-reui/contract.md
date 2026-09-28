@@ -5,7 +5,7 @@ slug: nguon-keo-tha-reui
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-28-nguon-keo-tha-reui-design.md
 approved_by:
 approved_at:
@@ -71,3 +71,11 @@ bàn phím, thả là ba đường vào tệp], `input type=file` của HTML.
 - Móc được gọi không có `accept`/`maxSize` để khỏi sinh câu lỗi tiếng Anh; phân loại vẫn là `lyDoTuChoiTep`.
 - E1 kiểm «nhánh không chạm» bằng diff từ điểm rẽ với `origin/onehub`; sau khi gộp vào `onehub` điểm rẽ trùng HEAD nên kiểm đó xanh rỗng — lời hứa là của vòng này.
 - Móc tạo URL xem trước (`URL.createObjectURL`) cho mọi tệp thêm vào và chỉ thu hồi URL của ảnh; mỗi tệp Word/PDF chọn trong hộp giữ một URL tới khi đóng trang. Giữ như bản ReUI, không vá móc.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-28 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1 (sổ d-20260928T120837Z-6 tới -12):
+
+- Ngoài-1: gợi ý «Kéo tệp vào đây, hoặc chọn tệp» lặp chữ «chọn tệp» của nút «Chọn tệp» ngay cạnh; câu chữ của hộp nằm ngoài phạm vi vòng này.
+- Ngoài-2: móc `use-file-upload` giữ một URL xem trước cho mỗi tệp Word/PDF đã chọn tới khi đóng trang (chỉ URL ảnh được thu hồi).
+- Ngoài-3: ở chế độ nhiều tệp, móc `use-file-upload` gặp một tệp trùng thì bỏ cả loạt mà không báo lỗi; `NguonKeoTha` gọi móc ở chế độ một tệp nên đường này chưa chạy trong sản phẩm. Nơi đầu tiên bật chế độ nhiều tệp phải sửa móc trước.
+- Ngoài-4 và Ngoài-7: ca «chọn lại đúng tệp vừa bị từ chối» (`nguon-keo-tha.dom.tsx`) tự dựng sự kiện `change`, nên không bắt được lỗi quên đặt lại `value` của ô tệp.
+- Ngoài-5 và Ngoài-6: E2 (`rang/cai-sach.mjs --phan moc`) chỉ soi bốn bộ bắt trên vùng và dòng import `DragEvent`, không quét `onDrag*`/`onDrop` trên mọi thẻ; chiều đỏ của nó mới phá nhánh `onDrop`.
