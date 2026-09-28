@@ -8,7 +8,7 @@ evals:
     cmd: config:executors.test.tdx_quyen_nut
     expected: "exit 0; bài API trên kho _test có bộ OKR mẫu nạp bằng napBoOkrMau (hàm nạp thật của M, không gieo tay) và cấu hình lưu qua okr.setProgram. MA TRẬN TOÀN PHẦN viết trước trong bài: người {quản trị, trưởng phòng ban của Mục tiêu, phụ trách KR không sửa được Mục tiêu, thành viên không sửa được, vai okr} × đích {Mục tiêu OneHub, Mục tiêu phòng ban, KR của phòng ban} × nấc đơn vị {tat, an, bat} → mỗi ô một kỳ vọng {sanSang bat | lyDo có tên | 403}; gọi bốn thủ tục okr.troLySanSang, okr.troLyDeXuat, okr.troLyDanhSach, okr.troLyQuyet (nhan, sua, bac, bo-qua trên dòng do nop_de_xuat thật ghi) qua tRPC VÀ qua REST (restMeta của router) cho mọi ô; số khẳng định = số ô × số thủ tục (quyết tính bốn cách) × 2 đường (in ra; lệch là đỏ). Ô có nghĩa bat chỉ khi người sửa được đúng thứ đang hỏi và nấc bat. troLyDanhSach: đối chứng dương — người phụ trách KR nhận đúng tập id dòng của KR đó (so tập, không đếm); thành viên không sửa được → 403. troLyQuyet bac/bo-qua của người không sửa được đích → 403 và okrDeXuat vẫn 'cho'. Chiều đỏ trên cùng bảng: (a) bản sao bỏ assertSuaKr ở nhánh keyResultId → ô 'phụ trách KR khác × KR' ra bat, thông điệp ghim 'o lech: <nguoi> x <dich> x <nac> x <thu tuc>'; (b) bản sao bỏ kiểm quyền ở nhánh bac → 'bac khong quyen: <nguoi>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr-access.service.ts, packages/db/src/okr-tro-ly.ts, apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr-access.service.ts, packages/db/src/okr-tro-ly.ts, apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E2
     criterion: AC-1
@@ -54,7 +54,7 @@ evals:
     cmd: config:executors.test.tdx_dung_lai_tran
     expected: "exit 0; bài API trên bộ OKR mẫu: (a) troLyDeXuat lần đầu → db.agentTask đếm okr-de-xuat tăng đúng 1, payload parse bằng okrTroLyViec có nac 'bat' và nguoiYeuCau là người gọi; (b) bấm lại khi hàng trước đã đóng 'da-nop' với 0 dòng → cùng taskId, số hàng không đổi; (c) okr.updateObjective đổi tên rồi bấm → hàng mới; (d) với TRO_LY_OKR_TRAN.troLyNgayMoiNguoi rút từ cấu hình (không chép số): gọi đến lượt thứ trần+1 với đầu vào mỗi lần khác nhau → lượt đó trả {bat:false, lyDo:'het-tran-ngay'}, số hàng không đổi; lượt bấm lại đầu vào cũ vẫn trả taskId cũ; sang ngày giờ Việt Nam mới (đồng hồ giả) → lại được; (e) sổ gieo bằng ghiChiPhi tới đúng trần tháng → het-tran-thang. Chiều đỏ: bản sao đếm cả lượt dùng lại vào trần ngày → ca (d) trả het-tran-ngay ở lượt dùng lại, thông điệp ghim 'dung lai bi tinh vao tran ngay'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, packages/db/src/okr-tro-ly.ts, packages/db/src/okr-tro-ly-danh-muc.ts, apps/api/test/tro-ly-okr-de-xuat-tran.spec.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, packages/db/src/okr-tro-ly.ts, packages/db/src/okr-tro-ly-danh-muc.ts, apps/api/test/tro-ly-okr-de-xuat-tran.spec.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E6
     criterion: AC-4
@@ -89,7 +89,7 @@ evals:
     cmd: config:executors.test.tdx_quyet
     expected: "exit 0; bài API trên bộ OKR mẫu, bốn dòng đi qua nop_de_xuat thật: (1) Nhận viết lại title → okr.objective đọc lại title mới; db.okrTrail có đúng 1 hàng mới cho Mục tiêu, note 'tro-ly-okr:<id>', actorUserId là người bấm; okrDeXuat 'nhan', giaTriCuoi bằng sau, nguoiQuyet, quyetLuc. (2) Sửa rồi nhận kr.title với giá trị khác → 'sua', giaTriCuoi là giá trị người gõ. (3) Nhận Căn chỉnh → okr.cayCanChinh có liên kết, 1 hàng vết. (4) Bỏ qua câu hỏi → 'bo-qua', 0 hàng vết. (5) Hai troLyQuyet đồng thời cùng dòng (Promise.all) → đúng một thành công, lần kia lỗi có tên, tổng hàng vết 1. (6) Chu kỳ ở pha khoá sửa → Nhận lỗi có lý do của OkrService, okrDeXuat vẫn 'cho', 0 hàng vết. Chiều đỏ: bản sao cập nhật okrDeXuat không điều kiện trangThai='cho' → (5) ra hai thành công, thông điệp ghim 'quyet hai lan'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, apps/api/test/tro-ly-okr-quyet.spec.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, apps/api/test/tro-ly-okr-quyet.spec.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E10
     criterion: AC-6
@@ -157,7 +157,7 @@ evals:
     cmd: config:executors.test.tdx_che_do_an
     expected: "exit 0; bài API trên bộ OKR mẫu, đơn vị ở chế độ ẩn (cấu hình qua setProgram): okr.updateObjective đổi tên → db.agentTask có đúng 1 hàng okr-de-xuat payload nac 'an'; lưu lại trong 30 phút (đồng hồ giả; số phút rút từ cấu hình) → không thêm; lưu khi đã đủ trần lượt ẩn ngày → không thêm; lưu chỉ đổi người tham gia (không đổi chữ) → không thêm. Dòng do nop_de_xuat thật ghi cho hàng ẩn có nac 'an'; mọi người dùng gọi troLyDanhSach qua tRPC và REST không thấy dòng nào; quản trị okr.troLyAn thấy lượt đó và dòng của nó; thành viên gọi troLyAn → 403; ghiChiPhi của phiên con lượt ẩn làm troLySanSang tính vào trần tháng. Chiều đỏ: bản sao troLyDanhSach bỏ lọc nac → người dùng thấy dòng chế độ ẩn, thông điệp ghim 'an lo ra nguoi dung'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, packages/db/src/okr-tro-ly.ts, "apps/agent/agent/subagents/tro_ly_okr/**", apps/api/test/tro-ly-okr-che-do-an.spec.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, packages/db/src/okr-tro-ly.ts, "apps/agent/agent/subagents/tro_ly_okr/**", apps/api/test/tro-ly-okr-che-do-an.spec.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E18
     criterion: AC-11
@@ -184,7 +184,7 @@ evals:
     cmd: config:executors.test.tdx_so_do
     expected: "exit 0; kho kiểm dựng một tháng bằng bên ghi thật (xepViecTroLy, nop_de_xuat, troLyQuyet, okr.updateObjective cho hoàn tác, ghiChiPhi) ở cả hai nấc; okr.troLySoDo trả mỗi số; bài chạy các câu rang/ty-le-quyet.sql, hoan-tac.sql, do-tre.sql, bi-loai.sql, chi-phi-moi-nhan.sql (đường suy từ vị trí bài, không hằng gốc) trên cùng kho và so từng số bằng nhau, tách nấc; số kỳ vọng viết tay trong bài cho kho dựng sẵn (vd nhận 3/8 = 37,5%) để phép so không chỉ là hai bên cùng sai. Kho dựng có một dòng het-han đã hiện (hienLuc có, do troLyDanhSach thật ghi) và một dòng het-han chưa hiện — chỉ dòng thứ nhất vào mẫu số; sổ chi phí có tiền của lượt ẩn khác 0 — chi phí mỗi đề xuất nhận của cột Bật không đổi khi thêm tiền chế độ ẩn, cột Ẩn là tiền chế độ ẩn chia số lượt ẩn. Chiều đỏ: bản sao troLySoDo tính nhận trên tổng gồm cả bi-loai → 'so do lech: ty-le-nhan'; câu SQL bản sao đếm dòng chưa hiện → 'mau so tinh dong chua hien'; câu SQL bản sao cộng tiền chế độ ẩn vào tử số → 'chi phi an vao ty so'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/okr/tro-ly.service.ts, "_acceptance/tro-ly-okr-de-xuat/rang/*.sql", apps/api/test/tro-ly-okr-so-do.spec.ts, packages/db/src/okr-de-xuat.ts]
+    paths: [apps/api/src/okr/tro-ly.service.ts, "_acceptance/tro-ly-okr-de-xuat/rang/*.sql", apps/api/test/tro-ly-okr-so-do.spec.ts, packages/db/src/okr-de-xuat.ts, apps/api/src/okr/tro-ly-so-do.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E21
     criterion: AC-13
