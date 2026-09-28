@@ -42,7 +42,7 @@ const DOT_BIEN = [
 		tu: "canDuoiSua(a, b) > tran",
 		thanh: "false",
 		ca: "myers-vo-ich: khac het",
-		ghim: "vong Myers muc khoi van chay",
+		ghim: "myers-vo-ich: vong Myers muc khoi van chay",
 	},
 ];
 
@@ -91,7 +91,10 @@ try {
 		writeFileSync(duong, lanh.replace(d.tu, d.thanh));
 		const r = chayCa(cay, d.ca);
 		writeFileSync(duong, lanh);
-		if (r.ma !== 0 && r.ra.includes(d.ghim))
+		if (
+			r.ma !== 0 &&
+			r.ra.split("\n").some((dong) => dong.startsWith(`error: ${d.ghim}`))
+		)
 			console.log(`dot bien ${d.ten}: bat`);
 		else {
 			console.error(`dot bien ${d.ten}: lot (ma ${r.ma}, thieu "${d.ghim}")`);
