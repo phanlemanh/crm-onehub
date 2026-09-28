@@ -172,10 +172,18 @@ describe("hai-bien", () => {
 	});
 });
 
+type YeuCauKy = {
+	pathname?: string;
+	operations?: string[];
+	validUntil?: number;
+	allowedContentTypes?: string[];
+	maximumSizeInBytes?: number;
+};
+
 describe("token-gui-di", () => {
 	it("token-gui-di: mọi yêu cầu của kho nguồn mang khoá riêng, không mang khoá logo", async () => {
 		const ghi: string[] = [];
-		const b64 = (o: object) =>
+		const b64 = (o: YeuCauKy & { storeId: string }) =>
 			Buffer.from(JSON.stringify(o)).toString("base64url");
 		const may = Bun.serve({
 			port: 0,
@@ -185,7 +193,7 @@ describe("token-gui-di", () => {
 					`${req.method} ${u.pathname} ${req.headers.get("authorization") ?? ""}`,
 				);
 				if (u.pathname === "/signed-token") {
-					const vao = (await req.json()) as object;
+					const vao = (await req.json()) as YeuCauKy;
 					return Response.json({
 						clientSigningToken: "khoa-ky-gia",
 						delegationToken: `${b64({ storeId: "store_knrgia", ...vao })}.gia`,
