@@ -5,7 +5,7 @@ slug: may-soan-de-xuat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-28
