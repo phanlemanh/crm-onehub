@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
-import { cn, laEscTuOSuaDeXuat } from "@crm/ui/lib/utils";
+import { cn, laEscTuOSuaDeXuat, laTuThongBao } from "@crm/ui/lib/utils";
 import { XIcon } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type * as React from "react";
@@ -132,7 +132,7 @@ function DialogContent({
 				}}
 				onInteractOutside={(e) => {
 					onInteractOutside?.(e);
-					if (g?.coThayDoi) e.preventDefault();
+					if (g?.coThayDoi || laTuThongBao(e)) e.preventDefault();
 				}}
 				onEscapeKeyDown={(e) => {
 					onEscapeKeyDown?.(e);
