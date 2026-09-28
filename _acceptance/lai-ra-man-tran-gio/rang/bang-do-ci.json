@@ -1,0 +1,571 @@
+{
+	"nguon": "gh run view <run_id> --repo phanlemanh/crm-onehub --attempt <attempt> --log, workflow ci.yml, 30 run gan nhat tinh den 2026-09-28",
+	"do_tai_cho_mac_mini_ms": {
+		"lai_tung": 1135,
+		"mo_tung": 30,
+		"chuoi_da_va": 460
+	},
+	"luot": [
+		{
+			"run_id": 36378005030,
+			"attempt": 1,
+			"nhanh": "feat/phien-chet-ve-dang-nhap",
+			"lai_tung": {
+				"ket_qua": "fail",
+				"ms": 5004.06
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 216
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1900.02
+			}
+		},
+		{
+			"run_id": 36378005030,
+			"attempt": 2,
+			"nhanh": "feat/phien-chet-ve-dang-nhap",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 3614
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 90
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1328
+			}
+		},
+		{
+			"run_id": 36372416119,
+			"attempt": 1,
+			"nhanh": "fix/vet-khuon-okr-tat-dinh",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4883.06
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 140
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1884.02
+			}
+		},
+		{
+			"run_id": 36371404477,
+			"attempt": 1,
+			"nhanh": "docs/okr-dung-het-bang-du-lieu-mau",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4430.03
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 101
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1561.01
+			}
+		},
+		{
+			"run_id": 36371259813,
+			"attempt": 1,
+			"nhanh": "feat/phien-chet-ve-dang-nhap",
+			"lai_tung": {
+				"ket_qua": "fail",
+				"ms": 7469.2
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 553.01
+			},
+			"chuoi_da_va": {
+				"ket_qua": "fail",
+				"ms": 203.01
+			}
+		},
+		{
+			"run_id": 36371259813,
+			"attempt": 2,
+			"nhanh": "feat/phien-chet-ve-dang-nhap",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4956.99
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 110
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1713
+			}
+		},
+		{
+			"run_id": 36369826997,
+			"attempt": 1,
+			"nhanh": "docs/okr-dung-het-bang-du-lieu-mau",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4849.04
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 132
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1779.01
+			}
+		},
+		{
+			"run_id": 36369364201,
+			"attempt": 1,
+			"nhanh": "feat/tro-ly-okr-nen",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4750.09
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 122
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1872.04
+			}
+		},
+		{
+			"run_id": 36368958569,
+			"attempt": 1,
+			"nhanh": "feat/tro-ly-okr-nen",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 3559.07
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 94
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1347.03
+			}
+		},
+		{
+			"run_id": 36365903944,
+			"attempt": 1,
+			"nhanh": "docs/kho-tai-lieu-luot-1-len-onehub",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 2812.06
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 68
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1042.02
+			}
+		},
+		{
+			"run_id": 36365903944,
+			"attempt": 2,
+			"nhanh": "docs/kho-tai-lieu-luot-1-len-onehub",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4910.97
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 155
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1908
+			}
+		},
+		{
+			"run_id": 36358001739,
+			"attempt": 1,
+			"nhanh": "proto/kho-tai-lieu",
+			"lai_tung": {
+				"ket_qua": "fail",
+				"ms": 5000.08
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 287
+			},
+			"chuoi_da_va": {
+				"ket_qua": "fail",
+				"ms": 295
+			}
+		},
+		{
+			"run_id": 36358001739,
+			"attempt": 2,
+			"nhanh": "proto/kho-tai-lieu",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 3128.05
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 85
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1426.02
+			}
+		},
+		{
+			"run_id": 36356634041,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1824",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4995.92
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 155
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 2088.97
+			}
+		},
+		{
+			"run_id": 36355135990,
+			"attempt": 1,
+			"nhanh": "feat/khep-ky-okr",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4891
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 127
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1773
+			}
+		},
+		{
+			"run_id": 36329490089,
+			"attempt": 1,
+			"nhanh": "feat/bo-dung-khong-ket",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4547.99
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 125
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1783
+			}
+		},
+		{
+			"run_id": 36328000375,
+			"attempt": 1,
+			"nhanh": "feat/bo-dung-khong-ket",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4643
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 137
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1992
+			}
+		},
+		{
+			"run_id": 36324292697,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1824",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4567.01
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 140
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1802
+			}
+		},
+		{
+			"run_id": 36322954980,
+			"attempt": 1,
+			"nhanh": "chore/kit-2-18-5-nhan-canh-gay",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4903.01
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 134
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1810
+			}
+		},
+		{
+			"run_id": 36321090385,
+			"attempt": 1,
+			"nhanh": "feat/no-sau-luot-4-okr",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4798.99
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 139
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1838.99
+			}
+		},
+		{
+			"run_id": 36320738561,
+			"attempt": 1,
+			"nhanh": "feat/no-sau-luot-4-okr",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4534.99
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 125
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1732
+			}
+		},
+		{
+			"run_id": 36316231974,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1824",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 3922.97
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 108
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1586.99
+			}
+		},
+		{
+			"run_id": 36308021311,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1416",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4525.04
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 130
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1768.02
+			}
+		},
+		{
+			"run_id": 36305800155,
+			"attempt": 1,
+			"nhanh": "feat/tac-nhan-model-rieng",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4720.04
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 131
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1854.02
+			}
+		},
+		{
+			"run_id": 36302880304,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1416",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4731.03
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 137
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1885.01
+			}
+		},
+		{
+			"run_id": 36301166336,
+			"attempt": 1,
+			"nhanh": "feat/hop-thoai-giu-cho-dang-nhap",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4565.02
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 133
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1959.01
+			}
+		},
+		{
+			"run_id": 36300814618,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1253",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4661.98
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 154
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1832.99
+			}
+		},
+		{
+			"run_id": 36300332249,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1253",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 3034.03
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 68
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1189.01
+			}
+		},
+		{
+			"run_id": 36299586021,
+			"attempt": 1,
+			"nhanh": "feat/ha-tran-thang-hoi-zalo",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4841.05
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 132
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1996.02
+			}
+		},
+		{
+			"run_id": 36298772533,
+			"attempt": 1,
+			"nhanh": "docs/lo-trinh-okr-ban-chup-1253",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 2916.04
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 69
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1215.02
+			}
+		},
+		{
+			"run_id": 36298292777,
+			"attempt": 1,
+			"nhanh": "fix/ro-slack-tac-nhan",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4681.06
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 113
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1772.02
+			}
+		},
+		{
+			"run_id": 36298038313,
+			"attempt": 1,
+			"nhanh": "fix/ro-slack-tac-nhan",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 3549.95
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 87
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1361.98
+			}
+		},
+		{
+			"run_id": 36293057574,
+			"attempt": 1,
+			"nhanh": "docs/trang-lo-trinh-okr",
+			"lai_tung": {
+				"ket_qua": "pass",
+				"ms": 4501.87
+			},
+			"mo_tung": {
+				"ket_qua": "pass",
+				"ms": 126
+			},
+			"chuoi_da_va": {
+				"ket_qua": "pass",
+				"ms": 1812.95
+			}
+		}
+	]
+}
