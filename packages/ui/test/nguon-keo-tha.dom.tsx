@@ -63,7 +63,7 @@ function tapId(e: Element): string[] {
 		.sort();
 }
 
-function demBam(o: HTMLInputElement): { so: number } {
+function demBam(o: HTMLInputElement) {
 	const dem = { so: 0 };
 	o.addEventListener("click", (e) => {
 		dem.so += 1;
