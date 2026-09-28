@@ -52,6 +52,17 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "may-soan-de-xuat",
+		ten: "Kho tài liệu lượt 2 — tải nguồn lên, duyệt bản máy soạn",
+		states: [
+			{ id: "ST-tai-nguon", nhan: "Tải nguồn lên" },
+			{
+				id: "ST-duyet-ban-may-soan",
+				nhan: "Duyệt bản máy soạn: nguồn trước, đối chiếu từng số",
+			},
+		],
+	},
+	{
 		slug: "doi-ten-onehub-center",
 		ten: "OneHub Center — cột trái đăng nhập hướng A",
 		states: [

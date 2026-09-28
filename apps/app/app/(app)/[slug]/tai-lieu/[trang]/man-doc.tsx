@@ -32,6 +32,7 @@ import {
 	ngayTaiLieu,
 } from "@/lib/tai-lieu-man";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { type NguonCuaTrang, NguonTrang } from "./nguon-trang";
 
 export type TrangDoc = {
 	slug: string;
@@ -44,6 +45,7 @@ export type TrangDoc = {
 	choLanDau: boolean;
 	soBanCho: number;
 	deXuatChoId: string | null;
+	nguon: NguonCuaTrang | null;
 };
 
 export function ManDoc({ trang }: { trang: TrangDoc }) {
@@ -156,6 +158,7 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 							) : null}
 							<p className="text-muted-foreground text-xs">{d.chuTrangMoTa}</p>
 						</section>
+						{trang.nguon ? <NguonTrang nguon={trang.nguon} /> : null}
 					</aside>
 				</div>
 			</PageShellContent>

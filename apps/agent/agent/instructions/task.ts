@@ -33,6 +33,13 @@ export default defineDynamic({
 				return defineInstructions({ markdown: CHI_DAN_ZALO });
 			}
 
+			if (purpose === "may-soan") {
+				return defineInstructions({
+					markdown:
+						"This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.",
+				});
+			}
+
 			if (purpose === "team-agent") {
 				return defineInstructions({
 					markdown: `This is one background run of a deployed team agent. Call agent_runner exactly once and pass the run id from your user message. Do not call research tools or perform work yourself. Relay the specialist's structured factual completion summary. Never claim an external action that the specialist did not log.`,

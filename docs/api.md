@@ -738,6 +738,43 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   writes one `chuyen-viec` `OkrTrail` row per KR and objective moved;
   `transferPreview` returns the same `{kr, mucTieu}` counts without writing anything.
 
+## Kho tài liệu: nguồn
+
+`apps/api/src/tai-lieu/tai-lieu-nguon.*` owns the `taiLieuNguon.*` router: `trangThai`,
+`xinCho`, `nhan`, `list`, `get`, `taiVe`, `soanLai`. It carries `PhamViChungMiddleware`.
+
+- **The browser uploads, the API only signs and receives.** `xinCho` returns a signed PUT
+  URL on a private Vercel Blob store (`packages/db/src/blob-nguon.ts`); the file never
+  passes through Nest. `nhan` reads the stored bytes back, recognises the kind from magic
+  bytes (`kho-nguon.ts`), computes `sha256` itself, and writes the `TaiLieuNguon` row and one
+  `AgentTask` of kind `soan-tu-nguon` in one transaction. It never parses the document:
+  reading text, deciding what the page says and drafting belong to the agent.
+- **`nhan` only accepts a pathname issued to this caller.** `xinCho` returns a `phieu`: an HMAC over
+  user, pathname and expiry (`phieu-nguon.ts`, key derived from `BETTER_AUTH_SECRET`, one hour).
+  `nhan` checks it, and refuses a pathname that already belongs to a `TaiLieuNguon`, before it reads
+  or deletes anything — knowing a source's pathname is not enough to delete its file (AC-16).
+  The destination is validated first; then one transaction takes an advisory lock on the pathname,
+  re-checks, reads the file and writes the row, using only `tx` — never a second pooled connection,
+  which is what hung the API under ten concurrent uploads. Only a known rejection deletes the file.
+- **A rejected or duplicate upload deletes its blob.** Same bytes as an existing source
+  answer `{ trung: true, nguonId }` of the old row; the unique index on `sha256` catches
+  the race the pre-check misses.
+- **No `BLOB_READ_WRITE_TOKEN` switches the area off, never throws.** `trangThai` answers
+  `{ bat: false }`, the screen locks «Tải nguồn lên», and `xinCho`, `nhan`, `taiVe` answer
+  `PRECONDITION_FAILED` with `NGUON.thongDiep.tat`. `DomainErrorMiddleware` maps 412 to
+  `PRECONDITION_FAILED`.
+- **Who sees a source is one function** (`quyen.ts`): the uploader, the target page's
+  owner, `owner` and `admin` always; anyone else once a proposal from it has been approved
+  into a version — any version, including one since replaced.
+  Everyone else gets `NOT_FOUND`, identical to a missing id. `taiVe` signs a GET for at
+  most five minutes.
+- **Approving a machine draft needs the numbers checked.** `taiLieu.approve` on a proposal
+  with `nguonId` recomputes `soMoi(noiDung, banGoc)` and refuses when `daDoiChieu` is
+  smaller. `taiLieu.propose` with `tuDeXuatId` copies `nguonId` and `trichDoan` from the
+  machine draft, so an edited draft still traces back to its source. Every proposal, from
+  a person or the machine, is written by `taoDeXuatTaiLieu` in
+  `packages/db/src/tai-lieu-de-xuat.ts`.
+
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may
