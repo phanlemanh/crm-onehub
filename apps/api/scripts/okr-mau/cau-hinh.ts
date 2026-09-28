@@ -17,6 +17,12 @@ export const OKR_MAU = {
 	lenh: "bun run okr:mau",
 } as const;
 
+export function idMau(loai: string, ma: string): string {
+	return `${OKR_MAU.tienTo}${loai}-${ma}`;
+}
+
+export const ngayDb = (ngay: string): Date => new Date(`${ngay}T00:00:00.000Z`);
+
 export type MaThoat = (typeof OKR_MAU.ma)[keyof typeof OKR_MAU.ma];
 
 export class LoiBoMau extends Error {
