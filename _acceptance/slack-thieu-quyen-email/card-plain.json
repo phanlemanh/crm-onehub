@@ -1,46 +1,18 @@
 {
   "feature_plain": "Khi kết nối Slack không cho app đọc email, Tác nhân không còn đăng dữ liệu đối tác vào kênh hay tin riêng có người mà nó không nhận ra được — nó dừng và nói phải kết nối lại Slack.",
-  "will_do": [
-    {"id": "AC-9", "p": "Sẽ chứng lỗ là thật: bộ kiểm của lượt này chạy trên mã hôm nay thì thấy tin đi ra, chạy trên bản vá thì xanh."},
-    {"id": "AC-10", "p": "Sẽ giữ nguyên mọi tệp của hãng — cả lượt chỉ sửa tệp của bản rẽ, nên kéo bản mới của hãng về không đụng chỗ này."}
+  "decisions": [
+    {"id": "E11", "q": "Tài liệu chỗ rẽ và mô tả PR nói đúng luật mà không lộ cách khai thác chứ?", "why": "Ba người chấm độc lập cùng đề xuất Đạt: cả hai chỉ tả hành vi sau bản sửa, không nêu tên quyền Slack hay cách lỗ xảy ra, và đều nói việc báo hãng không qua kênh công khai."}
   ],
-  "wont_do": [
-    {"id": "AC-1", "p": "Chặn tin vào kênh có người vai «chỉ OKR» chưa khớp Slack khi Slack không cho thấy email — kể cả khi người đó ở trang sau của danh bạ."},
-    {"id": "AC-2", "p": "Chặn tin riêng tới người vai «chỉ OKR» trong cùng hoàn cảnh — không mở cả cuộc trò chuyện."},
-    {"id": "AC-3", "p": "Sẽ KHÔNG chặn nhầm kênh mà mọi người đều đã khớp Slack với vai đầy đủ; người «chỉ OKR» đã khớp vẫn bị chặn như trước."},
-    {"id": "AC-4", "p": "Chặn bằng lời «có người không đọc được dữ liệu đối tác» khi kênh có cả người bị chặn lẫn người không nhận ra — lời đúng hơn thắng."},
-    {"id": "AC-5", "p": "Chặn như nhau với cả ba kiểu Slack trả thiếu email."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG tính bot, tài khoản đã nghỉ, người của tổ chức khác qua Slack Connect, hay người có email ngoài CRM — như bản vá trước."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG nêu tên, email hay mã Slack của ai trong lời từ chối — chỉ số người không nhận ra được và câu «kết nối lại Slack»."},
-    {"id": "AC-8", "p": "Sẽ KHÔNG làm đỏ ca nào của bản vá lối rò Slack trước."},
-    {"id": "OOS-1", "p": "KHÔNG đọc danh sách quyền của kết nối để từ chối sớm — xét từng người đã bắt được ca thiếu quyền."},
-    {"id": "OOS-2", "p": "KHÔNG chặn người của tổ chức khác hay người có email ngoài CRM — giữ phạm vi của bản vá trước."},
-    {"id": "OOS-3", "p": "KHÔNG thêm cảnh báo thiếu quyền trên màn Kết nối."},
-    {"id": "OOS-4", "p": "KHÔNG thử lại khi Slack báo quá tải, không dừng giữa chừng khi lượt bị huỷ, không gộp hai bộ đọc danh bạ — ba mục đã ghi hạn chế ở bản vá trước."},
-    {"id": "OOS-5", "p": "KHÔNG báo lỗ cho hãng — việc của chủ kho, qua kênh bảo mật riêng, khi chủ kho cho phép."}
-  ],
-  "scope_plain": "Lượt này chỉ lấp đúng một lỗ của bản vá trước; mọi thứ khác giữ nguyên.",
-  "coverage_plain": [
-    {"i": 0, "p": "Hai kiểu đích — kênh (AC-1) và tin riêng (AC-2) — mỗi kiểu có ca chặn và ca đối chứng đăng được."},
-    {"i": 1, "p": "Tám kiểu người ở đích, mỗi kiểu có một kết quả rõ: bị chặn, cho qua, không tính, hay không nhận ra (AC-1, AC-3, AC-6)."},
-    {"i": 2, "p": "Ba kiểu Slack trả thiếu email cho cùng một kết quả (AC-5, đếm đủ ba hàng)."},
-    {"i": 3, "p": "Ba tổ hợp trong một kênh: chỉ người đã rõ, có người không nhận ra, có cả hai loại — lời chặn thắng (AC-4)."},
-    {"i": 4, "p": "Đối chiếu tài liệu Slack: danh bạ chỉ có email khi kết nối được cấp quyền đọc email."},
-    {"i": 5, "p": "Giả định cần anh gạch: người không có trong danh bạ là người của tổ chức khác, không thể là thành viên CRM."},
-    {"i": 6, "p": "Giả định cần anh gạch: kết nối đủ quyền thì mọi thành viên thật đều có email, nên kênh thường không bị chặn oan."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Chưa có ca người «chỉ OKR» nằm ở trang thứ hai của danh bạ, nên đọc thiếu trang sẽ lọt tin — đã thêm ca hai trang và đếm số lần đọc."},
-    {"i": 1, "p": "Ca tài khoản đã nghỉ lại mang email, không giống lúc thiếu quyền thật — đã thêm tài khoản đã nghỉ không có email."},
-    {"i": 2, "p": "Ca đếm người không tách được «số người không nhận ra» với «tổng số người» — đã thêm người đã khớp và người ngoài CRM vào kênh, cấm con số tổng."},
-    {"i": 3, "p": "Ba ca chặn chỉ soi đầu câu, không phân biệt được luật mới với lỗi đọc Slack chung — đã ghim thêm số người và câu «kết nối lại Slack»."},
-    {"i": 4, "p": "Phép «không sửa tệp của hãng» có thể sót commit không mang tên việc — đã thêm vế: mọi commit của nhánh phải mang tên việc."}
-  ],
+  "scope_plain": "Năm mục cắt ở Cổng Phạm vi vẫn ngoài bản này, không mục nào bị kéo vào.",
   "decisions_plain": [
     {"id": "d-20260928T041521Z-1", "p": "KHÔNG dựng bản bấm được — lượt không chạm màn nào."},
     {"id": "d-20260928T041521Z-2", "p": "KHÔNG viết đặc tả màn — không có màn mới."},
-    {"id": "d-20260928T041521Z-3", "p": "Xét từng người thay vì đọc quyền của kết nối — một luật bắt cả ca thiếu quyền lẫn người lẻ không có email; đổi lại, kết nối thiếu quyền thì mọi kênh có người chưa khớp đều dừng đăng."},
-    {"id": "d-20260928T041521Z-4", "p": "KHÔNG chặn người của tổ chức khác hay người có email ngoài CRM — kênh chung với đối tác không hỏng; đổi lại, khách vẫn nhận tin như hôm nay."},
-    {"id": "d-20260928T041521Z-5", "p": "Bộ kiểm riêng cho lượt này — không đổi thước của bản vá đã ký; đổi lại phần dựng cảnh viết lại lần hai."}
-  ]
+    {"id": "d-20260928T041521Z-3", "p": "Xét từng người thay vì đọc quyền của kết nối — đổi lại, kết nối thiếu quyền thì mọi kênh có người chưa khớp đều dừng đăng."},
+    {"id": "d-20260928T041521Z-4", "p": "KHÔNG chặn người của tổ chức khác hay người có email ngoài CRM — khách vẫn nhận tin như hôm nay."},
+    {"id": "d-20260928T041521Z-5", "p": "Bộ kiểm riêng cho lượt này — không đổi thước của bản vá đã ký."},
+    {"id": "d-20260928T044042Z-7", "p": "Bốn việc làm lần lượt trong một phiên — đổi lại người soát độc lập duy nhất là lượt chấm tươi."},
+    {"id": "d-20260928T044343Z-8", "p": "Anh đã duyệt kế hoạch bốn việc ở Cổng 1.5."},
+    {"id": "d-20260928T051551Z-9", "p": "Sau vòng chấm 1, máy siết phép đo «lỗ là thật» cho từng ca và đưa bản mô tả PR cho người chấm đọc — đổi lại bộ phép đo đổi sau khi anh duyệt phạm vi, chỉ theo hướng chặt hơn; chờ anh phê."}
+  ],
+  "analyst_plain": ""
 }
