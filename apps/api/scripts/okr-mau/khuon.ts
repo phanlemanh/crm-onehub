@@ -253,7 +253,15 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	}
 });
 
-export function docBoOkrMau(json: unknown): BoOkrMau {
+export function docBoOkrMau(chu: string): BoOkrMau {
+	let json: BoOkrMau;
+	try {
+		json = JSON.parse(chu);
+	} catch (loi) {
+		throw new Error(
+			`không phải JSON: ${loi instanceof Error ? loi.message : String(loi)}`,
+		);
+	}
 	const r = boOkrMau.safeParse(json);
 	if (r.success) return r.data;
 	const dong = r.error.issues.map((i) => `${duongDan(i.path)}: ${i.message}`);
@@ -263,7 +271,9 @@ export function docBoOkrMau(json: unknown): BoOkrMau {
 export function duongDan(path: readonly PropertyKey[]): string {
 	return path
 		.map((p, i) =>
-			typeof p === "number" ? `[${p}]` : `${i === 0 ? "" : "."}${String(p)}`,
+			Number.isInteger(p)
+				? `[${String(p)}]`
+				: `${i === 0 ? "" : "."}${String(p)}`,
 		)
 		.join("");
 }

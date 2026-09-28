@@ -96,16 +96,19 @@ async function tapMau(tx: Tx) {
 	};
 }
 
-function bangGiu(loi: unknown): string | null {
-	if (
-		!(loi instanceof Prisma.PrismaClientKnownRequestError) ||
-		loi.code !== "P2003"
-	)
-		return null;
-	const meta = loi.meta ?? {};
-	const ten = [meta.modelName, meta.constraint, meta.field_name]
-		.filter((x): x is string => typeof x === "string")
-		.join(" · ");
+const metaKhoaNgoai = z.object({
+	modelName: z.string().optional(),
+	constraint: z.string().optional(),
+	field_name: z.string().optional(),
+});
+
+function bangGiu(loi: Prisma.PrismaClientKnownRequestError): string {
+	const meta = metaKhoaNgoai.safeParse(loi.meta ?? {});
+	const ten = meta.success
+		? [meta.data.modelName, meta.data.constraint, meta.data.field_name]
+				.filter(Boolean)
+				.join(" · ")
+		: "";
 	return ten || loi.message.split("\n").at(-1) || "khoá ngoại";
 }
 
@@ -574,11 +577,13 @@ async function trongGiaoDich<T>(
 	try {
 		return await db.$transaction(viec, GIAO_DICH);
 	} catch (loi) {
-		const giu = bangGiu(loi);
-		if (giu)
+		if (
+			loi instanceof Prisma.PrismaClientKnownRequestError &&
+			loi.code === "P2003"
+		)
 			throw new LoiBoMau(
 				OKR_MAU.ma.dangGiu,
-				`Không xoá được bộ mẫu: dữ liệu ngoài bộ mẫu đang trỏ vào người hoặc đơn vị mẫu (${giu}). Gỡ liên kết đó rồi chạy lại; không hàng nào đã đổi.`,
+				`Không xoá được bộ mẫu: dữ liệu ngoài bộ mẫu đang trỏ vào người hoặc đơn vị mẫu (${bangGiu(loi)}). Gỡ liên kết đó rồi chạy lại; không hàng nào đã đổi.`,
 			);
 		throw loi;
 	}

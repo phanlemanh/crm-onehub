@@ -56,9 +56,9 @@ export function docThamSo(args: string[], bayGio = new Date()): ThamSo {
 }
 
 function docTep(tep: string) {
-	let json: unknown;
+	let chu: string;
 	try {
-		json = JSON.parse(readFileSync(tep, "utf8"));
+		chu = readFileSync(tep, "utf8");
 	} catch (loi) {
 		throw new LoiBoMau(
 			OKR_MAU.ma.sai,
@@ -66,7 +66,7 @@ function docTep(tep: string) {
 		);
 	}
 	try {
-		return docBoOkrMau(json);
+		return docBoOkrMau(chu);
 	} catch (loi) {
 		throw new LoiBoMau(
 			OKR_MAU.ma.sai,

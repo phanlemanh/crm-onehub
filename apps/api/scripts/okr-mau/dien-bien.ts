@@ -19,7 +19,7 @@ type NhipKichBan = {
 
 const Q = OKR_MAU.tuan.tuanMoiQuy;
 
-const NHIP: Record<KichBan, NhipKichBan> = {
+const NHIP = {
 	deu: {
 		tuan: [1, 2, 3, 4, 5, 6],
 		tien: (k) => (k / Q) * 1.05,
@@ -55,7 +55,7 @@ const NHIP: Record<KichBan, NhipKichBan> = {
 		tien: (k) => k / Q,
 		tuTin: ["cao", "cao", "vua", "vua", "cao"],
 	},
-};
+} satisfies Record<KichBan, NhipKichBan>;
 
 const tron = (v: number) => Math.round(v * 10) / 10;
 

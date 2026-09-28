@@ -42,7 +42,7 @@ import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
 import {
 	chayLenh,
 	congTy,
-	congTyTho,
+	congTyChu,
 	demThamChieu,
 	lamSachOkr,
 	napMau,
@@ -232,11 +232,13 @@ describe("to-chuc-mau", () => {
 	});
 
 	test("chiều đỏ: tệp đổi trưởng Pháp chế sang người Nhân sự bị chặn ở bước đọc tệp", () => {
-		const tho = congTyTho() as { phongBan: { ma: string; truong: string }[] };
+		const tho: { phongBan: { ma: string; truong: string }[] } = JSON.parse(
+			congTyChu(),
+		);
 		const pc = tho.phongBan.find((p) => p.ma === "phap-che");
 		if (!pc) throw new Error("tệp mất phòng Pháp chế");
 		pc.truong = "tong-bich-ngoc";
-		expect(() => docBoOkrMau(tho)).toThrow(
+		expect(() => docBoOkrMau(JSON.stringify(tho))).toThrow(
 			"trưởng tong-bich-ngoc không thuộc phòng phap-che",
 		);
 	});
@@ -503,7 +505,7 @@ describe("sau-tuan-mau", () => {
 	];
 
 	test("diễn biến thuần: bảng kịch bản × sáu tuần", () => {
-		const bang: Record<KichBan, { giaTri: number[]; tuTin: MucTuTin[] }> = {
+		const bang = {
 			deu: {
 				giaTri: [10.5, 21, 31.5, 42, 52.5, 63],
 				tuTin: ["cao", "cao", "cao", "cao", "cao", "cao"],
@@ -529,7 +531,8 @@ describe("sau-tuan-mau", () => {
 				giaTri: [10, 20, 30, 40, 50],
 				tuTin: ["cao", "cao", "vua", "vua", "cao"],
 			},
-		};
+		} satisfies Record<KichBan, { giaTri: number[]; tuTin: MucTuTin[] }>;
+
 		for (const [kb, ky] of Object.entries(bang)) {
 			const lan = dienBien({
 				kieu: "tang-toi",
@@ -1145,7 +1148,7 @@ describe("bo-hong-mau", () => {
 		test(
 			`${ca.ten}: thoát 4 nêu đúng chỗ, không ghi`,
 			async () => {
-				const tho = congTyTho() as Tho;
+				const tho: Tho = JSON.parse(congTyChu());
 				const duong = ca.pha(tho);
 				const tep = join(mkdtempSync(join(tmpdir(), "okr-mau-")), "hong.json");
 				writeFileSync(tep, JSON.stringify(tho));

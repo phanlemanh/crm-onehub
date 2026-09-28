@@ -9,10 +9,9 @@ import { idMau, napBoOkrMau } from "../scripts/okr-mau/nap";
 
 export const GOC_API = join(import.meta.dir, "..");
 
-export const congTyTho = (): unknown =>
-	JSON.parse(readFileSync(TEP_CONG_TY, "utf8"));
+export const congTyChu = (): string => readFileSync(TEP_CONG_TY, "utf8");
 
-export const congTy = (): BoOkrMau => docBoOkrMau(congTyTho());
+export const congTy = (): BoOkrMau => docBoOkrMau(congTyChu());
 
 export const nguoiMau = (ma: string) => idMau("nguoi", ma);
 
@@ -36,84 +35,100 @@ export const napMau = (moc: Date) => napBoOkrMau(db, congTy(), { moc });
 
 const BO_QUA = new Set(["updatedAt", "suaLuc"]);
 
-function chuan(dong: object): Record<string, string> {
-	const ra: Record<string, string> = {};
-	for (const [k, v] of Object.entries(dong)) {
-		if (BO_QUA.has(k)) continue;
-		ra[k] =
-			v instanceof Date
-				? v.toISOString()
-				: v === null
-					? "null"
-					: typeof v === "object"
-						? JSON.stringify(v)
-						: String(v);
-	}
-	return ra;
-}
+const chuan = <T>(ds: T[]) =>
+	ds.map((dong) =>
+		JSON.stringify(dong, (khoa, giaTri) =>
+			BO_QUA.has(khoa) ? undefined : giaTri,
+		),
+	);
 
-export async function vanTay(): Promise<
-	Record<string, Record<string, string>[]>
-> {
+export async function vanTay(): Promise<Record<string, string[]>> {
 	const tien = { startsWith: OKR_MAU.tienTo };
 	const sap = { id: "asc" } as const;
-	const bang = {
-		user: await db.user.findMany({ where: { id: tien }, orderBy: sap }),
-		member: await db.member.findMany({ where: { id: tien }, orderBy: sap }),
-		division: await db.division.findMany({ where: { id: tien }, orderBy: sap }),
-		department: await db.department.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		orgPlacement: await db.orgPlacement.findMany({
-			where: { userId: tien },
-			orderBy: { userId: "asc" },
-		}),
-		okrCycle: await db.okrCycle.findMany({ where: { id: tien }, orderBy: sap }),
-		okrObjective: await db.okrObjective.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrKeyResult: await db.okrKeyResult.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrAlignment: await db.okrAlignment.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrNguonKr: await db.okrNguonKr.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrSoChup: await db.okrSoChup.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrCheckInSession: await db.okrCheckInSession.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrCheckIn: await db.okrCheckIn.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrDiemKr: await db.okrDiemKr.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrNhinLai: await db.okrNhinLai.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
-		okrMangSang: await db.okrMangSang.findMany({
-			where: { id: tien },
-			orderBy: sap,
-		}),
+	return {
+		user: chuan(await db.user.findMany({ where: { id: tien }, orderBy: sap })),
+		member: chuan(
+			await db.member.findMany({ where: { id: tien }, orderBy: sap }),
+		),
+		division: chuan(
+			await db.division.findMany({ where: { id: tien }, orderBy: sap }),
+		),
+		department: chuan(
+			await db.department.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		orgPlacement: chuan(
+			await db.orgPlacement.findMany({
+				where: { userId: tien },
+				orderBy: { userId: "asc" },
+			}),
+		),
+		okrCycle: chuan(
+			await db.okrCycle.findMany({ where: { id: tien }, orderBy: sap }),
+		),
+		okrObjective: chuan(
+			await db.okrObjective.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrKeyResult: chuan(
+			await db.okrKeyResult.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrAlignment: chuan(
+			await db.okrAlignment.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrNguonKr: chuan(
+			await db.okrNguonKr.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrSoChup: chuan(
+			await db.okrSoChup.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrCheckInSession: chuan(
+			await db.okrCheckInSession.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrCheckIn: chuan(
+			await db.okrCheckIn.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrDiemKr: chuan(
+			await db.okrDiemKr.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrNhinLai: chuan(
+			await db.okrNhinLai.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
+		okrMangSang: chuan(
+			await db.okrMangSang.findMany({
+				where: { id: tien },
+				orderBy: sap,
+			}),
+		),
 	};
-	return Object.fromEntries(
-		Object.entries(bang).map(([k, ds]) => [k, ds.map(chuan)]),
-	);
 }
 
 export async function vanTayKho(): Promise<Record<string, string>> {
