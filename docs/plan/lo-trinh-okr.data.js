@@ -1,5 +1,5 @@
 window.LO_TRINH_OKR_DATA = {
-	chup_luc: "2026-09-28T09:45:30+07:00",
+	chup_luc: "2026-09-28T13:41:44+07:00",
 	ban_song: "https://claude.ai/artifact/X2YjeuJfqBESPHQPQP7y2b",
 	hang_muc: {
 		"ai-9a": {
@@ -31,27 +31,28 @@ window.LO_TRINH_OKR_DATA = {
 			bat_khi:
 				"N1 c\u00f3 \u00edt nh\u1ea5t 12 ca th\u1eadt \u0111\u1ea1t c\u00f9ng ng\u01b0\u1ee1ng nh\u01b0 ca m\u1eabu; c\u1ea5p OneHub tr\u01b0\u1edbc m\u00f9a OKR n\u0103m (07/12), m\u1ecdi ph\u00f2ng ban tr\u01b0\u1edbc m\u00f9a qu\u00fd 1 (21/12)",
 			buoc_ke:
-				"L\u00e0n A, l\u01b0\u1ee3t \u0111\u1ea7u ti\u00ean; thi\u1ebft k\u1ebf ch\u1ea1y ngay, vi\u1ebft m\u00e3 khi 9a v\u00e0 M g\u1ed9p",
+				"Ch\u1edd anh k\u00fd C\u1ed5ng \u0110\u00e1ng r\u1ed3i duy\u1ec7t C\u1ed5ng Ph\u1ea1m vi trong phi\u00ean 9b; phi\u00ean \u0111\u1ec1 xu\u1ea5t n\u00e2ng 9b l\u00ean T3 n\u00ean th\u00eam C\u1ed5ng 1.5",
 			cau_giao:
 				"\u00abT\u00f4i b\u1ea5m \u00abNh\u1edd Tr\u1ee3 l\u00fd OKR g\u00f3p \u00fd\u00bb v\u00e0 nh\u1eadn v\u00e0i \u0111\u1ec1 xu\u1ea5t, c\u00e2u c\u0169 c\u1ea1nh c\u00e2u m\u1edbi; t\u00f4i nh\u1eadn, s\u1eeda hay b\u00e1c t\u1eebng d\u00f2ng\u00bb",
 			chan_boi: ["ai-9a", "okr-m"],
 			chay_khi:
 				"9a (#182) v\u00e0 b\u1ed9 OKR m\u1eabu (M) \u0111\u00e3 g\u1ed9p; l\u01b0\u1ee3t 7 \u0111\u00e3 l\u00ean",
-			cho_ai: "\u0111i\u1ec1u ki\u1ec7n",
+			cho_ai: "ch\u1ee7 kho",
 			ghi_chu:
-				"T\u1eeb 28/09 (anh quy\u1ebft): d\u1ef1ng b\u1eb1ng d\u1eef li\u1ec7u m\u1eabu, b\u1eadt b\u1eb1ng d\u1eef li\u1ec7u th\u1eadt. D\u1ef1ng th\u00eam n\u1ea5c \u00abch\u1ea1y b\u00f3ng\u00bb cho c\u00f4ng t\u1eafc: ch\u1ea1y tr\u00ean d\u1eef li\u1ec7u th\u1eadt, ch\u1ec9 qu\u1ea3n tr\u1ecb th\u1ea5y.",
+				"T\u1eeb 28/09 (anh quy\u1ebft): d\u1ef1ng b\u1eb1ng d\u1eef li\u1ec7u m\u1eabu, b\u1eadt b\u1eb1ng d\u1eef li\u1ec7u th\u1eadt. H\u1ed3 s\u01a1 nh\u00e1p: 15 ti\u00eau ch\u00ed, 29 ph\u00e9p \u0111o, b\u1ea3n m\u1eabu 23 tr\u1ea1ng th\u00e1i, h\u01b0\u1edbng \u00abc\u1ed9t c\u1ea1nh form\u00bb. L\u1ec7ch l\u1ed9 tr\u00ecnh: T3 thay T2, v\u00ec hai c\u1ed9t c\u00f4ng t\u1eafc c\u1ee7a 9a kh\u00f4ng di\u1ec5n \u0111\u01b0\u1ee3c \u00abOneHub b\u1eadt, ph\u00f2ng ban ch\u1ea1y b\u00f3ng\u00bb v\u00e0 kh\u00f4ng c\u00f3 ch\u1ed7 ghi c\u00e2u b\u1ecb b\u1ed9 ki\u1ec3m lo\u1ea1i. N\u1ea5c ch\u1ea1y b\u00f3ng: m\u00e1y t\u1ef1 g\u00f3p \u00fd khi m\u1ed9t M\u1ee5c ti\u00eau \u0111\u01b0\u1ee3c l\u01b0u v\u1edbi ch\u1eef \u0111\u1ed5i, ch\u1ec9 qu\u1ea3n tr\u1ecb \u0111\u1ecdc. \u01af\u1edbc eval kho\u1ea3ng $2 m\u1ed7i l\u01b0\u1ee3t ch\u1ea1y \u0111\u1ee7 ba b\u1ed9 ph\u00e9p \u0111o.",
 			han: "2026-12-07",
-			hang: "T2",
+			hang: "T3 (\u0111\u1ec1 xu\u1ea5t)",
 			ma: "9b",
-			ngay: "",
+			ngay: "2026-09-28",
 			nhom: "tro-ly",
-			phien: "",
+			phien:
+				"L\u01b0\u1ee3t 9b OKR: g\u00f3p \u00fd khi b\u1ea5m, thi\u1ebft k\u1ebf t\u1edbi C\u1ed5ng 1.5",
 			pr: [],
 			slug: "tro-ly-okr-de-xuat",
 			ten: "G\u00f3p \u00fd khi b\u1ea5m",
 			ten_ngan: "G\u00f3p \u00fd khi b\u1ea5m",
 			thu_tu: 240,
-			trang_thai: "ch\u01b0a m\u1edf",
+			trang_thai: "C\u1ed5ng \u0110\u00e1ng",
 		},
 		"ai-9c": {
 			bat_khi:
@@ -201,27 +202,28 @@ window.LO_TRINH_OKR_DATA = {
 			bat_khi:
 				"Ng\u01b0\u1eddi d\u00f9ng th\u1ea5y ngay khi g\u1ed9p; \u0111\u01b0\u1ee3c g\u1ed9p trong \u0111\u00f3ng b\u0103ng",
 			buoc_ke:
-				"M\u1edf phi\u00ean ngay; ph\u1ea3i l\u00ean tr\u01b0\u1edbc 26/10",
+				"Anh \u0111\u00e3 k\u00fd C\u1ed5ng B\u1eb1ng ch\u1ee9ng 13:28; phi\u00ean \u0111\u00e3 g\u1ed9p onehub (#184), ghim l\u1ea1i xanh 10/10, \u0111ang \u0111\u1ea9y nh\u00e1nh v\u00e0 m\u1edf PR",
 			cau_giao:
 				"\u00abK\u1ebft n\u1ed1i Slack thi\u1ebfu quy\u1ec1n \u0111\u1ecdc email v\u1eabn kh\u00f4ng \u0111\u1ec3 l\u1ecdt d\u1eef li\u1ec7u \u0111\u1ed1i t\u00e1c t\u1edbi ng\u01b0\u1eddi mang vai \u00abch\u1ec9 OKR\u00bb\u00bb",
 			chan_boi: [],
 			chay_khi:
 				"Ngay \u2014 v\u00e1 l\u1ed1i r\u00f2 Slack \u0111\u00e3 g\u1ed9p (#170)",
-			cho_ai: "\u0111i\u1ec1u ki\u1ec7n",
+			cho_ai: "m\u00e1y",
 			ghi_chu:
-				"T\u00e1ch t\u1eeb Ngo\u00e0i-4 c\u1ee7a v\u00e1 l\u1ed1i r\u00f2 Slack: b\u01b0\u1edbc ki\u1ec3m kh\u00f4ng nh\u1eadn ra ng\u01b0\u1eddi vai \u00abch\u1ec9 OKR\u00bb khi k\u1ebft n\u1ed1i thi\u1ebfu quy\u1ec1n \u0111\u1ecdc email.",
+				"T3: 11 ti\u00eau ch\u00ed, 11 ph\u00e9p \u0111o. T\u00e1ch t\u1eeb Ngo\u00e0i-4 c\u1ee7a v\u00e1 l\u1ed1i r\u00f2 Slack. Ph\u1ea3i l\u00ean onehub tr\u01b0\u1edbc 26/10.",
 			han: "2026-10-26",
 			hang: "T3",
 			ma: "S2",
-			ngay: "",
+			ngay: "2026-09-28",
 			nhom: "tro-ly",
-			phien: "",
+			phien:
+				"Ch\u1eb7n l\u1ecdt khi Slack thi\u1ebfu quy\u1ec1n \u0111\u1ecdc email (S2)",
 			pr: [],
 			slug: "slack-thieu-quyen-email",
 			ten: "Slack thi\u1ebfu quy\u1ec1n \u0111\u1ecdc email",
 			ten_ngan: "Slack thi\u1ebfu email",
 			thu_tu: 215,
-			trang_thai: "ch\u01b0a m\u1edf",
+			trang_thai: "C\u1ed5ng B\u1eb1ng ch\u1ee9ng",
 		},
 		"ai-t": {
 			bat_khi:
@@ -529,26 +531,27 @@ window.LO_TRINH_OKR_DATA = {
 			bat_khi:
 				"Kh\u00f4ng bao gi\u1edd tr\u00ean production; l\u1ec7nh n\u1ea1p t\u1eeb ch\u1ed1i ch\u1ea1y khi tr\u1ecf v\u00e0o production",
 			buoc_ke:
-				"M\u1edf phi\u00ean ngay; \u0111i tr\u01b0\u1edbc c\u1ea3 hai l\u00e0n",
+				"Anh \u0111\u00e3 k\u00fd C\u1ed5ng B\u1eb1ng ch\u1ee9ng; PR #186 \u0111ang xung \u0111\u1ed9t v\u1edbi onehub sau #183, #184 \u2014 phi\u00ean M g\u1ed9p l\u1ea1i, ghim l\u1ea1i, s\u1eeda d\u00f2ng M r\u1ed3i ch\u1edd ba ki\u1ec3m tra xanh",
 			cau_giao:
 				"\u00abM\u00e1y dev v\u00e0 b\u1ea3n xem tr\u01b0\u1edbc c\u00f3 m\u1ed9t c\u00f4ng ty gi\u1ea3 ch\u1ea1y OKR \u0111\u1ee7 m\u1ed9t qu\u00fd, \u0111\u1ec3 m\u1ecdi l\u01b0\u1ee3t sau d\u1ef1ng v\u00e0 \u0111o tr\u00ean c\u00f9ng m\u1ed9t b\u1ed9\u00bb",
 			chan_boi: [],
 			chay_khi: "Ngay \u2014 l\u01b0\u1ee3t 7 \u0111\u00e3 l\u00ean",
-			cho_ai: "\u0111i\u1ec1u ki\u1ec7n",
+			cho_ai: "m\u00e1y",
 			ghi_chu:
-				"Kho\u1ea3ng 40 ng\u01b0\u1eddi t\u00ean gi\u1ea3, ba b\u1ed9 ph\u1eadn, m\u01b0\u1eddi ph\u00f2ng ban; OKR n\u0103m v\u00e0 qu\u00fd 4 \u0111\u1ee7 s\u00e1u ki\u1ec3u KR; s\u00e1u tu\u1ea7n C\u1eadp nh\u1eadt tu\u1ea7n; m\u1ed9t qu\u00fd 3 \u0111\u00e3 kh\u00e9p; kho\u1ea3ng 30 ca g\u00f3p \u00fd m\u1eabu c\u00f9ng khu\u00f4n N1.",
+				"C\u00f4ng ty gi\u1ea3 40 ng\u01b0\u1eddi, OKR n\u0103m v\u00e0 qu\u00fd 4, s\u00e1u tu\u1ea7n C\u1eadp nh\u1eadt tu\u1ea7n, qu\u00fd 3 \u0111\u00e3 kh\u00e9p, 30 ca g\u00f3p \u00fd m\u1eabu c\u00f9ng khu\u00f4n N1. L\u1ec7nh n\u1ea1p t\u1eeb ch\u1ed1i m\u1ecdi c\u01a1 s\u1edf d\u1eef li\u1ec7u kh\u00f4ng \u1edf tr\u00ean m\u00e1y v\u00e0 kho c\u00f3 OKR th\u1eadt. S4 hai v\u00f2ng: v\u00f2ng 1 b\u1eaft l\u1ed1i v\u01b0\u1ee3t ch\u1eb7n qua tham s\u1ed1 host (\u0111\u00e3 s\u1eeda), v\u00f2ng 2 16/16 ph\u00e9p \u0111o m\u00e1y \u0111\u1ea1t.",
 			han: "",
 			hang: "T2",
 			ma: "M",
-			ngay: "",
+			ngay: "2026-09-28",
 			nhom: "okr",
-			phien: "",
-			pr: [],
+			phien:
+				"D\u1ef1ng b\u1ed9 OKR m\u1eabu d\u00f9ng chung (h\u1ea1ng m\u1ee5c M)",
+			pr: [186],
 			slug: "bo-okr-mau",
 			ten: "B\u1ed9 OKR m\u1eabu d\u00f9ng chung",
 			ten_ngan: "B\u1ed9 OKR m\u1eabu",
 			thu_tu: 75,
-			trang_thai: "ch\u01b0a m\u1edf",
+			trang_thai: "C\u1ed5ng B\u1eb1ng ch\u1ee9ng",
 		},
 		"zalo-4c": {
 			buoc_ke: "",
@@ -618,12 +621,12 @@ window.LO_TRINH_OKR_DATA = {
 			xong_luc: "2026-09-27T16:11:00+07:00",
 		},
 		"t-chip-dung-mau": {
-			ghi: "B\u1ed9 OKR m\u1eabu v\u00e0 S2 vi\u1ebft m\u00e3 ngay; 9b v\u00e0 8a thi\u1ebft k\u1ebf t\u1edbi h\u1ebft C\u1ed5ng 1.5 r\u1ed3i ch\u1edd M g\u1ed9p.",
+			ghi: "\u0110\u00e3 b\u1ea5m b\u1ed9 OKR m\u1eabu, S2 v\u00e0 9b; c\u00f2n chip 8a. 8a thi\u1ebft k\u1ebf t\u1edbi h\u1ebft C\u1ed5ng 1.5 r\u1ed3i ch\u1edd b\u1ed9 m\u1eabu g\u1ed9p.",
 			han: "",
-			lien_quan: ["okr-m", "ai-s2", "ai-9b", "okr-8"],
+			lien_quan: ["okr-8"],
 			nguon: "m\u00e1y",
 			thu_tu: 6,
-			viec: "B\u1ea5m ch\u1ea1y c\u00e1c phi\u00ean: b\u1ed9 OKR m\u1eabu, Slack thi\u1ebfu quy\u1ec1n email, 9b, 8a",
+			viec: "B\u1ea5m ch\u1ea1y phi\u00ean 8a: c\u1ea1nh KR, chia m\u00e3",
 			xong: false,
 			xong_luc: null,
 		},
@@ -667,6 +670,16 @@ window.LO_TRINH_OKR_DATA = {
 			xong: true,
 			xong_luc: "2026-09-28T09:33:24+07:00",
 		},
+		"t-gop-186-s2": {
+			ghi: "B\u1ed9 m\u1eabu g\u1ed9p xong th\u00ec 9b v\u00e0 8a vi\u1ebft m\u00e3 \u0111\u01b0\u1ee3c. S2 ph\u1ea3i l\u00ean tr\u01b0\u1edbc 26/10.",
+			han: "2026-10-26",
+			lien_quan: ["okr-m", "ai-s2"],
+			nguon: "m\u00e1y",
+			thu_tu: 6,
+			viec: "G\u1ed9p PR b\u1ed9 OKR m\u1eabu (#186) v\u00e0 PR c\u1ee7a S2 khi m\u1ed7i PR c\u00f3 ba ki\u1ec3m tra xanh tr\u00ean \u0111\u1ea7u nh\u00e1nh",
+			xong: false,
+			xong_luc: null,
+		},
 		"t-gt-1": {
 			ghi: "S\u1ed1ng khi \u2265 90% th\u00e0nh vi\u00ean c\u00f3 ph\u00f2ng ban ch\u00ednh v\u00e0 m\u1ecdi ph\u00f2ng ban c\u00f3 tr\u01b0\u1edfng; ch\u1ebft khi < 70%.",
 			han: "2026-10-26",
@@ -704,6 +717,16 @@ window.LO_TRINH_OKR_DATA = {
 			nguon: "m\u00e1y",
 			thu_tu: 35,
 			viec: "Ch\u1ecdn kho\u00e1 tr\u1ea3 ti\u1ec1n cho eval l\u00fac d\u1ef1ng c\u00e1c l\u01b0\u1ee3t AI, v\u00e0 tr\u1ea7n c\u1ee7a n\u00f3",
+			xong: false,
+			xong_luc: null,
+		},
+		"t-ky-9b": {
+			ghi: "Phi\u00ean 9b \u0111ang ch\u1edd. M\u1ed9t c\u00e2u c\u1ea7n anh quy\u1ebft: 9b \u0111i T3 c\u00f3 C\u1ed5ng 1.5, m\u00e1y t\u1ef1 ch\u1ea1y b\u00f3ng khi M\u1ee5c ti\u00eau \u0111\u01b0\u1ee3c l\u01b0u \u2014 phi\u00ean khuy\u00ean duy\u1ec7t.",
+			han: "",
+			lien_quan: ["ai-9b"],
+			nguon: "m\u00e1y",
+			thu_tu: 7,
+			viec: "K\u00fd C\u1ed5ng \u0110\u00e1ng v\u00e0 duy\u1ec7t C\u1ed5ng Ph\u1ea1m vi c\u1ee7a 9b (g\u00f3p \u00fd khi b\u1ea5m)",
 			xong: false,
 			xong_luc: null,
 		},
@@ -949,12 +972,12 @@ window.LO_TRINH_OKR_DATA = {
 			],
 		},
 		tong: {
-			cap_nhat_luc: "2026-09-28T09:50:00+07:00",
+			cap_nhat_luc: "2026-09-28T13:45:00+07:00",
 			ngay_mo: "2026-10-26",
 			nguon:
 				"m\u1ee5c 10 l\u1ed9 tr\u00ecnh OKR \u00b7 m\u1ee5c 4 l\u1ed9 tr\u00ecnh Tr\u1ee3 l\u00fd OKR \u00b7 m\u1ee5c 7 l\u1ed9 tr\u00ecnh Zalo \u00b7 b\u1ea3n \u0111\u1ed3 s\u1ea3n ph\u1ea9m \u00b7 PR \u0111ang m\u1edf",
 			nhan_ngay_mo: "C\u1ea3 c\u00f4ng ty v\u00e0o CRM l\u1ea7n \u0111\u1ea7u",
-			onehub: "1bb45ac7",
+			onehub: "8cce6338",
 		},
 	},
 };

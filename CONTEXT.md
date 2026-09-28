@@ -486,6 +486,13 @@ _Avoid_: dashboard, bảng điều khiển
 Vì sao: «Tổng quan» đã là tên trang chủ của CRM; hai màn cùng chữ thì người không biết
 mình đang đứng ở đâu.
 
+**Bộ OKR mẫu**: công ty giả «Hải Đăng Logistics» — 40 người tên giả, ba bộ phận, mười
+phòng ban — đang chạy OKR ở tuần 6 của quý, nạp bằng một lệnh vào máy dev hoặc phiên đo
+để mọi lượt OKR dựng và đo trên cùng một công ty. Không bao giờ có trên production hay
+bản xem trước. Chốt 2026-09-28.
+_Avoid_: dữ liệu demo, seed OKR, dữ liệu giả lập
+Vì sao: «demo» gợi thứ để trình diễn cho khách; bộ này là thước đo chung của đội.
+
 **Sức khoẻ chương trình**: màn của quản trị cho biết OKR đang chạy tốt tới đâu theo
 đơn vị — KR cập nhật đúng tuần, KR im, KR chưa có khởi điểm, người chưa nối kênh nhắc.
 Để biết nên kèm đơn vị nào, không để chấm người. Chốt 2026-09-26.
