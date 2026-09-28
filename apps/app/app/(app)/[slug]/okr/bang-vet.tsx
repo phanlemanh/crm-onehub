@@ -21,6 +21,7 @@ import {
 import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
 import { useQuery } from "@tanstack/react-query";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -58,6 +59,14 @@ const KHOA_HIEN = [
 type KhoaHien = (typeof KHOA_HIEN)[number];
 
 const HANH_DONG_KR = ["tao-kr", "sua-kr", "xoa-kr"] as const;
+
+const HANH_DONG_SUA = ["sua", "sua-kr"] as const;
+
+const GHI_CHU_TRO_LY = /^tro-ly-okr:\S+$/;
+
+function theoTroLy(note: string | null): boolean {
+	return note !== null && GHI_CHU_TRO_LY.test(note);
+}
 
 const KHONG_CO = "—";
 
@@ -145,6 +154,18 @@ function thayDoi(vet: Vet, bc: BoiCanh): ThayDoi[] {
 	});
 }
 
+function tenViec(vet: Vet, doi: ThayDoi[], locale: Locale): string {
+	const m = okrMessages(locale);
+	if (!theoTroLy(vet.note)) return m.hanhDong[vet.action];
+	const g = okrGopYMessages(locale).vet;
+	const motTruong = doi.length === 1 ? doi[0] : undefined;
+	const viec =
+		motTruong && HANH_DONG_SUA.some((h) => h === vet.action)
+			? g.suaTruong(motTruong.nhan.toLocaleLowerCase(locale))
+			: m.hanhDong[vet.action];
+	return `${viec} — ${g.theoTroLy}`;
+}
+
 export function luc(at: string, locale: Locale): string {
 	const d = new Date(at);
 	const gio = dateFormat(locale, { hour: "2-digit", minute: "2-digit" });
@@ -195,6 +216,7 @@ export function BangVet({
 	return (
 		<SimpleTable columns={cot}>
 			{dong.map((v) => {
+				const doi = thayDoi(v, bc);
 				const kr =
 					v.keyResultId === null
 						? null
@@ -218,7 +240,7 @@ export function BangVet({
 						</TableCell>
 						<TableCell className={CELL}>
 							<span className="flex min-w-0 flex-col gap-0.5 whitespace-normal">
-								<span>{m.hanhDong[v.action]}</span>
+								<span data-viec>{tenViec(v, doi, locale)}</span>
 								{kr ? (
 									<span
 										className="text-muted-foreground text-xs"
@@ -231,7 +253,7 @@ export function BangVet({
 						</TableCell>
 						<TableCell className={CELL}>
 							<span className="flex min-w-0 flex-col gap-0.5 whitespace-normal">
-								{thayDoi(v, bc).map((t) => (
+								{doi.map((t) => (
 									<span key={t.khoa} data-khoa={t.khoa}>
 										{t.nhan}: <span translate="no">{t.chu}</span>
 									</span>

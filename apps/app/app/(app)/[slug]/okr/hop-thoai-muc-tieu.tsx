@@ -41,6 +41,7 @@ import {
 	type LoaiMucTieu,
 	mucTieuInput,
 } from "@crm/validation/okr-muc-tieu";
+import type { TruongVietLai } from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
@@ -49,6 +50,13 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import {
+	CotGopY,
+	type GiaTriDaNhan,
+	LOP_THAN_HOP,
+	NutGopY,
+	useGopY,
+} from "./cot-gop-y";
 import type { MucTieu } from "./kieu";
 import type { DonChonOkr } from "./okr-search-params";
 
@@ -102,12 +110,13 @@ export function HopThoaiMucTieu({
 	const me = useQuery(trpc.users.me.queryOptions());
 	const program = useQuery(trpc.okr.program.queryOptions());
 
-	const cu = yeuCau.loai === "sua" ? yeuCau.mucTieu : null;
+	const [daLuu, setDaLuu] = useState<{ title?: string; whyNow?: string }>({});
+	const cu = yeuCau.loai === "sua" ? { ...yeuCau.mucTieu, ...daLuu } : null;
 	const capGoc =
 		yeuCau.loai === "sua"
 			? yeuCau.mucTieu.level
 			: CAP_THEO_DON[yeuCau.don.loai];
-	const [dau] = useState(() => ({
+	const [dau, setDau] = useState(() => ({
 		cap: capGoc,
 		ten: cu?.title ?? "",
 		loai: cu?.kind ?? "cam-ket",
@@ -129,6 +138,27 @@ export function HopThoaiMucTieu({
 		chuChon !== dau.chuChon ||
 		!cungTapHop(thamGia, dau.thamGia) ||
 		viSao !== dau.viSao;
+	const oDangSua = new Set<TruongVietLai>([
+		...(ten !== dau.ten ? (["title"] as const) : []),
+		...(viSao !== dau.viSao ? (["whyNow"] as const) : []),
+	]);
+	const nhanGiaTri = ({ truong, giaTri }: GiaTriDaNhan) => {
+		if (truong === "title") {
+			setTen(giaTri);
+			setDau((d) => ({ ...d, ten: giaTri }));
+			setDaLuu((l) => ({ ...l, title: giaTri }));
+		}
+		if (truong === "whyNow") {
+			setViSao(giaTri);
+			setDau((d) => ({ ...d, viSao: giaTri }));
+			setDaLuu((l) => ({ ...l, whyNow: giaTri }));
+		}
+	};
+	const gopY = useGopY({
+		objectiveId: cu?.id ?? null,
+		coSuaChuaLuu: coThayDoi,
+		onDaNhan: nhanGiaTri,
+	});
 
 	const chu = chuChon || me.data?.id || "";
 	const tenNguoi = (id: string) =>
@@ -235,13 +265,19 @@ export function HopThoaiMucTieu({
 			}}
 			coThayDoi={coThayDoi}
 		>
-			<DialogContent data-hop-thoai-muc-tieu={cu?.id ?? "moi"}>
+			<DialogContent
+				data-hop-thoai-muc-tieu={cu?.id ?? "moi"}
+				size={gopY.cotMo ? "wide" : "default"}
+			>
 				<DialogHeader>
 					<DialogTitle>
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
 					</DialogTitle>
 				</DialogHeader>
-				<div className="-m-1 max-h-[70svh] overflow-y-auto p-1" data-cuon-hop>
+				<div
+					className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
+					data-cuon-hop
+				>
 					<form
 						id={`${ma}-form`}
 						onSubmit={(e) => {
@@ -250,6 +286,7 @@ export function HopThoaiMucTieu({
 						}}
 					>
 						<FieldGroup>
+							<NutGopY gopY={gopY} />
 							<div className="grid grid-cols-2 gap-3">
 								<Field data-disabled={capChon.length === 1}>
 									<FieldLabel htmlFor={`${ma}-cap`}>{h.cap}</FieldLabel>
@@ -390,6 +427,7 @@ export function HopThoaiMucTieu({
 							{loi ? <FieldError>{loi}</FieldError> : null}
 						</FieldGroup>
 					</form>
+					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
 				</div>
 				<DialogFooter>
 					<DialogClose asChild>
