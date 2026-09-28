@@ -5,7 +5,7 @@ slug: may-soan-de-xuat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-28
@@ -118,3 +118,22 @@ duyệt rồi mới đăng; tra 2026-09-28), nghiên cứu mục 6.
   - Ngoài-14 — ca «PDF lớp chữ hỏng kiểu cid» dùng tệp tổng hợp chưa đúng dạng hỏng thật.
   - Ngoài-15 — phép kiểm «máy soạn không ra mạng» đếm chữ trong mã thay vì đọc cấu hình lúc chạy.
 - **Mở lại Cổng Phạm vi 2026-09-28 (Cổng Bằng chứng, Ngoài-1 và Ngoài-6 «nâng phạm vi sửa ngay»):** vòng chấm tìm ra thủ tục nhận nguồn có thể xoá tệp của một nguồn đã có (người biết đường lưu gọi lại với đích sai hay tệp trùng). Merge vào `onehub` là lên production, nên chủ kho chọn sửa trong lượt này: thêm AC-16 và E16, duyệt lại Cổng Phạm vi rồi mới sửa mã.
+- **Mù-1 đã có bằng chứng (round 5, 2026-09-28):** E2t chạy trên kho Blob riêng tư thật `kho-tai-lieu-nguon` (vùng `sin1`, không gắn dự án nào) và thoát 0. Hạn chế Mù-1 ở khối trên không còn đúng.
+- **Known limits (chủ kho ký ở Cổng Bằng chứng round 5, 2026-09-28; số theo thẻ round 5, khác số của khối trên):**
+  - Ngoài-1, Ngoài-2 — khi gỡ khoá theo đường lưu, bài kiểm gửi song song vẫn đỏ nhưng bằng câu «song song: nhan nhieu hon mot lan», không phải câu ghim E16 hứa; tính năng chặn xoá nhầm không đổi.
+  - Ngoài-3 — phép đo màn duyệt bằng bản máy soạn thật bỏ qua lỗi console và lỗi trang khi chụp.
+  - Ngoài-4 — thẻ «Thay đổi so với bản đang dùng» so với bản gốc lúc máy soạn bắt đầu; nếu một đề xuất khác được duyệt trong lúc chờ, thẻ có thể so với bản cũ hơn.
+  - Ngoài-5 — việc máy suy khi nào hiện khối so với bản đang dùng chưa có phép đo đi qua trang thật.
+  - Ngoài-6 — khối so với bản đang dùng chỉ được kiểm là có chứa «1,2%», chưa kiểm số cũ bị gạch và số mới được thêm đúng chỗ.
+  - Ngoài-7 — tiền tố token kênh của máy soạn trong phép kiểm viết tay, không lấy từ eve.
+  - Ngoài-8, Ngoài-16 — danh sách nguồn tự làm mới đúng hôm nay; nếu sau này đổi cách làm mới dữ liệu ở nơi khác mà quên chỗ này, người dùng có thể thấy danh sách cũ tới khi tải lại trang.
+  - Ngoài-9, Ngoài-17 — vài con số và câu thông báo của máy soạn chưa gom về tệp cấu hình của khu; không ảnh hưởng người dùng.
+  - Ngoài-10, Ngoài-18 — danh sách loại tệp nhận (Word, PDF) khai ở hai nơi; lệch nhau thì người tải chỉ thấy lỗi chung.
+  - Ngoài-12, Ngoài-21 — lượt soạn hợp lệ có thể bị đánh «hết giờ» sớm hơn một chút so với trần thời gian thật.
+  - Ngoài-13, Ngoài-22 — phép kiểm «1,5 không khớp 11,5» chưa chứng được sẽ bắt lỗi khi lỗi xảy ra.
+  - Ngoài-14, Ngoài-24 — ca «PDF lớp chữ hỏng kiểu cid» dùng tệp tổng hợp chưa đúng dạng hỏng thật.
+  - Ngoài-15, Ngoài-25 — phép kiểm «máy soạn không ra mạng» đếm chữ trong mã thay vì đọc cấu hình lúc chạy.
+  - Ngoài-20 — máy soạn không gửi được lượt nào thì lỗi bị bỏ qua không ghi log, đội vận hành khó truy nguyên nhân.
+  - Ngoài-23 — việc hai đường tạo đề xuất (người viết và máy soạn) cùng một cách ghi mới được chứng ở phía máy soạn; phía API chỉ kiểm bằng tìm chuỗi import.
+- **Mở hợp đồng mới (Ngoài-11, Ngoài-19):** một lỗi thoáng qua khi máy đọc tệp vừa tải lên có thể để nguồn kẹt mãi ở «đang soạn», và nút soạn lại từ chối nó. Tách thành việc riêng có tiêu chí nghiệm thu.
+- **Bản thật cần biến riêng cho kho nguồn:** kho nguồn (riêng tư) và kho logo (công khai, `packages/db/src/blob.ts`) đọc chung tên `BLOB_READ_WRITE_TOKEN`. Ngày 2026-09-28 cả ba dự án `crm-onehub-*` trên production đều chưa đặt biến này, nên tính năng tải nguồn tắt (nút khoá, theo AC-5). Đặt khoá kho riêng tư vào tên chung để bật tính năng thì phần tải logo sẽ ghi vào kho riêng tư; bật trên bản thật cần một biến riêng cho kho nguồn (việc riêng, đổi AC-5).

@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: may-soan-de-xuat
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 4a28ff7de6fffda9f3198987b198f4d3ab7c0967
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-28
 ---
 
 # Evidence Report: may-soan-de-xuat
@@ -304,7 +304,7 @@ human_signoff:
   required_evidence:
     - Ảnh chụp Bước 2 · Đối chiếu với bản máy soạn của trang bieu-mau ở 1440px NGAY KHI VỪA MỞ (chưa cuộn) — xác nhận cột phải có tiêu đề «Bản máy soạn» và nội dung hiển thị, không phải mảng đen trống, giống cấu trúc đã thấy ở hai ảnh b2-1440 của quyet-dinh-hoa-hong và quy-trinh
     - Một ghi chú hoặc video ngắn xác nhận hai cột Nguồn / Bản máy soạn ở màn duyệt bieu-mau cuộn ĐỘC LẬP với nhau (cuộn cột nguồn xuống sâu không làm mất nội dung cột bản máy soạn) — nếu xác nhận được đây chỉ là draft ngắn hơn nguồn (không phải lỗi hiển thị), verdict đổi thành PASS
-  human_override:  # chờ người ký
+  human_override: Đạt — Phan Le Manh 2026-09-28
 
 ### Lệnh suite (hồi quy)
 
