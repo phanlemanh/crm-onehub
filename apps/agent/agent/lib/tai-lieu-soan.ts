@@ -12,47 +12,35 @@ import { completeTask, type LeasedTask } from "./tasks";
 const LY_DO = TAI_LIEU_AGENT.lyDo;
 const KHONG_BAT = "Chưa soạn được — chưa bật lưu tệp nguồn.";
 
-export type PhienMaySoanVao = {
-	nguonId: string;
-	trangId: string;
-	taiBoiId: string;
-	chuNguon: string;
-};
-
-export type KetQuaPhien = { ok: true } | { ok: false; lyDo: string };
-
-export type MoPhienMaySoan = (vao: PhienMaySoanVao) => Promise<KetQuaPhien>;
-
-export type PhuThuocSoan = { kho: KhoNguon; moPhien: MoPhienMaySoan };
-
 async function ketThuc(
 	taskId: string,
 	nguonId: string,
-	trangThai: "CAN_GO_TAY" | "LOI" | "DA_SOAN",
-	lyDo: string | null,
+	trangThai: "CAN_GO_TAY" | "LOI",
+	lyDo: string,
 ): Promise<void> {
 	await db.taiLieuNguon.update({
 		where: { id: nguonId },
 		data: { trangThai, lyDo },
 	});
-	await completeTask(taskId, lyDo ?? "Đã soạn bản đề xuất.");
+	await completeTask(taskId, lyDo);
+}
+
+export async function coQuyTacViet(): Promise<boolean> {
+	const trang = await db.taiLieuTrang.findUnique({
+		where: { slug: TAI_LIEU_AGENT.soan.slugQuyTacViet },
+		select: { banDangDungId: true },
+	});
+	return Boolean(trang?.banDangDungId);
 }
 
 export async function chaySoanTuNguon(
 	task: LeasedTask,
-	deps: PhuThuocSoan,
+	kho: KhoNguon,
 ): Promise<void> {
 	const { nguonId } = parseSoanTuNguonPayload(task.payload);
 	const nguon = await db.taiLieuNguon.findUnique({
 		where: { id: nguonId },
-		select: {
-			id: true,
-			sha256: true,
-			blobPathname: true,
-			kieu: true,
-			trangId: true,
-			taiBoiId: true,
-		},
+		select: { id: true, sha256: true, blobPathname: true, kieu: true },
 	});
 	if (!nguon) {
 		await completeTask(task.id, "The source this names is gone.");
@@ -60,10 +48,10 @@ export async function chaySoanTuNguon(
 	}
 	await db.taiLieuNguon.update({
 		where: { id: nguon.id },
-		data: { trangThai: "DANG_SOAN", lyDo: null },
+		data: { trangThai: "CHO_DOC", lyDo: null },
 	});
-	if (!deps.kho.bat()) return ketThuc(task.id, nguon.id, "LOI", KHONG_BAT);
-	const byte = await deps.kho.doc(nguon.blobPathname);
+	if (!kho.bat()) return ketThuc(task.id, nguon.id, "LOI", KHONG_BAT);
+	const byte = await kho.doc(nguon.blobPathname);
 	if (!byte) return ketThuc(task.id, nguon.id, "LOI", LY_DO.khongTai);
 	const bam = createHash("sha256").update(byte).digest("hex");
 	if (bam !== nguon.sha256) {
@@ -78,12 +66,12 @@ export async function chaySoanTuNguon(
 		where: { id: nguon.id },
 		data: { chu: doc.chu, soTrang: doc.soTrang },
 	});
-	const phien = await deps.moPhien({
-		nguonId: nguon.id,
-		trangId: nguon.trangId,
-		taiBoiId: nguon.taiBoiId,
-		chuNguon: doc.chu,
+	if (!(await coQuyTacViet())) {
+		return ketThuc(task.id, nguon.id, "LOI", LY_DO.thieuQuyTac);
+	}
+	await db.taiLieuNguon.update({
+		where: { id: nguon.id },
+		data: { trangThai: "CHO_SOAN" },
 	});
-	if (phien.ok) return ketThuc(task.id, nguon.id, "DA_SOAN", null);
-	return ketThuc(task.id, nguon.id, "LOI", phien.lyDo);
+	await completeTask(task.id, LY_DO.choSoan);
 }

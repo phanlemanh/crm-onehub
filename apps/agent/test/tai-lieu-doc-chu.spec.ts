@@ -1,122 +1,59 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { db } from "@crm/db";
 import { khoNguonGia } from "@crm/db/test/blob-nguon-gia";
 import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
+import { guiMaySoan } from "../agent/lib/tai-lieu-phien";
+import { chaySoanTuNguon } from "../agent/lib/tai-lieu-soan";
+import { sendGia } from "./support/may-soan-gia";
 import {
-	chaySoanTuNguon,
-	type PhienMaySoanVao,
-} from "../agent/lib/tai-lieu-soan";
-import type { LeasedTask } from "../agent/lib/tasks";
+	datQuyTacViet,
+	donTaiLieu,
+	gieoNguoi,
+	gieoNguon,
+	gieoTrang,
+	gieoViec,
+} from "./support/tai-lieu-gieo";
 
-const MAU = join(
-	import.meta.dir,
-	"..",
-	"..",
-	"..",
-	"_acceptance",
-	"may-soan-de-xuat",
-	"mau",
-);
-const TIEN_TO = `msd6${(process.env.TEST_RUN_ID ?? "").slice(0, 6)}-`;
 const LY_DO = TAI_LIEU_AGENT.lyDo;
-let dem = 0;
-const ma = (p: string) => `${TIEN_TO}${p}-${Date.now().toString(36)}-${++dem}`;
 
 const gia = khoNguonGia();
-const goiPhien: { vao: PhienMaySoanVao; trangThaiLucGoi: string }[] = [];
+const model = sendGia();
 let nguoiId = "";
 let trangId = "";
 
-async function moPhien(vao: PhienMaySoanVao) {
-	const n = await db.taiLieuNguon.findUniqueOrThrow({
-		where: { id: vao.nguonId },
+async function chay(tep: string, bamKhai?: string) {
+	const nguon = await gieoNguon({ tep, trangId, taiBoiId: nguoiId, bamKhai });
+	gia.daPut.set(nguon.pathname, nguon.byte);
+	const task = await gieoViec(nguon.id);
+	const truoc = model.goi.length;
+	await chaySoanTuNguon(task, gia);
+	const sauDoc = await db.taiLieuNguon.findUniqueOrThrow({
+		where: { id: nguon.id },
 		select: { trangThai: true },
 	});
-	goiPhien.push({ vao, trangThaiLucGoi: n.trangThai });
-	return { ok: true as const };
-}
-
-async function chay(tep: string, bamKhai?: string) {
-	const byte = new Uint8Array(readFileSync(join(MAU, tep)));
-	const kieu = tep.endsWith(".pdf") ? "pdf" : "docx";
-	const pathname = ma("blob");
-	const nguon = await db.taiLieuNguon.create({
-		data: {
-			sha256: bamKhai ?? createHash("sha256").update(byte).digest("hex"),
-			tenTep: tep,
-			kieu,
-			kichThuoc: byte.length,
-			blobPathname: pathname,
-			taiBoiId: nguoiId,
-			trangId,
-		},
-		select: { id: true },
-	});
-	gia.daPut.set(pathname, byte);
-	const viec = await db.agentTask.create({
-		data: {
-			kind: "soan-tu-nguon",
-			reason: "thu",
-			priority: 300,
-			budget: 0,
-			dueAt: new Date(),
-			payload: { nguonId: nguon.id },
-		},
-	});
-	const truoc = goiPhien.length;
-	const task: LeasedTask = {
-		id: viec.id,
-		contactId: null,
-		companyId: null,
-		dealId: null,
-		kind: viec.kind,
-		reason: viec.reason,
-		payload: { nguonId: nguon.id },
-		budget: 0,
-		attempts: 1,
-		priority: 300,
-		dueAt: viec.dueAt,
-	};
-	await chaySoanTuNguon(task, { kho: gia, moPhien });
+	if (sauDoc.trangThai === "CHO_SOAN") await guiMaySoan(nguon.id, model.send);
 	const hang = await db.taiLieuNguon.findUniqueOrThrow({
 		where: { id: nguon.id },
 	});
-	const xong = await db.agentTask.findUniqueOrThrow({ where: { id: viec.id } });
+	const xong = await db.agentTask.findUniqueOrThrow({ where: { id: task.id } });
+	const deXuat = await db.taiLieuDeXuat.count({ where: { nguonId: nguon.id } });
 	return {
 		hang,
-		goiModel: goiPhien.length - truoc,
-		lucGoi: goiPhien.at(-1)?.trangThaiLucGoi,
+		goiModel: model.goi.length - truoc,
+		lucGoi: model.goi.at(-1)?.trangThaiLucGoi,
 		xong: xong.finishedAt !== null,
+		deXuat,
 	};
 }
 
 beforeAll(async () => {
-	nguoiId = ma("u");
-	await db.user.create({
-		data: { id: nguoiId, name: "Người tải", email: `${nguoiId}@thu.test` },
-	});
-	const trang = await db.taiLieuTrang.create({
-		data: {
-			slug: ma("trang"),
-			ten: "Trang thử",
-			loai: "quy-dinh",
-			chuTrangId: nguoiId,
-			taoBoiId: nguoiId,
-		},
-	});
-	trangId = trang.id;
+	nguoiId = await gieoNguoi();
+	trangId = await gieoTrang(nguoiId);
+	await datQuyTacViet(nguoiId, "## Quy tắc\n\nViết ngắn.");
 });
 
 afterAll(async () => {
-	await db.agentTask.deleteMany({
-		where: { kind: "soan-tu-nguon", reason: "thu" },
-	});
-	await db.taiLieuNguon.deleteMany({ where: { trangId } });
-	await db.taiLieuTrang.deleteMany({ where: { id: trangId } });
-	await db.user.deleteMany({ where: { id: nguoiId } });
+	await donTaiLieu([nguoiId]);
 });
 
 describe("doc-chu", () => {
@@ -155,7 +92,10 @@ describe("doc-chu", () => {
 					: "";
 			ghi(
 				`${tep}${lot}`,
-				r.hang.trangThai === "CAN_GO_TAY" && r.goiModel === 0 && r.xong,
+				r.hang.trangThai === "CAN_GO_TAY" &&
+					r.goiModel === 0 &&
+					r.deXuat === 0 &&
+					r.xong,
 			);
 		}
 		for (const [tep, lyDo] of [

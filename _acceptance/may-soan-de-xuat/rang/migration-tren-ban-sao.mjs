@@ -207,9 +207,8 @@ async function docSau(c) {
 			`SELECT count(*)::int AS n FROM "taiLieuDeXuat" WHERE "nguonId" IS NOT NULL OR "trichDoan" IS NOT NULL`,
 		)
 	).rows[0].n;
-	const nguon = (
-		await c.query(`SELECT count(*)::int AS n FROM "taiLieuNguon"`)
-	).rows[0].n;
+	const nguon = (await c.query(`SELECT count(*)::int AS n FROM "taiLieuNguon"`))
+		.rows[0].n;
 	return { sauDem, cotMoi, nguon };
 }
 
@@ -219,9 +218,7 @@ function soSau({ sauDem, cotMoi, nguon }) {
 	for (const [bang, n] of MA_TRAN) {
 		khang += 1;
 		if (sauDem[bang] !== n) {
-			hong.push(
-				`bang cu mat dong: ${TEN_HIEN[bang]} ${n} -> ${sauDem[bang]}`,
-			);
+			hong.push(`bang cu mat dong: ${TEN_HIEN[bang]} ${n} -> ${sauDem[bang]}`);
 		}
 	}
 	khang += 1;

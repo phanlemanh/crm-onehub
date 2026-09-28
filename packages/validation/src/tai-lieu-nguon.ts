@@ -9,6 +9,7 @@ export type KieuNguonTep = (typeof KIEU_NGUON)[number];
 
 export const TRANG_THAI_NGUON = [
 	"CHO_DOC",
+	"CHO_SOAN",
 	"DANG_SOAN",
 	"DA_SOAN",
 	"CAN_GO_TAY",
@@ -36,6 +37,7 @@ export const NGUON = {
 	},
 	nhanTrangThai: {
 		CHO_DOC: "Máy đang soạn",
+		CHO_SOAN: "Máy đang soạn",
 		DANG_SOAN: "Máy đang soạn",
 		DA_SOAN: "Đã soạn",
 		CAN_GO_TAY: "Cần gõ tay — tệp là bản quét, máy không đọc được chữ",

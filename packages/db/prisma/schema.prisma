@@ -2341,6 +2341,7 @@ model TaiLieuNguon {
   chu          String?
   soTrang      Int?
   soanLuc      DateTime?
+  banGocId     String?
   deXuat       TaiLieuDeXuat[]
 
   @@index([trangId])

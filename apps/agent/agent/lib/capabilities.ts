@@ -83,6 +83,12 @@ export function capabilitiesFrom(
 			enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim()),
 		},
 		{
+			...fromEnv("KHO_TAI_LIEU_AI_GATEWAY_API_KEY"),
+			label: "Drafting key",
+			gives:
+				"a separate AI Gateway key for the machine that drafts document pages from uploaded files, so its spend is billed apart. Without it drafting runs on the shared model key",
+		},
+		{
 			...fromEnv("ZALO_BOT_TOKEN"),
 			label: "Zalo reminders",
 			gives:

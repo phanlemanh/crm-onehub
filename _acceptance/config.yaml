@@ -49,7 +49,7 @@ executors:
     msd_doc_chu: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-doc-chu.spec.ts"'
     msd_soan_dat: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-soan.integration.spec.ts -t soan-dat"'
     msd_duyet_ban_may: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon-duyet.spec.ts"'
-    msd_kiem_so: "cd packages/validation && bun test test/tai-lieu-kiem-so.spec.ts && cd ../../apps/agent && bun test test/nop-ban-de-xuat.spec.ts"
+    msd_kiem_so: 'cd packages/validation && bun test test/tai-lieu-kiem-so.spec.ts && cd ../.. && bun run test -- "cd apps/agent && bun test test/nop-ban-de-xuat.spec.ts"'
     msd_soan_hong: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-soan.integration.spec.ts -t soan-hong"'
     msd_soan_lai: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t soan-lai"'
     msd_man_duyet_may: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-man-duyet-may.dom.tsx"

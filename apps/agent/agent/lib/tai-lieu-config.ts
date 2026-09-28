@@ -1,4 +1,6 @@
 const MINUTE_MS = 60_000;
+const NGHIN = 1_000;
+export const MOT_TRIEU = 1_000_000;
 
 export const TAI_LIEU_AGENT = {
 	docChu: {
@@ -12,7 +14,15 @@ export const TAI_LIEU_AGENT = {
 		thoiGianMs: 4 * MINUTE_MS,
 		slugQuyTacViet: "quy-tac-viet",
 		bienKhoaRieng: "KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
+		gioiHan: {
+			maxInputTokensPerSession: 400 * NGHIN,
+			maxOutputTokensPerSession: 60 * NGHIN,
+			sessionTimeoutMs: 4 * MINUTE_MS,
+		},
 	},
+	bangGia: {
+		"zai/glm-5.2-fast": { vaoMoiTrieu: 2.8, raMoiTrieu: 8.8 },
+	} satisfies Record<string, { vaoMoiTrieu: number; raMoiTrieu: number }>,
 	lyDo: {
 		banQuet: (trang: number, tong: number) =>
 			`Cần gõ tay — ${trang}/${tong} trang là bản quét, máy không đọc được chữ.`,
@@ -23,5 +33,16 @@ export const TAI_LIEU_AGENT = {
 		khongTai: "Chưa soạn được — không tải được tệp nguồn từ kho lưu.",
 		quaDai: "Chưa soạn được — nguồn quá dài để máy soạn một lần.",
 		rong: "Chưa soạn được — tệp không có chữ nào.",
+		thieuQuyTac: "Chưa soạn được — chưa có trang Quy tắc viết đã duyệt.",
+		loiModel: (chi: string) => `Chưa soạn được — máy soạn báo lỗi: ${chi}`,
+		loiGui: "Chưa soạn được — không mở được phiên máy soạn.",
+		hetGio: "Chưa soạn được — máy soạn chạy quá thời gian cho phép.",
+		khongNop: "Chưa soạn được — máy soạn dừng mà không nộp bản nào.",
+		biBac: (chi: string) =>
+			`Chưa soạn được — bản nộp bị bác khi kiểm số: ${chi}`,
+		saiKhuon: (chi: string) => `Chưa soạn được — bản nộp sai khuôn: ${chi}`,
+		daSoan: "Đã soạn bản đề xuất.",
+		choSoan: "Đã đọc chữ, chờ máy soạn.",
 	},
+	phien: { lo: 6, chiToiDa: 200 },
 } as const;

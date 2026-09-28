@@ -23,8 +23,10 @@ const KHUON_PHAI_CO = [
 	"agent_runner/tools/create_crm_activity.ts",
 	"agent_runner/tools/post_slack_message.ts",
 	"agent_runner/tools/finish_run.ts",
+	"may_soan/tools/nop_ban_de_xuat.ts",
 	"agent_builder/agent.ts#output",
 	"agent_runner/agent.ts#output",
+	"may_soan/agent.ts#output",
 ];
 
 type CoOKetQua = { shape: { result: z.ZodType } };

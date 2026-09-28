@@ -18,6 +18,7 @@ const KEYS = [
 	"GOOGLE_SHEETS_KHOA",
 	"AI_GATEWAY_API_KEY",
 	"VERCEL_OIDC_TOKEN",
+	"KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
 ] as const;
 
 const saved: Record<string, string | undefined> = {};

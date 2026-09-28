@@ -25,7 +25,9 @@ if (!token) {
 
 const bam = (b) => createHash("sha256").update(b).digest("hex");
 
-const { docxNho } = await import("../../../apps/api/test/tai-lieu-nguon-mau.ts");
+const { docxNho } = await import(
+	"../../../apps/api/test/tai-lieu-nguon-mau.ts"
+);
 const { db } = await import("../../../packages/db/src/index.ts");
 const { moDo } = await import("../../kho-tai-lieu/rang/man-lib.mjs");
 
@@ -53,7 +55,11 @@ try {
 		headers: { Origin: APP, "content-type": KIEU_DOCX },
 		body: byte,
 	});
-	dat(1, put.ok, `PUT vao URL ky tra ${put.status}: ${(await put.text()).slice(0, 200)}`);
+	dat(
+		1,
+		put.ok,
+		`PUT vao URL ky tra ${put.status}: ${(await put.text()).slice(0, 200)}`,
+	);
 
 	const nhan = await d.lam(u.cookie, "taiLieuNguon.nhan", {
 		pathname,
@@ -69,12 +75,20 @@ try {
 		where: { id: nhan.nguonId },
 		select: { sha256: true },
 	});
-	dat(2, hang.sha256 === bam(byte), `sha256 hang ${hang.sha256} != tep ${bam(byte)}`);
+	dat(
+		2,
+		hang.sha256 === bam(byte),
+		`sha256 hang ${hang.sha256} != tep ${bam(byte)}`,
+	);
 
 	const ve = await d.lam(u.cookie, "taiLieuNguon.taiVe", { id: nhan.nguonId });
 	const get = await fetch(ve.url);
 	const layVe = new Uint8Array(await get.arrayBuffer());
-	dat(3, get.ok && bam(layVe) === bam(byte), `GET URL ky tra ${get.status}, bam ${bam(layVe)}`);
+	dat(
+		3,
+		get.ok && bam(layVe) === bam(byte),
+		`GET URL ky tra ${get.status}, bam ${bam(layVe)}`,
+	);
 
 	const tran = ve.url.split("?")[0];
 	const khongKy = await fetch(tran);

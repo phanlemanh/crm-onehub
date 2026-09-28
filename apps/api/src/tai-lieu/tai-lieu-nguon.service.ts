@@ -280,7 +280,7 @@ export class TaiLieuNguonService {
 			select: { id: true, trangThai: true },
 		});
 		if (!h) throw khongCo();
-		if (h.trangThai === "CHO_DOC" || h.trangThai === "DANG_SOAN") {
+		if (["CHO_DOC", "CHO_SOAN", "DANG_SOAN"].includes(h.trangThai)) {
 			throw new ConflictException(T.dangSoan);
 		}
 		if (h.trangThai !== "LOI") {
