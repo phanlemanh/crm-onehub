@@ -1,5 +1,6 @@
 import { defineSchedule } from "eve/schedules";
 import crm from "../channels/crm";
+import { lenLichDoiSoat } from "../lib/ai-doi-soat";
 import { sweepBlankFacts } from "../lib/blank-facts";
 import {
 	pendingAgentRunIds,
@@ -20,6 +21,7 @@ export default defineSchedule({
 			Promise.all([
 				sweepBlankFacts(),
 				lenLichNhac(),
+				lenLichDoiSoat(),
 				chupSoOkr(),
 				kiemBot(),
 				dongHoiQuaHan(),

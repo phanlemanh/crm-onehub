@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { kyVongTheoNgay } from "@crm/db/okr-tien-do";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { kieuKr } from "@crm/validation/okr-kr";
@@ -55,7 +56,6 @@ import type {
 	SucKhoeOutput,
 	ToanCanhOutput,
 } from "./okr-xem.contracts";
-import { kyVongTheoNgay } from "./tien-do";
 import {
 	type CayGon,
 	cong,

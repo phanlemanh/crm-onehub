@@ -89,6 +89,17 @@ export function capabilitiesFrom(
 				"the morning reminder on Zalo for anyone who linked their Zalo, and the bot that answers link codes",
 		},
 		{
+			id: "MO_HINH_AI",
+			from: "AI_GATEWAY_API_KEY or VERCEL_OIDC_TOKEN",
+			label: "AI model",
+			gives:
+				"every model call, including Trợ lý OKR. Without it Trợ lý OKR tasks close at once as «chua-co-khoa-mo-hinh» and no session opens",
+			enabled: Boolean(
+				process.env.AI_GATEWAY_API_KEY?.trim() ||
+					process.env.VERCEL_OIDC_TOKEN?.trim(),
+			),
+		},
+		{
 			id: "GOOGLE_SHEETS_KHOA",
 			from: "GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA",
 			label: "Google Sheets",

@@ -12,6 +12,8 @@ export { LOAI_NHAC, type LoaiNhac } from "@crm/db/onboarding-nhac";
 
 const ma = z.string().min(1);
 
+const thangMa = z.string().regex(/^\d{4}-\d{2}$/);
+
 const [capNhat, krIm, duocGiao, nhacTen, theoDoi] = viecOkr.options;
 
 export const mucNhac = z.union([
@@ -23,6 +25,14 @@ export const mucNhac = z.union([
 	duocGiao.pick(KHOA_MUC_OKR["okr-duoc-giao"]).strict(),
 	nhacTen.pick(KHOA_MUC_OKR["okr-nhac-ten"]).strict(),
 	theoDoi.pick(KHOA_MUC_OKR["okr-theo-doi"]).strict(),
+	z
+		.object({
+			loai: z.literal("ai-tran"),
+			thang: thangMa,
+			muc: z.union([z.literal(80), z.literal(100)]),
+		})
+		.strict(),
+	z.object({ loai: z.literal("ai-doi-soat-lech"), thang: thangMa }).strict(),
 ]);
 
 export type MucNhac = z.infer<typeof mucNhac>;

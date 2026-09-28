@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_rethrow } from "next/navigation";
 import type * as React from "react";
 import { Suspense } from "react";
 import {
@@ -19,6 +20,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { BangChuKy } from "./bang-chu-ky";
 import { FormCauHinh } from "./form-cau-hinh";
+import { KhoiTroLyOkr } from "./khoi-tro-ly-okr";
 import { LyDoKhongQuyen } from "./trang-thai-cai-dat";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,6 +68,17 @@ export default async function CaiDatChuongTrinhOkrPage() {
 	);
 }
 
+async function loadProgram() {
+	try {
+		return await getServerQueryClient().fetchQuery(
+			getServerTrpc().okr.program.queryOptions(),
+		);
+	} catch (error) {
+		unstable_rethrow(error);
+		return null;
+	}
+}
+
 async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	await requireSession();
 
@@ -73,10 +86,16 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	const queryClient = getServerQueryClient();
 	const homNay = homNayVn(new Date());
 
-	await Promise.all([
+	const [, program] = await Promise.all([
 		queryClient.prefetchQuery(trpc.okr.cycles.queryOptions()),
-		queryClient.prefetchQuery(trpc.okr.program.queryOptions()),
+		loadProgram(),
 	]);
+	if (program?.canManage) {
+		await Promise.all([
+			queryClient.prefetchQuery(trpc.okr.aiChiTieu.queryOptions()),
+			queryClient.prefetchQuery(trpc.org.tree.queryOptions()),
+		]);
+	}
 
 	return (
 		<HydrateClient>
@@ -85,6 +104,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 				<div className="flex flex-col gap-6">
 					<BangChuKy goiY={goiYChuKy(homNay)} homNay={homNay} />
 					<FormCauHinh />
+					<KhoiTroLyOkr />
 				</div>
 			</PageShellContent>
 		</HydrateClient>

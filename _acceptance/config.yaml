@@ -784,6 +784,21 @@ executors:
     hth_so_tien: 'bun run test -- "cd apps/agent && bun test test/zalo-loc.spec.ts -t \"loc-che|so-tien\""'
     hth_thuoc_am: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cai-lenh|dang-ban\""'
     hth_token: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoi-crm-qua-zalo.integration.spec.ts -t \"cung-phien|duong-chinh\""'
+    tln_ma_tran_viec: cd packages/validation && bun test test/ai-chi-phi.spec.ts -t ma-tran-viec
+    tln_so_moi_phien: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/so-chi-phi.integration.spec.ts -t moi-phien"
+    tln_doi_soat: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ai-doi-soat.integration.spec.ts"
+    tln_tran_khong: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-viec.integration.spec.ts -t tran-khong"
+    tln_dong_viec: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-viec.integration.spec.ts -t dong-viec"
+    tln_uy_quyen: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen.spec.ts
+    tln_chuyen_tiep: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chuyen-tiep.spec.ts"
+    tln_cach_ly_tinh: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts
+    tln_chi_tieu_api: bun run test -- "cd apps/api && bun test test/tro-ly-okr-chi-tieu.spec.ts"
+    tln_man_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-cai-dat.dom.tsx
+    tln_mac_dinh: bun run test -- "cd packages/validation && bun test test/okr-tro-ly.spec.ts"
+    tln_san_sang: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-san-sang.integration.spec.ts"
+    tln_bao_tran: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ai-bao-tran.integration.spec.ts"
+    tln_tien_do_api: bun run test -- "cd apps/api && bun test test/okr.spec.ts test/okr-toan-canh-thuan.spec.ts"
+    tln_duong_do: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/duong-do-tro-ly.integration.spec.ts"
   script:
     ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
     ktl_migration_tren_ban_sao: "bun _acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
@@ -1281,6 +1296,16 @@ executors:
     kcb_khong_noi_tran: "bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs khong-noi-tran"
     kcb_tuan_tu: 'bun run test -- "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs bo-qua-lo && bun _acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs tuan-tu"'
     nso_do_man: 'NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3960} API_URL=${API_URL:-http://localhost:3961} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/no-sau-luot-5-okr/rang/man-no-okr.mjs"'
+    tln_doi_soat_that: bun _acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs
+    tln_hook_chan_that: bun _acceptance/tro-ly-okr-nen/rang/hook-chan-truoc.mjs
+    tln_dau_cuoi: bun _acceptance/tro-ly-okr-nen/rang/cach-ly-dau-cuoi.mjs --lan 3
+    tln_tran_loi_goi: bun _acceptance/tro-ly-okr-nen/rang/tran-moi-loi-goi.mjs
+    tln_man_that: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-nen/rang/man-cai-dat.mjs"
+    tln_san_thiet_ke: for t in "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-so-chi-phi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
+    tln_migration_chi_them: node _acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs
+    tln_tien_do_doi: node _acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs
+    tln_tu_dien_luat: node _acceptance/tro-ly-okr-nen/rang/tu-dien-luat.mjs
+    tln_so_phien_con_that: bun _acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs
     n4_mot_khuon: "bun _acceptance/no-sau-luot-4-okr/rang/mot-khuon.mjs"
     hg_confirm_chung: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca confirm && cd apps/app && bun test test/messages-guard.spec.ts"
     hg_huy_qua_nut_dong: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca huy"

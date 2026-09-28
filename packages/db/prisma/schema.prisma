@@ -1912,11 +1912,12 @@ model ZaloHoi {
 }
 
 model NotificationPreference {
-  id        String              @id @default(cuid())
-  userId    String              @unique
-  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  channel   NotificationChannel @default(AUTO)
-  updatedAt DateTime            @updatedAt
+  id           String              @id @default(cuid())
+  userId       String              @unique
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel      NotificationChannel @default(AUTO)
+  dongTroLyOkr Boolean             @default(true)
+  updatedAt    DateTime            @updatedAt
 
   @@map("notificationPreference")
 }
@@ -1997,16 +1998,22 @@ model OkrCycle {
 }
 
 model OkrProgramConfig {
-  id           String   @id @default(cuid())
-  version      Int      @unique
-  objectiveCap Int
-  krCap        Int
-  capMode      String
-  scoreScale   String
-  weightsOn    Boolean
-  personalOn   Boolean
-  createdById  String
-  createdAt    DateTime @default(now())
+  id             String   @id @default(cuid())
+  version        Int      @unique
+  objectiveCap   Int
+  krCap          Int
+  capMode        String
+  scoreScale     String
+  weightsOn      Boolean
+  personalOn     Boolean
+  aiOn           Boolean  @default(false)
+  aiDeXuatPhamVi String   @default("tat")
+  aiDeXuatDonVi  String[] @default([])
+  aiTomTatPhamVi String   @default("tat")
+  aiTomTatDonVi  String[] @default([])
+  aiTranThangUsd Decimal  @default(9) @db.Decimal(8, 2)
+  createdById    String
+  createdAt      DateTime @default(now())
 
   @@map("okrProgramConfig")
 }
@@ -2446,4 +2453,102 @@ model OkrMangSang {
 
   @@unique([tuObjectiveId, sangCycleId])
   @@map("okrMangSang")
+}
+
+model OkrDeXuat {
+  id          String    @id @default(cuid())
+  taskId      String
+  objectiveId String
+  keyResultId String?
+  loai        String
+  truong      String?
+  truoc       String?
+  sau         String?
+  sauChuan    String?
+  maVanDe     String?
+  dich        Json?
+  lyDo        String
+  trangThai   String    @default("cho")
+  giaTriCuoi  String?
+  inputHash   String
+  nguoiYeuCau String
+  nguoiQuyet  String?
+  quyetLuc    DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([objectiveId, trangThai])
+  @@index([taskId])
+  @@index([createdAt])
+  @@map("okrDeXuat")
+}
+
+model OkrTomTat {
+  id           String   @id @default(cuid())
+  taskId       String   @unique
+  cycleId      String
+  departmentId String
+  tuan         DateTime @db.Date
+  cau          Json
+  soCauBo      Int
+  trangThai    String
+  inputHash    String
+  createdAt    DateTime @default(now())
+
+  @@unique([cycleId, departmentId, tuan])
+  @@map("okrTomTat")
+}
+
+model OkrTomTatPhanHoi {
+  id       String   @id @default(cuid())
+  tomTatId String
+  userId   String
+  huuIch   Boolean
+  luc      DateTime @default(now())
+
+  @@unique([tomTatId, userId])
+  @@map("okrTomTatPhanHoi")
+}
+
+model AiChiPhi {
+  id              String   @id
+  at              DateTime
+  sessionId       String
+  phienCha        String?
+  kenh            String?
+  tinhNang        String
+  taskId          String?
+  modelId         String?
+  inputTokens     Int?
+  cacheReadTokens Int?
+  outputTokens    Int?
+  costUsd         Decimal? @db.Decimal(12, 6)
+
+  @@index([at])
+  @@index([tinhNang, at])
+  @@index([sessionId])
+  @@map("aiChiPhi")
+}
+
+model AiDoiSoat {
+  thang        String   @id
+  tuNgay       DateTime @db.Date
+  denNgay      DateTime @db.Date
+  soSoUsd      Decimal  @db.Decimal(12, 6)
+  soGatewayUsd Decimal? @db.Decimal(12, 6)
+  lechPhanTram Decimal? @db.Decimal(6, 1)
+  ketQua       String
+  lyDo         String?
+  luc          DateTime @default(now())
+
+  @@map("aiDoiSoat")
+}
+
+model AiBaoTran {
+  thang  String
+  muc    Int
+  userId String
+  luc    DateTime @default(now())
+
+  @@id([thang, muc, userId])
+  @@map("aiBaoTran")
 }

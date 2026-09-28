@@ -7,7 +7,7 @@ cần thiết để máy khác không phải học lại.
 
 ## 1. Đang ở đâu
 
-**Lượt 1 `kho-tai-lieu` đã ký Cổng Bằng chứng 2026-09-28**, chờ merge PR vào `onehub` (merge commit, không squash). Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
+**Lượt 1 `kho-tai-lieu` đã lên `onehub` 2026-09-28** (PR #180, merge commit `c1e37b73`). Lượt 2 `may-soan-de-xuat` đang ở S0–S1. Hạn chế đã biết ở `Notes` của `_acceptance/kho-tai-lieu/contract.md`.
 Lượt 0 xong. Nghiên cứu xong, bản mẫu xong, lộ
 trình đã sắp lại theo output ngày 2026-09-27 (năm lượt, chạy thật mọi phòng ban, một
 lượt sửa). Chưa có dòng mã sản phẩm nào ngoài bản mẫu và trình đọc markdown. Tám mục
@@ -86,7 +86,7 @@ Theo thứ tự, lấy từ mục 4 của lộ trình:
 
 Đường bàn giao phần mềm, theo mục 3 của lộ trình:
 
-1. Merge PR lượt 1 vào `onehub` bằng merge commit. Hai mục người dùng sẽ gặp trong 17 hạn
+1. ~~Merge PR lượt 1 vào `onehub`~~ — xong 2026-09-28 (#180). Hai mục người dùng sẽ gặp trong 17 hạn
    chế đã biết — dấu `|` trong ô bảng làm mất dữ liệu, danh sách đề xuất trần 25 dòng — nên
    vào đầu lượt 3 thay vì chờ lượt sửa.
 2. Lượt 2 `may-soan-de-xuat`, lượt 3 `tim-va-dieu-huong-kho`, lượt 4 `tro-ly-doc-kho`, mỗi

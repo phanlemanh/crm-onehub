@@ -14,6 +14,11 @@ export const TASK_KINDS = [
 	"nhac-ke-hoach",
 	"okr-doc-sheet",
 	"soan-tu-nguon",
+	"okr-de-xuat",
+	"okr-tom-tat-tuan",
+	"okr-kiem-san-sang",
+	"okr-tom-tat-xep",
+	"ai-doi-soat",
 ] as const;
 
 export type TaskKind = (typeof TASK_KINDS)[number];
@@ -27,6 +32,9 @@ export const DIRECT_KINDS = [
 	"nhac-ke-hoach",
 	"okr-doc-sheet",
 	"soan-tu-nguon",
+	"okr-kiem-san-sang",
+	"okr-tom-tat-xep",
+	"ai-doi-soat",
 ] as const;
 
 export type DirectKind = (typeof DIRECT_KINDS)[number];
@@ -68,4 +76,35 @@ export const PRIORITY = {
 	nhac: 60,
 	okrSheet: 400,
 	soanTuNguon: 300,
+	okrBam: 600,
+	okrNen: 90,
+	okrKiem: 940,
+	aiDoiSoat: 45,
 } as const;
+
+export const LOAI_VIEC_OKR = [
+	"okr-de-xuat",
+	"okr-tom-tat-tuan",
+	"okr-kiem-san-sang",
+	"okr-tom-tat-xep",
+] as const;
+
+export const LOAI_VIEC_TRO_LY_OKR = [
+	"okr-de-xuat",
+	"okr-tom-tat-tuan",
+] as const;
+
+export const VIEC_OKR = {
+	soLanThu: 1,
+	leaseMs: 30 * 1000,
+} as const;
+
+export function laViecTroLyOkr(kind: string): boolean {
+	return (LOAI_VIEC_TRO_LY_OKR as readonly string[]).includes(kind);
+}
+
+export function soLanThuToiDa(kind: string): number {
+	return (LOAI_VIEC_OKR as readonly string[]).includes(kind)
+		? VIEC_OKR.soLanThu
+		: MAX_ATTEMPTS;
+}

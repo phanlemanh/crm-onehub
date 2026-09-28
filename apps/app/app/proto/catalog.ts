@@ -378,6 +378,37 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tro-ly-okr-nen",
+		ten: "Cài đặt › Chương trình OKR — khối Trợ lý OKR và Sổ chi phí AI",
+		states: [
+			{ id: "ST-troly-san-sang", nhan: "Trợ lý OKR — sẵn sàng" },
+			{ id: "ST-troly-dang-tai", nhan: "Trợ lý OKR — đang tải" },
+			{ id: "ST-troly-tat", nhan: "Trợ lý OKR — đang tắt" },
+			{ id: "ST-troly-chua-san-sang", nhan: "Trợ lý OKR — chưa sẵn sàng" },
+			{ id: "ST-troly-het-tran", nhan: "Trợ lý OKR — đã chạm trần" },
+			{
+				id: "ST-troly-khong-don-vi",
+				nhan: "Trợ lý OKR — chọn đơn vị nhưng danh sách rỗng",
+			},
+			{ id: "ST-troly-loi-luu", nhan: "Trợ lý OKR — lưu hỏng" },
+			{ id: "ST-sochiphi-dang-tai", nhan: "Sổ chi phí — đang tải" },
+			{ id: "ST-sochiphi-rong", nhan: "Sổ chi phí — tháng chưa có lượt nào" },
+			{
+				id: "ST-sochiphi-co-so",
+				nhan: "Sổ chi phí — có số, có dòng chưa gán",
+			},
+			{ id: "ST-sochiphi-80", nhan: "Sổ chi phí — Trợ lý OKR 80% trần" },
+			{ id: "ST-sochiphi-100", nhan: "Sổ chi phí — Trợ lý OKR chạm trần" },
+			{ id: "ST-sochiphi-doi-soat-lech", nhan: "Sổ chi phí — đối soát lệch" },
+			{
+				id: "ST-sochiphi-khong-doi-soat",
+				nhan: "Sổ chi phí — chưa đối soát được",
+			},
+			{ id: "ST-sochiphi-loi", nhan: "Sổ chi phí — lỗi" },
+			{ id: "ST-thanh-vien", nhan: "Thành viên thường — không thấy hai khối" },
+		],
+	},
+	{
 		slug: "khep-ky-okr",
 		ten: "Khép kỳ OKR — rà, chấm, nhìn lại, mang sang, đóng",
 		states: [
