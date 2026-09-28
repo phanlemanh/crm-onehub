@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-28-canh-kr-okr-design.md` · hợp đồng `_acceptance/canh-kr-okr/contract.md` (duyệt 2026-09-28, Manh Phan) · phép đo `_acceptance/canh-kr-okr/evals.yaml` · bản mẫu `/proto/canh-kr-okr` (`design-pass.md`).
 
+**Cổng 1.5:** duyệt 2026-09-28 bởi Manh Phan — chạy subagent-driven (một tác tử con mỗi việc, kèm một người soát); việc 1 và 2 song song.
+
 ## Điều kiện trước S3
 
 Không bắt đầu Task 1 trước khi chủ kho dán «được viết mã, kéo onehub về trước» (điều kiện: M `bo-okr-mau`, #186, đã gộp). Khi đó, theo thứ tự:
