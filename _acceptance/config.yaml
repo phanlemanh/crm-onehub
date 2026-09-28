@@ -760,6 +760,14 @@ executors:
     rst_lich: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t lich"'
     rst_nguoi_bam: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t nguoi-bam"'
     rst_giu_nguyen: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t giu-nguyen"'
+    stqe_kenh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-kenh"'
+    stqe_tin_rieng: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-tin-rieng"'
+    stqe_dong_khop: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-dong-khop"'
+    stqe_uu_tien: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-uu-tien"'
+    stqe_ba_hinh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-ba-hinh"'
+    stqe_khong_tinh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-khong-tinh"'
+    stqe_loi_nhan: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-loi-nhan"'
+    stqe_ro_slack_con_xanh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts"'
     hth_chan_ghi: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t chan-ghi"'
     hth_ghi_that: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t ghi-that"'
     hth_web_fetch: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t web-fetch"'
@@ -814,6 +822,8 @@ executors:
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
     rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
     rst_kiem_ke: node _acceptance/ro-slack-tac-nhan/rang/kiem-ke.mjs
+    stqe_do_truoc_khi_va: node _acceptance/slack-thieu-quyen-email/rang/do-truoc-khi-va.mjs
+    stqe_khong_sua_tep_hang: node _acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs
     hcz_tai_lieu: bun _acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs
     tthz_tai_lieu: bun _acceptance/ha-tran-thang-hoi-zalo/rang/tai-lieu.mjs
     tthz_khong_cham_da_ky: bun _acceptance/ha-tran-thang-hoi-zalo/rang/khong-cham-da-ky.mjs
