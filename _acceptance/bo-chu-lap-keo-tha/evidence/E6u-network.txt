@@ -1,0 +1,8 @@
+E6u network truth
+Driver: puppeteer-core headless browser driven from inside man-chu.mjs / man-lib.mjs
+(a script this session shells out to via bun/mot-luot.sh), not one of this
+session's own browser tools (mcp__Claude_Browser / mcp__claude-in-chrome).
+This session has no read_network_requests / read_console_messages access into
+that headless page, so failed-request / console-error introspection is not
+possible from here.
+networkObserved = n-a (driver)
