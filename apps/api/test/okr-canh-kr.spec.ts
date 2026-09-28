@@ -784,10 +784,10 @@ describe("sang-kien", () => {
 			buoc.push(["C2 xoa", await trangThai(idC2)]);
 
 			buoc.push(["PY mo", await trangThai(idPY)]);
-			await db.onboardingPlan.update({
-				where: { id: PY },
-				data: { closedAt: new Date() },
-			});
+			ok(
+				await goi("onboarding.closePlan", { id: PY }, A.cookie),
+				"dong ke hoach PY",
+			);
 			buoc.push(["PY dong", await trangThai(idPY)]);
 			ok(await goi("companies.archive", { id: y.congTy }), "luu tru Y");
 			buoc.push(["Y luu tru", await trangThai(idPY)]);
