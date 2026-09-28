@@ -48,10 +48,12 @@ export const krInput = z.object({
 
 export type KrInput = z.infer<typeof krInput>;
 
-export type LoiSoTheoKieu =
-	| "dich-phai-lon-hon-khoi-diem"
-	| "dich-phai-nho-hon-khoi-diem"
-	| "phan-tram-ngoai-0-100";
+export const LOI_SO_THEO_KIEU = [
+	"dich-phai-lon-hon-khoi-diem",
+	"dich-phai-nho-hon-khoi-diem",
+	"phan-tram-ngoai-0-100",
+] as const;
+export type LoiSoTheoKieu = (typeof LOI_SO_THEO_KIEU)[number];
 
 export function kiemSoTheoKieu(
 	kieu: KieuKr,

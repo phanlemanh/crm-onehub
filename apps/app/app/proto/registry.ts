@@ -7,6 +7,7 @@ import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
+import { KhepKyOkrMau } from "./_modules/khep-ky-okr";
 import { KhoTaiLieuMau } from "./_modules/kho-tai-lieu";
 import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
@@ -29,6 +30,7 @@ const BANG_GHEP = {
 	"duong-proto-cho-design-pass": DuongProtoMau,
 	"ke-hoach-la-mot-ban-ghi": KeHoachLaMotBanGhiMau,
 	"keo-tha-thoa-thuan": KeoThaThoaThuanMau,
+	"khep-ky-okr": KhepKyOkrMau,
 	"khung-trang-cai-dat": KhungTrangCaiDatMau,
 	"kho-tai-lieu": KhoTaiLieuMau,
 	"may-soan-de-xuat": KhoTaiLieuMau,

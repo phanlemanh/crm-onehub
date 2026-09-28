@@ -13,6 +13,15 @@ import { auth, KHONG_TRONG_PHAM_VI, NOT_A_MEMBER } from "@crm/auth";
 import { db } from "@crm/db";
 import { readContextDevKey, writeContextDevKey } from "@crm/db/settings";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	chamKrInput,
+	dongRaInput,
+	ghiDieuHocDuocInput,
+	mangSangInput,
+	moLaiKyInput,
+	moRaInput,
+	xuatKyInput,
+} from "@crm/validation/okr-khep";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { z } from "zod";
@@ -21,6 +30,7 @@ import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
 import { ContextLogger } from "../src/logging/context-logger";
 import { OKR } from "../src/okr/okr-config";
+import { bangChamInput } from "../src/okr/okr-khep.contracts";
 import { AuthMiddleware } from "../src/trpc/middlewares/auth.middleware";
 import { PhamViChungMiddleware } from "../src/trpc/middlewares/pham-vi-du-lieu.middleware";
 import { WorkspaceService } from "../src/workspace/workspace.service";
@@ -125,11 +135,53 @@ const DAU_VAO_HOP_LE = {
 	"org.applyImport": { text: "" },
 	"okr.datNguonKr": { keyResultId: "khong-co", loai: "api" },
 	"okr.ghiSoKr": { id: "khong-co", giaTri: 1 },
+	"okr.moRa": {
+		cycleId: "khong-co",
+		tuNgay: "2026-11-16",
+		denNgay: "2026-11-22",
+	},
+	"okr.dongRa": { id: "khong-co" },
+	"okr.bangCham": { cycleId: "khong-co" },
+	"okr.chamKr": { keyResultId: "khong-co", diem: 0.5 },
+	"okr.ghiDieuHocDuoc": {
+		objectiveId: "khong-co",
+		noiDung: "Khách mới đến từ giới thiệu",
+	},
+	"okr.moLaiKy": { id: "khong-co", lyDo: "Chấm nhầm một KR cần sửa" },
+	"okr.mangSang": { objectiveId: "khong-co" },
+	"okr.xuatKy": { cycleId: "khong-co" },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
 		? DAU_VAO_HOP_LE[ten as keyof typeof DAU_VAO_HOP_LE]
 		: undefined;
+const THU_TUC_KHEP = {
+	"okr.moRa": moRaInput,
+	"okr.dongRa": dongRaInput,
+	"okr.bangCham": bangChamInput,
+	"okr.chamKr": chamKrInput,
+	"okr.ghiDieuHocDuoc": ghiDieuHocDuocInput,
+	"okr.moLaiKy": moLaiKyInput,
+	"okr.mangSang": mangSangInput,
+	"okr.xuatKy": xuatKyInput,
+} as const;
+const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
+
+const giaTriJson = z.json();
+const doiTuongJson = z.record(z.string(), giaTriJson);
+type GiaTriJson = z.infer<typeof giaTriJson>;
+
+function khoaCua(v: GiaTriJson, duong: string): string[] {
+	if (Array.isArray(v))
+		return v.flatMap((x, i) => khoaCua(x, `${duong}[${i}]`));
+	const doc = doiTuongJson.safeParse(v);
+	if (!doc.success) return [];
+	return Object.entries(doc.data).flatMap(([k, x]) => [
+		`${duong}.${k}`,
+		...khoaCua(x, `${duong}.${k}`),
+	]);
+}
+
 const dongNhatKy = z.object({
 	path: z.string(),
 	outcome: z.string(),
@@ -945,4 +997,222 @@ describe("vai-chi-okr", () => {
 			CHO_MA_TRAN_MS,
 		);
 	});
+});
+
+describe("pham-vi-khep", () => {
+	beforeEach(don);
+
+	test("tam thu tuc khep ky co trong so thu tuc va co dau vao hop le", () => {
+		const ten = new Set(soThuTuc(app).map((t) => t.ten));
+		expect(
+			Object.keys(THU_TUC_KHEP).filter((t) => !ten.has(t)),
+			"thu tuc khep ky khong do thay",
+		).toEqual([]);
+		const hong = Object.entries(THU_TUC_KHEP).flatMap(([t, khuon]) => {
+			const vao = dauVaoCua(t);
+			if (vao === undefined) return [`${t}: thieu dau vao`];
+			const doc = khuon.safeParse(vao);
+			return doc.success ? [] : [`${t}: ${doc.error.message}`];
+		});
+		expect(hong, "dau vao hop le cho thu tuc khep ky").toEqual([]);
+	});
+
+	test(
+		"vai okr: bangCham, xuatKy doc duoc; chamKr, ghiDieuHocDuoc, mangSang theo quyen ban ghi; moRa, dongRa, moLaiKy 403; khong dau ra nao co khoa doi tac",
+		async () => {
+			const minh = await gieoNguoi("khep-okr", "okr");
+			const khac = await gieoNguoi("khep-khac", "member");
+			const cookie = await dangNhap(minh.email);
+			const dau = { cookie };
+			const ra: { ten: string; body: GiaTriJson }[] = [];
+			const goi = async (
+				ten: keyof typeof THU_TUC_KHEP,
+				loai: "query" | "mutation",
+				vao: DauVaoHopLe,
+			) => {
+				const res = await goiTrpc(app, ten, loai, vao, dau);
+				ra.push({ ten, body: giaTriJson.parse(res.body) });
+				return {
+					status: res.status,
+					message: String(res.body?.error?.message ?? ""),
+					data: res.body?.result?.data,
+				};
+			};
+			const cu = await db.okrProgramConfig.findFirst({
+				orderBy: { version: "desc" },
+			});
+			const chuongTrinh = await db.okrProgramConfig.create({
+				data: {
+					version: (cu?.version ?? 0) + 1,
+					objectiveCap: 50,
+					krCap: 50,
+					capMode: "canh-bao",
+					scoreScale: "0-1",
+					weightsOn: false,
+					personalOn: true,
+					createdById: minh.userId,
+				},
+			});
+			const ky = await db.okrCycle.create({
+				data: {
+					kind: "quy",
+					name: id("ky-khep"),
+					startsOn: new Date("2000-01-01T00:00:00Z"),
+					endsOn: new Date("2000-03-31T00:00:00Z"),
+					phase: "cham-diem",
+				},
+			});
+			const kyKe = await db.okrCycle.create({
+				data: {
+					kind: "quy",
+					name: id("ky-khep-ke"),
+					startsOn: new Date("2000-04-01T00:00:00Z"),
+					endsOn: new Date("2000-06-30T00:00:00Z"),
+					phase: "lap-ke-hoach",
+				},
+			});
+			const gieo = async (userId: string, phan: string) => {
+				const mt = await db.okrObjective.create({
+					data: {
+						cycleId: ky.id,
+						level: "ca-nhan",
+						personUserId: userId,
+						ownerUserId: userId,
+						kind: "cam-ket",
+						status: "cong-bo",
+						publishedAt: new Date("2000-01-02T00:00:00Z"),
+						title: id(`mt-khep-${phan}`),
+					},
+				});
+				const kr = await db.okrKeyResult.create({
+					data: {
+						objectiveId: mt.id,
+						title: id(`kr-khep-${phan}`),
+						kind: "tang-toi",
+						ownerUserId: userId,
+						startValue: 0,
+						targetValue: 100,
+						currentValue: 50,
+						source: "tay",
+					},
+				});
+				await db.okrDiemKr.create({
+					data: {
+						keyResultId: kr.id,
+						cycleId: ky.id,
+						soChot: 50,
+						diemGoiY: 0.5,
+						thang: "0-1",
+						trongSoBat: false,
+						phienBanChuongTrinh: chuongTrinh.version,
+					},
+				});
+				return { mt: mt.id, kr: kr.id };
+			};
+			try {
+				const cuaMinh = await gieo(minh.userId, "minh");
+				const cuaKhac = await gieo(khac.userId, "khac");
+
+				const bang = await goi("okr.bangCham", "query", { cycleId: ky.id });
+				expect(bang.status, `bangCham ${bang.message}`).toBe(200);
+				expect(
+					bang.data.mucTieu.map((m: { id: string }) => m.id).sort(),
+				).toEqual([cuaMinh.mt, cuaKhac.mt].sort());
+
+				const ket = {
+					chamMinh: await goi("okr.chamKr", "mutation", {
+						keyResultId: cuaMinh.kr,
+						diem: 0.5,
+					}),
+					chamKhac: await goi("okr.chamKr", "mutation", {
+						keyResultId: cuaKhac.kr,
+						diem: 0.5,
+					}),
+					hocMinh: await goi("okr.ghiDieuHocDuoc", "mutation", {
+						objectiveId: cuaMinh.mt,
+						noiDung: "Khách mới đến từ giới thiệu",
+					}),
+					hocKhac: await goi("okr.ghiDieuHocDuoc", "mutation", {
+						objectiveId: cuaKhac.mt,
+						noiDung: "Khách mới đến từ giới thiệu",
+					}),
+					mangMinh: await goi("okr.mangSang", "mutation", {
+						objectiveId: cuaMinh.mt,
+					}),
+					mangKhac: await goi("okr.mangSang", "mutation", {
+						objectiveId: cuaKhac.mt,
+					}),
+					moRa: await goi("okr.moRa", "mutation", {
+						cycleId: ky.id,
+						tuNgay: "2000-02-01",
+						denNgay: "2000-02-07",
+					}),
+					dongRa: await goi("okr.dongRa", "mutation", {
+						...DAU_VAO_HOP_LE["okr.dongRa"],
+					}),
+					moLaiKy: await goi("okr.moLaiKy", "mutation", {
+						...DAU_VAO_HOP_LE["okr.moLaiKy"],
+						id: ky.id,
+					}),
+				};
+				expect(
+					Object.fromEntries(
+						Object.entries(ket).map(([k, v]) => [
+							k,
+							`${v.status} ${v.status === 200 ? "" : v.message}`.trim(),
+						]),
+					),
+				).toEqual({
+					chamMinh: "200",
+					chamKhac: `403 ${OKR.thongDiep.khongSuaDuocKr}`,
+					hocMinh: "200",
+					hocKhac: `403 ${OKR.thongDiep.khongSuaDuocDonVi}`,
+					mangMinh: "200",
+					mangKhac: `403 ${OKR.thongDiep.khongSuaDuocDonVi}`,
+					moRa: `403 ${OKR.thongDiep.canQuyenQuanTri}`,
+					dongRa: `403 ${OKR.thongDiep.canQuyenQuanTri}`,
+					moLaiKy: `403 ${OKR.thongDiep.canQuyenQuanTri}`,
+				});
+				expect(ket.mangMinh.data.cycleId).toBe(kyKe.id);
+
+				await db.okrCycle.update({
+					where: { id: ky.id },
+					data: { phase: "da-dong" },
+				});
+				const bangDong = await goi("okr.bangCham", "query", {
+					cycleId: ky.id,
+				});
+				const xuat = await goi("okr.xuatKy", "query", { cycleId: ky.id });
+				expect({
+					bangDong: bangDong.status,
+					xuat: xuat.status,
+					coMucTieu: String(xuat.data?.noiDung ?? "").includes(
+						id("mt-khep-minh"),
+					),
+				}).toEqual({ bangDong: 200, xuat: 200, coMucTieu: true });
+
+				const lo = ra.flatMap(({ ten, body }) =>
+					khoaCua(body, ten).filter((k) =>
+						KHOA_DOI_TAC.some((d) => k.endsWith(`.${d}`)),
+					),
+				);
+				expect(lo, `khoa doi tac trong dau ra: ${lo.join(", ")}`).toEqual([]);
+			} finally {
+				const kyIds = [ky.id, kyKe.id];
+				const mts = { cycleId: { in: kyIds } };
+				await db.okrMangSang.deleteMany({ where: { sangCycleId: kyKe.id } });
+				await db.okrNhinLai.deleteMany({ where: { objective: mts } });
+				await db.okrDiemKr.deleteMany({ where: { cycleId: ky.id } });
+				await db.okrKeyResult.deleteMany({ where: { objective: mts } });
+				await db.okrParticipant.deleteMany({ where: { objective: mts } });
+				await db.okrObjective.deleteMany({ where: mts });
+				await db.okrTrail.deleteMany({ where: { cycleId: { in: kyIds } } });
+				await db.okrCycle.deleteMany({ where: { id: { in: kyIds } } });
+				await db.okrProgramConfig.deleteMany({
+					where: { id: chuongTrinh.id },
+				});
+			}
+		},
+		CHO_MA_TRAN_MS,
+	);
 });

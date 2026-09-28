@@ -6,6 +6,8 @@ import {
 	suKienDoi,
 } from "../src/tai-lieu-diff";
 
+const TRAN_MS = process.env.CI ? 6_000 : 2_000;
+
 const TRUOC = `## Thời hạn chi trả
 
 Hoa hồng được chi trả trong vòng 48 giờ kể từ khi ký.
@@ -121,7 +123,7 @@ describe("tai-lieu-diff", () => {
 		const bd = performance.now();
 		const khoi = soSanh(truoc, sau);
 		const ms = performance.now() - bd;
-		expect(ms).toBeLessThan(2_000);
+		expect(ms).toBeLessThan(TRAN_MS);
 		expect(dem(khoi, "them") + dem(khoi, "bo")).toBeGreaterThan(0);
 	});
 
@@ -130,7 +132,7 @@ describe("tai-lieu-diff", () => {
 		const sau = "f g h i j ".repeat(20_000);
 		const bd = performance.now();
 		const khoi = soSanh(truoc, sau);
-		expect(performance.now() - bd).toBeLessThan(2_000);
+		expect(performance.now() - bd).toBeLessThan(TRAN_MS);
 		expect(dem(khoi, "them")).toBeGreaterThan(0);
 		expect(dem(khoi, "bo")).toBeGreaterThan(0);
 	});

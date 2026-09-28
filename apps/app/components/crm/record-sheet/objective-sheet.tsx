@@ -286,6 +286,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 				kind={mt.kind}
 				expected={mt.expected}
 				danhDauCuaToi={false}
+				hoiDoiTrong={ghiDuoc(mt)}
 				nhanHanhDong={m.cotThaoTac}
 				hanhDong={
 					coMenu

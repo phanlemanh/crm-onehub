@@ -30,6 +30,10 @@ Lịch sử nhánh (mới nhất trên cùng):
 
 | Commit | Việc |
 | --- | --- |
+| `43ff71ff` | Trần `diff-trang-dai` 6 giây trên CI, giữ 2 giây tại chỗ |
+| `3162c37a` | Dời `migration` sang `20261001010000_kho_tai_lieu`, khỏi trùng dấu với `okr_khep_ky` |
+| `2d4bed6f` | Kéo `onehub` mới vào (#178, #179), gỡ đụng độ `schema.prisma`, `registry.ts`, vẽ lại bản đồ |
+| `5e3e35b9` | Sổ theo dõi: lượt 1 đã ký Cổng Bằng chứng |
 | `17cf2463` | Ghim lại hồ sơ sau khi gộp `onehub` |
 | `cea37af8` | Kéo `onehub` mới vào (55 commit, không `migration`), vẽ lại bản đồ sản phẩm |
 | `9c6c6e18` | Ký Cổng Bằng chứng: E14j đạt, 17 hạn chế đã biết |

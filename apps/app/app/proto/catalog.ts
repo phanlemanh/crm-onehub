@@ -377,6 +377,38 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-toancanh-loi", nhan: "Toàn cảnh — lỗi" },
 		],
 	},
+	{
+		slug: "khep-ky-okr",
+		ten: "Khép kỳ OKR — rà, chấm, nhìn lại, mang sang, đóng",
+		states: [
+			{
+				id: "ST-cham-donvi",
+				nhan: "Chấm điểm — hướng A: cách xem trong Theo đơn vị",
+			},
+			{ id: "ST-cham-sheet", nhan: "Chấm điểm — hướng B: tab trong sheet" },
+			{ id: "ST-cham-lydo", nhan: "Chấm điểm — điểm khác gợi ý, thiếu lý do" },
+			{ id: "ST-cham-daxong", nhan: "Chấm điểm — đơn vị đã chấm hết" },
+			{ id: "ST-cham-chiokr", nhan: "Chấm điểm — vai «chỉ OKR» chỉ đọc" },
+			{ id: "ST-cham-dadong", nhan: "Chấm điểm — kỳ đã đóng" },
+			{ id: "ST-cham-rong", nhan: "Chấm điểm — đơn vị không có gì để chấm" },
+			{ id: "ST-cham-dangtai", nhan: "Chấm điểm — đang tải" },
+			{ id: "ST-cham-loi", nhan: "Chấm điểm — lỗi" },
+			{ id: "ST-mangsang-hoi", nhan: "Mang sang — hộp thoại xác nhận" },
+			{ id: "ST-mangsang-khongky", nhan: "Mang sang — chưa có chu kỳ kế" },
+			{ id: "ST-caidat-ra", nhan: "Cài đặt — mở rà giữa kỳ" },
+			{
+				id: "ST-caidat-dong-chan",
+				nhan: "Cài đặt — đóng kỳ khi còn KR chưa chấm",
+			},
+			{ id: "ST-caidat-dong", nhan: "Cài đặt — đóng kỳ khi đủ điểm" },
+			{ id: "ST-caidat-molai", nhan: "Cài đặt — mở lại kỳ đã đóng" },
+			{ id: "ST-kr-lydo", nhan: "Hộp thoại KR — đổi đích ngoài rà" },
+			{ id: "ST-kr-hoi", nhan: "Hộp thoại KR — câu hỏi chất lượng" },
+			{ id: "ST-muctieu-doitrong", nhan: "Sheet mục tiêu — thiếu đối trọng" },
+			{ id: "ST-dai-ra", nhan: "Khu OKR — dải rà giữa kỳ" },
+			{ id: "ST-toancanh-xuat", nhan: "Toàn cảnh — kỳ đã đóng, nút Xuất" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

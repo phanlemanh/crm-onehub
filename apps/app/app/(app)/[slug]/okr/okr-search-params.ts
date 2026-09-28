@@ -24,7 +24,7 @@ export type DonChonOkr =
 	| { loai: "pb"; id: string }
 	| { loai: "nguoi"; id: string };
 
-export const CACH_XEM = ["danh-sach", "cay", "hop-tuan"] as const;
+export const CACH_XEM = ["danh-sach", "cay", "hop-tuan", "cham"] as const;
 export type CachXem = (typeof CACH_XEM)[number];
 
 export const KY_HIEN_TAI = "current";

@@ -503,7 +503,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
 - **Eleven writes are locked by cycle phase.** Every objective, key-result and
   alignment write, plus `previewImport` and `applyImport`, calls
   `assertKyGhiDuoc` first: only `lap-ke-hoach` and `dang-chay` accept writes. Phase
-  only moves forward (`setCyclePhase`).
+  moves exactly one step forward (`setCyclePhase` locks the cycle row `FOR UPDATE`,
+  refuses a jump with `OKR.thongDiep.khep.phaTungBuoc` and a step back with
+  `phaChiDiToi`); the one way back is `moLaiKy` — see «Closing a cycle» below.
 - **Every write leaves one `OkrTrail` row, never an `Activity`.** The trail holds
   the action and a typed `before`/`after` snapshot (`@crm/validation/okr-vet`, which re-exports the one schema in
   `@crm/db/okr-vet` so the reminder generator in `@crm/db` parses with it too);
@@ -583,7 +585,8 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
 - **`removeKeyResult` refuses once a KR has history.** A KR with at least one
   `OkrCheckIn` row cannot be deleted (`krDaCapNhat`) — only edited; a KR another
   objective aligns to (`OkrAlignment.targetKeyResultId`) is refused the same way
-  (`krDangLaDich`). Both checks run inside the same lock as the delete, so a
+  (`krDangLaDich`), and so is a KR with a target change (`okrDoiDich`) or a score row
+  (`okrDiemKr`). The checks run inside the same lock as the delete, so a
   check-in written mid-transaction cannot race past them.
 - **A KR's number has a source, and the source locks at publication.**
   `okrKeyResult.source` is the effective source (`tay` · `crm` · `api` · `bang-tinh`) —
@@ -662,6 +665,45 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   gets `403` with `OKR.thongDiep.so.danhSachDoiTac`, while it can still read the number
   through `lichSuSo`. `okr.chiSo` returns the catalog and whether Sheets is on;
   `okr.xemTruocChiSo` counts up to now for the dialog and writes nothing.
+- **Closing a cycle: review window, scoring, lessons, carry-over, export.** Rules and
+  shapes shared by screen, server and the later AI pass live in `packages/validation`:
+  `@crm/validation/okr-khep` (`OKR_KHEP`, the score grid, `goiYDiem`, `diemChuan`,
+  `diemTheoThang`, `diemMucTieu`, `cachDoc`, every input schema) and
+  `@crm/validation/okr-kiem` (`kiemOkr`, four quality rules with stable codes — the
+  screen asks, the server never blocks on them). Server code is `OkrKhepService` plus
+  the pure `khep.ts` (`cuaSoHieuLuc`, `chotKyCham`, `kiemDongKy`), five tables at the
+  end of `schema.prisma`, every foreign key to the older OKR tables `ON DELETE RESTRICT`.
+  - `moRa` / `dongRa` (admin, `dang-chay` only, dates inside the cycle, no overlapping
+    open window) open and close a mid-cycle review window; `okr.cycles` returns the
+    window open today in Vietnam time. Changing a published KR's target in a running
+    cycle writes one `okrDoiDich` row; outside the window `updateKeyResult` requires
+    `lyDoDoiDich` (10–500 characters) and the row is marked `ngoaiRa`, which the
+    scoring screen shows as «Đích sửa ngoài rà».
+  - `dang-chay → cham-diem` only from the day after `endsOn` (Vietnam) and only once
+    every published KR with source `crm` has its last-day snapshot; the same
+    transaction writes one `okrDiemKr` per KR of a published objective (`soChot` =
+    `currentValue`, `diemGoiY` from the progress function, the program's `scoreScale`,
+    `weightsOn` and version copied onto the row) and closes any open window.
+    `cham-diem → da-dong` only when every row has `diem`.
+  - `chamKr` (whoever `ghiDuocKr` allows) takes the score on the row's own scale
+    (`0-100` → 80), stores it 0–1, and requires a reason when it differs from the
+    suggestion. `ghiDieuHocDuoc` (whoever edits the objective) works in `dang-chay`
+    and `cham-diem`. `bangCham` reads everything off the score rows — scale, weights,
+    reading — never the current program config, so a closed cycle's numbers do not
+    move when the program changes.
+  - `moLaiKy` (admin, reason 10–500) takes `da-dong` back to `cham-diem` and writes the
+    reason into the `mo-lai-ky` trail row's `note`; scores and snapshots stay.
+  - `mangSang` copies a published objective from a scoring or closed cycle into a draft
+    in the next cycle of the same kind: KRs scored below 1 go with start and current =
+    `soChot`, target kept, source `tay`; a KR whose new start breaks its kind is listed
+    in `khongChep`; participants who left are dropped (`boThamGia`), a KR whose owner
+    left goes to the objective's owner (`doiPhuTrachKr`); alignments are not copied.
+    One carry per objective per target cycle (`okrMangSang` unique).
+  - `xuatKy` (every OKR role, `da-dong` only) returns `{ tenTep, noiDung }`: UTF-8 CSV
+    with BOM, one row per KR of published and dropped objectives, cells starting with
+    `= + - @` or a tab get a leading `'`. Reading, so no trail row.
+  - Trail actions added: `mo-ra`, `dong-ra`, `doi-dich`, `cham-kr`, `nhin-lai`,
+    `mang-sang`, `mo-lai-ky`.
 - **Comments, mentions and follow live on the objective, not the KR.**
   `addComment` may tag one KR of that same objective (`keyResultId`, refused with
   `krKhacMucTieu` if the KR belongs to a different objective) and every mention

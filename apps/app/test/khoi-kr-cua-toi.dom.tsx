@@ -28,6 +28,7 @@ const KY = {
 	breakStartsOn: null,
 	breakEndsOn: null,
 	updateWeekday: 1,
+	cuaSoRa: null,
 } satisfies ChuKy["cycles"][number];
 const CO_KY = { cycles: [KY], currentId: "ky-1" } satisfies ChuKy;
 const KHONG_KY = { cycles: [], currentId: null } satisfies ChuKy;
