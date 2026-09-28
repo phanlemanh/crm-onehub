@@ -1,0 +1,30 @@
+{
+ "feature_plain": "Người đã hết phiên đăng nhập, dù mở trang chủ hay bất kỳ trang nào, đều được đưa về màn đăng nhập OneHub Center thay vì thấy trang giới thiệu cũ của hãng hoặc bị báo nhầm là «không còn trong không gian làm việc»; người còn phiên không thấy gì khác.",
+ "scope_plain": "Những việc vòng này cố ý không làm:",
+ "decisions_plain": [
+  {
+   "id": "d-20260928T015640Z-1",
+   "p": "Người còn phiên mở trang chủ đúng lúc máy chủ trả lời chậm: trang hỏi lại rồi vào thẳng không gian làm việc — đổi lại lúc máy chủ sập, người thấy trang lỗi mặc định bằng tiếng Anh."
+  },
+  {
+   "id": "d-20260928T015640Z-2",
+   "p": "Chỉ đưa về đăng nhập khi máy chủ nói rõ phiên đã hết; máy chủ chậm hay lỗi thì để yên như trước — đổi lại người hết phiên tốn thêm một lượt hỏi máy chủ mỗi lần mở trang cho tới khi đăng nhập lại."
+  },
+  {
+   "id": "d-20260928T015640Z-3",
+   "p": "KHÔNG làm bản mẫu bấm thử trước khi duyệt — vòng này không dựng màn mới, màn đích là trang đăng nhập đã có."
+  },
+  {
+   "id": "d-20260928T015640Z-4",
+   "p": "KHÔNG viết đặc tả trải nghiệm — không có màn mới để đặc tả."
+  },
+  {
+   "id": "d-20260928T015640Z-5",
+   "p": "KHÔNG xoá phần giới thiệu cũ của hãng khỏi mã nguồn, chỉ chặn lối vào — đổi lại mã cũ vẫn nằm trong kho nhưng giữ việc kéo bản mới của hãng về dễ dàng."
+  },
+  {
+   "id": "d-20260928T015640Z-6",
+   "p": "KHÔNG gửi bản vá lên kho gốc của hãng — chủ kho quyết; đổi lại bản riêng của OneHub lệch hãng thêm một chỗ."
+  }
+ ]
+}
