@@ -964,8 +964,13 @@ Phần lõi nằm ở tệp của bản rẽ `apps/agent/agent/lib/slack-nguoi-n
 đích Slack (mọi trang), khớp họ với thành viên bằng bảng khớp Slack hoặc email, đọc
 vai lúc gửi, và từ chối khi có người không đọc được dữ liệu đối tác
 (`docDuocPhamVi`), hoặc khi không đọc được ai ở đích. Bot và tài khoản Slack đã xoá
-không tính. Người Slack không khớp thành viên nào thì cho qua — mở lại khi có khớp
-tay. Bộ đọc Slack viết lại ở đây, cùng khuôn với `slack-people.ts`, để không chạm
+không tính. Người Slack có email mà không khớp thành viên nào thì cho qua — mở lại
+khi có khớp tay; người của tổ chức khác qua Slack Connect không có trong danh bạ nên
+cũng không tính. Người trong danh bạ mà Slack không cho thấy email và không có dòng
+khớp thì không xác định được: lượt bị từ chối bằng lời «không kiểm được người nhận»,
+kèm số người đó và lời nhắc kết nối lại Slack. Kết nối Slack thiếu quyền đọc email
+(`users:read.email`) vì thế không đăng được vào kênh có người chưa khớp — đúng ý, vì
+khi đó bước kiểm không phân biệt được người vai «chỉ OKR» với người ngoài CRM. Bộ đọc Slack viết lại ở đây, cùng khuôn với `slack-people.ts`, để không chạm
 thêm tệp của hãng.
 
 Gỡ chỗ rẽ khi hãng có bản sửa tương đương: bỏ hai chỗ sửa trên cùng tệp lõi, giữ

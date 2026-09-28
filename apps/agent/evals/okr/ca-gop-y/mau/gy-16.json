@@ -1,0 +1,31 @@
+{
+	"id": "gy-16",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Nhân sự"
+	},
+	"mucTieu": {
+		"title": "Đội ngũ gắn bó hơn",
+		"whyNow": "Nghỉ việc quý 3 cao nhất hai năm.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Nâng cao tinh thần đội ngũ",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 10,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": ["khong-do-duoc"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "KR không đo được."
+}

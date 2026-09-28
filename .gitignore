@@ -62,3 +62,5 @@ __pycache__/
 apps/agent/rang/.tmp/
 
 _acceptance/may-soan-de-xuat/mau/that/
+# Ca góp ý thật của N1 (OKR thật đã thay tên) — không bao giờ vào git.
+apps/agent/evals/okr/ca-gop-y/that/

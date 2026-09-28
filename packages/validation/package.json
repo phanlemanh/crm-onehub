@@ -20,6 +20,7 @@
 		"./invitation-status": "./src/invitation-status.ts",
 		"./listing-ingest": "./src/listing-ingest.ts",
 		"./nhac-ke-hoach": "./src/nhac-ke-hoach.ts",
+		"./okr-ca-gop-y": "./src/okr-ca-gop-y.ts",
 		"./okr-cap-nhat": "./src/okr-cap-nhat.ts",
 		"./okr-chi-so": "./src/okr-chi-so.ts",
 		"./okr-chu-ky": "./src/okr-chu-ky.ts",
