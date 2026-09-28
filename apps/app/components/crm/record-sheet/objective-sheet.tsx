@@ -28,7 +28,7 @@ import { TableCell } from "@crm/ui/components/table";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { BangKr } from "@/app/(app)/[slug]/okr/bang-kr";
+import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
 import {
@@ -246,6 +246,21 @@ function MenuKr({
 	);
 }
 
+function demCanh(mt: ChiTiet): ReadonlyMap<string, DemCanhKr> {
+	return new Map(
+		mt.keyResults.map((k) => [
+			k.id,
+			{
+				xong: k.soViec.xong,
+				tong: k.soViec.tong,
+				sangKien: k.soSangKien,
+				coBangChung: k.coBangChung,
+				suaDuoc: mt.status !== "da-bo" && mt.canEditKr.includes(k.id),
+			},
+		]),
+	);
+}
+
 type HopKr =
 	| { loai: "tao" }
 	| { loai: "sua"; kr: KetQua }
@@ -287,6 +302,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 				expected={mt.expected}
 				danhDauCuaToi={false}
 				hoiDoiTrong={ghiDuoc(mt)}
+				canh={demCanh(mt)}
 				nhanHanhDong={m.cotThaoTac}
 				hanhDong={
 					coMenu

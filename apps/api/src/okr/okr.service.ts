@@ -1539,12 +1539,47 @@ export class OkrService {
 			}),
 		]);
 		const objective = donViCuaDong(donVi);
-		const nguoi = await this.db.user.findMany({
-			where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
-			select: chonNguoi,
-		});
+		const krIds = mt.keyResults.map((k) => k.id);
+		const [nguoi, dem, xong, bangChung] = await Promise.all([
+			this.db.user.findMany({
+				where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
+				select: chonNguoi,
+			}),
+			this.db.okrViecKr.groupBy({
+				by: ["keyResultId", "loai"],
+				where: { keyResultId: { in: krIds } },
+				_count: { _all: true },
+			}),
+			this.db.okrViecKr.groupBy({
+				by: ["keyResultId"],
+				where: {
+					keyResultId: { in: krIds },
+					loai: "viec",
+					xongLuc: { not: null },
+				},
+				_count: { _all: true },
+			}),
+			this.db.okrBangChung.groupBy({
+				by: ["keyResultId"],
+				where: { keyResultId: { in: krIds } },
+				_count: { _all: true },
+			}),
+		]);
+		const demLoai = (krId: string, laViec: boolean) =>
+			dem
+				.filter((d) => d.keyResultId === krId && (d.loai === "viec") === laViec)
+				.reduce((tong, d) => tong + d._count._all, 0);
 		return {
 			...mt,
+			keyResults: mt.keyResults.map((k) => ({
+				...k,
+				soViec: {
+					xong: xong.find((d) => d.keyResultId === k.id)?._count._all ?? 0,
+					tong: demLoai(k.id, true),
+				},
+				soSangKien: demLoai(k.id, false),
+				coBangChung: bangChung.some((d) => d.keyResultId === k.id),
+			})),
 			cycleName: ky.name,
 			mangSangToi: toi
 				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }

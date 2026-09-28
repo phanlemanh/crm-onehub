@@ -75,6 +75,7 @@ export const canhKrOutput = z.object({
 		kind: z.enum(KIEU_KR),
 		objectiveId: z.string(),
 		ownerName: z.string(),
+		xong: z.boolean(),
 	}),
 	dong: z.array(dongCanh),
 	bangChung: z.array(bangChungDong),

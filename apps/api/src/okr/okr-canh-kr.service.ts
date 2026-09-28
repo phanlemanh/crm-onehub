@@ -126,6 +126,7 @@ export class OkrCanhKrService {
 				id: true,
 				title: true,
 				kind: true,
+				currentValue: true,
 				objectiveId: true,
 				ownerUserId: true,
 				owner: { select: { name: true } },
@@ -180,13 +181,15 @@ export class OkrCanhKrService {
 			tenNguoi: new Map(nguoi.map((n) => [n.id, n.name])),
 			conThanhVien: new Set(thanhVien.giu),
 		};
+		const kind = kieuKr.parse(kr.kind);
 		return {
 			kr: {
 				id: kr.id,
 				title: kr.title,
-				kind: kieuKr.parse(kr.kind),
+				kind,
 				objectiveId: kr.objectiveId,
 				ownerName: kr.owner.name,
+				xong: kind === "moc" && Number(kr.currentValue) === 1,
 			},
 			dong: hang.map(
 				(h): DongCanh =>

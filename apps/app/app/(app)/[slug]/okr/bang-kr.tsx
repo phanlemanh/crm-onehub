@@ -1,10 +1,13 @@
 "use client";
 
+import Add from "@carbon/icons-react/es/Add";
+import Attachment from "@carbon/icons-react/es/Attachment";
 import Help from "@carbon/icons-react/es/Help";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { CardTableEmpty } from "@crm/ui/components/card-table";
+import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -23,8 +26,10 @@ import type { Locale } from "@crm/ui/lib/locale";
 import { kiemOkr } from "@crm/validation/okr-kiem";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 import type { ReactNode } from "react";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { CELL, type KetQua } from "./kieu";
@@ -148,6 +153,67 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 	);
 }
 
+export type DemCanhKr = {
+	xong: number;
+	tong: number;
+	sangKien: number;
+	coBangChung: boolean;
+	suaDuoc: boolean;
+};
+
+const DEM_TRONG: DemCanhKr = {
+	xong: 0,
+	tong: 0,
+	sangKien: 0,
+	coBangChung: false,
+	suaDuoc: false,
+};
+
+function SoViecKr({ kr, dem }: { kr: KetQua; dem: DemCanhKr }) {
+	const m = okrCanhKrMessages(useLocale()).bangKr;
+	const mo = useOpenRecord();
+	const moKr = () => mo({ kind: "kr", id: kr.id });
+	if (dem.tong + dem.sangKien === 0)
+		return dem.suaDuoc ? (
+			<Button
+				size="sm"
+				variant="ghost"
+				data-mo-khung-kr={kr.id}
+				aria-label={dien(m.moViec, { ten: kr.title })}
+				onClick={moKr}
+			>
+				<Icon icon={Add} data-icon="inline-start" />
+				{m.them}
+			</Button>
+		) : (
+			<EmptyCellValue />
+		);
+	return (
+		<Button
+			size="sm"
+			variant="ghost"
+			data-mo-khung-kr={kr.id}
+			aria-label={dien(m.moViec, { ten: kr.title })}
+			onClick={moKr}
+		>
+			{dem.tong > 0 ? (
+				<span className="tabular-nums" data-so-viec={`${dem.xong}/${dem.tong}`}>
+					{dem.xong}/{dem.tong}
+				</span>
+			) : null}
+			{dem.sangKien > 0 ? (
+				<span
+					className="text-muted-foreground"
+					data-so-sang-kien={dem.sangKien}
+				>
+					{dem.tong > 0 ? "· " : null}
+					{dien(m.soSangKien, { n: dem.sangKien })}
+				</span>
+			) : null}
+		</Button>
+	);
+}
+
 function thieuDoiTrong(keyResults: KetQua[]): boolean {
 	return kiemOkr({
 		title: "",
@@ -184,6 +250,7 @@ export function BangKr({
 	hanhDong,
 	nhanHanhDong,
 	hoiDoiTrong,
+	canh,
 }: {
 	keyResults: KetQua[];
 	kind: LoaiMucTieu;
@@ -192,9 +259,11 @@ export function BangKr({
 	hanhDong?: (kr: KetQua) => ReactNode;
 	nhanHanhDong?: string;
 	hoiDoiTrong?: boolean;
+	canh?: ReadonlyMap<string, DemCanhKr>;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
+	const mc = okrCanhKrMessages(locale).bangKr;
 	const canhBao = hoiDoiTrong === true && thieuDoiTrong(keyResults);
 	const xem = useXemDuocBanGhi();
 	const cot: SimpleTableColumn[] = [
@@ -202,6 +271,7 @@ export function BangKr({
 		{ id: "phuTrach", header: m.cot.phuTrach, width: "w-40" },
 		{ id: "tienDo", header: m.cot.tienDo, width: "w-48" },
 		{ id: "dich", header: m.cot.dich, width: "w-40", align: "right" },
+		...(canh ? [{ id: "viec", header: mc.cotViec, width: "w-36" }] : []),
 		...(hanhDong
 			? [{ id: "hanhDong", srLabel: nhanHanhDong, width: "w-12" }]
 			: []),
@@ -223,6 +293,12 @@ export function BangKr({
 									{danhDauCuaToi && kr.laCuaToi ? (
 										<Badge variant="outline" data-cua-toi>
 											{m.cuaToi}
+										</Badge>
+									) : null}
+									{canh?.get(kr.id)?.coBangChung ? (
+										<Badge variant="outline" data-co-bang-chung>
+											<Icon icon={Attachment} data-icon="inline-start" />
+											{mc.coBangChung}
 										</Badge>
 									) : null}
 								</span>
@@ -247,6 +323,11 @@ export function BangKr({
 						>
 							<SoCuaKr kr={kr} xem={xem} />
 						</TableCell>
+						{canh ? (
+							<TableCell className={CELL} data-cot-viec={kr.id}>
+								<SoViecKr kr={kr} dem={canh.get(kr.id) ?? DEM_TRONG} />
+							</TableCell>
+						) : null}
 						{hanhDong ? (
 							<TableCell className={CELL}>{hanhDong(kr)}</TableCell>
 						) : null}

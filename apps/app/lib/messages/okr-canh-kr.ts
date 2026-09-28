@@ -1,0 +1,313 @@
+import type { Locale } from "@crm/ui/lib/locale";
+
+const vi = {
+	bangKr: {
+		cotViec: "Việc",
+		them: "Thêm",
+		moViec: "Mở việc và sáng kiến của KR {ten}",
+		soSangKien: "{n} sáng kiến",
+		coBangChung: "Có bằng chứng",
+	},
+	khung: {
+		tieuDeCho: "Việc của KR",
+		phuTrach: "{ten} phụ trách",
+		tabViec: "Việc và sáng kiến",
+		tabBangChung: "Bằng chứng",
+		dangTai: "Đang tải việc của KR…",
+		loi: {
+			tieuDe: "Không tải được việc của KR này",
+			moTa: "Mạng hoặc máy chủ đang lỗi. Việc đã ghi không mất.",
+			thuLai: "Thử lại",
+		},
+		khongCo: {
+			tieuDe: "Không tìm thấy KR này",
+			moTa: "KR có thể đã bị xoá, hoặc đường dẫn đã cũ.",
+			veMucTieu: "Về khung mục tiêu",
+		},
+		rong: {
+			tieuDe: "Chưa có việc hay sáng kiến nào cho KR này",
+			moTa: "Ghi việc đơn vị sẽ làm, hoặc gắn một kế hoạch 30 ngày hay chiến dịch đang đẩy KR này.",
+			moTaChiDoc: "Người sửa được KR sẽ ghi việc ở đây.",
+		},
+		khoa: "Kỳ đang chấm điểm hoặc đã đóng, hay mục tiêu đã bỏ — việc chỉ đọc.",
+		themViec: "Thêm việc",
+		gan: "Gắn…",
+		ganKeHoach: "Kế hoạch 30 ngày",
+		ganChienDich: "Chiến dịch",
+	},
+	viec: {
+		danhDau: "Đánh dấu xong: {ten}",
+		thaoTac: "Thao tác với việc {ten}",
+		sua: "Sửa",
+		giaoLai: "Giao lại",
+		go: "Gỡ",
+		daRoi: "đã rời",
+		khongNguoiLam: "Chưa có người làm",
+		han: "Hạn {ngay}",
+		quaHan: "quá hạn",
+	},
+	nhap: {
+		tieuDe: "Việc",
+		goiY: "Việc sẽ làm để đẩy KR này…",
+		phim: "Enter để lưu, Esc để huỷ.",
+		nguoiLam: "Người làm",
+		chonNguoi: "Chọn người làm",
+		timNguoi: "Tìm người",
+		khongAi: "Không ai khớp",
+		dangTaiNguoi: "Đang tải danh sách người…",
+		han: "Hạn (tuỳ chọn)",
+		huy: "Huỷ",
+		luu: "Lưu việc",
+		loiTieuDe: "Tiêu đề việc cần từ 2 đến 200 ký tự.",
+		loiNguoiLam: "Chọn người làm việc này.",
+	},
+	sangKien: {
+		loai: {
+			"chien-dich": "chiến dịch",
+			"ke-hoach": "kế hoạch 30 ngày",
+		},
+		khongQuyen: "Một {loai} — bạn không có quyền xem",
+		daXoa: {
+			"chien-dich": "Chiến dịch đã xoá",
+			"ke-hoach": "Kế hoạch đã xoá",
+		},
+		trangThai: {
+			"chua-chay": "Chưa chạy",
+			"dang-chay": "Đang chạy",
+			"da-dong": "Đã đóng",
+			"da-luu-tru": "Công ty của kế hoạch đã lưu trữ",
+			"da-xoa": "Bản ghi gốc đã xoá",
+		},
+		mo: "Mở {ten}",
+		thaoTac: "Thao tác với sáng kiến {ten}",
+		goKhoiKr: "Gỡ khỏi KR",
+	},
+	chon: {
+		"ke-hoach": {
+			tieuDe: "Gắn kế hoạch 30 ngày",
+			moTa: "Chọn kế hoạch 30 ngày đang đẩy KR này. Tên và tiến độ đọc thẳng từ kế hoạch, không chép.",
+			tim: "Tìm theo tên công ty…",
+			rong: "Không có kế hoạch nào khớp",
+			xacNhan: "Gắn {n} kế hoạch",
+		},
+		"chien-dich": {
+			tieuDe: "Gắn chiến dịch",
+			moTa: "Chọn chiến dịch đang đẩy KR này. Tên và trạng thái đọc thẳng từ chiến dịch, không chép.",
+			tim: "Tìm theo tên chiến dịch…",
+			rong: "Không có chiến dịch nào khớp",
+			xacNhan: "Gắn {n} chiến dịch",
+		},
+		gan: "Gắn",
+		huy: "Huỷ",
+		daGan: "Đã gắn vào KR.",
+	},
+	hoiGo: {
+		viec: {
+			tieuDe: "Gỡ việc «{ten}»?",
+			than: "Việc biến khỏi KR. Vết của mục tiêu vẫn ghi lần gỡ này.",
+		},
+		sangKien: {
+			tieuDe: "Gỡ sáng kiến khỏi KR?",
+			than: "Chỉ gỡ liên kết — chiến dịch hay kế hoạch gốc không bị đụng tới.",
+		},
+		bangChung: {
+			tieuDe: "Gỡ bằng chứng {ten}?",
+			than: "Đường dẫn và ghi chú biến khỏi KR. Tài liệu gốc không bị đụng tới.",
+		},
+		nut: "Gỡ",
+		thoi: "Giữ lại",
+	},
+	bao: {
+		daThem: "Đã thêm việc.",
+		daLuu: "Đã lưu việc.",
+		daGo: "Đã gỡ.",
+		daDinh: "Đã đính bằng chứng.",
+	},
+	bangChung: {
+		rong: {
+			tieuDe: "Chưa có bằng chứng",
+			moTa: "Đính đường dẫn cho thấy mốc này đã xong — không bắt buộc.",
+			moTaChuaXong:
+				"Mốc chưa xong. Đánh dấu xong ở «Cập nhật» rồi mới đính bằng chứng.",
+		},
+		dinh: "Đính bằng chứng",
+		thaoTac: "Thao tác với bằng chứng {ten}",
+		go: "Gỡ",
+		hop: {
+			tieuDe: "Đính bằng chứng",
+			moTa: "Dán đường dẫn tới văn bản, biên bản hay trang cho thấy mốc đã xong.",
+			duongDan: "Đường dẫn",
+			ghiChu: "Ghi chú (tuỳ chọn)",
+			ghiChuGoiY: "Bằng chứng này cho thấy gì…",
+			toiDa: "Tối đa 300 ký tự.",
+			huy: "Huỷ",
+			dinh: "Đính",
+		},
+		loiDuongDan: "Đường dẫn phải bắt đầu bằng http:// hoặc https://",
+		loiGhiChu: "Ghi chú tối đa 300 ký tự.",
+	},
+	capNhat: {
+		bangChung: "Bằng chứng (tuỳ chọn)",
+		goiY: "Đường dẫn tới văn bản cho thấy mốc đã xong. Lúc chấm cuối kỳ, người chấm sẽ thấy nó.",
+	},
+};
+
+export type OkrCanhKrMessages = typeof vi;
+
+const en: OkrCanhKrMessages = {
+	bangKr: {
+		cotViec: "Actions",
+		them: "Add",
+		moViec: "Open actions and initiatives of KR {ten}",
+		soSangKien: "{n} initiatives",
+		coBangChung: "Has evidence",
+	},
+	khung: {
+		tieuDeCho: "KR actions",
+		phuTrach: "Owned by {ten}",
+		tabViec: "Actions and initiatives",
+		tabBangChung: "Evidence",
+		dangTai: "Loading this KR's actions…",
+		loi: {
+			tieuDe: "Couldn't load this KR's actions",
+			moTa: "The network or the server is failing. Nothing you saved is lost.",
+			thuLai: "Try again",
+		},
+		khongCo: {
+			tieuDe: "This KR wasn't found",
+			moTa: "It may have been deleted, or the link is out of date.",
+			veMucTieu: "Back to the objective",
+		},
+		rong: {
+			tieuDe: "No actions or initiatives for this KR yet",
+			moTa: "Write down what the unit will do, or attach a 30-day plan or campaign that is pushing this KR.",
+			moTaChiDoc: "People who can edit this KR will add actions here.",
+		},
+		khoa: "The cycle is being scored or is closed, or the objective was dropped — actions are read-only.",
+		themViec: "Add action",
+		gan: "Attach…",
+		ganKeHoach: "30-day plan",
+		ganChienDich: "Campaign",
+	},
+	viec: {
+		danhDau: "Mark done: {ten}",
+		thaoTac: "Actions for {ten}",
+		sua: "Edit",
+		giaoLai: "Reassign",
+		go: "Remove",
+		daRoi: "left",
+		khongNguoiLam: "No assignee",
+		han: "Due {ngay}",
+		quaHan: "overdue",
+	},
+	nhap: {
+		tieuDe: "Action",
+		goiY: "What you'll do to push this KR…",
+		phim: "Enter to save, Esc to cancel.",
+		nguoiLam: "Assignee",
+		chonNguoi: "Pick an assignee",
+		timNguoi: "Search people",
+		khongAi: "No one matches",
+		dangTaiNguoi: "Loading people…",
+		han: "Due date (optional)",
+		huy: "Cancel",
+		luu: "Save action",
+		loiTieuDe: "An action needs 2 to 200 characters.",
+		loiNguoiLam: "Pick who does this action.",
+	},
+	sangKien: {
+		loai: {
+			"chien-dich": "campaign",
+			"ke-hoach": "30-day plan",
+		},
+		khongQuyen: "A {loai} — you can't view it",
+		daXoa: {
+			"chien-dich": "Deleted campaign",
+			"ke-hoach": "Deleted plan",
+		},
+		trangThai: {
+			"chua-chay": "Not started",
+			"dang-chay": "Running",
+			"da-dong": "Closed",
+			"da-luu-tru": "The plan's company is archived",
+			"da-xoa": "The source record was deleted",
+		},
+		mo: "Open {ten}",
+		thaoTac: "Actions for initiative {ten}",
+		goKhoiKr: "Remove from KR",
+	},
+	chon: {
+		"ke-hoach": {
+			tieuDe: "Attach a 30-day plan",
+			moTa: "Pick the 30-day plans pushing this KR. Names and progress are read live from the plan, never copied.",
+			tim: "Search by company name…",
+			rong: "No plan matches",
+			xacNhan: "Attach {n} plans",
+		},
+		"chien-dich": {
+			tieuDe: "Attach a campaign",
+			moTa: "Pick the campaigns pushing this KR. Names and status are read live from the campaign, never copied.",
+			tim: "Search by campaign name…",
+			rong: "No campaign matches",
+			xacNhan: "Attach {n} campaigns",
+		},
+		gan: "Attach",
+		huy: "Cancel",
+		daGan: "Attached to the KR.",
+	},
+	hoiGo: {
+		viec: {
+			tieuDe: "Remove the action “{ten}”?",
+			than: "The action leaves the KR. The objective's trail still records the removal.",
+		},
+		sangKien: {
+			tieuDe: "Remove the initiative from this KR?",
+			than: "Only the link goes — the campaign or plan itself is untouched.",
+		},
+		bangChung: {
+			tieuDe: "Remove the evidence {ten}?",
+			than: "The link and its note leave the KR. The document itself is untouched.",
+		},
+		nut: "Remove",
+		thoi: "Keep",
+	},
+	bao: {
+		daThem: "Action added.",
+		daLuu: "Action saved.",
+		daGo: "Removed.",
+		daDinh: "Evidence attached.",
+	},
+	bangChung: {
+		rong: {
+			tieuDe: "No evidence yet",
+			moTa: "Attach a link showing this milestone is done — optional.",
+			moTaChuaXong:
+				"The milestone isn't done. Mark it done in “Update” before attaching evidence.",
+		},
+		dinh: "Attach evidence",
+		thaoTac: "Actions for evidence {ten}",
+		go: "Remove",
+		hop: {
+			tieuDe: "Attach evidence",
+			moTa: "Paste a link to the document, minutes or page that shows the milestone is done.",
+			duongDan: "Link",
+			ghiChu: "Note (optional)",
+			ghiChuGoiY: "What this evidence shows…",
+			toiDa: "Up to 300 characters.",
+			huy: "Cancel",
+			dinh: "Attach",
+		},
+		loiDuongDan: "The link must start with http:// or https://",
+		loiGhiChu: "The note can be at most 300 characters.",
+	},
+	capNhat: {
+		bangChung: "Evidence (optional)",
+		goiY: "A link to the document showing the milestone is done. Whoever scores the cycle will see it.",
+	},
+};
+
+const BANG = { en, vi } satisfies Record<Locale, OkrCanhKrMessages>;
+
+export function okrCanhKrMessages(locale: Locale): OkrCanhKrMessages {
+	return BANG[locale];
+}

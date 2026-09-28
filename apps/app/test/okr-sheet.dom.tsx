@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import type {
 	ChuKyOutput,
 	CommentsOutput,
+	KrCanhOutput,
 	KrOutput,
 	ObjectiveOutput,
 	VetOutput,
@@ -33,7 +34,7 @@ const QUY: ChuKyOutput = {
 	cuaSoRa: null,
 };
 
-function kr(id: string, startLocked: boolean): KrOutput {
+function kr(id: string, startLocked: boolean): KrCanhOutput {
 	return {
 		id,
 		objectiveId: "mt-1",
@@ -54,6 +55,9 @@ function kr(id: string, startLocked: boolean): KrOutput {
 		progress: 40,
 		laCuaToi: false,
 		hienTaiQuaCapNhat: false,
+		soViec: { xong: 0, tong: 0 },
+		soSangKien: 0,
+		coBangChung: false,
 	};
 }
 

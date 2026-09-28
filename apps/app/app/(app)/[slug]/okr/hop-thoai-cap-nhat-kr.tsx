@@ -14,15 +14,25 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
-import { FieldGroup } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
+import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
+import { bangChungVao } from "@crm/validation/okr-canh-kr";
 import { mucCapNhat } from "@crm/validation/okr-cap-nhat";
 import { useMutation } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
+import { loiDuongDan } from "@/components/crm/record-sheet/kr-bang-chung";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -91,7 +101,9 @@ export function HopThoaiCapNhatKr({
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const ma = useId();
+	const mc = okrCanhKrMessages(locale);
 	const [o, setO] = useState(() => oBanDau(kr, locale));
+	const [bangChung, setBangChung] = useState("");
 	const gui = useMutation(
 		trpc.okr.guiCapNhat.mutationOptions({
 			onSuccess: async () => {
@@ -104,11 +116,20 @@ export function HopThoaiCapNhatKr({
 
 	const so = docGiaTri(kr, o.giaTri);
 	const loi = loiSo(kr, so);
+	const hienBangChung = kr.kind === "moc" && so === 1;
+	const saiBangChung = hienBangChung && loiDuongDan(bangChung);
+	const bangChungGui = hienBangChung
+		? bangChungVao.safeParse({ url: bangChung, ghiChu: "" })
+		: null;
 	const lan: LanTruoc | null = kr.lastAt === null ? null : "lan-truoc";
 	const khoa = gui.isPending;
 	const dangMo = sessionId === null && !loiMo;
 	const sanSang =
-		sessionId !== null && o.tuTin !== null && so !== null && loi === null;
+		sessionId !== null &&
+		o.tuTin !== null &&
+		so !== null &&
+		loi === null &&
+		!saiBangChung;
 	const loiMayChu =
 		gui.error?.data?.httpStatus !== undefined && gui.error.data.httpStatus < 500
 			? gui.error.message
@@ -131,6 +152,7 @@ export function HopThoaiCapNhatKr({
 					value: so,
 					confidence: o.tuTin,
 					note: o.ghiChu.trim(),
+					bangChung: bangChungGui?.success ? bangChungGui.data : undefined,
 				},
 			],
 		});
@@ -195,6 +217,35 @@ export function HopThoaiCapNhatKr({
 							so={so}
 							value={o.giaTri}
 						/>
+						{hienBangChung ? (
+							<Field
+								data-o="bang-chung"
+								data-invalid={saiBangChung ? true : undefined}
+							>
+								<FieldLabel htmlFor={`${ma}-bang-chung`}>
+									{mc.capNhat.bangChung}
+								</FieldLabel>
+								<Input
+									id={`${ma}-bang-chung`}
+									name="bang-chung"
+									type="url"
+									inputMode="url"
+									autoComplete="off"
+									spellCheck={false}
+									translate="no"
+									placeholder="https://…"
+									value={bangChung}
+									disabled={khoa}
+									aria-invalid={saiBangChung ? true : undefined}
+									onChange={(e) => setBangChung(e.target.value)}
+								/>
+								{saiBangChung ? (
+									<FieldError>{mc.bangChung.loiDuongDan}</FieldError>
+								) : (
+									<FieldDescription>{mc.capNhat.goiY}</FieldDescription>
+								)}
+							</Field>
+						) : null}
 						<ChonTuTin
 							datTuTin={(tuTin) => setO({ ...o, tuTin })}
 							khoa={khoa}

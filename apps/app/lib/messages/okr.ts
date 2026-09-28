@@ -1082,9 +1082,9 @@ const en: OkrMessages = {
 		menu: "Transfer OKR…",
 		tieuDe: "Transfer {ten}'s OKR",
 		coViec:
-			"{ten} owns {kr} running key results and {mucTieu} running objectives, and has {viec} open to-dos. Pick who takes all of it.",
+			"{ten} owns {kr} running key results and {mucTieu} running objectives, and has {viec} open actions. Pick who takes all of it.",
 		khongViec:
-			"{ten} owns no running key result or objective and has no open to-do.",
+			"{ten} owns no running key result or objective and has no open action.",
 		nguoiNhan: "Recipient",
 		chon: "Pick a recipient",
 		timNguoi: "Search people",
@@ -1094,7 +1094,7 @@ const en: OkrMessages = {
 		dangTai: "Loading people…",
 		xacNhan: "Transfer",
 		huy: "Cancel",
-		xong: "Transferred {kr} key results, {mucTieu} objectives and {viec} to-dos to {ten}.",
+		xong: "Transferred {kr} key results, {mucTieu} objectives and {viec} actions to {ten}.",
 	},
 };
 

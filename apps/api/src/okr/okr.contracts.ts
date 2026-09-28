@@ -196,7 +196,14 @@ export const lienKetMangSang = z
 	.object({ objectiveId: z.string(), cycleName: z.string() })
 	.nullable();
 
+export const krCanhOutput = krOutput.extend({
+	soViec: z.object({ xong: z.number(), tong: z.number() }),
+	soSangKien: z.number(),
+	coBangChung: z.boolean(),
+});
+
 export const objectiveOutput = mucTieuOutput.extend({
+	keyResults: z.array(krCanhOutput),
 	cycleName: z.string(),
 	mangSangToi: lienKetMangSang,
 	mangSangTu: lienKetMangSang,
@@ -439,6 +446,7 @@ export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
 export type AlignmentTreeOutput = z.infer<typeof alignmentTreeOutput>;
 export type KrOutput = z.infer<typeof krOutput>;
+export type KrCanhOutput = z.infer<typeof krCanhOutput>;
 export type DonViChon = z.infer<typeof donViChon>;
 export type OkrDongNhapOutput = z.infer<typeof okrDongNhapOutput>;
 export type VetOutput = z.infer<typeof vetOutput>;
