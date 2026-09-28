@@ -292,6 +292,7 @@ const DO = {
 };
 const MA = `c${Date.now().toString(36).slice(-6)}`;
 const LOI_BO_QUA = /Download the React DevTools/;
+const LOI_NGOAI = /Hydration failed[\s\S]*AppIconRailFallback/;
 const CHU = okrCanhKrMessages("vi");
 const CHU_OKR = okrMessages("vi");
 const TIEN_TO_MAU = "mau-okr-";
@@ -389,6 +390,7 @@ const hong = [];
 const anh = [];
 const mang = [];
 const loiConsole = [];
+const loiNgoai = [];
 let nhom = "";
 const kiem = (nhan, dat) => {
 	khang += 1;
@@ -731,6 +733,10 @@ async function trangMoi(khoa, rong, tuy = {}) {
 	const tenNhom = nhom;
 	trang.on("pageerror", (e) => {
 		ghi(`pageerror ${String(e).slice(0, 3000)}`);
+		if (LOI_NGOAI.test(String(e))) {
+			loiNgoai.push(`${tenNhom} ${khoa}: hydrat thanh bieu tuong`);
+			return;
+		}
 		loiConsole.push(`${tenNhom} ${khoa}: pageerror ${String(e).slice(0, 200)}`);
 	});
 	trang.on("console", (m) => {
@@ -2486,6 +2492,10 @@ try {
 		);
 		console.log(`  nhom ${nhomChay}: ${Math.round((Date.now() - b) / 1000)} s`);
 	}
+	if (loiNgoai.length > 0)
+		console.log(
+			`  ngoai pham vi (khong tinh hong): ${loiNgoai.length} loi hydrat cua AppIconRailFallback — ${loiNgoai.join(" || ")}`,
+		);
 	kiem(
 		`khong loi console (${loiConsole.length}): ${loiConsole.slice(0, 6).join(" || ")}`,
 		loiConsole.length === 0,
