@@ -185,9 +185,11 @@ const GHIM_TRO_LY_OKR = {
 		"Trần của Trợ lý OKR: 1.",
 		"Trần của Trợ lý OKR: 12.",
 	],
-	"tro-ly-okr:troLy.donViBat": ["Đơn vị bật 1", "Đơn vị bật 12"],
+	"tro-ly-okr:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
+	"tro-ly-okr:soDo.dongBiLoai": ["(+1 bị loại)", "(+12 bị loại)"],
+	"tro-ly-okr:troLy.donViCua": ["Đơn vị 1 a", "Đơn vị 12 a"],
 	"tro-ly-okr:troLy.hop.goiYPhongBan": ["Phòng ban · 1", "Phòng ban · 12"],
-	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị cho «1»", "Đơn vị cho «12»"],
+	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị 1 «A»", "Đơn vị 12 «A»"],
 	"tro-ly-okr:troLy.hop.xacNhan": ["Chọn 1 đơn vị", "Chọn 12 đơn vị"],
 	"tro-ly-okr:troLy.sanSang.chuaSanSang": [
 		"Chưa sẵn sàng — 1",

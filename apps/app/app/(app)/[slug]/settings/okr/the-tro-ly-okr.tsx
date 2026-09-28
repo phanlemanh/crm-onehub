@@ -16,6 +16,8 @@ import {
 	FieldError,
 	FieldGroup,
 	FieldLabel,
+	FieldLegend,
+	FieldSet,
 } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -51,24 +53,35 @@ import { LoiThe } from "./trang-thai-cai-dat";
 const FORM = "okr-tro-ly";
 
 type Viec = "de-xuat" | "tom-tat-tuan";
+type Nac = "bat" | "an";
+
+const VIEC: readonly Viec[] = ["de-xuat", "tom-tat-tuan"];
+const NAC: readonly Nac[] = ["bat", "an"];
+
+type Dong = { phamVi: AiPhamVi; donVi: string[] };
+type DongViecNac = Record<Viec, Record<Nac, Dong>>;
 
 type Nhap = {
 	aiOn: boolean;
-	deXuat: AiPhamVi;
-	deXuatDonVi: string[];
-	tomTat: AiPhamVi;
-	tomTatDonVi: string[];
+	dong: DongViecNac;
 	tran: string;
 };
 
 type Luu = {
 	aiOn: boolean;
 	aiDeXuatPhamVi: AiPhamVi;
-	aiDeXuatDonVi: readonly string[];
+	aiDeXuatDonVi: string[];
 	aiTomTatPhamVi: AiPhamVi;
-	aiTomTatDonVi: readonly string[];
+	aiTomTatDonVi: string[];
+	aiDeXuatAnPhamVi: AiPhamVi;
+	aiDeXuatAnDonVi: string[];
+	aiTomTatAnPhamVi: AiPhamVi;
+	aiTomTatAnDonVi: string[];
 	aiTranThangUsd: number;
 };
+
+type PhuBoi = (id: string) => boolean;
+type PhuTheoViec = Record<Viec, PhuBoi>;
 
 export type SanSangHien =
 	| { bat: true; conLaiUsd: number }
@@ -83,13 +96,24 @@ function docTran(chu: string): number | null {
 	return okrProgram.shape.aiTranThangUsd.safeParse(so).success ? so : null;
 }
 
+const dong = (phamVi: AiPhamVi, donVi: readonly string[]): Dong => ({
+	phamVi,
+	donVi: [...donVi],
+});
+
 function nhapTu(ct: Luu, locale: string): Nhap {
 	return {
 		aiOn: ct.aiOn,
-		deXuat: ct.aiDeXuatPhamVi,
-		deXuatDonVi: [...ct.aiDeXuatDonVi],
-		tomTat: ct.aiTomTatPhamVi,
-		tomTatDonVi: [...ct.aiTomTatDonVi],
+		dong: {
+			"de-xuat": {
+				bat: dong(ct.aiDeXuatPhamVi, ct.aiDeXuatDonVi),
+				an: dong(ct.aiDeXuatAnPhamVi, ct.aiDeXuatAnDonVi),
+			},
+			"tom-tat-tuan": {
+				bat: dong(ct.aiTomTatPhamVi, ct.aiTomTatDonVi),
+				an: dong(ct.aiTomTatAnPhamVi, ct.aiTomTatAnDonVi),
+			},
+		},
 		tran: new Intl.NumberFormat(locale, {
 			maximumFractionDigits: 2,
 			useGrouping: false,
@@ -97,17 +121,53 @@ function nhapTu(ct: Luu, locale: string): Nhap {
 	};
 }
 
+function phuBoiBat(bat: Dong, boPhanCua: ReadonlyMap<string, string>): PhuBoi {
+	if (bat.phamVi !== "danh-sach") return () => false;
+	return (id) => {
+		const boPhan = boPhanCua.get(id);
+		return (
+			bat.donVi.includes(id) ||
+			(boPhan !== undefined && bat.donVi.includes(boPhan))
+		);
+	};
+}
+
+function donViAn(d: Record<Nac, Dong>, phu: PhuBoi): string[] {
+	return d.an.donVi.filter((id) => !phu(id));
+}
+
+function goiLuu(nhap: Nhap, tran: number, phu: PhuTheoViec): Luu {
+	const deXuat = nhap.dong["de-xuat"];
+	const tomTat = nhap.dong["tom-tat-tuan"];
+	return {
+		aiOn: nhap.aiOn,
+		aiDeXuatPhamVi: deXuat.bat.phamVi,
+		aiDeXuatDonVi: deXuat.bat.donVi,
+		aiTomTatPhamVi: tomTat.bat.phamVi,
+		aiTomTatDonVi: tomTat.bat.donVi,
+		aiDeXuatAnPhamVi: deXuat.an.phamVi,
+		aiDeXuatAnDonVi: donViAn(deXuat, phu["de-xuat"]),
+		aiTomTatAnPhamVi: tomTat.an.phamVi,
+		aiTomTatAnDonVi: donViAn(tomTat, phu["tom-tat-tuan"]),
+		aiTranThangUsd: tran,
+	};
+}
+
 const cungTap = (a: readonly string[], b: readonly string[]) =>
 	a.length === b.length && a.every((x) => b.includes(x));
 
-function daDoi(nhap: Nhap, ct: Luu, tran: number | null): boolean {
+function daDoi(gui: Luu, ct: Luu): boolean {
 	return (
-		nhap.aiOn !== ct.aiOn ||
-		nhap.deXuat !== ct.aiDeXuatPhamVi ||
-		nhap.tomTat !== ct.aiTomTatPhamVi ||
-		!cungTap(nhap.deXuatDonVi, ct.aiDeXuatDonVi) ||
-		!cungTap(nhap.tomTatDonVi, ct.aiTomTatDonVi) ||
-		tran !== ct.aiTranThangUsd
+		gui.aiOn !== ct.aiOn ||
+		gui.aiDeXuatPhamVi !== ct.aiDeXuatPhamVi ||
+		gui.aiTomTatPhamVi !== ct.aiTomTatPhamVi ||
+		gui.aiDeXuatAnPhamVi !== ct.aiDeXuatAnPhamVi ||
+		gui.aiTomTatAnPhamVi !== ct.aiTomTatAnPhamVi ||
+		!cungTap(gui.aiDeXuatDonVi, ct.aiDeXuatDonVi) ||
+		!cungTap(gui.aiTomTatDonVi, ct.aiTomTatDonVi) ||
+		!cungTap(gui.aiDeXuatAnDonVi, ct.aiDeXuatAnDonVi) ||
+		!cungTap(gui.aiTomTatAnDonVi, ct.aiTomTatAnDonVi) ||
+		gui.aiTranThangUsd !== ct.aiTranThangUsd
 	);
 }
 
@@ -159,33 +219,46 @@ export function ChiBaoSanSang({
 	);
 }
 
-function DongViec({
+function DongNac({
 	viec,
+	nac,
 	phamVi,
 	donVi,
 	tenDonVi,
 	khoa,
+	khoaChu,
 	doiPhamVi,
 	moChon,
 }: {
 	viec: Viec;
+	nac: Nac;
 	phamVi: AiPhamVi;
 	donVi: string[];
 	tenDonVi: Map<string, string>;
 	khoa: boolean;
+	khoaChu: string | null;
 	doiPhamVi: (p: AiPhamVi) => void;
 	moChon: () => void;
 }) {
 	const t = troLyOkrMessages(useLocale()).troLy;
 	const ma = useId();
-	const nhan = t.viec[viec].nhan;
+	const nhan = t.nac[nac];
+	const tenViec = t.viec[viec];
 	const daChon = donVi.filter((id) => tenDonVi.has(id));
+	const tat = khoa || khoaChu !== null;
+	const moTa =
+		khoaChu ??
+		(phamVi === "danh-sach" && daChon.length === 0
+			? t.chuaChonDonVi
+			: nac === "bat"
+				? tenViec.moTa
+				: tenViec.moTaAn);
 	return (
-		<Field data-viec={viec}>
+		<Field data-nac={nac} data-disabled={tat}>
 			<FieldLabel htmlFor={`${ma}-pham-vi`}>{nhan}</FieldLabel>
 			<Select
 				value={phamVi}
-				disabled={khoa}
+				disabled={tat}
 				onValueChange={(v) => {
 					const moi = AI_PHAM_VI.find((p) => p === v);
 					if (moi) doiPhamVi(moi);
@@ -194,7 +267,8 @@ function DongViec({
 				<SelectTrigger
 					id={`${ma}-pham-vi`}
 					className="w-full sm:w-56"
-					data-pham-vi={viec}
+					data-pham-vi={nac === "bat" ? viec : undefined}
+					data-pham-vi-an={nac === "an" ? viec : undefined}
 				>
 					<SelectValue />
 				</SelectTrigger>
@@ -206,11 +280,11 @@ function DongViec({
 					))}
 				</SelectContent>
 			</Select>
-			{phamVi === "danh-sach" ? (
+			{phamVi === "danh-sach" && khoaChu === null ? (
 				<div className="flex flex-wrap items-center gap-2">
 					{daChon.length > 0 ? (
 						<ul
-							aria-label={t.donViBat(nhan)}
+							aria-label={t.donViCua(nhan, tenViec.nhan)}
 							className="flex flex-wrap gap-1.5"
 						>
 							{daChon.map((id) => (
@@ -227,20 +301,53 @@ function DongViec({
 						variant="outline"
 						size="sm"
 						disabled={khoa}
-						data-nut={`chon-don-vi-${viec}`}
+						data-nut={
+							nac === "bat" ? `chon-don-vi-${viec}` : `chon-don-vi-an-${viec}`
+						}
 						onClick={moChon}
 					>
 						{t.chonDonVi}
 					</Button>
 				</div>
 			) : null}
-			<FieldDescription>
-				{phamVi === "danh-sach" && daChon.length === 0
-					? t.chuaChonDonVi
-					: t.viec[viec].moTa}
-			</FieldDescription>
+			<FieldDescription>{moTa}</FieldDescription>
 		</Field>
 	);
+}
+
+type CayDonVi = {
+	tenDonVi: Map<string, string>;
+	mucChon: PickListItem[];
+	boPhanCua: Map<string, string>;
+};
+
+function useCayDonVi(): CayDonVi {
+	const t = troLyOkrMessages(useLocale()).troLy;
+	const trpc = useTRPC();
+	const cay = useQuery(trpc.org.tree.queryOptions());
+	const tenDonVi = new Map<string, string>([[DON_VI_ONEHUB, t.hop.onehub]]);
+	const boPhanCua = new Map<string, string>();
+	const mucChon: PickListItem[] = [
+		{ id: DON_VI_ONEHUB, label: t.hop.onehub, hint: t.hop.goiYOnehub },
+	];
+	for (const bp of cay.data?.divisions ?? []) {
+		tenDonVi.set(bp.id, bp.name);
+		mucChon.push({ id: bp.id, label: bp.name, hint: t.hop.goiYBoPhan });
+		for (const pb of bp.departments) {
+			tenDonVi.set(pb.id, pb.name);
+			boPhanCua.set(pb.id, bp.id);
+			mucChon.push({
+				id: pb.id,
+				label: pb.name,
+				hint: t.hop.goiYPhongBan(bp.name),
+			});
+		}
+	}
+	for (const pb of cay.data?.chuaXep ?? []) {
+		tenDonVi.set(pb.id, pb.name);
+		mucChon.push({ id: pb.id, label: pb.name, hint: t.hop.goiYPhongBan(null) });
+	}
+	return { tenDonVi, mucChon, boPhanCua };
 }
 
 export function TheTroLyOkr() {
@@ -251,9 +358,11 @@ export function TheTroLyOkr() {
 	const ma = useId();
 	const program = useQuery(trpc.okr.program.queryOptions());
 	const so = useQuery(trpc.okr.aiChiTieu.queryOptions());
-	const cay = useQuery(trpc.org.tree.queryOptions());
+	const { tenDonVi, mucChon, boPhanCua } = useCayDonVi();
 	const [nhap, setNhap] = useState<Nhap | null>(null);
-	const [dangChon, setDangChon] = useState<Viec | null>(null);
+	const [dangChon, setDangChon] = useState<{ viec: Viec; nac: Nac } | null>(
+		null,
+	);
 	const [chonTam, setChonTam] = useState<string[]>([]);
 	const [loiLuu, setLoiLuu] = useState(false);
 
@@ -274,27 +383,6 @@ export function TheTroLyOkr() {
 			},
 		}),
 	);
-
-	const tenDonVi = new Map<string, string>([[DON_VI_ONEHUB, t.hop.onehub]]);
-	const mucChon: PickListItem[] = [
-		{ id: DON_VI_ONEHUB, label: t.hop.onehub, hint: t.hop.goiYOnehub },
-	];
-	for (const bp of cay.data?.divisions ?? []) {
-		tenDonVi.set(bp.id, bp.name);
-		mucChon.push({ id: bp.id, label: bp.name, hint: t.hop.goiYBoPhan });
-		for (const pb of bp.departments) {
-			tenDonVi.set(pb.id, pb.name);
-			mucChon.push({
-				id: pb.id,
-				label: pb.name,
-				hint: t.hop.goiYPhongBan(bp.name),
-			});
-		}
-	}
-	for (const pb of cay.data?.chuaXep ?? []) {
-		tenDonVi.set(pb.id, pb.name);
-		mucChon.push({ id: pb.id, label: pb.name, hint: t.hop.goiYPhongBan(null) });
-	}
 
 	if (program.isError) {
 		return (
@@ -317,6 +405,8 @@ export function TheTroLyOkr() {
 					<Skeleton className="h-5 w-40" />
 					<Skeleton className="h-9 w-full" />
 					<Skeleton className="h-9 w-full" />
+					<Skeleton className="h-9 w-full" />
+					<Skeleton className="h-9 w-full" />
 					<Skeleton className="h-9 w-32" />
 				</CardContent>
 			</Card>
@@ -324,15 +414,39 @@ export function TheTroLyOkr() {
 	}
 
 	const daLuu = program.data;
+	const phu: PhuTheoViec = {
+		"de-xuat": phuBoiBat(nhap.dong["de-xuat"].bat, boPhanCua),
+		"tom-tat-tuan": phuBoiBat(nhap.dong["tom-tat-tuan"].bat, boPhanCua),
+	};
 	const tran = docTran(nhap.tran);
 	const tranHong = tran === null;
-	const doi = daDoi(nhap, daLuu, tran);
+	const gui = tran === null ? null : goiLuu(nhap, tran, phu);
+	const doi = gui !== null && daDoi(gui, daLuu);
 	const khoa = luu.isPending;
 	const sua = (thay: Partial<Nhap>) =>
 		setNhap((cu) => (cu ? { ...cu, ...thay } : cu));
-	const moChon = (viec: Viec) => {
-		setChonTam(viec === "de-xuat" ? nhap.deXuatDonVi : nhap.tomTatDonVi);
-		setDangChon(viec);
+	const suaDong = (viec: Viec, nac: Nac, thay: Partial<Dong>) =>
+		setNhap((cu) =>
+			cu
+				? {
+						...cu,
+						dong: {
+							...cu.dong,
+							[viec]: {
+								...cu.dong[viec],
+								[nac]: { ...cu.dong[viec][nac], ...thay },
+							},
+						},
+					}
+				: cu,
+		);
+	const hienDonVi = (viec: Viec, nac: Nac) =>
+		nac === "bat"
+			? nhap.dong[viec].bat.donVi
+			: donViAn(nhap.dong[viec], phu[viec]);
+	const moChon = (viec: Viec, nac: Nac) => {
+		setChonTam(hienDonVi(viec, nac));
+		setDangChon({ viec, nac });
 	};
 
 	return (
@@ -367,15 +481,8 @@ export function TheTroLyOkr() {
 					id={FORM}
 					onSubmit={(event) => {
 						event.preventDefault();
-						if (tran === null || khoa) return;
-						luu.mutate({
-							aiOn: nhap.aiOn,
-							aiDeXuatPhamVi: nhap.deXuat,
-							aiDeXuatDonVi: nhap.deXuatDonVi,
-							aiTomTatPhamVi: nhap.tomTat,
-							aiTomTatDonVi: nhap.tomTatDonVi,
-							aiTranThangUsd: tran,
-						});
+						if (gui === null || khoa) return;
+						luu.mutate(gui);
 					}}
 				>
 					<FieldGroup>
@@ -392,24 +499,30 @@ export function TheTroLyOkr() {
 								onCheckedChange={(on) => sua({ aiOn: on })}
 							/>
 						</Field>
-						<DongViec
-							viec="de-xuat"
-							phamVi={nhap.deXuat}
-							donVi={nhap.deXuatDonVi}
-							tenDonVi={tenDonVi}
-							khoa={khoa || !nhap.aiOn}
-							doiPhamVi={(p) => sua({ deXuat: p })}
-							moChon={() => moChon("de-xuat")}
-						/>
-						<DongViec
-							viec="tom-tat-tuan"
-							phamVi={nhap.tomTat}
-							donVi={nhap.tomTatDonVi}
-							tenDonVi={tenDonVi}
-							khoa={khoa || !nhap.aiOn}
-							doiPhamVi={(p) => sua({ tomTat: p })}
-							moChon={() => moChon("tom-tat-tuan")}
-						/>
+						{VIEC.map((viec) => (
+							<FieldSet key={viec} data-viec={viec}>
+								<FieldLegend>{t.viec[viec].nhan}</FieldLegend>
+								{NAC.map((nac) => (
+									<DongNac
+										key={nac}
+										viec={viec}
+										nac={nac}
+										phamVi={nhap.dong[viec][nac].phamVi}
+										donVi={hienDonVi(viec, nac)}
+										tenDonVi={tenDonVi}
+										khoa={khoa || !nhap.aiOn}
+										khoaChu={
+											nac === "an" &&
+											nhap.dong[viec].bat.phamVi === "toan-cong-ty"
+												? t.khoaAn
+												: null
+										}
+										doiPhamVi={(p) => suaDong(viec, nac, { phamVi: p })}
+										moChon={() => moChon(viec, nac)}
+									/>
+								))}
+							</FieldSet>
+						))}
 						<Field data-invalid={tranHong}>
 							<FieldLabel htmlFor={`${ma}-tran`}>{t.tran}</FieldLabel>
 							<Input
@@ -439,21 +552,21 @@ export function TheTroLyOkr() {
 					onOpenChange={(mo) => {
 						if (!mo) setDangChon(null);
 					}}
-					title={t.hop.tieuDe(t.viec[dangChon].nhan)}
-					description={t.hop.moTa}
+					title={t.hop.tieuDe(t.nac[dangChon.nac], t.viec[dangChon.viec].nhan)}
+					description={dangChon.nac === "an" ? t.hop.moTaAn : t.hop.moTa}
 					searchPlaceholder={t.hop.tim}
-					items={mucChon}
+					items={
+						dangChon.nac === "an"
+							? mucChon.filter((muc) => !phu[dangChon.viec](muc.id))
+							: mucChon
+					}
 					selected={chonTam}
 					onSelectedChange={setChonTam}
 					confirmLabel={t.hop.xacNhan}
 					cancelLabel={t.hop.huy}
 					emptyLabel={t.hop.rong}
 					onConfirm={() => {
-						sua(
-							dangChon === "de-xuat"
-								? { deXuatDonVi: chonTam }
-								: { tomTatDonVi: chonTam },
-						);
+						suaDong(dangChon.viec, dangChon.nac, { donVi: chonTam });
 						setDangChon(null);
 					}}
 				/>

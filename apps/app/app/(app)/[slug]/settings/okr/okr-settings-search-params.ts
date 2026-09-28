@@ -8,3 +8,7 @@ export const parseMoChuKy = parseAsBoolean.withDefault(false);
 export const THAM_SO_MO_RA = SEARCH_PARAM.okr.moRa;
 
 export const parseMoRa = parseAsString;
+
+export const THAM_SO_LUOT_GOP_Y = SEARCH_PARAM.okr.luotGopY;
+
+export const parseLuotGopY = parseAsString;
