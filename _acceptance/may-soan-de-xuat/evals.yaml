@@ -343,6 +343,22 @@ evals:
       (doc thuoc tinh data-variant). Tai lai (remount) -> ve buoc 1. CHIEU DO: ban sao hien Duyet ngay
       buoc 1 -> do voi thong diep ghim "duyet truoc khi doc nguon".
 
+  - id: E11b
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.msd_duyet_ban_may
+    paths:
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu-nguon-duyet.spec.ts"
+    expected: |
+      Cung tep voi E8b, doc ve AC-11 phia may chu: ca "Sửa bản này" — C mo ban may qua loader man sua
+      va taiLieu.propose voi tuDeXuatId cua ban may, sua mot chu, gui -> hang de xuat moi cua C co nguonId
+      = nguon va trichDoan bang dung mang cua ban may (so sau parseTrichDoan); C duyet qua taiLieu.approve
+      voi diffHash khop -> TaiLieuPhienBan.deXuat.nguonId khac rong; K goi nguon.taiVe -> duoc (nguon da
+      duoc ban dang dung trich). Doi chung duong: de xuat nguoi viet khong tuDeXuatId -> nguonId null.
+      CHIEU DO: ban sao duong sua bo nguonId -> do voi thong diep ghim "ban sua mat nguon".
+
   - id: E11u
     criterion: AC-11
     executor: ui-check
