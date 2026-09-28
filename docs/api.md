@@ -749,6 +749,10 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   bytes (`kho-nguon.ts`), computes `sha256` itself, and writes the `TaiLieuNguon` row and one
   `AgentTask` of kind `soan-tu-nguon` in one transaction. It never parses the document:
   reading text, deciding what the page says and drafting belong to the agent.
+- **`nhan` only accepts a pathname issued to this caller.** `xinCho` returns a `phieu`: an HMAC over
+  user, pathname and expiry (`phieu-nguon.ts`, key derived from `BETTER_AUTH_SECRET`, one hour).
+  `nhan` checks it, and refuses a pathname that already belongs to a `TaiLieuNguon`, before it reads
+  or deletes anything — knowing a source's pathname is not enough to delete its file (AC-16).
 - **A rejected or duplicate upload deletes its blob.** Same bytes as an existing source
   answer `{ trung: true, nguonId }` of the old row; the unique index on `sha256` catches
   the race the pre-check misses.
