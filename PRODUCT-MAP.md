@@ -63,6 +63,7 @@ flowchart TD
 - Trang Cài đặt › Thành viên giữ đủ hàng của bảng thành viên và cuộn như một trang khi danh sách «Được phép vào» dài — không khối nào đè lên bảng, menu đổi vai mở được (`bang-thanh-vien-giu-hang`)
 - Bộ dựng chung nhận chuỗi từ ngoài — một component hiện đúng tiếng người đọc mà chỗ gọi không phải truyền gì (`bo-dung-chung-nhan-chuoi`)
 - Bộ dựng tác nhân không còn kẹt im lặng — hạn mức phiên đủ cho model có suy nghĩ, câu hỏi «hết hạn mức» hiện trên màn với hai nút và trả lời được, trợ lý không gửi được khuôn kết quả vào bộ dựng nên không còn thành công giả (`bo-dung-khong-ket`)
+- Bộ OKR mẫu — máy dev có một công ty giả chạy OKR đủ một quý (40 người, ba bộ phận, mười phòng ban, OKR năm và quý 4, sáu tuần Cập nhật tuần, quý 3 đã khép, 30 ca góp ý cùng khuôn N1), nạp bằng một lệnh từ chối production và workspace có OKR thật (`bo-okr-mau`)
 - Chỉ chủ và quản trị đổi được khoá nghiên cứu, model của trợ lý và số ngày giữ mục đã lưu trữ — thành viên thường vẫn xem được, mọi đường đổi đều khoá cả trên màn lẫn khi gọi thẳng máy chủ, và không bị nhốt ở màn cắm khoá (`cai-dat-chung-chi-quan-tri`)
 - Cài đặt còn lại nói tiếng Việt — năm cụm Theo dõi, Kết nối, Khoá API, SSO, Thành viên đọc đúng tiếng của người quản trị, và mọi đoạn mã người chép giữ nguyên từng byte (`cai-dat-con-lai-noi-tieng-viet`)
 - Chân lái từng component ra màn — đo lớp chữ tiếng Anh nằm ở giá trị mặc định của tham số, và giải toả bảng mười dòng của vòng trước bằng đo thay vì khai (`chan-lai-component-ra-man`)
@@ -134,6 +135,7 @@ flowchart TD
 - Quên mật khẩu — người dùng tự xin liên kết đặt lại qua thư (tiếp quản PR (`quen-mat-khau`)
 - Quyền của lượt builder mang theo tường minh — bỏ luật suy commandType từ hình dạng tin nhắn, câu trả lời kế thừa đúng quyền của lượt đã hỏi, và dạy con agent_builder cửa ra not_authorized (`quyen-luot-mang-theo`)
 - Vá lối rò Slack — Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai «chỉ OKR», và lượt chạy nền của Tác nhân được coi là tự động nên mọi thao tác ghi nhạy cảm bị từ chối (`ro-slack-tac-nhan`) — đã giao — không đo, khai ở Cổng Đáng
+- Kết nối Slack thiếu quyền đọc email vẫn không để lọt dữ liệu đối tác tới người mang vai «chỉ OKR» (`slack-thieu-quyen-email`)
 - Người quản trị sửa, sắp xếp, lưu trữ và khôi phục bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — chỉ quản trị được đổi cấu hình (`sua-luu-tru-dieu-phoi`)
 - Sửa hai lỗi môi trường làm suite test đỏ, và nối dây cổng nghiệm thu vào bản kit đang cài (`sua-test-do-thu-tu-nap`)
 - Tác nhân chạy đúng với mọi model trong danh mục — khuôn model thấy di động giữa các nhà cung cấp, model giải theo vai lúc chạy thay vì ghim theo bản Tác nhân, lượt mà bộ chạy hỏng hoặc chưa nộp kết quả thì ghi Hỏng (`tac-nhan-model-rieng`)

@@ -60,3 +60,6 @@ __pycache__/
 *.pyc
 
 apps/agent/rang/.tmp/
+
+# Ca góp ý thật của N1 (OKR thật đã thay tên) — không bao giờ vào git.
+apps/agent/evals/okr/ca-gop-y/that/

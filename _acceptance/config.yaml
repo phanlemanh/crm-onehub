@@ -760,6 +760,14 @@ executors:
     rst_lich: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t lich"'
     rst_nguoi_bam: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t nguoi-bam"'
     rst_giu_nguyen: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/luot-tu-dong.integration.spec.ts -t giu-nguyen"'
+    stqe_kenh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-kenh"'
+    stqe_tin_rieng: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-tin-rieng"'
+    stqe_dong_khop: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-dong-khop"'
+    stqe_uu_tien: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-uu-tien"'
+    stqe_ba_hinh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-ba-hinh"'
+    stqe_khong_tinh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-khong-tinh"'
+    stqe_loi_nhan: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/slack-thieu-quyen-email.integration.spec.ts -t stqe-loi-nhan"'
+    stqe_ro_slack_con_xanh: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ro-slack-tac-nhan.integration.spec.ts"'
     hth_chan_ghi: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t chan-ghi"'
     hth_ghi_that: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t ghi-that"'
     hth_web_fetch: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/hoan-thien-hoi-crm-qua-zalo.integration.spec.ts -t web-fetch"'
@@ -791,6 +799,20 @@ executors:
     tln_bao_tran: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/ai-bao-tran.integration.spec.ts"
     tln_tien_do_api: bun run test -- "cd apps/api && bun test test/okr.spec.ts test/okr-toan-canh-thuan.spec.ts"
     tln_duong_do: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/duong-do-tro-ly.integration.spec.ts"
+    bom_to_chuc: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t to-chuc-mau"'
+    bom_toan_canh: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t toan-canh-mau"'
+    bom_kieu_kr: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t kieu-kr-mau"'
+    bom_sau_tuan: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t sau-tuan-mau"'
+    bom_quy_3: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t quy-3-mau"'
+    bom_moc: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t moc-ghim-mau"'
+    bom_nap_lai: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t nap-lai-mau"'
+    bom_xoa: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
+    bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
+    bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
+    bom_thu_tuc_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t thu-tuc-that-mau"'
+    bom_chan_production: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t chan-production"
+    bom_tai_lieu: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t tai-lieu"
+    bom_ca_gop_y: "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-ca-gop-y.spec.ts"
   script:
     ktl_migration_chi_them: "node _acceptance/kho-tai-lieu/rang/migration-chi-them.mjs"
     ktl_migration_tren_ban_sao: "bun _acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs"
@@ -800,6 +822,8 @@ executors:
     rst_do_truoc_khi_va: node _acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs
     rst_cho_re: node _acceptance/ro-slack-tac-nhan/rang/cho-re.mjs
     rst_kiem_ke: node _acceptance/ro-slack-tac-nhan/rang/kiem-ke.mjs
+    stqe_do_truoc_khi_va: node _acceptance/slack-thieu-quyen-email/rang/do-truoc-khi-va.mjs
+    stqe_khong_sua_tep_hang: node _acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs
     hcz_tai_lieu: bun _acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs
     tthz_tai_lieu: bun _acceptance/ha-tran-thang-hoi-zalo/rang/tai-lieu.mjs
     tthz_khong_cham_da_ky: bun _acceptance/ha-tran-thang-hoi-zalo/rang/khong-cham-da-ky.mjs
@@ -1300,6 +1324,7 @@ executors:
     hg_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     hg_man_ban_ghi: 'CHI_BUOC=7 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     hg_san_thiet_ke: "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs --ca thiet-ke && cd packages/ui && bun test test/messages-guard.spec.ts test/locale-messages.spec.tsx"
+    bom_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-mau/rang/man-bo-mau.mjs"'
     pcd_do_man: GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-ci-only-google-client-id} GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-ci-only-google-client-secret} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs man"
     pcd_do_api: GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-ci-only-google-client-id} GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-ci-only-google-client-secret} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs api"
   design:

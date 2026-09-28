@@ -1,0 +1,31 @@
+{
+	"id": "gy-09",
+	"bo": "viet-lai",
+	"ngonNgu": "tron-anh-viet",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Đối tác mới chạy được trong tuần đầu",
+		"whyNow": "Onboarding hiện mất ba tuần.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Onboard 20 partner mới",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 20,
+			"unit": "đối tác"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "KR đếm việc làm; kết quả là thời gian tới đơn đầu tiên."
+}
