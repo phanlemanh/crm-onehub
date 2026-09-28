@@ -5,6 +5,7 @@ import { RECORD_ID_COLUMNS } from "@crm/db/fields";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { fieldBackfillPayload } from "@crm/validation/field-backfill";
 import type { DocSheetPayload } from "@crm/validation/okr-nguon";
+import type { SoanTuNguonPayload } from "@crm/validation/tai-lieu-nguon";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import { AGENT_DISPATCH } from "./agent-dispatch.config";
@@ -336,6 +337,29 @@ export class AgentTriggerService {
 		if (queued > 0 || merged > 0) this.poke();
 
 		return { queued, merged };
+	}
+
+	async soanTuNguon(
+		nguonId: string,
+		client: Prisma.TransactionClient,
+	): Promise<void> {
+		const payload = { nguonId } satisfies SoanTuNguonPayload;
+		await this.enqueue(
+			{
+				kind: "soan-tu-nguon",
+				reason: `Soạn bản đề xuất từ nguồn ${nguonId}`,
+				priority: PRIORITY.soanTuNguon,
+				budget: 0,
+				payload,
+				subject: [{ path: ["nguonId"], value: nguonId }],
+			},
+			true,
+			client,
+		);
+	}
+
+	danhThucMaySoan(): void {
+		this.poke();
 	}
 
 	async okrDocSheet(keyResultId: string): Promise<void> {

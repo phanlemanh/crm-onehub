@@ -42,6 +42,7 @@ export const taiLieuProposeInput = z.object({
 	slug: ma,
 	ten: tenVao.optional(),
 	noiDung: noiDungVao,
+	tuDeXuatId: ma.optional(),
 });
 export const taiLieuApproveInput = z.object({
 	id: ma,

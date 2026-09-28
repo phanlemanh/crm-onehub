@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
+import type { KhoNguon } from "@crm/db/blob-nguon";
 import type { LoaiTrang } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import type { INestApplication } from "@nestjs/common";
@@ -237,12 +238,15 @@ export async function donTaiLieu(where: {
 	await db.taiLieuTrang.deleteMany({ where: { id: trangId } });
 }
 
-export function dungSan(): void {
+export function dungSan(thayKho?: KhoNguon): void {
 	beforeAll(async () => {
 		const { AppModule } = await import("../src/app.module");
-		const modul: TestingModule = await Test.createTestingModule({
-			imports: [AppModule],
-		}).compile();
+		const { KHO_NGUON } = await import("../src/tai-lieu/kho-nguon");
+		const dung = Test.createTestingModule({ imports: [AppModule] });
+		const modul: TestingModule = await (thayKho
+			? dung.overrideProvider(KHO_NGUON).useValue(thayKho)
+			: dung
+		).compile();
 		app = modul.createNestApplication({ bodyParser: false });
 		await app.init();
 		for (const ai of AI) {

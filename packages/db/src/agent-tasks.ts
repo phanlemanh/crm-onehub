@@ -13,6 +13,7 @@ export const TASK_KINDS = [
 	"agent-event",
 	"nhac-ke-hoach",
 	"okr-doc-sheet",
+	"soan-tu-nguon",
 ] as const;
 
 export type TaskKind = (typeof TASK_KINDS)[number];
@@ -25,6 +26,7 @@ export const DIRECT_KINDS = [
 	"agent-event",
 	"nhac-ke-hoach",
 	"okr-doc-sheet",
+	"soan-tu-nguon",
 ] as const;
 
 export type DirectKind = (typeof DIRECT_KINDS)[number];
@@ -65,4 +67,5 @@ export const PRIORITY = {
 	event: 700,
 	nhac: 60,
 	okrSheet: 400,
+	soanTuNguon: 300,
 } as const;
