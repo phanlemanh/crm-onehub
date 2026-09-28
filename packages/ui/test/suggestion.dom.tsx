@@ -44,9 +44,9 @@ describe("Suggestion — dáng cũ giữ nguyên (facts.tsx)", () => {
 		expect(than).not.toBeNull();
 		expect(than?.getAttribute("data-decided")).toBeNull();
 		expect(than?.querySelectorAll(":scope > div").length).toBe(2);
-		expect(than?.querySelector("p.truncate span.text-foreground")?.textContent).toBe(
-			"Đã xác minh email",
-		);
+		expect(
+			than?.querySelector("p.truncate span.text-foreground")?.textContent,
+		).toBe("Đã xác minh email");
 		const nut = than?.querySelectorAll('button[data-slot="button"]') ?? [];
 		expect(nut.length).toBe(2);
 		expect(nut[0]?.getAttribute("aria-label")).toBe("Chấp nhận gợi ý");
@@ -54,7 +54,9 @@ describe("Suggestion — dáng cũ giữ nguyên (facts.tsx)", () => {
 		expect(nut[0]?.textContent?.trim()).toBe("");
 		expect(nut[1]?.textContent?.trim()).toBe("");
 		expect(nut[0]?.querySelector("svg")).not.toBeNull();
-		expect(than?.querySelector("del, ins, input, [data-slot=suggestion-decided]")).toBeNull();
+		expect(
+			than?.querySelector("del, ins, input, [data-slot=suggestion-decided]"),
+		).toBeNull();
 		expect(than?.querySelector("label")).toBeNull();
 	});
 
@@ -127,9 +129,9 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onDismiss={() => {}}
 			/>,
 		);
-		expect(
-			goc.querySelector('[data-slot="suggestion"] > p')?.textContent,
-		).toBe("Mục tiêu 1");
+		expect(goc.querySelector('[data-slot="suggestion"] > p')?.textContent).toBe(
+			"Mục tiêu 1",
+		);
 	});
 
 	test("có onEdit: ba nút chữ Chấp nhận / Sửa / Từ chối", () => {
@@ -142,19 +144,24 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onEdit={() => {}}
 			/>,
 		);
-		const nut = [
-			...goc.querySelectorAll('button[data-slot="button"]'),
-		].map((b) => b.textContent);
+		const nut = [...goc.querySelectorAll('button[data-slot="button"]')].map(
+			(b) => b.textContent,
+		);
 		expect(nut).toEqual(["Chấp nhận gợi ý", "Sửa", "Từ chối gợi ý"]);
 	});
 
 	test("không có onEdit: chỉ hai nút, không có nút Sửa", () => {
 		const goc = ve(
-			<Suggestion before="a" value="b" onAccept={() => {}} onDismiss={() => {}} />,
+			<Suggestion
+				before="a"
+				value="b"
+				onAccept={() => {}}
+				onDismiss={() => {}}
+			/>,
 		);
-		const nut = [
-			...goc.querySelectorAll('button[data-slot="button"]'),
-		].map((b) => b.textContent);
+		const nut = [...goc.querySelectorAll('button[data-slot="button"]')].map(
+			(b) => b.textContent,
+		);
 		expect(nut).toEqual(["Chấp nhận gợi ý", "Từ chối gợi ý"]);
 	});
 
@@ -338,9 +345,9 @@ describe("Suggestion — dáng mới (Trợ lý OKR)", () => {
 				onDismiss={() => {}}
 			/>,
 		);
-		const nutNhan = [...goc.querySelectorAll('button[data-slot="button"]')].find(
-			(b) => b.textContent === "Chấp nhận gợi ý",
-		) as HTMLButtonElement;
+		const nutNhan = [
+			...goc.querySelectorAll('button[data-slot="button"]'),
+		].find((b) => b.textContent === "Chấp nhận gợi ý") as HTMLButtonElement;
 		expect(nutNhan.disabled).toBe(true);
 		const idMoTa = nutNhan.getAttribute("aria-describedby");
 		expect(idMoTa).toBeTruthy();
