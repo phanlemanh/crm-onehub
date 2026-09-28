@@ -260,7 +260,7 @@ test("lai tung component ra man, doc chu ban ve that su ve", async () => {
 		.flat()
 		.filter((b) => b.loi_dong === null);
 	expect(veDuoc.length).toBeGreaterThan(0);
-});
+}, 500);
 
 test("mo tung nguyen ban cua bang gioi han vong truoc", async () => {
 	const bang = JSON.parse(readFileSync(BANG_CU, "utf8")) as {
