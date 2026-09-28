@@ -772,7 +772,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   from.** `OkrMauService`: `luuMau` creates or edits (`@crm/validation/okr-mau`:
   name, `cap` bộ phận · phòng ban · cá nhân, `donViIds` of that level or empty for
   all, `noiDung` = sentence, kind and 1–`OKR_MAU.krToiDa` KRs each checked with
-  `kiemSoTheoKieu`), `luuTruMau` / `khoiPhucMau` archive and restore; each is
+  `kiemSoTheoKieu`; the sentence and each KR name reuse `mucTieuInput.shape.title`
+  and `krInput.shape.title`, so a template that saves is one `taoTuMau` accepts),
+  `luuTruMau` / `khoiPhucMau` archive and restore; each is
   admin-only and leaves a `sua-mau` trail row. `okr.mau` reads them: **with a `cap`
   or `donViId` filter every role — admins included — gets only live templates of
   that level that apply to that unit** (the «Bắt đầu từ mẫu» picker); an admin
@@ -784,8 +786,8 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   writing a row, and writes one `okrMucTieuTuMau` row pointing at the template.
   Editing a template later never touches objectives already made from it.
 - **`okr.thanhVien`** lists every workspace member (`id`, `name`, `email`) for the
-  mention and transfer pickers — no role filter, since being mentionable is
-  separate from who can edit.
+  mention, transfer and KR action-assignee pickers — no role filter, since being
+  mentionable is separate from who can edit.
 - **`okr.viecCuaToi` is one call for the caller's own OKR row.** `viec` is the
   caller's pending OKR items, filtered from the same `viecCanNhac` queue plan items
   share, with `cuaSo: "truc-tiep"` (events of the last 24 hours up to now, not the

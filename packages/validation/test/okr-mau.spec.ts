@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
+import { krInput } from "../src/okr-kr";
 import { mauNoiDung, OKR_MAU, parseMauNoiDung } from "../src/okr-mau";
+import { mucTieuInput } from "../src/okr-muc-tieu";
 
 type MauKrIn = {
 	title: string;
@@ -51,10 +53,19 @@ const CA_MAU: [string, unknown, boolean][] = [
 	],
 	["kiểu lạ", noiDung([kr({ kind: "khong-ton-tai" })]), false],
 	["tên KR trống", noiDung([kr({ title: "" })]), false],
+	["tên KR hai ký tự", noiDung([kr({ title: "KH" })]), false],
+	["câu mục tiêu hai ký tự", noiDung([kr()], { cauMucTieu: "Ab" }), false],
+	[
+		"tên KR và câu mục tiêu đủ ba ký tự",
+		noiDung([kr({ title: "KH1" })], { cauMucTieu: "Abc" }),
+		true,
+	],
 ];
 
+const ngan = noiDung([kr(), kr({ title: "KH" })], { cauMucTieu: "Ab" });
+
 describe("okr-mau", () => {
-	test("mauNoiDung: tám ca", () =>
+	test(`mauNoiDung: ${CA_MAU.length} ca`, () =>
 		expect(CA_MAU.map(([, v]) => mauNoiDung.safeParse(v).success)).toEqual(
 			CA_MAU.map(([, , k]) => k),
 		));
@@ -64,6 +75,46 @@ describe("okr-mau", () => {
 		expect(r.success).toBe(false);
 		if (!r.success)
 			expect(r.error.issues[0].path).toEqual(["krs", 1, "targetValue"]);
+	});
+
+	test("tiêu đề ngắn: cùng trần với tạo KR tay và tạo mục tiêu tay, ghim path krs.1.title và cauMucTieu", () => {
+		const r = mauNoiDung.safeParse(ngan);
+		expect({
+			tenKr: {
+				min: krInput.shape.title.minLength,
+				max: krInput.shape.title.maxLength,
+			},
+			cauMucTieu: {
+				min: mucTieuInput.shape.title.minLength,
+				max: mucTieuInput.shape.title.maxLength,
+			},
+		}).toEqual({ tenKr: OKR_MAU.tenKr, cauMucTieu: OKR_MAU.cauMucTieu });
+		expect({
+			krTay: krInput.shape.title.safeParse("KH").success,
+			mucTieuTay: mucTieuInput.shape.title.safeParse("Ab").success,
+			loi: r.success
+				? []
+				: r.error.issues.map((i) => ({
+						path: i.path.join("."),
+						code: i.code,
+						minimum: "minimum" in i ? Number(i.minimum) : null,
+					})),
+		}).toEqual({
+			krTay: false,
+			mucTieuTay: false,
+			loi: [
+				{
+					path: "cauMucTieu",
+					code: "too_small",
+					minimum: OKR_MAU.cauMucTieu.min,
+				},
+				{
+					path: "krs.1.title",
+					code: "too_small",
+					minimum: OKR_MAU.tenKr.min,
+				},
+			],
+		});
 	});
 
 	test("parseMauNoiDung({}) ném lỗi nêu krs", () => {

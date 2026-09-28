@@ -25,6 +25,7 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
+import { ghiDuocOPha } from "@crm/validation/okr-chu-ky";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -246,7 +247,10 @@ function MenuKr({
 	);
 }
 
-function demCanh(mt: ChiTiet): ReadonlyMap<string, DemCanhKr> {
+function demCanh(
+	mt: ChiTiet,
+	kyGhiDuoc: boolean,
+): ReadonlyMap<string, DemCanhKr> {
 	return new Map(
 		mt.keyResults.map((k) => [
 			k.id,
@@ -255,7 +259,8 @@ function demCanh(mt: ChiTiet): ReadonlyMap<string, DemCanhKr> {
 				tong: k.soViec.tong,
 				sangKien: k.soSangKien,
 				coBangChung: k.coBangChung,
-				suaDuoc: mt.status !== "da-bo" && mt.canEditKr.includes(k.id),
+				suaDuoc:
+					kyGhiDuoc && mt.status !== "da-bo" && mt.canEditKr.includes(k.id),
 			},
 		]),
 	);
@@ -269,6 +274,9 @@ type HopKr =
 function TabKr({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
+	const cycles = useQuery(trpc.okr.cycles.queryOptions());
+	const ky = cycles.data?.cycles.find((c) => c.id === mt.cycleId) ?? null;
+	const kyGhiDuoc = ky !== null && ghiDuocOPha(ky.phase);
 	const [hop, setHop] = useState<HopKr | null>(null);
 	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
 	const moCapNhat = (kr: KetQua) => {
@@ -302,7 +310,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 				expected={mt.expected}
 				danhDauCuaToi={false}
 				hoiDoiTrong={ghiDuoc(mt)}
-				canh={demCanh(mt)}
+				canh={demCanh(mt, kyGhiDuoc)}
 				nhanHanhDong={m.cotThaoTac}
 				hanhDong={
 					coMenu

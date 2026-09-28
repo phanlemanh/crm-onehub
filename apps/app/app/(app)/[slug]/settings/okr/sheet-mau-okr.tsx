@@ -59,6 +59,7 @@ import {
 	type LuuMauInput,
 	luuMauInput,
 	mauKr,
+	mauNoiDung,
 	OKR_MAU,
 } from "@crm/validation/okr-mau";
 import { LOAI_MUC_TIEU, type LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
@@ -138,6 +139,9 @@ const soCua = (k: KrNhap, chu: string) =>
 const soHong = (k: KrNhap, chu: string) =>
 	k.kieu !== "moc" && chu.trim() !== "" && docSoOkr(chu) === null;
 
+const chuHong = (chu: string, khuon: typeof mauKr.shape.title) =>
+	chu.trim() !== "" && !khuon.safeParse(chu).success;
+
 function banNhap(id: string | null, n: Nhap) {
 	return luuMauInput.safeParse({
 		id,
@@ -193,6 +197,7 @@ export function SheetMauOkr({
 	const hopLe = ket.success && !coSoHong;
 	const tenHong =
 		n.ten.trim() !== "" && !luuMauInput.shape.ten.safeParse(n.ten).success;
+	const cauHong = chuHong(n.cauMucTieu, mauNoiDung.shape.cauMucTieu);
 	const dsDonVi = donVi[nhomDonVi(n.cap)];
 	const tenDonVi = new Map(dsDonVi.map((d) => [d.id, d.label]));
 
@@ -349,7 +354,7 @@ export function SheetMauOkr({
 								{n.cap === "ca-nhan" ? t.apChoCaNhan : t.apChoMoTa}
 							</FieldDescription>
 						</Field>
-						<Field>
+						<Field data-invalid={cauHong || undefined}>
 							<FieldLabel htmlFor={`${ma}-cau`}>{t.cauMucTieu}</FieldLabel>
 							<Textarea
 								id={`${ma}-cau`}
@@ -358,12 +363,19 @@ export function SheetMauOkr({
 								maxLength={OKR_MAU.cauMucTieu.max}
 								translate="no"
 								aria-describedby={`${ma}-cau-mo-ta`}
+								aria-invalid={cauHong || undefined}
 								data-o-cau-muc-tieu
 								onChange={(e) => doi({ cauMucTieu: e.target.value })}
 							/>
-							<FieldDescription id={`${ma}-cau-mo-ta`}>
-								{dien(t.toiDaKyTu, { max: OKR_MAU.cauMucTieu.max })}
-							</FieldDescription>
+							{cauHong ? (
+								<FieldError data-loi-cau-muc-tieu>
+									{dien(t.loiCau, OKR_MAU.cauMucTieu)}
+								</FieldError>
+							) : (
+								<FieldDescription id={`${ma}-cau-mo-ta`}>
+									{dien(t.toiDaKyTu, { max: OKR_MAU.cauMucTieu.max })}
+								</FieldDescription>
+							)}
 						</Field>
 						<FieldSet>
 							<FieldLegend variant="label">{t.krMau}</FieldLegend>
@@ -462,23 +474,30 @@ function DongKrMau({
 	const h = o.hopThoai;
 	const hongKhoi = soHong(kr, kr.khoi);
 	const hongDich = soHong(kr, kr.dich) || loiKieu !== null;
+	const tenHong = chuHong(kr.ten, mauKr.shape.title);
 	const tenThu = dien(t.krThu, { n: thu + 1 });
 	return (
 		<Item size="sm" variant="outline" role="listitem" data-kr-mau={thu}>
 			<ItemContent>
 				<ItemTitle>{tenThu}</ItemTitle>
 				<FieldGroup>
-					<Field>
+					<Field data-invalid={tenHong || undefined}>
 						<FieldLabel htmlFor={`${ma}-ten`}>{t.tenKr}</FieldLabel>
 						<Input
 							id={`${ma}-ten`}
 							value={kr.ten}
-							maxLength={OKR_MAU.cauMucTieu.max}
+							maxLength={OKR_MAU.tenKr.max}
 							autoComplete="off"
 							translate="no"
+							aria-invalid={tenHong || undefined}
 							data-o-ten-kr
 							onChange={(e) => onDoi({ ten: e.target.value })}
 						/>
+						{tenHong ? (
+							<FieldError data-loi-ten-kr>
+								{dien(t.loiTenKr, OKR_MAU.tenKr)}
+							</FieldError>
+						) : null}
 					</Field>
 					<div className="grid items-start gap-3 sm:grid-cols-2">
 						<Field>

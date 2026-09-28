@@ -134,6 +134,8 @@ const SHEETS_TAT: CamSheets = { sheetsBat: false, emailSheets: null };
 let sheets = SHEETS_TAT;
 let origin: string | null = null;
 let cuaSoRa: ChuKyOutput["cuaSoRa"] = null;
+let phaQuy: ChuKyOutput["phase"] = QUY.phase;
+let daDocChuKy = 0;
 const TRONG_RA = { id: "ra-1", tuNgay: "2026-11-16", denNgay: "2026-11-22" };
 
 function thuTuc<TRa, TKet = { id: string; canhBao: string | null }>(
@@ -167,10 +169,13 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
 			objective: thuTuc("okr.objective", () => chiTiet),
-			cycles: thuTuc("okr.cycles", () => ({
-				cycles: [{ ...QUY, cuaSoRa }],
-				currentId: QUY.id,
-			})),
+			cycles: thuTuc("okr.cycles", () => {
+				daDocChuKy += 1;
+				return {
+					cycles: [{ ...QUY, phase: phaQuy, cuaSoRa }],
+					currentId: QUY.id,
+				};
+			}),
 			program: thuTuc("okr.program", () => ({
 				objectiveCap: 5,
 				krCap: 5,
@@ -411,6 +416,8 @@ beforeEach(() => {
 	sheets = SHEETS_TAT;
 	origin = null;
 	cuaSoRa = null;
+	phaQuy = QUY.phase;
+	daDocChuKy = 0;
 	chiTiet = mucTieu("nhap", false);
 });
 
@@ -552,6 +559,42 @@ describe("sheet-cong-bo-khoa-khoi-diem", () => {
 			disabled: o instanceof HTMLInputElement && o.disabled,
 			moTa: o?.getAttribute("aria-describedby") ?? null,
 		}).toEqual({ disabled: false, moTa: null });
+	});
+});
+
+describe("sheet-kr-o-viec-theo-pha", () => {
+	test("KR chua co viec, nguoi sua duoc KR: lap ke hoach va dang chay hien «Thêm»; cham diem va da dong hien «—»; o nao cung mo khung KR", async () => {
+		const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
+		const them = okrCanhKrMessages("vi").bangKr.them;
+		const ket: Record<string, string> = {};
+		for (const pha of [
+			"lap-ke-hoach",
+			"dang-chay",
+			"cham-diem",
+			"da-dong",
+		] as const) {
+			phaQuy = pha;
+			daDocChuKy = 0;
+			chiTiet = mucTieu("cong-bo", false);
+			const san = await mo();
+			await cho(() => daDocChuKy > 0, `doc chu ky ${pha}`);
+			await act(async () => {
+				await new Promise((r) => setTimeout(r, 0));
+			});
+			const o = san.o.ownerDocument.querySelector(
+				'[data-cot-viec="kr-1"] [data-mo-khung-kr="kr-1"]',
+			);
+			ket[pha] = o?.textContent?.trim() ?? "khong co o";
+			await act(async () => san.root.unmount());
+			san.o.remove();
+			dangMo = dangMo.filter((x) => x !== san);
+		}
+		expect(ket).toEqual({
+			"lap-ke-hoach": them,
+			"dang-chay": them,
+			"cham-diem": "—",
+			"da-dong": "—",
+		});
 	});
 });
 

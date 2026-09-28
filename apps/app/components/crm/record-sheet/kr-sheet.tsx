@@ -23,6 +23,7 @@ import {
 	type DuongVe,
 	KrViecDanhSach,
 	type LoaiSangKien,
+	loiTheoNguoiLam,
 	type TrangThaiCanh,
 	type ViecVao,
 } from "./kr-viec";
@@ -249,12 +250,18 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 	const { stack, close, open, lotDuoi } = useRecordStack();
 	const { tab, setTab } = useRecordSheetView(TAB.viec);
 	const q = useQuery(trpc.okr.canhKr.queryOptions({ keyResultId }));
-	const nguoi = useQuery(trpc.users.list.queryOptions());
+	const nguoi = useQuery(trpc.okr.thanhVien.queryOptions());
 	const toi = useQuery(trpc.users.me.queryOptions());
 	const [gan, setGan] = useState<LoaiSangKien | null>(null);
 	const objectiveId = q.data?.kr.objectiveId ?? null;
 	const ghi = useGhiCanh(keyResultId, objectiveId);
 	const duoiMotMinh = stack.length === 1;
+	const loiNguoiLam = (loi: unknown, vao: ViecVao) =>
+		loiTheoNguoiLam(
+			loi,
+			vao.nguoiLamUserId,
+			async () => (await nguoi.refetch()).data,
+		);
 
 	useEffect(() => {
 		if (objectiveId && duoiMotMinh)
@@ -291,8 +298,10 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 						nguoiDangTai={nguoi.isPending}
 						nguoiMacDinh={toi.data?.id ?? ""}
 						hanhDong={{
-							onThem: ghi.onThem,
-							onSua: ghi.onSua,
+							onThem: (vao) =>
+								ghi.onThem(vao).catch((loi) => loiNguoiLam(loi, vao)),
+							onSua: (id, vao) =>
+								ghi.onSua(id, vao).catch((loi) => loiNguoiLam(loi, vao)),
 							onDanhDau: ghi.onDanhDau,
 							onGo: ghi.onGo,
 							onGan: setGan,

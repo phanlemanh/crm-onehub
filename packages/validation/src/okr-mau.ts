@@ -1,18 +1,36 @@
 import { z } from "zod";
-import { kiemSoTheoKieu, kieuKr, soKr } from "./okr-kr";
-import { type CapMucTieu, donViMucTieu, LOAI_MUC_TIEU } from "./okr-muc-tieu";
+import { kiemSoTheoKieu, kieuKr, krInput, soKr } from "./okr-kr";
+import {
+	type CapMucTieu,
+	donViMucTieu,
+	LOAI_MUC_TIEU,
+	mucTieuInput,
+} from "./okr-muc-tieu";
+
+function doDai(chu: z.ZodString): { min: number; max: number } {
+	const { minLength: min, maxLength: max } = chu;
+	if (min === null || max === null)
+		throw new Error(
+			"Khuôn tiêu đề OKR phải khai cả độ dài tối thiểu và tối đa.",
+		);
+	return { min, max };
+}
+
+const tieuDeKr = krInput.shape.title;
+const cauMucTieu = mucTieuInput.shape.title;
 
 export const OKR_MAU = {
 	krToiDa: 10,
 	ten: { min: 3, max: 120 },
-	cauMucTieu: { max: 200 },
+	tenKr: doDai(tieuDeKr),
+	cauMucTieu: doDai(cauMucTieu),
 } as const;
 
 const ma = z.string().trim().min(1).max(120);
 
 export const mauKr = z
 	.object({
-		title: z.string().trim().min(1).max(OKR_MAU.cauMucTieu.max),
+		title: tieuDeKr,
 		kind: kieuKr,
 		unit: z.string().trim().max(24),
 		startValue: soKr.nullable(),
@@ -27,7 +45,7 @@ export const mauKr = z
 export type MauKr = z.infer<typeof mauKr>;
 
 export const mauNoiDung = z.object({
-	cauMucTieu: z.string().trim().min(1).max(OKR_MAU.cauMucTieu.max),
+	cauMucTieu,
 	loai: z.enum(LOAI_MUC_TIEU),
 	krs: z.array(mauKr).min(1).max(OKR_MAU.krToiDa),
 });

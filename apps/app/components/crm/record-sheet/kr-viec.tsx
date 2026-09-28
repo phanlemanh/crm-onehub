@@ -96,6 +96,19 @@ export type KrViecHanhDong = {
 
 export type DuongVe = { onVe: () => void; coMucTieuDuoi: boolean };
 
+export class NguoiLamKhongConThanhVien extends Error {}
+
+export async function loiTheoNguoiLam(
+	loi: unknown,
+	nguoiLamUserId: string,
+	docThanhVien: () => Promise<readonly { id: string }[] | undefined>,
+): Promise<never> {
+	const thanhVien = await docThanhVien();
+	if (thanhVien && !thanhVien.some((u) => u.id === nguoiLamUserId))
+		throw new NguoiLamKhongConThanhVien();
+	throw loi;
+}
+
 type ChonNguoi = {
 	nguoi: NguoiLamChon[];
 	nguoiDangTai: boolean;
@@ -151,20 +164,22 @@ function DongNhap({
 	const [nguoiLam, setNguoiLam] = useState(dau.nguoiLamUserId);
 	const [han, setHan] = useState<string | null>(dau.hanNgay);
 	const [loiTieuDe, setLoiTieuDe] = useState<string | null>(null);
-	const [loiNguoi, setLoiNguoi] = useState(false);
+	const [loiNguoi, setLoiNguoi] = useState<string | null>(null);
 	const [dangLuu, setDangLuu] = useState(false);
 
 	const luu = async () => {
 		if (dangLuu) return;
 		const kq = themViecInput.shape.tieuDe.safeParse(tieuDe);
 		setLoiTieuDe(kq.success ? null : dien(m.loiTieuDe, OKR_CANH_KR.tieuDe));
-		setLoiNguoi(nguoiLam === "");
+		setLoiNguoi(nguoiLam === "" ? m.loiNguoiLam : null);
 		if (!kq.success || nguoiLam === "") return;
 		setDangLuu(true);
 		try {
 			await onLuu({ tieuDe: kq.data, nguoiLamUserId: nguoiLam, hanNgay: han });
 		} catch (loi) {
-			setLoiTieuDe(loi instanceof Error ? loi.message : String(loi));
+			if (loi instanceof NguoiLamKhongConThanhVien)
+				setLoiNguoi(m.nguoiLamDaRoi);
+			else setLoiTieuDe(loi instanceof Error ? loi.message : String(loi));
 		} finally {
 			setDangLuu(false);
 		}
@@ -221,7 +236,9 @@ function DongNhap({
 								empty={m.khongAi}
 								aria-invalid={loiNguoi ? true : undefined}
 							/>
-							{loiNguoi ? <FieldError>{m.loiNguoiLam}</FieldError> : null}
+							{loiNguoi ? (
+								<FieldError data-loi-nguoi-lam>{loiNguoi}</FieldError>
+							) : null}
 						</Field>
 						<Field>
 							<FieldLabel htmlFor={`${ma}-han`}>{m.han}</FieldLabel>

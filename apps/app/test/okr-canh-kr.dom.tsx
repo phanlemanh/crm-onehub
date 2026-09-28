@@ -226,9 +226,8 @@ mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
 }));
 
-const { KrViecDanhSach } = await import(
-	"@/components/crm/record-sheet/kr-viec"
-);
+const { KrViecDanhSach, loiTheoNguoiLam, NguoiLamKhongConThanhVien } =
+	await import("@/components/crm/record-sheet/kr-viec");
 const { KhungKr, useDuongVe } = await import(
 	"@/components/crm/record-sheet/kr-sheet"
 );
@@ -487,6 +486,79 @@ describe("khung KR: dong nhap viec", () => {
 		expect(goi.them.mock.calls[0]).toEqual([
 			{ tieuDe: dai, nguoiLamUserId: "hung", hanNgay: null },
 		]);
+	});
+
+	test("may chu tu choi vi nguoi lam khong con la thanh vien: loi duoi o Nguoi lam, o tieu de khong loi, dong giu nguyen; loi khac van duoi tieu de", async () => {
+		const loiO = (o: HTMLElement) => {
+			const dong = motCai<HTMLElement>(o, "[data-dong-nhap]");
+			const oCua = (chon: string) =>
+				dong.querySelector(chon)?.closest('[data-slot="field"]') ?? null;
+			return {
+				nguoi:
+					oCua('[role="combobox"]')?.querySelector('[data-slot="field-error"]')
+						?.textContent ?? null,
+				tieuDe:
+					oCua("input[name='tieu-de-viec']")?.querySelector(
+						'[data-slot="field-error"]',
+					)?.textContent ?? null,
+				conDong: o.querySelector("[data-dong-nhap]") !== null,
+			};
+		};
+		const goi = taoGoi();
+		goi.them.mockImplementation(async () => {
+			throw new NguoiLamKhongConThanhVien();
+		});
+		const o = await dung(danhSach(BO_DU_LIEU["co-viec"], goi));
+		await go(await moDongNhap(o), "Gọi lại 20 đối tác cũ");
+		await phim(
+			motCai(o, "[data-dong-nhap] input[name='tieu-de-viec']"),
+			"Enter",
+		);
+		const khongConThanhVien = loiO(o);
+
+		const goiKhac = taoGoi();
+		goiKhac.them.mockImplementation(async () => {
+			throw new Error("Kỳ đang chấm điểm — việc chỉ đọc.");
+		});
+		const o2 = await dung(danhSach(BO_DU_LIEU["co-viec"], goiKhac));
+		await go(await moDongNhap(o2), "Gọi lại 20 đối tác cũ");
+		await phim(
+			motCai(o2, "[data-dong-nhap] input[name='tieu-de-viec']"),
+			"Enter",
+		);
+		expect({ khongConThanhVien, loiKhac: loiO(o2) }).toEqual({
+			khongConThanhVien: {
+				nguoi: m.nhap.nguoiLamDaRoi,
+				tieuDe: null,
+				conDong: true,
+			},
+			loiKhac: {
+				nguoi: null,
+				tieuDe: "Kỳ đang chấm điểm — việc chỉ đọc.",
+				conDong: true,
+			},
+		});
+	});
+
+	test("loiTheoNguoiLam: danh sach thanh vien doc lai khong con nguoi lam thi doi thanh loi nguoi lam; con thi giu loi goc; khong doc duoc thi giu loi goc", async () => {
+		const goc = new Error("Máy chủ từ chối");
+		const ket = async (ds: { id: string }[] | undefined) => {
+			try {
+				await loiTheoNguoiLam(goc, "lan", async () => ds);
+				return "khong-nem";
+			} catch (e) {
+				return e instanceof NguoiLamKhongConThanhVien
+					? "nguoi-lam"
+					: e === goc
+						? "goc"
+						: String(e);
+			}
+		};
+		expect({
+			daRoi: await ket([{ id: "hung" }]),
+			conDo: await ket([{ id: "hung" }, { id: "lan" }]),
+			khongDoc: await ket(undefined),
+		}).toEqual({ daRoi: "nguoi-lam", conDo: "goc", khongDoc: "goc" });
 	});
 
 	test("tieu de 200 ky tu lien khong tran: Item giu min-w-0 va wrap-anywhere, khong them class tai cho goi", async () => {
@@ -1333,6 +1405,53 @@ describe("cai dat: khoi Mau OKR", () => {
 		expect(document.body.textContent).toContain(
 			`Tên mẫu cần từ ${OKR_MAU.ten.min} đến ${OKR_MAU.ten.max} ký tự.`,
 		);
+	});
+
+	test("ten KR mau va cau muc tieu hai ky tu: loi duoi dung o, noi tran tu khuon KR tay va muc tieu tay, Luu khoa; du ba ky tu thi het loi", async () => {
+		datLaiMay([], true);
+		await moCaiDatMau("?mau=moi");
+		await cho(() => q("[data-sheet-mau]") !== null, "sheet mau mo");
+		const { OKR_MAU } = await import("@crm/validation/okr-mau");
+		const { krInput } = await import("@crm/validation/okr-kr");
+		const { mucTieuInput } = await import("@crm/validation/okr-muc-tieu");
+		await goO(q("[data-o-ten-mau]"), "Chăm sóc khách");
+		await goO(q("[data-o-cau-muc-tieu]"), "Ab");
+		await goO(krCuaSheet(0).querySelector("[data-o-ten-kr]"), "KH");
+		const loiDuoi = () => ({
+			cau: q("[data-loi-cau-muc-tieu]")?.textContent ?? null,
+			kr: krCuaSheet(0).querySelector("[data-loi-ten-kr]")?.textContent ?? null,
+			krInvalid:
+				krCuaSheet(0)
+					.querySelector("[data-o-ten-kr]")
+					?.getAttribute("aria-invalid") ?? null,
+			luuKhoa: nutTat('[data-nut="luu-mau"]'),
+		});
+		expect({
+			kr: {
+				min: krInput.shape.title.minLength,
+				max: krInput.shape.title.maxLength,
+			},
+			cau: {
+				min: mucTieuInput.shape.title.minLength,
+				max: mucTieuInput.shape.title.maxLength,
+			},
+		}).toEqual({ kr: OKR_MAU.tenKr, cau: OKR_MAU.cauMucTieu });
+		expect(loiDuoi()).toEqual({
+			cau: `Câu mục tiêu cần từ ${OKR_MAU.cauMucTieu.min} đến ${OKR_MAU.cauMucTieu.max} ký tự.`,
+			kr: `Tên KR cần từ ${OKR_MAU.tenKr.min} đến ${OKR_MAU.tenKr.max} ký tự.`,
+			krInvalid: "true",
+			luuKhoa: true,
+		});
+		expect(document.body.textContent).not.toContain("too_small");
+
+		await goO(q("[data-o-cau-muc-tieu]"), "Abc");
+		await goO(krCuaSheet(0).querySelector("[data-o-ten-kr]"), "KH1");
+		expect(loiDuoi()).toEqual({
+			cau: null,
+			kr: null,
+			krInvalid: null,
+			luuKhoa: false,
+		});
 	});
 
 	test("thanh vien thuong: danh sach doc duoc, Them mau va menu khoa, tro toi dong ly do duoi tieu de; ?mau=moi khong mo sheet", async () => {

@@ -61,6 +61,8 @@ const vi = {
 		luu: "Lưu việc",
 		loiTieuDe: "Tiêu đề việc cần từ {min} đến {max} ký tự.",
 		loiNguoiLam: "Chọn người làm việc này.",
+		nguoiLamDaRoi:
+			"Người này không còn trong không gian làm việc — chọn người khác.",
 	},
 	sangKien: {
 		loai: {
@@ -215,10 +217,12 @@ const vi = {
 			boDonVi: "Bỏ {ten} khỏi mẫu",
 			cauMucTieu: "Câu mục tiêu gợi ý",
 			toiDaKyTu: "Tối đa {max} ký tự.",
+			loiCau: "Câu mục tiêu cần từ {min} đến {max} ký tự.",
 			krMau: "KR mẫu",
 			soKr: "Từ {min} đến {max} KR.",
 			krThu: "KR thứ {n}",
 			tenKr: "Tên KR",
+			loiTenKr: "Tên KR cần từ {min} đến {max} ký tự.",
 			kieu: "Kiểu",
 			donViDo: "Đơn vị đo",
 			khoiDiem: "Khởi điểm (tuỳ chọn)",
@@ -331,6 +335,8 @@ const en: OkrCanhKrMessages = {
 		luu: "Save action",
 		loiTieuDe: "An action needs {min} to {max} characters.",
 		loiNguoiLam: "Pick who does this action.",
+		nguoiLamDaRoi:
+			"This person is no longer in the workspace — pick someone else.",
 	},
 	sangKien: {
 		loai: {
@@ -485,10 +491,12 @@ const en: OkrCanhKrMessages = {
 			boDonVi: "Remove {ten} from the template",
 			cauMucTieu: "Suggested objective",
 			toiDaKyTu: "Up to {max} characters.",
+			loiCau: "The objective needs {min} to {max} characters.",
 			krMau: "Template KRs",
 			soKr: "{min} to {max} KRs.",
 			krThu: "KR {n}",
 			tenKr: "KR name",
+			loiTenKr: "A KR name needs {min} to {max} characters.",
 			kieu: "Type",
 			donViDo: "Unit of measure",
 			khoiDiem: "Start (optional)",
