@@ -3,6 +3,7 @@
 import {
 	Table,
 	TableBody,
+	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
@@ -99,6 +100,28 @@ export function SimpleTable({
 			</TableHeader>
 			<TableBody>{children}</TableBody>
 		</Table>
+	);
+}
+
+export function SimpleTableCell({
+	align = "left",
+	numeric,
+	className,
+	...props
+}: ComponentProps<typeof TableCell> & {
+	align?: SimpleTableColumn["align"];
+	numeric?: boolean;
+}) {
+	return (
+		<TableCell
+			className={cn(
+				"px-3",
+				ALIGN_CLASS[numeric ? "right" : align],
+				numeric && "tabular-nums",
+				className,
+			)}
+			{...props}
+		/>
 	);
 }
 

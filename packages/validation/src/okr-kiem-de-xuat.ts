@@ -57,6 +57,10 @@ const SAU_TY_KHONG_PHAI_SO = new Set(["lệ", "trọng", "suất"]);
 
 const CHU_SO_CHINH_XAC = 15;
 
+const SO_BANG_CHU = TRO_LY_OKR_TRAN.soBangChu;
+const CHU_CAN_NGU_CANH = new Set(["một", "năm"]);
+const NAM_LICH = /^\d{4}$/;
+
 type SoDoc = { giaTri: number; goc: number; heSo: number };
 type Doc = { giaTri: number; het: number };
 
@@ -65,7 +69,7 @@ function tachSo(chu: string): string[] {
 		chu
 			.normalize("NFC")
 			.toLowerCase()
-			.match(/\d+(?:[.,]\d+)*|%|\p{L}+/gu) ?? []
+			.match(/\d+(?:[.,]\d+)*|%|\p{L}+|[.!?;:]/gu) ?? []
 	);
 }
 
@@ -103,7 +107,35 @@ function docChuSo(t: string[], i: number): Doc | null {
 	return so === null ? null : { giaTri: so, het: i + 1 };
 }
 
+function cumKhop(t: string[], tu: number, cum: string): boolean {
+	const chu = cum.split(" ");
+	return tu >= 0 && chu.every((c, k) => t[tu + k] === c);
+}
+
+function truocCum(t: string[], i: number, ds: readonly string[]): boolean {
+	return ds.some((cum) => cumKhop(t, i + 1, cum));
+}
+
+function sauCum(t: string[], i: number, ds: readonly string[]): boolean {
+	return ds.some((cum) => cumKhop(t, i - cum.split(" ").length, cum));
+}
+
+function laSoBangChu(t: string[], i: number): boolean {
+	const tu = t[i] ?? "";
+	if (!CHU_CAN_NGU_CANH.has(tu)) return true;
+	if (truocCum(t, i, SO_BANG_CHU.hauToCo)) return true;
+	if (tu === "một") return false;
+	const sau = t[i + 1];
+	if (sau === undefined || SO_BANG_CHU.dauCau.includes(sau)) return false;
+	if (NAM_LICH.test(sau)) return false;
+	return (
+		!sauCum(t, i, SO_BANG_CHU.namSauCum) &&
+		!truocCum(t, i, SO_BANG_CHU.namTruocCum)
+	);
+}
+
 function docMotSo(t: string[], i: number): Doc | null {
+	if (!/^\d/.test(t[i] ?? "") && !laSoBangChu(t, i)) return null;
 	const so = /^\d/.test(t[i] ?? "") ? docChuSo(t, i) : docChuViet(t, i);
 	return so ? theoSauTram(t, so) : null;
 }

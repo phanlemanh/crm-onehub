@@ -529,6 +529,64 @@ describe("so-doi-co", () => {
 	});
 });
 
+describe("so-bang-chu-theo-ngu-canh", () => {
+	test("«năm» chỉ thời gian và «một» không theo hậu tố cỡ không phải số", () => {
+		expect(
+			[
+				"Bứt phá doanh thu để hoàn thành chỉ tiêu năm",
+				"Giữ biên lợi nhuận cuối năm",
+				"Doanh thu năm nay vượt kế hoạch",
+				"Đối tác ở lại trong năm 2026",
+				"Tăng trưởng một cách bền vững",
+				"Doanh thu tăng trong năm. Đối tác ở lại",
+			].map(trichSo),
+		).toEqual([[], [], [], [2026], [], []]);
+	});
+
+	test("«năm», «một» trước hậu tố cỡ hay đứng đếm vẫn là số", () => {
+		expect(
+			[
+				"lên năm tỷ",
+				"năm đối tác mới",
+				"một tỷ đồng",
+				"một phần trăm",
+				"năm trăm triệu",
+			].map(trichSo),
+		).toEqual([[5e9], [5], [1e9], [1], [5e8]]);
+	});
+
+	test("so-moi theo ngữ cảnh chữ số", () => {
+		const co5 = doiKr(G, { targetValue: 5 });
+		const khong5 = doiKr(G, {
+			startValue: 1,
+			targetValue: 3,
+			currentValue: 1,
+		});
+		expect([
+			kiemDongDeXuat(
+				vietLaiTen(G, "Bứt phá doanh thu để hoàn thành chỉ tiêu năm"),
+				G,
+			),
+			kiemDongDeXuat(vietLaiTen(G, "Tăng trưởng một cách bền vững"), G),
+			kiemDongDeXuat(vietLaiKr(co5, "Có năm đối tác mới ký hợp tác"), co5),
+			kiemDongDeXuat(
+				vietLaiKr(khong5, "Có năm đối tác mới ký hợp tác"),
+				khong5,
+			),
+		]).toEqual([
+			{ qua: true },
+			{ qua: true },
+			{ qua: true },
+			{ qua: false, maLoai: "so-moi" },
+		]);
+	});
+
+	test("danh sách ngữ cảnh chữ số ở một nguồn", () => {
+		expect(TRO_LY_OKR_TRAN.soBangChu.namSauCum).toContain("chỉ tiêu");
+		expect(TRO_LY_OKR_TRAN.soBangChu.hauToCo).toContain("tỷ");
+	});
+});
+
 describe("tu-cam-va-nguoi", () => {
 	test("từ cấm lấy từ cấu hình, gồm danh sách NG", () => {
 		for (const tu of [

@@ -34,10 +34,13 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@crm/ui/components/sheet";
-import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
+import {
+	SimpleTable,
+	SimpleTableCell,
+	SimpleTableRow,
+} from "@crm/ui/components/simple-table";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
-import { TableCell } from "@crm/ui/components/table";
 import { formatPercent } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { MA_LOAI_DE_XUAT, TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
@@ -57,7 +60,6 @@ type SoNac = SoDo["bat"];
 type Luot = RouterOutputs["okr"]["troLyAn"]["luot"][number];
 type DongLuot = Luot["dong"][number];
 
-const CELL = "px-3 py-2.5 align-middle";
 const GIAY_MS = 1_000;
 const CHU_SO_TIEN_LE = 3;
 const HANG_CHO = ["mot", "hai", "ba", "bon", "nam", "sau"];
@@ -171,21 +173,13 @@ function BangSo({ soDo }: { soDo: SoDo }) {
 			>
 				{dong.map((h) => (
 					<SimpleTableRow key={h.id} sub={h.phu} data-so-do={h.id}>
-						<TableCell className={CELL} data-cot="nhan">
-							{h.nhan}
-						</TableCell>
-						<TableCell
-							className={`${CELL} text-right tabular-nums`}
-							data-cot="bat"
-						>
+						<SimpleTableCell data-cot="nhan">{h.nhan}</SimpleTableCell>
+						<SimpleTableCell numeric data-cot="bat">
 							{h.bat}
-						</TableCell>
-						<TableCell
-							className={`${CELL} text-right tabular-nums`}
-							data-cot="an"
-						>
+						</SimpleTableCell>
+						<SimpleTableCell numeric data-cot="an">
 							{h.an}
-						</TableCell>
+						</SimpleTableCell>
 					</SimpleTableRow>
 				))}
 			</SimpleTable>
@@ -225,7 +219,7 @@ function BangLuot({
 						data-luot={l.taskId}
 						onClick={() => moLuot(l.taskId)}
 					>
-						<TableCell className={CELL}>
+						<SimpleTableCell>
 							<Button
 								variant="link"
 								size="xs-wrap"
@@ -241,21 +235,14 @@ function BangLuot({
 									<span>{m.mucTieuMat}</span>
 								)}
 							</Button>
-						</TableCell>
-						<TableCell className={CELL} data-cot="nac">
-							{m.nacTen[l.nac]}
-						</TableCell>
-						<TableCell
-							className={`${CELL} text-right tabular-nums`}
-							data-cot="dong"
-						>
+						</SimpleTableCell>
+						<SimpleTableCell data-cot="nac">{m.nacTen[l.nac]}</SimpleTableCell>
+						<SimpleTableCell numeric data-cot="dong">
 							{soDongLoai(l) > 0
 								? `${soDongQua(l)} ${m.dongBiLoai(String(soDongLoai(l)))}`
 								: soDongQua(l)}
-						</TableCell>
-						<TableCell className={`${CELL} text-right tabular-nums`}>
-							{giay(l.doTreMs, locale)}
-						</TableCell>
+						</SimpleTableCell>
+						<SimpleTableCell numeric>{giay(l.doTreMs, locale)}</SimpleTableCell>
 					</SimpleTableRow>
 				))}
 			</SimpleTable>
@@ -397,7 +384,7 @@ export function TheGopYSoDo() {
 		return (
 			<Card data-the="gop-y-so-do" aria-busy="true">
 				{dau}
-				<CardContent className="flex flex-col gap-3">
+				<CardContent>
 					{HANG_CHO.map((hang) => (
 						<Skeleton key={hang} className="h-6 w-full" />
 					))}
@@ -430,7 +417,7 @@ export function TheGopYSoDo() {
 	return (
 		<Card data-the="gop-y-so-do">
 			{dau}
-			<CardContent className="flex flex-col gap-6">
+			<CardContent>
 				<BangSo soDo={soDo.data} />
 				{luot.length > 0 ? (
 					<BangLuot luot={luot} moLuot={(id) => void setMoId(id)} />

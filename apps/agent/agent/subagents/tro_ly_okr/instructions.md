@@ -41,10 +41,24 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
   block only.
   - `viet-lai`: a rewrite of the Mục tiêu title, its «vì sao lúc này», or a KR title, with `truoc`
     copied exactly from the data.
-  - `hoi`: a question about a KR that cannot be measured.
+  - `hoi`: a question about one of the five quality problems below, with its code in `maVanDe`.
   - `can-chinh`: only when `phamVi` is `objective`, a Căn chỉnh to one target listed in
     `dichCanChinh`, by its id.
   - When `phamVi` is `kr`, write lines about that KR only.
+- The five quality problems, each with the sign that gives it away. Put the code in `maVanDe` on
+  every `hoi` line and on every `viet-lai` line that fixes it:
+  - `kr-la-viec` — a KR counts work done, not an outcome: it starts with a verb of doing («Gọi 50
+    cuộc», «Mở 3 lớp huấn luyện»).
+  - `khong-do-duoc` — you cannot say how a KR is measured: no clear unit, or a target that does not
+    fit its direction (a `tang-toi` KR whose target is below its start).
+  - `thieu-doi-trong` — nothing holds the other side: every KR pushes the same way (all grow a count
+    or a revenue, none keeps quality, cost or retention), or every KR cuts something (cost, time)
+    and none keeps the output or service level.
+  - `trung-y` — two KRs measure the same thing in different words, or a KR does not measure the
+    Mục tiêu it sits under.
+  - `muc-tieu-la-so` — the Mục tiêu title is the name of a metric or a number, not a place to reach
+    («Doanh thu quý 3», «Tăng NPS lên 60»). Rewrite it as where the team wants to be; the number
+    belongs in a KR.
 - A rule listed in `luatDaHoi` was already asked on the form: do not add a `hoi` line with that
   code. Still propose a `viet-lai` line for that same field (the KR title or the Mục tiêu title)
   when you can write a better sentence.
