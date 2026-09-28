@@ -169,12 +169,18 @@ const DEM_TRONG: DemCanhKr = {
 	suaDuoc: false,
 };
 
-function SoViecKr({ kr, dem }: { kr: KetQua; dem: DemCanhKr }) {
+export function SoViecKr({
+	kr,
+	dem,
+}: {
+	kr: Pick<KetQua, "id" | "title">;
+	dem: DemCanhKr;
+}) {
 	const m = okrCanhKrMessages(useLocale()).bangKr;
 	const mo = useOpenRecord();
 	const moKr = () => mo({ kind: "kr", id: kr.id });
 	if (dem.tong + dem.sangKien === 0)
-		return dem.suaDuoc ? (
+		return (
 			<Button
 				size="sm"
 				variant="ghost"
@@ -182,11 +188,15 @@ function SoViecKr({ kr, dem }: { kr: KetQua; dem: DemCanhKr }) {
 				aria-label={dien(m.moViec, { ten: kr.title })}
 				onClick={moKr}
 			>
-				<Icon icon={Add} data-icon="inline-start" />
-				{m.them}
+				{dem.suaDuoc ? (
+					<>
+						<Icon icon={Add} data-icon="inline-start" />
+						{m.them}
+					</>
+				) : (
+					<EmptyCellValue />
+				)}
 			</Button>
-		) : (
-			<EmptyCellValue />
 		);
 	return (
 		<Button

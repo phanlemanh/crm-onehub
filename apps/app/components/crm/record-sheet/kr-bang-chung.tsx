@@ -42,7 +42,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import { formatDay } from "@crm/ui/lib/format";
-import { bangChungVao } from "@crm/validation/okr-canh-kr";
+import { bangChungVao, OKR_CANH_KR } from "@crm/validation/okr-canh-kr";
 import { useId, useState } from "react";
 import {
 	DetailSheetBody,
@@ -154,9 +154,11 @@ function HopThoaiDinh({
 								onChange={(e) => setGhiChu(e.target.value)}
 							/>
 							{saiGhiChu ? (
-								<FieldError>{m.loiGhiChu}</FieldError>
+								<FieldError>{dien(m.loiGhiChu, OKR_CANH_KR.ghiChu)}</FieldError>
 							) : (
-								<FieldDescription>{m.hop.toiDa}</FieldDescription>
+								<FieldDescription>
+									{dien(m.hop.toiDa, OKR_CANH_KR.ghiChu)}
+								</FieldDescription>
 							)}
 						</Field>
 					</FieldGroup>

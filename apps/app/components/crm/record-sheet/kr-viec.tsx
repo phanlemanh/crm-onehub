@@ -48,7 +48,8 @@ import {
 	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 import { formatDay } from "@crm/ui/lib/format";
-import { themViecInput } from "@crm/validation/okr-canh-kr";
+import { TU_XU_LY_ESC } from "@crm/ui/lib/tu-xu-ly-esc";
+import { OKR_CANH_KR, themViecInput } from "@crm/validation/okr-canh-kr";
 import { useId, useState } from "react";
 import {
 	DetailSheetBody,
@@ -90,8 +91,10 @@ export type KrViecHanhDong = {
 	onGan: (loai: LoaiSangKien) => void;
 	onMo: (loai: LoaiSangKien, id: string) => void;
 	onThuLai: () => void;
-	onVeMucTieu?: () => void;
+	ve: DuongVe;
 };
+
+export type DuongVe = { onVe: () => void; coMucTieuDuoi: boolean };
 
 type ChonNguoi = {
 	nguoi: NguoiLamChon[];
@@ -154,7 +157,7 @@ function DongNhap({
 	const luu = async () => {
 		if (dangLuu) return;
 		const kq = themViecInput.shape.tieuDe.safeParse(tieuDe);
-		setLoiTieuDe(kq.success ? null : m.loiTieuDe);
+		setLoiTieuDe(kq.success ? null : dien(m.loiTieuDe, OKR_CANH_KR.tieuDe));
 		setLoiNguoi(nguoiLam === "");
 		if (!kq.success || nguoiLam === "") return;
 		setDangLuu(true);
@@ -176,6 +179,7 @@ function DongNhap({
 						<Input
 							id={`${ma}-tieu-de`}
 							name="tieu-de-viec"
+							{...TU_XU_LY_ESC}
 							autoComplete="off"
 							autoFocus
 							translate="no"
@@ -554,16 +558,16 @@ function Loi({
 				title={m.khongCo.tieuDe}
 				description={m.khongCo.moTa}
 				action={
-					hanhDong.onVeMucTieu ? (
-						<Button
-							variant="outline"
-							data-nut="ve-muc-tieu"
-							onClick={hanhDong.onVeMucTieu}
-						>
-							<Icon data-icon="inline-start" icon={ArrowLeft} />
-							{m.khongCo.veMucTieu}
-						</Button>
-					) : undefined
+					<Button
+						variant="outline"
+						data-nut="ve-muc-tieu"
+						onClick={hanhDong.ve.onVe}
+					>
+						<Icon data-icon="inline-start" icon={ArrowLeft} />
+						{hanhDong.ve.coMucTieuDuoi
+							? m.khongCo.veMucTieu
+							: m.khongCo.dongKhung}
+					</Button>
 				}
 			/>
 		);

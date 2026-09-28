@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { CanhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
@@ -69,7 +70,10 @@ type TenTrangThai = (typeof TRANG_THAI)[number];
 const { KrViecDanhSach } = await import(
 	"@/components/crm/record-sheet/kr-viec"
 );
-const { KhungKr } = await import("@/components/crm/record-sheet/kr-sheet");
+const { KhungKr, useDuongVe } = await import(
+	"@/components/crm/record-sheet/kr-sheet"
+);
+const { SoViecKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
 type TrangThaiCanh =
 	import("@/components/crm/record-sheet/kr-viec").TrangThaiCanh;
 const { DetailSheet } = await import("@/components/detail-sheet");
@@ -101,6 +105,7 @@ type Goi = {
 	gan: ReturnType<typeof mock>;
 	mo: ReturnType<typeof mock>;
 	thuLai: ReturnType<typeof mock>;
+	ve: ReturnType<typeof mock>;
 };
 
 function taoGoi(): Goi {
@@ -112,6 +117,7 @@ function taoGoi(): Goi {
 		gan: mock(() => {}),
 		mo: mock(() => {}),
 		thuLai: mock(() => {}),
+		ve: mock(() => {}),
 	};
 }
 
@@ -147,6 +153,7 @@ function danhSach(duLieu: TrangThaiCanh, goi: Goi): ReactElement {
 				onGan: goi.gan,
 				onMo: goi.mo,
 				onThuLai: goi.thuLai,
+				ve: { onVe: goi.ve, coMucTieuDuoi: true },
 			}}
 		/>
 	);
@@ -384,5 +391,182 @@ describe("khung KR: tab theo kieu KR", () => {
 	test("KR moc: co ca hai tab", async () => {
 		const tab = await tabCua("moc");
 		expect(tab).toEqual([m.khung.tabViec, m.khung.tabBangChung]);
+	});
+});
+
+const KHONG_CO: TrangThaiCanh = {
+	loai: "loi",
+	thongDiep: "Không có KR kr-ma",
+	khongCo: true,
+};
+
+async function cho(xong: () => boolean, moTa: string): Promise<void> {
+	for (let vong = 0; vong < 80; vong += 1) {
+		if (xong()) return;
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 0));
+		});
+	}
+	throw new Error(`khong toi: ${moTa}`);
+}
+
+function coUrl(duong: string, man: ReactElement) {
+	let hienTai = new URLSearchParams(duong);
+	return {
+		url: () => hienTai,
+		man: (
+			<NuqsTestingAdapter
+				hasMemory
+				searchParams={duong}
+				onUrlUpdate={(su) => {
+					hienTai = new URLSearchParams(su.queryString);
+				}}
+			>
+				{man}
+			</NuqsTestingAdapter>
+		),
+	};
+}
+
+function KhongCoKr() {
+	const ve = useDuongVe();
+	const goi = taoGoi();
+	return (
+		<KrViecDanhSach
+			duLieu={KHONG_CO}
+			nguoi={[]}
+			nguoiDangTai={false}
+			nguoiMacDinh=""
+			hanhDong={{
+				onThem: goi.them,
+				onSua: goi.sua,
+				onDanhDau: goi.danhDau,
+				onGo: goi.go,
+				onGan: goi.gan,
+				onMo: goi.mo,
+				onThuLai: goi.thuLai,
+				ve,
+			}}
+		/>
+	);
+}
+
+describe("khung KR: ma KR khong ton tai luon co duong ve", () => {
+	test("mo tran ?record=kr:<ma sai>: Empty loi co nut, bam thi dong khung KR ve trang dang mo", async () => {
+		const san = coUrl("?record=kr:kr-ma", <KhongCoKr />);
+		const o = await dung(san.man);
+		const nut = motCai<HTMLButtonElement>(o, '[data-nut="ve-muc-tieu"]');
+		expect(nut.textContent).toBe(m.khung.khongCo.dongKhung);
+		await bam(nut);
+		await cho(() => san.url().get("record") === null, "record bi xoa");
+		expect(san.url().get("record")).toBeNull();
+	});
+
+	test("co khung muc tieu ben duoi: nut «Ve khung muc tieu» dua ve khung do", async () => {
+		const san = coUrl("?record=objective:mt-1,kr:kr-ma", <KhongCoKr />);
+		const o = await dung(san.man);
+		const nut = motCai<HTMLButtonElement>(o, '[data-nut="ve-muc-tieu"]');
+		expect(nut.textContent).toBe(m.khung.khongCo.veMucTieu);
+		await bam(nut);
+		await cho(
+			() => san.url().get("record") === "objective:mt-1",
+			"record ve objective:mt-1",
+		);
+		expect(san.url().get("record")).toBe("objective:mt-1");
+	});
+});
+
+describe("khung KR: Esc o dong nhap trong DetailSheet that", () => {
+	test("Esc huy dong nhap, khung van mo, khong hoi bo thay doi", async () => {
+		const goi = taoGoi();
+		const dongKhung = mock(() => {});
+		const o = await dung(
+			<DetailSheet open onOpenChange={dongKhung}>
+				{danhSach(BO_DU_LIEU["co-viec"], goi)}
+			</DetailSheet>,
+		);
+		void o;
+		await bam(motCai(document, '[data-nut="them-viec"]'));
+		const oNhap = motCai<HTMLInputElement>(
+			document,
+			"[data-dong-nhap] input[name='tieu-de-viec']",
+		);
+		await go(oNhap, "Gọi lại 20 đối tác cũ");
+		await phim(oNhap, "Escape");
+		expect(document.querySelector("[data-dong-nhap]")).toBeNull();
+		expect(dongKhung).toHaveBeenCalledTimes(0);
+		expect(document.querySelector('[role="alertdialog"]')).toBeNull();
+		expect(
+			document.querySelector('[data-slot="sheet-content"]'),
+		).not.toBeNull();
+		expect(goi.them).toHaveBeenCalledTimes(0);
+	});
+
+	test("kho 390 (Drawer): Esc huy dong nhap, khung van mo", async () => {
+		const rong = window.innerWidth;
+		window.innerWidth = 390;
+		try {
+			const goi = taoGoi();
+			const dongKhung = mock(() => {});
+			await dung(
+				<DetailSheet open onOpenChange={dongKhung}>
+					{danhSach(BO_DU_LIEU["co-viec"], goi)}
+				</DetailSheet>,
+			);
+			await cho(
+				() => document.querySelector('[data-slot="drawer-content"]') !== null,
+				"drawer mo",
+			);
+			await bam(motCai(document, '[data-nut="them-viec"]'));
+			const oNhap = motCai<HTMLInputElement>(
+				document,
+				"[data-dong-nhap] input[name='tieu-de-viec']",
+			);
+			await go(oNhap, "Gọi lại 20 đối tác cũ");
+			await phim(oNhap, "Escape");
+			expect(document.querySelector("[data-dong-nhap]")).toBeNull();
+			expect(dongKhung).toHaveBeenCalledTimes(0);
+			expect(document.querySelector('[role="alertdialog"]')).toBeNull();
+		} finally {
+			window.innerWidth = rong;
+		}
+	});
+
+	test("doi chung: Esc ngoai dong nhap van dong khung nhu cu", async () => {
+		const dongKhung = mock(() => {});
+		await dung(
+			<DetailSheet open onOpenChange={dongKhung}>
+				{danhSach(BO_DU_LIEU["co-viec"], taoGoi())}
+			</DetailSheet>,
+		);
+		await phim(motCai(document, '[data-nut="them-viec"]'), "Escape");
+		expect(dongKhung).toHaveBeenCalledWith(false);
+	});
+});
+
+describe("bang KR: o Viec «—» cua nguoi chi doc van mo khung KR", () => {
+	test("KR khong viec, khong sang kien, nguoi khong sua duoc: nut «—» co ten, bam mo record=kr", async () => {
+		const san = coUrl(
+			"",
+			<SoViecKr
+				kr={{ id: "kr-3", title: "Bộ câu hỏi công bố" }}
+				dem={{
+					xong: 0,
+					tong: 0,
+					sangKien: 0,
+					coBangChung: true,
+					suaDuoc: false,
+				}}
+			/>,
+		);
+		const o = await dung(san.man);
+		const nut = motCai<HTMLButtonElement>(o, '[data-mo-khung-kr="kr-3"]');
+		expect(nut.textContent).toBe("—");
+		expect(nut.getAttribute("aria-label")).toBe(
+			"Mở việc và sáng kiến của KR Bộ câu hỏi công bố",
+		);
+		await bam(nut);
+		await cho(() => san.url().get("record") === "kr:kr-3", "record=kr:kr-3");
+		expect(san.url().get("record")).toBe("kr:kr-3");
 	});
 });

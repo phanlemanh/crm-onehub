@@ -20,6 +20,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { type BangChungVao, KrBangChung } from "./kr-bang-chung";
 import {
 	type CanhKr,
+	type DuongVe,
 	KrViecDanhSach,
 	type LoaiSangKien,
 	type TrangThaiCanh,
@@ -236,6 +237,11 @@ function useGhiCanh(keyResultId: string, objectiveId: string | null) {
 	};
 }
 
+export function useDuongVe(): DuongVe {
+	const { stack, close } = useRecordStack();
+	return { onVe: close, coMucTieuDuoi: stack.length > 1 };
+}
+
 export function KrSheet({ keyResultId }: { keyResultId: string }) {
 	const trpc = useTRPC();
 	const router = useRouter();
@@ -264,7 +270,8 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 					khongCo: q.error.data?.code === "NOT_FOUND",
 				}
 			: { loai: "dang-tai" };
-	const coDuoi = stack.length > 1;
+	const ve = useDuongVe();
+	const coDuoi = ve.coMucTieuDuoi;
 
 	return (
 		<>
@@ -294,7 +301,7 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 								else router.push(workspaceUrl(`/campaigns/${id}`));
 							},
 							onThuLai: () => void q.refetch(),
-							onVeMucTieu: coDuoi ? close : undefined,
+							ve,
 						}}
 					/>
 				}

@@ -23,6 +23,7 @@ const vi = {
 			tieuDe: "Không tìm thấy KR này",
 			moTa: "KR có thể đã bị xoá, hoặc đường dẫn đã cũ.",
 			veMucTieu: "Về khung mục tiêu",
+			dongKhung: "Đóng khung KR",
 		},
 		rong: {
 			tieuDe: "Chưa có việc hay sáng kiến nào cho KR này",
@@ -58,7 +59,7 @@ const vi = {
 		han: "Hạn (tuỳ chọn)",
 		huy: "Huỷ",
 		luu: "Lưu việc",
-		loiTieuDe: "Tiêu đề việc cần từ 2 đến 200 ký tự.",
+		loiTieuDe: "Tiêu đề việc cần từ {min} đến {max} ký tự.",
 		loiNguoiLam: "Chọn người làm việc này.",
 	},
 	sangKien: {
@@ -139,12 +140,12 @@ const vi = {
 			duongDan: "Đường dẫn",
 			ghiChu: "Ghi chú (tuỳ chọn)",
 			ghiChuGoiY: "Bằng chứng này cho thấy gì…",
-			toiDa: "Tối đa 300 ký tự.",
+			toiDa: "Tối đa {max} ký tự.",
 			huy: "Huỷ",
 			dinh: "Đính",
 		},
 		loiDuongDan: "Đường dẫn phải bắt đầu bằng http:// hoặc https://",
-		loiGhiChu: "Ghi chú tối đa 300 ký tự.",
+		loiGhiChu: "Ghi chú tối đa {max} ký tự.",
 	},
 	capNhat: {
 		bangChung: "Bằng chứng (tuỳ chọn)",
@@ -177,6 +178,7 @@ const en: OkrCanhKrMessages = {
 			tieuDe: "This KR wasn't found",
 			moTa: "It may have been deleted, or the link is out of date.",
 			veMucTieu: "Back to the objective",
+			dongKhung: "Close this KR",
 		},
 		rong: {
 			tieuDe: "No actions or initiatives for this KR yet",
@@ -212,7 +214,7 @@ const en: OkrCanhKrMessages = {
 		han: "Due date (optional)",
 		huy: "Cancel",
 		luu: "Save action",
-		loiTieuDe: "An action needs 2 to 200 characters.",
+		loiTieuDe: "An action needs {min} to {max} characters.",
 		loiNguoiLam: "Pick who does this action.",
 	},
 	sangKien: {
@@ -293,12 +295,12 @@ const en: OkrCanhKrMessages = {
 			duongDan: "Link",
 			ghiChu: "Note (optional)",
 			ghiChuGoiY: "What this evidence shows…",
-			toiDa: "Up to 300 characters.",
+			toiDa: "Up to {max} characters.",
 			huy: "Cancel",
 			dinh: "Attach",
 		},
 		loiDuongDan: "The link must start with http:// or https://",
-		loiGhiChu: "The note can be at most 300 characters.",
+		loiGhiChu: "The note can be at most {max} characters.",
 	},
 	capNhat: {
 		bangChung: "Evidence (optional)",
