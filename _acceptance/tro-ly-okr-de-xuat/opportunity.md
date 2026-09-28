@@ -3,10 +3,10 @@ schema_version: 1
 slug: tro-ly-okr-de-xuat
 feature: Góp ý khi bấm — người sửa một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý», nhận vài đề xuất (câu cũ cạnh câu mới, câu hỏi chất lượng, chỗ Căn chỉnh) rồi nhận, sửa hay bác từng dòng; quản trị bật theo ba nấc tắt · chế độ ẩn · bật
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-28T08:09:23Z
 prototype:
   base_commit: a62adb166
   disposition: archive
@@ -49,10 +49,10 @@ phải điều kiện dựng. Thiết kế tới hết Cổng 1.5 rồi chờ M 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Người sửa Mục tiêu/KR ở cấp OneHub có dùng đề xuất của Trợ lý OKR để viết OKR năm sắc hơn không, với độ trễ chấp nhận được và chi phí trong trần?
-- Kết quả nào là SỐNG: [đề xuất] Trong 2 tuần bật ở cấp OneHub: tỷ lệ đề xuất được nhận (nguyên văn hoặc sửa rồi nhận) ≥ 30%; hoàn tác ≤ 10% số đã nhận; độ trễ p50 ≤ 8 s, p90 ≤ 15 s; 0 dòng có số mới lọt qua bộ kiểm; chi phí mỗi đề xuất được nhận ≤ 0,05 US$ và tháng ≤ 9 US$.
-- Kết quả nào là CHẾT: [đề xuất] Sau ≥ 30 đề xuất đã hiện: tỷ lệ nhận < 10%, hoặc hoàn tác > 30% số đã nhận, hoặc có dòng số mới lọt qua bộ kiểm, hoặc khu OKR chạm trần tháng trước ngày 20.
-- Timebox: [đề xuất] Dựng xong trước mùa OKR năm của cấp OneHub; đo tại phiên nghiệm thu sau 2 tuần bật ở cấp OneHub; bật cho mọi phòng ban trước mùa quý 1 chỉ khi đạt ngưỡng sống.
+- Câu hỏi phép đo trả lời: Người sửa Mục tiêu/KR ở cấp OneHub có dùng đề xuất của Trợ lý OKR để viết OKR năm sắc hơn không, với độ trễ chấp nhận được và chi phí trong trần?
+- Kết quả nào là SỐNG: Trong 2 tuần bật ở cấp OneHub: tỷ lệ đề xuất được nhận (nguyên văn hoặc sửa rồi nhận) ≥ 30%; hoàn tác ≤ 10% số đã nhận; độ trễ p50 ≤ 8 s, p90 ≤ 15 s; 0 dòng có số mới lọt qua bộ kiểm; chi phí mỗi đề xuất được nhận ≤ 0,05 US$ và tháng ≤ 9 US$.
+- Kết quả nào là CHẾT: Sau ≥ 30 đề xuất đã hiện: tỷ lệ nhận < 10%, hoặc hoàn tác > 30% số đã nhận, hoặc có dòng số mới lọt qua bộ kiểm, hoặc khu OKR chạm trần tháng trước ngày 20.
+- Timebox: Dựng xong trước mùa OKR năm của cấp OneHub; đo tại phiên nghiệm thu sau 2 tuần bật ở cấp OneHub; bật cho mọi phòng ban trước mùa quý 1 chỉ khi đạt ngưỡng sống.
 
 ## Kết quả prototype
 
@@ -70,9 +70,9 @@ dựng ở S1-D (design-pass) trước Cổng Phạm vi.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
-- **disposition = archive** Căn cứ: không có code prototype; nền là mã 9a đã gộp.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **decision = build.** Căn cứ: lộ trình Trợ lý OKR mục 5 «9b» và quyết định 28/09 «dựng hết bằng dữ liệu mẫu» (PR #183, đã lên onehub); 9a (#182) và bộ OKR mẫu (#186) đã lên onehub. Quyết 2026-09-28 bởi Manh Phan trong phiên lượt 9b, bằng `/acceptance-gate:start tro-ly-okr-de-xuat`; câu gõ nguyên văn: «quyết: build; ngưỡng: gỡ nhãn đề xuất».
+- **disposition = archive.** Căn cứ: không có code prototype; nền là mã 9a đã gộp.
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho câu hỏi phép đo, SỐNG, CHẾT và timebox như section Ngưỡng.
 
 ## Thước đo thành công → ứng viên criterion
 
