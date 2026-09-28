@@ -8,6 +8,7 @@
 		"./agent-tasks": "./src/agent-tasks.ts",
 		"./attribution": "./src/attribution.ts",
 		"./blob": "./src/blob.ts",
+		"./blob-nguon": "./src/blob-nguon.ts",
 		"./client": "./src/client.ts",
 		"./currency": "./src/currency.ts",
 		"./crm-events": "./src/crm-events.ts",
@@ -34,7 +35,8 @@
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
 		"./tracking": "./src/tracking.ts",
 		"./workspace": "./src/workspace.ts",
-		"./zalo-lien-ket": "./src/zalo-lien-ket.ts"
+		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",
+		"./test/*": "./test/*.ts"
 	},
 	"scripts": {
 		"build": "prisma generate",
