@@ -192,7 +192,7 @@ export class OkrCapNhatService {
 							ownerUserId: kr.ownerUserId,
 							objective: donViCua(kr.objective),
 							kind,
-							xong: kind === "moc" && m.value === 1,
+							xong: kind === "moc" && giaTri === 1,
 						},
 						m.bangChung,
 					);

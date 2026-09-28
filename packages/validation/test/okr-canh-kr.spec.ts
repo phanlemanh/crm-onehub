@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import {
+	bangChungVao,
 	duongDanBangChung,
 	guiGhiNhanInput,
+	OKR_CANH_KR,
 	themViecInput,
 } from "../src/okr-canh-kr";
 
@@ -38,6 +40,17 @@ describe("okr-canh-kr", () => {
 			co("Launch 🚀 bộ câu hỏi"),
 			co("x".repeat(200)),
 		]).toEqual([false, false, true, true]);
+	});
+	test("bằng chứng: ghi chú 300 ký tự nhận, 301 ký tự từ chối", () => {
+		const co = (ghiChu: string) =>
+			bangChungVao.safeParse({
+				url: "https://drive.google.com/x",
+				ghiChu,
+			}).success;
+		expect([
+			co("x".repeat(OKR_CANH_KR.ghiChu.max)),
+			co("x".repeat(OKR_CANH_KR.ghiChu.max + 1)),
+		]).toEqual([true, false]);
 	});
 	test("ghi nhận: 0 người, 6 người, trùng người, lời trống, lời 501 ký tự", () => {
 		const co = (nguoiNhan: string[], loiNhan: string) =>
