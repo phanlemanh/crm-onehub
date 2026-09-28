@@ -7,7 +7,7 @@ import {
 	mucTieuInput,
 } from "./okr-muc-tieu";
 
-function doDai(chu: z.ZodString): { min: number; max: number } {
+function doDai(chu: z.ZodString) {
 	const { minLength: min, maxLength: max } = chu;
 	if (min === null || max === null)
 		throw new Error(

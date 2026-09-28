@@ -256,7 +256,7 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 	const objectiveId = q.data?.kr.objectiveId ?? null;
 	const ghi = useGhiCanh(keyResultId, objectiveId);
 	const duoiMotMinh = stack.length === 1;
-	const loiNguoiLam = (loi: unknown, vao: ViecVao) =>
+	const loiNguoiLam = (loi: Error, vao: ViecVao) =>
 		loiTheoNguoiLam(
 			loi,
 			vao.nguoiLamUserId,

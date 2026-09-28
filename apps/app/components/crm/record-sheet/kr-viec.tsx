@@ -99,7 +99,7 @@ export type DuongVe = { onVe: () => void; coMucTieuDuoi: boolean };
 export class NguoiLamKhongConThanhVien extends Error {}
 
 export async function loiTheoNguoiLam(
-	loi: unknown,
+	loi: Error,
 	nguoiLamUserId: string,
 	docThanhVien: () => Promise<readonly { id: string }[] | undefined>,
 ): Promise<never> {
