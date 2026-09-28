@@ -5,7 +5,7 @@ slug: tai-lieu-diff-bo-myers-vo-ich
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-28-tai-lieu-diff-bo-myers-vo-ich-design.md
 approved_by:
 approved_at:
@@ -70,3 +70,8 @@ Bỏ `morphological-scan` — không gian đầu vào của phép chặn có đ�
   sau đã chứa bản sửa và phép so mất nghĩa; mốc ghim giữ lời hứa là của vòng này.
 - AC-2 đếm `Date.now` làm proxy cho số vòng Myers vì jsdiff gọi nó mỗi vòng. Nếu một bản jsdiff
   sau thôi gọi, vế 0 lần sẽ xanh rỗng; đối chứng dương của AC-2 là thứ bắt được điều đó.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-28 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1 (sổ d-20260928T142738Z-6, -7):
+
+- Ngoài-1: đối chứng dương của AC-2 (`dai-sua-rai-rac`) đếm lẫn `Date.now` của vòng Myers mức từ (≈50/71 lần), nên nó KHÔNG tách riêng được vòng mức khối như Notes trên hứa. Nếu jsdiff thôi gọi `Date.now` ở mức khối, vế 0 lần có thể xanh rỗng mà đối chứng vẫn xanh.
+- Ngoài-2: không kiểm nào buộc bảng `GHIM` phủ đủ bảy khoá của `CAP` — xoá một hàng là mất lặng một ca mà E1 vẫn xanh; bốn hàng `ngan`, `dai-khac-het`, `bien-qua-tran`, `dao-thu-tu` không có đột biến nào giữ. Expected của E1 trong `evals.yaml` còn ghi «6 pass», chạy thật là 7 pass.

@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 3d85348ce7573f98e2113b794eeb0e7611ebd32b
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-28
 ---
 
 # Evidence Report: tai-lieu-diff-bo-myers-vo-ich
