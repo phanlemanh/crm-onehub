@@ -169,7 +169,7 @@ describe("tai-lieu-diff", () => {
 	const lapSua = lap1500.map((d, i) =>
 		i % 150 === 45 ? `rieng sua ${i}.` : d,
 	);
-	const CAP: Record<string, [string, string]> = {
+	const CAP = {
 		ngan: [
 			"## Hạn\n\nHoa hồng trong 48 giờ.\n\nGiữ nguyên.",
 			"## Hạn\n\nHoa hồng trong 24 giờ.\n\nGiữ nguyên.\n\nThêm dòng.",
@@ -180,8 +180,8 @@ describe("tai-lieu-diff", () => {
 		"dao-thu-tu": [md(doanDanh("x", 1100)), md(doanDanh("x", 1100).reverse())],
 		"dai-sua-rai-rac": [md(goc1500), md(sua10)],
 		"lap-khoi": [md(lap1500), md(lapSua)],
-	};
-	const GHIM: [string, string][] = [
+	} satisfies Record<string, [string, string]>;
+	const GHIM: [keyof typeof CAP, string][] = [
 		[
 			"ngan",
 			"5636d2b553bb475d3dad74bb9322b576f6d4ceab68f5e884457a71c3e85c9e4b",
@@ -213,9 +213,7 @@ describe("tai-lieu-diff", () => {
 	];
 	for (const [ten, ghim] of GHIM)
 		test(`tran-duoi-khoi: ${ten}`, async () => {
-			const cap = CAP[ten];
-			if (!cap) throw new Error(`thieu cap: ${ten}`);
-			const bam = await diffHash(soSanh(...cap));
+			const bam = await diffHash(soSanh(...CAP[ten]));
 			if (bam !== ghim) throw new Error(`lech ban goc: ${ten} ${bam}`);
 		});
 
@@ -229,13 +227,13 @@ describe("tai-lieu-diff", () => {
 		}
 	};
 	test("myers-vo-ich: khac het thi khong vao vong Myers muc khoi", () => {
-		const [truoc, sau] = CAP["dai-khac-het"] ?? ["", ""];
+		const [truoc, sau] = CAP["dai-khac-het"];
 		const n = demDongHo(truoc, sau);
 		if (n !== 0)
 			throw new Error(`myers-vo-ich: vong Myers muc khoi van chay ${n} lan`);
 	});
 	test("myers-vo-ich: doi chung duong, trong tran thi cay dem thay vong Myers", () => {
-		const [truoc, sau] = CAP["dai-sua-rai-rac"] ?? ["", ""];
+		const [truoc, sau] = CAP["dai-sua-rai-rac"];
 		if (demDongHo(truoc, sau) === 0)
 			throw new Error("myers-vo-ich: cay dem khong thay vong Myers");
 	});
