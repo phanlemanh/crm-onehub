@@ -17,6 +17,7 @@ CREATE TABLE "taiLieuNguon" (
     "lyDo" TEXT,
     "chu" TEXT,
     "soTrang" INTEGER,
+    "soanLuc" TIMESTAMP(3),
 
     CONSTRAINT "taiLieuNguon_pkey" PRIMARY KEY ("id")
 );

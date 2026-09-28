@@ -2333,6 +2333,7 @@ model TaiLieuNguon {
   lyDo         String?
   chu          String?
   soTrang      Int?
+  soanLuc      DateTime?
   deXuat       TaiLieuDeXuat[]
 
   @@index([trangId])

@@ -50,7 +50,7 @@
 
 **Files:**
 - Modify: `packages/db/prisma/schema.prisma` (khối `TaiLieu*`, dòng ~2236–2330)
-- Create: `packages/db/prisma/migrations/20261002010000_may_soan_de_xuat/migration.sql`
+- Create: `packages/db/prisma/migrations/20261003010000_may_soan_de_xuat/migration.sql`
 - Create: `_acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs`, `_acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs`
 
 **Interfaces:**
