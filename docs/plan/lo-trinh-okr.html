@@ -327,8 +327,8 @@ details.done-list summary{padding:10px 14px;font-size:12.5px;color:var(--muted);
   const bucket = (s) => BUCKET[S(s)] || "idle";
   const WHO = { "chủ kho": ["Chờ anh", "me"], "máy": ["Máy đang làm", ""], "điều kiện": ["Chờ điều kiện", ""] };
   const GROUPS = [
-    ["okr", "Lộ trình OKR", "Các lượt của khu OKR, từ cây tổ chức tới cập nhật trong chat"],
-    ["tro-ly", "Trợ lý OKR · lượt 9", "Mỗi lượt con có Cổng riêng; chỉ gửi nội dung OKR khi có ZDR, trần $9 mỗi tháng"],
+    ["okr", "Lộ trình OKR", "Các lượt của khu OKR, từ cây tổ chức tới cập nhật trong chat; từ 28/09 dựng hết bằng dữ liệu mẫu"],
+    ["tro-ly", "Trợ lý OKR", "Dựng trên bộ OKR mẫu, bật khi dữ liệu thật đạt; chỉ gửi nội dung OKR khi có ZDR, trần $9 mỗi tháng"],
     ["zalo", "Zalo · ảnh hưởng khu OKR", "Sổ gốc là lộ trình Zalo; ở đây chỉ các việc khu OKR phải chờ"],
   ];
   const FILTERS = [
@@ -540,6 +540,7 @@ details.done-list summary{padding:10px 14px;font-size:12.5px;color:var(--muted);
     const rows = [
       ["Câu giao", S(it.cau_giao)],
       ["Chạy khi", S(it.chay_khi)],
+      ["Bật khi", S(it.bat_khi)],
       ["Chặn bởi", chan.length ? chan.map((id) => h("button", { class: "chip-link", type: "button", onclick: () => jump(id), title: itemName(id) }, st.items.has(id) ? S(st.items.get(id).ma) : id)) : ""],
       ["Phiên đang giữ", S(it.phien) ? h("span", { translate: "no" }, S(it.phien)) : ""],
       ["PR", prLinks(it.pr).length ? prLinks(it.pr).flatMap((a, i) => (i ? [" · ", a] : [a])) : ""],

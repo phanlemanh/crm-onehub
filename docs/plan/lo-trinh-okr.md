@@ -58,9 +58,15 @@ trình Trợ lý OKR», cuối mục 5.
 ## 2. Nguyên tắc chia lượt
 
 - **Mỗi lượt giao một câu người dùng nói được.**
-- **Lượt sau đứng trên dữ liệu thật của lượt trước.** Không nhắc khi chưa cập
-  nhật được; không tự đo khi KR chưa có nguồn; không tóm tắt khi chưa có lần
-  cập nhật.
+- **Dựng trên dữ liệu mẫu, bật trên dữ liệu thật.** Đổi 2026-09-28 (Manh Phan),
+  thay cho luật cũ «lượt sau đứng trên dữ liệu thật của lượt trước»: một lượt
+  không còn chờ dữ liệu thật mới được dựng. Mỗi lượt có hai điều kiện: **chạy
+  khi** chỉ nói về mã (lượt nào phải gộp trước), **bật khi** nói về dữ liệu thật
+  (phép đo nào phải đạt trên OKR thật của công ty). Cổng Bằng chứng ký trên bộ
+  OKR mẫu; Cổng Giá trị vẫn đọc số trên dữ liệu thật. Luật cũ vẫn đúng ở chỗ
+  người dùng thấy: không nhắc khi chưa cập nhật được, không tóm tắt khi chưa có
+  lần cập nhật — nay đó là điều kiện bật, không phải điều kiện dựng. Chi tiết ở
+  «Dựng hết bằng dữ liệu mẫu» cuối mục 5.
 - **Không chạm hai lớp khó-đảo trong một lượt.** Lượt chạm `packages/db/prisma`
   hoặc quyền là T3, có Cổng 1.5.
 - **Một cây tổ chức cho cả CRM.** OKR không có cây riêng, không có vai workspace
@@ -84,11 +90,12 @@ trình Trợ lý OKR», cuối mục 5.
 | 4 | `cap-nhat-tuan-okr` | «Sáng thứ Hai tôi được nhắc và cập nhật mọi KR của mình trong một phút» | T3 | lượt 3 |
 | 5 | `toan-canh-okr` | «Cả công ty nhìn được toàn cảnh và họp tuần trên cùng một màn» | T2 | lượt 4 |
 | 6 | `so-okr-tu-chay` | «Số của KR tự chảy từ CRM, bấm vào là ra bản ghi» | T3 | lượt 3 |
-| 7 | `khep-ky-okr` | «Kỳ được rà, chấm, nhìn lại và mang sang trong công cụ» | T2 | lượt 4, 6 · 27/09 chủ kho cho viết mã khi 9a chưa lên onehub; gộp onehub tới #177 (4n). S3 xong 28/09 ~00:15: 17 việc, mỗi việc một tác tử kèm một người soát (14 lượt soát ĐẠT, một lượt CẦN SỬA đã vá); vá thêm ngoài kế hoạch: mang sang bỏ người tham gia đã rời và giao KR của người đã rời cho người phụ trách mục tiêu; bài «việc của tôi» của lượt 4 phụ thuộc giờ chạy (đỏ cả trên onehub khi now+1h rơi vào thứ Hai) sửa cho tất định trong nhánh. Năm lệnh chứng xanh. Sang S4 · S4 vòng 1 (28/09): 21/22 phép đo máy đạt, 4/4 lệnh chứng xanh, 0 lỗi trong hợp đồng; E19 (hội đồng soi chuẩn kỹ thuật) «chưa chắc» vì chỉ được cấp tài liệu thiết kế; 7 mục ngoài hợp đồng chờ chủ kho · Cổng Bằng chứng chủ kho ký 28/09 (Manh Phan): E19 Đạt; 5 mục ngoài hợp đồng ghi Known limits (bài kiểm chưa chặt, luật mang sang chép hai nơi), 2 mục mở hợp đồng mới gom vòng «Nợ sau lượt 7 OKR» xong trước 14/12 (mang sang đúng lúc kỳ đích đổi pha; đợt rà đặt lịch tương lai không đóng được); đồng ý cắt; phê hết 17 quyết định treo (gồm tệp xuất ghi mã, mang sang bỏ người đã rời). Lưới trước gộp toàn kho sạch. Cổng Giá trị: chủ kho, đọc số 2027-01-15 |
-| 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 · tách 8a, 8b | lượt 3 · 8a sau bốn tuần dùng quý 4 |
+| 7 | `khep-ky-okr` | «Kỳ được rà, chấm, nhìn lại và mang sang trong công cụ» | T2 | lượt 4, 6 |
+| 8 | `canh-kr-okr` | «Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR» | T3 · tách 8a, 8b | lượt 3 và bộ OKR mẫu · từ 2026-09-28 không còn chờ bốn tuần dùng quý 4 |
 | — | vá lối rò Slack | «Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai chỉ OKR» | T3 | lượt 6 đã gộp; xong trước ngày mở cho cả công ty |
-| 9 | `tro-ly-okr` | «Trợ lý giúp tôi viết cho sắc và tóm tắt tuần cho đơn vị» | 9a T3 · 9b, 9c T2 | 9a sau vá Slack · 9b lượt 3 và luật lượt 7 · 9c sau 9b, ≥ 3 tuần Cập nhật tuần thật |
-| 10 | `okr-trong-chat` | «Tôi cập nhật ngay trong Slack hoặc Zalo, và biết sớm KR nào đang trượt» | T3 | lượt 4, 9 |
+| 9 | `tro-ly-okr` | «Trợ lý giúp tôi viết cho sắc và tóm tắt tuần cho đơn vị» | 9a T3 · 9b, 9c T2 | 9a sau vá Slack · 9b sau 9a và bộ OKR mẫu · 9c sau 9b; dữ liệu thật là điều kiện bật |
+| 10 | `okr-trong-chat` | «Tôi cập nhật ngay trong Slack hoặc Zalo, và biết sớm KR nào đang trượt» | T3 | lượt 4, 9a và bộ OKR mẫu; số đo của lượt 4 là điều kiện bật |
+| M | `bo-okr-mau` | «Máy dev và bản xem trước có một công ty giả chạy OKR đủ một quý, để mọi lượt sau dựng và đo trên cùng một bộ» | T2 | lượt 7 |
 
 ## 4. Chuẩn bị (2026-09-24 → 2026-09-30)
 
@@ -321,6 +328,12 @@ hợp đồng vượt 15 tiêu chí.
 **Tách hai (chỗ lệch 5):** 8a chạy khi đủ bốn tuần dùng quý 4; 8b chạy sau mùa
 đặt OKR quý 1. Mã nào vào 8a, mã nào vào 8b chưa chia.
 
+**Từ 2026-09-28 (chỗ lệch 12):** cả 11 mã đều dựng, không chờ bốn tuần dùng.
+Chia theo lớp khó-đảo thay cho theo điều người dùng hỏi: 8a gồm mọi mã thêm bảng
+hay đổi quyền (T3, có Cổng 1.5), 8b gồm phần chỉ đọc, lọc và gửi tin (T2). Việc
+chia mã làm ở S0 của 8a. Bốn tuần dùng quý 4 vẫn được đọc, nhưng để chọn phần
+nào cần mài sau khi đã lên, không phải để chọn phần nào được dựng.
+
 ### Lượt 9 — `tro-ly-okr` · 9a T3, 9b và 9c T2
 
 **Ý định:** Trợ lý OKR trong `apps/agent` với công cụ chỉ đọc OKR theo quyền
@@ -350,11 +363,11 @@ mô hình đang dùng không» và có con số trần chi tiêu tháng. Đã tr
 ở mục 5 của `docs/plan/lo-trinh-tro-ly-okr.md`; chỗ nào khác phần trên thì theo
 tệp đó.
 
-| Lượt | Slug | Hạng | Phủ | Chạy khi |
-| --- | --- | --- | --- | --- |
-| 9a · nền | `tro-ly-okr-nen` | T3, có Cổng 1.5 | sổ chi phí AI, trần tháng, bật tắt theo đơn vị; người dùng chưa thấy gì | vá Slack đã gộp; ZDR đạt (đạt ở N0, 2026-09-27) |
-| 9b · góp ý khi bấm | `tro-ly-okr-de-xuat` | T2 | AI-01 · AI-02 · AI-03 (AI) · AI-05 · DO-06 | 9a và lượt 7 đã lên; có ít nhất 12 ca mẫu từ OKR quý 4 thật |
-| 9c · tóm tắt tuần | `tro-ly-okr-tom-tat` | T2 | AI-04 | 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật |
+| Lượt | Slug | Hạng | Phủ | Chạy khi | Bật khi |
+| --- | --- | --- | --- | --- | --- |
+| 9a · nền | `tro-ly-okr-nen` | T3, có Cổng 1.5 | sổ chi phí AI, trần tháng, bật tắt theo đơn vị; người dùng chưa thấy gì | vá Slack đã gộp; ZDR đạt (đạt ở N0, 2026-09-27) | — |
+| 9b · góp ý khi bấm | `tro-ly-okr-de-xuat` | T2 | AI-01 · AI-02 · AI-03 (AI) · AI-05 · DO-06 | 9a và bộ OKR mẫu đã gộp (lượt 7 đã lên) | N1 có ít nhất 12 ca từ OKR quý 4 thật và chúng đạt cùng ngưỡng như ca mẫu |
+| 9c · tóm tắt tuần | `tro-ly-okr-tom-tat` | T2 | AI-04 | 9b đã gộp | chạy bóng ít nhất 3 tuần trên Cập nhật tuần thật và đạt ngưỡng ký |
 
 ### Lượt 10 — `okr-trong-chat` · T3
 
@@ -373,6 +386,11 @@ quá một ngày làm việc, hoặc một lần cập nhật quá 2 phút. Khô
 thì lượt này lùi. Đề nghị tách chat và cảnh báo khỏi điều kiện này, quyết ở Cổng
 Đáng của lượt 10 (chỗ lệch 7). Chat đi bằng một eve app riêng; trên Zalo dùng lại
 kênh hỏi CRM qua Zalo (chỗ lệch 6).
+
+**Từ 2026-09-28 (chỗ lệch 12):** điều kiện độ trễ ở trên thành điều kiện bật của
+nút trong Slack, không còn là điều kiện dựng. Lượt 10 giữ cảnh báo trượt và nút
+trong Slack; hỏi đáp OKR tách thành hạng mục C `hoi-dap-okr` và dựng ngay, không
+đợi sau mùa.
 
 ### Chỗ lệch với lộ trình Trợ lý OKR
 
@@ -393,6 +411,103 @@ trước khi dựng (N0). Mỗi dòng là một chỗ lộ trình này đã đ�
 | 9 | Vá lối rò Slack | Không có | Lượt T3 riêng, xong trước ngày mở cho cả công ty |
 | 10 | Đóng băng | Không có | Quanh ngày mở cho cả công ty, và trong mùa đặt OKR quý 1; chỉ vá lỗi |
 | 11 | Điều kiện mở lượt 9 | Dòng 9: gửi tới nhà cung cấp đang dùng, trần workspace $20 | Thêm ZDR bắt buộc (kể cả eval), và trần $9 cho khu OKR |
+| 12 | Điều kiện của mọi lượt còn lại | Chờ dữ liệu thật mới dựng (N1, ba tuần Cập nhật tuần, bốn tuần dùng quý 4, số đo lượt 4) | Dựng ngay trên bộ OKR mẫu; dữ liệu thật thành điều kiện bật. Thêm M, S2, 7n, C, L, T. Chủ kho quyết 2026-09-28 |
+
+### Dựng hết bằng dữ liệu mẫu
+
+Chủ kho quyết 2026-09-28 (Manh Phan): dựng mọi hạng mục còn lại bằng dữ liệu mẫu,
+kiểm lại bằng dữ liệu thật khi có. Lúc các phòng ban bắt đầu làm OKR thật, tính
+năng đã có sẵn; người dùng làm gì là thấy kết quả ngay, không phải đợi thêm một
+lượt dựng.
+
+**Ba thứ phải có để quyết định này chạy tốt**
+
+1. **Một bộ OKR mẫu dùng chung — hạng mục M, `bo-okr-mau`, T2.** Nếu mỗi lượt tự
+   bịa dữ liệu thử, mười lượt đo trên mười công ty khác nhau và không so được với
+   nhau. M dựng một lần, trước mọi lượt khác:
+   - một công ty giả khoảng 40 người tên giả, ba bộ phận, mười phòng ban có trưởng,
+     ít nhất một người mang vai «chỉ OKR»;
+   - OKR năm cấp OneHub và OKR quý 4 cho mọi phòng ban, đủ sáu kiểu KR, vài KR có
+     nguồn CRM;
+   - sáu tuần Cập nhật tuần, mức tự tin trôi dần, có KR «đáng bàn» và KR bỏ cập
+     nhật;
+   - một quý 3 đã khép, để thử lượt 7 và nháp «điều học được»;
+   - khoảng 30 ca góp ý mẫu, có ca trộn Anh–Việt, cùng khuôn với golden cases của
+     N1, để đổi từ ca mẫu sang ca thật chỉ là đổi thư mục.
+
+   Bộ mẫu nằm trong git vì không chứa dữ liệu thật; ca thật của N1 vẫn ngoài git.
+   Lệnh nạp từ chối chạy khi trỏ vào cơ sở dữ liệu production, hoặc vào workspace
+   đã có OKR thật.
+2. **Công tắc ba nấc: tắt · chạy bóng · bật.** 9a có công tắc bật tắt theo việc ×
+   đơn vị. Thêm nấc giữa: **chạy bóng** — máy chạy trên dữ liệu thật, ghi sổ chi
+   phí và số đo, nhưng chỉ quản trị chương trình thấy kết quả. Đó là cách kiểm
+   bằng dữ liệu thật mà người dùng chưa phải nhận kết quả sai. Nấc này dựng trong
+   9b, lượt đầu tiên dùng công tắc. Chạy bóng tốn tiền thật và tính vào trần $9.
+3. **Hai làn viết mã, một hàng chấm.** Tối đa hai lượt viết mã cùng lúc, mỗi làn
+   một lượt, vì hai lượt cùng làn chạm cùng chỗ (9b và 9c cùng trợ lý; 9c và 10
+   cùng nhắc buổi sáng). S4 chấm từng lượt một: bộ test đầy đủ chập chờn khi hai
+   bộ chấm chạy song song. Thiết kế (S0 tới hết Cổng 1.5) chạy song song không
+   giới hạn; xong Cổng 1.5 mà làn còn bận thì dừng đợi.
+
+**Thứ tự**
+
+Đi trước cả hai làn: gộp 9a (#182); M; và **S2 `slack-thieu-quyen-email`** (T3) —
+mục Ngoài-4 của vá lối rò Slack: kết nối Slack thiếu quyền đọc email thì bước kiểm
+không nhận ra người mang vai «chỉ OKR». S2 phải lên trước ngày mở cho cả công ty.
+
+| Làn | Thứ tự | Vì sao |
+| --- | --- | --- |
+| A · Trợ lý OKR | 9b → 9c → C → L → T | 9b dựng công tắc ba nấc và sổ đề xuất cả làn dùng lại; 9c cần 9b; C dùng công cụ đọc OKR theo quyền của 9b; L dùng sổ đề xuất; T gộp từ tóm tắt của 9c |
+| B · OKR không AI và kênh | 8a → 7n → 10 → 8b | 8a thêm bảng nên đi sớm, xa mùa quý 1; 7n (nợ sau lượt 7) phải lên trước 14/12; 10 đợi 9c gộp vì cùng chạm nhắc buổi sáng — 9c chậm thì 8b đi trước 10; 8b nhẹ nhất |
+
+Hạng mục mới:
+
+| # | Slug | Hạng | Câu giao |
+| --- | --- | --- | --- |
+| M | `bo-okr-mau` | T2 | «Máy dev và bản xem trước có một công ty giả chạy OKR đủ một quý» |
+| S2 | `slack-thieu-quyen-email` | T3 | «Kết nối Slack thiếu quyền đọc email vẫn không để lọt dữ liệu đối tác tới người mang vai «chỉ OKR»» |
+| 7n | `no-sau-luot-7-okr` | T2 | «Mang sang đúng khi kỳ đích đổi pha, và đợt rà đặt lịch tương lai đóng được» — hai mục Cổng Bằng chứng lượt 7 mở hợp đồng mới |
+| C | `hoi-dap-okr` | T3 | «Tôi hỏi về OKR trên web hoặc Zalo và nhận câu trả lời theo quyền của tôi» — phần chat của lượt 10, eve app riêng |
+| L | `nhap-dieu-hoc-duoc` | T2 | «Lúc đóng kỳ, Trợ lý soạn nháp điều học được; tôi nhận hay sửa» — Cổng Đáng phải gắn một mã mới trong bản phạm vi |
+| T | `tom-tat-cap-bo-phan` | T2 | «Trưởng bộ phận đọc một bản tóm tắt gộp từ các phòng ban» |
+
+**Đóng băng giữ nguyên, nhưng cho việc gộp chứ không cho việc dựng.** Từ tuần dựng
+cây tổ chức (19/10) tới khi các phòng ban công bố OKR quý 4, và trong mùa đặt OKR
+quý 1, chỉ gộp bản vá lỗi và S2. Lượt nào chấm xong trong đóng băng thì chờ; hết
+đóng băng thì kéo `onehub` về, ghim lại rồi mới gộp.
+
+**Bật khi nào, ai bật**
+
+| Hạng mục | Khi gộp, người dùng thấy | Bật khi |
+| --- | --- | --- |
+| M | không — chỉ máy dev và bản xem trước | không bao giờ trên production |
+| 8a, 8b | có, ngay khi gộp (không có AI) | — ; bốn tuần dùng quý 4 chọn phần cần mài |
+| 9b | không — công tắc tắt | N1 có ít nhất 12 ca thật, đạt cùng ngưỡng như ca mẫu; cấp OneHub trước mùa OKR năm, mọi phòng ban trước mùa quý 1 |
+| 9c | không — chạy bóng từ tuần có Cập nhật tuần thật | ba tuần chạy bóng đạt ngưỡng ký: câu bị bỏ ≤ 10%, không số lệch lọt qua |
+| 10 · cảnh báo trượt | không — chạy bóng hai tuần, đếm cảnh báo lẽ ra đã gửi | số cảnh báo mỗi trưởng đơn vị mỗi tuần nằm trong ngưỡng Cổng Phạm vi đặt |
+| 10 · nút trong Slack | không | quản trị Slack đồng ý quyền mới, và số đo lượt 4 cho thấy cập nhật trễ quá một ngày làm việc hoặc quá 2 phút |
+| C | không — công tắc tắt | eval hỏi đáp trên OKR thật đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production |
+| L | không | kỳ chấm và nhìn lại quý 4 |
+| T | không | tóm tắt phòng ban đã bật và đạt ngưỡng |
+
+Mỗi lần bật là một việc của chủ kho trên trang theo dõi, và là một dòng Ghi chú ở
+mục 10. N1 không còn chặn việc dựng 9b; nó là bộ kiểm để bật 9b và C.
+
+**Cái giá, nói trước**
+
+- Ca mẫu do người viết thì sạch hơn OKR thật, nên lời nhắc và ngưỡng chỉnh trên ca
+  mẫu có thể trượt trên ca thật. Chặn bằng công tắc tắt khi gộp, và chỉ bật khi ca
+  thật đạt cùng ngưỡng; ca thật hỏng thì sửa trong một vòng nợ, không bật tạm.
+- Lượt 8 mất bước xếp lại theo điều người dùng hỏi, nên có thể dựng phần ít ai
+  dùng. Cổng Giá trị của 8a, 8b đọc tỷ lệ dùng từng phần.
+- Eval lúc dựng gọi mô hình trên ca mẫu ở năm lượt AI (9b, 9c, C, L, T). Trước S4
+  của 9b, chủ kho xác nhận khoá nào trả tiền cho eval và trần bao nhiêu.
+- Sổ theo dõi thêm sáu hạng mục, và sáu hạng mục có thêm bước bật.
+
+Còn lại sau quyết định này: **11 lượt viết mã** (M, S2, 7n, 8a, 8b, 9b, 9c, 10, C,
+L, T), **1 việc không viết mã** (N1), **7 bước bật** (9b, 9c, cảnh báo và nút của
+lượt 10, C, L, T). Ba bước mở rộng sau Cổng Giá trị (miền thứ hai, tài liệu, MCP)
+không thuộc 78 mã OKR, vẫn chờ Cổng Giá trị; mục 9 «Chưa làm» giữ nguyên.
 
 ## 6. Triển khai cho người dùng
 
@@ -441,6 +556,7 @@ vọng đi từ ngày đó tới 2026-12-31.
 | Test chập chờn làm đỏ CI (vd `claimDue`) | Đã sửa (PR #108); không `--no-verify` |
 | GitHub Actions không chạy job vì lỗi thanh toán tài khoản (từ 2026-09-24) | Bằng chứng tạm là năm lệnh kiểm ở máy, ghi rõ trong hồ sơ; chủ kho sửa ở Billing & plans; không PR nào của lộ trình được coi là xanh CI cho tới khi job chạy thật |
 | Chi phí AI khi cả công ty dùng | Lượt 9 chỉ mở khi có trần; tóm tắt gom theo đơn vị |
+| Tính năng dựng trên ca mẫu trượt khi gặp OKR thật | Công tắc tắt khi gộp; chạy bóng trên dữ liệu thật rồi mới bật; bật chỉ khi ca thật đạt cùng ngưỡng với ca mẫu («Dựng hết bằng dữ liệu mẫu», mục 5) |
 | R1 trễ làm lỡ ngày mở cho cả công ty | Lùi theo tuần, không cắt lượt 2 hay lượt 4; lượt 5 có thể lên sau ngày mở vài ngày vì cập nhật tuần không cần nó |
 | Gộp `onehub` giữa chừng làm hồ sơ đã ký khác hoá cũ, Pre-merge check đỏ (gặp ở #120) | Trước khi mở PR: chạy pre-merge check ở máy, ghim lại hồ sơ bị nêu tên; ghi vào gói việc mọi lượt |
 | Cả công ty vào cùng lúc, câu hỏi dồn về một người | Hướng dẫn theo vai và đào tạo theo bộ phận trước ngày mở; một kênh hỏi đáp chung; trưởng bộ phận là tuyến hỏi đầu |
@@ -460,10 +576,11 @@ vọng đi từ ngày đó tới 2026-12-31.
 | CK-04 · CD-01 · CD-02 · CD-03 · CD-04 · CD-05 · AI-03 (luật) | 7 |
 | SK-01 · SK-02 · CI-05 · CI-06 · MT-06 · MT-07 · QT-02 · NH-05 · XEM-08 · XEM-09 · TC-06 | 8 |
 | AI-01 · AI-02 · AI-03 (AI) · AI-04 · AI-05 · DO-06 | 9 |
-| NH-06 · AI-06 · AI-07 | 10 |
+| NH-06 · AI-06 | 10 |
+| AI-07 | C `hoi-dap-okr` (tách khỏi lượt 10 ngày 2026-09-28) |
 | TC-07 · NG-01 · NG-02 · NG-03 · NG-04 · NG-05 · NG-06 · NG-07 | Chưa làm |
 
-Đủ 78 mã: 70 mã vào mười lượt, 8 mã ở «Chưa làm». AI-03 và KR-05 tách hai
+Đủ 78 mã: 70 mã vào mười lượt và hạng mục C, 8 mã ở «Chưa làm». AI-03 và KR-05 tách hai
 nửa ở hai lượt, ghi rõ nửa nào.
 
 ## 9. Chưa làm — kèm lý do, để khỏi bàn lại
@@ -525,16 +642,22 @@ Làm mới trang khi chủ kho nhắn «cập nhật lộ trình OKR»:
 | 4n | `no-sau-luot-4-okr` | đã lên `onehub` | 2026-09-27 | #176 | 5 mục ngoài hợp đồng mà Cổng Bằng chứng lượt 4 (26/09) định «mở hợp đồng mới»; gói việc «Nợ sau lượt 4 OKR» mở 26/09, chưa có hồ sơ hay nhánh. Một lỗi người dùng gặp: nhắc OKR theo sự kiện gửi giữa ngày rồi gửi lại sáng hôm sau. Bốn mục còn lại: màn tự tính ai được gửi cập nhật thay vì dùng quyền máy chủ trả về; một lần gửi nhận cùng KR hai lần; nhắc OKR đọc vết bằng JSON thô thay vì khuôn; khuôn mục nhắc OKR viết tay ở bốn, năm chỗ · 2026-09-27: hồ sơ `no-sau-luot-4-okr` qua Cổng Phạm vi và Cổng 1.5 (Manh Phan), đang dựng; chạm vùng nhắc buổi sáng của 9a — ai lên `onehub` sau gộp và soát lại · 2026-09-27: S4 round 1 PASS 16/16, Cổng Bằng chứng ký (Manh Phan), bảy mục ngoài hợp đồng ghi Known limits |
 | 5 | `toan-canh-okr` | đã lên `onehub` | 2026-09-26 | #157 | gói việc đã mở, gồm 11 biến thể `packages/ui` từ bản mẫu và ba trang hướng dẫn theo vai · mở 26/09 sáng chạy song song lượt 4 (phần không cần bảng cập nhật làm trước). Cổng Đáng ký 26/09 theo uỷ quyền: build, keep, ngưỡng SỐNG ≥ 2/3 trưởng đơn vị chạy xong họp tuần chỉ trên bảng tại phiên nghiệm thu 13/11 (trung vị ≤ 15 phút cho đơn vị ≤ 12 KR) và từ tuần thứ ba (16/11) ≥ 60% đơn vị có trưởng mở bảng mỗi tuần, đếm bằng vết `mo-hop-tuan` bền; CHẾT < 30%. Cổng Phạm vi ký 26/09: 15 tiêu chí, 29 phép đo, design-pass không đồng bộ cho bốn bề mặt chưa có bản mẫu; bốn giả định chốt hướng A (trang cá nhân = trang OKR một người; «KR thiếu khởi điểm» = KR của mục tiêu chưa công bố; họp tuần là cách xem thứ ba của «Theo đơn vị», sức khoẻ là trang riêng chỉ quản trị thấy; đếm mở bảng qua bảng vết, dòng không mang mục tiêu/KR, không hiện ở tab Vết). S3 xong cả hai nhịp 26/09 12:04, hợp đồng implemented; chờ lượt 4 lên onehub để chấm S4 trên dải so sạch. S4 chạy bằng Workflow trong chính phiên lượt: vòng 1 BLOCKED (6 kiểm tra màn đỏ vì thước chưa theo bước đã duyệt, ba lệch sản phẩm — AC-5 quay mãi, Sức khoẻ năm thẻ, câu hẹn ngày), vòng 2 BLOCKED chỉ vì tác tử chấm E30 chết, 0 phép đo đỏ, kèm hai lỗi trong hợp đồng vá có chiều đỏ (AC-7 họp tuần mất «tụt tự tin» khi cập nhật hai lần một tuần; AC-3 cây đơn vị không Tab tới ở trang một người), vòng 3 PASS — 0 đỏ, 8/8 kiểm tra màn, hội đồng E27 PASS. Cổng Bằng chứng ký 26/09 18:0x theo uỷ quyền: 12 mục ngoài hợp đồng ghi Known limits (bài kiểm chưa chặt, mã chưa gọn), 4 mục mở hợp đồng mới gom thành một vòng «Nợ sau lượt 5 OKR» (tải trước Theo đơn vị kèm bộ lọc mức tự tin; bộ lọc phụ trách hiện tên thay cho mã; khối «OKR của bạn» báo lỗi khi không tải được chu kỳ); E11/E12/E20 của `dat-okr-trong-crm` bị chạm ngoài làn máy vào Known limits. `dat-okr-trong-crm` ghim lại hai lần. Phiên điều phối đổi tay 17:05 (bàn giao ghi ở trí nhớ dự án). PR #157 gộp 26/09 18:20 (`5ebcd077`), ba kiểm tra xanh trên đầu nhánh 561ee9de, onehub không tiến thêm nên không ghim lại. Vòng nợ đi trước lượt 6 vì phục vụ 26/10. Cổng Giá trị: phiên nghiệm thu R1 13/11, chủ kho. Vòng nợ `no-sau-luot-5-okr` (T2, ba việc gom một vòng): Cổng Phạm vi 9 tiêu chí 12 phép đo; S4 vòng 1 PASS 12/12 nhưng hội đồng bắt một hồi quy do chính vòng gây ra (khối «OKR của bạn» đổi sang báo lỗi khi tải lại chu kỳ ở nền hỏng dù bảng cũ còn dùng được) → nâng phạm vi thêm AC-10, duyệt lại, vòng 2 PASS 13/13; ký 26/09 theo uỷ quyền; PR #159 gộp 26/09 21:2x (`f9932858`), đã gộp #158 trên đường; không có hồ sơ cơ hội nên không có phiên nghiệm thu, vòng đóng |
 | 6 | `so-okr-tu-chay` | đã lên `onehub` | 2026-09-27 | #162 | mở 26/09 20:0x bằng chip, chạy song song phần thiết kế khi vòng nợ lượt 5 còn viết mã (như lượt 2 với lượt 1), viết mã sau khi #159 gộp. Phiên điều phối đã ký Cổng Phạm vi (15 tiêu chí, 25 phép đo) và Cổng 1.5 (14 việc, subagent-driven) theo uỷ quyền trước khi Cổng Đáng có chữ ký, dòng Cổng Đáng tự đặt thay cho lệnh kit, bốn cờ vàng của thẻ không được nêu — chủ kho phát hiện 26/09 21:3x, quyết đi lại đúng thứ tự kit: hợp đồng mở lại về nháp (`b6aaf905`), chủ kho tự ký Cổng Đáng và duyệt lại Cổng Phạm vi trực tiếp trong phiên lượt 6, Cổng 1.5 giữ nếu phạm vi không đổi. Từ 21:4x phiên điều phối dừng, lượt 6 tự đi theo nếp kit. Chốt đã có, chờ ký lại: KR quý 4 công bố trước lượt này chỉ gắn số máy kiểu «số đo cạnh»; Google Sheets đọc bằng tài khoản dịch vụ chỉ đọc; «khối kinh doanh» = bộ phận «Kinh doanh». Đã gộp onehub f9932858 (#158 đổi schema nên migration lượt 6 đổi mốc 20260929010000). Ngưỡng đo gợi ý: ≥ 50% KR khối kinh doanh quý 4 có nguồn CRM trước 01/12 · Chủ kho tự ký Cổng Đáng và duyệt lại Cổng Phạm vi 26/09 21:4x trong phiên lượt 6 (15 tiêu chí, 25 phép đo); Cổng 1.5 duyệt lại: 14 việc, subagent-driven, việc 1, 2, 10 chạy song song. S3 xong 27/09 02:33. S4 vòng 1 (03:26): 24/25 phép đo máy đạt, E24 (soi thiết kế) chủ kho chấm Đạt, bốn lệnh chứng toàn kho xanh. Cổng Bằng chứng chủ kho ký 27/09 06:00: 9 mục ngoài hợp đồng ghi Known limits — 5 về mã (việc đọc Sheets có thể xếp trùng; nhật ký lỗi đọc Sheets thiếu chi tiết; khuôn đầu ra viết hai lần; hộp thoại KR đổi nguồn CRM sang kiểu mốc hay phần trăm trong một lần lưu luôn hỏng; thử lại sau lỗi 401 của Sheets không bao giờ thành công) và 4 về bài kiểm chưa chặt; đồng ý cắt; phê hết 13 quyết định treo, gồm bảng mức lệch cho phép trên production. Gộp onehub #161, ghim lại hai lần (sau gộp, và sau khi sửa bài năng lực Sheets để CI không cần khoá). PR #162 gộp 27/09 07:09 (`f2acca7f`), ba kiểm tra xanh trên đầu nhánh `ecf46ab0`. Cổng Giá trị: chủ kho, đọc số 2026-12-01 — SỐNG ≥ 50% KR đã công bố của khối kinh doanh quý 4 có nguồn CRM, và phép thử tin số trên production |
-| 7 | `khep-ky-okr` | đã lên `onehub` | 2026-09-28 | #179 | hạn cứng 2026-12-14 · 2026-09-27: lượt 4 và 6 đã lên, nên chân đứng đã đủ; theo thứ tự của `lo-trinh-tro-ly-okr.md` mục 4, lượt 7 chạy sau vá lối rò Slack và 9a, hoặc đi trước nếu 9a kẹt · mở 2026-09-27 trong phiên lượt 7, nhánh `feat/khep-ky-okr`; chỉ S0–S2 và cổng người tới hết Cổng 1.5, viết mã khi chủ kho cho (sau 9a và 4n). Hạng T3 (năm bảng mới), không phải T2 như mục 3. S1 xong: 15 tiêu chí, 22 phép đo, bản mẫu `/proto/khep-ky-okr` 20 trạng thái (hướng A/B cho màn chấm), phản biện context sạch 5 lỗ đã sửa. Cổng Đáng chủ kho ký 27/09 11:05 (Manh Phan): build, keep; ngưỡng SỐNG quý 4 đóng trong CRM trước 2027-01-15 và ≥ 70% mục tiêu có điều học được, CHẾT tới 2027-01-31 chưa đóng hoặc chấm ngoài rồi gõ lại hoặc < 40% có điều học được hoặc phải mở lại vì lỗi công cụ; điều học được không bắt buộc để đóng · Cổng Phạm vi chủ kho duyệt 27/09 13:49 (Manh Phan): hướng A cho màn chấm (cách xem thứ tư của «Theo đơn vị»), KR phần trăm gợi ý như thanh tiến độ, nhận hai biến thể `packages/ui` (câu hỏi dưới ô, cách xem thu về danh sách thả xuống). Cổng 1.5 duyệt 27/09: kế hoạch 17 việc, subagent-driven, việc 1–3 song song. Dừng chờ lệnh viết mã (sau 9a và 4n) · PR #179 mở 28/09 · gộp onehub #178, ghim lại (4/4 lệnh chứng, 17/17 phép đo máy); PR #179 gộp 28/09 khi ba kiểm tra xanh trên đầu nhánh. Còn: vòng «Nợ sau lượt 7 OKR» trước 14/12; gộp lại khi 9a lên onehub; Cổng Giá trị chủ kho đọc số 2027-01-15 |
-| 8 | `canh-kr-okr` | chưa mở | — | — | xếp lại sau bốn tuần chạy thử · 2026-09-27: tách 8a, chạy khi đủ bốn tuần dùng quý 4, và 8b, sau mùa đặt OKR quý 1 — chỗ lệch 5 ở mục 5 |
+| 7 | `khep-ky-okr` | đã lên `onehub` | 2026-09-28 | #179 | hạn cứng 2026-12-14 · 2026-09-27: lượt 4 và 6 đã lên, nên chân đứng đã đủ; theo thứ tự của `lo-trinh-tro-ly-okr.md` mục 4, lượt 7 chạy sau vá lối rò Slack và 9a, hoặc đi trước nếu 9a kẹt · mở 2026-09-27 trong phiên lượt 7, nhánh `feat/khep-ky-okr`; chỉ S0–S2 và cổng người tới hết Cổng 1.5, viết mã khi chủ kho cho (sau 9a và 4n). Hạng T3 (năm bảng mới), không phải T2 như mục 3. S1 xong: 15 tiêu chí, 22 phép đo, bản mẫu `/proto/khep-ky-okr` 20 trạng thái (hướng A/B cho màn chấm), phản biện context sạch 5 lỗ đã sửa. Cổng Đáng chủ kho ký 27/09 11:05 (Manh Phan): build, keep; ngưỡng SỐNG quý 4 đóng trong CRM trước 2027-01-15 và ≥ 70% mục tiêu có điều học được, CHẾT tới 2027-01-31 chưa đóng hoặc chấm ngoài rồi gõ lại hoặc < 40% có điều học được hoặc phải mở lại vì lỗi công cụ; điều học được không bắt buộc để đóng · Cổng Phạm vi chủ kho duyệt 27/09 13:49 (Manh Phan): hướng A cho màn chấm (cách xem thứ tư của «Theo đơn vị»), KR phần trăm gợi ý như thanh tiến độ, nhận hai biến thể `packages/ui` (câu hỏi dưới ô, cách xem thu về danh sách thả xuống). Cổng 1.5 duyệt 27/09: kế hoạch 17 việc, subagent-driven, việc 1–3 song song. Dừng chờ lệnh viết mã (sau 9a và 4n) · PR #179 mở 28/09 · gộp onehub #178, ghim lại (4/4 lệnh chứng, 17/17 phép đo máy); PR #179 gộp 28/09 khi ba kiểm tra xanh trên đầu nhánh. Còn: vòng «Nợ sau lượt 7 OKR» trước 14/12; gộp lại khi 9a lên onehub; Cổng Giá trị chủ kho đọc số 2027-01-15 · chuyển 2026-09-28 từ mục 3, nơi phiên lượt 7 ghi nhầm: 27/09 chủ kho cho viết mã khi 9a chưa lên onehub; gộp onehub tới #177 (4n). S3 xong 28/09 ~00:15: 17 việc, mỗi việc một tác tử kèm một người soát (14 lượt soát ĐẠT, một lượt CẦN SỬA đã vá); vá thêm ngoài kế hoạch: mang sang bỏ người tham gia đã rời và giao KR của người đã rời cho người phụ trách mục tiêu; bài «việc của tôi» của lượt 4 phụ thuộc giờ chạy (đỏ cả trên onehub khi now+1h rơi vào thứ Hai) sửa cho tất định trong nhánh. Năm lệnh chứng xanh. Sang S4 · S4 vòng 1 (28/09): 21/22 phép đo máy đạt, 4/4 lệnh chứng xanh, 0 lỗi trong hợp đồng; E19 (hội đồng soi chuẩn kỹ thuật) «chưa chắc» vì chỉ được cấp tài liệu thiết kế; 7 mục ngoài hợp đồng chờ chủ kho · Cổng Bằng chứng chủ kho ký 28/09 (Manh Phan): E19 Đạt; 5 mục ngoài hợp đồng ghi Known limits (bài kiểm chưa chặt, luật mang sang chép hai nơi), 2 mục mở hợp đồng mới gom vòng «Nợ sau lượt 7 OKR» xong trước 14/12 (mang sang đúng lúc kỳ đích đổi pha; đợt rà đặt lịch tương lai không đóng được); đồng ý cắt; phê hết 17 quyết định treo (gồm tệp xuất ghi mã, mang sang bỏ người đã rời). Lưới trước gộp toàn kho sạch. Cổng Giá trị: chủ kho, đọc số 2027-01-15 |
+| 7n | `no-sau-luot-7-okr` | chưa mở | — | — | 2026-09-28: hai mục ngoài hợp đồng Cổng Bằng chứng lượt 7 định «mở hợp đồng mới» — mang sang đúng lúc kỳ đích đổi pha; đợt rà đặt lịch tương lai không đóng được; phải lên trước 2026-12-14; làn B sau 8a |
+| 8 | `canh-kr-okr` | chưa mở | — | — | xếp lại sau bốn tuần chạy thử · 2026-09-27: tách 8a, chạy khi đủ bốn tuần dùng quý 4, và 8b, sau mùa đặt OKR quý 1 — chỗ lệch 5 ở mục 5 · 2026-09-28 (Manh Phan): dựng hết bằng dữ liệu mẫu — không chờ bốn tuần dùng quý 4; chạy khi M đã gộp, làn B đầu tiên; 8a gồm mã thêm bảng hay đổi quyền (T3), 8b phần chỉ đọc, lọc, gửi tin (T2), chia mã ở S0 của 8a |
 | 9 | `tro-ly-okr` | chưa mở | — | — | chờ trần chi tiêu AI · điều kiện mở đã trả lời 2026-09-26 (Manh Phan): cho gửi nội dung OKR tới nhà cung cấp mô hình đang dùng; trần chi tiêu AI của workspace 20 USD mỗi tháng. Ngân sách AI Gateway của team hôm nay cũng là 20 USD và dùng chung với làn nghiên cứu, nên lượt 9 cần khoá riêng có trần theo tháng · 2026-09-26 (Manh Phan) bổ sung điều kiện mở: chỉ gửi nội dung OKR khi có ZDR, kể cả eval; khu OKR trần $9 trong $20 của workspace · lượt 9 tách 9a (T3) · 9b · 9c; thứ tự, bàn giao và điều kiện mở ở `docs/plan/lo-trinh-tro-ly-okr.md` · N0 đo trước khi dựng xong 2026-09-27, ZDR đạt · 2026-09-27: theo dõi từng phần ở các dòng N0, S, 9a, N1, 9b, 9c ngay dưới; mục theo dõi của `lo-trinh-tro-ly-okr.md` gộp vào đây |
 | N0 | đo trước khi dựng | xong | 2026-09-27 | — | 2026-09-27, $0,59; nhánh nháp `spike/n0-do-truoc` không đẩy; kết quả ở `docs/reports/2026-09-26-tro-ly-okr/N0-ket-qua.md` · chờ chủ kho chạy truy vấn production |
 | S | `ro-slack-tac-nhan` | đã lên `onehub` | 2026-09-27 | #170 | chip đã mở 2026-09-26 · đủ điều kiện chạy từ 2026-09-27: lượt 6 đã gộp (#162) · vá lối rò Slack của Tác nhân, phải xong trước 2026-10-26; chạy từ 2026-09-27 trong phiên «Vá lối rò Slack của Tác nhân»; hợp đồng nháp, chờ Cổng Phạm vi · Cổng Đáng chủ kho ký 27/09 02:56 («Làm»): build, ngưỡng «Không đo được» — vá lỗ quyền, bằng chứng là phép đo đỏ trước vá, xanh sau vá; không phiên nghiệm thu. Cổng Phạm vi duyệt 27/09 02:59: 14 tiêu chí, 14 phép đo; năm lỗ của phản biện context sạch sửa trước duyệt. Cổng 1.5 duyệt 03:13: năm việc tuần tự; bộ đọc Slack viết trong tệp của bản rẽ để chỉ hai tệp của hãng bị sửa (`run-runtime.ts`, `approval.ts`), ghi chỗ rẽ có tên ở `docs/agent.md`. Gộp onehub giữa vòng (#164–#167, #169). S4 vòng 1 ở `81976d71`: 13/13 phép đo máy, 4/4 lệnh chứng, 0 lỗi trong hợp đồng. Cổng Bằng chứng chủ kho ký 27/09: E13 Đạt; 7 mục ngoài hợp đồng ghi Known limits (gồm: phép đo đỏ-trước và phép đo chỗ rẽ lấy mốc theo điểm gộp nên đỏ khi ghim lại sau gộp — phải truyền mốc cố định); Ngoài-4 mở hợp đồng mới — kết nối Slack thiếu quyền đọc email thì bước kiểm không nhận ra người vai «chỉ OKR», phải xong trước 26/10. Chưa báo hãng: chờ chủ kho cho phép, chỉ qua kênh bảo mật riêng. PR #170 |
 | 9a | `tro-ly-okr-nen` | đã lên `onehub` | 2026-09-28 | #182 | ZDR đạt ở N0; chờ vá Slack · 2026-09-27: đo lại giá và tỷ lệ cache trên Gemini 3.8 trước Cổng Phạm vi — production chạy 3.8, N0 đo 3.7 (báo cáo Tác nhân, #165); ba bài học khác của báo cáo đã thành luật ở `docs/agent.md` mục «Khi nào thêm mã, `tool`, `skill`, `subagent` hay Tác nhân» (#167) | · 2026-09-27: Cổng Đáng ký 06:59 (Manh Phan, build; giữ bốn mục từ điển) · Cổng Phạm vi ký 07:58 (15 tiêu chí, 26 phép đo) · Cổng 1.5 duyệt · S3 xong. Đo trên app thật tìm ba lỗi của cách dùng eve và đã vá: hook không chặn được tool (thêm bản thay từ chối), phiên con không thấy việc (tìm qua phiên gốc), lời gọi của phiên con không mang cờ ZDR (model đã bọc tự gắn); eval cách ly 3/3, đối soát sổ với Gateway lệch 1% · 2026-09-28: S4 bốn vòng — vòng 4 vượt trần ba vòng theo lời chủ kho, sửa hai lỗi màn Cài đặt (trần hai số lẻ, trang sập khi đọc lỗi) · Cổng Bằng chứng chủ kho ký (E24 Đạt; 39 hạn chế đã biết; ba việc tách hợp đồng riêng: việc bị đóng giữa chừng khi phiên con chạy lâu, khoá cắm rồi vẫn báo chưa có khoá, phép đo cách ly chưa có chiều đỏ) · gộp onehub hai lần (khép kỳ OKR, Kho tài liệu), migration dời sang 20261002010000, ghim lại 24/24 phép đo máy; E15 và E24 chưa chấm lại sau gộp · PR #182 đã lên onehub
-| N1 | golden cases | chưa mở | — | — | chờ OKR quý 4 công bố |
-| 9b | `tro-ly-okr-de-xuat` | chưa mở | — | — | chờ 9a và lượt 7 lên, và N1 có ít nhất 12 ca |
-| 9c | `tro-ly-okr-tom-tat` | chưa mở | — | — | chờ 9b gộp và ít nhất 3 tuần Cập nhật tuần thật |
-| 10 | `okr-trong-chat` | chưa mở | — | — | chờ số đo độ trễ của lượt 4 · Zalo không có nút, trên Zalo là trả lời bằng chữ — vòng 3–4 của `lo-trinh-zalo.md`, đề xuất gộp vòng 4 · thứ tự, bàn giao và điều kiện mở ở `docs/plan/lo-trinh-tro-ly-okr.md`; N0 (2026-09-27): phép thử stub không đạt, chat đi bằng eve app riêng; trên Zalo dùng lại kênh hỏi CRM qua Zalo (#158) |
+| N1 | golden cases | chưa mở | — | — | chờ OKR quý 4 công bố · 2026-09-28 (Manh Phan): dựng hết bằng dữ liệu mẫu — N1 không còn chặn dựng 9b; nó là bộ kiểm để bật 9b và C, cùng khuôn với ca mẫu của M |
+| 9b | `tro-ly-okr-de-xuat` | chưa mở | — | — | chờ 9a và lượt 7 lên, và N1 có ít nhất 12 ca · 2026-09-28 (Manh Phan): dựng hết bằng dữ liệu mẫu — chạy khi 9a (#182) và M đã gộp; dựng thêm nấc «chạy bóng» cho công tắc; bật khi N1 có ít nhất 12 ca thật đạt cùng ngưỡng ca mẫu |
+| 9c | `tro-ly-okr-tom-tat` | chưa mở | — | — | chờ 9b gộp và ít nhất 3 tuần Cập nhật tuần thật · 2026-09-28 (Manh Phan): dựng hết bằng dữ liệu mẫu — chạy khi 9b đã gộp; chạy bóng từ tuần có Cập nhật tuần thật, bật sau ba tuần bóng đạt ngưỡng |
+| 10 | `okr-trong-chat` | chưa mở | — | — | chờ số đo độ trễ của lượt 4 · Zalo không có nút, trên Zalo là trả lời bằng chữ — vòng 3–4 của `lo-trinh-zalo.md`, đề xuất gộp vòng 4 · thứ tự, bàn giao và điều kiện mở ở `docs/plan/lo-trinh-tro-ly-okr.md`; N0 (2026-09-27): phép thử stub không đạt, chat đi bằng eve app riêng; trên Zalo dùng lại kênh hỏi CRM qua Zalo (#158) · 2026-09-28 (Manh Phan): dựng hết bằng dữ liệu mẫu — giữ cảnh báo trượt và nút trong Slack, hỏi đáp tách sang C; chạy khi 8a gộp và 9c gộp (cùng nhắc buổi sáng); số đo lượt 4 thành điều kiện bật nút Slack |
+| M | `bo-okr-mau` | chưa mở | — | — | 2026-09-28: hạng mục mới, T2, đi trước cả hai làn — công ty giả khoảng 40 người, OKR năm và quý 4, sáu tuần Cập nhật tuần, một quý đã khép, khoảng 30 ca góp ý mẫu cùng khuôn N1; không bao giờ chạy trên production |
+| S2 | `slack-thieu-quyen-email` | chưa mở | — | — | 2026-09-28: tách từ Ngoài-4 của vá lối rò Slack (#170) — kết nối Slack thiếu quyền đọc email thì bước kiểm không nhận ra người vai «chỉ OKR»; T3, phải lên trước 2026-10-26, được gộp trong đóng băng |
+| C | `hoi-dap-okr` | chưa mở | — | — | 2026-09-28: AI-07 tách khỏi lượt 10, dựng ngay thay vì sau mùa; eve app riêng, trên Zalo dùng lại kênh hỏi CRM qua Zalo; làn A sau 9c; bật khi eval hỏi đáp trên OKR thật đạt |
+| L | `nhap-dieu-hoc-duoc` | chưa mở | — | — | 2026-09-28: dựng ngay trên quý 3 mẫu của M, làn A sau C; Cổng Đáng phải gắn một mã mới trong bản phạm vi; bật ở kỳ chấm và nhìn lại quý 4 |
+| T | `tom-tat-cap-bo-phan` | chưa mở | — | — | 2026-09-28: gộp từ tóm tắt phòng ban đã kiểm, làn A cuối; bật khi tóm tắt phòng ban đã bật và đạt ngưỡng |
 
 Hai việc của lộ trình Zalo chặn khu OKR, theo dõi ở mục 7 của
 `docs/plan/lo-trinh-zalo.md`: triển khai Zalo trên production (dòng T, trước
