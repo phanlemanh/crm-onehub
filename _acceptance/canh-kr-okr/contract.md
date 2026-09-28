@@ -5,7 +5,7 @@ slug: canh-kr-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-28T07:58:30Z
 design_doc: docs/superpowers/specs/2026-09-28-canh-kr-okr-design.md
@@ -89,3 +89,15 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 - Người dùng thấy ngay khi gộp, không công tắc; không gộp trong đóng băng (từ 19/10 tới khi các phòng ban công bố OKR quý 4). Viết mã chỉ khi M đã gộp và chủ kho cho.
 - Chạm nhắc buổi sáng (`okr-nhac.ts`) cùng vùng với 9c; ai gộp sau kéo `onehub` về và soát lại.
+
+Known limits — Cổng Bằng chứng (Phan Le Manh 2026-09-29, định đoạt mục ngoài hợp đồng của vòng chấm 1; sổ d-20260928T213100Z-20 … -28):
+
+- Ngoài-1 (`apps/api/src/okr/okr-mau.service.ts`): Khi trưởng phòng tạo mục tiêu từ mẫu và gán người khác phụ trách một KR, người đó có thể không nhận được thông báo 'Được giao phụ trách KR' như khi KR được tạo bằng tay.
+- Ngoài-2 (`apps/api/src/okr/okr-canh-kr.contracts.ts`): Không có hậu quả cho người dùng ngay bây giờ; rủi ro là sau này thêm một loại sáng kiến mới, một chỗ có thể bị quên sửa và làm ô nhập với danh sách hiển thị lệch nhau.
+- Ngoài-3 (`packages/validation/src/okr-mau.ts`): Nếu sau này trần ký tự đơn vị đo của KR đổi, một mẫu vẫn có thể lưu đơn vị đo vượt trần mới, khiến việc tạo mục tiêu từ mẫu đó bị từ chối bất ngờ.
+- Ngoài-4 (`apps/api/src/okr/okr-canh-kr.service.ts`): Không ảnh hưởng người dùng hiện tại; rủi ro là nếu luật 'mốc xong' đổi sau này, ba nơi có thể sửa không đủ cả ba và làm ứng xử lệch nhau giữa các màn.
+- Ngoài-5 (`packages/validation/src/okr-canh-kr.ts`): Không có hậu quả rõ cho người dùng bình thường; đây là một khe hở kỹ thuật nhỏ ở tầng kiểm dữ liệu đầu vào, không phải một ca người dùng gặp trong luồng dùng thật.
+- Ngoài-6 (`apps/api/src/okr/okr-trao-doi.service.ts`): Không có hậu quả ngay bây giờ; rủi ro là nếu sau này khái niệm 'quản trị' trong OKR đổi, nút gỡ trên màn và quyền gỡ thật ở máy chủ có thể không còn khớp nhau.
+- Ngoài-7 (`_acceptance/canh-kr-okr/rang/man-canh-kr.mjs`): Chưa có bằng chứng chắc chắn rằng nút 'Bắt đầu từ mẫu' hiện đúng cho mọi đơn vị có mẫu phù hợp — một lỗi ẩn ở đây có thể không bị phát hiện cho tới khi người dùng thật gặp phải.
+- Ngoài-8 (`apps/api/test/okr-cap-nhat.spec.ts`): Chưa có bằng chứng xác nhận rằng dán một đường dẫn không hợp lệ vào hộp thoại 'Cập nhật tuần' luôn bị từ chối đúng cách — một lỗi ở đây có thể lọt qua mà không ai biết.
+- Ngoài-9 (`apps/app/test/okr-canh-kr.dom.tsx`): Chưa có bằng chứng xác nhận màn 'Đặt mục tiêu' không lọc lại danh sách mẫu sau khi máy chủ đã lọc — nếu có lỗi ở đây, trưởng đơn vị có thể thấy mẫu không thuộc đơn vị mình mà không ai phát hiện.

@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: canh-kr-okr
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: b7823dd1e46ad7369df26680c302600c35471045
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-29
 ---
 
 # Evidence Report: canh-kr-okr
@@ -278,7 +278,7 @@ human_signoff:
     - Mã nguồn hàm lienKetChoVai cùng grep mọi nơi gọi nó trong apps/api/src/okr — xác nhận đúng một điểm quyết định trả hàng sáng kiến, và bộ chọn chiến dịch/kế hoạch dùng thủ tục list có sẵn của router campaign/onboarding-plan
     - Diff các component Khung KR (tab Việc và sáng kiến / Bằng chứng), dòng ghi nhận trong tab Trao đổi, và sheet Mẫu OKR — xác nhận dùng Sheet/Item/Checkbox/PickListDialog/TokenField/StatusIndicator/ConfirmDialog của packages/ui, không có <table>/<ul className="divide-y">/hộp rounded-lg border tự dựng
     - Diff CONTEXT.md thêm năm mục Việc (KR), Sáng kiến, Bằng chứng, Ghi nhận, Mẫu OKR theo đúng khuôn ba phần (nghĩa, Avoid, Vì sao) như các mục hiện có
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-09-29 — Đạt
 
 ### Lệnh suite (hồi quy)
 
