@@ -111,10 +111,15 @@ const slug =
 	new URL(dich || "/", APP).pathname.replace(/^\/+|\/+$/g, "").split("/")[0] ??
 	"";
 kiem(
-	`sau dang nhap di toi "${dich}" — khong phai onboarding`,
-	slug !== "" && !slug.startsWith("onboarding") && slug !== "sign-in",
+	`sau dang nhap di toi "${dich}" — la trang cua workspace, khong phai onboarding hay het quyen`,
+	slug !== "" &&
+		!["onboarding", "sign-in", "het-quyen"].some((x) => slug.startsWith(x)),
 );
-if (!slug || slug.startsWith("onboarding") || slug === "sign-in") await ket(1);
+if (
+	!slug ||
+	["onboarding", "sign-in", "het-quyen"].some((x) => slug.startsWith(x))
+)
+	await ket(1);
 
 mkdirSync(RA, { recursive: true });
 trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });
