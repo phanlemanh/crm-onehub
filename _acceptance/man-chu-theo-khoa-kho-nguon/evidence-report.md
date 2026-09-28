@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5053e991b79b441e0247fd416ee9d786451e41ef
+verified_commit: c256eddf377b39fb737312dd9528e081a090041b
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -104,3 +104,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1, E2, E3, E4 đều PASS ngay lần chạy đầu; bốn lệnh suite (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) đều xanh. Không cần vòng lặp thêm.
+
+### Re-pin lần 1 — 2026-09-28, do thước màn chữ theo KHO_TAI_LIEU_BLOB_TOKEN và gộp onehub (#197, #198)
+run_id: repin-20260928T213307Z-74133
+sha: c256eddf377b39fb737312dd9528e081a090041b · suites: 4 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng · ngoài làn máy: E1 · diff chạm vật đo ngoài làn máy: E1 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1
