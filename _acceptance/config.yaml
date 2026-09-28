@@ -40,6 +40,8 @@ executors:
     ktl_dan_tu_word: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-dan.dom.tsx'
     ktl_diff: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/diff-trang.dom.tsx && cd ../.. && bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t diff-hash"'
     ktl_lien_ket_tim: 'bun run test -- "cd apps/api && bun test test/tai-lieu.spec.ts -t lien-ket-tim"'
+    tdm_ban_goc: 'cd packages/validation && bun test test/tai-lieu-diff.spec.ts -t "tran-duoi-khoi"'
+    tdm_vong_myers: 'cd packages/validation && bun test test/tai-lieu-diff.spec.ts -t "myers-vo-ich"'
     msd_nguon_nhan: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-nhan"'
     msd_nguon_tu_choi: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nguon.spec.ts -t nguon-tu-choi"'
     msd_man_tai_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx -t tai-loi"
@@ -1375,6 +1377,10 @@ executors:
     pcd_do_api: GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-ci-only-google-client-id} GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-ci-only-google-client-secret} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/phien-chet-ve-dang-nhap/rang/do-man.mjs api"
     nkt_cai_sach: node _acceptance/nguon-keo-tha-reui/rang/cai-sach.mjs --phan cai
     nkt_dung_moc: node _acceptance/nguon-keo-tha-reui/rang/cai-sach.mjs --phan moc
+    tdm_cat_thuoc: node _acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/cat-thuoc.mjs
+    tdm_nhanh_hon_goc: bun _acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/nhanh-hon-goc.ts
+    tdm_khong_noi_thuoc: node _acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/luat.mjs --phan thuoc
+    tdm_luat_ma: node _acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/luat.mjs --phan ma
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

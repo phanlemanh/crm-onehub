@@ -68,6 +68,23 @@ function giong(a: Khoi, b: Khoi): boolean {
 	return a.kieu === b.kieu && a.chu === b.chu;
 }
 
+function canDuoiSua(truoc: Khoi[], sau: Khoi[]): number {
+	const con = new Map<string, number>();
+	for (const k of truoc) {
+		const khoa = JSON.stringify([k.kieu, k.chu]);
+		con.set(khoa, (con.get(khoa) ?? 0) + 1);
+	}
+	let chung = 0;
+	for (const k of sau) {
+		const khoa = JSON.stringify([k.kieu, k.chu]);
+		const n = con.get(khoa) ?? 0;
+		if (n === 0) continue;
+		con.set(khoa, n - 1);
+		chung += 1;
+	}
+	return truoc.length + sau.length - 2 * chung;
+}
+
 function mot(kieu: KieuKhoi, loai: LoaiDoan, chu: string): KhoiDoi {
 	return { kieu, doan: [{ loai, chu }] };
 }
@@ -173,10 +190,11 @@ function theoKhoi(truoc: Khoi[], sau: Khoi[]): KhoiDoi[] {
 export function soSanh(truoc: string, sau: string): KhoiDoi[] {
 	const a = khoiCua(truoc);
 	const b = khoiCua(sau);
-	const thay = diffArrays(a, b, {
-		comparator: giong,
-		maxEditLength: TAI_LIEU.diff.tranSuaKhoi,
-	});
+	const tran = TAI_LIEU.diff.tranSuaKhoi;
+	const thay =
+		canDuoiSua(a, b) > tran
+			? undefined
+			: diffArrays(a, b, { comparator: giong, maxEditLength: tran });
 	if (!thay) return theoKhoi(a, b);
 	const ra: KhoiDoi[] = [];
 	let bo: Khoi[] = [];
