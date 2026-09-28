@@ -54,9 +54,10 @@ evals:
       goi dich danh, xoa trong finally ke ca khi loi). Ban sao doi dich cua ghi(...)
       sang .acceptance-runs/lai-ra-man-tran-gio/E3-<pid>/ (moc LUOT_CHAY.duongLuot(ten)
       dung mot lan). Truoc va sau luot: sha256 cua ve-that.json va mo-nguyen-ban.json
-      trong thu muc tao pham cua chan-lai-component-ra-man khong doi, va danh sach tep
-      cua packages/ui/test khong doi; lech -> ma 2, in "tao pham ho so da ky bi ghi"
-      hoac ten tep thua.
+      trong thu muc tao pham cua chan-lai-component-ra-man khong doi, va sau luot khong
+      con ban sao nao mang pid cua chinh luot trong packages/ui/test (chi hoi tep rang
+      CO THE ghi — lan song song cua S4 cung ghi ban sao cua no); lech -> ma 2, in "tao
+      pham ho so da ky bi ghi" hoac ten ban sao con sot.
       chieu xanh — tran cua RIENG ca lai ep 300 ms: ca lai do vi qua han (junit ghi
       `<failure type="TimeoutError"/>` — bun khong ghi chu "timed out" vao junit); "mo tung nguyen ban" va "chuoi da va den man" xanh. Rang doc ket qua
       tung ca qua --reporter=junit, khong doc chuoi tong.
@@ -87,9 +88,9 @@ evals:
       lai-ra-man.moi-<pid>.tsx; ca hai doi dich ghi(...) sang
       .acceptance-runs/lai-ra-man-tran-gio/E4-<pid>/{cu,moi}/; chay tren CUNG cay;
       ve-that.json va mo-nguyen-ban.json cua hai luot trung tung byte. In kich thuoc hai
-      tep va so khoa cua ve-that.json. Ban sao xoa trong finally; danh sach tep cua
-      packages/ui/test truoc/sau luot phai trung (lech -> ma 2); sha256 tao pham cua
-      chan-lai-component-ra-man khong doi (lech -> ma 2).
+      tep va so khoa cua ve-that.json. Ban sao xoa trong finally; sau luot khong con
+      ban sao nao mang pid cua chinh luot trong packages/ui/test (con -> ma 2); sha256
+      tao pham cua chan-lai-component-ra-man khong doi (lech -> ma 2).
       CAP HAI CHIEU tren CUNG fixture, mot dot bien cho MOI tep:
       (a) ban sao moi cho ca lai ve bang locale "vi" thay "en"
       (`laiMotFile(f, "vi", tin)`) -> phai bao "ban ve lech: ve-that.json" kem khoa

@@ -97,7 +97,11 @@ export function ketCa(kq, tenCa) {
 }
 
 export function chup() {
-	const tep = readdirSync(THU_MUC_TEST, { recursive: true }).map(String).sort();
+	const duoi = `-${process.pid}.tsx`;
+	const tep = readdirSync(THU_MUC_TEST)
+		.map(String)
+		.filter((t) => t.startsWith("lai-ra-man.") && t.endsWith(duoi))
+		.sort();
 	const sha = {};
 	for (const t of CAU_HINH.taoPhamHoSoKy) {
 		const p = join(LUOT, t);
@@ -110,15 +114,9 @@ export function chup() {
 
 export function soChup(truoc, sau) {
 	const loi = [];
-	const them = sau.tep.filter((t) => !truoc.tep.includes(t));
-	const mat = truoc.tep.filter((t) => !sau.tep.includes(t));
-	if (them.length > 0)
+	if (sau.tep.length > 0)
 		loi.push(
-			`KHONG DO DUOC: tep thua trong packages/ui/test: ${them.join(", ")}`,
-		);
-	if (mat.length > 0)
-		loi.push(
-			`KHONG DO DUOC: tep mat trong packages/ui/test: ${mat.join(", ")}`,
+			`KHONG DO DUOC: ban sao cua luot nay con sot trong packages/ui/test: ${sau.tep.join(", ")}`,
 		);
 	for (const t of Object.keys(truoc.sha))
 		if (truoc.sha[t] !== sau.sha[t])
