@@ -263,7 +263,7 @@ evals:
       AgentTask, đọc sổ và ghi qua OkrService), khuôn parse ở biên trong packages/validation,
       không chú thích trong mã, hằng tinh chỉnh ở một tệp cấu hình mỗi khu, thành phần mới ở
       packages/ui không đè class ở chỗ gọi?
-    inputs: [docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md, _acceptance/tro-ly-okr-de-xuat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md]
+    inputs: [docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md, _acceptance/tro-ly-okr-de-xuat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md, _acceptance/tro-ly-okr-de-xuat/evidence/luat-kho.md]
     expected: >-
       PASS khi mọi ý đúng và không vi phạm luật kho nào có trích dẫn tệp:dòng; FAIL nêu đúng
       câu sai hoặc tệp vi phạm; UNCERTAIN khi thiếu bằng chứng, kèm danh sách bằng chứng cần thêm.
