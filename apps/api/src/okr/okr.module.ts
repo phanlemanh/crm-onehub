@@ -7,6 +7,7 @@ import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
 import { OkrKhepService } from "./okr-khep.service";
 import { OkrMauService } from "./okr-mau.service";
@@ -29,6 +30,7 @@ import { TroLyOkrService } from "./tro-ly.service";
 		OkrCanhKrService,
 		OkrMauService,
 		OkrHienThiService,
+		OkrDuyetService,
 		OkrRouter,
 	],
 })

@@ -92,7 +92,14 @@ function mucTieu(
 		canEditKr: [],
 		hienThi: "cong-khai",
 		nguoiXem: [],
-		quyen: { datHienThi: false },
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: false,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 		...thay,
 	};
 }

@@ -13,6 +13,7 @@ export const OKR_HIEN_THI = {
 
 export const LOI_KHUON_HIEN_THI = {
 	quaNguoiXem: `Tối đa ${OKR_HIEN_THI.nguoiXemToiDa} người xem có tên.`,
+	lyDoTraLai: `Lý do trả lại cần ${OKR_HIEN_THI.lyDoTraLai.toiThieu}–${OKR_HIEN_THI.lyDoTraLai.toiDa} ký tự.`,
 } as const;
 
 export type { NguCanhXem };
@@ -76,8 +77,12 @@ export const traLaiInput = z.object({
 	lyDo: z
 		.string()
 		.trim()
-		.min(OKR_HIEN_THI.lyDoTraLai.toiThieu)
-		.max(OKR_HIEN_THI.lyDoTraLai.toiDa),
+		.min(OKR_HIEN_THI.lyDoTraLai.toiThieu, {
+			error: LOI_KHUON_HIEN_THI.lyDoTraLai,
+		})
+		.max(OKR_HIEN_THI.lyDoTraLai.toiDa, {
+			error: LOI_KHUON_HIEN_THI.lyDoTraLai,
+		}),
 });
 export type TraLaiInput = z.infer<typeof traLaiInput>;
 

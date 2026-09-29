@@ -7,6 +7,7 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db } from "@crm/db";
+import { type NguoiDuyet, nguoiDuyetMucTieu } from "@crm/db/okr-duyet";
 import {
 	dieuKienXemMucTieu,
 	dungNguCanhXem,
@@ -107,6 +108,43 @@ export class OkrAccessService {
 
 	nguCanhXem(q: Quyen, userId: string): NguCanhXem {
 		return dungNguCanhXem(userId, q);
+	}
+
+	nguoiDuyet(q: Quyen, mt: DonViCuaMucTieu): NguoiDuyet {
+		const moiPb = [
+			...q.cay.divisions.flatMap((b) => b.departments),
+			...q.cay.chuaXep,
+		];
+		const truongCua = (ds: { id: string; head: { id: string } | null }[]) =>
+			new Map(
+				ds.flatMap((d): [string, string][] =>
+					d.head ? [[d.id, d.head.id]] : [],
+				),
+			);
+		return nguoiDuyetMucTieu(
+			{
+				truongCuaBoPhan: truongCua(q.cay.divisions),
+				truongCuaPhongBan: truongCua(moiPb),
+				boPhanCua: q.boPhanCua,
+				phongBanChinh: q.phongBanChinh,
+			},
+			mt,
+		);
+	}
+
+	duyetDuoc(q: Quyen, userId: string, mt: DonViCuaMucTieu): boolean {
+		const nd = this.nguoiDuyet(q, mt);
+		return nd.loai === "nguoi" ? nd.userId === userId : q.quanTri;
+	}
+
+	tenNguoiDuyet(q: Quyen, nd: NguoiDuyet): { ten: string } | "quan-tri" {
+		if (nd.loai === "quan-tri") return "quan-tri";
+		const truong = [
+			...q.cay.divisions,
+			...q.cay.divisions.flatMap((b) => b.departments),
+			...q.cay.chuaXep,
+		].find((d) => d.head?.id === nd.userId)?.head;
+		return { ten: truong?.name ?? nd.userId };
 	}
 
 	async assertXemMucTieu(userId: string, objectiveId: string) {
@@ -227,11 +265,15 @@ export class OkrAccessService {
 		);
 	}
 
-	async assertSuaMucTieu(userId: string, objectiveId: string) {
+	async assertSuaMucTieuCoQuyen(userId: string, objectiveId: string) {
 		const { q, mt } = await this.assertXemMucTieu(userId, objectiveId);
 		if (!this.suaDuocDonVi(q, userId, mt))
 			throw new ForbiddenException(OKR.thongDiep.khongSuaDuocDonVi);
-		return mt;
+		return { q, mt };
+	}
+
+	async assertSuaMucTieu(userId: string, objectiveId: string) {
+		return (await this.assertSuaMucTieuCoQuyen(userId, objectiveId)).mt;
 	}
 
 	async assertSuaKr(userId: string, keyResultId: string) {

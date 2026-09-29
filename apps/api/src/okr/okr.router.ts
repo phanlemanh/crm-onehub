@@ -7,7 +7,7 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
-import { datHienThiInput } from "@crm/validation/okr-hien-thi";
+import { datHienThiInput, traLaiInput } from "@crm/validation/okr-hien-thi";
 import {
 	chamKrInput,
 	dongRaInput,
@@ -94,6 +94,7 @@ import {
 } from "./okr-canh-kr.contracts";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
 import {
 	bangChamInput,
@@ -152,6 +153,7 @@ export class OkrRouter {
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
+		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -400,6 +402,54 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof idInput>,
 	) {
 		return this.okr.publishObjective(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/objectives/{id}/submit", TAG),
+	})
+	guiDuyet(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.duyet.guiDuyet(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/objectives/{id}/approve", TAG),
+	})
+	duyetMucTieu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.duyet.duyetMucTieu(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: traLaiInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/objectives/{objectiveId}/return", TAG),
+	})
+	traLaiMucTieu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof traLaiInput>,
+	) {
+		return this.duyet.traLaiMucTieu(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/objectives/{id}/withdraw", TAG),
+	})
+	rutDuyet(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.duyet.rutDuyet(ctx.user.id, input.id);
 	}
 
 	@Mutation({

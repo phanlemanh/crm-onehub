@@ -193,6 +193,18 @@ export const OKR = {
 			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
 		},
 		dangChoDuyet: "Mục tiêu đang chờ duyệt — rút lại để sửa.",
+		duyet: {
+			canDuyet: "Chương trình cần duyệt trước khi công bố — bấm «Gửi duyệt».",
+			khongCanDuyet:
+				"Mục tiêu này không cần duyệt — chương trình chưa bật bước duyệt, hoặc mục tiêu cấp OneHub. Bấm «Công bố».",
+			chiGuiTuNhap: "Chỉ gửi duyệt được mục tiêu nháp.",
+			guiCanKr: "Cần ít nhất một KR trước khi gửi duyệt.",
+			khongDuyetDuoc:
+				"Chỉ người duyệt của mục tiêu này mới duyệt hay trả lại được.",
+			khongPhaiNguoiGui: "Chỉ người đã gửi duyệt mới rút lại được.",
+			khongConChoDuyet:
+				"Mục tiêu này không còn chờ duyệt — tải lại để xem trạng thái mới.",
+		},
 		hienThi: {
 			nguoiXemKhongConThanhVien:
 				"Người xem có tên phải là thành viên còn trong không gian làm việc.",

@@ -245,9 +245,51 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "publishObjective",
+		ham: "congBoTrongGiaoDich",
 		bang: "okrKeyResult",
-		lyDo: "ghi: đếm KR của mục tiêu vừa qua assertSuaMucTieu",
+		lyDo: "ghi: đếm KR của mục tiêu vừa qua assertSuaMucTieu (publishObjective) hay assertXemMucTieu và người duyệt (duyetMucTieu); chỉ ra số",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "khoaMucTieu",
+		bang: "tho:okrObjective",
+		lyDo: "khoá hàng mục tiêu FOR UPDATE trong giao dịch ghi; mọi lời gọi (publishObjective, guiDuyet, duyetMucTieu, traLaiMucTieu, rutDuyet) đã qua assertXemMucTieu trước",
+	},
+	{
+		tep: "apps/api/src/okr/okr-duyet.service.ts",
+		ham: "guiDuyet",
+		bang: "okrKeyResult",
+		lyDo: "ghi: đếm KR của mục tiêu vừa qua assertSuaMucTieuCoQuyen để chặn gửi duyệt khi chưa có KR; chỉ ra số",
+	},
+	{
+		tep: "apps/api/src/okr/okr-duyet.service.ts",
+		ham: "rutDuyet",
+		bang: "okrTrail",
+		lyDo: "ghi: đọc người gửi duyệt gần nhất của mục tiêu vừa qua assertXemMucTieu; chỉ so với người gọi, không trả ra",
+	},
+	{
+		tep: "packages/db/src/okr-nhac.ts",
+		ham: "viecChoDuyet",
+		bang: "okrObjective",
+		lyDo: "nhắc buổi sáng đọc cả lô mục tiêu chờ duyệt cho mọi người duyệt; viecOkrCanNhac lọc từng người bằng dieuKienXemMucTieu (locTheoQuyenXem) trước khi trả",
+	},
+	{
+		tep: "packages/db/src/okr-nhac.ts",
+		ham: "viecChoDuyet",
+		bang: "okrTrail",
+		lyDo: "nhắc buổi sáng đọc người gửi duyệt của cả lô; viecOkrCanNhac lọc từng người bằng dieuKienXemMucTieu (locTheoQuyenXem) trước khi trả",
+	},
+	{
+		tep: "packages/db/src/okr-nhac.ts",
+		ham: "viecTraLai",
+		bang: "okrTrail",
+		lyDo: "nhắc buổi sáng đọc vết trả lại và gửi duyệt của cả lô; viecOkrCanNhac lọc từng người bằng dieuKienXemMucTieu (locTheoQuyenXem) trước khi trả",
+	},
+	{
+		tep: "packages/db/src/okr-nhac.ts",
+		ham: "viecTraLai",
+		bang: "okrObjective",
+		lyDo: "nhắc buổi sáng đọc cả lô mục tiêu bị trả lại; viecOkrCanNhac lọc từng người bằng dieuKienXemMucTieu (locTheoQuyenXem) trước khi trả",
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",

@@ -212,7 +212,29 @@ export const objectiveOutput = mucTieuOutput.extend({
 	canEditKr: z.array(z.string()),
 	hienThi: z.enum(MUC_HIEN_THI),
 	nguoiXem: z.array(z.object({ id: z.string(), name: z.string() })),
-	quyen: z.object({ datHienThi: z.boolean() }),
+	choDuyet: z
+		.object({
+			nguoiGui: nguoiOkr.nullable(),
+			guiLuc: z.string().nullable(),
+			nguoiDuyet: z.union([
+				z.object({ ten: z.string() }),
+				z.literal("quan-tri"),
+			]),
+		})
+		.nullable(),
+	traLaiGanNhat: z
+		.object({
+			lyDo: z.string(),
+			nguoi: nguoiOkr.nullable(),
+			luc: z.string(),
+		})
+		.nullable(),
+	quyen: z.object({
+		datHienThi: z.boolean(),
+		guiDuyet: z.boolean(),
+		duyet: z.boolean(),
+		rutDuyet: z.boolean(),
+	}),
 });
 export const createObjectiveInput = mucTieuInput;
 export const datHienThiOutput = z.object({
