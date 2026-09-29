@@ -417,6 +417,29 @@ describe("so-gop", () => {
 					where: { objectiveId: { in: [s.mucTieu.c1, s.mucTieu.g] } },
 				}),
 			).toBe(0);
+			const chuaCanChinh = async (thuTuc: string) =>
+				(
+					await doc<{ chuaCanChinh: { objectiveId: string }[] }>(
+						thuTuc,
+						s.t.cookie,
+						{ cycleId: s.ky },
+					)
+				).chuaCanChinh.map((n) => n.objectiveId);
+			const cay = await chuaCanChinh("okr.cayCanChinh");
+			const cayGoc = await chuaCanChinh("okr.alignmentTree");
+			expect({
+				cay: {
+					coG: cay.includes(s.mucTieu.g),
+					coC1: cay.includes(s.mucTieu.c1),
+				},
+				cayGoc: {
+					coG: cayGoc.includes(s.mucTieu.g),
+					coC1: cayGoc.includes(s.mucTieu.c1),
+				},
+			}).toEqual({
+				cay: { coG: false, coC1: true },
+				cayGoc: { coG: false, coC1: true },
+			});
 		},
 		CHO_MS,
 	);

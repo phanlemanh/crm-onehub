@@ -349,8 +349,7 @@ describe("toan-canh-mau", () => {
 						(m) =>
 							m.chuKy === "quy4" &&
 							m.cap === "phong-ban" &&
-							m.trangThai === "cong-bo" &&
-							m.hienThi === "cong-khai",
+							m.trangThai === "cong-bo",
 					)
 					.map((m) => idMau("mt", m.ma)),
 			);

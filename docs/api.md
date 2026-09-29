@@ -544,9 +544,10 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   - Aggregates (`toanCanh`, `hopTuan`, `sucKhoe`, `countByUnit`) drop restricted
     objectives **for everyone**, admins and heads included, through `boGioiHan` —
     never filtered per caller, so two people never see two different company numbers.
-  - A restricted objective has no alignment: it is left out of `alignmentTree`,
-    `cayCanChinh` and `alignmentTargets`, and `addAlignment` refuses it as source or
-    target. Trail rows and diễn biến of another objective that point at it show
+  - A restricted objective has no alignment: `alignmentTargets` never offers it,
+    `addAlignment` refuses it as source or target, and `alignmentTree` and
+    `cayCanChinh` leave it out of «chưa căn chỉnh» even for people who can see it —
+    it cannot be aligned, so listing it there is noise. Trail rows and diễn biến of another objective that point at it show
     `{ gioiHan: true }` instead of an id or a title (`vetChoNguoiXem` in `hien-thi.ts`).
   - `datHienThi({ objectiveId, hienThi, nguoiXem })` is for whoever edits the
     objective, phase-locked, refused while it waits for approval, takes only members,
@@ -606,9 +607,16 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   (`kr-phu-trach-roi`). The Sức khoẻ page shows it as «OKR mồ côi».
   `_acceptance/gioi-han-duyet-cay-okr/rang/okr-mo-coi.sql` lists the same
   `objectiveId`, `lop` pairs for the weekly read.
-- **Eleven writes are locked by cycle phase.** Every objective, key-result and
-  alignment write, plus `previewImport` and `applyImport`, calls
-  `assertKyGhiDuoc` first: only `lap-ke-hoach` and `dang-chay` accept writes. Phase
+- **Writes are locked by cycle phase.** Every objective, key-result and alignment
+  write (`createObjective`, `updateObjective`, `publishObjective`, `dropObjective`,
+  `createKeyResult`, `updateKeyResult`, `removeKeyResult`, `addAlignment`,
+  `removeAlignment`), the visibility and approval writes (`datHienThi`, `guiDuyet`,
+  `duyetMucTieu`, `traLaiMucTieu`, `rutDuyet`), `previewImport` and `applyImport`,
+  `taoTuMau`, `datNguonKr`, `ghiSoKr`, and every việc, sáng kiến and evidence write
+  (through `OkrCanhKrService.krDeGhi`) call `assertKyGhiDuoc` first: only
+  `lap-ke-hoach` and `dang-chay` accept writes. `chuyenDonVi` is the one write that
+  also accepts `cham-diem` (`PHA_CHUYEN_DUOC`), so restructuring after a cycle ends
+  but before it closes still moves its objectives. Phase
   moves exactly one step forward (`setCyclePhase` locks the cycle row `FOR UPDATE`,
   refuses a jump with `OKR.thongDiep.khep.phaTungBuoc` and a step back with
   `phaChiDiToi`); the one way back is `moLaiKy` — see «Closing a cycle» below.

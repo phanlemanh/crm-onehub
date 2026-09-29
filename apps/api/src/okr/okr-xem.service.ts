@@ -416,7 +416,7 @@ export class OkrXemService {
 		userId: string,
 		cycleId: string,
 	): Promise<CayCanChinhOutput> {
-		const mts = await this.okr.mucTieuCuaCay(userId, cycleId);
+		const { mts, gioiHan } = await this.okr.mucTieuCuaCay(userId, cycleId);
 		const kyVong = new Map(mts.map((m) => [m.id, m.expected]));
 		const laMoc = new Set(
 			mts.flatMap((m) =>
@@ -431,7 +431,7 @@ export class OkrXemService {
 					: (kyVong.get(n.objectiveId) ?? null),
 			children: n.children.map(gan),
 		});
-		const cay = dungCayCanChinh(mts);
+		const cay = dungCayCanChinh(mts, gioiHan);
 		return {
 			roots: cay.roots.map(gan),
 			chuaCanChinh: cay.chuaCanChinh.map(gan),

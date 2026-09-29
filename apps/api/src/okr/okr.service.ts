@@ -1275,7 +1275,8 @@ export class OkrService {
 	}
 
 	async alignmentTree(userId: string, cycleId: string) {
-		return dungCayCanChinh(await this.mucTieuCuaCay(userId, cycleId));
+		const { mts, gioiHan } = await this.mucTieuCuaCay(userId, cycleId);
+		return dungCayCanChinh(mts, gioiHan);
 	}
 
 	async mucTieuCuaCay(userId: string, cycleId: string) {
@@ -1315,7 +1316,22 @@ export class OkrService {
 					q,
 					pham,
 				);
-		return [...cha, ...cua, ...con];
+		const mts = [...cha, ...cua, ...con];
+		const gioiHan = new Set(
+			(
+				await this.db.okrObjective.findMany({
+					where: {
+						AND: [
+							{ id: { in: mts.map((m) => m.id) } },
+							dieuKienXemMucTieu(pham.nguCanh),
+							{ NOT: boGioiHan },
+						],
+					},
+					select: { id: true },
+				})
+			).map((r) => r.id),
+		);
+		return { mts, gioiHan };
 	}
 
 	async docMucTieu(

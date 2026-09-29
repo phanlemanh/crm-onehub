@@ -11,7 +11,8 @@ Hồ sơ `_acceptance/gioi-han-duyet-cay-okr` · MT-06, QT-02, TC-06 · T3.
   tối đa 20 người xem có tên thấy. Người khác không thấy nó ở danh sách, bảng họp, bảng
   chấm, tệp xuất, «Việc của tôi», tin nhắc buổi sáng hay Trợ lý OKR; mở đường dẫn của nó
   thì thấy «Không tìm thấy mục tiêu này» — đúng câu của mục tiêu không có. Mục tiêu giới
-  hạn không vào số gộp của ai (cả quản trị) và không căn chỉnh được; chọn giới hạn khi
+  hạn không vào số gộp của ai (cả quản trị), không căn chỉnh được và không nằm ở nhóm
+  «chưa căn chỉnh» của cây căn chỉnh; chọn giới hạn khi
   mục tiêu còn căn chỉnh thì hộp báo số căn chỉnh cần gỡ. Đầu khung có nhãn «Giới hạn».
 - **Bước duyệt.** Chương trình OKR có ô **«Công bố cần duyệt»** (mặc định tắt, chỉ quản
   trị đổi). Bật thì người sửa được mục tiêu bấm «Gửi duyệt»; người duyệt suy từ cây tổ
@@ -81,7 +82,6 @@ không ở thư mục tính năng.
 - Mục tiêu cá nhân của người đã rời hiện ở OKR mồ côi nhưng chưa có lối sửa ngoài bỏ.
 - Người duyệt gọi thẳng thủ tục gửi duyệt cho mục tiêu mình duyệt được thì máy chủ nhận;
   màn không hiện nút đó cho họ.
-- Cây căn chỉnh liệt mục tiêu giới hạn ở «chưa căn chỉnh» dù nó không căn chỉnh được.
 
 ## Ngoài hợp đồng
 
