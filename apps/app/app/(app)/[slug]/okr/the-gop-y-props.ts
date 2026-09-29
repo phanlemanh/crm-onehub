@@ -68,33 +68,33 @@ export function nhanO(d: DongHien, m: OkrGopYMessages): string {
 	return m.dong.loai[d.loai];
 }
 
-function nutVietLai(c: NguCanhThe): NutThe[] {
+function nutVietLai(c: NguCanhThe, m: OkrGopYMessages): NutThe[] {
 	const khoa = c.lyDoKhoa !== undefined;
 	if (c.dangSua) {
 		return [
 			{
 				id: "nhan-ban-sua",
-				label: c.m.dong.nhanBanSua,
+				label: m.dong.nhanBanSua,
 				tone: "primary",
 				disabled: khoa,
 			},
-			{ id: "huy-sua", label: c.m.dong.huySua, tone: "secondary" },
+			{ id: "huy-sua", label: m.dong.huySua, tone: "secondary" },
 		];
 	}
 	return [
-		{ id: "nhan", label: c.m.dong.nhan, tone: "primary", disabled: khoa },
-		{ id: "sua", label: c.m.dong.sua, tone: "secondary" },
-		{ id: "bac", label: c.m.dong.bac, tone: "quiet" },
+		{ id: "nhan", label: m.dong.nhan, tone: "primary", disabled: khoa },
+		{ id: "sua", label: m.dong.sua, tone: "secondary" },
+		{ id: "bac", label: m.dong.bac, tone: "quiet" },
 	];
 }
 
-function nutCauHoi(d: DongHien, c: NguCanhThe): NutThe[] {
-	const boQua: NutThe = { id: "bo-qua", label: c.m.dong.boQua, tone: "quiet" };
+function nutCauHoi(d: DongHien, c: NguCanhThe, m: OkrGopYMessages): NutThe[] {
+	const boQua: NutThe = { id: "bo-qua", label: m.dong.boQua, tone: "quiet" };
 	if (d.keyResultId === null || !c.coMoKr) return [boQua];
 	return [
 		{
 			id: "mo-kr",
-			label: c.m.dong.moKr,
+			label: m.dong.moKr,
 			tone: "secondary",
 			disabled: c.lyDoKhoaMoKr !== undefined,
 		},
@@ -102,8 +102,7 @@ function nutCauHoi(d: DongHien, c: NguCanhThe): NutThe[] {
 	];
 }
 
-function phanDong(d: DongHien, c: NguCanhThe): PhanDong {
-	const m = c.m;
+function phanDong(d: DongHien, c: NguCanhThe, m: OkrGopYMessages): PhanDong {
 	if (d.loai === "hoi") {
 		return {
 			kind: "question",
@@ -112,7 +111,7 @@ function phanDong(d: DongHien, c: NguCanhThe): PhanDong {
 			rationale: d.sau ? d.lyDo : undefined,
 			error: c.loi,
 			lockedReason: d.keyResultId !== null ? c.lyDoKhoaMoKr : undefined,
-			nut: nutCauHoi(d, c),
+			nut: nutCauHoi(d, c, m),
 			truongChi: null,
 		};
 	}
@@ -144,20 +143,24 @@ function phanDong(d: DongHien, c: NguCanhThe): PhanDong {
 		rationale: d.lyDo,
 		error: c.loi,
 		lockedReason: c.lyDoKhoa,
-		nut: nutVietLai(c),
+		nut: nutVietLai(c, m),
 		truongChi: d.truong,
 	};
 }
 
+function chuDaQuyet(d: DongHien, m: OkrGopYMessages, ket: KetQuyet): string {
+	return `${nhanO(d, m)} — ${m.dong.ket[ket]}`;
+}
+
 export function propsThe(d: DongHien, c: NguCanhThe): PropsThe {
-	const { nut, truongChi, ...phan } = phanDong(d, c);
+	const { nut, truongChi, ...phan } = phanDong(d, c, c.m);
 	if (c.ket) {
 		return {
 			the: {
 				...phan,
 				decided: {
 					decision: c.ket,
-					text: `${nhanO(d, c.m)} — ${c.m.dong.ket[c.ket]}`,
+					text: chuDaQuyet(d, c.m, c.ket),
 				},
 				pending: false,
 			},
