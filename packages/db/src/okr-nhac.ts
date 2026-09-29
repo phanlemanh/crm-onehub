@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Db } from "./client";
 import type { JsonValue } from "./json";
+import { dieuKienXemMucTieu, nguCanhXemOkr } from "./okr-hien-thi";
 import { parseOkrVet } from "./okr-vet";
 import {
 	type CuaSoNhac,
@@ -485,7 +486,49 @@ export async function viecOkrCanNhac(
 		if (chon.userId !== undefined && g.userId !== chon.userId) continue;
 		ket.set(g.userId, [...(ket.get(g.userId) ?? []), g.viec]);
 	}
-	return ket;
+	return locTheoQuyenXem(db, ket);
+}
+
+function mucTieuCua(v: ViecOkr): string | null {
+	return v.loai === "okr-cap-nhat" ? null : v.objectiveId;
+}
+
+async function locTheoQuyenXem(
+	db: Db,
+	ket: Map<string, ViecOkr[]>,
+): Promise<Map<string, ViecOkr[]>> {
+	const nguoi = [...ket]
+		.filter(([, ds]) => ds.some((v) => mucTieuCua(v) !== null))
+		.map(([userId]) => userId);
+	const nguCanh = await nguCanhXemOkr(db, nguoi);
+	const xemDuoc = new Map(
+		await Promise.all(
+			nguoi.map(async (userId): Promise<[string, Set<string>]> => {
+				const nc = nguCanh.get(userId);
+				const ids = [
+					...new Set(
+						(ket.get(userId) ?? []).flatMap((v) => mucTieuCua(v) ?? []),
+					),
+				];
+				if (!nc) return [userId, new Set()];
+				const thay = await db.okrObjective.findMany({
+					where: { AND: [{ id: { in: ids } }, dieuKienXemMucTieu(nc)] },
+					select: { id: true },
+				});
+				return [userId, new Set(thay.map((m) => m.id))];
+			}),
+		),
+	);
+	const ra = new Map<string, ViecOkr[]>();
+	for (const [userId, ds] of ket) {
+		const thay = xemDuoc.get(userId);
+		const giu = ds.filter((v) => {
+			const mt = mucTieuCua(v);
+			return mt === null || (thay?.has(mt) ?? false);
+		});
+		if (giu.length > 0) ra.set(userId, giu);
+	}
+	return ra;
 }
 
 export async function lienQuanOkr(db: Db, userId: string): Promise<boolean> {

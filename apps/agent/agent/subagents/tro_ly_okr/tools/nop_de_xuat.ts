@@ -28,7 +28,7 @@ export default defineTool({
 		const viec = doc.data;
 		if (viec.viec !== "de-xuat") return tuChoi("task payload unreadable");
 		if ((await soLanNop(taskId)) > 0) return tuChoi("already submitted");
-		const goi = await dungGoiDeXuat(viec.objectiveId);
+		const goi = await dungGoiDeXuat(viec.objectiveId, viec.nguoiYeuCau);
 		if (!goi) return tuChoi("objective is gone");
 		const coMat = idTrongGoi(goi);
 		const hopLe = input.dong.filter(

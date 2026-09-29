@@ -1,4 +1,9 @@
-import { docDeXuatDaBac, docMucTieu, docThangCham } from "./doc";
+import {
+	docDeXuatDaBac,
+	docMucTieu,
+	docThangCham,
+	nguoiYeuCauXemDuoc,
+} from "./doc";
 
 export type GoiDeXuat = {
 	thangCham: string;
@@ -28,9 +33,11 @@ export type GoiDeXuat = {
 
 export async function dungGoiDeXuat(
 	objectiveId: string,
+	nguoiYeuCau: string,
 ): Promise<GoiDeXuat | null> {
+	if (!(await nguoiYeuCauXemDuoc(objectiveId, nguoiYeuCau))) return null;
 	const [mt, thangCham, daBac] = await Promise.all([
-		docMucTieu(objectiveId),
+		docMucTieu(objectiveId, nguoiYeuCau),
 		docThangCham(),
 		docDeXuatDaBac(objectiveId),
 	]);

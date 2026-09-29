@@ -1,5 +1,6 @@
 import { db } from "@crm/db";
 import { LOAI_VIEC_TRO_LY_OKR } from "@crm/db/agent-tasks";
+import { dieuKienXemMucTieu, nguCanhXemOkr } from "@crm/db/okr-hien-thi";
 
 export const DANH_SACH_DOC = [
 	"agentTask",
@@ -23,9 +24,28 @@ export async function docViecTheoPhienGoc(sessionId: string) {
 	});
 }
 
-export async function docMucTieu(objectiveId: string) {
-	return db.okrObjective.findUnique({
-		where: { id: objectiveId },
+async function nguCanhCuaNguoi(nguoiYeuCau: string) {
+	return (await nguCanhXemOkr(db, [nguoiYeuCau])).get(nguoiYeuCau) ?? null;
+}
+
+export async function nguoiYeuCauXemDuoc(
+	objectiveId: string,
+	nguoiYeuCau: string,
+): Promise<boolean> {
+	const nc = await nguCanhCuaNguoi(nguoiYeuCau);
+	if (!nc) return false;
+	return (
+		(await db.okrObjective.count({
+			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
+		})) > 0
+	);
+}
+
+export async function docMucTieu(objectiveId: string, nguoiYeuCau: string) {
+	const nc = await nguCanhCuaNguoi(nguoiYeuCau);
+	if (!nc) return null;
+	return db.okrObjective.findFirst({
+		where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
 		select: {
 			id: true,
 			level: true,

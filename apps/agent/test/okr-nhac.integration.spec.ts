@@ -1061,3 +1061,94 @@ describe("ghi-nhan", () => {
 		CHO_MS,
 	);
 });
+
+describe("hien-thi", () => {
+	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+	const TEN_MUC_TIEU = "Mở rộng kho phía Nam";
+	const CHO_MS = 60_000;
+
+	async function gieoG() {
+		const X = await gieoNguoi("Xuan");
+		const K = await gieoNguoi("Khoa");
+		const F = await gieoNguoi("Phi");
+		await noiZalo(K.id, "ZK");
+		await noiZalo(F.id, "ZF");
+		await batBot();
+		const chay = await gieoChuKy("dang-chay", 1);
+		const G = await gieoMucTieu({
+			cycleId: chay,
+			chu: X.id,
+			tieuDe: TEN_MUC_TIEU,
+			congBo: ngayCach(goc, -20),
+		});
+		const kK = await gieoKr({
+			objectiveId: G,
+			chu: K.id,
+			khoa: ngayCach(goc, -3),
+		});
+		await theoDoi(G, F.id, ngayCach(goc, -5));
+		await theoDoi(G, K.id, ngayCach(goc, -5));
+		const luc = new Date(goc.getTime() - 2 * GIO_MS);
+		await binhLuan({
+			objectiveId: G,
+			tacGia: X.id,
+			nhacTen: [F.id, K.id],
+			luc,
+		});
+		await ghiNhan({ objectiveId: G, tacGia: X.id, nhan: [F.id], luc });
+		return { X, K, F, G, kK };
+	}
+
+	const cuaG = (kq: Map<string, ViecNhac[]>, userId: string, G: string) =>
+		cua(kq, userId).filter((v) => "objectiveId" in v && v.objectiveId === G);
+
+	test(
+		"hien-thi: G gioi han — F 0 muc neu G va khong hang nhac, K van co okr-cap-nhat, okr-theo-doi va tin co ten G; dat lai cong khai thi F co lai muc",
+		async () => {
+			const g = await gieoG();
+			await db.okrObjective.update({
+				where: { id: g.G },
+				data: { hienThi: "gioi-han" },
+			});
+			const kq = await tinh(goc);
+			const capNhatK = cua(kq, g.K.id).find((v) => v.loai === "okr-cap-nhat");
+			expect({
+				F: cuaG(kq, g.F.id, g.G),
+				FTatCa: cua(kq, g.F.id),
+				kCapNhat: capNhatK?.loai === "okr-cap-nhat" ? capNhatK.krIds : [],
+				kTheoDoi: cuaG(kq, g.K.id, g.G).some((v) => v.loai === "okr-theo-doi"),
+			}).toEqual({
+				F: [],
+				FTatCa: [],
+				kCapNhat: [g.kK],
+				kTheoDoi: true,
+			});
+
+			await lenLichNhac(goc);
+			const soHangF = (await hangCuaNguoi(g.F.id)).length;
+			const tinK = await guiQuaZalo(g.K.id, goc);
+			const textK = tinK.z.guiToi("ZK")[0]?.body.text ?? "";
+			expect({
+				soHangF,
+				tinKCoTenG: textK.includes(TEN_MUC_TIEU),
+			}).toEqual({ soHangF: 0, tinKCoTenG: true });
+
+			await db.agentTask.deleteMany({ where: { kind: "nhac-ke-hoach" } });
+			await db.okrObjective.update({
+				where: { id: g.G },
+				data: { hienThi: "cong-khai" },
+			});
+			const sau = await tinh(goc);
+			expect(
+				cuaG(sau, g.F.id, g.G)
+					.map((v) => v.loai)
+					.sort(),
+				"doi chung: cong khai lai thi F co lai ba muc",
+			).toEqual(["okr-ghi-nhan", "okr-nhac-ten", "okr-theo-doi"]);
+			await lenLichNhac(goc);
+			const tinF = await guiQuaZalo(g.F.id, goc);
+			expect(tinF.z.guiToi("ZF")[0]?.body.text ?? "").toContain(TEN_MUC_TIEU);
+		},
+		CHO_MS,
+	);
+});

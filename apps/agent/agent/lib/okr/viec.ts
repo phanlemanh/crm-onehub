@@ -5,6 +5,7 @@ import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import type { LeasedTask } from "../tasks";
 import { completeTask } from "../tasks";
 import { TRO_LY_OKR } from "./config";
+import { nguoiYeuCauXemDuoc } from "./doc";
 
 export { laViecTroLyOkr };
 
@@ -20,6 +21,11 @@ export async function lyDoChanTruocKhiGui(
 		return TRO_LY_OKR.ketThuc.hetLease;
 	const viec = okrTroLyViec.safeParse(task.payload);
 	if (!viec.success) return TRO_LY_OKR.ketThuc.payloadHong;
+	if (
+		viec.data.viec === "de-xuat" &&
+		!(await nguoiYeuCauXemDuoc(viec.data.objectiveId, viec.data.nguoiYeuCau))
+	)
+		return TRO_LY_OKR.ketThuc.khongXemDuoc;
 	if (!coKhoaMoHinh()) return TRO_LY_OKR.ketThuc.chuaCoKhoa;
 	const san = await troLyOkrSanSang(db, {
 		viec: viec.data.viec,
