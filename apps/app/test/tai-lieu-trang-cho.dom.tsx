@@ -165,6 +165,26 @@ describe("man-trang-cho", () => {
 			});
 		}
 
+		for (const dc of ["may-soan", "go-tay", "loi"] as const) {
+			test(`man-trang-cho: ${locale} ${dc} khong thay nguon thi khong co Xem nguon va ten tep`, () => {
+				const goc = mo(
+					{ ...trangVoi(dc), choLanDau: { dangCho: dc, nguon: null } },
+					locale,
+				);
+				const chu =
+					goc.querySelector(`[data-cho-lan-dau="${dc}"]`)?.textContent ?? "";
+				if (!chu.includes(m.cho[dc].tieuDe))
+					throw new Error(`${dc}: thieu khung dang cho`);
+				if (chu.includes(TEP))
+					throw new Error(`${dc}: lo ten tep khi khong thay nguon`);
+				const xem = [...goc.querySelectorAll("a")].filter(
+					(e) => e.textContent === m.xemNguon,
+				);
+				if (xem.length > 0)
+					throw new Error(`${dc}: thua nut ${m.xemNguon} khi khong thay nguon`);
+			});
+		}
+
 		test(`man-trang-cho: ${locale} loi khong co ly do chi hien ten tep`, () => {
 			const goc = mo(trangVoi("loi", null), locale);
 			const chu =

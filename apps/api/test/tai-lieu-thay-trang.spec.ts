@@ -119,6 +119,7 @@ async function themNguon(
 	trangId: string,
 	trangThai: TrangThaiNguon,
 	lyDo: string | null = null,
+	taiBoi: Ai = "tao",
 ): Promise<string> {
 	demNguon += 1;
 	const { id } = await db.taiLieuNguon.create({
@@ -128,7 +129,7 @@ async function themNguon(
 			kieu: "docx",
 			kichThuoc: 1,
 			blobPathname: PATHNAME_NGUON(randomUUID()),
-			taiBoiId: phien.tao.nguoi,
+			taiBoiId: phien[taiBoi].nguoi,
 			trangId,
 			trangThai,
 			lyDo,
@@ -266,6 +267,36 @@ describe("thay-trang", () => {
 			}
 		}
 		expect(oCoNguon).toBeGreaterThan(0);
+
+		const an = await trangTuNguon(ma("Nguon admin moi hon"), "LOI", LY_DO_LOI);
+		const cuaAdmin = await themNguon(
+			await idCua(an.slug),
+			"CAN_GO_TAY",
+			null,
+			"admin",
+		);
+		const MONG_NGUON = {
+			tao: null,
+			chu: cuaAdmin,
+			admin: cuaAdmin,
+			owner: cuaAdmin,
+		} satisfies Partial<Record<Ai, string | null>>;
+		for (const [ai, mong] of Object.entries(MONG_NGUON) as [
+			Ai,
+			string | null,
+		][]) {
+			const doc = ok<TrangDoc>(
+				await hoi("taiLieu.get", { slug: an.slug }, ai),
+				`get nguon admin ${ai}`,
+			);
+			if (doc.choLanDau?.dangCho !== "go-tay")
+				throw new Error(`dangCho sai: nguon-admin ${ai}`);
+			const nhan = doc.choLanDau.nguon?.id ?? null;
+			if (nhan !== mong)
+				throw new Error(
+					`nguon khong thay: ${ai} nguon-admin — mong ${mong ?? "null"}, nhan ${nhan ?? "null"}`,
+				);
+		}
 	});
 
 	test("khong-thay: trang khong duoc thay tra loi giong het slug khong co", async () => {
