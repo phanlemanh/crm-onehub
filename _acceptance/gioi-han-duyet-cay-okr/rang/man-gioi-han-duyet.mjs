@@ -703,6 +703,14 @@ async function chonHop(trang, triggerSel, tenMuc) {
 		await trang.type("[cmdk-input]", tenMuc);
 		await cho(300);
 	}
+	await thayNgay(
+		trang,
+		(c) =>
+			window
+				.__tim("[role='option']")
+				.some((o) => o.innerText.replace(/\s+/g, " ").trim().startsWith(c)),
+		tenMuc,
+	);
 	const tay = await trang.evaluateHandle(
 		(c) =>
 			window
@@ -1115,6 +1123,12 @@ function soiMay(may) {
 
 async function buocKhongThay() {
 	nhom = "E15 buoc-khong-thay";
+	const truoc = await dongDb(K.G);
+	const gioiHan = truoc?.hienThi === "gioi-han";
+	kiem(
+		`${nhom}: G dang gioi-han truoc khi nguoi ngoai mo (thay ${truoc?.hienThi}) — lo chi tinh khi G that su gioi han`,
+		gioiHan,
+	);
 	const may = mayGhi("ngoai");
 	const n = await moTrang("ngoai", DO.rong, `/okr?record=objective:${K.G}`, {
 		may,
@@ -1133,7 +1147,7 @@ async function buocKhongThay() {
 		khung.includes(CHU.khongThay.tieuDe),
 	);
 	const trang1 = await chuTrang(n);
-	if (trang1.includes(TEN.G))
+	if (gioiHan && trang1.includes(TEN.G))
 		console.log(
 			`  E15 buoc-khong-thay: tieu de G tim thay tren trang (${n.url()})`,
 		);
@@ -1161,7 +1175,7 @@ async function buocKhongThay() {
 		!dong.includes(K.G) && dong.includes(MT_CAN_CHINH),
 	);
 	const trang2 = await chuTrang(n);
-	if (trang2.includes(TEN.G))
+	if (gioiHan && trang2.includes(TEN.G))
 		console.log(
 			`  E15 buoc-khong-thay: tieu de G tim thay tren trang (${n.url()})`,
 		);
@@ -1169,7 +1183,7 @@ async function buocKhongThay() {
 	await chup(n, "buoc-khong-thay-theo-don-vi.png");
 	await doiGhi(may);
 	await n.close();
-	return may;
+	return { may, gioiHan };
 }
 
 const LOI_CHAN = (path) => ({
@@ -1274,7 +1288,7 @@ async function nhomE15() {
 	await buocConCanChinh();
 	await buocNguoiDuyet();
 	await buocBiTraLai();
-	const mayN = await buocKhongThay();
+	const { may: mayN, gioiHan } = await buocKhongThay();
 	await buocTrangThaiLoi();
 
 	const sN = soiMay(mayN);
@@ -1285,7 +1299,7 @@ async function nhomE15() {
 	console.log(
 		`  E16 doi chung duong truong T: ${sT.tong} phan hoi da soi, ${sT.lo.length} phan hoi chua id/tieu de G`,
 	);
-	if (sN.lo.length > 0) {
+	if (gioiHan && sN.lo.length > 0) {
 		console.log(
 			`  E16: nguoi khong xem duoc nhan ${sN.lo.length} phan hoi chua id/tieu de G`,
 		);
