@@ -216,8 +216,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.tdx_do_tre
-    expected_exit: 1
-    expected: "THOÁT MÃ 1 là giới hạn ĐÃ KHAI (d-…-29, chủ kho chọn đường 1 sau S4 round 3): độ trễ trên máy dev qua Gateway vượt ngưỡng p50 ≤ 8 000 ms / p90 ≤ 15 000 ms; ngưỡng đó chuyển thành điều kiện BẬT đo lại ở Cổng Giá trị trên OKR thật. Thoát 0 (lọt ngưỡng) được ghi «giới hạn đã khai không còn», thoát 2 (thiếu khoá, không đo được) vẫn là thất bại. rang/do-tre.mjs trên kho đo có bộ OKR mẫu: 20 lượt troLyDeXuat thật trên 20 Mục tiêu khác nhau (đầu vào khác nhau, không lượt dùng lại), model thật có ZDR; đọc độ trễ bằng CHÍNH rang/do-tre.sql; p50 ≤ 8 000 ms và p90 ≤ 15 000 ms; in 20 số. Lượt nào hỏng thì tính là 30 000 ms, không bỏ. Thiếu khoá → mã 2."
+    expected: "exit 0; rang/do-tre.mjs trên kho đo có bộ OKR mẫu: 20 lượt troLyDeXuat thật trên 20 Mục tiêu khác nhau (đầu vào khác nhau, không lượt dùng lại), model thật có ZDR; đọc độ trễ bằng CHÍNH rang/do-tre.sql; p50 ≤ 8 000 ms và p90 ≤ 15 000 ms; in 20 số. Lượt nào hỏng thì tính là 30 000 ms, không bỏ. Thiếu khoá → mã 2. Đo khi máy rảnh: lượt eval này chạy tuần tự, không song song với bộ test hay eval model khác (round 3 đo dưới tải ra 11 323 / 22 456 ms; round 4 máy rảnh ra 6 699 / 11 066 ms)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/agent/agent/subagents/tro_ly_okr/**", apps/agent/agent/lib/dispatch.ts, "_acceptance/tro-ly-okr-de-xuat/rang/do-tre.*"]
 
