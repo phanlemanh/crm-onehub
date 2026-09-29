@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b7823dd1e46ad7369df26680c302600c35471045
+verified_commit: b08c53a6574d2a596d22b3f023cf9c24a1a0a7cc
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -317,3 +317,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: Cả 21 eval máy (E1-E21, gồm ba cặp ui-check + script chung một lần chạy tien-de.mjs cho AC-10/AC-11/AC-12) và bốn lệnh suite hồi quy (test, lint, lint:slop, build) đều pass ở lần chạy đầu, không có eval nào fail hay bị BLOCKED. E22 (judgment, AC-15) — cả ba lens (domain-correctness, operational-feasibility, spec-alignment) đều UNCERTAIN vì input chỉ có hồ sơ thiết kế/ý định, không có diff mã nguồn thật của lượt này — chờ người tự soi diff và quyết ở Gate 2.
+
+### Re-pin lần 1 — 2026-09-29, do PR #210 sửa hai thước của canh-kr-okr (ảnh ra .acceptance-runs; E20 đo được sau gộp); bằng chứng hoá cũ từ b7823dd1
+run_id: repin-20260929T141057Z-15407
+sha: b08c53a6574d2a596d22b3f023cf9c24a1a0a7cc · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths), E14 (E14 không khai paths), E16 (E16 không khai paths), E22 (E22 không khai paths)

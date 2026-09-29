@@ -16,6 +16,7 @@ const GOC = join(dirname(TEP), "..", "..", "..");
 const THU_MUC = "packages/db/prisma/migrations";
 const TEP_SCHEMA = "packages/db/prisma/schema.prisma";
 const MOC = "origin/onehub";
+const MIGRATION_LUOT = "20261004010000_okr_canh_kr";
 const MODEL_MOI = [
 	"OkrViecKr",
 	"OkrBangChung",
@@ -64,7 +65,9 @@ const lietKeTruoc = () =>
 	git("ls-tree", "--name-only", `${TRUOC}:${THU_MUC}`)
 		.split("\n")
 		.filter((t) => t !== "" && t !== "migration_lock.toml");
-const cu = new Set(lietKeTruoc());
+const truoc = lietKeTruoc();
+const daGop = truoc.includes(MIGRATION_LUOT);
+const cu = new Set(truoc.filter((t) => t !== MIGRATION_LUOT));
 
 function cauLenh(sql) {
 	return sql
@@ -307,6 +310,7 @@ if (process.argv[2] === "--gia") {
 
 const moi = readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
 	.filter((d) => d.isDirectory() && !cu.has(d.name))
+	.filter((d) => !daGop || d.name === MIGRATION_LUOT)
 	.map((d) => d.name)
 	.sort();
 const docSql = (t) => readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
@@ -317,7 +321,7 @@ const { hong, dem, soKhoa } = soatTinh({
 });
 
 console.log(
-	`goc so sanh: ${MOC} (${TRUOC.slice(0, 8)}) · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem} · khoa ngoai viet truoc khop: ${soKhoa}/${KHOA_NGOAI_VIET_TRUOC.length}`,
+	`goc so sanh: ${MOC} (${TRUOC.slice(0, 8)})${daGop ? ` · ${MIGRATION_LUOT} da gop, do dung thu muc do` : ""} · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem} · khoa ngoai viet truoc khop: ${soKhoa}/${KHOA_NGOAI_VIET_TRUOC.length}`,
 );
 if (moi.length === 0 || dem === 0) {
 	console.log(`KHONG DO DUOC: khong co migration moi nao so voi ${MOC}`);
