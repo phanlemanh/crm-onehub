@@ -2,7 +2,6 @@
 
 import Archive from "@carbon/icons-react/es/Archive";
 import Undo from "@carbon/icons-react/es/Undo";
-import type { DealStage } from "@crm/db/enums";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
@@ -36,7 +35,7 @@ import {
 	BulkOwnerMenu,
 	reportBulk,
 } from "@/components/crm/bulk-actions";
-import { DEAL_STAGE_OPTIONS, LOSING_STAGES } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -62,7 +61,8 @@ export function DealsBulkActions({
 	const cache = useCrmCache();
 	const users = useQuery(trpc.users.list.queryOptions());
 	const reasonId = useId();
-	const [closing, setClosing] = useState<DealStage | null>(null);
+	const [closing, setClosing] = useState<string | null>(null);
+	const giaiDoan = useGiaiDoan();
 	const [reason, setReason] = useState("");
 	const [confirming, setConfirming] = useState(false);
 
@@ -196,18 +196,18 @@ export function DealsBulkActions({
 					<DropdownMenuSubTrigger>{m.bulk.changeStage}</DropdownMenuSubTrigger>
 					<DropdownMenuSubContent className="max-h-72 overflow-y-auto">
 						<DropdownMenuGroup>
-							{DEAL_STAGE_OPTIONS.map((option) => (
+							{giaiDoan.stages.map((option) => (
 								<DropdownMenuItem
-									key={option.value}
+									key={option.id}
 									onSelect={() => {
-										if (LOSING_STAGES.includes(option.value)) {
-											setClosing(option.value);
+										if (option.kind === "LOST") {
+											setClosing(option.id);
 											return;
 										}
-										setStage.mutate({ ids, stage: option.value });
+										setStage.mutate({ ids, stage: option.id });
 									}}
 								>
-									{option.label}
+									<span translate="no">{option.label}</span>
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuGroup>
@@ -233,9 +233,7 @@ export function DealsBulkActions({
 				<DialogContent>
 					<DialogHeader>
 						<DialogTitle>
-							{closing === "CLOSED_LOST"
-								? m.bulk.closeLost(deals(ids.length, locale))
-								: m.bulk.markUnqualified(deals(ids.length, locale))}
+							{m.bulk.closeLost(deals(ids.length, locale))}
 						</DialogTitle>
 						<DialogDescription>{m.bulk.sameReason}</DialogDescription>
 					</DialogHeader>

@@ -1,0 +1,128 @@
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import { db } from "@crm/db";
+import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
+import { readDealHistory } from "../agent/lib/accounts";
+import { listDeals } from "../agent/lib/lookup";
+import { dealPreamble } from "../agent/lib/preamble";
+
+const suffix = process.env.TEST_RUN_ID ?? "giai-doan-agent";
+const domain = `gd-agent-${suffix}.test`;
+const userId = `user-gda-${suffix}`;
+const tienTo = `gdtt-agent-${suffix}`;
+
+const moi = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
+const nhan = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
+const thoaThuan: { id: string; stage: string }[] = [];
+
+async function don() {
+	await db.activity.deleteMany({ where: { company: { domain } } });
+	await db.deal.deleteMany({ where: { company: { domain } } });
+	await db.company.deleteMany({ where: { domain } });
+	await db.dealStage.deleteMany({ where: { id: { startsWith: tienTo } } });
+	await db.user.deleteMany({ where: { id: userId } });
+}
+
+beforeAll(async () => {
+	await don();
+	await db.user.create({
+		data: {
+			id: userId,
+			name: "Người agent",
+			email: `${userId}@example.test`,
+			emailVerified: true,
+		},
+	});
+	const company = await db.company.create({
+		data: { name: `Công ty agent ${suffix}`, domain },
+		select: { id: true },
+	});
+	for (const kind of ["OPEN", "WON", "LOST"] as const) {
+		nhan[kind] = `Bước ${kind.toLowerCase()} ${suffix}`;
+		moi[kind] = (
+			await db.dealStage.create({
+				data: {
+					id: `${tienTo}-${kind}`,
+					label: nhan[kind],
+					kind,
+					position: 70,
+				},
+			})
+		).id;
+	}
+	for (const stage of [...Object.values(moi), GIAI_DOAN_GOC.CONTRACT_SENT]) {
+		const d = await db.deal.create({
+			data: {
+				name: `Agent ${thoaThuan.length} ${suffix}`,
+				companyId: company.id,
+				ownerId: userId,
+				stage,
+			},
+			select: { id: true },
+		});
+		thoaThuan.push({ id: d.id, stage });
+	}
+	await db.activity.create({
+		data: {
+			type: "STAGE_CHANGE",
+			subject: "Stage changed",
+			companyId: company.id,
+			dealId: thoaThuan[0]?.id,
+			createdById: userId,
+			meta: { from: GIAI_DOAN_GOC.DEMO_BOOKED, to: moi.OPEN },
+		},
+	});
+});
+
+afterAll(don);
+
+async function kindOf(id: string): Promise<LoaiGiaiDoan> {
+	return (
+		await db.dealStage.findUniqueOrThrow({
+			where: { id },
+			select: { kind: true },
+		})
+	).kind;
+}
+
+describe("giai-doan-agent", () => {
+	it("list_deals open, won, lost theo loai cua giai doan", async () => {
+		const ids = new Set(thoaThuan.map((t) => t.id));
+		let soCa = 0;
+		for (const [status, kind] of [
+			["open", "OPEN"],
+			["won", "WON"],
+			["lost", "LOST"],
+		] as const) {
+			const mong: string[] = [];
+			for (const t of thoaThuan) {
+				if ((await kindOf(t.stage)) === kind) mong.push(t.id);
+			}
+			const ra = await listDeals({ status, ownerId: userId, limit: 100 });
+			const co = ra.deals.map((d) => d.id).filter((id) => ids.has(id));
+			expect(
+				co.sort(),
+				`${status}: thieu thoa thuan o giai doan ${kind} moi`,
+			).toEqual(mong.sort());
+			soCa += 1;
+		}
+		expect(soCa).toBe(3);
+	});
+
+	it("lich su va phan mo dau in nhan, khong in id", async () => {
+		const dealId = thoaThuan[0]?.id as string;
+		const lichSu = JSON.stringify(await readDealHistory(dealId));
+		expect(lichSu.includes(nhan.OPEN), "lich su thieu nhan").toBe(true);
+		expect(lichSu.includes(moi.OPEN), "lich su in id").toBe(false);
+		const moDau = JSON.stringify(
+			await dealPreamble(dealId, { dispatched: false }),
+		);
+		expect(moDau.includes(nhan.OPEN), "mo dau thieu nhan").toBe(true);
+		expect(moDau.includes(moi.OPEN), "mo dau in id").toBe(false);
+	});
+});

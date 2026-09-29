@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration giữ id</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình 1 · Flowchart · giai-doan-thoa-thuan</p>
+    <h1>Migration giữ id cũ: bảy chuỗi enum thành bảy dòng</h1>
+    <p class="sub">Bốn bước nối tiếp trong một migration. Bước 2 chèn mỗi giai đoạn cũ thành một dòng có id đúng bằng chuỗi enum, nên mọi chỗ đã ghi chuỗi cũ vẫn trỏ đúng mà không phải viết lại.</p>
+
+    <svg viewBox="0 0 1200 504" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="56" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÌNH 1 · MIGRATION GIỮ ID · d-…-1 · d-…-2 · AC-1 · AC-14</text>
+
+      <line x1="280" y1="168" x2="328" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="600" y1="168" x2="648" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="872" y1="168" x2="920" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="464" y1="248" x2="464" y2="312" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="56" y="112" width="224" height="112" rx="6" fill="#fafafa"/>
+      <rect x="56" y="112" width="224" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="68" y="120" width="56" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="96" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 1</text>
+      <text x="168" y="168" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">enum DealStage</text>
+      <text x="168" y="188" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">(7 chuỗi)</text>
+
+      <rect x="328" y="88" width="272" height="160" rx="6" fill="#fafafa"/>
+      <rect x="328" y="88" width="272" height="160" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="340" y="96" width="56" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="368" y="108" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 2</text>
+      <text x="464" y="136" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tạo bảng <tspan font-family="'Geist Mono', monospace" font-size="11">DealStage</tspan>,</text>
+      <text x="464" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chèn 7 dòng, id = chuỗi cũ</text>
+      <rect x="372" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="396" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="420" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="444" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="476" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="508" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="532" y="172" width="20" height="20" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <line x1="372" y1="200" x2="464" y2="200" stroke="#575757" stroke-width="1"/>
+      <line x1="476" y1="200" x2="496" y2="200" stroke="#575757" stroke-width="1"/>
+      <line x1="508" y1="200" x2="552" y2="200" stroke="#575757" stroke-width="1"/>
+      <text x="464" y="224" fill="#171717" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">4 Đang mở · 1 Chốt được · 2 Không thành</text>
+
+      <rect x="648" y="112" width="224" height="112" rx="6" fill="#fafafa"/>
+      <rect x="648" y="112" width="224" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="660" y="120" width="56" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="688" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 3</text>
+      <text x="760" y="160" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace" font-size="11">Deal.stage</tspan> đổi kiểu <tspan font-family="'Geist Mono', monospace" font-size="11">text</tspan>,</text>
+      <text x="760" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đổi tên <tspan font-family="'Geist Mono', monospace" font-size="11">stageId</tspan>,</text>
+      <text x="760" y="200" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">gắn khoá ngoại</text>
+
+      <rect x="920" y="112" width="224" height="112" rx="6" fill="#fafafa"/>
+      <rect x="920" y="112" width="224" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="932" y="120" width="56" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="960" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 4</text>
+      <text x="1032" y="176" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xoá kiểu enum cũ</text>
+
+      <rect x="328" y="312" width="544" height="112" rx="6" fill="#fafafa"/>
+      <rect x="328" y="312" width="544" height="112" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="340" y="320" width="84" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="382" y="332" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIỮ NGUYÊN</text>
+      <text x="344" y="368" fill="#171717" font-size="12" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-size="11">Activity.meta {from,to}</tspan>  ·  telemetry <tspan font-family="'Geist Mono', monospace" font-size="11">deals_by_stage</tspan>  ·  răng đo hồ sơ khác</text>
+      <text x="344" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">vẫn trỏ đúng, không viết lại hàng nào</text>
+
+      <line x1="56" y1="456" x2="1144" y2="456" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="56" y="484" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="144" y="475" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="168" y="484" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bước giữ id</text>
+      <rect x="264" y="474" width="12" height="12" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="284" y="484" fill="#575757" font-size="11" font-family="'Geist', sans-serif">một dòng giai đoạn</text>
+      <line x1="424" y1="480" x2="448" y2="480" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="456" y="484" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bước kế trong cùng một migration</text>
+      <line x1="668" y1="480" x2="692" y2="480" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="700" y="484" fill="#575757" font-size="11" font-family="'Geist', sans-serif">đọc theo id cũ, không bị viết lại</text>
+    </svg>
+
+    <footer>Hình 1 · giai-doan-thoa-thuan · sổ quyết định d-…-1, d-…-2 · 2026-09-29</footer>
+  </div>
+</body>
+</html>

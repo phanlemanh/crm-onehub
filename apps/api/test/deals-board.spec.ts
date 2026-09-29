@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { type DealStage, db } from "@crm/db";
-import { CLOSED_DEAL_STAGES, OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
+import { db } from "@crm/db";
+import { GIAI_DOAN_GOC } from "@crm/db/giai-doan";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { ActivityStampService } from "../src/crm/activity-stamp.service";
 import { ConversionService } from "../src/currency/conversion.service";
@@ -35,7 +35,7 @@ const FIXTURE_DIR = join(
 	"fixtures",
 );
 
-const STAGES = [...OPEN_DEAL_STAGES, ...CLOSED_DEAL_STAGES] as DealStage[];
+const STAGES: string[] = Object.values(GIAI_DOAN_GOC);
 
 const agent = {
 	withCrmEvents: withDiscardedCrmEvents,
@@ -52,7 +52,7 @@ const deals = new DealsService(
 
 type Seed = {
 	name: string;
-	stage: DealStage;
+	stage: string;
 	owner: string;
 	cents: number | null;
 	counted: boolean;
@@ -106,7 +106,7 @@ function input(over: Partial<DealBoardInput>): DealBoardInput {
 	return dealBoardInput.parse({ sort: "name", dir: "asc", ...over });
 }
 
-function column(board: DealBoardResult, stage: DealStage) {
+function column(board: DealBoardResult, stage: string) {
 	const found = board.columns.find((c) => c.stage === stage);
 	if (!found) throw new Error(`thieu cot ${stage}`);
 	return found;
@@ -122,7 +122,7 @@ function writeFixture(name: string, board: DealBoardResult) {
 
 type Raw = {
 	name: string;
-	stage: DealStage;
+	stage: string;
 	owner: string;
 	cents: number | null;
 	kind: "counted" | "stale" | "pending" | "none";
@@ -636,7 +636,7 @@ describe("deals.board", () => {
 		const cut = await seedRaw(
 			Array.from({ length: 53 }, (_, i) => ({
 				name: `D${String(i).padStart(2, "0")}`,
-				stage: "QUALIFIED_TO_BUY" as DealStage,
+				stage: "QUALIFIED_TO_BUY",
 				owner: ownerD,
 				cents: 10_00,
 				kind: i === 0 || i === 52 ? ("pending" as const) : ("counted" as const),
@@ -653,8 +653,8 @@ describe("deals.board", () => {
 			luot: {
 				ten: string;
 				ids: Map<string, string>;
-				from: DealStage;
-				to: DealStage;
+				from: string;
+				to: string;
 			}[];
 		}[] = [
 			{

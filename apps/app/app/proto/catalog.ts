@@ -504,6 +504,27 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "giai-doan-thoa-thuan",
+		ten: "Cài đặt › Giai đoạn thoả thuận — quản trị tự cấu hình",
+		states: [
+			{
+				id: "ST-co-du-lieu",
+				nhan: "Có dữ liệu — bảy giai đoạn ban đầu, quản trị",
+			},
+			{ id: "ST-them", nhan: "Hộp thoại Thêm giai đoạn" },
+			{ id: "ST-them-tu-choi", nhan: "Thêm — máy chủ từ chối tên trùng" },
+			{ id: "ST-xoa-trong", nhan: "Xoá giai đoạn trống — hỏi lại" },
+			{
+				id: "ST-xoa-chuyen",
+				nhan: "Xoá giai đoạn còn thoả thuận — chọn đích cùng nhóm",
+			},
+			{ id: "ST-khong-quyen", nhan: "Thành viên thường — điều khiển khoá" },
+			{ id: "ST-dat-tran", nhan: "Đạt trần 20 giai đoạn — Thêm khoá" },
+			{ id: "ST-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-loi", nhan: "Lỗi tải" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

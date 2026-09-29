@@ -846,6 +846,34 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   a person or the machine, is written by `taoDeXuatTaiLieu` in
   `packages/db/src/tai-lieu-de-xuat.ts`.
 
+## Deal stages are rows, and code reads their kind
+
+`apps/api/src/giai-doan` owns the `giaiDoan.*` router. A deal stage is a row in
+`dealStage` (id, label, kind, position, archivedAt); `deal.stage` is a text foreign key
+to it. Owners and admins add, rename, reorder and delete stages in Settings → Deal
+stages.
+
+- **Behaviour follows `kind`, never a stage id.** `OPEN` · `WON` · `LOST` decide
+  whether a deal is closed, whether a reason is required, and what the Overview, the
+  OKR metric and the agent count. The rules live once, in `@crm/db/giai-doan`.
+  `GIAI_DOAN_GOC` names the seven original ids for the seed and tests only — product
+  code that branches on one of them is caught by the `khong-re-theo-ten` ruler.
+- **Every stage move goes through `DealsService.chuyenGiaiDoanTrongTx`**: one
+  `STAGE_CHANGE` activity and one `deal.stage.changed` event per deal, inside the
+  caller's transaction. `setStage`, `bulkSetStage` and a delete that moves deals all
+  use it.
+- **Delete is archive.** `archivedAt` is set and the row stays, so history keeps its
+  label. A stage that still has deals — archived deals included — is refused unless
+  `moveTo` names a live stage of the same kind; the move and the archive are one
+  transaction.
+- **Invariants run under `FOR UPDATE` on the live stages**: at least one live stage
+  per kind, labels unique case-insensitively after trimming, at most
+  `GIAI_DOAN.tran.tong` live stages, and `reorder` must list exactly the live stages
+  of one kind. The kind of a stage never changes.
+- **The timeline carries labels.** `activities.timeline` resolves the ids in a
+  `STAGE_CHANGE` meta, archived stages included, and returns `stageChange`; screens
+  print it and never look labels up themselves.
+
 ## Kho tài liệu: tìm, nhắc tới, sức khoẻ
 
 `apps/api/src/tai-lieu/tai-lieu-tim.service.ts` owns `taiLieu.tim`, `taiLieu.nhacToi`,

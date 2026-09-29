@@ -5,7 +5,6 @@ import {
 	Prisma as PrismaNamespace,
 	type RecordSource,
 } from "@crm/db";
-import { OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import {
 	BadRequestException,
@@ -110,7 +109,7 @@ export class CompaniesService {
 					_count: {
 						select: {
 							contacts: true,
-							deals: { where: { stage: { in: [...OPEN_DEAL_STAGES] } } },
+							deals: { where: { giaiDoan: { kind: "OPEN" } } },
 						},
 					},
 					lastActivityAt: true,
@@ -213,7 +212,11 @@ export class CompaniesService {
 					},
 				},
 				deals: {
-					orderBy: [{ stage: "asc" }, { expectedCloseDate: "asc" }],
+					orderBy: [
+						{ giaiDoan: { kind: "asc" } },
+						{ giaiDoan: { position: "asc" } },
+						{ expectedCloseDate: "asc" },
+					],
 					select: {
 						id: true,
 						name: true,

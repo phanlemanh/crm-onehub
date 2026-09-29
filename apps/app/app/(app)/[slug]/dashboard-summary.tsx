@@ -38,7 +38,7 @@ import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
-import { dealStageColor } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { nhacMessages } from "@/lib/messages/nhac";
 import {
@@ -112,6 +112,7 @@ function cot(m: TongQuanMessages) {
 }
 
 export function DashboardSummary() {
+	const giaiDoan = useGiaiDoan();
 	const locale = useLocale();
 	const m = tongQuanMessages(locale);
 	const COT = cot(m);
@@ -260,7 +261,7 @@ export function DashboardSummary() {
 															100
 														: 0
 												}
-												color={dealStageColor(deal.stage)}
+												color={giaiDoan.mau(deal.stage)}
 											/>
 										</TableCell>
 										<TableCell className={`${CELL} text-right tabular-nums`}>

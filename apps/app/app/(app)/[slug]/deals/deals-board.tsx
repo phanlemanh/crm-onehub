@@ -19,7 +19,7 @@ import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { LocalDay } from "@/components/local-date-time";
-import { dealStageLabel } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { type DealMessages, dealMessages } from "@/lib/messages/deals";
 import { useTRPC } from "@/lib/trpc/client";
 import type { DealBoardQueryInput } from "./deals-search-params";
@@ -56,6 +56,7 @@ export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 		placeholderData: (previous) => previous,
 	});
 	const { columns, move, pendingIds } = useDealBoardMove(board.data);
+	const giaiDoan = useGiaiDoan();
 
 	if (board.isError) {
 		return (
@@ -90,14 +91,14 @@ export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 	);
 	const stageName = (id: string | number) => {
 		const value = String(id);
-		if (isDealStage(board.data, value)) return dealStageLabel(value);
+		if (isDealStage(board.data, value)) return giaiDoan.label(value);
 		const card = byId.get(value);
-		return card ? dealStageLabel(card.stage) : value;
+		return card ? giaiDoan.label(card.stage) : value;
 	};
 
 	const boardColumns: BoardColumn[] = columns.map((column) => ({
 		id: column.stage,
-		label: dealStageLabel(column.stage),
+		label: giaiDoan.label(column.stage),
 		count: column.count,
 		summary: columnSummary(column, currency, locale, m),
 		cards: column.cards.map((card) => ({

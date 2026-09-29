@@ -123,13 +123,24 @@ _Avoid_: đồng tiền mặc định, default currency, tiền tệ gốc
 Vì sao: «mặc định» chỉ nói chỗ điền sẵn của một ô, không nói vai của thiết lập; người
 đọc một lời báo lỗi phải tìm được đúng thiết lập ấy ở Cài đặt, nơi nó mang tên này.
 
-**Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác. **CHƯA CHỐT
-NGHĨA.** Dữ liệu đang mang bảy bước của một phễu bán phần mềm — `DEMO_BOOKED`,
-`QUALIFIED_TO_BUY`, `CLOSED_WON`… — thừa kế từ kho gốc và không mô tả quy trình
-hợp tác của OneHub.
-_Avoid_: đã đặt lịch demo, đủ điều kiện để mua
+**Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác, trong một bộ
+giai đoạn chung cho mọi thoả thuận mà chủ sở hữu và quản trị viên tự thêm, đổi
+tên, sắp xếp và xoá ở Cài đặt › Giai đoạn thoả thuận. Mỗi giai đoạn thuộc một
+**loại giai đoạn**. Bộ ban đầu là bảy bước thừa kế từ kho gốc — `DEMO_BOOKED`,
+`QUALIFIED_TO_BUY`, `CLOSED_WON`… — giữ nhãn tiếng Anh cho tới khi quản trị viên
+đặt lại theo quy trình hợp tác thật. Chốt 2026-09-29 (vòng `giai-doan-thoa-thuan`).
+_Avoid_: đã đặt lịch demo, đủ điều kiện để mua, pipeline stage
 Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
-người đọc hiểu được.
+người đọc hiểu được — nên máy không dịch bảy nhãn cũ, người đặt tên thật.
+
+**Loại giai đoạn**: nhóm quyết định một giai đoạn thoả thuận hành xử ra sao —
+**Đang mở** (chưa tới kết cục) · **Chốt được** (hai bên bắt tay; tính vào «chốt
+được» ở Tổng quan và OKR) · **Không thành** (thôi không theo nữa; bắt ghi lý do).
+Loại chọn lúc tạo giai đoạn và không đổi được. Tỷ lệ chốt = Chốt được ÷ (Chốt được
++ Không thành). Chốt 2026-09-29.
+_Avoid_: thắng, thua, closed won, closed lost, trạng thái
+Vì sao: ba tên lấy đúng chữ của mục **Chốt** và **Đang mở** đã khoá; «thắng/thua»
+đọc quan hệ hợp tác thành một trận đấu.
 
 **Kế hoạch 30 ngày**: kế hoạch đưa một công ty mới ký vào guồng trong ba mươi
 ngày đầu, dựng từ một khuôn theo loại đối tác. Treo vào một công ty; mở như một

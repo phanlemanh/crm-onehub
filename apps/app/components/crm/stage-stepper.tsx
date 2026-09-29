@@ -1,27 +1,24 @@
 "use client";
 
-import { DealStage } from "@crm/db/enums";
-import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { DealStageIndicator } from "@/components/crm/deal-stage";
-import { dealStageLabel, isClosedStage, OPEN_STAGES } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-
-const RAIL = [...OPEN_STAGES, DealStage.CLOSED_WON] as readonly DealStage[];
 
 export function StageStepper({
 	dealId,
 	stage,
 }: {
 	dealId: string;
-	stage: DealStage;
+	stage: string;
 }) {
 	const trpc = useTRPC();
+	const giaiDoan = useGiaiDoan();
 	const cache = useCrmCache();
 	const m = crmMessages(useLocale());
 
@@ -35,8 +32,12 @@ export function StageStepper({
 		}),
 	);
 
-	const exited = isClosedStage(stage) && stage !== DealStage.CLOSED_WON;
-	const steps = exited ? OPEN_STAGES : RAIL;
+	const mo = giaiDoan.open.map((g) => g.id);
+	const chot = giaiDoan.stages.filter((g) => g.kind === "WON").map((g) => g.id);
+	const hienChot = chot.includes(stage) ? stage : chot[0];
+	const rail = hienChot ? [...mo, hienChot] : mo;
+	const exited = giaiDoan.laThua(stage);
+	const steps = exited ? mo : rail;
 	const currentIndex = steps.indexOf(stage);
 
 	return (
@@ -60,10 +61,10 @@ export function StageStepper({
 							)}
 						>
 							<span className="block truncate">
-								{current && option === DealStage.CLOSED_WON ? (
+								{current && chot.includes(option) ? (
 									<DealStageIndicator stage={stage} className="text-xs" />
 								) : (
-									<ForeignText lang="en">{dealStageLabel(option)}</ForeignText>
+									<span translate="no">{giaiDoan.label(option)}</span>
 								)}
 							</span>
 						</button>

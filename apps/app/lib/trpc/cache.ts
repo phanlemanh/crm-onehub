@@ -42,6 +42,7 @@ export type CrmCache = {
 	microsoft(options?: Options): Promise<void>;
 	settings(options?: Options): Promise<void>;
 	currency(options?: Options): Promise<void>;
+	giaiDoan(options?: Options): Promise<void>;
 	workspace(options?: Options): Promise<void>;
 	slack(options?: Options): Promise<void>;
 	zalo(options?: Options): Promise<void>;
@@ -216,6 +217,7 @@ export function useCrmCache(): CrmCache {
 					...activityKeys(),
 					trpc.dashboard.summary.queryKey(),
 					trpc.currency.settings.queryKey(),
+					trpc.giaiDoan.list.queryKey(),
 				],
 				options,
 			),
@@ -400,6 +402,20 @@ export function useCrmCache(): CrmCache {
 					trpc.deals.byId.queryKey(),
 					trpc.companies.byId.queryKey(),
 					trpc.dashboard.summary.queryKey(),
+				],
+				options,
+			),
+
+		giaiDoan: (options) =>
+			run(
+				[trpc.giaiDoan.list.queryKey()],
+				[
+					...listKeys(),
+					trpc.deals.byId.queryKey(),
+					trpc.companies.byId.queryKey(),
+					trpc.contacts.byId.queryKey(),
+					trpc.dashboard.summary.queryKey(),
+					...activityKeys(),
 				],
 				options,
 			),
