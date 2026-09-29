@@ -17,6 +17,16 @@ const ts = createRequire(import.meta.url)("typescript");
 const THU_MUC = dirname(fileURLToPath(import.meta.url));
 const GOC = join(THU_MUC, "..", "..", "..");
 const DUONG_DOC = join(THU_MUC, "duong-doc-okr.json");
+const { z } = createRequire(join(GOC, "packages/validation/package.json"))(
+	"zod",
+);
+const dongDuongDoc = z.array(
+	z.object({
+		tep: z.string().min(1),
+		thuTuc: z.array(z.string().regex(/^\w+\.\w+$/)).min(1),
+		lyDo: z.string().trim().min(1),
+	}),
+);
 
 const GOC_SOI = ["apps/api/src", "packages/db/src", "apps/agent/agent/lib"];
 const GOC_API = "apps/api/src/";
@@ -636,21 +646,13 @@ function docDuongDoc() {
 	} catch (e) {
 		return { loi: `duong-doc-okr.json khong doc duoc: ${e.message}`, dong: [] };
 	}
-	const hop = (d) =>
-		d !== null &&
-		typeof d === "object" &&
-		typeof d.tep === "string" &&
-		typeof d.lyDo === "string" &&
-		d.lyDo.trim().length > 0 &&
-		Array.isArray(d.thuTuc) &&
-		d.thuTuc.length > 0 &&
-		d.thuTuc.every((t) => typeof t === "string" && /^\w+\.\w+$/.test(t));
-	if (!Array.isArray(tho) || !tho.every(hop))
+	const doc = dongDuongDoc.safeParse(tho);
+	if (!doc.success)
 		return {
-			loi: "duong-doc-okr.json phai la mang { tep, thuTuc: string[] (>=1), lyDo }",
+			loi: `duong-doc-okr.json phai la mang { tep, thuTuc: string[] (>=1), lyDo }: ${doc.error.message}`,
 			dong: [],
 		};
-	return { loi: null, dong: tho };
+	return { loi: null, dong: doc.data };
 }
 
 function tepCanSoi(thay, them) {
