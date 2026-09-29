@@ -594,8 +594,11 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `OkrCheckIn` row cannot be deleted (`krDaCapNhat`) — only edited; a KR another
   objective aligns to (`OkrAlignment.targetKeyResultId`) is refused the same way
   (`krDangLaDich`), and so is a KR with a target change (`okrDoiDich`) or a score row
-  (`okrDiemKr`). The checks run inside the same lock as the delete, so a
-  check-in written mid-transaction cannot race past them.
+  (`okrDiemKr`), evidence (`okrBangChung`, `krCoBangChung`) or a recognition tied to
+  it (`okrGhiNhan`, `krCoGhiNhan`). The checks run inside the same lock as the
+  delete, so a check-in written mid-transaction cannot race past them. The KR's
+  việc and sáng kiến rows (`okrViecKr`) go in the same transaction, one `go-viec`
+  trail row each, before the `xoa-kr` row.
 - **A KR's number has a source, and the source locks at publication.**
   `okrKeyResult.source` is the effective source (`tay` · `crm` · `api` · `bang-tinh`) —
   the one that drives `currentValue` and progress. A machine source's settings are one
@@ -719,9 +722,72 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   idempotent — `skipDuplicates` on repeat-follow, a no-op unfollow writes no trail
   row. Every comment and follow toggle still writes its own `OkrTrail` row via the
   shared `vet()`, never an `Activity`.
+- **Việc (KR) are rows the unit writes under a KR; one table holds them and the
+  sáng kiến.** `OkrCanhKrService` owns `okrViecKr`: `loai: "viec"` is a hand-written
+  action (`tieuDe` 2–200 characters per `OKR_CANH_KR`, a `nguoiLamUserId` who must still be a member,
+  an optional `hanNgay`, `xongLuc` set when done), `loai: "chien-dich"` and
+  `"ke-hoach"` are sáng kiến. `themViec`, `suaViec` and `goViec` need whoever edits
+  the KR (`OkrAccessService.ghiDuocKr`); `danhDauViec` also lets the việc's own người
+  làm mark it done or not done — never edit or remove it. Every write is phase-locked
+  (`assertKyGhiDuoc`: nothing in `cham-diem`, `da-dong`, or on a dropped objective)
+  and leaves one trail row (`them-viec`, `sua-viec`, `xong-viec`, `go-viec`).
+  `okr.canhKr` returns the KR's rows in `position` order with a `quyen` block
+  (`suaDuoc`, `ganDuoc`) and `khoa`, so the sheet asks the server what it may do;
+  `okr.objective` adds each KR's `soViec` (`xong/tong`, `loai: "viec"` only),
+  `soSangKien` and `coBangChung` for the KR table's «Việc» column.
+- **A sáng kiến stores only the source record's id, and one function decides who
+  sees what it points at.** `ganSangKien` (a KR editor whose role reads partner data)
+  writes `campaignId` or `planId` and never copies a name; `@@unique([keyResultId,
+  campaignId])` / `([keyResultId, planId])` refuse the same record twice, an unknown
+  id is 404. Every read resolves the live record: name, status (`chua-chay` ·
+  `dang-chay` · `da-dong` · `da-luu-tru` when the plan's company is archived ·
+  `da-xoa` when the foreign key went `SET NULL`). **`lienKetChoVai` in
+  `apps/api/src/okr/canh-kr.ts` is the only place that turns a row into what a
+  caller sees**: for the «chỉ OKR» role (no `doi-tac` scope) it returns `{ loai,
+  coQuyen: false }` — no name, id, status or owner — and the trail snapshot of a
+  `gan-sang-kien` / `go-viec` row goes through the same function
+  (`vetSangKienChoVai`). A new endpoint that returns sáng kiến rows must call it;
+  `soi-ma.mjs --ca thiet-ke` counts return sites against calls and fails on a gap.
+  The pickers use the partner routers (`onboarding.listPlans`, `campaigns.list`),
+  never a read path inside `okr.*`.
+- **Bằng chứng is a link on a finished milestone KR.** `themBangChung` takes an
+  `http(s)` URL up to 2000 characters (`duongDanBangChung`, `javascript:`/`data:`/
+  empty refused) and a note up to 300 (`OKR_CANH_KR`), only on a `moc` KR whose `currentValue` is 1,
+  by a KR editor; `goBangChung` removes one. Both write a trail row
+  (`dinh-bang-chung`, `go-bang-chung`). `guiCapNhat` accepts an optional
+  `bangChung` per item and writes it through the same `ghiBangChung` inside the
+  check-in transaction, so a bad link refuses the whole submit and the KR does not
+  move. Marking a milestone done never requires evidence.
+- **Ghi nhận is a thank-you on a published objective, readable in the Trao đổi tab
+  and nowhere else.** `guiGhiNhan` (any member, the «chỉ OKR» role included) takes
+  1–5 recipients who are still members and are not the sender, a message of 1–500
+  characters and an optional KR of that same objective; draft and dropped objectives
+  refuse it, scoring and closed cycles do not. `goGhiNhan` is the sender's or an
+  admin's. `okr.comments` returns `dong`, comments and recognitions merged by time on
+  the server, so the screen never merges two lists. Recipients get one
+  `okr-ghi-nhan` reminder each (see `docs/agent.md`); nothing counts or ranks
+  recognitions per person — `soi-ma.mjs --ca dem-theo-nguoi` fails on a `groupBy`,
+  `_count` or raw `GROUP BY "userId"` over `okrGhiNhanNhan`.
+- **Mẫu OKR are admin-authored templates; the objective remembers which one it came
+  from.** `OkrMauService`: `luuMau` creates or edits (`@crm/validation/okr-mau`:
+  name, `cap` bộ phận · phòng ban · cá nhân, `donViIds` of that level or empty for
+  all, `noiDung` = sentence, kind and 1–`OKR_MAU.krToiDa` KRs each checked with
+  `kiemSoTheoKieu`; the sentence and each KR name reuse `mucTieuInput.shape.title`
+  and `krInput.shape.title`, so a template that saves is one `taoTuMau` accepts),
+  `luuTruMau` / `khoiPhucMau` archive and restore; each is
+  admin-only and leaves a `sua-mau` trail row. `okr.mau` reads them: **with a `cap`
+  or `donViId` filter every role — admins included — gets only live templates of
+  that level that apply to that unit** (the «Bắt đầu từ mẫu» picker); an admin
+  without a filter gets every template, archived ones too (the settings list); any
+  other role without a filter gets the live ones (d-13). `taoTuMau` builds a draft
+  objective and all its KRs in one transaction through the same rules as a hand-made
+  one (`kiemTranKr` shared with `createKeyResult`), refuses an archived template, a
+  template of another level or unit, and a missing or wrong-kind number without
+  writing a row, and writes one `okrMucTieuTuMau` row pointing at the template.
+  Editing a template later never touches objectives already made from it.
 - **`okr.thanhVien`** lists every workspace member (`id`, `name`, `email`) for the
-  mention and transfer pickers — no role filter, since being mentionable is
-  separate from who can edit.
+  mention, transfer and KR action-assignee pickers — no role filter, since being
+  mentionable is separate from who can edit.
 - **`okr.viecCuaToi` is one call for the caller's own OKR row.** `viec` is the
   caller's pending OKR items, filtered from the same `viecCanNhac` queue plan items
   share, with `cuaSo: "truc-tiep"` (events of the last 24 hours up to now, not the
@@ -733,10 +799,52 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   (`canManageOnboarding`), a separate action from the 30-day work transfer. Both
   share `dieuKienChuyen(fromUserId)`: a KR or objective only moves while its cycle
   is still writable (`PHA_GHI_DUOC`, i.e. not `da-bo`), and a personal objective
-  (`level: "ca-nhan"`) owned by the person leaving never moves. `transferWork`
-  re-points `ownerUserId`, drops the leaver from every `OkrParticipant` row, and
-  writes one `chuyen-viec` `OkrTrail` row per KR and objective moved;
-  `transferPreview` returns the same `{kr, mucTieu}` counts without writing anything.
+  (`level: "ca-nhan"`) owned by the person leaving never moves. The leaver's open
+  việc (`okrViecKr.nguoiLamUserId`, `xongLuc` null) on a KR under the same rule move
+  too; a việc already done keeps its người làm. `transferWork` re-points
+  `ownerUserId` and `nguoiLamUserId`, drops the leaver from every `OkrParticipant`
+  row, and writes one `chuyen-viec` `OkrTrail` row per KR, objective and việc moved;
+  `transferPreview` returns the same `{kr, mucTieu, viec}` counts without writing
+  anything.
+
+## Kho tài liệu: nguồn
+
+`apps/api/src/tai-lieu/tai-lieu-nguon.*` owns the `taiLieuNguon.*` router: `trangThai`,
+`xinCho`, `nhan`, `list`, `get`, `taiVe`, `soanLai`. It carries `PhamViChungMiddleware`.
+
+- **The browser uploads, the API only signs and receives.** `xinCho` returns a signed PUT
+  URL on a private Vercel Blob store (`packages/db/src/blob-nguon.ts`); the file never
+  passes through Nest. `nhan` reads the stored bytes back, recognises the kind from magic
+  bytes (`kho-nguon.ts`), computes `sha256` itself, and writes the `TaiLieuNguon` row and one
+  `AgentTask` of kind `soan-tu-nguon` in one transaction. It never parses the document:
+  reading text, deciding what the page says and drafting belong to the agent.
+- **`nhan` only accepts a pathname issued to this caller.** `xinCho` returns a `phieu`: an HMAC over
+  user, pathname and expiry (`phieu-nguon.ts`, key derived from `BETTER_AUTH_SECRET`, one hour).
+  `nhan` checks it, and refuses a pathname that already belongs to a `TaiLieuNguon`, before it reads
+  or deletes anything — knowing a source's pathname is not enough to delete its file (AC-16).
+  The destination is validated first; then one transaction takes an advisory lock on the pathname,
+  re-checks, reads the file and writes the row, using only `tx` — never a second pooled connection,
+  which is what hung the API under ten concurrent uploads. Only a known rejection deletes the file.
+- **A rejected or duplicate upload deletes its blob.** Same bytes as an existing source
+  answer `{ trung: true, nguonId }` of the old row; the unique index on `sha256` catches
+  the race the pre-check misses.
+- **No `KHO_TAI_LIEU_BLOB_TOKEN` switches the area off, never throws.** The store is its
+  own private one, apart from the public store the logos use, and there is no fallback to
+  the logos' variable (`docs/environment.md`). `trangThai` answers
+  `{ bat: false }`, the screen locks «Tải nguồn lên», and `xinCho`, `nhan`, `taiVe` answer
+  `PRECONDITION_FAILED` with `NGUON.thongDiep.tat`. `DomainErrorMiddleware` maps 412 to
+  `PRECONDITION_FAILED`.
+- **Who sees a source is one function** (`quyen.ts`): the uploader, the target page's
+  owner, `owner` and `admin` always; anyone else once a proposal from it has been approved
+  into a version — any version, including one since replaced.
+  Everyone else gets `NOT_FOUND`, identical to a missing id. `taiVe` signs a GET for at
+  most five minutes.
+- **Approving a machine draft needs the numbers checked.** `taiLieu.approve` on a proposal
+  with `nguonId` recomputes `soMoi(noiDung, banGoc)` and refuses when `daDoiChieu` is
+  smaller. `taiLieu.propose` with `tuDeXuatId` copies `nguonId` and `trichDoan` from the
+  machine draft, so an edited draft still traces back to its source. Every proposal, from
+  a person or the machine, is written by `taoDeXuatTaiLieu` in
+  `packages/db/src/tai-lieu-de-xuat.ts`.
 
 ## Money
 

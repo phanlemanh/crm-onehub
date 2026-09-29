@@ -56,3 +56,32 @@ export function dieuKienThay(nguoi: NguoiGoi): Prisma.TaiLieuTrangWhereInput {
 		],
 	};
 }
+
+export function dieuKienThayNguon(
+	nguoi: NguoiGoi,
+): Prisma.TaiLieuNguonWhereInput {
+	if (laQuanTri(nguoi.role)) return {};
+	return {
+		OR: [
+			{ taiBoiId: nguoi.id },
+			{ trang: { chuTrangId: nguoi.id } },
+			{ deXuat: { some: { phienBan: { isNot: null } } } },
+		],
+	};
+}
+
+export function dieuKienSoanLai(
+	nguoi: NguoiGoi,
+): Prisma.TaiLieuNguonWhereInput {
+	if (laQuanTri(nguoi.role)) return {};
+	return {
+		OR: [{ taiBoiId: nguoi.id }, { trang: { chuTrangId: nguoi.id } }],
+	};
+}
+
+export function soanLaiDuoc(
+	nguoi: NguoiGoi,
+	nguon: { taiBoiId: string; trang: TrangQuyen },
+): boolean {
+	return nguon.taiBoiId === nguoi.id || duyetDuoc(nguoi, nguon.trang);
+}

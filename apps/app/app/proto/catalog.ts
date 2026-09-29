@@ -52,6 +52,17 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "may-soan-de-xuat",
+		ten: "Kho tài liệu lượt 2 — tải nguồn lên, duyệt bản máy soạn",
+		states: [
+			{ id: "ST-tai-nguon", nhan: "Tải nguồn lên" },
+			{
+				id: "ST-duyet-ban-may-soan",
+				nhan: "Duyệt bản máy soạn: nguồn trước, đối chiếu từng số",
+			},
+		],
+	},
+	{
 		slug: "doi-ten-onehub-center",
 		ten: "OneHub Center — cột trái đăng nhập hướng A",
 		states: [
@@ -427,6 +438,62 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-muctieu-doitrong", nhan: "Sheet mục tiêu — thiếu đối trọng" },
 			{ id: "ST-dai-ra", nhan: "Khu OKR — dải rà giữa kỳ" },
 			{ id: "ST-toancanh-xuat", nhan: "Toàn cảnh — kỳ đã đóng, nút Xuất" },
+		],
+	},
+	{
+		slug: "canh-kr-okr",
+		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
+		states: [
+			{
+				id: "ST-bangkr-co-viec",
+				nhan: "Bảng KR — cột Việc, dấu có bằng chứng",
+			},
+			{ id: "ST-khungkr-co-viec", nhan: "Khung KR — việc và một sáng kiến" },
+			{ id: "ST-khungkr-them", nhan: "Khung KR — dòng nhập việc" },
+			{ id: "ST-khungkr-gan", nhan: "Khung KR — gắn kế hoạch 30 ngày" },
+			{ id: "ST-khungkr-rong", nhan: "Khung KR — chưa có gì" },
+			{ id: "ST-khungkr-dang-tai", nhan: "Khung KR — đang tải" },
+			{ id: "ST-khungkr-loi", nhan: "Khung KR — lỗi" },
+			{
+				id: "ST-khungkr-chi-okr",
+				nhan: "Khung KR — vai «chỉ OKR» thấy sáng kiến không tên",
+			},
+			{
+				id: "ST-khungkr-goc-mat",
+				nhan: "Khung KR — bản ghi gốc lưu trữ, đã xoá; người làm đã rời",
+			},
+			{ id: "ST-khungkr-khoa", nhan: "Khung KR — kỳ chấm điểm, chỉ đọc" },
+			{ id: "ST-bangchung-co", nhan: "Bằng chứng — KR mốc có một bằng chứng" },
+			{ id: "ST-bangchung-rong", nhan: "Bằng chứng — chưa có" },
+			{ id: "ST-bangchung-sai", nhan: "Bằng chứng — đường dẫn sai" },
+			{
+				id: "ST-capnhat-moc",
+				nhan: "Cập nhật KR mốc — ô bằng chứng khi chọn Xong",
+			},
+			{ id: "ST-traodoi-ghinhan", nhan: "Trao đổi — ghi nhận xen bình luận" },
+			{
+				id: "ST-traodoi-soan-ghinhan",
+				nhan: "Trao đổi — soạn ghi nhận (vai «chỉ OKR»)",
+			},
+			{ id: "ST-mau-danh-sach", nhan: "Cài đặt — danh sách mẫu OKR" },
+			{ id: "ST-mau-rong", nhan: "Cài đặt — chưa có mẫu" },
+			{
+				id: "ST-mau-khong-quyen",
+				nhan: "Cài đặt — thành viên thường, điều khiển khoá",
+			},
+			{
+				id: "ST-mau-sheet",
+				nhan: "Cài đặt — sheet thêm mẫu, KR mẫu trái kiểu",
+			},
+			{ id: "ST-datmt-chon-mau", nhan: "Đặt mục tiêu — bắt đầu từ mẫu" },
+			{
+				id: "ST-datmt-tu-mau",
+				nhan: "Đặt mục tiêu — form điền sẵn từ mẫu, thiếu số",
+			},
+			{
+				id: "ST-canh-chong",
+				nhan: "Cảnh ngữ cảnh — khung KR chồng lên khung mục tiêu",
+			},
 		],
 	},
 ];

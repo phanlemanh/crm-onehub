@@ -1756,5 +1756,368 @@
 			"donVi": "kho-van",
 			"trangThai": "da-bo"
 		}
-	]
+	],
+	"canhKr": {
+		"viec": [
+			{
+				"ma": "kd-bac-danh-sach",
+				"kr": "q4-kd-bac-1-k2",
+				"tieuDe": "Lập danh sách 80 chuỗi bán lẻ cần hẹn gặp",
+				"nguoiLam": "hoang-yen-nhi",
+				"hanTuan": 2,
+				"xongTuan": 2
+			},
+			{
+				"ma": "kd-bac-mau-bao-gia",
+				"kr": "q4-kd-bac-1-k3",
+				"tieuDe": "Chuẩn hoá mẫu báo giá cho bán lẻ",
+				"nguoiLam": "ngo-van-toan",
+				"hanTuan": 8
+			},
+			{
+				"ma": "kd-bac-goi-lai",
+				"kr": "q4-kd-bac-2-k1",
+				"tieuDe": "Gọi lại 20 đối tác đã xin báo giá quý 3",
+				"nguoiLam": "do-minh-khoa",
+				"hanTuan": 5
+			},
+			{
+				"ma": "kd-nam-khao-sat",
+				"kr": "q4-kd-nam-1-k1",
+				"tieuDe": "Khảo sát nhu cầu kho lạnh của 15 đối tác",
+				"nguoiLam": "truong-bao-ngoc",
+				"hanTuan": 3,
+				"xongTuan": 3
+			},
+			{
+				"ma": "kd-nam-gia-thue",
+				"kr": "q4-kd-nam-1-k3",
+				"tieuDe": "Đàm phán giá thuê kho lạnh theo mùa",
+				"nguoiLam": "duong-tuan-kiet",
+				"hanTuan": 9
+			},
+			{
+				"ma": "cham-soc-ca-toi",
+				"kr": "q4-cham-soc-1-k2",
+				"tieuDe": "Xếp thêm một người trực ca tối",
+				"nguoiLam": "lam-quynh-anh",
+				"hanTuan": 4,
+				"xongTuan": 4
+			},
+			{
+				"ma": "cham-soc-khao-sat",
+				"kr": "q4-cham-soc-1-k1",
+				"tieuDe": "Gửi khảo sát hài lòng sau mỗi ca đóng",
+				"nguoiLam": "cao-thanh-van",
+				"hanTuan": 8
+			},
+			{
+				"ma": "cham-soc-quy-trinh",
+				"kr": "q4-cham-soc-2-k2",
+				"tieuDe": "Viết nháp quy trình xử lý khiếu nại",
+				"nguoiLam": "vu-thu-ha",
+				"hanTuan": 3,
+				"xongTuan": 2
+			},
+			{
+				"ma": "marketing-anh-kho",
+				"kr": "q4-marketing-2-k1",
+				"tieuDe": "Chụp ảnh kho lạnh cho bộ tài liệu",
+				"nguoiLam": "luu-phuong-thao",
+				"hanTuan": 3,
+				"xongTuan": 3
+			},
+			{
+				"ma": "marketing-trang-gioi-thieu",
+				"kr": "q4-marketing-1-k1",
+				"tieuDe": "Viết lại trang giới thiệu dịch vụ kho lạnh",
+				"nguoiLam": "ta-my-linh",
+				"hanTuan": 7
+			},
+			{
+				"ma": "marketing-case-study",
+				"kr": "q4-marketing-2-k2",
+				"tieuDe": "Phỏng vấn hai đối tác hàng lạnh cho case study",
+				"nguoiLam": "kieu-anh-tuan",
+				"hanTuan": 8
+			},
+			{
+				"ma": "kho-van-bao-gia",
+				"kr": "q4-kho-van-1-k3",
+				"tieuDe": "Xin báo giá ba kho tạm ở Bình Dương",
+				"nguoiLam": "quach-minh-tri",
+				"hanTuan": 2,
+				"xongTuan": 2
+			},
+			{
+				"ma": "kho-van-khu-soan",
+				"kr": "q4-kho-van-1-k2",
+				"tieuDe": "Sắp lại khu soạn hàng theo tần suất xuất",
+				"nguoiLam": "to-thi-hong",
+				"hanTuan": 7
+			},
+			{
+				"ma": "dieu-phoi-tai-xe-cu",
+				"kr": "q4-dieu-phoi-2-k2",
+				"tieuDe": "Liên hệ lại 10 tài xế đã nghỉ mùa trước",
+				"nguoiLam": "au-gia-bao",
+				"hanTuan": 4,
+				"xongTuan": 4
+			},
+			{
+				"ma": "dieu-phoi-lich-truc",
+				"kr": "q4-dieu-phoi-2-k1",
+				"tieuDe": "Lập lịch trực tài xế dự phòng cuối tuần",
+				"nguoiLam": "khuc-dinh-nam",
+				"hanTuan": 8
+			},
+			{
+				"ma": "san-pham-doi-soat",
+				"kr": "q4-san-pham-1-k1",
+				"tieuDe": "Đối soát trạng thái đơn của kho Bình Dương",
+				"nguoiLam": "vo-duc-anh",
+				"hanTuan": 3,
+				"xongTuan": 3
+			},
+			{
+				"ma": "san-pham-chon-doi-tac",
+				"kr": "q4-san-pham-1-k2",
+				"tieuDe": "Chọn 5 đối tác dùng thử ứng dụng",
+				"nguoiLam": "bui-quang-huy",
+				"hanTuan": 9
+			},
+			{
+				"ma": "san-pham-tra-cuu",
+				"kr": "q4-san-pham-2-k2",
+				"tieuDe": "Thêm tra cứu đơn qua tin nhắn",
+				"nguoiLam": "dang-ngoc-mai",
+				"hanTuan": 10
+			},
+			{
+				"ma": "tai-chinh-nhac-no",
+				"kr": "q4-tai-chinh-1-k1",
+				"tieuDe": "Gửi thư nhắc 12 khách nợ quá hạn",
+				"nguoiLam": "giang-hai-yen",
+				"hanTuan": 2,
+				"xongTuan": 2
+			},
+			{
+				"ma": "tai-chinh-but-toan",
+				"kr": "q4-tai-chinh-1-k2",
+				"tieuDe": "Tự động hoá bút toán phân bổ cuối tháng",
+				"nguoiLam": "thai-minh-chau",
+				"hanTuan": 8
+			},
+			{
+				"ma": "nhan-su-tin-tuyen",
+				"kr": "q4-nhan-su-1-k1",
+				"tieuDe": "Đăng tin tuyển thời vụ trên ba kênh",
+				"nguoiLam": "vuong-duc-tai",
+				"hanTuan": 1,
+				"xongTuan": 1
+			},
+			{
+				"ma": "nhan-su-ghep-cap",
+				"kr": "q4-nhan-su-2-k1",
+				"tieuDe": "Ghép cặp người kèm cho người mới tháng 11",
+				"nguoiLam": "ninh-thao-vy",
+				"hanTuan": 7
+			},
+			{
+				"ma": "phap-che-gom-cau-hoi",
+				"kr": "q4-phap-che-2-k1",
+				"tieuDe": "Gom câu hỏi pháp lý từ kinh doanh quý 3",
+				"nguoiLam": "lu-quoc-viet",
+				"hanTuan": 3,
+				"xongTuan": 3
+			},
+			{
+				"ma": "phap-che-mau-thue-kho",
+				"kr": "q4-phap-che-1-k2",
+				"tieuDe": "Rà mẫu hợp đồng thuê kho cho mùa Tết",
+				"nguoiLam": "an-khanh-linh",
+				"hanTuan": 6
+			}
+		],
+		"bangChung": [
+			{
+				"ma": "bien-ban-chay-thu-kho-lanh",
+				"kr": "q3-kd-nam-k3",
+				"url": "https://docs.mau.onehub.test/bien-ban-chay-thu-kho-lanh",
+				"ghiChu": "Biên bản chạy thử kho lạnh Bình Dương, có chữ ký của kho"
+			},
+			{
+				"ma": "tai-lieu-hoi-nhap-kho",
+				"kr": "q3-nhan-su-k1",
+				"url": "https://docs.mau.onehub.test/tai-lieu-hoi-nhap-kho",
+				"ghiChu": "Bộ tài liệu hội nhập bản cuối"
+			},
+			{
+				"ma": "mau-hop-dong-chuan",
+				"kr": "q3-phap-che-k2",
+				"url": "https://docs.mau.onehub.test/mau-hop-dong-chuan",
+				"ghiChu": "Bộ mẫu hợp đồng chuẩn đã duyệt"
+			},
+			{
+				"ma": "tai-lieu-ban-hang-lanh",
+				"kr": "q4-marketing-2-k1",
+				"url": "https://docs.mau.onehub.test/tai-lieu-ban-hang-lanh",
+				"ghiChu": "Bộ tài liệu bán hàng hàng lạnh gửi đội kinh doanh"
+			}
+		],
+		"ghiNhan": [
+			{
+				"ma": "kd-bac-hen-gap",
+				"mucTieu": "q4-kd-bac-1",
+				"kr": "q4-kd-bac-1-k2",
+				"tacGia": "nguyen-thi-lan",
+				"nhan": ["hoang-yen-nhi"],
+				"loiNhan": "Cảm ơn Nhi đã hẹn được 12 chuỗi mới chỉ trong hai tuần.",
+				"tuan": 2
+			},
+			{
+				"ma": "cham-soc-ca-toi",
+				"mucTieu": "q4-cham-soc-1",
+				"kr": "q4-cham-soc-1-k2",
+				"tacGia": "vu-thu-ha",
+				"nhan": ["lam-quynh-anh", "mai-duc-long"],
+				"loiNhan": "Ca tối có người trực, khiếu nại tồn qua đêm giảm hẳn.",
+				"tuan": 4
+			},
+			{
+				"ma": "marketing-tai-lieu",
+				"mucTieu": "q4-marketing-2",
+				"kr": "q4-marketing-2-k1",
+				"tacGia": "tran-quoc-bao",
+				"nhan": ["luu-phuong-thao"],
+				"loiNhan": "Bộ tài liệu hàng lạnh giúp đội bán hàng chốt nhanh hơn hẳn.",
+				"tuan": 5
+			},
+			{
+				"ma": "kho-van-khu-soan",
+				"mucTieu": "q4-kho-van-1",
+				"tacGia": "chu-van-hung",
+				"nhan": ["dinh-cong-son", "to-thi-hong"],
+				"loiNhan": "Kho gọn hơn hẳn sau đợt sắp lại khu soạn hàng.",
+				"tuan": 3
+			},
+			{
+				"ma": "dieu-phoi-tai-xe",
+				"mucTieu": "q4-dieu-phoi-2",
+				"kr": "q4-dieu-phoi-2-k2",
+				"tacGia": "nghiem-thu-uyen",
+				"nhan": ["au-gia-bao"],
+				"loiNhan": "Bảo gọi lại được sáu tài xế cũ, tuần này không chuyến nào trễ.",
+				"tuan": 4
+			},
+			{
+				"ma": "tai-chinh-cong-no",
+				"mucTieu": "q4-tai-chinh-1",
+				"kr": "q4-tai-chinh-1-k1",
+				"tacGia": "thai-minh-chau",
+				"nhan": ["giang-hai-yen"],
+				"loiNhan": "Yến thu được hai khoản nợ khó nhất quý.",
+				"tuan": 3
+			},
+			{
+				"ma": "nhan-su-tuyen-dung",
+				"mucTieu": "q4-nhan-su-1",
+				"kr": "q4-nhan-su-1-k1",
+				"tacGia": "le-hai-dang",
+				"nhan": ["vuong-duc-tai", "tong-bich-ngoc"],
+				"loiNhan": "Tin tuyển lên sớm nên đã có hồ sơ cho mùa cao điểm.",
+				"tuan": 2
+			}
+		],
+		"mau": [
+			{
+				"ma": "bo-phan",
+				"ten": "Mẫu cho bộ phận: sẵn sàng mùa cao điểm",
+				"cap": "bo-phan",
+				"donVi": [],
+				"noiDung": {
+					"cauMucTieu": "Bộ phận sẵn sàng cho mùa cao điểm",
+					"loai": "cam-ket",
+					"krs": [
+						{
+							"title": "Kịch bản cao điểm được diễn tập đủ các điểm",
+							"kind": "moc",
+							"unit": "",
+							"startValue": null,
+							"targetValue": null
+						},
+						{
+							"title": "Bước kế hoạch xong đúng hạn",
+							"kind": "tang-toi",
+							"unit": "bước",
+							"startValue": 0,
+							"targetValue": null
+						}
+					]
+				}
+			},
+			{
+				"ma": "phong-kinh-doanh",
+				"ten": "Mẫu cho các phòng kinh doanh: khiếu nại trong ngày",
+				"cap": "phong-ban",
+				"donVi": ["kd-bac", "kd-nam", "cham-soc", "marketing"],
+				"noiDung": {
+					"cauMucTieu": "Khiếu nại được xử lý trong ngày",
+					"loai": "tham-vong",
+					"krs": [
+						{
+							"title": "Giữ khiếu nại tồn qua đêm dưới 5",
+							"kind": "giu-duoi",
+							"unit": "khiếu nại",
+							"startValue": null,
+							"targetValue": 5
+						},
+						{
+							"title": "Ra quy trình xử lý khiếu nại trong ngày",
+							"kind": "moc",
+							"unit": "",
+							"startValue": null,
+							"targetValue": null
+						}
+					]
+				}
+			},
+			{
+				"ma": "phong-ho-tro",
+				"ten": "Mẫu cho các phòng hỗ trợ: báo cáo hằng tuần",
+				"cap": "phong-ban",
+				"donVi": ["tai-chinh", "nhan-su", "phap-che"],
+				"noiDung": {
+					"cauMucTieu": "Báo cáo lãi lỗ theo tuyến mỗi tuần",
+					"loai": "tham-vong",
+					"krs": [
+						{
+							"title": "Tuyến có báo cáo lãi lỗ hằng tuần",
+							"kind": "phan-tram",
+							"unit": "%",
+							"startValue": null,
+							"targetValue": 100
+						},
+						{
+							"title": "Ra mẫu báo cáo lãi lỗ theo tuyến",
+							"kind": "moc",
+							"unit": "",
+							"startValue": null,
+							"targetValue": null
+						}
+					]
+				}
+			}
+		],
+		"tuMau": [
+			{
+				"mucTieu": "q4-cham-soc-2",
+				"mau": "phong-kinh-doanh"
+			},
+			{
+				"mucTieu": "q4-tai-chinh-2",
+				"mau": "phong-ho-tro"
+			}
+		]
+	}
 }

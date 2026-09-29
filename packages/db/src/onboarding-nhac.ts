@@ -18,6 +18,7 @@ export const THU_TU_NHAC = [
 	"okr-kr-im",
 	"okr-duoc-giao",
 	"okr-nhac-ten",
+	"okr-ghi-nhan",
 	"okr-theo-doi",
 	"ai-tran",
 	"ai-doi-soat-lech",

@@ -20,6 +20,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { BangChuKy } from "./bang-chu-ky";
 import { FormCauHinh } from "./form-cau-hinh";
+import { KhoiMauOkr } from "./khoi-mau-okr";
 import { KhoiTroLyOkr } from "./khoi-tro-ly-okr";
 import { LyDoKhongQuyen } from "./trang-thai-cai-dat";
 
@@ -89,6 +90,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	const [, program] = await Promise.all([
 		queryClient.prefetchQuery(trpc.okr.cycles.queryOptions()),
 		loadProgram(),
+		queryClient.prefetchQuery(trpc.okr.mau.queryOptions({})),
 	]);
 	if (program?.canManage) {
 		await Promise.all([
@@ -104,6 +106,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 				<div className="flex flex-col gap-6">
 					<BangChuKy goiY={goiYChuKy(homNay)} homNay={homNay} />
 					<FormCauHinh />
+					<KhoiMauOkr />
 					<KhoiTroLyOkr />
 				</div>
 			</PageShellContent>

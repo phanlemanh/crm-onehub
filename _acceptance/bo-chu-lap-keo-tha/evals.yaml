@@ -1,0 +1,122 @@
+schema_version: 1
+slug: bo-chu-lap-keo-tha
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.bclkt_chu_vi
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "apps/app/test/keo-tha-khong-lap-chu.dom.tsx"
+    expected: |
+      Ca "chu-vi" cua keo-tha-khong-lap-chu.dom.tsx dung hop tai that (NutTaiNguon, tRPC gia) duoi LocaleProvider "vi",
+      mo hop, doc textContent cua [data-hop-tai-nguon] [data-slot='nguon-keo-tha'] va assert BANG TRON
+      "Chọn tệp" + "Kéo tệp vào đây" + "Word (.docx) hoặc PDF, tới 20 MB" (ba chuoi viet san trong test, noi lien,
+      dung thu tu nut -> goi y -> mo ta); them assert cau goi y (phan tu dau cua cot chu dung sau nut) bang
+      taiLieuMessages("vi").nguon.hop.keoTha doc tu tep chu.
+      CHIEU DO (cung fixture): ban sao tai-lieu.ts giu cau cu "Kéo tệp vào đây, hoặc chọn tệp" -> fail voi thong diep ghim
+      "chu vung keo tha vi lech"; ban sao hop-tai-nguon.tsx truyen nhan={m.keoThaMoTa} -> fail cung thong diep.
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.bclkt_chu_en
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "apps/app/test/keo-tha-khong-lap-chu.dom.tsx"
+    expected: |
+      Ca "chu-en": nhu E1 duoi LocaleProvider "en", assert BANG TRON "Choose file" + "Drag a file here" +
+      "Word (.docx) or PDF, up to 20 MB" va cau goi y bang taiLieuMessages("en").nguon.hop.keoTha.
+      Ma tran 2 ngon ngu x 3 chuoi = 2 assert bang tron (E1, E2) + 2 assert goi y-tu-tep-chu.
+      CHIEU DO: ban sao tai-lieu.ts giu cau cu "Drag a file here, or choose a file" -> fail voi thong diep ghim
+      "chu vung keo tha en lech".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bclkt_khong_lap
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/test/keo-tha-khong-lap-chu.dom.tsx"
+    expected: |
+      Ca "khong-lap": voi moi ngon ngu trong ["vi","en"] (ma tran viet truoc, 2 phan tu = 2 assert), lay dong tu mo dau
+      cua taiLieuMessages(l).nguon.hop.keoThaNut (tu dau tien, chu thuong) va assert keoTha (chu thuong) KHONG chua no.
+      Doi chung duong cung ca: dong tu rut ra phai la "chọn" (vi) va "choose" (en) — nhan nut doi thi ca bao ro.
+      CHIEU DO (cung fixture): ban sao tai-lieu.ts giu cau cu o vi -> fail voi thong diep ghim
+      "cau goi y vi lap dong tu cua nut: chọn"; giu cau cu o en -> "cau goi y en lap dong tu cua nut: choose".
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.bclkt_guard
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    expected: |
+      messages-guard.spec.ts pass nguyen van (ban vi co dau, khac ban en, cho moi khoa).
+      CHIEU DO: ban sao tai-lieu.ts dat keoTha vi = "Drag a file here" -> messages-guard fail tai khoa nguon.hop.keoTha.
+  - id: E5a
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bclkt_thuoc_da_ky
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "packages/ui/test/nguon-keo-tha.dom.tsx"
+      - "packages/ui/test/nguon-canh-nhau.dom.tsx"
+      - "apps/app/test/nguon-keo-tha-chu.dom.tsx"
+      - "apps/app/test/tai-lieu-nguon.dom.tsx"
+    expected: |
+      Bon tep test cua hai ho so da ky chay nguyen van, moi tep mot tien trinh bun rieng, deu pass
+      (nguon-keo-tha.dom.tsx, nguon-canh-nhau.dom.tsx trong packages/ui; nguon-keo-tha-chu.dom.tsx,
+      tai-lieu-nguon.dom.tsx trong apps/app voi TZ=Asia/Ho_Chi_Minh).
+      CHIEU DO: ban sao tai-lieu.ts dat keoTha vi = "Kéo vào đây" -> tai-lieu-nguon.dom.tsx fail o assert
+      toContain("Kéo tệp vào đây") (dong 445) — thuoc da ky bat duoc cau lam mat chuoi con no ghim.
+  - id: E5b
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bclkt_khong_cham_thuoc
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs"
+    expected: |
+      exit 0; in "khong cham thuoc da ky: <N> tep doi, 0 tep bi cam". Tap tep doi = git diff --name-only <merge-base(origin/onehub, HEAD)>
+      (so voi CAY LAM VIEC, gom ca thay doi chua commit) cong git ls-files --others --exclude-standard. GOC suy tu vi tri script.
+      Danh sach cam viet truoc trong script: hai thu muc _acceptance/nguon-keo-tha-reui/, _acceptance/may-soan-de-xuat/
+      va bon tep test cua E5a. Khong phan giai duoc origin/onehub, merge-base hay sha cua --tu/--den -> exit 2 voi
+      "KHONG DO DUOC: ...", khong bao gio in "0 tep bi cam".
+      CHIEU DO (cung script, lich su git that): --tu 0bb16a44 --den cfac5bea (khoang cua PR #195, co cham
+      _acceptance/nguon-keo-tha-reui/ va packages/ui/test/nguon-keo-tha.dom.tsx) -> exit 1, thong diep ghim
+      "cham thuoc da ky:" kem ten tung tep bi cham. CHIEU DO cay lam viec: them mot dong chua commit vao
+      packages/ui/test/nguon-keo-tha.dom.tsx -> exit 1 cung thong diep ghim. Doi chung duong: --tu HEAD --den HEAD -> exit 0.
+  - id: E5c
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.msd_man_tai_nguon
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "_acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs"
+    expected: |
+      exit 0; man-tai-nguon.mjs (thuoc man that cua may-soan-de-xuat, chay nguyen van qua mot-luot.sh) in 'buoc N: dat' cho
+      3 buoc — buoc 1 van thay chuoi con «Kéo tệp vào đây» trong hop tai. Ma khac 0 -> nguoi cham chay lai cung lenh tren ban
+      sao cay o merge-base(origin/onehub, HEAD); do o ca hai = moi truong (ghi UNCERTAIN kem hai dau ra), do chi o HEAD = FAIL.
+      CHIEU DO (cua chinh phep do da ky): --chieu-do tren ban sao an tab Nguon -> 'buoc 2: khong thay hang nguon', ma 1.
+  - id: E6u
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bclkt_man_chu
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs qua mot-luot.sh) voi KHO_TAI_LIEU_BLOB_TOKEN gia de nut 'Tải nguồn lên' mo duoc; dang nhap dev:session mot member"
+      - "Buoc 1 (1440): mo Tai lieu, bam 'Tải nguồn lên', doc innerText cua nut va tung con cua cot chu trong [data-hop-tai-nguon] [data-slot='nguon-keo-tha'] -> bang tron ['Chọn tệp','Kéo tệp vào đây','Word (.docx) hoặc PDF, tới 20 MB'] -> anh bclkt-tai-1440.png"
+      - "Buoc 2 (390): nhu buoc 1, cong khong cuon ngang trang, hop khong tran -> anh bclkt-tai-390.png"
+    paths:
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "packages/ui/src/components/nguon-keo-tha.tsx"
+      - "_acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"
+    expected: "exit 0; man-chu.mjs in 'buoc 1: dat' va 'buoc 2: dat'; anh o .acceptance-runs/bo-chu-lap-keo-tha/evidence/; vong S4 chep bclkt-tai-1440.png va bclkt-tai-390.png sang _acceptance/bo-chu-lap-keo-tha/evidence/ va doc anh: vung keo tha hien 'Kéo tệp vào đây' ngay sau nut 'Chọn tệp', khong co chu 'hoặc chọn tệp'. Nut 'Tải nguồn lên' khoa (phien thieu KHO_TAI_LIEU_BLOB_TOKEN) -> exit 2 'KHONG DO DUOC: nut tai nguon khoa', khong bao gio 'dat'. CHIEU DO (cung thuoc, vat that tren ban sao): --chieu-do cay ban sao tai-lieu.ts giu cau cu 'Kéo tệp vào đây, hoặc chọn tệp' -> ma 1 voi thong diep ghim 'chu vung keo tha man that lech'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]

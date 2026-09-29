@@ -519,7 +519,7 @@ describe("the-truc-tiep", () => {
 
 describe("du-duong", () => {
 	test(
-		"du-duong: nam loai muc OKR do duong ghi that tao, okr.viecCuaToi tra du nam loai va qua khuon dau ra",
+		"du-duong: sau loai muc OKR do duong ghi that tao, okr.viecCuaToi tra du sau loai va qua khuon dau ra",
 		async () => {
 			await caiChuongTrinh();
 			const quy = await kyDangChay("dd");
@@ -555,6 +555,19 @@ describe("du-duong", () => {
 					tp.cookie,
 				),
 				"nhac ten X",
+			);
+			ok(
+				await goi(
+					"okr.guiGhiNhan",
+					{
+						objectiveId: o2,
+						keyResultId: null,
+						nguoiNhan: [X],
+						loiNhan: "Cảm ơn X",
+					},
+					tp.cookie,
+				),
+				"ghi nhan X",
 			);
 
 			const o3 = await mucTieu(quy, dvP, tp.nguoi, tp.cookie);

@@ -1,0 +1,55 @@
+schema_version: 1
+slug: khong-cham-thuoc-bat-doi-ten
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kct_doi_ten_commit
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs"
+      - "_acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs"
+    expected: |
+      exit 0; doi-ten.mjs --ca C1,C2 dung worktree tam tu HEAD, trong do commit `git mv` (C1: packages/ui/test/nguon-keo-tha.dom.tsx
+      -> packages/ui/test/da-doi-ten.dom.tsx; C2: _acceptance/nguon-keo-tha-reui/gap-probe.md -> docs/gap-probe-cu.md), chay
+      CHINH thuoc trong worktree voi --tu HEAD~1 --den HEAD, va in "C1: dat", "C2: dat" khi thuoc thoat 1 VA dong
+      "cham thuoc da ky:" chua DUONG CU. Ma tran viet truoc 2 ca = 2 khang dinh ma + 2 khang dinh duong cu.
+      Khang dinh xanh la QUAN HE: danh sach tep bi cham BANG DUNG [duong cu] (mot phan tu) — duong moi nam ngoai vung cam.
+      CHIEU DO (cung worktree, vat that): --chieu-do go "--no-renames" khoi ban thuoc trong worktree (dem dung 2 cho, khac 2 ->
+      ma 2 "KHONG DO DUOC") roi chay lai C1,C2. Thong diep ghim "thuoc bo sot doi ten: C<n>" CHI in khi thuoc thoat 0 VA in
+      "1 tep doi, 0 tep bi cam" — dung dau cua lo (git gop doi ten thanh mot duong moi). Ket qua khac (ma 2, sai cwd, cu phap vo)
+      -> "chieu do: HONG DOT BIEN C<n> ma <n>" va doi-ten.mjs thoat 1. Du ca dung dau -> "chieu do: DO DUNG GHIM", ma 0.
+      Moi truong: commit bang git -c user.name/-c user.email; worktree dung bang mkdtemp duoi $TMPDIR; thuoc goi voi cwd = worktree;
+      khong dung duoc tinh huong (commit loi, worktree loi) -> ma 2 "KHONG DO DUOC", khong bao "lech".
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.kct_doi_ten_stage
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs"
+      - "_acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs"
+    expected: |
+      exit 0; doi-ten.mjs --ca C3: trong worktree tam, `git mv apps/app/test/tai-lieu-nguon.dom.tsx apps/app/test/da-doi-ten.dom.tsx`
+      chi stage, chay thuoc che do mac dinh (merge-base origin/onehub voi cay lam viec) -> thuoc thoat 1 va in duong cu -> "C3: dat".
+      CHIEU DO: --chieu-do --ca C3 -> thuoc thoat 0 va in "0 tep bi cam" -> "thuoc bo sot doi ten: C3", "chieu do: DO DUNG GHIM";
+      ket qua khac -> "HONG DOT BIEN C3", ma 1.
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kct_khong_hoi_quy
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs"
+      - "_acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs"
+    expected: |
+      exit 0; doi-ten.mjs --ca C4,C5,C6 in "C4: dat" (khong doi gi -> thuoc ma 0, "0 tep bi cam"), "C5: dat" (sua noi dung chua commit
+      packages/ui/test/nguon-canh-nhau.dom.tsx -> ma 1, in duong do), "C6: dat" (--tu khong-co-ref --den HEAD -> ma 2, "KHONG DO DUOC").
+      Doi chung duong (C4) va hai nhanh cu (C5, C6) nam cung ma tran voi C1-C3. CHIEU DO: ban sao doi-ten.mjs mong C4 ra ma 1 ->
+      "C4: lech ... ma 0", doi-ten.mjs thoat 1 — tuc thuoc do phan biet duoc hai chieu.
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bclkt_khong_cham_thuoc
+    paths:
+      - "_acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs"
+    expected: |
+      exit 0; eval E5b cua ho so bo-chu-lap-keo-tha chay nguyen van tren nhanh nay in "khong cham thuoc da ky: <N> tep doi, 0 tep bi cam".
+      CHIEU DO: da co trong ma tran cua E1-E3 (cung thuoc, cung che do mac dinh o C3/C5).

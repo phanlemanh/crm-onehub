@@ -1,6 +1,7 @@
 import "@crm/env/load";
 
 import { db } from "@crm/db";
+import { BLOB_NGUON } from "@crm/db/blob-nguon";
 import { readContextDevKey } from "@crm/db/settings";
 
 export const CONTEXT_DEV = "CONTEXT_DEV";
@@ -30,6 +31,8 @@ export async function contextDevKey(): Promise<string | null> {
 		return null;
 	}
 }
+
+export const LUU_NGUON = "LUU_NGUON";
 
 export async function capabilities(): Promise<readonly Capability[]> {
 	return capabilitiesFrom(await contextDevKey());
@@ -71,6 +74,20 @@ export function capabilitiesFrom(
 			label: "Picture storage",
 			gives:
 				"somewhere to keep a logo or a profile photo. Without it a record has no picture at all, because the URLs these sources hand back expire and are never stored as they are",
+		},
+		{
+			id: LUU_NGUON,
+			from: BLOB_NGUON.bienKhoa,
+			label: "Document sources",
+			gives:
+				"somewhere to keep the Word and PDF files people upload to the document library, and to read them back for drafting. Without it nothing can be uploaded and no page is drafted from a file",
+			enabled: Boolean(process.env[BLOB_NGUON.bienKhoa]?.trim()),
+		},
+		{
+			...fromEnv("KHO_TAI_LIEU_AI_GATEWAY_API_KEY"),
+			label: "Drafting key",
+			gives:
+				"a separate AI Gateway key for the machine that drafts document pages from uploaded files, so its spend is billed apart. Without it drafting runs on the shared model key",
 		},
 		{
 			...fromEnv("ZALO_BOT_TOKEN"),

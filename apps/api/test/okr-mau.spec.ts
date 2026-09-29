@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { OKR_NHAC } from "@crm/db/okr-nhac";
-import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import { dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { CHI_SO_OKR } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
@@ -22,6 +22,7 @@ import {
 	kiemSoTheoKieu,
 	krInput,
 } from "@crm/validation/okr-kr";
+import { mauNoiDung } from "@crm/validation/okr-mau";
 import { crmHopKieu, parseOkrNguon } from "@crm/validation/okr-nguon";
 import { LoiBoMau, OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { dienBien } from "../scripts/okr-mau/dien-bien";
@@ -31,6 +32,7 @@ import {
 	kiemWorkspace,
 	napTrong,
 	xoaBoOkrMau,
+	xoaTrong,
 } from "../scripts/okr-mau/nap";
 import { kiemDongKy } from "../src/okr/khep";
 import type { BangChamOutput } from "../src/okr/okr-khep.contracts";
@@ -40,6 +42,7 @@ import type {
 } from "../src/okr/okr-xem.contracts";
 import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
 import {
+	BANG_DEM,
 	chayLenh,
 	congTy,
 	congTyChu,
@@ -125,7 +128,7 @@ afterAll(async () => {
 	setSystemTime();
 	await lamSachOkr();
 	await xoaBoOkrMau(db);
-});
+}, CHO);
 
 describe("to-chuc-mau", () => {
 	async function soVoiTep() {
@@ -864,6 +867,40 @@ const demBang = async () =>
 		Object.entries(await vanTay()).map(([k, ds]) => [k, ds.length]),
 	);
 
+const SAU_BANG = [
+	"okrViecKr",
+	"okrBangChung",
+	"okrGhiNhan",
+	"okrGhiNhanNhan",
+	"okrMau",
+	"okrMucTieuTuMau",
+] as const;
+
+const BANG_CO_MAU = [
+	"user",
+	"member",
+	"division",
+	"department",
+	"orgPlacement",
+	"okrCycle",
+	"okrObjective",
+	"okrKeyResult",
+	"okrAlignment",
+	"okrNguonKr",
+	"okrSoChup",
+	"okrCheckInSession",
+	"okrCheckIn",
+	"okrDiemKr",
+	"okrNhinLai",
+	"okrMangSang",
+	...SAU_BANG,
+] as const;
+
+const bangCoHang = (dem: Record<string, number>) =>
+	Object.keys(dem)
+		.filter((bang) => (dem[bang] ?? 0) > 0)
+		.sort();
+
 describe("nap-lai-mau", () => {
 	test(
 		"nạp hai lần: cùng số hàng, hàng ngoài bộ mẫu không đổi",
@@ -875,8 +912,7 @@ describe("nap-lai-mau", () => {
 			const mot = await demBang();
 			await napMau(MOC_THU_NAM);
 			expect(await demBang()).toEqual(mot);
-			for (const [bang, so] of Object.entries(mot))
-				expect(so, bang).toBeGreaterThan(0);
+			expect(bangCoHang(mot)).toEqual([...BANG_CO_MAU].sort());
 			expect(await chupNgoai()).toEqual(ngoai);
 			await donNgoai();
 		},
@@ -1229,6 +1265,250 @@ describe("thu-tuc-that-mau", () => {
 			}
 			await napMau(MOC_THU_NAM);
 			expect(await demBang()).toEqual(mot);
+		},
+		CHO,
+	);
+});
+
+describe("canh-kr-mau", () => {
+	type DemViec = { xong: number; chua: number };
+	const VIEC_KHAI = {
+		"kd-bac": { xong: 1, chua: 2 },
+		"kd-nam": { xong: 1, chua: 1 },
+		"cham-soc": { xong: 2, chua: 1 },
+		marketing: { xong: 1, chua: 2 },
+		"kho-van": { xong: 1, chua: 1 },
+		"dieu-phoi": { xong: 1, chua: 1 },
+		"san-pham": { xong: 1, chua: 2 },
+		"tai-chinh": { xong: 1, chua: 1 },
+		"nhan-su": { xong: 1, chua: 1 },
+		"phap-che": { xong: 1, chua: 1 },
+	} satisfies Record<string, DemViec>;
+	const TIEN = { startsWith: OKR_MAU.tienTo };
+	const NGOAI = {
+		nguoi2: "ngoai-mau-nguoi-2",
+		chuKy: "ngoai-mau-chu-ky",
+		mucTieu: "ngoai-mau-mt",
+		kr: "ngoai-mau-kr",
+		viec: "ngoai-mau-viec",
+		ghiNhan: "ngoai-mau-gn",
+	};
+	const nhanMau = nguoiMau("tran-quoc-bao");
+
+	async function viecTheoPhongBan(): Promise<Record<string, DemViec>> {
+		const ds = await db.okrViecKr.findMany({
+			where: { id: TIEN },
+			select: {
+				xongLuc: true,
+				keyResult: {
+					select: { objective: { select: { departmentId: true } } },
+				},
+			},
+		});
+		return Object.fromEntries(
+			bo.phongBan.map((p) => {
+				const cua = ds.filter(
+					(v) => v.keyResult.objective.departmentId === idMau("pb", p.ma),
+				);
+				return [
+					p.ma,
+					{
+						xong: cua.filter((v) => v.xongLuc !== null).length,
+						chua: cua.filter((v) => v.xongLuc === null).length,
+					},
+				];
+			}),
+		);
+	}
+
+	async function mocXongCoBangChung(): Promise<string[]> {
+		const ds = await db.okrKeyResult.findMany({
+			where: { id: TIEN, kind: "moc", bangChung: { some: {} } },
+			select: { id: true, currentValue: true, targetValue: true },
+		});
+		return ds
+			.filter((k) => Number(k.currentValue) === Number(k.targetValue))
+			.map((k) => k.id);
+	}
+
+	const demSau = (dem: Record<string, number>) =>
+		Object.fromEntries(SAU_BANG.map((bang) => [bang, dem[bang] ?? -1]));
+
+	async function idSauBang(): Promise<string[]> {
+		const chon = { where: { id: TIEN }, select: { id: true } } as const;
+		const ds = await Promise.all([
+			db.okrViecKr.findMany(chon),
+			db.okrBangChung.findMany(chon),
+			db.okrGhiNhan.findMany(chon),
+			db.okrMau.findMany(chon),
+			db.okrMucTieuTuMau.findMany(chon),
+		]);
+		return ds.flat().map((x) => x.id);
+	}
+
+	async function dungNgoai() {
+		const { nguoi } = await hangNgoai();
+		await db.user.create({
+			data: {
+				id: NGOAI.nguoi2,
+				name: "Ngoài mẫu hai",
+				email: "ngoai-mau-2@thu.test",
+				updatedAt: new Date(),
+			},
+		});
+		const homNay = new Date(`${ngayVN(new Date())}T00:00:00Z`);
+		await db.okrCycle.create({
+			data: {
+				id: NGOAI.chuKy,
+				kind: "quy",
+				name: "Quý ngoài mẫu",
+				startsOn: homNay,
+				endsOn: new Date(
+					homNay.getTime() +
+						7 * OKR_MAU.tuan.tuanMoiQuy * OKR_MAU.thoiGian.ngayMs,
+				),
+				phase: "dang-chay",
+			},
+		});
+		await db.okrObjective.create({
+			data: {
+				id: NGOAI.mucTieu,
+				cycleId: NGOAI.chuKy,
+				level: "onehub",
+				ownerUserId: nguoi,
+				kind: "cam-ket",
+				status: "cong-bo",
+				publishedAt: new Date(),
+				title: "Mục tiêu ngoài mẫu",
+			},
+		});
+		await db.okrKeyResult.create({
+			data: {
+				id: NGOAI.kr,
+				objectiveId: NGOAI.mucTieu,
+				title: "KR ngoài mẫu",
+				kind: "tang-toi",
+				ownerUserId: nguoi,
+				startValue: 0,
+				targetValue: 5,
+				currentValue: 0,
+			},
+		});
+		await db.okrViecKr.create({
+			data: {
+				id: NGOAI.viec,
+				keyResultId: NGOAI.kr,
+				loai: "viec",
+				tieuDe: "Việc ngoài mẫu",
+				nguoiLamUserId: nguoi,
+				taoBoiUserId: nguoi,
+			},
+		});
+		await db.okrGhiNhan.create({
+			data: {
+				id: NGOAI.ghiNhan,
+				objectiveId: NGOAI.mucTieu,
+				keyResultId: NGOAI.kr,
+				loiNhan: "Ghi nhận ngoài mẫu",
+				tacGiaUserId: nguoi,
+				nhan: { create: [{ userId: nhanMau }, { userId: NGOAI.nguoi2 }] },
+			},
+		});
+	}
+
+	async function chupNgoaiCanhKr() {
+		return {
+			viec: await db.okrViecKr.findUnique({ where: { id: NGOAI.viec } }),
+			ghiNhan: await db.okrGhiNhan.findUnique({
+				where: { id: NGOAI.ghiNhan },
+			}),
+			nhan: await db.okrGhiNhanNhan.findMany({
+				where: { ghiNhanId: NGOAI.ghiNhan },
+				orderBy: { userId: "asc" },
+			}),
+		};
+	}
+
+	async function donNgoaiCanhKr() {
+		await db.okrGhiNhan.deleteMany({ where: { id: NGOAI.ghiNhan } });
+		await db.okrViecKr.deleteMany({ where: { id: NGOAI.viec } });
+		await db.okrKeyResult.deleteMany({ where: { id: NGOAI.kr } });
+		await db.okrObjective.deleteMany({ where: { id: NGOAI.mucTieu } });
+		await db.okrCycle.deleteMany({ where: { id: NGOAI.chuKy } });
+		await db.user.deleteMany({ where: { id: NGOAI.nguoi2 } });
+		await donNgoai();
+	}
+
+	test(
+		"canh-kr: nạp có việc, bằng chứng, ghi nhận, mẫu; nạp lại không nhân đôi; xoá sạch sáu bảng, hàng ngoài đứng nguyên",
+		async () => {
+			expect(BANG_DEM.map((b) => b.bang)).toEqual(
+				expect.arrayContaining([...SAU_BANG]),
+			);
+			for (const [pb, d] of Object.entries(VIEC_KHAI)) {
+				expect(d.xong, pb).toBeGreaterThanOrEqual(1);
+				expect(d.chua, pb).toBeGreaterThanOrEqual(1);
+			}
+			expect(Object.keys(VIEC_KHAI).sort()).toEqual(
+				bo.phongBan.map((p) => p.ma).sort(),
+			);
+
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+
+			expect(await viecTheoPhongBan()).toEqual(VIEC_KHAI);
+			expect((await mocXongCoBangChung()).length).toBeGreaterThanOrEqual(3);
+			expect(
+				await db.okrGhiNhan.count({ where: { id: TIEN } }),
+			).toBeGreaterThanOrEqual(6);
+			const mau = await db.okrMau.findMany({
+				where: { id: TIEN },
+				select: { id: true, noiDung: true },
+			});
+			expect(mau.length).toBe(3);
+			for (const m of mau) {
+				const r = mauNoiDung.safeParse(m.noiDung);
+				expect(r.success, `${m.id}: ${r.error?.message ?? ""}`).toBe(true);
+			}
+			const tuMau = await db.okrMucTieuTuMau.findMany({
+				where: { id: TIEN },
+				select: {
+					mauId: true,
+					objective: { select: { id: true, cycleId: true } },
+				},
+			});
+			expect(tuMau.length).toBe(2);
+			for (const t of tuMau) {
+				expect(t.objective.id.startsWith(OKR_MAU.tienTo)).toBe(true);
+				expect(t.objective.cycleId).toBe(CHU_KY.quy4);
+				expect(mau.map((m) => m.id)).toContain(t.mauId);
+			}
+
+			const mot = demSau(await demBang());
+			for (const [bang, so] of Object.entries(mot))
+				expect(so, bang).toBeGreaterThan(0);
+			await napMau(MOC_THU_NAM);
+			expect(demSau(await demBang())).toEqual(mot);
+
+			await dungNgoai();
+			const ngoai = await chupNgoaiCanhKr();
+			const ids = [...(await tapIdMau()), ...(await idSauBang())];
+			const loi = await db
+				.$transaction((tx) => xoaTrong(tx), { timeout: CHO })
+				.then(
+					() => "",
+					(e) => String(e),
+				);
+			expect(loi).toBe("");
+			expect(demSau(await demBang())).toEqual(
+				Object.fromEntries(SAU_BANG.map((bang) => [bang, 0])),
+			);
+			expect(await demThamChieu(ids)).toEqual({});
+			expect(await chupNgoaiCanhKr()).toEqual({
+				...ngoai,
+				nhan: ngoai.nhan.filter((n) => n.userId !== nhanMau),
+			});
+			await donNgoaiCanhKr();
 		},
 		CHO,
 	);

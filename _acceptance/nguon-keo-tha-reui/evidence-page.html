@@ -1,0 +1,121 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · nguon-keo-tha-reui</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Vùng kéo-thả tệp nguồn (NguonKeoTha) dựng lại trên móc ReUI use-file-upload theo bố cục c-file-upload-3, thay bản vẽ tay bậc 5</h1><div class="sub">Trang bằng chứng · <span class="mono">nguon-keo-tha-reui</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E1-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E2-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E3-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E4-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E4b">E4b</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E4b-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E5-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E5b">E5b</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E5b-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E6-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E7-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E8-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E9-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E9b">E9b</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E9b-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-10</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E10-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E11u">E11u</a></td><td>AC-11</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">crm_xenodochial_gould_763cda_do (phien-do session; app http://localhost:4246, api http://localhost:4189)</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-12</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nguon-keo-tha-reui-E12-r1</td><td class="mono">2026-09-28T11:49:43Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · script</h3><p class="crit">AC-1: Given `packages/ui` trước vòng, When vòng cài `@reui/use-file-upload` theo `docs/reui.md`, Then có `packages/ui/src/hooks/use-file-upload.ts` export `useFileUpload`, tệp đó và `nguon-keo-tha.tsx` không có chú thích, không import `cn` hay `lucide-react`; `packages/ui/package.json` không có phụ thuộc `cn`; nhánh của vòng không chạm `button.tsx`, `alert.tsx`, `styles/globals.css` (so với điểm rẽ khỏi `onehub`); không có `src/components/reui/alert.tsx` hay thư mục `src/components/examples/`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E1-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.nkt_cai_sach</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">13/13 o dat</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · script</h3><p class="crit">AC-2: Given `nguon-keo-tha.tsx` sau vòng, When đọc mã của nó, Then nó lấy trạng thái kéo, bốn bộ bắt kéo-thả, việc mở hộp chọn tệp và ô tệp từ `useFileUpload`, và không tự khai bộ bắt `DragEvent` nào.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E2-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.nkt_dung_moc</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">kiem moc: dat</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given vùng kéo-thả với `chapNhan=&quot;.docx,.pdf&quot;` và `toiDaByte` 20 MB, When người chọn qua ô tệp hay thả một tệp đúng loại, đúng cỡ, Then `onChon` nhận đúng tệp đó; When tệp sai loại hay quá cỡ, Then `onChon` không được gọi và `onTuChoi` nhận tệp kèm lý do `loai` hoặc `co`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E3-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_hanh_vi_cu</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 5 tests across 1 file. [333.00ms]</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given vùng có `loi`, When hiển thị, Then câu lỗi nằm trong `FieldError` và cả ô tệp lẫn nút «Chọn tệp» mang `aria-describedby` trỏ tới nó; ô tệp mang `aria-invalid=&quot;true&quot;`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E4-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_hanh_vi_cu</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 5 tests across 1 file. [333.00ms]</pre>
+</div>
+<div class="card eval" id="E4b"><h3><span class="badge pass">PASS</span> &nbsp;E4b · test</h3><p class="crit">AC-4: Given vùng có `loi`, When hiển thị, Then câu lỗi nằm trong `FieldError` và cả ô tệp lẫn nút «Chọn tệp» mang `aria-describedby` trỏ tới nó; ô tệp mang `aria-invalid=&quot;true&quot;`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E4b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_nut_chon</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 4 tests across 1 file. [368.00ms]</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5: Given vùng nhận `tat`, When hiển thị và người thả một tệp, Then ô tệp và nút «Chọn tệp» khoá, lý do hiện ra, `onChon` không được gọi, vùng mang `data-tat=&quot;true&quot;`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E5-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_hanh_vi_cu</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 5 tests across 1 file. [333.00ms]</pre>
+</div>
+<div class="card eval" id="E5b"><h3><span class="badge pass">PASS</span> &nbsp;E5b · test</h3><p class="crit">AC-5: Given vùng nhận `tat`, When hiển thị và người thả một tệp, Then ô tệp và nút «Chọn tệp» khoá, lý do hiện ra, `onChon` không được gọi, vùng mang `data-tat=&quot;true&quot;`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E5b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_nut_chon</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 4 tests across 1 file. [368.00ms]</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given vùng thường, When người bấm nút «Chọn tệp» (nhãn từ prop `nutChon`, biến thể `outline`), Then hộp chọn tệp của trình duyệt được mở qua ô tệp; ô tệp nằm ngoài thứ tự Tab (`tabIndex=-1`) nên Tab chỉ dừng ở nút, và mang `aria-label` bằng nhãn nút.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E6-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_nut_chon</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 4 tests across 1 file. [368.00ms]</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-7: Given vùng thường, When một tệp được kéo vào vùng, Then vùng mang `data-keo=&quot;true&quot;`; When kéo ra khỏi vùng hoặc thả, Then `data-keo=&quot;false&quot;`; Given vùng nhận `tat`, When kéo tệp vào, Then `data-keo` vẫn `&quot;false&quot;`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E7-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_dang_keo</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 2 tests across 1 file. [353.00ms]</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-8: Given hộp «Tải nguồn lên» có đích «Trang mới» đã điền tên, When người chọn tệp `.jpg` hay `.docx` 21 MB, Then câu «Chỉ nhận Word (.docx) hoặc PDF, tới 20 MB» nằm dưới ô tệp, `xinCho` không được gọi, tên trang giữ nguyên; đối chứng: tệp `.docx` 1 MB đi hết `xinCho` → PUT → `nhan`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E8-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.msd_man_tai_loi</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 3 tests across 1 file. [677.00ms]</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-9: Given hộp tải và danh sách nguồn, When lưu tệp nguồn chưa bật hoặc tệp tải lên trùng nguồn đã có, Then nút «Tải nguồn lên» khoá kèm câu giải thích, và hộp báo «Nguồn này đã có» dẫn tới nguồn cũ — như trước vòng.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E9-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.msd_man_nguon_tat</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 2 tests across 1 file. [545.00ms]</pre>
+</div>
+<div class="card eval" id="E9b"><h3><span class="badge pass">PASS</span> &nbsp;E9b · test</h3><p class="crit">AC-9: Given hộp tải và danh sách nguồn, When lưu tệp nguồn chưa bật hoặc tệp tải lên trùng nguồn đã có, Then nút «Tải nguồn lên» khoá kèm câu giải thích, và hộp báo «Nguồn này đã có» dẫn tới nguồn cũ — như trước vòng.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E9b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.msd_man_hang_nguon</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 5 tests across 1 file. [640.00ms]</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · test</h3><p class="crit">AC-10: Given tệp chữ `apps/app/lib/messages/tai-lieu.ts`, When hộp tải thật hiển thị bằng tiếng Việt hay tiếng Anh, Then tên nút trong vùng kéo-thả đúng trọn chuỗi `keoThaNut` của ngôn ngữ đó («Chọn tệp» / «Choose file»), và bộ canh chữ `messages-guard` xanh.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E10-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nkt_chu</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [520.00ms]</pre>
+</div>
+<div class="card eval" id="E11u"><h3><span class="badge pass">PASS</span> &nbsp;E11u · ui-check</h3><p class="crit">AC-11: Given ứng dụng thật chạy trên phiên đo riêng, When người mở hộp «Tải nguồn lên» ở 1440 và 390, chọn tệp mẫu `.docx`, điền đích và bấm «Tải lên», Then hộp có vùng kéo-thả, hộp không tràn ngang ở 390, và tab Nguồn có hàng tên tệp với trạng thái «Máy đang soạn».</p>
+<div class="kv"><span>run_id <b>crm_xenodochial_gould_763cda_do (phien-do session; app http://localhost:4246, api http://localhost:4189)</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.msd_man_tai_nguon</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="5"><div class="frame"><img src="evidence/msd-nguon-390.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E11u-step1.png" alt="frame 2" loading="lazy"></div><div class="frame"><img src="evidence/E11u-step2.png" alt="frame 3" loading="lazy"></div><div class="frame"><img src="evidence/E11u-step3.png" alt="frame 4" loading="lazy"></div><div class="frame"><img src="evidence/E11u-step3b.png" alt="frame 5" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>5 frame · chạy như GIF</span></div>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-12: Given `nguon-keo-tha.tsx` và các tệp của khu tài liệu, When design-gate quét tĩnh, Then không tệp nào có màu, góc hay khoảng cách ngoài thang của `docs/design.md`.</p>
+<div class="kv"><span>run_id <b>minted-nguon-keo-tha-reui-E12-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.msd_san_thiet_ke</b></span><span>verified_at <b>2026-09-28T11:49:43Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">design-gate --mode static: mọi tệp tsx của khu tài liệu và packages/ui/src/components/nguon-*.tsx được in tên đã đạt</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">E3, E4, E5 (cd packages/ui &amp;&amp; bun test --preload ./test/setup-dom.ts ./test/nguon-canh-nhau.dom.tsx -t NguonKeoTha) — pass trên cả HEAD và baseline: khối describe này chạy nguyên văn hành vi cũ chưa đổi ở vòng này, nên là regression-guard có chủ ý cho hành vi hộp tải sẵn có, không phải bằng chứng riêng cho NguonKeoTha.
+E8 (cd apps/app &amp;&amp; bun test ... tai-lieu-nguon.dom.tsx -t tai-loi), E9 (-t nguon-tat), E9b (-t hang-nguon) — cùng lý do: các khối test này thuộc màn hình tải nguồn của hồ sơ máy-soạn-đề-xuất trước đó, chạy nguyên văn để xác nhận vùng kéo-thả mới không phá hành vi cũ.
+E12 (design-gate --mode static trên các tệp của khu tài liệu và packages/ui/src/components/nguon-*.tsx) — pass trên cả hai vì phần lớn tệp trong tập quét vốn đã sạch thiết kế tĩnh trước khi NguonKeoTha được thêm vào; chiều đỏ riêng của E12 (chèn className màu thô vào nguon-keo-tha.tsx) đã được khai trong định nghĩa eval để bù cho điểm này.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: mọi eval máy pass ngay lần chạy đầu (E1–E12, gồm E4b/E5b/E9b, và ui-check E11u); bốn lệnh suite hồi quy (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) đều xanh. Không có vòng quay lại implementation.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

@@ -591,6 +591,46 @@ của nó giữ nguyên, hai bên nối nhau. Đề xuất 2026-09-27, chốt t�
 _Avoid_: chuyển kỳ, kéo dài, sao chép
 Vì sao: «chuyển» gợi mục tiêu rời kỳ cũ; «kéo dài» gợi kỳ cũ chưa khép.
 
+**Việc (KR)**: một dòng đơn vị tự ghi dưới một KR — việc sẽ làm để đẩy KR đó, có
+một người làm, hạn tuỳ chọn, xong hay chưa. Người sửa được KR thêm, sửa, gỡ; người làm
+tự đánh dấu xong. Việc không góp vào tiến độ: KR vẫn đo kết quả. Đề xuất 2026-09-28
+(lượt 8a lộ trình OKR), chốt tại Cổng Phạm vi.
+_Avoid_: nhiệm vụ, task, đầu việc, bước
+Vì sao: «bước» đã là việc trong kế hoạch 30 ngày; «nhiệm vụ» gợi việc được giao từ
+trên xuống, còn việc (KR) do đơn vị tự đặt ra như một giả thuyết.
+
+**Sáng kiến (KR)**: một chiến dịch hay một kế hoạch 30 ngày có sẵn trong CRM, gắn
+vào một KR để nói nó đang đẩy KR đó. Chỉ lưu liên kết; tên và trạng thái đọc từ bản
+ghi gốc. Người mang vai «chỉ OKR» chỉ thấy «một chiến dịch» hay «một kế hoạch 30
+ngày», không tên. Việc (KR) và sáng kiến chung một danh sách «Việc và sáng kiến» của
+KR. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: initiative, dự án, chương trình
+Vì sao: «chương trình» đã là Chương trình OKR; «dự án» gợi một thứ mới phải lập,
+còn sáng kiến ở đây là việc đã có trong CRM được nối vào KR.
+
+**Bằng chứng (KR mốc)**: một đường dẫn kèm ghi chú đính vào KR kiểu mốc, cho thấy
+mốc đã xong dựa vào đâu — người chấm cuối kỳ đọc được. Không bắt buộc để đánh dấu
+xong; không tải tệp. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: tệp đính kèm, minh chứng, attachment
+Vì sao: «tệp đính kèm» hứa tải tệp lên, mà bằng chứng chỉ là đường dẫn; «minh chứng»
+mang giọng hồ sơ thi đua.
+
+**Ghi nhận (OKR)**: lời một người gửi tới một đến năm đồng nghiệp trên một mục tiêu
+đã công bố, tuỳ gắn một KR — cảm ơn phần họ đã góp. Hiện trong tab «Trao đổi» và báo
+tới người nhận qua việc OKR của họ. Mọi vai gửi được, kể cả «chỉ OKR». Không đếm,
+không xếp hạng người theo ghi nhận. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: khen thưởng, kudos, tuyên dương, điểm thưởng
+Vì sao: «khen thưởng», «tuyên dương» gợi quyết định của cấp trên có kèm lợi ích;
+đếm hay đổi điểm biến lời cảm ơn thành bảng thi đua — thứ lộ trình đã để ở «Chưa làm».
+
+**Mẫu OKR**: khung mục tiêu và KR quản trị soạn sẵn cho một cấp (bộ phận, phòng
+ban, cá nhân) và, tuỳ, cho vài đơn vị cụ thể — câu mục tiêu gợi ý, loại, KR mẫu.
+Người đặt mục tiêu chọn mẫu rồi điền số của mình; mục tiêu tạo ra là bản nháp, nhớ nó
+sinh từ mẫu nào, và không đổi khi mẫu đổi. Đề xuất 2026-09-28, chốt tại Cổng Phạm vi.
+_Avoid_: template, khuôn, bộ khung
+Vì sao: «khuôn» đã là Khuôn kế hoạch của kế hoạch 30 ngày; «template» là chữ tiếng
+Anh trong mã.
+
 **Vai «chỉ OKR»**: vai trong workspace cho người vào CRM chỉ để làm OKR — hôm nay
 là người ngoài khối kinh doanh. Họ đăng nhập, thấy khu OKR và hồ sơ của chính
 mình, nhưng không đọc được cá nhân, công ty, thoả thuận hợp tác, chiến dịch hay kế
@@ -673,8 +713,10 @@ Vì sao: «tài liệu» đã là cả kho và cả tệp nguồn; ba nghĩa m�
 không biết đang nói cái nào.
 
 **Nguồn**: tệp gốc người tải vào kho tài liệu (quyết định, biên bản, bản quét),
-không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn mang một lớp dữ liệu
-(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm). Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
+không ai sửa, chỉ để máy đọc và để trích dẫn. Mỗi nguồn sẽ mang một lớp dữ liệu
+(công khai, nội bộ, có dữ liệu cá nhân, nhạy cảm) — để sau, chưa gắn lượt; hôm nay nguồn
+chưa lưu lớp nào. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`; sửa câu lớp dữ liệu
+2026-09-28 tại Cổng Phạm vi của `may-soan-de-xuat`.
 _Avoid_: raw source, tài liệu gốc, file
 Vì sao: trang nói «theo nguồn X» phải trỏ tới đúng một thứ bất biến.
 
@@ -683,6 +725,27 @@ chủ trang duyệt. Không ai đọc được nó ngoài người duyệt; tr�
 đọc nó. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
 _Avoid_: bản nháp, draft, proposal
 Vì sao: «bản nháp» gợi thứ còn đang viết dở; bản đề xuất đã xong và đang chờ quyết.
+
+**Máy soạn**: phần của tác tử đọc chữ một nguồn rồi soạn một bản đề xuất cho trang
+đích, mỗi con số mới kèm đoạn nguồn chứa nó. Máy soạn không duyệt, không đọc gì ngoài
+nguồn, bản đang dùng của trang đích và trang «Quy tắc viết». Trên màn: «Máy đang soạn»,
+«Bản máy soạn». Chốt 2026-09-28 tại Cổng Phạm vi của `may-soan-de-xuat`.
+_Avoid_: AI viết, bot, trợ lý AI
+Vì sao: «trợ lý AI» đã là thứ trả lời câu hỏi từ bản đang dùng; máy soạn chỉ viết bản
+chờ duyệt, gọi chung một tên thì người đọc tưởng câu trả lời của trợ lý là bản đã duyệt.
+
+**Cần gõ tay**: trạng thái của một nguồn mà máy không đọc được chữ (bản quét, lớp chữ
+hỏng); máy không soạn gì, người phải gõ lại nội dung. Chốt 2026-09-28 tại Cổng Phạm vi
+của `may-soan-de-xuat`.
+_Avoid_: lỗi OCR, không hỗ trợ
+Vì sao: lượt này không có OCR; nói «lỗi OCR» là hứa một thứ không tồn tại.
+
+**Quy tắc viết**: trang tài liệu do chủ kho viết, máy soạn đọc làm lời dặn trước mỗi
+lượt soạn. Chưa có bản đang dùng thì máy không soạn. Chốt 2026-09-28 tại Cổng Phạm vi
+của `may-soan-de-xuat`.
+_Avoid_: prompt, lời nhắc hệ thống
+Vì sao: người viết nó là chủ kho, không phải kỹ sư; nó là một trang như mọi trang, có
+duyệt và phiên bản.
 
 **Bản đang dùng**: phiên bản trang tài liệu đã được duyệt và đang hiện cho mọi
 người, là thứ duy nhất trợ lý AI đọc. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.

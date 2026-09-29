@@ -1,0 +1,149 @@
+schema_version: 1
+slug: tai-lieu-diff-bo-myers-vo-ich
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tdm_ban_goc
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "packages/validation/src/tai-lieu-markdown.ts"
+      - "packages/validation/test/tai-lieu-diff.spec.ts"
+    expected: |
+      Ma tran viet truoc 7 ca "tran-duoi-khoi: <ten>" (ngan, dai-khac-het, bien-dung-tran,
+      bien-qua-tran, dao-thu-tu, dai-sua-rai-rac, lap-khoi) — so ca = so phan tu cua bang GHIM trong
+      spec, moi ca so diffHash(soSanh(truoc, sau)) voi 64 ky tu ghim tu ma o cfac5bea (tinh
+      bang ban sao ma goc, khong tinh lai tu ma moi). Lech -> throw thong diep ghim
+      "lech ban goc: <ten>". 6 pass, exit 0. Fixture bien: bien-dung-tran co can duoi dung bang
+      TAI_LIEU.diff.tranSuaKhoi (1000 khoi moi ben, khac het), bien-qua-tran bang tran + 1,
+      lap-khoi 1500 khoi trong do 1400 khoi cung mot cau (dem theo tap thay da tap lam can duoi
+      vuot tran sai).
+      CHIEU DO: do E3 chay (dot bien ">=" -> "lech ban goc: bien-dung-tran"; dot bien khong dem
+      phan chung -> "lech ban goc: dai-sua-rai-rac"; dot bien dem theo tap -> "lech ban goc:
+      lap-khoi").
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tdm_vong_myers
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "packages/validation/test/tai-lieu-diff.spec.ts"
+    expected: |
+      Hai ca "myers-vo-ich: ...", cung ham dem Date.now (spyOn, mockRestore trong finally):
+      (a) cap dai-khac-het (vanBanDai alpha/omega 200 000 ky tu) -> so lan goi Date.now trong
+      mot soSanh === 0, lech -> throw "myers-vo-ich: vong Myers muc khoi van chay <n> lan";
+      (b) doi chung duong tren cap dai-sua-rai-rac (can duoi trong tran) -> so lan goi > 0,
+      lech -> throw "myers-vo-ich: cay dem khong thay vong Myers". 2 pass, exit 0.
+      CHIEU DO: do E3 chay (dot bien bo han phep chan -> "(a)" do voi thong diep ghim
+      "vong Myers muc khoi van chay 2001 lan").
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tdm_cat_thuoc
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "packages/validation/test/tai-lieu-diff.spec.ts"
+      - "_acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/cat-thuoc.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no. Dung git worktree tam tu HEAD duoi
+      .acceptance-runs/tai-lieu-diff-bo-myers-vo-ich/ (symlink node_modules goc va
+      packages/validation/node_modules), don o finally. Ma tran viet truoc 4 dot bien x ca bat:
+      ">=" -> -t "tran-duoi-khoi: bien-dung-tran" do, stdout/stderr chua "lech ban goc:
+      bien-dung-tran"; "khong dem chung" -> -t "tran-duoi-khoi: dai-sua-rai-rac" do, chua "lech ban
+      goc: dai-sua-rai-rac"; "dem theo tap" (con.set(khoa, n - 1) -> con.set(khoa, 0)) -> -t
+      "tran-duoi-khoi: lap-khoi" do, chua "lech ban goc: lap-khoi"; "bo chan" -> -t "myers-vo-ich" do, chua "vong Myers muc khoi van
+      chay". Moi dot bien kiem rang chuoi thay the co mat dung 1 lan trong ma (khong co -> exit 2
+      "dot bien khong ap duoc: <ten>", khong xanh). Ban lanh tren cung worktree: ca 3 lenh -t
+      xanh. In "dot bien <ten>: bat" x4 + "lanh <ca>: xanh" x4, exit 0; mot o sai -> exit 1 ghim ten o.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tdm_nhanh_hon_goc
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "packages/validation/src/tai-lieu-markdown.ts"
+      - "_acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/nhanh-hon-goc.ts"
+    expected: |
+      Script (bun) suy goc kho tu vi tri cua chinh no; lay tai-lieu-diff.ts o moc GHIM cfac5bea
+      (khong phai merge-base troi) bang git show, ghi vao .acceptance-runs/<slug>/goc-<pid>.ts voi
+      import doi sang duong tuyet doi cua kho (sha vang -> exit 2 "khong co moc cfac5bea"; ma goc
+      da chua canDuoiSua -> exit 2 "goc so da chua ban sua", khong in ti le).
+      Mot luot = than ca tat-dinh: diffHash(soSanh(truoc, sau)) dong ho that, roi cung lenh
+      duoi Date.now gia +60 000 moi lan goi; hai hash phai bang nhau (lech -> exit 1 "tat-dinh
+      lech hash o luot <i>"). 1 luot ham nong moi ben, roi 10 luot xen ke HEAD/goc; in
+      "luot <i>: head <ms> goc <ms>" x10 va "trung vi head <ms> goc <ms> ti le <r>". Ti le <=
+      0.75 -> exit 0; lon hon -> exit 1 "tat-dinh khong nhanh hon goc: ti le <r>".
+      CHIEU DO: --chieu-do do ma goc o ca hai ben -> ti le ~1 -> exit 1 voi dung thong diep ghim
+      tren; script in "chieu do: bat" va exit 0 chi khi lan do do ra dung thong diep.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tdm_khong_noi_thuoc
+    paths:
+      - "packages/validation/test/tai-lieu-diff.spec.ts"
+      - "packages/validation/package.json"
+      - "_acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/luat.mjs"
+    expected: |
+      Doc spec bang bo phan tich TypeScript (khong regex tren chuoi tho): loi goi test(...) co
+      ten bat dau "tat-dinh:" ton tai dung 1 lan va co dung 2 doi so (khong doi so trang thoi
+      gian); khong loi goi setDefaultTimeout; khong doi so object co khoa timeout trong loi goi
+      test/describe/it nao; khai bao TRAN_MS co initializer dung van ban "process.env.CI ? 6_000 :
+      2_000"; khong bunfig.toml nao o packages/validation hay goc co khoa timeout; scripts.test cua
+      packages/validation/package.json va package.json goc, cung moi chuoi trong turbo.json, khong
+      chua "--timeout". In "kiem <ten>: dat" x7, exit 0. CHIEU DO: --chieu-do tren ban sao trong tmpdir them ", 20_000"
+      vao ca tat-dinh -> exit 1 "noi thuoc: tat-dinh co tran rieng"; ban sao doi TRAN_MS -> exit 1
+      "noi thuoc: TRAN_MS"; ban sao them setDefaultTimeout(20_000) -> "noi thuoc: setDefaultTimeout";
+      ban sao them bunfig.toml [test] timeout -> "noi thuoc: bunfig"; ban sao them --timeout vao
+      scripts.test -> "noi thuoc: --timeout". Moi ban sao mot thong diep ghim, exit 1.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_so_va_dat
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "apps/api/src/tai-lieu/**"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Eval E6 cua ho so da ky kho-tai-lieu chay nguyen van (tep test khong nam trong diff cua
+      vong): bon ca so-va-dat pass, exit 0. CHIEU DO: la chieu do da khai cua kho-tai-lieu E6.
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ktl_diff
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "packages/ui/src/components/diff-trang*.tsx"
+      - "packages/ui/test/diff-trang.dom.tsx"
+      - "apps/api/test/tai-lieu.spec.ts"
+    expected: |
+      Eval E13 cua ho so da ky kho-tai-lieu chay nguyen van: diff-trang.dom.tsx pass va ca
+      diff-hash cua apps/api (diffHash client === server) pass, exit 0. CHIEU DO: la chieu do da
+      khai cua kho-tai-lieu E13.
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tdm_luat_ma
+    paths:
+      - "packages/validation/src/tai-lieu-diff.ts"
+      - "_acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/luat.mjs"
+    expected: |
+      Doc tai-lieu-diff.ts bang bo phan tich TypeScript: (a) khong comment nao (getLeadingCommentRanges
+      /getTrailingCommentRanges tren moi token = 0); (b) loi goi diffArrays nam trong nhanh cua mot
+      bieu thuc dieu kien so ket qua canDuoiSua voi mot bien/thuoc tinh ma gia tri truy ve
+      TAI_LIEU.diff.tranSuaKhoi, va maxEditLength cua diffArrays cung truy ve no; (c) moi numeric
+      literal co o HEAD ma khong co o moc GHIM cfac5bea (so theo so lan xuat hien) thuoc {0, 1, 2};
+      (d) chu ky export (ten + tham so + kieu tra ve, in bang printer) cua soSanh, diffHash,
+      suKienDoi bang o cfac5bea. In "kiem <a..d>: dat", exit 0. CHIEU DO: --chieu-do tren ban sao
+      chen "// x" -> "luat ma: chu thich"; thay tran bang 2000 -> "luat ma: so ma"; doi ten tham
+      so soSanh -> "luat ma: chu ky soSanh"; doi chung duong: ban sao chi co "2 * chung" moi van
+      xanh o (c).

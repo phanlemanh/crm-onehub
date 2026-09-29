@@ -33,9 +33,18 @@ const BANG = new Map<string, TinhNang>([
 	["crm|okr|tro_ly_okr/tom-tat-tuan", "okr.tom-tat"],
 	["crm|team-agent|agent_runner", "crm.tac-nhan"],
 	["crm|builder|agent_builder", "crm.dung-tac-nhan"],
+	["crm|may-soan|-", "tai-lieu.may-soan"],
 ]);
 
 const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
+	{
+		khop: /^(eve|zalo)\|may-soan\|/,
+		lyDo: "phiên máy soạn chỉ mở từ kênh crm",
+	},
+	{
+		khop: /^crm\|may-soan\|(tro_ly_okr\/|agent_runner$|agent_builder$)/,
+		lyDo: "phiên máy soạn chỉ giao việc cho may_soan",
+	},
 	{
 		khop: /^crm\|zalo\|/,
 		lyDo: "phiên purpose zalo chỉ mở từ kênh zalo",

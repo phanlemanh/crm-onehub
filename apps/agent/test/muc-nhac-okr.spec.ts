@@ -73,6 +73,13 @@ const MAU = {
 		nhan: "Tăng trưởng",
 		nguoiTen: "Bình",
 	},
+	"okr-ghi-nhan": {
+		loai: "okr-ghi-nhan",
+		ghiNhanId: "gn-1",
+		objectiveId: "mt-5",
+		nhan: "Kho mới",
+		nguoiGui: "Oanh",
+	},
 	"okr-theo-doi": {
 		loai: "okr-theo-doi",
 		objectiveId: "mt-4",

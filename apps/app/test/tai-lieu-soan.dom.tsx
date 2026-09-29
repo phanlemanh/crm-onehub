@@ -18,7 +18,12 @@ type Editor = {
 	commands: { undo: () => boolean };
 };
 type VaoTao = { ten: string; noiDung: string };
-type VaoDeXuat = { slug: string; ten?: string; noiDung: string };
+type VaoDeXuat = {
+	slug: string;
+	ten?: string;
+	noiDung: string;
+	tuDeXuatId?: string;
+};
 type TuyChonDotBien<V, R> = {
 	onSuccess?: (r: R, v: V) => unknown;
 };
@@ -355,6 +360,14 @@ describe("tai-lieu man soan", () => {
 		expect(goi.deXuat.length).toBe(1);
 		expect(goi.deXuat[0]?.slug).toBe("quy-dinh-hoa-hong");
 		expect(goi.deXuat[0]?.noiDung).toContain("Thêm câu.");
+		expect(goi.deXuat[0]?.tuDeXuatId).toBeUndefined();
+	});
+
+	test("sua-ban-may: man sua mo tu ban may soan -> de xuat gui kem tuDeXuatId de giu nguon", async () => {
+		await mo({ ...SUA, tuDeXuatId: "dx-may" });
+		await goNoiDung(" Thêm câu.");
+		await bam(guiDuyet());
+		expect(goi.deXuat.map((v) => v.tuDeXuatId)).toEqual(["dx-may"]);
 	});
 
 	test("giu-thay-doi: co thay doi chua gui, bam Huy -> hop hoi lai hien, khong roi man", async () => {
