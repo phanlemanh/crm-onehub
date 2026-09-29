@@ -168,7 +168,7 @@ export async function dieuKienChiSo(
 				cot: "closedAt",
 				where: {
 					archivedAt: null,
-					stage: "CLOSED_WON",
+					giaiDoan: { kind: "WON" },
 					closedAt: trongKy,
 					ownerId: ng ? { in: ng } : undefined,
 				},

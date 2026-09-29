@@ -31,6 +31,7 @@ export async function lyDoChanTruocKhiGui(
 		viec: viec.data.viec,
 		objectiveId:
 			viec.data.viec === "de-xuat" ? viec.data.objectiveId : undefined,
+		nacViec: viec.data.viec === "de-xuat" ? viec.data.nac : undefined,
 		now,
 	});
 	return san.bat ? null : `khong-chay:${san.lyDo}`;

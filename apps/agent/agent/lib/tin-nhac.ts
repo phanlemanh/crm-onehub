@@ -8,6 +8,7 @@ import {
 	type ViecKeHoach,
 	type ViecNhac,
 } from "@crm/db/onboarding-nhac";
+import type { ViecTaiLieu } from "@crm/db/tai-lieu-nhac";
 
 type LoaiTin = ViecNhac["loai"];
 
@@ -24,6 +25,7 @@ export const TIEU_DE = {
 	"okr-nhac-ten": "Nhắc tên",
 	"okr-ghi-nhan": "Ghi nhận",
 	"okr-theo-doi": "Đang theo dõi",
+	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",
 } as const satisfies { [K in LoaiTin]: string };
@@ -141,9 +143,21 @@ function dongOkr(
 	return `• ${noiDungOkr(v, thoat)}${mo}`;
 }
 
+function dongTaiLieu(
+	v: ViecTaiLieu,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
+	const chu = `${v.so} bản đề xuất chờ bạn duyệt`;
+	if (khuon === "tron") return `${so}. ${chu}${url ? ` — ${url}` : ""}`;
+	return `• ${chu}${url ? ` — <${url}|mở tab Chờ duyệt>` : ""}`;
+}
+
 function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	const url = lienKet(v);
 	if ("planId" in v) return dongKeHoach(v, so, url, khuon);
+	if (v.loai === "tai-lieu-cho-duyet") return dongTaiLieu(v, so, url, khuon);
 	if (v.loai === "ai-tran" || v.loai === "ai-doi-soat-lech") {
 		return dongAi(v, so, url, khuon);
 	}

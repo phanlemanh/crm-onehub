@@ -29,7 +29,14 @@ import {
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
 import { LOAI_NGUON_MAY, okrNguonDong } from "@crm/validation/okr-nguon";
-import { troLySanSang } from "@crm/validation/okr-tro-ly";
+import {
+	lyDoKhongSanSang,
+	MA_VAN_DE,
+	maLoaiDeXuat,
+	TRUONG_VIET_LAI,
+	trangThaiDeXuat,
+	troLySanSang,
+} from "@crm/validation/okr-tro-ly";
 import { HANH_DONG_VET, okrVetSnapshot } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import { OKR } from "./okr-config";
@@ -98,6 +105,131 @@ export const aiChiTieuOutput = z.object({
 });
 
 export type AiChiTieuOutput = z.infer<typeof aiChiTieuOutput>;
+
+export const CACH_QUYET = ["nhan", "sua", "bac", "bo-qua"] as const;
+const nacLuot = z.enum(["bat", "an"]);
+const thang = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
+
+export const troLyDichInput = z.object({
+	objectiveId: ma,
+	keyResultId: ma.optional(),
+});
+export const troLySanSangOutput = troLySanSang;
+export const troLyDeXuatOutput = z.discriminatedUnion("bat", [
+	z.object({ bat: z.literal(true), taskId: z.string(), dungLai: z.boolean() }),
+	z.object({ bat: z.literal(false), lyDo: lyDoKhongSanSang }),
+]);
+const noiDungDong = {
+	id: z.string(),
+	loai: z.enum(["viet-lai", "hoi", "can-chinh"]),
+	objectiveId: z.string(),
+	keyResultId: z.string().nullable(),
+	truong: z.enum(TRUONG_VIET_LAI).nullable(),
+	truoc: z.string().nullable(),
+	sau: z.string().nullable(),
+	maVanDe: z.enum(MA_VAN_DE).nullable(),
+	targetObjectiveId: z.string().nullable(),
+	targetKeyResultId: z.string().nullable(),
+	lyDo: z.string(),
+};
+export const dongHien = z.object({
+	...noiDungDong,
+	tenDich: z.string().nullable(),
+});
+export const troLyDanhSachOutput = z.object({
+	dong: z.array(dongHien),
+	dangSoan: z.boolean(),
+	maKetThuc: z.string().nullable(),
+	lyDo: lyDoKhongSanSang.nullable(),
+});
+export const troLyQuyetInput = z.object({
+	deXuatId: ma,
+	cach: z.enum(CACH_QUYET),
+	giaTri: z.string().trim().min(1).max(OKR.ten.viSao).optional(),
+});
+export const troLyQuyetOutput = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true) }),
+	z.object({ ok: z.literal(false), lyDo: lyDoKhongSanSang }),
+]);
+export const troLyAnInput = z.object({
+	thang: thang.optional(),
+	nac: nacLuot.optional(),
+});
+export const dongLuot = z.object({
+	...noiDungDong,
+	trangThai: trangThaiDeXuat,
+	maLoai: maLoaiDeXuat.nullable(),
+});
+export const luotTroLy = z.object({
+	taskId: z.string(),
+	nac: nacLuot,
+	objectiveId: z.string().nullable(),
+	tenMucTieu: z.string().nullable(),
+	keyResultId: z.string().nullable(),
+	nguoiYeuCau: z.string().nullable(),
+	taoLuc: z.string(),
+	xongLuc: z.string().nullable(),
+	ketQua: z.string().nullable(),
+	doTreMs: z.number().nullable(),
+	chiPhiUsd: z.number(),
+	dong: z.array(dongLuot),
+});
+export const troLyAnOutput = z.object({
+	thang,
+	luot: z.array(luotTroLy),
+});
+export const troLySoDoInput = z.object({ thang: thang.optional() });
+const tyLe = z.number().nullable();
+export const soDoNac = z.object({
+	soLuot: z.number().int(),
+	sinhRa: z.number().int(),
+	daHien: z.number().int(),
+	nhan: z.number().int(),
+	sua: z.number().int(),
+	bac: z.number().int(),
+	boQua: z.number().int(),
+	tyLeNhan: tyLe,
+	tyLeSua: tyLe,
+	tyLeBac: tyLe,
+	tyLeBoQua: tyLe,
+	tyLeDuocNhan: tyLe,
+	daNhan: z.number().int(),
+	hoanTac: z.number().int(),
+	tyLeHoanTac: tyLe,
+	soLuotDo: z.number().int(),
+	p50Ms: z.number().int().nullable(),
+	p90Ms: z.number().int().nullable(),
+	tongCau: z.number().int(),
+	biLoai: z.number().int(),
+	tyLeBiLoai: tyLe,
+	theoMa: z.array(z.object({ maLoai: maLoaiDeXuat, so: z.number().int() })),
+	tienUsd: z.number(),
+	chiPhiMoiNhanUsd: z.number().nullable(),
+	chiPhiMoiLuotUsd: z.number().nullable(),
+});
+export const troLySoDoOutput = z.object({
+	thang,
+	bat: soDoNac,
+	an: soDoNac,
+});
+export const xuHuongKrInput = z.object({ keyResultId: ma });
+export const xuHuongKrOutput = z
+	.object({ moiTuan: z.number(), uocCuoiKy: z.number() })
+	.nullable();
+
+export type TroLyDichInput = z.infer<typeof troLyDichInput>;
+export type TroLyDeXuatOutput = z.infer<typeof troLyDeXuatOutput>;
+export type DongHien = z.infer<typeof dongHien>;
+export type TroLyDanhSachOutput = z.infer<typeof troLyDanhSachOutput>;
+export type TroLyQuyetInput = z.infer<typeof troLyQuyetInput>;
+export type TroLyQuyetOutput = z.infer<typeof troLyQuyetOutput>;
+export type TroLyAnInput = z.infer<typeof troLyAnInput>;
+export type DongLuot = z.infer<typeof dongLuot>;
+export type LuotTroLy = z.infer<typeof luotTroLy>;
+export type TroLyAnOutput = z.infer<typeof troLyAnOutput>;
+export type SoDoNac = z.infer<typeof soDoNac>;
+export type TroLySoDoOutput = z.infer<typeof troLySoDoOutput>;
+export type XuHuongKrOutput = z.infer<typeof xuHuongKrOutput>;
 export const okrAccessOutput = z.object({
 	canManageProgram: z.boolean(),
 	headOf: z.object({

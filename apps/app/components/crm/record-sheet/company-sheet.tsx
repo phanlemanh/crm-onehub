@@ -54,8 +54,8 @@ import {
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
 import { LocalDay } from "@/components/local-date-time";
-import { OPEN_STAGES } from "@/lib/deal-stage";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { crmMessages } from "@/lib/messages/crm";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import {
@@ -159,6 +159,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 		form: adding,
 		setForm: setAdding,
 	} = useRecordSheetView("overview");
+	const giaiDoan = useGiaiDoan();
 
 	const query = useQuery({
 		...trpc.companies.byId.queryOptions({ id: companyId }),
@@ -179,7 +180,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 		: null;
 
 	const openDeals =
-		company?.deals.filter((deal) => OPEN_STAGES.includes(deal.stage)) ?? [];
+		company?.deals.filter((deal) => !giaiDoan.laDaDong(deal.stage)) ?? [];
 	const openValueCents = openDeals.reduce(
 		(total, deal) => total + (deal.baseAmountCents ?? 0),
 		0,

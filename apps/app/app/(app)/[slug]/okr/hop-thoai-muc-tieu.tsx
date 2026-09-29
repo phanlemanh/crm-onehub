@@ -42,6 +42,7 @@ import {
 	type LoaiMucTieu,
 	mucTieuInput,
 } from "@crm/validation/okr-muc-tieu";
+import type { TruongVietLai } from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
@@ -52,6 +53,13 @@ import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import {
+	CotGopY,
+	type GiaTriDaNhan,
+	LOP_THAN_HOP,
+	NutGopY,
+	useGopY,
+} from "./cot-gop-y";
 import type { MucTieu } from "./kieu";
 import type { DonChonOkr } from "./okr-search-params";
 import { KhungTuMau, NutBatDauTuMau, NutTaoTuMau, useTuMau } from "./tu-mau";
@@ -89,6 +97,46 @@ function donViMoi(
 const cungTapHop = (a: string[], b: string[]) =>
 	a.length === b.length && [...a].sort().join("|") === [...b].sort().join("|");
 
+function OMucHienThi({
+	ma,
+	hienThi,
+	onDoi,
+	g,
+}: {
+	ma: string;
+	hienThi: MucHienThi;
+	onDoi: (moi: MucHienThi) => void;
+	g: ReturnType<typeof okrGioiHanMessages>["hienThi"];
+}) {
+	return (
+		<Field>
+			<FieldLabel htmlFor={`${ma}-hien-thi`}>{g.tieuDe}</FieldLabel>
+			<Select
+				value={hienThi}
+				onValueChange={(v) => {
+					const moi = MUC_HIEN_THI.find((x) => x === v);
+					if (moi) onDoi(moi);
+				}}
+			>
+				<SelectTrigger
+					id={`${ma}-hien-thi`}
+					aria-describedby={`${ma}-hien-thi-mo-ta`}
+					data-o="muc-hien-thi"
+				>
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectItem value="cong-khai">{g.congKhai}</SelectItem>
+					<SelectItem value="gioi-han">{g.gioiHan}</SelectItem>
+				</SelectContent>
+			</Select>
+			<FieldDescription id={`${ma}-hien-thi-mo-ta`}>
+				{hienThi === "gioi-han" ? g.khiTao : g.congKhaiMoTa}
+			</FieldDescription>
+		</Field>
+	);
+}
+
 export function HopThoaiMucTieu({
 	yeuCau,
 	dong,
@@ -109,12 +157,13 @@ export function HopThoaiMucTieu({
 	const me = useQuery(trpc.users.me.queryOptions());
 	const program = useQuery(trpc.okr.program.queryOptions());
 
-	const cu = yeuCau.loai === "sua" ? yeuCau.mucTieu : null;
+	const [daLuu, setDaLuu] = useState<{ title?: string; whyNow?: string }>({});
+	const cu = yeuCau.loai === "sua" ? { ...yeuCau.mucTieu, ...daLuu } : null;
 	const capGoc =
 		yeuCau.loai === "sua"
 			? yeuCau.mucTieu.level
 			: CAP_THEO_DON[yeuCau.don.loai];
-	const [dau] = useState(() => ({
+	const [dau, setDau] = useState(() => ({
 		cap: capGoc,
 		ten: cu?.title ?? "",
 		loai: cu?.kind ?? "cam-ket",
@@ -138,6 +187,27 @@ export function HopThoaiMucTieu({
 		!cungTapHop(thamGia, dau.thamGia) ||
 		viSao !== dau.viSao ||
 		hienThi !== "cong-khai";
+	const oDangSua = new Set<TruongVietLai>([
+		...(ten !== dau.ten ? (["title"] as const) : []),
+		...(viSao !== dau.viSao ? (["whyNow"] as const) : []),
+	]);
+	const nhanGiaTri = ({ truong, giaTri }: GiaTriDaNhan) => {
+		if (truong === "title") {
+			setTen(giaTri);
+			setDau((d) => ({ ...d, ten: giaTri }));
+			setDaLuu((l) => ({ ...l, title: giaTri }));
+		}
+		if (truong === "whyNow") {
+			setViSao(giaTri);
+			setDau((d) => ({ ...d, viSao: giaTri }));
+			setDaLuu((l) => ({ ...l, whyNow: giaTri }));
+		}
+	};
+	const gopY = useGopY({
+		objectiveId: cu?.id ?? null,
+		coSuaChuaLuu: coThayDoi,
+		onDaNhan: nhanGiaTri,
+	});
 
 	const chu = chuChon || me.data?.id || "";
 	const tenNguoi = (id: string) =>
@@ -259,13 +329,19 @@ export function HopThoaiMucTieu({
 			}}
 			coThayDoi={coThayDoi || tuMau.mauChon !== null}
 		>
-			<DialogContent data-hop-thoai-muc-tieu={cu?.id ?? "moi"}>
+			<DialogContent
+				data-hop-thoai-muc-tieu={cu?.id ?? "moi"}
+				size={gopY.cotMo ? "wide" : "default"}
+			>
 				<DialogHeader>
 					<DialogTitle>
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
 					</DialogTitle>
 				</DialogHeader>
-				<div className="-m-1 max-h-[70svh] overflow-y-auto p-1" data-cuon-hop>
+				<div
+					className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
+					data-cuon-hop
+				>
 					{tuMau.dangMo ? (
 						<KhungTuMau
 							tuMau={tuMau}
@@ -283,6 +359,7 @@ export function HopThoaiMucTieu({
 						>
 							<FieldGroup>
 								<NutBatDauTuMau tuMau={tuMau} />
+								<NutGopY gopY={gopY} />
 								<div className="grid grid-cols-2 gap-3">
 									<Field data-disabled={capChon.length === 1}>
 										<FieldLabel htmlFor={`${ma}-cap`}>{h.cap}</FieldLabel>
@@ -406,33 +483,12 @@ export function HopThoaiMucTieu({
 									) : null}
 								</Field>
 								{yeuCau.loai === "tao" ? (
-									<Field>
-										<FieldLabel htmlFor={`${ma}-hien-thi`}>
-											{g.tieuDe}
-										</FieldLabel>
-										<Select
-											value={hienThi}
-											onValueChange={(v) => {
-												const moi = MUC_HIEN_THI.find((x) => x === v);
-												if (moi) setHienThi(moi);
-											}}
-										>
-											<SelectTrigger
-												id={`${ma}-hien-thi`}
-												aria-describedby={`${ma}-hien-thi-mo-ta`}
-												data-o="muc-hien-thi"
-											>
-												<SelectValue />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value="cong-khai">{g.congKhai}</SelectItem>
-												<SelectItem value="gioi-han">{g.gioiHan}</SelectItem>
-											</SelectContent>
-										</Select>
-										<FieldDescription id={`${ma}-hien-thi-mo-ta`}>
-											{hienThi === "gioi-han" ? g.khiTao : g.congKhaiMoTa}
-										</FieldDescription>
-									</Field>
+									<OMucHienThi
+										ma={ma}
+										hienThi={hienThi}
+										onDoi={setHienThi}
+										g={g}
+									/>
 								) : null}
 								<Field>
 									<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
@@ -455,6 +511,7 @@ export function HopThoaiMucTieu({
 							</FieldGroup>
 						</form>
 					)}
+					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
 				</div>
 				<DialogFooter>
 					<DialogClose asChild>

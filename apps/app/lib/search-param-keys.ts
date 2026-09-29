@@ -23,6 +23,11 @@ export const SEARCH_PARAM = {
 		entity: "thucThe",
 		field: "truong",
 	},
+	giaiDoan: {
+		them: "themGiaiDoan",
+		doiTen: "doiTenGiaiDoan",
+		xoa: "xoaGiaiDoan",
+	},
 	dialog: {
 		create: "new",
 		switcher: "k",
@@ -51,6 +56,7 @@ export const SEARCH_PARAM = {
 		xem: "xemOkr",
 		moChuKy: "moChuKy",
 		moRa: "moRa",
+		luotGopY: "luotGopY",
 		phuTrach: "phuTrachOkr",
 		loai: "loaiOkr",
 		trangThai: "trangThaiOkr",
@@ -62,6 +68,9 @@ export const SEARCH_PARAM = {
 	taiLieu: {
 		tab: "tabTaiLieu",
 		loai: "loai",
+		donVi: "donVi",
+		chu: "chuTrang",
+		nhom: "nhomDeXuat",
 		tuDeXuat: "tuDeXuat",
 	},
 } as const;

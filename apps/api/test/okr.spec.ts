@@ -62,6 +62,10 @@ type ChuongTrinh = {
 	aiDeXuatDonVi: string[];
 	aiTomTatPhamVi: string;
 	aiTomTatDonVi: string[];
+	aiDeXuatAnPhamVi: string;
+	aiDeXuatAnDonVi: string[];
+	aiTomTatAnPhamVi: string;
+	aiTomTatAnDonVi: string[];
 	aiTranThangUsd: number;
 	duyetCongBo: boolean;
 	version: number;
@@ -308,6 +312,10 @@ describe("chuong-trinh", () => {
 			aiDeXuatDonVi: v1.aiDeXuatDonVi,
 			aiTomTatPhamVi: v1.aiTomTatPhamVi,
 			aiTomTatDonVi: v1.aiTomTatDonVi,
+			aiDeXuatAnPhamVi: v1.aiDeXuatAnPhamVi,
+			aiDeXuatAnDonVi: v1.aiDeXuatAnDonVi,
+			aiTomTatAnPhamVi: v1.aiTomTatAnPhamVi,
+			aiTomTatAnDonVi: v1.aiTomTatAnDonVi,
 			aiTranThangUsd: v1.aiTranThangUsd,
 			duyetCongBo: v1.duyetCongBo,
 		};

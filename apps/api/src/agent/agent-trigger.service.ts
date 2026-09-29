@@ -218,13 +218,16 @@ export class AgentTriggerService {
 			tx: Prisma.TransactionClient,
 			emit: (input: CrmEventInput) => Promise<void>,
 		) => Promise<Result>,
+		options?: { timeout?: number },
 	): Promise<Result> {
 		const queued: CrmEventInput[] = [];
-		const result = await this.db.$transaction((tx) =>
-			work(tx, async (input) => {
-				await this.createEventTask(tx, input);
-				queued.push(input);
-			}),
+		const result = await this.db.$transaction(
+			(tx) =>
+				work(tx, async (input) => {
+					await this.createEventTask(tx, input);
+					queued.push(input);
+				}),
+			options,
 		);
 
 		for (const input of queued) {
@@ -359,6 +362,10 @@ export class AgentTriggerService {
 	}
 
 	danhThucMaySoan(): void {
+		this.poke();
+	}
+
+	troLyOkrDaXep(): void {
 		this.poke();
 	}
 

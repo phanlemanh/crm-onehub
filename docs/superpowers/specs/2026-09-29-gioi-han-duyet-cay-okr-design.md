@@ -62,7 +62,7 @@ trị không sửa nội dung thay người» của lượt 3; chữa bằng đ�
 - `okrProgramConfig.duyetCongBo Boolean @default(false)` — theo phiên bản như mọi ô.
 - `TRANG_THAI_MUC_TIEU` thêm `cho-duyet`. Hành động vết thêm `doi-hien-thi`, `gui-duyet`,
   `duyet`, `tra-lai`, `rut-duyet`, `chuyen-don-vi`.
-- `migration` `20261006010000_okr_hien_thi_duyet`: hai cột có mặc định, một bảng, chỉ mục
+- `migration` `20261008010000_okr_hien_thi_duyet`: hai cột có mặc định, một bảng, chỉ mục
   — không sửa dữ liệu, không xoá cột.
 
 ## 4. Luật xem — một hàm

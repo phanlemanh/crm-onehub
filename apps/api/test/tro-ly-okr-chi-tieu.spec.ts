@@ -261,6 +261,39 @@ describe("chi-tieu", () => {
 		expect(du.sanSang.bat).toBe(true);
 	});
 
+	test("chỉ chế độ ẩn toàn công ty: chỉ báo đi tới trần và khoá, không báo góp ý tắt", async () => {
+		const chiAn: OkrProgramSua = {
+			aiDeXuatPhamVi: "tat",
+			aiDeXuatDonVi: [],
+			aiDeXuatAnPhamVi: "toan-cong-ty",
+			aiDeXuatAnDonVi: [],
+		};
+		expect((await goiTrpc("okr.setProgram", "quan", chiAn)).status).toBe(200);
+		const an = await chiTieu();
+		expect(an.sanSang.bat ? "bat" : an.sanSang.lyDo, "an ma bao tat").not.toBe(
+			"viec-tat",
+		);
+		expect(an.sanSang).toEqual({ bat: true, conLaiUsd: 2.499999 });
+
+		await thang(2);
+		expect((await chiTieu()).sanSang).toEqual({
+			bat: false,
+			lyDo: "het-tran-thang",
+		});
+		await thang(5);
+
+		const r = await goiTrpc("okr.setProgram", "quan", {
+			aiDeXuatPhamVi: "toan-cong-ty",
+			aiDeXuatAnPhamVi: "tat",
+		});
+		expect(r.status).toBe(200);
+		const dangCho = await db.agentTask.findMany({
+			where: { kind: "okr-kiem-san-sang", finishedAt: null },
+			select: { id: true },
+		});
+		kiemCuaBai.push(...dangCho.map((h) => h.id));
+	});
+
 	test("đối soát gần nhất là tháng đã qua", async () => {
 		await db.aiDoiSoat.create({
 			data: {

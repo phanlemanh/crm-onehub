@@ -31,6 +31,7 @@
 		"./okr-hien-thi": "./src/okr-hien-thi.ts",
 		"./okr-khep": "./src/okr-khep.ts",
 		"./okr-kiem": "./src/okr-kiem.ts",
+		"./okr-kiem-de-xuat": "./src/okr-kiem-de-xuat.ts",
 		"./okr-canh-kr": "./src/okr-canh-kr.ts",
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-mau": "./src/okr-mau.ts",
@@ -43,6 +44,7 @@
 		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts",
 		"./vai-workspace": "./src/vai-workspace.ts",
+		"./giai-doan": "./src/giai-doan.ts",
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
 		"./zalo-hoi": "./src/zalo-hoi.ts",
 		"./zalo-update": "./src/zalo-update.ts",
@@ -52,7 +54,8 @@
 		"./tai-lieu-diff": "./src/tai-lieu-diff.ts",
 		"./tai-lieu-trich-doan": "./src/tai-lieu-trich-doan.ts",
 		"./tai-lieu-so": "./src/tai-lieu-so.ts",
-		"./tai-lieu-nguon": "./src/tai-lieu-nguon.ts"
+		"./tai-lieu-nguon": "./src/tai-lieu-nguon.ts",
+		"./tai-lieu-tim": "./src/tai-lieu-tim.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",

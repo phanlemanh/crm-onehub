@@ -1,5 +1,5 @@
-import { DealStage, db } from "@crm/db";
-import { LOSING_DEAL_STAGES, OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
+import { db } from "@crm/db";
+import type { LoaiGiaiDoan } from "@crm/db/giai-doan";
 import { domainOf, normalise } from "./names";
 
 export type RecordKind = "contact" | "company" | "deal";
@@ -66,18 +66,18 @@ export async function listDeals(options: DealListOptions = {}) {
 			: new Date(
 					now.getTime() - Math.max(options.inactiveForDays, 0) * 86_400_000,
 				);
-	const stages =
+	const kind: LoaiGiaiDoan | null =
 		status === "open"
-			? [...OPEN_DEAL_STAGES]
+			? "OPEN"
 			: status === "won"
-				? [DealStage.CLOSED_WON]
+				? "WON"
 				: status === "lost"
-					? [...LOSING_DEAL_STAGES]
+					? "LOST"
 					: null;
 
 	const rows = await db.deal.findMany({
 		where: {
-			stage: stages ? { in: stages } : undefined,
+			giaiDoan: kind ? { kind } : undefined,
 			companyId: options.companyId ?? undefined,
 			ownerId: options.ownerId ?? undefined,
 			OR: cutoff
@@ -98,7 +98,7 @@ export async function listDeals(options: DealListOptions = {}) {
 		select: {
 			id: true,
 			name: true,
-			stage: true,
+			giaiDoan: { select: { label: true } },
 			amount: true,
 			currency: true,
 			createdAt: true,
@@ -134,7 +134,7 @@ export async function listDeals(options: DealListOptions = {}) {
 			return {
 				id: deal.id,
 				name: deal.name,
-				stage: deal.stage,
+				stage: deal.giaiDoan.label,
 				amount: deal.amount === null ? null : Number(deal.amount),
 				currency: deal.currency,
 				company: deal.company,
@@ -309,7 +309,7 @@ async function searchDeals(
 		select: {
 			id: true,
 			name: true,
-			stage: true,
+			giaiDoan: { select: { label: true } },
 			amount: true,
 			currency: true,
 			company: { select: { id: true, name: true } },
@@ -323,7 +323,7 @@ async function searchDeals(
 				kind: "deal" as const,
 				id: row.id,
 				name: row.name,
-				stage: row.stage,
+				stage: row.giaiDoan.label,
 				amount: row.amount === null ? null : Number(row.amount),
 				currency: row.currency,
 				company: row.company,

@@ -1,12 +1,11 @@
 "use client";
 
 import { normalizeCurrency } from "@crm/db/currency";
-import type { DealStage } from "@crm/db/enums";
 import { useMutation } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";
 import { toast } from "sonner";
-import { LOSING_STAGES } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -15,7 +14,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 export type DealBoard = RouterOutputs["deals"]["board"];
 export type DealBoardColumn = DealBoard["columns"][number];
 
-type Moved = { from: DealStage; to: DealStage };
+type Moved = { from: string; to: string };
 
 const closeReasonParams = {
 	[SEARCH_PARAM.dialog.closeDeal]: parseAsString,
@@ -25,7 +24,7 @@ const closeReasonParams = {
 export function isDealStage(
 	board: DealBoard | undefined,
 	value: string,
-): value is DealStage {
+): boolean {
 	return board?.columns.some((column) => column.stage === value) ?? false;
 }
 
@@ -115,6 +114,7 @@ export function useDealBoardMove(board: DealBoard | undefined) {
 	const cache = useCrmCache();
 	const [, setCloseParams] = useQueryStates(closeReasonParams);
 	const [moved, setMoved] = useState<ReadonlyMap<string, Moved>>(new Map());
+	const giaiDoan = useGiaiDoan();
 
 	const forget = (id: string) =>
 		setMoved((current) => {
@@ -138,8 +138,9 @@ export function useDealBoardMove(board: DealBoard | undefined) {
 
 	const move = (cardId: string, from: string, to: string) => {
 		if (from === to) return;
+		if (giaiDoan.dangTai) return;
 		if (!isDealStage(board, from) || !isDealStage(board, to)) return;
-		if (LOSING_STAGES.includes(to)) {
+		if (giaiDoan.laThua(to)) {
 			void setCloseParams({
 				[SEARCH_PARAM.dialog.closeDeal]: cardId,
 				[SEARCH_PARAM.dialog.closeStage]: to,

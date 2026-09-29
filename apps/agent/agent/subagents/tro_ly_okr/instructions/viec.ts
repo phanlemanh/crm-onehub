@@ -13,6 +13,7 @@ export default defineDynamic({
 			const goi = await dungGoiDeXuat(
 				viec.data.objectiveId,
 				viec.data.nguoiYeuCau,
+				{ keyResultId: viec.data.keyResultId, nac: viec.data.nac },
 			);
 			return goi ? defineInstructions({ markdown: goiThanhChiDan(goi) }) : null;
 		},

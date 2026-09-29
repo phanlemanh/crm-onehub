@@ -15,7 +15,7 @@ cuối».
   | `width` | Bề rộng | Dùng cho |
   | --- | --- | --- |
   | `narrow` | `--container-narrow` (560px) | trang giới thiệu, Intake, màn trước khi kết nối |
-  | `page` | `--container-page` (820px) | Chung, Theo dõi, Tiền tệ, Kết nối (danh sách), chi tiết một kết nối, Nhắc buổi sáng, Chương trình OKR |
+  | `page` | `--container-page` (820px) | Chung, Theo dõi, Tiền tệ, Giai đoạn thoả thuận, Kết nối (danh sách), chi tiết một kết nối, Nhắc buổi sáng, Chương trình OKR |
   | `wide` | `--container-page-wide` (1120px) | Thành viên, Khoá API, SSO, Trường, Điều phối 30 ngày |
   | `full` | cả vùng nội dung | Tổ chức (danh sách – chi tiết) |
 
@@ -36,7 +36,7 @@ cuối».
 
   | Nhóm | Mục |
   | --- | --- |
-  | Không gian làm việc | Chung · Tiền tệ · Trường |
+  | Không gian làm việc | Chung · Tiền tệ · Trường · Giai đoạn thoả thuận |
   | Con người | Thành viên · Tổ chức · Chương trình OKR · Điều phối 30 ngày |
   | Kết nối và dữ liệu | Kết nối · Theo dõi & phân tích |
   | Bảo mật | SSO · Khoá API |
@@ -103,10 +103,12 @@ Không dùng `SaveBar` ở Cài đặt: các section độc lập với nhau.
 - **Không đủ quyền**: điều khiển bị khoá, và một dòng dưới tiêu đề trang nói vì
   sao. Không ẩn section, không ẩn nút — thứ biến mất thì người dùng không biết
   mình thiếu quyền.
-  - Ngoại lệ duy nhất: hai khối «Trợ lý OKR» và «Sổ chi phí AI» ở Chương trình OKR
-    ẩn với người không phải quản trị — sổ chi phí là số tiền của cả công ty, không
-    phải cấu hình người đó thiếu quyền sửa. Chốt ở Cổng Phạm vi của
-    `tro-ly-okr-nen` (`_acceptance/tro-ly-okr-nen/decisions.jsonl`).
+  - Ngoại lệ duy nhất: ba khối «Trợ lý OKR», «Góp ý của Trợ lý OKR» và «Sổ chi
+    phí AI» ở Chương trình OKR ẩn với người không phải quản trị — sổ chi phí là
+    số tiền của cả công ty, không phải cấu hình người đó thiếu quyền sửa. Chốt
+    ở Cổng Phạm vi của `tro-ly-okr-nen` (`_acceptance/tro-ly-okr-nen/decisions.jsonl`);
+    khối thứ hai («Góp ý của Trợ lý OKR», `TheGopYSoDo`) thêm ở lượt 9b vì cùng
+    lý do.
 
 ## Đợt
 

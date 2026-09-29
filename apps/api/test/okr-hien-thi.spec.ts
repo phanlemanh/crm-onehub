@@ -1107,8 +1107,9 @@ describe("ghi-ke", () => {
 					objectiveId: s.g,
 					keyResultId: null,
 					nguoiYeuCau,
+					nac: "bat",
 				});
-				return kq.xep ? `xep ${kq.taskId}` : `tu choi ${kq.lyDo}`;
+				return kq.bat ? `xep ${kq.taskId}` : `tu choi ${kq.lyDo}`;
 			};
 			const truoc = await demHang();
 			const dangChay = {

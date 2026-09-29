@@ -5,11 +5,11 @@ import { resolveFavicon } from "../src/favicon";
 import { fieldKeyFromLabel } from "../src/fields-shape";
 import {
 	ActivityType,
-	DealStage,
 	type FieldEntity,
 	FieldType,
 	RateSource,
 } from "../src/generated/prisma/enums";
+import { GIAI_DOAN_GOC } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
@@ -280,16 +280,16 @@ const TITLES = [
 ] as const;
 
 const OPEN_STAGES = [
-	DealStage.DEMO_BOOKED,
-	DealStage.QUALIFIED_TO_BUY,
-	DealStage.DECISION_MAKER_BOUGHT_IN,
-	DealStage.CONTRACT_SENT,
+	GIAI_DOAN_GOC.DEMO_BOOKED,
+	GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
+	GIAI_DOAN_GOC.DECISION_MAKER_BOUGHT_IN,
+	GIAI_DOAN_GOC.CONTRACT_SENT,
 ] as const;
 
 const CLOSED_STAGES = [
-	DealStage.CLOSED_WON,
-	DealStage.CLOSED_LOST,
-	DealStage.UNQUALIFIED_TO_BUY,
+	GIAI_DOAN_GOC.CLOSED_WON,
+	GIAI_DOAN_GOC.CLOSED_LOST,
+	GIAI_DOAN_GOC.UNQUALIFIED_TO_BUY,
 ] as const;
 
 const DEAL_DESCRIPTIONS = [
@@ -887,8 +887,8 @@ async function seedDeals(
 					),
 					closedAt: closed ? stageChangedAt : null,
 					closedReason:
-						stage === DealStage.CLOSED_LOST ||
-						stage === DealStage.UNQUALIFIED_TO_BUY
+						stage === GIAI_DOAN_GOC.CLOSED_LOST ||
+						stage === GIAI_DOAN_GOC.UNQUALIFIED_TO_BUY
 							? pick(LOST_REASONS)
 							: null,
 					createdAt,
@@ -942,7 +942,7 @@ async function seedActivities(
 		dealId: string | null;
 		createdById: string;
 		createdAt: Date;
-		meta?: { from: DealStage; to: DealStage };
+		meta?: { from: string; to: string };
 	};
 
 	const rows: ActivityRow[] = [];
@@ -996,8 +996,10 @@ async function seedActivities(
 			dealId: deal.id,
 			subject: "Stage changed",
 			meta: {
-				from: DealStage.DEMO_BOOKED,
-				to: deal.closed ? DealStage.CLOSED_WON : DealStage.QUALIFIED_TO_BUY,
+				from: GIAI_DOAN_GOC.DEMO_BOOKED,
+				to: deal.closed
+					? GIAI_DOAN_GOC.CLOSED_WON
+					: GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
 			},
 		});
 	}

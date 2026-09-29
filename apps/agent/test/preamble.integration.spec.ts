@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
-import { DealStage, db } from "@crm/db";
+import { db } from "@crm/db";
+import { GIAI_DOAN_GOC } from "@crm/db/giai-doan";
 import {
 	companyPreamble,
 	composeClosing,
@@ -74,7 +75,7 @@ beforeAll(async () => {
 			name: `Fernhill platform ${suffix}`,
 			companyId,
 			ownerId: user.id,
-			stage: DealStage.CONTRACT_SENT,
+			stage: GIAI_DOAN_GOC.CONTRACT_SENT,
 			amount: 48_000,
 			contacts: { create: [{ contactId: paulaId, role: "Champion" }] },
 		},
@@ -116,7 +117,7 @@ describe("companyPreamble", () => {
 		const { markdown, focus } = await companyPreamble(companyId, rep);
 
 		expect(markdown).toContain(`company id \`${companyId}\``);
-		expect(markdown).toContain(`(CONTRACT_SENT) \`${dealId}\``);
+		expect(markdown).toContain(`(Contract sent) \`${dealId}\``);
 		expect(focus).toEqual({ companyId });
 	});
 
@@ -138,7 +139,7 @@ describe("contactPreamble", () => {
 	it("lists the deals they are on", async () => {
 		const { markdown } = await contactPreamble(paulaId, rep);
 
-		expect(markdown).toContain(`(CONTRACT_SENT, Champion) \`${dealId}\``);
+		expect(markdown).toContain(`(Contract sent, Champion) \`${dealId}\``);
 	});
 
 	it("offers a way out when they have no company", async () => {

@@ -1,0 +1,202 @@
+{
+  "feature_plain": "Chủ sở hữu và quản trị viên tự thêm, đổi tên, sắp xếp và xoá các giai đoạn của thoả thuận hợp tác ngay trong Cài đặt, thay vì chờ lập trình viên sửa bảy bước cố định của phễu bán phần mềm cũ.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chuyển dữ liệu hiện có sang cách mới mà không thoả thuận nào đổi chỗ: bảy bước cũ thành bảy giai đoạn giữ nguyên tên, ngày chốt, lý do và lịch sử."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho thêm giai đoạn vào một nhóm; giai đoạn mới hiện ngay thành một cột trên bảng cột và một mục trong menu giai đoạn."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ cho đổi tên giai đoạn; tên mới hiện ở mọi nơi, kể cả những dòng lịch sử ghi trước lúc đổi tên."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ cho xoá giai đoạn đang trống; nó biến khỏi bảng cột và menu, không ai chuyển thoả thuận vào được nữa, còn lịch sử cũ vẫn hiện đúng tên của nó."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ bắt chọn một giai đoạn cùng nhóm khi xoá giai đoạn còn thoả thuận (tính cả thoả thuận đã lưu trữ), chuyển hết sang đó với lịch sử đầy đủ, rồi mới xoá — hỏng giữa chừng thì không gì thay đổi."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ để nhóm của giai đoạn quyết cách hành xử: vào «Chốt được» hay «Không thành» thì đóng dấu ngày chốt, «Không thành» bắt ghi lý do, về «Đang mở» thì xoá ngày chốt; thoả thuận mới vào giai đoạn mở đứng đầu."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ tính tỷ lệ chốt ở Tổng quan theo nhóm: chốt được chia cho (chốt được + không thành), tính cả «Unqualified» và mọi giai đoạn mới."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ đếm chỉ số OKR «thoả thuận chốt được» trên mọi giai đoạn thuộc nhóm «Chốt được»; số liệu gửi về đo lường sử dụng chỉ mang mã giai đoạn, không mang tên người đặt."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ để agent lọc thoả thuận đang mở, chốt được, không thành theo nhóm của giai đoạn, và in tên giai đoạn chứ không in mã."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ có trang Cài đặt › Giai đoạn thoả thuận gồm ba thẻ theo nhóm, dùng được ở mọi khổ màn hình từ điện thoại tới máy lớn, bằng tiếng Việt và tiếng Anh, có trạng thái đang tải và lỗi tải."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-4",
+      "p": "Chặn mọi thứ tự sắp xếp không khớp đúng danh sách hiện có của nhóm (thiếu, thừa, lẫn nhóm), để hai người sắp cùng lúc không làm lệch thứ tự cột."
+    },
+    {
+      "id": "AC-7",
+      "p": "Chặn xoá giai đoạn cuối cùng của một nhóm, tên rỗng hoặc quá 40 ký tự, tên trùng (không phân biệt hoa thường), vượt 20 giai đoạn, và mọi cách đổi nhóm của một giai đoạn."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG cho thành viên thường sửa giai đoạn: họ thấy danh sách với nút bị khoá và một dòng nói vì sao; người chỉ dùng OKR không xem được danh sách."
+    },
+    {
+      "id": "AC-14",
+      "p": "Sẽ KHÔNG còn chỗ nào trong mã sản phẩm rẽ nhánh theo tên bảy bước cũ — mọi hành vi đi theo nhóm; trang mới qua được cổng kiểm thiết kế."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG làm nhiều bộ giai đoạn theo loại hợp tác — một bộ chung cho mọi thoả thuận."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG cho tự chọn màu — màu tự suy từ nhóm và vị trí."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG có xác suất, giá trị có trọng số hay dự báo theo giai đoạn."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG cho đổi nhóm của giai đoạn đã tạo."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG có nút khôi phục giai đoạn đã xoá."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG tự dịch hay đổi tên bảy bước cũ — quản trị viên đặt tên thật sau khi lên."
+    },
+    {
+      "id": "OOS-7",
+      "p": "KHÔNG ghi nhật ký ai đổi giai đoạn lúc nào."
+    },
+    {
+      "id": "OOS-8",
+      "p": "KHÔNG xoá hẳn giai đoạn khỏi dữ liệu — xoá chỉ là ẩn, để lịch sử luôn đọc được tên."
+    }
+  ],
+  "scope_plain": "Những thứ người duyệt có thể mong nhưng vòng này cố ý không làm:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Mọi bước trong vòng đời một giai đoạn đều có tiêu chí: khởi tạo khi chuyển dữ liệu (AC-1), thêm (AC-2), đổi tên (AC-3), sắp xếp (AC-4), xoá khi trống (AC-5), xoá khi còn thoả thuận (AC-6); khôi phục để sau, đổi nhóm thì không bao giờ."
+    },
+    {
+      "i": 1,
+      "p": "Mọi vai đều có tiêu chí: quản trị sửa được (AC-2 tới AC-7), thành viên chỉ xem (AC-8), người chỉ dùng OKR không xem (AC-8), agent đọc theo nhóm (AC-12)."
+    },
+    {
+      "i": 2,
+      "p": "Mọi nơi đang dùng giai đoạn — rút bằng tìm toàn kho — đều có tiêu chí: màn Thoả thuận, lịch sử, Tổng quan, OKR và số liệu sử dụng, agent, sự kiện cho tác nhân."
+    },
+    {
+      "i": 3,
+      "p": "Mọi ràng buộc trong bảng quy tắc của thiết kế đều có tiêu chí chặn (AC-4 thứ tự sắp, AC-6 đích xoá, AC-7 tên và số lượng)."
+    },
+    {
+      "i": 4,
+      "p": "Phần áp chung: mọi khổ màn hình và hai thứ tiếng (AC-13), tên người đặt không bị trình duyệt tự dịch (AC-13), trạng thái tải, lỗi, thiếu quyền (AC-8, AC-13), không rẽ nhánh theo tên cũ (AC-14); giai đoạn không chứa dữ liệu cá nhân."
+    },
+    {
+      "i": 5,
+      "p": "GIẢ ĐỊNH chờ người duyệt gạch: hai quản trị viên sửa cùng lúc thì dữ liệu không vỡ, người thứ hai chỉ thấy lời từ chối rồi tải lại — không có tiêu chí riêng."
+    },
+    {
+      "i": 6,
+      "p": "GIẢ ĐỊNH chờ người duyệt gạch: trần 20 giai đoạn và 40 ký tự là con số đặt ra, không đo từ dữ liệu thật; nằm trong một chỗ cấu hình để chỉnh."
+    },
+    {
+      "i": 7,
+      "p": "Phần để sau và không bao giờ làm nằm ở danh sách «sẽ KHÔNG làm» và sổ quyết định."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Một phép đo chặn đổi nhóm lại đo chữ ký thủ tục thay vì hành vi, và mâu thuẫn với thiết kế — đã thay bằng phép đo gửi thử nhóm lạ vào mọi thao tác rồi đọc dữ liệu thấy nhóm không đổi."
+    },
+    {
+      "i": 1,
+      "p": "Chưa hứa con số «còn N thoả thuận» có tính thoả thuận đã lưu trữ — thiếu thì giai đoạn chỉ còn thoả thuận lưu trữ sẽ không xoá được qua giao diện. Đã thêm vào AC-6 và hai phép đo."
+    },
+    {
+      "i": 2,
+      "p": "Lời hứa lịch sử hiện đúng tên giai đoạn đã xoá chỉ đo ở máy chủ, chưa đo trên màn — đã đánh dấu AC-5 là xuyên lớp và thêm phép đo dựng màn lịch sử (E19)."
+    },
+    {
+      "i": 3,
+      "p": "Chuyển giai đoạn hàng loạt chưa có phép đo — có thể lách luật giai đoạn đã xoá và luật bắt lý do. Đã thêm vào AC-5, AC-9 và hai phép đo."
+    },
+    {
+      "i": 4,
+      "p": "Thiết kế hứa báo sự kiện «đổi giai đoạn» cho tác nhân khi chuyển lúc xoá, nhưng hợp đồng không đo — đã thêm vào AC-6: mỗi thoả thuận đúng một sự kiện, hỏng giữa chừng thì không sự kiện nào."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260929T001721Z-1",
+      "p": "Đã chọn lưu giai đoạn thành một bảng riêng mà thoả thuận trỏ tới — đổi lại một lần chuyển dữ liệu trên máy thật không tự đảo ngược được."
+    },
+    {
+      "id": "d-20260929T001721Z-2",
+      "p": "Đã chọn giữ nguyên mã của bảy bước cũ — đổi lại hai kiểu mã cùng sống, có phép đo chặn mã sản phẩm dựa vào mã cũ."
+    },
+    {
+      "id": "d-20260929T001721Z-3",
+      "p": "Đã chọn ba nhóm, không có nhóm «loại ra» — đổi lại tỷ lệ chốt có thể giảm ngay sau khi lên vì «Unqualified» tính vào."
+    },
+    {
+      "id": "d-20260929T001721Z-4",
+      "p": "Đã chọn khi xoá phải chuyển thoả thuận sang giai đoạn cùng nhóm — đổi lại không dọn sang nhóm khác trong một bước, nhưng không sinh lý do hay ngày chốt giả."
+    },
+    {
+      "id": "d-20260929T001721Z-5",
+      "p": "KHÔNG làm nhiều bộ giai đoạn — tiết kiệm khoảng nửa vòng; nâng lên sau vẫn được."
+    },
+    {
+      "id": "d-20260929T001721Z-6",
+      "p": "KHÔNG cho đổi nhóm, khôi phục, tự chọn màu hay dự báo — đổi nhóm sẽ âm thầm làm sai ngày chốt."
+    },
+    {
+      "id": "d-20260929T001721Z-7",
+      "p": "Đã chọn sửa thẳng sáu tệp kiểm cũ sang mã mới — đổi lại vài hồ sơ đã ký phải ghim lại lúc giao."
+    },
+    {
+      "id": "d-20260929T001721Z-8",
+      "p": "Đã chọn để máy chủ gắn sẵn tên giai đoạn vào lịch sử — đổi lại lịch sử của giai đoạn đã xoá vẫn đọc được tên."
+    },
+    {
+      "id": "d-20260929T002254Z-9",
+      "p": "Đã dựng bản bấm được trong khung Cài đặt tĩnh và gửi ảnh kèm thẻ — đổi lại người duyệt không phải ngồi cùng kéo thử."
+    },
+    {
+      "id": "d-20260929T005346Z-11",
+      "p": "Đã giữ chữ «Xoá» trên màn dù thực chất giai đoạn chỉ bị ẩn — đổi lại lệch nghĩa «lưu trữ» của từ điển; đổi sang «Lưu trữ» khi có ai cần khôi phục."
+    },
+    {
+      "id": "d-20260929T005935Z-12",
+      "p": "Đã giữ tên cột giai đoạn cũ của thoả thuận thay vì đổi tên như bản thiết kế — đổi lại tên không nói rõ là trỏ tới bảng giai đoạn, nhưng các hồ sơ đã ký chạy nguyên, thay đổi nhỏ hơn nhiều."
+    },
+    {
+      "id": "d-20260929T010326Z-13",
+      "p": "Đã làm tuần tự trong một phiên và dồn mọi lần chuyển giai đoạn qua một đường duy nhất — đổi lại chậm hơn một lượt song song, được một luật chung cho kéo thả, đổi hàng loạt và xoá có chuyển."
+    }
+  ]
+}

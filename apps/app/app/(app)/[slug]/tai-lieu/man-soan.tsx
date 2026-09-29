@@ -20,7 +20,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { TrinhSoan } from "@crm/ui/components/trinh-soan";
 import { chuanNfc, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { chuanHoa } from "@crm/validation/tai-lieu-markdown";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
 	useCallback,
@@ -110,6 +110,15 @@ function FormSoan({
 	const cache = useCrmCache();
 	const router = useRouter();
 	const url = useWorkspaceUrl();
+	const queryClient = useQueryClient();
+	const timTrang = async (q: string) =>
+		(
+			await queryClient.fetchQuery(trpc.taiLieu.tim.queryOptions({ q }))
+		).rows.map((r) => ({
+			slug: r.slug,
+			ten: r.ten,
+			duong: url(duongTrang(r.slug)),
+		}));
 	const khai = useKhaiThayDoi();
 	const ma = useId();
 	const id = {
@@ -255,6 +264,13 @@ function FormSoan({
 							goiY={m.goiY}
 							id={id.noiDung}
 							nhan={m.noiDungNhan}
+							nhanLienKetTrang={{
+								nut: m.lienKetTrang.nut,
+								tim: m.lienKetTrang.tim,
+								goThem: m.lienKetTrang.goThem,
+								khongCo: m.lienKetTrang.khongCo,
+							}}
+							timTrang={timTrang}
 							nhanNut={{
 								tieuDe2: m.nut.tieuDe2,
 								tieuDe3: m.nut.tieuDe3,

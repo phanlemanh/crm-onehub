@@ -48,6 +48,21 @@ mock.module("@/lib/trpc/client", () => ({
 			list: thuTuc("users.list", () => [{ id: "u1", name: "Người A" }]),
 			me: thuTuc("users.me", () => ({ id: "u1", name: "Người A" })),
 		},
+		giaiDoan: {
+			list: thuTuc("giaiDoan.list", () => ({
+				canManage: true,
+				tran: 20,
+				stages: [
+					{
+						id: "DEMO_BOOKED",
+						label: "Demo booked",
+						kind: "OPEN",
+						position: 0,
+						dealCount: 0,
+					},
+				],
+			})),
+		},
 		currency: {
 			settings: thuTuc("currency.settings", () =>
 				settingsTreo

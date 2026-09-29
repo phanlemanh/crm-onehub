@@ -48,9 +48,10 @@ async function xep(i: number, luc: Date): Promise<string> {
 		objectiveId: mucTieu[i] ?? "",
 		keyResultId: null,
 		nguoiYeuCau: nguoi,
+		nac: "bat",
 		now: luc,
 	});
-	if (!kq.xep) throw new Error(`khong xep duoc viec ${i}: ${kq.lyDo}`);
+	if (!kq.bat) throw new Error(`khong xep duoc viec ${i}: ${kq.lyDo}`);
 	return kq.taskId;
 }
 

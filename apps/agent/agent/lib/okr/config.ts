@@ -1,8 +1,42 @@
+import {
+	MA_LOAI_DE_XUAT,
+	type MaLoaiDeXuat,
+} from "@crm/db/okr-tro-ly-danh-muc";
+
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
+const MO_HINH = "google/gemini-3.8-flash";
+const MO_HINH_JUDGE = "zai/glm-5.2-fast";
+const THE = ["onehub:tro-ly-okr"] as const;
+const MA_CAM_NG = [
+	"chep-cap-tren",
+	"noi-ve-nguoi",
+	"tu-cam",
+] as const satisfies readonly MaLoaiDeXuat[];
 
 export const TRO_LY_OKR = {
-	model: "google/gemini-3.8-flash",
+	model: MO_HINH,
+	moHinhZdr: [MO_HINH, MO_HINH_JUDGE],
+	judge: {
+		model: MO_HINH_JUDGE,
+		modelOptions: {
+			providerOptions: {
+				gateway: { zeroDataRetention: true, tags: [...THE] },
+			},
+		},
+		nguong: 0.7,
+	},
+	danhGia: {
+		tranUsdMacDinh: 2,
+		maCamNg: MA_LOAI_DE_XUAT.filter((ma) =>
+			(MA_CAM_NG as readonly string[]).includes(ma),
+		),
+		env: {
+			tongKet: "TDX_TONG_KET",
+			tranUsd: "TDX_TRAN_USD",
+			thuMucThem: "TDX_THU_MUC_THEM",
+		},
+	},
 	cuaSoNguCanh: 1_048_576,
 	tranRaMoiLoiGoi: 2_000,
 	limits: {
@@ -10,13 +44,14 @@ export const TRO_LY_OKR = {
 		maxOutputTokensPerSession: 4_000,
 		sessionTimeoutMs: 10 * MINUTE_MS,
 	},
-	tags: ["onehub:tro-ly-okr"],
+	tags: THE,
 	brief: "Run one Trợ lý OKR task.",
 	chiDanGoc:
 		'This session runs one Trợ lý OKR task. Call the tool tro_ly_okr exactly once with the message "run". Do not call any other tool and do not do the work yourself. When it returns, reply "done".',
 	tinNhanGoc: "run",
 	khoaMoHinh: ["AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"],
 	timViecCon: { soLan: 8, cachMs: 250 },
+	khoaKiemLai: "agent-task:okr-kiem-san-sang",
 	congCuChan: {
 		tuTao: [
 			"archive_field",

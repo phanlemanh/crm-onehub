@@ -337,6 +337,15 @@ const THU_TUC_OKR_LUOT_GIOI_HAN = [
 	"chuyenDonVi",
 	"moCoi",
 ].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_TRO_LY = [
+	"troLySanSang",
+	"troLyDeXuat",
+	"troLyDanhSach",
+	"troLyQuyet",
+	"troLyAn",
+	"troLySoDo",
+	"xuHuongKr",
+].map((t) => `okr.${t}`);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1401,6 +1410,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_TRUOC_LUOT,
 				...THU_TUC_OKR_LUOT_CANH_KR,
 				...THU_TUC_OKR_LUOT_GIOI_HAN,
+				...THU_TUC_OKR_LUOT_TRO_LY,
 			].sort(),
 		);
 		const hong = Object.entries(THU_TUC_CANH_KR).flatMap(([t, khuon]) => {
@@ -1869,6 +1879,29 @@ const THU_TU_DOC_OKR = {
 		khac: 200,
 		chiQuanTri: OKR.thongDiep.chuyen.canQuanTri,
 	},
+	"okr.troLyAn": {
+		vao: () => ({}),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
+	"okr.troLyDanhSach": {
+		vao: (s) => ({ objectiveId: s.g, keyResultId: s.krG }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.troLySanSang": {
+		vao: (s) => ({ objectiveId: s.g, keyResultId: s.krG }),
+		K: "vang",
+		khac: 404,
+		ma: "objectiveId",
+	},
+	"okr.troLySoDo": {
+		vao: () => ({}),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
 	"okr.viecCuaToi": {
 		vao: () => undefined,
 		K: "chua-G",
@@ -1883,6 +1916,12 @@ const THU_TU_DOC_OKR = {
 		}),
 		K: "vang",
 		khac: 200,
+	},
+	"okr.xuHuongKr": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "vang",
+		khac: 404,
+		ma: "keyResultId",
 	},
 	"okr.xuatKy": {
 		vao: cuaKy,

@@ -1,6 +1,11 @@
 import { type LoaiNhacAi, type ViecAi, viecAiCanNhac } from "./ai-nhac";
 import type { Db } from "./client";
 import { type LoaiNhacOkr, type ViecOkr, viecOkrCanNhac } from "./okr-nhac";
+import {
+	type LoaiNhacTaiLieu,
+	type ViecTaiLieu,
+	viecTaiLieuCanNhac,
+} from "./tai-lieu-nhac";
 import { WORKSPACE_ID } from "./workspace";
 
 export const LOAI_NHAC = [
@@ -22,9 +27,15 @@ export const THU_TU_NHAC = [
 	"okr-nhac-ten",
 	"okr-ghi-nhan",
 	"okr-theo-doi",
+	"tai-lieu-cho-duyet",
 	"ai-tran",
 	"ai-doi-soat-lech",
-] as const satisfies readonly (LoaiNhac | LoaiNhacOkr | LoaiNhacAi)[];
+] as const satisfies readonly (
+	| LoaiNhac
+	| LoaiNhacOkr
+	| LoaiNhacTaiLieu
+	| LoaiNhacAi
+)[];
 
 type ThieuThuTu = Exclude<ViecNhac["loai"], (typeof THU_TU_NHAC)[number]>;
 
@@ -146,7 +157,7 @@ export type ViecKeHoach = {
 	targetDays?: number;
 };
 
-export type ViecNhac = ViecKeHoach | ViecOkr | ViecAi;
+export type ViecNhac = ViecKeHoach | ViecOkr | ViecTaiLieu | ViecAi;
 
 function docKeHoach(db: Db, userId: string | undefined) {
 	return db.onboardingPlan.findMany({
@@ -306,17 +317,24 @@ function gom(gui: Gui[]): Map<string, ViecKeHoach[]> {
 function gop(
 	keHoach: Map<string, ViecKeHoach[]>,
 	okr: Map<string, ViecOkr[]>,
+	taiLieu: Map<string, ViecTaiLieu[]>,
 	ai: Map<string, ViecAi[]>,
 	thanhVien: Set<string>,
 ): Map<string, ViecNhac[]> {
 	const nguoi = [
-		...new Set([...keHoach.keys(), ...okr.keys(), ...ai.keys()]),
+		...new Set([
+			...keHoach.keys(),
+			...okr.keys(),
+			...taiLieu.keys(),
+			...ai.keys(),
+		]),
 	].filter((u) => thanhVien.has(u));
 	return new Map(
 		nguoi.map((userId) => {
 			const ds: ViecNhac[] = [
 				...(keHoach.get(userId) ?? []),
 				...(okr.get(userId) ?? []),
+				...(taiLieu.get(userId) ?? []),
 				...(ai.get(userId) ?? []),
 			];
 			return [userId, ds.sort(soSanh)];
@@ -328,7 +346,7 @@ export async function viecCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecNhac[]>> {
-	const [keHoach, thanhVien, okr, ai] = await Promise.all([
+	const [keHoach, thanhVien, okr, taiLieu, ai] = await Promise.all([
 		docKeHoach(db, chon.userId),
 		db.member.findMany({
 			where: {
@@ -338,12 +356,14 @@ export async function viecCanNhac(
 			select: { userId: true },
 		}),
 		viecOkrCanNhac(db, chon),
+		viecTaiLieuCanNhac(db, chon),
 		viecAiCanNhac(db, chon),
 	]);
 	const tap = new Set(thanhVien.map((m) => m.userId));
 	return gop(
 		gom(keHoach.flatMap((k) => guiCua(k, tap, chon.now))),
 		okr,
+		taiLieu,
 		ai,
 		tap,
 	);

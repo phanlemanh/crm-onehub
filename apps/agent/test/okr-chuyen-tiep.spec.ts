@@ -86,9 +86,10 @@ describe("okr-chuyen-tiep", () => {
 			objectiveId,
 			keyResultId: null,
 			nguoiYeuCau: "mn3-nguoi-yeu-cau",
+			nac: "bat",
 			now: LUC,
 		});
-		if (!xep.xep) throw new Error(`khong xep duoc: ${xep.lyDo}`);
+		if (!xep.bat) throw new Error(`khong xep duoc: ${xep.lyDo}`);
 		const cuaToi = await db.agentTask.findUniqueOrThrow({
 			where: { id: xep.taskId },
 			select: {

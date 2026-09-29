@@ -16,6 +16,7 @@ import type { NguoiGoi } from "./quyen";
 import {
 	taiLieuApproveInput,
 	taiLieuApproveOutput,
+	taiLieuBoLocOutput,
 	taiLieuCreateInput,
 	taiLieuCreateOutput,
 	taiLieuDangDungOutput,
@@ -23,15 +24,21 @@ import {
 	taiLieuIdInput,
 	taiLieuListInput,
 	taiLieuListOutput,
+	taiLieuNhacToiOutput,
 	taiLieuOkOutput,
 	taiLieuProposalOutput,
+	taiLieuProposalsInput,
 	taiLieuProposalsOutput,
 	taiLieuProposeInput,
 	taiLieuProposeOutput,
 	taiLieuRejectInput,
 	taiLieuSlugInput,
+	taiLieuSucKhoeOutput,
+	taiLieuTimInput,
+	taiLieuTimOutput,
 } from "./tai-lieu.contracts";
 import { TaiLieuService } from "./tai-lieu.service";
+import { TaiLieuTimService } from "./tai-lieu-tim.service";
 
 const TAG = ["Documents"];
 
@@ -44,7 +51,45 @@ function nguoiGoi(ctx: AuthedTrpcContext): NguoiGoi {
 export class TaiLieuRouter {
 	constructor(
 		@Inject(TaiLieuService) private readonly taiLieu: TaiLieuService,
+		@Inject(TaiLieuTimService) private readonly timKiem: TaiLieuTimService,
 	) {}
+
+	@Query({
+		input: taiLieuTimInput,
+		output: taiLieuTimOutput,
+		meta: restMeta("GET", "/tai-lieu/tim", TAG),
+	})
+	tim(@Input() input: z.infer<typeof taiLieuTimInput>) {
+		return this.timKiem.tim(input.q);
+	}
+
+	@Query({
+		output: taiLieuSucKhoeOutput,
+		meta: restMeta("GET", "/tai-lieu/suc-khoe", TAG),
+	})
+	sucKhoe(@Ctx() ctx: AuthedTrpcContext) {
+		return this.timKiem.sucKhoe(nguoiGoi(ctx));
+	}
+
+	@Query({
+		output: taiLieuBoLocOutput,
+		meta: restMeta("GET", "/tai-lieu/bo-loc", TAG),
+	})
+	boLoc(@Ctx() ctx: AuthedTrpcContext) {
+		return this.timKiem.boLoc(nguoiGoi(ctx));
+	}
+
+	@Query({
+		input: taiLieuSlugInput,
+		output: taiLieuNhacToiOutput,
+		meta: restMeta("GET", "/tai-lieu/trang/{slug}/nhac-toi", TAG),
+	})
+	nhacToi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuSlugInput>,
+	) {
+		return this.timKiem.nhacToi(nguoiGoi(ctx), input.slug);
+	}
 
 	@Query({
 		input: taiLieuListInput,
@@ -103,11 +148,15 @@ export class TaiLieuRouter {
 	}
 
 	@Query({
+		input: taiLieuProposalsInput,
 		output: taiLieuProposalsOutput,
 		meta: restMeta("GET", "/tai-lieu/de-xuat", TAG),
 	})
-	proposals(@Ctx() ctx: AuthedTrpcContext) {
-		return this.taiLieu.proposals(nguoiGoi(ctx));
+	proposals(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuProposalsInput>,
+	) {
+		return this.taiLieu.proposals(nguoiGoi(ctx), input);
 	}
 
 	@Query({

@@ -29,9 +29,10 @@ async function hangMoi(): Promise<LeasedTask> {
 		objectiveId: G,
 		keyResultId: null,
 		nguoiYeuCau: F,
+		nac: "bat",
 		now: new Date(),
 	});
-	if (!xep.xep) throw new Error(`khong xep duoc: ${xep.lyDo}`);
+	if (!xep.bat) throw new Error(`khong xep duoc: ${xep.lyDo}`);
 	const hang = await db.agentTask.update({
 		where: { id: xep.taskId },
 		data: {

@@ -23,6 +23,7 @@ export const NHOM_CAI_DAT: readonly NhomCaiDat[] = [
 			{ khoa: "chung", href: GOC_CAI_DAT },
 			{ khoa: "tienTe", href: `${GOC_CAI_DAT}/currencies` },
 			{ khoa: "truong", href: `${GOC_CAI_DAT}/fields` },
+			{ khoa: "giaiDoan", href: `${GOC_CAI_DAT}/giai-doan` },
 		],
 	},
 	{

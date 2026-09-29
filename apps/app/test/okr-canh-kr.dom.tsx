@@ -184,6 +184,17 @@ function ghiMau<TVao>(duong: GoiMay["duong"]) {
 	};
 }
 
+function khongGoi(duong: string) {
+	return {
+		mutationOptions: () => ({
+			mutationKey: [duong],
+			mutationFn: async () => {
+				throw new Error(`${duong} khong duoc goi khi tao muc tieu`);
+			},
+		}),
+	};
+}
+
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
@@ -207,6 +218,17 @@ mock.module("@/lib/trpc/client", () => ({
 			taoTuMau: ghiMau<TaoTuMauVao>("okr.taoTuMau"),
 			createObjective: ghiMau<object>("okr.createObjective"),
 			updateObjective: ghiMau<object>("okr.createObjective"),
+			troLySanSang: thuTucMau("okr.troLySanSang", () => ({
+				bat: false,
+				lyDo: null,
+			})),
+			troLyDanhSach: thuTucMau("okr.troLyDanhSach", () => ({
+				dong: [],
+				dangSoan: false,
+			})),
+			troLyDeXuat: khongGoi("okr.troLyDeXuat"),
+			troLyQuyet: khongGoi("okr.troLyQuyet"),
+			updateKeyResult: khongGoi("okr.updateKeyResult"),
 		},
 		users: {
 			list: thuTucMau("users.list", () => [

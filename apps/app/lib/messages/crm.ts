@@ -106,11 +106,8 @@ const en = {
 	close: {
 		done: "Deal closed.",
 		asLost: "Close as lost",
-		unqualified: "Mark as unqualified",
 		lostReason:
 			"What did we lose it to? This is the only place that answer gets recorded.",
-		unqualifiedReason:
-			"Why is this not a fit? It goes on the timeline so nobody re-runs the same deal.",
 		reasonPlaceholder: "Went with an incumbent vendor",
 		reason: "Reason",
 		save: "Save",
@@ -427,11 +424,8 @@ const vi = {
 	close: {
 		done: "Đã chốt thoả thuận.",
 		asLost: "Chốt là không thành",
-		unqualified: "Đánh dấu là chưa phù hợp",
 		lostReason:
 			"Vì sao không thành? Đây là chỗ duy nhất câu trả lời được ghi lại.",
-		unqualifiedReason:
-			"Vì sao chưa phù hợp? Câu này lên dòng thời gian để không ai làm lại từ đầu.",
 		reasonPlaceholder: "Đối tác đã có bên hợp tác khác",
 		reason: "Lý do",
 		save: "Lưu",

@@ -16,6 +16,7 @@ export const OKR = {
 		viSao: 500,
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
+	troLy: { soLuotGanDay: 50, ghiChuVet: "tro-ly-okr:" },
 	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
@@ -224,6 +225,14 @@ export const OKR = {
 				"Người xem có tên phải là thành viên còn trong không gian làm việc.",
 			conCanChinh: (n: number) =>
 				`Mục tiêu còn ${n} căn chỉnh — gỡ hết căn chỉnh (góp vào và nhận góp) rồi mới đặt mức giới hạn.`,
+		},
+		troLy: {
+			daQuyet: "Đề xuất này đã được quyết",
+			khongCoDeXuat: (id: string) => `Không có đề xuất nào mang mã ${id}.`,
+			cachKhongHop: "Dòng này không nhận cách quyết đó.",
+			canGiaTri: "Sửa rồi nhận cần giá trị mới.",
+			daCu: "Ô này đã đổi từ lúc Trợ lý OKR đề xuất — tải lại danh sách góp ý.",
+			krKhacMucTieu: "KR này không thuộc Mục tiêu đang hỏi.",
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

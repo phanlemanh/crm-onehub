@@ -63,6 +63,14 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tim-va-dieu-huong-kho",
+		ten: "Kho tài liệu lượt 3 — tìm ⌘K, sức khoẻ kho",
+		states: [
+			{ id: "ST-tim-nhanh", nhan: "Tìm nhanh ⌘K, có dấu hay không" },
+			{ id: "ST-suc-khoe", nhan: "Sức khoẻ kho: việc của chủ trang" },
+		],
+	},
+	{
 		slug: "doi-ten-onehub-center",
 		ten: "OneHub Center — cột trái đăng nhập hướng A",
 		states: [
@@ -441,6 +449,62 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tro-ly-okr-de-xuat",
+		ten: "Góp ý khi bấm — hộp Mục tiêu và KR, chế độ ẩn, số đo",
+		states: [
+			{
+				id: "ST-muctieu-co-dong",
+				nhan: "Mục tiêu — hướng A: cột cạnh form",
+			},
+			{
+				id: "ST-huong-chuyen-man",
+				nhan: "Mục tiêu — hướng B: chuyển màn",
+			},
+			{ id: "ST-muctieu-nut", nhan: "Mục tiêu — có nút góp ý" },
+			{
+				id: "ST-muctieu-nut-khoa-sua",
+				nhan: "Mục tiêu — sửa chưa lưu",
+			},
+			{
+				id: "ST-muctieu-dang-soan",
+				nhan: "Mục tiêu — đang soạn",
+			},
+			{
+				id: "ST-muctieu-sua-dong",
+				nhan: "Mục tiêu — sửa rồi nhận",
+			},
+			{
+				id: "ST-muctieu-da-quyet",
+				nhan: "Mục tiêu — đã quyết",
+			},
+			{
+				id: "ST-muctieu-rong",
+				nhan: "Mục tiêu — không có đề xuất",
+			},
+			{ id: "ST-muctieu-loi", nhan: "Mục tiêu — chưa trả lời được" },
+			{ id: "ST-muctieu-loi-nhan", nhan: "Mục tiêu — nhận bị từ chối" },
+			{ id: "ST-muctieu-het-tran", nhan: "Mục tiêu — hết trần tháng" },
+			{ id: "ST-muctieu-het-luot", nhan: "Mục tiêu — hết lượt hôm nay" },
+			{ id: "ST-muctieu-dang-cho", nhan: "Mục tiêu — đề xuất đang chờ" },
+			{ id: "ST-kr-cot", nhan: "Hộp KR — cột chỉ KR này" },
+			{ id: "ST-kr-xu-huong", nhan: "Hộp KR — dòng xu hướng dưới ô Đích" },
+			{
+				id: "ST-kr-khong-xu-huong",
+				nhan: "Hộp KR — không xu hướng",
+			},
+			{ id: "ST-caidat-nac", nhan: "Cài đặt — Bật cho · Chế độ ẩn cho" },
+			{
+				id: "ST-caidat-nac-bat-toan",
+				nhan: "Cài đặt — bật toàn công ty",
+			},
+			{ id: "ST-sodo-co-so", nhan: "Số đo — có số" },
+			{ id: "ST-sodo-ngan", nhan: "Số đo — ngăn một lượt" },
+			{ id: "ST-sodo-dang-tai", nhan: "Số đo — đang tải" },
+			{ id: "ST-sodo-rong", nhan: "Số đo — chưa có lượt nào" },
+			{ id: "ST-sodo-loi", nhan: "Số đo — lỗi" },
+		],
+	},
+	{
 		slug: "canh-kr-okr",
 		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
 		states: [
@@ -543,6 +607,27 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-mocoi-rong", nhan: "Sức khoẻ — không có OKR mồ côi" },
 			{ id: "ST-mocoi-dang-tai", nhan: "Sức khoẻ — OKR mồ côi đang tải" },
 			{ id: "ST-mocoi-loi", nhan: "Sức khoẻ — OKR mồ côi lỗi tải" },
+		],
+	},
+	{
+		slug: "giai-doan-thoa-thuan",
+		ten: "Cài đặt › Giai đoạn thoả thuận — quản trị tự cấu hình",
+		states: [
+			{
+				id: "ST-co-du-lieu",
+				nhan: "Có dữ liệu — bảy giai đoạn ban đầu, quản trị",
+			},
+			{ id: "ST-them", nhan: "Hộp thoại Thêm giai đoạn" },
+			{ id: "ST-them-tu-choi", nhan: "Thêm — máy chủ từ chối tên trùng" },
+			{ id: "ST-xoa-trong", nhan: "Xoá giai đoạn trống — hỏi lại" },
+			{
+				id: "ST-xoa-chuyen",
+				nhan: "Xoá giai đoạn còn thoả thuận — chọn đích cùng nhóm",
+			},
+			{ id: "ST-khong-quyen", nhan: "Thành viên thường — điều khiển khoá" },
+			{ id: "ST-dat-tran", nhan: "Đạt trần 20 giai đoạn — Thêm khoá" },
+			{ id: "ST-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-loi", nhan: "Lỗi tải" },
 		],
 	},
 ];

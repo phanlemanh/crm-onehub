@@ -218,14 +218,10 @@ model RateLimit {
   @@map("rateLimit")
 }
 
-enum DealStage {
-  DEMO_BOOKED
-  QUALIFIED_TO_BUY
-  UNQUALIFIED_TO_BUY
-  DECISION_MAKER_BOUGHT_IN
-  CONTRACT_SENT
-  CLOSED_WON
-  CLOSED_LOST
+enum DealStageKind {
+  OPEN
+  WON
+  LOST
 }
 
 enum ActivityType {
@@ -989,6 +985,20 @@ model AgentAuditEvent {
   @@map("agentAuditEvent")
 }
 
+model DealStage {
+  id         String        @id @default(cuid())
+  label      String
+  kind       DealStageKind
+  position   Int
+  archivedAt DateTime?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  deals      Deal[]
+
+  @@index([kind, position])
+  @@map("dealStage")
+}
+
 model Deal {
   id            String              @id @default(cuid())
   conversations AgentConversation[]
@@ -999,7 +1009,8 @@ model Deal {
   ownerId       String
   owner         User                @relation("DealOwner", fields: [ownerId], references: [id])
 
-  stage             DealStage @default(DEMO_BOOKED)
+  stage             String    @default("DEMO_BOOKED")
+  giaiDoan          DealStage @relation(fields: [stage], references: [id], onDelete: Restrict)
   stageChangedAt    DateTime  @default(now())
   amount            Decimal?  @db.Decimal(14, 2)
   currency          String    @default("USD")
@@ -2010,23 +2021,27 @@ model OkrCycle {
 }
 
 model OkrProgramConfig {
-  id             String   @id @default(cuid())
-  version        Int      @unique
-  objectiveCap   Int
-  krCap          Int
-  capMode        String
-  scoreScale     String
-  weightsOn      Boolean
-  personalOn     Boolean
-  aiOn           Boolean  @default(false)
-  aiDeXuatPhamVi String   @default("tat")
-  aiDeXuatDonVi  String[] @default([])
-  aiTomTatPhamVi String   @default("tat")
-  aiTomTatDonVi  String[] @default([])
-  aiTranThangUsd Decimal  @default(9) @db.Decimal(8, 2)
-  duyetCongBo    Boolean  @default(false)
-  createdById    String
-  createdAt      DateTime @default(now())
+  id               String   @id @default(cuid())
+  version          Int      @unique
+  objectiveCap     Int
+  krCap            Int
+  capMode          String
+  scoreScale       String
+  weightsOn        Boolean
+  personalOn       Boolean
+  aiOn             Boolean  @default(false)
+  aiDeXuatPhamVi   String   @default("tat")
+  aiDeXuatDonVi    String[] @default([])
+  aiTomTatPhamVi   String   @default("tat")
+  aiTomTatDonVi    String[] @default([])
+  aiDeXuatAnPhamVi String   @default("tat")
+  aiDeXuatAnDonVi  String[] @default([])
+  aiTomTatAnPhamVi String   @default("tat")
+  aiTomTatAnDonVi  String[] @default([])
+  aiTranThangUsd   Decimal  @default(9) @db.Decimal(8, 2)
+  duyetCongBo      Boolean  @default(false)
+  createdById      String
+  createdAt        DateTime @default(now())
 
   @@map("okrProgramConfig")
 }
@@ -2498,9 +2513,13 @@ model OkrDeXuat {
   nguoiYeuCau String
   nguoiQuyet  String?
   quyetLuc    DateTime?
+  nac         String    @default("bat")
+  maLoai      String?
+  hienLuc     DateTime?
   createdAt   DateTime  @default(now())
 
   @@index([objectiveId, trangThai])
+  @@index([objectiveId, nac, trangThai])
   @@index([taskId])
   @@index([createdAt])
   @@map("okrDeXuat")

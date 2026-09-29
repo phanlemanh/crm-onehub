@@ -6,7 +6,7 @@ import {
 	type WorkspaceRole,
 	workspaceRoleOf,
 } from "@crm/auth";
-import type { Db } from "@crm/db";
+import type { Db, Prisma } from "@crm/db";
 import { type NguoiDuyet, nguoiDuyetMucTieu } from "@crm/db/okr-duyet";
 import {
 	dieuKienXemMucTieu,
@@ -147,10 +147,14 @@ export class OkrAccessService {
 		return { ten: truong?.name ?? nd.userId };
 	}
 
-	async assertXemMucTieu(userId: string, objectiveId: string) {
+	async assertXemMucTieu(
+		userId: string,
+		objectiveId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
 		const q = await this.quyen(userId);
 		const nc = this.nguCanhXem(q, userId);
-		const row = await this.db.okrObjective.findFirst({
+		const row = await client.okrObjective.findFirst({
 			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
 			select: chonDonVi,
 		});
@@ -265,19 +269,31 @@ export class OkrAccessService {
 		);
 	}
 
-	async assertSuaMucTieuCoQuyen(userId: string, objectiveId: string) {
-		const { q, mt } = await this.assertXemMucTieu(userId, objectiveId);
+	async assertSuaMucTieuCoQuyen(
+		userId: string,
+		objectiveId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
+		const { q, mt } = await this.assertXemMucTieu(userId, objectiveId, client);
 		if (!this.suaDuocDonVi(q, userId, mt))
 			throw new ForbiddenException(OKR.thongDiep.khongSuaDuocDonVi);
 		return { q, mt };
 	}
 
-	async assertSuaMucTieu(userId: string, objectiveId: string) {
-		return (await this.assertSuaMucTieuCoQuyen(userId, objectiveId)).mt;
+	async assertSuaMucTieu(
+		userId: string,
+		objectiveId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
+		return (await this.assertSuaMucTieuCoQuyen(userId, objectiveId, client)).mt;
 	}
 
-	async assertSuaKr(userId: string, keyResultId: string) {
-		const kr = await this.db.okrKeyResult.findUnique({
+	async assertSuaKr(
+		userId: string,
+		keyResultId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
+		const kr = await client.okrKeyResult.findUnique({
 			where: { id: keyResultId },
 			include: { objective: { select: chonDonVi } },
 		});

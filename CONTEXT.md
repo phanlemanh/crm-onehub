@@ -123,13 +123,24 @@ _Avoid_: đồng tiền mặc định, default currency, tiền tệ gốc
 Vì sao: «mặc định» chỉ nói chỗ điền sẵn của một ô, không nói vai của thiết lập; người
 đọc một lời báo lỗi phải tìm được đúng thiết lập ấy ở Cài đặt, nơi nó mang tên này.
 
-**Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác. **CHƯA CHỐT
-NGHĨA.** Dữ liệu đang mang bảy bước của một phễu bán phần mềm — `DEMO_BOOKED`,
-`QUALIFIED_TO_BUY`, `CLOSED_WON`… — thừa kế từ kho gốc và không mô tả quy trình
-hợp tác của OneHub.
-_Avoid_: đã đặt lịch demo, đủ điều kiện để mua
+**Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác, trong một bộ
+giai đoạn chung cho mọi thoả thuận mà chủ sở hữu và quản trị viên tự thêm, đổi
+tên, sắp xếp và xoá ở Cài đặt › Giai đoạn thoả thuận. Mỗi giai đoạn thuộc một
+**loại giai đoạn**. Bộ ban đầu là bảy bước thừa kế từ kho gốc — `DEMO_BOOKED`,
+`QUALIFIED_TO_BUY`, `CLOSED_WON`… — giữ nhãn tiếng Anh cho tới khi quản trị viên
+đặt lại theo quy trình hợp tác thật. Chốt 2026-09-29 (vòng `giai-doan-thoa-thuan`).
+_Avoid_: đã đặt lịch demo, đủ điều kiện để mua, pipeline stage
 Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
-người đọc hiểu được.
+người đọc hiểu được — nên máy không dịch bảy nhãn cũ, người đặt tên thật.
+
+**Loại giai đoạn**: nhóm quyết định một giai đoạn thoả thuận hành xử ra sao —
+**Đang mở** (chưa tới kết cục) · **Chốt được** (hai bên bắt tay; tính vào «chốt
+được» ở Tổng quan và OKR) · **Không thành** (thôi không theo nữa; bắt ghi lý do).
+Loại chọn lúc tạo giai đoạn và không đổi được. Tỷ lệ chốt = Chốt được ÷ (Chốt được
++ Không thành). Chốt 2026-09-29.
+_Avoid_: thắng, thua, closed won, closed lost, trạng thái
+Vì sao: ba tên lấy đúng chữ của mục **Chốt** và **Đang mở** đã khoá; «thắng/thua»
+đọc quan hệ hợp tác thành một trận đấu.
 
 **Kế hoạch 30 ngày**: kế hoạch đưa một công ty mới ký vào guồng trong ba mươi
 ngày đầu, dựng từ một khuôn theo loại đối tác. Treo vào một công ty; mở như một
@@ -745,6 +756,17 @@ _Avoid_: hoá đơn AI, billing, nhật ký chi phí
 Vì sao: «hoá đơn» là chứng từ của nhà cung cấp, còn sổ là số của chính CRM để đối soát
 với hoá đơn đó.
 
+**Chế độ ẩn**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
+việc trên OKR thật — góp ý khi một Mục tiêu được lưu, tóm tắt sau ngày cập nhật — ghi sổ
+chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả ở Cài đặt ›
+Chương trình OKR. Tiền của nấc này là tiền thật, tính vào trần tháng. Quản trị chọn đơn vị
+ở chế độ ẩn cho từng việc; đơn vị đã bật thì không ở chế độ ẩn. Chốt 2026-09-28 (Manh
+Phan).
+_Avoid_: chạy bóng, shadow mode, thử nghiệm, beta
+Vì sao: «chạy bóng» là chữ dịch thẳng của «shadow mode», người không đọc tài liệu kỹ thuật
+khó đoán nghĩa; «thử nghiệm» và «beta» gợi người dùng đang được thử cho xem, trong khi ở
+nấc này người dùng không thấy gì.
+
 **Kho tài liệu**: nơi giữ quy định, chính sách, quy trình và biểu mẫu nội bộ của
 OneHub. Người viết và đọc trang; máy chỉ soạn bản đề xuất; trợ lý AI trả lời chỉ
 từ bản đang dùng. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
@@ -810,6 +832,14 @@ trang hiện «quá hạn xác minh» và trợ lý AI trả lời kèm cảnh b
 _Avoid_: hết hạn, expiry
 Vì sao: «hết hạn» nghe như quy định hết hiệu lực — đó là chuyện khác, của văn bản
 pháp luật.
+
+**Sức khoẻ kho**: tab «Sức khoẻ» của kho tài liệu, năm danh sách việc chủ trang nên
+xem — quá hạn xác minh, có bản đề xuất chờ duyệt, liên kết gãy, được nhắc mà chưa có
+trang, trang mồ côi (không trang nào dẫn tới). Mỗi dòng là một trang cùng chủ trang,
+không có điểm hay màu. Chốt 2026-09-29 tại Cổng Phạm vi của `tim-va-dieu-huong-kho`.
+_Avoid_: điểm sức khoẻ, đèn đỏ/xanh, kiểm toán kho
+Vì sao: «sức khoẻ chương trình» của OKR là một màn khác; ở kho, sức khoẻ là danh sách
+việc để làm, không phải một con số để chấm.
 
 **Bậc duyệt**: mức duyệt của một bản đề xuất theo hậu quả của nội dung. Bậc 1 một
 chủ trang duyệt; bậc 2 (tiền, giá, pháp lý) thêm một người kiểm thứ hai. Chốt

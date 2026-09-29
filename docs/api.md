@@ -921,6 +921,66 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   row, and writes one `chuyen-viec` `OkrTrail` row per KR, objective and việc moved;
   `transferPreview` returns the same `{kr, mucTieu, viec}` counts without writing
   anything.
+- **Bảy thủ tục của `TroLyOkrService` cho lượt 9b «Góp ý khi bấm».** `troLySanSang`,
+  `troLyDeXuat`, `troLyDanhSach`, `troLyQuyet`, `troLyAn`, `troLySoDo` và
+  `xuHuongKr` — đọc thẳng `okr.router.ts` để lấy danh sách hiện hành, dòng này
+  không phải nguồn thật. Ba thủ tục người dùng không đi qua cùng một cổng
+  quyền. `troLySanSang` (`GET .../objectives/{objectiveId}/assistant`) và
+  `troLyDeXuat` (`POST .../assistant/run`) đòi `assertSuaMucTieu` hoặc
+  `assertSuaKr` trên đúng đích được truyền — toàn hay không, không có tập con:
+  không sửa được đích thì `ForbiddenException` luôn, không có KR nào để lọc
+  xuống. Cả ba thủ tục — `troLySanSang`, `troLyDeXuat` và `troLyDanhSach` —
+  còn đòi nấc của đơn vị (`nacCuaDonVi`) đang là `bat`; không đạt thì trả về
+  lý do (`LyDoKhongSanSang`), không phải một lỗi 403. `troLyDanhSach`
+  (`GET .../assistant/suggestions`) không cùng cổng quyền với hai thủ tục
+  kia — nó lọc qua `tapDuocDoc` (`tro-ly.service.ts`): gọi kèm `keyResultId` thì
+  vẫn toàn-hay-không trên đúng KR đó, nhưng gọi cho cả Mục tiêu (không truyền
+  `keyResultId`) thì `tapDuocDoc` trả `"moi"` (mọi KR) khi người gọi sửa được
+  cả đơn vị (`suaDuocDonVi`); không thì lọc xuống đúng tập KR người gọi sửa
+  được (`ghiDuocKr`) và chỉ trả đề xuất của tập đó thay vì chặn cả dòng —
+  `troLyDanhSach` chỉ ném 403 (`khongSuaDuocDonVi`) khi không sửa được KR nào
+  trong Mục tiêu. Gọi kèm một `keyResultId` không thuộc Mục tiêu thì
+  `troLyDanhSach` trả danh sách rỗng thành công (`lyDo: null`), không 403 —
+  khác `troLySanSang` và `troLyDeXuat`, hai thủ tục này ném `krKhacMucTieu`
+  (400). Mục tiêu đã bỏ (`da-bo`) hay đã xoá cũng trả rỗng, không ném; với Mục
+  tiêu đã bỏ, cổng quyền đứng trước nên người không sửa được vẫn nhận 403, còn
+  Mục tiêu đã xoá thì không còn đơn vị để kiểm và ai gọi cũng nhận rỗng.
+  `troLyQuyet`
+  (`POST .../assistant/suggestions/{deXuatId}/decision`) kiểm quyền trên đích
+  của chính dòng đề xuất (`assertSuaDong`: KR nếu dòng gắn với một KR, Mục
+  tiêu nếu không), rồi mới kiểm lại nấc của đơn vị (`nacCuaDonVi`, phải `bat`)
+  một lần nữa bên trong transaction, vì nấc có thể đổi giữa lúc màn đọc danh
+  sách và lúc người dùng quyết. Transaction đó khoá dòng `okrObjective` của Mục
+  tiêu (`FOR UPDATE`) trước khi đọc dòng đề xuất, nên mọi lần quyết trên một Mục
+  tiêu đi tuần tự: hai dòng viết lại khác chữ của cùng một trường được nhận cùng
+  lúc thì lượt sau thấy `truoc` đã cũ và nhận `ConflictException` (`daCu`),
+  không đè lượt trước. `troLyAn` (`GET /okr/assistant/runs`) và
+  `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
+  `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
+  và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.
+- **Chế độ ẩn kích từ chính lần lưu, không từ lịch.** `OkrService.updateObjective`,
+  `updateKeyResult` và `createKeyResult` gọi `kichLuotAn` sau khi transaction của
+  lần lưu đã commit; hàm này gọi `xepLuotAnSauKhiLuu` (`@crm/db/okr-tro-ly`) và
+  tự bắt lỗi — xếp lượt ẩn hỏng chỉ ghi log cảnh báo, không lùi lại lần lưu OKR
+  đã thành công. `xepLuotAnSauKhiLuu` chỉ xếp việc khi lần lưu thật sự đổi
+  `title`/`whyNow` (Mục tiêu) hay `title` (KR) — cờ `doiChu` — và nấc của đơn vị
+  là `an`, không bao giờ khi đã `bat` (đơn vị đã `bat` thì đề xuất đến từ người
+  dùng bấm, không phải từ chế độ ẩn). Việc trùng được gộp theo một `sha256` của
+  id Mục tiêu, id KR và `updatedAt` của mọi dòng liên quan (`inputHash` trong
+  `taoViecDeXuat`), nên hai lần lưu ra cùng nội dung dùng chung một `AgentTask`
+  thay vì xếp hai lượt. Hai trần chỉ áp cho chế độ ẩn, cùng nằm trong
+  `TRO_LY_OKR_TRAN`: một lượt ẩn mỗi Mục tiêu mỗi `nhipAnMucTieuMs` (30 phút),
+  và `luotAnMoiNgay` (40) lượt ẩn toàn công ty mỗi ngày; cả hai vẫn tính vào
+  cùng `aiTranThangUsd` (9 USD mặc định) như mọi chi tiêu khác của Trợ lý OKR.
+  `troLyQuyet` ghi giá trị đã nhận hay đã sửa qua
+  `OkrService.updateObjectiveTrong`/`updateKeyResultTrong`/`addAlignmentTrong`
+  trong cùng transaction, với `note: "tro-ly-okr:" + deXuatId` — một dòng
+  `OkrTrail`, giống hệt một lần sửa tay. Dòng đề xuất của chế độ ẩn (`nac` là
+  `an`) không quyết được: `troLyQuyet` trả `NotFoundException` (`khongCoDeXuat`)
+  cho mọi dòng có `nac` khác `bat`, nên chế độ ẩn không bao giờ ghi vào OKR và
+  không để lại dòng `OkrTrail` nào. Chế độ ẩn không hiện gì cho người dùng: chỉ
+  quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
+  Chương trình OKR.
 
 ## Kho tài liệu: nguồn
 
@@ -960,6 +1020,73 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   machine draft, so an edited draft still traces back to its source. Every proposal, from
   a person or the machine, is written by `taoDeXuatTaiLieu` in
   `packages/db/src/tai-lieu-de-xuat.ts`.
+
+## Deal stages are rows, and code reads their kind
+
+`apps/api/src/giai-doan` owns the `giaiDoan.*` router. A deal stage is a row in
+`dealStage` (id, label, kind, position, archivedAt); `deal.stage` is a text foreign key
+to it. Owners and admins add, rename, reorder and delete stages in Settings → Deal
+stages.
+
+- **Behaviour follows `kind`, never a stage id.** `OPEN` · `WON` · `LOST` decide
+  whether a deal is closed, whether a reason is required, and what the Overview, the
+  OKR metric and the agent count. The rules live once, in `@crm/db/giai-doan`.
+  `GIAI_DOAN_GOC` names the seven original ids for the seed and tests only — product
+  code that branches on one of them is caught by the `khong-re-theo-ten` ruler.
+- **Every stage move goes through `DealsService.chuyenGiaiDoanTrongTx`**: one
+  `STAGE_CHANGE` activity and one `deal.stage.changed` event per deal, inside the
+  caller's transaction. `setStage`, `bulkSetStage` and a delete that moves deals all
+  use it.
+- **Delete is archive.** `archivedAt` is set and the row stays, so history keeps its
+  label. A stage that still has deals — archived deals included — is refused unless
+  `moveTo` names a live stage of the same kind; the move and the archive are one
+  transaction.
+- **Invariants run under `FOR UPDATE` on the live stages**: at least one live stage
+  per kind, labels unique case-insensitively after trimming, at most
+  `GIAI_DOAN.tran.tong` live stages, and `reorder` must list exactly the live stages
+  of one kind. The kind of a stage never changes.
+- **The timeline carries labels.** `activities.timeline` resolves the ids in a
+  `STAGE_CHANGE` meta, archived stages included, and returns `stageChange`; screens
+  print it and never look labels up themselves.
+
+## Kho tài liệu: tìm, nhắc tới, sức khoẻ
+
+`apps/api/src/tai-lieu/tai-lieu-tim.service.ts` owns `taiLieu.tim`, `taiLieu.nhacToi`,
+`taiLieu.boLoc` and `taiLieu.sucKhoe`, on the same `taiLieu` router and behind the same
+`PhamViChungMiddleware` — so the `okr` role reaches them like the rest of the kho.
+
+- **Search reads the bản đang dùng only.** `taiLieuTrang.timKiem` is a `tsvector` written at
+  approval (`to_tsvector('simple', unaccent(ten || noiDung))`); a proposal never enters it.
+  The query side is built once by `dungTruyVan` (`@crm/validation/tai-lieu-tim`): under
+  `TAI_LIEU.tim.toiThieu` characters it returns nothing without touching the database, the
+  last word gets `:*`, and the database applies `unaccent` again, so «quy dinh» finds «Quy
+  định». A title match ranks before a body match. The snippet is cut in TypeScript by
+  `doanTrich` around the first match, not by `ts_headline`, so the bold part is exactly the
+  word the person typed. No `pg_search`, no vectors.
+- **«Trang nhắc tới trang này» is computed on read.** `nhacToi` reads `taiLieuLienKet` rows
+  pointing at the slug from pages that have a bản đang dùng, drops a page linking to itself,
+  and cuts the sentence around the link from that page's current text with `cauChuaLienKet`.
+  No sentence is stored, so an edited page cannot show a stale quote. A caller who cannot
+  see the target page gets `NOT_FOUND`, the same as a missing slug.
+- **`sucKhoe` is five lists, each capped at `TAI_LIEU.tim.sucKhoeToiDa` with a real
+  `total`.** Quá hạn xác minh (before the start of today, VN time), có bản chờ duyệt, liên
+  kết gãy (grouped by source page), được nhắc mà chưa có trang (grouped by target slug) and
+  mồ côi (no other current page links to it). Every row carries its chủ trang; there is no
+  score.
+- **One counting rule for «chờ duyệt».** The tab badge, the Tổng quan card
+  (`dashboard.summary.taiLieuChoDuyet`) and the morning reminder all count through
+  `demChoDuyet` / `demChoDuyetTheoNguoi` in `@crm/db/tai-lieu-quyen`: proposals in
+  `CHO_DUYET` the person may approve — every one for `owner`/`admin`, only their own pages
+  for anyone else. A new place that shows the number calls the same function; a second
+  `count` beside it is how the badge and the reminder start to disagree.
+- **Who sees what is one set of `where` builders** in that same module —
+  `dieuKienThay` (pages), `dieuKienThayDeXuat` (proposals), `dieuKienDuyetDuoc`
+  (approvable). `list`, `boLoc`, `proposals` and `sucKhoe` compose them; none re-derives
+  the rule.
+- **Filters and paging live in the input, not the client.** `list` takes `donViId` and
+  `chuTrangId`; `boLoc` returns only the đơn vị and chủ trang that have a page the caller can
+  see, with counts. `proposals` takes `nhom` (`tat-ca` by default, `cho`, `da-xu-ly`) and a
+  page, and returns `total`.
 
 ## Money
 
