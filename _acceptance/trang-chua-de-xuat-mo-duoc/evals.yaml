@@ -89,7 +89,7 @@ evals:
       tay, Xem nguon}, loi {Viet tay, Xem nguon} + ly do (va o loi co lyDo null: chi ten tep, khong dau ':' treo), tra-lai {Viet tay}, chua-co-ban {Viet tay}, duyet
       {} va loi 'Dang cho ... duyet'; href Xem nguon = duongTabNguon() + '#' + neoNguon(id), href Viet tay
       = duongSuaTrang(slug); phan tu chua ten chu trang / ten tep co translate="no". CHIEU DO: ban sao an
-      nut Viet tay o go-tay -> 'go-tay: thieu nut Viet tay', ma 1.
+      nut Viet tay o go-tay -> 'go-tay: thieu nut Viết tay', ma 1.
 
   - id: E6
     criterion: AC-6
@@ -153,7 +153,7 @@ evals:
     cmd: config:executors.test.tcd_san_thiet_ke
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/[trang]/**"
-    expected: "design-gate --mode static tren man-doc.tsx va sua/page.tsx: exit 0, khong P0. CHIEU DO: ban sao them className='bg-red-500' vao khung trang thai -> exit 1 neu ten tep."
+    expected: "design-gate --mode static tren man-doc.tsx va sua/page.tsx: exit 0, khong P0. CHIEU DO: ban sao them className='text-gray-500 bg-red-500' (chu xam tren nen mau) vao khung trang thai -> design-gate verdict REJECT, p0_count 1, lenh tcd_san_thiet_ke exit 1. (Mot mau don 'bg-red-500' KHONG bi bat — bo quet canh mau giao dien kieu AI, khong canh mau le.)"
 
   - id: E9j
     criterion: AC-9
