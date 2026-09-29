@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8194b36b3663a232ff85d911c601afc3e5bc9f17
+verified_commit: 6e56b3c148d998bc06e93f626c106514267e994b
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -269,3 +269,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: all 19 evals passed, khong eval nao hong; 4 lenh suite xanh; khong judgment item; khong eval nao co phuong sai. Verdict PASS.
+
+### Re-pin lần 1 — 2026-09-29, do gộp onehub (#203, #205) trước khi merge PR #206
+run_id: repin-20260929T064017Z-47497
+sha: 6e56b3c148d998bc06e93f626c106514267e994b · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta
