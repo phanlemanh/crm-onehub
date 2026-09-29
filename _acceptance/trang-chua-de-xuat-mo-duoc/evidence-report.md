@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 95aca9cb78f97e8ea3e502c88e22e2c7d1c7aebe
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-29
 ---
 
 # Evidence Report: trang-chua-de-xuat-mo-duoc

@@ -5,7 +5,7 @@ slug: trang-chua-de-xuat-mo-duoc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -66,3 +66,6 @@ phẩm: đào kho. Chân ngành: OWASP ASVS 4.0 mục V4 «Access Control» — 
 - `taiLieu.get` đổi khuôn `choLanDau` (thêm `dangCho`, `nguon`) — màn đọc là nơi đọc duy nhất.
 - Hồ sơ đã ký có thước chạm `apps/api/src/tai-lieu/**` hay `apps/app/app/(app)/[slug]/tai-lieu/**` (`kho-tai-lieu`, `may-soan-de-xuat`, `tim-va-dieu-huong-kho` …) phải còn xanh; kiểm bằng `pre-merge-check` không `--slug` trước khi đẩy.
 - Từ điển: lint W6 báo «trạng thái», «chờ duyệt», «kết quả» là chữ tránh của mục khác (Loại giai đoạn, Được phép vào, Số chốt). Ở hợp đồng này chúng mang nghĩa của Kho tài liệu (trạng thái nguồn và trang, bản chờ duyệt, kết quả tìm) — trùng chữ khác nghĩa, giữ như `kho-tai-lieu` và `tim-va-dieu-huong-kho`.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-09-29):**
+  - Ngoài-2 — ai gõ thẳng đường dẫn sửa của một trang mà máy đang soạn vẫn mở được trình soạn trống và gửi được một bản viết tay song song với bản máy sắp soạn, nên trang có thể có hai bản đề xuất đầu tiên cạnh tranh nhau. Đi bằng nút trên màn đọc thì không gặp.
+  - Ngoài-3 — khi bản viết tay đầu tiên bị chủ trang trả lại, màn đọc quay về lời «Cần gõ tay» hoặc «Máy chưa soạn được» thay vì báo bản đó đã bị trả lại; người viết có thể không biết vì sao mình phải làm lại.
