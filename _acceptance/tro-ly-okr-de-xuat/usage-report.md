@@ -128,3 +128,49 @@ wall: 1409s
 - **claude-opus-5-5**: 3 agent · 67 calls · out 6,861 · in 134 · cache_read 10,664,546 · cache_create 520,011
 - **claude-haiku-4-5-20251001**: 23 agent · 46 calls · out 18,219 · in 414 · cache_read 2,377,983 · cache_create 1,714,259
 
+### S4 round 3 — wf_bdce804b-87c (24 agent, 59,213 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 6 | 18,995 | 12 | 879,494 | 147 |
+| triage | claude-sonnet-5-5 | 2 | 5,204 | 4 | 149,981 | 42 |
+| judge:E28:operational-feasibility | claude-sonnet-5-5 | 5 | 4,809 | 10 | 587,018 | 56 |
+| judge:E28:spec-alignment | claude-sonnet-5-5 | 5 | 4,477 | 10 | 571,955 | 57 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 2,912 | 18 | 113,283 | 57 |
+| review:measurement | claude-opus-5-5 | 21 | 2,413 | 42 | 3,270,300 | 219 |
+| review:conventions | claude-opus-5-5 | 26 | 2,144 | 52 | 4,148,241 | 243 |
+| machine:bun _acceptance/tro-ly-okr-de-xuat/rang/ | claude-haiku-4-5-20251001 | 2 | 1,893 | 18 | 27,438 | 370 |
+| judge:E28:domain-correctness | claude-sonnet-5-5 | 5 | 1,599 | 10 | 562,707 | 69 |
+| refute:eval-gop-y.mjs | claude-sonnet-5-5 | 7 | 1,595 | 14 | 794,325 | 53 |
+| review:bugs | claude-opus-5-5 | 29 | 1,550 | 58 | 5,036,270 | 292 |
+| judge:E25:domain-correctness | claude-sonnet-5-5 | 2 | 1,313 | 4 | 110,561 | 16 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,190 | 18 | 113,285 | 27 |
+| judge:E25:operational-feasibility | claude-sonnet-5-5 | 2 | 1,165 | 4 | 143,384 | 17 |
+| machine:bun _acceptance/tro-ly-okr-de-xuat/rang/ | claude-haiku-4-5-20251001 | 8 | 1,150 | 66 | 557,265 | 675 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 2 | 1,121 | 18 | 54,876 | 433 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-haiku-4-5-20251001 | 2 | 1,016 | 18 | 113,306 | 26 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-haiku-4-5-20251001 | 2 | 956 | 18 | 113,301 | 24 |
+| judge:E25:spec-alignment | claude-sonnet-5-5 | 2 | 936 | 4 | 143,382 | 18 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-haiku-4-5-20251001 | 2 | 852 | 18 | 113,308 | 22 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 9 | 811 | 74 | 767,688 | 48 |
+| machine:cd packages/validation && bun test test/ | claude-haiku-4-5-20251001 | 2 | 518 | 18 | 113,271 | 17 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 443 | 18 | 113,281 | 16 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 151 | 4 | 142,693 | 10 |
+
+
+wall: 1867s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 11 | 12,862 | 2,200,302 | 1608 | 00:33:54 | 01:00:41 |
+| judge | 6 | 14,299 | 2,119,007 | 73 | 00:33:54 | 00:35:07 |
+| review | 3 | 6,107 | 12,454,811 | 298 | 00:34:12 | 00:39:10 |
+| triage | 1 | 5,204 | 149,981 | 42 | 01:00:43 | 01:01:25 |
+| refute | 1 | 1,595 | 794,325 | 53 | 01:01:27 | 01:02:20 |
+| capture | 1 | 151 | 142,693 | 10 | 01:02:22 | 01:02:32 |
+| synthesize | 1 | 18,995 | 879,494 | 147 | 01:02:33 | 01:05:01 |
+
+- **claude-sonnet-5-5**: 10 agent · 38 calls · out 40,244 · in 76 · cache_read 4,085,500 · cache_create 1,104,836
+- **claude-haiku-4-5-20251001**: 11 agent · 35 calls · out 12,862 · in 302 · cache_read 2,200,302 · cache_create 975,976
+- **claude-opus-5-5**: 3 agent · 76 calls · out 6,107 · in 152 · cache_read 12,454,811 · cache_create 512,225
+

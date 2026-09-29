@@ -2,47 +2,49 @@
 schema_version: 2
 feature_slug: tro-ly-okr-de-xuat
 verdict: REJECT
-failed_evals: [E22]
+failed_evals: [E24]
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c42186b0998ddd1e0c556bf093d046c3c9e14bb1
+verified_commit: 94a597e067a0c0235f3d7e9f27c38e0bc85a2293
 human_signoff:
 ---
 
 # Evidence Report: tro-ly-okr-de-xuat
 
+Round 3. Bảng dưới thay toàn bộ nội dung round cũ; lịch sử round nằm ở mục Iterations. Bảy eval chạy lại ở round này (E6, E7, E8, E17, E22, E24, E26); hai mươi eval mang sang từ round trước vì delta không chạm paths của chúng; E25 và E28 là judgment chờ người.
+
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
-| E1 | AC-1 | test | PASS (carry-forward r1) |
-| E2 | AC-1 | test | PASS (carry-forward r1) |
+| E1 | AC-1 | test | PASS |
+| E2 | AC-1 | test | PASS |
 | E3 | AC-2 | test | PASS |
 | E4 | AC-2 | ui-check | PASS |
 | E5 | AC-3 | test | PASS |
 | E6 | AC-4 | test | PASS |
 | E7 | AC-4 | test | PASS |
 | E8 | AC-5 | test | PASS |
-| E9 | AC-6 | test | PASS (carry-forward r1) |
-| E10 | AC-6 | test | PASS (carry-forward r1) |
-| E11 | AC-7 | test | PASS (carry-forward r1) |
+| E9 | AC-6 | test | PASS |
+| E10 | AC-6 | test | PASS |
+| E11 | AC-7 | test | PASS |
 | E12 | AC-8 | test | PASS |
 | E13 | AC-8 | test | PASS |
 | E14 | AC-9 | test | PASS |
 | E15 | AC-9 | test | PASS |
 | E16 | AC-9 | test | PASS |
 | E17 | AC-10 | test | PASS |
-| E18 | AC-11 | test | PASS (carry-forward r1) |
-| E19 | AC-12 | test | PASS (carry-forward r1) |
+| E18 | AC-11 | test | PASS |
+| E19 | AC-12 | test | PASS |
 | E20 | AC-13 | test | PASS |
 | E21 | AC-13 | test | PASS |
-| E22 | AC-14 | script | FAIL |
+| E22 | AC-14 | script | PASS |
 | E23 | AC-14 | test | PASS |
-| E24 | AC-14 | script | PASS |
-| E25 | AC-14 | judgment | PENDING (hội đồng đề xuất: FAIL, chờ người) |
+| E24 | AC-14 | script | FAIL |
+| E25 | AC-14 | judgment | PENDING (panel đề xuất FAIL, chờ chủ kho) |
 | E26 | AC-4 | test | PASS |
 | E27 | AC-15 | script | PASS |
-| E28 | AC-15 | judgment | PENDING (hội đồng đề xuất: PASS, chờ người) |
+| E28 | AC-15 | judgment | UNCERTAIN |
 | E29 | AC-2 | script | PASS |
 
 ## Evidence
@@ -50,29 +52,32 @@ human_signoff:
 - eval: E1
   run_id: minted-tro-ly-okr-de-xuat-E1-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_quyen_nut
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-tro-ly-okr-de-xuat-E2-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_man_nut
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-tro-ly-okr-de-xuat-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_man_trang_thai
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    Ran 29 tests across 1 file. [4.14s]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: E4-2026-09-29T07:01+07-run2
@@ -80,284 +85,303 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.script.tdx_man_that
   verified_at: 2026-09-28T23:54:18Z
-  screenshot: evidence/E4-step3.png
-  observed: |
-    step3 1440: hop 'Sửa mục tiêu' có nút «Nhờ Trợ lý OKR góp ý» bật, ô Tên mục tiêu 'Giữ đà tăng trưởng bán lẻ miền Bắc', đơn vị Kinh doanh miền Bắc; 390: cùng hộp, nút góp ý và nút Lưu/Huỷ xếp dọc, không tràn. step4 1440/390: tên thành '…Bắcx', nút góp ý xám tắt, dòng «Lưu thay đổi trước khi nhờ góp ý», nút Lưu sáng — khớp expected. step5a: cột 'Trợ lý OKR' bên phải (1440) / dưới form (390) với 'Trợ lý OKR đang đọc Mục tiêu này…' và 3 khung xương, ô tên 'Doanh thu quý 4 miền Bắc'. step5b: nút đổi thành '4 đề xuất đang chờ'; hai thẻ 'Viết lại · Tên Mục tiêu' (gạch 'Doanh thu quý 4 miền Bắc' → 'Bứt phá quy mô kinh doanh miền Bắc trong mùa cao điểm cuối năm') và 'Viết lại · Tên KR', thẻ Câu hỏi, Căn chỉnh; nút Nhận/Sửa/Bác. step6a: bấm Sửa mở ô soạn 'Bứt phá quy mô kinh doanh…' với nút 'Nhận bản đã sửa'/'Huỷ'. step6b 1440: sau Nhận, ô Tên mục tiêu = 'Bứt phá quy mô kinh doanh miền Bắc trong mùa c…', dòng thu gọn 'Tên Mục tiêu — Đã nhận', toast xanh 'Đã nhận' + nút 'Hoàn tác', còn '2 đề xuất đang chờ'; 390: dòng khác 'Tên KR — Đã bác' thu gọn (đúng quyetDongKhac). step8: tab Vết 4 dòng, có 'Sửa tên — theo đề xuất của Trợ lý OKR' Doanh thu quý 4 miền Bắc → Bứt phá…; và dòng 'Sửa mục tiêu' hoàn tác 'Bứt phá… → Doanh thu quý 4 miền Bắc' (khớp bước 7 hoàn tác). step9: hộp 'Sửa KR' nguồn Chỉ số CRM, Đích 6, Hiện tại 2,9, gợi ý xu hướng «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61» (1440 và 390). step10a: Cài đặt › Chương trình OKR, bảng chu kỳ, cấu hình, thẻ 'Trợ lý OKR' bật (đang hiện 'Chưa sẵn sàng — Đang kiểm tra…'). step10b: thẻ Trợ lý OKR 'Sẵn sàng', Bật cho: Kinh doanh miền Bắc; Chế độ ẩn cho: Kinh doanh miền Nam; phần 'Góp ý của Trợ lý OKR — tháng này' bắt đầu 'Số đo'. step10c: ngăn lượt ẩn 'Chiếm lĩnh hàng lạnh ở Đông Nam Bộ — bản đo chế độ ẩn · Chế độ ẩn · 14,6 giây · 0,028 US$' với 5 dòng, mỗi dòng 'Qua bộ kiểm'. step10d: trưởng phòng KD Nam mở hộp 'Sửa mục tiêu' (tên 'Chiếm lĩnh hàng lạnh ở Đông Nam Bộ — bản đo chế độ ẩn'): không có nút góp ý, không có cột Trợ lý — khớp expected. Không frame nào mâu thuẫn expected.
-  network_observed: n-a (driver)
+  carried_from_round: 2
   output: |
-    Các khẳng định của script đều đúng: canh-cay chạy trước màn đầu; okr:mau --moc 2026-09-29 nạp 37 mục tiêu / 81 KR; nút góp ý hiện ở 1440 và 390; gõ một chữ thì nút tắt kèm «Lưu thay đổi trước khi nhờ góp ý», hoàn lại chữ thì nút mở lại; bấm góp ý (model thật) ra cột [data-cot-gop-y] rồi có dòng; Nhận thì ô title bằng okr.objective đọc lại (chiều đỏ ghim: trước Nhận tên đã lưu khác câu mới); OkrTrail có 1 hàng note tro-ly-okr:<id>; Hoàn tác đọc lại được «Doanh thu quý 4 miền Bắc», hoan-tac.sql đếm 1; tab Vết và hộp KR CRM hiện đúng nhãn và gợi ý xu hướng; Cài đặt có thẻ Trợ lý OKR, đặt Chế độ ẩn cho Kinh doanh miền Nam ra lượt ẩn đã nộp, trưởng phòng kd-nam sau khi ẩn không thấy nút lẫn cột. Mọi ảnh ở 1440 và 390: scrollWidth không lớn hơn clientWidth, 0 lần tràn ngang.
-    Ghi chú (không làm đỏ eval): script không nhấn lại lần nữa sau Hoàn tác (bước 8 vẫn đạt nhờ hàng Trail của lần Nhận đầu); khung 10a chụp lúc thẻ còn «Chưa sẵn sàng — Đang kiểm tra…», khung 10b cho thấy «Sẵn sàng»; 390 step10c nút đóng X đè lên cuối tiêu đề ngắn; 390 step8 cột «Trước → sau» bị cắt trong bảng. Network: driver puppeteer không đọc được network, ghi trong evidence/E4-network.txt.
-    Frames đã đọc: E4-step3, 4, 5a, 5b, 6a, 6b, 8, 9, 10a, 10b, 10c, 10d (mỗi khung một bản 1440 và một bản -390) tại _acceptance/tro-ly-okr-de-xuat/evidence/.
+    carry-forward tu round 2 — delta khong cham paths cua eval (frame goc xem round 2 trong Iterations)
 
 - eval: E5
   run_id: minted-tro-ly-okr-de-xuat-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_dung_lai_tran
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    bun run test -- "cd apps/api && bun test test/tro-ly-okr-de-xuat-tran.spec.ts" chạy xong, không có lỗi.
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-tro-ly-okr-de-xuat-E6-r2
+  run_id: minted-tro-ly-okr-de-xuat-E6-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_bo_kiem
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    cd packages/validation && bun test test/okr-kiem-de-xuat.spec.ts chạy xong, không có lỗi.
+    cd packages/validation && bun test test/okr-kiem-de-xuat.spec.ts
+    bài chạy xong, mã thoát 0
 
 - eval: E7
-  run_id: minted-tro-ly-okr-de-xuat-E7-r2
+  run_id: minted-tro-ly-okr-de-xuat-E7-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_nop_ghi
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    test-run: dropped crm_mulwn0ovjufy_test
+    bun test test/tro-ly-okr-nop.integration.spec.ts -t nop-ghi
+    test-run: dropped crm_muly1inmwki5_test
 
 - eval: E8
-  run_id: minted-tro-ly-okr-de-xuat-E8-r2
+  run_id: minted-tro-ly-okr-de-xuat-E8-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_khong_moi_lai
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    test-run: dropped crm_mulwn4ufhlp8_test
+    bun test test/tro-ly-okr-nop.integration.spec.ts -t khong-moi-lai
+    test-run: dropped crm_muly1gfskwwe_test
 
 - eval: E9
   run_id: minted-tro-ly-okr-de-xuat-E9-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_quyet
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: minted-tro-ly-okr-de-xuat-E10-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_man_vet
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-tro-ly-okr-de-xuat-E11-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_tach_tx
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E12
   run_id: minted-tro-ly-okr-de-xuat-E12-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_xu_huong
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    Ran 21 tests across 1 file. [9.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E13
   run_id: minted-tro-ly-okr-de-xuat-E13-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_xu_huong_api
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mulwn1h821ih_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E14
   run_id: minted-tro-ly-okr-de-xuat-E14-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_nac
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    Ran 5 tests across 1 file. [28.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E15
   run_id: minted-tro-ly-okr-de-xuat-E15-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_nac_luu
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mulwn26p1d9o_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E16
   run_id: minted-tro-ly-okr-de-xuat-E16-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_man_cai_dat
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    Ran 8 tests across 1 file. [1.81s]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E17
-  run_id: minted-tro-ly-okr-de-xuat-E17-r2
+  run_id: minted-tro-ly-okr-de-xuat-E17-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_che_do_an
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    test-run: dropped crm_mulwndqt3ws8_test
+    bun test test/tro-ly-okr-che-do-an.spec.ts
+    test-run: dropped crm_muly1gul18mz_test
 
 - eval: E18
   run_id: minted-tro-ly-okr-de-xuat-E18-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_giu_viec
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E19
   run_id: minted-tro-ly-okr-de-xuat-E19-r1
   exit_code: 0
-  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.tdx_kiem_khoa
   verified_at: 2026-09-28T22:13:48Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E20
   run_id: minted-tro-ly-okr-de-xuat-E20-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_so_do
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mulwne6kpkw8_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E21
   run_id: minted-tro-ly-okr-de-xuat-E21-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_man_so_do
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    Ran 8 tests across 1 file. [1052.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E22
-  run_id: minted-tro-ly-okr-de-xuat-E22-r2
-  exit_code: 3
-  baseline: red
+  run_id: minted-tro-ly-okr-de-xuat-E22-r3
+  exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.tdx_eval_gop_y
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    tu kiem thuoc so: 9 ca dung (nguyen tu, giu dau)
-    kho tdx-e22 · okr:mau --moc 2026-09-29: 40 nguoi mau, 10 phong ban, 37 muc tieu
-    eve eval okr/gop-y okr/ng --verbose thoat 0
-    so-moi-lot: 0 dong
-    DUNG gy-01 ... DUNG gy-30 (30 ca; gy-02 va gy-14 phu boi luat luot 7: kr-la-viec; gy-03 phu boi luat luot 7: thieu-doi-trong)
-    DOI CHUNG doi-chung-goi-50-cuoc: khong loi nao
-    chi: 0.473114 USD / tran 2 USD
-    hieu chinh: 7 cap → _acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md
-    ma: 30/30 · judge: 0.57 (7 cap, nguong 0.7)
-    ca doi chung khong bat duoc
-    Lệnh fail: bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs (gắn E22), mã thoát 3 do chiều đỏ ghim: ca giả «gọi 50 cuộc» (khongGopY) không ra dòng nào nên bài in «ca doi chung khong bat duoc».
+    bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs
+    ma: 30/30 · judge: 0.85 (20 cap, nguong 0.7)
 
 - eval: E23
   run_id: minted-tro-ly-okr-de-xuat-E23-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_judge_zdr
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    Ran 2 tests across 1 file. [195.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E24
-  run_id: minted-tro-ly-okr-de-xuat-E24-r2
-  exit_code: 0
-  baseline: red
+  run_id: minted-tro-ly-okr-de-xuat-E24-r3
+  exit_code: 1
+  baseline: n-a
   verifier: config:executors.script.tdx_do_tre
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    bun _acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs --lan 20 chạy xong, p50 và p90 trong ngưỡng.
+    bun _acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs --lan 20
+    do-tre.sql okr.thang=2026-09: nac bat, 20 luot do, p50 11323 ms, p90 22456 ms; nac an, 0 luot
+    20 so (ms): 10395, 14944, 8601, 22005, 12356, 6834, 12510, 5393, 6604, 9898, 23095, 7419, 9249, 5640, 16905, 29098, 19956, 12250, 22385, 6678
+    p50 11323 ms (nguong 8000) · p90 22456 ms (nguong 15000) · 0 luot hong tinh 30000
+    SAI do-tre.sql p50 11323 > 8000
+    SAI do-tre.sql p90 22456 > 15000
+    KHONG DAT
+    phien-do: xong
 
 - eval: E26
-  run_id: minted-tro-ly-okr-de-xuat-E26-r2
+  run_id: minted-tro-ly-okr-de-xuat-E26-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tdx_duong_do
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
   output: |
-    test-run: dropped crm_mulwnietsup1_test
+    bun test test/tro-ly-okr-duong-do.integration.spec.ts
+    test-run: dropped crm_muly1h78tzr8_test
 
 - eval: E27
   run_id: minted-tro-ly-okr-de-xuat-E27-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.tdx_tai_lieu
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    node _acceptance/tro-ly-okr-de-xuat/rang/tai-lieu.mjs chạy xong, không có lỗi.
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E29
   run_id: design-gate-03e847672e
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.tdx_san_thiet_ke
   verified_at: 2026-09-28T23:54:18Z
+  carried_from_round: 2
   output: |
-    design-gate.mjs --mode static chạy qua sáu tệp: cot-gop-y.tsx, hop-thoai-muc-tieu.tsx, hop-thoai-kr.tsx, the-tro-ly-okr.tsx, the-gop-y-so-do.tsx, suggestion.tsx; không tệp nào bị chặn.
-
-### Judgment
-
-- eval: E25
-  judged_by: hội đồng judge (fresh context, ba lens)
-  proposal: FAIL
-  rationale: Ba lens cùng bỏ phiếu không đạt. Bằng chứng judge đọc chỉ có 4 cặp thay vì 20 (tự ghi thiếu 16 cặp), cột chấm của chủ kho trống nên không tính được tỷ lệ khớp ≥ 85%, và điểm judge trung bình 0,00 thấp hơn ngưỡng 0,7. Lưu ý cho người quyết: tệp hieu-chinh-judge.md hiện tại (lượt E22 round 2, sinh 2026-09-29T00:01:14Z) ghi 22 ca bộ Viết lại, chỉ 7 cặp trong bảng (thiếu 13 cặp so với 20), điểm trung bình 0,57 — vẫn dưới cả hai ngưỡng, và cột chủ kho vẫn trống, nên đề xuất không đổi nhưng số liệu judge trích dẫn (4 cặp, 0,00) lệch với tệp hiện tại.
-  votes:
-    - domain-correctness: FAIL — Tệp chỉ có 4 cặp thay vì 20 (tự ghi «thiếu 16 cặp»), cột chấm của chủ kho còn trống nên không tính được tỷ lệ khớp ≥ 85%. Điểm judge trung bình 0,00, thấp hơn nhiều ngưỡng 0,7; ngay cả khi chủ kho điền đủ cột, điều kiện điểm bộ Viết lại ≥ 0,7 vẫn không đạt. Tiêu đề tệp nói 22 ca nhưng bảng chỉ có 4 dòng nên cần kiểm tra chênh lệch.
-    - operational-feasibility: FAIL — Chỉ có 4 trên 20 cặp, thiếu 16 cặp. Cột chấm của chủ kho hoàn toàn trống nên không tính được tỷ lệ khớp. Cả 4 cặp đều 0,00, trung bình 0,00, thấp hơn nhiều ngưỡng 0,7. Ví dụ «Đạt mức tăng trưởng doanh thu bứt phá» bỏ mất con số 20 tỷ, không giữ ý người viết.
-    - spec-alignment: FAIL — Tệp hiệu chỉnh chỉ có 4 cặp viết lại, thiếu 16 cặp so với 20 cặp E25 đòi. Điểm judge trung bình 0,00 thấp hơn ngưỡng 0,7. Cột chấm của chủ kho trống hoàn toàn nên không tính được tỷ lệ khớp ≥ 85%. Riêng điều kiện điểm judge đã vi phạm rõ ràng.
-  required_evidence:
-    - hieu-chinh-judge.md sinh lại bằng `bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs` với đủ 20 cặp viết lại (nay 7 cặp trong tệp hiện tại; judge đọc bản có 4), tại _acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md.
-    - Điểm judge trung bình bộ Viết lại ≥ 0,7 trong dòng đầu tệp đó (nay 0,57 trong tệp hiện tại), kèm giải thích các cặp chấm 0,00, ví dụ gy-06 «Doanh thu 20 tỷ đồng» viết lại thành «Bứt phá tăng trưởng kinh doanh để khẳng định vị thế» bỏ mất con số 20 tỷ.
-    - Cột «Chủ kho (Đạt/Không đạt)» do chính chủ kho điền đủ 20 dòng để tính tỷ lệ khớp với judge ≥ 85%.
-    - Nếu điểm 0,00 do judge chạy sai (ví dụ zai/glm-5.2-fast trả điểm rỗng), cần log gọi judge của lượt chạy để chứng minh.
-  human_override:  # chi nguoi ghi
-
-- eval: E28
-  judged_by: hội đồng judge (fresh context, ba lens)
-  proposal: PASS
-  rationale: Hai lens đạt, một lens chưa đủ bằng chứng nên đề xuất tổng chưa chắc. Phần tài liệu đạt ở cả ba lens; phần luật kho chỉ được chứng minh một phần (xem dissent của spec-alignment). Người quyết cần cân nhắc thêm các findings đo lường ở review-findings.md về độ phủ của luat-kho.mjs (mục 2 quét 2 trên 8 tệp API, mục 3 dựa trên 6 mẫu số chọn tay).
-  votes:
-    - domain-correctness: PASS — CONTEXT.md «Chế độ ẩn» nói rõ máy làm việc trên OKR thật, người dùng không thấy gì, tiền là tiền thật tính vào trần tháng, chỉ quản trị đọc. docs/api.md cụ thể hoá: trần mặc định 9 USD, chỉ troLyAn và troLySoDo dành cho quản trị, xuHuongKr trả null khi chưa ở nấc bật, chế độ ẩn kích từ lần lưu. luat-kho.md ghi 0 chú thích trong dòng thêm, API không có SDK AI hay fetch mới, hằng ở TRO_LY_OKR_TRAN, 0 Record<string, unknown> trong mã nguồn, 6 className đều là hình dạng, docs/agent.md liệt kê tệp packages/ui và packages/validation bị chạm. Hai điểm nhỏ không đủ đổi phiếu: mục CONTEXT nhắc «tóm tắt sau ngày cập nhật» là việc của 9c chưa dựng; câu «Ba thủ tục» trong api.md liệt kê bốn.
-    - operational-feasibility: PASS — CONTEXT.md mục «Chế độ ẩn» nói bằng chữ thường rằng người dùng không thấy gì, tiền là tiền thật tính vào trần tháng, chỉ quản trị đọc kết quả; docs/api.md và docs/agent.md nhắc lại đúng ba điểm, api.md ghi trần 9 USD mặc định. luat-kho.md cho thấy luật kho giữ được: 0 dòng chú thích thêm, API không có lệnh gọi model hay vendor, hằng tinh chỉnh ở TRO_LY_OKR_TRAN, không có Record<string, unknown> trong tệp nguồn, 6/6 className trên component @crm/ui là hình dạng. Judge không đọc diff (đúng luật blind); kết luận về luật kho dựa vào bằng chứng do script của lượt sinh ra.
-    - spec-alignment: UNCERTAIN — Phần tài liệu đạt: «Chế độ ẩn» của CONTEXT.md nói rõ người dùng không thấy gì, tiền thật tính vào trần tháng, chỉ quản trị đọc; api.md (9 USD mặc định) và agent.md khớp. Phần luật kho chỉ được chứng minh một nửa: luat-kho.md xác nhận không chú thích, không gọi model hay vendor trong API, không Record<string, unknown> ở mã nguồn, không className loại (b) trên @crm/ui. Nhưng không cho thấy API chỉ ghi AgentTask và ghi OKR qua OkrService (api.md nói troLyQuyet cập nhật trạng thái OkrDeXuat, AC-13 đòi hienLuc được ghi khi troLyDanhSach trả dòng). Phép kiểm hằng tinh chỉnh chỉ grep sáu con số và loại hai tệp config khỏi phép quét, trong khi có ít nhất ba tệp config (packages/db, agent, api).
-  required_evidence:
-    - Danh sách mọi lệnh ghi Prisma (create/update/updateMany/upsert/delete/$executeRaw) trên dòng thêm của apps/api/src/okr/tro-ly.service.ts và tro-ly-so-do.ts, lấy bằng `git diff -U0 $(git merge-base HEAD origin/onehub) HEAD -- apps/api/src/okr/tro-ly.service.ts apps/api/src/okr/tro-ly-so-do.ts | grep -E '^\+.*\.(create|update|updateMany|upsert|delete)\b|executeRaw'`; chuyển thành đạt nếu chỉ còn agentTask, hàng OkrDeXuat ghi hienLuc, và lời gọi OkrService.* trong cùng transaction.
-    - Đầu ra mở rộng của phép kiểm hằng ở rang/luat-kho.mjs: mọi literal số ≥ 2 chữ số hoặc mảng chuỗi tinh chỉnh trên dòng thêm của tệp nguồn ngoài TRO_LY_OKR_TRAN (kể cả 8, 200, 500 trong apps/agent/agent/lib/okr/*.ts và apps/api/src/okr/*.ts), và xác nhận ba tệp config (packages/db/src/okr-tro-ly-danh-muc.ts, apps/agent/agent/lib/okr/config.ts, apps/api/src/okr/okr-config.ts) không cùng khai một hằng.
-    - Kết quả `grep -nE 'rounded-(sm|md|lg)[^"]*border|size-2 rounded-full|navigator\.clipboard|<h[12] '` trên dòng thêm của apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx, hop-thoai-*.tsx và settings/okr/the-*.tsx, để loại các mẫu vẽ tay còn lại trong bảng «Dấu hiệu vẽ tay» của docs/design.md ngoài `<table` và `divide-y`.
-  human_override:  # chi nguoi ghi
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-tro-ly-okr-de-xuat-SUITE-bun_run_test-r2
+  run_id: minted-tro-ly-okr-de-xuat-SUITE-bun_run_test-r3
   exit_code: 0
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tro-ly-okr-de-xuat-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-tro-ly-okr-de-xuat-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tro-ly-okr-de-xuat-SUITE-bun_run_lint_slop-r2
+  run_id: minted-tro-ly-okr-de-xuat-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tro-ly-okr-de-xuat-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-tro-ly-okr-de-xuat-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-09-28T23:54:18Z
+  verified_at: 2026-09-29T00:33:44Z
+
+### Judgment (đề xuất của hội đồng, chờ người chốt)
+
+Hội đồng chỉ đề xuất; người chốt ở Cổng Bằng chứng qua human_override. Không eval judgment nào dưới đây đã có người xác nhận.
+
+- eval: E25
+  judged_by: judge panel (fresh context, ba lăng kính)
+  panel_proposal: FAIL
+  votes:
+    - domain-correctness: FAIL — điểm judge trung bình bộ Viết lại 0,57 (4/7 cặp Đạt), dưới ngưỡng 0,7; cột chấm của chủ kho trống nên chưa tính được tỷ lệ khớp; file chỉ có 7 cặp thay vì 20. Judge có vẻ chấm rộng: ba cặp bịa ý, bỏ «MRR» hoặc bỏ con số 8% vẫn được 1,00, nên khớp 85% khó đạt.
+    - operational-feasibility: FAIL — tệp hiệu chỉnh chỉ có 7 trên 20 cặp cần chấm (tệp ghi «thiếu 13 cặp»), cột chủ kho trống hết; điểm 0,57 dưới ngưỡng 0,7; chủ kho chưa có đủ 20 cặp để chấm.
+    - spec-alignment: FAIL — 7 cặp có điểm 1, 0, 1, 1, 0, 0, 1 nên trung bình khoảng 0,57; cột chủ kho trống nên không tính được tỷ lệ khớp; chỉ 7 trên 20 cặp cần đọc.
+  rationale: |
+    Lưu ý người chốt: các con số của hội đồng (7 cặp, 0,57) khớp một bản cũ của evidence/hieu-chinh-judge.md. Bản hiện có trên đĩa ghi 20 cặp viết lại, điểm judge trung bình 0.85 (cùng số với dòng đầu ra E22 round này), nhưng cột «Chủ kho (Đạt/Không đạt)» vẫn trống ở cả 20 hàng. Vế «khớp ≥ 85%» của E25 vì vậy vẫn chưa tính được cho tới khi chủ kho điền. Nên xem vế điểm 0,7 là đã đạt trên bản mới và vế khớp là chưa có dữ liệu, thay vì tin số 0,57.
+  required_evidence:
+    - Chủ kho điền «Đạt»/«Không đạt» vào cột cuối cho đủ 20 cặp trong _acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md, để tính tỷ lệ khớp với cột Judge (Judge Đạt khi điểm bằng 1) và kiểm tra ≥ 85%.
+    - Xác nhận bản hieu-chinh-judge.md sinh bởi lần chạy E22 của round này (điểm trung bình 0.85, 20 cặp) là bản hội đồng được chấm lại; nếu hội đồng chấm trên bản cũ 7 cặp thì chấm lại trên bản mới.
+  human_override:  # chi nguoi ghi
+
+- eval: E28
+  judged_by: judge panel (fresh context, ba lăng kính)
+  verdict: UNCERTAIN
+  votes:
+    - domain-correctness: UNCERTAIN — CONTEXT.md nói rõ người dùng không thấy gì, tiền thật tính vào trần tháng, chỉ quản trị đọc; con số 9 USD chỉ có ở docs/api.md. Luật kho phần lớn đạt theo luat-kho.md nhưng còn ba điểm chưa kết luận: một câu trong api.md nghe như đề xuất ẩn quyết được, tên hằng viSao khai ở hai tệp cấu hình, bảy literal số còn ghi «đọc tay».
+    - operational-feasibility: UNCERTAIN — phần tài liệu đạt; luat-kho.md (do script của người code sinh) còn 13 literal số «đọc tay» chưa kết luận, viSao khai hai nơi, và API ghi thẳng OkrDeXuat (tro-ly.service.ts:504) trong khi câu hỏi mô tả API chỉ ghi AgentTask và ghi OKR qua OkrService; thiết kế §4 cho phép trong giao dịch nhận nhưng luat-kho không nêu là ngoại lệ.
+    - spec-alignment: UNCERTAIN — mục «Chế độ ẩn» trong CONTEXT.md, docs/api.md, docs/agent.md đạt; luat-kho.md cho 0 chú thích, 0 lời gọi model trong API, 6 className chỉ đổi hình dạng. Hằng tinh chỉnh: 11 hằng đặt tên tại tệp và 2 số rời ở okr-kiem-de-xuat.ts:95 và :101 chỉ ghi «đọc tay» không kết luận; viSao khai hai nơi. Không đọc diff nên không kiểm được các mục còn lại.
+  rationale: |
+    Cả ba lăng kính cùng UNCERTAIN, không có ý kiến trái chiều. Điểm chung: tài liệu đạt, luật kho thiếu kết luận cho các hằng «đọc tay», tên viSao ở hai nơi, và ranh giới ghi OkrDeXuat của API.
+  required_evidence:
+    - Sửa hoặc giải thích câu trong docs/api.md, đoạn «Chế độ ẩn kích từ chính lần lưu» («quyết một đề xuất đến từ chế độ ẩn để lại đúng hình dạng vết đó», docs/api.md dòng 794-796), hoặc đoạn mã và bài kiểm troLyQuyet cho thấy dòng ẩn bị từ chối vì nấc không phải bat.
+    - Phán quyết cho viSao (500) khai ở packages/db/src/okr-tro-ly-danh-muc.ts (chu.viSao) và apps/api/src/okr/okr-config.ts (ten.viSao): một nguồn duy nhất, hoặc lý do ghi rõ vì sao tách. Lệnh gợi ý dò lịch sử: git log -S'viSao' trên hai tệp đó.
+    - Bảng phân loại tay các literal số còn ghi «đọc tay» ở mục 3 của luat-kho.md (tro-ly-so-do.ts:31/35/232, okr-xu-huong.ts:28/32, cot-gop-y.tsx:66, the-gop-y-so-do.tsx:63, okr-kiem-de-xuat.ts:58/95/101), mỗi dòng ghi là hằng đơn vị hoặc định dạng hợp lệ, hay tham số tinh chỉnh phải vào TRO_LY_OKR_TRAN.
+    - Một câu kết luận có căn cứ về tro-ly.service.ts:504 ghi bảng OkrDeXuat (đó là ngoại lệ thiết kế §4 cho phép hay vi phạm luật API chỉ ghi AgentTask và ghi OKR qua OkrService), kèm việc mở rộng mục 6 của luat-kho.md sang packages/db/src/okr-de-xuat.ts, okr-tro-ly.ts, okr-xu-huong.ts (hienLuc, xepLuotAnSauKhiLuu).
+    - Kiểm chéo bằng một lệnh grep độc lập với luat-kho.mjs trên git diff -U0 7db7cea33309 HEAD -- apps packages tìm dòng thêm chứa // hoặc /*, để mục 1 không phụ thuộc vào script tự chấm.
+    - Ghi rõ rằng API chạy lại kiemDongDeXuat khi đọc troLyDanhSach không vi phạm luật «trí khôn ở apps/agent» (kiemDongDeXuat là hàm thuần trong packages/validation; chốt mã noi-ve-nguoi không tính là identity matching).
+  human_override:  # chi nguoi ghi
 
 ## Known limits
 
@@ -365,13 +389,18 @@ human_signoff:
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt). Ghi chú: E4 (ui-check) không chạy được baseline (n-a); E1, E2, E9, E10, E11, E18, E19 mang sang từ round 1 nên không chạy A/B lại ở round này.
+carried tu round 2 — baseline khong do lai round nay
+
+Không có eval không-phân-biệt được liệt kê: danh sách rỗng. Mọi block eval ghi baseline n-a vì round này không đo lại. Bốn lệnh suite là regression-guard bình thường, không liệt kê.
+
+Round này còn một điểm cần người biết: lệnh do-tre.mjs không gắn eval nào ngoài E24 (mỗi lệnh fail đều đã gắn eval, không có lệnh fail mồ côi).
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval round này chạy một lần, không có eval nào có pass_rate lẫn lộn.
 
 ## Iterations
 
-Round 1: E22 và E4 không đạt theo run-log round 1; phát hiện ngoài hợp đồng ghi ở review-findings.md. Returned to implementation (đợt sửa 2 đã vá thước E4, E22, E26, E28).
-Round 2: E22 failed — ca đối chứng ghim (ca giả «gọi 50 cuộc», khongGopY) không ra dòng nào nên bài in «ca doi chung khong bat duoc»; 30/30 ca đúng theo mã nhưng judge bộ Viết lại chỉ 0,57 trên 7 cặp (dưới ngưỡng 0,7 của E25, tệp hiệu chỉnh thiếu 13 cặp so với 20), và hội đồng đề xuất E25 không đạt. E1, E2, E9, E10, E11, E18, E19 mang sang từ round 1. Returned to implementation.
+Round 1: E1, E2, E9, E10, E11, E18, E19 được chạy lần đầu và giữ kết quả xanh đến round này (carry-forward); chi tiết các lỗi round 1 xem run-log.jsonl và review-findings của round đó. Trả về triển khai.
+Round 2: REJECT — chỉ ca đối chứng E22 (commit 6837bb90: E4 xanh, E28 đề xuất PASS lúc đó). Trả về triển khai (commit 46310617 giữ con số người viết; commit 59d56495 sửa ca đối chứng E22).
+Round 3: REJECT — E24 đo độ trễ 20 lượt troLyDeXuat thật: p50 11323 ms so với ngưỡng 8000 ms và p90 22456 ms so với ngưỡng 15000 ms, 0 lượt hỏng. E22 xanh (30/30 mã, judge 0.85 trên 20 cặp). E25 chờ chủ kho chấm 20 cặp; E28 chờ người quyết ba điểm luật kho. Đây là round thứ ba: theo template, leo thang lên người dùng.
