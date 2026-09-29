@@ -720,6 +720,15 @@ async function chonHop(trang, triggerSel, tenMuc) {
 		tenMuc,
 	);
 	if (!tay.asElement()) {
+		const thay = await trang.evaluate(() => ({
+			o: document.querySelector("[cmdk-input]")?.value ?? null,
+			luaChon: window
+				.__tim("[role='option']")
+				.slice(0, 6)
+				.map((o) => o.innerText.replace(/\s+/g, " ").trim()),
+			rong: window.__tim("[cmdk-empty]").map((e) => e.innerText.trim()),
+		}));
+		console.log(`  ${nhom}: hop chon dang co ${JSON.stringify(thay)}`);
 		await trang.keyboard.press("Escape");
 		return kiem(
 			`${nhom}: khong co lua chon «${tenMuc}» o ${triggerSel}`,
