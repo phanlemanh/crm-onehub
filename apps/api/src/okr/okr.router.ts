@@ -8,13 +8,18 @@ import {
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import {
+	chuDeIdInput,
 	cycleIdInput,
 	dongYInput,
+	ganYInput,
 	gopYInput,
+	ketLuanInput,
 	moHoiYInput,
 	niemPhongInput,
+	suaChuDeInput,
 	suaHoiYInput,
 	suaYInput,
+	taoChuDeInput,
 	yIdInput,
 } from "@crm/validation/okr-hoi-y";
 import {
@@ -437,6 +442,66 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof niemPhongInput>,
 	) {
 		return this.hoiYDv.niemPhong(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: taoChuDeInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/chu-de", TAG),
+	})
+	taoChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taoChuDeInput>,
+	) {
+		return this.hoiYDv.taoChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaChuDeInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/chu-de/{chuDeId}/sua", TAG),
+	})
+	suaChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaChuDeInput>,
+	) {
+		return this.hoiYDv.suaChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: chuDeIdInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/chu-de/{chuDeId}/go", TAG),
+	})
+	goChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof chuDeIdInput>,
+	) {
+		return this.hoiYDv.goChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ganYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/y/gan", TAG),
+	})
+	ganY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ganYInput>,
+	) {
+		return this.hoiYDv.ganY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ketLuanInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/chu-de/{chuDeId}/ket-luan", TAG),
+	})
+	ketLuanChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ketLuanInput>,
+	) {
+		return this.hoiYDv.ketLuanChuDe(ctx.user.id, input);
 	}
 
 	@Query({

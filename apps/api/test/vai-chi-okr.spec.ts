@@ -23,13 +23,18 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import {
+	chuDeIdInput,
 	cycleIdInput,
 	dongYInput,
+	ganYInput,
 	gopYInput,
+	ketLuanInput,
 	moHoiYInput,
 	niemPhongInput,
+	suaChuDeInput,
 	suaHoiYInput,
 	suaYInput,
+	taoChuDeInput,
 	yIdInput,
 } from "@crm/validation/okr-hoi-y";
 import {
@@ -267,6 +272,17 @@ const DAU_VAO_HOP_LE = {
 			"Giảm thời gian giao chặng cuối",
 		],
 	},
+	"okr.taoChuDe": { hoiYId: "khong-co", ten: "Giao lạnh" },
+	"okr.suaChuDe": { chuDeId: "khong-co", ten: "Giao lạnh cho dược" },
+	"okr.goChuDe": { chuDeId: "khong-co" },
+	"okr.ganY": { yIds: ["khong-co"], chuDeId: "khong-co" },
+	"okr.ketLuanChuDe": {
+		chuDeId: "khong-co",
+		ketLuan: "chon",
+		lyDo: "Đúng hướng năm tới của công ty.",
+		cauMucTieu: "Giao lạnh có lãi ở ba tỉnh",
+		noiBanTruoc: "cau-1",
+	},
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -309,6 +325,11 @@ const THU_TUC_HOI_Y = {
 	"okr.goY": yIdInput,
 	"okr.dongY": dongYInput,
 	"okr.niemPhong": niemPhongInput,
+	"okr.taoChuDe": taoChuDeInput,
+	"okr.suaChuDe": suaChuDeInput,
+	"okr.goChuDe": chuDeIdInput,
+	"okr.ganY": ganYInput,
+	"okr.ketLuanChuDe": ketLuanInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

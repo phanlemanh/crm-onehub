@@ -22,7 +22,17 @@ export const OKR_HOI_Y = {
 		motTrongHai:
 			"Viết các câu viết trước, hoặc khai không viết trước — chỉ một trong hai.",
 	},
+	gan: {
+		motTrongHai:
+			"Gắn ý vào một chủ đề, hoặc đánh dấu ý lạ — chỉ một trong hai.",
+		yLaMotY: "Ý lạ chỉ đánh dấu đúng một ý mỗi lần.",
+	},
+	ketLuan: {
+		canCauMucTieu: "Chủ đề chọn cần câu mục tiêu hợp với khuôn tên mục tiêu.",
+	},
 	tenChuDe: { min: 2, max: 120 },
+	tenYLa: 120,
+	maToiDa: 120,
 	lyDo: { min: 10, max: 1000 },
 	hanGio: { min: 24, max: 168 },
 	trich: 2,
@@ -47,6 +57,8 @@ export const KET_LUAN = ["chon", "de-sau", "khong-lam", "da-co"] as const;
 export type KetLuan = (typeof KET_LUAN)[number];
 export const ketLuanChuDe = z.enum(KET_LUAN);
 
+export const KET_LUAN_CHON = "chon" satisfies KetLuan;
+
 export const NOI_BAN_TRUOC = [
 	"cau-1",
 	"cau-2",
@@ -58,7 +70,22 @@ export const NOI_BAN_TRUOC = [
 export type NoiBanTruoc = (typeof NOI_BAN_TRUOC)[number];
 export const noiBanTruoc = z.enum(NOI_BAN_TRUOC);
 
-const ma = z.string().trim().min(1).max(120);
+export const NOI_MOI = "moi" satisfies NoiBanTruoc;
+
+const NOI_CAU: readonly NoiBanTruoc[] = NOI_BAN_TRUOC.filter(
+	(n) => n !== NOI_MOI,
+);
+
+export function soCauCuaNoi(noi: NoiBanTruoc): number | null {
+	const i = NOI_CAU.indexOf(noi);
+	return i < 0 ? null : i + 1;
+}
+
+export function noiTuSoCau(soCau: number): NoiBanTruoc | null {
+	return NOI_CAU[soCau - 1] ?? null;
+}
+
+const ma = z.string().trim().min(1).max(OKR_HOI_Y.maToiDa);
 
 function chu(tran: { min?: number; max: number }) {
 	return z
@@ -168,24 +195,35 @@ export type SuaChuDeInput = z.infer<typeof suaChuDeInput>;
 export const chuDeIdInput = z.object({ chuDeId: ma });
 export type ChuDeIdInput = z.infer<typeof chuDeIdInput>;
 
-export const ganYInput = z.union([
-	z
-		.object({
-			yIds: z.array(ma).min(1).max(OKR_HOI_Y.ganToiDa),
-			chuDeId: ma,
-		})
-		.strict(),
-	z.object({ yIds: z.tuple([ma]), yLa: z.literal(true) }).strict(),
-]);
+export const ganYInput = z
+	.object({
+		yIds: z.array(ma).min(1).max(OKR_HOI_Y.ganToiDa),
+		chuDeId: ma.optional(),
+		yLa: z.literal(true).optional(),
+	})
+	.strict()
+	.refine((v) => (v.chuDeId === undefined) !== (v.yLa === undefined), {
+		message: OKR_HOI_Y.gan.motTrongHai,
+	})
+	.refine((v) => v.yLa === undefined || v.yIds.length === 1, {
+		message: OKR_HOI_Y.gan.yLaMotY,
+	});
 export type GanYInput = z.infer<typeof ganYInput>;
 
-export const ketLuanInput = z.object({
-	chuDeId: ma,
-	ketLuan: ketLuanChuDe,
-	lyDo,
-	cauMucTieu,
-	noiBanTruoc: noiBanTruoc.nullable(),
-});
+export const ketLuanInput = z
+	.object({
+		chuDeId: ma,
+		ketLuan: ketLuanChuDe,
+		lyDo,
+		cauMucTieu,
+		noiBanTruoc: noiBanTruoc.nullable(),
+	})
+	.refine(
+		(v) =>
+			v.ketLuan !== KET_LUAN_CHON ||
+			mucTieuInput.shape.title.safeParse(v.cauMucTieu).success,
+		{ message: OKR_HOI_Y.ketLuan.canCauMucTieu, path: ["cauMucTieu"] },
+	);
 export type KetLuanInput = z.infer<typeof ketLuanInput>;
 
 export const hoiYIdInput = z.object({ hoiYId: ma });

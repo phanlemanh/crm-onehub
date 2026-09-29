@@ -1,6 +1,22 @@
-import type { LoaiChuDe, TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
-import { chuanCau, OKR_HOI_Y, thuTuXao } from "@crm/validation/okr-hoi-y";
+import type {
+	KetLuan,
+	LoaiChuDe,
+	NoiBanTruoc,
+	TrangThaiHoiY,
+} from "@crm/validation/okr-hoi-y";
+import {
+	chuanCau,
+	KET_LUAN_CHON,
+	NOI_MOI,
+	noiTuSoCau,
+	OKR_HOI_Y,
+	thuTuXao,
+} from "@crm/validation/okr-hoi-y";
 import { mucTieuInput } from "@crm/validation/okr-muc-tieu";
+
+export function tenYLa(noiDung: string): string {
+	return Array.from(noiDung).slice(0, OKR_HOI_Y.tenYLa).join("");
+}
 
 export type YBangChung = {
 	id: string;
@@ -52,12 +68,12 @@ export function ketQuaBanTruoc(
 	ban: { cau: string[]; boQua: boolean },
 	chon: { noiBanTruoc: string; cauMucTieu: string }[],
 ): KetQuaBanTruoc {
-	const them = chon.filter((c) => c.noiBanTruoc === "moi").length;
+	const them = chon.filter((c) => c.noiBanTruoc === NOI_MOI).length;
 	if (ban.boQua) {
 		return { cau: [], doi: 0, them: chon.length, boQua: true };
 	}
 	const cau = ban.cau.map((chu, i): SoPhanBanTruoc => {
-		const noi = chon.filter((c) => c.noiBanTruoc === `cau-${i + 1}`);
+		const noi = chon.filter((c) => c.noiBanTruoc === noiTuSoCau(i + 1));
 		if (noi.length === 0) return "bo";
 		const chuan = chuanCau(chu);
 		return noi.some((c) => chuanCau(c.cauMucTieu) === chuan) ? "giu" : "doi";
@@ -183,7 +199,7 @@ export function lyDoChuaCongBo(
 	const moiChuDe = (ma: MaThieu, thieu: (c: ChuDeCongBo) => boolean) => {
 		for (const c of s.chuDe) if (thieu(c)) ra.push({ ma, chuDeId: c.id });
 	};
-	const chon = (c: ChuDeCongBo) => c.ketLuan === "chon";
+	const chon = (c: ChuDeCongBo) => c.ketLuan === KET_LUAN_CHON;
 
 	if (!s.coBanTruoc && !s.boQua) chungCuoc("chua-niem-phong");
 	if (s.yChuaGom > 0) chungCuoc("y-chua-gom");
@@ -216,6 +232,7 @@ export type YTho = {
 	chuDeId: string | null;
 	tacGiaUserId: string;
 	tacGiaTen: string;
+	phongBanId: string | null;
 	soDongY: number;
 	daDongY: boolean;
 	createdAt: Date;
@@ -249,25 +266,30 @@ export type NguoiXemY = {
 	trangThai: TrangThaiHoiY;
 };
 
-const chieuAn = (y: YTho): YChieuAn => ({
+const chieuAn = (y: YTho, chuDeId: string | null): YChieuAn => ({
 	id: y.id,
 	noiDung: y.noiDung,
 	viSao: y.viSao,
 	doBangGi: y.doBangGi,
-	chuDeId: y.chuDeId,
+	chuDeId,
 	daDongY: y.daDongY,
 });
 
 const chieuDayDu = (y: YTho): YChieuDayDu => ({
-	...chieuAn(y),
+	...chieuAn(y, y.chuDeId),
 	tacGia: { id: y.tacGiaUserId, ten: y.tacGiaTen },
 	soDongY: y.soDongY,
 	createdAt: y.createdAt,
 });
 
+function thayDayDu(xem: NguoiXemY): boolean {
+	if (xem.laNguoiChon && !xem.daNiemPhong) return false;
+	return xem.laNguoiChon || xem.laQuanTri;
+}
+
 export function chieuYChoNguoiXem(y: YTho[], xem: NguoiXemY): YChieuRa {
 	if (xem.laNguoiChon && !xem.daNiemPhong) return { khoa: true, y: [] };
-	if (xem.laNguoiChon || xem.laQuanTri) {
+	if (thayDayDu(xem)) {
 		const theoTao = [...y].sort(
 			(a, b) =>
 				a.createdAt.getTime() - b.createdAt.getTime() ||
@@ -275,6 +297,7 @@ export function chieuYChoNguoiXem(y: YTho[], xem: NguoiXemY): YChieuRa {
 		);
 		return { khoa: false, y: theoTao.map(chieuDayDu) };
 	}
+	const thayChuDe = xem.trangThai === "da-cong-bo";
 	const cuaNguoiKhac = y.filter((x) => x.tacGiaUserId !== xem.userId);
 	const theoId = new Map(cuaNguoiKhac.map((x) => [x.id, x]));
 	const thuTu = thuTuXao(
@@ -285,9 +308,70 @@ export function chieuYChoNguoiXem(y: YTho[], xem: NguoiXemY): YChieuRa {
 		khoa: false,
 		y: thuTu.flatMap((id) => {
 			const x = theoId.get(id);
-			return x ? [chieuAn(x)] : [];
+			return x ? [chieuAn(x, thayChuDe ? x.chuDeId : null)] : [];
 		}),
 	};
+}
+
+export type ChuDeTho = {
+	id: string;
+	loai: LoaiChuDe;
+	ten: string;
+	ketLuan: KetLuan | null;
+	lyDo: string;
+	cauMucTieu: string;
+	noiBanTruoc: NoiBanTruoc | null;
+	objectiveId: string | null;
+	viTri: number;
+};
+
+export type BangChungChieu = Omit<BangChungChuDe, "soDongY"> & {
+	soDongY?: number;
+};
+
+export type ChuDeChieu = Omit<ChuDeTho, "viTri"> & {
+	bangChung: BangChungChieu;
+	y: YChieu[];
+};
+
+export function chieuChuDeChoNguoiXem(
+	chuDe: ChuDeTho[],
+	y: YTho[],
+	xem: NguoiXemY,
+): ChuDeChieu[] | null {
+	const daCongBo = xem.trangThai === "da-cong-bo";
+	const dangGom = xem.trangThai === "dang-gom" && thayDayDu(xem);
+	if (!daCongBo && !dangGom) return null;
+	const day = thayDayDu(xem);
+	return [...chuDe]
+		.sort(
+			(a, b) => a.viTri - b.viTri || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+		)
+		.map((c) => {
+			const cua = y.filter((x) => x.chuDeId === c.id);
+			const { soDongY, ...khongDem } = bangChungChuDe(
+				cua.map((x) => ({
+					id: x.id,
+					noiDung: x.noiDung,
+					tacGiaUserId: x.tacGiaUserId,
+					phongBanId: x.phongBanId,
+					soDongY: x.soDongY,
+					createdAt: x.createdAt,
+				})),
+			);
+			return {
+				id: c.id,
+				loai: c.loai,
+				ten: c.ten,
+				ketLuan: c.ketLuan,
+				lyDo: c.lyDo,
+				cauMucTieu: c.cauMucTieu,
+				noiBanTruoc: c.noiBanTruoc,
+				objectiveId: c.objectiveId,
+				bangChung: day ? { ...khongDem, soDongY } : khongDem,
+				y: chieuYChoNguoiXem(cua, xem).y,
+			};
+		});
 }
 
 export type BanTruocTho = {

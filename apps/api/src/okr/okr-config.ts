@@ -219,6 +219,21 @@ export const OKR = {
 				"Chỉ người chọn của lần hỏi ý này mới niêm phong hay khai không viết trước được.",
 			daCoBanTruoc:
 				"Bản viết trước đã niêm phong hoặc đã khai không viết trước — không làm lại, không sửa được.",
+			chiGom: "Chỉ quản trị hoặc người chọn mới gom ý thành chủ đề được.",
+			chuaHetHan:
+				"Lần hỏi ý còn mở — chưa gom được, chờ tới hạn hoặc dời hạn về bây giờ.",
+			nguoiChonChuaNiemPhong:
+				"Người chọn cần niêm phong bản viết trước (hoặc khai không viết trước) rồi mới gom hay kết luận được.",
+			khongCoChuDe: (id: string) => `Không có chủ đề nào mang mã ${id}.`,
+			chuDeConY:
+				"Chủ đề còn ý — chuyển hết ý sang chủ đề khác rồi mới gỡ được.",
+			yKhacHoiY: "Ý này không thuộc lần hỏi ý của chủ đề.",
+			chuDeYLa:
+				"Chủ đề ý lạ chỉ chứa đúng một ý — gắn ý vào một chủ đề thường.",
+			noiBanTruocKhongCo: (soCau: number) =>
+				`Bản viết trước chỉ có ${soCau} câu — nối tới câu có thật hoặc chọn «mới».`,
+			noiBanTruocBoQua:
+				"Người chọn đã khai không viết trước — chủ đề chỉ nối được «mới».",
 		},
 		troLy: {
 			daQuyet: "Đề xuất này đã được quyết",

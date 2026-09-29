@@ -1,5 +1,8 @@
 import {
+	ketLuanChuDe,
+	loaiChuDe,
 	lyDoKhoaYKhuon,
+	noiBanTruoc,
 	soLieuHoiY,
 	trangThaiHoiYKhuon,
 } from "@crm/validation/okr-hoi-y";
@@ -26,6 +29,25 @@ const yChieuDayDu = yChieuAn.extend({
 
 export const yChieuOutput = z.union([yChieuDayDu, yChieuAn]);
 export type YChieuOutput = z.infer<typeof yChieuOutput>;
+
+const chuDeChieu = z.object({
+	id: z.string(),
+	loai: loaiChuDe,
+	ten: z.string(),
+	ketLuan: ketLuanChuDe.nullable(),
+	lyDo: z.string(),
+	cauMucTieu: z.string(),
+	noiBanTruoc: noiBanTruoc.nullable(),
+	objectiveId: z.string().nullable(),
+	bangChung: z.object({
+		soNguoi: z.number().int(),
+		soDonVi: z.number().int(),
+		soDongY: z.number().int().optional(),
+		trich: z.array(z.string()),
+	}),
+	y: z.array(yChieuOutput),
+});
+export type ChuDeChieuOutput = z.infer<typeof chuDeChieu>;
 
 const yCuaToi = z.object({
 	id: z.string(),
@@ -59,7 +81,7 @@ export const hoiYChiTiet = z.object({
 		lyDoKhoa: lyDoKhoaYKhuon.nullable(),
 		ds: z.array(yChieuOutput),
 	}),
-	chuDe: z.null(),
+	chuDe: z.array(chuDeChieu).nullable(),
 	banTruoc: banTruocChieu.nullable(),
 	ketQua: z.null(),
 	quyen: z.object({

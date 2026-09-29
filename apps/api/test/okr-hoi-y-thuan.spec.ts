@@ -1,16 +1,32 @@
 import { describe, expect, test } from "bun:test";
 import type { TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
-import { thuTuXao } from "@crm/validation/okr-hoi-y";
+import {
+	ganYInput,
+	ketLuanInput,
+	NOI_BAN_TRUOC,
+	NOI_MOI,
+	noiTuSoCau,
+	OKR_HOI_Y,
+	soCauCuaNoi,
+	thuTuXao,
+} from "@crm/validation/okr-hoi-y";
 import {
 	bangChungChuDe,
+	type ChuDeTho,
+	chieuChuDeChoNguoiXem,
 	chieuYChoNguoiXem,
 	docBanTruoc,
 	doPhu,
 	ketQuaBanTruoc,
 	lyDoChuaCongBo,
 	type MaThieu,
+	tenYLa,
 	type YTho,
 } from "../src/okr/hoi-y";
+
+type VaoThu = {
+	[khoa: string]: string | number | boolean | null | readonly string[];
+};
 
 const luc = (phut: number) => new Date(Date.UTC(2026, 9, 1, 3, phut));
 
@@ -484,6 +500,7 @@ describe("chieu-y", () => {
 		chuDeId: null,
 		tacGiaUserId,
 		tacGiaTen: `Tên ${tacGiaUserId}`,
+		phongBanId: null,
 		soDongY,
 		daDongY,
 		createdAt: luc(phut),
@@ -659,5 +676,384 @@ describe("doc-ban-truoc", () => {
 	test("khai không viết trước vẫn trả để màn nói rõ", () => {
 		const boQua = { cau: [], boQua: true, vietBoi: "Nguyễn A" };
 		expect(docBanTruoc(boQua, xem(false, "da-cong-bo"))).toEqual(boQua);
+	});
+});
+
+describe("chieu-chu-de", () => {
+	const luc2 = (phut: number) => new Date(Date.UTC(2026, 9, 1, 3, phut));
+	const yTho = (
+		id: string,
+		tacGiaUserId: string,
+		chuDeId: string | null,
+		soDongY: number,
+		phut: number,
+		phongBanId: string | null,
+	): YTho => ({
+		id,
+		noiDung: `nội dung ${id}`,
+		viSao: `vì sao ${id}`,
+		doBangGi: `đo ${id}`,
+		chuDeId,
+		tacGiaUserId,
+		tacGiaTen: `Tên ${tacGiaUserId}`,
+		phongBanId,
+		soDongY,
+		daDongY: false,
+		createdAt: luc2(phut),
+	});
+	const chuDe = (
+		id: string,
+		viTri: number,
+		phan: Partial<ChuDeTho> = {},
+	): ChuDeTho => ({
+		id,
+		loai: "chu-de",
+		ten: `Chủ đề ${id}`,
+		ketLuan: null,
+		lyDo: "",
+		cauMucTieu: "",
+		noiBanTruoc: null,
+		objectiveId: null,
+		viTri,
+		...phan,
+	});
+	const ds: YTho[] = [
+		yTho("y1", "u1", "c1", 3, 1, "pb1"),
+		yTho("y2", "u2", "c1", 0, 2, "pb2"),
+		yTho("y3", "u3", "c1", 2, 3, "pb2"),
+		yTho("y4", "u4", "c2", 1, 4, null),
+		yTho("y5", "u1", null, 0, 5, "pb1"),
+	];
+	const cd: ChuDeTho[] = [
+		chuDe("c2", 1, { ketLuan: "de-sau", lyDo: "Để kỳ sau khi đủ người." }),
+		chuDe("c1", 0, {
+			ketLuan: "chon",
+			lyDo: "Đúng hướng năm tới.",
+			cauMucTieu: "Giao lạnh có lãi",
+			noiBanTruoc: "cau-1",
+		}),
+	];
+	const xem = (
+		userId: string,
+		laQuanTri: boolean,
+		laNguoiChon: boolean,
+		daNiemPhong: boolean,
+		tt: TrangThaiHoiY,
+	) => ({
+		userId,
+		laQuanTri,
+		laNguoiChon,
+		daNiemPhong,
+		hoiYId: "hy1",
+		trangThai: tt,
+	});
+
+	test("dang-mo: không ai thấy chủ đề", () => {
+		for (const [qt, nc, np] of [
+			[false, false, false],
+			[true, false, false],
+			[true, true, true],
+		] as const)
+			expect(
+				chieuChuDeChoNguoiXem(cd, ds, xem("me", qt, nc, np, "dang-mo")),
+			).toBeNull();
+	});
+
+	test("dang-gom: quản trị và người chọn đã niêm phong thấy; thành viên và người chọn chưa niêm phong không", () => {
+		expect(
+			chieuChuDeChoNguoiXem(cd, ds, xem("me", false, false, false, "dang-gom")),
+		).toBeNull();
+		expect(
+			chieuChuDeChoNguoiXem(cd, ds, xem("ceo", true, true, false, "dang-gom")),
+		).toBeNull();
+		expect(
+			chieuChuDeChoNguoiXem(cd, ds, xem("qt", true, false, false, "dang-gom"))
+				?.length,
+		).toBe(2);
+		expect(
+			chieuChuDeChoNguoiXem(cd, ds, xem("ceo", true, true, true, "dang-gom"))
+				?.length,
+		).toBe(2);
+	});
+
+	test("da-cong-bo: mọi vai thấy chủ đề", () => {
+		for (const [qt, nc] of [
+			[false, false],
+			[true, false],
+			[true, true],
+		] as const)
+			expect(
+				chieuChuDeChoNguoiXem(cd, ds, xem("me", qt, nc, true, "da-cong-bo"))
+					?.length,
+			).toBe(2);
+	});
+
+	test("thứ tự theo viTri, mỗi chủ đề mang đúng các khoá", () => {
+		const r = chieuChuDeChoNguoiXem(
+			cd,
+			ds,
+			xem("qt", true, false, false, "dang-gom"),
+		);
+		expect(r?.map((c) => c.id)).toEqual(["c1", "c2"]);
+		expect(Object.keys(r?.[0] ?? {}).sort()).toEqual([
+			"bangChung",
+			"cauMucTieu",
+			"id",
+			"ketLuan",
+			"loai",
+			"lyDo",
+			"noiBanTruoc",
+			"objectiveId",
+			"ten",
+			"y",
+		]);
+		expect(r?.[0]?.noiBanTruoc).toBe("cau-1");
+	});
+
+	test("quản trị dang-gom: bằng chứng đủ bốn khoá, ý kèm tên và số, theo thời điểm tạo", () => {
+		const r = chieuChuDeChoNguoiXem(
+			cd,
+			ds,
+			xem("qt", true, false, false, "dang-gom"),
+		);
+		expect(r?.[0]?.bangChung).toEqual({
+			soNguoi: 3,
+			soDonVi: 2,
+			soDongY: 5,
+			trich: ["nội dung y1", "nội dung y3"],
+		});
+		expect(r?.[0]?.y.map((y) => y.id)).toEqual(["y1", "y2", "y3"]);
+		expect(r?.[0]?.y[0]).toMatchObject({
+			tacGia: { id: "u1", ten: "Tên u1" },
+			soDongY: 3,
+			chuDeId: "c1",
+		});
+		expect(r?.[1]?.bangChung.soDonVi).toBe(1);
+	});
+
+	test("thành viên sau công bố: ý không tên, không số, bằng chứng không có soDongY, chuDeId giữ", () => {
+		const r = chieuChuDeChoNguoiXem(
+			cd,
+			ds,
+			xem("me", false, false, false, "da-cong-bo"),
+		);
+		expect(r?.[0]?.bangChung).toEqual({
+			soNguoi: 3,
+			soDonVi: 2,
+			trich: ["nội dung y1", "nội dung y3"],
+		});
+		const chu = JSON.stringify(r);
+		for (const cam of ["Tên u", '"soDongY"', '"tacGia"', '"createdAt"'])
+			expect(chu.includes(cam), cam).toBe(false);
+		expect(r?.[0]?.y.every((y) => y.chuDeId === "c1")).toBe(true);
+	});
+
+	test("thành viên không thấy ý của chính mình trong chủ đề nhưng bằng chứng vẫn đếm", () => {
+		const r = chieuChuDeChoNguoiXem(
+			cd,
+			ds,
+			xem("u2", false, false, false, "da-cong-bo"),
+		);
+		expect(r?.[0]?.y.map((y) => y.id).sort()).toEqual(["y1", "y3"]);
+		expect(r?.[0]?.bangChung.soNguoi).toBe(3);
+	});
+
+	test("chủ đề rỗng: bằng chứng 0, trích rỗng, không ý", () => {
+		const r = chieuChuDeChoNguoiXem(
+			[chuDe("rong", 0)],
+			ds,
+			xem("qt", true, false, false, "dang-gom"),
+		);
+		expect(r).toEqual([
+			{
+				id: "rong",
+				loai: "chu-de",
+				ten: "Chủ đề rong",
+				ketLuan: null,
+				lyDo: "",
+				cauMucTieu: "",
+				noiBanTruoc: null,
+				objectiveId: null,
+				bangChung: { soNguoi: 0, soDonVi: 0, soDongY: 0, trich: [] },
+				y: [],
+			},
+		]);
+	});
+
+	test("chưa kết luận: lý do và câu mục tiêu là chuỗi rỗng", () => {
+		const r = chieuChuDeChoNguoiXem(
+			[chuDe("c1", 0)],
+			ds,
+			xem("qt", true, false, false, "dang-gom"),
+		);
+		expect({ lyDo: r?.[0]?.lyDo, cau: r?.[0]?.cauMucTieu }).toEqual({
+			lyDo: "",
+			cau: "",
+		});
+	});
+});
+
+describe("chieu-y-chu-de-id", () => {
+	const yTho = (id: string, tacGiaUserId: string, chuDeId: string): YTho => ({
+		id,
+		noiDung: `nội dung ${id}`,
+		viSao: "",
+		doBangGi: "",
+		chuDeId,
+		tacGiaUserId,
+		tacGiaTen: `Tên ${tacGiaUserId}`,
+		phongBanId: null,
+		soDongY: 1,
+		daDongY: false,
+		createdAt: luc(1),
+	});
+	const ds = [yTho("y1", "u1", "c1"), yTho("y2", "u2", "c1")];
+	const xem = (
+		laQuanTri: boolean,
+		laNguoiChon: boolean,
+		daNiemPhong: boolean,
+		trangThai: TrangThaiHoiY,
+	) => ({
+		userId: "me",
+		laQuanTri,
+		laNguoiChon,
+		daNiemPhong,
+		hoiYId: "hy1",
+		trangThai,
+	});
+	const chuDeId = (r: ReturnType<typeof chieuYChoNguoiXem>) =>
+		r.y.map((y) => y.chuDeId);
+
+	test("thành viên trước công bố: mọi chuDeId null", () => {
+		expect(
+			chuDeId(chieuYChoNguoiXem(ds, xem(false, false, false, "dang-mo"))),
+		).toEqual([null, null]);
+		expect(
+			chuDeId(chieuYChoNguoiXem(ds, xem(false, false, false, "dang-gom"))),
+		).toEqual([null, null]);
+	});
+
+	test("thành viên sau công bố: chuDeId thật", () => {
+		expect(
+			chuDeId(chieuYChoNguoiXem(ds, xem(false, false, false, "da-cong-bo"))),
+		).toEqual(["c1", "c1"]);
+	});
+
+	test("quản trị và người chọn đã niêm phong: chuDeId thật ở mọi trạng thái", () => {
+		for (const tt of ["dang-mo", "dang-gom", "da-cong-bo"] as const) {
+			expect(
+				chuDeId(chieuYChoNguoiXem(ds, xem(true, false, false, tt))),
+			).toEqual(["c1", "c1"]);
+			expect(chuDeId(chieuYChoNguoiXem(ds, xem(true, true, true, tt)))).toEqual(
+				["c1", "c1"],
+			);
+		}
+	});
+});
+
+describe("gan-y-khuon", () => {
+	const gop = { yIds: ["y1", "y2"], chuDeId: "c1" };
+	const cauLoi = (v: VaoThu) => {
+		const r = ganYInput.safeParse(v);
+		return r.success ? null : r.error.issues.map((i) => i.message);
+	};
+
+	test("nhận: nhiều ý vào một chủ đề; đúng một ý là ý lạ", () => {
+		expect(ganYInput.safeParse(gop).success).toBe(true);
+		expect(ganYInput.safeParse({ yIds: ["y1"], chuDeId: "c1" }).success).toBe(
+			true,
+		);
+		expect(ganYInput.safeParse({ yIds: ["y1"], yLa: true }).success).toBe(true);
+		const nam = Array.from({ length: OKR_HOI_Y.ganToiDa }, (_, i) => `y${i}`);
+		expect(ganYInput.safeParse({ yIds: nam, chuDeId: "c1" }).success).toBe(
+			true,
+		);
+	});
+
+	test("từ chối: hai đích, không đích, yLa false, yLa nhiều ý, khoá lạ, rỗng, quá trần", () => {
+		const nam = Array.from(
+			{ length: OKR_HOI_Y.ganToiDa + 1 },
+			(_, i) => `y${i}`,
+		);
+		expect(cauLoi({ yIds: ["y1"], chuDeId: "c1", yLa: true })).toEqual([
+			OKR_HOI_Y.gan.motTrongHai,
+		]);
+		expect(cauLoi({ yIds: ["y1"] })).toEqual([OKR_HOI_Y.gan.motTrongHai]);
+		expect(cauLoi({ yIds: ["y1"], yLa: false })).not.toBeNull();
+		expect(cauLoi({ yIds: ["y1", "y2"], yLa: true })).toEqual([
+			OKR_HOI_Y.gan.yLaMotY,
+		]);
+		expect(cauLoi({ ...gop, thua: 1 })).not.toBeNull();
+		expect(cauLoi({ yIds: [], chuDeId: "c1" })).not.toBeNull();
+		expect(cauLoi({ yIds: nam, chuDeId: "c1" })).not.toBeNull();
+	});
+});
+
+describe("ket-luan-khuon", () => {
+	const vao = {
+		chuDeId: "c1",
+		ketLuan: "chon",
+		lyDo: "Đúng hướng năm tới của công ty.",
+		cauMucTieu: "Giao lạnh có lãi",
+		noiBanTruoc: "cau-1",
+	};
+	const loi = (v: VaoThu) => {
+		const r = ketLuanInput.safeParse(v);
+		return r.success ? null : r.error.issues.map((i) => i.message);
+	};
+
+	test("nhận chọn có câu mục tiêu; để sau không cần câu mục tiêu", () => {
+		expect(loi(vao)).toBeNull();
+		expect(
+			loi({ ...vao, ketLuan: "de-sau", cauMucTieu: "", noiBanTruoc: null }),
+		).toBeNull();
+	});
+
+	test("từ chối: chọn thiếu câu mục tiêu, lý do 9 ký tự, nối tới mã lạ", () => {
+		expect(loi({ ...vao, cauMucTieu: "" })).toEqual([
+			OKR_HOI_Y.ketLuan.canCauMucTieu,
+		]);
+		expect(
+			loi({ ...vao, lyDo: "ý".repeat(OKR_HOI_Y.lyDo.min - 1) }),
+		).not.toBeNull();
+		expect(loi({ ...vao, noiBanTruoc: "cau-6" })).not.toBeNull();
+	});
+});
+
+describe("noi-ban-truoc-khuon", () => {
+	test("số câu và mã nối là hai chiều của cùng một danh mục", () => {
+		expect(NOI_BAN_TRUOC.map((n) => soCauCuaNoi(n))).toEqual([
+			1,
+			2,
+			3,
+			4,
+			5,
+			null,
+		]);
+		expect(soCauCuaNoi(NOI_MOI)).toBeNull();
+		expect([1, 2, 3, 4, 5].map(noiTuSoCau)).toEqual([
+			"cau-1",
+			"cau-2",
+			"cau-3",
+			"cau-4",
+			"cau-5",
+		]);
+		expect(noiTuSoCau(0)).toBeNull();
+		expect(noiTuSoCau(6)).toBeNull();
+	});
+});
+
+describe("ten-y-la", () => {
+	test("ngắn hơn trần giữ nguyên", () => {
+		expect(tenYLa("Mở tuyến giao lạnh")).toBe("Mở tuyến giao lạnh");
+	});
+
+	test("đúng trần ký tự đầu, không cắt giữa ký tự hai đơn vị", () => {
+		const dau = "a".repeat(OKR_HOI_Y.tenYLa - 1);
+		const y = `${dau}😀 đuôi còn lại`;
+		const ten = tenYLa(y);
+		expect(Array.from(ten).length).toBe(OKR_HOI_Y.tenYLa);
+		expect(ten).toBe(`${dau}😀`);
+		expect(y.slice(0, OKR_HOI_Y.tenYLa)).not.toBe(ten);
 	});
 });
