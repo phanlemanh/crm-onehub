@@ -1715,7 +1715,7 @@ type ChuoiAn =
 	| "soChup"
 	| "binhLuan"
 	| "loiNhan";
-type SanDoc = SanAn & { nguoiK: string };
+type SanDoc = SanAn & { nguoiK: string; chuG: string };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
@@ -2099,7 +2099,61 @@ async function vetC1An(bc: BoiCanhAn, kq: KetQuaAn): Promise<string[]> {
 	return lech;
 }
 
-async function sangDaDongAn(bc: BoiCanhAn) {
+const CHUA_CHAM_VIET_TRUOC = {
+	K: { conLai: 2, coDonViG: true },
+	M: { conLai: 1, coDonViG: false },
+	O: { conLai: 1, coDonViG: false },
+} as const satisfies Record<NguoiDoc, { conLai: number; coDonViG: boolean }>;
+
+const bangChuaCham = z.object({
+	conLai: z.number(),
+	chuaCham: z.array(z.object({ khoa: z.string(), conLai: z.number() })),
+});
+
+async function chuaChamAn(bc: BoiCanhAn, kq: KetQuaAn): Promise<string[]> {
+	const { san } = bc;
+	const lech: string[] = [];
+	const chuoiG = {
+		idG: san.g,
+		tieuDeG: G_AN.tieuDe,
+		tieuDeKr: G_AN.tieuDeKr,
+		donViG: id("pb-an"),
+		chuG: `${san.chuG}"`,
+	};
+	for (const duong of DUONG_DOC)
+		for (const ai of NGUOI_DOC) {
+			const o = `bangCham chua cham | ${duong} | ${ai}`;
+			const r = await goiDocAn(
+				bc,
+				"okr.bangCham",
+				{ cycleId: san.ky },
+				duong,
+				ai,
+			);
+			if (r.status !== 200) {
+				lech.push(`${o}: ${r.status} «${r.message}»`);
+				continue;
+			}
+			const bang = bangChuaCham.parse(r.data);
+			const thay = {
+				conLai: bang.conLai,
+				coDonViG: bang.chuaCham.some((d) => d.khoa === `pb:${san.pb}`),
+			};
+			if (JSON.stringify(thay) !== JSON.stringify(CHUA_CHAM_VIET_TRUOC[ai]))
+				lech.push(`${o}: ${JSON.stringify(thay)}`);
+			const so = Object.entries(chuoiG).map(
+				([k, c]) => [k, r.chu.split(c).length - 1] as const,
+			);
+			kq.bang.push(
+				`${o} | ${JSON.stringify(thay)} | ${so.map(([k, n]) => `${k} ${n}`).join(" ")}`,
+			);
+			if (ai !== "K")
+				for (const [k, n] of so) if (n > 0) kq.lo.push(`${o} | lo ${k} x${n}`);
+		}
+	return lech;
+}
+
+async function sangDaDongAn(bc: BoiCanhAn, kq: KetQuaAn): Promise<string[]> {
 	const { san } = bc;
 	await db.session.updateMany({
 		where: { userId: { startsWith: `${suffix}-` } },
@@ -2119,6 +2173,7 @@ async function sangDaDongAn(bc: BoiCanhAn) {
 	} finally {
 		setSystemTime();
 	}
+	const lech = await chuaChamAn(bc, kq);
 	const chua = await db.okrDiemKr.findMany({
 		where: { cycleId: san.ky, diem: null },
 		select: { keyResultId: true, diemGoiY: true, thang: true },
@@ -2144,6 +2199,7 @@ async function sangDaDongAn(bc: BoiCanhAn) {
 		{ cookie: bc.cookie.Q },
 	);
 	expect(dong.status, JSON.stringify(dong.body)).toBe(200);
+	return lech;
 }
 
 async function taoNguoiAn(phan: string, vai: Vai) {
@@ -2215,7 +2271,7 @@ describe("hien-thi-an", () => {
 				Q: await khoaApiCua(cookie.Q),
 			};
 			const gieo = await gieoMucTieuAn(goiGieoAn, nguoi, id, namVN());
-			const san = { ...gieo, nguoiK: nguoi.k.id };
+			const san = { ...gieo, nguoiK: nguoi.k.id, chuG: nguoi.truong.id };
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
 				const bc: BoiCanhAn = {
@@ -2251,7 +2307,7 @@ describe("hien-thi-an", () => {
 				for (const ten of thuTuc.filter((t) => !phaHai.includes(t)))
 					await dongDocAn(bc, kq, ten);
 				const vetLech = await vetC1An(bc, kq);
-				await sangDaDongAn(bc);
+				const chuaChamLech = await sangDaDongAn(bc, kq);
 				for (const ten of phaHai) await dongDocAn(bc, kq, ten);
 				console.log(
 					[
@@ -2268,6 +2324,10 @@ describe("hien-thi-an", () => {
 					[],
 				);
 				expect(vetLech, "vet C1").toEqual([]);
+				expect(
+					chuaChamLech,
+					"bangCham o pha cham diem: so KR chua cham cua nguoi khong xem duoc tinh ca G",
+				).toEqual([]);
 			} finally {
 				setSystemTime();
 				await donMucTieuAn(san, tatCaNguoi);

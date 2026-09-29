@@ -56,6 +56,19 @@ const BANG = [
 	"okrCheckIn",
 	"okrTrail",
 	"okrSoChup",
+	"okrAlignment",
+	"okrBangChung",
+	"okrDiemKr",
+	"okrDoiDich",
+	"okrFollow",
+	"okrGhiNhanNhan",
+	"okrMangSang",
+	"okrMention",
+	"okrMucTieuTuMau",
+	"okrNguoiXem",
+	"okrNguonKr",
+	"okrNhinLai",
+	"okrParticipant",
 ];
 const DOC = new Set([
 	"findMany",
@@ -80,6 +93,108 @@ const LY_DO_DUONG_DOC_RONG =
 	"duong-doc-okr.json rỗng: `rg okr(Objective|KeyResult|ViecKr|GhiNhan|Comment|CheckIn|Trail|SoChup)\\. apps/api/src --glob '!**/okr/**'` không ra dòng nào (29/09). Ngoài router okr chỉ dashboard gọi viecCanNhac của @crm/db/onboarding-nhac, và nó chỉ giữ mục kế hoạch (laNhacKeHoach), không trả mục OKR. Lời đọc ở packages/db/src và apps/agent/agent/lib là thư viện: thủ tục tRPC gọi chúng (okr.viecCuaToi, okr.banGhiChiSo) đã nằm trong router okr và trong ma trận THU_TU_DOC_OKR.";
 
 const MIEN_XEM = [
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "updateKeyResult",
+		bang: "okrNguonKr",
+		lyDo: "ghi: đọc nguồn máy của KR vừa qua assertSuaKr",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "removeKeyResult",
+		bang: "okrAlignment",
+		lyDo: "ghi: đếm căn chỉnh trỏ KR để chặn xoá, chỉ ra có/không",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "removeKeyResult",
+		bang: "okrDoiDich",
+		lyDo: "ghi: đếm lần đổi đích để chặn xoá, chỉ ra có/không",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "removeKeyResult",
+		bang: "okrDiemKr",
+		lyDo: "ghi: đếm dòng điểm để chặn xoá, chỉ ra có/không",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "removeKeyResult",
+		bang: "okrBangChung",
+		lyDo: "ghi: đếm bằng chứng để chặn xoá, chỉ ra có/không",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "addAlignment",
+		bang: "okrAlignment",
+		lyDo: "ghi: tìm căn chỉnh trùng sau khi nguồn và đích đã qua điều kiện xem",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "removeAlignment",
+		bang: "okrAlignment",
+		lyDo: "ghi: đọc căn chỉnh theo mã rồi assertSuaMucTieu trên nguồn; đích giới hạn không có căn chỉnh",
+	},
+	{
+		tep: "apps/api/src/okr/khep.ts",
+		ham: "kiemDongKy",
+		bang: "okrDiemKr",
+		lyDo: "cổng pha chấm điểm → đã đóng phải đếm mọi KR chưa chấm, kể cả giới hạn; chỉ quản trị gọi, chỉ ra số — bảng chấm dùng dongKyChoNguoiXem có điều kiện",
+	},
+	{
+		tep: "apps/api/src/okr/okr-khep.service.ts",
+		ham: "bangChamCua",
+		bang: "okrDiemKr",
+		lyDo: "đọc thang điểm của chu kỳ từ một dòng bất kỳ; không trả dòng, không nêu mục tiêu",
+	},
+	{
+		tep: "apps/api/src/okr/okr-khep.service.ts",
+		ham: "chamKr",
+		bang: "okrDiemKr",
+		lyDo: "ghi điểm sau cổng ghiDuocKr",
+	},
+	{
+		tep: "apps/api/src/okr/okr-khep.service.ts",
+		ham: "ghiDieuHocDuoc",
+		bang: "okrNhinLai",
+		lyDo: "ghi điều học được sau assertSuaMucTieu",
+	},
+	{
+		tep: "apps/api/src/okr/okr-khep.service.ts",
+		ham: "mangSang",
+		bang: "okrMangSang",
+		lyDo: "ghi dựa trên mục tiêu — cổng xem cho mangSang là Task 4",
+	},
+	{
+		tep: "apps/api/src/okr/okr-canh-kr.service.ts",
+		ham: "goBangChung",
+		bang: "okrBangChung",
+		lyDo: "ghi: đọc bằng chứng theo mã rồi qua krDeGhi và ghiDuocKr",
+	},
+	{
+		tep: "apps/api/src/okr/okr-trao-doi.service.ts",
+		ham: "follow",
+		bang: "okrFollow",
+		lyDo: "ghi dựa trên mục tiêu — cổng xem cho follow là Task 4",
+	},
+	{
+		tep: "packages/db/src/okr-nhac.ts",
+		ham: "viecTraoDoi",
+		bang: "okrFollow",
+		lyDo: "nhắc buổi sáng đọc cả lô cho mọi người nhận; lọc từng người bằng xemDuocMucTieu sau khi đọc (Task 5)",
+	},
+	{
+		tep: "packages/db/src/okr-nhac.ts",
+		ham: "lienQuanOkr",
+		bang: "okrFollow",
+		lyDo: "chỉ đếm dòng theo dõi của chính người gọi; ra có/không, không nêu mục tiêu",
+	},
+	{
+		tep: "apps/agent/agent/lib/okr-sheets.ts",
+		ham: "docVaGhi",
+		bang: "okrNguonKr",
+		lyDo: "máy đọc Google Sheets cho KR nguồn bảng tính, không có người xem",
+	},
 	{
 		tep: "apps/api/src/okr/okr-access.service.ts",
 		ham: "assertSuaMucTieu",
@@ -540,12 +655,7 @@ function coDieuKien(nut) {
 const BANG_THO = new RegExp(`"(${BANG.join("|")})"`, "g");
 
 function soiTep(ten, duong, chu) {
-	if (
-		!/okr(Objective|KeyResult|ViecKr|GhiNhan|Comment|CheckIn|Trail|SoChup)/.test(
-			chu,
-		)
-	)
-		return [];
+	if (!BANG.some((b) => chu.includes(b))) return [];
 	const sf = cay(duong, chu);
 	const ra = [];
 	const dong = (n) => sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;

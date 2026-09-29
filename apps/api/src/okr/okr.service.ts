@@ -1585,15 +1585,15 @@ export class OkrService {
 				select: chonDonVi,
 			}),
 			this.db.okrMangSang.findFirst({
-				where: { tuObjectiveId: id },
+				where: { tuObjectiveId: id, sangObjective: dieuKienXemMucTieu(nc) },
 				orderBy: { luc: "desc" },
 				select: {
 					sangObjectiveId: true,
 					sangCycle: { select: { name: true } },
 				},
 			}),
-			this.db.okrMangSang.findUnique({
-				where: { sangObjectiveId: id },
+			this.db.okrMangSang.findFirst({
+				where: { sangObjectiveId: id, tuObjective: dieuKienXemMucTieu(nc) },
 				select: {
 					tuObjectiveId: true,
 					tuObjective: { select: { cycle: { select: { name: true } } } },
@@ -1632,15 +1632,13 @@ export class OkrService {
 			}),
 			this.db.okrBangChung.groupBy({
 				by: ["keyResultId"],
-				where: { keyResultId: { in: krIds } },
+				where: {
+					keyResultId: { in: krIds },
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
+				},
 				_count: { _all: true },
 			}),
-			locXemTrongVet(
-				this.db,
-				nc,
-				dongVet,
-				[toi?.sangObjectiveId, tu?.tuObjectiveId].flatMap((x) => x ?? []),
-			),
+			locXemTrongVet(this.db, nc, dongVet),
 		]);
 		const demLoai = (krId: string, laViec: boolean) =>
 			dem
@@ -1658,17 +1656,15 @@ export class OkrService {
 				coBangChung: bangChung.some((d) => d.keyResultId === k.id),
 			})),
 			cycleName: ky.name,
-			mangSangToi:
-				toi && loc.xemDuoc(toi.sangObjectiveId)
-					? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
-					: null,
-			mangSangTu:
-				tu && loc.xemDuoc(tu.tuObjectiveId)
-					? {
-							objectiveId: tu.tuObjectiveId,
-							cycleName: tu.tuObjective.cycle.name,
-						}
-					: null,
+			mangSangToi: toi
+				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
+				: null,
+			mangSangTu: tu
+				? {
+						objectiveId: tu.tuObjectiveId,
+						cycleName: tu.tuObjective.cycle.name,
+					}
+				: null,
 			trail: dongVet.map(({ v, before, after }) =>
 				vetChoNguoiXem(
 					vetSangKienChoVai(q.role, {

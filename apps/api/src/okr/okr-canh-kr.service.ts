@@ -149,7 +149,10 @@ export class OkrCanhKrService {
 				select: chonHangCanh,
 			}),
 			this.db.okrBangChung.findMany({
-				where: { keyResultId },
+				where: {
+					keyResultId,
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
+				},
 				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 				select: {
 					id: true,

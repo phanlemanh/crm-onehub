@@ -34,7 +34,7 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { tenDonVi } from "./don-vi";
 import { locXemTrongVet } from "./hien-thi";
-import { kiemDongKy, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
+import { dongKyChoNguoiXem, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
 import { OkrService } from "./okr.service";
 import {
 	chonDonVi,
@@ -607,7 +607,7 @@ export class OkrKhepService {
 				where: { cycleId: input.cycleId },
 				select: { thang: true },
 			}),
-			kiemDongKy(this.db, input.cycleId),
+			dongKyChoNguoiXem(this.db, input.cycleId, nc),
 		]);
 		const thangKy = dauDong ? thangCham.parse(dauDong.thang) : null;
 		const { xemDuoc } = await locXemTrongVet(
