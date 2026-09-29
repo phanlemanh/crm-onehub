@@ -1,0 +1,51 @@
+{
+  "feature_plain": "Khi nhờ Trợ lý OKR góp ý, hộp sửa rộng ra, mỗi đề xuất thành một thẻ đọc liền một mạch với hàng nút ở dưới và một nút chính nổi bật; chỉ đổi giao diện, tác tử và dữ liệu giữ nguyên.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ mở rộng hộp Sửa mục tiêu và hộp Sửa KR khi cột góp ý mở, để câu đề xuất có ít nhất 320 px thay vì khoảng 135 px như bây giờ."},
+    {"id": "AC-2", "p": "Sẽ xếp thẻ viết lại thành ba tầng (loại và ô, câu cũ gạch trên câu mới, lý do), hàng nút nằm dưới chữ và chỉ «Nhận» được tô màu."},
+    {"id": "AC-3", "p": "Sẽ cho sửa câu ngay trên thẻ rồi nhận đúng chữ đã sửa; Huỷ hay Esc đưa thẻ về như cũ mà hộp vẫn mở."},
+    {"id": "AC-4", "p": "Sẽ cho câu hỏi gắn với một KR nút «Mở KR này» dẫn thẳng tới hộp sửa KR đó."},
+    {"id": "AC-5", "p": "Sẽ cho đề xuất căn chỉnh đúng một nút chính «Căn chỉnh», và thu gọn thẻ sau khi quyết."},
+    {"id": "AC-6", "p": "Sẽ làm sáng viền ô tương ứng trong form khi người rê chuột hay đặt con trỏ vào thẻ viết lại."},
+    {"id": "AC-9", "p": "Sẽ hiện đúng chữ và nút cho từng dạng thẻ trong bảng đặc tả: nút nhận khoá kèm lý do, lỗi dưới thẻ, thẻ gọn sau khi quyết."},
+    {"id": "AC-10", "p": "Sẽ dùng cùng kiểu thẻ cho thông tin tác tử đề xuất ở tab Tổng quan của một Cá nhân, Nhận và Bác vẫn ghi như trước."},
+    {"id": "AC-11", "p": "Sẽ xếp cột góp ý xuống dưới form trên điện thoại mà không tràn ngang; từ 1024 px trở lên form và cột đứng cạnh nhau."},
+    {"id": "AC-13", "p": "Sẽ lái màn thật với model thật ở hai khổ, chụp ảnh từng bước và đọc lại giá trị đã lưu cùng dòng vết."}
+  ],
+  "wont_do": [
+    {"id": "AC-7", "p": "Sẽ KHÔNG để phím J, K, Enter, E quyết hay mở sửa thẻ nào khi con trỏ đang ở ngoài cột góp ý."},
+    {"id": "AC-8", "p": "Sẽ KHÔNG đóng hộp sửa khi người bấm vào bất kỳ đâu trong cột góp ý, kể cả nút «Sửa»."},
+    {"id": "AC-12", "p": "Chặn việc giữ lại thành phần gợi ý cũ: kho chỉ còn một khuôn thẻ duyệt, lấy từ bộ AI Elements và ghi vào sổ đăng ký."},
+    {"id": "OOS-1", "p": "Không làm nút «Nhận tất cả»."},
+    {"id": "OOS-2", "p": "Không hiện chip «Trợ lý đã đọc gì»; dời sang lượt thống nhất từ vựng tác tử."},
+    {"id": "OOS-3", "p": "Không làm hội thoại hỏi lại Trợ lý và không đặt góp ý ngay dưới từng ô (phương án B, C)."},
+    {"id": "OOS-4", "p": "Không đụng tab Agent và trình dựng tác tử; đó là lượt kế."},
+    {"id": "OOS-5", "p": "Không làm việc tác tử xin duyệt trước khi ghi; đó là lượt thứ ba."},
+    {"id": "OOS-6", "p": "Không đổi dữ liệu, tác tử, bộ kiểm, API, vết, hoàn tác, nấc bật hay số đo."}
+  ],
+  "scope_plain": "Lượt này chỉ sửa cách thẻ góp ý hiện ra; mọi thứ phía sau giữ nguyên.",
+  "coverage_plain": [
+    {"i": 0, "p": "Loại thẻ: đủ bảy loại, từ viết lại tên Mục tiêu tới thông tin của Cá nhân; đủ nghĩa là mỗi loại có dòng trong bảng đặc tả và một ca đo."},
+    {"i": 1, "p": "Dạng thẻ: chờ, đang sửa, đang gửi, đã quyết, lỗi, nhận khoá; đủ nghĩa là mỗi dạng dựng được và kiểm chữ lẫn nút (AC-9, đủ các dạng thẻ)."},
+    {"i": 2, "p": "Khổ màn: hai cột từ 1024 px, xếp dọc dưới đó; kiểm ở 1440, 1024, 1023 và 390 px (AC-1, AC-11, bố cục hai khổ)."},
+    {"i": 3, "p": "Cách dùng: chuột, bàn phím và trình đọc màn hình; tên nút giữ nguyên để trình đọc màn hình không đổi."},
+    {"i": 4, "p": "Máy giả định: chưa làm «Nhận tất cả», chip nguồn và nhiều phương án viết lại."},
+    {"i": 5, "p": "Máy giả định: «Mở KR này» đóng hộp Mục tiêu rồi mới mở hộp KR, không chồng hai hộp."},
+    {"i": 6, "p": "Máy giả định: phím J, K chuyển thẻ như Linear và Gmail, chỉ khi con trỏ ở trong cột."},
+    {"i": 7, "p": "Máy giả định: thành phần mới tên ProposedChange."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Hộp Sửa KR có cùng cột góp ý nhưng không được đo bề ngang. Đã sửa: đo cả hai hộp ở mọi khổ."},
+    {"i": 1, "p": "Luật «một nút chính» chưa nói gì về thẻ câu hỏi. Đã sửa: thẻ cần quyết có đúng một nút tô màu, thẻ câu hỏi không có nút tô màu nào."},
+    {"i": 2, "p": "Phép đo so dữ liệu gửi đi với mẫu viết tay, đổi API là vẫn xanh. Đã sửa: kiểm bằng chính khuôn đầu vào của API; riêng ảnh màn tab Tổng quan hoãn vì cần tác tử sinh thông tin thật."},
+    {"i": 3, "p": "Sự cố «bấm Sửa làm đóng hộp» có thể không tái hiện trong môi trường giả lập. Đã sửa: thêm chốt trong trình duyệt thật, sau mỗi cú bấm hộp vẫn còn."},
+    {"i": 4, "p": "Ngưỡng «người lạ bấm nhầm Bác» không có chỗ đếm. Đã sửa: thêm cột đếm riêng trong nhật ký lái thử người lạ."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260929T115451Z-1", "p": "Chọn phương án A (thẻ xếp dọc, nút ở chân) — đổi lại chưa hỏi lại Trợ lý được và góp ý vẫn nằm ở cột."},
+    {"id": "d-20260929T115451Z-2", "p": "Dựng thẻ trên khuôn duyệt có sẵn của AI Elements — đổi lại thêm một tệp chép về phải ghi sổ lệch chuẩn."},
+    {"id": "d-20260929T115451Z-3", "p": "KHÔNG làm «Nhận tất cả», chip nguồn, nhiều phương án — đổi lại người vẫn quyết từng thẻ."},
+    {"id": "d-20260929T115451Z-4", "p": "KHÔNG dựng bản mẫu riêng cho lượt này, vì bản phác thảo đã duyệt ở trang rà soát — đổi lại ảnh thật chỉ có ở bước chấm."},
+    {"id": "d-20260929T115451Z-5", "p": "Giữ nguyên tên mọi nút — đổi lại chữ trên nút không đổi dù bố cục đổi."}
+  ]
+}

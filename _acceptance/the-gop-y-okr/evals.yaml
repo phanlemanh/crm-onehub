@@ -128,3 +128,11 @@ evals:
     expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn mới hay sửa của lượt (proposed-change.tsx, ai-elements/confirmation.tsx, cot-gop-y.tsx, hop-thoai-muc-tieu.tsx, hop-thoai-kr.tsx, facts.tsx — danh sách khai trong lệnh); năm lỗi nền P0 bằng 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/components/crm/facts.tsx"]
+  - id: E16
+    criterion: AC-1
+    executor: test
+    layer: component
+    cmd: config:executors.test.tgy_co_hop
+    expected: "exit 0; bài DOM co-hop dựng HopThoaiMucTieu và HopThoaiKr, mỗi hộp có đề xuất chờ: khi cột góp ý đóng, DialogContent mang data-size khác assist; khi cột mở, DialogContent của CẢ HAI hộp mang data-size=assist và cột góp ý nằm trong hộp. Chiều đỏ ghim: bản sao để HopThoaiKr giữ cỡ wide khi cột mở phải làm bài đỏ 'co hop kr'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/dialog.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]

@@ -43,7 +43,7 @@ Source input: `.acceptance-runs/tro-ly-okr-de-xuat/ux-ra-soat-2026-09-29/index.h
 
 Quét bằng `morphological-scan` ngay trong phiên (29/09).
 
-- **Trục A — loại thẻ:** viết lại tên Mục tiêu · «vì sao lúc này» · tên KR · câu hỏi gắn KR · câu hỏi cấp Mục tiêu · căn chỉnh · thông tin liên hệ  [thước CE: `DongGopY` trong `cot-gop-y.tsx` và `FactSuggestion` trong `facts.tsx` — SUY-TỪ-REPO]
+- **Trục A — loại thẻ:** viết lại tên Mục tiêu · «vì sao lúc này» · tên KR · câu hỏi gắn KR · câu hỏi cấp Mục tiêu · căn chỉnh · thông tin của Cá nhân  [thước CE: `DongGopY` trong `cot-gop-y.tsx` và `FactSuggestion` trong `facts.tsx` — SUY-TỪ-REPO]
 - **Trục B — dạng thẻ:** chờ · đang sửa · đang gửi · đã quyết · lỗi nhận · nhận khoá  [thước CE: nhánh render của `suggestion.tsx` và bảng trạng thái 9b — SUY-TỪ-REPO]
 - **Trục C — khổ:** hai cột (≥ 1024) · xếp dọc (< 1024), kiểm ở 1440 và 390  [thước CE: bộ khổ của E4 lượt 9b; NGÀNH: ReUI ai-chat-2 panel dock]
 - **Trục D — cách tương tác:** chuột · bàn phím · trình đọc màn hình (tên nút)  [thước CE: NGÀNH: Linear Triage, GitHub Copilot review — phím, nút ở chân]

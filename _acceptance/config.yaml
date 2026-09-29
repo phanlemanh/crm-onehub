@@ -928,6 +928,7 @@ executors:
     tgy_cot_phim: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t phim'
     tgy_cot_khong_dong: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t khong-dong'
     tgy_cot_trang_thai: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t trang-thai'
+    tgy_co_hop: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t co-hop'
     tgy_thong_tin: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t thong-tin'
   script:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
