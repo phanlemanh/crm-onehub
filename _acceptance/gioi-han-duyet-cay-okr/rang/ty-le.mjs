@@ -1,9 +1,14 @@
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const THU_MUC = dirname(fileURLToPath(import.meta.url));
 const GOC = join(THU_MUC, "..", "..", "..");
+const { z } = createRequire(join(GOC, "packages/validation/package.json"))(
+	"zod",
+);
+const coO = z.object({ duyetCongBo: z.boolean() });
 const TEP_SQL = join(THU_MUC, "ty-le-gioi-han-duyet.sql");
 const TEP_MO_COI = join(THU_MUC, "okr-mo-coi.sql");
 const THAM_SO = "okr.chu_ky";
@@ -340,18 +345,15 @@ async function datMoc(A) {
 		orderBy: [{ at: "asc" }, { id: "asc" }],
 		select: { id: true, before: true, after: true },
 	});
-	const doi = cauHinh
-		.map((r) => ({
-			id: r.id,
-			truoc: parseOkrVet(r.before)?.duyetCongBo,
-			sau: parseOkrVet(r.after)?.duyetCongBo,
-		}))
-		.filter(
-			(r) =>
-				typeof r.truoc === "boolean" &&
-				typeof r.sau === "boolean" &&
-				r.truoc !== r.sau,
-		);
+	const doi = cauHinh.flatMap((r) => {
+		const truoc = coO.safeParse(parseOkrVet(r.before));
+		const sau = coO.safeParse(parseOkrVet(r.after));
+		return truoc.success &&
+			sau.success &&
+			truoc.data.duyetCongBo !== sau.data.duyetCongBo
+			? [{ id: r.id, sau: sau.data.duyetCongBo }]
+			: [];
+	});
 	const thayO = doi.map((r) => r.sau).join(",");
 	const mongO = LICH_O.map(([b]) => b).join(",");
 	if (thayO !== mongO)
@@ -369,7 +371,9 @@ async function datMoc(A) {
 			LICH_DUYET,
 		)
 			.map(([k, l]) => `${k} ${l.map(([h, g]) => `${h}@${g}`).join(" ")}`)
-			.join(" · ")} · o duyet ${LICH_O.map(([b, g]) => `${b ? "bat" : "tat"}@${g}`).join(" ")}`,
+			.join(
+				" · ",
+			)} · o duyet ${LICH_O.map(([b, g]) => `${b ? "bat" : "tat"}@${g}`).join(" ")}`,
 	);
 }
 
@@ -422,7 +426,8 @@ try {
 		console.log(
 			`okr-mo-coi.sql tren cung kho: ${moCoi.length} dong (mong 0)${moCoi.length > 0 ? ` ${JSON.stringify(moCoi)}` : ""}`,
 		);
-		if (moCoi.length !== 0) hong.push(`lop mo coi: nhận ${moCoi.length}, mong 0`);
+		if (moCoi.length !== 0)
+			hong.push(`lop mo coi: nhận ${moCoi.length}, mong 0`);
 		await goi(ct, "okr.publishObjective", { id: A.A7 });
 		console.log(
 			"o duyet dang tat: truong cong bo thang A7 tu cho duyet (vet cong-bo tuChoDuyet — dong cap, khong tinh la duyet)",
