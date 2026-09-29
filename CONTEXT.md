@@ -631,6 +631,52 @@ _Avoid_: template, khuôn, bộ khung
 Vì sao: «khuôn» đã là Khuôn kế hoạch của kế hoạch 30 ngày; «template» là chữ tiếng
 Anh trong mã.
 
+**Mức hiển thị (mục tiêu)**: ai thấy một mục tiêu. Có hai mức: **Công khai** — mọi
+người trong chương trình OKR thấy, như trước nay; **Giới hạn** — chỉ người liên quan
+thấy: người phụ trách, người của mục tiêu cá nhân, người phụ trách hay người làm việc
+dưới một KR của nó, người tham gia, tối đa 20 người xem có tên, trưởng sửa được đơn vị
+của nó và quản trị. Mục tiêu giới hạn không vào số gộp của ai, không căn chỉnh được, và
+người ngoài mở đường dẫn của nó thấy «Không tìm thấy mục tiêu này» như với mục tiêu
+không có. Đặt ngay lúc tạo, kể cả khi còn nháp. Đề xuất 2026-09-29 (lượt 8c lộ trình
+OKR), chốt tại Cổng Phạm vi.
+_Avoid_: riêng tư, bí mật, ẩn, private
+Vì sao: «riêng tư» gợi chỉ một người thấy, mà mục tiêu giới hạn vẫn cả nhóm người liên
+quan thấy; «bí mật» gợi mức bảo mật của tài liệu; «ẩn» gợi còn đó nhưng không hiện —
+ở đây người ngoài không biết nó tồn tại.
+
+**Chờ duyệt / Người duyệt (OKR)**: trạng thái của một mục tiêu đã được gửi đi duyệt
+trước khi công bố, khi chương trình OKR bật «Công bố cần duyệt». Người duyệt không ai
+chọn tay mà suy từ cây tổ chức lúc đọc: mục tiêu phòng ban — trưởng bộ phận của nó;
+mục tiêu bộ phận — quản trị; mục tiêu cá nhân — trưởng phòng ban chính của người đó,
+hay trưởng bộ phận nếu chính người đó là trưởng phòng ban; không suy được ai thì quản
+trị. Mục tiêu cấp công ty không qua duyệt. Người duyệt «Duyệt và công bố» hoặc «Trả
+lại» kèm lý do; người gửi «Rút lại». Trong lúc chờ, nội dung, KR, căn chỉnh và mức hiển
+thị khoá. Người bấm công bố đã là người duyệt thì công bố thẳng. Đề xuất 2026-09-29
+(lượt 8c lộ trình OKR), chốt tại Cổng Phạm vi.
+_Avoid_: phê duyệt, phê chuẩn, xét duyệt, người phê duyệt
+Vì sao: «phê duyệt» mang giọng văn bản hành chính nhiều tầng ký; ở đây là một bước
+nhẹ, một người, trước khi mục tiêu vào số của công ty.
+
+**Chuyển OKR**: quản trị đưa một đến năm mươi mục tiêu ở kỳ đang mở từ một đơn vị sang
+một đơn vị khác cùng cấp (phòng ban sang phòng ban, bộ phận sang bộ phận) còn hoạt
+động. Mục tiêu giữ KR, cập nhật tuần, căn chỉnh, người xem và vết; mỗi mục tiêu để một
+dòng vết. Một mục hỏng thì cả lô không chuyển. Gộp đơn vị là chuyển hết rồi lưu trữ;
+tách là chuyển một phần. Đơn vị còn OKR mở thì chưa lưu trữ được — chuyển OKR là lối ra.
+Đề xuất 2026-09-29 (lượt 8c lộ trình OKR), chốt tại Cổng Phạm vi.
+_Avoid_: chuyển việc, bàn giao OKR, di chuyển mục tiêu
+Vì sao: «chuyển việc» đã là việc chuyển phần phụ trách của người rời sang người khác
+— đổi người, còn chuyển OKR đổi đơn vị; «bàn giao» gợi hai người trao tay nhau.
+
+**OKR mồ côi**: mục tiêu chưa bỏ ở kỳ đang mở mà không ai trả lời được: đơn vị của nó
+đã lưu trữ; không ai sửa được (phòng ban không trưởng và bộ phận trên không trưởng, bộ
+phận không trưởng, hay người của mục tiêu cá nhân đã rời); hoặc người phụ trách mục
+tiêu hay một KR đã rời. Quản trị thấy danh sách ở khối «OKR mồ côi» của Sức khoẻ chương
+trình, mỗi mục kèm lý do và lối sửa. Đề xuất 2026-09-29 (lượt 8c lộ trình OKR), chốt tại
+Cổng Phạm vi.
+_Avoid_: OKR bỏ rơi, OKR vô chủ, mục tiêu treo
+Vì sao: «vô chủ» chỉ nói ca mất người phụ trách, bỏ sót ca đơn vị đã lưu trữ;
+«treo» gợi mục tiêu đang chờ một quyết định, mà đây là mục tiêu không còn ai quyết.
+
 **Vai «chỉ OKR»**: vai trong workspace cho người vào CRM chỉ để làm OKR — hôm nay
 là người ngoài khối kinh doanh. Họ đăng nhập, thấy khu OKR và hồ sơ của chính
 mình, nhưng không đọc được cá nhân, công ty, thoả thuận hợp tác, chiến dịch hay kế

@@ -4,14 +4,50 @@ Hồ sơ `_acceptance/gioi-han-duyet-cay-okr` · MT-06, QT-02, TC-06 · T3.
 
 ## Người dùng được gì
 
-- Người sửa được một mục tiêu đặt nó ở mức **giới hạn**: chỉ người dính vào mục tiêu,
-  trưởng sửa được nó, quản trị và người xem có tên thấy. Người khác không thấy nó ở bất
-  kỳ màn, thủ tục, cầu REST, khoá API, tin nhắc hay trợ lý nào; giới hạn không vào số gộp
-  và không căn chỉnh được.
-- Chương trình OKR có ô **«Công bố cần duyệt»** (mặc định tắt). Bật thì trưởng đơn vị gửi
-  duyệt, trưởng cấp trên duyệt và công bố hay trả lại kèm lý do.
-- Cây tổ chức **không lưu trữ hay xoá được đơn vị còn OKR**; quản trị **chuyển OKR** sang
-  đơn vị khác khi gộp, tách; Sức khoẻ chương trình có khối **OKR mồ côi**.
+- **Mức hiển thị.** Người sửa được một mục tiêu đặt nó ở mức **giới hạn** — từ menu «…»
+  của khung mục tiêu («Mức hiển thị…») hay ngay trong hộp «Đặt mục tiêu», để mục tiêu
+  nhạy cảm không lộ dù chỉ lúc còn nháp. Chỉ người liên quan (người phụ trách, người
+  phụ trách KR, người làm việc dưới KR, người tham gia), trưởng sửa được nó, quản trị và
+  tối đa 20 người xem có tên thấy. Người khác không thấy nó ở danh sách, bảng họp, bảng
+  chấm, tệp xuất, «Việc của tôi», tin nhắc buổi sáng hay Trợ lý OKR; mở đường dẫn của nó
+  thì thấy «Không tìm thấy mục tiêu này» — đúng câu của mục tiêu không có. Mục tiêu giới
+  hạn không vào số gộp của ai (cả quản trị) và không căn chỉnh được; chọn giới hạn khi
+  mục tiêu còn căn chỉnh thì hộp báo số căn chỉnh cần gỡ. Đầu khung có nhãn «Giới hạn».
+- **Bước duyệt.** Chương trình OKR có ô **«Công bố cần duyệt»** (mặc định tắt, chỉ quản
+  trị đổi). Bật thì người sửa được mục tiêu bấm «Gửi duyệt»; người duyệt suy từ cây tổ
+  chức (mục tiêu phòng ban — trưởng bộ phận; bộ phận — quản trị; cá nhân — trưởng phòng
+  ban chính) thấy mục «Chờ bạn duyệt» trong việc OKR và tin buổi sáng, mở khung và bấm
+  «Duyệt và công bố» hay «Trả lại…» kèm lý do 10–500 ký tự; người gửi thấy dải «Chờ …
+  duyệt», rút lại được, và thấy lý do khi bị trả lại. Trong lúc chờ, nội dung, KR, căn
+  chỉnh và mức hiển thị khoá. Người duyệt tự bấm «Công bố» thì công bố thẳng. Tắt ô khi
+  còn mục chờ: mục chờ ở lại và người sửa được công bố thẳng.
+- **Tái cơ cấu không mồ côi.** Cài đặt › Tổ chức: phòng ban, bộ phận có dòng «OKR: N mục
+  tiêu ở kỳ đang mở»; đơn vị còn OKR mở không lưu trữ được (hộp lưu trữ nói lý do, nút
+  khoá, có «Chuyển OKR…»), đơn vị có lịch sử OKR không xoá hẳn được (máy chủ trả câu, không
+  còn lỗi 500). Hộp **Chuyển OKR** đưa 1–50 mục tiêu cùng cấp sang đơn vị khác, giữ KR,
+  cập nhật tuần, căn chỉnh, người xem và vết; một mục hỏng thì cả lô không chuyển. Sức
+  khoẻ chương trình có khối **OKR mồ côi** (đơn vị đã lưu trữ, không ai sửa được, người
+  phụ trách hay người phụ trách KR đã rời) với lối sửa: «Chuyển OKR…», «Đặt trưởng»,
+  «Mở mục tiêu».
+- Bộ OKR mẫu có thêm một mục tiêu giới hạn (phòng Pháp chế), một mục tiêu chờ duyệt, một
+  vết trả lại trên bản nháp, một phòng ban lưu trữ chỉ còn OKR quý đã khép.
+
+## Cách làm
+
+- **Luật xem là một hàm, hai dạng.** `xemDuocMucTieu` (thuần, `@crm/validation/okr-hien-thi`)
+  và `dieuKienXemMucTieu` (điều kiện Prisma, `@crm/db/okr-hien-thi`). Mọi đọc mục tiêu và
+  bảy bảng con của nó ở API, `packages/db` và tác tử gắn điều kiện này; số gộp bỏ giới hạn
+  qua `boGioiHan`. API dựng ngữ cảnh từ cùng cây quyết quyền sửa; nhắc buổi sáng và tác tử
+  dựng bằng `nguCanhXemOkr`. `soi-ma.mjs --ca xem` soi mọi lời đọc.
+- **Bước duyệt không thêm bảng.** Trạng thái `cho-duyet`, ô `duyetCongBo` theo phiên bản
+  chương trình, người duyệt suy lúc đọc bằng `nguoiDuyetMucTieu` (`@crm/db/okr-duyet`) —
+  API và bộ sinh nhắc gọi cùng hàm. Sáu hành động vết mới: `doi-hien-thi`, `gui-duyet`,
+  `duyet`, `tra-lai`, `rut-duyet`, `chuyen-don-vi`.
+- **Cây tổ chức không nhập module OKR.** `to-chuc` hỏi số OKR mở và lịch sử qua
+  `demOkrCuaDonVi` / `demOkrTheoDonVi` (`@crm/db/okr-don-vi`).
+- Tài liệu: `docs/api.md` (mục OKR, mục cây tổ chức), `docs/agent.md` (hai loại nhắc,
+  trợ lý đọc lại quyền), `CONTEXT.md` (Mức hiển thị, Chờ duyệt / Người duyệt, Chuyển OKR,
+  OKR mồ côi).
 
 ## Khối giao diện mới — bậc dừng (docs/design.md)
 
@@ -21,10 +57,37 @@ Hồ sơ `_acceptance/gioi-han-duyet-cay-okr` · MT-06, QT-02, TC-06 · T3.
 | Dải chờ duyệt, bị trả lại | 1 | `alert`, `badge` |
 | Hộp trả lại, hộp chuyển OKR | 1 | `dialog`, `combobox`, `checkbox`, `item`; ReUI «transfer list» — không cần |
 | Khối OKR mồ côi | 1 | `item`, `badge`, `empty`, `skeleton` |
+| Ô «Công bố cần duyệt» | 1 | `switch`, `field` (`orientation="horizontal"`) |
+| Dòng OKR mở và hộp lưu trữ chặn ở Tổ chức | 1 | `item`, `alert`, `dialog` |
+
+Hộp chuyển OKR dùng chung cho Tổ chức và Sức khoẻ nên sống ở `apps/app/components/okr`,
+không ở thư mục tính năng.
 
 ## Dữ liệu
 
 `migration` chỉ thêm: `okrObjective.hienThi` (mặc định `cong-khai`), `okrProgramConfig.duyetCongBo`
-(mặc định `false`), bảng `OkrNguoiXem` cuối `schema.prisma`.
+(mặc định `false`), bảng `OkrNguoiXem` cuối `schema.prisma`. Không sửa dữ liệu, không xoá cột.
+
+## Đo sau khi gộp
+
+- `rang/ty-le-gioi-han-duyet.sql` (chỉ đọc, `SET okr.chu_ky`): tỷ lệ mục tiêu giới hạn
+  trên mục tiêu đã công bố; trung vị giờ chờ duyệt, tỷ lệ xử lý trong 5 ngày, số lần tắt ô
+  duyệt trong hai tuần sau khi bật.
+- `rang/okr-mo-coi.sql` mỗi thứ hai: danh sách mục tiêu mồ côi và lớp của nó.
+
+## Giới hạn đã biết
+
+- Hộp dời phòng ban sang bộ phận khác chưa nói trước số mục tiêu đi theo.
+- Mục tiêu cá nhân của người đã rời hiện ở OKR mồ côi nhưng chưa có lối sửa ngoài bỏ.
+- Người duyệt gọi thẳng thủ tục gửi duyệt cho mục tiêu mình duyệt được thì máy chủ nhận;
+  màn không hiện nút đó cho họ.
+- Cây căn chỉnh liệt mục tiêu giới hạn ở «chưa căn chỉnh» dù nó không căn chỉnh được.
+
+## Ngoài hợp đồng
+
+- Bài `n4_du_duong` của hồ sơ `no-sau-luot-4-okr` gặp thêm hai loại nhắc mới; câu
+  expected của hồ sơ đó vẫn ghi năm loại.
+- `okr-mau.spec` (thước của hồ sơ `bo-okr-mau`) sửa số đếm và bảng có mẫu vì bộ mẫu lớn
+  thêm.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

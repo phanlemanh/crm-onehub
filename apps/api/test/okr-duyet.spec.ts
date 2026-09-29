@@ -286,9 +286,6 @@ describe("cong-bo", () => {
 					{ status: "cong-bo", tuChoDuyet: true },
 				],
 			});
-			console.log(
-				`cong-bo co: bat T ${coG1T}/${tra(chan)}, bat H ${coG1H}, tat nhap T ${coG2T}/${tra(tatG2)}, tat cho T ${coChoT}/${tra(tatCho)}`,
-			);
 			expect({
 				batKhongDuyet: [coG1T, tra(chan)],
 				batNguoiDuyet: coG1H,

@@ -638,7 +638,6 @@ describe("cong-bo-tu-cho-duyet", () => {
 			cauTuTruoc: dai.textContent?.includes(g.duyet.choTuTruoc),
 			cauKhoaSua: dai.textContent?.includes(g.duyet.khoaSua),
 		};
-		console.log(`cong-bo-tu-cho-duyet: ${JSON.stringify(truoc)}`);
 		expect(truoc).toEqual({
 			congBo: 1,
 			rutLai: false,

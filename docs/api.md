@@ -458,6 +458,23 @@ onboarding, OKR, reports and filters read it; no area keeps its own.
   archived or not — still holds it. A division is refused archive while it holds live
   departments, and refused purge while any department, archived or not, still points
   at it.
+- **A unit that still holds open OKR cannot be archived; a unit with any OKR history
+  cannot be purged.** `archiveDepartment` and `archiveDivision` lock the unit row and
+  refuse while an objective that is not dropped sits in a cycle still in
+  `lap-ke-hoach`, `dang-chay` or `cham-diem` (`PHA_CHUYEN_DUOC`); the message names the
+  count and the way out — «chuyển OKR hoặc bỏ mục tiêu». Purge is refused while any
+  objective, open or closed, points at the unit: `lyDoKhongXoaPhongBan` and the
+  division purge rule both take the OKR history count, so `org.tree` never offers
+  «Xoá hẳn» there and the server answers 400 with a sentence instead of a 500 from the
+  foreign key. `org.tree` carries `okrMo` on every division and department, so the
+  archive dialog says «OKR: N mục tiêu ở kỳ đang mở» before the admin presses anything.
+  Moving the objectives out is `okr.chuyenDonVi` (see «OKR»).
+- **`to-chuc` asks about OKR through `@crm/db/okr-don-vi`, never `../okr`.**
+  `demOkrCuaDonVi` (one unit, for archive and purge) and `demOkrTheoDonVi` (two fixed
+  `groupBy`, for the tree) are the only OKR reads in `apps/api/src/to-chuc`; the
+  `soi-ma.mjs --ca xem` scan fails on an import from `../okr`. A department moved to
+  another division takes its OKR along: alignments stay and edit rights follow the new
+  division head.
 - **Purgeability is one function.** `lyDoKhongXoaPhongBan` (`xoa-phong-ban.ts`)
   returns the refusal or nothing; `org.tree`, `org.purgeDepartment`,
   `org.archiveDepartment` and `onboarding.listDepartments` all call it, so no screen
@@ -500,6 +517,95 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   «KR owner, or can edit the objective's unit» is one function,
   `OkrAccessService.ghiDuocKr`, used by `assertSuaKr`, by `guiCapNhat` and by
   `canEditKr`, so the three cannot drift.
+- **Who sees an objective is one rule in two shapes.** `okrObjective.hienThi` is
+  `cong-khai` (everyone in the OKR program) or `gioi-han`. A restricted objective is
+  seen by admins (owner, admin), its owner, the person of a personal objective, a KR
+  owner, a việc's người làm under one of its KRs, a participant, a named viewer
+  (`okrNguoiXem`, up to `OKR_HIEN_THI.nguoiXemToiDa`) and whoever edits its unit per
+  `suaDuocDonVi`. `xemDuocMucTieu` (`@crm/validation/okr-hien-thi`, pure) answers for
+  one row; **`dieuKienXemMucTieu` (`@crm/db/okr-hien-thi`) returns the same rule as a
+  `Prisma.OkrObjectiveWhereInput`, and every read of `okrObjective` or of the seven
+  child tables (`okrKeyResult`, `okrViecKr`, `okrGhiNhan`, `okrComment`,
+  `okrCheckIn`, `okrTrail`, `okrSoChup`) puts it in its `where`** — directly or nested
+  through `objective`. The API builds the context from `OkrAccessService.quyen` (the
+  same tree that decides edit rights, no extra query); the morning reminder and the
+  agent build it with `nguCanhXemOkr`, and a test compares the two head sets on the
+  sample OKR set. `_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem` fails on
+  a read without the condition unless `MIEN_XEM` names it with a reason.
+  - Lists (`byUnit`, `mine`, `danhSach`, `bangCham`, `xuatKy`, `khoiCuaToi`) leave
+    the objective out, and counts and pages do not include it.
+  - Reads by id (`objective`, `dienBien`, `canhKr`, `comments`, `lichSuSo`,
+    `banGhiChiSo`) and writes based on an objective (`follow`, `addComment`,
+    `guiGhiNhan`, `mangSang`, `ghiSoKr`, and every edit through
+    `assertSuaMucTieu`) answer `NotFoundException(OKR.thongDiep.khongThayMucTieu)` —
+    the same sentence as an id that does not exist, so a 403 never confirms that a
+    restricted objective is there. Mentions and recognition recipients must be able to
+    see it.
+  - Aggregates (`toanCanh`, `hopTuan`, `sucKhoe`, `countByUnit`) drop restricted
+    objectives **for everyone**, admins and heads included, through `boGioiHan` —
+    never filtered per caller, so two people never see two different company numbers.
+  - A restricted objective has no alignment: it is left out of `alignmentTree`,
+    `cayCanChinh` and `alignmentTargets`, and `addAlignment` refuses it as source or
+    target. Trail rows and diễn biến of another objective that point at it show
+    `{ gioiHan: true }` instead of an id or a title (`vetChoNguoiXem` in `hien-thi.ts`).
+  - `datHienThi({ objectiveId, hienThi, nguoiXem })` is for whoever edits the
+    objective, phase-locked, refused while it waits for approval, takes only members,
+    and refuses `gioi-han` while the objective still has alignments in either direction
+    (`OKR.thongDiep.hienThi.conCanChinh(n)`). It writes one `doi-hien-thi` trail row
+    (level and viewer list, before → after). The create dialog carries the level, so a
+    sensitive draft is never public for a minute. `mangSang` copies the level and the
+    viewers still in the workspace; `taoTuMau` and `applyImport` create public
+    objectives.
+- **Publishing can require one approval step.** `okrProgramConfig.duyetCongBo`
+  («Công bố cần duyệt», admin-only through `setProgram`, versioned like every field;
+  the `cau-hinh` trail row carries it before and after) turns it on. The approver is
+  derived at read time, never stored — `nguoiDuyetMucTieu` (`@crm/db/okr-duyet`, the
+  same function the reminders use): a department objective goes to its division head,
+  a division objective to the admins, a personal objective to the head of the
+  person's primary department, or to the division head when the person is that head;
+  nobody derivable means the admins. OneHub-level objectives skip approval. The
+  approver always sees the objective. `OkrService.congBoHayGuiDuyet` is the one
+  decision:
+  - `guiDuyet` (whoever edits it, a draft with at least one KR) moves `nhap` →
+    `cho-duyet` and writes `gui-duyet`. `duyetMucTieu` (the approver) publishes in the
+    same transaction — `publishedAt`, start values locked — and writes `duyet`.
+    `traLaiMucTieu` (the approver, reason `OKR_HIEN_THI.lyDoTraLai` characters) goes
+    back to `nhap` with the reason in the `tra-lai` row's `note`. `rutDuyet` is the
+    sender's and writes `rut-duyet`. All four are phase-locked.
+  - `publishObjective` by someone who cannot approve while the switch is on is 400
+    `OKR.thongDiep.duyet.canDuyet`; an approver publishes straight away and the
+    `cong-bo` row carries `tuDuyet`, and an approver pressing publish on a pending
+    objective writes `duyet`. `applyImport` with «publish now» writes `cho-duyet` for
+    objectives the importer cannot approve. With the switch off, pending objectives
+    stay pending and whoever edits them may publish them directly — that `cong-bo`
+    row carries `tuChoDuyet: true`.
+  - While pending, the objective's content and KRs (including sources, việc, sáng
+    kiến and evidence), alignments, level and participants are locked
+    (`OKR.thongDiep.dangChoDuyet`). Aggregates still count only `cong-bo`; the
+    objective cap counts pending ones.
+  - `_acceptance/gioi-han-duyet-cay-okr/rang/ty-le-gioi-han-duyet.sql` (read-only,
+    `SET okr.chu_ky` first) pairs each `gui-duyet` with the next `duyet`, `tra-lai`,
+    `rut-duyet` or `cong-bo` from pending on the same objective: only `duyet` and
+    `tra-lai` count as handled, open pairs stay out of the median, and
+    `tatTrongHaiTuan` reads the `cau-hinh` rows where `duyetCongBo` flipped.
+- **Restructuring moves OKR; it never strands it.** `okr.chuyenDonVi` (admin) moves
+  1–`OKR_HIEN_THI.chuyenToiDa` objectives of one level (department → department,
+  division → division) to a live unit, in cycles still in `PHA_CHUYEN_DUOC`: it locks
+  the objective and cycle rows `FOR UPDATE` and re-checks inside the transaction,
+  changes only `departmentId` or `divisionId`, keeps KRs, check-ins, alignments,
+  viewers and trail, and writes one `chuyen-don-vi` row per objective. One bad id — a
+  dropped objective, another level, a closed cycle — refuses the whole batch, naming
+  the objective. Going over the receiving unit's objective cap still moves and
+  returns a warning. Merging is «move everything, then archive»; splitting is «move
+  some».
+- **`okr.moCoi` lists what nobody can answer for.** Admin-only; an objective not
+  dropped in an open cycle whose unit is archived (`don-vi-luu-tru`, data from before
+  the archive rule), that nobody can edit (`khong-ai-sua`: a department with no head
+  and no division head, a division with no head, a personal objective whose person
+  left), whose owner left (`phu-trach-roi`) or one of whose KR owners left
+  (`kr-phu-trach-roi`). The Sức khoẻ page shows it as «OKR mồ côi».
+  `_acceptance/gioi-han-duyet-cay-okr/rang/okr-mo-coi.sql` lists the same
+  `objectiveId`, `lop` pairs for the weekly read.
 - **Eleven writes are locked by cycle phase.** Every objective, key-result and
   alignment write, plus `previewImport` and `applyImport`, calls
   `assertKyGhiDuoc` first: only `lap-ke-hoach` and `dang-chay` accept writes. Phase
