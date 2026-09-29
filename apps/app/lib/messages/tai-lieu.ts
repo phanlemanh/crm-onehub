@@ -61,6 +61,12 @@ const en = {
 		} satisfies Record<TrangThaiDeXuat, string>,
 	},
 	doc: {
+		nhacToi: {
+			tieuDe: "Pages that mention this page ({so})",
+			rong: "No page mentions this page yet.",
+			loi: "Couldn't load the pages that mention this page.",
+			thuLai: "Try again",
+		},
 		veDanhSach: "All pages",
 		phienBan: "Version {so} · approved {ngay}",
 		chuaCoPhienBan: "No version in use yet",
@@ -299,6 +305,12 @@ const vi: TaiLieuMessages = {
 		},
 	},
 	doc: {
+		nhacToi: {
+			tieuDe: "Trang nhắc tới trang này ({so})",
+			rong: "Chưa trang nào nhắc tới trang này.",
+			loi: "Không tải được các trang nhắc tới trang này.",
+			thuLai: "Thử lại",
+		},
 		veDanhSach: "Tất cả trang",
 		phienBan: "Phiên bản {so} · duyệt {ngay}",
 		chuaCoPhienBan: "Chưa có phiên bản đang dùng",

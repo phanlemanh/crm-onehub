@@ -2,7 +2,7 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { act, createElement as h } from "react";
+import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
 type TrangTim = {
@@ -124,15 +124,13 @@ async function mo(coDoiTac: boolean): Promise<void> {
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 	await act(async () => {
 		root?.render(
-			h(
-				NuqsTestingAdapter,
-				{ searchParams: "?k=true", hasMemory: true },
-				h(
-					QueryClientProvider,
-					{ client: qc },
-					h(LocaleProvider, { locale: "vi" }, h(QuickSwitcher, { coDoiTac })),
-				),
-			),
+			<NuqsTestingAdapter hasMemory searchParams="?k=true">
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">
+						<QuickSwitcher coDoiTac={coDoiTac} />
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 		await nhip();
 	});
