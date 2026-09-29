@@ -39,6 +39,9 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	const thamSo = await loadTaiLieuSearchParams(searchParams);
 	const tab = thamSo[SEARCH_PARAM.taiLieu.tab];
 	const loai = thamSo[SEARCH_PARAM.taiLieu.loai];
+	const donVi = thamSo[SEARCH_PARAM.taiLieu.donVi];
+	const chu = thamSo[SEARCH_PARAM.taiLieu.chu];
+	const nhom = thamSo[SEARCH_PARAM.taiLieu.nhom];
 	const page = Math.max(1, thamSo[SEARCH_PARAM.list.page]);
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
@@ -48,9 +51,22 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			.catch(() => null),
 		chuTrangVaDonVi(session.user),
 		queryClient.prefetchQuery(
-			trpc.taiLieu.list.queryOptions({ loai: loai ?? undefined, page }),
+			trpc.taiLieu.list.queryOptions({
+				loai: loai ?? undefined,
+				donViId: donVi ?? undefined,
+				chuTrangId: chu ?? undefined,
+				page,
+			}),
 		),
 		queryClient.prefetchQuery(trpc.taiLieu.proposals.queryOptions()),
+		tab === "trang"
+			? queryClient.prefetchQuery(trpc.taiLieu.boLoc.queryOptions())
+			: null,
+		tab === "cho-duyet"
+			? queryClient.prefetchQuery(
+					trpc.taiLieu.proposals.queryOptions({ nhom, page }),
+				)
+			: null,
 		tab === "nguon"
 			? queryClient.prefetchQuery(trpc.taiLieuNguon.list.queryOptions())
 			: null,
@@ -63,7 +79,15 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 
 	return (
 		<HydrateClient>
-			<DanhSach loai={loai} luaChon={luaChon} page={page} tab={tab} />
+			<DanhSach
+				chu={chu}
+				donVi={donVi}
+				loai={loai}
+				luaChon={luaChon}
+				nhom={nhom}
+				page={page}
+				tab={tab}
+			/>
 		</HydrateClient>
 	);
 }

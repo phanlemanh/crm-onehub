@@ -7,6 +7,9 @@ const GIAY_MS = 1000;
 export const TAB_TAI_LIEU = ["trang", "cho-duyet", "nguon"] as const;
 export type TabTaiLieu = (typeof TAB_TAI_LIEU)[number];
 
+export const NHOM_DE_XUAT = ["cho", "da-xu-ly"] as const;
+export type NhomDeXuat = (typeof NHOM_DE_XUAT)[number];
+
 export const TAI_LIEU_MAN = {
 	muiGio: "Asia/Ho_Chi_Minh",
 	goc: "/tai-lieu",

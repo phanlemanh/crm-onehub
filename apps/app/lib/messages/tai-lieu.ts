@@ -22,6 +22,16 @@ const en = {
 	loc: {
 		nhan: "Page type",
 		tatCa: "All",
+		donVi: "Unit",
+		tatCaDonVi: "All units",
+		timDonVi: "Search units",
+		chu: "Page owner",
+		tatCaChu: "All page owners",
+		timChu: "Search page owners",
+		khongCo: "None",
+		boLoc: "Clear filters",
+		loiBoLoc: "Couldn't load the units and page owners.",
+		thuLai: "Try again",
 	},
 	cot: {
 		trang: "Page",
@@ -41,9 +51,9 @@ const en = {
 		thuLai: "Try again",
 	},
 	rongLoc: {
-		tieuDe: "No pages of this type",
-		than: "Pick another type, or show every page.",
-		nut: "Show all pages",
+		tieuDe: "No pages match the filters",
+		than: "Change the filters, or clear them to see every page.",
+		nut: "Clear filters",
 	},
 	phanTrang: {
 		nhan: "More pages of the list",
@@ -52,6 +62,12 @@ const en = {
 	},
 	choDuyet: {
 		rong: "No proposals awaiting your review.",
+		rongDaXuLy: "No proposals sent back or out of date yet.",
+		nhom: {
+			nhan: "Proposal group",
+			cho: "Awaiting",
+			daXuLy: "Handled",
+		},
 		veDanhSach: "Back to pages",
 		trangThai: {
 			CHO_DUYET: "Awaiting review",
@@ -266,6 +282,16 @@ const vi: TaiLieuMessages = {
 	loc: {
 		nhan: "Loại trang",
 		tatCa: "Tất cả",
+		donVi: "Đơn vị",
+		tatCaDonVi: "Mọi đơn vị",
+		timDonVi: "Tìm đơn vị",
+		chu: "Chủ trang",
+		tatCaChu: "Mọi chủ trang",
+		timChu: "Tìm chủ trang",
+		khongCo: "Không có",
+		boLoc: "Bỏ lọc",
+		loiBoLoc: "Không tải được danh sách đơn vị và chủ trang.",
+		thuLai: "Thử lại",
 	},
 	cot: {
 		trang: "Trang",
@@ -285,9 +311,9 @@ const vi: TaiLieuMessages = {
 		thuLai: "Thử lại",
 	},
 	rongLoc: {
-		tieuDe: "Chưa có trang loại này",
-		than: "Chọn loại khác, hoặc xem mọi trang.",
-		nut: "Xem mọi trang",
+		tieuDe: "Không có trang nào khớp bộ lọc",
+		than: "Đổi bộ lọc, hoặc bỏ lọc để xem mọi trang.",
+		nut: "Bỏ lọc",
 	},
 	phanTrang: {
 		nhan: "Phần tiếp của danh sách",
@@ -296,6 +322,8 @@ const vi: TaiLieuMessages = {
 	},
 	choDuyet: {
 		rong: "Không có bản nào chờ bạn duyệt.",
+		rongDaXuLy: "Chưa có bản nào đã trả lại hay đã cũ.",
+		nhom: { nhan: "Nhóm bản đề xuất", cho: "Đang chờ", daXuLy: "Đã xử lý" },
 		veDanhSach: "Về danh sách trang",
 		trangThai: {
 			CHO_DUYET: "Chờ duyệt",
