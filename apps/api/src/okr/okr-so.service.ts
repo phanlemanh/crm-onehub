@@ -401,16 +401,13 @@ export class OkrSoService {
 		const kr = await this.docKr(input.keyResultId, nc);
 		if (!docDuocPhamVi(q.role, "doi-tac"))
 			throw new ForbiddenException(T.so.danhSachDoiTac);
-		const cuaKr = {
-			keyResultId: input.keyResultId,
-			keyResult: { objective: dieuKienXemMucTieu(nc) },
-		};
 		const coTrang = OKR_SO.banGhi.coTrang;
 		const cua = { bo: (input.trang - 1) * coTrang, lay: coTrang };
 		const nguonMay = kr.nguonMay ? parseOkrNguon(kr.nguonMay) : null;
 		const chup = await this.db.okrSoChup.findFirst({
 			where: {
-				...cuaKr,
+				keyResultId: input.keyResultId,
+				keyResult: { objective: dieuKienXemMucTieu(nc) },
 				ngay: input.ngay ? ngayDb(input.ngay) : undefined,
 			},
 			orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
@@ -438,11 +435,15 @@ export class OkrSoService {
 			lanGhi: [],
 		};
 		if (loai === "api") {
+			const cuaApi = {
+				keyResultId: input.keyResultId,
+				nguon: "api",
+			};
 			const tong = await this.db.okrSoChup.count({
-				where: { ...cuaKr, nguon: "api" },
+				where: { ...cuaApi, keyResult: { objective: dieuKienXemMucTieu(nc) } },
 			});
 			const lan = await this.db.okrSoChup.findMany({
-				where: { ...cuaKr, nguon: "api" },
+				where: { ...cuaApi, keyResult: { objective: dieuKienXemMucTieu(nc) } },
 				orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
 				skip: cua.bo,
 				take: cua.lay,
