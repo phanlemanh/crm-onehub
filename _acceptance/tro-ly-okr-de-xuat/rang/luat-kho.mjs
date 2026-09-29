@@ -368,6 +368,7 @@ function mucTran(nen, them) {
 			)?.phan ?? null,
 	}));
 	const chuaPhan = bang.filter((b) => b.phan === null);
+	const dongTrung = bang.filter((b) => /TRÙNG/.test(b.phan ?? ""));
 	const tt = LUAT_KHO.tran.trungTen;
 	const lichSu = git(
 		"log",
@@ -399,7 +400,11 @@ function mucTran(nen, them) {
 			"```",
 		].join("\n"),
 		chuaPhan.length === 0
-			? `${bang.length} dòng «đọc tay» đều có phán quyết: không dòng nào là tham số tinh chỉnh phải vào TRO_LY_OKR_TRAN; một cặp trùng thật (NGAY_MS khai ở apps/api/src/okr/tro-ly-so-do.ts và packages/db/src/okr-xu-huong.ts cùng biểu thức 24 * 60 * MINUTE_MS) — lẽ ra xuất một DAY_MS cạnh MINUTE_MS ở packages/db/src/okr-tro-ly-danh-muc.ts; chưa sửa trong vòng này, ghi để chủ kho quyết.`
+			? `${bang.length} dòng «đọc tay» đều có phán quyết (đọc từng dòng ở bảng trên); ${
+					dongTrung.length === 0
+						? "không dòng nào mang phán quyết TRÙNG — luật «không viết hai lần một đơn vị» của AGENTS.md đạt trên các dòng này."
+						: `${dongTrung.length} dòng mang phán quyết TRÙNG (${dongTrung.map((b) => `${b.x.d.tep}:${b.x.d.so}`).join(", ")}) — luật «không viết hai lần» của AGENTS.md chưa đạt, ghi để chủ kho quyết.`
+				}`
 			: `${chuaPhan.length} dòng «đọc tay» chưa có phán quyết — đọc tay.`,
 		`### ${tt.ten} khai ở hai tệp cấu hình`,
 		[

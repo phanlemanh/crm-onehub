@@ -119,14 +119,9 @@ export const LUAT_KHO = {
 	},
 	phanLoaiTay: [
 		{
-			tep: "apps/api/src/okr/tro-ly-so-do.ts",
-			khop: /const NGAY_MS = 24 \* 60 \* MINUTE_MS/,
-			phan: "đơn vị (ngày = 24 × 60 phút, dẫn từ MINUTE_MS) — hợp lệ về loại, nhưng TRÙNG: packages/db/src/okr-xu-huong.ts:28 khai đúng biểu thức này; luật «không viết hai lần» của AGENTS.md chưa đạt",
-		},
-		{
-			tep: "packages/db/src/okr-xu-huong.ts",
-			khop: /const NGAY_MS = 24 \* 60 \* MINUTE_MS/,
-			phan: "đơn vị (ngày) — hợp lệ về loại, nhưng TRÙNG với apps/api/src/okr/tro-ly-so-do.ts:31",
+			tep: "packages/db/src/okr-tro-ly-danh-muc.ts",
+			khop: /export const NGAY_MS = 24 \* 60 \* MINUTE_MS/,
+			phan: "đơn vị (ngày = 24 × 60 phút, dẫn từ MINUTE_MS) — một nguồn duy nhất; tro-ly-so-do.ts và okr-xu-huong.ts nhập lại từ đây",
 		},
 		{
 			tep: "apps/api/src/okr/tro-ly-so-do.ts",
