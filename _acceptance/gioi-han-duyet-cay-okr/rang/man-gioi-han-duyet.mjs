@@ -19,7 +19,6 @@ const TEP_NAY = fileURLToPath(import.meta.url);
 const HO_SO = "gioi-han-duyet-cay-okr";
 const TAM =
 	process.env.BANG_CHUNG ?? join(GOC, ".acceptance-runs", HO_SO, "man");
-const DICH = join(GOC, "_acceptance", HO_SO, "evidence", "man");
 const NHOM = { E15: "E15", E16: "E15", E18: "E18", E19: "E18" };
 const MOI_EVAL = Object.keys(NHOM);
 const LENH_DO =
@@ -212,6 +211,7 @@ async function chieuDo() {
 if (laChieuDo) await chieuDo();
 
 const { default: puppeteer } = await import("puppeteer-core");
+const { chepSangBangChung } = await import("./noi-bang-chung.mjs");
 const { db } = await import("../../../packages/db/src/index.ts");
 const { okrGioiHanMessages } = await import(
 	"../../../apps/app/lib/messages/okr-gioi-han.ts"
@@ -464,8 +464,10 @@ async function taoNhap(tieuDe) {
 	return mt.id;
 }
 
+const NHI_PHAN = new Set(["Font", "Image", "Media"]);
+
 function mayGhi(tenMay) {
-	return { ten: tenMay, phan: [], hong: 0, dang: 0 };
+	return { ten: tenMay, phan: [], hong: 0, hongChu: 0, khongDoc: [], dang: 0 };
 }
 
 async function ghiMang(trang, may) {
@@ -476,7 +478,11 @@ async function ghiMang(trang, may) {
 	});
 	const cuaCho = new Map();
 	cdp.on("Network.responseReceived", (e) =>
-		cuaCho.set(e.requestId, { url: e.response.url, loai: e.type }),
+		cuaCho.set(e.requestId, {
+			url: e.response.url,
+			loai: e.type,
+			ma: e.response.status,
+		}),
 	);
 	cdp.on("Network.loadingFinished", (e) => {
 		const r = cuaCho.get(e.requestId);
@@ -492,8 +498,12 @@ async function ghiMang(trang, may) {
 						: b.body,
 				});
 			})
-			.catch(() => {
+			.catch((loi) => {
 				may.hong += 1;
+				if (!NHI_PHAN.has(r.loai)) may.hongChu += 1;
+				may.khongDoc.push(
+					`${r.ma} ${r.loai} ${r.url.slice(0, 140)} (${String(loi?.message ?? loi).slice(0, 80)})`,
+				);
 			})
 			.finally(() => {
 				may.dang -= 1;
@@ -699,10 +709,19 @@ async function moHop(trang, triggerSel) {
 
 async function chonHop(trang, triggerSel, tenMuc) {
 	if (!(await moHop(trang, triggerSel))) return false;
-	if (await coSel(trang, "[cmdk-input]")) {
-		await trang.type("[cmdk-input]", tenMuc);
-		await cho(300);
-	}
+	if (await coSel(trang, "[cmdk-input]"))
+		for (let lan = 0; lan < DO.lanMoHop; lan += 1) {
+			const o = await trang.evaluateHandle(
+				() => window.__tim("[cmdk-input]")[0] ?? null,
+			);
+			const el = o.asElement();
+			if (!el) break;
+			await el.click({ count: 3 });
+			await trang.keyboard.press("Backspace");
+			await el.type(tenMuc, { delay: 20 });
+			await cho(300);
+			if ((await el.evaluate((e) => e.value)) === tenMuc) break;
+		}
 	await thayNgay(
 		trang,
 		(c) =>
@@ -1303,10 +1322,20 @@ async function nhomE15() {
 	const sN = soiMay(mayN);
 	const sT = soiMay(mayT);
 	console.log(
-		`  E16 bo ghi CDP nguoi khong xem duoc: ${sN.tong} phan hoi da soi (${sN.trpc} tRPC), ${sN.lo.length} phan hoi chua id/tieu de G (khong doc duoc ${mayN.hong}; khong tinh chuoi dia chi «objective:<id>» ma chinh nguoi do go vao)`,
+		`  E16 bo ghi CDP nguoi khong xem duoc: ${sN.tong} phan hoi da soi (${sN.trpc} tRPC), ${sN.lo.length} phan hoi chua id/tieu de G (khong doc duoc ${mayN.hong}, trong do ${mayN.hongChu} phan hoi chu; khong tinh chuoi dia chi «objective:<id>» ma chinh nguoi do go vao)`,
 	);
 	console.log(
 		`  E16 doi chung duong truong T: ${sT.tong} phan hoi da soi, ${sT.lo.length} phan hoi chua id/tieu de G`,
+	);
+	for (const k of mayN.khongDoc)
+		console.log(`  E16 phan hoi khong doc duoc: ${k}`);
+	if (mayN.hongChu > 0)
+		console.log(
+			`  E16: khong doc duoc ${mayN.hongChu} phan hoi chu — dem lo khong tin duoc`,
+		);
+	kiem(
+		`E16: phan hoi chu (khong tinh ${[...NHI_PHAN].join("/")}) khong doc duoc ${mayN.hongChu} (mong 0)`,
+		mayN.hongChu === 0,
 	);
 	if (gioiHan && sN.lo.length > 0) {
 		console.log(
@@ -1741,10 +1770,16 @@ async function nhomE18() {
 }
 
 function chepBangChung() {
-	if (process.env.CHIEU_DO || hong.length > 0 || anh.length === 0) return;
-	mkdirSync(DICH, { recursive: true });
-	for (const a of anh) copyFileSync(join(TAM, a), join(DICH, a));
-	console.log(`  xanh: da chep ${anh.length} anh sang ${relative(GOC, DICH)}/`);
+	if (process.env.CHIEU_DO || hong.length > 0 || anh.length === 0) {
+		console.log(
+			`  bang chung: ${anh.length} anh o ${relative(GOC, TAM)}/ · KHONG chep sang evidence/ (${process.env.CHIEU_DO ? "chieu do" : hong.length > 0 ? "lan chay co hong" : "khong co anh"})`,
+		);
+		return;
+	}
+	chepSangBangChung(
+		anh.map((a) => join(TAM, a)),
+		anh.map((a) => join("man", a)),
+	);
 }
 
 trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });

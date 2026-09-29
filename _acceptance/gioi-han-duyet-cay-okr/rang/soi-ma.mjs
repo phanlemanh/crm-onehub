@@ -15,6 +15,7 @@ import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ts = createRequire(import.meta.url)("typescript");
+const { TAM_HO_SO, chepSangBangChung } = await import("./noi-bang-chung.mjs");
 
 const THU_MUC = dirname(fileURLToPath(import.meta.url));
 const GOC = join(THU_MUC, "..", "..", "..");
@@ -987,14 +988,7 @@ function chieuDoXem() {
 }
 
 const MOC = "origin/onehub";
-const NHANH_MOC = "onehub";
-const TEP_DIFF_LUOT = join(
-	GOC,
-	"_acceptance",
-	"gioi-han-duyet-cay-okr",
-	"evidence",
-	"diff-luot.txt",
-);
+const TEP_DIFF_LUOT = join(TAM_HO_SO, "diff-luot.txt");
 const LOAI_TRU_THIET_KE = new Set([
 	"node_modules",
 	".next",
@@ -1079,13 +1073,6 @@ function keoMoc() {
 	if (git("rev-parse", "--is-shallow-repository") === "true")
 		khongDoDuoc(
 			`kho la ban sao nong (shallow) — ${MOC}...HEAD khong co merge-base tin duoc; chay git fetch --unshallow roi do lai`,
-		);
-	const keo = spawnSync("git", ["-C", GOC, "fetch", "origin", NHANH_MOC], {
-		encoding: "utf8",
-	});
-	if (keo.status !== 0)
-		khongDoDuoc(
-			`git fetch origin ${NHANH_MOC} thoat ${keo.status}: ${(keo.stderr ?? "").trim().split("\n").at(-1)}`,
 		);
 	const goc = spawnSync("git", ["-C", GOC, "merge-base", "HEAD", MOC], {
 		encoding: "utf8",
@@ -1497,9 +1484,16 @@ function ghiDiffLuot(gocSo) {
 
 function lanhThietKe() {
 	const gocSo = keoMoc();
+	if (gocSo === git("rev-parse", "HEAD")) {
+		console.log(
+			`diff ${MOC}...HEAD rong — HEAD ${gocSo.slice(0, 8)} da nam trong ${MOC} (nhanh da gop); khong soi, khong ghi gi`,
+		);
+		process.exit(0);
+	}
 	const { hong, soTep } = caThietKe(gocSo);
 	if (soTep === 0) khongDoDuoc("diff khong co tep nao de soi");
 	ghiDiffLuot(gocSo);
+	chepSangBangChung([TEP_DIFF_LUOT], ["diff-luot.txt"]);
 	for (const h of hong) console.log(`HONG ${h}`);
 	console.log(`vi pham: ${hong.length}`);
 	process.exit(hong.length === 0 ? 0 : 1);
