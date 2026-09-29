@@ -7,6 +7,7 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import { moHoiYInput, suaHoiYInput } from "@crm/validation/okr-hoi-y";
 import {
 	chamKrInput,
 	dongRaInput,
@@ -104,6 +105,8 @@ import {
 } from "./okr-canh-kr.contracts";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { hoiYGhiOutput } from "./okr-hoi-y.contracts";
+import { OkrHoiYService } from "./okr-hoi-y.service";
 import {
 	bangChamInput,
 	bangChamOutput,
@@ -160,6 +163,7 @@ export class OkrRouter {
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
+		@Inject(OkrHoiYService) private readonly hoiY: OkrHoiYService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -315,6 +319,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof dongRaInput>,
 	) {
 		return this.khep.dongRa(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: moHoiYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y", TAG),
+	})
+	moHoiY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moHoiYInput>,
+	) {
+		return this.hoiY.moHoiY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaHoiYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}", TAG),
+	})
+	suaHoiY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaHoiYInput>,
+	) {
+		return this.hoiY.suaHoiY(ctx.user.id, input);
 	}
 
 	@Query({

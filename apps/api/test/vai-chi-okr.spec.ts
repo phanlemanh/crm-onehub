@@ -22,6 +22,7 @@ import {
 	themBangChungInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
+import { moHoiYInput, suaHoiYInput } from "@crm/validation/okr-hoi-y";
 import {
 	chamKrInput,
 	dongRaInput,
@@ -224,6 +225,15 @@ const DAU_VAO_HOP_LE = {
 		ownerUserId: "khong-co",
 		krs: [{ startValue: 0, targetValue: 10, ownerUserId: "khong-co" }],
 	},
+	"okr.moHoiY": {
+		cycleId: "khong-co",
+		cauHoi: "Năm tới OneHub nên dồn sức vào đâu?",
+		loiMo: "",
+		soLieu: [{ nhan: "Doanh thu", giaTri: "182 tỷ", ghiChu: "" }],
+		hanLuc: "2026-12-10T10:00:00.000Z",
+		nguoiChonUserId: "khong-co",
+	},
+	"okr.suaHoiY": { hoiYId: "khong-co", loiMo: "Lời mở mới" },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -255,6 +265,10 @@ const THU_TUC_CANH_KR = {
 	"okr.luuTruMau": idInput,
 	"okr.khoiPhucMau": idInput,
 	"okr.taoTuMau": taoTuMauInput,
+} as const;
+const THU_TUC_HOI_Y = {
+	"okr.moHoiY": moHoiYInput,
+	"okr.suaHoiY": suaHoiYInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",
@@ -324,6 +338,7 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySoDo",
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1379,7 +1394,7 @@ describe("pham-vi-khep", () => {
 describe("sang-kien-an", () => {
 	beforeEach(don);
 
-	test("thu tuc okr vai chi OKR voi toi duoc: danh sach viet truoc cong dung thu tuc cua luot; thu tuc canh KR co dau vao hop le", () => {
+	test("thu tuc okr vai chi OKR voi toi duoc: danh sach viet truoc cong dung thu tuc cua luot; thu tuc canh KR va hoi y co dau vao hop le", () => {
 		expect(
 			choPhep().filter((t) => t.startsWith("okr.")),
 			"thu tuc okr cua vai chi OKR lech danh sach viet truoc",
@@ -1388,15 +1403,19 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_TRUOC_LUOT,
 				...THU_TUC_OKR_LUOT_CANH_KR,
 				...THU_TUC_OKR_LUOT_TRO_LY,
+				...THU_TUC_OKR_LUOT_HOI_Y,
 			].sort(),
 		);
-		const hong = Object.entries(THU_TUC_CANH_KR).flatMap(([t, khuon]) => {
+		const hong = Object.entries({
+			...THU_TUC_CANH_KR,
+			...THU_TUC_HOI_Y,
+		}).flatMap(([t, khuon]) => {
 			const vao = dauVaoCua(t);
 			if (vao === undefined) return [`${t}: thieu dau vao`];
 			const doc = khuon.safeParse(vao);
 			return doc.success ? [] : [`${t}: ${doc.error.message}`];
 		});
-		expect(hong, "dau vao hop le cho thu tuc canh KR").toEqual([]);
+		expect(hong, "dau vao hop le cho thu tuc canh KR va hoi y").toEqual([]);
 	});
 
 	test(

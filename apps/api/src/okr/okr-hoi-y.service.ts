@@ -1,0 +1,210 @@
+import { isWorkspaceAdmin, workspaceRoleOf } from "@crm/auth";
+import type { Db, Prisma } from "@crm/db";
+import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
+import {
+	type MoHoiYInput,
+	OKR_HOI_Y,
+	parseSoLieuHoiY,
+	type SuaHoiYInput,
+	trangThaiHoiY,
+} from "@crm/validation/okr-hoi-y";
+import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
+import {
+	BadRequestException,
+	ForbiddenException,
+	Inject,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
+import { z } from "zod";
+import { InjectDatabase } from "../database/database.constants";
+import { DONG_HO_HOI_Y, type DongHo } from "./dong-ho";
+import { OkrService } from "./okr.service";
+import { OkrAccessService } from "./okr-access.service";
+import { OKR } from "./okr-config";
+import type { HoiYGhiOutput } from "./okr-hoi-y.contracts";
+
+type Tx = Prisma.TransactionClient;
+
+const T = OKR.thongDiep.hoiY;
+const phaChuKy = z.enum(PHA_CHU_KY);
+
+function sauGio(tu: Date, soGio: number): Date {
+	return new Date(tu.getTime() + soGio * OKR.thoiGian.gioMs);
+}
+
+function kiemHan(han: Date, tu: Date, den: Date, cau: string): void {
+	if (han.getTime() < tu.getTime() || han.getTime() > den.getTime())
+		throw new BadRequestException(cau);
+}
+
+@Injectable()
+export class OkrHoiYService {
+	constructor(
+		@InjectDatabase() private readonly db: Db,
+		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(DONG_HO_HOI_Y) private readonly dongHo: DongHo,
+	) {}
+
+	private async assertQuanTri(userId: string): Promise<void> {
+		const q = await this.quyenOkr.quyen(userId);
+		if (!q.quanTri) throw new ForbiddenException(T.chiQuanTri);
+	}
+
+	private async laQuanTri(tx: Tx, userId: string): Promise<boolean> {
+		return isWorkspaceAdmin(await workspaceRoleOf(userId, tx));
+	}
+
+	async moHoiY(userId: string, input: MoHoiYInput): Promise<HoiYGhiOutput> {
+		await this.assertQuanTri(userId);
+		const now = this.dongHo();
+		const hanLuc = new Date(input.hanLuc);
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.cycleId} FOR UPDATE`;
+			const c = await tx.okrCycle.findUnique({
+				where: { id: input.cycleId },
+				select: { phase: true },
+			});
+			if (!c)
+				throw new NotFoundException(OKR.thongDiep.khongCoChuKy(input.cycleId));
+			if (phaChuKy.parse(c.phase) !== "lap-ke-hoach")
+				throw new BadRequestException(T.kyKhongLapKeHoach);
+			const co = await tx.okrHoiY.findUnique({
+				where: { cycleId: input.cycleId },
+				select: { id: true },
+			});
+			if (co) throw new BadRequestException(T.daCoHoiY);
+			kiemHan(
+				hanLuc,
+				sauGio(now, OKR_HOI_Y.hanGio.min),
+				sauGio(now, OKR_HOI_Y.hanGio.max),
+				T.hanNgoaiKhoang,
+			);
+			if (!(await this.laQuanTri(tx, input.nguoiChonUserId)))
+				throw new BadRequestException(T.nguoiChonPhaiQuanTri);
+			const h = await tx.okrHoiY.create({
+				data: {
+					cycleId: input.cycleId,
+					cauHoi: input.cauHoi,
+					loiMo: input.loiMo,
+					soLieu: input.soLieu,
+					hanLuc,
+					nguoiChonUserId: input.nguoiChonUserId,
+					taoBoiUserId: userId,
+					createdAt: now,
+				},
+				select: { id: true },
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"mo-hoi-y",
+				{ cycleId: input.cycleId },
+				null,
+				{
+					hoiYId: h.id,
+					hanLuc: hanLuc.toISOString(),
+					nguoiChonUserId: input.nguoiChonUserId,
+					soLieu: input.soLieu.length,
+				},
+			);
+			return { id: h.id };
+		});
+	}
+
+	async suaHoiY(userId: string, input: SuaHoiYInput): Promise<HoiYGhiOutput> {
+		await this.assertQuanTri(userId);
+		const now = this.dongHo();
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrHoiY" WHERE id = ${input.hoiYId} FOR UPDATE`;
+			const h = await tx.okrHoiY.findUnique({
+				where: { id: input.hoiYId },
+				include: { banTruoc: { select: { id: true } } },
+			});
+			if (!h) throw new NotFoundException(T.khongCoHoiY(input.hoiYId));
+			const trangThai = trangThaiHoiY(h, now);
+			if (trangThai === "da-cong-bo") throw new BadRequestException(T.daCongBo);
+
+			const truoc: OkrVetSnapshot = {};
+			const sau: OkrVetSnapshot = {};
+			const data: Prisma.OkrHoiYUpdateInput = {};
+			if (input.cauHoi !== undefined && input.cauHoi !== h.cauHoi) {
+				truoc.cauHoi = h.cauHoi;
+				sau.cauHoi = input.cauHoi;
+				data.cauHoi = input.cauHoi;
+			}
+			if (input.loiMo !== undefined && input.loiMo !== h.loiMo) {
+				truoc.loiMo = h.loiMo;
+				sau.loiMo = input.loiMo;
+				data.loiMo = input.loiMo;
+			}
+			if (input.soLieu !== undefined) {
+				const cu = parseSoLieuHoiY(h.soLieu);
+				if (JSON.stringify(cu) !== JSON.stringify(input.soLieu)) {
+					truoc.soLieu = cu.length;
+					sau.soLieu = input.soLieu.length;
+					data.soLieu = input.soLieu;
+				}
+			}
+			const han = input.hanLuc === undefined ? null : new Date(input.hanLuc);
+			const doiHan =
+				han !== null && han.getTime() !== h.hanLuc.getTime() ? han : null;
+			if (doiHan) {
+				truoc.hanLuc = h.hanLuc.toISOString();
+				sau.hanLuc = doiHan.toISOString();
+				data.hanLuc = doiHan;
+			}
+			const doiNoiDung = Object.keys(sau).length > 0;
+			if (doiNoiDung && trangThai !== "dang-mo")
+				throw new BadRequestException(T.chiKhiDangMo);
+			if (doiHan)
+				kiemHan(
+					doiHan,
+					now,
+					sauGio(h.createdAt, OKR_HOI_Y.hanGio.max),
+					T.hanSuaNgoaiKhoang,
+				);
+			if (data.cauHoi !== undefined) {
+				const soY = await tx.okrY.count({ where: { hoiYId: h.id } });
+				if (soY > 0) throw new BadRequestException(T.cauHoiDaKhoa);
+			}
+
+			const moi = input.nguoiChonUserId;
+			const doiNguoiChon = moi !== undefined && moi !== h.nguoiChonUserId;
+			if (doiNguoiChon) {
+				if (!(await this.laQuanTri(tx, moi)))
+					throw new BadRequestException(T.nguoiChonPhaiQuanTri);
+				const daGop = await tx.okrY.count({
+					where: { hoiYId: h.id, tacGiaUserId: moi },
+				});
+				if (daGop > 0) throw new BadRequestException(T.nguoiChonDaGop);
+				if (h.banTruoc && (await this.laQuanTri(tx, h.nguoiChonUserId)))
+					throw new BadRequestException(T.daNiemPhong);
+				data.nguoiChon = { connect: { id: moi } };
+			}
+
+			if (!doiNoiDung && !doiNguoiChon) return { id: h.id };
+			await tx.okrHoiY.update({ where: { id: h.id }, data });
+			if (doiNoiDung)
+				await this.okr.vet(
+					tx,
+					userId,
+					"sua-hoi-y",
+					{ cycleId: h.cycleId },
+					truoc,
+					sau,
+				);
+			if (doiNguoiChon)
+				await this.okr.vet(
+					tx,
+					userId,
+					"doi-nguoi-chon",
+					{ cycleId: h.cycleId },
+					null,
+					{ tu: h.nguoiChonUserId, sang: moi },
+				);
+			return { id: h.id };
+		});
+	}
+}

@@ -1,13 +1,15 @@
+import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	LOI_KHUON_CAP_NHAT,
 	type LoiGiaTri,
 } from "@crm/validation/okr-cap-nhat";
+import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
 import { OKR_MAU } from "@crm/validation/okr-mau";
 
 export const OKR = {
 	tenGoc: "OneHub",
-	thoiGian: { giayMs: 1000 },
+	thoiGian: { giayMs: 1000, gioMs: 60 * MINUTE_MS },
 	ten: {
 		toiThieu: 3,
 		mucTieuToiDa: 200,
@@ -186,6 +188,26 @@ export const OKR = {
 			mangSangChiCongBo: "Chỉ mang sang được mục tiêu đã công bố.",
 			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
 			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
+		},
+		hoiY: {
+			chiQuanTri: "Chỉ quản trị mới mở hay sửa được lần hỏi ý mục tiêu.",
+			nguoiChonPhaiQuanTri:
+				"Người chọn phải là quản trị (owner hoặc admin) của không gian làm việc.",
+			nguoiChonDaGop:
+				"Người này đã góp ý trong lần hỏi ý — người chọn không góp ý, hãy chọn người khác.",
+			kyKhongLapKeHoach:
+				"Chỉ mở hỏi ý mục tiêu khi chu kỳ đang ở pha lập kế hoạch.",
+			daCoHoiY: "Chu kỳ này đã có một lần hỏi ý mục tiêu.",
+			hanNgoaiKhoang: `Hạn phải cách lúc mở từ ${OKR_HOI_Y.hanGio.min} tới ${OKR_HOI_Y.hanGio.max} giờ.`,
+			hanSuaNgoaiKhoang: `Hạn mới phải từ bây giờ tới ${OKR_HOI_Y.hanGio.max} giờ sau lúc mở — đặt bằng bây giờ là đóng sớm.`,
+			cauHoiDaKhoa:
+				"Đã có người góp ý — câu hỏi đã khoá, chỉ sửa được lời mở, con số và hạn.",
+			daNiemPhong:
+				"Người chọn đã niêm phong bản viết trước và vẫn là quản trị — không đổi người chọn được.",
+			chiKhiDangMo:
+				"Lần hỏi ý đã qua hạn — lời mở, con số, câu hỏi và hạn chỉ sửa được khi còn mở.",
+			daCongBo: "Lần hỏi ý này đã công bố.",
+			khongCoHoiY: (id: string) => `Không có lần hỏi ý nào mang mã ${id}.`,
 		},
 		troLy: {
 			daQuyet: "Đề xuất này đã được quyết",

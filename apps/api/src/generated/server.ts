@@ -30,6 +30,8 @@ import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, 
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
 import { moRaInput, dongRaInput, xuatKyInput, chamKrInput, ghiDieuHocDuocInput, moLaiKyInput, mangSangInput } from "@crm/validation/okr-khep";
+import { moHoiYInput, suaHoiYInput } from "@crm/validation/okr-hoi-y";
+import { hoiYGhiOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
@@ -707,6 +709,14 @@ const appRouter = t.router({
     dongRa: publicProcedure
       .input(dongRaInput)
       .output(okOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    moHoiY: publicProcedure
+      .input(moHoiYInput)
+      .output(hoiYGhiOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    suaHoiY: publicProcedure
+      .input(suaHoiYInput)
+      .output(hoiYGhiOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     bangCham: publicProcedure
       .input(bangChamInput)
