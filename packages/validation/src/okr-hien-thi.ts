@@ -94,3 +94,14 @@ export const chuyenDonViInput = z.object({
 	]),
 });
 export type ChuyenDonViInput = z.infer<typeof chuyenDonViInput>;
+
+export const LY_DO_MO_COI = [
+	"don-vi-luu-tru",
+	"khong-ai-sua",
+	"phu-trach-roi",
+	"kr-phu-trach-roi",
+] as const;
+export type LyDoMoCoi = (typeof LY_DO_MO_COI)[number];
+
+export const moCoiInput = z.object({ cycleId: ma.optional() });
+export type MoCoiInput = z.infer<typeof moCoiInput>;

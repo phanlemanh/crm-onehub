@@ -508,6 +508,18 @@ const MIEN_XEM = [
 		lyDo: "đếm để chặn lưu trữ, xoá hẳn đơn vị — phải đếm cả mục tiêu giới hạn; chỉ ra số",
 	},
 	{
+		tep: "packages/db/src/okr-don-vi.ts",
+		ham: "demOkrTheoDonVi",
+		bang: "okrObjective",
+		lyDo: "org.tree và onboarding.listDepartments đếm OKR mở và lịch sử theo đơn vị để nói trước số mục tiêu chặn lưu trữ, xoá hẳn — phải đếm cả mục tiêu giới hạn như demOkrCuaDonVi; chỉ ra số theo mã đơn vị, không mã hay tên mục tiêu",
+	},
+	{
+		tep: "apps/api/src/okr/okr-tai-co-cau.service.ts",
+		ham: "canhBaoTran",
+		bang: "okrObjective",
+		lyDo: "ghi: quản trị chuyển OKR, đếm mục tiêu của đơn vị nhận theo chu kỳ để so trần chương trình như kiemTranMucTieu — trần tính cả mục tiêu giới hạn; chỉ ra số",
+	},
+	{
 		tep: "packages/db/src/okr-nhac.ts",
 		ham: "docKr",
 		bang: "okrKeyResult",

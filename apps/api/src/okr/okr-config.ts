@@ -205,6 +205,19 @@ export const OKR = {
 			khongConChoDuyet:
 				"Mục tiêu này không còn chờ duyệt — tải lại để xem trạng thái mới.",
 		},
+		taiCoCau: {
+			canQuanTri:
+				"Cần quyền quản trị để chuyển OKR giữa các đơn vị hay xem OKR mồ côi.",
+			khacCap: (ten: string) =>
+				`Mục tiêu «${ten}» không cùng cấp với đơn vị nhận — mục tiêu phòng ban chỉ sang phòng ban, mục tiêu bộ phận chỉ sang bộ phận.`,
+			daBo: (ten: string) => `Mục tiêu «${ten}» đã bỏ — không chuyển nữa.`,
+			kyDaDong: (ten: string) =>
+				`Mục tiêu «${ten}» thuộc chu kỳ đã đóng — OKR đã đóng giữ ở đơn vị cũ.`,
+			donViNhanLuuTru:
+				"Đơn vị nhận đã lưu trữ — khôi phục đơn vị đó hoặc chọn đơn vị khác.",
+			vuotTran: (n: number, tran: number) =>
+				`Đã chuyển. Đơn vị nhận giờ có ${n} mục tiêu trong một chu kỳ — vượt trần ${tran} của chương trình.`,
+		},
 		hienThi: {
 			nguoiXemKhongConThanhVien:
 				"Người xem có tên phải là thành viên còn trong không gian làm việc.",

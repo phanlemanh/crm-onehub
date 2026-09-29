@@ -334,6 +334,8 @@ const THU_TUC_OKR_LUOT_GIOI_HAN = [
 	"duyetMucTieu",
 	"traLaiMucTieu",
 	"rutDuyet",
+	"chuyenDonVi",
+	"moCoi",
 ].map((t) => `okr.${t}`);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
@@ -1839,6 +1841,12 @@ const THU_TU_DOC_OKR = {
 		khac: 200,
 	},
 	"okr.mine": { vao: cuaKy, K: "chua-G", dau: "tieuDeG", khac: 200 },
+	"okr.moCoi": {
+		vao: cuaKy,
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.taiCoCau.canQuanTri,
+	},
 	"okr.objective": {
 		vao: (s) => ({ id: s.g }),
 		K: "chua-G",

@@ -7,7 +7,12 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
-import { datHienThiInput, traLaiInput } from "@crm/validation/okr-hien-thi";
+import {
+	chuyenDonViInput,
+	datHienThiInput,
+	moCoiInput,
+	traLaiInput,
+} from "@crm/validation/okr-hien-thi";
 import {
 	chamKrInput,
 	dongRaInput,
@@ -49,6 +54,7 @@ import {
 	byUnitInput,
 	byUnitOutput,
 	capNhatTuanOutput,
+	chuyenDonViOutput,
 	commentsOutput,
 	countByUnitInput,
 	createCycleInput,
@@ -65,6 +71,7 @@ import {
 	mineInput,
 	mineOutput,
 	moCapNhatOutput,
+	moCoiOutput,
 	objectiveInput,
 	objectiveOutput,
 	okOutput,
@@ -118,6 +125,7 @@ import {
 	xemTruocChiSoOutput,
 } from "./okr-so.contracts";
 import { OkrSoService } from "./okr-so.service";
+import { OkrTaiCoCauService } from "./okr-tai-co-cau.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import {
 	cayCanChinhOutput,
@@ -154,6 +162,7 @@ export class OkrRouter {
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
+		@Inject(OkrTaiCoCauService) private readonly taiCoCau: OkrTaiCoCauService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -438,6 +447,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof traLaiInput>,
 	) {
 		return this.duyet.traLaiMucTieu(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: chuyenDonViInput,
+		output: chuyenDonViOutput,
+		meta: restMeta("POST", "/okr/objectives/move-unit", TAG),
+	})
+	chuyenDonVi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof chuyenDonViInput>,
+	) {
+		return this.taiCoCau.chuyenDonVi(ctx.user.id, input);
+	}
+
+	@Query({
+		input: moCoiInput,
+		output: moCoiOutput,
+		meta: restMeta("GET", "/okr/orphans", TAG),
+	})
+	moCoi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moCoiInput>,
+	) {
+		return this.taiCoCau.moCoi(ctx.user.id, input);
 	}
 
 	@Mutation({
