@@ -791,10 +791,12 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `troLyQuyet` ghi giá trị đã nhận hay đã sửa qua
   `OkrService.updateObjectiveTrong`/`updateKeyResultTrong`/`addAlignmentTrong`
   trong cùng transaction, với `note: "tro-ly-okr:" + deXuatId` — một dòng
-  `OkrTrail`, giống hệt một lần sửa tay; quyết một đề xuất đến từ chế độ ẩn để
-  lại đúng hình dạng vết đó. Chế độ ẩn không hiện gì cho người dùng: chỉ quản
-  trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt › Chương
-  trình OKR.
+  `OkrTrail`, giống hệt một lần sửa tay. Dòng đề xuất của chế độ ẩn (`nac` là
+  `an`) không quyết được: `troLyQuyet` trả `NotFoundException` (`khongCoDeXuat`)
+  cho mọi dòng có `nac` khác `bat`, nên chế độ ẩn không bao giờ ghi vào OKR và
+  không để lại dòng `OkrTrail` nào. Chế độ ẩn không hiện gì cho người dùng: chỉ
+  quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
+  Chương trình OKR.
 
 ## Kho tài liệu: nguồn
 
