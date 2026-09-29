@@ -170,56 +170,72 @@ let daGoi: { duong: string; dauVao: DauVao }[] = [];
 let loiGhi = new Map<string, string>();
 let daLamMoi = 0;
 
-const docTheoDuong: Record<string, (vao: DauVao) => unknown> = {
-	"org.tree": () => cay,
-	"org.access": () => ({ canManage: quanTri }),
-	"okr.cycles": () => ({ cycles: [Q4, Q3], currentId: Q4.id }),
-	"okr.program": () => ({
-		objectiveCap: 5,
-		krCap: 5,
-		capMode: "canh-bao",
-		scoreScale: "0-1",
-		weightsOn: false,
-		personalOn: false,
-		duyetCongBo: false,
-		version: 3,
-		canManage: quanTri,
-	}),
-	"okr.byUnit": (vao) => {
-		const v = vao as { cycleId: string; unit: { id: string } };
-		if (v.cycleId !== Q4.id) return { objectives: [], canEdit: true };
-		if (v.unit.id === "pb-cu")
+type Doc = (vao: DauVao) => unknown;
+
+const docTheoDuong = new Map<string, Doc>([
+	["org.tree", () => cay],
+	["org.access", () => ({ canManage: quanTri })],
+	["okr.cycles", () => ({ cycles: [Q4, Q3], currentId: Q4.id })],
+	[
+		"okr.program",
+		() => ({
+			objectiveCap: 5,
+			krCap: 5,
+			capMode: "canh-bao",
+			scoreScale: "0-1",
+			weightsOn: false,
+			personalOn: false,
+			duyetCongBo: false,
+			version: 3,
+			canManage: quanTri,
+		}),
+	],
+	[
+		"okr.byUnit",
+		(vao) => {
+			const v = vao as { cycleId: string; unit: { id: string } };
+			if (v.cycleId !== Q4.id) return { objectives: [], canEdit: true };
+			if (v.unit.id === "pb-cu")
+				return {
+					objectives: [
+						mucTieu(
+							"o9",
+							"Chuẩn hoá nhận hàng ca đêm",
+							"cong-bo",
+							HA,
+							2,
+							"pb-cu",
+						),
+					],
+					canEdit: true,
+					canhBao: null,
+				};
 			return {
-				objectives: [
-					mucTieu(
-						"o9",
-						"Chuẩn hoá nhận hàng ca đêm",
-						"cong-bo",
-						HA,
-						2,
-						"pb-cu",
-					),
-				],
+				objectives: v.unit.id === "pb-1" ? MUC_TIEU_PB1 : [],
 				canEdit: true,
 				canhBao: null,
 			};
-		return {
-			objectives: v.unit.id === "pb-1" ? MUC_TIEU_PB1 : [],
-			canEdit: true,
-			canhBao: null,
-		};
-	},
-	"okr.moCoi": () => moCoi(),
-	"onboarding.listTemplates": () => [],
-	"onboarding.listDepartments": () => [],
-	"onboarding.manDanhMuc": () => null,
-};
+		},
+	],
+	["okr.moCoi", () => moCoi()],
+	["onboarding.listTemplates", () => []],
+	["onboarding.listDepartments", () => []],
+	["onboarding.manDanhMuc", () => null],
+]);
 
-const ketQuaGhi: Record<string, (vao: DauVao) => unknown> = {
-	"okr.chuyenDonVi": (vao) => ({
-		daChuyen: (vao as { objectiveIds: string[] }).objectiveIds.length,
-		canhBao: null,
-	}),
+const ketQuaGhi = new Map<string, Doc>([
+	[
+		"okr.chuyenDonVi",
+		(vao) => ({
+			daChuyen: (vao as { objectiveIds: string[] }).objectiveIds.length,
+			canhBao: null,
+		}),
+	],
+]);
+
+type ChonGhi = {
+	onSuccess?: (...a: never[]) => void;
+	onError?: (e: Error) => void;
 };
 
 function thuTuc(duong: string) {
@@ -230,29 +246,60 @@ function thuTuc(duong: string) {
 			queryKey: [duong, vao],
 			queryFn: async () => {
 				daGoi.push({ duong, dauVao: vao });
-				const doc = docTheoDuong[duong];
+				const doc = docTheoDuong.get(duong);
 				if (!doc) throw new Error(`khong doc ${duong}`);
 				return doc(vao);
 			},
 		}),
-		mutationOptions: (chon: object = {}) => ({
+		mutationOptions: (chon: ChonGhi = {}) => ({
 			...chon,
 			mutationKey: [duong],
 			mutationFn: async (vao: DauVao) => {
 				daGoi.push({ duong, dauVao: JSON.parse(JSON.stringify(vao)) });
 				const loi = loiGhi.get(duong);
 				if (loi !== undefined) throw new Error(loi);
-				return ketQuaGhi[duong]?.(vao) ?? { id: "ok" };
+				return ketQuaGhi.get(duong)?.(vao) ?? { id: "ok" };
 			},
 		}),
 	};
 }
 
-const boDinhTuyen = (ten: string) =>
-	new Proxy({}, { get: (_, thu) => thuTuc(`${ten}.${String(thu)}`) }) as Record<
-		string,
-		ReturnType<typeof thuTuc>
-	>;
+const THU_TUC = {
+	org: [
+		"tree",
+		"access",
+		"createDivision",
+		"renameDivision",
+		"reorderDivisions",
+		"archiveDivision",
+		"restoreDivision",
+		"purgeDivision",
+		"createDepartment",
+		"renameDepartment",
+		"moveDepartment",
+		"attachDepartments",
+		"addPeople",
+		"setHead",
+		"setPlacement",
+		"previewImport",
+		"applyImport",
+		"archiveDepartment",
+		"restoreDepartment",
+		"purgeDepartment",
+	],
+	okr: ["cycles", "program", "setProgram", "byUnit", "chuyenDonVi", "moCoi"],
+	onboarding: [
+		"listDepartments",
+		"manDanhMuc",
+		"listTemplates",
+		"archiveTemplate",
+		"restoreTemplate",
+		"purgeTemplate",
+	],
+} as const;
+
+const boDinhTuyen = (ten: keyof typeof THU_TUC) =>
+	Object.fromEntries(THU_TUC[ten].map((thu) => [thu, thuTuc(`${ten}.${thu}`)]));
 
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
