@@ -103,7 +103,7 @@ evals:
       Trang can go tay (khong ban de xuat) va trang ban dau bi tra lai: 'chu' va 'tao' goi taiLieu.propose
       -> 200, hang TaiLieuDeXuat co banGocId null va trangThai CHO_DUYET; get sau do -> dangCho duyet.
       'khac' goi propose cung trang -> NOT_FOUND (doi chung am co ghim). CHIEU DO: ban sao them dieu kien
-      banDangDungId not null vao propose -> 'viet tay bi chan: chu go-tay', ma 1.
+      banDangDungId not null vao propose -> 'viet tay bi chan: chu <slug trang can go tay>', ma 1.
 
   - id: E6u
     criterion: AC-6
