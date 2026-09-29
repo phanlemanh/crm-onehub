@@ -294,7 +294,7 @@ export class DashboardService {
 				)
 				.sort((a, b) => (b.baseAmountCents ?? -1) - (a.baseAmountCents ?? -1)),
 			mySteps: await this.buocCuaToi(actingUserId, now),
-			keHoachCanDeY: await this.keHoachCanDeY(actingUserId, now),
+			...(await this.viecTrucTiep(actingUserId, now)),
 			overdueTasks: overdueTasks.map(({ dueAt, ...task }) => ({
 				...task,
 				dueAt: dueAt?.toISOString() ?? null,
@@ -337,11 +337,19 @@ export class DashboardService {
 		}));
 	}
 
-	private async keHoachCanDeY(userId: string, now: Date) {
+	private async viecTrucTiep(userId: string, now: Date) {
 		const ds =
 			(await viecCanNhac(this.db, { now, userId, cuaSo: "truc-tiep" })).get(
 				userId,
 			) ?? [];
+		const taiLieu = ds.find((v) => v.loai === "tai-lieu-cho-duyet");
+		return {
+			keHoachCanDeY: this.keHoachCanDeY(ds),
+			taiLieuChoDuyet: taiLieu?.loai === "tai-lieu-cho-duyet" ? taiLieu.so : 0,
+		};
+	}
+
+	private keHoachCanDeY(ds: ViecNhac[]) {
 		return ds
 			.filter(laNhacKeHoach)
 			.slice(0, NHAC.tran)

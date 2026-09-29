@@ -90,3 +90,130 @@ describe("danh sach long ba cap tron loai", () => {
 		expect(quaTrinhSoan(BA_CAP_TRON_LOAI)).toBe(BA_CAP_TRON_LOAI);
 	});
 });
+
+type NutJson = { type?: string; text?: string; content?: NutJson[] };
+
+function chuCua(nut: NutJson): string {
+	return nut.text ?? (nut.content ?? []).map(chuCua).join("");
+}
+
+function oBang(doc: NutJson): string[][] | null {
+	const bang = (doc.content ?? []).find((n) => n.type === "table");
+	if (!bang) return null;
+	return (bang.content ?? []).map((hang) => (hang.content ?? []).map(chuCua));
+}
+
+const MAU_ONG = [
+	{
+		ten: "giua",
+		md: "| A | B |\n| --- | --- |\n| a\\|b | x |\n",
+		o: [
+			["A", "B"],
+			["a|b", "x"],
+		],
+	},
+	{
+		ten: "dau",
+		md: "| A | B |\n| --- | --- |\n| \\|x | y |\n",
+		o: [
+			["A", "B"],
+			["|x", "y"],
+		],
+	},
+	{
+		ten: "cuoi",
+		md: "| A | B |\n| --- | --- |\n| x\\| | y |\n",
+		o: [
+			["A", "B"],
+			["x|", "y"],
+		],
+	},
+	{
+		ten: "go-nguyen-van",
+		md: "| A | B |\n| --- | --- |\n| \\\\\\| | y |\n",
+		o: [
+			["A", "B"],
+			["\\|", "y"],
+		],
+	},
+	{
+		ten: "dam",
+		md: "| A | B |\n| --- | --- |\n| **a\\|b** | y |\n",
+		o: [
+			["A", "B"],
+			["a|b", "y"],
+		],
+	},
+	{ ten: "doan-van", md: "a | b\n", o: null },
+] as const;
+
+describe("ong-dung", () => {
+	test("ong-dung: du 6 mau viet truoc", () => {
+		expect(MAU_ONG.length).toBe(6);
+	});
+
+	for (const mau of MAU_ONG) {
+		test(`ong-dung: khu hoi va giu o: ${mau.ten}`, () => {
+			const lan1 = quaTrinhSoan(mau.md);
+			const t = dung(lan1);
+			const doc = t.editor().getJSON() as NutJson;
+			const lan2 = t.md();
+			t.goBo();
+			const o = oBang(doc);
+			if (mau.o === null) {
+				expect(o).toBeNull();
+				expect(chuCua(doc)).toBe("a | b");
+				khangDinhBatDong(`ong-dung ${mau.ten}`, lan1, lan2);
+				return;
+			}
+			const mong = mau.o[1][0];
+			if (o?.[1]?.[0] !== mong) {
+				const manh = mong.split("|").filter((m) => m.length > 0);
+				const tach = (o?.[1] ?? []).filter((c) => manh.includes(c)).length;
+				throw new Error(`ong-dung: o '${mong}' tach thanh ${tach} o`);
+			}
+			expect(o.map((h) => h.length)).toEqual(mau.o.map((h) => h.length));
+			expect(o).toEqual(mau.o.map((h) => [...h]));
+			khangDinhBatDong(`ong-dung ${mau.ten}`, lan1, lan2);
+		});
+	}
+
+	test("ong-dung: go a|b vao o bang trong trinh soan thi luu dung", () => {
+		const t = dung("");
+		t.editor().commands.setContent({
+			type: "doc",
+			content: [
+				{
+					type: "table",
+					content: [
+						{
+							type: "tableRow",
+							content: ["A", "B"].map((c) => ({
+								type: "tableHeader",
+								content: [
+									{ type: "paragraph", content: [{ type: "text", text: c }] },
+								],
+							})),
+						},
+						{
+							type: "tableRow",
+							content: ["a|b", "x"].map((c) => ({
+								type: "tableCell",
+								content: [
+									{ type: "paragraph", content: [{ type: "text", text: c }] },
+								],
+							})),
+						},
+					],
+				},
+			],
+		});
+		const md = t.md();
+		t.goBo();
+		expect(md).toContain("a\\|b");
+		const lai = dung(md);
+		const o = oBang(lai.editor().getJSON() as NutJson);
+		lai.goBo();
+		expect(o?.[1]).toEqual(["a|b", "x"]);
+	});
+});

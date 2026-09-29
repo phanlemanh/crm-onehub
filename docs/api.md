@@ -846,6 +846,45 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   a person or the machine, is written by `taoDeXuatTaiLieu` in
   `packages/db/src/tai-lieu-de-xuat.ts`.
 
+## Kho tài liệu: tìm, nhắc tới, sức khoẻ
+
+`apps/api/src/tai-lieu/tai-lieu-tim.service.ts` owns `taiLieu.tim`, `taiLieu.nhacToi`,
+`taiLieu.boLoc` and `taiLieu.sucKhoe`, on the same `taiLieu` router and behind the same
+`PhamViChungMiddleware` — so the `okr` role reaches them like the rest of the kho.
+
+- **Search reads the bản đang dùng only.** `taiLieuTrang.timKiem` is a `tsvector` written at
+  approval (`to_tsvector('simple', unaccent(ten || noiDung))`); a proposal never enters it.
+  The query side is built once by `dungTruyVan` (`@crm/validation/tai-lieu-tim`): under
+  `TAI_LIEU.tim.toiThieu` characters it returns nothing without touching the database, the
+  last word gets `:*`, and the database applies `unaccent` again, so «quy dinh» finds «Quy
+  định». A title match ranks before a body match. The snippet is cut in TypeScript by
+  `doanTrich` around the first match, not by `ts_headline`, so the bold part is exactly the
+  word the person typed. No `pg_search`, no vectors.
+- **«Trang nhắc tới trang này» is computed on read.** `nhacToi` reads `taiLieuLienKet` rows
+  pointing at the slug from pages that have a bản đang dùng, drops a page linking to itself,
+  and cuts the sentence around the link from that page's current text with `cauChuaLienKet`.
+  No sentence is stored, so an edited page cannot show a stale quote. A caller who cannot
+  see the target page gets `NOT_FOUND`, the same as a missing slug.
+- **`sucKhoe` is five lists, each capped at `TAI_LIEU.tim.sucKhoeToiDa` with a real
+  `total`.** Quá hạn xác minh (before the start of today, VN time), có bản chờ duyệt, liên
+  kết gãy (grouped by source page), được nhắc mà chưa có trang (grouped by target slug) and
+  mồ côi (no other current page links to it). Every row carries its chủ trang; there is no
+  score.
+- **One counting rule for «chờ duyệt».** The tab badge, the Tổng quan card
+  (`dashboard.summary.taiLieuChoDuyet`) and the morning reminder all count through
+  `demChoDuyet` / `demChoDuyetTheoNguoi` in `@crm/db/tai-lieu-quyen`: proposals in
+  `CHO_DUYET` the person may approve — every one for `owner`/`admin`, only their own pages
+  for anyone else. A new place that shows the number calls the same function; a second
+  `count` beside it is how the badge and the reminder start to disagree.
+- **Who sees what is one set of `where` builders** in that same module —
+  `dieuKienThay` (pages), `dieuKienThayDeXuat` (proposals), `dieuKienDuyetDuoc`
+  (approvable). `list`, `boLoc`, `proposals` and `sucKhoe` compose them; none re-derives
+  the rule.
+- **Filters and paging live in the input, not the client.** `list` takes `donViId` and
+  `chuTrangId`; `boLoc` returns only the đơn vị and chủ trang that have a page the caller can
+  see, with counts. `proposals` takes `nhom` (`tat-ca` by default, `cho`, `da-xu-ly`) and a
+  page, and returns `total`.
+
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may

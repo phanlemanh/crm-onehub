@@ -765,6 +765,14 @@ _Avoid_: hết hạn, expiry
 Vì sao: «hết hạn» nghe như quy định hết hiệu lực — đó là chuyện khác, của văn bản
 pháp luật.
 
+**Sức khoẻ kho**: tab «Sức khoẻ» của kho tài liệu, năm danh sách việc chủ trang nên
+xem — quá hạn xác minh, có bản đề xuất chờ duyệt, liên kết gãy, được nhắc mà chưa có
+trang, trang mồ côi (không trang nào dẫn tới). Mỗi dòng là một trang cùng chủ trang,
+không có điểm hay màu. Chốt 2026-09-29 tại Cổng Phạm vi của `tim-va-dieu-huong-kho`.
+_Avoid_: điểm sức khoẻ, đèn đỏ/xanh, kiểm toán kho
+Vì sao: «sức khoẻ chương trình» của OKR là một màn khác; ở kho, sức khoẻ là danh sách
+việc để làm, không phải một con số để chấm.
+
 **Bậc duyệt**: mức duyệt của một bản đề xuất theo hậu quả của nội dung. Bậc 1 một
 chủ trang duyệt; bậc 2 (tiền, giá, pháp lý) thêm một người kiểm thứ hai. Chốt
 2026-09-26 (Manh Phan): mọi thay đổi đều qua duyệt, không có bậc tự áp dụng.
