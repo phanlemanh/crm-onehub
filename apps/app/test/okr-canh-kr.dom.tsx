@@ -124,6 +124,7 @@ const CAY_TO_CHUC = {
 			name: "Khối Kinh doanh",
 			position: 0,
 			head: null,
+			okrMo: 0,
 			departments: [
 				{
 					id: "p1",
@@ -132,6 +133,7 @@ const CAY_TO_CHUC = {
 					divisionId: "bp-1",
 					head: null,
 					stepCount: 0,
+					okrMo: 0,
 					people: [],
 				},
 				{
@@ -141,6 +143,7 @@ const CAY_TO_CHUC = {
 					divisionId: "bp-1",
 					head: null,
 					stepCount: 0,
+					okrMo: 0,
 					people: [],
 				},
 			],

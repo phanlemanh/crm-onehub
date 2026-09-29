@@ -3,7 +3,8 @@ import {
 	WORKSPACE_ID,
 	workspaceRoleOf,
 } from "@crm/auth";
-import type { Db } from "@crm/db";
+import type { Db, Prisma } from "@crm/db";
+import { demOkrCuaDonVi, demOkrTheoDonVi } from "@crm/db/okr-don-vi";
 import { parseOnboardingTemplateSteps } from "@crm/validation/onboarding-template";
 import {
 	BadRequestException,
@@ -30,6 +31,8 @@ import { lyDoKhongXoaPhongBan } from "./xoa-phong-ban";
 
 const T = TO_CHUC.thongDiep;
 
+type Tx = Prisma.TransactionClient;
+
 export function kiemTen(ten: string): string {
 	const sach = ten.trim();
 	if (sach === "") throw new BadRequestException(T.tenTrong);
@@ -53,48 +56,56 @@ export class ToChucService {
 	}
 
 	async anhCay(): Promise<CayTho> {
-		const [members, divisions, departments, placements, secondaries, khuon] =
-			await Promise.all([
-				this.db.member.findMany({
-					where: { organizationId: WORKSPACE_ID },
-					select: { user: { select: { id: true, name: true, email: true } } },
-				}),
-				this.db.division.findMany({
-					select: {
-						id: true,
-						name: true,
-						position: true,
-						headUserId: true,
-						archivedAt: true,
-						_count: { select: { departments: true } },
-					},
-				}),
-				this.db.department.findMany({
-					select: {
-						id: true,
-						name: true,
-						position: true,
-						divisionId: true,
-						headUserId: true,
-						archivedAt: true,
-						_count: { select: { steps: true } },
-					},
-				}),
-				this.db.orgPlacement.findMany({
-					select: {
-						userId: true,
-						primaryDepartmentId: true,
-						managerUserId: true,
-					},
-				}),
-				this.db.orgSecondaryDepartment.findMany({
-					select: { userId: true, departmentId: true },
-				}),
-				this.db.onboardingTemplate.findMany({
-					orderBy: { createdAt: "asc" },
-					select: { name: true, steps: true },
-				}),
-			]);
+		const [
+			members,
+			divisions,
+			departments,
+			placements,
+			secondaries,
+			khuon,
+			okr,
+		] = await Promise.all([
+			this.db.member.findMany({
+				where: { organizationId: WORKSPACE_ID },
+				select: { user: { select: { id: true, name: true, email: true } } },
+			}),
+			this.db.division.findMany({
+				select: {
+					id: true,
+					name: true,
+					position: true,
+					headUserId: true,
+					archivedAt: true,
+					_count: { select: { departments: true } },
+				},
+			}),
+			this.db.department.findMany({
+				select: {
+					id: true,
+					name: true,
+					position: true,
+					divisionId: true,
+					headUserId: true,
+					archivedAt: true,
+					_count: { select: { steps: true } },
+				},
+			}),
+			this.db.orgPlacement.findMany({
+				select: {
+					userId: true,
+					primaryDepartmentId: true,
+					managerUserId: true,
+				},
+			}),
+			this.db.orgSecondaryDepartment.findMany({
+				select: { userId: true, departmentId: true },
+			}),
+			this.db.onboardingTemplate.findMany({
+				orderBy: { createdAt: "asc" },
+				select: { name: true, steps: true },
+			}),
+			demOkrTheoDonVi(this.db),
+		]);
 		return {
 			members: members.map((m) => m.user),
 			divisions: divisions.map(({ _count, ...d }) => ({
@@ -114,6 +125,7 @@ export class ToChucService {
 					banDo.set(id, [...(banDo.get(id) ?? []), k.name]);
 				return banDo;
 			}, new Map<string, string[]>()),
+			okr,
 		};
 	}
 
@@ -206,10 +218,15 @@ export class ToChucService {
 			where: { divisionId: input.id, archivedAt: null },
 		});
 		if (con > 0) throw new BadRequestException(T.boPhanConPhongBan(con));
-		return this.db.division.update({
-			where: { id: input.id },
-			data: { archivedAt: new Date() },
-			select: { id: true },
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "division" WHERE id = ${input.id} FOR UPDATE`;
+			const { mo } = await demOkrCuaDonVi(tx, { divisionId: input.id });
+			if (mo > 0) throw new BadRequestException(T.boPhanConOkrMo(mo));
+			return tx.division.update({
+				where: { id: input.id },
+				data: { archivedAt: new Date() },
+				select: { id: true },
+			});
 		});
 	}
 
@@ -229,9 +246,13 @@ export class ToChucService {
 			where: { divisionId: input.id },
 		});
 		if (con > 0) throw new BadRequestException(T.boPhanConTro);
-		return this.db.division.delete({
-			where: { id: input.id },
-			select: { id: true },
+		return this.db.$transaction(async (tx) => {
+			const { lichSu } = await demOkrCuaDonVi(tx, { divisionId: input.id });
+			if (lichSu > 0) throw new BadRequestException(T.boPhanConOkrXoa(lichSu));
+			return tx.division.delete({
+				where: { id: input.id },
+				select: { id: true },
+			});
 		});
 	}
 
@@ -329,9 +350,14 @@ export class ToChucService {
 		});
 		if (conNguoi > 0)
 			throw new BadRequestException(T.phongBanConNguoi(conNguoi));
-		await this.db.department.update({
-			where: { id: input.id },
-			data: { archivedAt: new Date() },
+		await this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "department" WHERE id = ${input.id} FOR UPDATE`;
+			const { mo } = await demOkrCuaDonVi(tx, { departmentId: input.id });
+			if (mo > 0) throw new BadRequestException(T.phongBanConOkrMo(mo));
+			await tx.department.update({
+				where: { id: input.id },
+				data: { archivedAt: new Date() },
+			});
 		});
 		return {
 			id: input.id,
@@ -348,27 +374,33 @@ export class ToChucService {
 		});
 	}
 
-	private async lyDoKhongXoa(id: string) {
+	private async lyDoKhongXoa(id: string, tx: Tx | Db = this.db) {
 		const pb = await this.phongBanCo(id);
-		const [stepCount, primaryCount, khuon] = await Promise.all([
-			this.db.onboardingStep.count({ where: { departmentId: id } }),
-			this.db.orgPlacement.count({ where: { primaryDepartmentId: id } }),
-			this.khuonChua(id),
-		]);
+		const stepCount = await tx.onboardingStep.count({
+			where: { departmentId: id },
+		});
+		const primaryCount = await tx.orgPlacement.count({
+			where: { primaryDepartmentId: id },
+		});
+		const khuon = await this.khuonChua(id);
+		const okr = await demOkrCuaDonVi(tx, { departmentId: id });
 		return lyDoKhongXoaPhongBan({
 			archived: pb.archivedAt !== null,
 			stepCount,
 			primaryCount,
 			khuon: khuon.map((k) => k.name),
+			okrLichSu: okr.lichSu,
 		});
 	}
 
 	async purgeDepartment(input: { id: string }) {
-		const lyDo = await this.lyDoKhongXoa(input.id);
-		if (lyDo !== null) throw new BadRequestException(lyDo);
-		return this.db.department.delete({
-			where: { id: input.id },
-			select: { id: true },
+		return this.db.$transaction(async (tx) => {
+			const lyDo = await this.lyDoKhongXoa(input.id, tx);
+			if (lyDo !== null) throw new BadRequestException(lyDo);
+			return tx.department.delete({
+				where: { id: input.id },
+				select: { id: true },
+			});
 		});
 	}
 
