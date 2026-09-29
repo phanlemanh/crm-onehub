@@ -1416,7 +1416,7 @@ executors:
     tdm_khong_noi_thuoc: node _acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/luat.mjs --phan thuoc
     tdm_luat_ma: node _acceptance/tai-lieu-diff-bo-myers-vo-ich/rang/luat.mjs --phan ma
     gdtt_migration: 'bun _acceptance/giai-doan-thoa-thuan/rang/migration-du-lieu.mjs'
-    gdtt_man_chrome: 'bun _acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs'
+    gdtt_man_chrome: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs"'
     gdtt_khong_re_theo_ten: 'bun _acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs'
     gdtt_san_thiet_ke: 'bun _acceptance/giai-doan-thoa-thuan/rang/san-thiet-ke.mjs'
   design:
