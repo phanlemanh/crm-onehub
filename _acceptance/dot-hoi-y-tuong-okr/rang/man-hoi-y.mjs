@@ -253,6 +253,9 @@ const { okrHoiYMessages } = await import(
 	"../../../apps/app/lib/messages/okr-hoi-y.ts"
 );
 const { okrMessages } = await import("../../../apps/app/lib/messages/okr.ts");
+const { parseSoLieuHoiY } = await import(
+	"../../../packages/validation/src/okr-hoi-y.ts"
+);
 const { canhCay } = await import(
 	"../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs"
 );
@@ -295,18 +298,6 @@ const QUY4 = idMau("chu-ky", "quy4");
 const TEN_KY = { nam: "Năm · mẫu", namKe: "Năm kế · mẫu", quy3: "Quý 3 · mẫu" };
 const QUAN_TRI = "le-hai-dang";
 const gon = (s) => (s ?? "").replace(/\s+/g, " ").trim();
-const xepKhoa = (v) =>
-	Array.isArray(v)
-		? v.map(xepKhoa)
-		: v && typeof v === "object"
-			? Object.fromEntries(
-					Object.keys(v)
-						.sort()
-						.map((k) => [k, xepKhoa(v[k])]),
-				)
-			: v;
-const bangNhau = (a, b) =>
-	JSON.stringify(xepKhoa(a)) === JSON.stringify(xepKhoa(b));
 
 const GO = {
 	loiMo: `Năm nay mình giữ được khách cũ nhưng khách mới về chậm hơn hẳn, nhất là ở các tuyến lạnh và miền Trung. Trước khi đặt mục tiêu năm kế, mình muốn nghe mỗi người: nếu được quyết, bạn dồn sức vào đâu và đo bằng gì. Ý nào cũng được đọc, không ai thấy tên bạn ngoài người chọn và quản trị. Mỗi người góp tối đa ba ý, gõ như đang nói với cả công ty ${MA}.`,
@@ -1070,7 +1061,8 @@ async function nhomE12() {
 	kiem("E13: loiMo trong DB bang chuoi da go", h?.loiMo === GO.loiMo);
 	kiem(
 		`E13: soLieu toEqual chuoi da go (DB ${JSON.stringify(h?.soLieu)})`,
-		bangNhau(h?.soLieu, GO.soLieu),
+		JSON.stringify(h ? parseSoLieuHoiY(h.soLieu) : null) ===
+			JSON.stringify(GO.soLieu),
 	);
 	kiem(
 		`E13: nguoiChonUserId la quan tri mau (${h?.nguoiChonUserId} / ${id.quanTri})`,
