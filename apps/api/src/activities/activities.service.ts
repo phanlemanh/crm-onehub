@@ -1,6 +1,7 @@
 import { ActivityType, type Db, type Prisma } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import { activityMeta } from "@crm/validation/activity-meta";
+import { parseStageChangeMeta } from "@crm/validation/giai-doan";
 import {
 	BadRequestException,
 	Injectable,
@@ -98,10 +99,29 @@ export class ActivitiesService {
 		const hasMore = rows.length > input.limit;
 		const entries = hasMore ? rows.slice(0, input.limit) : rows;
 
+		const nhan = await this.nhanGiaiDoan(entries);
+
 		return {
-			entries: entries.map(serializeEntry),
+			entries: entries.map((entry) => serializeEntry(entry, nhan)),
 			nextCursor: hasMore ? (entries[entries.length - 1]?.id ?? null) : null,
 		};
+	}
+
+	private async nhanGiaiDoan(entries: Entry[]): Promise<Map<string, string>> {
+		const ids = new Set<string>();
+		for (const entry of entries) {
+			if (entry.type !== ActivityType.STAGE_CHANGE) continue;
+			const change = parseStageChangeMeta(entry.meta);
+			if (!change) continue;
+			ids.add(change.to);
+			if (change.from) ids.add(change.from);
+		}
+		if (ids.size === 0) return new Map();
+		const rows = await this.db.dealStage.findMany({
+			where: { id: { in: [...ids] } },
+			select: { id: true, label: true },
+		});
+		return new Map(rows.map((row) => [row.id, row.label]));
 	}
 
 	async timelineCounts(
@@ -214,7 +234,7 @@ export class ActivitiesService {
 			select: ENTRY_SELECT,
 		});
 
-		return tasks.map(serializeEntry);
+		return tasks.map((task) => serializeEntry(task));
 	}
 
 	private anchor(
@@ -292,8 +312,17 @@ function filterClause(filter: TimelineFilter): Prisma.ActivityWhereInput {
 
 type Entry = Prisma.ActivityGetPayload<{ select: typeof ENTRY_SELECT }>;
 
-function serializeEntry(entry: Entry) {
+function stageChangeOf(entry: Entry, nhan: Map<string, string>) {
+	if (entry.type !== ActivityType.STAGE_CHANGE) return null;
+	const change = parseStageChangeMeta(entry.meta);
+	if (!change) return null;
+	const ref = (id: string) => ({ id, label: nhan.get(id) ?? id });
+	return { from: change.from ? ref(change.from) : null, to: ref(change.to) };
+}
+
+function serializeEntry(entry: Entry, nhan: Map<string, string> = new Map()) {
 	return {
+		stageChange: stageChangeOf(entry, nhan),
 		...entry,
 		occurredAt: entry.occurredAt?.toISOString() ?? null,
 		dueAt: entry.dueAt?.toISOString() ?? null,

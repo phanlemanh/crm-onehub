@@ -147,6 +147,12 @@ const activityCalendarEventOutput = z
 	})
 	.nullable();
 
+const stageRefOutput = z.object({ id: z.string(), label: z.string() });
+
+export const activityStageChangeOutput = z
+	.object({ from: stageRefOutput.nullable(), to: stageRefOutput })
+	.nullable();
+
 export const activityEntryOutput = z.object({
 	id: z.string(),
 	type: activityTypeOutput,
@@ -164,6 +170,7 @@ export const activityEntryOutput = z.object({
 	planId: z.string().nullable(),
 	emailThread: activityEmailThreadOutput,
 	calendarEvent: activityCalendarEventOutput,
+	stageChange: activityStageChangeOutput,
 });
 
 export type ActivityEntry = z.infer<typeof activityEntryOutput>;

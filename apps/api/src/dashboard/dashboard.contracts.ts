@@ -1,4 +1,4 @@
-import { ActivityType, DealStage } from "@crm/db";
+import { ActivityType } from "@crm/db";
 import { activityMeta } from "@crm/validation/activity-meta";
 import { z } from "zod";
 
@@ -10,9 +10,7 @@ export const dashboardSummaryInput = z.object({
 
 export type DashboardSummaryInput = z.infer<typeof dashboardSummaryInput>;
 
-const stageEnum = z.enum(
-	Object.values(DealStage) as [DealStage, ...DealStage[]],
-);
+const stageEnum = z.string().min(1);
 
 const ownerOutput = z.object({
 	id: z.string(),
