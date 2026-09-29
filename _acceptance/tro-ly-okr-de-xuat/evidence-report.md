@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 79bf1996b6c915b35dab14b44532ebb1915c2c2e
+verified_commit: eb8fbc0abe986f154c78f3f17a27138d679b39d2
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -362,3 +362,7 @@ Round 2: REJECT — chỉ ca đối chứng E22 (commit 6837bb90: E4 xanh, E28 �
 Round 3: REJECT — E24 đo độ trễ 20 lượt troLyDeXuat thật: p50 11323 ms so với ngưỡng 8000 ms và p90 22456 ms so với ngưỡng 15000 ms, 0 lượt hỏng. E22 xanh (30/30 mã, judge 0.85 trên 20 cặp). E25 chờ chủ kho chấm 20 cặp; E28 chờ người quyết ba điểm luật kho. Chủ kho chọn đường 1 cho E24 (d-…-29): ghi thành giới hạn đã khai, ngưỡng chuyển thành điều kiện bật đo lại ở Cổng Giá trị.
 Round 4: PENDING-JUDGMENT — HEAD 99410da8 (sau hai commit sửa tên Mục tiêu và ba ý chấm judge). Chín eval chạy lại đều xanh: E22 30/30 mã, judge 0.90 trên 20 cặp; E24 máy rảnh ra p50 6699 ms và p90 11066 ms, giới hạn đã khai không còn; bốn lệnh suite hồi quy xanh. Còn chờ người: E25 (cột chủ kho trống ở 20 cặp) và E28 (hội đồng đề xuất FAIL vì hằng đơn vị ngày khai hai chỗ và luat-kho.md neo ở HEAD cũ).
 Round 5: PENDING-JUDGMENT — HEAD 79bf1996, sau commit chủ kho gỡ giới hạn độ trễ E24 và cho phép chạy round 5. Mười eval chạy lại (E5, E12, E13, E14, E15, E16, E20, E21, E22, E23) đều xanh và đều đỏ trên baseline; E22 30/30 mã, judge 0.95 trên 20 cặp; bốn lệnh suite hồi quy xanh; mười chín eval còn lại mang từ round 1, 2, 4. Còn chờ người: E25 (cột chủ kho vẫn trống ở 20 hàng, header 22 ca so với 20 hàng chưa giải thích) và E28 (hội đồng nay đề xuất PASS, còn một lens chờ trích dẫn miễn className cho bản mẫu /proto và luat-kho.md sinh lại ở HEAD hiện tại). Sáu lỗi ngoài hợp đồng mới đều nằm ở công cụ đo luật kho hoặc phần dọn hằng số, không chạm tiêu chí nào; xem review-findings.md.
+
+### Re-pin lần 1 — 2026-09-29, do gộp onehub sau chữ ký (#201 #203 #204 #205 #206): migration dời 20261007010000, Sheet gộp hai bộ xử lý Esc, bài vai chỉ OKR và bài bắt đầu từ mẫu theo thủ tục của Trợ lý, bảng hiệu chỉnh phụ ra thư mục chạy
+run_id: repin-20260929T100835Z-68605
+sha: eb8fbc0abe986f154c78f3f17a27138d679b39d2 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E28 — chưa chứng lại, đi vòng S4 delta
