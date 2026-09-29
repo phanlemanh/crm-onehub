@@ -119,10 +119,12 @@ function TimelineHeader({
 
 interface TimelineIndicatorProps extends HTMLAttributes<HTMLDivElement> {
   asChild?: boolean
+  variant?: "default" | "icon"
 }
 
 function TimelineIndicator({
   asChild = false,
+  variant = "default",
   className,
   children,
   ...props
@@ -134,8 +136,11 @@ function TimelineIndicator({
       aria-hidden="true"
       className={cn(
         "border-border group-data-completed/timeline-item:border-muted-foreground absolute size-4 rounded-sm border-2 group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:left-0 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=vertical]/timeline:top-0 group-data-[orientation=vertical]/timeline:-left-6 group-data-[orientation=vertical]/timeline:-translate-x-1/2",
+        variant === "icon" &&
+          "flex items-center justify-center border-0 bg-background text-foreground [&_svg]:size-4",
         className
       )}
+      data-variant={variant}
       data-slot="timeline-indicator"
       {...props}
     >

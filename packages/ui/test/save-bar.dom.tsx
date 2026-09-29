@@ -22,14 +22,19 @@ const MUC = [
 	{ id: "c", label: "2 ý chưa gom", href: "#y-chua-gom" },
 ];
 
-function ve(items?: typeof MUC) {
+function ve(items?: typeof MUC, defaultOpen?: boolean) {
 	khung = document.createElement("div");
 	document.body.appendChild(khung);
 	root = createRoot(khung);
 	act(() =>
 		root?.render(
 			<LocaleProvider locale="vi">
-				<SaveBar items={items} open title="Chưa công bố được — còn 3 điều">
+				<SaveBar
+					defaultOpen={defaultOpen}
+					items={items}
+					open
+					title="Chưa công bố được — còn 3 điều"
+				>
 					<Button disabled size="sm">
 						Công bố
 					</Button>
@@ -68,6 +73,39 @@ describe("save-bar — biến thể danh sách", () => {
 		expect(ds?.getAttribute("data-mo")).toBe("true");
 		act(() => nut?.click());
 		expect(nut?.getAttribute("aria-expanded")).toBe("false");
+	});
+
+	test("defaultOpen: danh sách mở sẵn ở mọi khổ, gập được, tiêu đề xuống dòng thay vì cắt", () => {
+		const thanh = ve(MUC, true);
+		const nut = thanh.querySelector<HTMLButtonElement>("button[aria-controls]");
+		const ds = thanh.querySelector("ul");
+		const tieuDe = thanh.querySelector("p");
+		const truoc = {
+			mo: ds?.getAttribute("data-mo"),
+			hien: ds?.classList.contains("hidden"),
+			cuon: ds?.classList.contains("overflow-y-auto"),
+			nutMoiKho: nut?.classList.contains("md:hidden"),
+			cat: tieuDe?.classList.contains("truncate"),
+			expanded: nut?.getAttribute("aria-expanded"),
+		};
+		act(() => nut?.click());
+		expect({
+			truoc,
+			sau: {
+				mo: ds?.getAttribute("data-mo"),
+				an: ds?.classList.contains("hidden"),
+			},
+		}).toEqual({
+			truoc: {
+				mo: "true",
+				hien: false,
+				cuon: true,
+				nutMoiKho: false,
+				cat: false,
+				expanded: "true",
+			},
+			sau: { mo: "false", an: true },
+		});
 	});
 
 	test("không truyền danh sách thì giữ thanh lưu cũ", () => {

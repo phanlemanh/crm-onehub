@@ -46,9 +46,10 @@ import {
 	dongSoLieuHoiY,
 	moHoiYInput,
 	OKR_HOI_Y,
+	suaHoiYInput,
 } from "@crm/validation/okr-hoi-y";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { parseAsBoolean, useQueryState } from "nuqs";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { okrHoiYMessages } from "@/lib/messages/okr-hoi-y";
@@ -57,84 +58,157 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { ChuKy } from "../kieu";
 import { dien } from "./chu";
-import { congNgay, HOI_Y_MAN, hanLucTu, homNayVN, kiemHan } from "./man-hoi-y";
+import {
+	congNgay,
+	gioVN,
+	HOI_Y_MAN,
+	type HoiY,
+	hanLucTu,
+	homNayVN,
+	kiemHan,
+	kiemHanSua,
+	type LoiHan,
+} from "./man-hoi-y";
 
 type DongNhap = { id: number; nhan: string; giaTri: string; ghiChu: string };
 
 const PHA_MO = "lap-ke-hoach" satisfies PhaChuKy;
 
+export const CHE_DO_SHEET = ["mo", "sua"] as const;
+
 export function useMoHoiY() {
 	return useQueryState(
 		SEARCH_PARAM.okr.moHoiY,
-		parseAsBoolean.withDefault(false),
+		parseAsStringLiteral(CHE_DO_SHEET),
 	);
 }
 
-function FormMoHoiY({
+type Nap = {
+	cauHoi: string;
+	loiMo: string;
+	dong: DongNhap[];
+	ngay: string;
+	gio: string;
+	nguoiChon: string;
+};
+
+function napTu(sua: HoiY | null, cauHoiMacDinh: string, bayGio: number): Nap {
+	if (sua)
+		return {
+			cauHoi: sua.hoiY.cauHoi,
+			loiMo: sua.hoiY.loiMo,
+			dong: sua.hoiY.soLieu.map((s, i) => ({ id: i + 1, ...s })),
+			ngay: homNayVN(Date.parse(sua.hoiY.hanLuc)),
+			gio: gioVN(sua.hoiY.hanLuc),
+			nguoiChon: sua.nguoiChon.id,
+		};
+	return {
+		cauHoi: cauHoiMacDinh,
+		loiMo: "",
+		dong: [{ id: 1, nhan: "", giaTri: "", ghiChu: "" }],
+		ngay: congNgay(homNayVN(bayGio), HOI_Y_MAN.han.ngayMacDinh),
+		gio: HOI_Y_MAN.han.gioMacDinh,
+		nguoiChon: "",
+	};
+}
+
+function FormHoiY({
 	chuKy,
 	cycleId,
+	sua,
 	onXong,
 }: {
 	chuKy: ChuKy[];
 	cycleId: string;
+	sua: HoiY | null;
 	onXong: (cycleId: string) => void;
 }) {
 	const m = okrHoiYMessages(useLocale()).sheet;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const id = useId();
-	const moDuoc = chuKy.filter((c) => c.phase === PHA_MO);
+	const moDuoc = sua
+		? chuKy.filter((c) => c.id === cycleId)
+		: chuKy.filter((c) => c.phase === PHA_MO);
 	const [bayGio] = useState(() => Date.now());
 	const [kyId, setKyId] = useState(
 		moDuoc.some((c) => c.id === cycleId) ? cycleId : (moDuoc[0]?.id ?? ""),
 	);
 	const tenKy = (idKy: string) => chuKy.find((c) => c.id === idKy)?.name ?? "";
-	const [cauHoi, setCauHoi] = useState(() =>
-		dien(m.cauHoiMacDinh, { ky: tenKy(kyId) }),
+	const [dau] = useState(() =>
+		napTu(sua, dien(m.cauHoiMacDinh, { ky: tenKy(kyId) }), bayGio),
 	);
-	const [loiMo, setLoiMo] = useState("");
-	const [dong, setDong] = useState<DongNhap[]>([
-		{ id: 1, nhan: "", giaTri: "", ghiChu: "" },
-	]);
+	const [cauHoi, setCauHoi] = useState(dau.cauHoi);
+	const [loiMo, setLoiMo] = useState(dau.loiMo);
+	const [dong, setDong] = useState<DongNhap[]>(dau.dong);
 	const [daCham, setDaCham] = useState<ReadonlySet<number>>(new Set());
-	const [ngay, setNgay] = useState(() =>
-		congNgay(homNayVN(bayGio), HOI_Y_MAN.han.ngayMacDinh),
-	);
-	const [gio, setGio] = useState<string>(HOI_Y_MAN.han.gioMacDinh);
-	const [nguoiChon, setNguoiChon] = useState("");
+	const [ngay, setNgay] = useState(dau.ngay);
+	const [gio, setGio] = useState(dau.gio);
+	const [nguoiChon, setNguoiChon] = useState(dau.nguoiChon);
 	const quanTri = useQuery(
 		trpc.workspace.members.queryOptions({
 			role: ["owner", "admin"],
 			pageSize: HOI_Y_MAN.nguoiChonToiDa,
 		}),
 	);
+	const xong = async (cau: string) => {
+		toast.success(cau);
+		onXong(kyId);
+		await cache.hoiY();
+	};
 	const mo = useMutation(
-		trpc.okr.moHoiY.mutationOptions({
-			onSuccess: async () => {
-				toast.success(m.daMo);
-				onXong(kyId);
-				await cache.hoiY();
-			},
-			onError: (error) => toast.error(error.message),
-		}),
+		trpc.okr.moHoiY.mutationOptions({ onSuccess: () => xong(m.daMo) }),
+	);
+	const luu = useMutation(
+		trpc.okr.suaHoiY.mutationOptions({ onSuccess: () => xong(m.daLuu) }),
 	);
 
+	const khoaNoiDung = sua !== null && sua.trangThai !== "dang-mo";
+	const khoaCauHoi =
+		khoaNoiDung || (sua !== null && sua.y.ds.length + sua.cuaToi.y.length > 0);
 	const hanLuc = ngay && gio ? hanLucTu(ngay, gio) : "";
-	const loiHan = kiemHan(hanLuc, Date.now());
+	const soLieu = dong.map((d) => ({
+		nhan: d.nhan.trim(),
+		giaTri: d.giaTri.trim(),
+		ghiChu: d.ghiChu.trim(),
+	}));
 	const vao = {
 		cycleId: kyId,
 		cauHoi: cauHoi.trim(),
 		loiMo: loiMo.trim(),
-		soLieu: dong.map((d) => ({
-			nhan: d.nhan.trim(),
-			giaTri: d.giaTri.trim(),
-			ghiChu: d.ghiChu.trim(),
-		})),
+		soLieu,
 		hanLuc,
 		nguoiChonUserId: nguoiChon,
 	};
-	const hopLe = moHoiYInput.safeParse(vao).success && loiHan === null;
-	const cauHoiSai = !moHoiYInput.shape.cauHoi.safeParse(cauHoi).success;
+	const doiHan =
+		sua !== null && !khoaNoiDung && hanLuc !== hanLucTu(dau.ngay, dau.gio);
+	const thayDoi = sua && {
+		hoiYId: sua.hoiY.id,
+		cauHoi:
+			!khoaCauHoi && vao.cauHoi !== sua.hoiY.cauHoi ? vao.cauHoi : undefined,
+		loiMo: !khoaNoiDung && vao.loiMo !== sua.hoiY.loiMo ? vao.loiMo : undefined,
+		soLieu:
+			!khoaNoiDung && JSON.stringify(soLieu) !== JSON.stringify(sua.hoiY.soLieu)
+				? soLieu
+				: undefined,
+		hanLuc: doiHan ? hanLuc : undefined,
+		nguoiChonUserId: nguoiChon !== sua.nguoiChon.id ? nguoiChon : undefined,
+	};
+	const loiHan: LoiHan = sua
+		? doiHan
+			? kiemHanSua(hanLuc, sua.hoiY.createdAt)
+			: null
+		: kiemHan(hanLuc, Date.now());
+	const coThayDoi =
+		thayDoi !== null &&
+		Object.entries(thayDoi).some(([k, v]) => k !== "hoiYId" && v !== undefined);
+	const hopLe =
+		loiHan === null &&
+		(thayDoi
+			? coThayDoi && suaHoiYInput.safeParse(thayDoi).success
+			: moHoiYInput.safeParse(vao).success);
+	const cauHoiSai =
+		!khoaCauHoi && !moHoiYInput.shape.cauHoi.safeParse(cauHoi).success;
 	const loiDong = (d: DongNhap, so: number): string | null => {
 		if (!daCham.has(d.id)) return null;
 		if (!dongSoLieuHoiY.shape.nhan.safeParse(d.nhan).success)
@@ -170,6 +244,15 @@ function FormMoHoiY({
 				: loiHan === "muon"
 					? dien(m.loiHanMuon, { n: OKR_HOI_Y.hanGio.max })
 					: null;
+	const dangGui = mo.isPending || luu.isPending;
+	const loiMay = (sua ? luu.error : mo.error)?.message ?? null;
+	const nguoiChonDuoc = [
+		...(quanTri.data?.rows ?? []).map((n) => ({ id: n.userId, ten: n.name })),
+		...(sua &&
+		!(quanTri.data?.rows ?? []).some((n) => n.userId === sua.nguoiChon.id)
+			? [{ id: sua.nguoiChon.id, ten: sua.nguoiChon.name }]
+			: []),
+	];
 
 	return (
 		<form
@@ -177,14 +260,25 @@ function FormMoHoiY({
 			noValidate
 			onSubmit={(e) => {
 				e.preventDefault();
-				if (hopLe) mo.mutate(vao);
+				if (!hopLe) return;
+				if (thayDoi) luu.mutate(thayDoi);
+				else mo.mutate(vao);
 			}}
 		>
 			<div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 pb-6">
+				{khoaNoiDung ? (
+					<FieldDescription data-khoi="chi-nguoi-chon">
+						{m.chiNguoiChon}
+					</FieldDescription>
+				) : null}
 				<FieldGroup>
 					<Field>
 						<FieldLabel htmlFor={`${id}-ky`}>{m.chuKy}</FieldLabel>
-						<Select onValueChange={setKyId} value={kyId}>
+						<Select
+							disabled={sua !== null}
+							onValueChange={setKyId}
+							value={kyId}
+						>
 							<SelectTrigger id={`${id}-ky`}>
 								<SelectValue />
 							</SelectTrigger>
@@ -204,6 +298,7 @@ function FormMoHoiY({
 						<FieldLabel htmlFor={`${id}-cau-hoi`}>{m.cauHoi}</FieldLabel>
 						<Textarea
 							aria-invalid={cauHoiSai ? true : undefined}
+							disabled={khoaCauHoi}
 							id={`${id}-cau-hoi`}
 							maxLength={OKR_HOI_Y.cauHoi.max}
 							onChange={(e) => setCauHoi(e.target.value)}
@@ -218,12 +313,15 @@ function FormMoHoiY({
 								})}
 							</FieldError>
 						) : (
-							<FieldDescription>{m.cauHoiMoTa}</FieldDescription>
+							<FieldDescription>
+								{khoaCauHoi && !khoaNoiDung ? m.cauHoiKhoa : m.cauHoiMoTa}
+							</FieldDescription>
 						)}
 					</Field>
 					<Field>
 						<FieldLabel htmlFor={`${id}-loi-mo`}>{m.loiMo}</FieldLabel>
 						<Textarea
+							disabled={khoaNoiDung}
 							id={`${id}-loi-mo`}
 							maxLength={OKR_HOI_Y.loiMo.max}
 							onChange={(e) => setLoiMo(e.target.value)}
@@ -233,7 +331,7 @@ function FormMoHoiY({
 						<FieldDescription>{m.loiMoMoTa}</FieldDescription>
 					</Field>
 				</FieldGroup>
-				<FieldSet>
+				<FieldSet disabled={khoaNoiDung}>
 					<FieldLegend>{m.conSo}</FieldLegend>
 					<FieldDescription>
 						{dien(m.conSoMoTa, {
@@ -284,7 +382,6 @@ function FormMoHoiY({
 													translate="no"
 													value={d.ghiChu}
 												/>
-												<FieldDescription>{m.ghiChuMoTa}</FieldDescription>
 											</Field>
 											{loi ? <FieldError>{loi}</FieldError> : null}
 										</FieldGroup>
@@ -328,12 +425,21 @@ function FormMoHoiY({
 				<FieldGroup>
 					<Field data-invalid={loiHanChu ? true : undefined}>
 						<FieldLabel htmlFor={`${id}-han-ngay`}>{m.hanNgay}</FieldLabel>
-						<DatePicker id={`${id}-han-ngay`} onChange={setNgay} value={ngay} />
+						{khoaNoiDung ? (
+							<Input disabled id={`${id}-han-ngay`} readOnly value={ngay} />
+						) : (
+							<DatePicker
+								id={`${id}-han-ngay`}
+								onChange={setNgay}
+								value={ngay}
+							/>
+						)}
 					</Field>
 					<Field data-invalid={loiHanChu ? true : undefined}>
 						<FieldLabel htmlFor={`${id}-han-gio`}>{m.hanGio}</FieldLabel>
 						<Input
 							aria-invalid={loiHanChu ? true : undefined}
+							disabled={khoaNoiDung}
 							id={`${id}-han-gio`}
 							onChange={(e) => setGio(e.target.value)}
 							type="time"
@@ -358,28 +464,31 @@ function FormMoHoiY({
 							</SelectTrigger>
 							<SelectContent>
 								<SelectGroup>
-									{(quanTri.data?.rows ?? []).map((n) => (
-										<SelectItem key={n.userId} value={n.userId}>
-											<span translate="no">{n.name}</span>
+									{nguoiChonDuoc.map((n) => (
+										<SelectItem key={n.id} value={n.id}>
+											<span translate="no">{n.ten}</span>
 										</SelectItem>
 									))}
 								</SelectGroup>
 							</SelectContent>
 						</Select>
-						<FieldDescription>{m.nguoiChonMoTa}</FieldDescription>
+						<FieldDescription data-khoi="mo-ta-nguoi-chon">
+							{nguoiChon === "" ? m.nguoiChonThieu : m.nguoiChonMoTa}
+						</FieldDescription>
 					</Field>
 				</FieldGroup>
+				{loiMay ? <FieldError data-khoi="loi-may">{loiMay}</FieldError> : null}
 			</div>
 			<SheetFooter>
 				<div className="flex items-center justify-between gap-2">
 					<SheetClose asChild>
-						<Button type="button" variant="outline">
+						<Button data-nut="huy-sheet" type="button" variant="outline">
 							{m.huy}
 						</Button>
 					</SheetClose>
-					<Button disabled={!hopLe || mo.isPending} type="submit">
-						{mo.isPending ? <Spinner data-icon="inline-start" /> : null}
-						{m.mo}
+					<Button disabled={!hopLe || dangGui} type="submit">
+						{dangGui ? <Spinner data-icon="inline-start" /> : null}
+						{sua ? m.luu : m.mo}
 					</Button>
 				</div>
 			</SheetFooter>
@@ -390,29 +499,37 @@ function FormMoHoiY({
 export function SheetMoHoiY({
 	chuKy,
 	cycleId,
+	sua,
 	onXong,
 }: {
 	chuKy: ChuKy[];
 	cycleId: string;
+	sua: HoiY | null;
 	onXong: (cycleId: string) => void;
 }) {
 	const m = okrHoiYMessages(useLocale()).sheet;
-	const [mo, setMo] = useMoHoiY();
+	const [cheDo, setCheDo] = useMoHoiY();
+	const canCheDo = sua ? "sua" : "mo";
+	const mo = cheDo === canCheDo;
 	return (
-		<Sheet onOpenChange={(tiep) => void setMo(tiep || null)} open={mo}>
+		<Sheet
+			onOpenChange={(tiep) => void setCheDo(tiep ? canCheDo : null)}
+			open={mo}
+		>
 			<SheetContent data-khoi="sheet-mo-hoi-y" side="right" size="md">
 				<SheetHeader>
-					<SheetTitle>{m.tieuDe}</SheetTitle>
-					<SheetDescription>{m.moTa}</SheetDescription>
+					<SheetTitle>{sua ? m.tieuDeSua : m.tieuDe}</SheetTitle>
+					<SheetDescription>{sua ? m.moTaSua : m.moTa}</SheetDescription>
 				</SheetHeader>
 				{mo ? (
-					<FormMoHoiY
+					<FormHoiY
 						chuKy={chuKy}
 						cycleId={cycleId}
 						onXong={(ky) => {
-							void setMo(null);
+							void setCheDo(null);
 							onXong(ky);
 						}}
+						sua={sua}
 					/>
 				) : null}
 			</SheetContent>

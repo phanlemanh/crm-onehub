@@ -34,7 +34,7 @@ import { toast } from "sonner";
 import { okrHoiYMessages } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, dien, ghep } from "./chu";
+import { ChuNguoi, demSo, dien, ghep } from "./chu";
 import { ChiTietY } from "./khoi-gop";
 import { coTen, type HoiY, type YXem, yNguoiKhac } from "./man-hoi-y";
 
@@ -94,6 +94,7 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 	const dayDu = khac.some(coTen);
 	const bamDuoc = h.trangThai === "dang-mo";
 
+	const khoa = h.y.lyDoKhoa === null ? null : m.khoa[h.y.lyDoKhoa];
 	if (h.y.khoa) {
 		return (
 			<Card data-khoi="y-bi-khoa">
@@ -106,8 +107,8 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 							<EmptyMedia variant="icon">
 								<Icon icon={Locked} />
 							</EmptyMedia>
-							<EmptyTitle>{m.khoaTieuDe}</EmptyTitle>
-							<EmptyDescription>{m.khoaMoTa}</EmptyDescription>
+							<EmptyTitle>{khoa?.tieuDe}</EmptyTitle>
+							<EmptyDescription>{khoa?.moTa}</EmptyDescription>
 						</EmptyHeader>
 					</Empty>
 				</CardContent>
@@ -149,7 +150,7 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 						onClick={() => setHienHet(true)}
 						variant="outline"
 					>
-						{dien(m.hienThem, { n: conAn })}
+						{demSo(m.hienThem.mot, m.hienThem.nhieu, conAn)}
 					</Button>
 				</CardContent>
 			) : null}

@@ -1,4 +1,9 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { LyDoKhoaY } from "@crm/validation/okr-hoi-y";
+
+type DemSo = { mot: string; nhieu: string };
+
+type KhoaDanhSach = { tieuDe: string; moTa: string };
 
 const vi = {
 	dangTai: "Đang tải lần hỏi ý…",
@@ -22,7 +27,11 @@ const vi = {
 		bayGio: "Bây giờ",
 		chuaDinh: "chưa định",
 		tinhTrang: { qua: "đã qua", "hien-tai": "đang ở đây", chua: "chưa tới" },
-		conGio: "Còn {n} giờ tới hạn",
+		conGio: {
+			mot: "Còn {n} giờ tới hạn",
+			nhieu: "Còn {n} giờ tới hạn",
+		} satisfies DemSo,
+		sua: "Sửa lần hỏi ý",
 		duoiMotGio: "Còn chưa tới một giờ tới hạn",
 		daHetHan: "Đã hết hạn góp",
 		congBoLuc: "Công bố lúc {luc}",
@@ -44,11 +53,14 @@ const vi = {
 		doBangGi: "Đo bằng gì (tuỳ chọn)",
 		kyTu: "{n}/{max} ký tự",
 		kyTuItNhat: "{n}/{max} ký tự, ít nhất {min}",
-		conDuoc: "Bạn còn góp được {n} ý.",
+		conDuoc: {
+			mot: "Bạn còn góp được {n} ý.",
+			nhieu: "Bạn còn góp được {n} ý.",
+		} satisfies DemSo,
 		gui: "Gửi",
 		daGui: "Đã gửi ý của bạn.",
 		loiNgan: "Ý cần ít nhất {min} ký tự — hiện có {n}.",
-		duBaY: "Bạn đã góp đủ ba ý. Sửa hay gỡ một ý nếu muốn đổi.",
+		duY: "Bạn đã góp đủ {n} ý. Sửa hay gỡ một ý nếu muốn đổi.",
 	},
 	cuaBan: {
 		tieuDe: "Ý của bạn ({n}/{max})",
@@ -80,13 +92,19 @@ const vi = {
 			"Bạn thấy tên người góp và số người cũng nghĩ vậy; đồng nghiệp thì không.",
 		cungNghi: "Tôi cũng nghĩ vậy",
 		cungNghiNhan: "Tôi cũng nghĩ vậy: {chu}",
-		hienThem: "Hiện thêm {n} ý",
+		hienThem: {
+			mot: "Hiện thêm {n} ý",
+			nhieu: "Hiện thêm {n} ý",
+		} satisfies DemSo,
 		rong: "Chưa có ý nào của đồng nghiệp",
 		rongMoTa: "Ý người khác góp sẽ hiện ở đây, không kèm tên.",
 		tacGia: "{ten} · {n} người cũng nghĩ vậy",
-		khoaTieuDe: "Niêm phong trước khi đọc ý",
-		khoaMoTa:
-			"Bạn là người chọn. Danh sách mở ra ngay khi bạn niêm phong bản viết trước, hoặc chọn «Không viết trước».",
+		khoa: {
+			"chua-niem-phong": {
+				tieuDe: "Niêm phong trước khi đọc ý",
+				moTa: "Bạn là người chọn. Danh sách mở ra ngay khi bạn niêm phong bản viết trước, hoặc chọn «Không viết trước».",
+			},
+		} satisfies Record<LyDoKhoaY, KhoaDanhSach>,
 	},
 	doPhu: {
 		tieuDe: "Độ phủ theo đơn vị",
@@ -135,7 +153,10 @@ const vi = {
 		chuaGomMoTa:
 			"Mỗi ý phải vào một chủ đề, hoặc đứng riêng thành ý lạ, trước khi công bố. Chọn nhiều ý để gom một lần.",
 		daGomHet: "Mọi ý đã vào chủ đề",
-		daChon: "{n} ý đã chọn",
+		daChon: {
+			mot: "{n} ý đã chọn",
+			nhieu: "{n} ý đã chọn",
+		} satisfies DemSo,
 		viecDaChon: "Việc với các ý đã chọn",
 		duaVao: "Đưa vào chủ đề…",
 		duaVaoNhan: "Đưa vào chủ đề",
@@ -172,7 +193,10 @@ const vi = {
 		luu: "Lưu",
 		huy: "Huỷ",
 		loiTen: "Tên cần {tu}–{den} ký tự.",
-		daGan: "Đã đưa {n} ý vào chủ đề.",
+		daGan: {
+			mot: "Đã đưa {n} ý vào chủ đề.",
+			nhieu: "Đã đưa {n} ý vào chủ đề.",
+		} satisfies DemSo,
 		anY: "Ẩn ý",
 	},
 	ketLuan: {
@@ -212,15 +236,24 @@ const vi = {
 		tatCaY: "Tất cả {n} ý",
 	},
 	congBo: {
-		chuaDuoc: "Còn {n} điều trước khi công bố",
-		sanSang: "Sẵn sàng — {n} mục tiêu nháp sẽ được tạo ở cấp OneHub",
+		chuaDuoc: {
+			mot: "Còn {n} điều trước khi công bố",
+			nhieu: "Còn {n} điều trước khi công bố",
+		} satisfies DemSo,
+		sanSang: {
+			mot: "Sẵn sàng — {n} mục tiêu nháp sẽ được tạo ở cấp OneHub",
+			nhieu: "Sẵn sàng — {n} mục tiêu nháp sẽ được tạo ở cấp OneHub",
+		} satisfies DemSo,
 		sanSangMoTa: "Người góp sẽ thấy kết luận, lý do và bản viết trước của bạn.",
 		nut: "Công bố",
 		hoiTieuDe: "Công bố kết luận cho {ky}?",
 		hoiThan:
 			"{n} mục tiêu nháp được tạo ở cấp OneHub, bạn là người phụ trách. Mọi người đã góp sẽ thấy ý mình đi đâu, lý do của bạn, và bản viết trước — câu nào giữ nguyên, đổi, bỏ, thêm. Không rút lại được.",
 		chua: "Chưa",
-		xong: "Đã công bố — {n} mục tiêu nháp đã tạo.",
+		xong: {
+			mot: "Đã công bố — {n} mục tiêu nháp đã tạo.",
+			nhieu: "Đã công bố — {n} mục tiêu nháp đã tạo.",
+		} satisfies DemSo,
 		thieu: {
 			"chua-niem-phong": "Chưa niêm phong bản viết trước",
 			"y-chua-gom": "Còn ý chưa gom vào chủ đề",
@@ -281,7 +314,6 @@ const vi = {
 		nhan: "Nhãn",
 		giaTri: "Giá trị",
 		ghiChu: "Ghi chú",
-		ghiChuMoTa: "Bắt đầu bằng + hay - thì thẻ hiện mũi tên lên hay xuống.",
 		boDong: "Bỏ dòng {n}",
 		themDong: "Thêm dòng",
 		loiNhan: "Dòng {n}: nhãn cần {tu}–{den} ký tự.",
@@ -292,7 +324,7 @@ const vi = {
 			"Giờ Việt Nam. Ít nhất {min} giờ, nhiều nhất {max} giờ kể từ lúc mở.",
 		loiHanThieu: "Chọn ngày và giờ hạn.",
 		loiHanSom: "Hạn phải cách bây giờ ít nhất {n} giờ.",
-		loiHanMuon: "Hạn không được xa hơn {n} giờ kể từ bây giờ.",
+		loiHanMuon: "Hạn không được xa hơn {n} giờ kể từ lúc mở.",
 		nguoiChon: "Người chọn",
 		nguoiChonGoiY: "Chọn một quản trị",
 		nguoiChonMoTa:
@@ -300,6 +332,13 @@ const vi = {
 		huy: "Huỷ",
 		mo: "Mở",
 		daMo: "Đã mở hỏi ý.",
+		tieuDeSua: "Sửa lần hỏi ý",
+		moTaSua: "Thay đổi lưu ngay và ghi vào vết của chu kỳ.",
+		luu: "Lưu thay đổi",
+		daLuu: "Đã lưu lần hỏi ý.",
+		cauHoiKhoa: "Câu hỏi đã khoá vì đã có ý đầu tiên.",
+		chiNguoiChon: "Đã hết hạn góp: chỉ còn đổi được người chọn.",
+		nguoiChonThieu: "Chọn người chọn thì mới mở được.",
 	},
 };
 
@@ -334,7 +373,8 @@ const en: OkrHoiYMessages = {
 		bayGio: "Now",
 		chuaDinh: "not set",
 		tinhTrang: { qua: "done", "hien-tai": "you are here", chua: "not yet" },
-		conGio: "{n} hours left",
+		conGio: { mot: "{n} hour left", nhieu: "{n} hours left" },
+		sua: "Edit call for ideas",
 		duoiMotGio: "Less than an hour left",
 		daHetHan: "Ideas are closed",
 		congBoLuc: "Published {luc}",
@@ -356,11 +396,14 @@ const en: OkrHoiYMessages = {
 		doBangGi: "How to measure it (optional)",
 		kyTu: "{n}/{max} characters",
 		kyTuItNhat: "{n}/{max} characters, at least {min}",
-		conDuoc: "You can give {n} more ideas.",
+		conDuoc: {
+			mot: "You can give {n} more idea.",
+			nhieu: "You can give {n} more ideas.",
+		},
 		gui: "Send",
 		daGui: "Your idea is in.",
 		loiNgan: "An idea needs at least {min} characters — this one has {n}.",
-		duBaY: "You've given all three ideas. Edit or remove one to change it.",
+		duY: "You've given all {n} ideas. Edit or remove one to change it.",
 	},
 	cuaBan: {
 		tieuDe: "Your ideas ({n}/{max})",
@@ -392,13 +435,16 @@ const en: OkrHoiYMessages = {
 			"You see who gave each idea and how many agree; colleagues don't.",
 		cungNghi: "I think so too",
 		cungNghiNhan: "I think so too: {chu}",
-		hienThem: "Show {n} more ideas",
+		hienThem: { mot: "Show {n} more idea", nhieu: "Show {n} more ideas" },
 		rong: "No ideas from colleagues yet",
 		rongMoTa: "Ideas from others show up here, without names.",
 		tacGia: "{ten} · {n} agree",
-		khoaTieuDe: "Seal your list before reading ideas",
-		khoaMoTa:
-			"You are the decider. The list opens as soon as you seal what you wrote first, or choose “Skip writing first”.",
+		khoa: {
+			"chua-niem-phong": {
+				tieuDe: "Seal your list before reading ideas",
+				moTa: "You are the decider. The list opens as soon as you seal what you wrote first, or choose “Skip writing first”.",
+			},
+		},
 	},
 	doPhu: {
 		tieuDe: "Coverage by unit",
@@ -443,12 +489,12 @@ const en: OkrHoiYMessages = {
 	},
 	gom: {
 		tieuDe: "Group ideas into themes",
-		moTa: "{n} ideas. Admins and {ten} group them; only the decider concludes.",
+		moTa: "Ideas: {n}. Admins and {ten} group them; only the decider concludes.",
 		chuaGom: "Ungrouped ideas ({n})",
 		chuaGomMoTa:
 			"Every idea goes into a theme, or stands alone as an outlier, before publishing. Select several ideas to group them at once.",
 		daGomHet: "Every idea is in a theme",
-		daChon: "{n} ideas selected",
+		daChon: { mot: "{n} idea selected", nhieu: "{n} ideas selected" },
 		viecDaChon: "Actions for the selected ideas",
 		duaVao: "Move to theme…",
 		duaVaoNhan: "Move to theme",
@@ -461,9 +507,9 @@ const en: OkrHoiYMessages = {
 		chuDe: "Themes ({n})",
 		chuDeRong: "No themes yet",
 		chuDeRongMoTa: "Create a theme, then move ideas into it.",
-		bangChung: "{y} ideas · {nguoi} people in {donVi} units",
+		bangChung: "Ideas: {y} · people: {nguoi} · units: {donVi}",
 		bangChungDongY:
-			"{y} ideas · {nguoi} people in {donVi} units · {dongY} agree",
+			"Ideas: {y} · people: {nguoi} · units: {donVi} · agreeing: {dongY}",
 		tacGia: "{ten} · {n} agree",
 		viecChuDe: "Actions for theme “{chu}”",
 		doiTen: "Rename",
@@ -487,7 +533,10 @@ const en: OkrHoiYMessages = {
 		luu: "Save",
 		huy: "Cancel",
 		loiTen: "A name needs {tu}–{den} characters.",
-		daGan: "Moved {n} ideas into the theme.",
+		daGan: {
+			mot: "Moved {n} idea into the theme.",
+			nhieu: "Moved {n} ideas into the theme.",
+		},
 		anY: "Hide ideas",
 	},
 	ketLuan: {
@@ -524,19 +573,28 @@ const en: OkrHoiYMessages = {
 			"Say which line you wrote first this theme links to, or “Not in what I wrote first”.",
 		loiKetLuan: "Pick a conclusion.",
 		yLa: "Outlier",
-		tatCaY: "All {n} ideas",
+		tatCaY: "All ideas ({n})",
 	},
 	congBo: {
-		chuaDuoc: "{n} things left before publishing",
-		sanSang: "Ready — {n} draft company-level objectives will be created",
+		chuaDuoc: {
+			mot: "{n} thing left before publishing",
+			nhieu: "{n} things left before publishing",
+		},
+		sanSang: {
+			mot: "Ready — {n} draft company-level objective will be created",
+			nhieu: "Ready — {n} draft company-level objectives will be created",
+		},
 		sanSangMoTa:
 			"Contributors will see your conclusions, reasons and what you wrote first.",
 		nut: "Publish",
 		hoiTieuDe: "Publish conclusions for {ky}?",
 		hoiThan:
-			"{n} draft company-level objectives are created with you as owner. Everyone who gave ideas sees where they went, your reasons, and what you wrote first — which lines you kept, changed, dropped or added. This can't be undone.",
+			"Draft company-level objectives to create, with you as owner: {n}. Everyone who gave ideas sees where they went, your reasons, and what you wrote first — which lines you kept, changed, dropped or added. This can't be undone.",
 		chua: "Not yet",
-		xong: "Published — {n} draft objectives created.",
+		xong: {
+			mot: "Published — {n} draft objective created.",
+			nhieu: "Published — {n} draft objectives created.",
+		},
 		thieu: {
 			"chua-niem-phong": "What you write first isn't sealed",
 			"y-chua-gom": "Some ideas aren't in a theme",
@@ -597,7 +655,6 @@ const en: OkrHoiYMessages = {
 		nhan: "Label",
 		giaTri: "Value",
 		ghiChu: "Note",
-		ghiChuMoTa: "Start with + or - to show an up or down arrow on the card.",
 		boDong: "Remove row {n}",
 		themDong: "Add row",
 		loiNhan: "Row {n}: the label needs {tu}–{den} characters.",
@@ -608,7 +665,7 @@ const en: OkrHoiYMessages = {
 			"Vietnam time. At least {min} hours, at most {max} hours from opening.",
 		loiHanThieu: "Pick a deadline day and time.",
 		loiHanSom: "The deadline must be at least {n} hours from now.",
-		loiHanMuon: "The deadline can't be more than {n} hours from now.",
+		loiHanMuon: "The deadline can't be more than {n} hours after opening.",
 		nguoiChon: "Decider",
 		nguoiChonGoiY: "Pick an admin",
 		nguoiChonMoTa:
@@ -616,6 +673,13 @@ const en: OkrHoiYMessages = {
 		huy: "Cancel",
 		mo: "Open",
 		daMo: "The call for ideas is open.",
+		tieuDeSua: "Edit call for ideas",
+		moTaSua: "Changes save right away and go into the cycle's trail.",
+		luu: "Save changes",
+		daLuu: "Call for ideas saved.",
+		cauHoiKhoa: "The question is locked because the first idea has arrived.",
+		chiNguoiChon: "Ideas are closed: only the decider can still change.",
+		nguoiChonThieu: "Pick a decider to open.",
 	},
 };
 

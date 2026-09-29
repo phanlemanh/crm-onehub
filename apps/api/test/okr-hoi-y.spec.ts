@@ -4219,6 +4219,7 @@ describe("nhac", () => {
 				{
 					loai: GOP,
 					hoiYId: g.h,
+					cycleId: g.ky,
 					nhan: hang.cycle.name,
 					hanLuc: hang.hanLuc.toISOString(),
 				},
@@ -4264,6 +4265,7 @@ describe("nhac", () => {
 				{
 					loai: CONG_BO,
 					hoiYId: g.h,
+					cycleId: g.ky,
 					nhan: (await db.okrCycle.findUniqueOrThrow({ where: { id: g.ky } }))
 						.name,
 				},

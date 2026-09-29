@@ -28,7 +28,7 @@ import { DaiMoc } from "./dai-moc";
 import { BanVietTruoc, BanVietTruocDaNiem } from "./khoi-ban-truoc";
 import { KhoiDoPhu } from "./khoi-do-phu";
 import { KhoiGom } from "./khoi-gom";
-import { DuBaY, HetHan, KhoiMoDau, OSoanY, YCuaBan } from "./khoi-gop";
+import { DuY, HetHan, KhoiMoDau, OSoanY, YCuaBan } from "./khoi-gop";
 import { KhoiKetLuan } from "./khoi-ket-luan";
 import { KhoiKetQua } from "./khoi-ket-qua";
 import { KhoiYDongNghiep } from "./khoi-y-dong-nghiep";
@@ -116,10 +116,15 @@ function TrongHoiY({
 			</EmptyHeader>
 			{kyMo ? (
 				<EmptyContent>
-					<Button data-nut="mo-hoi-y" onClick={() => void setMo(true)}>
+					<Button data-nut="mo-hoi-y" onClick={() => void setMo("mo")}>
 						{m.mo}
 					</Button>
-					<SheetMoHoiY chuKy={chuKy} cycleId={kyMo.id} onXong={datKy} />
+					<SheetMoHoiY
+						chuKy={chuKy}
+						cycleId={kyMo.id}
+						onXong={datKy}
+						sua={null}
+					/>
 				</EmptyContent>
 			) : null}
 		</Empty>
@@ -149,7 +154,7 @@ function NoiDung({
 					/>
 					{h.quyen.gopDuoc ? <OSoanY h={h} /> : null}
 					{!h.quyen.gopDuoc && h.cuaToi.y.length >= OKR_HOI_Y.yMoiNguoi ? (
-						<DuBaY />
+						<DuY />
 					) : null}
 					{h.cuaToi.y.length > 0 ? <YCuaBan chiDoc={false} h={h} /> : null}
 					<KhoiYDongNghiep h={h} />
@@ -219,19 +224,21 @@ export function HoiYMan() {
 			</div>
 		);
 	}
-	if (cycles.isError || hoiY.isError) {
+	if (cycles.isError || access.isError || hoiY.isError) {
 		return (
 			<div data-trang-thai="loi">
 				<LoiHoiY
 					thuLai={() => {
 						if (cycles.isError) void cycles.refetch();
+						if (access.isError) void access.refetch();
 						if (hoiY.isError) void hoiY.refetch();
 					}}
 				/>
 			</div>
 		);
 	}
-	if (cycles.isPending || access.isPending || hoiY.isPending) {
+	const khongKy = cycles.isSuccess && cycleId === null;
+	if (cycles.isPending || access.isPending || (hoiY.isPending && !khongKy)) {
 		return (
 			<div data-trang-thai="dang-tai">
 				<DangTaiHoiY />
@@ -240,7 +247,7 @@ export function HoiYMan() {
 	}
 	const chuKy = cycles.data.cycles;
 	const ky = chuKy.find((c) => c.id === cycleId) ?? null;
-	if (hoiY.data === null) {
+	if (khongKy || !hoiY.data) {
 		return (
 			<div data-trang-thai={quanTri ? "trong-quan-tri" : "trong-thanh-vien"}>
 				<TrongHoiY chuKy={chuKy} ky={ky} quanTri={quanTri} />
@@ -251,6 +258,14 @@ export function HoiYMan() {
 	return (
 		<div className="flex min-w-0 flex-col gap-3" data-trang-thai={tt}>
 			<NoiDung bayGio={bayGio} h={hoiY.data} tenKy={ky?.name ?? ""} tt={tt} />
+			{hoiY.data.quyen.moDuoc && ky ? (
+				<SheetMoHoiY
+					chuKy={chuKy}
+					cycleId={ky.id}
+					onXong={() => {}}
+					sua={hoiY.data}
+				/>
+			) : null}
 		</div>
 	);
 }

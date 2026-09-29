@@ -67,7 +67,7 @@ import {
 } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, DoanChu, dien, ghep } from "./chu";
+import { ChuNguoi, DoanChu, demSo, dien, ghep } from "./chu";
 import { DaiMoc } from "./dai-moc";
 import { BanVietTruocDaNiem } from "./khoi-ban-truoc";
 import {
@@ -145,6 +145,11 @@ function TheKetLuan({ h, c }: { h: HoiY; c: ChuDe }) {
 	const loi = kiem(nhap, boQua, t);
 	const hien = (l: string | null) => (thu ? l : null);
 	const chon = nhap.ketLuan === KET_LUAN_CHON;
+	const khacDaLuu =
+		nhap.ketLuan !== c.ketLuan ||
+		nhap.lyDo.trim() !== c.lyDo ||
+		(chon ? nhap.cau.trim() : "") !== (c.cauMucTieu ?? "") ||
+		(chon && !boQua ? nhap.noi : null) !== c.noiBanTruoc;
 	const luu = useMutation(
 		trpc.okr.ketLuanChuDe.mutationOptions({
 			onSuccess: async () => {
@@ -297,7 +302,8 @@ function TheKetLuan({ h, c }: { h: HoiY; c: ChuDe }) {
 					) : null}
 					<Field orientation="horizontal">
 						<Button
-							disabled={luu.isPending}
+							data-nut="luu-ket-luan"
+							disabled={!khacDaLuu || luu.isPending}
 							onClick={() => {
 								setThu(true);
 								if (
@@ -314,6 +320,7 @@ function TheKetLuan({ h, c }: { h: HoiY; c: ChuDe }) {
 								});
 							}}
 							type="button"
+							variant="outline"
 						>
 							{luu.isPending ? <Spinner data-icon="inline-start" /> : null}
 							{m.luu}
@@ -350,7 +357,6 @@ function MucLuc({
 			</CardTitle>
 			<Scrollspy
 				history={false}
-				key={chuDe.map((c) => c.id).join(" ")}
 				offset={HOI_Y_MAN.cuon.lechPx}
 				onUpdate={setDangDoc}
 				targetRef={vung}
@@ -407,7 +413,7 @@ function ThanhCongBo({ h, tenKy }: { h: HoiY; tenKy: string }) {
 		trpc.okr.congBo.mutationOptions({
 			onSuccess: async (kq) => {
 				setHoi(false);
-				toast.success(dien(m.xong, { n: kq.mucTieuIds.length }));
+				toast.success(demSo(m.xong.mot, m.xong.nhieu, kq.mucTieuIds.length));
 				if (kq.canhBao) toast.warning(kq.canhBao);
 				await cache.okr();
 			},
@@ -422,22 +428,27 @@ function ThanhCongBo({ h, tenKy }: { h: HoiY; tenKy: string }) {
 		<>
 			<SaveBar
 				data-khoi="thanh-cong-bo"
+				defaultOpen
 				description={thieu.length === 0 ? m.sanSangMoTa : undefined}
-				items={thieu.map((d) => ({
-					id: `${d.ma}-${d.chuDeId ?? "chung"}`,
-					href: `#${dichThieu(d)}`,
-					label:
-						d.chuDeId === null
-							? dien(m.thieu[d.ma], { ten: "" })
-							: ghep(m.thieu[d.ma], {
-									ten: <ChuNguoi>{tenCua(d.chuDeId)}</ChuNguoi>,
-								}),
-				}))}
+				items={
+					thieu.length === 0
+						? undefined
+						: thieu.map((d) => ({
+								id: `${d.ma}-${d.chuDeId ?? "chung"}`,
+								href: `#${dichThieu(d)}`,
+								label:
+									d.chuDeId === null
+										? dien(m.thieu[d.ma], { ten: "" })
+										: ghep(m.thieu[d.ma], {
+												ten: <ChuNguoi>{tenCua(d.chuDeId)}</ChuNguoi>,
+											}),
+							}))
+				}
 				open
 				title={
 					thieu.length === 0
-						? dien(m.sanSang, { n: so })
-						: dien(m.chuaDuoc, { n: thieu.length })
+						? demSo(m.sanSang.mot, m.sanSang.nhieu, so)
+						: demSo(m.chuaDuoc.mot, m.chuaDuoc.nhieu, thieu.length)
 				}
 			>
 				<Button

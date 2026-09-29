@@ -28,12 +28,14 @@ function SaveBarViewport({ children }: { children: React.ReactNode }) {
 function SaveBar({
 	children,
 	className,
+	defaultOpen,
 	description,
 	items,
 	open,
 	title,
 	...props
 }: React.ComponentProps<"div"> & {
+	defaultOpen?: boolean;
 	description?: React.ReactNode;
 	items?: SaveBarItem[];
 	open: boolean;
@@ -42,7 +44,7 @@ function SaveBar({
 	const viewport = React.useContext(SaveBarViewportContext);
 	const msg = useMessages();
 	const idDanhSach = React.useId();
-	const [moDanhSach, setMoDanhSach] = React.useState(false);
+	const [moDanhSach, setMoDanhSach] = React.useState(defaultOpen ?? false);
 
 	const bar = (
 		<div
@@ -62,7 +64,14 @@ function SaveBar({
 			{...props}
 		>
 			<div className="min-w-0 flex-1">
-				<p className="truncate font-medium text-sm">{title}</p>
+				<p
+					className={cn(
+						"font-medium text-sm",
+						defaultOpen === undefined ? "truncate" : "text-pretty",
+					)}
+				>
+					{title}
+				</p>
 				{description ? (
 					<p className="truncate text-muted-foreground text-xs">{description}</p>
 				) : null}
@@ -70,7 +79,13 @@ function SaveBar({
 					<ul
 						className={cn(
 							"mt-1 flex-col items-start",
-							moDanhSach ? "flex" : "hidden md:flex",
+							defaultOpen === undefined
+								? moDanhSach
+									? "flex"
+									: "hidden md:flex"
+								: moDanhSach
+									? "flex max-h-40 overflow-y-auto"
+									: "hidden",
 						)}
 						data-mo={moDanhSach}
 						id={idDanhSach}
@@ -91,7 +106,7 @@ function SaveBar({
 					<Button
 						aria-controls={idDanhSach}
 						aria-expanded={moDanhSach}
-						className="md:hidden"
+						className={defaultOpen === undefined ? "md:hidden" : undefined}
 						onClick={() => setMoDanhSach((mo) => !mo)}
 						size="xs"
 						type="button"

@@ -26,7 +26,6 @@ import {
 	Timeline,
 	TimelineDate,
 	TimelineHeader,
-	TimelineIndicator,
 	TimelineItem,
 	TimelineSeparator,
 	TimelineTitle,
@@ -48,7 +47,7 @@ import {
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { ChuNguoi, DoanChu, ghep } from "./chu";
-import { DaiMoc } from "./dai-moc";
+import { DaiMoc, DauMoc } from "./dai-moc";
 import { type HoiY, lucVN, type YCuaToi } from "./man-hoi-y";
 
 function NhanKetLuan({ ketLuan }: { ketLuan: KetLuan }) {
@@ -130,7 +129,7 @@ function HanhTrinh({ buoc }: { buoc: Buoc[] }) {
 							{b.tieuDe}
 							<span className="sr-only">{m.daXong}</span>
 						</TimelineTitle>
-						<TimelineIndicator />
+						<DauMoc tt="qua" />
 					</TimelineHeader>
 					{b.than}
 				</TimelineItem>

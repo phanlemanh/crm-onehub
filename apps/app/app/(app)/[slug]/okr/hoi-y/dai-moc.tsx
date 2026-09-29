@@ -1,6 +1,12 @@
 "use client";
 
+import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
+import Edit from "@carbon/icons-react/es/Edit";
+import RadioButton from "@carbon/icons-react/es/RadioButton";
+import RadioButtonChecked from "@carbon/icons-react/es/RadioButtonChecked";
 import { Badge } from "@crm/ui/components/badge";
+import { Button } from "@crm/ui/components/button";
+import { type CarbonIcon, Icon } from "@crm/ui/components/icon";
 import { ItemDescription } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -15,8 +21,9 @@ import {
 } from "@crm/ui/components/reui/timeline";
 import type { TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
 import { okrHoiYMessages } from "@/lib/messages/okr-hoi-y";
-import { ChuNguoi, dien, ghep } from "./chu";
+import { ChuNguoi, demSo, dien, ghep } from "./chu";
 import { type HoiY, lucVN, soGioCon } from "./man-hoi-y";
+import { useMoHoiY } from "./sheet-mo-hoi-y";
 
 const MOC = ["mo", "han", "gom", "cong-bo"] as const;
 type Moc = (typeof MOC)[number];
@@ -27,7 +34,21 @@ const MOC_HIEN_TAI = {
 	"da-cong-bo": "cong-bo",
 } satisfies Record<TrangThaiHoiY, Moc>;
 
-type TinhTrang = "qua" | "hien-tai" | "chua";
+export type TinhTrang = "qua" | "hien-tai" | "chua";
+
+const ICON_MOC = {
+	qua: CheckmarkFilled,
+	"hien-tai": RadioButtonChecked,
+	chua: RadioButton,
+} satisfies Record<TinhTrang, CarbonIcon>;
+
+export function DauMoc({ tt }: { tt: TinhTrang }) {
+	return (
+		<TimelineIndicator data-dau={tt} variant="icon">
+			<Icon icon={ICON_MOC[tt]} />
+		</TimelineIndicator>
+	);
+}
 
 function tinhTrang(i: number, hienTai: number): TinhTrang {
 	if (i < hienTai) return "qua";
@@ -37,6 +58,7 @@ function tinhTrang(i: number, hienTai: number): TinhTrang {
 export function DaiMoc({ h, bayGio }: { h: HoiY; bayGio: number }) {
 	const locale = useLocale();
 	const m = okrHoiYMessages(locale).moc;
+	const [, setMo] = useMoHoiY();
 	const hienTai = MOC.indexOf(MOC_HIEN_TAI[h.trangThai]);
 	const luc = {
 		mo: h.hoiY.createdAt,
@@ -48,7 +70,7 @@ export function DaiMoc({ h, bayGio }: { h: HoiY; bayGio: number }) {
 	const dongPha =
 		h.trangThai === "dang-mo"
 			? gio > 0
-				? dien(m.conGio, { n: gio })
+				? demSo(m.conGio.mot, m.conGio.nhieu, gio)
 				: m.duoiMotGio
 			: h.trangThai === "dang-gom"
 				? m.daHetHan
@@ -87,7 +109,7 @@ export function DaiMoc({ h, bayGio }: { h: HoiY; bayGio: number }) {
 									{m.ten[moc]}
 									<span className="sr-only">, {m.tinhTrang[tt]}</span>
 								</TimelineTitle>
-								<TimelineIndicator />
+								<DauMoc tt={tt} />
 							</TimelineHeader>
 							{tt === "hien-tai" ? (
 								<TimelineContent>
@@ -98,10 +120,23 @@ export function DaiMoc({ h, bayGio }: { h: HoiY; bayGio: number }) {
 					);
 				})}
 			</Timeline>
-			<ItemDescription data-dong-pha suppressHydrationWarning>
-				{dongPha} ·{" "}
-				{ghep(m.nguoiChon, { ten: <ChuNguoi>{h.nguoiChon.name}</ChuNguoi> })}
-			</ItemDescription>
+			<div className="flex flex-wrap items-center justify-between gap-2">
+				<ItemDescription data-dong-pha suppressHydrationWarning>
+					{dongPha} ·{" "}
+					{ghep(m.nguoiChon, { ten: <ChuNguoi>{h.nguoiChon.name}</ChuNguoi> })}
+				</ItemDescription>
+				{h.quyen.moDuoc ? (
+					<Button
+						data-nut="sua-hoi-y"
+						onClick={() => void setMo("sua")}
+						size="sm"
+						variant="outline"
+					>
+						<Icon data-icon="inline-start" icon={Edit} />
+						{m.sua}
+					</Button>
+				) : null}
+			</div>
 		</div>
 	);
 }

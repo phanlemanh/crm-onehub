@@ -65,7 +65,7 @@ import {
 } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, DoanChu, dien, ghep } from "./chu";
+import { ChuNguoi, DoanChu, demSo, dien, ghep } from "./chu";
 import type { HoiY, YCuaToi } from "./man-hoi-y";
 
 type NoiDungY = { noiDung: string; viSao: string; doBangGi: string };
@@ -104,7 +104,9 @@ function LoiMo({ h }: { h: HoiY }) {
 			<StatGroup aria-label={m.conSo} data-khoi="the-con-so" role="group">
 				{h.hoiY.soLieu.map((s) => (
 					<StatCard
-						delta={s.ghiChu ? { value: s.ghiChu } : undefined}
+						delta={
+							s.ghiChu ? { value: s.ghiChu, direction: "neutral" } : undefined
+						}
 						key={`${s.nhan}-${s.giaTri}`}
 						label={s.nhan}
 						translate="no"
@@ -254,7 +256,7 @@ export function OSoanY({ h }: { h: HoiY }) {
 						/>
 						<Field orientation="horizontal">
 							<FieldDescription>
-								{dien(m.conDuoc, { n: conLai })}
+								{demSo(m.conDuoc.mot, m.conDuoc.nhieu, conLai)}
 							</FieldDescription>
 							<Button disabled={gop.isPending} type="submit">
 								{gop.isPending ? <Spinner data-icon="inline-start" /> : null}
@@ -268,11 +270,11 @@ export function OSoanY({ h }: { h: HoiY }) {
 	);
 }
 
-export function DuBaY() {
+export function DuY() {
 	const m = okrHoiYMessages(useLocale()).gop;
 	return (
-		<Alert data-khoi="du-ba-y">
-			<AlertTitle>{m.duBaY}</AlertTitle>
+		<Alert data-khoi="du-y">
+			<AlertTitle>{dien(m.duY, { n: OKR_HOI_Y.yMoiNguoi })}</AlertTitle>
 		</Alert>
 	);
 }

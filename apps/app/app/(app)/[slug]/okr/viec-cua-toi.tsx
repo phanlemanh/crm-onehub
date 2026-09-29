@@ -147,9 +147,10 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 		);
 	}
 	if (viec.loai === "okr-hoi-y-gop" || viec.loai === "okr-hoi-y-cong-bo") {
+		const thamSo = new URLSearchParams({ [SEARCH_PARAM.okr.ky]: viec.cycleId });
 		return (
 			<Button asChild size="sm" variant="outline">
-				<Link href={url("/okr/hoi-y")}>{m.moHoiY}</Link>
+				<Link href={`${url("/okr/hoi-y")}?${thamSo}`}>{m.moHoiY}</Link>
 			</Button>
 		);
 	}

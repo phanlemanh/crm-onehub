@@ -332,6 +332,7 @@ const DO_PHU: DoPhuDu = {
 
 let hoiY: HoiYDu | null | "loi" | "treo";
 let quanTri: boolean;
+let loiAccess: boolean;
 let nhan: NhanDu;
 type VaoGhi = {
 	readonly hoiYId?: string;
@@ -340,6 +341,10 @@ type VaoGhi = {
 	readonly viSao?: string;
 	readonly doBangGi?: string;
 	readonly yIds?: readonly string[];
+	readonly loiMo?: string;
+	readonly cauHoi?: string;
+	readonly hanLuc?: string;
+	readonly nguoiChonUserId?: string;
 };
 type TuyChonGhi = {
 	readonly onSuccess?: (kq: never, vao: never) => unknown;
@@ -397,10 +402,13 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
 			cycles: thuTuc("cycles", () => CHU_KY),
-			access: thuTuc("access", () => ({
-				canManageProgram: quanTri,
-				headOf: { divisions: [], departments: [] },
-			})),
+			access: thuTuc("access", () => {
+				if (loiAccess) throw new Error("không đọc được quyền");
+				return {
+					canManageProgram: quanTri,
+					headOf: { divisions: [], departments: [] },
+				};
+			}),
 			hoiY: thuTuc("hoiY", docHoiY),
 			hoiYNhan: thuTuc("hoiYNhan", () => nhan),
 			hoiYDoPhu: thuTuc("hoiYDoPhu", () => DO_PHU),
@@ -543,6 +551,7 @@ function oTheoNhan(o: HTMLElement, nhanO: string) {
 beforeEach(() => {
 	hoiY = coBan();
 	quanTri = false;
+	loiAccess = false;
 	nhan = {
 		coHoiY: true,
 		trangThai: "dang-mo",
@@ -610,7 +619,7 @@ describe("Hỏi ý — ô soạn", () => {
 		});
 	});
 
-	test("đủ ba ý: ô soạn vắng, dòng «đã đủ ba ý»", async () => {
+	test("đủ 3 ý: ô soạn vắng, dòng «đã đủ 3 ý» lấy số từ trần", async () => {
 		const b = coBan();
 		hoiY = {
 			...b,
@@ -628,7 +637,7 @@ describe("Hỏi ý — ô soạn", () => {
 		await cho(() => trangThai(o) === "gop", "gop");
 		expect({
 			oSoan: o.querySelector('[data-khoi="o-soan"]') !== null,
-			du: o.textContent?.includes("Bạn đã góp đủ ba ý"),
+			du: o.textContent?.includes("Bạn đã góp đủ 3 ý"),
 			cuaBan: o.querySelectorAll('[data-khoi="y-cua-ban"] [data-y]').length,
 		}).toEqual({ oSoan: false, du: true, cuaBan: 3 });
 	});
@@ -666,13 +675,20 @@ describe("Hỏi ý — người chọn kết luận", () => {
 		const lienKet = [...(thanh?.querySelectorAll("a") ?? [])];
 		const dich = lienKet.map((a) => a.getAttribute("href") ?? "");
 		const nut = thanh ? nutCo(thanh, "Công bố") : null;
+		const ds = thanh?.querySelector("ul");
 		expect({
+			dsHien:
+				ds !== null &&
+				ds !== undefined &&
+				!ds.classList.contains("hidden") &&
+				getComputedStyle(ds).display !== "none",
 			chu: lienKet.map((a) => a.textContent),
 			dich,
 			tonTai: dich.map((d) => document.getElementById(d.slice(1)) !== null),
 			nutTat: nut?.disabled,
 			dem: o.querySelector('[data-khoi="dem-ket-luan"]')?.textContent,
 		}).toEqual({
+			dsHien: true,
 			chu: [
 				"Còn ý chưa gom vào chủ đề",
 				"«Kho miền Trung» — chưa kết luận",
@@ -702,6 +718,135 @@ describe("Hỏi ý — người chọn kết luận", () => {
 				.querySelector('[data-khoi="thanh-chon"]')
 				?.querySelector('[data-slot="card-title"]')?.textContent,
 		}).toEqual({ truoc: false, soHop: 2, sau: "2 ý đã chọn" });
+	});
+
+	test("một nút tô nền duy nhất là «Công bố»; sửa một thẻ thì nút lưu của thẻ đó bật", async () => {
+		const o = await moTrangThai("chon-chua-du");
+		const toNen = () =>
+			[
+				...document.querySelectorAll(
+					'[data-slot="button"][data-variant="default"]',
+				),
+			].map((b) => b.textContent?.trim());
+		const luu = () =>
+			[
+				...o.querySelectorAll<HTMLButtonElement>('[data-nut="luu-ket-luan"]'),
+			].map((b) => b.disabled);
+		const truoc = { toNen: toNen(), luu: luu() };
+		const lyDo = o.querySelector<HTMLTextAreaElement>("#chu-de-c2 textarea");
+		if (!lyDo) throw new Error("không thấy ô lý do của c2");
+		await go(lyDo, "Để sang năm sau khi có vốn.");
+		expect({ truoc, sau: luu() }).toEqual({
+			truoc: { toNen: ["Công bố"], luu: [true, true, true] },
+			sau: [true, false, true],
+		});
+	});
+
+	test("khi không còn thiếu gì thì không có danh sách rỗng", async () => {
+		const b = chonChuaDu();
+		hoiY = {
+			...b,
+			quyen: { ...b.quyen, lyDoChuaCongBo: [], congBoDuoc: true },
+		};
+		const o = await mo();
+		await cho(() => trangThai(o) === "chon-du", "chon-du");
+		const thanh = document.querySelector('[data-khoi="thanh-cong-bo"]');
+		expect({
+			ul: thanh?.querySelector("ul") ?? null,
+			nutDs: thanh?.querySelector("button[aria-controls]") ?? null,
+			congBo: thanh ? nutCo(thanh, "Công bố").disabled : null,
+		}).toEqual({ ul: null, nutDs: null, congBo: false });
+	});
+});
+
+describe("Hỏi ý — dải mốc", () => {
+	test("mốc đã qua mang dấu tích, mốc hiện tại mang dấu đặc, mọi bước hành trình đã xong", async () => {
+		const o = await moTrangThai("ket-qua");
+		const dau = Object.fromEntries(
+			[...o.querySelectorAll("[data-khoi='dai-moc'] [data-moc]")].map((e) => [
+				e.getAttribute("data-moc"),
+				{
+					dau: e.querySelector("[data-dau]")?.getAttribute("data-dau"),
+					icon: e.querySelector("[data-dau] svg") !== null,
+				},
+			]),
+		);
+		const hanhTrinh = [
+			...o.querySelectorAll("[data-khoi='hanh-trinh'] [data-dau]"),
+		].map((e) => [e.getAttribute("data-dau"), e.querySelector("svg") !== null]);
+		expect({ dau, hanhTrinh }).toEqual({
+			dau: {
+				mo: { dau: "qua", icon: true },
+				han: { dau: "qua", icon: true },
+				gom: { dau: "qua", icon: true },
+				"cong-bo": { dau: "hien-tai", icon: true },
+			},
+			hanhTrinh: [
+				["qua", true],
+				["qua", true],
+				["qua", true],
+				["qua", true],
+			],
+		});
+	});
+});
+
+describe("Hỏi ý — sửa lần hỏi ý", () => {
+	test("không có quyen.moDuoc thì không có nút sửa", async () => {
+		const o = await moTrangThai("gop");
+		expect(o.querySelector('[data-nut="sua-hoi-y"]')).toBeNull();
+	});
+
+	test("quản trị sửa lời mở: gửi suaHoiY đúng trường đã đổi", async () => {
+		const b = coBan();
+		hoiY = { ...b, quyen: { ...b.quyen, moDuoc: true } };
+		const o = await mo();
+		await cho(() => trangThai(o) === "gop", "gop");
+		const nut = o.querySelector<HTMLButtonElement>('[data-nut="sua-hoi-y"]');
+		await act(async () => nut?.click());
+		await cho(
+			() => document.querySelector('[data-khoi="sheet-mo-hoi-y"]') !== null,
+			"sheet sửa",
+		);
+		await go(oTheoNhan(document.body, "Lời mở"), "Lời mở mới cho năm tới");
+		await act(async () => nutCo(document.body, "Lưu thay đổi").click());
+		await cho(() => goi.some((g) => g.ten === "suaHoiY"), "gọi suaHoiY");
+		expect(goi.find((g) => g.ten === "suaHoiY")?.vao).toEqual({
+			hoiYId: "h1",
+			loiMo: "Lời mở mới cho năm tới",
+		});
+	});
+
+	test("«Huỷ» nằm trong SheetClose: bấm thì sheet đóng, không gọi ghi", async () => {
+		const b = coBan();
+		hoiY = { ...b, quyen: { ...b.quyen, moDuoc: true } };
+		const o = await mo();
+		await cho(() => trangThai(o) === "gop", "gop");
+		const nut = o.querySelector<HTMLButtonElement>('[data-nut="sua-hoi-y"]');
+		await act(async () => nut?.click());
+		await cho(
+			() => document.querySelector('[data-khoi="sheet-mo-hoi-y"]') !== null,
+			"sheet sửa",
+		);
+		const huy = document.querySelector<HTMLButtonElement>(
+			'[data-nut="huy-sheet"]',
+		);
+		await act(async () => huy?.click());
+		await cho(
+			() => document.querySelector('[data-khoi="sheet-mo-hoi-y"]') === null,
+			"sheet đóng",
+		);
+		expect(goi.filter((g) => g.ten === "suaHoiY")).toEqual([]);
+	});
+});
+
+describe("Hỏi ý — lỗi quyền", () => {
+	test("access hỏng thì hiện lỗi kèm «Thử lại», không giả làm màn trống", async () => {
+		hoiY = null;
+		loiAccess = true;
+		const o = await mo();
+		await cho(() => trangThai(o) === "loi", "lỗi");
+		expect(nutCo(o, "Thử lại")).not.toBeNull();
 	});
 });
 

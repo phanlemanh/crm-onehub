@@ -65,7 +65,7 @@ import {
 } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, DoanChu, dien, ghep } from "./chu";
+import { ChuNguoi, DoanChu, demSo, dien, ghep } from "./chu";
 import { DaiMoc } from "./dai-moc";
 import {
 	type ChuDe,
@@ -91,7 +91,7 @@ function useGan(hoiYId: string, sauGan: () => void): Gan & { hop: ReactNode } {
 		trpc.okr.ganY.mutationOptions({
 			onSuccess: async (_kq, vao) => {
 				sauGan();
-				toast.success(dien(m.daGan, { n: vao.yIds.length }));
+				toast.success(demSo(m.daGan.mot, m.daGan.nhieu, vao.yIds.length));
 				await cache.hoiY();
 			},
 			onError: (error) => toast.error(error.message),
@@ -315,7 +315,9 @@ export function DanhSachYChuaGom({ h }: { h: HoiY }) {
 		<Card data-khoi="y-chua-gom" id={HOI_Y_MAN.neo.yChuaGom} tabIndex={-1}>
 			{conChon.length > 0 ? (
 				<CardHeader data-khoi="thanh-chon">
-					<CardTitle>{dien(m.daChon, { n: conChon.length })}</CardTitle>
+					<CardTitle>
+						{demSo(m.daChon.mot, m.daChon.nhieu, conChon.length)}
+					</CardTitle>
 					<CardAction>
 						<div
 							aria-label={m.viecDaChon}

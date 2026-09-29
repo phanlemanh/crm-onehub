@@ -25,6 +25,10 @@ export function dien<K extends string>(
 	);
 }
 
+export function demSo(mot: string, nhieu: string, n: number): string {
+	return dien(n === 1 ? mot : nhieu, { n });
+}
+
 export function ChuNguoi({ children }: { children: string }) {
 	return <span translate="no">{children}</span>;
 }

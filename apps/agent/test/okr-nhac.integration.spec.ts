@@ -1125,13 +1125,13 @@ describe("hoi-y", () => {
 			}).toEqual({
 				ket: "da-gui",
 				tieuDe: true,
-				mucCuaA: [{ loai: "okr-hoi-y-gop", hoiYId: h }],
+				mucCuaA: [{ loai: "okr-hoi-y-gop", hoiYId: h, cycleId: g.ky }],
 				soHang: { B: 0, P: 0, R: 0 },
-				daGui: [{ loai: "okr-hoi-y-gop", hoiYId: h }],
+				daGui: [{ loai: "okr-hoi-y-gop", hoiYId: h, cycleId: g.ky }],
 				soDong: 1,
 			});
 			expect(dongHoiY[0]).toBe(
-				`1. Công ty đang hỏi ý cho mục tiêu ${g.nhan} — hạn 17:00 14/10 — ${APP_URL}/${await slug()}/okr/hoi-y`,
+				`1. Công ty đang hỏi ý cho mục tiêu ${g.nhan} — hạn 17:00 14/10 — ${APP_URL}/${await slug()}/okr/hoi-y?kyOkr=${g.ky}`,
 			);
 		},
 		CHO_MS,
@@ -1181,13 +1181,13 @@ describe("hoi-y", () => {
 				dongCongBo: dongCongBo.length,
 			}).toEqual({
 				ket: "da-gui",
-				mucB: [{ loai: "okr-hoi-y-cong-bo", hoiYId: trong }],
+				mucB: [{ loai: "okr-hoi-y-cong-bo", hoiYId: trong, cycleId: g.ky }],
 				soHang: { A: 0, R: 0 },
 				tieuDe: true,
 				dongCongBo: 1,
 			});
 			expect(dongCongBo[0]).toBe(
-				`1. Mục tiêu ${g.nhan} đã công bố — xem ý của bạn đi đâu — ${APP_URL}/${await slug()}/okr/hoi-y`,
+				`1. Mục tiêu ${g.nhan} đã công bố — xem ý của bạn đi đâu — ${APP_URL}/${await slug()}/okr/hoi-y?kyOkr=${g.ky}`,
 			);
 		},
 		CHO_MS,

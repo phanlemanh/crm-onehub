@@ -149,7 +149,26 @@ export function hanLucTu(ngay: string, gio: string): string {
 	return `${ngay}T${gio}:00${HOI_Y_MAN.lechGio}`;
 }
 
+export function gioVN(iso: string): string {
+	const phan = dateFormat("vi", {
+		timeZone: HOI_Y_MAN.muiGio,
+		hour: "2-digit",
+		minute: "2-digit",
+		hourCycle: "h23",
+	}).formatToParts(new Date(iso));
+	const lay = (loai: Intl.DateTimeFormatPartTypes) =>
+		phan.find((p) => p.type === loai)?.value ?? "";
+	return `${lay("hour")}:${lay("minute")}`;
+}
+
 export type LoiHan = "thieu" | "som" | "muon" | null;
+
+export function kiemHanSua(hanLuc: string, moLuc: string): LoiHan {
+	const han = Date.parse(hanLuc);
+	if (Number.isNaN(han)) return "thieu";
+	if ((han - Date.parse(moLuc)) / GIO_MS > OKR_HOI_Y.hanGio.max) return "muon";
+	return null;
+}
 
 export function kiemHan(hanLuc: string, bayGio: number): LoiHan {
 	const han = Date.parse(hanLuc);

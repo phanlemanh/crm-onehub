@@ -66,12 +66,14 @@ export const viecOkr = z.discriminatedUnion("loai", [
 	z.object({
 		loai: z.literal("okr-hoi-y-gop"),
 		hoiYId: maMuc,
+		cycleId: maMuc,
 		nhan: z.string(),
 		hanLuc: z.iso.datetime(),
 	}),
 	z.object({
 		loai: z.literal("okr-hoi-y-cong-bo"),
 		hoiYId: maMuc,
+		cycleId: maMuc,
 		nhan: z.string(),
 	}),
 ]);
@@ -87,8 +89,8 @@ export const KHOA_MUC_OKR = {
 	"okr-nhac-ten": { loai: true, commentId: true },
 	"okr-ghi-nhan": { loai: true, ghiNhanId: true },
 	"okr-theo-doi": { loai: true, objectiveId: true },
-	"okr-hoi-y-gop": { loai: true, hoiYId: true },
-	"okr-hoi-y-cong-bo": { loai: true, hoiYId: true },
+	"okr-hoi-y-gop": { loai: true, hoiYId: true, cycleId: true },
+	"okr-hoi-y-cong-bo": { loai: true, hoiYId: true, cycleId: true },
 } as const satisfies {
 	[K in LoaiNhacOkr]: {
 		readonly [P in keyof Extract<ViecOkr, { loai: K }>]?: true;
@@ -495,6 +497,7 @@ async function viecHoiY(
 			hanLuc: true,
 			congBoLuc: true,
 			nguoiChonUserId: true,
+			cycleId: true,
 			cycle: { select: { name: true } },
 		},
 	});
@@ -532,6 +535,7 @@ async function viecHoiY(
 					viec: {
 						loai: "okr-hoi-y-gop",
 						hoiYId: h.id,
+						cycleId: h.cycleId,
 						nhan: h.cycle.name,
 						hanLuc: h.hanLuc.toISOString(),
 					},
@@ -544,7 +548,12 @@ async function viecHoiY(
 			.map(
 				(m): Gui => ({
 					userId: m.userId,
-					viec: { loai: "okr-hoi-y-cong-bo", hoiYId: h.id, nhan: h.cycle.name },
+					viec: {
+						loai: "okr-hoi-y-cong-bo",
+						hoiYId: h.id,
+						cycleId: h.cycleId,
+						nhan: h.cycle.name,
+					},
 				}),
 			),
 	);

@@ -202,10 +202,16 @@ describe("the viec OKR", () => {
 				{
 					loai: "okr-hoi-y-gop",
 					hoiYId: "hy-1",
+					cycleId: "n27",
 					nhan: "Năm 2027",
 					hanLuc: "2026-10-14T10:00:00.000Z",
 				},
-				{ loai: "okr-hoi-y-cong-bo", hoiYId: "hy-2", nhan: "Năm 2026" },
+				{
+					loai: "okr-hoi-y-cong-bo",
+					hoiYId: "hy-2",
+					cycleId: "n26",
+					nhan: "Năm 2026",
+				},
 			],
 		});
 		await mo("khi-co-viec", false);
@@ -223,7 +229,7 @@ describe("the viec OKR", () => {
 		);
 		expect(
 			dong().map((d) => d.querySelector("a")?.getAttribute("href")),
-		).toEqual(["/ws/okr/hoi-y", "/ws/okr/hoi-y"]);
+		).toEqual(["/ws/okr/hoi-y?kyOkr=n27", "/ws/okr/hoi-y?kyOkr=n26"]);
 		expect(dong().map((d) => d.querySelector("svg") !== null)).toEqual([
 			true,
 			true,

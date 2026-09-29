@@ -64,9 +64,8 @@ export function Scrollspy({
   useEffect(() => {
     const self = selfRef.current
     if (!self) return
-    const anchors = Array.from(
-      self.querySelectorAll<HTMLElement>(`[data-${dataAttribute}-anchor]`)
-    )
+    const boChon = `[data-${dataAttribute}-anchor]`
+    const moiAnchor = () => Array.from(self.querySelectorAll<HTMLElement>(boChon))
     const idCua = (anchor: HTMLElement | undefined) =>
       anchor
         ?.getAttribute(`data-${dataAttribute}-anchor`)
@@ -79,7 +78,7 @@ export function Scrollspy({
     let truoc: string | null = null
     const datHienTai = (id: string | null, ep = false) => {
       if (!id) return
-      for (const anchor of anchors) {
+      for (const anchor of moiAnchor()) {
         if (idCua(anchor) === id) anchor.setAttribute("data-active", "true")
         else anchor.removeAttribute("data-active")
       }
@@ -92,6 +91,7 @@ export function Scrollspy({
 
     const tinh = () => {
       const vung = vungCuon(targetRef)
+      const anchors = moiAnchor()
       if (!vung || anchors.length === 0) return
       const cuon = doCuon(vung)
       let chon = 0
@@ -149,20 +149,23 @@ export function Scrollspy({
       datHienTai(id, true)
     }
 
-    const nghe = anchors.map((anchor) => [anchor, nhay(anchor)] as const)
-    for (const [anchor, xuLy] of nghe) anchor.addEventListener("click", xuLy)
+    const khiBam = (event: Event) => {
+      const dich = event.target instanceof Element ? event.target.closest<HTMLElement>(boChon) : null
+      if (dich && self.contains(dich)) nhay(dich)(event)
+    }
+    self.addEventListener("click", khiBam)
     window.addEventListener("scroll", khiCuon, true)
 
     const dau = setTimeout(() => {
       const hash = decodeURIComponent(window.location.hash.replace("#", ""))
-      const theoHash = hash ? nghe.find(([anchor]) => idCua(anchor) === hash) : undefined
-      if (theoHash) theoHash[1]()
+      const theoHash = hash ? moiAnchor().find((anchor) => idCua(anchor) === hash) : undefined
+      if (theoHash) nhay(theoHash)()
       else tinh()
     }, 100)
 
     return () => {
       window.removeEventListener("scroll", khiCuon, true)
-      for (const [anchor, xuLy] of nghe) anchor.removeEventListener("click", xuLy)
+      self.removeEventListener("click", khiBam)
       clearTimeout(dau)
       if (hen !== undefined) clearTimeout(hen)
     }

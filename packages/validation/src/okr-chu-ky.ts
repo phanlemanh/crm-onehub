@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const THAM_SO_KY_OKR = "kyOkr";
+
 export const LOAI_CHU_KY = ["nam", "quy"] as const;
 export const PHA_CHU_KY = [
 	"lap-ke-hoach",

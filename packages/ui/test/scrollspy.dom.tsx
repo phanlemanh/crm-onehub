@@ -18,26 +18,32 @@ afterEach(() => {
 	document.body.innerHTML = "";
 });
 
-function Mau({ nhan }: { nhan: string }) {
+function Mau({ nhan, them = false }: { nhan: string; them?: boolean }) {
 	return (
 		<>
 			<Scrollspy history={false} onUpdate={() => {}} smooth={false}>
 				<button data-scrollspy-anchor="the-a" type="button">
 					{nhan}
 				</button>
+				{them ? (
+					<button data-scrollspy-anchor="the-b" type="button">
+						B
+					</button>
+				) : null}
 			</Scrollspy>
 			<section id="the-a">A</section>
+			<section id="the-b">B</section>
 		</>
 	);
 }
 
-function ve(nhan: string) {
+function ve(nhan: string, them = false) {
 	if (!khung) {
 		khung = document.createElement("div");
 		document.body.appendChild(khung);
 		root = createRoot(khung);
 	}
-	act(() => root?.render(<Mau nhan={nhan} />));
+	act(() => root?.render(<Mau nhan={nhan} them={them} />));
 }
 
 function bam() {
@@ -69,6 +75,33 @@ describe("scrollspy — gỡ đúng bộ nghe bấm", () => {
 		if (khung) document.body.appendChild(khung);
 		act(() => nut?.click());
 		expect(goiCuon).toHaveLength(0);
+	});
+
+	test("mục mới thêm sau khi gắn vẫn bấm được; hash chỉ cuộn một lần dù danh sách đổi", async () => {
+		window.scrollTo = ((tuyChon: ScrollToOptions) => {
+			goiCuon.push(tuyChon.top ?? -1);
+		}) as typeof window.scrollTo;
+		window.history.replaceState(null, "", "#the-a");
+		try {
+			ve("một");
+			await new Promise((r) => setTimeout(r, 150));
+			const sauGan = goiCuon.length;
+			ve("một", true);
+			ve("hai", true);
+			await new Promise((r) => setTimeout(r, 150));
+			const sauDoi = goiCuon.length;
+			const moi = document.querySelector<HTMLElement>(
+				'[data-scrollspy-anchor="the-b"]',
+			);
+			act(() => moi?.click());
+			expect({ sauGan, sauDoi, sauBam: goiCuon.length }).toEqual({
+				sauGan: 1,
+				sauDoi: 1,
+				sauBam: 2,
+			});
+		} finally {
+			window.history.replaceState(null, "", "/");
+		}
 	});
 
 	test("throttleTime gộp các lần cuộn sát nhau thành một lần tính", async () => {
