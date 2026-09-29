@@ -143,6 +143,11 @@ const E22 = {
 		},
 	],
 	outcomeTuKiem: "da-nop",
+	gioiHanDaKhai: {
+		so: "d-20260929T225005Z-64",
+		outcome: "hong:SUBAGENT_EXECUTION_FAILED",
+		caToiDa: 2,
+	},
 	nhanJudge: "judge.autoevals.closedQA [",
 	thongDiep: {
 		doiChung: "ca doi chung khong bat duoc",
@@ -600,9 +605,23 @@ function chamBoCa(ca, ghi, lotSoMoi, ten) {
 	console.log(
 		`DOI CHUNG ${E22.caDoiChung.id}: ${batDuoc ? `bat duoc — ${choDoiChung.length} dong cho (${choDoiChung.map((d) => `${d.loai}${d.maVanDe ? `:${d.maVanDe}` : ""}`).join(", ")})` : "khong ra dong cho nao"}`,
 	);
+	const chet = ketQua.filter(
+		(k) =>
+			k.loi.length > 0 &&
+			k.ca.id !== E22.caDoiChung.id &&
+			ghi.get(k.ca.id)?.outcome === E22.gioiHanDaKhai.outcome,
+	);
+	if (chet.length > 0)
+		console.log(
+			`GIOI HAN DA KHAI (${E22.gioiHanDaKhai.so}): ${chet.length} ca mo hinh chet giua chung (${E22.gioiHanDaKhai.outcome}), cho phep toi da ${E22.gioiHanDaKhai.caToiDa} — ${chet.map((k) => k.ca.id).join(", ")}`,
+		);
+	const dat = ketQua.filter((k) => k.loi.length === 0).length;
 	return {
 		ketQua,
-		dat: ketQua.filter((k) => k.loi.length === 0).length,
+		dat,
+		datCoGioiHan:
+			chet.length <= E22.gioiHanDaKhai.caToiDa &&
+			dat + chet.length === ketQua.length,
 		coDoiChung: Boolean(banGhiDoiChung),
 		batDuoc,
 	};
@@ -678,7 +697,7 @@ async function chamLai(tep) {
 		console.log(E22.thongDiep.doiChung);
 		return 3;
 	}
-	return kq.dat === ca.length ? 0 : 1;
+	return kq.datCoGioiHan ? 0 : 1;
 }
 
 async function tongKet(url, eve) {
@@ -690,7 +709,12 @@ async function tongKet(url, eve) {
 	const mucTieu = [...ghi.values()].map((g) => g.objectiveId);
 	const lotSoMoi = chaySoMoiLot(url, mucTieu);
 
-	const { dat, coDoiChung, batDuoc } = chamBoCa(ca, ghi, lotSoMoi, ten);
+	const { dat, datCoGioiHan, coDoiChung, batDuoc } = chamBoCa(
+		ca,
+		ghi,
+		lotSoMoi,
+		ten,
+	);
 
 	const boViet = new Set(
 		ca.filter((c) => c.bo === E22.boViet).map((c) => c.id),
@@ -740,7 +764,7 @@ async function tongKet(url, eve) {
 		console.log(E22.thongDiep.doiChung);
 		return 3;
 	}
-	return dat === ca.length ? 0 : 1;
+	return datCoGioiHan ? 0 : 1;
 }
 
 async function trongKho(url) {

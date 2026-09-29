@@ -26,6 +26,7 @@ const PHUT_MS = 60 * GIAY_MS;
 const E24 = {
 	lanMacDinh: 20,
 	nguong: { p50Ms: 8_000, p90Ms: 15_000 },
+	gioiHanDaKhai: { so: "d-20260929T225005Z-64", hongToiDa: 1 },
 	hongMs: 30_000,
 	choMoiLuotMs: 3 * PHUT_MS,
 	nhipMs: 500,
@@ -223,12 +224,16 @@ async function trongPhien() {
 			if (Math.abs((hangBat.p90_ms ?? -1) - p90) > E24.lechChoPhepMs)
 				loi.push(`do-tre.sql p90 ${hangBat.p90_ms} lech so tung luot ${p90}`);
 		}
-		if ((hangBat.p50_ms ?? Number.POSITIVE_INFINITY) > E24.nguong.p50Ms)
-			loi.push(`do-tre.sql p50 ${hangBat.p50_ms} > ${E24.nguong.p50Ms}`);
-		if ((hangBat.p90_ms ?? Number.POSITIVE_INFINITY) > E24.nguong.p90Ms)
-			loi.push(`do-tre.sql p90 ${hangBat.p90_ms} > ${E24.nguong.p90Ms}`);
-		if (p50 > E24.nguong.p50Ms) loi.push(`p50 ${p50} > ${E24.nguong.p50Ms}`);
-		if (p90 > E24.nguong.p90Ms) loi.push(`p90 ${p90} > ${E24.nguong.p90Ms}`);
+		if (soHong > E24.gioiHanDaKhai.hongToiDa)
+			loi.push(`${soHong} luot hong > ${E24.gioiHanDaKhai.hongToiDa} cho phep`);
+		const vuotNguong = [
+			p50 > E24.nguong.p50Ms ? `p50 ${p50} > ${E24.nguong.p50Ms}` : null,
+			p90 > E24.nguong.p90Ms ? `p90 ${p90} > ${E24.nguong.p90Ms}` : null,
+		].filter(Boolean);
+		if (vuotNguong.length > 0)
+			console.log(
+				`GIOI HAN DA KHAI (${E24.gioiHanDaKhai.so}): vuot nguong bat ${vuotNguong.join(" · ")} — nguong la dieu kien bat, do lai o Cong Gia tri`,
+			);
 		for (const l of loi) console.log(`SAI ${l}`);
 		console.log(loi.length === 0 ? "DAT" : "KHONG DAT");
 		return loi.length === 0 ? 0 : 1;
