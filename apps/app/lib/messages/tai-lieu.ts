@@ -6,6 +6,7 @@ const en = {
 	tieuDe: "Documents",
 	moTa: "Rules, policies, processes and forms, in the version in use.",
 	trangMoi: "New page",
+	timNhanh: "Quick search",
 	tab: {
 		nhan: "Document sections",
 		trang: "Pages",
@@ -243,6 +244,7 @@ const vi: TaiLieuMessages = {
 	tieuDe: "Tài liệu",
 	moTa: "Quy định, chính sách, quy trình và biểu mẫu, ở bản đang dùng.",
 	trangMoi: "Trang mới",
+	timNhanh: "Tìm nhanh",
 	tab: {
 		nhan: "Các phần của kho tài liệu",
 		trang: "Trang",

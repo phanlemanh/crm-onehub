@@ -2,6 +2,7 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import Book from "@carbon/icons-react/es/Book";
+import Search from "@carbon/icons-react/es/Search";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -69,6 +70,13 @@ function thamSo(loc: Loc): string {
 	return s ? `?${s}` : "";
 }
 
+function moTimNhanh(duong: string): string {
+	const [goc, q = ""] = duong.split("?");
+	const thamSoMoi = new URLSearchParams(q);
+	thamSoMoi.set(SEARCH_PARAM.dialog.switcher, "true");
+	return `${goc}?${thamSoMoi.toString()}`;
+}
+
 function laLoai(v: string): v is LoaiTrang {
 	return LOAI_TRANG.some((l) => l === v);
 }
@@ -87,6 +95,7 @@ export function DanhSach({
 	const soCho = cho.data?.choToiDuyet ?? 0;
 	const toi = (sua: Partial<Loc>) =>
 		`${url(duongDanhSach())}${thamSo({ tab, loai, page, ...sua })}`;
+	const lienKetTim = moTimNhanh(toi({}));
 
 	return (
 		<>
@@ -96,6 +105,20 @@ export function DanhSach({
 					<PageShellDescription>{m.moTa}</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
+					<Button asChild variant="outline">
+						<Link
+							aria-keyshortcuts="Meta+K Control+K"
+							data-nut-tim-nhanh=""
+							href={lienKetTim}
+							scroll={false}
+						>
+							<Icon icon={Search} />
+							{m.timNhanh}
+							<span aria-hidden className="text-muted-foreground text-xs">
+								⌘K
+							</span>
+						</Link>
+					</Button>
 					<NutTaiNguon luaChon={luaChon} />
 					<Button asChild>
 						<Link href={url(duongTrangMoi())}>
