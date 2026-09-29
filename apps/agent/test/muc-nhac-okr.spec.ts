@@ -87,7 +87,13 @@ const MAU = {
 		capNhat: 1,
 		binhLuan: 2,
 	},
-} satisfies { [K in ViecNhac["loai"]]: Extract<ViecNhac, { loai: K }> };
+	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 2 },
+} satisfies {
+	[K in Exclude<ViecNhac["loai"], "ai-tran" | "ai-doi-soat-lech">]: Extract<
+		ViecNhac,
+		{ loai: K }
+	>;
+};
 
 describe("loai-la", () => {
 	test("loai-la: muc loai okr-moi lam dungTin nem, thong diep neu ten loai", () => {

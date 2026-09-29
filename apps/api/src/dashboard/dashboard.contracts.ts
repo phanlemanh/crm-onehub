@@ -130,6 +130,7 @@ export const dashboardSummaryOutput = z.object({
 	biggestOpen: z.array(biggestOpenDealOutput),
 	mySteps: z.array(myStepOutput),
 	keHoachCanDeY: z.array(keHoachCanDeYOutput),
+	taiLieuChoDuyet: z.number().int(),
 	overdueTasks: z.array(overdueTaskOutput),
 	recentActivity: z.array(recentActivityOutput),
 });

@@ -49,6 +49,11 @@ export function duongTabNguon(): string {
 	return `${TAI_LIEU_MAN.goc}?${q.toString()}`;
 }
 
+export function duongChoDuyet(): string {
+	const q = new URLSearchParams({ [SEARCH_PARAM.taiLieu.tab]: "cho-duyet" });
+	return `${TAI_LIEU_MAN.goc}?${q.toString()}`;
+}
+
 export function neoNguon(id: string): string {
 	return `${TAI_LIEU_MAN.nguon.neo}${id}`;
 }
