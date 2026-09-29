@@ -1765,7 +1765,7 @@ const THU_TU_DOC_OKR = {
 		K: "vang",
 		khac: 200,
 	},
-	"okr.alignmentTree": { vao: cuaKy, K: "chua-G", dau: "tieuDeG", khac: 200 },
+	"okr.alignmentTree": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.banGhiChiSo": {
 		vao: (s) => ({ keyResultId: s.krG, trang: 1 }),
 		K: "chua-G",
@@ -1799,7 +1799,7 @@ const THU_TU_DOC_OKR = {
 		dau: "tieuDeG",
 		khac: 200,
 	},
-	"okr.cayCanChinh": { vao: cuaKy, K: "chua-G", dau: "tieuDeG", khac: 200 },
+	"okr.cayCanChinh": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.chiSo": { vao: () => undefined, K: "vang", khac: 200 },
 	"okr.comments": {
 		vao: (s) => ({ objectiveId: s.g }),
