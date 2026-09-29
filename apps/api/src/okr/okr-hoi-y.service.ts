@@ -7,6 +7,7 @@ import {
 	type DongYInput,
 	type GanYInput,
 	type GopYInput,
+	type HoiYIdInput,
 	KET_LUAN_CHON,
 	type KetLuanInput,
 	ketLuanChuDe,
@@ -42,15 +43,23 @@ import {
 	type ChuDeTho,
 	chieuChuDeChoNguoiXem,
 	chieuYChoNguoiXem,
+	chieuYCuaToi,
 	docBanTruoc,
+	ketQuaCongBo,
+	lyDoChuaCongBo,
+	type MaThieu,
+	type TinhTrangCongBo,
 	tenYLa,
+	tinhTrangCongBo,
 	type YChieu,
 	type YTho,
 } from "./hoi-y";
-import { OkrService } from "./okr.service";
+import { donViCua, OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
 import type {
+	CongBoOutput,
+	HieuViSaoOutput,
 	HoiYGhiOutput,
 	HoiYNhanOutput,
 	HoiYOutput,
@@ -96,6 +105,12 @@ function kiemNoiBanTruoc(
 	if (ban.boQua) throw new BadRequestException(T.noiBanTruocBoQua);
 	if (soCau > ban.cau.length)
 		throw new BadRequestException(T.noiBanTruocKhongCo(ban.cau.length));
+}
+
+function cauLyDo(ma: MaThieu, tt: TinhTrangCongBo): string {
+	return ma === "vuot-tran"
+		? T.congBoVuotTran(tt.objectiveCap, tt.tongOneHubSau)
+		: T.congBoThieu[ma];
 }
 
 function kiemHan(han: Date, tu: Date, den: Date, cau: string): void {
@@ -423,13 +438,13 @@ export class OkrHoiYService {
 		tx: Tx,
 		h: HoiYKhoa,
 		userId: string,
-		cach: "gom" | "ket-luan",
+		cach: "gom" | "ket-luan" | "cong-bo",
 	): Promise<{ now: Date; ban: { cau: string[]; boQua: boolean } | null }> {
 		const laNguoiChon = h.nguoiChonUserId === userId;
 		const quanTri = await this.laQuanTri(tx, userId);
 		if (laNguoiChon && !quanTri)
 			throw new ForbiddenException(T.nguoiChonPhaiQuanTri);
-		if (cach === "ket-luan" && !laNguoiChon)
+		if (cach !== "gom" && !laNguoiChon)
 			throw new ForbiddenException(T.chiNguoiChon);
 		if (!laNguoiChon && !quanTri) throw new ForbiddenException(T.chiGom);
 		const now = this.dongHo();
@@ -440,7 +455,7 @@ export class OkrHoiYService {
 			where: { hoiYId: h.id },
 			select: { cau: true, boQua: true },
 		});
-		if (laNguoiChon && !ban)
+		if (laNguoiChon && !ban && cach !== "cong-bo")
 			throw new BadRequestException(T.nguoiChonChuaNiemPhong);
 		return { now, ban };
 	}
@@ -625,6 +640,137 @@ export class OkrHoiYService {
 		});
 	}
 
+	private async tinhTrangCongBo(
+		tx: Tx | Db,
+		h: { id: string; cycleId: string },
+	): Promise<TinhTrangCongBo> {
+		const ban = await tx.okrHoiYBanTruoc.findUnique({
+			where: { hoiYId: h.id },
+			select: { boQua: true },
+		});
+		const yChuaGom = await tx.okrY.count({
+			where: { hoiYId: h.id, chuDeId: null },
+		});
+		const chuDe = await tx.okrChuDe.findMany({
+			where: { hoiYId: h.id },
+			orderBy: [{ viTri: "asc" }, { id: "asc" }],
+			select: {
+				id: true,
+				loai: true,
+				ten: true,
+				ketLuan: true,
+				lyDo: true,
+				cauMucTieu: true,
+				noiBanTruoc: true,
+				_count: { select: { y: true } },
+			},
+		});
+		const ct = await this.okr.program(tx);
+		const soMucTieuHienCo = await tx.okrObjective.count({
+			where: {
+				cycleId: h.cycleId,
+				...donViCua({ level: "onehub" }),
+				status: { not: "da-bo" },
+			},
+		});
+		return tinhTrangCongBo({
+			ban,
+			yChuaGom,
+			chuDe: chuDe.map((c) => ({
+				id: c.id,
+				loai: loaiChuDe.parse(c.loai),
+				ten: c.ten,
+				soY: c._count.y,
+				ketLuan: c.ketLuan,
+				lyDo: c.lyDo,
+				cauMucTieu: c.cauMucTieu,
+				noiBanTruoc: c.noiBanTruoc,
+			})),
+			soMucTieuHienCo,
+			objectiveCap: ct.objectiveCap,
+			capMode: ct.capMode,
+		});
+	}
+
+	async congBo(userId: string, input: HoiYIdInput): Promise<CongBoOutput> {
+		return this.db.$transaction(async (tx) => {
+			const h = await this.khoaHoiY(tx, input.hoiYId);
+			const { now } = await this.kiemGom(tx, h, userId, "cong-bo");
+			const ky = await tx.okrCycle.findUnique({
+				where: { id: h.cycleId },
+				select: { phase: true },
+			});
+			if (!ky || phaChuKy.parse(ky.phase) !== "lap-ke-hoach")
+				throw new BadRequestException(T.congBoKyKhongLapKeHoach);
+			const tinhTrang = await this.tinhTrangCongBo(tx, h);
+			const [dau] = lyDoChuaCongBo(tinhTrang);
+			if (dau) throw new BadRequestException(cauLyDo(dau.ma, tinhTrang));
+			const chon = await tx.okrChuDe.findMany({
+				where: { hoiYId: h.id, ketLuan: KET_LUAN_CHON },
+				orderBy: [{ viTri: "asc" }, { id: "asc" }],
+				select: { id: true, cauMucTieu: true, lyDo: true },
+			});
+			const mucTieuIds: string[] = [];
+			let canhBao: string | null = null;
+			for (const c of chon) {
+				const mt = await this.okr.taoMucTieuTrongTx(
+					tx,
+					userId,
+					{
+						cycleId: h.cycleId,
+						unit: { level: "onehub" },
+						ownerUserId: h.nguoiChonUserId,
+						kind: "cam-ket",
+						title: c.cauMucTieu,
+						whyNow: c.lyDo,
+						participantIds: [],
+					},
+					{ tuHoiY: h.id },
+				);
+				await tx.okrChuDe.update({
+					where: { id: c.id },
+					data: { objectiveId: mt.id },
+				});
+				mucTieuIds.push(mt.id);
+				canhBao = mt.canhBao ?? canhBao;
+			}
+			await tx.okrHoiY.update({
+				where: { id: h.id },
+				data: { congBoLuc: now },
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"cong-bo-hoi-y",
+				{ cycleId: h.cycleId },
+				null,
+				{ hoiYId: h.id, soMucTieu: mucTieuIds.length },
+			);
+			return { mucTieuIds, canhBao };
+		});
+	}
+
+	async hieuViSao(
+		userId: string,
+		input: HoiYIdInput,
+	): Promise<HieuViSaoOutput> {
+		return this.db.$transaction(async (tx) => {
+			const h = await this.khoaHoiY(tx, input.hoiYId);
+			const now = this.dongHo();
+			if (trangThaiHoiY(h, now) !== "da-cong-bo")
+				throw new BadRequestException(T.chuaCongBo);
+			const soY = await tx.okrY.count({
+				where: { hoiYId: h.id, tacGiaUserId: userId },
+			});
+			if (soY === 0) throw new BadRequestException(T.chuaGop);
+			await tx.okrHoiYHieu.createMany({
+				data: [{ hoiYId: h.id, userId, luc: now }],
+				skipDuplicates: true,
+			});
+			return { ok: true };
+		});
+	}
+
 	async hoiY(userId: string, input: CycleIdInput): Promise<HoiYOutput | null> {
 		const q = await this.quyenOkr.quyen(userId);
 		const now = this.dongHo();
@@ -643,6 +789,7 @@ export class OkrHoiYService {
 				},
 				hieu: { where: { userId }, select: { userId: true } },
 				chuDe: true,
+				cycle: { select: { phase: true } },
 			},
 		});
 		if (!h) return null;
@@ -683,18 +830,26 @@ export class OkrHoiYService {
 			viTri: c.viTri,
 		}));
 		const chuDe = chieuChuDeChoNguoiXem(chuDeTho, tho, xem);
-		const banTruoc = docBanTruoc(
-			h.banTruoc && {
-				cau: h.banTruoc.cau,
-				boQua: h.banTruoc.boQua,
-				vietBoi: h.banTruoc.vietBoi.name,
-			},
-			{ laNguoiChon, trangThai },
-		);
+		const banTho = h.banTruoc && {
+			cau: h.banTruoc.cau,
+			boQua: h.banTruoc.boQua,
+			vietBoi: h.banTruoc.vietBoi.name,
+		};
+		const banTruoc = docBanTruoc(banTho, { laNguoiChon, trangThai });
 		const cuaToi = h.y.filter((y) => y.tacGiaUserId === userId);
 		const duocGom = !laNguoiChon || daNiemPhong;
 		const chonDuoc =
 			trangThai === "dang-gom" && laNguoiChon && q.quanTri && daNiemPhong;
+		const dieuThieu =
+			trangThai === "dang-gom" && (laNguoiChon || q.quanTri)
+				? lyDoChuaCongBo(await this.tinhTrangCongBo(this.db, h))
+				: [];
+		const congBoDuoc =
+			trangThai === "dang-gom" &&
+			laNguoiChon &&
+			q.quanTri &&
+			phaChuKy.parse(h.cycle.phase) === "lap-ke-hoach" &&
+			dieuThieu.length === 0;
 		return {
 			hoiY: {
 				id: h.id,
@@ -708,13 +863,10 @@ export class OkrHoiYService {
 			trangThai,
 			nguoiChon: h.nguoiChon,
 			cuaToi: {
-				y: cuaToi.map((y) => ({
-					id: y.id,
-					noiDung: y.noiDung,
-					viSao: y.viSao,
-					doBangGi: y.doBangGi,
-					createdAt: y.createdAt.toISOString(),
-				})),
+				y: chieuYCuaToi(cuaToi, chuDeTho, {
+					trangThai,
+					congBoLuc: h.congBoLuc,
+				}),
 				daHieu: h.hieu.length > 0,
 			},
 			y: {
@@ -724,7 +876,7 @@ export class OkrHoiYService {
 			},
 			chuDe: chuDe?.map((c) => ({ ...c, y: c.y.map(raY) })) ?? null,
 			banTruoc,
-			ketQua: null,
+			ketQua: ketQuaCongBo(banTruoc, chuDeTho, trangThai),
 			quyen: {
 				moDuoc: q.quanTri && trangThai !== "da-cong-bo",
 				gopDuoc:
@@ -733,8 +885,8 @@ export class OkrHoiYService {
 					cuaToi.length < OKR_HOI_Y.yMoiNguoi,
 				gomDuoc: trangThai === "dang-gom" && q.quanTri && duocGom,
 				chonDuoc,
-				congBoDuoc: false,
-				lyDoChuaCongBo: [],
+				congBoDuoc,
+				lyDoChuaCongBo: dieuThieu,
 			},
 		};
 	}

@@ -6,6 +6,7 @@ import {
 import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
 import { OKR_MAU } from "@crm/validation/okr-mau";
+import type { MaThieu } from "./hoi-y";
 
 export const OKR = {
 	tenGoc: "OneHub",
@@ -216,7 +217,7 @@ export const OKR = {
 			yCuaMinh: "Không bấm «Tôi cũng nghĩ vậy» cho ý của chính mình.",
 			khongCoY: (id: string) => `Không có ý nào mang mã ${id}.`,
 			chiNguoiChon:
-				"Chỉ người chọn của lần hỏi ý này mới niêm phong hay khai không viết trước được.",
+				"Chỉ người chọn của lần hỏi ý này mới niêm phong, khai không viết trước, kết luận hay công bố được.",
 			daCoBanTruoc:
 				"Bản viết trước đã niêm phong hoặc đã khai không viết trước — không làm lại, không sửa được.",
 			chiGom: "Chỉ quản trị hoặc người chọn mới gom ý thành chủ đề được.",
@@ -236,6 +237,30 @@ export const OKR = {
 				`Bản viết trước chỉ có ${soCau} câu — nối tới câu có thật hoặc chọn «mới».`,
 			noiBanTruocBoQua:
 				"Người chọn đã khai không viết trước — chủ đề chỉ nối được «mới».",
+			congBoKyKhongLapKeHoach:
+				"Chỉ công bố được khi chu kỳ đang ở pha lập kế hoạch.",
+			congBoThieu: {
+				"chua-niem-phong":
+					"Người chọn cần niêm phong bản viết trước (hoặc khai không viết trước) rồi mới công bố được.",
+				"y-chua-gom": "Còn ý chưa gắn vào chủ đề — gắn hết ý rồi mới công bố.",
+				"chu-de-rong":
+					"Còn chủ đề rỗng — chuyển ý vào hoặc gỡ chủ đề rồi mới công bố.",
+				"thieu-ket-luan":
+					"Còn chủ đề chưa có kết luận — kết luận hết rồi mới công bố.",
+				"thieu-ly-do": `Mỗi chủ đề cần lý do dài ${OKR_HOI_Y.lyDo.min}–${OKR_HOI_Y.lyDo.max} ký tự.`,
+				"thieu-cau-muc-tieu":
+					"Còn chủ đề chọn thiếu câu mục tiêu hợp khuôn tên mục tiêu.",
+				"thieu-noi-ban-truoc":
+					"Còn chủ đề chọn chưa khai nối với câu viết trước nào — hoặc «mới».",
+				"khong-chon":
+					"Cần ít nhất một chủ đề kết luận «chọn» mới công bố được.",
+			} satisfies Record<Exclude<MaThieu, "vuot-tran">, string>,
+			congBoVuotTran: (tran: number, sau: number) =>
+				`Công bố sẽ đưa cấp OneHub lên ${sau} mục tiêu — vượt trần ${tran} của chương trình.`,
+			conHoiYChuaCongBo: (ten: string) =>
+				`Chu kỳ «${ten}» còn một lần hỏi ý mục tiêu chưa công bố — công bố (hoặc đổi người chọn nếu người chọn đã hết quyền quản trị) rồi mới rời lập kế hoạch được.`,
+			chuaCongBo: "Lần hỏi ý chưa công bố — chưa bấm «Tôi hiểu vì sao» được.",
+			chuaGop: "Chỉ người đã góp ý mới bấm «Tôi hiểu vì sao» được.",
 		},
 		troLy: {
 			daQuyet: "Đề xuất này đã được quyết",

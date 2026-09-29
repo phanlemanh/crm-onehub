@@ -1,17 +1,28 @@
+import { beforeAll } from "bun:test";
 import { API_KEY_HEADER, auth, type WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { OKR_HOI_Y, type SoLieuHoiY } from "@crm/validation/okr-hoi-y";
+import {
+	KET_LUAN_CHON,
+	NOI_MOI,
+	OKR_HOI_Y,
+	type SoLieuHoiY,
+	trangThaiHoiY,
+} from "@crm/validation/okr-hoi-y";
 import request from "supertest";
 import { DONG_HO_HOI_Y, type DongHo } from "../src/okr/dong-ho";
 import { OKR } from "../src/okr/okr-config";
+import { hoiYDocOutput } from "../src/okr/okr-hoi-y.contracts";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import {
+	CHUONG_TRINH_RONG,
 	dungSan,
 	goi,
+	goiQuery,
 	type Json,
 	nguoiMoi,
 	ok,
+	phien,
 	phienCua,
 	type TraLoi,
 	taoNam,
@@ -35,6 +46,12 @@ export function sauGio(tu: Date, soGio: number): Date {
 export function dungSanHoiY(): void {
 	dungSan((b) => b.overrideProvider(DONG_HO_HOI_Y).useValue(dongHo), {
 		rest: true,
+	});
+	beforeAll(async () => {
+		ok(
+			await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }),
+			"cau hinh chuong trinh",
+		);
 	});
 }
 
@@ -168,11 +185,100 @@ export async function gieoBanTruoc(hoiYId: string, vietBoiUserId: string) {
 	return db.okrHoiYBanTruoc.findUniqueOrThrow({ where: { hoiYId } });
 }
 
+export const LY_DO_CONG_BO_MAC_DINH =
+	"Đúng hướng năm tới của công ty, có người làm ngay.";
+
+async function docCuaNguoiChon(ky: string, cookie: string) {
+	const doc = hoiYDocOutput.parse(
+		ok(await goiQuery("okr.hoiY", cookie, { cycleId: ky }), "doc hoi y"),
+	);
+	if (!doc) throw new Error("khong co hoi y");
+	return doc;
+}
+
 export async function gieoCongBo(hoiYId: string) {
-	return db.okrHoiY.update({
-		where: { id: hoiYId },
-		data: { congBoLuc: dongHo() },
-	});
+	const h = await db.okrHoiY.findUniqueOrThrow({ where: { id: hoiYId } });
+	const cookie = await phienCua(h.nguoiChonUserId);
+	if ((await db.okrY.count({ where: { hoiYId } })) === 0) {
+		if (trangThaiHoiY(h, dongHo()) === "dang-mo")
+			await gieoY(hoiYId, phien.thuong.nguoi);
+		else
+			await db.okrY.create({
+				data: {
+					hoiYId,
+					tacGiaUserId: phien.thuong.nguoi,
+					noiDung: Y_MAC_DINH,
+					viSao: "",
+					doBangGi: "",
+					createdAt: dongHo(),
+				},
+			});
+	}
+	if (trangThaiHoiY(h, dongHo()) === "dang-mo")
+		ok(
+			await goi(
+				"okr.suaHoiY",
+				{ hoiYId, hanLuc: dongHo().toISOString() },
+				cookie,
+			),
+			"doi han ve bay gio",
+		);
+	const ketLuanChon = async (chuDeId: string, cauMucTieu: string) =>
+		ok(
+			await goi(
+				"okr.ketLuanChuDe",
+				{
+					chuDeId,
+					ketLuan: KET_LUAN_CHON,
+					lyDo: LY_DO_CONG_BO_MAC_DINH,
+					cauMucTieu,
+					noiBanTruoc: NOI_MOI,
+				},
+				cookie,
+			),
+			"ket luan chon",
+		);
+	for (let lan = 0; lan < 4; lan += 1) {
+		const doc = await docCuaNguoiChon(h.cycleId, cookie);
+		const thieu = doc.quyen.lyDoChuaCongBo;
+		if (thieu.length === 0) break;
+		const daGo = new Set<string>();
+		for (const { ma, chuDeId } of thieu) {
+			if (chuDeId && daGo.has(chuDeId)) continue;
+			if (ma === "khong-chon" && thieu.length > 1) continue;
+			if (ma === "chua-niem-phong")
+				ok(
+					await goi(
+						"okr.niemPhong",
+						{ hoiYId, cau: BAN_TRUOC_MAC_DINH },
+						cookie,
+					),
+					"niem phong",
+				);
+			else if (ma === "y-chua-gom") {
+				const chua = await db.okrY.findMany({
+					where: { hoiYId, chuDeId: null },
+					select: { id: true },
+				});
+				for (const y of chua)
+					ok(
+						await goi("okr.ganY", { yIds: [y.id], yLa: true }, cookie),
+						"gan y la",
+					);
+			} else if (ma === "chu-de-rong" && chuDeId) {
+				ok(await goi("okr.goChuDe", { chuDeId }, cookie), "go chu de rong");
+				daGo.add(chuDeId);
+			} else if (ma === "khong-chon") {
+				const dau = doc.chuDe?.[0];
+				if (!dau) throw new Error("khong con chu de de chon");
+				await ketLuanChon(dau.id, `Mục tiêu từ chủ đề ${dau.id.slice(-6)}`);
+			} else if (chuDeId)
+				await ketLuanChon(chuDeId, `Mục tiêu từ chủ đề ${chuDeId.slice(-6)}`);
+			else throw new Error(`khong sua duoc ${ma}`);
+		}
+	}
+	ok(await goi("okr.congBo", { hoiYId }, cookie), "cong bo");
+	return db.okrHoiY.findUniqueOrThrow({ where: { id: hoiYId } });
 }
 
 async function memberCua(userId: string): Promise<string> {

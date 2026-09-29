@@ -62,7 +62,8 @@ export function bangChungChuDe(y: YBangChung[]): BangChungChuDe {
 	return { soNguoi: nguoi.size, soDonVi: donVi.size, soDongY, trich };
 }
 
-export type SoPhanBanTruoc = "giu" | "doi" | "bo";
+export const SO_PHAN_BAN_TRUOC = ["giu", "doi", "bo"] as const;
+export type SoPhanBanTruoc = (typeof SO_PHAN_BAN_TRUOC)[number];
 
 export type KetQuaBanTruoc = {
 	cau: SoPhanBanTruoc[];
@@ -197,6 +198,28 @@ export type TinhTrangCongBo = {
 	objectiveCap: number;
 	capMode: "chan" | "canh-bao";
 };
+
+export type TinhTrangVao = {
+	ban: { boQua: boolean } | null;
+	yChuaGom: number;
+	chuDe: ChuDeCongBo[];
+	soMucTieuHienCo: number;
+	objectiveCap: number;
+	capMode: "chan" | "canh-bao";
+};
+
+export function tinhTrangCongBo(vao: TinhTrangVao): TinhTrangCongBo {
+	const soChon = vao.chuDe.filter((c) => c.ketLuan === KET_LUAN_CHON).length;
+	return {
+		coBanTruoc: vao.ban !== null && !vao.ban.boQua,
+		boQua: vao.ban?.boQua ?? false,
+		yChuaGom: vao.yChuaGom,
+		chuDe: vao.chuDe,
+		tongOneHubSau: vao.soMucTieuHienCo + soChon,
+		objectiveCap: vao.objectiveCap,
+		capMode: vao.capMode,
+	};
+}
 
 export function lyDoChuaCongBo(
 	s: TinhTrangCongBo,
@@ -396,4 +419,95 @@ export function docBanTruoc(
 	if (ban === null) return null;
 	if (xem.laNguoiChon || xem.trangThai === "da-cong-bo") return ban;
 	return null;
+}
+
+export type YCuaToiTho = {
+	id: string;
+	noiDung: string;
+	viSao: string;
+	doBangGi: string;
+	chuDeId: string | null;
+	createdAt: Date;
+	ganLuc: Date | null;
+};
+
+export type YCuaToiChieu = {
+	id: string;
+	noiDung: string;
+	viSao: string;
+	doBangGi: string;
+	createdAt: string;
+	chuDe: { id: string; ten: string } | null;
+	ketLuan: KetLuan | null;
+	lyDo: string | null;
+	objectiveId: string | null;
+	hanhTrinh: {
+		gopLuc: string;
+		vaoChuDeLuc: string | null;
+		ketLuanLuc: string | null;
+	};
+};
+
+export function chieuYCuaToi(
+	y: YCuaToiTho[],
+	chuDe: ChuDeTho[],
+	xem: { trangThai: TrangThaiHoiY; congBoLuc: Date | null },
+): YCuaToiChieu[] {
+	const daCongBo = xem.trangThai === "da-cong-bo";
+	const theoId = new Map(chuDe.map((c) => [c.id, c]));
+	return y.map((x) => {
+		const c = daCongBo && x.chuDeId !== null ? theoId.get(x.chuDeId) : null;
+		return {
+			id: x.id,
+			noiDung: x.noiDung,
+			viSao: x.viSao,
+			doBangGi: x.doBangGi,
+			createdAt: x.createdAt.toISOString(),
+			chuDe: c ? { id: c.id, ten: c.ten } : null,
+			ketLuan: c ? c.ketLuan : null,
+			lyDo: c ? c.lyDo : null,
+			objectiveId: c ? c.objectiveId : null,
+			hanhTrinh: {
+				gopLuc: x.createdAt.toISOString(),
+				vaoChuDeLuc: c ? (x.ganLuc?.toISOString() ?? null) : null,
+				ketLuanLuc: c ? (xem.congBoLuc?.toISOString() ?? null) : null,
+			},
+		};
+	});
+}
+
+export type KetQuaChieu = KetQuaBanTruoc & {
+	vietBoi: string;
+	chon: {
+		chuDeId: string;
+		ten: string;
+		cauMucTieu: string;
+		noiBanTruoc: NoiBanTruoc;
+		objectiveId: string | null;
+	}[];
+};
+
+export function ketQuaCongBo(
+	ban: BanTruocTho | null,
+	chuDe: ChuDeTho[],
+	trangThai: TrangThaiHoiY,
+): KetQuaChieu | null {
+	if (trangThai !== "da-cong-bo" || ban === null) return null;
+	const chon = [...chuDe]
+		.filter((c) => c.ketLuan === KET_LUAN_CHON)
+		.sort(
+			(a, b) => a.viTri - b.viTri || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+		)
+		.map((c) => ({
+			chuDeId: c.id,
+			ten: c.ten,
+			cauMucTieu: c.cauMucTieu,
+			noiBanTruoc: c.noiBanTruoc ?? NOI_MOI,
+			objectiveId: c.objectiveId,
+		}));
+	return {
+		...ketQuaBanTruoc(ban, chon),
+		vietBoi: ban.vietBoi,
+		chon,
+	};
 }

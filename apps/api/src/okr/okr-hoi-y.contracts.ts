@@ -7,7 +7,7 @@ import {
 	trangThaiHoiYKhuon,
 } from "@crm/validation/okr-hoi-y";
 import { z } from "zod";
-import { MA_THIEU } from "./hoi-y";
+import { MA_THIEU, SO_PHAN_BAN_TRUOC } from "./hoi-y";
 
 export const hoiYGhiOutput = z.object({ id: z.string() });
 export type HoiYGhiOutput = z.infer<typeof hoiYGhiOutput>;
@@ -54,12 +54,38 @@ const yCuaToi = z.object({
 	viSao: z.string(),
 	doBangGi: z.string(),
 	createdAt: z.string(),
+	chuDe: z.object({ id: z.string(), ten: z.string() }).nullable(),
+	ketLuan: ketLuanChuDe.nullable(),
+	lyDo: z.string().nullable(),
+	objectiveId: z.string().nullable(),
+	hanhTrinh: z.object({
+		gopLuc: z.string(),
+		vaoChuDeLuc: z.string().nullable(),
+		ketLuanLuc: z.string().nullable(),
+	}),
 });
 
 const banTruocChieu = z.object({
 	cau: z.array(z.string()),
 	boQua: z.boolean(),
 	vietBoi: z.string(),
+});
+
+const ketQuaChieu = z.object({
+	cau: z.array(z.enum(SO_PHAN_BAN_TRUOC)),
+	doi: z.number().int(),
+	them: z.number().int(),
+	boQua: z.boolean(),
+	vietBoi: z.string(),
+	chon: z.array(
+		z.object({
+			chuDeId: z.string(),
+			ten: z.string(),
+			cauMucTieu: z.string(),
+			noiBanTruoc,
+			objectiveId: z.string().nullable(),
+		}),
+	),
 });
 
 export const hoiYChiTiet = z.object({
@@ -82,7 +108,7 @@ export const hoiYChiTiet = z.object({
 	}),
 	chuDe: z.array(chuDeChieu).nullable(),
 	banTruoc: banTruocChieu.nullable(),
-	ketQua: z.null(),
+	ketQua: ketQuaChieu.nullable(),
 	quyen: z.object({
 		moDuoc: z.boolean(),
 		gopDuoc: z.boolean(),
@@ -97,6 +123,15 @@ export const hoiYChiTiet = z.object({
 export type HoiYOutput = z.infer<typeof hoiYChiTiet>;
 
 export const hoiYDocOutput = hoiYChiTiet.nullable();
+
+export const congBoOutput = z.object({
+	mucTieuIds: z.array(z.string()),
+	canhBao: z.string().nullable(),
+});
+export type CongBoOutput = z.infer<typeof congBoOutput>;
+
+export const hieuViSaoOutput = z.object({ ok: z.literal(true) });
+export type HieuViSaoOutput = z.infer<typeof hieuViSaoOutput>;
 
 export const hoiYNhanOutput = z.object({
 	coHoiY: z.boolean(),

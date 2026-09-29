@@ -17,12 +17,15 @@ import {
 	type ChuDeTho,
 	chieuChuDeChoNguoiXem,
 	chieuYChoNguoiXem,
+	chieuYCuaToi,
 	docBanTruoc,
 	doPhu,
 	ketQuaBanTruoc,
+	ketQuaCongBo,
 	lyDoChuaCongBo,
 	type MaThieu,
 	tenYLa,
+	tinhTrangCongBo,
 	type YTho,
 } from "../src/okr/hoi-y";
 
@@ -1123,5 +1126,202 @@ describe("ten-y-la", () => {
 				true,
 			);
 		}
+	});
+});
+
+describe("tinh-trang-cong-bo", () => {
+	const chuDe = (id: string, ketLuan: string | null) => ({
+		id,
+		loai: "chu-de" as const,
+		ten: `Chủ đề ${id}`,
+		soY: 1,
+		ketLuan,
+		lyDo: "Lý do đủ dài để qua",
+		cauMucTieu: "Tăng doanh thu",
+		noiBanTruoc: "moi",
+	});
+	const vao = {
+		ban: { boQua: false },
+		yChuaGom: 0,
+		chuDe: [chuDe("c1", "chon"), chuDe("c2", "chon"), chuDe("c3", "de-sau")],
+		soMucTieuHienCo: 4,
+		objectiveCap: 5,
+		capMode: "chan" as const,
+	};
+
+	test("có bản viết trước: coBanTruoc đúng, tổng cấp OneHub sau công bố = hiện có + số chủ đề chọn", () => {
+		const tt = tinhTrangCongBo(vao);
+		expect({
+			coBanTruoc: tt.coBanTruoc,
+			boQua: tt.boQua,
+			tongOneHubSau: tt.tongOneHubSau,
+		}).toEqual({ coBanTruoc: true, boQua: false, tongOneHubSau: 6 });
+		expect(lyDoChuaCongBo(tt)).toEqual([{ ma: "vuot-tran", chuDeId: null }]);
+	});
+
+	test("khai không viết trước: không phải chưa niêm phong", () => {
+		const tt = tinhTrangCongBo({ ...vao, ban: { boQua: true } });
+		expect({ coBanTruoc: tt.coBanTruoc, boQua: tt.boQua }).toEqual({
+			coBanTruoc: false,
+			boQua: true,
+		});
+		expect(lyDoChuaCongBo(tt).map((l) => l.ma)).not.toContain(
+			"chua-niem-phong",
+		);
+	});
+
+	test("không có hàng viết trước: chưa niêm phong", () => {
+		expect(
+			lyDoChuaCongBo(tinhTrangCongBo({ ...vao, ban: null })).map((l) => l.ma),
+		).toContain("chua-niem-phong");
+	});
+});
+
+describe("ket-qua-cong-bo", () => {
+	const chu = (
+		id: string,
+		viTri: number,
+		rieng: Partial<ChuDeTho> = {},
+	): ChuDeTho => ({
+		id,
+		loai: "chu-de",
+		ten: `Chủ đề ${id}`,
+		ketLuan: "chon",
+		lyDo: "Lý do đủ dài",
+		cauMucTieu: `Câu ${id}`,
+		noiBanTruoc: "moi",
+		objectiveId: `mt-${id}`,
+		viTri,
+		...rieng,
+	});
+	const ban = { cau: ["Câu c2", "Câu khác"], boQua: false, vietBoi: "Phan P" };
+
+	test("chưa công bố thì không có kết quả, kể cả người chọn", () => {
+		for (const t of ["dang-mo", "dang-gom"] as const)
+			expect(ketQuaCongBo(ban, [chu("c1", 0)], t)).toBeNull();
+	});
+
+	test("không có bản viết trước để đọc thì không có kết quả", () => {
+		expect(ketQuaCongBo(null, [chu("c1", 0)], "da-cong-bo")).toBeNull();
+	});
+
+	test("chỉ chủ đề chọn, xếp theo viTri, kèm vietBoi và mục tiêu; giữ-đổi-thêm-bỏ từ ketQuaBanTruoc", () => {
+		const r = ketQuaCongBo(
+			ban,
+			[
+				chu("c3", 2, { noiBanTruoc: "moi" }),
+				chu("c9", 5, { ketLuan: "de-sau", objectiveId: null }),
+				chu("c2", 1, { noiBanTruoc: "cau-1", cauMucTieu: "câu  C2 " }),
+			],
+			"da-cong-bo",
+		);
+		expect(r).toEqual({
+			cau: ["giu", "bo"],
+			doi: 0,
+			them: 1,
+			boQua: false,
+			vietBoi: "Phan P",
+			chon: [
+				{
+					chuDeId: "c2",
+					ten: "Chủ đề c2",
+					cauMucTieu: "câu  C2 ",
+					noiBanTruoc: "cau-1",
+					objectiveId: "mt-c2",
+				},
+				{
+					chuDeId: "c3",
+					ten: "Chủ đề c3",
+					cauMucTieu: "Câu c3",
+					noiBanTruoc: "moi",
+					objectiveId: "mt-c3",
+				},
+			],
+		});
+	});
+
+	test("khai không viết trước: chủ đề chọn chưa khai nối được tính là mới", () => {
+		const r = ketQuaCongBo(
+			{ cau: [], boQua: true, vietBoi: "Phan P" },
+			[
+				chu("c1", 0, { noiBanTruoc: null }),
+				chu("c2", 1, { noiBanTruoc: null }),
+			],
+			"da-cong-bo",
+		);
+		expect(r?.cau).toEqual([]);
+		expect(r?.them).toBe(2);
+		expect(r?.boQua).toBe(true);
+		expect(r?.chon.map((c) => c.noiBanTruoc)).toEqual(["moi", "moi"]);
+	});
+});
+
+describe("chieu-y-cua-toi", () => {
+	const y = (id: string, chuDeId: string | null, ganPhut: number | null) => ({
+		id,
+		noiDung: `ý ${id}`,
+		viSao: "",
+		doBangGi: "",
+		chuDeId,
+		createdAt: luc(1),
+		ganLuc: ganPhut === null ? null : luc(ganPhut),
+	});
+	const chuDe: ChuDeTho[] = [
+		{
+			id: "c1",
+			loai: "chu-de",
+			ten: "Giao lạnh",
+			ketLuan: "chon",
+			lyDo: "Đúng hướng",
+			cauMucTieu: "Giao lạnh có lãi",
+			noiBanTruoc: "moi",
+			objectiveId: "mt1",
+			viTri: 0,
+		},
+	];
+	const ra = (t: TrangThaiHoiY) =>
+		chieuYCuaToi([y("y1", "c1", 5), y("y2", null, null)], chuDe, {
+			trangThai: t,
+			congBoLuc: t === "da-cong-bo" ? luc(9) : null,
+		});
+
+	test("trước công bố: chủ đề, kết luận, lý do, mục tiêu và mốc vào chủ đề, mốc kết luận đều null", () => {
+		for (const t of ["dang-mo", "dang-gom"] as const)
+			expect(
+				ra(t).map((x) => [
+					x.chuDe,
+					x.ketLuan,
+					x.lyDo,
+					x.objectiveId,
+					x.hanhTrinh.vaoChuDeLuc,
+					x.hanhTrinh.ketLuanLuc,
+					x.hanhTrinh.gopLuc,
+				]),
+			).toEqual([
+				[null, null, null, null, null, null, luc(1).toISOString()],
+				[null, null, null, null, null, null, luc(1).toISOString()],
+			]);
+	});
+
+	test("sau công bố: ý trong chủ đề có đủ hành trình; ý không có chủ đề vẫn null", () => {
+		const [a, b] = ra("da-cong-bo");
+		expect(a).toEqual({
+			id: "y1",
+			noiDung: "ý y1",
+			viSao: "",
+			doBangGi: "",
+			createdAt: luc(1).toISOString(),
+			chuDe: { id: "c1", ten: "Giao lạnh" },
+			ketLuan: "chon",
+			lyDo: "Đúng hướng",
+			objectiveId: "mt1",
+			hanhTrinh: {
+				gopLuc: luc(1).toISOString(),
+				vaoChuDeLuc: luc(5).toISOString(),
+				ketLuanLuc: luc(9).toISOString(),
+			},
+		});
+		expect(b?.chuDe).toBeNull();
+		expect(b?.hanhTrinh.ketLuanLuc).toBeNull();
 	});
 });

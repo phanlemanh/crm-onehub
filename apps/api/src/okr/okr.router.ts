@@ -13,6 +13,7 @@ import {
 	dongYInput,
 	ganYInput,
 	gopYInput,
+	hoiYIdInput,
 	ketLuanInput,
 	moHoiYInput,
 	niemPhongInput,
@@ -120,6 +121,8 @@ import {
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
 import {
+	congBoOutput,
+	hieuViSaoOutput,
 	hoiYDocOutput,
 	hoiYGhiOutput,
 	hoiYNhanOutput,
@@ -502,6 +505,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof ketLuanInput>,
 	) {
 		return this.hoiYDv.ketLuanChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hoiYIdInput,
+		output: congBoOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/cong-bo", TAG),
+	})
+	congBo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiYIdInput>,
+	) {
+		return this.hoiYDv.congBo(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hoiYIdInput,
+		output: hieuViSaoOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/hieu-vi-sao", TAG),
+	})
+	hieuViSao(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiYIdInput>,
+	) {
+		return this.hoiYDv.hieuViSao(ctx.user.id, input);
 	}
 
 	@Query({

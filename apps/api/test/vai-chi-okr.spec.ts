@@ -28,6 +28,7 @@ import {
 	dongYInput,
 	ganYInput,
 	gopYInput,
+	hoiYIdInput,
 	ketLuanInput,
 	moHoiYInput,
 	niemPhongInput,
@@ -283,6 +284,8 @@ const DAU_VAO_HOP_LE = {
 		cauMucTieu: "Giao lạnh có lãi ở ba tỉnh",
 		noiBanTruoc: "cau-1",
 	},
+	"okr.congBo": { hoiYId: "khong-co" },
+	"okr.hieuViSao": { hoiYId: "khong-co" },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -330,6 +333,8 @@ const THU_TUC_HOI_Y = {
 	"okr.goChuDe": chuDeIdInput,
 	"okr.ganY": ganYInput,
 	"okr.ketLuanChuDe": ketLuanInput,
+	"okr.congBo": hoiYIdInput,
+	"okr.hieuViSao": hoiYIdInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

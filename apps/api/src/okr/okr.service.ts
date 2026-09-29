@@ -401,6 +401,13 @@ export class OkrService {
 				throw new BadRequestException(T.phaChiDiToi);
 			if (phaSau(phaCu) !== phase)
 				throw new BadRequestException(T.khep.phaTungBuoc);
+			if (phaCu === "lap-ke-hoach") {
+				const conHoiY = await tx.okrHoiY.count({
+					where: { cycleId: id, congBoLuc: null },
+				});
+				if (conHoiY > 0)
+					throw new BadRequestException(T.hoiY.conHoiYChuaCongBo(c.name));
+			}
 			if (phase === "cham-diem") {
 				if (ngay(new Date()) <= ngay(c.endsOn))
 					throw new BadRequestException(T.khep.chamTuNgaySau);
@@ -601,44 +608,59 @@ export class OkrService {
 	}
 
 	async createObjective(userId: string, input: MucTieuInput) {
+		await this.quyenOkr.assertSuaDonVi(userId, donViCua(input.unit));
+		return this.db.$transaction((tx) =>
+			this.taoMucTieuTrongTx(tx, userId, input),
+		);
+	}
+
+	async taoMucTieuTrongTx(
+		tx: Tx,
+		userId: string,
+		input: MucTieuInput,
+		vetThem: OkrVetSnapshot = {},
+	) {
 		const dv = donViCua(input.unit);
-		await this.quyenOkr.assertSuaDonVi(userId, dv);
-		return this.db.$transaction(async (tx) => {
-			await this.assertKyGhiDuoc(tx, input.cycleId);
-			if (dv.level === "ca-nhan" && !(await this.program(tx)).personalOn)
-				throw new BadRequestException(T.caNhanTat);
-			const thamGia = [...new Set(input.participantIds)];
-			await this.assertThanhVien(tx, [
-				input.ownerUserId,
-				...thamGia,
-				...(dv.personUserId ? [dv.personUserId] : []),
-			]);
-			const canhBao = await this.kiemTranMucTieu(tx, input.cycleId, dv, 1);
-			const viTri = await tx.okrObjective.count({
-				where: { cycleId: input.cycleId },
-			});
-			const mt = await tx.okrObjective.create({
-				data: {
-					cycleId: input.cycleId,
-					...dv,
-					ownerUserId: input.ownerUserId,
-					kind: input.kind,
-					title: input.title,
-					whyNow: input.whyNow,
-					position: viTri,
-					participants: { create: thamGia.map((u) => ({ userId: u })) },
-				},
-			});
-			await this.vet(
-				tx,
-				userId,
-				"tao",
-				{ objectiveId: mt.id, cycleId: mt.cycleId },
-				null,
-				{ title: mt.title, kind: mt.kind, level: mt.level, status: mt.status },
-			);
-			return { id: mt.id, canhBao };
+		await this.assertKyGhiDuoc(tx, input.cycleId);
+		if (dv.level === "ca-nhan" && !(await this.program(tx)).personalOn)
+			throw new BadRequestException(T.caNhanTat);
+		const thamGia = [...new Set(input.participantIds)];
+		await this.assertThanhVien(tx, [
+			input.ownerUserId,
+			...thamGia,
+			...(dv.personUserId ? [dv.personUserId] : []),
+		]);
+		const canhBao = await this.kiemTranMucTieu(tx, input.cycleId, dv, 1);
+		const viTri = await tx.okrObjective.count({
+			where: { cycleId: input.cycleId },
 		});
+		const mt = await tx.okrObjective.create({
+			data: {
+				cycleId: input.cycleId,
+				...dv,
+				ownerUserId: input.ownerUserId,
+				kind: input.kind,
+				title: input.title,
+				whyNow: input.whyNow,
+				position: viTri,
+				participants: { create: thamGia.map((u) => ({ userId: u })) },
+			},
+		});
+		await this.vet(
+			tx,
+			userId,
+			"tao",
+			{ objectiveId: mt.id, cycleId: mt.cycleId },
+			null,
+			{
+				title: mt.title,
+				kind: mt.kind,
+				level: mt.level,
+				status: mt.status,
+				...vetThem,
+			},
+		);
+		return { id: mt.id, canhBao };
 	}
 
 	async updateObjective(userId: string, input: MucTieuUpdate) {
