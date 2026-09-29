@@ -1,22 +1,22 @@
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: chờ phiên khác của cây này (crm_crm_do) dọn xong
-phien-do: kho crm_crm_do · app http://localhost:4556 · api http://localhost:4463
+phien-do: kho crm_crm_do · app http://localhost:4165 · api http://localhost:4521
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 -- API cua phien nay khong noi tac tu — mo phien do rieng co tac tu
--- phien do co tac tu: cay crm-tro-ly · tac tu cong 60898
-phien-do: kho crm_crm_tro_ly_do · app http://localhost:4413 · api http://localhost:4494
+-- phien do co tac tu: cay crm-tro-ly · tac tu cong 55776
+phien-do: kho crm_crm_tro_ly_do · app http://localhost:4710 · api http://localhost:4435
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 NAP okr:mau --moc 2026-09-29: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-29T05:00:00.000Z): 40 người, 3 bộ phận, 10 phòng ban, 3 chu kỳ, 37 mục tiêu, 81 KR, 420 lần cập nhật trong 296 phiên, 42 bản chụp số, 21 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu.
+GHI loai the cho sau nho gop y: viet lai true · cau hoi true · can chinh true
 DUNG E1 muc tieu: cot co the viet lai sau khi nho gop y (model that)
 ANH _acceptance/the-gop-y-okr/evidence/E1-1440-muc-tieu.png
 DUNG E1 muc tieu: hop data-size=assist
 DUNG E1 muc tieu: cot gop y 380 >= 360
 DUNG E1 muc tieu: cau moi 358 >= 320
-DUNG E1 muc tieu: cot form 364 >= khi chua co cot 345
+DUNG E1 muc tieu: cot form 364 >= khi chua co cot 348
 DUNG E1 muc tieu: scrollWidth 1440 == innerWidth 1440
 DUNG E1 kr: cot co the viet lai ten KR
 ANH _acceptance/the-gop-y-okr/evidence/E1-1440-kr.png
@@ -26,23 +26,23 @@ DUNG E1 kr: cau moi 358 >= 320
 DUNG E1 kr: cot form 364 >= khi chua co cot 345
 DUNG E1 kr: scrollWidth 1440 == innerWidth 1440
 DUNG E11 muc-tieu 390: cot mo lai voi the cho
-DUNG E11 muc-tieu 390: cot duoi form (top cot 102 >= bottom form 78)
-DUNG E11 muc-tieu 390: moi the trai het be ngang cot (325,325,325 / cot 325)
+DUNG E11 muc-tieu 390: cot duoi form (top cot 101 >= bottom form 77)
+DUNG E11 muc-tieu 390: moi the trai het be ngang cot (326,326,326,326 / cot 326)
 DUNG E11 muc-tieu 390: scrollWidth 390 == innerWidth 390
 ANH _acceptance/the-gop-y-okr/evidence/E11-390-muc-tieu.png
 DUNG E11 kr 390: cot mo lai voi the cho
-DUNG E11 kr 390: cot duoi form (top cot 433 >= bottom form 409)
-DUNG E11 kr 390: moi the trai het be ngang cot (325 / cot 325)
+DUNG E11 kr 390: cot duoi form (top cot 453 >= bottom form 429)
+DUNG E11 kr 390: moi the trai het be ngang cot (326 / cot 326)
 DUNG E11 kr 390: scrollWidth 390 == innerWidth 390
 ANH _acceptance/the-gop-y-okr/evidence/E11-390-kr.png
 DUNG E11 muc-tieu 1023: cot mo lai voi the cho
-DUNG E11 muc-tieu 1023: cot duoi form (top cot 161 >= bottom form 137)
-DUNG E11 muc-tieu 1023: moi the trai het be ngang cot (352,352,352 / cot 352)
+DUNG E11 muc-tieu 1023: cot duoi form (top cot 130 >= bottom form 106)
+DUNG E11 muc-tieu 1023: moi the trai het be ngang cot (351,351,351,351 / cot 351)
 DUNG E11 muc-tieu 1023: scrollWidth 1023 == innerWidth 1023
 ANH _acceptance/the-gop-y-okr/evidence/E11-1023-muc-tieu.png
 DUNG E11 kr 1023: cot mo lai voi the cho
-DUNG E11 kr 1023: cot duoi form (top cot 501 >= bottom form 477)
-DUNG E11 kr 1023: moi the trai het be ngang cot (351 / cot 351)
+DUNG E11 kr 1023: cot duoi form (top cot 533 >= bottom form 509)
+DUNG E11 kr 1023: moi the trai het be ngang cot (408 / cot 408)
 DUNG E11 kr 1023: scrollWidth 1023 == innerWidth 1023
 ANH _acceptance/the-gop-y-okr/evidence/E11-1023-kr.png
 DUNG E11 muc-tieu 1024: cot mo lai voi the cho
@@ -64,28 +64,34 @@ ANH _acceptance/the-gop-y-okr/evidence/E11-1440-kr.png
 DUNG E13: co dong viet lai Muc tieu cho nhan (title)
 DUNG E13 1440: cot co dong
 ANH _acceptance/the-gop-y-okr/evidence/E13-1440-co-dong.png
+DUNG E13 1440: co the can chinh de chup tron
+ANH _acceptance/the-gop-y-okr/evidence/E13-1440-can-chinh.png
 DUNG E13 390: cot co dong
 ANH _acceptance/the-gop-y-okr/evidence/E13-390-co-dong.png
-DUNG E13 390: co mot the cho khac de Bac (cmumpev3f0001x5tyevv4vvvp)
+DUNG E13 390: co the can chinh de chup tron
+ANH _acceptance/the-gop-y-okr/evidence/E13-390-can-chinh.png
+DUNG E13 390: co mot the cho khac de Bac (cmumputtc0001dztybs7wklex)
 DUNG E13 390 sau Bac: con dung mot hop thoai role=dialog (1)
 ANH _acceptance/the-gop-y-okr/evidence/E13-390-bac.png
-SAI E13 390: co cau hoi de Bo qua (khong)
+DUNG E13 390: co cau hoi de Bo qua (cmumputtc0002dztyr74qio7c)
+DUNG E13 390 sau Bo qua: con dung mot hop thoai role=dialog (1)
+ANH _acceptance/the-gop-y-okr/evidence/E13-390-bo-qua.png
 DUNG E13 1440 sau Sua: con dung mot hop thoai role=dialog (1)
 DUNG E13 1440 sau go: con dung mot hop thoai role=dialog (1)
 ANH _acceptance/the-gop-y-okr/evidence/E13-1440-dang-sua.png
 DUNG E13 1440 sau Nhan ban da sua: con dung mot hop thoai role=dialog (1)
 DUNG E13: okr.objective title doc lai bang chu da sua va khac cau truoc («Doanh thu quý 4 miền Bắc»)
 ANH _acceptance/the-gop-y-okr/evidence/E13-1440-da-nhan.png
-DUNG E13: OkrTrail co note tro-ly-okr:cmumpev3f0000x5ty0aptugtu (1 hang)
+DUNG E13: OkrTrail co note tro-ly-okr:cmumputtc0000dztyyn4gpfqh (1 hang)
 DUNG E13 tab Vet 1440 co «theo đề xuất của Trợ lý OKR»
 ANH _acceptance/the-gop-y-okr/evidence/E13-1440-vet.png
 DUNG E13 tab Vet 390 co «theo đề xuất của Trợ lý OKR»
 ANH _acceptance/the-gop-y-okr/evidence/E13-390-vet.png
-KET LUAN: 52 DUNG, 1 SAI — ma thoat 1
+KET LUAN: 56 DUNG, 0 SAI — ma thoat 0
 -- tiền đề làn đo: đã dọn contextDevApiKey
 -- tiền đề làn đo: đã dọn ảnh đại diện
-phien-do: xong — mã 1
+phien-do: xong — mã 0
 -- tiền đề làn đo: đã dọn contextDevApiKey
 -- tiền đề làn đo: đã dọn ảnh đại diện
-phien-do: xong — mã 1
-EXIT=1
+phien-do: xong — mã 0
+EXIT=0

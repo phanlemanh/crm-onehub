@@ -1,1 +1,1 @@
-E1 network: driver la puppeteer-core trong man-the-gop-y.mjs, khong co duong doc network/console -> n-a (driver)
+E1 network: driver la puppeteer-core trong man-the-gop-y.mjs, khong co duong doc network/console -> n-a (driver). Run 20:32 29/09.
