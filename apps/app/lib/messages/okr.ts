@@ -567,7 +567,7 @@ const en: OkrMessages = {
 		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
-		"hoi-y": "Ask for input",
+		"hoi-y": "Call for ideas",
 	},
 	nhanHoiYMoi: "New",
 	tieuDe: {
@@ -575,7 +575,7 @@ const en: OkrMessages = {
 		"cap-nhat-tuan": "My weekly update",
 		"theo-don-vi": "OKRs by unit",
 		"toan-canh": "OKR overview",
-		"hoi-y": "Input on objectives",
+		"hoi-y": "Call for ideas on objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -586,7 +586,7 @@ const en: OkrMessages = {
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
 		"hoi-y":
-			"The whole company gives input on next period's objectives before OKRs are set.",
+			"The whole company gives ideas for next period's objectives before OKRs are set.",
 	},
 	chuKy: "Cycle",
 	loaiChuKy: { nam: "Year", quy: "Quarter" },
@@ -824,11 +824,11 @@ const en: OkrMessages = {
 		"ghi-nhan": "Recognition",
 		"go-ghi-nhan": "Remove recognition",
 		"sua-mau": "Edit OKR template",
-		"mo-hoi-y": "Opened goal input",
-		"sua-hoi-y": "Edited goal input",
+		"mo-hoi-y": "Opened call for ideas",
+		"sua-hoi-y": "Edited call for ideas",
 		"doi-nguoi-chon": "Changed decider",
-		"niem-phong": "Sealed pre-commitment",
-		"cong-bo-hoi-y": "Published goal input",
+		"niem-phong": "Sealed what was written first",
+		"cong-bo-hoi-y": "Published call for ideas",
 	},
 	vet: {
 		cot: {
@@ -1089,13 +1089,12 @@ const en: OkrMessages = {
 			theoDoi: "New: {capNhat} updates, {binhLuan} comments",
 			theoDoiCapNhat: "New updates: {capNhat}",
 			theoDoiBinhLuan: "New comments: {binhLuan}",
-			hoiYGop: "Input on objectives is waiting for your ideas",
-			hoiYCongBo:
-				"Input on objectives is published — see where your ideas went",
+			hoiYGop: "The call for ideas on objectives is waiting for yours",
+			hoiYCongBo: "The call for ideas is published — see where your ideas went",
 		},
 		capNhatTuan: "Weekly update",
 		moMucTieu: "Open objective",
-		moHoiY: "Open Ask for input",
+		moHoiY: "Open the call for ideas",
 		rong: "Nothing in OKR needs you today",
 		loi: {
 			title: "Couldn't load your OKR to-dos",

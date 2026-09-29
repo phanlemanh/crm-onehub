@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReactNode, RefObject } from "react"
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 
 type ScrollspyProps = {
   children: ReactNode
@@ -17,6 +17,32 @@ type ScrollspyProps = {
   throttleTime?: number
 }
 
+type VungCuon = { phanTu: HTMLElement; laTrang: boolean }
+
+function vungCuon(
+  targetRef: ScrollspyProps["targetRef"]
+): VungCuon | null {
+  const goc = targetRef?.current
+  if (!goc || goc === document) {
+    return { phanTu: document.documentElement, laTrang: true }
+  }
+  if (!(goc instanceof HTMLElement)) return null
+  const viewport = goc.querySelector('[data-slot="scroll-area-viewport"]')
+  return {
+    phanTu: viewport instanceof HTMLElement ? viewport : goc,
+    laTrang: false,
+  }
+}
+
+function doCuon(vung: VungCuon): number {
+  return vung.laTrang ? window.scrollY : vung.phanTu.scrollTop
+}
+
+function viTri(section: HTMLElement, vung: VungCuon): number {
+  const dinh = vung.laTrang ? 0 : vung.phanTu.getBoundingClientRect().top
+  return section.getBoundingClientRect().top - dinh + doCuon(vung)
+}
+
 export function Scrollspy({
   children,
   targetRef,
@@ -26,203 +52,121 @@ export function Scrollspy({
   smooth = true,
   dataAttribute = "scrollspy",
   history = true,
+  throttleTime = 0,
 }: ScrollspyProps) {
   const selfRef = useRef<HTMLDivElement | null>(null)
-  const anchorElementsRef = useRef<Element[] | null>(null)
-  const prevIdTracker = useRef<string | null>(null)
-
-  const setActiveSection = useCallback(
-    (sectionId: string | null, force = false) => {
-      if (!sectionId) return
-      anchorElementsRef.current?.forEach((item) => {
-        const id = item.getAttribute(`data-${dataAttribute}-anchor`)
-        if (id === sectionId) {
-          item.setAttribute("data-active", "true")
-        } else {
-          item.removeAttribute("data-active")
-        }
-      })
-      if (onUpdate) onUpdate(sectionId)
-      if (history && (force || prevIdTracker.current !== sectionId)) {
-        window.history.replaceState({}, "", `#${sectionId}`)
-      }
-      prevIdTracker.current = sectionId
-    },
-    [anchorElementsRef, dataAttribute, history, onUpdate]
-  )
-
-  const handleScroll = useCallback(() => {
-    if (!anchorElementsRef.current || anchorElementsRef.current.length === 0)
-      return
-
-    let scrollElement =
-      targetRef?.current === document
-        ? document.documentElement
-        : (targetRef?.current as HTMLElement)
-
-    if (!scrollElement) return
-
-    const viewport = scrollElement.querySelector(
-      '[data-slot="scroll-area-viewport"]'
-    )
-    if (viewport instanceof HTMLElement) {
-      scrollElement = viewport
-    }
-
-    const scrollTop =
-      scrollElement === document.documentElement
-        ? window.scrollY || document.documentElement.scrollTop
-        : scrollElement.scrollTop
-
-    let activeIdx = 0
-    let minDelta = Infinity
-
-    anchorElementsRef.current.forEach((anchor, idx) => {
-      const sectionId = anchor.getAttribute(`data-${dataAttribute}-anchor`)
-      const sectionElement = document.getElementById(sectionId!)
-      if (!sectionElement) return
-
-      let customOffset = offset
-      const dataOffset = anchor.getAttribute(`data-${dataAttribute}-offset`)
-      if (dataOffset) customOffset = parseInt(dataOffset, 10)
-
-      const delta = Math.abs(
-        sectionElement.offsetTop - customOffset - scrollTop
-      )
-
-      if (
-        sectionElement.offsetTop - customOffset <= scrollTop &&
-        delta < minDelta
-      ) {
-        minDelta = delta
-        activeIdx = idx
-      }
-    })
-
-    const scrollHeight = (scrollElement as HTMLElement).scrollHeight
-    const clientHeight = (scrollElement as HTMLElement).clientHeight
-
-    if (scrollTop + clientHeight >= scrollHeight - 2) {
-      activeIdx = anchorElementsRef.current.length - 1
-    }
-
-    const activeAnchor = anchorElementsRef.current[activeIdx]
-    const sectionId =
-      activeAnchor?.getAttribute(`data-${dataAttribute}-anchor`) || null
-
-    setActiveSection(sectionId)
-  }, [anchorElementsRef, targetRef, dataAttribute, offset, setActiveSection])
-
-  const scrollTo = useCallback(
-    (anchorElement: HTMLElement) => (event?: Event) => {
-      if (event) event.preventDefault()
-      const sectionId =
-        anchorElement
-          .getAttribute(`data-${dataAttribute}-anchor`)
-          ?.replace("#", "") || null
-      if (!sectionId) return
-      const sectionElement = document.getElementById(sectionId)
-      if (!sectionElement) return
-
-      let scrollToElement: HTMLElement | Window | null =
-        targetRef?.current === document
-          ? window
-          : (targetRef?.current as HTMLElement)
-
-      if (scrollToElement instanceof HTMLElement) {
-        const viewport = scrollToElement.querySelector(
-          '[data-slot="scroll-area-viewport"]'
-        )
-        if (viewport instanceof HTMLElement) {
-          scrollToElement = viewport
-        }
-      }
-
-      let customOffset = offset
-      const dataOffset = anchorElement.getAttribute(
-        `data-${dataAttribute}-offset`
-      )
-      if (dataOffset) {
-        customOffset = parseInt(dataOffset, 10)
-      }
-
-      const scrollTop = sectionElement.offsetTop - customOffset
-
-      if (scrollToElement && "scrollTo" in scrollToElement) {
-        scrollToElement.scrollTo({
-          top: scrollTop,
-          left: 0,
-          behavior: smooth ? "smooth" : "auto",
-        })
-      }
-      setActiveSection(sectionId, true)
-    },
-    [dataAttribute, offset, smooth, targetRef, setActiveSection]
-  )
-
-  const scrollToHashSection = useCallback(() => {
-    const hash = CSS.escape(window.location.hash.replace("#", ""))
-
-    if (hash) {
-      const targetElement = document.querySelector(
-        `[data-${dataAttribute}-anchor="${hash}"]`
-      ) as HTMLElement
-      if (targetElement) {
-        scrollTo(targetElement)()
-      }
-    }
-  }, [dataAttribute, scrollTo])
+  const onUpdateRef = useRef(onUpdate)
 
   useEffect(() => {
-    if (selfRef.current) {
-      anchorElementsRef.current = Array.from(
-        selfRef.current.querySelectorAll(`[data-${dataAttribute}-anchor]`)
-      )
+    onUpdateRef.current = onUpdate
+  })
+
+  useEffect(() => {
+    const self = selfRef.current
+    if (!self) return
+    const anchors = Array.from(
+      self.querySelectorAll<HTMLElement>(`[data-${dataAttribute}-anchor]`)
+    )
+    const idCua = (anchor: HTMLElement | undefined) =>
+      anchor
+        ?.getAttribute(`data-${dataAttribute}-anchor`)
+        ?.replace("#", "") || null
+    const lechCua = (anchor: HTMLElement) => {
+      const rieng = anchor.getAttribute(`data-${dataAttribute}-offset`)
+      return rieng ? Number.parseInt(rieng, 10) : offset
     }
 
-    const currentAnchors = anchorElementsRef.current
-    currentAnchors?.forEach((item) => {
-      item.addEventListener("click", scrollTo(item as HTMLElement))
-    })
-
-    const onScroll = (event: Event) => {
-      const scrollElement =
-        targetRef?.current === document
-          ? window
-          : (targetRef?.current as HTMLElement)
-      if (!scrollElement) return
-
-      if (
-        scrollElement === window ||
-        (scrollElement instanceof HTMLElement &&
-          scrollElement.contains(event.target as Node))
-      ) {
-        handleScroll()
+    let truoc: string | null = null
+    const datHienTai = (id: string | null, ep = false) => {
+      if (!id) return
+      for (const anchor of anchors) {
+        if (idCua(anchor) === id) anchor.setAttribute("data-active", "true")
+        else anchor.removeAttribute("data-active")
       }
+      if (truoc !== id) onUpdateRef.current?.(id)
+      if (history && (ep || truoc !== id)) {
+        window.history.replaceState(window.history.state, "", `#${id}`)
+      }
+      truoc = id
     }
 
-    window.addEventListener("scroll", onScroll, true)
+    const tinh = () => {
+      const vung = vungCuon(targetRef)
+      if (!vung || anchors.length === 0) return
+      const cuon = doCuon(vung)
+      let chon = 0
+      let gan = Number.POSITIVE_INFINITY
+      anchors.forEach((anchor, i) => {
+        const id = idCua(anchor)
+        const section = id ? document.getElementById(id) : null
+        if (!section) return
+        const dinh = viTri(section, vung) - lechCua(anchor)
+        const lech = Math.abs(dinh - cuon)
+        if (dinh <= cuon && lech < gan) {
+          gan = lech
+          chon = i
+        }
+      })
+      const { scrollHeight, clientHeight } = vung.phanTu
+      if (scrollHeight > clientHeight + 2 && cuon + clientHeight >= scrollHeight - 2) {
+        chon = anchors.length - 1
+      }
+      datHienTai(idCua(anchors[chon]))
+    }
 
-    const initialTimeout = setTimeout(() => {
-      scrollToHashSection()
-      handleScroll()
+    let lanCuoi = 0
+    let hen: ReturnType<typeof setTimeout> | undefined
+    const khiCuon = (event: Event) => {
+      const vung = vungCuon(targetRef)
+      if (!vung) return
+      const cuaVung =
+        vung.laTrang ||
+        (event.target instanceof Node && vung.phanTu.contains(event.target))
+      if (!cuaVung) return
+      const cho = throttleTime - (Date.now() - lanCuoi)
+      if (cho <= 0) {
+        lanCuoi = Date.now()
+        tinh()
+        return
+      }
+      if (hen !== undefined) return
+      hen = setTimeout(() => {
+        hen = undefined
+        lanCuoi = Date.now()
+        tinh()
+      }, cho)
+    }
+
+    const nhay = (anchor: HTMLElement) => (event?: Event) => {
+      event?.preventDefault()
+      const id = idCua(anchor)
+      const section = id ? document.getElementById(id) : null
+      const vung = vungCuon(targetRef)
+      if (!section || !vung) return
+      const dich = viTri(section, vung) - lechCua(anchor)
+      const noi: HTMLElement | Window = vung.laTrang ? window : vung.phanTu
+      noi.scrollTo({ top: dich, left: 0, behavior: smooth ? "smooth" : "auto" })
+      datHienTai(id, true)
+    }
+
+    const nghe = anchors.map((anchor) => [anchor, nhay(anchor)] as const)
+    for (const [anchor, xuLy] of nghe) anchor.addEventListener("click", xuLy)
+    window.addEventListener("scroll", khiCuon, true)
+
+    const dau = setTimeout(() => {
+      const hash = decodeURIComponent(window.location.hash.replace("#", ""))
+      const theoHash = hash ? nghe.find(([anchor]) => idCua(anchor) === hash) : undefined
+      if (theoHash) theoHash[1]()
+      else tinh()
     }, 100)
 
     return () => {
-      window.removeEventListener("scroll", onScroll, true)
-      currentAnchors?.forEach((item) => {
-        item.removeEventListener("click", scrollTo(item as HTMLElement))
-      })
-      clearTimeout(initialTimeout)
+      window.removeEventListener("scroll", khiCuon, true)
+      for (const [anchor, xuLy] of nghe) anchor.removeEventListener("click", xuLy)
+      clearTimeout(dau)
+      if (hen !== undefined) clearTimeout(hen)
     }
-  }, [
-    targetRef,
-    selfRef,
-    handleScroll,
-    dataAttribute,
-    scrollTo,
-    scrollToHashSection,
-  ])
+  }, [targetRef, dataAttribute, offset, smooth, history, throttleTime])
 
   return (
     <div data-slot="scrollspy" className={className} ref={selfRef}>
