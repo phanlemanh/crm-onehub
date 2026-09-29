@@ -147,6 +147,10 @@ describe("thay-trang", () => {
 					get: get.status === 200,
 					nhacToi: nhac.status === 200,
 				};
+				if (thay.list !== thay.get)
+					throw new Error(`lech list/get: ${ai} ${tt}`);
+				if (thay.list !== thay.nhacToi)
+					throw new Error(`lech list/nhacToi: ${ai} ${tt}`);
 				for (const diem of DIEM_VAO) {
 					if (thay[diem] !== mong) {
 						throw new Error(
@@ -155,10 +159,6 @@ describe("thay-trang", () => {
 					}
 					dem += 1;
 				}
-				if (thay.list !== thay.get)
-					throw new Error(`lech list/get: ${ai} ${tt}`);
-				if (thay.list !== thay.nhacToi)
-					throw new Error(`lech list/nhacToi: ${ai} ${tt}`);
 			}
 		}
 		expect(dem).toBe(AI.length * TRANG_THAI_THU.length * DIEM_VAO.length);
@@ -205,8 +205,8 @@ describe("thay-trang", () => {
 				throw new Error(
 					`khong thay khac khong ton tai: ${thuTuc} — ${tomTat(an)} / ${tomTat(vang)}`,
 				);
-			expect(an.status).toBe(404);
-			expect(an.loi).toBe(TAI_LIEU_API.thongDiep.khongCo);
+			if (an.status !== 404 || an.loi !== TAI_LIEU_API.thongDiep.khongCo)
+				throw new Error(`khong thay sai loi: ${thuTuc} — ${tomTat(an)}`);
 			expect((await hoi(thuTuc, { slug: SLUG["may-soan"] }, "chu")).status).toBe(
 				200,
 			);

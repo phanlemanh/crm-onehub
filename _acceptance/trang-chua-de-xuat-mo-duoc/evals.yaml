@@ -19,7 +19,7 @@ evals:
       mot khang dinh cho moi diem vao (list, get, nhacToi) = 108 khang dinh; so khang dinh dem duoc in ra
       va bang 108. Quan he: moi nguoi, tap slug list (loc trong 6 trang thu) == tap get HTTP 200 == tap
       nhacToi khong NOT_FOUND. CHIEU DO: ban sao (.acceptance-runs/) khoi phuc dieu kien thayTrang cu
-      trong get -> 'lech list/get: owner may-soan' (va cac o khac), ma 1.
+      trong get -> 'lech list/get: tao may-soan' (o dau tien theo thu tu AI cua tai-lieu-san), ma 1.
 
   - id: E2
     criterion: AC-2
@@ -36,7 +36,7 @@ evals:
       chung duong: phep do khong rong). Chieu nguoc: moi nguoi x moi trang (6 x 6 = 36 o) co
       get.choLanDau.nguon khac null -> nguon.id thuoc tap id cua taiLieuNguon.list cua chinh nguoi do; so
       o co nguon khac null in ra va > 0. CHIEU DO: (a) ban sao bo ve taoBoiId khoi dieuKienThay ->
-      'dong nguon dan toi 404: tao may-soan', ma 1; (b) ban sao tra nguon khong loc bang dieuKienThayNguon
+      'dong nguon dan toi 404: tao loi' (dong nguon moi nhat cua tao), ma 1; (b) ban sao tra nguon khong loc bang dieuKienThayNguon
       trong get, gieo them (bang db, chi o chieu do) mot nguon moi hon do 'admin' tai cho trang loi — 'tao' thay
       trang (nguoi tao) nhung khong thay nguon do -> 'nguon khong thay: tao loi', ma 1.
 
@@ -51,8 +51,8 @@ evals:
     expected: |
       'khac' goi get va nhacToi cho trang may dang soan va cho slug khong co: {status, loi} bang nhau tung
       cap, status 404, loi = TAI_LIEU_API.thongDiep.khongCo; doi chung duong: 'chu' goi cung trang -> 200.
-      list cua 'khac' khong co slug do. CHIEU DO: ban sao doi thong diep khong-thay thanh chu khac ->
-      'khong thay khac khong ton tai: get', ma 1.
+      list cua 'khac' khong co slug do. CHIEU DO: ban sao de get tra FORBIDDEN cho trang co ma khong duoc thay ->
+      'khong thay khac khong ton tai: taiLieu.get', ma 1.
 
   - id: E4
     criterion: AC-4
@@ -128,7 +128,7 @@ evals:
       - "apps/api/src/tai-lieu/**"
       - "packages/db/src/tai-lieu-quyen.ts"
       - "apps/api/test/tai-lieu-thay-trang.spec.ts"
-    expected: "Cung lan chay E1: o (owner, may dang soan) va (owner, can go tay) — list co slug VA get HTTP 200 VA choLanDau.dangCho la may-soan / go-tay: hieu ung may chu ma buoc bam dong cua E7u dua vao, tu nonce la slug gieo trong chinh lan chay. CHIEU DO: nhu E1 -> 'lech list/get: owner may-soan', ma 1."
+    expected: "Cung lan chay E1: o (owner, may dang soan) va (owner, can go tay) — list co slug VA get HTTP 200 VA choLanDau.dangCho la may-soan / go-tay: hieu ung may chu ma buoc bam dong cua E7u dua vao, tu nonce la slug gieo trong chinh lan chay. CHIEU DO: nhu E1 -> 'lech list/get: tao may-soan', ma 1."
 
   - id: E7u
     criterion: AC-7
