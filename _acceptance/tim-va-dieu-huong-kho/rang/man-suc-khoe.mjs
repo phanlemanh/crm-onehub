@@ -258,7 +258,12 @@ try {
 			const hep = await d.moTrang(nguoi.cookie, HEP, `/tai-lieu${sau.q}`);
 			await d.doi(
 				hep,
-				() => window.__tim("[data-bang-trang] [data-trang]").length > 0,
+				() => window.__tim("[data-the-trang] [data-trang]").length > 0,
+			);
+			const theHep = await hep.evaluate(() =>
+				window
+					.__tim("[data-the-trang] [data-trang]")
+					.map((e) => e.getAttribute("data-trang")),
 			);
 			const tranHep = await d.cuonNgang(hep);
 			const deHep = await deLenNhau(hep);
@@ -268,6 +273,8 @@ try {
 			if (tranHep.length > 0)
 				loi.push(`390 cuon ngang: ${tranHep.join(", ")}`);
 			if (deHep.length > 0) loi.push(`390: ${deHep.join(", ")}`);
+			if (JSON.stringify(theHep) !== JSON.stringify([l1]))
+				loi.push(`390 danh sach sau loc: ${theHep.join(", ")}`);
 			const q = new URLSearchParams(sau.q);
 			if (q.get("donVi") !== dvA.id) loi.push("URL khong co don vi");
 			if (q.get("chuTrang") !== nguoi.id) loi.push("URL khong co chu trang");
