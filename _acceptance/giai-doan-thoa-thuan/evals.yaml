@@ -316,7 +316,7 @@ evals:
       nam ngoai): 0 lan xuat hien cua
       7 id cu (danh sach rut tu GIAI_DOAN_GOC bang import, khong viet tay) va cua ten GIAI_DOAN_GOC. In so
       tep da quet (> 0, ghim duoi can 50 de chan quet rong).
-      CHIEU DO: ban sao chen 'stage === "CLOSED_WON"' vao dashboard.service.ts -> do voi thong diep ghim
+      CHIEU DO (da chay 2026-09-29): ban sao chen 'stage === "CLOSED_WON"' vao dashboard.service.ts -> do voi thong diep ghim
       "apps/api/src/dashboard/dashboard.service.ts: CLOSED_WON".
 
   - id: E18
@@ -329,8 +329,10 @@ evals:
     expected: |
       exit 0. design-gate --mode static tren moi tep .tsx duoi settings/giai-doan va cac tep components/crm
       vong nay cham; khong vi pham. Dem tep > 0.
-      CHIEU DO: ban sao them className="rounded-[7px]" vao trang -> do voi thong diep cua design-gate goi
-      ten tep.
+      CHIEU DO (da chay 2026-09-29): ban sao dat chu xam tren nen mau (bg-blue-600 text-gray-400) vao
+      the cua giai-doan-settings.tsx -> do voi thong diep ghim "HONG apps/app/app/(app)/[slug]/settings/giai-doan/
+      giai-doan-settings.tsx". GIOI HAN DA DO: cong tinh cua bo kit chi chan 5 luat P0 (tuong phan, xam tren nen
+      mau, tran chu, anh hong, chu sat mep); goc bo tu dat rounded-[7px] KHONG bi bat (da thu 2026-09-29).
 
   - id: E19
     criterion: AC-5
