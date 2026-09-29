@@ -19,11 +19,13 @@ import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet"
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
+import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { PROTO_CATALOG } from "./catalog";
 
 export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
+	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
 	"ban-mau-okr": BanMauOkrMau,
 	"canh-kr-okr": CanhKrOkrMau,
 	"cau-truc-to-chuc": CauTrucToChucMau,

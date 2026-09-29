@@ -1,0 +1,347 @@
+schema_version: 1
+slug: giai-doan-thoa-thuan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.gdtt_migration
+    paths:
+      - "packages/db/prisma/migrations/20261006010000_giai_doan_thoa_thuan/**"
+      - "packages/db/prisma/schema.prisma"
+      - "_acceptance/giai-doan-thoa-thuan/rang/migration-du-lieu.mjs"
+    expected: |
+      exit 0. Rang tao kho dung-mot-lan crm_<id>_gdtt, chep thu muc migrations TRU migration cua vong
+      nay vao thu muc tam, migrate deploy toi 20261004010000, gieo bang SQL: 7 thoa thuan (moi giai doan
+      cu mot, trong do UNQUALIFIED_TO_BUY va CLOSED_WON da luu tru, CLOSED_LOST co closedReason va
+      closedAt) + 3 dong Activity STAGE_CHANGE meta {from,to}. Roi ap RIENG migration cua vong nay tu tep
+      that (khong chep noi dung). Ma tran viet truoc: 7 giai doan x [id, label, kind, position] = 28
+      khang dinh, gia tri ky vong rut tu apps/app/lib/deal-stage.ts O MOC TRUOC VONG (git show
+      <merge-base>:...), khong viet tay; + 7 thoa thuan x [stageId == stage cu, closedAt khong doi,
+      closedReason khong doi] = 21; + 3 dong meta so tung byte = 3; + kieu enum "DealStage" khong con
+      trong pg_type = 1. Tong 53 (hang KY_MONG trong tep; lech -> ma 2). Xoa kho o finally.
+      CHIEU DO (chay o S3, ban sao migration): (1) ban sao gan CLOSED_LOST vao OPEN -> do voi thong diep
+      ghim "CLOSED_LOST: kind OPEN != LOST"; (2) ban sao bo buoc DROP TYPE -> do "enum DealStage con song".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_tao
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "apps/api/src/deals/**"
+      - "packages/db/src/giai-doan.ts"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Tich hop tren DB kiem cua bun run test, goi qua caller tRPC that voi phien admin. Voi MOI loai
+      (OPEN, WON, LOST): create {label, kind} -> giaiDoan.list co no o vi tri cuoi cua loai do;
+      deals.board co mot cot id do dung chi so (cot sap theo kind roi position); deals.setStage mot thoa
+      thuan vao no thanh cong (LOST kem ly do). Ma tran 3 loai x [vi tri trong list, chi so cot board,
+      setStage thanh cong] = 9 khang dinh.
+      CHIEU DO: ban sao create gan position = 0 -> do voi thong diep ghim "OPEN: giai doan moi o vi tri 0
+      != cuoi".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.gdtt_man_menu
+    paths:
+      - "apps/app/components/crm/stage-change.tsx"
+      - "apps/app/components/crm/stage-stepper.tsx"
+      - "apps/app/lib/deal-stage.ts"
+      - "apps/app/test/giai-doan-menu.dom.tsx"
+    expected: |
+      jsdom, tRPC gia tra giaiDoan.list gom 5 giai doan tu dat ten (khong trung ten cu). Menu giai doan
+      hien DUNG 5 muc theo thu tu list (so theo chi so, nhan lay tu fixture list, khong viet tay); thanh
+      tien trinh hien dung cac giai doan OPEN theo thu tu. Doi chung duong cung tep: list 7 giai doan goc
+      -> 7 muc.
+      CHIEU DO: ban sao menu doc hang cu DEAL_STAGE_OPTIONS -> do voi thong diep ghim "muc 1: Demo booked
+      != <nhan fixture 1>".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_doi_ten
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "apps/api/src/activities/**"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Chuyen thoa thuan A sang giai doan G (sinh dong STAGE_CHANGE), roi rename G -> "Da ky hop dong".
+      Khang dinh: giaiDoan.list, deals.board (nhan cot), activities.timeline cua A (stageChange.to.label)
+      deu tra nhan moi; dong lich su tao TRUOC khi doi ten van tra nhan moi. 3 khang dinh.
+      CHIEU DO: ban sao timeline tra thang meta.to (id) -> do voi thong diep ghim "timeline: to.label
+      QUALIFIED_TO_BUY != Da ky hop dong".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_sap_xep
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Ca xanh: reorder OPEN dao nguoc -> giaiDoan.list va thu tu cot OPEN cua deals.board dao nguoc (so
+      tung chi so). Ma tran do viet truoc 5 ca tren cung fixture: thieu mot id, thua mot id la, trung
+      mot id, lan mot id WON, gui kind WON voi id OPEN -> moi ca BAD_REQUEST va list khong doi (so ca
+      mang id). 1 + 5 = 6 ca; dem ca chay = 6.
+      CHIEU DO: ban sao bo kiem "du va dung" -> do voi thong diep ghim "thieu mot id: reorder duoc chap
+      nhan".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_xoa_trong
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/src/activities/**"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Giai doan G co lich su (thoa thuan A tung o G roi chuyen di), hien trong. archive G -> khong con
+      trong giaiDoan.list, khong la cot cua deals.board; deals.create {stageId: G} va deals.setStage vao
+      G deu BAD_REQUEST; deals.bulkStage 2 thoa thuan vao G BAD_REQUEST va stageId ca hai khong doi;
+      activities.timeline cua A van tra from.label = nhan cua G. 6 khang dinh.
+      Doi chung duong cung fixture: truoc archive, setStage vao G thanh cong.
+      CHIEU DO: ban sao setStage bo kiem archivedAt -> do voi thong diep ghim "setStage vao giai doan da
+      xoa duoc chap nhan".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_xoa_chuyen
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Fixture: giai doan LOST nguon S co 3 thoa thuan (1 da luu tru), moi cai co closedAt va closedReason;
+      giai doan LOST T chi co 1 thoa thuan da luu tru. So dem: giaiDoan.list tra count S = 3, T = 1.
+      Ma tran do viet truoc 4 ca: khong moveTo, moveTo loai OPEN, moveTo = S, moveTo la giai doan da xoa
+      -> BAD_REQUEST, va snapshot (stageId, closedAt, closedReason, so Activity, archivedAt cua S) cua ca
+      3 thoa thuan KHONG doi (so tung truong). Ca xanh: moveTo = LOST dich D -> ca 3 o D; moi thoa thuan
+      dung MOT Activity STAGE_CHANGE moi {from S, to D}; stageChangedAt moi hon; closedAt, closedReason
+      khong doi; S co archivedAt; su kien deal.stage.changed (doc qua duong phat su kien CRM cua deals) dem = 3, so
+      tung cap {dealId, from S, to D}. Ca nguyen tu: tiem loi o thoa thuan thu 3 (qua tham so kiem cua
+      service) -> khong thoa thuan nao doi, S chua xoa, su kien dem = 0.
+      CHIEU DO: (1) ban sao chuyen tung thoa thuan ngoai transaction -> do voi thong diep ghim "nguyen tu:
+      2 thoa thuan da doi sau loi"; (2) ban sao dem bo thoa thuan da luu tru -> "S: count 2 != 3"; (3) ban sao chuyen
+      bang updateMany -> "su kien 0 != 3".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_bat_bien
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "packages/db/src/giai-doan.ts"
+      - "packages/validation/src/giai-doan.ts"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Ma tran viet truoc 8 ca do, moi ca: loi co ma va thong diep ghim (tu GIAI_DOAN / thong diep cua
+      module, khong viet tay) + so giai doan song khong doi: xoa giai doan OPEN cuoi cung (sau khi xoa 3
+      cai kia), WON cuoi cung, LOST cuoi cung; nhan "   " ; nhan 41 ky tu; nhan trung khac hoa thuong
+      ("closed WON"); nhan trung sau khi cat khoang trang; them cai thu 21. Doi chung duong cung fixture:
+      nhan 40 ky tu duoc nhan; them cai thu 20 duoc nhan. Loai bat bien: danh sach mutation giaiDoan.* TRU create
+      rut tu generated/server.ts (khong viet tay); voi MOI mutation gui payload hop le kem them truong kind khac loai
+      cua giai doan roi doc thang CSDL: kind khong doi (so khang dinh = so mutation; ca kind lech cua reorder de cho
+      E5). 8 + 2 + so mutation ca.
+      CHIEU DO: (1) ban sao so nhan phan biet hoa thuong -> do voi thong diep ghim "nhan trung khac hoa
+      thuong duoc chap nhan"; (2) ban sao rename trai input vao data -> do voi thong diep ghim "rename: kind OPEN -> WON".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_quyen
+    paths:
+      - "apps/api/src/giai-doan/**"
+      - "apps/api/test/giai-doan-quyen.spec.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      Ma tran viet truoc: 4 thu tuc ghi (create, rename, reorder, archive) x 2 vai (member, okr) = 8 ca
+      FORBIDDEN, danh sach thu tuc ghi rut tu generated/server.ts (moi mutation giaiDoan.*), khong viet
+      tay — them mutation moi ma khong vao ma tran thi do. + giaiDoan.list voi vai okr = FORBIDDEN
+      KHONG_TRONG_PHAM_VI; voi member = thanh cong. Doi chung duong: 4 thu tuc x admin, owner thanh cong.
+      vai-chi-okr.spec.ts xanh khong sua danh sach.
+      CHIEU DO: ban sao bo yeuCauQuanTri o rename -> do voi thong diep ghim "member: giaiDoan.rename
+      khong bi tu choi".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.gdtt_man_quyen
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
+      - "apps/app/test/giai-doan-cai-dat.dom.tsx"
+    expected: |
+      jsdom, vai member: moi nut Them, tay cam keo, menu «…» deu disabled/aria-disabled (dem = so giai doan
+      + 3 nut Them), dong ly do hien dung chuoi trong messages. Doi chung duong: vai admin cung fixture ->
+      khong cai nao khoa.
+      CHIEU DO: ban sao an nut Them voi member thay vi khoa -> do voi thong diep ghim "member: nut Them
+      bien mat thay vi khoa".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_theo_loai
+    paths:
+      - "apps/api/src/deals/**"
+      - "packages/db/src/giai-doan.ts"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      Tao giai doan moi cho ca ba loai (ten khong trung ten cu). Ma tran viet truoc: chuyen OPEN->WON moi
+      (closedAt co), OPEN->LOST moi khong ly do (BAD_REQUEST), OPEN->LOST moi co ly do (closedAt, ly do
+      co), WON moi->OPEN moi (closedAt, closedReason null), LOST moi->OPEN goc (null); deals.create khong
+      stageId -> giai doan OPEN position nho nhat; sau khi reorder OPEN -> giai doan OPEN dau moi; deals.bulkStage OPEN->LOST moi khong ly do (BAD_REQUEST, stageId
+      khong doi); deals.bulkStage OPEN->LOST moi co ly do (closedAt, ly do co tren moi thoa thuan). 9 ca.
+      CHIEU DO: ban sao laThua so id "CLOSED_LOST" thay vi kind -> do voi thong diep ghim "LOST moi khong
+      ly do duoc chap nhan".
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_tong_quan
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "apps/api/test/giai-doan-bao-cao.spec.ts"
+    expected: |
+      Fixture trong khung RATE_WINDOW_DAYS: 3 chot o CLOSED_WON, 2 o WON moi, 1 o CLOSED_LOST, 2 o
+      UNQUALIFIED_TO_BUY, 1 o LOST moi; OPEN: 2 giai doan goc + 1 OPEN moi co thoa thuan va baseAmount.
+      Gia tri ky vong tinh bang ham doc lap trong bai kiem tu fixture (khong so cung): wins 5, losses 4,
+      winRate 5/9; pipeline.stages = moi OPEN song theo position, dem va valueCents tung cai.
+      CHIEU DO: ban sao chi dem CLOSED_LOST vao losses -> do voi thong diep ghim "winRate 5/6 != 5/9".
+
+  - id: E13
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_okr_telemetry
+    paths:
+      - "packages/db/src/okr-chi-so.ts"
+      - "apps/api/src/telemetry/**"
+      - "apps/api/test/giai-doan-bao-cao.spec.ts"
+    expected: |
+      Hai thoa thuan chot trong ky: mot o CLOSED_WON, mot o WON moi -> chi so thoa-thuan-chot-duoc = 2.
+      Doi chung am cung fixture: thoa thuan o LOST moi khong duoc dem. Telemetry rollup: deals_by_stage co
+      khoa bang id tung giai doan co thoa thuan, gia tri bang so dem; chuoi JSON cua ca payload KHONG chua
+      nhan nao cua fixture (quet tung nhan).
+      CHIEU DO: ban sao okr-chi-so giu stage "CLOSED_WON" -> do voi thong diep ghim "chot-duoc 1 != 2".
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gdtt_agent
+    paths:
+      - "apps/agent/agent/lib/lookup.ts"
+      - "apps/agent/agent/lib/accounts.ts"
+      - "apps/agent/agent/lib/preamble.ts"
+      - "apps/agent/test/giai-doan-agent.integration.spec.ts"
+    expected: |
+      Tich hop DB kiem. Giai doan moi cho ca ba loai, mot thoa thuan moi cai + thoa thuan o giai doan goc.
+      Ma tran viet truoc: 3 trang thai (open, won, lost) x tap id thoa thuan tra ve = tap ky vong tinh tu
+      kind cua fixture. read_deal_history va preamble cua thoa thuan o giai doan moi: chuoi ra chua nhan,
+      khong chua id cua giai doan. 3 + 2 = 5 khang dinh.
+      CHIEU DO: ban sao lookup won = [id "CLOSED_WON"] -> do voi thong diep ghim "won: thieu thoa thuan o
+      giai doan WON moi".
+
+  - id: E15
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gdtt_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/lib/messages/**"
+      - "_acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs"
+    steps:
+      - "Canh cay (rang/canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
+      - "Dang nhap admin bang dev:session; gieo 3 thoa thuan o mot giai doan OPEN tam tao cho luot do"
+      - "Mo {APP_URL}/<slug>/settings/giai-doan o 320, 375, 768, 1024, 1440, lang vi va en -> chup evidence/cai-dat-<kho>-<tieng>.png"
+      - "Moi o: scrollWidth <= innerWidth; ba the (Dang mo, Chot duoc, Khong thanh) co mat; moi nhan giai doan mang translate=no"
+      - "O 1440/vi: bam Them o the Dang mo, go ten, Luu -> hang moi cuoi the; mo /<slug>/deals?view=board -> co cot mang nhan do -> chup evidence/them-thay-o-bang-cot.png"
+      - "O 1440/vi: menu … cua giai doan tam co 3 thoa thuan -> Xoa -> hop thoai hien 'Con 3' -> chon dich -> Chuyen va xoa -> deals.byId ca 3 tra stageId dich -> chup evidence/xoa-chuyen.png"
+      - "Chan mang toi giaiDoan.list -> trang hien loi va nut Thu lai -> chup evidence/loi-tai.png"
+    expected: |
+      exit 0. Chrome that tren may chu cua cay dang xet (phien do rieng cua tien-de). Ma tran viet truoc
+      5 kho x 2 tieng = 10 o x [khong tran, 3 the, moi nhan translate=no] = 30 khang dinh; + them-thay-o-
+      bang-cot 2; + xoa-chuyen 3 (dem trong hop thoai, 3 thoa thuan o dich, giai doan nguon bien mat);
+      + loi-tai 1. Tong 36 (hang KY_MONG; lech -> ma 2). Khong loi hydrate trong console moi o.
+      CHIEU DO (chay o S3, ban sao cung may chu cua cay): (1) hang Item dat whitespace-nowrap -> "tran
+      trang 320/vi"; (2) bo translate=no -> "nhan khong mang translate=no 1440/en".
+
+  - id: E16
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.gdtt_man_trang_thai
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/test/giai-doan-cai-dat.dom.tsx"
+    expected: |
+      jsdom. Ma tran viet truoc: dang tai -> ba khung xuong, khong 'return null'; loi -> Empty + nut Thu
+      lai, bam thi list goi lai (dem so lan goi 2); co du lieu -> ba the dung thu tu loai, dem hang moi the
+      bang fixture; giai doan duy nhat cua loai -> muc Xoa khoa; dat tran -> 3 nut Them khoa; giai doan co count > 0 (fixture: toan thoa thuan da luu tru) -> bam Xoa mo hop
+      thoai chuyen co chu "Con N", khong mo hop hoi lai. Thanh ben
+      Cai dat co muc Giai doan thoa thuan ngay sau Truong trong nhom khongGian. 7 ca.
+      CHIEU DO: ban sao loading tra null -> do voi thong diep ghim "dang tai: khong co khung xuong".
+
+  - id: E17
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.gdtt_khong_re_theo_ten
+    paths:
+      - "apps/api/src/**"
+      - "apps/agent/agent/**"
+      - "apps/app/app/**"
+      - "apps/app/components/**"
+      - "apps/app/lib/**"
+      - "packages/db/src/**"
+      - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
+    expected: |
+      exit 0. Quet git ls-files trong cac thu muc tren (tru packages/db/src/generated/**, packages/db/src/
+      giai-doan.ts noi khai GIAI_DOAN_GOC, apps/app/app/proto/** la ban mau du lieu gia, va packages/db/prisma/seed.ts
+      nam ngoai): 0 lan xuat hien cua
+      7 id cu (danh sach rut tu GIAI_DOAN_GOC bang import, khong viet tay) va cua ten GIAI_DOAN_GOC. In so
+      tep da quet (> 0, ghim duoi can 50 de chan quet rong).
+      CHIEU DO: ban sao chen 'stage === "CLOSED_WON"' vao dashboard.service.ts -> do voi thong diep ghim
+      "apps/api/src/dashboard/dashboard.service.ts: CLOSED_WON".
+
+  - id: E18
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.gdtt_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
+      - "apps/app/components/crm/**"
+    expected: |
+      exit 0. design-gate --mode static tren moi tep .tsx duoi settings/giai-doan va cac tep components/crm
+      vong nay cham; khong vi pham. Dem tep > 0.
+      CHIEU DO: ban sao them className="rounded-[7px]" vao trang -> do voi thong diep cua design-gate goi
+      ten tep.
+
+  - id: E19
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.gdtt_man_timeline
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/test/giai-doan-timeline.dom.tsx"
+    expected: |
+      jsdom, tRPC gia. activities.timeline gia co hai dong stageChange: mot dong cua giai doan da xoa G (vang khoi
+      giaiDoan.list gia), mot dong cua giai doan song da doi ten. Khang dinh: chu hien thi cua dong G chua nhan G va
+      KHONG chua id cua G; dong kia chua nhan moi. Ca timeline dung stageChange lay tu fixture cua dau ra API that
+      (hinh dang rut tu kieu z.infer cua activities.timeline, khong viet tay khuon). 2 dong x [co nhan, khong id] = 4.
+      CHIEU DO: ban sao component tra nhan trong giaiDoan.list -> do voi thong diep ghim "timeline: nhan G != <id>".
