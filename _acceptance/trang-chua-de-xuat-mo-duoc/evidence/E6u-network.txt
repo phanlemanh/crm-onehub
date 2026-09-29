@@ -1,0 +1,1 @@
+E6u: driver = man-trang-cho.mjs (headless browser in-script, no network reader exposed). networkObserved = n-a (driver). Phien do tu dung/tu tat ('phien-do: xong').

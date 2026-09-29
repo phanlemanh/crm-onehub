@@ -35,10 +35,12 @@ evals:
       taiLieu.tim voi tu chi co trong trang da duyet -> get HTTP 200; so dong nguon cua 'tao' >= 3 (doi
       chung duong: phep do khong rong). Chieu nguoc: moi nguoi x moi trang (6 x 6 = 36 o) co
       get.choLanDau.nguon khac null -> nguon.id thuoc tap id cua taiLieuNguon.list cua chinh nguoi do; so
-      o co nguon khac null in ra va > 0. CHIEU DO: (a) ban sao bo ve taoBoiId khoi dieuKienThay ->
-      'dong nguon dan toi 404: tao loi' (dong nguon moi nhat cua tao), ma 1; (b) ban sao tra nguon khong loc bang dieuKienThayNguon
-      trong get, gieo them (bang db, chi o chieu do) mot nguon moi hon do 'admin' tai cho trang loi — 'tao' thay
-      trang (nguoi tao) nhung khong thay nguon do -> 'nguon khong thay: tao loi', ma 1.
+      o co nguon khac null in ra va > 0. O thay-trang-khong-thay-nguon (luot xanh): trang do 'tao' tai
+      (LOI) them mot nguon moi hon CAN_GO_TAY do 'admin' tai (gieo db) — 'tao' thay trang (nguoi tao) nhung
+      khong thay nguon: get cua tao tra dangCho go-tay va nguon null; chu, admin, owner nhan nguon.id cua
+      admin (doi chung duong). CHIEU DO: (a) ban sao bo ve taoBoiId khoi dieuKienThay ->
+      'dong nguon dan toi 404: tao loi', ma 1; (b) ban sao tra nguon khong loc bang dieuKienThayNguon trong
+      get -> 'nguon khong thay: tao nguon-admin', ma 1.
 
   - id: E3
     criterion: AC-3
