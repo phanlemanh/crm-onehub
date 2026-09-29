@@ -191,7 +191,7 @@ describe("khong-quyen", () => {
 		});
 		const k = await dung();
 		const them = nutThem(k);
-		expect(them).toHaveLength(3);
+		expect(them, "member: nut Them bien mat thay vi khoa").toHaveLength(3);
 		expect(them.every(khoa), "member: nut Them bien mat thay vi khoa").toBe(
 			true,
 		);
