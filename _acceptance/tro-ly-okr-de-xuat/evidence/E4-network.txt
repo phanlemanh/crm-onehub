@@ -1,1 +1,3 @@
-driver: puppeteer-core ben trong man-gop-y.mjs — khong co read_network_requests/read_console_messages; networkObserved = n-a (driver)
+E4 network truth: driver = puppeteer script (rang/man-gop-y.mjs) trong phien-do tien-de; khong co read_network_requests/read_console_messages cua browser tool.
+networkObserved = n-a (driver). Script khong ghi request that bai; moi buoc goi trpc (okr.*) deu tra 2xx, neu khong script thoat ma 2 'KHONG DO DUOC'.
+Run 1 (06:59) thoat 2: eve dev server cua phien song song (eve eval okr/gop-y, PID 10332) dang giu tac tu -> ha tang, khong phai loi san pham. Run 2 (07:01) sau khi phien kia xong: 68 DUNG, 0 SAI, ma 0.
