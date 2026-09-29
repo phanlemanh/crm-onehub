@@ -5,7 +5,7 @@ slug: hydrat-thanh-bieu-tuong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-29-hydrat-thanh-bieu-tuong-design.md
 approved_by:
 approved_at:
@@ -64,5 +64,11 @@ Bỏ quét `morphological-scan` — xem entry `descope` «bỏ coverage-scan» t
 ## Notes
 
 - Test đỏ trước khi sửa đã chạy: e1, e2 đỏ với «Hydration failed…» và `aria-busy="true"` trong diff; e3 đỏ (0 liên kết thay 4); e5 đỏ.
-- Trên ứng dụng thật, mã TRƯỚC vòng không tái hiện được lỗi: 60 lượt tải sáu màn không dữ liệu OKR, rồi 64 lượt tải bốn màn có bộ OKR mẫu cho hai vai (thước E7 chạy trên mã cũ) — 0 lỗi hydrat. Gốc lỗi được xác nhận ở lớp DOM (cùng chữ ký: `aria-busy="true"` phía máy chủ, liên kết phía trình duyệt), chưa được xác nhận trên ứng dụng thật. Bản sửa làm lượt render đầu của thanh không đọc cache nữa, nên mọi thứ tự chạm cache đều khép — không riêng đường đã giả định.
+- Trên ứng dụng thật, mã TRƯỚC vòng không tái hiện được lỗi: 60 lượt tải sáu màn không dữ liệu OKR, rồi 64 lượt tải bốn màn có bộ OKR mẫu cho hai vai (thước E6u chạy trên mã cũ) — 0 lỗi hydrat. Gốc lỗi được xác nhận ở lớp DOM (cùng chữ ký: `aria-busy="true"` phía máy chủ, liên kết phía trình duyệt), chưa được xác nhận trên ứng dụng thật. Bản sửa làm lượt render đầu của thanh không đọc cache nữa, nên mọi thứ tự chạm cache đều khép — không riêng đường đã giả định.
 - Phần «0 lỗi hydrat qua N lượt» của AC-6 xanh cả trước lẫn sau vòng trên ứng dụng thật; chiều đỏ của nó là bản sao thanh cố ý lệch theo `typeof window` (chứng bộ nghe thấy được lỗi của thanh), không phải bản trước vòng.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-29 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1:
+
+- Ngoài-2: test DOM chỉ thử các tổ hợp cache và vai mà AC-1 đến AC-5 nêu (rỗng/có dữ liệu × admin/okr/null); các ô còn lại của bốn trục Coverage — cache «chưa có truy vấn», hai phía cùng có dữ liệu, vai trong cache khác vai máy chủ — chưa có ca riêng, câu «mọi ô cho cùng kết quả» dựa vào lập luận về lượt hydrat chỉ đọc prop.
+- Ngoài-3: phần «0 lỗi hydrat của thanh qua N lượt» của thước màn thật (E6u) không tự đối chứng dương trong mỗi lượt chạy; bộ nghe chỉ được chứng thấy lỗi một lần ở S3 (bản sao lệch theo `typeof window`), nên nếu Next đổi đường báo lỗi thì phần này vẫn xanh.
+- Ngoài-4: test DOM tự dựng prop `workspace` giống cách `RailTheoVai` làm, không đi qua `layout.tsx` thật; đổi cách layout truyền vai chỉ bị thước màn thật (E6u, bước HTML máy chủ) và kiểm kiểu (E7) bắt, không bị E1–E5 bắt.

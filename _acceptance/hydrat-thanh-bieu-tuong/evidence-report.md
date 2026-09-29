@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1d78d07234dad3e651bc6133c38ccef85d8f7e3c
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-29
 ---
 
 # Evidence Report: hydrat-thanh-bieu-tuong
