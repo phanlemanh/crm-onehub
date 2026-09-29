@@ -1,52 +1,32 @@
 {
-  "feature_plain": "Nhân viên gõ ⌘K có dấu hay không dấu là ra trang tài liệu, thấy trang nào nhắc tới trang đang đọc, lọc danh sách theo đơn vị, loại, chủ; chủ trang có tab Sức khoẻ và sáng nào cũng biết có mấy bản chờ mình duyệt.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ ra đúng trang khi gõ có dấu, không dấu, chữ hoa hay gõ dở một từ, tìm cả trong tên lẫn chữ trong trang, trang trúng tên đứng trước, mỗi dòng có đoạn trích tô đúng chữ khớp (AC-1 tìm tiếng Việt)."},
-    {"id": "AC-3", "p": "Sẽ có nhóm «Tài liệu» trong hộp ⌘K dùng chung của CRM, người chỉ làm OKR cũng dùng được, Enter mở trang; tìm lỗi thì nói lỗi chứ không nói «không có trang» (AC-3 hộp ⌘K)."},
-    {"id": "AC-4", "p": "Sẽ cho người viết chèn liên kết tới một trang có sẵn bằng một nút trong trình soạn, không phải chép địa chỉ; sau khi duyệt, trang kia thấy trang này nhắc tới nó (AC-4 chèn liên kết)."},
-    {"id": "AC-5", "p": "Sẽ hiện dưới mỗi trang danh sách các trang đã duyệt nhắc tới nó, mỗi dòng kèm câu chứa liên kết; tải lỗi thì hiện lỗi có nút thử lại (AC-5 trang nhắc tới)."},
-    {"id": "AC-6", "p": "Sẽ lọc danh sách trang theo đơn vị, loại, chủ trang, ghép được, giữ trên địa chỉ trang để gửi cho người khác; lọc ra rỗng có nút «Bỏ lọc» (AC-6 bộ lọc)."},
-    {"id": "AC-8", "p": "Sẽ liệt kê trong tab Sức khoẻ các trang quá hạn xác minh (theo ngày giờ Việt Nam) và các trang có bản chờ mà người xem thấy được, mỗi dòng ghi chủ trang (AC-8 việc của chủ trang)."},
-    {"id": "AC-9", "p": "Sẽ gửi trong tin nhắc buổi sáng một dòng «N bản đề xuất chờ bạn duyệt», N đúng bằng số ở tab «Chờ duyệt», không có bản chờ thì không có dòng (AC-9 nhắc sáng)."},
-    {"id": "AC-10", "p": "Sẽ giữ nguyên dấu | gõ trong ô bảng, lưu đi lưu lại không mất chữ, không tách ô sai (AC-10 hạn chế lượt 1)."},
-    {"id": "AC-11", "p": "Sẽ mở được mọi bản chờ duyệt kể cả sau dòng 25, bản đã trả lại hay đã cũ nằm ở nhóm riêng (AC-11 hạn chế lượt 1)."},
-    {"id": "AC-12", "p": "Sẽ để người duyệt xem ảnh chụp các màn mới ở khổ điện thoại và máy tính, chấm xem nhân viên văn phòng có hiểu mỗi màn để làm gì không (AC-12 chấm bằng mắt)."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Chặn chữ trong bản chưa duyệt lọt ra qua tìm, «trang nhắc tới» hay Sức khoẻ, với bất kỳ ai; tên trang chưa duyệt chỉ hiện trong «Có đề xuất chờ duyệt» cho đúng người đã thấy bản đó (AC-2 không rò)."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG coi trang đang soạn là «đã có»: tab Sức khoẻ liệt kê trang mồ côi, liên kết gãy và trang được nhắc mà chưa có, như nhau với mọi người (AC-7 sức khoẻ liên kết)."},
-    {"id": "OOS-1", "p": "KHÔNG làm lịch sử phiên bản, khôi phục, lưu trữ trang trong lượt này — đề xuất tách thành lượt 3b, anh chọn ở cổng này."},
-    {"id": "OOS-2", "p": "KHÔNG bắt gõ sai hay i/y lẫn nhau («qui» với «quy») — cần thêm chỉ mục mới, chờ số chạy thật."},
-    {"id": "OOS-3", "p": "KHÔNG làm danh sách trang cụt, đồ thị, xem trước khi rê chuột."},
-    {"id": "OOS-4", "p": "KHÔNG đếm số lần người dùng tìm hay mở ⌘K — lộ trình chốt chỉ đếm từ bảng dữ liệu."},
-    {"id": "OOS-5", "p": "KHÔNG lọc Sức khoẻ theo chủ, không xếp tên theo thứ tự chữ Việt chuẩn, không tìm trong tệp nguồn đã tải."},
-    {"id": "OOS-6", "p": "KHÔNG dùng tìm bằng vector hay tìm kiểu pg_search, không lọc phía trình duyệt."},
-    {"id": "OOS-7", "p": "KHÔNG làm quyền xem theo từng trang — lượt chủ trang và phạm vi sau chạy thật."}
-  ],
-  "scope_plain": "Phần cắt hoặc hoãn của lượt này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi đường tới một trang đều có tiêu chí: ⌘K (AC-1, AC-3), liên kết trong bài (AC-4), trang nhắc tới (AC-5), bộ lọc (AC-6), việc của chủ trang (AC-7, AC-8), nhắc sáng (AC-9); đối chiếu thứ tự điều hướng của nghiên cứu nền và của MediaWiki, Obsidian."},
-    {"i": 1, "p": "Mọi dạng nội dung đều xét ai thấy gì: bản đang dùng, trang chưa từng duyệt, bản chờ, bản trả lại, bản cũ; trang lưu trữ thuộc lượt 3b."},
-    {"i": 2, "p": "Sáu kiểu người xem (người tạo, chủ trang, chủ workspace, quản trị, thành viên khác, người chỉ làm OKR) đều nằm trong phép đo (AC-2, AC-3, AC-9)."},
-    {"i": 3, "p": "Các cách gõ tiếng Việt đều thử: có dấu, không dấu, chữ hoa, chữ đ, gõ dở, không khớp, quá ngắn (AC-1); gõ sai để sau."},
-    {"i": 4, "p": "Áp mọi màn: không lộ bản chưa duyệt (AC-2), lỗi hiện là lỗi (AC-3, AC-5, AC-6, AC-8), có trạng thái rỗng và phân trang (AC-5, AC-6, AC-11), sửa hai hạn chế lượt 1 (AC-10, AC-11)."},
-    {"i": 5, "p": "GIẢ ĐỊNH chờ anh gạch: cách tách từ hiện có đủ cho vài trăm trang tiếng Việt; lượt này không đo độ chính xác xếp hạng, 50 câu hỏi thật ở lượt 4 sẽ đo."},
-    {"i": 6, "p": "GIẢ ĐỊNH chờ anh gạch: quản trị nhận dòng nhắc đếm mọi bản chờ của kho mỗi sáng mà không thấy phiền; xem lại sau tuần đầu chạy thật."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Phép đo không rò tự mâu thuẫn: cấm tên trang nháp ở mọi nơi, lại đòi nó hiện trong «Có đề xuất chờ duyệt». Đã chốt: tên trang nháp chỉ hiện ở danh sách đó cho người đã thấy bản chờ, chữ trong bản chờ không ra đâu; phép đo viết lại thành kỳ vọng từng ô, thêm dòng đo ngưỡng lộ."},
-    {"i": 1, "p": "«Bản cũ» có hai định nghĩa, làm số trong tin nhắc và số ở tab có thể lệch. Đã chốt một định nghĩa: chỉ bản đang chờ mới đếm, bản trả lại và bản cũ ở nhóm «đã xử lý»; phép đo thêm ca bản cũ."},
-    {"i": 2, "p": "Phép đo không rò chỉ chứng được đường tìm còn chạy; «trang nhắc tới» và Sức khoẻ hỏng hẳn vẫn qua. Đã thêm ca đối chứng: hai đường đó phải trả đúng dữ liệu đã duyệt cho cả sáu người."},
-    {"i": 3, "p": "Đoạn trích và câu ngữ cảnh chỉ bị kiểm là «có mặt», không kiểm là đúng chữ khớp, đúng lần nhắc đầu. Đã thêm kiểm quan hệ với chữ gõ và so nguyên câu viết trước."},
-    {"i": 4, "p": "Thiết kế hứa «trang nhắc tới» và bộ lọc lỗi thì hiện lỗi, nhưng không tiêu chí nào giữ. Đã đưa vào tiêu chí AC-5, AC-6 kèm phép đo màn."}
+  "feature_plain": "Người dùng gõ ⌘K có dấu hay không dấu là ra trang tài liệu, thấy trang nào nhắc tới trang đang đọc, lọc kho theo đơn vị và chủ trang, chủ trang có tab Sức khoẻ, và sáng ra tin nhắc báo có mấy bản chờ mình duyệt.",
+  "scope_plain": "Những việc dưới đây đã cắt hoặc hoãn từ Cổng Phạm vi, không làm trong lượt này.",
+  "decisions": [
+    {
+      "id": "E12j",
+      "q": "Người văn phòng nhìn các màn mới có tự hiểu để làm gì không?",
+      "why": "Hội đồng ba người chấm ảnh: một đạt, hai chưa chắc. Họ chỉ ra ảnh Sức khoẻ mới thấy 2 trên 5 danh sách, ở điện thoại chip «Biểu mẫu» trên hàng lọc có thể bị cắt, và nhãn «Có đề xuất chờ duyệt» chưa dùng đúng chữ «bản đề xuất». Không ai thấy chữ đè hay cuộn ngang."
+    }
   ],
   "decisions_plain": [
-    {"id": "d-20260928T230629Z-1", "p": "Tìm bằng bộ tìm có sẵn trong cơ sở dữ liệu trên cột đã ghi lúc duyệt — đổi lại chưa bắt được gõ sai."},
-    {"id": "d-20260928T230629Z-2", "p": "KHÔNG làm lịch sử, khôi phục, lưu trữ trong lượt này, đề xuất tách thành lượt 3b — đổi lại chạy thật có thể bắt đầu khi chưa lưu trữ được trang cũ; anh chọn ở cổng này."},
-    {"id": "d-20260928T230629Z-3", "p": "⌘K của kho là một nhóm trong hộp ⌘K chung của CRM, không phải hộp thứ hai — đổi lại hộp chung phải lặng lẽ ẩn nhóm công ty cho người chỉ làm OKR."},
-    {"id": "d-20260928T230629Z-4", "p": "Câu ngữ cảnh của «trang nhắc tới» tính lúc mở trang — đổi lại mỗi lần mở tốn thêm một lần đọc, trần 100 trang nguồn."},
-    {"id": "d-20260928T230629Z-5", "p": "Anh chọn: dòng nhắc sáng đếm đúng số tab «Chờ duyệt», quản trị đếm mọi bản chờ — đổi lại quản trị bị nhắc mọi sáng khi kho còn bản chờ."},
-    {"id": "d-20260928T230629Z-6", "p": "KHÔNG đo số lần tìm hay mở ⌘K — đổi lại chưa có số để quyết có làm đồ thị toàn kho không."},
-    {"id": "d-20260928T230933Z-7", "p": "Duyệt giao diện trên ảnh chụp bản mẫu, không sửa bản mẫu dùng chung — đổi lại khối «trang nhắc tới», bộ lọc, chèn liên kết chỉ có hình thật lúc chấm."}
+    {"id": "d-20260928T230629Z-1", "p": "Tìm bằng bộ tìm chữ sẵn có của cơ sở dữ liệu, gõ không dấu vẫn ra — đổi lại chưa bắt được gõ sai chính tả."},
+    {"id": "d-20260928T230629Z-2", "p": "KHÔNG làm lịch sử, khôi phục, lưu trữ trang ở lượt này; tách sang lượt 3b — đổi lại chạy thật có thể bắt đầu khi chưa lưu trữ được trang cũ."},
+    {"id": "d-20260928T230629Z-3", "p": "⌘K của kho là một nhóm «Tài liệu» trong hộp tìm nhanh chung của cả ứng dụng — một phím một hộp."},
+    {"id": "d-20260928T230629Z-4", "p": "Câu trích trong khối «Trang nhắc tới trang này» tính lúc mở trang từ bản đang dùng — không bao giờ cũ, đổi lại mỗi lần mở tốn thêm một lần đọc."},
+    {"id": "d-20260928T230629Z-5", "p": "Dòng nhắc sáng đếm đúng số trên tab «Chờ duyệt»; quản trị thấy mọi bản chờ của kho."},
+    {"id": "d-20260928T230629Z-6", "p": "KHÔNG đo số lượt tìm hay lượt mở ⌘K; bốn số của chạy thật đếm từ dữ liệu."},
+    {"id": "d-20260928T230933Z-7", "p": "Duyệt hình bản mẫu của ⌘K và Sức khoẻ trước Cổng Phạm vi; ba màn còn lại chỉ có hình ở lượt chấm."},
+    {"id": "d-20260928T234045Z-9", "p": "Kho không có thẻ «Việc của bạn», nên số bản chờ duyệt hiện ở thẻ «Việc quá hạn» của Tổng quan — người chỉ dùng OKR không thấy thẻ này, chỉ thấy trong tin nhắc."},
+    {"id": "d-20260928T234045Z-10", "p": "Người chỉ dùng OKR lần đầu có ⌘K, và chỉ thấy nhóm Tài liệu."},
+    {"id": "d-20260928T234045Z-11", "p": "Màn đọc hỏi đúng các bản chờ của trang mình, sửa luôn lỗi đếm sai khi kho quá 25 bản chờ."},
+    {"id": "d-20260928T235354Z-12", "p": "Sửa phép đo quyền của người chỉ dùng OKR để nó thật sự chạy đủ; trang chỉ trùng tên thì đoạn trích lặp lại tên."},
+    {"id": "d-20260928T235650Z-13", "p": "Chưa có chỗ nào đặt hạn xác minh cho trang, nên danh sách «Quá hạn xác minh» sẽ rỗng trên bản thật cho tới khi có ô nhập hạn — ngoài phạm vi lượt này."},
+    {"id": "d-20260929T000003Z-14", "p": "Phép đo ngày quá hạn dùng ngày tương đối thay vì một ngày cố định; ranh giới ngày giờ Việt Nam vẫn được kiểm."},
+    {"id": "d-20260929T000507Z-15", "p": "Danh sách bản đề xuất có ba nhóm (tất cả, đang chờ, đã xử lý) để phép đo đã ký của lượt 1 không đổi."},
+    {"id": "d-20260929T001245Z-16", "p": "Bấm vào dòng nhắc sáng mở thẳng tab «Chờ duyệt» của kho."},
+    {"id": "d-20260929T003708Z-17", "p": "Trang gốc của người chỉ dùng OKR có một lỗi sẵn có ở bản dev; không sửa trong lượt này."},
+    {"id": "d-20260929T004924Z-18", "p": "Sửa một phép kiểm nhắc sáng để lại dữ liệu làm đỏ các phép kiểm khác khi chạy cả kho."},
+    {"id": "d-20260929T011259Z-19", "p": "Tab «Chờ duyệt», thẻ Tổng quan và nhắc sáng nay đếm bằng cùng một luật — đổi lại nhắc sáng tốn một lượt đếm cho mỗi người."},
+    {"id": "d-20260929T011259Z-20", "p": "Đầu trang dùng chung cho hàng nút xuống dòng khi không vừa cạnh tiêu đề, hết cảnh nút đè chữ trên điện thoại; dòng quá hạn đọc «xác minh đến …» — đổi lại chạm bố cục mọi trang và bản gốc ghim của một hồ sơ đã ký."}
   ]
 }
