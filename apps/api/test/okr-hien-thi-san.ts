@@ -16,6 +16,7 @@ import {
 	ok,
 	pbMoi,
 	phienCua,
+	type TraLoi,
 	truongMoi,
 } from "./okr-san";
 
@@ -361,6 +362,386 @@ export async function gieoTruongBiLoai(): Promise<SanTruongBiLoai> {
 			truongBpLuuCoCon,
 			nguoiPbDuoiBpLuu,
 		},
+	};
+}
+
+export const G_AN = {
+	tieuDe: "Tái cơ cấu hợp đồng mẫu",
+	tieuDeKr: "Rà 40 hợp đồng",
+	soChup: 37.5,
+	binhLuan: "Bản nháp điều khoản phạt chưa chốt",
+	loiNhan: "Cảm ơn đã rà xong lô đầu",
+	tieuDeC1: "Mục tiêu cá nhân công khai C1",
+	tieuDeKrC1: "Gọi 10 khách cũ",
+} as const;
+
+export type GoiThuTuc = (
+	thuTuc: string,
+	vao: Json,
+	cookie: string,
+) => Promise<TraLoi>;
+
+export type VaiAn = "quanTri" | "truong" | "k" | "thamGia" | "x";
+
+export type SanAn = {
+	nam: string;
+	ky: string;
+	pb: string;
+	g: string;
+	krG: string;
+	c1: string;
+	krC1: string;
+};
+
+export async function gieoMucTieuAn(
+	goiThuTuc: GoiThuTuc,
+	nguoi: Record<VaiAn, NguoiSan>,
+	ten: (phan: string) => string,
+	ky: { tu: string; den: string },
+): Promise<SanAn> {
+	const { quanTri, truong, k, thamGia, x } = nguoi;
+	const lam = async <T>(
+		thuTuc: string,
+		vao: Json,
+		ai: NguoiSan,
+		nhan: string,
+	): Promise<T> => ok<T>(await goiThuTuc(thuTuc, vao, ai.cookie), nhan);
+	const idCua = async (
+		thuTuc: string,
+		vao: Json,
+		ai: NguoiSan,
+		nhan: string,
+	): Promise<string> => (await lam<{ id: string }>(thuTuc, vao, ai, nhan)).id;
+
+	await lam("okr.setProgram", { ...CHUONG_TRINH_RONG }, quanTri, "cau hinh");
+	const pb = await idCua(
+		"org.createDepartment",
+		{ name: ten("pb-an"), divisionId: null },
+		quanTri,
+		"tao phong ban",
+	);
+	await lam(
+		"org.setPlacement",
+		{
+			userId: truong.id,
+			primaryDepartmentId: pb,
+			secondaryDepartmentIds: [],
+			managerUserId: null,
+		},
+		quanTri,
+		"xep truong",
+	);
+	await lam(
+		"org.setHead",
+		{ kind: "department", id: pb, userId: truong.id },
+		quanTri,
+		"dat truong",
+	);
+	const chuKy = (kind: "nam" | "quy", parentId: string | null) => ({
+		kind,
+		name: ten(`ky-an-${kind}`),
+		parentId,
+		startsOn: kind === "nam" ? `${ky.tu.slice(0, 4)}-01-01` : ky.tu,
+		endsOn: kind === "nam" ? `${ky.tu.slice(0, 4)}-12-31` : ky.den,
+		breakStartsOn: null,
+		breakEndsOn: null,
+		updateWeekday: 1,
+	});
+	const nam = await idCua(
+		"okr.createCycle",
+		chuKy("nam", null),
+		quanTri,
+		"tao nam",
+	);
+	const kyId = await idCua(
+		"okr.createCycle",
+		chuKy("quy", nam),
+		quanTri,
+		"tao quy",
+	);
+	await lam(
+		"okr.setCyclePhase",
+		{ id: kyId, phase: "dang-chay" },
+		quanTri,
+		"dang chay",
+	);
+
+	const g = await idCua(
+		"okr.createObjective",
+		{
+			cycleId: kyId,
+			unit: { level: "phong-ban", departmentId: pb },
+			title: G_AN.tieuDe,
+			kind: "cam-ket",
+			ownerUserId: truong.id,
+			participantIds: [thamGia.id],
+			whyNow: "",
+		},
+		truong,
+		"tao G",
+	);
+	const krMoi = (objectiveId: string, title: string) => ({
+		objectiveId,
+		title,
+		kind: "tang-toi",
+		ownerUserId: k.id,
+		startValue: 0,
+		targetValue: 100,
+		currentValue: 0,
+		unit: "",
+		dueOn: null,
+		weight: 1,
+	});
+	const krG = await idCua(
+		"okr.createKeyResult",
+		krMoi(g, G_AN.tieuDeKr),
+		truong,
+		"tao KR cua G",
+	);
+	await lam(
+		"okr.datNguonKr",
+		{ keyResultId: krG, loai: "api" },
+		truong,
+		"nguon api",
+	);
+	await lam("okr.publishObjective", { id: g }, truong, "cong bo G");
+
+	const c1 = await idCua(
+		"okr.createObjective",
+		{
+			cycleId: kyId,
+			unit: { level: "ca-nhan", personUserId: k.id },
+			title: G_AN.tieuDeC1,
+			kind: "cam-ket",
+			ownerUserId: k.id,
+			participantIds: [],
+			whyNow: "",
+		},
+		k,
+		"tao C1",
+	);
+	const krC1 = await idCua(
+		"okr.createKeyResult",
+		krMoi(c1, G_AN.tieuDeKrC1),
+		k,
+		"tao KR cua C1",
+	);
+	await lam("okr.publishObjective", { id: c1 }, k, "cong bo C1");
+	const noi = await idCua(
+		"okr.addAlignment",
+		{ objectiveId: c1, targetObjectiveId: g, targetKeyResultId: null },
+		k,
+		"can chinh C1 vao G",
+	);
+	await lam("okr.removeAlignment", { id: noi }, k, "go can chinh C1");
+
+	await idCua(
+		"okr.themViec",
+		{
+			keyResultId: krG,
+			tieuDe: "Rà lô hợp đồng đầu",
+			nguoiLamUserId: k.id,
+			hanNgay: null,
+		},
+		k,
+		"them viec",
+	);
+	await lam(
+		"okr.addComment",
+		{ objectiveId: g, body: G_AN.binhLuan, mentionUserIds: [] },
+		truong,
+		"binh luan G",
+	);
+	await idCua(
+		"okr.guiGhiNhan",
+		{
+			objectiveId: g,
+			keyResultId: krG,
+			nguoiNhan: [k.id],
+			loiNhan: G_AN.loiNhan,
+		},
+		truong,
+		"ghi nhan K",
+	);
+	await lam("okr.ghiSoKr", { id: krG, giaTri: G_AN.soChup }, k, "ghi so api");
+	for (const lan of ["mot", "hai"]) {
+		const { sessionId } = await lam<{ sessionId: string }>(
+			"okr.moCapNhat",
+			{ entry: "tab" },
+			k,
+			`mo cap nhat ${lan}`,
+		);
+		await lam(
+			"okr.guiCapNhat",
+			{
+				sessionId,
+				items: [{ keyResultId: krG, value: 0, confidence: "vua", note: "" }],
+			},
+			k,
+			`gui cap nhat ${lan}`,
+		);
+	}
+	await lam("okr.follow", { objectiveId: g, on: true }, x, "theo doi G");
+	await datGioiHan(g, [x.id], truong.id);
+	return { nam, ky: kyId, pb, g, krG, c1, krC1 };
+}
+
+export async function donMucTieuAn(san: SanAn, userIds: string[]) {
+	const cuaKy = { cycleId: { in: [san.ky, san.nam] } };
+	const mucTieu = { objective: cuaKy };
+	const kr = { keyResult: mucTieu };
+	await db.okrGhiNhanNhan.deleteMany({ where: { ghiNhan: mucTieu } });
+	await db.okrGhiNhan.deleteMany({ where: mucTieu });
+	await db.okrMention.deleteMany({ where: { comment: mucTieu } });
+	await db.okrComment.deleteMany({ where: mucTieu });
+	await db.okrFollow.deleteMany({ where: mucTieu });
+	await db.okrCheckIn.deleteMany({ where: kr });
+	await db.okrCheckInSession.deleteMany({
+		where: { userId: { in: userIds } },
+	});
+	await db.okrAlignment.deleteMany({
+		where: { OR: [mucTieu, { targetObjective: cuaKy }] },
+	});
+	await db.okrSoChup.deleteMany({ where: kr });
+	await db.okrNguonKr.deleteMany({ where: kr });
+	await db.okrDiemKr.deleteMany({ where: cuaKy });
+	await db.okrDoiDich.deleteMany({ where: kr });
+	await db.okrBangChung.deleteMany({ where: kr });
+	await db.okrViecKr.deleteMany({ where: kr });
+	await db.okrKeyResult.deleteMany({ where: mucTieu });
+	await db.okrParticipant.deleteMany({ where: mucTieu });
+	await db.okrNhinLai.deleteMany({ where: mucTieu });
+	await db.okrObjective.deleteMany({ where: cuaKy });
+	await db.okrTrail.deleteMany({
+		where: {
+			OR: [
+				{ cycleId: { in: [san.ky, san.nam] } },
+				{ objectiveId: { in: [san.g, san.c1] } },
+				{ actorUserId: { in: userIds } },
+			],
+		},
+	});
+	await db.okrCycle.deleteMany({ where: { id: san.ky } });
+	await db.okrCycle.deleteMany({ where: { id: san.nam } });
+	await db.okrProgramConfig.deleteMany({
+		where: { createdById: { in: userIds } },
+	});
+	await db.orgPlacement.deleteMany({ where: { userId: { in: userIds } } });
+	await db.department.updateMany({
+		where: { id: san.pb },
+		data: { headUserId: null },
+	});
+	await db.department.deleteMany({ where: { id: san.pb } });
+}
+
+export type SanSoGop = {
+	ky: string;
+	b1: string;
+	p1: string;
+	t: NguoiSan;
+	h: NguoiSan;
+	m: NguoiSan;
+	mucTieu: { g: string; c1: string; c2: string; bp: string; cn: string };
+	kr: { g: string; c1: string; c2: string };
+	tieuDe: { g: string; c1: string; c2: string };
+};
+
+async function mucTieuCoKr(
+	ky: string,
+	unit: Json,
+	chu: string,
+	ai: AiHoacCookie,
+	nhan: string,
+	hienTai: number,
+	congBoLuon = true,
+): Promise<{ id: string; kr: string; tieuDe: string }> {
+	const tieuDe = ma(`ht ${nhan}`);
+	const id = idTra(
+		await goi(
+			"okr.createObjective",
+			{
+				cycleId: ky,
+				unit,
+				title: tieuDe,
+				kind: "cam-ket",
+				ownerUserId: chu,
+				participantIds: [],
+				whyNow: "",
+			},
+			ai,
+		),
+		`tao ${nhan}`,
+	);
+	const kr = idTra(
+		await goi(
+			"okr.createKeyResult",
+			{
+				objectiveId: id,
+				title: ma(`ht kr ${nhan}`),
+				kind: "tang-toi",
+				ownerUserId: chu,
+				startValue: 0,
+				targetValue: 100,
+				currentValue: hienTai,
+				unit: "",
+				dueOn: null,
+				weight: 1,
+			},
+			ai,
+		),
+		`tao kr ${nhan}`,
+	);
+	if (congBoLuon) await congBo(id, ai, nhan);
+	return { id, kr, tieuDe };
+}
+
+export async function gieoSoGop(): Promise<SanSoGop> {
+	ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
+	const b1 = await bpMoi("sg-b1");
+	const p1 = await pbMoi("sg-p1", b1);
+	const hTruong = await truongMoi("division", b1, "sg-H");
+	const tTruong = await truongMoi("department", p1, "sg-T");
+	const t = { id: tTruong.nguoi, cookie: tTruong.cookie };
+	const h = { id: hTruong.nguoi, cookie: hTruong.cookie };
+	const m = await nguoiCo("sg-M");
+	const ky = await gieoKyQuy(KY_HIEN_THI);
+	const pb1 = { level: "phong-ban", departmentId: p1 };
+	const g = await mucTieuCoKr(ky, pb1, t.id, t.cookie, "sg G", 90);
+	const c1 = await mucTieuCoKr(ky, pb1, t.id, t.cookie, "sg C1", 20);
+	const c2 = await mucTieuCoKr(ky, pb1, t.id, t.cookie, "sg C2", 40);
+	const bp = await mucTieuCoKr(
+		ky,
+		{ level: "bo-phan", divisionId: b1 },
+		h.id,
+		h.cookie,
+		"sg BP",
+		0,
+	);
+	const cn = await mucTieuCoKr(
+		ky,
+		{ level: "ca-nhan", personUserId: t.id },
+		t.id,
+		t.cookie,
+		"sg CN",
+		0,
+		false,
+	);
+	for (const mt of [g, c1, c2])
+		ok(
+			await goi("okr.follow", { objectiveId: mt.id, on: true }, m.cookie),
+			"M theo doi",
+		);
+	await datGioiHan(g.id, [], t.id);
+	return {
+		ky,
+		b1,
+		p1,
+		t,
+		h,
+		m,
+		mucTieu: { g: g.id, c1: c1.id, c2: c2.id, bp: bp.id, cn: cn.id },
+		kr: { g: g.kr, c1: c1.kr, c2: c2.kr },
+		tieuDe: { g: g.tieuDe, c1: c1.tieuDe, c2: c2.tieuDe },
 	};
 }
 
