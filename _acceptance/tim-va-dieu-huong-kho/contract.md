@@ -5,7 +5,7 @@ slug: tim-va-dieu-huong-kho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-29-tim-va-dieu-huong-kho-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-29

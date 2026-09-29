@@ -1,27 +1,25 @@
 ---
 schema_version: 2
 feature_slug: tim-va-dieu-huong-kho
-verdict: BLOCKED
+verdict: PENDING-JUDGMENT
 failed_evals: []
-reason: "E3d — lệnh `cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-cmdk.dom.tsx` — agent bị skip/chết, không có kết quả, không được tính là pass. Remedy: chạy lại eval này (không phải lỗi mã)."
-blocked: [{"cmd":"cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-cmdk.dom.tsx","reason":"agent bi skip/chet — khong co ket qua, khong duoc tinh la pass"}]
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: aa8173564fef36d5d990cb347c3a88b3686e7355
+verified_commit: 0fe5a080a74526635c6fcaae89c3120fb3ada781
 human_signoff:
 ---
 
 # Evidence Report: tim-va-dieu-huong-kho
 
-Round 1. Verdict BLOCKED: eval E3d (AC-3, hộp tìm nhanh ⌘K bằng DOM) không có kết quả vì agent chạy nó bị skip/chết. Hai mươi hai eval máy còn lại đều xanh và đều đỏ trên baseline (trừ E0s là regression-guard). Hội đồng E12j (judgment) đề xuất FAIL ở cả ba lens vì tiêu đề trang «Tài liệu» bị ba nút đè lên ở khổ 390; đây là đề xuất, người quyết ở Cổng 2.
+Vòng 2. Mọi eval máy đều đạt; còn một mục judgment (E12j) chưa ngã ngũ nên người quyết ở Cổng 2.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | test | PASS |
 | E2 | AC-2 | test | PASS |
 | E3 | AC-3 | test | PASS |
-| E3d | AC-3 | test | BLOCKED |
+| E3d | AC-3 | test | PASS |
 | E3u | AC-3 | ui-check | PASS |
 | E4 | AC-4 | test | PASS |
 | E4b | AC-4 | test | PASS |
@@ -42,268 +40,251 @@ Round 1. Verdict BLOCKED: eval E3d (AC-3, hộp tìm nhanh ⌘K bằng DOM) khô
 | E11 | AC-11 | test | PASS |
 | E11d | AC-11 | test | PASS |
 | E0s | AC-12 | test | PASS |
-| E12j | AC-12 | judgment | PENDING (hội đồng đề xuất FAIL, chờ người) |
+| E12j | AC-12 | judgment | UNCERTAIN |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-tim-va-dieu-huong-kho-E1-r1
+  run_id: minted-tim-va-dieu-huong-kho-E1-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_tim_ma_tran
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynhmctqxe_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E2
-  run_id: minted-tim-va-dieu-huong-kho-E2-r1
+  run_id: ""
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_khong_ro
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynj32v5lh_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E3
-  run_id: minted-tim-va-dieu-huong-kho-E3-r1
+  run_id: minted-tim-va-dieu-huong-kho-E3-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_tim_vai_okr
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynh8msbz8_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E3d
+  run_id: minted-tim-va-dieu-huong-kho-E3d-r2
+  exit_code: 0
+  baseline: red
   verifier: config:executors.test.tdk_cmdk
+  verified_at: 2026-09-29T01:19:58Z
   output: |
-    Không có kết quả: agent chạy eval này bị skip/chết. Lệnh: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-cmdk.dom.tsx. Không được tính là pass; cần chạy lại.
+    Ran 4 tests across 1 file. [1113.00ms]
 
 - eval: E3u
-  run_id: minted-tim-va-dieu-huong-kho-E3u-r1
+  run_id: minted-tim-va-dieu-huong-kho-E3u-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdk_man_tim
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   screenshot: evidence/E3u-step1.png
   observed: |
-    Đã mở từng frame bằng Read. Bước 1 (1440): hộp tìm nhanh ⌘K có ô nhập «quy định hoa hồng», một nhóm «Tài liệu» với dòng «Quy định hoa hồng đối tác», đoạn trích có chữ «hoa» in đậm. Bước 2 (vai okr, «đào tạo»): chỉ nhóm «Tài liệu» với dòng «Đào tạo nhân viên mới», không banner lỗi, không nhóm nào khác. Bước 3 (390): hộp vừa khít chiều ngang, dòng kết quả cắt bằng dấu ba chấm, không thấy cuộn ngang. Khớp expected.
+    E3u-step1.png (1440x900): the command palette opened over a dark page. The input reads 'quy dinh hoa hong'. There is one group heading 'Tài liệu' with one row, 'Quy định hoa hồng đối tác'. The excerpt below it is 'Tỉ lệ hoa hồng theo tầng. Xem bảo mật dữ liệu trước khi ...' with 'hoa' in bold. This matches Expected for step 1.
+    E3u-step2.png (1440, okr): the input reads 'dao tao'. The only group is 'Tài liệu' with one row, 'Đào tạo nhân viên mới', with 'Đào' in bold. There is no error alert and no other group. This matches Expected for step 2.
+    E3u-step3.png (390x844, member): the input reads 'hoa hong'. The group 'Tài liệu' has one row, 'Quy định hoa hồng đối tác', with 'hoa' in bold and the excerpt truncated with an ellipsis. The palette fits within the width with margins and nothing is cut off horizontally. This matches Expected for step 3. The backdrop behind the palette is black in all frames and only the palette is visible. I take that to be the palette overlay in dark theme, and it does not contradict any assertion.
   network_observed: n-a (driver)
 
 - eval: E4
-  run_id: minted-tim-va-dieu-huong-kho-E4-r1
+  run_id: minted-tim-va-dieu-huong-kho-E4-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_chen_lien_ket_ui
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   output: |
-    Ran 4 tests across 1 file.
+    Ran 4 tests across 1 file. [1322.00ms]
 
 - eval: E4b
-  run_id: minted-tim-va-dieu-huong-kho-E4b-r1
+  run_id: minted-tim-va-dieu-huong-kho-E4b-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_chen_lien_ket_api
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulyng761f6c_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E4u
-  run_id: minted-tim-va-dieu-huong-kho-E4u-r1
+  run_id: minted-tim-va-dieu-huong-kho-E4u-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdk_man_tim
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   screenshot: evidence/E4u-step1.png
   observed: |
-    Màn «Sửa trang» ở 1440: ô «Tên trang» là «Đào tạo nhân viên mới», thân trang «Nhân viên mới học cách làm trong tuần thử việc.». Nút liên kết trang trên thanh công cụ đang sáng, bên dưới là hộp chèn với ô tìm «bao mat»; danh sách có «Bảo mật dữ liệu khách hàng» đứng đầu và được chọn, kế đó «Nghỉ phép năm», «Quy định hoa hồng đối tác». Không banner lỗi, không tràn. Chữ được chọn không thấy nổi trong ảnh; bước tạo liên kết do script kiểm DOM.
+    E4u-step1.png (1440, đọc bằng Read): trang "Sửa trang", tên trang "Đào tạo nhân viên mới", nội dung "Nhân viên mới học cách làm trong tuần thứ việc.". Trên thanh công cụ, nút biểu tượng trang tài liệu ("Liên kết tới trang") đang được nhấn và mở hộp chọn. Ô tìm kiếm chứa "bao mat". Danh sách có "Bảo mật dữ liệu khách hàng" ở đầu và đang được đánh dấu; bên dưới còn "Nghỉ phép năm" và "Quy định hoa hồng đối tác" (hai dòng này không khớp "bao mat", đây là ghi chú, không phải điều kiện). Khớp Expected: hộp chọn có trang cần tìm.
+    E4u-step2.png (390, đọc bằng Read): cùng trạng thái ở màn hẹp. Hộp chọn nằm gọn trong màn, có "Bảo mật dữ liệu khách hàng" đầu danh sách, không thấy tràn ngang.
   network_observed: n-a (driver)
 
 - eval: E5
-  run_id: minted-tim-va-dieu-huong-kho-E5-r1
+  run_id: minted-tim-va-dieu-huong-kho-E5-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_nhac_toi
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynij1r5k0_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E5d
-  run_id: minted-tim-va-dieu-huong-kho-E5d-r1
+  run_id: minted-tim-va-dieu-huong-kho-E5d-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_man_nhac_toi
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   output: |
-    Ran 3 tests across 1 file.
+    Ran 3 tests across 1 file. [596.00ms]
 
 - eval: E5u
-  run_id: minted-tim-va-dieu-huong-kho-E5u-r1
+  run_id: minted-tim-va-dieu-huong-kho-E5u-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdk_man_tim
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   screenshot: evidence/E5u-step1.png
   observed: |
-    Bước 1 (1440): màn đọc «Bảo mật dữ liệu khách hàng» có khối «Trang nhắc tới trang này (2)» gồm «Nghỉ phép năm» và «Quy định hoa hồng đối tác», mỗi dòng có câu chứa đoạn in đậm; cột phải «Chủ trang: Lê Thu Trang». Bước 2 (390): cùng khối nằm dưới nội dung, không cuộn ngang. Bước 3 (trang «Trang không ai nhắc tới»): khối (0) chỉ hiện «Chưa trang nào nhắc tới trang này.». Khớp expected.
+    step1 (1440, tdk-nhac-toi-1440): màn đọc 'Bảo mật dữ liệu khách hàng'; dưới nội dung 'Không chia sẻ dữ liệu khách ra ngoài.' có tiêu đề 'Trang nhắc tới trang này (2)' và 2 dòng thẻ: 'Nghỉ phép năm — Làm ở nhà thì theo **quy tắc bảo mật** của công ty.' và 'Quy định hoa hồng đối tác — Tỉ lệ hoa hồng theo tầng. Xem **bảo mật dữ liệu** trước khi gửi số.'; tên trang nguồn và câu có chữ đậm, khớp expected (N>=2). Cột phải có 'Chủ trang Lê Thu Trang'. Nhận xét thẩm mỹ nhẹ: khung thẻ cao khoảng 320px có khoảng trống lớn dưới 2 dòng, không làm sai expected.
+    step2 (390): cùng trang, khối 'Trang nhắc tới trang này (2)' nằm dưới nội dung (giữa 'Không chia sẻ...' và 'Chủ trang'), 2 dòng đầy đủ, không thấy cuộn ngang hay cắt chữ.
+    step3 (rỗng, 'Trang không ai nhắc tới'): tiêu đề 'Trang nhắc tới trang này (0)' và giữa khung có chữ 'Chưa trang nào nhắc tới trang này.', khớp expected.
   network_observed: n-a (driver)
-  ghi_chu: chiều đỏ --chieu-do của man-tim.mjs chỉ có bản sao bỏ nhóm Tài liệu khỏi ⌘K (ghim bước 1); chưa có bản sao bỏ khối «Trang nhắc tới» nên câu «bước 5: không thấy khối» trong expected chưa được chứng minh bằng chiều đỏ. Đây là khe hở của eval, không phải lỗi UI.
 
 - eval: E6
-  run_id: minted-tim-va-dieu-huong-kho-E6-r1
+  run_id: minted-tim-va-dieu-huong-kho-E6-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_loc
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynhvn0ix7_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E6d
-  run_id: minted-tim-va-dieu-huong-kho-E6d-r1
+  run_id: minted-tim-va-dieu-huong-kho-E6d-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_man_loc
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    Ran 4 tests across 1 file.
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E7
-  run_id: minted-tim-va-dieu-huong-kho-E7-r1
+  run_id: minted-tim-va-dieu-huong-kho-E7-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_suc_khoe_lien_ket
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynqdodo1i_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E8
-  run_id: minted-tim-va-dieu-huong-kho-E8-r1
+  run_id: minted-tim-va-dieu-huong-kho-E8-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_suc_khoe_trang_thai
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    Bộ ca trang-thai hoàn tất, không ca nào đỏ.
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E8d
-  run_id: minted-tim-va-dieu-huong-kho-E8d-r1
+  run_id: minted-tim-va-dieu-huong-kho-E8d-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_man_suc_khoe
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    Ran 2 tests across 1 file.
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E8u
-  run_id: minted-tim-va-dieu-huong-kho-E8u-r1
+  run_id: minted-tim-va-dieu-huong-kho-E8u-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdk_man_suc_khoe
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   screenshot: evidence/E8u-step1.png
   observed: |
-    Frame 1 (1440, tab Sức khoẻ): khối «Quá hạn xác minh» số 2 (hai dòng, có chữ «hết hạn»), khối «Có đề xuất chờ duyệt» số 1; các khối khác nằm dưới nếp gấp, số đọc từ DOM khớp đồ thị E7. Frame 2 (390): một cột, không cuộn ngang, NHƯNG tiêu đề «Tài liệu» bị các nút «Tìm nhanh / Tải nguồn lên / Trang mới» đè lên, chữ bị cắt («Tả», «liệ»). Frame 3 (tab Trang, có lọc): còn 1 dòng «Lọc L1». Frame 4 (Chờ duyệt trang 2): 6 dòng, chân trang «26-31 trong số 31» (kỳ vọng ghi 5 dòng, lệch 1 do một bản chờ từ đồ thị E7).
+    Đã mở từng frame thật bằng Read. Step1 (1440, tab Sức khoẻ, nền tối): tab "Sức khoẻ" gạch chân đang chọn, tab "Chờ duyệt" có huy hiệu 1; khối "Quá hạn xác minh" huy hiệu 2 với 2 thẻ (Quá hạn Q2 xác minh đến 22/09/2026, Quá hạn Q1 xác minh đến 28/09/2026); khối "Có đề xuất chờ duyệt" huy hiệu 1 với 1 thẻ (Sức khoẻ N1 nháp, 1 bản chờ duyệt); các khối còn lại nằm dưới nếp gấp (5 khối đã xác nhận bằng DOM), khớp mong đợi E7 (2 và 1 thấy rõ). Đầu trang: tiêu đề "Tài liệu" và các nút Tìm nhanh/Tải nguồn lên/Trang mới không đè lên nhau.
+    Step2 (390): một cột, các nút xếp trên tiêu đề không đè lên nhau, không thấy cuộn ngang, cùng 2 khối và số 2/1 như 1440.
+    Step3 (1440, tab Trang): chip loại (Tất cả 1, Quy định 1, Chính sách 0, Quy trình 0, Biểu mẫu 0), dropdown đơn vị "Phòng Kinh doanh", dropdown chủ trang "Lê Thu Trang", nút "Bỏ lọc"; bảng thu còn đúng 1 dòng "Lọc L1" (Quy định, Lê Thu Trang, Phòng Kinh doanh) - danh sách đã thu hẹp (URL mang lọc và tải lại giữ lọc do script bước 3 khẳng định: bước 3 đạt).
+    Step4 (tab Chờ duyệt): huy hiệu 30, nhãn "Đang chờ", trang cuối hiện 5 dòng (4 Chờ duyệt nháp + 1 Sức khoẻ N1 nháp), chân trang "26-30 trong số 30", "2 / 2", nút Trước/Tiếp - khớp 25 dòng trang 1 + 5 dòng trang 2. Không mâu thuẫn Expected.
   network_observed: n-a (driver)
 
 - eval: E9
-  run_id: minted-tim-va-dieu-huong-kho-E9-r1
+  run_id: mulzpbfxgca8
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_nhac_sang
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    Bộ ca nhắc sáng hoàn tất, không ca nào đỏ.
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E9b
-  run_id: minted-tim-va-dieu-huong-kho-E9b-r1
+  run_id: minted-tim-va-dieu-huong-kho-E9b-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_nhac_bang_tab
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulynyi69962_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E10
-  run_id: minted-tim-va-dieu-huong-kho-E10-r1
+  run_id: minted-tim-va-dieu-huong-kho-E10-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_ong_dung
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   output: |
-    Ran 8 tests across 1 file.
+    Ran 8 tests across 1 file. [703.00ms]
 
 - eval: E10d
-  run_id: minted-tim-va-dieu-huong-kho-E10d-r1
+  run_id: minted-tim-va-dieu-huong-kho-E10d-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_ong_dung_doc
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   output: |
-    Ran 4 tests across 1 file.
+    Ran 4 tests across 1 file. [706.00ms]
 
 - eval: E11
-  run_id: minted-tim-va-dieu-huong-kho-E11-r1
+  run_id: minted-tim-va-dieu-huong-kho-E11-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_de_xuat_phan_trang
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    test-run: dropped crm_mulyo7ijwhud_test
+  verified_at: 2026-09-29T01:19:58Z
 
 - eval: E11d
-  run_id: minted-tim-va-dieu-huong-kho-E11d-r1
+  run_id: minted-tim-va-dieu-huong-kho-E11d-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tdk_man_cho_duyet
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
   output: |
-    Ran 2 tests across 1 file.
+    Ran 2 tests across 1 file. [853.00ms]
 
 - eval: E0s
-  run_id: minted-tim-va-dieu-huong-kho-E0s-r1
+  run_id: minted-tim-va-dieu-huong-kho-E0s-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.tdk_san_thiet_ke
-  verified_at: 2026-09-29T00:50:15Z
-  output: |
-    design-gate --mode static chạy trên mọi tsx của Kho tài liệu, quick-switcher và trình soạn; không P0.
+  verified_at: 2026-09-29T01:19:58Z
+
+- eval: E12j
+  judged_by: hội đồng judge (fresh context), ba lăng kính: domain-correctness, operational-feasibility, spec-alignment
+  verdict: UNCERTAIN
+  rationale: Hai trên ba lăng kính chưa thể kết luận. Tab Sức khoẻ chỉ lộ 2 trên 5 danh sách trong khung ảnh; ở 390, hàng chip lọc trên tab Trang thiếu chip "Biểu mẫu" và chip cuối sát mép phải nên chưa rõ bị cắt hay cuộn ngang; nhãn "Có đề xuất chờ duyệt" và "1 bản chờ duyệt" lệch từ điển («Bản đề xuất»). Lăng kính spec-alignment cho PASS.
+  panel:
+    - domain-correctness: UNCERTAIN — Most screens read clearly and the dictionary terms match (Chủ trang, xác minh đến ngày, Bản đang dùng). Three things stop me from calling PASS. Tab Sức khoẻ shows only 2 of its 5 lists (the first is cut at the bottom of the frame). The 390 filter row on the Trang tab shows Tất cả, Quy định, Chính sách and Quy trình, with Biểu mẫu missing and the last chip flush against the right edge, so I cannot tell whether it is clipped or scrolls sideways. The heading "Có đề xuất chờ duyệt" and the text "1 bản chờ duyệt" do not use the dictionary's «Bản đề xuất»; «Đề xuất» is a separate entry for Trợ lý OKR. The evidence also cannot show what the name on a Chờ duyệt row means (proposer, chủ trang or approver).
+    - operational-feasibility: UNCERTAIN — Most screens read clearly and use the CONTEXT.md terms (Chủ trang, xác minh đến ngày, Trang nhắc tới trang này, Bỏ lọc), and I saw no overlapping text in the 12 images. Two things stop a PASS. In tdk-loc-390.png the fifth chip "Biểu mẫu 0" (present in tdk-loc-1440.png) is missing after "Quy trình 0", so it is either clipped or reached by horizontal scroll. The Sức khoẻ tab shows only 2 of its 5 lists in both images, and no image shows the Nguồn area or the empty states.
+    - spec-alignment: PASS — Trong 14 ảnh (hộp ⌘K, khối "Trang nhắc tới trang này (2)", tab Sức khoẻ, danh sách Kho có lọc, hộp chèn liên kết, Chờ duyệt trang 2) mỗi màn tự nói rõ việc của nó bằng nhãn và câu dẫn ngắn ("Việc chủ trang nên xem, theo từng danh sách", "xác minh đến 22/09/2026", "1 bản chờ duyệt", "Chủ trang", "26–30 trong số 30"). Nhãn khớp từ điển CONTEXT.md (chủ trang, bản đang dùng, xác minh đến ngày, Sức khoẻ). Ở cả 390 và 1440 không thấy cuộn ngang, cắt chữ hay chữ đè lên nhau. Các khoảng trống lớn dưới danh sách thẻ ở Sức khoẻ và khối nhắc tới chỉ là bố cục lỏng, không làm khó hiểu.
+  required_evidence:
+    - Ảnh chụp toàn trang (fullPage:true) của tab Sức khoẻ ở 1440 và 390, thấy đủ năm danh sách (quá hạn xác minh, có bản đề xuất chờ duyệt, liên kết gãy, được nhắc mà chưa có trang, trang mồ côi) kèm nhãn và trạng thái rỗng. Chạy lại eval ui-check cho tdk-suc-khoe với chụp fullPage vào _acceptance/tim-va-dieu-huong-kho/evidence/ (tên gợi ý tdk-suc-khoe-*-full.png).
+    - Số đo ở 390 trên tab Trang (dùng seed như tdk-loc-390.png) gồm scrollWidth so với clientWidth của hàng chip loại (Tất cả / Quy định / Chính sách / Quy trình / Biểu mẫu) và document.documentElement.scrollWidth so với innerWidth, cùng một ảnh thấy chip Biểu mẫu (xuống dòng hoặc có dấu hiệu cuộn).
+    - Dòng nguồn (messages / vi locale của apps/app) của nhãn «Có đề xuất chờ duyệt» và «1 bản chờ duyệt» trên tab Sức khoẻ, kèm mục trong CONTEXT.md cho phép «đề xuất» thay «bản đề xuất» ở màn này, hoặc đổi nhãn thành «Có bản đề xuất chờ duyệt».
+    - Ảnh dòng Chờ duyệt (hoặc tooltip/nhãn) cho thấy tên người bên cạnh ngày nghĩa là gì, ví dụ «Người soạn» hay «Chủ trang».
+    - Ảnh 390 của hộp chèn liên kết (tdk-chen-lien-ket-390.png) với mép phải nằm trong 390px, kèm nhãn hoặc placeholder cho biết hộp làm gì (ở ảnh hiện tại hộp kết thúc ở x≈389 và không thấy nhãn).
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-tim-va-dieu-huong-kho-SUITE-bun_run_test-r1
+  run_id: minted-tim-va-dieu-huong-kho-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tim-va-dieu-huong-kho-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tim-va-dieu-huong-kho-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tim-va-dieu-huong-kho-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tim-va-dieu-huong-kho-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-29T00:50:15Z
+  verified_at: 2026-09-29T01:19:58Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tim-va-dieu-huong-kho-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tim-va-dieu-huong-kho-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-29T00:50:15Z
-
-### Judgment
-
-- eval: E12j
-  judged_by: judge panel (3 lens, fresh context) — đề xuất, chờ người
-  verdict: UNCERTAIN
-  rationale: Hội đồng đề xuất FAIL ở cả ba lens; máy không tự chốt, người quyết ở Cổng 2. Ảnh tdk-suc-khoe-390.png cho thấy tiêu đề «Tài liệu» bị «Tìm nhanh», «Tải nguồn lên», «Trang mới» đè lên, trái tiêu chí không chữ đè nhau ở khổ 390.
-  votes:
-    - domain-correctness: FAIL — Ở khổ 390, ảnh tdk-suc-khoe-390.png cho thấy tiêu đề trang «Tài liệu» bị các nút «Tìm nhanh», «Tải nguồn lên», «Trang mới» đè lên, chỉ còn đọc được «Tả» và «liệ». Ảnh 1440 nhìn chung dễ hiểu và nhãn khớp từ điển (chủ trang, xác minh, «Quá hạn xác minh», «Trang nhắc tới trang này»), nhưng dòng «hết hạn xác minh» dùng chữ «hết hạn» mà mục «Xác minh đến ngày» trong CONTEXT.md ghi trong Avoid. Bộ ảnh cũng thiếu bản 390 cho hộp chèn liên kết, danh sách Kho có lọc và tab Chờ duyệt trang 2.
-    - operational-feasibility: FAIL — Ảnh tdk-suc-khoe-390.png cho thấy ở khổ 390 tiêu đề «Tài liệu» bị ba nút «Tìm nhanh», «Tải nguồn lên», «Trang mới» đè lên, chỉ còn «Tả»/«liệ» đọc được, nên tiêu chí không chữ đè lên nhau bị vi phạm. Phần còn lại phần lớn dễ hiểu và theo từ điển, nhưng dòng «hết hạn xác minh» ở tab Sức khoẻ dùng chữ mà mục «Xác minh đến ngày» liệt vào Avoid. Bộ ảnh thiếu khổ 390 cho danh sách có lọc, hộp chèn liên kết và Chờ duyệt trang 2.
-    - spec-alignment: FAIL — Ảnh tdk-suc-khoe-390.png cho thấy hai nút «Tìm nhanh» và «Tải nguồn lên» đè lên tiêu đề trang «Tài liệu», chỉ còn thấy «Tả» và «liê» ở mép trái, nên tiêu chí không chữ đè lên nhau ở khổ 390 không đạt. Các ảnh còn lại (hộp ⌘K 1440 và 390, khối «Trang nhắc tới trang này», hộp chèn liên kết, tab Chờ duyệt trang 2, danh sách Kho có lọc) đọc được và không thấy cuộn ngang. Nhãn phần lớn khớp CONTEXT.md, nhưng dòng «hết hạn xác minh» dùng đúng chữ «hết hạn» mà mục «Xác minh đến ngày» liệt vào Avoid.
-  required_evidence:
-    - Ảnh chụp lại tdk-suc-khoe-390.png (chạy lại phép đo màn ui-check của tim-va-dieu-huong-kho ở khổ 390) trong đó tiêu đề «Tài liệu» hiện đủ chữ, không bị ba nút «Tìm nhanh» / «Tải nguồn lên» / «Trang mới» đè lên; kèm số đo hộp chữ và hộp nút ở 390 không giao nhau (spec-alignment)
-    - Ảnh 390 còn thiếu của danh sách Kho có lọc (tương ứng tdk-loc-1440.png), hộp chèn liên kết (tương ứng tdk-chen-lien-ket-1440.png) và tab Chờ duyệt trang 2 (tương ứng tdk-cho-duyet-trang-2.png), lấy từ cùng phép đo ở evidence/, chứng minh không cuộn ngang và không chữ đè nhau
-    - Xác nhận ở CONTEXT.md hoặc hợp đồng rằng câu «hết hạn xác minh» trên dòng Sức khoẻ được chấp nhận, hoặc ảnh chụp lại với nhãn đổi thành «quá hạn xác minh» / «xác minh đến ngày …» theo mục «Xác minh đến ngày»
-  human_override:  # chi nguoi ghi
+  verified_at: 2026-09-29T01:19:58Z
 
 ## Known limits
 
@@ -311,12 +292,13 @@ Round 1. Verdict BLOCKED: eval E3d (AC-3, hộp tìm nhanh ⌘K bằng DOM) khô
 
 ## Analyst
 
-E0s (regression-guard có chủ ý: design-gate tĩnh pass cả trên code cũ lẫn code mới, chứng minh sàn thiết kế chứ không chứng minh tính năng mới).
+E0s: pass cả trên code cũ lẫn code mới (baseline green), nên nó chứng minh bộ đo chứ chưa chứng minh tính năng. Đây là cổng thiết kế tĩnh có chủ ý (regression-guard); chiều đỏ của nó dựa vào bản sao thêm className, không dựa vào diff của tính năng. Mọi eval máy khác của tính năng đều red trên baseline (có phân biệt); các eval ui-check không chạy được trên baseline (n-a).
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval đều chạy một lần, xác định; không eval nào có pass_rate lẫn.
 
 ## Iterations
 
-Round 1: E3d không có kết quả vì agent chạy nó bị skip/chết, nên báo cáo BLOCKED (chạy lại E3d, không phải sửa mã). E12j hội đồng đề xuất FAIL 3/3 vì tiêu đề «Tài liệu» bị nút đè ở khổ 390 và cụm «hết hạn xác minh». Hai lưu ý phụ của ui-check: chiều đỏ của E5u chưa có bản sao cho khối «Trang nhắc tới»; E8u bước 4 ra 6 dòng thay vì 5 do một bản chờ của đồ thị E7.
+Round 1: BLOCKED (commit 895dfe7e) — vòng đầu không ra kết quả chạy trọn; đã sửa ở 143216f0 (một luật duyệt, đầu trang không đè ở 390) rồi đưa ảnh màn vòng 2 vào hồ sơ ở 0fe5a080.
+Round 2: mọi eval máy đạt, lệnh suite đạt; E12j UNCERTAIN (hội đồng chưa thấy đủ năm danh sách Sức khoẻ, chip Biểu mẫu ở 390, nhãn lệch từ điển). Verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2.

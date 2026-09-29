@@ -1,1 +1,1 @@
-E8u: driver = man-suc-khoe.mjs (puppeteer script qua phien do), khong co duong doc network/console cua browser tool -> networkObserved n-a (driver). Script khong bao loi app-fail; 4 buoc dat.
+E8u: driver la script playwright (man-suc-khoe.mjs) trong phien do rieng, khong co read_network_requests/console; networkObserved = n-a (driver)
