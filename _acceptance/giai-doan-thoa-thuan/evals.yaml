@@ -18,7 +18,7 @@ evals:
       closedAt) + 3 dong Activity STAGE_CHANGE meta {from,to}. Roi ap RIENG migration cua vong nay tu tep
       that (khong chep noi dung). Ma tran viet truoc: 7 giai doan x [id, label, kind, position] = 28
       khang dinh, gia tri ky vong rut tu apps/app/lib/deal-stage.ts O MOC TRUOC VONG (git show
-      <merge-base>:...), khong viet tay; + 7 thoa thuan x [stageId == stage cu, closedAt khong doi,
+      <merge-base>:...), khong viet tay; + 7 thoa thuan x [stage (text) == stage cu, closedAt khong doi,
       closedReason khong doi] = 21; + 3 dong meta so tung byte = 3; + kieu enum "DealStage" khong con
       trong pg_type = 1. Tong 53 (hang KY_MONG trong tep; lech -> ma 2). Xoa kho o finally.
       CHIEU DO (chay o S3, ban sao migration): (1) ban sao gan CLOSED_LOST vao OPEN -> do voi thong diep
@@ -105,8 +105,8 @@ evals:
       - "apps/api/test/giai-doan.spec.ts"
     expected: |
       Giai doan G co lich su (thoa thuan A tung o G roi chuyen di), hien trong. archive G -> khong con
-      trong giaiDoan.list, khong la cot cua deals.board; deals.create {stageId: G} va deals.setStage vao
-      G deu BAD_REQUEST; deals.bulkStage 2 thoa thuan vao G BAD_REQUEST va stageId ca hai khong doi;
+      trong giaiDoan.list, khong la cot cua deals.board; deals.create {stage: G} va deals.setStage vao
+      G deu BAD_REQUEST; deals.bulkSetStage 2 thoa thuan vao G BAD_REQUEST va stage ca hai khong doi;
       activities.timeline cua A van tra from.label = nhan cua G. 6 khang dinh.
       Doi chung duong cung fixture: truoc archive, setStage vao G thanh cong.
       CHIEU DO: ban sao setStage bo kiem archivedAt -> do voi thong diep ghim "setStage vao giai doan da
@@ -125,7 +125,7 @@ evals:
       Fixture: giai doan LOST nguon S co 3 thoa thuan (1 da luu tru), moi cai co closedAt va closedReason;
       giai doan LOST T chi co 1 thoa thuan da luu tru. So dem: giaiDoan.list tra count S = 3, T = 1.
       Ma tran do viet truoc 4 ca: khong moveTo, moveTo loai OPEN, moveTo = S, moveTo la giai doan da xoa
-      -> BAD_REQUEST, va snapshot (stageId, closedAt, closedReason, so Activity, archivedAt cua S) cua ca
+      -> BAD_REQUEST, va snapshot (stage, closedAt, closedReason, so Activity, archivedAt cua S) cua ca
       3 thoa thuan KHONG doi (so tung truong). Ca xanh: moveTo = LOST dich D -> ca 3 o D; moi thoa thuan
       dung MOT Activity STAGE_CHANGE moi {from S, to D}; stageChangedAt moi hon; closedAt, closedReason
       khong doi; S co archivedAt; su kien deal.stage.changed (doc qua duong phat su kien CRM cua deals) dem = 3, so
@@ -202,8 +202,8 @@ evals:
       Tao giai doan moi cho ca ba loai (ten khong trung ten cu). Ma tran viet truoc: chuyen OPEN->WON moi
       (closedAt co), OPEN->LOST moi khong ly do (BAD_REQUEST), OPEN->LOST moi co ly do (closedAt, ly do
       co), WON moi->OPEN moi (closedAt, closedReason null), LOST moi->OPEN goc (null); deals.create khong
-      stageId -> giai doan OPEN position nho nhat; sau khi reorder OPEN -> giai doan OPEN dau moi; deals.bulkStage OPEN->LOST moi khong ly do (BAD_REQUEST, stageId
-      khong doi); deals.bulkStage OPEN->LOST moi co ly do (closedAt, ly do co tren moi thoa thuan). 9 ca.
+      stage -> giai doan OPEN position nho nhat; sau khi reorder OPEN -> giai doan OPEN dau moi; deals.bulkSetStage OPEN->LOST moi khong ly do (BAD_REQUEST, stage
+      khong doi); deals.bulkSetStage OPEN->LOST moi co ly do (closedAt, ly do co tren moi thoa thuan). 9 ca.
       CHIEU DO: ban sao laThua so id "CLOSED_LOST" thay vi kind -> do voi thong diep ghim "LOST moi khong
       ly do duoc chap nhan".
 
@@ -272,7 +272,7 @@ evals:
       - "Mo {APP_URL}/<slug>/settings/giai-doan o 320, 375, 768, 1024, 1440, lang vi va en -> chup evidence/cai-dat-<kho>-<tieng>.png"
       - "Moi o: scrollWidth <= innerWidth; ba the (Dang mo, Chot duoc, Khong thanh) co mat; moi nhan giai doan mang translate=no"
       - "O 1440/vi: bam Them o the Dang mo, go ten, Luu -> hang moi cuoi the; mo /<slug>/deals?view=board -> co cot mang nhan do -> chup evidence/them-thay-o-bang-cot.png"
-      - "O 1440/vi: menu … cua giai doan tam co 3 thoa thuan -> Xoa -> hop thoai hien 'Con 3' -> chon dich -> Chuyen va xoa -> deals.byId ca 3 tra stageId dich -> chup evidence/xoa-chuyen.png"
+      - "O 1440/vi: menu … cua giai doan tam co 3 thoa thuan -> Xoa -> hop thoai hien 'Con 3' -> chon dich -> Chuyen va xoa -> deals.byId ca 3 tra stage dich -> chup evidence/xoa-chuyen.png"
       - "Chan mang toi giaiDoan.list -> trang hien loi va nut Thu lai -> chup evidence/loi-tai.png"
     expected: |
       exit 0. Chrome that tren may chu cua cay dang xet (phien do rieng cua tien-de). Ma tran viet truoc

@@ -47,23 +47,26 @@ model DealStage {
 }
 
 model Deal {
-  stageId String    @default(…)   -- xem dưới
-  stage   DealStage @relation(fields: [stageId], references: [id])
+  stage    String    @default("DEMO_BOOKED")
+  giaiDoan DealStage @relation(fields: [stage], references: [id], onDelete: Restrict)
 }
 ```
 
 - Tên model `DealStage` giữ nguyên chữ của hãng để diff nhỏ; enum cũ cùng tên bị
   xoá trong cùng `migration`.
-- `Deal.stage` (enum) → `Deal.stageId` (text, khoá ngoại `ON DELETE RESTRICT`).
-  Không có giá trị mặc định ở tầng DB: service chọn giai đoạn mở đầu tiên.
+- `Deal.stage` giữ TÊN, đổi KIỂU: enum → text, khoá ngoại tới `dealStage.id`
+  (`ON DELETE RESTRICT`), quan hệ tên `giaiDoan`. Giữ tên để test, fixture và
+  lệnh SQL của các hồ sơ đã ký chạy nguyên (quyết định S2). Mặc định tầng DB giữ
+  `DEMO_BOOKED` chỉ để test và seed tạo thẳng bằng Prisma không vỡ; service luôn
+  tự chọn giai đoạn mở đứng đầu, không dựa vào mặc định này.
 - **Migration `20261006010000_giai_doan_thoa_thuan`**, một transaction:
   1. tạo enum `DealStageKind`, bảng `DealStage`;
   2. chèn bảy dòng với **id = chuỗi enum cũ** (`DEMO_BOOKED`…), nhãn = nhãn đang
      hiện ở `apps/app/lib/deal-stage.ts`, loại: bốn bước đầu `OPEN`,
      `CLOSED_WON` `WON`, `CLOSED_LOST` và `UNQUALIFIED_TO_BUY` `LOST`; vị trí theo
      `ORDER` hiện tại;
-  3. `ALTER COLUMN stage TYPE text USING stage::text`, đổi tên thành `stageId`,
-     thêm khoá ngoại và chỉ mục;
+  3. `ALTER COLUMN stage TYPE text USING stage::text`, thêm khoá ngoại (chỉ mục
+     `deal_stage_idx` giữ nguyên);
   4. xoá kiểu enum `DealStage` cũ.
 - Vì id giữ nguyên chuỗi cũ: `Activity.meta {from, to}` của lịch sử cũ, dòng
   `deals_by_stage` của telemetry, và mọi răng đo của hồ sơ khác đang gieo bằng
@@ -117,8 +120,9 @@ Ghi gọi `canManageSettings` (owner, admin) trước mọi việc; cùng hàm �
 | `reorder` | `{ kind, ids }` |
 | `archive` | `{ id, moveTo? }` |
 
-`deals.setStage`, `deals.bulkStage`, `deals.create` nhận `stageId` (chuỗi), kiểm
-giai đoạn sống. Mọi truy vấn «đang mở» dùng `stage: { kind: "OPEN" }`.
+`deals.setStage`, `deals.bulkSetStage`, `deals.create` nhận `stage` là id giai
+đoạn (chuỗi), kiểm giai đoạn sống. Khoá `stage` của mọi đầu ra API giữ nguyên tên,
+nay là id. Mọi truy vấn «đang mở» dùng `giaiDoan: { kind: "OPEN" }`.
 Freshness: thêm `cache.giaiDoan()` vào `useCrmCache()`; `archive` có chuyển thì
 gọi thêm `cache.deal` diện rộng.
 
