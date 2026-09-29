@@ -16,6 +16,10 @@ import {
 	docBoCaGopY,
 	THU_MUC_CA_MAU,
 } from "../../../apps/agent/evals/okr/ca-gop-y.ts";
+import {
+	COT_DONG_TONG_KET,
+	dongTongKet,
+} from "../../../apps/agent/evals/okr/tong-ket-gop-y.ts";
 import { TRO_LY_OKR_TRAN } from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
 import { kiemOkr } from "../../../packages/validation/src/okr-kiem.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
@@ -99,6 +103,30 @@ const E22 = {
 		{ van: "Phạm Thị Hoa", ten: "Thị Hoa", khop: true },
 		{ van: "Phạm Thị Hoan", ten: "Thị Hoa", khop: false },
 	],
+	tuKiemCa: [
+		{
+			ten: "khongGopY-co-viet-lai",
+			kyVong: { khongGopY: true, vanDe: [] },
+			dong: [{ loai: "viet-lai", truong: "title", sau: "Khách mới gắn bó" }],
+			tienTo: "khongGopY",
+			phaiCo: true,
+		},
+		{
+			ten: "khongGopY-chi-hoi",
+			kyVong: { khongGopY: true, vanDe: [] },
+			dong: [{ loai: "hoi", truong: null, sau: null }],
+			tienTo: "khongGopY",
+			phaiCo: false,
+		},
+		{
+			ten: "van-de-khong-dong",
+			kyVong: { khongGopY: false, vanDe: ["kr-la-viec"] },
+			dong: [],
+			tienTo: "van de kr-la-viec",
+			phaiCo: true,
+		},
+	],
+	outcomeTuKiem: "da-nop",
 	nhanJudge: "judge.autoevals.closedQA [",
 	thongDiep: {
 		doiChung: "ca doi chung khong bat duoc",
@@ -307,20 +335,20 @@ function goiEve(url, { lenh, tongKet, them, log }) {
 	return { ma: r.status, batDau, lenh: lenh.join(" ") };
 }
 
+function docDongTongKet(d, i) {
+	const r = banGhiCa.safeParse(JSON.parse(d));
+	if (!r.success)
+		throw new Error(`tong-ket dong ${i + 1} sai khuon: ${r.error.message}`);
+	return r.data;
+}
+
 function docTongKet(tep = TONG_KET) {
 	if (!existsSync(tep)) return new Map();
 	return new Map(
 		readFileSync(tep, "utf8")
 			.split("\n")
 			.filter(Boolean)
-			.map((d, i) => {
-				const r = banGhiCa.safeParse(JSON.parse(d));
-				if (!r.success)
-					throw new Error(
-						`tong-ket dong ${i + 1} sai khuon: ${r.error.message}`,
-					);
-				return r.data;
-			})
+			.map(docDongTongKet)
 			.map((g) => [g.ca, g]),
 	);
 }
@@ -459,6 +487,48 @@ function kiemCa(ca, ghi, lotSoMoi, ten) {
 	}
 	if (ca.bo === E22.boNg) loi.push(...kiemNg(ca, ghi, cho, ten));
 	return loi;
+}
+
+function dongGia(ten, i, mau) {
+	const rong = Object.fromEntries(
+		Object.keys(COT_DONG_TONG_KET).map((k) => [k, null]),
+	);
+	return {
+		...rong,
+		id: `tu-kiem-${ten}-${i}`,
+		lyDo: `tu kiem ${ten}`,
+		trangThai: "cho",
+		...mau,
+	};
+}
+
+function tuKiemKiemCa() {
+	return E22.tuKiemCa
+		.map((tk) => {
+			const ca = {
+				...E22.caDoiChung,
+				id: `tu-kiem-${tk.ten}`,
+				kyVong: { ...E22.caDoiChung.kyVong, ...tk.kyVong },
+			};
+			const ghi = docDongTongKet(
+				dongTongKet({
+					ca,
+					objectiveId: `tu-kiem-${tk.ten}`,
+					krs: [],
+					capTrenKr: [],
+					taskId: `tu-kiem-${tk.ten}`,
+					outcome: E22.outcomeTuKiem,
+					dong: tk.dong.map((m, i) => dongGia(tk.ten, i, m)),
+				}),
+				0,
+			);
+			const loi = kiemCa(ca, ghi, new Set(), []);
+			const co = loi.some((l) => l.startsWith(tk.tienTo));
+			return co === tk.phaiCo
+				? null
+				: `${tk.ten} — phai ${tk.phaiCo ? "co" : "khong co"} loi «${tk.tienTo}», kiemCa tra [${loi.join(" · ")}]`;
+		})
+		.filter(Boolean);
 }
 
 async function tongKetMotCa(url, eve) {
@@ -678,6 +748,11 @@ async function main() {
 		return khongDo(`tu kiem thuoc so sai: ${saiTuKiem.join(" · ")}`);
 	console.log(
 		`tu kiem thuoc so: ${E22.tuKiem.length + E22.tuKiemTen.length} ca dung (nguyen tu, giu dau)`,
+	);
+	const saiKiemCa = tuKiemKiemCa();
+	if (saiKiemCa.length > 0) return khongDo(`tu kiem kiemCa: ${saiKiemCa[0]}`);
+	console.log(
+		`tu kiem kiemCa: ${E22.tuKiemCa.length} ca dung (ban ghi dung dongTongKet cua gop-y.eval.ts)`,
 	);
 	if (tepChamLai) return chamLai(tepChamLai);
 	if (chiCa && !caDon())

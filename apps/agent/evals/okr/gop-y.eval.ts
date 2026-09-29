@@ -7,6 +7,7 @@ import { defineEval } from "eve/evals";
 import { equals, satisfies } from "eve/evals/expect";
 import { TRO_LY_OKR } from "../../agent/lib/okr/config";
 import { docBoCaGopY, THU_MUC_CA_MAU } from "./ca-gop-y";
+import { COT_DONG_TONG_KET, dongTongKet } from "./tong-ket-gop-y";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -292,33 +293,21 @@ function motCa(ca: CaGopY, stt: number) {
 			const dong = await db.okrDeXuat.findMany({
 				where: { taskId: xep.taskId },
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-				select: {
-					id: true,
-					loai: true,
-					keyResultId: true,
-					truong: true,
-					truoc: true,
-					sau: true,
-					maVanDe: true,
-					lyDo: true,
-					trangThai: true,
-					maLoai: true,
-				},
+				select: COT_DONG_TONG_KET,
 			});
 			const tep = process.env[GOP_Y_EVAL.env.tongKet];
 			if (tep) {
 				appendFileSync(
 					tep,
-					`${JSON.stringify({
-						ca: ca.id,
-						bo: ca.bo,
+					dongTongKet({
+						ca,
 						objectiveId: g.objectiveId,
 						krs: g.krs,
 						capTrenKr: g.capTrenKr,
 						taskId: xep.taskId,
 						outcome: hang?.outcome ?? null,
 						dong,
-					})}\n`,
+					}),
 				);
 			}
 			t.log(JSON.stringify(dong));
