@@ -1,4 +1,8 @@
-import { soLieuHoiY, trangThaiHoiYKhuon } from "@crm/validation/okr-hoi-y";
+import {
+	lyDoKhoaYKhuon,
+	soLieuHoiY,
+	trangThaiHoiYKhuon,
+} from "@crm/validation/okr-hoi-y";
 import { z } from "zod";
 import { MA_THIEU } from "./hoi-y";
 
@@ -52,7 +56,7 @@ export const hoiYChiTiet = z.object({
 	cuaToi: z.object({ y: z.array(yCuaToi), daHieu: z.boolean() }),
 	y: z.object({
 		khoa: z.boolean(),
-		lyDoKhoa: z.string(),
+		lyDoKhoa: lyDoKhoaYKhuon.nullable(),
 		ds: z.array(yChieuOutput),
 	}),
 	chuDe: z.null(),

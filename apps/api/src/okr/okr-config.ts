@@ -217,12 +217,8 @@ export const OKR = {
 			khongCoY: (id: string) => `Không có ý nào mang mã ${id}.`,
 			chiNguoiChon:
 				"Chỉ người chọn của lần hỏi ý này mới niêm phong hay khai không viết trước được.",
-			chiNiemPhongKhiDangMo:
-				"Lần hỏi ý đã qua hạn — không niêm phong hay khai không viết trước được nữa.",
 			daCoBanTruoc:
 				"Bản viết trước đã niêm phong hoặc đã khai không viết trước — không làm lại, không sửa được.",
-			yBiKhoa:
-				"Ý của người khác được giữ kín tới khi bạn niêm phong bản viết trước hoặc khai không viết trước.",
 		},
 		troLy: {
 			daQuyet: "Đề xuất này đã được quyết",

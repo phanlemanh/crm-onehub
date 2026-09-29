@@ -1,7 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import {
-	CAU_NIEM_PHONG_MOT_TRONG_HAI,
 	OKR_HOI_Y,
 	parseSoLieuHoiY,
 	type SoLieuHoiY,
@@ -31,6 +30,7 @@ import {
 	khoaApiCua,
 	type Nguoi,
 	nguoiCo,
+	roiDi,
 	SO_LIEU_MAC_DINH,
 	sauGio,
 	Y_MAC_DINH,
@@ -1118,7 +1118,7 @@ describe("ban-truoc", () => {
 				idLo: [],
 				chuLo: [],
 				khoa: true,
-				lyDoKhoa: T.yBiKhoa,
+				lyDoKhoa: "chua-niem-phong",
 				banTruoc: null,
 			});
 			const docQ = await docHoiY(ky, nguoi.Q.cookie);
@@ -1126,7 +1126,7 @@ describe("ban-truoc", () => {
 				soY: docQ?.y.ds.length,
 				khoa: docQ?.y.khoa,
 				lyDoKhoa: docQ?.y.lyDoKhoa,
-			}).toEqual({ soY: 3, khoa: false, lyDoKhoa: "" });
+			}).toEqual({ soY: 3, khoa: false, lyDoKhoa: null });
 		},
 		CHO_MS,
 	);
@@ -1174,7 +1174,7 @@ describe("ban-truoc", () => {
 				banTruoc: docP?.banTruoc,
 			}).toEqual({
 				khoa: false,
-				lyDoKhoa: "",
+				lyDoKhoa: null,
 				soY: 3,
 				idTen: [...ids].sort(),
 				ten: [...ten].sort(),
@@ -1248,8 +1248,8 @@ describe("ban-truoc", () => {
 				},
 				{ ca: "T-thanh-vien", maHttp: 403, cau: T.chiNguoiChon },
 				{ ca: "O-vai-chi-okr", maHttp: 403, cau: T.chiNguoiChon },
-				{ ca: "P-bi-ha-vai", maHttp: 403, cau: T.chiNguoiChon },
-				{ ca: "sau-han", maHttp: 400, cau: T.chiNiemPhongKhiDangMo },
+				{ ca: "P-bi-ha-vai", maHttp: 403, cau: T.nguoiChonPhaiQuanTri },
+				{ ca: "P-da-roi", maHttp: 401, cau: "UNAUTHORIZED" },
 				{ ca: "sau-cong-bo", maHttp: 400, cau: T.daCongBo },
 				{ ca: "hoi-y-khong-co", maHttp: 404, cau: T.khongCoHoiY("khong-co") },
 				{
@@ -1270,20 +1270,20 @@ describe("ban-truoc", () => {
 				{
 					ca: "vua-cau-vua-bo-qua",
 					maHttp: 400,
-					cau: CAU_NIEM_PHONG_MOT_TRONG_HAI,
+					cau: OKR_HOI_Y.banTruoc.motTrongHai,
 				},
 				{
 					ca: "khong-cau-khong-bo-qua",
 					maHttp: 400,
-					cau: CAU_NIEM_PHONG_MOT_TRONG_HAI,
+					cau: OKR_HOI_Y.banTruoc.motTrongHai,
 				},
 			] as const satisfies readonly Ca[];
 
 			const mo = await gieoHoiY();
 			const haVai = await gieoHoiY();
 			await doiVai(haVai.nguoi.P.id, "member");
-			const gom = await gieoHoiY();
-			await donHanVeBayGio(gom);
+			const daRoi = await gieoHoiY();
+			await roiDi(daRoi.nguoi.P.id);
 			const congBo = await gieoHoiY();
 			await donHanVeBayGio(congBo);
 			await gieoCongBo(congBo.h);
@@ -1294,7 +1294,7 @@ describe("ban-truoc", () => {
 				"T-thanh-vien": () => niemPhongCua(mo.h, tv.cookie),
 				"O-vai-chi-okr": () => niemPhongCua(mo.h, O.cookie),
 				"P-bi-ha-vai": () => niemPhongCua(haVai.h, haVai.nguoi.P.cookie),
-				"sau-han": () => niemPhongCua(gom.h, gom.nguoi.P.cookie),
+				"P-da-roi": () => niemPhongCua(daRoi.h, daRoi.nguoi.P.cookie),
 				"sau-cong-bo": () => niemPhongCua(congBo.h, congBo.nguoi.P.cookie),
 				"hoi-y-khong-co": () => niemPhongCua("khong-co", P.cookie),
 				"hai-cau": () =>
@@ -1412,6 +1412,71 @@ describe("ban-truoc", () => {
 							maHttp: { seal: 403, doi: 200 },
 						},
 			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: qua hạn vẫn niêm phong được — P đọc khoá (0 ý người khác, khoa true, chua-niem-phong), niêm phong bốn câu → 200, hàng đúng, P đọc thấy 3 ý kèm tên; đã công bố thì 400 daCongBo",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { ky, h, nguoi } = g;
+			const { ids, ten } = await gieoBaYCuaNguoiKhac(g);
+			await donHanVeBayGio(g);
+			const truoc = await docHoiY(ky, nguoi.P.cookie);
+			expect({
+				trangThai: truoc?.trangThai,
+				soY: truoc?.y.ds.length,
+				khoa: truoc?.y.khoa,
+				lyDoKhoa: truoc?.y.lyDoKhoa,
+			}).toEqual({
+				trangThai: "dang-gom",
+				soY: 0,
+				khoa: true,
+				lyDoKhoa: "chua-niem-phong",
+			});
+			const { id } = ok<{ id: string }>(
+				await niemPhongCua(h, nguoi.P.cookie),
+				"P niem phong qua han",
+			);
+			const hang = await db.okrHoiYBanTruoc.findUniqueOrThrow({
+				where: { hoiYId: h },
+			});
+			expect({
+				id: hang.id,
+				cau: hang.cau,
+				boQua: hang.boQua,
+				vietBoiUserId: hang.vietBoiUserId,
+				niemPhongLuc: hang.niemPhongLuc.toISOString(),
+			}).toEqual({
+				id,
+				cau: [...BAN_TRUOC_MAC_DINH],
+				boQua: false,
+				vietBoiUserId: nguoi.P.id,
+				niemPhongLuc: dongHo().toISOString(),
+			});
+			const sau = await docHoiY(ky, nguoi.P.cookie);
+			const thay = (sau?.y.ds ?? []).flatMap((y) =>
+				"tacGia" in y ? [{ id: y.id, ten: y.tacGia.ten }] : [],
+			);
+			expect({
+				khoa: sau?.y.khoa,
+				lyDoKhoa: sau?.y.lyDoKhoa,
+				idTen: thay.map((y) => y.id).sort(),
+				ten: thay.map((y) => y.ten).sort(),
+			}).toEqual({
+				khoa: false,
+				lyDoKhoa: null,
+				idTen: [...ids].sort(),
+				ten: [...ten].sort(),
+			});
+			await gieoCongBo(h);
+			const daCongBo = await niemPhongCua(h, nguoi.P.cookie);
+			expect({ maHttp: daCongBo.status, cau: daCongBo.loi }).toEqual({
+				maHttp: 400,
+				cau: T.daCongBo,
+			});
 		},
 		CHO_MS,
 	);

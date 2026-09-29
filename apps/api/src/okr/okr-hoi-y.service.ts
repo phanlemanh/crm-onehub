@@ -355,12 +355,12 @@ export class OkrHoiYService {
 		return this.db.$transaction(async (tx) => {
 			const h = await this.khoaHoiY(tx, input.hoiYId);
 			const now = this.dongHo();
-			if (h.nguoiChonUserId !== userId || !(await this.laQuanTri(tx, userId)))
+			if (h.nguoiChonUserId !== userId)
 				throw new ForbiddenException(T.chiNguoiChon);
-			const trangThai = trangThaiHoiY(h, now);
-			if (trangThai === "da-cong-bo") throw new BadRequestException(T.daCongBo);
-			if (trangThai === "dang-gom")
-				throw new BadRequestException(T.chiNiemPhongKhiDangMo);
+			if (!(await this.laQuanTri(tx, userId)))
+				throw new ForbiddenException(T.nguoiChonPhaiQuanTri);
+			if (trangThaiHoiY(h, now) === "da-cong-bo")
+				throw new BadRequestException(T.daCongBo);
 			const daCo = await tx.okrHoiYBanTruoc.findUnique({
 				where: { hoiYId: h.id },
 				select: { id: true },
@@ -466,7 +466,7 @@ export class OkrHoiYService {
 			},
 			y: {
 				khoa: chieu.khoa,
-				lyDoKhoa: chieu.khoa ? T.yBiKhoa : "",
+				lyDoKhoa: chieu.khoa ? "chua-niem-phong" : null,
 				ds: chieu.y.map(raY),
 			},
 			chuDe: null,

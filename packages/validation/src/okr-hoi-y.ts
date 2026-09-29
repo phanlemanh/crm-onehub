@@ -15,7 +15,13 @@ export const OKR_HOI_Y = {
 	noiDung: { min: 10, max: 300 },
 	viSao: { max: 500 },
 	doBangGi: { max: 200 },
-	banTruoc: { min: 3, max: 5, cau: { min: 10, max: 200 } },
+	banTruoc: {
+		min: 3,
+		max: 5,
+		cau: { min: 10, max: 200 },
+		motTrongHai:
+			"Viết các câu viết trước, hoặc khai không viết trước — chỉ một trong hai.",
+	},
 	tenChuDe: { min: 2, max: 120 },
 	lyDo: { min: 10, max: 1000 },
 	hanGio: { min: 24, max: 168 },
@@ -28,6 +34,10 @@ export const OKR_HOI_Y = {
 export const TRANG_THAI_HOI_Y = ["dang-mo", "dang-gom", "da-cong-bo"] as const;
 export type TrangThaiHoiY = (typeof TRANG_THAI_HOI_Y)[number];
 export const trangThaiHoiYKhuon = z.enum(TRANG_THAI_HOI_Y);
+
+export const LY_DO_KHOA_Y = ["chua-niem-phong"] as const;
+export type LyDoKhoaY = (typeof LY_DO_KHOA_Y)[number];
+export const lyDoKhoaYKhuon = z.enum(LY_DO_KHOA_Y);
 
 export const LOAI_CHU_DE = ["chu-de", "y-la"] as const;
 export type LoaiChuDe = (typeof LOAI_CHU_DE)[number];
@@ -133,8 +143,6 @@ export type YIdInput = z.infer<typeof yIdInput>;
 export const dongYInput = z.object({ yId: ma, bat: z.boolean() });
 export type DongYInput = z.infer<typeof dongYInput>;
 
-export const CAU_NIEM_PHONG_MOT_TRONG_HAI = `Viết từ ${OKR_HOI_Y.banTruoc.min} tới ${OKR_HOI_Y.banTruoc.max} câu, hoặc khai không viết trước — chỉ một trong hai.`;
-
 export const niemPhongInput = z
 	.object({
 		hoiYId: ma,
@@ -147,7 +155,7 @@ export const niemPhongInput = z
 	})
 	.strict()
 	.refine((v) => (v.cau === undefined) !== (v.boQua === undefined), {
-		message: CAU_NIEM_PHONG_MOT_TRONG_HAI,
+		message: OKR_HOI_Y.banTruoc.motTrongHai,
 	});
 export type NiemPhongInput = z.infer<typeof niemPhongInput>;
 
