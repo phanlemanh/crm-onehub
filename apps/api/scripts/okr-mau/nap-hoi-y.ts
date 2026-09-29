@@ -16,6 +16,7 @@ export type DemHoiY = {
 	y: number;
 	dongY: number;
 	chuDe: number;
+	yLa: number;
 };
 
 const CUA = OKR_MAU.hoiY;
@@ -121,11 +122,17 @@ export async function napHoiYMau(
 			await dichVu.ketLuanChuDe(chon, ketLuanVao(id, c.ketLuan));
 	}
 
+	const [soHoiY, soChuDe, soYLa] = await Promise.all([
+		db.okrHoiY.count({ where: { cycleId: chuKyId } }),
+		db.okrChuDe.count({ where: { hoiYId, loai: "chu-de" } }),
+		db.okrChuDe.count({ where: { hoiYId, loai: "y-la" } }),
+	]);
 	return {
-		hoiY: 1,
+		hoiY: soHoiY,
 		y: h.y.length,
 		dongY: h.dongY.length,
-		chuDe: h.chuDe.length + h.yLa.length,
+		chuDe: soChuDe,
+		yLa: soYLa,
 	};
 }
 
@@ -151,7 +158,10 @@ export async function xoaHoiY(
 		where: { OR: [{ hoiYId: H }, { userId: U }] },
 	});
 	const yXoa = await tx.okrY.deleteMany({ where: { id: Y } });
-	const chuDe = await tx.okrChuDe.deleteMany({ where: { hoiYId: H } });
+	const chuDe = await tx.okrChuDe.deleteMany({
+		where: { hoiYId: H, loai: "chu-de" },
+	});
+	const yLa = await tx.okrChuDe.deleteMany({ where: { hoiYId: H } });
 	await tx.okrHoiYBanTruoc.deleteMany({ where: { hoiYId: H } });
 	const hoiYXoa = await tx.okrHoiY.deleteMany({ where: { id: H } });
 	return {
@@ -159,5 +169,6 @@ export async function xoaHoiY(
 		y: yXoa.count,
 		dongY: dongY.count,
 		chuDe: chuDe.count,
+		yLa: yLa.count,
 	};
 }

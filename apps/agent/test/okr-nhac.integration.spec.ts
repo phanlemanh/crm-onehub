@@ -1102,6 +1102,7 @@ describe("hoi-y", () => {
 				cycleId: g.ky,
 				nguoiChon: g.P.id,
 				han: HAN,
+				mo: new Date(goc.getTime() - 3 * GIO_MS),
 			});
 			await gieoY(h, g.B.id, new Date(goc.getTime() - 2 * GIO_MS));
 			setSystemTime(goc);

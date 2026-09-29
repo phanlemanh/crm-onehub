@@ -31,11 +31,13 @@ import { docBoOkrMau, type KichBan } from "../scripts/okr-mau/khuon";
 import {
 	idMau,
 	kiemWorkspace,
+	napBoOkrMau,
 	napTrong,
 	xoaBoOkrMau,
 	xoaTrong,
 } from "../scripts/okr-mau/nap";
 import { kiemDongKy } from "../src/okr/khep";
+import { OKR } from "../src/okr/okr-config";
 import type { BangChamOutput } from "../src/okr/okr-khep.contracts";
 import type {
 	HopTuanOutput,
@@ -53,6 +55,7 @@ import {
 	nguoiMau,
 	tapIdMau,
 	vanTay,
+	vanTayHoiY,
 	vanTayKho,
 } from "./okr-mau-san";
 import {
@@ -913,6 +916,11 @@ const BANG_CO_MAU = [
 	"okrNhinLai",
 	"okrMangSang",
 	...SAU_BANG,
+	"okrHoiY",
+	"okrHoiYBanTruoc",
+	"okrY",
+	"okrYDongY",
+	"okrChuDe",
 ] as const;
 
 const bangCoHang = (dem: Record<string, number>) =>
@@ -1708,10 +1716,10 @@ describe("hoi-y", () => {
 					expect(d.createdAt.getTime(), m.ma).toBeLessThan(han.getTime());
 				}
 			}
+			const gomLuc = new Date(han.getTime() + OKR_MAU.hoiY.gomSauHanGio * GIO);
 			for (const c of h.chuDe) {
-				expect(c.createdAt.getTime()).toBeGreaterThanOrEqual(han.getTime());
-				for (const x of c.y)
-					expect(x.ganLuc?.getTime()).toBeGreaterThanOrEqual(han.getTime());
+				expect(c.createdAt, c.ten).toEqual(gomLuc);
+				for (const x of c.y) expect(x.ganLuc, x.noiDung).toEqual(gomLuc);
 			}
 
 			const chon = h.chuDe.find((c) => c.ketLuan === "chon");
@@ -1752,6 +1760,90 @@ describe("hoi-y", () => {
 			expect(h.hanLuc.getTime()).toBeLessThan(bayGio.getTime());
 			expect(h.congBoLuc).toBeNull();
 			expect(trangThaiHoiY(h, new Date())).toBe("dang-gom");
+		},
+		CHO,
+	);
+
+	test(
+		"vân tay phủ sáu bảng hỏi ý theo nội dung, không theo mã sinh: nạp lại cùng mốc ra cùng vân tay, đủ số hàng từng bảng",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const mot = await vanTayHoiY();
+			const idMot = await idSauBang();
+			await xoaBoOkrMau(db);
+			await napMau(MOC_THU_NAM);
+			const hai = await vanTayHoiY();
+			expect(await idSauBang()).not.toEqual(idMot);
+			expect(hai).toEqual(mot);
+			expect(
+				Object.fromEntries(
+					Object.entries(await vanTay())
+						.filter(([bang]) => SAU_BANG_HOI_Y.some((b) => b === bang))
+						.map(([bang, ds]) => [bang, ds.length]),
+				),
+			).toEqual({
+				okrHoiY: KHAI.hoiY,
+				okrHoiYBanTruoc: 1,
+				okrY: KHAI.y,
+				okrYDongY: KHAI.dongY,
+				okrChuDe: KHAI.chuDe,
+				okrHoiYHieu: 0,
+			});
+			const chu = JSON.stringify(mot);
+			for (const id of idMot) expect(chu.includes(id), id).toBe(false);
+		},
+		CHO,
+	);
+
+	test(
+		"lệnh nạp và lệnh xoá in số lần hỏi ý thật, số chủ đề và số ý lạ tách riêng",
+		async () => {
+			await lamSachOkr();
+			const tomTat = `${KHAI.hoiY} lần hỏi ý mục tiêu với ${KHAI.y} ý, ${KHAI.dongY} lượt đồng ý, ${KHAI.chuDe - KHAI.chuDeYLa} chủ đề + ${KHAI.chuDeYLa} ý lạ`;
+			const nap = chayLenh([]);
+			expect(nap.ma, nap.loi).toBe(0);
+			expect(nap.ra).toContain(tomTat);
+			const xoa = chayLenh([OKR_MAU.co.xoa]);
+			expect(xoa.ma, xoa.loi).toBe(0);
+			expect(xoa.ra).toContain(tomTat);
+		},
+		CHO,
+	);
+
+	test(
+		"nạp hỏi ý mẫu hỏng giữa chừng: lỗi đi ra nguyên văn, bộ mẫu vừa nạp được dọn sạch, không ghi lỗi dọn",
+		async () => {
+			await lamSachOkr();
+			const mau = congTy();
+			const thanhVien = mau.nguoi.find(
+				(n) => n.vai === "member" && n.ma !== mau.hoiY.nguoiChon,
+			);
+			if (!thanhVien) throw new Error("bộ mẫu không có thành viên thường");
+			const hong = {
+				...mau,
+				hoiY: { ...mau.hoiY, nguoiChon: thanhVien.ma },
+			};
+			const ghiLoi: string[] = [];
+			const goc = console.error;
+			console.error = (...x: string[]) => {
+				ghiLoi.push(x.join(" "));
+			};
+			try {
+				const loi = await napBoOkrMau(db, hong, { moc: MOC_THU_NAM }).then(
+					() => null,
+					(e: Error) => e,
+				);
+				expect(loi).toBeInstanceOf(Error);
+				expect(loi?.message).toBe(OKR.thongDiep.hoiY.chiQuanTri);
+			} finally {
+				console.error = goc;
+			}
+			expect({
+				idMau: await tapIdMau(),
+				hoiY: await db.okrHoiY.count(),
+				ghiLoi,
+			}).toEqual({ idMau: [], hoiY: 0, ghiLoi: [] });
 		},
 		CHO,
 	);
@@ -1855,7 +1947,8 @@ describe("hoi-y", () => {
 				hoiY: KHAI.hoiY,
 				y: KHAI.y + 1,
 				dongY: KHAI.dongY + 1,
-				chuDe: KHAI.chuDe,
+				chuDe: KHAI.chuDe - KHAI.chuDeYLa,
+				yLa: KHAI.chuDeYLa,
 			});
 			expect(await demSauBang()).toEqual({
 				okrHoiY: 1,

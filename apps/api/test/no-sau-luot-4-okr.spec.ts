@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
-import { LOAI_NHAC_OKR } from "@crm/db/okr-nhac";
+import { LOAI_NHAC_OKR, type LoaiNhacOkr } from "@crm/db/okr-nhac";
 import { mocNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import {
 	guiCapNhatInput,
@@ -27,6 +27,7 @@ import {
 	ok,
 	pbMoi,
 	phienCua,
+	taoNam,
 	truongMoi,
 	ungDung,
 } from "./okr-san";
@@ -517,10 +518,8 @@ describe("the-truc-tiep", () => {
 	);
 });
 
-const LOAI_CO_DUONG_RIENG: readonly string[] = [
-	"okr-hoi-y-gop",
-	"okr-hoi-y-cong-bo",
-];
+const LOAI_CO_DUONG_RIENG: LoaiNhacOkr[] = ["okr-hoi-y-cong-bo"];
+const HAN_HOI_Y_GIO = 48;
 
 describe("du-duong", () => {
 	test(
@@ -594,6 +593,20 @@ describe("du-duong", () => {
 					tp.cookie,
 				),
 				"tp cap nhat k3",
+			);
+
+			const nguoiChon = await nguoiMoi("dd-chon", "admin");
+			const kyKe = await taoNam("dd-hoi-y", new Date().getUTCFullYear() + 1);
+			ok(
+				await goi("okr.moHoiY", {
+					cycleId: kyKe,
+					cauHoi: "Năm tới công ty nên dồn sức vào điều gì trước tiên?",
+					loiMo: "",
+					soLieu: [{ nhan: "Doanh thu năm", giaTri: "186 tỷ", ghiChu: "" }],
+					hanLuc: new Date(Date.now() + HAN_HOI_Y_GIO * GIO_MS).toISOString(),
+					nguoiChonUserId: nguoiChon,
+				}),
+				"mo hoi y cho X gop",
 			);
 
 			const quaTrpc = await doc<ViecCuaToiOutput>("okr.viecCuaToi", cX);

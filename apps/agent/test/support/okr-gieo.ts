@@ -7,6 +7,12 @@ import type {
 	PhamViChiSo,
 } from "@crm/validation/okr-chi-so";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
+import {
+	KET_LUAN_CHON,
+	NOI_MOI,
+	type SoLieuHoiY,
+	soLieuHoiY,
+} from "@crm/validation/okr-hoi-y";
 import type { KieuKr } from "@crm/validation/okr-kr";
 import type { OkrVetSnapshot } from "@crm/validation/okr-vet";
 import { donDep, ma, TIEN_TO } from "./nhac-gieo";
@@ -288,24 +294,74 @@ export async function gieoPhongBan(
 	return pb.id;
 }
 
+const HOI_Y_GIEO = {
+	moTruocHanGio: 48,
+	cauHoi: "Năm tới nên dồn sức vào điều gì?",
+	soLieu: [
+		{ nhan: "Doanh thu năm", giaTri: "186 tỷ", ghiChu: "" },
+	] satisfies SoLieuHoiY,
+	chuDe: "Giao lạnh có lãi",
+	lyDo: "Đúng hướng năm tới, có người làm ngay.",
+	cauMucTieu: "Đưa giao lạnh thành dịch vụ có lãi",
+	noiDungY: "Mở tuyến giao lạnh cho khách dược",
+} as const;
+
 export async function gieoHoiY(h: {
 	cycleId: string;
 	nguoiChon: string;
 	han: Date;
+	mo?: Date;
 	congBo?: Date;
 }): Promise<string> {
+	const mo =
+		h.mo ?? new Date(h.han.getTime() - HOI_Y_GIEO.moTruocHanGio * GIO_MS);
+	if (h.congBo && h.congBo.getTime() < h.han.getTime())
+		throw new Error(
+			`gieoHoiY: công bố ${h.congBo.toISOString()} trước hạn ${h.han.toISOString()} — lần hỏi ý chỉ công bố được sau hạn`,
+		);
 	const hang = await db.okrHoiY.create({
 		data: {
 			cycleId: h.cycleId,
-			cauHoi: "Năm tới nên dồn sức vào điều gì?",
-			soLieu: [],
+			cauHoi: HOI_Y_GIEO.cauHoi,
+			soLieu: soLieuHoiY.parse(HOI_Y_GIEO.soLieu),
 			hanLuc: h.han,
 			nguoiChonUserId: h.nguoiChon,
 			taoBoiUserId: h.nguoiChon,
 			congBoLuc: h.congBo ?? null,
-			createdAt: new Date(h.han.getTime() - 48 * GIO_MS),
+			createdAt: mo,
 		},
 	});
+	if (h.congBo) {
+		await db.okrHoiYBanTruoc.create({
+			data: {
+				hoiYId: hang.id,
+				cau: [],
+				boQua: true,
+				vietBoiUserId: h.nguoiChon,
+				niemPhongLuc: h.han,
+			},
+		});
+		const mucTieu = await gieoMucTieu({
+			cycleId: h.cycleId,
+			chu: h.nguoiChon,
+			tieuDe: HOI_Y_GIEO.cauMucTieu,
+			congBo: null,
+		});
+		await db.okrChuDe.create({
+			data: {
+				hoiYId: hang.id,
+				loai: "chu-de",
+				ten: HOI_Y_GIEO.chuDe,
+				ketLuan: KET_LUAN_CHON,
+				lyDo: HOI_Y_GIEO.lyDo,
+				cauMucTieu: HOI_Y_GIEO.cauMucTieu,
+				noiBanTruoc: NOI_MOI,
+				objectiveId: mucTieu,
+				viTri: 0,
+				createdAt: h.han,
+			},
+		});
+	}
 	return hang.id;
 }
 
@@ -314,11 +370,27 @@ export async function gieoY(
 	tacGia: string,
 	luc: Date,
 ): Promise<void> {
+	const h = await db.okrHoiY.findUniqueOrThrow({
+		where: { id: hoiYId },
+		select: {
+			createdAt: true,
+			hanLuc: true,
+			congBoLuc: true,
+			chuDe: { select: { id: true }, orderBy: { viTri: "asc" }, take: 1 },
+		},
+	});
+	if (luc.getTime() < h.createdAt.getTime() || luc >= h.hanLuc)
+		throw new Error(
+			`gieoY: ý góp lúc ${luc.toISOString()} ngoài [mở ${h.createdAt.toISOString()}, hạn ${h.hanLuc.toISOString()}) của lần hỏi ý`,
+		);
+	const chuDeId = h.congBoLuc ? (h.chuDe[0]?.id ?? null) : null;
 	await db.okrY.create({
 		data: {
 			hoiYId,
 			tacGiaUserId: tacGia,
-			noiDung: "Mở tuyến giao lạnh cho khách dược",
+			noiDung: HOI_Y_GIEO.noiDungY,
+			chuDeId,
+			ganLuc: chuDeId ? h.hanLuc : null,
 			createdAt: luc,
 		},
 	});
@@ -344,6 +416,8 @@ export async function donOkr(): Promise<void> {
 		where: { actorUserId: { startsWith: TIEN_TO } },
 	});
 	await db.okrY.deleteMany({ where: { hoiY: cuaSan } });
+	await db.okrChuDe.deleteMany({ where: { hoiY: cuaSan } });
+	await db.okrHoiYBanTruoc.deleteMany({ where: { hoiY: cuaSan } });
 	await db.okrHoiY.deleteMany({ where: cuaSan });
 	await db.okrSoChup.deleteMany({
 		where: { keyResult: { objective: cuaSan } },

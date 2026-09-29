@@ -620,7 +620,11 @@ export async function napBoOkrMau(
 		const hoiY = await napHoiYMau(db, bo, { moc, chuKyId: CHU_KY.namKe });
 		return { ...dem, ...hoiY };
 	} catch (loi) {
-		await xoaBoOkrMau(db).catch(() => null);
+		await xoaBoOkrMau(db).catch((loiDon) => {
+			console.error(
+				`Nạp lần hỏi ý mẫu hỏng, và dọn bộ mẫu vừa nạp cũng hỏng — kho còn bộ mẫu dở, chạy lại với ${OKR_MAU.co.xoa}: ${loiDon instanceof Error ? loiDon.message : String(loiDon)}`,
+			);
+		});
 		throw loi;
 	}
 }

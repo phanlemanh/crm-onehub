@@ -3440,7 +3440,11 @@ const tCongBo = () => tGom(5);
 const tHieu = () => tGom(6);
 
 async function gieoDu(
-	opts: { chuaKetLuan?: TenChuDe[]; boQua?: boolean; yChuaGom?: boolean } = {},
+	opts: {
+		chuaKetLuan?: readonly TenChuDe[];
+		boQua?: boolean;
+		yChuaGom?: boolean;
+	} = {},
 ) {
 	datDongHo(LUC);
 	const g = await gieoHoiY();
@@ -3526,7 +3530,7 @@ const soChuDeCoMucTieu = (hoiYId: string) =>
 
 const CA_THIEU = [
 	{
-		ca: "chua-niem-phong",
+		ca: "chua-niem-phong-dung-tay",
 		ma: "chua-niem-phong",
 		maHttp: 400,
 		cau: T.congBoThieu["chua-niem-phong"],
@@ -3536,6 +3540,7 @@ const CA_THIEU = [
 		ma: "y-chua-gom",
 		maHttp: 400,
 		cau: T.congBoThieu["y-chua-gom"],
+		gieo: { yChuaGom: true },
 	},
 	{
 		ca: "chu-de-rong",
@@ -3548,15 +3553,17 @@ const CA_THIEU = [
 		ma: "thieu-ket-luan",
 		maHttp: 400,
 		cau: T.congBoThieu["thieu-ket-luan"],
+		gieo: { chuaKetLuan: ["K4"] },
+		kem: ["thieu-ly-do"],
 	},
 	{
-		ca: "thieu-ly-do",
+		ca: "thieu-ly-do-dung-tay",
 		ma: "thieu-ly-do",
 		maHttp: 400,
 		cau: T.congBoThieu["thieu-ly-do"],
 	},
 	{
-		ca: "thieu-cau-muc-tieu",
+		ca: "thieu-cau-muc-tieu-dung-tay",
 		ma: "thieu-cau-muc-tieu",
 		maHttp: 400,
 		cau: T.congBoThieu["thieu-cau-muc-tieu"],
@@ -3584,10 +3591,12 @@ const CA_THIEU = [
 	ma: MaThieu;
 	maHttp: number;
 	cau: string;
+	gieo?: { yChuaGom?: boolean; chuaKetLuan?: readonly TenChuDe[] };
+	kem?: readonly MaThieu[];
 }[];
 
 const PHA_THIEU = {
-	"chua-niem-phong": async (g) => {
+	"chua-niem-phong-dung-tay": async (g) => {
 		await db.okrHoiYBanTruoc.delete({ where: { hoiYId: g.h } });
 		return null;
 	},
@@ -3597,21 +3606,15 @@ const PHA_THIEU = {
 		ok(await ketLuanCua(id, KET_LUAN_DU.K4, g.nguoi.P.cookie), "P ket luan");
 		return id;
 	},
-	"thieu-ket-luan": async (g) => {
-		await db.okrChuDe.update({
-			where: { id: g.k.K4 },
-			data: { ketLuan: null },
-		});
-		return g.k.K4;
-	},
-	"thieu-ly-do": async (g) => {
+	"thieu-ket-luan": async (g) => g.k.K4,
+	"thieu-ly-do-dung-tay": async (g) => {
 		await db.okrChuDe.update({
 			where: { id: g.k.K4 },
 			data: { lyDo: "ngắn" },
 		});
 		return g.k.K4;
 	},
-	"thieu-cau-muc-tieu": async (g) => {
+	"thieu-cau-muc-tieu-dung-tay": async (g) => {
 		await db.okrChuDe.update({
 			where: { id: g.k.K3 },
 			data: { cauMucTieu: "" },
@@ -3652,11 +3655,11 @@ const PHA_THIEU = {
 
 describe("cong-bo", () => {
 	test(
-		"cong-bo: bảng 9 ca thiếu — mỗi ca dựng từ lần hỏi ý đủ điều kiện rồi phá đúng một điều; quyen.lyDoChuaCongBo của người chọn đúng một mã, congBo 400 với câu riêng, không mục tiêu, không vết, không chủ đề nào nối mục tiêu, congBoLuc null",
+		"cong-bo: bảng 9 ca thiếu — mỗi ca dựng từ lần hỏi ý đủ điều kiện rồi phá đúng một điều; quyen.lyDoChuaCongBo của người chọn đúng mã của điều bị phá (chủ đề chưa kết luận kéo theo thiếu lý do của chính nó), congBo 400 với câu riêng, không mục tiêu, không vết, không chủ đề nào nối mục tiêu, congBoLuc null. Ba ca «-dung-tay» (chua-niem-phong, thieu-ly-do, thieu-cau-muc-tieu) sửa hàng bằng Prisma vì không thủ tục nào tạo được trạng thái đó — chỉ là chốt chặn phía máy chủ; sáu ca kia đi qua thủ tục thật",
 		async () => {
 			const ra: unknown[] = [];
 			for (const c of CA_THIEU) {
-				const g = await gieoDu(c.ca === "y-chua-gom" ? { yChuaGom: true } : {});
+				const g = await gieoDu("gieo" in c ? c.gieo : {});
 				datDongHo(tCongBo());
 				const chuDeId = await PHA_THIEU[c.ca](g);
 				const truoc = {
@@ -3692,7 +3695,10 @@ describe("cong-bo", () => {
 					ca: c.ca,
 					quyen: {
 						congBoDuoc: false,
-						lyDoChuaCongBo: [{ ma: c.ma, chuDeId }],
+						lyDoChuaCongBo: [
+							{ ma: c.ma, chuDeId },
+							...("kem" in c ? c.kem : []).map((ma) => ({ ma, chuDeId })),
+						],
 					},
 					tra: { maHttp: c.maHttp, cau: c.cau },
 					doi: { mucTieu: 0, vet: 0, chuDeNoiMucTieu: 0, congBoLuc: null },
