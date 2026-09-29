@@ -80,7 +80,7 @@ bảng mới. Không cột mới trên bảng có sẵn: nối chủ đề ↔ m
 |---|---|---|
 | `OkrHoiY` | `cycleId @unique`, `cauHoi` (10–300), `loiMo` (0–1000), `soLieu Json` (1–5 `{ nhan, giaTri, ghiChu }`), `hanLuc`, `nguoiChonUserId`, `taoBoiUserId`, `congBoLuc?`, `createdAt`, `updatedAt` | chu kỳ, `user`: RESTRICT |
 | `OkrHoiYBanTruoc` | `hoiYId @unique`, `cau String[]` (3–5 câu, hoặc trống khi `boQua`), `boQua Boolean`, `vietBoiUserId`, `niemPhongLuc` | hỏi ý, `user`: RESTRICT |
-| `OkrY` | `hoiYId`, `tacGiaUserId`, `noiDung` (10–300), `viSao` (0–500), `doBangGi` (0–200), `chuDeId?`, `createdAt`, `updatedAt` | hỏi ý, `user`: RESTRICT · chủ đề: SET NULL |
+| `OkrY` | `hoiYId`, `tacGiaUserId`, `noiDung` (10–300), `viSao` (0–500), `doBangGi` (0–200), `chuDeId?`, `ganLuc?` (lúc gắn vào chủ đề — mốc «vào chủ đề» của hành trình), `createdAt`, `updatedAt` | hỏi ý, `user`: RESTRICT · chủ đề: SET NULL |
 | `OkrYDongY` | `yId`, `userId` — khoá chính ghép, `createdAt` | ý: CASCADE · `user`: RESTRICT |
 | `OkrChuDe` | `hoiYId`, `loai` (`chu-de` · `y-la`), `ten` (2–120), `ketLuan?` (`chon` · `de-sau` · `khong-lam` · `da-co`), `lyDo` (0–1000), `cauMucTieu` (0–200), `noiBanTruoc String?` (`cau-1`…`cau-5` hoặc `moi`), `objectiveId? @unique`, `viTri`, `createdAt` | hỏi ý: RESTRICT · mục tiêu: RESTRICT |
 | `OkrHoiYHieu` | `hoiYId`, `userId` — khoá chính ghép, `luc` | hỏi ý, `user`: RESTRICT |
