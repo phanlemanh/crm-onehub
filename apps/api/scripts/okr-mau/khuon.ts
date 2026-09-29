@@ -5,6 +5,11 @@ import {
 } from "@crm/validation/okr-canh-kr";
 import { MA_CHI_SO, PHAM_VI_CHI_SO } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
+import {
+	MUC_HIEN_THI,
+	OKR_HIEN_THI,
+	traLaiInput,
+} from "@crm/validation/okr-hien-thi";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import { luuMauInput, mauNoiDung } from "@crm/validation/okr-mau";
@@ -48,6 +53,18 @@ const phongBan = z.strictObject({
 	truong: ma,
 });
 
+const phongBanLuuTru = z.strictObject({
+	ma,
+	ten: z.string().trim().min(2),
+	boPhan: ma,
+});
+
+const duyetMau = z.strictObject({
+	traLai: z
+		.strictObject({ nguoi: ma, lyDo: traLaiInput.shape.lyDo })
+		.optional(),
+});
+
 const nguonCrm = z.strictObject({
 	chiSo: z.enum(MA_CHI_SO),
 	phamVi: z.discriminatedUnion("kieu", [
@@ -83,7 +100,12 @@ const mucTieu = z.strictObject({
 	donVi: ma.optional(),
 	chu: ma,
 	kieu: z.enum(["cam-ket", "tham-vong"]),
-	trangThai: z.enum(["cong-bo", "nhap", "da-bo"]).default("cong-bo"),
+	trangThai: z
+		.enum(["cong-bo", "nhap", "cho-duyet", "da-bo"])
+		.default("cong-bo"),
+	hienThi: z.enum(MUC_HIEN_THI).default("cong-khai"),
+	nguoiXem: z.array(ma).max(OKR_HIEN_THI.nguoiXemToiDa).default([]),
+	duyet: duyetMau.optional(),
 	ten: z.string().trim().min(3).max(200),
 	viSao: z.string().trim().max(500).default(""),
 	canChinh: z
@@ -147,6 +169,7 @@ const boTho = z.strictObject({
 	chuKy: z.strictObject({ nam: chuKy, quy3: chuKy, quy4: chuKy }),
 	boPhan: z.array(boPhan).min(1),
 	phongBan: z.array(phongBan).min(1),
+	phongBanLuuTru: z.array(phongBanLuuTru).default([]),
 	nguoi: z.array(nguoi).min(1),
 	mucTieu: z.array(mucTieu).min(1),
 	canhKr,
@@ -172,6 +195,7 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 		ctx.addIssue({ code: "custom", path, message });
 	const nguoiTheoMa = new Map(bo.nguoi.map((n) => [n.ma, n]));
 	const pbTheoMa = new Map(bo.phongBan.map((p) => [p.ma, p]));
+	const pbLuuTruTheoMa = new Map(bo.phongBanLuuTru.map((p) => [p.ma, p]));
 	const bpTheoMa = new Map(bo.boPhan.map((b) => [b.ma, b]));
 	const mtTheoMa = new Map(bo.mucTieu.map((m) => [m.ma, m]));
 	const krTheoMa = new Map(
@@ -180,7 +204,11 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 
 	const trungNguoi = trungMa(bo.nguoi);
 	if (trungNguoi) loi(["nguoi"], `mã người trùng: ${trungNguoi}`);
-	const trungDonVi = trungMa([...bo.boPhan, ...bo.phongBan]);
+	const trungDonVi = trungMa([
+		...bo.boPhan,
+		...bo.phongBan,
+		...bo.phongBanLuuTru,
+	]);
 	if (trungDonVi) loi(["phongBan"], `mã đơn vị trùng: ${trungDonVi}`);
 	const trungMt = trungMa(bo.mucTieu);
 	if (trungMt) loi(["mucTieu"], `mã mục tiêu trùng: ${trungMt}`);
@@ -194,6 +222,10 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	bo.boPhan.forEach((b, i) => {
 		if (!nguoiTheoMa.has(b.truong))
 			loi(["boPhan", i, "truong"], `không có người ${b.truong}`);
+	});
+	bo.phongBanLuuTru.forEach((p, i) => {
+		if (!bpTheoMa.has(p.boPhan))
+			loi(["phongBanLuuTru", i, "boPhan"], `không có bộ phận ${p.boPhan}`);
 	});
 	bo.phongBan.forEach((p, i) => {
 		if (!bpTheoMa.has(p.boPhan))
@@ -212,8 +244,22 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 			loi(["mucTieu", i, "chu"], `không có người ${m.chu}`);
 		if (m.cap === "onehub" && m.donVi !== undefined)
 			loi(["mucTieu", i, "donVi"], "mục tiêu OneHub không có đơn vị");
-		if (m.cap === "phong-ban" && !pbTheoMa.has(m.donVi ?? ""))
+		if (
+			m.cap === "phong-ban" &&
+			!pbTheoMa.has(m.donVi ?? "") &&
+			!pbLuuTruTheoMa.has(m.donVi ?? "")
+		)
 			loi(["mucTieu", i, "donVi"], `không có phòng ban ${m.donVi}`);
+		if (
+			m.cap === "phong-ban" &&
+			pbLuuTruTheoMa.has(m.donVi ?? "") &&
+			m.chuKy !== "quy3"
+		)
+			loi(
+				["mucTieu", i, "chuKy"],
+				`phòng ban lưu trữ ${m.donVi} chỉ còn mục tiêu quý 3 đã khép`,
+			);
+		kiemHienThiVaDuyet(bo, m, i, loi);
 		if (m.cap === "bo-phan" && !bpTheoMa.has(m.donVi ?? ""))
 			loi(["mucTieu", i, "donVi"], `không có bộ phận ${m.donVi}`);
 		if (m.krs.length > OKR_PROGRAM_MAC_DINH.krCap)
@@ -310,6 +356,67 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 });
 
 type BaoLoi = (path: (string | number)[], message: string) => void;
+
+function kiemHienThiVaDuyet(
+	bo: BoOkrMau,
+	m: MucTieuMau,
+	i: number,
+	loi: BaoLoi,
+): void {
+	const nguoi = new Set(bo.nguoi.map((n) => n.ma));
+	if (m.hienThi === "cong-khai" && m.nguoiXem.length > 0)
+		loi(["mucTieu", i, "nguoiXem"], "mục tiêu công khai không có người xem");
+	if (m.hienThi === "gioi-han") {
+		if (m.nguoiXem.length === 0)
+			loi(["mucTieu", i, "nguoiXem"], "mục tiêu giới hạn cần người xem có tên");
+		if (m.canChinh)
+			loi(["mucTieu", i, "canChinh"], "mục tiêu giới hạn không căn chỉnh được");
+		const krCua = new Set(m.krs.map((k) => k.ma));
+		const nhamVao = bo.mucTieu.find(
+			(x) =>
+				x.canChinh?.mucTieu === m.ma ||
+				(x.canChinh?.kr !== undefined && krCua.has(x.canChinh.kr)),
+		);
+		if (nhamVao)
+			loi(
+				["mucTieu", i, "hienThi"],
+				`mục tiêu ${nhamVao.ma} căn chỉnh vào mục tiêu giới hạn ${m.ma}`,
+			);
+	}
+	if (new Set(m.nguoiXem).size !== m.nguoiXem.length)
+		loi(["mucTieu", i, "nguoiXem"], "người xem trùng");
+	for (const n of m.nguoiXem)
+		if (!nguoi.has(n)) loi(["mucTieu", i, "nguoiXem"], `không có người ${n}`);
+
+	if (m.trangThai === "cho-duyet") {
+		if (m.chuKy !== "quy4" || m.cap === "onehub")
+			loi(
+				["mucTieu", i, "trangThai"],
+				"chờ duyệt chỉ ở mục tiêu quý 4 cấp bộ phận hay phòng ban",
+			);
+		if (!m.duyet || m.duyet.traLai)
+			loi(
+				["mucTieu", i, "duyet"],
+				"mục tiêu chờ duyệt có vết gửi, không trả lại",
+			);
+	} else if (m.duyet) {
+		if (m.trangThai !== "nhap")
+			loi(
+				["mucTieu", i, "duyet"],
+				"vết duyệt chỉ ở mục tiêu nháp hay chờ duyệt",
+			);
+		if (m.duyet.traLai && !nguoi.has(m.duyet.traLai.nguoi))
+			loi(
+				["mucTieu", i, "duyet", "traLai", "nguoi"],
+				`không có người ${m.duyet.traLai.nguoi}`,
+			);
+		if (m.duyet.traLai?.nguoi === m.chu)
+			loi(
+				["mucTieu", i, "duyet", "traLai", "nguoi"],
+				"người trả lại không phải người gửi",
+			);
+	}
+}
 
 function kiemCanhKr(bo: BoOkrMau, loi: BaoLoi): void {
 	const ck = bo.canhKr;

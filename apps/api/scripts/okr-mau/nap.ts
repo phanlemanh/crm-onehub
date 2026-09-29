@@ -27,6 +27,8 @@ export type DemBoMau = {
 	phien: number;
 	soChup: number;
 	diem: number;
+	nguoiXem: number;
+	vet: number;
 } & DemCanhKr;
 
 type Quy = "quy3" | "quy4";
@@ -126,7 +128,7 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const capNhat = await tx.okrCheckIn.deleteMany({
 		where: { OR: [{ keyResultId: K }, { sessionId: P }] },
 	});
-	await tx.okrTrail.deleteMany({
+	const vet = await tx.okrTrail.deleteMany({
 		where: {
 			OR: [
 				{ cycleId: C },
@@ -158,6 +160,9 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	});
 	await tx.okrCuaSoRa.deleteMany({ where: { cycleId: C } });
 	await tx.okrDeXuat.deleteMany({ where: { objectiveId: O } });
+	const nguoiXem = await tx.okrNguoiXem.deleteMany({
+		where: { objectiveId: O },
+	});
 	await tx.okrTomTat.deleteMany({ where: { cycleId: C } });
 	const kr = await tx.okrKeyResult.deleteMany({ where: { id: K } });
 	const mucTieu = await tx.okrObjective.deleteMany({ where: { id: O } });
@@ -182,6 +187,8 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 		phien: phienXoa.count,
 		soChup: soChup.count,
 		diem: diem.count,
+		nguoiXem: nguoiXem.count,
+		vet: vet.count,
 		...canhKr,
 	};
 }
@@ -209,6 +216,50 @@ function donViDb(m: MucTieuMau) {
 	if (m.cap === "bo-phan")
 		return { divisionId: idMau("bp", m.donVi ?? ""), departmentId: null };
 	return { divisionId: null, departmentId: null };
+}
+
+const daCongBo = (m: MucTieuMau) =>
+	m.trangThai === "cong-bo" || m.trangThai === "da-bo";
+
+const TUAN_GUI_DUYET = { nhap: 2, choDuyet: 5 } as const;
+const GIO_TRA_LAI = 6;
+
+function vetDuyet(
+	bo: BoOkrMau,
+	lich: ReturnType<typeof lichMau>,
+): Prisma.OkrTrailCreateManyInput[] {
+	return bo.mucTieu.flatMap((m) => {
+		if (!m.duyet) return [];
+		const tuan =
+			m.trangThai === "cho-duyet"
+				? TUAN_GUI_DUYET.choDuyet
+				: TUAN_GUI_DUYET.nhap;
+		const gui = lich.lucCapNhat("quy4", tuan);
+		const objectiveId = idMau("mt", m.ma);
+		const dong: Prisma.OkrTrailCreateManyInput[] = [
+			{
+				id: idMau("vet", `${m.ma}-gui-duyet`),
+				at: gui,
+				actorUserId: idMau("nguoi", m.chu),
+				objectiveId,
+				action: "gui-duyet",
+				before: { status: "nhap" },
+				after: { status: "cho-duyet" },
+			},
+		];
+		if (m.duyet.traLai)
+			dong.push({
+				id: idMau("vet", `${m.ma}-tra-lai`),
+				at: new Date(gui.getTime() + GIO_TRA_LAI * OKR_MAU.thoiGian.gioMs),
+				actorUserId: idMau("nguoi", m.duyet.traLai.nguoi),
+				objectiveId,
+				action: "tra-lai",
+				before: { status: "cho-duyet" },
+				after: { status: "nhap" },
+				note: m.duyet.traLai.lyDo,
+			});
+		return dong;
+	});
 }
 
 function phamViDb(k: KrMau): Prisma.InputJsonValue {
@@ -276,6 +327,17 @@ export async function napTrong(
 			headUserId: nguoiId(p.truong),
 		})),
 	});
+	await tx.department.createMany({
+		data: bo.phongBanLuuTru.map((p, i) => ({
+			id: idMau("pb", p.ma),
+			createdAt: bayGio,
+			name: p.ten,
+			position: dauPb + bo.phongBan.length + i,
+			divisionId: idMau("bp", p.boPhan),
+			headUserId: null,
+			archivedAt: bayGio,
+		})),
+	});
 	await tx.orgPlacement.createMany({
 		data: bo.nguoi.map((n) => ({
 			userId: nguoiId(n.ma),
@@ -329,7 +391,7 @@ export async function napTrong(
 			const khoa = `${m.chuKy}:${m.cap}:${m.donVi ?? ""}`;
 			const pos = viTri.get(khoa) ?? 0;
 			viTri.set(khoa, pos + 1);
-			const congBo = m.trangThai !== "nhap";
+			const congBo = daCongBo(m);
 			return {
 				id: idMau("mt", m.ma),
 				createdAt: bayGio,
@@ -339,6 +401,7 @@ export async function napTrong(
 				ownerUserId: nguoiId(m.chu),
 				kind: m.kieu,
 				status: m.trangThai,
+				hienThi: m.hienThi,
 				title: m.ten,
 				whyNow: m.viSao,
 				publishedAt: congBo ? dauChuKy(m) : null,
@@ -355,6 +418,17 @@ export async function napTrong(
 		})),
 	);
 	if (thamGia.length) await tx.okrParticipant.createMany({ data: thamGia });
+	const nguoiXem = bo.mucTieu.flatMap((m) =>
+		m.nguoiXem.map((u) => ({
+			objectiveId: idMau("mt", m.ma),
+			userId: nguoiId(u),
+			createdById: nguoiId(m.chu),
+			createdAt: bayGio,
+		})),
+	);
+	if (nguoiXem.length) await tx.okrNguoiXem.createMany({ data: nguoiXem });
+	const vet = vetDuyet(bo, lich);
+	if (vet.length) await tx.okrTrail.createMany({ data: vet });
 
 	const lanCua = new Map<string, { quy: Quy; lan: LanMau[] }>();
 	for (const m of bo.mucTieu) {
@@ -407,7 +481,7 @@ export async function napTrong(
 				unit: k.donVi,
 				weight: 1,
 				source: k.nguon ? "crm" : "tay",
-				startLockedAt: m.trangThai === "nhap" ? null : dauChuKy(m),
+				startLockedAt: daCongBo(m) ? dauChuKy(m) : null,
 				position: i,
 			};
 		}),
@@ -558,7 +632,7 @@ export async function napTrong(
 	return {
 		nguoi: bo.nguoi.length,
 		boPhan: bo.boPhan.length,
-		phongBan: bo.phongBan.length,
+		phongBan: bo.phongBan.length + bo.phongBanLuuTru.length,
 		chuKy: 3,
 		mucTieu: bo.mucTieu.length,
 		kr: krDong.length,
@@ -566,6 +640,8 @@ export async function napTrong(
 		phien: phien.size,
 		soChup: chup.length,
 		diem: diem.length,
+		nguoiXem: nguoiXem.length,
+		vet: vet.length,
 		...canhKr,
 	};
 }
