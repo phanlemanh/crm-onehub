@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-29T08:52:00+07:00",
+	chup_luc: "2026-09-29T12:21:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -22,7 +22,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ten: "Tìm được",
 			nghia: "⌘K có dấu hay không dấu, backlink, tab Sức khoẻ",
 			de_xuat: "2026-10-08",
-			that: "",
+			that: "2026-09-29",
 			hang_muc: "l3",
 		},
 		{
@@ -103,16 +103,15 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ten: "Lượt 3",
 			slug: "tim-va-dieu-huong-kho",
 			hang: "T2",
-			trang_thai: "Cổng Bằng chứng",
+			trang_thai: "đã lên onehub",
 			ngay: "2026-09-29",
 			pr: [205],
 			cau_giao:
 				"«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
-			buoc_ke:
-				"Chờ CI của PR #205 xanh rồi anh quyết merge; sau khi lên còn phiên nghiệm thu",
+			buoc_ke: "Phiên nghiệm thu lượt 3; Cổng Giá trị đóng ở đợt chạy thật",
 			chan_boi: [],
 			ghi_chu:
-				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất. 29/09: S3 xong, năm lệnh xanh. S4 round 1 BLOCKED kèm một phát hiện trong hợp đồng (nhắc sáng tự tính lại luật duyệt) và hội đồng ảnh thấy tiêu đề bị nút đè ở 390; đã sửa, kể cả đầu trang dùng chung. Round 2 PENDING-JUDGMENT: 25 eval và bốn suite xanh, hội đồng ảnh UNCERTAIN, bảy mục ngoài hợp đồng. Anh ký Cổng Bằng chứng 29/09 (E12j Đạt); gộp onehub, ghim lại xanh, mở PR #205.",
+				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất. 29/09: S3 xong, năm lệnh xanh. S4 round 1 BLOCKED kèm một phát hiện trong hợp đồng (nhắc sáng tự tính lại luật duyệt) và hội đồng ảnh thấy tiêu đề bị nút đè ở 390; đã sửa, kể cả đầu trang dùng chung. Round 2 PENDING-JUDGMENT: 25 eval và bốn suite xanh, hội đồng ảnh UNCERTAIN, bảy mục ngoài hợp đồng. Anh ký Cổng Bằng chứng 29/09 (E12j Đạt); gộp onehub, ghim lại xanh, mở PR #205. CI xanh, merge vào onehub 29/09, lên production.",
 			cho_anh: true,
 		},
 		{
@@ -210,6 +209,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 	],
 	cho_anh: [
 		{
+			viec: "Phiên nghiệm thu lượt 3: /acceptance-gate:uat-session tim-va-dieu-huong-kho",
+			hang_muc: "l3",
+		},
+		{
 			viec: "Kiểm production có BLOB_READ_WRITE_TOKEN chưa: kho kho-tai-lieu-nguon chưa gắn dự án nào; thiếu token thì nút «Tải nguồn lên» khoá",
 			hang_muc: "l2",
 		},
@@ -257,6 +260,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3 lên onehub (PR #205): ⌘K tìm kho, trang nhắc tới, lọc, tab Sức khoẻ, dòng nhắc sáng",
+		},
 		{
 			ngay: "2026-09-29",
 			viec: "Lượt 3: anh ký Cổng Bằng chứng; mở PR #205 vào onehub",
