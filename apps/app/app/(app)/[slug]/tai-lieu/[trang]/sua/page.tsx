@@ -82,7 +82,7 @@ async function NoiDung({
 			</HydrateClient>
 		);
 	}
-	if (trang.noiDung === null)
+	if (trang.choLanDau?.dangCho === "duyet")
 		redirect(workspaceUrl(workspace, duongTrang(trang.slug)));
 
 	return (
@@ -93,7 +93,7 @@ async function NoiDung({
 					kieu: "sua",
 					slug: trang.slug,
 					ten: trang.ten,
-					banGoc: trang.noiDung,
+					banGoc: trang.noiDung ?? "",
 				}}
 			/>
 		</HydrateClient>
