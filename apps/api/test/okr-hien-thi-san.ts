@@ -129,17 +129,16 @@ async function congBo(id: string, ai: AiHoacCookie, nhan: string) {
 export async function datGioiHan(
 	objectiveId: string,
 	nguoiXem: string[],
-	boi: string,
+	ai: AiHoacCookie,
 ): Promise<void> {
-	await db.okrObjective.update({
-		where: { id: objectiveId },
-		data: {
-			hienThi: "gioi-han",
-			nguoiXem: {
-				create: nguoiXem.map((userId) => ({ userId, createdById: boi })),
-			},
-		},
-	});
+	ok(
+		await goi(
+			"okr.datHienThi",
+			{ objectiveId, hienThi: "gioi-han", nguoiXem },
+			ai,
+		),
+		`dat gioi han ${objectiveId}`,
+	);
 }
 
 export async function gieoHienThi(): Promise<SanHienThi> {
@@ -191,7 +190,7 @@ export async function gieoHienThi(): Promise<SanHienThi> {
 		"them viec pb gh",
 	);
 	await congBo(phongBanGioiHan, t.cookie, "pb gh");
-	await datGioiHan(phongBanGioiHan, [nguoiXemCoTen.id], t.nguoi);
+	await datGioiHan(phongBanGioiHan, [nguoiXemCoTen.id], t.cookie);
 
 	const caNhanGioiHan = await mucTieuMoi(
 		ky,
@@ -202,7 +201,7 @@ export async function gieoHienThi(): Promise<SanHienThi> {
 	);
 	await krMoi(caNhanGioiHan, chu.id, nguoiCaNhan.cookie, "cn gh");
 	await congBo(caNhanGioiHan, nguoiCaNhan.cookie, "cn gh");
-	await datGioiHan(caNhanGioiHan, [], nguoiCaNhan.id);
+	await datGioiHan(caNhanGioiHan, [], nguoiCaNhan.cookie);
 
 	const onehubGioiHan = await mucTieuMoi(
 		ky,
@@ -213,7 +212,7 @@ export async function gieoHienThi(): Promise<SanHienThi> {
 	);
 	await krMoi(onehubGioiHan, chu.id, nguoi.quanTri.cookie, "oh gh");
 	await congBo(onehubGioiHan, nguoi.quanTri.cookie, "oh gh");
-	await datGioiHan(onehubGioiHan, [], nguoi.quanTri.id);
+	await datGioiHan(onehubGioiHan, [], nguoi.quanTri.cookie);
 
 	const boPhanGioiHan = await mucTieuMoi(
 		ky,
@@ -224,7 +223,7 @@ export async function gieoHienThi(): Promise<SanHienThi> {
 	);
 	await krMoi(boPhanGioiHan, chu.id, h.cookie, "bp gh");
 	await congBo(boPhanGioiHan, h.cookie, "bp gh");
-	await datGioiHan(boPhanGioiHan, [], h.nguoi);
+	await datGioiHan(boPhanGioiHan, [], h.cookie);
 
 	const nhapGioiHan = await mucTieuMoi(
 		ky,
@@ -233,7 +232,7 @@ export async function gieoHienThi(): Promise<SanHienThi> {
 		n.cookie,
 		"nhap gh",
 	);
-	await datGioiHan(nhapGioiHan, [nguoiXemCoTen.id], n.nguoi);
+	await datGioiHan(nhapGioiHan, [nguoiXemCoTen.id], n.cookie);
 
 	return {
 		ky,
@@ -582,7 +581,12 @@ export async function gieoMucTieuAn(
 		);
 	}
 	await lam("okr.follow", { objectiveId: g, on: true }, x, "theo doi G");
-	await datGioiHan(g, [x.id], truong.id);
+	await lam(
+		"okr.datHienThi",
+		{ objectiveId: g, hienThi: "gioi-han", nguoiXem: [x.id] },
+		truong,
+		"dat gioi han G",
+	);
 	return { nam, ky: kyId, pb, g, krG, c1, krC1 };
 }
 
@@ -731,7 +735,7 @@ export async function gieoSoGop(): Promise<SanSoGop> {
 			await goi("okr.follow", { objectiveId: mt.id, on: true }, m.cookie),
 			"M theo doi",
 		);
-	await datGioiHan(g.id, [], t.id);
+	await datGioiHan(g.id, [], t.cookie);
 	return {
 		ky,
 		b1,
@@ -810,4 +814,189 @@ export async function mucTieuDeXemCua(
 			];
 		}),
 	);
+}
+
+export type AnhHienThi = { hienThi: string; nguoiXem: string[]; vet: number };
+
+export async function anhHienThi(objectiveId: string): Promise<AnhHienThi> {
+	const [mt, vet] = await Promise.all([
+		db.okrObjective.findUniqueOrThrow({
+			where: { id: objectiveId },
+			select: {
+				hienThi: true,
+				nguoiXem: { select: { userId: true }, orderBy: { userId: "asc" } },
+			},
+		}),
+		db.okrTrail.count({ where: { objectiveId } }),
+	]);
+	return {
+		hienThi: mt.hienThi,
+		nguoiXem: mt.nguoiXem.map((x) => x.userId),
+		vet,
+	};
+}
+
+export async function datMuc(
+	objectiveId: string,
+	hienThi: string,
+	nguoiXem: string[],
+	ai: AiHoacCookie,
+): Promise<TraLoi> {
+	return goi("okr.datHienThi", { objectiveId, hienThi, nguoiXem }, ai);
+}
+
+export async function mucTieuPhongBan(
+	ky: string,
+	departmentId: string,
+	chu: NguoiSan,
+	nhan: string,
+	kr: { chu: string; congBo: boolean } | null,
+): Promise<{ id: string; kr: string | null }> {
+	const id = await mucTieuMoi(
+		ky,
+		{ level: "phong-ban", departmentId },
+		chu.id,
+		chu.cookie,
+		nhan,
+	);
+	if (!kr) return { id, kr: null };
+	const krId = await krMoi(id, kr.chu, chu.cookie, nhan);
+	if (kr.congBo) await congBo(id, chu.cookie, nhan);
+	return { id, kr: krId };
+}
+
+export type SanHienThiGhi = {
+	ky: string;
+	b1: string;
+	p1: string;
+	t: NguoiSan;
+	h: NguoiSan;
+	k: NguoiSan;
+	m: NguoiSan;
+	x: NguoiSan;
+	y: NguoiSan;
+	z: NguoiSan;
+	ngoai: string;
+	g: string;
+	g2: string;
+	gc: { id: string; kr: string };
+	bp: string;
+	cn1: string;
+	cn2: string;
+};
+
+export async function gieoHienThiGhi(): Promise<SanHienThiGhi> {
+	ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
+	const b1 = await bpMoi("hg-b1");
+	const p1 = await pbMoi("hg-p1", b1);
+	const hTruong = await truongMoi("division", b1, "hg-H");
+	const tTruong = await truongMoi("department", p1, "hg-T");
+	const t = { id: tTruong.nguoi, cookie: tTruong.cookie };
+	const h = { id: hTruong.nguoi, cookie: hTruong.cookie };
+	const k = await nguoiCo("hg-K");
+	ok(await datViTri(k.id, p1), "xep K vao P1");
+	const m = await nguoiCo("hg-M");
+	const x = await nguoiCo("hg-X");
+	const y = await nguoiCo("hg-Y");
+	const z = await nguoiCo("hg-Z");
+	const ngoai = await nguoiMoi("hg-ngoai");
+	await roiKhoi(ngoai);
+	const ky = await gieoKyQuy(KY_HIEN_THI);
+	const g = (await mucTieuPhongBan(ky, p1, t, "hg G", null)).id;
+	const g2 = (
+		await mucTieuPhongBan(ky, p1, t, "hg G2", { chu: t.id, congBo: true })
+	).id;
+	ok(await datMuc(g2, "gioi-han", [x.id, y.id], t.cookie), "G2 gioi han");
+	const gc = await mucTieuPhongBan(ky, p1, t, "hg Gc", {
+		chu: t.id,
+		congBo: true,
+	});
+	const bp = await mucTieuMoi(
+		ky,
+		{ level: "bo-phan", divisionId: b1 },
+		h.id,
+		h.cookie,
+		"hg BP",
+	);
+	await krMoi(bp, h.id, h.cookie, "hg BP");
+	await congBo(bp, h.cookie, "hg BP");
+	const caNhan = async (nhan: string) => {
+		const id = await mucTieuMoi(
+			ky,
+			{ level: "ca-nhan", personUserId: k.id },
+			k.id,
+			k.cookie,
+			nhan,
+		);
+		await krMoi(id, k.id, k.cookie, nhan);
+		await congBo(id, k.cookie, nhan);
+		return id;
+	};
+	return {
+		ky,
+		b1,
+		p1,
+		t,
+		h,
+		k,
+		m,
+		x,
+		y,
+		z,
+		ngoai,
+		g,
+		g2,
+		gc: { id: gc.id, kr: gc.kr ?? "" },
+		bp,
+		cn1: await caNhan("hg CN1"),
+		cn2: await caNhan("hg CN2"),
+	};
+}
+
+export type SanGhiKe = {
+	ky: string;
+	p1: string;
+	t: NguoiSan;
+	a: NguoiSan;
+	b: NguoiSan;
+	m: NguoiSan;
+	g: string;
+	krG: string;
+	tieuDeG: string;
+};
+
+export async function gieoGhiKe(): Promise<SanGhiKe> {
+	ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
+	const p1 = await pbMoi("gk-p1");
+	const tTruong = await truongMoi("department", p1, "gk-T");
+	const t = { id: tTruong.nguoi, cookie: tTruong.cookie };
+	const a = await nguoiCo("gk-A");
+	const b = await nguoiCo("gk-B");
+	const m = await nguoiCo("gk-M");
+	const ky = await gieoKyQuy(KY_HIEN_THI);
+	const tieuDeG = ma("gk G");
+	const g = idTra(
+		await goi(
+			"okr.createObjective",
+			{
+				cycleId: ky,
+				unit: { level: "phong-ban", departmentId: p1 },
+				title: tieuDeG,
+				kind: "cam-ket",
+				ownerUserId: t.id,
+				participantIds: [],
+				whyNow: "",
+			},
+			t.cookie,
+		),
+		"tao G",
+	);
+	const krG = await krMoi(g, a.id, t.cookie, "gk G");
+	ok(
+		await goi("okr.datNguonKr", { keyResultId: krG, loai: "api" }, t.cookie),
+		"nguon api",
+	);
+	await congBo(g, t.cookie, "gk G");
+	await datGioiHan(g, [b.id], t.cookie);
+	return { ky, p1, t, a, b, m, g, krG, tieuDeG };
 }

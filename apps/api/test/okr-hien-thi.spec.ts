@@ -1,4 +1,12 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
+import { API_KEY_HEADER, auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { demOkrCuaDonVi } from "@crm/db/okr-don-vi";
 import {
@@ -6,8 +14,14 @@ import {
 	type NguCanhXem,
 	nguCanhXemOkr,
 } from "@crm/db/okr-hien-thi";
-import { xemDuocMucTieu } from "@crm/validation/okr-hien-thi";
+import { KHONG_XEM_DUOC, xepViecTroLy } from "@crm/db/okr-tro-ly";
+import {
+	LOI_KHUON_HIEN_THI,
+	xemDuocMucTieu,
+} from "@crm/validation/okr-hien-thi";
+import { parseOkrVet } from "@crm/validation/okr-vet";
 import { ForbiddenException } from "@nestjs/common";
+import request from "supertest";
 import { xoaBoOkrMau } from "../scripts/okr-mau/nap";
 import { OkrAccessService } from "../src/okr/okr-access.service";
 import { OKR } from "../src/okr/okr-config";
@@ -16,22 +30,43 @@ import type {
 	SucKhoeOutput,
 	ToanCanhOutput,
 } from "../src/okr/okr-xem.contracts";
-import { donSanCanhKr } from "./okr-canh-kr-san";
+import { donSanCanhKr, roiKhoi, vaoLai } from "./okr-canh-kr-san";
 import {
+	type AnhHienThi,
+	anhHienThi,
+	datMuc,
+	gieoGhiKe,
 	gieoHienThi,
+	gieoHienThiGhi,
 	gieoSoGop,
 	gieoTruongBiLoai,
 	MUC_TIEU_SAN,
 	type MucTieuSan,
 	mucTieuDeXemCua,
+	mucTieuPhongBan,
+	type SanGhiKe,
 	type SanHienThi,
+	type SanHienThiGhi,
 	type SanSoGop,
 	VAI_XEM,
 	type VaiXem,
 } from "./okr-hien-thi-san";
-import { donSanKhep, sangPha } from "./okr-khep-san";
+import { donSanKhep, gieoKyQuy, sangPha } from "./okr-khep-san";
 import { congTy, lamSachOkr, napMau, nguoiMau } from "./okr-mau-san";
-import { datViTri, doc, dungSan, goi, goiQuery, ok, ungDung } from "./okr-san";
+import {
+	datViTri,
+	doc,
+	dungSan,
+	goi,
+	goiQuery,
+	type Json,
+	ma,
+	ok,
+	phienCua,
+	TIEN_TO,
+	type TraLoi,
+	ungDung,
+} from "./okr-san";
 
 dungSan();
 
@@ -519,5 +554,559 @@ describe("xem-theo-ma", () => {
 			});
 		},
 		CHO_MS,
+	);
+});
+
+const KY_KE = { tu: "2027-01-01", den: "2027-03-31" } as const;
+
+async function denChamDiem(ky: string): Promise<void> {
+	const c = await db.okrCycle.findUniqueOrThrow({
+		where: { id: ky },
+		select: { phase: true },
+	});
+	if (c.phase === "dang-chay") ok(await sangPha(ky, "cham-diem"), "cham diem");
+}
+
+describe("hien-thi-ghi", () => {
+	let s: SanHienThiGhi;
+
+	beforeAll(async () => {
+		s = await gieoHienThiGhi();
+	}, CHO_GIEO_MS);
+	afterAll(async () => {
+		setSystemTime();
+		await donSanKhep();
+		await donSanCanhKr();
+	}, CHO_MS);
+
+	test(
+		"đặt giới hạn hai người xem, đổi người xem, đặt lại công khai: bảng và vết đúng từng bước",
+		async () => {
+			const { g, t, x, y, z } = s;
+			const cap = (a: string, b: string) => [a, b].sort();
+			const buoc = [
+				{ hienThi: "gioi-han", nguoiXem: [x.id, y.id] },
+				{ hienThi: "gioi-han", nguoiXem: [y.id, z.id] },
+				{ hienThi: "cong-khai", nguoiXem: [] },
+			];
+			const ket: { tra: unknown; bang: AnhHienThi }[] = [];
+			let docX: TraLoi | null = null;
+			let docT: TraLoi | null = null;
+			for (const [i, b] of buoc.entries()) {
+				const tra = ok<unknown>(
+					await datMuc(g, b.hienThi, b.nguoiXem, t.cookie),
+					`buoc ${i + 1}`,
+				);
+				ket.push({ tra, bang: await anhHienThi(g) });
+				if (i === 0) {
+					docX = await goiQuery("okr.objective", x.cookie, { id: g });
+					docT = await goiQuery("okr.objective", t.cookie, { id: g });
+				}
+			}
+			expect(ket.map((k) => ({ ...k, bang: { ...k.bang, vet: 0 } }))).toEqual([
+				{
+					tra: { id: g, hienThi: "gioi-han", nguoiXem: cap(x.id, y.id) },
+					bang: { hienThi: "gioi-han", nguoiXem: cap(x.id, y.id), vet: 0 },
+				},
+				{
+					tra: { id: g, hienThi: "gioi-han", nguoiXem: cap(y.id, z.id) },
+					bang: { hienThi: "gioi-han", nguoiXem: cap(y.id, z.id), vet: 0 },
+				},
+				{
+					tra: { id: g, hienThi: "cong-khai", nguoiXem: [] },
+					bang: { hienThi: "cong-khai", nguoiXem: [], vet: 0 },
+				},
+			]);
+			const vet = await db.okrTrail.findMany({
+				where: { objectiveId: g, action: "doi-hien-thi" },
+				orderBy: [{ at: "asc" }, { id: "asc" }],
+			});
+			expect(
+				vet.map((v) => ({
+					actor: v.actorUserId,
+					before: parseOkrVet(v.before),
+					after: parseOkrVet(v.after),
+				})),
+			).toEqual([
+				{
+					actor: t.id,
+					before: { hienThi: "cong-khai", nguoiXem: [] },
+					after: { hienThi: "gioi-han", nguoiXem: cap(x.id, y.id) },
+				},
+				{
+					actor: t.id,
+					before: { hienThi: "gioi-han", nguoiXem: cap(x.id, y.id) },
+					after: { hienThi: "gioi-han", nguoiXem: cap(y.id, z.id) },
+				},
+				{
+					actor: t.id,
+					before: { hienThi: "gioi-han", nguoiXem: cap(y.id, z.id) },
+					after: { hienThi: "cong-khai", nguoiXem: [] },
+				},
+			]);
+			const doc = (tra: TraLoi | null) =>
+				tra?.data as
+					| {
+							hienThi: string;
+							nguoiXem: { id: string }[];
+							quyen: { datHienThi: boolean };
+					  }
+					| undefined;
+			expect({
+				x: {
+					status: docX?.status,
+					hienThi: doc(docX)?.hienThi,
+					nguoiXem: doc(docX)
+						?.nguoiXem.map((n) => n.id)
+						.sort(),
+					datHienThi: doc(docX)?.quyen.datHienThi,
+				},
+				t: { status: docT?.status, datHienThi: doc(docT)?.quyen.datHienThi },
+			}).toEqual({
+				x: {
+					status: 200,
+					hienThi: "gioi-han",
+					nguoiXem: cap(x.id, y.id),
+					datHienThi: false,
+				},
+				t: { status: 200, datHienThi: true },
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tạo mục tiêu với mức giới hạn: hàng tạo đã mang gioi-han",
+		async () => {
+			const tra = ok<{ id: string }>(
+				await goi(
+					"okr.createObjective",
+					{
+						cycleId: s.ky,
+						unit: { level: "phong-ban", departmentId: s.p1 },
+						title: ma("hg tao gioi han"),
+						kind: "cam-ket",
+						ownerUserId: s.t.id,
+						participantIds: [],
+						whyNow: "",
+						hienThi: "gioi-han",
+					},
+					s.t.cookie,
+				),
+				"tao gioi han",
+			);
+			const hang = await db.okrObjective.findUniqueOrThrow({
+				where: { id: tra.id },
+				select: { hienThi: true },
+			});
+			const tao = await db.okrTrail.findFirstOrThrow({
+				where: { objectiveId: tra.id, action: "tao" },
+			});
+			expect({
+				hang: hang.hienThi,
+				vet: parseOkrVet(tao.after)?.hienThi,
+				m: (await goiQuery("okr.objective", s.m.cookie, { id: tra.id })).status,
+			}).toEqual({ hang: "gioi-han", vet: "gioi-han", m: 404 });
+		},
+		CHO_MS,
+	);
+
+	test(
+		"người xem có tên bị gỡ khỏi không gian làm việc rồi vào lại: vẫn trong danh sách và thấy lại mục tiêu",
+		async () => {
+			const g3 = (await mucTieuPhongBan(s.ky, s.p1, s.t, "hg G3", null)).id;
+			ok(await datMuc(g3, "gioi-han", [s.z.id], s.t.cookie), "G3 gioi han");
+			const xem = async (cookie: string) =>
+				(await goiQuery("okr.objective", cookie, { id: g3 })).status;
+			const truoc = await xem(s.z.cookie);
+			await roiKhoi(s.z.id);
+			const khiRoi = (await anhHienThi(g3)).nguoiXem;
+			await vaoLai(s.z.id);
+			const cookieMoi = await phienCua(s.z.id);
+			const sau = await xem(cookieMoi);
+			const docT = await doc<{ nguoiXem: { id: string }[] }>(
+				"okr.objective",
+				s.t.cookie,
+				{ id: g3 },
+			);
+			expect({
+				truoc,
+				khiRoi,
+				sau,
+				nguoiXemSau: (await anhHienThi(g3)).nguoiXem,
+				trenKhung: docT.nguoiXem.map((n) => n.id),
+				m: await xem(s.m.cookie),
+			}).toEqual({
+				truoc: 200,
+				khiRoi: [s.z.id],
+				sau: 200,
+				nguoiXemSau: [s.z.id],
+				trenKhung: [s.z.id],
+				m: 404,
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"bảng từ chối viết trước: 7 ca, mỗi ca câu ghim, bảng người xem, mức và vết không đổi",
+		async () => {
+			const { g, gc, t, m, x, k } = s;
+			const noi: string[] = [];
+			const canChinh = async (
+				vao: Json,
+				ai: string,
+				nhan: string,
+			): Promise<string> => {
+				const id = ok<{ id: string }>(
+					await goi("okr.addAlignment", vao, ai),
+					nhan,
+				).id;
+				noi.push(id);
+				return id;
+			};
+			const hai = [x.id, ...Array.from({ length: 20 }, () => ma("hg-x"))];
+			type Ca = {
+				ten: string;
+				mt: string;
+				vao: [string, string[]];
+				ai: string;
+				cho: string;
+				truoc?: () => Promise<void>;
+				sau?: () => Promise<void>;
+			};
+			const CA: Ca[] = [
+				{
+					ten: "M khong sua duoc G",
+					mt: g,
+					vao: ["gioi-han", [x.id]],
+					ai: m.cookie,
+					cho: `403 ${OKR.thongDiep.khongSuaDuocDonVi}`,
+				},
+				{
+					ten: "nguoi xem khong phai thanh vien",
+					mt: g,
+					vao: ["gioi-han", [x.id, s.ngoai]],
+					ai: t.cookie,
+					cho: `400 ${OKR.thongDiep.hienThi.nguoiXemKhongConThanhVien}`,
+				},
+				{
+					ten: "21 nguoi xem",
+					mt: g,
+					vao: ["gioi-han", hai],
+					ai: t.cookie,
+					cho: `400 ${LOI_KHUON_HIEN_THI.quaNguoiXem}`,
+				},
+				{
+					ten: "can chinh di va toi",
+					mt: gc.id,
+					vao: ["gioi-han", []],
+					ai: t.cookie,
+					cho: `400 ${OKR.thongDiep.hienThi.conCanChinh(2)}`,
+					truoc: async () => {
+						await canChinh(
+							{
+								objectiveId: gc.id,
+								targetObjectiveId: s.bp,
+								targetKeyResultId: null,
+							},
+							t.cookie,
+							"Gc vao BP",
+						);
+						await canChinh(
+							{
+								objectiveId: s.cn1,
+								targetObjectiveId: gc.id,
+								targetKeyResultId: null,
+							},
+							k.cookie,
+							"CN1 vao Gc",
+						);
+					},
+					sau: async () => {
+						ok(
+							await goi("okr.removeAlignment", { id: noi[0] }, t.cookie),
+							"go Gc vao BP",
+						);
+						ok(
+							await goi("okr.removeAlignment", { id: noi[1] }, k.cookie),
+							"go CN1 vao Gc",
+						);
+					},
+				},
+				{
+					ten: "chi can chinh toi KR cua Gc",
+					mt: gc.id,
+					vao: ["gioi-han", []],
+					ai: t.cookie,
+					cho: `400 ${OKR.thongDiep.hienThi.conCanChinh(1)}`,
+					truoc: async () => {
+						await canChinh(
+							{
+								objectiveId: s.cn2,
+								targetObjectiveId: null,
+								targetKeyResultId: gc.kr,
+							},
+							k.cookie,
+							"CN2 vao KR Gc",
+						);
+					},
+				},
+				{
+					ten: "G dang cho duyet",
+					mt: g,
+					vao: ["gioi-han", [x.id]],
+					ai: t.cookie,
+					cho: `400 ${OKR.thongDiep.dangChoDuyet}`,
+					truoc: async () => {
+						await db.okrObjective.update({
+							where: { id: g },
+							data: { status: "cho-duyet" },
+						});
+					},
+					sau: async () => {
+						await db.okrObjective.update({
+							where: { id: g },
+							data: { status: "nhap" },
+						});
+					},
+				},
+				{
+					ten: "chu ky cham diem",
+					mt: g,
+					vao: ["gioi-han", [x.id]],
+					ai: t.cookie,
+					cho: `400 ${OKR.thongDiep.kyDaKhoa}`,
+					truoc: () => denChamDiem(s.ky),
+				},
+			];
+			const ket: Record<string, { tra: string; bang: AnhHienThi }> = {};
+			const cho: Record<string, { tra: string; bang: AnhHienThi }> = {};
+			for (const ca of CA) {
+				await ca.truoc?.();
+				const truoc = await anhHienThi(ca.mt);
+				const tra = await datMuc(ca.mt, ca.vao[0], ca.vao[1], ca.ai);
+				ket[ca.ten] = {
+					tra: `${tra.status} ${tra.loi}`,
+					bang: await anhHienThi(ca.mt),
+				};
+				cho[ca.ten] = { tra: ca.cho, bang: truoc };
+				await ca.sau?.();
+			}
+			console.log(
+				`hien-thi-ghi bang tu choi: ${CA.length} ca\n${CA.map((ca) => `${ca.ten}: ${ket[ca.ten]?.tra}`).join("\n")}`,
+			);
+			expect(CA.length).toBe(7);
+			expect(ket).toEqual(cho);
+		},
+		CHO_GIEO_MS,
+	);
+
+	test(
+		"mang sang G2 giới hạn: bản nháp giới hạn với người xem cũ trừ người đã rời; M không thấy bản nháp",
+		async () => {
+			await denChamDiem(s.ky);
+			const ke = await gieoKyQuy({ ...KY_KE, pha: "lap-ke-hoach" });
+			await roiKhoi(s.y.id);
+			const ra = ok<{ id: string; cycleId: string }>(
+				await goi("okr.mangSang", { objectiveId: s.g2 }, s.t.cookie),
+				"mang sang G2",
+			);
+			const byUnit = async (cookie: string) =>
+				(
+					await doc<{ objectives: { id: string }[] }>("okr.byUnit", cookie, {
+						cycleId: ke,
+						unit: { loai: "pb", id: s.p1 },
+					})
+				).objectives.some((o) => o.id === ra.id);
+			const { vet: _vet, ...nhap } = await anhHienThi(ra.id);
+			expect({
+				cycleId: ra.cycleId,
+				nhap,
+				t: await byUnit(s.t.cookie),
+				m: await byUnit(s.m.cookie),
+			}).toEqual({
+				cycleId: ke,
+				nhap: { hienThi: "gioi-han", nguoiXem: [s.x.id] },
+				t: true,
+				m: false,
+			});
+		},
+		CHO_GIEO_MS,
+	);
+});
+
+describe("ghi-ke", () => {
+	let s: SanGhiKe;
+
+	beforeAll(async () => {
+		s = await gieoGhiKe();
+	}, CHO_GIEO_MS);
+	afterAll(async () => {
+		setSystemTime();
+		await db.agentTask.deleteMany({
+			where: {
+				kind: "okr-de-xuat",
+				payload: { path: ["objectiveId"], equals: s.g },
+			},
+		});
+		await db.okrFollow.deleteMany({ where: { objectiveId: s.g } });
+		await donSanKhep();
+		await donSanCanhKr();
+	}, CHO_MS);
+
+	const demHang = async () => ({
+		okrFollow: await db.okrFollow.count({ where: { objectiveId: s.g } }),
+		okrComment: await db.okrComment.count({ where: { objectiveId: s.g } }),
+		okrGhiNhan: await db.okrGhiNhan.count({ where: { objectiveId: s.g } }),
+		okrObjective: await db.okrObjective.count({
+			where: { cycle: { name: { startsWith: TIEN_TO } } },
+		}),
+		okrSoChup: await db.okrSoChup.count({ where: { keyResultId: s.krG } }),
+		agentTask: await db.agentTask.count({ where: { kind: "okr-de-xuat" } }),
+	});
+
+	test(
+		"người xem được A: nhắc tên M và ghi nhận tới M bị từ chối nêu tên M; nhắc B và ghi nhận tới B được",
+		async () => {
+			const tenM = (
+				await db.user.findUniqueOrThrow({
+					where: { id: s.m.id },
+					select: { name: true },
+				})
+			).name;
+			const truoc = await demHang();
+			const nhacM = await goi(
+				"okr.addComment",
+				{ objectiveId: s.g, body: "Nhờ xem giúp", mentionUserIds: [s.m.id] },
+				s.a.cookie,
+			);
+			const ghiNhanM = await goi(
+				"okr.guiGhiNhan",
+				{
+					objectiveId: s.g,
+					keyResultId: null,
+					nguoiNhan: [s.m.id],
+					loiNhan: "Cảm ơn đã hỗ trợ",
+				},
+				s.a.cookie,
+			);
+			const giua = await demHang();
+			const nhacB = await goi(
+				"okr.addComment",
+				{ objectiveId: s.g, body: "Nhờ B xem", mentionUserIds: [s.b.id] },
+				s.a.cookie,
+			);
+			const ghiNhanB = await goi(
+				"okr.guiGhiNhan",
+				{
+					objectiveId: s.g,
+					keyResultId: null,
+					nguoiNhan: [s.b.id],
+					loiNhan: "Cảm ơn B",
+				},
+				s.a.cookie,
+			);
+			const sau = await demHang();
+			expect({
+				nhacM: `${nhacM.status} ${nhacM.loi}`,
+				ghiNhanM: `${ghiNhanM.status} ${ghiNhanM.loi}`,
+				giua,
+				nhacB: nhacB.status,
+				ghiNhanB: ghiNhanB.status,
+				sau: { binhLuan: sau.okrComment, ghiNhan: sau.okrGhiNhan },
+			}).toEqual({
+				nhacM: `400 ${OKR.thongDiep.traoDoi.nhacKhongXemDuoc(tenM)}`,
+				ghiNhanM: `400 ${OKR.thongDiep.canhKr.nguoiNhanKhongXemDuoc(tenM)}`,
+				giua: truoc,
+				nhacB: 200,
+				ghiNhanB: 200,
+				sau: {
+					binhLuan: truoc.okrComment + 1,
+					ghiNhan: truoc.okrGhiNhan + 1,
+				},
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"bảng viết trước 6 thao tác của M không xem được G: 404 hay từ chối có tên, không hàng nào ghi",
+		async () => {
+			const khoaM = (
+				await auth.api.createApiKey({
+					body: { name: ma("gk-khoa"), userId: s.m.id },
+				})
+			).key;
+			const bangKhoa = async (thuTuc: string, vao: Json) => {
+				const res = await request(ungDung().getHttpServer())
+					.post(`/api/trpc/${thuTuc}`)
+					.set(API_KEY_HEADER, khoaM)
+					.set("content-type", "application/json")
+					.send(JSON.stringify(vao));
+				return `${res.status} ${String(res.body?.error?.message ?? "")}`;
+			};
+			const http = async (thuTuc: string, vao: Json) => {
+				const tra = await goi(thuTuc, vao, s.m.cookie);
+				return `${tra.status} ${tra.loi}`;
+			};
+			const xep = async (nguoiYeuCau: string) => {
+				const kq = await xepViecTroLy(db, {
+					viec: "de-xuat",
+					objectiveId: s.g,
+					keyResultId: null,
+					nguoiYeuCau,
+				});
+				return kq.xep ? `xep ${kq.taskId}` : `tu choi ${kq.lyDo}`;
+			};
+			const truoc = await demHang();
+			const dangChay = {
+				follow: await http("okr.follow", { objectiveId: s.g, on: true }),
+				addComment: await http("okr.addComment", {
+					objectiveId: s.g,
+					body: "Bình luận của M",
+					mentionUserIds: [],
+				}),
+				guiGhiNhan: await http("okr.guiGhiNhan", {
+					objectiveId: s.g,
+					keyResultId: null,
+					nguoiNhan: [s.a.id],
+					loiNhan: "Cảm ơn A",
+				}),
+				ghiSoKr: await bangKhoa("okr.ghiSoKr", { id: s.krG, giaTri: 12 }),
+				xepViecTroLy: await xep(s.m.id),
+			};
+			await denChamDiem(s.ky);
+			const ket = {
+				...dangChay,
+				mangSang: await http("okr.mangSang", { objectiveId: s.g }),
+			};
+			const sau = await demHang();
+			const khong = `404 ${OKR.thongDiep.khongThayMucTieu}`;
+			console.log(
+				`ghi-ke bang M: ${Object.keys(ket).length} ca\n${Object.entries(ket)
+					.map(([k, v]) => `${k}: ${v}`)
+					.join(
+						"\n",
+					)}\nhang truoc ${JSON.stringify(truoc)} sau ${JSON.stringify(sau)}`,
+			);
+			expect({ ket, sau }).toEqual({
+				ket: {
+					follow: khong,
+					addComment: khong,
+					guiGhiNhan: khong,
+					ghiSoKr: khong,
+					xepViecTroLy: `tu choi ${KHONG_XEM_DUOC}`,
+					mangSang: khong,
+				},
+				sau: truoc,
+			});
+			expect({
+				a: await xep(s.a.id),
+				b: (await goi("okr.follow", { objectiveId: s.g, on: true }, s.b.cookie))
+					.status,
+			}).toEqual({ a: "tu choi tat", b: 200 });
+		},
+		CHO_GIEO_MS,
 	);
 });
