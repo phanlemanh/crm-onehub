@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-29T14:55:00+07:00",
+	chup_luc: "2026-09-30T09:30:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -130,6 +130,22 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			chan_boi: [],
 			ghi_chu:
 				"Tách từ lượt 3 ngày 29/09, anh nhận ở Cổng Phạm vi. T3 vì cần cột trạng thái lưu trữ trên TaiLieuTrang. Gồm cả «trang lưu trữ không ra kết quả» của tìm kiếm.",
+		},
+		{
+			id: "s208",
+			dong: 11,
+			ten: "Sửa",
+			slug: "trang-chua-de-xuat-mo-duoc",
+			hang: "T2",
+			trang_thai: "đã lên onehub",
+			ngay: "2026-09-29",
+			pr: [208],
+			cau_giao:
+				"«Trang nào danh sách cho thấy thì tôi bấm vào là mở được; trang chưa có bản nào thì màn đọc nói đang chờ gì và cho tôi viết tay bản đầu»",
+			buoc_ke: "Không còn việc: đã lên production, không cần phiên nghiệm thu",
+			chan_boi: [],
+			ghi_chu:
+				"Mở sau sự việc 29/09 trên production: «Chính sách nhân viên» hiện trong danh sách nhưng mở ra 404, vì danh sách và màn đọc dùng hai luật «ai thấy trang» khác nhau và trang vừa tải nguồn chưa có bản đề xuất. Nay một luật cho danh sách, màn đọc và trang nhắc tới; người tải nguồn thấy trang ngay; màn đọc nói đang chờ gì và chỉ lối viết tay. Anh ký Cổng Bằng chứng 29/09; merge cb6d5be8, lên production 29/09 12:15.",
 		},
 		{
 			id: "l4",
@@ -293,6 +309,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-09-29",
+			viec: "Sửa lên onehub (PR #208): trang chưa có bản đề xuất mở được; màn đọc nói đang chờ gì và chỉ lối viết tay. Lên production 12:15",
+		},
 		{
 			ngay: "2026-09-29",
 			viec: "Lượt 3 lên onehub (PR #205): ⌘K tìm kho, trang nhắc tới, lọc, tab Sức khoẻ, dòng nhắc sáng",
