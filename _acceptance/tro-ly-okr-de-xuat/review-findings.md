@@ -1,72 +1,60 @@
-# Review findings — tro-ly-okr-de-xuat (round 3)
+# Review findings — tro-ly-okr-de-xuat (round 4)
 
 ## Trong hợp đồng
 
-- **Hình dạng 4 (âm tính một mình, đối chứng không đi qua thước): ca đối chứng E22 không còn đi qua kiemCa, nên nhánh khongGopY của thước mất chiều đỏ**
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs:512`
-  severity: high
+- **kiemCa không đọc kyVong.vietLai và miễn cả vanDe bị luật lớp 7 phủ — 9/22 ca bộ Viết lại đạt DUNG dù nop_de_xuat rỗng**
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs:477`
+  severity: medium
   AC: AC-14
-  source: measurement
-  detail: Trong chamBoCa (dòng 508-512), ca đối chứng giờ tính `batDuoc = choDoiChung.length > 0`: bất kỳ dòng 'cho' nào cũng đủ, và kiemCa không được gọi. Bản trước là `kiemCa(E22.caDoiChung, …).some(l => l.startsWith("khongGopY"))`. Trong khi đó, cái chấm đúng/sai các ca khongGopY thật là kiemCa dòng 447, và nó chỉ bắn khi có dòng `viet-lai` (`ca.kyVong.khongGopY && vietLai.length > 0`). Hai điều kiện này là hai quan hệ khác nhau. Đối chứng xanh chỉ chứng minh tác tử có ra dòng; nó không chứng minh nhánh khongGopY của thước có bắt được lỗi. Bằng chứng cụ thể: .acceptance-runs/tro-ly-okr-de-xuat/cham-lai-r3/xanh.out:33 in `DOI CHUNG doi-chung-goi-50-cuoc: bat duoc — 2 dong cho (hoi:muc-tieu-la-so, hoi:kr-la-viec)`. Bản ghi đó chỉ có hai dòng `hoi` và 0 dòng viet-lai, nên nếu đưa qua kiemCa thì sẽ ra DUNG, tức là đối chứng 'bắt được' đúng một bản ghi mà thước chấm là đạt. Giả sử dòng 447 bị hỏng (ví dụ điều kiện không bao giờ đúng), E22 vẫn thoát 0 với 'bat duoc'. Ngoài đối chứng này, không có tự kiểm nào khác cho kiemCa: tuKiem/tuKiemTen chỉ thử bộ so cụm từ và họ tên.
-  rationale: AC-14 hứa chốt bằng mã «ca khongGopY không có dòng viết lại»; ca đối chứng không còn chạy qua đúng hàm chấm đó nên không chứng minh được chốt này có thể đỏ, làm bằng chứng của AC-14 không đứng vững.
+  source: bugs
+  detail: `kiemCa` chỉ đòi dòng cho `kyVong.vanDe` không nằm trong `vanDePhuBoiLuot7(ca)` (kiemOkr = luatDaHoi), và không nơi nào trong kho đọc `kyVong.vietLai` (grep: chỉ superRefine của okr-ca-gop-y.ts nhắc tới). Chạy kiemOkr trên bộ mẫu: gy-01, gy-02, gy-03, gy-07, gy-11, gy-14, gy-19, gy-20, gy-21 ra tập yêu cầu rỗng — một lượt nộp 0 dòng, outcome `da-nop` vẫn in `DUNG` và góp vào `ma: n/n` xanh. Riêng gy-02 và gy-14 khai `vanDe: ["kr-la-viec"]` + `vietLai: ["kr.title"]` nhưng bị miễn vì KR mở bằng «Gọi»/«Tổ chức» — trái với chữ E22 «mỗi kyVong.vanDe có ≥ 1 dòng đúng trường hoặc đúng maVanDe» (evals.yaml không nói miễn) và với instructions.md («Still propose a viet-lai line for that same field»). Bộ tự kiểm `tuKiemCa` mới thêm vòng này không có ca nào cho vietLai nên lỗ hổng không lộ. Miễn lớp 7 có từ aa08f5ea (đợt sửa 2); vietLai chưa bao giờ được đo — ghi để parent đối chiếu run-log. Sửa gọn: với vanDe bị phủ bởi lớp 7 vẫn đòi ≥ 1 dòng viet-lai đúng trường của `E22.truongCuaVanDe[vd]`; và với `kyVong.vietLai` không rỗng đòi ≥ 1 dòng `viet-lai` trạng thái `cho` đúng trường; thêm hai ca `tuKiemCa` tương ứng.
+  rationale: AC-14 đòi mỗi kyVong.vanDe có dòng đúng trường ở mọi ca, không nêu miễn trừ; phép chấm miễn nhiều ca nên chốt bằng mã này không thật sự chứng minh điều AC hứa.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **instructions.md tells the model to keep the number in a Mục tiêu rewrite, which contradicts CONTEXT.md**
-  Người dùng thấy gì: Khi góp ý một Mục tiêu có con số như «Tăng NPS lên 60», Trợ lý có thể viết lại câu mới mà vẫn giữ số 60 trong tên Mục tiêu. Từ điển của sản phẩm quy định con số phải nằm ở kết quả then chốt, nên người dùng có thể nhận một gợi ý đi ngược quy ước đặt tên.
-  file: `apps/agent/agent/subagents/tro_ly_okr/instructions.md`
-  severity: high
-  Đề xuất: known-limits
-
-- **luat-kho section 6 cannot see writes made inside @crm/db helpers, so «API chỉ ghi AgentTask/OkrDeXuat/OkrService» is not proven**
-  Người dùng thấy gì: Báo cáo bằng chứng có thể không phát hiện nếu sau này có đoạn mã ghi thẳng vào dữ liệu OKR theo đường vòng. Hiện tại không có việc ghi nào như vậy nên người dùng chưa bị ảnh hưởng.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
+- **Ba ý chấm judge nay sống ở hai bản chép đã lệch chữ nhau**
+  Người dùng thấy gì: Bảng chủ kho chấm thử và câu hỏi máy chấm dùng hai bản chữ hơi khác nhau. Con số 'máy khớp người' có thể đo hai đề bài không hẳn giống nhau, nên độ tin cậy của phép hiệu chỉnh kém hơn vẻ ngoài.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/hieu-chinh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **luat-kho section 3 files the AGENTS.md «Don't» pattern under a label that reads as acceptable**
-  Người dùng thấy gì: Báo cáo bằng chứng liệt kê các con số cố định trong mã mà không nói rõ chúng có thể đáng bị gom về một chỗ. Người duyệt có thể bỏ qua chúng, và sau này ai muốn chỉnh một mốc thời gian hay ngưỡng có thể phải tìm ở nhiều nơi.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **`--cham-lai` re-grade exits 0 even though it skips two E22 checks**
-  Người dùng thấy gì: Khi chấm lại kết quả cũ bằng chế độ ngoại tuyến, hai kiểm tra bị bỏ qua nhưng kết quả vẫn báo đạt như một lần chạy đầy đủ. Người xem có thể tưởng đó là bằng chứng đầy đủ trong khi thiếu hai kiểm tra.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **luat-kho marks code number literals as 'trong chuỗi' when a closed string appears earlier on the same line**
-  Người dùng thấy gì: Báo cáo bằng chứng đếm sai số lượng hằng số nằm trong chuỗi chữ, nên người duyệt có thể tin rằng có nhiều số vô hại hơn thực tế. Sản phẩm người dùng không bị ảnh hưởng.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **E22 runs up to 3 more eve evals before checking whether the main eve crashed, timed out or hit a config error**
-  Người dùng thấy gì: Nếu lượt đo chính bị treo hoặc lỗi cấu hình, bộ đo vẫn chạy thêm tới ba lượt nữa rồi mới báo không đo được. Người vận hành có thể mất vài giờ và một khoản tiền gọi mô hình cho một lượt đã biết là vô ích.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **--cham-lai exits 0 while skipping two E22 checks (so-moi-lot, noi-ve-nguoi)**
-  Người dùng thấy gì: Chấm lại kết quả cũ bằng chế độ ngoại tuyến báo đạt giống hệt một lượt đầy đủ dù đã bỏ qua hai kiểm tra bắt buộc. Người xem có thể ghi nhận nó là bằng chứng chính thức khi chưa đủ.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 5 (tuyên quét cả lớp mà chỉ có vài mẫu điểm) kèm hình dạng 4: mục 7 «Dấu hiệu vẽ tay» của luat-kho kết luận âm tính bằng 4 regex, không đối chứng dương**
-  Người dùng thấy gì: Phần kiểm tra giao diện vẽ tay trong báo cáo bằng chứng chỉ dò được một số kiểu và bỏ sót vài màn Trợ lý OKR. Kết quả «không có vi phạm» vì vậy chưa chắc chắn, dù soát tay chưa thấy lỗi nào.
+- **Kết luận mục 3 của luat-kho.md là chữ cứng, không suy từ kết quả quét**
+  Người dùng thấy gì: Một đoạn kết luận trong báo cáo kiểm luật kho là câu viết sẵn. Nếu mã đổi sau này, báo cáo vẫn khẳng định như cũ và không ai được báo, nhưng hôm nay nội dung vẫn đúng.
   file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 5 (tuyên quét cả lớp mà chỉ có danh sách điểm): mục 6 luat-kho kết luận «chỉ ghi AgentTask, OkrDeXuat, OkrService» nhưng lời gọi hàm ghi của @crm/db chỉ nhận ra được xepViecTroLy**
-  Người dùng thấy gì: Báo cáo bằng chứng khẳng định Trợ lý chỉ ghi vào ba loại dữ liệu, nhưng nếu sau này có hàm mới ghi vào chỗ khác thì báo cáo sẽ không thấy. Hiện tại chưa có việc ghi ngoài dự kiến nào.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
+- **Bao đóng import chỉ đi theo «./», import «../» rơi thành «nguồn ngoài kho» im lặng**
+  Người dùng thấy gì: Bộ quét luật kho có một kẽ hở: nếu sau này có tệp nhập theo đường dẫn lùi thư mục, nó sẽ bị bỏ qua mà báo cáo vẫn ghi là sạch. Hiện chưa có tệp nào như vậy nên chưa gây hại.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho-lan-theo.mjs`
   severity: low
   Đề xuất: known-limits
+
+- **Ca tự kiểm dựng dòng viet-lai không có truoc — bản ghi không thể tồn tại**
+  Người dùng thấy gì: Một ca tự kiểm dùng dòng giả thiếu vài trường mà dòng thật luôn có. Kết quả kiểm vẫn đúng, chỉ là dữ liệu mẫu chưa giống thật.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **phanLoaiSo xếp nhầm số ngoài chuỗi thành «trong chuỗi» — hai literal bị giấu khỏi bảng «đọc tay» của luat-kho.md §3**
+  Người dùng thấy gì: Báo cáo kiểm luật kho bỏ sót hai con số 10 nằm trong mã đọc số tiếng Việt, nên ghi là đã xem hết trong khi còn hai chỗ chưa ai đọc. Không ảnh hưởng người dùng, chỉ làm bằng chứng nghiệm thu nói hơi quá.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 — judge là thước duy nhất cho ba luật mới, không có đối chứng đỏ cho judge**
+  Người dùng thấy gì: Việc Trợ lý không đặt số vào tên Mục tiêu và không thêm ý ngoài lề hiện chỉ do máy chấm bằng lời kiểm tra, chưa có ca xấu đã biết để chứng minh máy chấm bắt được. Đề xuất xấu vẫn có thể lọt qua mà không ai thấy.
+  file: `apps/agent/evals/okr/gop-y.eval.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Hình dạng 5 — fixture khai đủ véc-tơ kỳ vọng nhưng kiemCa chỉ khẳng định hai phần tử; kyVong.vietLai chết**
+  Người dùng thấy gì: Nhiều ca mẫu khai rằng Trợ lý phải viết lại một câu cụ thể, nhưng phép chấm không kiểm điều đó. Trợ lý có thể chỉ hỏi lại người dùng thay vì viết lại mà ca vẫn được tính là đạt.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
+  severity: medium
+  Đề xuất: new-contract
 
 - **Punctuation list in soBangChu.dauCau has a second hardcoded copy in the tokenizer regex (r2)**
   Người dùng thấy gì: Nếu sau này ai đó thêm một dấu câu vào danh sách cấu hình, Trợ lý OKR sẽ không nhận ra dấu đó khi kiểm số viết bằng chữ và việc chỉnh cấu hình không có tác dụng. Hiện tại chưa gây sai kết quả cho người dùng.
@@ -170,4 +158,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 5/10 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 3/8 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs, _acceptance/tro-ly-okr-de-xuat/rang/luat-kho-lan-theo.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
