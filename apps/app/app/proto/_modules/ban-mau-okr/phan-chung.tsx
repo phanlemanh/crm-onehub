@@ -58,6 +58,8 @@ export type Vai = "chi-okr" | "day-du";
 
 export type TrangOkr = "cua-toi" | "cap-nhat" | "theo-don-vi" | "toan-canh";
 
+export type TrangKhung = TrangOkr | "hoi-y";
+
 type MucDieuHuong = { key: string; nhan: string; icon: CarbonIcon };
 
 const MUC_OKR: MucDieuHuong = { key: "okr", nhan: "OKR", icon: Target };
@@ -89,12 +91,18 @@ const TRANG: { value: TrangOkr; nhan: string }[] = [
 	{ value: "toan-canh", nhan: "Toàn cảnh" },
 ];
 
+const TAB_HOI_Y = {
+	value: "hoi-y",
+	nhan: "Hỏi ý",
+} satisfies { value: TrangKhung; nhan: string };
+
 const TIEU_DE_TRANG = {
 	"cua-toi": "OKR của tôi",
 	"cap-nhat": "Cập nhật tuần của tôi",
 	"theo-don-vi": "OKR theo đơn vị",
 	"toan-canh": "Toàn cảnh OKR",
-} satisfies Record<TrangOkr, string>;
+	"hoi-y": "Hỏi ý mục tiêu",
+} satisfies Record<TrangKhung, string>;
 
 function RailDieuHuong({ vai }: { vai: Vai }) {
 	return (
@@ -163,12 +171,14 @@ export function KhungUngDung({
 	trang,
 	moDieuHuong = false,
 	nguoi,
+	chuKy,
 	children,
 }: {
 	vai: Vai;
 	nguoi?: string;
-	trang: TrangOkr;
+	trang: TrangKhung;
 	moDieuHuong?: boolean;
+	chuKy?: string;
 	children: ReactNode;
 }) {
 	return (
@@ -203,7 +213,7 @@ export function KhungUngDung({
 				<RailDieuHuong vai={vai} />
 				<div className="flex min-w-0 flex-1 flex-col px-4 pt-4 pb-6 md:px-6 md:pt-6">
 					<div className="mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6">
-						<DauTrangOkr trang={trang} />
+						<DauTrangOkr chuKy={chuKy} trang={trang} />
 						{children}
 					</div>
 				</div>
@@ -213,7 +223,9 @@ export function KhungUngDung({
 	);
 }
 
-function DauTrangOkr({ trang }: { trang: TrangOkr }) {
+function DauTrangOkr({ trang, chuKy }: { trang: TrangKhung; chuKy?: string }) {
+	const tab = trang === "hoi-y" ? [...TRANG, TAB_HOI_Y] : TRANG;
+	const cacKy = chuKy ? [chuKy, ...CHU_KY_KHAC] : CHU_KY_KHAC;
 	return (
 		<header className="flex flex-col gap-3">
 			<div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -222,12 +234,12 @@ function DauTrangOkr({ trang }: { trang: TrangOkr }) {
 				</h2>
 				<div className="ml-auto flex items-center gap-2">
 					<Badge variant="outline">Dữ liệu mẫu</Badge>
-					<Select defaultValue={KY.ten}>
+					<Select defaultValue={chuKy ?? KY.ten}>
 						<SelectTrigger aria-label="Chu kỳ" size="sm">
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent align="end">
-							{CHU_KY_KHAC.map((ky) => (
+							{cacKy.map((ky) => (
 								<SelectItem key={ky} value={ky}>
 									{ky}
 								</SelectItem>
@@ -243,7 +255,7 @@ function DauTrangOkr({ trang }: { trang: TrangOkr }) {
 						className="w-full justify-start gap-6 border-b"
 						variant="line"
 					>
-						{TRANG.map((t) => (
+						{tab.map((t) => (
 							<TabsTrigger key={t.value} value={t.value}>
 								{t.nhan}
 							</TabsTrigger>

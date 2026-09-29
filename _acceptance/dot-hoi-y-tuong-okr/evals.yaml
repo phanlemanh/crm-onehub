@@ -1,0 +1,214 @@
+schema_version: 1
+feature_slug: dot-hoi-y-tuong-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_mo
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, packages/validation/test/okr-hoi-y.spec.ts, packages/db/src/okr-vet.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; khuôn soLieuHoiY: BẢNG CA VIẾT TRƯỚC ≥ 10 so toEqual nhận/từ chối (nhận 1 dòng, 5 dòng, ghiChu trống; từ chối 0 dòng, 6 dòng, nhan 1 ký tự, nhan 61, giaTri trống, giaTri 41, ghiChu 121) với đường dẫn lỗi. Dịch vụ, chu kỳ năm C ở lap-ke-hoach: quản trị Q moHoiY(C, câu hỏi, lời mở, 3 con số, hạn now+48h, người chọn P admin) → đọc DB, parse soLieu toEqual đầu vào, trangThaiHoiY = dang-mo; suaHoiY(lời mở mới, 4 con số) → đúng; suaHoiY(hanLuc = now) → dang-gom; okrTrail cycle C mảng hành động toEqual [mo-hoi-y, sua-hoi-y, sua-hoi-y]. Lối ra người chọn trên H2: P niêm phong, hạ P về member qua thủ tục thật → suaHoiY(nguoiChon Q2) được, okrHoiYBanTruoc giữ nguyên vietBoiUserId P, một vết doi-nguoi-chon {tu: P, sang: Q2}. CHIỀU ĐỎ: bản sao suaHoiY không ghi vết → ca mảng vết đỏ, bài in mảng nhận."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_mo_tu_choi
+    paths: [apps/api/src/okr/**, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; BẢNG CA TỪ CHỐI VIẾT TRƯỚC 11 ca, mỗi ca khai mã HTTP và câu ghim trước khi chạy, bài so toEqual bảng kết quả với bảng khai và khẳng định số hàng okrHoiY và okrTrail không đổi: thành viên mở (403); vai okr mở (403); người chọn là member (400 nguoiChonPhaiQuanTri); chu kỳ dang-chay (400 kyKhongLapKeHoach); mở lần hai cùng chu kỳ (400 daCoHoiY); hạn now+23h (400); hạn now+8 ngày (400); 0 con số và 6 con số (400); đổi cauHoi khi đã có một ý (400 cauHoiDaKhoa); đổi người chọn sau khi P niêm phong (400 daNiemPhong). CHIỀU ĐỎ: bản sao moHoiY bỏ kiểm vai người chọn → ô «người chọn là member» đỏ, bài in ô lệch."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_gop
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; lần hỏi ý H đang mở: thành viên T gopY(«Mở tuyến giao lạnh cho khách dược» 36 ký tự, vì sao, đo bằng gì) → DB {tacGiaUserId T, noiDung, viSao, doBangGi, chuDeId null}; suaY → đúng; goY → 0 hàng của ý đó; vai okr O góp một ý → tacGiaUserId O. Từ chối viết trước, mỗi ca câu ghim, đếm okrY không đổi: T góp ý thứ tư (400 quaBaY); O sửa ý của T (403); O gỡ ý của T (403); P (người chọn) góp (400 nguoiChonKhongGop); nội dung 9 ký tự và 301 ký tự (400); góp sau khi dời hạn về now (400 hetHan); góp sau công bố (400). Ca đua: hai lời gopY song song của T khi T đã có 2 ý → đúng một thành công, DB đúng 3 ý (khoá hàng hỏi ý). CHIỀU ĐỎ: bản sao đếm trần ngoài giao dịch → ca đua đỏ, bài in số ý 4."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_ten_va_so
+    paths: [apps/api/src/okr/**, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/vai-chi-okr.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; H đang mở, ý Y1 của A (tên «Ngô Minh Châu»), Y2 của B; T và O bấm «tôi cũng nghĩ vậy» Y1; P đã niêm phong. MA TRẬN VIẾT TRƯỚC 4 vai (T member, O okr, Q quản trị, P người chọn) × 3 đường (tRPC, cầu REST GET tương ứng, khoá API của chính người đó gọi cầu REST) × 2 thủ tục đọc (okr.hoiY, okr.hoiYDoPhu) × 3 trạng thái (dang-mo sau niêm phong, dang-gom sau gom và kết luận, da-cong-bo) = 72 ô, mỗi ô khai trước có/không có tên và số, bài in số ô đã chạy và phải bằng 72; tập thủ tục đọc của lần hỏi ý rút từ generated/server.ts so toEqual [hoiY, hoiYDoPhu] để thủ tục đọc mới không lọt ma trận: với T và O, JSON.stringify phản hồi không chứa chuỗi «Ngô Minh Châu», mã user của A, B, khoá soDongY của ý người khác — đếm = 0 in bảng đếm; mỗi ý có daDongY đúng (T: Y1 true, Y2 false); với Q và P: có tên A và soDongY của Y1 = 2. dongY(Y1, bat) lần hai bởi T → okrYDongY vẫn 2 hàng; dongY(Y1, tat) → 1 hàng; A dongY(Y1) → 400 yCuaMinh; sau hạn → 400. Tập thủ tục vai okr với tới được so toEqual danh sách viết trước có thêm đúng 16 thủ tục mới (ALIAS và tập ghim của vai-chi-okr.spec); ma-tran vẫn xanh. CHIỀU ĐỎ: bản sao hàm chiếu ý trả tacGia cho mọi vai → ô (O, tRPC, hoiY, dang-mo, tên A) đỏ, bài in đường và chuỗi lộ; bản sao chiếu chủ đề ở da-cong-bo dùng phép chiếu của màn gom (kèm tên) → ô (O, tRPC, hoiY, da-cong-bo) đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_ban_truoc
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; H đang mở có 3 ý của người khác, người chọn P. Trước niêm phong: okr.hoiY bởi P → mảng y chứa 0 ý của người khác (so id), cờ khoaY = true và lyDoKhoa ghim. niemPhong(bốn câu viết trước, câu 1 «Đưa giao lạnh thành dịch vụ có lãi») → DB một okrHoiYBanTruoc {cau toEqual bốn câu, boQua false}; P đọc → thấy 3 ý kèm tên; niemPhong lần hai → 400 daNiemPhong; mọi thủ tục ghi bản viết trước sau đó → 400; okrTrail niem-phong có after toEqual {soCau: 4, boQua: false} và JSON.stringify của hàng vết không chứa chuỗi nào trong bốn câu. Quét lộ trước công bố: MA TRẬN VIẾT TRƯỚC 3 vai (Q quản trị không phải người chọn, T, O) × 3 đường (tRPC, REST, khoá API) × 2 thủ tục đọc (okr.hoiY, okr.hoiYDoPhu) × 2 trạng thái (dang-mo sau niêm phong; dang-gom sau khi P kết luận và khai nối cau-1, cau-3) = 36 ô — đếm phản hồi chứa bất kỳ câu nào trong bốn câu = 0 ở mọi ô, bài in số ô (= 36). Sau công bố (qua fixture công bố): cả 3 vai đọc được bốn câu. Ca khai không viết trước trên H2: niemPhong({boQua}) → P đọc được ý, kết quả sau công bố có boQua true. CHIỀU ĐỎ: bản sao okr.hoiY trả banTruoc cho quản trị → ô (Q, tRPC, hoiY, dang-mo) đỏ in câu lộ; bản sao chủ đề ở dang-gom kèm chữ câu đã nối → ô (Q, tRPC, hoiY, dang-gom) đỏ; bản sao bỏ khoá đọc ý trước niêm phong → ca «0 ý trước niêm phong» đỏ in số ý."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_gom
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; H đang gom có 6 ý Y1…Y6. Q taoChuDe(«Giao lạnh») → hàng {loai chu-de, ten}; suaChuDe(«Giao lạnh cho dược») → đúng; ganY([Y1, Y2, Y3], chuDe) → ba ý có chuDeId; ganY([Y4], yLa) → một chủ đề mới loai y-la chứa đúng Y4, ten = 120 ký tự đầu của Y4; P ganY([Y3], chủ đề thứ hai) → Y3 đổi chuDeId; taoChuDe rồi goChuDe khi rỗng → 0 hàng. Từ chối viết trước, mỗi ca câu ghim và đếm okrChuDe, chuDeId không đổi: gom khi H còn mở (400 chuaHetHan); T gom (403); O gom (403); goChuDe còn ý (400 chuDeConY); ganY vào chủ đề của lần hỏi ý khác (400). CHIỀU ĐỎ: bản sao ganY yLa gom nhiều ý vào một chủ đề ý lạ → ca «đúng Y4» đỏ in số ý."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_ket_luan
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, apps/api/src/okr/hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-thuan.spec.ts]
+    expected: "exit 0; hàm thuần bằng chứng: chủ đề có 5 ý của 4 người ở 3 phòng ban thuộc 2 bộ phận, lượt đồng ý [3, 0, 2, 1, 0] → toEqual {soNguoi 4, soDonVi 3, soDongY 6, trich: [ý 3 đồng ý, ý 2 đồng ý]} (trích = hai ý nhiều đồng ý nhất, hoà thì cũ trước); chủ đề một ý → trich một phần tử. Dịch vụ: P ketLuanChuDe(K1, chon, lý do 40 ký tự, câu mục tiêu, noiBanTruoc cau-1) → đọc DB đúng; (K5, chon, lý do, câu mục tiêu, noiBanTruoc moi) → đúng; (K2, de-sau, lý do); (K3, da-co, lý do); okr.hoiY trả K4 chưa kết luận với lyDo === \"\" và cauMucTieu === \"\" (không chữ máy điền). Từ chối viết trước, mỗi ca câu ghim, bảng không đổi: Q (không phải P) kết luận (403 chiNguoiChon); lý do 9 ký tự (400); chon thiếu câu mục tiêu (400); noiBanTruoc cau-5 khi có 4 câu (400); noiBanTruoc cau-1 khi P đã khai không viết trước (400); kết luận khi H còn mở (400). CHIỀU ĐỎ: bản sao bằng chứng đếm đơn vị theo bộ phận → soDonVi 2, ca đỏ in hai giá trị."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_cong_bo
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-san.ts]
+    expected: "exit 0; BẢNG CA THIẾU VIẾT TRƯỚC 9 ca, mỗi ca dựng từ một lần hỏi ý đủ điều kiện rồi phá đúng một điều (chưa niêm phong, còn ý chưa gom, còn chủ đề rỗng, chủ đề thiếu kết luận, thiếu lý do, chon thiếu câu mục tiêu, chon chưa khai noiBanTruoc, 0 chủ đề chon, vượt objectiveCap chế độ chặn): okr.hoiY.quyen.lyDoChuaCongBo toEqual [mã của đúng điều bị phá]; congBo → 400 với câu ghim riêng; đếm okrObjective, okrChuDe.objectiveId, congBoLuc không đổi. Ca đủ: ba chủ đề chon → đúng 3 okrObjective {level onehub, status nhap, ownerUserId P, title = cauMucTieu, whyNow = lyDo, kind cam-ket} (so toEqual tập), mỗi chủ đề chon có objectiveId trỏ đúng, congBoLuc khác null, okrTrail có 3 dòng tao với after.tuHoiY = H và 1 dòng cong-bo-hoi-y; congBo lần hai → 400 daCongBo. Chế độ cảnh báo vượt trần → công bố được, trả canhBao. setCyclePhase(C, dang-chay) khi H chưa công bố → 400 conHoiYChuaCongBo, pha không đổi; sau công bố → được. Ca lối ra trên H3: P niêm phong, hạ P về member → P congBo 403; Q đổi người chọn sang Q2 → Q2 kết luận đủ, congBo được, mục tiêu nháp có owner Q2; setCyclePhase(C3, dang-chay) được. CHIỀU ĐỎ phụ: bản sao giữ luật «không đổi người chọn sau niêm phong» → ca lối ra đỏ in mã 400 daNiemPhong. CHIỀU ĐỎ: bản sao congBo tạo mục tiêu ngoài giao dịch rồi lỗi ở chủ đề thứ ba → ca «đếm không đổi» đỏ in số mục tiêu mồ côi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_ket_qua
+    paths: [apps/api/src/okr/**, apps/api/src/okr/hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-thuan.spec.ts]
+    expected: "exit 0; hàm thuần giữ-đổi-thêm-bỏ: bốn câu, ba chủ đề chon {cau-1 với câu mục tiêu trùng câu 1 khác hoa thường và khoảng trắng; cau-3 với câu mục tiêu khác chữ; moi} → toEqual {cau: [giu, bo, doi, bo], doi: 1, them: 1}; chủ đề de-sau nối cau-2 không tính; không niêm phong (boQua) → {cau: [], them: 3, boQua: true}. Dịch vụ, H đã công bố như contract: A (đã góp 2 ý, một vào K1 chon, một vào K2 de-sau) đọc → cuaToi.y toEqual [{chuDe K1, ketLuan chon, lyDo, objectiveId}, {chuDe K2, ketLuan de-sau, lyDo, objectiveId null}]; ketQua toEqual giá trị viết trước; khoY chứa K2 cho cả A và O. A hieuViSao → một okrHoiYHieu; lần hai → vẫn 1 hàng. O (chưa góp) hieuViSao → 400 chuaGop; A hieuViSao trên H2 chưa công bố → 400. CHIỀU ĐỎ: bản sao thuần coi câu nối bởi chủ đề de-sau là giữ → ca thuần đỏ in mảng nhận; bản sao so chữ phân biệt hoa thường → câu 1 thành doi, ca đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_nhac
+    paths: [packages/db/src/okr-nhac.ts, packages/db/src/onboarding-nhac.ts, packages/validation/src/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/api/src/okr/**, apps/api/test/okr-hoi-y.spec.ts, apps/agent/test/okr-nhac.integration.spec.ts]
+    expected: "exit 0; H đang mở; A chưa góp, B đã góp, O vai okr chưa góp, P người chọn, R đã rời (gieo qua thủ tục thật với đồng hồ tiêm vào OkrHoiYService, không UPDATE tay mốc nào). viecCuaToi: A và O mỗi người đúng một mục {loai okr-hoi-y-gop, hoiYId H}; B, P: 0 mục loại đó; tập người có mục toEqual {A, O}. Dời hạn về now → 0 mục okr-hoi-y-gop cho mọi người. Công bố H lúc t trong cửa sổ: tập người có mục okr-hoi-y-cong-bo toEqual {B} (A, O chưa góp không có); t ngoài cửa sổ → 0. Bài tích hợp agent (đồng hồ đóng băng 08:31 giờ VN): tin nhắc buổi sáng của A chứa đúng một dòng hỏi ý với tên chu kỳ và đường mở …/okr/hoi-y; KHOA_MUC_OKR, THU_TU_NHAC phủ hai loại mới (check-types). CHIỀU ĐỎ: bản sao sinh mục gop cho mọi thành viên kể cả người đã góp → tập {A, O} đỏ, bài in tập nhận."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_do_phu
+    paths: [apps/api/src/okr/**, apps/api/src/okr/hoi-y.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-hoi-y-thuan.spec.ts, apps/api/test/okr-hoi-y-hieu-nang.spec.ts]
+    expected: "exit 0; hàm thuần độ phủ: cây viết trước 3 bộ phận, 5 phòng ban, 20 thành viên còn hiệu lực + 1 người chưa xếp + người chọn P + người đã rời R; ý gieo qua thủ tục thật bằng đồng hồ tiêm: ngày 1 giờ VN có 7 thành viên còn hiệu lực góp, cộng R (đã rời, không nằm trong 7) góp ngày 1; ngày 2 thêm 5 thành viên; ca biên: một ý lúc 23:59 VN ngày 1 (= 16:59 UTC) vào cột ngày 1, một ý lúc 00:00 VN ngày 2 (= 17:00 UTC ngày 1) vào cột ngày 2; kết quả toEqual MA TRẬN VIẾT TRƯỚC (9 hàng: gốc, 3 bộ phận, 5 phòng ban, chưa xếp — × 2 ngày) với số làm tròn một chữ số; P và R không ở mẫu số; hàng gốc = 12/21. Dịch vụ: okr.hoiYDoPhu trên cùng dữ liệu gieo qua thủ tục thật trả cùng ma trận. Hiệu năng: đếm truy vấn Prisma của hoiYDoPhu với 5 và 50 phòng ban → bằng nhau. Quét mọi thủ tục của lần hỏi ý bởi quản trị: không phản hồi nào có khoá chuaGop hay danh sách mã người mà người đó không có ý (đếm = 0). CHIỀU ĐỎ: bản sao tính mẫu số gồm người chọn → hàng gốc 12/22, bài in ô lệch."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hy_man_chrome
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo nạp bộ OKR mẫu, xoá lần hỏi ý mẫu của chu kỳ năm kế để chu kỳ trống; đăng nhập dev:session quản trị mẫu; dọn theo id ở cuối kể cả khi đỏ"
+      - "Mở {APP_URL}/<slug>/okr/hoi-y ở 1440/vi, chọn chu kỳ năm kế → Empty «Chưa hỏi ý cho kỳ này» có «Mở hỏi ý» → ảnh buoc-trong-quan-tri"
+      - "«Mở hỏi ý» → sheet mở, URL mang trạng thái mở; câu hỏi điền sẵn; xoá nhãn con số thứ nhất → lỗi dưới ô, «Mở» tắt; điền lời mở, ba con số, hạn +2 ngày, người chọn quản trị mẫu → «Mở» → sheet đóng, trang ở trạng thái đang mở với lời mở, thẻ con số, «còn 4x giờ» → ảnh buoc-mo"
+      - "Đăng nhập thành viên thường mẫu → cùng trang: gõ ý, «Vì sao», «Đo bằng gì» → «Gửi» → khối «Ý của bạn» có ý vừa gửi; bấm «Tôi cũng nghĩ vậy» trên một ý người khác (gieo sẵn một ý của người thứ ba qua API) → nút ở trạng thái bật; ý người khác không hiện tên → ảnh buoc-gop"
+      - "Heatmap độ phủ có hàng toàn công ty và các bộ phận, ô của phòng ban người vừa góp khác 0 → ảnh buoc-do-phu"
+      - "Đăng nhập thành viên thường khác trên chu kỳ không có hỏi ý → Empty «Chưa có lần hỏi ý nào cho kỳ này», không nút mở"
+      - "Chặn truy vấn okr.hoiY ở trình duyệt → Empty lỗi + «Thử lại»; bỏ chặn bấm lại tải được; trì hoãn truy vấn → Skeleton → ảnh buoc-trang-thai"
+      - "Ảnh 390 cho buoc-mo và buoc-gop; scrollWidth <= innerWidth; ý và lời mở mang translate=no"
+    expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao màn in tên người góp cho mọi vai → bước buoc-gop đỏ, script in tên lộ trong DOM."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.hy_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/**, apps/api/src/okr/**, _acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs]
+    expected: "Cùng lần chạy với E12: sau «Mở», DB có đúng một okrHoiY trên chu kỳ năm kế với lời mở và ba con số bằng chuỗi đã gõ (so toEqual soLieu), nguoiChonUserId đúng; sau «Gửi», okrY mới với tacGiaUserId là thành viên đăng nhập và ba ô bằng chuỗi đã gõ; sau bấm, okrYDongY {yId, userId} đúng một hàng; số trên ô heatmap của phòng ban bằng tính tay từ DB. CHIỀU ĐỎ: bản sao ô soạn gửi «Vì sao» vào «Đo bằng gì» → so DB đỏ, script in hai chuỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.hy_man_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/hoi-y/**", apps/app/test/okr-hoi-y.dom.tsx]
+    expected: "exit 0; bài DOM dựng trang Hỏi ý với dữ liệu viết trước cho chín trạng thái (dang-tai, loi, trong-quan-tri, trong-thanh-vien, gop, het-han, viet-truoc, chon-chua-du, ket-qua): mỗi trạng thái khẳng định phần tử riêng của nó có mặt và phần tử của tám trạng thái kia vắng (ma trận 9 × 9 viết trước); ô soạn: 9 ký tự → FieldError câu ghim, mutation không gọi; đủ 3 ý → ô soạn vắng, dòng «đã đủ ba ý»; thanh công bố in đúng từng mục của lyDoChuaCongBo và «Công bố» disabled khi mảng khác rỗng. CHIỀU ĐỎ: bản sao thanh công bố bật nút khi còn thiếu → ca chon-chua-du đỏ in trạng thái nút."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hy_man_chrome
+    steps:
+      - "Cùng phiên đo E12, trên lần hỏi ý mẫu của bộ OKR mẫu (đang gom, đã niêm phong)"
+      - "Trước đó, trên một lần hỏi ý thứ hai gieo qua API ở chu kỳ quý kế (đang mở, chưa niêm phong): đăng nhập người chọn → danh sách ý khoá, dòng lý do «Niêm phong trước khi đọc ý» → ảnh buoc-khoa-nguoi-chon"
+      - "Đăng nhập người chọn mẫu → lần hỏi ý mẫu: cột «Ý chưa gom» có tên người góp; chọn một ý → «Đưa vào chủ đề…» → chủ đề có sẵn → ý rời cột → ảnh buoc-gom"
+      - "Thanh công bố dính đáy liệt điều còn thiếu, «Công bố» tắt → ảnh buoc-thieu"
+      - "Kết luận các chủ đề còn thiếu: chọn «Chọn» + lý do + câu mục tiêu + nối câu viết trước; «Để sau» + lý do; ý lạ «Không làm» + lý do; ô lý do trống khi mới mở (không chữ điền sẵn) → thanh công bố «Sẵn sàng — N mục tiêu nháp» và «Công bố» bật → ảnh buoc-du"
+      - "«Công bố» → xác nhận → trang kết quả: bản viết trước giữ nguyên · đổi · thêm · bỏ, chủ đề chọn có liên kết mục tiêu nháp; bấm một liên kết → khung mục tiêu nháp mở với «Vì sao lúc này» bằng lý do đã gõ → ảnh buoc-ket-qua"
+      - "Đăng nhập thành viên mẫu đã góp → khối «Ý của bạn» có kết luận, lý do nguyên văn → «Tôi hiểu vì sao» → dòng «Bạn đã xác nhận hiểu» → ảnh buoc-hieu"
+      - "Ảnh 390 cho buoc-thieu và buoc-ket-qua; scrollWidth <= innerWidth; thanh công bố nằm trong khung nhìn khi cuộn"
+    expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao máy chủ trả ý cho người chọn chưa niêm phong → bước buoc-khoa-nguoi-chon đỏ, script in số ý hiện."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-12
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.hy_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/api/src/okr/**, _acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs]
+    expected: "Cùng lần chạy với E15: sau gom, okrY của ý đó có chuDeId của chủ đề đã chọn; sau kết luận, okrChuDe ketLuan, lyDo, cauMucTieu, noiBanTruoc bằng giá trị đã chọn và gõ; sau công bố, số okrObjective level onehub nhap mới bằng số chủ đề chon, whyNow bằng lý do đã gõ, congBoLuc khác null; sau «Tôi hiểu vì sao», đúng một okrHoiYHieu của thành viên đó; mọi phản hồi mạng tới trình duyệt của thành viên (ghi qua CDP) trước bước công bố không chứa câu viết trước nào — đếm = 0, in số phản hồi đã ghi (> 0). CHIỀU ĐỎ: bản sao nút công bố gửi lý do cắt 12 ký tự → so whyNow đỏ, script in hai chuỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hy_bo_mau
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts, apps/api/test/okr-mau-san.ts]
+    expected: "exit 0; trên kho sạch: nạp bộ mẫu → đúng một chu kỳ năm kế ở lap-ke-hoach; đúng một okrHoiY trên nó, trạng thái suy dang-gom, người chọn là quản trị mẫu, okrHoiYBanTruoc 4 câu; 28–32 okrY của 23–27 tác giả phủ cả ba bộ phận, ≥ 3 tác giả vai okr; ≥ 10 okrYDongY; ≥ 4 okrChuDe, ≥ 2 đã kết luận, đúng 1 loai y-la; ≥ 4 ý chuDeId null — bảng khai so từng dòng. Nạp lần hai → đếm từng bảng trong sáu bảng mới bằng lần một. Kho có thêm một ý và một lượt đồng ý ngoài bộ mẫu trên lần hỏi ý ngoài bộ mẫu → xoá bộ mẫu → 0 hàng của sáu bảng mang mã thực thể mẫu, hai hàng ngoài bộ mẫu đọc lại không đổi; danh sách bảng đếm rút từ Prisma DMMF và chứa sáu bảng mới. CHIỀU ĐỎ: bản sao lệnh xoá bỏ bước xoá okrYDongY → ca xoá đỏ in bảng còn hàng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-14
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.hy_ty_le
+    paths: [_acceptance/dot-hoi-y-tuong-okr/rang/ty-le-hoi-y.sql, _acceptance/dot-hoi-y-tuong-okr/rang/ty-le.mjs, apps/api/src/okr/**]
+    expected: "exit 0; trên kho đo (phiên đo tự dựng), gieo qua thủ tục thật bằng đồng hồ tiêm (không UPDATE tay mốc nào) hai lần hỏi ý nối tiếp H1 (quý) và H2 (năm) trên 20 thành viên còn hiệu lực + người chọn + R: H1 có 10 người góp gồm R, rồi R rời trước H2; H2 có 15 người góp, trong đó 8 người đã góp H1; H2 công bố với 4 câu viết trước, 3 chủ đề chon (cau-1 cùng chữ, cau-3 khác chữ, moi), 1 de-sau, 1 da-co, 1 ý lạ khong-lam; 9 người bấm hiểu trước mốc công bố + 7 × 24 giờ (một người đúng 7 × 24 giờ trừ 1 giây), 1 người đúng mốc 7 × 24 giờ (không tính), 1 người sau 8 ngày; 12 lượt đồng ý; 30 ý. Chạy ty-le-hoi-y.sql với SET okr.hoi_y = H2, okr.hoi_y_truoc = H1 → toEqual {thanhVien 20, gop 15, hieu7 9, doi 1, them 1, gopTruoc 9, gopLai 8, soY 30, soYLa 1, chuDeChon 3, chuDeDeSau 1, chuDeDaCo 1, chuDeKhongLam 1, soDongY 12}. Script đọc tệp SQL và từ chối câu khác SELECT hay SET. CHIỀU ĐỎ: --chieu-do chạy bản sao SQL đếm người chọn vào thanhVien → 21, exit 1 in hai kết quả; bản sao đếm hiểu với biên đóng 7 × 24 giờ → hieu7 10, exit 1; bản sao không lọc người đã rời ở gopTruoc → 10, exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-14
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.hy_migration_chi_them
+    paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/dot-hoi-y-tuong-okr/rang/migration-chi-them.mjs]
+    expected: "exit 0; script (khuôn canh-kr-okr/rang/migration-chi-them.mjs, suy gốc kho từ vị trí của nó) đọc mọi thư mục migration mới so với origin/onehub; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE (UNIQUE) INDEX trên bảng mới, ALTER TABLE <bảng mới> ADD CONSTRAINT … FOREIGN KEY; cấm UPDATE, DELETE, DROP, ALTER COLUMN, RENAME, ADD COLUMN trên bảng có sẵn; in số câu (> 0). Sáu model mới liền nhau và là các model cuối của schema.prisma; bảng khoá ngoại viết trước so toEqual bảng đọc từ SQL: tới okrCycle, okrObjective, user là ON DELETE RESTRICT; okrYDongY → okrY là CASCADE; okrY → okrChuDe là SET NULL. CHIỀU ĐỎ: 4 tệp giả trong tmpdir (ADD COLUMN trên okrObjective; khoá ngoại tới okrObjective CASCADE; model mới giữa tệp; DROP INDEX) → exit 1 thông điệp ghim từng loại. Đối chứng dương: tệp chỉ CREATE TABLE và khoá ngoại đúng bảng → exit 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.hy_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/**, packages/ui/src/components/heatmap.tsx, packages/validation/src/**, apps/api/src/okr/**, CONTEXT.md, _acceptance/dot-hoi-y-tuong-okr/rang/soi-ma.mjs]
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD, chỉ tính dòng lượt này thêm; mỗi .tsx của apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay (bảng docs/design.md); mọi SheetFooter, DialogFooter mới có «Huỷ» bọc SheetClose / DialogClose; tệp mới không chú thích mã, không Record<string, unknown>; mọi khoá chữ mới trong lib/messages/okr*.ts có vi và en khác nhau; hàm chiếu ý theo vai và hàm đọc bản viết trước mỗi hàm định nghĩa đúng một lần và mọi chỗ trả ý hay bản viết trong apps/api/src/okr gọi nó (đếm chỗ trả = đếm lời gọi); CONTEXT.md có tám mục Hỏi ý mục tiêu, Ý (hỏi ý), Người chọn, Bản viết trước, Chủ đề (hỏi ý), Ý lạ, Kết luận (chủ đề), Kho ý; không chuỗi «đợt hỏi» trong chữ màn; in danh sách tệp đã soi (> 0). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x`, một nút Huỷ không SheetClose và một khoá chữ thiếu en → đỏ in ba vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-15
+    executor: judgment
+    question: >-
+      Nhìn diff của lượt này: sáu bảng mới có đúng hình của thiết kế (bản viết trước
+      là hàng riêng ghi một lần, ý lạ là chủ đề một ý, nối chủ đề ↔ mục tiêu là cột
+      trên bảng mới, không cột mới trên bảng cũ); quyền nằm trong một service và màn
+      chỉ hỏi cờ quyền từ API; luật ai đọc được tên người góp, số đồng ý và bản viết
+      trước nằm ở một chỗ; công bố đi qua đường tạo mục tiêu có sẵn thay vì ghi thẳng
+      bảng; trang Hỏi ý dựng bằng thành phần packages/ui như bản mẫu đã duyệt; mục từ
+      điển mới viết đúng nếp CONTEXT.md (nghĩa, Avoid, Vì sao) và không dùng chữ «đợt»?
+    inputs: [docs/superpowers/specs/2026-09-29-dot-hoi-y-tuong-okr-design.md, _acceptance/dot-hoi-y-tuong-okr/contract.md, _acceptance/dot-hoi-y-tuong-okr/design-pass.md]
+    expected: >-
+      PASS khi cả sáu vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
+      tệp và dòng. FAIL khi một vế sai.
+    evidence_required: [run_id, verifier, verified_at, output]

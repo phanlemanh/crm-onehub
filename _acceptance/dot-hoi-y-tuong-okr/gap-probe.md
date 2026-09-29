@@ -1,0 +1,17 @@
+---
+slug: dot-hoi-y-tuong-okr
+at: 2026-09-29T10:02:00Z
+verdict: findings
+p0: 0
+p1: 4
+p2: 1
+---
+## Findings
+
+| Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
+|---|---|---|---|---|---|
+| P1 | design | Không có lối ra khi người chọn mất quyền quản trị hay rời công ty sau khi niêm phong; ba luật ghép thành ngõ cụt (ghi của người chọn bị từ chối, đổi người chọn chỉ khi chưa niêm phong, chu kỳ không rời «lập kế hoạch» khi còn lần hỏi ý chưa công bố) | P niêm phong 08/12, bị hạ về member 10/12; công bố 403, đổi người chọn 400, setCyclePhase 400 — chu kỳ năm 2027 không bao giờ chạy được trừ khi sửa DB tay | Chốt một lối ra ở thiết kế, thêm vế vào AC-7 và ca hạ vai P rồi công bố bằng người mới trong E8, chiều đỏ giữ luật cũ | fixed: quản trị đổi được người chọn sau niêm phong khi người chọn hiện tại không còn là owner/admin; bản viết trước giữ nguyên của người cũ, vết doi-nguoi-chon (thiết kế mục 5, 7; AC-1, AC-7; E1, E8 có ca lối ra và chiều đỏ) |
+| P1 | contract | Ngưỡng SỐNG ký ở Cổng Đáng là «≥ 1 mục tiêu đổi hoặc thêm» nhưng đường đo chỉ đo «thêm»; nối câu viết trước là tuỳ chọn nên không nối thì tự rơi vào «thêm» — thước lệch sẵn về phía đạt | CEO chọn đúng bốn câu mình đã niêm phong mà không bấm nối → them = 4, đọc SỐNG dù không đổi gì; CEO giữ câu 1 nhưng viết lại theo ý công ty, không thêm → them = 0, đọc không đạt | Mỗi chủ đề chọn phải khai nối câu k hay «mới», chưa khai là điều thiếu riêng của công bố; SQL thêm cột doi; E18 thêm ca giữ-mà-đổi | fixed: noiBanTruoc bắt buộc (cau-1…cau-5 hoặc moi) cho chủ đề chọn khi có bản viết trước, là điều kiện công bố thứ 5; kết quả có nhãn giữ nguyên · đổi · thêm · bỏ; thước là doi + them (thiết kế mục 4, 6, 11; AC-6, AC-7, AC-8, Đường đo; E7, E8, E9, E18) |
+| P1 | evals | Hai ma trận quét lộ chỉ quét một trạng thái và không liệt kê thủ tục được quét [tim-va-dieu-huong-kho#F1] | Bản cài dùng phép chiếu của màn gom (kèm tên) cho chủ đề ở da-cong-bo — O đọc kho ý thấy tên; chủ đề ở dang-gom kèm chữ câu đã nối — Q đọc được câu niêm phong; E4, E5 vẫn xanh vì chỉ quét lúc đang mở | Ma trận vai × đường × thủ tục đọc (liệt tên) × trạng thái, số ô in ra bằng số ô khai; so tập thủ tục đọc với router | fixed: E4 thành 72 ô (4 vai × 3 đường × hoiY, hoiYDoPhu × dang-mo, dang-gom, da-cong-bo), E5 thành 36 ô trước công bố; tập thủ tục đọc rút từ generated/server.ts so toEqual; thêm chiều đỏ cho hai ca lộ đã nêu |
+| P1 | design | Chưa ghim nguồn đồng hồ cho các mốc do thủ tục ghi và cách chia ngày giờ Việt Nam; E11 mơ hồ về R [toan-canh-okr#F1] | Mốc để now() của Postgres, S3 không gieo được hai ngày hay mốc 8 ngày qua thủ tục thật nên UPDATE tay — câu đo thử trên hàng viết tay; hoặc ý rơi qua ranh 17:00 UTC làm ma trận chập chờn | Đồng hồ tiêm ở service, ghi tường minh mọi mốc; ngayVN = ngày của (mốc + 7 giờ); cửa sổ hiểu nửa mở; ca biên 23:59 và 00:00 VN; nói rõ R | fixed: thiết kế mục 3 ghim đồng hồ tiêm và ngayVN; cửa sổ hiểu [congBoLuc, congBoLuc + 7 × 24 giờ); E10, E11, E18 gieo bằng đồng hồ tiêm, cấm UPDATE tay; E11 có ca biên và nói R không thuộc 7 người; E18 có ca đúng mốc 7 × 24 giờ |
+| P2 | contract | Mẫu số của gopTruoc và hieu7 không ghim ca người đã rời | 6 người góp lần đầu rồi nghỉ; tính trên 30 người thì 11/30 = 36,7% (CHẾT), trên 24 người còn lại thì 45,8% — Cổng Giá trị ký kill vì người nghỉ việc | Ghim định nghĩa; E18 thêm ca R góp H1 rồi rời | fixed: mọi mẫu số tính theo thành viên còn hiệu lực lúc chạy câu đo (kho không giữ ngày rời — ghi rõ ở Đường đo); E18 gieo R góp H1 rồi rời, gopTruoc 9, chiều đỏ không lọc người rời → 10 |
