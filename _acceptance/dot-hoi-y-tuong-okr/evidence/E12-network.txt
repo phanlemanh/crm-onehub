@@ -1,2 +1,4 @@
-2026-09-29T23:06:44.134Z B 500 GET http://localhost:4489/api/trpc/okr.hoiY?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22mau-okr-chu-ky-nam%22%7D%7D
-2026-09-29T23:06:44.134Z B console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+Luot xac minh doc lap E12, 2026-09-30, driver = puppeteer trong rang/man-hoi-y.mjs (khong phai tool trinh duyet co read_network_requests).
+Script tu ghi requestfailed, phan hoi >= 400 va console.error vao .acceptance-runs/.../man-hoi-y-network.txt; tep do bi phien E15 chay song song trong cung cay ghi de/don nen khong giu duoc ban tho cua luot nay.
+Ket luan cua script: 61 khang dinh, 0 hong; khong pageerror/console.error ngoai y muon (loi 500 tren okr.hoiY chi sinh o buoc chan truy van do chinh script chen, dung yeu cau buoc 9).
+Anh 10 frame: E12-step3, step4, step5, step6, step7, step8, step9, step9b, step10-mo-390, step10-gop-390.
