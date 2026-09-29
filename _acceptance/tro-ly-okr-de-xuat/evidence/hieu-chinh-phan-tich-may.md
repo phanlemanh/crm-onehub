@@ -74,3 +74,41 @@ Chạy thử từng ca bằng `eval-gop-y.mjs --ca` (không ghi tệp hiệu ch�
 
 Tiền chạy thử: khoảng 0,25 USD (ngoài trần 2 USD của một round). Bản 20 cặp để chủ kho chấm là
 bản round 4 sinh lại; bản round 3 (c92fcf92) chỉ còn giá trị đối chiếu.
+
+## Chủ kho nhận bản chấm máy round 3 (29/09)
+
+Chủ kho (Manh Phan) đọc bảng round 3 ở trên và nhận nó làm chấm của mình. Khớp với judge: 15/20 =
+75 %, dưới ngưỡng 85 % của E25. Bảng này chấm bản round 3 (c92fcf92), không phải bản đang là đầu
+vào E25.
+
+## Chấm thử bản round 4 (hieu-chinh-judge.md sinh 02:21Z, judge 0.90) — cùng thước
+
+| # | Ca | Đề xuất | Máy chấm | Judge | Lý do ngắn |
+| --- | --- | --- | --- | --- | --- |
+| 1 | gy-01 | Toàn bộ thoả thuận của đội kinh doanh được quản lý tập trung trên CRM | Đạt | 1 | trạng thái, giữ ý |
+| 2 | gy-02 | Số đối tác mới được kết nối và hỗ trợ trong tháng đầu | Đạt (yếu) | 1 | đo được; vẫn gần việc làm như #1/#13 round 3 |
+| 3 | gy-03 | Hợp đồng được chốt hiệu quả cùng đối tác | Không đạt | 0 | «hiệu quả» mơ hồ, mất ý «tăng tốc» |
+| 4 | gy-04 | Điểm hài lòng đối tác | Đạt | 1 | gọi tên thứ được đo |
+| 5 | gy-06 | Doanh thu hoàn thành chỉ tiêu năm | Đạt | 1 | không số, dựng từ «vì sao lúc này» |
+| 6 | gy-07 | App v2 sẵn sàng phục vụ đối tác | Đạt (yếu) | 1 | trạng thái, kết quả còn mỏng |
+| 7 | gy-07 | App v2 có mặt trên App Store (KR) | Không đạt | 1 | KR vẫn là việc phát hành, viết thành trạng thái; không đo gì |
+| 8 | gy-08 | Mảng SaaS kho mở rộng nguồn thu định kỳ vững chắc | Đạt (yếu) | 1 | diễn giải MRR; «vững chắc» sát khẩu hiệu |
+| 9 | gy-09 | 20 đối tác mới hoàn thành onboarding | Đạt | 1 | giữ 20 ở KR cùng đơn vị |
+| 10 | gy-11 | Đối tác hài lòng và gắn kết hơn với dịch vụ | Đạt | 1 | diễn giải cùng ý NPS |
+| 11 | gy-14 | Tỷ lệ nhân viên kinh doanh hoàn thành đào tạo sản phẩm mới (KR) | Không đạt | 1 | học xong khoá vẫn là việc; kết quả là bán được tính năng |
+| 12 | gy-15 | Chi phí vận tải được tối ưu để thích ứng với biến động giá dầu | Đạt (yếu) | 1 | dựng từ «giá dầu tăng»; «tối ưu» mềm |
+| 13 | gy-18 | Công nợ quá hạn được thu hồi lành mạnh | Không đạt | 0 | «thu hồi lành mạnh» mơ hồ |
+| 14 | gy-20 | Pipeline quý 4 dồi dào và vững chắc để chuẩn bị cho giai đoạn tiếp theo | Không đạt | 1 | đuôi «chuẩn bị cho giai đoạn tiếp theo» là ý dữ liệu không có |
+| 15 | gy-01 (lap 1) | Thông tin thoả thuận tập trung nhất quán trên hệ thống CRM cho đội kinh doanh | Đạt | 1 | trạng thái, giữ ý |
+| 16 | gy-02 (lap 1) | Tỷ lệ đối tác mới được kết nối và chăm sóc trong tháng đầu | Đạt (yếu) | 1 | như #2 |
+| 17 | gy-04 (lap 1) | Điểm hài lòng đối tác đạt 100 (KR) | Không đạt | 1 | đưa target giữ chỗ 100 (đơn vị trống) vào tên KR; ca mẫu dặn không bịa số, chỉ hỏi đo bằng gì |
+| 18 | gy-05 (lap 1) | Doanh thu cuối năm hoàn thành trọn vẹn | Đạt | 1 | giữ ý, không số |
+| 19 | gy-06 (lap 1) | Doanh thu hoàn thành theo chỉ tiêu năm | Đạt | 1 | như #5 |
+| 20 | gy-07 (lap 1) | Đối tác chủ động theo dõi đơn hàng qua app v2 | Đạt | 1 | dựng từ «vì sao» và KR cuộc gọi — kết quả rõ nhất bảng |
+
+Khớp máy ↔ judge: **16/20 = 80 %**, dưới 85 %. Bốn chỗ lệch đều là judge cho 1 khi máy chấm Không
+đạt: #7, #11 (KR là việc viết thành trạng thái), #14 (ý thêm ở đuôi câu), #17 (đưa số giữ chỗ vào
+tên KR). Ba quy luật round 3 (số trong tên Mục tiêu, «đạt kết quả tốt», «hàng đầu») không còn.
+
+Lưu ý nguồn gốc: nếu cột «Chủ kho» được điền từ bảng này thì E25 đo độ khớp giữa judge và bản chấm
+máy mà chủ kho đã nhận, không phải chấm độc lập của người.
