@@ -38,6 +38,7 @@ const GOC_TO_CHUC = "apps/api/src/to-chuc";
 const VUNG_LUAT = ["apps", "packages"];
 const LOAI_TRU = new Set([
 	"node_modules",
+	".eve",
 	"generated",
 	".next",
 	"dist",
@@ -1045,6 +1046,7 @@ const MOC = "origin/onehub";
 const TEP_DIFF_LUOT = join(TAM_HO_SO, "diff-luot.txt");
 const LOAI_TRU_THIET_KE = new Set([
 	"node_modules",
+	".eve",
 	".next",
 	"dist",
 	"build",
