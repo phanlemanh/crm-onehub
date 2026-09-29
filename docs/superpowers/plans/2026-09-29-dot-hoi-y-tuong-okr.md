@@ -21,6 +21,15 @@ Không bắt đầu Task 1 trước khi chủ kho duyệt Cổng 1.5 và dán l�
 3. Soát kế hoạch với mã mới: mốc `migration` mới nhất (hôm nay `20261006010000_giai_doan_thoa_thuan` → lượt này `20261008010000_okr_hoi_y`; nếu đã có mốc sau đó thì lấy mốc sau mốc mới nhất), model cuối `schema.prisma` (hôm nay `OkrMucTieuTuMau`, dòng 2671), dòng số của `setCyclePhase` (L360), `assertKyGhiDuoc` (L462), `vet` (L472), `assertThanhVien` (L511), `kiemTranMucTieu` (L520), `createObjective` (L567) ở `okr.service.ts`; `OkrAccessService.quyen` (L65); `viecOkr` (L22), `KHOA_MUC_OKR` (L70), `viecOkrCanNhac` (L469) ở `packages/db/src/okr-nhac.ts`; `THU_TU_NHAC` (L20) ở `onboarding-nhac.ts`; `napBoOkrMau` (L594), `xoaBoOkrMau` (L607) ở `apps/api/scripts/okr-mau/nap.ts`. Mọi chỗ lệch ghi vào `decisions.jsonl` (`type: "fix"`, `stage: "S3"`).
 4. Soát hạng: vẫn T3.
 
+## Soát lại sau gộp onehub (2026-09-29, `4dc7effe`)
+
+- Đã gộp `origin/onehub` tới `cb6d5be8` (116 commit, gồm #207 Trợ lý OKR góp ý 9b và #208). Xung đột: `apps/app/app/proto/catalog.ts` (giữ cả hai mục `tro-ly-okr-de-xuat` và `dot-hoi-y-tuong-okr`), `PRODUCT-MAP.md` (vẽ lại bằng máy).
+- `migration` mới nhất nay là `20261007010000_tro_ly_okr_de_xuat` → mốc của lượt này `20261008010000_okr_hoi_y` vẫn đúng.
+- Model cuối vẫn `OkrMucTieuTuMau` (L2679).
+- Dòng số đổi ở `okr.service.ts`: `setCyclePhase` L392, `assertKyGhiDuoc` L498, `vet` L508, `assertThanhVien` L547, `kiemTranMucTieu` L556, `createObjective` L603. Không đổi: `OkrAccessService.quyen` L65, `viecOkr` L22, `KHOA_MUC_OKR` L70, `viecOkrCanNhac` L469, `THU_TU_NHAC` L20, `napBoOkrMau` L594, `xoaBoOkrMau` L607, `noiDungOkr` L68, `duongMo` L113.
+- `VIEC_TRO_LY` vẫn `["de-xuat", "tom-tat-tuan"]` — lượt 11b vẫn là việc riêng.
+- Hạng vẫn T3.
+
 ## Global Constraints
 
 - Không viết chú thích trong mã (mới hay sửa).
