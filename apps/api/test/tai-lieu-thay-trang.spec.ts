@@ -97,7 +97,9 @@ async function trangTuNguon(
 	});
 	expect(hang.trang.taoBoiId).toBe(phien.tao.nguoi);
 	expect(
-		await db.taiLieuDeXuat.count({ where: { trang: { slug: hang.trang.slug } } }),
+		await db.taiLieuDeXuat.count({
+			where: { trang: { slug: hang.trang.slug } },
+		}),
 	).toBe(0);
 	return { slug: hang.trang.slug, nguonId };
 }
@@ -275,9 +277,9 @@ describe("thay-trang", () => {
 				);
 			if (an.status !== 404 || an.loi !== TAI_LIEU_API.thongDiep.khongCo)
 				throw new Error(`khong thay sai loi: ${thuTuc} — ${tomTat(an)}`);
-			expect((await hoi(thuTuc, { slug: SLUG["may-soan"] }, "chu")).status).toBe(
-				200,
-			);
+			expect(
+				(await hoi(thuTuc, { slug: SLUG["may-soan"] }, "chu")).status,
+			).toBe(200);
 		}
 		expect((await slugThayQuaList("khac")).has(SLUG["may-soan"])).toBe(false);
 	});
@@ -299,7 +301,11 @@ describe("thay-trang", () => {
 				tt,
 				tt === "LOI" ? LY_DO_LOI : null,
 			);
-			o[`don-${tt}`] = { slug: r.slug, mong: NGUON_DON[tt], nguonId: r.nguonId };
+			o[`don-${tt}`] = {
+				slug: r.slug,
+				mong: NGUON_DON[tt],
+				nguonId: r.nguonId,
+			};
 		}
 		o["con-ban-cho"] = { slug: SLUG["cho-duyet"], mong: "duyet" };
 		o["tra-lai-khong-nguon"] = { slug: SLUG["tra-lai"], mong: "tra-lai" };
@@ -361,7 +367,12 @@ describe("thay-trang", () => {
 
 	test("viet-tay: chu trang va nguoi tao gui ban dau cho trang chua co ban", async () => {
 		const goTay = await trangTuNguon(ma("Viet tay go tay"), "CAN_GO_TAY");
-		const tl = await taoTrang(ma("Viet tay tra lai"), "Bản đầu.\n", "tao", "chu");
+		const tl = await taoTrang(
+			ma("Viet tay tra lai"),
+			"Bản đầu.\n",
+			"tao",
+			"chu",
+		);
 		await traLai(tl.deXuatId, "chu");
 		const CA: [Ai, string][] = [
 			["chu", goTay.slug],
@@ -381,7 +392,9 @@ describe("thay-trang", () => {
 				ai,
 			);
 			if (r.status !== 200)
-				throw new Error(`viet tay bi chan: ${ai} ${slug} — ${r.status} ${r.loi}`);
+				throw new Error(
+					`viet tay bi chan: ${ai} ${slug} — ${r.status} ${r.loi}`,
+				);
 			const { deXuatId } = r.data as { deXuatId: string };
 			const hang = await db.taiLieuDeXuat.findUniqueOrThrow({
 				where: { id: deXuatId },

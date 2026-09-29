@@ -1,5 +1,9 @@
 import type { Locale } from "@crm/ui/lib/locale";
-import type { LoaiTrang, TrangThaiDeXuat } from "@crm/validation/tai-lieu";
+import type {
+	DangCho,
+	LoaiTrang,
+	TrangThaiDeXuat,
+} from "@crm/validation/tai-lieu";
 import { NGUON, type TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 
 const en = {
@@ -106,8 +110,36 @@ const en = {
 		coBanCho: "{so} proposal awaiting review",
 		suaTrang: "Edit page",
 		xemBanCho: "View the proposal awaiting review",
-		choLanDauTieuDe: "This page is not visible to everyone yet.",
-		choLanDauThan: "Waiting for {ten} to review.",
+		cho: {
+			duyet: {
+				tieuDe: "This page is not visible to everyone yet.",
+				than: "Waiting for {ten} to review.",
+			},
+			"may-soan": {
+				tieuDe: "The composer is drafting the first version.",
+				than: "Once drafted, it will wait for {ten} to review.",
+			},
+			"go-tay": {
+				tieuDe: "Needs typing by hand.",
+				than: "The source is a scan the composer can't read. Type the content to send it to {ten} for review.",
+			},
+			loi: {
+				tieuDe: "The composer couldn't draft this page.",
+				than: "Redraft it from the Sources tab, or write it by hand and send it to {ten} for review.",
+			},
+			"tra-lai": {
+				tieuDe: "The first version was returned.",
+				than: "Write a new version to send to {ten} for review.",
+			},
+			"chua-co-ban": {
+				tieuDe: "This page has no version yet.",
+				than: "Write the first version to send to {ten} for review.",
+			},
+		} satisfies Record<DangCho, { tieuDe: string; than: string }>,
+		nguonLyDo: "Source {tep}: {lyDo}",
+		nguonTep: "Source {tep}.",
+		vietTay: "Write by hand",
+		xemNguon: "View source",
 		mucLuc: "On this page",
 		chuTrang: "Page owner",
 		chuTrangMoTa: "Reviews every change to this page",
@@ -385,8 +417,36 @@ const vi: TaiLieuMessages = {
 		coBanCho: "Có {so} bản chờ duyệt",
 		suaTrang: "Sửa trang",
 		xemBanCho: "Xem bản chờ duyệt",
-		choLanDauTieuDe: "Trang này chưa hiện cho mọi người.",
-		choLanDauThan: "Đang chờ {ten} duyệt.",
+		cho: {
+			duyet: {
+				tieuDe: "Trang này chưa hiện cho mọi người.",
+				than: "Đang chờ {ten} duyệt.",
+			},
+			"may-soan": {
+				tieuDe: "Máy đang soạn bản đầu.",
+				than: "Bản soạn xong sẽ chờ {ten} duyệt.",
+			},
+			"go-tay": {
+				tieuDe: "Cần gõ tay.",
+				than: "Nguồn là bản quét, máy không đọc được chữ. Gõ nội dung để gửi {ten} duyệt.",
+			},
+			loi: {
+				tieuDe: "Máy chưa soạn được.",
+				than: "Soạn lại ở tab Nguồn, hoặc viết tay để gửi {ten} duyệt.",
+			},
+			"tra-lai": {
+				tieuDe: "Bản đầu đã bị trả lại.",
+				than: "Viết bản mới để gửi {ten} duyệt.",
+			},
+			"chua-co-ban": {
+				tieuDe: "Trang chưa có bản nào.",
+				than: "Viết bản đầu để gửi {ten} duyệt.",
+			},
+		} satisfies Record<DangCho, { tieuDe: string; than: string }>,
+		nguonLyDo: "Nguồn {tep}: {lyDo}",
+		nguonTep: "Nguồn {tep}.",
+		vietTay: "Viết tay",
+		xemNguon: "Xem nguồn",
 		mucLuc: "Trên trang này",
 		chuTrang: "Chủ trang",
 		chuTrangMoTa: "Duyệt mọi thay đổi của trang này",
