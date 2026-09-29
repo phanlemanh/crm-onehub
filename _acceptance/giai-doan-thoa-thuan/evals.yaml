@@ -267,21 +267,22 @@ evals:
       - "apps/app/lib/messages/**"
       - "_acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs"
     steps:
-      - "Canh cay (rang/canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
-      - "Dang nhap admin bang dev:session; gieo 3 thoa thuan o mot giai doan OPEN tam tao cho luot do"
-      - "Mo {APP_URL}/<slug>/settings/giai-doan o 320, 375, 768, 1024, 1440, lang vi va en -> chup evidence/cai-dat-<kho>-<tieng>.png"
-      - "Moi o: scrollWidth <= innerWidth; ba the (Dang mo, Chot duoc, Khong thanh) co mat; moi nhan giai doan mang translate=no"
-      - "O 1440/vi: bam Them o the Dang mo, go ten, Luu -> hang moi cuoi the; mo /<slug>/deals?view=board -> co cot mang nhan do -> chup evidence/them-thay-o-bang-cot.png"
-      - "O 1440/vi: menu … cua giai doan tam co 3 thoa thuan -> Xoa -> hop thoai hien 'Con 3' -> chon dich -> Chuyen va xoa -> deals.byId ca 3 tra stage dich -> chup evidence/xoa-chuyen.png"
-      - "Chan mang toi giaiDoan.list -> trang hien loi va nut Thu lai -> chup evidence/loi-tai.png"
+      - "tien-de dung phien do rieng (kho crm_<cay>_do, API va app cua cay) va dat khoa nghien cuu gia; canh cay truoc man dau"
+      - "Dang nhap bang dev:session, nang nguoi do thanh admin trong kho do; tao giai doan OPEN tam va 3 thoa thuan o do"
+      - "Mo {APP_URL}/<slug>/settings/giai-doan o 320, 375, 768, 1024, 1440, lang vi va en -> chup evidence/E15-cai-dat-<kho>-<tieng>.png"
+      - "Moi o: vung main khong tran ngang; ba the OPEN, WON, LOST dung thu tu; moi nhan giai doan mang translate=no"
+      - "O 1440/vi: bam Them o the Dang mo, go ten, Luu -> hang moi hien; mo /<slug>/deals?view=board -> co cot mang id giai doan moi -> chup evidence/E15-them-thay-o-bang-cot.png"
+      - "O 1440/vi: menu … cua giai doan tam -> Xoa -> hop thoai bao Con 3 thoa thuan -> chon dich -> Chuyen va xoa -> deals.byId ca 3 tra stage dich, giai doan tam bien khoi list -> chup evidence/E15-xoa-chuyen.png"
     expected: |
-      exit 0. Chrome that tren may chu cua cay dang xet (phien do rieng cua tien-de). Ma tran viet truoc
-      5 kho x 2 tieng = 10 o x [khong tran, 3 the, moi nhan translate=no] = 30 khang dinh; + them-thay-o-
-      bang-cot 2; + xoa-chuyen 3 (dem trong hop thoai, 3 thoa thuan o dich, giai doan nguon bien mat);
-      + loi-tai 1. Tong 36 (hang KY_MONG; lech -> ma 2). Khong loi hydrate trong console moi o.
-      CHIEU DO (chay o S3, ban sao cung may chu cua cay): (1) hang Item dat whitespace-nowrap -> "tran
-      trang 320/vi"; (2) bo translate=no -> "nhan khong mang translate=no 1440/en".
-
+      exit 0. Chrome that tren phien do rieng cua cay dang xet (tien-de). Ma tran viet truoc 5 kho x 2 tieng = 10 o x
+      [main khong tran, 3 the dung thu tu, moi nhan translate=no] = 30 khang dinh; + them 2 (hang moi, cot bang cot);
+      + xoa-chuyen 3 (dem trong hop thoai, 3 thoa thuan o dich, giai doan nguon bien mat). Tong 35 (hang KY_MONG;
+      lech -> ma 2). Loi hydrate trong console moi o cung la HONG.
+      GIOI HAN DA DO: do tran trong vung main, khong do document — header chung tran 2px o 320/vi khi co huy hieu
+      «Dang tra cuu N»; rang in GHI CHU cho ca do (loi san co, ngoai pham vi vong nay). Ca loi tai KHONG do bang Chrome:
+      trang prefetch phia may chu roi hydrate nen chan request trinh duyet khong tao duoc trang thai loi; E16 do ca do.
+      CHIEU DO (da chay 2026-09-29, ban sao tren phien do cua cay): (1) the dat min-w-[420px] -> "tran trang 320/vi";
+      (2) nhan bo translate=no -> "nhan khong mang translate=no 320/vi".
   - id: E16
     criterion: AC-13
     executor: test
