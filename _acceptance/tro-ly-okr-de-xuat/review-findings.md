@@ -1,60 +1,54 @@
-# Review findings — tro-ly-okr-de-xuat (round 4)
+# Review findings: tro-ly-okr-de-xuat (round 5)
 
 ## Trong hợp đồng
 
-- **kiemCa không đọc kyVong.vietLai và miễn cả vanDe bị luật lớp 7 phủ — 9/22 ca bộ Viết lại đạt DUNG dù nop_de_xuat rỗng**
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs:477`
-  severity: medium
-  AC: AC-14
-  source: bugs
-  detail: `kiemCa` chỉ đòi dòng cho `kyVong.vanDe` không nằm trong `vanDePhuBoiLuot7(ca)` (kiemOkr = luatDaHoi), và không nơi nào trong kho đọc `kyVong.vietLai` (grep: chỉ superRefine của okr-ca-gop-y.ts nhắc tới). Chạy kiemOkr trên bộ mẫu: gy-01, gy-02, gy-03, gy-07, gy-11, gy-14, gy-19, gy-20, gy-21 ra tập yêu cầu rỗng — một lượt nộp 0 dòng, outcome `da-nop` vẫn in `DUNG` và góp vào `ma: n/n` xanh. Riêng gy-02 và gy-14 khai `vanDe: ["kr-la-viec"]` + `vietLai: ["kr.title"]` nhưng bị miễn vì KR mở bằng «Gọi»/«Tổ chức» — trái với chữ E22 «mỗi kyVong.vanDe có ≥ 1 dòng đúng trường hoặc đúng maVanDe» (evals.yaml không nói miễn) và với instructions.md («Still propose a viet-lai line for that same field»). Bộ tự kiểm `tuKiemCa` mới thêm vòng này không có ca nào cho vietLai nên lỗ hổng không lộ. Miễn lớp 7 có từ aa08f5ea (đợt sửa 2); vietLai chưa bao giờ được đo — ghi để parent đối chiếu run-log. Sửa gọn: với vanDe bị phủ bởi lớp 7 vẫn đòi ≥ 1 dòng viet-lai đúng trường của `E22.truongCuaVanDe[vd]`; và với `kyVong.vietLai` không rỗng đòi ≥ 1 dòng `viet-lai` trạng thái `cho` đúng trường; thêm hai ca `tuKiemCa` tương ứng.
-  rationale: AC-14 đòi mỗi kyVong.vanDe có dòng đúng trường ở mọi ca, không nêu miễn trừ; phép chấm miễn nhiều ca nên chốt bằng mã này không thật sự chứng minh điều AC hứa.
+Không có.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Ba ý chấm judge nay sống ở hai bản chép đã lệch chữ nhau**
-  Người dùng thấy gì: Bảng chủ kho chấm thử và câu hỏi máy chấm dùng hai bản chữ hơi khác nhau. Con số 'máy khớp người' có thể đo hai đề bài không hẳn giống nhau, nên độ tin cậy của phép hiệu chỉnh kém hơn vẻ ngoài.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/hieu-chinh.mjs`
+- **Kết luận mục 3 của luat-kho nói luật «không viết hai lần» ĐẠT chỉ vì không nhãn nào chứa chữ TRÙNG, trong khi chính bảng ghi một cặp trùng nghĩa**
+  Người dùng thấy gì: Báo cáo kiểm luật kho có thể ghi «đạt» ở chỗ đáng lẽ phải ghi còn một đơn vị thời gian khai hai lần. Người dùng cuối không thấy gì; chỉ người đọc báo cáo nghiệm thu có thể tin nhầm là luật đã được đo kỹ.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Kết luận mục 3 của luat-kho.md là chữ cứng, không suy từ kết quả quét**
-  Người dùng thấy gì: Một đoạn kết luận trong báo cáo kiểm luật kho là câu viết sẵn. Nếu mã đổi sau này, báo cáo vẫn khẳng định như cũ và không ai được báo, nhưng hôm nay nội dung vẫn đúng.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
+- **Mục phanLoaiTay mới cho NGAY_MS ở okr-tro-ly-danh-muc.ts là mục chết: tệp này nằm trong danh sách cấu hình mà thước bỏ qua khi quét**
+  Người dùng thấy gì: Một dòng ghi chú trong báo cáo kiểm luật kho không bao giờ được dùng tới, nên báo cáo thiếu dấu vết về việc gộp hằng số thời gian. Người dùng không bị ảnh hưởng gì.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho-cau-hinh.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Còn sót import MINUTE_MS không dùng sau khi chuyển NGAY_MS về một nguồn (biome noUnusedImports)**
+  Người dùng thấy gì: Còn sót một dòng khai báo thừa trong mã, chỉ gây cảnh báo cho lập trình viên. Người dùng không thấy và không bị ảnh hưởng.
+  file: `packages/db/src/okr-xu-huong.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **gop-y.eval.ts tự dựng lại MINUTE_MS dù @crm/db/okr-tro-ly-danh-muc đã xuất sẵn**
+  Người dùng thấy gì: Bộ kiểm chất lượng góp ý tự khai lại đơn vị phút thay vì dùng chung một nơi, có thể lệch nếu sau này đổi. Người dùng không thấy khác biệt.
+  file: `apps/agent/evals/okr/gop-y.eval.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Bao đóng import chỉ đi theo «./», import «../» rơi thành «nguồn ngoài kho» im lặng**
+- **Phán quyết tay mới cho NGAY_MS trong luat-kho không bao giờ khớp dòng nào**
+  Người dùng thấy gì: Báo cáo kiểm luật kho có một phán quyết trông như đã đo nhưng thực ra không được đo. Chỉ ảnh hưởng độ tin cậy của báo cáo nghiệm thu, không ảnh hưởng người dùng.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho-cau-hinh.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3: lời hứa «không viết hai lần một đơn vị» là quan hệ giữa các khai báo, nhưng kết luận chỉ kiểm chữ «TRÙNG» có mặt trong nhãn viết tay**
+  Người dùng thấy gì: Báo cáo kiểm luật kho chưa thật sự so các khai báo đơn vị với nhau, chỉ dựa vào chữ người ghi tay. Người dùng cuối không thấy; muốn đo thật thì cần một việc riêng.
+  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Bao đóng import chỉ đi theo «./», import «../» rơi thành «nguồn ngoài kho» im lặng (r4)**
   Người dùng thấy gì: Bộ quét luật kho có một kẽ hở: nếu sau này có tệp nhập theo đường dẫn lùi thư mục, nó sẽ bị bỏ qua mà báo cáo vẫn ghi là sạch. Hiện chưa có tệp nào như vậy nên chưa gây hại.
   file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho-lan-theo.mjs`
   severity: low
   Đề xuất: known-limits
-
-- **Ca tự kiểm dựng dòng viet-lai không có truoc — bản ghi không thể tồn tại**
-  Người dùng thấy gì: Một ca tự kiểm dùng dòng giả thiếu vài trường mà dòng thật luôn có. Kết quả kiểm vẫn đúng, chỉ là dữ liệu mẫu chưa giống thật.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
-  severity: low
-  Đề xuất: wont-fix
-
-- **phanLoaiSo xếp nhầm số ngoài chuỗi thành «trong chuỗi» — hai literal bị giấu khỏi bảng «đọc tay» của luat-kho.md §3**
-  Người dùng thấy gì: Báo cáo kiểm luật kho bỏ sót hai con số 10 nằm trong mã đọc số tiếng Việt, nên ghi là đã xem hết trong khi còn hai chỗ chưa ai đọc. Không ảnh hưởng người dùng, chỉ làm bằng chứng nghiệm thu nói hơi quá.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — judge là thước duy nhất cho ba luật mới, không có đối chứng đỏ cho judge**
-  Người dùng thấy gì: Việc Trợ lý không đặt số vào tên Mục tiêu và không thêm ý ngoài lề hiện chỉ do máy chấm bằng lời kiểm tra, chưa có ca xấu đã biết để chứng minh máy chấm bắt được. Đề xuất xấu vẫn có thể lọt qua mà không ai thấy.
-  file: `apps/agent/evals/okr/gop-y.eval.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Hình dạng 5 — fixture khai đủ véc-tơ kỳ vọng nhưng kiemCa chỉ khẳng định hai phần tử; kyVong.vietLai chết**
-  Người dùng thấy gì: Nhiều ca mẫu khai rằng Trợ lý phải viết lại một câu cụ thể, nhưng phép chấm không kiểm điều đó. Trợ lý có thể chỉ hỏi lại người dùng thay vì viết lại mà ca vẫn được tính là đạt.
-  file: `_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs`
-  severity: medium
-  Đề xuất: new-contract
 
 - **Punctuation list in soBangChu.dauCau has a second hardcoded copy in the tokenizer regex (r2)**
   Người dùng thấy gì: Nếu sau này ai đó thêm một dấu câu vào danh sách cấu hình, Trợ lý OKR sẽ không nhận ra dấu đó khi kiểm số viết bằng chữ và việc chỉnh cấu hình không có tác dụng. Hiện tại chưa gây sai kết quả cho người dùng.
@@ -104,23 +98,11 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Payload của việc okr-de-xuat bị parse hai lần bằng hai khuôn khác nhau trong cùng đường đọc (r1)**
-  Người dùng thấy gì: Số đo góp ý bật hay ẩn trên thẻ quản trị hiện đúng. Nhưng nếu sau này ai đó đổi mặc định của chế độ bật/ẩn ở một chỗ mà quên chỗ kia, số trên thẻ có thể lệch mà không ai hay.
-  file: `apps/api/src/okr/tro-ly-so-do.ts`
-  severity: medium
-  Đề xuất: known-limits
-
 - **Tiền tố ghi chú vết «tro-ly-okr:» được đúc lại bằng regex ở client thay vì dùng chung một nguồn (r1)**
   Người dùng thấy gì: Nhãn «theo đề xuất của Trợ lý OKR» trên tab Vết hiện đúng bây giờ. Nếu sau này chuỗi đánh dấu bị đổi ở một phía, nhãn này sẽ biến mất trên màn mà không có cảnh báo nào.
   file: `apps/app/app/(app)/[slug]/okr/bang-vet.tsx`
   severity: medium
   Đề xuất: known-limits
-
-- **KIEU_KR bị chép lại trong @crm/db thay vì có một nguồn duy nhất (r1)**
-  Người dùng thấy gì: Danh sách sáu kiểu KR được khai ở hai nơi. Hiện tại chúng khớp nhau và có bài kiểm canh, nên người dùng không thấy khác biệt nào.
-  file: `packages/db/src/okr-xu-huong.ts`
-  severity: low
-  Đề xuất: wont-fix
 
 - **okr.troLyAn tải toàn bộ lượt trong tháng rồi lọc và cắt 50 trong bộ nhớ (r1)**
   Người dùng thấy gì: Khi quản trị mở thẻ «Góp ý của Trợ lý OKR», hệ thống đọc cả tháng dữ liệu rồi mới cắt bớt. Với lượng dùng hiện nay vẫn đúng, nhưng thẻ có thể mở chậm dần khi số lượt ẩn trong tháng lớn lên.
@@ -158,4 +140,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 3/8 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs, _acceptance/tro-ly-okr-de-xuat/rang/luat-kho-lan-theo.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 4/6 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs, _acceptance/tro-ly-okr-de-xuat/rang/luat-kho-cau-hinh.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
