@@ -3554,7 +3554,6 @@ const CA_THIEU = [
 		maHttp: 400,
 		cau: T.congBoThieu["thieu-ket-luan"],
 		gieo: { chuaKetLuan: ["K4"] },
-		kem: ["thieu-ly-do"],
 	},
 	{
 		ca: "thieu-ly-do-dung-tay",
@@ -3592,7 +3591,6 @@ const CA_THIEU = [
 	maHttp: number;
 	cau: string;
 	gieo?: { yChuaGom?: boolean; chuaKetLuan?: readonly TenChuDe[] };
-	kem?: readonly MaThieu[];
 }[];
 
 const PHA_THIEU = {
@@ -3655,7 +3653,7 @@ const PHA_THIEU = {
 
 describe("cong-bo", () => {
 	test(
-		"cong-bo: bảng 9 ca thiếu — mỗi ca dựng từ lần hỏi ý đủ điều kiện rồi phá đúng một điều; quyen.lyDoChuaCongBo của người chọn đúng mã của điều bị phá (chủ đề chưa kết luận kéo theo thiếu lý do của chính nó), congBo 400 với câu riêng, không mục tiêu, không vết, không chủ đề nào nối mục tiêu, congBoLuc null. Ba ca «-dung-tay» (chua-niem-phong, thieu-ly-do, thieu-cau-muc-tieu) sửa hàng bằng Prisma vì không thủ tục nào tạo được trạng thái đó — chỉ là chốt chặn phía máy chủ; sáu ca kia đi qua thủ tục thật",
+		"cong-bo: bảng 9 ca thiếu — mỗi ca dựng từ lần hỏi ý đủ điều kiện rồi phá đúng một điều; quyen.lyDoChuaCongBo của người chọn đúng một mã của điều bị phá, congBo 400 với câu riêng, không mục tiêu, không vết, không chủ đề nào nối mục tiêu, congBoLuc null. Ba ca «-dung-tay» (chua-niem-phong, thieu-ly-do, thieu-cau-muc-tieu) sửa hàng bằng Prisma vì không thủ tục nào tạo được trạng thái đó — chỉ là chốt chặn phía máy chủ; sáu ca kia đi qua thủ tục thật",
 		async () => {
 			const ra: unknown[] = [];
 			for (const c of CA_THIEU) {
@@ -3695,10 +3693,7 @@ describe("cong-bo", () => {
 					ca: c.ca,
 					quyen: {
 						congBoDuoc: false,
-						lyDoChuaCongBo: [
-							{ ma: c.ma, chuDeId },
-							...("kem" in c ? c.kem : []).map((ma) => ({ ma, chuDeId })),
-						],
+						lyDoChuaCongBo: [{ ma: c.ma, chuDeId }],
 					},
 					tra: { maHttp: c.maHttp, cau: c.cau },
 					doi: { mucTieu: 0, vet: 0, chuDeNoiMucTieu: 0, congBoLuc: null },
@@ -4146,7 +4141,6 @@ describe("cong-bo", () => {
 			expect(sau?.quyen.lyDoChuaCongBo).toEqual([
 				{ ma: "y-chua-gom", chuDeId: null },
 				{ ma: "thieu-ket-luan", chuDeId: k },
-				{ ma: "thieu-ly-do", chuDeId: k },
 				{ ma: "khong-chon", chuDeId: null },
 			]);
 		},
@@ -4181,12 +4175,7 @@ describe("cong-bo", () => {
 				lyDoChuaCongBo: choKetLuan?.quyen.lyDoChuaCongBo.map((l) => l.ma),
 			}).toEqual({
 				congBoDuoc: false,
-				lyDoChuaCongBo: [
-					"thieu-ket-luan",
-					"thieu-ket-luan",
-					"thieu-ly-do",
-					"thieu-ly-do",
-				],
+				lyDoChuaCongBo: ["thieu-ket-luan", "thieu-ket-luan"],
 			});
 			for (const ten of ["K3", "K4"] as const)
 				ok(
@@ -4450,7 +4439,6 @@ describe("ket-qua", () => {
 					thieu,
 					[
 						{ ma: "thieu-ket-luan", chuDeId: thieu.k.K4 },
-						{ ma: "thieu-ly-do", chuDeId: thieu.k.K4 },
 						{ ma: "thieu-noi-ban-truoc", chuDeId: thieu.k.K3 },
 					],
 				],

@@ -553,6 +553,12 @@ describe("ly-do-chua-cong-bo", () => {
 					cauMucTieu: "",
 					noiBanTruoc: null,
 				}),
+				chuDe("c2", {
+					ketLuan: "de-sau",
+					lyDo: "",
+					cauMucTieu: "",
+					noiBanTruoc: null,
+				}),
 			],
 			tongOneHubSau: 9,
 			objectiveCap: 5,
@@ -567,6 +573,27 @@ describe("ly-do-chua-cong-bo", () => {
 			"khong-chon",
 			"vuot-tran",
 		]);
+	});
+
+	test("chủ đề chưa kết luận, lý do trống: chỉ thiếu kết luận — thiếu lý do chỉ tính khi đã chọn kết luận", () => {
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [chuDe("c1"), chuDe("c2", { ketLuan: null, lyDo: "" })],
+			}),
+		).toEqual([dong("thieu-ket-luan", "c2")]);
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [
+					chuDe("c1"),
+					chuDe("c2", {
+						ketLuan: null,
+						lyDo: "ý".repeat(OKR_HOI_Y.lyDo.max + 1),
+					}),
+				],
+			}),
+		).toEqual([dong("thieu-ket-luan", "c2")]);
 	});
 
 	test("ý lạ chưa có kết luận: thiếu kết luận, gắn đúng chủ đề", () => {

@@ -40,6 +40,7 @@ const TEP_CHIEU = "apps/api/src/okr/hoi-y.ts";
 const TEP_GOP = "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx";
 const TEP_KET_LUAN = "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx";
 const TEP_CONG_BO = "apps/api/src/okr/okr-hoi-y.service.ts";
+const TEP_THANH_LUU = "packages/ui/src/components/save-bar.tsx";
 const VET = {
 	"E12-ten": {
 		eval: "E12",
@@ -97,6 +98,17 @@ const VET = {
 				"lyDo: nhap.lyDo.trim().slice(0, 12),",
 			),
 		ghim: /E16: whyNow «[^»]*» khac ly do da go «[^»]+»/,
+	},
+	"B2-ve": {
+		eval: "E15",
+		tep: TEP_THANH_LUU,
+		mo: "ban sao danh sach dieu thieu van bam trung duoc nhung khong ve ra (nhu lan trong o 1440)",
+		cam: (s) =>
+			s.replace(
+				'"max-h-24 w-full overflow-y-auto overscroll-contain md:max-h-40",',
+				'"max-h-24 w-full overflow-y-auto overscroll-contain opacity-0 md:max-h-40",',
+			),
+		ghim: /B2 \(1440\): lien ket dieu thieu dau tien duoc ve ra anh/,
 	},
 	"E16-cong-bo": {
 		eval: "E15",
@@ -285,6 +297,7 @@ const DO = {
 	hienTruoc: 10,
 	motHangPx: 4,
 	dongLoiMo: 3,
+	mauToiThieu: 8,
 };
 const MA = `h${Date.now().toString(36).slice(-6)}`;
 const LOI_BO_QUA = /Download the React DevTools/;
@@ -1552,6 +1565,87 @@ function chanHoiY(khoa, cua) {
 
 const CHE = [];
 
+async function chanDoanDanhSach(trang) {
+	return trang.evaluate(() => {
+		const bar = window.__tim("[data-khoi='thanh-cong-bo']")[0];
+		const ul = bar?.querySelector("ul");
+		if (!ul) return null;
+		const s = getComputedStyle(ul);
+		const ru = ul.getBoundingClientRect();
+		const a = ul.querySelector("a");
+		const ra = a?.getBoundingClientRect();
+		const tren = ra
+			? document.elementFromPoint(
+					ra.left + ra.width / 2,
+					ra.top + ra.height / 2,
+				)
+			: null;
+		return {
+			ul: {
+				maskImage: s.maskImage,
+				webkitMaskImage: s.webkitMaskImage,
+				maskSize: s.maskSize,
+				maskPosition: s.maskPosition,
+				maskComposite: s.maskComposite,
+				color: s.color,
+				opacity: s.opacity,
+				visibility: s.visibility,
+				overflow: s.overflowY,
+				height: s.height,
+				scrollTop: ul.scrollTop,
+				scrollHeight: ul.scrollHeight,
+				clientHeight: ul.clientHeight,
+				rect: [Math.round(ru.top), Math.round(ru.height)],
+			},
+			li: [...ul.querySelectorAll("li")].map((li) => {
+				const r = li.getBoundingClientRect();
+				return [Math.round(r.top - ru.top), Math.round(r.height)];
+			}),
+			a: a
+				? {
+						color: getComputedStyle(a).color,
+						opacity: getComputedStyle(a).opacity,
+						visibility: getComputedStyle(a).visibility,
+					}
+				: null,
+			tren: tren ? `${tren.tagName} ${tren.getAttribute("data-slot")}` : null,
+			trenLaLienKet: !!(a && tren && (tren === a || a.contains(tren))),
+		};
+	});
+}
+
+async function soMauCuaLienKetDau(trang) {
+	const o = await trang.evaluate(() => {
+		const a = window.__tim("[data-khoi='thanh-cong-bo'] ul a")[0];
+		const r = a?.getBoundingClientRect();
+		return r && r.width > 0 && r.height > 0
+			? { x: r.left, y: r.top, width: r.width, height: r.height }
+			: null;
+	});
+	if (!o) return 0;
+	const anh = await trang.screenshot({
+		clip: o,
+		encoding: "base64",
+		type: "png",
+	});
+	return trang.evaluate(async (b64) => {
+		const hinh = new Image();
+		hinh.src = `data:image/png;base64,${b64}`;
+		await hinh.decode();
+		const ve = document.createElement("canvas");
+		ve.width = hinh.naturalWidth;
+		ve.height = hinh.naturalHeight;
+		const ctx = ve.getContext("2d");
+		if (!ctx) return 0;
+		ctx.drawImage(hinh, 0, 0);
+		const d = ctx.getImageData(0, 0, ve.width, ve.height).data;
+		const mau = new Set();
+		for (let i = 0; i < d.length; i += 4)
+			mau.add(`${d[i]},${d[i + 1]},${d[i + 2]}`);
+		return mau.size;
+	}, anh);
+}
+
 async function kiemCuoiTrang(trang, tenAnh, nhan) {
 	await trang.evaluate(() => {
 		const k = document.querySelector("[data-slot='page-shell-scroll']");
@@ -1599,6 +1693,9 @@ async function kiemCuoiTrang(trang, tenAnh, nhan) {
 		};
 	});
 	console.log(`  ${nhan}: cuoi trang ${JSON.stringify(r)}`);
+	console.log(
+		`  ${nhan}: danh sach dieu thieu ${JSON.stringify(await chanDoanDanhSach(trang))}`,
+	);
 	kiem(
 		`${nhan}: cuon het trang, nut «${CHU.ketLuan.luu}» cua the cuoi nam tron tren thanh cong bo mo san (thay ${JSON.stringify(r)})`,
 		r.nutTren !== null &&
@@ -1606,6 +1703,19 @@ async function kiemCuoiTrang(trang, tenAnh, nhan) {
 			r.thanhTren !== null &&
 			r.nutTren >= 0 &&
 			r.nutDay <= r.thanhTren,
+	);
+	const chanDoan = await chanDoanDanhSach(trang);
+	const mauLienKet = await soMauCuaLienKetDau(trang);
+	console.log(
+		`  ${nhan}: lien ket dieu thieu dau tien — elementFromPoint ${chanDoan?.tren}, ${mauLienKet} mau diem anh trong o cua no`,
+	);
+	kiem(
+		`${nhan}: lien ket dieu thieu dau tien cua thanh cong bo bam trung duoc (elementFromPoint tai tam tra ve chinh lien ket, thay ${chanDoan?.tren ?? "khong co"})`,
+		chanDoan?.trenLaLienKet === true,
+	);
+	kiem(
+		`${nhan}: lien ket dieu thieu dau tien duoc ve ra anh — o cua no co it nhat ${DO.mauToiThieu} mau diem anh (thay ${mauLienKet})`,
+		mauLienKet >= DO.mauToiThieu,
 	);
 	await chup(trang, tenAnh);
 }

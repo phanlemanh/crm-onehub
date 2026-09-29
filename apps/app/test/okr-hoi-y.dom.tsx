@@ -225,7 +225,6 @@ function chonChuaDu(): HoiYDu {
 			lyDoChuaCongBo: [
 				{ ma: "y-chua-gom", chuDeId: null },
 				{ ma: "thieu-ket-luan", chuDeId: "c2" },
-				{ ma: "thieu-ly-do", chuDeId: "c2" },
 				{ ma: "thieu-ket-luan", chuDeId: "yla" },
 			],
 		},
@@ -710,11 +709,12 @@ describe("Hỏi ý — người chọn kết luận", () => {
 			chu: [
 				"Còn ý chưa gom vào chủ đề",
 				"«Kho miền Trung» — chưa kết luận",
-				"«Kho miền Trung» — lý do chưa đủ dài hoặc quá dài",
 				"«Làm ứng dụng riêng cho tài xế» — chưa kết luận",
 			],
-			dich: ["#y-chua-gom", "#chu-de-c2", "#chu-de-c2", "#chu-de-yla"],
-			tonTai: [true, true, true, true],
+			dich: chonChuaDu().quyen.lyDoChuaCongBo.map((d) =>
+				d.chuDeId === null ? "#y-chua-gom" : `#chu-de-${d.chuDeId}`,
+			),
+			tonTai: chonChuaDu().quyen.lyDoChuaCongBo.map(() => true),
 			nutTat: true,
 			dem: "1/3 chủ đề đã kết luận",
 		});

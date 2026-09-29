@@ -63,8 +63,7 @@ function SaveBarList({
 						: cn(
 								"max-h-24 w-full overflow-y-auto overscroll-contain md:max-h-40",
 								open ? "flex" : "hidden",
-								overflows &&
-									"mask-b-from-80% border-b",
+								overflows && "border-b",
 							),
 				)}
 				data-mo={open}

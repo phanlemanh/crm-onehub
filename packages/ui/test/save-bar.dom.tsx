@@ -199,3 +199,42 @@ describe("save-bar — giữ chỗ cho thanh dính đáy", () => {
 		expect(veGiuCho(undefined, 246)).toBeNull();
 	});
 });
+
+describe("save-bar — danh sách cuộn không che chữ", () => {
+	test("danh sách tràn: gạch đáy và dòng gợi ý cuộn, không lớp mask nào trên phần tử cuộn", () => {
+		const goc = {
+			cuon: Object.getOwnPropertyDescriptor(
+				HTMLElement.prototype,
+				"scrollHeight",
+			),
+			khung: Object.getOwnPropertyDescriptor(
+				HTMLElement.prototype,
+				"clientHeight",
+			),
+		};
+		Object.defineProperty(HTMLElement.prototype, "scrollHeight", {
+			configurable: true,
+			get: () => 300,
+		});
+		Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+			configurable: true,
+			get: () => 100,
+		});
+		try {
+			const thanh = ve(MUC, true, "checklist");
+			const ds = thanh.querySelector("ul");
+			expect({
+				tran: ds?.getAttribute("data-tran"),
+				gachDay: ds?.classList.contains("border-b"),
+				mask: /(^|\s)mask-/.test(ds?.getAttribute("class") ?? ""),
+				goiY:
+					thanh.querySelector('[data-slot="save-bar-scroll-hint"]') !== null,
+			}).toEqual({ tran: "true", gachDay: true, mask: false, goiY: true });
+		} finally {
+			if (goc.cuon)
+				Object.defineProperty(HTMLElement.prototype, "scrollHeight", goc.cuon);
+			if (goc.khung)
+				Object.defineProperty(HTMLElement.prototype, "clientHeight", goc.khung);
+		}
+	});
+});
