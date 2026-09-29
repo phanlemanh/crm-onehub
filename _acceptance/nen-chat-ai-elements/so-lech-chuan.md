@@ -196,6 +196,27 @@ hơn thật — nó bỏ được một lần dựng component trong render. Ké
 làm, nhưng nó vẫn phải đi qua đúng nghi thức ở cuối sổ, vì `reasoning.tsx` nhập
 `./shimmer` và răng mồ côi đang tính bao đóng qua đúng cạnh đó.
 
+### confirmation.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/confirmation.tsx`
+
+**Số dòng khác:** 10
+
+**Vân tay lệch:** `5695b450b02078b9`
+
+**Đổi gì:** Kéo bằng CLI ngày 29/09 ở lượt `the-gop-y-okr`, trong một sân tạm có
+`components.json` của kho, rồi chép riêng tệp này vào cây. Chạy thẳng trong
+`packages/ui` thì CLI dừng hỏi ghi đè `alert.tsx` và `button.tsx`, và thêm một gói
+`cn` không ai dùng vào `package.json`. Toàn bộ 10 dòng khác là bản vá của kho:
+
+- Bỏ bốn dòng chú thích `//` của thượng nguồn.
+- `ConfirmationAction` bỏ `className="h-8 px-3 text-sm"`, dùng `size="sm"` của `Button`.
+
+**Vì sao:** `AGENTS.md` cấm chú thích trong mã. `docs/design.md` cấm `className`
+đổi cỡ và khoảng cách của một component `@crm/ui` tại chỗ gọi; cỡ nhỏ đã có sẵn
+thành biến thể `sm` của `Button`. Tệp không có chữ hiện trên màn: các chuỗi còn
+lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-cung.mjs`.
+
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 
 Đây không phải cảnh báo trừu tượng. Nó đã xảy ra trong chính kho này, trong hai

@@ -76,6 +76,9 @@ const en = {
 		acceptEdited: "Accept edited",
 		cancelEdit: "Cancel",
 	},
+	proposedChange: {
+		edit: "Edit",
+	},
 	spinner: {
 		loading: "Loading",
 	},
@@ -260,6 +263,9 @@ const vi = {
 		dismissShort: "Bác",
 		acceptEdited: "Nhận bản đã sửa",
 		cancelEdit: "Huỷ",
+	},
+	proposedChange: {
+		edit: "Sửa",
 	},
 	spinner: {
 		loading: "Đang tải",
