@@ -51,7 +51,10 @@ const { SettingsSidebar, SettingsSidebarFallback } = await import(
 );
 
 const NHOM = [
-	["Không gian làm việc", ["Chung", "Tiền tệ", "Trường"]],
+	[
+		"Không gian làm việc",
+		["Chung", "Tiền tệ", "Trường", "Giai đoạn thoả thuận"],
+	],
 	[
 		"Con người",
 		["Thành viên", "Tổ chức", "Chương trình OKR", "Điều phối 30 ngày"],
