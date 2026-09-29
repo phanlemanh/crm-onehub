@@ -12,11 +12,23 @@ const LOP = [
 	"phu-trach-roi",
 	"kr-phu-trach-roi",
 ];
+const MONG = [
+	["O2", "khong-ai-sua"],
+	["O3", "don-vi-luu-tru"],
+	["O5", "kr-phu-trach-roi"],
+	["O6", "phu-trach-roi"],
+	["O7", "khong-ai-sua"],
+	["O8", "khong-ai-sua"],
+	["O9", "khong-ai-sua"],
+];
 const MONG_LOP = {
 	"don-vi-luu-tru": 1,
-	"khong-ai-sua": 1,
+	"khong-ai-sua": 4,
+	"phu-trach-roi": 1,
 	"kr-phu-trach-roi": 1,
 };
+const PHA_TRONG_SQL = /c\.phase IN \(([^)]*)\)/;
+const THANH_VIEN_TRONG_SQL = /m\."organizationId" = '([^']*)'/;
 const GHIM_CHI_DOC = "câu SQL không chỉ SELECT";
 const CAM_GHI =
 	/\b(INSERT|UPDATE|DELETE|MERGE|UPSERT|DROP|ALTER|CREATE|TRUNCATE|GRANT|REVOKE|COPY|CALL|LOCK|VACUUM|COMMENT|REFRESH|RESET|DO|EXECUTE|PREPARE|LISTEN|NOTIFY|SET_CONFIG)\b/i;
@@ -68,6 +80,29 @@ const hongCau = kiemCau(sql);
 if (hongCau.length > 0) thoat(1, hongCau.map((h) => `HONG ${h}`).join("\n"));
 console.log(
 	`okr-mo-coi.sql: dat — mot cau WITH/SELECT, khong tu khoa ghi, khong moc thoi gian (${sql.split("\n").length} dong)`,
+);
+const { PHA_CHUYEN_DUOC } = await import(
+	join(GOC, "packages/db/src/okr-don-vi.ts")
+);
+const { WORKSPACE_ID } = await import(
+	join(GOC, "packages/db/src/workspace.ts")
+);
+const phaSql = [...(sql.match(PHA_TRONG_SQL)?.[1] ?? "").matchAll(/'([^']*)'/g)]
+	.map((m) => m[1])
+	.join(",");
+const khongGian = sql.match(THANH_VIEN_TRONG_SQL)?.[1] ?? "";
+if (phaSql !== PHA_CHUYEN_DUOC.join(","))
+	thoat(
+		1,
+		`HONG pha trong okr-mo-coi.sql «${phaSql}» khac PHA_CHUYEN_DUOC «${PHA_CHUYEN_DUOC.join(",")}» cua @crm/db/okr-don-vi`,
+	);
+if (khongGian !== WORKSPACE_ID)
+	thoat(
+		1,
+		`HONG khong gian trong okr-mo-coi.sql «${khongGian}» khac WORKSPACE_ID «${WORKSPACE_ID}»`,
+	);
+console.log(
+	`okr-mo-coi.sql: pha mo khop PHA_CHUYEN_DUOC (${phaSql}) · khong gian khop WORKSPACE_ID (${khongGian})`,
 );
 const banSaoBoLuuTru = sql.replace(BO_LUU_TRU, "");
 if (banSaoBoLuuTru === sql || sql.match(BO_LUU_TRU)?.length !== 2)
@@ -169,14 +204,24 @@ async function doc(c, nhan) {
 	return { dong, sqlCap, apiCap };
 }
 
+async function goThanhVien(c, userId) {
+	const thanhVien = await db.member.findFirstOrThrow({
+		where: { userId },
+		select: { id: true },
+	});
+	await goi(c, "workspace.removeMember", { memberId: thanhVien.id });
+}
+
 async function gieo() {
 	const qt = ma("qt");
 	const hP2 = ma("hP2");
 	const k5 = ma("k5");
+	const u6 = ma("u6");
+	const p7 = ma("p7");
 	await gieoThanhVien(qt, "admin");
-	await gieoThanhVien(hP2, "member");
-	await gieoThanhVien(k5, "member");
+	for (const u of [hP2, k5, u6, p7]) await gieoThanhVien(u, "member");
 	const c = (await mintPhien(qt)).cookie;
+	await goi(c, "okr.setProgram", { personalOn: true });
 
 	const B0 = (await goi(c, "org.createDivision", { name: ma("B0") })).id;
 	const B1 = (await goi(c, "org.createDivision", { name: ma("B1") })).id;
@@ -188,12 +233,15 @@ async function gieo() {
 	const P3 = await pb("P3", B0);
 	const P4 = await pb("P4", B0);
 	const P5 = await pb("P5", B0);
-	await goi(c, "org.setPlacement", {
-		userId: hP2,
-		primaryDepartmentId: P2,
-		secondaryDepartmentIds: [],
-		managerUserId: null,
-	});
+	const xep = (userId, primaryDepartmentId) =>
+		goi(c, "org.setPlacement", {
+			userId,
+			primaryDepartmentId,
+			secondaryDepartmentIds: [],
+			managerUserId: null,
+		});
+	await xep(hP2, P2);
+	await xep(p7, P5);
 	await goi(c, "org.setHead", { kind: "department", id: P2, userId: hP2 });
 
 	const nam = await goi(c, "okr.createCycle", {
@@ -220,22 +268,22 @@ async function gieo() {
 	).id;
 	await goi(c, "okr.setCyclePhase", { id: C, phase: "dang-chay" });
 
-	const mucTieu = async (departmentId, chuKr) => {
+	const mucTieu = async (unit, chuKr, ownerUserId = qt) => {
 		const { id } = await goi(c, "okr.createObjective", {
 			cycleId: C,
-			unit: { level: "phong-ban", departmentId },
+			unit,
 			title: ma("muc-tieu"),
 			kind: "cam-ket",
-			ownerUserId: qt,
+			ownerUserId,
 			participantIds: [],
 			whyNow: "",
 		});
-		for (const ownerUserId of chuKr)
+		for (const chu of chuKr)
 			await goi(c, "okr.createKeyResult", {
 				objectiveId: id,
 				title: ma("kr"),
 				kind: "tang-toi",
-				ownerUserId,
+				ownerUserId: chu,
 				startValue: 0,
 				targetValue: 10,
 				currentValue: 0,
@@ -246,14 +294,25 @@ async function gieo() {
 		await goi(c, "okr.publishObjective", { id });
 		return id;
 	};
-	const O2 = await mucTieu(P2, [qt]);
-	const O3 = await mucTieu(P3, [qt]);
-	const O5 = await mucTieu(P5, [qt, k5]);
-	await mucTieu(P4, [qt]);
+	const pbDv = (departmentId) => ({ level: "phong-ban", departmentId });
+	const O = {
+		O2: await mucTieu(pbDv(P2), [qt]),
+		O3: await mucTieu(pbDv(P3), [qt]),
+		O4: await mucTieu(pbDv(P4), [qt]),
+		O5: await mucTieu(pbDv(P5), [qt, k5]),
+		O6: await mucTieu(pbDv(P5), [qt], u6),
+		O7: await mucTieu({ level: "ca-nhan", personUserId: p7 }, [qt]),
+		O8: await mucTieu({ level: "bo-phan", divisionId: B1 }, [qt]),
+		O9: await mucTieu(pbDv(P4), [qt]),
+	};
 	console.log(
-		`gieo: chu ky ${C}, B0 (P3, P4, P5) B1 (P2) co truong; O2 ${O2} · O3 ${O3} · O5 ${O5} (KR cua ${k5})`,
+		`gieo: chu ky ${C}; B0 (P3, P4, P5) va B1 (P2) co truong; ${Object.entries(
+			O,
+		)
+			.map(([k, v]) => `${k} ${v}`)
+			.join(" · ")}`,
 	);
-	return { c, qt, hP2, k5, B1, P2, P3, P4, O2, O3, O5 };
+	return { c, qt, hP2, k5, u6, p7, B1, P2, P3, P4, O };
 }
 
 async function tienDe(c) {
@@ -268,38 +327,64 @@ async function tienDe(c) {
 async function lamHong(s) {
 	await goi(s.c, "org.setHead", { kind: "department", id: s.P2, userId: null });
 	await goi(s.c, "org.setHead", { kind: "division", id: s.B1, userId: null });
-	const thanhVien = await db.member.findFirstOrThrow({
-		where: { userId: s.k5 },
-		select: { id: true },
-	});
-	await goi(s.c, "workspace.removeMember", { memberId: thanhVien.id });
+	for (const u of [s.k5, s.u6, s.p7]) await goThanhVien(s.c, u);
 	await db.department.update({
 		where: { id: s.P3 },
 		data: { archivedAt: new Date() },
 	});
+	await db.okrObjective.update({
+		where: { id: s.O.O9 },
+		data: { departmentId: null },
+	});
 	console.log(
-		"lam hong: bo truong P2 va B1 · go K5 khoi khong gian lam viec · ghi thang archivedAt cho P3",
+		"lam hong: bo truong P2 va B1 (O2, O8 bo phan) · go K5 (KR cua O5), U6 (phu trach O6), P7 (nguoi cua O7 ca nhan) · ghi thang archivedAt cho P3 (O3) · ghi thang departmentId null cho O9",
 	);
 }
 
-function kiemBaLop(s, r) {
+async function sua(s) {
+	await goi(s.c, "org.setHead", {
+		kind: "department",
+		id: s.P2,
+		userId: s.hP2,
+	});
+	await goi(s.c, "org.setHead", { kind: "division", id: s.B1, userId: s.qt });
+	for (const u of [s.k5, s.u6])
+		await goi(s.c, "okr.transferWork", { fromUserId: u, toUserId: s.qt });
+	await gieoThanhVien(s.p7, "member");
+	await goi(s.c, "okr.chuyenDonVi", {
+		objectiveIds: [s.O.O3, s.O.O9],
+		denDonVi: { level: "phong-ban", id: s.P4 },
+	});
+	console.log(
+		"sua: dat lai truong P2, B1 · chuyen viec K5, U6 cho quan tri · P7 vao lai · chuyen O3, O9 sang P4",
+	);
+}
+
+function kiemLop(s, r) {
 	const hong = [];
-	const mongCap = [
-		`${s.O2} khong-ai-sua`,
-		`${s.O3} don-vi-luu-tru`,
-		`${s.O5} kr-phu-trach-roi`,
-	].sort();
+	const mongCap = MONG.map(([k, lop]) => `${s.O[k]} ${lop}`).sort();
+	const soSql = demLop(r.sqlCap);
+	const soApi = demLop(r.apiCap);
+	for (const lop of LOP) {
+		const mong = MONG_LOP[lop] ?? 0;
+		if ((soSql[lop] ?? 0) !== mong || (soApi[lop] ?? 0) !== mong)
+			hong.push(
+				`lop ${lop}: sql ${soSql[lop] ?? 0}, api ${soApi[lop] ?? 0}, mong ${mong}`,
+			);
+	}
+	const thieuSql = mongCap.filter((c) => !r.sqlCap.includes(c));
+	const thuaSql = r.sqlCap.filter((c) => !mongCap.includes(c));
+	if (thieuSql.length + thuaSql.length > 0)
+		hong.push(
+			`sql khac muc viet truoc: thieu ${JSON.stringify(thieuSql)} · thua ${JSON.stringify(thuaSql)}`,
+		);
 	if (JSON.stringify(r.sqlCap) !== JSON.stringify(r.apiCap))
 		hong.push(
 			`sql lech api: sql ${JSON.stringify(r.sqlCap)} · api ${JSON.stringify(r.apiCap)}`,
 		);
-	if (JSON.stringify(demLop(r.sqlCap)) !== JSON.stringify(MONG_LOP))
-		hong.push(
-			`dem theo lop: nhan ${JSON.stringify(demLop(r.sqlCap))}, mong ${JSON.stringify(MONG_LOP)}`,
-		);
 	if (JSON.stringify(r.apiCap) !== JSON.stringify(mongCap))
 		hong.push(
-			`api khac ba muc viet truoc: nhan ${JSON.stringify(r.apiCap)}, mong ${JSON.stringify(mongCap)}`,
+			`api khac muc viet truoc: nhan ${JSON.stringify(r.apiCap)}, mong ${JSON.stringify(mongCap)}`,
 		);
 	const cot = [...new Set(r.dong.flatMap((d) => Object.keys(d)))].sort();
 	if (JSON.stringify(cot) !== JSON.stringify([...COT].sort()))
@@ -314,28 +399,20 @@ try {
 		return (await mintPhien(tam)).cookie;
 	})();
 	await tienDe(phienDau);
+	console.log(`mong viet truoc: ${JSON.stringify(MONG_LOP)}`);
 	const s = await gieo();
 	const sach = await doc(s.c, "sau khi gieo");
 	if (sach.sqlCap.length + sach.apiCap.length > 0)
 		thoat(1, "HONG sau khi gieo da co muc mo coi — gieo sai");
 	await lamHong(s);
-	const r = await doc(s.c, "sau ba lop");
+	const r = await doc(s.c, "sau khi lam hong");
 	if (!chieuDo) {
-		const hong = kiemBaLop(s, r);
-		await goi(s.c, "org.setHead", {
-			kind: "department",
-			id: s.P2,
-			userId: s.hP2,
-		});
-		await goi(s.c, "okr.transferWork", { fromUserId: s.k5, toUserId: s.qt });
-		await goi(s.c, "okr.chuyenDonVi", {
-			objectiveIds: [s.O3],
-			denDonVi: { level: "phong-ban", id: s.P4 },
-		});
-		const sau = await doc(s.c, "sau ba buoc sua");
+		const hong = kiemLop(s, r);
+		await sua(s);
+		const sau = await doc(s.c, "sau khi sua");
 		if (sau.sqlCap.length !== 0 || sau.apiCap.length !== 0)
 			hong.push(
-				`sau ba buoc sua: sql ${JSON.stringify(sau.sqlCap)} · api ${JSON.stringify(sau.apiCap)}`,
+				`sau khi sua: sql ${JSON.stringify(sau.sqlCap)} · api ${JSON.stringify(sau.apiCap)}`,
 			);
 		for (const h of hong) console.log(`HONG ${h}`);
 		console.log(`toEqual: ${hong.length === 0 ? "dat" : "HONG"}`);

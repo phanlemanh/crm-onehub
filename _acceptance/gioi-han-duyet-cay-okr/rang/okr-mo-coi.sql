@@ -61,7 +61,12 @@ lop AS (
       AND m."divisionId" IN (SELECT id FROM bo_phan_song)
       AND m."divisionId" NOT IN (SELECT id FROM truong_bo_phan)
     )
-    OR (m.level = 'ca-nhan' AND m."personUserId" NOT IN (SELECT id FROM thanh_vien))
+    OR (m.level = 'phong-ban' AND m."departmentId" IS NULL)
+    OR (m.level = 'bo-phan' AND m."divisionId" IS NULL)
+    OR (
+      m.level = 'ca-nhan'
+      AND (m."personUserId" IS NULL OR m."personUserId" NOT IN (SELECT id FROM thanh_vien))
+    )
   UNION ALL
   SELECT m.id, 'phu-trach-roi'
   FROM muc_tieu m
