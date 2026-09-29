@@ -50,7 +50,10 @@ import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
-import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
+import {
+	type OkrGioiHanMessages,
+	okrGioiHanMessages,
+} from "@/lib/messages/okr-gioi-han";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import {
@@ -106,11 +109,11 @@ function OMucHienThi({
 	ma: string;
 	hienThi: MucHienThi;
 	onDoi: (moi: MucHienThi) => void;
-	g: ReturnType<typeof okrGioiHanMessages>["hienThi"];
+	g: OkrGioiHanMessages;
 }) {
 	return (
 		<Field>
-			<FieldLabel htmlFor={`${ma}-hien-thi`}>{g.tieuDe}</FieldLabel>
+			<FieldLabel htmlFor={`${ma}-hien-thi`}>{g.hienThi.tieuDe}</FieldLabel>
 			<Select
 				value={hienThi}
 				onValueChange={(v) => {
@@ -126,12 +129,12 @@ function OMucHienThi({
 					<SelectValue />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="cong-khai">{g.congKhai}</SelectItem>
-					<SelectItem value="gioi-han">{g.gioiHan}</SelectItem>
+					<SelectItem value="cong-khai">{g.hienThi.congKhai}</SelectItem>
+					<SelectItem value="gioi-han">{g.hienThi.gioiHan}</SelectItem>
 				</SelectContent>
 			</Select>
 			<FieldDescription id={`${ma}-hien-thi-mo-ta`}>
-				{hienThi === "gioi-han" ? g.khiTao : g.congKhaiMoTa}
+				{hienThi === "gioi-han" ? g.hienThi.khiTao : g.hienThi.congKhaiMoTa}
 			</FieldDescription>
 		</Field>
 	);
@@ -148,7 +151,7 @@ export function HopThoaiMucTieu({
 	const m = okrMessages(locale);
 	const h = m.hopThoai;
 	const tm = okrCanhKrMessages(locale).mau.tuMau;
-	const g = okrGioiHanMessages(locale).hienThi;
+	const g = okrGioiHanMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const openRecord = useOpenRecord();

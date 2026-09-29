@@ -96,7 +96,7 @@ const vi = {
 		"Mục tiêu đang chờ duyệt — việc, sáng kiến và bằng chứng khoá tới khi duyệt xong hoặc rút lại. Vẫn đánh dấu việc xong được.",
 };
 
-type OkrGioiHanMessages = typeof vi;
+export type OkrGioiHanMessages = typeof vi;
 
 const en: OkrGioiHanMessages = {
 	nhan: {
