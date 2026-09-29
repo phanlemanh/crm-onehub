@@ -5,7 +5,9 @@ slug: gioi-han-duyet-cay-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-29T05:23:04Z
 design_doc: docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md
 ---
 
