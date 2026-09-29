@@ -151,6 +151,7 @@ describe("vai-okr", () => {
 		const thay = await tim("quy dinh", "okr");
 		expect(thay.map((d) => d.slug)).toEqual([slugCua.get("P1") as string]);
 		ok(await hoi("taiLieu.boLoc", undefined, "okr"), "okr boLoc");
+		ok(await hoi("taiLieu.sucKhoe", undefined, "okr"), "okr sucKhoe");
 		ok(
 			await hoi("taiLieu.nhacToi", { slug: slugCua.get("P1") }, "okr"),
 			"okr nhacToi",

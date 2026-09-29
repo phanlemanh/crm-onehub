@@ -32,6 +32,7 @@ import {
 	taiLieuProposeOutput,
 	taiLieuRejectInput,
 	taiLieuSlugInput,
+	taiLieuSucKhoeOutput,
 	taiLieuTimInput,
 	taiLieuTimOutput,
 } from "./tai-lieu.contracts";
@@ -59,6 +60,14 @@ export class TaiLieuRouter {
 	})
 	tim(@Input() input: z.infer<typeof taiLieuTimInput>) {
 		return this.timKiem.tim(input.q);
+	}
+
+	@Query({
+		output: taiLieuSucKhoeOutput,
+		meta: restMeta("GET", "/tai-lieu/suc-khoe", TAG),
+	})
+	sucKhoe(@Ctx() ctx: AuthedTrpcContext) {
+		return this.timKiem.sucKhoe(nguoiGoi(ctx));
 	}
 
 	@Query({

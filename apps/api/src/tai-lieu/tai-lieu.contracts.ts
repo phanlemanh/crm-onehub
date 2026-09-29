@@ -180,6 +180,31 @@ export const taiLieuBoLocOutput = z.object({
 	chuTrang: z.array(muaLoc),
 });
 
+const dongSucKhoe = z.object({
+	slug: z.string(),
+	ten: z.string(),
+	chuTrang: nguoi,
+});
+const khoiSucKhoe = <T extends z.ZodTypeAny>(dong: T) =>
+	z.object({ rows: z.array(dong), total: z.number().int() });
+export const taiLieuSucKhoeOutput = z.object({
+	quaHan: khoiSucKhoe(dongSucKhoe.extend({ xacMinhDen: z.string() })),
+	choDuyet: khoiSucKhoe(dongSucKhoe.extend({ soBan: z.number().int() })),
+	gay: khoiSucKhoe(
+		dongSucKhoe.extend({
+			lienKet: z.array(z.object({ denSlug: z.string(), vanBan: z.string() })),
+		}),
+	),
+	chuaCo: khoiSucKhoe(
+		z.object({
+			denSlug: z.string(),
+			vanBan: z.string(),
+			soTrang: z.number().int(),
+		}),
+	),
+	moCoi: khoiSucKhoe(dongSucKhoe.extend({ duyetLuc: z.string() })),
+});
+
 export type TaiLieuListInput = z.infer<typeof taiLieuListInput>;
 export type TaiLieuCreateInput = z.infer<typeof taiLieuCreateInput>;
 export type TaiLieuProposeInput = z.infer<typeof taiLieuProposeInput>;
@@ -193,3 +218,4 @@ export type TaiLieuProposalOutput = z.infer<typeof taiLieuProposalOutput>;
 export type TaiLieuTimOutput = z.infer<typeof taiLieuTimOutput>;
 export type TaiLieuNhacToiOutput = z.infer<typeof taiLieuNhacToiOutput>;
 export type TaiLieuBoLocOutput = z.infer<typeof taiLieuBoLocOutput>;
+export type TaiLieuSucKhoeOutput = z.infer<typeof taiLieuSucKhoeOutput>;
