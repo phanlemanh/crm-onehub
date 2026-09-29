@@ -94,6 +94,24 @@ const LY_DO_DUONG_DOC_RONG =
 
 const MIEN_XEM = [
 	{
+		tep: "apps/api/src/okr/okr-hien-thi.service.ts",
+		ham: "datHienThi",
+		bang: "tho:okrObjective",
+		lyDo: "khoá hàng mục tiêu FOR UPDATE sau assertSuaMucTieu (đã qua điều kiện xem)",
+	},
+	{
+		tep: "apps/api/src/okr/okr-hien-thi.service.ts",
+		ham: "datHienThi",
+		bang: "okrObjective",
+		lyDo: "ghi: đọc lại trạng thái, mức và người xem của mục tiêu vừa qua assertSuaMucTieu (đã qua điều kiện xem)",
+	},
+	{
+		tep: "apps/api/src/okr/okr-hien-thi.service.ts",
+		ham: "datHienThi",
+		bang: "okrAlignment",
+		lyDo: "đếm mọi căn chỉnh hai chiều để chặn sang giới hạn, kể cả căn chỉnh từ mục tiêu người gọi không xem được; chỉ ra số",
+	},
+	{
 		tep: "apps/api/src/okr/okr.service.ts",
 		ham: "updateKeyResult",
 		bang: "okrNguonKr",
@@ -163,19 +181,13 @@ const MIEN_XEM = [
 		tep: "apps/api/src/okr/okr-khep.service.ts",
 		ham: "mangSang",
 		bang: "okrMangSang",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho mangSang là Task 4",
+		lyDo: "ghi: tìm lần mang sang trùng sau assertSuaMucTieu (đã qua điều kiện xem); chỉ ra có/không",
 	},
 	{
 		tep: "apps/api/src/okr/okr-canh-kr.service.ts",
 		ham: "goBangChung",
 		bang: "okrBangChung",
 		lyDo: "ghi: đọc bằng chứng theo mã rồi qua krDeGhi và ghiDuocKr",
-	},
-	{
-		tep: "apps/api/src/okr/okr-trao-doi.service.ts",
-		ham: "follow",
-		bang: "okrFollow",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho follow là Task 4",
 	},
 	{
 		tep: "packages/db/src/okr-nhac.ts",
@@ -197,15 +209,9 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr-access.service.ts",
-		ham: "assertSuaMucTieu",
-		bang: "okrObjective",
-		lyDo: "cổng ghi: ai qua được suaDuocDonVi đều xem được mục tiêu (vế đơn vị của luật xem); 404 của đường ghi là Task 4",
-	},
-	{
-		tep: "apps/api/src/okr/okr-access.service.ts",
 		ham: "assertSuaKr",
 		bang: "okrKeyResult",
-		lyDo: "cổng ghi KR: người phụ trách KR hay người sửa được đơn vị đều xem được mục tiêu; 404 của đường ghi là Task 4",
+		lyDo: "cổng ghi KR: người phụ trách KR hay người sửa được đơn vị đều xem được mục tiêu; ghiSoKr hỏi điều kiện xem trước (docKr) để trả 404",
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
@@ -343,13 +349,13 @@ const MIEN_XEM = [
 		tep: "apps/api/src/okr/okr-khep.service.ts",
 		ham: "mangSang",
 		bang: "okrObjective",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho mangSang là Task 4",
+		lyDo: "ghi: đọc lại mục tiêu nguồn và đếm vị trí trong chu kỳ đích sau assertSuaMucTieu (đã qua điều kiện xem); vị trí chỉ là số",
 	},
 	{
 		tep: "apps/api/src/okr/okr-khep.service.ts",
 		ham: "mangSang",
 		bang: "tho:okrObjective",
-		lyDo: "khoá hàng mục tiêu FOR UPDATE trong mangSang — cổng xem là Task 4",
+		lyDo: "khoá hàng mục tiêu FOR UPDATE sau assertSuaMucTieu (đã qua điều kiện xem)",
 	},
 	{
 		tep: "apps/api/src/okr/okr-canh-kr.service.ts",
@@ -383,33 +389,9 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr-canh-kr.service.ts",
-		ham: "guiGhiNhan",
-		bang: "okrObjective",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho guiGhiNhan là Task 4",
-	},
-	{
-		tep: "apps/api/src/okr/okr-canh-kr.service.ts",
-		ham: "guiGhiNhan",
-		bang: "okrKeyResult",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho guiGhiNhan là Task 4",
-	},
-	{
-		tep: "apps/api/src/okr/okr-canh-kr.service.ts",
 		ham: "goGhiNhan",
 		bang: "okrGhiNhan",
 		lyDo: "ghi: chỉ người gửi hay quản trị gỡ được, đọc hàng của chính mã đưa vào",
-	},
-	{
-		tep: "apps/api/src/okr/okr-trao-doi.service.ts",
-		ham: "mucTieuCo",
-		bang: "okrObjective",
-		lyDo: "cổng tồn tại của addComment và follow — cổng xem cho hai đường ghi này là Task 4",
-	},
-	{
-		tep: "apps/api/src/okr/okr-trao-doi.service.ts",
-		ham: "addComment",
-		bang: "okrKeyResult",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho addComment là Task 4",
 	},
 	{
 		tep: "apps/api/src/okr/okr-trao-doi.service.ts",
@@ -458,12 +440,6 @@ const MIEN_XEM = [
 		ham: "datNguonKr",
 		bang: "tho:okrKeyResult",
 		lyDo: "khoá hàng KR FOR UPDATE sau assertSuaKr",
-	},
-	{
-		tep: "apps/api/src/okr/okr-so.service.ts",
-		ham: "ghiSoKr",
-		bang: "okrKeyResult",
-		lyDo: "ghi dựa trên mục tiêu — cổng xem cho ghiSoKr là Task 4 (sau assertSuaKr)",
 	},
 	{
 		tep: "apps/api/src/okr/okr-cap-nhat.service.ts",
@@ -553,13 +529,13 @@ const MIEN_XEM = [
 		tep: "packages/db/src/okr-tro-ly.ts",
 		ham: "donViCuaMucTieu",
 		bang: "okrObjective",
-		lyDo: "Trợ lý OKR tra đơn vị để tính phạm vi bật — không trả tiêu đề; chặn xếp việc theo quyền xem là Task 4",
+		lyDo: "Trợ lý OKR tra đơn vị để tính phạm vi bật — không trả tiêu đề; xepViecTroLy đã hỏi điều kiện xem của người yêu cầu trước",
 	},
 	{
 		tep: "packages/db/src/okr-tro-ly.ts",
 		ham: "xepViecTroLy",
 		bang: "okrObjective",
-		lyDo: "xếp việc đề xuất đọc mốc cập nhật của mục tiêu; từ chối người không xem được là Task 4",
+		lyDo: "xếp việc đề xuất đọc mốc cập nhật của mục tiêu sau khi người yêu cầu qua điều kiện xem (từ chối khong-xem-duoc)",
 	},
 	{
 		tep: "packages/db/src/okr-chi-so.ts",

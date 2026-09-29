@@ -7,6 +7,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
+import { MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import {
 	KIEU_KR,
@@ -209,8 +210,16 @@ export const objectiveOutput = mucTieuOutput.extend({
 	mangSangTu: lienKetMangSang,
 	trail: z.array(vetOutput),
 	canEditKr: z.array(z.string()),
+	hienThi: z.enum(MUC_HIEN_THI),
+	nguoiXem: z.array(z.object({ id: z.string(), name: z.string() })),
+	quyen: z.object({ datHienThi: z.boolean() }),
 });
 export const createObjectiveInput = mucTieuInput;
+export const datHienThiOutput = z.object({
+	id: z.string(),
+	hienThi: z.enum(MUC_HIEN_THI),
+	nguoiXem: z.array(z.string()),
+});
 export const updateObjectiveInput = mucTieuUpdate;
 export const idInput = z.object({ id: ma });
 export const okOutput = z.object({
@@ -451,6 +460,7 @@ export type DonViChon = z.infer<typeof donViChon>;
 export type OkrDongNhapOutput = z.infer<typeof okrDongNhapOutput>;
 export type VetOutput = z.infer<typeof vetOutput>;
 export type ObjectiveOutput = z.infer<typeof objectiveOutput>;
+export type DatHienThiOutput = z.infer<typeof datHienThiOutput>;
 export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;

@@ -408,7 +408,9 @@ export class OkrKhepService {
 					title: true,
 					whyNow: true,
 					ownerUserId: true,
+					hienThi: true,
 					participants: { select: { userId: true } },
+					nguoiXem: { select: { userId: true } },
 					cycle: { select: { kind: true, endsOn: true, phase: true } },
 					keyResults: {
 						where: { diemKr: { isNot: null } },
@@ -460,6 +462,10 @@ export class OkrKhepService {
 				tx,
 				nguon.participants.map((p) => p.userId),
 			);
+			const { giu: nguoiXem } = await this.okr.locThanhVien(
+				tx,
+				nguon.nguoiXem.map((x) => x.userId),
+			);
 			const { bo: roiKr } = await this.okr.locThanhVien(
 				tx,
 				nguon.keyResults.map((k) => k.ownerUserId),
@@ -480,8 +486,12 @@ export class OkrKhepService {
 					kind: nguon.kind,
 					title: nguon.title,
 					whyNow: nguon.whyNow,
+					hienThi: nguon.hienThi,
 					position: viTri,
 					participants: { create: thamGia.map((u) => ({ userId: u })) },
+					nguoiXem: {
+						create: nguoiXem.map((u) => ({ userId: u, createdById: userId })),
+					},
 				},
 			});
 			const chep: string[] = [];

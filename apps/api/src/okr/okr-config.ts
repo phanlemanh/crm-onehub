@@ -83,6 +83,8 @@ export const OKR = {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
 			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
+			nhacKhongXemDuoc: (ten: string) =>
+				`${ten} không xem được mục tiêu này — bỏ nhắc tên, hoặc thêm vào người xem của mục tiêu.`,
 		},
 		canhKr: {
 			mucTieuDaBo: "Mục tiêu này đã bỏ — việc cạnh KR chỉ đọc.",
@@ -108,6 +110,8 @@ export const OKR = {
 			tuGhiNhan: "Không tự ghi nhận chính mình — chọn người khác.",
 			nguoiNhanKhongConThanhVien:
 				"Người nhận phải là thành viên còn trong không gian làm việc.",
+			nguoiNhanKhongXemDuoc: (ten: string) =>
+				`${ten} không xem được mục tiêu này — không gửi ghi nhận tới người không xem được.`,
 			khongCoGhiNhan: (id: string) => `Không có ghi nhận nào mang mã ${id}.`,
 			khongGoDuocGhiNhan:
 				"Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
@@ -187,6 +191,13 @@ export const OKR = {
 			mangSangChiCongBo: "Chỉ mang sang được mục tiêu đã công bố.",
 			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
 			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
+		},
+		dangChoDuyet: "Mục tiêu đang chờ duyệt — rút lại để sửa.",
+		hienThi: {
+			nguoiXemKhongConThanhVien:
+				"Người xem có tên phải là thành viên còn trong không gian làm việc.",
+			conCanChinh: (n: number) =>
+				`Mục tiêu còn ${n} căn chỉnh — gỡ hết căn chỉnh (góp vào và nhận góp) rồi mới đặt mức giới hạn.`,
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",

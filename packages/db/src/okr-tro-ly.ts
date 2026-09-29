@@ -4,6 +4,7 @@ import { chiTieuThang, thangVN } from "./ai-chi-phi";
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
 import { lockIdempotencyKey } from "./idempotency";
+import { dieuKienXemMucTieu, nguCanhXemOkr } from "./okr-hien-thi";
 import {
 	AI_PHAM_VI,
 	type CauHinhAi,
@@ -161,9 +162,11 @@ export const LY_DO_VIEC_OKR = {
 	"ai-doi-soat": "ai-doi-soat",
 } as const;
 
+export const KHONG_XEM_DUOC = "khong-xem-duoc" as const;
+
 export type XepViec =
 	| { xep: true; taskId: string; moi: boolean }
-	| { xep: false; lyDo: LyDoKhongSanSang };
+	| { xep: false; lyDo: LyDoKhongSanSang | typeof KHONG_XEM_DUOC };
 
 export async function xepViecTroLy(
 	db: Db,
@@ -176,6 +179,13 @@ export async function xepViecTroLy(
 	},
 ): Promise<XepViec> {
 	const now = v.now ?? new Date();
+	const nc = (await nguCanhXemOkr(db, [v.nguoiYeuCau])).get(v.nguoiYeuCau);
+	const thay =
+		nc &&
+		(await db.okrObjective.count({
+			where: { AND: [{ id: v.objectiveId }, dieuKienXemMucTieu(nc)] },
+		})) > 0;
+	if (!thay) return { xep: false, lyDo: KHONG_XEM_DUOC };
 	const san = await troLyOkrSanSang(db, {
 		viec: v.viec,
 		objectiveId: v.objectiveId,

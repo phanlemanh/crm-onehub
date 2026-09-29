@@ -7,6 +7,7 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import { datHienThiInput } from "@crm/validation/okr-hien-thi";
 import {
 	chamKrInput,
 	dongRaInput,
@@ -54,6 +55,7 @@ import {
 	createKrInput,
 	createObjectiveInput,
 	cyclesOutput,
+	datHienThiOutput,
 	followOutput,
 	guiCapNhatOutput,
 	idInput,
@@ -92,6 +94,7 @@ import {
 } from "./okr-canh-kr.contracts";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrHienThiService } from "./okr-hien-thi.service";
 import {
 	bangChamInput,
 	bangChamOutput,
@@ -148,6 +151,7 @@ export class OkrRouter {
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
+		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -286,6 +290,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof mangSangInput>,
 	) {
 		return this.khep.mangSang(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: datHienThiInput,
+		output: datHienThiOutput,
+		meta: restMeta("PUT", "/okr/objectives/{objectiveId}/visibility", TAG),
+	})
+	datHienThi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof datHienThiInput>,
+	) {
+		return this.hienThi.datHienThi(ctx.user.id, input);
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })

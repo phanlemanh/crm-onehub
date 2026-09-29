@@ -469,19 +469,21 @@ export class OkrCanhKrService {
 		input: GuiGhiNhanInput,
 		now = new Date(),
 	): Promise<{ id: string }> {
+		const { q, nc, mt } = await this.access.assertXemMucTieu(
+			userId,
+			input.objectiveId,
+		);
 		return this.db.$transaction(async (tx) => {
-			const mt = await tx.okrObjective.findUnique({
-				where: { id: input.objectiveId },
-				select: { id: true, status: true },
-			});
-			if (!mt) throw new NotFoundException(T.khongCoMucTieu(input.objectiveId));
 			if (mt.status !== "cong-bo")
 				throw new BadRequestException(T.canhKr.ghiNhanChiCongBo);
 			if (input.nguoiNhan.includes(userId))
 				throw new BadRequestException(T.canhKr.tuGhiNhan);
 			if (input.keyResultId !== null) {
-				const kr = await tx.okrKeyResult.findUnique({
-					where: { id: input.keyResultId },
+				const kr = await tx.okrKeyResult.findFirst({
+					where: {
+						id: input.keyResultId,
+						objective: dieuKienXemMucTieu(nc),
+					},
 					select: { objectiveId: true },
 				});
 				if (!kr) throw new NotFoundException(T.khongCoKr(input.keyResultId));
@@ -492,6 +494,12 @@ export class OkrCanhKrService {
 				tx,
 				input.nguoiNhan,
 				() => T.canhKr.nguoiNhanKhongConThanhVien,
+			);
+			await this.access.assertXemDuocHet(
+				q,
+				mt.id,
+				input.nguoiNhan,
+				T.canhKr.nguoiNhanKhongXemDuoc,
 			);
 			const row = await tx.okrGhiNhan.create({
 				data: {

@@ -90,6 +90,9 @@ function mucTieu(
 		theoDoi: false,
 		trail: [],
 		canEditKr: [],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		quyen: { datHienThi: false },
 		...thay,
 	};
 }

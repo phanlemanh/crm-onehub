@@ -32,7 +32,6 @@ import { OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
-type Tx = Prisma.TransactionClient;
 const chonNguoi = { id: true, name: true, email: true } as const;
 
 function dieuKienChuyen(fromUserId: string) {
@@ -70,15 +69,6 @@ export class OkrTraoDoiService {
 		@Inject(OkrService) private readonly okr: OkrService,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 	) {}
-
-	private async mucTieuCo(tx: Tx | Db, objectiveId: string) {
-		const mt = await tx.okrObjective.findUnique({
-			where: { id: objectiveId },
-			select: { id: true },
-		});
-		if (!mt) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
-		return mt;
-	}
 
 	async thanhVien(): Promise<ThanhVienOutput> {
 		const rows = await this.db.member.findMany({
@@ -182,11 +172,17 @@ export class OkrTraoDoiService {
 
 	async addComment(userId: string, input: AddCommentInput, now = new Date()) {
 		const nhac = [...new Set(input.mentionUserIds)];
+		const { q, nc } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			input.objectiveId,
+		);
 		return this.db.$transaction(async (tx) => {
-			await this.mucTieuCo(tx, input.objectiveId);
 			if (input.keyResultId !== undefined) {
-				const kr = await tx.okrKeyResult.findUnique({
-					where: { id: input.keyResultId },
+				const kr = await tx.okrKeyResult.findFirst({
+					where: {
+						id: input.keyResultId,
+						objective: dieuKienXemMucTieu(nc),
+					},
 					select: { objectiveId: true },
 				});
 				if (!kr) throw new NotFoundException(T.khongCoKr(input.keyResultId));
@@ -197,6 +193,12 @@ export class OkrTraoDoiService {
 				tx,
 				nhac,
 				() => T.traoDoi.nhacKhongConThanhVien,
+			);
+			await this.quyenOkr.assertXemDuocHet(
+				q,
+				input.objectiveId,
+				nhac,
+				T.traoDoi.nhacKhongXemDuoc,
 			);
 			const c = await tx.okrComment.create({
 				data: {
@@ -228,8 +230,11 @@ export class OkrTraoDoiService {
 	}
 
 	async follow(userId: string, input: FollowInput): Promise<FollowOutput> {
+		const { nc } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			input.objectiveId,
+		);
 		return this.db.$transaction(async (tx) => {
-			await this.mucTieuCo(tx, input.objectiveId);
 			const doi = input.on
 				? (
 						await tx.okrFollow.createMany({
@@ -252,7 +257,10 @@ export class OkrTraoDoiService {
 					null,
 				);
 			const followerCount = await tx.okrFollow.count({
-				where: { objectiveId: input.objectiveId },
+				where: {
+					objectiveId: input.objectiveId,
+					objective: dieuKienXemMucTieu(nc),
+				},
 			});
 			return { following: input.on, followerCount };
 		});

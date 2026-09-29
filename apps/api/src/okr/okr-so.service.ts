@@ -290,11 +290,13 @@ export class OkrSoService {
 	}
 
 	async ghiSoKr(userId: string, input: GhiSoKrInput, now = new Date()) {
+		const { nc } = await this.nguCanhCua(userId);
+		await this.docKr(input.id, nc);
 		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id);
 		return this.db.$transaction(async (tx) => {
 			await this.okr.assertKyGhiDuoc(tx, quyen.objective.cycleId);
-			const kr = await tx.okrKeyResult.findUniqueOrThrow({
-				where: { id: input.id },
+			const kr = await tx.okrKeyResult.findFirst({
+				where: { id: input.id, objective: dieuKienXemMucTieu(nc) },
 				include: {
 					nguonMay: true,
 					objective: {
@@ -305,6 +307,7 @@ export class OkrSoService {
 					},
 				},
 			});
+			if (!kr) throw new NotFoundException(T.khongThayMucTieu);
 			if (trangThaiMucTieu.parse(kr.objective.status) === "da-bo")
 				throw new BadRequestException(T.daBo);
 			if (kr.nguonMay?.loai !== "api")

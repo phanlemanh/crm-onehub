@@ -11,6 +11,10 @@ export const OKR_HIEN_THI = {
 	chuyenToiDa: 50,
 } as const;
 
+export const LOI_KHUON_HIEN_THI = {
+	quaNguoiXem: `Tối đa ${OKR_HIEN_THI.nguoiXemToiDa} người xem có tên.`,
+} as const;
+
 export type { NguCanhXem };
 
 export type MucTieuDeXem = {
@@ -61,7 +65,9 @@ const ma = z.string().trim().min(1).max(120);
 export const datHienThiInput = z.object({
 	objectiveId: ma,
 	hienThi: z.enum(MUC_HIEN_THI),
-	nguoiXem: z.array(ma).max(OKR_HIEN_THI.nguoiXemToiDa),
+	nguoiXem: z
+		.array(ma)
+		.max(OKR_HIEN_THI.nguoiXemToiDa, { error: LOI_KHUON_HIEN_THI.quaNguoiXem }),
 });
 export type DatHienThiInput = z.infer<typeof datHienThiInput>;
 
