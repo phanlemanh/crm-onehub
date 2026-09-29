@@ -25,8 +25,8 @@ const GOP_Y_EVAL = {
 	},
 	capTren: { "phong-ban": "bo-phan", "bo-phan": "onehub" },
 	tieuChi: [
-		"Câu đề xuất nói kết quả muốn đạt, không nói việc sẽ làm.",
-		"Câu đề xuất giữ ý của người viết câu gốc, không đổi sang mục tiêu khác.",
+		"Câu đề xuất nói kết quả muốn đạt, không nói việc sẽ làm: tên Mục tiêu viết bằng chữ, không mang con số hay tên chỉ số; tên KR gọi tên thứ được đo và không kết bằng cụm mơ hồ như «đạt kết quả tốt».",
+		"Câu đề xuất giữ ý của người viết câu gốc, không đổi sang mục tiêu khác và không thêm ý mà nội dung gốc không có («hàng đầu», «được tin cậy»).",
 		"Câu đề xuất trả lời theo ngôn ngữ chiếm đa số trong nội dung câu gốc.",
 	],
 	nhanTruong: {

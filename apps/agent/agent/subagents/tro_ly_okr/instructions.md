@@ -40,9 +40,11 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
 - Call `nop_de_xuat` exactly once. Put at most eight lines in it. Every line uses ids from the data
   block only.
   - `viet-lai`: a rewrite of the Mục tiêu title, its «vì sao lúc này», or a KR title, with `truoc`
-    copied exactly from the data. The rewrite keeps what the person meant, including a number they
-    wrote when that number is the point of the sentence: carry it into the new sentence, do not drop
-    it. Never add a number of your own.
+    copied exactly from the data. The rewrite keeps what the person meant and says it as an outcome.
+    It adds no quality the data does not state — no «hàng đầu», «được tin cậy», «bứt phá», «vững
+    mạnh» unless the person wrote them. A number the person wrote stays only in a KR title that still
+    measures the same thing in the same unit; a Mục tiêu title never carries a number. Never add a
+    number of your own.
   - `hoi`: a question about one of the five quality problems below, with its code in `maVanDe`.
   - `can-chinh`: only when `phamVi` is `objective`, a Căn chỉnh to one target listed in
     `dichCanChinh`, by its id.
@@ -50,7 +52,11 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
 - The five quality problems, each with the sign that gives it away. Put the code in `maVanDe` on
   every `hoi` line and on every `viet-lai` line that fixes it:
   - `kr-la-viec` — a KR counts work done, not an outcome: it starts with a verb of doing («Gọi 50
-    cuộc», «Mở 3 lớp huấn luyện»).
+    cuộc», «Mở 3 lớp huấn luyện»). The rewrite names the outcome that is counted or measured — a
+    count, a rate, a value — so it fits a start, a target and a unit, and never ends in a vague tail
+    («đạt kết quả tốt»). When the outcome differs from what the person counted, their number and
+    unit no longer apply: leave them out and add a `hoi` line (`khong-do-duoc`) asking for the
+    start and the target.
   - `khong-do-duoc` — you cannot say how a KR is measured: no clear unit, or a target that does not
     fit its direction (a `tang-toi` KR whose target is below its start).
   - `thieu-doi-trong` — nothing holds the other side: every KR pushes the same way (all grow a count
@@ -59,8 +65,10 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
   - `trung-y` — two KRs measure the same thing in different words, or a KR does not measure the
     Mục tiêu it sits under.
   - `muc-tieu-la-so` — the Mục tiêu title is the name of a metric or a number, not a place to reach
-    («Doanh thu quý 3», «Tăng NPS lên 60»). Rewrite it as where the team wants to be, and keep the
-    number the person wrote in the new sentence.
+    («Doanh thu quý 3», «Tăng NPS lên 60»). Rewrite it as where the team wants to be, in words with
+    no number: the number belongs to the KR that measures it («Doanh thu 20 tỷ đồng» → «Hợp đồng
+    mới đưa doanh thu lên tầm mới», and 20 tỷ đồng stays in the KR). When no KR carries that
+    number, add a `hoi` line (`muc-tieu-la-so`) saying which KR should.
 - A rule listed in `luatDaHoi` was already asked on the form: do not add a `hoi` line with that
   code. Still propose a `viet-lai` line for that same field (the KR title or the Mục tiêu title)
   when you can write a better sentence.

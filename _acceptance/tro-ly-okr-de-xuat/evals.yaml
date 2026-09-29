@@ -201,7 +201,7 @@ evals:
     cmd: config:executors.script.tdx_eval_gop_y
     expected: "exit 0; rang/eval-gop-y.mjs tạo kho đo dùng-một-lần, chạy eve eval apps/agent/evals/okr/gop-y.eval.ts và ng.eval.ts trên THU_MUC_CA_MAU qua docBoCaGopY (không có khoá mô hình → mã 2, không xanh; tiền theo khoá và trần chủ kho khai trước S4). Chốt bằng mã mọi ca: 0 dòng còn lại mang số mới theo bộ trích số riêng của rang/so-moi-lot.mjs (không chạy lại kiemDongDeXuat làm thước); ca khongGopY 0 dòng viết lại; mỗi kyVong.vanDe có ≥ 1 dòng đúng trường hoặc đúng maVanDe; ca NG không chep-cap-tren, noi-ve-nguoi, tu-cam. Judge zai/glm-5.2-fast với providerOptions.gateway.zeroDataRetention true: in điểm bộ Viết lại. In 'ma: n/n · judge: x'. Chiều đỏ ghim: một ca giả thêm trong lần chạy có kyVong.khongGopY true nhưng Mục tiêu 'gọi 50 cuộc' → nếu không ra dòng thì bài in 'ca doi chung khong bat duoc' và mã 3."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/agent/evals/okr/**", "apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs, _acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs]
+    paths: ["apps/agent/evals/okr/**", "apps/agent/agent/subagents/tro_ly_okr/**", packages/validation/src/okr-kiem-de-xuat.ts, _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs, _acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs, _acceptance/tro-ly-okr-de-xuat/rang/hieu-chinh.mjs]
 
   - id: E23
     criterion: AC-14
