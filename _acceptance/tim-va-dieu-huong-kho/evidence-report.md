@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0fe5a080a74526635c6fcaae89c3120fb3ada781
+verified_commit: 0e97c6c04e50b432ae1472e6828d8248540e6752
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -302,3 +302,7 @@ none — mọi eval đều chạy một lần, xác định; không eval nào c�
 
 Round 1: BLOCKED (commit 895dfe7e) — vòng đầu không ra kết quả chạy trọn; đã sửa ở 143216f0 (một luật duyệt, đầu trang không đè ở 390) rồi đưa ảnh màn vòng 2 vào hồ sơ ở 0fe5a080.
 Round 2: mọi eval máy đạt, lệnh suite đạt; E12j UNCERTAIN (hội đồng chưa thấy đủ năm danh sách Sức khoẻ, chip Biểu mẫu ở 390, nhãn lệch từ điển). Verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-09-29, do gộp onehub (#204) vào nhánh trước khi mở PR
+run_id: repin-20260929T014426Z-19569
+sha: 0e97c6c04e50b432ae1472e6828d8248540e6752 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E3u, E4u, E5u, E8u, E12j (E12j không khai paths)
