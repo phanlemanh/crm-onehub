@@ -1,0 +1,1 @@
+E18 network: driver la script puppeteer (man-gioi-han-duyet.mjs), khong co duong doc network rieng. Script tu assert 0 loi console/mang khop LOI_MANG (Failed to load resource|ERR_FAILED|TRPCClientError|status 400/403/404/500): 38 khang dinh, 0 hong.

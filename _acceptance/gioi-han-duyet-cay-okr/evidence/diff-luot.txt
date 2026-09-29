@@ -1,4 +1,4 @@
-git diff origin/onehub...HEAD — merge-base 893d31072de3f1303a5128108b540d6a12d81252, HEAD fe8bcbf9651534e521a8d129b678adfce7dc0813
+git diff origin/onehub...HEAD — merge-base 2e3280474f472b9853ed9a66bb0f4524ede6ff7d, HEAD 86bbd37b347cfdf8953886f91e4f6476368a7698
 
 ## git diff --stat
 
@@ -9,7 +9,7 @@ CONTEXT.md                                                                      
  _acceptance/gioi-han-duyet-cay-okr/card.html                                                             |   39 ++
  _acceptance/gioi-han-duyet-cay-okr/contract.md                                                           |   90 +++++
  _acceptance/gioi-han-duyet-cay-okr/coverage-scan.md                                                      |   53 +++
- _acceptance/gioi-han-duyet-cay-okr/decisions.jsonl                                                       |   14 +
+ _acceptance/gioi-han-duyet-cay-okr/decisions.jsonl                                                       |   20 +
  _acceptance/gioi-han-duyet-cay-okr/design-pass.md                                                        |   96 +++++
  _acceptance/gioi-han-duyet-cay-okr/duong-nen.md                                                          |   14 +
  _acceptance/gioi-han-duyet-cay-okr/evals.yaml                                                            |  244 ++++++++++++
@@ -59,6 +59,25 @@ CONTEXT.md                                                                      
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-luu-tru-chan--mobile-390.png           |  Bin 0 -> 23938 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-okr-mo--desktop-1440.png               |  Bin 0 -> 98573 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-okr-mo--mobile-390.png                 |  Bin 0 -> 102432 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/diff-luot.txt                                                |  398 +++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-bi-tra-lai.png                                      |  Bin 0 -> 50014 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet-390.png                                   |  Bin 0 -> 43713 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet.png                                       |  Bin 0 -> 52378 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh-khoa.png                               |  Bin 0 -> 103951 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh.png                                    |  Bin 0 -> 104063 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen-390.png                                      |  Bin 0 -> 55851 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen.png                                          |  Bin 0 -> 137829 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-con-can-chinh.png                                   |  Bin 0 -> 48621 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-gioi-han.png                                        |  Bin 0 -> 45528 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-khong-thay-theo-don-vi.png                          |  Bin 0 -> 126452 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-khong-thay.png                                      |  Bin 0 -> 15664 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-luu-tru-chan.png                                    |  Bin 0 -> 26421 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi-390.png                                      |  Bin 0 -> 38612 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi-rong.png                                     |  Bin 0 -> 60805 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi.png                                          |  Bin 0 -> 70711 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet-390.png                                 |  Bin 0 -> 44337 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet.png                                     |  Bin 0 -> 52406 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/trang-thai-loi.png                                       |  Bin 0 -> 14810 bytes
  _acceptance/gioi-han-duyet-cay-okr/figures/ai-thay-gioi-han.html                                         |  160 ++++++++
  _acceptance/gioi-han-duyet-cay-okr/figures/ai-thay-gioi-han.png                                          |  Bin 0 -> 118143 bytes
  _acceptance/gioi-han-duyet-cay-okr/figures/index.md                                                      |   30 ++
@@ -67,71 +86,79 @@ CONTEXT.md                                                                      
  _acceptance/gioi-han-duyet-cay-okr/figures/vong-duyet.html                                               |  167 ++++++++
  _acceptance/gioi-han-duyet-cay-okr/figures/vong-duyet.png                                                |  Bin 0 -> 121073 bytes
  _acceptance/gioi-han-duyet-cay-okr/gap-probe.md                                                          |   17 +
- _acceptance/gioi-han-duyet-cay-okr/mo-ta-pr.md                                                           |   93 +++++
+ _acceptance/gioi-han-duyet-cay-okr/mo-ta-pr.md                                                           |  103 +++++
  _acceptance/gioi-han-duyet-cay-okr/opportunity.md                                                        |  104 +++++
  _acceptance/gioi-han-duyet-cay-okr/rang/duong-doc-okr.json                                               |    1 +
- _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs                                           | 1791 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs                                           | 1826 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  _acceptance/gioi-han-duyet-cay-okr/rang/migration-chi-them.mjs                                           |  353 +++++++++++++++++
  _acceptance/gioi-han-duyet-cay-okr/rang/mo-coi.mjs                                                       |  440 +++++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/rang/noi-bang-chung.mjs                                               |   72 ++++
  _acceptance/gioi-han-duyet-cay-okr/rang/okr-mo-coi.sql                                                   |   82 ++++
- _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs                                                       | 1582 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs                                                       | 1630 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  _acceptance/gioi-han-duyet-cay-okr/rang/ty-le-gioi-han-duyet.sql                                         |   69 ++++
- _acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs                                                        |  464 +++++++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs                                                        |  464 ++++++++++++++++++++++
+ _acceptance/tro-ly-okr-de-xuat/decisions.jsonl                                                           |    1 +
  apps/agent/agent/lib/okr/config.ts                                                                       |    1 +
- apps/agent/agent/lib/okr/doc.ts                                                                          |   26 +-
- apps/agent/agent/lib/okr/goi-ngu-canh.ts                                                                 |   11 +-
+ apps/agent/agent/lib/okr/doc.ts                                                                          |   42 +-
+ apps/agent/agent/lib/okr/goi-ngu-canh.ts                                                                 |    7 +-
+ apps/agent/agent/lib/okr/nop-de-xuat.ts                                                                  |    2 +-
  apps/agent/agent/lib/okr/viec.ts                                                                         |    6 +
  apps/agent/agent/lib/tin-nhac.ts                                                                         |    8 +
- apps/agent/agent/subagents/tro_ly_okr/instructions/viec.ts                                               |    5 +-
- apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts                                               |    2 +-
+ apps/agent/agent/subagents/tro_ly_okr/instructions/viec.ts                                               |    9 +-
  apps/agent/test/muc-nhac-okr.spec.ts                                                                     |   13 +
- apps/agent/test/okr-hien-thi.integration.spec.ts                                                         |  127 +++++++
+ apps/agent/test/okr-hien-thi.integration.spec.ts                                                         |  128 ++++++
  apps/agent/test/okr-nhac.integration.spec.ts                                                             |  240 ++++++++++++
  apps/agent/test/support/okr-gieo.ts                                                                      |    2 +
+ apps/agent/test/tro-ly-okr-nop.integration.spec.ts                                                       |    2 +-
+ apps/api/scripts/okr-mau/cau-hinh.ts                                                                     |    1 +
  apps/api/scripts/okr-mau/cong-ty.json                                                                    |   98 ++++-
- apps/api/scripts/okr-mau/khuon.ts                                                                        |  113 +++++-
+ apps/api/scripts/okr-mau/khuon.ts                                                                        |  117 +++++-
  apps/api/scripts/okr-mau/lenh.ts                                                                         |    2 +-
- apps/api/scripts/okr-mau/nap.ts                                                                          |   84 +++-
+ apps/api/scripts/okr-mau/nap.ts                                                                          |   83 +++-
  apps/api/src/generated/server.ts                                                                         |   31 +-
+ apps/api/src/okr/can-chinh.ts                                                                            |    7 +-
  apps/api/src/okr/hien-thi.ts                                                                             |   94 +++++
  apps/api/src/okr/khep.ts                                                                                 |   67 +++-
- apps/api/src/okr/okr-access.service.ts                                                                   |  137 ++++++-
+ apps/api/src/okr/okr-access.service.ts                                                                   |  145 ++++++-
  apps/api/src/okr/okr-canh-kr.contracts.ts                                                                |    1 +
  apps/api/src/okr/okr-canh-kr.service.ts                                                                  |   55 ++-
  apps/api/src/okr/okr-cap-nhat.service.ts                                                                 |   17 +-
  apps/api/src/okr/okr-config.ts                                                                           |   41 ++
  apps/api/src/okr/okr-duyet.service.ts                                                                    |  131 +++++++
- apps/api/src/okr/okr-hien-thi.service.ts                                                                 |   89 +++++
+ apps/api/src/okr/okr-hien-thi.service.ts                                                                 |   90 +++++
  apps/api/src/okr/okr-khep.service.ts                                                                     |   72 +++-
  apps/api/src/okr/okr-so.service.ts                                                                       |   49 ++-
- apps/api/src/okr/okr-tai-co-cau.service.ts                                                               |  320 ++++++++++++++++
+ apps/api/src/okr/okr-tai-co-cau.service.ts                                                               |  320 +++++++++++++++
  apps/api/src/okr/okr-trao-doi.service.ts                                                                 |   58 +--
  apps/api/src/okr/okr-xem.config.ts                                                                       |    1 -
- apps/api/src/okr/okr-xem.service.ts                                                                      |   55 ++-
+ apps/api/src/okr/okr-xem.service.ts                                                                      |   59 ++-
  apps/api/src/okr/okr.contracts.ts                                                                        |   50 +++
  apps/api/src/okr/okr.module.ts                                                                           |    6 +
- apps/api/src/okr/okr.router.ts                                                                           |  120 +++++-
- apps/api/src/okr/okr.service.ts                                                                          |  403 ++++++++++++++++----
+ apps/api/src/okr/okr.router.ts                                                                           |  127 +++++-
+ apps/api/src/okr/okr.service.ts                                                                          |  423 ++++++++++++++++----
+ apps/api/src/okr/tro-ly.service.ts                                                                       |   69 +++-
  apps/api/src/onboarding/onboarding.service.ts                                                            |   21 +-
  apps/api/src/to-chuc/cay.ts                                                                              |   11 +-
  apps/api/src/to-chuc/to-chuc-config.ts                                                                   |    8 +
  apps/api/src/to-chuc/to-chuc.contracts.ts                                                                |    3 +
- apps/api/src/to-chuc/to-chuc.service.ts                                                                  |  160 ++++----
+ apps/api/src/to-chuc/to-chuc.service.ts                                                                  |  160 +++++---
  apps/api/src/to-chuc/xoa-phong-ban.ts                                                                    |    2 +
  apps/api/test/no-sau-luot-4-okr.spec.ts                                                                  |   33 ++
  apps/api/test/okr-canh-kr.spec.ts                                                                        |    1 +
- apps/api/test/okr-duyet.spec.ts                                                                          |  931 +++++++++++++++++++++++++++++++++++++++++++++
- apps/api/test/okr-hien-thi-san.ts                                                                        | 1066 +++++++++++++++++++++++++++++++++++++++++++++++++++
- apps/api/test/okr-hien-thi.spec.ts                                                                       | 1121 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- apps/api/test/okr-mau.spec.ts                                                                            |  256 ++++++++++++-
+ apps/api/test/okr-duyet.spec.ts                                                                          |  931 ++++++++++++++++++++++++++++++++++++++++++++
+ apps/api/test/okr-hien-thi-san.ts                                                                        | 1066 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ apps/api/test/okr-hien-thi.spec.ts                                                                       | 1164 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ apps/api/test/okr-mau.spec.ts                                                                            |  253 +++++++++++-
  apps/api/test/okr-san.ts                                                                                 |    1 +
- apps/api/test/okr-tai-co-cau.spec.ts                                                                     |  893 +++++++++++++++++++++++++++++++++++++++++++
+ apps/api/test/okr-tai-co-cau.spec.ts                                                                     |  893 ++++++++++++++++++++++++++++++++++++++++++
  apps/api/test/okr-toan-canh.spec.ts                                                                      |    2 +-
  apps/api/test/okr.spec.ts                                                                                |    2 +
- apps/api/test/vai-chi-okr.spec.ts                                                                        |  689 ++++++++++++++++++++++++++++++++-
- apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx                                                     |   37 +-
+ apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts                                                           |  100 +++++
+ apps/api/test/tro-ly-okr-hoan-tac.spec.ts                                                                |   13 +-
+ apps/api/test/vai-chi-okr.spec.ts                                                                        |  711 ++++++++++++++++++++++++++++++++++
+ apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx                                                     |   56 ++-
  apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx                                                             |    1 +
- apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/okr-mo-coi.tsx                                          |  253 +++++++++++++
+ apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/okr-mo-coi.tsx                                          |  253 ++++++++++++
  apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/page.tsx                                                |    9 +-
  apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/suc-khoe.tsx                                            |    2 +
  apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx                                                           |   36 +-
@@ -146,7 +173,7 @@ CONTEXT.md                                                                      
  apps/app/app/proto/_modules/gioi-han-duyet-cay-okr/cai-dat.tsx                                           |  459 ++++++++++++++++++++++
  apps/app/app/proto/_modules/gioi-han-duyet-cay-okr/du-lieu.ts                                            |  270 +++++++++++++
  apps/app/app/proto/_modules/gioi-han-duyet-cay-okr/index.tsx                                             |  144 +++++++
- apps/app/app/proto/_modules/gioi-han-duyet-cay-okr/khung-muc-tieu.tsx                                    |  601 +++++++++++++++++++++++++++++
+ apps/app/app/proto/_modules/gioi-han-duyet-cay-okr/khung-muc-tieu.tsx                                    |  601 ++++++++++++++++++++++++++++
  apps/app/app/proto/_modules/gioi-han-duyet-cay-okr/mo-coi.tsx                                            |  198 ++++++++++
  apps/app/app/proto/catalog.ts                                                                            |   49 +++
  apps/app/app/proto/registry.ts                                                                           |    2 +
@@ -157,7 +184,7 @@ CONTEXT.md                                                                      
  apps/app/components/crm/record-sheet/objective-sheet.tsx                                                 |  161 +++++++-
  apps/app/components/crm/record-sheet/record-parts.tsx                                                    |    4 +
  apps/app/components/okr/hop-chuyen-okr-search-params.ts                                                  |   24 ++
- apps/app/components/okr/hop-chuyen-okr.tsx                                                               |  363 ++++++++++++++++++
+ apps/app/components/okr/hop-chuyen-okr.tsx                                                               |  363 +++++++++++++++++
  apps/app/lib/messages/okr-gioi-han.ts                                                                    |  199 ++++++++++
  apps/app/lib/messages/okr-tai-co-cau.ts                                                                  |  224 +++++++++++
  apps/app/lib/messages/okr.ts                                                                             |   26 +-
@@ -166,7 +193,7 @@ CONTEXT.md                                                                      
  apps/app/test/messages-guard.spec.ts                                                                     |   27 ++
  apps/app/test/okr-cai-dat.dom.tsx                                                                        |    6 +-
  apps/app/test/okr-canh-kr.dom.tsx                                                                        |   22 ++
- apps/app/test/okr-gioi-han-duyet.dom.tsx                                                                 |  825 ++++++++++++++++++++++++++++++++++++++++
+ apps/app/test/okr-gioi-han-duyet.dom.tsx                                                                 |  825 +++++++++++++++++++++++++++++++++++++++
  apps/app/test/okr-sheet.dom.tsx                                                                          |   11 +
  apps/app/test/okr-tai-co-cau.dom.tsx                                                                     |  820 +++++++++++++++++++++++++++++++++++++++
  apps/app/test/okr-theo-don-vi.dom.tsx                                                                    |    3 +
@@ -175,29 +202,29 @@ CONTEXT.md                                                                      
  apps/app/test/to-chuc.dom.tsx                                                                            |   10 +-
  apps/app/test/tro-ly-okr-cai-dat.dom.tsx                                                                 |    1 +
  docs/agent.md                                                                                            |   21 +-
- docs/api.md                                                                                              |  106 ++++++
+ docs/api.md                                                                                              |  121 +++++-
  docs/plan/lo-trinh-okr.md                                                                                |    2 +-
  docs/superpowers/plans/2026-09-29-gioi-han-duyet-cay-okr.md                                              |  260 +++++++++++++
  docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md                                       |  281 ++++++++++++++
  packages/db/package.json                                                                                 |    3 +
- packages/db/prisma/migrations/20261006010000_okr_hien_thi_duyet/migration.sql                            |   30 ++
+ packages/db/prisma/migrations/20261008010000_okr_hien_thi_duyet/migration.sql                            |   30 ++
  packages/db/prisma/schema.prisma                                                                         |   20 +
  packages/db/src/okr-don-vi.ts                                                                            |   93 +++++
  packages/db/src/okr-duyet.ts                                                                             |   59 +++
  packages/db/src/okr-hien-thi.ts                                                                          |  176 +++++++++
  packages/db/src/okr-nhac.ts                                                                              |  179 ++++++++-
- packages/db/src/okr-tro-ly.ts                                                                            |   12 +-
+ packages/db/src/okr-tro-ly.ts                                                                            |   21 +-
  packages/db/src/okr-vet.ts                                                                               |    6 +
  packages/db/src/onboarding-nhac.ts                                                                       |    2 +
  packages/validation/package.json                                                                         |    1 +
  packages/validation/src/nhac-ke-hoach.ts                                                                 |    5 +-
  packages/validation/src/okr-chu-ky.ts                                                                    |    6 +-
  packages/validation/src/okr-chuong-trinh.ts                                                              |    2 +
- packages/validation/src/okr-hien-thi.ts                                                                  |  107 ++++++
+ packages/validation/src/okr-hien-thi.ts                                                                  |  107 +++++
  packages/validation/src/okr-muc-tieu.ts                                                                  |    9 +-
  packages/validation/test/okr-hien-thi.spec.ts                                                            |  229 +++++++++++
  packages/validation/test/okr-tro-ly.spec.ts                                                              |    1 +
- 195 files changed, 20971 insertions(+), 350 deletions(-)
+ 222 files changed, 21864 insertions(+), 384 deletions(-)
 
 ## Danh sách tệp (git diff --name-status)
 
@@ -258,6 +285,25 @@ A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-luu-tru-chan
 A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-luu-tru-chan--mobile-390.png
 A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-okr-mo--desktop-1440.png
 A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-okr-mo--mobile-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/diff-luot.txt
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-bi-tra-lai.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh-khoa.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-con-can-chinh.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-gioi-han.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-khong-thay-theo-don-vi.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-khong-thay.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-luu-tru-chan.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi-rong.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/man/trang-thai-loi.png
 A	_acceptance/gioi-han-duyet-cay-okr/figures/ai-thay-gioi-han.html
 A	_acceptance/gioi-han-duyet-cay-okr/figures/ai-thay-gioi-han.png
 A	_acceptance/gioi-han-duyet-cay-okr/figures/index.md
@@ -272,26 +318,31 @@ A	_acceptance/gioi-han-duyet-cay-okr/rang/duong-doc-okr.json
 A	_acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs
 A	_acceptance/gioi-han-duyet-cay-okr/rang/migration-chi-them.mjs
 A	_acceptance/gioi-han-duyet-cay-okr/rang/mo-coi.mjs
+A	_acceptance/gioi-han-duyet-cay-okr/rang/noi-bang-chung.mjs
 A	_acceptance/gioi-han-duyet-cay-okr/rang/okr-mo-coi.sql
 A	_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs
 A	_acceptance/gioi-han-duyet-cay-okr/rang/ty-le-gioi-han-duyet.sql
 A	_acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs
+M	_acceptance/tro-ly-okr-de-xuat/decisions.jsonl
 M	apps/agent/agent/lib/okr/config.ts
 M	apps/agent/agent/lib/okr/doc.ts
 M	apps/agent/agent/lib/okr/goi-ngu-canh.ts
+M	apps/agent/agent/lib/okr/nop-de-xuat.ts
 M	apps/agent/agent/lib/okr/viec.ts
 M	apps/agent/agent/lib/tin-nhac.ts
 M	apps/agent/agent/subagents/tro_ly_okr/instructions/viec.ts
-M	apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts
 M	apps/agent/test/muc-nhac-okr.spec.ts
 A	apps/agent/test/okr-hien-thi.integration.spec.ts
 M	apps/agent/test/okr-nhac.integration.spec.ts
 M	apps/agent/test/support/okr-gieo.ts
+M	apps/agent/test/tro-ly-okr-nop.integration.spec.ts
+M	apps/api/scripts/okr-mau/cau-hinh.ts
 M	apps/api/scripts/okr-mau/cong-ty.json
 M	apps/api/scripts/okr-mau/khuon.ts
 M	apps/api/scripts/okr-mau/lenh.ts
 M	apps/api/scripts/okr-mau/nap.ts
 M	apps/api/src/generated/server.ts
+M	apps/api/src/okr/can-chinh.ts
 A	apps/api/src/okr/hien-thi.ts
 M	apps/api/src/okr/khep.ts
 M	apps/api/src/okr/okr-access.service.ts
@@ -311,6 +362,7 @@ M	apps/api/src/okr/okr.contracts.ts
 M	apps/api/src/okr/okr.module.ts
 M	apps/api/src/okr/okr.router.ts
 M	apps/api/src/okr/okr.service.ts
+M	apps/api/src/okr/tro-ly.service.ts
 M	apps/api/src/onboarding/onboarding.service.ts
 M	apps/api/src/to-chuc/cay.ts
 M	apps/api/src/to-chuc/to-chuc-config.ts
@@ -327,6 +379,8 @@ M	apps/api/test/okr-san.ts
 A	apps/api/test/okr-tai-co-cau.spec.ts
 M	apps/api/test/okr-toan-canh.spec.ts
 M	apps/api/test/okr.spec.ts
+M	apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts
+M	apps/api/test/tro-ly-okr-hoan-tac.spec.ts
 M	apps/api/test/vai-chi-okr.spec.ts
 M	apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx
 M	apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx
@@ -379,7 +433,7 @@ M	docs/plan/lo-trinh-okr.md
 A	docs/superpowers/plans/2026-09-29-gioi-han-duyet-cay-okr.md
 A	docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md
 M	packages/db/package.json
-A	packages/db/prisma/migrations/20261006010000_okr_hien_thi_duyet/migration.sql
+A	packages/db/prisma/migrations/20261008010000_okr_hien_thi_duyet/migration.sql
 M	packages/db/prisma/schema.prisma
 A	packages/db/src/okr-don-vi.ts
 A	packages/db/src/okr-duyet.ts
