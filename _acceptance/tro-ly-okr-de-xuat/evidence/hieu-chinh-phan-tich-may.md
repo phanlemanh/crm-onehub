@@ -112,3 +112,37 @@ tên KR). Ba quy luật round 3 (số trong tên Mục tiêu, «đạt kết qu�
 
 Lưu ý nguồn gốc: nếu cột «Chủ kho» được điền từ bảng này thì E25 đo độ khớp giữa judge và bản chấm
 máy mà chủ kho đã nhận, không phải chấm độc lập của người.
+
+## Chấm thử bản round 5 (hieu-chinh-judge.md sinh 06:34Z, judge 0.95) — cùng thước
+
+Bảng round 5 là đầu vào E25 hiện hành. Thước giữ nguyên các phán ở round 4 để hai bảng so được.
+
+| # | Ca | Đề xuất | Máy chấm | Judge | Lý do ngắn |
+| --- | --- | --- | --- | --- | --- |
+| 1 | gy-01 | Dữ liệu thoả thuận của đội kinh doanh tập trung hoàn toàn trên CRM | Đạt | 1 | trạng thái, giữ ý |
+| 2 | gy-02 | Tỷ lệ đối tác mới được chăm sóc và duy trì sau tháng đầu | Đạt | 1 | «duy trì sau tháng đầu» đúng kết quả ca mẫu nêu |
+| 3 | gy-03 | Hợp đồng với các đối tác được chốt và ký kết kịp thời | Đạt | 1 | «kịp thời» giữ ý tăng tốc, khớp «vì sao» cuối năm |
+| 4 | gy-04 | Điểm hài lòng của đối tác đạt 100 (KR) | Không đạt | 1 | như #17 round 4: số giữ chỗ vào tên KR |
+| 5 | gy-06 | Doanh thu hoàn thành chỉ tiêu năm | Đạt | 1 | như round 4 |
+| 6 | gy-07 | Đối tác theo dõi đơn thuận tiện trên app v2 | Đạt | 1 | kết quả, dựng từ «vì sao» |
+| 7 | gy-07 | App v2 có mặt trên App Store (KR) | Không đạt | 1 | như #7 round 4: việc phát hành viết thành trạng thái |
+| 8 | gy-07 | Số cuộc gọi hỏi đơn của đối tác (KR) | Đạt (yếu) | 1 | đúng thước, nhưng KR gốc đã tốt — đề xuất thừa, bỏ số khỏi tên |
+| 9 | gy-08 | Mảng SaaS kho mở rộng nguồn thu định kỳ khi lượng khách thuê phần mềm kho tăng nhanh | Đạt | 1 | dựng từ «vì sao» người viết («khách» là chữ của họ) |
+| 10 | gy-09 | Số partner mới hoàn tất onboard đạt 20 | Đạt (yếu) | 1 | giữ 20 cùng đơn vị; còn chữ Anh «partner», «onboard» |
+| 11 | gy-11 | Đối tác hài lòng và gắn kết hơn với dịch vụ | Đạt | 1 | như round 4 |
+| 12 | gy-14 | Số nhân viên hoàn thành đào tạo sản phẩm (KR) | Không đạt | 1 | như #11 round 4: học xong khoá vẫn là việc |
+| 13 | gy-15 | Chi phí vận tải được tối ưu hiệu quả khi giá dầu tăng | Không đạt | 0 | «tối ưu hiệu quả» mơ hồ, như «chốt hiệu quả» round 4 |
+| 14 | gy-18 | Công nợ quá hạn được đưa về mức an toàn | Đạt | 1 | trạng thái, không số |
+| 15 | gy-20 | Pipeline được mở rộng dồi dào cho quý 4 | Đạt (yếu) | 1 | «dồi dào» đáp «mỏng» trong «vì sao»; «mở rộng» sát chỉ-số-kèm-hướng |
+| 16 | gy-21 | Thời gian duyệt hợp đồng (KR) | Đạt (yếu) | 1 | như #8: KR gốc đã tốt, đề xuất thừa |
+| 17 | gy-01 (lap 1) | Đội kinh doanh quản lý toàn bộ thoả thuận tập trung trên CRM | Đạt | 1 | trạng thái, giữ ý |
+| 18 | gy-02 (lap 1) | Tỷ lệ đối tác mới được kết nối và hỗ trợ trong tháng đầu | Đạt (yếu) | 1 | như #16 round 4 |
+| 19 | gy-04 (lap 1) | Điểm hài lòng của đối tác | Đạt | 1 | gọi tên thứ được đo |
+| 20 | gy-06 (lap 1) | Doanh thu hoàn thành chỉ tiêu năm | Đạt | 1 | như #5 |
+
+Khớp máy ↔ judge: **17/20 = 85 %**, đúng ngưỡng E25. Ba chỗ lệch là ba quy luật round 4 còn lại:
+KR là việc viết thành trạng thái (#7, #12) và số giữ chỗ vào tên KR (#4). Quy luật «ý thêm ở đuôi câu»
+không còn. Quy luật mới, judge và máy cùng cho qua: model viết lại cả KR vốn đã tốt thành tên chỉ số
+trơn (#8, #16) — đề xuất thừa, người dùng sẽ thấy và bác.
+
+Kết quả sát ngưỡng: đổi một phán Đạt (yếu) nào thành Không đạt là xuống 80 %.
