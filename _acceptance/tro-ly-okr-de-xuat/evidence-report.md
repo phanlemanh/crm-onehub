@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: eb8fbc0abe986f154c78f3f17a27138d679b39d2
+verified_commit: f63d4435403654846778fdaecc002407e6cefe79
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -369,3 +369,7 @@ Round 5: PENDING-JUDGMENT — HEAD 79bf1996, sau commit chủ kho gỡ giới h�
 ### Re-pin lần 1 — 2026-09-29, do gộp onehub sau chữ ký (#201 #203 #204 #205 #206): migration dời 20261007010000, Sheet gộp hai bộ xử lý Esc, bài vai chỉ OKR và bài bắt đầu từ mẫu theo thủ tục của Trợ lý, bảng hiệu chỉnh phụ ra thư mục chạy
 run_id: repin-20260929T100835Z-68605
 sha: eb8fbc0abe986f154c78f3f17a27138d679b39d2 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E28 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-09-29, do thẻ góp ý OKR thay Suggestion bằng ProposedChange và nới cổng mồ côi
+run_id: repin-20260929T162300Z-46292
+sha: f63d4435403654846778fdaecc002407e6cefe79 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E28 — chưa chứng lại, đi vòng S4 delta
