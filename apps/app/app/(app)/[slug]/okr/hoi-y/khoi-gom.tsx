@@ -310,6 +310,7 @@ export function DanhSachYChuaGom({ h }: { h: HoiY }) {
 	const chuDe = h.chuDe ?? [];
 	const chuaGom = h.y.ds.filter((y) => y.chuDeId === null);
 	const conChon = chon.filter((id) => chuaGom.some((y) => y.id === id));
+	const day = conChon.length >= OKR_HOI_Y.ganToiDa;
 
 	return (
 		<Card data-khoi="y-chua-gom" id={HOI_Y_MAN.neo.yChuaGom} tabIndex={-1}>
@@ -356,6 +357,11 @@ export function DanhSachYChuaGom({ h }: { h: HoiY }) {
 				</CardHeader>
 			)}
 			<CardContent>
+				{day ? (
+					<FieldDescription data-khoi="chon-toi-da">
+						{dien(m.chonToiDa, { n: OKR_HOI_Y.ganToiDa })}
+					</FieldDescription>
+				) : null}
 				{chuaGom.length === 0 ? (
 					<Empty>
 						<EmptyHeader>
@@ -370,10 +376,13 @@ export function DanhSachYChuaGom({ h }: { h: HoiY }) {
 									<Checkbox
 										aria-label={dien(m.chonY, { chu: y.noiDung })}
 										checked={conChon.includes(y.id)}
+										disabled={day && !conChon.includes(y.id)}
 										onCheckedChange={(v) =>
 											setChon((cu) =>
 												v === true
-													? [...cu, y.id]
+													? cu.length < OKR_HOI_Y.ganToiDa
+														? [...cu, y.id]
+														: cu
 													: cu.filter((id) => id !== y.id),
 											)
 										}

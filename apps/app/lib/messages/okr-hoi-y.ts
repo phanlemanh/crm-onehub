@@ -165,6 +165,8 @@ const vi = {
 		duaVao: "Đưa vào chủ đề…",
 		duaVaoNhan: "Đưa vào chủ đề",
 		boChon: "Bỏ chọn",
+		chonToiDa:
+			"Mỗi lần đưa tối đa {n} ý vào chủ đề — bỏ chọn bớt để chọn ý khác.",
 		chonY: "Chọn ý «{chu}»",
 		viecY: "Việc với ý «{chu}»",
 		yLaMuc: "Ý lạ — đứng riêng",
@@ -343,6 +345,14 @@ const vi = {
 		daLuu: "Đã lưu lần hỏi ý.",
 		chiNguoiChon: "Đã hết hạn góp: chỉ còn đổi được người chọn.",
 		nguoiChonThieu: "Chọn người chọn thì mới mở được.",
+		dongNgay: "Đóng ngay",
+		dongNgayMoTa:
+			"Đặt hạn bằng bây giờ: ngừng nhận ý và chuyển sang gom. Không mở lại được.",
+		dongNgayTieuDe: "Đóng hỏi ý ngay?",
+		dongNgayThan:
+			"Hạn thành bây giờ. Không ai góp, sửa, gỡ ý hay bấm «Tôi cũng nghĩ vậy» được nữa; quản trị và người chọn bắt đầu gom. Không mở lại được.",
+		dongNgayThoi: "Chưa đóng",
+		daDong: "Đã đóng hỏi ý — chuyển sang gom.",
 	},
 };
 
@@ -507,6 +517,8 @@ const en: OkrHoiYMessages = {
 		duaVao: "Move to theme…",
 		duaVaoNhan: "Move to theme",
 		boChon: "Clear selection",
+		chonToiDa:
+			"Move at most {n} ideas into a theme at once — clear some to select others.",
 		chonY: "Select idea “{chu}”",
 		viecY: "Actions for idea “{chu}”",
 		yLaMuc: "Outlier — stands alone",
@@ -688,6 +700,14 @@ const en: OkrHoiYMessages = {
 		daLuu: "Call for ideas saved.",
 		chiNguoiChon: "Ideas are closed: you can only change the decider.",
 		nguoiChonThieu: "Pick a decider to open.",
+		dongNgay: "Close now",
+		dongNgayMoTa:
+			"Sets the deadline to now: ideas stop and grouping starts. It can't be reopened.",
+		dongNgayTieuDe: "Close the call for ideas now?",
+		dongNgayThan:
+			"The deadline becomes now. Nobody can give, edit, remove ideas or press “I think so too” anymore; admins and the decider start grouping. It can't be reopened.",
+		dongNgayThoi: "Keep open",
+		daDong: "Call for ideas closed — grouping starts.",
 	},
 };
 

@@ -3,6 +3,7 @@
 import Add from "@carbon/icons-react/es/Add";
 import Subtract from "@carbon/icons-react/es/Subtract";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import {
 	Field,
@@ -162,6 +163,16 @@ function FormHoiY({
 	const luu = useMutation(
 		trpc.okr.suaHoiY.mutationOptions({ onSuccess: () => xong(m.daLuu) }),
 	);
+	const [hoiDong, setHoiDong] = useState(false);
+	const dongSom = useMutation(
+		trpc.okr.suaHoiY.mutationOptions({
+			onSuccess: () => {
+				setHoiDong(false);
+				return xong(m.daDong);
+			},
+			onError: () => setHoiDong(false),
+		}),
+	);
 
 	const khoaNoiDung = sua !== null && sua.trangThai !== "dang-mo";
 	const hanLuc = ngay && gio ? hanLucTu(ngay, gio) : "";
@@ -244,8 +255,10 @@ function FormHoiY({
 					: loiHan === "muon"
 						? dien(m.loiHanMuon, { n: OKR_HOI_Y.hanGio.max })
 						: null;
-	const dangGui = mo.isPending || luu.isPending;
-	const loiMay = (sua ? luu.error : mo.error)?.message ?? null;
+	const dangGui = mo.isPending || luu.isPending || dongSom.isPending;
+	const loiMay =
+		(sua ? (dongSom.error ?? luu.error) : mo.error)?.message ?? null;
+	const dongDuoc = sua !== null && sua.trangThai === "dang-mo";
 	const nguoiChonDuoc = [
 		...(quanTri.data?.rows ?? []).map((n) => ({ id: n.userId, ten: n.name })),
 		...(sua &&
@@ -454,6 +467,21 @@ function FormHoiY({
 							</FieldDescription>
 						)}
 					</Field>
+					{dongDuoc ? (
+						<Field>
+							<Button
+								className="self-start"
+								data-nut="dong-ngay"
+								disabled={dangGui}
+								onClick={() => setHoiDong(true)}
+								type="button"
+								variant="outline"
+							>
+								{m.dongNgay}
+							</Button>
+							<FieldDescription>{m.dongNgayMoTa}</FieldDescription>
+						</Field>
+					) : null}
 					<Field>
 						<FieldLabel htmlFor={`${id}-nguoi-chon`}>{m.nguoiChon}</FieldLabel>
 						<Select onValueChange={setNguoiChon} value={nguoiChon}>
@@ -490,6 +518,20 @@ function FormHoiY({
 					</Button>
 				</div>
 			</SheetFooter>
+			{dongDuoc ? (
+				<ConfirmDialog
+					nut={m.dongNgay}
+					onConfirm={() =>
+						dongSom.mutate({ hoiYId: sua.hoiY.id, dongNgay: true })
+					}
+					onOpenChange={setHoiDong}
+					open={hoiDong}
+					pending={dongSom.isPending}
+					than={m.dongNgayThan}
+					thoi={m.dongNgayThoi}
+					tieuDe={m.dongNgayTieuDe}
+				/>
+			) : null}
 		</form>
 	);
 }

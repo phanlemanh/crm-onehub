@@ -430,6 +430,7 @@ function ThanhCongBo({ h, tenKy }: { h: HoiY; tenKy: string }) {
 				data-khoi="thanh-cong-bo"
 				defaultOpen
 				layout="checklist"
+				reserveSpace
 				description={thieu.length === 0 ? m.sanSangMoTa : undefined}
 				items={
 					thieu.length === 0
@@ -492,11 +493,7 @@ export function KhoiKetLuan({
 			el?.closest<HTMLElement>('[data-slot="page-shell-scroll"]') ?? null;
 	};
 	return (
-		<div
-			className="flex flex-col gap-6 pb-40"
-			data-khoi="ket-luan-man"
-			ref={neoVung}
-		>
+		<div className="flex flex-col gap-6" data-khoi="ket-luan-man" ref={neoVung}>
 			<DaiMoc bayGio={bayGio} h={h} />
 			<Card id={HOI_Y_MAN.neo.ketLuan} tabIndex={-1}>
 				<CardHeader>

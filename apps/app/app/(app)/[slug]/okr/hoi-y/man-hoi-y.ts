@@ -50,7 +50,8 @@ export type TrangThaiMan = (typeof TRANG_THAI_MAN)[number];
 
 export function trangThaiMan(h: HoiY): TrangThaiMan {
 	if (h.trangThai === "da-cong-bo") return "ket-qua";
-	if (h.y.khoa) return "viet-truoc";
+	if (h.y.khoa && h.quyen.niemPhongDuoc) return "viet-truoc";
+	if (h.y.khoa) return h.trangThai === "dang-mo" ? "gop" : "het-han";
 	if (h.trangThai === "dang-mo") {
 		return h.banTruoc === null ? "gop" : "da-niem-phong";
 	}

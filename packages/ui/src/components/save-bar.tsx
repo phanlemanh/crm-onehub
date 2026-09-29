@@ -97,6 +97,7 @@ function SaveBar({
 	items,
 	layout = "inline",
 	open,
+	reserveSpace = false,
 	title,
 	...props
 }: React.ComponentProps<"div"> & {
@@ -105,6 +106,7 @@ function SaveBar({
 	items?: SaveBarItem[];
 	layout?: SaveBarLayout;
 	open: boolean;
+	reserveSpace?: boolean;
 	title: React.ReactNode;
 }) {
 	const viewport = React.useContext(SaveBarViewportContext);
@@ -112,6 +114,31 @@ function SaveBar({
 	const idDanhSach = React.useId();
 	const [moDanhSach, setMoDanhSach] = React.useState(defaultOpen);
 	const checklist = layout === "checklist";
+	const barRef = React.useRef<HTMLDivElement>(null);
+	const [chieuCaoGiuCho, setChieuCaoGiuCho] = React.useState(0);
+
+	React.useLayoutEffect(() => {
+		const el = barRef.current;
+		if (!reserveSpace || !open || !el) {
+			setChieuCaoGiuCho(0);
+			return;
+		}
+		const measure = () => {
+			const lop = el.parentElement;
+			const leDay = lop
+				? Number.parseFloat(getComputedStyle(lop).paddingBottom) || 0
+				: 0;
+			setChieuCaoGiuCho(el.offsetHeight + leDay);
+		};
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(el);
+		window.addEventListener("resize", measure);
+		return () => {
+			observer.disconnect();
+			window.removeEventListener("resize", measure);
+		};
+	}, [reserveSpace, open]);
 
 	const toggle = items ? (
 		<Button
@@ -153,6 +180,7 @@ function SaveBar({
 			data-slot="save-bar"
 			data-state={open ? "open" : "closed"}
 			inert={open ? undefined : true}
+			ref={barRef}
 			role={items ? "status" : undefined}
 			{...props}
 		>
@@ -196,12 +224,30 @@ function SaveBar({
 		</div>
 	);
 
-	if (viewport) return createPortal(bar, viewport);
+	const giuCho = reserveSpace ? (
+		<div
+			aria-hidden
+			className="shrink-0"
+			data-slot="save-bar-spacer"
+			style={{ height: chieuCaoGiuCho }}
+		/>
+	) : null;
+
+	if (viewport)
+		return (
+			<>
+				{giuCho}
+				{createPortal(bar, viewport)}
+			</>
+		);
 
 	return (
-		<div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-5">
-			{bar}
-		</div>
+		<>
+			{giuCho}
+			<div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-5">
+				{bar}
+			</div>
+		</>
 	);
 }
 

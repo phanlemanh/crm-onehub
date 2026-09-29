@@ -351,6 +351,7 @@ type VaoGhi = {
 	readonly loiMo?: string;
 	readonly cauHoi?: string;
 	readonly hanLuc?: string;
+	readonly dongNgay?: boolean;
 	readonly nguoiChonUserId?: string;
 };
 type TuyChonGhi = {
@@ -997,6 +998,152 @@ describe("Hỏi ý — sheet: câu từ chối của máy chủ và nhánh hết
 				giaiThich: true,
 			},
 			vao: { hoiYId: "h1", nguoiChonUserId: "trang" },
+		});
+	});
+});
+
+describe("Hỏi ý — sheet: đóng ngay", () => {
+	test("đang mở: «Đóng ngay» hỏi lại bằng ConfirmDialog, chưa xác nhận thì không gửi; xác nhận thì gửi đúng { hoiYId, dongNgay: true }", async () => {
+		await moSheetSua(coBan());
+		const nut = document.querySelector<HTMLButtonElement>(
+			'[data-nut="dong-ngay"]',
+		);
+		if (!nut) throw new Error("không thấy nút «Đóng ngay»");
+		await act(async () => nut.click());
+		await cho(
+			() => document.querySelector('[role="alertdialog"]') !== null,
+			"hỏi lại",
+		);
+		const hop = document.querySelector('[role="alertdialog"]');
+		const truoc = goi.filter((g) => g.ten === "suaHoiY").length;
+		if (!hop) throw new Error("không thấy hộp hỏi lại");
+		await act(async () => nutCo(hop, "Đóng ngay").click());
+		await cho(() => goi.some((g) => g.ten === "suaHoiY"), "gọi suaHoiY");
+		expect({
+			truoc,
+			vao: JSON.parse(
+				JSON.stringify(goi.find((g) => g.ten === "suaHoiY")?.vao),
+			),
+		}).toEqual({ truoc: 0, vao: { hoiYId: "h1", dongNgay: true } });
+	});
+
+	test("đang gom: không có «Đóng ngay»", async () => {
+		await moSheetSua(DU_LIEU["het-han"]());
+		expect(document.querySelector('[data-nut="dong-ngay"]')).toBeNull();
+	});
+});
+
+describe("Hỏi ý — người chọn không còn là quản trị", () => {
+	for (const [ten, trangThaiHoiY, man] of [
+		["đang mở", "dang-mo", "gop"],
+		["đang gom", "dang-gom", "het-han"],
+	] as const)
+		test(`${ten}: chưa niêm phong mà niemPhongDuoc false — không có khối viết trước, danh sách khoá nói rõ đã hết quyền`, async () => {
+			const b = coBan();
+			hoiY = {
+				...b,
+				hoiY:
+					trangThaiHoiY === "dang-gom"
+						? { ...b.hoiY, hanLuc: new Date(BAY_GIO - GIO).toISOString() }
+						: b.hoiY,
+				trangThai: trangThaiHoiY,
+				y: { khoa: true, lyDoKhoa: "het-quyen-chon", ds: [] },
+				quyen: { ...b.quyen, gopDuoc: false, niemPhongDuoc: false },
+			};
+			const o = await mo();
+			await cho(() => trangThai(o) === man, man);
+			expect({
+				banVietTruoc: o.querySelector('[data-khoi="ban-viet-truoc"]') !== null,
+				khoa: o.querySelector(
+					'[data-khoi="y-bi-khoa"] [data-slot="empty-title"]',
+				)?.textContent,
+			}).toEqual({ banVietTruoc: false, khoa: "Bạn không còn quyền chọn" });
+		});
+});
+
+describe("Hỏi ý — gom: trần chọn nhiều", () => {
+	test(`chọn tới ${50} ý thì ô còn lại tắt và một dòng nói trần; thanh chọn đếm đúng ${50}`, async () => {
+		const b = chonChuaDu();
+		const nhieu = Array.from({ length: 51 }, (_, i) =>
+			yDu(`n${i + 1}`, `Ý chưa gom số ${i + 1} cho năm tới`, null),
+		);
+		hoiY = { ...b, y: { ...b.y, ds: nhieu } };
+		const o = await mo();
+		await cho(() => trangThai(o) === "chon-chua-du", "chọn chưa đủ");
+		const hop = () => [
+			...o.querySelectorAll<HTMLButtonElement>(
+				'[data-khoi="y-chua-gom"] [role="checkbox"]',
+			),
+		];
+		for (const c of hop().slice(0, 50)) await act(async () => c.click());
+		const cuoi = hop()[50];
+		if (!cuoi) throw new Error("thiếu ô thứ 51");
+		await act(async () => cuoi.click());
+		expect({
+			soHop: hop().length,
+			tat: hop().filter((c) => c.disabled).length,
+			cuoiChon: cuoi.getAttribute("aria-checked"),
+			dem: o
+				.querySelector('[data-khoi="thanh-chon"]')
+				?.querySelector('[data-slot="card-title"]')?.textContent,
+			tran: o.querySelector('[data-khoi="chon-toi-da"]')?.textContent,
+		}).toEqual({
+			soHop: 51,
+			tat: 1,
+			cuoiChon: "false",
+			dem: "50 ý đã chọn",
+			tran: "Mỗi lần đưa tối đa 50 ý vào chủ đề — bỏ chọn bớt để chọn ý khác.",
+		});
+	});
+});
+
+describe("Hỏi ý — kết quả ở khổ hẹp", () => {
+	test("dấu tích «Bạn đã xác nhận hiểu.» nằm trong cùng dòng chữ; mô tả mục «Thêm» và câu viết trước cũ không bị cắt dòng", async () => {
+		const b = ketQua();
+		const kq = b.ketQua;
+		if (!kq) throw new Error("thiếu kết quả");
+		hoiY = {
+			...b,
+			cuaToi: { ...b.cuaToi, daHieu: true },
+			ketQua: {
+				...kq,
+				them: 1,
+				chon: [
+					...kq.chon,
+					{
+						chuDeId: "c3",
+						ten: "Tuyến riêng cho khách dược ở ba tỉnh miền Trung và Tây Nguyên",
+						cauMucTieu: "Mở tuyến giao lạnh cho khách dược",
+						noiBanTruoc: "moi",
+						objectiveId: "o3",
+					},
+				],
+			},
+		};
+		const o = await mo();
+		await cho(() => trangThai(o) === "ket-qua", "kết quả");
+		const daHieu = o.querySelector('[data-khoi="da-hieu"]');
+		const moTa = (chon: string) =>
+			o
+				.querySelector(chon)
+				?.closest('[data-slot="item"]')
+				?.querySelector('[data-slot="item-description"]');
+		const catDong = (e: Element | null | undefined) =>
+			/line-clamp|truncate/.test(e?.getAttribute("class") ?? "");
+		expect({
+			daHieu: daHieu?.textContent,
+			bienThe: daHieu?.getAttribute("data-variant"),
+			dauTichTrongDong: daHieu?.firstElementChild?.tagName.toLowerCase(),
+			them: moTa('[data-giu-bo="them"]')?.textContent,
+			themCat: catDong(moTa('[data-giu-bo="them"]')),
+			doiCat: catDong(moTa('[data-giu-bo="doi"]')),
+		}).toEqual({
+			daHieu: "Bạn đã xác nhận hiểu.",
+			bienThe: "xong",
+			dauTichTrongDong: "svg",
+			them: "Từ chủ đề «Tuyến riêng cho khách dược ở ba tỉnh miền Trung và Tây Nguyên» — không có trong bản viết trước.",
+			themCat: false,
+			doiCat: false,
 		});
 	});
 });

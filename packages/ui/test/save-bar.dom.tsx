@@ -134,3 +134,68 @@ describe("save-bar — biến thể danh sách", () => {
 		expect(thanh.getAttribute("role")).toBeNull();
 	});
 });
+
+describe("save-bar — giữ chỗ cho thanh dính đáy", () => {
+	function veGiuCho(giuCho: boolean | undefined, chieuCao: number) {
+		const goc = Object.getOwnPropertyDescriptor(
+			HTMLElement.prototype,
+			"offsetHeight",
+		);
+		Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+			configurable: true,
+			get(this: HTMLElement) {
+				return this.getAttribute("data-slot") === "save-bar" ? chieuCao : 0;
+			},
+		});
+		try {
+			khung = document.createElement("div");
+			document.body.appendChild(khung);
+			root = createRoot(khung);
+			act(() =>
+				root?.render(
+					<LocaleProvider locale="vi">
+						<SaveBar
+							defaultOpen
+							items={MUC}
+							layout="checklist"
+							open
+							reserveSpace={giuCho}
+							title="Chưa công bố được — còn 3 điều"
+						>
+							<Button size="sm">Công bố</Button>
+						</SaveBar>
+					</LocaleProvider>,
+				),
+			);
+		} finally {
+			if (goc)
+				Object.defineProperty(HTMLElement.prototype, "offsetHeight", goc);
+		}
+		return document.querySelector<HTMLElement>('[data-slot="save-bar-spacer"]');
+	}
+
+	test("reserveSpace: một khối giữ chỗ trong luồng trang, cao bằng thanh cộng lề đáy của lớp dính", () => {
+		const giuCho = veGiuCho(true, 246);
+		const lop = document.querySelector<HTMLElement>(
+			'[data-slot="save-bar"]',
+		)?.parentElement;
+		const leDay = Number.parseFloat(
+			lop ? getComputedStyle(lop).paddingBottom || "0" : "0",
+		);
+		expect({
+			coKhoi: giuCho !== null,
+			anVoiDocMan: giuCho?.getAttribute("aria-hidden"),
+			trongLuong: giuCho?.parentElement === khung,
+			cao: giuCho?.style.height,
+		}).toEqual({
+			coKhoi: true,
+			anVoiDocMan: "true",
+			trongLuong: true,
+			cao: `${246 + (Number.isNaN(leDay) ? 0 : leDay)}px`,
+		});
+	});
+
+	test("không truyền reserveSpace thì không có khối giữ chỗ", () => {
+		expect(veGiuCho(undefined, 246)).toBeNull();
+	});
+});

@@ -1,6 +1,5 @@
 "use client";
 
-import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Launch from "@carbon/icons-react/es/Launch";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
@@ -224,8 +223,8 @@ function YCuaBanKetQua({ h }: { h: HoiY }) {
 			</CardContent>
 			<CardFooter>
 				{h.cuaToi.daHieu ? (
-					<FieldDescription data-khoi="da-hieu">
-						<Icon data-icon="inline-start" icon={Checkmark} /> {m.daHieu}
+					<FieldDescription data-khoi="da-hieu" variant="xong">
+						{m.daHieu}
 					</FieldDescription>
 				) : (
 					<div className="flex flex-col items-start gap-2">
@@ -285,7 +284,7 @@ function VietTruocRoiChon({ h }: { h: HoiY }) {
 											{nhan === "doi" && noi ? (
 												<>
 													<DoanChu>{noi.cauMucTieu}</DoanChu>
-													<ItemDescription>
+													<ItemDescription unclamped>
 														{ghep(m.vietTruocCu, {
 															chu: <del translate="no">{chu}</del>,
 														})}
@@ -314,7 +313,7 @@ function VietTruocRoiChon({ h }: { h: HoiY }) {
 						<Item data-chu-de={c.chuDeId} key={c.chuDeId} variant="outline">
 							<ItemContent>
 								<DoanChu>{c.cauMucTieu}</DoanChu>
-								<ItemDescription>
+								<ItemDescription unclamped>
 									{ghep(m.tuChuDe, { ten: <ChuNguoi>{c.ten}</ChuNguoi> })}
 								</ItemDescription>
 								<XemNhap objectiveId={c.objectiveId} />
