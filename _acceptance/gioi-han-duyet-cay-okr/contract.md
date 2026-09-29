@@ -5,7 +5,7 @@ slug: gioi-han-duyet-cay-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-29T05:23:04Z
 design_doc: docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md
@@ -88,3 +88,14 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Người dùng thấy ngay khi gộp, không công tắc riêng của lượt; ô «Công bố cần duyệt» mặc định tắt. Không gộp trong đóng băng (từ 19/10 tới khi các phòng ban công bố OKR quý 4).
 - Chạm vùng của 9b (trợ lý đọc OKR) và của `to-chuc`; ai gộp sau kéo `onehub` về và chạy lại `soi-ma.mjs --ca xem`.
 - Luật cho lượt sau: mọi đường đọc OKR mới gọi `dieuKienXemMucTieu`; mọi số gộp mới bỏ mục tiêu giới hạn.
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-29, định đoạt mục ngoài hợp đồng của vòng chấm 1; sổ d-20260929T132303Z-23 … d-20260929T132303Z-31):
+
+- Ngoài-1 (`apps/api/src/okr/okr.service.ts`): Hôm nay việc chặn căn chỉnh vào mục tiêu giới hạn vẫn đúng. Nhưng nếu sau này ai đổi cách viết điều kiện lọc, hệ thống có thể lặng lẽ từ chối căn chỉnh vào mọi mục tiêu công khai, và trợ lý sẽ không đề xuất được đích nào.
+- Ngoài-2 (`apps/api/src/okr/okr-duyet.service.ts`): Không ảnh hưởng người dùng hôm nay. Nếu sau này đổi tên một trạng thái duyệt, sẽ phải sửa nhiều chỗ và dễ sót, có thể làm màn hình hiện sai trạng thái.
+- Ngoài-3 (`packages/db/src/okr-duyet.ts`): Nếu một mục tiêu có cấp đơn vị lạ hoặc gõ sai, tin nhắc buổi sáng có thể gửi việc duyệt cho quản trị thay vì trưởng phòng hay trưởng bộ phận, và hai nơi có thể nêu hai người duyệt khác nhau.
+- Ngoài-4 (`apps/api/src/okr/okr-xem.service.ts`): Khi bật duyệt và một trưởng phòng gửi mục tiêu đi duyệt, số «chưa công bố» ở Sức khoẻ chương trình giảm xuống dù chưa có gì được công bố, làm người xem tưởng tiến độ tốt hơn thực tế.
+- Ngoài-5 (`apps/api/src/okr/okr-hien-thi.service.ts`): Nếu một người đặt mục tiêu sang giới hạn đúng lúc người khác căn chỉnh vào nó, hiếm khi mục tiêu giới hạn vẫn còn một căn chỉnh trỏ tới. Cần hai thao tác trùng đúng khoảnh khắc nên rất ít gặp.
+- Ngoài-6 (`apps/api/test/tro-ly-okr-hoan-tac.spec.ts`): Bài kiểm tra canh việc người ta có lỡ xoá bớt các kiểm tra OKR cũ hay không chỉ nhìn vào một lần gộp trong quá khứ, nên về sau nếu ai xoá kiểm tra thì bài này vẫn báo xanh. Người dùng không thấy ngay, nhưng lưới an toàn bị hở.
+- Ngoài-7 (`_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs`): Công cụ tự soi có thể coi một truy vấn OKR là đã có điều kiện xem dù điều kiện đặt sai chỗ, nên một chỗ lộ mục tiêu giới hạn về sau có thể lọt qua mà công cụ vẫn báo ổn.
+- Ngoài-9 (`apps/api/test/okr-tai-co-cau.spec.ts`): Bài kiểm tra canh khu tổ chức không được phụ thuộc vào OKR có thể không bắt được một số cách viết phụ thuộc, nên sau này khu tổ chức có thể dính lại vào OKR mà bài vẫn xanh.
