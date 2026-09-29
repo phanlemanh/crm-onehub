@@ -116,7 +116,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "updateKeyResult",
+		ham: "updateKeyResultTrong",
 		bang: "okrNguonKr",
 		lyDo: "ghi: đọc nguồn máy của KR vừa qua assertSuaKr",
 	},
@@ -146,7 +146,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "addAlignment",
+		ham: "addAlignmentTrong",
 		bang: "okrAlignment",
 		lyDo: "ghi: tìm căn chỉnh trùng sau khi nguồn và đích đã qua điều kiện xem",
 	},
@@ -242,7 +242,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "updateObjective",
+		ham: "updateObjectiveTrong",
 		bang: "okrObjective",
 		lyDo: "ghi: đọc lại hàng sau assertSuaMucTieu",
 	},
@@ -302,7 +302,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "updateKeyResult",
+		ham: "updateKeyResultTrong",
 		bang: "okrKeyResult",
 		lyDo: "ghi: đọc lại KR sau assertSuaKr",
 	},
@@ -338,7 +338,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "updateKeyResult",
+		ham: "updateKeyResultTrong",
 		bang: "tho:okrKeyResult",
 		lyDo: "khoá hàng KR FOR UPDATE sau assertSuaKr",
 	},
@@ -350,13 +350,13 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "addAlignment",
+		ham: "addAlignmentTrong",
 		bang: "tho:okrObjective",
 		lyDo: "khoá hàng mục tiêu nguồn FOR UPDATE sau assertSuaMucTieu",
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "addAlignment",
+		ham: "addAlignmentTrong",
 		bang: "tho:okrKeyResult",
 		lyDo: "khoá hàng KR đích FOR SHARE; đích đọc ngay sau qua dichCanChinh có điều kiện xem",
 	},
@@ -596,9 +596,63 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "packages/db/src/okr-tro-ly.ts",
-		ham: "xepViecTroLy",
+		ham: "taoViecDeXuat",
 		bang: "okrObjective",
-		lyDo: "xếp việc đề xuất đọc mốc cập nhật của mục tiêu sau khi người yêu cầu qua điều kiện xem (từ chối khong-xem-duoc)",
+		lyDo: "xếp việc đề xuất đọc mốc cập nhật của mục tiêu và mã KR để băm khoá, không trả tiêu đề; xepViecTroLy hỏi điều kiện xem của người yêu cầu trước (từ chối khong-xem-duoc), xepLuotAnSauKhiLuu chạy sau khi người lưu vừa qua assertSuaMucTieu/assertSuaKr — người sửa được luôn xem được",
+	},
+	{
+		tep: "packages/db/src/okr-tro-ly.ts",
+		ham: "nacCuaMucTieu",
+		bang: "okrKeyResult",
+		lyDo: "tra mục tiêu của KR để tính nấc bật theo đơn vị, chỉ ra objectiveId; lối gọi (troLySanSang, xepViecTroLy, tác tử trước khi gửi) đã hỏi điều kiện xem của người yêu cầu",
+	},
+	{
+		tep: "packages/db/src/okr-de-xuat.ts",
+		ham: "danhSachDeXuat",
+		bang: "okrObjective",
+		lyDo: "thư viện; lối gọi duy nhất troLyDanhSach đọc mục tiêu qua dieuKienXemMucTieu trước — người không xem được nhận danh sách rỗng như mã không có",
+	},
+	{
+		tep: "packages/db/src/okr-xu-huong.ts",
+		ham: "docDiemXuHuong",
+		bang: "okrKeyResult",
+		lyDo: "thư viện; lối gọi duy nhất xuHuongKr đọc KR qua điều kiện xem trước (404 như mã không có); chỉ ra số",
+	},
+	{
+		tep: "packages/db/src/okr-xu-huong.ts",
+		ham: "docDiemXuHuong",
+		bang: "okrSoChup",
+		lyDo: "thư viện; lối gọi duy nhất xuHuongKr đọc KR qua điều kiện xem trước; chỉ ra số",
+	},
+	{
+		tep: "packages/db/src/okr-xu-huong.ts",
+		ham: "docDiemXuHuong",
+		bang: "okrCheckIn",
+		lyDo: "thư viện; lối gọi duy nhất xuHuongKr đọc KR qua điều kiện xem trước; chỉ ra số",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly.service.ts",
+		ham: "troLyQuyet",
+		bang: "tho:okrObjective",
+		lyDo: "khoá hàng FOR UPDATE theo mã mục tiêu của dòng đề xuất, không đọc cột nào; điều kiện xem hỏi ngay sau (xemDuoc) — không xem được thì 404 cùng câu với mã đề xuất không có",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly.service.ts",
+		ham: "assertConHieuLuc",
+		bang: "okrObjective",
+		lyDo: "ghi: đọc tiêu đề hiện hành để so với dòng đề xuất sau khi troLyQuyet đã qua xemDuoc và assertSuaDong; không trả ra ngoài",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly.service.ts",
+		ham: "luotTu",
+		bang: "okrObjective",
+		lyDo: "chỉ troLyAn gọi, sau assertQuanTri; quản trị xem được mọi mục tiêu (§4)",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly-so-do.ts",
+		ham: "hoanTacTrong",
+		bang: "okrTrail",
+		lyDo: "số đo Trợ lý OKR chỉ quản trị (troLyAn, troLySoDo qua assertQuanTri); đếm lần hoàn tác, không trả vết; quản trị xem được mọi mục tiêu (§4)",
 	},
 	{
 		tep: "packages/db/src/okr-chi-so.ts",

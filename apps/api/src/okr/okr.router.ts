@@ -304,8 +304,11 @@ export class OkrRouter {
 		output: xuHuongKrOutput,
 		meta: restMeta("GET", "/okr/key-results/{keyResultId}/trend", TAG),
 	})
-	xuHuongKr(@Input() input: z.infer<typeof xuHuongKrInput>) {
-		return this.troLy.xuHuongKr(input.keyResultId);
+	xuHuongKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof xuHuongKrInput>,
+	) {
+		return this.troLy.xuHuongKr(ctx.user.id, input.keyResultId);
 	}
 
 	@Mutation({
