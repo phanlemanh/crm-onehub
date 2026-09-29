@@ -41,6 +41,7 @@ export class OkrHienThiService {
 			});
 			if (cu.status === "cho-duyet")
 				throw new BadRequestException(T.dangChoDuyet);
+			if (cu.status === "da-bo") throw new BadRequestException(T.daBo);
 			await this.okr.assertThanhVien(
 				tx,
 				nguoiXem,

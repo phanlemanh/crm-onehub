@@ -904,6 +904,25 @@ describe("hien-thi-ghi", () => {
 					},
 				},
 				{
+					ten: "G da bo",
+					mt: g,
+					vao: ["gioi-han", [x.id]],
+					ai: t.cookie,
+					cho: `400 ${OKR.thongDiep.daBo}`,
+					truoc: async () => {
+						await db.okrObjective.update({
+							where: { id: g },
+							data: { status: "da-bo" },
+						});
+					},
+					sau: async () => {
+						await db.okrObjective.update({
+							where: { id: g },
+							data: { status: "nhap" },
+						});
+					},
+				},
+				{
 					ten: "chu ky cham diem",
 					mt: g,
 					vao: ["gioi-han", [x.id]],
@@ -928,7 +947,7 @@ describe("hien-thi-ghi", () => {
 			console.log(
 				`hien-thi-ghi bang tu choi: ${CA.length} ca\n${CA.map((ca) => `${ca.ten}: ${ket[ca.ten]?.tra}`).join("\n")}`,
 			);
-			expect(CA.length).toBe(7);
+			expect(CA.length).toBe(8);
 			expect(ket).toEqual(cho);
 		},
 		CHO_GIEO_MS,

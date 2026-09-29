@@ -550,8 +550,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
     it cannot be aligned, so listing it there is noise. Trail rows and diễn biến of another objective that point at it show
     `{ gioiHan: true }` instead of an id or a title (`vetChoNguoiXem` in `hien-thi.ts`).
   - `datHienThi({ objectiveId, hienThi, nguoiXem })` is for whoever edits the
-    objective, phase-locked, refused while it waits for approval, takes only members,
-    and refuses `gioi-han` while the objective still has alignments in either direction
+    objective, phase-locked, refused while it waits for approval or once dropped
+    (`OKR.thongDiep.daBo`), takes only members, and refuses `gioi-han` while the
+    objective still has alignments in either direction
     (`OKR.thongDiep.hienThi.conCanChinh(n)`). It writes one `doi-hien-thi` trail row
     (level and viewer list, before → after). The create dialog carries the level, so a
     sensitive draft is never public for a minute. `mangSang` copies the level and the

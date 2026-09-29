@@ -78,16 +78,26 @@ không ở thư mục tính năng.
 
 ## Giới hạn đã biết
 
+- Mục tiêu cá nhân của người đã rời ở kỳ đang mở không ai sửa hay bỏ được: quyền sửa chỉ
+  có khi người đó còn trong cây, quản trị không có lối riêng, và «Mở mục tiêu» mở khung
+  chỉ đọc. Mục tiêu nằm ở danh sách OKR mồ côi tới khi kỳ đóng, nên phép đọc mồ côi hằng
+  tuần sẽ thấy nó. Câu hỏi sản phẩm để ngỏ cho Cổng Bằng chứng: sổ quyết định
+  `decisions.jsonl` dòng 14 (d-20260929T082318Z-14, loại revisit).
+- Số OKR mở của mỗi đơn vị trên cây tổ chức có tính mục tiêu giới hạn, nên người không
+  xem được vẫn đoán được đơn vị đó có mục tiêu giới hạn.
+- Mục tiêu còn chờ duyệt khi kỳ sang chấm điểm không duyệt, rút lại hay bỏ được nữa, và
+  vẫn chặn lưu trữ đơn vị của nó.
+- Chỉ số «chưa khởi điểm» ở Sức khoẻ chương trình không tính mục tiêu đang chờ duyệt.
+- Bảng Vết không hiện chi tiết của lần đổi mức hiển thị và lần chuyển đơn vị.
+- Chuyển một mục tiêu đang chờ duyệt sang đơn vị khác đổi người duyệt mà không báo ai.
+- Người duyệt gửi duyệt được cho chính mình qua thủ tục; màn không hiện nút đó cho họ.
+- Ghi theo mã KR (nguồn số, việc, bằng chứng) cho người cầm mã KR biết mục tiêu giới hạn
+  của nó đã bỏ hay đã công bố.
+- Hai khe tranh chấp hẹp: gắn căn chỉnh cùng lúc với đặt giới hạn; ghi nội dung KR cùng lúc
+  với gửi duyệt.
 - Hộp dời phòng ban sang bộ phận khác chưa nói trước số mục tiêu đi theo.
-- Mục tiêu cá nhân của người đã rời hiện ở OKR mồ côi nhưng chưa có lối sửa ngoài bỏ.
-- Người duyệt gọi thẳng thủ tục gửi duyệt cho mục tiêu mình duyệt được thì máy chủ nhận;
-  màn không hiện nút đó cho họ.
-
-## Ngoài hợp đồng
-
-- Bài `n4_du_duong` của hồ sơ `no-sau-luot-4-okr` gặp thêm hai loại nhắc mới; câu
-  expected của hồ sơ đó vẫn ghi năm loại.
-- `okr-mau.spec` (thước của hồ sơ `bo-okr-mau`) sửa số đếm và bảng có mẫu vì bộ mẫu lớn
-  thêm.
+- Hai hồ sơ đã ký có bài sửa vì bộ mẫu và số loại nhắc lớn thêm: `n4_du_duong` của
+  `no-sau-luot-4-okr` (câu expected vẫn ghi năm loại nhắc) và số đếm của `okr-mau.spec`
+  (`bo-okr-mau`).
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
