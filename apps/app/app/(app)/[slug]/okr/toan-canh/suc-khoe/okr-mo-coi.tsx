@@ -35,11 +35,12 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
-import { HopChuyenOkr } from "@/app/(app)/[slug]/settings/organization/hop-chuyen-okr";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { HopChuyenOkr } from "@/components/okr/hop-chuyen-okr";
 import {
 	chuyenOkrParsers,
 	type NguonChuyenOkr,
-} from "@/app/(app)/[slug]/settings/organization/to-chuc-search-params";
+} from "@/components/okr/hop-chuyen-okr-search-params";
 import { okrTaiCoCauMessages } from "@/lib/messages/okr-tai-co-cau";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -51,7 +52,7 @@ type MucMoCoi = RouterOutputs["okr"]["moCoi"][number];
 type HanhDongMoCoi =
 	| { loai: "chuyen"; nguon: NguonChuyenOkr }
 	| { loai: "dat-truong"; href: string }
-	| { loai: "nguoi-roi"; href: string };
+	| { loai: "mo-muc-tieu" };
 
 const KHUNG_TAI = ["mot", "hai", "ba"] as const;
 
@@ -72,7 +73,6 @@ function hanhDongCua(
 			[SEARCH_PARAM.toChuc.don]:
 				`${d.level === "phong-ban" ? "pb" : "bp"}:${d.id}`,
 		})}`;
-	const thanhVien = url("/settings/members");
 	const ra: HanhDongMoCoi[] = [];
 	const them = (h: HanhDongMoCoi) => {
 		if (!ra.some((x) => x.loai === h.loai)) ra.push(h);
@@ -82,9 +82,9 @@ function hanhDongCua(
 		if (ly === "khong-ai-sua" && dv)
 			them({ loai: "dat-truong", href: toChuc(dv) });
 		if (ly === "khong-ai-sua" && m.donVi.level === "ca-nhan")
-			them({ loai: "nguoi-roi", href: thanhVien });
+			them({ loai: "mo-muc-tieu" });
 		if (ly === "phu-trach-roi" || ly === "kr-phu-trach-roi")
-			them({ loai: "nguoi-roi", href: thanhVien });
+			them({ loai: "mo-muc-tieu" });
 	}
 	return ra;
 }
@@ -98,6 +98,7 @@ function DongMoCoi({
 }) {
 	const m = okrTaiCoCauMessages(useLocale()).moCoi;
 	const url = useWorkspaceUrl();
+	const moHoSo = useOpenRecord();
 	return (
 		<Item size="sm" variant="outline" data-mo-coi={muc.objectiveId}>
 			<ItemContent>
@@ -116,34 +117,36 @@ function DongMoCoi({
 				</span>
 			</ItemContent>
 			<ItemActions>
-				{hanhDongCua(muc, url).map((h) =>
-					h.loai === "chuyen" ? (
+				{hanhDongCua(muc, url).map((h) => {
+					if (h.loai === "dat-truong")
+						return (
+							<Button
+								key={h.loai}
+								variant="outline"
+								size="sm"
+								asChild
+								data-hanh-dong={h.loai}
+							>
+								<Link href={h.href}>{m.hanhDong.datTruong}</Link>
+							</Button>
+						);
+					return (
 						<Button
 							key={h.loai}
 							variant="outline"
 							size="sm"
 							aria-haspopup="dialog"
 							data-hanh-dong={h.loai}
-							onClick={() => moChuyen(h.nguon)}
+							onClick={() =>
+								h.loai === "chuyen"
+									? moChuyen(h.nguon)
+									: moHoSo({ kind: "objective", id: muc.objectiveId })
+							}
 						>
-							{m.hanhDong.chuyen}
+							{h.loai === "chuyen" ? m.hanhDong.chuyen : m.hanhDong.moMucTieu}
 						</Button>
-					) : (
-						<Button
-							key={h.loai}
-							variant="outline"
-							size="sm"
-							asChild
-							data-hanh-dong={h.loai}
-						>
-							<Link href={h.href}>
-								{h.loai === "dat-truong"
-									? m.hanhDong.datTruong
-									: m.hanhDong.nguoiRoi}
-							</Link>
-						</Button>
-					),
-				)}
+					);
+				})}
 			</ItemActions>
 		</Item>
 	);
@@ -151,7 +154,7 @@ function DongMoCoi({
 
 function DangTaiMoCoi({ chu }: { chu: string }) {
 	return (
-		<ItemGroup aria-busy="true" className="gap-2">
+		<ItemGroup aria-busy="true">
 			<span className="sr-only" role="status">
 				{chu}
 			</span>
@@ -223,7 +226,7 @@ export function KhoiMoCoi() {
 	} else {
 		trangThai = "ST-mocoi-co";
 		than = (
-			<ItemGroup className="gap-2">
+			<ItemGroup>
 				{moCoi.data.map((muc) => (
 					<DongMoCoi key={muc.objectiveId} muc={muc} moChuyen={moChuyen} />
 				))}

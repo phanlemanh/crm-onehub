@@ -686,6 +686,12 @@ const MO_COI: MucMoCoi[] = [
 		donVi: { level: "phong-ban", id: "pb-2", ten: "Kinh doanh vùng 2" },
 		lyDo: ["khong-ai-sua", "kr-phu-trach-roi"],
 	},
+	{
+		objectiveId: "o11",
+		tieuDe: "Ký 5 hợp đồng khung với chủ hàng FDI",
+		donVi: { level: "ca-nhan", id: "phuc", ten: "Lâm Gia Phúc" },
+		lyDo: ["khong-ai-sua", "phu-trach-roi"],
+	},
 ];
 
 describe("mo-coi", () => {
@@ -735,14 +741,17 @@ describe("mo-coi", () => {
 			t.moCoi.loi.tieuDe,
 		);
 		await bam(nutTheoChu(t.moCoi.loi.thuLai));
-		await cho(() => tatCa("[data-mo-coi]").length === 2, "muc sau thu lai");
+		await cho(
+			() => tatCa("[data-mo-coi]").length === MO_COI.length,
+			"muc sau thu lai",
+		);
 		expect(lan).toBe(2);
 	});
 
 	test("ST-mocoi-co: moi muc co nhan ly do va hanh dong dung ly do; Chuyen OKR mo hop tu don vi da luu tru", async () => {
 		moCoi = async () => MO_COI;
 		await mo(<KhoiMoCoi />);
-		await cho(() => tatCa("[data-mo-coi]").length === 2, "hai muc");
+		await cho(() => tatCa("[data-mo-coi]").length === MO_COI.length, "ba muc");
 		const hang = tatCa("[data-mo-coi]").map((o) => ({
 			id: o.getAttribute("data-mo-coi"),
 			lyDo: [...o.querySelectorAll("[data-ly-do]")].map((b) => chu(b)),
@@ -767,10 +776,18 @@ describe("mo-coi", () => {
 						t.moCoi.hanhDong.datTruong,
 						"/ws/settings/organization?don=pb%3Apb-2",
 					],
-					["nguoi-roi", t.moCoi.hanhDong.nguoiRoi, "/ws/settings/members"],
+					["mo-muc-tieu", t.moCoi.hanhDong.moMucTieu, null],
 				],
 			},
+			{
+				id: "o11",
+				lyDo: [t.moCoi.lyDo["khong-ai-sua"], t.moCoi.lyDo["phu-trach-roi"]],
+				hanhDong: [["mo-muc-tieu", t.moCoi.hanhDong.moMucTieu, null]],
+			},
 		]);
+		expect(
+			tatCa("[data-khoi-mo-coi] a").map((a) => a.getAttribute("href")),
+		).toEqual(["/ws/settings/organization?don=pb%3Apb-2"]);
 		await bam(q("[data-mo-coi='o9'] [data-hanh-dong='chuyen']"));
 		await moHopChuyenVaCho();
 		expect({
@@ -784,5 +801,20 @@ describe("mo-coi", () => {
 			muc: ["o9"],
 			tu: "Từ «Kho vận Củ Chi». Mục tiêu giữ KR, cập nhật tuần, căn chỉnh, người xem và vết.",
 		});
+	});
+
+	test("ST-mocoi-co: nguoi phu trach hay nguoi phu trach KR da roi — Mo muc tieu mo ngan muc tieu, khong dan sang Thanh vien", async () => {
+		moCoi = async () => MO_COI;
+		await mo(<KhoiMoCoi />);
+		await cho(() => tatCa("[data-mo-coi]").length === MO_COI.length, "ba muc");
+		await bam(q("[data-mo-coi='o10'] [data-hanh-dong='mo-muc-tieu']"));
+		await cho(() => url.get("record") !== null, "mo ngan muc tieu");
+		expect(url.getAll("record").join(",")).toBe("objective:o10");
+		await bam(q("[data-mo-coi='o11'] [data-hanh-dong='mo-muc-tieu']"));
+		await cho(
+			() => url.getAll("record").join(",").includes("o11"),
+			"mo ngan muc tieu thu hai",
+		);
+		expect(url.getAll("record").join(",")).toContain("objective:o11");
 	});
 });

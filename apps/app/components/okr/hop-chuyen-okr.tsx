@@ -58,10 +58,10 @@ import { okrTaiCoCauMessages } from "@/lib/messages/okr-tai-co-cau";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import type { CayDuLieu } from "./kieu";
-import type { NguonChuyenOkr } from "./to-chuc-search-params";
+import type { NguonChuyenOkr } from "./hop-chuyen-okr-search-params";
 
 type MucTieu = RouterOutputs["okr"]["byUnit"]["objectives"][number];
+type CayDuLieu = RouterOutputs["org"]["tree"];
 
 const KHUNG_TAI = ["mot", "hai", "ba"] as const;
 
@@ -209,7 +209,7 @@ export function HopChuyenOkr({
 		);
 	else if (dangTai)
 		danhSach = (
-			<ItemGroup aria-busy="true" className="gap-2">
+			<ItemGroup aria-busy="true">
 				<span className="sr-only" role="status">
 					{m.dangTai}
 				</span>
@@ -239,7 +239,7 @@ export function HopChuyenOkr({
 		danhSach = (
 			<FieldSet>
 				<FieldLegend variant="label">{m.danhSach(mucTieu.length)}</FieldLegend>
-				<ItemGroup className="gap-2">
+				<ItemGroup>
 					{mucTieu.map((o) => {
 						const id = `${ma}-${o.id}`;
 						const moTa = m.dongMoTa(

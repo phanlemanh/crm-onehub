@@ -93,7 +93,7 @@ const vi = {
 		hanhDong: {
 			chuyen: "Chuyển OKR…",
 			datTruong: "Đặt trưởng",
-			nguoiRoi: "Chuyển OKR của người rời",
+			moMucTieu: "Mở mục tiêu",
 		},
 		dangTai: "Đang tải OKR mồ côi…",
 		rong: {
@@ -204,7 +204,7 @@ const en: OkrTaiCoCauMessages = {
 		hanhDong: {
 			chuyen: "Move OKRs…",
 			datTruong: "Set a head",
-			nguoiRoi: "Hand over a leaver's OKRs",
+			moMucTieu: "Open objective",
 		},
 		dangTai: "Loading orphaned OKRs…",
 		rong: {
