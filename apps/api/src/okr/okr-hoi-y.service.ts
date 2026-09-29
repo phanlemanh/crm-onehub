@@ -450,7 +450,10 @@ export class OkrHoiYService {
 		const now = this.dongHo();
 		const trangThai = trangThaiHoiY(h, now);
 		if (trangThai === "da-cong-bo") throw new BadRequestException(T.daCongBo);
-		if (trangThai === "dang-mo") throw new BadRequestException(T.chuaHetHan);
+		if (trangThai === "dang-mo")
+			throw new BadRequestException(
+				cach === "cong-bo" ? T.congBoChuaHetHan : T.chuaHetHan,
+			);
 		const ban = await tx.okrHoiYBanTruoc.findUnique({
 			where: { hoiYId: h.id },
 			select: { cau: true, boQua: true },
@@ -841,7 +844,7 @@ export class OkrHoiYService {
 		const chonDuoc =
 			trangThai === "dang-gom" && laNguoiChon && q.quanTri && daNiemPhong;
 		const dieuThieu =
-			trangThai === "dang-gom" && (laNguoiChon || q.quanTri)
+			trangThai === "dang-gom" && laNguoiChon
 				? lyDoChuaCongBo(await this.tinhTrangCongBo(this.db, h))
 				: [];
 		const congBoDuoc =

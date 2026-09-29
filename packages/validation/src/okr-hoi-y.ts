@@ -1,6 +1,17 @@
 import { z } from "zod";
 import { mucTieuInput } from "./okr-muc-tieu";
 
+function tranWhyNow(): number {
+	const max = mucTieuInput.shape.whyNow.maxLength;
+	if (max === null)
+		throw new Error(
+			"Khuôn «vì sao lúc này» của mục tiêu phải khai độ dài tối đa.",
+		);
+	return max;
+}
+
+const TRAN_WHY_NOW = tranWhyNow();
+
 export const OKR_HOI_Y = {
 	yMoiNguoi: 3,
 	soLieu: {
@@ -29,6 +40,8 @@ export const OKR_HOI_Y = {
 	},
 	ketLuan: {
 		canCauMucTieu: "Chủ đề chọn cần câu mục tiêu hợp với khuôn tên mục tiêu.",
+		lyDoChonMax: TRAN_WHY_NOW,
+		lyDoChonQuaDai: `Chủ đề chọn: lý do tối đa ${TRAN_WHY_NOW} ký tự, vì thành «vì sao lúc này» của mục tiêu.`,
 	},
 	tenChuDe: { min: 2, max: 120 },
 	maToiDa: 120,
@@ -222,6 +235,12 @@ export const ketLuanInput = z
 			v.ketLuan !== KET_LUAN_CHON ||
 			mucTieuInput.shape.title.safeParse(v.cauMucTieu).success,
 		{ message: OKR_HOI_Y.ketLuan.canCauMucTieu, path: ["cauMucTieu"] },
+	)
+	.refine(
+		(v) =>
+			v.ketLuan !== KET_LUAN_CHON ||
+			v.lyDo.length <= OKR_HOI_Y.ketLuan.lyDoChonMax,
+		{ message: OKR_HOI_Y.ketLuan.lyDoChonQuaDai, path: ["lyDo"] },
 	);
 export type KetLuanInput = z.infer<typeof ketLuanInput>;
 

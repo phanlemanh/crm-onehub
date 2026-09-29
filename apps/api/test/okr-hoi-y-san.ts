@@ -200,19 +200,11 @@ export async function gieoCongBo(hoiYId: string) {
 	const h = await db.okrHoiY.findUniqueOrThrow({ where: { id: hoiYId } });
 	const cookie = await phienCua(h.nguoiChonUserId);
 	if ((await db.okrY.count({ where: { hoiYId } })) === 0) {
-		if (trangThaiHoiY(h, dongHo()) === "dang-mo")
-			await gieoY(hoiYId, phien.thuong.nguoi);
-		else
-			await db.okrY.create({
-				data: {
-					hoiYId,
-					tacGiaUserId: phien.thuong.nguoi,
-					noiDung: Y_MAC_DINH,
-					viSao: "",
-					doBangGi: "",
-					createdAt: dongHo(),
-				},
-			});
+		if (trangThaiHoiY(h, dongHo()) !== "dang-mo")
+			throw new Error(
+				"gieoCongBo: lan hoi y khong co y nao va da qua han — gieo y bang gieoY truoc han",
+			);
+		await gieoY(hoiYId, phien.thuong.nguoi);
 	}
 	if (trangThaiHoiY(h, dongHo()) === "dang-mo")
 		ok(

@@ -442,6 +442,19 @@ describe("ly-do-chua-cong-bo", () => {
 		).toEqual([dong("thieu-ly-do", "l1")]);
 	});
 
+	test("lý do vượt trần «vì sao lúc này»: chủ đề chọn thiếu lý do, chủ đề khác vẫn nhận tới trần lý do", () => {
+		const dai = "ý".repeat(OKR_HOI_Y.ketLuan.lyDoChonMax + 1);
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [
+					chuDe("c1", { lyDo: dai }),
+					chuDe("c2", { ketLuan: "de-sau", lyDo: dai }),
+				],
+			}),
+		).toEqual([dong("thieu-ly-do", "c1")]);
+	});
+
 	test("ý lạ được chọn: thiếu câu mục tiêu và thiếu nối câu viết trước", () => {
 		expect(
 			lyDoChuaCongBo({
@@ -1057,6 +1070,28 @@ describe("ket-luan-khuon", () => {
 		expect(loi(vao)).toBeNull();
 		expect(
 			loi({ ...vao, ketLuan: "de-sau", cauMucTieu: "", noiBanTruoc: null }),
+		).toBeNull();
+	});
+
+	test("lý do chọn quá trần «vì sao lúc này» bị từ chối với câu ghim; để sau nhận cùng độ dài", () => {
+		const dai = "ý".repeat(OKR_HOI_Y.ketLuan.lyDoChonMax + 1);
+		expect(loi({ ...vao, lyDo: dai })).toEqual([
+			OKR_HOI_Y.ketLuan.lyDoChonQuaDai,
+		]);
+		expect(
+			loi({
+				...vao,
+				lyDo: "ý".repeat(OKR_HOI_Y.ketLuan.lyDoChonMax),
+			}),
+		).toBeNull();
+		expect(
+			loi({
+				...vao,
+				ketLuan: "de-sau",
+				cauMucTieu: "",
+				noiBanTruoc: null,
+				lyDo: dai,
+			}),
 		).toBeNull();
 	});
 

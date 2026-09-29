@@ -335,7 +335,7 @@ describe("mo-tu-choi", () => {
 				),
 				"doi han ve bay gio",
 			);
-			const congBo = await gieoHoiY();
+			const congBo = await gieoHoiY({ yCua: ["T"] });
 			ok(
 				await goi(
 					"okr.suaHoiY",
@@ -632,7 +632,7 @@ describe("gop-y", () => {
 			const gom = await gieoHoiY({ yCua: ["T"] });
 			const yTGom = await yCua(gom.h, gom.nguoi.T.id);
 			await donHanVeBayGio(gom);
-			const congBo = await gieoHoiY();
+			const congBo = await gieoHoiY({ yCua: ["T"] });
 			await donHanVeBayGio(congBo);
 			await gieoCongBo(congBo.h);
 			const { T: tv, O, P, A } = mo.nguoi;
@@ -1374,7 +1374,7 @@ describe("ban-truoc", () => {
 			await doiVai(haVai.nguoi.P.id, "member");
 			const daRoi = await gieoHoiY();
 			await roiDi(daRoi.nguoi.P.id);
-			const congBo = await gieoHoiY();
+			const congBo = await gieoHoiY({ yCua: ["T"] });
 			await donHanVeBayGio(congBo);
 			await gieoCongBo(congBo.h);
 			const { Q, T: tv, O, P } = mo.nguoi;
@@ -2237,8 +2237,8 @@ describe("gom", () => {
 		async () => {
 			const g = await gieoGom({ yCua: ["A", "B", "R"] });
 			const { ky, h, nguoi, y } = g;
-			const [yA, yB, yR] = y;
-			if (!yA || !yB || !yR) throw new Error("thieu y");
+			const [yA, yB] = y;
+			if (!yA || !yB) throw new Error("thieu y");
 			const c = await gomVaKetLuan(h, yA, nguoi, KET_LUAN_CHON_MAU);
 			ok(await ganYCua([yB], { chuDeId: c }, nguoi.Q.cookie), "gan them y");
 			const khoa = { T: "", O: "" };
@@ -2309,7 +2309,6 @@ describe("gom", () => {
 				}).toEqual({ chuDe: [c], chuDeId: 2 });
 			}
 
-			await db.okrY.delete({ where: { id: yR } });
 			await gieoCongBo(h);
 			const sau: Cell[] = [];
 			for (const vai of VAI)
@@ -2330,7 +2329,7 @@ describe("gom", () => {
 						duong,
 						maHttp: 200,
 						chuDeNull: false,
-						chuDeIdKhacNull: 2,
+						chuDeIdKhacNull: 3,
 					})),
 				),
 			);
@@ -2500,7 +2499,7 @@ describe("ket-luan", () => {
 	);
 
 	test(
-		"ket-luan: 14 ca từ chối — mã HTTP và câu ghim khớp bảng khai; bảng chủ đề, chuDeId, ganLuc và vết không đổi ở mọi ca",
+		"ket-luan: 15 ca từ chối — mã HTTP và câu ghim khớp bảng khai; bảng chủ đề, chuDeId, ganLuc và vết không đổi ở mọi ca",
 		async () => {
 			const KHAI = [
 				{ ca: "Q-khong-phai-nguoi-chon", maHttp: 403, cau: T.chiNguoiChon },
@@ -2515,6 +2514,11 @@ describe("ket-luan", () => {
 					ca: "chon-thieu-cau-muc-tieu",
 					maHttp: 400,
 					cau: OKR_HOI_Y.ketLuan.canCauMucTieu,
+				},
+				{
+					ca: "chon-ly-do-501-ky-tu",
+					maHttp: 400,
+					cau: OKR_HOI_Y.ketLuan.lyDoChonQuaDai,
 				},
 				{
 					ca: "cau-5-khi-co-bon-cau",
@@ -2613,6 +2617,15 @@ describe("ket-luan", () => {
 						{ ...KET_LUAN_CHON_MAU, cauMucTieu: "" },
 						P.cookie,
 					),
+				"chon-ly-do-501-ky-tu": () =>
+					ketLuanCua(
+						kChinh,
+						{
+							...KET_LUAN_CHON_MAU,
+							lyDo: "ý".repeat(OKR_HOI_Y.ketLuan.lyDoChonMax + 1),
+						},
+						P.cookie,
+					),
 				"cau-5-khi-co-bon-cau": () =>
 					ketLuanCua(
 						kChinh,
@@ -2668,6 +2681,21 @@ describe("ket-luan", () => {
 					vanTayDoi: false,
 				})),
 			);
+			const daiDeSau = "ý".repeat(OKR_HOI_Y.ketLuan.lyDoChonMax + 1);
+			ok(
+				await ketLuanCua(
+					kChinh,
+					{
+						ketLuan: "de-sau",
+						lyDo: daiDeSau,
+						cauMucTieu: "",
+						noiBanTruoc: null,
+					},
+					P.cookie,
+				),
+				"de sau voi ly do dai hon tran chon",
+			);
+			expect((await hangChuDe(kChinh)).lyDo).toBe(daiDeSau);
 		},
 		CHO_MA_TRAN_MS,
 	);
@@ -2810,7 +2838,7 @@ const tCongBo = () => tGom(5);
 const tHieu = () => tGom(6);
 
 async function gieoDu(
-	opts: { chuaKetLuan?: TenChuDe[]; boQua?: boolean } = {},
+	opts: { chuaKetLuan?: TenChuDe[]; boQua?: boolean; yChuaGom?: boolean } = {},
 ) {
 	datDongHo(LUC);
 	const g = await gieoHoiY();
@@ -2826,6 +2854,10 @@ async function gieoDu(
 	for (const [i, [ten, ai]] of thuTu.entries()) {
 		datDongHo(cauThu(i));
 		y[ten] = (await gieoY(g.h, ai.id, `Ý ${ten} cho mục tiêu năm tới`)).id;
+	}
+	if (opts.yChuaGom) {
+		datDongHo(cauThu(thuTu.length));
+		await gieoY(g.h, tv.id, "Ý thừa chưa vào chủ đề nào");
 	}
 	datDongHo(tGom(0));
 	if (opts.boQua)
@@ -2957,19 +2989,7 @@ const PHA_THIEU = {
 		await db.okrHoiYBanTruoc.delete({ where: { hoiYId: g.h } });
 		return null;
 	},
-	"y-chua-gom": async (g) => {
-		await db.okrY.create({
-			data: {
-				hoiYId: g.h,
-				tacGiaUserId: g.nguoi.T.id,
-				noiDung: "Ý thừa chưa vào chủ đề nào",
-				viSao: "",
-				doBangGi: "",
-				createdAt: dongHo(),
-			},
-		});
-		return null;
-	},
+	"y-chua-gom": async () => null,
 	"chu-de-rong": async (g) => {
 		const id = await chuDeMoiId(g.h, "Chủ đề rỗng", g.nguoi.Q.cookie);
 		ok(await ketLuanCua(id, KET_LUAN_DU.K4, g.nguoi.P.cookie), "P ket luan");
@@ -3034,7 +3054,7 @@ describe("cong-bo", () => {
 		async () => {
 			const ra: unknown[] = [];
 			for (const c of CA_THIEU) {
-				const g = await gieoDu();
+				const g = await gieoDu(c.ca === "y-chua-gom" ? { yChuaGom: true } : {});
 				datDongHo(tCongBo());
 				const chuDeId = await PHA_THIEU[c.ca](g);
 				const truoc = {
@@ -3238,13 +3258,18 @@ describe("cong-bo", () => {
 				},
 				{ ca: "T-thanh-vien", maHttp: 403, cau: T.chiNguoiChon },
 				{ ca: "O-vai-chi-okr", maHttp: 403, cau: T.chiNguoiChon },
-				{ ca: "P-khi-con-mo", maHttp: 400, cau: T.chuaHetHan },
+				{ ca: "P-khi-con-mo", maHttp: 400, cau: T.congBoChuaHetHan },
 				{
 					ca: "P-khi-ky-khong-con-lap-ke-hoach",
 					maHttp: 400,
 					cau: T.congBoKyKhongLapKeHoach,
 				},
 				{ ca: "P-bi-ha-vai", maHttp: 403, cau: T.nguoiChonPhaiQuanTri },
+				{
+					ca: "P-chua-niem-phong-y-da-gom",
+					maHttp: 400,
+					cau: T.congBoThieu["chua-niem-phong"],
+				},
 				{ ca: "hoi-y-khong-co", maHttp: 404, cau: T.khongCoHoiY("khong-co") },
 			] as const satisfies readonly Ca[];
 			const du = await gieoDu();
@@ -3256,6 +3281,16 @@ describe("cong-bo", () => {
 				data: { phase: "dang-chay" },
 			});
 			await doiVai(haVai.nguoi.P.id, "member");
+			const chuaNiem = await gieoHoiY({ yCua: ["A"] });
+			await donHanVeBayGio(chuaNiem);
+			ok(
+				await ganYCua(
+					[await yCua(chuaNiem.h, chuaNiem.nguoi.A.id)],
+					{ yLa: true },
+					chuaNiem.nguoi.Q.cookie,
+				),
+				"Q gom y cua P chua niem phong",
+			);
 			datDongHo(tCongBo());
 			const CHAY = {
 				"Q-quan-tri-khong-phai-nguoi-chon": () =>
@@ -3266,6 +3301,8 @@ describe("cong-bo", () => {
 				"P-khi-ky-khong-con-lap-ke-hoach": () =>
 					congBoCua(doiKy.h, doiKy.nguoi.P.cookie),
 				"P-bi-ha-vai": () => congBoCua(haVai.h, haVai.nguoi.P.cookie),
+				"P-chua-niem-phong-y-da-gom": () =>
+					congBoCua(chuaNiem.h, chuaNiem.nguoi.P.cookie),
 				"hoi-y-khong-co": () => congBoCua("khong-co", du.nguoi.P.cookie),
 			} satisfies Record<(typeof CA)[number]["ca"], () => Promise<TraLoi>>;
 			const truoc = {
@@ -3284,7 +3321,7 @@ describe("cong-bo", () => {
 				vet: await dem("okrTrail"),
 				congBo: await db.okrHoiY.count({
 					where: {
-						id: { in: [du.h, mo.h, doiKy.h, haVai.h] },
+						id: { in: [du.h, mo.h, doiKy.h, haVai.h, chuaNiem.h] },
 						congBoLuc: { not: null },
 					},
 				}),
@@ -3666,14 +3703,33 @@ describe("ket-qua", () => {
 	);
 
 	test(
-		"ket-qua: trước công bố cuaToi.y không lộ chủ đề, kết luận, lý do, mục tiêu, mốc vào chủ đề và mốc kết luận cho A, T, O, P, Q; ketQua null; chỉ người chọn thấy congBoDuoc — quản trị khác và thành viên nhận danh sách điều thiếu rỗng",
+		"ket-qua: trước công bố cuaToi.y không lộ chủ đề, kết luận, lý do, mục tiêu, mốc vào chủ đề và mốc kết luận cho A, T, O, P, Q; ketQua null; chỉ người chọn thấy congBoDuoc và danh sách điều còn thiếu — quản trị khác, thành viên và vai okr luôn nhận danh sách rỗng, kể cả khi lần hỏi ý chưa đủ điều kiện",
 		async () => {
 			datDongHo(LUC);
 			const mo = await gieoHoiY({ yCua: ["A", "T"] });
 			const gom = await gieoDu();
+			const thieu = await gieoDu({ chuaKetLuan: ["K4"] });
+			ok(
+				await ketLuanCua(
+					thieu.k.K3,
+					{ ...KET_LUAN_DU.K3, noiBanTruoc: null },
+					thieu.nguoi.P.cookie,
+				),
+				"P bo noi ban truoc",
+			);
 			const XEM = [
-				["dang-mo", mo],
-				["dang-gom", gom],
+				["dang-mo", "dang-mo", mo, []],
+				["dang-gom", "dang-gom", gom, []],
+				[
+					"dang-gom-thieu",
+					"dang-gom",
+					thieu,
+					[
+						{ ma: "thieu-ket-luan", chuDeId: thieu.k.K4 },
+						{ ma: "thieu-ly-do", chuDeId: thieu.k.K4 },
+						{ ma: "thieu-noi-ban-truoc", chuDeId: thieu.k.K3 },
+					],
+				],
 			] as const;
 			const VAI = ["A", "T", "O", "P", "Q"] as const;
 			const SO_Y = {
@@ -3682,11 +3738,11 @@ describe("ket-qua", () => {
 			} as const;
 			const ra: unknown[] = [];
 			const kyVong: unknown[] = [];
-			for (const [trangThai, g] of XEM)
+			for (const [nhan, trangThai, g, dieuThieu] of XEM)
 				for (const vai of VAI) {
 					const doc = await docHoiY(g.ky, g.nguoi[vai].cookie);
 					ra.push({
-						trangThai,
+						nhan,
 						vai,
 						dung: doc?.trangThai === trangThai,
 						y: doc?.cuaToi.y.map((y) => ({
@@ -3703,7 +3759,7 @@ describe("ket-qua", () => {
 						lyDoChuaCongBo: doc?.quyen.lyDoChuaCongBo,
 					});
 					kyVong.push({
-						trangThai,
+						nhan,
 						vai,
 						dung: true,
 						y: Array.from({ length: SO_Y[trangThai][vai] }, () => ({
@@ -3716,8 +3772,8 @@ describe("ket-qua", () => {
 							coGopLuc: true,
 						})),
 						ketQua: null,
-						congBoDuoc: trangThai === "dang-gom" && vai === "P",
-						lyDoChuaCongBo: [],
+						congBoDuoc: nhan === "dang-gom" && vai === "P",
+						lyDoChuaCongBo: vai === "P" ? dieuThieu : [],
 					});
 				}
 			console.log(`ket-qua: đã chạy ${ra.length}/${XEM.length * VAI.length} ô`);

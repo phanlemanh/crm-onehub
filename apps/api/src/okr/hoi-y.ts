@@ -237,7 +237,8 @@ export function lyDoChuaCongBo(
 	moiChuDe("thieu-ket-luan", (c) => c.ketLuan === null);
 	moiChuDe("thieu-ly-do", (c) => {
 		const dai = c.lyDo.trim().length;
-		return dai < OKR_HOI_Y.lyDo.min || dai > OKR_HOI_Y.lyDo.max;
+		const tran = chon(c) ? OKR_HOI_Y.ketLuan.lyDoChonMax : OKR_HOI_Y.lyDo.max;
+		return dai < OKR_HOI_Y.lyDo.min || dai > tran;
 	});
 	moiChuDe(
 		"thieu-cau-muc-tieu",

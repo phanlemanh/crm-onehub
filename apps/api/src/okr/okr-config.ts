@@ -237,6 +237,8 @@ export const OKR = {
 				`Bản viết trước chỉ có ${soCau} câu — nối tới câu có thật hoặc chọn «mới».`,
 			noiBanTruocBoQua:
 				"Người chọn đã khai không viết trước — chủ đề chỉ nối được «mới».",
+			congBoChuaHetHan:
+				"Lần hỏi ý còn mở — chưa công bố được, chờ tới hạn hoặc dời hạn về bây giờ.",
 			congBoKyKhongLapKeHoach:
 				"Chỉ công bố được khi chu kỳ đang ở pha lập kế hoạch.",
 			congBoThieu: {
@@ -247,7 +249,7 @@ export const OKR = {
 					"Còn chủ đề rỗng — chuyển ý vào hoặc gỡ chủ đề rồi mới công bố.",
 				"thieu-ket-luan":
 					"Còn chủ đề chưa có kết luận — kết luận hết rồi mới công bố.",
-				"thieu-ly-do": `Mỗi chủ đề cần lý do dài ${OKR_HOI_Y.lyDo.min}–${OKR_HOI_Y.lyDo.max} ký tự.`,
+				"thieu-ly-do": `Mỗi chủ đề cần lý do dài ${OKR_HOI_Y.lyDo.min}–${OKR_HOI_Y.lyDo.max} ký tự (chủ đề chọn tối đa ${OKR_HOI_Y.ketLuan.lyDoChonMax}).`,
 				"thieu-cau-muc-tieu":
 					"Còn chủ đề chọn thiếu câu mục tiêu hợp khuôn tên mục tiêu.",
 				"thieu-noi-ban-truoc":
