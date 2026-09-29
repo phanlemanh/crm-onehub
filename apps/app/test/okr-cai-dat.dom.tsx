@@ -330,7 +330,7 @@ describe("cai-dat-khong-quyen-khoa-dieu-khien", () => {
 		}).toEqual({
 			tieuDeThe: [m.chuKy.tieuDe, m.cauHinh.tieuDe],
 			soHangChuKy: 4,
-			soDieuKhien: 12,
+			soDieuKhien: 13,
 			moiCaiKhoa: true,
 			moiCaiTroLyDo: true,
 			lyDo: [[LY_DO_KHONG_QUYEN, m.khongQuyen]],
@@ -352,7 +352,7 @@ describe("cai-dat-khong-quyen-khoa-dieu-khien", () => {
 			lyDo: 0,
 			moChuKy: false,
 			tranMucTieu: false,
-			congTac: [false, false],
+			congTac: [false, false, false],
 			luu: true,
 			tro: false,
 		});
@@ -397,6 +397,7 @@ describe("cai-dat-luu-bat-khi-sua", () => {
 					scoreScale: "0-1",
 					weightsOn: false,
 					personalOn: false,
+					duyetCongBo: false,
 				},
 			},
 		]);
