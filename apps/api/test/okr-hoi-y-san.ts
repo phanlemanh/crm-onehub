@@ -123,6 +123,13 @@ export async function gieoBanTruoc(hoiYId: string, vietBoiUserId: string) {
 	});
 }
 
+export async function gieoCongBo(hoiYId: string) {
+	return db.okrHoiY.update({
+		where: { id: hoiYId },
+		data: { congBoLuc: dongHo() },
+	});
+}
+
 async function memberCua(userId: string): Promise<string> {
 	return (
 		await db.member.findFirstOrThrow({

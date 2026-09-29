@@ -15,6 +15,7 @@ import {
 	doiVai,
 	dongHo,
 	dungSanHoiY,
+	gieoCongBo,
 	gieoHoiY,
 	gieoY,
 	nguoiCo,
@@ -44,6 +45,8 @@ const SO_LIEU_BON: SoLieuHoiY = [
 ];
 
 const dongSo = (nhan: string) => ({ nhan, giaTri: "1", ghiChu: "" });
+const MOT_MS = 1;
+const lechMs = (d: Date, ms: number) => new Date(d.getTime() + ms);
 
 describe("mo-hoi-y", () => {
 	test(
@@ -186,6 +189,52 @@ describe("mo-hoi-y", () => {
 		},
 		CHO_MS,
 	);
+
+	test(
+		"mo-hoi-y: biên nhận — mở với hạn đúng 24 giờ và đúng 168 giờ; sửa hạn về đúng createdAt + 168 giờ",
+		async () => {
+			datDongHo(LUC);
+			const Q = await nguoiCo("bien-Q", "admin");
+			const P = await nguoiCo("bien-P", "admin");
+			const moVoi = async (soGio: number) => {
+				const cycleId = await taoNam(`bien-${soGio}`, NAM_KE);
+				const hanLuc = sauGio(LUC, soGio);
+				const { id } = ok<{ id: string }>(
+					await goi(
+						"okr.moHoiY",
+						{
+							cycleId,
+							cauHoi: CAU_HOI_MAC_DINH,
+							loiMo: "",
+							soLieu: SO_LIEU_MAC_DINH,
+							hanLuc: hanLuc.toISOString(),
+							nguoiChonUserId: P.id,
+						},
+						Q.cookie,
+					),
+					`mo han ${soGio} gio`,
+				);
+				const row = await db.okrHoiY.findUniqueOrThrow({ where: { id } });
+				expect(row.hanLuc.toISOString()).toBe(hanLuc.toISOString());
+				return row;
+			};
+			await moVoi(OKR_HOI_Y.hanGio.min);
+			await moVoi(OKR_HOI_Y.hanGio.max);
+			const h = await moVoi(HAN.hopLe);
+			const tran = sauGio(h.createdAt, OKR_HOI_Y.hanGio.max);
+			ok(
+				await goi(
+					"okr.suaHoiY",
+					{ hoiYId: h.id, hanLuc: tran.toISOString() },
+					Q.cookie,
+				),
+				"sua han dung createdAt + 168 gio",
+			);
+			const sau = await db.okrHoiY.findUniqueOrThrow({ where: { id: h.id } });
+			expect(sau.hanLuc.toISOString()).toBe(tran.toISOString());
+		},
+		CHO_MS,
+	);
 });
 
 type Ca = { ca: string; maHttp: number; cau: string };
@@ -193,7 +242,7 @@ type KetQua = Ca & { doi: { [bang: string]: number } };
 
 describe("mo-tu-choi", () => {
 	test(
-		"mo-tu-choi: 12 ca viết trước — mã HTTP và câu ghim khớp bảng khai; okrHoiY và okrTrail không đổi ở mọi ca",
+		"mo-tu-choi: 17 ca viết trước — mã HTTP và câu ghim khớp bảng khai; okrHoiY và okrTrail không đổi ở mọi ca",
 		async () => {
 			datDongHo(LUC);
 			const KHAI = [
@@ -229,6 +278,15 @@ describe("mo-tu-choi", () => {
 					maHttp: 400,
 					cau: T.nguoiChonDaGop,
 				},
+				{
+					ca: "sua-han-qua-createdAt-168-gio",
+					maHttp: 400,
+					cau: T.hanSuaNgoaiKhoang,
+				},
+				{ ca: "sua-han-truoc-bay-gio", maHttp: 400, cau: T.hanSuaNgoaiKhoang },
+				{ ca: "sua-loi-mo-khi-dang-gom", maHttp: 400, cau: T.chiKhiDangMo },
+				{ ca: "sua-con-so-khi-dang-gom", maHttp: 400, cau: T.chiKhiDangMo },
+				{ ca: "sua-sau-cong-bo", maHttp: 400, cau: T.daCongBo },
 			] as const satisfies readonly Ca[];
 
 			const coY = await gieoHoiY({ yCua: ["T"] });
@@ -237,6 +295,33 @@ describe("mo-tu-choi", () => {
 			const Q2 = await nguoiCo("e2-Q2", "admin");
 			const Q3 = await nguoiCo("e2-Q3", "admin");
 			await gieoY(daGop.h, Q3.id);
+			const dangMo = await gieoHoiY();
+			const dangGom = await gieoHoiY();
+			ok(
+				await goi(
+					"okr.suaHoiY",
+					{ hoiYId: dangGom.h, hanLuc: dongHo().toISOString() },
+					dangGom.nguoi.Q.cookie,
+				),
+				"doi han ve bay gio",
+			);
+			const congBo = await gieoHoiY();
+			ok(
+				await goi(
+					"okr.suaHoiY",
+					{ hoiYId: congBo.h, hanLuc: dongHo().toISOString() },
+					congBo.nguoi.Q.cookie,
+				),
+				"doi han ve bay gio truoc cong bo",
+			);
+			await gieoCongBo(congBo.h);
+			const taoLuc = (
+				await db.okrHoiY.findUniqueOrThrow({ where: { id: dangMo.h } })
+			).createdAt;
+			const suaVoi = (
+				g: { h: string; nguoi: { Q: { cookie: string } } },
+				vao: { hanLuc?: string; loiMo?: string; soLieu?: SoLieuHoiY },
+			) => goi("okr.suaHoiY", { hoiYId: g.h, ...vao }, g.nguoi.Q.cookie);
 			const { Q, T: thanhVien, O } = coY.nguoi;
 			const kyTrong = await taoNam("e2-trong", NAM_KE);
 			const kyMember = await taoNam("e2-member", NAM_KE);
@@ -294,6 +379,23 @@ describe("mo-tu-choi", () => {
 						{ hoiYId: daGop.h, nguoiChonUserId: Q3.id },
 						daGop.nguoi.Q.cookie,
 					),
+				"sua-han-qua-createdAt-168-gio": () =>
+					suaVoi(dangMo, {
+						hanLuc: lechMs(
+							sauGio(taoLuc, OKR_HOI_Y.hanGio.max),
+							MOT_MS,
+						).toISOString(),
+					}),
+				"sua-han-truoc-bay-gio": () =>
+					suaVoi(dangMo, {
+						hanLuc: lechMs(dongHo(), -MOT_MS).toISOString(),
+					}),
+				"sua-loi-mo-khi-dang-gom": () =>
+					suaVoi(dangGom, { loiMo: "Lời mở sửa sau khi đã qua hạn" }),
+				"sua-con-so-khi-dang-gom": () =>
+					suaVoi(dangGom, { soLieu: SO_LIEU_BON }),
+				"sua-sau-cong-bo": () =>
+					suaVoi(congBo, { loiMo: "Lời mở sửa sau khi đã công bố" }),
 			} satisfies {
 				[K in (typeof KHAI)[number]["ca"]]: () => Promise<TraLoi>;
 			};
