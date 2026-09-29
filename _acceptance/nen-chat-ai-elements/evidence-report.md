@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 787d66525c93e022bee430e6450c361c2fbd5a49
+verified_commit: a8af896d4f715b6d413bf3cb36faadf81ce95631
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -207,3 +207,15 @@ sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-24, do ghim lai tren cay hop nhat sau khi gop onehub 973f1b01 (#125)
 run_id: repin-20260924T160407Z-81970
 sha: 787d66525c93e022bee430e6450c361c2fbd5a49 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 4 — 2026-09-29, do sổ lệch chuẩn ghi bản vá nhãn vai của conversation.tsx (commit 92554b5b)
+run_id: repin-20260929T124702Z-10802
+sha: 92554b5b5f34d3d1e6ef2374f124168c6f3d18e7 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-09-29, do thẻ góp ý OKR thay Suggestion bằng ProposedChange và nới cổng mồ côi
+run_id: repin-20260929T162300Z-46292
+sha: f63d4435403654846778fdaecc002407e6cefe79 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 6 — 2026-09-29, do gộp onehub (#208–#211) vào nhánh thẻ góp ý OKR
+run_id: repin-20260929T165336Z-18491
+sha: a8af896d4f715b6d413bf3cb36faadf81ce95631 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng

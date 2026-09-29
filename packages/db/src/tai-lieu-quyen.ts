@@ -38,6 +38,7 @@ export function dieuKienThay(
 		OR: [
 			{ banDangDungId: { not: null } },
 			{ chuTrangId: nguoi.id },
+			{ taoBoiId: nguoi.id },
 			{ deXuat: { some: { taoBoiId: nguoi.id } } },
 		],
 	};

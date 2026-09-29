@@ -62,12 +62,16 @@ Gộp hai loại vào một dòng là cách nhanh nhất để lần sau chép n
 
 **Tệp:** `packages/ui/src/components/ai-elements/conversation.tsx`
 
-**Số dòng khác:** 62
+**Số dòng khác:** 93
 
-**Vân tay lệch:** `d6b6b975f09e45d2`
+**Vân tay lệch:** `5313136dacbb05cd`
 
-**Đổi gì:** Tệp này đã kéo bản CLI tươi ở vòng này, nên toàn bộ 62 dòng khác là
-bản vá của kho, không có phần cũ hơn thượng nguồn.
+**Đổi gì:** Đo lại 29/09 bằng bản CLI tươi trong sân tạm: toàn bộ 93 dòng khác
+là bản vá của kho, **không có phần cũ hơn thượng nguồn** — thượng nguồn chưa đổi
+tệp này kể từ lần kéo 09/09. Bản vá đến theo hai đợt, ghi tách ra vì đợt sau là
+lý do sổ này từng đỏ.
+
+Bản vá của kho, đợt 09/09 (vòng này):
 
 - Thêm `import { useMessages } from "@crm/ui/components/locale-provider"`.
 - `ConversationEmptyState` bỏ hai giá trị mặc định của tham số —
@@ -78,16 +82,45 @@ bản vá của kho, không có phần cũ hơn thượng nguồn.
   được hook; vế `description && …` bỏ đi vì bản dự phòng luôn có.
 - `ConversationContent` thêm hai lớp lên con trực tiếp:
   `[&>*]:[content-visibility:auto]` và `[&>*]:[contain-intrinsic-size:auto_10rem]`,
-  theo đúng lối `message-scroller.tsx` đang đi.
+  theo đúng lối `message-scroller.tsx` đang đi. Chuỗi lớp tách thành lời gọi
+  `cn(…)` nhiều dòng vì dài quá khổ.
 - Hai `rounded-full` — nút cuộn xuống và nút tải hội thoại — đổi sang
   `rounded-md`.
 
-**Vì sao:** Ba lý do khác nhau, không dồn được làm một. Hai chuỗi là màn tiếng
-Việt: `AGENTS.md` và `docs/design.md` không cho chữ tiếng Anh đứng trên màn, và
-AC-5 ghim đúng hai chuỗi này làm dân số. Hai bán kính là thang bán kính đóng của
-`docs/design.md`, `rounded-full` không có trong thang. Hai lớp `content-visibility`
-là bản vá của AC-7: `Conversation` bản gốc bố cục toàn bộ lượt, nên ở ca 500 lượt
-nó chậm hơn `MessageScroller` quá ngưỡng 1,2 lần mà Cổng 1 đã ký.
+Bản vá của kho, đợt 10/09 (lượt ghim lại, commit `040c52395`, sổ không được
+cập nhật lúc đó):
+
+- Thêm `import type { Messages } from "@crm/ui/lib/messages"`.
+- `defaultFormatMessage` thượng nguồn viết hoa chữ đầu của `message.role` để ra
+  `**User:**` · `**Assistant:**`. Bản trong cây thay bằng hàm `nhanVai(message, msg)`
+  đọc `msg.chatMessage.roleUser` · `msg.chatMessage.roleAssistant`, và
+  `defaultFormatMessage` thành hàm bậc cao `(msg) => (message) => …` vì nó cần
+  bảng chuỗi mà ở tầng module thì không gọi được hook.
+- `messagesToMarkdown` **đổi chữ ký**: thêm tham số thứ hai bắt buộc
+  `msg: Messages`, còn `formatMessage` lùi xuống thứ ba và thành tuỳ chọn không
+  giá trị mặc định (`formatMessage ?? defaultFormatMessage(msg)` trong thân).
+  Tham số vòng lặp đổi tên `msg` → `m` để khỏi che bảng chuỗi.
+- `ConversationDownload` bỏ `formatMessage = defaultFormatMessage` ở tham số,
+  gọi `useMessages()`, truyền `msg` vào `messagesToMarkdown`, và thêm `msg` vào
+  mảng phụ thuộc của `useCallback`.
+
+**Vì sao:** Bốn lý do khác nhau, không dồn được làm một. Hai chuỗi của
+`ConversationEmptyState` là màn tiếng Việt: `AGENTS.md` và `docs/design.md`
+không cho chữ tiếng Anh đứng trên màn, và AC-5 ghim đúng hai chuỗi này làm dân
+số. Hai bán kính là thang bán kính đóng của `docs/design.md`, `rounded-full`
+không có trong thang. Hai lớp `content-visibility` là bản vá của AC-7:
+`Conversation` bản gốc bố cục toàn bộ lượt, nên ở ca 500 lượt nó chậm hơn
+`MessageScroller` quá ngưỡng 1,2 lần mà Cổng 1 đã ký. Nhãn vai là **lớp chuỗi
+thứ năm** ghi ở `contract.md` mục "Đã sửa thêm ở lượt ghim lại (10/09)": chuỗi
+*suy ra* từ `message.role`, không có literal nào cho răng quét chuỗi nhìn thấy,
+nên bản hội thoại tải về vẫn ra `**User:**` dù mọi chuỗi khác đã về bảng. Nó là
+finding trong hợp đồng nên được sửa ngay ở lượt đó.
+
+Khi chép lại tay sau một lần kéo: đổi chữ ký `messagesToMarkdown` là đổi API
+công khai của tệp. Hiện không chỗ nào ngoài chính tệp gọi nó, nhưng ai dùng nó
+từ bản thượng nguồn theo chữ ký cũ `(messages, formatMessage)` sẽ truyền hàm vào
+chỗ bảng chuỗi — kiểm kiểu bắt được, nên chạy `bun run check-types` ngay sau
+bước chép.
 
 ### message.tsx
 
@@ -196,6 +229,27 @@ hơn thật — nó bỏ được một lần dựng component trong render. Ké
 làm, nhưng nó vẫn phải đi qua đúng nghi thức ở cuối sổ, vì `reasoning.tsx` nhập
 `./shimmer` và răng mồ côi đang tính bao đóng qua đúng cạnh đó.
 
+### confirmation.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/confirmation.tsx`
+
+**Số dòng khác:** 10
+
+**Vân tay lệch:** `5695b450b02078b9`
+
+**Đổi gì:** Kéo bằng CLI ngày 29/09 ở lượt `the-gop-y-okr`, trong một sân tạm có
+`components.json` của kho, rồi chép riêng tệp này vào cây. Chạy thẳng trong
+`packages/ui` thì CLI dừng hỏi ghi đè `alert.tsx` và `button.tsx`, và thêm một gói
+`cn` không ai dùng vào `package.json`. Toàn bộ 10 dòng khác là bản vá của kho:
+
+- Bỏ bốn dòng chú thích `//` của thượng nguồn.
+- `ConfirmationAction` bỏ `className="h-8 px-3 text-sm"`, dùng `size="sm"` của `Button`.
+
+**Vì sao:** `AGENTS.md` cấm chú thích trong mã. `docs/design.md` cấm `className`
+đổi cỡ và khoảng cách của một component `@crm/ui` tại chỗ gọi; cỡ nhỏ đã có sẵn
+thành biến thể `sm` của `Button`. Tệp không có chữ hiện trên màn: các chuỗi còn
+lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-cung.mjs`.
+
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 
 Đây không phải cảnh báo trừu tượng. Nó đã xảy ra trong chính kho này, trong hai
@@ -282,7 +336,8 @@ Bảy bước, theo thứ tự. Bỏ bước nào cũng là để một bản v�
    nào.
 4. **Chép lại tay từng bản vá đã ghi trong mục của tệp đó ở sổ này**, vào đúng
    `packages/ui/src/components/ai-elements` — chuỗi về `useMessages()`, bán kính
-   về thang, `content-visibility` cho `conversation`. Đọc mục, không đọc trí nhớ.
+   về thang, `content-visibility` và nhãn vai của bản tải về cho `conversation`.
+   Đọc mục, không đọc trí nhớ.
 5. **Chạy `node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`**, đọc
    số dòng khác và vân tay mới, rồi cập nhật mục của tệp đó: phần "đổi gì" trước,
    hai con số sau. Đổi con số mà không đọc diff là làm hồ sơ lệch.

@@ -5,6 +5,7 @@ import { Combobox } from "@crm/ui/components/combobox";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import {
 	Dialog,
+	DialogAssistBody,
 	DialogClose,
 	DialogContent,
 	DialogFooter,
@@ -52,13 +53,7 @@ import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-import {
-	CotGopY,
-	type GiaTriDaNhan,
-	LOP_THAN_HOP,
-	NutGopY,
-	useGopY,
-} from "./cot-gop-y";
+import { CotGopY, type GiaTriDaNhan, NutGopY, useGopY } from "./cot-gop-y";
 import type { KetQua } from "./kieu";
 import { KHOA_NGUON } from "./nguon-so";
 import { nhapNguonKhac } from "./nguon-so-luat";
@@ -390,15 +385,12 @@ export function HopThoaiKr({
 		>
 			<DialogContent
 				data-hop-thoai-kr={n.krId ?? "moi"}
-				size={gopY.cotMo ? "wide" : "default"}
+				size={gopY.cotMo ? "assist" : "default"}
 			>
 				<DialogHeader>
 					<DialogTitle>{n.krId ? h.suaKr : h.themKr}</DialogTitle>
 				</DialogHeader>
-				<div
-					className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
-					data-cuon-hop
-				>
+				<DialogAssistBody split={gopY.cotMo} data-cuon-hop>
 					<form
 						id={`${ma}-form`}
 						onSubmit={(e) => {
@@ -412,6 +404,7 @@ export function HopThoaiKr({
 								<FieldLabel htmlFor={`${ma}-ten`}>{h.tenKr}</FieldLabel>
 								<Input
 									id={`${ma}-ten`}
+									data-duoc-chi={gopY.oDuocChi === "kr.title" || undefined}
 									value={ten}
 									maxLength={200}
 									autoComplete="off"
@@ -625,7 +618,7 @@ export function HopThoaiKr({
 						</FieldGroup>
 					</form>
 					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
-				</div>
+				</DialogAssistBody>
 				<DialogFooter>
 					<DialogClose asChild dongNgay={daLuuMot && !coThayDoi}>
 						<Button variant="outline" disabled={dangLuu}>

@@ -221,6 +221,7 @@ const GHIM_OKR_GOP_Y = {
 		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A",
 	],
 	"okr-gop-y:vet.suaTruong": ["Sửa 1", "Sửa 12"],
+	"okr-gop-y:dong.gopVao": ["Góp vào «1»", "Góp vào «12»"],
 } satisfies Record<string, [string, string]>;
 
 const GHIM = {

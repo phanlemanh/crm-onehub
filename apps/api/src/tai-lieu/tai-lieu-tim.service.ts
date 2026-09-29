@@ -6,7 +6,7 @@ import { cauChuaLienKet, chuThuong } from "@crm/validation/tai-lieu-markdown";
 import { doanTrich, dungTruyVan } from "@crm/validation/tai-lieu-tim";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import { type NguoiGoi, thayTrang } from "./quyen";
+import type { NguoiGoi } from "./quyen";
 import type {
 	TaiLieuBoLocOutput,
 	TaiLieuNhacToiOutput,
@@ -85,15 +85,11 @@ export class TaiLieuTimService {
 	}
 
 	async nhacToi(nguoi: NguoiGoi, slug: string): Promise<TaiLieuNhacToiOutput> {
-		const dich = await this.db.taiLieuTrang.findUnique({
-			where: { slug },
-			select: {
-				chuTrangId: true,
-				banDangDungId: true,
-				deXuat: { distinct: ["taoBoiId"], select: { taoBoiId: true } },
-			},
+		const dich = await this.db.taiLieuTrang.findFirst({
+			where: { AND: [{ slug }, dieuKienThay(nguoi)] },
+			select: { id: true },
 		});
-		if (!dich || !thayTrang(nguoi, dich, dich.deXuat)) {
+		if (!dich) {
 			throw new NotFoundException(TAI_LIEU_API.thongDiep.khongCo);
 		}
 		const lienKet = await this.db.taiLieuLienKet.findMany({

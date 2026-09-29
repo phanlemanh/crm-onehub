@@ -3,7 +3,6 @@ import { join } from "node:path";
 import puppeteer from "puppeteer-core";
 import { okrMessages } from "../../../apps/app/lib/messages/okr.ts";
 import { okrGopYMessages } from "../../../apps/app/lib/messages/okr-gop-y.ts";
-import { messages as uiMessages } from "../../../packages/ui/src/lib/messages.ts";
 import {
 	batTacTu,
 	cauThieuKhoa,
@@ -78,7 +77,6 @@ const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
 const m = okrMessages("vi");
 const g = okrGopYMessages("vi");
-const ui = uiMessages("vi");
 const QUY4 = idMau("chu-ky", E4.chuKy);
 const bo = JSON.parse(
 	readFileSync(join(GOC, "apps/api/scripts/okr-mau/cong-ty.json"), "utf8"),
@@ -497,7 +495,7 @@ async function quyetDongKhac(t, d) {
 				.filter(
 					(o) =>
 						o.getAttribute("data-dong") !== id &&
-						!o.hasAttribute("data-da-quyet"),
+						!o.hasAttribute("data-decided"),
 				)
 				.map((o) => o.getAttribute("data-dong"))[0] ?? null,
 		d.id,
@@ -516,12 +514,12 @@ async function quyetDongKhac(t, d) {
 				(b) => b.textContent?.trim() === chu,
 			),
 		hang,
-		ui.suggestion.dismissShort,
+		g.dong.bac,
 	);
-	await bam(t.p, hang, nut ? ui.suggestion.dismissShort : g.dong.boQua);
+	await bam(t.p, hang, nut ? g.dong.bac : g.dong.boQua);
 	kiem(
 		`ST-muctieu-da-quyet ${t.rong}: dong ${khac} thu gon`,
-		await hien(t.p, `${hang}[data-da-quyet]`),
+		await hien(t.p, `${hang}[data-decided]`),
 	);
 	await chup(t, "ST-muctieu-da-quyet", hang);
 }
@@ -549,13 +547,13 @@ async function buocGopY(tl) {
 	const O = O_CUA_TRUONG[d.truong];
 	const hang = `[data-cot-gop-y] [data-dong="${d.id}"]`;
 	for (const t of ds) {
-		await bam(t.p, hang, ui.suggestion.edit);
+		await bam(t.p, hang, g.dong.sua);
 		kiem(
 			`ST-muctieu-sua-dong ${t.rong}: o sua mo`,
-			await hien(t.p, `${hang} [data-slot="suggestion-edit"]`),
+			await hien(t.p, `${hang} [data-slot="proposed-change-edit"]`),
 		);
 		await chup(t, "ST-muctieu-sua-dong", hang);
-		await bam(t.p, hang, ui.suggestion.cancelEdit);
+		await bam(t.p, hang, g.dong.huySua);
 	}
 
 	const [p1, p2] = ds;
@@ -567,8 +565,8 @@ async function buocGopY(tl) {
 		await ket(3);
 	}
 	await quyetDongKhac(p2, d);
-	await bam(p1.p, hang, ui.suggestion.acceptShort);
-	await p1.p.waitForSelector(`${hang}[data-da-quyet="accepted"]`, {
+	await bam(p1.p, hang, g.dong.nhan);
+	await p1.p.waitForSelector(`${hang}[data-decided="accepted"]`, {
 		visible: true,
 		timeout: E4.cho.manMs,
 	});

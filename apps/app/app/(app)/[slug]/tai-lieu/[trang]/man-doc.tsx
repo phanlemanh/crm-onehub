@@ -13,7 +13,7 @@ import {
 	readerHeadings,
 } from "@crm/ui/components/markdown-reader";
 import { Separator } from "@crm/ui/components/separator";
-import type { LoaiTrang } from "@crm/validation/tai-lieu";
+import type { DangCho, LoaiTrang } from "@crm/validation/tai-lieu";
 import Link from "next/link";
 import { useMemo } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
@@ -28,12 +28,35 @@ import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import {
 	duongDanhSach,
 	duongDeXuat,
+	duongNguon,
 	duongSuaTrang,
 	ngayTaiLieu,
 } from "@/lib/tai-lieu-man";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { type NguonCuaTrang, NguonTrang } from "./nguon-trang";
 import { NhacToi } from "./nhac-toi";
+
+export type NguonCho = { id: string; tenTep: string; lyDo: string | null };
+
+export type ChoLanDau = { dangCho: DangCho; nguon: NguonCho | null };
+
+const CO_VIET_TAY = {
+	duyet: false,
+	"may-soan": false,
+	"go-tay": true,
+	loi: true,
+	"tra-lai": true,
+	"chua-co-ban": true,
+} satisfies Record<DangCho, boolean>;
+
+const CO_XEM_NGUON = {
+	duyet: false,
+	"may-soan": true,
+	"go-tay": true,
+	loi: true,
+	"tra-lai": false,
+	"chua-co-ban": false,
+} satisfies Record<DangCho, boolean>;
 
 export type TrangDoc = {
 	slug: string;
@@ -43,7 +66,7 @@ export type TrangDoc = {
 	donVi: string | null;
 	phienBan: { so: number; duyetLuc: string } | null;
 	noiDung: string;
-	choLanDau: boolean;
+	choLanDau: ChoLanDau | null;
 	soBanCho: number;
 	deXuatChoId: string | null;
 	nguon: NguonCuaTrang | null;
@@ -92,15 +115,7 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 				>
 					<article className="flex min-w-0 max-w-3xl flex-1 flex-col gap-4">
 						{trang.choLanDau ? (
-							<Alert data-cho-lan-dau="" role="status">
-								<Icon icon={Information} />
-								<AlertTitle>{d.choLanDauTieuDe}</AlertTitle>
-								<AlertDescription>
-									<span translate="no">
-										{dien(d.choLanDauThan, { ten: trang.chuTrang })}
-									</span>
-								</AlertDescription>
-							</Alert>
+							<KhungCho cho={trang.choLanDau} chuTrang={trang.chuTrang} />
 						) : null}
 						<div className="flex flex-wrap items-center gap-2">
 							{trang.soBanCho > 0 ? (
@@ -115,6 +130,19 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 									</Link>
 								</Button>
 							)}
+							{trang.choLanDau && CO_VIET_TAY[trang.choLanDau.dangCho] ? (
+								<Button asChild size="sm" variant="outline">
+									<Link href={url(duongSuaTrang(trang.slug))}>{d.vietTay}</Link>
+								</Button>
+							) : null}
+							{trang.choLanDau?.nguon &&
+							CO_XEM_NGUON[trang.choLanDau.dangCho] ? (
+								<Button asChild size="sm" variant="ghost">
+									<Link href={url(duongNguon(trang.choLanDau.nguon.id))}>
+										{d.xemNguon}
+									</Link>
+								</Button>
+							) : null}
 							{trang.deXuatChoId ? (
 								<Button asChild size="sm" variant="ghost">
 									<Link href={url(duongDeXuat(trang.deXuatChoId))}>
@@ -165,5 +193,26 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 				</div>
 			</PageShellContent>
 		</>
+	);
+}
+
+function KhungCho({ cho, chuTrang }: { cho: ChoLanDau; chuTrang: string }) {
+	const d = taiLieuMessages(useLocale()).doc;
+	const loi = cho.dangCho === "loi" ? cho.nguon?.lyDo : null;
+	return (
+		<Alert data-cho-lan-dau={cho.dangCho} role="status">
+			<Icon icon={Information} />
+			<AlertTitle>{d.cho[cho.dangCho].tieuDe}</AlertTitle>
+			<AlertDescription>
+				<p translate="no">{dien(d.cho[cho.dangCho].than, { ten: chuTrang })}</p>
+				{cho.nguon && CO_XEM_NGUON[cho.dangCho] ? (
+					<p className="wrap-anywhere" translate="no">
+						{loi
+							? dien(d.nguonLyDo, { tep: cho.nguon.tenTep, lyDo: loi })
+							: dien(d.nguonTep, { tep: cho.nguon.tenTep })}
+					</p>
+				) : null}
+			</AlertDescription>
+		</Alert>
 	);
 }

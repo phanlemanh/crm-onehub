@@ -65,16 +65,8 @@ const en = {
 		previousSlide: "Previous item",
 		nextSlide: "Next item",
 	},
-	suggestion: {
-		accept: "Accept",
+	proposedChange: {
 		edit: "Edit",
-		dismiss: "Dismiss",
-		accepted: "Accepted",
-		dismissed: "Dismissed",
-		acceptShort: "Accept",
-		dismissShort: "Reject",
-		acceptEdited: "Accept edited",
-		cancelEdit: "Cancel",
 	},
 	spinner: {
 		loading: "Loading",
@@ -250,16 +242,8 @@ const vi = {
 		previousSlide: "Mục trước",
 		nextSlide: "Mục sau",
 	},
-	suggestion: {
-		accept: "Chấp nhận gợi ý",
+	proposedChange: {
 		edit: "Sửa",
-		dismiss: "Từ chối gợi ý",
-		accepted: "Đã nhận",
-		dismissed: "Đã bác",
-		acceptShort: "Nhận",
-		dismissShort: "Bác",
-		acceptEdited: "Nhận bản đã sửa",
-		cancelEdit: "Huỷ",
 	},
 	spinner: {
 		loading: "Đang tải",

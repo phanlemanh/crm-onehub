@@ -15,6 +15,8 @@ const BO_QUA = new Set([
 	"dist",
 	"build",
 	"coverage",
+	".eve",
+	".output",
 ]);
 
 const MIEN_TRU = [
@@ -74,7 +76,7 @@ function gom(thuMuc, kho) {
 	const muc = liet(thuMuc);
 	if (muc === null) return false;
 	for (const d of muc) {
-		if (BO_QUA.has(d.name)) continue;
+		if (BO_QUA.has(d.name) || d.name.startsWith(".next")) continue;
 		const duong = join(thuMuc, d.name);
 		if (d.isDirectory()) {
 			if (!gom(duong, kho)) return false;
@@ -95,11 +97,31 @@ if (!gom(UNG_DUNG, khoUngDung)) {
 }
 const chuUngDung = khoUngDung.join("\n");
 
-const hat = tep.filter((t) =>
+const nhapAiElements = (chu, t) =>
 	new RegExp(`@crm/ui/components/ai-elements/${ghim(ten(t))}(?![\\w-])`).test(
-		chuUngDung,
-	),
-);
+		chu,
+	);
+
+const thang = tep.filter((t) => nhapAiElements(chuUngDung, t));
+
+const THANH_PHAN = dirname(THU_MUC);
+const cau = (liet(THANH_PHAN) ?? [])
+	.filter((d) => d.isFile() && d.name.endsWith(".tsx"))
+	.map((d) => d.name)
+	.filter((c) =>
+		new RegExp(`@crm/ui/components/${ghim(ten(c))}(?![\\w/-])`).test(
+			chuUngDung,
+		),
+	);
+const quaCau = new Map();
+for (const c of cau) {
+	const nguon = readFileSync(join(THANH_PHAN, c), "utf8");
+	for (const t of tep) {
+		if (!quaCau.has(t) && nhapAiElements(nguon, t)) quaCau.set(t, c);
+	}
+}
+
+const hat = tep.filter((t) => thang.includes(t) || quaCau.has(t));
 
 function giai(tuTep, khai) {
 	const dich = resolve(dirname(join(THU_MUC, tuTep)), khai);
@@ -151,9 +173,11 @@ console.log(
 console.log(`SONG (${songSap.length}):`);
 for (const t of songSap) {
 	const nhapBoi = tep.filter((x) => song.has(x) && canh.get(x)?.has(t));
-	const boi = hat.includes(t)
+	const boi = thang.includes(t)
 		? "apps/** nhap thang"
-		: `${nhapBoi.join(", ")} nhap qua duong tuong doi`;
+		: quaCau.has(t)
+			? `${quaCau.get(t)} (apps/** nhap) nhap qua @crm/ui`
+			: `${nhapBoi.join(", ")} nhap qua duong tuong doi`;
 	console.log(`   ${t} — ${boi}`);
 }
 console.log(`MIEN TRU (${mienTru.length}):`);

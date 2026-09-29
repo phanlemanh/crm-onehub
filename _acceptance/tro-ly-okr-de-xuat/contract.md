@@ -88,11 +88,10 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 ## Notes
 
 - Độ trễ góp ý khi bấm phụ thuộc tải máy đo: round 3 đo dưới tải ra p50 11,3 s / p90 22,5 s (trên ngưỡng 8 s / 15 s của AC-14), round 2 và round 4 máy rảnh lọt ngưỡng (round 4: 6,7 s / 11,1 s). Chủ kho gỡ giới hạn đã khai sau round 4 (29/09): E24 lại đòi thoát 0 và đo khi máy rảnh. Mọi công tắc tắt khi gộp; độ trễ trên OKR thật vẫn đo lại ở Cổng Giá trị trước khi bật cho người dùng.
-- Known limit (chủ kho khai 30/09, khi ghim lại hồ sơ sau lượt 8c; sổ d-20260929T225005Z-64): độ trễ góp ý không còn là điều kiện đạt của E24. Bốn lượt ghim lại 29–30/09 ra p50 7,2–8,7 s / p90 15,1–22,6 s, trên ngưỡng 8 s / 15 s. Ngưỡng đó là điều kiện bật, đo lại ở Cổng Giá trị trên OKR thật trước khi bật cho người dùng.
-- Known limit (cùng sổ): khoảng 2 trong 30 lượt góp ý chết giữa chừng ở phía mô hình, và người dùng thấy báo hỏng. E22 tính đạt khi tối đa 2 ca chết như vậy, có ghi tên ca, và mọi ca còn lại đều đúng.
 
 ### Known limits (Cổng Bằng chứng, 2026-09-29)
 
+- E24: độ trễ góp ý khai mã thoát 1 là giới hạn đã biết (chủ kho chọn 29/09 khi ghim lại cho lượt `the-gop-y-okr`): độ trễ phụ thuộc tải phía model, ngưỡng 8 s / 15 s của AC-14 không chặn gộp; pin báo khi lọt ngưỡng trở lại.
 - Ngoài-1: báo cáo kiểm luật kho (`rang/luat-kho.mjs`) kết luận luật «không viết hai lần một đơn vị» đạt chỉ vì không phán quyết tay nào chứa chữ «TRÙNG»; dòng `1_000` ở thẻ số đo cùng nghĩa với giây của API nhưng nhãn tránh chữ đó.
 - Ngoài-4: bộ kiểm góp ý (`apps/agent/evals/okr/gop-y.eval.ts`) tự khai lại đơn vị phút thay vì nhập `MINUTE_MS` dùng chung.
 - Ngoài-5: phán quyết tay cho `NGAY_MS` trong cấu hình kiểm luật kho không khớp dòng nào, vì tệp cấu hình bị bỏ khỏi phần quét số.

@@ -1,0 +1,22 @@
+{
+  "feature_plain": "Khi nhờ Trợ lý OKR góp ý, hộp sửa rộng ra, mỗi đề xuất thành một thẻ đọc liền một mạch với hàng nút ở dưới và một nút chính nổi bật; gợi ý thông tin của Cá nhân dùng cùng kiểu thẻ.",
+  "will_do": [],
+  "wont_do": [],
+  "scope_plain": "Lượt này chỉ đổi cách thẻ góp ý hiện ra; «Nhận tất cả», chip nguồn, hội thoại hỏi lại và tác tử ở tab Agent để cho các lượt sau.",
+  "decisions": [],
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260929T115451Z-1", "p": "Chọn phương án A (thẻ xếp dọc, nút ở chân) — đổi lại chưa hỏi lại Trợ lý được và góp ý vẫn nằm ở cột."},
+    {"id": "d-20260929T115451Z-2", "p": "Dựng thẻ trên khuôn duyệt có sẵn của AI Elements — đổi lại thêm một tệp chép về phải ghi sổ lệch chuẩn."},
+    {"id": "d-20260929T115451Z-3", "p": "KHÔNG làm «Nhận tất cả», chip nguồn, nhiều phương án — đổi lại người vẫn quyết từng thẻ."},
+    {"id": "d-20260929T115451Z-4", "p": "KHÔNG dựng bản mẫu riêng, vì bản phác thảo đã duyệt ở trang rà soát — đổi lại ảnh thật chỉ có ở bước chấm."},
+    {"id": "d-20260929T115451Z-5", "p": "Giữ nguyên tên mọi nút — đổi lại chữ trên nút không đổi dù bố cục đổi."},
+    {"id": "d-20260929T122853Z-7", "p": "Kéo khuôn duyệt của AI Elements trong một thư mục tạm rồi chép riêng tệp đó vào kho — đổi lại không ghi đè nút và hộp cảnh báo đang có."},
+    {"id": "d-20260929T122853Z-8", "p": "KHÔNG thêm vế chặn «nút rời trang» vào hộp thoại như kế hoạch dự tính, vì với thư viện đang dùng nó không bao giờ chạy — đổi lại sự cố «bấm Sửa đóng hộp» chỉ được chốt bằng phép đo trên trình duyệt thật."},
+    {"id": "d-20260929T124138Z-9", "p": "Sửa câu mô tả chiều đỏ của phép đo phím Esc cho đúng thứ đang giữ hộp mở — đổi lại một câu trong bộ phép đo đổi sau Cổng Phạm vi, tiêu chí giữ nguyên."},
+    {"id": "d-20260929T124138Z-10", "p": "«Mở KR này» khoá kèm lý do khi Mục tiêu còn sửa chưa lưu — đổi lại người phải lưu trước rồi mới mở KR, không mất chữ đang gõ."},
+    {"id": "d-20260929T125906Z-11", "p": "Công cụ tìm thành phần không ai dùng của hồ sơ chat giờ nhìn qua một bước thành phần trung gian và bỏ qua thư mục bản dựng — đổi lại hồ sơ đã ký đó phải ghim lại khi giao."},
+    {"id": "d-20260929T131544Z-12", "p": "Khai từng bước lái màn cho ba phép đo trên trình duyệt — đổi lại không đổi tiêu chí hay kết quả mong đợi."},
+    {"id": "d-20260929T133002Z-13", "p": "Kịch bản lái màn nhờ Trợ lý lại tới khi có đủ ba loại thẻ và chụp trọn thẻ căn chỉnh — đổi lại mỗi lượt đo có thể tốn tới bốn lượt gọi model."}
+  ]
+}

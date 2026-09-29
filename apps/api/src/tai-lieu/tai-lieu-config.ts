@@ -1,4 +1,5 @@
-import { TAI_LIEU } from "@crm/validation/tai-lieu";
+import { type DangCho, TAI_LIEU } from "@crm/validation/tai-lieu";
+import type { TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 
 const HE_SO_NFD = 3;
 const PHUT_MS = 60_000;
@@ -36,3 +37,12 @@ export const TAI_LIEU_API = {
 			"Chưa đối chiếu hết con số với nguồn. Đánh dấu từng con số rồi mới duyệt được.",
 	},
 } as const;
+
+export const NGUON_CHO = {
+	CHO_DOC: "may-soan",
+	CHO_SOAN: "may-soan",
+	DANG_SOAN: "may-soan",
+	DA_SOAN: null,
+	CAN_GO_TAY: "go-tay",
+	LOI: "loi",
+} as const satisfies Record<TrangThaiNguon, DangCho | null>;
