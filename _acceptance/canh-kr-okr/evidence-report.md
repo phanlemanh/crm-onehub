@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b08c53a6574d2a596d22b3f023cf9c24a1a0a7cc
+verified_commit: f55e110820fbc2ccf229a0445cdf99813408649e
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -321,3 +321,7 @@ Round 1: Cả 21 eval máy (E1-E21, gồm ba cặp ui-check + script chung một
 ### Re-pin lần 1 — 2026-09-29, do PR #210 sửa hai thước của canh-kr-okr (ảnh ra .acceptance-runs; E20 đo được sau gộp); bằng chứng hoá cũ từ b7823dd1
 run_id: repin-20260929T141057Z-15407
 sha: b08c53a6574d2a596d22b3f023cf9c24a1a0a7cc · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths), E14 (E14 không khai paths), E16 (E16 không khai paths), E22 (E22 không khai paths)
+
+### Re-pin lần 2 — 2026-09-29, do thước migration của khep-ky-okr và canh-kr-okr đo được sau khi lượt đã gộp (dựng lại nền lúc gộp)
+run_id: repin-20260929T151035Z-23219
+sha: f55e110820fbc2ccf229a0445cdf99813408649e · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths), E14 (E14 không khai paths), E16 (E16 không khai paths), E22 (E22 không khai paths)
