@@ -367,7 +367,7 @@ tệp đó.
 | --- | --- | --- | --- | --- | --- |
 | 9a · nền | `tro-ly-okr-nen` | T3, có Cổng 1.5 | sổ chi phí AI, trần tháng, bật tắt theo đơn vị; người dùng chưa thấy gì | vá Slack đã gộp; ZDR đạt (đạt ở N0, 2026-09-27) | — |
 | 9b · góp ý khi bấm | `tro-ly-okr-de-xuat` | T2 | AI-01 · AI-02 · AI-03 (AI) · AI-05 · DO-06 | 9a và bộ OKR mẫu đã gộp (lượt 7 đã lên) | N1 có ít nhất 12 ca từ OKR quý 4 thật và chúng đạt cùng ngưỡng như ca mẫu |
-| 9c · tóm tắt tuần | `tro-ly-okr-tom-tat` | T2 | AI-04 | 9b đã gộp | chạy bóng ít nhất 3 tuần trên Cập nhật tuần thật và đạt ngưỡng ký |
+| 9c · tóm tắt tuần | `tro-ly-okr-tom-tat` | T2 | AI-04 | 9b đã gộp | chạy ở chế độ ẩn ít nhất 3 tuần trên Cập nhật tuần thật và đạt ngưỡng ký |
 
 ### Lượt 10 — `okr-trong-chat` · T3
 
@@ -438,8 +438,8 @@ lượt dựng.
    Bộ mẫu nằm trong git vì không chứa dữ liệu thật; ca thật của N1 vẫn ngoài git.
    Lệnh nạp từ chối chạy khi trỏ vào cơ sở dữ liệu production, hoặc vào workspace
    đã có OKR thật.
-2. **Công tắc ba nấc: tắt · chạy bóng · bật.** 9a có công tắc bật tắt theo việc ×
-   đơn vị. Thêm nấc giữa: **chạy bóng** — máy chạy trên dữ liệu thật, ghi sổ chi
+2. **Công tắc ba nấc: tắt · chế độ ẩn · bật.** 9a có công tắc bật tắt theo việc ×
+   đơn vị. Thêm nấc giữa: **chế độ ẩn** (tên cũ «chạy bóng», đổi 2026-09-28) — máy chạy trên dữ liệu thật, ghi sổ chi
    phí và số đo, nhưng chỉ quản trị chương trình thấy kết quả. Đó là cách kiểm
    bằng dữ liệu thật mà người dùng chưa phải nhận kết quả sai. Nấc này dựng trong
    9b, lượt đầu tiên dùng công tắc. Chạy bóng tốn tiền thật và tính vào trần $9.
@@ -483,8 +483,8 @@ quý 1, chỉ gộp bản vá lỗi và S2. Lượt nào chấm xong trong đón
 | M | không — chỉ máy dev và bản xem trước | không bao giờ trên production |
 | 8a, 8b | có, ngay khi gộp (không có AI) | — ; bốn tuần dùng quý 4 chọn phần cần mài |
 | 9b | không — công tắc tắt | N1 có ít nhất 12 ca thật, đạt cùng ngưỡng như ca mẫu; cấp OneHub trước mùa OKR năm, mọi phòng ban trước mùa quý 1 |
-| 9c | không — chạy bóng từ tuần có Cập nhật tuần thật | ba tuần chạy bóng đạt ngưỡng ký: câu bị bỏ ≤ 10%, không số lệch lọt qua |
-| 10 · cảnh báo trượt | không — chạy bóng hai tuần, đếm cảnh báo lẽ ra đã gửi | số cảnh báo mỗi trưởng đơn vị mỗi tuần nằm trong ngưỡng Cổng Phạm vi đặt |
+| 9c | không — chạy ở chế độ ẩn từ tuần có Cập nhật tuần thật | ba tuần ở chế độ ẩn đạt ngưỡng ký: câu bị bỏ ≤ 10%, không số lệch lọt qua |
+| 10 · cảnh báo trượt | không — chạy ở chế độ ẩn hai tuần, đếm cảnh báo lẽ ra đã gửi | số cảnh báo mỗi trưởng đơn vị mỗi tuần nằm trong ngưỡng Cổng Phạm vi đặt |
 | 10 · nút trong Slack | không | quản trị Slack đồng ý quyền mới, và số đo lượt 4 cho thấy cập nhật trễ quá một ngày làm việc hoặc quá 2 phút |
 | C | không — công tắc tắt | eval hỏi đáp trên OKR thật đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production |
 | L | không | kỳ chấm và nhìn lại quý 4 |
@@ -556,7 +556,7 @@ vọng đi từ ngày đó tới 2026-12-31.
 | Test chập chờn làm đỏ CI (vd `claimDue`) | Đã sửa (PR #108); không `--no-verify` |
 | GitHub Actions không chạy job vì lỗi thanh toán tài khoản (từ 2026-09-24) | Bằng chứng tạm là năm lệnh kiểm ở máy, ghi rõ trong hồ sơ; chủ kho sửa ở Billing & plans; không PR nào của lộ trình được coi là xanh CI cho tới khi job chạy thật |
 | Chi phí AI khi cả công ty dùng | Lượt 9 chỉ mở khi có trần; tóm tắt gom theo đơn vị |
-| Tính năng dựng trên ca mẫu trượt khi gặp OKR thật | Công tắc tắt khi gộp; chạy bóng trên dữ liệu thật rồi mới bật; bật chỉ khi ca thật đạt cùng ngưỡng với ca mẫu («Dựng hết bằng dữ liệu mẫu», mục 5) |
+| Tính năng dựng trên ca mẫu trượt khi gặp OKR thật | Công tắc tắt khi gộp; chạy ở chế độ ẩn trên dữ liệu thật rồi mới bật; bật chỉ khi ca thật đạt cùng ngưỡng với ca mẫu («Dựng hết bằng dữ liệu mẫu», mục 5) |
 | R1 trễ làm lỡ ngày mở cho cả công ty | Lùi theo tuần, không cắt lượt 2 hay lượt 4; lượt 5 có thể lên sau ngày mở vài ngày vì cập nhật tuần không cần nó |
 | Gộp `onehub` giữa chừng làm hồ sơ đã ký khác hoá cũ, Pre-merge check đỏ (gặp ở #120) | Trước khi mở PR: chạy pre-merge check ở máy, ghim lại hồ sơ bị nêu tên; ghi vào gói việc mọi lượt |
 | Cả công ty vào cùng lúc, câu hỏi dồn về một người | Hướng dẫn theo vai và đào tạo theo bộ phận trước ngày mở; một kênh hỏi đáp chung; trưởng bộ phận là tuyến hỏi đầu |
