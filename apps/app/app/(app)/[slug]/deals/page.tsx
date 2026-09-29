@@ -74,6 +74,7 @@ async function Deals({
 				)
 			: Promise.resolve(),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
+		queryClient.prefetchQuery(trpc.giaiDoan.list.queryOptions()),
 		queryClient.prefetchQuery(trpc.companies.options.queryOptions({ q: "" })),
 	]);
 

@@ -138,6 +138,7 @@ export function useDealBoardMove(board: DealBoard | undefined) {
 
 	const move = (cardId: string, from: string, to: string) => {
 		if (from === to) return;
+		if (giaiDoan.dangTai) return;
 		if (!isDealStage(board, from) || !isDealStage(board, to)) return;
 		if (giaiDoan.laThua(to)) {
 			void setCloseParams({
