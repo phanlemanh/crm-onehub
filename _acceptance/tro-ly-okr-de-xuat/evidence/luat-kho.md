@@ -1,6 +1,6 @@
 # Luật kho trên diff của lượt tro-ly-okr-de-xuat
 
-Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `11194ed786b4` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 89 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14876 dòng thêm.
+Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `91eba547b502` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 90 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14902 dòng thêm.
 
 ## 1. Chú thích trong dòng thêm
 
@@ -18,6 +18,21 @@ Kết quả:
 ```
 
 Kết luận: không dòng thêm nào mang chú thích.
+
+### Kiểm chéo độc lập với bộ lọc của luat-kho.mjs
+
+Ba lệnh shell dưới đây chạy nguyên văn qua `bash -c` (không qua hàm lọc JS ở trên); kết quả dán nguyên văn. Lệnh thứ ba là đối chứng: cùng mẫu grep phải bắt một dòng thêm có chú thích.
+
+```
+$ git diff -U0 7db7cea333090b5dd5d00e4dd9ae2b1bdfb910a0 HEAD -- apps packages ':(exclude)**/generated/**' ':(exclude)*.md' ':(exclude)*.json' ':(exclude)*.lock' | grep -E '^\+[^+].*(//|/\*)'
+(không in dòng nào; grep thoát 1)
+$ git diff -U0 7db7cea333090b5dd5d00e4dd9ae2b1bdfb910a0 HEAD -- apps packages ':(exclude)**/generated/**' ':(exclude)*.md' ':(exclude)*.json' ':(exclude)*.lock' | grep -E '^\+[^+].*(//|/\*)' | grep -vE '[a-z][a-z0-9+.-]*://'
+(không in dòng nào; grep thoát 1)
+$ printf '%s\n' '+const x = 1; // chu thich' | grep -cE '^\+[^+].*(//|/\*)'
+1
+```
+
+Kiểm chéo: 0 dòng trước khi bỏ URL, 0 sau — khớp 0 dòng của bộ lọc JS; đối chứng bắt được dòng có chú thích.
 
 ## 2. API không gọi model hay vendor
 
@@ -156,6 +171,39 @@ packages/validation/src/okr-kiem-de-xuat.ts:101 · 100 · số rời — đọc 
 
 Kết luận: 38 hằng số trong ba tệp cấu hình, 1 tên hằng khai ở hơn một tệp (viSao); 18 literal số ≥ 2 chữ số ở tệp nguồn của lượt — 11 hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay; 4 trong chuỗi; 1 khuôn Zod (min/max); 2 số rời — đọc tay.
 
+### Phán quyết tay cho các dòng «đọc tay»
+
+```
+tệp:dòng · số · phán quyết
+apps/api/src/okr/tro-ly-so-do.ts:31 · 24 · đơn vị (ngày = 24 × 60 phút, dẫn từ MINUTE_MS) — hợp lệ về loại, nhưng TRÙNG: packages/db/src/okr-xu-huong.ts:28 khai đúng biểu thức này; luật «không viết hai lần» của AGENTS.md chưa đạt
+apps/api/src/okr/tro-ly-so-do.ts:31 · 60 · đơn vị (ngày = 24 × 60 phút, dẫn từ MINUTE_MS) — hợp lệ về loại, nhưng TRÙNG: packages/db/src/okr-xu-huong.ts:28 khai đúng biểu thức này; luật «không viết hai lần» của AGENTS.md chưa đạt
+apps/api/src/okr/tro-ly-so-do.ts:35 · 15 · định dạng: toPrecision(15) cắt đuôi dấu phẩy động khi nội suy phân vị, giới hạn của số double — không phải tham số tinh chỉnh
+apps/api/src/okr/tro-ly-so-do.ts:232 · 0.5 · định nghĩa số đo: p50/p90 là tên số đo spec §10 hứa (trả ra p50Ms, p90Ms) — đổi nó là đổi số đo, không phải chỉnh ngưỡng
+apps/api/src/okr/tro-ly-so-do.ts:232 · 0.9 · định nghĩa số đo: p50/p90 là tên số đo spec §10 hứa (trả ra p50Ms, p90Ms) — đổi nó là đổi số đo, không phải chỉnh ngưỡng
+apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:66 · 12 · đơn vị lịch: 12 tháng một năm (tính tháng kế) — hợp lệ
+apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:63 · 1_000 · đơn vị: mili giây của một giây để định dạng độ trễ — hợp lệ về loại; cùng nghĩa với OKR.thoiGian.giayMs (API) nhưng tệp client không nhập được okr-config của API
+packages/db/src/okr-xu-huong.ts:28 · 24 · đơn vị (ngày) — hợp lệ về loại, nhưng TRÙNG với apps/api/src/okr/tro-ly-so-do.ts:31
+packages/db/src/okr-xu-huong.ts:28 · 60 · đơn vị (ngày) — hợp lệ về loại, nhưng TRÙNG với apps/api/src/okr/tro-ly-so-do.ts:31
+packages/db/src/okr-xu-huong.ts:32 · 100 · đơn vị: 100 của phần trăm (kẹp KR phần trăm, làm tròn hai số lẻ) — hợp lệ
+packages/validation/src/okr-kiem-de-xuat.ts:58 · 15 · định dạng: toPrecision(15) khi nhân hệ số tỷ/triệu/nghìn, giới hạn của số double — không phải tham số tinh chỉnh
+packages/validation/src/okr-kiem-de-xuat.ts:95 · 100 · ngữ pháp số đếm tiếng Việt: «trăm» = × 100 trong bộ đọc số viết bằng chữ — hằng ngôn ngữ, không tinh chỉnh (đặt tên được nhưng không đổi hành vi)
+packages/validation/src/okr-kiem-de-xuat.ts:101 · 100 · ngữ pháp số đếm tiếng Việt: phần sau «trăm» phải < 100 — cùng hằng ngôn ngữ như dòng trên
+```
+
+13 dòng «đọc tay» đều có phán quyết: không dòng nào là tham số tinh chỉnh phải vào TRO_LY_OKR_TRAN; một cặp trùng thật (NGAY_MS khai ở apps/api/src/okr/tro-ly-so-do.ts và packages/db/src/okr-xu-huong.ts cùng biểu thức 24 * 60 * MINUTE_MS) — lẽ ra xuất một DAY_MS cạnh MINUTE_MS ở packages/db/src/okr-tro-ly-danh-muc.ts; chưa sửa trong vòng này, ghi để chủ kho quyết.
+
+### viSao khai ở hai tệp cấu hình
+
+```
+$ git log -S'viSao' --format='%h %ad %s' --date=short -- packages/db/src/okr-tro-ly-danh-muc.ts apps/api/src/okr/okr-config.ts
+dd43b70c5 2026-09-27 tro-ly-okr-nen: dời hàm tiến độ xuống @crm/db, tách điều kiện đích Căn chỉnh, danh mục thuần ở @crm/db
+976ee2af3 2026-09-25 okr: module okr — chu kỳ, cấu hình chương trình, quyền theo bản ghi, vết
+dd43b70c5: có trong 7db7cea33309 (trước lượt này)
+976ee2af3: có trong 7db7cea33309 (trước lượt này)
+```
+
+Phán quyết: cùng một nghĩa (độ dài tối đa của «vì sao lúc này», 500 — bằng `max(500)` của `whyNow` trong packages/validation/src/okr-muc-tieu.ts), dùng ở hai khu khác nhau: `OKR.ten.viSao` (apps/api) chặn đầu vào API — lượt này dùng nó làm trần rộng cho `giaTri` của `troLyQuyet` (okr.contracts.ts), rồi `updateObjectiveInput`/`updateKrInput` siết theo đúng trường; `TRO_LY_OKR_TRAN.chu.viSao` (packages/db) là trần câu Trợ lý nộp, đọc ở packages/validation/src/okr-tro-ly.ts, nơi không nhập được cấu hình của apps/api. Cả hai khai báo có từ trước lượt này (xem trên). Nên là một nguồn (một hằng trong packages, apps/api nhập lại) — ba chỗ cùng giữ 500 là nợ có sẵn; gộp là việc ngoài hợp đồng lượt này, chưa làm.
+
 ## 4. Record<string, unknown> và as unknown
 
 Lệnh:
@@ -266,7 +314,26 @@ apps/api/src/okr/tro-ly.service.ts:466 · OkrService · this.okr.updateObjective
 apps/api/src/okr/tro-ly.service.ts:504 · okrDeXuat · const { count } = await tx.okrDeXuat.updateMany({
 ```
 
-Kết luận: chỉ ghi AgentTask (1), OkrDeXuat (1) và qua OkrService (3).
+Kết luận: dòng trực tiếp trong hai tệp dịch vụ chỉ ghi AgentTask (1), OkrDeXuat (1) và qua OkrService (3); lần theo hàm @crm/db ở dưới.
+
+### Lần theo hàm @crm/db mà dịch vụ gọi
+
+Mỗi hàm nhập từ @crm/db mà apps/api/src/okr/tro-ly.service.ts (nguồn /^@crm\/db\/.+/), apps/api/src/okr/tro-ly-so-do.ts (nguồn /^@crm\/db\/.+/), apps/api/src/okr/okr.service.ts (nguồn /^@crm\/db\/(okr-tro-ly|okr-de-xuat|okr-xu-huong)$/) gọi: đọc thân hàm trong packages/db/src, đi tiếp vào hàm cùng tệp và hàm nhập tương đối, in mọi lệnh ghi Prisma (`db.|tx.<mô hình>.<create|update|upsert|delete…>(`) hay `$executeRaw`. Lệnh khớp chữ `.update(` mà không phải trên `db`/`tx` in riêng ở cuối.
+
+```
+nơi gọi · đường hàm · lệnh ghi · mô hình.lệnh · data
+apps/api/src/okr/tro-ly.service.ts:382 · danhSachDeXuat · packages/db/src/okr-de-xuat.ts:84 · okrDeXuat.updateMany · { trangThai: "het-han" }
+apps/api/src/okr/tro-ly.service.ts:382 · danhSachDeXuat · packages/db/src/okr-de-xuat.ts:93 · okrDeXuat.updateMany · { hienLuc: v.now }
+apps/api/src/okr/tro-ly.service.ts:242 · xepViecTroLy → taoViecDeXuat · packages/db/src/okr-tro-ly.ts:311 · agentTask.create · { …nhiều dòng }
+apps/api/src/okr/okr.service.ts:276 · xepLuotAnSauKhiLuu → taoViecDeXuat · packages/db/src/okr-tro-ly.ts:311 · agentTask.create · { …nhiều dòng }
+# khớp chữ nhưng không phải ghi Prisma: 2
+xepViecTroLy → taoViecDeXuat · packages/db/src/okr-tro-ly.ts:287 · const inputHash = createHash("sha256") .update(
+xepLuotAnSauKhiLuu → taoViecDeXuat · packages/db/src/okr-tro-ly.ts:287 · const inputHash = createHash("sha256") .update(
+```
+
+Qua hàm @crm/db: 4 lệnh ghi — okrDeXuat (2), agentTask (2); không mô hình nào ngoài AgentTask và OkrDeXuat.
+
+Phán quyết cho tro-ly.service.ts:504 (`tx.okrDeXuat.updateMany`): ngoại lệ thiết kế cho phép, không vi phạm. Căn cứ: spec docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md §4 (sơ đồ: «một tx: OkrService …Trong(tx) + OkrTrail.note + OkrDeXuat có điều kiện «cho»») và §8 «Quyết» (nhận và sửa gọi `updateObjectiveTrong`/`updateKeyResultTrong`/`addAlignmentTrong` trong cùng `tx` với cập nhật có điều kiện `trangThai = 'cho'`). Lệnh chỉ ghi quyết định của người (`trangThai`, `giaTriCuoi`, `nguoiQuyet`, `quyetLuc`) lên sổ đề xuất — không sinh nội dung, không chấm, không gọi model; `OkrDeXuat` không phải bản ghi OKR (docs/api.md: «nằm ngoài luật vết»), còn giá trị OKR vẫn ghi qua `OkrService.*Trong`. Câu «API chỉ đọc sổ và ghi `AgentTask`» ở docs/api.md thuộc mục `okr.aiChiTieu`, không phải luật cấm ghi sổ đề xuất. Hai `updateMany` trong `danhSachDeXuat` cũng đúng spec: §8 «dòng `cho` có `truoc` khác giá trị hiện tại thành `het-han` khi đọc», §5 `hienLuc` «lúc dòng lần đầu được `troLyDanhSach` trả cho người». AgentTask ghi qua `xepViecTroLy` (bấm) và `xepLuotAnSauKhiLuu` (chế độ ẩn, gọi từ okr.service.ts) — đúng luật «API ghi một hàng AgentTask, agent quyết».
 
 ## 7. Dấu hiệu vẽ tay trên màn Trợ lý OKR
 
@@ -285,3 +352,45 @@ Kết quả:
 ```
 
 Kết luận: 5 tệp màn của lượt: không hộp rounded+border tự dựng, không chấm size-2 rounded-full, không navigator.clipboard, không <h1>/<h2> tự đặt.
+
+## 8. API chạy lại kiemDongDeXuat khi đọc troLyDanhSach
+
+Lệnh:
+
+```
+grep -n 'kiemDongDeXuat' apps/api/src/okr/tro-ly.service.ts
+bao đóng import của packages/validation/src/okr-kiem-de-xuat.ts (đi theo ./… và @crm/db|@crm/validation qua exports); đối chiếu /^(ai|@ai-sdk\/.*|openai|@anthropic-ai\/.*|@google\/.*|@vercel\/ai.*|axios|got|node-fetch|undici)$/; grep -iE 'generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(' trên mọi tệp trong bao, rồi lọc dòng là lời gọi hay import thật
+in thân noiVeNguoi
+```
+
+Kết quả:
+
+```
+apps/api/src/okr/tro-ly.service.ts:25: kiemDongDeXuat,
+apps/api/src/okr/tro-ly.service.ts:387: kiemLai: (hang) => kiemDongDeXuat(dongTuHang(hang), goi),
+# tệp trong bao đóng import: 6
+packages/validation/src/okr-kiem-de-xuat.ts
+packages/validation/src/okr-kiem.ts
+packages/validation/src/okr-kr.ts
+packages/validation/src/okr-tro-ly.ts
+packages/db/src/okr-tro-ly-danh-muc.ts
+packages/validation/src/okr-chu-ky.ts
+# nguồn ngoài kho: zod
+# nguồn SDK AI hay vendor: 0
+# dòng khớp mẫu lỏng 'generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(': packages/db/src/okr-tro-ly-danh-muc.ts:129: "het-tran-gateway",
+# trong đó là lời gọi hay import thật (\b(generateText|streamText|generateObject|streamObject|fetch)\s*\(|from\s+"(ai|@ai-sdk\/[^"]*|openai|@anthropic-ai\/[^"]*)"): 0
+# thân noiVeNguoi
+packages/validation/src/okr-kiem-de-xuat.ts:274: function noiVeNguoi(dong: DongDeXuat, goi: GoiKiem): boolean {
+packages/validation/src/okr-kiem-de-xuat.ts:275: 	const chu = chuCuaDong(dong).map(khongDau);
+packages/validation/src/okr-kiem-de-xuat.ts:276: 	return goi.tenThanhVien
+packages/validation/src/okr-kiem-de-xuat.ts:277: 		.map(khongDau)
+packages/validation/src/okr-kiem-de-xuat.ts:278: 		.filter(
+packages/validation/src/okr-kiem-de-xuat.ts:279: 			(ten) => ten.split(" ").length >= TRO_LY_OKR_TRAN.soChuHoTenToiThieu,
+packages/validation/src/okr-kiem-de-xuat.ts:280: 		)
+packages/validation/src/okr-kiem-de-xuat.ts:281: 		.some((ten) => chu.some((c) => coCum(c, ten)));
+packages/validation/src/okr-kiem-de-xuat.ts:282: }
+```
+
+Kết luận: kiemDongDeXuat là hàm thuần trong packages/validation: bao đóng import 6 tệp, nguồn ngoài kho chỉ zod; 0 SDK AI hay vendor, 0 lời gọi model hay mạng (1 dòng khớp mẫu lỏng là chữ, không phải lời gọi — in ở trên).
+
+Phán quyết: API chạy lại `kiemDongDeXuat` trong `troLyDanhSach` (qua `kiemLai` của `danhSachDeXuat`) không vi phạm luật «trí khôn sống ở apps/agent». Luật đó cấm vendor client, làm giàu, chấm điểm và khớp danh tính trong Nest. Đây là một hàm thuần, tất định, không gọi model, không gọi mạng, dùng chung với agent (spec §8: bộ kiểm «chạy trong nop_de_xuat trước khi ghi, và chạy lại khi troLyDanhSach đọc — số hiện tại có thể đã đổi»); nó chỉ quyết một dòng agent đã nộp có còn được hiện hay không. Chốt `noi-ve-nguoi` (`noiVeNguoi`) so họ tên đầy đủ của thành viên (không dấu, tối thiểu `TRO_LY_OKR_TRAN.soChuHoTenToiThieu` chữ) trong chữ đề xuất để CHẶN dòng đó — không gắn dòng với một người, không ghi, không trả danh tính nào; nên không phải khớp danh tính theo nghĩa của luật.
