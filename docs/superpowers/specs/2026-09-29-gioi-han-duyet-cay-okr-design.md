@@ -81,8 +81,9 @@ Công khai: mọi người qua được phạm vi OKR. Giới hạn: người xe
 
 `nguCanhXemOkr(db, userIds)` (`@crm/db/okr-hien-thi`) dựng ngữ cảnh — vai, tập đơn vị làm
 trưởng theo luật trưởng hiệu lực của cây (còn là thành viên, còn thuộc phòng ban, đơn vị
-chưa lưu trữ). API dựng từ đây chứ không tự suy lần hai; một bài kiểm so tập trưởng của
-ngữ cảnh với `OkrAccessService.quyen` trên bộ OKR mẫu để hai bên không trôi.
+chưa lưu trữ) — dùng cho nhắc buổi sáng và tác tử. API dựng ngữ cảnh từ `OkrAccessService.quyen`
+(cùng cây quyết quyền sửa, không thêm truy vấn); một bài kiểm so tập trưởng hai bên trên bộ OKR
+mẫu để chúng không trôi.
 
 Hệ quả trên từng đường:
 
