@@ -753,6 +753,13 @@ describe("hien-thi-ghi", () => {
 		async () => {
 			const { g, gc, t, m, x, k } = s;
 			const noi: string[] = [];
+			const gcCongKhai = async () => {
+				if ((await anhHienThi(gc.id)).hienThi !== "cong-khai")
+					ok(
+						await datMuc(gc.id, "cong-khai", [], t.cookie),
+						"tra Gc cong khai",
+					);
+			};
 			const canChinh = async (
 				vao: Json,
 				ai: string,
@@ -824,6 +831,7 @@ describe("hien-thi-ghi", () => {
 						);
 					},
 					sau: async () => {
+						await gcCongKhai();
 						ok(
 							await goi("okr.removeAlignment", { id: noi[0] }, t.cookie),
 							"go Gc vao BP",
@@ -841,6 +849,7 @@ describe("hien-thi-ghi", () => {
 					ai: t.cookie,
 					cho: `400 ${OKR.thongDiep.hienThi.conCanChinh(1)}`,
 					truoc: async () => {
+						await gcCongKhai();
 						await canChinh(
 							{
 								objectiveId: s.cn2,
