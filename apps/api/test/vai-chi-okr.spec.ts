@@ -251,6 +251,7 @@ const DAU_VAO_HOP_LE = {
 	"okr.suaHoiY": { hoiYId: "khong-co", loiMo: "Lời mở mới" },
 	"okr.hoiY": { cycleId: "khong-co" },
 	"okr.hoiYNhan": { cycleId: "khong-co" },
+	"okr.hoiYDoPhu": { hoiYId: "khong-co" },
 	"okr.gopY": {
 		hoiYId: "khong-co",
 		noiDung: "Mở tuyến giao lạnh cho khách dược",
@@ -323,6 +324,7 @@ const THU_TUC_HOI_Y = {
 	"okr.suaHoiY": suaHoiYInput,
 	"okr.hoiY": cycleIdInput,
 	"okr.hoiYNhan": cycleIdInput,
+	"okr.hoiYDoPhu": hoiYIdInput,
 	"okr.gopY": gopYInput,
 	"okr.suaY": suaYInput,
 	"okr.goY": yIdInput,
@@ -405,6 +407,7 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
+const SO_THU_TUC_HOI_Y = 17;
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1461,6 +1464,9 @@ describe("sang-kien-an", () => {
 	beforeEach(don);
 
 	test("thu tuc okr vai chi OKR voi toi duoc: danh sach viet truoc cong dung thu tuc cua luot; thu tuc canh KR va hoi y co dau vao hop le", () => {
+		expect(THU_TUC_OKR_LUOT_HOI_Y.length, "so thu tuc moi cua luot hoi y").toBe(
+			SO_THU_TUC_HOI_Y,
+		);
 		expect(
 			choPhep().filter((t) => t.startsWith("okr.")),
 			"thu tuc okr cua vai chi OKR lech danh sach viet truoc",

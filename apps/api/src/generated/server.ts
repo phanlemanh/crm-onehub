@@ -30,8 +30,8 @@ import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, 
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
 import { moRaInput, dongRaInput, xuatKyInput, chamKrInput, ghiDieuHocDuocInput, moLaiKyInput, mangSangInput } from "@crm/validation/okr-khep";
-import { moHoiYInput, suaHoiYInput, cycleIdInput, gopYInput, suaYInput, yIdInput, dongYInput, niemPhongInput, taoChuDeInput, suaChuDeInput, chuDeIdInput, ganYInput, ketLuanInput, hoiYIdInput } from "@crm/validation/okr-hoi-y";
-import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
+import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYInput, yIdInput, dongYInput, niemPhongInput, taoChuDeInput, suaChuDeInput, chuDeIdInput, ganYInput, ketLuanInput } from "@crm/validation/okr-hoi-y";
+import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
@@ -725,6 +725,10 @@ const appRouter = t.router({
     hoiYNhan: publicProcedure
       .input(cycleIdInput)
       .output(hoiYNhanOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    hoiYDoPhu: publicProcedure
+      .input(hoiYIdInput)
+      .output(hoiYDoPhuOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     gopY: publicProcedure
       .input(gopYInput)

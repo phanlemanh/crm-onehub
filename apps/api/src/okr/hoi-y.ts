@@ -1,3 +1,4 @@
+import { ngayVN } from "@crm/db/onboarding-nhac";
 import type {
 	KetLuan,
 	LoaiChuDe,
@@ -13,6 +14,7 @@ import {
 	thuTuXao,
 } from "@crm/validation/okr-hoi-y";
 import { mucTieuInput } from "@crm/validation/okr-muc-tieu";
+import { OKR_XEM } from "./okr-xem.config";
 
 export function tenYLa(noiDung: string): string {
 	let dai = 0;
@@ -94,9 +96,17 @@ export function ketQuaBanTruoc(
 	};
 }
 
+export const LOAI_DON_VI_DO_PHU = [
+	"goc",
+	"bo-phan",
+	"phong-ban",
+	"chua-xep",
+] as const;
+export type LoaiDonViDoPhu = (typeof LOAI_DON_VI_DO_PHU)[number];
+
 export type DonViDoPhu = {
 	id: string;
-	loai: "goc" | "bo-phan" | "phong-ban" | "chua-xep";
+	loai: LoaiDonViDoPhu;
 	cha: string | null;
 };
 
@@ -111,9 +121,13 @@ export type DoPhuRa = { hang: { id: string; giaTri: number[] }[] };
 
 const motChuSo = (x: number): number => Math.round(x * 10) / 10;
 
-export function doPhu(input: DoPhuVao): DoPhuRa {
-	const theoId = new Map(input.donVi.map((d) => [d.id, d]));
-	const chuaXep = input.donVi.filter((d) => d.loai === "chua-xep");
+function thanhVienCuaDonVi(
+	donVi: DonViDoPhu[],
+	nguoi: DoPhuVao["nguoi"],
+): Map<string, string[]> {
+	const theoId = new Map(donVi.map((d) => [d.id, d]));
+	const chuaXep = donVi.filter((d) => d.loai === "chua-xep");
+	const gocIds = donVi.filter((d) => d.loai === "goc").map((d) => d.id);
 
 	function chuoiDonVi(phongBanChinh: string | null): Set<string> {
 		const chuoi = new Set<string>();
@@ -129,6 +143,16 @@ export function doPhu(input: DoPhuVao): DoPhuRa {
 		return chuoi;
 	}
 
+	const thanhVien = new Map<string, string[]>(donVi.map((d) => [d.id, []]));
+	for (const n of nguoi) {
+		const chuoi = chuoiDonVi(n.phongBanChinh);
+		for (const id of gocIds) chuoi.add(id);
+		for (const id of chuoi) thanhVien.get(id)?.push(n.id);
+	}
+	return thanhVien;
+}
+
+export function doPhu(input: DoPhuVao): DoPhuRa {
 	const ngayDauTien = new Map<string, string>();
 	for (const g of input.gop) {
 		const cu = ngayDauTien.get(g.tacGiaUserId);
@@ -137,15 +161,7 @@ export function doPhu(input: DoPhuVao): DoPhuRa {
 		}
 	}
 
-	const thanhVien = new Map<string, string[]>(
-		input.donVi.map((d) => [d.id, []]),
-	);
-	const gocIds = input.donVi.filter((d) => d.loai === "goc").map((d) => d.id);
-	for (const n of input.nguoi) {
-		const chuoi = chuoiDonVi(n.phongBanChinh);
-		for (const id of gocIds) chuoi.add(id);
-		for (const id of chuoi) thanhVien.get(id)?.push(n.id);
-	}
+	const thanhVien = thanhVienCuaDonVi(input.donVi, input.nguoi);
 
 	return {
 		hang: input.donVi.map((d) => {
@@ -162,6 +178,125 @@ export function doPhu(input: DoPhuVao): DoPhuRa {
 				}),
 			};
 		}),
+	};
+}
+
+export function cacNgayVN(tu: Date, den: Date): string[] {
+	const ra: string[] = [];
+	const cuoi = ngayVN(den);
+	for (let ngay = ngayVN(tu); ngay <= cuoi; ngay = congNgay(ngay))
+		ra.push(ngay);
+	return ra;
+}
+
+function congNgay(ngay: string): string {
+	return new Date(Date.parse(`${ngay}T00:00:00Z`) + OKR_XEM.thoiGian.ngayMs)
+		.toISOString()
+		.slice(0, 10);
+}
+
+export type DonViCoNhan = DonViDoPhu & { nhan: string };
+
+export type HangDoPhu = DonViCoNhan & { giaTri: (number | null)[] };
+
+export type BangDoPhu = {
+	cot: { ngay: string; nhan: string }[];
+	hang: HangDoPhu[];
+};
+
+export type BangDoPhuVao = {
+	tu: Date;
+	den: Date;
+	donVi: DonViCoNhan[];
+	nguoi: DoPhuVao["nguoi"];
+	gop: { tacGiaUserId: string; luc: Date }[];
+};
+
+export type CayDoPhu = {
+	divisions: {
+		id: string;
+		name: string;
+		departments: { id: string; name: string }[];
+	}[];
+	chuaXep: { id: string; name: string }[];
+	people: { id: string; primaryDepartmentId: string | null }[];
+};
+
+export function donViTuCay(cay: CayDoPhu, tenGoc: string): DonViCoNhan[] {
+	const goc = OKR_HOI_Y.doPhu.idGoc;
+	return [
+		{ id: goc, nhan: tenGoc, loai: "goc", cha: null },
+		...cay.divisions.map(
+			(b): DonViCoNhan => ({
+				id: b.id,
+				nhan: b.name,
+				loai: "bo-phan",
+				cha: goc,
+			}),
+		),
+		...cay.divisions.flatMap((b) =>
+			b.departments.map(
+				(p): DonViCoNhan => ({
+					id: p.id,
+					nhan: p.name,
+					loai: "phong-ban",
+					cha: b.id,
+				}),
+			),
+		),
+		...cay.chuaXep.map(
+			(p): DonViCoNhan => ({
+				id: p.id,
+				nhan: p.name,
+				loai: "phong-ban",
+				cha: goc,
+			}),
+		),
+		{
+			id: OKR_HOI_Y.doPhu.idChuaXep,
+			nhan: OKR_HOI_Y.doPhu.nhanChuaXep,
+			loai: "chua-xep",
+			cha: goc,
+		},
+	];
+}
+
+export function nguoiTinhDoPhu(
+	people: CayDoPhu["people"],
+	nguoiChonUserId: string,
+): DoPhuVao["nguoi"] {
+	return people
+		.filter((n) => n.id !== nguoiChonUserId)
+		.map((n) => ({ id: n.id, phongBanChinh: n.primaryDepartmentId }));
+}
+
+function nhanNgay(ngay: string): string {
+	const [, thang, ngayTrongThang] = ngay.split("-");
+	return `${ngayTrongThang}/${thang}`;
+}
+
+export function bangDoPhu(input: BangDoPhuVao): BangDoPhu {
+	const ngay = cacNgayVN(input.tu, input.den);
+	const ra = doPhu({
+		ngay,
+		donVi: input.donVi,
+		nguoi: input.nguoi,
+		gop: input.gop.map((g) => ({
+			tacGiaUserId: g.tacGiaUserId,
+			ngayVN: ngayVN(g.luc),
+		})),
+	});
+	const thanhVien = thanhVienCuaDonVi(input.donVi, input.nguoi);
+	const giaTri = new Map(ra.hang.map((h) => [h.id, h.giaTri]));
+	return {
+		cot: ngay.map((n) => ({ ngay: n, nhan: nhanNgay(n) })),
+		hang: input.donVi.map((d) => ({
+			...d,
+			giaTri:
+				(thanhVien.get(d.id)?.length ?? 0) === 0
+					? ngay.map(() => null)
+					: (giaTri.get(d.id) ?? []),
+		})),
 	};
 }
 

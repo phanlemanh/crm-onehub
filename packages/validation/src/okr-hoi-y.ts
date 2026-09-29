@@ -51,6 +51,11 @@ export const OKR_HOI_Y = {
 	hienTruoc: 10,
 	hieuNgay: 7,
 	ganToiDa: 50,
+	doPhu: {
+		idGoc: "goc",
+		idChuaXep: "chua-xep",
+		nhanChuaXep: "Chưa xếp phòng ban",
+	},
 } as const;
 
 export const TRANG_THAI_HOI_Y = ["dang-mo", "dang-gom", "da-cong-bo"] as const;

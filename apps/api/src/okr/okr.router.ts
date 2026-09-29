@@ -124,6 +124,7 @@ import {
 	congBoOutput,
 	hieuViSaoOutput,
 	hoiYDocOutput,
+	hoiYDoPhuOutput,
 	hoiYGhiOutput,
 	hoiYNhanOutput,
 } from "./okr-hoi-y.contracts";
@@ -388,6 +389,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleIdInput>,
 	) {
 		return this.hoiYDv.hoiYNhan(ctx.user.id, input);
+	}
+
+	@Query({
+		input: hoiYIdInput,
+		output: hoiYDoPhuOutput,
+		meta: restMeta("GET", "/okr/hoi-y/do-phu", TAG),
+	})
+	hoiYDoPhu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiYIdInput>,
+	) {
+		return this.hoiYDv.hoiYDoPhu(ctx.user.id, input);
 	}
 
 	@Mutation({

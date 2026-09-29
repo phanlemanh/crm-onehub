@@ -7,7 +7,7 @@ import {
 	trangThaiHoiYKhuon,
 } from "@crm/validation/okr-hoi-y";
 import { z } from "zod";
-import { MA_THIEU, SO_PHAN_BAN_TRUOC } from "./hoi-y";
+import { LOAI_DON_VI_DO_PHU, MA_THIEU, SO_PHAN_BAN_TRUOC } from "./hoi-y";
 
 export const hoiYGhiOutput = z.object({ id: z.string() });
 export type HoiYGhiOutput = z.infer<typeof hoiYGhiOutput>;
@@ -140,3 +140,17 @@ export const hoiYNhanOutput = z.object({
 	soChuDeChuaKetLuan: z.number().int().nullable(),
 });
 export type HoiYNhanOutput = z.infer<typeof hoiYNhanOutput>;
+
+export const hoiYDoPhuOutput = z.object({
+	cot: z.array(z.object({ ngay: z.string(), nhan: z.string() })),
+	hang: z.array(
+		z.object({
+			id: z.string(),
+			nhan: z.string(),
+			loai: z.enum(LOAI_DON_VI_DO_PHU),
+			cha: z.string().nullable(),
+			giaTri: z.array(z.number().nullable()),
+		}),
+	),
+});
+export type HoiYDoPhuOutput = z.infer<typeof hoiYDoPhuOutput>;

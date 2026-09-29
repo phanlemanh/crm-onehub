@@ -40,14 +40,17 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { DONG_HO_HOI_Y, type DongHo } from "./dong-ho";
 import {
+	bangDoPhu,
 	type ChuDeTho,
 	chieuChuDeChoNguoiXem,
 	chieuYChoNguoiXem,
 	chieuYCuaToi,
 	docBanTruoc,
+	donViTuCay,
 	ketQuaCongBo,
 	lyDoChuaCongBo,
 	type MaThieu,
+	nguoiTinhDoPhu,
 	type TinhTrangCongBo,
 	tenYLa,
 	tinhTrangCongBo,
@@ -60,6 +63,7 @@ import { OKR } from "./okr-config";
 import type {
 	CongBoOutput,
 	HieuViSaoOutput,
+	HoiYDoPhuOutput,
 	HoiYGhiOutput,
 	HoiYNhanOutput,
 	HoiYOutput,
@@ -926,5 +930,36 @@ export class OkrHoiYService {
 			soChuDeChuaKetLuan:
 				laNguoiChon && trangThai === "dang-gom" ? h._count.chuDe : null,
 		};
+	}
+
+	async hoiYDoPhu(
+		userId: string,
+		input: HoiYIdInput,
+	): Promise<HoiYDoPhuOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const now = this.dongHo();
+		const [h, gop] = await Promise.all([
+			this.db.okrHoiY.findUnique({
+				where: { id: input.hoiYId },
+				select: { createdAt: true, hanLuc: true, nguoiChonUserId: true },
+			}),
+			this.db.okrY.groupBy({
+				by: ["tacGiaUserId"],
+				where: { hoiYId: input.hoiYId },
+				_min: { createdAt: true },
+			}),
+		]);
+		if (!h) throw new NotFoundException(T.khongCoHoiY(input.hoiYId));
+		return bangDoPhu({
+			tu: h.createdAt,
+			den: h.hanLuc.getTime() < now.getTime() ? h.hanLuc : now,
+			donVi: donViTuCay(q.cay, OKR.tenGoc),
+			nguoi: nguoiTinhDoPhu(q.cay.people, h.nguoiChonUserId),
+			gop: gop.flatMap((g) =>
+				g._min.createdAt === null
+					? []
+					: [{ tacGiaUserId: g.tacGiaUserId, luc: g._min.createdAt }],
+			),
+		});
 	}
 }

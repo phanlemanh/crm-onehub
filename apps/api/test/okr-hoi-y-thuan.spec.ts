@@ -14,7 +14,9 @@ import {
 } from "@crm/validation/okr-hoi-y";
 import {
 	bangChungChuDe,
+	bangDoPhu,
 	type ChuDeTho,
+	cacNgayVN,
 	chieuChuDeChoNguoiXem,
 	chieuYChoNguoiXem,
 	chieuYCuaToi,
@@ -251,6 +253,97 @@ describe("do-phu", () => {
 			gop,
 		});
 		expect(r).toEqual({ hang: [{ id: "goc", giaTri: [0, 0] }] });
+	});
+
+	const NGAY_1_CUOI = new Date("2026-11-02T16:59:00.000Z");
+	const NGAY_2_DAU = new Date("2026-11-02T17:00:00.000Z");
+
+	test("cac-ngay: từ ngày mở tới ngày đóng theo giờ Việt Nam, 16:59 và 17:00 UTC sang hai ngày", () => {
+		expect(
+			cacNgayVN(
+				new Date("2026-11-02T03:00:00.000Z"),
+				new Date("2026-11-03T09:00:00.000Z"),
+			),
+		).toEqual(["2026-11-02", "2026-11-03"]);
+		expect(cacNgayVN(NGAY_1_CUOI, NGAY_1_CUOI)).toEqual(["2026-11-02"]);
+		expect(cacNgayVN(NGAY_1_CUOI, NGAY_2_DAU)).toEqual([
+			"2026-11-02",
+			"2026-11-03",
+		]);
+		expect(
+			cacNgayVN(
+				new Date("2026-12-30T10:00:00.000Z"),
+				new Date("2027-01-02T10:00:00.000Z"),
+			),
+		).toEqual(["2026-12-30", "2026-12-31", "2027-01-01", "2027-01-02"]);
+	});
+
+	test("bang-do-phu: cột có nhãn ngày/tháng, ý 16:59 UTC vào cột ngày 1, ý 17:00 UTC vào cột ngày 2, đơn vị không có ai là null", () => {
+		const r = bangDoPhu({
+			tu: new Date("2026-11-02T03:00:00.000Z"),
+			den: new Date("2026-11-03T09:00:00.000Z"),
+			donVi: [
+				{ id: "goc", nhan: "OneHub", loai: "goc", cha: null },
+				{ id: "bp", nhan: "Khối một", loai: "bo-phan", cha: "goc" },
+				{ id: "pb", nhan: "Phòng một", loai: "phong-ban", cha: "bp" },
+				{ id: "pbRong", nhan: "Phòng rỗng", loai: "phong-ban", cha: "bp" },
+				{ id: "cx", nhan: "Chưa xếp", loai: "chua-xep", cha: "goc" },
+			],
+			nguoi: [
+				{ id: "p1", phongBanChinh: "pb" },
+				{ id: "p2", phongBanChinh: "pb" },
+				{ id: "p3", phongBanChinh: null },
+			],
+			gop: [
+				{ tacGiaUserId: "p1", luc: NGAY_1_CUOI },
+				{ tacGiaUserId: "p2", luc: NGAY_2_DAU },
+				{ tacGiaUserId: "p3", luc: NGAY_2_DAU },
+				{ tacGiaUserId: "p1", luc: NGAY_2_DAU },
+			],
+		});
+		expect(r).toEqual({
+			cot: [
+				{ ngay: "2026-11-02", nhan: "02/11" },
+				{ ngay: "2026-11-03", nhan: "03/11" },
+			],
+			hang: [
+				{
+					id: "goc",
+					nhan: "OneHub",
+					loai: "goc",
+					cha: null,
+					giaTri: [33.3, 100],
+				},
+				{
+					id: "bp",
+					nhan: "Khối một",
+					loai: "bo-phan",
+					cha: "goc",
+					giaTri: [50, 100],
+				},
+				{
+					id: "pb",
+					nhan: "Phòng một",
+					loai: "phong-ban",
+					cha: "bp",
+					giaTri: [50, 100],
+				},
+				{
+					id: "pbRong",
+					nhan: "Phòng rỗng",
+					loai: "phong-ban",
+					cha: "bp",
+					giaTri: [null, null],
+				},
+				{
+					id: "cx",
+					nhan: "Chưa xếp",
+					loai: "chua-xep",
+					cha: "goc",
+					giaTri: [0, 100],
+				},
+			],
+		});
 	});
 });
 
