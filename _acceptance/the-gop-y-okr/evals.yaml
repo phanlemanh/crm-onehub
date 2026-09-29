@@ -5,6 +5,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.tgy_man_that
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo riêng có tác tử (tien-de); nạp bộ OKR mẫu; bật góp ý cho phòng kd-bac qua okr.setProgram; đăng nhập dev:session trưởng phòng"
+      - "1440 px: mở hộp Sửa KR «Gọi điện cho đối tác mới mỗi tuần», đo bề ngang form khi chưa có cột, đóng"
+      - "1440 px: mở hộp Sửa mục tiêu, đo form, bấm «Nhờ Trợ lý OKR góp ý» (model thật), chờ thẻ viết lại → đo data-size, cột, câu mới, form, tràn ngang; ảnh E1-1440-muc-tieu"
+      - "1440 px: mở lại hộp Sửa KR, cột mở với thẻ của KR (hoặc nhờ góp ý) → đo như trên; ảnh E1-1440-kr"
     expected: "exit 0; rang/man-the-gop-y.mjs trong phiên đo riêng mở hộp Sửa mục tiêu rồi hộp Sửa KR, mỗi hộp có đề xuất, ở 1440 px, đo bằng getBoundingClientRect trong trình duyệt thật cho từng hộp: hộp mang data-size=assist, cột góp ý ≥ 360 px, khối câu mới của thẻ viết lại ≥ 320 px, cột form ≥ bề ngang cột form khi không có cột (đo cùng lượt, cùng hộp trước khi bấm góp ý), document.documentElement.scrollWidth == innerWidth. In từng số. Chiều đỏ ghim trong script: cùng phép đo chạy trên một bản dựng cố ý đặt cột 292 px (tham số --kiem-do-do) phải in 'cau moi hep: <px> < 320' và mã 1; hộp KR để cỡ wide phải in 'cau moi hep (kr)' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
     paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
@@ -86,6 +92,11 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.tgy_man_that
+    steps:
+      - "Cùng phiên và dữ liệu của E1 (dòng chờ còn trong kho đo)"
+      - "Ở 390, 1023, 1024, 1440 px: mở hộp Sửa mục tiêu rồi hộp Sửa KR, cột tự mở với thẻ chờ"
+      - "390 và 1023: đo top cột so với bottom form, bề ngang từng thẻ so với cột; 1024 và 1440: đo lệch top cột và form"
+      - "Mọi khổ: scrollWidth so innerWidth; ảnh E11-<khổ>-muc-tieu và E11-<khổ>-kr"
     expected: "exit 0; cùng script E1 ở khung 390 px, cho hộp Sửa mục tiêu và hộp Sửa KR: khối cột góp ý nằm dưới khối form (top cột ≥ bottom form), mỗi thẻ rộng bằng cột trừ lề, scrollWidth == innerWidth ở mọi bước; ở 1440 px và 1024 px cột và form cùng hàng (top chênh < 8 px); ca biên ngay dưới mốc: ở 1023 px cột KHÔNG cùng hàng với form (top cột ≥ bottom form). Ảnh evidence/E11-*.png từng bước. Chiều đỏ ghim: phép đo tràn ngang chạy trên trang có một phần tử cố ý rộng 500 px (--kiem-do-do) phải in 'tran ngang' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
     paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
@@ -103,6 +114,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.tgy_man_that
+    steps:
+      - "Cùng phiên của E1; lấy một dòng viết lại cấp Mục tiêu đang chờ trong kho đo"
+      - "Mở hộp Sửa mục tiêu ở 1440 và 390 → ảnh E13-1440-co-dong, E13-390-co-dong"
+      - "390: Bác một thẻ khác, Bỏ qua một câu hỏi; sau mỗi cú bấm đếm hộp thoại → ảnh E13-390-bac, E13-390-bo-qua"
+      - "1440: Sửa thẻ viết lại, xoá chữ cũ, gõ chữ mới, Nhận bản đã sửa; sau mỗi cú bấm đếm hộp thoại → ảnh E13-1440-dang-sua, E13-1440-da-nhan"
+      - "Đọc lại okr.objective qua API, đếm okrTrail có note tro-ly-okr:<id>, mở tab Vết ở 1440 và 390 → ảnh E13-<khổ>-vet"
     expected: "exit 0; cùng script: phiên đo riêng, bộ OKR mẫu, bật góp ý cho một phòng qua okr.setProgram, trưởng phòng nhờ góp ý (model thật; thiếu khoá → mã 2), Sửa rồi Nhận bản đã sửa, Bỏ qua câu hỏi, Bác một đề xuất; sau mỗi cú bấm trong cột khẳng định còn đúng một role=dialog; sau Nhận đọc lại okr.objective phải bằng chữ đã sửa và khác câu trước; tab Vết có dòng mang note tro-ly-okr:<id>. Ảnh evidence/E13-*.png ở 1440 và 390. Chiều đỏ ghim: nếu bản đọc lại trước khi nhận đã bằng chữ đã sửa → 'nhan khong doi gi' mã 3."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
     paths: ["packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/**", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
