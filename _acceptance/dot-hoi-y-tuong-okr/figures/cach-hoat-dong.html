@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đợt hỏi ý tưởng mục tiêu · Swimlane</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 1240px; width: 100%; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Swimlane · Khu OKR · Bản để bàn</p>
+    <h1>Đợt hỏi ý tưởng mục tiêu: hỏi → gom → chọn → báo lại</h1>
+    <p class="sub">Bước 1–2 của chu kỳ OKR chạy trong CRM; đợt đầu hỏi tầm năm 2027. Bốn nét sau phản biện: CEO viết trước, niêm phong, lộ ra khi công bố; ghi tên, đồng nghiệp thấy ý không thấy tên; thẻ mồi là 3–5 con số CEO công bố cùng lời mở; không công bố khi còn chủ đề chưa có phận và lý do. Chưa qua Cổng Đáng — 2026-09-29.</p>
+
+    <svg viewBox="0 0 1080 512" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- Time columns -->
+      <text x="248" y="72" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">NGÀY 0 · MỞ</text>
+      <text x="424" y="72" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">NGÀY 1–2 · GÓP</text>
+      <text x="600" y="72" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">NGÀY 3 · GOM</text>
+      <text x="776" y="72" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">NGÀY 3–4 · CHỌN</text>
+      <text x="952" y="72" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">SAU CÔNG BỐ</text>
+
+      <!-- Lane dividers -->
+      <line x1="40" y1="80" x2="1040" y2="80" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="40" y1="168" x2="1040" y2="168" stroke="rgba(23,23,23,0.10)" stroke-width="1"/>
+      <line x1="40" y1="256" x2="1040" y2="256" stroke="rgba(23,23,23,0.10)" stroke-width="1"/>
+      <line x1="40" y1="344" x2="1040" y2="344" stroke="rgba(23,23,23,0.10)" stroke-width="1"/>
+      <line x1="40" y1="432" x2="1040" y2="432" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+
+      <!-- Actor column divider -->
+      <line x1="160" y1="80" x2="160" y2="432" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+
+      <!-- Lane labels -->
+      <text x="56" y="128" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">QUẢN TRỊ OKR</text>
+      <text x="56" y="216" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHÂN VIÊN</text>
+      <text x="56" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">cả vai «chỉ OKR»</text>
+      <text x="56" y="304" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">TRỢ LÝ OKR</text>
+      <text x="56" y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">tuỳ chọn</text>
+      <text x="56" y="392" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CEO</text>
+
+      <!-- Arrows (drawn first) -->
+      <!-- N1 → N3: CEO viết trước cùng lúc mở đợt -->
+      <line x1="224" y1="152" x2="224" y2="360" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- N1 → N2: mời cả công ty, nhắc người chưa góp -->
+      <path d="M272,152 V204 Q272,212 280,212 H352" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- N2 → N4: hết hạn thì đóng đợt, ý về người gom -->
+      <path d="M496,212 H568 Q576,212 576,204 V152" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- N8 → N4: trợ lý gợi ý nhóm (tuỳ chọn) -->
+      <line x1="624" y1="272" x2="624" y2="152" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <!-- N4 → N5: chủ đề và ý lạ lên bàn CEO -->
+      <path d="M672,124 H744 Q752,124 752,132 V360" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- N3 → N5: mở niêm phong, so với ý của cả công ty -->
+      <line x1="320" y1="388" x2="704" y2="388" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <!-- N5 → N7: khi công bố, tin đóng vòng tới người góp (đường quan trọng nhất) -->
+      <path d="M848,388 H944 Q952,388 952,380 V240" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <!-- N5 → N9: ý chưa chọn về kho -->
+      <path d="M800,360 V148 Q800,140 808,140 H880" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <!-- Arrow labels (mask + text, 8px above the stroke) -->
+      <rect x="232" y="288" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="260" y="300" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÙNG LÚC</text>
+
+      <rect x="284" y="188" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="316" y="200" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MỜI · NHẮC</text>
+
+      <rect x="504" y="188" width="52" height="16" rx="2" fill="#fafafa"/>
+      <text x="530" y="200" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HẾT HẠN</text>
+
+      <rect x="632" y="204" width="40" height="16" rx="2" fill="#fafafa"/>
+      <text x="652" y="216" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">GỢI Ý</text>
+
+      <rect x="660" y="236" width="84" height="16" rx="2" fill="#fafafa"/>
+      <text x="702" y="248" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHỦ ĐỀ · Ý LẠ</text>
+
+      <rect x="468" y="364" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="512" y="376" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MỞ NIÊM PHONG</text>
+
+      <rect x="856" y="364" width="80" height="16" rx="2" fill="#fafafa"/>
+      <text x="896" y="376" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHI CÔNG BỐ</text>
+
+      <rect x="816" y="116" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="844" y="128" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐỂ SAU</text>
+
+      <!-- Nodes -->
+      <!-- N1 Quản trị: mở đợt hỏi -->
+      <rect x="176" y="96" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="176" y="96" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="248" y="118" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở đợt hỏi</text>
+      <text x="248" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chu kỳ năm · hạn 2 ngày</text>
+      <text x="248" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lời mở + 3–5 con số CEO</text>
+
+      <!-- N2 Nhân viên: góp ý -->
+      <rect x="352" y="184" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="352" y="184" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="424" y="206" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Góp ý, thấy ý nhau</text>
+      <text x="424" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">1–3 ý · vì sao · đo gì</text>
+      <text x="424" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">+1 «tôi cũng nghĩ vậy»</text>
+
+      <!-- N3 CEO: viết trước, niêm phong -->
+      <rect x="176" y="360" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="176" y="360" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="248" y="382" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">CEO viết trước</text>
+      <text x="248" y="396" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">3–5 mục tiêu, niêm phong</text>
+      <text x="248" y="408" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lộ ra khi công bố</text>
+
+      <!-- N4 Quản trị: gom chủ đề -->
+      <rect x="528" y="96" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="528" y="96" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="600" y="118" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gom chủ đề</text>
+      <text x="600" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">gắn nhãn · thấy số +1</text>
+      <text x="600" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ô «ý lạ» · ô «đã có»</text>
+
+      <!-- N8 Trợ lý OKR: gợi ý nhóm (tuỳ chọn) -->
+      <rect x="528" y="272" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="528" y="272" width="144" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="600" y="294" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gợi ý nhóm</text>
+      <text x="600" y="308" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">máy đề xuất · người quyết</text>
+      <text x="600" y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tắt AI vẫn gom tay được</text>
+
+      <!-- N5 CEO: chọn 3–5 chủ đề (tâm điểm) -->
+      <rect x="704" y="360" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="704" y="360" width="144" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="776" y="382" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chọn 3–5 chủ đề</text>
+      <text x="776" y="396" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">mỗi chủ đề: phận + lý do</text>
+      <text x="776" y="408" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">→ nháp Mục tiêu năm</text>
+
+      <!-- N7 Nhân viên: nhận tin đóng vòng -->
+      <rect x="880" y="184" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="880" y="184" width="144" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="952" y="206" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nhận tin đóng vòng</text>
+      <text x="952" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">phận của ý + lý do CEO</text>
+      <text x="952" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">1 chạm: tôi hiểu vì sao</text>
+
+      <!-- N9 Quản trị: kho ý -->
+      <rect x="880" y="96" width="144" height="56" rx="6" fill="#fafafa"/>
+      <rect x="880" y="96" width="144" height="56" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="952" y="118" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Kho ý</text>
+      <text x="952" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">«để sau» → mồi đợt sau</text>
+      <text x="952" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ai cũng đọc được</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="448" x2="1040" y2="448" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="464" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="40" y="480" width="16" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="64" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước</text>
+
+      <rect x="120" y="480" width="16" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="144" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Tâm điểm</text>
+
+      <rect x="232" y="480" width="16" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="256" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Tuỳ chọn</text>
+
+      <rect x="344" y="480" width="16" height="12" rx="2" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="368" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kho</text>
+
+      <line x1="432" y1="486" x2="460" y2="486" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="468" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Trao tay</text>
+
+      <line x1="552" y1="486" x2="580" y2="486" stroke="#575757" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <text x="588" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đường phụ</text>
+
+      <line x1="680" y1="486" x2="708" y2="486" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="716" y="490" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đóng vòng — đường quan trọng nhất</text>
+    </svg>
+  </div>
+</body>
+</html>
