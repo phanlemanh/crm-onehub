@@ -1,4 +1,7 @@
+const GIAY_MS = 1000;
+
 export const GIAI_DOAN_API = {
+	thoiHan: { xoaMs: 120 * GIAY_MS },
 	messages: {
 		forbidden: "Only an owner or an admin can change deal stages.",
 		trung: "A stage with that name already exists.",

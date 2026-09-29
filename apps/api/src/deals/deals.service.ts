@@ -583,24 +583,31 @@ export class DealsService {
 		tx: Prisma.TransactionClient,
 		id: string,
 	): Promise<{ id: string; kind: LoaiGiaiDoan }> {
-		const giaiDoan = await tx.dealStage.findUnique({
-			where: { id },
-			select: { id: true, kind: true, archivedAt: true },
-		});
-		if (!giaiDoan || giaiDoan.archivedAt) {
+		const [giaiDoan] = await tx.$queryRaw<{ id: string; kind: LoaiGiaiDoan }[]>`
+			SELECT id, kind::text AS kind
+			FROM "dealStage"
+			WHERE id = ${id} AND "archivedAt" IS NULL
+			FOR SHARE
+		`;
+		if (!giaiDoan) {
 			throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
 		}
-		return { id: giaiDoan.id, kind: giaiDoan.kind };
+		return giaiDoan;
 	}
 
 	private async giaiDoanMoDau(
 		tx: Prisma.TransactionClient,
 	): Promise<{ id: string; kind: LoaiGiaiDoan }> {
-		return tx.dealStage.findFirstOrThrow({
-			where: { kind: "OPEN", archivedAt: null },
-			orderBy: { position: "asc" },
-			select: { id: true, kind: true },
-		});
+		const [dau] = await tx.$queryRaw<{ id: string; kind: LoaiGiaiDoan }[]>`
+			SELECT id, kind::text AS kind
+			FROM "dealStage"
+			WHERE kind = 'OPEN' AND "archivedAt" IS NULL
+			ORDER BY position
+			LIMIT 1
+			FOR SHARE
+		`;
+		if (!dau) throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
+		return dau;
 	}
 
 	async chuyenGiaiDoanTrongTx(

@@ -663,3 +663,101 @@ describe("bat-bien", () => {
 		}
 	});
 });
+
+describe("dong-thoi", () => {
+	const ngu = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+	it("hai lan tao dong thoi khong lot nhan trung khac hoa thuong", async () => {
+		const ket = await Promise.allSettled([
+			giaiDoan.create(userId, { label: `Đàm phán ${suffix}`, kind: "OPEN" }),
+			giaiDoan.create(userId, { label: `đàm phán ${suffix}`, kind: "OPEN" }),
+		]);
+		const duoc = ket.filter((k) => k.status === "fulfilled").length;
+		expect(duoc, `dong thoi: ${duoc} nhan trung duoc tao`).toBe(1);
+	});
+
+	it("hai lan tao dong thoi o 19 giai doan khong vuot tran", async () => {
+		const dem = async () => db.dealStage.count({ where: { archivedAt: null } });
+		const them: string[] = [];
+		while ((await dem()) < 19) {
+			them.push(
+				(
+					await giaiDoan.create(userId, {
+						label: `Lấp đồng thời ${them.length} ${suffix}`,
+						kind: "OPEN",
+					})
+				).id,
+			);
+		}
+		try {
+			await Promise.allSettled([
+				giaiDoan.create(userId, { label: `Hai A ${suffix}`, kind: "OPEN" }),
+				giaiDoan.create(userId, { label: `Hai B ${suffix}`, kind: "OPEN" }),
+			]);
+			const sau = await dem();
+			expect(sau, `dong thoi: tran ${sau} > 20`).toBe(20);
+		} finally {
+			await db.dealStage.updateMany({
+				where: { label: { endsWith: suffix }, archivedAt: null },
+				data: { archivedAt: new Date() },
+			});
+		}
+	});
+
+	it("tao thoa thuan vao giai doan dang bi xoa bi tu choi sau khi xoa commit", async () => {
+		const G = (
+			await giaiDoan.create(userId, {
+				label: `Đang xoá ${suffix}`,
+				kind: "OPEN",
+			})
+		).id;
+		const giu = db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "dealStage" WHERE id = ${G} FOR UPDATE`;
+			await tx.dealStage.update({
+				where: { id: G },
+				data: { archivedAt: new Date() },
+			});
+			await ngu(400);
+		});
+		await ngu(100);
+		const tao = loiCua(
+			deals.create({
+				name: `Đua ${suffix}`,
+				companyId,
+				ownerId: userId,
+				stage: G,
+			}),
+		);
+		await giu;
+		expect(
+			await tao,
+			"dong thoi: thoa thuan roi vao giai doan vua bi xoa",
+		).toBe(GIAI_DOAN_API.messages.khongCo);
+	});
+
+	it("xoa co chuyen chay voi thoi han rieng cua GIAI_DOAN_API", async () => {
+		const tuyChon: { timeout?: number }[] = [];
+		const agentBat = {
+			withCrmEvents: async <T>(
+				work: (
+					tx: Prisma.TransactionClient,
+					emit: () => Promise<void>,
+				) => Promise<T>,
+				opts?: { timeout?: number },
+			) => {
+				tuyChon.push(opts ?? {});
+				return db.$transaction((tx) => work(tx, async () => undefined), opts);
+			},
+		} as unknown as AgentTriggerService;
+		const rieng = new GiaiDoanService(db, agentBat, deals);
+		const { id } = await giaiDoan.create(userId, {
+			label: `Thời hạn ${suffix}`,
+			kind: "OPEN",
+		});
+		await rieng.archive(userId, { id });
+		expect(
+			tuyChon[0]?.timeout,
+			"xoa: transaction dung thoi han mac dinh 5s",
+		).toBe(GIAI_DOAN_API.thoiHan.xoaMs);
+	});
+});

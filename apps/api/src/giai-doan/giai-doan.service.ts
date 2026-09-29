@@ -129,40 +129,43 @@ export class GiaiDoanService {
 		await this.requireManager(userId);
 		const input = giaiDoanArchiveInput.parse(raw);
 		const now = new Date();
-		const ketQua = await this.agent.withCrmEvents(async (tx, emit) => {
-			const song = await this.khoaSong(tx);
-			const nguon = song.find((g) => g.id === input.id);
-			if (!nguon) throw new NotFoundException(M.khongCo);
-			if (song.filter((g) => g.kind === nguon.kind).length === 1) {
-				throw new BadRequestException(M.cuoiCung);
-			}
-			const conLai = await tx.deal.findMany({
-				where: { stage: nguon.id },
-				select: { id: true },
-				orderBy: { id: "asc" },
-			});
-			if (conLai.length > 0) {
-				if (!input.moveTo) throw new BadRequestException(M.conThoaThuan);
-				const dich = song.find((g) => g.id === input.moveTo);
-				if (!dich || dich.id === nguon.id || dich.kind !== nguon.kind) {
-					throw new BadRequestException(M.dichSai);
+		const ketQua = await this.agent.withCrmEvents(
+			async (tx, emit) => {
+				const song = await this.khoaSong(tx);
+				const nguon = song.find((g) => g.id === input.id);
+				if (!nguon) throw new NotFoundException(M.khongCo);
+				if (song.filter((g) => g.kind === nguon.kind).length === 1) {
+					throw new BadRequestException(M.cuoiCung);
 				}
-				for (const { id } of conLai) {
-					await this.deals.chuyenGiaiDoanTrongTx(tx, emit, {
-						dealId: id,
-						toStageId: dich.id,
-						actingUserId: userId,
-						now,
-						giuNguyenDong: true,
-					});
+				const conLai = await tx.deal.findMany({
+					where: { stage: nguon.id },
+					select: { id: true },
+					orderBy: { id: "asc" },
+				});
+				if (conLai.length > 0) {
+					if (!input.moveTo) throw new BadRequestException(M.conThoaThuan);
+					const dich = song.find((g) => g.id === input.moveTo);
+					if (!dich || dich.id === nguon.id || dich.kind !== nguon.kind) {
+						throw new BadRequestException(M.dichSai);
+					}
+					for (const { id } of conLai) {
+						await this.deals.chuyenGiaiDoanTrongTx(tx, emit, {
+							dealId: id,
+							toStageId: dich.id,
+							actingUserId: userId,
+							now,
+							giuNguyenDong: true,
+						});
+					}
 				}
-			}
-			await tx.dealStage.update({
-				where: { id: nguon.id },
-				data: { archivedAt: now },
-			});
-			return { id: nguon.id, moved: conLai.length };
-		});
+				await tx.dealStage.update({
+					where: { id: nguon.id },
+					data: { archivedAt: now },
+				});
+				return { id: nguon.id, moved: conLai.length };
+			},
+			{ timeout: GIAI_DOAN_API.thoiHan.xoaMs },
+		);
 		this.logger.log({
 			message: "Deal stage archived",
 			stageId: ketQua.id,
@@ -181,7 +184,10 @@ export class GiaiDoanService {
 		}
 	}
 
-	private khoaSong(tx: Prisma.TransactionClient): Promise<GiaiDoanSong[]> {
+	private async khoaSong(
+		tx: Prisma.TransactionClient,
+	): Promise<GiaiDoanSong[]> {
+		await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext('dealStage'))`;
 		return tx.$queryRaw<GiaiDoanSong[]>`
 			SELECT id, label, kind::text AS kind, position
 			FROM "dealStage"
