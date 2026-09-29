@@ -253,7 +253,7 @@ evals:
       Ma tran viet truoc: 3 trang thai (open, won, lost) x tap id thoa thuan tra ve = tap ky vong tinh tu
       kind cua fixture. read_deal_history va preamble cua thoa thuan o giai doan moi: chuoi ra chua nhan,
       khong chua id cua giai doan. 3 + 2 = 5 khang dinh.
-      CHIEU DO: ban sao lookup won = [id "CLOSED_WON"] -> do voi thong diep ghim "won: thieu thoa thuan o
+      CHIEU DO (da chay 2026-09-29): ban sao lookup won = [id "CLOSED_WON"] -> do voi thong diep ghim "won: thieu thoa thuan o
       giai doan WON moi".
 
   - id: E15
