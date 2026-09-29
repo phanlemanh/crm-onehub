@@ -237,7 +237,7 @@ xoá đơn vị đọc từ nhật ký `tRPC org.purge* err` (đã có).
 - «Rút lại», «Trả lại», «Chuyển OKR» và lưu mức hiển thị đổi quyền nên đi qua hộp thoại có
   nút chính bên phải, «Huỷ» bọc `DialogClose`; «Gửi duyệt» hỏi lại bằng `ConfirmDialog`.
 - Tên mục tiêu, lý do trả lại là chữ người nhập: `translate="no"`.
-- Khổ 390: hộp thoại toàn màn, dải chờ duyệt xếp dọc, không cuộn ngang.
+- Khổ 390: hộp thoại theo khuôn `Dialog` sẵn có (chưa có biến thể toàn màn — design-pass Nhóm 2), dải chờ duyệt xếp dọc, không cuộn ngang.
 - Ngày theo giờ Việt Nam, in bằng `Intl.DateTimeFormat`.
 
 ### 5. Xuất xứ component
