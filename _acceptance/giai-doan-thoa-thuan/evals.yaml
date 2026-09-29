@@ -40,7 +40,7 @@ evals:
       deals.board co mot cot id do dung chi so (cot sap theo kind roi position); deals.setStage mot thoa
       thuan vao no thanh cong (LOST kem ly do). Ma tran 3 loai x [vi tri trong list, chi so cot board,
       setStage thanh cong] = 9 khang dinh.
-      CHIEU DO: ban sao create gan position = 0 -> do voi thong diep ghim "OPEN: giai doan moi o vi tri 0
+      CHIEU DO (da chay 2026-09-29): ban sao create gan position = 0 -> do voi thong diep ghim "OPEN: giai doan moi o vi tri 0
       != cuoi".
 
   - id: E3
@@ -90,7 +90,7 @@ evals:
       tung chi so). Ma tran do viet truoc 5 ca tren cung fixture: thieu mot id, thua mot id la, trung
       mot id, lan mot id WON, gui kind WON voi id OPEN -> moi ca BAD_REQUEST va list khong doi (so ca
       mang id). 1 + 5 = 6 ca; dem ca chay = 6.
-      CHIEU DO: ban sao bo kiem "du va dung" -> do voi thong diep ghim "thieu mot id: reorder duoc chap
+      CHIEU DO (da chay 2026-09-29): ban sao bo kiem "du va dung" -> do voi thong diep ghim "thieu mot id: reorder duoc chap
       nhan".
 
   - id: E6
@@ -109,7 +109,7 @@ evals:
       G deu BAD_REQUEST; deals.bulkSetStage 2 thoa thuan vao G BAD_REQUEST va stage ca hai khong doi;
       activities.timeline cua A van tra from.label = nhan cua G. 6 khang dinh.
       Doi chung duong cung fixture: truoc archive, setStage vao G thanh cong.
-      CHIEU DO: ban sao setStage bo kiem archivedAt -> do voi thong diep ghim "setStage vao giai doan da
+      CHIEU DO (da chay 2026-09-29): ban sao setStage bo kiem archivedAt -> do voi thong diep ghim "setStage vao giai doan da
       xoa duoc chap nhan".
 
   - id: E7
@@ -131,7 +131,7 @@ evals:
       khong doi; S co archivedAt; su kien deal.stage.changed (doc qua duong phat su kien CRM cua deals) dem = 3, so
       tung cap {dealId, from S, to D}. Ca nguyen tu: tiem loi o thoa thuan thu 3 (qua tham so kiem cua
       service) -> khong thoa thuan nao doi, S chua xoa, su kien dem = 0.
-      CHIEU DO: (1) ban sao chuyen tung thoa thuan ngoai transaction -> do voi thong diep ghim "nguyen tu:
+      CHIEU DO (da chay 2026-09-29): (1) ban sao chuyen tung thoa thuan ngoai transaction -> do voi thong diep ghim "nguyen tu:
       2 thoa thuan da doi sau loi"; (2) ban sao dem bo thoa thuan da luu tru -> "S: count 2 != 3"; (3) ban sao chuyen
       bang updateMany -> "su kien 0 != 3".
 
@@ -154,7 +154,7 @@ evals:
       rut tu generated/server.ts (khong viet tay); voi MOI mutation gui payload hop le kem them truong kind khac loai
       cua giai doan roi doc thang CSDL: kind khong doi (so khang dinh = so mutation; ca kind lech cua reorder de cho
       E5). 8 + 2 + so mutation ca.
-      CHIEU DO: (1) ban sao so nhan phan biet hoa thuong -> do voi thong diep ghim "nhan trung khac hoa
+      CHIEU DO (da chay 2026-09-29): (1) ban sao so nhan phan biet hoa thuong -> do voi thong diep ghim "nhan trung khac hoa
       thuong duoc chap nhan"; (2) ban sao rename trai input vao data -> do voi thong diep ghim "rename: kind OPEN -> WON".
 
   - id: E9
@@ -172,7 +172,7 @@ evals:
       tay — them mutation moi ma khong vao ma tran thi do. + giaiDoan.list voi vai okr = FORBIDDEN
       KHONG_TRONG_PHAM_VI; voi member = thanh cong. Doi chung duong: 4 thu tuc x admin, owner thanh cong.
       vai-chi-okr.spec.ts xanh khong sua danh sach.
-      CHIEU DO: ban sao bo yeuCauQuanTri o rename -> do voi thong diep ghim "member: giaiDoan.rename
+      CHIEU DO (da chay 2026-09-29): ban sao bo yeuCauQuanTri o rename -> do voi thong diep ghim "member: giaiDoan.rename
       khong bi tu choi".
 
   - id: E10
