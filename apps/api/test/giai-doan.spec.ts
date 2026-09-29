@@ -398,6 +398,7 @@ describe("xoa-trong", () => {
 			await loiCua(
 				deals.create({ name: "x", companyId, ownerId: userId, stage: id }),
 			),
+			"tao vao giai doan da xoa duoc chap nhan",
 		).toBe(GIAI_DOAN_API.messages.khongCo);
 		expect(
 			await loiCua(deals.setStage({ id: a, stage: id }, userId)),
