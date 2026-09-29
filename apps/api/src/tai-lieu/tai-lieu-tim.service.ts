@@ -21,7 +21,7 @@ const NGUOI = { select: { id: true, name: true } } as const;
 
 type LienKetDung = { tuTrangId: string; denSlug: string; vanBan: string };
 
-function cat<T>(rows: T[]): { rows: T[]; total: number } {
+function cat<T>(rows: T[]) {
 	return { rows: rows.slice(0, TIM.sucKhoeToiDa), total: rows.length };
 }
 

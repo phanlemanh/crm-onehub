@@ -146,7 +146,7 @@ describe("trang-thai", () => {
 		}
 		await trangDuyet("Q5", "Trang Q5.\n", "chu");
 		await deXuat(slug.Q5 as string, "Sửa Q5.\n", "tao");
-		const ngay: Record<string, Date | null> = {
+		const ngay = {
 			Q1: cach(-1),
 			Q2: cach(0),
 			Q3: cach(1),
@@ -174,7 +174,7 @@ describe("trang-thai", () => {
 	});
 
 	test("trang-thai: co de xuat cho duyet theo nguoi xem thay duoc, kem so ban", async () => {
-		const MONG: Record<string, Record<string, number>> = {
+		const MONG = {
 			chu: { Q5: 1 },
 			khac: { Q3: 2 },
 			admin: { Q3: 2, Q5: 1 },

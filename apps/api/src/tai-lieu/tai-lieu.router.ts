@@ -27,6 +27,7 @@ import {
 	taiLieuNhacToiOutput,
 	taiLieuOkOutput,
 	taiLieuProposalOutput,
+	taiLieuProposalsInput,
 	taiLieuProposalsOutput,
 	taiLieuProposeInput,
 	taiLieuProposeOutput,
@@ -147,11 +148,15 @@ export class TaiLieuRouter {
 	}
 
 	@Query({
+		input: taiLieuProposalsInput,
 		output: taiLieuProposalsOutput,
 		meta: restMeta("GET", "/tai-lieu/de-xuat", TAG),
 	})
-	proposals(@Ctx() ctx: AuthedTrpcContext) {
-		return this.taiLieu.proposals(nguoiGoi(ctx));
+	proposals(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuProposalsInput>,
+	) {
+		return this.taiLieu.proposals(nguoiGoi(ctx), input);
 	}
 
 	@Query({

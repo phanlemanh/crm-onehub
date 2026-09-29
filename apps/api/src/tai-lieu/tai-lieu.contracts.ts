@@ -33,6 +33,14 @@ export const taiLieuListInput = z.object({
 	page: z.number().int().min(1).default(1),
 });
 export const taiLieuSlugInput = z.object({ slug: ma });
+export const NHOM_DE_XUAT = ["tat-ca", "cho", "da-xu-ly"] as const;
+export const taiLieuProposalsInput = z
+	.object({
+		nhom: z.enum(NHOM_DE_XUAT).default("tat-ca"),
+		page: z.number().int().min(1).default(1),
+		slug: ma.optional(),
+	})
+	.optional();
 export const taiLieuIdInput = z.object({ id: ma });
 export const taiLieuCreateInput = z.object({
 	ten: tenVao,
@@ -110,6 +118,7 @@ export const taiLieuProposalsOutput = z.object({
 			cu: z.boolean(),
 		}),
 	),
+	total: z.number().int(),
 	choToiDuyet: z.number().int(),
 });
 
@@ -206,6 +215,7 @@ export const taiLieuSucKhoeOutput = z.object({
 });
 
 export type TaiLieuListInput = z.infer<typeof taiLieuListInput>;
+export type TaiLieuProposalsInput = z.infer<typeof taiLieuProposalsInput>;
 export type TaiLieuCreateInput = z.infer<typeof taiLieuCreateInput>;
 export type TaiLieuProposeInput = z.infer<typeof taiLieuProposeInput>;
 export type TaiLieuApproveInput = z.infer<typeof taiLieuApproveInput>;

@@ -19,10 +19,7 @@ type KhoaTrang = "T1" | "T2" | "T3" | "T4" | "T5" | "T6" | "T7" | "T8";
 
 const DON_VI: readonly KhoaDv[] = ["DV1", "DV2", "DV3", "DV4"];
 
-const TRANG: Record<
-	KhoaTrang,
-	{ dv: KhoaDv | null; loai: LoaiTrang; chu: Ai }
-> = {
+const TRANG = {
 	T1: { dv: "DV1", loai: "quy-dinh", chu: "chu" },
 	T2: { dv: "DV1", loai: "chinh-sach", chu: "khac" },
 	T3: { dv: "DV2", loai: "quy-dinh", chu: "chu" },
@@ -31,7 +28,7 @@ const TRANG: Record<
 	T6: { dv: null, loai: "quy-dinh", chu: "admin" },
 	T7: { dv: "DV1", loai: "quy-trinh", chu: "chu" },
 	T8: { dv: "DV3", loai: "chinh-sach", chu: "chu" },
-};
+} satisfies Record<KhoaTrang, { dv: KhoaDv | null; loai: LoaiTrang; chu: Ai }>;
 
 type Dem = Record<LoaiTrang, number>;
 const dem = (qd: number, cs: number, qt: number, bm: number): Dem => ({
@@ -166,9 +163,9 @@ describe("loc", () => {
 		for (const { ten, loc, mong, facet } of MA_TRAN) {
 			const vao = {
 				page: 1,
-				...(loc.dv ? { donViId: dvId.get(loc.dv) } : {}),
-				...(loc.loai ? { loai: loc.loai } : {}),
-				...(loc.chu ? { chuTrangId: phien[loc.chu].nguoi } : {}),
+				donViId: loc.dv ? dvId.get(loc.dv) : undefined,
+				loai: loc.loai,
+				chuTrangId: loc.chu ? phien[loc.chu].nguoi : undefined,
 			};
 			const ra = ok<{
 				rows: { slug: string }[];
