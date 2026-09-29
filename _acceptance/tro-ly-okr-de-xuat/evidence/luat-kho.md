@@ -1,6 +1,6 @@
 # Luật kho trên diff của lượt tro-ly-okr-de-xuat
 
-Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `91eba547b502` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 90 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14902 dòng thêm.
+Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `21a21de8c80e` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 90 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14915 dòng thêm.
 
 ## 1. Chú thích trong dòng thêm
 
@@ -147,19 +147,15 @@ Kết quả:
 # tên hằng khai ở hơn một tệp cấu hình: 1
   viSao: packages/db/src/okr-tro-ly-danh-muc.ts#chu.viSao, apps/api/src/okr/okr-config.ts#ten.viSao
 
-# literal số ≥ 2 chữ số trên dòng thêm của tệp nguồn (ngoài ba tệp cấu hình, tệp kiểm, evals, proto): 18
+# literal số ≥ 2 chữ số trên dòng thêm của tệp nguồn (ngoài ba tệp cấu hình, tệp kiểm, evals, proto): 14
 tệp:dòng · số · loại
-apps/api/src/okr/tro-ly-so-do.ts:31 · 24 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-apps/api/src/okr/tro-ly-so-do.ts:31 · 60 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-apps/api/src/okr/tro-ly-so-do.ts:35 · 15 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-apps/api/src/okr/tro-ly-so-do.ts:232 · 0.5 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-apps/api/src/okr/tro-ly-so-do.ts:232 · 0.9 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:38 · 15 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:235 · 0.5 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:235 · 0.9 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
 apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:66 · 12 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
 apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:111 · 01 · trong chuỗi
 apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:63 · 1_000 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-packages/db/src/okr-xu-huong.ts:28 · 24 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-packages/db/src/okr-xu-huong.ts:28 · 60 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
-packages/db/src/okr-xu-huong.ts:32 · 100 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+packages/db/src/okr-xu-huong.ts:35 · 100 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
 packages/ui/src/components/suggestion.tsx:163 · 15 · trong chuỗi
 packages/validation/src/okr-chuong-trinh.ts:22 · 200 · khuôn Zod (min/max)
 packages/validation/src/okr-kiem-de-xuat.ts:58 · 15 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
@@ -169,28 +165,24 @@ packages/validation/src/okr-kiem-de-xuat.ts:95 · 100 · số rời — đọc t
 packages/validation/src/okr-kiem-de-xuat.ts:101 · 100 · số rời — đọc tay
 ```
 
-Kết luận: 38 hằng số trong ba tệp cấu hình, 1 tên hằng khai ở hơn một tệp (viSao); 18 literal số ≥ 2 chữ số ở tệp nguồn của lượt — 11 hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay; 4 trong chuỗi; 1 khuôn Zod (min/max); 2 số rời — đọc tay.
+Kết luận: 38 hằng số trong ba tệp cấu hình, 1 tên hằng khai ở hơn một tệp (viSao); 14 literal số ≥ 2 chữ số ở tệp nguồn của lượt — 7 hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay; 4 trong chuỗi; 1 khuôn Zod (min/max); 2 số rời — đọc tay.
 
 ### Phán quyết tay cho các dòng «đọc tay»
 
 ```
 tệp:dòng · số · phán quyết
-apps/api/src/okr/tro-ly-so-do.ts:31 · 24 · đơn vị (ngày = 24 × 60 phút, dẫn từ MINUTE_MS) — hợp lệ về loại, nhưng TRÙNG: packages/db/src/okr-xu-huong.ts:28 khai đúng biểu thức này; luật «không viết hai lần» của AGENTS.md chưa đạt
-apps/api/src/okr/tro-ly-so-do.ts:31 · 60 · đơn vị (ngày = 24 × 60 phút, dẫn từ MINUTE_MS) — hợp lệ về loại, nhưng TRÙNG: packages/db/src/okr-xu-huong.ts:28 khai đúng biểu thức này; luật «không viết hai lần» của AGENTS.md chưa đạt
-apps/api/src/okr/tro-ly-so-do.ts:35 · 15 · định dạng: toPrecision(15) cắt đuôi dấu phẩy động khi nội suy phân vị, giới hạn của số double — không phải tham số tinh chỉnh
-apps/api/src/okr/tro-ly-so-do.ts:232 · 0.5 · định nghĩa số đo: p50/p90 là tên số đo spec §10 hứa (trả ra p50Ms, p90Ms) — đổi nó là đổi số đo, không phải chỉnh ngưỡng
-apps/api/src/okr/tro-ly-so-do.ts:232 · 0.9 · định nghĩa số đo: p50/p90 là tên số đo spec §10 hứa (trả ra p50Ms, p90Ms) — đổi nó là đổi số đo, không phải chỉnh ngưỡng
+apps/api/src/okr/tro-ly-so-do.ts:38 · 15 · định dạng: toPrecision(15) cắt đuôi dấu phẩy động khi nội suy phân vị, giới hạn của số double — không phải tham số tinh chỉnh
+apps/api/src/okr/tro-ly-so-do.ts:235 · 0.5 · định nghĩa số đo: p50/p90 là tên số đo spec §10 hứa (trả ra p50Ms, p90Ms) — đổi nó là đổi số đo, không phải chỉnh ngưỡng
+apps/api/src/okr/tro-ly-so-do.ts:235 · 0.9 · định nghĩa số đo: p50/p90 là tên số đo spec §10 hứa (trả ra p50Ms, p90Ms) — đổi nó là đổi số đo, không phải chỉnh ngưỡng
 apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:66 · 12 · đơn vị lịch: 12 tháng một năm (tính tháng kế) — hợp lệ
 apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:63 · 1_000 · đơn vị: mili giây của một giây để định dạng độ trễ — hợp lệ về loại; cùng nghĩa với OKR.thoiGian.giayMs (API) nhưng tệp client không nhập được okr-config của API
-packages/db/src/okr-xu-huong.ts:28 · 24 · đơn vị (ngày) — hợp lệ về loại, nhưng TRÙNG với apps/api/src/okr/tro-ly-so-do.ts:31
-packages/db/src/okr-xu-huong.ts:28 · 60 · đơn vị (ngày) — hợp lệ về loại, nhưng TRÙNG với apps/api/src/okr/tro-ly-so-do.ts:31
-packages/db/src/okr-xu-huong.ts:32 · 100 · đơn vị: 100 của phần trăm (kẹp KR phần trăm, làm tròn hai số lẻ) — hợp lệ
+packages/db/src/okr-xu-huong.ts:35 · 100 · đơn vị: 100 của phần trăm (kẹp KR phần trăm, làm tròn hai số lẻ) — hợp lệ
 packages/validation/src/okr-kiem-de-xuat.ts:58 · 15 · định dạng: toPrecision(15) khi nhân hệ số tỷ/triệu/nghìn, giới hạn của số double — không phải tham số tinh chỉnh
 packages/validation/src/okr-kiem-de-xuat.ts:95 · 100 · ngữ pháp số đếm tiếng Việt: «trăm» = × 100 trong bộ đọc số viết bằng chữ — hằng ngôn ngữ, không tinh chỉnh (đặt tên được nhưng không đổi hành vi)
 packages/validation/src/okr-kiem-de-xuat.ts:101 · 100 · ngữ pháp số đếm tiếng Việt: phần sau «trăm» phải < 100 — cùng hằng ngôn ngữ như dòng trên
 ```
 
-13 dòng «đọc tay» đều có phán quyết: không dòng nào là tham số tinh chỉnh phải vào TRO_LY_OKR_TRAN; một cặp trùng thật (NGAY_MS khai ở apps/api/src/okr/tro-ly-so-do.ts và packages/db/src/okr-xu-huong.ts cùng biểu thức 24 * 60 * MINUTE_MS) — lẽ ra xuất một DAY_MS cạnh MINUTE_MS ở packages/db/src/okr-tro-ly-danh-muc.ts; chưa sửa trong vòng này, ghi để chủ kho quyết.
+9 dòng «đọc tay» đều có phán quyết (đọc từng dòng ở bảng trên); không dòng nào mang phán quyết TRÙNG — luật «không viết hai lần một đơn vị» của AGENTS.md đạt trên các dòng này.
 
 ### viSao khai ở hai tệp cấu hình
 
@@ -377,7 +369,7 @@ packages/db/src/okr-tro-ly-danh-muc.ts
 packages/validation/src/okr-chu-ky.ts
 # nguồn ngoài kho: zod
 # nguồn SDK AI hay vendor: 0
-# dòng khớp mẫu lỏng 'generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(': packages/db/src/okr-tro-ly-danh-muc.ts:129: "het-tran-gateway",
+# dòng khớp mẫu lỏng 'generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(': packages/db/src/okr-tro-ly-danh-muc.ts:130: "het-tran-gateway",
 # trong đó là lời gọi hay import thật (\b(generateText|streamText|generateObject|streamObject|fetch)\s*\(|from\s+"(ai|@ai-sdk\/[^"]*|openai|@anthropic-ai\/[^"]*)"): 0
 # thân noiVeNguoi
 packages/validation/src/okr-kiem-de-xuat.ts:274: function noiVeNguoi(dong: DongDeXuat, goi: GoiKiem): boolean {
