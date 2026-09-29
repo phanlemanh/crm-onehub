@@ -1,61 +1,97 @@
 {
-  "feature_plain": "Người đặt mục tiêu giấu được một mục tiêu nhạy cảm khỏi người không liên quan, chương trình bật được bước trưởng cấp trên duyệt trước khi mục tiêu chạy, và gộp, tách, lưu trữ phòng ban giữa kỳ không còn để OKR không ai trả lời.",
-  "will_do": [
-    {"id":"AC-1","p":"Sẽ cho người sửa được mục tiêu đặt nó ở mức «giới hạn» kèm người xem có tên, đổi lại công khai, và giữ nguyên mức khi mang sang kỳ sau."},
-    {"id":"AC-2","p":"Sẽ quyết «ai thấy mục tiêu giới hạn» bằng một luật duy nhất: quản trị, người dính vào mục tiêu, trưởng sửa được nó và người xem có tên."},
-    {"id":"AC-4","p":"Sẽ để mục tiêu giới hạn ngoài mọi con số tổng (toàn cảnh, họp tuần, sức khoẻ) — ai cũng thấy cùng một số — và không cho căn chỉnh."},
-    {"id":"AC-6","p":"Sẽ có ô «Công bố cần duyệt» trong Chương trình OKR; bật thì cả nút Công bố lẫn nhập bảng tính đều phải qua duyệt, tắt thì như hôm nay."},
-    {"id":"AC-7","p":"Sẽ cho trưởng đơn vị gửi duyệt, trưởng cấp trên duyệt và công bố hay trả lại kèm lý do, người gửi rút lại để sửa."},
-    {"id":"AC-8","p":"Sẽ báo người duyệt mỗi sáng những mục tiêu đang chờ mình, và báo người gửi khi bị trả lại kèm lý do."},
-    {"id":"AC-10","p":"Sẽ cho quản trị chuyển OKR của một đơn vị sang đơn vị khác cùng cấp mà giữ nguyên KR, cập nhật tuần, căn chỉnh và lịch sử."},
-    {"id":"AC-11","p":"Sẽ cho quản trị thấy danh sách OKR mồ côi — đơn vị đã lưu trữ, không ai sửa được, người phụ trách đã rời — kèm lối sửa."},
-    {"id":"AC-12","p":"Sẽ hiện nhãn «Giới hạn», dải «Chờ … duyệt» và dải bị trả lại ngay trên khung mục tiêu, thử trong trình duyệt thật."},
-    {"id":"AC-13","p":"Sẽ có công tắc duyệt ở Cài đặt, dòng «OKR ở kỳ đang mở» và hộp «Chuyển OKR…» ở Tổ chức, khối «OKR mồ côi» ở Sức khoẻ."},
-    {"id":"AC-14","p":"Sẽ nạp sẵn vào bộ OKR mẫu một mục tiêu giới hạn, một mục tiêu chờ duyệt, một phòng ban đã lưu trữ, và có câu đếm cho phiên nghiệm thu."}
+  "feature_plain": "Người đặt mục tiêu giấu được mục tiêu nhạy cảm khỏi người không liên quan, chương trình bật được bước trưởng cấp trên duyệt trước khi mục tiêu chạy, và tái cơ cấu phòng ban giữa kỳ không còn để OKR không ai trả lời.",
+  "decisions": [
+    {
+      "id": "E25",
+      "q": "Mã và tài liệu có đúng cách thiết kế đã duyệt không?",
+      "why": "Hội đồng chỉ có số dòng đổi, không có thân diff; máy đã gom đủ bốn bằng chứng họ đòi — từ điển, tài liệu API, cây tổ chức không nhập khu OKR, và nơi dùng luật xem."
+    }
   ],
-  "wont_do": [
-    {"id":"AC-3","p":"Sẽ KHÔNG để người không xem được thấy mục tiêu giới hạn qua bất kỳ đường nào — màn, thủ tục, cầu REST, khoá API, vết của mục tiêu khác."},
-    {"id":"AC-5","p":"Sẽ KHÔNG cho người không xem được theo dõi, bình luận, ghi nhận, mang sang, ghi số hay nhờ trợ lý trên mục tiêu giới hạn, và không nhắc tên nó cho họ."},
-    {"id":"AC-9","p":"Chặn lưu trữ đơn vị còn OKR ở kỳ chưa đóng, và chặn xoá hẳn đơn vị có lịch sử OKR bằng câu giải thích thay cho lỗi máy chủ."},
-    {"id":"OOS-1","p":"KHÔNG có mức «trong đơn vị» và không có mức hiển thị riêng cho từng KR."},
-    {"id":"OOS-2","p":"KHÔNG cho mục tiêu giới hạn căn chỉnh — cần cách hiện một dòng giữ chỗ không tên trước."},
-    {"id":"OOS-3","p":"KHÔNG có nhiều tầng duyệt, chọn tay người duyệt, hay duyệt lại khi sửa sau công bố."},
-    {"id":"OOS-4","p":"KHÔNG cho quản trị sửa OKR thay đơn vị không có trưởng."},
-    {"id":"OOS-5","p":"KHÔNG chặn hay cảnh báo ở hộp gỡ thành viên — người rời hiện ở danh sách mồ côi."},
-    {"id":"OOS-6","p":"KHÔNG có thao tác gộp, tách đơn vị riêng — gộp là chuyển OKR rồi lưu trữ."},
-    {"id":"OOS-7","p":"KHÔNG dạy trợ lý OKR đọc theo mức hiển thị ngoài việc chặn yêu cầu — lượt 9b và sau phải dùng cùng luật."}
-  ],
-  "coverage_plain": [
-    {"i":0,"p":"Ba luật mới — hiển thị, duyệt, cây đổi (lưu trữ, xoá hẳn, dời, trưởng rời, người phụ trách rời, chuyển OKR) — mỗi luật có tiêu chí riêng (AC-1, AC-6, AC-7, AC-9, AC-10, AC-11)."},
-    {"i":1,"p":"Mọi đường chạm dữ liệu OKR — danh sách, mở theo mã, số tổng, căn chỉnh, nhắc, ghi dựa trên mục tiêu, xuất, trợ lý — đo bằng một ma trận gọi thật (AC-3, AC-4, AC-5, AC-8)."},
-    {"i":2,"p":"Mười nhóm người, từ quản trị tới vai «chỉ OKR», có bảng kỳ vọng viết trước cho ai thấy và ai duyệt (AC-2, AC-3, AC-7)."},
-    {"i":3,"p":"Bốn trạng thái mục tiêu nhân hai nhóm pha kỳ đều có ca: nháp, chờ duyệt, công bố, bỏ (AC-1, AC-7, AC-6, AC-9, AC-10)."},
-    {"i":4,"p":"Áp chéo: ba cửa vào, vết cho mọi thao tác ghi mới, khoá theo pha, ba trạng thái màn, bộ OKR mẫu và một luật xem duy nhất."},
-    {"i":5,"p":"Giả định: nghĩa ba mã đúng như bảng trong hồ sơ cơ hội."},
-    {"i":6,"p":"Giả định: chỉ hai mức, công khai và giới hạn."},
-    {"i":7,"p":"Giả định: quản trị thấy mọi mục tiêu, kể cả giới hạn (như Perdoo)."},
-    {"i":8,"p":"Giả định: mục tiêu giới hạn không vào số tổng với ai và không căn chỉnh được (như Perdoo)."},
-    {"i":9,"p":"Giả định: người duyệt suy từ cây, một tầng; người bấm công bố đã là người duyệt thì công bố thẳng."},
-    {"i":10,"p":"Giả định: trong lúc chờ duyệt không sửa được nội dung, muốn sửa thì rút lại."},
-    {"i":11,"p":"Giả định: không lưu trữ được đơn vị còn mục tiêu ở kỳ chưa đóng, kể cả lúc đang chấm điểm."},
-    {"i":12,"p":"Giả định: đơn vị không trưởng thì chữa bằng đặt trưởng, quản trị không sửa thay."},
-    {"i":13,"p":"Giả định: dời phòng ban sang bộ phận khác giữa kỳ thì OKR đi theo phòng ban, căn chỉnh giữ nguyên."}
-  ],
-  "gap_probe_plain": [
-    {"i":0,"p":"Phép đo «không lộ» chỉ có một ô đối chứng, nên một đường đọc trả rỗng vì thiếu dữ liệu vẫn ra xanh — đã viết lại thành bảng mỗi đường một dòng, người xem được phải thấy mục tiêu, và gieo đủ dữ liệu con."},
-    {"i":1,"p":"Lưới soi mã chỉ nhìn bảng mục tiêu, bỏ sót đọc qua KR, việc, ghi nhận, vết và các khu ngoài OKR — đã mở rộng ra bảy bảng con trên toàn máy chủ và tác tử."},
-    {"i":2,"p":"Lời hứa «mang sang giữ mức giới hạn» chưa có phép đo — đã thêm vào tiêu chí và phép đo."},
-    {"i":3,"p":"Vết của một mục tiêu công khai từng căn chỉnh với mục tiêu giới hạn có thể lộ tên nó — đã thêm luật che và phép đo hai chiều."},
-    {"i":4,"p":"Ngưỡng mồ côi đo tuổi mà không có mốc, ngưỡng «tắt bước duyệt» không có cột — đã đổi ngưỡng mồ côi sang so danh sách theo tuần và thêm cột, ca ghép cặp cho câu đếm."}
-  ],
+  "analyst_plain": "",
   "decisions_plain": [
-    {"id":"d-20260929T011119Z-1","p":"Đã chọn hai mức hiển thị theo Perdoo — đổi lại mục tiêu giới hạn không góp vào mục tiêu cấp trên và không vào số của đơn vị."},
-    {"id":"d-20260929T011119Z-2","p":"Đã chọn một luật xem dùng chung cho màn, nhắc và trợ lý — đổi lại cần một phép đo giữ hai nơi suy trưởng khớp nhau."},
-    {"id":"d-20260929T011119Z-3","p":"Đã chọn suy người duyệt từ cây lúc đọc — trưởng đổi thì mục chờ đi theo; đổi lại chỉ vết ghi ai là người duyệt lúc gửi."},
-    {"id":"d-20260929T011119Z-4","p":"Đã chọn thêm hai ô có mặc định vào bảng cũ để giữ tốc độ toàn cảnh — đổi lại rời nếp «không cột mới trên bảng cũ» của lượt 8a."},
-    {"id":"d-20260929T011119Z-5","p":"KHÔNG cho quản trị sửa OKR của đơn vị không trưởng — đổi lại kỳ có thể trôi vài ngày khi chậm đặt trưởng."},
-    {"id":"d-20260929T011119Z-6","p":"Đã chọn chặn lưu trữ cả khi kỳ đang chấm điểm — đổi lại quản trị phải chuyển OKR hay đợi đóng kỳ."},
-    {"id":"d-20260929T011119Z-7","p":"KHÔNG đụng hộp gỡ thành viên — đổi lại quản trị biết OKR mồ côi sau khi gỡ, không trước."},
-    {"id":"d-20260929T011119Z-8","p":"Đã chọn dựng bản mẫu bấm được không đồng bộ để duyệt trên màn — tốn một lượt dựng."}
+    {
+      "id": "d-20260929T011119Z-1",
+      "p": "Đã chọn hai mức hiển thị theo Perdoo — đổi lại mục tiêu giới hạn không góp vào mục tiêu cấp trên và không vào số của đơn vị."
+    },
+    {
+      "id": "d-20260929T011119Z-2",
+      "p": "Đã chọn một luật xem dùng chung cho màn, nhắc và trợ lý — đổi lại cần một phép đo giữ hai nơi suy trưởng khớp nhau."
+    },
+    {
+      "id": "d-20260929T011119Z-3",
+      "p": "Đã chọn suy người duyệt từ cây lúc đọc — trưởng đổi thì mục chờ đi theo; đổi lại chỉ vết ghi ai là người duyệt lúc gửi."
+    },
+    {
+      "id": "d-20260929T011119Z-4",
+      "p": "Đã chọn thêm hai ô có mặc định vào bảng cũ để giữ tốc độ toàn cảnh — đổi lại rời nếp «không cột mới trên bảng cũ» của lượt 8a."
+    },
+    {
+      "id": "d-20260929T011119Z-5",
+      "p": "KHÔNG cho quản trị sửa OKR của đơn vị không trưởng — đổi lại kỳ có thể trôi vài ngày khi chậm đặt trưởng."
+    },
+    {
+      "id": "d-20260929T011119Z-6",
+      "p": "Đã chọn chặn lưu trữ cả khi kỳ đang chấm điểm — đổi lại quản trị phải chuyển OKR hay đợi đóng kỳ."
+    },
+    {
+      "id": "d-20260929T011119Z-7",
+      "p": "KHÔNG đụng hộp gỡ thành viên — đổi lại quản trị biết OKR mồ côi sau khi gỡ, không trước."
+    },
+    {
+      "id": "d-20260929T011119Z-8",
+      "p": "Đã chọn dựng bản mẫu bấm được không đồng bộ để duyệt trên màn — tốn một lượt dựng."
+    },
+    {
+      "id": "d-20260929T052628Z-10",
+      "p": "Đã chọn: máy chủ suy «ai thấy» từ chính cây nó dùng để quyết quyền sửa, còn tin nhắc và trợ lý dùng hàm riêng ở tầng dữ liệu — đổi lại có hai nơi suy trưởng, một phép đo giữ chúng khớp."
+    },
+    {
+      "id": "d-20260929T052628Z-11",
+      "p": "Đã chọn thi công tuần tự phần máy chủ, mỗi việc một người soát — đổi lại chậm hơn chạy song song."
+    },
+    {
+      "id": "d-20260929T063314Z-12",
+      "p": "Đã chọn: ba màn chỉ quản trị (sổ chi phí AI, sức khoẻ, xem trước chuyển việc) được đo là «từ chối» với người thường, kèm một lượt quản trị đối chứng — chữ của phép đo E3 lệch với cách khai này."
+    },
+    {
+      "id": "d-20260929T063314Z-13",
+      "p": "Đã chọn: bảng họp tuần bỏ mục tiêu giới hạn với mọi người, kể cả trưởng — đổi lại trưởng bàn mục tiêu đó ngoài bảng họp."
+    },
+    {
+      "id": "d-20260929T082318Z-14",
+      "p": "CÒN MỞ: mục tiêu cá nhân của người đã nghỉ nằm mãi ở danh sách mồ côi, không ai sửa hay bỏ được — ngưỡng «0 mồ côi» có thể báo oan; lối ra: cho quản trị bỏ nó, hoặc không tính lớp này."
+    },
+    {
+      "id": "d-20260929T111218Z-15",
+      "p": "Gộp lượt 9b: đổi mốc migration của lượt này để chạy sau migration của 9b — kho nào đã chạy tên cũ phải làm lại."
+    },
+    {
+      "id": "d-20260929T111218Z-16",
+      "p": "Gộp lượt 9b: hàng đợi trợ lý theo khuôn mới của 9b, vẫn từ chối người không xem được mục tiêu."
+    },
+    {
+      "id": "d-20260929T111218Z-17",
+      "p": "Gộp lượt 9b: trợ lý kiểm lại quyền xem của người yêu cầu trước khi đọc mục tiêu."
+    },
+    {
+      "id": "d-20260929T111218Z-18",
+      "p": "Gộp lượt 9b: danh sách đề xuất của trợ lý trả rỗng (không trả «không tìm thấy») cho người không xem được, theo cách 9b đã ghim."
+    },
+    {
+      "id": "d-20260929T111218Z-19",
+      "p": "Gộp lượt 9b: năm màn đọc của trợ lý vào ma trận «không lộ» của lượt này."
+    },
+    {
+      "id": "d-20260929T111218Z-20",
+      "p": "CÒN MỞ: sửa một phép đo của hồ sơ 9b đã ký — nó so với nhánh gốc nên sau khi gộp sẽ cắn mọi lượt sửa bài OKR; nay ghim vào đúng thay đổi của 9b."
+    },
+    {
+      "id": "d-20260929T113825Z-21",
+      "p": "Sửa sau vòng chấm 1: một khoá chữ bộ soi không thấy, hộp «Rút lại» theo khuôn hỏi lại chung, phép đo «không lộ» kiểm thêm người xem được."
+    },
+    {
+      "id": "d-20260929T130542Z-22",
+      "p": "Sửa sau vòng chấm 2: phép đo màn chọn người xem chắc chắn khi máy chịu tải — sản phẩm không đổi."
+    }
   ]
 }
