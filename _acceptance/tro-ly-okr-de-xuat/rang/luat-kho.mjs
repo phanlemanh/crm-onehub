@@ -1,78 +1,8 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-
-const LUAT_KHO = {
-	ra: join(GOC, "_acceptance/tro-ly-okr-de-xuat/evidence/luat-kho.md"),
-	nen: "origin/onehub",
-	vung: ["apps", "packages"],
-	boQua: [/\/generated\//, /\.md$/, /\.json$/, /\.lock$/, /bun\.lock/],
-	laTep: {
-		kiem: [
-			/\/test\//,
-			/\.spec\.tsx?$/,
-			/\.dom\.tsx$/,
-			/\/evals\//,
-			/\/proto\//,
-		],
-		cauHinh: [
-			"packages/db/src/okr-tro-ly-danh-muc.ts",
-			"apps/agent/agent/lib/okr/config.ts",
-			"apps/api/src/okr/okr-config.ts",
-		],
-	},
-	chuThich: /\/\/|\/\*/,
-	url: /[a-z][a-z0-9+.-]*:\/\/[^\s"'`)]*/gi,
-	api: "apps/api/src",
-	goiMoHinh:
-		/generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(/i,
-	nguonVendor:
-		/^(ai|@ai-sdk\/.*|openai|@anthropic-ai\/.*|@google\/.*|@vercel\/ai.*|axios|got|node-fetch|undici)$/,
-	ghiPrisma: {
-		tep: [
-			"apps/api/src/okr/tro-ly.service.ts",
-			"apps/api/src/okr/tro-ly-so-do.ts",
-		],
-		lenh: /\.(create|createMany|update|updateMany|upsert|delete|deleteMany)\s*\(|\$executeRaw/,
-		quaOkrService: /this\.okr\.(\w+Trong)\s*\(/,
-		hamGhiAgentTask: ["xepViecTroLy"],
-		mo: /\.(\w+)\s*$|\.(\w+)\s*\.\s*(create|createMany|update|updateMany|upsert|delete|deleteMany)\s*\(/,
-		nhinLui: 3,
-	},
-	tran: {
-		tep: "packages/db/src/okr-tro-ly-danh-muc.ts",
-		batDau: "export const TRO_LY_OKR_TRAN = {",
-		cauHinh: [
-			{ tep: "packages/db/src/okr-tro-ly-danh-muc.ts", ten: "TRO_LY_OKR_TRAN" },
-			{ tep: "apps/agent/agent/lib/okr/config.ts", ten: "TRO_LY_OKR" },
-			{ tep: "apps/api/src/okr/okr-config.ts", ten: "OKR" },
-		],
-		soLiteral: /(?<![\w.#$-])\d[\d_]*(?:\.\d+)?(?![\w%.-])/g,
-		khuonZod: /\.(min|max|length|int|gte|lte|gt|lt|multipleOf)\(\s*$/,
-	},
-	veTay: {
-		tep: [
-			/^apps\/app\/app\/\(app\)\/\[slug\]\/okr\/cot-gop-y\.tsx$/,
-			/^apps\/app\/app\/\(app\)\/\[slug\]\/okr\/hop-thoai-[^/]+\.tsx$/,
-			/^apps\/app\/app\/\(app\)\/\[slug\]\/settings\/okr\/the-[^/]+\.tsx$/,
-		],
-		mau: /rounded-(sm|md|lg)[^"]*border|size-2 rounded-full|navigator\.clipboard|<h[12] /,
-	},
-	kieuLong: /Record<string,\s*unknown>|as unknown/,
-	ui: {
-		tienTo: "apps/app/",
-		mauTay: /<table|divide-y/,
-		nguon: /from\s+"@crm\/ui[^"]*"/,
-		lopHinhDang: /^(h|w|size|min-h|min-w|max-h|max-w)-[\w./[\]()-]+$/,
-		lopBoCuc:
-			/^((sm|md|lg|xl):)?(w-full|w-fit|flex|flex-1|flex-col|flex-row|grid|col-span-\d+|items-\w+|justify-\w+|self-\w+|min-w-0|shrink-0|sr-only|hidden|block)$/,
-		thanhPhanHinhDang: new Set(["Skeleton"]),
-	},
-	cat: 40,
-};
+import { GOC, LUAT_KHO } from "./luat-kho-cau-hinh.mjs";
+import { baoNhap, ghiQuaDb, moDun, nguonNhap } from "./luat-kho-lan-theo.mjs";
 
 function git(...thamSo) {
 	return execFileSync("git", ["-C", GOC, ...thamSo], {
@@ -126,7 +56,7 @@ function khoi(ds) {
 	return [...cat, ...them].join("\n");
 }
 
-function muc(tieuDe, lenh, ketQua, ketLuan) {
+function muc(tieuDe, lenh, ketQua, ketLuan, them = []) {
 	return [
 		`## ${tieuDe}`,
 		"",
@@ -144,13 +74,53 @@ function muc(tieuDe, lenh, ketQua, ketLuan) {
 		"",
 		`Kết luận: ${ketLuan}`,
 		"",
+		...them.flatMap((d) => [d, ""]),
 	].join("\n");
+}
+
+function sh(lenh) {
+	const r = spawnSync("bash", ["-c", lenh], {
+		cwd: GOC,
+		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
+	});
+	return { ma: r.status, ra: `${r.stdout}` };
+}
+
+function kiemCheoChuThich(nen) {
+	const k = LUAT_KHO.kiemCheo;
+	const tho = `git diff -U0 ${nen} HEAD -- apps packages ${k.loc} | grep -E ${k.mau}`;
+	const loc = `${tho} | grep -vE ${k.boUrl}`;
+	const doiChung = `printf '%s\\n' '${k.doiChung}' | grep -cE ${k.mau}`;
+	const a = sh(tho);
+	const b = sh(loc);
+	const c = sh(doiChung);
+	const soDong = (x) => x.ra.split("\n").filter(Boolean).length;
+	return {
+		lenh: [tho, loc, doiChung],
+		ketQua: [
+			`$ ${tho}`,
+			a.ra.trim() === ""
+				? `(không in dòng nào; grep thoát ${a.ma})`
+				: a.ra.trimEnd(),
+			`$ ${loc}`,
+			b.ra.trim() === ""
+				? `(không in dòng nào; grep thoát ${b.ma})`
+				: b.ra.trimEnd(),
+			`$ ${doiChung}`,
+			c.ra.trimEnd(),
+		].join("\n"),
+		soTho: soDong(a),
+		soLoc: soDong(b),
+		doiChungBat: c.ra.trim() === "1",
+	};
 }
 
 function mucChuThich(nen, them) {
 	const trung = them.filter((d) =>
 		LUAT_KHO.chuThich.test(d.chu.replace(LUAT_KHO.url, "")),
 	);
+	const kc = kiemCheoChuThich(nen);
 	return muc(
 		"1. Chú thích trong dòng thêm",
 		[
@@ -161,19 +131,15 @@ function mucChuThich(nen, them) {
 		trung.length === 0
 			? "không dòng thêm nào mang chú thích."
 			: `${trung.length} dòng khớp mẫu — đọc từng dòng: chuỗi hay regex chứa // không phải chú thích.`,
+		[
+			"### Kiểm chéo độc lập với bộ lọc của luat-kho.mjs",
+			"Ba lệnh shell dưới đây chạy nguyên văn qua `bash -c` (không qua hàm lọc JS ở trên); kết quả dán nguyên văn. Lệnh thứ ba là đối chứng: cùng mẫu grep phải bắt một dòng thêm có chú thích.",
+			["```", kc.ketQua, "```"].join("\n"),
+			kc.doiChungBat && kc.soLoc === trung.length
+				? `Kiểm chéo: ${kc.soTho} dòng trước khi bỏ URL, ${kc.soLoc} sau — khớp ${trung.length} dòng của bộ lọc JS; đối chứng bắt được dòng có chú thích.`
+				: `Kiểm chéo LỆCH: grep ${kc.soLoc} dòng, bộ lọc JS ${trung.length} dòng, đối chứng ${kc.doiChungBat ? "bắt" : "KHÔNG bắt"} — đọc tay.`,
+		],
 	);
-}
-
-function nguonNhap(noiDung) {
-	return [
-		...new Set(
-			[
-				...noiDung.matchAll(
-					/(?:^|\n)\s*(?:import|export)[^;]*?from\s+"([^"]+)"/g,
-				),
-			].map((m) => m[1]),
-		),
-	];
 }
 
 function tepApi(nen) {
@@ -274,6 +240,32 @@ function mucGhiPrisma(nen, them) {
 		(r) => !["agentTask", "okrDeXuat", "OkrService"].includes(r.loai),
 	);
 	const coLoai = (l) => ra.filter((r) => r.loai === l).length;
+	const db = ghiQuaDb();
+	const theoMo = [...Map.groupBy(db.hang, (h) => h.mo)].map(
+		([mo, ds]) => `${mo} (${ds.length})`,
+	);
+	const moLa = db.hang.filter(
+		(h) => !["agentTask", "okrDeXuat"].includes(h.mo),
+	);
+	const quaDb = [
+		"### Lần theo hàm @crm/db mà dịch vụ gọi",
+		`Mỗi hàm nhập từ @crm/db mà ${LUAT_KHO.ghiDb.goi.map((g) => `${g.tep} (nguồn ${g.nguon})`).join(", ")} gọi: đọc thân hàm trong packages/db/src, đi tiếp vào hàm cùng tệp và hàm nhập tương đối, in mọi lệnh ghi Prisma (\`db.|tx.<mô hình>.<create|update|upsert|delete…>(\`) hay \`$executeRaw\`. Lệnh khớp chữ \`.update(\` mà không phải trên \`db\`/\`tx\` in riêng ở cuối.`,
+		[
+			"```",
+			"nơi gọi · đường hàm · lệnh ghi · mô hình.lệnh · data",
+			...db.hang.map(
+				(h) =>
+					`${h.noiGoi.join(", ")} · ${h.duong.join(" → ")} · ${h.vitri} · ${h.mo}.${h.lenh} · ${h.duLieu ?? "-"}`,
+			),
+			`# khớp chữ nhưng không phải ghi Prisma: ${db.khong.length}`,
+			...db.khong.map((k) => `${k.duong.join(" → ")} · ${k.vitri} · ${k.chu}`),
+			"```",
+		].join("\n"),
+		moLa.length === 0
+			? `Qua hàm @crm/db: ${db.hang.length} lệnh ghi — ${theoMo.join(", ")}; không mô hình nào ngoài AgentTask và OkrDeXuat.`
+			: `Qua hàm @crm/db: ${moLa.length} lệnh ghi ngoài AgentTask/OkrDeXuat — đọc từng dòng.`,
+		LUAT_KHO.phanQuyet.ghiDeXuat,
+	];
 	return muc(
 		"6. Lệnh ghi của API Trợ lý OKR",
 		[
@@ -287,8 +279,9 @@ function mucGhiPrisma(nen, them) {
 					...ra.map((r) => `${r.d.tep}:${r.d.so} · ${r.loai} · ${r.chiTiet}`),
 				].join("\n"),
 		khac.length === 0
-			? `chỉ ghi AgentTask (${coLoai("agentTask")}), OkrDeXuat (${coLoai("okrDeXuat")}) và qua OkrService (${coLoai("OkrService")}).`
+			? `dòng trực tiếp trong hai tệp dịch vụ chỉ ghi AgentTask (${coLoai("agentTask")}), OkrDeXuat (${coLoai("okrDeXuat")}) và qua OkrService (${coLoai("OkrService")}); lần theo hàm @crm/db ở dưới.`
 			: `${khac.length} lệnh ghi ngoài AgentTask, OkrDeXuat, OkrService — đọc từng dòng.`,
+		quaDb,
 	);
 }
 
@@ -366,6 +359,61 @@ function mucTran(nen, them) {
 			.slice(0, LUAT_KHO.cat * 2)
 			.map((x) => `${x.d.tep}:${x.d.so} · ${x.so} · ${x.loai}`),
 	].join("\n");
+	const docTay = soRoi.filter((x) => x.loai.endsWith("đọc tay"));
+	const bang = docTay.map((x) => ({
+		x,
+		phan:
+			LUAT_KHO.phanLoaiTay.find(
+				(p) => p.tep === x.d.tep && p.khop.test(x.d.chu),
+			)?.phan ?? null,
+	}));
+	const chuaPhan = bang.filter((b) => b.phan === null);
+	const tt = LUAT_KHO.tran.trungTen;
+	const lichSu = git(
+		"log",
+		`-S${tt.ten}`,
+		"--format=%h %ad %s",
+		"--date=short",
+		"--",
+		...tt.tep,
+	).trim();
+	const trongNen = lichSu
+		.split("\n")
+		.filter(Boolean)
+		.map((d) => d.split(" ")[0])
+		.map((h) => ({
+			h,
+			nen:
+				spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", h, nen])
+					.status === 0,
+		}));
+	const phanQuyet = [
+		"### Phán quyết tay cho các dòng «đọc tay»",
+		[
+			"```",
+			"tệp:dòng · số · phán quyết",
+			...bang.map(
+				(b) =>
+					`${b.x.d.tep}:${b.x.d.so} · ${b.x.so} · ${b.phan ?? "CHƯA PHÂN LOẠI — đọc tay"}`,
+			),
+			"```",
+		].join("\n"),
+		chuaPhan.length === 0
+			? `${bang.length} dòng «đọc tay» đều có phán quyết: không dòng nào là tham số tinh chỉnh phải vào TRO_LY_OKR_TRAN; một cặp trùng thật (NGAY_MS khai ở apps/api/src/okr/tro-ly-so-do.ts và packages/db/src/okr-xu-huong.ts cùng biểu thức 24 * 60 * MINUTE_MS) — lẽ ra xuất một DAY_MS cạnh MINUTE_MS ở packages/db/src/okr-tro-ly-danh-muc.ts; chưa sửa trong vòng này, ghi để chủ kho quyết.`
+			: `${chuaPhan.length} dòng «đọc tay» chưa có phán quyết — đọc tay.`,
+		`### ${tt.ten} khai ở hai tệp cấu hình`,
+		[
+			"```",
+			`$ git log -S'${tt.ten}' --format='%h %ad %s' --date=short -- ${tt.tep.join(" ")}`,
+			lichSu,
+			...trongNen.map(
+				(t) =>
+					`${t.h}: ${t.nen ? `có trong ${nen.slice(0, 12)} (trước lượt này)` : "thêm trong lượt này"}`,
+			),
+			"```",
+		].join("\n"),
+		LUAT_KHO.phanQuyet.viSao,
+	];
 	return muc(
 		"3. Hằng tinh chỉnh ở một tệp cấu hình",
 		[
@@ -374,6 +422,7 @@ function mucTran(nen, them) {
 		],
 		ketQua,
 		`${tatCa.length} hằng số trong ba tệp cấu hình, ${trung.length === 0 ? "không tên hằng nào khai ở hai tệp" : `${trung.length} tên hằng khai ở hơn một tệp (${trung.map(([la]) => la).join(", ")})`}; ${soRoi.length} literal số ≥ 2 chữ số ở tệp nguồn của lượt — ${[...Map.groupBy(soRoi, (x) => x.loai)].map(([loai, ds]) => `${ds.length} ${loai}`).join("; ")}.`,
+		phanQuyet,
 	);
 }
 
@@ -527,6 +576,53 @@ function mucVeTay(nen, them) {
 	);
 }
 
+function mucKiemLai() {
+	const k = LUAT_KHO.kiemLai;
+	const goi = readFileSync(join(GOC, k.goi), "utf8")
+		.split("\n")
+		.map((chu, i) => ({ tep: k.goi, so: i + 1, chu }))
+		.filter((d) => d.chu.includes(k.ham));
+	const bao = baoNhap(k.tep);
+	const vendor = bao.ngoai.filter((n) => LUAT_KHO.nguonVendor.test(n));
+	const long = bao.tep.flatMap((t) =>
+		readFileSync(join(GOC, t), "utf8")
+			.split("\n")
+			.map((chu, i) => ({ tep: t, so: i + 1, chu }))
+			.filter((d) => LUAT_KHO.goiMoHinh.test(d.chu)),
+	);
+	const moHinh = long.filter((d) => k.goiThat.test(d.chu));
+	const md = moDun(k.tep);
+	const h = md.ham.get(k.chotTen);
+	const than = h
+		? md.dong
+				.slice(h.bat, h.het + 1)
+				.map((chu, i) => `${k.tep}:${h.bat + i + 1}: ${chu}`)
+		: [`${k.chotTen}: không thấy trong ${k.tep}`];
+	return muc(
+		`8. API chạy lại ${k.ham} khi đọc troLyDanhSach`,
+		[
+			`grep -n '${k.ham}' ${k.goi}`,
+			`bao đóng import của ${k.tep} (đi theo ./… và @crm/db|@crm/validation qua exports); đối chiếu ${LUAT_KHO.nguonVendor}; grep -iE '${LUAT_KHO.goiMoHinh.source}' trên mọi tệp trong bao, rồi lọc dòng là lời gọi hay import thật`,
+			`in thân ${k.chotTen}`,
+		],
+		[
+			...goi.map(dongIn),
+			`# tệp trong bao đóng import: ${bao.tep.length}`,
+			...bao.tep,
+			`# nguồn ngoài kho: ${bao.ngoai.join(", ") || "(không)"}`,
+			`# nguồn SDK AI hay vendor: ${vendor.length === 0 ? "0" : vendor.join(", ")}`,
+			`# dòng khớp mẫu lỏng '${LUAT_KHO.goiMoHinh.source}': ${long.length === 0 ? "0" : long.map(dongIn).join(" | ")}`,
+			`# trong đó là lời gọi hay import thật (${k.goiThat.source}): ${moHinh.length === 0 ? "0" : moHinh.map(dongIn).join(" | ")}`,
+			`# thân ${k.chotTen}`,
+			...than,
+		].join("\n"),
+		vendor.length === 0 && moHinh.length === 0
+			? `${k.ham} là hàm thuần trong packages/validation: bao đóng import ${bao.tep.length} tệp, nguồn ngoài kho chỉ ${bao.ngoai.join(", ")}; 0 SDK AI hay vendor, 0 lời gọi model hay mạng${long.length > 0 ? ` (${long.length} dòng khớp mẫu lỏng là chữ, không phải lời gọi — in ở trên)` : ""}.`
+			: `${vendor.length} nguồn vendor, ${moHinh.length} dòng gọi model trong bao đóng — đọc tay.`,
+		[LUAT_KHO.phanQuyet.kiemLai],
+	);
+}
+
 function main() {
 	const nen = git("merge-base", "HEAD", LUAT_KHO.nen).trim();
 	const dau = git("rev-parse", "HEAD").trim();
@@ -544,6 +640,7 @@ function main() {
 		mucUi(nen, them),
 		mucGhiPrisma(nen, them),
 		mucVeTay(nen, them),
+		mucKiemLai(),
 	].join("\n");
 	mkdirSync(dirname(LUAT_KHO.ra), { recursive: true });
 	writeFileSync(LUAT_KHO.ra, noiDung);
