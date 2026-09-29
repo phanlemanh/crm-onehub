@@ -1,4 +1,5 @@
 import {
+	afterAll,
 	afterEach,
 	beforeAll,
 	describe,
@@ -37,6 +38,10 @@ let demTrang = 0;
 
 afterEach(() => {
 	setSystemTime();
+});
+
+afterAll(async () => {
+	await donTaiLieuHet();
 });
 
 async function donTaiLieuHet(): Promise<void> {
