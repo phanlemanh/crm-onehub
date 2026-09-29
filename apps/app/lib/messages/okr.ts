@@ -7,12 +7,15 @@ const vi = {
 		"cap-nhat-tuan": "Cập nhật tuần",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
+		"hoi-y": "Hỏi ý",
 	},
+	nhanHoiYMoi: "Mới",
 	tieuDe: {
 		"cua-toi": "OKR của tôi",
 		"cap-nhat-tuan": "Cập nhật tuần của tôi",
 		"theo-don-vi": "OKR theo đơn vị",
 		"toan-canh": "Toàn cảnh OKR",
+		"hoi-y": "Hỏi ý mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -22,6 +25,7 @@ const vi = {
 		"theo-don-vi":
 			"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 		"toan-canh": "Cả công ty trong một màn.",
+		"hoi-y": "Cả công ty góp ý cho mục tiêu kỳ tới, trước khi đặt OKR.",
 	},
 	chuKy: "Chu kỳ",
 	loaiChuKy: { nam: "Năm", quy: "Quý" },
@@ -555,12 +559,15 @@ const en: OkrMessages = {
 		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
+		"hoi-y": "Ask for input",
 	},
+	nhanHoiYMoi: "New",
 	tieuDe: {
 		"cua-toi": "My OKRs",
 		"cap-nhat-tuan": "My weekly update",
 		"theo-don-vi": "OKRs by unit",
 		"toan-canh": "OKR overview",
+		"hoi-y": "Input on objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -570,6 +577,8 @@ const en: OkrMessages = {
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
+		"hoi-y":
+			"The whole company gives input on next period's objectives before OKRs are set.",
 	},
 	chuKy: "Cycle",
 	loaiChuKy: { nam: "Year", quy: "Quarter" },
