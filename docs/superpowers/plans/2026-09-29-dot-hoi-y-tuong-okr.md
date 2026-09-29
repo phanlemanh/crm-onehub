@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-29-dot-hoi-y-tuong-okr-design.md` · hợp đồng `_acceptance/dot-hoi-y-tuong-okr/contract.md` (duyệt 2026-09-29, Manh Phan) · phép đo `_acceptance/dot-hoi-y-tuong-okr/evals.yaml` · bản mẫu `/proto/dot-hoi-y-tuong-okr` (`design-pass.md`, ba vòng) · rà soát `ra-soat-ux.md`, `ra-soat-reui.md`.
 
+**Cổng 1.5:** duyệt 2026-09-29T12:25:54Z bởi Manh Phan — «duyệt · chạy: tác tử con · việc 1, 2, 11 song song»: subagent-driven (một tác tử con mỗi việc, kèm một người soát); việc 1, 2, 11 song song.
+
 ## Điều kiện trước S3
 
 Không bắt đầu Task 1 trước khi chủ kho duyệt Cổng 1.5 và dán lệnh viết mã. Khi đó, theo thứ tự:
