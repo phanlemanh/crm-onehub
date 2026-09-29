@@ -27,6 +27,7 @@ const HANG_CU = {
 	aiTomTatPhamVi: "tat",
 	aiTomTatDonVi: [],
 	aiTranThangUsd: 9,
+	duyetCongBo: false,
 };
 
 function coChuoiTuDo(schema: z.ZodType): boolean {
