@@ -139,6 +139,7 @@ describe("tach-giao-dich", () => {
 		const diff = git(
 			"diff",
 			"--unified=0",
+			"--diff-filter=M",
 			goc.ra,
 			"--",
 			":(glob)apps/api/test/okr*.spec.ts",

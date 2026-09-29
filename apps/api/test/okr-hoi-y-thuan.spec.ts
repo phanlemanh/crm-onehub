@@ -26,10 +26,21 @@ import {
 	ketQuaCongBo,
 	lyDoChuaCongBo,
 	type MaThieu,
+	nguoiTinhDoPhu,
 	tenYLa,
 	tinhTrangCongBo,
 	type YTho,
 } from "../src/okr/hoi-y";
+import {
+	E11_BAY_GIO,
+	E11_COT,
+	E11_DON_VI,
+	E11_GIO_MO,
+	E11_GOP,
+	E11_NGUOI,
+	E11_NGUOI_CHON,
+	e11KyVong,
+} from "./okr-hoi-y-do-phu-mau";
 
 type VaoThu = {
 	[khoa: string]: string | number | boolean | null | readonly string[];
@@ -214,7 +225,7 @@ describe("do-phu", () => {
 	];
 	const ngay = ["2026-10-01", "2026-10-02"];
 
-	test("E11: chín hàng, hai ngày, cộng dồn, một chữ số thập phân", () => {
+	test("do-phu: cây hai bộ phận — chín hàng, hai ngày, cộng dồn, một chữ số thập phân", () => {
 		expect(doPhu({ ngay, donVi, nguoi, gop })).toEqual({
 			hang: [
 				{ id: "goc", giaTri: [19, 57.1] },
@@ -253,6 +264,59 @@ describe("do-phu", () => {
 			gop,
 		});
 		expect(r).toEqual({ hang: [{ id: "goc", giaTri: [0, 0] }] });
+	});
+
+	const nhanE11 = (khoa: string) => khoa;
+	const dauVaoE11 = (
+		chonNguoi: (
+			people: { id: string; primaryDepartmentId: string | null }[],
+			nguoiChon: string,
+		) => { id: string; phongBanChinh: string | null }[],
+	) => {
+		const people = [...E11_NGUOI, E11_NGUOI_CHON].map((n) => ({
+			id: n.khoa,
+			primaryDepartmentId: n.pb,
+		}));
+		return bangDoPhu({
+			tu: E11_GIO_MO,
+			den: E11_BAY_GIO,
+			donVi: E11_DON_VI.map((d) => ({
+				id: d.khoa,
+				nhan: nhanE11(d.khoa),
+				loai: d.loai,
+				cha: d.cha,
+			})),
+			nguoi: chonNguoi(people, E11_NGUOI_CHON.khoa),
+			gop: E11_GOP.map((g) => ({ tacGiaUserId: g.nguoi, luc: g.luc })),
+		});
+	};
+	const bangE11 = (bang: ReturnType<typeof bangDoPhu>) => ({
+		cot: bang.cot,
+		hang: bang.hang.map(({ nhan: _nhan, ...con }) => con),
+	});
+
+	test("E11: ba bộ phận, năm phòng ban, 20 thành viên, 1 chưa xếp, người chọn trong cây, người đã rời vắng mặt — mười hàng, gốc 12/21, đúng ma trận của bài dịch vụ", () => {
+		expect(bangE11(dauVaoE11(nguoiTinhDoPhu))).toEqual({
+			cot: E11_COT,
+			hang: e11KyVong((khoa) => khoa),
+		});
+	});
+
+	test("E11 đỏ: bản sao mẫu số gồm người chọn cho gốc 12/22, lệch ma trận", () => {
+		const gomNguoiChon = (
+			people: { id: string; primaryDepartmentId: string | null }[],
+		) =>
+			people.map((n) => ({ id: n.id, phongBanChinh: n.primaryDepartmentId }));
+		const hong = bangE11(dauVaoE11(gomNguoiChon));
+		const goc = hong.hang[0];
+		console.log(
+			`do-phu: bản sao gồm người chọn, gốc ${JSON.stringify(goc?.giaTri)} (12/22)`,
+		);
+		expect(goc?.giaTri).toEqual([31.8, 54.5]);
+		expect(hong).not.toEqual({
+			cot: E11_COT,
+			hang: e11KyVong((khoa) => khoa),
+		});
 	});
 
 	const NGAY_1_CUOI = new Date("2026-11-02T16:59:00.000Z");

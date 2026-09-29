@@ -1,6 +1,6 @@
 import "./bat-dem-truy-van";
 import { describe, expect, test } from "bun:test";
-import { db, setPrismaLogSink } from "@crm/db";
+import { type PrismaLogRecord, setPrismaLogSink } from "@crm/db";
 import { hoiYDoPhuOutput } from "../src/okr/okr-hoi-y.contracts";
 import { datDongHo, dungSanHoiY, gieoHoiY } from "./okr-hoi-y-san";
 import { bpMoi, datViTri, goiQuery, ok, pbMoi } from "./okr-san";
@@ -13,21 +13,21 @@ const SO_PHONG_BAN_NHO = 5;
 const SO_PHONG_BAN_LON = 50;
 const SO_BO_PHAN = 3;
 
-async function demCauMoiKhoiChay(): Promise<boolean> {
-	let cau = 0;
-	setPrismaLogSink((r) => {
-		if (r.level === "query") cau += 1;
-	});
-	await db.$queryRaw`SELECT 1`;
-	setPrismaLogSink(null);
-	return cau > 0;
+const CHAY_RIENG = process.env.DB_DA_NAP_TRUOC_TEP_DEM === "false";
+if (process.env.PRISMA_LOG_QUERIES_DO_TEP_DEM === "true") {
+	delete process.env.PRISMA_LOG_QUERIES;
+	delete process.env.PRISMA_LOG_QUERIES_DO_TEP_DEM;
 }
-
-const DEM_DUOC = await demCauMoiKhoiChay();
-if (!DEM_DUOC)
+if (!CHAY_RIENG)
 	console.warn(
-		"hieu-nang: bỏ qua — máy khách Prisma đã nạp trước khi tệp này bật nhật ký truy vấn; chạy riêng: bun test test/okr-hoi-y-hieu-nang.spec.ts",
+		"hieu-nang: !!! KHÔNG ĐO !!! @crm/db đã nạp trong tiến trình này trước tệp hiệu năng nên không có nhật ký truy vấn; số truy vấn cố định của hoiYDoPhu chỉ được đo khi chạy riêng: cd apps/api && bun test test/okr-hoi-y-hieu-nang.spec.ts",
 	);
+
+const chiGhiLoi = (r: PrismaLogRecord) => {
+	if (r.level === "error") console.error(r.message);
+	if (r.level === "warn") console.warn(r.message);
+};
+if (CHAY_RIENG) setPrismaLogSink(chiGhiLoi);
 
 async function doDem(
 	hoiYId: string,
@@ -38,7 +38,7 @@ async function doDem(
 		if (r.level === "query") cau += 1;
 	});
 	const tra = await goiQuery("okr.hoiYDoPhu", cookie, { hoiYId });
-	setPrismaLogSink(null);
+	setPrismaLogSink(chiGhiLoi);
 	const bang = hoiYDoPhuOutput.parse(ok(tra, "hoiYDoPhu"));
 	return {
 		cau,
@@ -47,7 +47,7 @@ async function doDem(
 }
 
 describe("hieu-nang", () => {
-	test.if(DEM_DUOC)(
+	test.if(CHAY_RIENG)(
 		"hieu-nang: số câu truy vấn của hoiYDoPhu không tăng khi phòng ban đi từ 5 lên 50",
 		async () => {
 			datDongHo(LUC);

@@ -23,22 +23,6 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import {
-	chuDeIdInput,
-	cycleIdInput,
-	dongYInput,
-	ganYInput,
-	gopYInput,
-	hoiYIdInput,
-	ketLuanInput,
-	moHoiYInput,
-	niemPhongInput,
-	suaChuDeInput,
-	suaHoiYInput,
-	suaYInput,
-	taoChuDeInput,
-	yIdInput,
-} from "@crm/validation/okr-hoi-y";
-import {
 	chamKrInput,
 	dongRaInput,
 	ghiDieuHocDuocInput,
@@ -76,6 +60,7 @@ import {
 	maTranTrpc,
 	soThuTuc,
 } from "./ma-tran-thu";
+import { THU_TUC_HOI_Y } from "./okr-hoi-y-thu-tuc";
 import { gieoThanhVien } from "./phien-thu";
 
 const suffix = process.env.TEST_RUN_ID ?? "vai-chi-okr";
@@ -318,25 +303,6 @@ const THU_TUC_CANH_KR = {
 	"okr.luuTruMau": idInput,
 	"okr.khoiPhucMau": idInput,
 	"okr.taoTuMau": taoTuMauInput,
-} as const;
-const THU_TUC_HOI_Y = {
-	"okr.moHoiY": moHoiYInput,
-	"okr.suaHoiY": suaHoiYInput,
-	"okr.hoiY": cycleIdInput,
-	"okr.hoiYNhan": cycleIdInput,
-	"okr.hoiYDoPhu": hoiYIdInput,
-	"okr.gopY": gopYInput,
-	"okr.suaY": suaYInput,
-	"okr.goY": yIdInput,
-	"okr.dongY": dongYInput,
-	"okr.niemPhong": niemPhongInput,
-	"okr.taoChuDe": taoChuDeInput,
-	"okr.suaChuDe": suaChuDeInput,
-	"okr.goChuDe": chuDeIdInput,
-	"okr.ganY": ganYInput,
-	"okr.ketLuanChuDe": ketLuanInput,
-	"okr.congBo": hoiYIdInput,
-	"okr.hieuViSao": hoiYIdInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

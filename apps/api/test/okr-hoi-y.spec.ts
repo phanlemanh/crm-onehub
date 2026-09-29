@@ -14,13 +14,25 @@ import { z } from "zod";
 import type { KetQuaChieu, MaThieu } from "../src/okr/hoi-y";
 import { OKR } from "../src/okr/okr-config";
 import {
-	type HoiYDoPhuOutput,
 	type HoiYNhanOutput,
 	type HoiYOutput,
 	hoiYDocOutput,
 	hoiYDoPhuOutput,
 	hoiYNhanOutput,
 } from "../src/okr/okr-hoi-y.contracts";
+import {
+	E11_BAY_GIO,
+	E11_COT,
+	E11_DON_VI,
+	E11_GIO_MO,
+	E11_GOP,
+	E11_NGAY_1_CUOI,
+	E11_NGAY_2_DAU,
+	E11_NGUOI,
+	E11_NGUOI_CHON,
+	E11_NGUOI_ROI,
+	e11KyVong,
+} from "./okr-hoi-y-do-phu-mau";
 import {
 	BAN_TRUOC_MAC_DINH,
 	type Bang,
@@ -43,6 +55,7 @@ import {
 	sauGio,
 	Y_MAC_DINH,
 } from "./okr-hoi-y-san";
+import { THU_TUC_HOI_Y } from "./okr-hoi-y-thu-tuc";
 import {
 	bpMoi,
 	CHUONG_TRINH_RONG,
@@ -116,75 +129,118 @@ function demMaTrongMang(
 	);
 }
 
-describe("do-phu", () => {
-	const utc = (ngay: number, gio: number, phut = 0, giay = 0, ms = 0) =>
-		new Date(Date.UTC(2026, 10, ngay, gio, phut, giay, ms));
-	const GIO_MO = utc(2, 3);
-	const NGAY_1_CUOI = utc(2, 16, 59, 59, 999);
-	const NGAY_2_DAU = utc(2, 17);
-	const BAY_GIO = utc(3, 9);
+type TapChuaGop = { ma: ReadonlySet<string>; ten: ReadonlySet<string> };
+type KetQuaQuet = {
+	khoaChuaGop: number;
+	maChuaGop: number;
+	tenChuaGop: number;
+};
+const KHONG_LO: KetQuaQuet = { khoaChuaGop: 0, maChuaGop: 0, tenChuaGop: 0 };
 
+async function tapChuaGop(hoiYId: string): Promise<TapChuaGop> {
+	const daGop = new Set(
+		(
+			await db.okrY.findMany({
+				where: { hoiYId },
+				select: { tacGiaUserId: true },
+			})
+		).map((y) => y.tacGiaUserId),
+	);
+	const chua = (
+		await db.member.findMany({
+			where: { organizationId: WORKSPACE_ID },
+			select: { user: { select: { id: true, name: true } } },
+		})
+	)
+		.map((m) => m.user)
+		.filter((u) => !daGop.has(u.id));
+	return {
+		ma: new Set(chua.map((u) => u.id)),
+		ten: new Set(chua.map((u) => u.name).filter((t) => t !== "")),
+	};
+}
+
+function quetChuaGop(data: Json, tap: TapChuaGop): KetQuaQuet {
+	return {
+		khoaChuaGop: demKhoaLo(data, KHOA_LO_DANH_SACH),
+		maChuaGop: demMaTrongMang(data, tap.ma),
+		tenChuaGop: demMaTrongMang(data, tap.ten),
+	};
+}
+
+describe("do-phu", () => {
 	test(
-		"do-phu: E11 — hai ngày giờ Việt Nam qua thủ tục thật bằng đồng hồ tiêm, biên 23:59:59.999 và 00:00 VN, người chọn và người đã rời ngoài mẫu số, gốc 12/21, mọi vai đọc cùng một bảng, quản trị không nhận danh sách người chưa góp",
+		"do-phu: E11 — ba bộ phận, năm phòng ban, hai ngày giờ Việt Nam qua thủ tục thật bằng đồng hồ tiêm, biên 23:59:59.999 và 00:00 VN, người chọn và người đã rời ngoài mẫu số, gốc 12/21, mọi vai đọc cùng bảng với bài thuần, quản trị không nhận danh sách người chưa góp",
 		async () => {
 			const truoc = await cay();
+			const nguoiPhien = [
+				phien.quan.nguoi,
+				phien.thuong.nguoi,
+				phien.chu.nguoi,
+				phien.okr.nguoi,
+			];
+			const nguoiLa = truoc.people.filter((n) => !nguoiPhien.includes(n.id));
 			expect(
 				{
-					nguoi: truoc.people.map((n) => n.id).sort(),
 					boPhan: truoc.divisions.length,
 					chuaXep: truoc.chuaXep.length,
+					nguoiPhienDuDu: nguoiPhien.every((id) =>
+						truoc.people.some((n) => n.id === id),
+					),
+					nguoiLaDaXep: nguoiLa.filter((n) => n.primaryDepartmentId !== null)
+						.length,
 				},
-				"cay to chuc khong sach truoc khi gieo do phu",
+				"cay to chuc co don vi hay nguoi da xep truoc khi gieo do phu",
 			).toEqual({
-				nguoi: [
-					phien.quan.nguoi,
-					phien.thuong.nguoi,
-					phien.chu.nguoi,
-					phien.okr.nguoi,
-				].sort(),
 				boPhan: 0,
 				chuaXep: 0,
+				nguoiPhienDuDu: true,
+				nguoiLaDaXep: 0,
 			});
-			const bpA = await bpMoi("dp-bpA");
-			const bpB = await bpMoi("dp-bpB");
-			const bpC = await bpMoi("dp-bpC");
-			const pb1 = await pbMoi("dp-pb1", bpA);
-			const pb2 = await pbMoi("dp-pb2", bpA);
-			const pb3 = await pbMoi("dp-pb3", bpB);
-			const pb4 = await pbMoi("dp-pb4", bpB);
-			const pb5 = await pbMoi("dp-pb5", bpC);
+			console.log(
+				`do-phu: ${nguoiLa.length} thành viên lạ chưa xếp của tệp khác trong cây`,
+			);
+			const donVi = new Map<string, string>([
+				[OKR_HOI_Y.doPhu.idGoc, OKR_HOI_Y.doPhu.idGoc],
+				[OKR_HOI_Y.doPhu.idChuaXep, OKR_HOI_Y.doPhu.idChuaXep],
+			]);
+			for (const d of E11_DON_VI) {
+				if (d.loai === "bo-phan")
+					donVi.set(d.khoa, await bpMoi(`dp-${d.khoa}`));
+				if (d.loai === "phong-ban")
+					donVi.set(
+						d.khoa,
+						await pbMoi(`dp-${d.khoa}`, donVi.get(d.cha ?? "")),
+					);
+			}
+			const idDonVi = (khoa: string) => donVi.get(khoa) ?? `thieu-${khoa}`;
+			const nguoi = new Map<string, string>([
+				["quan", phien.quan.nguoi],
+				["thuong", phien.thuong.nguoi],
+				["chu", phien.chu.nguoi],
+				["okr", phien.okr.nguoi],
+			]);
 			const xep = async (userId: string, pb: string | null) =>
-				ok(await datViTri(userId, pb), "xep vi tri");
-			const nguoiMember = async (ten: string, pb: string | null) => {
-				const { id } = await nguoiCo(`dp-${ten}`, "member");
-				if (pb !== null) await xep(id, pb);
-				return id;
-			};
-			const quan = phien.quan.nguoi;
-			const thuong = phien.thuong.nguoi;
-			const okrVai = phien.okr.nguoi;
-			await xep(quan, pb1);
-			await xep(thuong, pb1);
-			await xep(phien.chu.nguoi, pb2);
-			await xep(okrVai, pb2);
-			const a3 = await nguoiMember("a3", pb1);
-			await nguoiMember("a4", pb1);
-			const b3 = await nguoiMember("b3", pb2);
-			const c1 = await nguoiMember("c1", pb3);
-			const c2 = await nguoiMember("c2", pb3);
-			for (const ten of ["c3", "c4", "c5"]) await nguoiMember(ten, pb3);
-			const d1 = await nguoiMember("d1", pb4);
-			const d2 = await nguoiMember("d2", pb4);
-			for (const ten of ["d3", "d4"]) await nguoiMember(ten, pb4);
-			const e1 = await nguoiMember("e1", pb5);
-			const e2 = await nguoiMember("e2", pb5);
-			for (const ten of ["e3", "e4"]) await nguoiMember(ten, pb5);
-			const x = await nguoiMember("x", null);
-			const roi = await nguoiMember("R", pb2);
-			const nguoiChon = await nguoiCo("dp-P", "admin");
-			await xep(nguoiChon.id, pb3);
+				pb === null
+					? undefined
+					: ok(await datViTri(userId, idDonVi(pb)), "xep vi tri");
+			for (const n of E11_NGUOI) {
+				const co = nguoi.get(n.khoa);
+				if (co) await xep(co, n.pb);
+				else {
+					const moi = await nguoiCo(`dp-${n.khoa}`, "member");
+					nguoi.set(n.khoa, moi.id);
+					await xep(moi.id, n.pb);
+				}
+			}
+			const nguoiChon = await nguoiCo(`dp-${E11_NGUOI_CHON.khoa}`, "admin");
+			await xep(nguoiChon.id, E11_NGUOI_CHON.pb);
+			const roi = await nguoiCo(`dp-${E11_NGUOI_ROI.khoa}`, "member");
+			await xep(roi.id, E11_NGUOI_ROI.pb);
+			nguoi.set(E11_NGUOI_ROI.khoa, roi.id);
+			const idNguoi = (khoa: string) => nguoi.get(khoa) ?? `thieu-${khoa}`;
 
-			datDongHo(GIO_MO);
+			datDongHo(E11_GIO_MO);
 			const ky = await taoNam("do-phu", NAM_KE);
 			const { id: h } = ok<{ id: string }>(
 				await goi("okr.moHoiY", {
@@ -192,60 +248,30 @@ describe("do-phu", () => {
 					cauHoi: CAU_HOI_MAC_DINH,
 					loiMo: "",
 					soLieu: SO_LIEU_MAC_DINH,
-					hanLuc: sauGio(GIO_MO, HAN.hopLe).toISOString(),
+					hanLuc: sauGio(E11_GIO_MO, HAN.hopLe).toISOString(),
 					nguoiChonUserId: nguoiChon.id,
 				}),
 				"mo hoi y do phu",
 			);
-			const GOP: [Date, string][] = [
-				[utc(2, 4), thuong],
-				[utc(2, 5), a3],
-				[utc(2, 6), okrVai],
-				[utc(2, 7), c1],
-				[utc(2, 8), d1],
-				[utc(2, 9), x],
-				[utc(2, 10), roi],
-				[NGAY_1_CUOI, c2],
-				[NGAY_2_DAU, e1],
-				[utc(3, 1), quan],
-				[utc(3, 2), b3],
-				[utc(3, 3), d2],
-				[utc(3, 4), e2],
-				[utc(3, 5), a3],
-			];
-			for (const [luc, ai] of GOP) {
-				datDongHo(luc);
-				await gieoY(h, ai);
+			for (const g of E11_GOP) {
+				datDongHo(g.luc);
+				await gieoY(h, idNguoi(g.nguoi));
 			}
-			await roiDi(roi);
-			datDongHo(BAY_GIO);
+			await roiDi(roi.id);
+			datDongHo(E11_BAY_GIO);
 
-			const lucCuaY = async (ai: string) =>
+			const lucCuaY = async (khoa: string) =>
 				(
 					await db.okrY.findFirstOrThrow({
-						where: { hoiYId: h, tacGiaUserId: ai },
+						where: { hoiYId: h, tacGiaUserId: idNguoi(khoa) },
 						orderBy: { createdAt: "asc" },
 					})
 				).createdAt.toISOString();
-			expect([await lucCuaY(c2), await lucCuaY(e1)]).toEqual([
-				NGAY_1_CUOI.toISOString(),
-				NGAY_2_DAU.toISOString(),
+			expect([await lucCuaY("c2"), await lucCuaY("e1")]).toEqual([
+				E11_NGAY_1_CUOI.toISOString(),
+				E11_NGAY_2_DAU.toISOString(),
 			]);
 
-			const G = OKR_HOI_Y.doPhu.idGoc;
-			const CX = OKR_HOI_Y.doPhu.idChuaXep;
-			const KY_VONG: Omit<HoiYDoPhuOutput["hang"][number], "nhan">[] = [
-				{ id: G, loai: "goc", cha: null, giaTri: [33.3, 57.1] },
-				{ id: bpA, loai: "bo-phan", cha: G, giaTri: [42.9, 71.4] },
-				{ id: bpB, loai: "bo-phan", cha: G, giaTri: [33.3, 44.4] },
-				{ id: bpC, loai: "bo-phan", cha: G, giaTri: [0, 50] },
-				{ id: pb1, loai: "phong-ban", cha: bpA, giaTri: [50, 75] },
-				{ id: pb2, loai: "phong-ban", cha: bpA, giaTri: [33.3, 66.7] },
-				{ id: pb3, loai: "phong-ban", cha: bpB, giaTri: [40, 40] },
-				{ id: pb4, loai: "phong-ban", cha: bpB, giaTri: [25, 50] },
-				{ id: pb5, loai: "phong-ban", cha: bpC, giaTri: [0, 50] },
-				{ id: CX, loai: "chua-xep", cha: G, giaTri: [100, 100] },
-			];
 			const docBang = async (ai: string) =>
 				hoiYDoPhuOutput.parse(
 					ok(await goiQuery("okr.hoiYDoPhu", ai, { hoiYId: h }), "do phu"),
@@ -258,73 +284,91 @@ describe("do-phu", () => {
 				cot: bang.cot,
 				hang: bang.hang.map(({ nhan: _nhan, ...con }) => con),
 			}).toEqual({
-				cot: [
-					{ ngay: "2026-11-02", nhan: "02/11" },
-					{ ngay: "2026-11-03", nhan: "03/11" },
-				],
-				hang: KY_VONG,
+				cot: E11_COT,
+				hang: e11KyVong(idDonVi, nguoiLa.length),
 			});
 			expect(bang.hang[0]?.nhan).toBe(OKR.tenGoc);
 			expect(bang.hang.at(-1)?.nhan).toBe(OKR_HOI_Y.doPhu.nhanChuaXep);
-			for (const ai of ["thuong", "okr", nguoiChon.cookie])
+			for (const ai of ["thuong", "okr", "chu", nguoiChon.cookie])
 				expect(await docBang(ai), "moi vai doc cung mot bang").toEqual(bang);
 
-			const daGop = new Set(GOP.map(([, ai]) => ai));
-			const chuaGop = new Set(
-				(
-					await db.member.findMany({
-						where: { organizationId: WORKSPACE_ID },
-						select: { userId: true },
-					})
-				)
-					.map((m) => m.userId)
-					.filter((id) => !daGop.has(id)),
-			);
-			expect(chuaGop.has(nguoiChon.id)).toBe(true);
-			expect(chuaGop.size).toBeGreaterThan(1);
-			const quet: {
-				ai: string;
-				thuTuc: ThuTucDoc;
-				khoaChuaGop: number;
-				maChuaGopTrongMang: number;
-			}[] = [];
-			for (const [ai, cookie] of [
+			const chuaGop = await tapChuaGop(h);
+			expect(chuaGop.ma.has(nguoiChon.id)).toBe(true);
+			expect(chuaGop.ma.size).toBeGreaterThan(1);
+			const DOC_QUA: [string, string][] = [
 				["quan", "quan"],
+				["thuong", "thuong"],
+				["okr", "okr"],
+				["chu", "chu"],
 				["nguoi-chon", nguoiChon.cookie],
-			] as const)
+			];
+			const quet: ({ ai: string; thuTuc: ThuTucDoc } & KetQuaQuet)[] = [];
+			for (const [ai, cookie] of DOC_QUA)
 				for (const thuTuc of THU_TUC_DOC) {
 					const tra = await goiQuery(
 						thuTuc,
 						cookie,
 						KHUON_DOC[thuTuc].vao({ cycleId: ky, hoiYId: h }),
 					);
-					quet.push({
-						ai,
-						thuTuc,
-						khoaChuaGop: demKhoaLo(tra.data, KHOA_LO_DANH_SACH),
-						maChuaGopTrongMang: demMaTrongMang(tra.data, chuaGop),
-					});
+					quet.push({ ai, thuTuc, ...quetChuaGop(tra.data, chuaGop) });
 				}
 			console.log(
-				`do-phu: quét ${quet.length} phản hồi của quản trị và người chọn, khoá chuaGop ${quet.reduce((t, q) => t + q.khoaChuaGop, 0)}, mã người chưa góp trong mảng ${quet.reduce((t, q) => t + q.maChuaGopTrongMang, 0)}`,
+				`do-phu: quét ${quet.length} phản hồi (${DOC_QUA.length} vai × ${THU_TUC_DOC.length} thủ tục đọc), khoá chuaGop ${quet.reduce((t, q) => t + q.khoaChuaGop, 0)}, mã người chưa góp trong mảng ${quet.reduce((t, q) => t + q.maChuaGop, 0)}, tên người chưa góp trong mảng ${quet.reduce((t, q) => t + q.tenChuaGop, 0)}`,
 			);
-			expect(quet.length).toBe(2 * THU_TUC_DOC.length);
-			expect(quet).toEqual(
-				quet.map((q) => ({ ...q, khoaChuaGop: 0, maChuaGopTrongMang: 0 })),
-			);
+			expect(quet.length).toBe(DOC_QUA.length * THU_TUC_DOC.length);
+			expect(quet).toEqual(quet.map((q) => ({ ...q, ...KHONG_LO })));
+
+			const [ngay1 = 0, ngay2 = 0] =
+				e11KyVong(idDonVi, nguoiLa.length)[0]?.giaTri ?? [];
+			const hanLuc = sauGio(E11_GIO_MO, HAN.hopLe);
+			for (const muon of [
+				new Date(hanLuc.getTime() + 2 * OKR.thoiGian.gioMs),
+				new Date(hanLuc.getTime() + 24 * OKR.thoiGian.gioMs * 10),
+			]) {
+				datDongHo(muon);
+				const sauHan = await docBang("quan");
+				expect(
+					{
+						cot: sauHan.cot.map((c) => c.ngay),
+						goc: sauHan.hang[0]?.giaTri,
+					},
+					`doc sau han luc ${muon.toISOString()}`,
+				).toEqual({
+					cot: ["2026-11-02", "2026-11-03", "2026-11-04"],
+					goc: [ngay1, ngay2, ngay2],
+				});
+			}
 		},
 		CHO_MA_TRAN_MS,
 	);
 
-	test("do-phu: máy quét bắt được khoá chuaGop và mã người chưa góp trong mảng, bỏ qua mã đứng riêng", () => {
-		const ma = new Set(["u-chua-gop"]);
+	test("do-phu: máy quét bắt được khoá chuaGop, mã và tên người chưa góp trong mảng, bỏ qua mã đứng riêng", () => {
+		const tap: TapChuaGop = {
+			ma: new Set(["u-chua-gop"]),
+			ten: new Set(["Lê Chưa Góp"]),
+		};
+		expect(quetChuaGop({ a: { chuaGop: ["u-chua-gop"] } }, tap)).toEqual({
+			khoaChuaGop: 1,
+			maChuaGop: 1,
+			tenChuaGop: 0,
+		});
+		expect(quetChuaGop({ a: { ds: [{ ten: "Lê Chưa Góp" }] } }, tap)).toEqual({
+			khoaChuaGop: 0,
+			maChuaGop: 0,
+			tenChuaGop: 1,
+		});
+		expect(quetChuaGop({ ds: ["u-chua-gop", "u-chua-gop"] }, tap)).toEqual({
+			khoaChuaGop: 0,
+			maChuaGop: 2,
+			tenChuaGop: 0,
+		});
 		expect(
-			demKhoaLo({ a: { chuaGop: ["u-chua-gop"] } }, KHOA_LO_DANH_SACH),
-		).toBe(1);
-		expect(demMaTrongMang({ a: { ds: [{ id: "u-chua-gop" }] } }, ma)).toBe(1);
-		expect(demMaTrongMang({ ds: ["u-chua-gop", "u-chua-gop"] }, ma)).toBe(2);
-		expect(demMaTrongMang({ nguoiChon: { id: "u-chua-gop" } }, ma)).toBe(0);
-		expect(demKhoaLo({ a: [{ b: 1 }] }, KHOA_LO_DANH_SACH)).toBe(0);
+			quetChuaGop(
+				{ nguoiChon: { id: "u-chua-gop", name: "Lê Chưa Góp" } },
+				tap,
+			),
+		).toEqual(KHONG_LO);
+		expect(quetChuaGop({ a: [{ b: 1 }] }, tap)).toEqual(KHONG_LO);
 	});
 });
 
@@ -1126,16 +1170,18 @@ const nhanCua = (tra: TraLoi, nhan: string): HoiYNhanOutput =>
 	hoiYNhanOutput.parse(ok(tra, nhan));
 
 describe("ten-va-so", () => {
-	test("ten-va-so: tập thủ tục đọc của lần hỏi ý rút từ generated/server.ts là hoiY, hoiYDoPhu, hoiYNhan và bằng THU_TUC_DOC — thủ tục đọc mới không lọt ma trận", async () => {
+	test("ten-va-so: thủ tục đọc của lần hỏi ý = thủ tục query trong generated/server.ts giao với THU_TUC_HOI_Y của vai «chỉ OKR» — bằng THU_TUC_DOC, thủ tục đọc mới không lọt ma trận", async () => {
 		const nguon = await Bun.file(
 			join(import.meta.dir, "..", "src", "generated", "server.ts"),
 		).text();
-		const doc = nguon
-			.split(/\n(?=\s{4}\w+: publicProcedure)/)
-			.flatMap((khoi) => {
-				const ten = /^\s+(hoiY\w*): publicProcedure/.exec(khoi)?.[1];
+		const truyVan = new Set(
+			nguon.split(/\n(?=\s{4}\w+: publicProcedure)/).flatMap((khoi) => {
+				const ten = /^\s+(\w+): publicProcedure/.exec(khoi)?.[1];
 				return ten && khoi.includes(".query(") ? [`okr.${ten}`] : [];
-			})
+			}),
+		);
+		const doc = Object.keys(THU_TUC_HOI_Y)
+			.filter((t) => truyVan.has(t))
 			.sort();
 		expect(doc).toEqual(["okr.hoiY", "okr.hoiYDoPhu", "okr.hoiYNhan"]);
 		expect(doc).toEqual([...THU_TUC_DOC].sort());
@@ -1156,6 +1202,12 @@ describe("ten-va-so", () => {
 			ok(await dongYCua(y1, tv.cookie), "T dong y Y1");
 			ok(await dongYCua(y1, O.cookie), "O dong y Y1");
 			await gieoBanTruoc(h, nguoi.P.id);
+			const chuaGop = await tapChuaGop(h);
+			expect(
+				[A.id, B.id].some((id) => chuaGop.ma.has(id)),
+				"A, B da gop nen khong o tap chua gop",
+			).toBe(false);
+			expect(chuaGop.ma.size).toBeGreaterThan(3);
 			const khoa = { T: "", O: "", Q: "", P: "" } satisfies {
 				[V in VaiMaTran]: string;
 			};
@@ -1227,6 +1279,8 @@ describe("ten-va-so", () => {
 
 			const nhan: (typeof KHAI)[number][] = [];
 			const lo: string[] = [];
+			const loChuaGop: string[] = [];
+			let soQuet = 0;
 			for (const trangThai of TRANG_THAI_MA_TRAN) {
 				if (trangThai === "dang-gom") {
 					await donHanVeBayGio({ h, nguoi });
@@ -1247,6 +1301,12 @@ describe("ten-va-so", () => {
 									`${k.trangThai} ${k.vai} ${k.duong} ${k.thuTuc} lo ${ten}: ${chu.slice(Math.max(0, o - 80), o + 80)}`,
 								);
 						}
+					const quet = quetChuaGop(tra.data, chuaGop);
+					soQuet += 1;
+					if (JSON.stringify(quet) !== JSON.stringify(KHONG_LO))
+						loChuaGop.push(
+							`${k.trangThai} ${k.vai} ${k.duong} ${k.thuTuc}: ${JSON.stringify(quet)}`,
+						);
 					nhan.push({
 						...k,
 						maHttp: tra.status,
@@ -1255,6 +1315,11 @@ describe("ten-va-so", () => {
 				}
 			}
 			console.log(`ten-va-so: đã chạy ${nhan.length}/${KHAI.length} ô`);
+			console.log(
+				`ten-va-so: quét người chưa góp ${soQuet}/${KHAI.length} ô, ô lộ ${loChuaGop.length}`,
+			);
+			expect(soQuet, "so o quet nguoi chua gop").toBe(SO_O_TEN_VA_SO);
+			expect(loChuaGop, "khoa, ma, ten nguoi chua gop lo o cac o").toEqual([]);
 			expect(lo, "chuoi lo toi T, O").toEqual([]);
 			expect(nhan.length, "so o ma tran E4").toBe(SO_O_TEN_VA_SO);
 			expect(nhan.length).toBe(KHAI.length);
