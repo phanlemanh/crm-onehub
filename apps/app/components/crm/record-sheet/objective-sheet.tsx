@@ -67,6 +67,7 @@ type NoiGop = ChiTiet["alignments"][number];
 
 const TRANG_THAI_SHEET = {
 	nhap: "ST-sheet-nhap",
+	"cho-duyet": "ST-sheet-choduyet",
 	"cong-bo": "ST-sheet-congbo",
 	"da-bo": "ST-sheet-dabo",
 } as const satisfies Record<ChiTiet["status"], string>;

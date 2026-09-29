@@ -13,6 +13,12 @@ export type PhaChuKy = (typeof PHA_CHU_KY)[number];
 
 export const PHA_GHI_DUOC: readonly PhaChuKy[] = ["lap-ke-hoach", "dang-chay"];
 
+export const PHA_CHUYEN_DUOC: readonly PhaChuKy[] = [
+	"lap-ke-hoach",
+	"dang-chay",
+	"cham-diem",
+];
+
 export const ngayLich = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 
 export const chuKyInput = z

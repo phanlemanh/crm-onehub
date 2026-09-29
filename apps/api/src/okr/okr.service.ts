@@ -421,6 +421,7 @@ export class OkrService {
 				aiTomTatPhamVi: row.aiTomTatPhamVi,
 				aiTomTatDonVi: row.aiTomTatDonVi,
 				aiTranThangUsd: row.aiTranThangUsd.toNumber(),
+				duyetCongBo: row.duyetCongBo,
 			}),
 			version: row.version,
 		};

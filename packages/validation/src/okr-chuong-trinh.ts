@@ -30,6 +30,7 @@ export const okrProgram = z.object({
 	aiTomTatPhamVi: z.enum(AI_PHAM_VI),
 	aiTomTatDonVi: z.array(z.string().min(1)).max(200),
 	aiTranThangUsd: tranThangUsd,
+	duyetCongBo: z.boolean(),
 });
 
 export type OkrProgram = z.infer<typeof okrProgram>;
@@ -51,6 +52,7 @@ export const OKR_PROGRAM_MAC_DINH: OkrProgram = {
 	aiTomTatPhamVi: "tat",
 	aiTomTatDonVi: [],
 	aiTranThangUsd: TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
+	duyetCongBo: false,
 };
 
 export function docTranUsd(chu: string): number | null {
