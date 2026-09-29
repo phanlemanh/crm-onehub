@@ -34,7 +34,6 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
-	ItemTitle,
 } from "@crm/ui/components/item";
 import { Textarea } from "@crm/ui/components/textarea";
 import { Toggle } from "@crm/ui/components/toggle";
@@ -43,20 +42,22 @@ import {
 	DO_PHU_DANG_MO,
 	DO_PHU_HET_HAN,
 	HOI_Y,
+	SO_Y_HIEN_TRUOC,
+	THU_TU_XAO_CHO_CAO_THANH_VAN,
 	TRAN,
 	Y_CUA_TOI,
 	Y_NGUOI_KHAC,
 	Y_TOI_DA_DONG_Y,
 	type YMau,
 } from "./du-lieu";
-import { CauHoi, DoPhu, LoiMo } from "./khung";
+import { CauHoi, DaiPha, DoPhu, LoiMo, VanBan } from "./khung";
 
 export type HinhGop = "chua-gop" | "da-gop" | "het-han";
 
 function ChiTietY({ y }: { y: YMau }) {
 	return (
 		<>
-			<ItemTitle translate="no">{y.noiDung}</ItemTitle>
+			<VanBan>{y.noiDung}</VanBan>
 			{y.viSao ? (
 				<ItemDescription>
 					Vì sao: <span translate="no">{y.viSao}</span>
@@ -124,9 +125,7 @@ function OSoanY({ conLai }: { conLai: number }) {
 					</FieldDescription>
 				</Field>
 				<Field orientation="horizontal">
-					<FieldDescription>
-						Bạn còn góp được {conLai} ý. Hạn {HOI_Y.han}, giờ Việt Nam.
-					</FieldDescription>
+					<FieldDescription>Bạn còn góp được {conLai} ý.</FieldDescription>
 					<Button disabled={!hopLe}>Gửi</Button>
 				</Field>
 			</FieldGroup>
@@ -210,18 +209,25 @@ function YNguoiKhac({
 	chiDoc: boolean;
 }) {
 	const [bat, setBat] = useState<string[]>(daDongY);
+	const [hienHet, setHienHet] = useState(false);
+	const theoThuTu = THU_TU_XAO_CHO_CAO_THANH_VAN.map((id) =>
+		Y_NGUOI_KHAC.find((y) => y.id === id),
+	).filter((y): y is YMau => y !== undefined);
+	const dangHien = hienHet ? theoThuTu : theoThuTu.slice(0, SO_Y_HIEN_TRUOC);
+	const conAn = theoThuTu.length - dangHien.length;
 
 	return (
 		<Card data-khoi="y-nguoi-khac">
 			<CardHeader>
-				<CardTitle>Ý của đồng nghiệp</CardTitle>
+				<CardTitle>Ý của đồng nghiệp ({theoThuTu.length})</CardTitle>
 				<CardDescription>
-					Không kèm tên. «Tôi cũng nghĩ vậy» không hiện số đếm ở đây — chỉ người
-					gom thấy.
+					Không kèm tên. Thứ tự xáo riêng cho từng người để ý đầu danh sách
+					không được lợi. «Tôi cũng nghĩ vậy» không hiện số đếm ở đây — chỉ
+					người gom thấy.
 				</CardDescription>
 			</CardHeader>
 			<ItemGroup>
-				{Y_NGUOI_KHAC.map((y) => {
+				{dangHien.map((y) => {
 					const dangBat = bat.includes(y.id);
 					return (
 						<Item data-y={y.id} key={y.id} variant="outline">
@@ -249,6 +255,17 @@ function YNguoiKhac({
 					);
 				})}
 			</ItemGroup>
+			{conAn > 0 ? (
+				<div>
+					<Button
+						data-nut="hien-them"
+						onClick={() => setHienHet(true)}
+						variant="outline"
+					>
+						Hiện thêm {conAn} ý
+					</Button>
+				</div>
+			) : null}
 		</Card>
 	);
 }
@@ -259,29 +276,32 @@ export function GopMan({ hinh }: { hinh: HinhGop }) {
 	const conLai = TRAN.yMoiNguoi - (daGop ? Y_CUA_TOI.length : 0);
 
 	return (
-		<div className="flex flex-col gap-6" data-hinh-gop={hinh}>
+		<div className="flex flex-col gap-4" data-hinh-gop={hinh}>
+			<DaiPha pha={hetHan ? "dang-gom" : "dang-mo"} />
 			{hetHan ? (
 				<Alert data-khoi="het-han">
 					<AlertTitle>Đã hết hạn góp — đang chờ công bố</AlertTitle>
 					<AlertDescription>
-						Hạn là {HOI_Y.han}. Khi{" "}
-						<span translate="no">{HOI_Y.nguoiChon.ten}</span> công bố, bạn nhận
-						nhắc buổi sáng và thấy mỗi ý của mình đi đâu, vì sao.
+						Khi <span translate="no">{HOI_Y.nguoiChon.ten}</span> công bố, bạn
+						nhận nhắc buổi sáng và thấy mỗi ý của mình đi đâu, vì sao.
 					</AlertDescription>
 				</Alert>
 			) : null}
-			<LoiMo />
 			<Card>
 				<CauHoi
 					ghiChu={
 						hetHan
 							? `${HOI_Y.daGop}/${HOI_Y.thanhVien} người đã góp ${HOI_Y.soY} ý.`
-							: `Góp 1–${TRAN.yMoiNguoi} ý. Hạn ${HOI_Y.han}.`
+							: `Góp 1–${TRAN.yMoiNguoi} ý. Đồng nghiệp đọc ý, không thấy tên bạn.`
 					}
-					hetHan={hetHan}
 				/>
-				{hetHan ? null : <OSoanY conLai={conLai} />}
 			</Card>
+			<LoiMo />
+			{hetHan ? null : (
+				<Card>
+					<OSoanY conLai={conLai} />
+				</Card>
+			)}
 			{daGop ? <YCuaBan chiDoc={hetHan} /> : null}
 			<YNguoiKhac chiDoc={hetHan} daDongY={daGop ? [Y_TOI_DA_DONG_Y] : []} />
 			<DoPhu hang={hetHan ? DO_PHU_HET_HAN : DO_PHU_DANG_MO} />

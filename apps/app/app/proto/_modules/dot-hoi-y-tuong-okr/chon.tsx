@@ -55,7 +55,8 @@ import {
 	Y_LA,
 	Y_RUT_GON,
 } from "./du-lieu";
-import { apBoSung, danhGiaCau, NHAN_CAU } from "./khung";
+import { DanhSachYChuaGom } from "./gom";
+import { apBoSung, DaiPha, danhGiaCau, NHAN_CAU, VanBan } from "./khung";
 
 export type HinhChon = "chua-du" | "du";
 
@@ -70,24 +71,65 @@ function chuDeBanDau(hinh: HinhChon): ChuDeMau[] {
 	return hinh === "chua-du" ? tatCa : tatCa.map(apBoSung);
 }
 
-function thieu(chuDe: ChuDeMau[], yChuaGom: number): string[] {
-	const chuaKetLuan = chuDe.filter((c) => c.ketLuan === null).length;
-	const chuaLyDo = chuDe.filter(
-		(c) => c.lyDo.trim().length < TRAN.lyDo.it,
-	).length;
-	const chuaCau = chuDe.filter(
-		(c) => c.ketLuan === "chon" && c.cauMucTieu.trim().length === 0,
-	).length;
-	const chuaNoi = chuDe.filter(
-		(c) => c.ketLuan === "chon" && c.noiBanTruoc === null,
-	).length;
+type DieuThieu = { khoa: string; chu: string; dich: string };
+
+const Y_CHUA_GOM_NEO = "y-chua-gom";
+
+function neoChuDe(id: string): string {
+	return `chu-de-${id}`;
+}
+
+const DAI_TEN_TRONG_THANH = 36;
+
+function rutGon(ten: string): string {
+	return ten.length > DAI_TEN_TRONG_THANH
+		? `${ten.slice(0, DAI_TEN_TRONG_THANH).trimEnd()}…`
+		: ten;
+}
+
+function daKetLuan(c: ChuDeMau): boolean {
+	return c.ketLuan !== null && c.lyDo.trim().length >= TRAN.lyDo.it;
+}
+
+function thieuCuaChuDe(c: ChuDeMau): string[] {
 	return [
-		chuaKetLuan > 0 ? `${chuaKetLuan} chủ đề chưa kết luận` : null,
-		chuaLyDo > 0 ? `${chuaLyDo} chủ đề chưa có lý do` : null,
-		chuaCau > 0 ? `${chuaCau} chủ đề chọn chưa có câu mục tiêu` : null,
-		chuaNoi > 0 ? `${chuaNoi} chủ đề chọn chưa khai nối câu viết trước` : null,
-		yChuaGom > 0 ? `${yChuaGom} ý chưa gom` : null,
+		c.ketLuan === null ? "chưa kết luận" : null,
+		c.lyDo.trim().length < TRAN.lyDo.it ? "chưa có lý do" : null,
+		c.ketLuan === "chon" && c.cauMucTieu.trim().length === 0
+			? "chưa có câu mục tiêu"
+			: null,
+		c.ketLuan === "chon" && c.noiBanTruoc === null
+			? "chưa khai nối câu viết trước"
+			: null,
 	].filter((x): x is string => x !== null);
+}
+
+function thieu(chuDe: ChuDeMau[], yChuaGom: number): DieuThieu[] {
+	const theoChuDe = chuDe.flatMap((c) =>
+		thieuCuaChuDe(c).map((chu) => ({
+			khoa: `${c.id}-${chu}`,
+			chu: `«${rutGon(c.ten)}» — ${chu}`,
+			dich: neoChuDe(c.id),
+		})),
+	);
+	return yChuaGom > 0
+		? [
+				...theoChuDe,
+				{
+					khoa: "y-chua-gom",
+					chu: `${yChuaGom} ý chưa gom`,
+					dich: Y_CHUA_GOM_NEO,
+				},
+			]
+		: theoChuDe;
+}
+
+function nhayToi(id: string) {
+	const dich = document.getElementById(id);
+	if (!dich) return;
+	const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	dich.scrollIntoView({ behavior: giam ? "auto" : "smooth", block: "start" });
+	dich.focus({ preventScroll: true });
 }
 
 function TheChon({
@@ -102,7 +144,12 @@ function TheChon({
 	const idLyDo = `ly-do-${c.id}`;
 
 	return (
-		<Card data-chu-de={c.id} data-ket-luan={c.ketLuan ?? "chua"}>
+		<Card
+			data-chu-de={c.id}
+			data-ket-luan={c.ketLuan ?? "chua"}
+			id={neoChuDe(c.id)}
+			tabIndex={-1}
+		>
 			<CardHeader>
 				<CardTitle translate="no">{c.ten}</CardTitle>
 				<CardDescription>
@@ -121,7 +168,7 @@ function TheChon({
 						return (
 							<Item key={t.yId} size="xs" variant="muted">
 								<ItemContent>
-									<ItemTitle translate="no">«{t.cau}»</ItemTitle>
+									<VanBan>«{t.cau}»</VanBan>
 									{tacGia ? (
 										<ItemDescription>
 											<span translate="no">{tacGia.ten}</span> ·{" "}
@@ -176,7 +223,10 @@ function TheChon({
 						)}
 					</Field>
 					{c.ketLuan === "chon" ? (
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2" data-khoi="khi-chon">
+						<div
+							className="grid grid-cols-1 gap-4 md:grid-cols-2"
+							data-khoi="khi-chon"
+						>
 							<Field>
 								<FieldLabel htmlFor={`cau-${c.id}`}>Câu mục tiêu</FieldLabel>
 								<Input
@@ -281,38 +331,32 @@ function BanVietTruocCuaBan({ chuDe }: { chuDe: ChuDeMau[] }) {
 export function ChonMan({ hinh }: { hinh: HinhChon }) {
 	const [chuDe, setChuDe] = useState<ChuDeMau[]>(() => chuDeBanDau(hinh));
 	const [hoi, setHoi] = useState(false);
-	const yChuaGom = hinh === "du" ? 0 : 1;
-	const conThieu = thieu(chuDe, yChuaGom);
+	const yChuaGom = hinh === "du" ? [] : Y_CHUA_GOM.slice(-1);
+	const conThieu = thieu(chuDe, yChuaGom.length);
 	const soChon = chuDe.filter((c) => c.ketLuan === "chon").length;
-	const yLe = Y_CHUA_GOM[Y_CHUA_GOM.length - 1];
+	const soDaKetLuan = chuDe.filter(daKetLuan).length;
 	const doi = (moi: ChuDeMau) =>
 		setChuDe((cu) => cu.map((c) => (c.id === moi.id ? moi : c)));
 
 	return (
 		<div className="flex flex-col gap-6" data-hinh-chon={hinh}>
+			<DaiPha pha="dang-gom" />
 			<Card>
 				<CardHeader>
 					<CardTitle>Kết luận từng chủ đề</CardTitle>
+					<CardAction>
+						<Badge data-khoi="dem-ket-luan" variant="outline">
+							{soDaKetLuan}/{chuDe.length} chủ đề đã kết luận
+						</Badge>
+					</CardAction>
 					<CardDescription>
 						Mỗi chủ đề cần một kết luận và lý do bạn tự viết. Máy chỉ đính bằng
 						chứng, không điền sẵn lý do.
 					</CardDescription>
 				</CardHeader>
 			</Card>
-			{yChuaGom > 0 && yLe ? (
-				<Alert data-khoi="con-y-chua-gom">
-					<AlertTitle>Còn {yChuaGom} ý chưa gom</AlertTitle>
-					<AlertDescription>
-						«<span translate="no">{yLe.noiDung}</span>» —{" "}
-						<span translate="no">{yLe.tacGia.ten}</span>. Đưa vào một chủ đề
-						hoặc để thành ý lạ.
-					</AlertDescription>
-					<AlertAction>
-						<Button size="sm" variant="outline">
-							Gom
-						</Button>
-					</AlertAction>
-				</Alert>
+			{yChuaGom.length > 0 ? (
+				<DanhSachYChuaGom chonSan={[]} danhSach={yChuaGom} />
 			) : null}
 			<div className="grid gap-6 lg:grid-cols-3">
 				<div className="flex min-w-0 flex-col gap-6 lg:col-span-2">
@@ -320,7 +364,7 @@ export function ChonMan({ hinh }: { hinh: HinhChon }) {
 						<TheChon c={c} key={c.id} onDoi={doi} />
 					))}
 				</div>
-				<div className="flex min-w-0 flex-col gap-6">
+				<div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-4 lg:self-start">
 					<BanVietTruocCuaBan chuDe={chuDe} />
 				</div>
 			</div>
@@ -329,12 +373,30 @@ export function ChonMan({ hinh }: { hinh: HinhChon }) {
 					<AlertTitle>
 						{conThieu.length === 0
 							? `Sẵn sàng — ${soChon} mục tiêu nháp sẽ được tạo ở cấp OneHub`
-							: "Chưa công bố được"}
+							: `Chưa công bố được — còn ${conThieu.length} điều`}
 					</AlertTitle>
 					<AlertDescription>
-						{conThieu.length === 0
-							? "Người góp sẽ thấy kết luận, lý do và bản viết trước của bạn."
-							: conThieu.join(" · ")}
+						{conThieu.length === 0 ? (
+							"Người góp sẽ thấy kết luận, lý do và bản viết trước của bạn."
+						) : (
+							<ul aria-label="Điều còn thiếu" className="flex flex-col">
+								{conThieu.map((d) => (
+									<li key={d.khoa}>
+										<Button asChild size="xs-wrap" variant="link">
+											<a
+												href={`#${d.dich}`}
+												onClick={(e) => {
+													e.preventDefault();
+													nhayToi(d.dich);
+												}}
+											>
+												<span translate="no">{d.chu}</span>
+											</a>
+										</Button>
+									</li>
+								))}
+							</ul>
+						)}
 					</AlertDescription>
 					<AlertAction>
 						<Button
@@ -353,7 +415,7 @@ export function ChonMan({ hinh }: { hinh: HinhChon }) {
 				onOpenChange={setHoi}
 				open={hoi}
 				pending={false}
-				than={`${soChon} mục tiêu nháp được tạo ở cấp OneHub, bạn là người phụ trách. Mọi người đã góp sẽ thấy ý mình đi đâu, lý do của bạn, và bản viết trước — câu nào giữ, bỏ, thêm. Không rút lại được.`}
+				than={`${soChon} mục tiêu nháp được tạo ở cấp OneHub, bạn là người phụ trách. Mọi người đã góp sẽ thấy ý mình đi đâu, lý do của bạn, và bản viết trước — câu nào giữ nguyên, đổi, bỏ, thêm. Không rút lại được.`}
 				thoi="Chưa"
 				tieuDe={`Công bố kết luận cho ${HOI_Y.chuKy}?`}
 				tone="default"

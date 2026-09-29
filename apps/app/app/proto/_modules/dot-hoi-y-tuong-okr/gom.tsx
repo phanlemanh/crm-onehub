@@ -38,56 +38,74 @@ import {
 	Y_CHUA_GOM,
 	Y_LA,
 	Y_RUT_GON,
+	type YMau,
 } from "./du-lieu";
+import { DaiPha, VanBan } from "./khung";
 
-function MenuDuaVao({ nhan, nutNhan }: { nhan: string; nutNhan: string }) {
+function MenuDuaVao() {
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button aria-label={nhan} size="sm" variant="outline">
-					{nutNhan}
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end">
-				<DropdownMenuLabel>Đưa vào chủ đề</DropdownMenuLabel>
-				{CHU_DE_GOM.map((c) => (
-					<DropdownMenuItem key={c.id}>
-						<span translate="no">{c.ten}</span>
-					</DropdownMenuItem>
-				))}
-				<DropdownMenuSeparator />
-				<DropdownMenuItem>Ý lạ — đứng riêng</DropdownMenuItem>
-				<DropdownMenuItem>
-					<Icon icon={Add} />
-					Chủ đề mới…
+		<DropdownMenuContent align="end">
+			<DropdownMenuLabel>Đưa vào chủ đề</DropdownMenuLabel>
+			{CHU_DE_GOM.map((c) => (
+				<DropdownMenuItem key={c.id}>
+					<span translate="no">{c.ten}</span>
 				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
+			))}
+			<DropdownMenuSeparator />
+			<DropdownMenuItem>Ý lạ — đứng riêng</DropdownMenuItem>
+			<DropdownMenuItem>
+				<Icon icon={Add} />
+				Chủ đề mới…
+			</DropdownMenuItem>
+		</DropdownMenuContent>
 	);
 }
 
-function YChuaGom() {
-	const [chon, setChon] = useState<string[]>(["g-1", "g-2"]);
+export function DanhSachYChuaGom({
+	danhSach,
+	chonSan,
+}: {
+	danhSach: YMau[];
+	chonSan: string[];
+}) {
+	const [chon, setChon] = useState<string[]>(chonSan);
 
 	return (
-		<Card data-khoi="y-chua-gom">
-			<CardHeader>
-				<CardTitle>Ý chưa gom ({Y_CHUA_GOM.length})</CardTitle>
-				<CardDescription>
-					Mỗi ý phải vào một chủ đề, hoặc đứng riêng thành ý lạ, trước khi công
-					bố.
-				</CardDescription>
-				{chon.length > 0 ? (
+		<Card data-khoi="y-chua-gom" id="y-chua-gom" tabIndex={-1}>
+			{chon.length > 0 ? (
+				<CardHeader data-khoi="thanh-chon">
+					<CardTitle>{chon.length} ý đã chọn</CardTitle>
 					<CardAction>
-						<MenuDuaVao
-							nhan={`Đưa ${chon.length} ý đã chọn vào chủ đề`}
-							nutNhan={`Đưa ${chon.length} ý vào…`}
-						/>
+						<div
+							aria-label="Việc với các ý đã chọn"
+							className="flex items-center gap-1"
+							role="toolbar"
+						>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button size="sm" variant="outline">
+										Đưa vào chủ đề…
+									</Button>
+								</DropdownMenuTrigger>
+								<MenuDuaVao />
+							</DropdownMenu>
+							<Button onClick={() => setChon([])} size="sm" variant="ghost">
+								Bỏ chọn
+							</Button>
+						</div>
 					</CardAction>
-				) : null}
-			</CardHeader>
+				</CardHeader>
+			) : (
+				<CardHeader>
+					<CardTitle>Ý chưa gom ({danhSach.length})</CardTitle>
+					<CardDescription>
+						Mỗi ý phải vào một chủ đề, hoặc đứng riêng thành ý lạ, trước khi
+						công bố. Chọn nhiều ý để gom một lần.
+					</CardDescription>
+				</CardHeader>
+			)}
 			<ItemGroup>
-				{Y_CHUA_GOM.map((y) => {
+				{danhSach.map((y) => {
 					const daChon = chon.includes(y.id);
 					return (
 						<Item data-y={y.id} key={y.id} variant="outline">
@@ -105,8 +123,8 @@ function YChuaGom() {
 								/>
 							</ItemMedia>
 							<ItemContent>
-								<ItemTitle translate="no">{y.noiDung}</ItemTitle>
-								<ItemDescription>
+								<VanBan>{y.noiDung}</VanBan>
+								<ItemDescription data-dong-phu>
 									<span translate="no">{y.tacGia.ten}</span> ·{" "}
 									<span translate="no">{y.tacGia.donVi}</span> ·{" "}
 									{y.dongY > 0
@@ -115,10 +133,18 @@ function YChuaGom() {
 								</ItemDescription>
 							</ItemContent>
 							<ItemActions>
-								<MenuDuaVao
-									nhan={`Đưa ý «${y.noiDung}» vào chủ đề`}
-									nutNhan="Đưa vào chủ đề…"
-								/>
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button
+											aria-label={`Việc với ý «${y.noiDung}»`}
+											size="icon-sm"
+											variant="ghost"
+										>
+											<Icon icon={OverflowMenuHorizontal} />
+										</Button>
+									</DropdownMenuTrigger>
+									<MenuDuaVao />
+								</DropdownMenu>
 							</ItemActions>
 						</Item>
 					);
@@ -190,18 +216,18 @@ function TheChuDeGom({ c }: { c: ChuDeMau }) {
 export function GomMan() {
 	return (
 		<div className="flex flex-col gap-6" data-hinh="gom">
+			<DaiPha pha="dang-gom" />
 			<Card>
 				<CardHeader>
 					<CardTitle>Gom ý thành chủ đề</CardTitle>
 					<CardDescription>
-						Hết hạn lúc {HOI_Y.han}. {HOI_Y.daGop}/{HOI_Y.thanhVien} người đã
-						góp {HOI_Y.soY} ý. Bạn và{" "}
+						{HOI_Y.soY} ý. Bạn và{" "}
 						<span translate="no">{HOI_Y.nguoiChon.ten}</span> cùng gom; chỉ
 						người chọn kết luận.
 					</CardDescription>
 				</CardHeader>
 			</Card>
-			<YChuaGom />
+			<DanhSachYChuaGom chonSan={["g-1", "g-2"]} danhSach={Y_CHUA_GOM} />
 			<Card data-khoi="chu-de">
 				<CardHeader>
 					<CardTitle>Chủ đề ({CHU_DE_GOM.length})</CardTitle>

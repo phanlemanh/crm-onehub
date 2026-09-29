@@ -20,7 +20,6 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
-	ItemTitle,
 } from "@crm/ui/components/item";
 import { useState } from "react";
 import {
@@ -32,7 +31,15 @@ import {
 	Y_LA,
 	Y_RUT_GON,
 } from "./du-lieu";
-import { apBoSung, danhGiaCau, NHAN_CAU, NhanKetLuan } from "./khung";
+import {
+	apBoSung,
+	DaiPha,
+	danhGiaCau,
+	LoiNguoiNoi,
+	NHAN_CAU,
+	NhanKetLuan,
+	VanBan,
+} from "./khung";
 
 export type HinhKetQua = "chua-hieu" | "da-hieu";
 
@@ -40,10 +47,7 @@ const CHU_DE_CONG_BO: ChuDeMau[] = [...CHU_DE_GOM, Y_LA].map(apBoSung);
 
 function LyDoNguyenVan({ lyDo }: { lyDo: string }) {
 	return (
-		<ItemDescription>
-			<span translate="no">{HOI_Y.nguoiChon.ten}</span>:{" "}
-			<q translate="no">{lyDo}</q>
-		</ItemDescription>
+		<LoiNguoiNoi loi={lyDo} nguoi={HOI_Y.nguoiChon.ten} vai="người chọn" />
 	);
 }
 
@@ -77,21 +81,19 @@ function YCuaBanKetQua({ hinh }: { hinh: HinhKetQua }) {
 						return (
 							<Item data-y={y.id} key={y.id} variant="outline">
 								<ItemContent>
-									<ItemTitle translate="no">{y.noiDung}</ItemTitle>
+									<VanBan>{y.noiDung}</VanBan>
 									{c ? (
 										<>
-											<ItemDescription>
-												Vào chủ đề «<span translate="no">{c.ten}</span>»
-											</ItemDescription>
+											<div className="flex flex-wrap items-center gap-2">
+												{c.ketLuan ? <NhanKetLuan ketLuan={c.ketLuan} /> : null}
+												<ItemDescription>
+													Vào chủ đề «<span translate="no">{c.ten}</span>»
+												</ItemDescription>
+											</div>
 											<LyDoNguyenVan lyDo={c.lyDo} />
 										</>
 									) : null}
 								</ItemContent>
-								{c?.ketLuan ? (
-									<ItemActions>
-										<NhanKetLuan ketLuan={c.ketLuan} />
-									</ItemActions>
-								) : null}
 								{c?.ketLuan === "chon" ? (
 									<div className="w-full">
 										<XemNhap ten={c.cauMucTieu} />
@@ -151,13 +153,13 @@ function VietTruocRoiChon() {
 								<ItemContent>
 									{nhan === "doi" && noi ? (
 										<>
-											<ItemTitle translate="no">{noi.cauMucTieu}</ItemTitle>
+											<VanBan>{noi.cauMucTieu}</VanBan>
 											<ItemDescription>
 												Viết trước: <del translate="no">{b.cau}</del>
 											</ItemDescription>
 										</>
 									) : (
-										<ItemTitle translate="no">{b.cau}</ItemTitle>
+										<VanBan>{b.cau}</VanBan>
 									)}
 									{nhan === "bo" ? (
 										<ItemDescription>
@@ -184,7 +186,7 @@ function VietTruocRoiChon() {
 					{chonMoi.map((c) => (
 						<Item data-chu-de={c.id} key={c.id} variant="outline">
 							<ItemContent>
-								<ItemTitle translate="no">{c.cauMucTieu}</ItemTitle>
+								<VanBan>{c.cauMucTieu}</VanBan>
 								<ItemDescription>
 									Từ chủ đề «<span translate="no">{c.ten}</span>» — không có
 									trong bản viết trước.
@@ -223,7 +225,7 @@ function KhoY() {
 					{deSau.map((c) => (
 						<Item data-chu-de={c.id} key={c.id} variant="outline">
 							<ItemContent>
-								<ItemTitle translate="no">{c.ten}</ItemTitle>
+								<VanBan>{c.ten}</VanBan>
 								<LyDoNguyenVan lyDo={c.lyDo} />
 								{c.yIds.map((id) => {
 									const y = Y_RUT_GON.get(id);
@@ -245,6 +247,7 @@ function KhoY() {
 export function KetQuaMan({ hinh }: { hinh: HinhKetQua }) {
 	return (
 		<div className="flex flex-col gap-6" data-hinh-ket-qua={hinh}>
+			<DaiPha pha="da-cong-bo" />
 			<YCuaBanKetQua hinh={hinh} />
 			<VietTruocRoiChon />
 			<KhoY />

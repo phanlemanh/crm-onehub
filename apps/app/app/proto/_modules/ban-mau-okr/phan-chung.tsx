@@ -223,6 +223,19 @@ export function KhungUngDung({
 	);
 }
 
+const LE_TAB_PX = 16;
+
+function cuonTabDangDungVaoKhung(khung: HTMLDivElement | null) {
+	const tab = khung?.querySelector<HTMLElement>(
+		'[role="tab"][data-state="active"]',
+	);
+	if (!khung || !tab) return;
+	const phai = tab.offsetLeft + tab.offsetWidth + LE_TAB_PX - khung.clientWidth;
+	const trai = tab.offsetLeft - LE_TAB_PX;
+	if (phai > khung.scrollLeft) khung.scrollLeft = phai;
+	else if (trai < khung.scrollLeft) khung.scrollLeft = Math.max(0, trai);
+}
+
 function DauTrangOkr({ trang, chuKy }: { trang: TrangKhung; chuKy?: string }) {
 	const tab = trang === "hoi-y" ? [...TRANG, TAB_HOI_Y] : TRANG;
 	const cacKy = chuKy ? [chuKy, ...CHU_KY_KHAC] : CHU_KY_KHAC;
@@ -249,10 +262,14 @@ function DauTrangOkr({ trang, chuKy }: { trang: TrangKhung; chuKy?: string }) {
 				</div>
 			</div>
 			<Tabs value={trang}>
-				<div className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
+				<div
+					className="relative -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0"
+					data-khung-tab
+					ref={cuonTabDangDungVaoKhung}
+				>
 					<TabsList
 						aria-label="Khu OKR"
-						className="w-full justify-start gap-6 border-b"
+						className="w-max min-w-full justify-start gap-6 border-b"
 						variant="line"
 					>
 						{tab.map((t) => (

@@ -1,17 +1,20 @@
 "use client";
 
 import Renew from "@carbon/icons-react/es/Renew";
-import Time from "@carbon/icons-react/es/Time";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
 	Card,
-	CardAction,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@crm/ui/components/collapsible";
 import {
 	Empty,
 	EmptyContent,
@@ -25,9 +28,12 @@ import {
 	Item,
 	ItemContent,
 	ItemDescription,
+	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { StepList, StepListItem } from "@crm/ui/components/step-list";
+import { type ReactNode, useState } from "react";
 import {
 	BO_SUNG_KHI_DU,
 	type ChuDeMau,
@@ -77,32 +83,128 @@ export function danhGiaCau(
 	};
 }
 
+export type Pha = "dang-mo" | "dang-gom" | "da-cong-bo";
+
+const BUOC_PHA: { pha: Pha; ten: string }[] = [
+	{ pha: "dang-mo", ten: "Đang mở" },
+	{ pha: "dang-gom", ten: "Đang gom" },
+	{ pha: "da-cong-bo", ten: "Đã công bố" },
+];
+
+const DONG_PHA = {
+	"dang-mo": `Hạn ${HOI_Y.han} · ${HOI_Y.conLai}`,
+	"dang-gom": `Đã hết hạn ${HOI_Y.han} · ${HOI_Y.daGop}/${HOI_Y.thanhVien} người đã góp`,
+	"da-cong-bo": `Công bố ${HOI_Y.congBoLuc}`,
+} satisfies Record<Pha, string>;
+
+export function DaiPha({ pha }: { pha: Pha }) {
+	return (
+		<div className="flex flex-col gap-2" data-khoi="dai-pha" data-pha={pha}>
+			<StepList label="Pha của lần hỏi ý" tinh>
+				{BUOC_PHA.map((b, i) => (
+					<StepListItem
+						key={b.pha}
+						step={i + 1}
+						title={
+							b.pha === pha ? (
+								<span className="flex items-center gap-2" data-buoc-hien-tai>
+									{b.ten}
+									<Badge variant="secondary">Bây giờ</Badge>
+								</span>
+							) : (
+								b.ten
+							)
+						}
+					/>
+				))}
+			</StepList>
+			<ItemDescription data-dong-pha>
+				{DONG_PHA[pha]} · Người chọn:{" "}
+				<span translate="no">{HOI_Y.nguoiChon.ten}</span>
+			</ItemDescription>
+		</div>
+	);
+}
+
+export function VanBan({ children }: { children: ReactNode }) {
+	return (
+		<p className="text-sm" translate="no">
+			{children}
+		</p>
+	);
+}
+
+export function LoiNguoiNoi({
+	nguoi,
+	vai,
+	loi,
+}: {
+	nguoi: string;
+	vai: string;
+	loi: string;
+}) {
+	return (
+		<Item data-khoi="loi-nguoi-noi" size="sm" variant="muted">
+			<ItemContent>
+				<ItemDescription>
+					<span translate="no">{nguoi}</span> · {vai}
+				</ItemDescription>
+				<VanBan>«{loi}»</VanBan>
+			</ItemContent>
+		</Item>
+	);
+}
+
 export function LoiMo() {
+	const [mo, setMo] = useState(false);
 	return (
 		<Card data-khoi="loi-mo">
-			<CardHeader>
-				<CardTitle>
-					<span translate="no">{HOI_Y.nguoiChon.ten}</span> hỏi ý cho mục tiêu{" "}
-					{HOI_Y.chuKy}
-				</CardTitle>
-				<CardDescription>Mở lúc {HOI_Y.moLuc}</CardDescription>
-			</CardHeader>
 			<CardContent>
-				<p className="text-sm" translate="no">
-					{HOI_Y.loiMo}
-				</p>
+				<Collapsible onOpenChange={setMo} open={mo}>
+					{mo ? null : (
+						<p className="line-clamp-3 text-sm" translate="no">
+							{HOI_Y.loiMo}
+						</p>
+					)}
+					<CollapsibleContent>
+						<div className="flex flex-col gap-3">
+							<VanBan>{HOI_Y.loiMo}</VanBan>
+							<ItemGroup data-khoi="ghi-chu-con-so">
+								{SO_LIEU.map((s) => (
+									<Item key={s.id} size="xs">
+										<ItemContent>
+											<ItemDescription>
+												<span translate="no">{s.nhan}</span> —{" "}
+												<span translate="no">{s.ghiChu}</span>
+											</ItemDescription>
+										</ItemContent>
+									</Item>
+								))}
+							</ItemGroup>
+						</div>
+					</CollapsibleContent>
+					<div className="flex flex-wrap items-center gap-x-2">
+						<ItemDescription>
+							Lời mở của <span translate="no">{HOI_Y.nguoiChon.ten}</span>
+						</ItemDescription>
+						<CollapsibleTrigger asChild>
+							<Button size="xs" variant="link">
+								{mo ? "Thu gọn" : "Đọc thêm"}
+							</Button>
+						</CollapsibleTrigger>
+					</div>
+				</Collapsible>
 				<div
-					className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+					className="grid grid-cols-2 gap-2 lg:grid-cols-4"
 					data-khoi="the-con-so"
 				>
 					{SO_LIEU.map((s) => (
-						<Item key={s.id} size="sm" variant="outline">
+						<Item key={s.id} size="xs" variant="outline">
 							<ItemContent>
 								<ItemDescription translate="no">{s.nhan}</ItemDescription>
 								<ItemTitle className="tabular-nums" translate="no">
 									{s.giaTri}
 								</ItemTitle>
-								<ItemDescription translate="no">{s.ghiChu}</ItemDescription>
 							</ItemContent>
 						</Item>
 					))}
@@ -112,23 +214,11 @@ export function LoiMo() {
 	);
 }
 
-export function CauHoi({
-	ghiChu,
-	hetHan = false,
-}: {
-	ghiChu: string;
-	hetHan?: boolean;
-}) {
+export function CauHoi({ ghiChu }: { ghiChu: string }) {
 	return (
 		<CardHeader data-khoi="cau-hoi">
 			<CardTitle translate="no">{HOI_Y.cauHoi}</CardTitle>
 			<CardDescription>{ghiChu}</CardDescription>
-			<CardAction>
-				<Badge variant="outline">
-					<Icon data-icon="inline-start" icon={Time} />
-					{hetHan ? "Đã hết hạn" : HOI_Y.conLai}
-				</Badge>
-			</CardAction>
 		</CardHeader>
 	);
 }

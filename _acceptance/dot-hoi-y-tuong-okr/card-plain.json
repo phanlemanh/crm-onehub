@@ -39,11 +39,11 @@
     },
     {
       "id": "AC-11",
-      "p": "Sẽ chạy trên màn thật: quản trị mở bằng sheet, thành viên góp ý và bấm «Tôi cũng nghĩ vậy», xem độ phủ; đủ trạng thái trống, đang tải, lỗi, và dùng được ở khổ điện thoại."
+      "p": "Sẽ chạy trên màn thật: quản trị mở bằng sheet; thành viên thấy dải pha, câu hỏi, lời mở gập, con số và ô góp ngay trong màn hình đầu của điện thoại, góp ý, bấm «Tôi cũng nghĩ vậy» trên 10 ý đầu rồi «Hiện thêm»; tab «Hỏi ý» luôn thấy được; đủ trạng thái trống, đang tải, lỗi."
     },
     {
       "id": "AC-12",
-      "p": "Sẽ chạy trên màn thật phần của CEO: gom, kết luận, thanh công bố liệt điều thiếu, công bố, rồi trang kết quả và nút «Tôi hiểu vì sao» của người góp."
+      "p": "Sẽ chạy trên màn thật phần của CEO: chọn nhiều ý rồi đưa vào chủ đề, kết luận có dòng đếm, bấm điều thiếu thì nhảy tới đúng chủ đề, công bố; trang kết quả hiện lý do đủ không cắt và nút «Tôi hiểu vì sao»."
     },
     {
       "id": "AC-13",
@@ -57,7 +57,7 @@
   "wont_do": [
     {
       "id": "AC-3",
-      "p": "Sẽ KHÔNG cho thành viên và vai «chỉ OKR» thấy tên người góp hay số người đồng ý với ý của người khác — qua màn, API hay khoá API; chỉ quản trị và người chọn thấy."
+      "p": "Sẽ KHÔNG cho thành viên và vai «chỉ OKR» thấy tên người góp hay số người đồng ý với ý của người khác — qua màn, API hay khoá API; và mỗi người thấy ý đồng nghiệp theo một thứ tự xáo riêng, để ý đứng đầu không được bấm chỉ vì đứng đầu."
     },
     {
       "id": "OOS-1",
@@ -221,6 +221,10 @@
     {
       "id": "d-20260929T100532Z-8",
       "p": "Duyệt giao diện trên bản bấm được trong khung khu OKR, anh phản ứng lúc rảnh trên ảnh và bản mẫu — không ngồi cùng; không bày bộ phương án thứ hai vì khuôn một cột đã so với hai khuôn khác."
+    },
+    {
+      "id": "d-20260929T102113Z-9",
+      "p": "Áp bảy sửa của rà soát UX: tab luôn thấy, ô góp lên màn đầu điện thoại, lý do không cắt, gom kiểu chọn nhiều, dải pha, lối tắt tới điều thiếu, ý đồng nghiệp xáo thứ tự theo người xem — đổi lại thêm ba biến thể giao diện dùng chung (heatmap, thanh lưu có danh sách, dải bước ngang) và sửa thanh tab OKR thật."
     }
   ]
 }

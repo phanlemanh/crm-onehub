@@ -32,55 +32,55 @@
   {
     "st": "ST-gop-chua-gop",
     "kho": "mobile-375",
-    "cao": 4011,
+    "cao": 4396,
     "tranNgang": false
   },
   {
     "st": "ST-gop-da-gop",
     "kho": "mobile-375",
-    "cao": 4388,
+    "cao": 4768,
     "tranNgang": false
   },
   {
     "st": "ST-gop-het-han",
     "kho": "mobile-375",
-    "cao": 4017,
+    "cao": 4385,
     "tranNgang": false
   },
   {
     "st": "ST-viet-truoc",
     "kho": "mobile-375",
-    "cao": 3107,
+    "cao": 2895,
     "tranNgang": false
   },
   {
     "st": "ST-gom",
     "kho": "mobile-375",
-    "cao": 3192,
+    "cao": 3332,
     "tranNgang": false
   },
   {
     "st": "ST-chon-chua-du",
     "kho": "mobile-375",
-    "cao": 4803,
+    "cao": 5167,
     "tranNgang": false
   },
   {
     "st": "ST-chon-du",
     "kho": "mobile-375",
-    "cao": 4714,
+    "cao": 4920,
     "tranNgang": false
   },
   {
     "st": "ST-ket-qua",
     "kho": "mobile-375",
-    "cao": 2382,
+    "cao": 2862,
     "tranNgang": false
   },
   {
     "st": "ST-ket-qua-da-hieu",
     "kho": "mobile-375",
-    "cao": 2380,
+    "cao": 2860,
     "tranNgang": false
   },
   {
@@ -116,55 +116,55 @@
   {
     "st": "ST-gop-chua-gop",
     "kho": "desktop-1280",
-    "cao": 2665,
+    "cao": 3082,
     "tranNgang": false
   },
   {
     "st": "ST-gop-da-gop",
     "kho": "desktop-1280",
-    "cao": 2943,
+    "cao": 3354,
     "tranNgang": false
   },
   {
     "st": "ST-gop-het-han",
     "kho": "desktop-1280",
-    "cao": 2557,
+    "cao": 2956,
     "tranNgang": false
   },
   {
     "st": "ST-viet-truoc",
     "kho": "desktop-1280",
-    "cao": 2303,
+    "cao": 2361,
     "tranNgang": false
   },
   {
     "st": "ST-gom",
     "kho": "desktop-1280",
-    "cao": 2135,
+    "cao": 2312,
     "tranNgang": false
   },
   {
     "st": "ST-chon-chua-du",
     "kho": "desktop-1280",
-    "cao": 3645,
+    "cao": 3970,
     "tranNgang": false
   },
   {
     "st": "ST-chon-du",
     "kho": "desktop-1280",
-    "cao": 3555,
+    "cao": 3729,
     "tranNgang": false
   },
   {
     "st": "ST-ket-qua",
     "kho": "desktop-1280",
-    "cao": 1782,
+    "cao": 2048,
     "tranNgang": false
   },
   {
     "st": "ST-ket-qua-da-hieu",
     "kho": "desktop-1280",
-    "cao": 1784,
+    "cao": 2050,
     "tranNgang": false
   }
 ]

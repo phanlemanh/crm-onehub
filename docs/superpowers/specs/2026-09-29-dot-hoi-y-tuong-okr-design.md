@@ -163,6 +163,12 @@ Thước «đổi hoặc thêm» của Cổng Đáng là `doi + them`.
   Việt Nam từ ngày mở tới ngày hạn, giá trị là phần trăm thành viên còn hiệu lực của
   đơn vị (theo phòng ban chính; trừ người chọn) đã góp ít nhất một ý tới hết ngày đó.
   `hoiYDoPhu` chạy số truy vấn cố định dù bao nhiêu đơn vị.
+- **Thứ tự ý của người khác xáo cố định theo người xem.** `hoiY` trả `y[]` của người
+  khác theo một hoán vị suy từ băm `(hoiYId, userId người xem)` — cùng người gọi lại thì
+  cùng thứ tự, hai người khác nhau thì khác thứ tự, không phụ thuộc thứ tự tạo hay số
+  đồng ý. Để ý đứng đầu không được bấm «Tôi cũng nghĩ vậy» chỉ vì đứng đầu (rà soát UX
+  2026-09-29, phát hiện 7). Màn hiện 10 ý đầu rồi «Hiện thêm N ý»; `y[]` trả đủ, cắt ở màn.
+  Quản trị và người chọn ở màn gom xem theo thứ tự tạo.
 - Ghi: `moHoiY`, `suaHoiY`, `gopY`, `suaY`, `goY`, `dongY({ yId, bat })`, `niemPhong({
   cau[] } | { boQua: true })`, `taoChuDe`, `suaChuDe`, `goChuDe`, `ganY({ yIds[],
   chuDeId } | { yIds[], yLa: true })`, `ketLuanChuDe`, `congBo`, `hieuViSao`.
@@ -271,14 +277,14 @@ sử ngày rời, gỡ thành viên là xoá hàng `member`. Người chọn kh�
 | ST-hoiy-trong-quan-tri | Tab Hỏi ý | Empty «Chưa hỏi ý cho kỳ này» + «Mở hỏi ý» | mở hỏi ý |
 | ST-hoiy-trong-thanh-vien | Tab Hỏi ý | Empty «Chưa có lần hỏi ý nào cho kỳ này» | chờ |
 | ST-mo-sheet | Sheet Mở hỏi ý | Chu kỳ, câu hỏi mặc định, lời mở, 1–5 dòng con số, hạn, người chọn; «Mở» tắt khi chưa hợp lệ | mở / huỷ |
-| ST-gop-chua-gop | Tab đang mở | Lời mở, thẻ con số, câu hỏi, ô soạn, đếm ngược hạn, heatmap, ý người khác không tên | gửi ý |
+| ST-gop-chua-gop | Tab đang mở | Dải pha, câu hỏi, lời mở gập, thẻ con số, ô soạn trong màn đầu, 10 ý người khác không tên xáo theo người xem + «Hiện thêm», heatmap | gửi ý |
 | ST-gop-da-gop | Tab đang mở | Khối «Ý của bạn» (sửa, gỡ), ô soạn còn khi < 3 ý, nút «Tôi cũng nghĩ vậy» đã bật trên ý đã chọn | góp thêm / đóng |
 | ST-gop-het-han | Tab đang gom (thành viên) | «Đã hết hạn góp — đang chờ công bố», ý của bạn chỉ đọc | chờ |
 | ST-viet-truoc | Tab đang mở (người chọn) | Khối «Bản viết trước» 3–5 ô; danh sách ý khoá «Niêm phong trước khi đọc ý» | niêm phong / khai không viết trước |
-| ST-gom | Tab đang gom (quản trị) | Cột «Ý chưa gom» (tên người, số đồng ý), thẻ chủ đề, menu «Đưa vào chủ đề…», «Ý lạ» | gom |
-| ST-chon-chua-du | Tab đang gom (người chọn) | Mỗi thẻ chủ đề: bằng chứng, kết luận, lý do, câu mục tiêu; bản viết trước bên cạnh; thanh công bố liệt điều thiếu, «Công bố» tắt | kết luận |
+| ST-gom | Tab đang gom (quản trị) | Dải pha, «Ý chưa gom» (tên người, số đồng ý, ô chọn, menu «…»), thanh chọn nhiều khi đã chọn, thẻ chủ đề | gom |
+| ST-chon-chua-du | Tab đang gom (người chọn) | Dòng đếm chủ đề đã kết luận; mỗi thẻ chủ đề: bằng chứng, kết luận, lý do, câu mục tiêu, nối câu; bản viết trước dính bên cạnh; thanh công bố liệt điều thiếu thành liên kết, «Công bố» tắt | kết luận |
 | ST-chon-du | Tab đang gom (người chọn) | Thanh công bố «Sẵn sàng — 4 mục tiêu nháp sẽ được tạo», «Công bố» bật | công bố |
-| ST-ket-qua | Tab đã công bố | Khối «Ý của bạn» với kết luận, lý do, «Tôi hiểu vì sao»; bản viết trước giữ nguyên · đổi · thêm · bỏ; chủ đề đã chọn trỏ mục tiêu nháp; kho ý | bấm hiểu / mở mục tiêu |
+| ST-ket-qua | Tab đã công bố | Dải pha ở «Đã công bố»; khối «Ý của bạn» với kết luận, lý do đủ không cắt, «Tôi hiểu vì sao»; bản viết trước giữ nguyên · đổi · thêm · bỏ; chủ đề đã chọn trỏ mục tiêu nháp; kho ý | bấm hiểu / mở mục tiêu |
 | ST-ket-qua-da-hieu | Tab đã công bố | Như trên, nút thành dòng «Bạn đã xác nhận hiểu» | đóng |
 <!-- UX-STATE-TABLE>>> -->
 
@@ -289,8 +295,19 @@ sử ngày rời, gỡ thành viên là xoá hàng `member`. Người chọn kh�
 - Hạn in theo giờ Việt Nam kèm «còn N giờ»; hạn tối thiểu 24 giờ, tối đa 7 ngày.
 - Niêm phong, khai không viết trước, công bố, gỡ ý, gỡ chủ đề: `ConfirmDialog`; niêm
   phong nói rõ «không sửa được sau khi niêm phong».
-- Gom không kéo-thả: menu «Đưa vào chủ đề…» trên từng ý, chọn nhiều ý bằng ô đánh dấu
-  rồi gắn một lần.
+- Gom không kéo-thả, theo bố cục `wishlist-1` của ReUI: mỗi ý có ô chọn và menu «…»
+  (các chủ đề, «Ý lạ», «Chủ đề mới…»); thanh «N ý đã chọn · Đưa vào chủ đề… · Bỏ chọn»
+  thay hàng tiêu đề danh sách, chỉ hiện khi đã chọn ít nhất một ý.
+- Dải pha dưới tiêu đề ở mọi trạng thái có lần hỏi ý: `StepList` tĩnh ba bước Đang mở ·
+  Đang gom · Đã công bố, kèm hạn, số giờ còn lại và tên người chọn.
+- Trạng thái góp ở 390: câu hỏi → lời mở gập ba dòng kèm «Đọc thêm» (`Collapsible`) →
+  thẻ con số lưới hai cột → ô soạn; ô soạn nằm trong màn hình đầu (390 × 812).
+- Màn kết luận: dòng đếm «N/M chủ đề đã kết luận» ở đầu; thanh công bố liệt từng điều
+  thiếu thành liên kết nhảy tới đúng thẻ chủ đề; bản viết trước dính khi cuộn ở ≥ lg.
+- Lý do của người chọn không bao giờ bị cắt (khối «Ý của bạn», kho ý); câu trích theo
+  bố cục `review-3` của ReUI, dựng bằng `Item`.
+- Thanh tab khu OKR (năm tab từ lượt này) cuộn ngang ở khổ hẹp và tự cuộn tab đang
+  đứng vào khung nhìn — sửa ở `thanh-tab.tsx` thật, không chỉ bản mẫu.
 - Sheet «Mở hỏi ý» mở trên URL; «Huỷ» bên trái bọc `SheetClose`.
 - Chữ người nhập (ý, vì sao, đo bằng gì, câu viết trước, tên chủ đề, lý do, lời mở,
   con số) mang `translate="no"`.
@@ -307,13 +324,23 @@ sử ngày rời, gỡ thành viên là xoá hàng `member`. Người chọn kh�
 | `ToggleGroup` | dùng | kết luận bốn giá trị |
 | `DropdownMenu`, `Checkbox` | ghép | «Đưa vào chủ đề…», chọn nhiều ý |
 | `Heatmap` | mở rộng | thêm prop chú giải để không in câu về KR — biến thể trong `packages/ui` |
+| `SaveBar` | mở rộng | biến thể nhận danh sách điều thiếu, mỗi dòng là liên kết tới thẻ, vai `status` thay `alert` — `packages/ui` |
+| `StepList` | mở rộng | dải pha: chế độ tĩnh đánh dấu bước hiện tại, kiểu xếp ngang (tham chiếu `c-timeline-12`) — `packages/ui` |
+| `Collapsible` | dùng | lời mở gập ba dòng |
+| `Tabs` (thanh tab OKR) | ghép | vùng cuộn ngang, cuộn tab đang đứng vào khung nhìn |
 | `Sheet` | dùng | mở hỏi ý |
 | `Empty`, `Skeleton` | dùng | ba trạng thái |
 | `ConfirmDialog` | dùng | niêm phong, công bố, gỡ |
 | `Badge` | dùng | giữ nguyên · đổi · thêm · bỏ, kết luận |
 
-Bậc dừng: 1 (`packages/ui`), một biến thể ở `Heatmap`. Đã tra ReUI bậc 3 («kanban»,
-«sortable list») cho gom — không dùng: kéo-thả khó trên 390 và cho bàn phím; menu đủ.
+Bậc dừng: 1 (`packages/ui`), ba biến thể (`Heatmap`, `SaveBar`, `StepList`) ở bậc 5. Chữ
+người nhập dài (ý, lý do, câu trích) ra đoạn văn trong `ItemContent` vì `ItemTitle` và
+`ItemDescription` cắt dòng; lời giải thích không đặt ở `CardDescription` vì nó ẩn dưới
+640px — hai chỗ này dùng cách có sẵn, không làm biến thể ở lượt này. Đã tra ReUI
+(rà soát UX 2026-09-29, `ra-soat-ux.md`): bố cục `wishlist-1` cho gom và `review-3` cho
+câu trích (block Pro — bậc 4, bản vẽ, dựng lại bằng thành phần kho); `c-timeline-12`
+không dùng vì `StepList` tĩnh đã đủ; kanban không dùng — số chủ đề không giới hạn, kéo
+thả khó trên 390 và cho bàn phím; không có mẫu thanh dính đáy liệt điều thiếu.
 
 ### 6. Khuôn IA đã chọn + căn cứ
 

@@ -1,19 +1,19 @@
 ---
 slug: dot-hoi-y-tuong-okr
-at: 2026-09-29T10:05:32Z
+at: 2026-09-29T10:30:58Z
 route: http://localhost:3370/proto/dot-hoi-y-tuong-okr
 material: real-components
 context: static-frame
 context_scenes: []
-reaction: nac-2 (goi-anh-va-vat-bam-duoc)
+reaction: nac-2 (goi-anh-va-vat-bam-duoc; vong-2 theo ra-soat-ux.md, chu kho xem truc tiep tren vat)
 options:
 divergence: skipped — khuôn một-cột-cuộn theo nếp khu OKR; danh-sách-chi-tiết và kanban đã so ở đặc tả UX mục 6 của thiết kế, không còn hướng máy không tự chắc
 ds_skill: web-design-guidelines
 states: [ST-hoiy-dang-tai, ST-hoiy-loi, ST-hoiy-trong-quan-tri, ST-hoiy-trong-thanh-vien, ST-mo-sheet, ST-gop-chua-gop, ST-gop-da-gop, ST-gop-het-han, ST-viet-truoc, ST-gom, ST-chon-chua-du, ST-chon-du, ST-ket-qua, ST-ket-qua-da-hieu]
 breakpoints: [mobile-375, desktop-1280]
 themes: [dark]
-patched: 2
-deferred: 4
+patched: 9
+deferred: 7
 ---
 # design-pass — dot-hoi-y-tuong-okr
 
@@ -72,6 +72,15 @@ theo từng lần kết luận. 28 ảnh; không trạng thái nào tràn ngang 
 - Tiêu đề «CEO viết trước, rồi chọn» dùng chữ «CEO» mà từ điển tránh trên màn: đổi
   thành «<tên người chọn> viết trước, rồi chọn».
 
+- Vòng 2 (rà soát UX, chủ kho duyệt áp cả bảy, `ra-soat-ux.md`):
+  - A: thanh tab trong khung cuộn ngang, tự cuộn tab đang đứng vào khung nhìn — tab «Hỏi ý» ở x 329–359 trong 375 ở cả 14 trạng thái.
+  - B: trạng thái góp xếp dải pha → câu hỏi → lời mở gập ba dòng («Đọc thêm») → thẻ con số lưới hai cột → ô soạn; mép trên ô soạn 781px ở 375 (trước 885px) — đạt sát, chỉ lộ khoảng 31px của ô.
+  - C: lý do của người chọn hiện đủ theo bố cục `review-3` ở «Ý của bạn đi đâu» và kho ý — 0 đoạn bị cắt.
+  - D: gom theo bố cục `wishlist-1` — ô chọn + menu «…», thanh «N ý đã chọn · Đưa vào chủ đề… · Bỏ chọn» chỉ hiện khi đã chọn; 0/5 dòng phụ bị cắt.
+  - E: dải pha `StepList` tĩnh ba bước kèm dòng hạn, số người đã góp hay lúc công bố, tên người chọn, ở mọi trạng thái có lần hỏi ý.
+  - F: dòng đếm «4/6 chủ đề đã kết luận»; thanh công bố «Chưa công bố được — còn 4 điều» liệt từng điều thành liên kết, bấm thì cuộn và đặt tiêu điểm vào đúng thẻ; bản viết trước dính khi cuộn ở ≥ lg.
+  - G: 15 ý đồng nghiệp theo một hoán vị cố định cho người xem, hiện 10 rồi «Hiện thêm 5 ý».
+
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 
 - `Heatmap` in chú giải cứng về KR («Ô càng nổi khỏi nền, càng nhiều KR tự tin cao»,
@@ -86,3 +95,12 @@ theo từng lần kết luận. 28 ảnh; không trạng thái nào tràn ngang 
   vậy ở lượt này; thành phần trích là việc chung của kho.
 - `Empty` không có biến thể có viền; bản mẫu theo cách bản mẫu OKR cũ (`className="border"`).
   Đề xuất: biến thể `outline` trong `packages/ui` khi dựng thật.
+- (vòng 2) `CardDescription` tự ẩn dưới 640px, nên mọi lời giải thích đặt ở đó biến mất
+  trên điện thoại (câu «không kèm tên», lý do danh sách ý bị khoá). Đề xuất: biến thể
+  luôn hiện; tới lúc đó dựng thật dùng `ItemDescription` hoặc đoạn văn trong nội dung.
+- (vòng 2) `ItemTitle` cắt một dòng, `ItemDescription` cắt hai dòng, không có thân không
+  cắt — chữ người nhập dài phải ra đoạn văn trong `ItemContent`. Đề xuất: biến thể không cắt.
+- (vòng 2) `StepList` chỉ xếp dọc (khoảng 110px ở 375) và chế độ tĩnh không đánh dấu bước
+  hiện tại — bản mẫu gắn tay một `Badge` «Bây giờ». Đề xuất: kiểu xếp ngang và bước hiện
+  tại cho chế độ tĩnh (tham chiếu `c-timeline-12` của ReUI).
+

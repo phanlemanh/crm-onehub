@@ -237,7 +237,101 @@ export const Y_NGUOI_KHAC: YMau[] = [
 		tacGia: NGUOI.ha,
 		dongY: 6,
 	},
+	{
+		id: "y-8",
+		noiDung:
+			"Gộp ba bảng giá đang dùng song song thành một, công khai cho đối tác",
+		viSao:
+			"Cùng một tuyến mà ba nhân viên báo ba giá, đối tác hỏi lại là mất niềm tin.",
+		doBangGi: "Số báo giá phải sửa lại sau khi gửi",
+		tacGia: NGUOI.nhi,
+		dongY: 4,
+	},
+	{
+		id: "y-9",
+		noiDung: "Đối soát công nợ với đối tác xong trong 5 ngày đầu tháng",
+		viSao:
+			"Hiện mất gần ba tuần, tiền về chậm nên tháng nào cũng phải vay ngắn hạn.",
+		doBangGi: "Số ngày từ cuối tháng tới lúc đối soát xong",
+		tacGia: NGUOI.thu,
+		dongY: 3,
+	},
+	{
+		id: "y-10",
+		noiDung:
+			"Không nhận thêm đối tác nhỏ lẻ ở miền Trung cho tới khi có kho riêng",
+		viSao:
+			"Đơn nhỏ ở miền Trung đi ghép xe nên lỗ trên từng chuyến, lại hay trễ.",
+		doBangGi: "Biên lợi nhuận của tuyến miền Trung",
+		tacGia: NGUOI.phuc,
+		dongY: 2,
+	},
+	{
+		id: "y-11",
+		noiDung:
+			"Tài xế được đánh giá lại lộ trình sau mỗi tuần, không chỉ nghe điều phối",
+		viSao: "",
+		doBangGi: "Số lộ trình được sửa theo góp ý của tài xế",
+		tacGia: NGUOI.uyen,
+		dongY: 5,
+	},
+	{
+		id: "y-12",
+		noiDung:
+			"Hợp đồng mẫu dưới 200 triệu thì không cần Pháp chế duyệt từng bản",
+		viSao:
+			"Pháp chế đang là chỗ tắc: hợp đồng nhỏ chờ cùng hàng với hợp đồng lớn.",
+		doBangGi: "Số ngày từ báo giá tới ký",
+		tacGia: NGUOI.viet,
+		dongY: 4,
+	},
+	{
+		id: "y-13",
+		noiDung:
+			"Mỗi quý tuyển đủ người trước mùa cao điểm, không tuyển gấp khi đã quá tải",
+		viSao: "Tháng 11 năm nào cũng tuyển vội, người mới vào đúng lúc bận nhất.",
+		doBangGi: "Số vị trí còn trống lúc vào mùa cao điểm",
+		tacGia: NGUOI.vy,
+		dongY: 3,
+	},
+	{
+		id: "y-14",
+		noiDung: "Đo độ lạnh trong xe theo thời gian thực và gửi cho đối tác xem",
+		viSao:
+			"Đối tác dược phẩm yêu cầu chứng minh nhiệt độ suốt tuyến mới chịu ký.",
+		doBangGi: "Số đối tác dược phẩm ký mới",
+		tacGia: NGUOI.bao,
+		dongY: 5,
+	},
+	{
+		id: "y-15",
+		noiDung: "Bỏ họp giao ban sáng thứ Hai, thay bằng cập nhật viết trong CRM",
+		viSao: "Cả phòng mất hai giờ mỗi tuần để nghe việc của người khác.",
+		doBangGi: "",
+		tacGia: NGUOI.linh,
+		dongY: 1,
+	},
 ];
+
+export const THU_TU_XAO_CHO_CAO_THANH_VAN = [
+	"y-9",
+	"y-4",
+	"y-12",
+	"y-1",
+	"y-15",
+	"y-6",
+	"y-2",
+	"y-11",
+	"y-3",
+	"y-14",
+	"y-7",
+	"y-10",
+	"y-5",
+	"y-13",
+	"y-8",
+] as const;
+
+export const SO_Y_HIEN_TRUOC = 10;
 
 export const Y_TOI_DA_DONG_Y = "y-2";
 

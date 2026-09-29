@@ -29,7 +29,7 @@ import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useState } from "react";
 import { DO_PHU_DANG_MO, HOI_Y, NHAP_VIET_TRUOC, TRAN } from "./du-lieu";
-import { CauHoi, DoPhu, LoiMo } from "./khung";
+import { CauHoi, DaiPha, DoPhu, LoiMo } from "./khung";
 
 type HopHoi = "niem-phong" | "bo-qua" | null;
 
@@ -178,11 +178,12 @@ function YBiKhoa() {
 
 export function VietTruocMan() {
 	return (
-		<div className="flex flex-col gap-6" data-hinh="viet-truoc">
-			<LoiMo />
+		<div className="flex flex-col gap-4" data-hinh="viet-truoc">
+			<DaiPha pha="dang-mo" />
 			<Card>
 				<CauHoi ghiChu="Bạn là người chọn nên không góp ý. Bạn viết trước, rồi kết luận từng chủ đề sau hạn." />
 			</Card>
+			<LoiMo />
 			<BanVietTruoc />
 			<YBiKhoa />
 			<DoPhu hang={DO_PHU_DANG_MO} />
