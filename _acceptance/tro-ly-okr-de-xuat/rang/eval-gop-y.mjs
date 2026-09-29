@@ -19,7 +19,7 @@ import {
 import { TRO_LY_OKR_TRAN } from "../../../packages/db/src/okr-tro-ly-danh-muc.ts";
 import { kiemOkr } from "../../../packages/validation/src/okr-kiem.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
-import { ghiHieuChinh } from "./hieu-chinh.mjs";
+import { ghiHieuChinh, HIEU_CHINH as HIEU_CHINH_BANG } from "./hieu-chinh.mjs";
 import {
 	AGENT,
 	cauThieuKhoa,
@@ -84,6 +84,8 @@ const E22 = {
 	eval: ["okr/gop-y", "okr/ng"],
 	evalCuaBo: { "viet-lai": "okr/gop-y", ng: "okr/ng" },
 	thamSoCa: "--ca",
+	thamSoChamLai: "--cham-lai",
+	lanLapToiDa: 3,
 	tuKiem: [
 		{ van: "Nâng chất lượng dịch vụ", cum: "lương", khop: false },
 		{ van: "Nâng chất lượng dịch vụ", cum: "chat", khop: false },
@@ -155,6 +157,7 @@ const SO_MOI_LOT = join(
 	"_acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs",
 );
 const EVE = join(AGENT, "node_modules/.bin/eve");
+const HIEU_CHINH_SO_CAP = HIEU_CHINH_BANG.soCap;
 
 const chiDungKho = process.argv.includes("--kho");
 const chiCa = (() => {
@@ -168,6 +171,18 @@ const chiCa = (() => {
 	return id;
 })();
 const THU_MUC_LUOT = chiCa ? join(RA, `e22-ca-${chiCa}`) : THU_MUC;
+const tepChamLai = (() => {
+	const i = process.argv.indexOf(E22.thamSoChamLai);
+	if (i < 0) return null;
+	const tep = process.argv[i + 1] ?? "";
+	if (!existsSync(tep)) {
+		console.log(
+			`KHONG DO DUOC: ${E22.thamSoChamLai} can mot tep tong-ket.jsonl co that, nhan «${tep}»`,
+		);
+		process.exit(2);
+	}
+	return tep;
+})();
 const tranUsd = (() => {
 	const i = process.argv.indexOf("--tran-usd");
 	if (i < 0) return TRO_LY_OKR.danhGia.tranUsdMacDinh;
@@ -252,17 +267,26 @@ async function demBoMau(url) {
 }
 
 function chayEve(url) {
-	rmSync(TONG_KET, { force: true });
 	rmSync(CA_THEM, { recursive: true, force: true });
 	mkdirSync(CA_THEM, { recursive: true });
 	writeFileSync(
 		join(CA_THEM, `${E22.caDoiChung.id}.json`),
 		`${JSON.stringify(E22.caDoiChung, null, "\t")}\n`,
 	);
-	const batDau = Date.now();
 	const lenh = chiCa
 		? ["eval", E22.evalCuaBo[caDon().bo], "--tag", chiCa, "--verbose"]
 		: ["eval", ...E22.eval, "--verbose"];
+	return goiEve(url, {
+		lenh,
+		tongKet: TONG_KET,
+		them: { [E22.env.thuMucThem]: CA_THEM },
+		log: "eve.log",
+	});
+}
+
+function goiEve(url, { lenh, tongKet, them, log }) {
+	rmSync(tongKet, { force: true });
+	const batDau = Date.now();
 	const r = spawnSync(EVE, lenh, {
 		cwd: AGENT,
 		encoding: "utf8",
@@ -271,22 +295,22 @@ function chayEve(url) {
 			PATH: duongPath(),
 			DATABASE_URL: url,
 			AGENT_BRIDGE_SECRET: randomBytes(24).toString("hex"),
-			[E22.env.tongKet]: TONG_KET,
+			[E22.env.tongKet]: tongKet,
 			[E22.env.tranUsd]: String(tranUsd),
-			[E22.env.thuMucThem]: CA_THEM,
+			...them,
 			ZALO_BOT_TOKEN: "",
 			CRM_TELEMETRY_DISABLED: "1",
 		},
 		timeout: E22.timeoutMs,
 	});
-	writeFileSync(join(THU_MUC_LUOT, "eve.log"), `${r.stdout}\n${r.stderr}`);
+	writeFileSync(join(THU_MUC_LUOT, log), `${r.stdout}\n${r.stderr}`);
 	return { ma: r.status, batDau, lenh: lenh.join(" ") };
 }
 
-function docTongKet() {
-	if (!existsSync(TONG_KET)) return new Map();
+function docTongKet(tep = TONG_KET) {
+	if (!existsSync(tep)) return new Map();
 	return new Map(
-		readFileSync(TONG_KET, "utf8")
+		readFileSync(tep, "utf8")
 			.split("\n")
 			.filter(Boolean)
 			.map((d, i) => {
@@ -471,15 +495,7 @@ async function tongKetMotCa(url, eve) {
 	return loi.length === 0 ? 0 : 1;
 }
 
-async function tongKet(url, eve) {
-	if (chiCa) return tongKetMotCa(url, eve);
-	const ca = docBoCaGopY(THU_MUC_CA_MAU);
-	const ghi = docTongKet();
-	const diem = docJudge(eve.batDau);
-	const ten = await tenThanhVien(url);
-	const mucTieu = [...ghi.values()].map((g) => g.objectiveId);
-	const lotSoMoi = chaySoMoiLot(url, mucTieu);
-
+function chamBoCa(ca, ghi, lotSoMoi, ten) {
 	const ketQua = ca.map((c) => ({
 		ca: c,
 		loi: kiemCa(c, ghi.get(c.id), lotSoMoi, ten),
@@ -489,40 +505,122 @@ async function tongKet(url, eve) {
 			`${loi.length === 0 ? `DUNG ${c.id}` : `SAI ${c.id}: ${loi.join(" · ")}`}${ghiPhu(c)}`,
 		);
 	}
-
-	const doiChung = kiemCa(
-		E22.caDoiChung,
-		ghi.get(E22.caDoiChung.id),
-		lotSoMoi,
-		ten,
+	const banGhiDoiChung = ghi.get(E22.caDoiChung.id);
+	const choDoiChung = (banGhiDoiChung?.dong ?? []).filter(
+		(d) => d.trangThai === "cho",
 	);
-	const batDuoc = doiChung.some((l) => l.startsWith("khongGopY"));
+	const batDuoc = choDoiChung.length > 0;
 	console.log(
-		`DOI CHUNG ${E22.caDoiChung.id}: ${doiChung.length === 0 ? "khong loi nao" : doiChung.join(" · ")}`,
+		`DOI CHUNG ${E22.caDoiChung.id}: ${batDuoc ? `bat duoc — ${choDoiChung.length} dong cho (${choDoiChung.map((d) => `${d.loai}${d.maVanDe ? `:${d.maVanDe}` : ""}`).join(", ")})` : "khong ra dong cho nao"}`,
 	);
+	return {
+		ketQua,
+		dat: ketQua.filter((k) => k.loi.length === 0).length,
+		coDoiChung: Boolean(banGhiDoiChung),
+		batDuoc,
+	};
+}
 
-	const boViet = new Set(
-		ca.filter((c) => c.bo === E22.boViet).map((c) => c.id),
-	);
-	const cap = [...ghi.values()]
+function capVietLai(ghi, boViet, diem, nhanLuot) {
+	return [...ghi.values()]
 		.filter((g) => boViet.has(g.ca))
 		.sort((a, b) => a.ca.localeCompare(b.ca))
 		.flatMap((g) =>
 			g.dong
 				.filter((d) => d.loai === "viet-lai" && d.trangThai === "cho")
 				.map((d) => ({
-					ca: g.ca,
+					ca: nhanLuot ? `${g.ca} (${nhanLuot})` : g.ca,
 					truong: d.truong,
 					truoc: d.truoc,
 					sau: d.sau,
 					diem: diem.get(`${g.ca} ${d.id}`) ?? null,
 				})),
 		);
-	const coDiem = cap.map((c) => c.diem).filter((d) => d !== null);
+}
+
+async function chiDaTieu(url) {
+	const [chi] = await truyVan(
+		url,
+		`SELECT coalesce(sum("costUsd"), 0)::float8 AS usd FROM "aiChiPhi"`,
+	);
+	return Number(chi.usd);
+}
+
+async function lapVietLai(url, boViet, cap) {
+	const them = [];
+	for (let lan = 1; lan <= E22.lanLapToiDa; lan += 1) {
+		if (cap.length + them.length >= HIEU_CHINH_SO_CAP) break;
+		const chi = await chiDaTieu(url);
+		if (chi >= tranUsd) {
+			console.log(
+				`lap viet-lai ${lan}: da cham tran ${tranUsd} USD (${chi.toFixed(6)}), dung`,
+			);
+			break;
+		}
+		const tep = join(THU_MUC_LUOT, `tong-ket-lap-${lan}.jsonl`);
+		const eve = goiEve(url, {
+			lenh: ["eval", E22.evalCuaBo[E22.boViet], "--verbose"],
+			tongKet: tep,
+			them: {},
+			log: `eve-lap-${lan}.log`,
+		});
+		const moi = capVietLai(
+			docTongKet(tep),
+			boViet,
+			docJudge(eve.batDau),
+			`lap ${lan}`,
+		);
+		them.push(...moi);
+		console.log(
+			`lap viet-lai ${lan}: eve thoat ${eve.ma}, them ${moi.length} cap (tong ${cap.length + them.length}/${HIEU_CHINH_SO_CAP})`,
+		);
+	}
+	return them;
+}
+
+async function chamLai(tep) {
+	const ca = docBoCaGopY(THU_MUC_CA_MAU);
+	const ghi = docTongKet(tep);
+	console.log(
+		`${E22.thamSoChamLai} ${tep}: ${ghi.size} ban ghi — khong goi model, khong dung kho; noi-ve-nguoi va so-moi-lot can kho nen bo qua khi cham lai`,
+	);
+	const kq = chamBoCa(ca, ghi, new Set(), []);
+	console.log(`ma: ${kq.dat}/${ca.length}`);
+	if (!kq.coDoiChung) return khongDo(E22.thongDiep.doiChungKhongGhi);
+	if (!kq.batDuoc) {
+		console.log(E22.thongDiep.doiChung);
+		return 3;
+	}
+	return kq.dat === ca.length ? 0 : 1;
+}
+
+async function tongKet(url, eve) {
+	if (chiCa) return tongKetMotCa(url, eve);
+	const ca = docBoCaGopY(THU_MUC_CA_MAU);
+	const ghi = docTongKet();
+	const diem = docJudge(eve.batDau);
+	const ten = await tenThanhVien(url);
+	const mucTieu = [...ghi.values()].map((g) => g.objectiveId);
+	const lotSoMoi = chaySoMoiLot(url, mucTieu);
+
+	const { dat, coDoiChung, batDuoc } = chamBoCa(ca, ghi, lotSoMoi, ten);
+
+	const boViet = new Set(
+		ca.filter((c) => c.bo === E22.boViet).map((c) => c.id),
+	);
+	const capChinh = capVietLai(ghi, boViet, diem, null);
+	const cap = [...capChinh, ...(await lapVietLai(url, boViet, capChinh))];
+	const coDiem = cap
+		.slice(0, HIEU_CHINH_SO_CAP)
+		.map((c) => c.diem)
+		.filter((d) => d !== null);
 	const judge =
 		coDiem.length === 0
 			? null
 			: coDiem.reduce((s, d) => s + d, 0) / coDiem.length;
+	console.log(
+		`cap: ${Math.min(cap.length, HIEU_CHINH_SO_CAP)}/${HIEU_CHINH_SO_CAP} · judge trung binh ${judge === null ? "—" : judge.toFixed(2)} (${coDiem.length} cap co diem)`,
+	);
 	const hc = ghiHieuChinh({
 		tep: HIEU_CHINH,
 		cap,
@@ -532,13 +630,9 @@ async function tongKet(url, eve) {
 		runId: RUN_ID,
 	});
 
-	const [chi] = await truyVan(
-		url,
-		`SELECT coalesce(sum("costUsd"), 0)::float8 AS usd FROM "aiChiPhi"`,
-	);
-	const dat = ketQua.filter((k) => k.loi.length === 0).length;
+	const chi = await chiDaTieu(url);
 	console.log(
-		`chi: ${Number(chi.usd).toFixed(6)} USD / tran ${tranUsd} USD${Number(chi.usd) >= tranUsd ? " — da cham tran, ca con lai bi bo qua" : ""}`,
+		`chi: ${chi.toFixed(6)} USD / tran ${tranUsd} USD${chi >= tranUsd ? " — da cham tran, ca con lai bi bo qua" : ""}`,
 	);
 	console.log(
 		hc.giu
@@ -553,8 +647,7 @@ async function tongKet(url, eve) {
 		return khongDo(
 			`eve eval ${eve.ma === null ? "sap hay het gio" : "bao loi cau hinh (ma 2)"} — xem .acceptance-runs/tro-ly-okr-de-xuat/e22/eve.log`,
 		);
-	if (!ghi.has(E22.caDoiChung.id))
-		return khongDo(E22.thongDiep.doiChungKhongGhi);
+	if (!coDoiChung) return khongDo(E22.thongDiep.doiChungKhongGhi);
 	if (!batDuoc) {
 		console.log(E22.thongDiep.doiChung);
 		return 3;
@@ -586,6 +679,7 @@ async function main() {
 	console.log(
 		`tu kiem thuoc so: ${E22.tuKiem.length + E22.tuKiemTen.length} ca dung (nguyen tu, giu dau)`,
 	);
+	if (tepChamLai) return chamLai(tepChamLai);
 	if (chiCa && !caDon())
 		return khongDo(`${E22.thamSoCa} ${chiCa}: khong co ca nay trong bo mau`);
 	if (!chiDungKho && !coKhoaMoHinh()) return khongDo(cauThieuKhoa());
