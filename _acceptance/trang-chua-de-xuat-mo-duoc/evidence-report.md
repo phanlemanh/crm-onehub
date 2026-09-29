@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 95aca9cb78f97e8ea3e502c88e22e2c7d1c7aebe
+verified_commit: 7f2f7fdb52a33ae83b74c94ee52d53a8cbececc3
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -191,3 +191,7 @@ E9j — đề xuất PASS. human_override để trống cho người ở Cổng 
 
 Round 1: E8 không chạy được (tác tử design-gate bị bỏ qua hoặc chết) nên BLOCKED; không eval nào đỏ; cần chạy lại E8, không cần sửa mã.
 Round 2: chạy lại toàn bộ; E1 đến E8 và bốn lệnh suite đều xanh, E8 chạy được, hội đồng đề xuất PASS cho E9j chờ người chốt.
+
+### Re-pin lần 1 — 2026-09-29, do hoá cũ do gộp onehub (#207) sau chữ ký
+run_id: repin-20260929T110436Z-70395
+sha: 7f2f7fdb52a33ae83b74c94ee52d53a8cbececc3 · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E6u, E7u, E9j (E9j không khai paths) · AC không có chốt máy: AC-9
