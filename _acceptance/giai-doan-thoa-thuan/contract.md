@@ -5,7 +5,7 @@ slug: giai-doan-thoa-thuan
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-29-giai-doan-thoa-thuan-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-29
@@ -74,3 +74,20 @@ Chân sản phẩm: Product Context dựng từ repo — thoả thuận hợp t�
 - Mốc `migration` `20261006010000`; kiểm lại `origin/onehub` ngay trước merge.
 - Tỷ lệ chốt ở Tổng quan có thể giảm sau khi lên vì «Unqualified» vào mẫu số — chủ kho đã chấp nhận ở brainstorm.
 - Test của các hồ sơ đã ký import `DealStage` phải sửa sang `GIAI_DOAN_GOC`; các hồ sơ đó ghim lại ở S5.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-29 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1:
+
+- Ngoài-3: Giới hạn độ dài tên giai đoạn và danh sách ba loại được viết lại ở vài nơi. Hiện đang khớp, nhưng nếu đổi giới hạn ở một nơi mà quên nơi kia thì ô nhập và máy chủ sẽ báo khác nhau.
+- Ngoài-4: Nếu vì lý do nào đó dòng lịch sử thiếu thông tin nhãn, màn hình sẽ hiện mã giai đoạn thay vì tên. Trong dữ liệu hiện tại điều này không xảy ra.
+- Ngoài-5: Một dòng lịch sử đổi giai đoạn có dữ liệu hỏng sẽ lặng lẽ bị coi như không phải lần đổi giai đoạn, thay vì báo lỗi rõ ràng.
+- Ngoài-8: Khi kéo thả đổi thứ tự giai đoạn mà bị lỗi, thẻ vẫn hiện thứ tự vừa kéo dù thứ tự thật không đổi, cho tới khi người dùng tải lại trang.
+- Ngoài-9: Nếu có người vừa thêm thoả thuận vào một giai đoạn trong lúc quản trị viên đang mở trang, nút Xoá vẫn coi giai đoạn là trống và báo lỗi mãi cho tới khi tải lại trang.
+- Ngoài-10: Hiếm khi, nếu quản trị viên xoá giai đoạn đúng lúc có người kéo một thoả thuận của giai đoạn đó sang bước khác, một trong hai thao tác có thể thất bại với lỗi khó hiểu. Dữ liệu không bị hỏng, thử lại là được.
+- Ngoài-11: Bài kiểm tra chưa chứng minh chặt rằng lời báo khi đặt tên giai đoạn rỗng hoặc quá dài là lời báo đúng lý do. Người dùng vẫn bị chặn, nhưng bài kiểm có thể xanh dù lời báo sai.
+- Ngoài-12: Bài kiểm tra việc xoá giai đoạn sang đích sai chưa xác nhận lời báo có nêu đúng lý do. Dữ liệu vẫn được xác nhận là không đổi.
+- Ngoài-13: Bài kiểm tra việc thêm giai đoạn mới chỉ xác nhận giai đoạn có mặt trên bảng cột, chưa xác nhận nó đứng đúng vị trí. Nếu cột nằm sai chỗ thì bài kiểm vẫn xanh.
+- Ngoài-14: Bài kiểm tra số liệu thoả thuận theo giai đoạn gửi về hãng chỉ xác nhận có số lớn hơn không, chưa so với số thoả thuận thật. Một lỗi đếm sai vẫn có thể lọt qua bài kiểm.
+- Ngoài-15: Bài kiểm tra các nút bị khoá khi đạt trần 20 giai đoạn có thể vẫn xanh nếu các nút Thêm biến mất hẳn. Trang thật chưa được chứng minh sai.
+- Ngoài-16: Bài kiểm tra việc đổi tên giai đoạn chưa xác nhận tên mới hiện trên bảng cột của màn Thoả thuận, chỉ xác nhận ở danh sách giai đoạn và lịch sử.
+- Ngoài-17: Bài kiểm tra chưa xác nhận đầy đủ hai điều nhỏ: ngày đổi giai đoạn của thoả thuận khi xoá giai đoạn, và danh sách không đổi sau một yêu cầu bị từ chối.
+- Ngoài-18: Bài kiểm tra chưa xác nhận câu chữ lời từ chối mà thành viên thường thật sự nhìn thấy. Việc họ bị từ chối vẫn được kiểm đúng.
