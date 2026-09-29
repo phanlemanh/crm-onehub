@@ -6,11 +6,13 @@ import { TaiLieuRouter } from "./tai-lieu.router";
 import { TaiLieuService } from "./tai-lieu.service";
 import { TaiLieuNguonRouter } from "./tai-lieu-nguon.router";
 import { TaiLieuNguonService } from "./tai-lieu-nguon.service";
+import { TaiLieuTimService } from "./tai-lieu-tim.service";
 
 @Module({
 	imports: [TrpcModule, AgentModule],
 	providers: [
 		TaiLieuService,
+		TaiLieuTimService,
 		TaiLieuRouter,
 		khoNguonProvider,
 		TaiLieuNguonService,

@@ -22,6 +22,11 @@ import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { TAI_LIEU } from "@crm/validation/tai-lieu";
 import { type Editor, useEditorState } from "@tiptap/react";
 import { type KeyboardEvent, useRef, useState } from "react";
+import {
+	type NhanLienKetTrang,
+	NutLienKetTrang,
+	type TimTrang,
+} from "./trinh-soan-lien-ket-trang";
 
 export const NUT_TRINH_SOAN = [
 	"tieuDe2",
@@ -41,6 +46,8 @@ export type NutTrinhSoan = (typeof NUT_TRINH_SOAN)[number];
 export type NhanNutTrinhSoan = Record<NutTrinhSoan, string>;
 
 type NutLenh = Exclude<NutTrinhSoan, "lienKet">;
+
+type NutThanh = NutTrinhSoan | "lienKetTrang";
 
 type TrangThaiNut = Record<NutTrinhSoan, { bat: boolean; khoa: boolean }> & {
 	href: string;
@@ -131,26 +138,36 @@ export function ThanhCongCuTrinhSoan({
 	editor,
 	nhan,
 	nhanNut,
+	timTrang,
+	nhanLienKetTrang,
 }: {
 	editor: Editor | null;
 	nhan: string;
 	nhanNut: NhanNutTrinhSoan;
+	timTrang?: TimTrang;
+	nhanLienKetTrang?: NhanLienKetTrang;
 }) {
 	const trang =
 		useEditorState({
 			editor,
 			selector: ({ editor: e }) => (e ? docTrangThai(e) : TRONG),
 		}) ?? TRONG;
-	const [dangChon, setDangChon] = useState<NutTrinhSoan>("tieuDe2");
+	const [dangChon, setDangChon] = useState<NutThanh>("tieuDe2");
 	const [moLienKet, setMoLienKet] = useState(false);
 	const khung = useRef<HTMLDivElement>(null);
 
-	const mo = NUT_TRINH_SOAN.filter((k) => !trang[k].khoa);
+	const coLienKetTrang = timTrang !== undefined && nhanLienKetTrang !== undefined;
+	const day: readonly NutThanh[] = coLienKetTrang
+		? [...NUT_TRINH_SOAN, "lienKetTrang"]
+		: NUT_TRINH_SOAN;
+	const khoaCua = (k: NutThanh) =>
+		k === "lienKetTrang" ? editor === null : trang[k].khoa;
+	const mo = day.filter((k) => !khoaCua(k));
 	const hienHanh = mo.includes(dangChon) ? dangChon : mo[0];
 
-	const nutCua = (el: EventTarget): NutTrinhSoan | undefined => {
+	const nutCua = (el: EventTarget): NutThanh | undefined => {
 		if (!(el instanceof HTMLElement)) return undefined;
-		return NUT_TRINH_SOAN.find((k) => k === el.dataset.nut);
+		return day.find((k) => k === el.dataset.nut);
 	};
 
 	const diChuyen = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -170,7 +187,7 @@ export function ThanhCongCuTrinhSoan({
 		khung.current?.querySelector<HTMLElement>(`[data-nut="${toi}"]`)?.focus();
 	};
 
-	const chiSo = (k: NutTrinhSoan) => (k === hienHanh ? 0 : -1);
+	const chiSo = (k: NutThanh) => (k === hienHanh ? 0 : -1);
 
 	const nutTrang = (k: NutTrinhSoan) => ({
 		"aria-label": nhanNut[k],
@@ -290,6 +307,15 @@ export function ThanhCongCuTrinhSoan({
 					/>
 				</PopoverContent>
 			</Popover>
+			{coLienKetTrang ? (
+				<NutLienKetTrang
+					editor={editor}
+					khoa={khoaCua("lienKetTrang")}
+					nhan={nhanLienKetTrang}
+					tabIndex={chiSo("lienKetTrang")}
+					timTrang={timTrang}
+				/>
+			) : null}
 			<Separator orientation="vertical" />
 			<Button size="icon-sm" variant="ghost" {...nutTrang("hoanTac")}>
 				<Icon icon={Undo} />

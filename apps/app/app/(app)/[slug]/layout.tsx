@@ -102,11 +102,9 @@ async function TimNhanhTheoVai() {
 	await connection();
 	const workspace = await loadWorkspace();
 
-	if (chiOkr(workspace?.viewerRole)) return null;
-
 	return (
 		<HydrateClient>
-			<QuickSwitcher />
+			<QuickSwitcher coDoiTac={!chiOkr(workspace?.viewerRole)} />
 		</HydrateClient>
 	);
 }

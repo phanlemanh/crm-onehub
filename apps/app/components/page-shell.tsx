@@ -63,7 +63,7 @@ function PageShellHeader({
 			{...props}
 		>
 			{breadcrumb}
-			<div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2">
+			<div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
 				{children}
 			</div>
 		</header>
@@ -88,7 +88,7 @@ function PageShellTitle({ className, ...props }: React.ComponentProps<"h1">) {
 		<h1
 			data-slot="page-shell-title"
 			className={cn(
-				"col-start-1 row-start-1 min-w-0 self-center text-balance font-medium text-2xl tracking-tight md:text-3xl",
+				"min-w-0 flex-auto text-balance font-medium text-2xl tracking-tight md:text-3xl",
 				className,
 			)}
 			{...props}
@@ -104,7 +104,7 @@ function PageShellDescription({
 		<p
 			data-slot="page-shell-description"
 			className={cn(
-				"col-span-full row-start-2 text-balance text-muted-foreground text-sm",
+				"order-last basis-full text-balance text-muted-foreground text-sm",
 				className,
 			)}
 			{...props}
@@ -119,10 +119,7 @@ function PageShellActions({
 	return (
 		<div
 			data-slot="page-shell-actions"
-			className={cn(
-				"col-start-2 row-start-1 flex flex-wrap items-center gap-2 self-center justify-self-end",
-				className,
-			)}
+			className={cn("flex flex-wrap items-center gap-2", className)}
 			{...props}
 		/>
 	);

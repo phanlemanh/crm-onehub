@@ -51,6 +51,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { buocQuaHan, DongBuoc, ngayCuaBuoc } from "./dong-buoc";
 import { DongKeHoach } from "./dong-ke-hoach";
+import { DongTaiLieu } from "./dong-tai-lieu";
 import { KhoiKrCuaToi } from "./okr/khoi-kr-cua-toi";
 import { ViecOkrCuaToi } from "./okr/viec-cua-toi";
 import { overviewParsers } from "./overview-search-params";
@@ -154,8 +155,14 @@ export function DashboardSummary() {
 		);
 	}
 
-	const { biggestOpen, overdueTasks, recentActivity, mySteps, keHoachCanDeY } =
-		summary;
+	const {
+		biggestOpen,
+		overdueTasks,
+		recentActivity,
+		mySteps,
+		keHoachCanDeY,
+		taiLieuChoDuyet,
+	} = summary;
 	const now = new Date();
 	const theoHan = [
 		...overdueTasks.map((viec) => ({
@@ -180,7 +187,17 @@ export function DashboardSummary() {
 		id: `${keHoach.loai}:${keHoach.planId}`,
 		keHoach,
 	}));
-	const dong = [...theoHan, ...keHoach];
+	const taiLieu =
+		taiLieuChoDuyet > 0
+			? [
+					{
+						loai: "taiLieu" as const,
+						id: "tai-lieu-cho-duyet",
+						so: taiLieuChoDuyet,
+					},
+				]
+			: [];
+	const dong = [...taiLieu, ...theoHan, ...keHoach];
 	const soQuaHan =
 		overdueTasks.length + mySteps.filter((b) => buocQuaHan(b, now)).length;
 	const soIm = keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im").length;
@@ -276,7 +293,9 @@ export function DashboardSummary() {
 						) : (
 							<SimpleTable variant="panel" surface="page" columns={COT.tasks}>
 								{dong.map((d) =>
-									d.loai === "keHoach" ? (
+									d.loai === "taiLieu" ? (
+										<DongTaiLieu key={d.id} so={d.so} />
+									) : d.loai === "keHoach" ? (
 										<DongKeHoach key={d.id} dong={d.keHoach} />
 									) : d.loai === "buoc" ? (
 										<DongBuoc

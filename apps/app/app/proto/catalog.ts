@@ -63,6 +63,14 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tim-va-dieu-huong-kho",
+		ten: "Kho tài liệu lượt 3 — tìm ⌘K, sức khoẻ kho",
+		states: [
+			{ id: "ST-tim-nhanh", nhan: "Tìm nhanh ⌘K, có dấu hay không" },
+			{ id: "ST-suc-khoe", nhan: "Sức khoẻ kho: việc của chủ trang" },
+		],
+	},
+	{
 		slug: "doi-ten-onehub-center",
 		ten: "OneHub Center — cột trái đăng nhập hướng A",
 		states: [

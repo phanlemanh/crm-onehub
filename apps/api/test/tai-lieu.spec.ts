@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
@@ -675,5 +675,103 @@ describe("chu-trang-roi-di", () => {
 			"get sau",
 		);
 		expect(`${g.phienBan?.so} ${g.noiDung}`).toBe("2 Bản hai.");
+	});
+});
+
+describe("de-xuat-phan-trang", () => {
+	type HangDx = { id: string; trangThai: string };
+	type Trang = { rows: HangDx[]; total: number; choToiDuyet: number };
+	const choId: string[] = [];
+	const xuLyId: string[] = [];
+
+	async function trangDeXuat(nhom: "cho" | "da-xu-ly", page: number) {
+		return ok<Trang>(
+			await hoi("taiLieu.proposals", { nhom, page }, "chu"),
+			`proposals ${nhom} ${page}`,
+		);
+	}
+
+	beforeAll(async () => {
+		await donTaiLieu({});
+		const cho = await taoTrang("Phân trang chờ", "Gốc chờ.\n");
+		await duyet(cho.deXuatId, "chu");
+		for (let i = 0; i < 30; i += 1) {
+			choId.push(await deXuat(cho.slug, `Bản chờ số ${i}.\n`));
+		}
+		const tra = await taoTrang("Phân trang trả lại", "Gốc trả lại.\n");
+		await duyet(tra.deXuatId, "chu");
+		for (let i = 0; i < 6; i += 1) {
+			const id = await deXuat(tra.slug, `Bản trả lại số ${i}.\n`);
+			await traLai(id, "chu");
+			xuLyId.push(id);
+		}
+		const cu = await taoTrang("Phân trang cũ", "Gốc cũ.\n");
+		await duyet(cu.deXuatId, "chu");
+		const cungGoc: string[] = [];
+		for (let i = 0; i < 5; i += 1) {
+			cungGoc.push(await deXuat(cu.slug, `Bản cùng gốc số ${i}.\n`));
+		}
+		await duyet(cungGoc[0] as string, "chu");
+		xuLyId.push(...cungGoc.slice(1));
+	});
+
+	test("de-xuat-phan-trang: 30 ban cho chia 25 va 5, ban cu nhat mo duoc", async () => {
+		const mot = await trangDeXuat("cho", 1);
+		const hai = await trangDeXuat("cho", 2);
+		if (mot.rows.length > 0 && hai.rows[0]?.id === mot.rows[0]?.id) {
+			throw new Error("phan-trang: trang 2 lap lai trang 1");
+		}
+		expect(mot.rows.length).toBe(25);
+		expect(hai.rows.length).toBe(5);
+		expect(mot.total).toBe(30);
+		expect(mot.choToiDuyet).toBe(30);
+		const tatCa = [...mot.rows, ...hai.rows];
+		if (tatCa.some((r) => r.trangThai !== "CHO_DUYET")) {
+			throw new Error("phan-trang: nhom cho co ban CU");
+		}
+		expect(tatCa.map((r) => r.id).sort()).toEqual([...choId].sort());
+		const cuNhat = choId[0] as string;
+		expect(hai.rows.map((r) => r.id)).toContain(cuNhat);
+		ok(await hoi("taiLieu.proposal", { id: cuNhat }, "chu"), "mo ban cu nhat");
+	});
+
+	test("de-xuat-phan-trang: nhom da xu ly co dung 6 ban tra lai va 4 ban cu", async () => {
+		const xuLy = await trangDeXuat("da-xu-ly", 1);
+		expect(xuLy.total).toBe(10);
+		expect(xuLy.rows.map((r) => r.id).sort()).toEqual([...xuLyId].sort());
+		expect(xuLy.rows.map((r) => r.trangThai).sort()).toEqual([
+			...Array(4).fill("CU"),
+			...Array(6).fill("TRA_LAI"),
+		]);
+	});
+
+	test("de-xuat-phan-trang: loc theo slug chi tra ban cua trang do", async () => {
+		const cho = ok<Trang>(
+			await hoi("taiLieu.proposals", { nhom: "cho", page: 1 }, "chu"),
+			"cho",
+		);
+		const slugCua = await db.taiLieuDeXuat.findFirstOrThrow({
+			where: { id: choId[0] },
+			select: { trang: { select: { slug: true } } },
+		});
+		const motTrang = ok<Trang>(
+			await hoi(
+				"taiLieu.proposals",
+				{ nhom: "cho", page: 2, slug: slugCua.trang.slug },
+				"chu",
+			),
+			"theo slug",
+		);
+		expect(cho.total).toBe(30);
+		expect(motTrang.total).toBe(30);
+		const trangKhac = ok<Trang>(
+			await hoi(
+				"taiLieu.proposals",
+				{ nhom: "cho", page: 1, slug: "khong-co-trang-nay" },
+				"chu",
+			),
+			"slug khong co",
+		);
+		expect(trangKhac.total).toBe(0);
 	});
 });

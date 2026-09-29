@@ -1,0 +1,1 @@
+E8u: driver la script playwright (man-suc-khoe.mjs) trong phien do rieng, khong co read_network_requests/console; networkObserved = n-a (driver)
