@@ -1,6 +1,7 @@
 "use client";
 
 import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
+import Target from "@carbon/icons-react/es/Target";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -10,10 +11,19 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemDescription,
+	ItemMedia,
+	ItemTitle,
+} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import type { ReactNode } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
+import { okrTaiCoCauMessages } from "@/lib/messages/okr-tai-co-cau";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 
 export type MucMenu = { nhan: string; lam: () => void };
@@ -123,5 +133,43 @@ export function TieuDeMuc({
 			<h3 className="font-medium text-sm">{chu}</h3>
 			{children ? <div className="flex flex-wrap gap-2">{children}</div> : null}
 		</div>
+	);
+}
+
+export function DongOkrMo({
+	level,
+	okrMo,
+	sua,
+	moChuyen,
+}: {
+	level: "phong-ban" | "bo-phan";
+	okrMo: number;
+	sua: boolean;
+	moChuyen: () => void;
+}) {
+	const c = okrTaiCoCauMessages(useLocale()).toChuc;
+	if (okrMo === 0) return null;
+	return (
+		<Item size="sm" variant="outline" data-dong-okr-mo={okrMo}>
+			<ItemMedia variant="icon">
+				<Icon icon={Target} />
+			</ItemMedia>
+			<ItemContent>
+				<ItemTitle>{c.okrMo(okrMo)}</ItemTitle>
+				<ItemDescription>{c.okrMoMoTa[level]}</ItemDescription>
+			</ItemContent>
+			<ItemActions>
+				<Button
+					variant="outline"
+					size="sm"
+					disabled={!sua}
+					aria-haspopup="dialog"
+					data-nut="chuyen-okr"
+					onClick={moChuyen}
+				>
+					{c.chuyenOkr}
+				</Button>
+			</ItemActions>
+		</Item>
 	);
 }

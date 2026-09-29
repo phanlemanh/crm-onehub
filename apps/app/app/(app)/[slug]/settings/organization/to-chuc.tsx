@@ -34,6 +34,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { CayDieuHuong } from "./cay-dieu-huong";
 import { ChiTiet, giaiDon, tenChon } from "./chi-tiet";
 import { DaLuuTruToChuc } from "./da-luu-tru-to-chuc";
+import { HopChuyenOkr } from "./hop-chuyen-okr";
 import { HopGanPhongBan } from "./hop-gan-phong-ban";
 import { HopThemNguoi } from "./hop-them-nguoi";
 import { HopThoaiDonVi } from "./hop-thoai-don-vi";
@@ -45,6 +46,7 @@ import {
 	type HoiLuuTru,
 	KHO_HEP,
 	moiPhongBan,
+	okrMoCua,
 	type YeuCauDonVi,
 } from "./kieu";
 import { OSo } from "./o-so";
@@ -81,7 +83,7 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 	const trpc = useTRPC();
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const quyen = useQuery(trpc.org.access.queryOptions());
-	const [{ don, loc }, datUrl] = useQueryStates(toChucParsers);
+	const [{ don, loc, chuyenOkr }, datUrl] = useQueryStates(toChucParsers);
 	const [{ q }] = useQueryStates(searchParsers);
 	const hep = useKhoHep();
 	const [nguoiMo, setNguoiMo] = useState<string | null>(null);
@@ -148,6 +150,7 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 		hoiLuuTru: setHoiLuu,
 		moGan: (bp) => setGanVao(bp.id),
 		moThem: (pb) => setThemVao(pb.id),
+		moChuyenOkr: (x) => void datUrl({ [SEARCH_PARAM.toChuc.chuyenOkr]: x }),
 	};
 
 	const duong =
@@ -291,8 +294,20 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 				/>
 			) : null}
 			{moNhap ? <HopThoaiNhap dong={() => setMoNhap(false)} /> : null}
+			{chuyenOkr && sua ? (
+				<HopChuyenOkr
+					key={`${chuyenOkr.level}:${chuyenOkr.id}`}
+					nguon={chuyenOkr}
+					dong={() => void datUrl({ [SEARCH_PARAM.toChuc.chuyenOkr]: null })}
+				/>
+			) : null}
 			<XacNhanLuuTru
 				hoi={hoiLuu}
+				okrMo={hoiLuu ? okrMoCua(d, hoiLuu) : 0}
+				moChuyen={(x) => {
+					setHoiLuu(null);
+					hd.moChuyenOkr({ level: x.loai, id: x.id });
+				}}
 				dong={() => setHoiLuu(null)}
 				daLuu={(x) => {
 					if (chon.loai === "pb" && chon.pb.id === x.id)

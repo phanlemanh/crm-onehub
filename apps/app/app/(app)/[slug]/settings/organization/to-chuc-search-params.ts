@@ -23,7 +23,30 @@ export const parseAsDon = createParser<DonChon>({
 	eq: (a, b) => vietDon(a) === vietDon(b),
 });
 
+export type NguonChuyenOkr = { level: "phong-ban" | "bo-phan"; id: string };
+
+const TIEN_TO = { "phong-ban": "pb", "bo-phan": "bp" } as const;
+
+const vietNguon = (n: NguonChuyenOkr): string => `${TIEN_TO[n.level]}:${n.id}`;
+
+export const parseAsNguonChuyenOkr = createParser<NguonChuyenOkr>({
+	parse: (v) => {
+		const [loai, id, ...du] = v.split(":");
+		if (!id || du.length > 0) return null;
+		if (loai === "pb") return { level: "phong-ban", id };
+		if (loai === "bp") return { level: "bo-phan", id };
+		return null;
+	},
+	serialize: vietNguon,
+	eq: (a, b) => vietNguon(a) === vietNguon(b),
+});
+
+export const chuyenOkrParsers = {
+	[SEARCH_PARAM.toChuc.chuyenOkr]: parseAsNguonChuyenOkr,
+};
+
 export const toChucParsers = {
 	[SEARCH_PARAM.toChuc.don]: parseAsDon,
 	[SEARCH_PARAM.toChuc.loc]: parseAsStringLiteral(["chua-truong"] as const),
+	...chuyenOkrParsers,
 };

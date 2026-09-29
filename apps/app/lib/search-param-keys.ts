@@ -38,6 +38,7 @@ export const SEARCH_PARAM = {
 	toChuc: {
 		don: "don",
 		loc: "loc",
+		chuyenOkr: "chuyenOkr",
 	},
 	onboarding: {
 		trangThai: "trangThai",

@@ -40,7 +40,14 @@ export type HanhDong = {
 	hoiLuuTru: (x: HoiLuuTru) => void;
 	moGan: (bp: BoPhanDuLieu) => void;
 	moThem: (pb: PhongBanDuLieu) => void;
+	moChuyenOkr: (x: { level: "bo-phan" | "phong-ban"; id: string }) => void;
 };
+
+export function okrMoCua(cay: CayDuLieu, x: HoiLuuTru): number {
+	if (x.loai === "bo-phan")
+		return cay.divisions.find((d) => d.id === x.id)?.okrMo ?? 0;
+	return moiPhongBan(cay).find((d) => d.id === x.id)?.okrMo ?? 0;
+}
 
 export function khopTim(chu: string, tim: string): boolean {
 	const bo = (x: string) =>
