@@ -7,11 +7,13 @@ import {
 	nguCanhXemOkr,
 } from "@crm/db/okr-hien-thi";
 import { xemDuocMucTieu } from "@crm/validation/okr-hien-thi";
+import { ForbiddenException } from "@nestjs/common";
 import { xoaBoOkrMau } from "../scripts/okr-mau/nap";
 import { OkrAccessService } from "../src/okr/okr-access.service";
 import { donSanCanhKr } from "./okr-canh-kr-san";
 import {
 	gieoHienThi,
+	gieoTruongBiLoai,
 	MUC_TIEU_SAN,
 	type MucTieuSan,
 	mucTieuDeXemCua,
@@ -103,6 +105,68 @@ describe("ma-tran-xem", () => {
 			expect(lech).toEqual([]);
 		},
 		CHO_MS,
+	);
+
+	test(
+		"trưởng không hiệu lực: chuyển đi, rời workspace, đơn vị lưu trữ — hai bên khớp nhau và khớp bảng khai",
+		async () => {
+			const { donVi, nguoi } = await gieoTruongBiLoai();
+			const trong = (userId: string): NguCanhXem => ({
+				userId,
+				quanTri: false,
+				boPhanTruong: [],
+				phongBanTruong: [],
+				phongBanDuoiBoPhanTruong: [],
+				nguoiDuoiQuyen: [],
+			});
+			const kyVong = [
+				trong(nguoi.daChuyenDi),
+				{ ...trong(nguoi.truongQuaPhu), phongBanTruong: [donVi.pbPhu] },
+				trong(nguoi.truongPbLuu),
+				trong(nguoi.truongBpLuu),
+				trong(nguoi.truongBpLuuCoCon),
+				{
+					...trong(nguoi.truongPbDuoiBpLuu),
+					phongBanTruong: [donVi.pbDuoiBpLuu],
+					nguoiDuoiQuyen: [
+						nguoi.nguoiPbDuoiBpLuu,
+						nguoi.truongPbDuoiBpLuu,
+					].sort(),
+				},
+				trong(nguoi.nguoiPbDuoiBpLuu),
+			];
+			const tuDb = await nguCanhXemOkr(db, [
+				...kyVong.map((k) => k.userId),
+				nguoi.daRoiWorkspace,
+			]);
+			const lech: string[] = [];
+			let soSanh = 0;
+			for (const cho of kyVong) {
+				const api = await nguCanhApi(cho.userId);
+				const moi = tuDb.get(cho.userId);
+				soSanh += 1;
+				if (JSON.stringify(api) !== JSON.stringify(cho))
+					lech.push(`quyen ${cho.userId}: ${JSON.stringify(api)}`);
+				if (JSON.stringify(moi) !== JSON.stringify(cho))
+					lech.push(`nguCanhXemOkr ${cho.userId}: ${JSON.stringify(moi)}`);
+			}
+			if (
+				JSON.stringify(tuDb.get(nguoi.daRoiWorkspace)) !==
+				JSON.stringify(trong(nguoi.daRoiWorkspace))
+			)
+				lech.push(
+					`nguCanhXemOkr ${nguoi.daRoiWorkspace}: ${JSON.stringify(tuDb.get(nguoi.daRoiWorkspace))}`,
+				);
+			console.log(
+				`trưởng không hiệu lực: ${soSanh} người so ba chiều, thêm người rời workspace`,
+			);
+			expect(soSanh).toBe(7);
+			await expect(nguCanhApi(nguoi.daRoiWorkspace)).rejects.toBeInstanceOf(
+				ForbiddenException,
+			);
+			expect(lech).toEqual([]);
+		},
+		CHO_GIEO_MS,
 	);
 
 	test(

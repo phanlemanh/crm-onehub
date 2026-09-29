@@ -2,6 +2,7 @@ import { db } from "@crm/db";
 import { MUC_HIEN_THI, type MucTieuDeXem } from "@crm/validation/okr-hien-thi";
 import { CAP_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import { z } from "zod";
+import { roiKhoi, vaoLai } from "./okr-canh-kr-san";
 import { gieoKyQuy } from "./okr-khep-san";
 import {
 	type AiHoacCookie,
@@ -246,6 +247,119 @@ export async function gieoHienThi(): Promise<SanHienThi> {
 			onehubGioiHan,
 			boPhanGioiHan,
 			nhapGioiHan,
+		},
+	};
+}
+
+export type SanTruongBiLoai = {
+	donVi: {
+		pbRoi: string;
+		pbPhu: string;
+		bpRa: string;
+		pbRa: string;
+		pbLuu: string;
+		bpLuu: string;
+		bpLuuCoCon: string;
+		pbDuoiBpLuu: string;
+	};
+	nguoi: {
+		daChuyenDi: string;
+		truongQuaPhu: string;
+		daRoiWorkspace: string;
+		truongPbLuu: string;
+		truongBpLuu: string;
+		truongPbDuoiBpLuu: string;
+		truongBpLuuCoCon: string;
+		nguoiPbDuoiBpLuu: string;
+	};
+};
+
+async function datTruong(
+	kind: "division" | "department",
+	id: string,
+	userId: string,
+	nhan: string,
+): Promise<void> {
+	ok(await goi("org.setHead", { kind, id, userId }), `truong ${nhan}`);
+}
+
+async function luuTru(
+	thuTuc: "org.archiveDepartment" | "org.archiveDivision",
+	id: string,
+	nhan: string,
+): Promise<void> {
+	ok(await goi(thuTuc, { id }), `luu tru ${nhan}`);
+}
+
+export async function gieoTruongBiLoai(): Promise<SanTruongBiLoai> {
+	const pbLe = await pbMoi("ht-le");
+
+	const pbRoi = await pbMoi("ht-pb-roi");
+	const daChuyenDi = (await truongMoi("department", pbRoi, "ht-chuyen-di"))
+		.nguoi;
+	ok(await datViTri(daChuyenDi, pbLe), "chuyen truong ra khoi phong ban");
+
+	const pbPhu = await pbMoi("ht-pb-phu");
+	const truongQuaPhu = await nguoiMoi("ht-truong-phu");
+	ok(await datViTri(truongQuaPhu, pbLe, [pbPhu]), "xep truong qua phu");
+	await datTruong("department", pbPhu, truongQuaPhu, "qua phong ban phu");
+
+	const bpRa = await bpMoi("ht-bp-ra");
+	const pbRa = await pbMoi("ht-pb-ra");
+	const daRoiWorkspace = (await truongMoi("department", pbRa, "ht-roi-ws"))
+		.nguoi;
+	await datTruong("division", bpRa, daRoiWorkspace, "bo phan nguoi roi");
+	await roiKhoi(daRoiWorkspace);
+
+	const pbLuu = await pbMoi("ht-pb-luu");
+	const truongPbLuu = (await truongMoi("department", pbLuu, "ht-truong-luu"))
+		.nguoi;
+	await roiKhoi(truongPbLuu);
+	await luuTru("org.archiveDepartment", pbLuu, "phong ban co truong");
+	await vaoLai(truongPbLuu);
+
+	const bpLuu = await bpMoi("ht-bp-luu");
+	const truongBpLuu = (await truongMoi("division", bpLuu, "ht-truong-bp-luu"))
+		.nguoi;
+	await luuTru("org.archiveDivision", bpLuu, "bo phan co truong");
+
+	const bpLuuCoCon = await bpMoi("ht-bp-luu-con");
+	const truongBpLuuCoCon = (
+		await truongMoi("division", bpLuuCoCon, "ht-truong-bp-con")
+	).nguoi;
+	const pbDuoiBpLuu = await pbMoi("ht-pb-duoi-luu", bpLuuCoCon);
+	await luuTru("org.archiveDepartment", pbDuoiBpLuu, "phong ban con");
+	await luuTru("org.archiveDivision", bpLuuCoCon, "bo phan co con");
+	ok(
+		await goi("org.restoreDepartment", { id: pbDuoiBpLuu }),
+		"khoi phuc phong ban duoi bo phan luu tru",
+	);
+	const truongPbDuoiBpLuu = (
+		await truongMoi("department", pbDuoiBpLuu, "ht-truong-pb-duoi")
+	).nguoi;
+	const nguoiPbDuoiBpLuu = await nguoiMoi("ht-nguoi-pb-duoi");
+	ok(await datViTri(nguoiPbDuoiBpLuu, pbDuoiBpLuu), "xep nguoi pb duoi");
+
+	return {
+		donVi: {
+			pbRoi,
+			pbPhu,
+			bpRa,
+			pbRa,
+			pbLuu,
+			bpLuu,
+			bpLuuCoCon,
+			pbDuoiBpLuu,
+		},
+		nguoi: {
+			daChuyenDi,
+			truongQuaPhu,
+			daRoiWorkspace,
+			truongPbLuu,
+			truongBpLuu,
+			truongPbDuoiBpLuu,
+			truongBpLuuCoCon,
+			nguoiPbDuoiBpLuu,
 		},
 	};
 }

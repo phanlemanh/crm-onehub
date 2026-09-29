@@ -111,24 +111,13 @@ export async function nguCanhXemOkr(
 			select: { userId: true, primaryDepartmentId: true },
 		}),
 		db.orgSecondaryDepartment.findMany({
-			where: { department: { archivedAt: null } },
 			select: { userId: true, departmentId: true },
 		}),
 	]);
 	const vai = new Map(thanhVien.map((m) => [m.userId, m.role]));
-	const boPhanSong = new Set(boPhan.map((b) => b.id));
-	const phongBanSong = new Set(phongBan.map((p) => p.id));
-	const chinh = new Map(
-		viTri.flatMap((p) =>
-			vai.has(p.userId) && p.primaryDepartmentId !== null
-				? [[p.userId, p.primaryDepartmentId] as const]
-				: [],
-		),
-	);
+	const chinh = new Map(viTri.map((p) => [p.userId, p.primaryDepartmentId]));
 	const phuCua = nhomTheo(
-		phu.flatMap((s): [string, string][] =>
-			vai.has(s.userId) ? [[s.userId, s.departmentId]] : [],
-		),
+		phu.map((s): [string, string] => [s.userId, s.departmentId]),
 	);
 	const thuoc = (userId: string, pb: string) =>
 		chinh.get(userId) === pb || (phuCua.get(userId)?.has(pb) ?? false);
@@ -148,22 +137,9 @@ export async function nguCanhXemOkr(
 				: [],
 		),
 	);
-	const boPhanCua = new Map(
-		phongBan.map((p) => [
-			p.id,
-			p.divisionId !== null && boPhanSong.has(p.divisionId)
-				? p.divisionId
-				: null,
-		]),
-	);
+	const boPhanCua = new Map(phongBan.map((p) => [p.id, p.divisionId]));
 	const phongBanChinh = new Map(
-		thanhVien.map((m) => {
-			const pb = chinh.get(m.userId);
-			return [
-				m.userId,
-				pb !== undefined && phongBanSong.has(pb) ? pb : null,
-			] as const;
-		}),
+		thanhVien.map((m) => [m.userId, chinh.get(m.userId) ?? null]),
 	);
 	const rong = new Set<string>();
 	return new Map(
