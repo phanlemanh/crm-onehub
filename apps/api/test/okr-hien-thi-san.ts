@@ -1000,3 +1000,67 @@ export async function gieoGhiKe(): Promise<SanGhiKe> {
 	await datGioiHan(g, [b.id], t.cookie);
 	return { ky, p1, t, a, b, m, g, krG, tieuDeG };
 }
+
+export type SanDuyet = {
+	ky: string;
+	b1: string;
+	b2: string;
+	p1: string;
+	p2: string;
+	p3: string;
+	t: NguoiSan;
+	h: NguoiSan;
+	k: NguoiSan;
+	m: NguoiSan;
+	q: NguoiSan;
+	o: NguoiSan;
+};
+
+export async function gieoDuyet(nhan: string): Promise<SanDuyet> {
+	ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
+	const b1 = await bpMoi(`${nhan}-b1`);
+	const b2 = await bpMoi(`${nhan}-b2`);
+	const p1 = await pbMoi(`${nhan}-p1`, b1);
+	const p2 = await pbMoi(`${nhan}-p2`);
+	const p3 = await pbMoi(`${nhan}-p3`, b2);
+	const hTruong = await truongMoi("division", b1, `${nhan}-H`);
+	const tTruong = await truongMoi("department", p1, `${nhan}-T`);
+	const k = await nguoiCo(`${nhan}-K`);
+	ok(await datViTri(k.id, p1), "xep K vao P1");
+	const q = await nguoiCo(`${nhan}-Q`, "admin");
+	const oId = await nguoiMoi(`${nhan}-O`, "okr");
+	return {
+		ky: await gieoKyQuy(KY_HIEN_THI),
+		b1,
+		b2,
+		p1,
+		p2,
+		p3,
+		t: { id: tTruong.nguoi, cookie: tTruong.cookie },
+		h: { id: hTruong.nguoi, cookie: hTruong.cookie },
+		k,
+		m: await nguoiCo(`${nhan}-M`),
+		q,
+		o: { id: oId, cookie: await phienCua(oId) },
+	};
+}
+
+export async function datDuyetCongBo(bat: boolean): Promise<void> {
+	ok(await goi("okr.setProgram", { duyetCongBo: bat }), `duyet cong bo ${bat}`);
+}
+
+export async function mucTieuCoHaiKr(
+	s: SanDuyet,
+	unit: Json,
+	ai: NguoiSan,
+	nhan: string,
+): Promise<{ id: string; kr: string[] }> {
+	const id = await mucTieuMoi(s.ky, unit, ai.id, ai.cookie, nhan);
+	return {
+		id,
+		kr: [
+			await krMoi(id, ai.id, ai.cookie, `${nhan} 1`),
+			await krMoi(id, ai.id, ai.cookie, `${nhan} 2`),
+		],
+	};
+}

@@ -328,7 +328,13 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"xuatKy",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_CANH_KR = Object.keys(THU_TUC_CANH_KR);
-const THU_TUC_OKR_LUOT_GIOI_HAN = ["datHienThi"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_GIOI_HAN = [
+	"datHienThi",
+	"guiDuyet",
+	"duyetMucTieu",
+	"traLaiMucTieu",
+	"rutDuyet",
+].map((t) => `okr.${t}`);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
