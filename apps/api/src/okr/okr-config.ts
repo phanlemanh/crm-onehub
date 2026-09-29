@@ -208,6 +208,13 @@ export const OKR = {
 				"Lần hỏi ý đã qua hạn — lời mở, con số, câu hỏi và hạn chỉ sửa được khi còn mở.",
 			daCongBo: "Lần hỏi ý này đã công bố.",
 			khongCoHoiY: (id: string) => `Không có lần hỏi ý nào mang mã ${id}.`,
+			hetHan:
+				"Lần hỏi ý đã qua hạn — không góp, sửa, gỡ ý hay bấm «Tôi cũng nghĩ vậy» được nữa.",
+			quaBaY: `Mỗi người góp tối đa ${OKR_HOI_Y.yMoiNguoi} ý — sửa hoặc gỡ một ý cũ để góp ý mới.`,
+			nguoiChonKhongGop: "Người chọn không góp ý trong lần hỏi ý mà mình chọn.",
+			chiYCuaMinh: "Chỉ người góp mới sửa hay gỡ được ý này.",
+			yCuaMinh: "Không bấm «Tôi cũng nghĩ vậy» cho ý của chính mình.",
+			khongCoY: (id: string) => `Không có ý nào mang mã ${id}.`,
 		},
 		troLy: {
 			daQuyet: "Đề xuất này đã được quyết",

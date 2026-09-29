@@ -22,7 +22,15 @@ import {
 	themBangChungInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
-import { moHoiYInput, suaHoiYInput } from "@crm/validation/okr-hoi-y";
+import {
+	cycleIdInput,
+	dongYInput,
+	gopYInput,
+	moHoiYInput,
+	suaHoiYInput,
+	suaYInput,
+	yIdInput,
+} from "@crm/validation/okr-hoi-y";
 import {
 	chamKrInput,
 	dongRaInput,
@@ -234,6 +242,22 @@ const DAU_VAO_HOP_LE = {
 		nguoiChonUserId: "khong-co",
 	},
 	"okr.suaHoiY": { hoiYId: "khong-co", loiMo: "Lời mở mới" },
+	"okr.hoiY": { cycleId: "khong-co" },
+	"okr.hoiYNhan": { cycleId: "khong-co" },
+	"okr.gopY": {
+		hoiYId: "khong-co",
+		noiDung: "Mở tuyến giao lạnh cho khách dược",
+		viSao: "",
+		doBangGi: "",
+	},
+	"okr.suaY": {
+		yId: "khong-co",
+		noiDung: "Mở tuyến giao lạnh cho khách dược",
+		viSao: "Khách dược cần giao lạnh.",
+		doBangGi: "",
+	},
+	"okr.goY": { yId: "khong-co" },
+	"okr.dongY": { yId: "khong-co", bat: true },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -269,6 +293,12 @@ const THU_TUC_CANH_KR = {
 const THU_TUC_HOI_Y = {
 	"okr.moHoiY": moHoiYInput,
 	"okr.suaHoiY": suaHoiYInput,
+	"okr.hoiY": cycleIdInput,
+	"okr.hoiYNhan": cycleIdInput,
+	"okr.gopY": gopYInput,
+	"okr.suaY": suaYInput,
+	"okr.goY": yIdInput,
+	"okr.dongY": dongYInput,
 } as const;
 const THU_TUC_OKR_TRUOC_LUOT = [
 	"access",

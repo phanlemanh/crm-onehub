@@ -8,6 +8,11 @@ import {
 } from "@crm/validation/okr-hoi-y";
 import { OKR } from "../src/okr/okr-config";
 import {
+	type HoiYNhanOutput,
+	hoiYDocOutput,
+	hoiYNhanOutput,
+} from "../src/okr/okr-hoi-y.contracts";
+import {
 	type Bang,
 	CAU_HOI_MAC_DINH,
 	datDongHo,
@@ -15,14 +20,19 @@ import {
 	doiVai,
 	dongHo,
 	dungSanHoiY,
+	gieoBanTruoc,
 	gieoCongBo,
 	gieoHoiY,
 	gieoY,
+	goiRest,
+	khoaApiCua,
+	type Nguoi,
 	nguoiCo,
 	SO_LIEU_MAC_DINH,
 	sauGio,
+	Y_MAC_DINH,
 } from "./okr-hoi-y-san";
-import { dangChay, goi, ok, type TraLoi, taoNam } from "./okr-san";
+import { dangChay, goi, goiQuery, ok, type TraLoi, taoNam } from "./okr-san";
 
 dungSanHoiY();
 
@@ -421,6 +431,604 @@ describe("mo-tu-choi", () => {
 					doi: Object.fromEntries(BANG_KHONG_DOI.map((b) => [b, 0])),
 				})),
 			);
+		},
+		CHO_MS,
+	);
+});
+
+const CHO_MA_TRAN_MS = 120_000;
+const Y_DAY = {
+	noiDung: Y_MAC_DINH,
+	viSao: "Khách dược cần giao lạnh ổn định quanh năm.",
+	doBangGi: "Số đơn giao lạnh mỗi tháng",
+} as const;
+type YVao = { noiDung: string; viSao: string; doBangGi: string };
+const gop = (hoiYId: string, cookie: string, vao: YVao = Y_DAY) =>
+	goi("okr.gopY", { hoiYId, ...vao }, cookie);
+const dongYCua = (yId: string, cookie: string, bat = true) =>
+	goi("okr.dongY", { yId, bat }, cookie);
+const donHanVeBayGio = async (g: { h: string; nguoi: { Q: Nguoi } }) =>
+	ok(
+		await goi(
+			"okr.suaHoiY",
+			{ hoiYId: g.h, hanLuc: dongHo().toISOString() },
+			g.nguoi.Q.cookie,
+		),
+		"doi han ve bay gio",
+	);
+const yCua = async (hoiYId: string, tacGiaUserId: string) =>
+	(
+		await db.okrY.findFirstOrThrow({
+			where: { hoiYId, tacGiaUserId },
+			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+		})
+	).id;
+const vanTayY = async () =>
+	JSON.stringify(
+		await db.okrY.findMany({
+			orderBy: { id: "asc" },
+			select: {
+				id: true,
+				tacGiaUserId: true,
+				noiDung: true,
+				viSao: true,
+				doBangGi: true,
+			},
+		}),
+	);
+const lapChu = (n: number) => "ý".repeat(n);
+
+describe("gop-y", () => {
+	test(
+		"gop-y: T góp, sửa rồi gỡ; O (vai okr) góp — DB đúng từng bước, người góp là người gọi, createdAt là giờ tiêm, không vết",
+		async () => {
+			datDongHo(LUC);
+			const { ky, h, nguoi } = await gieoHoiY();
+			const { T: tv, O } = nguoi;
+			const docY = (id: string) =>
+				db.okrY.findUnique({
+					where: { id },
+					select: {
+						hoiYId: true,
+						tacGiaUserId: true,
+						noiDung: true,
+						viSao: true,
+						doBangGi: true,
+						chuDeId: true,
+						createdAt: true,
+					},
+				});
+			const { id } = ok<{ id: string }>(await gop(h, tv.cookie), "T gop");
+			expect(await docY(id)).toEqual({
+				hoiYId: h,
+				tacGiaUserId: tv.id,
+				...Y_DAY,
+				chuDeId: null,
+				createdAt: LUC,
+			});
+			const suaVao = {
+				noiDung: "Mở tuyến giao lạnh cho khách dược ở miền Trung",
+				viSao: "Hai kho miền Trung đang trống nửa công suất.",
+				doBangGi: "Tỉ lệ lấp đầy kho lạnh miền Trung",
+			};
+			ok(await goi("okr.suaY", { yId: id, ...suaVao }, tv.cookie), "T sua");
+			expect(await docY(id)).toEqual({
+				hoiYId: h,
+				tacGiaUserId: tv.id,
+				...suaVao,
+				chuDeId: null,
+				createdAt: LUC,
+			});
+			ok(await goi("okr.goY", { yId: id }, tv.cookie), "T go");
+			expect(await docY(id)).toBeNull();
+			const cuaO = ok<{ id: string }>(await gop(h, O.cookie), "O gop");
+			expect(await docY(cuaO.id)).toEqual({
+				hoiYId: h,
+				tacGiaUserId: O.id,
+				...Y_DAY,
+				chuDeId: null,
+				createdAt: LUC,
+			});
+			const vet = await db.okrTrail.findMany({
+				where: { cycleId: ky, action: { not: "tao-chu-ky" } },
+				select: { action: true },
+			});
+			expect(vet.map((v) => v.action)).toEqual(["mo-hoi-y"]);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"gop-y: 11 ca từ chối viết trước — mã HTTP và câu ghim khớp bảng khai; okrY, okrTrail và nội dung mọi ý không đổi ở mọi ca",
+		async () => {
+			datDongHo(LUC);
+			const KHAI = [
+				{ ca: "y-thu-tu-cua-T", maHttp: 400, cau: T.quaBaY },
+				{ ca: "O-sua-y-cua-T", maHttp: 403, cau: T.chiYCuaMinh },
+				{ ca: "O-go-y-cua-T", maHttp: 403, cau: T.chiYCuaMinh },
+				{ ca: "nguoi-chon-gop", maHttp: 400, cau: T.nguoiChonKhongGop },
+				{
+					ca: "noi-dung-9-ky-tu",
+					maHttp: 400,
+					cau: `noiDung: Too small: expected string to have >=${OKR_HOI_Y.noiDung.min} characters`,
+				},
+				{
+					ca: "noi-dung-301-ky-tu",
+					maHttp: 400,
+					cau: `noiDung: Too big: expected string to have <=${OKR_HOI_Y.noiDung.max} characters`,
+				},
+				{ ca: "gop-sau-doi-han-ve-bay-gio", maHttp: 400, cau: T.hetHan },
+				{ ca: "sua-sau-doi-han-ve-bay-gio", maHttp: 400, cau: T.hetHan },
+				{ ca: "go-sau-doi-han-ve-bay-gio", maHttp: 400, cau: T.hetHan },
+				{ ca: "gop-sau-cong-bo", maHttp: 400, cau: T.daCongBo },
+				{ ca: "sua-y-khong-co", maHttp: 404, cau: T.khongCoY("khong-co") },
+			] as const satisfies readonly Ca[];
+
+			const mo = await gieoHoiY({ yCua: ["T", "T", "T"] });
+			const yT = await yCua(mo.h, mo.nguoi.T.id);
+			const gom = await gieoHoiY({ yCua: ["T"] });
+			const yTGom = await yCua(gom.h, gom.nguoi.T.id);
+			await donHanVeBayGio(gom);
+			const congBo = await gieoHoiY();
+			await donHanVeBayGio(congBo);
+			await gieoCongBo(congBo.h);
+			const { T: tv, O, P, A } = mo.nguoi;
+
+			const CHAY = {
+				"y-thu-tu-cua-T": () => gop(mo.h, tv.cookie),
+				"O-sua-y-cua-T": () => goi("okr.suaY", { yId: yT, ...Y_DAY }, O.cookie),
+				"O-go-y-cua-T": () => goi("okr.goY", { yId: yT }, O.cookie),
+				"nguoi-chon-gop": () => gop(mo.h, P.cookie),
+				"noi-dung-9-ky-tu": () =>
+					gop(mo.h, A.cookie, {
+						...Y_DAY,
+						noiDung: lapChu(OKR_HOI_Y.noiDung.min - 1),
+					}),
+				"noi-dung-301-ky-tu": () =>
+					gop(mo.h, A.cookie, {
+						...Y_DAY,
+						noiDung: lapChu(OKR_HOI_Y.noiDung.max + 1),
+					}),
+				"gop-sau-doi-han-ve-bay-gio": () => gop(gom.h, gom.nguoi.A.cookie),
+				"sua-sau-doi-han-ve-bay-gio": () =>
+					goi(
+						"okr.suaY",
+						{ yId: yTGom, ...Y_DAY, noiDung: "Sửa sau khi đã qua hạn góp" },
+						gom.nguoi.T.cookie,
+					),
+				"go-sau-doi-han-ve-bay-gio": () =>
+					goi("okr.goY", { yId: yTGom }, gom.nguoi.T.cookie),
+				"gop-sau-cong-bo": () => gop(congBo.h, congBo.nguoi.A.cookie),
+				"sua-y-khong-co": () =>
+					goi("okr.suaY", { yId: "khong-co", ...Y_DAY }, tv.cookie),
+			} satisfies {
+				[K in (typeof KHAI)[number]["ca"]]: () => Promise<TraLoi>;
+			};
+
+			const BANG: Bang[] = ["okrY", "okrTrail"];
+			const nhan: KetQua[] = [];
+			for (const khai of KHAI) {
+				const truoc = await Promise.all(BANG.map(dem));
+				const vanTayTruoc = await vanTayY();
+				const tra = await CHAY[khai.ca]();
+				const sau = await Promise.all(BANG.map(dem));
+				nhan.push({
+					ca: khai.ca,
+					maHttp: tra.status,
+					cau: tra.loi.includes(khai.cau) ? khai.cau : tra.loi,
+					doi: {
+						...Object.fromEntries(
+							BANG.map((b, i) => [b, (sau[i] ?? 0) - (truoc[i] ?? 0)]),
+						),
+						noiDungY: (await vanTayY()) === vanTayTruoc ? 0 : 1,
+					},
+				});
+			}
+			expect(nhan).toEqual(
+				KHAI.map((k) => ({
+					...k,
+					doi: { okrY: 0, okrTrail: 0, noiDungY: 0 },
+				})),
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"gop-y: biên hạn nửa mở — lúc hanLuc − 1 ms góp được, createdAt đúng giờ tiêm; lúc đúng hanLuc bị từ chối hetHan, không thêm ý",
+		async () => {
+			datDongHo(LUC);
+			const { h, nguoi } = await gieoHoiY();
+			const han = (await db.okrHoiY.findUniqueOrThrow({ where: { id: h } }))
+				.hanLuc;
+			const truocHan = lechMs(han, -MOT_MS);
+			datDongHo(truocHan);
+			const { id } = ok<{ id: string }>(
+				await gop(h, nguoi.A.cookie),
+				"gop luc hanLuc - 1 ms",
+			);
+			const y = await db.okrY.findUniqueOrThrow({ where: { id } });
+			expect(y.createdAt.toISOString()).toBe(truocHan.toISOString());
+			datDongHo(han);
+			const dungHan = await gop(h, nguoi.B.cookie);
+			expect({
+				maHttp: dungHan.status,
+				cau: dungHan.loi.includes(T.hetHan) ? T.hetHan : dungHan.loi,
+				soYCuaB: await db.okrY.count({
+					where: { hoiYId: h, tacGiaUserId: nguoi.B.id },
+				}),
+			}).toEqual({ maHttp: 400, cau: T.hetHan, soYCuaB: 0 });
+		},
+		CHO_MS,
+	);
+
+	test(
+		"gop-y: ca đua — T đã có 2 ý, hai lời gopY song song → đúng một thành công, một quaBaY, DB đúng 3 ý của T",
+		async () => {
+			datDongHo(LUC);
+			const { h, nguoi } = await gieoHoiY({ yCua: ["T", "T"] });
+			const [mot, hai] = await Promise.all([
+				gop(h, nguoi.T.cookie, {
+					...Y_DAY,
+					noiDung: "Ý thứ ba gửi từ tab thứ nhất",
+				}),
+				gop(h, nguoi.T.cookie, {
+					...Y_DAY,
+					noiDung: "Ý thứ ba gửi từ tab thứ hai",
+				}),
+			]);
+			expect({
+				soYCuaT: await db.okrY.count({
+					where: { hoiYId: h, tacGiaUserId: nguoi.T.id },
+				}),
+				maHttp: [mot.status, hai.status].sort(),
+				cau: [mot.loi, hai.loi].filter((l) => l !== ""),
+			}).toEqual({
+				soYCuaT: OKR_HOI_Y.yMoiNguoi,
+				maHttp: [200, 400],
+				cau: [T.quaBaY],
+			});
+		},
+		CHO_MS,
+	);
+});
+
+const TEN_A = "Ngô Minh Châu";
+const TEN_B = "Lê Thu Hà";
+const TRANG_THAI_MA_TRAN = ["dang-mo", "dang-gom", "da-cong-bo"] as const;
+const VAI_MA_TRAN = ["T", "O", "Q", "P"] as const;
+const DUONG_MA_TRAN = ["trpc", "rest", "khoa-api"] as const;
+const THU_TUC_DOC = ["okr.hoiY", "okr.hoiYNhan"] as const;
+type VaiMaTran = (typeof VAI_MA_TRAN)[number];
+type DuongMaTran = (typeof DUONG_MA_TRAN)[number];
+type ThuTucDoc = (typeof THU_TUC_DOC)[number];
+const REST_DOC = {
+	"okr.hoiY": "/okr/hoi-y",
+	"okr.hoiYNhan": "/okr/hoi-y/nhan",
+} as const satisfies { [K in ThuTucDoc]: string };
+
+type DemO = {
+	ten: number;
+	maA: number;
+	maB: number;
+	soDongY: number;
+	daDongY: (boolean | null)[] | null;
+	soDongYCuaY1: number | null;
+};
+const AN_TEN: DemO = {
+	ten: 0,
+	maA: 0,
+	maB: 0,
+	soDongY: 0,
+	daDongY: [true, false],
+	soDongYCuaY1: null,
+};
+const DAY_DU: DemO = {
+	ten: 1,
+	maA: 1,
+	maB: 1,
+	soDongY: 2,
+	daDongY: [false, false],
+	soDongYCuaY1: 2,
+};
+const NHAN_NHE: DemO = {
+	ten: 0,
+	maA: 0,
+	maB: 0,
+	soDongY: 0,
+	daDongY: null,
+	soDongYCuaY1: null,
+};
+const KY_VONG_O = {
+	"okr.hoiY": { T: AN_TEN, O: AN_TEN, Q: DAY_DU, P: DAY_DU },
+	"okr.hoiYNhan": { T: NHAN_NHE, O: NHAN_NHE, Q: NHAN_NHE, P: NHAN_NHE },
+} as const satisfies { [K in ThuTucDoc]: { [V in VaiMaTran]: DemO } };
+
+const demChuoi = (chu: string, tim: string) => chu.split(tim).length - 1;
+const nhanCua = (tra: TraLoi, nhan: string): HoiYNhanOutput =>
+	hoiYNhanOutput.parse(ok(tra, nhan));
+
+describe("ten-va-so", () => {
+	test(
+		"ten-va-so: ma trận viết trước 3 trạng thái × 4 vai × 3 đường × 2 thủ tục đọc — T, O không thấy tên, mã người góp, số đồng ý; Q, P thấy; bài in số ô",
+		async () => {
+			datDongHo(LUC);
+			const { ky, h, nguoi } = await gieoHoiY();
+			const { A, B, T: tv, O } = nguoi;
+			await db.user.update({ where: { id: A.id }, data: { name: TEN_A } });
+			await db.user.update({ where: { id: B.id }, data: { name: TEN_B } });
+			const y1 = (await gieoY(h, A.id, "Mở tuyến giao lạnh cho khách dược")).id;
+			const y2 = (
+				await gieoY(h, B.id, "Giảm thời gian giao chặng cuối nội thành")
+			).id;
+			ok(await dongYCua(y1, tv.cookie), "T dong y Y1");
+			ok(await dongYCua(y1, O.cookie), "O dong y Y1");
+			await gieoBanTruoc(h, nguoi.P.id);
+			const khoa = { T: "", O: "", Q: "", P: "" } satisfies {
+				[V in VaiMaTran]: string;
+			};
+			for (const vai of VAI_MA_TRAN)
+				khoa[vai] = await khoaApiCua(nguoi[vai].id);
+
+			const KHAI = TRANG_THAI_MA_TRAN.flatMap((trangThai) =>
+				VAI_MA_TRAN.flatMap((vai) =>
+					DUONG_MA_TRAN.flatMap((duong) =>
+						THU_TUC_DOC.map((thuTuc) => ({
+							trangThai,
+							vai,
+							duong,
+							thuTuc,
+							maHttp: 200,
+							dem: KY_VONG_O[thuTuc][vai],
+						})),
+					),
+				),
+			);
+			expect(KHAI.length).toBe(
+				TRANG_THAI_MA_TRAN.length *
+					VAI_MA_TRAN.length *
+					DUONG_MA_TRAN.length *
+					THU_TUC_DOC.length,
+			);
+
+			const goiO = (
+				vai: VaiMaTran,
+				duong: DuongMaTran,
+				thuTuc: ThuTucDoc,
+			): Promise<TraLoi> => {
+				const rest = `${REST_DOC[thuTuc]}?cycleId=${encodeURIComponent(ky)}`;
+				switch (duong) {
+					case "trpc":
+						return goiQuery(thuTuc, nguoi[vai].cookie, { cycleId: ky });
+					case "rest":
+						return goiRest(rest, { cookie: nguoi[vai].cookie });
+					case "khoa-api":
+						return goiRest(rest, { khoa: khoa[vai] });
+				}
+			};
+			const demCua = (tra: TraLoi, thuTuc: ThuTucDoc): DemO => {
+				const chu = JSON.stringify(tra.data);
+				const coBan = {
+					ten: demChuoi(chu, TEN_A),
+					maA: demChuoi(chu, A.id),
+					maB: demChuoi(chu, B.id),
+					soDongY: demChuoi(chu, '"soDongY":'),
+				};
+				if (thuTuc === "okr.hoiYNhan") {
+					hoiYNhanOutput.parse(tra.data);
+					return { ...coBan, daDongY: null, soDongYCuaY1: null };
+				}
+				const ds = hoiYDocOutput.parse(tra.data)?.y.ds ?? [];
+				const tim = (id: string) => ds.find((y) => y.id === id);
+				const motY = tim(y1);
+				return {
+					...coBan,
+					daDongY: [tim(y1)?.daDongY ?? null, tim(y2)?.daDongY ?? null],
+					soDongYCuaY1: motY && "soDongY" in motY ? motY.soDongY : null,
+				};
+			};
+			const CAM = {
+				tenA: TEN_A,
+				tenB: TEN_B,
+				maA: A.id,
+				maB: B.id,
+				soDongY: '"soDongY":',
+			};
+
+			const nhan: (typeof KHAI)[number][] = [];
+			const lo: string[] = [];
+			for (const trangThai of TRANG_THAI_MA_TRAN) {
+				if (trangThai === "dang-gom") await donHanVeBayGio({ h, nguoi });
+				if (trangThai === "da-cong-bo") await gieoCongBo(h);
+				for (const k of KHAI.filter((x) => x.trangThai === trangThai)) {
+					const tra = await goiO(k.vai, k.duong, k.thuTuc);
+					const chu = JSON.stringify(tra.data);
+					if (k.vai === "T" || k.vai === "O")
+						for (const [ten, s] of Object.entries(CAM)) {
+							const o = chu.indexOf(s);
+							if (o >= 0)
+								lo.push(
+									`${k.trangThai} ${k.vai} ${k.duong} ${k.thuTuc} lo ${ten}: ${chu.slice(Math.max(0, o - 80), o + 80)}`,
+								);
+						}
+					nhan.push({
+						...k,
+						maHttp: tra.status,
+						dem: tra.status === 200 ? demCua(tra, k.thuTuc) : NHAN_NHE,
+					});
+				}
+			}
+			console.log(`ten-va-so: đã chạy ${nhan.length}/${KHAI.length} ô`);
+			expect(lo, "chuoi lo toi T, O").toEqual([]);
+			expect(nhan.length).toBe(KHAI.length);
+			expect(nhan).toEqual(KHAI);
+		},
+		CHO_MA_TRAN_MS,
+	);
+
+	test(
+		"ten-va-so: thứ tự xáo — 12 ý của 6 người; T lần 1 = lần 2, O lần 1 = lần 2, T ≠ O, T ≠ thứ tự tạo; T bấm đồng ý ý cuối không đổi thứ tự",
+		async () => {
+			datDongHo(LUC);
+			const { h, ky, nguoi } = await gieoHoiY();
+			const X = await nguoiCo("xao-X", "member");
+			const Y = await nguoiCo("xao-Y", "member");
+			const nguoiGop = [nguoi.A, nguoi.B, nguoi.R, nguoi.Q, X, Y];
+			const SO_Y_MOI_NGUOI = 2;
+			for (let i = 0; i < nguoiGop.length * SO_Y_MOI_NGUOI; i += 1) {
+				datDongHo(lechMs(LUC, i * MOT_MS));
+				const ai = nguoiGop[i % nguoiGop.length];
+				if (!ai) throw new Error("thieu nguoi gop");
+				await gieoY(h, ai.id, `Ý số ${i + 1} cho mục tiêu năm tới`);
+			}
+			const theoTao = (
+				await db.okrY.findMany({
+					where: { hoiYId: h },
+					orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+					select: { id: true },
+				})
+			).map((y) => y.id);
+			const thuTu = async (ai: Nguoi) =>
+				(
+					hoiYDocOutput.parse(
+						ok(await goiQuery("okr.hoiY", ai.cookie, { cycleId: ky }), "doc"),
+					)?.y.ds ?? []
+				).map((y) => y.id);
+			const t1 = await thuTu(nguoi.T);
+			const t2 = await thuTu(nguoi.T);
+			const o1 = await thuTu(nguoi.O);
+			const o2 = await thuTu(nguoi.O);
+			expect([...t1].sort()).toEqual([...theoTao].sort());
+			expect(t2, "T lan 2 khac lan 1").toEqual(t1);
+			expect(o2, "O lan 2 khac lan 1").toEqual(o1);
+			expect(o1, `T khac O — T: ${t1.join(",")}`).not.toEqual(t1);
+			expect(t1, "T khac thu tu tao").not.toEqual(theoTao);
+			const cuoi = t1.at(-1);
+			if (!cuoi) throw new Error("T khong thay y nao");
+			ok(await dongYCua(cuoi, nguoi.T.cookie), "T dong y y cuoi");
+			expect(await thuTu(nguoi.T), "bam dong y doi thu tu").toEqual(t1);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ten-va-so: dongY — bấm lần hai không thêm hàng, bỏ bấm xoá hàng, bấm ý của mình 400 yCuaMinh, sau hạn 400 hetHan",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { A, B, O, T: tv } = g.nguoi;
+			const y1 = (await gieoY(g.h, A.id)).id;
+			const soHang = () => db.okrYDongY.count({ where: { yId: y1 } });
+			const buoc: {
+				buoc: string;
+				maHttp: number;
+				cau: string;
+				soHang: number;
+			}[] = [];
+			const ghi = async (ten: string, tra: TraLoi, cau = "") =>
+				buoc.push({
+					buoc: ten,
+					maHttp: tra.status,
+					cau: cau && tra.loi.includes(cau) ? cau : tra.loi,
+					soHang: await soHang(),
+				});
+			await ghi("T bat", await dongYCua(y1, tv.cookie));
+			await ghi("O bat", await dongYCua(y1, O.cookie));
+			await ghi("T bat lan hai", await dongYCua(y1, tv.cookie));
+			await ghi("T tat", await dongYCua(y1, tv.cookie, false));
+			await ghi("A bat y cua minh", await dongYCua(y1, A.cookie), T.yCuaMinh);
+			await donHanVeBayGio(g);
+			await ghi("B bat sau han", await dongYCua(y1, B.cookie), T.hetHan);
+			expect(buoc).toEqual([
+				{ buoc: "T bat", maHttp: 200, cau: "", soHang: 1 },
+				{ buoc: "O bat", maHttp: 200, cau: "", soHang: 2 },
+				{ buoc: "T bat lan hai", maHttp: 200, cau: "", soHang: 2 },
+				{ buoc: "T tat", maHttp: 200, cau: "", soHang: 1 },
+				{ buoc: "A bat y cua minh", maHttp: 400, cau: T.yCuaMinh, soHang: 1 },
+				{ buoc: "B bat sau han", maHttp: 400, cau: T.hetHan, soHang: 1 },
+			]);
+			const hang = await db.okrYDongY.findUniqueOrThrow({
+				where: { yId_userId: { yId: y1, userId: O.id } },
+			});
+			expect(hang.createdAt.toISOString()).toBe(LUC.toISOString());
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ten-va-so: hoiYNhan — T chưa góp canGop true; góp rồi false; P đang gom 6 chủ đề 2 đã kết luận → 4, Q → null; qua hạn canGop false cho mọi người; chu kỳ không có hỏi ý → coHoiY false, hoiY null",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { ky, h, nguoi } = g;
+			const nhan = async (ai: Nguoi) =>
+				nhanCua(
+					await goiQuery("okr.hoiYNhan", ai.cookie, { cycleId: ky }),
+					"hoiYNhan",
+				);
+			expect(await nhan(nguoi.T)).toEqual({
+				coHoiY: true,
+				trangThai: "dang-mo",
+				canGop: true,
+				soChuDeChuaKetLuan: null,
+			});
+			expect((await nhan(nguoi.P)).canGop).toBe(false);
+			await gieoY(h, nguoi.T.id);
+			expect(await nhan(nguoi.T)).toEqual({
+				coHoiY: true,
+				trangThai: "dang-mo",
+				canGop: false,
+				soChuDeChuaKetLuan: null,
+			});
+			await donHanVeBayGio(g);
+			const SO_CHU_DE = 6;
+			const DA_KET_LUAN = 2;
+			await db.okrChuDe.createMany({
+				data: Array.from({ length: SO_CHU_DE }, (_, i) => ({
+					hoiYId: h,
+					loai: "chu-de",
+					ten: `Chủ đề ${i + 1}`,
+					viTri: i,
+					ketLuan: i < DA_KET_LUAN ? "de-sau" : null,
+					lyDo: i < DA_KET_LUAN ? "Để kỳ sau khi đủ người làm." : "",
+				})),
+			});
+			const VAI_NHAN = ["T", "O", "A", "Q", "P"] as const;
+			const sauHan: { [V in (typeof VAI_NHAN)[number]]?: HoiYNhanOutput } = {};
+			for (const v of VAI_NHAN) sauHan[v] = await nhan(nguoi[v]);
+			const gom = (so: number | null): HoiYNhanOutput => ({
+				coHoiY: true,
+				trangThai: "dang-gom",
+				canGop: false,
+				soChuDeChuaKetLuan: so,
+			});
+			expect(sauHan).toEqual({
+				T: gom(null),
+				O: gom(null),
+				A: gom(null),
+				Q: gom(null),
+				P: gom(SO_CHU_DE - DA_KET_LUAN),
+			});
+			const kyTrong = await taoNam("nhan-trong", NAM_KE);
+			expect(
+				nhanCua(
+					await goiQuery("okr.hoiYNhan", nguoi.T.cookie, {
+						cycleId: kyTrong,
+					}),
+					"hoiYNhan ky trong",
+				),
+			).toEqual({
+				coHoiY: false,
+				trangThai: null,
+				canGop: false,
+				soChuDeChuaKetLuan: null,
+			});
+			expect(
+				ok(
+					await goiQuery("okr.hoiY", nguoi.T.cookie, { cycleId: kyTrong }),
+					"hoiY ky trong",
+				),
+			).toBeNull();
 		},
 		CHO_MS,
 	);

@@ -1,10 +1,22 @@
-import type { WorkspaceRole } from "@crm/auth";
+import { API_KEY_HEADER, auth, type WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { OKR_HOI_Y, type SoLieuHoiY } from "@crm/validation/okr-hoi-y";
+import request from "supertest";
 import { DONG_HO_HOI_Y, type DongHo } from "../src/okr/dong-ho";
 import { OKR } from "../src/okr/okr-config";
-import { dungSan, goi, nguoiMoi, ok, phienCua, taoNam } from "./okr-san";
+import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
+import {
+	dungSan,
+	goi,
+	type Json,
+	nguoiMoi,
+	ok,
+	phienCua,
+	type TraLoi,
+	taoNam,
+	ungDung,
+} from "./okr-san";
 
 const GIO_MS = OKR.thoiGian.gioMs;
 
@@ -21,7 +33,9 @@ export function sauGio(tu: Date, soGio: number): Date {
 }
 
 export function dungSanHoiY(): void {
-	dungSan((b) => b.overrideProvider(DONG_HO_HOI_Y).useValue(dongHo));
+	dungSan((b) => b.overrideProvider(DONG_HO_HOI_Y).useValue(dongHo), {
+		rest: true,
+	});
 }
 
 export type Nguoi = { id: string; cookie: string };
@@ -100,15 +114,46 @@ export async function gieoHoiY(opts: GieoHoiY = {}): Promise<{
 	return { ky, h, nguoi };
 }
 
-export async function gieoY(hoiYId: string, tacGiaUserId: string) {
-	return db.okrY.create({
-		data: {
-			hoiYId,
-			tacGiaUserId,
-			noiDung: "Mở tuyến giao lạnh cho khách dược",
-			createdAt: dongHo(),
-		},
-	});
+export const Y_MAC_DINH = "Mở tuyến giao lạnh cho khách dược";
+
+export async function gieoY(
+	hoiYId: string,
+	tacGiaUserId: string,
+	noiDung: string = Y_MAC_DINH,
+) {
+	const { id } = ok<{ id: string }>(
+		await goi(
+			"okr.gopY",
+			{ hoiYId, noiDung, viSao: "", doBangGi: "" },
+			await phienCua(tacGiaUserId),
+		),
+		"gieo y",
+	);
+	return db.okrY.findUniqueOrThrow({ where: { id } });
+}
+
+export async function khoaApiCua(userId: string): Promise<string> {
+	return (
+		await auth.api.createApiKey({ body: { name: `hoi-y-${userId}`, userId } })
+	).key;
+}
+
+export async function goiRest(
+	duong: string,
+	dau: { cookie: string } | { khoa: string },
+): Promise<TraLoi> {
+	const req = request(ungDung().getHttpServer()).get(
+		`${REST_BRIDGE_PATH}${duong}`,
+	);
+	const res = await ("cookie" in dau
+		? req.set("cookie", dau.cookie)
+		: req.set(API_KEY_HEADER, dau.khoa));
+	const body: Json = res.body ?? null;
+	return {
+		status: res.status,
+		data: res.status === 200 ? body : null,
+		loi: String(res.body?.message ?? ""),
+	};
 }
 
 export async function gieoBanTruoc(hoiYId: string, vietBoiUserId: string) {

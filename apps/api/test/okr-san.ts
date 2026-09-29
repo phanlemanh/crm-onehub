@@ -7,8 +7,13 @@ import {
 	type TestingModule,
 	type TestingModuleBuilder,
 } from "@nestjs/testing";
+import type { NextFunction, Request, Response } from "express";
+import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
+import { createOpenApiExpressMiddleware } from "trpc-to-openapi";
 import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
+import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
+import { createBaseTrpcContext } from "../src/trpc/trpc.context";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 export const TIEN_TO = `dok${(process.env.TEST_RUN_ID ?? "").slice(0, 8)}`;
@@ -208,6 +213,7 @@ const DON_SAN_MS = 30_000;
 
 export function dungSan(
 	sua: (b: TestingModuleBuilder) => TestingModuleBuilder = (b) => b,
+	tuy: { rest?: boolean } = {},
 ): void {
 	beforeAll(async () => {
 		const { AppModule } = await import("../src/app.module");
@@ -215,7 +221,24 @@ export function dungSan(
 			Test.createTestingModule({ imports: [AppModule] }),
 		).compile();
 		app = modul.createNestApplication({ bodyParser: false });
+		let cau: ((req: Request, res: Response) => Promise<void>) | undefined;
+		if (tuy.rest)
+			app.use(
+				REST_BRIDGE_PATH,
+				(req: Request, res: Response, next: NextFunction) => {
+					if (!cau) {
+						next();
+						return;
+					}
+					void cau(req, res);
+				},
+			);
 		await app.init();
+		if (tuy.rest)
+			cau = createOpenApiExpressMiddleware({
+				router: app.get(AppRouterHost).appRouter,
+				createContext: ({ req }) => createBaseTrpcContext(req),
+			});
 		for (const [khoa, vai] of [
 			["quan", "admin"],
 			["thuong", "member"],
