@@ -15,6 +15,8 @@ const BO_QUA = new Set([
 	"dist",
 	"build",
 	"coverage",
+	".eve",
+	".output",
 ]);
 
 const MIEN_TRU = [
@@ -74,7 +76,7 @@ function gom(thuMuc, kho) {
 	const muc = liet(thuMuc);
 	if (muc === null) return false;
 	for (const d of muc) {
-		if (BO_QUA.has(d.name)) continue;
+		if (BO_QUA.has(d.name) || d.name.startsWith(".next")) continue;
 		const duong = join(thuMuc, d.name);
 		if (d.isDirectory()) {
 			if (!gom(duong, kho)) return false;

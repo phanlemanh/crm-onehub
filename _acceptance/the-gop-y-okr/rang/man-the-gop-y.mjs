@@ -129,7 +129,7 @@ function doBoCuc(chonHop) {
 		].map((o) => o.getBoundingClientRect().width),
 		sw: document.documentElement.scrollWidth,
 		iw: window.innerWidth,
-		soHop: document.querySelectorAll('[role="dialog"]').length,
+		soHop: document.querySelectorAll('[role="dialog"][data-slot="dialog-content"]').length,
 	};
 }
 
@@ -199,9 +199,11 @@ async function chup(p, ten) {
 
 async function kiemMotHop(p, nhan) {
 	const so = await p.evaluate(
-		() => document.querySelectorAll('[role="dialog"]').length,
+		() =>
+			document.querySelectorAll('[role="dialog"][data-slot="dialog-content"]')
+				.length,
 	);
-	kiem(`${nhan}: con dung mot role=dialog (${so})`, so === 1);
+	kiem(`${nhan}: con dung mot hop thoai role=dialog (${so})`, so === 1);
 }
 
 async function kiemDoDo() {
@@ -583,7 +585,10 @@ async function buocE13(tl) {
 		await kiemMotHop(p1.p, "E13 1440 sau Sua");
 		const o = `${hang} [data-slot="proposed-change-edit"]`;
 		await p1.p.waitForSelector(o, { visible: true, timeout: TGY.cho.manMs });
-		await p1.p.click(o, { clickCount: 3 });
+		await p1.p.$eval(o, (x) => {
+			x.focus();
+			x.select();
+		});
 		await p1.p.keyboard.press("Backspace");
 		await p1.p.type(o, chuSua);
 		await kiemMotHop(p1.p, "E13 1440 sau go");
