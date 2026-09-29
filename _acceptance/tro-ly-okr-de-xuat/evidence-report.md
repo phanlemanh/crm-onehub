@@ -261,12 +261,13 @@ Round 5, HEAD 79bf1996. Bảng dưới thay toàn bộ nội dung round cũ; l�
     __EXIT=0
 
 - eval: E24
-  run_id: minted-tro-ly-okr-de-xuat-E24-r4
-  exit_code: 0
+  run_id: minted-tro-ly-okr-de-xuat-E24-r3
+  exit_code: 1
   verifier: config:executors.script.tdx_do_tre
-  verified_at: 2026-09-29T02:02:38Z
-  carried_from_round: 4
-  note: carry-forward tu round 4 — delta khong cham paths cua eval
+  verified_at: 2026-09-29T00:33:44Z
+  output: |
+    round 3 do duoi tai: p50 11,3 s / p90 22,5 s (nguong 8 s / 15 s) — khong dat nguong; round 4 may ranh lot nguong (6,7 s / 11,1 s)
+  note: dat-co-gioi-han — ma 1 da khai o evals.yaml (expected_exit 1); chu kho nhan gioi han 29/09 (d-20260929T152417Z-62) khi ghim lai cho the-gop-y-okr: lan ghim lai 29/09 do lai p50 9,6-13,2 s / p90 22,8-24,7 s
 
 - eval: E26
   run_id: mum1fvmlp980
@@ -344,6 +345,8 @@ Round 5, HEAD 79bf1996. Bảng dưới thay toàn bộ nội dung round cũ; l�
   verified_at: 2026-09-29T06:09:11Z
 
 ## Known limits
+
+- E24 đạt-có-giới-hạn (mã 1 đã khai): độ trễ góp ý phụ thuộc tải phía model — round 3 đo 11,3 s / 22,5 s, làn ghim lại 29/09 đo 9,6–13,2 s / 22,8–24,7 s so ngưỡng 8 s / 15 s. Chủ kho Phan Le Manh nhận giới hạn ngày 29/09/2026 (d-20260929T152417Z-62).
 
 ## Ngoài hợp đồng
 
