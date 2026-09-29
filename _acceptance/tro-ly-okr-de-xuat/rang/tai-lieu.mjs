@@ -14,8 +14,8 @@ const TAI_LIEU = {
 			process.env.TAI_LIEU_ROUTER ??
 			join(GOC, "apps", "api", "src", "okr", "okr.router.ts"),
 	},
+	gop9b: "2e3280474f472b9853ed9a66bb0f4524ede6ff7d",
 	ref: {
-		onehub: process.env.TAI_LIEU_REF_ONEHUB ?? "origin/onehub",
 		release: process.env.TAI_LIEU_REF_RELEASE ?? "origin/release",
 	},
 	muc: {
@@ -28,7 +28,7 @@ const TAI_LIEU = {
 	thanTrangTri: /^\t\t|^\t\}\)/,
 	thongDiep: {
 		routerRong: "tai lieu: router khong rut duoc thu tuc nao",
-		thieuRef: (ten) => `tai lieu: khong do duoc cho re 9b — thieu ref ${ten}`,
+		thieuRef: (ten) => `tai lieu: khong do duoc cho re 9b — thieu ${ten}`,
 	},
 };
 
@@ -110,18 +110,26 @@ function kiemApiMd(thuTuc) {
 }
 
 function tapTepHangTrongDiff() {
-	const thieuRef = Object.values(TAI_LIEU.ref).filter((ten) => !coRef(ten));
+	const thieuRef = [
+		...Object.values(TAI_LIEU.ref),
+		`${TAI_LIEU.gop9b}^1`,
+		`${TAI_LIEU.gop9b}^2`,
+	].filter((ten) => !coRef(ten));
 	if (thieuRef.length > 0) {
 		if (process.env.CI) {
 			console.warn(
-				`tai-lieu: CI thieu ref ${thieuRef.join(", ")} (checkout nong) — bo qua kiem cho re 9b`,
+				`tai-lieu: CI thieu ${thieuRef.join(", ")} (checkout nong) — bo qua kiem cho re 9b`,
 			);
 			return null;
 		}
 		throw new KhongDo(TAI_LIEU.thongDiep.thieuRef(thieuRef.join(", ")));
 	}
-	const goc = git("merge-base", "HEAD", TAI_LIEU.ref.onehub).trim();
-	const doi = git("diff", "--name-only", goc, "HEAD")
+	const doi = git(
+		"diff",
+		"--name-only",
+		`${TAI_LIEU.gop9b}^1`,
+		`${TAI_LIEU.gop9b}^2`,
+	)
 		.split("\n")
 		.filter(Boolean);
 	const coORelease = new Set(
