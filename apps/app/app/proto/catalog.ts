@@ -496,6 +496,55 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "gioi-han-duyet-cay-okr",
+		ten: "Mức hiển thị, bước duyệt nhẹ, tái cơ cấu không mồ côi",
+		states: [
+			{
+				id: "ST-khung-gioi-han",
+				nhan: "Khung mục tiêu — nhãn khoá «Giới hạn»",
+			},
+			{
+				id: "ST-khung-khong-thay",
+				nhan: "Khung mục tiêu — người không xem được mở đường dẫn",
+			},
+			{
+				id: "ST-hienthi-hop",
+				nhan: "Hộp mức hiển thị — giới hạn, 2 người xem",
+			},
+			{
+				id: "ST-hienthi-con-can-chinh",
+				nhan: "Hộp mức hiển thị — mục tiêu còn căn chỉnh",
+			},
+			{ id: "ST-duyet-cho-nguoi-gui", nhan: "Chờ duyệt — người gửi thấy" },
+			{ id: "ST-duyet-cho-nguoi-duyet", nhan: "Chờ duyệt — người duyệt thấy" },
+			{ id: "ST-duyet-tra-lai-hop", nhan: "Hộp trả lại — lý do chưa đủ dài" },
+			{ id: "ST-duyet-bi-tra-lai", nhan: "Bản nháp bị trả lại, kèm lý do" },
+			{ id: "ST-duyet-viec-cua-toi", nhan: "Việc OKR của tôi — chờ bạn duyệt" },
+			{
+				id: "ST-chuongtrinh-duyet",
+				nhan: "Chương trình OKR — bật «Công bố cần duyệt»",
+			},
+			{
+				id: "ST-chuongtrinh-khong-quyen",
+				nhan: "Chương trình OKR — không phải quản trị, công tắc khoá",
+			},
+			{ id: "ST-tochuc-okr-mo", nhan: "Tổ chức — phòng ban còn 4 mục tiêu mở" },
+			{
+				id: "ST-tochuc-luu-tru-chan",
+				nhan: "Tổ chức — lưu trữ bị chặn vì còn OKR",
+			},
+			{ id: "ST-chuyen-hop", nhan: "Hộp chuyển OKR" },
+			{
+				id: "ST-chuyen-loi",
+				nhan: "Hộp chuyển OKR — lỗi, không mục nào chuyển",
+			},
+			{ id: "ST-mocoi-co", nhan: "Sức khoẻ — có OKR mồ côi" },
+			{ id: "ST-mocoi-rong", nhan: "Sức khoẻ — không có OKR mồ côi" },
+			{ id: "ST-mocoi-dang-tai", nhan: "Sức khoẻ — OKR mồ côi đang tải" },
+			{ id: "ST-mocoi-loi", nhan: "Sức khoẻ — OKR mồ côi lỗi tải" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

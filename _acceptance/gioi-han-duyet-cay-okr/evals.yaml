@@ -1,0 +1,244 @@
+schema_version: 1
+feature_slug: gioi-han-duyet-cay-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_hien_thi_ghi
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-hien-thi.ts, packages/db/src/okr-vet.ts, apps/api/test/okr-hien-thi.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; chu kỳ quý dang-chay, mục tiêu nháp G của phòng P1 (trưởng T). Chuỗi viết trước: datHienThi(G, gioi-han, [X, Y]) → DB hienThi gioi-han, tập OkrNguoiXem toEqual {X, Y}; datHienThi(G, gioi-han, [Y, Z]) → {Y, Z}; datHienThi(G, cong-khai, []) → cong-khai, 0 hàng. okrTrail của G đúng ba dòng doi-hien-thi, before/after so toEqual cả ba cặp viết trước. createObjective(..., hienThi gioi-han) → hàng tạo đã mang gioi-han (đọc ngay sau tạo). mangSang: G2 giới hạn ở quý đã chấm có người xem {X, Y}, Y bị workspace.removeMember → bản nháp ở quý kế hienThi gioi-han, okrNguoiXem toEqual {X}; M gọi byUnit quý kế không thấy bản nháp. BẢNG TỪ CHỐI VIẾT TRƯỚC 7 ca, mỗi ca câu ghim và đếm hàng okrNguoiXem, okrTrail, hienThi không đổi: thành viên M không sửa được G (403); người xem không phải thành viên (400); 21 người xem (400); G còn một căn chỉnh đi và một căn chỉnh tới — hai ca riêng (400 nêu «2 căn chỉnh» / «1 căn chỉnh»); G ở cho-duyet (400 dangChoDuyet); chu kỳ cham-diem (400 kyDaKhoa). CHIỀU ĐỎ: bản sao datHienThi bỏ kiểm căn chỉnh → hai ca căn chỉnh đỏ in hienThi đã đổi; bản sao mangSang không chép mức → ca mang sang đỏ in hienThi cong-khai."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_hien_thi_ma_tran
+    paths: [packages/validation/src/okr-hien-thi.ts, packages/validation/test/okr-hien-thi.spec.ts, packages/db/src/okr-hien-thi.ts, apps/api/src/okr/okr-access.service.ts, apps/api/test/okr-hien-thi.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC 11 người × 3 mục tiêu (phòng ban công khai, phòng ban giới hạn, cá nhân giới hạn) = 33 ô xemDuocMucTieu so toEqual bảng khai; bảng khai nằm trong bài dưới dạng hằng, số ô assert = 33 (bài đếm và in). Trên kho gieo cùng 11 người và 6 mục tiêu (thêm onehub giới hạn, bộ phận giới hạn, nháp giới hạn), với từng người: tập id findMany({where: dieuKienXemMucTieu(nguCanh)}) toEqual tập id lọc bằng xemDuocMucTieu trên toàn bộ mục tiêu — 11 so sánh. Trên bộ OKR mẫu nạp vào kho thử: với mọi người mẫu, tập phòng ban và bộ phận làm trưởng của nguCanhXemOkr toEqual của OkrAccessService.quyen (40 so sánh, in số). CHIỀU ĐỎ: bản sao xemDuocMucTieu bỏ vế người làm việc → ô (người làm, phòng ban giới hạn) đỏ in ô lệch; bản sao dieuKienXemMucTieu bỏ vế người xem có tên → so sánh tập của X đỏ in id thiếu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_hien_thi_bon_duong
+    paths: [apps/api/src/**, packages/db/src/okr-*.ts, apps/api/test/vai-chi-okr.spec.ts, apps/api/test/okr-hien-thi-san.ts, _acceptance/gioi-han-duyet-cay-okr/rang/duong-doc-okr.json]
+    expected: "exit 0; gieo qua thủ tục thật G giới hạn (tiêu đề «Tái cơ cấu hợp đồng mẫu», KR «Rà 40 hợp đồng» của K có nguồn api và một số chụp, một việc, một bình luận, một ghi nhận, hai cập nhật tuần, một người tham gia, một người theo dõi, một người xem có tên) và mục tiêu công khai C1 từng căn chỉnh vào G rồi gỡ trước khi G đặt giới hạn (vết C1 có dòng them-can-chinh, go-can-chinh trỏ G). Danh sách thủ tục đọc chạm OKR = mọi query của router okr rút lúc chạy cộng các thủ tục ngoài okr ghi trong rang/duong-doc-okr.json (cùng tệp soi-ma --ca xem đòi) — so toEqual MA TRẬN VIẾT TRƯỚC THU_TU_DOC_OKR, mỗi dòng một thủ tục với đầu vào cố định (trỏ G, K, C1, chu kỳ hay đơn vị của G) và cột kỳ vọng cho K: «chứa G» hoặc «G vắng với mọi người» (số gộp, khai tên ở E4); số dòng assert = số thủ tục, bài in cả hai số; thủ tục đọc mới làm bài đỏ in tên. Mỗi dòng × ba đường (tRPC phiên, REST cookie, REST khoá API của chính người gọi) × ba người (K xem được, M vai member không xem được, O vai okr không xem được): mã trạng thái so toEqual cột khai (K 200; M, O 200 hay 404 như khai; 400 hay 403 ở bất kỳ ô nào là đỏ); với M, O JSON.stringify(phản hồi) chứa id G, «Tái cơ cấu hợp đồng mẫu», «Rà 40 hợp đồng» — đếm = 0 mỗi chuỗi, in bảng đếm; với K ở dòng «chứa G» đếm tiêu đề G ≥ 1. Dòng vết và diễn biến của C1: M, O thấy dòng căn chỉnh cũ với đích {gioiHan: true}, không id G; K thấy id G. Thủ tục theo mã trên G với M, O trả 404 message toEqual message của mã ngẫu nhiên không tồn tại. ma-tran và ma-tran-khoa-rest cũ vẫn xanh; tập thủ tục vai okr với tới được toEqual tập trước lượt cộng đúng bảy thủ tục mới. CHIỀU ĐỎ: bản sao okr-xem.danhSach không gắn dieuKienXemMucTieu → ô (danhSach, REST khoá, O, tiêu đề G) đỏ in đường và chuỗi lộ; bản sao đọc vết không qua vetChoNguoiXem → ô (vết C1, M, id G) đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_hien_thi_so_gop
+    paths: [apps/api/src/okr/**, apps/api/test/okr-hien-thi.spec.ts, apps/api/test/okr-hien-thi-san.ts, apps/api/test/okr-toan-canh-hieu-nang.spec.ts]
+    expected: "exit 0; P1 có G (giới hạn, tiến độ 90%) và C1, C2 (công khai, 20% và 40%). Số viết trước: toanCanh dòng P1 {mucTieu 2, tienDo 30}, hopTuan P1 chỉ có KR của C1, C2, sucKhoe P1 đếm 2, countByUnit P1 = 2 — mỗi số so toEqual cho người xem được (T) VÀ người không xem được (M): hai kết quả toEqual nhau và toEqual số khai. alignmentTargets không chứa G (cả với T); addAlignment(C1 → G) và (G → mục tiêu bộ phận) → 400 câu ghim, 0 hàng. Danh sách: byUnit, mine, danhSach (total, trang 1 cỡ 1), bangCham, xuatKy (chuỗi CSV) — với T chứa G, với M không chứa G và total M = total T − 1. okr-toan-canh-hieu-nang.spec vẫn xanh, số truy vấn không đổi. CHIỀU ĐỎ: bản sao toan-canh.gop chỉ lọc theo người xem thay vì bỏ giới hạn → số của T ≠ số của M, bài in hai số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_hien_thi_ghi_ke
+    paths: [apps/api/src/okr/**, packages/db/src/okr-tro-ly.ts, apps/api/test/okr-hien-thi.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC 6 thao tác của M (không xem được G): follow, addComment, guiGhiNhan, mangSang (G công bố ở quý đã chấm), ghiSoKr bằng khoá API của M trên KR api của G, xepViecTroLy(G, nguoiYeuCau M) — mỗi ca 404 (hàng đợi: từ chối có tên), đếm okrFollow, okrComment, okrGhiNhan, okrObjective, okrSoChup, agentTask không đổi. Người xem được A: addComment nhắc M → 400 nêu tên M; guiGhiNhan tới M → 400 nêu M; bình luận nhắc người xem được B → được. CHIỀU ĐỎ: bản sao follow bỏ kiểm xem → ca follow đỏ in số hàng okrFollow tăng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_hien_thi_nhac
+    paths: [packages/db/src/okr-nhac.ts, packages/db/src/okr-hien-thi.ts, apps/agent/agent/lib/okr/**, apps/agent/agent/lib/tin-nhac.ts, apps/agent/test/okr-nhac.integration.spec.ts, apps/agent/test/okr-hien-thi.integration.spec.ts]
+    expected: "exit 0; G công khai, F theo dõi G, K là người phụ trách KR của G; có bình luận mới trong cửa sổ. Đặt G giới hạn (F không xem được). viecOkrCanNhac: F 0 mục nêu G (so toEqual mảng rỗng các mục có objectiveId G), K có mục okr-cap-nhat của KR G và mục okr-theo-doi nếu K theo dõi; tin nhắc buổi sáng kế của F (đồng hồ đóng băng) không chứa tiêu đề G, của K chứa. Tác tử: việc trợ lý đã xếp cho F khi G còn công khai, G đổi giới hạn trước khi chạy → tác tử không đọc G (docMucTieu không được gọi — đếm lời gọi 0) và việc kết thúc với lý do khongXemDuoc. Đối chứng: đặt lại công khai → F có lại mục. CHIỀU ĐỎ: bản sao lọc nhắc bỏ bước xemDuocMucTieu → ca F đỏ in mục lộ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_duyet_cong_bo
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-chuong-trinh.ts, packages/validation/src/okr-muc-tieu.ts, apps/api/test/okr-duyet.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; quản trị setProgram({duyetCongBo: true}) → program() version +1, duyetCongBo true, một vết cau-hinh với before/after so toEqual {duyetCongBo: false} → {duyetCongBo: true} (các ô khác không đổi thì không có mặt hay bằng nhau hai bên); thành viên thường setProgram → 403, version không đổi. Ô bật: publishObjective(mục tiêu P1) bởi T → 400 message toEqual câu ghim canDuyet, status nhap; applyImport(P1, congBo: true, 2 mục tiêu) bởi T → hai mục tiêu status cho-duyet, mỗi cái một vết gui-duyet, 0 cong-bo; publishObjective bởi H → cong-bo, vết cong-bo after.tuDuyet true; applyImport bởi H → cong-bo. Ô tắt: publishObjective bởi T trên nháp → cong-bo; trên mục tiêu cho-duyet còn lại → cong-bo. toanCanh và capNhatTuan chỉ đếm cong-bo (số viết trước). CHIỀU ĐỎ: bản sao applyImport bỏ nhánh duyệt → ca nhập đỏ in status cong-bo."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_duyet_vong
+    paths: [apps/api/src/okr/**, packages/db/src/okr-vet.ts, apps/api/test/okr-duyet.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; ô bật; chuỗi viết trước trên mục tiêu nháp G của P1 có hai KR: guiDuyet(T) → cho-duyet; traLaiMucTieu(H, «Chưa có KR đo khách hàng mới») → nhap; updateObjective(T, tiêu đề mới) → được; guiDuyet(T) → cho-duyet; duyetMucTieu(H) → cong-bo, publishedAt khác null, mọi KR startLockedAt khác null. Mảng hành động vết của G so toEqual [gui-duyet, tra-lai, sua, gui-duyet, duyet]; dòng tra-lai note toEqual lý do. rutDuyet(T) trên một mục tiêu cho-duyet khác → nhap, vết rut-duyet. Lý do 9 ký tự và 501 ký tự → 400 câu ghim. CHIỀU ĐỎ: bản sao duyetMucTieu không khoá khởi điểm KR → ca startLockedAt đỏ in KR."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_duyet_nguoi
+    paths: [apps/api/src/okr/**, apps/api/test/okr-duyet.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; BẢNG NGƯỜI DUYỆT VIẾT TRƯỚC 7 ca so toEqual nguoiDuyet(...): phòng ban có bộ phận có trưởng → trưởng bộ phận; phòng ban không bộ phận → quan-tri; phòng ban có bộ phận không trưởng → quan-tri; bộ phận → quan-tri; cá nhân thường → trưởng phòng ban chính; cá nhân là trưởng phòng ban → trưởng bộ phận; cá nhân không phòng ban chính → quan-tri. MA TRẬN VIẾT TRƯỚC 5 người (T, H, quản trị Q, thành viên M, vai okr O) × 4 thao tác (guiDuyet, duyetMucTieu, traLaiMucTieu, rutDuyet) = 20 ô so toEqual bảng khai được/403 (Q duyệt được chỉ khi người duyệt suy ra là quan-tri — ca phòng ban có trưởng bộ phận: Q 403), ô 403 đếm vết không đổi. Khi cho-duyet: updateObjective, createKeyResult, updateKeyResult, removeKeyResult, addAlignment, datHienThi, addParticipant của T → 7 ô 400 dangChoDuyet, bảng không đổi. CHIỀU ĐỎ: bản sao duyetDuoc cho mọi người sửa được → ô (T, duyetMucTieu) đỏ in ô lệch."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_duyet_nhac
+    paths: [packages/db/src/okr-nhac.ts, packages/db/src/onboarding-nhac.ts, packages/validation/src/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/api/src/okr/**, apps/agent/test/okr-nhac.integration.spec.ts, apps/api/test/okr-duyet.spec.ts]
+    expected: "exit 0; G1, G2 chờ H duyệt; G3 của T bị H trả lại trong cửa sổ. viecCuaToi(H): mục okr-cho-duyet có tập objectiveId toEqual {G1, G2}; viecCuaToi(T): đúng một okr-tra-lai {objectiveId G3, lyDo}; M: 0 mục của hai loại. Tin nhắc buổi sáng hai ngày liền của H (đồng hồ đóng băng) đều có G1, G2; duyetMucTieu(G1) rồi tính lại → H chỉ còn G2. Trả lại ngoài cửa sổ 24 giờ → T 0 mục. THU_TU_NHAC và mucNhac nhận hai loại mới (bài kiểm độ đủ của THU_TU_NHAC xanh). CHIỀU ĐỎ: bản sao viecChoDuyet trả mọi mục cho-duyet cho mọi trưởng → ca M hay H thừa G của đơn vị khác đỏ in mục."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_luu_tru_chan
+    paths: [apps/api/src/to-chuc/**, packages/db/src/okr-don-vi.ts, apps/api/test/okr-tai-co-cau.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; P có mục tiêu ở chu kỳ dang-chay, B có mục tiêu cấp bộ phận ở chu kỳ cham-diem, R đã lưu trữ chỉ còn mục tiêu quý da-dong, S chỉ có mục tiêu da-bo ở kỳ đang chạy và mục tiêu da-dong. archiveDepartment(P) → 400 message chứa «1 mục tiêu» và «chuyển OKR», P archivedAt null; archiveDivision(B) → 400 tương tự; purgeDepartment(R) → 400 (không 500) message ghim; org.tree: R purgeable false, okrMo của P = 1, của S = 0; archiveDepartment(S) → được. Tập lỗi không bao giờ chứa mã 500 (bài quét mọi phản hồi của ca). Hàm đếm dùng chung được gọi từ to-chuc: soi import — apps/api/src/to-chuc không nhập từ apps/api/src/okr (in số tệp đã soi > 0). CHIỀU ĐỎ: bản sao lyDoKhongXoaPhongBan bỏ điều kiện OKR → ca R đỏ in mã 500 hay purgeable true."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_chuyen_don_vi
+    paths: [apps/api/src/okr/**, apps/api/src/to-chuc/**, apps/api/test/okr-tai-co-cau.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; P có bốn mục tiêu dang-chay (G1 có hai KR, ba cập nhật tuần, một căn chỉnh, người xem có tên, một việc). Chụp trước: đếm okrKeyResult, okrCheckIn, okrAlignment, okrNguoiXem, okrViecKr, okrTrail theo mục tiêu. chuyenDonVi([G1, G2, G3], Q) bởi quản trị → ba departmentId = Q; mọi số đếm chụp giữ nguyên, okrTrail mỗi mục tiêu thêm đúng một chuyen-don-vi {before: P, after: Q}. suaDuocDonVi: trưởng Q true, trưởng P false trên G1. BẢNG LÔ HỎNG VIẾT TRƯỚC 5 ca (mã không tồn tại trong lô; mục tiêu bộ phận sang phòng ban; Q đã lưu trữ; chu kỳ da-dong; người gọi trưởng P) → 400/403, không departmentId nào đổi (so toàn bộ bốn mục tiêu). Q có trần 1 mục tiêu chế độ chan → vẫn chuyển, trả canhBao. Chuyển G4 → archiveDepartment(P) được. CHIỀU ĐỎ: bản sao chuyenDonVi ghi từng mục tiêu ngoài giao dịch → ca lô có mã hỏng đỏ in departmentId đã đổi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_mo_coi
+    paths: [apps/api/src/okr/**, apps/api/src/to-chuc/**, apps/api/src/workspace/workspace.service.ts, apps/api/test/okr-tai-co-cau.spec.ts, apps/api/test/okr-hien-thi-san.ts]
+    expected: "exit 0; chuỗi viết trước trên kho gieo sạch (moCoi = [] ở đầu): (1) setHead P2 về null và bộ phận của P2 về null trưởng → moCoi chứa mục tiêu của P2 lý do [khong-ai-sua]; (2) workspace.removeMember người phụ trách KR K5 → mục tiêu của K5 lý do [kr-phu-trach-roi]; (3) ghi thẳng department.update archivedAt cho P3 còn mục tiêu dang-chay → [don-vi-luu-tru]. moCoi so toEqual đúng ba mục {objectiveId, lyDo}. Sửa: setHead P2 → bỏ mục một; transferWork người rời → bỏ mục hai; chuyenDonVi mục tiêu P3 sang P4 → moCoi = []. moveDepartment(P4 sang bộ phận khác) → moCoi = [], suaDuocDonVi của trưởng bộ phận mới true, cũ false. Thành viên gọi moCoi → 403. CHIỀU ĐỎ: bản sao moCoi bỏ lớp kr-phu-trach-roi → bước (2) đỏ in mảng nhận."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-11
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ghd_mo_coi_sql
+    paths: [_acceptance/gioi-han-duyet-cay-okr/rang/okr-mo-coi.sql, _acceptance/gioi-han-duyet-cay-okr/rang/mo-coi.mjs, apps/api/src/okr/**]
+    expected: "exit 0; trên kho đo (phiên đo tự dựng) gieo ba ca của E13 qua thủ tục thật (ca đơn vị lưu trữ ghi thẳng như E13); okr-mo-coi.sql trả các cặp (objectiveId, lop) toEqual tập của okr.moCoi gọi qua API thật, và đếm theo lớp toEqual {khong-ai-sua: 1, kr-phu-trach-roi: 1, don-vi-luu-tru: 1}; câu không có cột tuổi (không mốc để tính); câu chỉ đọc (chạy trong giao dịch READ ONLY). Sau ba bước sửa: câu trả 0 dòng. CHIỀU ĐỎ: --chieu-do chạy bản sao câu bỏ điều kiện archivedAt → lớp don-vi-luu-tru đếm 0, script in lệch với API."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ghd_man_chrome
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo nạp bộ OKR mẫu; bật ô duyệt qua API thật bằng quản trị mẫu; đăng nhập dev:session trưởng phòng Kinh doanh vùng 1 (T)"
+      - "Mở khung mục tiêu nháp G của phòng ở 1440/vi → menu «…» › «Mức hiển thị…» → chọn «Giới hạn», thêm một người xem → Lưu → đầu khung có nhãn «Giới hạn» → ảnh buoc-gioi-han"
+      - "Mở hộp mức hiển thị trên một mục tiêu còn căn chỉnh → chọn «Giới hạn» → lỗi «còn … căn chỉnh», Lưu khoá → ảnh buoc-con-can-chinh"
+      - "Trên G: «Gửi duyệt» → hỏi lại → xác nhận → dải «Chờ … duyệt» + «Rút lại», nút sửa khoá → ảnh buoc-cho-duyet"
+      - "Đăng nhập trưởng bộ phận Kinh doanh (H) → Tổng quan hay khu OKR › việc OKR của tôi có «Chờ bạn duyệt: <G>» → bấm → khung G có dải «… gửi duyệt» + «Duyệt và công bố», «Trả lại…» → ảnh buoc-nguoi-duyet"
+      - "«Trả lại…» → gõ 5 ký tự → nút khoá; gõ đủ lý do → Trả lại → khung G về nháp; đăng nhập lại T → dải bị trả lại kèm lý do → ảnh buoc-bi-tra-lai"
+      - "Đăng nhập một thành viên phòng khác (không xem được G) → mở đường dẫn record của G → «Không tìm thấy mục tiêu này»; toàn trang (innerText) không chứa tiêu đề G; Theo đơn vị của phòng không có dòng G → ảnh buoc-khong-thay"
+      - "Trạng thái: chặn truy vấn okr.objective ở trình duyệt → Empty lỗi + «Thử lại», bỏ chặn bấm lại tải được; ảnh 390 cho buoc-cho-duyet, buoc-nguoi-duyet; scrollWidth <= innerWidth; tiêu đề và lý do mang translate=no"
+    expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao máy chủ objective không gắn dieuKienXemMucTieu → bước buoc-khong-thay đỏ, script in tiêu đề G tìm thấy trên trang."
+
+  - id: E16
+    criterion: AC-12
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ghd_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/api/src/okr/**, _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs]
+    expected: "Cùng lần chạy với E15: sau Lưu mức, DB có G.hienThi gioi-han và đúng một okrNguoiXem là người đã chọn; sau Gửi duyệt, G.status cho-duyet và một vết gui-duyet của T; sau Trả lại, G.status nhap và dòng tra-lai có note bằng chuỗi đã gõ; mọi phản hồi mạng tới trình duyệt của người không xem được (ghi qua CDP) không chứa id và tiêu đề G — đếm = 0, script in số phản hồi đã soi (> 0). CHIỀU ĐỎ: cùng bản sao với E15 → đếm lộ > 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.ghd_khung_dom
+    paths: [apps/app/components/crm/record-sheet/**, "apps/app/app/(app)/[slug]/okr/**", apps/app/test/okr-gioi-han-duyet.dom.tsx]
+    expected: "exit 0; bài DOM dựng khung mục tiêu với dữ liệu viết trước cho sáu trạng thái đầu khung (cong-khai, gioi-han, cho-duyet-nguoi-gui, cho-duyet-nguoi-duyet, bi-tra-lai, khong-thay): mỗi trạng thái khẳng định phần tử riêng có mặt và phần tử của năm trạng thái kia vắng (ma trận 6 × 6 viết trước, in số ô = 36); hộp mức: chọn Giới hạn với loi conCanChinh từ máy chủ → FieldError câu ghim, Lưu khoá; hộp trả lại: 9 ký tự → nút khoá, 10 ký tự → bật; Huỷ của ba hộp thoại bọc DialogClose. CHIỀU ĐỎ: bản sao đầu khung hiện dải người duyệt cho mọi người sửa được → ô (cho-duyet-nguoi-gui, nút Duyệt vắng) đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ghd_man_chrome
+    steps:
+      - "Cùng phiên đo E15; đăng nhập quản trị mẫu → {APP_URL}/<slug>/settings/okr → dòng «Công bố cần duyệt» có công tắc trong form, tắt → bật → Lưu → toast → ảnh buoc-chuong-trinh"
+      - "Đăng nhập thành viên thường → cùng trang: công tắc khoá, một dòng lý do dưới tiêu đề → ảnh buoc-chuong-trinh-khoa"
+      - "Quản trị → Cài đặt › Tổ chức → chọn phòng ban có OKR mở → dòng «OKR: N mục tiêu ở kỳ đang mở» → «Lưu trữ» → hộp nói lý do, nút lưu trữ khoá, có «Chuyển OKR…» → ảnh buoc-luu-tru-chan"
+      - "«Chuyển OKR…» → chọn phòng ban nhận cùng bộ phận khác, bỏ chọn một mục tiêu → «Chuyển 3 mục tiêu» → toast; dòng OKR của phòng ban cũ còn 1 → ảnh buoc-chuyen"
+      - "Khu OKR › Sức khoẻ chương trình → khối «OKR mồ côi» rỗng «Không có OKR mồ côi» → phiên đo gỡ một người phụ trách KR qua API thật → tải lại → một mục với nhãn «Người phụ trách KR đã rời» và hành động → ảnh buoc-mo-coi"
+      - "Ảnh 390 cho buoc-chuyen và buoc-mo-coi; scrollWidth <= innerWidth"
+    expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao hộp lưu trữ không đọc okrMo → bước buoc-luu-tru-chan đỏ, script in «nút lưu trữ bật»."
+
+  - id: E19
+    criterion: AC-13
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ghd_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/settings/organization/**", "apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, apps/api/src/to-chuc/**, _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs]
+    expected: "Cùng lần chạy với E18: sau Lưu, program() version tăng và duyetCongBo true; sau Chuyển, đúng ba mục tiêu đã chọn có departmentId là phòng nhận (so tập), mục tiêu bỏ chọn giữ phòng cũ, ba vết chuyen-don-vi; phòng ban cũ archivedAt vẫn null; khối mồ côi trên màn liệt đúng tập objectiveId của okr.moCoi. CHIỀU ĐỎ: bản sao hộp chuyển gửi mọi mục tiêu bất kể ô chọn → so tập đỏ in mục tiêu thừa."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ghd_bo_mau
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts, apps/api/test/okr-mau-san.ts]
+    expected: "exit 0; kho sạch: nạp bộ mẫu → đúng 1 mục tiêu hienThi gioi-han (phòng Pháp chế) có đúng 1 okrNguoiXem; đúng 1 mục tiêu cho-duyet; đúng 1 vết tra-lai trên một mục tiêu nháp; đúng 1 phòng ban archivedAt khác null và mọi mục tiêu của nó ở chu kỳ da-dong; program() duyetCongBo false; okr.moCoi = []. Nạp lần hai → số hàng okrNguoiXem và vết mẫu không đổi. Xoá → 0 hàng mang mã mẫu ở okrNguoiXem, hàng ngoài bộ mẫu đứng nguyên. Các ca cũ của okr-mau.spec vẫn xanh. CHIỀU ĐỎ: bản sao nap.ts tạo phòng ban lưu trữ với mục tiêu quý 4 → ca moCoi = [] đỏ in mục."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-14
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ghd_ty_le
+    paths: [_acceptance/gioi-han-duyet-cay-okr/rang/ty-le-gioi-han-duyet.sql, _acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs, apps/api/src/okr/**]
+    expected: "exit 0; kho đo, gieo qua thủ tục thật chu kỳ C: 10 mục tiêu công bố (2 giới hạn), 1 nháp giới hạn (không tính), 4 lần gửi duyệt với mốc đồng hồ viết trước — xử lý sau 10, 30, 60 giờ và một lần sau 150 giờ; thêm một chuỗi gửi → trả lại (sau 20 giờ) → gửi → duyệt (sau 40 giờ) trên cùng mục tiêu (hai cặp) và một gửi → rút lại (không tính xử lý, không vào trung vị), một gửi còn mở; setProgram thật bật rồi tắt sau 5 ngày, bật lại rồi tắt sau 20 ngày. Số viết trước: gioiHan 2, congBo 10, guiDuyet 8, capXuLy 6, trungViGioCho 35, xuLyTrong5Ngay 5, tatTrongHaiTuan 1; lớp mồ côi 0. Câu chạy READ ONLY, so toEqual từng cột. CHIỀU ĐỎ: --chieu-do chạy bản sao câu đếm cả nháp → gioiHan 3, script in lệch."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E22
+    criterion: AC-14
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ghd_migration_chi_them
+    paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/gioi-han-duyet-cay-okr/rang/migration-chi-them.mjs]
+    expected: "exit 0; script (khuôn canh-kr-okr/rang/migration-chi-them.mjs, suy gốc kho từ vị trí của nó) đọc mọi thư mục migration mới so với origin/onehub; mỗi câu SQL thuộc tập viết trước: CREATE TABLE okrNguoiXem, CREATE (UNIQUE) INDEX trên bảng mới hay trên okrObjective(hienThi), ALTER TABLE okrNguoiXem ADD CONSTRAINT … FOREIGN KEY, và đúng hai ALTER TABLE … ADD COLUMN có DEFAULT (okrObjective.hienThi, okrProgramConfig.duyetCongBo); cấm UPDATE, DELETE, DROP, ALTER COLUMN, RENAME, ADD COLUMN không DEFAULT; model OkrNguoiXem là model cuối schema.prisma. CHIỀU ĐỎ: --chieu-do chạy trên bản sao migration có thêm UPDATE okrObjective → đỏ in câu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E23
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.ghd_soi_xem
+    paths: [apps/api/src/**, packages/db/src/**, apps/agent/agent/lib/**, _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs, _acceptance/gioi-han-duyet-cay-okr/rang/duong-doc-okr.json]
+    expected: "exit 0; soi-ma.mjs --ca xem suy gốc kho từ vị trí của nó; liệt mọi lời đọc (findMany|findFirst|findUnique|findUniqueOrThrow|findFirstOrThrow|count|groupBy|aggregate) trên okrObjective VÀ trên bảy bảng con okrKeyResult, okrViecKr, okrGhiNhan, okrComment, okrCheckIn, okrTrail, okrSoChup, cùng truy vấn thô trên các bảng đó, ở toàn apps/api/src, packages/db/src, apps/agent/agent/lib (ngoài tệp test); mỗi lời gọi hoặc có dieuKienXemMucTieu / boGioiHan (trực tiếp hay lồng qua quan hệ objective) trong where, hoặc có dòng trong MIEN_XEM viết trước kèm lý do; mỗi tệp ngoài apps/api/src/okr có lời đọc như vậy phải có thủ tục của nó trong rang/duong-doc-okr.json (tệp E3 dùng); in số lời gọi theo từng bảng (tổng > 40) và số miễn. Thêm: xemDuocMucTieu định nghĩa đúng một lần; apps/api/src/to-chuc không import từ ../okr. CHIỀU ĐỎ: --chieu-do chép okr-xem.service.ts vào tmpdir, bỏ dieuKienXemMucTieu khỏi một findMany → đỏ in tệp và dòng; thêm tệp giả ngoài okr có okrKeyResult.findMany({include: {objective: true}}) không điều kiện → đỏ in tệp, dòng và «thiếu trong duong-doc-okr.json»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E24
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.ghd_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/settings/organization/**", apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, packages/validation/src/**, apps/api/src/okr/**, CONTEXT.md, docs/api.md, _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs]
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD, chỉ tính dòng lượt này thêm; mỗi .tsx của apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay (bảng docs/design.md); mọi DialogFooter mới có «Huỷ» bọc DialogClose; tệp mới không chú thích mã, không Record<string, unknown>; mọi khoá chữ mới trong lib/messages/okr*.ts có vi và en khác nhau; CONTEXT.md có bốn mục Mức hiển thị, Chờ duyệt, Chuyển OKR, OKR mồ côi; docs/api.md mục OKR có «dieuKienXemMucTieu» và mục cây tổ chức có luật lưu trữ mới; ghi evidence/diff-luot.txt (git diff --stat và danh sách tệp) cho hội đồng; in danh sách tệp đã soi (> 0). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x`, một nút Huỷ không DialogClose và một khoá chữ thiếu en → đỏ in ba vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E25
+    criterion: AC-15
+    executor: judgment
+    question: >-
+      Nhìn diff của lượt này (evidence/diff-luot.txt và mô tả PR): luật xem nằm ở một hàm
+      thuần và một hàm dựng điều kiện dùng chung, API và nhắc buổi sáng dựng ngữ cảnh từ
+      một chỗ; bước duyệt không thêm bảng mà suy người duyệt từ cây lúc đọc; cây tổ chức
+      hỏi OKR qua một hàm đếm dùng chung chứ không nhập module okr; màn dựng bằng thành
+      phần packages/ui như bản mẫu đã duyệt, dải chờ duyệt và nhãn giới hạn không lộ tên
+      mục tiêu cho người không xem được; bốn mục từ điển mới viết đúng nếp CONTEXT.md
+      (nghĩa, Avoid, Vì sao) và docs/api.md nói đủ luật mới?
+    inputs: [docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md, _acceptance/gioi-han-duyet-cay-okr/contract.md, _acceptance/gioi-han-duyet-cay-okr/design-pass.md, _acceptance/gioi-han-duyet-cay-okr/mo-ta-pr.md, _acceptance/gioi-han-duyet-cay-okr/evidence/diff-luot.txt]
+    expected: >-
+      PASS khi cả năm vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu tệp
+      và dòng. FAIL khi một vế sai.
