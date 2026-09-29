@@ -1,4 +1,4 @@
-import type { TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
+import type { LoaiChuDe, TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
 import { chuanCau, OKR_HOI_Y, thuTuXao } from "@crm/validation/okr-hoi-y";
 import { mucTieuInput } from "@crm/validation/okr-muc-tieu";
 
@@ -156,6 +156,7 @@ export type MaThieu = (typeof MA_THIEU)[number];
 
 export type ChuDeCongBo = {
 	id: string;
+	loai: LoaiChuDe;
 	ten: string;
 	soY: number;
 	ketLuan: string | null;

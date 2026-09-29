@@ -235,6 +235,7 @@ describe("do-phu", () => {
 describe("ly-do-chua-cong-bo", () => {
 	type CauChuDe = {
 		id: string;
+		loai: "chu-de" | "y-la";
 		ten: string;
 		soY: number;
 		ketLuan: string | null;
@@ -244,6 +245,7 @@ describe("ly-do-chua-cong-bo", () => {
 	};
 	const chuDe = (id: string, rieng: Partial<CauChuDe> = {}): CauChuDe => ({
 		id,
+		loai: "chu-de",
 		ten: `Chủ đề ${id}`,
 		soY: 2,
 		ketLuan: "chon",
@@ -386,6 +388,68 @@ describe("ly-do-chua-cong-bo", () => {
 			"khong-chon",
 			"vuot-tran",
 		]);
+	});
+
+	test("ý lạ chưa có kết luận: thiếu kết luận, gắn đúng chủ đề", () => {
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [
+					chuDe("c1"),
+					chuDe("l1", { loai: "y-la", soY: 1, ketLuan: null }),
+				],
+			}),
+		).toEqual([dong("thieu-ket-luan", "l1")]);
+	});
+
+	test("ý lạ không làm: lý do 9 ký tự là thiếu lý do", () => {
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [
+					chuDe("c1"),
+					chuDe("l1", {
+						loai: "y-la",
+						soY: 1,
+						ketLuan: "khong-lam",
+						lyDo: "chín ký t",
+						noiBanTruoc: null,
+					}),
+				],
+			}),
+		).toEqual([dong("thieu-ly-do", "l1")]);
+	});
+
+	test("ý lạ được chọn: thiếu câu mục tiêu và thiếu nối câu viết trước", () => {
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [
+					chuDe("c1"),
+					chuDe("l1", {
+						loai: "y-la",
+						soY: 1,
+						cauMucTieu: "",
+						noiBanTruoc: null,
+					}),
+				],
+			}),
+		).toEqual([
+			dong("thieu-cau-muc-tieu", "l1"),
+			dong("thieu-noi-ban-truoc", "l1"),
+		]);
+	});
+
+	test("ý lạ được chọn đủ điều kiện thì tính là chủ đề chọn", () => {
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [
+					chuDe("l1", { loai: "y-la", soY: 1, noiBanTruoc: "moi" }),
+					chuDe("c2", { ketLuan: "de-sau" }),
+				],
+			}),
+		).toEqual([]);
 	});
 
 	test("nhiều chủ đề thiếu cùng một điều: mỗi chủ đề một dòng theo thứ tự chủ đề", () => {
