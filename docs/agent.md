@@ -240,8 +240,14 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
 - **Việc OKR đi chung một tin.** `viecCanNhac` gộp việc kế hoạch với
   `viecOkrCanNhac` (`@crm/db/okr-nhac`, hằng số ở `OKR_NHAC`) theo người, lọc thành
   viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
-  «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi năm loại OKR còn lại
-  (KR im, được giao, nhắc tên, ghi nhận, đang theo dõi). Trần
+  «Cập nhật tuần» đứng đầu, rồi «hỏi ý đang chờ bạn góp» (`okr-hoi-y-gop`), bốn loại
+  kế hoạch, rồi các loại OKR còn lại (KR im, được giao, nhắc tên, ghi nhận, «hỏi ý đã
+  công bố» `okr-hoi-y-cong-bo`, đang theo dõi). Hai loại hỏi ý sinh từ `viecHoiY`
+  (`@crm/db/okr-nhac`): «đang chờ bạn góp» cho mọi thành viên còn hiệu lực chưa góp ý
+  nào ở lần hỏi ý đang mở (trừ người chọn), «đã công bố» cho người đã góp còn là thành
+  viên khi `congBoLuc` rơi trong cửa sổ sự kiện; trạng thái lần hỏi ý đọc từ
+  `trangThaiHoiY` (`@crm/db/okr-hoi-y-trang-thai`), số truy vấn cố định dù bao nhiêu
+  lần hỏi ý hay thành viên. Đường mở là `<APP_URL>/<slug>/okr/hoi-y`. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
   nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Chữ «sáng nay»
   theo giờ VN lúc dựng tin (`dungTin(ten, luc, …)`, `laBuoiSang`): từ `NHAC.trua`

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
 import { db } from "@crm/db";
+import { OKR_NHAC } from "@crm/db/okr-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type KetLuan,
@@ -20,6 +21,7 @@ import {
 	hoiYDoPhuOutput,
 	hoiYNhanOutput,
 } from "../src/okr/okr-hoi-y.contracts";
+import { OkrTraoDoiService } from "../src/okr/okr-trao-doi.service";
 import {
 	E11_BAY_GIO,
 	E11_COT,
@@ -70,6 +72,7 @@ import {
 	phien,
 	type TraLoi,
 	taoNam,
+	ungDung,
 } from "./okr-san";
 
 dungSanHoiY();
@@ -4143,6 +4146,162 @@ describe("ket-qua", () => {
 				}
 			console.log(`ket-qua: đã chạy ${ra.length}/${XEM.length * VAI.length} ô`);
 			expect(ra).toEqual(kyVong);
+		},
+		CHO_MA_TRAN_MS,
+	);
+});
+
+describe("nhac", () => {
+	const GOP = "okr-hoi-y-gop";
+	const CONG_BO = "okr-hoi-y-cong-bo";
+	const SUKIEN_MS = OKR_NHAC.suKienGio * OKR.thoiGian.gioMs;
+
+	async function bangNhac(
+		nguoi: Record<string, Nguoi>,
+		now: Date,
+		hoiYIds: string[],
+	): Promise<Record<string, string[]>> {
+		const svc = ungDung().get(OkrTraoDoiService);
+		const ra: Record<string, string[]> = {};
+		for (const [ten, ai] of Object.entries(nguoi)) {
+			const { viec } = await svc.viecCuaToi(ai.id, now);
+			ra[ten] = viec
+				.filter(
+					(v) =>
+						(v.loai === GOP || v.loai === CONG_BO) &&
+						hoiYIds.includes(v.hoiYId),
+				)
+				.map((v) => v.loai)
+				.sort();
+		}
+		return ra;
+	}
+
+	async function muc(ai: Nguoi, now: Date, hoiYId?: string) {
+		const { viec } = await ungDung()
+			.get(OkrTraoDoiService)
+			.viecCuaToi(ai.id, now);
+		return viec.filter(
+			(v) =>
+				(v.loai === GOP || v.loai === CONG_BO) &&
+				(hoiYId === undefined || v.hoiYId === hoiYId),
+		);
+	}
+
+	const coMuc = (bang: Record<string, string[]>, loai: string) =>
+		Object.entries(bang)
+			.filter(([, ds]) => ds.includes(loai))
+			.map(([ten]) => ten)
+			.sort();
+
+	const RONG = { Q: [], P: [], T: [], O: [], A: [], B: [], R: [], L: [] };
+
+	test(
+		"nhac: lần hỏi ý đang mở — A, O và quản trị Q chưa góp mỗi người đúng một mục «đang chờ bạn góp» kèm tên chu kỳ và hạn; B, T đã góp, P người chọn, R và L đã rời không có; đúng hạn thì hết mục",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY({ yCua: ["T", "B", "R"] });
+			const L = await nguoiCo("hoi-y-L", "member");
+			await roiDi(g.nguoi.R.id);
+			await roiDi(L.id);
+			const nguoi = { ...g.nguoi, L };
+			const hang = await db.okrHoiY.findUniqueOrThrow({
+				where: { id: g.h },
+				select: { hanLuc: true, cycle: { select: { name: true } } },
+			});
+			const mot = sauGio(LUC, 1);
+
+			const luc1 = await bangNhac(nguoi, mot, [g.h]);
+			expect(luc1).toEqual({ ...RONG, Q: [GOP], O: [GOP], A: [GOP] });
+			const e10 = new Set(["A", "B", "O", "P", "R"]);
+			expect(coMuc(luc1, GOP).filter((t) => e10.has(t))).toEqual(["A", "O"]);
+			expect(await muc(g.nguoi.A, mot, g.h)).toEqual([
+				{
+					loai: GOP,
+					hoiYId: g.h,
+					nhan: hang.cycle.name,
+					hanLuc: hang.hanLuc.toISOString(),
+				},
+			]);
+
+			expect(
+				await bangNhac(nguoi, lechMs(hang.hanLuc, -MOT_MS), [g.h]),
+			).toEqual({ ...RONG, Q: [GOP], O: [GOP], A: [GOP] });
+			expect(await bangNhac(nguoi, hang.hanLuc, [g.h])).toEqual(RONG);
+			expect(await bangNhac(nguoi, sauGio(hang.hanLuc, 5), [g.h])).toEqual(
+				RONG,
+			);
+		},
+		CHO_MA_TRAN_MS,
+	);
+
+	test(
+		"nhac: dời hạn về bây giờ thì không ai còn mục «đang chờ bạn góp»; công bố lúc t — trong cửa sổ 24 giờ chỉ B và T đã góp còn là thành viên có đúng một mục «đã công bố», ngoài cửa sổ hai đầu thì không",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY({ yCua: ["T", "B", "R"] });
+			const L = await nguoiCo("hoi-y-L", "member");
+			await roiDi(g.nguoi.R.id);
+			await roiDi(L.id);
+			const nguoi = { ...g.nguoi, L };
+			const t = sauGio(LUC, 3);
+			datDongHo(t);
+			await donHanVeBayGio(g);
+
+			expect(await bangNhac(nguoi, t, [g.h])).toEqual(RONG);
+
+			const h = await gieoCongBo(g.h);
+			expect(h.congBoLuc).toEqual(t);
+			const trong = { ...RONG, B: [CONG_BO], T: [CONG_BO] };
+			const sau = await bangNhac(nguoi, sauGio(t, 1), [g.h]);
+			expect(sau).toEqual(trong);
+			expect(
+				coMuc(sau, CONG_BO).filter((x) =>
+					["A", "B", "O", "P", "R"].includes(x),
+				),
+			).toEqual(["B"]);
+			expect(await muc(g.nguoi.B, sauGio(t, 1), g.h)).toEqual([
+				{
+					loai: CONG_BO,
+					hoiYId: g.h,
+					nhan: (await db.okrCycle.findUniqueOrThrow({ where: { id: g.ky } }))
+						.name,
+				},
+			]);
+			expect(
+				await bangNhac(nguoi, lechMs(t, SUKIEN_MS - MOT_MS), [g.h]),
+			).toEqual(trong);
+			expect(await bangNhac(nguoi, lechMs(t, SUKIEN_MS), [g.h])).toEqual(RONG);
+			expect(await bangNhac(nguoi, lechMs(t, -MOT_MS), [g.h])).toEqual(RONG);
+		},
+		CHO_MA_TRAN_MS,
+	);
+
+	test(
+		"nhac: hai lần hỏi ý cùng mở — mục tính theo từng lần: người đã góp lần này vẫn nhận mục của lần kia, người chọn lần này nhận mục của lần kia",
+		async () => {
+			datDongHo(LUC);
+			const g1 = await gieoHoiY({ yCua: ["B"] });
+			const g2 = await gieoHoiY({ yCua: ["A"] });
+			const mot = sauGio(LUC, 1);
+			const cua = async (ai: Nguoi) =>
+				(await muc(ai, mot))
+					.map((v) => (v.loai === GOP ? `${v.loai}:${v.hoiYId}` : v.loai))
+					.filter((x) => x.endsWith(g1.h) || x.endsWith(g2.h))
+					.sort();
+			expect({
+				B1: await cua(g1.nguoi.B),
+				A2: await cua(g2.nguoi.A),
+				P1: await cua(g1.nguoi.P),
+				P2: await cua(g2.nguoi.P),
+				T1: await cua(g1.nguoi.T),
+			}).toEqual({
+				B1: [`${GOP}:${g2.h}`],
+				A2: [`${GOP}:${g1.h}`],
+				P1: [`${GOP}:${g2.h}`],
+				P2: [`${GOP}:${g1.h}`],
+				T1: [`${GOP}:${g1.h}`, `${GOP}:${g2.h}`].sort(),
+			});
 		},
 		CHO_MA_TRAN_MS,
 	);

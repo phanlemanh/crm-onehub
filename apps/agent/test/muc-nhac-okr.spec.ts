@@ -87,6 +87,17 @@ const MAU = {
 		capNhat: 1,
 		binhLuan: 2,
 	},
+	"okr-hoi-y-gop": {
+		loai: "okr-hoi-y-gop",
+		hoiYId: "hy-1",
+		nhan: "Năm 2027",
+		hanLuc: "2026-10-30T10:00:00.000Z",
+	},
+	"okr-hoi-y-cong-bo": {
+		loai: "okr-hoi-y-cong-bo",
+		hoiYId: "hy-1",
+		nhan: "Năm 2027",
+	},
 	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 2 },
 } satisfies {
 	[K in Exclude<ViecNhac["loai"], "ai-tran" | "ai-doi-soat-lech">]: Extract<

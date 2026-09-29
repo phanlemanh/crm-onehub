@@ -517,6 +517,11 @@ describe("the-truc-tiep", () => {
 	);
 });
 
+const LOAI_CO_DUONG_RIENG: readonly string[] = [
+	"okr-hoi-y-gop",
+	"okr-hoi-y-cong-bo",
+];
+
 describe("du-duong", () => {
 	test(
 		"du-duong: sau loai muc OKR do duong ghi that tao, okr.viecCuaToi tra du sau loai va qua khuon dau ra",
@@ -593,7 +598,9 @@ describe("du-duong", () => {
 
 			const quaTrpc = await doc<ViecCuaToiOutput>("okr.viecCuaToi", cX);
 			const loai = [...new Set(quaTrpc.viec.map((v) => v.loai))].sort();
-			const mong = [...LOAI_NHAC_OKR].sort();
+			const mong = LOAI_NHAC_OKR.filter(
+				(l) => !LOAI_CO_DUONG_RIENG.includes(l),
+			).sort();
 			if (JSON.stringify(loai) !== JSON.stringify(mong)) {
 				throw new Error(
 					`du-duong: thieu ${mong.filter((l) => !loai.includes(l)).join(", ")}`,

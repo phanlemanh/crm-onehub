@@ -1,9 +1,11 @@
 "use client";
 
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
+import Bullhorn from "@carbon/icons-react/es/Bullhorn";
 import Chat from "@carbon/icons-react/es/Chat";
 import CheckmarkOutline from "@carbon/icons-react/es/CheckmarkOutline";
 import Edit from "@carbon/icons-react/es/Edit";
+import Idea from "@carbon/icons-react/es/Idea";
 import Renew from "@carbon/icons-react/es/Renew";
 import Time from "@carbon/icons-react/es/Time";
 import Trophy from "@carbon/icons-react/es/Trophy";
@@ -55,6 +57,8 @@ const ICON_VIEC = {
 	"okr-nhac-ten": Chat,
 	"okr-ghi-nhan": Trophy,
 	"okr-theo-doi": View,
+	"okr-hoi-y-gop": Idea,
+	"okr-hoi-y-cong-bo": Bullhorn,
 } satisfies Record<ViecOkr["loai"], typeof Edit>;
 
 function khoaViec(v: ViecOkr): string {
@@ -71,6 +75,9 @@ function khoaViec(v: ViecOkr): string {
 			return `${v.loai}:${v.ghiNhanId}`;
 		case "okr-theo-doi":
 			return `${v.loai}:${v.objectiveId}`;
+		case "okr-hoi-y-gop":
+		case "okr-hoi-y-cong-bo":
+			return `${v.loai}:${v.hoiYId}`;
 	}
 }
 
@@ -117,6 +124,10 @@ function TieuDeViec({ viec }: { viec: ViecOkr }) {
 						: m.theoDoi,
 				{ capNhat: viec.capNhat, binhLuan: viec.binhLuan },
 			);
+		case "okr-hoi-y-gop":
+			return m.hoiYGop;
+		case "okr-hoi-y-cong-bo":
+			return m.hoiYCongBo;
 	}
 }
 
@@ -132,6 +143,13 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 					{m.capNhatTuan}
 					<Icon icon={ArrowRight} data-icon="inline-end" />
 				</Link>
+			</Button>
+		);
+	}
+	if (viec.loai === "okr-hoi-y-gop" || viec.loai === "okr-hoi-y-cong-bo") {
+		return (
+			<Button asChild size="sm" variant="outline">
+				<Link href={url("/okr/hoi-y")}>{m.moHoiY}</Link>
 			</Button>
 		);
 	}

@@ -1,3 +1,8 @@
+import {
+	TRANG_THAI_HOI_Y,
+	type TrangThaiHoiY,
+	trangThaiHoiY,
+} from "@crm/db/okr-hoi-y-trang-thai";
 import { z } from "zod";
 import { mucTieuInput } from "./okr-muc-tieu";
 
@@ -58,8 +63,7 @@ export const OKR_HOI_Y = {
 	},
 } as const;
 
-export const TRANG_THAI_HOI_Y = ["dang-mo", "dang-gom", "da-cong-bo"] as const;
-export type TrangThaiHoiY = (typeof TRANG_THAI_HOI_Y)[number];
+export { TRANG_THAI_HOI_Y, type TrangThaiHoiY, trangThaiHoiY };
 export const trangThaiHoiYKhuon = z.enum(TRANG_THAI_HOI_Y);
 
 export const LY_DO_KHOA_Y = ["chua-niem-phong"] as const;
@@ -254,15 +258,6 @@ export type HoiYIdInput = z.infer<typeof hoiYIdInput>;
 
 export const cycleIdInput = z.object({ cycleId: ma });
 export type CycleIdInput = z.infer<typeof cycleIdInput>;
-
-export function trangThaiHoiY(
-	h: { hanLuc: Date; congBoLuc: Date | null },
-	now: Date,
-): TrangThaiHoiY {
-	if (h.congBoLuc) return "da-cong-bo";
-	if (now.getTime() >= h.hanLuc.getTime()) return "dang-gom";
-	return "dang-mo";
-}
 
 function fnv1a(s: string): number {
 	let h = 0x811c9dc5;

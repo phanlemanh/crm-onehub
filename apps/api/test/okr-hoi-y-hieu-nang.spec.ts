@@ -1,8 +1,9 @@
 import "./bat-dem-truy-van";
 import { describe, expect, test } from "bun:test";
-import { type PrismaLogRecord, setPrismaLogSink } from "@crm/db";
+import { db, type PrismaLogRecord, setPrismaLogSink } from "@crm/db";
+import { viecOkrCanNhac } from "@crm/db/okr-nhac";
 import { hoiYDoPhuOutput } from "../src/okr/okr-hoi-y.contracts";
-import { datDongHo, dungSanHoiY, gieoHoiY } from "./okr-hoi-y-san";
+import { datDongHo, dungSanHoiY, gieoHoiY, sauGio } from "./okr-hoi-y-san";
 import { bpMoi, datViTri, goiQuery, ok, pbMoi } from "./okr-san";
 
 dungSanHoiY();
@@ -95,6 +96,42 @@ describe("hieu-nang", () => {
 				`hoiYDoPhu: số câu ${nho.soPhongBan} phòng ban = ${nho.cau}, ${lon.soPhongBan} phòng ban = ${lon.cau}`,
 			).toBe(
 				`hoiYDoPhu: số câu ${nho.soPhongBan} phòng ban = ${nho.cau}, ${lon.soPhongBan} phòng ban = ${nho.cau}`,
+			);
+		},
+		CHO_MS,
+	);
+
+	test.if(CHAY_RIENG)(
+		"hieu-nang: số câu truy vấn của việc OKR không tăng khi lần hỏi ý đi từ 1 lên 4 và thành viên tăng theo",
+		async () => {
+			datDongHo(LUC);
+			const now = sauGio(LUC, 1);
+			const doNhac = async () => {
+				let cau = 0;
+				setPrismaLogSink((r) => {
+					if (r.level === "query") cau += 1;
+				});
+				const ket = await viecOkrCanNhac(db, { now, cuaSo: "truc-tiep" });
+				setPrismaLogSink(chiGhiLoi);
+				return { cau, soNguoi: ket.size };
+			};
+			await gieoHoiY({ yCua: ["T"] });
+			await doNhac();
+			const mot = await doNhac();
+			for (let i = 0; i < 3; i += 1) await gieoHoiY({ yCua: ["T", "A"] });
+			await doNhac();
+			const bon = await doNhac();
+			console.log(
+				`hieu-nang: viecOkrCanNhac ${mot.cau} câu với ${mot.soNguoi} người, ${bon.cau} câu với ${bon.soNguoi} người`,
+			);
+			expect(`viecOkrCanNhac đếm được câu truy vấn: ${mot.cau > 0}`).toBe(
+				"viecOkrCanNhac đếm được câu truy vấn: true",
+			);
+			expect(bon.soNguoi - mot.soNguoi, "so nguoi them").toBeGreaterThan(0);
+			expect(
+				`viecOkrCanNhac: 1 lần hỏi ý = ${mot.cau} câu, 4 lần hỏi ý = ${bon.cau} câu`,
+			).toBe(
+				`viecOkrCanNhac: 1 lần hỏi ý = ${mot.cau} câu, 4 lần hỏi ý = ${mot.cau} câu`,
 			);
 		},
 		CHO_MS,

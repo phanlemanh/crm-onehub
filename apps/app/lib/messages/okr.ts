@@ -524,9 +524,12 @@ const vi = {
 			theoDoi: "{capNhat} cập nhật, {binhLuan} bình luận mới",
 			theoDoiCapNhat: "{capNhat} cập nhật mới",
 			theoDoiBinhLuan: "{binhLuan} bình luận mới",
+			hoiYGop: "Hỏi ý mục tiêu đang chờ bạn góp",
+			hoiYCongBo: "Hỏi ý mục tiêu đã công bố — xem ý của bạn đi đâu",
 		},
 		capNhatTuan: "Cập nhật tuần",
 		moMucTieu: "Mở mục tiêu",
+		moHoiY: "Mở Hỏi ý",
 		rong: "Hôm nay OKR không cần gì từ bạn",
 		loi: {
 			title: "Không lấy được việc OKR của bạn",
@@ -1086,9 +1089,13 @@ const en: OkrMessages = {
 			theoDoi: "New: {capNhat} updates, {binhLuan} comments",
 			theoDoiCapNhat: "New updates: {capNhat}",
 			theoDoiBinhLuan: "New comments: {binhLuan}",
+			hoiYGop: "Input on objectives is waiting for your ideas",
+			hoiYCongBo:
+				"Input on objectives is published — see where your ideas went",
 		},
 		capNhatTuan: "Weekly update",
 		moMucTieu: "Open objective",
+		moHoiY: "Open Ask for input",
 		rong: "Nothing in OKR needs you today",
 		loi: {
 			title: "Couldn't load your OKR to-dos",

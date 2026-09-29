@@ -288,6 +288,42 @@ export async function gieoPhongBan(
 	return pb.id;
 }
 
+export async function gieoHoiY(h: {
+	cycleId: string;
+	nguoiChon: string;
+	han: Date;
+	congBo?: Date;
+}): Promise<string> {
+	const hang = await db.okrHoiY.create({
+		data: {
+			cycleId: h.cycleId,
+			cauHoi: "Năm tới nên dồn sức vào điều gì?",
+			soLieu: [],
+			hanLuc: h.han,
+			nguoiChonUserId: h.nguoiChon,
+			taoBoiUserId: h.nguoiChon,
+			congBoLuc: h.congBo ?? null,
+			createdAt: new Date(h.han.getTime() - 48 * GIO_MS),
+		},
+	});
+	return hang.id;
+}
+
+export async function gieoY(
+	hoiYId: string,
+	tacGia: string,
+	luc: Date,
+): Promise<void> {
+	await db.okrY.create({
+		data: {
+			hoiYId,
+			tacGiaUserId: tacGia,
+			noiDung: "Mở tuyến giao lạnh cho khách dược",
+			createdAt: luc,
+		},
+	});
+}
+
 export async function donOkr(): Promise<void> {
 	await db.agentTask.deleteMany({ where: { kind: "nhac-ke-hoach" } });
 	const cuaSan = { cycle: { name: { startsWith: TIEN_TO } } };
@@ -307,6 +343,8 @@ export async function donOkr(): Promise<void> {
 	await db.okrTrail.deleteMany({
 		where: { actorUserId: { startsWith: TIEN_TO } },
 	});
+	await db.okrY.deleteMany({ where: { hoiY: cuaSan } });
+	await db.okrHoiY.deleteMany({ where: cuaSan });
 	await db.okrSoChup.deleteMany({
 		where: { keyResult: { objective: cuaSan } },
 	});

@@ -123,6 +123,9 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 		if (v.loai === "okr-cap-nhat") {
 			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
 		}
+		if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
+			return `${ctx.appUrl}/${ctx.slug}/okr/hoi-y`;
+		}
 		return `${ctx.appUrl}/${ctx.slug}/okr?record=objective:${v.objectiveId}`;
 	};
 }
