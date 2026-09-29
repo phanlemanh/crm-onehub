@@ -5,7 +5,9 @@ slug: dot-hoi-y-tuong-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-29T11:11:04Z
 design_doc: docs/superpowers/specs/2026-09-29-dot-hoi-y-tuong-okr-design.md
 ---
 
