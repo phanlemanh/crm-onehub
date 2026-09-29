@@ -220,7 +220,7 @@ evals:
       UNQUALIFIED_TO_BUY, 1 o LOST moi; OPEN: 2 giai doan goc + 1 OPEN moi co thoa thuan va baseAmount.
       Gia tri ky vong tinh bang ham doc lap trong bai kiem tu fixture (khong so cung): wins 5, losses 4,
       winRate 5/9; pipeline.stages = moi OPEN song theo position, dem va valueCents tung cai.
-      CHIEU DO: ban sao chi dem CLOSED_LOST vao losses -> do voi thong diep ghim "winRate 5/6 != 5/9".
+      CHIEU DO: ban sao chi dem CLOSED_LOST vao losses -> do voi thong diep ghim "winRate 5/6 != 5/9" (da chay 2026-09-29).
 
   - id: E13
     criterion: AC-11
@@ -236,7 +236,7 @@ evals:
       Doi chung am cung fixture: thoa thuan o LOST moi khong duoc dem. Telemetry rollup: deals_by_stage co
       khoa bang id tung giai doan co thoa thuan, gia tri bang so dem; chuoi JSON cua ca payload KHONG chua
       nhan nao cua fixture (quet tung nhan).
-      CHIEU DO: ban sao okr-chi-so giu stage "CLOSED_WON" -> do voi thong diep ghim "chot-duoc 1 != 2".
+      CHIEU DO: ban sao okr-chi-so giu stage "CLOSED_WON" -> do voi thong diep ghim "chot-duoc 3 != 5" (da chay 2026-09-29).
 
   - id: E14
     criterion: AC-12
