@@ -5,7 +5,7 @@ slug: the-gop-y-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-29
 design_doc: docs/superpowers/specs/2026-09-29-the-gop-y-okr-design.md
@@ -71,3 +71,16 @@ Quét bằng `morphological-scan` ngay trong phiên (29/09).
 
 - Tên truy cập của nút giữ nguyên (Nhận · Sửa · Bác · Bỏ qua · Nhận bản đã sửa · Huỷ) để thước lượt 9b chỉ đổi chỗ bám bố cục.
 - Hồ sơ `tro-ly-okr-de-xuat` ghim lại ở S5: bài DOM cột góp ý, bài `suggestion.dom.tsx`, `render-diff.spec.tsx` và `rang/man-gop-y.mjs` của nó đổi theo.
+
+### Known limits (Cổng Bằng chứng, 2026-09-29)
+
+- Ngoài-1: kịch bản lái màn (`rang/man-the-gop-y.mjs`) báo đỏ cả E1, E11, E13 nếu sau ba lần nhờ lại Trợ lý vẫn không đưa ra thẻ căn chỉnh, dù giao diện đúng.
+- Ngoài-3: khi lượt nhờ đầu không ra thẻ viết lại, kịch bản lái màn nhờ lại qua API thay vì bấm nút «Nhờ Trợ lý OKR góp ý», nên một nút hỏng có thể lọt ở nhánh thử lại.
+- Ngoài-4, Ngoài-8: trong hộp Sửa KR có chữ chưa lưu, thẻ câu hỏi gắn KR hiện dòng «Lưu thay đổi của Mục tiêu trước khi mở KR» dù thẻ không có nút mở KR.
+- Ngoài-6: `ProposedChange` nhận `id` nhưng không đặt lên phần tử trang; chưa màn nào truyền `id`.
+- Ngoài-7: phép đo E29 của `tro-ly-okr-de-xuat` còn trỏ vào `suggestion.tsx` đã xoá; phải sửa lệnh đó khi ghim lại hồ sơ đó ở S5.
+- Ngoài-9: trong lúc một thẻ đang gửi, «Bỏ qua», «Mở KR này», «Bác» ở thẻ khác không khoá; bấm vào không có phản ứng.
+- Ngoài-11: dòng «jsdom không tái hiện» của E8 là lời khai in sẵn từ bước thăm dò trên merge-base (lưu ở `.acceptance-runs/the-gop-y-okr/E8-merge-base.txt`), không chạy lại mỗi lượt.
+- Ngoài-12: E5 so data-slot của thẻ căn chỉnh đã quyết với thẻ viết lại đã quyết — hai thẻ cùng thành phần nên phép so luôn đúng; phần thu gọn được đo bằng chữ «Đã nhận» và 0 nút.
+- Ngoài-13: E10 không đo thứ tự hàng nút đứng sau khối giá trị và bằng chứng ở thẻ thông tin.
+- Ngoài-16: cầu nối mới của cổng mồ côi dò tên nhập bằng biểu thức trên văn bản gộp của `apps/**`, nên một chuỗi tên trong tệp kiểm cũng được tính là có người dùng.
