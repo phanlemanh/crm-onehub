@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md` · hợp đồng `_acceptance/gioi-han-duyet-cay-okr/contract.md` (duyệt 2026-09-29, Manh Phan) · phép đo `_acceptance/gioi-han-duyet-cay-okr/evals.yaml` · bản mẫu `/proto/gioi-han-duyet-cay-okr` (`design-pass.md`).
 
+**Cổng 1.5:** duyệt 2026-09-29 bởi Manh Phan — chạy subagent-driven (một tác tử con mỗi việc, kèm một người soát); việc 8, 9, 10 song song.
+
 ## Điều kiện trước S3
 
 1. `git fetch origin && git merge origin/onehub` (nhánh gốc hôm nay `1a39db24`).

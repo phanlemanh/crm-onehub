@@ -3,10 +3,10 @@ schema_version: 1
 slug: gioi-han-duyet-cay-okr
 feature: Mục tiêu có mức hiển thị giới hạn, có bước duyệt nhẹ tuỳ chọn, và tái cơ cấu giữa kỳ không làm OKR mồ côi — lượt 8c của lộ trình OKR (MT-06, QT-02, TC-06)
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-29T05:30:32Z
 prototype:
   base_commit: 1a39db2412f4f77dd8191be3970589a594130134
   disposition: keep
@@ -70,10 +70,10 @@ chủ kho sửa nếu bản phạm vi nói khác.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] ba thứ có được dùng như ý không — mức giới hạn có kéo mục tiêu nhạy cảm vào công cụ mà không làm OKR thôi minh bạch; bước duyệt (nếu chương trình bật) có chạy nhanh hay thành nút thắt; tái cơ cấu mùa quý 1 có để lại OKR mồ côi không.
-- Kết quả nào là SỐNG: [đề xuất] tới 2027-01-11: có ít nhất một mục tiêu đã công bố ở mức giới hạn và tỷ lệ mục tiêu giới hạn trên mục tiêu đã công bố ≤ 15%; nếu chương trình bật bước duyệt, trung vị thời gian chờ duyệt ≤ 2 ngày và ≥ 90% mục tiêu gửi duyệt được duyệt hay trả lại trong 5 ngày; ở mọi lần đọc hằng tuần từ 2026-11-02 có 0 mục tiêu mồ côi ở kỳ đang mở và 0 lần xoá đơn vị trả lỗi 500.
-- Kết quả nào là CHẾT: [đề xuất] tỷ lệ mục tiêu giới hạn > 30% (OKR thôi là thứ cả công ty nhìn thấy — xem lại mức mặc định); hoặc chương trình tắt bước duyệt trong vòng hai tuần sau khi bật (nút thắt); hoặc cùng một mục tiêu mồ côi có mặt ở ba lần đọc tuần liên tiếp.
-- Timebox: [đề xuất] dựng và đo trên bộ OKR mẫu; gộp ngoài đóng băng (từ 19/10 tới khi các phòng ban công bố OKR quý 4); đọc số 2026-12-01 và 2027-01-11 (mùa đặt quý 1 là lúc bước duyệt và tái cơ cấu chạy thật), đọc lần cuối 2027-01-31.
+- Câu hỏi phép đo trả lời: ba thứ có được dùng như ý không — mức giới hạn có kéo mục tiêu nhạy cảm vào công cụ mà không làm OKR thôi minh bạch; bước duyệt (nếu chương trình bật) có chạy nhanh hay thành nút thắt; tái cơ cấu mùa quý 1 có để lại OKR mồ côi không.
+- Kết quả nào là SỐNG: tới 2027-01-11: có ít nhất một mục tiêu đã công bố ở mức giới hạn và tỷ lệ mục tiêu giới hạn trên mục tiêu đã công bố ≤ 15%; nếu chương trình bật bước duyệt, trung vị thời gian chờ duyệt ≤ 2 ngày và ≥ 90% mục tiêu gửi duyệt được duyệt hay trả lại trong 5 ngày; ở mọi lần đọc hằng tuần từ 2026-11-02 có 0 mục tiêu mồ côi ở kỳ đang mở và 0 lần xoá đơn vị trả lỗi 500.
+- Kết quả nào là CHẾT: tỷ lệ mục tiêu giới hạn > 30% (OKR thôi là thứ cả công ty nhìn thấy — xem lại mức mặc định); hoặc chương trình tắt bước duyệt trong vòng hai tuần sau khi bật (nút thắt); hoặc cùng một mục tiêu mồ côi có mặt ở ba lần đọc tuần liên tiếp.
+- Timebox: dựng và đo trên bộ OKR mẫu; gộp ngoài đóng băng (từ 19/10 tới khi các phòng ban công bố OKR quý 4); đọc số 2026-12-01 và 2027-01-11 (mùa đặt quý 1 là lúc bước duyệt và tái cơ cấu chạy thật), đọc lần cuối 2027-01-31.
 
 ## Kết quả prototype
 
@@ -96,3 +96,9 @@ bộ trên `/proto/gioi-han-duyet-cay-okr`.
 - Gộp, tách đơn vị như một thao tác của cây tổ chức — gộp = chuyển OKR rồi lưu trữ.
 - Chặn gỡ thành viên đang phụ trách OKR — gỡ vẫn được, OKR của họ hiện ở danh sách mồ côi.
 - Trợ lý OKR đọc theo mức hiển thị ngoài việc chặn ở hàng đợi — lượt 9b, C.
+
+## Cổng 0
+
+- **decision = build.** Căn cứ: lộ trình OKR mục 5 «Lượt 8», dòng 8c mục 10; nghĩa ba mã như bảng ở trên. Quyết 2026-09-29 bởi Manh Phan trong phiên lượt 8c («Cổng Đáng: làm, ngưỡng như đề xuất»).
+- **disposition = keep.** Bản mẫu `gioi-han-duyet-cay-okr` ở lại kho (`docs/proto.md`).
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho câu hỏi, SỐNG, CHẾT và timebox như section Ngưỡng.
