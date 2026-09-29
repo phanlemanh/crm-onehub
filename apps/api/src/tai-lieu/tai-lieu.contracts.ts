@@ -1,5 +1,6 @@
 import {
 	chuanNfc,
+	DANG_CHO,
 	LOAI_TRANG,
 	TAI_LIEU,
 	TRANG_THAI_DE_XUAT,
@@ -96,7 +97,19 @@ export const taiLieuGetOutput = z.object({
 	phienBan: z.object({ so: z.number().int(), duyetLuc: z.string() }).nullable(),
 	noiDung: z.string().nullable(),
 	coBanCho: z.boolean(),
-	choLanDau: z.object({ chuTrang: nguoi }).nullable(),
+	choLanDau: z
+		.object({
+			chuTrang: nguoi,
+			dangCho: z.enum(DANG_CHO),
+			nguon: z
+				.object({
+					id: z.string(),
+					tenTep: z.string(),
+					lyDo: z.string().nullable(),
+				})
+				.nullable(),
+		})
+		.nullable(),
 	suaDuoc: z.literal(true),
 	nguon: nguonNgan.nullable(),
 });

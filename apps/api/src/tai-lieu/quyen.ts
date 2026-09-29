@@ -22,17 +22,6 @@ export function thayDeXuat(
 	return deXuat.taoBoiId === nguoi.id || duyetDuoc(nguoi, trang);
 }
 
-export function thayTrang(
-	nguoi: NguoiGoi,
-	trang: TrangQuyen & { banDangDungId: string | null },
-	deXuatCuaTrang: readonly DeXuatQuyen[],
-): boolean {
-	return (
-		trang.banDangDungId !== null ||
-		deXuatCuaTrang.some((d) => thayDeXuat(nguoi, d, trang))
-	);
-}
-
 export function dieuKienThayNguon(
 	nguoi: NguoiGoi,
 ): Prisma.TaiLieuNguonWhereInput {

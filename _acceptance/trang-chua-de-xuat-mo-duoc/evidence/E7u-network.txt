@@ -1,0 +1,2 @@
+driver: bun/puppeteer script (man-trang-cho.mjs) via phien do; khong co duong doc network (read_network_requests). networkObserved=n-a (driver)
+run: EXIT=0; buoc 1..4 dat; chieu-do 1 va 2 ghim do ma 1

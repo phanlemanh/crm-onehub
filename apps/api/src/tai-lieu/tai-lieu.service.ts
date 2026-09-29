@@ -10,6 +10,7 @@ import {
 import {
 	chuanNfc,
 	coChuHaySo,
+	type DangCho,
 	gocSlug,
 	LOAI_TRANG,
 	type LoaiTrang,
@@ -21,6 +22,10 @@ import {
 } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
+import {
+	parseTrangThaiNguon,
+	type TrangThaiNguon,
+} from "@crm/validation/tai-lieu-nguon";
 import { soMoi } from "@crm/validation/tai-lieu-so";
 import {
 	danhSachTrichDoan,
@@ -34,7 +39,12 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import { duyetDuoc, type NguoiGoi, thayDeXuat, thayTrang } from "./quyen";
+import {
+	dieuKienThayNguon,
+	duyetDuoc,
+	type NguoiGoi,
+	thayDeXuat,
+} from "./quyen";
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
@@ -48,7 +58,7 @@ import type {
 	TaiLieuProposeInput,
 	TaiLieuRejectInput,
 } from "./tai-lieu.contracts";
-import { TAI_LIEU_API } from "./tai-lieu-config";
+import { NGUON_CHO, TAI_LIEU_API } from "./tai-lieu-config";
 
 const T = TAI_LIEU_API.thongDiep;
 
@@ -147,6 +157,17 @@ export async function ghiSuKien(
 	});
 }
 
+export function dangChoCua(v: {
+	coCho: boolean;
+	coTraLai: boolean;
+	nguonMoi: TrangThaiNguon | null;
+}): DangCho {
+	if (v.coCho) return "duyet";
+	const tuNguon = v.nguonMoi ? NGUON_CHO[v.nguonMoi] : null;
+	if (tuNguon) return tuNguon;
+	return v.coTraLai ? "tra-lai" : "chua-co-ban";
+}
+
 @Injectable()
 export class TaiLieuService {
 	constructor(@InjectDatabase() private readonly db: Db) {}
@@ -227,14 +248,13 @@ export class TaiLieuService {
 	}
 
 	async get(nguoi: NguoiGoi, slug: string): Promise<TaiLieuGetOutput> {
-		const t = await this.db.taiLieuTrang.findUnique({
-			where: { slug },
+		const t = await this.db.taiLieuTrang.findFirst({
+			where: { AND: [{ slug }, dieuKienThay(nguoi)] },
 			select: {
+				id: true,
 				slug: true,
 				ten: true,
 				loai: true,
-				chuTrangId: true,
-				banDangDungId: true,
 				chuTrang: NGUOI,
 				department: DON_VI,
 				banDangDung: {
@@ -245,11 +265,10 @@ export class TaiLieuService {
 						deXuat: { select: { nguon: NGUON_NGAN } },
 					},
 				},
-				deXuat: { distinct: ["taoBoiId"], select: { taoBoiId: true } },
 				_count: { select: { deXuat: { where: this.coBanCho(nguoi) } } },
 			},
 		});
-		if (!t || !thayTrang(nguoi, t, t.deXuat)) throw khongCo();
+		if (!t) throw khongCo();
 		const ban = t.banDangDung;
 		return {
 			slug: t.slug,
@@ -262,9 +281,45 @@ export class TaiLieuService {
 				: null,
 			noiDung: ban?.noiDung ?? null,
 			coBanCho: t._count.deXuat > 0,
-			choLanDau: ban ? null : { chuTrang: t.chuTrang },
+			choLanDau: ban ? null : await this.choLanDau(nguoi, t),
 			suaDuoc: true,
 			nguon: ban?.deXuat.nguon ?? null,
+		};
+	}
+
+	private async choLanDau(
+		nguoi: NguoiGoi,
+		t: { id: string; chuTrang: { id: string; name: string } },
+	): Promise<NonNullable<TaiLieuGetOutput["choLanDau"]>> {
+		const [deXuat, moi] = await Promise.all([
+			this.db.taiLieuDeXuat.findMany({
+				where: { trangId: t.id, trangThai: { in: ["CHO_DUYET", "TRA_LAI"] } },
+				distinct: ["trangThai"],
+				select: { trangThai: true },
+			}),
+			this.db.taiLieuNguon.findFirst({
+				where: { trangId: t.id },
+				orderBy: [{ taiLuc: "desc" }, { id: "desc" }],
+				select: { id: true, tenTep: true, trangThai: true, lyDo: true },
+			}),
+		]);
+		const co = (tt: TrangThaiDeXuat) => deXuat.some((d) => d.trangThai === tt);
+		const thayNguon =
+			moi !== null &&
+			(await this.db.taiLieuNguon.count({
+				where: { AND: [{ id: moi.id }, dieuKienThayNguon(nguoi)] },
+			})) > 0;
+		return {
+			chuTrang: t.chuTrang,
+			dangCho: dangChoCua({
+				coCho: co("CHO_DUYET"),
+				coTraLai: co("TRA_LAI"),
+				nguonMoi: moi ? parseTrangThaiNguon(moi.trangThai) : null,
+			}),
+			nguon:
+				moi && thayNguon
+					? { id: moi.id, tenTep: moi.tenTep, lyDo: moi.lyDo }
+					: null,
 		};
 	}
 

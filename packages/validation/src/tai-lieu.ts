@@ -16,6 +16,16 @@ export const TRANG_THAI_DE_XUAT = [
 ] as const;
 export type TrangThaiDeXuat = (typeof TRANG_THAI_DE_XUAT)[number];
 
+export const DANG_CHO = [
+	"duyet",
+	"may-soan",
+	"go-tay",
+	"loi",
+	"tra-lai",
+	"chua-co-ban",
+] as const;
+export type DangCho = (typeof DANG_CHO)[number];
+
 export const LOAI_SU_KIEN = [
 	"TAO",
 	"DE_XUAT",
