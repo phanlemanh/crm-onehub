@@ -51,22 +51,22 @@ const SLUG = "chinh-sach-nhan-vien";
 const NGUON_ID = "nguon-thu-1";
 
 type Nut = "vietTay" | "xemNguon";
-const NUT: Record<DangCho, readonly Nut[]> = {
+const NUT = {
 	duyet: [],
 	"may-soan": ["xemNguon"],
 	"go-tay": ["vietTay", "xemNguon"],
 	loi: ["vietTay", "xemNguon"],
 	"tra-lai": ["vietTay"],
 	"chua-co-ban": ["vietTay"],
-};
-const CO_NGUON: Record<DangCho, boolean> = {
+} satisfies Record<DangCho, readonly Nut[]>;
+const CO_NGUON = {
 	duyet: false,
 	"may-soan": true,
 	"go-tay": true,
 	loi: true,
 	"tra-lai": false,
 	"chua-co-ban": false,
-};
+} satisfies Record<DangCho, boolean>;
 
 function trangVoi(dangCho: DangCho, lyDo: string | null = LY_DO): TrangDoc {
 	return {
@@ -124,14 +124,14 @@ function khongDich(goc: HTMLElement, chu: string): boolean {
 describe("man-trang-cho", () => {
 	for (const locale of ["vi", "en"] as const) {
 		const m = taiLieuMessages(locale).doc;
-		const nhan: Record<Nut, string> = {
+		const nhan = {
 			vietTay: m.vietTay,
 			xemNguon: m.xemNguon,
-		};
-		const href: Record<Nut, string> = {
+		} satisfies Record<Nut, string>;
+		const href = {
 			vietTay: workspaceUrl("ws", duongSuaTrang(SLUG)),
 			xemNguon: workspaceUrl("ws", duongNguon(NGUON_ID)),
-		};
+		} satisfies Record<Nut, string>;
 
 		for (const dc of DANG_CHO) {
 			test(`man-trang-cho: ${locale} ${dc} noi dang cho gi va dung nut di tiep`, () => {
@@ -153,7 +153,7 @@ describe("man-trang-cho", () => {
 				const nut = [...goc.querySelectorAll("a")];
 				for (const k of ["vietTay", "xemNguon"] as const) {
 					const a = nut.filter((e) => e.textContent === nhan[k]);
-					if (NUT[dc].includes(k)) {
+					if (NUT[dc].some((x) => x === k)) {
 						if (a.length !== 1) throw new Error(`${dc}: thieu nut ${nhan[k]}`);
 						expect(a[0]?.getAttribute("href")).toBe(href[k]);
 					} else if (a.length > 0) {

@@ -13,16 +13,16 @@ import { docxNho } from "./tai-lieu-nguon-mau";
 import {
 	AI,
 	type Ai,
-	duyet,
 	dungSan,
+	duyet,
 	goi,
 	hoi,
 	ma,
 	ok,
 	phien,
+	type TraLoi,
 	taoTrang,
 	traLai,
-	type TraLoi,
 } from "./tai-lieu-san";
 
 const gia = khoNguonGia();
@@ -41,14 +41,17 @@ type TrangThaiThu = (typeof TRANG_THAI_THU)[number];
 const CA_SAU = TRANG_THAI_THU;
 const CHI_DA_DUYET = ["da-duyet"] as const;
 
-const MONG: Record<Ai, readonly TrangThaiThu[]> = {
+const MONG = {
 	owner: CA_SAU,
 	admin: CA_SAU,
 	chu: CA_SAU,
 	tao: CA_SAU,
 	khac: CHI_DA_DUYET,
 	okr: CHI_DA_DUYET,
-};
+} satisfies Record<Ai, readonly TrangThaiThu[]>;
+
+const mongThay = (ai: Ai, tt: TrangThaiThu): boolean =>
+	MONG[ai].some((x) => x === tt);
 
 const DIEM_VAO = ["list", "get", "nhacToi"] as const;
 const LY_DO_LOI = "Máy soạn hết thời gian.";
@@ -191,14 +194,14 @@ describe("thay-trang", () => {
 			const quaList = await slugThayQuaList(ai);
 			for (const tt of TRANG_THAI_THU) {
 				const slug = SLUG[tt];
-				const mong = MONG[ai].includes(tt);
+				const mong = mongThay(ai, tt);
 				const get = await hoi("taiLieu.get", { slug }, ai);
 				const nhac = await hoi("taiLieu.nhacToi", { slug }, ai);
-				const thay: Record<(typeof DIEM_VAO)[number], boolean> = {
+				const thay = {
 					list: quaList.has(slug),
 					get: get.status === 200,
 					nhacToi: nhac.status === 200,
-				};
+				} satisfies Record<(typeof DIEM_VAO)[number], boolean>;
 				if (thay.list !== thay.get)
 					throw new Error(`lech list/get: ${ai} ${tt}`);
 				if (thay.list !== thay.nhacToi)
@@ -285,14 +288,14 @@ describe("thay-trang", () => {
 	});
 
 	test("dang-cho: trang chua co ban noi dung dang cho gi, theo thu tu uu tien", async () => {
-		const NGUON_DON: Record<TrangThaiNguon, DangCho> = {
+		const NGUON_DON = {
 			CHO_DOC: "may-soan",
 			CHO_SOAN: "may-soan",
 			DANG_SOAN: "may-soan",
 			DA_SOAN: "chua-co-ban",
 			CAN_GO_TAY: "go-tay",
 			LOI: "loi",
-		};
+		} satisfies Record<TrangThaiNguon, DangCho>;
 		const o: Record<string, { slug: string; mong: DangCho; nguonId?: string }> =
 			{};
 		for (const tt of TRANG_THAI_NGUON) {

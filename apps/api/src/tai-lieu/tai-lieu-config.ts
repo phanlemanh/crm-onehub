@@ -38,10 +38,11 @@ export const TAI_LIEU_API = {
 	},
 } as const;
 
-export const NGUON_CHO: Partial<Record<TrangThaiNguon, DangCho>> = {
+export const NGUON_CHO = {
 	CHO_DOC: "may-soan",
 	CHO_SOAN: "may-soan",
 	DANG_SOAN: "may-soan",
+	DA_SOAN: null,
 	CAN_GO_TAY: "go-tay",
 	LOI: "loi",
-};
+} as const satisfies Record<TrangThaiNguon, DangCho | null>;

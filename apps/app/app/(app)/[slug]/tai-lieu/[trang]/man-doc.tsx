@@ -40,23 +40,23 @@ export type NguonCho = { id: string; tenTep: string; lyDo: string | null };
 
 export type ChoLanDau = { dangCho: DangCho; nguon: NguonCho | null };
 
-const CO_VIET_TAY: Record<DangCho, boolean> = {
+const CO_VIET_TAY = {
 	duyet: false,
 	"may-soan": false,
 	"go-tay": true,
 	loi: true,
 	"tra-lai": true,
 	"chua-co-ban": true,
-};
+} satisfies Record<DangCho, boolean>;
 
-const CO_XEM_NGUON: Record<DangCho, boolean> = {
+const CO_XEM_NGUON = {
 	duyet: false,
 	"may-soan": true,
 	"go-tay": true,
 	loi: true,
 	"tra-lai": false,
 	"chua-co-ban": false,
-};
+} satisfies Record<DangCho, boolean>;
 
 export type TrangDoc = {
 	slug: string;

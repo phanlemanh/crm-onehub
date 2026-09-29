@@ -21,11 +21,11 @@ import {
 	type TrangThaiDeXuat,
 } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
+import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
 import {
 	parseTrangThaiNguon,
 	type TrangThaiNguon,
 } from "@crm/validation/tai-lieu-nguon";
-import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
 import { soMoi } from "@crm/validation/tai-lieu-so";
 import {
 	danhSachTrichDoan,
@@ -163,7 +163,7 @@ export function dangChoCua(v: {
 	nguonMoi: TrangThaiNguon | null;
 }): DangCho {
 	if (v.coCho) return "duyet";
-	const tuNguon = v.nguonMoi ? NGUON_CHO[v.nguonMoi] : undefined;
+	const tuNguon = v.nguonMoi ? NGUON_CHO[v.nguonMoi] : null;
 	if (tuNguon) return tuNguon;
 	return v.coTraLai ? "tra-lai" : "chua-co-ban";
 }
