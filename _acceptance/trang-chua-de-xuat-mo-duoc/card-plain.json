@@ -1,42 +1,16 @@
 {
-  "feature_plain": "Trang nào đã hiện trong danh sách Kho tài liệu thì bấm vào là mở được, kể cả trang chưa có bản nào; màn đọc nói rõ trang đang chờ gì và bước kế là gì.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho mỗi người mở được đúng những trang họ thấy trong danh sách, và không trang nào khác. Đo trên sáu người và sáu tình trạng trang."},
-    {"id": "AC-2", "p": "Sẽ để mọi lối vào trang, từ tab Nguồn và từ tìm nhanh ⌘K, dẫn tới trang mở được. Nút «Xem nguồn» chỉ hiện khi người xem thấy được nguồn đó."},
-    {"id": "AC-3", "p": "Sẽ trả lời người không được xem trang giống hệt như khi trang không tồn tại."},
-    {"id": "AC-4", "p": "Sẽ cho biết trang chưa có bản đang chờ gì: chờ duyệt, máy đang soạn, cần gõ tay, máy chưa soạn được, bản đầu bị trả lại, hay chưa có bản nào. Có thứ tự rõ khi nhiều việc cùng xảy ra."},
-    {"id": "AC-5", "p": "Sẽ hiện trên màn đọc một khung nói trang đang chờ gì, kèm đúng nút đi tiếp: «Xem nguồn», «Viết tay» hoặc cả hai."},
-    {"id": "AC-6", "p": "Sẽ cho chủ trang hoặc người tạo trang viết tay bản đầu trên trình soạn trống, gửi duyệt, rồi quay về màn đọc báo đang chờ duyệt."}
-  ],
-  "wont_do": [
-    {"id": "AC-7", "p": "Chặn lỗi 404 khi chủ kho bấm một dòng trang máy đang soạn trong danh sách. Đo trên bản chạy thật, ở cả khổ điện thoại không bị cuộn ngang."},
-    {"id": "AC-8", "p": "Sẽ KHÔNG tự đặt màu, bo góc hay khoảng cách riêng ngoài bộ giao diện chung."},
-    {"id": "OOS-1", "p": "Không làm lại trang 404 tiếng Anh mặc định khi đường dẫn không có trang — việc đó để riêng."},
-    {"id": "OOS-2", "p": "Không tự làm mới màn đọc khi máy soạn xong. Người xem phải tải lại trang."},
-    {"id": "OOS-3", "p": "Không đổi luật ai thấy bản đề xuất và ai thấy nguồn, vì hai luật đó đang đúng."},
-    {"id": "OOS-4", "p": "Không đặt nút «Soạn lại» trên màn đọc. Màn đọc chỉ dẫn sang tab Nguồn, nơi đã có nút này."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Người xem: phủ đủ sáu vai của kho, gồm người tạo trang, chủ trang, owner, admin, thành viên khác và vai okr (AC-1 đến AC-3)."},
-    {"i": 1, "p": "Tình trạng trang: phủ mọi tình trạng của trang chưa có bản theo nguồn và bản đề xuất, cùng trang đã duyệt (AC-1, AC-4, AC-5)."},
-    {"i": 2, "p": "Lối vào trang: danh sách, màn đọc, «trang nhắc tới», tab Nguồn, tìm nhanh và màn sửa (AC-1, AC-2, AC-6, AC-7)."},
-    {"i": 3, "p": "Không đo từng ô của 252 tổ hợp. Một phép đo quan hệ kiểm «thấy ở danh sách thì mở được», đúng với lời hứa."},
-    {"i": 4, "p": "Áp mọi nơi: không thấy thì giống như không tồn tại (AC-3). Tên người và tên tệp không bị trình duyệt dịch (AC-5). Màn điện thoại không cuộn ngang (AC-7)."},
-    {"i": 5, "p": "Để sau: bộ lọc, tab Sức khoẻ và danh sách trang đang dùng tự nhận luật mới qua cùng một hàm, nhưng lượt này không đo riêng."},
-    {"i": 6, "p": "Không làm: đổi luật thấy bản đề xuất hay thấy nguồn."},
-    {"i": 7, "p": "Chủ kho đã chốt khi duyệt thiết kế: người tạo trang, kể cả người tải nguồn rồi chọn người khác làm chủ trang, thấy và mở được trang chưa có bản của mình."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Khi trang vừa bị trả lại vừa đang được máy soạn lại, màn có thể báo sai tình trạng. Đã sửa: hợp đồng ghi rõ thứ tự ưu tiên, và phép đo có thêm các trang mang hai dấu hiệu cùng lúc."},
-    {"i": 1, "p": "Chưa có phép đo nào gõ bản đầu rồi bấm gửi trên màn thật. Đã sửa: phép đo trên bản chạy thật có thêm bước gõ, gửi, rồi thấy màn báo chờ duyệt."},
-    {"i": 2, "p": "Nút «Xem nguồn» có thể dẫn tới dòng mà người xem không được thấy. Đã sửa: nguồn chỉ hiện khi người xem thấy được nó, và phép đo kiểm cả chiều trang sang nguồn."},
-    {"i": 3, "p": "Phép đo không cuộn ngang mới kiểm một tình trạng. Đã sửa: kiểm cả bốn tình trạng, với tên tệp và lý do dài."},
-    {"i": 4, "p": "Lý do lỗi của máy soạn do phép đo tự đặt. Không sửa: việc máy soạn ghi lý do đã có phép đo riêng ở lượt máy soạn. Màn vẫn hiện gọn khi không có lý do."}
-  ],
+  "feature_plain": "Trang nào danh sách Kho tài liệu cho một người thấy thì người đó bấm vào là mở được, kể cả trang chưa có bản nào. Màn đọc nói rõ trang đang chờ gì và có nút đi tiếp: xem nguồn hoặc viết tay.",
+  "scope_plain": "Những việc đã hẹn để ngoài lượt này, giữ nguyên như lúc duyệt phạm vi:",
+  "decisions": [],
+  "analyst_plain": "",
   "decisions_plain": [
-    {"id": "d-20260929T095300Z-1", "p": "Chọn một luật duy nhất cho danh sách, màn đọc và «trang nhắc tới». Đổi lại, bỏ cách giữ hai bản luật song song."},
-    {"id": "d-20260929T095300Z-2", "p": "Chọn cho «người tạo trang» thấy trang của mình. Người tải nguồn cho trang mới cũng chính là người tạo, nên kết quả như đã chốt và khớp lời hứa của lượt đầu."},
-    {"id": "d-20260929T095300Z-3", "p": "KHÔNG làm phiên duyệt giao diện trên bản mẫu trước cổng, vì màn chỉ đổi lời trong một khung có sẵn. Đổi lại, ảnh chụp bốn tình trạng do phép đo chụp sau khi làm xong."},
-    {"id": "d-20260929T095300Z-4", "p": "KHÔNG làm lại trang 404 tiếng Anh và KHÔNG tự làm mới màn khi máy soạn xong. Hai việc này để lượt khác."}
+    {"id": "d-20260929T095300Z-1", "p": "Chọn một luật duy nhất cho danh sách, màn đọc và «trang nhắc tới»; đổi lại bỏ cách giữ hai bản luật song song."},
+    {"id": "d-20260929T095300Z-2", "p": "Chọn cho «người tạo trang» thấy trang của mình; người tải nguồn cho trang mới chính là người tạo, nên đúng điều đã chốt."},
+    {"id": "d-20260929T095300Z-3", "p": "KHÔNG làm phiên duyệt giao diện trên bản mẫu trước cổng; đổi lại, ảnh chụp bốn tình trạng do phép đo chụp sau khi làm xong."},
+    {"id": "d-20260929T095300Z-4", "p": "KHÔNG làm lại trang 404 tiếng Anh và KHÔNG tự làm mới màn khi máy soạn xong — để lượt khác."},
+    {"id": "d-20260929T100426Z-5", "p": "Sửa chữ mô tả cách phép đo báo đỏ cho khớp đúng chữ nó in khi phá thật; không đổi lời hứa nào."},
+    {"id": "d-20260929T101000Z-6", "p": "Đổi cách thử «màu tự đặt» sang loại màu mà bộ quét thật sự bắt; đổi lại, một màu lẻ đơn chiếc vẫn chỉ có mắt người canh."},
+    {"id": "d-20260929T101315Z-7", "p": "Sửa lỗi phép đo màn tìm ra: tên tệp dài làm khung tràn ngang trên điện thoại, nay chữ tự xuống dòng; và đổi cách thử bước gửi bản đầu cho đúng đường gửi."},
+    {"id": "d-20260929T103249Z-8", "p": "Sửa lỗi lượt chấm đầu tìm ra: phép đo nay có thật một người thấy trang mà không thấy nguồn, và màn không hiện «Xem nguồn» cho họ."}
   ]
 }
