@@ -87,11 +87,13 @@ async function WorkspaceHeader({
 
 async function RailTheoVai() {
 	await connection();
-	await loadWorkspace();
+	const workspace = await loadWorkspace();
 
 	return (
 		<HydrateClient>
-			<AppIconRail />
+			<AppIconRail
+				workspace={workspace ? { viewerRole: workspace.viewerRole } : null}
+			/>
 		</HydrateClient>
 	);
 }
