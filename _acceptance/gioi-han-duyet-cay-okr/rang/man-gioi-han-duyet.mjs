@@ -238,8 +238,9 @@ const DO = {
 	choHydrateMs: 800,
 	choKhongHienMs: 1500,
 	choGhiMs: 1500,
-	choMoHopMs: 5000,
+	choMoHopMs: 10_000,
 	lanMoHop: 3,
+	lanDiChuyen: 60,
 	soMucTieuChuyen: 4,
 };
 const MA = `g${Date.now().toString(36).slice(-6)}`;
@@ -608,11 +609,13 @@ async function moTrang(khoa, rong, duong, tuy = {}) {
 	return trang;
 }
 
-const thayNgay = (trang, fn, ...doiSo) =>
+const thayTrong = (trang, ms, fn, ...doiSo) =>
 	trang
-		.waitForFunction(fn, { timeout: DO.choMs, polling: 200 }, ...doiSo)
+		.waitForFunction(fn, { timeout: ms, polling: 200 }, ...doiSo)
 		.then(() => true)
 		.catch(() => false);
+const thayNgay = (trang, fn, ...doiSo) =>
+	thayTrong(trang, DO.choMs, fn, ...doiSo);
 
 async function doi(trang, nhan, fn, ...doiSo) {
 	return kiem(
@@ -638,6 +641,20 @@ const chuTrang = (trang) =>
 async function bamEl(tay, nhan) {
 	const el = tay.asElement();
 	if (!el) return kiem(`${nhom}: khong thay ${nhan} de bam`, false);
+	try {
+		await el.click();
+	} catch {
+		await el.evaluate((e) => e.click());
+	}
+	return true;
+}
+
+async function bamIm(trang, sel) {
+	await trang.bringToFront();
+	const el = (
+		await trang.evaluateHandle((s) => window.__tim(s)[0] ?? null, sel)
+	).asElement();
+	if (!el) return false;
 	try {
 		await el.click();
 	} catch {
@@ -683,78 +700,127 @@ async function go(trang, sel, chu) {
 	return true;
 }
 
-async function moHop(trang, triggerSel) {
+const HOP_MO = "[data-state='open'] [cmdk-input]";
+const LUA_CHON_MO = "[data-state='open'] [role='option']";
+
+const hopDangMo = (trang, triggerSel) =>
+	trang.evaluate(
+		(s) => window.__tim(s)[0]?.getAttribute("aria-expanded") === "true",
+		triggerSel,
+	);
+
+async function moHopLyDo(trang, triggerSel) {
 	if (
-		!(await doi(
+		!(await thayNgay(
 			trang,
-			`${nhom}: ${triggerSel} san sang de chon`,
 			(s) => window.__tim(s)[0]?.disabled === false,
 			triggerSel,
 		))
 	)
-		return false;
+		return `${triggerSel} van khoa sau ${DO.choMs}ms (danh sach chua tai)`;
 	for (let lan = 0; lan < DO.lanMoHop; lan += 1) {
-		if (!(await bam(trang, triggerSel))) return false;
-		const mo = await trang
-			.waitForFunction(() => window.__tim("[role='option']").length > 0, {
-				timeout: DO.choMoHopMs,
-				polling: 200,
-			})
-			.then(() => true)
-			.catch(() => false);
-		if (mo) return true;
+		if (
+			!(await hopDangMo(trang, triggerSel)) &&
+			!(await bamIm(trang, triggerSel))
+		)
+			return `khong thay ${triggerSel} de bam`;
+		const mo = await thayTrong(
+			trang,
+			DO.choMoHopMs,
+			(s, o) =>
+				window.__tim(s)[0]?.getAttribute("aria-expanded") === "true" &&
+				window.__tim(o).length > 0,
+			triggerSel,
+			HOP_MO,
+		);
+		if (mo) return null;
 	}
-	return kiem(`${nhom}: hop chon cua ${triggerSel} khong mo`, false);
+	return `hop chon cua ${triggerSel} khong mo sau ${DO.lanMoHop} lan`;
 }
 
-async function chonHop(trang, triggerSel, tenMuc) {
-	if (!(await moHop(trang, triggerSel))) return false;
-	if (await coSel(trang, "[cmdk-input]"))
-		for (let lan = 0; lan < DO.lanMoHop; lan += 1) {
-			const o = await trang.evaluateHandle(
-				() => window.__tim("[cmdk-input]")[0] ?? null,
-			);
-			const el = o.asElement();
-			if (!el) break;
-			await el.click({ count: 3 });
-			await trang.keyboard.press("Backspace");
-			await el.type(tenMuc, { delay: 20 });
-			await cho(300);
-			if ((await el.evaluate((e) => e.value)) === tenMuc) break;
-		}
-	await thayNgay(
-		trang,
-		(c) =>
-			window
-				.__tim("[role='option']")
-				.some((o) => o.innerText.replace(/\s+/g, " ").trim().startsWith(c)),
-		tenMuc,
-	);
-	const tay = await trang.evaluateHandle(
-		(c) =>
-			window
-				.__tim("[role='option']")
-				.find((o) => o.innerText.replace(/\s+/g, " ").trim().startsWith(c)) ??
-			null,
-		tenMuc,
-	);
-	if (!tay.asElement()) {
-		const thay = await trang.evaluate(() => ({
-			o: document.querySelector("[cmdk-input]")?.value ?? null,
-			luaChon: window
-				.__tim("[role='option']")
-				.slice(0, 6)
-				.map((o) => o.innerText.replace(/\s+/g, " ").trim()),
-			rong: window.__tim("[cmdk-empty]").map((e) => e.innerText.trim()),
-		}));
-		console.log(`  ${nhom}: hop chon dang co ${JSON.stringify(thay)}`);
-		await trang.keyboard.press("Escape");
-		return kiem(
-			`${nhom}: khong co lua chon «${tenMuc}» o ${triggerSel}`,
-			false,
-		);
+async function goTim(trang, chu) {
+	for (let lan = 0; lan < DO.lanMoHop; lan += 1) {
+		const el = (
+			await trang.evaluateHandle((s) => window.__tim(s)[0] ?? null, HOP_MO)
+		).asElement();
+		if (!el) return false;
+		await el.evaluate((e) => {
+			e.focus();
+			e.select();
+		});
+		await trang.keyboard.press("Backspace");
+		await el.type(chu, { delay: 20 });
+		if (
+			await thayTrong(
+				trang,
+				DO.choMoHopMs,
+				(s, c) => document.querySelector(s)?.value === c,
+				HOP_MO,
+				chu,
+			)
+		)
+			return true;
 	}
-	await bamEl(tay, `lua chon ${tenMuc}`);
+	return false;
+}
+
+async function chonLyDo(trang, triggerSel, tenMuc, timChu = tenMuc) {
+	let daGo = false;
+	for (let lan = 0; lan < DO.lanMoHop && !daGo; lan += 1) {
+		const loiMo = await moHopLyDo(trang, triggerSel);
+		if (loiMo) return loiMo;
+		daGo = await goTim(trang, timChu);
+	}
+	const coMuc = await thayNgay(
+		trang,
+		(s, c) =>
+			window
+				.__tim(s)
+				.some((o) => o.innerText.replace(/\s+/g, " ").trim().startsWith(c)),
+		LUA_CHON_MO,
+		tenMuc,
+	);
+	if (coMuc)
+		for (let i = 0; i < DO.lanDiChuyen; i += 1) {
+			const { dangChon, tieuDiem } = await trang.evaluate(
+				(s, o) => ({
+					dangChon:
+						window
+							.__tim(`${s}[aria-selected='true']`)[0]
+							?.innerText.replace(/\s+/g, " ")
+							.trim() ?? null,
+					tieuDiem: document.activeElement?.matches(o) === true,
+				}),
+				LUA_CHON_MO,
+				HOP_MO,
+			);
+			if (!tieuDiem) break;
+			if (dangChon?.startsWith(tenMuc)) {
+				await trang.keyboard.press("Enter");
+				return null;
+			}
+			await trang.keyboard.press("ArrowDown");
+		}
+	const thay = await trang.evaluate(
+		(o, l) => ({
+			o: document.querySelector(o)?.value ?? null,
+			luaChon: window
+				.__tim(l)
+				.slice(0, 6)
+				.map((x) => x.innerText.replace(/\s+/g, " ").trim()),
+			rong: window.__tim("[cmdk-empty]").map((e) => e.innerText.trim()),
+			tieuDiem: document.activeElement?.outerHTML.slice(0, 120) ?? null,
+		}),
+		HOP_MO,
+		LUA_CHON_MO,
+	);
+	if (await hopDangMo(trang, triggerSel)) await trang.keyboard.press("Escape");
+	return `khong ${coMuc ? "di toi" : "co"} lua chon «${tenMuc}» o ${triggerSel} (go «${timChu}» ${daGo ? "dung" : "lech"}; hop dang co ${JSON.stringify(thay)})`;
+}
+
+async function chonHop(trang, triggerSel, tenMuc, timChu = tenMuc) {
+	const loi = await chonLyDo(trang, triggerSel, tenMuc, timChu);
+	if (loi) return kiem(`${nhom}: ${loi}`, false);
 	await cho(300);
 	return true;
 }
@@ -878,35 +944,130 @@ async function laTranslateNo(trang, sel, chu) {
 	);
 }
 
+const O_NGUOI_XEM = "[data-hop='muc-hien-thi'] [role='combobox']";
+const TOKEN_NGUOI_XEM = "[data-hop='muc-hien-thi'] [data-nguoi-xem]";
+const RADIO_GIOI_HAN =
+	"[data-hop='muc-hien-thi'] [role='radio'][value='gioi-han']";
+
+async function chonNguoiXem(t) {
+	const coTen = () =>
+		thayTrong(
+			t,
+			DO.choMoHopMs,
+			(s, c) => (window.__tim(s)[0]?.innerText ?? "").includes(c),
+			TOKEN_NGUOI_XEM,
+			ten.nguoiXem,
+		);
+	let loi = null;
+	for (let lan = 1; lan <= DO.lanMoHop; lan += 1) {
+		loi = await chonLyDo(t, O_NGUOI_XEM, ten.nguoiXem, NGUOI_XEM);
+		if (!loi && (await coTen())) return null;
+		loi ??= `o nguoi xem khong co «${ten.nguoiXem}» sau khi chon (thay «${await chuSel(t, TOKEN_NGUOI_XEM)}»)`;
+		console.log(`  ${nhom}: lan ${lan} chua chon duoc nguoi xem — ${loi}`);
+		if (await coTen()) return null;
+	}
+	return loi;
+}
+
+async function tienDeGioiHan(t) {
+	if (
+		!(await thayNgay(
+			t,
+			(s) => window.__tim(s).length > 0,
+			`[data-mo-muc-tieu='${K.G}']`,
+		))
+	)
+		return `khong thay nut mo G sau ${DO.choMs}ms`;
+	await bamIm(t, `[data-mo-muc-tieu='${K.G}']`);
+	if (
+		!(await thayNgay(
+			t,
+			(s) => window.__tim(`${s}[data-dau-khung]`).length > 0,
+			SHEET(K.G),
+		))
+	)
+		return `khung G khong tai xong sau ${DO.choMs}ms`;
+	await bamIm(t, NUT_MENU(K.G));
+	if (
+		!(await thayNgay(
+			t,
+			() =>
+				window.__tim("[role='menuitem'][data-muc='muc-hien-thi']").length > 0,
+		))
+	)
+		return `menu khong co muc «${CHU.menuMucHienThi}»`;
+	await bamIm(t, "[role='menuitem'][data-muc='muc-hien-thi']");
+	if (
+		!(await thayNgay(
+			t,
+			() => window.__tim("[data-hop='muc-hien-thi']").length > 0,
+		))
+	)
+		return "hop muc hien thi khong mo";
+	if (
+		!(await thayNgay(
+			t,
+			() =>
+				document.querySelector("[role='menu']") === null &&
+				document.activeElement?.closest("[data-hop='muc-hien-thi']") != null,
+		))
+	)
+		return `menu chua dong han hoac tieu diem chua vao hop muc hien thi sau ${DO.choMs}ms`;
+	for (
+		let lan = 0;
+		lan < DO.lanMoHop && !(await coSel(t, O_NGUOI_XEM));
+		lan += 1
+	) {
+		await bamIm(t, RADIO_GIOI_HAN);
+		await thayTrong(
+			t,
+			DO.choMoHopMs,
+			(s) => window.__tim(s).length > 0,
+			O_NGUOI_XEM,
+		);
+	}
+	if (!(await coSel(t, O_NGUOI_XEM)))
+		return "o nguoi xem khong hien khi chon Gioi han";
+	return chonNguoiXem(t);
+}
+
 async function buocGioiHan(t) {
 	nhom = "E15 buoc-gioi-han";
-	if (!(await moSheet(t, K.G, nhom))) return;
-	if (!(await moMucHienThi(t, K.G, nhom))) return;
-	await bam(t, "[data-hop='muc-hien-thi'] [role='radio'][value='gioi-han']");
-	await coMat(
-		t,
-		"[data-hop='muc-hien-thi'] [role='combobox']",
-		`${nhom}: o nguoi xem hien khi chon Gioi han`,
-	);
-	await chonHop(t, "[data-hop='muc-hien-thi'] [role='combobox']", ten.nguoiXem);
-	const token = await chuSel(t, "[data-hop='muc-hien-thi'] [data-nguoi-xem]");
+	const tienDeHong = async (lyDo) => {
+		khang += 1;
+		hong.push(`${nhom}: TIEN DE HONG — ${lyDo}`);
+		await t
+			.screenshot({ path: join(TAM, "buoc-gioi-han-hong.png") })
+			.then(() => anh.push("buoc-gioi-han-hong.png"))
+			.catch(() => null);
+		return false;
+	};
+	const loi = await tienDeGioiHan(t);
+	if (loi) return tienDeHong(loi);
+	const token = await chuSel(t, TOKEN_NGUOI_XEM);
 	kiem(
 		`${nhom}: o nguoi xem co «${ten.nguoiXem}» (thay «${token}»)`,
 		token.includes(ten.nguoiXem),
 	);
-	await bam(t, "[data-nut='luu-muc-hien-thi']");
-	await doi(
+	const toast = coToast(t, CHU.hienThi.daLuu);
+	await bamIm(t, "[data-nut='luu-muc-hien-thi']");
+	const dong = await thayNgay(
 		t,
-		`${nhom}: dong hop va dau khung gioi-han co nhan «${CHU.nhan.gioiHan}»`,
 		(s) =>
 			window.__tim("[data-hop='muc-hien-thi']").length === 0 &&
 			window.__tim(`${s} [data-nhan-gioi-han]`).length > 0,
 		DAU_KHUNG(K.G, "gioi-han"),
 	);
-	kiem(
-		`${nhom}: toast «${CHU.hienThi.daLuu}»`,
-		await coToast(t, CHU.hienThi.daLuu),
-	);
+	if (!dong) {
+		const loiHop = await chuSel(
+			t,
+			"[data-hop='muc-hien-thi'] [data-slot='field-error']",
+		);
+		return tienDeHong(
+			`sau Luu ${DO.choMs}ms hop chua dong hoac dau khung chua co nhan «${CHU.nhan.gioiHan}» (loi tren hop «${loiHop}»)`,
+		);
+	}
+	kiem(`${nhom}: toast «${CHU.hienThi.daLuu}»`, await toast);
 	const nhan = await chuSel(t, `${SHEET(K.G)} [data-nhan-gioi-han]`);
 	kiem(
 		`${nhom}: nhan dau khung «${CHU.nhan.gioiHan}» (thay «${nhan}»)`,
@@ -918,10 +1079,11 @@ async function buocGioiHan(t) {
 	console.log(
 		`  E16 sau Luu muc: G.hienThi ${d?.hienThi}, okrNguoiXem ${JSON.stringify(xem)}`,
 	);
-	kiem(
-		`E16: sau Luu, G.hienThi «${d?.hienThi}» mong gioi-han va okrNguoiXem ${JSON.stringify(xem)} mong [${id.nguoiXem}]`,
-		d?.hienThi === "gioi-han" && xem.length === 1 && xem[0] === id.nguoiXem,
-	);
+	const dat =
+		d?.hienThi === "gioi-han" && xem.length === 1 && xem[0] === id.nguoiXem;
+	const cau = `E16: sau Luu, G.hienThi «${d?.hienThi}» mong gioi-han va okrNguoiXem ${JSON.stringify(xem)} mong [${id.nguoiXem}]`;
+	if (!dat) return tienDeHong(cau);
+	return kiem(cau, true);
 }
 
 async function buocConCanChinh() {
@@ -1309,11 +1471,24 @@ async function nhomE15() {
 	);
 	const mayT = mayGhi("truong");
 	const t = await moTrang("truong", DO.rong, "/okr", { may: mayT });
-	await buocGioiHan(t);
-	await buocChoDuyet(t);
+	const tienDe = await buocGioiHan(t);
+	if (tienDe) await buocChoDuyet(t);
 	await doiGhi(mayT);
 	await t.close();
 	await buocConCanChinh();
+	if (!tienDe) {
+		for (const b of [
+			"E15 buoc-cho-duyet",
+			"E15 buoc-nguoi-duyet",
+			"E15 buoc-tra-lai",
+			"E15 buoc-bi-tra-lai",
+			"E15 buoc-khong-thay",
+			"E16 bo ghi CDP nguoi khong xem duoc",
+		])
+			console.log(`  ${b}: bo qua vi tien de hong`);
+		await buocTrangThaiLoi();
+		return;
+	}
 	await buocNguoiDuyet();
 	await buocBiTraLai();
 	const { may: mayN, gioiHan } = await buocKhongThay();
