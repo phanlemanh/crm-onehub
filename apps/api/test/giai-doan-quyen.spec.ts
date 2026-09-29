@@ -15,16 +15,24 @@ const TIEN_TO = `gdq-${suffix}`;
 type Vai = "owner" | "admin" | "member" | "okr";
 type TraLoi = { status: number; data: unknown; loi: string; ma: string };
 
-const cookie: Record<Vai, string> = {
+const cookie = {
 	owner: "",
 	admin: "",
 	member: "",
 	okr: "",
-};
+} satisfies Record<Vai, string>;
 const daGieo = { nguoi: [] as string[], phien: [] as string[] };
 let app: INestApplication;
 
-async function goi(ai: Vai, thuTuc: string, dauVao: unknown): Promise<TraLoi> {
+type DauVao = {
+	id?: string;
+	label?: string;
+	kind?: string;
+	ids?: string[];
+	moveTo?: string;
+};
+
+async function goi(ai: Vai, thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
 	const res = await request(app.getHttpServer())
 		.post(`/api/trpc/giaiDoan.${thuTuc}`)
 		.set("cookie", cookie[ai])
@@ -81,7 +89,7 @@ async function taoTam(ten: string): Promise<string> {
 	return g.id;
 }
 
-async function dauVaoHopLe(thuTuc: string): Promise<unknown> {
+async function dauVaoHopLe(thuTuc: string): Promise<DauVao> {
 	switch (thuTuc) {
 		case "create":
 			return {

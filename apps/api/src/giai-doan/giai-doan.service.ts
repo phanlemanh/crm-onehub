@@ -12,7 +12,11 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { DealsService } from "../deals/deals.service";
 import {
+	type GiaiDoanArchiveInput,
+	type GiaiDoanCreateInput,
 	type GiaiDoanList,
+	type GiaiDoanRenameInput,
+	type GiaiDoanReorderInput,
 	giaiDoanArchiveInput,
 	giaiDoanCreateInput,
 	giaiDoanRenameInput,
@@ -61,7 +65,7 @@ export class GiaiDoanService {
 		};
 	}
 
-	async create(userId: string, raw: unknown) {
+	async create(userId: string, raw: GiaiDoanCreateInput) {
 		await this.requireManager(userId);
 		const input = giaiDoanCreateInput.parse(raw);
 		const created = await this.db.$transaction(async (tx) => {
@@ -84,7 +88,7 @@ export class GiaiDoanService {
 		return created;
 	}
 
-	async rename(userId: string, raw: unknown) {
+	async rename(userId: string, raw: GiaiDoanRenameInput) {
 		await this.requireManager(userId);
 		const input = giaiDoanRenameInput.parse(raw);
 		return this.db.$transaction(async (tx) => {
@@ -103,7 +107,7 @@ export class GiaiDoanService {
 		});
 	}
 
-	async reorder(userId: string, raw: unknown) {
+	async reorder(userId: string, raw: GiaiDoanReorderInput) {
 		await this.requireManager(userId);
 		const input = giaiDoanReorderInput.parse(raw);
 		await this.db.$transaction(async (tx) => {
@@ -121,7 +125,7 @@ export class GiaiDoanService {
 		return { id: input.ids[0] as string };
 	}
 
-	async archive(userId: string, raw: unknown) {
+	async archive(userId: string, raw: GiaiDoanArchiveInput) {
 		await this.requireManager(userId);
 		const input = giaiDoanArchiveInput.parse(raw);
 		const now = new Date();

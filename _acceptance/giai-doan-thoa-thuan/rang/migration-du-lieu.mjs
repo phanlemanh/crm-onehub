@@ -2,8 +2,8 @@ import { execFileSync, spawnSync } from "node:child_process";
 import {
 	cpSync,
 	mkdirSync,
-	readFileSync,
 	readdirSync,
+	readFileSync,
 	rmSync,
 	writeFileSync,
 } from "node:fs";
@@ -18,7 +18,8 @@ const { Client } = require("pg");
 
 const VONG = "20261006010000_giai_doan_thoa_thuan";
 const MIG_VONG =
-	process.env.GDTT_MIG ?? join(DB, "prisma", "migrations", VONG, "migration.sql");
+	process.env.GDTT_MIG ??
+	join(DB, "prisma", "migrations", VONG, "migration.sql");
 const KY_MONG = 53;
 
 function docEnv(khoa) {
@@ -61,10 +62,7 @@ function kyVong(moc) {
 }
 
 const sapKhoa = (o) =>
-	JSON.stringify(
-		o,
-		o && typeof o === "object" ? Object.keys(o).sort() : undefined,
-	);
+	JSON.stringify(Object.fromEntries(Object.entries(o ?? {}).sort()));
 
 const hong = [];
 let dem = 0;

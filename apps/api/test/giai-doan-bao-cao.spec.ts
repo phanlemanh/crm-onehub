@@ -14,10 +14,19 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 const dashboard = new DashboardService(db, new ConversionService(db));
 
+type BanRollup = { deals_by_stage: Record<string, number> };
+type CoCrm = { crm(since: Date): Promise<BanRollup> };
+
 type Gieo = { stage: string; closed: boolean; cents: number };
 
-const moi: Record<LoaiGiaiDoan, string> = { OPEN: "", WON: "", LOST: "" };
-const nhan: Record<LoaiGiaiDoan, string> = { OPEN: "", WON: "", LOST: "" };
+const moi = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
+const nhan = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
 let companyId = "";
 let gieo: Gieo[] = [];
 
@@ -175,12 +184,8 @@ describe("okr-telemetry", () => {
 
 	it("deals_by_stage khoa bang id, khong mang nhan", async () => {
 		const rollup = new RollupService(db, {} as never);
-		const crm = await (
-			rollup as unknown as {
-				crm(since: Date): Promise<Record<string, unknown>>;
-			}
-		).crm(new Date(0));
-		const theoStage = crm.deals_by_stage as Record<string, number>;
+		const crm = await (rollup as unknown as CoCrm).crm(new Date(0));
+		const theoStage = crm.deals_by_stage;
 		for (const id of Object.values(moi)) {
 			expect(theoStage[id], `deals_by_stage thieu ${id}`).toBeGreaterThan(0);
 		}

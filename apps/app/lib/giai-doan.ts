@@ -23,11 +23,11 @@ const MAU_MO = [
 
 const MAU_DONG = "var(--chart-5)";
 
-const TONE: Record<LoaiGiaiDoanHien, StatusTone> = {
+const TONE = {
 	OPEN: "info",
 	WON: "success",
 	LOST: "error",
-};
+} as const satisfies Record<LoaiGiaiDoanHien, StatusTone>;
 
 export function mauGiaiDoan(
 	giaiDoan: GiaiDoanHien | undefined,

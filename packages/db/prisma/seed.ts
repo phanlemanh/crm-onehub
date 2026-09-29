@@ -997,7 +997,9 @@ async function seedActivities(
 			subject: "Stage changed",
 			meta: {
 				from: GIAI_DOAN_GOC.DEMO_BOOKED,
-				to: deal.closed ? GIAI_DOAN_GOC.CLOSED_WON : GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
+				to: deal.closed
+					? GIAI_DOAN_GOC.CLOSED_WON
+					: GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
 			},
 		});
 	}

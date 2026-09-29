@@ -10,8 +10,14 @@ const domain = `gd-agent-${suffix}.test`;
 const userId = `user-gda-${suffix}`;
 const tienTo = `gdtt-agent-${suffix}`;
 
-const moi: Record<LoaiGiaiDoan, string> = { OPEN: "", WON: "", LOST: "" };
-const nhan: Record<LoaiGiaiDoan, string> = { OPEN: "", WON: "", LOST: "" };
+const moi = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
+const nhan = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
 const thoaThuan: { id: string; stage: string }[] = [];
 
 async function don() {

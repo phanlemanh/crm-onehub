@@ -36,7 +36,7 @@ const activities = new ActivitiesService(db, stamp);
 type SuKien = {
 	type: string;
 	record: { id: string };
-	data: Record<string, unknown>;
+	data: { companyId?: string; from?: string | null; to?: string };
 };
 const phat: SuKien[] = [];
 const agentDem = {
@@ -69,7 +69,10 @@ const giaiDoan = new GiaiDoanService(
 );
 
 let companyId = "";
-const moi: Record<LoaiGiaiDoan, string> = { OPEN: "", WON: "", LOST: "" };
+const moi = { OPEN: "", WON: "", LOST: "" } satisfies Record<
+	LoaiGiaiDoan,
+	string
+>;
 
 async function taoGiaiDoan(kind: LoaiGiaiDoan, ten: string, position = 50) {
 	const g = await db.dealStage.create({
@@ -642,10 +645,6 @@ describe("bat-bien", () => {
 			"archive",
 			"rename",
 		]);
-		const goi = giaiDoan as unknown as Record<
-			string,
-			(u: string, i: unknown) => Promise<unknown>
-		>;
 		for (const ten of mutation) {
 			const { id } = await giaiDoan.create(userId, {
 				label: `Kind lạ ${ten} ${suffix}`,
@@ -653,7 +652,11 @@ describe("bat-bien", () => {
 			});
 			const input =
 				ten === "rename" ? { id, label: `Kind lạ đổi ${suffix}` } : { id };
-			await goi[ten]?.(userId, { ...input, kind: "WON" });
+			if (ten === "rename") {
+				await giaiDoan.rename(userId, { ...input, kind: "WON" } as never);
+			} else {
+				await giaiDoan.archive(userId, { ...input, kind: "WON" } as never);
+			}
 			const kind = (await db.dealStage.findUniqueOrThrow({ where: { id } }))
 				.kind;
 			expect(kind, `${ten}: kind OPEN -> ${kind}`).toBe("OPEN");

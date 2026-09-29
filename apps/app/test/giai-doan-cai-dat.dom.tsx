@@ -38,6 +38,8 @@ let duLieu: GiaiDoanList = giaiDoanListOutput.parse({
 });
 let soLanDoc = 0;
 
+type MoiGhi = { onSuccess?: unknown; onError?: unknown; onSettled?: unknown };
+
 function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 	return {
 		queryKey: (v?: TVao) => (v === undefined ? [ten] : [ten, v]),
@@ -46,7 +48,7 @@ function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 			queryKey: v === undefined ? [ten] : [ten, v],
 			queryFn: async () => doc(v),
 		}),
-		mutationOptions: (tuyChon?: object) => ({
+		mutationOptions: (tuyChon?: MoiGhi) => ({
 			mutationKey: [ten],
 			mutationFn: async () => ({ id: "x" }),
 			...tuyChon,
