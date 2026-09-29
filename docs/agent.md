@@ -247,7 +247,11 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   nào ở lần hỏi ý đang mở (trừ người chọn), «đã công bố» cho người đã góp còn là thành
   viên khi `congBoLuc` rơi trong cửa sổ sự kiện; trạng thái lần hỏi ý đọc từ
   `trangThaiHoiY` (`@crm/db/okr-hoi-y-trang-thai`), số truy vấn cố định dù bao nhiêu
-  lần hỏi ý hay thành viên. Đường mở là `<APP_URL>/<slug>/okr/hoi-y`. Trần
+  lần hỏi ý hay thành viên. Đường mở là `<APP_URL>/<slug>/okr/hoi-y?kyOkr=<cycleId>`
+  (`duongMo`, khoá tham số là `THAM_SO_KY_OKR` của `@crm/validation/okr-chu-ky`, cùng
+  khoá màn đọc): mục nhắc mang `cycleId` của lần hỏi ý, nên người mở nhắc «đã công bố»
+  sau khi chu kỳ đã sang «đang chạy» vẫn tới đúng chu kỳ, không rơi về quý hiện tại;
+  dòng «Việc của bạn» dựng cùng đường. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
   nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Chữ «sáng nay»
   theo giờ VN lúc dựng tin (`dungTin(ten, luc, …)`, `laBuoiSang`): từ `NHAC.trua`
