@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, join } from "node:path";
 import { TIEU_CHI_JUDGE } from "../../../apps/agent/evals/okr/tong-ket-gop-y.ts";
 
 export const HIEU_CHINH = {
@@ -56,7 +57,15 @@ function noiDung({ cap, judge, soCa, moHinh, luc }) {
 	};
 }
 
-export function ghiHieuChinh({ tep, cap, judge, soCa, moHinh, runId }) {
+export function ghiHieuChinh({
+	tep,
+	thuMucPhu,
+	cap,
+	judge,
+	soCa,
+	moHinh,
+	runId,
+}) {
 	const luc = new Date().toISOString();
 	const { soCap, chu } = noiDung({ cap, judge, soCa, moHinh, luc });
 	const daCham = existsSync(tep) ? oDaCham(readFileSync(tep, "utf8")) : [];
@@ -64,7 +73,8 @@ export function ghiHieuChinh({ tep, cap, judge, soCa, moHinh, runId }) {
 		writeFileSync(tep, chu);
 		return { tep, soCap, giu: false };
 	}
-	const moi = tep.replace(/\.md$/, `.${runId}.md`);
+	mkdirSync(thuMucPhu, { recursive: true });
+	const moi = join(thuMucPhu, basename(tep).replace(/\.md$/, `.${runId}.md`));
 	writeFileSync(moi, chu);
 	return { tep: moi, soCap, giu: true, daCham: daCham.length };
 }

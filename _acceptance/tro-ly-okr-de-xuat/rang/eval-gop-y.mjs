@@ -710,6 +710,7 @@ async function tongKet(url, eve) {
 	);
 	const hc = ghiHieuChinh({
 		tep: HIEU_CHINH,
+		thuMucPhu: THU_MUC,
 		cap,
 		judge,
 		soCa: boViet.size,
