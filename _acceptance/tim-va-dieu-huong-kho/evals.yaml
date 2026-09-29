@@ -150,7 +150,7 @@ evals:
       - "packages/ui/src/components/trinh-soan*.tsx"
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
       - "_acceptance/tim-va-dieu-huong-kho/rang/man-tim.mjs"
-    expected: "exit 0; man-tim.mjs in 'buoc 4: dat'. CHIEU DO: --chieu-do tren ban sao an nut Lien ket toi trang -> 'buoc 4: khong thay nut Lien ket toi trang', ma 1."
+    expected: "exit 0; man-tim.mjs in 'buoc 4: dat'. CHIEU DO: --chieu-do=4 tren ban sao an nut Lien ket toi trang -> 'buoc 4: khong thay nut Lien ket toi trang', ma 1."
 
   - id: E5
     criterion: AC-5
@@ -199,7 +199,7 @@ evals:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
       - "packages/ui/src/components/**"
       - "_acceptance/tim-va-dieu-huong-kho/rang/man-tim.mjs"
-    expected: "exit 0; man-tim.mjs in 'buoc 5: dat', 'buoc 6: dat', 'buoc 7: dat'. CHIEU DO: --chieu-do tren ban sao bo khoi nhac toi khoi man doc -> 'buoc 5: khong thay khoi Trang nhac toi', ma 1."
+    expected: "exit 0; man-tim.mjs in 'buoc 5: dat', 'buoc 6: dat', 'buoc 7: dat'. CHIEU DO: --chieu-do=5 tren ban sao bo khoi nhac toi khoi man doc -> 'buoc 5: khong thay khoi Trang nhac toi', ma 1."
 
   - id: E6
     criterion: AC-6
@@ -295,7 +295,7 @@ evals:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
       - "packages/ui/src/components/**"
       - "_acceptance/tim-va-dieu-huong-kho/rang/man-suc-khoe.mjs"
-    expected: "exit 0; man-suc-khoe.mjs in 'buoc N: dat' cho 4 buoc; so cua tung khoi doc tu DOM bang innerText khop mong doi cua do thi E7. CHIEU DO: --chieu-do tren ban sao an tab Suc khoe -> 'buoc 1: khong thay tab Suc khoe', ma 1."
+    expected: "exit 0; man-suc-khoe.mjs in 'buoc N: dat' cho 4 buoc; so cua tung khoi doc tu DOM bang innerText khop mong doi cua do thi E7. CHIEU DO: --chieu-do tren ban sao an tab Suc khoe -> 'buoc 1: khong thay tab Suc khoe', ma 1; --chieu-do=2 tren ban sao tra khung dau trang ve luoi cu -> 'buoc 2: 390: tieu de de len nut ...', ma 1."
 
   - id: E9
     criterion: AC-9
@@ -419,9 +419,12 @@ evals:
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cmdk-okr-1440.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cmdk-390.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-chen-lien-ket-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-chen-lien-ket-390.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-nhac-toi-1440.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-nhac-toi-390.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-suc-khoe-1440.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-suc-khoe-390.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-loc-1440.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-loc-390.png"
       - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cho-duyet-trang-2.png"
+      - "_acceptance/tim-va-dieu-huong-kho/evidence/tdk-cho-duyet-trang-2-390.png"

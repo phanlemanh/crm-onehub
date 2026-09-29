@@ -7,22 +7,55 @@ const GOC = join(HERE, "..", "..", "..");
 const HO_SO = "tim-va-dieu-huong-kho";
 
 const CAY_DO = {
-	nhan: "ban sao bo nhom Tai lieu khoi QuickSwitcher",
-	tenCay: "tdk-man-tim-chieu-do",
-	chiBuoc: "1",
-	tep: "apps/app/components/crm/quick-switcher.tsx",
-	cam: (s) =>
-		s.replace(
-			"{duChu && !taiLieu.isError && trang.length > 0 ? (",
-			"{false ? (",
-		),
-	dauVet: "{false ? (",
-	ghim: /buoc 1: khong thay nhom Tai lieu/,
+	1: {
+		nhan: "ban sao bo nhom Tai lieu khoi QuickSwitcher",
+		tenCay: "tdk-man-tim-chieu-do",
+		chiBuoc: "1",
+		tep: "apps/app/components/crm/quick-switcher.tsx",
+		cam: (s) =>
+			s.replace(
+				"{duChu && !taiLieu.isError && trang.length > 0 ? (",
+				"{false ? (",
+			),
+		dauVet: "{false ? (",
+		ghim: /buoc 1: khong thay nhom Tai lieu/,
+	},
+	4: {
+		nhan: "ban sao an nut Lien ket toi trang",
+		tenCay: "tdk-man-tim-chieu-do-4",
+		chiBuoc: "4",
+		tep: "packages/ui/src/components/trinh-soan-thanh-cong-cu.tsx",
+		cam: (s) => s.replace("{coLienKetTrang ? (", "{false ? ("),
+		dauVet: "{false ? (",
+		ghim: /buoc 4: khong thay nut Lien ket toi trang/,
+	},
+	5: {
+		nhan: "ban sao bo khoi nhac toi khoi man doc",
+		tenCay: "tdk-man-tim-chieu-do-5",
+		chiBuoc: "5",
+		tep: "apps/app/app/(app)/[slug]/tai-lieu/[trang]/man-doc.tsx",
+		cam: (s) =>
+			s.replace(
+				"{trang.choLanDau ? null : <NhacToi slug={trang.slug} />}",
+				"{trang.choLanDau ? null : null}",
+			),
+		dauVet: "{trang.choLanDau ? null : null}",
+		ghim: /buoc 5: khong thay khoi Trang nhac toi/,
+	},
 };
 
-if (process.argv.includes("--chieu-do")) {
+const coChieuDo = process.argv.find(
+	(a) => a === "--chieu-do" || a.startsWith("--chieu-do="),
+);
+if (coChieuDo) {
+	const buoc = coChieuDo.split("=")[1] ?? "1";
+	const cay = CAY_DO[buoc];
+	if (!cay) {
+		console.log(`KHONG DO DUOC: man-tim khong co chieu do cho buoc ${buoc}`);
+		process.exit(2);
+	}
 	const { chieuDo } = await import("../../kho-tai-lieu/rang/man-lib.mjs");
-	await chieuDo(TEP_NAY, CAY_DO);
+	await chieuDo(TEP_NAY, cay);
 }
 
 if (!process.env.PHIEN_DO || !process.env.API_URL) {
@@ -37,6 +70,7 @@ process.env.BANG_CHUNG ??= join(GOC, ".acceptance-runs", HO_SO, "evidence");
 const { cho, chay, HEP, moDo, RONG } = await import(
 	"../../kho-tai-lieu/rang/man-lib.mjs"
 );
+const { deLenNhau } = await import("./khung.mjs");
 
 const d = await moDo();
 
@@ -140,32 +174,46 @@ try {
 			const hop = await docHop(t);
 			const tran = await d.cuonNgang(t);
 			await d.chup(t, "tdk-cmdk-390.png");
+			await t.keyboard.press("Escape");
+			await cho(400);
+			const de = await deLenNhau(t);
 			await t.close();
 			const loi = [];
 			if (!hop.trang.some((r) => r.slug === slug.qd))
 				loi.push("390: nhom Tai lieu khong co trang");
 			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			if (de.length > 0) loi.push(`390: ${de.join(", ")}`);
 			d.dat(3, loi.length === 0, loi.join(" · "));
 		});
 
+	async function moHopLienKet(rong) {
+		const t = await d.moTrang(nguoi.cookie, rong, `/tai-lieu/${slug.dt}/sua`);
+		await d.doi(t, () => window.__tim("[role='textbox'] p").length > 0);
+		const doan = await t.$("[role='textbox'] p");
+		await doan.click({ clickCount: 3 });
+		if (!(await t.$("[data-nut='lienKetTrang']"))) return { t, coNut: false };
+		await d.bamSel(t, "[data-nut='lienKetTrang']");
+		await t.keyboard.type("bao mat", { delay: 20 });
+		await d.doi(
+			t,
+			(s) => window.__tim(`[data-goi-y-trang="${s}"]`).length > 0,
+			slug.bm,
+		);
+		return { t, coNut: true };
+	}
+
 	if (chay(4))
 		await d.chayBuoc(4, async () => {
-			const t = await d.moTrang(nguoi.cookie, RONG, `/tai-lieu/${slug.dt}/sua`);
-			await d.doi(t, () => window.__tim("[role='textbox'] p").length > 0);
-			const doan = await t.$("[role='textbox'] p");
-			await doan.click({ clickCount: 3 });
-			if (!(await t.$("[data-nut='lienKetTrang']"))) {
+			const hep = await moHopLienKet(HEP);
+			const tranHep = hep.coNut ? await d.cuonNgang(hep.t) : [];
+			if (hep.coNut) await d.chup(hep.t, "tdk-chen-lien-ket-390.png");
+			await hep.t.close();
+			const { t, coNut } = await moHopLienKet(RONG);
+			if (!coNut) {
 				d.dat(4, false, "khong thay nut Lien ket toi trang");
 				await t.close();
 				return;
 			}
-			await d.bamSel(t, "[data-nut='lienKetTrang']");
-			await t.keyboard.type("bao mat", { delay: 20 });
-			await d.doi(
-				t,
-				(s) => window.__tim(`[data-goi-y-trang="${s}"]`).length > 0,
-				slug.bm,
-			);
 			await d.chup(t, "tdk-chen-lien-ket-1440.png");
 			await t.click(`[data-goi-y-trang="${slug.bm}"]`);
 			await cho(600);
@@ -175,7 +223,11 @@ try {
 				slug.bm,
 			);
 			await t.close();
-			d.dat(4, co === 1, `doan chu chua thanh lien ket (${co} lien ket)`);
+			const loi = [];
+			if (co !== 1) loi.push(`doan chu chua thanh lien ket (${co} lien ket)`);
+			if (tranHep.length > 0)
+				loi.push(`390 cuon ngang: ${tranHep.join(", ")}`);
+			d.dat(4, loi.length === 0, loi.join(" · "));
 		});
 
 	const docNhac = (t) =>

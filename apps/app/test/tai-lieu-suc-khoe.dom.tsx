@@ -157,6 +157,13 @@ describe("man-suc-khoe", () => {
 		]) {
 			expect(chu).toContain(tieuDe);
 		}
+		const quaHan =
+			goc.querySelector('[data-khoi-suc-khoe="qua-han"]')?.textContent ?? "";
+		if (quaHan.includes("hết hạn") || !quaHan.includes("xác minh đến")) {
+			throw new Error(
+				`man-suc-khoe: dong qua han khong theo tu dien: ${quaHan}`,
+			);
+		}
 		expect(chu).toContain("2 bản chờ duyệt");
 		expect(chu).toContain("liên kết tới «quy chế thưởng»");
 		expect(chu).toContain("2 trang nhắc tới");

@@ -132,7 +132,7 @@ export function SucKhoe() {
 					href: toiTrang(r.slug),
 					moTa: (
 						<Chu
-							chiTiet={dien(m.hetHan, {
+							chiTiet={dien(m.xacMinhDen, {
 								ngay: ngayTaiLieu(r.xacMinhDen, locale),
 							})}
 							ten={r.chuTrang.name}

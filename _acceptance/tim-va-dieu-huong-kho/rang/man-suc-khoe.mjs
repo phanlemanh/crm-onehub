@@ -6,19 +6,60 @@ const HERE = dirname(TEP_NAY);
 const GOC = join(HERE, "..", "..", "..");
 const HO_SO = "tim-va-dieu-huong-kho";
 
+const KHUNG_CU = [
+	[
+		'<div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">',
+		'<div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2">',
+	],
+	[
+		'"min-w-0 flex-auto text-balance font-medium text-2xl tracking-tight md:text-3xl"',
+		'"col-start-1 row-start-1 min-w-0 self-center text-balance font-medium text-2xl tracking-tight md:text-3xl"',
+	],
+	[
+		'"order-last basis-full text-balance text-muted-foreground text-sm"',
+		'"col-span-full row-start-2 text-balance text-muted-foreground text-sm"',
+	],
+	[
+		'"flex flex-wrap items-center gap-2"',
+		'"col-start-2 row-start-1 flex flex-wrap items-center gap-2 self-center justify-self-end"',
+	],
+];
+
 const CAY_DO = {
-	nhan: "ban sao an tab Suc khoe",
-	tenCay: "tdk-man-suc-khoe-chieu-do",
-	chiBuoc: "1",
-	tep: "apps/app/app/(app)/[slug]/tai-lieu/danh-sach.tsx",
-	cam: (s) => s.replace('data-tab-suc-khoe=""', 'data-tab-an=""'),
-	dauVet: 'data-tab-an=""',
-	ghim: /buoc 1: khong thay tab Suc khoe/,
+	1: {
+		nhan: "ban sao an tab Suc khoe",
+		tenCay: "tdk-man-suc-khoe-chieu-do",
+		chiBuoc: "1",
+		tep: "apps/app/app/(app)/[slug]/tai-lieu/danh-sach.tsx",
+		cam: (s) => s.replace('data-tab-suc-khoe=""', 'data-tab-an=""'),
+		dauVet: 'data-tab-an=""',
+		ghim: /buoc 1: khong thay tab Suc khoe/,
+	},
+	2: {
+		nhan: "ban sao tra khung dau trang ve luoi cu",
+		tenCay: "tdk-man-suc-khoe-chieu-do-2",
+		chiBuoc: "2",
+		tep: "apps/app/components/page-shell.tsx",
+		cam: (s) => KHUNG_CU.reduce((acc, [moi, cu]) => acc.replace(moi, cu), s),
+		dauVet: "grid-cols-[minmax(0,1fr)_auto]",
+		ghim: /buoc 2: .*tieu de de len nut/,
+	},
 };
 
-if (process.argv.includes("--chieu-do")) {
+const coChieuDo = process.argv.find(
+	(a) => a === "--chieu-do" || a.startsWith("--chieu-do="),
+);
+if (coChieuDo) {
+	const buoc = coChieuDo.split("=")[1] ?? "1";
+	const cay = CAY_DO[buoc];
+	if (!cay) {
+		console.log(
+			`KHONG DO DUOC: man-suc-khoe khong co chieu do cho buoc ${buoc}`,
+		);
+		process.exit(2);
+	}
 	const { chieuDo } = await import("../../kho-tai-lieu/rang/man-lib.mjs");
-	await chieuDo(TEP_NAY, CAY_DO);
+	await chieuDo(TEP_NAY, cay);
 }
 
 if (!process.env.PHIEN_DO || !process.env.API_URL) {
@@ -33,11 +74,13 @@ process.env.BANG_CHUNG ??= join(GOC, ".acceptance-runs", HO_SO, "evidence");
 const { cho, chay, HEP, MA, moDo, RONG } = await import(
 	"../../kho-tai-lieu/rang/man-lib.mjs"
 );
+const { deLenNhau } = await import("./khung.mjs");
 
 const d = await moDo();
 
 const NGAY_MS = 24 * 60 * 60 * 1000;
-const SO_CHO = 30;
+const TONG_CHO = 30;
+const MOT_TRANG = 25;
 const MONG_KHOI = {
 	"qua-han": 2,
 	"cho-duyet": 1,
@@ -168,6 +211,8 @@ try {
 			const loi = soSanhKhoi(await docKhoi(t));
 			const tran = await d.cuonNgang(t);
 			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			const de = await deLenNhau(t);
+			if (de.length > 0) loi.push(`390: ${de.join(", ")}`);
 			await d.chup(t, "tdk-suc-khoe-390.png");
 			await t.close();
 			d.dat(2, loi.length === 0, loi.join(" · "));
@@ -210,7 +255,19 @@ try {
 			await cho(1200);
 			const taiLai = await doc();
 			await t.close();
+			const hep = await d.moTrang(nguoi.cookie, HEP, `/tai-lieu${sau.q}`);
+			await d.doi(
+				hep,
+				() => window.__tim("[data-bang-trang] [data-trang]").length > 0,
+			);
+			const tranHep = await d.cuonNgang(hep);
+			const deHep = await deLenNhau(hep);
+			await d.chup(hep, "tdk-loc-390.png");
+			await hep.close();
 			const loi = [];
+			if (tranHep.length > 0)
+				loi.push(`390 cuon ngang: ${tranHep.join(", ")}`);
+			if (deHep.length > 0) loi.push(`390: ${deHep.join(", ")}`);
 			const q = new URLSearchParams(sau.q);
 			if (q.get("donVi") !== dvA.id) loi.push("URL khong co don vi");
 			if (q.get("chuTrang") !== nguoi.id) loi.push("URL khong co chu trang");
@@ -224,7 +281,10 @@ try {
 	if (chay(4))
 		await d.chayBuoc(4, async () => {
 			const c = await tao(`Chờ duyệt nhiều ${MA}`, "Gốc.\n");
-			for (let i = 0; i < SO_CHO; i += 1) {
+			const coSan = await d.db.taiLieuDeXuat.count({
+				where: { trangThai: "CHO_DUYET", trang: { chuTrangId: nguoi.id } },
+			});
+			for (let i = coSan; i < TONG_CHO; i += 1) {
 				await d.lam(khac.cookie, "taiLieu.propose", {
 					slug: c,
 					noiDung: `Bản chờ số ${i}.\n`,
@@ -248,10 +308,17 @@ try {
 			}));
 			await d.chup(t, "tdk-cho-duyet-trang-2.png");
 			await t.close();
-			const tong = SO_CHO + 1;
+			const hep = await d.moTrang(nguoi.cookie, HEP, `/tai-lieu${hai.q}`);
+			await d.doi(hep, () => window.__tim("[data-de-xuat]").length > 0);
+			const tranHep = await d.cuonNgang(hep);
+			await d.chup(hep, "tdk-cho-duyet-trang-2-390.png");
+			await hep.close();
 			const loi = [];
-			if (mot !== 25) loi.push(`trang 1 co ${mot} dong`);
-			if (hai.so !== tong - 25) loi.push(`trang 2 co ${hai.so} dong`);
+			if (mot !== MOT_TRANG) loi.push(`trang 1 co ${mot} dong`);
+			if (hai.so !== TONG_CHO - MOT_TRANG)
+				loi.push(`trang 2 co ${hai.so} dong`);
+			if (tranHep.length > 0)
+				loi.push(`390 cuon ngang: ${tranHep.join(", ")}`);
 			if (new URLSearchParams(hai.q).get("page") !== "2")
 				loi.push("URL khong sang trang 2");
 			d.dat(4, loi.length === 0, loi.join(" · "));

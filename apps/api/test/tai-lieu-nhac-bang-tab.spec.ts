@@ -1,8 +1,11 @@
 import { beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { isWorkspaceAdmin, WORKSPACE_ROLES } from "@crm/auth";
 import { db } from "@crm/db";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
+import { duyetDuocTrang, laQuanTriTaiLieu } from "@crm/db/tai-lieu-quyen";
+import { duyetDuoc, laQuanTri } from "../src/tai-lieu/quyen";
 import {
 	type Ai,
 	deXuat,
@@ -29,6 +32,13 @@ const DINH_NGHIA_LUAT =
 
 function luatTuDinhNghia(nguon: string): string[] {
 	return [...nguon.matchAll(DINH_NGHIA_LUAT)].map((m) => m[1] as string);
+}
+
+const TU_SUY_QUAN_TRI =
+	/\bisWorkspaceAdmin\b|["'](?:owner|admin)["']|chuTrangId\s*===|===\s*\w+\.chuTrangId/g;
+
+function tuSuyQuanTri(nguon: string): string[] {
+	return [...nguon.matchAll(TU_SUY_QUAN_TRI)].map((m) => m[0]);
 }
 
 beforeAll(async () => {
@@ -101,5 +111,45 @@ describe("nhac-bang-tab", () => {
 			"doi chung duong: ban cu co dinh nghia",
 		).toEqual(["dieuKienDuyetDuoc"]);
 		expect(luatTuDinhNghia(readFileSync(QUYEN, "utf8"))).toEqual([]);
+	});
+
+	test("nhac-bang-tab: quyen.ts cua API khong tu suy quan tri hay chu trang", () => {
+		const cu = [
+			'import { isWorkspaceAdmin } from "@crm/auth";',
+			"export function duyetDuoc(nguoi: NguoiGoi, trang: TrangQuyen): boolean {",
+			"\treturn nguoi.id === trang.chuTrangId || isWorkspaceAdmin(nguoi.role);",
+			"}",
+		].join("\n");
+		expect(
+			tuSuyQuanTri(cu).length,
+			"doi chung duong: ban cu tu suy",
+		).toBeGreaterThan(0);
+		const thay = tuSuyQuanTri(readFileSync(QUYEN, "utf8"));
+		if (thay.length > 0) {
+			throw new Error(
+				`nhac-bang-tab: quyen.ts tu suy luat duyet: ${thay.join(", ")}`,
+			);
+		}
+	});
+
+	test("nhac-bang-tab: quan tri kho khop vai quan tri workspace, duyetDuoc cua API bang duyetDuocTrang", () => {
+		const trang = { chuTrangId: "u-chu" };
+		let o = 0;
+		for (const role of [...WORKSPACE_ROLES, null]) {
+			expect(laQuanTriTaiLieu(role), `vai ${role}`).toBe(
+				isWorkspaceAdmin(role),
+			);
+			expect(laQuanTri(role), `vai ${role}`).toBe(isWorkspaceAdmin(role));
+			for (const id of ["u-chu", "u-khac"]) {
+				const nguoi = { id, role };
+				if (duyetDuoc(nguoi, trang) !== duyetDuocTrang(nguoi, trang)) {
+					throw new Error(
+						`nhac-bang-tab: duyetDuoc lech duyetDuocTrang o ${id}/${role}`,
+					);
+				}
+				o += 1;
+			}
+		}
+		expect(o).toBe((WORKSPACE_ROLES.length + 1) * 2);
 	});
 });

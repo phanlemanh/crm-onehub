@@ -23,6 +23,13 @@ export function dieuKienDuyetDuoc(
 	return { trang: { chuTrangId: nguoi.id } };
 }
 
+export function duyetDuocTrang(
+	nguoi: NguoiXemTaiLieu,
+	trang: { chuTrangId: string },
+): boolean {
+	return laQuanTriTaiLieu(nguoi.role) || nguoi.id === trang.chuTrangId;
+}
+
 export function dieuKienThay(
 	nguoi: NguoiXemTaiLieu,
 ): Prisma.TaiLieuTrangWhereInput {
@@ -46,28 +53,6 @@ export async function demChoDuyetTheoNguoi(
 	db: Db,
 	nguoi: readonly NguoiXemTaiLieu[],
 ): Promise<Map<string, number>> {
-	const [theoChu, tong] = await Promise.all([
-		db.taiLieuDeXuat.groupBy({
-			by: ["trangId"],
-			where: { trangThai: "CHO_DUYET" },
-			_count: { _all: true },
-		}),
-		db.taiLieuDeXuat.count({ where: { trangThai: "CHO_DUYET" } }),
-	]);
-	const trang = await db.taiLieuTrang.findMany({
-		where: { id: { in: theoChu.map((t) => t.trangId) } },
-		select: { id: true, chuTrangId: true },
-	});
-	const chuCua = new Map(trang.map((t) => [t.id, t.chuTrangId]));
-	const soCuaChu = new Map<string, number>();
-	for (const t of theoChu) {
-		const chu = chuCua.get(t.trangId);
-		if (chu) soCuaChu.set(chu, (soCuaChu.get(chu) ?? 0) + t._count._all);
-	}
-	return new Map(
-		nguoi.map((n) => [
-			n.id,
-			laQuanTriTaiLieu(n.role) ? tong : (soCuaChu.get(n.id) ?? 0),
-		]),
-	);
+	const so = await Promise.all(nguoi.map((n) => demChoDuyet(db, n)));
+	return new Map(nguoi.map((n, i) => [n.id, so[i] ?? 0]));
 }
