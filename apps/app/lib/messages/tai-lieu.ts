@@ -154,6 +154,12 @@ const en = {
 			hoanTac: "Undo",
 			lamLai: "Redo",
 		},
+		lienKetTrang: {
+			nut: "Link to a page",
+			tim: "Type a page name",
+			goThem: "Type at least two characters.",
+			khongCo: "No page matches.",
+		},
 		sauDuyet:
 			"The page is visible to everyone only after the page owner approves it.",
 		guiDuyet: "Send for review",
@@ -426,6 +432,12 @@ const vi: TaiLieuMessages = {
 			lienKet: "Liên kết",
 			hoanTac: "Hoàn tác",
 			lamLai: "Làm lại",
+		},
+		lienKetTrang: {
+			nut: "Liên kết tới trang",
+			tim: "Gõ tên trang",
+			goThem: "Gõ ít nhất hai chữ.",
+			khongCo: "Không có trang nào khớp.",
 		},
 		sauDuyet: "Trang chỉ hiện với mọi người sau khi chủ trang duyệt.",
 		guiDuyet: "Gửi duyệt",

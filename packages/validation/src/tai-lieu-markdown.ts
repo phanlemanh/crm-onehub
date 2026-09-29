@@ -263,3 +263,11 @@ export function cauChuaLienKet(md: string, denSlug: string): CauLienKet | null {
 	}
 	return dau ? { ...dau, soLan } : null;
 }
+
+export function nutLienKetTrang(ten: string, duong: string): JSONContent {
+	return {
+		type: "text",
+		text: chuanNfc(ten),
+		marks: [{ type: "link", attrs: { href: duong } }],
+	};
+}

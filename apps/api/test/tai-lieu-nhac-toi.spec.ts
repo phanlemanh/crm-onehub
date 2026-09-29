@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, test } from "bun:test";
+import { nutLienKetTrang, tuanTuHoa } from "@crm/validation/tai-lieu-markdown";
 import { TAI_LIEU_API } from "../src/tai-lieu/tai-lieu-config";
 import {
 	deXuat,
@@ -167,5 +168,36 @@ describe("nhac-toi-ma-tran", () => {
 		expect(`${nhap.status} ${nhap.loi}`).toBe(`404 ${T.khongCo}`);
 		expect(`${khongCo.status} ${khongCo.loi}`).toBe(`404 ${T.khongCo}`);
 		expect(await nhacToi(slug.N as string, "tao")).toEqual([]);
+	});
+});
+
+describe("chen-lien-ket", () => {
+	test("chen-lien-ket: lien ket chen tu trinh soan, duyet xong thi trang dich thay trang nguon", async () => {
+		const nguon = await taoTrang("Chèn liên kết nguồn", "Gốc.\n");
+		await duyet(nguon.deXuatId, "chu");
+		const md = tuanTuHoa({
+			type: "doc",
+			content: [
+				{
+					type: "paragraph",
+					content: [
+						{ type: "text", text: "Đọc " },
+						nutLienKetTrang("Quy trình khiếu nại", `/ws/tai-lieu/${slug.D}`),
+						{ type: "text", text: " trước." },
+					],
+				},
+			],
+		});
+		const id = await deXuat(nguon.slug, md);
+		const truoc = (await nhacToi(slug.D as string)).map((r) => r.slug);
+		expect(truoc).not.toContain(nguon.slug);
+		await duyet(id, "chu");
+		const sau = await nhacToi(slug.D as string);
+		const dong = sau.find((r) => r.slug === nguon.slug);
+		if (!dong) {
+			throw new Error("chen-lien-ket: dich khong thay trang nguon sau duyet");
+		}
+		expect(dong.vanBan).toBe("Quy trình khiếu nại");
+		expect(dong.cau).toBe("Đọc Quy trình khiếu nại trước.");
 	});
 });
