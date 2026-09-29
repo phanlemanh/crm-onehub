@@ -20,7 +20,9 @@ const bang: DealBoard = dealBoardOutput.parse(
 );
 
 let treoGiaiDoan = true;
-const ghi: unknown[] = [];
+type LenhGhi = { id: string; toStageId: string; closedReason?: string };
+
+const ghi: LenhGhi[] = [];
 const url: URLSearchParams[] = [];
 
 function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa) {
@@ -33,7 +35,7 @@ function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa) {
 		}),
 		mutationOptions: (tuyChon?: MoiGhi) => ({
 			mutationKey: [ten],
-			mutationFn: async (v: unknown) => {
+			mutationFn: async (v: LenhGhi) => {
 				ghi.push(v);
 				return null;
 			},
