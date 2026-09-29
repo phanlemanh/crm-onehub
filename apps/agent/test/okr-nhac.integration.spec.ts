@@ -27,6 +27,7 @@ import {
 	HOM_QUA,
 	hangCua,
 	lucVN,
+	NGAY_MAI,
 	NGAY_NHAC,
 	ngayCach,
 	PHUT_SAU,
@@ -1148,6 +1149,154 @@ describe("hien-thi", () => {
 			await lenLichNhac(goc);
 			const tinF = await guiQuaZalo(g.F.id, goc);
 			expect(tinF.z.guiToi("ZF")[0]?.body.text ?? "").toContain(TEN_MUC_TIEU);
+		},
+		CHO_MS,
+	);
+});
+
+describe("duyet", () => {
+	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+	const mai = lucVN(NGAY_MAI, PHUT_SAU);
+	const LY_DO = "Chưa có KR đo khách hàng mới";
+	const TEN = {
+		g1: "Mở rộng kho Bình Dương",
+		g2: "Giữ chân khách lớn",
+		g3: "Khách hàng mới quý 4",
+		g4: "Chuẩn hoá hợp đồng",
+	} as const;
+	const CHO_MS = 60_000;
+
+	async function gieo() {
+		const H = await gieoNguoi("Hà");
+		const T = await gieoNguoi("Tâm");
+		const M = await gieoNguoi("Minh");
+		await noiZalo(H.id, "ZH");
+		await noiZalo(T.id, "ZT");
+		await batBot();
+		const b1 = await gieoBoPhan(H.id);
+		const p1 = await gieoPhongBan(T.id, b1);
+		await gieoPhongBan(null, await gieoBoPhan(M.id));
+		const p3 = await gieoPhongBan(null);
+		const chay = await gieoChuKy("dang-chay", 1);
+		const moi = async (tieuDe: string, departmentId: string) => {
+			const id = await gieoMucTieu({
+				cycleId: chay,
+				chu: T.id,
+				tieuDe,
+				congBo: null,
+				cap: "phong-ban",
+				departmentId,
+			});
+			await gieoKr({ objectiveId: id, chu: T.id, khoa: null });
+			return id;
+		};
+		const G1 = await moi(TEN.g1, p1);
+		const G2 = await moi(TEN.g2, p1);
+		const G3 = await moi(TEN.g3, p1);
+		const G4 = await moi(TEN.g4, p3);
+		const guiLuc = new Date(goc.getTime() - 3 * GIO_MS);
+		for (const id of [G1, G2, G3, G4]) {
+			await vet({
+				action: "gui-duyet",
+				nguoiLam: T.id,
+				objectiveId: id,
+				truoc: { status: "nhap" },
+				sau: { status: "cho-duyet" },
+				luc: guiLuc,
+			});
+			if (id !== G3)
+				await db.okrObjective.update({
+					where: { id },
+					data: { status: "cho-duyet" },
+				});
+		}
+		await vet({
+			action: "tra-lai",
+			nguoiLam: H.id,
+			objectiveId: G3,
+			truoc: { status: "cho-duyet" },
+			sau: { status: "nhap" },
+			ghiChu: LY_DO,
+			luc: new Date(goc.getTime() - 2 * GIO_MS),
+		});
+		return { H, T, M, G1, G2, G3, G4 };
+	}
+
+	const mucCua = async (userId: string, luc: Date) =>
+		(await hangCuaNguoi(userId))
+			.filter((h) => h.subject === chuDeNhac(userId, luc))
+			.flatMap((h) => parseNhacPayload(h.payload).muc)
+			.filter((m) => m.loai === "okr-cho-duyet" || m.loai === "okr-tra-lai")
+			.map((m) => `${m.loai}:${"objectiveId" in m ? m.objectiveId : ""}`)
+			.sort();
+
+	test(
+		"duyet: tin sáng hai ngày liền của H đều có G1, G2; T có dòng trả lại kèm lý do trong cửa sổ, hết sang ngày sau; M không mục; duyệt G1 thì H còn G2",
+		async () => {
+			const g = await gieo();
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			const ngay1 = {
+				h: await mucCua(g.H.id, goc),
+				t: await mucCua(g.T.id, goc),
+				m: await mucCua(g.M.id, goc),
+			};
+			const textH =
+				(await guiQuaZalo(g.H.id, goc)).z.guiToi("ZH")[0]?.body.text ?? "";
+			const textT =
+				(await guiQuaZalo(g.T.id, goc)).z.guiToi("ZT")[0]?.body.text ?? "";
+			setSystemTime(mai);
+			await lenLichNhac(mai);
+			const ngay2 = {
+				h: await mucCua(g.H.id, mai),
+				t: await mucCua(g.T.id, mai),
+				m: await mucCua(g.M.id, mai),
+			};
+			await db.okrObjective.update({
+				where: { id: g.G1 },
+				data: { status: "cong-bo", publishedAt: mai },
+			});
+			await vet({
+				action: "duyet",
+				nguoiLam: g.H.id,
+				objectiveId: g.G1,
+				truoc: { status: "cho-duyet" },
+				sau: { status: "cong-bo" },
+				luc: mai,
+			});
+			const sauDuyet = cua(await tinh(mai), g.H.id)
+				.flatMap((v) => (v.loai === "okr-cho-duyet" ? [v.objectiveId] : []))
+				.sort();
+			const dongH = textH.split("\n");
+			const dongT = textT.split("\n");
+			console.log(
+				`duyet ngay 1: ${JSON.stringify(ngay1)}\nngay 2: ${JSON.stringify(ngay2)}\ntin H:\n${textH}\ntin T:\n${textT}`,
+			);
+			const cho = (id: string) => `okr-cho-duyet:${id}`;
+			expect({
+				ngay1,
+				ngay2,
+				sauDuyet,
+				tieuDeH: dongH.includes(TIEU_DE["okr-cho-duyet"]),
+				dongH: [TEN.g1, TEN.g2, TEN.g4].map(
+					(t) => dongH.filter((d) => d.includes(t)).length,
+				),
+				tieuDeT: dongT.includes(TIEU_DE["okr-tra-lai"]),
+				dongT: dongT.filter((d) => d.includes(TEN.g3) && d.includes(LY_DO))
+					.length,
+			}).toEqual({
+				ngay1: {
+					h: [cho(g.G1), cho(g.G2)].sort(),
+					t: [`okr-tra-lai:${g.G3}`],
+					m: [],
+				},
+				ngay2: { h: [cho(g.G1), cho(g.G2)].sort(), t: [], m: [] },
+				sauDuyet: [g.G2],
+				tieuDeH: true,
+				dongH: [1, 1, 0],
+				tieuDeT: true,
+				dongT: 1,
+			});
 		},
 		CHO_MS,
 	);

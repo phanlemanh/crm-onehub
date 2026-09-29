@@ -4,7 +4,9 @@ import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Chat from "@carbon/icons-react/es/Chat";
 import CheckmarkOutline from "@carbon/icons-react/es/CheckmarkOutline";
 import Edit from "@carbon/icons-react/es/Edit";
+import Pending from "@carbon/icons-react/es/Pending";
 import Renew from "@carbon/icons-react/es/Renew";
+import Reply from "@carbon/icons-react/es/Reply";
 import Time from "@carbon/icons-react/es/Time";
 import Trophy from "@carbon/icons-react/es/Trophy";
 import UserFollow from "@carbon/icons-react/es/UserFollow";
@@ -55,6 +57,8 @@ const ICON_VIEC = {
 	"okr-nhac-ten": Chat,
 	"okr-ghi-nhan": Trophy,
 	"okr-theo-doi": View,
+	"okr-cho-duyet": Pending,
+	"okr-tra-lai": Reply,
 } satisfies Record<ViecOkr["loai"], typeof Edit>;
 
 function khoaViec(v: ViecOkr): string {
@@ -70,6 +74,8 @@ function khoaViec(v: ViecOkr): string {
 		case "okr-ghi-nhan":
 			return `${v.loai}:${v.ghiNhanId}`;
 		case "okr-theo-doi":
+		case "okr-cho-duyet":
+		case "okr-tra-lai":
 			return `${v.loai}:${v.objectiveId}`;
 	}
 }
@@ -117,6 +123,15 @@ function TieuDeViec({ viec }: { viec: ViecOkr }) {
 						: m.theoDoi,
 				{ capNhat: viec.capNhat, binhLuan: viec.binhLuan },
 			);
+		case "okr-cho-duyet":
+			return viec.nguoiGui === null
+				? m.choDuyet
+				: ghep(m.choDuyetCuaNguoi, { nguoi: <Ten>{viec.nguoiGui}</Ten> });
+		case "okr-tra-lai":
+			return ghep(m.traLai, {
+				nguoi: <Ten>{viec.nguoiTraLai}</Ten>,
+				lyDo: <Ten>{viec.lyDo}</Ten>,
+			});
 	}
 }
 

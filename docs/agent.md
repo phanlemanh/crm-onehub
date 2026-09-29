@@ -240,8 +240,13 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
 - **Việc OKR đi chung một tin.** `viecCanNhac` gộp việc kế hoạch với
   `viecOkrCanNhac` (`@crm/db/okr-nhac`, hằng số ở `OKR_NHAC`) theo người, lọc thành
   viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
-  «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi năm loại OKR còn lại
-  (KR im, được giao, nhắc tên, ghi nhận, đang theo dõi). Trần
+  «Cập nhật tuần» đứng đầu, rồi hai loại của bước duyệt («Chờ bạn duyệt» —
+  `okr-cho-duyet`, mỗi mục tiêu đang chờ người đó duyệt, lặp mỗi sáng tới khi xử lý;
+  «Bị trả lại» — `okr-tra-lai`, người gửi duyệt gần nhất, trong cửa sổ 24 giờ, kèm lý
+  do), rồi bốn loại kế hoạch, rồi năm loại OKR còn lại (KR im, được giao, nhắc tên,
+  ghi nhận, đang theo dõi). Người duyệt suy như `nguoiDuyetMucTieu`
+  (`@crm/db/okr-duyet`) — cùng hàm API dùng; người duyệt là quản trị thì mọi quản trị
+  nhận mục. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
   nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Chữ «sáng nay»
   theo giờ VN lúc dựng tin (`dungTin(ten, luc, …)`, `laBuoiSang`): từ `NHAC.trua`

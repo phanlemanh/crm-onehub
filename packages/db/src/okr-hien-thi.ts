@@ -89,10 +89,15 @@ function nhomTheo<K, V>(cap: [K, V][]): Map<K, Set<V>> {
 	return ra;
 }
 
-export async function nguCanhXemOkr(
-	db: DbHoacTx,
-	userIds: string[],
-): Promise<Map<string, NguCanhXem>> {
+export type CayOkr = {
+	vai: ReadonlyMap<string, string>;
+	truongCuaPhongBan: ReadonlyMap<string, string>;
+	truongCuaBoPhan: ReadonlyMap<string, string>;
+	boPhanCua: ReadonlyMap<string, string | null>;
+	phongBanChinh: ReadonlyMap<string, string | null>;
+};
+
+export async function docCayOkr(db: DbHoacTx): Promise<CayOkr> {
 	const [thanhVien, boPhan, phongBan, viTri, phu] = await Promise.all([
 		db.member.findMany({
 			where: { organizationId: WORKSPACE_ID },
@@ -121,36 +126,50 @@ export async function nguCanhXemOkr(
 	);
 	const thuoc = (userId: string, pb: string) =>
 		chinh.get(userId) === pb || (phuCua.get(userId)?.has(pb) ?? false);
-	const truongPhongBan = nhomTheo(
-		phongBan.flatMap((p): [string, string][] =>
-			p.headUserId !== null &&
-			vai.has(p.headUserId) &&
-			thuoc(p.headUserId, p.id)
-				? [[p.headUserId, p.id]]
-				: [],
+	return {
+		vai,
+		truongCuaPhongBan: new Map(
+			phongBan.flatMap((p): [string, string][] =>
+				p.headUserId !== null &&
+				vai.has(p.headUserId) &&
+				thuoc(p.headUserId, p.id)
+					? [[p.id, p.headUserId]]
+					: [],
+			),
 		),
-	);
-	const truongBoPhan = nhomTheo(
-		boPhan.flatMap((b): [string, string][] =>
-			b.headUserId !== null && vai.has(b.headUserId)
-				? [[b.headUserId, b.id]]
-				: [],
+		truongCuaBoPhan: new Map(
+			boPhan.flatMap((b): [string, string][] =>
+				b.headUserId !== null && vai.has(b.headUserId)
+					? [[b.id, b.headUserId]]
+					: [],
+			),
 		),
-	);
-	const boPhanCua = new Map(phongBan.map((p) => [p.id, p.divisionId]));
-	const phongBanChinh = new Map(
-		thanhVien.map((m) => [m.userId, chinh.get(m.userId) ?? null]),
-	);
+		boPhanCua: new Map(phongBan.map((p) => [p.id, p.divisionId])),
+		phongBanChinh: new Map(
+			thanhVien.map((m) => [m.userId, chinh.get(m.userId) ?? null]),
+		),
+	};
+}
+
+export async function nguCanhXemOkr(
+	db: DbHoacTx,
+	userIds: string[],
+): Promise<Map<string, NguCanhXem>> {
+	const cay = await docCayOkr(db);
+	const theoTruong = (m: ReadonlyMap<string, string>) =>
+		nhomTheo([...m].map(([dv, truong]): [string, string] => [truong, dv]));
+	const truongPhongBan = theoTruong(cay.truongCuaPhongBan);
+	const truongBoPhan = theoTruong(cay.truongCuaBoPhan);
 	const rong = new Set<string>();
 	return new Map(
 		userIds.map((userId) => [
 			userId,
 			dungNguCanhXem(userId, {
-				quanTri: VAI_QUAN_TRI_OKR.has(vai.get(userId) ?? ""),
+				quanTri: VAI_QUAN_TRI_OKR.has(cay.vai.get(userId) ?? ""),
 				truongBoPhan: truongBoPhan.get(userId) ?? rong,
 				truongPhongBan: truongPhongBan.get(userId) ?? rong,
-				boPhanCua,
-				phongBanChinh,
+				boPhanCua: cay.boPhanCua,
+				phongBanChinh: cay.phongBanChinh,
 			}),
 		]),
 	);

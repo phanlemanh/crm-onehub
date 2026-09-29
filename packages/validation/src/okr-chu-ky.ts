@@ -1,4 +1,5 @@
 import { PHA_CHUYEN_DUOC as PHA_CHUYEN } from "@crm/db/okr-don-vi";
+import { PHA_GHI_DUOC as PHA_GHI } from "@crm/db/okr-duyet";
 import { z } from "zod";
 
 export const LOAI_CHU_KY = ["nam", "quy"] as const;
@@ -12,7 +13,7 @@ export const PHA_CHU_KY = [
 export type LoaiChuKy = (typeof LOAI_CHU_KY)[number];
 export type PhaChuKy = (typeof PHA_CHU_KY)[number];
 
-export const PHA_GHI_DUOC: readonly PhaChuKy[] = ["lap-ke-hoach", "dang-chay"];
+export const PHA_GHI_DUOC: readonly PhaChuKy[] = PHA_GHI;
 
 export const PHA_CHUYEN_DUOC: readonly PhaChuKy[] = PHA_CHUYEN;
 
