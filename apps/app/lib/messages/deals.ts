@@ -79,7 +79,6 @@ const en = {
 		sameReason:
 			"The same reason goes on every one of them, so keep it to what they have in common.",
 		closeLost: (n: string) => `Close ${n} as lost`,
-		markUnqualified: (n: string) => `Mark ${n} as unqualified`,
 		reasonPlaceholder: "Budget pulled for the quarter",
 		nobody: "Nobody",
 	},
@@ -184,7 +183,6 @@ const vi = {
 		sameReason:
 			"Cùng một lý do ghi cho tất cả, nên chỉ nêu phần chung của chúng.",
 		closeLost: (n: string) => `Chốt ${n} là không thành`,
-		markUnqualified: (n: string) => `Đánh dấu ${n} là chưa phù hợp`,
 		reasonPlaceholder: "Đối tác hoãn sang quý sau",
 		nobody: "Không ai",
 	},

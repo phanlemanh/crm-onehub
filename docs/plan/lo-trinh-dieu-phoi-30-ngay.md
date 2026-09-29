@@ -9,6 +9,86 @@ mỗi lượt một bản giao dùng được, và một chân trời để khô
 Bản quét đầy đủ nằm trong lịch sử phiên; bảng phủ ở mục 6 chép lại từng ô để
 không ô nào rơi giữa hai lượt.
 
+## Hiện trạng 2026-09-29 — ba lượt đã lên, chờ số thật
+
+Lượt 1, 2, 3 cùng lên `onehub` ngày 22/09. Lượt 4 và 5 chưa mở, đúng điều kiện
+đã khai. Việc của khu này trước 06/10 không phải dựng thêm mà là **chuẩn bị để
+đo được**: ba lượt cùng hết cửa sổ hai tuần vào một ngày, và ba chỗ hiện đang
+làm phép đo đỏ vì lý do đã biết. Mục 1–8 bên dưới giữ nguyên như viết 22/09;
+mục 9 là sổ theo dõi.
+
+### Đã giao
+
+| Câu giao | Lượt | PR | Hồ sơ |
+| --- | --- | --- | --- |
+| Kế hoạch là một bản ghi làm việc được | 1 | #77 | `signed-off`; phiên nghiệm thu dựng sẵn, hoãn |
+| Mọi phía đều thấy kế hoạch | 2 | #79 | `machine-cleared` — chưa ký hẳn |
+| Máy nhắc trước người, qua Slack | 3 | #82 | `signed-off` |
+
+Cùng khu, ngoài năm lượt, đã lên:
+
+- Nhắc buổi sáng qua Zalo, người nhận tự chọn kênh (#94); trả lời «xong n» trong
+  Zalo để đánh dấu bước xong (#144). Lượt 3 nay có hai kênh, và «đánh dấu xong»
+  đi qua một thủ tục chung cho cả màn lẫn Zalo.
+- Trang 30 ngày đầu theo khuôn danh sách của Thoả thuận (#85); hạn việc tính
+  theo ngày giờ Việt Nam (#84).
+
+Nền dưới chân đã đổi, không do lộ trình này:
+
+- Bộ phận của khuôn nay là phòng ban của cây tổ chức (#120, #136): Cài đặt ›
+  Điều phối trỏ sang Cài đặt › Tổ chức, danh mục lọc theo phòng ban, ô Mục tiêu
+  đổi thành Thời lượng.
+- Vai «chỉ OKR» (#129) không đọc được dữ liệu đối tác, nên cũng không thấy kế
+  hoạch 30 ngày. Người được giao bước mà mang vai này sẽ không thấy việc của
+  mình — cần soát trước phiên nghiệm thu.
+
+### Mốc đo đã khai
+
+| Ngày | Lượt | Sống khi | Nguồn số |
+| --- | --- | --- | --- |
+| 06/10 | 1 | Mọi kế hoạch đang chạy có bước đã giao hoặc đã xong; cột Im lặng khác `—` ở ít nhất một hàng | `OnboardingStep`, danh mục |
+| 06/10 | 2 | Ít nhất nửa số bước xong do chính người được giao bấm; «hôm nay tôi có việc gì» trả lời từ tổng quan trong 30 giây | vết `buoc.xong`, bấm giờ tại phiên |
+| 06/10 | 3 | Số ngày im trung vị thấp hơn ngày bật; ít nhất nửa số bước đã nhắc xong đúng hoặc trước hạn | `OnboardingStep.updatedAt`, hàng nhắc đã gửi |
+| 06/10 | 4 (mở hay lùi) | Có bước bị đổi hạn hơn một lần, hoặc ghi chú trên bước đang dùng làm danh sách việc con | vết đổi hạn, ghi chú |
+| khoảng 02/11 | vòng một | Sheet cũ không còn được cập nhật hai tuần cuối; mỗi bộ phận chấm kín từ 4/5 | phiên nghiệm thu |
+
+Cả năm dòng đọc dữ liệu production. Nếu tới 06/10 production chưa có đối tác
+thật nào trong kế hoạch, ba lượt đo trên tập rỗng — phải biết điều này trước
+khi đặt lịch phiên, không phải tại phiên.
+
+### Now — lấp trước 06/10
+
+1. **Kế hoạch trống không thêm được bước đầu** (Ngoài-5 của lượt 1, đã hứa
+   «mở hợp đồng mới», chưa mở). Nút «Add a step» chỉ nằm dưới nhóm phòng ban đã
+   có bước, nên kế hoạch không còn bước nào — hoặc phòng ban chưa có bước — không
+   thêm được từ màn. Ngưỡng lượt 1 đếm «mọi kế hoạch đang chạy», nên một kế hoạch
+   như vậy làm đỏ cả lượt vì một lỗ đã biết, không vì người không dùng. T2, nhỏ.
+2. **Số nền của lượt 3 chưa ai chụp.** Ngưỡng so với «ngày bật» nhưng hôm 22/09
+   không có số đo. Dựng lại được, không cần đổi ngưỡng: trước #77 không thủ tục
+   nào ghi vào bước, nên ngày chạm cuối của bước chưa từng đổi là ngày tạo; từ #77
+   mọi giao · xong · đổi hạn đều để vết có giờ. Tính ngày im của từng kế hoạch tại
+   lúc #82 gộp (2026-09-22 13:29 UTC) từ hai nguồn đó, ghi vào hồ sơ lượt 3.
+3. **Lượt 2 chưa ký hẳn.** Hồ sơ dừng ở `machine-cleared`, cửa veto để ngỏ.
+   Phiên nghiệm thu chỉ chạy trên vòng đã ký, nên phải đóng trước 06/10.
+
+### Next — sau 06/10
+
+- **Một phiên nghiệm thu cho cả ba lượt**, cùng người, cùng dữ liệu, thay vì ba
+  buổi. Vòng một vẫn đo riêng khoảng 02/11 vì cửa sổ sáu tuần.
+- **Lượt 4 mở hay lùi**, quyết bằng số đổi hạn và ghi chú đọc từ vết ở 06/10.
+- **Nợ đã ghi của lượt 1**: thêm bước dưới phòng ban đã lưu trữ trả lỗi thô thay
+  vì câu đọc được (Ngoài-1 — cây tổ chức đã chặn lưu trữ phòng ban còn người, nhưng
+  chưa ai đo lại đường này); ba bài kiểm giao diện của vòng một vẫn đo trang kế
+  hoạch cũ (Ngoài-2); vết đổi kế hoạch hỏng hình dạng không để lại lỗi (Ngoài-3).
+
+### Later — không đổi
+
+- Lượt 5 vẫn chờ đội nền tảng có bên gửi; điểm nhận không có thay đổi nào từ
+  21/09.
+- Phiên nghiệm thu vòng một rơi vào tuần OKR bắt đầu áp dụng cho mọi phòng ban
+  (26/10). Cùng những trưởng bộ phận sẽ được gọi cho cả hai — nên đặt lịch sớm.
+- Chân trời (mục 5) và Never (mục 7) giữ nguyên.
+
 ## 1. Ba điều rà ra, gom thành một
 
 | Phát hiện | Bằng chứng |
@@ -263,10 +343,10 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 
 | # | Slug | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
-| 0 | `dieu-phoi-30-ngay-dau` (vòng một) | đã lên `onehub` | 2026-09-21 | #68 · #71 · #74 · #75 | Cổng Giá trị dời tới sau lượt 1 |
-| 1 | `ke-hoach-la-mot-ban-ghi` | đã giao, chờ Cổng Giá trị | 2026-09-22 | — | Cổng Phạm vi duyệt (15 tiêu chí, 20 phép đo); Cổng 1.5 duyệt qua /goal; S3 xong; S4 vòng 1 PASS — 20/20 phép đo và bốn lệnh suite xanh, hợp đồng `verified`; Cổng Bằng chứng ký 2026-09-22 (Phan Le Manh): tám giới hạn ghi Known limits, Ngoài-5 (kế hoạch trống không thêm được bước đầu) mở hợp đồng mới. PR #77 merge 2026-09-22 (`cca1cf4b`), production dựng xanh, migration đã chạy. Phiên nghiệm thu dựng ở `scheduled`, HOÃN theo chủ kho 2026-09-22 để làm lượt 2: ngưỡng hai tuần đo sớm nhất 2026-10-06; vế (c) chờ phiên nghiệm thu của vòng một. Phải ghim lại bốn hồ sơ trước PR: dieu-phoi-30-ngay-dau, noi-bon-nut-dieu-phoi, sua-luu-tru-dieu-phoi, chi-quan-tri-sua-duoc-truong |
-| 2 | `moi-phia-deu-thay-ke-hoach` | đã lên `onehub` | 2026-09-22 | #79 | Cổng Đáng ký build (Manh Phan); Cổng Phạm vi đi tiếp ở trạng thái V (T2, 13 tiêu chí, 18 phép đo, phản biện 0 P0, cửa veto mở); S3 xong — năm lệnh xanh, 17 khoá kh2 xanh; S4 vòng 1 PASS (18/18 phép đo đạt, 0 lỗi trong hợp đồng, 9 mục ngoài hợp đồng chờ người quyết), Cổng Bằng chứng: 9 mục ngoài hợp đồng ghi Known limits, để yên cửa veto (Manh Phan) → hồ sơ `machine-cleared`, lưới trước-merge sạch; kế: ghim lại ba hồ sơ đã ký rồi mở PR. Phải ghim lại trước PR: ke-hoach-la-mot-ban-ghi, dieu-phoi-30-ngay-dau, quan-ly-danh-muc-30-ngay. Đã gộp #79 2026-09-22 (`7442c667`) sau khi gộp `onehub` (kit 2.18.1) và ghim lại ke-hoach-la-mot-ban-ghi cùng chính hồ sơ này (hai hồ sơ kia không hoá cũ); phiên nghiệm thu chưa chạy |
-| 3 | `may-nhac-truoc-nguoi` | Cổng Bằng chứng | 2026-09-22 | — | nhánh `feat/may-nhac-truoc-nguoi` từ `onehub` `7442c667`; Cổng Đáng ký build (Phan Le Manh, 2026-09-22): theo dõi bằng bảng `OnboardingWatch` → T3; thư ngoài phạm vi; ngưỡng chốt như đề xuất. S1 xong 2026-09-22: 12 tiêu chí, 15 phép đo, phản biện context sạch 0 P0 (5 lỗ đã vá), bản mẫu /proto 7 trạng thái. Cổng Phạm vi duyệt (Phan Le Manh); Cổng 1.5 duyệt kế hoạch sáu task; S3 xong — năm lệnh xanh, 14 khoá mn3 xanh; S4 vòng 1 PASS (15/15 phép đo đạt), hợp đồng `verified`; hai điểm yếu phép đo trong hợp đồng (E5 dòng 6, E12) và năm mục ngoài hợp đồng chờ Cổng Bằng chứng. Cổng Bằng chứng trả lại (Phan Le Manh) để sửa E5, E12; S4 vòng 2 PASS, hợp đồng `verified`, 0 lỗi trong hợp đồng, 8 mục ngoài hợp đồng chờ người quyết. Cổng Bằng chứng ký 2026-09-22 (Phan Le Manh): bảy mục ghi Known limits, Ngoài-5 chấp nhận không sửa; kế: gộp onehub, ghim lại, mở PR. Lộ ra khi đo: bốn eval dom của quan-ly-danh-muc-30-ngay đỏ trên onehub từ lượt 1 (mở việc riêng) |
+| 0 | `dieu-phoi-30-ngay-dau` (vòng một) | đã lên `onehub` | 2026-09-21 | #68 · #71 · #74 · #75 | Cổng Giá trị dời tới sau lượt 1. 2026-09-29 soát: hồ sơ `da-cham-boi-thuc-te`; PR mở đầu vòng một là #66 (cột PR thiếu). Chưa có `uat-session.md`; ngưỡng vòng một tính sáu tuần sau ngày bật, đo sớm nhất khoảng 2026-11-02. Vế (c) của lượt 1 chờ phiên này |
+| 1 | `ke-hoach-la-mot-ban-ghi` | Cổng Giá trị | 2026-09-22 | #77 | Cổng Phạm vi duyệt (15 tiêu chí, 20 phép đo); Cổng 1.5 duyệt qua /goal; S3 xong; S4 vòng 1 PASS — 20/20 phép đo và bốn lệnh suite xanh, hợp đồng `verified`; Cổng Bằng chứng ký 2026-09-22 (Phan Le Manh): tám giới hạn ghi Known limits, Ngoài-5 (kế hoạch trống không thêm được bước đầu) mở hợp đồng mới. PR #77 merge 2026-09-22 (`cca1cf4b`), production dựng xanh, migration đã chạy. Phiên nghiệm thu dựng ở `scheduled`, HOÃN theo chủ kho 2026-09-22 để làm lượt 2: ngưỡng hai tuần đo sớm nhất 2026-10-06; vế (c) chờ phiên nghiệm thu của vòng một. Phải ghim lại bốn hồ sơ trước PR: dieu-phoi-30-ngay-dau, noi-bon-nut-dieu-phoi, sua-luu-tru-dieu-phoi, chi-quan-tri-sua-duoc-truong. 2026-09-29 soát: trạng thái đổi về từ vựng của bảng (trước ghi «đã giao, chờ Cổng Giá trị»). Phiên nghiệm thu vẫn `scheduled`, đo sớm nhất 2026-10-06; chưa có `stranger-drive.md`. Hợp đồng mới cho Ngoài-5 (kế hoạch trống không thêm được bước đầu, không thêm được bước dưới bộ phận chưa có bước) chưa mở |
+| 2 | `moi-phia-deu-thay-ke-hoach` | đã lên `onehub` | 2026-09-22 | #79 | Cổng Đáng ký build (Manh Phan); Cổng Phạm vi đi tiếp ở trạng thái V (T2, 13 tiêu chí, 18 phép đo, phản biện 0 P0, cửa veto mở); S3 xong — năm lệnh xanh, 17 khoá kh2 xanh; S4 vòng 1 PASS (18/18 phép đo đạt, 0 lỗi trong hợp đồng, 9 mục ngoài hợp đồng chờ người quyết), Cổng Bằng chứng: 9 mục ngoài hợp đồng ghi Known limits, để yên cửa veto (Manh Phan) → hồ sơ `machine-cleared`, lưới trước-merge sạch; kế: ghim lại ba hồ sơ đã ký rồi mở PR. Phải ghim lại trước PR: ke-hoach-la-mot-ban-ghi, dieu-phoi-30-ngay-dau, quan-ly-danh-muc-30-ngay. Đã gộp #79 2026-09-22 (`7442c667`) sau khi gộp `onehub` (kit 2.18.1) và ghim lại ke-hoach-la-mot-ban-ghi cùng chính hồ sơ này (hai hồ sơ kia không hoá cũ); phiên nghiệm thu chưa chạy. 2026-09-29 soát: hồ sơ dừng ở `machine-cleared` — Cổng Bằng chứng để yên cửa veto, chưa `signed-off`; chưa có `uat-session.md` |
+| 3 | `may-nhac-truoc-nguoi` | đã lên `onehub` | 2026-09-22 | #82 | nhánh `feat/may-nhac-truoc-nguoi` từ `onehub` `7442c667`; Cổng Đáng ký build (Phan Le Manh, 2026-09-22): theo dõi bằng bảng `OnboardingWatch` → T3; thư ngoài phạm vi; ngưỡng chốt như đề xuất. S1 xong 2026-09-22: 12 tiêu chí, 15 phép đo, phản biện context sạch 0 P0 (5 lỗ đã vá), bản mẫu /proto 7 trạng thái. Cổng Phạm vi duyệt (Phan Le Manh); Cổng 1.5 duyệt kế hoạch sáu task; S3 xong — năm lệnh xanh, 14 khoá mn3 xanh; S4 vòng 1 PASS (15/15 phép đo đạt), hợp đồng `verified`; hai điểm yếu phép đo trong hợp đồng (E5 dòng 6, E12) và năm mục ngoài hợp đồng chờ Cổng Bằng chứng. Cổng Bằng chứng trả lại (Phan Le Manh) để sửa E5, E12; S4 vòng 2 PASS, hợp đồng `verified`, 0 lỗi trong hợp đồng, 8 mục ngoài hợp đồng chờ người quyết. Cổng Bằng chứng ký 2026-09-22 (Phan Le Manh): bảy mục ghi Known limits, Ngoài-5 chấp nhận không sửa; kế: gộp onehub, ghim lại, mở PR. Lộ ra khi đo: bốn eval dom của quan-ly-danh-muc-30-ngay đỏ trên onehub từ lượt 1 (mở việc riêng). 2026-09-29 soát: #82 đã gộp 2026-09-22 (`acbb1366`), hồ sơ `signed-off`; migration chạy trong bước dựng crm-api; `APP_URL` của crm-onehub-agent đã có ở Production. Số nền «ngày im trung vị» ở ngày bật không có trong kho — vế (a) của ngưỡng chưa có mốc để so, phải quyết trước 2026-10-06. Mở rộng ngoài lộ trình đã lên: `nhac-qua-zalo` (#94), `tra-loi-tin-nhac` (#144), cả hai `signed-off`. Chưa có `uat-session.md` |
 | 4 | `buoc-co-viec-con` | chưa mở | — | — | chỉ mở khi có bằng chứng bước còn quá to |
 | 5 | `so-lua-va-noi-nen-tang` | chưa mở | — | — | chờ đội nền tảng có bên gửi |
 

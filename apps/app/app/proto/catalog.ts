@@ -63,6 +63,14 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tim-va-dieu-huong-kho",
+		ten: "Kho tài liệu lượt 3 — tìm ⌘K, sức khoẻ kho",
+		states: [
+			{ id: "ST-tim-nhanh", nhan: "Tìm nhanh ⌘K, có dấu hay không" },
+			{ id: "ST-suc-khoe", nhan: "Sức khoẻ kho: việc của chủ trang" },
+		],
+	},
+	{
 		slug: "doi-ten-onehub-center",
 		ten: "OneHub Center — cột trái đăng nhập hướng A",
 		states: [
@@ -438,6 +446,83 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-muctieu-doitrong", nhan: "Sheet mục tiêu — thiếu đối trọng" },
 			{ id: "ST-dai-ra", nhan: "Khu OKR — dải rà giữa kỳ" },
 			{ id: "ST-toancanh-xuat", nhan: "Toàn cảnh — kỳ đã đóng, nút Xuất" },
+		],
+	},
+	{
+		slug: "canh-kr-okr",
+		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
+		states: [
+			{
+				id: "ST-bangkr-co-viec",
+				nhan: "Bảng KR — cột Việc, dấu có bằng chứng",
+			},
+			{ id: "ST-khungkr-co-viec", nhan: "Khung KR — việc và một sáng kiến" },
+			{ id: "ST-khungkr-them", nhan: "Khung KR — dòng nhập việc" },
+			{ id: "ST-khungkr-gan", nhan: "Khung KR — gắn kế hoạch 30 ngày" },
+			{ id: "ST-khungkr-rong", nhan: "Khung KR — chưa có gì" },
+			{ id: "ST-khungkr-dang-tai", nhan: "Khung KR — đang tải" },
+			{ id: "ST-khungkr-loi", nhan: "Khung KR — lỗi" },
+			{
+				id: "ST-khungkr-chi-okr",
+				nhan: "Khung KR — vai «chỉ OKR» thấy sáng kiến không tên",
+			},
+			{
+				id: "ST-khungkr-goc-mat",
+				nhan: "Khung KR — bản ghi gốc lưu trữ, đã xoá; người làm đã rời",
+			},
+			{ id: "ST-khungkr-khoa", nhan: "Khung KR — kỳ chấm điểm, chỉ đọc" },
+			{ id: "ST-bangchung-co", nhan: "Bằng chứng — KR mốc có một bằng chứng" },
+			{ id: "ST-bangchung-rong", nhan: "Bằng chứng — chưa có" },
+			{ id: "ST-bangchung-sai", nhan: "Bằng chứng — đường dẫn sai" },
+			{
+				id: "ST-capnhat-moc",
+				nhan: "Cập nhật KR mốc — ô bằng chứng khi chọn Xong",
+			},
+			{ id: "ST-traodoi-ghinhan", nhan: "Trao đổi — ghi nhận xen bình luận" },
+			{
+				id: "ST-traodoi-soan-ghinhan",
+				nhan: "Trao đổi — soạn ghi nhận (vai «chỉ OKR»)",
+			},
+			{ id: "ST-mau-danh-sach", nhan: "Cài đặt — danh sách mẫu OKR" },
+			{ id: "ST-mau-rong", nhan: "Cài đặt — chưa có mẫu" },
+			{
+				id: "ST-mau-khong-quyen",
+				nhan: "Cài đặt — thành viên thường, điều khiển khoá",
+			},
+			{
+				id: "ST-mau-sheet",
+				nhan: "Cài đặt — sheet thêm mẫu, KR mẫu trái kiểu",
+			},
+			{ id: "ST-datmt-chon-mau", nhan: "Đặt mục tiêu — bắt đầu từ mẫu" },
+			{
+				id: "ST-datmt-tu-mau",
+				nhan: "Đặt mục tiêu — form điền sẵn từ mẫu, thiếu số",
+			},
+			{
+				id: "ST-canh-chong",
+				nhan: "Cảnh ngữ cảnh — khung KR chồng lên khung mục tiêu",
+			},
+		],
+	},
+	{
+		slug: "giai-doan-thoa-thuan",
+		ten: "Cài đặt › Giai đoạn thoả thuận — quản trị tự cấu hình",
+		states: [
+			{
+				id: "ST-co-du-lieu",
+				nhan: "Có dữ liệu — bảy giai đoạn ban đầu, quản trị",
+			},
+			{ id: "ST-them", nhan: "Hộp thoại Thêm giai đoạn" },
+			{ id: "ST-them-tu-choi", nhan: "Thêm — máy chủ từ chối tên trùng" },
+			{ id: "ST-xoa-trong", nhan: "Xoá giai đoạn trống — hỏi lại" },
+			{
+				id: "ST-xoa-chuyen",
+				nhan: "Xoá giai đoạn còn thoả thuận — chọn đích cùng nhóm",
+			},
+			{ id: "ST-khong-quyen", nhan: "Thành viên thường — điều khiển khoá" },
+			{ id: "ST-dat-tran", nhan: "Đạt trần 20 giai đoạn — Thêm khoá" },
+			{ id: "ST-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-loi", nhan: "Lỗi tải" },
 		],
 	},
 ];

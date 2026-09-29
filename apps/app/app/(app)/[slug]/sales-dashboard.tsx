@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AreaTrend, DonutStat } from "@/components/dashboard-charts";
-import { dealStageColor, dealStageLabel } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { tongQuanMessages } from "@/lib/messages/tong-quan";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -43,6 +43,7 @@ function changeDelta(
 }
 
 export function SalesDashboard({ summary }: { summary: Summary }) {
+	const giaiDoan = useGiaiDoan();
 	const locale = useLocale();
 	const workspaceUrl = useWorkspaceUrl();
 	const m = tongQuanMessages(locale);
@@ -76,9 +77,9 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 			? [
 					{
 						key: stage.stage,
-						label: dealStageLabel(stage.stage),
+						label: giaiDoan.label(stage.stage),
 						value: stage.valueCents,
-						color: dealStageColor(stage.stage),
+						color: giaiDoan.mau(stage.stage),
 						count: stage.count,
 					},
 				]

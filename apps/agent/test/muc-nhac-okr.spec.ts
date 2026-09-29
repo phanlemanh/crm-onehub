@@ -73,6 +73,13 @@ const MAU = {
 		nhan: "Tăng trưởng",
 		nguoiTen: "Bình",
 	},
+	"okr-ghi-nhan": {
+		loai: "okr-ghi-nhan",
+		ghiNhanId: "gn-1",
+		objectiveId: "mt-5",
+		nhan: "Kho mới",
+		nguoiGui: "Oanh",
+	},
 	"okr-theo-doi": {
 		loai: "okr-theo-doi",
 		objectiveId: "mt-4",
@@ -80,7 +87,13 @@ const MAU = {
 		capNhat: 1,
 		binhLuan: 2,
 	},
-} satisfies { [K in ViecNhac["loai"]]: Extract<ViecNhac, { loai: K }> };
+	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 2 },
+} satisfies {
+	[K in Exclude<ViecNhac["loai"], "ai-tran" | "ai-doi-soat-lech">]: Extract<
+		ViecNhac,
+		{ loai: K }
+	>;
+};
 
 describe("loai-la", () => {
 	test("loai-la: muc loai okr-moi lam dungTin nem, thong diep neu ten loai", () => {

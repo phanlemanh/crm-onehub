@@ -36,6 +36,13 @@ const DU: ViecCuaToiOutput = {
 			nguoiTen: "Võ Phương Thảo",
 		},
 		{
+			loai: "okr-ghi-nhan",
+			ghiNhanId: "gn-1",
+			objectiveId: "mt-5",
+			nhan: "Chốt kho mới",
+			nguoiGui: "Đặng Minh Khoa",
+		},
+		{
 			loai: "okr-theo-doi",
 			objectiveId: "mt-4",
 			nhan: "Mở rộng miền Trung",
@@ -155,15 +162,16 @@ afterEach(() => {
 describe("the viec OKR", () => {
 	test("moi loai mot dong, dong cap nhat dan toi man cap nhat voi loi vao viec-cua-toi", async () => {
 		await mo("khi-lien-quan", true);
-		await cho(() => dong().length === 5, "nam dong");
+		await cho(() => dong().length === 6, "sau dong");
 		expect(dong().map((d) => d.dataset.viecOkr)).toEqual([
 			"okr-cap-nhat",
 			"okr-kr-im",
 			"okr-duoc-giao",
 			"okr-nhac-ten",
+			"okr-ghi-nhan",
 			"okr-theo-doi",
 		]);
-		const [capNhat, im, giao, nhac, theo] = dong();
+		const [capNhat, im, giao, nhac, ghiNhan, theo] = dong();
 		expect(capNhat?.textContent).toContain("2 KR chờ cập nhật tuần này");
 		expect(capNhat?.querySelector("a")?.getAttribute("href")).toBe(
 			"/ws/okr/cap-nhat-tuan?tu=viec-cua-toi",
@@ -171,6 +179,10 @@ describe("the viec OKR", () => {
 		expect(im?.textContent).toContain("KR im 15 ngày");
 		expect(giao?.textContent).toContain(m.cau.giaoKr);
 		expect(nhac?.textContent).toContain("Võ Phương Thảo nhắc tên bạn");
+		expect(ghiNhan?.textContent).toContain("Đặng Minh Khoa ghi nhận bạn");
+		expect(ghiNhan?.querySelector("[translate=no]")?.textContent).toBe(
+			"Đặng Minh Khoa",
+		);
 		expect(theo?.textContent).toContain("2 bình luận mới");
 		expect(theo?.textContent).not.toContain("0 cập nhật");
 		expect(nhac?.querySelector("[translate=no]")?.textContent).toBe(
@@ -185,7 +197,7 @@ describe("the viec OKR", () => {
 
 	test("bam dong khac mo sheet muc tieu dung ma", async () => {
 		await mo("khi-lien-quan", true);
-		await cho(() => dong().length === 5, "nam dong");
+		await cho(() => dong().length === 6, "sau dong");
 		const nut = dong()[3]?.querySelector("button");
 		await act(async () => nut?.click());
 		await cho(() => url !== "", "doi url");
@@ -224,7 +236,7 @@ describe("the viec OKR", () => {
 	test("tab Cua toi: co dong thi hien khoi du co lien quan sai", async () => {
 		traVe = () => ({ ...DU, lienQuanOkr: false });
 		await mo("khi-co-viec", false);
-		await cho(() => dong().length === 5, "nam dong");
+		await cho(() => dong().length === 6, "sau dong");
 	});
 
 	test("tab Cua toi: rong thi khong co khoi", async () => {
@@ -253,6 +265,6 @@ describe("the viec OKR", () => {
 			(b) => b.textContent?.trim() === m.loi.action,
 		);
 		await act(async () => thuLai?.click());
-		await cho(() => dong().length === 5, "tai lai xong");
+		await cho(() => dong().length === 6, "tai lai xong");
 	});
 });

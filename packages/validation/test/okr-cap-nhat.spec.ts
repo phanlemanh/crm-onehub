@@ -26,6 +26,29 @@ const DAU_VAO = [
 		true,
 	],
 	[
+		"gui kem bang chung hop le",
+		guiCapNhatInput,
+		{
+			sessionId: "s",
+			items: [
+				{
+					...muc,
+					bangChung: { url: "https://drive.google.com/x", ghiChu: "" },
+				},
+			],
+		},
+		true,
+	],
+	[
+		"gui kem bang chung url javascript",
+		guiCapNhatInput,
+		{
+			sessionId: "s",
+			items: [{ ...muc, bangChung: { url: "javascript:x", ghiChu: "" } }],
+		},
+		false,
+	],
+	[
 		"binh luan hop le",
 		addCommentInput,
 		{ objectiveId: "o", body: "x", mentionUserIds: [] },
@@ -77,7 +100,7 @@ const DAU_VAO = [
 ] as const;
 
 describe("okr-cap-nhat khuon", () => {
-	test("ma tran 12 dau vao x parse", () => {
+	test("ma tran 14 dau vao x parse", () => {
 		const thuc = DAU_VAO.map(([ten, khuon, vao]) => [
 			ten,
 			khuon.safeParse(vao).success,

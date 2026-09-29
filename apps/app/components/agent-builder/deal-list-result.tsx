@@ -17,7 +17,7 @@ import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalDay } from "@/components/local-date-time";
 import type { DealListResult } from "@/lib/agent-transcript";
-import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import {
 	type KetQuaMessages,
 	ketQuaMessages,
@@ -142,13 +142,13 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 }
 
 function Stage({ stage }: { stage: string }) {
-	const option = DEAL_STAGE_OPTIONS.find(
-		(candidate) => candidate.value === stage,
-	);
-	return option ? (
-		<DealStageIndicator stage={option.value} />
+	const giaiDoan = useGiaiDoan();
+	return giaiDoan.theoId.has(stage) ? (
+		<DealStageIndicator stage={stage} />
 	) : (
-		<span className="text-muted-foreground">{humaniseStage(stage)}</span>
+		<span className="text-muted-foreground" translate="no">
+			{stage}
+		</span>
 	);
 }
 
@@ -177,14 +177,6 @@ function tableMeta(
 	].filter((detail): detail is string => Boolean(detail));
 
 	return details.join(" · ");
-}
-
-function humaniseStage(stage: string): string {
-	return stage
-		.toLowerCase()
-		.split("_")
-		.map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
-		.join(" ");
 }
 
 function pipelineTotal(

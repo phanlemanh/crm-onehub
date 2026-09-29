@@ -1,0 +1,1 @@
+E5u: driver la man-tim.mjs (Playwright noi bo qua tien-de); khong co read_network_requests -> n-a (driver). Log: e5u-main.log exit 0, e5u-chieu.log ma 1 dung ghim.

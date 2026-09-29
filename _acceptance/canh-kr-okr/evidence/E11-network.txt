@@ -1,0 +1,8 @@
+Driver cho E11 la script Puppeteer noi bo (_acceptance/canh-kr-okr/rang/man-canh-kr.mjs),
+chay qua Bash (khong phai Browser MCP tool). Toi khong co read_network_requests /
+read_console_messages tren phien Puppeteer do script tu quan ly. Script co tu ghi mang
+qua CDP (bien `mang` -> man-canh-kr-network.txt) nhung chi dung cho E15 (kiem tra lo du
+lieu vai okr); file tam nay nam trong TAM (.acceptance-runs/canh-kr-okr/man/) va bi don
+dep (rmSync) khi phien-do.mjs ket thuc phien do rieng — khong con ton tai sau khi chay xong.
+Script noi bo co tu kham "khong loi console" (kiem tra loiConsole.length === 0) va da PASS
+(nam trong 89 khang dinh, 0 hong). => networkObserved = "n-a (driver)".

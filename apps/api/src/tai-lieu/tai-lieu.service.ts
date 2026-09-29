@@ -3,6 +3,11 @@ import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { taoDeXuatTaiLieu } from "@crm/db/tai-lieu-de-xuat";
 import {
+	demChoDuyet,
+	dieuKienThay,
+	dieuKienThayDeXuat,
+} from "@crm/db/tai-lieu-quyen";
+import {
 	chuanNfc,
 	coChuHaySo,
 	gocSlug,
@@ -29,15 +34,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import {
-	dieuKienDuyetDuoc,
-	dieuKienThay,
-	dieuKienThayDeXuat,
-	duyetDuoc,
-	type NguoiGoi,
-	thayDeXuat,
-	thayTrang,
-} from "./quyen";
+import { duyetDuoc, type NguoiGoi, thayDeXuat, thayTrang } from "./quyen";
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
@@ -46,6 +43,7 @@ import type {
 	TaiLieuListInput,
 	TaiLieuListOutput,
 	TaiLieuProposalOutput,
+	TaiLieuProposalsInput,
 	TaiLieuProposalsOutput,
 	TaiLieuProposeInput,
 	TaiLieuRejectInput,
@@ -97,6 +95,15 @@ function khongCo(): NotFoundException {
 function bam(noiDung: string): string {
 	return createHash("sha256").update(noiDung).digest("hex");
 }
+
+const TRANG_THAI_NHOM = {
+	"tat-ca": { trangThai: { not: "DA_DUYET" } },
+	cho: { trangThai: "CHO_DUYET" },
+	"da-xu-ly": { trangThai: { in: ["TRA_LAI", "CU"] } },
+} as const satisfies Record<
+	NonNullable<TaiLieuProposalsInput>["nhom"],
+	Prisma.TaiLieuDeXuatWhereInput
+>;
 
 function laCu(
 	trangThai: string,
@@ -162,7 +169,13 @@ export class TaiLieuService {
 		nguoi: NguoiGoi,
 		input: TaiLieuListInput,
 	): Promise<TaiLieuListOutput> {
-		const thay = dieuKienThay(nguoi);
+		const thay: Prisma.TaiLieuTrangWhereInput = {
+			AND: [
+				dieuKienThay(nguoi),
+				...(input.donViId ? [{ departmentId: input.donViId }] : []),
+				...(input.chuTrangId ? [{ chuTrangId: input.chuTrangId }] : []),
+			],
+		};
 		const where: Prisma.TaiLieuTrangWhereInput = input.loai
 			? { AND: [thay, { loai: input.loai }] }
 			: thay;
@@ -391,14 +404,26 @@ export class TaiLieuService {
 		};
 	}
 
-	async proposals(nguoi: NguoiGoi): Promise<TaiLieuProposalsOutput> {
-		const [rows, choToiDuyet] = await Promise.all([
+	async proposals(
+		nguoi: NguoiGoi,
+		input: TaiLieuProposalsInput,
+	): Promise<TaiLieuProposalsOutput> {
+		const nhom = input?.nhom ?? "tat-ca";
+		const page = input?.page ?? 1;
+		const where: Prisma.TaiLieuDeXuatWhereInput = {
+			AND: [
+				dieuKienThayDeXuat(nguoi),
+				TRANG_THAI_NHOM[nhom],
+				...(input?.slug ? [{ trang: { slug: input.slug } }] : []),
+			],
+		};
+		const coTrang = TAI_LIEU_API.deXuat.coTrang;
+		const [rows, total, choToiDuyet] = await Promise.all([
 			this.db.taiLieuDeXuat.findMany({
-				where: {
-					AND: [dieuKienThayDeXuat(nguoi), { trangThai: { not: "DA_DUYET" } }],
-				},
+				where,
 				orderBy: [{ createdAt: "desc" }, { id: "asc" }],
-				take: TAI_LIEU_API.deXuat.coTrang,
+				skip: (page - 1) * coTrang,
+				take: coTrang,
 				select: {
 					id: true,
 					ten: true,
@@ -409,9 +434,8 @@ export class TaiLieuService {
 					trang: { select: { slug: true, banDangDungId: true } },
 				},
 			}),
-			this.db.taiLieuDeXuat.count({
-				where: { AND: [dieuKienDuyetDuoc(nguoi), { trangThai: "CHO_DUYET" }] },
-			}),
+			this.db.taiLieuDeXuat.count({ where }),
+			demChoDuyet(this.db, nguoi),
 		]);
 		return {
 			rows: rows.map((r) => ({
@@ -423,6 +447,7 @@ export class TaiLieuService {
 				trangThai: r.trangThai as TrangThaiDeXuat,
 				cu: laCu(r.trangThai, r.banGocId, r.trang.banDangDungId),
 			})),
+			total,
 			choToiDuyet,
 		};
 	}

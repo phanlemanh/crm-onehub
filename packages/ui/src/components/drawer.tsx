@@ -9,6 +9,7 @@ import {
 	useGiuGoc,
 	useGiuNoiDung,
 } from "@crm/ui/components/giu-thay-doi";
+import { escTuXuLy } from "@crm/ui/lib/tu-xu-ly-esc";
 
 const drawerTitleVariants = cva("font-heading font-medium text-foreground", {
 	variants: {
@@ -202,6 +203,10 @@ function DrawerContent({
 				}}
 				onEscapeKeyDown={(e) => {
 					onEscapeKeyDown?.(e);
+					if (escTuXuLy(e.target)) {
+						e.preventDefault();
+						return;
+					}
 					if (g?.coThayDoi) {
 						e.preventDefault();
 						g.hoiLai();

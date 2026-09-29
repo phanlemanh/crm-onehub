@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-29T05:24:00+07:00",
+	chup_luc: "2026-09-29T14:55:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -22,7 +22,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ten: "Tìm được",
 			nghia: "⌘K có dấu hay không dấu, backlink, tab Sức khoẻ",
 			de_xuat: "2026-10-08",
-			that: "",
+			that: "2026-09-29",
 			hang_muc: "l3",
 		},
 		{
@@ -104,16 +104,32 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ten: "Lượt 3",
 			slug: "tim-va-dieu-huong-kho",
 			hang: "T2",
-			trang_thai: "chưa mở",
-			ngay: "",
-			pr: [],
+			trang_thai: "đã lên onehub",
+			ngay: "2026-09-29",
+			pr: [205],
 			cau_giao:
 				"«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
-			buoc_ke: "Mở được ngay: lượt 1 và lượt 2 đã lên",
+			buoc_ke: "Phiên nghiệm thu lượt 3; Cổng Giá trị đóng ở đợt chạy thật",
 			chan_boi: [],
 			ghi_chu:
-				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ.",
+				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất. 29/09: S3 xong, năm lệnh xanh. S4 round 1 BLOCKED kèm một phát hiện trong hợp đồng (nhắc sáng tự tính lại luật duyệt) và hội đồng ảnh thấy tiêu đề bị nút đè ở 390; đã sửa, kể cả đầu trang dùng chung. Round 2 PENDING-JUDGMENT: 25 eval và bốn suite xanh, hội đồng ảnh UNCERTAIN, bảy mục ngoài hợp đồng. Anh ký Cổng Bằng chứng 29/09 (E12j Đạt); gộp onehub, ghim lại xanh, mở PR #205. CI xanh, merge vào onehub 29/09, lên production.",
 			cho_anh: true,
+		},
+		{
+			id: "l3b",
+			dong: 10,
+			ten: "Lượt 3b",
+			slug: "lich-su-va-luu-tru-trang",
+			hang: "T3",
+			trang_thai: "chưa mở",
+			ngay: "2026-09-29",
+			pr: [],
+			cau_giao:
+				"«Tôi xem được các phiên bản cũ của trang, khôi phục một bản cũ qua duyệt, và lưu trữ trang không còn dùng»",
+			buoc_ke: "Mở được ngay: lượt 3 đã lên",
+			chan_boi: [],
+			ghi_chu:
+				"Tách từ lượt 3 ngày 29/09, anh nhận ở Cổng Phạm vi. T3 vì cần cột trạng thái lưu trữ trên TaiLieuTrang. Gồm cả «trang lưu trữ không ra kết quả» của tìm kiếm.",
 		},
 		{
 			id: "l4",
@@ -126,8 +142,8 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			pr: [],
 			cau_giao:
 				"«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
-			buoc_ke: "Chờ lượt 3 lên và 50 câu hỏi thật",
-			chan_boi: ["l3", "cb"],
+			buoc_ke: "Lượt 3 đã lên; còn chờ 50 câu hỏi thật",
+			chan_boi: ["cb"],
 			ghi_chu:
 				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2.",
 		},
@@ -210,8 +226,12 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 	],
 	cho_anh: [
 		{
-			viec: "Mở lượt 3 tim-va-dieu-huong-kho (nhận thêm hai hạn chế của lượt 1)",
+			viec: "Phiên nghiệm thu lượt 3: /acceptance-gate:uat-session tim-va-dieu-huong-kho",
 			hang_muc: "l3",
+		},
+		{
+			viec: "Mở lượt 3b lich-su-va-luu-tru-trang (T3)",
+			hang_muc: "l3b",
 		},
 		{
 			viec: "Thử tải một tệp Word quy định thật lên production: lần ghi vào kho riêng tư đầu tiên chưa được đo ở production",
@@ -267,8 +287,36 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ngay: "2026-09-28",
 			viec: "Kho nguồn dùng khoá Blob riêng, không lùi về khoá logo; không gắn kho riêng tư vào dự án",
 		},
+		{
+			ngay: "2026-09-29",
+			viec: "Tách lịch sử, khôi phục, lưu trữ sang lượt 3b (T3); lượt 3 giữ T2, không migration",
+		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3 lên onehub (PR #205): ⌘K tìm kho, trang nhắc tới, lọc, tab Sức khoẻ, dòng nhắc sáng",
+		},
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3: anh ký Cổng Bằng chứng; mở PR #205 vào onehub",
+		},
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3: S4 round 2 PENDING-JUDGMENT, 25 eval và bốn suite xanh; chờ anh ký Cổng Bằng chứng",
+		},
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3: Cổng Đáng ký build, ngưỡng giữ như đề xuất",
+		},
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3: Cổng Phạm vi duyệt, nhận tách lịch sử, khôi phục, lưu trữ sang 3b; vào S2",
+		},
+		{
+			ngay: "2026-09-29",
+			viec: "Lượt 3 mở: S1 xong, 12 AC, 25 eval, chờ Cổng Đáng và Cổng Phạm vi",
+		},
 		{
 			ngay: "2026-09-28",
 			viec: "#200: thước màn chữ của hộp kéo-thả theo khoá kho nguồn mới",

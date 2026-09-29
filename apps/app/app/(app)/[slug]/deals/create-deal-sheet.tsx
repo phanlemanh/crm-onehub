@@ -10,7 +10,6 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@crm/ui/components/field";
-import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -40,7 +39,7 @@ import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
-import { dealStageLabel, OPEN_STAGES } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { dealMessages } from "@/lib/messages/deals";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -80,7 +79,9 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 	const [name, setName] = useState("");
 	const [company, setCompany] = useState(companyId ?? UNSET);
 	const [ownerId, setOwnerId] = useState(UNSET);
-	const [stage, setStage] = useState<string>("DEMO_BOOKED");
+	const [stage, setStage] = useState("");
+	const giaiDoan = useGiaiDoan();
+	const stageHien = stage || giaiDoan.open[0]?.id || "";
 	const [amount, setAmount] = useState("");
 	const [currency, setCurrency] = useState("");
 	const [closeDate, setCloseDate] = useState("");
@@ -150,7 +151,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 							name,
 							companyId: company,
 							ownerId: resolvedOwner,
-							stage: stage as never,
+							stage: stage || undefined,
 							amountCents: reading?.kind === "ok" ? reading.cents : null,
 							currency: knownCurrency ?? undefined,
 							expectedCloseDate: closeDate || null,
@@ -203,16 +204,14 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 							<FieldLabel htmlFor="create-deal-stage">
 								{m.create.stage}
 							</FieldLabel>
-							<Select value={stage} onValueChange={setStage}>
+							<Select value={stageHien} onValueChange={setStage}>
 								<SelectTrigger id="create-deal-stage">
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									{OPEN_STAGES.map((value) => (
-										<SelectItem key={value} value={value}>
-											<ForeignText lang="en">
-												{dealStageLabel(value)}
-											</ForeignText>
+									{giaiDoan.open.map((option) => (
+										<SelectItem key={option.id} value={option.id}>
+											<span translate="no">{option.label}</span>
 										</SelectItem>
 									))}
 								</SelectContent>

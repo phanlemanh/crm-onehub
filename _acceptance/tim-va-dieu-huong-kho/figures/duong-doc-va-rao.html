@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đường đọc và rào · tim-va-dieu-huong-kho</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 66ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình Cổng Phạm vi · Luồng dữ liệu · tim-va-dieu-huong-kho</p>
+    <h1>Đường đọc và rào: mọi đường đọc mới chỉ lấy thứ đã duyệt</h1>
+    <p class="sub">Tìm đọc cột <code>timKiem</code> ghi lúc duyệt; «Trang nhắc tới» và Sức khoẻ đọc bảng liên kết thay trọn lúc duyệt, câu ngữ cảnh tính lúc đọc từ bản đang dùng. Bản chưa duyệt chỉ có một đường riêng, qua luật lượt 1, và chỉ mang tên trang cùng số bản.</p>
+
+    <svg viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-1 · d-4 · P0 · AC-1 · AC-2 · AC-5 · AC-7 · AC-8</text>
+
+      <text x="40" y="172" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">chữ thân bản chưa duyệt không vào đường đọc nào</text>
+
+      <path d="M 240 248 L 288 248" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 400 232 L 432 232 Q 440 232 440 224 L 440 144 Q 440 136 448 136 L 480 136" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 400 248 L 480 248" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 400 264 L 432 264 Q 440 264 440 272 L 440 352 Q 440 360 448 360 L 480 360" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 704 136 L 880 136" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 704 236 L 880 236" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 704 348 L 744 348 Q 752 348 752 340 L 752 260 Q 752 252 760 252 L 880 252" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 704 268 L 746 268 A 6 6 0 0 1 758 268 L 800 268 Q 808 268 808 276 L 808 332 Q 808 340 816 340 L 880 340" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 704 372 L 880 372" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 140 296 L 140 472 Q 140 480 148 480 L 432 480" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <path d="M 704 480 L 880 480" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="760" y="216" width="104" height="12" rx="2" fill="#fafafa"/>
+      <text x="812" y="225" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÂU · LÚC ĐỌC</text>
+      <rect x="740" y="460" width="104" height="12" rx="2" fill="#fafafa"/>
+      <text x="792" y="469" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TÊN · SỐ BẢN</text>
+      <text x="1012" y="540" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="middle">chỉ tên trang và số bản, không chữ thân</text>
+
+      <rect x="40" y="200" width="200" height="96" rx="8" fill="#fafafa"/>
+      <rect x="40" y="200" width="200" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="140" y="236" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bản đề xuất</text>
+      <text x="140" y="254" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">(chưa duyệt)</text>
+      <text x="140" y="276" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chữ thân · tên trang nháp</text>
+
+      <rect x="288" y="216" width="112" height="64" rx="8" fill="#fafafa"/>
+      <rect x="288" y="216" width="112" height="64" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="344" y="246" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Duyệt</text>
+      <text x="344" y="264" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ghi ba chỗ</text>
+
+      <rect x="480" y="104" width="224" height="64" rx="8" fill="#fafafa"/>
+      <rect x="480" y="104" width="224" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="488" y="110" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="506" y="120" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">d-1</text>
+      <text x="592" y="136" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cột <tspan font-family="'Geist Mono', monospace">timKiem</tspan></text>
+      <text x="592" y="155" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">unaccent · lúc duyệt</text>
+
+      <rect x="480" y="216" width="224" height="64" rx="8" fill="#fafafa"/>
+      <rect x="480" y="216" width="224" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="592" y="245" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phiên bản / bản đang dùng</text>
+      <text x="592" y="264" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">nội dung đã duyệt</text>
+
+      <rect x="480" y="328" width="224" height="64" rx="8" fill="#fafafa"/>
+      <rect x="480" y="328" width="224" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="592" y="357" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bảng liên kết</text>
+      <text x="592" y="376" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">thay trọn lúc duyệt</text>
+
+      <rect x="880" y="104" width="264" height="64" rx="8" fill="#fafafa"/>
+      <rect x="880" y="104" width="264" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="888" y="110" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="906" y="120" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-1</text>
+      <text x="1012" y="136" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">taiLieu.tim ⌘K</text>
+      <text x="1012" y="155" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đọc cột timKiem</text>
+
+      <rect x="880" y="216" width="264" height="64" rx="8" fill="#fafafa"/>
+      <rect x="880" y="216" width="264" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="888" y="222" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="906" y="232" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-5</text>
+      <text x="1012" y="245" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang nhắc tới</text>
+      <text x="1012" y="264" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bảng liên kết + câu từ bản đang dùng</text>
+
+      <rect x="880" y="328" width="264" height="64" rx="8" fill="#fafafa"/>
+      <rect x="880" y="328" width="264" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="888" y="334" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="906" y="344" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-7</text>
+      <text x="1012" y="357" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Sức khoẻ</text>
+      <text x="1012" y="376" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bảng liên kết + bản đang dùng</text>
+
+      <rect x="432" y="452" width="272" height="56" rx="8" fill="#fafafa"/>
+      <rect x="432" y="452" width="272" height="56" rx="8" fill="rgba(23,23,23,0.05)" stroke="#171717" stroke-width="1.2"/>
+      <rect x="440" y="458" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="458" y="468" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-2</text>
+      <text x="568" y="478" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">luật lượt 1</text>
+      <text x="568" y="497" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">người tạo · chủ trang · quản trị</text>
+
+      <rect x="880" y="448" width="264" height="64" rx="8" fill="#fafafa"/>
+      <rect x="880" y="448" width="264" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="888" y="454" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="906" y="464" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-8</text>
+      <text x="1012" y="483" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Sức khoẻ: Có đề xuất chờ duyệt</text>
+      <text x="1012" y="501" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">tên trang · số bản</text>
+
+      <line x1="40" y1="560" x2="1160" y2="560" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="580" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="592" width="16" height="10" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="64" y="601" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chỗ ghi duy nhất cho đường đọc: lúc duyệt</text>
+      <rect x="300" y="592" width="16" height="10" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="324" y="601" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chưa duyệt</text>
+      <line x1="416" y1="597" x2="440" y2="597" stroke="#575757" stroke-width="1"/>
+      <text x="448" y="601" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Dữ liệu đã duyệt đi tới đường đọc</text>
+      <line x1="648" y1="597" x2="672" y2="597" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="680" y="601" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đường riêng của bản chưa duyệt, qua rào quyền</text>
+    </svg>
+
+    <footer>tim-va-dieu-huong-kho · Cổng Phạm vi · d-1 · d-4 · P0 gap-probe · design doc 2026-09-29 mục 1, 4, 6 · AC-1 · AC-2 · AC-5 · AC-7 · AC-8</footer>
+  </div>
+</body>
+</html>

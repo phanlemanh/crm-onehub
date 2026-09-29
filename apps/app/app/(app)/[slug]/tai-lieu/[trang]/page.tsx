@@ -37,8 +37,9 @@ async function NoiDung({ params }: { params: Params }) {
 			queryClient.fetchQuery(trpc.taiLieu.get.queryOptions({ slug })),
 		),
 		queryClient
-			.fetchQuery(trpc.taiLieu.proposals.queryOptions())
+			.fetchQuery(trpc.taiLieu.proposals.queryOptions({ nhom: "cho", slug }))
 			.catch(() => null),
+		queryClient.prefetchQuery(trpc.taiLieu.nhacToi.queryOptions({ slug })),
 	]);
 	if (!trang) notFound();
 

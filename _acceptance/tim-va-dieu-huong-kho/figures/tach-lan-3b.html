@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tách lượt 3b · tim-va-dieu-huong-kho</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 66ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình Cổng Phạm vi · So sánh hai nhánh · tim-va-dieu-huong-kho</p>
+    <h1>Tách lịch sử, khôi phục, lưu trữ sang lượt 3b, hay gộp vào lượt 3</h1>
+    <p class="sub">Cả hai nhánh cùng đứng trên một sự thật: <code>TaiLieuTrang</code> chưa có trạng thái lưu trữ, nên lưu trữ cần chạm <code>packages/db/prisma</code>. Máy khuyên tách; chủ kho chọn ở Cổng Phạm vi.</p>
+
+    <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-2 · HAI NHÁNH RẼ · AC-7 · OUT OF SCOPE DÒNG 1</text>
+
+      <path d="M 576 152 L 576 176 Q 576 184 568 184 L 308 184 Q 300 184 300 192 L 300 220" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 624 152 L 624 176 Q 624 184 632 184 L 892 184 Q 900 184 900 192 L 900 220" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 300 276 L 300 308" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 300 372 L 300 404" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 300 468 L 300 500" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 900 276 L 900 308" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 900 372 L 900 404" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 900 468 L 900 500" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="340" y="72" width="520" height="80" rx="8" fill="#fafafa"/>
+      <rect x="340" y="72" width="520" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="348" y="78" width="28" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="362" y="88" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">d-2</text>
+      <text x="600" y="104" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt 3 như lộ trình mục 4</text>
+      <text x="600" y="126" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace">TaiLieuTrang</tspan> chưa có trạng thái lưu trữ → lưu trữ cần <tspan font-family="'Geist Mono', monospace">packages/db/prisma</tspan></text>
+      <text x="600" y="143" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">chung cho cả hai nhánh</text>
+
+      <rect x="80" y="220" width="440" height="56" rx="8" fill="#fafafa"/>
+      <rect x="80" y="220" width="440" height="56" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="88" y="226" width="76" height="14" rx="2" fill="#006B4F"/>
+      <text x="126" y="236" fill="#ffffff" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN</text>
+      <text x="300" y="250" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tách</text>
+      <text x="300" y="267" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">hai lượt: 3 rồi 3b</text>
+
+      <rect x="680" y="220" width="440" height="56" rx="8" fill="#fafafa"/>
+      <rect x="680" y="220" width="440" height="56" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1.4"/>
+      <text x="900" y="250" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gộp</text>
+      <text x="900" y="267" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">một lượt</text>
+
+      <rect x="100" y="308" width="400" height="64" rx="8" fill="#fafafa"/>
+      <rect x="100" y="308" width="400" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="108" y="314" width="16" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="116" y="324" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">1</text>
+      <text x="300" y="338" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt 3 · T2 · 12 AC</text>
+      <text x="300" y="357" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">dưới trần 15 AC của kit</text>
+
+      <rect x="100" y="404" width="400" height="64" rx="8" fill="#fafafa"/>
+      <rect x="100" y="404" width="400" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="108" y="410" width="16" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="116" y="420" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+      <text x="300" y="434" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không migration · không Cổng 1.5</text>
+      <text x="300" y="453" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không chạm packages/db/prisma</text>
+
+      <rect x="100" y="500" width="400" height="100" rx="8" fill="#fafafa"/>
+      <rect x="100" y="500" width="400" height="100" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="108" y="506" width="16" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="116" y="516" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">3</text>
+      <rect x="380" y="506" width="112" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="436" y="516" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">OUT OF SCOPE · DÒNG 1</text>
+      <text x="300" y="532" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt 3b · T3 · khoảng 5 AC</text>
+      <text x="300" y="549" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lich-su-va-luu-tru-trang</text>
+      <text x="300" y="569" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cột lưu trữ · lịch sử · khôi phục · lưu trữ qua duyệt</text>
+      <text x="300" y="586" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trang lưu trữ biến khỏi tìm, «nhắc tới», Sức khoẻ (AC-7)</text>
+
+      <rect x="700" y="308" width="400" height="64" rx="8" fill="#fafafa"/>
+      <rect x="700" y="308" width="400" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="708" y="314" width="16" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="716" y="324" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">1</text>
+      <text x="900" y="338" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Một lượt · T3 · 16–17 AC</text>
+      <text x="900" y="357" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">lượt 3 cộng lịch sử, khôi phục, lưu trữ</text>
+
+      <rect x="700" y="404" width="400" height="64" rx="8" fill="#fafafa"/>
+      <rect x="700" y="404" width="400" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="708" y="410" width="16" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="716" y="420" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+      <text x="900" y="434" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thêm Cổng 1.5</text>
+      <text x="900" y="453" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chạm packages/db/prisma</text>
+
+      <rect x="700" y="500" width="400" height="100" rx="8" fill="#fafafa"/>
+      <rect x="700" y="500" width="400" height="100" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="708" y="506" width="16" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="716" y="516" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">3</text>
+      <text x="900" y="544" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vượt trần 15 AC của kit</text>
+      <text x="900" y="564" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phải cắt chỗ khác</text>
+
+      <line x1="40" y1="632" x2="1160" y2="632" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="652" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="664" width="16" height="10" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="64" y="673" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh máy khuyên · chủ kho chọn ở Cổng Phạm vi</text>
+      <line x1="360" y1="669" x2="384" y2="669" stroke="#575757" stroke-width="1"/>
+      <text x="392" y="673" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hệ quả nối tiếp, đọc từ trên xuống</text>
+    </svg>
+
+    <footer>tim-va-dieu-huong-kho · Cổng Phạm vi · d-2 · design doc 2026-09-29 mục «Vì sao tách 3b» · AC-7 · Out of scope dòng 1</footer>
+  </div>
+</body>
+</html>

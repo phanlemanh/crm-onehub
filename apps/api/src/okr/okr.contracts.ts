@@ -8,7 +8,18 @@ import {
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
-import { KIEU_KR, krInput, NGUON_KR } from "@crm/validation/okr-kr";
+import {
+	KIEU_KR,
+	krInput,
+	LOI_SO_THEO_KIEU,
+	NGUON_KR,
+} from "@crm/validation/okr-kr";
+import {
+	CAP_MAU,
+	type LuuMauInput,
+	luuMauInput,
+	mauNoiDung,
+} from "@crm/validation/okr-mau";
 import {
 	CAP_MUC_TIEU,
 	LOAI_MUC_TIEU,
@@ -185,7 +196,14 @@ export const lienKetMangSang = z
 	.object({ objectiveId: z.string(), cycleName: z.string() })
 	.nullable();
 
+export const krCanhOutput = krOutput.extend({
+	soViec: z.object({ xong: z.number(), tong: z.number() }),
+	soSangKien: z.number(),
+	coBangChung: z.boolean(),
+});
+
 export const objectiveOutput = mucTieuOutput.extend({
+	keyResults: z.array(krCanhOutput),
 	cycleName: z.string(),
 	mangSangToi: lienKetMangSang,
 	mangSangTu: lienKetMangSang,
@@ -319,6 +337,25 @@ export const guiCapNhatOutput = z.object({
 	seconds: z.number(),
 });
 
+export const dongTraoDoi = z.discriminatedUnion("loai", [
+	z.object({
+		loai: z.literal("binh-luan"),
+		id: z.string(),
+		createdAt: z.string(),
+	}),
+	z.object({
+		loai: z.literal("ghi-nhan"),
+		id: z.string(),
+		createdAt: z.string(),
+		nguoiGui: nguoiOkr,
+		nguoiNhan: z.array(nguoiOkr),
+		keyResultId: z.string().nullable(),
+		keyResultTitle: z.string().nullable(),
+		loiNhan: z.string(),
+		goDuoc: z.boolean(),
+	}),
+]);
+
 export const commentsOutput = z.object({
 	comments: z.array(
 		z.object({
@@ -331,6 +368,7 @@ export const commentsOutput = z.object({
 			mentions: z.array(nguoiOkr),
 		}),
 	),
+	dong: z.array(dongTraoDoi),
 });
 export const addCommentOutput = z.object({ id: z.string() });
 export const thanhVienOutput = z.array(nguoiOkr);
@@ -345,12 +383,70 @@ export const viecCuaToiOutput = z.object({
 export const transferOkrOutput = z.object({
 	kr: z.number(),
 	mucTieu: z.number(),
+	viec: z.number(),
 });
+
+export const mauInput = z.object({
+	cap: z.enum(CAP_MAU).optional(),
+	donViId: ma.optional(),
+});
+export type MauInput = z.infer<typeof mauInput>;
+
+export const mauDong = z.object({
+	id: z.string(),
+	ten: z.string(),
+	cap: z.enum(CAP_MAU),
+	donViIds: z.array(z.string()),
+	soKr: z.number(),
+	daDung: z.number(),
+	luuTru: z.boolean(),
+	noiDung: mauNoiDung,
+});
+export const mauOutput = z.object({
+	mau: z.array(mauDong),
+	quanTri: z.boolean(),
+});
+export type MauOutput = z.infer<typeof mauOutput>;
+
+const loiSoTheoKieu = z.enum(LOI_SO_THEO_KIEU);
+const duongSoKrMau = z.tuple([z.literal("noiDung"), z.literal("krs")]);
+const duongKrMau = z.tuple(
+	[z.literal("noiDung"), z.literal("krs"), z.number()],
+	z.union([z.string(), z.number()]),
+);
+
+function cauLoiMau(duong: readonly PropertyKey[], cau: string): string {
+	if (duongSoKrMau.safeParse(duong).success) return OKR.thongDiep.mau.soKrMau;
+	const kr = duongKrMau.safeParse(duong);
+	if (!kr.success) return cau;
+	const [, , thu, truong] = kr.data;
+	const kieu = loiSoTheoKieu.safeParse(cau);
+	if (kieu.success)
+		return OKR.thongDiep.mau.krMau(
+			thu + 1,
+			OKR.thongDiep.soTheoKieu[kieu.data],
+		);
+	return OKR.thongDiep.mau.krMau(
+		thu + 1,
+		truong === undefined ? `${cau}.` : `${String(truong)}: ${cau}.`,
+	);
+}
+
+export const luuMauVao = luuMauInput
+	.extend({ noiDung: z.unknown() })
+	.transform((vao, ctx): LuuMauInput => {
+		const r = luuMauInput.safeParse(vao);
+		if (r.success) return r.data;
+		for (const loi of r.error.issues)
+			ctx.addIssue({ ...loi, message: cauLoiMau(loi.path, loi.message) });
+		return z.NEVER;
+	});
 
 export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
 export type AlignmentTreeOutput = z.infer<typeof alignmentTreeOutput>;
 export type KrOutput = z.infer<typeof krOutput>;
+export type KrCanhOutput = z.infer<typeof krCanhOutput>;
 export type DonViChon = z.infer<typeof donViChon>;
 export type OkrDongNhapOutput = z.infer<typeof okrDongNhapOutput>;
 export type VetOutput = z.infer<typeof vetOutput>;
@@ -359,6 +455,7 @@ export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
 export type CommentsOutput = z.infer<typeof commentsOutput>;
+export type DongTraoDoi = z.infer<typeof dongTraoDoi>;
 export type FollowOutput = z.infer<typeof followOutput>;
 export type ThanhVienOutput = z.infer<typeof thanhVienOutput>;
 export type ViecOkrOutput = z.infer<typeof viecOkr>;

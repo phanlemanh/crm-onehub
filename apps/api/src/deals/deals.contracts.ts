@@ -1,4 +1,3 @@
-import { DealStage } from "@crm/db";
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
 import { z } from "zod";
 import { bulkIdsInput } from "../crm/bulk";
@@ -37,15 +36,13 @@ export const dealListInput = listInput.extend({
 
 export type DealListInput = z.infer<typeof dealListInput>;
 
-const stageEnum = z.enum(
-	Object.values(DealStage) as [DealStage, ...DealStage[]],
-);
+export const stageId = z.string().min(1);
 
 export const dealCreateInput = z.object({
 	name: z.string().trim().min(1, "A deal needs a name."),
 	companyId: z.string().min(1, "A deal belongs to a company."),
 	ownerId: z.string().min(1, "A deal needs an owner."),
-	stage: stageEnum.optional(),
+	stage: stageId.optional(),
 	amountCents,
 	currency: currencyCode.optional(),
 	expectedCloseDate: z.string().nullable().optional(),
@@ -75,7 +72,7 @@ export const dealIdInput = z.object({ id: z.string() });
 
 export const setStageInput = z.object({
 	id: z.string(),
-	stage: stageEnum,
+	stage: stageId,
 	closedReason: z.string().trim().optional(),
 });
 
@@ -121,7 +118,7 @@ export const dealBulkOwnerInput = bulkIdsInput.extend({
 export type DealBulkOwnerInput = z.infer<typeof dealBulkOwnerInput>;
 
 export const dealBulkStageInput = bulkIdsInput.extend({
-	stage: stageEnum,
+	stage: stageId,
 	closedReason: z.string().trim().optional(),
 });
 
@@ -195,7 +192,7 @@ const dealContactOutput = dealContactSummaryOutput.extend({
 const dealListRowOutput = z.object({
 	id: z.string(),
 	name: z.string(),
-	stage: stageEnum,
+	stage: stageId,
 	currency: z.string(),
 	company: dealCompanyOutput,
 	owner: dealOwnerOutput,
@@ -241,7 +238,7 @@ export const dealBoardCardOutput = dealListRowOutput
 export const dealBoardOutput = z.object({
 	columns: z.array(
 		z.object({
-			stage: stageEnum,
+			stage: stageId,
 			count: z.number(),
 			valueCents: z.number().nullable(),
 			countedCount: z.number(),
@@ -261,7 +258,7 @@ export const dealDetailOutput = z.object({
 	id: z.string(),
 	name: z.string(),
 	description: z.string().nullable(),
-	stage: stageEnum,
+	stage: stageId,
 	currency: z.string(),
 	closedReason: z.string().nullable(),
 	company: dealCompanyDetailOutput,
@@ -299,7 +296,7 @@ export type DealMutated = z.infer<typeof dealMutateOutput>;
 
 export const dealSetStageOutput = z.object({
 	id: z.string(),
-	stage: stageEnum,
+	stage: stageId,
 	changed: z.boolean(),
 });
 

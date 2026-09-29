@@ -1,4 +1,8 @@
-import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
+import {
+	canManageOnboarding,
+	isWorkspaceAdmin,
+	workspaceRoleOf,
+} from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { laViecOkr, lienQuanOkr } from "@crm/db/okr-nhac";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
@@ -20,6 +24,7 @@ import {
 import { InjectDatabase } from "../database/database.constants";
 import type {
 	CommentsOutput,
+	DongTraoDoi,
 	FollowOutput,
 	ThanhVienOutput,
 	TransferOkrOutput,
@@ -37,24 +42,26 @@ function dieuKienChuyen(fromUserId: string) {
 		status: { not: "da-bo" },
 		cycle: { phase: { in: [...PHA_GHI_DUOC] } },
 	} satisfies Prisma.OkrObjectiveWhereInput;
-	return {
-		kr: {
-			ownerUserId: fromUserId,
-			objective: {
-				...conGhi,
-				NOT: { level: "ca-nhan", personUserId: fromUserId },
-			},
+	const krConGhi = {
+		objective: {
+			...conGhi,
+			NOT: { level: "ca-nhan", personUserId: fromUserId },
 		},
+	} satisfies Prisma.OkrKeyResultWhereInput;
+	return {
+		kr: { ownerUserId: fromUserId, ...krConGhi },
 		mucTieu: {
 			ownerUserId: fromUserId,
 			level: { not: "ca-nhan" },
 			...conGhi,
 		},
 		thamGia: { userId: fromUserId, objective: conGhi },
+		viec: { nguoiLamUserId: fromUserId, xongLuc: null, keyResult: krConGhi },
 	} satisfies {
 		kr: Prisma.OkrKeyResultWhereInput;
 		mucTieu: Prisma.OkrObjectiveWhereInput;
 		thamGia: Prisma.OkrParticipantWhereInput;
+		viec: Prisma.OkrViecKrWhereInput;
 	};
 }
 
@@ -88,23 +95,43 @@ export class OkrTraoDoiService {
 			);
 	}
 
-	async comments(objectiveId: string): Promise<CommentsOutput> {
+	async comments(userId: string, objectiveId: string): Promise<CommentsOutput> {
 		await this.mucTieuCo(this.db, objectiveId);
-		const rows = await this.db.okrComment.findMany({
-			where: { objectiveId },
-			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-			include: {
-				keyResult: { select: { title: true } },
-				mentions: { select: { userId: true } },
-			},
-		});
+		const [rows, ghiNhan, role] = await Promise.all([
+			this.db.okrComment.findMany({
+				where: { objectiveId },
+				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+				include: {
+					keyResult: { select: { title: true } },
+					mentions: { select: { userId: true } },
+				},
+			}),
+			this.db.okrGhiNhan.findMany({
+				where: { objectiveId },
+				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+				select: {
+					id: true,
+					createdAt: true,
+					keyResultId: true,
+					loiNhan: true,
+					tacGiaUserId: true,
+					keyResult: { select: { title: true } },
+					nhan: { select: { userId: true } },
+				},
+			}),
+			workspaceRoleOf(userId),
+		]);
 		const ids = [
-			...new Set(
-				rows.flatMap((r) => [
+			...new Set([
+				...rows.flatMap((r) => [
 					r.authorUserId,
 					...r.mentions.map((m) => m.userId),
 				]),
-			),
+				...ghiNhan.flatMap((g) => [
+					g.tacGiaUserId,
+					...g.nhan.map((n) => n.userId),
+				]),
+			]),
 		];
 		const nguoi = await this.db.user.findMany({
 			where: { id: { in: ids } },
@@ -116,6 +143,31 @@ export class OkrTraoDoiService {
 				name: T.traoDoi.nguoiKhongCon,
 				email: "",
 			};
+		const theoTen = (a: { name: string }, b: { name: string }) =>
+			a.name.localeCompare(b.name, "vi");
+		const quanTri = isWorkspaceAdmin(role);
+		const dong: DongTraoDoi[] = [
+			...rows.map(
+				(r): DongTraoDoi => ({
+					loai: "binh-luan",
+					id: r.id,
+					createdAt: r.createdAt.toISOString(),
+				}),
+			),
+			...ghiNhan.map(
+				(g): DongTraoDoi => ({
+					loai: "ghi-nhan",
+					id: g.id,
+					createdAt: g.createdAt.toISOString(),
+					nguoiGui: ai(g.tacGiaUserId),
+					nguoiNhan: g.nhan.map((n) => ai(n.userId)).sort(theoTen),
+					keyResultId: g.keyResultId,
+					keyResultTitle: g.keyResult?.title ?? null,
+					loiNhan: g.loiNhan,
+					goDuoc: g.tacGiaUserId === userId || quanTri,
+				}),
+			),
+		].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 		return {
 			comments: rows.map((r) => ({
 				id: r.id,
@@ -124,10 +176,9 @@ export class OkrTraoDoiService {
 				keyResultTitle: r.keyResult?.title ?? null,
 				body: r.body,
 				createdAt: r.createdAt.toISOString(),
-				mentions: r.mentions
-					.map((m) => ai(m.userId))
-					.sort((a, b) => a.name.localeCompare(b.name, "vi")),
+				mentions: r.mentions.map((m) => ai(m.userId)).sort(theoTen),
 			})),
+			dong,
 		};
 	}
 
@@ -234,11 +285,12 @@ export class OkrTraoDoiService {
 	): Promise<TransferOkrOutput> {
 		await this.yeuCauQuanTri(userId);
 		const dk = dieuKienChuyen(input.fromUserId);
-		const [kr, mucTieu] = await Promise.all([
+		const [kr, mucTieu, viec] = await Promise.all([
 			this.db.okrKeyResult.count({ where: dk.kr }),
 			this.db.okrObjective.count({ where: dk.mucTieu }),
+			this.db.okrViecKr.count({ where: dk.viec }),
 		]);
-		return { kr, mucTieu };
+		return { kr, mucTieu, viec };
 	}
 
 	async transferWork(
@@ -251,7 +303,7 @@ export class OkrTraoDoiService {
 		return this.db.$transaction(async (tx) => {
 			await this.okr.assertThanhVien(tx, [input.toUserId]);
 			const dk = dieuKienChuyen(input.fromUserId);
-			const [krs, mucTieu] = await Promise.all([
+			const [krs, mucTieu, viec] = await Promise.all([
 				tx.okrKeyResult.findMany({
 					where: dk.kr,
 					select: { id: true, objectiveId: true },
@@ -260,6 +312,15 @@ export class OkrTraoDoiService {
 				tx.okrObjective.findMany({
 					where: dk.mucTieu,
 					select: { id: true },
+					orderBy: { id: "asc" },
+				}),
+				tx.okrViecKr.findMany({
+					where: dk.viec,
+					select: {
+						id: true,
+						keyResultId: true,
+						keyResult: { select: { objectiveId: true } },
+					},
 					orderBy: { id: "asc" },
 				}),
 			]);
@@ -290,8 +351,22 @@ export class OkrTraoDoiService {
 					sau,
 				);
 			}
+			for (const v of viec) {
+				await tx.okrViecKr.update({
+					where: { id: v.id },
+					data: { nguoiLamUserId: input.toUserId },
+				});
+				await this.okr.vet(
+					tx,
+					userId,
+					"chuyen-viec",
+					{ objectiveId: v.keyResult.objectiveId, keyResultId: v.keyResultId },
+					{ viecId: v.id, nguoiLamUserId: input.fromUserId },
+					{ viecId: v.id, nguoiLamUserId: input.toUserId },
+				);
+			}
 			await tx.okrParticipant.deleteMany({ where: dk.thamGia });
-			return { kr: krs.length, mucTieu: mucTieu.length };
+			return { kr: krs.length, mucTieu: mucTieu.length, viec: viec.length };
 		});
 	}
 }

@@ -29,6 +29,16 @@ export const HANH_DONG_VET = [
 	"nhin-lai",
 	"mang-sang",
 	"mo-lai-ky",
+	"them-viec",
+	"sua-viec",
+	"xong-viec",
+	"go-viec",
+	"gan-sang-kien",
+	"dinh-bang-chung",
+	"go-bang-chung",
+	"ghi-nhan",
+	"go-ghi-nhan",
+	"sua-mau",
 ] as const;
 
 export type HanhDongVet = (typeof HANH_DONG_VET)[number];

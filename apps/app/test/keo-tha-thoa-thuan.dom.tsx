@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { DealStage } from "@crm/db/enums";
 import type { BoardProps } from "@crm/ui/components/board";
 import { formatMoney } from "@crm/ui/lib/format";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -12,6 +11,7 @@ import type { DealBoardQueryInput } from "@/app/(app)/[slug]/deals/deals-search-
 import type { DealBoard } from "@/app/(app)/[slug]/deals/use-deal-board-move";
 import { dealBoardOutput } from "../../api/src/deals/deals.contracts";
 
+type DealStage = string;
 type BoardData = DealBoard;
 type Column = BoardData["columns"][number];
 type Card = Column["cards"][number];
@@ -75,6 +75,28 @@ function thuTuc<TVao, TRa>(
 
 const rong = () => [];
 
+const GIAI_DOAN_GOC_THU = {
+	canManage: true,
+	tran: 20,
+	stages: (
+		[
+			["DEMO_BOOKED", "Demo booked", "OPEN", 0],
+			["QUALIFIED_TO_BUY", "Qualified to buy", "OPEN", 1],
+			["DECISION_MAKER_BOUGHT_IN", "Decision maker in", "OPEN", 2],
+			["CONTRACT_SENT", "Contract sent", "OPEN", 3],
+			["CLOSED_WON", "Closed won", "WON", 0],
+			["CLOSED_LOST", "Closed lost", "LOST", 0],
+			["UNQUALIFIED_TO_BUY", "Unqualified", "LOST", 1],
+		] as const
+	).map(([id, label, kind, position]) => ({
+		id,
+		label,
+		kind,
+		position,
+		dealCount: 0,
+	})),
+};
+
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		deals: {
@@ -105,6 +127,9 @@ mock.module("@/lib/trpc/client", () => ({
 				return { id: v.id, stage: v.stage };
 			}),
 			byId: thuTuc("deals.byId", rong),
+		},
+		giaiDoan: {
+			list: thuTuc("giaiDoan.list", () => GIAI_DOAN_GOC_THU),
 		},
 		users: { list: thuTuc("users.list", rong) },
 		fields: {

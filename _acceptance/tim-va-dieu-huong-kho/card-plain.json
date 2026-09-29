@@ -1,0 +1,32 @@
+{
+  "feature_plain": "Người dùng gõ ⌘K có dấu hay không dấu là ra trang tài liệu, thấy trang nào nhắc tới trang đang đọc, lọc kho theo đơn vị và chủ trang, chủ trang có tab Sức khoẻ, và sáng ra tin nhắc báo có mấy bản chờ mình duyệt.",
+  "scope_plain": "Những việc dưới đây đã cắt hoặc hoãn từ Cổng Phạm vi, không làm trong lượt này.",
+  "decisions": [
+    {
+      "id": "E12j",
+      "q": "Người văn phòng nhìn các màn mới có tự hiểu để làm gì không?",
+      "why": "Hội đồng ba người chấm ảnh: một đạt, hai chưa chắc. Họ chỉ ra ảnh Sức khoẻ mới thấy 2 trên 5 danh sách, ở điện thoại chip «Biểu mẫu» trên hàng lọc có thể bị cắt, và nhãn «Có đề xuất chờ duyệt» chưa dùng đúng chữ «bản đề xuất». Không ai thấy chữ đè hay cuộn ngang."
+    }
+  ],
+  "decisions_plain": [
+    {"id": "d-20260928T230629Z-1", "p": "Tìm bằng bộ tìm chữ sẵn có của cơ sở dữ liệu, gõ không dấu vẫn ra — đổi lại chưa bắt được gõ sai chính tả."},
+    {"id": "d-20260928T230629Z-2", "p": "KHÔNG làm lịch sử, khôi phục, lưu trữ trang ở lượt này; tách sang lượt 3b — đổi lại chạy thật có thể bắt đầu khi chưa lưu trữ được trang cũ."},
+    {"id": "d-20260928T230629Z-3", "p": "⌘K của kho là một nhóm «Tài liệu» trong hộp tìm nhanh chung của cả ứng dụng — một phím một hộp."},
+    {"id": "d-20260928T230629Z-4", "p": "Câu trích trong khối «Trang nhắc tới trang này» tính lúc mở trang từ bản đang dùng — không bao giờ cũ, đổi lại mỗi lần mở tốn thêm một lần đọc."},
+    {"id": "d-20260928T230629Z-5", "p": "Dòng nhắc sáng đếm đúng số trên tab «Chờ duyệt»; quản trị thấy mọi bản chờ của kho."},
+    {"id": "d-20260928T230629Z-6", "p": "KHÔNG đo số lượt tìm hay lượt mở ⌘K; bốn số của chạy thật đếm từ dữ liệu."},
+    {"id": "d-20260928T230933Z-7", "p": "Duyệt hình bản mẫu của ⌘K và Sức khoẻ trước Cổng Phạm vi; ba màn còn lại chỉ có hình ở lượt chấm."},
+    {"id": "d-20260928T234045Z-9", "p": "Kho không có thẻ «Việc của bạn», nên số bản chờ duyệt hiện ở thẻ «Việc quá hạn» của Tổng quan — người chỉ dùng OKR không thấy thẻ này, chỉ thấy trong tin nhắc."},
+    {"id": "d-20260928T234045Z-10", "p": "Người chỉ dùng OKR lần đầu có ⌘K, và chỉ thấy nhóm Tài liệu."},
+    {"id": "d-20260928T234045Z-11", "p": "Màn đọc hỏi đúng các bản chờ của trang mình, sửa luôn lỗi đếm sai khi kho quá 25 bản chờ."},
+    {"id": "d-20260928T235354Z-12", "p": "Sửa phép đo quyền của người chỉ dùng OKR để nó thật sự chạy đủ; trang chỉ trùng tên thì đoạn trích lặp lại tên."},
+    {"id": "d-20260928T235650Z-13", "p": "Chưa có chỗ nào đặt hạn xác minh cho trang, nên danh sách «Quá hạn xác minh» sẽ rỗng trên bản thật cho tới khi có ô nhập hạn — ngoài phạm vi lượt này."},
+    {"id": "d-20260929T000003Z-14", "p": "Phép đo ngày quá hạn dùng ngày tương đối thay vì một ngày cố định; ranh giới ngày giờ Việt Nam vẫn được kiểm."},
+    {"id": "d-20260929T000507Z-15", "p": "Danh sách bản đề xuất có ba nhóm (tất cả, đang chờ, đã xử lý) để phép đo đã ký của lượt 1 không đổi."},
+    {"id": "d-20260929T001245Z-16", "p": "Bấm vào dòng nhắc sáng mở thẳng tab «Chờ duyệt» của kho."},
+    {"id": "d-20260929T003708Z-17", "p": "Trang gốc của người chỉ dùng OKR có một lỗi sẵn có ở bản dev; không sửa trong lượt này."},
+    {"id": "d-20260929T004924Z-18", "p": "Sửa một phép kiểm nhắc sáng để lại dữ liệu làm đỏ các phép kiểm khác khi chạy cả kho."},
+    {"id": "d-20260929T011259Z-19", "p": "Tab «Chờ duyệt», thẻ Tổng quan và nhắc sáng nay đếm bằng cùng một luật — đổi lại nhắc sáng tốn một lượt đếm cho mỗi người."},
+    {"id": "d-20260929T011259Z-20", "p": "Đầu trang dùng chung cho hàng nút xuống dòng khi không vừa cạnh tiêu đề, hết cảnh nút đè chữ trên điện thoại; dòng quá hạn đọc «xác minh đến …» — đổi lại chạm bố cục mọi trang và bản gốc ghim của một hồ sơ đã ký."}
+  ]
+}

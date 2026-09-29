@@ -26,6 +26,8 @@ export const LOAI_VIEC_NHAC = "nhac-ke-hoach";
 
 const LY_DO = "nhắc buổi sáng";
 
+const DUONG_CHO_DUYET = "tabTaiLieu=cho-duyet";
+
 const CHU_DE = /^user:(.+):\d{4}-\d{2}-\d{2}$/;
 
 export type KetQuaNhac = "da-gui" | "khong-slack" | "khong-khop" | "khong-viec";
@@ -55,6 +57,9 @@ function maViec(v: ViecNhac): MucNhac {
 				? { loai: v.loai, thang: v.thang, muc: v.muc }
 				: { loai: v.loai, thang: v.thang },
 		);
+	}
+	if (v.loai === "tai-lieu-cho-duyet") {
+		return mucNhac.parse({ loai: v.loai, so: v.so });
 	}
 	if (!laViecOkr(v)) {
 		return mucNhac.parse({ loai: v.loai, planId: v.planId, stepId: v.stepId });
@@ -112,6 +117,9 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 		if ("planId" in v)
 			return `${ctx.appUrl}/${ctx.slug}?record=plan:${v.planId}`;
 		if (laViecAi(v)) return `${ctx.appUrl}/${ctx.slug}/settings/okr`;
+		if (v.loai === "tai-lieu-cho-duyet") {
+			return `${ctx.appUrl}/${ctx.slug}/tai-lieu?${DUONG_CHO_DUYET}`;
+		}
 		if (v.loai === "okr-cap-nhat") {
 			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
 		}
