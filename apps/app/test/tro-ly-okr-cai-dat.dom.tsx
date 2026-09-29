@@ -27,6 +27,7 @@ const chuongTrinh = () => ({
 	aiTomTatPhamVi: "tat",
 	aiTomTatDonVi: [],
 	aiTranThangUsd: 9,
+	duyetCongBo: false,
 	version: 4,
 	canManage: coQuyen,
 });

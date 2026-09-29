@@ -88,6 +88,7 @@ const chuongTrinh = () => ({
 	scoreScale: "0-1",
 	weightsOn: false,
 	personalOn: false,
+	duyetCongBo: false,
 	version: 3,
 	canManage: coQuyen,
 });

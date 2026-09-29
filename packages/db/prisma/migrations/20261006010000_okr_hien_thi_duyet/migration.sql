@@ -1,4 +1,3 @@
-
 -- AlterTable
 ALTER TABLE "okrProgramConfig" ADD COLUMN     "duyetCongBo" BOOLEAN NOT NULL DEFAULT false;
 
@@ -29,4 +28,3 @@ ALTER TABLE "okrNguoiXem" ADD CONSTRAINT "okrNguoiXem_userId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "okrNguoiXem" ADD CONSTRAINT "okrNguoiXem_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
