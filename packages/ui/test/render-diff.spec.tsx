@@ -39,13 +39,13 @@ import {
 } from "../src/components/okr-status";
 import { PeriodSelect } from "../src/components/period-select";
 import { Progress } from "../src/components/progress";
+import { ProposedChange } from "../src/components/proposed-change";
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
 import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
-import { ProposedChange } from "../src/components/proposed-change";
 import { TablePagination } from "../src/components/table-pagination";
 import { TargetLineChart } from "../src/components/target-line-chart";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";

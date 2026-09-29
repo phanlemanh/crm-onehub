@@ -706,7 +706,7 @@ async function caThongTin() {
 	]);
 }
 
-const CA_TRANG_THAI: Record<string, () => Promise<void>> = {
+const CA_TRANG_THAI = {
 	"ST-thegopy-cho": caCho,
 	"ST-thegopy-sua": caSua,
 	"ST-thegopy-dang-gui": caDangGui,
@@ -719,12 +719,16 @@ const CA_TRANG_THAI: Record<string, () => Promise<void>> = {
 	"ST-thegopy-chi-o": caChiO,
 	"ST-thegopy-kr": caKr,
 	"ST-thegopy-thong-tin": caThongTin,
-};
+} satisfies Record<string, () => Promise<void>>;
+
+function caCua(id: string): (() => Promise<void>) | undefined {
+	return Object.entries(CA_TRANG_THAI).find(([k]) => k === id)?.[1];
+}
 
 function doiChieu(bang: readonly string[]): void {
 	const giao = new Set<string>(GIAO_E1_E11);
 	for (const id of bang) {
-		if (!giao.has(id) && !(id in CA_TRANG_THAI))
+		if (!giao.has(id) && caCua(id) === undefined)
 			throw new Error(`thieu ca: ${id}`);
 	}
 	for (const id of Object.keys(CA_TRANG_THAI)) {
@@ -743,7 +747,7 @@ describe("the-gop-y-okr — bảng trạng thái", () => {
 				continue;
 			}
 			if (id === "ST-thegopy-kr") console.log(`giao E1/E11: ${id} (be ngang)`);
-			const ca = CA_TRANG_THAI[id];
+			const ca = caCua(id);
 			if (!ca) throw new Error(`thieu ca: ${id}`);
 			await ca();
 			await dongHet();

@@ -33,7 +33,13 @@ const TGY = {
 		hep: { rong: 390, cao: 844 },
 	},
 	nguong: { cotPx: 360, cauPx: 320, lechHangPx: 8, dungSaiPx: 2 },
-	cho: { manMs: 60 * GIAY_MS, gopYMs: 3 * PHUT_MS, lamMoiMs: 400, nhipMs: 500, moLaiMs: 5 * GIAY_MS },
+	cho: {
+		manMs: 60 * GIAY_MS,
+		gopYMs: 3 * PHUT_MS,
+		lamMoiMs: 400,
+		nhipMs: 500,
+		moLaiMs: 5 * GIAY_MS,
+	},
 	quanTri: "le-hai-dang",
 	chuKy: "quy4",
 	phong: "kd-bac",
@@ -56,7 +62,8 @@ const TGY = {
 	},
 	chuSua: {
 		title: "Không thoả thuận nào của miền Bắc bị mất dấu trong quý 4",
-		whyNow: "Quý 3 mất dấu chín thoả thuận; quý 4 là mùa ký lại với đối tác lớn.",
+		whyNow:
+			"Quý 3 mất dấu chín thoả thuận; quý 4 là mùa ký lại với đối tác lớn.",
 	},
 	lenh: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"',
 	thongDiep: { nhanKhongDoi: "nhan khong doi gi" },
@@ -117,9 +124,9 @@ function doBoCuc(chonHop) {
 		form: khung(hop.querySelector("form")),
 		cot: khung(cot),
 		cau: cau ? cau.getBoundingClientRect().width : null,
-		the: [...(cot?.querySelectorAll('[data-slot="proposed-change"]') ?? [])].map(
-			(o) => o.getBoundingClientRect().width,
-		),
+		the: [
+			...(cot?.querySelectorAll('[data-slot="proposed-change"]') ?? []),
+		].map((o) => o.getBoundingClientRect().width),
 		sw: document.documentElement.scrollWidth,
 		iw: window.innerWidth,
 		soHop: document.querySelectorAll('[role="dialog"]').length,
@@ -165,7 +172,10 @@ function kiemE11(so, ten, rong) {
 	}
 	if (rong >= TGY.kho.moc.rong) {
 		const lech = Math.abs(so.cot.top - so.form.top);
-		kiem(`${nhan}: form va cot cung hang (lech ${Math.round(lech)} < ${N.lechHangPx})`, lech < N.lechHangPx);
+		kiem(
+			`${nhan}: form va cot cung hang (lech ${Math.round(lech)} < ${N.lechHangPx})`,
+			lech < N.lechHangPx,
+		);
 	} else {
 		kiem(
 			`${nhan}: cot duoi form (top cot ${Math.round(so.cot.top)} >= bottom form ${Math.round(so.form.bottom)})`,
@@ -188,25 +198,49 @@ async function chup(p, ten) {
 }
 
 async function kiemMotHop(p, nhan) {
-	const so = await p.evaluate(() => document.querySelectorAll('[role="dialog"]').length);
+	const so = await p.evaluate(
+		() => document.querySelectorAll('[role="dialog"]').length,
+	);
 	kiem(`${nhan}: con dung mot role=dialog (${so})`, so === 1);
 }
 
 async function kiemDoDo() {
-	trinhDuyet = await puppeteer.launch({ executablePath: TGY.chrome, headless: true });
+	trinhDuyet = await puppeteer.launch({
+		executablePath: TGY.chrome,
+		headless: true,
+	});
 	const p = await trinhDuyet.newPage();
-	const hop = (thuocTinh, size) => `<div role="dialog" ${thuocTinh} data-size="${size}" style="width:800px;display:grid;grid-template-columns:1fr 292px;gap:24px"><form style="height:120px"></form><section data-cot-gop-y><div data-slot="proposed-change" data-kind="rewrite"><p data-slot="proposed-change-value">Câu mới</p></div></section></div>`;
+	const hop = (thuocTinh, size) =>
+		`<div role="dialog" ${thuocTinh} data-size="${size}" style="width:800px;display:grid;grid-template-columns:1fr 292px;gap:24px"><form style="height:120px"></form><section data-cot-gop-y><div data-slot="proposed-change" data-kind="rewrite"><p data-slot="proposed-change-value">Câu mới</p></div></section></div>`;
 	await p.setViewport({ width: TGY.kho.rong.rong, height: TGY.kho.rong.cao });
-	await p.setContent(`<body style="margin:0">${hop("data-hop-thoai-muc-tieu", "assist")}</body>`);
+	await p.setContent(
+		`<body style="margin:0">${hop("data-hop-thoai-muc-tieu", "assist")}</body>`,
+	);
 	kiemE1(await p.evaluate(doBoCuc, HOP_MT), "muc tieu", 0);
-	await p.setContent(`<body style="margin:0">${hop("data-hop-thoai-kr", "wide")}</body>`);
+	await p.setContent(
+		`<body style="margin:0">${hop("data-hop-thoai-kr", "wide")}</body>`,
+	);
 	kiemE1(await p.evaluate(doBoCuc, HOP_KR), "kr", 0);
 	await p.setViewport({ width: TGY.kho.hep.rong, height: TGY.kho.hep.cao });
-	await p.setContent('<body style="margin:0"><div style="width:500px;height:10px"></div></body>');
-	kiemTran(await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: window.innerWidth })), "trang 390");
-	const can = ["cau moi hep: 292 < 320", "cau moi hep (kr): 292 < 320", "tran ngang"];
+	await p.setContent(
+		'<body style="margin:0"><div style="width:500px;height:10px"></div></body>',
+	);
+	kiemTran(
+		await p.evaluate(() => ({
+			sw: document.documentElement.scrollWidth,
+			iw: window.innerWidth,
+		})),
+		"trang 390",
+	);
+	const can = [
+		"cau moi hep: 292 < 320",
+		"cau moi hep (kr): 292 < 320",
+		"tran ngang",
+	];
 	const thay = can.filter((c) => dong.some((d) => d.includes(c)));
-	dong.push(`KIEM DO DO: ${thay.length}/${can.length} thong diep ghim do dung (${thay.join(" · ")})`);
+	dong.push(
+		`KIEM DO DO: ${thay.length}/${can.length} thong diep ghim do dung (${thay.join(" · ")})`,
+	);
 	await ket(thay.length === can.length ? 1 : 0);
 }
 
@@ -217,8 +251,13 @@ async function suySlug(cookie) {
 	});
 	const dich = res.headers.get("location");
 	if (!dich) return null;
-	const dau = new URL(dich, APP).pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
-	return dau && !["onboarding", "sign-in", "het-quyen"].some((x) => dau.startsWith(x)) ? dau : null;
+	const dau = new URL(dich, APP).pathname
+		.replace(/^\/+|\/+$/g, "")
+		.split("/")[0];
+	return dau &&
+		!["onboarding", "sign-in", "het-quyen"].some((x) => dau.startsWith(x))
+		? dau
+		: null;
 }
 
 async function trang(cookie, { rong, cao }) {
@@ -236,7 +275,11 @@ async function trang(cookie, { rong, cao }) {
 async function bamKhiYen(p, tim, ...thamSo) {
 	const han = Date.now() + TGY.cho.manMs;
 	for (;;) {
-		const h = await p.waitForFunction(tim, { timeout: TGY.cho.manMs }, ...thamSo);
+		const h = await p.waitForFunction(
+			tim,
+			{ timeout: TGY.cho.manMs },
+			...thamSo,
+		);
 		try {
 			await h.asElement().click();
 			return;
@@ -253,7 +296,8 @@ async function bam(p, trong, chu, vaiTro = "button") {
 		p,
 		(trong, chon, chu) =>
 			[...document.querySelectorAll(`${trong} ${chon}`)].find(
-				(x) => x.textContent?.trim() === chu && x.checkVisibility() && !x.disabled,
+				(x) =>
+					x.textContent?.trim() === chu && x.checkVisibility() && !x.disabled,
 			) ?? null,
 		trong,
 		chon,
@@ -264,7 +308,10 @@ async function bam(p, trong, chu, vaiTro = "button") {
 async function bamNhan(p, chon) {
 	await bamKhiYen(
 		p,
-		(chon) => [...document.querySelectorAll(chon)].filter((x) => x.checkVisibility()).at(-1) ?? null,
+		(chon) =>
+			[...document.querySelectorAll(chon)]
+				.filter((x) => x.checkVisibility())
+				.at(-1) ?? null,
 		chon,
 	);
 }
@@ -287,7 +334,10 @@ async function moSheet(p) {
 		await bamNhan(p, `[data-mo-muc-tieu="${MT}"]`);
 		const mo = await p
 			.waitForFunction(
-				(nhan) => [...document.querySelectorAll(`button[aria-label="${nhan}"]`)].some((b) => b.checkVisibility()),
+				(nhan) =>
+					[...document.querySelectorAll(`button[aria-label="${nhan}"]`)].some(
+						(b) => b.checkVisibility(),
+					),
 				{ timeout: TGY.cho.moLaiMs },
 				m.sheet.menu,
 			)
@@ -303,7 +353,10 @@ async function moHopMucTieu(p) {
 	await bamNhan(p, `button[aria-label="${m.sheet.menu}"]`);
 	await bam(p, "", m.sheet.sua, "menuitem");
 	await p.waitForSelector(HOP_MT, { visible: true, timeout: TGY.cho.manMs });
-	await p.waitForSelector("[data-nut-gop-y]", { visible: true, timeout: TGY.cho.manMs });
+	await p.waitForSelector("[data-nut-gop-y]", {
+		visible: true,
+		timeout: TGY.cho.manMs,
+	});
 }
 
 async function moHopKr(p) {
@@ -311,14 +364,19 @@ async function moHopKr(p) {
 	await bamNhan(p, `button[aria-label*="${TGY.krYeu.title}"]`);
 	await bamNhan(p, '[data-muc="sua-kr"]');
 	await p.waitForSelector(HOP_KR, { visible: true, timeout: TGY.cho.manMs });
-	await p.waitForSelector("[data-nut-gop-y]", { visible: true, timeout: TGY.cho.manMs });
+	await p.waitForSelector("[data-nut-gop-y]", {
+		visible: true,
+		timeout: TGY.cho.manMs,
+	});
 }
 
 async function coTheVietLai(p, chonHop, hanMs) {
 	return p
 		.waitForFunction(
 			(chonHop) =>
-				document.querySelector(`${chonHop} [data-cot-gop-y] [data-the-cho][data-kind="rewrite"]`) !== null,
+				document.querySelector(
+					`${chonHop} [data-cot-gop-y] [data-the-cho][data-kind="rewrite"]`,
+				) !== null,
 			{ timeout: hanMs },
 			chonHop,
 		)
@@ -345,15 +403,28 @@ async function buocE1(tl) {
 		let co = await nhoVaCho(t2.p, HOP_MT);
 		for (let lan = 0; !co && lan < TGY.viSaoThu.length; lan += 1) {
 			await t2.ctx.close();
-			await trpc(API, tl).lam("okr.updateObjective", { id: MT, whyNow: TGY.viSaoThu[lan] });
+			await trpc(API, tl).lam("okr.updateObjective", {
+				id: MT,
+				whyNow: TGY.viSaoThu[lan],
+			});
 			const t3 = await trang(tl, TGY.kho.rong);
 			await moHopMucTieu(t3.p);
 			co = await nhoVaCho(t3.p, HOP_MT);
 			Object.assign(t2, t3);
 		}
-		if (!kiem("E1 muc tieu: cot co the viet lai sau khi nho gop y (model that)", co)) return;
+		if (
+			!kiem(
+				"E1 muc tieu: cot co the viet lai sau khi nho gop y (model that)",
+				co,
+			)
+		)
+			return;
 		await chup(t2.p, "E1-1440-muc-tieu");
-		kiemE1(await t2.p.evaluate(doBoCuc, HOP_MT), "muc tieu", mtTruoc?.form?.width ?? 0);
+		kiemE1(
+			await t2.p.evaluate(doBoCuc, HOP_MT),
+			"muc tieu",
+			mtTruoc?.form?.width ?? 0,
+		);
 		await t2.ctx.close();
 
 		const t4 = await trang(tl, TGY.kho.rong);
@@ -362,7 +433,11 @@ async function buocE1(tl) {
 		if (!coKr) coKr = await nhoVaCho(t4.p, HOP_KR);
 		if (kiem("E1 kr: cot co the viet lai ten KR", coKr)) {
 			await chup(t4.p, "E1-1440-kr");
-			kiemE1(await t4.p.evaluate(doBoCuc, HOP_KR), "kr", krTruoc?.form?.width ?? 0);
+			kiemE1(
+				await t4.p.evaluate(doBoCuc, HOP_KR),
+				"kr",
+				krTruoc?.form?.width ?? 0,
+			);
 		}
 		await t4.ctx.close();
 	} catch (loi) {
@@ -381,11 +456,18 @@ async function buocE11(tl) {
 			const t = await trang(tl, kho);
 			try {
 				await moHop(t.p);
-				if (!kiem(`E11 ${ten} ${kho.rong}: cot mo lai voi the cho`, await coTheVietLai(t.p, chon, TGY.cho.manMs)))
+				if (
+					!kiem(
+						`E11 ${ten} ${kho.rong}: cot mo lai voi the cho`,
+						await coTheVietLai(t.p, chon, TGY.cho.manMs),
+					)
+				)
 					continue;
 				kiemE11(await t.p.evaluate(doBoCuc, chon), ten, kho.rong);
 				await t.p.evaluate((chon) => {
-					document.querySelector(`${chon} [data-cot-gop-y]`)?.scrollIntoView({ block: "start" });
+					document
+						.querySelector(`${chon} [data-cot-gop-y]`)
+						?.scrollIntoView({ block: "start" });
 				}, chon);
 				await chup(t.p, `E11-${kho.rong}-${ten}`);
 			} finally {
@@ -408,7 +490,9 @@ async function dongVietLaiMucTieu(url) {
 }
 
 async function docTruong(cookie, truong) {
-	return (await trpc(API, cookie).hoi("okr.objective", { id: MT }))[truong] ?? "";
+	return (
+		(await trpc(API, cookie).hoi("okr.objective", { id: MT }))[truong] ?? ""
+	);
 }
 
 async function choDieuKien(doc, hanMs) {
@@ -435,26 +519,48 @@ async function buocE13(tl) {
 	buoc = "E13";
 	const url = process.env.DATABASE_URL;
 	const d = await dongVietLaiMucTieu(url);
-	if (!kiem(`E13: co dong viet lai Muc tieu cho nhan (${d?.truong ?? "khong"})`, Boolean(d))) return;
+	if (
+		!kiem(
+			`E13: co dong viet lai Muc tieu cho nhan (${d?.truong ?? "khong"})`,
+			Boolean(d),
+		)
+	)
+		return;
 	const p1 = await trang(tl, TGY.kho.rong);
 	const p2 = await trang(tl, TGY.kho.hep);
 	try {
 		for (const t of [p1, p2]) {
 			await moHopMucTieu(t.p);
-			kiem(`E13 ${t.rong}: cot co dong`, await coTheVietLai(t.p, HOP_MT, TGY.cho.manMs));
-			await t.p.evaluate(() => document.querySelector("[data-cot-gop-y]")?.scrollIntoView({ block: "start" }));
+			kiem(
+				`E13 ${t.rong}: cot co dong`,
+				await coTheVietLai(t.p, HOP_MT, TGY.cho.manMs),
+			);
+			await t.p.evaluate(() =>
+				document
+					.querySelector("[data-cot-gop-y]")
+					?.scrollIntoView({ block: "start" }),
+			);
 			await chup(t.p, `E13-${t.rong}-co-dong`);
 		}
 
-		const khac = (await idTheCho(p2.p, ':not([data-kind="question"])')).filter((id) => id !== d.id)[0];
-		if (kiem(`E13 390: co mot the cho khac de Bac (${khac ?? "khong"})`, Boolean(khac))) {
+		const khac = (await idTheCho(p2.p, ':not([data-kind="question"])')).filter(
+			(id) => id !== d.id,
+		)[0];
+		if (
+			kiem(
+				`E13 390: co mot the cho khac de Bac (${khac ?? "khong"})`,
+				Boolean(khac),
+			)
+		) {
 			await bam(p2.p, `[data-dong="${khac}"]`, g.dong.bac);
 			await hien(p2.p, `[data-dong="${khac}"][data-decided]`);
 			await kiemMotHop(p2.p, "E13 390 sau Bac");
 			await chup(p2.p, "E13-390-bac");
 		}
 		const hoi = (await idTheCho(p2.p, '[data-kind="question"]'))[0];
-		if (kiem(`E13 390: co cau hoi de Bo qua (${hoi ?? "khong"})`, Boolean(hoi))) {
+		if (
+			kiem(`E13 390: co cau hoi de Bo qua (${hoi ?? "khong"})`, Boolean(hoi))
+		) {
 			await bam(p2.p, `[data-dong="${hoi}"]`, g.dong.boQua);
 			await hien(p2.p, `[data-dong="${hoi}"][data-decided]`);
 			await kiemMotHop(p2.p, "E13 390 sau Bo qua");
@@ -464,7 +570,9 @@ async function buocE13(tl) {
 		const truoc = await docTruong(tl, d.truong);
 		const chuSua = TGY.chuSua[d.truong];
 		if (truoc === chuSua) {
-			dong.push(`${TGY.thongDiep.nhanKhongDoi}: ${d.truong} da luu «${truoc}» bang chu se sua`);
+			dong.push(
+				`${TGY.thongDiep.nhanKhongDoi}: ${d.truong} da luu «${truoc}» bang chu se sua`,
+			);
 			await ket(3);
 		}
 		const hang = `[data-dong="${d.id}"]`;
@@ -481,16 +589,29 @@ async function buocE13(tl) {
 		await kiemMotHop(p1.p, "E13 1440 sau go");
 		await chup(p1.p, "E13-1440-dang-sua");
 		await bam(p1.p, hang, g.dong.nhanBanSua);
-		await p1.p.waitForSelector(`${hang}[data-decided="accepted"]`, { visible: true, timeout: TGY.cho.manMs });
+		await p1.p.waitForSelector(`${hang}[data-decided="accepted"]`, {
+			visible: true,
+			timeout: TGY.cho.manMs,
+		});
 		await kiemMotHop(p1.p, "E13 1440 sau Nhan ban da sua");
-		const docLai = await choDieuKien(async () => (await docTruong(tl, d.truong)) === chuSua, TGY.cho.manMs);
+		const docLai = await choDieuKien(
+			async () => (await docTruong(tl, d.truong)) === chuSua,
+			TGY.cho.manMs,
+		);
 		kiem(
 			`E13: okr.objective ${d.truong} doc lai bang chu da sua va khac cau truoc («${truoc}»)`,
 			Boolean(docLai) && truoc !== chuSua,
 		);
 		await chup(p1.p, "E13-1440-da-nhan");
-		const [vet] = await truyVan(url, `SELECT count(*)::int AS n FROM "okrTrail" WHERE note = $1`, [`tro-ly-okr:${d.id}`]);
-		kiem(`E13: OkrTrail co note tro-ly-okr:${d.id} (${vet.n} hang)`, vet.n >= 1);
+		const [vet] = await truyVan(
+			url,
+			`SELECT count(*)::int AS n FROM "okrTrail" WHERE note = $1`,
+			[`tro-ly-okr:${d.id}`],
+		);
+		kiem(
+			`E13: OkrTrail co note tro-ly-okr:${d.id} (${vet.n} hang)`,
+			vet.n >= 1,
+		);
 	} finally {
 		await p1.ctx.close();
 		await p2.ctx.close();
@@ -498,9 +619,15 @@ async function buocE13(tl) {
 	for (const kho of [TGY.kho.rong, TGY.kho.hep]) {
 		const t = await trang(tl, kho);
 		try {
-			await t.p.goto(duongDonVi(`&record=objective:${MT}&tab=vet`), { waitUntil: "load" });
+			await t.p.goto(duongDonVi(`&record=objective:${MT}&tab=vet`), {
+				waitUntil: "load",
+			});
 			const coVet = await t.p
-				.waitForFunction((chu) => document.body.innerText.includes(chu), { timeout: TGY.cho.manMs }, g.vet.theoTroLy)
+				.waitForFunction(
+					(chu) => document.body.innerText.includes(chu),
+					{ timeout: TGY.cho.manMs },
+					g.vet.theoTroLy,
+				)
 				.then(() => true)
 				.catch(() => false);
 			kiem(`E13 tab Vet ${kho.rong} co «${g.vet.theoTroLy}»`, coVet);
@@ -516,14 +643,24 @@ mkdirSync(ANH, { recursive: true });
 if (process.argv.includes("--kiem-do-do")) await kiemDoDo();
 
 if (!trongPhienCoTacTu()) {
-	console.log("-- API cua phien nay khong noi tac tu — mo phien do rieng co tac tu");
+	console.log(
+		"-- API cua phien nay khong noi tac tu — mo phien do rieng co tac tu",
+	);
 	process.exit(await chayTrongPhienCoTacTu(TGY.lenh));
 }
 
-const { canhCay } = await import("../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs");
+const { canhCay } = await import(
+	"../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs"
+);
 const cay = await canhCay();
-if (cay.ket !== "dung-cay") await khongDo(`${APP} khong phuc vu cay dang xet (${cay.ket}) — ${cay.dong.join(" · ")}`);
-if (!laKhoDo()) await khongDo("DATABASE_URL khong phai kho do rieng — chay qua scripts/lan-do/tien-de.mjs");
+if (cay.ket !== "dung-cay")
+	await khongDo(
+		`${APP} khong phuc vu cay dang xet (${cay.ket}) — ${cay.dong.join(" · ")}`,
+	);
+if (!laKhoDo())
+	await khongDo(
+		"DATABASE_URL khong phai kho do rieng — chay qua scripts/lan-do/tien-de.mjs",
+	);
 
 const MT = idMau("mt", TGY.mucTieu);
 let slug;
@@ -531,12 +668,14 @@ let tl;
 try {
 	buoc = "chuan-bi";
 	const nap = napBoMau();
-	if (nap.ma !== 0) throw new Error(`okr:mau --moc ${nap.moc} thoat ${nap.ma}: ${nap.dong}`);
+	if (nap.ma !== 0)
+		throw new Error(`okr:mau --moc ${nap.moc} thoat ${nap.ma}: ${nap.dong}`);
 	dong.push(`NAP okr:mau --moc ${nap.moc}: ${nap.dong}`);
 	const qt = phienCookie(thuMau(TGY.quanTri));
 	tl = phienCookie(thuMau(TGY.truong));
 	slug = await suySlug(qt);
-	if (!slug) throw new Error(`${APP}/ khong chuyen toi trang chinh cua workspace`);
+	if (!slug)
+		throw new Error(`${APP}/ khong chuyen toi trang chinh cua workspace`);
 	await trpc(API, qt).lam("okr.setProgram", {
 		aiOn: true,
 		aiDeXuatPhamVi: "danh-sach",
@@ -552,11 +691,18 @@ try {
 	await khongDo(`buoc ${buoc}: ${loi?.message ?? loi}`);
 }
 
-if (!coKhoaMoHinh()) await khongDo(`${cauThieuKhoa()} — buoc nho gop y can model that`);
+if (!coKhoaMoHinh())
+	await khongDo(`${cauThieuKhoa()} — buoc nho gop y can model that`);
 
-trinhDuyet = await puppeteer.launch({ executablePath: TGY.chrome, headless: true });
+trinhDuyet = await puppeteer.launch({
+	executablePath: TGY.chrome,
+	headless: true,
+});
 try {
-	tacTu = await batTacTu({ cong: Number(process.env[PHIEN_TRO_LY.bienCongTacTu]), thuMuc: join(GOC, ".acceptance-runs/the-gop-y-okr") });
+	tacTu = await batTacTu({
+		cong: Number(process.env[PHIEN_TRO_LY.bienCongTacTu]),
+		thuMuc: join(GOC, ".acceptance-runs/the-gop-y-okr"),
+	});
 	await buocE1(tl);
 	await buocE11(tl);
 	await buocE13(tl);

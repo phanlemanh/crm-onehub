@@ -1049,7 +1049,9 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 			() => chu(dongCua(D_TEN.id)) === "Tên Mục tiêu — Đã nhận",
 			"da nhan",
 		);
-		expect(nut("Căn chỉnh", dongCua(D_CAN.id) ?? document).disabled).toBe(false);
+		expect(nut("Căn chỉnh", dongCua(D_CAN.id) ?? document).disabled).toBe(
+			false,
+		);
 	});
 
 	test("trang-thai khong-giu-o-sua: go o sua roi Nhan ban da sua, dong hop khong hoi bo thay doi", async () => {

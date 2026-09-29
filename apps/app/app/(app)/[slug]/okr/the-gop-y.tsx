@@ -81,7 +81,7 @@ export function TheGopY({
 		coMoKr: gopY.moKr !== undefined,
 		lyDoKhoaMoKr: gopY.coSuaChuaLuu ? m.dong.khoaMoKr : undefined,
 	});
-	const lam: Record<HanhDongThe, () => void> = {
+	const lam = {
 		nhan: () => gopY.quyet(dong, "nhan"),
 		"can-chinh": () => gopY.quyet(dong, "nhan"),
 		bac: () => gopY.quyet(dong, "bac"),
@@ -98,7 +98,7 @@ export function TheGopY({
 		"mo-kr": () => {
 			if (dong.keyResultId) gopY.moKr?.(dong.keyResultId);
 		},
-	};
+	} satisfies Record<HanhDongThe, () => void>;
 	const actions: ProposedChangeAction[] = p.nut.map((n) => ({
 		...n,
 		onClick: lam[n.id],

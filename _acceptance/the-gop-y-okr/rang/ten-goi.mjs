@@ -14,11 +14,24 @@ const GOC =
 const THANH_PHAN = join(GOC, "packages", "ui", "src", "components");
 const CONFIRMATION = join(THANH_PHAN, "ai-elements", "confirmation.tsx");
 const LUAT_CHAT = join(GOC, "docs", "chat-ui.md");
-const SO_LECH = join(GOC, "_acceptance", "nen-chat-ai-elements", "so-lech-chuan.md");
-const MO_COI = join(GOC, "_acceptance", "nen-chat-ai-elements", "rang", "mo-coi.mjs");
+const SO_LECH = join(
+	GOC,
+	"_acceptance",
+	"nen-chat-ai-elements",
+	"so-lech-chuan.md",
+);
+const MO_COI = join(
+	GOC,
+	"_acceptance",
+	"nen-chat-ai-elements",
+	"rang",
+	"mo-coi.mjs",
+);
 const TEN_CU = "Suggestion";
 
-const ts = createRequire(join(GOC, "packages", "ui", "package.json"))("typescript");
+const ts = createRequire(join(GOC, "packages", "ui", "package.json"))(
+	"typescript",
+);
 
 const loi = [];
 const kiem = (dung, dong) => {
@@ -50,7 +63,11 @@ function tenXuat(duong) {
 	);
 	const ten = [];
 	for (const cau of nguon.statements) {
-		if (ts.isExportDeclaration(cau) && cau.exportClause && ts.isNamedExports(cau.exportClause)) {
+		if (
+			ts.isExportDeclaration(cau) &&
+			cau.exportClause &&
+			ts.isNamedExports(cau.exportClause)
+		) {
 			for (const muc of cau.exportClause.elements) ten.push(muc.name.text);
 			continue;
 		}
@@ -81,7 +98,9 @@ const moCoi = spawnSync(process.execPath, [MO_COI], { encoding: "utf8" });
 const raMoCoi = `${moCoi.stdout}${moCoi.stderr}`;
 const dongSong = raMoCoi
 	.split("\n")
-	.find((d) => /^\s+confirmation\.tsx — /.test(d) && !/MO COI|miễn trừ/.test(d));
+	.find(
+		(d) => /^\s+confirmation\.tsx — /.test(d) && !/MO COI|miễn trừ/.test(d),
+	);
 kiem(
 	moCoi.status === 0 && dongSong !== undefined,
 	dongSong
