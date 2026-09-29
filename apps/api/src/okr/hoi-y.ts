@@ -1,0 +1,305 @@
+import type { TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
+import { chuanCau, OKR_HOI_Y, thuTuXao } from "@crm/validation/okr-hoi-y";
+import { mucTieuInput } from "@crm/validation/okr-muc-tieu";
+
+export type YBangChung = {
+	id: string;
+	noiDung: string;
+	tacGiaUserId: string;
+	phongBanId: string | null;
+	soDongY: number;
+	createdAt: Date;
+};
+
+export type BangChungChuDe = {
+	soNguoi: number;
+	soDonVi: number;
+	soDongY: number;
+	trich: string[];
+};
+
+export function bangChungChuDe(y: YBangChung[]): BangChungChuDe {
+	const nguoi = new Set<string>();
+	const donVi = new Set<string | null>();
+	let soDongY = 0;
+	for (const x of y) {
+		nguoi.add(x.tacGiaUserId);
+		donVi.add(x.phongBanId);
+		soDongY += x.soDongY;
+	}
+	const trich = [...y]
+		.sort(
+			(a, b) =>
+				b.soDongY - a.soDongY ||
+				a.createdAt.getTime() - b.createdAt.getTime() ||
+				(a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+		)
+		.slice(0, OKR_HOI_Y.trich)
+		.map((x) => x.noiDung);
+	return { soNguoi: nguoi.size, soDonVi: donVi.size, soDongY, trich };
+}
+
+export type SoPhanBanTruoc = "giu" | "doi" | "bo";
+
+export type KetQuaBanTruoc = {
+	cau: SoPhanBanTruoc[];
+	doi: number;
+	them: number;
+	boQua: boolean;
+};
+
+export function ketQuaBanTruoc(
+	ban: { cau: string[]; boQua: boolean },
+	chon: { noiBanTruoc: string; cauMucTieu: string }[],
+): KetQuaBanTruoc {
+	const them = chon.filter((c) => c.noiBanTruoc === "moi").length;
+	if (ban.boQua) {
+		return { cau: [], doi: 0, them: chon.length, boQua: true };
+	}
+	const cau = ban.cau.map((chu, i): SoPhanBanTruoc => {
+		const noi = chon.filter((c) => c.noiBanTruoc === `cau-${i + 1}`);
+		if (noi.length === 0) return "bo";
+		const chuan = chuanCau(chu);
+		return noi.some((c) => chuanCau(c.cauMucTieu) === chuan) ? "giu" : "doi";
+	});
+	return {
+		cau,
+		doi: cau.filter((c) => c === "doi").length,
+		them,
+		boQua: false,
+	};
+}
+
+export type DonViDoPhu = {
+	id: string;
+	loai: "goc" | "bo-phan" | "phong-ban" | "chua-xep";
+	cha: string | null;
+};
+
+export type DoPhuVao = {
+	ngay: string[];
+	donVi: DonViDoPhu[];
+	nguoi: { id: string; phongBanChinh: string | null }[];
+	gop: { tacGiaUserId: string; ngayVN: string }[];
+};
+
+export type DoPhuRa = { hang: { id: string; giaTri: number[] }[] };
+
+const motChuSo = (x: number): number => Math.round(x * 10) / 10;
+
+export function doPhu(input: DoPhuVao): DoPhuRa {
+	const theoId = new Map(input.donVi.map((d) => [d.id, d]));
+	const chuaXep = input.donVi.filter((d) => d.loai === "chua-xep");
+
+	function chuoiDonVi(phongBanChinh: string | null): Set<string> {
+		const chuoi = new Set<string>();
+		if (phongBanChinh === null) {
+			for (const d of chuaXep) chuoi.add(d.id);
+			return chuoi;
+		}
+		let id: string | null = phongBanChinh;
+		while (id !== null && !chuoi.has(id)) {
+			chuoi.add(id);
+			id = theoId.get(id)?.cha ?? null;
+		}
+		return chuoi;
+	}
+
+	const ngayDauTien = new Map<string, string>();
+	for (const g of input.gop) {
+		const cu = ngayDauTien.get(g.tacGiaUserId);
+		if (cu === undefined || g.ngayVN < cu) {
+			ngayDauTien.set(g.tacGiaUserId, g.ngayVN);
+		}
+	}
+
+	const thanhVien = new Map<string, string[]>(
+		input.donVi.map((d) => [d.id, []]),
+	);
+	const gocIds = input.donVi.filter((d) => d.loai === "goc").map((d) => d.id);
+	for (const n of input.nguoi) {
+		const chuoi = chuoiDonVi(n.phongBanChinh);
+		for (const id of gocIds) chuoi.add(id);
+		for (const id of chuoi) thanhVien.get(id)?.push(n.id);
+	}
+
+	return {
+		hang: input.donVi.map((d) => {
+			const ai = thanhVien.get(d.id) ?? [];
+			return {
+				id: d.id,
+				giaTri: input.ngay.map((ngay) => {
+					if (ai.length === 0) return 0;
+					const daGop = ai.filter((id) => {
+						const dau = ngayDauTien.get(id);
+						return dau !== undefined && dau <= ngay;
+					}).length;
+					return motChuSo((100 * daGop) / ai.length);
+				}),
+			};
+		}),
+	};
+}
+
+export const MA_THIEU = [
+	"chua-niem-phong",
+	"y-chua-gom",
+	"chu-de-rong",
+	"thieu-ket-luan",
+	"thieu-ly-do",
+	"thieu-cau-muc-tieu",
+	"thieu-noi-ban-truoc",
+	"khong-chon",
+	"vuot-tran",
+] as const;
+export type MaThieu = (typeof MA_THIEU)[number];
+
+export type ChuDeCongBo = {
+	id: string;
+	ten: string;
+	soY: number;
+	ketLuan: string | null;
+	lyDo: string;
+	cauMucTieu: string;
+	noiBanTruoc: string | null;
+};
+
+export type TinhTrangCongBo = {
+	coBanTruoc: boolean;
+	boQua: boolean;
+	yChuaGom: number;
+	chuDe: ChuDeCongBo[];
+	tongOneHubSau: number;
+	objectiveCap: number;
+	capMode: "chan" | "canh-bao";
+};
+
+export function lyDoChuaCongBo(
+	s: TinhTrangCongBo,
+): { ma: MaThieu; chuDeId: string | null }[] {
+	const ra: { ma: MaThieu; chuDeId: string | null }[] = [];
+	const chungCuoc = (ma: MaThieu) => ra.push({ ma, chuDeId: null });
+	const moiChuDe = (ma: MaThieu, thieu: (c: ChuDeCongBo) => boolean) => {
+		for (const c of s.chuDe) if (thieu(c)) ra.push({ ma, chuDeId: c.id });
+	};
+	const chon = (c: ChuDeCongBo) => c.ketLuan === "chon";
+
+	if (!s.coBanTruoc && !s.boQua) chungCuoc("chua-niem-phong");
+	if (s.yChuaGom > 0) chungCuoc("y-chua-gom");
+	moiChuDe("chu-de-rong", (c) => c.soY === 0);
+	moiChuDe("thieu-ket-luan", (c) => c.ketLuan === null);
+	moiChuDe("thieu-ly-do", (c) => {
+		const dai = c.lyDo.trim().length;
+		return dai < OKR_HOI_Y.lyDo.min || dai > OKR_HOI_Y.lyDo.max;
+	});
+	moiChuDe(
+		"thieu-cau-muc-tieu",
+		(c) => chon(c) && !mucTieuInput.shape.title.safeParse(c.cauMucTieu).success,
+	);
+	moiChuDe(
+		"thieu-noi-ban-truoc",
+		(c) => chon(c) && !s.boQua && c.noiBanTruoc === null,
+	);
+	if (!s.chuDe.some(chon)) chungCuoc("khong-chon");
+	if (s.capMode === "chan" && s.tongOneHubSau > s.objectiveCap) {
+		chungCuoc("vuot-tran");
+	}
+	return ra;
+}
+
+export type YTho = {
+	id: string;
+	noiDung: string;
+	viSao: string;
+	doBangGi: string;
+	chuDeId: string | null;
+	tacGiaUserId: string;
+	tacGiaTen: string;
+	soDongY: number;
+	daDongY: boolean;
+	createdAt: Date;
+};
+
+export type YChieuAn = {
+	id: string;
+	noiDung: string;
+	viSao: string;
+	doBangGi: string;
+	chuDeId: string | null;
+	daDongY: boolean;
+};
+
+export type YChieuDayDu = YChieuAn & {
+	tacGia: { id: string; ten: string };
+	soDongY: number;
+	createdAt: Date;
+};
+
+export type YChieu = YChieuAn | YChieuDayDu;
+
+export type YChieuRa = { khoa: boolean; y: YChieu[] };
+
+export type NguoiXemY = {
+	userId: string;
+	laQuanTri: boolean;
+	laNguoiChon: boolean;
+	daNiemPhong: boolean;
+	hoiYId: string;
+	trangThai: TrangThaiHoiY;
+};
+
+const chieuAn = (y: YTho): YChieuAn => ({
+	id: y.id,
+	noiDung: y.noiDung,
+	viSao: y.viSao,
+	doBangGi: y.doBangGi,
+	chuDeId: y.chuDeId,
+	daDongY: y.daDongY,
+});
+
+const chieuDayDu = (y: YTho): YChieuDayDu => ({
+	...chieuAn(y),
+	tacGia: { id: y.tacGiaUserId, ten: y.tacGiaTen },
+	soDongY: y.soDongY,
+	createdAt: y.createdAt,
+});
+
+export function chieuYChoNguoiXem(y: YTho[], xem: NguoiXemY): YChieuRa {
+	if (xem.laNguoiChon && !xem.daNiemPhong) return { khoa: true, y: [] };
+	if (xem.laNguoiChon || xem.laQuanTri) {
+		const theoTao = [...y].sort(
+			(a, b) =>
+				a.createdAt.getTime() - b.createdAt.getTime() ||
+				(a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+		);
+		return { khoa: false, y: theoTao.map(chieuDayDu) };
+	}
+	const cuaNguoiKhac = y.filter((x) => x.tacGiaUserId !== xem.userId);
+	const theoId = new Map(cuaNguoiKhac.map((x) => [x.id, x]));
+	const thuTu = thuTuXao(
+		cuaNguoiKhac.map((x) => x.id),
+		`${xem.hoiYId}:${xem.userId}`,
+	);
+	return {
+		khoa: false,
+		y: thuTu.flatMap((id) => {
+			const x = theoId.get(id);
+			return x ? [chieuAn(x)] : [];
+		}),
+	};
+}
+
+export type BanTruocTho = {
+	cau: string[];
+	boQua: boolean;
+	vietBoi: string;
+};
+
+export function docBanTruoc(
+	ban: BanTruocTho | null,
+	xem: { laNguoiChon: boolean; trangThai: TrangThaiHoiY },
+): BanTruocTho | null {
+	if (ban === null) return null;
+	if (xem.laNguoiChon || xem.trangThai === "da-cong-bo") return ban;
+	return null;
+}
