@@ -65,10 +65,14 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
   - `trung-y` — two KRs measure the same thing in different words, or a KR does not measure the
     Mục tiêu it sits under.
   - `muc-tieu-la-so` — the Mục tiêu title is the name of a metric or a number, not a place to reach
-    («Doanh thu quý 3», «Tăng NPS lên 60»). Rewrite it as where the team wants to be, in words with
-    no number: the number belongs to the KR that measures it («Doanh thu 20 tỷ đồng» → «Hợp đồng
-    mới đưa doanh thu lên tầm mới», and 20 tỷ đồng stays in the KR). When no KR carries that
-    number, add a `hoi` line (`muc-tieu-la-so`) saying which KR should.
+    («Doanh thu quý 3», «Tăng NPS lên 60»). Rewrite it as the state the team is in when the cycle
+    is done, built from what the person already wrote — the «vì sao lúc này», the KR, the unit's
+    name — not a metric with a direction («Tăng doanh thu», «Giảm công nợ»), not a verb of doing
+    («Kiểm soát», «Triển khai») and not a slogan («khẳng định vị thế», «bứt phá»). Open the sentence
+    with the thing that changes — the debt, the partner, the revenue — and say where it ends up, in
+    words with no number: the number belongs to the KR that
+    measures it and stays there. When no KR carries that number, add a `hoi` line
+    (`muc-tieu-la-so`) saying which KR should.
 - A rule listed in `luatDaHoi` was already asked on the form: do not add a `hoi` line with that
   code. Still propose a `viet-lai` line for that same field (the KR title or the Mục tiêu title)
   when you can write a better sentence.
