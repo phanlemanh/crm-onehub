@@ -1,4 +1,4 @@
-git diff origin/onehub...HEAD — merge-base 2e3280474f472b9853ed9a66bb0f4524ede6ff7d, HEAD 86bbd37b347cfdf8953886f91e4f6476368a7698
+git diff origin/onehub...HEAD — merge-base 2e3280474f472b9853ed9a66bb0f4524ede6ff7d, HEAD 6f272b15d946a37825fab888e0d4cfee5eab8d08
 
 ## git diff --stat
 
@@ -9,10 +9,31 @@ CONTEXT.md                                                                      
  _acceptance/gioi-han-duyet-cay-okr/card.html                                                             |   39 ++
  _acceptance/gioi-han-duyet-cay-okr/contract.md                                                           |   90 +++++
  _acceptance/gioi-han-duyet-cay-okr/coverage-scan.md                                                      |   53 +++
- _acceptance/gioi-han-duyet-cay-okr/decisions.jsonl                                                       |   20 +
+ _acceptance/gioi-han-duyet-cay-okr/decisions.jsonl                                                       |   21 +
  _acceptance/gioi-han-duyet-cay-okr/design-pass.md                                                        |   96 +++++
  _acceptance/gioi-han-duyet-cay-okr/duong-nen.md                                                          |   14 +
  _acceptance/gioi-han-duyet-cay-okr/evals.yaml                                                            |  244 ++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/evidence-report.md                                                    |  347 +++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-network.txt                                              |    4 +
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step3-gioi-han.png                                       |  Bin 0 -> 45616 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step4-con-can-chinh.png                                  |  Bin 0 -> 48621 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step5-cho-duyet.png                                      |  Bin 0 -> 52543 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step6-nguoi-duyet.png                                    |  Bin 0 -> 52567 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step7-bi-tra-lai.png                                     |  Bin 0 -> 50295 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step8-khong-thay.png                                     |  Bin 0 -> 15664 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step8b-theo-don-vi.png                                   |  Bin 0 -> 126452 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step9-cho-duyet-390.png                                  |  Bin 0 -> 44120 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step9-nguoi-duyet-390.png                                |  Bin 0 -> 44737 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E15-step9-trang-thai-loi.png                                 |  Bin 0 -> 14810 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-network.txt                                              |    1 +
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step1.png                                                |  Bin 0 -> 106237 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step2.png                                                |  Bin 0 -> 106270 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step3.png                                                |  Bin 0 -> 26421 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step4.png                                                |  Bin 0 -> 139564 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step5a-rong.png                                          |  Bin 0 -> 60805 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step5b.png                                               |  Bin 0 -> 70608 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step6a-chuyen-390.png                                    |  Bin 0 -> 55851 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/E18-step6b-mo-coi-390.png                                    |  Bin 0 -> 38612 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-chuongtrinh-duyet--desktop-1440.png           |  Bin 0 -> 95937 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-chuongtrinh-duyet--mobile-390.png             |  Bin 0 -> 96535 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-chuongtrinh-khong-quyen--desktop-1440.png     |  Bin 0 -> 99115 bytes
@@ -59,24 +80,24 @@ CONTEXT.md                                                                      
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-luu-tru-chan--mobile-390.png           |  Bin 0 -> 23938 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-okr-mo--desktop-1440.png               |  Bin 0 -> 98573 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-tochuc-okr-mo--mobile-390.png                 |  Bin 0 -> 102432 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/diff-luot.txt                                                |  398 +++++++++++++++++++
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-bi-tra-lai.png                                      |  Bin 0 -> 50014 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet-390.png                                   |  Bin 0 -> 43713 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet.png                                       |  Bin 0 -> 52378 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh-khoa.png                               |  Bin 0 -> 103951 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh.png                                    |  Bin 0 -> 104063 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/diff-luot.txt                                                |  452 ++++++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-bi-tra-lai.png                                      |  Bin 0 -> 50295 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet-390.png                                   |  Bin 0 -> 44120 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-cho-duyet.png                                       |  Bin 0 -> 52543 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh-khoa.png                               |  Bin 0 -> 106270 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuong-trinh.png                                    |  Bin 0 -> 106237 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen-390.png                                      |  Bin 0 -> 55851 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen.png                                          |  Bin 0 -> 137829 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-chuyen.png                                          |  Bin 0 -> 139564 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-con-can-chinh.png                                   |  Bin 0 -> 48621 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-gioi-han.png                                        |  Bin 0 -> 45528 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-gioi-han.png                                        |  Bin 0 -> 45616 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-khong-thay-theo-don-vi.png                          |  Bin 0 -> 126452 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-khong-thay.png                                      |  Bin 0 -> 15664 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-luu-tru-chan.png                                    |  Bin 0 -> 26421 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi-390.png                                      |  Bin 0 -> 38612 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi-rong.png                                     |  Bin 0 -> 60805 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi.png                                          |  Bin 0 -> 70711 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet-390.png                                 |  Bin 0 -> 44337 bytes
- _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet.png                                     |  Bin 0 -> 52406 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-mo-coi.png                                          |  Bin 0 -> 70608 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet-390.png                                 |  Bin 0 -> 44737 bytes
+ _acceptance/gioi-han-duyet-cay-okr/evidence/man/buoc-nguoi-duyet.png                                     |  Bin 0 -> 52567 bytes
  _acceptance/gioi-han-duyet-cay-okr/evidence/man/trang-thai-loi.png                                       |  Bin 0 -> 14810 bytes
  _acceptance/gioi-han-duyet-cay-okr/figures/ai-thay-gioi-han.html                                         |  160 ++++++++
  _acceptance/gioi-han-duyet-cay-okr/figures/ai-thay-gioi-han.png                                          |  Bin 0 -> 118143 bytes
@@ -97,6 +118,9 @@ CONTEXT.md                                                                      
  _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs                                                       | 1630 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  _acceptance/gioi-han-duyet-cay-okr/rang/ty-le-gioi-han-duyet.sql                                         |   69 ++++
  _acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs                                                        |  464 ++++++++++++++++++++++
+ _acceptance/gioi-han-duyet-cay-okr/review-findings.md                                                    |   77 ++++
+ _acceptance/gioi-han-duyet-cay-okr/run-log.jsonl                                                         |   43 +++
+ _acceptance/gioi-han-duyet-cay-okr/usage-report.md                                                       |   63 +++
  _acceptance/tro-ly-okr-de-xuat/decisions.jsonl                                                           |    1 +
  apps/agent/agent/lib/okr/config.ts                                                                       |    1 +
  apps/agent/agent/lib/okr/doc.ts                                                                          |   42 +-
@@ -155,8 +179,8 @@ CONTEXT.md                                                                      
  apps/api/test/okr.spec.ts                                                                                |    2 +
  apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts                                                           |  100 +++++
  apps/api/test/tro-ly-okr-hoan-tac.spec.ts                                                                |   13 +-
- apps/api/test/vai-chi-okr.spec.ts                                                                        |  711 ++++++++++++++++++++++++++++++++++
- apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx                                                     |   56 ++-
+ apps/api/test/vai-chi-okr.spec.ts                                                                        |  714 ++++++++++++++++++++++++++++++++++
+ apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx                                                     |   59 ++-
  apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx                                                             |    1 +
  apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/okr-mo-coi.tsx                                          |  253 ++++++++++++
  apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/page.tsx                                                |    9 +-
@@ -179,7 +203,7 @@ CONTEXT.md                                                                      
  apps/app/app/proto/registry.ts                                                                           |    2 +
  apps/app/components/crm/record-sheet/kr-bang-chung.tsx                                                   |    2 +-
  apps/app/components/crm/record-sheet/kr-viec.tsx                                                         |   27 +-
- apps/app/components/crm/record-sheet/objective-duyet.tsx                                                 |  400 +++++++++++++++++++
+ apps/app/components/crm/record-sheet/objective-duyet.tsx                                                 |  391 +++++++++++++++++++
  apps/app/components/crm/record-sheet/objective-hien-thi.tsx                                              |  292 ++++++++++++++
  apps/app/components/crm/record-sheet/objective-sheet.tsx                                                 |  161 +++++++-
  apps/app/components/crm/record-sheet/record-parts.tsx                                                    |    4 +
@@ -193,7 +217,7 @@ CONTEXT.md                                                                      
  apps/app/test/messages-guard.spec.ts                                                                     |   27 ++
  apps/app/test/okr-cai-dat.dom.tsx                                                                        |    6 +-
  apps/app/test/okr-canh-kr.dom.tsx                                                                        |   22 ++
- apps/app/test/okr-gioi-han-duyet.dom.tsx                                                                 |  825 +++++++++++++++++++++++++++++++++++++++
+ apps/app/test/okr-gioi-han-duyet.dom.tsx                                                                 |  836 +++++++++++++++++++++++++++++++++++++++
  apps/app/test/okr-sheet.dom.tsx                                                                          |   11 +
  apps/app/test/okr-tai-co-cau.dom.tsx                                                                     |  820 +++++++++++++++++++++++++++++++++++++++
  apps/app/test/okr-theo-don-vi.dom.tsx                                                                    |    3 +
@@ -224,7 +248,7 @@ CONTEXT.md                                                                      
  packages/validation/src/okr-muc-tieu.ts                                                                  |    9 +-
  packages/validation/test/okr-hien-thi.spec.ts                                                            |  229 +++++++++++
  packages/validation/test/okr-tro-ly.spec.ts                                                              |    1 +
- 222 files changed, 21864 insertions(+), 384 deletions(-)
+ 246 files changed, 22462 insertions(+), 384 deletions(-)
 
 ## Danh sách tệp (git diff --name-status)
 
@@ -239,6 +263,27 @@ A	_acceptance/gioi-han-duyet-cay-okr/decisions.jsonl
 A	_acceptance/gioi-han-duyet-cay-okr/design-pass.md
 A	_acceptance/gioi-han-duyet-cay-okr/duong-nen.md
 A	_acceptance/gioi-han-duyet-cay-okr/evals.yaml
+A	_acceptance/gioi-han-duyet-cay-okr/evidence-report.md
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-network.txt
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step3-gioi-han.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step4-con-can-chinh.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step5-cho-duyet.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step6-nguoi-duyet.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step7-bi-tra-lai.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step8-khong-thay.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step8b-theo-don-vi.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step9-cho-duyet-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step9-nguoi-duyet-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E15-step9-trang-thai-loi.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-network.txt
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step1.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step2.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step3.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step4.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step5a-rong.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step5b.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step6a-chuyen-390.png
+A	_acceptance/gioi-han-duyet-cay-okr/evidence/E18-step6b-mo-coi-390.png
 A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-chuongtrinh-duyet--desktop-1440.png
 A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-chuongtrinh-duyet--mobile-390.png
 A	_acceptance/gioi-han-duyet-cay-okr/evidence/design-pass/ST-chuongtrinh-khong-quyen--desktop-1440.png
@@ -323,6 +368,9 @@ A	_acceptance/gioi-han-duyet-cay-okr/rang/okr-mo-coi.sql
 A	_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs
 A	_acceptance/gioi-han-duyet-cay-okr/rang/ty-le-gioi-han-duyet.sql
 A	_acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs
+A	_acceptance/gioi-han-duyet-cay-okr/review-findings.md
+A	_acceptance/gioi-han-duyet-cay-okr/run-log.jsonl
+A	_acceptance/gioi-han-duyet-cay-okr/usage-report.md
 M	_acceptance/tro-ly-okr-de-xuat/decisions.jsonl
 M	apps/agent/agent/lib/okr/config.ts
 M	apps/agent/agent/lib/okr/doc.ts

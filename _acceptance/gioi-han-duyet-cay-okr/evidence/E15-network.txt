@@ -1,4 +1,7 @@
-2026-09-29T11:18:37.781Z truong 400 POST http://localhost:4283/api/trpc/okr.datHienThi?batch=1
-2026-09-29T11:18:37.781Z truong console.error Failed to load resource: the server responded with a status of 400 (Bad Request)
-2026-09-29T11:18:58.616Z truong 500 GET http://localhost:4283/api/trpc/okr.objective?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmuml22200002r9cfttfcdnis%22%7D%7D
-2026-09-29T11:18:58.616Z truong console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+# E15 network (chay 2 that pass, app http://localhost:4536 api http://localhost:4442; raw tu man-gioi-han-duyet-network.txt)
+2026-09-29T12:32:29.638Z truong 400 POST http://localhost:4536/api/trpc/okr.datHienThi?batch=1
+2026-09-29T12:32:29.639Z truong console.error Failed to load resource: the server responded with a status of 400 (Bad Request)
+2026-09-29T12:32:50.362Z truong 500 GET http://localhost:4536/api/trpc/okr.objective?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmumnp1iy0002zdcfb9gbcd5w%22%7D%7D
+2026-09-29T12:32:50.362Z truong console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+# 400 okr.datHienThi = buoc 4 (chon Gioi han tren muc tieu con can chinh, loi 'con 1 can chinh' la ket qua dung cua eval)
+# 500 okr.objective = buoc 9 (chan truy van o trinh duyet bang request interception -> Empty loi + Thu lai)
