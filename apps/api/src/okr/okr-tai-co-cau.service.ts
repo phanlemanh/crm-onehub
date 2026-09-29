@@ -140,9 +140,9 @@ export class OkrTaiCoCauService {
 		const hang =
 			dv.level === "phong-ban"
 				? await tx.$queryRaw<{ archivedAt: Date | null }[]>`
-					SELECT "archivedAt" FROM "department" WHERE id = ${dv.id} FOR UPDATE`
+					SELECT "archivedAt" FROM "department" WHERE id = ${dv.id} FOR NO KEY UPDATE`
 				: await tx.$queryRaw<{ archivedAt: Date | null }[]>`
-					SELECT "archivedAt" FROM "division" WHERE id = ${dv.id} FOR UPDATE`;
+					SELECT "archivedAt" FROM "division" WHERE id = ${dv.id} FOR NO KEY UPDATE`;
 		const [dong] = hang;
 		if (!dong) throw new NotFoundException(T.khongCoDonVi(dv.id));
 		if (dong.archivedAt !== null)

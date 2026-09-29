@@ -219,7 +219,7 @@ export class ToChucService {
 		});
 		if (con > 0) throw new BadRequestException(T.boPhanConPhongBan(con));
 		return this.db.$transaction(async (tx) => {
-			await tx.$queryRaw`SELECT id FROM "division" WHERE id = ${input.id} FOR UPDATE`;
+			await tx.$queryRaw`SELECT id FROM "division" WHERE id = ${input.id} FOR NO KEY UPDATE`;
 			const { mo } = await demOkrCuaDonVi(tx, { divisionId: input.id });
 			if (mo > 0) throw new BadRequestException(T.boPhanConOkrMo(mo));
 			return tx.division.update({
@@ -351,7 +351,7 @@ export class ToChucService {
 		if (conNguoi > 0)
 			throw new BadRequestException(T.phongBanConNguoi(conNguoi));
 		await this.db.$transaction(async (tx) => {
-			await tx.$queryRaw`SELECT id FROM "department" WHERE id = ${input.id} FOR UPDATE`;
+			await tx.$queryRaw`SELECT id FROM "department" WHERE id = ${input.id} FOR NO KEY UPDATE`;
 			const { mo } = await demOkrCuaDonVi(tx, { departmentId: input.id });
 			if (mo > 0) throw new BadRequestException(T.phongBanConOkrMo(mo));
 			await tx.department.update({
