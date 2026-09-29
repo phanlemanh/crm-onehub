@@ -186,7 +186,7 @@ evals:
       jsdom, vai member: moi nut Them, tay cam keo, menu «…» deu disabled/aria-disabled (dem = so giai doan
       + 3 nut Them), dong ly do hien dung chuoi trong messages. Doi chung duong: vai admin cung fixture ->
       khong cai nao khoa.
-      CHIEU DO: ban sao an nut Them voi member thay vi khoa -> do voi thong diep ghim "member: nut Them
+      CHIEU DO (da chay 2026-09-29): ban sao an nut Them voi member thay vi khoa -> do voi thong diep ghim "member: nut Them
       bien mat thay vi khoa".
 
   - id: E11
@@ -296,7 +296,7 @@ evals:
       bang fixture; giai doan duy nhat cua loai -> muc Xoa khoa; dat tran -> 3 nut Them khoa; giai doan co count > 0 (fixture: toan thoa thuan da luu tru) -> bam Xoa mo hop
       thoai chuyen co chu "Con N", khong mo hop hoi lai. Thanh ben
       Cai dat co muc Giai doan thoa thuan ngay sau Truong trong nhom khongGian. 7 ca.
-      CHIEU DO: ban sao loading tra null -> do voi thong diep ghim "dang tai: khong co khung xuong".
+      CHIEU DO (da chay 2026-09-29): ban sao loading tra null -> do voi thong diep ghim "dang tai: khong co khung xuong".
 
   - id: E17
     criterion: AC-14
