@@ -57,7 +57,7 @@ evals:
       hien DUNG 5 muc theo thu tu list (so theo chi so, nhan lay tu fixture list, khong viet tay); thanh
       tien trinh hien dung cac giai doan OPEN theo thu tu. Doi chung duong cung tep: list 7 giai doan goc
       -> 7 muc.
-      CHIEU DO: ban sao menu doc hang cu DEAL_STAGE_OPTIONS -> do voi thong diep ghim "muc 1: Demo booked
+      CHIEU DO (da chay 2026-09-29): ban sao menu doc danh sach cung -> do voi thong diep ghim "muc 1: Demo booked
       != <nhan fixture 1>".
 
   - id: E4
@@ -344,4 +344,5 @@ evals:
       giaiDoan.list gia), mot dong cua giai doan song da doi ten. Khang dinh: chu hien thi cua dong G chua nhan G va
       KHONG chua id cua G; dong kia chua nhan moi. Ca timeline dung stageChange lay tu fixture cua dau ra API that
       (hinh dang rut tu kieu z.infer cua activities.timeline, khong viet tay khuon). 2 dong x [co nhan, khong id] = 4.
-      CHIEU DO: ban sao component tra nhan trong giaiDoan.list -> do voi thong diep ghim "timeline: nhan G != <id>".
+      CHIEU DO (da chay 2026-09-29): ban sao component tra nhan trong giaiDoan.list -> do voi thong diep ghim
+      "timeline: nhan G Thử nghiệm cũ vang".
