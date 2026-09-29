@@ -161,11 +161,7 @@ function SheetContent({
 				}}
 				onEscapeKeyDown={(e) => {
 					onEscapeKeyDown?.(e);
-					if (laEscTuOSuaDeXuat(e)) e.preventDefault();
-				}}
-				onEscapeKeyDown={(e) => {
-					onEscapeKeyDown?.(e);
-					if (escTuXuLy(e.target)) e.preventDefault();
+					if (laEscTuOSuaDeXuat(e) || escTuXuLy(e.target)) e.preventDefault();
 				}}
 				{...props}
 			>
