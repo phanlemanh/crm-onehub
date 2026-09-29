@@ -185,9 +185,15 @@ const GHIM_TRO_LY_OKR = {
 		"Trần của Trợ lý OKR: 1.",
 		"Trần của Trợ lý OKR: 12.",
 	],
-	"tro-ly-okr:troLy.donViBat": ["Đơn vị bật 1", "Đơn vị bật 12"],
+	"tro-ly-okr:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
+	"tro-ly-okr:soDo.dongBiLoai": ["(+1 bị loại)", "(+12 bị loại)"],
+	"tro-ly-okr:soDo.hang.hoanTac": [
+		"Hoàn tác trong 1 ngày",
+		"Hoàn tác trong 12 ngày",
+	],
+	"tro-ly-okr:troLy.donViCua": ["Đơn vị 1 a", "Đơn vị 12 a"],
 	"tro-ly-okr:troLy.hop.goiYPhongBan": ["Phòng ban · 1", "Phòng ban · 12"],
-	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị cho «1»", "Đơn vị cho «12»"],
+	"tro-ly-okr:troLy.hop.tieuDe": ["Đơn vị 1 «A»", "Đơn vị 12 «A»"],
 	"tro-ly-okr:troLy.hop.xacNhan": ["Chọn 1 đơn vị", "Chọn 12 đơn vị"],
 	"tro-ly-okr:troLy.sanSang.chuaSanSang": [
 		"Chưa sẵn sàng — 1",
@@ -199,8 +205,26 @@ const GHIM_TRO_LY_OKR = {
 	],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_OKR_GOP_Y = {
+	"okr-gop-y:nut.dangCho": ["1 đề xuất đang chờ", "12 đề xuất đang chờ"],
+	"okr-gop-y:nut.tamNghi": [
+		"Trợ lý OKR tạm nghỉ tới 1",
+		"Trợ lý OKR tạm nghỉ tới 12",
+	],
+	"okr-gop-y:cot.soDong": [
+		"1 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
+		"12 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
+	],
+	"okr-gop-y:xuHuong": [
+		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A",
+		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A",
+	],
+	"okr-gop-y:vet.suaTruong": ["Sửa 1", "Sửa 12"],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
 	...GHIM_TRO_LY_OKR,
+	...GHIM_OKR_GOP_Y,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],

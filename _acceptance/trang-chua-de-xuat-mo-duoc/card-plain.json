@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Trang nào danh sách Kho tài liệu cho một người thấy thì người đó bấm vào là mở được, kể cả trang chưa có bản nào. Màn đọc nói rõ trang đang chờ gì và có nút đi tiếp: xem nguồn hoặc viết tay.",
+  "scope_plain": "Những việc đã hẹn để ngoài lượt này, giữ nguyên như lúc duyệt phạm vi:",
+  "decisions": [],
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260929T095300Z-1", "p": "Chọn một luật duy nhất cho danh sách, màn đọc và «trang nhắc tới»; đổi lại bỏ cách giữ hai bản luật song song."},
+    {"id": "d-20260929T095300Z-2", "p": "Chọn cho «người tạo trang» thấy trang của mình; người tải nguồn cho trang mới chính là người tạo, nên đúng điều đã chốt."},
+    {"id": "d-20260929T095300Z-3", "p": "KHÔNG làm phiên duyệt giao diện trên bản mẫu trước cổng; đổi lại, ảnh chụp bốn tình trạng do phép đo chụp sau khi làm xong."},
+    {"id": "d-20260929T095300Z-4", "p": "KHÔNG làm lại trang 404 tiếng Anh và KHÔNG tự làm mới màn khi máy soạn xong — để lượt khác."},
+    {"id": "d-20260929T100426Z-5", "p": "Sửa chữ mô tả cách phép đo báo đỏ cho khớp đúng chữ nó in khi phá thật; không đổi lời hứa nào."},
+    {"id": "d-20260929T101000Z-6", "p": "Đổi cách thử «màu tự đặt» sang loại màu mà bộ quét thật sự bắt; đổi lại, một màu lẻ đơn chiếc vẫn chỉ có mắt người canh."},
+    {"id": "d-20260929T101315Z-7", "p": "Sửa lỗi phép đo màn tìm ra: tên tệp dài làm khung tràn ngang trên điện thoại, nay chữ tự xuống dòng; và đổi cách thử bước gửi bản đầu cho đúng đường gửi."},
+    {"id": "d-20260929T103249Z-8", "p": "Sửa lỗi lượt chấm đầu tìm ra: phép đo nay có thật một người thấy trang mà không thấy nguồn, và màn không hiện «Xem nguồn» cho họ."}
+  ]
+}

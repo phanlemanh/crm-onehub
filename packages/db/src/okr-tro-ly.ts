@@ -8,16 +8,18 @@ import {
 	AI_PHAM_VI,
 	type CauHinhAi,
 	type DonViMucTieu,
-	donViDuocBat,
 	KET_QUA_KIEM_SAN_SANG,
 	type KetQuaKiemSanSang,
 	type LyDoKhongSanSang,
 	motTrong,
-	phamViCuaViec,
+	type NacCuaDonVi,
+	nacCuaDonVi,
+	nacCuaViec,
 	TRO_LY_OKR_TRAN,
 	type TroLySanSang,
 	type ViecTroLy,
 } from "./okr-tro-ly-danh-muc";
+import { dauNgayVN } from "./onboarding-nhac";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
 
@@ -27,6 +29,10 @@ export const CAU_HINH_AI_MAC_DINH: CauHinhAi = {
 	aiDeXuatDonVi: [],
 	aiTomTatPhamVi: "tat",
 	aiTomTatDonVi: [],
+	aiDeXuatAnPhamVi: "tat",
+	aiDeXuatAnDonVi: [],
+	aiTomTatAnPhamVi: "tat",
+	aiTomTatAnDonVi: [],
 	aiTranThangUsd: TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
 };
 
@@ -44,6 +50,10 @@ export async function cauHinhAiLuc(
 			aiDeXuatDonVi: true,
 			aiTomTatPhamVi: true,
 			aiTomTatDonVi: true,
+			aiDeXuatAnPhamVi: true,
+			aiDeXuatAnDonVi: true,
+			aiTomTatAnPhamVi: true,
+			aiTomTatAnDonVi: true,
 			aiTranThangUsd: true,
 		},
 	});
@@ -55,6 +65,18 @@ export async function cauHinhAiLuc(
 		aiDeXuatDonVi: row.aiDeXuatDonVi,
 		aiTomTatPhamVi: motTrong(AI_PHAM_VI, row.aiTomTatPhamVi, "aiTomTatPhamVi"),
 		aiTomTatDonVi: row.aiTomTatDonVi,
+		aiDeXuatAnPhamVi: motTrong(
+			AI_PHAM_VI,
+			row.aiDeXuatAnPhamVi,
+			"aiDeXuatAnPhamVi",
+		),
+		aiDeXuatAnDonVi: row.aiDeXuatAnDonVi,
+		aiTomTatAnPhamVi: motTrong(
+			AI_PHAM_VI,
+			row.aiTomTatAnPhamVi,
+			"aiTomTatAnPhamVi",
+		),
+		aiTomTatAnDonVi: row.aiTomTatAnDonVi,
 		aiTranThangUsd: row.aiTranThangUsd.toNumber(),
 	};
 }
@@ -97,21 +119,101 @@ export async function donViCuaMucTieu(
 	};
 }
 
+export type KetQuaKiem = { ketQua: KetQuaKiemSanSang; luc: Date };
+
 export async function ketQuaKiemGanNhat(
 	db: DbHoacTx,
 	luc: Date = new Date(),
-): Promise<KetQuaKiemSanSang | null> {
+): Promise<KetQuaKiem | null> {
 	const row = await db.agentTask.findFirst({
 		where: { kind: "okr-kiem-san-sang", finishedAt: { not: null, lte: luc } },
 		orderBy: { finishedAt: "desc" },
-		select: { outcome: true },
+		select: { outcome: true, finishedAt: true },
 	});
-	if (!row?.outcome) return null;
-	return motTrong(
-		KET_QUA_KIEM_SAN_SANG,
-		row.outcome,
-		"okr-kiem-san-sang.outcome",
-	);
+	if (!row?.outcome || !row.finishedAt) return null;
+	return {
+		ketQua: motTrong(
+			KET_QUA_KIEM_SAN_SANG,
+			row.outcome,
+			"okr-kiem-san-sang.outcome",
+		),
+		luc: row.finishedAt,
+	};
+}
+
+export async function canKiemLaiKhoa(
+	db: DbHoacTx,
+	now: Date = new Date(),
+): Promise<boolean> {
+	if (!(await cauHinhAiLuc(db, now)).aiOn) return false;
+	const kq = await ketQuaKiemGanNhat(db, now);
+	if (kq?.ketQua !== "chua-co-khoa-mo-hinh") return false;
+	if (now.getTime() - kq.luc.getTime() <= TRO_LY_OKR_TRAN.hanKiemKhoaMs) {
+		return false;
+	}
+	const dangCho = await db.agentTask.count({
+		where: { kind: "okr-kiem-san-sang", finishedAt: null },
+	});
+	return dangCho === 0;
+}
+
+type NacXep = "bat" | "an";
+
+const khong = (lyDo: LyDoKhongSanSang): TroLySanSang => ({ bat: false, lyDo });
+
+async function nacCuaMucTieu(
+	db: DbHoacTx,
+	ct: CauHinhAi,
+	viec: ViecTroLy,
+	v: { objectiveId?: string; keyResultId?: string; donVi?: DonViMucTieu },
+): Promise<NacCuaDonVi> {
+	const objectiveId =
+		v.objectiveId ??
+		(v.keyResultId
+			? (
+					await db.okrKeyResult.findUniqueOrThrow({
+						where: { id: v.keyResultId },
+						select: { objectiveId: true },
+					})
+				).objectiveId
+			: undefined);
+	const donVi =
+		v.donVi ?? (objectiveId ? await donViCuaMucTieu(db, objectiveId) : null);
+	if (donVi) return nacCuaDonVi(ct, viec, donVi);
+	return nacCuaViec(ct, viec);
+}
+
+async function quaTranChung(
+	db: DbHoacTx,
+	ct: CauHinhAi,
+	now: Date,
+): Promise<TroLySanSang> {
+	const chi = (await chiTieuThang(db, thangVN(now), now)).troLyOkrUsd;
+	if (chi >= ct.aiTranThangUsd) return khong("het-tran-thang");
+	if ((await ketQuaKiemGanNhat(db, now))?.ketQua === "chua-co-khoa-mo-hinh") {
+		return khong("chua-co-khoa-mo-hinh");
+	}
+	return {
+		bat: true,
+		conLaiUsd: Math.round((ct.aiTranThangUsd - chi) * 1e6) / 1e6,
+	};
+}
+
+async function soLuotDeXuatTrongNgay(
+	db: DbHoacTx,
+	nguoiYeuCau: string,
+	now: Date,
+): Promise<number> {
+	return db.agentTask.count({
+		where: {
+			kind: "okr-de-xuat",
+			createdAt: { gte: dauNgayVN(now) },
+			AND: [
+				{ payload: { path: ["nguoiYeuCau"], equals: nguoiYeuCau } },
+				{ payload: { path: ["nac"], equals: "bat" } },
+			],
+		},
+	});
 }
 
 export async function troLyOkrSanSang(
@@ -119,38 +221,31 @@ export async function troLyOkrSanSang(
 	v: {
 		viec: ViecTroLy;
 		objectiveId?: string;
+		keyResultId?: string;
 		donVi?: DonViMucTieu;
+		nguoiYeuCau?: string;
+		nacViec?: NacXep;
 		now?: Date;
 		coTacTu?: boolean;
 	},
 ): Promise<TroLySanSang> {
 	const now = v.now ?? new Date();
 	const ct = await cauHinhAiLuc(db, now);
-	const khong = (lyDo: LyDoKhongSanSang): TroLySanSang => ({
-		bat: false,
-		lyDo,
-	});
-	const donVi =
-		v.donVi ??
-		(v.objectiveId ? await donViCuaMucTieu(db, v.objectiveId) : null);
-	const bat = donVi
-		? donViDuocBat(ct, v.viec, donVi)
-		: !ct.aiOn
-			? "tat"
-			: phamViCuaViec(ct, v.viec).phamVi === "tat"
-				? "viec-tat"
-				: "bat";
-	if (bat !== "bat") return khong(bat);
-	const chi = (await chiTieuThang(db, thangVN(now), now)).troLyOkrUsd;
-	if (chi >= ct.aiTranThangUsd) return khong("het-tran-thang");
-	if ((await ketQuaKiemGanNhat(db, now)) === "chua-co-khoa-mo-hinh") {
-		return khong("chua-co-khoa-mo-hinh");
+	const nac = await nacCuaMucTieu(db, ct, v.viec, v);
+	if (nac === "an" && v.nacViec !== "an") return khong("don-vi-chua-bat");
+	if (nac !== "bat" && nac !== "an") return khong(nac);
+	const chung = await quaTranChung(db, ct, now);
+	if (!chung.bat) return chung;
+	if (
+		v.viec === "de-xuat" &&
+		v.nguoiYeuCau &&
+		(await soLuotDeXuatTrongNgay(db, v.nguoiYeuCau, now)) >=
+			TRO_LY_OKR_TRAN.troLyNgayMoiNguoi
+	) {
+		return khong("het-tran-ngay");
 	}
 	if (v.coTacTu === false) return khong("chua-noi-tac-tu");
-	return {
-		bat: true,
-		conLaiUsd: Math.round((ct.aiTranThangUsd - chi) * 1e6) / 1e6,
-	};
+	return chung;
 }
 
 export const LY_DO_VIEC_OKR = {
@@ -161,38 +256,23 @@ export const LY_DO_VIEC_OKR = {
 	"ai-doi-soat": "ai-doi-soat",
 } as const;
 
-export type XepViec =
-	| { xep: true; taskId: string; moi: boolean }
-	| { xep: false; lyDo: LyDoKhongSanSang };
+type KetQuaTao<L extends string> =
+	| { tao: true; taskId: string; dungLai: boolean }
+	| { tao: false; lyDo: L };
 
-export async function xepViecTroLy(
+async function taoViecDeXuat<L extends string>(
 	db: Db,
 	v: {
-		viec: "de-xuat";
 		objectiveId: string;
 		keyResultId: string | null;
 		nguoiYeuCau: string;
-		now?: Date;
+		nac: NacXep;
+		now: Date;
 	},
-): Promise<XepViec> {
-	const now = v.now ?? new Date();
-	const san = await troLyOkrSanSang(db, {
-		viec: v.viec,
-		objectiveId: v.objectiveId,
-		now,
-	});
-	if (!san.bat) return { xep: false, lyDo: san.lyDo };
+	chan: (tx: Prisma.TransactionClient) => Promise<L | null>,
+): Promise<KetQuaTao<L>> {
 	return db.$transaction(async (tx) => {
 		await lockIdempotencyKey(tx, `agent-task:okr-de-xuat:${v.objectiveId}`);
-		const co = await tx.agentTask.findFirst({
-			where: {
-				kind: "okr-de-xuat",
-				finishedAt: null,
-				payload: { path: ["objectiveId"], equals: v.objectiveId },
-			},
-			select: { id: true },
-		});
-		if (co) return { xep: true, taskId: co.id, moi: false } as const;
 		const mt = await tx.okrObjective.findUniqueOrThrow({
 			where: { id: v.objectiveId },
 			select: {
@@ -213,23 +293,159 @@ export async function xepViecTroLy(
 				].join("|"),
 			)
 			.digest("hex");
+		const co = await tx.agentTask.findFirst({
+			where: {
+				kind: "okr-de-xuat",
+				OR: [{ finishedAt: null }, { outcome: "da-nop" }],
+				AND: [
+					{ payload: { path: ["inputHash"], equals: inputHash } },
+					{ payload: { path: ["nac"], equals: v.nac } },
+				],
+			},
+			orderBy: { createdAt: "desc" },
+			select: { id: true },
+		});
+		if (co) return { tao: true, taskId: co.id, dungLai: true } as const;
+		const lyDo = await chan(tx);
+		if (lyDo !== null) return { tao: false, lyDo } as const;
 		const hang = await tx.agentTask.create({
 			data: {
 				kind: "okr-de-xuat",
 				reason: LY_DO_VIEC_OKR["okr-de-xuat"],
-				priority: PRIORITY.okrBam,
+				priority: v.nac === "bat" ? PRIORITY.okrBam : PRIORITY.okrNen,
 				budget: 0,
-				dueAt: now,
+				dueAt: v.now,
+				createdAt: v.now,
 				payload: {
 					viec: "de-xuat",
 					objectiveId: v.objectiveId,
 					keyResultId: v.keyResultId,
 					nguoiYeuCau: v.nguoiYeuCau,
 					inputHash,
+					nac: v.nac,
 				},
 			},
 			select: { id: true },
 		});
-		return { xep: true, taskId: hang.id, moi: true } as const;
+		return { tao: true, taskId: hang.id, dungLai: false } as const;
 	});
+}
+
+export type XepViec =
+	| { bat: true; taskId: string; dungLai: boolean }
+	| { bat: false; lyDo: LyDoKhongSanSang };
+
+export async function xepViecTroLy(
+	db: Db,
+	v: {
+		viec: "de-xuat";
+		objectiveId: string;
+		keyResultId: string | null;
+		nguoiYeuCau: string;
+		nac: "bat";
+		now?: Date;
+	},
+): Promise<XepViec> {
+	const now = v.now ?? new Date();
+	const ct = await cauHinhAiLuc(db, now);
+	const nac = await nacCuaMucTieu(db, ct, v.viec, {
+		objectiveId: v.objectiveId,
+	});
+	if (nac !== "bat") {
+		return { bat: false, lyDo: nac === "an" ? "don-vi-chua-bat" : nac };
+	}
+	const chung = await quaTranChung(db, ct, now);
+	if (!chung.bat) return chung;
+	const kq = await taoViecDeXuat(
+		db,
+		{ ...v, now },
+		async (tx): Promise<LyDoKhongSanSang | null> => {
+			await lockIdempotencyKey(tx, `okr-de-xuat-ngay:${v.nguoiYeuCau}`);
+			const da = await soLuotDeXuatTrongNgay(tx, v.nguoiYeuCau, now);
+			return da >= TRO_LY_OKR_TRAN.troLyNgayMoiNguoi ? "het-tran-ngay" : null;
+		},
+	);
+	return kq.tao
+		? { bat: true, taskId: kq.taskId, dungLai: kq.dungLai }
+		: { bat: false, lyDo: kq.lyDo };
+}
+
+export type LyDoBoLuotAn =
+	| "khong-doi-chu"
+	| "khong-o-che-do-an"
+	| "nhip-muc-tieu"
+	| "het-luot-an-ngay"
+	| "het-tran-thang"
+	| "chua-co-khoa-mo-hinh";
+
+export type XepLuotAn =
+	| { xep: true; taskId: string; dungLai: boolean }
+	| { xep: false; lyDo: LyDoBoLuotAn };
+
+export async function xepLuotAnSauKhiLuu(
+	db: Db,
+	v: {
+		objectiveId: string;
+		keyResultId: string | null;
+		nguoiLuu: string;
+		doiChu: boolean;
+		now: Date;
+	},
+): Promise<XepLuotAn> {
+	const bo = (lyDo: LyDoBoLuotAn): XepLuotAn => ({ xep: false, lyDo });
+	if (!v.doiChu) return bo("khong-doi-chu");
+	const ct = await cauHinhAiLuc(db, v.now);
+	const nac = await nacCuaMucTieu(db, ct, "de-xuat", {
+		objectiveId: v.objectiveId,
+	});
+	if (nac !== "an") {
+		return bo("khong-o-che-do-an");
+	}
+	const chung = await quaTranChung(db, ct, v.now);
+	if (!chung.bat) {
+		return bo(
+			chung.lyDo === "het-tran-thang"
+				? "het-tran-thang"
+				: "chua-co-khoa-mo-hinh",
+		);
+	}
+	const kq = await taoViecDeXuat(
+		db,
+		{
+			objectiveId: v.objectiveId,
+			keyResultId: v.keyResultId,
+			nguoiYeuCau: v.nguoiLuu,
+			nac: "an",
+			now: v.now,
+		},
+		async (tx): Promise<LyDoBoLuotAn | null> => {
+			await lockIdempotencyKey(tx, "okr-de-xuat-an-ngay");
+			const ganDay = await tx.agentTask.count({
+				where: {
+					kind: "okr-de-xuat",
+					createdAt: {
+						gt: new Date(v.now.getTime() - TRO_LY_OKR_TRAN.nhipAnMucTieuMs),
+					},
+					AND: [
+						{ payload: { path: ["objectiveId"], equals: v.objectiveId } },
+						{ payload: { path: ["nac"], equals: "an" } },
+					],
+				},
+			});
+			if (ganDay > 0) return "nhip-muc-tieu";
+			const homNay = await tx.agentTask.count({
+				where: {
+					kind: "okr-de-xuat",
+					createdAt: { gte: dauNgayVN(v.now) },
+					payload: { path: ["nac"], equals: "an" },
+				},
+			});
+			return homNay >= TRO_LY_OKR_TRAN.luotAnMoiNgay
+				? "het-luot-an-ngay"
+				: null;
+		},
+	);
+	return kq.tao
+		? { xep: true, taskId: kq.taskId, dungLai: kq.dungLai }
+		: bo(kq.lyDo);
 }

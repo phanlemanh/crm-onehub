@@ -20,7 +20,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 			theme={theme as ToasterProps["theme"]}
 			position="bottom-left"
 			containerAriaLabel={msg.thongBao.vung}
-			className="toaster group"
+			className="toaster group pointer-events-auto"
 			icons={{
 				success: <CircleCheckIcon className="size-4" />,
 				info: <InfoIcon className="size-4" />,

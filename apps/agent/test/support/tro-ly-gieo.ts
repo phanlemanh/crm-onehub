@@ -26,6 +26,8 @@ export async function gieoCauHinhAi(
 			...p,
 			aiDeXuatDonVi: [...(p.aiDeXuatDonVi ?? [])],
 			aiTomTatDonVi: [...(p.aiTomTatDonVi ?? [])],
+			aiDeXuatAnDonVi: [...(p.aiDeXuatAnDonVi ?? [])],
+			aiTomTatAnDonVi: [...(p.aiTomTatAnDonVi ?? [])],
 			aiTranThangUsd: new Prisma.Decimal(
 				p.aiTranThangUsd ?? CAU_HINH_AI_MAC_DINH.aiTranThangUsd,
 			),

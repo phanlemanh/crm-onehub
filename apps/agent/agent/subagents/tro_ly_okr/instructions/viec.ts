@@ -10,7 +10,10 @@ export default defineDynamic({
 			if (hang?.kind !== "okr-de-xuat" || hang.finishedAt) return null;
 			const viec = okrTroLyViec.safeParse(hang.payload);
 			if (!viec.success || viec.data.viec !== "de-xuat") return null;
-			const goi = await dungGoiDeXuat(viec.data.objectiveId);
+			const goi = await dungGoiDeXuat(viec.data.objectiveId, {
+				keyResultId: viec.data.keyResultId,
+				nac: viec.data.nac,
+			});
 			return goi ? defineInstructions({ markdown: goiThanhChiDan(goi) }) : null;
 		},
 	},

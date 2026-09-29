@@ -2,8 +2,11 @@ import {
 	AI_PHAM_VI,
 	KET_QUA_KIEM_SAN_SANG,
 	LY_DO_KHONG_SAN_SANG,
+	MA_LOAI_DE_XUAT,
+	NAC_TRO_LY,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
+	TRUONG_VIET_LAI,
 	VIEC_TRO_LY,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
@@ -15,15 +18,21 @@ export {
 	type CauHinhAi,
 	DON_VI_ONEHUB,
 	type DonViMucTieu,
-	donViDuocBat,
 	KET_QUA_KIEM_SAN_SANG,
 	type KetQuaKiemSanSang,
 	LY_DO_KHONG_SAN_SANG,
 	type LyDoKhongSanSang,
+	MA_LOAI_DE_XUAT,
+	type MaLoaiDeXuat,
+	NAC_TRO_LY,
+	type NacTroLy,
+	nacCuaDonVi,
 	phamViCuaViec,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
+	TRUONG_VIET_LAI,
 	type TroLySanSang,
+	type TruongVietLai,
 	VIEC_TRO_LY,
 	type ViecTroLy,
 } from "@crm/db/okr-tro-ly-danh-muc";
@@ -33,6 +42,10 @@ export const viecTroLy = z.enum(VIEC_TRO_LY);
 export const aiPhamVi = z.enum(AI_PHAM_VI);
 
 export const trangThaiDeXuat = z.enum(TRANG_THAI_DE_XUAT);
+
+export const nacTroLy = z.enum(NAC_TRO_LY);
+
+export const maLoaiDeXuat = z.enum(MA_LOAI_DE_XUAT);
 
 export const lyDoKhongSanSang = z.enum(LY_DO_KHONG_SAN_SANG);
 
@@ -50,6 +63,7 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 		keyResultId: z.string().min(1).nullable(),
 		nguoiYeuCau: z.string().min(1),
 		inputHash: z.string().min(1),
+		nac: nacTroLy.exclude(["tat"]).default("bat"),
 	}),
 	z.object({
 		viec: z.literal("tom-tat-tuan"),
@@ -61,8 +75,6 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 ]);
 
 export type OkrTroLyViec = z.infer<typeof okrTroLyViec>;
-
-const TRUONG_VIET_LAI = ["title", "whyNow", "kr.title"] as const;
 
 const TRAN_CUA_TRUONG = {
 	title: TRO_LY_OKR_TRAN.chu.tenMucTieu,
@@ -112,6 +124,41 @@ export const dongDeXuat = z
 	});
 
 export type DongDeXuat = z.infer<typeof dongDeXuat>;
+
+export const dichDeXuat = z.object({
+	targetObjectiveId: z.string().min(1).nullable(),
+	targetKeyResultId: z.string().min(1).nullable(),
+});
+
+export type HangDeXuat = {
+	loai: string;
+	objectiveId: string;
+	keyResultId: string | null;
+	truong: string | null;
+	truoc: string | null;
+	sau: string | null;
+	maVanDe: string | null;
+	dich: unknown;
+	lyDo: string;
+};
+
+export function dongTuHang(hang: HangDeXuat): DongDeXuat {
+	const dich =
+		hang.dich === null
+			? { targetObjectiveId: null, targetKeyResultId: null }
+			: dichDeXuat.parse(hang.dich);
+	return dongDeXuat.parse({
+		loai: hang.loai,
+		objectiveId: hang.objectiveId,
+		keyResultId: hang.keyResultId,
+		truong: hang.truong,
+		truoc: hang.truoc,
+		sau: hang.sau,
+		maVanDe: hang.maVanDe,
+		...dich,
+		lyDo: hang.lyDo,
+	});
+}
 
 export const nopDeXuat = z.object({
 	dong: z.array(dongDeXuat).max(TRO_LY_OKR_TRAN.soDongDeXuat),

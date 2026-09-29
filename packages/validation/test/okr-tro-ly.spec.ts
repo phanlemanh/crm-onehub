@@ -1,17 +1,23 @@
 import { describe, expect, test } from "bun:test";
+import { KIEU_KR as KIEU_KR_DB } from "@crm/db/okr-xu-huong";
 import { z } from "zod";
 import {
 	docTranUsd,
-	donViDuocBat,
+	nacCuaDonVi,
+	nacCuaViec,
 	OKR_PROGRAM_MAC_DINH,
 	type OkrProgram,
 	okrProgram,
+	okrProgramSua,
 } from "../src/okr-chuong-trinh";
+import { KIEU_KR } from "../src/okr-kr";
 import {
 	ketQuaTroLy,
 	nopDeXuat,
 	okrTroLyViec,
 	trangThaiDeXuat,
+	VIEC_TRO_LY,
+	type ViecTroLy,
 } from "../src/okr-tro-ly";
 
 const HANG_CU = {
@@ -146,10 +152,10 @@ describe("don-vi-duoc-bat", () => {
 			],
 			[ct({ aiDeXuatPhamVi: "toan-cong-ty" }), phongNgoai, "bat"],
 		] as const;
-		expect(o.map(([c, d]) => donViDuocBat(c, "de-xuat", d))).toEqual(
+		expect(o.map(([c, d]) => nacCuaDonVi(c, "de-xuat", d))).toEqual(
 			o.map(([, , m]) => m),
 		);
-		const rong = donViDuocBat(
+		const rong = nacCuaDonVi(
 			ct({ aiDeXuatPhamVi: "danh-sach", aiDeXuatDonVi: [] }),
 			"de-xuat",
 			phongA,
@@ -164,8 +170,190 @@ describe("don-vi-duoc-bat", () => {
 			aiTomTatPhamVi: "toan-cong-ty",
 		});
 		expect([
-			donViDuocBat(c, "de-xuat", phongA),
-			donViDuocBat(c, "tom-tat-tuan", phongA),
+			nacCuaDonVi(c, "de-xuat", phongA),
+			nacCuaDonVi(c, "tom-tat-tuan", phongA),
 		]).toEqual(["don-vi-chua-bat", "bat"]);
+	});
+});
+
+describe("nac", () => {
+	const DON_VI = {
+		OneHub: { onehub: true, boPhanId: null, phongBanId: null },
+		"bo phan B": { onehub: false, boPhanId: "bp-b", phongBanId: null },
+		"phong trong B": { onehub: false, boPhanId: "bp-b", phongBanId: "pb-b1" },
+		"phong ngoai B": { onehub: false, boPhanId: "bp-c", phongBanId: "pb-c1" },
+		"ca nhan trong B": {
+			onehub: false,
+			boPhanId: "bp-b",
+			phongBanId: "pb-b2",
+		},
+	} as const;
+
+	const PHAM_VI = {
+		tat: { phamVi: "tat", donVi: [] },
+		"toan-cong-ty": { phamVi: "toan-cong-ty", donVi: [] },
+		"danh-sach[]": { phamVi: "danh-sach", donVi: [] },
+		"danh-sach[onehub]": { phamVi: "danh-sach", donVi: ["onehub"] },
+		"danh-sach[bp-b]": { phamVi: "danh-sach", donVi: ["bp-b"] },
+	} as const;
+
+	const NAC = {
+		V: "viec-tat",
+		C: "don-vi-chua-bat",
+		A: "an",
+		B: "bat",
+	} as const;
+
+	const BANG_BAT = {
+		tat: {
+			tat: "VVVVV",
+			"toan-cong-ty": "AAAAA",
+			"danh-sach[]": "CCCCC",
+			"danh-sach[onehub]": "ACCCC",
+			"danh-sach[bp-b]": "CAACA",
+		},
+		"toan-cong-ty": {
+			tat: "BBBBB",
+			"toan-cong-ty": "BBBBB",
+			"danh-sach[]": "BBBBB",
+			"danh-sach[onehub]": "BBBBB",
+			"danh-sach[bp-b]": "BBBBB",
+		},
+		"danh-sach[]": {
+			tat: "CCCCC",
+			"toan-cong-ty": "AAAAA",
+			"danh-sach[]": "CCCCC",
+			"danh-sach[onehub]": "ACCCC",
+			"danh-sach[bp-b]": "CAACA",
+		},
+		"danh-sach[onehub]": {
+			tat: "BCCCC",
+			"toan-cong-ty": "BAAAA",
+			"danh-sach[]": "BCCCC",
+			"danh-sach[onehub]": "BCCCC",
+			"danh-sach[bp-b]": "BAACA",
+		},
+		"danh-sach[bp-b]": {
+			tat: "CBBCB",
+			"toan-cong-ty": "ABBAB",
+			"danh-sach[]": "CBBCB",
+			"danh-sach[onehub]": "ABBCB",
+			"danh-sach[bp-b]": "CBBCB",
+		},
+	} satisfies Record<
+		keyof typeof PHAM_VI,
+		Record<keyof typeof PHAM_VI, string>
+	>;
+
+	const cauHinh = (
+		viec: ViecTroLy,
+		aiOn: boolean,
+		bat: keyof typeof PHAM_VI,
+		an: keyof typeof PHAM_VI,
+	): OkrProgram => {
+		const b = PHAM_VI[bat];
+		const a = PHAM_VI[an];
+		return viec === "de-xuat"
+			? {
+					...OKR_PROGRAM_MAC_DINH,
+					aiOn,
+					aiDeXuatPhamVi: b.phamVi,
+					aiDeXuatDonVi: [...b.donVi],
+					aiDeXuatAnPhamVi: a.phamVi,
+					aiDeXuatAnDonVi: [...a.donVi],
+				}
+			: {
+					...OKR_PROGRAM_MAC_DINH,
+					aiOn,
+					aiTomTatPhamVi: b.phamVi,
+					aiTomTatDonVi: [...b.donVi],
+					aiTomTatAnPhamVi: a.phamVi,
+					aiTomTatAnDonVi: [...a.donVi],
+				};
+	};
+
+	test("nac: ma trận toàn phần aiOn × Bật cho × Chế độ ẩn cho × đơn vị, bật thắng ẩn", () => {
+		const tenPhamVi = Object.keys(PHAM_VI) as (keyof typeof PHAM_VI)[];
+		const tenDonVi = Object.keys(DON_VI) as (keyof typeof DON_VI)[];
+		const lech: string[] = [];
+		let soO = 0;
+		let soKhangDinh = 0;
+		for (const viec of VIEC_TRO_LY) {
+			for (const aiOn of [false, true]) {
+				for (const bat of tenPhamVi) {
+					for (const an of tenPhamVi) {
+						const ct = cauHinh(viec, aiOn, bat, an);
+						tenDonVi.forEach((dv, i) => {
+							soO += 1;
+							const chu = BANG_BAT[bat][an][i] as keyof typeof NAC;
+							const mong = aiOn ? NAC[chu] : "tat";
+							const ra = nacCuaDonVi(ct, viec, DON_VI[dv]);
+							soKhangDinh += 1;
+							if (ra !== mong) {
+								lech.push(
+									`${viec} aiOn=${aiOn} bat=${bat} an=${an} × ${dv}: mong ${mong}, ra ${ra}`,
+								);
+							}
+						});
+					}
+				}
+			}
+		}
+		console.log(`nac: ${soO} o, ${soKhangDinh} khang dinh`);
+		expect(lech).toEqual([]);
+		expect(soKhangDinh).toBe(soO);
+		expect(soO).toBe(VIEC_TRO_LY.length * 2 * 5 * 5 * 5);
+	});
+
+	test("nac: không có đơn vị, việc chỉ bật chế độ ẩn đọc là ẩn, không là việc tắt", () => {
+		const ct = (p: Partial<OkrProgram>) =>
+			okrProgram.parse({ ...OKR_PROGRAM_MAC_DINH, aiOn: true, ...p });
+		expect([
+			nacCuaViec(
+				ct({ aiOn: false, aiDeXuatPhamVi: "toan-cong-ty" }),
+				"de-xuat",
+			),
+			nacCuaViec(ct({ aiDeXuatPhamVi: "toan-cong-ty" }), "de-xuat"),
+			nacCuaViec(
+				ct({ aiDeXuatPhamVi: "danh-sach", aiDeXuatDonVi: ["onehub"] }),
+				"de-xuat",
+			),
+			nacCuaViec(ct({ aiDeXuatAnPhamVi: "toan-cong-ty" }), "de-xuat"),
+			nacCuaViec(ct({ aiDeXuatAnPhamVi: "toan-cong-ty" }), "tom-tat-tuan"),
+			nacCuaViec(ct({}), "de-xuat"),
+		]).toEqual(["tat", "bat", "bat", "an", "viec-tat", "viec-tat"]);
+	});
+
+	test("nac: hàng cấu hình cũ không có bốn trường ẩn đọc ra cả hai việc tắt", () => {
+		const ct = okrProgram.parse(HANG_CU);
+		expect({
+			deXuat: [ct.aiDeXuatPhamVi, ct.aiDeXuatAnPhamVi, ct.aiDeXuatAnDonVi],
+			tomTat: [ct.aiTomTatPhamVi, ct.aiTomTatAnPhamVi, ct.aiTomTatAnDonVi],
+		}).toEqual({ deXuat: ["tat", "tat", []], tomTat: ["tat", "tat", []] });
+		expect(ct).toEqual(OKR_PROGRAM_MAC_DINH);
+	});
+
+	test("nac: sửa một phần không tự đặt lại bốn trường ẩn", () => {
+		expect(okrProgramSua.parse({ aiOn: true })).toEqual({ aiOn: true });
+	});
+
+	test("nac: việc đề xuất cũ không mang nấc đọc là bật; nấc tắt không nhận", () => {
+		const viec = {
+			viec: "de-xuat",
+			objectiveId: "mt",
+			keyResultId: null,
+			nguoiYeuCau: "u",
+			inputHash: "h",
+		};
+		const cu = okrTroLyViec.parse(viec);
+		expect(cu.viec === "de-xuat" ? cu.nac : null).toBe("bat");
+		expect(okrTroLyViec.safeParse({ ...viec, nac: "an" }).success).toBe(true);
+		expect(okrTroLyViec.safeParse({ ...viec, nac: "tat" }).success).toBe(false);
+	});
+});
+
+describe("kieu-kr", () => {
+	test("sáu kiểu KR của hàm xu hướng khớp khuôn KR", () => {
+		expect([...KIEU_KR_DB]).toEqual([...KIEU_KR]);
 	});
 });

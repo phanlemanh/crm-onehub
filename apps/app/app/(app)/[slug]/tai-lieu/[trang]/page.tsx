@@ -59,7 +59,12 @@ async function NoiDung({ params }: { params: Params }) {
 					donVi: trang.donVi?.name ?? null,
 					phienBan: trang.phienBan,
 					noiDung: trang.noiDung ?? "",
-					choLanDau: trang.choLanDau !== null,
+					choLanDau: trang.choLanDau
+						? {
+								dangCho: trang.choLanDau.dangCho,
+								nguon: trang.choLanDau.nguon,
+							}
+						: null,
 					soBanCho,
 					deXuatChoId: choCuaTrang[0]?.id ?? null,
 					nguon: trang.nguon,

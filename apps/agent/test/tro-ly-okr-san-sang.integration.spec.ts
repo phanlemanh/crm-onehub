@@ -1,9 +1,26 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { db } from "@crm/db";
-import { DIRECT_KINDS } from "@crm/db/agent-tasks";
+import { DIRECT_KINDS, PRIORITY } from "@crm/db/agent-tasks";
 import { chiTieuThang } from "@crm/db/ai-chi-phi";
-import { troLyOkrSanSang, xepViecTroLy } from "@crm/db/okr-tro-ly";
-import { chayKiemSanSang } from "../agent/lib/okr/kiem-san-sang";
+import {
+	ketQuaKiemGanNhat,
+	troLyOkrSanSang,
+	xepViecTroLy,
+} from "@crm/db/okr-tro-ly";
+import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
+import { drainAll } from "../agent/lib/dispatch";
+import {
+	chayKiemSanSang,
+	xepKiemLaiKhoa,
+} from "../agent/lib/okr/kiem-san-sang";
 import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
 import {
 	donOkr,
@@ -173,9 +190,10 @@ describe("tro-ly-okr-san-sang", () => {
 			objectiveId: muc.onehub,
 			keyResultId: null,
 			nguoiYeuCau: nguoi,
+			nac: "bat",
 			now: HOM_NAY,
 		});
-		expect(het).toEqual({ xep: false, lyDo: "het-tran-thang" });
+		expect(het).toEqual({ bat: false, lyDo: "het-tran-thang" });
 		expect(await db.agentTask.count({ where: { kind: "okr-de-xuat" } })).toBe(
 			truoc,
 		);
@@ -192,6 +210,7 @@ describe("tro-ly-okr-san-sang", () => {
 					objectiveId: muc.onehub,
 					keyResultId: null,
 					nguoiYeuCau: nguoi,
+					nac: "bat",
 					now: HOM_NAY,
 				}),
 			),
@@ -203,7 +222,7 @@ describe("tro-ly-okr-san-sang", () => {
 			},
 		});
 		expect(hang.length).toBe(1);
-		expect([a?.xep && a.taskId, b?.xep && b.taskId]).toEqual([
+		expect([a?.bat && a.taskId, b?.bat && b.taskId]).toEqual([
 			hang[0]?.id,
 			hang[0]?.id,
 		]);
@@ -262,4 +281,109 @@ describe("kiem-san-sang", () => {
 		process.env.VERCEL_OIDC_TOKEN = "oidc-gia";
 		expect((await chay()).outcome).toBe("san-sang");
 	});
+});
+
+describe("kiem-khoa-het-han", () => {
+	const MOC = new Date("2033-08-01T02:00:00Z").getTime();
+	const HAN = TRO_LY_OKR_TRAN.hanKiemKhoaMs;
+	const PHUT = 60_000;
+	const khoa = {
+		AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
+		VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
+	};
+	let gui = 0;
+	const send = async (t: { id: string }) => {
+		gui += 1;
+		return { id: `ses-${t.id}` };
+	};
+	const viecKiem = () =>
+		db.agentTask.findMany({
+			where: { kind: "okr-kiem-san-sang", dueAt: { gte: new Date(MOC) } },
+			orderBy: { dueAt: "asc" },
+			select: { id: true, finishedAt: true, outcome: true },
+		});
+	const sanSang = () =>
+		troLyOkrSanSang(db, { viec: "de-xuat", now: new Date() }).then((r) =>
+			r.bat ? "bat" : r.lyDo,
+		);
+	const luc = (ms: number) => setSystemTime(new Date(ms));
+
+	afterEach(() => setSystemTime());
+
+	afterAll(async () => {
+		for (const [k, v] of Object.entries(khoa)) {
+			if (v === undefined) delete process.env[k];
+			else process.env[k] = v;
+		}
+		await db.agentTask.deleteMany({
+			where: { kind: "okr-kiem-san-sang", dueAt: { gte: new Date(MOC) } },
+		});
+	});
+
+	test("kiem-khoa-het-han: chưa có khoá chỉ chặn trong hạn; nhịp sau hạn xếp đúng một việc kiểm, không gọi model", async () => {
+		luc(MOC);
+		await db.agentTask.updateMany({
+			where: { finishedAt: null },
+			data: { finishedAt: new Date(MOC), outcome: "don-truoc-kiem-khoa" },
+		});
+		delete process.env.AI_GATEWAY_API_KEY;
+		delete process.env.VERCEL_OIDC_TOKEN;
+		await gieoCauHinhAi(new Date(MOC - PHUT), {
+			aiOn: true,
+			aiDeXuatPhamVi: "toan-cong-ty",
+			aiTranThangUsd: 9,
+		});
+		await db.agentTask.create({
+			data: {
+				kind: "okr-kiem-san-sang",
+				reason: "okr-kiem-san-sang",
+				priority: PRIORITY.okrKiem,
+				budget: 0,
+				dueAt: new Date(MOC),
+			},
+		});
+		await drainAll(send);
+		const dau = await ketQuaKiemGanNhat(db, new Date());
+		expect(dau?.ketQua).toBe("chua-co-khoa-mo-hinh");
+		expect(await sanSang()).toBe("chua-co-khoa-mo-hinh");
+		const hetDau = dau?.luc.getTime() ?? MOC;
+
+		luc(hetDau + HAN + PHUT);
+		await Promise.all([xepKiemLaiKhoa(), xepKiemLaiKhoa()]);
+		await xepKiemLaiKhoa();
+		expect((await viecKiem()).filter((v) => v.finishedAt === null).length).toBe(
+			1,
+		);
+		await drainAll(send);
+		const hai = await viecKiem();
+		expect(hai.map((v) => v.outcome)).toEqual([
+			"chua-co-khoa-mo-hinh",
+			"chua-co-khoa-mo-hinh",
+		]);
+		const hetHai =
+			(await ketQuaKiemGanNhat(db, new Date()))?.luc.getTime() ?? 0;
+
+		process.env.AI_GATEWAY_API_KEY = "khoa-gia";
+		luc(hetHai + HAN - PHUT);
+		await drainAll(send);
+		expect((await viecKiem()).length).toBe(2);
+		expect(await sanSang()).toBe("chua-co-khoa-mo-hinh");
+
+		luc(hetHai + HAN + PHUT);
+		await drainAll(send);
+		const sanSangSau = await sanSang();
+		if (sanSangSau === "chua-co-khoa-mo-hinh") {
+			throw new Error("kiem khoa cu chan mai");
+		}
+		const ba = await viecKiem();
+		expect(ba.map((v) => v.outcome)).toEqual([
+			"chua-co-khoa-mo-hinh",
+			"chua-co-khoa-mo-hinh",
+			"san-sang",
+		]);
+		expect(sanSangSau).toBe("bat");
+		await drainAll(send);
+		expect((await viecKiem()).length).toBe(3);
+		expect(gui).toBe(0);
+	}, 60_000);
 });
