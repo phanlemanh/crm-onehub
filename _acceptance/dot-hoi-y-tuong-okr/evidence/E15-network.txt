@@ -1,0 +1,1 @@
+network: script CDP/puppeteer; requestfailed+pageerror captured; 144 assertions 0 fail; app origin localhost:4765 api :4516 (ephemeral). E16 ghi 118 responses; 5 font body unreadable (static asset, note only).
