@@ -45,7 +45,7 @@ import { SkeletonSwap } from "../src/components/skeleton-swap";
 import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
-import { Suggestion } from "../src/components/suggestion";
+import { ProposedChange } from "../src/components/proposed-change";
 import { TablePagination } from "../src/components/table-pagination";
 import { TargetLineChart } from "../src/components/target-line-chart";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
@@ -308,11 +308,14 @@ const CA: Ca[] = [
 		),
 	},
 	{
-		ten: "Suggestion",
+		ten: "ProposedChange",
 		ve: () => (
-			<Suggestion onAccept={() => {}} onDismiss={() => {}}>
-				Đất Xanh
-			</Suggestion>
+			<ProposedChange
+				kind="rewrite"
+				value="Đất Xanh"
+				editing={{ value: "Đất Xanh", onChange: () => {}, onCancel: () => {} }}
+				actions={[]}
+			/>
 		),
 	},
 	{

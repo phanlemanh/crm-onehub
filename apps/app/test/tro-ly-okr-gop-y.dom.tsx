@@ -470,7 +470,7 @@ const nutLuuMucTieu = () =>
 
 function oSua(goc: ParentNode): HTMLTextAreaElement | null {
 	return goc.querySelector<HTMLTextAreaElement>(
-		'[data-slot="suggestion-edit"]',
+		'[data-slot="proposed-change-edit"]',
 	);
 }
 
@@ -641,7 +641,7 @@ const CA = {
 		expect(chu(cot())).toContain("Trợ lý OKR đang đọc Mục tiêu này…");
 		expect(cot()?.getAttribute("aria-busy")).toBe("true");
 		expect(cot()?.querySelectorAll("[data-khung-dong]")).toHaveLength(3);
-		expect(hopMucTieu()?.getAttribute("data-size")).toBe("wide");
+		expect(hopMucTieu()?.getAttribute("data-size")).toBe("assist");
 		expect(
 			cot()?.querySelector(`button[aria-label="${m.cot.dong}"]`),
 		).not.toBeNull();
@@ -682,9 +682,9 @@ const CA = {
 			[...(can?.querySelectorAll("button") ?? [])].map((b) =>
 				b.textContent?.trim(),
 			),
-		).toEqual(["Nhận", "Bác"]);
+		).toEqual(["Căn chỉnh", "Bác"]);
 		expect(chu(can)).toContain(D_CAN.tenDich ?? "");
-		expect(hopMucTieu()?.getAttribute("data-size")).toBe("wide");
+		expect(hopMucTieu()?.getAttribute("data-size")).toBe("assist");
 	},
 
 	"ST-muctieu-sua-dong": async () => {
@@ -729,7 +729,7 @@ const CA = {
 			() => chu(dongCua(D_TEN.id)) === "Tên Mục tiêu — Đã nhận",
 			"dong ten thu gon da nhan",
 		);
-		expect(dongCua(D_TEN.id)?.getAttribute("data-da-quyet")).toBe("accepted");
+		expect(dongCua(D_TEN.id)?.getAttribute("data-decided")).toBe("accepted");
 		expect(dongCua(D_TEN.id)?.querySelector("del, ins")).toBeNull();
 		expect(goiCua("okr.troLyQuyet")[0]?.dauVao).toEqual({
 			deXuatId: D_TEN.id,
@@ -818,7 +818,7 @@ const CA = {
 		await moHopMucTieu();
 		await cho(() => nutCo("3 đề xuất đang chờ") !== null, "nut dang cho");
 		await cho(() => dongCua(D_TEN.id) !== null, "cot da hien khi mo hop");
-		expect(hopMucTieu()?.getAttribute("data-size")).toBe("wide");
+		expect(hopMucTieu()?.getAttribute("data-size")).toBe("assist");
 		expect(goiCua("okr.troLyDeXuat")).toHaveLength(0);
 		await bam(
 			nutNhan(
@@ -850,7 +850,7 @@ const CA = {
 				d.getAttribute("data-dong"),
 			),
 		).toEqual([D_KR.id, D_HOI.id]);
-		expect(hopKr()?.getAttribute("data-size")).toBe("wide");
+		expect(hopKr()?.getAttribute("data-size")).toBe("assist");
 	},
 
 	"ST-kr-xu-huong": async () => {
@@ -1035,7 +1035,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		);
 		await moCotCoDong();
 		await bam(nut("Nhận", dongCua(D_TEN.id) ?? document));
-		const nhanCan = nut("Nhận", dongCua(D_CAN.id) ?? document);
+		const nhanCan = nut("Căn chỉnh", dongCua(D_CAN.id) ?? document);
 		expect(nhanCan.disabled).toBe(true);
 		expect(
 			chu(
@@ -1049,7 +1049,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 			() => chu(dongCua(D_TEN.id)) === "Tên Mục tiêu — Đã nhận",
 			"da nhan",
 		);
-		expect(nut("Nhận", dongCua(D_CAN.id) ?? document).disabled).toBe(false);
+		expect(nut("Căn chỉnh", dongCua(D_CAN.id) ?? document).disabled).toBe(false);
 	});
 
 	test("trang-thai khong-giu-o-sua: go o sua roi Nhan ban da sua, dong hop khong hoi bo thay doi", async () => {

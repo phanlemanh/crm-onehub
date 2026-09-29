@@ -15,8 +15,6 @@ export function laTuThongBao(event: { target: EventTarget | null }) {
 export function laEscTuOSuaDeXuat(event: { target: EventTarget | null }) {
 	return (
 		event.target instanceof Element &&
-		event.target.closest(
-			'[data-slot="suggestion-edit"], [data-slot="proposed-change-edit"]',
-		) !== null
+		event.target.closest('[data-slot="proposed-change-edit"]') !== null
 	);
 }

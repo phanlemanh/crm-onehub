@@ -42,6 +42,7 @@ const { HopThoaiMucTieu } = await import(
 const { HopThoaiKr } = await import("@/app/(app)/[slug]/okr/hop-thoai-kr");
 const { FactSuggestion } = await import("@/components/crm/facts");
 const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
+type ContactFact = import("@/lib/contact-facts").ContactFact;
 
 const m = okrGopYMessages("vi");
 
@@ -179,7 +180,8 @@ describe("the-gop-y-okr — sửa rồi nhận", () => {
 
 		await bam(nut(m.dong.sua, the(D_TEN.id)));
 		await phim(oSua(the(D_TEN.id)), "Escape");
-		if (hopMucTieu() === null || hop.dong() > 0) throw new Error("esc dong hop");
+		if (hopMucTieu() === null || hop.dong() > 0)
+			throw new Error("esc dong hop");
 		expect(oSua(the(D_TEN.id))).toBeNull();
 		expect(nutCo(m.dong.nhan, the(D_TEN.id))).not.toBeNull();
 		expect(goiCua("okr.troLyQuyet")).toHaveLength(0);
@@ -204,7 +206,9 @@ describe("the-gop-y-okr — mở KR từ câu hỏi", () => {
 		);
 		const u = userEvent.setup({ document, pointerEventsCheck: 0 });
 		await cho(
-			() => document.querySelector('button[aria-label="Thao tác với mục tiêu"]') !== null,
+			() =>
+				document.querySelector('button[aria-label="Thao tác với mục tiêu"]') !==
+				null,
 			"nut menu muc tieu",
 		);
 		const menu = document.querySelector<HTMLButtonElement>(
@@ -395,7 +399,7 @@ describe("the-gop-y-okr — phím trong cột", () => {
 		for (const k of ["j", "k", "Enter", "e"]) await phim(ten, k);
 		if (goiCua("okr.troLyQuyet").length !== 1 || oSua(document) !== null)
 			throw new Error("phim ngoai cot");
-		expect(document.activeElement).toBe(ten);
+		expect(document.activeElement === ten).toBe(true);
 	});
 });
 
@@ -441,14 +445,16 @@ function dichCua(): DichBam[] {
 		{
 			ten: "chu cau moi",
 			lay: () =>
-				cot()?.querySelector('[data-the-cho] [data-slot="proposed-change-value"]') ??
-				null,
+				cot()?.querySelector(
+					'[data-the-cho] [data-slot="proposed-change-value"]',
+				) ?? null,
 		},
 		{
 			ten: "khoang trong giua hai nut",
 			lay: () =>
-				cot()?.querySelector('[data-the-cho] [data-slot="proposed-change-actions"]') ??
-				null,
+				cot()?.querySelector(
+					'[data-the-cho] [data-slot="proposed-change-actions"]',
+				) ?? null,
 		},
 		{ ten: "tieu de cot", lay: () => cot()?.querySelector("p") ?? null },
 	];
@@ -521,7 +527,9 @@ function idBang(): string[] {
 	const dau = chu.indexOf("<<<UX-STATE-TABLE");
 	const cuoi = chu.indexOf("UX-STATE-TABLE>>>");
 	if (dau < 0 || cuoi < dau) throw new Error("khong thay bang UX-STATE-TABLE");
-	return [...chu.slice(dau, cuoi).matchAll(/^\|\s*(ST-thegopy-[a-z0-9-]+)\s*\|/gm)]
+	return [
+		...chu.slice(dau, cuoi).matchAll(/^\|\s*(ST-thegopy-[a-z0-9-]+)\s*\|/gm),
+	]
 		.map((k) => k[1] ?? "")
 		.filter((id) => id !== "");
 }
@@ -532,11 +540,11 @@ async function caCho() {
 	await moHopMucTieu([D_TEN]);
 	await nhoGopY(D_TEN.id);
 	const t = the(D_TEN.id);
-	expect(t.querySelector('[data-slot="proposed-change-label"]')?.textContent).toBe(
-		`${m.dong.loai["viet-lai"]} · ${m.dong.truong.title}`,
-	);
-	expect(t.querySelector("del")?.textContent).toBe(D_TEN.truoc);
-	expect(t.querySelector("ins")?.textContent).toBe(D_TEN.sau);
+	expect(
+		t.querySelector('[data-slot="proposed-change-label"]')?.textContent,
+	).toBe(`${m.dong.loai["viet-lai"]} · ${m.dong.truong.title}`);
+	expect(t.querySelector("del")?.textContent).toBe(D_TEN.truoc ?? "");
+	expect(t.querySelector("ins")?.textContent).toBe(D_TEN.sau ?? "");
 	expect(hangNut(t)).toEqual([
 		{ chu: m.dong.nhan, kieu: "default" },
 		{ chu: m.dong.sua, kieu: "outline" },
@@ -561,7 +569,9 @@ async function caDangGui() {
 	await nhoGopY(D_TEN.id);
 	await bam(nut(m.dong.nhan, the(D_TEN.id)));
 	const t = the(D_TEN.id);
-	expect(nutChinh(t)[0]?.querySelector('[data-slot="spinner"], svg')).not.toBeNull();
+	expect(
+		nutChinh(t)[0]?.querySelector('[data-slot="spinner"], svg'),
+	).not.toBeNull();
 	expect([...t.querySelectorAll("button")].every((b) => b.disabled)).toBe(true);
 }
 
@@ -655,7 +665,7 @@ async function caKr() {
 	).toEqual([D_KR.id]);
 }
 
-const FACT = {
+const FACT: ContactFact = {
 	id: "fact-1",
 	field: "jobTitle",
 	value: "Giám đốc kinh doanh miền Bắc",
@@ -669,7 +679,7 @@ const FACT = {
 	sourceUrl: null,
 	status: "PROPOSED",
 	observedAt: "2026-09-20T03:00:00.000Z",
-} as const;
+};
 
 async function moThongTin(): Promise<void> {
 	datMacDinh([]);
@@ -685,7 +695,9 @@ async function moThongTin(): Promise<void> {
 
 async function caThongTin() {
 	await moThongTin();
-	const t = document.querySelector<HTMLElement>('[data-slot="proposed-change"]');
+	const t = document.querySelector<HTMLElement>(
+		'[data-slot="proposed-change"]',
+	);
 	if (!t) throw new Error("khong thay the thong tin");
 	expect(t.getAttribute("data-kind")).toBe("compact");
 	expect(hangNut(t)).toEqual([
@@ -781,5 +793,3 @@ describe("the-gop-y-okr — gợi ý thông tin của Cá nhân", () => {
 		expect(nut("Bác").disabled).toBe(false);
 	});
 });
-
-export {};
