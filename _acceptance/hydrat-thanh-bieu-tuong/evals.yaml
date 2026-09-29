@@ -52,7 +52,7 @@ evals:
       may chu BANG mucRailChoVai("okr").length; sau hydrat BANG cung so; va so do < MUC_RAIL.length (doi chung
       duong: vai okr that su rut gon, ca khong xanh vi hai so trung nhau).
       CHIEU DO: ban truoc vong -> HTML may chu la ban cho, so lien ket 0 thay 4 (expect toBe(4) received 0).
-      Ban sao truyen mucRailChoVai(null) bat ke prop -> fail so lien ket 9 thay 4.
+      Ban sao truyen mucRailChoVai(null) bat ke prop -> fail so lien ket 10 thay 4 (expect toBe(4) received 10).
   - id: E4
     criterion: AC-4
     executor: test
@@ -69,7 +69,7 @@ evals:
       cache trinh duyet. Assert: truoc BANG MUC_RAIL.length; sau BANG mucRailChoVai("okr").length.
       Ca nay giu hanh vi co san (thanh theo truy van) — ban truoc vong cung xanh o buoc sau.
       CHIEU DO (cung fixture): ban sao app-icon-rail.tsx bo useQuery (chi dung prop) -> fail o assert sau:
-      expected 4 received 9.
+      expected 4 received 10.
   - id: E5
     criterion: AC-5
     executor: test
@@ -115,7 +115,10 @@ evals:
       CHIEU DO 2: layout.tsx truyen workspace={{ viewerRole: "admin" }} go cung -> exit 1 voi
       "html may chu chiOkr ...: 10 lien ket thay 4".
       CHIEU DO 3 (bo nghe): ban sao app-icon-rail.tsx them aria-busy={typeof window === "undefined" ? "true" : undefined}
-      tren nav ban du -> exit 1 voi "loi hydrat cua thanh: <k>/<n> luot", k > 0.
+      tren nav ban du -> exit 1 voi "loi hydrat cua thanh: <k>/<n> luot", k > 0 (React 19 khong va thuoc tinh lech, nen
+      kem "sau tai <nguoi> ...: thanh con ban").
+      Da chay o S3 (LUOT=2): chieu do 1 -> 16 hong, chieu do 2 -> 4 hong "10 lien ket thay 4", chieu do 3 -> "loi hydrat
+      cua thanh: 16"; chieu xanh (LUOT=8) -> 49 kiem, 0 hong, 64 luot, 0 loi hydrat.
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
   - id: E7
     criterion: AC-7

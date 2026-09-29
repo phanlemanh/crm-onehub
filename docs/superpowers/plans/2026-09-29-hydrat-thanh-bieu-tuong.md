@@ -39,12 +39,12 @@
 **Interfaces:**
 - Produces: `export type RailWorkspace = { viewerRole: string | null }` và `AppIconRail({ workspace }: { workspace: RailWorkspace | null })`.
 
-- [ ] **Step 1: Xác nhận test đỏ**
+- [x] **Step 1: Xác nhận test đỏ**
 
 Run: `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx`
 Expected: 2 pass (e0), 5 fail (e1–e5), e1/e2 mang «Hydration failed».
 
-- [ ] **Step 2: Sửa `AppIconRail`**
+- [x] **Step 2: Sửa `AppIconRail`**
 
 ```tsx
 import { useHydrated } from "@/lib/use-hydrated";
@@ -73,7 +73,7 @@ export function AppIconRail({
 }
 ```
 
-- [ ] **Step 3: Sửa `RailTheoVai`**
+- [x] **Step 3: Sửa `RailTheoVai`**
 
 ```tsx
 async function RailTheoVai() {
@@ -90,15 +90,15 @@ async function RailTheoVai() {
 }
 ```
 
-- [ ] **Step 4: Chạy test**
+- [x] **Step 4: Chạy test**
 
 Run: lệnh Step 1. Expected: 7 pass, 0 fail.
 
-- [ ] **Step 5: Kiểu, lint**
+- [x] **Step 5: Kiểu, lint**
 
 Run: `bun run check-types && bun run lint && bun run lint:slop`. Expected: exit 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/app/components/app-icon-rail.tsx "apps/app/app/(app)/[slug]/layout.tsx"
@@ -111,10 +111,10 @@ git commit -m "fix(app): thanh biểu tượng hydrat theo vai máy chủ, khôn
 
 **Files:** không sửa tệp nào được commit; mỗi phá-thử làm trên cây ĐÃ commit rồi `git checkout -- <tệp>`.
 
-- [ ] **Step 1: E1–E3, E5 — bản trước vòng.** `git show origin/onehub:apps/app/components/app-icon-rail.tsx > apps/app/components/app-icon-rail.tsx` → chạy `htbt_e1/e2/e3/e5` → mỗi lệnh exit ≠ 0 với thông điệp đã khai; `git checkout -- apps/app/components/app-icon-rail.tsx`.
-- [ ] **Step 2: E5 — bỏ cổng `useHydrated`.** Đổi `(hydrated ? workspaceQuery.data : undefined)` thành `workspaceQuery.data` → `htbt_e5` fail «Hydration failed»; khôi phục.
-- [ ] **Step 3: E4 — bỏ `useQuery`.** Đổi nguồn thành `workspace` → `htbt_e4` fail «expected 4 received 10»; khôi phục.
-- [ ] **Step 4: E3 — bỏ vai.** Đổi `mucRailChoVai(viewerRole)` thành `mucRailChoVai(null)` → `htbt_e3` fail «10 thay 4»; khôi phục.
-- [ ] **Step 5: E7 — prop thiếu.** `layout.tsx` gọi `<AppIconRail />` → `check-types` fail TS2741; khôi phục.
-- [ ] **Step 6: E6u — ba chiều đỏ trên ứng dụng thật** (phiên đo, mỗi lượt ~8 phút, `LUOT=2` đủ cho chiều đỏ): (1) layout truyền `null` → «thanh may chu van ban cho»; (2) layout truyền `{ viewerRole: "admin" }` → «10 lien ket thay 4»; (3) nav bản đủ thêm `aria-busy={typeof window === "undefined" ? "true" : undefined}` → «loi hydrat cua thanh: k/n luot», k > 0. Khôi phục sau mỗi lượt; cuối cùng `git status` sạch ngoài `_acceptance/`.
-- [ ] **Step 7: Chiều xanh E6u** trên cây đã sửa, `LUOT` mặc định 8 → «0 hong», «loi hydrat cua thanh: 0».
+- [x] **Step 1: E1–E3, E5 — bản trước vòng.** `git show origin/onehub:apps/app/components/app-icon-rail.tsx > apps/app/components/app-icon-rail.tsx` → chạy `htbt_e1/e2/e3/e5` → mỗi lệnh exit ≠ 0 với thông điệp đã khai; `git checkout -- apps/app/components/app-icon-rail.tsx`.
+- [x] **Step 2: E5 — bỏ cổng `useHydrated`.** Đổi `(hydrated ? workspaceQuery.data : undefined)` thành `workspaceQuery.data` → `htbt_e5` fail «Hydration failed»; khôi phục.
+- [x] **Step 3: E4 — bỏ `useQuery`.** Đổi nguồn thành `workspace` → `htbt_e4` fail «expected 4 received 10»; khôi phục.
+- [x] **Step 4: E3 — bỏ vai.** Đổi `mucRailChoVai(viewerRole)` thành `mucRailChoVai(null)` → `htbt_e3` fail «10 thay 4»; khôi phục.
+- [x] **Step 5: E7 — prop thiếu.** `layout.tsx` gọi `<AppIconRail />` → `check-types` fail TS2741; khôi phục.
+- [x] **Step 6: E6u — ba chiều đỏ trên ứng dụng thật** (phiên đo, mỗi lượt ~8 phút, `LUOT=2` đủ cho chiều đỏ): (1) layout truyền `null` → «thanh may chu van ban cho»; (2) layout truyền `{ viewerRole: "admin" }` → «10 lien ket thay 4»; (3) nav bản đủ thêm `aria-busy={typeof window === "undefined" ? "true" : undefined}` → «loi hydrat cua thanh: k/n luot», k > 0. Khôi phục sau mỗi lượt; cuối cùng `git status` sạch ngoài `_acceptance/`.
+- [x] **Step 7: Chiều xanh E6u** trên cây đã sửa, `LUOT` mặc định 8 → «0 hong», «loi hydrat cua thanh: 0».
