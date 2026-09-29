@@ -1,0 +1,12 @@
+{
+  "feature_plain": "Thanh biểu tượng bên trái hiện giống hệt nhau ở máy chủ và trên trình duyệt ngay lần tải đầu, nên hết lỗi «Hydration failed» chập chờn và các phép đo màn không còn lật màu vì nó.",
+  "scope_plain": "Bốn việc cố ý để ngoài vòng này, mỗi việc đi đường riêng:",
+  "decisions_plain": [
+    {"id": "d-20260928T234710Z-1", "p": "KHÔNG chạy quét độ phủ tự động — bốn trục (cache hai phía, vai, thời điểm) liệt tay đủ; đổi lại không có bằng chứng độ phủ từ công cụ quét."},
+    {"id": "d-20260928T234710Z-2", "p": "KHÔNG làm phiên thiết kế giao diện — thanh trông y như cũ, chỉ đổi nguồn dữ liệu của lần vẽ đầu; đổi lại cổng đầu duyệt bằng chữ."},
+    {"id": "d-20260928T234710Z-3", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn, luồng hay trạng thái mới nào."},
+    {"id": "d-20260928T234710Z-4", "p": "Chọn: máy chủ đưa vai xuống cho thanh, lần vẽ đầu chỉ dùng vai đó; loại ba cách khác vì hoặc còn lệch khi máy chủ lỗi, hoặc mất việc thanh tự cập nhật, hoặc đổi cách nạp dữ liệu của mọi màn."},
+    {"id": "d-20260928T234710Z-5", "p": "KHÔNG sửa đầu trang (tên workspace) trong vòng này dù cùng họ lỗi — đã mở việc riêng."},
+    {"id": "d-20260928T235057Z-6", "p": "Giữ phép đo trên ứng dụng thật dù bản cũ cũng qua được (không tái hiện được lỗi thật): nó đo được đường máy chủ đưa vai xuống thanh và có ảnh thanh của hai vai để người nhìn."}
+  ]
+}

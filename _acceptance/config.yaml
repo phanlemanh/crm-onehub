@@ -873,9 +873,15 @@ executors:
     gdtt_man_quyen: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/giai-doan-cai-dat.dom.tsx -t khong-quyen'
     gdtt_man_timeline: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/giai-doan-timeline.dom.tsx'
     gdtt_man_trang_thai: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/giai-doan-cai-dat.dom.tsx -t trang-thai'
+    htbt_e1: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e1 '
+    htbt_e2: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e2 '
+    htbt_e3: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e3 '
+    htbt_e4: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e4 '
+    htbt_e5: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e5 '
   script:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
+    htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
     mctkkn_khoa_rong: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/khoa-rong.mjs
     mctkkn_chieu_do: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/chieu-do-can-khoa.mjs
     mctkkn_ten_khoa: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/ten-khoa.mjs
