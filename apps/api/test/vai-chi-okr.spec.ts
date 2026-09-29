@@ -2071,7 +2071,7 @@ async function oDocAn(
 		kq.cauKhac.push(`${o}: 403 sai cau «${r.message}»`);
 	const so = demChuoi(bc, r.chu);
 	kq.bang.push(`${o} | ${r.status} | ${Object.values(so).join(" ")}`);
-	if (ai !== "K") ghiLo(kq, o, so);
+	if (ai !== "K" || d.K === "vang") ghiLo(kq, o, so);
 	const dau = d.dau ?? "tieuDeG";
 	if (ai === "K" && d.K === "chua-G" && !d.chiQuanTri && so[dau] < 1)
 		kq.thieu.push(`${o} | thieu ${dau}`);
@@ -2378,7 +2378,10 @@ describe("hien-thi-an", () => {
 				);
 				expect(kq.soDong).toBe(thuTuc.length);
 				expect(kq.trangThai).toEqual(kq.cho);
-				expect(kq.lo, "M, O nhan chuoi cua G").toEqual([]);
+				expect(
+					kq.lo,
+					"M, O nhan chuoi cua G; K nhan chuoi cua G o dong K vang",
+				).toEqual([]);
 				expect(kq.thieu, "K khong thay G o dong chua G").toEqual([]);
 				expect(kq.cauKhac, "404 khac cau ma khong co / 403 sai cau").toEqual(
 					[],
