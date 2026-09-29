@@ -85,7 +85,6 @@ export function QuickSwitcher({ coDoiTac }: { coDoiTac: boolean }) {
 
 	const moTrang = (slug: string) => {
 		setQuery("");
-		void setOpen(null);
 		router.push(url(duongTrang(slug)));
 	};
 
