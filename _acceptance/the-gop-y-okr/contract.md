@@ -5,7 +5,7 @@ slug: the-gop-y-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-29
 design_doc: docs/superpowers/specs/2026-09-29-the-gop-y-okr-design.md
