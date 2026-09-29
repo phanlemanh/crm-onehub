@@ -184,6 +184,7 @@ const en = {
 	saveBar: {
 		hienDanhSach: "Show the list",
 		anDanhSach: "Hide the list",
+		cuonThem: "Scroll the list to see the rest",
 	},
 };
 
@@ -372,6 +373,7 @@ const vi = {
 	saveBar: {
 		hienDanhSach: "Xem danh sách",
 		anDanhSach: "Ẩn danh sách",
+		cuonThem: "Cuộn danh sách để xem phần còn lại",
 	},
 } satisfies Messages;
 

@@ -164,8 +164,6 @@ function FormHoiY({
 	);
 
 	const khoaNoiDung = sua !== null && sua.trangThai !== "dang-mo";
-	const khoaCauHoi =
-		khoaNoiDung || (sua !== null && sua.y.ds.length + sua.cuaToi.y.length > 0);
 	const hanLuc = ngay && gio ? hanLucTu(ngay, gio) : "";
 	const soLieu = dong.map((d) => ({
 		nhan: d.nhan.trim(),
@@ -185,7 +183,7 @@ function FormHoiY({
 	const thayDoi = sua && {
 		hoiYId: sua.hoiY.id,
 		cauHoi:
-			!khoaCauHoi && vao.cauHoi !== sua.hoiY.cauHoi ? vao.cauHoi : undefined,
+			!khoaNoiDung && vao.cauHoi !== sua.hoiY.cauHoi ? vao.cauHoi : undefined,
 		loiMo: !khoaNoiDung && vao.loiMo !== sua.hoiY.loiMo ? vao.loiMo : undefined,
 		soLieu:
 			!khoaNoiDung && JSON.stringify(soLieu) !== JSON.stringify(sua.hoiY.soLieu)
@@ -196,7 +194,7 @@ function FormHoiY({
 	};
 	const loiHan: LoiHan = sua
 		? doiHan
-			? kiemHanSua(hanLuc, sua.hoiY.createdAt)
+			? kiemHanSua(hanLuc, sua.hoiY.createdAt, Date.now())
 			: null
 		: kiemHan(hanLuc, Date.now());
 	const coThayDoi =
@@ -208,7 +206,7 @@ function FormHoiY({
 			? coThayDoi && suaHoiYInput.safeParse(thayDoi).success
 			: moHoiYInput.safeParse(vao).success);
 	const cauHoiSai =
-		!khoaCauHoi && !moHoiYInput.shape.cauHoi.safeParse(cauHoi).success;
+		!khoaNoiDung && !moHoiYInput.shape.cauHoi.safeParse(cauHoi).success;
 	const loiDong = (d: DongNhap, so: number): string | null => {
 		if (!daCham.has(d.id)) return null;
 		if (!dongSoLieuHoiY.shape.nhan.safeParse(d.nhan).success)
@@ -241,9 +239,11 @@ function FormHoiY({
 			? m.loiHanThieu
 			: loiHan === "som"
 				? dien(m.loiHanSom, { n: OKR_HOI_Y.hanGio.min })
-				: loiHan === "muon"
-					? dien(m.loiHanMuon, { n: OKR_HOI_Y.hanGio.max })
-					: null;
+				: loiHan === "qua"
+					? m.loiHanQua
+					: loiHan === "muon"
+						? dien(m.loiHanMuon, { n: OKR_HOI_Y.hanGio.max })
+						: null;
 	const dangGui = mo.isPending || luu.isPending;
 	const loiMay = (sua ? luu.error : mo.error)?.message ?? null;
 	const nguoiChonDuoc = [
@@ -298,7 +298,7 @@ function FormHoiY({
 						<FieldLabel htmlFor={`${id}-cau-hoi`}>{m.cauHoi}</FieldLabel>
 						<Textarea
 							aria-invalid={cauHoiSai ? true : undefined}
-							disabled={khoaCauHoi}
+							disabled={khoaNoiDung}
 							id={`${id}-cau-hoi`}
 							maxLength={OKR_HOI_Y.cauHoi.max}
 							onChange={(e) => setCauHoi(e.target.value)}
@@ -313,9 +313,7 @@ function FormHoiY({
 								})}
 							</FieldError>
 						) : (
-							<FieldDescription>
-								{khoaCauHoi && !khoaNoiDung ? m.cauHoiKhoa : m.cauHoiMoTa}
-							</FieldDescription>
+							<FieldDescription>{m.cauHoiMoTa}</FieldDescription>
 						)}
 					</Field>
 					<Field>
@@ -477,9 +475,9 @@ function FormHoiY({
 						</FieldDescription>
 					</Field>
 				</FieldGroup>
-				{loiMay ? <FieldError data-khoi="loi-may">{loiMay}</FieldError> : null}
 			</div>
 			<SheetFooter>
+				{loiMay ? <FieldError data-khoi="loi-may">{loiMay}</FieldError> : null}
 				<div className="flex items-center justify-between gap-2">
 					<SheetClose asChild>
 						<Button data-nut="huy-sheet" type="button" variant="outline">

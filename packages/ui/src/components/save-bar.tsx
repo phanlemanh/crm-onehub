@@ -25,12 +25,77 @@ function SaveBarViewport({ children }: { children: React.ReactNode }) {
 	);
 }
 
+type SaveBarLayout = "inline" | "checklist";
+
+function SaveBarList({
+	id,
+	items,
+	layout,
+	open,
+}: {
+	id: string;
+	items: SaveBarItem[];
+	layout: SaveBarLayout;
+	open: boolean;
+}) {
+	const msg = useMessages();
+	const ref = React.useRef<HTMLUListElement>(null);
+	const [overflows, setOverflows] = React.useState(false);
+
+	React.useLayoutEffect(() => {
+		const el = ref.current;
+		if (!el || layout !== "checklist") return;
+		const measure = () =>
+			setOverflows(open && el.scrollHeight > el.clientHeight + 1);
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(el);
+		return () => observer.disconnect();
+	}, [items, layout, open]);
+
+	return (
+		<>
+			<ul
+				className={cn(
+					"flex-col items-start",
+					layout === "inline"
+						? cn("mt-1", open ? "flex" : "hidden md:flex")
+						: cn(
+								"max-h-24 w-full overflow-y-auto overscroll-contain md:max-h-40",
+								open ? "flex" : "hidden",
+								overflows &&
+									"mask-b-from-80% border-b",
+							),
+				)}
+				data-mo={open}
+				data-tran={overflows || undefined}
+				id={id}
+				ref={ref}
+			>
+				{items.map((item) => (
+					<li key={item.id}>
+						<Button asChild size="xs-wrap" variant="link">
+							<a href={item.href}>{item.label}</a>
+						</Button>
+					</li>
+				))}
+			</ul>
+			{overflows ? (
+				<p className="text-muted-foreground text-xs" data-slot="save-bar-scroll-hint">
+					{msg.saveBar.cuonThem}
+				</p>
+			) : null}
+		</>
+	);
+}
+
 function SaveBar({
 	children,
 	className,
-	defaultOpen,
+	defaultOpen = false,
 	description,
 	items,
+	layout = "inline",
 	open,
 	title,
 	...props
@@ -38,13 +103,40 @@ function SaveBar({
 	defaultOpen?: boolean;
 	description?: React.ReactNode;
 	items?: SaveBarItem[];
+	layout?: SaveBarLayout;
 	open: boolean;
 	title: React.ReactNode;
 }) {
 	const viewport = React.useContext(SaveBarViewportContext);
 	const msg = useMessages();
 	const idDanhSach = React.useId();
-	const [moDanhSach, setMoDanhSach] = React.useState(defaultOpen ?? false);
+	const [moDanhSach, setMoDanhSach] = React.useState(defaultOpen);
+	const checklist = layout === "checklist";
+
+	const toggle = items ? (
+		<Button
+			aria-controls={idDanhSach}
+			aria-expanded={moDanhSach}
+			className={checklist ? undefined : "md:hidden"}
+			onClick={() => setMoDanhSach((mo) => !mo)}
+			size="xs"
+			type="button"
+			variant="ghost"
+		>
+			{moDanhSach ? msg.saveBar.anDanhSach : msg.saveBar.hienDanhSach}
+		</Button>
+	) : null;
+
+	const heading = (
+		<>
+			<p className={cn("font-medium text-sm", checklist ? "text-pretty" : "truncate")}>
+				{title}
+			</p>
+			{description ? (
+				<p className="truncate text-muted-foreground text-xs">{description}</p>
+			) : null}
+		</>
+	);
 
 	const bar = (
 		<div
@@ -54,69 +146,53 @@ function SaveBar({
 				open
 					? "translate-y-0 opacity-100 starting:translate-y-[calc(100%+1.25rem)] starting:opacity-0"
 					: "pointer-events-none hidden translate-y-[calc(100%+1.25rem)] opacity-0",
-				items ? "items-start" : "items-center",
+				checklist ? "flex-col gap-2" : items ? "items-start" : "items-center",
 				className,
 			)}
+			data-layout={layout}
 			data-slot="save-bar"
 			data-state={open ? "open" : "closed"}
 			inert={open ? undefined : true}
 			role={items ? "status" : undefined}
 			{...props}
 		>
-			<div className="min-w-0 flex-1">
-				<p
-					className={cn(
-						"font-medium text-sm",
-						defaultOpen === undefined ? "truncate" : "text-pretty",
-					)}
-				>
-					{title}
-				</p>
-				{description ? (
-					<p className="truncate text-muted-foreground text-xs">{description}</p>
-				) : null}
-				{items ? (
-					<ul
-						className={cn(
-							"mt-1 flex-col items-start",
-							defaultOpen === undefined
-								? moDanhSach
-									? "flex"
-									: "hidden md:flex"
-								: moDanhSach
-									? "flex max-h-40 overflow-y-auto"
-									: "hidden",
-						)}
-						data-mo={moDanhSach}
-						id={idDanhSach}
-					>
-						{items.map((item) => (
-							<li key={item.id}>
-								<Button asChild size="xs-wrap" variant="link">
-									<a href={item.href}>{item.label}</a>
-								</Button>
-							</li>
-						))}
-					</ul>
-				) : null}
-			</div>
-
-			<div className="flex shrink-0 items-center gap-2">
-				{items ? (
-					<Button
-						aria-controls={idDanhSach}
-						aria-expanded={moDanhSach}
-						className={defaultOpen === undefined ? "md:hidden" : undefined}
-						onClick={() => setMoDanhSach((mo) => !mo)}
-						size="xs"
-						type="button"
-						variant="ghost"
-					>
-						{moDanhSach ? msg.saveBar.anDanhSach : msg.saveBar.hienDanhSach}
-					</Button>
-				) : null}
-				{children}
-			</div>
+			{checklist ? (
+				<>
+					<div className="flex items-start gap-4">
+						<div className="min-w-0 flex-1">{heading}</div>
+						<div className="flex shrink-0 items-center gap-2">
+							{toggle}
+							{children}
+						</div>
+					</div>
+					{items ? (
+						<SaveBarList
+							id={idDanhSach}
+							items={items}
+							layout={layout}
+							open={moDanhSach}
+						/>
+					) : null}
+				</>
+			) : (
+				<>
+					<div className="min-w-0 flex-1">
+						{heading}
+						{items ? (
+							<SaveBarList
+								id={idDanhSach}
+								items={items}
+								layout={layout}
+								open={moDanhSach}
+							/>
+						) : null}
+					</div>
+					<div className="flex shrink-0 items-center gap-2">
+						{toggle}
+						{children}
+					</div>
+				</>
+			)}
 		</div>
 	);
 

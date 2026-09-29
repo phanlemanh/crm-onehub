@@ -161,11 +161,16 @@ export function gioVN(iso: string): string {
 	return `${lay("hour")}:${lay("minute")}`;
 }
 
-export type LoiHan = "thieu" | "som" | "muon" | null;
+export type LoiHan = "thieu" | "som" | "qua" | "muon" | null;
 
-export function kiemHanSua(hanLuc: string, moLuc: string): LoiHan {
+export function kiemHanSua(
+	hanLuc: string,
+	moLuc: string,
+	bayGio: number,
+): LoiHan {
 	const han = Date.parse(hanLuc);
 	if (Number.isNaN(han)) return "thieu";
+	if (han < bayGio) return "qua";
 	if ((han - Date.parse(moLuc)) / GIO_MS > OKR_HOI_Y.hanGio.max) return "muon";
 	return null;
 }

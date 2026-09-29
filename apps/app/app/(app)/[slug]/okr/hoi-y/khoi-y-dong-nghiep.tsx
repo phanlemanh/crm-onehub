@@ -27,7 +27,7 @@ import {
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Toggle } from "@crm/ui/components/toggle";
-import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
+import { LY_DO_KHOA_Y, OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -94,7 +94,7 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 	const dayDu = khac.some(coTen);
 	const bamDuoc = h.trangThai === "dang-mo";
 
-	const khoa = h.y.lyDoKhoa === null ? null : m.khoa[h.y.lyDoKhoa];
+	const khoa = m.khoa[h.y.lyDoKhoa ?? LY_DO_KHOA_Y[0]];
 	if (h.y.khoa) {
 		return (
 			<Card data-khoi="y-bi-khoa">
@@ -107,8 +107,8 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 							<EmptyMedia variant="icon">
 								<Icon icon={Locked} />
 							</EmptyMedia>
-							<EmptyTitle>{khoa?.tieuDe}</EmptyTitle>
-							<EmptyDescription>{khoa?.moTa}</EmptyDescription>
+							<EmptyTitle>{khoa.tieuDe}</EmptyTitle>
+							<EmptyDescription>{khoa.moTa}</EmptyDescription>
 						</EmptyHeader>
 					</Empty>
 				</CardContent>

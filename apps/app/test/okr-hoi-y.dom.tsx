@@ -352,6 +352,12 @@ type TuyChonGhi = {
 };
 const goi: { ten: string; vao: VaoGhi }[] = [];
 let khiGop: () => void = () => {};
+const loiGhi = new Map<string, string>();
+let chuKy: ChuKyDu = CHU_KY;
+const QUAN_TRI_MAU = [
+	{ userId: "dang", name: "Lê Hải Đăng" },
+	{ userId: "trang", name: "Phạm Thu Trang" },
+];
 
 type Vao = { readonly cycleId?: string; readonly hoiYId?: string } | undefined;
 
@@ -369,6 +375,8 @@ function thuTuc<T>(ten: string, doc: (vao: Vao) => Promise<T> | T) {
 			mutationFn: async (vao: VaoGhi) => {
 				goi.push({ ten, vao });
 				if (ten === "gopY") khiGop();
+				const loi = loiGhi.get(ten);
+				if (loi) throw new Error(loi);
 				return { id: "moi", mucTieuIds: [], canhBao: null, ok: true };
 			},
 		}),
@@ -401,7 +409,7 @@ const DOT_BIEN = [
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
-			cycles: thuTuc("cycles", () => CHU_KY),
+			cycles: thuTuc("cycles", () => chuKy),
 			access: thuTuc("access", () => {
 				if (loiAccess) throw new Error("không đọc được quyền");
 				return {
@@ -418,8 +426,8 @@ mock.module("@/lib/trpc/client", () => ({
 		},
 		workspace: {
 			members: thuTuc("members", () => ({
-				rows: [],
-				total: 0,
+				rows: QUAN_TRI_MAU,
+				total: QUAN_TRI_MAU.length,
 				facetCounts: {},
 			})),
 		},
@@ -560,6 +568,8 @@ beforeEach(() => {
 	};
 	goi.length = 0;
 	khiGop = () => {};
+	loiGhi.clear();
+	chuKy = CHU_KY;
 });
 
 afterEach(async () => {
@@ -837,6 +847,174 @@ describe("Hỏi ý — sửa lần hỏi ý", () => {
 			"sheet đóng",
 		);
 		expect(goi.filter((g) => g.ten === "suaHoiY")).toEqual([]);
+	});
+});
+
+async function bam(o: Element): Promise<void> {
+	await act(async () => {
+		for (const loai of [
+			"pointerdown",
+			"mousedown",
+			"pointerup",
+			"mouseup",
+			"click",
+		]) {
+			const Kieu = loai.startsWith("pointer") ? PointerEvent : MouseEvent;
+			o.dispatchEvent(
+				new Kieu(loai, {
+					bubbles: true,
+					cancelable: true,
+					button: 0,
+					pointerType: "mouse",
+				} as PointerEventInit),
+			);
+		}
+	});
+}
+
+async function chonTrongSelect(trigger: Element, nhanMuc: string) {
+	await bam(trigger);
+	const tuyChon = () => [...document.body.querySelectorAll('[role="option"]')];
+	await cho(() => tuyChon().length > 0, "select mở");
+	const muc = tuyChon().find((x) => x.textContent === nhanMuc);
+	if (!muc) throw new Error(`select không có ${nhanMuc}`);
+	await act(async () => {
+		muc.dispatchEvent(
+			new KeyboardEvent("keydown", {
+				key: "Enter",
+				bubbles: true,
+				cancelable: true,
+			}),
+		);
+	});
+	await cho(() => tuyChon().length === 0, "select đóng");
+}
+
+function nutChonNguoi(): Element {
+	const label = [...document.body.querySelectorAll("label")].find(
+		(l) => l.textContent?.trim() === "Người chọn",
+	);
+	const trigger = document.getElementById(label?.getAttribute("for") ?? "");
+	if (!trigger) throw new Error("không thấy ô người chọn");
+	return trigger;
+}
+
+async function moSheetSua(h: HoiYDu): Promise<HTMLElement> {
+	hoiY = { ...h, quyen: { ...h.quyen, moDuoc: true } };
+	const o = await mo();
+	await cho(
+		() => o.querySelector('[data-nut="sua-hoi-y"]') !== null,
+		"nút sửa",
+	);
+	await act(async () =>
+		o.querySelector<HTMLButtonElement>('[data-nut="sua-hoi-y"]')?.click(),
+	);
+	await cho(
+		() => document.querySelector('[data-khoi="sheet-mo-hoi-y"]') !== null,
+		"sheet sửa",
+	);
+	return o;
+}
+
+function loiMay() {
+	const e = document.querySelector('[data-khoi="loi-may"]');
+	return {
+		chu: e?.textContent ?? null,
+		trongChan: e?.closest('[data-slot="sheet-footer"]') !== null,
+		canhNut:
+			e?.parentElement?.querySelector('button[type="submit"]') !== null &&
+			e?.parentElement?.querySelector('button[type="submit"]') !== undefined,
+	};
+}
+
+describe("Hỏi ý — sheet: câu từ chối của máy chủ và nhánh hết hạn", () => {
+	test("mở: máy chủ từ chối thì câu ghim hiện nguyên văn ở chân sheet, cạnh «Mở»", async () => {
+		hoiY = null;
+		quanTri = true;
+		const CAU = "Chu kỳ này đã có một lần hỏi ý.";
+		loiGhi.set("moHoiY", CAU);
+		const o = await mo();
+		await cho(() => trangThai(o) === "trong-quan-tri", "trống quản trị");
+		await act(async () =>
+			o.querySelector<HTMLButtonElement>('[data-nut="mo-hoi-y"]')?.click(),
+		);
+		await cho(
+			() => document.querySelector('[data-khoi="sheet-mo-hoi-y"]') !== null,
+			"sheet mở",
+		);
+		await go(oTheoNhan(document.body, "Nhãn"), "Doanh thu năm");
+		await go(oTheoNhan(document.body, "Giá trị"), "186 tỷ");
+		await chonTrongSelect(nutChonNguoi(), "Lê Hải Đăng");
+		await act(async () => nutCo(document.body, "Mở").click());
+		await cho(() => goi.some((g) => g.ten === "moHoiY"), "gọi moHoiY");
+		await cho(() => loiMay().chu !== null, "câu từ chối");
+		expect(loiMay()).toEqual({ chu: CAU, trongChan: true, canhNut: true });
+	});
+
+	test("sửa: máy chủ từ chối thì câu ghim hiện nguyên văn ở chân sheet, cạnh «Lưu thay đổi»", async () => {
+		const CAU =
+			"Hạn mới phải từ bây giờ tới 168 giờ sau lúc mở — đặt bằng bây giờ là đóng sớm.";
+		loiGhi.set("suaHoiY", CAU);
+		await moSheetSua(coBan());
+		await go(oTheoNhan(document.body, "Lời mở"), "Lời mở mới cho năm tới");
+		await act(async () => nutCo(document.body, "Lưu thay đổi").click());
+		await cho(() => loiMay().chu !== null, "câu từ chối");
+		expect(loiMay()).toEqual({ chu: CAU, trongChan: true, canhNut: true });
+	});
+
+	test("đang gom: ô nội dung tắt, đổi người chọn gửi đúng { hoiYId, nguoiChonUserId }", async () => {
+		await moSheetSua(DU_LIEU["het-han"]());
+		const tat = {
+			cauHoi: oTheoNhan(document.body, "Câu hỏi").disabled,
+			loiMo: oTheoNhan(document.body, "Lời mở").disabled,
+			conSo:
+				document.querySelector<HTMLFieldSetElement>(
+					'[data-khoi="sheet-mo-hoi-y"] fieldset',
+				)?.disabled ?? null,
+			gio: oTheoNhan(document.body, "Hạn — giờ").disabled,
+			giaiThich:
+				document.querySelector('[data-khoi="chi-nguoi-chon"]') !== null,
+		};
+		await chonTrongSelect(nutChonNguoi(), "Phạm Thu Trang");
+		await act(async () => nutCo(document.body, "Lưu thay đổi").click());
+		await cho(() => goi.some((g) => g.ten === "suaHoiY"), "gọi suaHoiY");
+		const vao = JSON.parse(
+			JSON.stringify(goi.find((g) => g.ten === "suaHoiY")?.vao),
+		);
+		expect({ tat, vao }).toEqual({
+			tat: {
+				cauHoi: true,
+				loiMo: true,
+				conSo: true,
+				gio: true,
+				giaiThich: true,
+			},
+			vao: { hoiYId: "h1", nguoiChonUserId: "trang" },
+		});
+	});
+});
+
+describe("Hỏi ý — trạng thái biên", () => {
+	test("không giải được chu kỳ nào thì hiện màn trống, không skeleton mãi", async () => {
+		chuKy = {
+			cycles: CHU_KY.cycles.filter((c) => c.phase === "dang-chay"),
+			currentId: null,
+		};
+		hoiY = coBan();
+		const o = await mo();
+		await cho(() => trangThai(o) === "trong-thanh-vien", "trống thành viên");
+		expect(o.querySelector('[data-khoi="trong-thanh-vien"]')).not.toBeNull();
+	});
+
+	test("danh sách khoá mà thiếu mã lý do vẫn có tiêu đề", async () => {
+		const b = DU_LIEU["viet-truoc"]();
+		hoiY = { ...b, y: { ...b.y, lyDoKhoa: null } };
+		const o = await mo();
+		await cho(() => trangThai(o) === "viet-truoc", "viết trước");
+		expect(
+			o.querySelector('[data-khoi="y-bi-khoa"] [data-slot="empty-title"]')
+				?.textContent,
+		).toBe("Niêm phong trước khi đọc ý");
 	});
 });
 

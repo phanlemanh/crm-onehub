@@ -22,7 +22,11 @@ const MUC = [
 	{ id: "c", label: "2 ý chưa gom", href: "#y-chua-gom" },
 ];
 
-function ve(items?: typeof MUC, defaultOpen?: boolean) {
+function ve(
+	items?: typeof MUC,
+	defaultOpen?: boolean,
+	layout?: "inline" | "checklist",
+) {
 	khung = document.createElement("div");
 	document.body.appendChild(khung);
 	root = createRoot(khung);
@@ -32,6 +36,7 @@ function ve(items?: typeof MUC, defaultOpen?: boolean) {
 				<SaveBar
 					defaultOpen={defaultOpen}
 					items={items}
+					layout={layout}
 					open
 					title="Chưa công bố được — còn 3 điều"
 				>
@@ -75,8 +80,8 @@ describe("save-bar — biến thể danh sách", () => {
 		expect(nut?.getAttribute("aria-expanded")).toBe("false");
 	});
 
-	test("defaultOpen: danh sách mở sẵn ở mọi khổ, gập được, tiêu đề xuống dòng thay vì cắt", () => {
-		const thanh = ve(MUC, true);
+	test("checklist + defaultOpen: danh sách mở sẵn ở mọi khổ, trải hết bề ngang dưới hàng tiêu đề, gập được, tiêu đề xuống dòng", () => {
+		const thanh = ve(MUC, true, "checklist");
 		const nut = thanh.querySelector<HTMLButtonElement>("button[aria-controls]");
 		const ds = thanh.querySelector("ul");
 		const tieuDe = thanh.querySelector("p");
@@ -87,6 +92,8 @@ describe("save-bar — biến thể danh sách", () => {
 			nutMoiKho: nut?.classList.contains("md:hidden"),
 			cat: tieuDe?.classList.contains("truncate"),
 			expanded: nut?.getAttribute("aria-expanded"),
+			traiHet: ds?.parentElement === thanh,
+			tran: ["max-h-24", "md:max-h-40"].every((c) => ds?.classList.contains(c)),
 		};
 		act(() => nut?.click());
 		expect({
@@ -103,9 +110,21 @@ describe("save-bar — biến thể danh sách", () => {
 				nutMoiKho: false,
 				cat: false,
 				expanded: "true",
+				traiHet: true,
+				tran: true,
 			},
 			sau: { mo: "false", an: true },
 		});
+	});
+
+	test("defaultOpen={false} vẽ y hệt khi không truyền", () => {
+		const html = (x: HTMLElement) =>
+			x.outerHTML.replace(/id="[^"]*"|aria-controls="[^"]*"/g, "");
+		const a = html(ve(MUC, false));
+		act(() => root?.unmount());
+		khung?.remove();
+		const b = html(ve(MUC));
+		expect(a).toBe(b);
 	});
 
 	test("không truyền danh sách thì giữ thanh lưu cũ", () => {
