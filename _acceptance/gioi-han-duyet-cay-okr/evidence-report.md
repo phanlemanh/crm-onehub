@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cbb939a601f5183e35c061632bf479ef85f3e63a
+verified_commit: 8d8725346789a1736b8e93aecd051c28535aa2ce
 human_signoff: Manh Phan 2026-09-29
 ---
 
@@ -360,3 +360,7 @@ none — mọi eval chạy một lần, không eval nào có pass_rate lẫn l�
 Round 1: bộ kiểm app đỏ ở khoá chữ chết (một lỗi trong hợp đồng). Trả về sửa.
 Round 2: E16, E19 đỏ — thước màn chập chờn ở bước chọn người xem khi máy chịu tải. Trả về sửa.
 Round 3: mọi eval máy xanh (E16, E19 xanh lại, E15, E18 mở lại từng ảnh); còn E25 chờ người vì hội đồng chỉ có --stat của diff. Verdict PENDING-JUDGMENT, chuyển Cổng Bằng chứng.
+
+### Re-pin lần 1 — 2026-09-29, do ghim lại sau khi gộp onehub tới #212
+run_id: repin-20260929T233409Z-97700
+sha: 8d8725346789a1736b8e93aecd051c28535aa2ce · suites: 4 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15 (E15 không khai paths), E18 (E18 không khai paths), E25 (E25 không khai paths)
