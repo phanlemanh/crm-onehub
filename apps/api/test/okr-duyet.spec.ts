@@ -17,6 +17,7 @@ import type {
 	ViecCuaToiOutput,
 } from "../src/okr/okr.contracts";
 import { OkrAccessService } from "../src/okr/okr-access.service";
+import type { CanhKrOutput } from "../src/okr/okr-canh-kr.contracts";
 import { OKR } from "../src/okr/okr-config";
 import type { ToanCanhOutput } from "../src/okr/okr-xem.contracts";
 import { chienDichMoi, donSanCanhKr } from "./okr-canh-kr-san";
@@ -808,6 +809,9 @@ describe("nguoi-duyet", () => {
 			const danhDau = tra(
 				await goi("okr.danhDauViec", { id: viec, xong: true }, s.k.cookie),
 			);
+			const canh = await doc<CanhKrOutput>("okr.canhKr", s.t.cookie, {
+				keyResultId: kr1 ?? "",
+			});
 			console.log(
 				`nguoi-duyet khoa: ${CA.length} o\n${JSON.stringify(ket, null, 1)}\ndanhDauViec cua nguoi lam: ${danhDau}`,
 			);
@@ -817,6 +821,10 @@ describe("nguoi-duyet", () => {
 			);
 			expect(sau).toEqual(truoc);
 			expect(danhDau).toBe("200");
+			expect({ choDuyet: canh.choDuyet, khoa: canh.khoa }).toEqual({
+				choDuyet: true,
+				khoa: false,
+			});
 		},
 		CHO_MS,
 	);

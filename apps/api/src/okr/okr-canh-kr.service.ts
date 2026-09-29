@@ -229,6 +229,7 @@ export class OkrCanhKrService {
 			khoa:
 				!ghiDuocOPha(phaChuKy.parse(kr.objective.cycle.phase)) ||
 				objective.status === "da-bo",
+			choDuyet: objective.status === "cho-duyet",
 		};
 	}
 
