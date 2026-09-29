@@ -1,0 +1,51 @@
+{
+  "feature_plain": "Người sửa một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý» ngay trong hộp thoại sửa, nhận vài đề xuất rồi nhận, sửa hay bác từng dòng; quản trị bật theo ba nấc tắt · chế độ ẩn · bật.",
+  "scope_plain": "Những việc dưới đây cố ý để lượt sau, đã duyệt ở Cổng Phạm vi:",
+  "decisions": [
+    {
+      "id": "E25",
+      "q": "Máy chấm câu viết lại có khớp cách anh chấm đủ để tin không?",
+      "why": "Anh đã nhận bản chấm máy round 5 làm chấm của mình: khớp 17 trên 20 cặp (85 %), đúng ngưỡng; điểm máy chấm 0,95. Ba chỗ máy chấm dễ dãi hơn anh: KR vẫn là việc làm viết thành trạng thái (hai cặp) và một KR bị gắn con số giữ chỗ. Hội đồng đọc bảng trước khi cột được điền nên đề xuất «chưa chắc»."
+    },
+    {
+      "id": "E28",
+      "q": "Tài liệu và luật kho của lượt này đã đủ để phát hành chưa?",
+      "why": "Hội đồng đề xuất đạt: ba tài liệu nói đủ chế độ ẩn không hiện gì cho người dùng, tiền thật tính vào trần 9 USD, chỉ quản trị đọc số; luật kho đo sạch, hằng số ngày nay chỉ khai một chỗ."
+    }
+  ],
+  "decisions_plain": [
+    {"id": "d-20260928T050007Z-1", "p": "Đã chọn thêm vài cột mới vào cơ sở dữ liệu (chỉ thêm, không sửa) để bật chế độ ẩn theo từng đơn vị — đổi lại thêm một cổng duyệt kế hoạch."},
+    {"id": "d-20260928T050007Z-2", "p": "Đã chọn cho chế độ ẩn tự chạy khi một Mục tiêu được lưu, có nhịp 30 phút và trần 40 lượt mỗi ngày — đổi lại tốn tiền thật trong trần tháng."},
+    {"id": "d-20260928T050007Z-3", "p": "Đã chọn ghi ngay từng dòng người nhận, và khoá nút góp ý khi còn sửa chưa lưu — đổi lại người phải lưu trước khi nhờ góp ý."},
+    {"id": "d-20260928T050007Z-4", "p": "Đã chọn duyệt giao diện trên bản mẫu bấm được trong ứng dụng — đổi lại tốn một lượt dựng bản mẫu."},
+    {"id": "d-20260928T050007Z-5", "p": "KHÔNG làm trạng thái «đã sửa theo câu hỏi»; câu hỏi chỉ có bỏ qua — đếm sau bằng số đo."},
+    {"id": "d-20260928T050007Z-6", "p": "KHÔNG hiệu chỉnh máy chấm cho bộ ca nhạy cảm ở lượt này; bộ đó chặn bằng luật cứng, máy chấm chỉ tham khảo."},
+    {"id": "d-20260928T050007Z-7", "p": "KHÔNG đưa chuỗi Cập nhật tuần vào dữ liệu Trợ lý đọc ở lượt này."},
+    {"id": "d-20260928T050007Z-8", "p": "Đã chọn cho dòng xu hướng bật tắt cùng nấc với góp ý, dù nó không gọi mô hình — một công tắc cho người quản trị."},
+    {"id": "d-20260928T051346Z-9", "p": "Đã chọn đặt đề xuất ở cột bên cạnh ô sửa trong hộp thoại, thay vì chuyển sang một màn khác trong hộp."},
+    {"id": "d-20260928T065713Z-10", "p": "Đã đổi tên nấc giữa từ «chạy bóng» thành «chế độ ẩn» cho người không đọc tài liệu kỹ thuật cũng hiểu."},
+    {"id": "d-20260928T081448Z-12", "p": "Đã chọn đặt phần đọc danh sách đề xuất và phần kích chế độ ẩn ở chỗ dùng chung, để bài kiểm đo đúng điều người dùng thấy."},
+    {"id": "d-20260928T081824Z-13", "p": "Anh đã duyệt kế hoạch mười việc, mỗi việc một tác tử viết và một tác tử soát."},
+    {"id": "d-20260928T145704Z-14", "p": "Đã nới một phép đo: bài kiểm cũ được thêm đúng bốn dòng cho bốn trường chế độ ẩn, không hạ kỳ vọng nào — chờ anh phê."},
+    {"id": "d-20260928T150703Z-15", "p": "Đã thêm tệp chứa logic đọc đề xuất vào vùng theo dõi của ba phép đo, để sửa tệp đó thì phép đo phải chạy lại."},
+    {"id": "d-20260928T160122Z-16", "p": "Đã đổi cách một phép đo bác và bỏ qua đề xuất, chiều «bác giữ nguyên» chuyển sang phép đo khác — chờ anh phê."},
+    {"id": "d-20260928T162544Z-17", "p": "Đã thêm hai tệp mới vào vùng theo dõi của các phép đo liên quan, để chúng không bị bỏ sót khi tệp đổi."},
+    {"id": "d-20260928T170301Z-18", "p": "Đã sửa chữ một phép đo từ «sáu trường» thành «mười trường» vì chính lượt này thêm bốn trường chế độ ẩn — chờ anh phê."},
+    {"id": "d-20260928T171143Z-19", "p": "Đã thêm tệp chữ mới của hộp thoại vào vùng theo dõi của các phép đo màn hình."},
+    {"id": "d-20260928T224048Z-20", "p": "Đã sửa bốn nguyên nhân khiến round 1 trả lại: gọi sai tên thủ tục, đếm nhầm dòng bị loại, máy chấm nhận câu hỏi rỗng, thiếu đối chứng."},
+    {"id": "d-20260928T224048Z-21", "p": "Đã thu hẹp danh sách từ cấm về nhóm nhạy cảm cộng từ bán hàng và dự án — đổi lại vài từ nhãn màn hình không còn bị chặn trong câu góp ý."},
+    {"id": "d-20260928T224048Z-22", "p": "Đã dặn Trợ lý vẫn đề xuất câu viết lại cho trường mà form đã hỏi, chỉ nộp rỗng khi không có gì cần sửa."},
+    {"id": "d-20260928T224048Z-23", "p": "Đã thêm một báo cáo kiểm luật kho làm bằng chứng cho phần tài liệu và luật kho."},
+    {"id": "d-20260928T224102Z-24", "p": "Đã đính chính một dòng sổ trỏ nhầm; việc thu hẹp từ cấm không lật bộ tiêu chí đã duyệt."},
+    {"id": "d-20260928T224253Z-25", "p": "Anh đã đồng ý thu hẹp danh sách từ cấm."},
+    {"id": "d-20260928T231915Z-26", "p": "Đã chọn không đòi Trợ lý hỏi lại điều form đã hỏi người dùng, theo đặc tả — chờ anh phê."},
+    {"id": "d-20260929T001938Z-27", "p": "Đã sửa phép đo đếm cả câu hỏi của Trợ lý chứ không chỉ câu viết lại, đúng chữ đã duyệt."},
+    {"id": "d-20260929T010619Z-28", "p": "Round 3 dừng vì độ trễ vượt ngưỡng; hết ba round nên máy trình anh ba đường thay vì tự chạy tiếp."},
+    {"id": "d-20260929T011948Z-29", "p": "Anh đã chọn phát hành với độ trễ là giới hạn đã biết — sau này anh gỡ lại ở round 4."},
+    {"id": "d-20260929T014237Z-30", "p": "Đã sửa chỉ dẫn cho Trợ lý: tên Mục tiêu không mang số, tên KR gọi tên thứ được đo, không thêm lời khen — theo phân tích 20 cặp."},
+    {"id": "d-20260929T025037Z-31", "p": "Đã gộp hằng số ngày về một chỗ, gộp tiêu chí chấm về một chỗ, và khai rõ phép đo không đòi hỏi lại điều form đã hỏi — chờ anh phê."},
+    {"id": "d-20260929T053122Z-32", "p": "Anh đã nhận bản chấm máy làm đánh giá của mình."},
+    {"id": "d-20260929T060857Z-33", "p": "Anh đã gỡ giới hạn độ trễ vì round 4 đo khi máy rảnh đã lọt ngưỡng — đổi lại độ trễ lại là điều kiện chặn."},
+    {"id": "d-20260929T072056Z-34", "p": "Anh đã nhận bản chấm máy round 5 cho 20 cặp; máy chấm khớp anh 85 %, đúng ngưỡng."}
+  ]
+}

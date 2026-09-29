@@ -1089,6 +1089,73 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
 Gỡ khi hãng có bản tương đương: hook chi phí trong subagent và số lần thử theo loại
 việc là phần nên gửi lên hãng — chưa gửi ở lượt này.
 
+## Chỗ rẽ: Trợ lý OKR (lượt 9b)
+
+Danh sách dưới đây là tệp của hãng lượt 9b «Góp ý khi bấm» chạm thêm — rút bằng
+`git diff` giữa merge-base của nhánh với `origin/onehub` và `HEAD`, giao với
+danh sách tệp có ở `origin/release`. `tai-lieu.mjs` tính lại đúng phép giao đó
+mỗi lần chạy và so với mục này; không hơn, không kém.
+
+- `apps/agent/agent/lib/dispatch.ts` — xếp lịch gọi `xepKiemLaiKhoa` mỗi nhịp
+  quét, cùng khuôn với móc lượt 9a đã thêm.
+- `apps/api/src/agent/agent-trigger.service.ts` — thêm `troLyOkrDaXep()`, poke
+  dispatch ngay khi `troLyDeXuat` xếp việc mới; lượt ẩn của `kichLuotAn` không
+  gọi hàm này, nó chờ nhịp quét thường của dispatch.
+- `apps/api/src/generated/server.ts` — sinh lại khi bảy thủ tục mới vào
+  `okr.router.ts`; không sửa tay.
+- `apps/app/lib/search-param-keys.ts` — thêm khoá `luotGopY` cho URL của cột
+  góp ý.
+- `apps/app/lib/trpc/cache.ts` — năm khoá truy vấn mới (`troLySanSang`,
+  `troLyDanhSach`, `xuHuongKr`, `troLySoDo`, `troLyAn`) vào danh sách làm mới
+  khi lưu Mục tiêu hay KR.
+- `packages/db/package.json` — hai subpath export mới: `./okr-de-xuat`,
+  `./okr-xu-huong`.
+- `packages/db/prisma/schema.prisma` — bảng `OkrDeXuat` và bốn cột chế độ ẩn
+  của cấu hình chương trình (`aiDeXuatAnPhamVi`, `aiDeXuatAnDonVi`,
+  `aiTomTatAnPhamVi`, `aiTomTatAnDonVi`); `migration` chỉ thêm.
+- `packages/ui/src/components/dialog.tsx` — `onEscapeKeyDown` mới chặn Esc
+  đóng hộp thoại khi Esc bắt nguồn từ ô «Nhận bản đã sửa» đang mở
+  (`laEscTuOSuaDeXuat`); bấm trong vùng thông báo không tính là bấm ngoài hộp
+  (`laTuThongBao`), để nút «Hoàn tác» của thông báo không đóng hộp.
+- `packages/ui/src/components/sheet.tsx` — cùng chặn Esc và cùng bỏ qua bấm
+  trong vùng thông báo như `dialog.tsx`.
+- `packages/ui/src/components/simple-table.tsx` — prop `sub` mới cho
+  `SimpleTableRow`: dòng phụ thụt lề ở ô đầu và chữ mờ (`ROW_SUB`), dùng cho
+  các hàng theo mã loại dưới hàng «bị loại» trong bảng số đo góp ý ở Cài đặt;
+  `SimpleTableCell` mới cho ô thân bảng có đệm ngang khớp tiêu đề cột và
+  `numeric` căn phải chữ số đều, thay cho lớp đệm đè ở chỗ gọi.
+- `packages/ui/src/components/sonner.tsx` — vùng thông báo `pointer-events-auto`:
+  hộp modal của Radix khoá con trỏ trên body, nên thiếu lớp này thì nút
+  «Hoàn tác» sau khi Nhận một dòng góp ý không bấm được khi hộp còn mở.
+- `packages/ui/src/components/suggestion.tsx` — thành phần `Suggestion` chung
+  của `packages/ui`, có sẵn từ hãng (không phải ReUI, cũng không phải
+  `Suggestion` gợi ý câu hỏi của AI Elements trong `docs/chat-ui.md`), mở rộng
+  cho ba cách (nhận · sửa · bác) và khoá nút khi có `acceptDisabledReason`.
+- `packages/ui/src/lib/utils.ts` — `laEscTuOSuaDeXuat` và `laTuThongBao`, dùng
+  ở `dialog.tsx` và `sheet.tsx` phía trên.
+- `packages/validation/package.json` — một subpath export mới:
+  `./okr-kiem-de-xuat`.
+- `docs/api.md` — cũng có đường dẫn ở `release` (hãng để chỗ cho tài liệu
+  riêng), nhưng OneHub đã thay hẳn nội dung từ lượt trước; vào danh sách này
+  chỉ vì phép giao thấy đường dẫn trùng, không phải một hành vi hãng bị chạm.
+- `docs/agent.md` — chính tệp đang đọc; cùng lý do với `docs/api.md` ngay trên,
+  tự liệt tên mình cho đủ phép giao.
+
+Phần việc lớn của lượt này nằm ở tệp OneHub tự dựng, không có đường dẫn trùng
+ở `release` nên không vào bảng trên: `apps/agent/agent/lib/okr/{viec,goi-ngu-canh,doc}.ts`
+(9a đã mở, 9b sửa thêm), `apps/agent/agent/lib/okr/nop-de-xuat.ts` (mới),
+`apps/agent/agent/subagents/tro_ly_okr/instructions.md`,
+`apps/agent/agent/subagents/tro_ly_okr/instructions/viec.ts`,
+`apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts` và
+`apps/agent/agent/subagents/tro_ly_okr/hooks/giu-viec.ts` (mới) — hook này giữ
+việc `okr-de-xuat` không đóng sớm khi phiên con chưa nộp xong đề xuất.
+
+Chế độ ẩn — nấc giữa của công tắc, giữa tắt và bật — không hiện gì cho người
+dùng và không poke dispatch; nó chờ đúng nhịp quét mà `okr-de-xuat` việc
+thường vẫn chờ, nên độ trễ của một lượt ẩn không có gì đảm bảo ngoài nhịp đó.
+Dưới `eve dev` không có cron: hàng ẩn được xếp ngay trong `updateObjective` và
+nằm chờ tới lần gọi `/internal/crm/dispatch` kế tiếp (phép đo E4 tự gọi).
+
 ## Chỗ rẽ: Máy soạn của Kho tài liệu (lượt 2)
 
 Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:

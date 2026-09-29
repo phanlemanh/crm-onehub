@@ -8,10 +8,11 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { VIEC_OKR } from "@crm/db/agent-tasks";
-import { xepViecTroLy } from "@crm/db/okr-tro-ly";
+import { xepLuotAnSauKhiLuu, xepViecTroLy } from "@crm/db/okr-tro-ly";
 import { crmEvents, taskToken } from "../agent/channels/crm";
 import hook from "../agent/hooks/okr-uy-quyen";
 import { beginResearch, taskAuth } from "../agent/lib/dispatch";
+import { lyDoChanTruocKhiGui } from "../agent/lib/okr/viec";
 import { reconcileStaleTasks } from "../agent/lib/stale-tasks";
 import type { LeasedTask } from "../agent/lib/tasks";
 import type {
@@ -34,9 +35,10 @@ async function hangMoi(i: number): Promise<LeasedTask> {
 		objectiveId: mucTieu[i] ?? "",
 		keyResultId: null,
 		nguoiYeuCau: "mn3-nguoi-yeu-cau",
+		nac: "bat",
 		now: new Date(),
 	});
-	if (!xep.xep) throw new Error(`khong xep duoc: ${xep.lyDo}`);
+	if (!xep.bat) throw new Error(`khong xep duoc: ${xep.lyDo}`);
 	const hang = await db.agentTask.update({
 		where: { id: xep.taskId },
 		data: {
@@ -84,7 +86,7 @@ beforeAll(async () => {
 	const chu = await gieoNguoi("Người gieo việc OKR");
 	const ck = await gieoChuKy("dang-chay");
 	mucTieu = await Promise.all(
-		[0, 1, 2, 3, 4, 5].map(() =>
+		[0, 1, 2, 3, 4, 5, 6, 7].map(() =>
 			gieoMucTieu({ cycleId: ck, chu: chu.id, congBo: new Date() }),
 		),
 	);
@@ -226,5 +228,52 @@ describe("dong-viec", () => {
 		).toBeGreaterThan(20_000);
 		await reconcileStaleTasks();
 		expect((await ketQua(d.id)).finishedAt).toBeNull();
+	}, 30_000);
+});
+
+describe("cong-gui-che-do-an", () => {
+	test("luot an do may xep qua cong gui; hang nac bat tren don vi an bi chan", async () => {
+		await gieoCauHinhAi(new Date(Date.now() - 4_000), {
+			aiOn: true,
+			aiDeXuatPhamVi: "toan-cong-ty",
+			aiTranThangUsd: 9,
+		});
+		const hangBat = await hangMoi(6);
+		const an = {
+			aiOn: true,
+			aiDeXuatPhamVi: "tat",
+			aiDeXuatAnPhamVi: "toan-cong-ty",
+			aiTranThangUsd: 9,
+		} as const;
+		await gieoCauHinhAi(new Date(Date.now() - 3_000), an);
+		const xep = await xepLuotAnSauKhiLuu(db, {
+			objectiveId: mucTieu[7] ?? "",
+			keyResultId: null,
+			nguoiLuu: "mn3-nguoi-luu",
+			doiChu: true,
+			now: new Date(),
+		});
+		if (!xep.xep) throw new Error(`khong xep duoc luot an: ${xep.lyDo}`);
+		const hangAn = await db.agentTask.findUniqueOrThrow({
+			where: { id: xep.taskId },
+		});
+		const lyDoAn = await lyDoChanTruocKhiGui(hangAn);
+		if (lyDoAn !== null) throw new Error(`luot an chet o cong gui: ${lyDoAn}`);
+		expect(await lyDoChanTruocKhiGui(hangBat)).toBe(
+			"khong-chay:don-vi-chua-bat",
+		);
+
+		await gieoCauHinhAi(new Date(Date.now() - 2_000), {
+			aiOn: true,
+			aiDeXuatPhamVi: "toan-cong-ty",
+			aiTranThangUsd: 9,
+		});
+		expect(await lyDoChanTruocKhiGui(hangAn)).toBeNull();
+
+		await gieoCauHinhAi(new Date(Date.now() - 1_000), {
+			...an,
+			aiDeXuatAnPhamVi: "tat",
+		});
+		expect(await lyDoChanTruocKhiGui(hangAn)).toBe("khong-chay:viec-tat");
 	}, 30_000);
 });

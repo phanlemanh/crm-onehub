@@ -4,6 +4,7 @@ import {
 	kyVongTheoNgay,
 	tienDoMucTieu,
 } from "@crm/db/okr-tien-do";
+import { xepLuotAnSauKhiLuu } from "@crm/db/okr-tro-ly";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
@@ -56,6 +57,7 @@ import {
 	ForbiddenException,
 	Inject,
 	Injectable,
+	Logger,
 	NotFoundException,
 } from "@nestjs/common";
 import { z } from "zod";
@@ -99,6 +101,17 @@ import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
 type Tx = Prisma.TransactionClient;
+type GhiTrong = { note?: string };
+type AlignmentInput = {
+	objectiveId: string;
+	targetObjectiveId: string | null;
+	targetKeyResultId: string | null;
+};
+type LuotAn = {
+	objectiveId: string;
+	keyResultId: string | null;
+	doiChu: boolean;
+};
 
 const loaiChuKy = z.enum(LOAI_CHU_KY);
 const phaChuKy = z.enum(PHA_CHU_KY);
@@ -256,11 +269,30 @@ type ChuKyDong = {
 
 @Injectable()
 export class OkrService {
+	private readonly logger = new Logger(OkrService.name);
+
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 		@Inject(AgentTriggerService) private readonly trigger: AgentTriggerService,
 	) {}
+
+	private async kichLuotAn(nguoiLuu: string, luot: LuotAn) {
+		try {
+			await xepLuotAnSauKhiLuu(this.db, {
+				...luot,
+				nguoiLuu,
+				now: new Date(),
+			});
+		} catch (loi) {
+			this.logger.warn({
+				message: "Không xếp được lượt đề xuất ẩn sau khi lưu; lần lưu vẫn giữ",
+				objectiveId: luot.objectiveId,
+				keyResultId: luot.keyResultId,
+				loi: loi instanceof Error ? loi.name : "khong-ro",
+			});
+		}
+	}
 
 	async access(userId: string) {
 		const q = await this.quyenOkr.quyen(userId);
@@ -420,6 +452,10 @@ export class OkrService {
 				aiDeXuatDonVi: row.aiDeXuatDonVi,
 				aiTomTatPhamVi: row.aiTomTatPhamVi,
 				aiTomTatDonVi: row.aiTomTatDonVi,
+				aiDeXuatAnPhamVi: row.aiDeXuatAnPhamVi,
+				aiDeXuatAnDonVi: row.aiDeXuatAnDonVi,
+				aiTomTatAnPhamVi: row.aiTomTatAnPhamVi,
+				aiTomTatAnDonVi: row.aiTomTatAnDonVi,
 				aiTranThangUsd: row.aiTranThangUsd.toNumber(),
 			}),
 			version: row.version,
@@ -606,52 +642,79 @@ export class OkrService {
 	}
 
 	async updateObjective(userId: string, input: MucTieuUpdate) {
-		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.id);
-		return this.db.$transaction(async (tx) => {
-			await this.assertKyGhiDuoc(tx, mt.cycleId);
-			const cu = await tx.okrObjective.findUniqueOrThrow({
-				where: { id: mt.id },
-				include: { participants: { select: { userId: true } } },
-			});
-			if (cu.status === "da-bo") throw new BadRequestException(T.daBo);
-			const thamGia = input.participantIds
-				? [...new Set(input.participantIds)].sort()
-				: undefined;
-			await this.assertThanhVien(tx, [
-				...(input.ownerUserId ? [input.ownerUserId] : []),
-				...(thamGia ?? []),
-			]);
-			const truoc: OkrVetSnapshot = {};
-			const sau: OkrVetSnapshot = {};
-			ghiKhac(truoc, sau, "title", cu.title, input.title);
-			ghiKhac(truoc, sau, "kind", cu.kind, input.kind);
-			ghiKhac(truoc, sau, "ownerUserId", cu.ownerUserId, input.ownerUserId);
-			ghiKhac(truoc, sau, "whyNow", cu.whyNow, input.whyNow);
-			ghiKhac(
-				truoc,
-				sau,
-				"participantIds",
-				cu.participants.map((p) => p.userId).sort(),
-				thamGia,
-			);
-			await tx.okrObjective.update({
-				where: { id: mt.id },
-				data: {
-					title: input.title,
-					kind: input.kind,
-					ownerUserId: input.ownerUserId,
-					whyNow: input.whyNow,
-					participants: thamGia
-						? {
-								deleteMany: {},
-								create: thamGia.map((u) => ({ userId: u })),
-							}
-						: undefined,
-				},
-			});
-			await this.vet(tx, userId, "sua", { objectiveId: mt.id }, truoc, sau);
-			return { id: mt.id, canhBao: null };
+		const { luotAn, ...kq } = await this.db.$transaction((tx) =>
+			this.updateObjectiveTrong(tx, userId, input),
+		);
+		await this.kichLuotAn(userId, luotAn);
+		return kq;
+	}
+
+	async updateObjectiveTrong(
+		tx: Tx,
+		userId: string,
+		input: MucTieuUpdate,
+		opts?: GhiTrong,
+	) {
+		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.id, tx);
+		await this.assertKyGhiDuoc(tx, mt.cycleId);
+		const cu = await tx.okrObjective.findUniqueOrThrow({
+			where: { id: mt.id },
+			include: { participants: { select: { userId: true } } },
 		});
+		if (cu.status === "da-bo") throw new BadRequestException(T.daBo);
+		const thamGia = input.participantIds
+			? [...new Set(input.participantIds)].sort()
+			: undefined;
+		await this.assertThanhVien(tx, [
+			...(input.ownerUserId ? [input.ownerUserId] : []),
+			...(thamGia ?? []),
+		]);
+		const truoc: OkrVetSnapshot = {};
+		const sau: OkrVetSnapshot = {};
+		ghiKhac(truoc, sau, "title", cu.title, input.title);
+		ghiKhac(truoc, sau, "kind", cu.kind, input.kind);
+		ghiKhac(truoc, sau, "ownerUserId", cu.ownerUserId, input.ownerUserId);
+		ghiKhac(truoc, sau, "whyNow", cu.whyNow, input.whyNow);
+		ghiKhac(
+			truoc,
+			sau,
+			"participantIds",
+			cu.participants.map((p) => p.userId).sort(),
+			thamGia,
+		);
+		await tx.okrObjective.update({
+			where: { id: mt.id },
+			data: {
+				title: input.title,
+				kind: input.kind,
+				ownerUserId: input.ownerUserId,
+				whyNow: input.whyNow,
+				participants: thamGia
+					? {
+							deleteMany: {},
+							create: thamGia.map((u) => ({ userId: u })),
+						}
+					: undefined,
+			},
+		});
+		await this.vet(
+			tx,
+			userId,
+			"sua",
+			{ objectiveId: mt.id },
+			truoc,
+			sau,
+			opts?.note ?? null,
+		);
+		return {
+			id: mt.id,
+			canhBao: null,
+			luotAn: {
+				objectiveId: mt.id,
+				keyResultId: null,
+				doiChu: "title" in sau || "whyNow" in sau,
+			},
+		};
 	}
 
 	async publishObjective(userId: string, id: string) {
@@ -715,7 +778,7 @@ export class OkrService {
 
 	async createKeyResult(userId: string, input: CreateKrInput) {
 		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
-		return this.db.$transaction(async (tx) => {
+		const kq = await this.db.$transaction(async (tx) => {
 			await this.assertKyGhiDuoc(tx, mt.cycleId);
 			const trangThai = await this.trangThai(tx, mt.id);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
@@ -761,10 +824,29 @@ export class OkrService {
 			);
 			return { id: kr.id, canhBao };
 		});
+		await this.kichLuotAn(userId, {
+			objectiveId: mt.id,
+			keyResultId: kq.id,
+			doiChu: true,
+		});
+		return kq;
 	}
 
 	async updateKeyResult(userId: string, input: UpdateKrInput) {
-		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id);
+		const { luotAn, ...kq } = await this.db.$transaction((tx) =>
+			this.updateKeyResultTrong(tx, userId, input),
+		);
+		await this.kichLuotAn(userId, luotAn);
+		return kq;
+	}
+
+	async updateKeyResultTrong(
+		tx: Tx,
+		userId: string,
+		input: UpdateKrInput,
+		opts?: GhiTrong,
+	) {
+		const quyen = await this.quyenOkr.assertSuaKr(userId, input.id, tx);
 		const doiCot =
 			input.kind !== undefined ||
 			input.ownerUserId !== undefined ||
@@ -774,149 +856,143 @@ export class OkrService {
 			if (!this.quyenOkr.suaDuocDonVi(q, userId, quyen.objective))
 				throw new ForbiddenException(T.khongSuaDuocKr);
 		}
-		return this.db.$transaction(async (tx) => {
-			await this.assertKyGhiDuoc(tx, quyen.objective.cycleId);
-			await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${quyen.id} FOR UPDATE`;
-			const kr = await tx.okrKeyResult.findUnique({ where: { id: quyen.id } });
-			if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
-			if (
-				input.currentValue !== undefined &&
-				input.currentValue !== soKr(kr.currentValue) &&
-				nguonKr.parse(kr.source) !== "tay"
-			)
-				throw new BadRequestException(T.so.hienTaiCuaMay);
-			if (input.kind !== undefined && !crmHopKieu(input.kind)) {
-				const may = await tx.okrNguonKr.findUnique({
-					where: { keyResultId: kr.id },
-					select: { loai: true },
-				});
-				if (kr.source === "crm" || may?.loai === "crm")
-					throw new BadRequestException(T.so.crmKhongHopKieu);
-			}
-			const trangThai = await this.trangThai(tx, kr.objectiveId);
-			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
-			const dangChay =
-				trangThai === "cong-bo" &&
-				(await this.phaCua(tx, kr.objectiveId)) === "dang-chay";
-			if (
-				dangChay &&
-				input.currentValue !== undefined &&
-				input.currentValue !== soKr(kr.currentValue)
-			)
-				throw new BadRequestException(T.hienTaiQuaCapNhat);
-			const khoi = soKr(kr.startValue);
-			if (
-				input.startValue !== undefined &&
-				kr.startLockedAt !== null &&
-				input.startValue !== khoi
-			)
-				throw new BadRequestException(T.khoiDiemDaKhoa);
-			const kind = input.kind ?? kieuKr.parse(kr.kind);
-			this.assertSoTheoKieu(
-				kind,
-				input.startValue ?? khoi,
-				input.targetValue ?? soKr(kr.targetValue),
-			);
-			if (input.ownerUserId)
-				await this.assertThanhVien(tx, [input.ownerUserId]);
-			const dichCu = soKr(kr.targetValue);
-			let doiDich: Prisma.OkrDoiDichUncheckedCreateInput | null = null;
-			if (
-				dangChay &&
-				input.targetValue !== undefined &&
-				input.targetValue !== dichCu
-			) {
-				const ra = await cuaSoHieuLuc(
-					tx,
-					quyen.objective.cycleId,
-					ngay(new Date()),
-				);
-				if (ra === null && !input.lyDoDoiDich)
-					throw new BadRequestException(T.khep.lyDoDoiDich);
-				doiDich = {
-					keyResultId: kr.id,
-					truoc: dichCu,
-					sau: input.targetValue,
-					lyDo: input.lyDoDoiDich ?? "",
-					ngoaiRa: ra === null,
-					cuaSoRaId: ra?.id ?? null,
-					tacGiaUserId: userId,
-				};
-			}
-			const truoc: OkrVetSnapshot = {};
-			const sau: OkrVetSnapshot = {};
-			ghiKhac(truoc, sau, "title", kr.title, input.title);
-			ghiKhac(truoc, sau, "kind", kr.kind, input.kind);
-			ghiKhac(truoc, sau, "ownerUserId", kr.ownerUserId, input.ownerUserId);
-			ghiKhac(truoc, sau, "startValue", khoi, input.startValue);
-			ghiKhac(
-				truoc,
-				sau,
-				"targetValue",
-				soKr(kr.targetValue),
-				input.targetValue,
-			);
-			ghiKhac(
-				truoc,
-				sau,
-				"currentValue",
-				soKr(kr.currentValue),
-				input.currentValue,
-			);
-			ghiKhac(truoc, sau, "unit", kr.unit, input.unit);
-			ghiKhac(
-				truoc,
-				sau,
-				"dueOn",
-				kr.dueOn ? ngay(kr.dueOn) : null,
-				input.dueOn,
-			);
-			ghiKhac(truoc, sau, "weight", soKr(kr.weight), input.weight);
-			await tx.okrKeyResult.update({
-				where: { id: kr.id },
-				data: {
-					title: input.title,
-					kind: input.kind,
-					ownerUserId: input.ownerUserId,
-					startValue: input.startValue,
-					targetValue: input.targetValue,
-					currentValue: input.currentValue,
-					unit: input.unit,
-					dueOn:
-						input.dueOn === undefined
-							? undefined
-							: input.dueOn === null
-								? null
-								: toDate(input.dueOn),
-					weight: input.weight,
-				},
+		await this.assertKyGhiDuoc(tx, quyen.objective.cycleId);
+		await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${quyen.id} FOR UPDATE`;
+		const kr = await tx.okrKeyResult.findUnique({ where: { id: quyen.id } });
+		if (!kr) throw new NotFoundException(T.khongCoKr(quyen.id));
+		if (
+			input.currentValue !== undefined &&
+			input.currentValue !== soKr(kr.currentValue) &&
+			nguonKr.parse(kr.source) !== "tay"
+		)
+			throw new BadRequestException(T.so.hienTaiCuaMay);
+		if (input.kind !== undefined && !crmHopKieu(input.kind)) {
+			const may = await tx.okrNguonKr.findUnique({
+				where: { keyResultId: kr.id },
+				select: { loai: true },
 			});
+			if (kr.source === "crm" || may?.loai === "crm")
+				throw new BadRequestException(T.so.crmKhongHopKieu);
+		}
+		const trangThai = await this.trangThai(tx, kr.objectiveId);
+		if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
+		const dangChay =
+			trangThai === "cong-bo" &&
+			(await this.phaCua(tx, kr.objectiveId)) === "dang-chay";
+		if (
+			dangChay &&
+			input.currentValue !== undefined &&
+			input.currentValue !== soKr(kr.currentValue)
+		)
+			throw new BadRequestException(T.hienTaiQuaCapNhat);
+		const khoi = soKr(kr.startValue);
+		if (
+			input.startValue !== undefined &&
+			kr.startLockedAt !== null &&
+			input.startValue !== khoi
+		)
+			throw new BadRequestException(T.khoiDiemDaKhoa);
+		const kind = input.kind ?? kieuKr.parse(kr.kind);
+		this.assertSoTheoKieu(
+			kind,
+			input.startValue ?? khoi,
+			input.targetValue ?? soKr(kr.targetValue),
+		);
+		if (input.ownerUserId) await this.assertThanhVien(tx, [input.ownerUserId]);
+		const dichCu = soKr(kr.targetValue);
+		let doiDich: Prisma.OkrDoiDichUncheckedCreateInput | null = null;
+		if (
+			dangChay &&
+			input.targetValue !== undefined &&
+			input.targetValue !== dichCu
+		) {
+			const ra = await cuaSoHieuLuc(
+				tx,
+				quyen.objective.cycleId,
+				ngay(new Date()),
+			);
+			if (ra === null && !input.lyDoDoiDich)
+				throw new BadRequestException(T.khep.lyDoDoiDich);
+			doiDich = {
+				keyResultId: kr.id,
+				truoc: dichCu,
+				sau: input.targetValue,
+				lyDo: input.lyDoDoiDich ?? "",
+				ngoaiRa: ra === null,
+				cuaSoRaId: ra?.id ?? null,
+				tacGiaUserId: userId,
+			};
+		}
+		const truoc: OkrVetSnapshot = {};
+		const sau: OkrVetSnapshot = {};
+		ghiKhac(truoc, sau, "title", kr.title, input.title);
+		ghiKhac(truoc, sau, "kind", kr.kind, input.kind);
+		ghiKhac(truoc, sau, "ownerUserId", kr.ownerUserId, input.ownerUserId);
+		ghiKhac(truoc, sau, "startValue", khoi, input.startValue);
+		ghiKhac(truoc, sau, "targetValue", soKr(kr.targetValue), input.targetValue);
+		ghiKhac(
+			truoc,
+			sau,
+			"currentValue",
+			soKr(kr.currentValue),
+			input.currentValue,
+		);
+		ghiKhac(truoc, sau, "unit", kr.unit, input.unit);
+		ghiKhac(truoc, sau, "dueOn", kr.dueOn ? ngay(kr.dueOn) : null, input.dueOn);
+		ghiKhac(truoc, sau, "weight", soKr(kr.weight), input.weight);
+		await tx.okrKeyResult.update({
+			where: { id: kr.id },
+			data: {
+				title: input.title,
+				kind: input.kind,
+				ownerUserId: input.ownerUserId,
+				startValue: input.startValue,
+				targetValue: input.targetValue,
+				currentValue: input.currentValue,
+				unit: input.unit,
+				dueOn:
+					input.dueOn === undefined
+						? undefined
+						: input.dueOn === null
+							? null
+							: toDate(input.dueOn),
+				weight: input.weight,
+			},
+		});
+		await this.vet(
+			tx,
+			userId,
+			"sua-kr",
+			{ objectiveId: kr.objectiveId, keyResultId: kr.id },
+			truoc,
+			sau,
+			opts?.note ?? null,
+		);
+		if (doiDich) {
+			await tx.okrDoiDich.create({ data: doiDich });
 			await this.vet(
 				tx,
 				userId,
-				"sua-kr",
-				{ objectiveId: kr.objectiveId, keyResultId: kr.id },
-				truoc,
-				sau,
+				"doi-dich",
+				{
+					cycleId: quyen.objective.cycleId,
+					objectiveId: kr.objectiveId,
+					keyResultId: kr.id,
+				},
+				{ targetValue: dichCu },
+				{ targetValue: Number(doiDich.sau), ngoaiRa: doiDich.ngoaiRa },
+				doiDich.lyDo || null,
 			);
-			if (doiDich) {
-				await tx.okrDoiDich.create({ data: doiDich });
-				await this.vet(
-					tx,
-					userId,
-					"doi-dich",
-					{
-						cycleId: quyen.objective.cycleId,
-						objectiveId: kr.objectiveId,
-						keyResultId: kr.id,
-					},
-					{ targetValue: dichCu },
-					{ targetValue: Number(doiDich.sau), ngoaiRa: doiDich.ngoaiRa },
-					doiDich.lyDo || null,
-				);
-			}
-			return { id: kr.id, canhBao: null };
-		});
+		}
+		return {
+			id: kr.id,
+			canhBao: null,
+			luotAn: {
+				objectiveId: kr.objectiveId,
+				keyResultId: kr.id,
+				doiChu: "title" in sau,
+			},
+		};
 	}
 
 	async removeKeyResult(userId: string, id: string) {
@@ -1005,68 +1081,71 @@ export class OkrService {
 		return mt;
 	}
 
-	async addAlignment(
+	async addAlignment(userId: string, input: AlignmentInput) {
+		return this.db.$transaction((tx) =>
+			this.addAlignmentTrong(tx, userId, input),
+		);
+	}
+
+	async addAlignmentTrong(
+		tx: Tx,
 		userId: string,
-		input: {
-			objectiveId: string;
-			targetObjectiveId: string | null;
-			targetKeyResultId: string | null;
-		},
+		input: AlignmentInput,
+		opts?: GhiTrong,
 	) {
 		const nguon = await this.quyenOkr.assertSuaMucTieu(
 			userId,
 			input.objectiveId,
+			tx,
 		);
-		return this.db.$transaction(async (tx) => {
-			await this.assertKyGhiDuoc(tx, nguon.cycleId);
-			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
-			if ((await this.trangThai(tx, nguon.id)) === "da-bo")
-				throw new BadRequestException(T.daBo);
-			if (
-				(input.targetObjectiveId === null) ===
-				(input.targetKeyResultId === null)
-			)
-				throw new BadRequestException(T.canChinh.khongCoDich);
-			if (input.targetKeyResultId !== null)
-				await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${input.targetKeyResultId} FOR SHARE`;
-			const dich = await this.dichCanChinh(tx, {
-				objectiveId: input.targetObjectiveId,
-				keyResultId: input.targetKeyResultId,
-			});
-			if (dich.id === nguon.id)
-				throw new BadRequestException(T.canChinh.chinhNo);
-			if (HANG_CAP[capMucTieu.parse(dich.level)] >= HANG_CAP[nguon.level])
-				throw new BadRequestException(T.canChinh.cungCap);
-			if (dich.status !== "cong-bo")
-				throw new BadRequestException(T.canChinh.chuaCongBo);
-			const ky = await tx.okrCycle.findUniqueOrThrow({
-				where: { id: nguon.cycleId },
-				select: { parentId: true },
-			});
-			if (dich.cycleId !== nguon.cycleId && dich.cycleId !== ky.parentId)
-				throw new BadRequestException(T.canChinh.khacChuKy);
-			const noi = {
-				objectiveId: nguon.id,
-				targetObjectiveId: input.targetObjectiveId,
-				targetKeyResultId: input.targetKeyResultId,
-			};
-			if (await tx.okrAlignment.findFirst({ where: noi }))
-				throw new BadRequestException(T.canChinh.daGan);
-			const g = await tx.okrAlignment.create({ data: noi });
-			await this.vet(
-				tx,
-				userId,
-				"gan-can-chinh",
-				{ objectiveId: nguon.id },
-				null,
-				{
-					alignmentId: g.id,
-					targetObjectiveId: g.targetObjectiveId,
-					targetKeyResultId: g.targetKeyResultId,
-				},
-			);
-			return { id: g.id, canhBao: null };
+		await this.assertKyGhiDuoc(tx, nguon.cycleId);
+		await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
+		if ((await this.trangThai(tx, nguon.id)) === "da-bo")
+			throw new BadRequestException(T.daBo);
+		if (
+			(input.targetObjectiveId === null) ===
+			(input.targetKeyResultId === null)
+		)
+			throw new BadRequestException(T.canChinh.khongCoDich);
+		if (input.targetKeyResultId !== null)
+			await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${input.targetKeyResultId} FOR SHARE`;
+		const dich = await this.dichCanChinh(tx, {
+			objectiveId: input.targetObjectiveId,
+			keyResultId: input.targetKeyResultId,
 		});
+		if (dich.id === nguon.id) throw new BadRequestException(T.canChinh.chinhNo);
+		if (HANG_CAP[capMucTieu.parse(dich.level)] >= HANG_CAP[nguon.level])
+			throw new BadRequestException(T.canChinh.cungCap);
+		if (dich.status !== "cong-bo")
+			throw new BadRequestException(T.canChinh.chuaCongBo);
+		const ky = await tx.okrCycle.findUniqueOrThrow({
+			where: { id: nguon.cycleId },
+			select: { parentId: true },
+		});
+		if (dich.cycleId !== nguon.cycleId && dich.cycleId !== ky.parentId)
+			throw new BadRequestException(T.canChinh.khacChuKy);
+		const noi = {
+			objectiveId: nguon.id,
+			targetObjectiveId: input.targetObjectiveId,
+			targetKeyResultId: input.targetKeyResultId,
+		};
+		if (await tx.okrAlignment.findFirst({ where: noi }))
+			throw new BadRequestException(T.canChinh.daGan);
+		const g = await tx.okrAlignment.create({ data: noi });
+		await this.vet(
+			tx,
+			userId,
+			"gan-can-chinh",
+			{ objectiveId: nguon.id },
+			null,
+			{
+				alignmentId: g.id,
+				targetObjectiveId: g.targetObjectiveId,
+				targetKeyResultId: g.targetKeyResultId,
+			},
+			opts?.note ?? null,
+		);
+		return { id: g.id, canhBao: null };
 	}
 
 	async removeAlignment(userId: string, id: string) {

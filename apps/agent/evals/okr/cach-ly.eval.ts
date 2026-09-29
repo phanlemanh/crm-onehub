@@ -203,10 +203,11 @@ function mot(lan: number) {
 				objectiveId: g.objectiveId,
 				keyResultId: null,
 				nguoiYeuCau: g.nguoiYeuCau,
+				nac: "bat",
 				now: new Date(),
 			});
-			await t.require(xep.xep, equals(true));
-			if (!xep.xep) return;
+			await t.require(xep.bat, equals(true));
+			if (!xep.bat) return;
 
 			const r = await t.target.fetch("/internal/crm/dispatch", {
 				method: "POST",

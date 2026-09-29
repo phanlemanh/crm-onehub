@@ -10,7 +10,7 @@ import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
 import { TRO_LY_OKR } from "./okr/config";
-import { chayKiemSanSang } from "./okr/kiem-san-sang";
+import { chayKiemSanSang, xepKiemLaiKhoa } from "./okr/kiem-san-sang";
 import {
 	giaHanLease,
 	laViecTroLyOkr,
@@ -382,6 +382,12 @@ export const drainAll = collapsing(
 		const startedAt = new Date();
 		lastSweepStartedAt = startedAt;
 		lastSweepError = null;
+
+		await xepKiemLaiKhoa().catch((error) => {
+			console.error(
+				`[agent] Could not queue a fresh AI model key check: ${reasonOf(error)}`,
+			);
+		});
 
 		const controller = new AbortController();
 		const signal = controller.signal;

@@ -10,6 +10,9 @@ import troLyOkr from "../agent/subagents/tro_ly_okr/agent";
 const GOC = join(import.meta.dir, "..", "agent");
 const THU_MUC_CON =
 	process.env.THU_MUC_TRO_LY ?? join(GOC, "subagents/tro_ly_okr");
+const THU_MUC_EVAL =
+	process.env.THU_MUC_EVAL_OKR ?? join(import.meta.dir, "..", "evals/okr");
+const CAU_HINH_EVAL = join(import.meta.dir, "..", "evals/evals.config.ts");
 const TOOL_SONG = ["nop_de_xuat"] as const;
 const TOOL_TAT = [
 	"ask_question",
@@ -215,6 +218,101 @@ describe("tuy-chon-moi-loi-goi", () => {
 		expect(
 			trong.providerOptions?.gateway?.zeroDataRetention,
 			"thieu ZDR khi khong co tuy chon",
+		).toBe(true);
+	});
+});
+
+const cauHinhJudge = z.object({
+	model: z
+		.union([
+			z.string(),
+			z.object({ modelId: z.string() }).transform((m) => m.modelId),
+		])
+		.optional(),
+	modelOptions: z
+		.object({
+			providerOptions: z
+				.object({
+					gateway: z
+						.object({ zeroDataRetention: z.boolean().optional() })
+						.optional(),
+				})
+				.optional(),
+		})
+		.optional(),
+});
+
+type CauHinhJudge = z.input<typeof cauHinhJudge>;
+
+const evalDaKhai = z.object({
+	_tag: z.literal("EveEval"),
+	judge: cauHinhJudge.optional(),
+});
+
+const JUDGE_THEO_LOI_GOI = /judge\.autoevals\.\w+\([^;]*\bmodel\s*:/s;
+
+function judgeZdr(judge: CauHinhJudge): boolean {
+	const doc = cauHinhJudge.safeParse(judge);
+	if (!doc.success) return false;
+	return (
+		doc.data.modelOptions?.providerOptions?.gateway?.zeroDataRetention ===
+			true &&
+		(TRO_LY_OKR.moHinhZdr as readonly string[]).includes(doc.data.model ?? "")
+	);
+}
+
+async function kiemJudge(
+	thuMuc: string,
+): Promise<{ soTep: number; loi: string[] }> {
+	const tep = tepTs(thuMuc).filter((t) => t.endsWith(".eval.ts"));
+	const loi: string[] = [];
+	for (const t of tep) {
+		const ten = relative(thuMuc, t);
+		const mod = await import(t);
+		const ds = z.array(evalDaKhai).safeParse([mod.default].flat());
+		const nguon = readFileSync(t, "utf8");
+		const dungJudge = /\bt\.judge\./.test(nguon);
+		const sai =
+			!ds.success ||
+			ds.data.some((e) => (e.judge ? !judgeZdr(e.judge) : dungJudge)) ||
+			JUDGE_THEO_LOI_GOI.test(nguon);
+		if (sai) loi.push(`judge khong zdr: ${ten}`);
+	}
+	return { soTep: tep.length, loi };
+}
+
+describe("judge-zdr", () => {
+	test("judge-zdr: mọi eval dưới evals/okr có judge ZDR thuộc danh sách của cấu hình", async () => {
+		const { soTep, loi } = await kiemJudge(THU_MUC_EVAL);
+		console.log(`judge-zdr: quet ${soTep} tep *.eval.ts duoi ${THU_MUC_EVAL}`);
+		if (soTep === 0) throw new Error(`judge-zdr: 0 tep duoi ${THU_MUC_EVAL}`);
+		expect(loi).toEqual([]);
+		const cauHinh = z
+			.object({ judge: cauHinhJudge.optional() })
+			.parse((await import(CAU_HINH_EVAL)).default);
+		if (cauHinh.judge && !judgeZdr(cauHinh.judge)) {
+			throw new Error("judge khong zdr: evals.config.ts");
+		}
+	});
+
+	test("judge-zdr: đối chứng — bộ đọc thấy judge thiếu cờ, model ngoài danh sách, và t.judge không khai judge", () => {
+		expect(
+			judgeZdr({
+				model: TRO_LY_OKR.judge.model,
+				modelOptions: TRO_LY_OKR.judge.modelOptions,
+			}),
+		).toBe(true);
+		expect(judgeZdr({ model: TRO_LY_OKR.judge.model })).toBe(false);
+		expect(
+			judgeZdr({
+				model: "openai/gpt-5.4-mini",
+				modelOptions: TRO_LY_OKR.judge.modelOptions,
+			}),
+		).toBe(false);
+		expect(
+			JUDGE_THEO_LOI_GOI.test(
+				't.judge.autoevals.closedQA("gon", { model: "openai/gpt-5.4-mini" })',
+			),
 		).toBe(true);
 	});
 });

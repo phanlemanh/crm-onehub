@@ -3,6 +3,7 @@
 import {
 	Table,
 	TableBody,
+	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
@@ -30,6 +31,9 @@ const ALIGN_CLASS = {
 	right: "text-right",
 	center: "text-center",
 } as const;
+
+const ROW_SUB =
+	"text-muted-foreground [&>[data-slot=table-cell]:first-child]:pl-6";
 
 const PANEL_SURFACE = {
 	popover: "bg-popover [&_th]:bg-popover",
@@ -99,6 +103,28 @@ export function SimpleTable({
 	);
 }
 
+export function SimpleTableCell({
+	align = "left",
+	numeric,
+	className,
+	...props
+}: ComponentProps<typeof TableCell> & {
+	align?: SimpleTableColumn["align"];
+	numeric?: boolean;
+}) {
+	return (
+		<TableCell
+			className={cn(
+				"px-3",
+				ALIGN_CLASS[numeric ? "right" : align],
+				numeric && "tabular-nums",
+				className,
+			)}
+			{...props}
+		/>
+	);
+}
+
 export function SimpleTableNote({
 	className,
 	...props
@@ -117,6 +143,7 @@ export function SimpleTableRow({
 	expandable,
 	invalid,
 	selected,
+	sub,
 	className,
 	...props
 }: ComponentProps<typeof TableRow> & {
@@ -124,13 +151,16 @@ export function SimpleTableRow({
 	expandable?: boolean;
 	invalid?: boolean;
 	selected?: boolean;
+	sub?: boolean;
 }) {
 	return (
 		<TableRow
 			data-invalid={invalid ? "" : undefined}
 			data-state={selected ? "selected" : undefined}
+			data-sub={sub ? "" : undefined}
 			className={cn(
 				"hover:bg-transparent",
+				sub && ROW_SUB,
 				clickable && (expandable ? ROW_ACCENT_EXPANDABLE : ROW_ACCENT),
 				selected && !invalid && ROW_SELECTED,
 				invalid && ROW_INVALID,

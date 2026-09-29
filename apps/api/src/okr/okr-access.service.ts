@@ -5,7 +5,7 @@ import {
 	type WorkspaceRole,
 	workspaceRoleOf,
 } from "@crm/auth";
-import type { Db } from "@crm/db";
+import type { Db, Prisma } from "@crm/db";
 import { CAP_MUC_TIEU, type CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import {
 	ForbiddenException,
@@ -147,8 +147,12 @@ export class OkrAccessService {
 		return q;
 	}
 
-	async assertSuaMucTieu(userId: string, objectiveId: string) {
-		const row = await this.db.okrObjective.findUnique({
+	async assertSuaMucTieu(
+		userId: string,
+		objectiveId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
+		const row = await client.okrObjective.findUnique({
 			where: { id: objectiveId },
 			select: chonDonVi,
 		});
@@ -159,8 +163,12 @@ export class OkrAccessService {
 		return mt;
 	}
 
-	async assertSuaKr(userId: string, keyResultId: string) {
-		const kr = await this.db.okrKeyResult.findUnique({
+	async assertSuaKr(
+		userId: string,
+		keyResultId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
+		const kr = await client.okrKeyResult.findUnique({
 			where: { id: keyResultId },
 			include: { objective: { select: chonDonVi } },
 		});

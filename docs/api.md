@@ -806,6 +806,66 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   row, and writes one `chuyen-viec` `OkrTrail` row per KR, objective and việc moved;
   `transferPreview` returns the same `{kr, mucTieu, viec}` counts without writing
   anything.
+- **Bảy thủ tục của `TroLyOkrService` cho lượt 9b «Góp ý khi bấm».** `troLySanSang`,
+  `troLyDeXuat`, `troLyDanhSach`, `troLyQuyet`, `troLyAn`, `troLySoDo` và
+  `xuHuongKr` — đọc thẳng `okr.router.ts` để lấy danh sách hiện hành, dòng này
+  không phải nguồn thật. Ba thủ tục người dùng không đi qua cùng một cổng
+  quyền. `troLySanSang` (`GET .../objectives/{objectiveId}/assistant`) và
+  `troLyDeXuat` (`POST .../assistant/run`) đòi `assertSuaMucTieu` hoặc
+  `assertSuaKr` trên đúng đích được truyền — toàn hay không, không có tập con:
+  không sửa được đích thì `ForbiddenException` luôn, không có KR nào để lọc
+  xuống. Cả ba thủ tục — `troLySanSang`, `troLyDeXuat` và `troLyDanhSach` —
+  còn đòi nấc của đơn vị (`nacCuaDonVi`) đang là `bat`; không đạt thì trả về
+  lý do (`LyDoKhongSanSang`), không phải một lỗi 403. `troLyDanhSach`
+  (`GET .../assistant/suggestions`) không cùng cổng quyền với hai thủ tục
+  kia — nó lọc qua `tapDuocDoc` (`tro-ly.service.ts`): gọi kèm `keyResultId` thì
+  vẫn toàn-hay-không trên đúng KR đó, nhưng gọi cho cả Mục tiêu (không truyền
+  `keyResultId`) thì `tapDuocDoc` trả `"moi"` (mọi KR) khi người gọi sửa được
+  cả đơn vị (`suaDuocDonVi`); không thì lọc xuống đúng tập KR người gọi sửa
+  được (`ghiDuocKr`) và chỉ trả đề xuất của tập đó thay vì chặn cả dòng —
+  `troLyDanhSach` chỉ ném 403 (`khongSuaDuocDonVi`) khi không sửa được KR nào
+  trong Mục tiêu. Gọi kèm một `keyResultId` không thuộc Mục tiêu thì
+  `troLyDanhSach` trả danh sách rỗng thành công (`lyDo: null`), không 403 —
+  khác `troLySanSang` và `troLyDeXuat`, hai thủ tục này ném `krKhacMucTieu`
+  (400). Mục tiêu đã bỏ (`da-bo`) hay đã xoá cũng trả rỗng, không ném; với Mục
+  tiêu đã bỏ, cổng quyền đứng trước nên người không sửa được vẫn nhận 403, còn
+  Mục tiêu đã xoá thì không còn đơn vị để kiểm và ai gọi cũng nhận rỗng.
+  `troLyQuyet`
+  (`POST .../assistant/suggestions/{deXuatId}/decision`) kiểm quyền trên đích
+  của chính dòng đề xuất (`assertSuaDong`: KR nếu dòng gắn với một KR, Mục
+  tiêu nếu không), rồi mới kiểm lại nấc của đơn vị (`nacCuaDonVi`, phải `bat`)
+  một lần nữa bên trong transaction, vì nấc có thể đổi giữa lúc màn đọc danh
+  sách và lúc người dùng quyết. Transaction đó khoá dòng `okrObjective` của Mục
+  tiêu (`FOR UPDATE`) trước khi đọc dòng đề xuất, nên mọi lần quyết trên một Mục
+  tiêu đi tuần tự: hai dòng viết lại khác chữ của cùng một trường được nhận cùng
+  lúc thì lượt sau thấy `truoc` đã cũ và nhận `ConflictException` (`daCu`),
+  không đè lượt trước. `troLyAn` (`GET /okr/assistant/runs`) và
+  `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
+  `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
+  và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.
+- **Chế độ ẩn kích từ chính lần lưu, không từ lịch.** `OkrService.updateObjective`,
+  `updateKeyResult` và `createKeyResult` gọi `kichLuotAn` sau khi transaction của
+  lần lưu đã commit; hàm này gọi `xepLuotAnSauKhiLuu` (`@crm/db/okr-tro-ly`) và
+  tự bắt lỗi — xếp lượt ẩn hỏng chỉ ghi log cảnh báo, không lùi lại lần lưu OKR
+  đã thành công. `xepLuotAnSauKhiLuu` chỉ xếp việc khi lần lưu thật sự đổi
+  `title`/`whyNow` (Mục tiêu) hay `title` (KR) — cờ `doiChu` — và nấc của đơn vị
+  là `an`, không bao giờ khi đã `bat` (đơn vị đã `bat` thì đề xuất đến từ người
+  dùng bấm, không phải từ chế độ ẩn). Việc trùng được gộp theo một `sha256` của
+  id Mục tiêu, id KR và `updatedAt` của mọi dòng liên quan (`inputHash` trong
+  `taoViecDeXuat`), nên hai lần lưu ra cùng nội dung dùng chung một `AgentTask`
+  thay vì xếp hai lượt. Hai trần chỉ áp cho chế độ ẩn, cùng nằm trong
+  `TRO_LY_OKR_TRAN`: một lượt ẩn mỗi Mục tiêu mỗi `nhipAnMucTieuMs` (30 phút),
+  và `luotAnMoiNgay` (40) lượt ẩn toàn công ty mỗi ngày; cả hai vẫn tính vào
+  cùng `aiTranThangUsd` (9 USD mặc định) như mọi chi tiêu khác của Trợ lý OKR.
+  `troLyQuyet` ghi giá trị đã nhận hay đã sửa qua
+  `OkrService.updateObjectiveTrong`/`updateKeyResultTrong`/`addAlignmentTrong`
+  trong cùng transaction, với `note: "tro-ly-okr:" + deXuatId` — một dòng
+  `OkrTrail`, giống hệt một lần sửa tay. Dòng đề xuất của chế độ ẩn (`nac` là
+  `an`) không quyết được: `troLyQuyet` trả `NotFoundException` (`khongCoDeXuat`)
+  cho mọi dòng có `nac` khác `bat`, nên chế độ ẩn không bao giờ ghi vào OKR và
+  không để lại dòng `OkrTrail` nào. Chế độ ẩn không hiện gì cho người dùng: chỉ
+  quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
+  Chương trình OKR.
 
 ## Kho tài liệu: nguồn
 
