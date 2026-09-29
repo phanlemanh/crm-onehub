@@ -32,7 +32,7 @@ const CAY_DO = {
 				'<p className="whitespace-nowrap" translate="no">',
 			),
 		dauVet: '<p className="whitespace-nowrap" translate="no">',
-		ghim: /buoc 2: cuon ngang loi-390/,
+		ghim: /buoc 2: .*cuon ngang loi-390/,
 	},
 	3: {
 		nhan: "ban sao tra lai chuyen huong cua /sua khi trang chua co ban",
