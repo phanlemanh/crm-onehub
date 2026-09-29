@@ -5,7 +5,7 @@ slug: tim-va-dieu-huong-kho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-29-tim-va-dieu-huong-kho-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-29
@@ -82,3 +82,14 @@ dẫn.
 - `QuickSwitcher` đang giữ ⌘K cho cả ứng dụng; lượt này không thêm bộ nghe phím thứ hai.
 - Ngưỡng Cổng Đáng của lượt ở `opportunity.md`; ngưỡng của cả sản phẩm ở lộ trình mục 5.
 - Từ điển: lint W6 báo «chờ duyệt», «trạng thái», «sức khoẻ», «kết quả», «thông báo», «nhóm», «tài liệu», «khối» là chữ tránh của mục khác (Được phép vào, Bậc, Tình trạng KR, Số chốt, Nhắc buổi sáng, Bộ phận, Trang tài liệu). Ở hợp đồng này chúng mang nghĩa của Kho tài liệu (tab «Chờ duyệt», tab «Sức khoẻ», nhóm trong hộp ⌘K, kết quả tìm) — trùng chữ khác nghĩa, giữ nguyên như lượt 1.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-09-29):**
+  - Ngoài-2 — bản nhắc buổi sáng chạy chậm dần khi số người trong công ty tăng, vì mỗi người tốn một lượt đếm riêng; với quy mô hiện tại chưa thấy được, kết quả đếm vẫn đúng.
+  - Ngoài-4 — người dùng không thấy gì khác; nếu sau này ai đó đổi khung đầu trang, các phép đo đã ký có thể vẫn báo xanh mà không được đo lại.
+  - Ngoài-5 — nếu trên điện thoại nút chèn liên kết biến mất, phép đo vẫn báo đạt và ảnh cũ có thể được đưa cho người duyệt xem.
+  - Ngoài-6 — luật ai được duyệt bản nào vẫn còn một bản sao ở phía máy chủ mà bài kiểm không bắt được; lệch nhau sau này thì số bản chờ trên tab có thể khác số trong nhắc sáng.
+  - Ngoài-7 — bài kiểm bản gốc đầu trang không còn phát hiện được nếu ai đó lỡ đổi bố cục đầu trang chung.
+  - Ngoài-8 — kết quả tìm hiện vẫn đúng; nếu dữ liệu có dòng sai dạng, người dùng thấy lỗi chung chung thay vì thông báo chỉ rõ chỗ hỏng.
+  - Ngoài-11 — nếu tìm công ty, người hay thoả thuận bị lỗi, hộp tìm nhanh có thể báo «không có gì khớp» hoặc lặng lẽ ẩn các nhóm đó.
+  - Ngoài-13 — phép kiểm chưa bắt được lỗi múi giờ khi xác định trang quá hạn xác minh; một trang có thể bị tính quá hạn sớm hay muộn một ngày mà không ai phát hiện.
+  - Ngoài-14 — danh sách liên kết gãy ở tab Sức khoẻ chưa được kiểm là có đủ tên trang và tên chủ trang.
+  - Ngoài-16 — phép kiểm chưa chứng minh trang chưa từng duyệt không lọt vào các danh sách khác của Sức khoẻ với người tạo, chủ trang, owner và admin.

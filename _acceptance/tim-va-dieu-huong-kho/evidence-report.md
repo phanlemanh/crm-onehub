@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: tim-va-dieu-huong-kho
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0fe5a080a74526635c6fcaae89c3120fb3ada781
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-29
 ---
 
 # Evidence Report: tim-va-dieu-huong-kho
@@ -262,7 +262,7 @@ Vòng 2. Mọi eval máy đều đạt; còn một mục judgment (E12j) chưa n
     - Dòng nguồn (messages / vi locale của apps/app) của nhãn «Có đề xuất chờ duyệt» và «1 bản chờ duyệt» trên tab Sức khoẻ, kèm mục trong CONTEXT.md cho phép «đề xuất» thay «bản đề xuất» ở màn này, hoặc đổi nhãn thành «Có bản đề xuất chờ duyệt».
     - Ảnh dòng Chờ duyệt (hoặc tooltip/nhãn) cho thấy tên người bên cạnh ngày nghĩa là gì, ví dụ «Người soạn» hay «Chủ trang».
     - Ảnh 390 của hộp chèn liên kết (tdk-chen-lien-ket-390.png) với mép phải nằm trong 390px, kèm nhãn hoặc placeholder cho biết hộp làm gì (ở ảnh hiện tại hộp kết thúc ở x≈389 và không thấy nhãn).
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Phan Le Manh 2026-09-29
 
 ### Lệnh suite (hồi quy)
 
