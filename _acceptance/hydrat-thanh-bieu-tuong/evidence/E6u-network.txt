@@ -1,0 +1,27 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_xenodochial_gould_763cda_do · app http://localhost:4480 · api http://localhost:4574
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+  nap bo OKR mau: ma 0 — Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-29T00:02:34.514Z): 40 người, 3 bộ phận, 10 phòng ban, 3 chu kỳ, 37 mục tiêu, 81 KR, 420 lần cập nhật trong 296 phiên, 42 bản chụp số, 21 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu.
+$ bun scripts/dev-session.ts le-hai-dang@mau.onehub.test
+$ bun scripts/dev-session.ts doan-thi-thu@mau.onehub.test
+man-thanh: slug onehub-center · muc tieu mau-okr-mt-q4-cham-soc-1 · kr mau-okr-kr-q4-cham-soc-1-k1 · so muc quanTri=10 chiOkr=4 · luot=8
+  html may chu quanTri /onehub-center/okr: 2 nav · ban=false · 10 lien ket
+  html may chu quanTri /onehub-center/okr?record=objective:mau-okr-mt-q4-cham-soc-1: 2 nav · ban=false · 10 lien ket
+  html may chu quanTri /onehub-center/okr?record=kr:mau-okr-kr-q4-cham-soc-1-k1: 2 nav · ban=false · 10 lien ket
+  html may chu quanTri /onehub-center: 2 nav · ban=false · 10 lien ket
+  html may chu chiOkr /onehub-center/okr: 2 nav · ban=false · 4 lien ket
+  html may chu chiOkr /onehub-center/okr?record=objective:mau-okr-mt-q4-cham-soc-1: 2 nav · ban=false · 4 lien ket
+  html may chu chiOkr /onehub-center/okr?record=kr:mau-okr-kr-q4-cham-soc-1-k1: 2 nav · ban=false · 4 lien ket
+  html may chu chiOkr /onehub-center: 2 nav · ban=false · 4 lien ket
+  anh: .acceptance-runs/hydrat-thanh-bieu-tuong/evidence/htbt-thanh-quanTri-1440.png
+  anh: .acceptance-runs/hydrat-thanh-bieu-tuong/evidence/htbt-thanh-chiOkr-1440.png
+  tai trinh duyet: 64 luot
+  loi hydrat cua thanh: 0
+  loi hydrat khac (ngoai vong, khong tinh hong): 0
+man-thanh: 49 kiem, 0 hong
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

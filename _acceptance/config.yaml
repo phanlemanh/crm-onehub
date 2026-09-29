@@ -873,9 +873,15 @@ executors:
     bclkt_khong_lap: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-khong-lap-chu.dom.tsx -t khong-lap
     bclkt_guard: cd apps/app && bun test test/messages-guard.spec.ts
     bclkt_thuoc_da_ky: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx && bun test --preload ./test/setup-dom.ts ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nguon-keo-tha-chu.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nguon.dom.tsx
+    htbt_e1: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e1 '
+    htbt_e2: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e2 '
+    htbt_e3: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e3 '
+    htbt_e4: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e4 '
+    htbt_e5: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e5 '
   script:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
+    htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
     mctkkn_khoa_rong: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/khoa-rong.mjs
     mctkkn_chieu_do: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/chieu-do-can-khoa.mjs
     mctkkn_ten_khoa: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/ten-khoa.mjs
