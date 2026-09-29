@@ -49,6 +49,7 @@ const TGY = {
 	viSaoThu: [
 		"Quý 4 là mùa cao điểm; đội cần giữ đối tác mới ở lại sau đơn đầu.",
 		"Mùa mua sắm cuối năm dồn đơn; đối tác mới cần chạy ổn trước tháng 12.",
+		"Đối tác mới bỏ đi sau đơn đầu; quý 4 là lúc giữ họ ở lại.",
 	],
 	krYeu: {
 		title: "Gọi điện cho đối tác mới mỗi tuần",
@@ -129,7 +130,9 @@ function doBoCuc(chonHop) {
 		].map((o) => o.getBoundingClientRect().width),
 		sw: document.documentElement.scrollWidth,
 		iw: window.innerWidth,
-		soHop: document.querySelectorAll('[role="dialog"][data-slot="dialog-content"]').length,
+		soHop: document.querySelectorAll(
+			'[role="dialog"][data-slot="dialog-content"]',
+		).length,
 	};
 }
 
@@ -386,6 +389,32 @@ async function coTheVietLai(p, chonHop, hanMs) {
 		.catch(() => false);
 }
 
+async function loaiTheCho(p, chonHop) {
+	await p
+		.waitForFunction(
+			(chonHop) =>
+				document
+					.querySelector(`${chonHop} [data-cot-gop-y]`)
+					?.getAttribute("aria-busy") !== "true",
+			{ timeout: TGY.cho.gopYMs },
+			chonHop,
+		)
+		.catch(() => {});
+	return p.evaluate((chonHop) => {
+		const cot = document.querySelector(`${chonHop} [data-cot-gop-y]`);
+		const co = (k) =>
+			cot?.querySelector(`[data-the-cho][data-kind="${k}"]`) !== null &&
+			cot?.querySelector(`[data-the-cho][data-kind="${k}"]`) !== undefined;
+		return {
+			rewrite: co("rewrite"),
+			question: co("question"),
+			compact: co("compact"),
+		};
+	}, chonHop);
+}
+
+const duLoai = (l) => Boolean(l?.rewrite && l.question && l.compact);
+
 async function nhoVaCho(p, chonHop) {
 	await bamNhan(p, `${chonHop} [data-nut-gop-y="nho"] button`);
 	return coTheVietLai(p, chonHop, TGY.cho.gopYMs);
@@ -403,17 +432,27 @@ async function buocE1(tl) {
 		await moHopMucTieu(t2.p);
 		const mtTruoc = await t2.p.evaluate(doBoCuc, HOP_MT);
 		let co = await nhoVaCho(t2.p, HOP_MT);
-		for (let lan = 0; !co && lan < TGY.viSaoThu.length; lan += 1) {
+		let loai = co ? await loaiTheCho(t2.p, HOP_MT) : null;
+		for (
+			let lan = 0;
+			!(co && duLoai(loai)) && lan < TGY.viSaoThu.length;
+			lan += 1
+		) {
 			await t2.ctx.close();
 			await trpc(API, tl).lam("okr.updateObjective", {
 				id: MT,
 				whyNow: TGY.viSaoThu[lan],
 			});
+			await trpc(API, tl).lam("okr.troLyDeXuat", { objectiveId: MT });
 			const t3 = await trang(tl, TGY.kho.rong);
 			await moHopMucTieu(t3.p);
-			co = await nhoVaCho(t3.p, HOP_MT);
+			co = await coTheVietLai(t3.p, HOP_MT, TGY.cho.gopYMs);
+			loai = co ? await loaiTheCho(t3.p, HOP_MT) : null;
 			Object.assign(t2, t3);
 		}
+		dong.push(
+			`GHI loai the cho sau nho gop y: viet lai ${loai?.rewrite} · cau hoi ${loai?.question} · can chinh ${loai?.compact}`,
+		);
 		if (
 			!kiem(
 				"E1 muc tieu: cot co the viet lai sau khi nho gop y (model that)",
@@ -543,6 +582,15 @@ async function buocE13(tl) {
 					?.scrollIntoView({ block: "start" }),
 			);
 			await chup(t.p, `E13-${t.rong}-co-dong`);
+			const coCanChinh = await t.p.evaluate(() => {
+				const the = document.querySelector(
+					'[data-cot-gop-y] [data-the-cho][data-kind="compact"]',
+				);
+				the?.scrollIntoView({ block: "center" });
+				return the !== null;
+			});
+			if (kiem(`E13 ${t.rong}: co the can chinh de chup tron`, coCanChinh))
+				await chup(t.p, `E13-${t.rong}-can-chinh`);
 		}
 
 		const khac = (await idTheCho(p2.p, ':not([data-kind="question"])')).filter(

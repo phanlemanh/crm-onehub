@@ -131,7 +131,7 @@ evals:
       Nhìn các ảnh thẻ góp ý ở 1440 và 390 px: với mỗi thẻ cần quyết (viết lại, căn chỉnh), nút nào là hành động chính, và câu đề
       xuất mới có đọc liền một mạch không (không bị bẻ thành các dòng ba bốn chữ)? So với ảnh cột
       cũ của lượt 9b, thẻ mới có sửa được cảm giác chật không?
-    inputs: [_acceptance/the-gop-y-okr/evidence/E13-1440-co-dong.png, _acceptance/the-gop-y-okr/evidence/E13-390-co-dong.png, .acceptance-runs/tro-ly-okr-de-xuat/lai-tay-2026-09-29/09-ba-de-xuat.jpg]
+    inputs: [_acceptance/the-gop-y-okr/evidence/E13-1440-co-dong.png, _acceptance/the-gop-y-okr/evidence/E13-390-co-dong.png, _acceptance/the-gop-y-okr/evidence/E13-1440-can-chinh.png, _acceptance/the-gop-y-okr/evidence/E13-390-can-chinh.png, .acceptance-runs/tro-ly-okr-de-xuat/lai-tay-2026-09-29/09-ba-de-xuat.jpg]
     expected: >-
       PASS khi mỗi thẻ cần quyết có đúng một nút chính nhận ra được ngay, thẻ câu hỏi không tranh nút chính với thẻ cần quyết, và câu mới ở 1440 px không bị bẻ quá
       hai dòng với câu dài ≤ 90 ký tự; FAIL nêu thẻ và ảnh vi phạm; UNCERTAIN khi thiếu ảnh.
