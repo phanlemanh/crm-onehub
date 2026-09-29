@@ -5,7 +5,7 @@ slug: tro-ly-okr-de-xuat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-28T08:10:11Z
 design_doc: docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md
@@ -88,5 +88,24 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 ## Notes
 
 - Độ trễ góp ý khi bấm phụ thuộc tải máy đo: round 3 đo dưới tải ra p50 11,3 s / p90 22,5 s (trên ngưỡng 8 s / 15 s của AC-14), round 2 và round 4 máy rảnh lọt ngưỡng (round 4: 6,7 s / 11,1 s). Chủ kho gỡ giới hạn đã khai sau round 4 (29/09): E24 lại đòi thoát 0 và đo khi máy rảnh. Mọi công tắc tắt khi gộp; độ trễ trên OKR thật vẫn đo lại ở Cổng Giá trị trước khi bật cho người dùng.
+
+### Known limits (Cổng Bằng chứng, 2026-09-29)
+
+- Ngoài-1: báo cáo kiểm luật kho (`rang/luat-kho.mjs`) kết luận luật «không viết hai lần một đơn vị» đạt chỉ vì không phán quyết tay nào chứa chữ «TRÙNG»; dòng `1_000` ở thẻ số đo cùng nghĩa với giây của API nhưng nhãn tránh chữ đó.
+- Ngoài-4: bộ kiểm góp ý (`apps/agent/evals/okr/gop-y.eval.ts`) tự khai lại đơn vị phút thay vì nhập `MINUTE_MS` dùng chung.
+- Ngoài-5: phán quyết tay cho `NGAY_MS` trong cấu hình kiểm luật kho không khớp dòng nào, vì tệp cấu hình bị bỏ khỏi phần quét số.
+- Ngoài-7: bộ quét luật kho chỉ lần theo import «./»; import «../» rơi thành «nguồn ngoài kho» mà báo cáo vẫn ghi sạch. Hiện chưa tệp nào dùng kiểu đó.
+- Ngoài-8: danh sách dấu câu của bộ kiểm số viết bằng chữ có bản chép thứ hai trong biểu thức tách từ; thêm dấu vào cấu hình sẽ không có tác dụng.
+- Ngoài-9: «một»/«năm» đứng trước «tỷ lệ», «tỷ trọng», «tỷ suất» bị đọc thành số mới, nên câu viết lại tốt có cụm đó bị loại lặng lẽ.
+- Ngoài-10: phép đo số mới lọt qua (`rang/so-moi-lot.mjs`) dùng chung bảng quy tắc với bộ kiểm, nên một lỗi trong bảng làm cả hai cùng bỏ sót.
+- Ngoài-11: bài kiểm bấm nút Hoàn tác khi hộp thoại mở chỉ kiểm tên class chứ không thử bấm thật.
+- Ngoài-12: bài kiểm đóng hộp thoại khi bấm trong thông báo dùng thông báo giả viết tay đúng bộ chọn, không dùng thông báo thật.
+- Ngoài-13: bài kiểm «bấm nút trong thông báo không đóng hộp» thiếu đối chứng dương (bấm chỗ khác thì đóng).
+- Ngoài-15: ba biến `TDX_*` chỉ dùng cho bài đo góp ý chưa được khai trong `.env.example`.
+- Ngoài-16: tiền tố ghi chú vết «tro-ly-okr:» được viết lại bằng regex ở màn tab Vết thay vì dùng chung một nguồn với phía ghi.
+- Ngoài-17: thẻ «Góp ý của Trợ lý OKR» của quản trị đọc cả tháng lượt ẩn rồi mới lọc và cắt 50 trong bộ nhớ; có thể chậm dần khi số lượt lớn lên.
+- Ngoài-20: khi kích lượt ẩn sau lưu hỏng, nhật ký chỉ ghi tên lớp lỗi, nuốt thông điệp lỗi.
+- Ngoài-21: ca «không thấy dòng ẩn» ở nấc ẩn chỉ khẳng định danh sách rỗng, trong khi API về cấu trúc đã luôn trả rỗng ở nấc đó; một bài khác trong cùng tệp vẫn canh bộ lọc.
+- Ngoài-22: bài kiểm nộp mười dòng bị loại dùng danh sách mười mã chép cứng, không rút từ `MA_LOAI_DE_XUAT`; mã thứ mười một sẽ không được kiểm.
 
 ## Iterations

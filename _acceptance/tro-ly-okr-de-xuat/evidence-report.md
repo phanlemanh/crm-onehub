@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: tro-ly-okr-de-xuat
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 79bf1996b6c915b35dab14b44532ebb1915c2c2e
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-29
 ---
 
 # Evidence Report: tro-ly-okr-de-xuat
@@ -305,7 +305,7 @@ Round 5, HEAD 79bf1996. Bảng dưới thay toàn bộ nội dung round cũ; l�
   required_evidence:
     - Bản /Users/manh-macmini/dev/crm/_acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md do chủ kho điền cột cuối («Đạt» hoặc «Không đạt») cho đủ các cặp. Có bản đó thì khớp = số cặp chủ kho trùng judge (judge Đạt khi điểm bằng 1,00) chia tổng số cặp, so với 85%; từ 17/20 trở lên là PASS, dưới mức đó là FAIL.
     - Giải thích vì sao header ghi 22 ca bộ Viết lại mà bảng chỉ liệt kê 20 hàng, ví dụ đầu ra đầy đủ của lệnh `bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs` hoặc một dòng ghi chú trong hieu-chinh-judge.md. Cần để biết mẫu số của tỷ lệ khớp và của điểm trung bình.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-09-29 — Đạt
 
 - eval: E28
   judged_by: hội đồng ba lens (fresh context), đề xuất PASS với một phiếu chưa kết luận
@@ -319,7 +319,7 @@ Round 5, HEAD 79bf1996. Bảng dưới thay toàn bộ nội dung round cũ; l�
     - Trích nguyên văn từ docs/proto.md (hoặc mục /proto trong docs/design.md) cho biết bản mẫu dưới apps/app/app/proto/_modules/tro-ly-okr-de-xuat/ được miễn luật không đè className lên component @crm/ui. Có câu đó thì mục className chuyển sang PASS; không miễn thì 20 dòng ở luat-kho.md §5 là vi phạm.
     - Bản luat-kho.md sinh lại ở HEAD hiện tại (79bf1996) bằng `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`, hoặc `git diff --stat 21a21de8 HEAD -- apps packages` chỉ ra không tệp mã nào đổi sau 21a21de8.
     - Một câu trong spec §8/§4 hoặc docs/api.md mục OKR xác nhận API được ghi OkrDeXuat (quyết định của người, het-han, hienLuc) ngoài AgentTask và OkrService.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-09-29 — Đạt
 
 ### Lệnh suite (hồi quy)
 
