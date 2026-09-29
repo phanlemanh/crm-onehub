@@ -15,7 +15,7 @@ import { donViCua, OkrAccessService } from "../src/okr/okr-access.service";
 import { OKR } from "../src/okr/okr-config";
 import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
 import { TO_CHUC } from "../src/to-chuc/to-chuc-config";
-import { donSanCanhKr, roiKhoi } from "./okr-canh-kr-san";
+import { donSanCanhKr, roiKhoi, vaoLai } from "./okr-canh-kr-san";
 import { KY_HIEN_THI } from "./okr-hien-thi-san";
 import {
 	donSanKhep,
@@ -275,10 +275,12 @@ describe("chuyen-don-vi", () => {
 		Q: "",
 		QL: "",
 		BX: "",
+		BY: "",
 		tP: { nguoi: "", cookie: "" },
 		tQ: { nguoi: "", cookie: "" },
 		G: [] as string[],
 		GB: "",
+		GBo: "",
 		GD: "",
 	};
 
@@ -293,6 +295,7 @@ describe("chuyen-don-vi", () => {
 		s.BX = await bpMoi("cd-BX");
 		s.tP = await truongMoi("department", s.P, "cd-tP");
 		s.tQ = await truongMoi("department", s.Q, "cd-tQ");
+		s.BY = await bpMoi("cd-BY");
 		const tBX = await truongMoi("division", s.BX, "cd-tBX");
 		ok(await goi("org.archiveDepartment", { id: s.QL }), "luu tru QL");
 		const x = await nguoiMoi("cd-X");
@@ -357,6 +360,8 @@ describe("chuyen-don-vi", () => {
 			"viec G1",
 		);
 		s.GB = await mucTieu(s.ky, bpDv(s.BX), tBX);
+		s.GBo = await mucTieu(s.ky, pbDv(s.P), s.tP);
+		ok(await goi("okr.dropObjective", { id: s.GBo }, s.tP.cookie), "bo GBo");
 		s.GD = await mucTieu(s.kyDong, pbDv(s.P), s.tP);
 		ok(await sangPha(s.kyDong, "cham-diem"), "ky dong cham diem");
 		ok(await sangPha(s.kyDong, "da-dong"), "ky da dong");
@@ -381,7 +386,7 @@ describe("chuyen-don-vi", () => {
 		async () => {
 			const [g1, g2, g3, g4] = s.G;
 			if (!g1 || !g2 || !g3 || !g4) throw new Error("thieu muc tieu");
-			const tatCa = [...s.G, s.GD];
+			const tatCa = [...s.G, s.GD, s.GBo];
 			const donViDau = await donViCuaMucTieu(tatCa);
 			const khongCo = `khong-co-${ma("g")}`;
 			const tieuDe = async (id: string) =>
@@ -393,6 +398,8 @@ describe("chuyen-don-vi", () => {
 				).title;
 			const tieuDeGB = await tieuDe(s.GB);
 			const tieuDeGD = await tieuDe(s.GD);
+			const tieuDeGBo = await tieuDe(s.GBo);
+			const khongCoDv = `khong-co-${ma("dv")}`;
 			const LO_HONG = [
 				{
 					ten: "ma khong ton tai trong lo",
@@ -417,6 +424,18 @@ describe("chuyen-don-vi", () => {
 					vao: { objectiveIds: [g1, s.GD], den: pbDv(s.Q) },
 					ai: phien.quan.cookie,
 					mong: `400 ${T.taiCoCau.kyDaDong(tieuDeGD)}`,
+				},
+				{
+					ten: "lo co muc tieu da bo",
+					vao: { objectiveIds: [g1, s.GBo], den: pbDv(s.Q) },
+					ai: phien.quan.cookie,
+					mong: `400 ${T.taiCoCau.daBo(tieuDeGBo)}`,
+				},
+				{
+					ten: "don vi nhan khong ton tai",
+					vao: { objectiveIds: [g1], den: pbDv(khongCoDv) },
+					ai: phien.quan.cookie,
+					mong: `400 ${T.khongCoDonVi(khongCoDv)}`,
 				},
 				{
 					ten: "nguoi goi la truong P",
@@ -572,6 +591,35 @@ describe("chuyen-don-vi", () => {
 		},
 		CHO_MS,
 	);
+	test(
+		"chuyen-don-vi bộ phận sang bộ phận: đổi divisionId, một vết chuyen-don-vi, trưởng bộ phận nhận sửa được",
+		async () => {
+			const tBY = await truongMoi("division", s.BY, "cd-tBY");
+			const chuyen = ok<{ daChuyen: number; canhBao: string | null }>(
+				await goi("okr.chuyenDonVi", {
+					objectiveIds: [s.GB],
+					denDonVi: { level: "bo-phan", id: s.BY },
+				}),
+				"chuyen GB sang BY",
+			);
+			const vet = await db.okrTrail.findMany({
+				where: { objectiveId: s.GB, action: "chuyen-don-vi" },
+				select: { before: true, after: true },
+			});
+			expect({
+				chuyen,
+				donVi: await donViCuaMucTieu([s.GB]),
+				vet: vet.map((v) => [parseOkrVet(v.before), parseOkrVet(v.after)]),
+				suaDuoc: await suaDuoc(tBY.nguoi, s.GB),
+			}).toEqual({
+				chuyen: { daChuyen: 1, canhBao: null },
+				donVi: { [s.GB]: s.BY },
+				vet: [[{ divisionId: s.BX }, { divisionId: s.BY }]],
+				suaDuoc: true,
+			});
+		},
+		CHO_MS,
+	);
 });
 
 describe("mo-coi", () => {
@@ -590,9 +638,17 @@ describe("mo-coi", () => {
 		hB3: { nguoi: "", cookie: "" },
 		h5: { nguoi: "", cookie: "" },
 		k5: "",
+		u6: "",
+		p7: "",
+		B4: "",
+		hB4: { nguoi: "", cookie: "" },
 		O2: "",
 		O3: "",
 		O5: "",
+		O6: "",
+		O7: "",
+		O8: "",
+		O9: "",
 	};
 
 	beforeAll(async () => {
@@ -616,6 +672,27 @@ describe("mo-coi", () => {
 		s.O2 = await mucTieu(s.ky, pbDv(s.P2), s.hP2);
 		s.O3 = await mucTieu(s.ky, pbDv(s.P3), h3);
 		s.O5 = await mucTieu(s.ky, pbDv(s.P5), s.h5, [{}, { ownerUserId: s.k5 }]);
+		s.u6 = await nguoiMoi("mc-U6");
+		s.p7 = await nguoiMoi("mc-P7");
+		ok(await datViTri(s.p7, s.P5), "xep P7 vao P5");
+		s.B4 = await bpMoi("mc-B4");
+		s.hB4 = await truongMoi("division", s.B4, "mc-hB4");
+		s.O6 = (
+			await gieoMucTieuCongBo(s.ky, [{ ownerUserId: s.h5.nguoi }], {
+				unit: pbDv(s.P5),
+				ownerUserId: s.u6,
+				ai: s.h5.cookie,
+			})
+		).objectiveId;
+		s.O7 = (
+			await gieoMucTieuCongBo(s.ky, [{ ownerUserId: s.h5.nguoi }], {
+				unit: { level: "ca-nhan", personUserId: s.p7 },
+				ownerUserId: s.h5.nguoi,
+				ai: s.h5.cookie,
+			})
+		).objectiveId;
+		s.O8 = await mucTieu(s.ky, bpDv(s.B4), s.hB4);
+		s.O9 = await mucTieu(s.ky, pbDv(s.P5), s.h5);
 	}, CHO_GIEO_MS);
 	afterAll(donSan, CHO_MS);
 
@@ -752,6 +829,64 @@ describe("mo-coi", () => {
 			expect(tra(await moCoi(truongBoPhan))).toBe(
 				`403 ${T.taiCoCau.canQuanTri}`,
 			);
+		},
+		CHO_GIEO_MS,
+	);
+	test(
+		"mo-coi bốn ca thêm: người phụ trách mục tiêu rời, người của mục tiêu cá nhân rời, bộ phận không trưởng, mục tiêu phòng ban mất cột đơn vị — rồi sửa về rỗng",
+		async () => {
+			const dau = await docMoCoi();
+			await roiKhoi(s.u6);
+			await roiKhoi(s.p7);
+			ok(
+				await goi("org.setHead", { kind: "division", id: s.B4, userId: null }),
+				"bo truong B4",
+			);
+			await db.okrObjective.update({
+				where: { id: s.O9 },
+				data: { departmentId: null },
+			});
+			const hongTho = ok<MucMoCoi[]>(await moCoi(), "okr.moCoi bon ca");
+			const hong = gon(hongTho);
+			const o9 = hongTho.find((m) => m.objectiveId === s.O9)?.donVi;
+			ok(
+				await goi("okr.transferWork", {
+					fromUserId: s.u6,
+					toUserId: s.h5.nguoi,
+				}),
+				"chuyen viec U6",
+			);
+			await vaoLai(s.p7);
+			ok(
+				await goi("org.setHead", {
+					kind: "division",
+					id: s.B4,
+					userId: s.hB4.nguoi,
+				}),
+				"dat lai truong B4",
+			);
+			ok(
+				await goi("okr.chuyenDonVi", {
+					objectiveIds: [s.O9],
+					denDonVi: { level: "phong-ban", id: s.P4 },
+				}),
+				"chuyen O9 sang P4",
+			);
+			expect({ dau, hong, o9, sau: await docMoCoi() }).toEqual({
+				dau: [],
+				hong: mong([
+					{ objectiveId: s.O6, lyDo: ["phu-trach-roi"] },
+					{ objectiveId: s.O7, lyDo: ["khong-ai-sua"] },
+					{ objectiveId: s.O8, lyDo: ["khong-ai-sua"] },
+					{ objectiveId: s.O9, lyDo: ["khong-ai-sua"] },
+				]),
+				o9: {
+					level: "phong-ban",
+					id: null,
+					ten: T.taiCoCau.khongDonVi,
+				},
+				sau: [],
+			});
 		},
 		CHO_GIEO_MS,
 	);

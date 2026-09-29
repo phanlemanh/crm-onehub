@@ -213,6 +213,7 @@ export const OKR = {
 			daBo: (ten: string) => `Mục tiêu «${ten}» đã bỏ — không chuyển nữa.`,
 			kyDaDong: (ten: string) =>
 				`Mục tiêu «${ten}» thuộc chu kỳ đã đóng — OKR đã đóng giữ ở đơn vị cũ.`,
+			khongDonVi: "Không gắn đơn vị",
 			donViNhanLuuTru:
 				"Đơn vị nhận đã lưu trữ — khôi phục đơn vị đó hoặc chọn đơn vị khác.",
 			vuotTran: (n: number, tran: number) =>

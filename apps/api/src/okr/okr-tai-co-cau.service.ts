@@ -1,6 +1,6 @@
 import type { Db, Prisma } from "@crm/db";
 import { dieuKienOkrMo, PHA_CHUYEN_DUOC } from "@crm/db/okr-don-vi";
-import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
+import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import type {
 	ChuyenDonViInput,
 	LyDoMoCoi,
@@ -12,7 +12,6 @@ import {
 	ForbiddenException,
 	Inject,
 	Injectable,
-	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type { TreeOutput } from "../to-chuc/to-chuc.contracts";
@@ -61,10 +60,19 @@ const cotDonVi = (dv: DonViNhan) =>
 const ghiDonVi = (dv: DonViNhan, id: string) =>
 	dv.level === "phong-ban" ? { departmentId: id } : { divisionId: id };
 
+function khongDonVi(level: CapMucTieu): DonViMoCoi {
+	return {
+		donVi: { level, id: null, ten: T.taiCoCau.khongDonVi },
+		luuTru: false,
+		khongAiSua: true,
+	};
+}
+
 function donViMoCoi(mt: MucTieuMoCoi, cay: CayMoCoi): DonViMoCoi {
 	switch (mt.level) {
 		case "phong-ban": {
-			const id = mt.departmentId ?? "";
+			const id = mt.departmentId;
+			if (id === null) return khongDonVi(mt.level);
 			const pb = cay.phongBan.get(id);
 			const bp = pb?.divisionId ? cay.boPhan.get(pb.divisionId) : undefined;
 			return {
@@ -78,7 +86,8 @@ function donViMoCoi(mt: MucTieuMoCoi, cay: CayMoCoi): DonViMoCoi {
 			};
 		}
 		case "bo-phan": {
-			const id = mt.divisionId ?? "";
+			const id = mt.divisionId;
+			if (id === null) return khongDonVi(mt.level);
 			const bp = cay.boPhan.get(id);
 			return {
 				donVi: {
@@ -91,7 +100,8 @@ function donViMoCoi(mt: MucTieuMoCoi, cay: CayMoCoi): DonViMoCoi {
 			};
 		}
 		case "ca-nhan": {
-			const id = mt.personUserId ?? "";
+			const id = mt.personUserId;
+			if (id === null) return khongDonVi(mt.level);
 			return {
 				donVi: { level: mt.level, id, ten: cay.tenNguoi.get(id) ?? id },
 				luuTru: false,
@@ -144,9 +154,21 @@ export class OkrTaiCoCauService {
 				: await tx.$queryRaw<{ archivedAt: Date | null }[]>`
 					SELECT "archivedAt" FROM "division" WHERE id = ${dv.id} FOR NO KEY UPDATE`;
 		const [dong] = hang;
-		if (!dong) throw new NotFoundException(T.khongCoDonVi(dv.id));
+		if (!dong) throw new BadRequestException(T.khongCoDonVi(dv.id));
 		if (dong.archivedAt !== null)
 			throw new BadRequestException(T.taiCoCau.donViNhanLuuTru);
+	}
+
+	private async khoaLo(tx: Tx, ids: string[], nc: NguCanhXem): Promise<void> {
+		const ky = await tx.okrObjective.findMany({
+			where: { AND: [{ id: { in: ids } }, dieuKienXemMucTieu(nc)] },
+			select: { cycleId: true },
+			distinct: ["cycleId"],
+		});
+		const kyIds = ky.map((k) => k.cycleId).sort();
+		if (kyIds.length > 0)
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ANY(${kyIds}) ORDER BY id FOR UPDATE`;
+		await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ANY(${[...ids].sort()}) ORDER BY id FOR UPDATE`;
 	}
 
 	private async canhBaoTran(
@@ -183,6 +205,7 @@ export class OkrTaiCoCauService {
 		const ids = [...new Set(input.objectiveIds)];
 		return this.db.$transaction(async (tx) => {
 			await this.khoaDonViNhan(tx, den);
+			await this.khoaLo(tx, ids, nc);
 			const hang = await tx.okrObjective.findMany({
 				where: { AND: [{ id: { in: ids } }, dieuKienXemMucTieu(nc)] },
 				select: {

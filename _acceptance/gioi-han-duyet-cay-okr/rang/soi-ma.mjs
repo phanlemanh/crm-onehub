@@ -515,6 +515,12 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr-tai-co-cau.service.ts",
+		ham: "khoaLo",
+		bang: "tho:okrObjective",
+		lyDo: "khoá hàng mục tiêu FOR UPDATE trước khi chuyển đơn vị; mã lấy từ lô đã qua điều kiện xem ngay trên, không trả hàng nào",
+	},
+	{
+		tep: "apps/api/src/okr/okr-tai-co-cau.service.ts",
 		ham: "canhBaoTran",
 		bang: "okrObjective",
 		lyDo: "ghi: quản trị chuyển OKR, đếm mục tiêu của đơn vị nhận theo chu kỳ để so trần chương trình như kiemTranMucTieu — trần tính cả mục tiêu giới hạn; chỉ ra số",
