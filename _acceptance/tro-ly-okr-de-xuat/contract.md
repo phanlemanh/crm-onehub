@@ -87,4 +87,6 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 ## Notes
 
+- Known limit (chủ kho chọn 29/09 sau S4 round 3): độ trễ góp ý khi bấm trên máy dev qua Gateway là p50 11,3 s và p90 22,5 s (round 3), trên ngưỡng 8 s / 15 s của AC-14; round 2 cùng eval lọt ngưỡng. Mọi công tắc tắt khi gộp nên người dùng chưa gặp; ngưỡng 8 s / 15 s là điều kiện bật, đo lại ở Cổng Giá trị trên OKR thật trước khi bật cho người dùng. E24 khai `expected_exit: 1`.
+
 ## Iterations
