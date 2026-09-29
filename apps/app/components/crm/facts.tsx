@@ -1,8 +1,8 @@
 "use client";
 
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { ProposedChange } from "@crm/ui/components/proposed-change";
 import { Provenance } from "@crm/ui/components/sourced-value";
-import { Suggestion } from "@crm/ui/components/suggestion";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { LocalDateTime } from "@/components/local-date-time";
@@ -49,12 +49,26 @@ export function FactSuggestion({
 	);
 
 	return (
-		<Suggestion
+		<ProposedChange
+			kind="compact"
 			value={fact.value}
 			rationale={fact.evidence.map((item) => item.detail).join(" · ")}
 			pending={decide.isPending}
-			onAccept={() => decide.mutate({ factId: fact.id, decision: "accept" })}
-			onDismiss={() => decide.mutate({ factId: fact.id, decision: "dismiss" })}
+			actions={[
+				{
+					id: "nhan",
+					label: m.facts.accept,
+					tone: "primary",
+					onClick: () => decide.mutate({ factId: fact.id, decision: "accept" }),
+				},
+				{
+					id: "bac",
+					label: m.facts.dismiss,
+					tone: "quiet",
+					onClick: () =>
+						decide.mutate({ factId: fact.id, decision: "dismiss" }),
+				},
+			]}
 		/>
 	);
 }

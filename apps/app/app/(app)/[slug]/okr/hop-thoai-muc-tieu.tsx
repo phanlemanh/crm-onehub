@@ -5,6 +5,7 @@ import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
 	Dialog,
+	DialogAssistBody,
 	DialogClose,
 	DialogContent,
 	DialogFooter,
@@ -51,13 +52,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import {
-	CotGopY,
-	type GiaTriDaNhan,
-	LOP_THAN_HOP,
-	NutGopY,
-	useGopY,
-} from "./cot-gop-y";
+import { CotGopY, type GiaTriDaNhan, NutGopY, useGopY } from "./cot-gop-y";
 import type { MucTieu } from "./kieu";
 import type { DonChonOkr } from "./okr-search-params";
 import { KhungTuMau, NutBatDauTuMau, NutTaoTuMau, useTuMau } from "./tu-mau";
@@ -98,9 +93,11 @@ const cungTapHop = (a: string[], b: string[]) =>
 export function HopThoaiMucTieu({
 	yeuCau,
 	dong,
+	moKr,
 }: {
 	yeuCau: YeuCauMucTieu;
 	dong: () => void;
+	moKr?: (keyResultId: string) => void;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -162,6 +159,7 @@ export function HopThoaiMucTieu({
 		objectiveId: cu?.id ?? null,
 		coSuaChuaLuu: coThayDoi,
 		onDaNhan: nhanGiaTri,
+		moKr,
 	});
 
 	const chu = chuChon || me.data?.id || "";
@@ -285,17 +283,14 @@ export function HopThoaiMucTieu({
 		>
 			<DialogContent
 				data-hop-thoai-muc-tieu={cu?.id ?? "moi"}
-				size={gopY.cotMo ? "wide" : "default"}
+				size={gopY.cotMo ? "assist" : "default"}
 			>
 				<DialogHeader>
 					<DialogTitle>
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
 					</DialogTitle>
 				</DialogHeader>
-				<div
-					className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
-					data-cuon-hop
-				>
+				<DialogAssistBody split={gopY.cotMo} data-cuon-hop>
 					{tuMau.dangMo ? (
 						<KhungTuMau
 							tuMau={tuMau}
@@ -356,6 +351,7 @@ export function HopThoaiMucTieu({
 									<FieldLabel htmlFor={`${ma}-ten`}>{h.tenMucTieu}</FieldLabel>
 									<Input
 										id={`${ma}-ten`}
+										data-duoc-chi={gopY.oDuocChi === "title" || undefined}
 										value={ten}
 										maxLength={200}
 										autoComplete="off"
@@ -440,6 +436,7 @@ export function HopThoaiMucTieu({
 									<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
 									<Textarea
 										id={`${ma}-vi-sao`}
+										data-duoc-chi={gopY.oDuocChi === "whyNow" || undefined}
 										value={viSao}
 										maxLength={500}
 										translate="no"
@@ -458,7 +455,7 @@ export function HopThoaiMucTieu({
 						</form>
 					)}
 					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
-				</div>
+				</DialogAssistBody>
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button variant="outline" disabled={dangLuu}>
