@@ -37,6 +37,8 @@ export const OKR = {
 			"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới sửa KR này.",
 		khongCoChuKy: (id: string) => `Không có chu kỳ nào mang mã ${id}.`,
 		khongCoMucTieu: (id: string) => `Không có mục tiêu nào mang mã ${id}.`,
+		khongThayMucTieu:
+			"Không thấy mục tiêu này — có thể nó không còn, hoặc bạn không được xem.",
 		khongCoKr: (id: string) => `Không có KR nào mang mã ${id}.`,
 		khongCoDonVi: (id: string) => `Không có đơn vị nào mang mã ${id}.`,
 		krDangLaDich:
@@ -203,6 +205,8 @@ export const OKR = {
 			daGan: "Đã gắn vào chỗ này rồi.",
 			khongCoDich: "Cần đúng một đích: mục tiêu hoặc KR.",
 			khongCo: (id: string) => `Không có căn chỉnh nào mang mã ${id}.`,
+			gioiHanKhongCanChinh:
+				"Mục tiêu ở mức giới hạn không căn chỉnh được: không góp vào mục tiêu khác, cũng không nhận mục tiêu nào góp vào.",
 		},
 		nhap: {
 			thieuMucTieu: "Thiếu mục tiêu",

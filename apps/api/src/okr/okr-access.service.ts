@@ -6,7 +6,11 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db } from "@crm/db";
-import { dungNguCanhXem, type NguCanhXem } from "@crm/db/okr-hien-thi";
+import {
+	dieuKienXemMucTieu,
+	dungNguCanhXem,
+	type NguCanhXem,
+} from "@crm/db/okr-hien-thi";
 import { CAP_MUC_TIEU, type CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import {
 	ForbiddenException,
@@ -93,6 +97,17 @@ export class OkrAccessService {
 
 	nguCanhXem(q: Quyen, userId: string): NguCanhXem {
 		return dungNguCanhXem(userId, q);
+	}
+
+	async assertXemMucTieu(userId: string, objectiveId: string) {
+		const q = await this.quyen(userId);
+		const nc = this.nguCanhXem(q, userId);
+		const row = await this.db.okrObjective.findFirst({
+			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
+			select: chonDonVi,
+		});
+		if (!row) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		return { q, nc, mt: donViCua(row) };
 	}
 
 	suaDuocDonVi(q: Quyen, userId: string, dv: DonViCuaMucTieu): boolean {
