@@ -104,6 +104,10 @@ const vi = {
 				tieuDe: "Niêm phong trước khi đọc ý",
 				moTa: "Bạn là người chọn. Danh sách mở ra ngay khi bạn niêm phong bản viết trước, hoặc chọn «Không viết trước».",
 			},
+			"het-quyen-chon": {
+				tieuDe: "Bạn không còn quyền chọn",
+				moTa: "Bạn là người chọn nhưng không còn là quản trị, nên không niêm phong hay đọc ý được. Quản trị sẽ đổi người chọn; ý của mọi người hiện cho bạn khi công bố.",
+			},
 		} satisfies Record<LyDoKhoaY, KhoaDanhSach>,
 	},
 	doPhu: {
@@ -443,6 +447,10 @@ const en: OkrHoiYMessages = {
 			"chua-niem-phong": {
 				tieuDe: "Seal your list before reading ideas",
 				moTa: "You are the decider. The list opens as soon as you seal what you wrote first, or choose “Skip writing first”.",
+			},
+			"het-quyen-chon": {
+				tieuDe: "You can no longer decide",
+				moTa: "You are the decider but no longer an admin, so you can't seal or read ideas. An admin will pick a new decider; everyone's ideas show here once they're published.",
 			},
 		},
 	},

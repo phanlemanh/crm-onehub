@@ -156,6 +156,7 @@ function coBan(): HoiYDu {
 			gomDuoc: false,
 			chonDuoc: false,
 			congBoDuoc: false,
+			niemPhongDuoc: false,
 			lyDoChuaCongBo: [],
 		},
 	};
@@ -220,6 +221,7 @@ function chonChuaDu(): HoiYDu {
 			gomDuoc: true,
 			chonDuoc: true,
 			congBoDuoc: false,
+			niemPhongDuoc: false,
 			lyDoChuaCongBo: [
 				{ ma: "y-chua-gom", chuDeId: null },
 				{ ma: "thieu-ket-luan", chuDeId: "c2" },
@@ -308,7 +310,12 @@ const DU_LIEU = {
 		return {
 			...b,
 			y: { khoa: true, lyDoKhoa: "chua-niem-phong", ds: [] },
-			quyen: { ...b.quyen, gopDuoc: false, moDuoc: true },
+			quyen: {
+				...b.quyen,
+				gopDuoc: false,
+				moDuoc: true,
+				niemPhongDuoc: true,
+			},
 		};
 	},
 	"chon-chua-du": chonChuaDu,

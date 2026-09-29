@@ -142,10 +142,10 @@ export class OkrHoiYService {
 
 	async moHoiY(userId: string, input: MoHoiYInput): Promise<HoiYGhiOutput> {
 		await this.assertQuanTri(userId);
-		const now = this.dongHo();
 		const hanLuc = new Date(input.hanLuc);
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.cycleId} FOR UPDATE`;
+			const now = this.dongHo();
 			const c = await tx.okrCycle.findUnique({
 				where: { id: input.cycleId },
 				select: { phase: true },
@@ -199,9 +199,9 @@ export class OkrHoiYService {
 
 	async suaHoiY(userId: string, input: SuaHoiYInput): Promise<HoiYGhiOutput> {
 		await this.assertQuanTri(userId);
-		const now = this.dongHo();
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrHoiY" WHERE id = ${input.hoiYId} FOR UPDATE`;
+			const now = this.dongHo();
 			const h = await tx.okrHoiY.findUnique({
 				where: { id: input.hoiYId },
 				include: { banTruoc: { select: { id: true } } },
@@ -231,7 +231,11 @@ export class OkrHoiYService {
 					data.soLieu = input.soLieu;
 				}
 			}
-			const han = input.hanLuc === undefined ? null : new Date(input.hanLuc);
+			const han = input.dongNgay
+				? now
+				: input.hanLuc === undefined
+					? null
+					: new Date(input.hanLuc);
 			const doiHan =
 				han !== null && han.getTime() !== h.hanLuc.getTime() ? han : null;
 			if (doiHan) {
@@ -845,16 +849,18 @@ export class OkrHoiYService {
 		const banTruoc = docBanTruoc(banTho, { laNguoiChon, trangThai });
 		const cuaToi = h.y.filter((y) => y.tacGiaUserId === userId);
 		const duocGom = !laNguoiChon || daNiemPhong;
+		const nguoiChonHieuLuc = laNguoiChon && q.quanTri;
 		const chonDuoc =
-			trangThai === "dang-gom" && laNguoiChon && q.quanTri && daNiemPhong;
+			trangThai === "dang-gom" && nguoiChonHieuLuc && daNiemPhong;
 		const dieuThieu =
-			trangThai === "dang-gom" && laNguoiChon
-				? lyDoChuaCongBo(await this.tinhTrangCongBo(this.db, h))
+			trangThai === "dang-gom" && nguoiChonHieuLuc
+				? lyDoChuaCongBo(await this.tinhTrangCongBo(this.db, h)).filter(
+						(d) => daNiemPhong || d.chuDeId === null,
+					)
 				: [];
 		const congBoDuoc =
 			trangThai === "dang-gom" &&
-			laNguoiChon &&
-			q.quanTri &&
+			nguoiChonHieuLuc &&
 			phaChuKy.parse(h.cycle.phase) === "lap-ke-hoach" &&
 			dieuThieu.length === 0;
 		return {
@@ -878,7 +884,11 @@ export class OkrHoiYService {
 			},
 			y: {
 				khoa: chieu.khoa,
-				lyDoKhoa: chieu.khoa ? "chua-niem-phong" : null,
+				lyDoKhoa: chieu.khoa
+					? q.quanTri
+						? "chua-niem-phong"
+						: "het-quyen-chon"
+					: null,
 				ds: chieu.y.map(raY),
 			},
 			chuDe: chuDe?.map((c) => ({ ...c, y: c.y.map(raY) })) ?? null,
@@ -893,6 +903,8 @@ export class OkrHoiYService {
 				gomDuoc: trangThai === "dang-gom" && q.quanTri && duocGom,
 				chonDuoc,
 				congBoDuoc,
+				niemPhongDuoc:
+					nguoiChonHieuLuc && !daNiemPhong && trangThai !== "da-cong-bo",
 				lyDoChuaCongBo: dieuThieu,
 			},
 		};
@@ -923,12 +935,15 @@ export class OkrHoiYService {
 			};
 		const trangThai = trangThaiHoiY(h, now);
 		const laNguoiChon = h.nguoiChonUserId === userId;
+		const demChuDe =
+			laNguoiChon &&
+			trangThai === "dang-gom" &&
+			isWorkspaceAdmin(await workspaceRoleOf(userId, this.db));
 		return {
 			coHoiY: true,
 			trangThai,
 			canGop: trangThai === "dang-mo" && !laNguoiChon && h._count.y === 0,
-			soChuDeChuaKetLuan:
-				laNguoiChon && trangThai === "dang-gom" ? h._count.chuDe : null,
+			soChuDeChuaKetLuan: demChuDe ? h._count.chuDe : null,
 		};
 	}
 

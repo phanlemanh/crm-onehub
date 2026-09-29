@@ -644,6 +644,35 @@ describe("ly-do-chua-cong-bo", () => {
 		).toEqual([]);
 	});
 
+	test("lần hỏi ý không có ý nào và không có chủ đề: không đòi chủ đề chọn, chỉ còn đòi niêm phong", () => {
+		const rong = (): Vao => ({
+			...tot(),
+			yChuaGom: 0,
+			chuDe: [],
+			tongOneHubSau: 0,
+		});
+		expect(lyDoChuaCongBo({ ...rong(), coBanTruoc: false })).toEqual([
+			dong("chua-niem-phong", null),
+		]);
+		expect(lyDoChuaCongBo(rong())).toEqual([]);
+		expect(
+			lyDoChuaCongBo({ ...rong(), coBanTruoc: false, boQua: true }),
+		).toEqual([]);
+	});
+
+	test("có ý mà không có chủ đề nào chọn vẫn thiếu chủ đề chọn", () => {
+		expect(
+			lyDoChuaCongBo({ ...tot(), yChuaGom: 2, chuDe: [], tongOneHubSau: 0 }),
+		).toEqual([dong("y-chua-gom", null), dong("khong-chon", null)]);
+		expect(
+			lyDoChuaCongBo({
+				...tot(),
+				chuDe: [chuDe("c1", { soY: 0, ketLuan: "de-sau", noiBanTruoc: null })],
+				tongOneHubSau: 0,
+			}),
+		).toEqual([dong("chu-de-rong", "c1"), dong("khong-chon", null)]);
+	});
+
 	test("nhiều chủ đề thiếu cùng một điều: mỗi chủ đề một dòng theo thứ tự chủ đề", () => {
 		const r = lyDoChuaCongBo({
 			...tot(),
@@ -748,6 +777,27 @@ describe("chieu-y", () => {
 			for (const y of r.y) {
 				expect(Object.keys(y).sort()).toEqual(KHOA_DAY_DU);
 			}
+		});
+
+		test(`người chọn đã niêm phong nhưng không còn là quản trị (${tt}): như thành viên — không tên, không số`, () => {
+			const r = chieuYChoNguoiXem(ds, xem("ceo", false, true, true, tt));
+			expect(r.khoa).toBe(false);
+			expect(r.y.map((y) => y.id).sort()).toEqual([
+				"y1",
+				"y2",
+				"y3",
+				"y4",
+				"y5",
+			]);
+			for (const y of r.y) {
+				expect(Object.keys(y).sort()).toEqual(KHOA_AN);
+			}
+		});
+
+		test(`người chọn chưa niêm phong, không còn là quản trị (${tt}): vẫn khoá`, () => {
+			expect(chieuYChoNguoiXem(ds, xem("ceo", false, true, false, tt))).toEqual(
+				{ khoa: true, y: [] },
+			);
 		});
 
 		test(`người chọn chưa niêm phong (${tt}): khoá, không ý nào`, () => {
@@ -949,6 +999,26 @@ describe("chieu-chu-de", () => {
 			chieuChuDeChoNguoiXem(cd, ds, xem("ceo", true, true, true, "dang-gom"))
 				?.length,
 		).toBe(2);
+	});
+
+	test("dang-gom: người chọn đã niêm phong mà không còn là quản trị không thấy chủ đề; sau công bố thấy như thành viên — bằng chứng không có soDongY", () => {
+		expect(
+			chieuChuDeChoNguoiXem(cd, ds, xem("ceo", false, true, true, "dang-gom")),
+		).toBeNull();
+		const sau = chieuChuDeChoNguoiXem(
+			cd,
+			ds,
+			xem("ceo", false, true, true, "da-cong-bo"),
+		);
+		expect(sau?.length).toBe(2);
+		for (const c of sau ?? []) {
+			expect(Object.keys(c.bangChung).sort()).toEqual([
+				"soDonVi",
+				"soNguoi",
+				"trich",
+			]);
+			for (const y of c.y) expect("tacGia" in y).toBe(false);
+		}
 	});
 
 	test("da-cong-bo: mọi vai thấy chủ đề", () => {

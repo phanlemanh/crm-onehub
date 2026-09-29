@@ -898,13 +898,20 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   `suaChuDe`, `goChuDe`, `ganY`): quản trị hoặc người chọn, chỉ khi `dang-gom`.
   Niêm phong, kết luận và công bố: chỉ người chọn, và người chọn phải còn là quản
   trị. Đổi người chọn bị từ chối khi người mới đã góp ý (`nguoiChonDaGop`) hay khi
-  người cũ đã niêm phong mà vẫn là quản trị. `hoiY` trả cờ `quyen` (`moDuoc`,
-  `gopDuoc`, `gomDuoc`, `chonDuoc`, `congBoDuoc`, `lyDoChuaCongBo`); màn không tự
-  suy lại luật nào.
+  người cũ đã niêm phong mà vẫn là quản trị. Người chọn bị hạ vai không còn là
+  người chọn ở bất cứ chỗ nào: không thấy tên, số, chủ đề, không nhận
+  `lyDoChuaCongBo`, không được mời niêm phong (`lyDoKhoa = "het-quyen-chon"`). Hạn
+  đặt bằng bây giờ là đóng sớm; `suaHoiY({ dongNgay: true })` lấy giờ của máy chủ
+  làm hạn, vì giờ máy khách gửi lên luôn trễ hơn giờ máy chủ nhận. `hoiY` trả cờ
+  `quyen` (`moDuoc`, `gopDuoc`, `gomDuoc`, `chonDuoc`, `congBoDuoc`,
+  `niemPhongDuoc`, `lyDoChuaCongBo`); màn không tự suy lại luật nào. Người chọn
+  chưa niêm phong chỉ nhận các mã chung trong `lyDoChuaCongBo` (`chua-niem-phong`,
+  `y-chua-gom`, `khong-chon`, `vuot-tran`), không mã nào kèm `chuDeId`.
 - **Luật đọc ở một chỗ.** `apps/api/src/okr/hoi-y.ts` giữ hai hàm, và mọi thủ tục
   trả ý hay bản viết trước đi qua chúng: `chieuYChoNguoiXem` quyết ai thấy tên
-  người góp và số đồng ý (quản trị và người chọn đã niêm phong — người chọn chưa
-  niêm phong nhận danh sách khoá, `khoa: true`, không ý nào), còn thành viên nhận ý
+  người góp và số đồng ý (quản trị không phải người chọn, và người chọn còn là quản
+  trị đã niêm phong — người chọn chưa niêm phong nhận danh sách khoá, `khoa: true`,
+  không ý nào; người chọn đã hạ vai xem như thành viên), còn thành viên nhận ý
   không tên theo thứ tự xáo cố định theo người xem (`thuTuXao`, băm
   `(hoiYId, userId)`); `docBanTruoc` chỉ trả bản viết trước cho người chọn, hay cho
   mọi người sau công bố. `chieuChuDeChoNguoiXem` dựng chủ đề trên
@@ -919,10 +926,16 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   `OkrService.taoMucTieuTrongTx` trong cùng transaction — mục tiêu nháp cấp
   OneHub, người phụ trách là người chọn, `whyNow` là lý do của chủ đề, vết `tao`
   mang `after.tuHoiY`. Không ghi thẳng vào `okrObjective`. Kết quả giữ nguyên · đổi
-  · bỏ · thêm tính bằng `ketQuaBanTruoc` (so câu sau `chuanCau`).
+  · bỏ · thêm tính bằng `ketQuaBanTruoc` (so câu sau `chuanCau`). Lần hỏi ý không
+  có ý nào và không có chủ đề nào không bị đòi «ít nhất một chủ đề chọn»: người
+  chọn niêm phong hoặc khai không viết trước (làm được cả khi đang gom), rồi công bố
+  rỗng — không mục tiêu nào, `congBoLuc` được đặt, vết `cong-bo-hoi-y` mang
+  `soMucTieu: 0`. Không có lối này thì chu kỳ kẹt ở lập kế hoạch mãi.
 - **Chốt pha.** Chỉ mở và công bố được khi chu kỳ ở `lap-ke-hoach`;
   `setCyclePhase` từ chối rời `lap-ke-hoach` khi chu kỳ còn lần hỏi ý chưa công bố
-  (`conHoiYChuaCongBo`).
+  (`conHoiYChuaCongBo`). Câu lỗi nêu đúng các lối ra: người chọn công bố — kể cả
+  công bố rỗng khi không có ý nào; người chọn đã hết quyền quản trị thì quản trị
+  đổi người chọn trước. Không có lối huỷ lần hỏi ý.
 - **Vết mức chu kỳ, không vết cho dữ liệu góp.** `mo-hoi-y`, `sua-hoi-y`,
   `doi-nguoi-chon`, `niem-phong` (`after = { soCau, boQua }`, không chữ câu) và
   `cong-bo-hoi-y`, với `objectiveId` null. Ý, đồng ý, gom, kết luận, hiểu là dữ liệu

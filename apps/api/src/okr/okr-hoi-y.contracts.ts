@@ -115,6 +115,7 @@ export const hoiYChiTiet = z.object({
 		gomDuoc: z.boolean(),
 		chonDuoc: z.boolean(),
 		congBoDuoc: z.boolean(),
+		niemPhongDuoc: z.boolean(),
 		lyDoChuaCongBo: z.array(
 			z.object({ ma: z.enum(MA_THIEU), chuDeId: z.string().nullable() }),
 		),

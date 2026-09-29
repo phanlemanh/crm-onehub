@@ -260,7 +260,7 @@ export const OKR = {
 			congBoVuotTran: (tran: number, sau: number) =>
 				`Công bố sẽ đưa cấp OneHub lên ${sau} mục tiêu — vượt trần ${tran} của chương trình.`,
 			conHoiYChuaCongBo: (ten: string) =>
-				`Chu kỳ «${ten}» còn một lần hỏi ý mục tiêu chưa công bố — công bố (hoặc đổi người chọn nếu người chọn đã hết quyền quản trị) rồi mới rời lập kế hoạch được.`,
+				`Chu kỳ «${ten}» còn một lần hỏi ý mục tiêu chưa công bố — người chọn công bố rồi mới rời lập kế hoạch được. Lần hỏi ý không có ý nào vẫn công bố được: người chọn niêm phong hoặc khai không viết trước, rồi công bố không tạo mục tiêu nào. Người chọn đã hết quyền quản trị thì quản trị đổi người chọn trước.`,
 			chuaCongBo: "Lần hỏi ý chưa công bố — chưa bấm «Tôi hiểu vì sao» được.",
 			chuaGop: "Chỉ người đã góp ý mới bấm «Tôi hiểu vì sao» được.",
 		},

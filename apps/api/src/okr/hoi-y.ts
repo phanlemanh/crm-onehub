@@ -383,7 +383,8 @@ export function lyDoChuaCongBo(
 		"thieu-noi-ban-truoc",
 		(c) => chon(c) && !s.boQua && c.noiBanTruoc === null,
 	);
-	if (!s.chuDe.some(chon)) chungCuoc("khong-chon");
+	const rong = s.yChuaGom === 0 && s.chuDe.length === 0;
+	if (!rong && !s.chuDe.some(chon)) chungCuoc("khong-chon");
 	if (s.capMode === "chan" && s.tongOneHubSau > s.objectiveCap) {
 		chungCuoc("vuot-tran");
 	}
@@ -449,8 +450,10 @@ const chieuDayDu = (y: YTho): YChieuDayDu => ({
 });
 
 function thayDayDu(xem: NguoiXemY): boolean {
-	if (xem.laNguoiChon && !xem.daNiemPhong) return false;
-	return xem.laNguoiChon || xem.laQuanTri;
+	return (
+		(xem.laNguoiChon && xem.laQuanTri && xem.daNiemPhong) ||
+		(xem.laQuanTri && !xem.laNguoiChon)
+	);
 }
 
 export function chieuYChoNguoiXem(y: YTho[], xem: NguoiXemY): YChieuRa {

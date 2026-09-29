@@ -52,6 +52,9 @@ export const OKR_HOI_Y = {
 	maToiDa: 120,
 	lyDo: { min: 10, max: 1000 },
 	hanGio: { min: 24, max: 168 },
+	dongNgay: {
+		motTrongHai: "Đóng ngay lấy giờ của máy chủ — không gửi kèm một hạn khác.",
+	},
 	trich: 2,
 	hienTruoc: 10,
 	hieuNgay: 7,
@@ -66,7 +69,7 @@ export const OKR_HOI_Y = {
 export { TRANG_THAI_HOI_Y, type TrangThaiHoiY, trangThaiHoiY };
 export const trangThaiHoiYKhuon = z.enum(TRANG_THAI_HOI_Y);
 
-export const LY_DO_KHOA_Y = ["chua-niem-phong"] as const;
+export const LY_DO_KHOA_Y = ["chua-niem-phong", "het-quyen-chon"] as const;
 export type LyDoKhoaY = (typeof LY_DO_KHOA_Y)[number];
 export const lyDoKhoaYKhuon = z.enum(LY_DO_KHOA_Y);
 
@@ -169,14 +172,20 @@ export const moHoiYInput = z.object({
 });
 export type MoHoiYInput = z.infer<typeof moHoiYInput>;
 
-export const suaHoiYInput = z.object({
-	hoiYId: ma,
-	cauHoi: cauHoi.optional(),
-	loiMo: loiMo.optional(),
-	soLieu: soLieuHoiY.optional(),
-	hanLuc: hanLuc.optional(),
-	nguoiChonUserId: ma.optional(),
-});
+export const suaHoiYInput = z
+	.object({
+		hoiYId: ma,
+		cauHoi: cauHoi.optional(),
+		loiMo: loiMo.optional(),
+		soLieu: soLieuHoiY.optional(),
+		hanLuc: hanLuc.optional(),
+		dongNgay: z.literal(true).optional(),
+		nguoiChonUserId: ma.optional(),
+	})
+	.refine((v) => v.dongNgay === undefined || v.hanLuc === undefined, {
+		message: OKR_HOI_Y.dongNgay.motTrongHai,
+		path: ["dongNgay"],
+	});
 export type SuaHoiYInput = z.infer<typeof suaHoiYInput>;
 
 export const gopYInput = z.object({ hoiYId: ma, noiDung, viSao, doBangGi });
