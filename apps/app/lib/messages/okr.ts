@@ -256,6 +256,11 @@ const vi = {
 		"ghi-nhan": "Ghi nhận",
 		"go-ghi-nhan": "Gỡ ghi nhận",
 		"sua-mau": "Sửa mẫu OKR",
+		"mo-hoi-y": "Mở hỏi ý",
+		"sua-hoi-y": "Sửa hỏi ý",
+		"doi-nguoi-chon": "Đổi người chọn",
+		"niem-phong": "Niêm phong bản viết trước",
+		"cong-bo-hoi-y": "Công bố hỏi ý",
 	},
 	vet: {
 		cot: {
@@ -807,6 +812,11 @@ const en: OkrMessages = {
 		"ghi-nhan": "Recognition",
 		"go-ghi-nhan": "Remove recognition",
 		"sua-mau": "Edit OKR template",
+		"mo-hoi-y": "Opened goal input",
+		"sua-hoi-y": "Edited goal input",
+		"doi-nguoi-chon": "Changed decider",
+		"niem-phong": "Sealed pre-commitment",
+		"cong-bo-hoi-y": "Published goal input",
 	},
 	vet: {
 		cot: {

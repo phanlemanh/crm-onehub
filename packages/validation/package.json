@@ -34,6 +34,7 @@
 		"./okr-canh-kr": "./src/okr-canh-kr.ts",
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-mau": "./src/okr-mau.ts",
+		"./okr-hoi-y": "./src/okr-hoi-y.ts",
 		"./okr-muc-tieu": "./src/okr-muc-tieu.ts",
 		"./okr-nguon": "./src/okr-nguon.ts",
 		"./okr-trao-doi": "./src/okr-trao-doi.ts",
