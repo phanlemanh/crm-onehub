@@ -1,6 +1,6 @@
 # Luật kho trên diff của lượt tro-ly-okr-de-xuat
 
-Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `8ebc64360133` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 89 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14876 dòng thêm.
+Sinh bởi `node _acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs`. So HEAD `11194ed786b4` với `git merge-base HEAD origin/onehub` = `7db7cea33309`. 89 tệp thêm hay sửa dưới apps/ và packages/ (đã bỏ tệp sinh, *.md, *.json), 14876 dòng thêm.
 
 ## 1. Chú thích trong dòng thêm
 
@@ -24,164 +24,137 @@ Kết luận: không dòng thêm nào mang chú thích.
 Lệnh:
 
 ```
-git diff -U0 7db7cea33309 HEAD -- apps/api/src/okr/tro-ly.service.ts apps/api/src/agent/agent-trigger.service.ts
-grep -iE 'generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(' trên dòng thêm và trên cả tệp hiện tại; in các dòng import
+git diff --name-only --diff-filter=AM 7db7cea33309 HEAD -- apps/api/src   (bỏ tệp sinh) → 8 tệp
+mỗi tệp: nguồn import, đối chiếu /^(ai|@ai-sdk\/.*|openai|@anthropic-ai\/.*|@google\/.*|@vercel\/ai.*|axios|got|node-fetch|undici)$/; grep -iE 'generateText|streamText|generateObject|streamObject|@ai-sdk|openai|anthropic|gateway|fetch\(' trên dòng thêm và cả tệp
 ```
 
 Kết quả:
 
 ```
-# apps/api/src/okr/tro-ly.service.ts
-dòng thêm khớp: 0
-cả tệp khớp: 0
-nguồn nhập:
-  import type { Db, Prisma } from "@crm/db";
-  import { chiTieuThang, doiSoatGanNhat, thangVN } from "@crm/db/ai-chi-phi";
-  import {
-  } from "@crm/db/ai-chi-phi-danh-muc";
-  import { danhSachDeXuat } from "@crm/db/okr-de-xuat";
-  import {
-  } from "@crm/db/okr-tro-ly";
-  import {
-  } from "@crm/db/okr-tro-ly-danh-muc";
-  import { docDiemXuHuong, xuHuongKr as tinhXuHuong } from "@crm/db/okr-xu-huong";
-  import { kiemOkr } from "@crm/validation/okr-kiem";
-  import {
-  } from "@crm/validation/okr-kiem-de-xuat";
-  import { kieuKr } from "@crm/validation/okr-kr";
-  import {
-  } from "@crm/validation/okr-tro-ly";
-  import {
-  } from "@nestjs/common";
-  import type { z } from "zod";
-  import { AgentTriggerService } from "../agent/agent-trigger.service";
-  import { InjectDatabase } from "../database/database.constants";
-  import {
-  } from "./okr.contracts";
-  import { OkrService } from "./okr.service";
-  import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
-  import { OKR } from "./okr-config";
-  import {
-  } from "./tro-ly-so-do";
 # apps/api/src/agent/agent-trigger.service.ts
-dòng thêm khớp: 0
+nguồn nhập: @crm/db, @crm/db/agent-tasks, @crm/db/crm-events, @crm/db/fields, @crm/db/idempotency, @crm/validation/field-backfill, @crm/validation/okr-nguon, @crm/validation/tai-lieu-nguon, @nestjs/common, ../database/database.constants, ./agent-dispatch.config, ./bridge
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
 cả tệp khớp: apps/api/src/agent/agent-trigger.service.ts:661: const response = await fetch(agent.url(path), {
-nguồn nhập:
-  import { type Db, type FieldEntity, Prisma } from "@crm/db";
-  import { PRIORITY } from "@crm/db/agent-tasks";
-  import { CRM_EVENT_CATALOG, type CrmEventType } from "@crm/db/crm-events";
-  import { RECORD_ID_COLUMNS } from "@crm/db/fields";
-  import { lockIdempotencyKey } from "@crm/db/idempotency";
-  import { fieldBackfillPayload } from "@crm/validation/field-backfill";
-  import type { DocSheetPayload } from "@crm/validation/okr-nguon";
-  import type { SoanTuNguonPayload } from "@crm/validation/tai-lieu-nguon";
-  import { Injectable, Logger } from "@nestjs/common";
-  import { InjectDatabase } from "../database/database.constants";
-  import { AGENT_DISPATCH } from "./agent-dispatch.config";
-  import { bridge } from "./bridge";
+# apps/api/src/okr/okr-access.service.ts
+nguồn nhập: @crm/auth, @crm/db, @crm/validation/okr-muc-tieu, @nestjs/common, zod, ../database/database.constants, ../to-chuc/to-chuc.contracts, ../to-chuc/to-chuc.service, ./okr-config
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
+# apps/api/src/okr/okr-config.ts
+nguồn nhập: @crm/validation/okr-cap-nhat, @crm/validation/okr-khep
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
+# apps/api/src/okr/okr.contracts.ts
+nguồn nhập: @crm/validation/ai-chi-phi, @crm/validation/nhac-ke-hoach, @crm/validation/okr-cap-nhat, @crm/validation/okr-chu-ky, @crm/validation/okr-chuong-trinh, @crm/validation/okr-khep, @crm/validation/okr-kr, @crm/validation/okr-muc-tieu, @crm/validation/okr-nguon, @crm/validation/okr-tro-ly, @crm/validation/okr-vet, zod, ./okr-config
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
+# apps/api/src/okr/okr.router.ts
+nguồn nhập: @crm/validation/okr-cap-nhat, @crm/validation/okr-khep, @crm/validation/okr-trao-doi, @nestjs/common, nestjs-trpc, zod, ../trpc/context.types, ../trpc/middlewares/pham-vi-du-lieu.middleware, ../trpc/openapi, ./okr.contracts, ./okr.service, ./okr-cap-nhat.service, ./okr-khep.contracts, ./okr-khep.service, ./okr-so.contracts, ./okr-so.service, ./okr-trao-doi.service, ./okr-xem.contracts, ./okr-xem.service, ./tro-ly.service
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
+# apps/api/src/okr/okr.service.ts
+nguồn nhập: @crm/db, @crm/db/okr-tien-do, @crm/db/okr-tro-ly, @crm/db/onboarding-nhac, @crm/db/workspace, @crm/validation/okr-can-chinh, @crm/validation/okr-chu-ky, @crm/validation/okr-chuong-trinh, @crm/validation/okr-kr, @crm/validation/okr-muc-tieu, @crm/validation/okr-nguon, @crm/validation/okr-vet, @nestjs/common, zod, ../agent/agent-trigger.service, ../database/database.constants, ../to-chuc/nhap, ./can-chinh, ./don-vi, ./khep, ./nhap, ./okr.contracts, ./okr-access.service, ./okr-config
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
+# apps/api/src/okr/tro-ly-so-do.ts
+nguồn nhập: @crm/db, @crm/db/ai-chi-phi, @crm/db/okr-tro-ly-danh-muc, @crm/validation/okr-tro-ly, @crm/validation/okr-vet, zod, ./okr.contracts, ./okr-config
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
+# apps/api/src/okr/tro-ly.service.ts
+nguồn nhập: @crm/db, @crm/db/ai-chi-phi, @crm/db/ai-chi-phi-danh-muc, @crm/db/okr-de-xuat, @crm/db/okr-tro-ly, @crm/db/okr-tro-ly-danh-muc, @crm/db/okr-xu-huong, @crm/validation/okr-kiem, @crm/validation/okr-kiem-de-xuat, @crm/validation/okr-kr, @crm/validation/okr-tro-ly, @nestjs/common, zod, ../agent/agent-trigger.service, ../database/database.constants, ./okr.contracts, ./okr.service, ./okr-access.service, ./okr-config, ./tro-ly-so-do
+nguồn SDK AI hay vendor: 0
+dòng thêm khớp lời gọi model/vendor: 0
+cả tệp khớp: 0
 ```
 
-Kết luận: không dòng thêm nào của lượt gọi model, SDK AI hay fetch; 1 dòng khớp nằm ở phần cũ của tệp, ngoài diff lượt này (in ở trên); nguồn nhập không có SDK AI hay vendor.
+Kết luận: 8 tệp apps/api/src của lượt: 0 nguồn SDK AI hay vendor, 0 dòng thêm gọi model/vendor; 1 dòng khớp mẫu có sẵn từ trước lượt: apps/api/src/agent/agent-trigger.service.ts:661.
 
 ## 3. Hằng tinh chỉnh ở một tệp cấu hình
 
 Lệnh:
 
 ```
-sed -n '/export const TRO_LY_OKR_TRAN = {/,/^} as const;/p' packages/db/src/okr-tro-ly-danh-muc.ts
-git diff -U0 7db7cea33309 HEAD -- apps packages   rồi grep từng mẫu số trên dòng thêm của tệp nguồn
+bun nạp TRO_LY_OKR_TRAN (packages/db/src/okr-tro-ly-danh-muc.ts), TRO_LY_OKR (apps/agent/agent/lib/okr/config.ts), OKR (apps/api/src/okr/okr-config.ts) và rút mọi giá trị số
+git diff -U0 7db7cea33309 HEAD -- apps packages   rồi quét /(?<![\w.#$-])\d[\d_]*(?:\.\d+)?(?![\w%.-])/g trên dòng thêm của tệp nguồn
 ```
 
 Kết quả:
 
 ```
-# packages/db/src/okr-tro-ly-danh-muc.ts (dòng 5–77)
-export const TRO_LY_OKR_TRAN = {
-	chu: {
-		tenMucTieu: 200,
-		tenKr: 200,
-		viSao: 500,
-		lyDo: 200,
-		cauHoi: 200,
-		cauTomTat: 280,
-	},
-	soDongDeXuat: 8,
-	soCauTomTat: 6,
-	soNguonMoiCau: 4,
-	tranThangMacDinhUsd: 9,
-	tranThangToiDaUsd: 20,
-	tuCam: [
-		"lương",
-		"thưởng",
-		"xếp loại",
-		"xếp hạng",
-		"đánh giá nhân viên",
-		"đánh giá hiệu suất",
-		"KPI",
-		"bảng xếp hạng",
-		"huy hiệu",
-		"điểm đổi quà",
-		"khách hàng",
-		"deal",
-		"cơ hội",
-		"doanh số",
-		"phễu",
-		"dự án",
-		"task",
-		"nhiệm vụ",
-	],
-	soBangChu: {
-		hauToCo: [
-			"tỷ",
-			"tỉ",
-			"triệu",
-			"nghìn",
-			"ngàn",
-			"trăm",
-			"mươi",
-			"%",
-			"phần trăm",
-		],
-		namSauCum: [
-			"cuối",
-			"đầu",
-			"giữa",
-			"trong",
-			"mỗi",
-			"hằng",
-			"hàng",
-			"cả",
-			"nửa",
-			"của",
-			"chỉ tiêu",
-			"kế hoạch",
-		],
-		namTruocCum: ["nay", "tới", "sau", "trước", "ngoái", "học", "tài chính"],
-		dauCau: [".", "!", "?", ";", ":"],
-	},
-	soChuHoTenToiThieu: 2,
-	troLyNgayMoiNguoi: 20,
-	luotAnMoiNgay: 40,
-	nhipAnMucTieuMs: 30 * MINUTE_MS,
-	hanKiemKhoaMs: 10 * MINUTE_MS,
-	hoiLaiMs: 1.5 * SECOND_MS,
-	tranChoMs: 30 * SECOND_MS,
-	diemXuHuongToiThieu: 3,
-	hoanTacNgay: 7,
-} as const;
+# packages/db/src/okr-tro-ly-danh-muc.ts: 20 hằng số
+  chu.tenMucTieu = 200
+  chu.tenKr = 200
+  chu.viSao = 500
+  chu.lyDo = 200
+  chu.cauHoi = 200
+  chu.cauTomTat = 280
+  soDongDeXuat = 8
+  soCauTomTat = 6
+  soNguonMoiCau = 4
+  tranThangMacDinhUsd = 9
+  tranThangToiDaUsd = 20
+  soChuHoTenToiThieu = 2
+  troLyNgayMoiNguoi = 20
+  luotAnMoiNgay = 40
+  nhipAnMucTieuMs = 1800000
+  hanKiemKhoaMs = 600000
+  hoiLaiMs = 1500
+  tranChoMs = 30000
+  diemXuHuongToiThieu = 3
+  hoanTacNgay = 7
+# apps/agent/agent/lib/okr/config.ts: 9 hằng số
+  judge.nguong = 0.7
+  danhGia.tranUsdMacDinh = 2
+  cuaSoNguCanh = 1048576
+  tranRaMoiLoiGoi = 2000
+  limits.maxInputTokensPerSession = 40000
+  limits.maxOutputTokensPerSession = 4000
+  limits.sessionTimeoutMs = 600000
+  timViecCon.soLan = 8
+  timViecCon.cachMs = 250
+# apps/api/src/okr/okr-config.ts: 9 hằng số
+  thoiGian.giayMs = 1000
+  ten.toiThieu = 3
+  ten.mucTieuToiDa = 200
+  ten.krToiDa = 200
+  ten.donViDo = 24
+  ten.viSao = 500
+  lo.toiDaDong = 1000
+  lo.toiDaKyTu = 200000
+  troLy.soLuotGanDay = 50
 
-# số tinh chỉnh trên dòng thêm của tệp nguồn (bỏ packages/db/src/okr-tro-ly-danh-muc.ts, apps/agent/agent/lib/okr/config.ts, apps/api/src/okr/okr-config.ts và tệp kiểm, evals, proto)
-[30 phút] 0 dòng
-[40] 0 dòng
-[20] 2 dòng
-  apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:597: <Skeleton className="h-20 w-full" data-khung-dong />
-  apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:598: <Skeleton className="h-20 w-full" data-khung-dong />
-[30 000] 0 dòng
-[1 500] 0 dòng
-[7 ngày] 0 dòng
+# tên hằng khai ở hơn một tệp cấu hình: 1
+  viSao: packages/db/src/okr-tro-ly-danh-muc.ts#chu.viSao, apps/api/src/okr/okr-config.ts#ten.viSao
+
+# literal số ≥ 2 chữ số trên dòng thêm của tệp nguồn (ngoài ba tệp cấu hình, tệp kiểm, evals, proto): 18
+tệp:dòng · số · loại
+apps/api/src/okr/tro-ly-so-do.ts:31 · 24 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:31 · 60 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:35 · 15 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:232 · 0.5 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/api/src/okr/tro-ly-so-do.ts:232 · 0.9 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:66 · 12 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx:111 · 01 · trong chuỗi
+apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx:63 · 1_000 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+packages/db/src/okr-xu-huong.ts:28 · 24 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+packages/db/src/okr-xu-huong.ts:28 · 60 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+packages/db/src/okr-xu-huong.ts:32 · 100 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+packages/ui/src/components/suggestion.tsx:163 · 15 · trong chuỗi
+packages/validation/src/okr-chuong-trinh.ts:22 · 200 · khuôn Zod (min/max)
+packages/validation/src/okr-kiem-de-xuat.ts:58 · 15 · hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay
+packages/validation/src/okr-kiem-de-xuat.ts:86 · 10 · trong chuỗi
+packages/validation/src/okr-kiem-de-xuat.ts:89 · 10 · trong chuỗi
+packages/validation/src/okr-kiem-de-xuat.ts:95 · 100 · số rời — đọc tay
+packages/validation/src/okr-kiem-de-xuat.ts:101 · 100 · số rời — đọc tay
 ```
 
-Kết luận: 2 dòng khớp mẫu số — đọc từng dòng: số trong khuôn Zod, cỡ chữ hay chỉ số mảng không phải hằng tinh chỉnh.
+Kết luận: 38 hằng số trong ba tệp cấu hình, 1 tên hằng khai ở hơn một tệp (viSao); 18 literal số ≥ 2 chữ số ở tệp nguồn của lượt — 11 hằng UPPER_SNAKE đặt tên tại tệp (đơn vị, độ chính xác, phân vị) — đọc tay; 4 trong chuỗi; 1 khuôn Zod (min/max); 2 số rời — đọc tay.
 
 ## 4. Record<string, unknown> và as unknown
 
@@ -272,3 +245,43 @@ apps/app/app/proto/_modules/tro-ly-okr-de-xuat/index.tsx:52: <div> className="ml
 ```
 
 Kết luận: màn sản phẩm: 6 className trên component @crm/ui, cả 6 thuộc loại (a) bố cục hay hình dạng; 0 loại (b); không <table> hay divide-y tự dựng. 20 chỗ ở bản mẫu /proto nằm ngoài vật, không phân loại.
+
+## 6. Lệnh ghi của API Trợ lý OKR
+
+Lệnh:
+
+```
+git diff -U0 7db7cea33309 HEAD -- apps/api/src/okr/tro-ly.service.ts apps/api/src/okr/tro-ly-so-do.ts | grep -E '^\+.*\.(create|update|updateMany|upsert|delete)\b|executeRaw'
+cộng lời gọi this.okr.*Trong(…) và hàm @crm/db ghi AgentTask (xepViecTroLy); mô hình Prisma tìm ngược tối đa 3 dòng
+```
+
+Kết quả:
+
+```
+tệp:dòng · loại · chi tiết
+apps/api/src/okr/tro-ly.service.ts:242 · agentTask · xepViecTroLy (@crm/db/okr-tro-ly)
+apps/api/src/okr/tro-ly.service.ts:439 · OkrService · this.okr.addAlignmentTrong
+apps/api/src/okr/tro-ly.service.ts:455 · OkrService · this.okr.updateKeyResultTrong
+apps/api/src/okr/tro-ly.service.ts:466 · OkrService · this.okr.updateObjectiveTrong
+apps/api/src/okr/tro-ly.service.ts:504 · okrDeXuat · const { count } = await tx.okrDeXuat.updateMany({
+```
+
+Kết luận: chỉ ghi AgentTask (1), OkrDeXuat (1) và qua OkrService (3).
+
+## 7. Dấu hiệu vẽ tay trên màn Trợ lý OKR
+
+Lệnh:
+
+```
+git diff -U0 7db7cea33309 HEAD -- apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx
+grep -nE 'rounded-(sm|md|lg)[^"]*border|size-2 rounded-full|navigator\.clipboard|<h[12] ' trên dòng thêm
+```
+
+Kết quả:
+
+```
+# 5 tệp
+0 dòng
+```
+
+Kết luận: 5 tệp màn của lượt: không hộp rounded+border tự dựng, không chấm size-2 rounded-full, không navigator.clipboard, không <h1>/<h2> tự đặt.
