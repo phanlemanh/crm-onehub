@@ -181,6 +181,10 @@ const en = {
 		chuGiai:
 			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
 	},
+	saveBar: {
+		hienDanhSach: "Show the list",
+		anDanhSach: "Hide the list",
+	},
 };
 
 export type Messages = typeof en;
@@ -364,6 +368,10 @@ const vi = {
 		tuan: "Tuần",
 		chuGiai:
 			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
+	},
+	saveBar: {
+		hienDanhSach: "Xem danh sách",
+		anDanhSach: "Ẩn danh sách",
 	},
 } satisfies Messages;
 

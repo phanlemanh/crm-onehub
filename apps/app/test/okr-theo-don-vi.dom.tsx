@@ -536,7 +536,7 @@ describe("theo-don-vi-bien", () => {
 });
 
 describe("thanh-tab", () => {
-	test("thanh-tab: tab dang chon theo duong, ba lien ket giu kyOkr, tieu de theo tab", async () => {
+	test("thanh-tab: tab dang chon theo duong, nam lien ket giu kyOkr, tieu de theo tab", async () => {
 		const o = document.createElement("div");
 		document.body.appendChild(o);
 		const root = createRoot(o);
@@ -562,8 +562,9 @@ describe("thanh-tab", () => {
 				"/ws/okr/cap-nhat-tuan?kyOkr=q3",
 				"/ws/okr/theo-don-vi?kyOkr=q3",
 				"/ws/okr/toan-canh?kyOkr=q3",
+				"/ws/okr/hoi-y?kyOkr=q3",
 			],
-			dangChon: ["false", "false", "true", "false"],
+			dangChon: ["false", "false", "true", "false", "false"],
 		});
 	});
 });
