@@ -1,9 +1,6 @@
-import {
-	canManageOnboarding,
-	isWorkspaceAdmin,
-	workspaceRoleOf,
-} from "@crm/auth";
+import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { laViecOkr, lienQuanOkr } from "@crm/db/okr-nhac";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
@@ -31,6 +28,7 @@ import type {
 	ViecCuaToiOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
@@ -70,6 +68,7 @@ export class OkrTraoDoiService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 	) {}
 
 	private async mucTieuCo(tx: Tx | Db, objectiveId: string) {
@@ -96,10 +95,10 @@ export class OkrTraoDoiService {
 	}
 
 	async comments(userId: string, objectiveId: string): Promise<CommentsOutput> {
-		await this.mucTieuCo(this.db, objectiveId);
-		const [rows, ghiNhan, role] = await Promise.all([
+		const { q, nc } = await this.quyenOkr.assertXemMucTieu(userId, objectiveId);
+		const [rows, ghiNhan] = await Promise.all([
 			this.db.okrComment.findMany({
-				where: { objectiveId },
+				where: { objectiveId, objective: dieuKienXemMucTieu(nc) },
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				include: {
 					keyResult: { select: { title: true } },
@@ -107,7 +106,7 @@ export class OkrTraoDoiService {
 				},
 			}),
 			this.db.okrGhiNhan.findMany({
-				where: { objectiveId },
+				where: { objectiveId, objective: dieuKienXemMucTieu(nc) },
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				select: {
 					id: true,
@@ -119,7 +118,6 @@ export class OkrTraoDoiService {
 					nhan: { select: { userId: true } },
 				},
 			}),
-			workspaceRoleOf(userId),
 		]);
 		const ids = [
 			...new Set([
@@ -145,7 +143,7 @@ export class OkrTraoDoiService {
 			};
 		const theoTen = (a: { name: string }, b: { name: string }) =>
 			a.name.localeCompare(b.name, "vi");
-		const quanTri = isWorkspaceAdmin(role);
+		const quanTri = q.quanTri;
 		const dong: DongTraoDoi[] = [
 			...rows.map(
 				(r): DongTraoDoi => ({

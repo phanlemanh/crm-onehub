@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
 import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
@@ -32,9 +33,15 @@ import {
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { tenDonVi } from "./don-vi";
+import { locXemTrongVet } from "./hien-thi";
 import { kiemDongKy, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
 import { OkrService } from "./okr.service";
-import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
+import {
+	chonDonVi,
+	donViCua,
+	OkrAccessService,
+	type Quyen,
+} from "./okr-access.service";
 import { OKR } from "./okr-config";
 import {
 	type BangChamInput,
@@ -568,7 +575,15 @@ export class OkrKhepService {
 		userId: string,
 		input: BangChamInput,
 	): Promise<BangChamOutput> {
-		const q = await this.quyenOkr.quyen(userId);
+		return this.bangChamCua(userId, await this.quyenOkr.quyen(userId), input);
+	}
+
+	private async bangChamCua(
+		userId: string,
+		q: Quyen,
+		input: BangChamInput,
+	): Promise<BangChamOutput> {
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
 		const c = await this.db.okrCycle.findUnique({
 			where: { id: input.cycleId },
 			select: { phase: true },
@@ -584,7 +599,7 @@ export class OkrKhepService {
 		};
 		const [mts, dauDong, dongKy] = await Promise.all([
 			this.db.okrObjective.findMany({
-				where,
+				where: { AND: [where, dieuKienXemMucTieu(nc)] },
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 				select: chonBangCham,
 			}),
@@ -595,6 +610,15 @@ export class OkrKhepService {
 			kiemDongKy(this.db, input.cycleId),
 		]);
 		const thangKy = dauDong ? thangCham.parse(dauDong.thang) : null;
+		const { xemDuoc } = await locXemTrongVet(
+			this.db,
+			nc,
+			[],
+			mts.flatMap((m) => [
+				...m.mangSangDi.map((d) => d.sangObjectiveId),
+				...(m.mangSangTu ? [m.mangSangTu.tuObjectiveId] : []),
+			]),
+		);
 		const mucTieu = mts
 			.map((m): MucTieuCham & { hang: number } => {
 				const dv = donViCua(m);
@@ -642,7 +666,7 @@ export class OkrKhepService {
 					dau?.trongSoBat ?? false,
 				);
 				const thang: ThangCham | null = dau?.thang ?? thangKy;
-				const toi = m.mangSangDi[0];
+				const toi = m.mangSangDi.find((d) => xemDuoc(d.sangObjectiveId));
 				return {
 					hang: HANG_CAP[dv.level],
 					id: m.id,
@@ -660,12 +684,13 @@ export class OkrKhepService {
 								cycleName: toi.sangCycle.name,
 							}
 						: null,
-					mangSangTu: m.mangSangTu
-						? {
-								objectiveId: m.mangSangTu.tuObjectiveId,
-								cycleName: m.mangSangTu.tuObjective.cycle.name,
-							}
-						: null,
+					mangSangTu:
+						m.mangSangTu && xemDuoc(m.mangSangTu.tuObjectiveId)
+							? {
+									objectiveId: m.mangSangTu.tuObjectiveId,
+									cycleName: m.mangSangTu.tuObjective.cycle.name,
+								}
+							: null,
 					krs: krs.map((k) => k.ra),
 				};
 			})
@@ -687,12 +712,19 @@ export class OkrKhepService {
 		if (!c) throw new NotFoundException(T.khongCoChuKy(input.cycleId));
 		if (c.phase !== "da-dong")
 			throw new BadRequestException(T.khep.xuatChiKhiDong);
+		const q = await this.quyenOkr.quyen(userId);
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
 		const [bang, mts] = await Promise.all([
-			this.bangCham(userId, { cycleId: input.cycleId }),
+			this.bangChamCua(userId, q, { cycleId: input.cycleId }),
 			this.db.okrObjective.findMany({
 				where: {
-					cycleId: input.cycleId,
-					status: { in: ["cong-bo", "da-bo"] },
+					AND: [
+						{
+							cycleId: input.cycleId,
+							status: { in: ["cong-bo", "da-bo"] },
+						},
+						dieuKienXemMucTieu(nc),
+					],
 				},
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 				select: chonXuat,

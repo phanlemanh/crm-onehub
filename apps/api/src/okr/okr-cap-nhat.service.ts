@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import {
 	type GuiCapNhatInput,
@@ -48,10 +49,19 @@ export class OkrCapNhatService {
 		now = new Date(),
 	): Promise<CapNhatTuanOutput> {
 		const tuan = dauTuanVN(now);
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
 		const krs = await this.db.okrKeyResult.findMany({
 			where: {
 				ownerUserId: userId,
-				objective: { status: "cong-bo", cycle: { phase: "dang-chay" } },
+				objective: {
+					AND: [
+						{ status: "cong-bo", cycle: { phase: "dang-chay" } },
+						dieuKienXemMucTieu(nc),
+					],
+				},
 			},
 			include: {
 				objective: {
@@ -70,7 +80,10 @@ export class OkrCapNhatService {
 			],
 		});
 		const lan = await this.db.okrCheckIn.findMany({
-			where: { keyResultId: { in: krs.map((k) => k.id) } },
+			where: {
+				keyResultId: { in: krs.map((k) => k.id) },
+				keyResult: { objective: dieuKienXemMucTieu(nc) },
+			},
 			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 			distinct: ["keyResultId"],
 		});

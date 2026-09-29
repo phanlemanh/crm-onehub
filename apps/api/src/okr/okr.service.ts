@@ -1,5 +1,10 @@
 import type { Db, Prisma } from "@crm/db";
 import {
+	boGioiHan,
+	dieuKienXemMucTieu,
+	type NguCanhXem,
+} from "@crm/db/okr-hien-thi";
+import {
 	chonChuKyHienTai,
 	kyVongTheoNgay,
 	tienDoMucTieu,
@@ -70,6 +75,7 @@ import {
 	vetSangKienChoVai,
 } from "./canh-kr";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
+import { locXemTrongVet, type PhamDoc, vetChoNguoiXem } from "./hien-thi";
 import {
 	type CuaSoRa,
 	chotKyCham,
@@ -150,6 +156,12 @@ const chonMucTieu = {
 		orderBy: { position: "asc" },
 	},
 	alignments: {
+		where: {
+			OR: [
+				{ targetObjective: boGioiHan },
+				{ targetKeyResult: { objective: boGioiHan } },
+			],
+		},
 		include: {
 			targetObjective: { select: { title: true, ...chonTenDonVi } },
 			targetKeyResult: {
@@ -982,27 +994,30 @@ export class OkrService {
 	private async dichCanChinh(
 		tx: Tx,
 		dich: { objectiveId: string | null; keyResultId: string | null },
+		nc: NguCanhXem,
 	) {
 		const chon = {
 			id: true,
 			level: true,
 			status: true,
 			cycleId: true,
+			hienThi: true,
 		} as const;
 		if (dich.keyResultId !== null) {
-			const kr = await tx.okrKeyResult.findUnique({
-				where: { id: dich.keyResultId },
+			const kr = await tx.okrKeyResult.findFirst({
+				where: { id: dich.keyResultId, objective: dieuKienXemMucTieu(nc) },
 				select: { objective: { select: chon } },
 			});
-			if (!kr) throw new NotFoundException(T.khongCoKr(dich.keyResultId));
+			if (!kr) throw new NotFoundException(T.khongThayMucTieu);
 			return kr.objective;
 		}
-		const id = dich.objectiveId ?? "";
-		const mt = await tx.okrObjective.findUnique({
-			where: { id },
+		const mt = await tx.okrObjective.findFirst({
+			where: {
+				AND: [{ id: dich.objectiveId ?? "" }, dieuKienXemMucTieu(nc)],
+			},
 			select: chon,
 		});
-		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
+		if (!mt) throw new NotFoundException(T.khongThayMucTieu);
 		return mt;
 	}
 
@@ -1018,11 +1033,20 @@ export class OkrService {
 			userId,
 			input.objectiveId,
 		);
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
 		return this.db.$transaction(async (tx) => {
 			await this.assertKyGhiDuoc(tx, nguon.cycleId);
 			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
 			if ((await this.trangThai(tx, nguon.id)) === "da-bo")
 				throw new BadRequestException(T.daBo);
+			const nguonCongKhai = await tx.okrObjective.count({
+				where: { AND: [{ id: nguon.id }, boGioiHan] },
+			});
+			if (nguonCongKhai === 0)
+				throw new BadRequestException(T.canChinh.gioiHanKhongCanChinh);
 			if (
 				(input.targetObjectiveId === null) ===
 				(input.targetKeyResultId === null)
@@ -1030,10 +1054,16 @@ export class OkrService {
 				throw new BadRequestException(T.canChinh.khongCoDich);
 			if (input.targetKeyResultId !== null)
 				await tx.$queryRaw`SELECT id FROM "okrKeyResult" WHERE id = ${input.targetKeyResultId} FOR SHARE`;
-			const dich = await this.dichCanChinh(tx, {
-				objectiveId: input.targetObjectiveId,
-				keyResultId: input.targetKeyResultId,
-			});
+			const dich = await this.dichCanChinh(
+				tx,
+				{
+					objectiveId: input.targetObjectiveId,
+					keyResultId: input.targetKeyResultId,
+				},
+				nc,
+			);
+			if (dich.hienThi !== boGioiHan.hienThi)
+				throw new BadRequestException(T.canChinh.gioiHanKhongCanChinh);
 			if (dich.id === nguon.id)
 				throw new BadRequestException(T.canChinh.chinhNo);
 			if (HANG_CAP[capMucTieu.parse(dich.level)] >= HANG_CAP[nguon.level])
@@ -1096,16 +1126,23 @@ export class OkrService {
 		});
 	}
 
-	async alignmentTargets(objectiveId: string) {
-		const nguon = await this.db.okrObjective.findUnique({
-			where: { id: objectiveId },
+	async alignmentTargets(userId: string, objectiveId: string) {
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const nguon = await this.db.okrObjective.findFirst({
+			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
 			select: {
 				level: true,
 				cycleId: true,
+				hienThi: true,
 				cycle: { select: { parentId: true } },
 			},
 		});
-		if (!nguon) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
+		if (!nguon) throw new NotFoundException(T.khongThayMucTieu);
+		if (nguon.hienThi !== boGioiHan.hienThi)
+			throw new BadRequestException(T.canChinh.gioiHanKhongCanChinh);
 		const nguonCanChinh = {
 			level: capMucTieu.parse(nguon.level),
 			cycleId: nguon.cycleId,
@@ -1113,9 +1150,14 @@ export class OkrService {
 		};
 		const rows = await this.db.okrObjective.findMany({
 			where: {
-				status: "cong-bo",
-				level: { in: capDichCanChinh(nguonCanChinh.level) },
-				cycleId: { in: chuKyDichCanChinh(nguonCanChinh) },
+				AND: [
+					{
+						status: "cong-bo",
+						level: { in: capDichCanChinh(nguonCanChinh.level) },
+						cycleId: { in: chuKyDichCanChinh(nguonCanChinh) },
+					},
+					boGioiHan,
+				],
 			},
 			select: {
 				id: true,
@@ -1155,15 +1197,22 @@ export class OkrService {
 
 	async mucTieuCuaCay(userId: string, cycleId: string) {
 		const q = await this.quyenOkr.quyen(userId);
+		const pham = { nguCanh: this.quyenOkr.nguCanhXem(q, userId) };
 		const ky = await this.db.okrCycle.findUnique({
 			where: { id: cycleId },
 			select: { parentId: true },
 		});
 		if (!ky) throw new NotFoundException(T.khongCoChuKy(cycleId));
 		const cha = ky.parentId
-			? await this.docMucTieu(this.db, { cycleId: ky.parentId }, userId, q)
+			? await this.docMucTieu(
+					this.db,
+					{ cycleId: ky.parentId },
+					userId,
+					q,
+					pham,
+				)
 			: [];
-		const cua = await this.docMucTieu(this.db, { cycleId }, userId, q);
+		const cua = await this.docMucTieu(this.db, { cycleId }, userId, q, pham);
 		const con = ky.parentId
 			? []
 			: await this.docMucTieu(
@@ -1181,6 +1230,7 @@ export class OkrService {
 					},
 					userId,
 					q,
+					pham,
 				);
 		return [...cha, ...cua, ...con];
 	}
@@ -1190,11 +1240,17 @@ export class OkrService {
 		where: Prisma.OkrObjectiveWhereInput,
 		viewerId: string,
 		q: Quyen,
+		pham: PhamDoc,
 		homNay = new Date(),
 	): Promise<MucTieuOutput[]> {
 		const ct = await this.program(tx);
 		const rows = await tx.okrObjective.findMany({
-			where,
+			where: {
+				AND: [
+					where,
+					pham === "so-gop" ? boGioiHan : dieuKienXemMucTieu(pham.nguCanh),
+				],
+			},
 			include: {
 				...chonMucTieu,
 				followers: { where: { userId: viewerId }, select: { userId: true } },
@@ -1464,6 +1520,7 @@ export class OkrService {
 			{ cycleId, ...dv },
 			userId,
 			q,
+			{ nguCanh: this.quyenOkr.nguCanhXem(q, userId) },
 		);
 		return {
 			objectives,
@@ -1475,7 +1532,7 @@ export class OkrService {
 	async countByUnit(cycleId: string): Promise<Record<string, number>> {
 		const nhom = await this.db.okrObjective.groupBy({
 			by: ["level", "divisionId", "departmentId", "personUserId"],
-			where: { cycleId, status: "cong-bo" },
+			where: { AND: [{ cycleId, status: "cong-bo" }, boGioiHan] },
 			_count: { _all: true },
 		});
 		const dem: Record<string, number> = {};
@@ -1502,14 +1559,18 @@ export class OkrService {
 			},
 			userId,
 			q,
+			{ nguCanh: this.quyenOkr.nguCanhXem(q, userId) },
 		);
 		return { objectives };
 	}
 
 	async objective(userId: string, id: string): Promise<ObjectiveOutput> {
 		const q = await this.quyenOkr.quyen(userId);
-		const [mt] = await this.docMucTieu(this.db, { id }, userId, q);
-		if (!mt) throw new NotFoundException(T.khongCoMucTieu(id));
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
+		const [mt] = await this.docMucTieu(this.db, { id }, userId, q, {
+			nguCanh: nc,
+		});
+		if (!mt) throw new NotFoundException(T.khongThayMucTieu);
 		const [vet, ky, donVi, toi, tu] = await Promise.all([
 			this.db.okrTrail.findMany({
 				where: { objectiveId: id },
@@ -1519,8 +1580,8 @@ export class OkrService {
 				where: { id: mt.cycleId },
 				select: { name: true },
 			}),
-			this.db.okrObjective.findUniqueOrThrow({
-				where: { id },
+			this.db.okrObjective.findFirstOrThrow({
+				where: { AND: [{ id }, dieuKienXemMucTieu(nc)] },
 				select: chonDonVi,
 			}),
 			this.db.okrMangSang.findFirst({
@@ -1541,20 +1602,29 @@ export class OkrService {
 		]);
 		const objective = donViCuaDong(donVi);
 		const krIds = mt.keyResults.map((k) => k.id);
-		const [nguoi, dem, xong, bangChung] = await Promise.all([
+		const dongVet = vet.map((v) => ({
+			v,
+			before: parseOkrVet(v.before),
+			after: parseOkrVet(v.after),
+		}));
+		const [nguoi, dem, xong, bangChung, loc] = await Promise.all([
 			this.db.user.findMany({
 				where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
 				select: chonNguoi,
 			}),
 			this.db.okrViecKr.groupBy({
 				by: ["keyResultId", "loai"],
-				where: { keyResultId: { in: krIds } },
+				where: {
+					keyResultId: { in: krIds },
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
+				},
 				_count: { _all: true },
 			}),
 			this.db.okrViecKr.groupBy({
 				by: ["keyResultId"],
 				where: {
 					keyResultId: { in: krIds },
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
 					loai: "viec",
 					xongLuc: { not: null },
 				},
@@ -1565,6 +1635,12 @@ export class OkrService {
 				where: { keyResultId: { in: krIds } },
 				_count: { _all: true },
 			}),
+			locXemTrongVet(
+				this.db,
+				nc,
+				dongVet,
+				[toi?.sangObjectiveId, tu?.tuObjectiveId].flatMap((x) => x ?? []),
+			),
 		]);
 		const demLoai = (krId: string, laViec: boolean) =>
 			dem
@@ -1582,26 +1658,32 @@ export class OkrService {
 				coBangChung: bangChung.some((d) => d.keyResultId === k.id),
 			})),
 			cycleName: ky.name,
-			mangSangToi: toi
-				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
-				: null,
-			mangSangTu: tu
-				? {
-						objectiveId: tu.tuObjectiveId,
-						cycleName: tu.tuObjective.cycle.name,
-					}
-				: null,
-			trail: vet.map((v) =>
-				vetSangKienChoVai(q.role, {
-					id: v.id,
-					at: v.at.toISOString(),
-					actor: nguoi.find((n) => n.id === v.actorUserId) ?? null,
-					action: hanhDongVet.parse(v.action),
-					keyResultId: v.keyResultId,
-					before: parseOkrVet(v.before),
-					after: parseOkrVet(v.after),
-					note: v.note,
-				}),
+			mangSangToi:
+				toi && loc.xemDuoc(toi.sangObjectiveId)
+					? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
+					: null,
+			mangSangTu:
+				tu && loc.xemDuoc(tu.tuObjectiveId)
+					? {
+							objectiveId: tu.tuObjectiveId,
+							cycleName: tu.tuObjective.cycle.name,
+						}
+					: null,
+			trail: dongVet.map(({ v, before, after }) =>
+				vetChoNguoiXem(
+					vetSangKienChoVai(q.role, {
+						id: v.id,
+						at: v.at.toISOString(),
+						actor: nguoi.find((n) => n.id === v.actorUserId) ?? null,
+						action: hanhDongVet.parse(v.action),
+						keyResultId: v.keyResultId,
+						before,
+						after,
+						note: v.note,
+					}),
+					loc.xemDuoc,
+					loc.mucTieuCuaKr,
+				),
 			),
 			canEditKr: mt.keyResults
 				.filter((k) =>

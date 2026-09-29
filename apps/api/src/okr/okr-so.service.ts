@@ -1,4 +1,4 @@
-import { docDuocPhamVi, workspaceRoleOf } from "@crm/auth";
+import { docDuocPhamVi } from "@crm/auth";
 import { type Db, Prisma } from "@crm/db";
 import {
 	banGhiChiSo,
@@ -6,6 +6,7 @@ import {
 	type KhoangKy,
 	khoangKy,
 } from "@crm/db/okr-chi-so";
+import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import { OKR_SO } from "@crm/db/okr-so-config";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { kiemGiaTriTheoKieu } from "@crm/validation/okr-cap-nhat";
@@ -352,9 +353,9 @@ export class OkrSoService {
 		return new Map(rows.map((r) => [r.id, r.name]));
 	}
 
-	private async docKr(keyResultId: string) {
-		const kr = await this.db.okrKeyResult.findUnique({
-			where: { id: keyResultId },
+	private async docKr(keyResultId: string, nc: NguCanhXem) {
+		const kr = await this.db.okrKeyResult.findFirst({
+			where: { id: keyResultId, objective: dieuKienXemMucTieu(nc) },
 			select: {
 				title: true,
 				source: true,
@@ -364,14 +365,20 @@ export class OkrSoService {
 				},
 			},
 		});
-		if (!kr) throw new NotFoundException(T.khongCoKr(keyResultId));
+		if (!kr) throw new NotFoundException(T.khongThayMucTieu);
 		return kr;
 	}
 
-	async lichSuSo(keyResultId: string) {
-		await this.docKr(keyResultId);
+	private async nguCanhCua(userId: string) {
+		const q = await this.quyenOkr.quyen(userId);
+		return { q, nc: this.quyenOkr.nguCanhXem(q, userId) };
+	}
+
+	async lichSuSo(userId: string, keyResultId: string) {
+		const { nc } = await this.nguCanhCua(userId);
+		await this.docKr(keyResultId, nc);
 		const rows = await this.db.okrSoChup.findMany({
-			where: { keyResultId },
+			where: { keyResultId, keyResult: { objective: dieuKienXemMucTieu(nc) } },
 			orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
 			select: { ngay: true, giaTri: true, nguon: true, tacGiaUserId: true },
 		});
@@ -390,15 +397,20 @@ export class OkrSoService {
 		userId: string,
 		input: BanGhiChiSoInput,
 	): Promise<BanGhiChiSoOutput> {
-		if (!docDuocPhamVi(await workspaceRoleOf(userId), "doi-tac"))
+		const { q, nc } = await this.nguCanhCua(userId);
+		const kr = await this.docKr(input.keyResultId, nc);
+		if (!docDuocPhamVi(q.role, "doi-tac"))
 			throw new ForbiddenException(T.so.danhSachDoiTac);
-		const kr = await this.docKr(input.keyResultId);
+		const cuaKr = {
+			keyResultId: input.keyResultId,
+			keyResult: { objective: dieuKienXemMucTieu(nc) },
+		};
 		const coTrang = OKR_SO.banGhi.coTrang;
 		const cua = { bo: (input.trang - 1) * coTrang, lay: coTrang };
 		const nguonMay = kr.nguonMay ? parseOkrNguon(kr.nguonMay) : null;
 		const chup = await this.db.okrSoChup.findFirst({
 			where: {
-				keyResultId: input.keyResultId,
+				...cuaKr,
 				ngay: input.ngay ? ngayDb(input.ngay) : undefined,
 			},
 			orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
@@ -426,10 +438,11 @@ export class OkrSoService {
 			lanGhi: [],
 		};
 		if (loai === "api") {
-			const cuaApi = { keyResultId: input.keyResultId, nguon: "api" };
-			const tong = await this.db.okrSoChup.count({ where: cuaApi });
+			const tong = await this.db.okrSoChup.count({
+				where: { ...cuaKr, nguon: "api" },
+			});
 			const lan = await this.db.okrSoChup.findMany({
-				where: cuaApi,
+				where: { ...cuaKr, nguon: "api" },
 				orderBy: [{ ngay: "desc" }, { chupLuc: "desc" }],
 				skip: cua.bo,
 				take: cua.lay,

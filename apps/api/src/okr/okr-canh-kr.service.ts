@@ -1,5 +1,6 @@
 import { docDuocPhamVi } from "@crm/auth";
 import { type Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
 	type BangChungVao,
@@ -120,8 +121,10 @@ export class OkrCanhKrService {
 		keyResultId: string,
 		now = new Date(),
 	): Promise<CanhKrOutput> {
-		const kr = await this.db.okrKeyResult.findUnique({
-			where: { id: keyResultId },
+		const q = await this.access.quyen(userId);
+		const nc = this.access.nguCanhXem(q, userId);
+		const kr = await this.db.okrKeyResult.findFirst({
+			where: { id: keyResultId, objective: dieuKienXemMucTieu(nc) },
 			select: {
 				id: true,
 				title: true,
@@ -135,11 +138,13 @@ export class OkrCanhKrService {
 				},
 			},
 		});
-		if (!kr) throw new NotFoundException(T.khongCoKr(keyResultId));
-		const [q, viec, bangChung] = await Promise.all([
-			this.access.quyen(userId),
+		if (!kr) throw new NotFoundException(T.khongThayMucTieu);
+		const [viec, bangChung] = await Promise.all([
 			this.db.okrViecKr.findMany({
-				where: { keyResultId },
+				where: {
+					keyResultId,
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
+				},
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
 				select: chonHangCanh,
 			}),

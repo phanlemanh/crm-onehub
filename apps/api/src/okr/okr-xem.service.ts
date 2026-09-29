@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { boGioiHan, dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { kyVongTheoNgay } from "@crm/db/okr-tien-do";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
@@ -21,6 +22,7 @@ import { InjectDatabase } from "../database/database.constants";
 import { dungCayCanChinh } from "./can-chinh";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
 import { dienBienKr, tuanCapNhatDau } from "./dien-bien";
+import type { PhamDoc } from "./hien-thi";
 import {
 	cacTuan,
 	congTuan,
@@ -169,9 +171,17 @@ export class OkrXemService {
 
 	private async lanCuaKr(
 		where: Prisma.OkrObjectiveWhereInput,
+		pham: PhamDoc,
 	): Promise<LanTheoKr> {
 		const krs = await this.db.okrKeyResult.findMany({
-			where: { objective: where },
+			where: {
+				objective: {
+					AND: [
+						where,
+						pham === "so-gop" ? boGioiHan : dieuKienXemMucTieu(pham.nguCanh),
+					],
+				},
+			},
 			select: {
 				id: true,
 				startLockedAt: true,
@@ -232,9 +242,10 @@ export class OkrXemService {
 		input: DanhSachInput,
 	): Promise<DanhSachOutput> {
 		const q = await this.quyenOkr.quyen(userId);
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
 		const donVi = this.dieuKienDonVi(input.unit, q);
 		const goc = { AND: [{ cycleId: input.cycleId }, donVi] };
-		const lan = await this.lanCuaKr(goc);
+		const lan = await this.lanCuaKr(goc, { nguCanh: nc });
 		const tuTinMoi = new Map<string, MucTuTin>();
 		for (const [id, l] of lan) {
 			const m = l.lan.at(-1);
@@ -253,9 +264,10 @@ export class OkrXemService {
 				{ AND: [...goc.AND, ...this.dieuKienLoc(input.loc), ...locTuTin] },
 				userId,
 				q,
+				{ nguCanh: nc },
 			),
 			this.db.okrObjective.findMany({
-				where: goc,
+				where: { AND: [goc, dieuKienXemMucTieu(nc)] },
 				select: {
 					id: true,
 					kind: true,
@@ -306,8 +318,8 @@ export class OkrXemService {
 		const q = await this.quyenOkr.quyen(userId);
 		const where = { cycleId, status: "cong-bo" };
 		const [congBo, lan, tuanKy] = await Promise.all([
-			this.okr.docMucTieu(this.db, where, userId, q),
-			this.lanCuaKr(where),
+			this.okr.docMucTieu(this.db, where, userId, q, "so-gop"),
+			this.lanCuaKr(where, "so-gop"),
 			this.tuanCuaKy(cycleId),
 		]);
 		const so = this.krSoCua(congBo, lan);
@@ -339,7 +351,11 @@ export class OkrXemService {
 		const nguoi = q.cay.people.map((p) => p.id);
 		const [kr, zalo, slack, lan] = await Promise.all([
 			this.db.okrKeyResult.findMany({
-				where: { objective: { cycleId, status: { in: ["cong-bo", "nhap"] } } },
+				where: {
+					objective: {
+						AND: [{ cycleId, status: { in: ["cong-bo", "nhap"] } }, boGioiHan],
+					},
+				},
 				select: {
 					id: true,
 					objective: {
@@ -360,7 +376,7 @@ export class OkrXemService {
 				where: { crmUserId: { in: nguoi }, slackUserId: { not: null } },
 				select: { crmUserId: true },
 			}),
-			this.lanCuaKr({ cycleId, status: "cong-bo" }),
+			this.lanCuaKr({ cycleId, status: "cong-bo" }, "so-gop"),
 		]);
 		const tuanTruoc = congTuan(dauTuanVN(homNay), -1);
 		const rieng = new Map<string, SoRieng>();
@@ -435,8 +451,8 @@ export class OkrXemService {
 			],
 		};
 		const [mts, lan] = await Promise.all([
-			this.okr.docMucTieu(this.db, where, userId, q),
-			this.lanCuaKr(where),
+			this.okr.docMucTieu(this.db, where, userId, q, "so-gop"),
+			this.lanCuaKr(where, "so-gop"),
 		]);
 		const so = this.krSoCua(mts, lan);
 		const tuan = dauTuanVN(homNay);
@@ -527,11 +543,16 @@ export class OkrXemService {
 	}
 
 	async dienBien(
+		userId: string,
 		keyResultId: string,
 		homNay = new Date(),
 	): Promise<DienBienOutput> {
-		const kr = await this.db.okrKeyResult.findUnique({
-			where: { id: keyResultId },
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const kr = await this.db.okrKeyResult.findFirst({
+			where: { id: keyResultId, objective: dieuKienXemMucTieu(nc) },
 			select: {
 				id: true,
 				title: true,
@@ -554,8 +575,11 @@ export class OkrXemService {
 				},
 			},
 		});
-		if (!kr) throw new NotFoundException(OKR_XEM.thongDiep.khongCoKr);
-		const lan = await this.lanCuaKr({ keyResults: { some: { id: kr.id } } });
+		if (!kr) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		const lan = await this.lanCuaKr(
+			{ keyResults: { some: { id: kr.id } } },
+			{ nguCanh: nc },
+		);
 		const c = kr.objective.cycle;
 		const nghi =
 			c.breakStartsOn && c.breakEndsOn
@@ -597,14 +621,15 @@ export class OkrXemService {
 	): Promise<KhoiCuaToiOutput> {
 		const ai = input.userId ?? userId;
 		const q = await this.quyenOkr.quyen(userId);
+		const pham = { nguCanh: this.quyenOkr.nguCanhXem(q, userId) };
 		const where = {
 			cycleId: input.cycleId,
 			status: "cong-bo",
 			keyResults: { some: { ownerUserId: ai } },
 		};
 		const [mts, lan] = await Promise.all([
-			this.okr.docMucTieu(this.db, where, userId, q),
-			this.lanCuaKr(where),
+			this.okr.docMucTieu(this.db, where, userId, q, pham),
+			this.lanCuaKr(where, pham),
 		]);
 		const so = this.krSoCua(mts, lan);
 		const dong: (DongCuaToi & { thuTu: number })[] = mts.flatMap((m) =>

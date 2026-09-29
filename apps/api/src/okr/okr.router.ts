@@ -455,8 +455,11 @@ export class OkrRouter {
 			TAG,
 		),
 	})
-	alignmentTargets(@Input() input: z.infer<typeof alignmentTargetsInput>) {
-		return this.okr.alignmentTargets(input.objectiveId);
+	alignmentTargets(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof alignmentTargetsInput>,
+	) {
+		return this.okr.alignmentTargets(ctx.user.id, input.objectiveId);
 	}
 
 	@Mutation({
@@ -584,8 +587,11 @@ export class OkrRouter {
 		output: dienBienOutput,
 		meta: restMeta("GET", "/okr/key-results/{keyResultId}/history", TAG),
 	})
-	dienBien(@Input() input: z.infer<typeof dienBienInput>) {
-		return this.xem.dienBien(input.keyResultId);
+	dienBien(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dienBienInput>,
+	) {
+		return this.xem.dienBien(ctx.user.id, input.keyResultId);
 	}
 
 	@Query({
@@ -916,8 +922,11 @@ export class OkrRouter {
 		output: lichSuSoOutput,
 		meta: restMeta("GET", "/okr/key-results/{keyResultId}/snapshots", TAG),
 	})
-	lichSuSo(@Input() input: z.infer<typeof lichSuSoInput>) {
-		return this.so.lichSuSo(input.keyResultId);
+	lichSuSo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof lichSuSoInput>,
+	) {
+		return this.so.lichSuSo(ctx.user.id, input.keyResultId);
 	}
 
 	@Query({
