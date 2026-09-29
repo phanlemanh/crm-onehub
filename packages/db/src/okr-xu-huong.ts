@@ -1,6 +1,11 @@
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
-import { MINUTE_MS, motTrong, TRO_LY_OKR_TRAN } from "./okr-tro-ly-danh-muc";
+import {
+	MINUTE_MS,
+	motTrong,
+	NGAY_MS,
+	TRO_LY_OKR_TRAN,
+} from "./okr-tro-ly-danh-muc";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
 
@@ -24,8 +29,6 @@ export type DiemCuaKr = {
 	ketThucKy: Date;
 	kieu: KieuKr;
 };
-
-const NGAY_MS = 24 * 60 * MINUTE_MS;
 
 const TUAN_MS = 7 * NGAY_MS;
 

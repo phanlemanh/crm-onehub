@@ -1,4 +1,5 @@
 export const MINUTE_MS = 60_000;
+export const NGAY_MS = 24 * 60 * MINUTE_MS;
 
 const SECOND_MS = MINUTE_MS / 60;
 

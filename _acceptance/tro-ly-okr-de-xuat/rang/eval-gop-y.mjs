@@ -125,6 +125,22 @@ const E22 = {
 			tienTo: "van de kr-la-viec",
 			phaiCo: true,
 		},
+		{
+			ten: "luat-7-chi-hoi",
+			krs: [
+				{
+					title: "Gọi 50 cuộc mỗi tuần",
+					kind: "tang-toi",
+					startValue: 0,
+					targetValue: 50,
+					unit: "cuộc",
+				},
+			],
+			kyVong: { khongGopY: false, vanDe: ["kr-la-viec"] },
+			dong: [],
+			tienTo: "van de kr-la-viec",
+			phaiCo: false,
+		},
 	],
 	outcomeTuKiem: "da-nop",
 	nhanJudge: "judge.autoevals.closedQA [",
@@ -508,6 +524,7 @@ function tuKiemKiemCa() {
 			const ca = {
 				...E22.caDoiChung,
 				id: `tu-kiem-${tk.ten}`,
+				krs: tk.krs ?? E22.caDoiChung.krs,
 				kyVong: { ...E22.caDoiChung.kyVong, ...tk.kyVong },
 			};
 			const ghi = docDongTongKet(

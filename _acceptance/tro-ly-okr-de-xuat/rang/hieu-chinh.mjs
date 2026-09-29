@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { TIEU_CHI_JUDGE } from "../../../apps/agent/evals/okr/tong-ket-gop-y.ts";
 
 export const HIEU_CHINH = {
 	soCap: 20,
@@ -39,11 +40,11 @@ function noiDung({ cap, judge, soCa, moHinh, luc }) {
 			"",
 			`Sinh bởi \`bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs\` lúc ${luc}, ${soCa} ca bộ Viết lại, judge \`${moHinh}\` có ZDR, điểm judge trung bình ${judge === null ? "—" : judge.toFixed(2)}.`,
 			"",
-			"Ba ý chấm (judge và chủ kho chấm cùng ba ý):",
+			`Bảng lấy ${HIEU_CHINH.soCap} cặp viết lại đầu tiên gom từ các ca đó (trần soCap), nên số ca và số cặp khác nhau.`,
 			"",
-			"1. Nói kết quả, không nói việc làm — chỉ xét trường đang viết lại: tên Mục tiêu viết bằng chữ, không mang con số, không chỉ là tên một chỉ số kèm hướng tăng hay giảm, không mở đầu bằng động từ việc làm; tên KR gọi tên thứ được đo, không kết bằng cụm mơ hồ như «đạt kết quả tốt».",
-			"2. Giữ ý người viết — không đổi sang mục tiêu khác, không gắn thêm lời tự khen hay khẩu hiệu không đo được («hàng đầu», «được tin cậy», «khẳng định vị thế»); diễn giải cùng ý bằng chữ thường không tính là thêm ý.",
-			"3. Trả lời theo ngôn ngữ chiếm đa số của nội dung.",
+			"Ba ý chấm, nguyên văn câu judge đọc (judge và chủ kho chấm cùng ba ý):",
+			"",
+			...TIEU_CHI_JUDGE.map((y, i) => `${i + 1}. ${y}`),
 			"",
 			"Chủ kho điền cột cuối bằng «Đạt» hoặc «Không đạt» cho từng cặp. Judge Đạt khi điểm bằng 1. Khớp là khi chấm của chủ kho trùng judge; E25 đạt khi khớp ≥ 85% và điểm judge trung bình ≥ 0,7.",
 			thieu,

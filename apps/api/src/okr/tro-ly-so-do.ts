@@ -1,6 +1,10 @@
 import { type Db, Prisma } from "@crm/db";
 import { khungThangVN } from "@crm/db/ai-chi-phi";
-import { MINUTE_MS, TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
+import {
+	MINUTE_MS,
+	NGAY_MS,
+	TRO_LY_OKR_TRAN,
+} from "@crm/db/okr-tro-ly-danh-muc";
 import { maLoaiDeXuat } from "@crm/validation/okr-tro-ly";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { z } from "zod";
@@ -28,7 +32,6 @@ export type LuotThang = {
 
 export type SoThang = { luot: LuotThang[]; hoanTac: ReadonlySet<string> };
 
-const NGAY_MS = 24 * 60 * MINUTE_MS;
 const HAN_HOAN_TAC_MS = TRO_LY_OKR_TRAN.hoanTacNgay * NGAY_MS;
 const CHU_SO_TY_LE = 4;
 const CHU_SO_TIEN = 6;
