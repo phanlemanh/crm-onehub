@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 932ab45680a3e697519209040ad53310f843cb89
+verified_commit: a8af896d4f715b6d413bf3cb36faadf81ce95631
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -231,3 +231,7 @@ none — every multi-run eval is uniform
 
 Round 1: REJECT — E1 lỗi ở bước E13 thiếu thẻ câu hỏi trong bộ thẻ chụp, E14 chưa chắc vì thiếu ảnh đủ loại thẻ. Returned to implementation.
 Round 2: PASS — kịch bản màn nhờ lại tới khi đủ loại thẻ và chụp trọn thẻ căn chỉnh (commit 2b93a081, 932ab456); E1, E11, E13 chạy lại và E14 chấm lại trên ảnh mới, E2-E10, E12, E15, E16 mang từ round 1 vì delta không chạm paths của chúng.
+
+### Re-pin lần 1 — 2026-09-29, do gộp onehub (#208–#211) vào nhánh thẻ góp ý OKR
+run_id: repin-20260929T165336Z-18491
+sha: a8af896d4f715b6d413bf3cb36faadf81ce95631 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E1, E11, E13, E14 · AC không có chốt máy: AC-13, AC-14
