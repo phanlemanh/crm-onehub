@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import type { TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
+import { thuTuXao } from "@crm/validation/okr-hoi-y";
 import {
 	bangChungChuDe,
 	chieuYChoNguoiXem,
@@ -594,6 +595,34 @@ describe("chieu-y", () => {
 			xem("ua", false, false, false, "dang-mo"),
 		);
 		expect(r.y.map((y) => y.id)).not.toEqual(nhieu.map((y) => y.id));
+	});
+
+	test("hạt xáo là hoiYId:userId của người xem", () => {
+		const r = chieuYChoNguoiXem(
+			nhieu,
+			xem("ua", false, false, false, "dang-mo"),
+		);
+		expect(r.y.map((y) => y.id)).toEqual(
+			thuTuXao(
+				nhieu.map((y) => y.id),
+				"hy1:ua",
+			),
+		);
+	});
+
+	test("cùng người xem, khác lần hỏi ý thì khác thứ tự", () => {
+		const theo = (hoiYId: string) =>
+			chieuYChoNguoiXem(nhieu, {
+				...xem("ua", false, false, false, "dang-mo"),
+				hoiYId,
+			}).y.map((y) => y.id);
+		expect(theo("hy1")).not.toEqual(theo("hy2"));
+		expect(theo("hy2")).toEqual(
+			thuTuXao(
+				nhieu.map((y) => y.id),
+				"hy2:ua",
+			),
+		);
 	});
 });
 
