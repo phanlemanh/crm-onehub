@@ -4,7 +4,12 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
 const GIAY_MS = 1000;
 
-export const TAB_TAI_LIEU = ["trang", "cho-duyet", "nguon"] as const;
+export const TAB_TAI_LIEU = [
+	"trang",
+	"cho-duyet",
+	"nguon",
+	"suc-khoe",
+] as const;
 export type TabTaiLieu = (typeof TAB_TAI_LIEU)[number];
 
 export const NHOM_DE_XUAT = ["cho", "da-xu-ly"] as const;

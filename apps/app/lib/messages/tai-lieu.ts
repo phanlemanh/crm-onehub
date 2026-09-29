@@ -12,6 +12,7 @@ const en = {
 		trang: "Pages",
 		choDuyet: "Awaiting review",
 		nguon: "Sources",
+		sucKhoe: "Health",
 	},
 	loai: {
 		"quy-dinh": "Rule",
@@ -75,6 +76,22 @@ const en = {
 			TRA_LAI: "Sent back",
 			CU: "Out of date",
 		} satisfies Record<TrangThaiDeXuat, string>,
+	},
+	sucKhoe: {
+		moTa: "What page owners should look at, list by list.",
+		quaHan: "Past its check-by date",
+		choDuyet: "Has proposals awaiting review",
+		gay: "Broken links",
+		chuaCo: "Mentioned but no page yet",
+		moCoi: "Orphaned: no page links here",
+		rong: "No pages.",
+		loi: "Couldn't load the library's health.",
+		thuLai: "Try again",
+		hetHan: "check by {ngay}",
+		soBan: "{so} awaiting review",
+		toi: "links to «{chu}»",
+		soTrang: "mentioned by {so} pages",
+		duyet: "approved {ngay}",
 	},
 	doc: {
 		nhacToi: {
@@ -272,6 +289,7 @@ const vi: TaiLieuMessages = {
 		trang: "Trang",
 		choDuyet: "Chờ duyệt",
 		nguon: "Nguồn",
+		sucKhoe: "Sức khoẻ",
 	},
 	loai: {
 		"quy-dinh": "Quy định",
@@ -331,6 +349,22 @@ const vi: TaiLieuMessages = {
 			TRA_LAI: "Đã trả lại",
 			CU: "Đã cũ",
 		},
+	},
+	sucKhoe: {
+		moTa: "Việc chủ trang nên xem, theo từng danh sách.",
+		quaHan: "Quá hạn xác minh",
+		choDuyet: "Có đề xuất chờ duyệt",
+		gay: "Liên kết gãy",
+		chuaCo: "Được nhắc mà chưa có trang",
+		moCoi: "Mồ côi: không trang nào dẫn tới",
+		rong: "Không có trang nào.",
+		loi: "Không tải được sức khoẻ kho.",
+		thuLai: "Thử lại",
+		hetHan: "hết hạn xác minh {ngay}",
+		soBan: "{so} bản chờ duyệt",
+		toi: "liên kết tới «{chu}»",
+		soTrang: "{so} trang nhắc tới",
+		duyet: "duyệt {ngay}",
 	},
 	doc: {
 		nhacToi: {

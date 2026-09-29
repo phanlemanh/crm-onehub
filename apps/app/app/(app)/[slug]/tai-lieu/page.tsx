@@ -62,6 +62,9 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		tab === "trang"
 			? queryClient.prefetchQuery(trpc.taiLieu.boLoc.queryOptions())
 			: null,
+		tab === "suc-khoe"
+			? queryClient.prefetchQuery(trpc.taiLieu.sucKhoe.queryOptions())
+			: null,
 		tab === "cho-duyet"
 			? queryClient.prefetchQuery(
 					trpc.taiLieu.proposals.queryOptions({ nhom, page }),

@@ -23,9 +23,10 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { BangNguon } from "./bang-nguon";
 import { ChoDuyet } from "./cho-duyet";
-import { type Loc, moTimNhanh, thamSo } from "./danh-sach-loc";
+import { BO_LOC_TRONG, type Loc, moTimNhanh, thamSo } from "./danh-sach-loc";
 import { DanhSachTrang } from "./danh-sach-trang";
 import { type LuaChonTai, NutTaiNguon } from "./hop-tai-nguon";
+import { SucKhoe } from "./suc-khoe";
 
 export function DanhSach({
 	tab,
@@ -83,7 +84,7 @@ export function DanhSach({
 					<TabsTrigger asChild value="trang">
 						<Link
 							aria-current={tab === "trang" ? "page" : undefined}
-							href={toi({ tab: "trang", page: 1 })}
+							href={toi({ tab: "trang", nhom: "cho", page: 1 })}
 						>
 							{m.tab.trang}
 						</Link>
@@ -92,7 +93,7 @@ export function DanhSach({
 						<Link
 							aria-current={tab === "cho-duyet" ? "page" : undefined}
 							data-tab-cho-duyet=""
-							href={toi({ tab: "cho-duyet", loai: null, page: 1 })}
+							href={toi({ ...BO_LOC_TRONG, tab: "cho-duyet" })}
 						>
 							{m.tab.choDuyet}
 							{soCho > 0 ? (
@@ -106,9 +107,18 @@ export function DanhSach({
 						<Link
 							aria-current={tab === "nguon" ? "page" : undefined}
 							data-tab-nguon=""
-							href={toi({ tab: "nguon", loai: null, page: 1 })}
+							href={toi({ ...BO_LOC_TRONG, tab: "nguon" })}
 						>
 							{m.tab.nguon}
+						</Link>
+					</TabsTrigger>
+					<TabsTrigger asChild value="suc-khoe">
+						<Link
+							aria-current={tab === "suc-khoe" ? "page" : undefined}
+							data-tab-suc-khoe=""
+							href={toi({ ...BO_LOC_TRONG, tab: "suc-khoe" })}
+						>
+							{m.tab.sucKhoe}
 						</Link>
 					</TabsTrigger>
 				</TabsList>
@@ -116,6 +126,8 @@ export function DanhSach({
 			<PageShellContent>
 				{tab === "cho-duyet" ? (
 					<ChoDuyet nhom={nhom} page={page} toi={toi} />
+				) : tab === "suc-khoe" ? (
+					<SucKhoe />
 				) : tab === "nguon" ? (
 					<BangNguon />
 				) : (
