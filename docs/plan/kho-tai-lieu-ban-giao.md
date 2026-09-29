@@ -1,7 +1,7 @@
 # Kho tài liệu — bàn giao để chạy tiếp ở máy khác
 
 Viết 2026-09-27. Mọi thứ cần để chạy tiếp nằm trong nhánh `proto/kho-tai-lieu` của
-`origin` (`phanlemanh/crm-onehub`), trừ ba thứ không vào git: tệp `.env`, trí nhớ
+`origin` (`phanlemanh/crm-onehub`), trừ hai thứ không vào git: trí nhớ
 của phiên máy, và kết quả thô 1 MB của phiên research. Mục 4 chép lại phần trí nhớ
 cần thiết để máy khác không phải học lại.
 
@@ -164,7 +164,21 @@ git fetch origin && git switch proto/kho-tai-lieu
 git merge origin/onehub
 ```
 
-Đặt `.env` vào gốc kho, rồi:
+`.env` nằm trong kho dưới dạng mã hoá (`.env.enc`, AES-256-CBC, PBKDF2 600.000 vòng).
+Mật khẩu chỉ chủ kho giữ, không ghi ở đâu trong kho. Giải mã ra `.env` ở gốc kho:
+
+```bash
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in .env.enc -out .env
+```
+
+Đổi khoá nào trong `.env` thì mã hoá lại và commit `.env.enc` (tên tệp `.env` vẫn bị
+`.gitignore` chặn, chỉ bản mã hoá được vào git):
+
+```bash
+openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -in .env -out .env.enc
+```
+
+Rồi:
 
 ```bash
 bun install && (cd packages/db && bun run db:generate)

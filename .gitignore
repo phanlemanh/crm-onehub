@@ -9,6 +9,7 @@ node_modules
 # documentation, so the catch-all below must not swallow it.
 .env
 .env.*
+!.env.enc
 !.env.example
 
 # Testing
