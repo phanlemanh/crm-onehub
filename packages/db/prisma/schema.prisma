@@ -216,14 +216,10 @@ model RateLimit {
   @@map("rateLimit")
 }
 
-enum DealStage {
-  DEMO_BOOKED
-  QUALIFIED_TO_BUY
-  UNQUALIFIED_TO_BUY
-  DECISION_MAKER_BOUGHT_IN
-  CONTRACT_SENT
-  CLOSED_WON
-  CLOSED_LOST
+enum DealStageKind {
+  OPEN
+  WON
+  LOST
 }
 
 enum ActivityType {
@@ -987,6 +983,20 @@ model AgentAuditEvent {
   @@map("agentAuditEvent")
 }
 
+model DealStage {
+  id         String        @id @default(cuid())
+  label      String
+  kind       DealStageKind
+  position   Int
+  archivedAt DateTime?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  deals      Deal[]
+
+  @@index([kind, position])
+  @@map("dealStage")
+}
+
 model Deal {
   id            String              @id @default(cuid())
   conversations AgentConversation[]
@@ -997,7 +1007,8 @@ model Deal {
   ownerId       String
   owner         User                @relation("DealOwner", fields: [ownerId], references: [id])
 
-  stage             DealStage @default(DEMO_BOOKED)
+  stage             String    @default("DEMO_BOOKED")
+  giaiDoan          DealStage @relation(fields: [stage], references: [id], onDelete: Restrict)
   stageChangedAt    DateTime  @default(now())
   amount            Decimal?  @db.Decimal(14, 2)
   currency          String    @default("USD")

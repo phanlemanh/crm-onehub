@@ -21,7 +21,7 @@ evals:
       <merge-base>:...), khong viet tay; + 7 thoa thuan x [stage (text) == stage cu, closedAt khong doi,
       closedReason khong doi] = 21; + 3 dong meta so tung byte = 3; + kieu enum "DealStage" khong con
       trong pg_type = 1. Tong 53 (hang KY_MONG trong tep; lech -> ma 2). Xoa kho o finally.
-      CHIEU DO (chay o S3, ban sao migration): (1) ban sao gan CLOSED_LOST vao OPEN -> do voi thong diep
+      CHIEU DO (da chay 2026-09-29, ban sao qua GDTT_MIG): (1) ban sao gan CLOSED_LOST vao OPEN -> do voi thong diep
       ghim "CLOSED_LOST: kind OPEN != LOST"; (2) ban sao bo buoc DROP TYPE -> do "enum DealStage con song".
 
   - id: E2
