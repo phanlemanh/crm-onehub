@@ -28,7 +28,7 @@ import { DealStageMenu } from "@/components/crm/stage-change";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalDay, LocalRelativeTime } from "@/components/local-date-time";
-import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { type DealMessages, dealMessages } from "@/lib/messages/deals";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -206,6 +206,7 @@ export function DealsTable() {
 
 	const facetCounts = deals.data?.facetCounts;
 	const fieldFacets = useFieldFacets("DEAL", facetCounts);
+	const giaiDoan = useGiaiDoan();
 
 	const facets: DataTableFacet[] = [
 		{
@@ -220,9 +221,9 @@ export function DealsTable() {
 		{
 			id: "stage",
 			label: m.facets.stage,
-			options: DEAL_STAGE_OPTIONS.filter(
-				(option) => (facetCounts?.stage?.[option.value] ?? 0) > 0,
-			),
+			options: giaiDoan.stages
+				.filter((option) => (facetCounts?.stage?.[option.id] ?? 0) > 0)
+				.map((option) => ({ value: option.id, label: option.label })),
 		},
 		{
 			id: "closing",

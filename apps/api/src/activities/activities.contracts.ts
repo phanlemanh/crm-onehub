@@ -170,7 +170,7 @@ export const activityEntryOutput = z.object({
 	planId: z.string().nullable(),
 	emailThread: activityEmailThreadOutput,
 	calendarEvent: activityCalendarEventOutput,
-	stageChange: activityStageChangeOutput,
+	stageChange: activityStageChangeOutput.optional(),
 });
 
 export type ActivityEntry = z.infer<typeof activityEntryOutput>;

@@ -6,6 +6,7 @@ import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
 import { DuongProtoMau } from "./_modules/duong-proto";
+import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { KhepKyOkrMau } from "./_modules/khep-ky-okr";
@@ -19,7 +20,6 @@ import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet"
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
-import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { PROTO_CATALOG } from "./catalog";
 
 export type ProtoComponent = (props: { state: string }) => ReactNode;
