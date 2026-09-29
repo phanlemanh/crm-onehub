@@ -13,9 +13,13 @@ import {
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import { luuMauInput, mauNoiDung } from "@crm/validation/okr-mau";
+import { TRANG_THAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
 import { z } from "zod";
 import { OKR_MAU } from "./cau-hinh";
+
+const [CONG_KHAI, GIOI_HAN] = MUC_HIEN_THI;
+const [NHAP, CHO_DUYET] = TRANG_THAI_MUC_TIEU;
 
 const ma = z
 	.string()
@@ -364,9 +368,9 @@ function kiemHienThiVaDuyet(
 	loi: BaoLoi,
 ): void {
 	const nguoi = new Set(bo.nguoi.map((n) => n.ma));
-	if (m.hienThi === "cong-khai" && m.nguoiXem.length > 0)
+	if (m.hienThi === CONG_KHAI && m.nguoiXem.length > 0)
 		loi(["mucTieu", i, "nguoiXem"], "mục tiêu công khai không có người xem");
-	if (m.hienThi === "gioi-han") {
+	if (m.hienThi === GIOI_HAN) {
 		if (m.nguoiXem.length === 0)
 			loi(["mucTieu", i, "nguoiXem"], "mục tiêu giới hạn cần người xem có tên");
 		if (m.canChinh)
@@ -388,7 +392,7 @@ function kiemHienThiVaDuyet(
 	for (const n of m.nguoiXem)
 		if (!nguoi.has(n)) loi(["mucTieu", i, "nguoiXem"], `không có người ${n}`);
 
-	if (m.trangThai === "cho-duyet") {
+	if (m.trangThai === CHO_DUYET) {
 		if (m.chuKy !== "quy4" || m.cap === "onehub")
 			loi(
 				["mucTieu", i, "trangThai"],
@@ -400,7 +404,7 @@ function kiemHienThiVaDuyet(
 				"mục tiêu chờ duyệt có vết gửi, không trả lại",
 			);
 	} else if (m.duyet) {
-		if (m.trangThai !== "nhap")
+		if (m.trangThai !== NHAP)
 			loi(
 				["mucTieu", i, "duyet"],
 				"vết duyệt chỉ ở mục tiêu nháp hay chờ duyệt",

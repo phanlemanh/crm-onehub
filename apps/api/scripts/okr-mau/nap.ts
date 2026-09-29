@@ -221,9 +221,6 @@ function donViDb(m: MucTieuMau) {
 const daCongBo = (m: MucTieuMau) =>
 	m.trangThai === "cong-bo" || m.trangThai === "da-bo";
 
-const TUAN_GUI_DUYET = { nhap: 2, choDuyet: 5 } as const;
-const GIO_TRA_LAI = 6;
-
 function vetDuyet(
 	bo: BoOkrMau,
 	lich: ReturnType<typeof lichMau>,
@@ -232,8 +229,8 @@ function vetDuyet(
 		if (!m.duyet) return [];
 		const tuan =
 			m.trangThai === "cho-duyet"
-				? TUAN_GUI_DUYET.choDuyet
-				: TUAN_GUI_DUYET.nhap;
+				? OKR_MAU.duyet.tuanGui.choDuyet
+				: OKR_MAU.duyet.tuanGui.nhap;
 		const gui = lich.lucCapNhat("quy4", tuan);
 		const objectiveId = idMau("mt", m.ma);
 		const dong: Prisma.OkrTrailCreateManyInput[] = [
@@ -250,7 +247,9 @@ function vetDuyet(
 		if (m.duyet.traLai)
 			dong.push({
 				id: idMau("vet", `${m.ma}-tra-lai`),
-				at: new Date(gui.getTime() + GIO_TRA_LAI * OKR_MAU.thoiGian.gioMs),
+				at: new Date(
+					gui.getTime() + OKR_MAU.duyet.gioTraLai * OKR_MAU.thoiGian.gioMs,
+				),
 				actorUserId: idMau("nguoi", m.duyet.traLai.nguoi),
 				objectiveId,
 				action: "tra-lai",
