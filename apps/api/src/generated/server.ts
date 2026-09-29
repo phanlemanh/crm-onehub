@@ -30,7 +30,7 @@ import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, 
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
 import { moRaInput, dongRaInput, xuatKyInput, chamKrInput, ghiDieuHocDuocInput, moLaiKyInput, mangSangInput } from "@crm/validation/okr-khep";
-import { moHoiYInput, suaHoiYInput, cycleIdInput, gopYInput, suaYInput, yIdInput, dongYInput } from "@crm/validation/okr-hoi-y";
+import { moHoiYInput, suaHoiYInput, cycleIdInput, gopYInput, suaYInput, yIdInput, dongYInput, niemPhongInput } from "@crm/validation/okr-hoi-y";
 import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
@@ -740,6 +740,10 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     dongY: publicProcedure
       .input(dongYInput)
+      .output(hoiYGhiOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    niemPhong: publicProcedure
+      .input(niemPhongInput)
       .output(hoiYGhiOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     bangCham: publicProcedure

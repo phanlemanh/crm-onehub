@@ -50,7 +50,11 @@ export const hoiYChiTiet = z.object({
 	trangThai: trangThaiHoiYKhuon,
 	nguoiChon: z.object({ id: z.string(), name: z.string() }),
 	cuaToi: z.object({ y: z.array(yCuaToi), daHieu: z.boolean() }),
-	y: z.object({ khoa: z.boolean(), ds: z.array(yChieuOutput) }),
+	y: z.object({
+		khoa: z.boolean(),
+		lyDoKhoa: z.string(),
+		ds: z.array(yChieuOutput),
+	}),
 	chuDe: z.null(),
 	banTruoc: banTruocChieu.nullable(),
 	ketQua: z.null(),

@@ -157,15 +157,15 @@ export async function goiRest(
 }
 
 export async function gieoBanTruoc(hoiYId: string, vietBoiUserId: string) {
-	return db.okrHoiYBanTruoc.create({
-		data: {
-			hoiYId,
-			cau: BAN_TRUOC_MAC_DINH,
-			boQua: false,
-			vietBoiUserId,
-			niemPhongLuc: dongHo(),
-		},
-	});
+	ok(
+		await goi(
+			"okr.niemPhong",
+			{ hoiYId, cau: BAN_TRUOC_MAC_DINH },
+			await phienCua(vietBoiUserId),
+		),
+		"gieo ban truoc",
+	);
+	return db.okrHoiYBanTruoc.findUniqueOrThrow({ where: { hoiYId } });
 }
 
 export async function gieoCongBo(hoiYId: string) {

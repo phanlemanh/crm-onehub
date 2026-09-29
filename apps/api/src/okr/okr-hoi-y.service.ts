@@ -6,6 +6,7 @@ import {
 	type DongYInput,
 	type GopYInput,
 	type MoHoiYInput,
+	type NiemPhongInput,
 	OKR_HOI_Y,
 	parseSoLieuHoiY,
 	type SuaHoiYInput,
@@ -52,6 +53,7 @@ function sauGio(tu: Date, soGio: number): Date {
 
 type HoiYKhoa = {
 	id: string;
+	cycleId: string;
 	hanLuc: Date;
 	congBoLuc: Date | null;
 	nguoiChonUserId: string;
@@ -248,6 +250,7 @@ export class OkrHoiYService {
 			where: { id: hoiYId },
 			select: {
 				id: true,
+				cycleId: true,
 				hanLuc: true,
 				congBoLuc: true,
 				nguoiChonUserId: true,
@@ -345,6 +348,48 @@ export class OkrHoiYService {
 		});
 	}
 
+	async niemPhong(
+		userId: string,
+		input: NiemPhongInput,
+	): Promise<HoiYGhiOutput> {
+		return this.db.$transaction(async (tx) => {
+			const h = await this.khoaHoiY(tx, input.hoiYId);
+			const now = this.dongHo();
+			if (h.nguoiChonUserId !== userId || !(await this.laQuanTri(tx, userId)))
+				throw new ForbiddenException(T.chiNguoiChon);
+			const trangThai = trangThaiHoiY(h, now);
+			if (trangThai === "da-cong-bo") throw new BadRequestException(T.daCongBo);
+			if (trangThai === "dang-gom")
+				throw new BadRequestException(T.chiNiemPhongKhiDangMo);
+			const daCo = await tx.okrHoiYBanTruoc.findUnique({
+				where: { hoiYId: h.id },
+				select: { id: true },
+			});
+			if (daCo) throw new BadRequestException(T.daCoBanTruoc);
+			const boQua = input.boQua === true;
+			const cau = input.cau ?? [];
+			const ban = await tx.okrHoiYBanTruoc.create({
+				data: {
+					hoiYId: h.id,
+					cau,
+					boQua,
+					vietBoiUserId: userId,
+					niemPhongLuc: now,
+				},
+				select: { id: true },
+			});
+			await this.okr.vet(
+				tx,
+				userId,
+				"niem-phong",
+				{ cycleId: h.cycleId },
+				null,
+				{ soCau: cau.length, boQua },
+			);
+			return { id: ban.id };
+		});
+	}
+
 	async hoiY(userId: string, input: CycleIdInput): Promise<HoiYOutput | null> {
 		const q = await this.quyenOkr.quyen(userId);
 		const now = this.dongHo();
@@ -419,7 +464,11 @@ export class OkrHoiYService {
 				})),
 				daHieu: h.hieu.length > 0,
 			},
-			y: { khoa: chieu.khoa, ds: chieu.y.map(raY) },
+			y: {
+				khoa: chieu.khoa,
+				lyDoKhoa: chieu.khoa ? T.yBiKhoa : "",
+				ds: chieu.y.map(raY),
+			},
 			chuDe: null,
 			banTruoc,
 			ketQua: null,

@@ -12,6 +12,7 @@ import {
 	dongYInput,
 	gopYInput,
 	moHoiYInput,
+	niemPhongInput,
 	suaHoiYInput,
 	suaYInput,
 	yIdInput,
@@ -424,6 +425,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof dongYInput>,
 	) {
 		return this.hoiYDv.dongY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: niemPhongInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/niem-phong", TAG),
+	})
+	niemPhong(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof niemPhongInput>,
+	) {
+		return this.hoiYDv.niemPhong(ctx.user.id, input);
 	}
 
 	@Query({

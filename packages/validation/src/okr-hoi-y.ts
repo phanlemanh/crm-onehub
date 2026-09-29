@@ -133,18 +133,22 @@ export type YIdInput = z.infer<typeof yIdInput>;
 export const dongYInput = z.object({ yId: ma, bat: z.boolean() });
 export type DongYInput = z.infer<typeof dongYInput>;
 
-export const niemPhongInput = z.union([
-	z
-		.object({
-			hoiYId: ma,
-			cau: z
-				.array(cauBanTruoc)
-				.min(OKR_HOI_Y.banTruoc.min)
-				.max(OKR_HOI_Y.banTruoc.max),
-		})
-		.strict(),
-	z.object({ hoiYId: ma, boQua: z.literal(true) }).strict(),
-]);
+export const CAU_NIEM_PHONG_MOT_TRONG_HAI = `Viết từ ${OKR_HOI_Y.banTruoc.min} tới ${OKR_HOI_Y.banTruoc.max} câu, hoặc khai không viết trước — chỉ một trong hai.`;
+
+export const niemPhongInput = z
+	.object({
+		hoiYId: ma,
+		cau: z
+			.array(cauBanTruoc)
+			.min(OKR_HOI_Y.banTruoc.min)
+			.max(OKR_HOI_Y.banTruoc.max)
+			.optional(),
+		boQua: z.literal(true).optional(),
+	})
+	.strict()
+	.refine((v) => (v.cau === undefined) !== (v.boQua === undefined), {
+		message: CAU_NIEM_PHONG_MOT_TRONG_HAI,
+	});
 export type NiemPhongInput = z.infer<typeof niemPhongInput>;
 
 export const taoChuDeInput = z.object({ hoiYId: ma, ten: tenChuDe });

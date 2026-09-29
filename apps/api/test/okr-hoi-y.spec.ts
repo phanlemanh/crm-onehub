@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import {
+	CAU_NIEM_PHONG_MOT_TRONG_HAI,
 	OKR_HOI_Y,
 	parseSoLieuHoiY,
 	type SoLieuHoiY,
@@ -9,10 +10,12 @@ import {
 import { OKR } from "../src/okr/okr-config";
 import {
 	type HoiYNhanOutput,
+	type HoiYOutput,
 	hoiYDocOutput,
 	hoiYNhanOutput,
 } from "../src/okr/okr-hoi-y.contracts";
 import {
+	BAN_TRUOC_MAC_DINH,
 	type Bang,
 	CAU_HOI_MAC_DINH,
 	datDongHo,
@@ -190,8 +193,12 @@ describe("mo-hoi-y", () => {
 				orderBy: [{ at: "asc" }, { id: "asc" }],
 				select: { action: true, objectiveId: true, after: true },
 			});
-			expect(vet.map((v) => v.action)).toEqual(["mo-hoi-y", "doi-nguoi-chon"]);
-			expect(vet[1]).toEqual({
+			expect(vet.map((v) => v.action)).toEqual([
+				"mo-hoi-y",
+				"niem-phong",
+				"doi-nguoi-chon",
+			]);
+			expect(vet[2]).toEqual({
 				action: "doi-nguoi-chon",
 				objectiveId: null,
 				after: { tu: nguoi.P.id, sang: Q2.id },
@@ -744,6 +751,22 @@ const KY_VONG_O = {
 	"okr.hoiYNhan": { T: NHAN_NHE, O: NHAN_NHE, Q: NHAN_NHE, P: NHAN_NHE },
 } as const satisfies { [K in ThuTucDoc]: { [V in VaiMaTran]: DemO } };
 
+const docQuaDuong = (
+	cycleId: string,
+	dau: { cookie: string; khoa: string },
+	duong: DuongMaTran,
+	thuTuc: ThuTucDoc,
+): Promise<TraLoi> => {
+	const rest = `${REST_DOC[thuTuc]}?cycleId=${encodeURIComponent(cycleId)}`;
+	switch (duong) {
+		case "trpc":
+			return goiQuery(thuTuc, dau.cookie, { cycleId });
+		case "rest":
+			return goiRest(rest, { cookie: dau.cookie });
+		case "khoa-api":
+			return goiRest(rest, { khoa: dau.khoa });
+	}
+};
 const demChuoi = (chu: string, tim: string) => chu.split(tim).length - 1;
 const nhanCua = (tra: TraLoi, nhan: string): HoiYNhanOutput =>
 	hoiYNhanOutput.parse(ok(tra, nhan));
@@ -795,17 +818,13 @@ describe("ten-va-so", () => {
 				vai: VaiMaTran,
 				duong: DuongMaTran,
 				thuTuc: ThuTucDoc,
-			): Promise<TraLoi> => {
-				const rest = `${REST_DOC[thuTuc]}?cycleId=${encodeURIComponent(ky)}`;
-				switch (duong) {
-					case "trpc":
-						return goiQuery(thuTuc, nguoi[vai].cookie, { cycleId: ky });
-					case "rest":
-						return goiRest(rest, { cookie: nguoi[vai].cookie });
-					case "khoa-api":
-						return goiRest(rest, { khoa: khoa[vai] });
-				}
-			};
+			): Promise<TraLoi> =>
+				docQuaDuong(
+					ky,
+					{ cookie: nguoi[vai].cookie, khoa: khoa[vai] },
+					duong,
+					thuTuc,
+				);
 			const demCua = (tra: TraLoi, thuTuc: ThuTucDoc): DemO => {
 				const chu = JSON.stringify(tra.data);
 				const coBan = {
@@ -1031,5 +1050,535 @@ describe("ten-va-so", () => {
 			).toBeNull();
 		},
 		CHO_MS,
+	);
+});
+
+const TEN_R = "Phạm Quốc Bảo";
+const Y_NGUOI_KHAC = [
+	"Mở kho lạnh cho khách dược miền Trung",
+	"Giao đơn trong hai giờ ở nội thành",
+	"Tặng gói bảo hiểm hàng hoá cho khách quay lại",
+] as const;
+const BAN_KHAC = [
+	"Bán thêm dịch vụ kho bãi cho khách cũ",
+	"Mở tuyến giao xuyên biên giới ở phía Bắc",
+	"Tự làm phần mềm điều xe cho đội giao hàng",
+	"Giữ chi phí giao chặng cuối dưới mười phần trăm",
+] as const;
+const VAI_VIET_TRUOC = ["Q", "T", "O"] as const;
+const TRANG_THAI_VIET_TRUOC = ["dang-mo"] as const;
+const niemPhongCua = (
+	hoiYId: string,
+	cookie: string,
+	vao: { cau: readonly string[] } | { boQua: true } = {
+		cau: BAN_TRUOC_MAC_DINH,
+	},
+) => goi("okr.niemPhong", { hoiYId, ...vao }, cookie);
+const chuLo = (chu: string, cau: readonly string[]) =>
+	cau.filter((c) => chu.includes(c));
+
+async function gieoBaYCuaNguoiKhac(g: Awaited<ReturnType<typeof gieoHoiY>>) {
+	const { A, B, R } = g.nguoi;
+	await db.user.update({ where: { id: A.id }, data: { name: TEN_A } });
+	await db.user.update({ where: { id: B.id }, data: { name: TEN_B } });
+	await db.user.update({ where: { id: R.id }, data: { name: TEN_R } });
+	const [yA, yB, yR] = Y_NGUOI_KHAC;
+	const ids = [
+		(await gieoY(g.h, A.id, yA)).id,
+		(await gieoY(g.h, B.id, yB)).id,
+		(await gieoY(g.h, R.id, yR)).id,
+	];
+	return { ids, ten: [TEN_A, TEN_B, TEN_R] };
+}
+
+const docHoiY = async (ky: string, cookie: string) =>
+	hoiYDocOutput.parse(
+		ok(await goiQuery("okr.hoiY", cookie, { cycleId: ky }), "doc hoi y"),
+	);
+
+describe("ban-truoc", () => {
+	test(
+		"ban-truoc: trước niêm phong P đọc lần hỏi ý có 3 ý của người khác — 0 ý (so id), khoa true, câu ghim, không chữ ý nào trong phản hồi; Q vẫn thấy 3 ý",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { ky, nguoi } = g;
+			const { ids, ten } = await gieoBaYCuaNguoiKhac(g);
+			const docP = await docHoiY(ky, nguoi.P.cookie);
+			const chu = JSON.stringify(docP);
+			expect({
+				soY: docP?.y.ds.length,
+				idLo: ids.filter((id) => chu.includes(id)),
+				chuLo: chuLo(chu, [...Y_NGUOI_KHAC, ...ten]),
+				khoa: docP?.y.khoa,
+				lyDoKhoa: docP?.y.lyDoKhoa,
+				banTruoc: docP?.banTruoc,
+			}).toEqual({
+				soY: 0,
+				idLo: [],
+				chuLo: [],
+				khoa: true,
+				lyDoKhoa: T.yBiKhoa,
+				banTruoc: null,
+			});
+			const docQ = await docHoiY(ky, nguoi.Q.cookie);
+			expect({
+				soY: docQ?.y.ds.length,
+				khoa: docQ?.y.khoa,
+				lyDoKhoa: docQ?.y.lyDoKhoa,
+			}).toEqual({ soY: 3, khoa: false, lyDoKhoa: "" });
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: P niêm phong bốn câu — DB đúng một hàng {cau, boQua false, người viết P, giờ tiêm}, P đọc được 3 ý kèm tên; lần hai 400 daCoBanTruoc, hàng không đổi; vết niem-phong {soCau 4, boQua false} và chuỗi vết không chứa câu nào",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { ky, h, nguoi } = g;
+			const { ids, ten } = await gieoBaYCuaNguoiKhac(g);
+			const { id } = ok<{ id: string }>(
+				await niemPhongCua(h, nguoi.P.cookie),
+				"P niem phong",
+			);
+			const hang = await db.okrHoiYBanTruoc.findMany({ where: { hoiYId: h } });
+			expect(hang.length).toBe(1);
+			expect({
+				id: hang[0]?.id,
+				cau: hang[0]?.cau,
+				boQua: hang[0]?.boQua,
+				vietBoiUserId: hang[0]?.vietBoiUserId,
+				niemPhongLuc: hang[0]?.niemPhongLuc.toISOString(),
+			}).toEqual({
+				id,
+				cau: [...BAN_TRUOC_MAC_DINH],
+				boQua: false,
+				vietBoiUserId: nguoi.P.id,
+				niemPhongLuc: LUC.toISOString(),
+			});
+
+			const docP = await docHoiY(ky, nguoi.P.cookie);
+			const tenP = (
+				await db.user.findUniqueOrThrow({ where: { id: nguoi.P.id } })
+			).name;
+			const thay = (docP?.y.ds ?? []).flatMap((y) =>
+				"tacGia" in y ? [{ id: y.id, ten: y.tacGia.ten }] : [],
+			);
+			expect({
+				khoa: docP?.y.khoa,
+				lyDoKhoa: docP?.y.lyDoKhoa,
+				soY: docP?.y.ds.length,
+				idTen: thay.map((y) => y.id).sort(),
+				ten: thay.map((y) => y.ten).sort(),
+				banTruoc: docP?.banTruoc,
+			}).toEqual({
+				khoa: false,
+				lyDoKhoa: "",
+				soY: 3,
+				idTen: [...ids].sort(),
+				ten: [...ten].sort(),
+				banTruoc: { cau: [...BAN_TRUOC_MAC_DINH], boQua: false, vietBoi: tenP },
+			});
+
+			const truoc = JSON.stringify(hang);
+			const lanHai = [
+				{
+					ca: "cau-khac",
+					tra: await niemPhongCua(h, nguoi.P.cookie, { cau: BAN_KHAC }),
+				},
+				{ ca: "cau-cu", tra: await niemPhongCua(h, nguoi.P.cookie) },
+				{
+					ca: "khai-khong-viet",
+					tra: await niemPhongCua(h, nguoi.P.cookie, { boQua: true }),
+				},
+			].map((x) => ({
+				ca: x.ca,
+				maHttp: x.tra.status,
+				cau: x.tra.loi.includes(T.daCoBanTruoc) ? T.daCoBanTruoc : x.tra.loi,
+			}));
+			expect(lanHai).toEqual(
+				["cau-khac", "cau-cu", "khai-khong-viet"].map((ca) => ({
+					ca,
+					maHttp: 400,
+					cau: T.daCoBanTruoc,
+				})),
+			);
+			expect(
+				JSON.stringify(
+					await db.okrHoiYBanTruoc.findMany({ where: { hoiYId: h } }),
+				),
+			).toBe(truoc);
+
+			const vet = await db.okrTrail.findMany({
+				where: { cycleId: ky, action: "niem-phong" },
+			});
+			expect(
+				vet.map((v) => ({
+					actorUserId: v.actorUserId,
+					objectiveId: v.objectiveId,
+					before: v.before,
+					after: v.after,
+				})),
+			).toEqual([
+				{
+					actorUserId: nguoi.P.id,
+					objectiveId: null,
+					before: null,
+					after: { soCau: 4, boQua: false },
+				},
+			]);
+			expect(
+				chuLo(JSON.stringify(vet), [...BAN_TRUOC_MAC_DINH, ...BAN_KHAC]),
+				"vet chua chu cau",
+			).toEqual([]);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: 12 ca từ chối viết trước — mã HTTP và câu ghim khớp bảng khai; hàng bản viết trước và vết không đổi ở mọi ca",
+		async () => {
+			datDongHo(LUC);
+			const KHAI = [
+				{
+					ca: "Q-quan-tri-khong-phai-nguoi-chon",
+					maHttp: 403,
+					cau: T.chiNguoiChon,
+				},
+				{ ca: "T-thanh-vien", maHttp: 403, cau: T.chiNguoiChon },
+				{ ca: "O-vai-chi-okr", maHttp: 403, cau: T.chiNguoiChon },
+				{ ca: "P-bi-ha-vai", maHttp: 403, cau: T.chiNguoiChon },
+				{ ca: "sau-han", maHttp: 400, cau: T.chiNiemPhongKhiDangMo },
+				{ ca: "sau-cong-bo", maHttp: 400, cau: T.daCongBo },
+				{ ca: "hoi-y-khong-co", maHttp: 404, cau: T.khongCoHoiY("khong-co") },
+				{
+					ca: "hai-cau",
+					maHttp: 400,
+					cau: `cau: Too small: expected array to have >=${OKR_HOI_Y.banTruoc.min} items`,
+				},
+				{
+					ca: "sau-cau",
+					maHttp: 400,
+					cau: `cau: Too big: expected array to have <=${OKR_HOI_Y.banTruoc.max} items`,
+				},
+				{
+					ca: "cau-9-ky-tu",
+					maHttp: 400,
+					cau: `cau: Too small: expected string to have >=${OKR_HOI_Y.banTruoc.cau.min} characters`,
+				},
+				{
+					ca: "vua-cau-vua-bo-qua",
+					maHttp: 400,
+					cau: CAU_NIEM_PHONG_MOT_TRONG_HAI,
+				},
+				{
+					ca: "khong-cau-khong-bo-qua",
+					maHttp: 400,
+					cau: CAU_NIEM_PHONG_MOT_TRONG_HAI,
+				},
+			] as const satisfies readonly Ca[];
+
+			const mo = await gieoHoiY();
+			const haVai = await gieoHoiY();
+			await doiVai(haVai.nguoi.P.id, "member");
+			const gom = await gieoHoiY();
+			await donHanVeBayGio(gom);
+			const congBo = await gieoHoiY();
+			await donHanVeBayGio(congBo);
+			await gieoCongBo(congBo.h);
+			const { Q, T: tv, O, P } = mo.nguoi;
+			const cauNgan = lapChu(OKR_HOI_Y.banTruoc.cau.min - 1);
+			const CHAY = {
+				"Q-quan-tri-khong-phai-nguoi-chon": () => niemPhongCua(mo.h, Q.cookie),
+				"T-thanh-vien": () => niemPhongCua(mo.h, tv.cookie),
+				"O-vai-chi-okr": () => niemPhongCua(mo.h, O.cookie),
+				"P-bi-ha-vai": () => niemPhongCua(haVai.h, haVai.nguoi.P.cookie),
+				"sau-han": () => niemPhongCua(gom.h, gom.nguoi.P.cookie),
+				"sau-cong-bo": () => niemPhongCua(congBo.h, congBo.nguoi.P.cookie),
+				"hoi-y-khong-co": () => niemPhongCua("khong-co", P.cookie),
+				"hai-cau": () =>
+					niemPhongCua(mo.h, P.cookie, {
+						cau: BAN_TRUOC_MAC_DINH.slice(0, OKR_HOI_Y.banTruoc.min - 1),
+					}),
+				"sau-cau": () =>
+					niemPhongCua(mo.h, P.cookie, {
+						cau: [...BAN_TRUOC_MAC_DINH, ...BAN_KHAC].slice(
+							0,
+							OKR_HOI_Y.banTruoc.max + 1,
+						),
+					}),
+				"cau-9-ky-tu": () =>
+					niemPhongCua(mo.h, P.cookie, {
+						cau: [
+							...BAN_TRUOC_MAC_DINH.slice(0, OKR_HOI_Y.banTruoc.min - 1),
+							cauNgan,
+						],
+					}),
+				"vua-cau-vua-bo-qua": () =>
+					goi(
+						"okr.niemPhong",
+						{ hoiYId: mo.h, cau: BAN_TRUOC_MAC_DINH, boQua: true },
+						P.cookie,
+					),
+				"khong-cau-khong-bo-qua": () =>
+					goi("okr.niemPhong", { hoiYId: mo.h }, P.cookie),
+			} satisfies { [K in (typeof KHAI)[number]["ca"]]: () => Promise<TraLoi> };
+
+			const BANG: Bang[] = ["okrHoiYBanTruoc", "okrTrail"];
+			const nhan: KetQua[] = [];
+			for (const khai of KHAI) {
+				const truoc = await Promise.all(BANG.map(dem));
+				const tra = await CHAY[khai.ca]();
+				const sau = await Promise.all(BANG.map(dem));
+				nhan.push({
+					ca: khai.ca,
+					maHttp: tra.status,
+					cau: tra.loi.includes(khai.cau) ? khai.cau : tra.loi,
+					doi: Object.fromEntries(
+						BANG.map((b, i) => [b, (sau[i] ?? 0) - (truoc[i] ?? 0)]),
+					),
+				});
+			}
+			expect(nhan).toEqual(
+				KHAI.map((k) => ({
+					...k,
+					doi: { okrHoiYBanTruoc: 0, okrTrail: 0 },
+				})),
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: ca đua — P niêm phong hai lần song song → đúng một hàng, một thành công, một 400 daCoBanTruoc, đúng một vết",
+		async () => {
+			datDongHo(LUC);
+			const { ky, h, nguoi } = await gieoHoiY();
+			const [mot, hai] = await Promise.all([
+				niemPhongCua(h, nguoi.P.cookie),
+				niemPhongCua(h, nguoi.P.cookie, { cau: BAN_KHAC }),
+			]);
+			expect({
+				soHang: await db.okrHoiYBanTruoc.count({ where: { hoiYId: h } }),
+				soVet: await db.okrTrail.count({
+					where: { cycleId: ky, action: "niem-phong" },
+				}),
+				maHttp: [mot.status, hai.status].sort(),
+				cau: [mot.loi, hai.loi].filter((l) => l !== ""),
+			}).toEqual({
+				soHang: 1,
+				soVet: 1,
+				maHttp: [200, 400],
+				cau: [T.daCoBanTruoc],
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: ca đua — P niêm phong song song với Q đổi người chọn sang P2 → hoặc có hàng do P viết và P vẫn là người chọn, hoặc không hàng và P2 là người chọn; không bao giờ hàng của người không còn là người chọn",
+		async () => {
+			datDongHo(LUC);
+			const { h, nguoi } = await gieoHoiY();
+			const P2 = await nguoiCo("hoi-y-P2", "admin");
+			const [seal, doi] = await Promise.all([
+				niemPhongCua(h, nguoi.P.cookie),
+				goi(
+					"okr.suaHoiY",
+					{ hoiYId: h, nguoiChonUserId: P2.id },
+					nguoi.Q.cookie,
+				),
+			]);
+			const hang = await db.okrHoiYBanTruoc.findMany({ where: { hoiYId: h } });
+			const nguoiChon = (
+				await db.okrHoiY.findUniqueOrThrow({ where: { id: h } })
+			).nguoiChonUserId;
+			const truocKhi = seal.status === 200;
+			expect({
+				hang: hang.map((r) => r.vietBoiUserId),
+				nguoiChon,
+				maHttp: { seal: seal.status, doi: doi.status },
+			}).toEqual(
+				truocKhi
+					? {
+							hang: [nguoi.P.id],
+							nguoiChon: nguoi.P.id,
+							maHttp: { seal: 200, doi: 400 },
+						}
+					: {
+							hang: [],
+							nguoiChon: P2.id,
+							maHttp: { seal: 403, doi: 200 },
+						},
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: khai không viết trước — P đọc được 3 ý kèm tên, hàng {cau [], boQua true}, vết {soCau 0, boQua true}; sau công bố Q, T, O đọc banTruoc {cau [], boQua true}",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { ky, h, nguoi } = g;
+			await gieoBaYCuaNguoiKhac(g);
+			expect((await docHoiY(ky, nguoi.P.cookie))?.y).toMatchObject({
+				khoa: true,
+				ds: [],
+			});
+			const { id } = ok<{ id: string }>(
+				await niemPhongCua(h, nguoi.P.cookie, { boQua: true }),
+				"P khai khong viet truoc",
+			);
+			const hang = await db.okrHoiYBanTruoc.findUniqueOrThrow({
+				where: { hoiYId: h },
+			});
+			expect({
+				id: hang.id,
+				cau: hang.cau,
+				boQua: hang.boQua,
+				vietBoiUserId: hang.vietBoiUserId,
+			}).toEqual({ id, cau: [], boQua: true, vietBoiUserId: nguoi.P.id });
+			const docP = await docHoiY(ky, nguoi.P.cookie);
+			expect({
+				khoa: docP?.y.khoa,
+				soY: docP?.y.ds.length,
+				coTen: docP?.y.ds.every((y) => "tacGia" in y),
+			}).toEqual({ khoa: false, soY: 3, coTen: true });
+			const vet = await db.okrTrail.findMany({
+				where: { cycleId: ky, action: "niem-phong" },
+				select: { after: true },
+			});
+			expect(vet).toEqual([{ after: { soCau: 0, boQua: true } }]);
+			const daNiem = await niemPhongCua(h, nguoi.P.cookie);
+			expect({ maHttp: daNiem.status, cau: daNiem.loi }).toEqual({
+				maHttp: 400,
+				cau: T.daCoBanTruoc,
+			});
+			await gieoCongBo(h);
+			const sauCongBo = await Promise.all(
+				VAI_VIET_TRUOC.map(async (v) => [
+					v,
+					(await docHoiY(ky, nguoi[v].cookie))?.banTruoc,
+				]),
+			);
+			const vietBoi = (
+				await db.user.findUniqueOrThrow({ where: { id: nguoi.P.id } })
+			).name;
+			expect(Object.fromEntries(sauCongBo)).toEqual({
+				Q: { cau: [], boQua: true, vietBoi },
+				T: { cau: [], boQua: true, vietBoi },
+				O: { cau: [], boQua: true, vietBoi },
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ban-truoc: nửa ma trận quét lộ — dang-mo sau niêm phong, 3 vai (Q, T, O) × 3 đường × các thủ tục đọc khai ở THU_TUC_DOC: 0 câu viết trước trong phản hồi ở mọi ô, banTruoc null; sau công bố Q, T, O đọc đủ bốn câu qua cả ba đường; bài in số ô",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY({ yCua: ["A", "B"] });
+			const { ky, h, nguoi } = g;
+			await gieoBanTruoc(h, nguoi.P.id);
+			const khoa = { Q: "", T: "", O: "" } satisfies {
+				[V in (typeof VAI_VIET_TRUOC)[number]]: string;
+			};
+			for (const vai of VAI_VIET_TRUOC)
+				khoa[vai] = await khoaApiCua(nguoi[vai].id);
+
+			type OKhai = {
+				trangThai: (typeof TRANG_THAI_VIET_TRUOC)[number];
+				vai: (typeof VAI_VIET_TRUOC)[number];
+				duong: DuongMaTran;
+				thuTuc: ThuTucDoc;
+				maHttp: number;
+				cauLo: string[];
+				banTruoc: HoiYOutput["banTruoc"];
+			};
+			const KHAI: OKhai[] = TRANG_THAI_VIET_TRUOC.flatMap((trangThai) =>
+				VAI_VIET_TRUOC.flatMap((vai) =>
+					DUONG_MA_TRAN.flatMap((duong) =>
+						THU_TUC_DOC.map((thuTuc) => ({
+							trangThai,
+							vai,
+							duong,
+							thuTuc,
+							maHttp: 200,
+							cauLo: [],
+							banTruoc: null,
+						})),
+					),
+				),
+			);
+			expect(KHAI.length).toBe(
+				TRANG_THAI_VIET_TRUOC.length *
+					VAI_VIET_TRUOC.length *
+					DUONG_MA_TRAN.length *
+					THU_TUC_DOC.length,
+			);
+
+			const goiO = (k: OKhai) =>
+				docQuaDuong(
+					ky,
+					{ cookie: nguoi[k.vai].cookie, khoa: khoa[k.vai] },
+					k.duong,
+					k.thuTuc,
+				);
+			const nhan: OKhai[] = [];
+			const lo: string[] = [];
+			for (const k of KHAI) {
+				const tra = await goiO(k);
+				const chu = JSON.stringify(tra.data);
+				const cauLo = chuLo(chu, BAN_TRUOC_MAC_DINH);
+				if (cauLo.length > 0)
+					lo.push(
+						`${k.trangThai} ${k.vai} ${k.duong} ${k.thuTuc} lo: ${cauLo.join(" | ")}`,
+					);
+				nhan.push({
+					...k,
+					maHttp: tra.status,
+					cauLo,
+					banTruoc:
+						k.thuTuc === "okr.hoiY"
+							? (hoiYDocOutput.parse(tra.data)?.banTruoc ?? null)
+							: null,
+				});
+			}
+			console.log(`ban-truoc: đã chạy ${nhan.length}/${KHAI.length} ô`);
+			expect(lo, "cau viet truoc lo toi Q, T, O").toEqual([]);
+			expect(nhan.length).toBe(KHAI.length);
+			expect(nhan).toEqual(KHAI);
+
+			await gieoCongBo(h);
+			const SAU = VAI_VIET_TRUOC.flatMap((vai) =>
+				DUONG_MA_TRAN.map((duong) => ({
+					vai,
+					duong,
+					maHttp: 200,
+					cauLo: [...BAN_TRUOC_MAC_DINH],
+				})),
+			);
+			const sau: typeof SAU = [];
+			for (const k of SAU) {
+				const tra = await docQuaDuong(
+					ky,
+					{ cookie: nguoi[k.vai].cookie, khoa: khoa[k.vai] },
+					k.duong,
+					"okr.hoiY",
+				);
+				sau.push({
+					...k,
+					maHttp: tra.status,
+					cauLo: chuLo(JSON.stringify(tra.data), BAN_TRUOC_MAC_DINH),
+				});
+			}
+			console.log(
+				`ban-truoc: sau công bố đã chạy ${sau.length}/${SAU.length} ô`,
+			);
+			expect(sau).toEqual(SAU);
+		},
+		CHO_MA_TRAN_MS,
 	);
 });
