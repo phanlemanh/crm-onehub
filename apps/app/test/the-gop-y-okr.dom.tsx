@@ -385,6 +385,11 @@ describe("the-gop-y-okr — phím trong cột", () => {
 		await phim(o, "Escape");
 		expect(oSua(the(D_TEN.id))).toBeNull();
 
+		const huy = nut("Huỷ", hopMucTieu() ?? document);
+		await act(async () => huy.focus());
+		for (const k of ["j", "k", "e"]) await phim(huy, k);
+		if (document.activeElement !== huy) throw new Error("phim ngoai cot");
+
 		const ten = oTen();
 		await act(async () => ten?.focus());
 		for (const k of ["j", "k", "Enter", "e"]) await phim(ten, k);
