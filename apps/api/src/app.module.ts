@@ -21,6 +21,7 @@ import { DatabaseModule } from "./database/database.module";
 import { DealsModule } from "./deals/deals.module";
 import { EnrichmentModule } from "./enrichment/enrichment.module";
 import { FieldsModule } from "./fields/fields.module";
+import { GiaiDoanModule } from "./giai-doan/giai-doan.module";
 import { GoogleModule } from "./google/google.module";
 import { HealthModule } from "./health/health.module";
 import { ListingsModule } from "./listings/listings.module";
@@ -70,6 +71,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		ConversationsModule,
 		CurrencyModule,
 		DealsModule,
+		GiaiDoanModule,
 		FieldsModule,
 		ActivitiesModule,
 		AgentModule,

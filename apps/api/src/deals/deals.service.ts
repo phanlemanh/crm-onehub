@@ -5,8 +5,8 @@ import {
 	Prisma as PrismaNamespace,
 } from "@crm/db";
 import { normalizeCurrency } from "@crm/db/currency";
-import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
+import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
 import {
 	BadRequestException,
 	Injectable,
@@ -32,6 +32,7 @@ import {
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
 import { FieldsService } from "../fields/fields.service";
+import { GIAI_DOAN_API } from "../giai-doan/giai-doan-config";
 import {
 	archivedFilter,
 	countsByKey,
@@ -587,7 +588,7 @@ export class DealsService {
 			select: { id: true, kind: true, archivedAt: true },
 		});
 		if (!giaiDoan || giaiDoan.archivedAt) {
-			throw new BadRequestException("That stage no longer exists.");
+			throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
 		}
 		return { id: giaiDoan.id, kind: giaiDoan.kind };
 	}
@@ -844,7 +845,7 @@ export class DealsService {
 			select: { kind: true, archivedAt: true },
 		});
 		if (!den || den.archivedAt) {
-			throw new BadRequestException("That stage no longer exists.");
+			throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
 		}
 
 		if (laThua(den.kind) && !closedReason) {
