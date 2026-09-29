@@ -57,6 +57,8 @@ const vi = {
 		guiLuc: "gửi {ngay}",
 		khoaSua:
 			"Mục tiêu đang chờ duyệt — rút lại để sửa nội dung, KR, căn chỉnh hay mức hiển thị.",
+		choTuTruoc:
+			"Mục tiêu gửi duyệt từ trước khi chương trình tắt bước duyệt — nay công bố thẳng được, không cần chờ.",
 		rutLai: "Rút lại",
 		hopRut: {
 			tieuDe: "Rút lại yêu cầu duyệt?",
@@ -153,6 +155,8 @@ const en: OkrGioiHanMessages = {
 		guiLuc: "sent {ngay}",
 		khoaSua:
 			"The objective is awaiting approval — withdraw it to edit content, KRs, alignment or visibility.",
+		choTuTruoc:
+			"This was submitted before the program turned approval off — it can now be published directly, no wait needed.",
 		rutLai: "Withdraw",
 		hopRut: {
 			tieuDe: "Withdraw the approval request?",

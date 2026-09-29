@@ -1834,6 +1834,11 @@ export class OkrService {
 					: null,
 			quyen: {
 				datHienThi: mt.canEdit && ghiDuoc && !choDuyet,
+				congBo:
+					ghiDuoc &&
+					mt.canEdit &&
+					(mt.status === "nhap" || choDuyet) &&
+					this.congBoHayGuiDuyet(ct, q, userId, objective) === "cong-bo",
 				guiDuyet:
 					ghiDuoc &&
 					mt.canEdit &&

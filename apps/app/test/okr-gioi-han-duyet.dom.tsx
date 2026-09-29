@@ -66,6 +66,7 @@ const KR: KrCanhOutput = {
 
 const KHONG_QUYEN = {
 	datHienThi: false,
+	congBo: false,
 	guiDuyet: false,
 	duyet: false,
 	rutDuyet: false,
@@ -144,7 +145,7 @@ const DU_LIEU = {
 			guiLuc: GUI_LUC,
 			nguoiDuyet: { ten: MINH.name },
 		},
-		quyen: { ...KHONG_QUYEN, duyet: true },
+		quyen: { ...KHONG_QUYEN, congBo: true, duyet: true },
 	}),
 	"bi-tra-lai": mucTieu({
 		status: "nhap",
@@ -284,6 +285,7 @@ const g = okrGioiHanMessages("vi");
 const m = okrMessages("vi");
 
 let dangMo: { o: HTMLElement; root: Root }[] = [];
+let khach = new QueryClient();
 
 async function dung(noiDung: ReactElement): Promise<void> {
 	const o = document.createElement("div");
@@ -292,6 +294,7 @@ async function dung(noiDung: ReactElement): Promise<void> {
 	const client = new QueryClient({
 		defaultOptions: { queries: { retry: false } },
 	});
+	khach = client;
 	await act(async () => {
 		root.render(
 			<NuqsTestingAdapter hasMemory searchParams="?record=objective:mt-g">
@@ -505,6 +508,7 @@ describe("dau-khung", () => {
 			"Trần Hà gửi duyệt · 29/09",
 		);
 		expect(dai.querySelector('[data-nut="rut-lai"]')).toBeNull();
+		expect(document.body.querySelector('[data-nut="cong-bo"]')).toBeNull();
 		await bam(motCai('[data-nut="duyet"]'));
 		await cho(() => daLamMoi.length > 0, "lam moi sau duyet");
 		expect(daGoi).toEqual([
@@ -614,7 +618,110 @@ describe("hop-muc-hien-thi", () => {
 	});
 });
 
+describe("cong-bo-tu-cho-duyet", () => {
+	test("o duyet da tat, muc con cho duyet: Cong bo o dau khung theo quyen.congBo, dai noi gui tu truoc, bam goi publishObjective", async () => {
+		chiTiet = mucTieu({
+			status: "cho-duyet",
+			publishedAt: null,
+			choDuyet: {
+				nguoiGui: MINH,
+				guiLuc: GUI_LUC,
+				nguoiDuyet: { ten: MINH.name },
+			},
+			quyen: { ...KHONG_QUYEN, congBo: true },
+		});
+		await moSheet();
+		const dai = motCai('[data-dai="cho-nguoi-gui"]');
+		const truoc = {
+			congBo: document.body.querySelectorAll('[data-nut="cong-bo"]').length,
+			rutLai: dai.querySelector('[data-nut="rut-lai"]') !== null,
+			cauTuTruoc: dai.textContent?.includes(g.duyet.choTuTruoc),
+			cauKhoaSua: dai.textContent?.includes(g.duyet.khoaSua),
+		};
+		console.log(`cong-bo-tu-cho-duyet: ${JSON.stringify(truoc)}`);
+		expect(truoc).toEqual({
+			congBo: 1,
+			rutLai: false,
+			cauTuTruoc: true,
+			cauKhoaSua: false,
+		});
+		await bam(motCai('[data-nut="cong-bo"]'));
+		await cho(
+			() => document.body.querySelector('[role="alertdialog"]') !== null,
+			"hoi cong bo",
+		);
+		await bam(nut(m.sheet.hoiCongBo.action, motCai('[role="alertdialog"]')));
+		await cho(() => daLamMoi.length > 0, "lam moi sau cong bo");
+		expect(daGoi).toEqual([
+			{ duong: "okr.publishObjective", dauVao: { id: "mt-g" } },
+		]);
+	});
+
+	test("doi chung: o bat, nguoi sua khong duyet duoc (quyen.congBo false) khong co Cong bo", async () => {
+		chiTiet = DU_LIEU["cho-duyet-nguoi-gui"];
+		await moSheet();
+		expect(document.body.querySelector('[data-nut="cong-bo"]')).toBeNull();
+		expect(
+			motCai('[data-dai="cho-nguoi-gui"]').textContent?.includes(
+				g.duyet.khoaSua,
+			),
+		).toBe(true);
+	});
+});
+
+describe("tai-lai-thanh-404", () => {
+	test("da tai xong roi tai lai ra 404: khung thanh khong-thay, dau khung khong con tieu de cu", async () => {
+		await moSheet();
+		expect(document.body.textContent).toContain(TEN_G);
+		chiTiet = LOI_KHONG_THAY;
+		await act(async () => {
+			await khach.refetchQueries();
+		});
+		await cho(
+			() => document.body.querySelector("[data-khung-khong-thay]") !== null,
+			"khung khong thay sau tai lai",
+		);
+		expect(document.body.textContent).not.toContain(TEN_G);
+		expect(
+			document.body.querySelector("[data-nhan-gioi-han], [data-dai]"),
+		).toBeNull();
+	});
+});
+
 describe("hop-tra-lai-va-rut-lai", () => {
+	test("tra lai hong o may chu: hop con mo, giu ly do, loi trong hop", async () => {
+		chiTiet = DU_LIEU["cho-duyet-nguoi-duyet"];
+		loiGhi = {
+			duong: "okr.traLaiMucTieu",
+			loi: "Mục tiêu này không còn chờ duyệt.",
+			code: "BAD_REQUEST",
+		};
+		await moSheet();
+		await bam(motCai('[data-nut="tra-lai"]'));
+		await cho(
+			() => document.body.querySelector('[data-hop="tra-lai"]') !== null,
+			"hop tra lai",
+		);
+		await go(motCai('[data-hop="tra-lai"] textarea'), LY_DO);
+		await bam(motCai('[data-nut="xac-nhan-tra-lai"]'));
+		await cho(
+			() =>
+				document.body.querySelector(
+					'[data-hop="tra-lai"] [data-slot="field-error"]',
+				) !== null,
+			"loi trong hop tra lai",
+		);
+		expect({
+			loi: motCai('[data-hop="tra-lai"] [data-slot="field-error"]').textContent,
+			lyDo: motCai<HTMLTextAreaElement>('[data-hop="tra-lai"] textarea').value,
+			lamMoi: daLamMoi.length,
+		}).toEqual({
+			loi: "Mục tiêu này không còn chờ duyệt.",
+			lyDo: LY_DO,
+			lamMoi: 0,
+		});
+	});
+
 	test("tra lai: 9 ky tu khoa, 10 ky tu bat, gui dung ly do; Huy boc DialogClose", async () => {
 		chiTiet = DU_LIEU["cho-duyet-nguoi-duyet"];
 		await moSheet();

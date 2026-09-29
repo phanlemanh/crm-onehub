@@ -130,7 +130,12 @@ describe("cong-bo", () => {
 				sauCam: [bat.version, true],
 			});
 
+			const coCongBo = async (id: string, ai: NguoiSan) =>
+				(await doc<ObjectiveOutput>("okr.objective", ai.cookie, { id })).quyen
+					.congBo;
 			const g1 = await mucTieuCoHaiKr(s, pb(s.p1), s.t, "dc G1");
+			const coG1T = await coCongBo(g1.id, s.t);
+			const coG1H = await coCongBo(g1.id, s.h);
 			const chan = await goi("okr.publishObjective", { id: g1.id }, s.t.cookie);
 			const tieuDeNhap = [ma("dc I1"), ma("dc I2")];
 			const dongNhap = (tieuDe: string[], email: string) =>
@@ -251,6 +256,8 @@ describe("cong-bo", () => {
 
 			await datDuyetCongBo(false);
 			const g2 = await mucTieuCoHaiKr(s, pb(s.p1), s.t, "dc G2");
+			const coG2T = await coCongBo(g2.id, s.t);
+			const coChoT = await coCongBo(con?.id ?? "", s.t);
 			const tatG2 = await goi(
 				"okr.publishObjective",
 				{ id: g2.id },
@@ -278,6 +285,20 @@ describe("cong-bo", () => {
 					{ status: "cho-duyet" },
 					{ status: "cong-bo", tuChoDuyet: true },
 				],
+			});
+			console.log(
+				`cong-bo co: bat T ${coG1T}/${tra(chan)}, bat H ${coG1H}, tat nhap T ${coG2T}/${tra(tatG2)}, tat cho T ${coChoT}/${tra(tatCho)}`,
+			);
+			expect({
+				batKhongDuyet: [coG1T, tra(chan)],
+				batNguoiDuyet: coG1H,
+				tatNhap: [coG2T, tra(tatG2)],
+				tatCho: [coChoT, tra(tatCho)],
+			}).toEqual({
+				batKhongDuyet: [false, `400 ${T.duyet.canDuyet}`],
+				batNguoiDuyet: true,
+				tatNhap: [true, "200"],
+				tatCho: [true, "200"],
 			});
 		},
 		CHO_MS,
@@ -371,16 +392,24 @@ describe("vong-duyet", () => {
 				ghiChuTraLai: LY_DO,
 				truocGui: {
 					datHienThi: true,
+					congBo: false,
 					guiDuyet: true,
 					duyet: false,
 					rutDuyet: false,
 				},
 				khiChoT: [
 					choTen,
-					{ datHienThi: false, guiDuyet: false, duyet: false, rutDuyet: true },
+					{
+						datHienThi: false,
+						congBo: false,
+						guiDuyet: false,
+						duyet: false,
+						rutDuyet: true,
+					},
 				],
 				khiChoH: {
 					datHienThi: false,
+					congBo: true,
 					guiDuyet: false,
 					duyet: true,
 					rutDuyet: false,

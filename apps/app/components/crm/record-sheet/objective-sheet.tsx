@@ -157,7 +157,7 @@ function HanhDongMucTieu({
 				mt.traLaiGanNhat === null ? (
 					<NutGuiDuyet objectiveId={mt.id} />
 				) : null
-			) : mt.status === "nhap" ? (
+			) : mt.quyen.congBo && !mt.quyen.duyet ? (
 				<Button
 					size="sm"
 					data-nut="cong-bo"
@@ -612,7 +612,8 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 	const query = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
 	const binhLuan = useQuery(trpc.okr.comments.queryOptions({ objectiveId }));
 	const [hopHienThi, setHopHienThi] = useState(false);
-	const mt = query.data;
+	const khongThay = query.error?.data?.code === "NOT_FOUND";
+	const mt = khongThay ? undefined : query.data;
 	const tenKy = mt?.cycleName;
 
 	const tabs: DetailSheetTab[] = mt
@@ -683,11 +684,11 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 		>
 			<RecordSheetFrame
 				loading={query.isPending}
-				error={query.error?.message ?? null}
+				error={mt ? null : (query.error?.message ?? null)}
 				errorView={
 					query.error ? (
 						<LoiKhung
-							khongThay={query.error.data?.code === "NOT_FOUND"}
+							khongThay={khongThay}
 							thuLai={() => void query.refetch()}
 						/>
 					) : null

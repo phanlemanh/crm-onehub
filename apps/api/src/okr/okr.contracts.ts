@@ -231,6 +231,7 @@ export const objectiveOutput = mucTieuOutput.extend({
 		.nullable(),
 	quyen: z.object({
 		datHienThi: z.boolean(),
+		congBo: z.boolean(),
 		guiDuyet: z.boolean(),
 		duyet: z.boolean(),
 		rutDuyet: z.boolean(),

@@ -96,6 +96,7 @@ function mucTieu(
 		traLaiGanNhat: null,
 		quyen: {
 			datHienThi: false,
+			congBo: false,
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,

@@ -116,6 +116,7 @@ function mucTieu(
 		traLaiGanNhat: null,
 		quyen: {
 			datHienThi: true,
+			congBo: status === "nhap",
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,

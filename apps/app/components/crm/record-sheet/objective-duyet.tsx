@@ -15,7 +15,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
-import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
@@ -45,7 +50,12 @@ export type DuyetMucTieu = {
 		nguoi: NguoiTen | null;
 		luc: string;
 	} | null;
-	quyen: { guiDuyet: boolean; duyet: boolean; rutDuyet: boolean };
+	quyen: {
+		congBo: boolean;
+		guiDuyet: boolean;
+		duyet: boolean;
+		rutDuyet: boolean;
+	};
 };
 
 const NGAY_THANG = new Intl.DateTimeFormat("en-GB", {
@@ -183,10 +193,13 @@ function HopTraLai({
 	const trpc = useTRPC();
 	const ma = useId();
 	const [lyDo, setLyDo] = useState("");
+	const [loi, setLoi] = useState<string | null>(null);
+	const xong = useGhiDuyet(objectiveId, m.daTraLai, dong);
 	const traLai = useMutation(
-		trpc.okr.traLaiMucTieu.mutationOptions(
-			useGhiDuyet(objectiveId, m.daTraLai, dong),
-		),
+		trpc.okr.traLaiMucTieu.mutationOptions({
+			onSuccess: xong.onSuccess,
+			onError: (e) => setLoi(e.message),
+		}),
 	);
 	const du = traLaiInput.shape.lyDo.safeParse(lyDo).success;
 	const { toiThieu, toiDa } = OKR_HIEN_THI.lyDoTraLai;
@@ -211,7 +224,10 @@ function HopTraLai({
 						aria-describedby={`${ma}-dem`}
 						id={`${ma}-ly-do`}
 						maxLength={toiDa}
-						onChange={(e) => setLyDo(e.target.value)}
+						onChange={(e) => {
+							setLoi(null);
+							setLyDo(e.target.value);
+						}}
 						placeholder={m.hopTraLai.goiY}
 						translate="no"
 						value={lyDo}
@@ -223,6 +239,7 @@ function HopTraLai({
 							min: toiThieu,
 						})}
 					</FieldDescription>
+					{loi ? <FieldError>{loi}</FieldError> : null}
 				</Field>
 				<DialogFooter>
 					<DialogClose asChild>
@@ -261,7 +278,9 @@ function DaiChoDuyet({ mucTieu }: { mucTieu: DuyetMucTieu }) {
 					: null}
 			</AlertTitle>
 			<AlertDescription>
-				<p id={`khoa-sua-${mucTieu.id}`}>{m.khoaSua}</p>
+				<p id={`khoa-sua-${mucTieu.id}`}>
+					{mucTieu.quyen.congBo ? m.choTuTruoc : m.khoaSua}
+				</p>
 				{mucTieu.quyen.rutDuyet ? (
 					<NutDai>
 						<Button
