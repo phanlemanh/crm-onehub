@@ -906,8 +906,12 @@ stages.
   `count` beside it is how the badge and the reminder start to disagree.
 - **Who sees what is one set of `where` builders** in that same module —
   `dieuKienThay` (pages), `dieuKienThayDeXuat` (proposals), `dieuKienDuyetDuoc`
-  (approvable). `list`, `boLoc`, `proposals` and `sucKhoe` compose them; none re-derives
-  the rule.
+  (approvable). `list`, `get`, `nhacToi`, `propose`, `boLoc`, `proposals` and `sucKhoe`
+  compose them inside the query; none re-derives the rule in memory. A page is seen by
+  `owner`/`admin`, its chủ trang, its creator (`taoBoiId` — for a page made by «Tải nguồn
+  lên», the uploader), anyone with a proposal on it, and everyone once it has a bản đang
+  dùng. So a page the list shows always opens, including one whose first draft the máy
+  soạn has not delivered yet.
 - **Filters and paging live in the input, not the client.** `list` takes `donViId` and
   `chuTrangId`; `boLoc` returns only the đơn vị and chủ trang that have a page the caller can
   see, with counts. `proposals` takes `nhom` (`tat-ca` by default, `cho`, `da-xu-ly`) and a

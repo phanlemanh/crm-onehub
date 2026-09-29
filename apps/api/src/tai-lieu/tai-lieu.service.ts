@@ -34,7 +34,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-import { duyetDuoc, type NguoiGoi, thayDeXuat, thayTrang } from "./quyen";
+import { duyetDuoc, type NguoiGoi, thayDeXuat } from "./quyen";
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
@@ -227,14 +227,12 @@ export class TaiLieuService {
 	}
 
 	async get(nguoi: NguoiGoi, slug: string): Promise<TaiLieuGetOutput> {
-		const t = await this.db.taiLieuTrang.findUnique({
-			where: { slug },
+		const t = await this.db.taiLieuTrang.findFirst({
+			where: { AND: [{ slug }, dieuKienThay(nguoi)] },
 			select: {
 				slug: true,
 				ten: true,
 				loai: true,
-				chuTrangId: true,
-				banDangDungId: true,
 				chuTrang: NGUOI,
 				department: DON_VI,
 				banDangDung: {
@@ -245,11 +243,10 @@ export class TaiLieuService {
 						deXuat: { select: { nguon: NGUON_NGAN } },
 					},
 				},
-				deXuat: { distinct: ["taoBoiId"], select: { taoBoiId: true } },
 				_count: { select: { deXuat: { where: this.coBanCho(nguoi) } } },
 			},
 		});
-		if (!t || !thayTrang(nguoi, t, t.deXuat)) throw khongCo();
+		if (!t) throw khongCo();
 		const ban = t.banDangDung;
 		return {
 			slug: t.slug,
