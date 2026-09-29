@@ -31,6 +31,10 @@ const GHIM_NGUOI_CHON = "thanhVien: nhận 21, mong 20";
 const GHIM_BIEN_DONG = "hieu7: nhận 10, mong 9";
 const GHIM_DA_ROI = "gopTruoc: nhận 10, mong 9";
 const GHIM_CHI_DOC = "câu SQL không chỉ SELECT hay SET";
+const GHIM_THAM_SO_TUY =
+	"câu SQL đọc tham số tuỳ chọn không kèm missing_ok true";
+const DOC_THAM_SO_TUY =
+	/current_setting\(\s*'okr\.hoi_y_truoc'\s*(?:,\s*(\w+)\s*)?\)/gi;
 const MO_DAU_DUOC = new Set(["SELECT", "WITH", "SET"]);
 const SET_DUOC = /^SET\s+(LOCAL\s+)?okr\.\w+\s*(=|TO)\s*'[^']*'$/i;
 const CAM_GHI =
@@ -141,6 +145,14 @@ function kiemChiDoc(sql) {
 	for (const ten of Object.values(THAM_SO))
 		if (!sql.includes(`current_setting('${ten}'`))
 			hong.push(`câu SQL không đọc tham số ${ten}`);
+	const docTuy = [...sql.matchAll(DOC_THAM_SO_TUY)];
+	if (
+		docTuy.length === 0 ||
+		docTuy.some((d) => (d[1] ?? "").toLowerCase() !== "true")
+	)
+		hong.push(
+			`${GHIM_THAM_SO_TUY}: ${THAM_SO.hoiYTruoc} — thiếu tham số thì câu đo lỗi thay vì đọc NULL`,
+		);
 	return hong;
 }
 
@@ -173,6 +185,10 @@ const banSao = {
 	bienDong: sql.replace(CAM.bienDong.tu, CAM.bienDong.sang),
 	daRoi: sql.replace(CAM.daRoi.tu, CAM.daRoi.sang),
 	ghi: `${sql.trimEnd()}\nUPDATE "okrHoiYHieu" SET luc = now();\n`,
+	thieuTrue: sql.replace(
+		`current_setting('${THAM_SO.hoiYTruoc}', true)`,
+		`current_setting('${THAM_SO.hoiYTruoc}')`,
+	),
 };
 for (const [ten, s] of Object.entries(banSao))
 	if (s === sql)
@@ -509,8 +525,16 @@ try {
 		console.log(
 			`  ban sao them UPDATE — ${tuChoi ? "bat, script tu choi truoc khi chay" : "LOT"}: ${GHIM_CHI_DOC}`,
 		);
-		console.log(`chieu do: ${bat}/4 ban sao bi bat`);
-		process.exitCode = bat === 4 ? 1 : 0;
+		const hongTrue = kiemChiDoc(banSao.thieuTrue);
+		for (const h of hongTrue) console.log(`    HONG ${h}`);
+		const tuChoiTrue = hongTrue.some((h) => h.startsWith(GHIM_THAM_SO_TUY));
+		if (tuChoiTrue) bat += 1;
+		console.log(
+			`  ban sao bo true o ${THAM_SO.hoiYTruoc} — ${tuChoiTrue ? "bat, script tu choi truoc khi chay" : "LOT"}: ${GHIM_THAM_SO_TUY}`,
+		);
+		const SO_BAN_SAO = 5;
+		console.log(`chieu do: ${bat}/${SO_BAN_SAO} ban sao bi bat`);
+		process.exitCode = bat === SO_BAN_SAO ? 1 : 0;
 	}
 	console.log("kho do bo khi phien dong — khong don tay");
 } catch (e) {

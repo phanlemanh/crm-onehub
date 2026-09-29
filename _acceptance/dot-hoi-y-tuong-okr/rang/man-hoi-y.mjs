@@ -39,6 +39,7 @@ const CHON = new Set(
 const TEP_CHIEU = "apps/api/src/okr/hoi-y.ts";
 const TEP_GOP = "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx";
 const TEP_KET_LUAN = "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx";
+const TEP_CONG_BO = "apps/api/src/okr/okr-hoi-y.service.ts";
 const VET = {
 	"E12-ten": {
 		eval: "E12",
@@ -46,7 +47,7 @@ const VET = {
 		mo: "ban sao chieu y tra ten nguoi gop cho moi vai (man in ten)",
 		cam: (s) =>
 			s.replace(
-				"\treturn xem.laNguoiChon || xem.laQuanTri;\n",
+				"\treturn (\n\t\t(xem.laNguoiChon && xem.laQuanTri && xem.daNiemPhong) ||\n\t\t(xem.laQuanTri && !xem.laNguoiChon)\n\t);\n",
 				"\treturn true;\n",
 			),
 		ghim: /E12 buoc-gop: ten lo «[^»]+»/,
@@ -80,15 +81,10 @@ const VET = {
 		tep: TEP_CHIEU,
 		mo: "ban sao may chu tra y cho nguoi chon chua niem phong",
 		cam: (s) =>
-			s
-				.replace(
-					"\tif (xem.laNguoiChon && !xem.daNiemPhong) return { khoa: true, y: [] };\n",
-					"",
-				)
-				.replace(
-					"\tif (xem.laNguoiChon && !xem.daNiemPhong) return false;\n",
-					"",
-				),
+			s.replace(
+				"\tif (xem.laNguoiChon && !xem.daNiemPhong) return { khoa: true, y: [] };\n",
+				"",
+			),
 		ghim: /E15 buoc-khoa-nguoi-chon: nguoi chon chua niem phong thay [1-9]\d* y/,
 	},
 	E16: {
@@ -100,6 +96,13 @@ const VET = {
 				"lyDo: nhap.lyDo.trim(),",
 				"lyDo: nhap.lyDo.trim().slice(0, 12),",
 			),
+		ghim: /E16: whyNow «[^»]*» khac ly do da go «[^»]+»/,
+	},
+	"E16-cong-bo": {
+		eval: "E15",
+		tep: TEP_CONG_BO,
+		mo: "ban sao cong bo (may chu) dat whyNow bang ly do cat 12 ky tu",
+		cam: (s) => s.replace("whyNow: c.lyDo,", "whyNow: c.lyDo.slice(0, 12),"),
 		ghim: /E16: whyNow «[^»]*» khac ly do da go «[^»]+»/,
 	},
 };
@@ -464,8 +467,10 @@ const maCua = async (userId) =>
 		await db.user.findUnique({ where: { id: userId }, select: { email: true } })
 	)?.email.split("@")[0] ?? "";
 
+const LOAI_KHONG_CHU = new Set(["Font", "Image", "Media"]);
+
 function mayGhi(tenMay) {
-	return { ten: tenMay, phan: [], hong: 0, dang: 0 };
+	return { ten: tenMay, phan: [], hong: 0, dang: 0, loiDoc: [] };
 }
 
 async function ghiMang(trang, may) {
@@ -476,7 +481,12 @@ async function ghiMang(trang, may) {
 	});
 	const cuaCho = new Map();
 	cdp.on("Network.responseReceived", (e) =>
-		cuaCho.set(e.requestId, { url: e.response.url, loai: e.type }),
+		cuaCho.set(e.requestId, {
+			url: e.response.url,
+			loai: e.type,
+			maHttp: e.response.status,
+			kieu: e.response.mimeType,
+		}),
 	);
 	cdp.on("Network.loadingFinished", (e) => {
 		const r = cuaCho.get(e.requestId);
@@ -492,8 +502,9 @@ async function ghiMang(trang, may) {
 						: b.body,
 				});
 			})
-			.catch(() => {
+			.catch((loi) => {
 				may.hong += 1;
+				may.loiDoc.push({ ...r, cau: String(loi?.message ?? loi) });
 			})
 			.finally(() => {
 				may.dang -= 1;
@@ -1077,14 +1088,14 @@ async function nhomE12() {
 	);
 	const moDau = await a.evaluate(() => ({
 		loiMo:
-			window.__tim("[data-khoi='loi-mo'] [translate='no']")[0]?.innerText ?? "",
+			window.__tim("[data-khoi='loi-mo'] [translate='no']")[0]?.textContent ??
+			"",
 		the: window.__tim("[data-khoi='the-con-so'] [data-slot='stat-card']")
 			.length,
 	}));
 	kiem(
 		`E12 buoc 4: trang hien loi mo va ${GO.soLieu.length} the con so (thay ${JSON.stringify({ ...moDau, loiMo: moDau.loiMo.slice(0, 30) })})`,
-		gon(GO.loiMo).startsWith(gon(moDau.loiMo).slice(0, 40)) &&
-			moDau.the === GO.soLieu.length,
+		gon(moDau.loiMo) === gon(GO.loiMo) && moDau.the === GO.soLieu.length,
 	);
 	await chup(a, "buoc-mo.png");
 	await kho(a, DO.hep);
@@ -1177,15 +1188,21 @@ async function nhomE12() {
 	);
 	kiem(
 		`E12 buoc 5: moc Mo hien tai (aria-current=step) gan «${CHU.moc.bayGio}», ba moc sau chua toi`,
-		dau.moc[0]?.hienTai === "step" &&
+		dau.moc.length === 4 &&
+			dau.moc[0]?.hienTai === "step" &&
 			dau.moc[0]?.bayGio === CHU.moc.bayGio &&
 			dau.moc.slice(1).every((m) => m.tt === "chua" && m.hienTai === null),
 	);
+	if (dau.moc[3]?.ngay === CHU.moc.chuaDinh)
+		console.log(
+			`  E12 bước 5: mốc Công bố chưa có ngày — chưa công bố (màn in «${CHU.moc.chuaDinh}»; ba mốc Mở, Hạn, Gom có ngày giờ)`,
+		);
 	kiem(
 		`E12 buoc 5: moc Mo, Han, Gom co ngay gio; Cong bo «${CHU.moc.chuaDinh}» khi chua cong bo (thay ${JSON.stringify(dau.moc.map((m) => m.ngay))})`,
-		dau.moc
-			.slice(0, 3)
-			.every((m) => /^\d{1,2}\/\d{1,2} \d{2}:\d{2}$/.test(m.ngay)) &&
+		dau.moc.length === 4 &&
+			dau.moc
+				.slice(0, 3)
+				.every((m) => /^\d{1,2}\/\d{1,2} \d{2}:\d{2}$/.test(m.ngay)) &&
 			(dau.moc[3]?.ngay === CHU.moc.chuaDinh ||
 				/^\d{1,2}\/\d{1,2} \d{2}:\d{2}$/.test(dau.moc[3]?.ngay ?? "")),
 	);
@@ -1312,14 +1329,17 @@ async function nhomE12() {
 	);
 	await cho(DO.choGhiMs);
 	await kiemTheoTen(g, KHUNG_DN, tenGieo, "E12 buoc-gop");
-	const khongDich = await g.evaluate(
-		(k) =>
-			window
-				.__tim(`${k} [data-y] p`)
-				.every((p) => p.getAttribute("translate") === "no"),
-		KHUNG_DN,
+	const khongDich = await g.evaluate((k) => {
+		const doan = window.__tim(`${k} [data-y] p`);
+		return {
+			so: doan.length,
+			lech: doan.filter((p) => p.getAttribute("translate") !== "no").length,
+		};
+	}, KHUNG_DN);
+	kiem(
+		`E12 buoc 6: y mang translate=no (thay ${JSON.stringify(khongDich)})`,
+		khongDich.so > 0 && khongDich.lech === 0,
 	);
-	kiem("E12 buoc 6: y mang translate=no", khongDich);
 	await doi(
 		g,
 		"E12 buoc 6: tab Hoi y mat huy hieu Moi sau khi gui",
@@ -1400,7 +1420,9 @@ async function nhomE12() {
 	);
 	kiem(
 		"E12 buoc 7: heatmap co hang toan cong ty va du bo phan",
-		hm.hang[0] === "goc" && boPhan.every((b) => hm.hang.includes(b)),
+		hm.hang[0] === "goc" &&
+			boPhan.length > 0 &&
+			boPhan.every((b) => hm.hang.includes(b)),
 	);
 	kiem(`E12 buoc 7: o phong ban cua A khac 0 (thay «${hm.oCuoi}»)`, tren > 0);
 	kiem(
@@ -1428,6 +1450,7 @@ async function nhomE12() {
 		`E12 buoc 8: Empty «${CHU.trong.thanhVien}», khong nut mo (thay ${JSON.stringify(trongTv)})`,
 		trongTv.tieuDe === CHU.trong.thanhVien && trongTv.nut === 0,
 	);
+	await chup(b, "buoc-trong-thanh-vien.png");
 	cua.che = "loi";
 	await chonHop(b, "[data-chon-chu-ky]", TEN_KY.nam);
 	await choTrangThai(b, "loi", "E12 buoc 9: chan okr.hoiY");
@@ -1528,6 +1551,64 @@ function chanHoiY(khoa, cua) {
 }
 
 const CHE = [];
+
+async function kiemCuoiTrang(trang, tenAnh, nhan) {
+	await trang.evaluate(() => {
+		const k = document.querySelector("[data-slot='page-shell-scroll']");
+		if (k) k.scrollTop = k.scrollHeight;
+		window.scrollTo(0, document.documentElement.scrollHeight);
+	});
+	await cho(600);
+	const r = await trang.evaluate(() => {
+		const nut = window.__tim("[data-nut='luu-ket-luan']").at(-1);
+		const bar = window.__tim("[data-khoi='thanh-cong-bo']")[0];
+		const giuCho = document.querySelector("[data-slot='save-bar-spacer']");
+		const rn = nut?.getBoundingClientRect();
+		const rb = bar?.getBoundingClientRect();
+		return {
+			nutTren: rn ? Math.round(rn.top) : null,
+			nutDay: rn ? Math.round(rn.bottom) : null,
+			thanhTren: rb ? Math.round(rb.top) : null,
+			thanhCao: rb ? Math.round(rb.height) : null,
+			giuCho: giuCho ? Math.round(giuCho.getBoundingClientRect().height) : null,
+			cao: window.innerHeight,
+			ds: (() => {
+				const ul = bar?.querySelector("ul");
+				const dau = ul?.querySelector("li")?.getBoundingClientRect();
+				return ul
+					? {
+							cuon: ul.scrollTop,
+							cao: ul.clientHeight,
+							toanBo: ul.scrollHeight,
+							muc: ul.querySelectorAll("li").length,
+							dauTren: dau ? Math.round(dau.top) : null,
+							hien: window.__tim("[data-khoi='thanh-cong-bo'] ul a").length,
+							tren: (() => {
+								const a = ul.querySelector("a")?.getBoundingClientRect();
+								const e = a
+									? document.elementFromPoint(
+											a.left + a.width / 2,
+											a.top + a.height / 2,
+										)
+									: null;
+								return e ? `${e.tagName} ${e.getAttribute("data-slot")}` : null;
+							})(),
+						}
+					: null;
+			})(),
+		};
+	});
+	console.log(`  ${nhan}: cuoi trang ${JSON.stringify(r)}`);
+	kiem(
+		`${nhan}: cuon het trang, nut «${CHU.ketLuan.luu}» cua the cuoi nam tron tren thanh cong bo mo san (thay ${JSON.stringify(r)})`,
+		r.nutTren !== null &&
+			r.nutDay !== null &&
+			r.thanhTren !== null &&
+			r.nutTren >= 0 &&
+			r.nutDay <= r.thanhTren,
+	);
+	await chup(trang, tenAnh);
+}
 const AN_DANH_SACH = "Ẩn danh sách";
 
 const theChuDe = (chuDeId) => `[data-chu-de='${chuDeId}'][id^='chu-de-']`;
@@ -1761,7 +1842,10 @@ async function nhomE15() {
 
 	nhom = "E15 buoc 3";
 	const KHUNG_GOM = "[data-khoi='y-chua-gom']";
-	const c = await moTrang("quanTri", DO.rong, duongHoiY(NAM_KE));
+	const mayChon = mayGhi("nguoi-chon");
+	const c = await moTrang("quanTri", DO.rong, duongHoiY(NAM_KE), {
+		may: mayChon,
+	});
 	await choTrangThai(c, "chon-chua-du", "E15 buoc 3");
 	const gom0 = await c.evaluate((kg) => {
 		const hienTai = window.__tim(
@@ -1772,6 +1856,9 @@ async function nhomE15() {
 			moc: hienTai?.getAttribute("data-moc") ?? null,
 			y: window.__tim(`${kg} [data-y]`).length,
 			tacGia: window.__tim(`${kg} [data-y] [data-tac-gia]`).length,
+			tacGiaRong: window
+				.__tim(`${kg} [data-y] [data-tac-gia]`)
+				.filter((e) => (e.textContent ?? "").trim() === "").length,
 			thanh: window.__tim("[data-khoi='thanh-chon']").length,
 		};
 	}, KHUNG_GOM);
@@ -1780,7 +1867,9 @@ async function nhomE15() {
 		gom0.pha === "dang-gom" &&
 			gom0.moc === "gom" &&
 			gom0.y === chuaGom.length &&
+			gom0.y > 0 &&
 			gom0.tacGia === gom0.y &&
+			gom0.tacGiaRong === 0 &&
 			gom0.thanh === 0,
 	);
 	await bam(c, `${KHUNG_GOM} [data-y='${yGom.id}'] [role='checkbox']`);
@@ -1845,6 +1934,7 @@ async function nhomE15() {
 	kiem(
 		`E15 buoc 4: muc luc liet du ${chuDeNay.length} chu de voi dau da/chua ket luan dung DB (thay ${JSON.stringify(ml)})`,
 		ml.length === chuDeNay.length &&
+			chuDeNay.length > 0 &&
 			chuDeNay.every((x) =>
 				ml.some((m) => m.id === x.id && m.da === (x.ketLuan !== null)),
 			),
@@ -1949,6 +2039,7 @@ async function nhomE15() {
 			false,
 		);
 	await chup(n, "buoc-thieu.png");
+	await kiemCuoiTrang(n, "buoc-cuoi-trang-390.png", "B2 (390)");
 	await n.close();
 
 	nhom = "E15 buoc 5";
@@ -1973,6 +2064,7 @@ async function nhomE15() {
 		(kg) => window.__tim(`${kg} [data-y]`).length === 0,
 		KHUNG_GOM,
 	);
+	await kiemCuoiTrang(c, "buoc-cuoi-trang.png", "B2 (1440)");
 	const moi = await db.okrChuDe.findFirst({
 		where: { hoiYId: h.id, ten: GO.tenChuDeMoi },
 		select: { id: true },
@@ -2026,10 +2118,18 @@ async function nhomE15() {
 				mlSau.find((m) => m.id === kl.id)?.da === true,
 		);
 	}
-	console.log(
-		`  E15 buoc 5: ngoai hop dong — nut luu bi thanh cong bo mo san che o ${CHE.length} the${CHE.length ? `: ${CHE.join(", ")}` : ""}`,
+	kiem(
+		`E15 buoc 5 (ngoai hop dong, sua gom B2): nut «${CHU.ketLuan.luu}» khong bi thanh cong bo mo san che o the nao (che ${CHE.length}${CHE.length ? `: ${CHE.join(", ")}` : ""})`,
+		CHE.length === 0,
 	);
-	const sanSang = demSo(CHU.congBo.sanSang.mot, CHU.congBo.sanSang.nhieu, 3);
+	const soChonDb = await db.okrChuDe.count({
+		where: { hoiYId: h.id, ketLuan: "chon" },
+	});
+	const sanSang = demSo(
+		CHU.congBo.sanSang.mot,
+		CHU.congBo.sanSang.nhieu,
+		soChonDb,
+	);
 	await doi(
 		c,
 		`E15 buoc 5: thanh cong bo «${sanSang}», «Công bố» bat`,
@@ -2085,12 +2185,37 @@ async function nhomE15() {
 	await mTrang.close();
 	const phan = [...may.phan];
 	const lo = phan.filter((p) => banTruoc.some((cau) => p.than.includes(cau)));
+	const coCauHoi = phan.filter((p) => p.than.includes(h.cauHoi)).length;
 	console.log(
-		`  E16: ghi ${phan.length} phan hoi toi trinh duyet cua M truoc cong bo (${may.hong} khong doc duoc than); chua cau viet truoc: ${lo.length}${lo.length ? ` (${lo.map((p) => p.url).join(", ")})` : ""}`,
+		`  E16: ghi ${phan.length} phan hoi toi trinh duyet cua M truoc cong bo (${may.hong} khong doc duoc than, ${may.dang} con dang doc); chua cau viet truoc: ${lo.length}${lo.length ? ` (${lo.map((p) => p.url).join(", ")})` : ""}; doi chung duong — chua cau hoi cua lan hoi y: ${coCauHoi}`,
+	);
+	for (const l of may.loiDoc)
+		console.log(
+			`  E16: khong doc duoc than ${l.maHttp} ${l.loai} ${l.kieu} ${l.url} — ${l.cau}`,
+		);
+	const loiDocChu = may.loiDoc.filter((l) => !LOAI_KHONG_CHU.has(l.loai));
+	kiem(
+		`E16: moi than phan hoi co the mang chu toi trinh duyet cua M doc duoc — chi mien ${LOAI_KHONG_CHU.size} loai nhi phan (${[...LOAI_KHONG_CHU].join(", ")}) Chrome khong giu than (khong doc duoc ${may.hong}, trong do mang chu ${loiDocChu.length}, con dang doc ${may.dang})`,
+		loiDocChu.length === 0 && may.dang === 0,
+	);
+	kiem(
+		`E16 doi chung duong: it nhat mot phan hoi toi M chua cau hoi «${h.cauHoi}» — chung minh than phan hoi da duoc doc (thay ${coCauHoi})`,
+		coCauHoi > 0,
 	);
 	kiem(
 		`E16: moi phan hoi toi trinh duyet thanh vien truoc cong bo khong chua cau viet truoc (ghi ${phan.length}, lo ${lo.length})`,
 		phan.length > 0 && lo.length === 0,
+	);
+	for (let i = 0; i < 20 && mayChon.dang > 0; i += 1) await cho(250);
+	const choNguoiChon = mayChon.phan.filter((p) =>
+		banTruoc.some((cau) => p.than.includes(cau)),
+	).length;
+	console.log(
+		`  E16 doi chung duong: ghi ${mayChon.phan.length} phan hoi toi nguoi chon (${mayChon.hong} khong doc duoc than); chua cau viet truoc: ${choNguoiChon}`,
+	);
+	kiem(
+		`E16 doi chung duong: nguoi chon (duoc doc ban viet truoc) nhan it nhat mot phan hoi chua cau viet truoc — cung may quet thay duoc cau niem phong (thay ${choNguoiChon})`,
+		choNguoiChon > 0,
 	);
 
 	nhom = "E15 buoc 6";
@@ -2141,6 +2266,21 @@ async function nhomE15() {
 		`E16: so okrObjective onehub nhap moi ${mtMoi.length} bang so chu de chon ${chuDeChon.length}`,
 		mtMoi.length === chuDeChon.length && mtMoi.length > 0,
 	);
+	const lienKetNhap = await c.evaluate(() =>
+		window
+			.__tim("[data-khoi='viet-truoc-roi-chon'] [data-mo-muc-tieu]")
+			.map((e) => e.getAttribute("data-mo-muc-tieu")),
+	);
+	for (const cdc of chuDeChon) {
+		kiem(
+			`E16: chu de chon ${cdc.id} noi objectiveId ${cdc.objectiveId} la mot muc tieu nhap moi`,
+			cdc.objectiveId !== null && mtMoi.some((m) => m.id === cdc.objectiveId),
+		);
+		kiem(
+			`E15 buoc 6: trang ket qua co lien ket mo muc tieu nhap ${cdc.objectiveId} cua chu de chon ${cdc.id} (thay ${JSON.stringify(lienKetNhap)})`,
+			cdc.objectiveId !== null && lienKetNhap.includes(cdc.objectiveId),
+		);
+	}
 	for (const kl of ketLuan.filter((x) => x.ketLuan === "chon")) {
 		const cdc = chuDeChon.find((x) => x.id === kl.id);
 		const mt = mtMoi.find((x) => x.id === cdc?.objectiveId);
