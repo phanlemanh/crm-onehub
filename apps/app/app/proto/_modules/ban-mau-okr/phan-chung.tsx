@@ -172,6 +172,8 @@ export function KhungUngDung({
 	moDieuHuong = false,
 	nguoi,
 	chuKy,
+	nhanTabHoiY,
+	congCuCungHangTab = false,
 	children,
 }: {
 	vai: Vai;
@@ -179,6 +181,8 @@ export function KhungUngDung({
 	trang: TrangKhung;
 	moDieuHuong?: boolean;
 	chuKy?: string;
+	nhanTabHoiY?: string;
+	congCuCungHangTab?: boolean;
 	children: ReactNode;
 }) {
 	return (
@@ -213,7 +217,12 @@ export function KhungUngDung({
 				<RailDieuHuong vai={vai} />
 				<div className="flex min-w-0 flex-1 flex-col px-4 pt-4 pb-6 md:px-6 md:pt-6">
 					<div className="mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6">
-						<DauTrangOkr chuKy={chuKy} trang={trang} />
+						<DauTrangOkr
+							chuKy={chuKy}
+							congCuCungHangTab={congCuCungHangTab}
+							nhanTabHoiY={nhanTabHoiY}
+							trang={trang}
+						/>
 						{children}
 					</div>
 				</div>
@@ -236,48 +245,94 @@ function cuonTabDangDungVaoKhung(khung: HTMLDivElement | null) {
 	else if (trai < khung.scrollLeft) khung.scrollLeft = Math.max(0, trai);
 }
 
-function DauTrangOkr({ trang, chuKy }: { trang: TrangKhung; chuKy?: string }) {
-	const tab = trang === "hoi-y" ? [...TRANG, TAB_HOI_Y] : TRANG;
+function CongCuTrang({ chuKy }: { chuKy?: string }) {
 	const cacKy = chuKy ? [chuKy, ...CHU_KY_KHAC] : CHU_KY_KHAC;
+	return (
+		<>
+			<Badge variant="outline">Dữ liệu mẫu</Badge>
+			<Select defaultValue={chuKy ?? KY.ten}>
+				<SelectTrigger aria-label="Chu kỳ" size="sm">
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent align="end">
+					{cacKy.map((ky) => (
+						<SelectItem key={ky} value={ky}>
+							{ky}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
+		</>
+	);
+}
+
+function DauTrangOkr({
+	trang,
+	chuKy,
+	nhanTabHoiY,
+	congCuCungHangTab,
+}: {
+	trang: TrangKhung;
+	chuKy?: string;
+	nhanTabHoiY?: string;
+	congCuCungHangTab: boolean;
+}) {
+	const tab = trang === "hoi-y" ? [...TRANG, TAB_HOI_Y] : TRANG;
 	return (
 		<header className="flex flex-col gap-3">
 			<div className="flex flex-wrap items-center gap-x-4 gap-y-2">
 				<h2 className="min-w-0 font-medium text-2xl tracking-tight md:text-3xl">
 					{TIEU_DE_TRANG[trang]}
 				</h2>
-				<div className="ml-auto flex items-center gap-2">
-					<Badge variant="outline">Dữ liệu mẫu</Badge>
-					<Select defaultValue={chuKy ?? KY.ten}>
-						<SelectTrigger aria-label="Chu kỳ" size="sm">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent align="end">
-							{cacKy.map((ky) => (
-								<SelectItem key={ky} value={ky}>
-									{ky}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+				<div
+					className={
+						congCuCungHangTab
+							? "ml-auto flex items-center gap-2 md:hidden"
+							: "ml-auto flex items-center gap-2"
+					}
+				>
+					<CongCuTrang chuKy={chuKy} />
 				</div>
 			</div>
 			<Tabs value={trang}>
 				<div
-					className="relative -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0"
-					data-khung-tab
-					ref={cuonTabDangDungVaoKhung}
+					className={
+						congCuCungHangTab
+							? "flex items-center gap-4 md:border-b"
+							: "flex items-center gap-4"
+					}
 				>
-					<TabsList
-						aria-label="Khu OKR"
-						className="w-max min-w-full justify-start gap-6 border-b"
-						variant="line"
+					<div
+						className="relative -mx-4 min-w-0 flex-1 overflow-x-auto px-4 md:mx-0 md:px-0"
+						data-khung-tab
+						ref={cuonTabDangDungVaoKhung}
 					>
-						{tab.map((t) => (
-							<TabsTrigger key={t.value} value={t.value}>
-								{t.nhan}
-							</TabsTrigger>
-						))}
-					</TabsList>
+						<TabsList
+							aria-label="Khu OKR"
+							className={
+								congCuCungHangTab
+									? "w-max min-w-full justify-start gap-6 border-b md:border-b-0"
+									: "w-max min-w-full justify-start gap-6 border-b"
+							}
+							variant="line"
+						>
+							{tab.map((t) => (
+								<TabsTrigger key={t.value} value={t.value}>
+									{t.nhan}
+									{t.value === "hoi-y" && nhanTabHoiY ? (
+										<Badge data-nhan-tab variant="secondary">
+											{nhanTabHoiY}
+										</Badge>
+									) : null}
+								</TabsTrigger>
+							))}
+						</TabsList>
+					</div>
+					{congCuCungHangTab ? (
+						<div className="hidden shrink-0 items-center gap-2 md:flex">
+							<CongCuTrang chuKy={chuKy} />
+						</div>
+					) : null}
 				</div>
 			</Tabs>
 		</header>

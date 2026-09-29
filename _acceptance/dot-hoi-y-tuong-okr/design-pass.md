@@ -1,19 +1,19 @@
 ---
 slug: dot-hoi-y-tuong-okr
-at: 2026-09-29T10:30:58Z
+at: 2026-09-29T11:02:50Z
 route: http://localhost:3370/proto/dot-hoi-y-tuong-okr
 material: real-components
 context: static-frame
 context_scenes: []
-reaction: nac-2 (goi-anh-va-vat-bam-duoc; vong-2 theo ra-soat-ux.md, chu kho xem truc tiep tren vat)
+reaction: nac-2 (goi-anh-va-vat-bam-duoc; vong-2 ra-soat-ux.md, vong-3 ra-soat-reui.md — chu kho xem truc tiep tren vat)
 options:
 divergence: skipped — khuôn một-cột-cuộn theo nếp khu OKR; danh-sách-chi-tiết và kanban đã so ở đặc tả UX mục 6 của thiết kế, không còn hướng máy không tự chắc
 ds_skill: web-design-guidelines
 states: [ST-hoiy-dang-tai, ST-hoiy-loi, ST-hoiy-trong-quan-tri, ST-hoiy-trong-thanh-vien, ST-mo-sheet, ST-gop-chua-gop, ST-gop-da-gop, ST-gop-het-han, ST-viet-truoc, ST-gom, ST-chon-chua-du, ST-chon-du, ST-ket-qua, ST-ket-qua-da-hieu]
 breakpoints: [mobile-375, desktop-1280]
 themes: [dark]
-patched: 9
-deferred: 7
+patched: 15
+deferred: 11
 ---
 # design-pass — dot-hoi-y-tuong-okr
 
@@ -81,6 +81,15 @@ theo từng lần kết luận. 28 ảnh; không trạng thái nào tràn ngang 
   - F: dòng đếm «4/6 chủ đề đã kết luận»; thanh công bố «Chưa công bố được — còn 4 điều» liệt từng điều thành liên kết, bấm thì cuộn và đặt tiêu điểm vào đúng thẻ; bản viết trước dính khi cuộn ở ≥ lg.
   - G: 15 ý đồng nghiệp theo một hoán vị cố định cho người xem, hiện 10 rồi «Hiện thêm 5 ý».
 
+- Vòng 3 (rà soát ReUI lần hai, chủ kho duyệt áp R1–R5, `ra-soat-reui.md`):
+  - R1: dải mốc ngang bốn mốc Mở · Hạn · Gom · Công bố kèm ngày giờ, mốc hiện tại gắn «Bây giờ» (`aria-current=step`) — thay `StepList` dọc.
+  - R2: mỗi ý trong «Ý của bạn đi đâu» có hành trình dọc: góp → vào chủ đề → người chọn kết luận kèm lý do đủ → thành mục tiêu nháp.
+  - R3: thanh tab bố cục `navbar-1` — tab «Hỏi ý» gắn «Mới» (thành viên chưa góp) hay số chủ đề chưa kết luận (người chọn); chọn chu kỳ cùng hàng tab ở ≥ md.
+  - R4: màn kết luận ba cột ở ≥ lg — mục lục chủ đề dính (dấu đã/chưa, sáng mục đang đọc, bấm nhảy và đặt tiêu điểm) · thẻ chủ đề · bản viết trước dính.
+  - R5: thẻ con số bằng `StatCard` trong `StatGroup` của kho, có chênh lệch mũi tên.
+  - Thanh công bố dời vào cột giữa ở ≥ lg — trước đó trải hết bề ngang và đè đáy mục lục, bản viết trước (máy phát hiện khi soát ảnh).
+  - Ô soạn ở 375 cách đầu trang 778px; tab «Hỏi ý» trọn khung ở 14 trạng thái; không tràn ngang 14 × 3 khổ.
+
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 
 - `Heatmap` in chú giải cứng về KR («Ô càng nổi khỏi nền, càng nhiều KR tự tin cao»,
@@ -103,4 +112,12 @@ theo từng lần kết luận. 28 ảnh; không trạng thái nào tràn ngang 
 - (vòng 2) `StepList` chỉ xếp dọc (khoảng 110px ở 375) và chế độ tĩnh không đánh dấu bước
   hiện tại — bản mẫu gắn tay một `Badge` «Bây giờ». Đề xuất: kiểu xếp ngang và bước hiện
   tại cho chế độ tĩnh (tham chiếu `c-timeline-12` của ReUI).
+- (vòng 3) Dải mốc ngang, hành trình dọc và mục lục chủ đề trong bản mẫu dựng gần đúng
+  bằng `ol`/`li`, `Icon`, viền và `IntersectionObserver` viết tay — docs/proto.md cấm cài
+  thành phần trong lúc dựng bản mẫu. S3 cài `timeline` và `scrollspy` của ReUI vào
+  `packages/ui` (bốn chỗ sửa của `docs/reui.md`) và thay cả ba.
+- (vòng 3) Thanh tab thật của khu OKR (`thanh-tab.tsx`) cần cùng kiểu với khung bản mẫu:
+  huy hiệu trên tab, công cụ cùng hàng ở ≥ md.
+- (vòng 3) `StatCard` ở 375 cao khoảng 130px mỗi hàng, không có cỡ gọn; bản mẫu bỏ khung
+  Card quanh lời mở để ô soạn còn trong màn đầu. Đề xuất: biến thể `size="sm"` khi cần.
 

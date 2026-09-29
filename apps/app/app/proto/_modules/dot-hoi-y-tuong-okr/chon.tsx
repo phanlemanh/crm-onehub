@@ -1,5 +1,8 @@
 "use client";
 
+import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
+import CircleDash from "@carbon/icons-react/es/CircleDash";
+
 import {
 	Alert,
 	AlertAction,
@@ -24,13 +27,13 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@crm/ui/components/field";
+import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import {
 	Item,
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
-	ItemTitle,
 } from "@crm/ui/components/item";
 import {
 	Select,
@@ -41,6 +44,7 @@ import {
 } from "@crm/ui/components/select";
 import { Textarea } from "@crm/ui/components/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useState } from "react";
 import {
 	BAN_VIET_TRUOC,
@@ -61,6 +65,8 @@ import { apBoSung, DaiPha, danhGiaCau, NHAN_CAU, VanBan } from "./khung";
 export type HinhChon = "chua-du" | "du";
 
 const MOI = "moi";
+
+const VUNG_DANG_DOC = "0px 0px -60% 0px";
 
 function laKetLuan(v: string): v is KetLuan {
 	return THU_TU_KET_LUAN.some((k) => k === v);
@@ -122,6 +128,10 @@ function thieu(chuDe: ChuDeMau[], yChuaGom: number): DieuThieu[] {
 				},
 			]
 		: theoChuDe;
+}
+
+export function demChuaKetLuan(hinh: HinhChon): number {
+	return chuDeBanDau(hinh).filter((c) => !daKetLuan(c)).length;
 }
 
 function nhayToi(id: string) {
@@ -305,9 +315,9 @@ function BanVietTruocCuaBan({ chuDe }: { chuDe: ChuDeMau[] }) {
 						return (
 							<Item data-cau={b.so} key={b.so} size="xs">
 								<ItemContent>
-									<ItemTitle>
+									<p className="text-sm">
 										{b.so}. <span translate="no">{b.cau}</span>
-									</ItemTitle>
+									</p>
 									<ItemDescription>
 										{noi ? (
 											<>
@@ -328,6 +338,56 @@ function BanVietTruocCuaBan({ chuDe }: { chuDe: ChuDeMau[] }) {
 	);
 }
 
+function MucLuc({
+	chuDe,
+	dangDoc,
+}: {
+	chuDe: ChuDeMau[];
+	dangDoc: string | null;
+}) {
+	const soDa = chuDe.filter(daKetLuan).length;
+	return (
+		<nav
+			aria-label="Mục lục chủ đề"
+			className="hidden min-w-0 lg:sticky lg:top-4 lg:col-span-3 lg:flex lg:flex-col lg:gap-3 lg:self-start"
+			data-khoi="muc-luc"
+		>
+			<CardTitle>
+				{soDa}/{chuDe.length} chủ đề đã kết luận
+			</CardTitle>
+			<ul className="flex flex-col gap-1">
+				{chuDe.map((c) => {
+					const da = daKetLuan(c);
+					const dangXem = dangDoc === c.id;
+					return (
+						<li key={c.id}>
+							<Button
+								aria-current={dangXem ? "location" : undefined}
+								className="w-full justify-start"
+								data-muc-luc={c.id}
+								onClick={() => nhayToi(neoChuDe(c.id))}
+								size="sm"
+								variant={dangXem ? "secondary" : "ghost"}
+							>
+								<Icon
+									data-icon="inline-start"
+									icon={da ? CheckmarkFilled : CircleDash}
+								/>
+								<span className="min-w-0 truncate" translate="no">
+									{c.ten}
+								</span>
+								<span className="sr-only">
+									{da ? ", đã kết luận" : ", chưa kết luận"}
+								</span>
+							</Button>
+						</li>
+					);
+				})}
+			</ul>
+		</nav>
+	);
+}
+
 export function ChonMan({ hinh }: { hinh: HinhChon }) {
 	const [chuDe, setChuDe] = useState<ChuDeMau[]>(() => chuDeBanDau(hinh));
 	const [hoi, setHoi] = useState(false);
@@ -335,8 +395,33 @@ export function ChonMan({ hinh }: { hinh: HinhChon }) {
 	const conThieu = thieu(chuDe, yChuaGom.length);
 	const soChon = chuDe.filter((c) => c.ketLuan === "chon").length;
 	const soDaKetLuan = chuDe.filter(daKetLuan).length;
+	const [dangDoc, setDangDoc] = useState<string | null>(
+		() => chuDe[0]?.id ?? null,
+	);
 	const doi = (moi: ChuDeMau) =>
 		setChuDe((cu) => cu.map((c) => (c.id === moi.id ? moi : c)));
+
+	useMountEffect(() => {
+		const the = [
+			...document.querySelectorAll<HTMLElement>(
+				"[data-hinh-chon] [data-chu-de]",
+			),
+		];
+		const quan = new IntersectionObserver(
+			(muc) => {
+				const dau = muc
+					.filter((m) => m.isIntersecting)
+					.sort(
+						(a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+					)[0];
+				const id = dau?.target.getAttribute("data-chu-de");
+				if (id) setDangDoc(id);
+			},
+			{ rootMargin: VUNG_DANG_DOC },
+		);
+		for (const t of the) quan.observe(t);
+		return () => quan.disconnect();
+	});
 
 	return (
 		<div className="flex flex-col gap-6" data-hinh-chon={hinh}>
@@ -358,56 +443,57 @@ export function ChonMan({ hinh }: { hinh: HinhChon }) {
 			{yChuaGom.length > 0 ? (
 				<DanhSachYChuaGom chonSan={[]} danhSach={yChuaGom} />
 			) : null}
-			<div className="grid gap-6 lg:grid-cols-3">
-				<div className="flex min-w-0 flex-col gap-6 lg:col-span-2">
+			<div className="grid gap-6 lg:grid-cols-12">
+				<MucLuc chuDe={chuDe} dangDoc={dangDoc} />
+				<div className="flex min-w-0 flex-col gap-6 lg:col-span-6">
 					{chuDe.map((c) => (
 						<TheChon c={c} key={c.id} onDoi={doi} />
 					))}
+					<div className="sticky bottom-4 z-10" data-khoi="thanh-cong-bo">
+						<Alert>
+							<AlertTitle>
+								{conThieu.length === 0
+									? `Sẵn sàng — ${soChon} mục tiêu nháp sẽ được tạo ở cấp OneHub`
+									: `Chưa công bố được — còn ${conThieu.length} điều`}
+							</AlertTitle>
+							<AlertDescription>
+								{conThieu.length === 0 ? (
+									"Người góp sẽ thấy kết luận, lý do và bản viết trước của bạn."
+								) : (
+									<ul aria-label="Điều còn thiếu" className="flex flex-col">
+										{conThieu.map((d) => (
+											<li key={d.khoa}>
+												<Button asChild size="xs-wrap" variant="link">
+													<a
+														href={`#${d.dich}`}
+														onClick={(e) => {
+															e.preventDefault();
+															nhayToi(d.dich);
+														}}
+													>
+														<span translate="no">{d.chu}</span>
+													</a>
+												</Button>
+											</li>
+										))}
+									</ul>
+								)}
+							</AlertDescription>
+							<AlertAction>
+								<Button
+									disabled={conThieu.length > 0}
+									onClick={() => setHoi(true)}
+									size="sm"
+								>
+									Công bố
+								</Button>
+							</AlertAction>
+						</Alert>
+					</div>
 				</div>
-				<div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-4 lg:self-start">
+				<div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-4 lg:col-span-3 lg:self-start">
 					<BanVietTruocCuaBan chuDe={chuDe} />
 				</div>
-			</div>
-			<div className="sticky bottom-4 z-10" data-khoi="thanh-cong-bo">
-				<Alert>
-					<AlertTitle>
-						{conThieu.length === 0
-							? `Sẵn sàng — ${soChon} mục tiêu nháp sẽ được tạo ở cấp OneHub`
-							: `Chưa công bố được — còn ${conThieu.length} điều`}
-					</AlertTitle>
-					<AlertDescription>
-						{conThieu.length === 0 ? (
-							"Người góp sẽ thấy kết luận, lý do và bản viết trước của bạn."
-						) : (
-							<ul aria-label="Điều còn thiếu" className="flex flex-col">
-								{conThieu.map((d) => (
-									<li key={d.khoa}>
-										<Button asChild size="xs-wrap" variant="link">
-											<a
-												href={`#${d.dich}`}
-												onClick={(e) => {
-													e.preventDefault();
-													nhayToi(d.dich);
-												}}
-											>
-												<span translate="no">{d.chu}</span>
-											</a>
-										</Button>
-									</li>
-								))}
-							</ul>
-						)}
-					</AlertDescription>
-					<AlertAction>
-						<Button
-							disabled={conThieu.length > 0}
-							onClick={() => setHoi(true)}
-							size="sm"
-						>
-							Công bố
-						</Button>
-					</AlertAction>
-				</Alert>
 			</div>
 			<ConfirmDialog
 				nut="Công bố"

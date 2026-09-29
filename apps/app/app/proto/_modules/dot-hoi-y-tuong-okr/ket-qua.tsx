@@ -1,6 +1,7 @@
 "use client";
 
 import Checkmark from "@carbon/icons-react/es/Checkmark";
+import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
 import Launch from "@carbon/icons-react/es/Launch";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
@@ -21,12 +22,14 @@ import {
 	ItemDescription,
 	ItemGroup,
 } from "@crm/ui/components/item";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import {
 	BAN_VIET_TRUOC,
 	CHU_DE_GOM,
 	type ChuDeMau,
+	HANH_TRINH_Y_CUA_TOI,
 	HOI_Y,
+	KET_LUAN_LUC,
 	Y_CUA_TOI,
 	Y_LA,
 	Y_RUT_GON,
@@ -62,6 +65,54 @@ function XemNhap({ ten }: { ten: string }) {
 	);
 }
 
+type BuocHanhTrinh = {
+	khoa: string;
+	tieuDe: ReactNode;
+	luc: string;
+	than?: ReactNode;
+};
+
+function HanhTrinh({ buoc }: { buoc: BuocHanhTrinh[] }) {
+	return (
+		<ol
+			aria-label="Ý này đã đi qua"
+			className="flex flex-col pt-2"
+			data-khoi="hanh-trinh"
+		>
+			{buoc.map((b, i) => {
+				const cuoi = i === buoc.length - 1;
+				return (
+					<li className="flex gap-3" data-buoc={b.khoa} key={b.khoa}>
+						<span className="flex flex-col items-center gap-1">
+							<Icon icon={CheckmarkFilled} />
+							{cuoi ? null : (
+								<span
+									aria-hidden="true"
+									className="w-0 flex-1 border-foreground border-l"
+								/>
+							)}
+						</span>
+						<div
+							className={
+								cuoi
+									? "flex min-w-0 flex-1 flex-col gap-1"
+									: "flex min-w-0 flex-1 flex-col gap-1 pb-4"
+							}
+						>
+							<span className="text-sm">{b.tieuDe}</span>
+							<ItemDescription>
+								{b.luc}
+								<span className="sr-only">, đã xong</span>
+							</ItemDescription>
+							{b.than}
+						</div>
+					</li>
+				);
+			})}
+		</ol>
+	);
+}
+
 function YCuaBanKetQua({ hinh }: { hinh: HinhKetQua }) {
 	const [daHieu, setDaHieu] = useState(hinh === "da-hieu");
 
@@ -78,27 +129,62 @@ function YCuaBanKetQua({ hinh }: { hinh: HinhKetQua }) {
 				<ItemGroup>
 					{Y_CUA_TOI.map((y) => {
 						const c = CHU_DE_CONG_BO.find((x) => x.yIds.includes(y.id));
+						const ht = HANH_TRINH_Y_CUA_TOI.find((h) => h.yId === y.id);
+						const buoc: BuocHanhTrinh[] = [
+							{ khoa: "gop", tieuDe: "Bạn góp", luc: ht?.gopLuc ?? "" },
+							...(c
+								? [
+										{
+											khoa: "vao-chu-de",
+											tieuDe: (
+												<>
+													Vào chủ đề «<span translate="no">{c.ten}</span>»
+												</>
+											),
+											luc: ht?.vaoChuDeLuc ?? "",
+										},
+									]
+								: []),
+							...(c?.ketLuan
+								? [
+										{
+											khoa: "ket-luan",
+											tieuDe: (
+												<span className="flex flex-wrap items-center gap-2">
+													<span>
+														<span translate="no">{HOI_Y.nguoiChon.ten}</span>{" "}
+														kết luận:
+													</span>
+													<NhanKetLuan ketLuan={c.ketLuan} />
+												</span>
+											),
+											luc: KET_LUAN_LUC,
+											than: <LyDoNguyenVan lyDo={c.lyDo} />,
+										},
+									]
+								: []),
+							...(c?.ketLuan === "chon"
+								? [
+										{
+											khoa: "muc-tieu-nhap",
+											tieuDe: "Thành mục tiêu nháp",
+											luc: KET_LUAN_LUC,
+											than: (
+												<div>
+													<VanBan>{c.cauMucTieu}</VanBan>
+													<XemNhap ten={c.cauMucTieu} />
+												</div>
+											),
+										},
+									]
+								: []),
+						];
 						return (
 							<Item data-y={y.id} key={y.id} variant="outline">
 								<ItemContent>
 									<VanBan>{y.noiDung}</VanBan>
-									{c ? (
-										<>
-											<div className="flex flex-wrap items-center gap-2">
-												{c.ketLuan ? <NhanKetLuan ketLuan={c.ketLuan} /> : null}
-												<ItemDescription>
-													Vào chủ đề «<span translate="no">{c.ten}</span>»
-												</ItemDescription>
-											</div>
-											<LyDoNguyenVan lyDo={c.lyDo} />
-										</>
-									) : null}
+									<HanhTrinh buoc={buoc} />
 								</ItemContent>
-								{c?.ketLuan === "chon" ? (
-									<div className="w-full">
-										<XemNhap ten={c.cauMucTieu} />
-									</div>
-								) : null}
 							</Item>
 						);
 					})}

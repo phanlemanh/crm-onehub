@@ -163,6 +163,10 @@ Thước «đổi hoặc thêm» của Cổng Đáng là `doi + them`.
   Việt Nam từ ngày mở tới ngày hạn, giá trị là phần trăm thành viên còn hiệu lực của
   đơn vị (theo phòng ban chính; trừ người chọn) đã góp ít nhất một ý tới hết ngày đó.
   `hoiYDoPhu` chạy số truy vấn cố định dù bao nhiêu đơn vị.
+- `hoiYNhan({ cycleId })` → `{ coHoiY, trangThai, canGop, soChuDeChuaKetLuan }` — thủ tục
+  đọc nhẹ cho huy hiệu của tab «Hỏi ý» (layout khu OKR gọi nó mỗi trang): `canGop` đúng khi
+  người xem còn góp được và chưa góp ý nào lúc đang mở; `soChuDeChuaKetLuan` chỉ trả cho
+  người chọn lúc đang gom, người khác nhận `null`. Không trả tên, không trả nội dung.
 - **Thứ tự ý của người khác xáo cố định theo người xem.** `hoiY` trả `y[]` của người
   khác theo một hoán vị suy từ băm `(hoiYId, userId người xem)` — cùng người gọi lại thì
   cùng thứ tự, hai người khác nhau thì khác thứ tự, không phụ thuộc thứ tự tạo hay số
@@ -298,8 +302,18 @@ sử ngày rời, gỡ thành viên là xoá hàng `member`. Người chọn kh�
 - Gom không kéo-thả, theo bố cục `wishlist-1` của ReUI: mỗi ý có ô chọn và menu «…»
   (các chủ đề, «Ý lạ», «Chủ đề mới…»); thanh «N ý đã chọn · Đưa vào chủ đề… · Bỏ chọn»
   thay hàng tiêu đề danh sách, chỉ hiện khi đã chọn ít nhất một ý.
-- Dải pha dưới tiêu đề ở mọi trạng thái có lần hỏi ý: `StepList` tĩnh ba bước Đang mở ·
-  Đang gom · Đã công bố, kèm hạn, số giờ còn lại và tên người chọn.
+- Dải pha dưới tiêu đề ở mọi trạng thái có lần hỏi ý: `timeline` ngang của ReUI theo
+  `c-timeline-12` — bốn mốc Mở · Hạn · Gom · Công bố, ngày giờ trên mỗi mốc, mốc đã qua
+  có dấu tích, mốc hiện tại gắn «Bây giờ»; một hàng ở 390.
+- Mỗi ý trong «Ý của bạn đi đâu» có hành trình dọc theo `c-timeline-3`: Bạn góp → Vào
+  chủ đề → Người chọn kết luận kèm lý do đủ → Thành mục tiêu nháp (khi chọn).
+- Tab «Hỏi ý» của thanh tab khu OKR (bố cục `navbar-1`) mang huy hiệu khi có việc cho
+  người xem: «Mới» khi `canGop`; số khi `soChuDeChuaKetLuan` > 0; không có việc thì không
+  huy hiệu. Ô chọn chu kỳ cùng hàng tab ở ≥ md.
+- Màn kết luận ở ≥ lg: ba cột — mục lục chủ đề (`scrollspy` của ReUI theo
+  `c-scrollspy-1`, dấu đã/chưa kết luận, sáng mục đang đọc, bấm để nhảy) · các thẻ chủ đề
+  · bản viết trước dính. Dưới lg giữ thanh công bố liệt điều thiếu.
+- Thẻ con số dùng `StatCard` của kho: nhãn, số, chênh lệch có mũi tên, ghi chú.
 - Trạng thái góp ở 390: câu hỏi → lời mở gập ba dòng kèm «Đọc thêm» (`Collapsible`) →
   thẻ con số lưới hai cột → ô soạn; ô soạn nằm trong màn hình đầu (390 × 812).
 - Màn kết luận: dòng đếm «N/M chủ đề đã kết luận» ở đầu; thanh công bố liệt từng điều
@@ -325,7 +339,10 @@ sử ngày rời, gỡ thành viên là xoá hàng `member`. Người chọn kh�
 | `DropdownMenu`, `Checkbox` | ghép | «Đưa vào chủ đề…», chọn nhiều ý |
 | `Heatmap` | mở rộng | thêm prop chú giải để không in câu về KR — biến thể trong `packages/ui` |
 | `SaveBar` | mở rộng | biến thể nhận danh sách điều thiếu, mỗi dòng là liên kết tới thẻ, vai `status` thay `alert` — `packages/ui` |
-| `StepList` | mở rộng | dải pha: chế độ tĩnh đánh dấu bước hiện tại, kiểu xếp ngang (tham chiếu `c-timeline-12`) — `packages/ui` |
+| `timeline` (ReUI, miễn phí) | cài vào `packages/ui` | dải pha ngang (`c-timeline-12`), hành trình của một ý (`c-timeline-3`) — `docs/reui.md` đã xếp «Dùng» |
+| `scrollspy` (ReUI, miễn phí) | cài vào `packages/ui` | mục lục chủ đề ở màn kết luận ≥ lg (`c-scrollspy-1`) |
+| `StatCard` | dùng | thẻ con số |
+| `Tabs` + `Badge` | ghép | huy hiệu trên tab «Hỏi ý» (bố cục `navbar-1`) |
 | `Collapsible` | dùng | lời mở gập ba dòng |
 | `Tabs` (thanh tab OKR) | ghép | vùng cuộn ngang, cuộn tab đang đứng vào khung nhìn |
 | `Sheet` | dùng | mở hỏi ý |
@@ -333,7 +350,10 @@ sử ngày rời, gỡ thành viên là xoá hàng `member`. Người chọn kh�
 | `ConfirmDialog` | dùng | niêm phong, công bố, gỡ |
 | `Badge` | dùng | giữ nguyên · đổi · thêm · bỏ, kết luận |
 
-Bậc dừng: 1 (`packages/ui`), ba biến thể (`Heatmap`, `SaveBar`, `StepList`) ở bậc 5. Chữ
+Bậc dừng: 3 — hai thành phần miễn phí của ReUI (`timeline`, `scrollspy`) cài vào
+`packages/ui` theo bốn chỗ sửa của `docs/reui.md`; hai biến thể (`Heatmap`, `SaveBar`) ở
+bậc 5; biến thể `StepList` ngang đã bỏ vì `timeline` thay. Rà soát ReUI lần hai ở
+`ra-soat-reui.md` (block Timeline, Navbar, kho ví dụ; mục đã bác kèm lý do). Chữ
 người nhập dài (ý, lý do, câu trích) ra đoạn văn trong `ItemContent` vì `ItemTitle` và
 `ItemDescription` cắt dòng; lời giải thích không đặt ở `CardDescription` vì nó ẩn dưới
 640px — hai chỗ này dùng cách có sẵn, không làm biến thể ở lượt này. Đã tra ReUI

@@ -649,3 +649,40 @@ export const DO_PHU_HET_HAN: HangDoPhu[] = DO_PHU_DANG_MO.map((h) => ({
 	...h,
 	theoNgay: [h.theoNgay[0] ?? 0, Math.min(100, (h.theoNgay[0] ?? 0) + 45)],
 }));
+
+export type HuongChenh = "up" | "down" | "neutral";
+
+export type ChenhLechSoLieu = {
+	soLieuId: string;
+	giaTri: string;
+	huong: HuongChenh;
+};
+
+export const CHENH_LECH_SO_LIEU: ChenhLechSoLieu[] = [
+	{ soLieuId: "doanh-thu", giaTri: "−8 điểm", huong: "down" },
+	{ soLieuId: "hop-dong", giaTri: "cao nhất", huong: "up" },
+	{ soLieuId: "quay-lai", giaTri: "2025: 70%", huong: "down" },
+	{ soLieuId: "giao-hang", giaTri: "như 2025", huong: "neutral" },
+];
+
+export type MocHoiY = {
+	id: "mo" | "han" | "gom" | "cong-bo";
+	ten: string;
+	luc: string;
+};
+
+export const MOC_HOI_Y: MocHoiY[] = [
+	{ id: "mo", ten: "Mở", luc: "11:00 07/12" },
+	{ id: "han", ten: "Hạn", luc: "17:00 08/12" },
+	{ id: "gom", ten: "Gom", luc: "09–13/12" },
+	{ id: "cong-bo", ten: "Công bố", luc: "14/12" },
+];
+
+export type HanhTrinhY = { yId: string; gopLuc: string; vaoChuDeLuc: string };
+
+export const HANH_TRINH_Y_CUA_TOI: HanhTrinhY[] = [
+	{ yId: "toi-1", gopLuc: "11:40 07/12", vaoChuDeLuc: "09/12" },
+	{ yId: "toi-2", gopLuc: "16:05 07/12", vaoChuDeLuc: "10/12" },
+];
+
+export const KET_LUAN_LUC = "14/12";

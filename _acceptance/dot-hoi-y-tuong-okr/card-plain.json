@@ -39,11 +39,11 @@
     },
     {
       "id": "AC-11",
-      "p": "Sẽ chạy trên màn thật: quản trị mở bằng sheet; thành viên thấy dải pha, câu hỏi, lời mở gập, con số và ô góp ngay trong màn hình đầu của điện thoại, góp ý, bấm «Tôi cũng nghĩ vậy» trên 10 ý đầu rồi «Hiện thêm»; tab «Hỏi ý» luôn thấy được; đủ trạng thái trống, đang tải, lỗi."
+      "p": "Sẽ chạy trên màn thật: quản trị mở bằng sheet; thành viên thấy tab «Hỏi ý» gắn «Mới» khi chưa góp, dải pha ngang bốn mốc, câu hỏi, lời mở gập, thẻ con số có chênh lệch và ô góp ngay trong màn hình đầu của điện thoại, góp ý, bấm «Tôi cũng nghĩ vậy» trên 10 ý đầu rồi «Hiện thêm»; đủ trạng thái trống, đang tải, lỗi."
     },
     {
       "id": "AC-12",
-      "p": "Sẽ chạy trên màn thật phần của CEO: chọn nhiều ý rồi đưa vào chủ đề, kết luận có dòng đếm, bấm điều thiếu thì nhảy tới đúng chủ đề, công bố; trang kết quả hiện lý do đủ không cắt và nút «Tôi hiểu vì sao»."
+      "p": "Sẽ chạy trên màn thật phần của CEO: tab mang số chủ đề chưa kết luận, chọn nhiều ý rồi đưa vào chủ đề, mục lục chủ đề ở máy tính và thanh điều thiếu ở điện thoại, công bố; người góp thấy hành trình của từng ý tới kết luận và mục tiêu nháp, lý do đủ, nút «Tôi hiểu vì sao»."
     },
     {
       "id": "AC-13",
@@ -225,6 +225,10 @@
     {
       "id": "d-20260929T102113Z-9",
       "p": "Áp bảy sửa của rà soát UX: tab luôn thấy, ô góp lên màn đầu điện thoại, lý do không cắt, gom kiểu chọn nhiều, dải pha, lối tắt tới điều thiếu, ý đồng nghiệp xáo thứ tự theo người xem — đổi lại thêm ba biến thể giao diện dùng chung (heatmap, thanh lưu có danh sách, dải bước ngang) và sửa thanh tab OKR thật."
+    },
+    {
+      "id": "d-20260929T105141Z-10",
+      "p": "Dùng timeline của ReUI cho dải pha và hành trình từng ý, huy hiệu trên tab «Hỏi ý», mục lục chủ đề cho CEO ở máy tính, thẻ con số có chênh lệch — đổi lại cài hai thành phần ReUI miễn phí vào bộ giao diện chung và thêm một thủ tục đọc nhẹ."
     }
   ]
 }

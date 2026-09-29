@@ -1,5 +1,8 @@
 "use client";
 
+import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
+import RadioButton from "@carbon/icons-react/es/RadioButton";
+import RadioButtonChecked from "@carbon/icons-react/es/RadioButtonChecked";
 import Renew from "@carbon/icons-react/es/Renew";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
@@ -15,6 +18,7 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "@crm/ui/components/collapsible";
+import { StatGroup } from "@crm/ui/components/dashboard";
 import {
 	Empty,
 	EmptyContent,
@@ -23,23 +27,25 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { Heatmap } from "@crm/ui/components/heatmap";
-import { Icon } from "@crm/ui/components/icon";
+import { type CarbonIcon, Icon } from "@crm/ui/components/icon";
 import {
 	Item,
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
-	ItemTitle,
 } from "@crm/ui/components/item";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import { StepList, StepListItem } from "@crm/ui/components/step-list";
+import { StatCard } from "@crm/ui/components/stat-card";
 import { type ReactNode, useState } from "react";
 import {
 	BO_SUNG_KHI_DU,
+	CHENH_LECH_SO_LIEU,
 	type ChuDeMau,
 	type HangDoPhu,
 	HOI_Y,
 	type KetLuan,
+	MOC_HOI_Y,
+	type MocHoiY,
 	NGAY_DO_PHU,
 	NHAN_KET_LUAN,
 	SO_LIEU,
@@ -85,39 +91,86 @@ export function danhGiaCau(
 
 export type Pha = "dang-mo" | "dang-gom" | "da-cong-bo";
 
-const BUOC_PHA: { pha: Pha; ten: string }[] = [
-	{ pha: "dang-mo", ten: "Đang mở" },
-	{ pha: "dang-gom", ten: "Đang gom" },
-	{ pha: "da-cong-bo", ten: "Đã công bố" },
-];
+type TinhTrangMoc = "qua" | "hien-tai" | "chua";
+
+const MOC_HIEN_TAI = {
+	"dang-mo": "mo",
+	"dang-gom": "gom",
+	"da-cong-bo": "cong-bo",
+} satisfies Record<Pha, MocHoiY["id"]>;
 
 const DONG_PHA = {
-	"dang-mo": `Hạn ${HOI_Y.han} · ${HOI_Y.conLai}`,
-	"dang-gom": `Đã hết hạn ${HOI_Y.han} · ${HOI_Y.daGop}/${HOI_Y.thanhVien} người đã góp`,
+	"dang-mo": `${HOI_Y.conLai} tới hạn`,
+	"dang-gom": `${HOI_Y.daGop}/${HOI_Y.thanhVien} người đã góp`,
 	"da-cong-bo": `Công bố ${HOI_Y.congBoLuc}`,
 } satisfies Record<Pha, string>;
+
+const NHAN_TINH_TRANG_MOC = {
+	qua: "đã qua",
+	"hien-tai": "đang ở đây",
+	chua: "chưa tới",
+} satisfies Record<TinhTrangMoc, string>;
+
+function tinhTrangMoc(pha: Pha, i: number): TinhTrangMoc {
+	const hienTai = MOC_HOI_Y.findIndex((m) => m.id === MOC_HIEN_TAI[pha]);
+	if (i < hienTai) return "qua";
+	return i === hienTai ? "hien-tai" : "chua";
+}
+
+const ICON_MOC = {
+	qua: CheckmarkFilled,
+	"hien-tai": RadioButtonChecked,
+	chua: RadioButton,
+} satisfies Record<TinhTrangMoc, CarbonIcon>;
 
 export function DaiPha({ pha }: { pha: Pha }) {
 	return (
 		<div className="flex flex-col gap-2" data-khoi="dai-pha" data-pha={pha}>
-			<StepList label="Pha của lần hỏi ý" tinh>
-				{BUOC_PHA.map((b, i) => (
-					<StepListItem
-						key={b.pha}
-						step={i + 1}
-						title={
-							b.pha === pha ? (
-								<span className="flex items-center gap-2" data-buoc-hien-tai>
-									{b.ten}
-									<Badge variant="secondary">Bây giờ</Badge>
+			<div className="overflow-x-auto" data-khung-moc>
+				<ol aria-label="Các mốc của lần hỏi ý" className="flex min-w-max">
+					{MOC_HOI_Y.map((m, i) => {
+						const tt = tinhTrangMoc(pha, i);
+						const cuoi = i === MOC_HOI_Y.length - 1;
+						return (
+							<li
+								aria-current={tt === "hien-tai" ? "step" : undefined}
+								className={
+									tt === "chua"
+										? "flex min-w-0 flex-1 flex-col gap-1 pe-2 text-muted-foreground"
+										: "flex min-w-0 flex-1 flex-col gap-1 pe-2"
+								}
+								data-moc={m.id}
+								data-tinh-trang={tt}
+								key={m.id}
+							>
+								<span className="text-muted-foreground text-xs tabular-nums">
+									{m.luc}
 								</span>
-							) : (
-								b.ten
-							)
-						}
-					/>
-				))}
-			</StepList>
+								<span className="flex items-center gap-1">
+									<Icon icon={ICON_MOC[tt]} />
+									{tt === "hien-tai" ? (
+										<Badge variant="secondary">Bây giờ</Badge>
+									) : null}
+									{cuoi ? null : (
+										<span
+											aria-hidden="true"
+											className={
+												tt === "qua"
+													? "flex-1 border-foreground border-t"
+													: "flex-1 border-border border-t border-dashed"
+											}
+										/>
+									)}
+								</span>
+								<span className="text-sm">
+									{m.ten}
+									<span className="sr-only">, {NHAN_TINH_TRANG_MOC[tt]}</span>
+								</span>
+							</li>
+						);
+					})}
+				</ol>
+			</div>
 			<ItemDescription data-dong-pha>
 				{DONG_PHA[pha]} · Người chọn:{" "}
 				<span translate="no">{HOI_Y.nguoiChon.ten}</span>
@@ -158,59 +211,59 @@ export function LoiNguoiNoi({
 export function LoiMo() {
 	const [mo, setMo] = useState(false);
 	return (
-		<Card data-khoi="loi-mo">
-			<CardContent>
-				<Collapsible onOpenChange={setMo} open={mo}>
-					{mo ? null : (
-						<p className="line-clamp-3 text-sm" translate="no">
-							{HOI_Y.loiMo}
-						</p>
-					)}
-					<CollapsibleContent>
-						<div className="flex flex-col gap-3">
-							<VanBan>{HOI_Y.loiMo}</VanBan>
-							<ItemGroup data-khoi="ghi-chu-con-so">
-								{SO_LIEU.map((s) => (
-									<Item key={s.id} size="xs">
-										<ItemContent>
-											<ItemDescription>
-												<span translate="no">{s.nhan}</span> —{" "}
-												<span translate="no">{s.ghiChu}</span>
-											</ItemDescription>
-										</ItemContent>
-									</Item>
-								))}
-							</ItemGroup>
-						</div>
-					</CollapsibleContent>
-					<div className="flex flex-wrap items-center gap-x-2">
-						<ItemDescription>
-							Lời mở của <span translate="no">{HOI_Y.nguoiChon.ten}</span>
-						</ItemDescription>
-						<CollapsibleTrigger asChild>
-							<Button size="xs" variant="link">
-								{mo ? "Thu gọn" : "Đọc thêm"}
-							</Button>
-						</CollapsibleTrigger>
+		<div className="flex flex-col gap-3" data-khoi="loi-mo">
+			<Collapsible onOpenChange={setMo} open={mo}>
+				{mo ? null : (
+					<p className="line-clamp-3 text-sm" translate="no">
+						{HOI_Y.loiMo}
+					</p>
+				)}
+				<CollapsibleContent>
+					<div className="flex flex-col gap-3">
+						<VanBan>{HOI_Y.loiMo}</VanBan>
+						<ItemGroup data-khoi="ghi-chu-con-so">
+							{SO_LIEU.map((s) => (
+								<Item key={s.id} size="xs">
+									<ItemContent>
+										<ItemDescription>
+											<span translate="no">{s.nhan}</span> —{" "}
+											<span translate="no">{s.ghiChu}</span>
+										</ItemDescription>
+									</ItemContent>
+								</Item>
+							))}
+						</ItemGroup>
 					</div>
-				</Collapsible>
-				<div
-					className="grid grid-cols-2 gap-2 lg:grid-cols-4"
-					data-khoi="the-con-so"
-				>
-					{SO_LIEU.map((s) => (
-						<Item key={s.id} size="xs" variant="outline">
-							<ItemContent>
-								<ItemDescription translate="no">{s.nhan}</ItemDescription>
-								<ItemTitle className="tabular-nums" translate="no">
-									{s.giaTri}
-								</ItemTitle>
-							</ItemContent>
-						</Item>
-					))}
+				</CollapsibleContent>
+				<div className="flex flex-wrap items-center gap-x-2">
+					<ItemDescription>
+						Lời mở của <span translate="no">{HOI_Y.nguoiChon.ten}</span>
+					</ItemDescription>
+					<CollapsibleTrigger asChild>
+						<Button size="xs" variant="link">
+							{mo ? "Thu gọn" : "Đọc thêm"}
+						</Button>
+					</CollapsibleTrigger>
 				</div>
-			</CardContent>
-		</Card>
+			</Collapsible>
+			<StatGroup data-khoi="the-con-so">
+				{SO_LIEU.map((s) => {
+					const chenh = CHENH_LECH_SO_LIEU.find((c) => c.soLieuId === s.id);
+					return (
+						<StatCard
+							delta={
+								chenh
+									? { value: chenh.giaTri, direction: chenh.huong }
+									: undefined
+							}
+							key={s.id}
+							label={<span translate="no">{s.nhan}</span>}
+							value={<span translate="no">{s.giaTri}</span>}
+						/>
+					);
+				})}
+			</StatGroup>
+		</div>
 	);
 }
 

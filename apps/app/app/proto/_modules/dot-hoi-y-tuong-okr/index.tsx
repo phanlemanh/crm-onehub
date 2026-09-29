@@ -1,7 +1,7 @@
 "use client";
 
 import { KhungUngDung } from "../ban-mau-okr/phan-chung";
-import { ChonMan, type HinhChon } from "./chon";
+import { ChonMan, demChuaKetLuan, type HinhChon } from "./chon";
 import { HOI_Y, NGUOI } from "./du-lieu";
 import { GomMan } from "./gom";
 import { GopMan, type HinhGop } from "./gop";
@@ -76,6 +76,15 @@ function NoiDung({ m }: { m: Man }) {
 	}
 }
 
+function nhanTabHoiY(m: Man): string | undefined {
+	if (m.man === "gop" && m.hinh === "chua-gop") return "Mới";
+	if (m.man === "chon") {
+		const con = demChuaKetLuan(m.hinh);
+		return con > 0 ? String(con) : undefined;
+	}
+	return undefined;
+}
+
 export function DotHoiYTuongOkrMau({ state }: { state: string }) {
 	const canh: CanhMan =
 		state in CANH_THEO_STATE
@@ -85,7 +94,9 @@ export function DotHoiYTuongOkrMau({ state }: { state: string }) {
 	return (
 		<KhungUngDung
 			chuKy={HOI_Y.chuKy}
+			congCuCungHangTab
 			key={state}
+			nhanTabHoiY={nhanTabHoiY(canh.m)}
 			nguoi={canh.nguoi}
 			trang="hoi-y"
 			vai="day-du"
