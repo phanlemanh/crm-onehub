@@ -39,6 +39,7 @@ import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -97,7 +98,9 @@ function Ten({ children }: { children: string }) {
 }
 
 function TieuDeViec({ viec }: { viec: ViecOkr }) {
-	const m = okrMessages(useLocale()).viecCuaToi.cau;
+	const locale = useLocale();
+	const m = okrMessages(locale).viecCuaToi.cau;
+	const g = okrGioiHanMessages(locale).viec;
 	switch (viec.loai) {
 		case "okr-cap-nhat":
 			return ghep(m.capNhat, { n: viec.soKr });
@@ -124,14 +127,28 @@ function TieuDeViec({ viec }: { viec: ViecOkr }) {
 				{ capNhat: viec.capNhat, binhLuan: viec.binhLuan },
 			);
 		case "okr-cho-duyet":
-			return viec.nguoiGui === null
-				? m.choDuyet
-				: ghep(m.choDuyetCuaNguoi, { nguoi: <Ten>{viec.nguoiGui}</Ten> });
+			return ghep(g.choDuyet, { ten: <Ten>{viec.nhan}</Ten> });
 		case "okr-tra-lai":
-			return ghep(m.traLai, {
+			return ghep(g.traLai, {
 				nguoi: <Ten>{viec.nguoiTraLai}</Ten>,
-				lyDo: <Ten>{viec.lyDo}</Ten>,
+				ten: <Ten>{viec.nhan}</Ten>,
 			});
+	}
+}
+
+function MoTaViec({ viec }: { viec: ViecOkr }) {
+	const g = okrGioiHanMessages(useLocale()).viec;
+	switch (viec.loai) {
+		case "okr-cho-duyet":
+			return viec.nguoiGui === null ? null : (
+				<ItemDescription>
+					{ghep(g.nguoiGui, { nguoi: <Ten>{viec.nguoiGui}</Ten> })}
+				</ItemDescription>
+			);
+		case "okr-tra-lai":
+			return <ItemDescription translate="no">{viec.lyDo}</ItemDescription>;
+		default:
+			return <ItemDescription translate="no">{viec.nhan}</ItemDescription>;
 	}
 }
 
@@ -174,7 +191,7 @@ function DongViec({ viec }: { viec: ViecOkr }) {
 						<TieuDeViec viec={viec} />
 					</span>
 				</ItemTitle>
-				<ItemDescription translate="no">{viec.nhan}</ItemDescription>
+				<MoTaViec viec={viec} />
 			</ItemContent>
 			<ItemActions>
 				<DichViec viec={viec} />

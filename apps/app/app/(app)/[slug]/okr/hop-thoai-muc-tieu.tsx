@@ -34,6 +34,7 @@ import {
 	TokenFieldAction,
 	TokenFieldItem,
 } from "@crm/ui/components/token-field";
+import { MUC_HIEN_THI, type MucHienThi } from "@crm/validation/okr-hien-thi";
 import {
 	type CapMucTieu,
 	type DonViMucTieu,
@@ -48,6 +49,7 @@ import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
+import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { MucTieu } from "./kieu";
@@ -98,6 +100,7 @@ export function HopThoaiMucTieu({
 	const m = okrMessages(locale);
 	const h = m.hopThoai;
 	const tm = okrCanhKrMessages(locale).mau.tuMau;
+	const g = okrGioiHanMessages(locale).hienThi;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const openRecord = useOpenRecord();
@@ -125,6 +128,7 @@ export function HopThoaiMucTieu({
 	const [chuChon, setChuChon] = useState(dau.chuChon);
 	const [thamGia, setThamGia] = useState<string[]>(dau.thamGia);
 	const [viSao, setViSao] = useState(dau.viSao);
+	const [hienThi, setHienThi] = useState<MucHienThi>("cong-khai");
 	const [loi, setLoi] = useState<string | null>(null);
 	const coThayDoi =
 		cap !== dau.cap ||
@@ -132,7 +136,8 @@ export function HopThoaiMucTieu({
 		loai !== dau.loai ||
 		chuChon !== dau.chuChon ||
 		!cungTapHop(thamGia, dau.thamGia) ||
-		viSao !== dau.viSao;
+		viSao !== dau.viSao ||
+		hienThi !== "cong-khai";
 
 	const chu = chuChon || me.data?.id || "";
 	const tenNguoi = (id: string) =>
@@ -228,6 +233,7 @@ export function HopThoaiMucTieu({
 				ownerUserId: chu,
 				participantIds: nguoiThamGia,
 				whyNow: viSao,
+				hienThi,
 			});
 			return;
 		}
@@ -399,6 +405,35 @@ export function HopThoaiMucTieu({
 										</div>
 									) : null}
 								</Field>
+								{yeuCau.loai === "tao" ? (
+									<Field>
+										<FieldLabel htmlFor={`${ma}-hien-thi`}>
+											{g.tieuDe}
+										</FieldLabel>
+										<Select
+											value={hienThi}
+											onValueChange={(v) => {
+												const moi = MUC_HIEN_THI.find((x) => x === v);
+												if (moi) setHienThi(moi);
+											}}
+										>
+											<SelectTrigger
+												id={`${ma}-hien-thi`}
+												aria-describedby={`${ma}-hien-thi-mo-ta`}
+												data-o="muc-hien-thi"
+											>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="cong-khai">{g.congKhai}</SelectItem>
+												<SelectItem value="gioi-han">{g.gioiHan}</SelectItem>
+											</SelectContent>
+										</Select>
+										<FieldDescription id={`${ma}-hien-thi-mo-ta`}>
+											{hienThi === "gioi-han" ? g.khiTao : g.congKhaiMoTa}
+										</FieldDescription>
+									</Field>
+								) : null}
 								<Field>
 									<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
 									<Textarea
