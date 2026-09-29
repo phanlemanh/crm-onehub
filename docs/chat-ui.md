@@ -84,6 +84,7 @@ surfaces:
 | Scrolling the transcript | `Conversation` + `ConversationScrollButton` (in tree) |
 | Empty transcript | `ConversationEmptyState` (in tree) |
 | Clickable prompt starters | `Suggestions` + `Suggestion` — **fetch first** |
+| Approving a change the AI proposes (accept, edit, reject) | `ProposedChange` in `packages/ui`, built on `Confirmation` |
 | "The agent is thinking" | `ThinkingIndicator` — see the orphan note below |
 
 "Fetch first" means the component is the right answer but is **not in the tree
@@ -109,26 +110,32 @@ AI Elements has no answer for these. They are not oversights to fix later.
 
 A verdict per component. Changing one means editing this table first.
 
-### Adopted — 14
+### Adopted — 15
 
 The chat spine plus the two growth areas the decision named. **Adopted is a
 verdict about direction, not a claim that the file is on disk** — see the next
 section for what is actually in the tree.
 
-`artifact` · `attachments` · `conversation` · `inline-citation` · `message` ·
-`model-selector` · `plan` · `prompt-input` · `reasoning` · `shimmer` · `sources` ·
-`suggestion` · `task` · `tool`
+`artifact` · `attachments` · `confirmation` · `conversation` · `inline-citation` ·
+`message` · `model-selector` · `plan` · `prompt-input` · `reasoning` · `shimmer` ·
+`sources` · `suggestion` · `task` · `tool`
+
+`confirmation` moved here on 2026-09-29 (`the-gop-y-okr`): the OKR assistant's
+suggestion cards and the contact fact suggestions are approvals of a change the
+AI proposes, which is the job `Confirmation` exists for. `ProposedChange` wraps it
+so both surfaces share one card.
 
 `sources` and `inline-citation` are the highest-value ones and the least
 started: `lib/agent-transcript.ts` already exports `sourcesOf()`, it is covered
 by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 
-### What is in the tree today — 4
+### What is in the tree today — 5
 
-`packages/ui/src/components/ai-elements/` holds exactly four files:
+`packages/ui/src/components/ai-elements/` holds exactly five files:
 
 | File | Why it is here |
 | --- | --- |
+| `confirmation.tsx` | imported by `proposed-change.tsx`, which the OKR suggestion column and the contact fact suggestions use |
 | `message.tsx` | imported by the record sheet's Agent tab and the builder |
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
@@ -148,7 +155,7 @@ commit is **not** a complete change — the component has to reach a screen in
 the same change, or the gate blocks the push. That is the intended friction:
 the register says which component is right, the gate says it may not sit unused.
 
-### Available — 7
+### Available — 6
 
 Not installed, no ceremony needed. When the need appears, run the CLI — then
 wire it in, per the paragraph above.
@@ -156,7 +163,6 @@ wire it in, per the paragraph above.
 | Component | The need |
 | --- | --- |
 | `chain-of-thought` | Reasoning grows into named steps with results. |
-| `confirmation` | A tool call needs the rep to approve it first. |
 | `context` | Token usage or cost becomes visible. |
 | `queue` | Queued messages or todos appear in the transcript. |
 | `checkpoint` | A conversation can be rewound to an earlier turn. |
@@ -188,7 +194,7 @@ present is not evidence that it is supported. `ThinkingIndicator` —
 ## Local divergence, and re-applying it
 
 Several vendored files need edits to satisfy `docs/design.md` and
-`locale-provider`. The counts below are for the four files in the tree today;
+`locale-provider`. The counts below are for the five files in the tree today;
 the divergence ledger of record is
 `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, which carries one entry per
 file with a fingerprint of the diverging lines:
@@ -203,6 +209,11 @@ file with a fingerprint of the diverging lines:
 - 2 CSS properties added to `ConversationContent` so it drops off-screen layout
   the way `MessageScroller` does. Without them the transcript at 500 turns is
   **32× slower**; measured in a real browser, not a hand-copied page.
+- `confirmation` drops its four upstream `//` comments and the `className` that
+  resized `ConfirmationAction`; it uses the `sm` size of `Button` instead. It was
+  pulled in a scratch directory with this repo's `components.json`, because
+  running `add` in `packages/ui` stops to ask about overwriting `alert.tsx` and
+  `button.tsx`.
 
 Whichever files a later phase pulls back in bring their own divergences, and
 they belong in that same ledger.

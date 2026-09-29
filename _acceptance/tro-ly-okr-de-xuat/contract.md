@@ -91,6 +91,7 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 ### Known limits (Cổng Bằng chứng, 2026-09-29)
 
+- E24: độ trễ góp ý khai mã thoát 1 là giới hạn đã biết (chủ kho chọn 29/09 khi ghim lại cho lượt `the-gop-y-okr`): độ trễ phụ thuộc tải phía model, ngưỡng 8 s / 15 s của AC-14 không chặn gộp; pin báo khi lọt ngưỡng trở lại.
 - Ngoài-1: báo cáo kiểm luật kho (`rang/luat-kho.mjs`) kết luận luật «không viết hai lần một đơn vị» đạt chỉ vì không phán quyết tay nào chứa chữ «TRÙNG»; dòng `1_000` ở thẻ số đo cùng nghĩa với giây của API nhưng nhãn tránh chữ đó.
 - Ngoài-4: bộ kiểm góp ý (`apps/agent/evals/okr/gop-y.eval.ts`) tự khai lại đơn vị phút thay vì nhập `MINUTE_MS` dùng chung.
 - Ngoài-5: phán quyết tay cho `NGAY_MS` trong cấu hình kiểm luật kho không khớp dòng nào, vì tệp cấu hình bị bỏ khỏi phần quét số.

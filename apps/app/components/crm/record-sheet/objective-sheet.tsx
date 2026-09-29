@@ -122,7 +122,9 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
 	const [hoi, setHoi] = useState<"cong-bo" | "bo" | "sua" | null>(null);
+	const [krMo, setKrMo] = useState<string | null>(null);
 	const dongHoi = () => setHoi(null);
+	const krDangMo = mt.keyResults.find((k) => k.id === krMo) ?? null;
 	const congBo = useMutation(
 		trpc.okr.publishObjective.mutationOptions(
 			useXong(mt.id, m.daCongBo, dongHoi),
@@ -191,7 +193,24 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 				}}
 			/>
 			{hoi === "sua" ? (
-				<HopThoaiMucTieu yeuCau={{ loai: "sua", mucTieu: mt }} dong={dongHoi} />
+				<HopThoaiMucTieu
+					yeuCau={{ loai: "sua", mucTieu: mt }}
+					dong={dongHoi}
+					moKr={(id) => {
+						setHoi(null);
+						setKrMo(id);
+					}}
+				/>
+			) : null}
+			{krDangMo ? (
+				<HopThoaiKr
+					objectiveId={mt.id}
+					mucTieu={mt}
+					kr={krDangMo}
+					chuMacDinh={mt.owner.id}
+					suaDuocCot={mt.canEdit}
+					dong={() => setKrMo(null)}
+				/>
 			) : null}
 		</>
 	);

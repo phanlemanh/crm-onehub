@@ -96,6 +96,8 @@
 	--container-page-wide: 1120px;
 	--container-narrow: 560px;
 	--container-sheet: 640px;
+	--container-assist: 800px;
+	--container-assist-rail: 380px;
 	--color-dark-card: #171717;
 	--color-dark-border: #2a2a2a;
 	--color-dark-ring: #40be96;
