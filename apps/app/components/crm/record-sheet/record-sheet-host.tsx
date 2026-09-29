@@ -7,6 +7,7 @@ import { DetailSheet } from "@/components/detail-sheet";
 import { CompanySheet } from "./company-sheet";
 import { ContactSheet } from "./contact-sheet";
 import { DealSheet } from "./deal-sheet";
+import { KrSheet } from "./kr-sheet";
 import { ObjectiveSheet } from "./objective-sheet";
 import { PlanSheet } from "./plan-sheet";
 import { type RecordRef, recordKey, useRecordStack } from "./record-stack";
@@ -50,6 +51,10 @@ export function RecordSheetHost() {
 
 				{shown?.kind === "so-kr" ? (
 					<SoKrSheet key={recordKey(shown)} keyResultId={shown.id} />
+				) : null}
+
+				{shown?.kind === "kr" ? (
+					<KrSheet key={recordKey(shown)} keyResultId={shown.id} />
 				) : null}
 			</DetailSheet>
 

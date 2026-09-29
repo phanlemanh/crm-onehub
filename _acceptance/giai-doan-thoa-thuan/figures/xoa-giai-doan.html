@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xoá giai đoạn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1000px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 800px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình 2 · Flowchart · giai-doan-thoa-thuan</p>
+    <h1>Xoá một giai đoạn: ba chỗ rẽ</h1>
+    <p class="sub">Máy chủ hỏi hai câu trước khi xoá. Giai đoạn còn thoả thuận thì phải chuyển hết sang một giai đoạn cùng loại, trong cùng một transaction với lệnh xoá.</p>
+
+    <svg viewBox="0 0 960 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÌNH 2 · XOÁ GIAI ĐOẠN · d-…-4 · AC-5 · AC-6 · AC-7</text>
+
+      <line x1="320" y1="120" x2="320" y2="152" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="448" y1="208" x2="592" y2="208" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="320" y1="264" x2="320" y2="304" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="448" y1="360" x2="592" y2="360" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="320" y1="416" x2="320" y2="464" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="320" y1="528" x2="320" y2="576" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="480" y1="648" x2="592" y2="648" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="508" y="186" width="24" height="14" rx="2" fill="#fafafa"/>
+      <text x="520" y="197" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ</text>
+      <rect x="328" y="276" width="40" height="14" rx="2" fill="#fafafa"/>
+      <text x="348" y="287" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG</text>
+      <rect x="500" y="338" width="40" height="14" rx="2" fill="#fafafa"/>
+      <text x="520" y="349" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG</text>
+      <rect x="328" y="432" width="24" height="14" rx="2" fill="#fafafa"/>
+      <text x="340" y="443" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ</text>
+      <rect x="488" y="626" width="96" height="14" rx="2" fill="#fafafa"/>
+      <text x="536" y="637" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LỖI GIỮA CHỪNG</text>
+
+      <rect x="176" y="72" width="288" height="48" rx="24" fill="#fafafa"/>
+      <rect x="176" y="72" width="288" height="48" rx="24" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị bấm Xoá trên giai đoạn S</text>
+
+      <polygon points="320,152 448,208 320,264 192,208" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="204" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Là giai đoạn sống cuối</text>
+      <text x="320" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">của loại?</text>
+
+      <rect x="592" y="176" width="288" height="64" rx="6" fill="#fafafa"/>
+      <rect x="592" y="176" width="288" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="832" y="184" width="40" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="852" y="196" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-7</text>
+      <text x="608" y="212" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Xoá bị khoá, nói lý do</text>
+
+      <polygon points="320,304 448,360 320,416 192,360" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">S còn N thoả thuận</text>
+      <text x="320" y="372" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(gồm đã lưu trữ)?</text>
+
+      <rect x="592" y="328" width="288" height="64" rx="6" fill="#fafafa"/>
+      <rect x="592" y="328" width="288" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="832" y="336" width="40" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="852" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-5</text>
+      <text x="608" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hỏi lại → đặt <tspan font-family="'Geist Mono', monospace" font-size="11">archivedAt</tspan></text>
+
+      <rect x="176" y="464" width="288" height="64" rx="6" fill="#fafafa"/>
+      <rect x="176" y="464" width="288" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="416" y="472" width="40" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="436" y="484" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-6</text>
+      <text x="192" y="492" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hộp thoại “Còn N”</text>
+      <text x="192" y="512" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">+ chọn đích cùng loại</text>
+
+      <rect x="160" y="576" width="320" height="144" rx="6" fill="#fafafa"/>
+      <rect x="160" y="576" width="320" height="144" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="172" y="584" width="116" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="230" y="596" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MỘT TRANSACTION</text>
+      <rect x="432" y="584" width="40" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="452" y="596" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-6</text>
+      <text x="176" y="628" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chuyển N thoả thuận</text>
+      <text x="176" y="648" fill="#171717" font-size="12" font-family="'Geist', sans-serif">(mỗi cái 1 dòng lịch sử, 1 sự kiện)</text>
+      <text x="176" y="676" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-size="11">closedAt</tspan> giữ nguyên,</text>
+      <text x="176" y="700" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">rồi đặt <tspan font-family="'Geist Mono', monospace" font-size="11">archivedAt</tspan> cho S</text>
+
+      <rect x="592" y="616" width="288" height="64" rx="6" fill="#fafafa"/>
+      <rect x="592" y="616" width="288" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="832" y="624" width="40" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="852" y="636" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-6</text>
+      <text x="608" y="652" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không gì đổi, không sự kiện</text>
+
+      <line x1="40" y1="752" x2="920" y2="752" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="780" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="128" y="771" width="24" height="10" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="780" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bắt đầu</text>
+      <polygon points="232,768 244,776 232,784 220,776" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="252" y="780" fill="#575757" font-size="11" font-family="'Geist', sans-serif">máy chủ kiểm</text>
+      <rect x="356" y="771" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="380" y="780" fill="#575757" font-size="11" font-family="'Geist', sans-serif">tất cả hoặc không gì cả</text>
+      <rect x="548" y="770" width="36" height="14" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="566" y="780" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-n</text>
+      <text x="592" y="780" fill="#575757" font-size="11" font-family="'Geist', sans-serif">tiêu chí mà nút đó hứa</text>
+    </svg>
+
+    <footer>Hình 2 · giai-doan-thoa-thuan · sổ quyết định d-…-4 · 2026-09-29</footer>
+  </div>
+</body>
+</html>

@@ -308,10 +308,6 @@ const GHIM = {
 	"deals:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 	"deals:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 	"deals:bulk.closeLost": ["Chốt 1 là không thành", "Chốt 12 là không thành"],
-	"deals:bulk.markUnqualified": [
-		"Đánh dấu 1 là chưa phù hợp",
-		"Đánh dấu 12 là chưa phù hợp",
-	],
 	"record-sheet:company.noContactsBody": [
 		"Mọi người bạn trao đổi ở 1 nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.",
 		"Mọi người bạn trao đổi ở 12 nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.",

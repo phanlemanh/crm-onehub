@@ -33,6 +33,7 @@ import {
 } from "@/lib/tai-lieu-man";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { type NguonCuaTrang, NguonTrang } from "./nguon-trang";
+import { NhacToi } from "./nhac-toi";
 
 export type TrangDoc = {
 	slug: string;
@@ -143,6 +144,7 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 								</div>
 							</>
 						)}
+						{trang.choLanDau ? null : <NhacToi slug={trang.slug} />}
 					</article>
 					<aside className="flex w-full shrink-0 flex-col gap-5 xl:sticky xl:top-4 xl:w-72 xl:self-start">
 						<ReaderToc headings={mucLuc} label={d.mucLuc} />

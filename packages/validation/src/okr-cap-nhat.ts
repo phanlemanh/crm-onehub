@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { bangChungVao } from "./okr-canh-kr";
 import { type KieuKr, soKr } from "./okr-kr";
 
 export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
@@ -25,6 +26,7 @@ export const mucCapNhat = z
 			.string()
 			.trim()
 			.max(GHI_CHU_TOI_DA, { error: LOI_KHUON_CAP_NHAT.ghiChu }),
+		bangChung: bangChungVao.optional(),
 	})
 	.strict();
 export const moCapNhatInput = z.object({ entry: z.enum(LOI_VAO) }).strict();

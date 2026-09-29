@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
-import { DealStage, db, RateSource } from "@crm/db";
+import { db, RateSource } from "@crm/db";
 import { normalizeCurrency } from "@crm/db/currency";
+import { GIAI_DOAN_GOC } from "@crm/db/giai-doan";
 import { SETTINGS_ID, writeReportingCurrency } from "@crm/db/settings";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { ActivityStampService } from "../src/crm/activity-stamp.service";
@@ -453,8 +454,8 @@ describe("the dashboard only values what it can convert", () => {
 		await db.user.deleteMany({ where: { id: analystId } });
 	});
 
-	async function stale(name: string, stage: DealStage) {
-		const closed = stage === DealStage.CLOSED_WON;
+	async function stale(name: string, stage: string) {
+		const closed = stage === GIAI_DOAN_GOC.CLOSED_WON;
 
 		return db.deal.create({
 			data: {
@@ -481,10 +482,10 @@ describe("the dashboard only values what it can convert", () => {
 			ownerId: analystId,
 			amountCents: 10_000,
 			currency: "USD",
-			stage: DealStage.CLOSED_WON,
+			stage: GIAI_DOAN_GOC.CLOSED_WON,
 		});
 
-		const unvalued = await stale("Stale win", DealStage.CLOSED_WON);
+		const unvalued = await stale("Stale win", GIAI_DOAN_GOC.CLOSED_WON);
 
 		const summary = await dashboard.summary(analystId, { scope: "me" });
 
@@ -504,7 +505,7 @@ describe("the dashboard only values what it can convert", () => {
 			currency: "USD",
 		});
 
-		const unvalued = await stale("Stale open", DealStage.DEMO_BOOKED);
+		const unvalued = await stale("Stale open", GIAI_DOAN_GOC.DEMO_BOOKED);
 
 		const summary = await dashboard.summary(analystId, { scope: "me" });
 

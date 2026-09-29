@@ -1,19 +1,23 @@
-import type { DealStage } from "@crm/db/enums";
-import { ForeignText } from "@crm/ui/components/foreign-text";
+"use client";
+
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
-import { dealStagePresentation } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 
 export function DealStageIndicator({
 	stage,
 	className,
 }: {
-	stage: DealStage;
+	stage: string;
 	className?: string;
 }) {
-	const { label, tone } = dealStagePresentation(stage);
+	const giaiDoan = useGiaiDoan();
 	return (
-		<ForeignText lang="en">
-			<StatusIndicator tone={tone} label={label} className={className} />
-		</ForeignText>
+		<span translate="no">
+			<StatusIndicator
+				tone={giaiDoan.tone(stage)}
+				label={giaiDoan.label(stage)}
+				className={className}
+			/>
+		</span>
 	);
 }

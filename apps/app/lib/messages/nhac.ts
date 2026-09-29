@@ -15,6 +15,8 @@ const en = {
 	moTaIm: "{n} quiet plans",
 	nguoiTheoDoi: "Watchers",
 	chuaAi: "No one is watching this plan yet",
+	khoTaiLieu: "Documents",
+	banChoDuyet: "{so} proposals awaiting your review",
 };
 
 export type NhacMessages = typeof en;
@@ -34,6 +36,8 @@ const vi: NhacMessages = {
 	moTaIm: "{n} kế hoạch im",
 	nguoiTheoDoi: "Người theo dõi",
 	chuaAi: "Chưa ai theo dõi kế hoạch này",
+	khoTaiLieu: "Kho tài liệu",
+	banChoDuyet: "{so} bản đề xuất chờ bạn duyệt",
 };
 
 const BANG = { en, vi } satisfies Record<Locale, NhacMessages>;

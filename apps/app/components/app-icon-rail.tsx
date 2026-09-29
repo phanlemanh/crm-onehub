@@ -44,6 +44,7 @@ import {
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { mucRailChoVai } from "@/lib/pham-vi-man";
 import { useTRPC } from "@/lib/trpc/client";
+import { useHydrated } from "@/lib/use-hydrated";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 const ICON = {
@@ -213,16 +214,23 @@ export function AppIconRailFallback() {
 	);
 }
 
-export function AppIconRail() {
+export type RailWorkspace = { viewerRole: string | null };
+
+export function AppIconRail({
+	workspace,
+}: {
+	workspace: RailWorkspace | null;
+}) {
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
 	const { open, setOpen } = useMobileNav();
 	const prefetchSection = usePrefetchSection();
 	const m = khungUngDungMessages(useLocale());
 	const trpc = useTRPC();
-	const workspace = useQuery(trpc.workspace.get.queryOptions());
-	const viewerRole = workspace.data?.viewerRole ?? null;
-	const daBiet = workspace.data !== undefined;
+	const hydrated = useHydrated();
+	const workspaceQuery = useQuery(trpc.workspace.get.queryOptions());
+	const nguon = (hydrated ? workspaceQuery.data : undefined) ?? workspace;
+	const viewerRole = nguon?.viewerRole ?? null;
 
 	const items = useMemo(
 		() =>
@@ -238,7 +246,7 @@ export function AppIconRail() {
 			),
 		[workspaceUrl, m, viewerRole],
 	);
-	if (!daBiet) return <AppIconRailFallback />;
+	if (!nguon) return <AppIconRailFallback />;
 	const active = (item: RailItem) =>
 		mucDangMo(item.muc, pathname, workspaceUrl);
 	const inChat = items.some((item) => laMucHoiThoai(item.muc) && active(item));

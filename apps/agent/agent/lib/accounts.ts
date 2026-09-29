@@ -1,15 +1,8 @@
 import { ActivityType, db, EmailDirection } from "@crm/db";
-import { z } from "zod";
+import { parseStageChangeMeta } from "@crm/validation/giai-doan";
 import { isDerivedName } from "./names";
 
 const BODY_LIMIT = 4000;
-
-const stageChangeMeta = z
-	.object({
-		from: z.string().nullable().catch(null),
-		to: z.string().nullable().catch(null),
-	})
-	.catch({ from: null, to: null });
 
 export type AccountThread = {
 	subject: string | null;
@@ -157,7 +150,7 @@ export async function readCompanyHistory(
 				select: {
 					id: true,
 					name: true,
-					stage: true,
+					giaiDoan: { select: { label: true, kind: true } },
 					amount: true,
 					currency: true,
 					expectedCloseDate: true,
@@ -281,7 +274,7 @@ export async function readCompanyHistory(
 		notes,
 		stats: {
 			people: peopleCount,
-			openDeals: deals.filter((deal) => isOpen(deal.stage)).length,
+			openDeals: deals.filter((deal) => deal.giaiDoan.kind === "OPEN").length,
 			emails: emailCount,
 			meetings: meetingCount,
 			theyReplied: lastInbound !== null,
@@ -352,7 +345,7 @@ export async function readDealHistory(
 			id: true,
 			name: true,
 			description: true,
-			stage: true,
+			giaiDoan: { select: { label: true, kind: true } },
 			stageChangedAt: true,
 			amount: true,
 			currency: true,
@@ -467,6 +460,20 @@ export async function readDealHistory(
 				: Promise.resolve(null),
 		]);
 
+	const idGiaiDoan = new Set<string>();
+	for (const change of stageChanges) {
+		const meta = parseStageChangeMeta(change.meta);
+		if (meta?.from) idGiaiDoan.add(meta.from);
+		if (meta?.to) idGiaiDoan.add(meta.to);
+	}
+	const nhanGiaiDoan = new Map(
+		(
+			await db.dealStage.findMany({
+				where: { id: { in: [...idGiaiDoan] } },
+				select: { id: true, label: true },
+			})
+		).map((g) => [g.id, g.label]),
+	);
 	const now = new Date();
 
 	return {
@@ -474,8 +481,8 @@ export async function readDealHistory(
 			id: deal.id,
 			name: deal.name,
 			description: deal.description,
-			stage: deal.stage,
-			open: isOpen(deal.stage),
+			stage: deal.giaiDoan.label,
+			open: deal.giaiDoan.kind === "OPEN",
 			daysInStage: daysSince(deal.stageChangedAt, now),
 			stageChangedAt: deal.stageChangedAt.toISOString(),
 			amount: deal.amount === null ? null : Number(deal.amount),
@@ -495,10 +502,12 @@ export async function readDealHistory(
 			role,
 		})),
 		stageHistory: stageChanges.map((change) => {
-			const meta = stageChangeMeta.parse(change.meta);
+			const meta = parseStageChangeMeta(change.meta);
+			const ten = (id: string | null | undefined) =>
+				id ? (nhanGiaiDoan.get(id) ?? id) : null;
 			return {
-				from: meta.from,
-				to: meta.to,
+				from: ten(meta?.from),
+				to: ten(meta?.to),
 				at: change.createdAt.toISOString(),
 			};
 		}),
@@ -527,14 +536,6 @@ export async function readDealHistory(
 					: "Nobody is attached to this deal, so the correspondence here is the whole account's. Attaching the people on it would make this answer sharper."
 				: "Connected email and calendar history are outside this agent version's approved data sources.",
 	};
-}
-
-function isOpen(stage: string): boolean {
-	return (
-		stage !== "CLOSED_WON" &&
-		stage !== "CLOSED_LOST" &&
-		stage !== "UNQUALIFIED_TO_BUY"
-	);
 }
 
 async function recentNotes(
@@ -621,7 +622,7 @@ function toAccountMeeting(
 function toCompanyDeal(deal: {
 	id: string;
 	name: string;
-	stage: string;
+	giaiDoan: { label: string; kind: string };
 	amount: unknown;
 	currency: string;
 	expectedCloseDate: Date | null;
@@ -634,8 +635,8 @@ function toCompanyDeal(deal: {
 	return {
 		id: deal.id,
 		name: deal.name,
-		stage: deal.stage,
-		open: isOpen(deal.stage),
+		stage: deal.giaiDoan.label,
+		open: deal.giaiDoan.kind === "OPEN",
 		amount: deal.amount === null ? null : Number(deal.amount),
 		currency: deal.currency,
 		expectedCloseDate: deal.expectedCloseDate?.toISOString() ?? null,

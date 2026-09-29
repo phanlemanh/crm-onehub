@@ -1,9 +1,16 @@
+import {
+	guiGhiNhanInput,
+	themBangChungInput,
+	themViecInput,
+} from "@crm/validation/okr-canh-kr";
 import { MA_CHI_SO, PHAM_VI_CHI_SO } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
+import { luuMauInput, mauNoiDung } from "@crm/validation/okr-mau";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
 import { z } from "zod";
+import { OKR_MAU } from "./cau-hinh";
 
 const ma = z
 	.string()
@@ -90,6 +97,51 @@ const mucTieu = z.strictObject({
 
 const chuKy = z.strictObject({ ten: z.string().trim().min(2).max(80) });
 
+const tuanQuy = z.number().int().min(1).max(OKR_MAU.tuan.tuanMoiQuy);
+const tuanDaQua = z.number().int().min(1).max(OKR_MAU.tuan.soTuanCapNhat);
+
+const viecMau = z.strictObject({
+	ma,
+	kr: ma,
+	tieuDe: themViecInput.shape.tieuDe,
+	nguoiLam: ma,
+	hanTuan: tuanQuy.optional(),
+	xongTuan: tuanDaQua.optional(),
+});
+
+const bangChungMau = z.strictObject({
+	ma,
+	kr: ma,
+	url: themBangChungInput.shape.url,
+	ghiChu: themBangChungInput.shape.ghiChu,
+});
+
+const ghiNhanMau = z.strictObject({
+	ma,
+	mucTieu: ma,
+	kr: ma.optional(),
+	tacGia: ma,
+	nhan: guiGhiNhanInput.shape.nguoiNhan,
+	loiNhan: guiGhiNhanInput.shape.loiNhan,
+	tuan: tuanDaQua,
+});
+
+const mauOkr = z.strictObject({
+	ma,
+	ten: luuMauInput.shape.ten,
+	cap: luuMauInput.shape.cap,
+	donVi: z.array(ma),
+	noiDung: mauNoiDung,
+});
+
+const canhKr = z.strictObject({
+	viec: z.array(viecMau).min(1),
+	bangChung: z.array(bangChungMau),
+	ghiNhan: z.array(ghiNhanMau),
+	mau: z.array(mauOkr),
+	tuMau: z.array(z.strictObject({ mucTieu: ma, mau: ma })),
+});
+
 const boTho = z.strictObject({
 	congTy: z.string(),
 	chuKy: z.strictObject({ nam: chuKy, quy3: chuKy, quy4: chuKy }),
@@ -97,12 +149,14 @@ const boTho = z.strictObject({
 	phongBan: z.array(phongBan).min(1),
 	nguoi: z.array(nguoi).min(1),
 	mucTieu: z.array(mucTieu).min(1),
+	canhKr,
 });
 
 export type BoOkrMau = z.infer<typeof boTho>;
 export type NguoiMau = BoOkrMau["nguoi"][number];
 export type MucTieuMau = BoOkrMau["mucTieu"][number];
 export type KrMau = MucTieuMau["krs"][number];
+export type CanhKrMau = BoOkrMau["canhKr"];
 
 function trungMa(ds: { ma: string }[]): string | null {
 	const thay = new Set<string>();
@@ -251,7 +305,133 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 					`${chuKy} ${khoa}: ${so} mục tiêu vượt trần ${OKR_PROGRAM_MAC_DINH.objectiveCap}`,
 				);
 	}
+
+	kiemCanhKr(bo, loi);
 });
+
+type BaoLoi = (path: (string | number)[], message: string) => void;
+
+function kiemCanhKr(bo: BoOkrMau, loi: BaoLoi): void {
+	const ck = bo.canhKr;
+	const nguoi = new Set(bo.nguoi.map((n) => n.ma));
+	const mtTheoMa = new Map(bo.mucTieu.map((m) => [m.ma, m]));
+	const krTheoMa = new Map(
+		bo.mucTieu.flatMap((m) => m.krs.map((k) => [k.ma, { k, m }] as const)),
+	);
+	const mauTheoMa = new Map(ck.mau.map((m) => [m.ma, m]));
+
+	for (const [ten, ds] of [
+		["viec", ck.viec],
+		["bangChung", ck.bangChung],
+		["ghiNhan", ck.ghiNhan],
+		["mau", ck.mau],
+	] as const) {
+		const trung = trungMa(ds);
+		if (trung) loi(["canhKr", ten], `mã trùng: ${trung}`);
+	}
+	const trungTuMau = trungMa(ck.tuMau.map((t) => ({ ma: t.mucTieu })));
+	if (trungTuMau)
+		loi(["canhKr", "tuMau"], `mục tiêu sinh từ mẫu hai lần: ${trungTuMau}`);
+
+	ck.viec.forEach((v, i) => {
+		const path = ["canhKr", "viec", i];
+		const kr = krTheoMa.get(v.kr);
+		if (!kr) loi([...path, "kr"], `không có KR ${v.kr}`);
+		else if (kr.m.chuKy === "quy3" || kr.m.trangThai === "da-bo")
+			loi([...path, "kr"], `KR ${v.kr} đang khoá ghi`);
+		if (!nguoi.has(v.nguoiLam))
+			loi([...path, "nguoiLam"], `không có người ${v.nguoiLam}`);
+	});
+
+	ck.bangChung.forEach((b, i) => {
+		const path = ["canhKr", "bangChung", i];
+		const kr = krTheoMa.get(b.kr);
+		if (!kr) loi([...path, "kr"], `không có KR ${b.kr}`);
+		else if (kr.k.kieu !== "moc")
+			loi(
+				[...path, "kr"],
+				`bằng chứng chỉ cho KR mốc, ${b.kr} là ${kr.k.kieu}`,
+			);
+		else if (kr.m.trangThai !== "cong-bo")
+			loi([...path, "kr"], `KR ${b.kr} thuộc mục tiêu chưa công bố`);
+		const url = `https://docs.${OKR_MAU.mienThu}/${b.ma}`;
+		if (b.url !== url) loi([...path, "url"], `đường dẫn mẫu phải là ${url}`);
+	});
+
+	ck.ghiNhan.forEach((g, i) => {
+		const path = ["canhKr", "ghiNhan", i];
+		const mt = mtTheoMa.get(g.mucTieu);
+		if (!mt) loi([...path, "mucTieu"], `không có mục tiêu ${g.mucTieu}`);
+		else if (mt.trangThai !== "cong-bo")
+			loi([...path, "mucTieu"], `mục tiêu ${g.mucTieu} chưa công bố`);
+		if (g.kr && krTheoMa.get(g.kr)?.m.ma !== g.mucTieu)
+			loi([...path, "kr"], `KR ${g.kr} không thuộc mục tiêu ${g.mucTieu}`);
+		if (!nguoi.has(g.tacGia))
+			loi([...path, "tacGia"], `không có người ${g.tacGia}`);
+		for (const n of g.nhan)
+			if (!nguoi.has(n)) loi([...path, "nhan"], `không có người ${n}`);
+		if (g.nhan.includes(g.tacGia))
+			loi([...path, "nhan"], "không tự ghi nhận chính mình");
+	});
+
+	if (ck.mau.length > 0 && !bo.nguoi.some((n) => n.vai === "admin"))
+		loi(["canhKr", "mau"], "mẫu OKR cần một người vai admin đứng tên");
+	const boPhan = new Set(bo.boPhan.map((b) => b.ma));
+	const phongBan = new Set(bo.phongBan.map((p) => p.ma));
+	ck.mau.forEach((m, i) => {
+		const co = m.cap === "bo-phan" ? boPhan : phongBan;
+		for (const dv of m.donVi)
+			if (!co.has(dv))
+				loi(
+					["canhKr", "mau", i, "donVi"],
+					`không có đơn vị ${dv} ở cấp ${m.cap}`,
+				);
+	});
+
+	ck.tuMau.forEach((t, i) => {
+		const path = ["canhKr", "tuMau", i];
+		const mau = mauTheoMa.get(t.mau);
+		const mt = mtTheoMa.get(t.mucTieu);
+		if (!mau) loi([...path, "mau"], `không có mẫu ${t.mau}`);
+		if (!mt) loi([...path, "mucTieu"], `không có mục tiêu ${t.mucTieu}`);
+		if (!mau || !mt) return;
+		const sai = saiVoiMau(mt, mau);
+		if (sai)
+			loi(
+				path,
+				`mục tiêu ${t.mucTieu} không sinh được từ mẫu ${t.mau}: ${sai}`,
+			);
+	});
+}
+
+function saiVoiMau(
+	mt: MucTieuMau,
+	mau: BoOkrMau["canhKr"]["mau"][number],
+): string | null {
+	const nd = mau.noiDung;
+	if (mt.chuKy !== "quy4" || mt.trangThai === "da-bo")
+		return "chỉ mục tiêu quý 4 còn sống";
+	if (mt.mangSangTu) return "mục tiêu mang sang không sinh từ mẫu";
+	if (mt.cap !== mau.cap) return `cấp ${mt.cap} khác cấp mẫu ${mau.cap}`;
+	if (mau.donVi.length > 0 && !mau.donVi.includes(mt.donVi ?? ""))
+		return `đơn vị ${mt.donVi} ngoài danh sách của mẫu`;
+	if (mt.ten !== nd.cauMucTieu) return "tên khác câu mục tiêu của mẫu";
+	if (mt.kieu !== nd.loai) return "loại khác loại của mẫu";
+	if (mt.krs.length !== nd.krs.length) return "số KR khác mẫu";
+	const lech = mt.krs.findIndex((k, j) => {
+		const m = nd.krs[j];
+		return (
+			!m ||
+			k.nguon !== undefined ||
+			k.ten !== m.title ||
+			k.kieu !== m.kind ||
+			k.donVi !== m.unit ||
+			(m.startValue !== null && m.startValue !== k.khoi) ||
+			(m.targetValue !== null && m.targetValue !== k.dich)
+		);
+	});
+	return lech === -1 ? null : `KR thứ ${lech + 1} khác KR mẫu`;
+}
 
 export function docBoOkrMau(chu: string): BoOkrMau {
 	let json: BoOkrMau;

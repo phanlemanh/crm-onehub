@@ -41,6 +41,7 @@ function PickListDialog({
 	onConfirm,
 	pending = false,
 	error = null,
+	onSearchChange,
 }: {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -56,6 +57,7 @@ function PickListDialog({
 	onConfirm: () => void;
 	pending?: boolean;
 	error?: string | null;
+	onSearchChange?: (search: string) => void;
 }) {
 	const [tim, setTim] = useState("");
 	const oTim = useRef<HTMLInputElement>(null);
@@ -92,7 +94,10 @@ function PickListDialog({
 							placeholder={searchPlaceholder}
 							value={tim}
 							aria-invalid={error ? true : undefined}
-							onChange={(e) => setTim(e.target.value)}
+							onChange={(e) => {
+								setTim(e.target.value);
+								onSearchChange?.(e.target.value);
+							}}
 						/>
 					</InputGroup>
 					{error ? <FieldError>{error}</FieldError> : null}

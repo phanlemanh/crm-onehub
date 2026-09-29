@@ -1,0 +1,133 @@
+schema_version: 1
+slug: hydrat-thanh-bieu-tuong
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.htbt_e1
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/lib/use-hydrated.ts"
+      - "apps/app/test/thanh-bieu-tuong-hydrat.dom.tsx"
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+    expected: |
+      Moi lenh chay kem hai ca "e0" (doi chung duong cua bo nghe loi hydrat): cay lech cau truc -> danh sach loi chua
+      "Hydration failed because the server rendered HTML didn't match the client"; cay lech mot thuoc tinh aria-busy ->
+      bo nghe console.error bat duoc dong co "aria-busy". Bo nghe = onRecoverableError + console.error loc /hydrat|didn't match|Hydration/i.
+      Ca "e1" cua thanh-bieu-tuong-hydrat.dom.tsx: renderToString voi cache may chu co san truy van workspace.get rong
+      (getQueryCache().build, khong du lieu) + HydrationBoundary mang du lieu admin; hydrateRoot voi cache trinh duyet
+      da setQueryData admin; bat onRecoverableError. Assert: danh sach loi hydrat BANG [] ; HTML may chu khong chua
+      "aria-busy"; sau hydrat khong co nav[aria-busy='true'] va so a[href] trong nav BANG MUC_RAIL.length.
+      CHIEU DO (cung fixture): ban app-icon-rail.tsx truoc vong (origin/onehub) -> ca fail, danh sach loi mang
+      "Hydration failed because the server rendered HTML didn't match the client" va diff co dong `aria-busy="true"`
+      duoi <AppIconRail>. Ban sao bo useHydrated (doc thang truyVan.data ?? workspace) -> e1 van xanh (lop nay do e5 giu).
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.htbt_e2
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/lib/use-hydrated.ts"
+      - "apps/app/test/thanh-bieu-tuong-hydrat.dom.tsx"
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+    expected: |
+      Ca "e2": chieu nguoc cua e1 — cache may chu da co du lieu admin, cache trinh duyet co truy van rong.
+      Assert giong e1 (loi BANG [], HTML khong "aria-busy", sau hydrat du MUC_RAIL.length lien ket, khong nav ban).
+      CHIEU DO: ban truoc vong -> fail voi "Hydration failed" (may chu ve ban du, trinh duyet ve ban cho).
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.htbt_e3
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/lib/use-hydrated.ts"
+      - "apps/app/lib/pham-vi-man.ts"
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/test/thanh-bieu-tuong-hydrat.dom.tsx"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+    expected: |
+      Ca "e3": vai may chu "okr", cache hai phia deu co truy van rong. Assert: loi BANG []; so lien ket trong HTML
+      may chu BANG mucRailChoVai("okr").length; sau hydrat BANG cung so; va so do < MUC_RAIL.length (doi chung
+      duong: vai okr that su rut gon, ca khong xanh vi hai so trung nhau).
+      CHIEU DO: ban truoc vong -> HTML may chu la ban cho, so lien ket 0 thay 4 (expect toBe(4) received 0).
+      Ban sao truyen mucRailChoVai(null) bat ke prop -> fail so lien ket 10 thay 4 (expect toBe(4) received 10).
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.htbt_e4
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/lib/use-hydrated.ts"
+      - "apps/app/lib/pham-vi-man.ts"
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/test/thanh-bieu-tuong-hydrat.dom.tsx"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+    expected: |
+      Ca "e4": hydrat voi vai may chu admin (du MUC_RAIL.length), roi act(setQueryData workspace.get vai okr) tren
+      cache trinh duyet. Assert: truoc BANG MUC_RAIL.length; sau BANG mucRailChoVai("okr").length.
+      Ca nay giu hanh vi co san (thanh theo truy van) — ban truoc vong cung xanh o buoc sau.
+      CHIEU DO (cung fixture): ban sao app-icon-rail.tsx bo useQuery (chi dung prop) -> fail o assert sau:
+      expected 4 received 10.
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.htbt_e5
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/lib/use-hydrated.ts"
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/test/thanh-bieu-tuong-hydrat.dom.tsx"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+    expected: |
+      Ca "e5": prop workspace null (may chu khong tai duoc), HydrationBoundary khong mang du lieu, cache may chu co
+      truy van rong, cache trinh duyet da co du lieu admin. Assert: loi BANG []; HTML may chu co nav[aria-busy='true']
+      va 0 lien ket; sau hydrat khong con nav ban va du MUC_RAIL.length lien ket.
+      CHIEU DO (cung fixture): ban sao bo cong useHydrated (nguon = truyVan.data ?? workspace ngay luot dau) ->
+      fail voi "Hydration failed" (may chu ban cho, trinh duyet ban du). Ban truoc vong -> cung fail "Hydration failed".
+  - id: E6u
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.htbt_man_thanh
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs qua mot-luot.sh); nap bo OKR mau neu kho do chua co chu ky; dev:session cho le-hai-dang (admin) va doan-thi-thu (okr) @mau.onehub.test"
+      - "Buoc HTML: moi nguoi x bon man (/okr, /okr?record=objective:<id>, /okr?record=kr:<id>, Tong quan) fetch HTML may chu khong chay JS; nav cuoi co lop app-rail: khong aria-busy='true', so <a bang MUC_RAIL.length (admin) hoac mucRailChoVai('okr').length (okr)"
+      - "Buoc trinh duyet: LUOT (mac dinh 8) luot x hai nguoi x bon man o 1440, networkidle0 roi cho 1.5 s; gom pageerror + console.error khop /Hydration failed|didn't match|hydrated but some attributes/i; loi nhac AppIconRail hoac aria-busy tinh la loi cua thanh"
+      - "Luot dau moi man: nav[class*=app-rail] sau tai khong aria-busy, dung so lien ket cua vai; o /okr chup anh nav -> htbt-thanh-quanTri-1440.png, htbt-thanh-chiOkr-1440.png"
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/lib/use-hydrated.ts"
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/lib/pham-vi-man.ts"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+      - "_acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"
+    expected: |
+      exit 0; man-thanh.mjs in "man-thanh: <n> kiem, 0 hong" va "loi hydrat cua thanh: 0"; anh o
+      .acceptance-runs/hydrat-thanh-bieu-tuong/evidence/, vong S4 chep sang _acceptance/hydrat-thanh-bieu-tuong/evidence/
+      va doc anh: thanh admin 10 bieu tuong, thanh okr 4 bieu tuong, khong bieu tuong mo (disabled).
+      Khong phien do / bo mau thieu / vai nguoi mau sai -> exit 2 "KHONG DO DUOC: ...", khong bao gio "0 hong".
+      Doi chung duong: vai okr phai rut gon (so muc okr < admin) — khong thi exit 2.
+      Ban TRUOC vong cung xanh o day (0/64 luot, 8/8 HTML sach — xem Notes cua contract).
+      CHIEU DO 1 (vat that tren cay, sau commit): layout.tsx truyen workspace={null} -> exit 1 voi
+      "html may chu <nguoi> ...: thanh may chu van ban cho (aria-busy)" va "<k> lien ket thay <n>".
+      CHIEU DO 2: layout.tsx truyen workspace={{ viewerRole: "admin" }} go cung -> exit 1 voi
+      "html may chu chiOkr ...: 10 lien ket thay 4".
+      CHIEU DO 3 (bo nghe): ban sao app-icon-rail.tsx them aria-busy={typeof window === "undefined" ? "true" : undefined}
+      tren nav ban du -> exit 1 voi "loi hydrat cua thanh: <k>/<n> luot", k > 0 (React 19 khong va thuoc tinh lech, nen
+      kem "sau tai <nguoi> ...: thanh con ban").
+      Da chay o S3 (LUOT=2): chieu do 1 -> 16 hong, chieu do 2 -> 4 hong "10 lien ket thay 4", chieu do 3 -> "loi hydrat
+      cua thanh: 16"; chieu xanh (LUOT=8) -> 49 kiem, 0 hong, 64 luot, 0 loi hydrat.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+    expected: |
+      bunx turbo run check-types --force exit 0 (test, lint, lint:slop, build chay moi round qua suite_keys).
+      CHIEU DO: ban sao layout.tsx goi <AppIconRail /> khong truyen workspace -> check-types exit != 0 voi
+      TS2741 "Property 'workspace' is missing" tro vao layout.tsx.

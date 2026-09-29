@@ -212,6 +212,34 @@ export async function binhLuan(b: {
 	return c.id;
 }
 
+export async function ghiNhan(g: {
+	objectiveId: string;
+	tacGia: string;
+	nhan: string[];
+	keyResultId?: string;
+	luc: Date;
+}): Promise<string> {
+	const row = await db.okrGhiNhan.create({
+		data: {
+			objectiveId: g.objectiveId,
+			keyResultId: g.keyResultId ?? null,
+			loiNhan: "cam on",
+			tacGiaUserId: g.tacGia,
+			createdAt: g.luc,
+			nhan: { create: g.nhan.map((userId) => ({ userId })) },
+		},
+	});
+	await vet({
+		action: "ghi-nhan",
+		nguoiLam: g.tacGia,
+		objectiveId: g.objectiveId,
+		keyResultId: g.keyResultId,
+		sau: { ghiNhanId: row.id, nguoiNhan: g.nhan },
+		luc: g.luc,
+	});
+	return row.id;
+}
+
 export async function theoDoi(
 	objectiveId: string,
 	userId: string,
@@ -263,6 +291,10 @@ export async function gieoPhongBan(
 export async function donOkr(): Promise<void> {
 	await db.agentTask.deleteMany({ where: { kind: "nhac-ke-hoach" } });
 	const cuaSan = { cycle: { name: { startsWith: TIEN_TO } } };
+	await db.okrGhiNhanNhan.deleteMany({
+		where: { ghiNhan: { objective: cuaSan } },
+	});
+	await db.okrGhiNhan.deleteMany({ where: { objective: cuaSan } });
 	await db.okrMention.deleteMany({ where: { comment: { objective: cuaSan } } });
 	await db.okrComment.deleteMany({ where: { objective: cuaSan } });
 	await db.okrFollow.deleteMany({ where: { objective: cuaSan } });

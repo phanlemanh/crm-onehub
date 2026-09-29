@@ -240,7 +240,8 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
 - **Việc OKR đi chung một tin.** `viecCanNhac` gộp việc kế hoạch với
   `viecOkrCanNhac` (`@crm/db/okr-nhac`, hằng số ở `OKR_NHAC`) theo người, lọc thành
   viên một lần — người chỉ có việc OKR vẫn có hàng. Thứ tự nhóm là `THU_TU_NHAC`:
-  «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi bốn loại OKR còn lại. Trần
+  «Cập nhật tuần» đứng đầu, rồi bốn loại kế hoạch, rồi năm loại OKR còn lại
+  (KR im, được giao, nhắc tên, ghi nhận, đang theo dõi). Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
   nay có N việc cần bạn để ý.»; tin chỉ có việc kế hoạch giữ câu cũ. Chữ «sáng nay»
   theo giờ VN lúc dựng tin (`dungTin(ten, luc, …)`, `laBuoiSang`): từ `NHAC.trua`
@@ -265,12 +266,28 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   `{loai: "okr-cap-nhat", krIds}` (một hoặc nhiều KR gộp vào một dòng nhắc),
   `{loai: "okr-kr-im", keyResultId}`, `{loai: "okr-duoc-giao", objectiveId,
   keyResultId?}`, `{loai: "okr-nhac-ten", commentId}`,
-  `{loai: "okr-theo-doi", objectiveId}`. Đọc `payload.muc`/`daGui` phải khớp
-  đúng nhánh theo `loai`, không suy trường của nhánh này sang nhánh khác.
+  `{loai: "okr-ghi-nhan", ghiNhanId}`, `{loai: "okr-theo-doi", objectiveId}`; Kho tài
+  liệu có `{loai: "tai-lieu-cho-duyet", so}` với `so` là số nguyên dương.
+  Đọc `payload.muc`/`daGui` phải khớp đúng nhánh theo `loai`, không suy trường của
+  nhánh này sang nhánh khác.
+- **Ghi nhận đến người nhận thành một dòng «Ghi nhận» riêng.** `viecTraoDoi`
+  (`@crm/db/okr-nhac`) đọc `okrGhiNhan` mới trong cửa sổ trên mục tiêu chưa bỏ và sinh
+  cho mỗi người nhận — trừ chính người gửi — đúng một mục `okr-ghi-nhan` mang
+  `ghiNhanId`, mục tiêu và tên người gửi; tin đọc «<người gửi> ghi nhận bạn ở
+  «<mục tiêu>»». Không gộp vào «Nhắc tên», người gửi không có mục nào, và không mục
+  nào đếm ghi nhận theo người.
+- **Kho tài liệu góp một dòng đếm, không phải một dòng mỗi bản.** `viecTaiLieuCanNhac`
+  (`@crm/db/tai-lieu-nhac`) đếm bản đề xuất `CHO_DUYET` người đó duyệt được bằng
+  `demChoDuyetTheoNguoi` — cùng hàm với số trên tab «Chờ duyệt» và thẻ Tổng quan, nên ba
+  chỗ không bao giờ lệch nhau — và sinh đúng một mục `{loai: "tai-lieu-cho-duyet", so}`
+  khi số lớn hơn 0. Nhóm «Kho tài liệu» đứng sau «Đang theo dõi» trong `THU_TU_NHAC`. Tin
+  không mang tên trang hay nội dung bản đề xuất. `xong <n>` trỏ vào dòng này bị từ chối
+  như dòng OKR: không có bước nào để đánh dấu.
 - **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở: kế hoạch
   `<APP_URL>/<slug>?record=plan:<id>`, cập nhật tuần
   `<APP_URL>/<slug>/okr/cap-nhat-tuan?tu=nhac`, việc OKR khác
-  `<APP_URL>/<slug>/okr?record=objective:<id>`; vắng thì tin vẫn gửi, không liên kết.
+  `<APP_URL>/<slug>/okr?record=objective:<id>`, kho tài liệu
+  `<APP_URL>/<slug>/tai-lieu?tabTaiLieu=cho-duyet`; vắng thì tin vẫn gửi, không liên kết.
 - **`payload.daGui` là thứ thước đọc**, không phải `payload.muc`. `muc` là danh sách
   lúc quét; `daGui` là đúng các dòng đã có trong tin sau khi cắt. Hai câu truy vấn
   đường đo ở `_acceptance/may-nhac-truoc-nguoi/rang/` đọc tập này. `payload` chỉ giữ

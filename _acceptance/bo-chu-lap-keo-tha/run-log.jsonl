@@ -17,3 +17,6 @@
 {"ts":"2026-09-28T12:59:45Z","sha":"416be5a721401b9799a8f0316c62af292d9f2d5a","round":1,"kind":"round-tally","verdict":"PASS","expected":12,"returned":12,"blocked":0}
 {"ts":"2026-09-28T12:59:45Z","sha":"416be5a721401b9799a8f0316c62af292d9f2d5a","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":12}
 {"kind":"thuoc-vat","ts":"2026-09-28T13:21:44Z","round":1,"san":"416be5a721401b9799a8f0316c62af292d9f2d5a","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}
+{"ts":"2026-09-28T15:02:05Z","kind":"repin","run_id":"repin-20260928T150205Z-95412","sha":"d396c87d065ff5bb77bb79882c1bb576b46bc30a","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5a":0,"E5b":0,"E5c":0},"evals_not_machine":["E6u"]}
+{"ts":"2026-09-28T15:35:56Z","kind":"repin","run_id":"repin-20260928T153556Z-55843","sha":"a831f519f7ab792b1411655cbc78cbcf0ed20097","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5a":0,"E5b":0,"E5c":0},"evals_not_machine":["E6u"]}
+{"ts":"2026-09-28T21:33:07Z","kind":"repin","run_id":"repin-20260928T213307Z-74133","sha":"c256eddf377b39fb737312dd9528e081a090041b","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5a":0,"E5b":0,"E5c":0},"evals_not_machine":["E6u"],"evals_not_machine_touched":["E6u"]}

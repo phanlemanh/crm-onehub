@@ -246,6 +246,16 @@ const vi = {
 		"nhin-lai": "Ghi điều học được",
 		"mang-sang": "Mang sang kỳ sau",
 		"mo-lai-ky": "Mở lại kỳ",
+		"them-viec": "Thêm việc",
+		"sua-viec": "Sửa việc",
+		"xong-viec": "Đánh dấu việc",
+		"go-viec": "Gỡ việc",
+		"gan-sang-kien": "Gắn sáng kiến",
+		"dinh-bang-chung": "Đính bằng chứng",
+		"go-bang-chung": "Gỡ bằng chứng",
+		"ghi-nhan": "Ghi nhận",
+		"go-ghi-nhan": "Gỡ ghi nhận",
+		"sua-mau": "Sửa mẫu OKR",
 	},
 	vet: {
 		cot: {
@@ -458,7 +468,7 @@ const vi = {
 		dangTai: "Đang tải KR của bạn…",
 	},
 	traoDoi: {
-		danhSach: "Các bình luận",
+		danhSach: "Bình luận và ghi nhận",
 		rong: {
 			title: "Chưa có trao đổi nào",
 			body: "Hỏi, trả lời hoặc nhắc tên người cần biết — ai mở mục tiêu này cũng đọc được.",
@@ -501,6 +511,7 @@ const vi = {
 			giaoKr: "Bạn được giao phụ trách KR",
 			giaoMucTieu: "Bạn được giao phụ trách mục tiêu",
 			nhacTen: "{nguoi} nhắc tên bạn",
+			ghiNhan: "{nguoi} ghi nhận bạn",
 			theoDoi: "{capNhat} cập nhật, {binhLuan} bình luận mới",
 			theoDoiCapNhat: "{capNhat} cập nhật mới",
 			theoDoiBinhLuan: "{binhLuan} bình luận mới",
@@ -519,8 +530,9 @@ const vi = {
 		menu: "Chuyển OKR…",
 		tieuDe: "Chuyển OKR của {ten}",
 		coViec:
-			"{ten} đang phụ trách {kr} KR và {mucTieu} mục tiêu ở chu kỳ đang chạy. Chọn người nhận tất cả.",
-		khongViec: "{ten} không phụ trách KR hay mục tiêu nào đang chạy.",
+			"{ten} đang phụ trách {kr} KR, {mucTieu} mục tiêu và làm {viec} việc chưa xong ở chu kỳ đang chạy. Chọn người nhận tất cả.",
+		khongViec:
+			"{ten} không phụ trách KR hay mục tiêu nào đang chạy và không còn việc nào chưa xong.",
 		nguoiNhan: "Người nhận",
 		chon: "Chọn người nhận",
 		timNguoi: "Tìm người",
@@ -530,7 +542,7 @@ const vi = {
 		dangTai: "Đang tải danh sách người…",
 		xacNhan: "Chuyển",
 		huy: "Huỷ",
-		xong: "Đã chuyển {kr} KR và {mucTieu} mục tiêu cho {ten}.",
+		xong: "Đã chuyển {kr} KR, {mucTieu} mục tiêu và {viec} việc cho {ten}.",
 	},
 };
 
@@ -785,6 +797,16 @@ const en: OkrMessages = {
 		"nhin-lai": "Wrote what was learned",
 		"mang-sang": "Carried over to next cycle",
 		"mo-lai-ky": "Reopened cycle",
+		"them-viec": "Add action",
+		"sua-viec": "Edit action",
+		"xong-viec": "Mark action",
+		"go-viec": "Remove action",
+		"gan-sang-kien": "Link initiative",
+		"dinh-bang-chung": "Attach evidence",
+		"go-bang-chung": "Remove evidence",
+		"ghi-nhan": "Recognition",
+		"go-ghi-nhan": "Remove recognition",
+		"sua-mau": "Edit OKR template",
 	},
 	vet: {
 		cot: {
@@ -998,7 +1020,7 @@ const en: OkrMessages = {
 		dangTai: "Loading your key results…",
 	},
 	traoDoi: {
-		danhSach: "Comments",
+		danhSach: "Comments and recognitions",
 		rong: {
 			title: "No discussion yet",
 			body: "Ask, answer or mention someone who should know — anyone who opens this objective can read it.",
@@ -1041,6 +1063,7 @@ const en: OkrMessages = {
 			giaoKr: "You now own a key result",
 			giaoMucTieu: "You now own an objective",
 			nhacTen: "{nguoi} mentioned you",
+			ghiNhan: "{nguoi} recognized you",
 			theoDoi: "New: {capNhat} updates, {binhLuan} comments",
 			theoDoiCapNhat: "New updates: {capNhat}",
 			theoDoiBinhLuan: "New comments: {binhLuan}",
@@ -1059,8 +1082,9 @@ const en: OkrMessages = {
 		menu: "Transfer OKR…",
 		tieuDe: "Transfer {ten}'s OKR",
 		coViec:
-			"{ten} owns {kr} running key results and {mucTieu} running objectives. Pick who takes all of it.",
-		khongViec: "{ten} owns no running key result or objective.",
+			"{ten} owns {kr} running key results and {mucTieu} running objectives, and has {viec} open actions. Pick who takes all of it.",
+		khongViec:
+			"{ten} owns no running key result or objective and has no open action.",
 		nguoiNhan: "Recipient",
 		chon: "Pick a recipient",
 		timNguoi: "Search people",
@@ -1070,7 +1094,7 @@ const en: OkrMessages = {
 		dangTai: "Loading people…",
 		xacNhan: "Transfer",
 		huy: "Cancel",
-		xong: "Transferred {kr} key results and {mucTieu} objectives to {ten}.",
+		xong: "Transferred {kr} key results, {mucTieu} objectives and {viec} actions to {ten}.",
 	},
 };
 

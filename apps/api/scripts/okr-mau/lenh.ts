@@ -76,7 +76,7 @@ function docTep(tep: string) {
 }
 
 const tomTat = (d: DemBoMau) =>
-	`${d.nguoi} người, ${d.boPhan} bộ phận, ${d.phongBan} phòng ban, ${d.chuKy} chu kỳ, ${d.mucTieu} mục tiêu, ${d.kr} KR, ${d.capNhat} lần cập nhật trong ${d.phien} phiên, ${d.soChup} bản chụp số, ${d.diem} điểm quý 3`;
+	`${d.nguoi} người, ${d.boPhan} bộ phận, ${d.phongBan} phòng ban, ${d.chuKy} chu kỳ, ${d.mucTieu} mục tiêu, ${d.kr} KR, ${d.capNhat} lần cập nhật trong ${d.phien} phiên, ${d.soChup} bản chụp số, ${d.diem} điểm quý 3, ${d.viec} việc, ${d.bangChung} bằng chứng, ${d.ghiNhan} ghi nhận, ${d.mau} mẫu OKR, ${d.tuMau} mục tiêu sinh từ mẫu`;
 
 export async function chayLenh(args: string[]): Promise<number> {
 	try {

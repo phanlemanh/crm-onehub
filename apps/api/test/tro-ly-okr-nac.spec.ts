@@ -22,7 +22,7 @@ import {
 
 const MIGRATION = join(
 	import.meta.dir,
-	"../../../packages/db/prisma/migrations/20261004010000_tro_ly_okr_de_xuat/migration.sql",
+	"../../../packages/db/prisma/migrations/20261007010000_tro_ly_okr_de_xuat/migration.sql",
 );
 
 const CAM = [

@@ -19,6 +19,7 @@ export const RECORD_KINDS = [
 	"plan",
 	"objective",
 	"so-kr",
+	"kr",
 ] as const;
 
 export type RecordKind = (typeof RECORD_KINDS)[number];
@@ -115,12 +116,25 @@ export function useRecordStack() {
 
 	const closeAll = useCallback(() => write([], "replace"), [write]);
 
+	const lotDuoi = useCallback(
+		(ref: RecordRef) => {
+			const key = recordKey(ref);
+			if (stack.some((entry) => recordKey(entry) === key)) return;
+			void setParams(
+				{ [SEARCH_PARAM.record.stack]: [ref, ...stack].map(recordKey) },
+				{ history: "replace" },
+			);
+		},
+		[setParams, stack],
+	);
+
 	return {
 		stack,
 		top: stack.at(-1) ?? null,
 		open,
 		close,
 		closeAll,
+		lotDuoi,
 	};
 }
 

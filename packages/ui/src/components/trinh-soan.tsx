@@ -4,6 +4,10 @@ import {
 	type NhanNutTrinhSoan,
 	ThanhCongCuTrinhSoan,
 } from "@crm/ui/components/trinh-soan-thanh-cong-cu";
+import type {
+	NhanLienKetTrang,
+	TimTrang,
+} from "@crm/ui/components/trinh-soan-lien-ket-trang";
 import { locDan } from "@crm/ui/lib/dan-tu-van-phong";
 import { chuanNfc } from "@crm/validation/tai-lieu";
 import {
@@ -15,7 +19,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, type JSONContent, useEditor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
 
-export type { NhanNutTrinhSoan };
+export type { NhanLienKetTrang, NhanNutTrinhSoan, TimTrang };
 
 export type TrinhSoanProps = {
 	giaTri: string;
@@ -23,6 +27,8 @@ export type TrinhSoanProps = {
 	nhan: string;
 	goiY: string;
 	nhanNut: NhanNutTrinhSoan;
+	timTrang?: TimTrang;
+	nhanLienKetTrang?: NhanLienKetTrang;
 	id?: string;
 	"aria-describedby"?: string;
 	"aria-invalid"?: boolean;
@@ -111,6 +117,8 @@ export function TrinhSoan(props: TrinhSoanProps) {
 				editor={editor}
 				key={editor ? "san" : "cho"}
 				nhan={nhan}
+				nhanLienKetTrang={props.nhanLienKetTrang}
+				timTrang={props.timTrang}
 				nhanNut={nhanNut}
 			/>
 			<EditorContent editor={editor} />

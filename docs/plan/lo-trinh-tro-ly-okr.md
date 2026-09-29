@@ -247,7 +247,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
   - câu bị bỏ ≤ 10%;
   - không số lệch nào lọt qua;
   - tỷ lệ tắt nhắc không tăng.
-- **Chạy khi:** 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật. Từ 2026-09-28: 9b đã gộp; ba tuần Cập nhật tuần thật thành điều kiện bật — ở chế độ ẩn ba tuần, đạt ngưỡng ký thì bật.
+- **Chạy khi:** 9b đã gộp; có ít nhất 3 tuần Cập nhật tuần thật. Từ 2026-09-28: 9b đã gộp; ba tuần Cập nhật tuần thật thành điều kiện bật — chạy ở chế độ ẩn ba tuần, đạt ngưỡng ký thì bật.
 
 ### Lượt 10 · OKR trong chat · T3 — AI-06, AI-07, NH-06
 

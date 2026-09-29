@@ -1,0 +1,11 @@
+Driver cho E14 là script node noi bo (man-canh-kr.mjs), khong phai browser tool
+co read_network_requests trong phien nay -> networkObserved = "n-a (driver)".
+
+Tham khao (khong phai wire-level cua phien nay, la log tu chinh eval E15 dung
+chung mot lan chay, ghi lai qua CDP noi bo cua script):
+  E15 bo ghi CDP vai okr: 67 phan hoi da ghi, 1 phan hoi canhKr,
+    0 phan hoi chua id/ten cua P hay Q (khong doc duoc 0)
+  E15 doi chung duong truong P1: 66 phan hoi da ghi, 1 canhKr,
+    3 phan hoi chua ten cong ty P (doi chung duong: co lo la dung, vi P1 co quyen)
+
+Khong co request loi 4xx/5xx nao duoc script bao (0 hong tren 27 khang dinh).

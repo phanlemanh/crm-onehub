@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
-import { DealStage, db } from "@crm/db";
+import { db } from "@crm/db";
+import { GIAI_DOAN_GOC } from "@crm/db/giai-doan";
 import { listDeals, searchCrm } from "../agent/lib/lookup";
 
 const suffix = process.env.TEST_RUN_ID ?? "lookup-spec";
@@ -77,7 +78,7 @@ beforeAll(async () => {
 			name: `Northwind renewal ${suffix}`,
 			companyId: northwindId,
 			ownerId: user.id,
-			stage: DealStage.QUALIFIED_TO_BUY,
+			stage: GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
 			amount: 12_000,
 			lastActivityAt: new Date("2026-06-01T12:00:00.000Z"),
 		},
@@ -90,7 +91,7 @@ beforeAll(async () => {
 			name: `Fresh expansion ${suffix}`,
 			companyId: northwindId,
 			ownerId: user.id,
-			stage: DealStage.CONTRACT_SENT,
+			stage: GIAI_DOAN_GOC.CONTRACT_SENT,
 			lastActivityAt: new Date("2026-08-04T12:00:00.000Z"),
 		},
 		select: { id: true },
@@ -102,7 +103,7 @@ beforeAll(async () => {
 			name: `Closed renewal ${suffix}`,
 			companyId: brightwaterId,
 			ownerId: user.id,
-			stage: DealStage.CLOSED_LOST,
+			stage: GIAI_DOAN_GOC.CLOSED_LOST,
 			lastActivityAt: new Date("2026-05-01T12:00:00.000Z"),
 		},
 		select: { id: true },

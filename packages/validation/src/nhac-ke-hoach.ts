@@ -14,7 +14,7 @@ const ma = z.string().min(1);
 
 const thangMa = z.string().regex(/^\d{4}-\d{2}$/);
 
-const [capNhat, krIm, duocGiao, nhacTen, theoDoi] = viecOkr.options;
+const [capNhat, krIm, duocGiao, nhacTen, ghiNhan, theoDoi] = viecOkr.options;
 
 export const mucNhac = z.union([
 	z
@@ -24,6 +24,7 @@ export const mucNhac = z.union([
 	krIm.pick(KHOA_MUC_OKR["okr-kr-im"]).strict(),
 	duocGiao.pick(KHOA_MUC_OKR["okr-duoc-giao"]).strict(),
 	nhacTen.pick(KHOA_MUC_OKR["okr-nhac-ten"]).strict(),
+	ghiNhan.pick(KHOA_MUC_OKR["okr-ghi-nhan"]).strict(),
 	theoDoi.pick(KHOA_MUC_OKR["okr-theo-doi"]).strict(),
 	z
 		.object({
@@ -33,6 +34,12 @@ export const mucNhac = z.union([
 		})
 		.strict(),
 	z.object({ loai: z.literal("ai-doi-soat-lech"), thang: thangMa }).strict(),
+	z
+		.object({
+			loai: z.literal("tai-lieu-cho-duyet"),
+			so: z.number().int().positive(),
+		})
+		.strict(),
 ]);
 
 export type MucNhac = z.infer<typeof mucNhac>;

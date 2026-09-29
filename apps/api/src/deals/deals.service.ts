@@ -1,25 +1,22 @@
 import {
 	ActivityType,
 	type Db,
-	type DealStage,
 	type Prisma,
 	Prisma as PrismaNamespace,
 } from "@crm/db";
 import { normalizeCurrency } from "@crm/db/currency";
-import {
-	CLOSED_DEAL_STAGES,
-	isClosedStage,
-	LOSING_DEAL_STAGES,
-	OPEN_DEAL_STAGES,
-} from "@crm/db/deal-stage";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
+import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
 import {
 	BadRequestException,
 	Injectable,
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import { AgentTriggerService } from "../agent/agent-trigger.service";
+import {
+	AgentTriggerService,
+	type CrmEventInput,
+} from "../agent/agent-trigger.service";
 import { ARCHIVE } from "../archive/archive-config";
 import {
 	ActivityStampService,
@@ -35,6 +32,7 @@ import {
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
 import { FieldsService } from "../fields/fields.service";
+import { GIAI_DOAN_API } from "../giai-doan/giai-doan-config";
 import {
 	archivedFilter,
 	countsByKey,
@@ -87,14 +85,20 @@ const CONTACT_SELECT = {
 	imageUrl: true,
 } as const;
 
-const LOSING = new Set<DealStage>(LOSING_DEAL_STAGES);
+const DANG_MO: Prisma.DealWhereInput = { giaiDoan: { kind: "OPEN" } };
 
-const DEAL_BOARD_STAGES = [...OPEN_DEAL_STAGES, ...CLOSED_DEAL_STAGES] as const;
+const DA_DONG: Prisma.DealWhereInput = {
+	giaiDoan: { kind: { in: ["WON", "LOST"] } },
+};
 
 const SORTABLE: OrderByColumns<Prisma.DealOrderByWithRelationInput[]> = {
 	name: (dir) => [{ name: dir }],
 	company: (dir) => [{ company: { name: dir } }, { name: "asc" }],
-	stage: (dir) => [{ stage: dir }, { expectedCloseDate: "asc" }],
+	stage: (dir) => [
+		{ giaiDoan: { kind: dir } },
+		{ giaiDoan: { position: dir } },
+		{ expectedCloseDate: "asc" },
+	],
 	amount: (dir) => [{ baseAmount: { sort: dir, nulls: "last" } }],
 	expectedCloseDate: (dir) => [{ expectedCloseDate: dir }],
 	createdAt: (dir) => [{ createdAt: dir }],
@@ -120,7 +124,7 @@ export class DealsService {
 		const where = this.buildWhere(input, filterableFields);
 		const { skip, take } = paginate(input);
 
-		const openWhere = { ...where, stage: { in: [...OPEN_DEAL_STAGES] } };
+		const openWhere: Prisma.DealWhereInput = { AND: [where, DANG_MO] };
 		const base = await this.conversion.reportingCurrency();
 
 		const [rows, total, facetCounts, openValue, unconverted] =
@@ -211,8 +215,14 @@ export class DealsService {
 		const base = await this.conversion.reportingCurrency();
 		const orderBy = resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]);
 
+		const giaiDoan = await this.db.dealStage.findMany({
+			where: { archivedAt: null },
+			orderBy: [{ kind: "asc" }, { position: "asc" }],
+			select: { id: true },
+		});
+
 		const columns = await Promise.all(
-			DEAL_BOARD_STAGES.map(async (stage) => {
+			giaiDoan.map(async ({ id: stage }) => {
 				const stageWhere: Prisma.DealWhereInput = { AND: [where, { stage }] };
 				const [count, value, unconverted, cards] = await Promise.all([
 					this.db.deal.count({ where: stageWhere }),
@@ -343,8 +353,6 @@ export class DealsService {
 	}
 
 	async create(input: DealCreateInput) {
-		const stage = input.stage ?? "DEMO_BOOKED";
-		const closed = isClosedStage(stage);
 		const now = new Date();
 
 		const currency = normalizeCurrency(
@@ -357,6 +365,11 @@ export class DealsService {
 
 		try {
 			const deal = await this.agent.withCrmEvents(async (tx, emit) => {
+				const giaiDoan = input.stage
+					? await this.docGiaiDoanSong(tx, input.stage)
+					: await this.giaiDoanMoDau(tx);
+				const stage = giaiDoan.id;
+				const closed = laDaDong(giaiDoan.kind);
 				const created = await tx.deal.create({
 					data: {
 						name: input.name.trim(),
@@ -370,7 +383,7 @@ export class DealsService {
 						...fx,
 						expectedCloseDate: parseDate(input.expectedCloseDate),
 					},
-					select: { id: true, name: true, companyId: true },
+					select: { id: true, name: true, companyId: true, stage: true },
 				});
 				await emit({
 					type: "deal.created",
@@ -389,7 +402,11 @@ export class DealsService {
 				return created;
 			});
 
-			this.logger.log({ message: "Deal created", dealId: deal.id, stage });
+			this.logger.log({
+				message: "Deal created",
+				dealId: deal.id,
+				stage: deal.stage,
+			});
 
 			void this.fields.queueBackfillForNewRecord("DEAL", deal.id);
 
@@ -562,99 +579,139 @@ export class DealsService {
 		);
 	}
 
-	async setStage(input: SetStageInput, actingUserId: string) {
-		const closedReason = input.closedReason?.trim();
-		const closed = isClosedStage(input.stage);
-		const transition = await this.agent.withCrmEvents(async (tx, emit) => {
-			const [deal] = await tx.$queryRaw<
-				Array<{ id: string; stage: DealStage; companyId: string }>
-			>`
-				SELECT id, stage, "companyId"
-				FROM deal
-				WHERE id = ${input.id}
-				FOR UPDATE
-			`;
+	async docGiaiDoanSong(
+		tx: Prisma.TransactionClient,
+		id: string,
+	): Promise<{ id: string; kind: LoaiGiaiDoan }> {
+		const [giaiDoan] = await tx.$queryRaw<{ id: string; kind: LoaiGiaiDoan }[]>`
+			SELECT id, kind::text AS kind
+			FROM "dealStage"
+			WHERE id = ${id} AND "archivedAt" IS NULL
+			FOR SHARE
+		`;
+		if (!giaiDoan) {
+			throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
+		}
+		return giaiDoan;
+	}
 
-			if (!deal) {
-				throw new NotFoundException(`No deal with id ${input.id}.`);
-			}
+	private async giaiDoanMoDau(
+		tx: Prisma.TransactionClient,
+	): Promise<{ id: string; kind: LoaiGiaiDoan }> {
+		const [dau] = await tx.$queryRaw<{ id: string; kind: LoaiGiaiDoan }[]>`
+			SELECT id, kind::text AS kind
+			FROM "dealStage"
+			WHERE kind = 'OPEN' AND "archivedAt" IS NULL
+			ORDER BY position
+			LIMIT 1
+			FOR SHARE
+		`;
+		if (!dau) throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
+		return dau;
+	}
 
-			if (deal.stage === input.stage) {
-				return {
-					changed: false as const,
-					deal,
-					updated: { id: deal.id, stage: deal.stage },
-					now: null,
-				};
-			}
-			if (LOSING.has(input.stage) && !closedReason) {
-				throw new BadRequestException(
-					"Say why it was lost — a closed-lost deal with no reason teaches nobody anything.",
-				);
-			}
+	async chuyenGiaiDoanTrongTx(
+		tx: Prisma.TransactionClient,
+		emit: (input: CrmEventInput) => Promise<void>,
+		args: {
+			dealId: string;
+			toStageId: string;
+			closedReason?: string;
+			actingUserId: string;
+			now: Date;
+			giuNguyenDong?: boolean;
+		},
+	) {
+		const closedReason = args.closedReason?.trim();
+		const [deal] = await tx.$queryRaw<
+			Array<{ id: string; stage: string; companyId: string }>
+		>`
+			SELECT id, stage, "companyId"
+			FROM deal
+			WHERE id = ${args.dealId}
+			FOR UPDATE
+		`;
 
-			const now = new Date();
-			const updated = await tx.deal.update({
-				where: { id: input.id },
-				data: {
-					stage: input.stage,
-					stageChangedAt: now,
-					closedAt: closed ? now : null,
-					closedReason: closed ? (closedReason ?? null) : null,
-				},
-				select: { id: true, stage: true },
-			});
-			await tx.activity.create({
-				data: {
-					type: ActivityType.STAGE_CHANGE,
-					subject: "Stage changed",
-					body: closedReason ?? null,
-					occurredAt: now,
-					companyId: deal.companyId,
-					dealId: deal.id,
-					createdById: actingUserId,
-					meta: { from: deal.stage, to: input.stage },
-				},
-			});
-			await emit({
-				type: "deal.stage.changed",
-				record: { kind: "deal", id: deal.id },
-				occurredAt: now,
-				data: { companyId: deal.companyId, from: deal.stage, to: input.stage },
-			});
-			if (!isClosedStage(deal.stage) && closed) {
-				await emit({
-					type: "deal.closed",
-					record: { kind: "deal", id: deal.id },
-					occurredAt: now,
-					data: {
-						companyId: deal.companyId,
-						from: deal.stage,
-						to: input.stage,
-					},
-				});
-			}
-			if (isClosedStage(deal.stage) && !closed) {
-				await emit({
-					type: "deal.opened",
-					record: { kind: "deal", id: deal.id },
-					occurredAt: now,
-					data: {
-						companyId: deal.companyId,
-						from: deal.stage,
-						to: input.stage,
-					},
-				});
-			}
+		if (!deal) {
+			throw new NotFoundException(`No deal with id ${args.dealId}.`);
+		}
 
-			return { changed: true as const, deal, updated, now };
+		const den = await this.docGiaiDoanSong(tx, args.toStageId);
+
+		if (deal.stage === den.id) {
+			return {
+				changed: false as const,
+				deal,
+				updated: { id: deal.id, stage: deal.stage },
+			};
+		}
+		if (laThua(den.kind) && !closedReason && !args.giuNguyenDong) {
+			throw new BadRequestException(
+				"Say why it was lost — a closed-lost deal with no reason teaches nobody anything.",
+			);
+		}
+
+		const tu = await tx.dealStage.findUniqueOrThrow({
+			where: { id: deal.stage },
+			select: { kind: true },
 		});
+		const closed = laDaDong(den.kind);
+		const wasClosed = laDaDong(tu.kind);
+		const { now } = args;
+		const updated = await tx.deal.update({
+			where: { id: deal.id },
+			data: args.giuNguyenDong
+				? { stage: den.id, stageChangedAt: now }
+				: {
+						stage: den.id,
+						stageChangedAt: now,
+						closedAt: closed ? now : null,
+						closedReason: closed ? (closedReason ?? null) : null,
+					},
+			select: { id: true, stage: true },
+		});
+		await tx.activity.create({
+			data: {
+				type: ActivityType.STAGE_CHANGE,
+				subject: "Stage changed",
+				body: closedReason ?? null,
+				occurredAt: now,
+				companyId: deal.companyId,
+				dealId: deal.id,
+				createdById: args.actingUserId,
+				meta: { from: deal.stage, to: den.id },
+			},
+		});
+		const data = { companyId: deal.companyId, from: deal.stage, to: den.id };
+		const record = { kind: "deal" as const, id: deal.id };
+		await emit({ type: "deal.stage.changed", record, occurredAt: now, data });
+		if (!wasClosed && closed) {
+			await emit({ type: "deal.closed", record, occurredAt: now, data });
+		}
+		if (wasClosed && !closed) {
+			await emit({ type: "deal.opened", record, occurredAt: now, data });
+		}
+
+		return { changed: true as const, deal, updated };
+	}
+
+	async setStage(input: SetStageInput, actingUserId: string) {
+		const now = new Date();
+		const transition = await this.agent.withCrmEvents((tx, emit) =>
+			this.chuyenGiaiDoanTrongTx(tx, emit, {
+				dealId: input.id,
+				toStageId: input.stage,
+				closedReason: input.closedReason,
+				actingUserId,
+				now,
+			}),
+		);
 
 		if (!transition.changed) {
 			return { ...transition.updated, changed: false };
 		}
 
-		const { deal, updated, now } = transition;
+		const { deal, updated } = transition;
 
 		await this.stamp.touch({ companyId: deal.companyId, dealId: deal.id }, now);
 
@@ -790,8 +847,15 @@ export class DealsService {
 		actingUserId: string,
 	): Promise<BulkResult> {
 		const closedReason = input.closedReason?.trim();
+		const den = await this.db.dealStage.findUnique({
+			where: { id: input.stage },
+			select: { kind: true, archivedAt: true },
+		});
+		if (!den || den.archivedAt) {
+			throw new BadRequestException(GIAI_DOAN_API.messages.khongCo);
+		}
 
-		if (LOSING.has(input.stage) && !closedReason) {
+		if (laThua(den.kind) && !closedReason) {
 			throw new BadRequestException(
 				"Say why they were lost — a closed-lost deal with no reason teaches nobody anything.",
 			);
@@ -853,13 +917,13 @@ export class DealsService {
 		if (owner) and.push(owner);
 
 		if (input.status === "open") {
-			and.push({ stage: { in: [...OPEN_DEAL_STAGES] } });
+			and.push(DANG_MO);
 		} else if (input.status === "closed") {
-			and.push({ stage: { in: [...CLOSED_DEAL_STAGES] } });
+			and.push(DA_DONG);
 		}
 
 		if (input.stage.length > 0) {
-			and.push({ stage: { in: input.stage as DealStage[] } });
+			and.push({ stage: { in: input.stage } });
 		}
 
 		if (input.closing.length > 0) {
@@ -881,9 +945,18 @@ export class DealsService {
 			AND: [this.searchFilter(input.q), archivedFilter(input.archived)],
 		};
 
-		const [owners, stages, fieldFacets, ...closingCounts] = await Promise.all([
+		const [
+			owners,
+			stages,
+			openCount,
+			closedCount,
+			fieldFacets,
+			...closingCounts
+		] = await Promise.all([
 			this.db.deal.groupBy({ by: ["ownerId"], where, _count: { _all: true } }),
 			this.db.deal.groupBy({ by: ["stage"], where, _count: { _all: true } }),
+			this.db.deal.count({ where: { AND: [where, DANG_MO] } }),
+			this.db.deal.count({ where: { AND: [where, DA_DONG] } }),
 			this.fields.filterFacetCounts("DEAL", where, filterableFields),
 			...CLOSING_WINDOWS.map((window) =>
 				this.db.deal.count({ where: { AND: [where, closingFilter(window)] } }),
@@ -891,14 +964,6 @@ export class DealsService {
 		]);
 
 		const stageCounts = countsByKey(stages, "stage");
-		const openCount = OPEN_DEAL_STAGES.reduce(
-			(total, stage) => total + (stageCounts[stage] ?? 0),
-			0,
-		);
-		const closedCount = CLOSED_DEAL_STAGES.reduce(
-			(total, stage) => total + (stageCounts[stage] ?? 0),
-			0,
-		);
 
 		return {
 			status: { open: openCount, closed: closedCount },
@@ -952,7 +1017,7 @@ function closingFilter(window: ClosingWindow): Prisma.DealWhereInput {
 		case "overdue":
 			return {
 				expectedCloseDate: { lt: now },
-				stage: { in: [...OPEN_DEAL_STAGES] },
+				...DANG_MO,
 			};
 		case "this-month":
 			return {

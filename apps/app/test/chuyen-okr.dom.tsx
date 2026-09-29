@@ -111,7 +111,7 @@ const THANH_VIEN = [
 
 function datThanhVien(
 	canManage: boolean,
-	xemTruoc: { kr: number; mucTieu: number },
+	xemTruoc: { kr: number; mucTieu: number; viec: number },
 ) {
 	dat("workspace.get", () => ({
 		id: "ws",
@@ -256,7 +256,7 @@ afterEach(async () => {
 
 describe("chuyen-okr-man", () => {
 	test("chuyen-okr-man: menu co ca hai muc, xem truoc dung so, chon T, gui dung payload okr.transferWork", async () => {
-		datThanhVien(true, { kr: 2, mucTieu: 1 });
+		datThanhVien(true, { kr: 2, mucTieu: 1, viec: 3 });
 		await mo(<MembersTable />);
 		await moMenuCua("Huong Le");
 
@@ -273,6 +273,7 @@ describe("chuyen-okr-man", () => {
 		if (!hop) throw new Error("khong thay hop thoai");
 		expect(hop.textContent).toContain("2 KR");
 		expect(hop.textContent).toContain("1 mục tiêu");
+		expect(hop.textContent).toContain("3 việc chưa xong");
 
 		const xem = daGoi.filter((g) => g.duong === "okr.transferPreview");
 		expect(xem.length, "dung mot loi goi transferPreview").toBe(1);
@@ -324,7 +325,7 @@ describe("chuyen-okr-man", () => {
 	});
 
 	test("chuyen-okr-man: xem truoc 0 va 0 thi cau khong phu trach va nut khoa", async () => {
-		datThanhVien(true, { kr: 0, mucTieu: 0 });
+		datThanhVien(true, { kr: 0, mucTieu: 0, viec: 0 });
 		await mo(<MembersTable />);
 		await moMenuCua("Huong Le");
 		const muc = mucMenu(kOkr.menu);
@@ -346,8 +347,27 @@ describe("chuyen-okr-man", () => {
 		expect(xacNhan?.disabled, "nut chuyen khoa khi 0 va 0").toBe(true);
 	});
 
+	test("chuyen-okr-man: chi con viec chua xong thi van co cau chuyen va o nguoi nhan", async () => {
+		datThanhVien(true, { kr: 0, mucTieu: 0, viec: 2 });
+		await mo(<MembersTable />);
+		await moMenuCua("Huong Le");
+		const muc = mucMenu(kOkr.menu);
+		if (!muc) throw new Error("khong thay muc Chuyen OKR");
+		await bam(muc);
+
+		await cho(
+			() => document.body.textContent?.includes("2 việc chưa xong") === true,
+			"cau co viec",
+		);
+		const hop = document.body.querySelector('[role="dialog"]');
+		expect(
+			hop?.querySelector(`[aria-label="${kOkr.nguoiNhan}"]`),
+			"co o nguoi nhan khi chi con viec",
+		).not.toBeNull();
+	});
+
 	test("chuyen-okr-man: doi chung am — khong co quyen thi khong co muc nao trong hai muc chuyen", async () => {
-		datThanhVien(false, { kr: 2, mucTieu: 1 });
+		datThanhVien(false, { kr: 2, mucTieu: 1, viec: 3 });
 		await mo(<MembersTable />);
 		await moMenuCua("Huong Le");
 		await nghi(5);
@@ -356,12 +376,14 @@ describe("chuyen-okr-man", () => {
 	});
 });
 
-const SO_CA_KHOA_RIENG = 4;
-const KHOA_RIENG: ["vi" | "en", number, number][] = [
-	["vi", 2, 1],
-	["vi", 0, 0],
-	["en", 2, 1],
-	["en", 0, 0],
+const SO_CA_KHOA_RIENG = 6;
+const KHOA_RIENG: ["vi" | "en", number, number, number][] = [
+	["vi", 2, 1, 3],
+	["vi", 0, 0, 2],
+	["vi", 0, 0, 0],
+	["en", 2, 1, 3],
+	["en", 0, 0, 2],
+	["en", 0, 0, 0],
 ];
 
 describe("chuyen-okr-khoa-rieng", () => {
@@ -388,12 +410,12 @@ describe("chuyen-okr-khoa-rieng", () => {
 	});
 
 	test.each(KHOA_RIENG)(
-		"chuyen-okr-khoa-rieng: %s %i KR / %i muc tieu",
-		async (locale, kr, mucTieu) => {
+		"chuyen-okr-khoa-rieng: %s %i KR / %i muc tieu / %i viec",
+		async (locale, kr, mucTieu, viec) => {
 			daChay += 1;
-			const tenCa = `${locale} ${kr}/${mucTieu}`;
+			const tenCa = `${locale} ${kr}/${mucTieu}/${viec}`;
 			const kc = okrMessages(locale).chuyen;
-			datThanhVien(true, { kr, mucTieu });
+			datThanhVien(true, { kr, mucTieu, viec });
 			const o = document.createElement("div");
 			document.body.appendChild(o);
 			const root = createRoot(o);
@@ -425,8 +447,13 @@ describe("chuyen-okr-khoa-rieng", () => {
 
 			const ten = "Huong Le";
 			const kyVong =
-				kr > 0 || mucTieu > 0
-					? dien(kc.coViec, { ten, kr: String(kr), mucTieu: String(mucTieu) })
+				kr > 0 || mucTieu > 0 || viec > 0
+					? dien(kc.coViec, {
+							ten,
+							kr: String(kr),
+							mucTieu: String(mucTieu),
+							viec: String(viec),
+						})
 					: dien(kc.khongViec, { ten });
 			expect(
 				daGhi.filter((d) => d.includes("same key")),

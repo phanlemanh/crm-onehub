@@ -65,6 +65,12 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
+import {
+	anhVetViec,
+	chonHangViec,
+	hangViec,
+	vetSangKienChoVai,
+} from "./canh-kr";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
 import {
 	type CuaSoRa,
@@ -180,7 +186,7 @@ const chonMucTieu = {
 	...quanHeDonVi,
 } satisfies Prisma.OkrObjectiveInclude;
 
-function donViCua(unit: DonViMucTieu): DonViCuaMucTieu {
+export function donViCua(unit: DonViMucTieu): DonViCuaMucTieu {
 	return {
 		level: unit.level,
 		divisionId: unit.level === "bo-phan" ? unit.divisionId : null,
@@ -570,6 +576,13 @@ export class OkrService {
 		return T.vuotTranMucTieu(dem);
 	}
 
+	kiemTranKr(ct: OkrProgram, dem: number, them: number): string | null {
+		if (dem + them <= ct.krCap) return null;
+		const loi = T.vuotTranKr(dem + them - 1);
+		if (ct.capMode === "chan") throw new BadRequestException(loi);
+		return loi;
+	}
+
 	private async trangThai(tx: Tx, id: string) {
 		const mt = await tx.okrObjective.findUnique({
 			where: { id },
@@ -779,12 +792,7 @@ export class OkrService {
 				where: { objectiveId: mt.id },
 				_max: { position: true },
 			});
-			let canhBao: string | null = null;
-			if (dem + 1 > ct.krCap) {
-				if (ct.capMode === "chan")
-					throw new BadRequestException(T.vuotTranKr(dem));
-				canhBao = T.vuotTranKr(dem);
-			}
+			const canhBao = this.kiemTranKr(ct, dem, 1);
 			const kr = await tx.okrKeyResult.create({
 				data: {
 					objectiveId: mt.id,
@@ -1013,6 +1021,25 @@ export class OkrService {
 				throw new BadRequestException(T.khep.krCoDoiDich);
 			if ((await tx.okrDiemKr.count({ where: { keyResultId: kr.id } })) > 0)
 				throw new BadRequestException(T.khep.krCoDiem);
+			if ((await tx.okrBangChung.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.canhKr.krCoBangChung);
+			if ((await tx.okrGhiNhan.count({ where: { keyResultId: kr.id } })) > 0)
+				throw new BadRequestException(T.canhKr.krCoGhiNhan);
+			const viec = await tx.okrViecKr.findMany({
+				where: { keyResultId: kr.id },
+				orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
+				select: chonHangViec,
+			});
+			await tx.okrViecKr.deleteMany({ where: { keyResultId: kr.id } });
+			for (const v of viec)
+				await this.vet(
+					tx,
+					userId,
+					"go-viec",
+					{ objectiveId: mt.id, keyResultId: kr.id },
+					anhVetViec(hangViec(v)),
+					null,
+				);
 			await tx.okrNguonKr.deleteMany({ where: { keyResultId: kr.id } });
 			await tx.okrKeyResult.delete({ where: { id: kr.id } });
 			await this.vet(
@@ -1591,12 +1618,47 @@ export class OkrService {
 			}),
 		]);
 		const objective = donViCuaDong(donVi);
-		const nguoi = await this.db.user.findMany({
-			where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
-			select: chonNguoi,
-		});
+		const krIds = mt.keyResults.map((k) => k.id);
+		const [nguoi, dem, xong, bangChung] = await Promise.all([
+			this.db.user.findMany({
+				where: { id: { in: [...new Set(vet.map((v) => v.actorUserId))] } },
+				select: chonNguoi,
+			}),
+			this.db.okrViecKr.groupBy({
+				by: ["keyResultId", "loai"],
+				where: { keyResultId: { in: krIds } },
+				_count: { _all: true },
+			}),
+			this.db.okrViecKr.groupBy({
+				by: ["keyResultId"],
+				where: {
+					keyResultId: { in: krIds },
+					loai: "viec",
+					xongLuc: { not: null },
+				},
+				_count: { _all: true },
+			}),
+			this.db.okrBangChung.groupBy({
+				by: ["keyResultId"],
+				where: { keyResultId: { in: krIds } },
+				_count: { _all: true },
+			}),
+		]);
+		const demLoai = (krId: string, laViec: boolean) =>
+			dem
+				.filter((d) => d.keyResultId === krId && (d.loai === "viec") === laViec)
+				.reduce((tong, d) => tong + d._count._all, 0);
 		return {
 			...mt,
+			keyResults: mt.keyResults.map((k) => ({
+				...k,
+				soViec: {
+					xong: xong.find((d) => d.keyResultId === k.id)?._count._all ?? 0,
+					tong: demLoai(k.id, true),
+				},
+				soSangKien: demLoai(k.id, false),
+				coBangChung: bangChung.some((d) => d.keyResultId === k.id),
+			})),
 			cycleName: ky.name,
 			mangSangToi: toi
 				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
@@ -1607,16 +1669,18 @@ export class OkrService {
 						cycleName: tu.tuObjective.cycle.name,
 					}
 				: null,
-			trail: vet.map((v) => ({
-				id: v.id,
-				at: v.at.toISOString(),
-				actor: nguoi.find((n) => n.id === v.actorUserId) ?? null,
-				action: hanhDongVet.parse(v.action),
-				keyResultId: v.keyResultId,
-				before: parseOkrVet(v.before),
-				after: parseOkrVet(v.after),
-				note: v.note,
-			})),
+			trail: vet.map((v) =>
+				vetSangKienChoVai(q.role, {
+					id: v.id,
+					at: v.at.toISOString(),
+					actor: nguoi.find((n) => n.id === v.actorUserId) ?? null,
+					action: hanhDongVet.parse(v.action),
+					keyResultId: v.keyResultId,
+					before: parseOkrVet(v.before),
+					after: parseOkrVet(v.after),
+					note: v.note,
+				}),
+			),
 			canEditKr: mt.keyResults
 				.filter((k) =>
 					this.quyenOkr.ghiDuocKr(q, userId, {

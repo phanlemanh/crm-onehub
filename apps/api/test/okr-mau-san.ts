@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
+import { z } from "zod";
 import { OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { type BoOkrMau, docBoOkrMau } from "../scripts/okr-mau/khuon";
 import { TEP_CONG_TY } from "../scripts/okr-mau/lenh";
@@ -33,102 +34,51 @@ export async function lamSachOkr(): Promise<void> {
 
 export const napMau = (moc: Date) => napBoOkrMau(db, congTy(), { moc });
 
-const BO_QUA = new Set(["updatedAt", "suaLuc"]);
+const BO_QUA = ["updatedAt", "suaLuc"];
 
-const chuan = <T>(ds: T[]) =>
-	ds.map((dong) =>
-		JSON.stringify(dong, (khoa, giaTri) =>
-			BO_QUA.has(khoa) ? undefined : giaTri,
-		),
-	);
+const moHinhDuLieu = z.object({
+	models: z.record(
+		z.string(),
+		z.object({
+			dbName: z.string().nullable(),
+			fields: z.array(
+				z.object({ name: z.string(), kind: z.string(), type: z.string() }),
+			),
+		}),
+	),
+});
+
+export type BangDem = { model: string; bang: string; khoa: string };
+
+function rutBangDem(): BangDem[] {
+	const r = moHinhDuLieu.safeParse(Reflect.get(db, "_runtimeDataModel"));
+	if (!r.success)
+		throw new Error(
+			`client Prisma không mang mô hình dữ liệu lúc chạy: ${r.error.message}`,
+		);
+	return Object.entries(r.data.models).flatMap(([model, m]) => {
+		const vo = m.fields.filter((f) => f.kind === "scalar");
+		const khoa = vo.find((f) => f.name === "id") ?? vo[0];
+		return khoa?.type === "String"
+			? [{ model, bang: m.dbName ?? model, khoa: khoa.name }]
+			: [];
+	});
+}
+
+export const BANG_DEM: readonly BangDem[] = rutBangDem();
 
 export async function vanTay(): Promise<Record<string, string[]>> {
-	const tien = { startsWith: OKR_MAU.tienTo };
-	const sap = { id: "asc" } as const;
-	return {
-		user: chuan(await db.user.findMany({ where: { id: tien }, orderBy: sap })),
-		member: chuan(
-			await db.member.findMany({ where: { id: tien }, orderBy: sap }),
-		),
-		division: chuan(
-			await db.division.findMany({ where: { id: tien }, orderBy: sap }),
-		),
-		department: chuan(
-			await db.department.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		orgPlacement: chuan(
-			await db.orgPlacement.findMany({
-				where: { userId: tien },
-				orderBy: { userId: "asc" },
-			}),
-		),
-		okrCycle: chuan(
-			await db.okrCycle.findMany({ where: { id: tien }, orderBy: sap }),
-		),
-		okrObjective: chuan(
-			await db.okrObjective.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrKeyResult: chuan(
-			await db.okrKeyResult.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrAlignment: chuan(
-			await db.okrAlignment.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrNguonKr: chuan(
-			await db.okrNguonKr.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrSoChup: chuan(
-			await db.okrSoChup.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrCheckInSession: chuan(
-			await db.okrCheckInSession.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrCheckIn: chuan(
-			await db.okrCheckIn.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrDiemKr: chuan(
-			await db.okrDiemKr.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrNhinLai: chuan(
-			await db.okrNhinLai.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-		okrMangSang: chuan(
-			await db.okrMangSang.findMany({
-				where: { id: tien },
-				orderBy: sap,
-			}),
-		),
-	};
+	const cap = await Promise.all(
+		BANG_DEM.map(async ({ bang, khoa }) => {
+			const rows = await db.$queryRawUnsafe<{ dong: string }[]>(
+				`SELECT (to_jsonb(t) - $2::text[])::text AS dong FROM "${bang}" t WHERE "${khoa}" LIKE $1 ORDER BY dong`,
+				`${OKR_MAU.tienTo}%`,
+				BO_QUA,
+			);
+			return [bang, rows.map((r) => r.dong)] as const;
+		}),
+	);
+	return Object.fromEntries(cap);
 }
 
 export async function vanTayKho(): Promise<Record<string, string>> {

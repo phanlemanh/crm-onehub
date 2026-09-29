@@ -80,9 +80,12 @@ async function Summary({
 	]);
 
 	const queryClient = getServerQueryClient();
-	await queryClient.prefetchQuery(
-		getServerTrpc().dashboard.summary.queryOptions({ scope }),
-	);
+	await Promise.all([
+		queryClient.prefetchQuery(
+			getServerTrpc().dashboard.summary.queryOptions({ scope }),
+		),
+		queryClient.prefetchQuery(getServerTrpc().giaiDoan.list.queryOptions()),
+	]);
 
 	return (
 		<HydrateClient>

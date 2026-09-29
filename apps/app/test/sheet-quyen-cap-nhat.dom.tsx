@@ -5,6 +5,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type {
 	ChuKyOutput,
+	KrCanhOutput,
 	KrOutput,
 	ObjectiveOutput,
 } from "../../api/src/okr/okr.contracts";
@@ -30,7 +31,7 @@ const QUY: ChuKyOutput = {
 	cuaSoRa: null,
 };
 
-function kr(thay: Partial<KrOutput>): KrOutput {
+function kr(thay: Partial<KrOutput>): KrCanhOutput {
 	return {
 		id: "kr-1",
 		objectiveId: "mt-1",
@@ -51,6 +52,9 @@ function kr(thay: Partial<KrOutput>): KrOutput {
 		progress: 40,
 		laCuaToi: false,
 		hienTaiQuaCapNhat: true,
+		soViec: { xong: 0, tong: 0 },
+		soSangKien: 0,
+		coBangChung: false,
 		...thay,
 	};
 }
@@ -144,7 +148,7 @@ mock.module("@/lib/trpc/client", () => ({
 			removeKeyResult: thuTuc("okr.removeKeyResult"),
 			addAlignment: thuTuc("okr.addAlignment"),
 			removeAlignment: thuTuc("okr.removeAlignment"),
-			comments: thuTuc("okr.comments", () => ({ comments: [] })),
+			comments: thuTuc("okr.comments", () => ({ comments: [], dong: [] })),
 			thanhVien: thuTuc("okr.thanhVien", () => [HUNG]),
 			chiSo: thuTuc("okr.chiSo", () => ({
 				chiSo: [],

@@ -1,18 +1,15 @@
 "use client";
 
-import { DealStage } from "@crm/db/enums";
 import { Checkbox } from "@crm/ui/components/checkbox";
-import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { cn } from "@crm/ui/lib/utils";
+import { parseStageChangeMeta } from "@crm/validation/giai-doan";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { z } from "zod";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { LocalDateTime, LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
-import { dealStageLabel } from "@/lib/deal-stage";
 import { crmMessages } from "@/lib/messages/crm";
 import { quaHan } from "@/lib/qua-han";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -32,10 +29,15 @@ const TIME_OPTIONS: Intl.DateTimeFormatOptions = {
 	minute: "2-digit",
 };
 
-const stageChange = z
-	.object({ from: z.enum(DealStage), to: z.enum(DealStage) })
-	.nullable()
-	.catch(null);
+function tuMeta(entry: TimelineEntryData) {
+	if (entry.type !== "STAGE_CHANGE") return null;
+	const meta = parseStageChangeMeta(entry.meta);
+	if (!meta) return null;
+	return {
+		from: meta.from ? { id: meta.from, label: meta.from } : null,
+		to: { id: meta.to, label: meta.to },
+	};
+}
 
 function anchorId(anchor: TimelineAnchor): string {
 	if ("companyId" in anchor) return anchor.companyId;
@@ -73,7 +75,7 @@ export function TimelineEntry({
 		quaHan(new Date(entry.dueAt), completedAt, new Date());
 
 	const change =
-		entry.type === "STAGE_CHANGE" ? stageChange.parse(entry.meta) : null;
+		entry.stageChange === undefined ? tuMeta(entry) : entry.stageChange;
 	const when = entry.occurredAt ?? entry.createdAt;
 
 	const synced = entry.meta?.synced === true;
@@ -85,9 +87,13 @@ export function TimelineEntry({
 
 	const headline = change ? (
 		<>
-			<ForeignText lang="en">{dealStageLabel(change.from)}</ForeignText>
-			{" → "}
-			<ForeignText lang="en">{dealStageLabel(change.to)}</ForeignText>
+			{change.from ? (
+				<>
+					<span translate="no">{change.from.label}</span>
+					{" → "}
+				</>
+			) : null}
+			<span translate="no">{change.to.label}</span>
 		</>
 	) : entry.type === "PLAN_CHANGE" ? (
 		dongVet(entry.meta, locale)

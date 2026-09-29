@@ -1,7 +1,6 @@
 "use client";
 
 import ChevronDown from "@carbon/icons-react/es/ChevronDown";
-import type { DealStage } from "@crm/db/enums";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
@@ -28,7 +27,7 @@ import { useMutation } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useId, useState } from "react";
 import { toast } from "sonner";
-import { DEAL_STAGE_OPTIONS, LOSING_STAGES } from "@/lib/deal-stage";
+import { useGiaiDoan } from "@/lib/giai-doan";
 import { crmMessages } from "@/lib/messages/crm";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -61,11 +60,12 @@ export function DealStageMenu({
 	variant = "inline",
 }: {
 	dealId: string;
-	stage: DealStage;
+	stage: string;
 	variant?: "inline" | "control";
 }) {
 	const [, setCloseParams] = useQueryStates(closeReasonParams);
 	const setStage = useStageMutation();
+	const giaiDoan = useGiaiDoan();
 
 	return (
 		<DropdownMenu>
@@ -99,9 +99,9 @@ export function DealStageMenu({
 				<DropdownMenuRadioGroup
 					value={stage}
 					onValueChange={(next) => {
-						const chosen = next as DealStage;
+						const chosen = next;
 						if (chosen === stage) return;
-						if (LOSING_STAGES.includes(chosen)) {
+						if (giaiDoan.laThua(chosen)) {
 							void setCloseParams({
 								[SEARCH_PARAM.dialog.closeDeal]: dealId,
 								[SEARCH_PARAM.dialog.closeStage]: chosen,
@@ -111,9 +111,9 @@ export function DealStageMenu({
 						setStage.mutate({ id: dealId, stage: chosen });
 					}}
 				>
-					{DEAL_STAGE_OPTIONS.map((option) => (
-						<DropdownMenuRadioItem key={option.value} value={option.value}>
-							{option.label}
+					{giaiDoan.stages.map((option) => (
+						<DropdownMenuRadioItem key={option.id} value={option.id}>
+							<span translate="no">{option.label}</span>
 						</DropdownMenuRadioItem>
 					))}
 				</DropdownMenuRadioGroup>
@@ -143,21 +143,15 @@ export function CloseReasonDialog() {
 		close();
 	});
 
-	const stage = closingStage as DealStage | null;
+	const stage = closingStage;
 	const open = Boolean(closing && stage);
 
 	return (
 		<Dialog open={open} onOpenChange={(next) => !next && close()}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>
-						{stage === "CLOSED_LOST" ? m.close.asLost : m.close.unqualified}
-					</DialogTitle>
-					<DialogDescription>
-						{stage === "CLOSED_LOST"
-							? m.close.lostReason
-							: m.close.unqualifiedReason}
-					</DialogDescription>
+					<DialogTitle>{m.close.asLost}</DialogTitle>
+					<DialogDescription>{m.close.lostReason}</DialogDescription>
 				</DialogHeader>
 
 				<form

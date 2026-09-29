@@ -1,5 +1,7 @@
 "use client";
 
+import Book from "@carbon/icons-react/es/Book";
+
 import {
 	Command,
 	CommandDialog,
@@ -13,20 +15,38 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { duongTrang } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 const KINDS = ["company", "contact", "deal"] as const;
 
-export function QuickSwitcher() {
+type DoanTrich = { truoc: string; khop: string; sau: string };
+
+function Trich({ doan }: { doan: DoanTrich }) {
+	return (
+		<span className="truncate text-muted-foreground text-xs" translate="no">
+			{doan.truoc}
+			<strong>{doan.khop}</strong>
+			{doan.sau}
+		</span>
+	);
+}
+
+export function QuickSwitcher({ coDoiTac }: { coDoiTac: boolean }) {
 	const openRecord = useOpenRecord();
+	const router = useRouter();
+	const url = useWorkspaceUrl();
 	const trpc = useTRPC();
 	const m = khungUngDungMessages(useLocale()).switcher;
 
@@ -48,13 +68,25 @@ export function QuickSwitcher() {
 		return () => document.removeEventListener("keydown", onKeyDown);
 	}, [setOpen]);
 
+	const duChu = query.trim().length >= 2;
 	const results = useQuery({
 		...trpc.search.quick.queryOptions({ q: query }),
-		enabled: open && query.trim().length >= 2,
+		enabled: open && coDoiTac && duChu,
+		placeholderData: (previous) => previous,
+	});
+	const taiLieu = useQuery({
+		...trpc.taiLieu.tim.queryOptions({ q: query }),
+		enabled: open && duChu,
 		placeholderData: (previous) => previous,
 	});
 
-	const hits = results.data?.hits ?? [];
+	const hits = coDoiTac && !results.isError ? (results.data?.hits ?? []) : [];
+	const trang = taiLieu.data?.rows ?? [];
+
+	const moTrang = (slug: string) => {
+		setQuery("");
+		router.push(url(duongTrang(slug)));
+	};
 
 	const go = (kind: (typeof KINDS)[number], id: string) => {
 		setQuery("");
@@ -67,11 +99,11 @@ export function QuickSwitcher() {
 			open={open}
 			onOpenChange={(next) => setOpen(next || null)}
 			title={m.title}
-			description={m.description}
+			description={coDoiTac ? m.description : m.descriptionTaiLieu}
 		>
 			<Command shouldFilter={false}>
 				<CommandInput
-					placeholder={m.placeholder}
+					placeholder={coDoiTac ? m.placeholder : m.placeholderTaiLieu}
 					value={query}
 					onValueChange={setQuery}
 				/>
@@ -79,6 +111,14 @@ export function QuickSwitcher() {
 					<CommandEmpty>
 						{query.trim().length < 2 ? m.typeMore : m.noMatch}
 					</CommandEmpty>
+
+					{duChu && taiLieu.isError ? (
+						<CommandGroup heading={m.taiLieu}>
+							<CommandItem data-tai-lieu-loi="" disabled value="tai-lieu-loi">
+								{m.taiLieuLoi}
+							</CommandItem>
+						</CommandGroup>
+					) : null}
 
 					{KINDS.map((kind) => {
 						const group = hits.filter((hit) => hit.kind === kind);
@@ -120,6 +160,26 @@ export function QuickSwitcher() {
 							</CommandGroup>
 						);
 					})}
+					{duChu && !taiLieu.isError && trang.length > 0 ? (
+						<CommandGroup heading={m.taiLieu}>
+							{trang.map((t) => (
+								<CommandItem
+									data-tai-lieu={t.slug}
+									key={`tai-lieu:${t.slug}`}
+									onSelect={() => moTrang(t.slug)}
+									value={`tai-lieu:${t.slug}`}
+								>
+									<Icon icon={Book} />
+									<span className="flex min-w-0 flex-col">
+										<span className="truncate" translate="no">
+											{t.ten}
+										</span>
+										<Trich doan={t.doanTrich} />
+									</span>
+								</CommandItem>
+							))}
+						</CommandGroup>
+					) : null}
 				</CommandList>
 			</Command>
 		</CommandDialog>
