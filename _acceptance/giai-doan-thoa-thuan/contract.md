@@ -91,3 +91,8 @@ Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-29 (Phan Le M
 - Ngoài-16: Bài kiểm tra việc đổi tên giai đoạn chưa xác nhận tên mới hiện trên bảng cột của màn Thoả thuận, chỉ xác nhận ở danh sách giai đoạn và lịch sử.
 - Ngoài-17: Bài kiểm tra chưa xác nhận đầy đủ hai điều nhỏ: ngày đổi giai đoạn của thoả thuận khi xoá giai đoạn, và danh sách không đổi sau một yêu cầu bị từ chối.
 - Ngoài-18: Bài kiểm tra chưa xác nhận câu chữ lời từ chối mà thành viên thường thật sự nhìn thấy. Việc họ bị từ chối vẫn được kiểm đúng.
+
+Known limits — chấp nhận sau Cổng Bằng chứng 2026-09-29 (Phan Le Manh), từ phát hiện của lượt rà toàn nhánh và của phép đo màn E15, không nằm trong danh sách đánh số của thẻ:
+
+- Xoá một giai đoạn còn N thoả thuận phát N sự kiện đổi giai đoạn, nên tác tử được hẹn chạy khi thoả thuận đổi giai đoạn sẽ chạy N lần (ví dụ gửi N tin Slack). Đúng với lời hứa của AC-6; gom sự kiện là việc của một hợp đồng sau nếu đội dùng tác tử kiểu đó.
+- Đầu trang chung tràn ngang 2px ở khổ 320, tiếng Việt, khi có huy hiệu «Đang tra cứu N». Lỗi có sẵn từ trước, nằm ngoài trang Giai đoạn thoả thuận; E15 đo tràn trong vùng nội dung của trang.
