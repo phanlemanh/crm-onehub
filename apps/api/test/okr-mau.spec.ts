@@ -15,6 +15,7 @@ import { dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { CHI_SO_OKR } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
+import { trangThaiHoiY } from "@crm/validation/okr-hoi-y";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import {
 	KIEU_KR,
@@ -54,7 +55,17 @@ import {
 	vanTay,
 	vanTayKho,
 } from "./okr-mau-san";
-import { doc, dungSan, goi, goiQuery, phien, phienCua } from "./okr-san";
+import {
+	doc,
+	dungSan,
+	goi,
+	goiQuery,
+	nguoiMoi,
+	ok,
+	phien,
+	phienCua,
+	taoNam,
+} from "./okr-san";
 
 dungSan();
 
@@ -69,6 +80,7 @@ const TUAN = [
 ];
 const CHU_KY = {
 	nam: idMau("chu-ky", "nam"),
+	namKe: idMau("chu-ky", "nam-ke"),
 	quy3: idMau("chu-ky", "quy3"),
 	quy4: idMau("chu-ky", "quy4"),
 };
@@ -254,7 +266,7 @@ describe("toan-canh-mau", () => {
 	}, CHO);
 
 	test(
-		"ba chu kỳ, OneHub năm, mọi phòng ban có mục tiêu quý 4 đã công bố",
+		"bốn chu kỳ, OneHub năm, mọi phòng ban có mục tiêu quý 4 đã công bố",
 		async () => {
 			const cookie = await ceo();
 			const { cycles } = await doc<{
@@ -273,12 +285,19 @@ describe("toan-canh-mau", () => {
 					.map((c) => [c.id, c]),
 			);
 			expect(Object.keys(mau).sort()).toEqual(Object.values(CHU_KY).sort());
-			const [nam, q3, q4] = [
+			const [nam, namKe, q3, q4] = [
 				mau[CHU_KY.nam],
+				mau[CHU_KY.namKe],
 				mau[CHU_KY.quy3],
 				mau[CHU_KY.quy4],
 			];
-			if (!nam || !q3 || !q4) throw new Error("thiếu chu kỳ mẫu");
+			if (!nam || !namKe || !q3 || !q4) throw new Error("thiếu chu kỳ mẫu");
+			expect([namKe.kind, namKe.phase, namKe.parentId]).toEqual([
+				"nam",
+				"lap-ke-hoach",
+				null,
+			]);
+			expect(namKe.startsOn > nam.endsOn).toBe(true);
 			expect([nam.kind, q3.phase, q4.phase, q3.parentId, q4.parentId]).toEqual([
 				"nam",
 				"da-dong",
@@ -1512,4 +1531,440 @@ describe("canh-kr-mau", () => {
 		},
 		CHO,
 	);
+});
+
+describe("hoi-y", () => {
+	const SAU_BANG_HOI_Y = [
+		"okrHoiY",
+		"okrHoiYBanTruoc",
+		"okrY",
+		"okrYDongY",
+		"okrChuDe",
+		"okrHoiYHieu",
+	] as const;
+	const KY_NAM_KE = idMau("chu-ky", "nam-ke");
+	const GIO = OKR_MAU.thoiGian.gioMs;
+	const NGUOI_CHON = nguoiMau("le-hai-dang");
+
+	const KHAI = {
+		chuKyNamKeLapKeHoach: 1,
+		hoiY: 1,
+		nguoiChonLaQuanTriMau: 1,
+		banTruoc: 4,
+		y: 30,
+		tacGia: 25,
+		boPhanCoTacGia: 3,
+		tacGiaVaiOkr: 4,
+		dongY: 12,
+		chuDe: 5,
+		chuDeYLa: 1,
+		chuDeDaKetLuan: 2,
+		chuDeChon: 1,
+		yChuaGom: 5,
+	} as const;
+
+	async function doHoiY() {
+		const [ky, hoiY] = await Promise.all([
+			db.okrCycle.count({
+				where: { id: KY_NAM_KE, kind: "nam", phase: "lap-ke-hoach" },
+			}),
+			db.okrHoiY.findMany({
+				where: { cycleId: KY_NAM_KE },
+				include: {
+					banTruoc: true,
+					y: { include: { tacGia: { include: { members: true } } } },
+					chuDe: true,
+				},
+			}),
+		]);
+		const h = hoiY[0];
+		if (!h) throw new Error("kho không có lần hỏi ý trên chu kỳ năm kế");
+		const tacGiaIds = [...new Set(h.y.map((y) => y.tacGiaUserId))];
+		const boPhan = await db.orgPlacement.findMany({
+			where: { userId: { in: tacGiaIds } },
+			select: { primaryDepartment: { select: { divisionId: true } } },
+		});
+		const laQuanTri = await db.member.count({
+			where: { userId: NGUOI_CHON, role: "admin" },
+		});
+		return {
+			chuKyNamKeLapKeHoach: ky,
+			hoiY: hoiY.length,
+			nguoiChonLaQuanTriMau:
+				h.nguoiChonUserId === NGUOI_CHON && laQuanTri > 0 ? 1 : 0,
+			banTruoc: h.banTruoc?.cau.length ?? 0,
+			y: h.y.length,
+			tacGia: tacGiaIds.length,
+			boPhanCoTacGia: new Set(
+				boPhan.map((b) => b.primaryDepartment?.divisionId),
+			).size,
+			tacGiaVaiOkr: new Set(
+				h.y
+					.filter((y) => y.tacGia.members.some((m) => m.role === "okr"))
+					.map((y) => y.tacGiaUserId),
+			).size,
+			dongY: await db.okrYDongY.count({ where: { y: { hoiYId: h.id } } }),
+			chuDe: h.chuDe.length,
+			chuDeYLa: h.chuDe.filter((c) => c.loai === "y-la").length,
+			chuDeDaKetLuan: h.chuDe.filter((c) => c.ketLuan !== null).length,
+			chuDeChon: h.chuDe.filter((c) => c.ketLuan === "chon").length,
+			yChuaGom: h.y.filter((y) => y.chuDeId === null).length,
+		};
+	}
+
+	async function demSauBang(): Promise<Record<string, number>> {
+		const ra: Record<string, number> = {};
+		for (const bang of SAU_BANG_HOI_Y) {
+			const b = BANG_DEM.find((x) => x.bang === bang);
+			if (!b) throw new Error(`BANG_DEM không có bảng ${bang}`);
+			const rows = await db.$queryRawUnsafe<{ n: bigint }[]>(
+				`SELECT count(*) AS n FROM "${b.bang}"`,
+			);
+			ra[bang] = Number(rows[0]?.n ?? 0);
+		}
+		return ra;
+	}
+
+	async function docY() {
+		const ds = await db.okrY.findMany({
+			where: { hoiY: { cycleId: KY_NAM_KE } },
+			include: { chuDe: true },
+		});
+		return ds
+			.map((y) => ({
+				tacGia: y.tacGiaUserId,
+				noiDung: y.noiDung,
+				viSao: y.viSao,
+				doBangGi: y.doBangGi,
+				luc: y.createdAt.toISOString(),
+				chuDe: y.chuDe?.ten ?? null,
+				yLa: y.chuDe?.loai === "y-la",
+			}))
+			.sort((a, b) => a.noiDung.localeCompare(b.noiDung));
+	}
+
+	async function idSauBang(): Promise<string[]> {
+		const ds = await Promise.all([
+			db.okrHoiY.findMany({ select: { id: true } }),
+			db.okrHoiYBanTruoc.findMany({ select: { id: true } }),
+			db.okrY.findMany({ select: { id: true } }),
+			db.okrChuDe.findMany({ select: { id: true } }),
+		]);
+		return ds.flat().map((x) => x.id);
+	}
+
+	test(
+		"nạp bộ mẫu: chu kỳ năm kế ở lập kế hoạch, một lần hỏi ý đang gom — bảng khai so từng dòng",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			expect(await doHoiY()).toEqual(KHAI);
+			expect(bo.hoiY.nguoiChon).toBe("le-hai-dang");
+			expect(bo.hoiY.banTruoc).toHaveLength(KHAI.banTruoc);
+			expect(bo.hoiY.y).toHaveLength(KHAI.y);
+			expect(bo.hoiY.dongY).toHaveLength(KHAI.dongY);
+			expect(bo.hoiY.chuDe).toHaveLength(KHAI.chuDe - KHAI.chuDeYLa);
+			expect(bo.hoiY.yLa).toHaveLength(KHAI.chuDeYLa);
+
+			const h = await db.okrHoiY.findFirstOrThrow({
+				where: { cycleId: KY_NAM_KE },
+				include: { banTruoc: true, chuDe: { include: { y: true } } },
+			});
+			const t0 = new Date(
+				MOC_THU_NAM.getTime() - OKR_MAU.hoiY.moTruocGio * GIO,
+			);
+			const han = new Date(t0.getTime() + OKR_MAU.hoiY.hanSauMoGio * GIO);
+			expect(h.createdAt).toEqual(t0);
+			expect(h.hanLuc).toEqual(han);
+			expect(h.congBoLuc).toBeNull();
+			expect(h.taoBoiUserId).toBe(NGUOI_CHON);
+			expect(trangThaiHoiY(h, MOC_THU_NAM)).toBe("dang-gom");
+			expect(trangThaiHoiY(h, new Date(han.getTime() - 1))).toBe("dang-mo");
+			expect(h.banTruoc?.vietBoiUserId).toBe(NGUOI_CHON);
+			expect(h.banTruoc?.boQua).toBe(false);
+			expect(h.banTruoc?.cau).toEqual(bo.hoiY.banTruoc);
+			expect(h.banTruoc?.niemPhongLuc).toEqual(
+				new Date(t0.getTime() + OKR_MAU.hoiY.niemPhongSauMoGio * GIO),
+			);
+
+			const y = await db.okrY.findMany({
+				where: { hoiYId: h.id },
+				include: { dongY: true },
+			});
+			for (const m of bo.hoiY.y) {
+				const dong = y.find(
+					(x) =>
+						x.tacGiaUserId === nguoiMau(m.tacGia) && x.noiDung === m.noiDung,
+				);
+				expect(dong, m.ma).toBeDefined();
+				const luc = new Date(t0.getTime() + m.gio * GIO);
+				expect(dong?.createdAt, m.ma).toEqual(luc);
+				expect(dong?.viSao, m.ma).toBe(m.viSao);
+				expect(dong?.doBangGi, m.ma).toBe(m.doBangGi);
+				for (const d of dong?.dongY ?? []) {
+					expect(d.createdAt.getTime(), m.ma).toBe(
+						luc.getTime() + OKR_MAU.hoiY.dongYSauYGio * GIO,
+					);
+					expect(d.createdAt.getTime(), m.ma).toBeLessThan(han.getTime());
+				}
+			}
+			for (const c of h.chuDe) {
+				expect(c.createdAt.getTime()).toBeGreaterThanOrEqual(han.getTime());
+				for (const x of c.y)
+					expect(x.ganLuc?.getTime()).toBeGreaterThanOrEqual(han.getTime());
+			}
+
+			const chon = h.chuDe.find((c) => c.ketLuan === "chon");
+			expect(chon?.noiBanTruoc).toBe("cau-1");
+			expect(chon?.cauMucTieu.length).toBeGreaterThan(0);
+			expect(chon?.lyDo.length).toBeGreaterThan(0);
+			const khac = h.chuDe.filter(
+				(c) => c.ketLuan !== null && c.ketLuan !== "chon",
+			);
+			expect(khac).toHaveLength(1);
+			expect(khac[0]?.noiBanTruoc).toBeNull();
+			const yLa = h.chuDe.filter((c) => c.loai === "y-la");
+			expect(yLa[0]?.y).toHaveLength(1);
+			expect(yLa[0]?.ketLuan).toBeNull();
+
+			const vet = await db.okrTrail.findMany({
+				where: { cycleId: KY_NAM_KE },
+				select: { action: true, actorUserId: true },
+				orderBy: { action: "asc" },
+			});
+			expect(vet).toEqual([
+				{ action: "mo-hoi-y", actorUserId: NGUOI_CHON },
+				{ action: "niem-phong", actorUserId: NGUOI_CHON },
+			]);
+		},
+		CHO,
+	);
+
+	test(
+		"mốc là bây giờ (lệnh không --moc): lần hỏi ý đã qua hạn, chưa công bố — đang gom hôm nay",
+		async () => {
+			await lamSachOkr();
+			const bayGio = new Date();
+			await napMau(bayGio);
+			const h = await db.okrHoiY.findFirstOrThrow({
+				where: { cycleId: KY_NAM_KE },
+			});
+			expect(h.hanLuc.getTime()).toBeLessThan(bayGio.getTime());
+			expect(h.congBoLuc).toBeNull();
+			expect(trangThaiHoiY(h, new Date())).toBe("dang-gom");
+		},
+		CHO,
+	);
+
+	test("danh sách bảng đếm rút từ mô hình dữ liệu và chứa đủ sáu bảng hỏi ý", () => {
+		expect(BANG_DEM.map((b) => b.bang)).toEqual(
+			expect.arrayContaining([...SAU_BANG_HOI_Y]),
+		);
+	});
+
+	test(
+		"nạp lần hai: từng bảng trong sáu bảng bằng lần một, nội dung y hệt",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const mot = await demSauBang();
+			const noiDung = await docY();
+			expect(mot).toEqual({
+				okrHoiY: KHAI.hoiY,
+				okrHoiYBanTruoc: 1,
+				okrY: KHAI.y,
+				okrYDongY: KHAI.dongY,
+				okrChuDe: KHAI.chuDe,
+				okrHoiYHieu: 0,
+			});
+			await napMau(MOC_THU_NAM);
+			expect(await demSauBang()).toEqual(mot);
+			expect(await docY()).toEqual(noiDung);
+			expect(await doHoiY()).toEqual(KHAI);
+		},
+		CHO,
+	);
+
+	test(
+		"xoá bộ mẫu: sáu bảng không còn hàng mang mã thực thể mẫu, hàng ngoài bộ mẫu đứng nguyên",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const idMauSauBang = await idSauBang();
+			expect(idMauSauBang.length).toBeGreaterThan(0);
+
+			const ky = await taoNam("ngoai-hoi-y", 2033);
+			const chon = await nguoiMoi("ngoai-hoi-y-chon", "admin");
+			const tacGia = await nguoiMoi("ngoai-hoi-y-tac-gia", "member");
+			const dongYNgoai = await nguoiMoi("ngoai-hoi-y-dong-y", "member");
+			const { id: hoiYId } = ok<{ id: string }>(
+				await goi(
+					"okr.moHoiY",
+					{
+						cycleId: ky,
+						cauHoi: "Hỏi ý ngoài bộ mẫu để thử xoá",
+						loiMo: "",
+						soLieu: [{ nhan: "Doanh thu năm", giaTri: "1 tỷ", ghiChu: "" }],
+						hanLuc: new Date(Date.now() + 48 * GIO).toISOString(),
+						nguoiChonUserId: chon,
+					},
+					await phienCua(chon),
+				),
+				"mo hoi y ngoai mau",
+			);
+			const gopY = async (cua: string, noiDung: string) =>
+				ok<{ id: string }>(
+					await goi(
+						"okr.gopY",
+						{ hoiYId, noiDung, viSao: "", doBangGi: "" },
+						await phienCua(cua),
+					),
+					"gop y",
+				).id;
+			const dongY = async (cua: string, yId: string) =>
+				ok(
+					await goi("okr.dongY", { yId, bat: true }, await phienCua(cua)),
+					"dong y",
+				);
+			const yNgoai = await gopY(tacGia, "Ý ngoài bộ mẫu do người ngoài góp");
+			await dongY(dongYNgoai, yNgoai);
+			await dongY(nguoiMau("ngo-van-toan"), yNgoai);
+			const yCuaNguoiMau = await gopY(
+				nguoiMau("bui-quang-huy"),
+				"Ý của người mẫu góp vào lần hỏi ý ngoài bộ mẫu",
+			);
+			expect(await db.okrYDongY.count({ where: { yId: yNgoai } })).toBe(2);
+
+			const chupNgoai = async () => ({
+				hoiY: await db.okrHoiY.findUnique({ where: { id: hoiYId } }),
+				y: await db.okrY.findUnique({ where: { id: yNgoai } }),
+				dongY: await db.okrYDongY.findMany({
+					where: { yId: yNgoai, userId: dongYNgoai },
+				}),
+			});
+			const ngoai = await chupNgoai();
+			expect(ngoai.hoiY).not.toBeNull();
+			expect(ngoai.y).not.toBeNull();
+			expect(ngoai.dongY).toHaveLength(1);
+			const ids = [...(await tapIdMau()), ...idMauSauBang, yCuaNguoiMau];
+
+			const dem = await db.$transaction((tx) => xoaTrong(tx), {
+				timeout: CHO,
+			});
+			expect(dem).toMatchObject({
+				hoiY: KHAI.hoiY,
+				y: KHAI.y + 1,
+				dongY: KHAI.dongY + 1,
+				chuDe: KHAI.chuDe,
+			});
+			expect(await demSauBang()).toEqual({
+				okrHoiY: 1,
+				okrHoiYBanTruoc: 0,
+				okrY: 1,
+				okrYDongY: 1,
+				okrChuDe: 0,
+				okrHoiYHieu: 0,
+			});
+			expect(await demThamChieu(ids)).toEqual({});
+			expect(await chupNgoai()).toEqual(ngoai);
+			expect(
+				await db.okrY.findUnique({ where: { id: yCuaNguoiMau } }),
+			).toBeNull();
+
+			await db.okrYDongY.deleteMany({ where: { yId: yNgoai } });
+			await db.okrY.deleteMany({ where: { hoiYId } });
+			await db.okrTrail.deleteMany({ where: { cycleId: ky } });
+			await db.okrHoiY.deleteMany({ where: { id: hoiYId } });
+			await db.okrCycle.deleteMany({ where: { id: ky } });
+		},
+		CHO,
+	);
+
+	type Tho = {
+		hoiY: {
+			nguoiChon: string;
+			y: { ma: string; tacGia: string; gio: number }[];
+			dongY: { y: string; nguoi: string }[];
+			chuDe: {
+				y: string[];
+				ketLuan?: { loai: string; lyDo: string; noi?: string };
+			}[];
+		};
+	};
+	const ketLuanChon = (tho: Tho) =>
+		tho.hoiY.chuDe.find((c) => c.ketLuan?.loai === "chon")?.ketLuan;
+	const CA_HONG: { ten: string; pha: (tho: Tho) => string }[] = [
+		{
+			ten: "người chọn không phải quản trị",
+			pha: (tho) => {
+				tho.hoiY.nguoiChon = "pham-thu-trang";
+				return "hoiY.nguoiChon";
+			},
+		},
+		{
+			ten: "người chọn góp ý",
+			pha: (tho) => {
+				const y = tho.hoiY.y[0];
+				if (y) y.tacGia = tho.hoiY.nguoiChon;
+				return "hoiY.y[0].tacGia";
+			},
+		},
+		{
+			ten: "một người góp bốn ý",
+			pha: (tho) => {
+				const dau = tho.hoiY.y[0]?.tacGia ?? "";
+				for (const y of tho.hoiY.y.slice(0, 4)) y.tacGia = dau;
+				return "hoiY.y[3].tacGia";
+			},
+		},
+		{
+			ten: "tác giả đồng ý ý của chính mình",
+			pha: (tho) => {
+				const d = tho.hoiY.dongY[0];
+				const y = tho.hoiY.y.find((x) => x.ma === d?.y);
+				if (d && y) d.nguoi = y.tacGia;
+				return "hoiY.dongY[0]";
+			},
+		},
+		{
+			ten: "một ý nằm ở hai chủ đề",
+			pha: (tho) => {
+				const dau = tho.hoiY.chuDe[0]?.y[0] ?? "";
+				tho.hoiY.chuDe[1]?.y.push(dau);
+				return "hoiY.chuDe[1].y";
+			},
+		},
+		{
+			ten: "chủ đề chọn nối câu viết trước không có",
+			pha: (tho) => {
+				const k = ketLuanChon(tho);
+				if (k) k.noi = "cau-5";
+				return "hoiY.chuDe[0].ketLuan.noi";
+			},
+		},
+		{
+			ten: "lý do chọn quá dài cho «vì sao lúc này»",
+			pha: (tho) => {
+				const k = ketLuanChon(tho);
+				if (k) k.lyDo = "x".repeat(501);
+				return "hoiY.chuDe[0].ketLuan";
+			},
+		},
+		{
+			ten: "ý góp sau hạn",
+			pha: (tho) => {
+				const y = tho.hoiY.y[0];
+				if (y) y.gio = OKR_MAU.hoiY.hanSauMoGio;
+				return "hoiY.y[0].gio";
+			},
+		},
+	];
+
+	for (const ca of CA_HONG) {
+		test(`tệp hỏng — ${ca.ten}: nêu đúng chỗ`, () => {
+			const tho: Tho = JSON.parse(congTyChu());
+			const duong = ca.pha(tho);
+			expect(() => docBoOkrMau(JSON.stringify(tho))).toThrow(duong);
+		});
+	}
 });

@@ -41,6 +41,16 @@ nào — nó không có chiến dịch hay kế hoạch 30 ngày; phép đo cầ
 thủ tục thật. Nạp lại không nhân đôi hàng nào của sáu bảng mới, `--xoa` gỡ sạch chúng
 cùng phần còn lại của bộ mẫu.
 
+Từ lượt hỏi ý mục tiêu bộ mẫu có thêm một chu kỳ năm kế tiếp ở «lập kế hoạch» và một
+lần hỏi ý đang gom trên nó (khối `hoiY` của `cong-ty.json`, nạp bởi
+`okr-mau/nap-hoi-y.ts`): người chọn `le-hai-dang` đã niêm phong bốn câu, 30 ý của 25
+người ở cả ba bộ phận (bốn người vai «chỉ OKR»), 12 lượt đồng ý, bốn chủ đề (hai đã
+kết luận), một ý lạ, năm ý chưa gom. Mọi hàng đi qua thủ tục thật của
+`OkrHoiYService` với đồng hồ tiêm tiến dần từ mốc `--moc` (mở 6 ngày trước mốc, hạn 24
+giờ trước mốc), nên không `--moc` thì hạn đã qua và màn `/okr/hoi-y` ở «đang gom».
+Sáu bảng hỏi ý mang mã sinh của cơ sở dữ liệu, không mang `mau-okr-`: `--xoa` tìm
+chúng qua chu kỳ và người mẫu.
+
 ```sh
 bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
 bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó

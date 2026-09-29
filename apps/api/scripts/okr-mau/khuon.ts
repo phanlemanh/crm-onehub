@@ -5,6 +5,19 @@ import {
 } from "@crm/validation/okr-canh-kr";
 import { MA_CHI_SO, PHAM_VI_CHI_SO } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
+import {
+	gopYInput,
+	KET_LUAN_CHON,
+	ketLuanChuDe,
+	ketLuanInput,
+	moHoiYInput,
+	NOI_MOI,
+	niemPhongInput,
+	noiBanTruoc,
+	OKR_HOI_Y,
+	soCauCuaNoi,
+	taoChuDeInput,
+} from "@crm/validation/okr-hoi-y";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import { luuMauInput, mauNoiDung } from "@crm/validation/okr-mau";
@@ -142,14 +155,56 @@ const canhKr = z.strictObject({
 	tuMau: z.array(z.strictObject({ mucTieu: ma, mau: ma })),
 });
 
+const yHoiYMau = z.strictObject({
+	ma,
+	tacGia: ma,
+	gio: z.number().int().min(OKR_MAU.hoiY.niemPhongSauMoGio),
+	noiDung: gopYInput.shape.noiDung,
+	viSao: gopYInput.shape.viSao.default(""),
+	doBangGi: gopYInput.shape.doBangGi.default(""),
+});
+
+const ketLuanMau = z.discriminatedUnion("loai", [
+	z.strictObject({
+		loai: z.literal(KET_LUAN_CHON),
+		lyDo: ketLuanInput.shape.lyDo,
+		cauMucTieu: ketLuanInput.shape.cauMucTieu,
+		noi: noiBanTruoc,
+	}),
+	z.strictObject({
+		loai: ketLuanChuDe.exclude([KET_LUAN_CHON]),
+		lyDo: ketLuanInput.shape.lyDo,
+	}),
+]);
+
+const chuDeMau = z.strictObject({
+	ma,
+	ten: taoChuDeInput.shape.ten,
+	y: z.array(ma).min(1),
+	ketLuan: ketLuanMau.optional(),
+});
+
+const hoiYMau = z.strictObject({
+	nguoiChon: ma,
+	cauHoi: moHoiYInput.shape.cauHoi,
+	loiMo: moHoiYInput.shape.loiMo,
+	soLieu: moHoiYInput.shape.soLieu,
+	banTruoc: niemPhongInput.shape.cau.unwrap(),
+	y: z.array(yHoiYMau).min(1),
+	dongY: z.array(z.strictObject({ y: ma, nguoi: ma })),
+	chuDe: z.array(chuDeMau),
+	yLa: z.array(ma),
+});
+
 const boTho = z.strictObject({
 	congTy: z.string(),
-	chuKy: z.strictObject({ nam: chuKy, quy3: chuKy, quy4: chuKy }),
+	chuKy: z.strictObject({ nam: chuKy, namKe: chuKy, quy3: chuKy, quy4: chuKy }),
 	boPhan: z.array(boPhan).min(1),
 	phongBan: z.array(phongBan).min(1),
 	nguoi: z.array(nguoi).min(1),
 	mucTieu: z.array(mucTieu).min(1),
 	canhKr,
+	hoiY: hoiYMau,
 });
 
 export type BoOkrMau = z.infer<typeof boTho>;
@@ -157,6 +212,8 @@ export type NguoiMau = BoOkrMau["nguoi"][number];
 export type MucTieuMau = BoOkrMau["mucTieu"][number];
 export type KrMau = MucTieuMau["krs"][number];
 export type CanhKrMau = BoOkrMau["canhKr"];
+export type HoiYMau = BoOkrMau["hoiY"];
+export type KetLuanHoiYMau = NonNullable<HoiYMau["chuDe"][number]["ketLuan"]>;
 
 function trungMa(ds: { ma: string }[]): string | null {
 	const thay = new Set<string>();
@@ -307,6 +364,7 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	}
 
 	kiemCanhKr(bo, loi);
+	kiemHoiY(bo, loi);
 });
 
 type BaoLoi = (path: (string | number)[], message: string) => void;
@@ -401,6 +459,99 @@ function kiemCanhKr(bo: BoOkrMau, loi: BaoLoi): void {
 				path,
 				`mục tiêu ${t.mucTieu} không sinh được từ mẫu ${t.mau}: ${sai}`,
 			);
+	});
+}
+
+function kiemHoiY(bo: BoOkrMau, loi: BaoLoi): void {
+	const h = bo.hoiY;
+	const vai = new Map(bo.nguoi.map((n) => [n.ma, n.vai]));
+	const cuaHoiY = OKR_MAU.hoiY;
+
+	if (!vai.has(h.nguoiChon))
+		loi(["hoiY", "nguoiChon"], `không có người ${h.nguoiChon}`);
+	else if (vai.get(h.nguoiChon) !== "admin")
+		loi(["hoiY", "nguoiChon"], `người chọn ${h.nguoiChon} phải là quản trị`);
+
+	const yTheoMa = new Map<string, HoiYMau["y"][number]>();
+	const soY = new Map<string, number>();
+	h.y.forEach((y, i) => {
+		const path = ["hoiY", "y", i];
+		if (yTheoMa.has(y.ma)) loi([...path, "ma"], `mã ý trùng: ${y.ma}`);
+		yTheoMa.set(y.ma, y);
+		if (!vai.has(y.tacGia))
+			loi([...path, "tacGia"], `không có người ${y.tacGia}`);
+		else if (y.tacGia === h.nguoiChon)
+			loi([...path, "tacGia"], "người chọn không góp ý");
+		const so = (soY.get(y.tacGia) ?? 0) + 1;
+		soY.set(y.tacGia, so);
+		if (so > OKR_HOI_Y.yMoiNguoi)
+			loi([...path, "tacGia"], `${y.tacGia} góp quá ${OKR_HOI_Y.yMoiNguoi} ý`);
+		if (y.gio + cuaHoiY.dongYSauYGio >= cuaHoiY.hanSauMoGio)
+			loi(
+				[...path, "gio"],
+				`ý phải góp trước giờ thứ ${cuaHoiY.hanSauMoGio - cuaHoiY.dongYSauYGio} sau khi mở, để còn chỗ cho lượt đồng ý trước hạn`,
+			);
+	});
+
+	const cap = new Set<string>();
+	h.dongY.forEach((d, i) => {
+		const path = ["hoiY", "dongY", i];
+		const y = yTheoMa.get(d.y);
+		if (!y) loi([...path, "y"], `không có ý ${d.y}`);
+		if (!vai.has(d.nguoi)) loi([...path, "nguoi"], `không có người ${d.nguoi}`);
+		else if (d.nguoi === h.nguoiChon)
+			loi(path, "người chọn không đồng ý ý nào");
+		else if (y?.tacGia === d.nguoi)
+			loi(path, `${d.nguoi} không đồng ý ý của chính mình`);
+		const khoa = `${d.y}:${d.nguoi}`;
+		if (cap.has(khoa)) loi(path, `lượt đồng ý trùng: ${khoa}`);
+		cap.add(khoa);
+	});
+
+	const daGom = new Map<string, string>();
+	const gom = (ma: string, noi: string, path: (string | number)[]) => {
+		if (!yTheoMa.has(ma)) loi(path, `không có ý ${ma}`);
+		else if (daGom.has(ma)) loi(path, `ý ${ma} đã nằm ở ${daGom.get(ma)}`);
+		else daGom.set(ma, noi);
+	};
+	const trungChuDe = trungMa(h.chuDe);
+	if (trungChuDe) loi(["hoiY", "chuDe"], `mã chủ đề trùng: ${trungChuDe}`);
+	h.chuDe.forEach((c, i) => {
+		const path = ["hoiY", "chuDe", i];
+		c.y.forEach((ma, j) => {
+			gom(ma, `chủ đề ${c.ma}`, [...path, "y", j]);
+		});
+		const kl = c.ketLuan;
+		if (!kl) return;
+		const chon = kl.loai === KET_LUAN_CHON;
+		const r = ketLuanInput.safeParse({
+			chuDeId: c.ma,
+			ketLuan: kl.loai,
+			lyDo: kl.lyDo,
+			cauMucTieu: "cauMucTieu" in kl ? kl.cauMucTieu : "",
+			noiBanTruoc: "noi" in kl ? kl.noi : null,
+		});
+		if (!r.success)
+			for (const is of r.error.issues)
+				loi(
+					[
+						...path,
+						"ketLuan",
+						...is.path.map((k) => (k === "noiBanTruoc" ? "noi" : String(k))),
+					],
+					is.message,
+				);
+		if (chon && "noi" in kl && kl.noi !== NOI_MOI) {
+			const soCau = soCauCuaNoi(kl.noi);
+			if (soCau !== null && soCau > h.banTruoc.length)
+				loi(
+					[...path, "ketLuan", "noi"],
+					`nối ${kl.noi} nhưng chỉ có ${h.banTruoc.length} câu viết trước`,
+				);
+		}
+	});
+	h.yLa.forEach((ma, j) => {
+		gom(ma, "ý lạ", ["hoiY", "yLa", j]);
 	});
 }
 

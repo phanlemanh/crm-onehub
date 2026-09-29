@@ -7,6 +7,14 @@ export const OKR_MAU = {
 	mienThu: "mau.onehub.test",
 	tuan: { soTuanCapNhat: 6, tuanMoiQuy: 13, gioCapNhat: 9, lechVN: 7 },
 	thoiGian: { phutMs: PHUT_MS, gioMs: GIO_MS, ngayMs: NGAY_MS },
+	hoiY: {
+		moTruocGio: 6 * 24,
+		hanSauMoGio: 5 * 24,
+		niemPhongSauMoGio: 1,
+		dongYSauYGio: 1,
+		gomSauHanGio: 2,
+		ketLuanSauHanGio: 4,
+	},
 	mayCucBo: ["localhost", "127.0.0.1", "::1", "[::1]"],
 	moiTruongCam: {
 		NODE_ENV: ["production"],
