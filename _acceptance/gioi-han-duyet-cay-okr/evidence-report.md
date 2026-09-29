@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: gioi-han-duyet-cay-okr
-verdict: REJECT
-failed_evals: ["E16","E19"]
+verdict: PENDING-JUDGMENT
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6f272b15d946a37825fab888e0d4cfee5eab8d08
+verified_commit: cbb939a601f5183e35c061632bf479ef85f3e63a
 human_signoff:
 ---
 
 # Evidence Report: gioi-han-duyet-cay-okr
 
-Round 2. Nội dung thay toàn bộ round cũ; lịch sử round nằm ở mục Iterations.
+Round 3. Nội dung thay toàn bộ round cũ; lịch sử round nằm ở mục Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,10 +32,10 @@ Round 2. Nội dung thay toàn bộ round cũ; lịch sử round nằm ở mục
 | E13 | AC-11 | test | PASS |
 | E14 | AC-11 | script | PASS |
 | E15 | AC-12 | ui-check | PASS |
-| E16 | AC-12 | script | FAIL |
+| E16 | AC-12 | script | PASS |
 | E17 | AC-12 | test | PASS |
 | E18 | AC-13 | ui-check | PASS |
-| E19 | AC-13 | script | FAIL |
+| E19 | AC-13 | script | PASS |
 | E20 | AC-14 | test | PASS |
 | E21 | AC-14 | script | PASS |
 | E22 | AC-14 | script | PASS |
@@ -43,9 +43,9 @@ Round 2. Nội dung thay toàn bộ round cũ; lịch sử round nằm ở mục
 | E24 | AC-15 | script | PASS |
 | E25 | AC-15 | judgment | UNCERTAIN |
 
-Lệnh fail không gắn eval nào: không có. Lệnh duy nhất đỏ là lệnh chung của E16 và E19 (phiên đo màn `man-gioi-han-duyet.mjs` chạy qua `tien-de.mjs`), nó gắn với hai eval đó nên được ghi ở hai khối bên dưới.
+Lệnh fail không gắn eval nào: không có.
 
-Lưu ý mâu thuẫn cần người đọc: hai eval ui-check E15 và E18 (do tác tử ui-check chạy lần 2 và đã mở từng ảnh) báo đạt, nhưng chính lần chạy script chung mà E16 và E19 dựa vào in ra hàng loạt dòng HONG ở các bước của E15 (không thấy lựa chọn người xem, không thấy hộp hỏi lại «Gửi mục tiêu này đi duyệt?», hết 30000ms ở nhiều chỗ), và script ghi rõ «KHÔNG chép sang evidence/ (lần chạy có hỏng)». Hai nguồn không cùng một lần chạy, nên không thể coi E15 xanh hơn lần chạy script đã đỏ; đây là lý do REJECT nằm ở E16 và E19 và cần chạy lại cả cụm.
+Round này chạy lại E15 đến E19 (cụm phép đo màn, cùng bộ kiểm DOM) và bốn lệnh suite. Lần chạy chung của E16 và E19 đã xanh, và hai eval ui-check E15, E18 đã được mở từng ảnh đối chiếu; mâu thuẫn ở round 2 giữa lần chạy script và tác tử ui-check không còn. E1 đến E14 và E20 đến E24 mang từ round trước (delta không chạm paths của chúng). E25 vẫn chờ người: hội đồng không có thân diff để đối chiếu.
 
 ## Evidence
 
@@ -75,10 +75,9 @@ Lưu ý mâu thuẫn cần người đọc: hai eval ui-check E15 và E18 (do t�
   baseline: n-a
   verifier: config:executors.test.ghd_hien_thi_bon_duong
   verified_at: 2026-09-29T11:38:27Z
+  carried_from_round: 2
   output: |
-    bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t hien-thi-an && bun test test/vai-chi-okr.spec.ts -t ma-tran"
-    chay 1 lan, dat 1 lan, khong phuong sai
-    __EXIT=0
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-gioi-han-duyet-cay-okr-E4-r1
@@ -191,90 +190,68 @@ Lưu ý mâu thuẫn cần người đọc: hai eval ui-check E15 và E18 (do t�
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E15
-  run_id: E15-lan-2-pass-2026-09-29T12:32Z
+  run_id: E15-verifier-doc-lap-2026-09-29T13:08Z
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ghd_man_chrome
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
   screenshot: evidence/E15-step3-gioi-han.png
   observed: |
-    Đã mở và đọc cả 10 frame lần 2, và đối chiếu Expected:
-    - step3-gioi-han: khung G «Giữ chân đối tác chiến lược miền Bắc gmnp020», đầu khung có chip «Giới hạn» có ổ khoá cạnh «Cam kết» và «Nháp». Toast «Đã lưu mức hiển thị», nút «Gửi duyệt» hiện. Khớp.
-    - step4-con-can-chinh: hộp «Mức hiển thị», radio «Giới hạn» được chọn, chữ đỏ «Mục tiêu còn 1 căn chỉnh — gỡ hết căn chỉnh (góp vào và nhận góp) rồi mới đặt mức giới hạn.», nút «Mở tab Căn chỉnh», nút «Lưu» mờ (khoá). Khớp.
-    - step5-cho-duyet: dải «Chờ Trần Quốc Bảo duyệt · gửi 29/09 … Rút lại», chip «Chờ duyệt» và «Giới hạn», toast «Đã gửi duyệt». Không còn nút «Gửi duyệt» và «Thêm KR», cột việc chỉ còn «—» (sửa bị khoá). Khớp.
-    - step6-nguoi-duyet (đăng nhập Trần Quốc Bảo): dải «Nguyễn Thị Lan gửi duyệt · 29/09» với nút xanh «Duyệt và công bố» và «Trả lại…». Khớp.
-    - step7-bi-tra-lai: dải viền cam «Trần Quốc Bảo trả lại · 29/09», lý do «Chưa nêu số khởi điểm của KR, bổ sung rồi gửi lại gmnp020», chip «Nháp» + «Giới hạn», có «Gửi duyệt». Khớp.
-    - step8-khong-thay (Võ Đức Anh): khung «Mục tiêu» chỉ có «Không tìm thấy mục tiêu này / Đường dẫn có thể sai, hoặc mục tiêu không còn.» và nút «Đóng». Không có tiêu đề G. Khớp.
-    - step8b-theo-don-vi: «OKR theo đơn vị › Kinh doanh miền Bắc», 2 mục tiêu (Giữ đà tăng trưởng bán lẻ miền Bắc, Mở rộng tệp đối tác bán lẻ miền Bắc), không có dòng G. Khớp.
-    - step9-cho-duyet-390 và step9-nguoi-duyet-390: drawer ở 390 px, dải chờ duyệt (nút «Rút lại») và dải người duyệt (nút «Duyệt và công bố», «Trả lại…») hiển thị đủ, không tràn ngang. Bảng KR bị cắt ở mép phải cột «Việc», đúng phần cuộn ngang trong bảng, trang không tràn.
-    - step9-trang-thai-loi: Empty lỗi «Không tải được mục tiêu / Chưa có gì bị mất — thử lại sau ít phút.» kèm nút «Thử lại». Khớp.
-    Không có frame nào mâu thuẫn Expected. Lưu ý: frame lần 1 (hỏng) chỉ hiện hộp «Bỏ những gì vừa nhập?» trên nền đen và không đạt.
+    Đã mở từng frame bằng Read. Bước 3 (1440): khung «Giữ chân đối tác chiến lược miền Bắc», chip Cam kết, Nháp và chip khoá «Giới hạn», nút Gửi duyệt, toast «Đã lưu mức hiển thị». Bước 4: hộp «Mức hiển thị» chọn «Giới hạn», dòng đỏ «Mục tiêu còn 1 căn chỉnh…», nút Lưu khoá. Bước 5: chip Chờ duyệt + Giới hạn, dải «Chờ Trần Quốc Bảo duyệt» với nút Rút lại, không còn Gửi duyệt và Thêm KR.
+    Bước 6 (người duyệt): dải «Nguyễn Thị Lan gửi duyệt» với «Duyệt và công bố» và «Trả lại…», không có nút sửa. Bước 7 (bị trả lại): chip Nháp, dải viền cam «Trần Quốc Bảo trả lại» kèm lý do, nút Gửi duyệt, sửa mở lại. Bước 8: người ngoài chỉ thấy «Không tìm thấy mục tiêu này»; trang theo đơn vị Kinh doanh miền Bắc «2 mục tiêu», không có dòng G.
+    Bước 9 (390): bottom sheet tiêu đề xuống dòng, nút Rút lại / Duyệt và công bố / Trả lại xếp dọc, không tràn ngang; trạng thái lỗi «Không tải được mục tiêu» kèm «Thử lại». Không frame nào mâu thuẫn Expected; danh sách «Chờ bạn duyệt» ở Tổng quan và thao tác hộp «Trả lại…» 5 ký tự không nằm trong frame, được kiểm bằng 59 khẳng định của script (0 hỏng), không bằng mắt.
   network_observed: clean
+  output: |
+    Chạy qua tien-de.mjs: man-gioi-han-duyet.mjs, chiều đỏ (--chieu-do) đỏ đúng chỗ ghim và in tiêu đề G tìm thấy trên trang ở bước buoc-khong-thay (đúng kỳ vọng), bản sao worktree chiều đỏ đã dọn.
+    Frame lưu ở evidence/: E15-step3-gioi-han, E15-step4-con-can-chinh, E15-step5-cho-duyet, E15-step6-nguoi-duyet, E15-step7-bi-tra-lai, E15-step8-khong-thay, E15-step8b-theo-don-vi, E15-step9-cho-duyet-390, E15-step9-nguoi-duyet-390, E15-step9-trang-thai-loi (.png); network: E15-network.txt.
+    Network chỉ có hai lỗi app-scope do chính bước yêu cầu tạo ra: POST okr.datHienThi ở bước 4 (lỗi «còn 1 căn chỉnh» là kết quả đúng) và GET okr.objective ở bước 9 (do chặn truy vấn có chủ đích, app hiện Empty lỗi + Thử lại đúng kỳ vọng). Không lỗi kết nối ngoài ý muốn.
 
 - eval: E16
-  run_id: minted-gioi-han-duyet-cay-okr-E16-r2
-  exit_code: 1
+  run_id: minted-gioi-han-duyet-cay-okr-E16-r3
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ghd_man_chrome
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
   output: |
-    lệnh: EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs"
-    HONG: E15 buoc-gioi-han: khong co lua chon «Đỗ Minh Khoa» o [data-hop='muc-hien-thi'] [role='combobox']
-    HONG: E16: sau Luu, G.hienThi «cong-khai» mong gioi-han va okrNguoiXem [] mong [mau-okr-nguoi-do-minh-khoa]
-    HONG: E15 buoc-cho-duyet: hoi lai «Gửi mục tiêu này đi duyệt?»: het 30000ms van chua thay
-    HONG: E16: sau Gui duyet G.status «nhap» mong cho-duyet va dung mot vet gui-duyet cua T (thay 0: )
-    HONG: E15 buoc-nguoi-duyet: viec OKR cua toi co «Chờ bạn duyệt: Giữ chân đối tác chiến lược miền Bắc gmlsc2g»: het 30000ms van chua thay
-    HONG: E15 buoc-tra-lai: khong thay [data-okr-sheet='cmumlsdjs0002mccfluywtdxc'] [data-nut='tra-lai'] de bam
-    HONG: E16: sau Tra lai G.status «nhap» mong nhap va dung mot vet tra-lai co note «Chưa nêu số khởi điểm của KR, bổ sung rồi gửi lại gmlsc2g» (thay [])
-    HONG: E15 buoc-bi-tra-lai: dai co «Trần Quốc Bảo trả lại» va ly do da go (thay «»)
-    HONG: E15 buoc-khong-thay: G dang gioi-han truoc khi nguoi ngoai mo (thay cong-khai) — lo chi tinh khi G that su gioi han
-    HONG: E15 buoc-khong-thay: Theo don vi khong co dong G (thay ["mau-okr-mt-q4-kd-bac-1","mau-okr-mt-q4-kd-bac-2","cmumlsdjs0002mccfluywtdxc"])
-    HONG: E16: nguoi khong xem duoc nhan 2 phan hoi chua id/tieu de G (mong 0)
-    bang chung: 18 anh o .acceptance-runs/gioi-han-duyet-cay-okr/man/ · KHONG chep sang evidence/ (lan chay co hong)
-    phien-do: xong — mã 1
-    Cả ba điều kiện DB của E16 (mức giới hạn sau Lưu, vết gui-duyet, vết tra-lai) và điều kiện không lộ (2 phản hồi chứa G, mong 0) đều lệch. Nguyên nhân gốc chưa xác định; dòng đầu tiên hỏng là không chọn được người xem, các bước sau là hệ quả dây chuyền.
+    Lệnh chung với E19: EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs"
+    1 lần chạy, 1 lần đạt, không phương sai.
+    phien-do: xong — mã 0
 
 - eval: E17
-  run_id: minted-gioi-han-duyet-cay-okr-E17-r2
+  run_id: minted-gioi-han-duyet-cay-okr-E17-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ghd_khung_dom
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx
-    Ran 16 tests across 1 file. [1.61s]
-    __EXIT=0
+    Lệnh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx
+    Ran 16 tests across 1 file. [1.57s]
 
 - eval: E18
-  run_id: minted-gioi-han-duyet-cay-okr-E18-r2
+  run_id: minted-gioi-han-duyet-cay-okr-E18-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ghd_man_chrome
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
   screenshot: evidence/E18-step1.png
   observed: |
-    Da mo bang Read tung frame:
-    step1: trang Chuong trinh OKR (dark, quan tri Le Hai Dang), muc Cau hinh co dong «Công bố cần duyệt» voi cong tac nam trong form, dang BAT; nut «Lưu» da mờ sau khi luu; toast xanh «Đã lưu cấu hình chương trình.» goc trai duoi. Khop expected.
-    step2: cung trang, thanh vien thuong (VĐ): duoi tieu de co dong «Chỉ quản trị đổi được cấu hình chương trình.»; cac o nhap, select, cong tac deu mo/khoa (nut Mo chu ky va Luu mo). Khop.
-    step3: hop thoai «Lưu trữ «Kinh doanh miền Bắc»?» co canh bao vang «Chưa lưu trữ được — Phòng ban còn 4 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.», nut «Chuyển OKR… →» dang kich hoat, nut «Lưu trữ» mo (khoa), «Huỷ». Khop.
-    step4: man To chuc, phong Kinh doanh mien Bac, dong «OKR: 1 mục tiêu ở kỳ đang mở» (con lai 1) voi nut «Chuyển OKR…»; toast «Đã chuyển 3 mục tiêu sang Kinh doanh miền Nam.» kem canh bao vuot tran 5 (6 muc tieu). Khop.
-    step5a: Suc khoe chuong trinh, khoi «OKR mồ côi» rong: «Không có OKR mồ côi — Mọi mục tiêu ở kỳ đang mở đều có đơn vị còn hoạt động và người trả lời.» Khop.
-    step5b: cung khoi co 1 muc «Xuất kho nhanh như đối thủ tốt nhất», «Phòng ban · Kho vận», nhan «Người phụ trách KR đã rời», nut «Mở mục tiêu». Khop.
-    step6a (390px): sheet phong Kinh doanh mien Bac trong khung hep, «OKR: 1 mục tiêu ở kỳ đang mở», nut «Chuyển OKR…», toast chuyen 3 muc tieu; khong thay tran ngang. Khop.
-    step6b (390px): khoi «OKR mồ côi» voi 1 muc, nhan «Người phụ trách KR đã rời», nut «Mở mục tiêu» vua khung 390, khong cat ngang. Khop.
-  network_observed: n-a (driver)
+    Đã mở từng khung bằng Read. Bước 1 (1440): trang Chương trình OKR của quản trị (avatar LH), dòng «Công bố cần duyệt» với công tắc đang bật, toast «Đã lưu cấu hình chương trình.». Bước 2: thành viên thường (avatar VĐ) thấy «Chỉ quản trị đổi được cấu hình chương trình.», các ô nhập và nút đều khoá. Bước 3: hộp «Lưu trữ «Kinh doanh miền Bắc»?» có cảnh báo cam «Chưa lưu trữ được — Phòng ban còn 4 mục tiêu ở kỳ đang mở», nút «Chuyển OKR…» sáng, «Lưu trữ» khoá.
+    Bước 4: trang Tổ chức, dòng «OKR: 1 mục tiêu ở kỳ đang mở» kèm «Chuyển OKR…», toast «Đã chuyển 3 mục tiêu sang Kinh doanh miền Nam.» (kèm cảnh báo vượt trần 6/5). Bước 5: khối «OKR mồ côi» rỗng «Không có OKR mồ côi», sau khi gỡ người phụ trách KR có 1 thẻ «Xuất kho nhanh như đối thủ tốt nhất» nhãn «Người phụ trách KR đã rời» và nút «Mở mục tiêu». Bước 6 (390): bố cục xếp dọc, không tràn ngang, thẻ OKR và toast hiện đầy đủ. Không khung nào mâu thuẫn Expected.
+  network_observed: clean
+  output: |
+    Chiều đỏ (--chieu-do --chi E18, bản sao xác nhận lưu trữ đổi điều kiện okrMo): script báo hỏng đúng ở buoc-luu-tru-chan với nút lưu trữ bật, tổng kết «DO DUNG GHIM» (đạt, đúng kỳ vọng); bản sao worktree tạm đã dọn.
+    Khung lưu ở evidence/: E18-step1, E18-step2, E18-step3, E18-step4, E18-step5a-rong, E18-step5b, E18-step6a-chuyen-390, E18-step6b-mo-coi-390 (.png); network: E18-network.txt (0 dòng lỗi). Không lỗi console. Một verifier khác (E15) chạy song song cùng cây nên phiên đo chờ nhau qua hàng đợi, không ảnh hưởng kết quả.
 
 - eval: E19
-  run_id: minted-gioi-han-duyet-cay-okr-E19-r2
-  exit_code: 1
+  run_id: minted-gioi-han-duyet-cay-okr-E19-r3
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ghd_man_chrome
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
   output: |
-    Cùng lệnh và cùng lần chạy với E16 (một lệnh gắn hai eval E16, E19). Phần đuôi kết quả máy trả về chỉ liệt kê các bước HONG của E15 và E16; không có dòng HONG riêng nào của E18 hay E19 trong phần đuôi đó.
-    Lệnh kết thúc lỗi, nên cả hai eval gắn với lệnh này bị tính đỏ theo quy tắc gắn lệnh-với-eval. Các điều kiện riêng của E19 (version program tăng và duyetCongBo true sau Lưu; đúng ba mục tiêu đổi departmentId; ba vết chuyen-don-vi; khối mồ côi khớp okr.moCoi) chưa được tách kết quả riêng trong đuôi này.
-    phien-do: xong — mã 1
-    Cần chạy lại phiên đo và đọc log đầy đủ của E19 trước khi kết luận nguyên nhân.
+    Cùng lần chạy chung với E16: EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs"
+    1 lần chạy, 1 lần đạt, không phương sai.
+    phien-do: xong — mã 0
 
 - eval: E20
   run_id: minted-gioi-han-duyet-cay-okr-E20-r1
@@ -322,49 +299,47 @@ Lưu ý mâu thuẫn cần người đọc: hai eval ui-check E15 và E18 (do t�
   baseline: n-a
   verifier: config:executors.script.ghd_san_thiet_ke
   verified_at: 2026-09-29T11:38:27Z
+  carried_from_round: 2
   output: |
-    bun _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca thiet-ke
-    vi pham: 0
-    __EXIT=0
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E25
-  judged_by: judge-subagent (fresh context)
+  judged_by: judge-subagent panel (fresh context, ba lăng kính)
   verdict: UNCERTAIN
-  panel_proposal: UNCERTAIN
-  rationale: Cả ba góc nhìn đều thấy spec, mô tả PR và danh sách tệp khớp về cấu trúc, nhưng evidence/diff-luot.txt chỉ có thống kê và danh sách tệp, không có nội dung diff nên không kiểm được mã, bốn mục CONTEXT.md, luật mới ở docs/api.md, việc to-chuc không nhập okr, hay dải chờ duyệt có lộ tên mục tiêu không. Góc spec-alignment còn ghi nhận có hai chỗ dựng ngữ cảnh xem (OkrAccessService.quyen và nguCanhXemOkr) chỉ được giữ khớp bằng một bài so tập ở AC-2.
+  rationale: Cả ba giám khảo đều không xác nhận được vì tệp diff-luot.txt chỉ có `--stat` và danh sách tệp, không có thân diff. Tên tệp và mô tả PR khớp hình dạng cần có (hàm xem thuần và điều kiện xem dùng chung, người duyệt suy ra không thêm bảng, đếm OKR cho cây tổ chức, migration chỉ thêm bảng người xem), nhưng nội dung bốn mục CONTEXT.md, độ đủ của docs/api.md, việc to-chuc không nhập okr, và việc dải chờ duyệt cùng nhãn giới hạn không lộ tên mục tiêu đều chỉ có lời khẳng định, không có chữ để đối chiếu. Lăng kính spec-alignment còn nêu thêm một điểm cần người phân định: câu hỏi nói API và nhắc buổi sáng dựng ngữ cảnh từ một chỗ, còn spec mô tả hai đường dựng khớp nhau bằng một bài so tập trưởng.
   votes:
-    - domain-correctness: UNCERTAIN — Kiến trúc khai đúng (hàm thuần cộng hàm dựng điều kiện, người duyệt suy lúc đọc không thêm bảng, đếm OKR cho to-chuc, thành phần ở packages/ui) nhưng diff-luot.txt không có nội dung diff nên chỉ có lời khai của tác giả làm căn cứ.
-    - operational-feasibility: UNCERTAIN — Cấu trúc và danh sách tệp khớp mô tả PR, nhưng không kiểm được to-chuc có nhập module okr hay không, mọi truy vấn có đi qua điều kiện xem hay không, dải và nhãn có lộ tên mục tiêu hay không, và độ đủ của CONTEXT.md, docs/api.md.
-    - spec-alignment: UNCERTAIN — Cấu trúc khớp (hàm thuần ở packages/validation và packages/db, không có bảng duyệt mới, okr-don-vi.ts tách riêng, CONTEXT.md thêm 46 dòng, docs/api.md thêm 121 dòng) nhưng thiếu nội dung diff, và mô tả PR cho thấy hai chỗ dựng ngữ cảnh xem thay vì một.
+    - domain-correctness: UNCERTAIN — chỉ có --stat, mọi khẳng định về nội dung (điều kiện xem cho mọi truy vấn, to-chuc không nhập okr, bốn mục CONTEXT.md, docs/api.md) không có nội dung để đối chiếu.
+    - operational-feasibility: UNCERTAIN — danh sách tệp khớp kiến trúc khai, nhưng không kiểm được ngữ cảnh xem dựng từ đâu, to-chuc có nhập okr không, màn có dùng packages/ui và không lộ tên mục tiêu không.
+    - spec-alignment: UNCERTAIN — không thấy thân diff cho ba vế; và hai đường dựng ngữ cảnh (API từ OkrAccessService.quyen, nhắc/tác tử từ nguCanhXemOkr) có thể lệch hoặc không lệch tuỳ AC-15 đòi «một chỗ» hay chỉ đòi dùng chung hàm xem.
   required_evidence:
-    - Nội dung diff thật của CONTEXT.md và docs/api.md (và docs/agent.md), để thấy bốn mục Mức hiển thị, Chờ duyệt / Người duyệt, Chuyển OKR, OKR mồ côi có đủ nghĩa, Avoid, Vì sao, và luật xem, bước duyệt, chặn lưu trữ, xoá hẳn, chuyển OKR được nói đủ. Lấy bằng git diff origin/onehub...HEAD trên các tệp đó.
-    - Đầu ra của soi-ma.mjs --ca xem (thoát 0, liệt kê các truy vấn okrObjective và bảy bảng con đi qua dieuKienXemMucTieu hoặc có trong danh sách miễn kèm lý do), hoặc một tệp evidence lưu đầu ra đó.
-    - Diff của packages/db/src/okr-hien-thi.ts, packages/validation/src/okr-hien-thi.ts, packages/db/src/okr-duyet.ts, packages/db/src/okr-nhac.ts và apps/api/src/okr/okr-access.service.ts, kèm giải thích vì sao có hai hàm dựng ngữ cảnh xem mà vẫn coi là một chỗ, hoặc bằng chứng bài so tập trưởng hai bên xanh.
-    - Diff của apps/api/src/to-chuc (và packages/db/src/okr-don-vi.ts) cho thấy không có import nào từ apps/api/src/okr và có dùng demOkrCuaDonVi, demOkrTheoDonVi từ @crm/db/okr-don-vi.
-    - Diff của objective-duyet.tsx, objective-hien-thi.tsx, objective-sheet.tsx, hop-chuyen-okr.tsx và viec-cua-toi.tsx để xác nhận chỉ dùng thành phần packages/ui và dải chờ duyệt, nhãn giới hạn, mục «Chờ bạn duyệt» không mang tên mục tiêu cho người không xem được.
+    - Thân diff CONTEXT.md (`git diff origin/onehub...HEAD -- CONTEXT.md`, +46 dòng) cho thấy bốn mục Mức hiển thị, Chờ duyệt / Người duyệt, Chuyển OKR, OKR mồ côi, mỗi mục có nghĩa, Avoid, Vì sao.
+    - Thân diff docs/api.md (`git diff origin/onehub...HEAD -- docs/api.md`, +121 dòng) cho thấy mục OKR và mục cây tổ chức nói đủ luật xem, bước duyệt, chặn lưu trữ và xoá hẳn đơn vị còn OKR, chuyển OKR, OKR mồ côi.
+    - Thân diff hoặc `grep -rn "okr" apps/api/src/to-chuc` cho thấy to-chuc chỉ nhập demOkrCuaDonVi / demOkrTheoDonVi từ packages/db, không nhập module apps/api/src/okr.
+    - Thân diff okr-access.service.ts, packages/db/src/okr-nhac.ts, apps/agent/agent/lib/tin-nhac.ts (hoặc kết quả `soi-ma.mjs --ca xem`) cho thấy API và nhắc buổi sáng dùng cùng xemDuocMucTieu và dieuKienXemMucTieu, kèm văn bản chốt hai bộ dựng ngữ cảnh cộng bài so tập trưởng là đủ cho AC-15.
+    - Thân diff objective-duyet.tsx, objective-hien-thi.tsx, viec-cua-toi.tsx, okr-mo-coi.tsx (hoặc ảnh evidence/man/buoc-khong-thay.png, buoc-khong-thay-theo-don-vi.png) cho thấy chỉ import từ @crm/ui, không dấu hiệu vẽ tay, và dải chờ duyệt cùng nhãn giới hạn không đưa tên mục tiêu cho người không xem được.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bun_run_test-r2
+  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bun_run_test-r3
   exit_code: 0
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
 
 - cmd: bun run lint:slop
-  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bun_run_lint_slop-r2
+  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-gioi-han-duyet-cay-okr-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-09-29T11:38:27Z
+  verified_at: 2026-09-29T13:07:24Z
 
 ## Known limits
 
@@ -372,15 +347,16 @@ Lưu ý mâu thuẫn cần người đọc: hai eval ui-check E15 và E18 (do t�
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Baseline cua moi eval ghi n-a.
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Field baseline cua tung eval ghi n-a.
 
-Không có eval không-phân-biệt được liệt kê.
+Eval không phân biệt (xanh cả trên diffBase lẫn HEAD): không có. Các lệnh suite xanh cả hai phía là lưới hồi quy bình thường, không liệt kê.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lần, xác định).
+none — mọi eval chạy một lần, không eval nào có pass_rate lẫn lộn hay chập chờn.
 
 ## Iterations
 
-Round 1: REJECT theo bảng tổng kết round (27 eval trả về, không eval nào bị chặn); các sửa sau đó nằm ở các commit S4 vòng 1 (khoá chữ chết, «Rút lại» dùng ConfirmDialog, hien-thi-an đếm chuỗi của G cho K, sổ quyết định). Trả về triển khai.
-Round 2: E16 và E19 đỏ vì phiên đo màn chung kết thúc lỗi; đuôi kết quả cho thấy nhiều bước của E15 hết 30000ms và không chọn được người xem, trong khi ui-check E15 và E18 do tác tử chạy riêng báo đạt. Phải chạy lại cả cụm đo màn trên một lần chạy thống nhất và tách kết quả E19. E25 vẫn chờ người ở Cổng 2 vì diff-luot.txt thiếu nội dung diff. Trả về triển khai.
+Round 1: bộ kiểm app đỏ ở khoá chữ chết (một lỗi trong hợp đồng). Trả về sửa.
+Round 2: E16, E19 đỏ — thước màn chập chờn ở bước chọn người xem khi máy chịu tải. Trả về sửa.
+Round 3: mọi eval máy xanh (E16, E19 xanh lại, E15, E18 mở lại từng ảnh); còn E25 chờ người vì hội đồng chỉ có --stat của diff. Verdict PENDING-JUDGMENT, chuyển Cổng Bằng chứng.

@@ -1,4 +1,4 @@
-# Review findings: gioi-han-duyet-cay-okr (round 2)
+# Review findings — gioi-han-duyet-cay-okr (round 3)
 
 ## Trong hợp đồng
 
@@ -61,7 +61,5 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/api/test/okr-tai-co-cau.spec.ts`
   severity: low
   Đề xuất: known-limits
-
-## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
