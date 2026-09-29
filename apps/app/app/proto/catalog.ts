@@ -449,6 +449,62 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tro-ly-okr-de-xuat",
+		ten: "Góp ý khi bấm — hộp Mục tiêu và KR, chế độ ẩn, số đo",
+		states: [
+			{
+				id: "ST-muctieu-co-dong",
+				nhan: "Mục tiêu — hướng A: cột cạnh form",
+			},
+			{
+				id: "ST-huong-chuyen-man",
+				nhan: "Mục tiêu — hướng B: chuyển màn",
+			},
+			{ id: "ST-muctieu-nut", nhan: "Mục tiêu — có nút góp ý" },
+			{
+				id: "ST-muctieu-nut-khoa-sua",
+				nhan: "Mục tiêu — sửa chưa lưu",
+			},
+			{
+				id: "ST-muctieu-dang-soan",
+				nhan: "Mục tiêu — đang soạn",
+			},
+			{
+				id: "ST-muctieu-sua-dong",
+				nhan: "Mục tiêu — sửa rồi nhận",
+			},
+			{
+				id: "ST-muctieu-da-quyet",
+				nhan: "Mục tiêu — đã quyết",
+			},
+			{
+				id: "ST-muctieu-rong",
+				nhan: "Mục tiêu — không có đề xuất",
+			},
+			{ id: "ST-muctieu-loi", nhan: "Mục tiêu — chưa trả lời được" },
+			{ id: "ST-muctieu-loi-nhan", nhan: "Mục tiêu — nhận bị từ chối" },
+			{ id: "ST-muctieu-het-tran", nhan: "Mục tiêu — hết trần tháng" },
+			{ id: "ST-muctieu-het-luot", nhan: "Mục tiêu — hết lượt hôm nay" },
+			{ id: "ST-muctieu-dang-cho", nhan: "Mục tiêu — đề xuất đang chờ" },
+			{ id: "ST-kr-cot", nhan: "Hộp KR — cột chỉ KR này" },
+			{ id: "ST-kr-xu-huong", nhan: "Hộp KR — dòng xu hướng dưới ô Đích" },
+			{
+				id: "ST-kr-khong-xu-huong",
+				nhan: "Hộp KR — không xu hướng",
+			},
+			{ id: "ST-caidat-nac", nhan: "Cài đặt — Bật cho · Chế độ ẩn cho" },
+			{
+				id: "ST-caidat-nac-bat-toan",
+				nhan: "Cài đặt — bật toàn công ty",
+			},
+			{ id: "ST-sodo-co-so", nhan: "Số đo — có số" },
+			{ id: "ST-sodo-ngan", nhan: "Số đo — ngăn một lượt" },
+			{ id: "ST-sodo-dang-tai", nhan: "Số đo — đang tải" },
+			{ id: "ST-sodo-rong", nhan: "Số đo — chưa có lượt nào" },
+			{ id: "ST-sodo-loi", nhan: "Số đo — lỗi" },
+		],
+	},
+	{
 		slug: "canh-kr-okr",
 		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
 		states: [

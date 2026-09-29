@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
-import { cn } from "@crm/ui/lib/utils";
+import { cn, laEscTuOSuaDeXuat, laTuThongBao } from "@crm/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
@@ -157,11 +157,11 @@ function SheetContent({
 				}}
 				onInteractOutside={(e) => {
 					onInteractOutside?.(e);
-					if (g?.coThayDoi) e.preventDefault();
+					if (g?.coThayDoi || laTuThongBao(e)) e.preventDefault();
 				}}
 				onEscapeKeyDown={(e) => {
 					onEscapeKeyDown?.(e);
-					if (escTuXuLy(e.target)) e.preventDefault();
+					if (laEscTuOSuaDeXuat(e) || escTuXuLy(e.target)) e.preventDefault();
 				}}
 				{...props}
 			>

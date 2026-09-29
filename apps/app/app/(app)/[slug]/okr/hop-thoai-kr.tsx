@@ -40,16 +40,25 @@ import {
 	krInput,
 } from "@crm/validation/okr-kr";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
+import type { TruongVietLai } from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import {
+	CotGopY,
+	type GiaTriDaNhan,
+	LOP_THAN_HOP,
+	NutGopY,
+	useGopY,
+} from "./cot-gop-y";
 import type { KetQua } from "./kieu";
 import { KHOA_NGUON } from "./nguon-so";
 import { nhapNguonKhac } from "./nguon-so-luat";
@@ -111,6 +120,20 @@ function oKrKhac(a: OKr, b: OKr): boolean {
 		a.chu !== b.chu ||
 		a.han !== b.han ||
 		a.trongSo !== b.trongSo
+	);
+}
+
+function DongXuHuong({ keyResultId }: { keyResultId: string }) {
+	const locale = useLocale();
+	const trpc = useTRPC();
+	const xuHuong = useQuery(trpc.okr.xuHuongKr.queryOptions({ keyResultId }));
+	const x = xuHuong.data;
+	if (!x) return null;
+	const moiTuan = `${x.moiTuan > 0 ? "+" : ""}${hienSo(x.moiTuan, locale)}`;
+	return (
+		<FieldDescription variant="hoi" data-xu-huong>
+			{okrGopYMessages(locale).xuHuong(moiTuan, hienSo(x.uocCuoiKy, locale))}
+		</FieldDescription>
 	);
 }
 
@@ -176,7 +199,9 @@ export function HopThoaiKr({
 	const [loi, setLoi] = useState<string | null>(null);
 	const n = useNguonSo({ objectiveId, kr, mucTieu, baoLoi: setLoi });
 	const [nguonDau, setNguonDau] = useState(n.gia);
-	const goc = n.goc;
+	const [tenDaLuu, setTenDaLuu] = useState<string | null>(null);
+	const goc =
+		n.goc && tenDaLuu !== null ? { ...n.goc, title: tenDaLuu } : n.goc;
 	const oHienTai: OKr = {
 		ten,
 		kieu,
@@ -190,6 +215,19 @@ export function HopThoaiKr({
 	};
 	const coThayDoi =
 		oKrKhac(dau, oHienTai) || nhapNguonKhac(nguonDau, n.gia) || lyDo !== "";
+	const oDangSua = new Set<TruongVietLai>(ten !== dau.ten ? ["kr.title"] : []);
+	const nhanGiaTri = ({ truong, giaTri }: GiaTriDaNhan) => {
+		if (truong !== "kr.title") return;
+		setTen(giaTri);
+		setDau((d) => ({ ...d, ten: giaTri }));
+		setTenDaLuu(giaTri);
+	};
+	const gopY = useGopY({
+		objectiveId: n.krId ? objectiveId : null,
+		keyResultId: n.krId ?? undefined,
+		coSuaChuaLuu: coThayDoi,
+		onDaNhan: nhanGiaTri,
+	});
 
 	const tao = useMutation(trpc.okr.createKeyResult.mutationOptions());
 	const sua = useMutation(trpc.okr.updateKeyResult.mutationOptions());
@@ -350,11 +388,17 @@ export function HopThoaiKr({
 			}}
 			coThayDoi={coThayDoi}
 		>
-			<DialogContent data-hop-thoai-kr={n.krId ?? "moi"}>
+			<DialogContent
+				data-hop-thoai-kr={n.krId ?? "moi"}
+				size={gopY.cotMo ? "wide" : "default"}
+			>
 				<DialogHeader>
 					<DialogTitle>{n.krId ? h.suaKr : h.themKr}</DialogTitle>
 				</DialogHeader>
-				<div className="-m-1 max-h-[70svh] overflow-y-auto p-1" data-cuon-hop>
+				<div
+					className={LOP_THAN_HOP[gopY.cotMo ? "coCot" : "motCot"]}
+					data-cuon-hop
+				>
 					<form
 						id={`${ma}-form`}
 						onSubmit={(e) => {
@@ -363,6 +407,7 @@ export function HopThoaiKr({
 						}}
 					>
 						<FieldGroup>
+							<NutGopY gopY={gopY} />
 							<Field>
 								<FieldLabel htmlFor={`${ma}-ten`}>{h.tenKr}</FieldLabel>
 								<Input
@@ -443,6 +488,7 @@ export function HopThoaiKr({
 										</FieldDescription>
 									) : null}
 									{hoiDuoi("targetValue")}
+									{n.krId ? <DongXuHuong keyResultId={n.krId} /> : null}
 								</Field>
 								<Field>
 									<FieldLabel htmlFor={`${ma}-hien`}>{h.hienTai}</FieldLabel>
@@ -578,6 +624,7 @@ export function HopThoaiKr({
 							{loi ? <FieldError data-loi-may-chu>{loi}</FieldError> : null}
 						</FieldGroup>
 					</form>
+					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
 				</div>
 				<DialogFooter>
 					<DialogClose asChild dongNgay={daLuuMot && !coThayDoi}>

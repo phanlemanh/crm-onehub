@@ -315,6 +315,15 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"xuatKy",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_CANH_KR = Object.keys(THU_TUC_CANH_KR);
+const THU_TUC_OKR_LUOT_TRO_LY = [
+	"troLySanSang",
+	"troLyDeXuat",
+	"troLyDanhSach",
+	"troLyQuyet",
+	"troLyAn",
+	"troLySoDo",
+	"xuHuongKr",
+].map((t) => `okr.${t}`);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1374,7 +1383,13 @@ describe("sang-kien-an", () => {
 		expect(
 			choPhep().filter((t) => t.startsWith("okr.")),
 			"thu tuc okr cua vai chi OKR lech danh sach viet truoc",
-		).toEqual([...THU_TUC_OKR_TRUOC_LUOT, ...THU_TUC_OKR_LUOT_CANH_KR].sort());
+		).toEqual(
+			[
+				...THU_TUC_OKR_TRUOC_LUOT,
+				...THU_TUC_OKR_LUOT_CANH_KR,
+				...THU_TUC_OKR_LUOT_TRO_LY,
+			].sort(),
+		);
 		const hong = Object.entries(THU_TUC_CANH_KR).flatMap(([t, khuon]) => {
 			const vao = dauVaoCua(t);
 			if (vao === undefined) return [`${t}: thieu dau vao`];

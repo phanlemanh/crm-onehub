@@ -1,9 +1,14 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import type { OkrProgramSua } from "@crm/validation/okr-chuong-trinh";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import type { AiChiTieuOutput } from "../../api/src/okr/okr.contracts";
+import type {
+	AiChiTieuOutput,
+	SoDoNac,
+	TroLySoDoOutput,
+} from "../../api/src/okr/okr.contracts";
 
 let coQuyen: boolean;
 let aiOn: boolean;
@@ -13,6 +18,7 @@ let chuaGan: number;
 let rong: boolean;
 let sanSang: AiChiTieuOutput["sanSang"];
 let doiSoat: AiChiTieuOutput["doiSoat"];
+let cauHinh: OkrProgramSua;
 
 const chuongTrinh = () => ({
 	objectiveCap: 5,
@@ -26,9 +32,48 @@ const chuongTrinh = () => ({
 	aiDeXuatDonVi: [],
 	aiTomTatPhamVi: "tat",
 	aiTomTatDonVi: [],
+	aiDeXuatAnPhamVi: "tat",
+	aiDeXuatAnDonVi: [],
+	aiTomTatAnPhamVi: "tat",
+	aiTomTatAnDonVi: [],
 	aiTranThangUsd: 9,
+	...cauHinh,
 	version: 4,
 	canManage: coQuyen,
+});
+
+const nacRong = (): SoDoNac => ({
+	soLuot: 0,
+	sinhRa: 0,
+	daHien: 0,
+	nhan: 0,
+	sua: 0,
+	bac: 0,
+	boQua: 0,
+	tyLeNhan: null,
+	tyLeSua: null,
+	tyLeBac: null,
+	tyLeBoQua: null,
+	tyLeDuocNhan: null,
+	daNhan: 0,
+	hoanTac: 0,
+	tyLeHoanTac: null,
+	soLuotDo: 0,
+	p50Ms: null,
+	p90Ms: null,
+	tongCau: 0,
+	biLoai: 0,
+	tyLeBiLoai: null,
+	theoMa: [],
+	tienUsd: 0,
+	chiPhiMoiNhanUsd: null,
+	chiPhiMoiLuotUsd: null,
+});
+
+const soDo = (): TroLySoDoOutput => ({
+	thang: "2026-09",
+	bat: nacRong(),
+	an: nacRong(),
 });
 
 const NHOM = [
@@ -116,6 +161,8 @@ mock.module("@/lib/trpc/client", () => ({
 			program: thuTuc("okr.program", chuongTrinh),
 			aiChiTieu: thuTuc("okr.aiChiTieu", chiTieu),
 			setProgram: thuTuc("okr.setProgram"),
+			troLySoDo: thuTuc("okr.troLySoDo", soDo),
+			troLyAn: thuTuc("okr.troLyAn", () => ({ thang: "2026-09", luot: [] })),
 		},
 		org: { tree: thuTuc("org.tree", () => CAY) },
 	}),
@@ -163,13 +210,15 @@ async function mo(): Promise<QueryClient> {
 	});
 	await act(async () => {
 		root.render(
-			<QueryClientProvider client={client}>
-				<LocaleProvider locale="vi">
-					<TooltipProvider>
-						<KhoiTroLyOkr />
-					</TooltipProvider>
-				</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter hasMemory>
+				<QueryClientProvider client={client}>
+					<LocaleProvider locale="vi">
+						<TooltipProvider>
+							<KhoiTroLyOkr />
+						</TooltipProvider>
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	dangMo.push({ o, root, client });
@@ -259,6 +308,7 @@ beforeEach(() => {
 	rong = false;
 	sanSang = { bat: true, conLaiUsd: 6.58 };
 	doiSoat = null;
+	cauHinh = {};
 	daGoi = [];
 	daDoc = [];
 	daLamMoi = 0;
@@ -361,6 +411,10 @@ describe("quan-tri", () => {
 					aiDeXuatDonVi: ["bp-kd"],
 					aiTomTatPhamVi: "tat",
 					aiTomTatDonVi: [],
+					aiDeXuatAnPhamVi: "tat",
+					aiDeXuatAnDonVi: [],
+					aiTomTatAnPhamVi: "tat",
+					aiTomTatAnDonVi: [],
 					aiTranThangUsd: 7.5,
 				},
 			},
@@ -386,7 +440,9 @@ describe("trang-thai", () => {
 		});
 		await mo();
 		await cho(
-			() => tatCa('[data-the][aria-busy="true"]').length === 2,
+			() =>
+				q('[data-the="tro-ly-okr"][aria-busy="true"]') !== null &&
+				q('[data-the="so-chi-phi"][aria-busy="true"]') !== null,
 			"hai the dang tai",
 		);
 		await act(async () => tha());
@@ -515,5 +571,258 @@ describe("thanh-vien", () => {
 			},
 			"lo khoi AI cho thanh vien",
 		).toEqual({ the: 0, goiSo: 0 });
+	});
+});
+
+const VIEC = ["de-xuat", "tom-tat-tuan"] as const;
+
+const nhanTrongHop = () =>
+	tatCa('[data-slot="pick-list-item"]').map((o) => o.getAttribute("data-id"));
+
+async function moHopAn(viec: string): Promise<void> {
+	const nut = q(`[data-nut="chon-don-vi-an-${viec}"]`);
+	if (!nut) throw new Error(`khong co nut chon don vi an ${viec}`);
+	await bam(nut);
+	await cho(
+		() => q('[data-slot="pick-list-item"]') !== null,
+		"hop chon don vi an",
+	);
+}
+
+describe("nac", () => {
+	test("nac: mỗi việc có hai dòng «Bật cho» và «Chế độ ẩn cho», mỗi dòng ba lựa chọn", async () => {
+		aiOn = true;
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		for (const viec of VIEC) {
+			expect(
+				tatCa(`[data-viec="${viec}"] [data-nac] [data-slot="field-label"]`).map(
+					(o) => o.textContent?.trim(),
+				),
+				`hai dong nac cua ${viec}`,
+			).toEqual([m.troLy.nac.bat, m.troLy.nac.an]);
+		}
+		expect(m.troLy.nac).toEqual({ bat: "Bật cho", an: "Chế độ ẩn cho" });
+		expect(
+			chuCua(
+				'[data-viec="de-xuat"] [data-nac="an"] [data-slot="field-description"]',
+			),
+		).toBe(
+			"Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới.",
+		);
+		const an = q('[data-pham-vi-an="de-xuat"]');
+		if (!an) throw new Error("khong co o che do an");
+		await bam(an);
+		await cho(() => tatCa('[role="option"]').length > 0, "mo o chon che do an");
+		expect(tatCa('[role="option"]').map((o) => o.textContent?.trim())).toEqual([
+			m.troLy.phamVi.tat,
+			m.troLy.phamVi["toan-cong-ty"],
+			m.troLy.phamVi["danh-sach"],
+		]);
+	});
+
+	test("nac: chọn toàn công ty ở Bật cho khoá Chế độ ẩn cho, kèm «mọi đơn vị đã bật»", async () => {
+		aiOn = true;
+		cauHinh = { aiDeXuatAnPhamVi: "danh-sach", aiDeXuatAnDonVi: ["pb-mk"] };
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		const an = () => q('[data-pham-vi-an="de-xuat"]');
+		expect(an()?.hasAttribute("disabled"), "o an khoa khi chua bat toan").toBe(
+			false,
+		);
+		const bat = q('[data-pham-vi="de-xuat"]');
+		if (!bat) throw new Error("khong co o bat");
+		await chonLuaChon(bat, m.troLy.phamVi["toan-cong-ty"]);
+		await cho(
+			() =>
+				chuCua('[data-pham-vi="de-xuat"]') === m.troLy.phamVi["toan-cong-ty"],
+			"bat toan cong ty",
+		);
+		const dongAn = q('[data-viec="de-xuat"] [data-nac="an"]');
+		expect(
+			{
+				khoa: an()?.hasAttribute("disabled"),
+				nut: q('[data-nut="chon-don-vi-an-de-xuat"]') !== null,
+				moTa: dongAn
+					?.querySelector('[data-slot="field-description"]')
+					?.textContent?.trim(),
+			},
+			"an khong khoa khi bat toan",
+		).toEqual({ khoa: true, nut: false, moTa: m.troLy.khoaAn });
+		expect(m.troLy.khoaAn.toLowerCase()).toContain("mọi đơn vị đã bật");
+		expect(
+			q('[data-viec="tom-tat-tuan"] [data-pham-vi-an]')?.hasAttribute(
+				"disabled",
+			),
+			"viec kia khong bi khoa theo",
+		).toBe(false);
+	});
+
+	test("nac: cấu hình đã lưu bật toàn công ty thì dòng chế độ ẩn khoá ngay khi mở", async () => {
+		aiOn = true;
+		cauHinh = { aiTomTatPhamVi: "toan-cong-ty" };
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		expect(
+			{
+				khoa: q('[data-pham-vi-an="tom-tat-tuan"]')?.hasAttribute("disabled"),
+				moTa: chuCua(
+					'[data-viec="tom-tat-tuan"] [data-nac="an"] [data-slot="field-description"]',
+				),
+			},
+			"an khong khoa khi bat toan",
+		).toEqual({ khoa: true, moTa: m.troLy.khoaAn });
+	});
+
+	test("nac: bật toàn công ty rồi Lưu — gói gửi chế độ ẩn tắt, không mang danh sách ẩn cũ", async () => {
+		aiOn = true;
+		cauHinh = { aiDeXuatAnPhamVi: "danh-sach", aiDeXuatAnDonVi: ["pb-mk"] };
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		const bat = q('[data-pham-vi="de-xuat"]');
+		if (!bat) throw new Error("khong co o bat");
+		await chonLuaChon(bat, m.troLy.phamVi["toan-cong-ty"]);
+		await cho(
+			() =>
+				chuCua('[data-pham-vi="de-xuat"]') === m.troLy.phamVi["toan-cong-ty"],
+			"bat toan cong ty",
+		);
+		const luu = q('[data-nut="luu-tro-ly"]');
+		if (!luu) throw new Error("khong co nut luu");
+		await bam(luu);
+		await cho(() => daLamMoi > 0, "lam moi sau khi luu");
+		const vao = daGoi[0]?.dauVao;
+		expect(
+			{
+				bat: vao?.aiDeXuatPhamVi,
+				an: vao?.aiDeXuatAnPhamVi,
+				anDonVi: vao?.aiDeXuatAnDonVi,
+			},
+			"an con song khi bat toan",
+		).toEqual({ bat: "toan-cong-ty", an: "tat", anDonVi: [] });
+		expect(chuCua('[data-pham-vi-an="de-xuat"]')).toBe(m.troLy.phamVi.tat);
+	});
+
+	test("nac: danh sách chế độ ẩn không cho chọn đơn vị đã ở danh sách bật", async () => {
+		aiOn = true;
+		cauHinh = {
+			aiDeXuatPhamVi: "danh-sach",
+			aiDeXuatDonVi: ["bp-kd"],
+			aiDeXuatAnPhamVi: "danh-sach",
+			aiDeXuatAnDonVi: [],
+		};
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		await moHopAn("de-xuat");
+		expect(nhanTrongHop(), "an cho chon don vi da bat").toEqual(["onehub"]);
+	});
+
+	test("nac: Lưu gửi đúng các trường AI, danh sách ẩn bỏ đơn vị đã bật", async () => {
+		aiOn = true;
+		cauHinh = {
+			aiDeXuatPhamVi: "danh-sach",
+			aiDeXuatDonVi: ["pb-mk"],
+		};
+		await mo();
+		await cho(daTaiXong, "tai xong");
+
+		const an = q('[data-pham-vi-an="de-xuat"]');
+		if (!an) throw new Error("khong co o an");
+		await chonLuaChon(an, m.troLy.phamVi["danh-sach"]);
+		await cho(
+			() => q('[data-nut="chon-don-vi-an-de-xuat"]') !== null,
+			"nut chon don vi an",
+		);
+		expect(
+			chuCua(
+				'[data-viec="de-xuat"] [data-nac="an"] [data-slot="field-description"]',
+			),
+		).toBe(m.troLy.chuaChonDonViAn);
+		await moHopAn("de-xuat");
+		expect(nhanTrongHop()).toEqual(["onehub", "bp-kd"]);
+		const hop = q('[data-slot="pick-list-item"][data-id="bp-kd"] button');
+		if (!hop) throw new Error("khong co o bo phan");
+		await bam(hop);
+		const xacNhan = tatCa('[role="dialog"] button').find(
+			(o) => o.textContent?.trim() === m.troLy.hop.xacNhan(1),
+		);
+		if (!xacNhan) throw new Error("khong co nut xac nhan");
+		await bam(xacNhan);
+		await cho(() => q('[role="dialog"]') === null, "dong hop");
+		expect(chuCua('[data-viec="de-xuat"] [data-nac="an"] ul')).toBe(
+			"Khối Kinh doanh",
+		);
+
+		const anTomTat = q('[data-pham-vi-an="tom-tat-tuan"]');
+		if (!anTomTat) throw new Error("khong co o an tom tat");
+		await chonLuaChon(anTomTat, m.troLy.phamVi["toan-cong-ty"]);
+		await cho(
+			() =>
+				chuCua('[data-pham-vi-an="tom-tat-tuan"]') ===
+				m.troLy.phamVi["toan-cong-ty"],
+			"an tom tat toan cong ty",
+		);
+
+		const luu = q('[data-nut="luu-tro-ly"]');
+		if (!luu) throw new Error("khong co nut luu");
+		expect(luu.hasAttribute("disabled")).toBe(false);
+		await bam(luu);
+		await cho(() => daLamMoi > 0, "lam moi sau khi luu");
+		expect(daGoi).toEqual([
+			{
+				duong: "okr.setProgram",
+				dauVao: {
+					aiOn: true,
+					aiDeXuatPhamVi: "danh-sach",
+					aiDeXuatDonVi: ["pb-mk"],
+					aiTomTatPhamVi: "tat",
+					aiTomTatDonVi: [],
+					aiDeXuatAnPhamVi: "danh-sach",
+					aiDeXuatAnDonVi: ["bp-kd"],
+					aiTomTatAnPhamVi: "toan-cong-ty",
+					aiTomTatAnDonVi: [],
+					aiTranThangUsd: 9,
+				},
+			},
+		]);
+	});
+
+	test("nac: đơn vị đã bật sau khi chọn ẩn thì không còn trong danh sách ẩn khi lưu", async () => {
+		aiOn = true;
+		cauHinh = {
+			aiDeXuatPhamVi: "danh-sach",
+			aiDeXuatDonVi: ["bp-kd"],
+			aiDeXuatAnPhamVi: "danh-sach",
+			aiDeXuatAnDonVi: ["onehub", "pb-mk"],
+		};
+		await mo();
+		await cho(daTaiXong, "tai xong");
+		expect(chuCua('[data-viec="de-xuat"] [data-nac="an"] ul')).toBe(
+			m.troLy.hop.onehub,
+		);
+		await go(q("[data-o-tran-ai]"), "8");
+		const luu = q('[data-nut="luu-tro-ly"]');
+		if (!luu) throw new Error("khong co nut luu");
+		await bam(luu);
+		await cho(() => daLamMoi > 0, "lam moi sau khi luu");
+		expect(daGoi[0]?.dauVao?.aiDeXuatAnDonVi).toEqual(["onehub"]);
+	});
+
+	test("nac: thành viên không thấy thẻ Trợ lý OKR, thẻ Góp ý và không gọi số đo", async () => {
+		coQuyen = false;
+		await mo();
+		await cho(() => daDoc.includes("okr.program"), "doc chuong trinh");
+		for (let i = 0; i < 5; i += 1) {
+			await act(async () => {
+				await new Promise((r) => setTimeout(r, 0));
+			});
+		}
+		expect(
+			{
+				the: tatCa("[data-the]").length,
+				goi: daDoc.filter((d) => d !== "okr.program" && d !== "org.tree"),
+			},
+			"lo the tro ly cho thanh vien",
+		).toEqual({ the: 0, goi: [] });
 	});
 });

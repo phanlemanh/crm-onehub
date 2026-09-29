@@ -9,6 +9,10 @@ export const THAM_SO_MO_RA = SEARCH_PARAM.okr.moRa;
 
 export const parseMoRa = parseAsString;
 
+export const THAM_SO_LUOT_GOP_Y = SEARCH_PARAM.okr.luotGopY;
+
+export const parseLuotGopY = parseAsString;
+
 export const THAM_SO_MAU = SEARCH_PARAM.okr.mau;
 
 export const MAU_MOI = "moi";

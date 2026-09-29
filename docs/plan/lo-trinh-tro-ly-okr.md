@@ -304,7 +304,7 @@ tệp). Truy vấn trả lời production đang đặt model nào cho agent gố
 | 9a chưa gộp khi tới lúc triển khai Zalo | Hỏi CRM qua Zalo mở mà chưa có sổ chi phí | Hạ trần hỏi CRM qua Zalo xuống mức N0 đề xuất |
 | 9a hoặc lượt 7 chưa xong trước đóng băng | Làm sau đóng băng | Vá Slack vẫn phải xong trước ngày mở; nếu cần thì đi trước mọi lượt khác |
 | 9b chưa xong trước mùa OKR năm | Cấp OneHub đặt OKR năm mà không có trợ lý | Giữ đích cho mùa quý 1 |
-| Chưa đủ 3 tuần Cập nhật tuần thật | Từ 2026-09-28: 9c đã dựng xong, chạy tiếp ở chế độ ẩn, chưa bật | 9c bật khi đủ ba tuần bóng đạt ngưỡng |
+| Chưa đủ 3 tuần Cập nhật tuần thật | Từ 2026-09-28: 9c đã dựng xong, ở chế độ ẩn tiếp, chưa bật | 9c bật khi đủ ba tuần ở chế độ ẩn đạt ngưỡng |
 | Production dùng GLM cho agent gốc | Trần $9 không giữ được | Chuyển agent gốc sang Gemini, hoặc bỏ bước chuyển tiếp (nấc 3 ở mục 4.10 của thiết kế), hoặc chủ kho nâng trần |
 
 ## 8. Kiểm «sẵn sàng cho mùa đặt OKR quý 1»

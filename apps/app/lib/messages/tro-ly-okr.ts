@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { MaLoaiDeXuat, TruongVietLai } from "@crm/validation/okr-tro-ly";
 
 const vi = {
 	troLy: {
@@ -10,26 +11,39 @@ const vi = {
 		batMoTa:
 			"Nội dung OKR chỉ gửi tới nhà cung cấp mô hình cam kết không lưu dữ liệu. Người dùng chưa thấy nút nào cho tới khi góp ý mở.",
 		phamVi: {
-			tat: "Tắt",
+			tat: "Không đơn vị nào",
 			"toan-cong-ty": "Toàn công ty",
 			"danh-sach": "Chọn đơn vị",
+		},
+		nac: {
+			bat: "Bật cho",
+			an: "Chế độ ẩn cho",
 		},
 		viec: {
 			"de-xuat": {
 				nhan: "Góp ý khi bấm",
 				moTa: "Người sửa được một Mục tiêu nhờ Trợ lý OKR góp ý tên, «vì sao lúc này» và KR.",
+				moTaAn:
+					"Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới.",
 			},
 			"tom-tat-tuan": {
 				nhan: "Tóm tắt tuần",
 				moTa: "Mỗi phòng ban nhận một Tóm tắt tuần ở đầu Họp tuần.",
+				moTaAn: "Máy tóm tắt sau ngày cập nhật; chỉ quản trị thấy kết quả.",
 			},
 		},
-		donViBat: (viec: string) => `Đơn vị bật ${viec.toLowerCase()}`,
+		khoaAn: "Mọi đơn vị đã bật — không còn đơn vị nào để chế độ ẩn.",
+		donViCua: (nac: string, viec: string) =>
+			`Đơn vị ${nac.toLowerCase()} ${viec.toLowerCase()}`,
 		chonDonVi: "Chọn đơn vị…",
 		chuaChonDonVi: "Chưa chọn đơn vị nào — việc này chưa chạy ở đâu.",
+		chuaChonDonViAn: "Chưa chọn đơn vị nào — chế độ ẩn chưa chạy ở đâu.",
 		hop: {
-			tieuDe: (viec: string) => `Đơn vị cho «${viec}»`,
+			tieuDe: (nac: string, viec: string) =>
+				`Đơn vị ${nac.toLowerCase()} «${viec}»`,
 			moTa: "Trợ lý OKR chỉ chạy cho Mục tiêu thuộc các đơn vị đã chọn.",
+			moTaAn:
+				"Máy chạy ở chế độ ẩn cho Mục tiêu thuộc các đơn vị đã chọn. Đơn vị đã bật không có trong danh sách.",
 			tim: "Tìm đơn vị",
 			xacNhan: (n: number) => `Chọn ${n} đơn vị`,
 			huy: "Huỷ",
@@ -97,6 +111,73 @@ const vi = {
 			khongRo: "không rõ lý do",
 		},
 	},
+	soDo: {
+		tieuDe: "Góp ý của Trợ lý OKR — tháng này",
+		moTa: "Số đo của nấc bật và chế độ ẩn; bấm một lượt để xem từng dòng.",
+		cotSo: "Số đo",
+		nacTen: {
+			bat: "Bật",
+			an: "Chế độ ẩn",
+		},
+		hang: {
+			luot: "Lượt",
+			daHien: "Đề xuất đã hiện / sinh ra",
+			nhan: "Nhận",
+			sua: "Sửa rồi nhận",
+			bac: "Bác",
+			boQua: "Bỏ qua câu hỏi",
+			hoanTac: (ngay: string) => `Hoàn tác trong ${ngay} ngày`,
+			p50: "Độ trễ p50",
+			p90: "Độ trễ p90",
+			biLoai: "Câu bị bộ kiểm loại",
+			chiPhiMoiNhan: "Chi phí mỗi đề xuất được nhận",
+			chiPhiMoiLuot: "Chi phí mỗi lượt",
+		},
+		cotMucTieu: "Mục tiêu",
+		cotNac: "Nấc",
+		cotDong: "Dòng",
+		cotTre: "Độ trễ",
+		dongBiLoai: (so: string) => `(+${so} bị loại)`,
+		mucTieuMat: "Mục tiêu đã xoá",
+		rong: "Tháng này chưa có lượt góp ý nào",
+		rongMoTa: "Lượt góp ý ở nấc bật và chế độ ẩn sẽ hiện ở đây.",
+		loi: "Không tải được số đo",
+		thuLai: "Thử lại",
+		khongDong: "Lượt này không có dòng nào.",
+		loai: {
+			"viet-lai": "Viết lại",
+			hoi: "Câu hỏi",
+			"can-chinh": "Căn chỉnh",
+		},
+		truong: {
+			title: "Viết lại tên Mục tiêu",
+			whyNow: "Viết lại «vì sao lúc này»",
+			"kr.title": "Viết lại tên KR",
+		} satisfies Record<TruongVietLai, string>,
+		trangThai: {
+			cho: "Qua bộ kiểm",
+			nhan: "Đã nhận",
+			sua: "Sửa rồi nhận",
+			bac: "Đã bác",
+			"het-han": "Hết hạn",
+			"da-sua-theo": "Người dùng đã sửa theo",
+			"bo-qua": "Đã bỏ qua",
+			"bi-loai": "Bị loại",
+		},
+		biLoaiMa: (nhan: string) => `Bị loại · ${nhan}`,
+		maLoai: {
+			"id-ngoai-goi": "Trỏ tới mục không có trong OKR đã gửi",
+			"so-moi": "Có số mới không có trong câu gốc",
+			"tu-cam": "Dùng từ cần tránh",
+			"noi-ve-nguoi": "Nêu tên một người",
+			"chep-cap-tren": "Chép KR của Mục tiêu cấp trên",
+			"trung-luat": "Trùng câu hỏi luật đã hỏi",
+			"dich-ngoai-tap": "Căn chỉnh tới đích ngoài danh sách",
+			"da-bac": "Trùng đề xuất đã bị bác",
+			"dang-cho": "Trùng đề xuất đang chờ",
+			"khong-doi": "Câu mới giống câu cũ",
+		} satisfies Record<MaLoaiDeXuat, string>,
+	},
 };
 
 export type TroLyOkrMessages = typeof vi;
@@ -111,26 +192,39 @@ const en: TroLyOkrMessages = {
 		batMoTa:
 			"OKR content goes only to model providers that commit to keeping no data. Nobody sees a button until feedback opens.",
 		phamVi: {
-			tat: "Off",
+			tat: "No units",
 			"toan-cong-ty": "Whole company",
 			"danh-sach": "Chosen units",
+		},
+		nac: {
+			bat: "On for",
+			an: "Hidden mode for",
 		},
 		viec: {
 			"de-xuat": {
 				nhan: "Feedback on request",
 				moTa: "Anyone who can edit an objective can ask the OKR assistant for feedback on its title, “why now” and KRs.",
+				moTaAn:
+					"Feedback runs when an objective is saved; only admins see the results, in the card below.",
 			},
 			"tom-tat-tuan": {
 				nhan: "Weekly summary",
 				moTa: "Each department gets a weekly summary at the top of its weekly meeting.",
+				moTaAn: "Summaries run after update day; only admins see the results.",
 			},
 		},
-		donViBat: (viec: string) => `Units with ${viec.toLowerCase()}`,
+		khoaAn: "Every unit is already on — none is left for hidden mode.",
+		donViCua: (nac: string, viec: string) =>
+			`Units ${nac.toLowerCase()} ${viec.toLowerCase()}`,
 		chonDonVi: "Choose units…",
 		chuaChonDonVi: "No unit chosen — this runs nowhere yet.",
+		chuaChonDonViAn: "No unit chosen — hidden mode runs nowhere yet.",
 		hop: {
-			tieuDe: (viec: string) => `Units for “${viec}”`,
+			tieuDe: (nac: string, viec: string) =>
+				`Units ${nac.toLowerCase()} “${viec}”`,
 			moTa: "The OKR assistant runs only for objectives in the chosen units.",
+			moTaAn:
+				"Hidden mode runs for objectives in the chosen units. Units that are on are not listed.",
 			tim: "Search units",
 			xacNhan: (n: number) => `Choose ${n} units`,
 			huy: "Cancel",
@@ -197,6 +291,73 @@ const en: TroLyOkrMessages = {
 				"the agent has no AI Gateway key of its own to filter by",
 			loiGateway: (ma: string) => `AI Gateway returned ${ma}`,
 			khongRo: "reason unknown",
+		},
+	},
+	soDo: {
+		tieuDe: "OKR assistant feedback — this month",
+		moTa: "Numbers for on and hidden mode; open a run to see each line.",
+		cotSo: "Measure",
+		nacTen: {
+			bat: "On",
+			an: "Hidden mode",
+		},
+		hang: {
+			luot: "Runs",
+			daHien: "Suggestions shown / produced",
+			nhan: "Accepted",
+			sua: "Edited then accepted",
+			bac: "Rejected",
+			boQua: "Questions skipped",
+			hoanTac: (ngay: string) => `Undone within ${ngay} days`,
+			p50: "Latency p50",
+			p90: "Latency p90",
+			biLoai: "Lines dropped by the checker",
+			chiPhiMoiNhan: "Cost per accepted suggestion",
+			chiPhiMoiLuot: "Cost per run",
+		},
+		cotMucTieu: "Objective",
+		cotNac: "Mode",
+		cotDong: "Lines",
+		cotTre: "Latency",
+		dongBiLoai: (so: string) => `(+${so} dropped)`,
+		mucTieuMat: "Deleted objective",
+		rong: "No feedback runs this month yet",
+		rongMoTa: "Runs in on and hidden mode will show up here.",
+		loi: "Couldn't load the numbers",
+		thuLai: "Try again",
+		khongDong: "This run has no lines.",
+		loai: {
+			"viet-lai": "Rewrite",
+			hoi: "Question",
+			"can-chinh": "Alignment",
+		},
+		truong: {
+			title: "Rewrite objective title",
+			whyNow: "Rewrite “why now”",
+			"kr.title": "Rewrite KR title",
+		},
+		trangThai: {
+			cho: "Passed the checker",
+			nhan: "Accepted",
+			sua: "Edited then accepted",
+			bac: "Rejected",
+			"het-han": "Expired",
+			"da-sua-theo": "User edited along",
+			"bo-qua": "Skipped",
+			"bi-loai": "Dropped",
+		},
+		biLoaiMa: (nhan: string) => `Dropped · ${nhan}`,
+		maLoai: {
+			"id-ngoai-goi": "Points at something not in the OKR sent",
+			"so-moi": "Adds a number not in the original",
+			"tu-cam": "Uses a word to avoid",
+			"noi-ve-nguoi": "Names a person",
+			"chep-cap-tren": "Copies a KR of the parent objective",
+			"trung-luat": "Repeats a rule question already asked",
+			"dich-ngoai-tap": "Aligns to a target outside the list",
+			"da-bac": "Repeats a rejected suggestion",
+			"dang-cho": "Repeats a pending suggestion",
+			"khong-doi": "New text same as the old",
 		},
 	},
 };
