@@ -206,7 +206,7 @@ function KhungCho({ cho, chuTrang }: { cho: ChoLanDau; chuTrang: string }) {
 			<AlertDescription>
 				<p translate="no">{dien(d.cho[cho.dangCho].than, { ten: chuTrang })}</p>
 				{cho.nguon && CO_XEM_NGUON[cho.dangCho] ? (
-					<p className="break-words" translate="no">
+					<p className="wrap-anywhere" translate="no">
 						{loi
 							? dien(d.nguonLyDo, { tep: cho.nguon.tenTep, lyDo: loi })
 							: dien(d.nguonTep, { tep: cho.nguon.tenTep })}

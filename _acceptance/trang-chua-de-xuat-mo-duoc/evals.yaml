@@ -117,7 +117,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
       - "_acceptance/trang-chua-de-xuat-mo-duoc/rang/man-trang-cho.mjs"
-    expected: "exit 0; man-trang-cho.mjs in 'buoc 3: dat', 'buoc 4: dat'. CHIEU DO: --chieu-do=3 tren ban sao tra lai redirect cua /sua khi noiDung null -> 'buoc 3: khong mo trinh soan', ma 1; --chieu-do=4 tren ban sao bo lam moi cache taiLieu.get sau khi gui -> 'buoc 4: man doc chua bao cho duyet', ma 1."
+    expected: "exit 0; man-trang-cho.mjs in 'buoc 3: dat', 'buoc 4: dat'. CHIEU DO: --chieu-do=3 tren ban sao tra lai redirect cua /sua khi noiDung null -> 'buoc 3: khong mo trinh soan', ma 1; --chieu-do=4 tren ban sao khoa nut Gui duyet (khoaGui = true) -> 'buoc 4: khong gui duoc', ma 1."
 
   - id: E7
     criterion: AC-7
@@ -144,7 +144,7 @@ evals:
       - "packages/db/src/tai-lieu-quyen.ts"
       - "apps/api/src/tai-lieu/**"
       - "_acceptance/trang-chua-de-xuat-mo-duoc/rang/man-trang-cho.mjs"
-    expected: "exit 0; man-trang-cho.mjs in 'buoc 1: dat' va bon dong 'buoc 2: dat <trang>'; anh o .acceptance-runs/trang-chua-de-xuat-mo-duoc/evidence/, vong S4 chep sang _acceptance/trang-chua-de-xuat-mo-duoc/evidence/ cho E9j. CHIEU DO: --chieu-do=1 tren ban sao khoi phuc thayTrang cu trong get -> 'buoc 1: man doc 404', ma 1; --chieu-do=2 tren ban sao bo break-words o khung trang thai -> 'buoc 2: cuon ngang loi-390', ma 1."
+    expected: "exit 0; man-trang-cho.mjs in 'buoc 1: dat' va bon dong 'buoc 2: dat <trang>'; anh o .acceptance-runs/trang-chua-de-xuat-mo-duoc/evidence/, vong S4 chep sang _acceptance/trang-chua-de-xuat-mo-duoc/evidence/ cho E9j. CHIEU DO: --chieu-do=1 tren ban sao khoi phuc thayTrang cu trong get -> 'buoc 1: man doc 404', ma 1; --chieu-do=2 tren ban sao doi wrap-anywhere thanh whitespace-nowrap o dong nguon -> 'buoc 2: cuon ngang loi-390', ma 1."
 
   - id: E8
     criterion: AC-8
