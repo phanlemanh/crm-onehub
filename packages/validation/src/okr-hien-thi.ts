@@ -1,3 +1,4 @@
+import type { NguCanhXem } from "@crm/db/okr-hien-thi";
 import { z } from "zod";
 import type { CapMucTieu } from "./okr-muc-tieu";
 
@@ -10,14 +11,7 @@ export const OKR_HIEN_THI = {
 	chuyenToiDa: 50,
 } as const;
 
-export type NguCanhXem = {
-	userId: string;
-	quanTri: boolean;
-	boPhanTruong: string[];
-	phongBanTruong: string[];
-	phongBanDuoiBoPhanTruong: string[];
-	nguoiDuoiQuyen: string[];
-};
+export type { NguCanhXem };
 
 export type MucTieuDeXem = {
 	hienThi: MucHienThi;

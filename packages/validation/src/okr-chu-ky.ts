@@ -1,3 +1,4 @@
+import { PHA_CHUYEN_DUOC as PHA_CHUYEN } from "@crm/db/okr-don-vi";
 import { z } from "zod";
 
 export const LOAI_CHU_KY = ["nam", "quy"] as const;
@@ -13,11 +14,7 @@ export type PhaChuKy = (typeof PHA_CHU_KY)[number];
 
 export const PHA_GHI_DUOC: readonly PhaChuKy[] = ["lap-ke-hoach", "dang-chay"];
 
-export const PHA_CHUYEN_DUOC: readonly PhaChuKy[] = [
-	"lap-ke-hoach",
-	"dang-chay",
-	"cham-diem",
-];
+export const PHA_CHUYEN_DUOC: readonly PhaChuKy[] = PHA_CHUYEN;
 
 export const ngayLich = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 

@@ -6,6 +6,7 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db } from "@crm/db";
+import { dungNguCanhXem, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import { CAP_MUC_TIEU, type CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import {
 	ForbiddenException,
@@ -88,6 +89,10 @@ export class OkrAccessService {
 			),
 			cay,
 		};
+	}
+
+	nguCanhXem(q: Quyen, userId: string): NguCanhXem {
+		return dungNguCanhXem(userId, q);
 	}
 
 	suaDuocDonVi(q: Quyen, userId: string, dv: DonViCuaMucTieu): boolean {
