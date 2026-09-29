@@ -3,10 +3,10 @@ schema_version: 1
 slug: dot-hoi-y-tuong-okr
 feature: Đợt hỏi ý tưởng mục tiêu — cả công ty góp ý cho mục tiêu năm, CEO chọn và nói vì sao, ai góp cũng biết ý mình đi đâu (bước 1–2 của chu kỳ OKR, chạy trong CRM)
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-29T09:34:17Z
 prototype:
   base_commit:
   disposition: archive
@@ -94,10 +94,10 @@ liệu thật.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đợt hỏi trong CRM có làm CEO đổi lựa chọn và có làm người góp quay lại không?
-- Kết quả nào là SỐNG: [đề xuất] đợt đầu (12/2026) ≥ 80% thành viên còn hiệu lực góp ít nhất một ý; ≥ 60% người góp bấm «tôi hiểu vì sao» trong 7 ngày sau công bố; bản niêm phong so với bản chọn có ít nhất một mục tiêu đổi hoặc thêm từ ý của công ty. Cổng Giá trị đọc thêm ở đợt quý 2/2027: ≥ 70% người đã góp đợt đầu góp lại.
-- Kết quả nào là CHẾT: [đề xuất] dưới 50% góp; hoặc dưới 30% bấm «tôi hiểu vì sao»; hoặc đợt quý 2 dưới 40% góp lại.
-- Timebox: [đề xuất] dựng xong và chạy trọn một đợt trên bộ OKR mẫu trước 2026-11-28; đo lần đầu 2026-12-14, sau khi đợt năm 2027 đóng và CEO công bố.
+- Câu hỏi phép đo trả lời: đợt hỏi trong CRM có làm CEO đổi lựa chọn và có làm người góp quay lại không?
+- Kết quả nào là SỐNG: đợt đầu (12/2026) ≥ 80% thành viên còn hiệu lực góp ít nhất một ý; ≥ 60% người góp bấm «tôi hiểu vì sao» trong 7 ngày sau công bố; bản niêm phong so với bản chọn có ít nhất một mục tiêu đổi hoặc thêm từ ý của công ty. Cổng Giá trị đọc thêm ở đợt quý 2/2027: ≥ 70% người đã góp đợt đầu góp lại.
+- Kết quả nào là CHẾT: dưới 50% góp; hoặc dưới 30% bấm «tôi hiểu vì sao»; hoặc đợt quý 2 dưới 40% góp lại.
+- Timebox: dựng xong và chạy trọn một đợt trên bộ OKR mẫu trước 2026-11-28; đo lần đầu 2026-12-14, sau khi đợt năm 2027 đóng và CEO công bố.
 
 ## Kết quả prototype
 
@@ -115,9 +115,9 @@ vòng) đi nghi thức design-pass trên `/proto` ở S1, chấm bằng thước
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** Căn cứ: chủ kho ký 2026-09-29 (Manh Phan) — «build · ngưỡng: giữ đề xuất · timebox 28/11 · đo 14/12».
 - **disposition = archive** Căn cứ: không có prototype riêng.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** giữ nguyên bản đề xuất ở section Ngưỡng — đợt đầu SỐNG ≥ 80% góp · ≥ 60% bấm «tôi hiểu vì sao» trong 7 ngày · ≥ 1 mục tiêu đổi hoặc thêm so với bản niêm phong; CHẾT < 50% góp hoặc < 30% bấm hiểu; Cổng Giá trị đợt quý 2/2027 SỐNG ≥ 70% góp lại, CHẾT < 40%. Timebox dựng xong trước 2026-11-28, đo lần đầu 2026-12-14.
 
 ## Thước đo thành công → ứng viên criterion
 
