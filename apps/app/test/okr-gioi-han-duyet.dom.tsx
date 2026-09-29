@@ -753,19 +753,30 @@ describe("hop-tra-lai-va-rut-lai", () => {
 		]);
 	});
 
-	test("rut lai: hop co Huy boc DialogClose, nut chinh goi rutDuyet", async () => {
+	test("rut lai: ConfirmDialog nhu Gui duyet, Huy la nut dong cua hop, nut chinh goi rutDuyet", async () => {
 		chiTiet = DU_LIEU["cho-duyet-nguoi-gui"];
 		await moSheet();
 		await bam(motCai('[data-nut="rut-lai"]'));
 		await cho(
-			() => document.body.querySelector('[data-hop="rut-lai"]') !== null,
+			() => document.body.querySelector('[role="alertdialog"]') !== null,
 			"hop rut lai",
 		);
-		const hop = motCai('[data-hop="rut-lai"]');
-		expect(hop.querySelector("[data-slot='dialog-close']")?.textContent).toBe(
-			g.duyet.hopRut.huy,
-		);
-		await bam(motCai('[data-nut="xac-nhan-rut-lai"]'));
+		const hop = motCai('[role="alertdialog"]');
+		expect({
+			tieuDe: hop.querySelector("[data-slot='alert-dialog-title']")
+				?.textContent,
+			huy: hop.querySelector("[data-slot='alert-dialog-cancel']")?.textContent,
+			nut: hop.querySelector("[data-slot='alert-dialog-action']")?.textContent,
+			tone: hop
+				.querySelector("[data-slot='alert-dialog-action']")
+				?.getAttribute("data-variant"),
+		}).toEqual({
+			tieuDe: g.duyet.hopRut.tieuDe,
+			huy: g.duyet.hopRut.huy,
+			nut: g.duyet.hopRut.nut,
+			tone: "default",
+		});
+		await bam(nut(g.duyet.hopRut.nut, hop));
 		await cho(() => daLamMoi.length > 0, "lam moi sau rut");
 		expect(daGoi).toEqual([{ duong: "okr.rutDuyet", dauVao: { id: "mt-g" } }]);
 	});

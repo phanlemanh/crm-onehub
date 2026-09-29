@@ -138,9 +138,11 @@ export function NutGuiDuyet({ objectiveId }: { objectiveId: string }) {
 
 function HopRutLai({
 	objectiveId,
+	open,
 	dong,
 }: {
 	objectiveId: string;
+	open: boolean;
 	dong: () => void;
 }) {
 	const m = okrGioiHanMessages(useLocale()).duyet;
@@ -149,34 +151,21 @@ function HopRutLai({
 		trpc.okr.rutDuyet.mutationOptions(useGhiDuyet(objectiveId, m.daRut, dong)),
 	);
 	return (
-		<Dialog
-			open
+		<ConfirmDialog
+			tone="default"
+			nut={m.hopRut.nut}
+			thoi={m.hopRut.huy}
+			tieuDe={m.hopRut.tieuDe}
+			than={m.hopRut.moTa}
+			open={open}
+			pending={rut.isPending}
 			onOpenChange={(mo) => {
 				if (!mo && !rut.isPending) dong();
 			}}
-		>
-			<DialogContent data-hop="rut-lai">
-				<DialogHeader>
-					<DialogTitle>{m.hopRut.tieuDe}</DialogTitle>
-					<DialogDescription>{m.hopRut.moTa}</DialogDescription>
-				</DialogHeader>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant="outline" disabled={rut.isPending}>
-							{m.hopRut.huy}
-						</Button>
-					</DialogClose>
-					<Button
-						data-nut="xac-nhan-rut-lai"
-						disabled={rut.isPending}
-						onClick={() => rut.mutate({ id: objectiveId })}
-					>
-						{rut.isPending ? <Spinner /> : null}
-						{m.hopRut.nut}
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+			onConfirm={() => {
+				if (!rut.isPending) rut.mutate({ id: objectiveId });
+			}}
+		/>
 	);
 }
 
@@ -295,9 +284,11 @@ function DaiChoDuyet({ mucTieu }: { mucTieu: DuyetMucTieu }) {
 					</NutDai>
 				) : null}
 			</AlertDescription>
-			{rut ? (
-				<HopRutLai objectiveId={mucTieu.id} dong={() => setRut(false)} />
-			) : null}
+			<HopRutLai
+				objectiveId={mucTieu.id}
+				open={rut}
+				dong={() => setRut(false)}
+			/>
 		</Alert>
 	);
 }
