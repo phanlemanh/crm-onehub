@@ -244,6 +244,25 @@ type ChupGanNhat = {
 	nguon: string;
 };
 
+export type VetCongBo = {
+	hanhDong: Extract<HanhDongVet, "cong-bo" | "duyet">;
+	sau: OkrVetSnapshot;
+};
+
+export function vetCongBo(
+	truoc: TrangThaiMucTieu,
+	tuDuyet: boolean,
+): VetCongBo {
+	if (truoc === "cho-duyet")
+		return tuDuyet
+			? { hanhDong: "duyet", sau: { status: "cong-bo" } }
+			: { hanhDong: "cong-bo", sau: { status: "cong-bo", tuChoDuyet: true } };
+	return {
+		hanhDong: "cong-bo",
+		sau: tuDuyet ? { status: "cong-bo", tuDuyet: true } : { status: "cong-bo" },
+	};
+}
+
 export function doCanhVaSoMay(
 	nguon: string,
 	nguonMay: { loai: string } | null,
@@ -707,7 +726,7 @@ export class OkrService {
 		tx: Tx,
 		userId: string,
 		mt: { id: string; status: TrangThaiMucTieu },
-		cach: { hanhDong: "cong-bo" | "duyet"; tuDuyet: boolean },
+		cach: { tuDuyet: boolean },
 	) {
 		if ((await tx.okrKeyResult.count({ where: { objectiveId: mt.id } })) === 0)
 			throw new BadRequestException(T.congBoCanKr);
@@ -720,15 +739,14 @@ export class OkrService {
 			where: { objectiveId: mt.id, startLockedAt: null },
 			data: { startLockedAt: luc },
 		});
+		const vet = vetCongBo(mt.status, cach.tuDuyet);
 		await this.vet(
 			tx,
 			userId,
-			cach.hanhDong,
+			vet.hanhDong,
 			{ objectiveId: mt.id },
 			{ status: mt.status },
-			cach.tuDuyet
-				? { status: "cong-bo", tuDuyet: true }
-				: { status: "cong-bo" },
+			vet.sau,
 		);
 		return { id: mt.id, canhBao: null };
 	}
@@ -749,10 +767,7 @@ export class OkrService {
 				tx,
 				userId,
 				{ id: mt.id, status: trangThai },
-				{
-					hanhDong: "cong-bo",
-					tuDuyet: ct.duyetCongBo && mt.level !== "onehub",
-				},
+				{ tuDuyet: ct.duyetCongBo && mt.level !== "onehub" },
 			);
 		});
 	}

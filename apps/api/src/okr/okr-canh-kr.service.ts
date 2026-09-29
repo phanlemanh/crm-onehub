@@ -68,7 +68,11 @@ export class OkrCanhKrService {
 		@Inject(OkrAccessService) private readonly access: OkrAccessService,
 	) {}
 
-	private async krDeGhi(tx: Tx, keyResultId: string) {
+	private async krDeGhi(
+		tx: Tx,
+		keyResultId: string,
+		ghi: "noi-dung" | "tien-do" = "noi-dung",
+	) {
 		const kr = await tx.okrKeyResult.findUnique({
 			where: { id: keyResultId },
 			select: {
@@ -81,6 +85,8 @@ export class OkrCanhKrService {
 		await this.okr.assertKyGhiDuoc(tx, kr.objective.cycleId);
 		if (kr.objective.status === "da-bo")
 			throw new BadRequestException(T.canhKr.mucTieuDaBo);
+		if (ghi === "noi-dung" && kr.objective.status === "cho-duyet")
+			throw new BadRequestException(T.dangChoDuyet);
 		return { ...kr, objective: donViCua(kr.objective) };
 	}
 
@@ -374,7 +380,7 @@ export class OkrCanhKrService {
 		const q = await this.access.quyen(userId);
 		return this.db.$transaction(async (tx) => {
 			const cu = await this.viecTuGo(tx, input.id);
-			const kr = await this.krDeGhi(tx, cu.keyResultId);
+			const kr = await this.krDeGhi(tx, cu.keyResultId, "tien-do");
 			if (cu.nguoiLamUserId !== userId) this.assertGhiDuoc(q, userId, kr);
 			await tx.okrViecKr.update({
 				where: { id: cu.id },

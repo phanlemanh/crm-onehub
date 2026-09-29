@@ -72,7 +72,7 @@ export class OkrDuyetService {
 				tx,
 				userId,
 				{ id: mt.id, status: CHO_DUYET },
-				{ hanhDong: "duyet", tuDuyet: false },
+				{ tuDuyet: true },
 			);
 		});
 	}

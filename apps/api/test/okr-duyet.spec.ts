@@ -19,7 +19,7 @@ import type {
 import { OkrAccessService } from "../src/okr/okr-access.service";
 import { OKR } from "../src/okr/okr-config";
 import type { ToanCanhOutput } from "../src/okr/okr-xem.contracts";
-import { donSanCanhKr } from "./okr-canh-kr-san";
+import { chienDichMoi, donSanCanhKr } from "./okr-canh-kr-san";
 import {
 	datDuyetCongBo,
 	gieoDuyet,
@@ -229,6 +229,25 @@ describe("cong-bo", () => {
 				capNhatTuan: [g1.id, i3.id].sort(),
 			});
 
+			const [con, cho2] = nhapCuaT;
+			const hDuyet = await goi(
+				"okr.publishObjective",
+				{ id: cho2?.id ?? "" },
+				s.h.cookie,
+			);
+			const vetHDuyet = (await vetCua(cho2?.id ?? "")).at(-1);
+			expect({
+				hDuyet: [tra(hDuyet), await trangThai(cho2?.id ?? "")],
+				vet: [
+					vetHDuyet?.action,
+					parseOkrVet(vetHDuyet?.before),
+					parseOkrVet(vetHDuyet?.after),
+				],
+			}).toEqual({
+				hDuyet: ["200", "cong-bo"],
+				vet: ["duyet", { status: "cho-duyet" }, { status: "cong-bo" }],
+			});
+
 			await datDuyetCongBo(false);
 			const g2 = await mucTieuCoHaiKr(s, pb(s.p1), s.t, "dc G2");
 			const tatG2 = await goi(
@@ -236,7 +255,6 @@ describe("cong-bo", () => {
 				{ id: g2.id },
 				s.t.cookie,
 			);
-			const [con] = nhapCuaT;
 			const tatCho = await goi(
 				"okr.publishObjective",
 				{ id: con?.id ?? "" },
@@ -254,7 +272,11 @@ describe("cong-bo", () => {
 			}).toEqual({
 				g2: ["200", "cong-bo"],
 				cho: ["200", "cong-bo"],
-				vetCho: ["cong-bo", { status: "cho-duyet" }, { status: "cong-bo" }],
+				vetCho: [
+					"cong-bo",
+					{ status: "cho-duyet" },
+					{ status: "cong-bo", tuChoDuyet: true },
+				],
 			});
 		},
 		CHO_MS,
@@ -601,7 +623,7 @@ describe("nguoi-duyet", () => {
 	);
 
 	test(
-		"nguoi-duyet: khi chờ duyệt, 7 thao tác sửa của T bị từ chối 400 dangChoDuyet, bảng không đổi",
+		"nguoi-duyet: khi chờ duyệt, 14 thao tác sửa nội dung mục tiêu và KR của T bị từ chối 400 dangChoDuyet, bảng không đổi; người làm vẫn đánh dấu việc xong",
 		async () => {
 			const dich = await mucTieuCoHaiKr(
 				s,
@@ -615,6 +637,52 @@ describe("nguoi-duyet", () => {
 				"Q duyet dich",
 			);
 			const g = await mucTieuCoHaiKr(s, pb(s.p1), s.t, "dn khoa");
+			const [kr1, kr2] = g.kr;
+			const krMoc = ok<{ id: string }>(
+				await goi(
+					"okr.createKeyResult",
+					{
+						objectiveId: g.id,
+						title: ma("dn kr moc"),
+						kind: "moc",
+						ownerUserId: s.t.id,
+						startValue: 0,
+						targetValue: 1,
+						currentValue: 1,
+						unit: "",
+						dueOn: null,
+						weight: 1,
+					},
+					s.t.cookie,
+				),
+				"tao KR moc",
+			).id;
+			const viec = ok<{ id: string }>(
+				await goi(
+					"okr.themViec",
+					{
+						keyResultId: kr1 ?? "",
+						tieuDe: "Gọi lại khách cũ",
+						nguoiLamUserId: s.k.id,
+						hanNgay: null,
+					},
+					s.t.cookie,
+				),
+				"them viec",
+			).id;
+			const bangChung = ok<{ id: string }>(
+				await goi(
+					"okr.themBangChung",
+					{
+						keyResultId: krMoc,
+						url: "https://drive.google.com/thu",
+						ghiChu: "",
+					},
+					s.t.cookie,
+				),
+				"them bang chung",
+			).id;
+			const chienDich = await chienDichMoi(ma("dn cd"), s.t);
 			await guiDuyet(g.id, s.t);
 			const anh = async () => {
 				const mt = await db.okrObjective.findUniqueOrThrow({
@@ -626,7 +694,18 @@ describe("nguoi-duyet", () => {
 						participants: { select: { userId: true } },
 						keyResults: {
 							orderBy: { position: "asc" },
-							select: { id: true, title: true, targetValue: true },
+							select: {
+								id: true,
+								title: true,
+								targetValue: true,
+								source: true,
+								nguonMay: { select: { loai: true } },
+								viecKr: {
+									orderBy: { id: "asc" },
+									select: { id: true, tieuDe: true, xongLuc: true },
+								},
+								bangChung: { select: { id: true } },
+							},
 						},
 						alignments: { select: { id: true } },
 						nguoiXem: { select: { userId: true } },
@@ -641,7 +720,6 @@ describe("nguoi-duyet", () => {
 					vet: (await vetCua(g.id)).length,
 				};
 			};
-			const [kr1, kr2] = g.kr;
 			const CA: [string, string, Json][] = [
 				[
 					"updateObjective",
@@ -689,18 +767,56 @@ describe("nguoi-duyet", () => {
 					"okr.updateObjective",
 					{ id: g.id, participantIds: [s.k.id] },
 				],
+				[
+					"datNguonKr",
+					"okr.datNguonKr",
+					{ keyResultId: kr1 ?? "", loai: "api" },
+				],
+				[
+					"themViec",
+					"okr.themViec",
+					{
+						keyResultId: kr1 ?? "",
+						tieuDe: "Việc thêm khi chờ duyệt",
+						nguoiLamUserId: s.k.id,
+						hanNgay: null,
+					},
+				],
+				["suaViec", "okr.suaViec", { id: viec, tieuDe: "Đổi tên việc" }],
+				["goViec", "okr.goViec", { id: viec }],
+				[
+					"ganSangKien",
+					"okr.ganSangKien",
+					{ keyResultId: kr1 ?? "", loai: "chien-dich", banGhiId: chienDich },
+				],
+				[
+					"themBangChung",
+					"okr.themBangChung",
+					{
+						keyResultId: krMoc,
+						url: "https://drive.google.com/thu-2",
+						ghiChu: "",
+					},
+				],
+				["goBangChung", "okr.goBangChung", { id: bangChung }],
 			];
 			const truoc = await anh();
 			const ket: Record<string, string> = {};
 			for (const [ten, thuTuc, vao] of CA)
 				ket[ten] = tra(await goi(thuTuc, vao, s.t.cookie));
 			const sau = await anh();
-			console.log(`nguoi-duyet khoa: ${JSON.stringify(ket, null, 1)}`);
-			expect(CA).toHaveLength(7);
+			const danhDau = tra(
+				await goi("okr.danhDauViec", { id: viec, xong: true }, s.k.cookie),
+			);
+			console.log(
+				`nguoi-duyet khoa: ${CA.length} o\n${JSON.stringify(ket, null, 1)}\ndanhDauViec cua nguoi lam: ${danhDau}`,
+			);
+			expect(CA).toHaveLength(14);
 			expect(ket).toEqual(
 				Object.fromEntries(CA.map(([ten]) => [ten, `400 ${T.dangChoDuyet}`])),
 			);
 			expect(sau).toEqual(truoc);
+			expect(danhDau).toBe("200");
 		},
 		CHO_MS,
 	);

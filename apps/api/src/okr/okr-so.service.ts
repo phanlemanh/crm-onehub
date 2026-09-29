@@ -225,6 +225,8 @@ export class OkrSoService {
 			});
 			const trangThai = trangThaiMucTieu.parse(kr.objective.status);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
+			if (trangThai === "cho-duyet")
+				throw new BadRequestException(T.dangChoDuyet);
 			const congBo = trangThai === "cong-bo";
 			const nguon = nguonKr.parse(kr.source);
 			if (congBo && nguon !== "tay")
