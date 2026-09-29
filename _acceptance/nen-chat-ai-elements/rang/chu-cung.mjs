@@ -52,6 +52,7 @@ const MIEN_GIA_TRI = {
 			outline: "biến thể Button — chip có viền",
 			icon: "cỡ Button — ô vuông vừa đúng một icon",
 			"icon-sm": "cỡ Button — ô vuông nhỏ",
+			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
 		},
 	},
 	"enum-may": {
@@ -82,6 +83,12 @@ const MIEN_GIA_TRI = {
 			file: "nhãn nội bộ phân loại tệp đính kèm",
 			"image/": "tiền tố MIME đem đi startsWith",
 			"text/markdown": "MIME của blob hội thoại tải về",
+			"input-streaming": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"input-available": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"approval-requested": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"approval-responded": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"output-denied": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"output-available": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"conversation.md":
 				"tên tệp máy đọc của bản tải về. Nó CÓ thể hiện ở thanh tải của trình duyệt; miễn ở đây là quyết định có ý thức vì nó là định danh tập tin kèm đuôi, không phải câu trên màn.",
 		},

@@ -17,6 +17,8 @@ const TAI_LIEU = {
 	ref: {
 		onehub: process.env.TAI_LIEU_REF_ONEHUB ?? "origin/onehub",
 		release: process.env.TAI_LIEU_REF_RELEASE ?? "origin/release",
+		gop9b:
+			process.env.TAI_LIEU_GOP_9B ?? "2e3280474f472b9853ed9a66bb0f4524ede6ff7d",
 	},
 	muc: {
 		cheDoAn: "**Chế độ ẩn**",
@@ -110,7 +112,10 @@ function kiemApiMd(thuTuc) {
 }
 
 function tapTepHangTrongDiff() {
-	const thieuRef = Object.values(TAI_LIEU.ref).filter((ten) => !coRef(ten));
+	const thieuRef = [
+		...Object.values(TAI_LIEU.ref),
+		`${TAI_LIEU.ref.gop9b}^1`,
+	].filter((ten) => !coRef(ten));
 	if (thieuRef.length > 0) {
 		if (process.env.CI) {
 			console.warn(
@@ -120,8 +125,12 @@ function tapTepHangTrongDiff() {
 		}
 		throw new KhongDo(TAI_LIEU.thongDiep.thieuRef(thieuRef.join(", ")));
 	}
-	const goc = git("merge-base", "HEAD", TAI_LIEU.ref.onehub).trim();
-	const doi = git("diff", "--name-only", goc, "HEAD")
+	const doi = git(
+		"diff",
+		"--name-only",
+		`${TAI_LIEU.ref.gop9b}^1`,
+		TAI_LIEU.ref.gop9b,
+	)
 		.split("\n")
 		.filter(Boolean);
 	const coORelease = new Set(
