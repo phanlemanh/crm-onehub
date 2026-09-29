@@ -499,8 +499,9 @@ export class OkrHoiYService {
 
 	async suaChuDe(userId: string, input: SuaChuDeInput): Promise<HoiYGhiOutput> {
 		return this.db.$transaction(async (tx) => {
-			const { h } = await this.khoaTheoChuDe(tx, input.chuDeId);
+			const { h, loai } = await this.khoaTheoChuDe(tx, input.chuDeId);
 			await this.kiemGom(tx, h, userId, "gom");
+			if (loai === "y-la") throw new BadRequestException(T.yLaKhongDoiTen);
 			await tx.okrChuDe.update({
 				where: { id: input.chuDeId },
 				data: { ten: input.ten },
@@ -581,11 +582,22 @@ export class OkrHoiYService {
 				dich = await this.chuDeMoi(tx, h.id, "y-la", tenYLa(motY.noiDung), now);
 			}
 			const doi = y.filter((x) => x.chuDeId !== dich).map((x) => x.id);
-			if (doi.length > 0)
+			if (doi.length > 0) {
 				await tx.okrY.updateMany({
 					where: { id: { in: doi } },
 					data: { chuDeId: dich, ganLuc: now },
 				});
+				const cu = [
+					...new Set(
+						y.flatMap((x) =>
+							x.chuDeId !== null && x.chuDeId !== dich ? [x.chuDeId] : [],
+						),
+					),
+				];
+				await tx.okrChuDe.deleteMany({
+					where: { id: { in: cu }, loai: "y-la", y: { none: {} } },
+				});
+			}
 			return { id: dich };
 		});
 	}

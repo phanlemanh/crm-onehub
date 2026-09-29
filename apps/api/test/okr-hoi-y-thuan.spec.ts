@@ -8,6 +8,8 @@ import {
 	noiTuSoCau,
 	OKR_HOI_Y,
 	soCauCuaNoi,
+	suaChuDeInput,
+	taoChuDeInput,
 	thuTuXao,
 } from "@crm/validation/okr-hoi-y";
 import {
@@ -792,7 +794,7 @@ describe("chieu-chu-de", () => {
 		const r = chieuChuDeChoNguoiXem(
 			cd,
 			ds,
-			xem("qt", true, false, false, "dang-gom"),
+			xem("ceo", true, true, true, "dang-gom"),
 		);
 		expect(r?.map((c) => c.id)).toEqual(["c1", "c2"]);
 		expect(Object.keys(r?.[0] ?? {}).sort()).toEqual([
@@ -862,7 +864,7 @@ describe("chieu-chu-de", () => {
 		const r = chieuChuDeChoNguoiXem(
 			[chuDe("rong", 0)],
 			ds,
-			xem("qt", true, false, false, "dang-gom"),
+			xem("ceo", true, true, true, "dang-gom"),
 		);
 		expect(r).toEqual([
 			{
@@ -880,11 +882,57 @@ describe("chieu-chu-de", () => {
 		]);
 	});
 
+	test("trước công bố quản trị không phải người chọn không thấy câu mục tiêu và chỗ nối; người chọn và mọi người sau công bố thấy thật", () => {
+		const cua = (qt: boolean, nc: boolean, np: boolean, tt: TrangThaiHoiY) =>
+			chieuChuDeChoNguoiXem(cd, ds, xem("me", qt, nc, np, tt))?.map((c) => ({
+				id: c.id,
+				cau: c.cauMucTieu,
+				noi: c.noiBanTruoc,
+				ketLuan: c.ketLuan,
+				lyDo: c.lyDo,
+			}));
+		expect(cua(true, false, false, "dang-gom")).toEqual([
+			{
+				id: "c1",
+				cau: null,
+				noi: null,
+				ketLuan: "chon",
+				lyDo: "Đúng hướng năm tới.",
+			},
+			{
+				id: "c2",
+				cau: null,
+				noi: null,
+				ketLuan: "de-sau",
+				lyDo: "Để kỳ sau khi đủ người.",
+			},
+		]);
+		const that: NonNullable<ReturnType<typeof cua>> = [
+			{
+				id: "c1",
+				cau: "Giao lạnh có lãi",
+				noi: "cau-1",
+				ketLuan: "chon",
+				lyDo: "Đúng hướng năm tới.",
+			},
+			{
+				id: "c2",
+				cau: "",
+				noi: null,
+				ketLuan: "de-sau",
+				lyDo: "Để kỳ sau khi đủ người.",
+			},
+		];
+		expect(cua(true, true, true, "dang-gom")).toEqual(that);
+		expect(cua(true, false, true, "da-cong-bo")).toEqual(that);
+		expect(cua(false, false, true, "da-cong-bo")).toEqual(that);
+	});
+
 	test("chưa kết luận: lý do và câu mục tiêu là chuỗi rỗng", () => {
 		const r = chieuChuDeChoNguoiXem(
 			[chuDe("c1", 0)],
 			ds,
-			xem("qt", true, false, false, "dang-gom"),
+			xem("ceo", true, true, true, "dang-gom"),
 		);
 		expect({ lyDo: r?.[0]?.lyDo, cau: r?.[0]?.cauMucTieu }).toEqual({
 			lyDo: "",
@@ -1048,12 +1096,32 @@ describe("ten-y-la", () => {
 		expect(tenYLa("Mở tuyến giao lạnh")).toBe("Mở tuyến giao lạnh");
 	});
 
-	test("đúng trần ký tự đầu, không cắt giữa ký tự hai đơn vị", () => {
-		const dau = "a".repeat(OKR_HOI_Y.tenYLa - 1);
-		const y = `${dau}😀 đuôi còn lại`;
-		const ten = tenYLa(y);
-		expect(Array.from(ten).length).toBe(OKR_HOI_Y.tenYLa);
-		expect(ten).toBe(`${dau}😀`);
-		expect(y.slice(0, OKR_HOI_Y.tenYLa)).not.toBe(ten);
+	test("chữ thường dài hơn trần: cắt đúng trần của tên chủ đề", () => {
+		const y = "a".repeat(OKR_HOI_Y.tenChuDe.max + 30);
+		expect(tenYLa(y)).toBe("a".repeat(OKR_HOI_Y.tenChuDe.max));
+	});
+
+	test("ký tự hai đơn vị ở ranh giới không bị cắt đôi và không làm tên vượt trần", () => {
+		const dau = "a".repeat(OKR_HOI_Y.tenChuDe.max - 1);
+		const ten = tenYLa(`${dau}😀 đuôi còn lại`);
+		expect(ten).toBe(dau);
+		expect(ten.length).toBeLessThanOrEqual(OKR_HOI_Y.tenChuDe.max);
+	});
+
+	test("nhiều ký tự hai đơn vị: tên có đúng số ký tự vừa trần", () => {
+		const ten = tenYLa("😀".repeat(OKR_HOI_Y.tenChuDe.max));
+		expect(ten.length).toBe(OKR_HOI_Y.tenChuDe.max);
+		expect(Array.from(ten).length).toBe(OKR_HOI_Y.tenChuDe.max / 2);
+	});
+
+	test("tên ý lạ qua được khuôn tạo và đổi tên chủ đề", () => {
+		const dau = "a".repeat(OKR_HOI_Y.tenChuDe.max - 1);
+		for (const y of [`${dau}😀 đuôi`, "😀".repeat(300), "a".repeat(300)]) {
+			const ten = tenYLa(y);
+			expect(taoChuDeInput.safeParse({ hoiYId: "h1", ten }).success).toBe(true);
+			expect(suaChuDeInput.safeParse({ chuDeId: "c1", ten }).success).toBe(
+				true,
+			);
+		}
 	});
 });

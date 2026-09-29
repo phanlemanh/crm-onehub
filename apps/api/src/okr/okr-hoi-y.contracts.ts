@@ -36,7 +36,7 @@ const chuDeChieu = z.object({
 	ten: z.string(),
 	ketLuan: ketLuanChuDe.nullable(),
 	lyDo: z.string(),
-	cauMucTieu: z.string(),
+	cauMucTieu: z.string().nullable(),
 	noiBanTruoc: noiBanTruoc.nullable(),
 	objectiveId: z.string().nullable(),
 	bangChung: z.object({
@@ -47,7 +47,6 @@ const chuDeChieu = z.object({
 	}),
 	y: z.array(yChieuOutput),
 });
-export type ChuDeChieuOutput = z.infer<typeof chuDeChieu>;
 
 const yCuaToi = z.object({
 	id: z.string(),

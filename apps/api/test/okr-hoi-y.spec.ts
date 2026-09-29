@@ -1680,6 +1680,7 @@ describe("ban-truoc", () => {
 					const yB = await yCua(h, nguoi.B.id);
 					await gomVaKetLuan(h, yA, nguoi, {
 						...KET_LUAN_CHON_MAU,
+						cauMucTieu: BAN_TRUOC_MAC_DINH[0] ?? "",
 						noiBanTruoc: "cau-1",
 					});
 					await gomVaKetLuan(
@@ -1823,9 +1824,9 @@ const hangY = async (id: string) => {
 
 describe("gom", () => {
 	test(
-		"gom: chuỗi E6 — Q tạo, đổi tên, gắn ba ý, ý lạ cắt 120 ký tự theo Array.from, P chuyển ý sang chủ đề khác, gắn lại cùng chủ đề không đổi ganLuc, tạo rồi gỡ chủ đề rỗng; ganLuc là giờ tiêm; không vết",
+		"gom: chuỗi E6 — Q tạo, đổi tên, gắn ba ý, ý lạ cắt vừa trần tên chủ đề, P chuyển ý sang chủ đề khác, gắn lại cùng chủ đề không đổi ganLuc, tạo rồi gỡ chủ đề rỗng; ganLuc là giờ tiêm; không vết",
 		async () => {
-			const dau = "b".repeat(OKR_HOI_Y.tenYLa - 1);
+			const dau = "b".repeat(OKR_HOI_Y.tenChuDe.max - 1);
 			const g = await gieoGom({
 				yCua: ["A", "B", "R", "T", "O", "Q"],
 				noiDung: [
@@ -1888,7 +1889,7 @@ describe("gom", () => {
 				soY: await db.okrY.count({ where: { chuDeId: c2 } }),
 			}).toEqual({
 				loai: "y-la",
-				ten: `${dau}😀`,
+				ten: dau,
 				viTri: 1,
 				soY: 1,
 			});
@@ -1955,7 +1956,7 @@ describe("gom", () => {
 	);
 
 	test(
-		"gom: 26 ca từ chối — mã HTTP và câu ghim khớp bảng khai; bảng chủ đề, chuDeId, ganLuc và vết không đổi ở mọi ca",
+		"gom: 27 ca từ chối — mã HTTP và câu ghim khớp bảng khai; bảng chủ đề, chuDeId, ganLuc và vết không đổi ở mọi ca",
 		async () => {
 			const KHAI = [
 				{ ca: "Q-tao-khi-con-mo", maHttp: 400, cau: T.chuaHetHan },
@@ -1987,6 +1988,7 @@ describe("gom", () => {
 				},
 				{ ca: "gan-hai-dich", maHttp: 400, cau: OKR_HOI_Y.gan.motTrongHai },
 				{ ca: "gan-y-la-hai-y", maHttp: 400, cau: OKR_HOI_Y.gan.yLaMotY },
+				{ ca: "sua-chu-de-y-la", maHttp: 400, cau: T.yLaKhongDoiTen },
 				{
 					ca: "P-chua-niem-phong-tao",
 					maHttp: 400,
@@ -2078,6 +2080,7 @@ describe("gom", () => {
 						{ yIds: [yGom2], chuDeId: cRong, yLa: true },
 						Q.cookie,
 					),
+				"sua-chu-de-y-la": () => suaChuDeCua(cYLa, "Đổi tên ý lạ", Q.cookie),
 				"gan-y-la-hai-y": () =>
 					goi("okr.ganY", { yIds: [yGom2, yGom0], yLa: true }, Q.cookie),
 				"P-chua-niem-phong-tao": () =>
@@ -2124,6 +2127,38 @@ describe("gom", () => {
 			);
 		},
 		CHO_MA_TRAN_MS,
+	);
+
+	test(
+		"gom: ý lạ duy nhất chuyển sang chủ đề thường thì chủ đề ý lạ rỗng bị xoá cùng giao dịch; chuyển giữa hai chủ đề thường không xoá chủ đề nào; đánh dấu ý lạ lần hai không tạo thêm",
+		async () => {
+			const g = await gieoGom({ yCua: ["A", "B"] });
+			const { h, nguoi, y } = g;
+			const [yA, yB] = y;
+			if (!yA || !yB) throw new Error("thieu y");
+			const { Q } = nguoi;
+			const c1 = await chuDeMoiId(h, "Giao lạnh", Q.cookie);
+			const c2 = await chuDeMoiId(h, "Kho miền Trung", Q.cookie);
+			ok(await ganYCua([yB], { chuDeId: c1 }, Q.cookie), "gan yB vao c1");
+			const yLa = ok<{ id: string }>(
+				await ganYCua([yA], { yLa: true }, Q.cookie),
+				"yA thanh y la",
+			).id;
+			const soChuDe = () => db.okrChuDe.count({ where: { hoiYId: h } });
+			expect(await soChuDe()).toBe(3);
+			ok(await ganYCua([yB], { chuDeId: c2 }, Q.cookie), "chuyen yB sang c2");
+			expect({
+				soChuDe: await soChuDe(),
+				c1: (await db.okrChuDe.findUnique({ where: { id: c1 } }))?.id,
+			}).toEqual({ soChuDe: 3, c1 });
+			ok(await ganYCua([yA], { chuDeId: c1 }, Q.cookie), "yA sang c1");
+			expect({
+				soChuDe: await soChuDe(),
+				yLaCon: await db.okrChuDe.findUnique({ where: { id: yLa } }),
+				yA: (await hangY(yA)).chuDeId,
+			}).toEqual({ soChuDe: 2, yLaCon: null, yA: c1 });
+		},
+		CHO_MS,
 	);
 
 	test(
@@ -2195,6 +2230,9 @@ describe("gom", () => {
 			khoa.T = await khoaApiCua(nguoi.T.id);
 			khoa.O = await khoaApiCua(nguoi.O.id);
 			const VAI = ["T", "O"] as const;
+			const TRANG_THAI_THANH_VIEN = ["dang-gom", "da-cong-bo"] as const;
+			const SO_O =
+				TRANG_THAI_THANH_VIEN.length * VAI.length * DUONG_MA_TRAN.length;
 			type Cell = {
 				trangThai: string;
 				vai: (typeof VAI)[number];
@@ -2280,7 +2318,10 @@ describe("gom", () => {
 					})),
 				),
 			);
-			console.log(`gom: đã chạy ${cells.length + sau.length}/12 ô thành viên`);
+			console.log(
+				`gom: đã chạy ${cells.length + sau.length}/${SO_O} ô thành viên`,
+			);
+			expect(cells.length + sau.length).toBe(SO_O);
 		},
 		CHO_MA_TRAN_MS,
 	);

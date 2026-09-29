@@ -31,7 +31,6 @@ export const OKR_HOI_Y = {
 		canCauMucTieu: "Chủ đề chọn cần câu mục tiêu hợp với khuôn tên mục tiêu.",
 	},
 	tenChuDe: { min: 2, max: 120 },
-	tenYLa: 120,
 	maToiDa: 120,
 	lyDo: { min: 10, max: 1000 },
 	hanGio: { min: 24, max: 168 },

@@ -15,7 +15,14 @@ import {
 import { mucTieuInput } from "@crm/validation/okr-muc-tieu";
 
 export function tenYLa(noiDung: string): string {
-	return Array.from(noiDung).slice(0, OKR_HOI_Y.tenYLa).join("");
+	let dai = 0;
+	const ra: string[] = [];
+	for (const kyTu of noiDung) {
+		if (dai + kyTu.length > OKR_HOI_Y.tenChuDe.max) break;
+		ra.push(kyTu);
+		dai += kyTu.length;
+	}
+	return ra.join("");
 }
 
 export type YBangChung = {
@@ -329,7 +336,8 @@ export type BangChungChieu = Omit<BangChungChuDe, "soDongY"> & {
 	soDongY?: number;
 };
 
-export type ChuDeChieu = Omit<ChuDeTho, "viTri"> & {
+export type ChuDeChieu = Omit<ChuDeTho, "viTri" | "cauMucTieu"> & {
+	cauMucTieu: string | null;
 	bangChung: BangChungChieu;
 	y: YChieu[];
 };
@@ -343,6 +351,7 @@ export function chieuChuDeChoNguoiXem(
 	const dangGom = xem.trangThai === "dang-gom" && thayDayDu(xem);
 	if (!daCongBo && !dangGom) return null;
 	const day = thayDayDu(xem);
+	const thayNoiBanTruoc = daCongBo || xem.laNguoiChon;
 	return [...chuDe]
 		.sort(
 			(a, b) => a.viTri - b.viTri || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
@@ -365,8 +374,8 @@ export function chieuChuDeChoNguoiXem(
 				ten: c.ten,
 				ketLuan: c.ketLuan,
 				lyDo: c.lyDo,
-				cauMucTieu: c.cauMucTieu,
-				noiBanTruoc: c.noiBanTruoc,
+				cauMucTieu: thayNoiBanTruoc ? c.cauMucTieu : null,
+				noiBanTruoc: thayNoiBanTruoc ? c.noiBanTruoc : null,
 				objectiveId: c.objectiveId,
 				bangChung: day ? { ...khongDem, soDongY } : khongDem,
 				y: chieuYChoNguoiXem(cua, xem).y,

@@ -230,6 +230,8 @@ export const OKR = {
 			yKhacHoiY: "Ý này không thuộc lần hỏi ý của chủ đề.",
 			chuDeYLa:
 				"Chủ đề ý lạ chỉ chứa đúng một ý — gắn ý vào một chủ đề thường.",
+			yLaKhongDoiTen:
+				"Chủ đề ý lạ mang tên của ý — không đổi tên, hãy sửa ý hoặc chuyển ý sang chủ đề thường.",
 			noiBanTruocKhongCo: (soCau: number) =>
 				`Bản viết trước chỉ có ${soCau} câu — nối tới câu có thật hoặc chọn «mới».`,
 			noiBanTruocBoQua:
