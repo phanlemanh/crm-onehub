@@ -1,0 +1,7 @@
+[
+	{ "id": "onehub", "cap": "onehub", "ma": null },
+	{ "id": "bp-kinh-doanh", "cap": "bo-phan", "ma": "kinh-doanh" },
+	{ "id": "pb-kd-bac", "cap": "phong-ban", "ma": "kd-bac" },
+	{ "id": "pb-kho-van", "cap": "phong-ban", "ma": "kho-van" },
+	{ "id": "pb-tai-chinh", "cap": "phong-ban", "ma": "tai-chinh", "chen": true }
+]
