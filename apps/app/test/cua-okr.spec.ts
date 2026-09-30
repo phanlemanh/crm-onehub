@@ -651,6 +651,51 @@ describe("cua-okr", () => {
 				.status,
 		).toBe(202);
 	});
+	test("sau thu lai: gui tiep va huy luot tren phien cu → 409 phien-da-thay, khong toi tro ly, khong dem luot; doc luong phien cu van qua; gui tren phien song qua", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		await goi(NGUOI.okr, "/eve/v1/session", id);
+		const eveCu = daTraEve.at(-1) ?? "";
+		await capNhatPhien(db, id, `${PHIEN_CHO_EVE}${id}-lai`);
+		await goi(NGUOI.okr, "/eve/v1/session", id);
+		const eveMoi = daTraEve.at(-1) ?? "";
+		const ghiCu = [];
+		for (const duong of [
+			`/eve/v1/session/${eveCu}`,
+			`/eve/v1/session/${eveCu}/cancel`,
+		]) {
+			const res = await goi(NGUOI.okr, duong, id);
+			ghiCu.push({
+				duong,
+				status: res.status,
+				body: await res.json(),
+				chuyen: daChuyen.length,
+				luot: daTangLuot.length,
+			});
+		}
+		expect(ghiCu).toEqual(
+			[`/eve/v1/session/${eveCu}`, `/eve/v1/session/${eveCu}/cancel`].map(
+				(duong) => ({
+					duong,
+					status: 409,
+					body: { error: "phien-da-thay" },
+					chuyen: 0,
+					luot: 0,
+				}),
+			),
+		);
+		const docCu = await goi(
+			NGUOI.okr,
+			`/eve/v1/session/${eveCu}/stream`,
+			id,
+			"GET",
+		);
+		const guiMoi = await goi(NGUOI.okr, `/eve/v1/session/${eveMoi}`, id);
+		expect({
+			docCu: docCu.status,
+			guiMoi: guiMoi.status,
+			luot: daTangLuot,
+		}).toEqual({ docCu: 202, guiMoi: 202, luot: [id] });
+	});
 	test("ma eve chi o than cung doc duoc; khong doc duoc thi 502 co ten, cuoc giu cho giu", async () => {
 		const id = await cuocCho(NGUOI.okr);
 		traVe = "chi-than";

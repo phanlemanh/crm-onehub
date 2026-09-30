@@ -285,24 +285,27 @@ describe("man soan — cho giu phien", () => {
 		expect(daTaiLuong).toEqual([CUOC.sessionId]);
 	});
 
-	test("cửa trả 409 da-co-phien: đọc lại cuộc rồi mở lại theo phiên có sẵn", async () => {
-		datDanhSach({ cuoc: CHO_GIU });
-		await moMan();
-		const moTruoc = soLanMoAgent;
-		const doc = goiCua("okr.soanDanhSach").length;
-		datDanhSach({ cuoc: { ...CHO_GIU, sessionId: "wrun_khac", soLuot: 1 } });
-		await baoLoiAgent(
-			Object.assign(new Error("da-co-phien"), {
-				status: 409,
-				body: '{"error":"da-co-phien"}',
-			}),
-		);
-		await nhip(20);
-		expect(soLanMoAgent).toBe(moTruoc + 1);
-		expect(goiCua("okr.soanDanhSach").length).toBeGreaterThan(doc);
-		expect(daTaiLuong).toEqual(["wrun_khac"]);
-		expect(q('[data-luot="loi"]')).toBeNull();
-	});
+	test.each(["da-co-phien", "phien-da-thay"])(
+		"cửa trả 409 %s: đọc lại cuộc rồi mở lại theo phiên có sẵn",
+		async (ma) => {
+			datDanhSach({ cuoc: CHO_GIU });
+			await moMan();
+			const moTruoc = soLanMoAgent;
+			const doc = goiCua("okr.soanDanhSach").length;
+			datDanhSach({ cuoc: { ...CHO_GIU, sessionId: "wrun_khac", soLuot: 1 } });
+			await baoLoiAgent(
+				Object.assign(new Error(ma), {
+					status: 409,
+					body: JSON.stringify({ error: ma }),
+				}),
+			);
+			await nhip(20);
+			expect(soLanMoAgent).toBe(moTruoc + 1);
+			expect(goiCua("okr.soanDanhSach").length).toBeGreaterThan(doc);
+			expect(daTaiLuong).toEqual(["wrun_khac"]);
+			expect(q('[data-luot="loi"]')).toBeNull();
+		},
+	);
 });
 
 const DV = {

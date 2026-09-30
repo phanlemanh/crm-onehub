@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { setTimeout as cho } from "node:timers/promises";
 import { db, Prisma } from "@crm/db";
 import { docCuoc, donViAiCuaCuoc } from "@crm/db/okr-cuoc-soan";
 import { cauHinhAiLuc } from "@crm/db/okr-tro-ly";
@@ -6,7 +7,7 @@ import {
 	nacCuaDonVi,
 	type TRANG_THAI_DE_XUAT,
 } from "@crm/db/okr-tro-ly-danh-muc";
-import type { BanNhap } from "@crm/validation/okr-cuoc-soan";
+import { type BanNhap, laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
 import {
 	type DongKiemSoan,
 	kiemBanNhap,
@@ -152,6 +153,20 @@ async function docKhoaDaQuyet(
 	);
 }
 
+async function laPhienSong(
+	cuocSoanId: string,
+	sessionId: string,
+): Promise<boolean> {
+	const han = Date.now() + TRO_LY_OKR_SOAN.choGanPhien.ms;
+	for (;;) {
+		const cuoc = await docCuoc(db, cuocSoanId);
+		if (!cuoc) return false;
+		if (!laChoGiuPhien(cuoc.sessionId) || Date.now() >= han)
+			return cuoc.sessionId === sessionId;
+		await cho(TRO_LY_OKR_SOAN.choGanPhien.nhipMs);
+	}
+}
+
 function idKrCua(goi: GoiSoan): Set<string> {
 	return new Set(
 		goi.lop2a.ungVienCanChinh.filter((u) => u.loai === "kr").map((u) => u.id),
@@ -169,6 +184,11 @@ export async function nopBanNhap(
 	if (!cuoc || cuoc.nguoiMoUserId !== userId)
 		return tuChoi(TU_CHOI.cuocKhongThuocPhien);
 	if (cuoc.trangThai !== "dang") return tuChoi(TU_CHOI.cuocKhongDang);
+	if (
+		cuoc.sessionId !== ctx.session.id &&
+		!(await laPhienSong(cuocSoanId, ctx.session.id))
+	)
+		return tuChoi(TU_CHOI.phienKhongSong);
 	const ky = await db.okrCycle.findUniqueOrThrow({
 		where: { id: cuoc.cycleId },
 		select: { phase: true },

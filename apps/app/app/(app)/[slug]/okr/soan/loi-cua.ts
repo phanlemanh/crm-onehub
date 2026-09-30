@@ -28,11 +28,16 @@ export function lyDoTuChoiLuot(loi: Error | undefined): LyDoLuot | null {
 	return CUA_OKR.trangThaiTuChoiLuot[ma] === http.data.status ? ma : null;
 }
 
+const PHIEN_KHAC_SONG: readonly string[] = [
+	CUA_OKR.loi.daCoPhien,
+	CUA_OKR.loi.phienDaThay,
+];
+
 export function laDaCoPhien(loi: Error | undefined): boolean {
 	const http = loiHttp.safeParse(loi);
 	return (
 		http.success &&
 		http.data.status === SOAN_UI.trangThaiDaCoPhien &&
-		http.data.body.error === CUA_OKR.loi.daCoPhien
+		PHIEN_KHAC_SONG.includes(http.data.body.error)
 	);
 }

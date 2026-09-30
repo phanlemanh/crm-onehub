@@ -74,6 +74,10 @@ async function handler(
 		return loi(403, CUA_OKR.loi.phienKhongThuocCuoc);
 	}
 
+	if (duong.phien && duong.phien !== cuoc.sessionId && !laChiDoc(request)) {
+		return loi(409, CUA_OKR.loi.phienDaThay);
+	}
+
 	const moPhien = request.method === "POST" && duong.ten === "moPhien";
 	if (moPhien && !laChoGiuPhien(cuoc.sessionId)) {
 		return loi(409, CUA_OKR.loi.daCoPhien);
@@ -201,6 +205,10 @@ function docPhienEve(headers: Headers, than: string): string | null {
 	} catch {
 		return null;
 	}
+}
+
+function laChiDoc(request: Request): boolean {
+	return CUA_OKR.chiDoc.some((method) => method === request.method);
 }
 
 function laLuot(ten: DangDuong): boolean {

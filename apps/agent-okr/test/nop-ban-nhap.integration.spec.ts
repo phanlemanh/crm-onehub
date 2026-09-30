@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
+import { capNhatPhien } from "@crm/db/okr-cuoc-soan";
 import type { BanNhap, MucTieuNhap } from "@crm/validation/okr-cuoc-soan";
+import { PHIEN_CHO_EVE } from "@crm/validation/okr-cuoc-soan";
 import { noiDungSoan } from "@crm/validation/okr-tro-ly";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 import type { KetQuaNop } from "../agent/lib/nop-ban-nhap";
@@ -49,6 +51,7 @@ let canh: Awaited<ReturnType<typeof gieoCanhGoi>>;
 beforeAll(async () => {
 	await moXuong();
 	canh = await gieoCanhGoi({ vaiNguoiMo: "member" });
+	await capNhatPhien(db, canh.cuocSoanId, PHIEN_1);
 }, 60_000);
 afterAll(donDep);
 
@@ -420,6 +423,63 @@ describe("nop-ban-nhap", () => {
 		expect(
 			await db.okrDeXuat.count({ where: { cuocSoanId: cuocKhac.id } }),
 		).toBe(truoc);
+	});
+
+	test("phiên cũ của cuộc (đã Thử lại sang phiên khác) → từ chối 'phien khong con song', không ghi; phiên sống thì ghi", async () => {
+		const cu = `${TIEN_TO}phien-cu`;
+		const song = `${TIEN_TO}phien-song`;
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: cu,
+		});
+		await capNhatPhien(db, cuoc.id, song);
+		const dem = () => db.okrDeXuat.count({ where: { cuocSoanId: cuoc.id } });
+		const tuPhienCu = await nop(tron(), nguCanh(cu, canh.nguoiMo.id, cuoc.id));
+		const truocSong = await dem();
+		const tuPhienSong = await nop(
+			tron(),
+			nguCanh(song, canh.nguoiMo.id, cuoc.id),
+		);
+		expect({
+			cu: [tuPhienCu.ketQua, tuPhienCu.lyDo],
+			hangSauCu: truocSong,
+			song: tuPhienSong.ketQua,
+		}).toEqual({
+			cu: ["tu-choi", TRO_LY_OKR_SOAN.tuChoi.phienKhongSong],
+			hangSauCu: 0,
+			song: "da-ghi",
+		});
+		expect(await dem()).toBeGreaterThan(0);
+	});
+
+	test("cuộc còn mang chỗ giữ phiên: chờ cửa ghi mã eve rồi mới so — đúng phiên này thì ghi, phiên khác thắng thì từ chối", async () => {
+		const moi = async (phien: string, thang: string) => {
+			const cuoc = await gieoCuoc({
+				cycleId: canh.chuKy.nay,
+				departmentId: canh.phong.id,
+				nguoiMoUserId: canh.nguoiMo.id,
+				sessionId: `${PHIEN_CHO_EVE}${TIEN_TO}${phien}`,
+			});
+			const ghi = new Promise<void>((xong) =>
+				setTimeout(() => {
+					void capNhatPhien(db, cuoc.id, thang).then(() => xong());
+				}, TRO_LY_OKR_SOAN.choGanPhien.nhipMs * 2),
+			);
+			const ra = await nop(tron(), nguCanh(phien, canh.nguoiMo.id, cuoc.id));
+			await ghi;
+			return [ra.ketQua, ra.lyDo];
+		};
+		const p1 = `${TIEN_TO}phien-cho-1`;
+		const p2 = `${TIEN_TO}phien-cho-2`;
+		expect({
+			dungPhien: await moi(p1, p1),
+			phienKhacThang: await moi(p2, `${TIEN_TO}phien-thang`),
+		}).toEqual({
+			dungPhien: ["da-ghi", ""],
+			phienKhacThang: ["tu-choi", TRO_LY_OKR_SOAN.tuChoi.phienKhongSong],
+		});
 	});
 
 	test("phiên không mang vai hay mục đích okr-soan → từ chối 'sai muc dich'", async () => {

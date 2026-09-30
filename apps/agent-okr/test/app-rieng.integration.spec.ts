@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { currentTree, treeSlug } from "@crm/db/measure-database";
+import { capNhatPhien } from "@crm/db/okr-cuoc-soan";
 import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 import { docSoNguoiGo } from "../agent/lib/so-nguoi-go";
@@ -154,6 +155,7 @@ describe("app-rieng: bốn lượt", () => {
 			const kq = await (await phien.send(m)).result();
 			expect(kq.status, `luot «${m}» that bai`).toBe("waiting");
 			sessionId = kq.sessionId;
+			await capNhatPhien(db, canh.cuocSoanId, sessionId);
 			suKien.push(...kq.events);
 			if (m === KICH_BAN.sua)
 				expect(kq.message ?? "").toContain(KICH_BAN.tenMucTieu3);

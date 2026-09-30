@@ -114,6 +114,7 @@ describe("hong-chen", () => {
 			const kq = await (await phien.send(m)).result();
 			expect(kq.status, `luot «${m}» that bai`).toBe("waiting");
 			sessionId = kq.sessionId;
+			await capNhatPhien(db, canh.cuocSoanId, sessionId);
 			suKien.push(...kq.events);
 		}
 
@@ -193,9 +194,8 @@ describe("hong-chen", () => {
 		const cacPhien = sau?.cacPhien ?? [];
 		expect(daDoi).toContain(sau?.sessionId ?? "");
 		expect(new Set(cacPhien).size).toBe(cacPhien.length);
-		expect(cacPhien.length).toBe(cuoc.cacPhien.length + 1 + daDoi.length);
 		expect([...cacPhien].sort()).toEqual(
-			[...cuoc.cacPhien, cu, ...daDoi].sort(),
+			[...new Set([...cuoc.cacPhien, cu, ...daDoi])].sort(),
 		);
 		await db.okrCuocSoan.update({
 			where: { id: canh.cuocSoanId },

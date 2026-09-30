@@ -1317,7 +1317,11 @@ cách ly duy nhất tin được là **không có gì để rò**:
   `okr.soanMo` đặt `OkrCuocSoan.sessionId` là một placeholder `cho-eve:<uuid>`; chỉ khi
   `sessionId` còn là placeholder, cửa mới cho `POST /eve/v1/session` (không thì 409
   `da-co-phien`), rồi đọc mã phiên eve từ phản hồi và ghi thay placeholder trước khi trả.
-  Đường có mã phiên phải thuộc `sessionId` hoặc `cacPhien` của cuộc. Phiên eve thua đua
+  Đường có mã phiên phải thuộc `sessionId` hoặc `cacPhien` của cuộc; đọc luồng nhận mọi
+  phiên đó, còn gửi tiếp hay huỷ lượt trên phiên khác `sessionId` là 409 `phien-da-thay`
+  (màn đọc lại cuộc rồi mở theo phiên sống, như với `da-co-phien`). `nop_ban_nhap` cũng
+  chỉ ghi từ phiên sống của cuộc; cuộc còn placeholder thì chờ cửa ghi mã eve tối đa năm
+  giây rồi mới so. Phiên eve thua đua
   hay không ghi được thì nối vào `cacPhien` mà không đổi `sessionId` (chi phí cộng theo
   mọi phiên của cuộc). «Thử lại» là `soanMo({ thuLaiCuocId })`, đúc placeholder mới.
 - `GET /health` trả `{ cay }` — cây kho mà tiến trình phục vụ, tính bằng

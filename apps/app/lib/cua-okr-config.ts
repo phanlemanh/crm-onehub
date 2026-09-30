@@ -27,6 +27,7 @@ export const CUA_OKR = {
 		huyLuot: ["eve", "v1", "session", PHIEN, "cancel"],
 	},
 	dangLuot: ["moPhien", "guiTiep"],
+	chiDoc: ["GET", "HEAD"],
 	khongChuyen: [
 		"host",
 		"cookie",
@@ -56,6 +57,7 @@ export const CUA_OKR = {
 		cuocKhongDang: "cuoc-khong-dang",
 		phienKhongThuocCuoc: "phien-khong-thuoc-cuoc",
 		daCoPhien: "da-co-phien",
+		phienDaThay: "phien-da-thay",
 		khongDocDuocPhien: "khong-doc-duoc-phien",
 		khongGhiDuocPhien: "khong-ghi-duoc-phien",
 		khongDemDuocLuot: "khong-dem-duoc-luot",

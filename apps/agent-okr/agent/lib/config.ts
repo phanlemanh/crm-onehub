@@ -42,7 +42,9 @@ export const TRO_LY_OKR_SOAN = {
 		saiMucDich: "phien khong phai okr-soan",
 		chuKyKhongLapKeHoach: "chu ky khong o pha lap ke hoach",
 		dongTrungKhoa: "dong trung khoa",
+		phienKhongSong: "phien khong con song",
 	},
+	choGanPhien: { ms: 5 * SECOND_MS, nhipMs: SECOND_MS / 4 },
 	tinhNang: "okr.soan" satisfies TinhNang,
 	trangThaiDaQuyet: [
 		"nhan",
