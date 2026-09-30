@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { z } from "../../../packages/validation/node_modules/zod/index.js";
 
 const vi = process.argv.indexOf("--goc");
 const GOC =
@@ -18,12 +19,19 @@ function doc(duong) {
 	return readFileSync(duong, "utf8");
 }
 
-const config = Bun.YAML.parse(doc(join(GOC, "_acceptance", "config.yaml")));
-const lenh = config?.executors?.script?.kto_man_giu;
-if (typeof lenh !== "string") {
+const khuonConfig = z.object({
+	executors: z.object({
+		script: z.object({ kto_man_giu: z.string().min(1) }),
+	}),
+});
+const docConfig = khuonConfig.safeParse(
+	Bun.YAML.parse(doc(join(GOC, "_acceptance", "config.yaml"))),
+);
+if (!docConfig.success) {
 	console.log("KHONG DO DUOC: config khong co executors.script.kto_man_giu");
 	process.exit(2);
 }
+const lenh = docConfig.data.executors.script.kto_man_giu;
 const e17 = Bun.YAML.parse(doc(join(HO_SO, "evals.yaml")))?.evals?.find(
 	(e) => e.id === "E17",
 );
