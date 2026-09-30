@@ -61,6 +61,7 @@ type ViecDo = {
 	phienGoc: string;
 	nac: string;
 	outcomeMo: string | null;
+	conLaiMs: number | null;
 	goi: GoiTomTat | null;
 };
 
@@ -106,7 +107,7 @@ function cauTuGoi(goi: GoiTomTat) {
 }
 
 async function xaViec(): Promise<void> {
-	const nhan = await claimDue(50, { only: [TOM_TAT] }, VIEC_OKR.leaseMs);
+	const nhan = await claimDue(50, { only: [TOM_TAT] }, VIEC_OKR.leaseTomTatMs);
 	for (const task of nhan) {
 		const phong = phongCua(task.payload);
 		if (!phong) continue;
@@ -122,6 +123,7 @@ async function xaViec(): Promise<void> {
 				payload: true,
 				kind: true,
 				id: true,
+				leasedUntil: true,
 			},
 		});
 		const p = okrTroLyViec.parse(task.payload);
@@ -131,6 +133,7 @@ async function xaViec(): Promise<void> {
 			phienGoc,
 			nac: p.viec === "tom-tat-tuan" ? p.nac : "",
 			outcomeMo: sau.finishedAt ? (sau.outcome ?? "") : null,
+			conLaiMs: sau.leasedUntil ? sau.leasedUntil.getTime() - Date.now() : null,
 			goi:
 				sau.finishedAt || sau.sessionId !== phienGoc
 					? null
@@ -256,6 +259,18 @@ describe("duong-do", () => {
 			expect(chan).toEqual([]);
 			expect([...viec.keys()].sort()).toEqual(["a", "b"]);
 			expect(viec.get("b")?.nac).toBe("an");
+		},
+		CHO_DB,
+	);
+
+	test(
+		"beginResearch that: viec tom tat duoc giu 3 phut, khong phai 30 giay",
+		() => {
+			expect([...viec.values()].map((v) => v.conLaiMs)).toEqual([
+				VIEC_OKR.leaseTomTatMs,
+				VIEC_OKR.leaseTomTatMs,
+			]);
+			expect(VIEC_OKR.leaseTomTatMs).toBeGreaterThan(VIEC_OKR.leaseMs);
 		},
 		CHO_DB,
 	);

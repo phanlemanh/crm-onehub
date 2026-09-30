@@ -298,7 +298,7 @@ describe("tuy-chon-moi-loi-goi", () => {
 });
 
 describe("tran-tom-tat-moi-loi-goi", () => {
-	const GIA_TRI_LON = 9_000;
+	const GIA_TRI_LON = 20_000;
 
 	async function tranCuaMoHinh(
 		kep: Parameters<typeof dungMoHinh>[0],
@@ -318,16 +318,16 @@ describe("tran-tom-tat-moi-loi-goi", () => {
 		return daGoi[0];
 	}
 
-	test("trần tóm tắt 4.000, trần góp ý 2.000, trần phiên đủ cho một lời gọi tóm tắt", () => {
-		expect(TRO_LY_OKR.tranRaTomTatMoiLoiGoi).toBe(4_000);
+	test("trần tóm tắt 8.000, trần góp ý 2.000, trần phiên 16.000 đủ hai lời gọi tóm tắt", () => {
+		expect(TRO_LY_OKR.tranRaTomTatMoiLoiGoi).toBe(8_000);
 		expect(TRO_LY_OKR.tranRaMoiLoiGoi).toBe(2_000);
-		expect(TRO_LY_OKR.limits.maxOutputTokensPerSession).toBe(8_000);
+		expect(TRO_LY_OKR.limits.maxOutputTokensPerSession).toBe(16_000);
 		expect(TRO_LY_OKR.limits.maxOutputTokensPerSession).toBeGreaterThan(
 			TRO_LY_OKR.tranRaTomTatMoiLoiGoi,
 		);
 	});
 
-	test("model tóm tắt kẹp 4.000 cả khi xin nhiều hơn hay không xin, vẫn ZDR và thinkingLevel", async () => {
+	test("model tóm tắt kẹp 8.000 cả khi xin nhiều hơn hay không xin, vẫn ZDR và thinkingLevel", async () => {
 		for (const xin of [GIA_TRI_LON, undefined]) {
 			const vao = await tranCuaMoHinh(kepTranTomTat, xin);
 			expect(vao?.maxOutputTokens).toBe(TRO_LY_OKR.tranRaTomTatMoiLoiGoi);
@@ -351,7 +351,7 @@ describe("tran-tom-tat-moi-loi-goi", () => {
 		expect(MO_HINH_TOM_TAT).not.toBe(MO_HINH_TRO_LY_OKR);
 	});
 
-	test("chọn theo việc: tóm tắt được model 4.000, góp ý và không tìm được việc rơi về mặc định", async () => {
+	test("chọn theo việc: tóm tắt được model 8.000, góp ý và không tìm được việc rơi về mặc định", async () => {
 		const ctx = {};
 		const viec = (kind: string) => async () => ({ kind }) as never;
 		const tomTat = await chonMoHinhTheoViec(ctx, viec("okr-tom-tat-tuan"));

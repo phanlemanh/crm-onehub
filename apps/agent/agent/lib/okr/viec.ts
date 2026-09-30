@@ -1,6 +1,6 @@
 import { db } from "@crm/db";
 import {
-	type LOAI_VIEC_TRO_LY_OKR,
+	LOAI_VIEC_TOM_TAT_TUAN,
 	laViecTroLyOkr,
 	soLanThuToiDa,
 	VIEC_OKR,
@@ -14,9 +14,6 @@ import { TRO_LY_OKR } from "./config";
 import { coBanTomTatCuaViec, docViecOkr, nguoiYeuCauXemDuoc } from "./doc";
 
 export { laViecTroLyOkr };
-
-const LOAI_TOM_TAT =
-	"okr-tom-tat-tuan" satisfies (typeof LOAI_VIEC_TRO_LY_OKR)[number];
 
 export function coKhoaMoHinh(): boolean {
 	return TRO_LY_OKR.khoaMoHinh.some((k) => Boolean(process.env[k]?.trim()));
@@ -73,10 +70,16 @@ export async function giaHanLease(
 	taskId: string,
 	now: Date = new Date(),
 ): Promise<void> {
-	await db.agentTask.updateMany({
-		where: { id: taskId, finishedAt: null },
-		data: { leasedUntil: new Date(now.getTime() + VIEC_OKR.leaseMs) },
-	});
+	const tomTat = new Date(now.getTime() + VIEC_OKR.leaseTomTatMs);
+	const thuong = new Date(now.getTime() + VIEC_OKR.leaseMs);
+	await db.$executeRaw`
+		UPDATE "agentTask"
+		SET "leasedUntil" = CASE
+			WHEN kind = ${LOAI_VIEC_TOM_TAT_TUAN} THEN ${tomTat}::timestamp
+			ELSE ${thuong}::timestamp
+		END
+		WHERE id = ${taskId} AND "finishedAt" IS NULL
+	`;
 }
 
 export async function ketThucCuaViec(
@@ -85,7 +88,7 @@ export async function ketThucCuaViec(
 ): Promise<string> {
 	if (ketThuc !== "da-nop") return ketThuc;
 	const viec = await docViecOkr(taskId);
-	if (viec?.kind !== LOAI_TOM_TAT) return ketThuc;
+	if (viec?.kind !== LOAI_VIEC_TOM_TAT_TUAN) return ketThuc;
 	return (await coBanTomTatCuaViec(taskId))
 		? ketThuc
 		: TRO_LY_OKR.ketThuc.tomTatKhongNop;

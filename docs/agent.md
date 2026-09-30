@@ -69,9 +69,9 @@ agent and the API both need it.
 Trợ lý OKR thêm năm loại. `okr-kiem-san-sang` (có khoá mô hình không),
 `okr-tom-tat-xep` và `ai-doi-soat` (đối soát sổ chi phí với báo cáo AI Gateway, ngày 2
 mỗi tháng) là việc trực tiếp, không mở phiên. `okr-de-xuat` và `okr-tom-tat-tuan` đi
-làn nghiên cứu với `purpose: "okr"`: một lần thử, lease 30 giây do hook gia hạn, kiểm
-lại trần và công tắc ngay trước khi gửi, hỏng là đóng với mã (`VIEC_OKR`,
-`lib/okr/viec.ts`).
+làn nghiên cứu với `purpose: "okr"`: một lần thử, lease do hook gia hạn (30 giây cho góp
+ý, 3 phút cho tóm tắt tuần), kiểm lại trần và công tắc ngay trước khi gửi, hỏng là đóng
+với mã (`VIEC_OKR`, `lib/okr/viec.ts`).
 
 **Tóm tắt tuần đến sáng hôm sau ngày cập nhật, và chỉ cho phòng ban** (lượt 9c). Mỗi
 sáng 06:00 giờ VN (`OKR_TOM_TAT.gioXep`) việc `okr-tom-tat-xep` chạy trên làn trực
@@ -1223,10 +1223,16 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
   ZDR, thẻ và `thinkingLevel` trong middleware. Với lời gọi eve dựng cho phiên con,
   Gemini 3.8 Flash có lúc suy nghĩ tới trần 2.000 token rồi trả rỗng (5/8); câu «Act at
   once…» đầu phần việc trong `instructions.md` đưa về 0/24.
-- **Trần mỗi lời gọi theo loại việc (lượt 9c).** Việc góp ý (`okr-de-xuat`) giữ 2.000
-  token mỗi lời gọi. Việc tóm tắt (`okr-tom-tat-tuan`) được 4.000, vì Gemini 3.8 Flash
-  nghĩ hết 2.000 rồi dừng `MAX_TOKENS` khi chưa viết chữ nào; trần mỗi phiên lên 8.000
-  cho đủ hai lời gọi như thế. Hai model là cùng một model, cùng ZDR, thẻ và
+- **Trần và lease theo loại việc (lượt 9c).** Việc góp ý (`okr-de-xuat`) giữ 2.000 token
+  mỗi lời gọi và lease 30 giây. Việc tóm tắt (`okr-tom-tat-tuan`) được 8.000 token mỗi
+  lời gọi, 16.000 mỗi phiên, lease 3 phút (`VIEC_OKR.leaseTomTatMs`). Vì sao: Gemini 3.8
+  Flash nghĩ gần hết trần rồi trả rỗng (2.000: dừng `MAX_TOKENS` khi chưa viết chữ nào;
+  4.000: nghĩ 3.845 token mất 28 giây, eve gọi lại một lần, vượt lease 30 giây nên việc
+  đóng `hong:het-lease`). Trần mỗi phiên là trần chung của tác tử (eve chỉ cho khai một),
+  nên phiên góp ý cũng được 16.000, nhưng mỗi lời gọi góp ý vẫn bị kẹp 2.000. Lease theo
+  loại việc nằm trong `giaHanLease` (một câu lệnh chọn theo `kind`), nên hai hook
+  (`hooks/okr-uy-quyen.ts`, `subagents/tro_ly_okr/hooks/giu-viec.ts`) và `beginResearch`
+  đều ăn theo mà không phải biết loại việc. Hai model là cùng một model, cùng ZDR, thẻ và
   `thinkingLevel`, chỉ khác middleware kẹp trần (`lib/okr/mo-hinh.ts`). Phiên con chọn
   giữa hai cái ở `step.started` (`lib/okr/chon-mo-hinh.ts`), vì chỉ bước đó mới được trả
   đối tượng model sống; không tìm được việc hay việc không phải tóm tắt thì eve dùng
