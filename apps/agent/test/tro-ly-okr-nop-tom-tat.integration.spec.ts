@@ -323,6 +323,7 @@ describe("goi", () => {
 
 			const hoTen = (
 				await db.member.findMany({
+					where: { userId: { startsWith: OKR_MAU.tienTo } },
 					select: { user: { select: { name: true } } },
 				})
 			)
