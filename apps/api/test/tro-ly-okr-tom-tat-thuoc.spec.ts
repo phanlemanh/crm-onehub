@@ -62,7 +62,7 @@ const MO_HOM_SAU = luc("2026-11-14T09:00:00");
 const PHAN_HOI_LUC = luc("2026-11-13T10:00:00");
 const TAT_LUC = luc("2026-11-13T11:00:00");
 const THANG_TRUOC = luc("2026-10-31T23:00:00");
-const NAC = ["bat", "an"] as const;
+const NAC = ["bat", "an", "khong-ro"] as const;
 const DANG = [
 	"gia-tri",
 	"truoc",
@@ -106,22 +106,40 @@ const KY_VONG = {
 			ty_le_bo: 0.25,
 			theo_ma: { "so-lech": 1 },
 		},
+		"khong-ro": {
+			tuan: TUAN,
+			so_ban: 0,
+			can_xem: 0,
+			tong_cau: 0,
+			cau_bo: 0,
+			ty_le_bo: null,
+			theo_ma: {},
+		},
 	},
 	"so-lech-lot": {
 		bat: { cau: 11, lech: 0 },
 		an: { cau: 3, lech: 0 },
+		"khong-ro": { cau: 0, lech: 0 },
 	},
 	"mo-sau-nhac": {
 		bat: { nhan_dong: 2, mo_trong_ngay: 1, ty_le_mo: 0.5 },
 		an: { nhan_dong: 0, mo_trong_ngay: 0, ty_le_mo: null },
+		"khong-ro": { nhan_dong: 0, mo_trong_ngay: 0, ty_le_mo: null },
 	},
 	"huu-ich": {
 		bat: { phan_hoi: 3, huu_ich: 2, khong_huu_ich: 1, ty_le_huu_ich: 0.6667 },
 		an: { phan_hoi: 0, huu_ich: 0, khong_huu_ich: 0, ty_le_huu_ich: null },
+		"khong-ro": {
+			phan_hoi: 0,
+			huu_ich: 0,
+			khong_huu_ich: 0,
+			ty_le_huu_ich: null,
+		},
 	},
 	"tat-dong": {
 		bat: { truong_phong: 3, da_tat: 1, ty_le_tat: 0.3333 },
 		an: { truong_phong: 1, da_tat: 1, ty_le_tat: 1 },
+		"khong-ro": { truong_phong: 0, da_tat: 0, ty_le_tat: null },
 	},
 	"chi-phi-tom-tat": {
 		bat: {
@@ -137,6 +155,13 @@ const KY_VONG = {
 			chuyen_tiep_usd: 0.001,
 			so_ban: 1,
 			usd_moi_ban: 0.004,
+		},
+		"khong-ro": {
+			tien_usd: 0,
+			tom_tat_usd: 0,
+			chuyen_tiep_usd: 0,
+			so_ban: 0,
+			usd_moi_ban: null,
 		},
 	},
 } satisfies Record<string, Record<Nac, Hang>>;
@@ -296,6 +321,7 @@ async function gieoChiPhiBan() {
 		["p3-ct", viec.p3, "0.001", "okr.chuyen-tiep"],
 		["de-xuat", null, "0.05", "okr.de-xuat"],
 		["ct-khong-viec", null, "0.02", "okr.chuyen-tiep"],
+		["tt-khong-viec", null, "0.07", "okr.tom-tat"],
 	] as const;
 	datDongHo(SAU(30 * MINUTE_MS));
 	for (const [id, taskId, usd, tinhNang] of gieo)
@@ -423,9 +449,13 @@ function chaySoLech(them: string[] = []): SoLech {
 		env: { ...process.env, DATABASE_URL: url },
 	});
 	const ra = `${r.stdout}${r.stderr}`;
-	const dem = { bat: { cau: -1, lech: -1 }, an: { cau: -1, lech: -1 } };
+	const dem = {
+		bat: { cau: -1, lech: -1 },
+		an: { cau: -1, lech: -1 },
+		"khong-ro": { cau: -1, lech: -1 },
+	};
 	for (const m of ra.matchAll(
-		/^so-lech-lot: (bat|an) (\d+) lech \/ (\d+) cau$/gm,
+		/^so-lech-lot: (bat|an|khong-ro) (\d+) lech \/ (\d+) cau$/gm,
 	))
 		dem[m[1] as Nac] = { lech: Number(m[2]), cau: Number(m[3]) };
 	const dong = [...ra.matchAll(/^([^|\s]+)\|(\d+)\|(.+)$/gm)].map((m) => ({
@@ -457,10 +487,14 @@ async function doSau(): Promise<Record<string, Record<Nac, Hang>>> {
 			hang.find(
 				(h) => h.nac === nac && (ten !== "cau-bi-bo" || h.tuan === TUAN),
 			) ?? {};
-		ra[ten] = { bat: theoNac("bat"), an: theoNac("an") };
+		ra[ten] = {
+			bat: theoNac("bat"),
+			an: theoNac("an"),
+			"khong-ro": theoNac("khong-ro"),
+		};
 	}
 	const sl = chaySoLech();
-	ra["so-lech-lot"] = { bat: sl.dem.bat, an: sl.dem.an };
+	ra["so-lech-lot"] = sl.dem;
 	return ra;
 }
 

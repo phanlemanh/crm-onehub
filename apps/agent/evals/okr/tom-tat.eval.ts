@@ -1,4 +1,4 @@
-import { appendFileSync } from "node:fs";
+import { appendFileSync, writeFileSync } from "node:fs";
 import { db, Prisma } from "@crm/db";
 import { dungGoiTomTat, type GoiTomTat } from "@crm/db/okr-tom-tat";
 import { MINUTE_MS, NGAY_MS, OKR_TOM_TAT } from "@crm/db/okr-tro-ly-danh-muc";
@@ -210,6 +210,8 @@ export default defineEval({
 			return;
 		}
 
+		const tep = process.env[TOM_TAT_EVAL.env.tongKet];
+		if (tep) writeFileSync(tep, "");
 		const moc = await lucXep();
 		await batTomTat(
 			await nguoiMau(),
@@ -236,7 +238,6 @@ export default defineEval({
 			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 			select: { id: true, payload: true, createdAt: true, outcome: true },
 		});
-		const tep = process.env[TOM_TAT_EVAL.env.tongKet];
 		for (const v of viec) {
 			const p = okrTroLyViec.parse(v.payload);
 			if (p.viec !== "tom-tat-tuan") continue;

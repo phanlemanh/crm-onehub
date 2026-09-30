@@ -1,5 +1,5 @@
 WITH nac AS (
-  SELECT unnest(ARRAY['bat', 'an']) AS nac
+  SELECT unnest(ARRAY['bat', 'an', 'khong-ro']) AS nac
 ),
 nhac AS (
   SELECT t.id,
@@ -15,7 +15,7 @@ nhac AS (
 luot AS (
   SELECT n.id, n.user_id, n.ngay,
     n.muc ->> 'departmentId' AS phong,
-    coalesce(b.cau ->> 'nac', 'bat') AS nac
+    coalesce(b.cau ->> 'nac', 'khong-ro') AS nac
   FROM nhac n
   LEFT JOIN "okrTomTat" b ON b.id = n.muc ->> 'tomTatId'
 ),

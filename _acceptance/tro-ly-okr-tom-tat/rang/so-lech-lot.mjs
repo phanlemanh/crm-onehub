@@ -25,7 +25,10 @@ const SO_LECH = {
 	nghin: 1_000,
 	thamSoBan: "--ban",
 	thamSoDoc: "--doc",
+	khongRo: "khong-ro",
 };
+
+const NAC = ["bat", "an"];
 
 const DON_VI = new Map([
 	["một", 1],
@@ -322,7 +325,7 @@ export async function soLechTrongKho(url, { ban = null, bo = [] } = {}) {
 		const hang = await truyVan(khach, CAU_BAN, [ban]);
 		const banDoc = hang.map((h) => ({
 			id: h.id,
-			nac: h.cau?.nac === "an" ? "an" : "bat",
+			nac: NAC.includes(h.cau?.nac) ? h.cau.nac : SO_LECH.khongRo,
 			cau: Array.isArray(h.cau?.cau) ? h.cau.cau : [],
 		}));
 		const idNguon = [
@@ -331,7 +334,9 @@ export async function soLechTrongKho(url, { ban = null, bo = [] } = {}) {
 		const lan = await truyVan(khach, CAU_LAN, [idNguon, SO_LECH.gioVN]);
 		const theoId = new Map(lan.map((l) => [l.id, thamChieuCua(l, bo)]));
 		const lech = [];
-		const dem = { bat: { cau: 0, lech: 0 }, an: { cau: 0, lech: 0 } };
+		const dem = Object.fromEntries(
+			[...NAC, SO_LECH.khongRo].map((nac) => [nac, { cau: 0, lech: 0 }]),
+		);
 		for (const b of banDoc) {
 			b.cau.forEach((c, i) => {
 				dem[b.nac].cau += 1;
@@ -381,9 +386,9 @@ async function main() {
 	}
 	const kq = await soLechTrongKho(url, { ban: thamSoDs(SO_LECH.thamSoBan) });
 	console.log(
-		`${TEN}: ${kq.lech.length} so lech trong ${kq.dem.bat.cau + kq.dem.an.cau} cau cua ${kq.soBan} ban`,
+		`${TEN}: ${kq.lech.length} so lech trong ${Object.values(kq.dem).reduce((s, d) => s + d.cau, 0)} cau cua ${kq.soBan} ban`,
 	);
-	for (const nac of ["bat", "an"])
+	for (const nac of Object.keys(kq.dem))
 		console.log(
 			`${TEN}: ${nac} ${kq.dem[nac].lech} lech / ${kq.dem[nac].cau} cau`,
 		);

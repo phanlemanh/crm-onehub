@@ -54,6 +54,8 @@ const E17 = {
 	thongDiep: {
 		khongBan: "khong ban nao",
 		chamTran: "cham tran chay",
+		judgeNgoaiSo:
+			"chua gom tien judge: judge goi Gateway truc tiep, khong ghi vao AiChiPhi",
 	},
 	env: TRO_LY_OKR.danhGia.env,
 };
@@ -338,6 +340,10 @@ async function motMoc(moc, i, tran) {
 			return {
 				hong: `eve eval ${eve.ma === null ? "sap hay het gio" : "bao loi cau hinh (ma 2)"} o moc ${moc}`,
 			};
+		if (!existsSync(tongKet))
+			return {
+				hong: `eve eval thoat ${eve.ma} ma khong ghi tong ket o moc ${moc} — eval bi bo qua (kho, khoa hay tran) hoac hong truoc khi chay`,
+			};
 		const ban = docTongKet(tongKet);
 		const ids = ban.map((b) => b.tomTatId).filter(Boolean);
 		const lech =
@@ -384,18 +390,18 @@ async function main() {
 		}
 		if (kq.hong) return khongDo(kq.hong);
 		theoMoc.push(kq);
+		if (chiDungKho) continue;
+		console.log(
+			`chi moc ${m}: ${kq.chi.toFixed(6)} USD theo AiChiPhi / tran ${tran} USD moi moc — ${E17.thongDiep.judgeNgoaiSo}`,
+		);
+		if (kq.chi >= tran)
+			return khongDo(
+				`${E17.thongDiep.chamTran} ${tran} USD o moc ${m} — dung, khong chay moc ke`,
+			);
 	}
 	if (chiDungKho) return 0;
-	const chi = theoMoc.reduce((s, m) => s + m.chi, 0);
-	console.log(
-		`chi: ${chi.toFixed(6)} USD (${theoMoc.map((m) => `${m.moc} ${m.chi.toFixed(6)}`).join(", ")}) / tran ${tran} USD moi moc`,
-	);
 	const kq = chamTatCa(theoMoc);
 	for (const d of kq.dong) console.log(d);
-	if (theoMoc.some((m) => m.chi >= tran))
-		return khongDo(
-			`${E17.thongDiep.chamTran} ${tran} USD — ban con lai khong do`,
-		);
 	return kq.ma;
 }
 

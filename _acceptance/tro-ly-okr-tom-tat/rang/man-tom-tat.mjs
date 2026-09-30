@@ -481,7 +481,7 @@ async function dungTinNhac() {
 	return /(https?:\/\/\S+)/.exec(dongTin)?.[1] ?? null;
 }
 
-async function buocNhac(tlA, url) {
+async function buocMoTuTin(tlA, url) {
 	buoc = "nhac-mo-bang";
 	const lienKet = await dungTinNhac();
 	if (
@@ -498,6 +498,23 @@ async function buocNhac(tlA, url) {
 			q.get("donOkr") === `pb:${PB.a}` &&
 			q.get("kyOkr") === KY,
 	);
+	const nguoiA = idMau("nguoi", truongCua(E9.phong.a));
+	const moc = new Date().toISOString().replace("Z", "");
+	const demVet = async () =>
+		(
+			await truyVan(
+				url,
+				`SELECT count(*)::int AS n FROM "okrTrail"
+				 WHERE action = 'mo-hop-tuan' AND "actorUserId" = $1 AND after ->> 'donVi' = $2
+				   AND "at" >= $3::timestamp`,
+				[nguoiA, `pb:${PB.a}`, moc],
+			)
+		)[0].n;
+	const truoc = await demVet();
+	kiem(
+		`truoc khi mo duong trong tin: ${truoc} vet mo-hop-tuan cua truong phong A tu ${moc}Z`,
+		truoc === 0,
+	);
 	const t = await trang(tlA, E9.kho[0]);
 	try {
 		await t.p.goto(lienKet, { waitUntil: "load" });
@@ -508,18 +525,14 @@ async function buocNhac(tlA, url) {
 	} finally {
 		await t.ctx.close();
 	}
-	const [vet] = await truyVan(
-		url,
-		`SELECT count(*)::int AS n FROM "okrTrail"
-		 WHERE action = 'mo-hop-tuan' AND "actorUserId" = $1 AND after ->> 'donVi' = $2
-		   AND to_char("at" + interval '7 hours', 'YYYY-MM-DD') = $3`,
-		[idMau("nguoi", truongCua(E9.phong.a)), `pb:${PB.a}`, ngayVN()],
-	);
+	const sau = await demVet();
 	kiem(
-		`vet mo-hop-tuan cua truong phong A, phong A, ${ngayVN()}: ${vet.n} hang`,
-		vet.n === 1,
+		`sau khi mo duong trong tin: ${sau} vet mo-hop-tuan cua truong phong A, phong A`,
+		sau === 1,
 	);
+}
 
+async function buocCongTac(tlA, url) {
 	buoc = "ST-nhac-dong-tomtat";
 	const CONG_TAC = '[data-cong-tac="dong-tom-tat"]';
 	await moiKho(tlA, async (t) => {
@@ -707,8 +720,9 @@ trinhDuyet = await puppeteer.launch({
 });
 
 try {
+	await buocMoTuTin(tlA, URL_KHO);
 	await buocKhoi(tlA, URL_KHO, api);
-	await buocNhac(tlA, URL_KHO);
+	await buocCongTac(tlA, URL_KHO);
 	await buocPhongAn(tlB);
 	await buocQuanTri(qt);
 } catch (loi) {

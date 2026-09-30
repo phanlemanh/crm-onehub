@@ -1,9 +1,9 @@
 WITH nac AS (
-  SELECT unnest(ARRAY['bat', 'an']) AS nac
+  SELECT unnest(ARRAY['bat', 'an', 'khong-ro']) AS nac
 ),
 moi_nhat AS (
   SELECT DISTINCT ON (t."departmentId")
-    t."departmentId", coalesce(t.cau ->> 'nac', 'bat') AS nac
+    t."departmentId", coalesce(t.cau ->> 'nac', 'khong-ro') AS nac
   FROM "okrTomTat" t
   ORDER BY t."departmentId", t."createdAt" DESC, t.id DESC
 ),

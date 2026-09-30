@@ -1,9 +1,9 @@
 WITH nac AS (
-  SELECT unnest(ARRAY['bat', 'an']) AS nac
+  SELECT unnest(ARRAY['bat', 'an', 'khong-ro']) AS nac
 ),
 ban AS (
   SELECT t.id, t.tuan, t."trangThai",
-    coalesce(t.cau ->> 'nac', 'bat') AS nac,
+    coalesce(t.cau ->> 'nac', 'khong-ro') AS nac,
     jsonb_array_length(coalesce(t.cau -> 'cau', '[]'::jsonb)) AS con_lai,
     t."soCauBo" AS bo,
     coalesce(t.cau -> 'bo', '[]'::jsonb) AS ds_bo

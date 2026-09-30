@@ -7,10 +7,10 @@ khung AS (
   FROM tham_so
 ),
 nac AS (
-  SELECT unnest(ARRAY['bat', 'an']) AS nac
+  SELECT unnest(ARRAY['bat', 'an', 'khong-ro']) AS nac
 ),
 phan_hoi AS (
-  SELECT p.id, p."huuIch", coalesce(t.cau ->> 'nac', 'bat') AS nac
+  SELECT p.id, p."huuIch", coalesce(t.cau ->> 'nac', 'khong-ro') AS nac
   FROM "okrTomTatPhanHoi" p
   JOIN "okrTomTat" t ON t.id = p."tomTatId", khung k
   WHERE p.luc >= k.tu AND p.luc < k.den

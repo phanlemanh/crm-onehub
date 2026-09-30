@@ -7,17 +7,15 @@ khung AS (
   FROM tham_so
 ),
 nac AS (
-  SELECT unnest(ARRAY['bat', 'an']) AS nac
+  SELECT unnest(ARRAY['bat', 'an', 'khong-ro']) AS nac
 ),
 dong AS (
-  SELECT c."tinhNang", c."costUsd", coalesce(t.payload ->> 'nac', 'bat') AS nac
+  SELECT c."tinhNang", c."costUsd", coalesce(t.payload ->> 'nac', 'khong-ro') AS nac
   FROM "aiChiPhi" c
-  LEFT JOIN "agentTask" t ON t.id = c."taskId", khung k
+  JOIN "agentTask" t ON t.id = c."taskId", khung k
   WHERE c.at >= k.tu AND c.at < k.den
-    AND (
-      c."tinhNang" = 'okr.tom-tat'
-      OR (c."tinhNang" = 'okr.chuyen-tiep' AND t.kind = 'okr-tom-tat-tuan')
-    )
+    AND t.kind = 'okr-tom-tat-tuan'
+    AND c."tinhNang" IN ('okr.tom-tat', 'okr.chuyen-tiep')
 ),
 tien AS (
   SELECT nac,
@@ -28,7 +26,7 @@ tien AS (
   GROUP BY nac
 ),
 ban AS (
-  SELECT coalesce(b.cau ->> 'nac', 'bat') AS nac, count(*)::int AS so
+  SELECT coalesce(b.cau ->> 'nac', 'khong-ro') AS nac, count(*)::int AS so
   FROM "okrTomTat" b, khung k
   WHERE b."createdAt" >= k.tu AND b."createdAt" < k.den
   GROUP BY 1
