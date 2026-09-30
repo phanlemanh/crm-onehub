@@ -95,3 +95,13 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Người dùng thấy ngay khi gộp, không công tắc; tab «Hỏi ý» trống cho tới khi quản trị mở lần đầu.
 - Chạm nhắc buổi sáng (`okr-nhac.ts`) cùng vùng với 9c; ai gộp sau kéo `onehub` về và soát lại.
 - Mốc `migration` đặt sau migration mới nhất của `onehub` lúc viết mã.
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-30, định đoạt mục ngoài hợp đồng của vòng chấm 3; sổ d-20260930T025744Z-26 … -32):
+
+- Ngoài-1 (`apps/api/src/okr/okr-hoi-y.service.ts`): Nếu một kết luận lưu trong dữ liệu bị hỏng hoặc sai giá trị, việc công bố có thể vẫn đi tiếp mà không báo lỗi. Với dữ liệu nhập qua màn hình hiện tại thì không gặp.
+- Ngoài-2 (`packages/validation/test/okr-hoi-y.spec.ts`): Bài kiểm tra giới hạn của các con số trong lần hỏi ý chỉ xác nhận là bị từ chối, không xác nhận từ chối vì lý do nào. Nếu quy tắc bị sửa nhầm, bài kiểm tra vẫn có thể xanh.
+- Ngoài-3 (`apps/api/src/okr/hoi-y.ts`): Hiện chỉ có hai chế độ trần mục tiêu và cả hai chạy đúng. Nếu sau này thêm chế độ thứ ba, bước công bố có thể không hiểu chế độ đó mà không có cảnh báo nào.
+- Ngoài-4 (`apps/app/app/(app)/[slug]/okr/hoi-y/man-hoi-y.ts`): Múi giờ của khu OKR đang khai báo ở hai chỗ. Nếu sau này đổi múi giờ mà chỉ sửa một chỗ, màn Hỏi ý có thể hiển thị giờ lệch so với phần còn lại của OKR.
+- Ngoài-5 (`CONTEXT.md`): Từ điển sản phẩm vẫn ghi cụm từ Hỏi ý mục tiêu là đang chờ duyệt phạm vi, dù phạm vi đã được duyệt.
+- Ngoài-6 (`apps/app/app/(app)/[slug]/okr/hoi-y/sheet-mo-hoi-y.tsx`): Khi có hai chu kỳ cùng ở giai đoạn lập kế hoạch và quản trị đổi chu kỳ trong hộp mở, câu hỏi mặc định vẫn nhắc tên chu kỳ đầu; không sửa tay trước khi bấm Mở thì câu hỏi sai kỳ và khoá sau ý đầu tiên.
+- Ngoài-7 (`apps/agent/test/support/okr-gieo.ts`): Dòng nhắc buổi sáng về Hỏi ý chỉ được thử trên dữ liệu dựng tay; nếu cách ghi dữ liệu thật đổi hình dạng, bài kiểm tra vẫn xanh trong khi tin nhắc thật có thể lệch.
