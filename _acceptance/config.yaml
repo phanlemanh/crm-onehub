@@ -1571,7 +1571,7 @@ executors:
     tdx_tai_lieu: 'node _acceptance/tro-ly-okr-de-xuat/rang/tai-lieu.mjs'
     tdx_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx" "packages/ui/src/components/proposed-change.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     tts_man_that: 'PHIEN_DO_TEN_CAY=tts-e9 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-tom-tat/rang/man-tom-tat.mjs"'
-    tts_eval: 'bun _acceptance/tro-ly-okr-tom-tat/rang/eval-tom-tat.mjs'
+    tts_eval: 'bun _acceptance/tro-ly-okr-tom-tat/rang/eval-tom-tat.mjs --tran-usd 1'
     tts_tai_lieu: 'node _acceptance/tro-ly-okr-tom-tat/rang/tai-lieu.mjs'
     tts_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx" "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx" "apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/tom-tat-quan-tri.tsx" "apps/app/app/(app)/[slug]/settings/notifications/khoi-kenh.tsx" "packages/ui/src/components/ai-elements/inline-citation.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     n4_mot_khuon: "bun _acceptance/no-sau-luot-4-okr/rang/mot-khuon.mjs"
