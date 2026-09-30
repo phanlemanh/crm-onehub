@@ -1,6 +1,9 @@
 import { mock } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { NuqsTestingAdapter } from "nuqs/adapters/testing";
+import {
+	NuqsTestingAdapter,
+	type OnUrlUpdateFunction,
+} from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type {
@@ -296,7 +299,8 @@ export async function nhip(lan = 1): Promise<void> {
 
 export type TuyChonMo = {
 	searchParams?: string;
-	onUrlUpdate?: (e: { queryString: string }) => void;
+	onUrlUpdate?: OnUrlUpdateFunction;
+	giuHangDoiUrl?: boolean;
 };
 
 export async function mo(
@@ -322,6 +326,7 @@ export async function mo(
 				hasMemory
 				searchParams={chon.searchParams ?? ""}
 				onUrlUpdate={chon.onUrlUpdate}
+				resetUrlUpdateQueueOnMount={!chon.giuHangDoiUrl}
 			>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">

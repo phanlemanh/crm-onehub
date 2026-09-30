@@ -27,7 +27,7 @@ import {
 import { TableCell } from "@crm/ui/components/table";
 import { ghiDuocOPha } from "@crm/validation/okr-chu-ky";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
@@ -39,6 +39,7 @@ import {
 import { HopThoaiKr } from "@/app/(app)/[slug]/okr/hop-thoai-kr";
 import { HopThoaiMucTieu } from "@/app/(app)/[slug]/okr/hop-thoai-muc-tieu";
 import { CELL, type KetQua } from "@/app/(app)/[slug]/okr/kieu";
+import { khoaHopOkr, useHopOkr } from "@/app/(app)/[slug]/okr/ngan-okr-url";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -121,10 +122,9 @@ function NutTheoDoi({ mt }: { mt: ChiTiet }) {
 function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
-	const [hoi, setHoi] = useState<"cong-bo" | "bo" | "sua" | null>(null);
-	const [krMo, setKrMo] = useState<string | null>(null);
+	const [hoi, setHoi] = useState<"cong-bo" | "bo" | null>(null);
+	const [, datHop] = useHopOkr();
 	const dongHoi = () => setHoi(null);
-	const krDangMo = mt.keyResults.find((k) => k.id === krMo) ?? null;
 	const congBo = useMutation(
 		trpc.okr.publishObjective.mutationOptions(
 			useXong(mt.id, m.daCongBo, dongHoi),
@@ -155,7 +155,7 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
-					<DropdownMenuItem onSelect={() => setHoi("sua")}>
+					<DropdownMenuItem onSelect={() => void datHop({ loai: "muc-tieu" })}>
 						{m.sua}
 					</DropdownMenuItem>
 					<DropdownMenuItem variant="destructive" onSelect={() => setHoi("bo")}>
@@ -192,26 +192,6 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 					if (!bo.isPending) bo.mutate({ id: mt.id });
 				}}
 			/>
-			{hoi === "sua" ? (
-				<HopThoaiMucTieu
-					yeuCau={{ loai: "sua", mucTieu: mt }}
-					dong={dongHoi}
-					moKr={(id) => {
-						setHoi(null);
-						setKrMo(id);
-					}}
-				/>
-			) : null}
-			{krDangMo ? (
-				<HopThoaiKr
-					objectiveId={mt.id}
-					mucTieu={mt}
-					kr={krDangMo}
-					chuMacDinh={mt.owner.id}
-					suaDuocCot={mt.canEdit}
-					dong={() => setKrMo(null)}
-				/>
-			) : null}
 		</>
 	);
 }
@@ -285,10 +265,47 @@ function demCanh(
 	);
 }
 
-type HopKr =
-	| { loai: "tao" }
-	| { loai: "sua"; kr: KetQua }
-	| { loai: "cap-nhat"; kr: KetQua; sessionId: string | null };
+type HopKr = { loai: "cap-nhat"; kr: KetQua; sessionId: string | null };
+
+function NganOkr({ mt }: { mt: ChiTiet }) {
+	const [hop, datHop] = useHopOkr();
+	const kr =
+		hop?.loai === "kr"
+			? (mt.keyResults.find((k) => k.id === hop.id) ?? null)
+			: null;
+	const duoc =
+		hop === null
+			? false
+			: hop.loai === "kr"
+				? kr !== null && mt.status !== "da-bo" && mt.canEditKr.includes(kr.id)
+				: ghiDuoc(mt);
+	useEffect(() => {
+		if (hop !== null && !duoc) void datHop(null);
+	}, [hop, duoc, datHop]);
+	if (hop === null || !duoc) return null;
+	const dong = () => void datHop(null);
+	if (hop.loai === "muc-tieu") {
+		return (
+			<HopThoaiMucTieu
+				key={khoaHopOkr(hop)}
+				yeuCau={{ loai: "sua", mucTieu: mt }}
+				dong={dong}
+				moKr={(id) => void datHop({ loai: "kr", id })}
+			/>
+		);
+	}
+	return (
+		<HopThoaiKr
+			key={khoaHopOkr(hop)}
+			objectiveId={mt.id}
+			mucTieu={mt}
+			kr={kr}
+			chuMacDinh={mt.owner.id}
+			suaDuocCot={mt.canEdit}
+			dong={dong}
+		/>
+	);
+}
 
 function TabKr({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
@@ -297,6 +314,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 	const ky = cycles.data?.cycles.find((c) => c.id === mt.cycleId) ?? null;
 	const kyGhiDuoc = ky !== null && ghiDuocOPha(ky.phase);
 	const [hop, setHop] = useState<HopKr | null>(null);
+	const [, datHopOkr] = useHopOkr();
 	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
 	const moCapNhat = (kr: KetQua) => {
 		setHop({ loai: "cap-nhat", kr, sessionId: null });
@@ -304,11 +322,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 			{ entry: "sheet" },
 			{
 				onSuccess: ({ sessionId }) =>
-					setHop((cu) =>
-						cu?.loai === "cap-nhat" && cu.kr.id === kr.id
-							? { ...cu, sessionId }
-							: cu,
-					),
+					setHop((cu) => (cu?.kr.id === kr.id ? { ...cu, sessionId } : cu)),
 			},
 		);
 	};
@@ -338,7 +352,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 									mt={mt}
 									kr={kr}
 									capNhat={() => moCapNhat(kr)}
-									sua={() => setHop({ loai: "sua", kr })}
+									sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
 									xoa={() => setXoa(kr)}
 								/>
 							)
@@ -352,14 +366,14 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 						variant="outline"
 						data-nut="them-kr"
 						aria-haspopup="dialog"
-						onClick={() => setHop({ loai: "tao" })}
+						onClick={() => void datHopOkr({ loai: "kr-moi" })}
 					>
 						<Icon icon={Add} data-icon="inline-start" />
 						{m.themKr}
 					</Button>
 				</div>
 			) : null}
-			{hop?.loai === "cap-nhat" ? (
+			{hop ? (
 				<HopThoaiCapNhatKr
 					kr={krCapNhatTuSheet(mt, hop.kr)}
 					chuTen={hop.kr.owner.name}
@@ -367,15 +381,6 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 					sessionId={hop.sessionId}
 					loiMo={moPhien.isError}
 					moLai={() => moCapNhat(hop.kr)}
-					dong={() => setHop(null)}
-				/>
-			) : hop ? (
-				<HopThoaiKr
-					objectiveId={mt.id}
-					mucTieu={mt}
-					kr={hop.loai === "sua" ? hop.kr : null}
-					chuMacDinh={mt.owner.id}
-					suaDuocCot={mt.canEdit}
 					dong={() => setHop(null)}
 				/>
 			) : null}
@@ -655,6 +660,7 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 				tab={tab}
 				onTabChange={setTab}
 			/>
+			{mt ? <NganOkr mt={mt} /> : null}
 		</div>
 	);
 }

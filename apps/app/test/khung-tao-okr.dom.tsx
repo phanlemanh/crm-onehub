@@ -11,6 +11,7 @@ import {
 	bam,
 	cho,
 	cot,
+	D_HOI_KR,
 	D_KR,
 	D_TEN,
 	dat,
@@ -22,6 +23,7 @@ import {
 	hopKr,
 	hopMucTieu,
 	KR_1,
+	KR_2,
 	MT,
 	mo,
 	nhip,
@@ -46,6 +48,16 @@ const h = okrMessages("vi").hopThoai;
 const tenDong = uiMessages("vi").dialog.close;
 
 afterEach(dongHet);
+
+async function choUrl(xong: () => boolean, moTa: string): Promise<void> {
+	for (let vong = 0; vong < 40; vong += 1) {
+		if (xong()) return;
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 25));
+		});
+	}
+	throw new Error(`khong toi: ${moTa}`);
+}
 
 const ngan = (o: HTMLElement | null): HTMLElement | null =>
 	o?.closest<HTMLElement>('[data-slot="sheet-content"]') ?? null;
@@ -358,5 +370,327 @@ describe("khung-tao-okr — gửi đúng dữ liệu", () => {
 			updateKrInput.parse({ id: KR_1.id, title: "Gọi 60 cuộc mỗi tuần" }),
 		);
 		console.log("updateKeyResult", JSON.stringify(pSuaKr));
+	}, 120_000);
+});
+
+const { ObjectiveSheet } = await import(
+	"@/components/crm/record-sheet/objective-sheet"
+);
+const { DetailSheet } = await import("@/components/detail-sheet");
+const { useRecordStack } = await import(
+	"@/components/crm/record-sheet/record-stack"
+);
+const { NganTaoMucTieu, NutThemMucTieu } = await import(
+	"@/app/(app)/[slug]/okr/ngan-okr-url"
+);
+const { default: userEvent } = await import("@testing-library/user-event");
+
+type NhatKy = { lan: URLSearchParams[]; cuoi: () => URLSearchParams };
+
+function nhatKyUrl(): NhatKy & {
+	ghi: (e: { searchParams: URLSearchParams }) => void;
+} {
+	const lan: URLSearchParams[] = [];
+	return {
+		lan,
+		ghi: (e) => {
+			lan.push(new URLSearchParams(e.searchParams));
+		},
+		cuoi: () => lan.at(-1) ?? new URLSearchParams(),
+	};
+}
+
+function datKhung(chon: { suaDuoc?: boolean; cho?: number } = {}): void {
+	const sua = chon.suaDuoc ?? true;
+	const chiTiet = {
+		...MT,
+		canEdit: sua,
+		keyResults: MT.keyResults.map((k) => ({
+			...k,
+			soViec: { xong: 0, tong: 0 },
+			soSangKien: 0,
+			coBangChung: false,
+		})),
+		cycleName: "Quý 4/2026",
+		mangSangToi: null,
+		mangSangTu: null,
+		trail: [],
+		canEditKr: sua ? [KR_1.id, KR_2.id] : [],
+	};
+	dat("okr.objective", () =>
+		chon.cho
+			? new Promise((r) => setTimeout(() => r(chiTiet), chon.cho))
+			: chiTiet,
+	);
+	dat("okr.comments", () => ({ comments: [], dong: [] }));
+	dat("okr.alignmentTargets", () => ({ targets: [] }));
+	dat("okr.thanhVien", () => [HAI]);
+	dat("workspace.get", () => ({ viewerRole: "member" }));
+}
+
+function NutDongKhung() {
+	const { close } = useRecordStack();
+	return (
+		<button type="button" data-nut="dong-khung" onClick={close}>
+			đóng khung
+		</button>
+	);
+}
+
+async function moKhung(
+	searchParams: string,
+	nk: ReturnType<typeof nhatKyUrl>,
+	dong: readonly DongHien[] = [],
+	chon: { suaDuoc?: boolean; cho?: number } = {},
+): Promise<void> {
+	datMacDinh([...dong]);
+	datKhung(chon);
+	await mo(
+		<>
+			<NutDongKhung />
+			<DetailSheet onOpenChange={() => {}} open>
+				<ObjectiveSheet objectiveId={MT.id} />
+			</DetailSheet>
+		</>,
+		{ searchParams, onUrlUpdate: nk.ghi, giuHangDoiUrl: true },
+	);
+	await cho(
+		() => document.querySelector(`[data-okr-sheet="${MT.id}"]`) !== null,
+		"khung muc tieu",
+	);
+	await nhip(10);
+}
+
+async function bamMuc(nhanNut: string, chuMuc: string): Promise<void> {
+	const u = userEvent.setup({ document, pointerEventsCheck: 0 });
+	await cho(
+		() => document.querySelector(`button[aria-label="${nhanNut}"]`) !== null,
+		`nut ${nhanNut}`,
+	);
+	const menu = document.querySelector<HTMLButtonElement>(
+		`button[aria-label="${nhanNut}"]`,
+	);
+	if (!menu) throw new Error(`khong thay ${nhanNut}`);
+	await u.click(menu);
+	await nhip(5);
+	const muc = [...document.querySelectorAll('[role="menuitem"]')].find(
+		(o) => o.textContent?.trim() === chuMuc,
+	);
+	if (!muc) throw new Error(`khong thay muc ${chuMuc}`);
+	await u.click(muc);
+	await nhip(5);
+}
+
+const hs = okrMessages("vi").sheet;
+const nhanMenuKr = (ten: string) => hs.menuKr.replace("{ten}", ten);
+
+type DichKhung = {
+	khoa: string;
+	bam: () => Promise<void>;
+	kiem: () => boolean;
+};
+
+const BON_DICH: readonly DichKhung[] = [
+	{
+		khoa: "muc-tieu",
+		bam: () => bamMuc(hs.menu, hs.sua),
+		kiem: () => hopMucTieu()?.getAttribute("data-hop-thoai-muc-tieu") === MT.id,
+	},
+	{
+		khoa: "kr-moi",
+		bam: async () => {
+			await cho(
+				() => document.querySelector("[data-nut='them-kr']") !== null,
+				"nut them kr",
+			);
+			const b = document.querySelector<HTMLButtonElement>(
+				"[data-nut='them-kr']",
+			);
+			if (b) await bam(b);
+		},
+		kiem: () => hopKr()?.getAttribute("data-hop-thoai-kr") === "moi",
+	},
+	{
+		khoa: `kr:${KR_1.id}`,
+		bam: () => bamMuc(nhanMenuKr(KR_1.title), hs.suaKr),
+		kiem: () =>
+			hopKr()?.getAttribute("data-hop-thoai-kr") === KR_1.id &&
+			oTen(hopKr())?.value === KR_1.title,
+	},
+	{
+		khoa: `kr:${KR_2.id}`,
+		bam: () => bamMuc(nhanMenuKr(KR_2.title), hs.suaKr),
+		kiem: () =>
+			hopKr()?.getAttribute("data-hop-thoai-kr") === KR_2.id &&
+			oTen(hopKr())?.value === KR_2.title,
+	},
+];
+
+describe("khung-tao-okr — tạo Mục tiêu trên URL", () => {
+	test("tao-muc-tieu: bấm ghi new, URL mở lại ngăn, tạo xong mở khung Mục tiêu, không quyền thì không mở", async () => {
+		const coDeal = await dataSizeNganDeal();
+		const dung = (suaDuoc: boolean | undefined) => (
+			<>
+				<NutThemMucTieu suaDuoc={suaDuoc} />
+				<NganTaoMucTieu
+					suaDuoc={suaDuoc}
+					cycleId={MT.cycleId}
+					don={{ loai: "goc" }}
+					tenDon="OneHub"
+				/>
+			</>
+		);
+
+		let nk = nhatKyUrl();
+		datMacDinh([]);
+		dat("okr.createObjective", () => ({ id: "mt-moi", canhBao: null }));
+		await mo(dung(true), { onUrlUpdate: nk.ghi });
+		await bam(nut(okrMessages("vi").themMucTieu));
+		if (nk.cuoi().get("new") !== "true") throw new Error("khong ghi url: new");
+		await cho(() => hopMucTieu() !== null, "ngan tao mo");
+		const khung = ngan(hopMucTieu());
+		expect(khung?.getAttribute("data-side")).toBe("right");
+		expect(hopMucTieu()?.getAttribute("data-hop-thoai-muc-tieu")).toBe("moi");
+		expect(khung?.getAttribute("data-size")).toBe(coDeal);
+		await dongHet();
+
+		nk = nhatKyUrl();
+		datMacDinh([]);
+		dat("okr.createObjective", () => ({ id: "mt-moi", canhBao: null }));
+		await mo(dung(true), { searchParams: "new=true", onUrlUpdate: nk.ghi });
+		await cho(() => hopMucTieu() !== null, "ngan tao mo tu url");
+		await go(oTen(hopMucTieu()), "Không thoả thuận nào bị mất dấu");
+		await bam(nut(h.taoMucTieu));
+		await cho(
+			() => nk.cuoi().get("record") === "objective:mt-moi",
+			"mo khung moi",
+		);
+		expect(nk.cuoi().get("new")).toBeNull();
+		await dongHet();
+
+		nk = nhatKyUrl();
+		datMacDinh([]);
+		await mo(dung(false), {
+			searchParams: "new=true",
+			onUrlUpdate: nk.ghi,
+			giuHangDoiUrl: true,
+		});
+		await choUrl(() => nk.lan.length > 0, "xoa khoa new khi khong quyen");
+		if (hopMucTieu() !== null) throw new Error("mo ngan khong quyen: new");
+		expect(nk.cuoi().has("new")).toBe(false);
+		await dongHet();
+
+		nk = nhatKyUrl();
+		datMacDinh([]);
+		await mo(dung(undefined), {
+			searchParams: "new=true",
+			onUrlUpdate: nk.ghi,
+		});
+		await nhip(10);
+		expect(nk.lan.length).toBe(0);
+	}, 120_000);
+});
+
+describe("khung-tao-okr — ngăn trong khung Mục tiêu trên URL", () => {
+	test("url-khung: bốn đích × bấm hay URL, đóng ngăn, đóng khung, khoá sai, không quyền, dữ liệu chưa tải", async () => {
+		let soKhang = 0;
+		for (const d of BON_DICH) {
+			let nk = nhatKyUrl();
+			await moKhung(`record=objective:${MT.id}`, nk);
+			await d.bam();
+			await cho(d.kiem, `ngan ${d.khoa} mo bang bam`);
+			if (nk.cuoi().get("hopOkr") !== d.khoa)
+				throw new Error(
+					`bam khong ghi hopOkr=${d.khoa}: ${nk.cuoi().get("hopOkr")}`,
+				);
+			soKhang += 1;
+			await dongHet();
+
+			nk = nhatKyUrl();
+			await moKhung(`record=objective:${MT.id}&hopOkr=${d.khoa}`, nk);
+			await cho(d.kiem, `ngan ${d.khoa} mo bang url`);
+			soKhang += 1;
+			await dongHet();
+		}
+
+		let nk = nhatKyUrl();
+		await moKhung(`record=objective:${MT.id}&hopOkr=muc-tieu`, nk);
+		await cho(() => hopMucTieu() !== null, "ngan muc tieu");
+		await bam(nut(h.huy, ngan(hopMucTieu()) ?? document.body));
+		await cho(() => hopMucTieu() === null, "ngan dong");
+		expect(nk.cuoi().has("hopOkr")).toBe(false);
+		expect(
+			document.querySelector(`[data-okr-sheet="${MT.id}"]`),
+		).not.toBeNull();
+		soKhang += 1;
+		await dongHet();
+
+		nk = nhatKyUrl();
+		await moKhung(`record=objective:${MT.id}&hopOkr=muc-tieu`, nk);
+		await cho(
+			() => hopMucTieu() !== null,
+			"ngan muc tieu truoc khi dong khung",
+		);
+		const nutDong = document.querySelector<HTMLButtonElement>(
+			"[data-nut='dong-khung']",
+		);
+		if (!nutDong) throw new Error("khong thay nut dong khung");
+		await bam(nutDong);
+		if (nk.cuoi().has("hopOkr")) throw new Error("khoa con sau khi dong khung");
+		expect(nk.cuoi().has("record")).toBe(false);
+		soKhang += 1;
+		await dongHet();
+
+		nk = nhatKyUrl();
+		await moKhung(`record=objective:${MT.id}&hopOkr=kr:khong-co`, nk);
+		await choUrl(() => nk.lan.length > 0, "xoa khoa kr khong co");
+		expect(hopKr()).toBeNull();
+		expect(nk.cuoi().has("hopOkr")).toBe(false);
+		soKhang += 1;
+		await dongHet();
+
+		for (const khoa of ["muc-tieu", "kr-moi", `kr:${KR_1.id}`]) {
+			nk = nhatKyUrl();
+			await moKhung(`record=objective:${MT.id}&hopOkr=${khoa}`, nk, [], {
+				suaDuoc: false,
+			});
+			await choUrl(() => nk.lan.length > 0, `xoa khoa khong quyen ${khoa}`);
+			if (hopMucTieu() !== null || hopKr() !== null)
+				throw new Error(`mo ngan khong quyen: ${khoa}`);
+			expect(nk.cuoi().has("hopOkr")).toBe(false);
+			soKhang += 1;
+			await dongHet();
+		}
+
+		nk = nhatKyUrl();
+		await moKhung(`record=objective:${MT.id}&hopOkr=muc-tieu`, nk, [], {
+			cho: 60,
+		});
+		await cho(() => hopMucTieu() !== null, "ngan mo sau khi du lieu toi");
+		expect(nk.lan.some((u) => !u.has("hopOkr"))).toBe(false);
+		await dongHet();
+
+		console.log(`so khang dinh: ${soKhang}`);
+		expect(soKhang).toBe(8 + 3 + 3);
+	}, 300_000);
+});
+
+describe("khung-tao-okr — Mở KR này đổi khoá URL", () => {
+	test("mo-kr-url: từ ngăn Sửa mục tiêu mở đúng ngăn Sửa KR và ghi hopOkr của KR đó", async () => {
+		const nk2 = nhatKyUrl();
+		await moKhung(`record=objective:${MT.id}&hopOkr=muc-tieu`, nk2, [D_HOI_KR]);
+		await cho(() => hopMucTieu() !== null, "ngan muc tieu");
+		await cho(() => nutCo(mg.nut.nho) !== null, "nut nho");
+		await bam(nut(mg.nut.nho));
+		await cho(() => nutCo(mg.dong.moKr) !== null, "nut mo kr");
+		await bam(nut(mg.dong.moKr));
+		await cho(() => hopKr() !== null, "ngan kr");
+		expect(hopMucTieu()).toBeNull();
+		if (hopKr()?.getAttribute("data-hop-thoai-kr") !== KR_2.id)
+			throw new Error(
+				`mo sai kr: ${hopKr()?.getAttribute("data-hop-thoai-kr")}`,
+			);
+		expect(oTen(hopKr())?.value).toBe(KR_2.title);
+		expect(nk2.cuoi().get("hopOkr")).toBe(`kr:${KR_2.id}`);
 	}, 120_000);
 });
