@@ -54,6 +54,7 @@ import {
 	DetailSheetStats,
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
+import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -61,8 +62,14 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { TabDienBien } from "./objective-dien-bien";
-import { coDaiDuyet, DaiDuyet, NutGuiDuyet } from "./objective-duyet";
-import { HopMucHienThi, NhanGioiHan } from "./objective-hien-thi";
+import {
+	coDaiDuyet,
+	DaiDuyet,
+	DongLyDoGuiKhoa,
+	khoaGuiDuyet,
+	NutGuiDuyet,
+} from "./objective-duyet";
+import { HopMucHienThi } from "./objective-hien-thi";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";
@@ -138,6 +145,7 @@ function HanhDongMucTieu({
 	const m = okrMessages(locale).sheet;
 	const g = okrGioiHanMessages(locale);
 	const trpc = useTRPC();
+	const toi = useQuery(trpc.users.me.queryOptions());
 	const [hoi, setHoi] = useState<"cong-bo" | "bo" | "sua" | null>(null);
 	const [krMo, setKrMo] = useState<string | null>(null);
 	const dongHoi = () => setHoi(null);
@@ -151,17 +159,28 @@ function HanhDongMucTieu({
 		trpc.okr.dropObjective.mutationOptions(useXong(mt.id, m.daBo, dongHoi)),
 	);
 
+	const vuaTraLai =
+		mt.traLaiGanNhat?.nguoi?.id !== undefined &&
+		mt.traLaiGanNhat.nguoi.id === toi.data?.id;
+
 	if (!ghiDuoc(mt)) return null;
 
 	return (
 		<>
 			{mt.quyen.guiDuyet ? (
 				mt.traLaiGanNhat === null ? (
-					<NutGuiDuyet objectiveId={mt.id} />
+					<NutGuiDuyet
+						objectiveId={mt.id}
+						soKr={mt.keyResults.length}
+						nguoiDuyet={mt.nguoiDuyetDuKien}
+						lyDo="dong-rieng"
+					/>
 				) : null
 			) : mt.quyen.congBo && !mt.quyen.duyet ? (
 				<Button
 					size="sm"
+					variant={vuaTraLai ? "outline" : "default"}
+					data-variant={vuaTraLai ? "outline" : "default"}
 					data-nut="cong-bo"
 					disabled={congBo.isPending}
 					onClick={() => setHoi("cong-bo")}
@@ -760,6 +779,11 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 							{coDaiDuyet(mt) ? (
 								<DetailSheetSection>
 									<DaiDuyet mucTieu={mt} />
+								</DetailSheetSection>
+							) : null}
+							{ghiDuoc(mt) && khoaGuiDuyet(mt) ? (
+								<DetailSheetSection>
+									<DongLyDoGuiKhoa objectiveId={mt.id} />
 								</DetailSheetSection>
 							) : null}
 							<SoMucTieu mt={mt} />

@@ -469,6 +469,12 @@ onboarding, OKR, reports and filters read it; no area keeps its own.
   foreign key. `org.tree` carries `okrMo` on every division and department, so the
   archive dialog says «OKR: N mục tiêu ở kỳ đang mở» before the admin presses anything.
   Moving the objectives out is `okr.chuyenDonVi` (see «OKR»).
+- **The archive dialog asks before it offers.** `org.luuTruXemTruoc({ id })` (admin)
+  returns every reason a department cannot be archived — `khuon` (still in a live
+  onboarding template), `nguoi` (people whose primary department it is), `okr` (open
+  objectives) — as `{ loai, cau }`. It and `archiveDepartment` call the same
+  `lyDoChanLuuTru`; archive re-runs it inside the locked transaction and throws the
+  first sentence, so the dialog and the server cannot disagree.
 - **`to-chuc` asks about OKR through `@crm/db/okr-don-vi`, never `../okr`.**
   `demOkrCuaDonVi` (one unit, for archive and purge) and `demOkrTheoDonVi` (two fixed
   `groupBy`, for the tree) are the only OKR reads in `apps/api/src/to-chuc`; the
@@ -541,9 +547,14 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
     the same sentence as an id that does not exist, so a 403 never confirms that a
     restricted objective is there. Mentions and recognition recipients must be able to
     see it.
-  - Aggregates (`toanCanh`, `hopTuan`, `sucKhoe`, `countByUnit`) drop restricted
-    objectives **for everyone**, admins and heads included, through `boGioiHan` —
-    never filtered per caller, so two people never see two different company numbers.
+  - Aggregates (`toanCanh`, `hopTuan`, `sucKhoe`) drop restricted objectives **for
+    everyone**, admins and heads included, through `boGioiHan` — never filtered per
+    caller, so two people never see two different company numbers.
+  - `countByUnit` is not an aggregate: it is the navigation count on the unit tree, and
+    counts the published objectives the caller can open (`dieuKienXemMucTieu`), so the
+    tree and the list beside it always agree for the same person.
+  - List rows (`mucTieuOutput`, alignment-tree nodes, `moCoi` rows) carry `hienThi` and
+    `soNguoiXem`, so every list can mark a restricted objective without opening it.
   - A restricted objective has no alignment: `alignmentTargets` never offers it,
     `addAlignment` refuses it as source or target, and `alignmentTree` and
     `cayCanChinh` leave it out of «chưa căn chỉnh» even for people who can see it —
@@ -599,7 +610,10 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   dropped objective, another level, a closed cycle — refuses the whole batch, naming
   the objective. Going over the receiving unit's objective cap still moves and
   returns a warning. Merging is «move everything, then archive»; splitting is «move
-  some».
+  some». `okr.chuyenDonViXemTruoc` takes the same input and returns
+  `{ vuotTran: { soSau, tran } | null }` from the same `vuotTran` count the move uses —
+  the dialog warns before the admin moves. The move itself only warns, whatever the
+  program's `capMode`.
 - **`okr.moCoi` lists what nobody can answer for.** Admin-only; an objective not
   dropped in an open cycle whose unit is archived (`don-vi-luu-tru`, data from before
   the archive rule), that nobody can edit (`khong-ai-sua`: a department with no head

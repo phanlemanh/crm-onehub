@@ -16,7 +16,7 @@ import {
 } from "@crm/ui/components/dialog";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { useMutation } from "@tanstack/react-query";
+import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useRef } from "react";
 import { toast } from "sonner";
 import { dien, dienNode } from "@/components/crm/record-sheet/plan-copy";
@@ -26,19 +26,23 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { HoiLuuTru } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
 
+export type LyDoChan = { loai: "khuon" | "nguoi" | "okr"; cau: string };
+
 function HopLuuTruChan({
 	hoi,
-	okrMo,
+	lyDo,
+	dangKiem,
 	dong,
 	moChuyen,
 }: {
 	hoi: HoiLuuTru | null;
-	okrMo: number;
+	lyDo: LyDoChan[];
+	dangKiem: boolean;
 	dong: () => void;
 	moChuyen: (x: HoiLuuTru) => void;
 }) {
 	const c = okrTaiCoCauMessages(useLocale()).toChuc;
-	const lyDo = useId();
+	const idLyDo = useId();
 	const cap = hoi?.loai ?? "phong-ban";
 	return (
 		<Dialog
@@ -56,34 +60,51 @@ function HopLuuTruChan({
 					</DialogTitle>
 					<DialogDescription>{c.chan.moTa[cap]}</DialogDescription>
 				</DialogHeader>
-				<Alert variant="warning">
-					<Icon icon={WarningAlt} />
-					<AlertTitle>{c.chan.canhBao}</AlertTitle>
-					<AlertDescription>
-						<p id={lyDo} data-ly-do-chan>
-							{c.chan.lyDo[cap](okrMo)}
-						</p>
-						<div className="flex flex-col gap-2 sm:flex-row">
-							<Button
-								variant="outline"
-								size="sm"
-								aria-haspopup="dialog"
-								data-nut="chuyen-okr-tu-luu-tru"
-								onClick={() => {
-									if (hoi) moChuyen(hoi);
-								}}
-							>
-								{c.chuyenOkr}
-								<Icon icon={ArrowRight} data-icon="inline-end" />
-							</Button>
-						</div>
-					</AlertDescription>
-				</Alert>
+				{dangKiem ? (
+					<p
+						id={idLyDo}
+						className="text-muted-foreground text-sm"
+						role="status"
+						data-dang-kiem-luu-tru
+					>
+						{c.chan.dangKiem}
+					</p>
+				) : (
+					<Alert variant="warning" aria-live="polite">
+						<Icon icon={WarningAlt} />
+						<AlertTitle>{c.chan.canhBao}</AlertTitle>
+						<AlertDescription>
+							<div id={idLyDo} className="flex flex-col gap-2">
+								{lyDo.map((l) => (
+									<div key={l.loai} className="flex flex-col gap-2">
+										<p data-ly-do-chan={l.loai}>{l.cau}</p>
+										{l.loai === "okr" ? (
+											<div className="flex flex-col gap-2 sm:flex-row">
+												<Button
+													variant="outline"
+													size="sm"
+													aria-haspopup="dialog"
+													data-nut="chuyen-okr-tu-luu-tru"
+													onClick={() => {
+														if (hoi) moChuyen(hoi);
+													}}
+												>
+													{c.chuyenOkr}
+													<Icon icon={ArrowRight} data-icon="inline-end" />
+												</Button>
+											</div>
+										) : null}
+									</div>
+								))}
+							</div>
+						</AlertDescription>
+					</Alert>
+				)}
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button variant="outline">{c.chan.huy}</Button>
 					</DialogClose>
-					<Button disabled aria-describedby={lyDo} data-nut="luu-tru-khoa">
+					<Button disabled aria-describedby={idLyDo} data-nut="luu-tru-khoa">
 						{c.chan.luuTru}
 					</Button>
 				</DialogFooter>
@@ -105,8 +126,16 @@ export function XacNhanLuuTru({
 	daLuu: (x: HoiLuuTru) => void;
 	moChuyen: (x: HoiLuuTru) => void;
 }) {
-	const m = toChucMessages(useLocale());
+	const locale = useLocale();
+	const m = toChucMessages(locale);
+	const c = okrTaiCoCauMessages(locale).toChuc;
 	const trpc = useTRPC();
+	const xemTruoc = useQuery(
+		trpc.org.luuTruXemTruoc.queryOptions(
+			hoi?.loai === "phong-ban" ? { id: hoi.id } : skipToken,
+			{ staleTime: 0 },
+		),
+	);
 	const lamMoi = useLamMoiToChuc();
 	const dangHoanTac = useRef(false);
 	const luuPb = useMutation(trpc.org.archiveDepartment.mutationOptions());
@@ -132,9 +161,22 @@ export function XacNhanLuuTru({
 		else khoiBp.mutate({ id: x.id }, xong);
 	};
 
-	if (okrMo > 0)
+	const chanBoPhan: LyDoChan[] =
+		hoi?.loai === "bo-phan" && okrMo > 0
+			? [{ loai: "okr", cau: c.chan.lyDo["bo-phan"](okrMo) }]
+			: [];
+	const lyDo =
+		hoi?.loai === "phong-ban" ? (xemTruoc.data?.lyDo ?? []) : chanBoPhan;
+	const dangKiem = hoi?.loai === "phong-ban" && xemTruoc.isPending;
+	if (dangKiem || lyDo.length > 0)
 		return (
-			<HopLuuTruChan hoi={hoi} okrMo={okrMo} dong={dong} moChuyen={moChuyen} />
+			<HopLuuTruChan
+				hoi={hoi}
+				lyDo={lyDo}
+				dangKiem={dangKiem}
+				dong={dong}
+				moChuyen={moChuyen}
+			/>
 		);
 
 	return (
@@ -144,7 +186,11 @@ export function XacNhanLuuTru({
 				if (!mo && !dangLuu) dong();
 			}}
 			tieuDe={dien(m.xacNhanLuuTru.tieuDe, { ten: hoi?.name ?? "" })}
-			than={m.xacNhanLuuTru.than}
+			than={
+				xemTruoc.isError
+					? `${m.xacNhanLuuTru.than} ${c.chan.chuaKiem}`
+					: m.xacNhanLuuTru.than
+			}
 			nut={m.luuTru}
 			thoi={m.xacNhanLuuTru.giu}
 			pending={dangLuu}

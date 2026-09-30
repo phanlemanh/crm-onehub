@@ -146,6 +146,8 @@ export const MT: MucTieuOutput = {
 	following: false,
 	followerCount: 0,
 	theoDoi: false,
+	hienThi: "cong-khai",
+	soNguoiXem: 0,
 };
 
 const RONG_DONG = {

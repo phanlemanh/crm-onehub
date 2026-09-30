@@ -1,6 +1,7 @@
 "use client";
 
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Card,
@@ -23,9 +24,10 @@ import {
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
+import { type ReactNode, useId, useState } from "react";
 import { toast } from "sonner";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
@@ -252,6 +254,48 @@ export function MembersTable() {
 	const k = keHoachNoiMessages(locale).chuyen;
 	const kOkr = okrMessages(locale).chuyen;
 
+	const okrCuaNguoiGo = useQuery(
+		trpc.okr.transferPreview.queryOptions(
+			dangGo ? { fromUserId: dangGo.userId } : skipToken,
+			{ staleTime: 0 },
+		),
+	);
+	const soOkr = okrCuaNguoiGo.data
+		? okrCuaNguoiGo.data.kr + okrCuaNguoiGo.data.mucTieu
+		: 0;
+	let canhBaoGo: ReactNode = null;
+	if (dangGo && okrCuaNguoiGo.isPending)
+		canhBaoGo = (
+			<p
+				className="text-muted-foreground text-sm"
+				role="status"
+				data-go-dang-doc
+			>
+				{t.xacNhan.go.dangDoc}
+			</p>
+		);
+	else if (okrCuaNguoiGo.isError)
+		canhBaoGo = (
+			<p
+				className="text-muted-foreground text-sm"
+				role="status"
+				data-go-loi-doc
+			>
+				{t.xacNhan.go.loiDoc}
+			</p>
+		);
+	else if (okrCuaNguoiGo.data && soOkr > 0)
+		canhBaoGo = (
+			<Alert variant="warning" data-go-co-okr>
+				<AlertDescription>
+					{dien(t.xacNhan.go.coOkr, {
+						kr: okrCuaNguoiGo.data.kr,
+						mucTieu: okrCuaNguoiGo.data.mucTieu,
+					})}
+				</AlertDescription>
+			</Alert>
+		);
+
 	const remove = useMutation(
 		trpc.workspace.removeMember.mutationOptions({
 			onSuccess: async () => {
@@ -358,6 +402,19 @@ export function MembersTable() {
 					if (dangGo) remove.mutate({ memberId: dangGo.id });
 				}}
 				pending={remove.isPending}
+				noiDung={canhBaoGo}
+				nutPhu={
+					soOkr > 0 && quyenKeHoach.data?.canManage
+						? {
+								nut: kOkr.menu,
+								onClick: () => {
+									const x = dangGo;
+									setDangGo(null);
+									setDangChuyenOkr(x);
+								},
+							}
+						: null
+				}
 			/>
 		</section>
 	);

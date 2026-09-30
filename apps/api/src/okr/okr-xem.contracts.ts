@@ -1,4 +1,5 @@
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
+import { MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { KIEU_KR } from "@crm/validation/okr-kr";
 import {
 	LOAI_MUC_TIEU,
@@ -61,6 +62,8 @@ export const nutCayDayDu: z.ZodType<NutCayDayDu> = z.lazy(() =>
 		kind: z.enum(LOAI_MUC_TIEU),
 		gop: z.number(),
 		lapLai: z.boolean(),
+		hienThi: z.enum(MUC_HIEN_THI),
+		soNguoiXem: z.number(),
 		expected: z.number().nullable(),
 		children: z.array(nutCayDayDu),
 	}),

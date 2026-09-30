@@ -26,7 +26,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import { OKR_HIEN_THI, traLaiInput } from "@crm/validation/okr-hien-thi";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { type ReactNode, useId, useState } from "react";
 import { toast } from "sonner";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
@@ -35,15 +35,23 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { dien, dienNode } from "./plan-copy";
 
-type NguoiTen = { name: string };
+type NguoiTen = { id: string; name: string };
+type NguoiDuyet = { ten: string } | "quan-tri";
 
 export type DuyetMucTieu = {
 	id: string;
 	title: string;
+	keyResults: readonly { id: string }[];
+	nguoiDuyetDuKien: NguoiDuyet | null;
 	choDuyet: {
 		nguoiGui: NguoiTen | null;
 		guiLuc: string | null;
-		nguoiDuyet: { ten: string } | "quan-tri";
+		nguoiDuyet: NguoiDuyet;
+		lanTraLaiTruoc: {
+			lyDo: string;
+			nguoi: NguoiTen | null;
+			luc: string;
+		} | null;
 	} | null;
 	traLaiGanNhat: {
 		lyDo: string;
@@ -98,31 +106,84 @@ function NutDai({ children }: { children: ReactNode }) {
 	);
 }
 
-export function NutGuiDuyet({ objectiveId }: { objectiveId: string }) {
+const idLyDoGuiKhoa = (objectiveId: string) => `ly-do-gui-khoa-${objectiveId}`;
+
+export function khoaGuiDuyet(mucTieu: {
+	quyen: { guiDuyet: boolean };
+	traLaiGanNhat: unknown;
+	keyResults: unknown[];
+}): boolean {
+	return (
+		mucTieu.quyen.guiDuyet &&
+		mucTieu.traLaiGanNhat === null &&
+		mucTieu.keyResults.length === 0
+	);
+}
+
+export function DongLyDoGuiKhoa({ objectiveId }: { objectiveId: string }) {
+	const m = okrGioiHanMessages(useLocale()).duyet;
+	return (
+		<p
+			className="text-muted-foreground text-xs"
+			data-ly-do-gui-khoa
+			id={idLyDoGuiKhoa(objectiveId)}
+		>
+			{m.canKr}
+		</p>
+	);
+}
+
+export function NutGuiDuyet({
+	objectiveId,
+	soKr,
+	nguoiDuyet,
+	lyDo,
+}: {
+	objectiveId: string;
+	soKr: number;
+	nguoiDuyet: NguoiDuyet | null;
+	lyDo: "duoi-nut" | "dong-rieng";
+}) {
 	const m = okrGioiHanMessages(useLocale()).duyet;
 	const trpc = useTRPC();
 	const [hoi, setHoi] = useState(false);
+	const thieuKr = soKr === 0;
+	let seDuyet = "";
+	if (nguoiDuyet === "quan-tri") seDuyet = ` ${m.seDuyetQuanTri}`;
+	else if (nguoiDuyet)
+		seDuyet = ` ${dien(m.seDuyet, { nguoi: nguoiDuyet.ten })}`;
 	const gui = useMutation(
 		trpc.okr.guiDuyet.mutationOptions(
 			useGhiDuyet(objectiveId, m.daGui, () => setHoi(false)),
 		),
 	);
+	const nut = (
+		<Button
+			aria-describedby={thieuKr ? idLyDoGuiKhoa(objectiveId) : undefined}
+			data-nut="gui-duyet"
+			disabled={gui.isPending || thieuKr}
+			onClick={() => setHoi(true)}
+			size="sm"
+		>
+			{m.guiDuyet}
+		</Button>
+	);
 	return (
 		<>
-			<Button
-				data-nut="gui-duyet"
-				disabled={gui.isPending}
-				onClick={() => setHoi(true)}
-				size="sm"
-			>
-				{m.guiDuyet}
-			</Button>
+			{lyDo === "duoi-nut" && thieuKr ? (
+				<span className="flex flex-col gap-1">
+					{nut}
+					<DongLyDoGuiKhoa objectiveId={objectiveId} />
+				</span>
+			) : (
+				nut
+			)}
 			<ConfirmDialog
 				tone="default"
 				nut={m.hoiGui.nut}
 				thoi={m.hoiGui.thoi}
 				tieuDe={m.hoiGui.tieuDe}
-				than={m.hoiGui.than}
+				than={`${m.hoiGui.than}${seDuyet}`}
 				open={hoi}
 				pending={gui.isPending}
 				onOpenChange={(mo) => {
@@ -302,6 +363,7 @@ function DaiChoNguoiDuyet({ mucTieu }: { mucTieu: DuyetMucTieu }) {
 			useGhiDuyet(mucTieu.id, m.daDuyet, () => {}),
 		),
 	);
+	const toi = useQuery(trpc.users.me.queryOptions());
 	const cho = mucTieu.choDuyet;
 	if (!cho) return null;
 	return (
@@ -315,6 +377,18 @@ function DaiChoNguoiDuyet({ mucTieu }: { mucTieu: DuyetMucTieu }) {
 			</AlertTitle>
 			<AlertDescription>
 				<p>{m.duyetMoTa}</p>
+				{cho.lanTraLaiTruoc ? (
+					<p data-lan-tra-lai-truoc>
+						{cho.lanTraLaiTruoc.nguoi &&
+						cho.lanTraLaiTruoc.nguoi.id === toi.data?.id
+							? dien(m.lanTruocBan, { ngay: ngayThang(cho.lanTraLaiTruoc.luc) })
+							: dienNode(m.lanTruoc, {
+									nguoi: <Ten>{cho.lanTraLaiTruoc.nguoi?.name ?? ""}</Ten>,
+									ngay: ngayThang(cho.lanTraLaiTruoc.luc),
+								})}{" "}
+						<span translate="no">{cho.lanTraLaiTruoc.lyDo}</span>
+					</p>
+				) : null}
 				<NutDai>
 					<Button
 						data-nut="duyet"
@@ -367,7 +441,12 @@ function DaiBiTraLai({ mucTieu }: { mucTieu: DuyetMucTieu }) {
 				</p>
 				{mucTieu.quyen.guiDuyet ? (
 					<NutDai>
-						<NutGuiDuyet objectiveId={mucTieu.id} />
+						<NutGuiDuyet
+							objectiveId={mucTieu.id}
+							soKr={mucTieu.keyResults.length}
+							nguoiDuyet={mucTieu.nguoiDuyetDuKien}
+							lyDo="duoi-nut"
+						/>
 					</NutDai>
 				) : null}
 			</AlertDescription>

@@ -41,6 +41,7 @@ import {
 	chuyenOkrParsers,
 	type NguonChuyenOkr,
 } from "@/components/okr/hop-chuyen-okr-search-params";
+import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrTaiCoCauMessages } from "@/lib/messages/okr-tai-co-cau";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -109,6 +110,9 @@ function DongMoCoi({
 					{m.cap[muc.donVi.level]} · <span translate="no">{muc.donVi.ten}</span>
 				</ItemDescription>
 				<span className="flex flex-wrap gap-1">
+					{muc.hienThi === "gioi-han" ? (
+						<NhanGioiHan moHop={null} soNguoiXem={muc.soNguoiXem} />
+					) : null}
 					{muc.lyDo.map((ly) => (
 						<Badge key={ly} variant="outline" data-ly-do={ly}>
 							{m.lyDo[ly]}
