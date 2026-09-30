@@ -20,9 +20,11 @@ import {
 } from "@crm/ui/components/select";
 import {
 	Sheet,
+	SheetBody,
 	SheetClose,
 	SheetContent,
 	SheetDescription,
+	SheetFooter,
 	SheetHeader,
 	SheetTitle,
 } from "@crm/ui/components/sheet";
@@ -34,31 +36,21 @@ const khong = () => undefined;
 
 function Chan({ chinh, tat }: { chinh: string; tat: boolean }) {
 	return (
-		<div
-			className="mt-auto flex flex-col-reverse gap-2 p-4 sm:flex-row sm:justify-end"
-			data-ban-mau-chan
-		>
+		<SheetFooter>
 			<SheetClose asChild>
 				<Button variant="outline">Huỷ</Button>
 			</SheetClose>
 			<Button disabled={tat}>{chinh}</Button>
-		</div>
+		</SheetFooter>
 	);
 }
 
 function Than({ cot, children }: { cot?: ReactNode; children: ReactNode }) {
 	return (
-		<div
-			className={
-				cot
-					? "grid flex-1 gap-6 overflow-y-auto overscroll-contain px-4 lg:grid-cols-[minmax(0,1fr)_var(--container-assist-rail)] lg:items-start"
-					: "flex-1 overflow-y-auto overscroll-contain px-4"
-			}
-			data-cuon-hop
-		>
+		<SheetBody split={cot !== undefined} data-cuon-hop>
 			{children}
 			{cot}
-		</div>
+		</SheetBody>
 	);
 }
 
@@ -81,7 +73,7 @@ export function Ngan({
 }) {
 	return (
 		<Sheet open modal={false}>
-			<SheetContent side="right" size={cot ? "lg" : "sm"} {...dauVet}>
+			<SheetContent side="right" size={cot ? "assist" : undefined} {...dauVet}>
 				<SheetHeader>
 					<SheetTitle>{tieuDe}</SheetTitle>
 					{moTa ? (
