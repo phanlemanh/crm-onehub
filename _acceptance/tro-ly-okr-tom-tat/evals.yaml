@@ -13,7 +13,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.tts_api_okr
-    expected: "exit 0; các bài OKR sẵn có của API chạm luật đáng bàn (okr-toan-canh-thuan.spec.ts, okr-toan-canh.spec.ts, okr-toan-canh-hieu-nang.spec.ts, okr-mau.spec.ts, vai-chi-okr.spec.ts) chạy xanh với kỳ vọng không đổi: git diff của năm tệp đó so với merge-base chỉ được đổi dòng import (bài kiểm của lệnh so bằng git diff -U0 và đỏ 'ky vong bi sua: <tep>' khi có dòng khác import đổi)."
+    expected: "exit 0; các bài OKR sẵn có của API chạm luật đáng bàn (okr-toan-canh-thuan.spec.ts, okr-toan-canh.spec.ts, okr-toan-canh-hieu-nang.spec.ts, okr-mau.spec.ts, vai-chi-okr.spec.ts) chạy xanh với kỳ vọng không đổi: git diff của năm tệp đó so với merge-base không xoá và không đổi dòng nào ngoài dòng import; thêm ca mới được phép (bài kiểm của lệnh so bằng git diff -U0 và đỏ 'ky vong bi sua: <tep>' khi có dòng không phải import bị xoá hoặc bị đổi)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/api/src/okr/**", packages/db/src/okr-hop-tuan.ts, apps/api/test/okr-toan-canh-thuan.spec.ts, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-toan-canh-hieu-nang.spec.ts, apps/api/test/okr-mau.spec.ts, apps/api/test/vai-chi-okr.spec.ts]
 
@@ -88,7 +88,7 @@ evals:
       - "Mọi ảnh ở 1440 và 390; đo scrollWidth ≤ clientWidth mỗi ảnh"
     expected: "exit 0; mỗi bước có ảnh trong .acceptance-runs/tro-ly-okr-tom-tat/man/ và một dòng kết quả; mọi giá trị trên thẻ trích dẫn bằng giá trị đọc từ kho; không bước nào tràn ngang. Chiều đỏ ghim trong script: bản tóm tắt của phòng A phải có ít nhất một câu có số — không có thì bước so thẻ không chứng gì, mã 3 'khong cau co so'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/reminders/**", "apps/app/app/(app)/[slug]/settings/notifications/**", packages/ui/src/components/ai-elements/inline-citation.tsx, apps/api/src/okr/tro-ly.service.ts, "apps/agent/agent/subagents/tro_ly_okr/**", _acceptance/tro-ly-okr-tom-tat/rang/man-tom-tat.mjs]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/reminders/**", "apps/app/app/(app)/[slug]/settings/notifications/**", packages/ui/src/components/ai-elements/inline-citation.tsx, apps/api/src/okr/tro-ly.service.ts, "apps/agent/agent/subagents/tro_ly_okr/**", _acceptance/tro-ly-okr-tom-tat/rang/man-tom-tat.mjs, _acceptance/tro-ly-okr-tom-tat/rang/gio-nhac.mjs]
 
   - id: E10
     criterion: AC-7
@@ -189,7 +189,7 @@ evals:
       phản hồi), khuôn parse ở biên trong packages/validation, không chú thích trong mã, hằng
       tinh chỉnh ở một tệp cấu hình mỗi khu, thành phần mới ở packages/ui không đè class ở
       chỗ gọi?
-    inputs: [docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md, _acceptance/tro-ly-okr-tom-tat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md]
+    inputs: [docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md, _acceptance/tro-ly-okr-tom-tat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md, _acceptance/tro-ly-okr-tom-tat/evidence/luat-kho.md]
     expected: >-
       PASS khi mọi ý đúng và không vi phạm luật kho nào có trích dẫn tệp:dòng; FAIL nêu đúng
       câu sai hoặc tệp vi phạm; UNCERTAIN khi thiếu bằng chứng, kèm danh sách bằng chứng cần thêm.
