@@ -28,19 +28,33 @@ export function tronTuyChon(cu: ProviderOptions | undefined): ProviderOptions {
 	);
 }
 
-export const kepTranRaMoiLoiGoi: LanguageModelMiddleware = {
-	transformParams: async ({ params }) => ({
-		...params,
-		maxOutputTokens: Math.min(
-			params.maxOutputTokens ?? TRO_LY_OKR.tranRaMoiLoiGoi,
-			TRO_LY_OKR.tranRaMoiLoiGoi,
-		),
-		providerOptions: tronTuyChon(params.providerOptions),
-	}),
-};
+export function dungKepTran(tran: number): LanguageModelMiddleware {
+	return {
+		transformParams: async ({ params }) => ({
+			...params,
+			maxOutputTokens: Math.min(params.maxOutputTokens ?? tran, tran),
+			providerOptions: tronTuyChon(params.providerOptions),
+		}),
+	};
+}
 
-export const MO_HINH_TRO_LY_OKR: LanguageModel = wrapLanguageModel({
-	model: gateway(TRO_LY_OKR.model),
-	middleware: kepTranRaMoiLoiGoi,
-	modelId: TRO_LY_OKR.model,
-});
+export type MoHinhSong = Exclude<LanguageModel, string>;
+
+export function dungMoHinh(
+	kep: LanguageModelMiddleware,
+	goc: MoHinhSong = gateway(TRO_LY_OKR.model),
+): MoHinhSong {
+	return wrapLanguageModel({
+		model: goc,
+		middleware: kep,
+		modelId: TRO_LY_OKR.model,
+	});
+}
+
+export const kepTranRaMoiLoiGoi = dungKepTran(TRO_LY_OKR.tranRaMoiLoiGoi);
+
+export const kepTranTomTat = dungKepTran(TRO_LY_OKR.tranRaTomTatMoiLoiGoi);
+
+export const MO_HINH_TRO_LY_OKR: MoHinhSong = dungMoHinh(kepTranRaMoiLoiGoi);
+
+export const MO_HINH_TOM_TAT: MoHinhSong = dungMoHinh(kepTranTomTat);

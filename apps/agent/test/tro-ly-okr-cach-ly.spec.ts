@@ -1,10 +1,23 @@
 import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
+import { MockLanguageModelV4 } from "ai/test";
 import { z } from "zod";
+import {
+	chonMoHinhTheoViec,
+	type MoHinhChon,
+} from "../agent/lib/okr/chon-mo-hinh";
 import { TRO_LY_OKR } from "../agent/lib/okr/config";
 import { DANH_SACH_DOC } from "../agent/lib/okr/doc";
-import { kepTranRaMoiLoiGoi } from "../agent/lib/okr/mo-hinh";
+import {
+	dungMoHinh,
+	kepTranRaMoiLoiGoi,
+	kepTranTomTat,
+	MO_HINH_TOM_TAT,
+	MO_HINH_TRO_LY_OKR,
+	type MoHinhSong,
+} from "../agent/lib/okr/mo-hinh";
+import type { NguCanhKenh } from "../agent/lib/phien-con";
 import troLyOkr from "../agent/subagents/tro_ly_okr/agent";
 
 const GOC = join(import.meta.dir, "..", "agent");
@@ -116,6 +129,19 @@ const GIOI_HAN = [
 
 const soGioiHan = z.number();
 
+type XuLyBuoc = (
+	su: { type: string },
+	ctx: NguCanhKenh,
+) => Promise<MoHinhChon | null>;
+
+const moHinhDong = z.object({
+	kind: z.literal("eve:dynamic"),
+	fallback: z.custom<MoHinhSong>((v) => v instanceof Object),
+	events: z.strictObject({
+		"step.started": z.custom<XuLyBuoc>((v) => v instanceof Function),
+	}),
+});
+
 function kiemMoHinh(dinhNghia: {
 	model: unknown;
 	modelOptions?: {
@@ -128,9 +154,14 @@ function kiemMoHinh(dinhNghia: {
 	limits?: Partial<Record<(typeof GIOI_HAN)[number], number>>;
 }): string[] {
 	const loi: string[] = [];
-	const model = dinhNghia.model as { modelId?: string; kind?: string };
-	if (model?.kind === "eve:dynamic" || dinhNghia.model instanceof Function)
-		loi.push("model dong");
+	const laDong =
+		(dinhNghia.model as { kind?: string } | undefined)?.kind === "eve:dynamic";
+	const dong = moHinhDong.safeParse(dinhNghia.model);
+	if (laDong && !dong.success) loi.push("model dong ngoai step.started");
+	if (!laDong && dinhNghia.model instanceof Function) loi.push("model dong");
+	const model = (
+		laDong && dong.success ? dong.data.fallback : dinhNghia.model
+	) as { modelId?: string };
 	if (model?.modelId !== TRO_LY_OKR.model)
 		loi.push(`model la: ${model?.modelId}`);
 	const po = dinhNghia.modelOptions?.providerOptions ?? {};
@@ -263,6 +294,80 @@ describe("tuy-chon-moi-loi-goi", () => {
 			trong.providerOptions?.gateway?.zeroDataRetention,
 			"thieu ZDR khi khong co tuy chon",
 		).toBe(true);
+	});
+});
+
+describe("tran-tom-tat-moi-loi-goi", () => {
+	const GIA_TRI_LON = 9_000;
+
+	async function tranCuaMoHinh(
+		kep: Parameters<typeof dungMoHinh>[0],
+		xin: number | undefined,
+	) {
+		const daGoi: Parameters<MockLanguageModelV4["doGenerate"]>[0][] = [];
+		const gia = new MockLanguageModelV4({
+			doGenerate: async (vao) => {
+				daGoi.push(vao);
+				return {} as never;
+			},
+		});
+		await (dungMoHinh(kep, gia) as unknown as MockLanguageModelV4).doGenerate({
+			prompt: [],
+			maxOutputTokens: xin,
+		});
+		return daGoi[0];
+	}
+
+	test("trần tóm tắt 4.000, trần góp ý 2.000, trần phiên đủ cho một lời gọi tóm tắt", () => {
+		expect(TRO_LY_OKR.tranRaTomTatMoiLoiGoi).toBe(4_000);
+		expect(TRO_LY_OKR.tranRaMoiLoiGoi).toBe(2_000);
+		expect(TRO_LY_OKR.limits.maxOutputTokensPerSession).toBe(8_000);
+		expect(TRO_LY_OKR.limits.maxOutputTokensPerSession).toBeGreaterThan(
+			TRO_LY_OKR.tranRaTomTatMoiLoiGoi,
+		);
+	});
+
+	test("model tóm tắt kẹp 4.000 cả khi xin nhiều hơn hay không xin, vẫn ZDR và thinkingLevel", async () => {
+		for (const xin of [GIA_TRI_LON, undefined]) {
+			const vao = await tranCuaMoHinh(kepTranTomTat, xin);
+			expect(vao?.maxOutputTokens).toBe(TRO_LY_OKR.tranRaTomTatMoiLoiGoi);
+			expect(vao?.providerOptions?.gateway?.zeroDataRetention).toBe(true);
+			expect(vao?.providerOptions?.google).toEqual({
+				thinkingConfig: { thinkingLevel: "low" },
+			});
+		}
+		const nho = await tranCuaMoHinh(kepTranTomTat, 500);
+		expect(nho?.maxOutputTokens).toBe(500);
+	});
+
+	test("model góp ý vẫn kẹp 2.000", async () => {
+		const vao = await tranCuaMoHinh(kepTranRaMoiLoiGoi, GIA_TRI_LON);
+		expect(vao?.maxOutputTokens).toBe(TRO_LY_OKR.tranRaMoiLoiGoi);
+	});
+
+	test("hai model cùng mã model, khác đối tượng", () => {
+		expect(MO_HINH_TOM_TAT.modelId).toBe(TRO_LY_OKR.model);
+		expect(MO_HINH_TRO_LY_OKR.modelId).toBe(TRO_LY_OKR.model);
+		expect(MO_HINH_TOM_TAT).not.toBe(MO_HINH_TRO_LY_OKR);
+	});
+
+	test("chọn theo việc: tóm tắt được model 4.000, góp ý và không tìm được việc rơi về mặc định", async () => {
+		const ctx = {};
+		const viec = (kind: string) => async () => ({ kind }) as never;
+		const tomTat = await chonMoHinhTheoViec(ctx, viec("okr-tom-tat-tuan"));
+		expect(tomTat?.model).toBe(MO_HINH_TOM_TAT);
+		expect(tomTat?.modelContextWindowTokens).toBe(TRO_LY_OKR.cuaSoNguCanh);
+		expect(await chonMoHinhTheoViec(ctx, viec("okr-de-xuat"))).toBeNull();
+		expect(await chonMoHinhTheoViec(ctx, async () => null)).toBeNull();
+	});
+
+	test("agent: model động chỉ ở step.started, mặc định là model 2.000, không tìm được phiên gốc thì không chọn", async () => {
+		const model = moHinhDong.parse(troLyOkr.model);
+		expect(model.kind).toBe("eve:dynamic");
+		expect(model.fallback).toBe(MO_HINH_TRO_LY_OKR);
+		expect(
+			await model.events["step.started"]({ type: "step.started" }, {}),
+		).toBeNull();
 	});
 });
 

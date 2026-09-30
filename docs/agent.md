@@ -1223,6 +1223,14 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
   ZDR, thẻ và `thinkingLevel` trong middleware. Với lời gọi eve dựng cho phiên con,
   Gemini 3.8 Flash có lúc suy nghĩ tới trần 2.000 token rồi trả rỗng (5/8); câu «Act at
   once…» đầu phần việc trong `instructions.md` đưa về 0/24.
+- **Trần mỗi lời gọi theo loại việc (lượt 9c).** Việc góp ý (`okr-de-xuat`) giữ 2.000
+  token mỗi lời gọi. Việc tóm tắt (`okr-tom-tat-tuan`) được 4.000, vì Gemini 3.8 Flash
+  nghĩ hết 2.000 rồi dừng `MAX_TOKENS` khi chưa viết chữ nào; trần mỗi phiên lên 8.000
+  cho đủ hai lời gọi như thế. Hai model là cùng một model, cùng ZDR, thẻ và
+  `thinkingLevel`, chỉ khác middleware kẹp trần (`lib/okr/mo-hinh.ts`). Phiên con chọn
+  giữa hai cái ở `step.started` (`lib/okr/chon-mo-hinh.ts`), vì chỉ bước đó mới được trả
+  đối tượng model sống; không tìm được việc hay việc không phải tóm tắt thì eve dùng
+  `fallback`, tức trần 2.000. Mọi đường gọi model đều qua một trong hai middleware.
 
 Gỡ khi hãng có bản tương đương: hook chi phí trong subagent và số lần thử theo loại
 việc là phần nên gửi lên hãng — chưa gửi ở lượt này.
@@ -1331,7 +1339,8 @@ Phần việc lớn của lượt này nằm ở tệp OneHub tự dựng, khôn
 của việc tóm tắt chỉ khi có bản), `apps/agent/agent/lib/so-chi-phi.ts`, `tin-nhac.ts`,
 `nhac-ke-hoach.ts`, `tra-loi-nhac.ts`, và trong `subagents/tro_ly_okr/`:
 `tools/nop_tom_tat.ts` (mới), `instructions/viec.ts`, `agent.ts` (mô tả thêm việc
-tóm tắt). `instructions.md` không đổi. Gói dùng chung: `packages/db/src/okr-tom-tat.ts`
+tóm tắt; model chọn theo việc ở `step.started`, xem `lib/okr/chon-mo-hinh.ts`).
+`instructions.md` không đổi. Gói dùng chung: `packages/db/src/okr-tom-tat.ts`
 (gói, ghi, đọc cho người xem và cho quản trị, dòng nhắc), `okr-hop-tuan.ts` (luật
 «đáng bàn», dời nguyên từ `apps/api/src/okr/hop-tuan.ts`), `okr-nhac.ts`
 (`cuaSoSuKien`), `onboarding-nhac.ts` (`thuTrongTuan` dùng chung với lịch tóm tắt),
