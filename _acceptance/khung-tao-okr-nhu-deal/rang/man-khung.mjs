@@ -1,7 +1,9 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import puppeteer from "puppeteer-core";
+import { okrGopYMessages } from "../../../apps/app/lib/messages/okr-gop-y.ts";
 import {
+	batTacTu,
 	cauThieuKhoa,
 	chayTrongPhienCoTacTu,
 	coKhoaMoHinh,
@@ -9,6 +11,7 @@ import {
 	idMau,
 	laKhoDo,
 	napBoMau,
+	PHIEN_TRO_LY,
 	phienCookie,
 	thuMau,
 	tre,
@@ -32,14 +35,17 @@ const KTO = {
 		dungSaiPx: 2,
 		chanPhaiPx: 24,
 		tuHangPx: 640,
+		tamHangPx: 2,
+		haiXPx: 8,
 	},
-	gia: { rongPx: 384, hepPx: 292, lechPx: 20, tranPx: 600 },
+	gia: { rongPx: 384, hepPx: 292, lechPx: 20, tranPx: 600, dauLechPx: 11 },
 	cho: {
 		manMs: 120 * GIAY_MS,
 		nganMs: 60 * GIAY_MS,
 		hoatMs: 5 * GIAY_MS,
 		nhipMs: 100,
 		lamMoiMs: 400,
+		theMs: 4 * 60 * GIAY_MS,
 	},
 	quanTri: "le-hai-dang",
 	chuKy: "quy4",
@@ -49,10 +55,14 @@ const KTO = {
 	huy: "Huỷ",
 	nutDev: "nextjs-portal, .tsqd-parent-container, .tsqd-open-btn-container",
 	lenh: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"',
+	lenhDauCot:
+		'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs --chi dau-cot"',
 	thongDiep: {
 		lechBeNgang: "lech be ngang",
 		tranNgang: "tran ngang",
 		huyKhongBenTrai: "huy khong ben trai",
+		dauLechTrai: "dau cot lech trai",
+		dauKhacCo: "dau cot khac co chu",
 	},
 };
 
@@ -60,15 +70,19 @@ const ANH = join(GOC, "_acceptance/khung-tao-okr-nhu-deal/evidence");
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
 
+const g = okrGopYMessages("vi");
+const CHI_DAU_COT = process.argv.includes("--chi");
 const dong = [];
 let sai = 0;
 let trinhDuyet = null;
+let tacTu = null;
 let slug = null;
 let MT = null;
 let KR = null;
 
 async function ket(ma) {
 	if (trinhDuyet) await trinhDuyet.close().catch(() => {});
+	if (tacTu) await tacTu.dung();
 	for (const d of dong) console.log(d);
 	console.log(
 		`KET LUAN: ${dong.filter((d) => d.startsWith("DUNG")).length} DUNG, ${sai} SAI — ma thoat ${ma}`,
@@ -343,6 +357,133 @@ async function chup(p, ten) {
 	dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
 }
 
+function doDauCot(chon, tieuDe, nhanDong) {
+	const ngan = [...document.querySelectorAll(chon)].find((o) =>
+		o.checkVisibility(),
+	);
+	const cot = ngan?.querySelector("[data-cot-gop-y]");
+	if (!ngan || !cot) return null;
+	const khung = (o) => {
+		if (!o) return null;
+		const r = o.getBoundingClientRect();
+		return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+	};
+	const khungChu = (o) => {
+		if (!o) return null;
+		const vung = document.createRange();
+		vung.selectNodeContents(o);
+		const r = vung.getBoundingClientRect();
+		return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+	};
+	const tieu = [...cot.querySelectorAll("*")].find(
+		(o) =>
+			tieuDe.includes(o.textContent?.trim() ?? "") &&
+			![...o.children].some(
+				(c) => c.textContent?.trim() === o.textContent?.trim(),
+			),
+	);
+	const x = cot.querySelector(`button[aria-label="${nhanDong}"]`);
+	let hang = tieu;
+	while (hang && x && !hang.contains(x) && hang !== cot)
+		hang = hang.parentElement;
+	const ke = hang && hang !== cot ? hang.nextElementSibling : null;
+	const laChu = ke !== null && ke.tagName === "P";
+	const moTa = laChu ? ke : null;
+	const sau = laChu ? ke.nextElementSibling : ke;
+	const dau =
+		sau?.getAttribute("data-slot") === "empty"
+			? sau
+			: (sau?.firstElementChild ?? sau);
+	const nutForm = [...ngan.querySelectorAll("form button")].find((b) =>
+		b.checkVisibility(),
+	);
+	const xNgan = ngan.querySelector(':scope > [data-slot="sheet-close"]');
+	const tieuNgan = ngan.querySelector('[data-slot="sheet-title"]');
+	const kieu = (o) =>
+		o
+			? {
+					co: Number.parseFloat(getComputedStyle(o).fontSize),
+					dam: getComputedStyle(o).fontWeight,
+				}
+			: null;
+	return {
+		tieu: khungChu(tieu),
+		x: khung(x),
+		moTa: khungChu(moTa),
+		dau: khung(dau),
+		nutForm: khung(nutForm),
+		xNgan: khung(xNgan),
+		kieuTieu: kieu(tieu),
+		kieuMoTa: kieu(moTa),
+		kieuNgan: kieu(tieuNgan),
+		coThe: cot.querySelector('[data-slot="proposed-change"]') !== null,
+	};
+}
+
+function kiemDauCot(so, nhan, rong) {
+	const N = KTO.nguong;
+	if (!so?.tieu || !so.x || !so.dau) {
+		kiem(`E24 ${nhan}: thay du tieu de, dau X, phan tu dau`, false);
+		return;
+	}
+	const lechMoTa = so.moTa ? so.tieu.left - so.moTa.left : 0;
+	const lechDau = so.tieu.left - so.dau.left;
+	const lech = Math.max(Math.abs(lechMoTa), Math.abs(lechDau));
+	kiem(
+		lech <= N.khopPx
+			? `E24 ${nhan}: tieu de bam mep trai (lech mo ta ${tron(lechMoTa)} · lech phan tu dau ${tron(lechDau)})`
+			: `${KTO.thongDiep.dauLechTrai}: ${tron(lech)} (${nhan})`,
+		lech <= N.khopPx,
+	);
+	const lechX = Math.abs(so.x.right - so.dau.right);
+	kiem(
+		`E24 ${nhan}: dau X dong cot bam mep phai (lech ${tron(lechX)} <= ${N.khopPx})`,
+		lechX <= N.khopPx,
+	);
+	const cungCo =
+		so.kieuTieu &&
+		so.kieuNgan &&
+		so.kieuTieu.co === so.kieuNgan.co &&
+		so.kieuTieu.dam === so.kieuNgan.dam;
+	kiem(
+		cungCo
+			? `E24 ${nhan}: tieu de cot cung co chu tieu de ngan (${so.kieuTieu.co}px/${so.kieuTieu.dam})`
+			: `${KTO.thongDiep.dauKhacCo}: cot ${so.kieuTieu?.co}px/${so.kieuTieu?.dam} · ngan ${so.kieuNgan?.co}px/${so.kieuNgan?.dam} (${nhan})`,
+		cungCo,
+	);
+	if (so.moTa)
+		kiem(
+			`E24 ${nhan}: dong mo ta ${so.kieuMoTa?.co}px khong to hon tieu de ${so.kieuTieu?.co}px`,
+			(so.kieuMoTa?.co ?? 99) <= (so.kieuTieu?.co ?? 0),
+		);
+	if (rong >= KTO.kho.moc.rong) {
+		if (!so.nutForm) kiem(`E24 ${nhan}: thay nut dau cua form`, false);
+		else {
+			const tam = (k) => (k.top + k.bottom) / 2;
+			const lechTam = Math.abs(tam(so.tieu) - tam(so.nutForm));
+			kiem(
+				`E24 ${nhan}: tam hang tieu de cot lech tam nut dau form ${tron(lechTam)} <= ${N.tamHangPx}`,
+				lechTam <= N.tamHangPx,
+			);
+		}
+	}
+	if (so.xNgan) {
+		const ngang = Math.max(
+			so.x.left - so.xNgan.right,
+			so.xNgan.left - so.x.right,
+		);
+		const doc = Math.max(
+			so.x.top - so.xNgan.bottom,
+			so.xNgan.top - so.x.bottom,
+		);
+		const cach = Math.max(ngang, doc);
+		kiem(
+			`E24 ${nhan}: hai dau X cach nhau ${tron(cach)} >= ${N.haiXPx}`,
+			cach >= N.haiXPx,
+		);
+	}
+}
+
 function trangGia(ngan) {
 	return `<!doctype html><html><head><style>*{box-sizing:border-box}body{margin:0;font:14px sans-serif}[data-slot=sheet-content]{position:fixed;top:0;right:0;height:100vh;display:flex;flex-direction:column;background:#fff;border-left:1px solid #ccc}[data-slot=sheet-header]{padding:16px}[data-slot=sheet-title]{margin:0;font-size:14px}[data-slot=sheet-body]{flex:1;min-height:0;overflow-y:auto;padding:0 16px}[data-slot=sheet-footer]{margin-top:auto;display:flex;flex-direction:column-reverse;gap:8px;padding:16px}@media (min-width:640px){[data-slot=sheet-footer]{flex-direction:row;justify-content:flex-end}}</style></head><body>${ngan}</body></html>`;
 }
@@ -360,7 +501,46 @@ async function doGia(p, kho, ngan) {
 	return p.evaluate(doNgan, '[data-slot="sheet-content"]');
 }
 
+function nganDauGia({ thut = 0, coTieu = 14 }) {
+	return `<div data-slot="sheet-content" data-side="right" style="width:800px"><div data-slot="sheet-header"><h2 data-slot="sheet-title" style="font-size:14px;font-weight:500">Sửa mục tiêu</h2></div><button data-slot="sheet-close" style="position:absolute;top:12px;right:12px;width:28px;height:28px">x</button><div data-slot="sheet-body" style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start"><form><button type="button" style="height:32px">Nhờ</button></form><section data-cot-gop-y><div style="display:flex;align-items:center;justify-content:space-between;height:32px;padding-left:${thut}px"><p style="margin:0;font-size:${coTieu}px;font-weight:500">${g.cot.tieuDe}</p><button aria-label="${g.cot.dong}" style="width:28px;height:28px">x</button></div><p style="margin:0;font-size:12px">Trợ lý OKR đang đọc</p><div><div style="height:80px;border:1px solid #ccc"></div></div></section></div></div>`;
+}
+
 async function kiemDoDo() {
+	if (process.argv[process.argv.indexOf("--kiem-do-do") + 1] === "dau-cot") {
+		trinhDuyet = await puppeteer.launch({
+			executablePath: KTO.chrome,
+			headless: true,
+		});
+		const p = await trinhDuyet.newPage();
+		const doDau = async (tuyChon) => {
+			await p.setViewport({ width: 1440, height: 900 });
+			await p.setContent(trangGia(nganDauGia(tuyChon)));
+			return p.evaluate(
+				doDauCot,
+				'[data-slot="sheet-content"]',
+				[g.cot.tieuDe, g.cot.tieuDeKr],
+				g.cot.dong,
+			);
+		};
+		const soLanhTruoc = sai;
+		const lanh = await doDau({});
+		kiemDauCot(lanh, "doi-chung", 1440);
+		const doiChungSai = sai - soLanhTruoc;
+		kiemDauCot(await doDau({ thut: KTO.gia.dauLechPx }), "gia-thut", 1440);
+		kiemDauCot(await doDau({ coTieu: 12 }), "gia-co-chu", 1440);
+		const coThut = dong.some(
+			(d) =>
+				d.startsWith("SAI") &&
+				d.includes(`${KTO.thongDiep.dauLechTrai}: ${KTO.gia.dauLechPx}`),
+		);
+		const coCo = dong.some(
+			(d) => d.startsWith("SAI") && d.includes(KTO.thongDiep.dauKhacCo),
+		);
+		dong.push(
+			`KIEM DO DO dau-cot: doi chung ${doiChungSai === 0 ? "xanh" : `DO (${doiChungSai} SAI)`} · «${KTO.thongDiep.dauLechTrai}: ${KTO.gia.dauLechPx}» ${coThut ? "co" : "KHONG CO"} · «${KTO.thongDiep.dauKhacCo}» ${coCo ? "co" : "KHONG CO"}`,
+		);
+		await ket(coThut && coCo && doiChungSai === 0 ? 1 : 3);
+	}
 	const loai = ["tran", "chan"].includes(
 		process.argv[process.argv.indexOf("--kiem-do-do") + 1],
 	)
@@ -625,6 +805,92 @@ async function buocRong(tl) {
 	return null;
 }
 
+async function doVaKiemDau(p, ngan, nhan, rong, tenAnh) {
+	await p.evaluate((chon) => {
+		document
+			.querySelector(`${chon} [data-cot-gop-y]`)
+			?.scrollIntoView({ block: "start" });
+	}, ngan.chon);
+	const so = await p.evaluate(
+		doDauCot,
+		ngan.chon,
+		[g.cot.tieuDe, g.cot.tieuDeKr],
+		g.cot.dong,
+	);
+	dong.push(`GHI E24 ${nhan}: ${JSON.stringify(so)}`);
+	kiemDauCot(so, nhan, rong);
+	await chup(p, tenAnh);
+	return so;
+}
+
+async function buocDauCot(tl) {
+	const [, , suaMt, , suaKr] = nganCan();
+	let soLanCoThe = 0;
+	for (const kho of [KTO.kho.rong, KTO.kho.hep]) {
+		for (const ngan of [suaMt, suaKr]) {
+			const kq = await moVaDo(tl, kho, ngan);
+			if (!kq) continue;
+			try {
+				const loi = await moCot(
+					kq.t.p,
+					ngan.chon,
+					`E24 ${kho.rong} ${ngan.ten}`,
+				);
+				if (loi !== null) {
+					kiem(
+						`E24 ${kho.rong} ${ngan.ten}: mo duoc cot gop y (${loi})`,
+						false,
+					);
+					continue;
+				}
+				await doVaKiemDau(
+					kq.t.p,
+					ngan,
+					`${kho.rong} ${ngan.ten} dang-soan`,
+					kho.rong,
+					`E24-${kho.rong}-${ngan.ten}-dang-soan`,
+				);
+				const coThe = await kq.t.p
+					.waitForSelector(
+						`${ngan.chon} [data-cot-gop-y] [data-slot="proposed-change"]`,
+						{
+							visible: true,
+							timeout: KTO.cho.theMs,
+						},
+					)
+					.then(() => true)
+					.catch(() => false);
+				dong.push(
+					`GHI E24 ${kho.rong} ${ngan.ten}: ${coThe ? "cot co the gop y" : "cot khong co the (model khong goi y) — do trang thai cuoi"}`,
+				);
+				if (coThe) soLanCoThe += 1;
+				else
+					await doVaKiemDau(
+						kq.t.p,
+						ngan,
+						`${kho.rong} ${ngan.ten} trang-thai-cuoi`,
+						kho.rong,
+						`E24-${kho.rong}-${ngan.ten}-cuoi`,
+					);
+				if (coThe)
+					await doVaKiemDau(
+						kq.t.p,
+						ngan,
+						`${kho.rong} ${ngan.ten} co-the`,
+						kho.rong,
+						`E24-${kho.rong}-${ngan.ten}-co-the`,
+					);
+			} finally {
+				await kq.t.ctx.close();
+			}
+		}
+	}
+	kiem(
+		`E24: do duoc trang thai co the o it nhat mot ngan (${soLanCoThe} lan)`,
+		soLanCoThe > 0,
+	);
+}
+
 mkdirSync(ANH, { recursive: true });
 
 if (process.argv.includes("--kiem-do-do")) await kiemDoDo();
@@ -674,6 +940,13 @@ const sanSang = await trpc(API, tl)
 	.hoi("okr.troLySanSang", { objectiveId: MT })
 	.catch((e) => ({ bat: false, lyDo: e.message }));
 dong.push(`GHI okr.troLySanSang ${MT}: ${JSON.stringify(sanSang)}`);
+if (CHI_DAU_COT && !trongPhienCoTacTu()) {
+	if (!coKhoaMoHinh())
+		await khongDo(`${cauThieuKhoa()} — E24 can the gop y that tu tac tu`);
+	for (const d of dong) console.log(d);
+	console.log("-- E24 can tac tu — mo phien do rieng co tac tu");
+	process.exit(await chayTrongPhienCoTacTu(KTO.lenhDauCot));
+}
 if (sanSang?.lyDo === "chua-noi-tac-tu" && !trongPhienCoTacTu()) {
 	if (!coKhoaMoHinh())
 		await khongDo(
@@ -688,6 +961,18 @@ trinhDuyet = await puppeteer.launch({
 	executablePath: KTO.chrome,
 	headless: true,
 });
+if (CHI_DAU_COT) {
+	try {
+		tacTu = await batTacTu({
+			cong: Number(process.env[PHIEN_TRO_LY.bienCongTacTu]),
+			thuMuc: join(GOC, ".acceptance-runs/khung-tao-okr-nhu-deal"),
+		});
+		await buocDauCot(tl);
+	} catch (loi) {
+		await khongDo(`${loi?.message ?? loi}`);
+	}
+	await ket(sai === 0 ? 0 : 1);
+}
 try {
 	await buocNamNgan(tl);
 	await buocMoChuKy(qt);
