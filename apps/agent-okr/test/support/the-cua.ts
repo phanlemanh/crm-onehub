@@ -10,7 +10,7 @@ export type YeuSachCua = {
 	name?: string;
 	iat: number;
 	nbf: number;
-	exp: number;
+	exp: number | undefined;
 };
 
 export function yeuSach(

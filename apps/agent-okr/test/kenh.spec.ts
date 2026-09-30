@@ -28,6 +28,7 @@ beforeAll(async () => {
 	for (const vai of ["owner", "admin", "member", "okr"] as const)
 		nguoi[vai] = (await gieoNguoi(`Người ${vai}`, vai)).id;
 	nguoi.ngoai = (await gieoNguoi("Người ngoài", null)).id;
+	nguoi.khach = (await gieoNguoi("Người vai lạ", "khach")).id;
 	const ky = await gieoChuKy("lap-ke-hoach");
 	const dv = await gieoDonVi();
 	cuocId = (
@@ -131,6 +132,44 @@ describe("kenh-okr", () => {
 		).toBeNull();
 	});
 
+	test("vai lạ trong bảng thành viên không được nâng thành member: bỏ qua", async () => {
+		expect(
+			await auth(
+				yeuCau(
+					await mintOkr(yeuSach({ sub: nguoi.khach, cuocSoanId: cuocId })),
+				),
+			),
+		).toBeNull();
+	});
+
+	test("thẻ thiếu exp hoặc đã hết hạn bị bỏ qua", async () => {
+		expect(
+			await auth(
+				yeuCau(
+					await mintOkr(
+						yeuSach({ sub: nguoi.okr, cuocSoanId: cuocId, exp: undefined }),
+					),
+				),
+			),
+		).toBeNull();
+		const qua = Math.floor(Date.now() / 1000) - 3600;
+		expect(
+			await auth(
+				yeuCau(
+					await mintOkr(
+						yeuSach({
+							sub: nguoi.okr,
+							cuocSoanId: cuocId,
+							iat: qua - 120,
+							nbf: qua - 120,
+							exp: qua,
+						}),
+					),
+				),
+			),
+		).toBeNull();
+	});
+
 	test("cuộc của người khác hay không còn dang → 403 (ForbiddenError), không phải bỏ qua", async () => {
 		await expect(
 			auth(
@@ -145,15 +184,20 @@ describe("kenh-okr", () => {
 			where: { id: cuocId },
 			data: { trangThai: "bo" },
 		});
-		await expect(
-			auth(
-				yeuCau(await mintOkr(yeuSach({ sub: nguoi.okr, cuocSoanId: cuocId }))),
-			),
-		).rejects.toMatchObject({ response: { status: 403 } });
-		await db.okrCuocSoan.update({
-			where: { id: cuocId },
-			data: { trangThai: "dang" },
-		});
+		try {
+			await expect(
+				auth(
+					yeuCau(
+						await mintOkr(yeuSach({ sub: nguoi.okr, cuocSoanId: cuocId })),
+					),
+				),
+			).rejects.toMatchObject({ response: { status: 403 } });
+		} finally {
+			await db.okrCuocSoan.update({
+				where: { id: cuocId },
+				data: { trangThai: "dang" },
+			});
+		}
 	});
 
 	test("tệp kênh không có localDev, không có vercelOidc; thiếu bí mật thì đóng (auth: [])", () => {
@@ -175,7 +219,10 @@ describe("kenh-okr", () => {
 			else process.env[bienBiMat] = cu;
 		});
 
-		async function goiInfo(biMat: string | undefined): Promise<number> {
+		async function goiInfo(
+			biMat: string | undefined,
+			kyBang = BI_MAT_THU,
+		): Promise<number> {
 			if (biMat === undefined) delete process.env[bienBiMat];
 			else process.env[bienBiMat] = biMat;
 			const kenh = (await import(
@@ -185,7 +232,10 @@ describe("kenh-okr", () => {
 			if (tuyen?.transport !== "http") throw new Error("thiếu tuyến /info");
 			const res = await tuyen.handler(
 				yeuCau(
-					await mintOkr(yeuSach({ sub: nguoi.okr, cuocSoanId: cuocId })),
+					await mintOkr(
+						yeuSach({ sub: nguoi.okr, cuocSoanId: cuocId }),
+						kyBang,
+					),
 					"/eve/v1/info",
 				),
 				{} as never,
@@ -197,6 +247,7 @@ describe("kenh-okr", () => {
 			expect(await goiInfo(BI_MAT_THU)).not.toBe(401);
 			expect(await goiInfo(undefined)).toBe(401);
 			expect(await goiInfo("")).toBe(401);
+			expect(await goiInfo("   ", "   ")).toBe(401);
 		});
 	});
 });

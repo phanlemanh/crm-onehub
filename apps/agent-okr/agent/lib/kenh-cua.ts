@@ -1,6 +1,5 @@
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { toWorkspaceRole } from "@crm/validation/vai-workspace";
 import {
 	type AuthFn,
 	extractBearerToken,
@@ -23,22 +22,35 @@ const thuocTinhCua = z.object({
 
 const vaiDuocVao = z.enum(TRO_LY_OKR_SOAN.vaiDuocVao);
 
+const phanThan = z.object({ exp: z.number().finite() });
+
+function coHanDung(token: string): boolean {
+	const giua = token.split(".")[1];
+	if (!giua) return false;
+	try {
+		const json: unknown = JSON.parse(
+			Buffer.from(giua, "base64url").toString("utf8"),
+		);
+		return phanThan.safeParse(json).success;
+	} catch {
+		return false;
+	}
+}
+
 export function repTuCuaOkr(
 	secret: string,
 	client: typeof db = db,
 ): AuthFn<Request> {
 	return withAuthChallenges(
 		async (request: Request) => {
-			const kq = await verifyJwtHmac(
-				extractBearerToken(request.headers.get("authorization")),
-				{
-					algorithm: "HS256",
-					audiences: [BRIDGE_AUDIENCE_OKR],
-					issuer: BRIDGE_ISSUER_OKR,
-					secret,
-				},
-			);
-			if (!kq.ok) return null;
+			const token = extractBearerToken(request.headers.get("authorization"));
+			const kq = await verifyJwtHmac(token, {
+				algorithm: "HS256",
+				audiences: [BRIDGE_AUDIENCE_OKR],
+				issuer: BRIDGE_ISSUER_OKR,
+				secret,
+			});
+			if (!kq.ok || !token || !coHanDung(token)) return null;
 			const userId = kq.sessionAuth.subject;
 			if (!userId) return null;
 			const thuoc = thuocTinhCua.safeParse(kq.sessionAuth.attributes ?? {});
@@ -49,9 +61,7 @@ export function repTuCuaOkr(
 				},
 				select: { role: true },
 			});
-			const vai = vaiDuocVao.safeParse(
-				member ? toWorkspaceRole(member.role) : null,
-			);
+			const vai = vaiDuocVao.safeParse(member?.role);
 			if (!vai.success) return null;
 			const cuoc = await client.okrCuocSoan.findUnique({
 				where: { id: thuoc.data.cuocSoanId },

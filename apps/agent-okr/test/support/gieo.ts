@@ -20,7 +20,7 @@ export async function moXuong(): Promise<void> {
 
 export async function gieoNguoi(
 	ten: string,
-	role: "owner" | "admin" | "member" | "okr" | null = "member",
+	role: "owner" | "admin" | "member" | "okr" | "khach" | null = "member",
 ) {
 	const id = ma();
 	const u = await db.user.create({
