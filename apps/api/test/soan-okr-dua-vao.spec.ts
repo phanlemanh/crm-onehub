@@ -1681,3 +1681,91 @@ describe("dua-vao", () => {
 		CHO_DB,
 	);
 });
+
+describe("mot-khoa-hai-dong", () => {
+	test(
+		"một khoá Mục tiêu hai dòng (Mục tiêu đã nhận rồi đổi tên qua chat): bảng giữ dòng đã quyết trước, đưa vào tạo đúng một Mục tiêu mang KR của nó; bác dòng đổi tên không kéo KR đã nhận",
+		async () => {
+			const tenGoc = "Khách miền Nam đặt lại đều mỗi quý";
+			const gieo = async (nhanDoiTen: boolean) => {
+				const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+				const cu = { inputHash: `cu:${cuoc.id}` };
+				const [mtGoc] = await gieoDongNhap(
+					cuoc,
+					[{ loai: "muc-tieu-moi", khoa: "a", ten: tenGoc }],
+					"nhan",
+					cu,
+				);
+				const kr = await gieoDongNhap(
+					cuoc,
+					[
+						{
+							loai: "kr-moi",
+							khoa: "a1",
+							chaKhoa: "a",
+							ten: "Khách miền Nam đặt lại",
+							kieu: "tang-toi",
+							donVi: "khách",
+						},
+						{
+							loai: "kr-moi",
+							khoa: "a2",
+							chaKhoa: "a",
+							ten: "Tỷ lệ khách miền Nam quay lại",
+							kieu: "phan-tram",
+							donVi: "%",
+						},
+					],
+					"nhan",
+					cu,
+				);
+				const [mtDoi] = await gieoDongNhap(
+					cuoc,
+					[{ loai: "muc-tieu-moi", khoa: "a", ten: "Khách miền Nam gắn bó" }],
+					nhanDoiTen ? "nhan" : "cho",
+					{ inputHash: `moi:${cuoc.id}` },
+				);
+				return { cuoc, mtGoc, mtDoi, kr };
+			};
+			const hai = await gieo(true);
+			const bang = await danhSach(hai.cuoc.id, "trpc", cQuanTri);
+			const kq = ok<SoanDuaVaoOutput>(
+				await duaVao(
+					hai.cuoc.id,
+					hai.kr.map((deXuatId) => ({ deXuatId, khoiDiem: 2, dich: 9 })),
+					cQuanTri,
+				),
+				"dua vao mot khoa hai dong",
+			);
+			const taoRa = kq.ok
+				? await db.okrObjective.findMany({
+						where: { id: { in: kq.mucTieuIds } },
+						select: { title: true, _count: { select: { keyResults: true } } },
+					})
+				: [];
+			await db.okrObjective.deleteMany({
+				where: { id: { in: kq.ok ? kq.mucTieuIds : [] } },
+			});
+			const mot = await gieo(false);
+			const bac = await quyet(mot.mtDoi ?? "", "bac", undefined, cQuanTri);
+			expect({
+				bang: bang.dong
+					.filter((d) => d.loai === "muc-tieu-moi" && d.khoa === "a")
+					.map((d) => [d.id, d.trangThai]),
+				duaVao: kq.ok ? kq.soMucTieu : kq.lyDo,
+				taoRa: taoRa.map((m) => [m.title, m._count.keyResults]),
+				bac: [bac.status, bac.loi],
+				krSauBac: await Promise.all(mot.kr.map(trangThaiDongNhap)),
+			}).toEqual({
+				bang: [[hai.mtGoc ?? "", "nhan"]],
+				duaVao: 1,
+				taoRa: [[tenGoc, 2]],
+				bac: [409, T.dongCu],
+				krSauBac: ["nhan", "nhan"],
+			});
+			await xoaCuoc(hai.cuoc.id);
+			await xoaCuoc(mot.cuoc.id);
+		},
+		CHO_DB,
+	);
+});

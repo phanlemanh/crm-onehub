@@ -81,7 +81,10 @@ b. **The draft.** When the person asks for the draft («đưa bản nháp», «s
 
 c. **Edits.** When the person edits by chat («bỏ mục 2», «đổi KR đầu»), call `nop_ban_nhap` again
    with the whole draft, not only the changed lines. Keep the `khoa` of every line you did not
-   change. Never submit again a line the tool answered as `da-bac`.
+   change. Never submit again a line the tool answered as `da-bac`. A line in `giuNguyen` is
+   already decided on the draft board and was not written again: with `da-quyet-khac-ten` the
+   person asked you to change a line they had already decided — tell them to change it on the
+   board, and give any genuinely new line a new `khoa`.
 
 d. **After the tool answers,** tell the person in one or two sentences what was written and which
    lines were dropped and why, by their code. Do not repeat the draft; the person sees it on the

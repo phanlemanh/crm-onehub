@@ -50,6 +50,12 @@ export const TRO_LY_OKR_SOAN = {
 		"nhan",
 		"sua",
 	] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][],
+	trangThaiGiuKhoa: [
+		"nhan",
+		"sua",
+		"bac",
+	] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][],
+	giuNguyen: { daQuyet: "da-quyet", khacTen: "da-quyet-khac-ten" },
 	suKien: {
 		nguoiGo: "message.received",
 		duoiChiTruyen: ".appended",

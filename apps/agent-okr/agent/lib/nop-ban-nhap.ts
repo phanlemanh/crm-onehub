@@ -13,7 +13,7 @@ import {
 	kiemBanNhap,
 	type MaLoaiBanNhap,
 } from "@crm/validation/okr-kiem-ban-nhap";
-import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
+import { khoaDong, khoaModel } from "@crm/validation/okr-kiem-de-xuat";
 import {
 	type DongSoan,
 	dongSoanTuHang,
@@ -29,12 +29,28 @@ export type DongBiLoai = { khoa: string; ten: string; maLoai: MaLoaiBanNhap };
 
 type TrangThaiHang = (typeof TRANG_THAI_DE_XUAT)[number];
 
-type TrangThaiDaQuyet = (typeof TRO_LY_OKR_SOAN.trangThaiDaQuyet)[number];
+type TrangThaiGiu = (typeof TRO_LY_OKR_SOAN.trangThaiGiuKhoa)[number];
+
+type MaGiu =
+	(typeof TRO_LY_OKR_SOAN.giuNguyen)[keyof typeof TRO_LY_OKR_SOAN.giuNguyen];
 
 export type DongGiuNguyen = {
 	khoa: string;
 	ten: string;
-	trangThai: TrangThaiDaQuyet;
+	trangThai: TrangThaiGiu;
+	ma: MaGiu;
+};
+
+type DongDaLuu = {
+	khoa: string;
+	ten: string;
+	trangThai: TrangThaiGiu;
+	khoaDong: string;
+};
+
+type DaQuyet = {
+	theoKhoaDong: ReadonlyMap<string, DongDaLuu>;
+	theoKhoaModel: ReadonlyMap<string, DongDaLuu>;
 };
 
 export type KetQuaNop = {
@@ -126,13 +142,16 @@ function chanTrungKhoa(dongs: readonly DongKiemSoan[]): void {
 	}
 }
 
-async function docKhoaDaQuyet(
-	cuocSoanId: string,
-): Promise<Map<string, TrangThaiDaQuyet>> {
+const GIU = TRO_LY_OKR_SOAN.giuNguyen;
+const QUYET_GIU_TEN: ReadonlySet<TrangThaiGiu> = new Set(
+	TRO_LY_OKR_SOAN.trangThaiDaQuyet,
+);
+
+async function docDaQuyet(cuocSoanId: string): Promise<DaQuyet> {
 	const hang = await db.okrDeXuat.findMany({
 		where: {
 			cuocSoanId,
-			trangThai: { in: [...TRO_LY_OKR_SOAN.trangThaiDaQuyet] },
+			trangThai: { in: [...TRO_LY_OKR_SOAN.trangThaiGiuKhoa] },
 		},
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 		select: {
@@ -144,13 +163,58 @@ async function docKhoaDaQuyet(
 			trangThai: true,
 		},
 	});
-	const trangThai = z.enum(TRO_LY_OKR_SOAN.trangThaiDaQuyet);
-	return new Map(
-		hang.map((h) => [
-			khoaDong(dongSoanTuHang(h)),
-			trangThai.parse(h.trangThai),
-		]),
-	);
+	const trangThai = z.enum(TRO_LY_OKR_SOAN.trangThaiGiuKhoa);
+	const theoKhoaDong = new Map<string, DongDaLuu>();
+	const theoKhoaModel = new Map<string, DongDaLuu>();
+	for (const h of hang) {
+		const dong = dongSoanTuHang(h);
+		const luu: DongDaLuu = {
+			khoa: dong.khoa,
+			ten: dong.loai === "can-chinh-moi" ? dong.khoa : dong.ten,
+			trangThai: trangThai.parse(h.trangThai),
+			khoaDong: khoaDong(dong),
+		};
+		if (QUYET_GIU_TEN.has(luu.trangThai) && !theoKhoaDong.has(luu.khoaDong))
+			theoKhoaDong.set(luu.khoaDong, luu);
+		if (!theoKhoaModel.has(khoaModel(dong)))
+			theoKhoaModel.set(khoaModel(dong), luu);
+	}
+	return { theoKhoaDong, theoKhoaModel };
+}
+
+function voiKhoaDaLuu(
+	input: BanNhap,
+	dongs: readonly DongKiemSoan[],
+	daQuyet: DaQuyet,
+): BanNhap {
+	const dung = new Set(input.mucTieu.map((m) => m.khoa));
+	const doi = new Map<string, string>();
+	for (const d of dongs) {
+		if (d.loai !== "muc-tieu-moi") continue;
+		const luu = daQuyet.theoKhoaDong.get(khoaCua(d));
+		if (!luu || luu.khoa === d.khoa || dung.has(luu.khoa)) continue;
+		doi.set(d.khoa, luu.khoa);
+		dung.add(luu.khoa);
+	}
+	if (doi.size === 0) return input;
+	return {
+		mucTieu: input.mucTieu.map((m) => ({
+			...m,
+			khoa: doi.get(m.khoa) ?? m.khoa,
+		})),
+	};
+}
+
+function giuTheo(d: DongKiemSoan, daQuyet: DaQuyet): DongGiuNguyen | null {
+	const cungNoiDung = daQuyet.theoKhoaDong.get(khoaCua(d));
+	if (cungNoiDung) {
+		const { khoa, ten, trangThai } = cungNoiDung;
+		return { khoa, ten, trangThai, ma: GIU.daQuyet };
+	}
+	const cungKhoa = daQuyet.theoKhoaModel.get(khoaModel(veDongSoan(d)));
+	if (!cungKhoa || cungKhoa.khoaDong === khoaCua(d)) return null;
+	const { khoa, ten, trangThai } = cungKhoa;
+	return { khoa, ten, trangThai, ma: GIU.khacTen };
 }
 
 async function laPhienSong(
@@ -202,14 +266,16 @@ export async function nopBanNhap(
 	if (nac !== "bat" && nac !== "an") return tuChoi(TU_CHOI.donViChuaBat);
 	const goi = await goiSoan(cuocSoanId, { vai });
 	if (!goi) return tuChoi(TU_CHOI.cuocKhongDang);
-	const dongs = dongTuBanNhap(input, { cuocSoanId, idKr: idKrCua(goi) });
-	chanTrungKhoa(dongs);
-	const daQuyet = await docKhoaDaQuyet(cuocSoanId);
-	const giuNguyen = dongs.flatMap((d) => {
-		const trangThai = daQuyet.get(khoaCua(d));
-		return trangThai ? [{ khoa: d.khoa, ten: tenCua(d), trangThai }] : [];
-	});
-	const conLai = dongs.filter((d) => !daQuyet.has(khoaCua(d)));
+	const dung = { cuocSoanId, idKr: idKrCua(goi) };
+	chanTrungKhoa(dongTuBanNhap(input, dung));
+	const daQuyet = await docDaQuyet(cuocSoanId);
+	const dongs = dongTuBanNhap(
+		voiKhoaDaLuu(input, dongTuBanNhap(input, dung), daQuyet),
+		dung,
+	);
+	const giu = dongs.map((d) => ({ d, giu: giuTheo(d, daQuyet) }));
+	const giuNguyen = giu.flatMap(({ giu }) => (giu ? [giu] : []));
+	const conLai = giu.flatMap(({ d, giu }) => (giu ? [] : [d]));
 	const kiem = await goiKiemTu(goi, {
 		soNguoiGo: await docSoNguoiGo(ctx.session.id),
 	});

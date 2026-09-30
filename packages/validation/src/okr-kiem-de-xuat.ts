@@ -3,6 +3,7 @@ import { docSoOkr } from "./okr-kr";
 import {
 	type DongDeXuat,
 	type DongGopY,
+	type DongSoan,
 	type MaLoaiDeXuat,
 	TRO_LY_OKR_TRAN,
 } from "./okr-tro-ly";
@@ -197,6 +198,17 @@ export function khoaDong(dong: DongDeXuat): string {
 			return `${dong.loai}:${chuanHoa(dong.ten)}`;
 		case "can-chinh-moi":
 			return `can-chinh-moi:${dong.chaKhoa}:${dong.targetObjectiveId ?? dong.targetKeyResultId ?? "-"}`;
+	}
+}
+
+export function khoaModel(dong: DongSoan): string {
+	switch (dong.loai) {
+		case "muc-tieu-moi":
+			return `muc-tieu-moi:${dong.khoa}`;
+		case "kr-moi":
+			return `kr-moi:${dong.chaKhoa}:${dong.khoa}`;
+		case "can-chinh-moi":
+			return khoaDong(dong);
 	}
 }
 

@@ -94,6 +94,18 @@ describe("luat-ban-nhap", () => {
 		).toEqual([["1", ["11"], ["12"]]]);
 	});
 
+	test("cayNhap: hai dòng Mục tiêu cùng khoá — dòng đã quyết giữ chỗ, KR của nó còn nguyên, dù dòng chưa quyết đến trước hay sau", () => {
+		const doiTen = { ...mt("9", "A đổi tên qua chat"), khoa: "mt:1" };
+		const hinh = (dong: DongSoan[]) =>
+			cayNhap(dong).map((k) => [k.mucTieu.id, k.kr.map((x) => x.id)]);
+		const daNhan = mt("1", "A", "nhan");
+		const krNhan = kr("11", "1", "K1", "nhan");
+		expect({
+			sau: hinh([daNhan, krNhan, doiTen]),
+			truoc: hinh([doiTen, daNhan, krNhan]),
+		}).toEqual({ sau: [["1", ["11"]]], truoc: [["1", ["11"]]] });
+	});
+
 	test("soBanNhap so theo khoaDong: vừa thêm · vừa sửa · vừa chuyển · đã bỏ", () => {
 		const truoc = [
 			mt("1", "Giữ khách"),

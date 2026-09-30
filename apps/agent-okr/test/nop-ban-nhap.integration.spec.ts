@@ -3,7 +3,7 @@ import { db } from "@crm/db";
 import { capNhatPhien } from "@crm/db/okr-cuoc-soan";
 import type { BanNhap, MucTieuNhap } from "@crm/validation/okr-cuoc-soan";
 import { PHIEN_CHO_EVE } from "@crm/validation/okr-cuoc-soan";
-import { noiDungSoan } from "@crm/validation/okr-tro-ly";
+import { dongSoanTuHang, noiDungSoan } from "@crm/validation/okr-tro-ly";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 import type { KetQuaNop } from "../agent/lib/nop-ban-nhap";
 import type { NguCanhPhien } from "../agent/lib/phien";
@@ -385,6 +385,92 @@ describe("nop-ban-nhap", () => {
 			(await db.okrDeXuat.findUniqueOrThrow({ where: { id: sua.id } }))
 				.giaTriCuoi,
 		).toBe("Tỷ lệ đối tác lớn gia hạn");
+	});
+
+	test("Mục tiêu đã nhận: đổi tên qua chat không tạo dòng thứ hai cùng khoá (da-quyet-khac-ten, khoá đã lưu), đổi tên dòng chưa quyết vẫn ghi; nộp lại cùng tên dưới khoá khác thì con nối vào khoá đã lưu", async () => {
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: `${TIEN_TO}phien-doi-ten`,
+		});
+		const ctx = nguCanh(cuoc.sessionId, canh.nguoiMo.id, cuoc.id);
+		await nop(tron(), ctx);
+		const m1 = await db.okrDeXuat.findFirstOrThrow({
+			where: { cuocSoanId: cuoc.id, loai: "muc-tieu-moi", trangThai: "cho" },
+			orderBy: { createdAt: "asc" },
+		});
+		await db.okrDeXuat.update({
+			where: { id: m1.id },
+			data: {
+				trangThai: "nhan",
+				nguoiQuyet: canh.nguoiMo.id,
+				quyetLuc: new Date(),
+			},
+		});
+		const dongMucTieu = async () =>
+			(
+				await db.okrDeXuat.findMany({
+					where: {
+						cuocSoanId: cuoc.id,
+						trangThai: { not: "bi-loai" },
+					},
+					orderBy: { createdAt: "asc" },
+				})
+			).map(dongSoanTuHang);
+		const b = tron();
+		const doiTen: BanNhap = {
+			mucTieu: [
+				{ ...mucTieu(b, 0), ten: "Đối tác miền Bắc gắn bó thêm hai năm" },
+				{ ...mucTieu(b, 1), ten: "Kênh bán lẻ miền Bắc có mặt khắp tỉnh" },
+			],
+		};
+		const ra = await nop(doiTen, ctx);
+		const sauDoiTen = await dongMucTieu();
+		const tenKhoa = (khoa: string) =>
+			sauDoiTen.flatMap((n) =>
+				n.loai === "muc-tieu-moi" && n.khoa === khoa ? [n.ten] : [],
+			);
+		expect({
+			m1: tenKhoa("m1"),
+			m2: tenKhoa("m2").at(-1),
+			giu: ra.giuNguyen.filter((g) => g.khoa === "m1"),
+		}).toEqual({
+			m1: [mucTieu(b, 0).ten],
+			m2: "Kênh bán lẻ miền Bắc có mặt khắp tỉnh",
+			giu: [
+				{
+					khoa: "m1",
+					ten: mucTieu(b, 0).ten,
+					trangThai: "nhan",
+					ma: TRO_LY_OKR_SOAN.giuNguyen.khacTen,
+				},
+			],
+		});
+		const doiKhoa: BanNhap = {
+			mucTieu: [
+				{ ...mucTieu(b, 0), khoa: "m9", canChinhId: null },
+				mucTieu(b, 2),
+			],
+		};
+		const lai = await nop(doiKhoa, ctx);
+		const sauDoiKhoa = await dongMucTieu();
+		expect({
+			giu: lai.giuNguyen.find((g) => g.ten === mucTieu(b, 0).ten),
+			mucTieuM9: sauDoiKhoa.filter((n) => n.khoa === "m9").length,
+			conM9: sauDoiKhoa.filter(
+				(n) => n.loai !== "muc-tieu-moi" && n.chaKhoa === "m9",
+			).length,
+		}).toEqual({
+			giu: {
+				khoa: "m1",
+				ten: mucTieu(b, 0).ten,
+				trangThai: "nhan",
+				ma: TRO_LY_OKR_SOAN.giuNguyen.daQuyet,
+			},
+			mucTieuM9: 0,
+			conM9: 0,
+		});
 	});
 
 	test("hai dòng cùng khoá trong một bản → lỗi tool «dong trung khoa», không ghi", async () => {

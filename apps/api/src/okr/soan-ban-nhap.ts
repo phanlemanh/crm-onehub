@@ -1,7 +1,7 @@
 import type { Db, Prisma } from "@crm/db";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
-import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
+import { khoaDong, khoaModel } from "@crm/validation/okr-kiem-de-xuat";
 import {
 	type DongSoan,
 	dongKrMoi,
@@ -96,7 +96,16 @@ export function tapHien(ds: readonly DongDoc[]): DongDoc[] {
 		const cu = thang.get(d.khoaDong);
 		if (!cu || daQuyet(d) || !daQuyet(cu)) thang.set(d.khoaDong, d);
 	}
-	return ungVien.filter((d) => thang.get(d.khoaDong) === d);
+	const moiKhoa = ungVien.filter((d) => thang.get(d.khoaDong) === d);
+	const quyetTruoc = new Map<string, DongDoc>();
+	for (const d of moiKhoa) {
+		const k = khoaModel(d.dong);
+		if (daQuyet(d) && !quyetTruoc.has(k)) quyetTruoc.set(k, d);
+	}
+	return moiKhoa.filter((d) => {
+		const q = quyetTruoc.get(khoaModel(d.dong));
+		return q === undefined || q === d;
+	});
 }
 
 export async function docBanNhapHien(

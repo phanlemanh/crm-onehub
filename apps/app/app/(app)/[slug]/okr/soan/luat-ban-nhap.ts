@@ -13,14 +13,23 @@ import type {
 } from "./kieu";
 
 const DA_NHAN: ReadonlySet<DongSoan["trangThai"]> = new Set(["nhan", "sua"]);
+const DA_QUYET: ReadonlySet<DongSoan["trangThai"]> = new Set([
+	"nhan",
+	"sua",
+	"bac",
+]);
 
 export const daNhan = (d: DongSoan): boolean => DA_NHAN.has(d.trangThai);
+
+const daQuyet = (d: DongSoan): boolean => DA_QUYET.has(d.trangThai);
 
 export function cayNhap(dong: readonly DongSoan[]): KhoiNhap[] {
 	const khoi = new Map<string, KhoiNhap>();
 	for (const d of dong) {
-		if (d.loai === "muc-tieu-moi")
-			khoi.set(d.khoa, { mucTieu: d, kr: [], canChinh: [] });
+		if (d.loai !== "muc-tieu-moi") continue;
+		const cu = khoi.get(d.khoa)?.mucTieu;
+		if (cu && (daQuyet(cu) || !daQuyet(d))) continue;
+		khoi.set(d.khoa, { mucTieu: d, kr: [], canChinh: [] });
 	}
 	for (const d of dong) {
 		if (d.loai === "muc-tieu-moi") continue;
