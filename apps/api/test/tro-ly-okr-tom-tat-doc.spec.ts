@@ -514,30 +514,33 @@ describe("trang-thai", () => {
 					},
 				],
 			});
-			expect(moi.trangThai).toBe("can-xem");
-			tienDongHo(MINUTE_MS);
-			const soHang = await db.okrTomTatPhanHoi.count({
-				where: { tomTatId: banE },
-			});
-			for (const duong of HAI_DUONG) {
-				const t = await docE(canhTt.truongE, duong);
-				expect(banLot(t)).toBe("khong ban");
-				expect(coDong(t)).toBe("ban=null dangSoan=false chuaCapNhat=false");
-				const tra = await goiQua(
-					app,
-					"phanHoi",
-					duong,
-					{ tomTatId: banE, huuIch: true },
-					await cookieCua(canhTt.truongE),
-				);
-				expect(`${tra.status} ${tra.loi}`).toBe(
-					`404 ${OKR.thongDiep.troLy.khongCoTomTat(banE)}`,
-				);
+			try {
+				expect(moi.trangThai).toBe("can-xem");
+				tienDongHo(MINUTE_MS);
+				const soHang = await db.okrTomTatPhanHoi.count({
+					where: { tomTatId: banE },
+				});
+				for (const duong of HAI_DUONG) {
+					const t = await docE(canhTt.truongE, duong);
+					expect(banLot(t)).toBe("khong ban");
+					expect(coDong(t)).toBe("ban=null dangSoan=false chuaCapNhat=false");
+					const tra = await goiQua(
+						app,
+						"phanHoi",
+						duong,
+						{ tomTatId: banE, huuIch: true },
+						await cookieCua(canhTt.truongE),
+					);
+					expect(`${tra.status} ${tra.loi}`).toBe(
+						`404 ${OKR.thongDiep.troLy.khongCoTomTat(banE)}`,
+					);
+				}
+				expect(
+					await db.okrTomTatPhanHoi.count({ where: { tomTatId: banE } }),
+				).toBe(soHang);
+			} finally {
+				await boBan(moi.id);
 			}
-			expect(
-				await db.okrTomTatPhanHoi.count({ where: { tomTatId: banE } }),
-			).toBe(soHang);
-			await boBan(moi.id);
 			tienDongHo(MINUTE_MS);
 			expect((await docE(canhTt.truongE, "trpc")).ban?.id).toBe(banE);
 		},
@@ -576,31 +579,34 @@ describe("trang-thai", () => {
 				tuan: tuanSau(tuanE),
 				cau: [cauLanh(0, await nguonE())],
 			});
-			expect(moi.trangThai).toBe("hien");
-			const lucDoc = new Date(
-				cuoi + OKR_TOM_TAT.cuaSoNgay * NGAY_MS + MINUTE_MS,
-			);
-			datDongHo(lucDoc);
-			const taoLuc = (
-				await db.okrTomTat.findUniqueOrThrow({
-					where: { id: moi.id },
-					select: { createdAt: true },
-				})
-			).createdAt;
-			expect(
-				lucDoc.getTime() - taoLuc.getTime() <
-					OKR_TOM_TAT.hienTrongNgay * NGAY_MS,
-			).toBe(true);
-			for (const duong of HAI_DUONG) {
-				const t = await docE(canhTt.truongE, duong);
+			try {
+				expect(moi.trangThai).toBe("hien");
+				const lucDoc = new Date(
+					cuoi + OKR_TOM_TAT.cuaSoNgay * NGAY_MS + MINUTE_MS,
+				);
+				datDongHo(lucDoc);
+				const taoLuc = (
+					await db.okrTomTat.findUniqueOrThrow({
+						where: { id: moi.id },
+						select: { createdAt: true },
+					})
+				).createdAt;
 				expect(
-					t.ban === null
-						? "khong ban"
-						: `ban cu lot khi chua cap nhat: ${t.ban.id}`,
-				).toBe("khong ban");
-				expect(coDong(t)).toBe("ban=null dangSoan=false chuaCapNhat=true");
+					lucDoc.getTime() - taoLuc.getTime() <
+						OKR_TOM_TAT.hienTrongNgay * NGAY_MS,
+				).toBe(true);
+				for (const duong of HAI_DUONG) {
+					const t = await docE(canhTt.truongE, duong);
+					expect(
+						t.ban === null
+							? "khong ban"
+							: `ban cu lot khi chua cap nhat: ${t.ban.id}`,
+					).toBe("khong ban");
+					expect(coDong(t)).toBe("ban=null dangSoan=false chuaCapNhat=true");
+				}
+			} finally {
+				await boBan(moi.id);
 			}
-			await boBan(moi.id);
 		},
 		CHO_DB,
 	);
