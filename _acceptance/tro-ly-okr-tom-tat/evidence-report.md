@@ -1,33 +1,31 @@
 ---
 schema_version: 2
 feature_slug: tro-ly-okr-tom-tat
-verdict: BLOCKED
-failed_evals: ["E2","E17"]
-reason: |
-  Phép đo màn E9 không đo được. Thước chính thức man-tom-tat.mjs dừng với mã 2 ở bước 8, trước khi có ảnh nào. Nguyên nhân: hàm sangMai() chọn giờ nhắc 08:31 ngày mai, nên cửa sổ sự kiện của viecTomTatCanNhac là từ 08:30 hôm nay đến 08:30 ngày mai. Bản tóm tắt được tạo lúc 04:2x giờ VN ngày 01/10, nằm ngoài cửa sổ, nên lenLichNhac không tạo việc nhắc cho Trưởng phòng A và thước báo "khong co tin nhac cho truong phong A". Thước chỉ chạy được sau 08:30 giờ VN. Không có ảnh chính thức nào.
-blocked:
-  - cmd: "ui-check:E9"
-    reason: "Thước chính thức man-tom-tat.mjs dừng với mã 2 (không đo được) ở bước 8, trước mọi ảnh; phụ thuộc giờ chạy, chỉ chạy được sau 08:30 giờ VN."
+verdict: REJECT
+failed_evals: ["E17","E9"]
+reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bf64284aadbf0d8862f3af30e825280373bedb17
+verified_commit: accf48464184189cfe339fe045a151cdc12d1041
 human_signoff:
 ---
 
 # Evidence Report: tro-ly-okr-tom-tat
 
+Round 2. Hai eval đỏ: E17 (chạy model thật) và E9 (đo màn thật). Bộ test đầy đủ cũng đỏ một ca, không gắn eval nào. Lịch sử round nằm ở mục Iterations.
+
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | test | PASS |
-| E2 | AC-1 | test | FAIL |
+| E2 | AC-1 | test | PASS |
 | E3 | AC-2 | test | PASS |
 | E4 | AC-3 | test | PASS |
 | E5 | AC-4 | test | PASS |
 | E6 | AC-4 | test | PASS |
 | E7 | AC-5 | test | PASS |
 | E8 | AC-6 | test | PASS |
-| E9 | AC-7 | ui-check | BLOCKED |
+| E9 | AC-7 | ui-check | FAIL |
 | E10 | AC-7 | test | PASS |
 | E11 | AC-8 | test | PASS |
 | E12 | AC-9 | test | PASS |
@@ -44,266 +42,257 @@ human_signoff:
 
 ## Evidence
 
-- eval: E1
-  run_id: minted-tro-ly-okr-tom-tat-E1-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.tts_dang_ban
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    Ran 19 tests across 1 file. [44.00ms]
+Mốc thời gian `verified_at` của các khối round 2 là giờ lập báo cáo (sau khi các lệnh chạy xong); các lệnh không in giờ riêng.
 
 - eval: E2
-  run_id: minted-tro-ly-okr-tom-tat-E2-r1
-  exit_code: 1
+  run_id: minted-tro-ly-okr-tom-tat-E2-r2
+  exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_api_okr
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    Lệnh chạy đủ, không bị công cụ giết. Năm tệp test api xanh: 99 pass, 1 skip, 0 fail, 3817 expect() calls, 100 tests across 5 files [41.67s].
-    Lệnh thứ hai (ky-vong-khong-doi.mjs) dừng với mã 1 và in: ky vong bi sua: apps/api/test/vai-chi-okr.spec.ts
-    Nghĩa là tệp vai-chi-okr.spec.ts đã bị sửa so với mốc kỳ vọng không đổi (ngoài dòng import).
+    ky vong khong doi: 5 tep chi them dong hoac doi import
 
 - eval: E3
-  run_id: minted-tro-ly-okr-tom-tat-E3-r1
+  run_id: minted-tro-ly-okr-tom-tat-E3-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_lich
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolx9q1kytv_test
+    test-run: dropped crm_muonibkoj76k_test
 
 - eval: E4
-  run_id: minted-tro-ly-okr-tom-tat-E4-r1
+  run_id: minted-tro-ly-okr-tom-tat-E4-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_bo_kiem
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    Ran 37 tests across 1 file. [57.00ms]
+    Ran 41 tests across 1 file. [59.00ms]
 
 - eval: E5
-  run_id: minted-tro-ly-okr-tom-tat-E5-r1
+  run_id: minted-tro-ly-okr-tom-tat-E5-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_nop
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolx9nbkg1e_test
+    test-run: dropped crm_muonibsz62i1_test
 
 - eval: E6
-  run_id: minted-tro-ly-okr-tom-tat-E6-r1
+  run_id: minted-tro-ly-okr-tom-tat-E6-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.tts_cach_ly
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    Ran 9 tests across 1 file. [253.00ms]
+    Ran 9 tests across 1 file. [215.00ms]
 
 - eval: E7
-  run_id: minted-tro-ly-okr-tom-tat-E7-r1
+  run_id: minted-tro-ly-okr-tom-tat-E7-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_doc
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolx9dex82o_test
+    test-run: dropped crm_muonibftwumj_test
 
 - eval: E8
-  run_id: minted-tro-ly-okr-tom-tat-E8-r1
+  run_id: minted-tro-ly-okr-tom-tat-E8-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_man_khoi
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    Ran 24 tests across 1 file. [3.21s]
+    Ran 24 tests across 1 file. [2.27s]
 
 - eval: E9
-  run_id: e9-20261001-tts-e9
-  exit_code: 2
+  run_id: e9-verify-20261001-a (log: .acceptance-runs/tro-ly-okr-tom-tat/man/e9-verify-run.log); lần lặp e9-verify-run2.log
+  exit_code: 1
   baseline: n-a
   verifier: config:executors.script.tts_man_that
-  verified_at: 2026-09-30T21:17:21Z
-  screenshot: /Users/manhphan/dev/crm/.claude/worktrees/happy-rubin-36de0b/.acceptance-runs/tro-ly-okr-tom-tat/chan-doan/man/ST-tomtat-co-cau-1440.png
+  verified_at: 2026-09-30T22:02:01Z
+  screenshot: evidence/E9-step1.png
   observed: |
-    Thước chính thức không tạo ảnh nào. Chỉ xem được 3 ảnh chẩn đoán (chạy 5, không phải bằng chứng chính thức). ST-tomtat-co-cau-1440: trang OKR theo đơn vị, phòng Kinh doanh miền Bắc, tab Họp tuần, khối «Tóm tắt tuần của Trợ lý OKR» có 4 câu, mỗi câu có nhãn «Cập nhật 28/09» và hai nút Hữu ích, Không hữu ích; các câu có số (2.9, 27.3, 12.1). ST-suckhoe-tomtat-co-1440: trang Toàn cảnh, Sức khoẻ chương trình, đăng nhập quản trị; ảnh cao 1000px chỉ thấy các thẻ tổng hợp và bảng Theo đơn vị, phần khối tóm tắt quản trị nằm dưới nếp ảnh nên chỉ dựa được vào dòng DUNG của thước (phòng A Bật, phòng B Ẩn). ST-tomtat-trich-dan-1-390: thẻ trích dẫn mở trên màn 390, «Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng», Giá trị 2,9 tỷ đồng, Mức tự tin cao, nút «Xem diễn biến KR», điều hướng 1/4, không tràn ngang.
+    Đã mở bằng Read các ảnh step1, 2, 3, 13, 15, 17, 19, 21, 22, 24. step1 (1440, ST-tomtat-co-cau): OKR theo đơn vị › Kinh doanh miền Bắc › Họp tuần, khối 'Tóm tắt tuần của Trợ lý OKR' có 5 câu, mỗi câu có nhãn 'Cập nhật 28/09' (câu 1 '+3'), hai nút 'Hữu ích / Không hữu ích', bên dưới 'Đáng bàn tuần này 1'. step2 (390): cùng khối xếp dọc, không tràn ngang. step3: thẻ trích dẫn mở dưới câu 1, '1/4', tên KR 'Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng', Giá trị 2,9 tỷ đồng, Mức tự tin 'Tự tin cao', liên kết 'Xem diễn biến KR' — khớp giá trị thước đọc từ kho. step13: ngăn mục tiêu 'Giữ đà tăng trưởng bán lẻ miền Bắc' mở ở tab 'Diễn biến' với biểu đồ KR đúng. step15: nút 'Hữu ích' được chọn, hiện 'Cảm ơn, đã ghi'. step17: trang 'Nhắc buổi sáng' có mục 'Trợ lý OKR — Dòng Tóm tắt tuần của Trợ lý OKR' với công tắc bật (ảnh chụp trước khi tắt, đúng thứ tự). step19: Phòng B (Chăm sóc đối tác) › Họp tuần chỉ có bảng 'Đáng bàn tuần này', KHÔNG có khối Tóm tắt tuần — đúng. step21: Toàn cảnh › Sức khoẻ chương trình (ảnh chỉ phủ phần trên của trang; hàng Bật/Ẩn của hai phòng nằm dưới nếp gập và được khẳng định bằng DOM trong log: phòng A Bật, phòng B Ẩn). step22/24: ngăn bản phòng B 'Chăm sóc đối tác · tuần 28/09', 'Chế độ ẩn · Qua bộ kiểm, chỉ quản trị thấy — bỏ 0/5 câu', 5 câu còn lại kèm Nguồn, 'Câu bị bỏ · 0' — đúng ở 1440 và 390. Các ảnh khớp Expected ngoại trừ bước 8: không có ảnh nào chứng minh vết mo-hop-tuan, và kiểm kho báo 0 vết (Expected yêu cầu đúng 1), nên E9 không đạt.
   network_observed: n-a (driver)
   output: |
-    KẾT QUẢ CHÍNH THỨC (thước nguyên bản, không sửa): KHÔNG ĐO ĐƯỢC, mã 2. Không có ảnh chính thức nào; E9-network.txt không viết vì driver là puppeteer trong script.
-    Lần 1: tác tử con dừng (mã 1) vì có một máy chủ dev eve đang chạy cho cùng tác nhân, là tiến trình của eval khác cùng cây; không dừng nó, đợi rồi chạy lại.
-    Lần 2 (thước nguyên bản): 5 bước DUNG (setProgram; nạp okr:mau --moc 2026-10-01; việc xếp đóng da-xep:2; việc tóm tắt phòng A nac bat đóng da-nop; việc tóm tắt phòng B nac an đóng da-nop; bản phòng A hien, bản phòng B hien). Sau đó KHONG DO DUOC tại bước nhac-mo-bang: khong co tin nhac cho truong phong A. Kết quả: 5 DUNG, 0 SAI, dừng với mã 2. Log: .acceptance-runs/tro-ly-okr-tom-tat/man/e9-run.log.
-    Lý do đã kiểm: hiện 04:21 giờ VN 01/10; mocNhac(08:31 ngày mai) = 08:30 ngày mai; cửa sổ bắt đầu 08:30 hôm nay, bản tạo lúc 04:2x nên ngoài cửa sổ (packages/db/src/okr-nhac.ts cuaSoSuKien, okr-tom-tat.ts viecTomTatCanNhac). Đây là lỗi phụ thuộc giờ của thước, chưa chứng minh là lỗi sản phẩm.
-    CHẨN ĐOÁN, KHÔNG PHẢI BẰNG CHỨNG (bản sao thước .acceptance-runs/tro-ly-okr-tom-tat/chan-doan/man-tom-tat-cd.mjs, ảnh ở .acceptance-runs/tro-ly-okr-tom-tat/chan-doan/man/, 22 ảnh ở 1440 và 390):
-    - Chạy 1, 3, 4: SAI «ban phong A can-xem» (mã 1). Model thật không cho bản đủ câu qua lưới kiểm; 3 trên 5 lần chạy A ra can-xem, nên mô hình không ổn định.
-    - Chạy 2 (không chờ): 74 DUNG, 1 SAI «sau khi mo duong trong tin: 0 vet mo-hop-tuan». HopTuan ghi vết bằng useMountEffect bất đồng bộ, thước đếm ngay rồi đóng trang: race của thước.
-    - Chạy 5 (có chờ 5 giây): 75 DUNG, 0 SAI, mã 0. Thẻ trích dẫn của cả 4 câu ở 1440 và 390 khớp hàng OkrCheckIn trong kho (giá trị, mức tự tin, ghi chú); Enter, Space mở thẻ và Esc đóng; Xem diễn biến KR đúng URL; Hữu ích ghi đúng 1 hàng OkrTomTatPhanHoi; tin nhắc có dòng «Tóm tắt tuần Phòng Kinh doanh miền Bắc · 1 KR đáng bàn» với đường mở xemOkr=hop-tuan, donOkr=pb:mau-okr-pb-kd-bac, kyOkr=mau-okr-chu-ky-quy4; đúng 1 vết mo-hop-tuan; công tắc tắt vẫn tắt sau tải lại (dongTroLyOkr=false); phòng B không có khối tóm tắt; Sức khoẻ có A Bật, B Ẩn; mọi ảnh scrollWidth <= clientWidth.
-    Kết luận: chưa có lượt chính thức nào qua bước 8 nên không khai PASS. Cần chủ thước sửa sangMai và đoạn chờ vết, rồi chạy lại sau 08:30 giờ VN.
+    Lệnh: PHIEN_DO_TEN_CAY=tts-e9 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-tom-tat/rang/man-tom-tat.mjs". Chạy 3 lần: lần 1 không đo được (eve dev cổng 50865 bị tiến trình eve eval okr/tom-tat của E17 chạy song song cùng cây chiếm; không phải lỗi sản phẩm). Lần 2 và lần 3 (chạy lại để xem có ngẫu nhiên không): cả hai đều đúng 80 DUNG, 1 SAI, cùng một dòng SAI.
+    SAI (1 assertion, xác định, lặp lại 2/2 lần): «sau khi mo duong trong tin: 0 vet mo-hop-tuan cua truong phong A, phong A». Kỳ vọng đúng 1 vết mo-hop-tuan (actorUserId = Trưởng phòng A, after.donVi = pb:mau-okr-pb-kd-bac) sau khi mở đường trong tin; đếm bảng okrTrail thực tế 0. Đây là bước 8 của eval (AC-9 / gap-probe P1 'mở từ dòng báo phải ghi vết').
+    Hp-tuan.tsx gọi okr.moHopTuan trong useMountEffect (mutation phía client); thước đọc kho ngay sau page.goto(waitUntil load) rồi đóng context không chờ. Chưa phân biệt được race của thước với vết thật sự không ghi được (người chấm chỉ đọc, không sửa mã hay thước).
+    Đạt: cảnh cây + phiên đo riêng (kho crm_tts_e9_do); okr:mau --moc 2026-10-01 nạp OK; phòng A bật, phòng B ẩn; bản A và B hiện; tin nhắc Trưởng phòng A có dòng «1. Tóm tắt tuần Phòng Kinh doanh miền Bắc · 1 KR đáng bàn» kèm đường mở đúng tham số (xemOkr=hop-tuan, donOkr=pb:mau-okr-pb-kd-bac, kyOkr=mau-okr-chu-ky-quy4); 5 câu có số; thẻ trích dẫn 5 câu x 2 cỡ (1440, 390) khớp hàng OkrCheckIn đọc từ kho; Enter và Space mở thẻ, Esc đóng; 'Xem diễn biến KR' cho đúng URL; 'Hữu ích' ghi đúng 1 hàng OkrTomTatPhanHoi; công tắc Nhắc buổi sáng tắt, tải lại còn tắt, NotificationPreference.dongTroLyOkr=false; phòng B › Họp tuần không có khối Tóm tắt tuần; quản trị Toàn cảnh › Sức khoẻ: phòng A Bật, phòng B Ẩn. scrollWidth <= clientWidth ở mọi ảnh (24 ảnh, 1440 và 390).
+    Ảnh: evidence/E9-step1..24.png. Log: .acceptance-runs/tro-ly-okr-tom-tat/man/e9-verify-run.log và e9-verify-run2.log.
 
 - eval: E10
-  run_id: minted-tro-ly-okr-tom-tat-E10-r1
+  run_id: minted-tro-ly-okr-tom-tat-E10-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_duong_do
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolxa3ao5nz_test
-
-- eval: E11
-  run_id: minted-tro-ly-okr-tom-tat-E11-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.tts_phan_hoi
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    test-run: dropped crm_muolx9ftbxu9_test
+    test-run: dropped crm_muonic1n1d02_test
 
 - eval: E12
-  run_id: muolxfg7gs5g
+  run_id: minted-tro-ly-okr-tom-tat-E12-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_nhac
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolxfg7gs5g_test
-
-- eval: E13
-  run_id: minted-tro-ly-okr-tom-tat-E13-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.tts_tat_dong
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    Ran 6 tests across 1 file. [578.00ms]
-
-- eval: E14
-  run_id: minted-tro-ly-okr-tom-tat-E14-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.tts_quan_tri
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    Ran 8 tests across 1 file. [752.00ms]
+    test-run: dropped crm_muonibm5t2qh_test
 
 - eval: E15
-  run_id: minted-tro-ly-okr-tom-tat-E15-r1
+  run_id: minted-tro-ly-okr-tom-tat-E15-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_thuoc
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolxh9b0okr_test
-
-- eval: E16
-  run_id: minted-tro-ly-okr-tom-tat-E16-r1
-  exit_code: 0
-  baseline: green
-  verifier: config:executors.test.tts_chi_phi
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    test-run: dropped crm_muolxjcpg8kh_test
+    test-run: dropped crm_muonibwml7yi_test
 
 - eval: E17
-  run_id: minted-tro-ly-okr-tom-tat-E17-r1
+  run_id: minted-tro-ly-okr-tom-tat-E17-r2
   exit_code: 1
   baseline: red
   verifier: config:executors.script.tts_eval
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
     moc: 2026-09-29, 2026-09-15 · tran 1 USD
-    moc 2026-09-29: 0.187825 USD theo AiChiPhi / tran 1 USD moi moc (chua gom tien judge: judge goi Gateway truc tiep, khong ghi vao AiChiPhi)
-    moc 2026-09-15: 0.138563 USD theo AiChiPhi / tran 1 USD moi moc (chua gom tien judge)
-    Mốc 2026-09-29: 10 bản đều DUNG (không số lệch, KR tụt đều có câu dẫn, không họ tên).
-    SAI ban 2026-09-14 Kinh doanh miền Bắc nac=bat trang-thai=can-xem cau=2 bo=3 lech=0 tut=0/1 — kr tut khong co cau: mau-okr-kr-q4-kd-bac-1-k2
-    SAI ban 2026-09-14 Marketing nac=bat trang-thai=- cau=0 — viec dong bang hong:SUBAGENT_EXECUTION_FAILED
-    SAI ban 2026-09-14 Pháp chế nac=bat trang-thai=- cau=0 — viec dong bang hong:SUBAGENT_EXECUTION_FAILED
-    SAI cau bi bo 15/90 = 16.7% (nguong 10%)
-
-- eval: E18
-  run_id: minted-tro-ly-okr-tom-tat-E18-r1
-  exit_code: 0
-  baseline: green
-  verifier: config:executors.test.tdx_judge_zdr
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    Ran 2 tests across 1 file. [151.00ms]
+    eve eval okr/tom-tat (moc 2026-09-29) thoat 0 — chi 0.201354 USD theo AiChiPhi / tran 1 USD moi moc
+    eve eval okr/tom-tat (moc 2026-09-15) thoat 1 — chi 0.183468 USD theo AiChiPhi / tran 1 USD moi moc
+    chua gom tien judge: judge goi Gateway truc tiep, khong ghi vao AiChiPhi
+    DUNG 19 ban tren 20; moi ban in nac=bat trang-thai=hien, 0 lech, 0 tut that bai; judge in kem, khong chan
+    SAI ban 2026-09-14 Pháp chế nac=bat trang-thai=- cau=0 bo=0 lech=0 tut=0/0 judge=— — viec dong bang hong:SUBAGENT_EXECUTION_FAILED
+    DUNG cau bi bo 1/96 = 1.0% (nguong 10%)
+    Ghi chú: mốc 2026-09-15 không ra bản cho một phòng (Pháp chế) vì việc bị đóng băng hỏng; các chốt bằng mã trên 19 bản còn lại đều đạt. Nguyên nhân gốc (lỗi model/nhà cung cấp hay lỗi sản phẩm) chưa xác định trong vòng này.
 
 - eval: E19
-  run_id: minted-tro-ly-okr-tom-tat-E19-r1
+  run_id: minted-tro-ly-okr-tom-tat-E19-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tts_tai_lieu
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
     tai-lieu: muc cho re 9c, docs/api.md §OKR (3 thu tuc), docs/agent.md (chayXepTomTat, damBaoLichTomTat) deu du.
 
 - eval: E21
-  run_id: design-gate-dca805c0b6
+  run_id: design-gate-ab2f58b0db
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.tts_san_thiet_ke
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    design-gate --mode static chạy lần lượt trên 5 tệp (khoi-tom-tat.tsx, hop-tuan.tsx, tom-tat-quan-tri.tsx, khoi-kenh.tsx, inline-citation.tsx); vòng lặp không dừng giữa chừng.
+    design-gate --mode static chạy trên 5 tệp giao diện của lượt, không lỗi P0.
 
 - eval: E22
-  run_id: minted-tro-ly-okr-tom-tat-E22-r1
+  run_id: minted-tro-ly-okr-tom-tat-E22-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tts_doc_trang_thai
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
   output: |
-    test-run: dropped crm_muolxngv9ufv_test
+    test-run: dropped crm_muoniln0ga56_test
 
-### Judgment (E20, AC-15)
+### Mang sang từ round trước
 
-Đề xuất của hội đồng: UNCERTAIN. Để trống human_override cho người quyết ở Cổng 2. Nửa luật kho (không chú thích trong mã, không đè class, hằng ở một tệp) chưa chấm được vì diff không nằm trong danh sách input của eval.
+Các eval dưới đây không bị delta chạm vào paths của chúng, round này không chạy lại.
+
+- eval: E1
+  run_id: minted-tro-ly-okr-tom-tat-E1-r1
+  exit_code: 0
+  verifier: config:executors.test.tts_dang_ban
+  verified_at: 2026-09-30T21:17:21Z
+  carried_from_round: 1
+  output: |
+    carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E11
+  run_id: minted-tro-ly-okr-tom-tat-E11-r1
+  exit_code: 0
+  verifier: config:executors.test.tts_phan_hoi
+  verified_at: 2026-09-30T21:17:21Z
+  carried_from_round: 1
+  output: |
+    carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E13
+  run_id: minted-tro-ly-okr-tom-tat-E13-r1
+  exit_code: 0
+  verifier: config:executors.test.tts_tat_dong
+  verified_at: 2026-09-30T21:17:21Z
+  carried_from_round: 1
+  output: |
+    carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E14
+  run_id: minted-tro-ly-okr-tom-tat-E14-r1
+  exit_code: 0
+  verifier: config:executors.test.tts_quan_tri
+  verified_at: 2026-09-30T21:17:21Z
+  carried_from_round: 1
+  output: |
+    carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E16
+  run_id: minted-tro-ly-okr-tom-tat-E16-r1
+  exit_code: 0
+  verifier: config:executors.test.tts_chi_phi
+  verified_at: 2026-09-30T21:17:21Z
+  carried_from_round: 1
+  output: |
+    carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E18
+  run_id: minted-tro-ly-okr-tom-tat-E18-r1
+  exit_code: 0
+  verifier: config:executors.test.tdx_judge_zdr
+  verified_at: 2026-09-30T21:17:21Z
+  carried_from_round: 1
+  output: |
+    carry-forward tu round 1 — delta khong cham paths cua eval
+
+### Judgment
+
+Hội đồng đề xuất cho E20: UNCERTAIN. Ô human_override để trống cho người quyết ở Cổng 2.
+
+- domain-correctness: UNCERTAIN — Phần hiểu đúng hành vi thì đạt: CONTEXT.md (Tóm tắt tuần, Chế độ ẩn), docs/api.md §OKR và chỗ rẽ 9c của docs/agent.md đều nói rõ chạy sáng hôm sau ngày cập nhật, chỉ phòng ban, câu lệch số bị bỏ, bản quá 30% bị giữ lại không hiện cho ai, chế độ ẩn chỉ quản trị thấy. Phần luật kho chưa kết luận được: evidence/luat-kho.md xác nhận 0 chú thích, API chỉ đọc và ghi phản hồi, khuôn Zod ở packages/validation, hằng chính ở OKR_TOM_TAT; nhưng còn `className` trên thành phần `@crm/ui` (Button `self-start`, SimpleTableCell `whitespace-normal`/`align-top`/`hidden md:table-cell`, Skeleton) và vài hằng khai cục bộ (`LAM_TRON_GIA_TRI`, `NGHIN`, `CHU_SO_CHINH_XAC`, `HE_SO_DON_VI`). Có tính là «đè class ở chỗ gọi» hay «hằng tinh chỉnh» hay không thì cần luật design.md và diff, đều ngoài danh sách input của eval này.
+- operational-feasibility: PASS — CONTEXT.md, docs/api.md và docs/agent.md (mục 9c) nói nhất quán cả năm điều: tóm tắt chạy sáng hôm sau ngày cập nhật, chỉ cho phòng ban, câu lệch số bị bỏ, bản bỏ quá 30% bị giữ lại không hiện cho ai, bản chế độ ẩn chỉ quản trị chương trình thấy ở Sức khoẻ. luat-kho.md cho thấy luật kho giữ được: 0 chú thích mới, API chỉ đọc bảng tóm tắt và ghi phản hồi, khuôn Zod ở packages/validation, hằng tinh chỉnh gom ở OKR_TOM_TAT (mấy hằng cục bộ chỉ là hệ số đổi đơn vị), inline-citation ở packages/ui, className trên thành phần @crm/ui chỉ là bố cục. Một điểm để người soát lưu ý: khoi-kenh.tsx:183 có thẻ h2 tự đặt cỡ chữ, thuộc bảng «vẽ tay» của design.md.
+- spec-alignment: UNCERTAIN — Phần tài liệu đạt rõ (như trên). Phần luật kho trên diff thì chỉ có luat-kho.md, và tệp đó tự ghi hai chỗ mở hai cách đọc: hằng khai cục bộ ngoài `OKR_TOM_TAT` (`LAM_TRON_GIA_TRI`, `NGHIN`, `CHU_SO_CHINH_XAC`, `HE_SO_DON_VI`) và `className` thêm trên `SimpleTableCell` (`align-top`, `whitespace-normal`, `hidden md:table-cell`) cùng `Button` (`self-start`). Chưa đủ căn cứ để kết luận đạt hay trượt luật «hằng ở một tệp cấu hình» và «không đè class ở chỗ gọi».
 
 - eval: E20
-  judged_by: judge panel (fresh context, 3 lens)
+  judged_by: judge-subagent (fresh context)
   verdict: UNCERTAIN
-  votes:
-    - domain-correctness: UNCERTAIN — Nửa đọc-hiểu đạt: mục Tóm tắt tuần của CONTEXT.md, đoạn tóm tắt ở docs/api.md và mục chỗ rẽ 9c của docs/agent.md nói rõ tóm tắt chạy sáng hôm sau ngày cập nhật, chỉ cho phòng ban, câu lệch số bị bỏ, bản quá 30% câu bị bỏ không hiện cho ai, chế độ ẩn chỉ quản trị thấy. Nửa luật kho (không chú thích trong mã, không đè class ở chỗ gọi, hằng ở một tệp cấu hình) không có trong danh sách input, còn diff thì bị cấm đọc để giữ chấm mù, nên chỉ kết luận được phần tài liệu tự khai (API chỉ đọc và ghi phản hồi, khuôn ở packages/validation, hằng ở OKR_TOM_TAT, popover và inline-citation ở packages/ui), chưa kiểm được trên mã thật.
-    - operational-feasibility: UNCERTAIN — Nửa đầu của câu hỏi (người không đọc mã hiểu đúng) đạt: mục Tóm tắt tuần trong CONTEXT.md, docs/api.md và docs/agent.md nói rõ tóm tắt chạy sáng hôm sau ngày cập nhật, chỉ cho phòng ban, câu lệch số bị bỏ, bản có hơn 30% câu bị bỏ không hiện cho ai, và chế độ ẩn chỉ quản trị thấy. Nửa sau (diff giữ luật kho: không chú thích trong mã, hằng ở một tệp cấu hình, khuôn parse ở packages/validation, thành phần ở packages/ui không đè class) không chấm được: diff không nằm trong danh sách Input và lượt chấm là blind. Các tài liệu chỉ là lời khai của người code, không phải bằng chứng. Ngoài ra CONTEXT.md mục «Chế độ ẩn» viết quản trị đọc kết quả ở «Cài đặt › Chương trình OKR», còn mục Tóm tắt tuần và thiết kế đặt nó ở «Sức khoẻ chương trình», nên hai mục hơi lệch nhau.
-    - spec-alignment: UNCERTAIN — Phần tài liệu đạt: CONTEXT.md (Tóm tắt tuần, Chế độ ẩn), docs/api.md §OKR và docs/agent.md nói rõ tóm tắt chạy sáng hôm sau ngày cập nhật, chỉ phòng ban, câu lệch số bị bỏ, bản bị bỏ quá 30% không hiện cho ai, chế độ ẩn chỉ quản trị thấy. Phần "diff có giữ luật kho" (không chú thích trong mã, hằng ở một tệp cấu hình, thành phần mới ở packages/ui không đè class ở chỗ gọi) không có diff trong danh sách Input nên không thể phán. Các dòng trong docs chỉ là lời tự khai của lượt, không phải bằng chứng. Lệch nhỏ: mục Chế độ ẩn của CONTEXT.md nói quản trị đọc kết quả ở Cài đặt › Chương trình OKR, trong khi mục Tóm tắt tuần và api.md nói ở Sức khoẻ chương trình.
-  rationale: Cả ba lens đều UNCERTAIN cùng một lý do — phần tài liệu đạt, phần luật kho trên mã thật chưa có bằng chứng vì diff không nằm trong danh sách input; thêm một chỗ lệch chữ giữa hai mục của CONTEXT.md về nơi quản trị đọc kết quả.
+  rationale: Tài liệu đạt rõ; luật kho trên diff chưa kết luận được vì có hai chỗ mở hai cách đọc (hằng khai cục bộ ngoài OKR_TOM_TAT, className thêm trên thành phần @crm/ui) và vài thẻ tiêu đề tự đặt cỡ chữ.
   required_evidence:
-    - Kết quả `bun run lint:slop` và `bun run lint` từ gốc kho trên nhánh feat/tro-ly-okr-tom-tat, mã thoát 0, in kèm tay kết quả quét chú thích: `git diff origin/onehub...HEAD -- '*.ts' '*.tsx'` không có dòng thêm nào bắt đầu bằng `//` hoặc `/*` (lấy từ eval máy của lượt, không phải từ judge này).
-    - Kết quả quét className trong diff của `apps/app/**/okr/khoi-tom-tat.tsx` và `apps/app/**/suc-khoe/tom-tat-quan-tri.tsx`: không có `className` đổi màu, góc, khoảng cách của component `@crm/ui`; lấy từ luật anti-slop trong `bun run lint:slop` hoặc `grep -n className` trên hai tệp đó.
-    - Xác nhận bằng `grep -rn 'OKR_TOM_TAT'` trong `apps/agent`, `packages/db`, `apps/api` rằng không còn số tinh chỉnh (06:00, 7 ngày, 8 ngày, 30%, hai dòng báo) viết thẳng ngoài `packages/db/src/okr-tro-ly-danh-muc.ts`.
-    - Xác nhận `apps/api/src/okr/tro-ly.service.ts` không nhập client model nào và không ghi `AgentTask` loại `okr-tom-tat-*`: `grep -nE "okr-tom-tat|@ai-sdk|gateway" apps/api/src/okr/tro-ly.service.ts` chỉ thấy đọc `OkrTomTat` và upsert `OkrTomTatPhanHoi`.
-    - Danh sách tệp diff kèm kết quả kiểm tra tại `apps/agent` (lich-tom-tat.ts, nop-tom-tat.ts), `apps/api/src/okr/tro-ly.service.ts` và `packages/validation/src/okr-tom-tat.ts`, cho thấy API chỉ đọc `OkrTomTat` và ghi `OkrTomTatPhanHoi` mà không gọi model, các hằng tinh chỉnh chỉ nằm ở `OKR_TOM_TAT`, và khuôn Json được parse bằng Zod ở biên. Lấy từ `git diff origin/onehub...HEAD --stat` và đọc các tệp đó.
-    - Diff của `packages/ui/src/components/popover.tsx` và `khoi-tom-tat.tsx` cho thấy biến thể `size="panel"` được thêm trong packages/ui và nơi gọi không đè `className` về màu, góc hay khoảng cách (kết quả `bun run lint:slop`, hoặc grep `className` trên `khoi-tom-tat.tsx` và `tom-tat-quan-tri.tsx`).
-    - Sửa hoặc xác nhận câu trong CONTEXT.md mục «Chế độ ẩn» để chỗ quản trị đọc kết quả tóm tắt khớp với «Sức khoẻ chương trình» ở mục Tóm tắt tuần (CONTEXT.md dòng 828–832 và mục Tóm tắt tuần).
-    - Diff của lượt (git diff origin/onehub...HEAD, giới hạn apps/agent, apps/api, apps/app, packages/db, packages/validation, packages/ui) được đưa vào danh sách Input của eval E20, để kiểm không có chú thích trong mã, không có hằng tinh chỉnh ngoài OKR_TOM_TAT, và không có className đè ở chỗ gọi.
-    - Kết quả lint:slop và kiểm tĩnh không-chú-thích trên các tệp mới của lượt (chạy `bun run lint:slop` ở gốc kho), nếu hội đồng muốn bằng chứng máy thay cho đọc diff.
-    - Một dòng sửa ở mục Chế độ ẩn của CONTEXT.md (khoảng dòng 828-832) cho khớp nơi quản trị thấy bản tóm tắt (Sức khoẻ chương trình), hoặc xác nhận của chủ kho rằng hai chỗ không mâu thuẫn.
+    - Phán quyết của chủ kho (ghi vào _acceptance/tro-ly-okr-tom-tat/evidence/, ví dụ luat-kho.md) rằng `className` chỉ làm bố cục trên `@crm/ui` ở apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx (Button `self-start`, Skeleton h/w) và okr/toan-canh/suc-khoe/tom-tat-quan-tri.tsx (SimpleTableCell `align-top`, `whitespace-normal`, `hidden md:table-cell`) được chấp nhận theo luật «không đè class» của docs/design.md; hoặc diff chuyển chúng thành biến thể trong packages/ui rồi chạy lại `grep -n className` trên hai tệp đó cho kết quả sạch.
+    - Phán quyết tương tự (hoặc diff sửa) cho `<h2 className="font-medium text-sm">` ở settings/notifications/khoi-kenh.tsx:183 và `<h3 className="font-medium text-sm">` ở tom-tat-quan-tri.tsx:264,295 — docs/design.md mục «Dấu hiệu vẽ tay» xếp `<h2>` tự đặt cỡ chữ vào mẫu phải dùng `PageShellTitle`/`CardTitle`; bằng chứng là `grep -n "<h[1-6]"` trên ba tệp sau khi sửa hoặc dòng chấp nhận có chữ ký.
+    - Xác nhận rằng các hằng khai cục bộ `LAM_TRON_GIA_TRI = 10_000` (packages/db/src/okr-tom-tat.ts), `NGHIN`, `CHU_SO_CHINH_XAC`, `HE_SO_DON_VI` (packages/validation/src/okr-kiem-tom-tat.ts) là hệ số đổi đơn vị/làm tròn chứ không phải hằng tinh chỉnh; hoặc diff dời chúng vào `OKR_TOM_TAT` ở packages/db/src/okr-tro-ly-danh-muc.ts, kèm lần chạy lại lệnh quét số cứng ở mục 4 của luat-kho.md.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
+Một lệnh suite đỏ không gắn eval nào: `bun run test`. Trong đó gói agent báo một ca đỏ («goi > tap Muc tieu cua goi bang tap Muc tieu cong khai da cong bo cua phong trong chu ky; goi khong chua ho ten thanh vien»), 966 ca đạt trên 967; 8 trên 10 tác vụ turbo xong. Người chấm chỉ đọc nên chưa xác định đây là lỗi thật hay ca chập chờn dưới tải; cần chạy lại riêng và đọc log trước khi kết luận. Ba lệnh còn lại (lint, lint:slop, build) xanh.
+
 - cmd: bun run test
-  run_id: minted-tro-ly-okr-tom-tat-SUITE-bun_run_test-r1
+  run_id: minted-tro-ly-okr-tom-tat-SUITE-bun_run_test-r2
   exit_code: 1
-  verified_at: 2026-09-30T21:17:21Z
-  output: |
-    Lệnh không gắn eval nào. Gói api: 1399 pass, 3 skip, 1 fail, 1403 tests across 145 files [134.89s].
-    Ca đỏ duy nhất: an-vang > an-vang: ma tran ghi — moi mutation cua okr co dung mot dong GHI_VAO_KY_AN hoac MIEN_GHI; goi vao X da an 400 cau ghim va ban ghi dich doc lai giu nguyen; cung lenh vao V duoc.
-    Tasks: 9 successful, 11 total; Failed: api#test. Kho dùng một lần crm_muolx7ui3iu2_test đã drop.
+  verified_at: 2026-09-30T22:02:01Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tro-ly-okr-tom-tat-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tro-ly-okr-tom-tat-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tro-ly-okr-tom-tat-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tro-ly-okr-tom-tat-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tro-ly-okr-tom-tat-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tro-ly-okr-tom-tat-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-30T21:17:21Z
+  verified_at: 2026-09-30T22:02:01Z
 
 ## Known limits
 
@@ -311,16 +300,13 @@ human_signoff:
 
 ## Analyst
 
-Eval không phân biệt (xanh trên cả nhánh lẫn mốc diffBase, chứng minh harness chứ không chứng minh tính năng; nên viết lại để khẳng định hành vi mới, hoặc xác nhận là lưới hồi quy có chủ ý):
-
-- E6 (tts_cach_ly): `cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts`
-- E16 (tts_chi_phi): `bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/so-chi-phi.integration.spec.ts -t tom-tat"`
-- E18 (tdx_judge_zdr): `cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts -t judge-zdr`
+Eval không phân biệt (xanh cả trên baseline lẫn trên HEAD): E6 (`cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts`). Viết lại để khẳng định hành vi mới, hoặc xác nhận đây là regression-guard có chủ ý.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lượt, không eval nào khai runs lớn hơn 1).
+none — every multi-run eval is uniform (mọi eval chạy một lần, tất định; E17 chạy hai mốc ngày nhưng tính là một lần và không có tỷ lệ pass_rate)
 
 ## Iterations
 
-Round 1: E2 và E17 không đạt; E9 bị chặn vì thước màn phụ thuộc giờ chạy (chỉ chạy được sau 08:30 giờ VN). E2: vai-chi-okr.spec.ts đã bị sửa so với mốc kỳ vọng không đổi, năm tệp test api đều xanh. E17: 15/90 câu bị bỏ (16.7%, ngưỡng 10%) ở mốc 2026-09-15, trong đó hai phòng (Marketing, Pháp chế) có việc đóng băng hỏng SUBAGENT_EXECUTION_FAILED và một bản thiếu câu dẫn tới KR tụt; mốc 2026-09-29 đạt cả 10 bản; chi phí theo AiChiPhi 0.187825 và 0.138563 USD, dưới trần 1 USD mỗi mốc. Lệnh hồi quy `bun run test` không gắn eval cũng có một ca đỏ (an-vang, ma trận ghi của okr), chưa xác định nguyên nhân. E20 còn UNCERTAIN, chờ người quyết ở Cổng 2. Chờ người xem trước khi quay lại thi công.
+Round 1: BLOCKED — thước E9 không đo được (giờ nhắc 08:31 ngày mai nằm ngoài cửa sổ sự kiện của việc nhắc khi bản tóm tắt tạo lúc 04:2x sáng 01/10), E17 đỏ, bộ test đầy đủ đỏ; sáu eval E1, E11, E13, E14, E16, E18 đạt và được mang sang round 2. Returned to implementation (sổ quyết định S4-r1: sửa bài ke-hoach-sheet theo ngày chạy, thêm ca cho E2, thêm bằng chứng luật kho cho E20, thêm gio-nhac cho E9).
+Round 2: E17, E9 failed — E17: model thật không ra bản cho phòng Pháp chế ở mốc 2026-09-15 (việc đóng băng hỏng SUBAGENT_EXECUTION_FAILED), 19 trên 20 bản đạt các chốt bằng mã; E9: thước chạy được, 80 bước đạt, riêng bước 8 (mở đường trong tin nhắc phải ghi đúng 1 vết mo-hop-tuan) đếm được 0 vết, lặp lại 2/2 lần, chưa phân biệt race của thước với lỗi ghi vết thật. Bộ test đầy đủ đỏ một ca ở gói agent, không gắn eval nào. Returned to implementation.

@@ -55,3 +55,56 @@ wall: 744s
 - **claude-sonnet-5-5**: 32 agent · 125 calls · out 42,090 · in 250 · cache_read 9,475,034 · cache_create 1,887,921
 - **claude-opus-5-5**: 3 agent · 123 calls · out 9,179 · in 246 · cache_read 21,880,145 · cache_create 643,521
 
+### S4 round 2 — wf_1befe0b3-8ab (30 agent, 47,244 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 16,018 | 8 | 345,919 | 116 |
+| ui:E9 | claude-sonnet-5-5 | 28 | 4,867 | 56 | 2,934,125 | 406 |
+| judge:E20:operational-feasibility | claude-sonnet-5-5 | 5 | 3,320 | 10 | 448,289 | 50 |
+| triage | claude-sonnet-5-5 | 2 | 2,447 | 4 | 74,506 | 18 |
+| baseline:diffBase | claude-sonnet-5-5 | 15 | 2,212 | 30 | 1,175,194 | 136 |
+| judge:E20:spec-alignment | claude-sonnet-5-5 | 5 | 2,194 | 10 | 437,204 | 43 |
+| judge:E20:domain-correctness | claude-sonnet-5-5 | 5 | 2,111 | 10 | 403,876 | 45 |
+| machine:bun _acceptance/tro-ly-okr-tom-tat/rang/ | claude-sonnet-5-5 | 2 | 2,074 | 4 | 103,309 | 155 |
+| review:bugs | claude-opus-5-5 | 24 | 1,902 | 48 | 2,643,970 | 192 |
+| review:measurement | claude-opus-5-5 | 17 | 1,695 | 34 | 1,807,680 | 152 |
+| review:conventions | claude-opus-5-5 | 9 | 1,119 | 18 | 788,404 | 61 |
+| machine:bunx turbo run lint --force | claude-sonnet-5-5 | 2 | 908 | 4 | 103,259 | 9 |
+| machine:bun run test | claude-sonnet-5-5 | 2 | 735 | 4 | 70,516 | 212 |
+| refute:okr-kiem-tom-tat.ts | claude-sonnet-5-5 | 4 | 599 | 8 | 225,729 | 16 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 558 | 4 | 103,299 | 14 |
+| machine:node _acceptance/tro-ly-okr-tom-tat/rang | claude-sonnet-5-5 | 2 | 470 | 4 | 103,296 | 7 |
+| machine:bunx turbo run build --force | claude-sonnet-5-5 | 2 | 461 | 4 | 103,257 | 32 |
+| machine:for t in "apps/app/app/(app)/[slug]/okr/ | claude-sonnet-5-5 | 2 | 435 | 4 | 103,552 | 7 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 431 | 4 | 103,325 | 13 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 363 | 4 | 103,327 | 12 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 344 | 4 | 103,304 | 9 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 342 | 4 | 103,344 | 13 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 323 | 4 | 103,345 | 12 |
+| machine:cd apps/agent && CRM_TELEMETRY_DISABLED= | claude-sonnet-5-5 | 2 | 303 | 4 | 103,316 | 7 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 209 | 4 | 103,297 | 12 |
+| machine:cd packages/validation && bun test test/ | claude-sonnet-5-5 | 2 | 207 | 4 | 103,281 | 6 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-sonnet-5-5 | 2 | 206 | 4 | 103,342 | 9 |
+| machine:bun run lint:slop | claude-sonnet-5-5 | 2 | 202 | 4 | 103,253 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 145 | 4 | 70,623 | 5 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 44 | 4 | 103,401 | 52 |
+
+
+wall: 585s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 2,212 | 1,175,194 | 136 | 22:02:28 | 22:04:44 |
+| machine | 18 | 8,615 | 1,827,023 | 266 | 22:02:28 | 22:06:54 |
+| ui | 1 | 4,867 | 2,934,125 | 406 | 22:02:44 | 22:09:30 |
+| judge | 3 | 7,625 | 1,289,369 | 51 | 22:02:44 | 22:03:36 |
+| review | 3 | 4,716 | 5,240,054 | 195 | 22:02:45 | 22:05:59 |
+| triage | 1 | 2,447 | 74,506 | 18 | 22:09:32 | 22:09:50 |
+| refute | 1 | 599 | 225,729 | 16 | 22:09:52 | 22:10:08 |
+| capture | 1 | 145 | 70,623 | 5 | 22:10:10 | 22:10:15 |
+| synthesize | 1 | 16,018 | 345,919 | 116 | 22:10:17 | 22:12:13 |
+
+- **claude-sonnet-5-5**: 27 agent · 106 calls · out 42,528 · in 212 · cache_read 7,942,488 · cache_create 1,714,689
+- **claude-opus-5-5**: 3 agent · 50 calls · out 4,716 · in 100 · cache_read 5,240,054 · cache_create 307,455
+
