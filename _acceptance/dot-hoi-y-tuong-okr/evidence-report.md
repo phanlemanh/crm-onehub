@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: dot-hoi-y-tuong-okr
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 169eb0c06221afb335096202e4fd7e66b84463f9
-human_signoff:
+human_signoff: Manh Phan 2026-09-30
 ---
 
 # Evidence Report: dot-hoi-y-tuong-okr
@@ -246,7 +246,7 @@ human_signoff:
     - Hàm congBo trong okr-hoi-y.service.ts gọi đường tạo mục tiêu có sẵn của OkrService (title = mucTieuInput.shape.title, cùng vết tao) trong giao dịch FOR UPDATE, không có prisma.okrObjective.create trực tiếp.
     - Danh sách import trong apps/app/app/(app)/[slug]/okr/hoi-y/*.tsx chỉ từ @crm/ui (kể cả timeline, scrollspy, Heatmap, SaveBar mở rộng), git diff --stat packages/ui, và bun run lint:slop xanh: không có table, ul divide-y, chấm size-2 tự vẽ.
     - Diff CONTEXT.md: các mục Hỏi ý mục tiêu, Ý, Người chọn, Bản viết trước, Chủ đề, Ý lạ, Kết luận, Kho ý mỗi mục có nghĩa, dòng _Avoid_ và dòng «Vì sao»; grep chữ «đợt» trong phần thêm mới chỉ ở dòng Avoid; mục Hỏi ý mục tiêu không còn ghi chờ duyệt phạm vi (Ngoài-5), hoặc người ký chấp nhận nó là giới hạn đã biết.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-09-30 — Đạt
 
 ### Lệnh suite (hồi quy)
 

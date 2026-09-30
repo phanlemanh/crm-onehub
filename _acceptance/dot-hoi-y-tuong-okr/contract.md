@@ -5,7 +5,7 @@ slug: dot-hoi-y-tuong-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-29T11:11:04Z
 design_doc: docs/superpowers/specs/2026-09-29-dot-hoi-y-tuong-okr-design.md
@@ -105,3 +105,11 @@ Known limits — Cổng Bằng chứng (Manh Phan 2026-09-30, định đoạt m�
 - Ngoài-5 (`CONTEXT.md`): Từ điển sản phẩm vẫn ghi cụm từ Hỏi ý mục tiêu là đang chờ duyệt phạm vi, dù phạm vi đã được duyệt.
 - Ngoài-6 (`apps/app/app/(app)/[slug]/okr/hoi-y/sheet-mo-hoi-y.tsx`): Khi có hai chu kỳ cùng ở giai đoạn lập kế hoạch và quản trị đổi chu kỳ trong hộp mở, câu hỏi mặc định vẫn nhắc tên chu kỳ đầu; không sửa tay trước khi bấm Mở thì câu hỏi sai kỳ và khoá sau ý đầu tiên.
 - Ngoài-7 (`apps/agent/test/support/okr-gieo.ts`): Dòng nhắc buổi sáng về Hỏi ý chỉ được thử trên dữ liệu dựng tay; nếu cách ghi dữ liệu thật đổi hình dạng, bài kiểm tra vẫn xanh trong khi tin nhắc thật có thể lệch.
+
+Known limits — Cổng Bằng chứng, lượt chấm lại (Manh Phan 2026-09-30, định đoạt mục ngoài hợp đồng của vòng chấm 4; sổ d-20260930T033235Z-35 … -39). Lượt ký vòng 3 phía trên không ghi được chữ ký vì hồ sơ trượt khuôn; các giới hạn của nó vẫn đúng.
+
+- Ngoài-1 (`apps/api/src/okr/okr-hoi-y.service.ts`): mở hợp đồng mới — phép soi quyền xem mục tiêu của kho sẽ báo đỏ sau khi gộp; lời đếm mục tiêu lúc công bố chưa khai miễn kèm lý do.
+- Ngoài-2 (`apps/api/src/okr/hoi-y.ts`): Nếu dữ liệu lưu của một chủ đề bị hỏng hoặc sai giá trị, việc công bố vẫn có thể đi tiếp trong khi màn xem lần hỏi ý lại báo lỗi. Với dữ liệu nhập qua màn hình hiện tại thì không gặp.
+- Ngoài-3 (`apps/app/app/(app)/[slug]/okr/hoi-y/man-hoi-y.ts`): Đơn vị phút và múi giờ của màn Hỏi ý được khai riêng; đổi một chỗ mà quên chỗ kia thì giờ trên màn Hỏi ý có thể lệch.
+- Ngoài-4 (`packages/ui/test/scrollspy.dom.tsx`): Bài kiểm tra việc gỡ mục lục khỏi trang không thể báo đỏ; nếu mục lục quên dọn sự kiện khi bị gỡ, lỗi có thể lọt.
+- Ngoài-5 (`packages/validation/test/okr-hoi-y.spec.ts`): Bài kiểm tra giới hạn các con số chỉ xác nhận là bị từ chối, không xác nhận vì lý do nào.
