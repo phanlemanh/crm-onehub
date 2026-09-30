@@ -1,4 +1,4 @@
-# Sổ điều phối S3 — soan-okr-cung-tro-ly (bản chép từ sổ SDD, 2026-10-01)
+# Sổ điều phối S3 — soan-okr-cung-tro-ly (bản chép từ sổ SDD, cập nhật 2026-10-01)
 
 Bản chép nguyên văn sổ điều phối vòng subagent-driven; sha trước lần chuẩn hoá trailer (c080aa4b) đã đổi, tra bằng thông điệp commit.
 
@@ -219,3 +219,8 @@ Tự nhất quán từng việc: mỗi việc trong năm phần có test đỏ �
 - Vòng vá toàn nhánh 1 dispatched (8 mục), BASE HEAD hiện, model opus.
 - Vòng vá toàn nhánh 1: 8 commit 26e2e1a9, dac97cb8, 225545ed, e317f301, 51498244, d784a68f, ed3aa379, 4613e5b2 (api 91/0, ma trận 756, agent-okr 77/0, cua-okr 27/0, DOM 110/0, db 219/0; soi-ma sua-an-chu-ky-okr 0 vi phạm). Luật nối cha–con: chaKhoa = khoá model của Mục tiêu; dòng trùng khoá với dòng đã quyết mà nội dung khác → không ghi, giuNguyen mã da-quyet-khac-ten với khoá đã lưu; tapHien và cayNhap mỗi khoá giữ dòng đã quyết sớm nhất. Lưu ý chủ kho: migration okr_soan đổi cả nội dung → kho dev crm nếu đã áp bản cũ lệch checksum. Re-review dispatched.
 - Vòng vá toàn nhánh 1: re-review Approved. Known limits ghi nhận: ca góc model gán khoá đã lưu cho Mục tiêu khác + nộp lại cũ dưới khoá mới → KR mồ côi (khong-co-cha khi nhận); Thử lại của người không mở khi đơn vị tắt/lưu trữ nhận lý do thay 403 (thứ tự cổng); mục 8b signal, 9 dọn trùng lặp, 10a eval-soan.mjs ghi evidence/, khoá KR không kèm cha. Mốc F chạy trên HEAD.
+- Mốc F trên 4613e5b2: 4 lệnh xanh; bun run test đỏ api: okr-sua-an-chu-ky.spec.ts:2414 «ma tran ghi» — 6 mutation soan* chưa khai GHI_VAO_KY_AN/MIEN_GHI (onehub lượt ẩn chu kỳ). Ruling: khai GHI_VAO_KY_AN + congCuoc từ chối 400 câu ghim khi chu kỳ của cuộc đã ẩn; bản ghi đích không đổi. Dispatch tác nhân gộp-2.
+- Ma trận ghi kỳ ẩn: 8bce34e6 (4 mutation soan* vào GHI_VAO_KY_AN; assertKyChuaAn ở cổng đơn vị và cổng cuộc; đưa vào/danh sách trên chu kỳ ẩn → 400). Ghim lại sua-an-chu-ky-okr (bài trong vùng đo). Mốc G chạy nền.
+- Mốc G: app#test đỏ = DOM noi-man-buoc «lich khong mo ra o ngay 2026-09-25» (phụ thuộc ngày thật, như kr-may); unit app 558/0 qua wrapper. Ruling: ghim ngày như kr-may, commit riêng; giao tác nhân gộp-2.
+- ke-hoach-sheet.dom.tsx ghim ngày 64071ea9 (mã sản phẩm không đổi; onehub đỏ cùng lý do). Mốc H chạy nền.
+- Mốc H trên 64071ea9: NĂM LỆNH XANH. S3 xong trừ D8, E1 (chờ chủ kho cho tiêu tiền). Trình chủ kho gói quyết định 2026-10-01.
