@@ -5,7 +5,9 @@ slug: tro-ly-okr-tom-tat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-30T14:53:45Z
 design_doc: docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md
 ---
 
