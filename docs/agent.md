@@ -401,8 +401,9 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   - **Tối đa hai dòng của máy mỗi tin** (`OKR_TOM_TAT.dongBaoAiToiDa`). Dòng máy là
     `okr-tom-tat` cộng các dòng ngân sách AI; `okr-tom-tat` đứng sau
     `tai-lieu-cho-duyet`, trước `ai-tran` và `ai-doi-soat-lech` trong `THU_TU_NHAC`.
-    Mọi dòng của người đứng trước, và dòng máy bị cắt **trước** `NHAC.tran` và trần
-    ký tự Zalo — tin đã có đủ việc của người thì dòng tóm tắt rơi, và không gửi bù
+    Hai bước cắt: trước hết dòng máy chỉ giữ lại hai; rồi cả tin cắt theo
+    `NHAC.tran` và trần ký tự Zalo. Mọi dòng của người đứng trước, dòng máy đứng cuối
+    nên rơi trước — tin đã có đủ việc của người thì dòng tóm tắt rơi, và không gửi bù
     sáng hôm sau. Dòng tóm tắt đứng một mình vẫn đủ để gửi tin (`da-gui:1`).
   - `xong <n>` trỏ vào dòng này bị từ chối như dòng OKR, câu trả lời nêu nhóm «Trợ lý
     OKR».
@@ -905,7 +906,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | --- | --- | --- |
 | Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
 | Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
-| Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — tool sống `nop_de_xuat` (9a), `nop_tom_tat` (9c), mọi tool dựng sẵn tắt, sandbox chặn mạng; 9b, 9c thêm `skill` phương pháp OKR và mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
+| Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — tool sống `nop_de_xuat` (9a), `nop_tom_tat` (9c), mọi tool dựng sẵn tắt, sandbox chặn mạng; không có `skill` nào (`load_skill` tắt) — phương pháp OKR nằm trong lời dặn tĩnh `instructions.md`; 9b, 9c thêm mã kiểm số ở `packages/validation` | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
 | Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
