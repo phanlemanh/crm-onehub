@@ -1,0 +1,214 @@
+schema_version: 1
+feature_slug: tro-ly-okr-tom-tat
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tts_dang_ban
+    expected: "exit 0; bài thuần packages/db/test/okr-hop-tuan.spec.ts nhập lyDoCua từ @crm/db/okr-hop-tuan. MA TRẬN viết trước trong bài, mỗi ca một mảng lý do kỳ vọng đủ loại và thứ tự: tụt 1 bậc, tụt 2 bậc, tụt so với tuần trước khi tuần này có hai lần, im đúng 13 và 14 ngày tính từ lần cuối, im 14 ngày tính từ khoaLuc khi chưa có lần nào, ghi chú trước và sau đầu tuần trước, KR chưa có lần nào lẫn khoaLuc; số khẳng định bằng số ca (in ra). Bài đọc cây apps/api/src/okr và đòi không có tệp hop-tuan.ts (đường suy từ vị trí bài). Chiều đỏ trên cùng bảng: bản sao đổi so sánh im từ >= sang > → ca 14 ngày đỏ với thông điệp ghim 'ly do lech: <ca>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/okr-hop-tuan.ts, packages/db/package.json, packages/db/test/okr-hop-tuan.spec.ts, "apps/api/src/okr/**"]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tts_api_okr
+    expected: "exit 0; các bài OKR sẵn có của API chạm luật đáng bàn (okr-toan-canh-thuan.spec.ts, okr-toan-canh.spec.ts, okr-toan-canh-hieu-nang.spec.ts, okr-mau.spec.ts, vai-chi-okr.spec.ts) chạy xanh với kỳ vọng không đổi: git diff của năm tệp đó so với merge-base chỉ được đổi dòng import (bài kiểm của lệnh so bằng git diff -U0 và đỏ 'ky vong bi sua: <tep>' khi có dòng khác import đổi)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/okr/**", packages/db/src/okr-hop-tuan.ts, apps/api/test/okr-toan-canh-thuan.spec.ts, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-toan-canh-hieu-nang.spec.ts, apps/api/test/okr-mau.spec.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_lich
+    expected: "exit 0; bài tích hợp apps/agent/test/tro-ly-okr-lich-tom-tat.integration.spec.ts trên kho _test có bộ OKR mẫu nạp bằng napBoOkrMau, thêm một chu kỳ năm đang chạy có updateWeekday khác chu kỳ quý; cấu hình lưu qua okr.setProgram-tương-đương (hàm ghi thật của API hoặc ghi OkrProgramConfig đúng khuôn okrProgram parse). MA TRẬN viết trước: bảy ngày × hai chu kỳ × phòng {tat, an, bat} × {có, không có cập nhật 7 ngày}; mỗi ngày chạy chayXepTomTat với đồng hồ giả 06:00 giờ VN; kỳ vọng là TẬP (cycleId, departmentId, nac) của hàng okr-tom-tat-tuan mới — so tập, không đếm. Thêm: hai lượt chayXepTomTat chạy đồng thời → đúng một việc xếp ngày kế và không trùng việc tóm tắt; chạy lại cùng ngày → không thêm; sổ gieo bằng ghiChiPhi tới trần → 0 việc tóm tắt, việc xếp đóng mã chứa 'het-tran-thang'; damBaoLichTomTat khi không còn việc xếp mở → đúng 1 (gọi hai lần vẫn 1), khi mọi nấc tóm tắt tắt → 0. Chiều đỏ: bản sao bỏ điều kiện ngày cập nhật là hôm qua → ô ngày khác ra việc, thông điệp ghim 'o lich lech: <ngay> x <chu ky> x <phong>'; bản sao ghi việc kế SAU vòng phòng ban và ném giữa vòng → 'chuoi dut'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/lich-tom-tat.ts, apps/agent/agent/lib/dispatch.ts, packages/db/src/okr-tom-tat.ts, packages/db/src/okr-tro-ly.ts, packages/db/src/agent-tasks.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/tro-ly-okr-lich-tom-tat.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tts_bo_kiem
+    expected: "exit 0; bài thuần packages/validation/test/okr-kiem-tom-tat.spec.ts. Bảng ca viết trước: với MỖI mã trong MA_BO_CAU (rút lúc chạy từ khuôn, không chép tay) một câu đỏ và một câu lành cùng gói; cộng các dạng số khó (1,5; 12%; 3 triệu; 'mười hai'; ngày dd/mm của nguồn; chênh lệch và tiến độ do mã tính; số kiểu Anh chép từ ghi chú tiếng Anh: 1.5, 1,200, 3k, 12.5%) mỗi dạng một ca khớp và một ca lệch. Kỳ vọng: câu lành qua, câu đỏ bị bỏ đúng mã. Bản: 3/10 bỏ → hien, 4/10 bỏ → can-xem, 0 câu còn lại → can-xem. Chiều đỏ: mã mới trong MA_BO_CAU không có cặp ca → 'ma chua co ca: <ma>'; bản sao bộ kiểm bỏ luật sai-chieu → ca đỏ sai-chieu qua, thông điệp ghim 'cau do lot: sai-chieu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-kiem-tom-tat.ts, packages/validation/src/okr-tom-tat.ts, packages/validation/src/okr-kiem-de-xuat.ts, packages/validation/test/okr-kiem-tom-tat.spec.ts]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_nop
+    expected: "exit 0; bài tích hợp apps/agent/test/tro-ly-okr-nop-tom-tat.integration.spec.ts trên bộ OKR mẫu: việc okr-tom-tat-tuan thật (ghi bằng chayXepTomTat), gói dựng bằng dungGoiTomTat; nopTomTatVao với 3 câu lành dẫn id trong gói + 1 câu số lệch + 1 câu nguồn ngoài gói → đúng 1 hàng OkrTomTat, cau parse bằng noiDungTomTat: cau đúng 3 câu, bo đúng 2 phần tử với mã so-lech và nguon-ngoai-goi, soCauBo 2, trangThai can-xem (2/5 > 30%), nac bằng payload; lần nộp hai → từ chối, vẫn 1 hàng; nộp từ phiên của việc okr-de-xuat → từ chối, 0 hàng; ketThucTuKetQua trên kết quả thật → 'da-nop'. Gói: tập objectiveId trong gói bằng TẬP Mục tiêu công khai đã công bố của phòng trong chu kỳ đọc thẳng từ kho (so tập); chuỗi JSON của gói không chứa họ tên đầy đủ nào của danh sách thành viên (đối chứng dương: chính danh sách đó có trong kho, in số tên đã so). Chiều đỏ: bản sao dungGoiTomTat bỏ điều kiện hienThi cong-khai → tập Mục tiêu lệch, thông điệp ghim 'goi lech cong khai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/nop-tom-tat.ts, apps/agent/agent/subagents/tro_ly_okr/**, packages/db/src/okr-tom-tat.ts, packages/validation/src/okr-tom-tat.ts, packages/validation/src/okr-kiem-tom-tat.ts, apps/agent/test/tro-ly-okr-nop-tom-tat.integration.spec.ts]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tts_cach_ly
+    expected: "exit 0; bài tĩnh apps/agent/test/tro-ly-okr-cach-ly.spec.ts: TOOL_SONG của tro_ly_okr đúng bằng tập {nop_de_xuat, nop_tom_tat}; DANH_SACH_DOC của lib/okr/doc.ts có okrTomTat và okrCheckIn và không bảng đối tác nào; mọi ca cách ly sẵn có của 9a xanh. Chiều đỏ có sẵn của bài (thêm tool sống thứ ba → 'tool song lech')."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", apps/agent/agent/lib/okr/doc.ts, apps/agent/test/tro-ly-okr-cach-ly.spec.ts]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_doc
+    expected: "exit 0; bài API apps/api/test/tro-ly-okr-tom-tat-doc.spec.ts trên bộ OKR mẫu, bản OkrTomTat ghi bằng hàm ghi thật của nop-tom-tat (không gieo tay khuôn cau). MA TRẬN viết trước: người {thành viên phòng, trưởng phòng, thành viên phòng khác, vai okr, quản trị} × bản {bat-hien, bat-can-xem, an-hien, phòng nấc tắt} → kỳ vọng {có bản | không có bản}; gọi okr.troLyTomTat qua tRPC VÀ qua REST (restMeta); số khẳng định = số ô × 2 (in ra). Ô có bản: tập câu so tập; mỗi nguồn trả về bằng từng trường của hàng OkrCheckIn đọc thẳng từ kho (keyResultId, ngày, value, confidence, note). Lọc: đổi Mục tiêu nguồn của câu 2 sang hienThi giới hạn không gồm người xem → câu 2 vắng, câu còn lại có (đối chứng dương: người được xem vẫn thấy câu 2); xoá KR nguồn của câu 3 → câu 3 vắng; sửa thẳng value của hàng OkrCheckIn nguồn câu 1 sau khi ghi → câu 1 vắng, câu khác còn; xoá thẳng riêng hàng OkrCheckIn nguồn câu 4 mà giữ KR → câu 4 vắng. Chiều đỏ: bản sao bỏ lọc theo người xem → 'cau lot quyen: <nguoi> x <cau>'; bản sao trả cả can-xem → 'o lech: <nguoi> x <ban>'; bản sao bỏ kiemCauTomTat lúc hiện → 'so cu lot: cau 1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr.contracts.ts, packages/db/src/okr-tom-tat.ts, packages/validation/src/okr-kiem-tom-tat.ts, apps/api/test/tro-ly-okr-tom-tat-doc.spec.ts]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tts_man_khoi
+    expected: "exit 0; bài DOM apps/app/test/tro-ly-okr-tom-tat.dom.tsx trên KhoiTomTat và HopTuan với tRPC giả: một ca cho MỖI id ST-tomtat-* của bảng UX-STATE-TABLE trong design doc (rút lúc chạy, đường suy từ vị trí bài), mỗi ca khẳng định chữ và điều khiển của dòng đó; nhãn trích dẫn: bấm, Enter, Space đều mở thẻ, Esc đóng, thẻ hiện đúng value/confidence/note của nguồn giả, nhiều nguồn lật '2/3'; đơn vị bp, goc, nguoi → không có khối (không gọi troLyTomTat); đang soạn: đồng hồ giả, hỏi lại mỗi 5 000 ms, dừng sau 120 000 ms, unmount thì số lần gọi ngừng tăng. Chiều đỏ: bảng trạng thái có id không có ca → 'trang thai chua do: <id>'; bản sao nhãn trích dẫn chỉ mở khi di chuột → ca bấm đỏ 'trich dan khong bam duoc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx", "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx", packages/ui/src/components/ai-elements/inline-citation.tsx, apps/app/lib/messages/okr-toan-canh.ts, docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md, apps/app/test/tro-ly-okr-tom-tat.dom.tsx]
+
+  - id: E9
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tts_man_that
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo riêng (tien-de); nạp bộ OKR mẫu bằng bun run okr:mau --moc <ghim là ngày sau ngày cập nhật>; quản trị mẫu lưu Chương trình OKR: Tóm tắt tuần bật cho phòng A, chế độ ẩn cho phòng B"
+      - "Gọi /internal/crm/dispatch cho tới khi việc xếp và hai việc tóm tắt đóng (model thật có ZDR; thiếu khoá → mã 2, không xanh)"
+      - "Đăng nhập dev:session Trưởng phòng A; OKR › Theo đơn vị › phòng A › Họp tuần → ảnh ST-tomtat-co-cau ở 1440 và 390"
+      - "Bấm nhãn trích dẫn của từng câu → ảnh ST-tomtat-trich-dan; so giá trị, mức tự tin, ghi chú trên thẻ với hàng OkrCheckIn đọc từ kho đo"
+      - "Bấm 'Xem diễn biến KR' → URL có record=objective:<id>, tab=dien-bien, krOkr=<keyResultId của nguồn>; ảnh ngăn"
+      - "Bấm 'Hữu ích' → ảnh ST-tomtat-da-phan-hoi; kho có đúng 1 hàng OkrTomTatPhanHoi của người đó"
+      - "Dựng tin nhắc của Trưởng phòng A bằng chayNhac với kênh giả; mở đúng đường mở của dòng okr-tom-tat trong tin → Họp tuần của phòng A; kho đo có đúng một vết mo-hop-tuan của người đó, phòng A, ngày hôm đó"
+      - "Trang Nhắc buổi sáng → ảnh ST-nhac-dong-tomtat; tắt, tải lại, còn tắt"
+      - "Phòng B › Họp tuần → không có khối Tóm tắt tuần"
+      - "Đăng nhập quản trị; Toàn cảnh › Sức khoẻ → ảnh ST-suckhoe-tomtat-co có cả phòng A (Bật) và phòng B (Ẩn); mở bản B → ảnh ST-suckhoe-tomtat-ngan"
+      - "Mọi ảnh ở 1440 và 390; đo scrollWidth ≤ clientWidth mỗi ảnh"
+    expected: "exit 0; mỗi bước có ảnh trong .acceptance-runs/tro-ly-okr-tom-tat/man/ và một dòng kết quả; mọi giá trị trên thẻ trích dẫn bằng giá trị đọc từ kho; không bước nào tràn ngang. Chiều đỏ ghim trong script: bản tóm tắt của phòng A phải có ít nhất một câu có số — không có thì bước so thẻ không chứng gì, mã 3 'khong cau co so'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/reminders/**", "apps/app/app/(app)/[slug]/settings/notifications/**", packages/ui/src/components/ai-elements/inline-citation.tsx, apps/api/src/okr/tro-ly.service.ts, "apps/agent/agent/subagents/tro_ly_okr/**", _acceptance/tro-ly-okr-tom-tat/rang/man-tom-tat.mjs]
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_duong_do
+    expected: "exit 0; bài tích hợp apps/agent/test/tro-ly-okr-tom-tat-duong-do.integration.spec.ts: bộ OKR mẫu, cấu hình bật phòng A và ẩn phòng B; chayXepTomTat thật → hai việc; mỗi việc được xả qua beginResearch thật tới lyDoChanTruocKhiGui (không chặn), rồi nopTomTatVao với câu dựng từ gói thật (model giả chỉ ở chỗ sinh câu); okr.troLyTomTat (gọi hàm service thật) của phòng A trả câu có nguồn bằng hàng OkrCheckIn; phòng B trả không có bản; troLyTomTatQuanTri trả cả hai với nac đúng. Chiều đỏ: bản sao lyDoChanTruocKhiGui không truyền nac/đơn vị cho tom-tat-tuan → việc phòng B đóng 'khong-chay:don-vi-chua-bat', thông điệp ghim 'an bi chan truoc khi gui'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/viec.ts, apps/agent/agent/lib/dispatch.ts, apps/agent/agent/lib/okr/lich-tom-tat.ts, apps/agent/agent/lib/okr/nop-tom-tat.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/test/tro-ly-okr-tom-tat-duong-do.integration.spec.ts]
+
+  - id: E11
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_phan_hoi
+    expected: "exit 0; bài API apps/api/test/tro-ly-okr-tom-tat-phan-hoi.spec.ts: người xem được bấm huuIch true rồi false → đúng 1 hàng OkrTomTatPhanHoi của người đó mang false; hai người → 2 hàng; người không xem được bản (bản can-xem, bản ẩn, phòng nấc tắt) → 403 hoặc NotFound có tên và 0 hàng mới, qua tRPC và REST. Chiều đỏ: bản sao dùng create thay upsert → lần hai lỗi hoặc 2 hàng, thông điệp ghim 'phan hoi trung'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/test/tro-ly-okr-tom-tat-phan-hoi.spec.ts]
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_nhac
+    expected: "exit 0; bài tích hợp apps/agent/test/tro-ly-okr-nhac-tom-tat.integration.spec.ts: bộ OKR mẫu, bản OkrTomTat ghi bằng hàm ghi thật; MA TRẬN viết trước tám ô của AC-9 → mỗi ô tập mục nhắc kỳ vọng (so tập loai + tomTatId); dựng tin bằng chayNhac thật với kênh giả ghi chữ đã gửi. Kỳ vọng: n trên dòng bằng số KR của phòng có lyDoCua khác rỗng trừ KR có mục okr-kr-im trong cùng tin (tính lại trong bài bằng @crm/db/okr-hop-tuan, không chép số); số dòng thuộc LOAI_NHAC_AI ∪ {okr-tom-tat} trong daGui ≤ 2 và mọi dòng đó đứng sau mọi dòng việc người; người chỉ có dòng tóm tắt → tin gửi, outcome da-gui:1; chữ dòng không chứa câu nào của cau; đường mở của dòng parse ra đường Họp tuần với xemOkr=hop-tuan, donOkr=pb:<id phòng của bản>, kyOkr=<cycleId của bản> (so từng tham số). Chiều đỏ: bản sao không trừ KR im → 'dem trung kr im'; bản sao bỏ trần hai dòng AI → 'qua hai dong bao'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/okr-tom-tat.ts, packages/db/src/onboarding-nhac.ts, packages/validation/src/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/test/tro-ly-okr-nhac-tom-tat.integration.spec.ts]
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_tat_dong
+    expected: "exit 0; (a) bài API apps/api/test/tro-ly-okr-tat-dong.spec.ts: thủ tục ghi dongTroLyOkr đổi hàng NotificationPreference của chính người gọi (đọc lại từ kho), không đổi của người khác; thủ tục đọc trả laTruongPhong đúng cho trưởng phòng mẫu và thành viên thường; (b) bài DOM apps/app/test/nhac-dong-tom-tat.dom.tsx: công tắc có với laTruongPhong true, vắng với false; bấm gọi mutation với giá trị đảo. Chiều đỏ: bản sao ghi theo userId từ input thay vì phiên → 'ghi nham nguoi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/zalo/**", "apps/app/app/(app)/[slug]/settings/notifications/**", "apps/app/app/(app)/[slug]/reminders/**", apps/api/test/tro-ly-okr-tat-dong.spec.ts, apps/app/test/nhac-dong-tom-tat.dom.tsx]
+
+  - id: E14
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_quan_tri
+    expected: "exit 0; (a) bài API apps/api/test/tro-ly-okr-tom-tat-quan-tri.spec.ts: tuần có bản bat-hien, bat-can-xem, an-hien, việc khong-lam-duoc, việc đang chạy; quản trị chương trình nhận mọi phòng có việc tuần đó với nac, trangThai, soCau, soCauBo, huuIch/khong bằng đếm thẳng từ kho (so từng trường); thành viên, trưởng phòng, vai okr → 403 qua tRPC và REST; (b) bài DOM apps/app/test/suc-khoe-tom-tat.dom.tsx: mỗi id ST-suckhoe-tomtat-* một ca; ngăn một bản hiện câu bị bỏ kèm nhãn lý do cho mỗi mã của MA_BO_CAU (rút lúc chạy). Chiều đỏ: bản sao bỏ assert quyền → 'quan tri lot: <vai>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, "apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/**", apps/api/test/tro-ly-okr-tom-tat-quan-tri.spec.ts, apps/app/test/suc-khoe-tom-tat.dom.tsx]
+
+  - id: E15
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_thuoc
+    expected: "exit 0; bài API apps/api/test/tro-ly-okr-tom-tat-thuoc.spec.ts trên kho _test: gieo bằng hàm ghi thật (bản qua hàm ghi của nop-tom-tat, phản hồi qua troLyTomTatPhanHoi, vết mở bảng qua OkrXemService.moHopTuan, tuỳ chọn tắt dòng qua thủ tục ghi dongTroLyOkr, tin nhắc bằng chayNhac với kênh giả, AiChiPhi bằng ghiChiPhi) với số đã biết cho hai nấc; chạy sáu thước ở _acceptance/tro-ly-okr-tom-tat/rang/ (đường suy từ vị trí bài) và so với số đã biết từng dòng (in bảng). so-lech-lot.mjs: kiểm tĩnh không import okr-kiem-tom-tat hay okr-kiem-de-xuat; một bản có câu lành chứa mỗi dạng số của tập tham chiếu (giá trị lần dẫn, lần trước, chênh lệch, khởi điểm, đích, tiến độ phần trăm, ngày dd/mm) → báo 0; gieo thẳng một câu số lệch vào cau → báo đúng id bản và câu đó. Chiều đỏ ghim: một thước in số khác số đã biết → 'thuoc lech: <ten> <nac>'; bản sao so-lech-lot bỏ tiến độ khỏi tập tham chiếu → câu lành tiến độ bị báo, thông điệp 'lech gia: tien-do'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-tom-tat/rang/**", apps/api/src/okr/okr-xem.service.ts, apps/api/test/tro-ly-okr-tom-tat-thuoc.spec.ts]
+
+  - id: E16
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_chi_phi
+    expected: "exit 0; bài tích hợp apps/agent/test/so-chi-phi.integration.spec.ts -t tom-tat: sự kiện step.completed của phiên con tro_ly_okr với ctx KHÔNG có thuộc tính okrViec/okrTaskId, việc thật okr-tom-tat-tuan gắn sessionId phiên gốc → hàng AiChiPhi tinhNang 'okr.tom-tat', nối về việc; cùng dựng cảnh với việc okr-de-xuat → 'okr.de-xuat' (đối chứng); sổ tới trần → lyDoChanTruocKhiGui đóng việc tóm tắt 'khong-chay:het-tran-thang' và start không được gọi. Chiều đỏ: bản sao đọc loại việc từ thuộc tính phiên → 'tinh nang lech: okr.de-xuat'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/so-chi-phi.ts, packages/db/src/ai-chi-phi-danh-muc.ts, "apps/agent/agent/subagents/tro_ly_okr/hooks/**", apps/agent/agent/lib/okr/viec.ts, apps/agent/test/so-chi-phi.integration.spec.ts]
+
+  - id: E17
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.tts_eval
+    expected: "exit 0; khung _acceptance/tro-ly-okr-tom-tat/rang/eval-tom-tat.mjs: kho dùng-một-lần, okr:mau ở hai mốc ngày (mỗi mốc là ngày sau ngày cập nhật), bật tóm tắt cho mọi phòng ban, chạy eve eval okr/tom-tat với model thật có ZDR (thiếu khoá hay chạm trần chạy → mã 2, không xanh); đọc mọi OkrTomTat. Chốt bằng mã, in từng bản: 0 số lệch theo bộ trích số độc lập của rang/so-lech-lot.mjs; tổng soCauBo / tổng câu ≤ 10%; mỗi KR có lý do tut (lyDoCua tại mốc) được ít nhất một câu còn lại dẫn tới một lần cập nhật của KR đó; không câu nào chứa họ tên thành viên (so không dấu); điểm judge 'đúng ý nguồn' in kèm từng bản, không chặn. In tổng chi phí từ AiChiPhi. Chiều đỏ ghim: một mốc cho 0 bản → mã 3 'khong ban nao', vì chốt trên tập rỗng không chứng gì."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/agent/evals/okr/**", "apps/agent/agent/subagents/tro_ly_okr/**", apps/agent/agent/lib/okr/nop-tom-tat.ts, packages/db/src/okr-tom-tat.ts, packages/validation/src/okr-kiem-tom-tat.ts, _acceptance/tro-ly-okr-tom-tat/rang/eval-tom-tat.mjs]
+
+  - id: E18
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.tdx_judge_zdr
+    expected: "exit 0; bài tĩnh judge-zdr của 9b quét mọi apps/agent/evals/okr/*.eval.ts (gồm tom-tat.eval.ts mới): mọi defineEval có judge khai judge.modelOptions.providerOptions với zeroDataRetention và model judge thuộc moHinhZdr. Chiều đỏ có sẵn của bài."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/agent/evals/okr/**", apps/agent/test/tro-ly-okr-cach-ly.spec.ts]
+
+  - id: E19
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.tts_tai_lieu
+    expected: "exit 0; script _acceptance/tro-ly-okr-tom-tat/rang/tai-lieu.mjs: (a) mục chỗ rẽ 9c của docs/agent.md liệt kê đúng tập tệp = giao của git diff merge-base..HEAD với danh sách tệp ở origin/release (so tập, in hai phía); (b) docs/api.md §OKR nêu tên ba thủ tục troLyTomTat, troLyTomTatPhanHoi, troLyTomTatQuanTri; (c) docs/agent.md nêu chayXepTomTat và damBaoLichTomTat. Chiều đỏ: thiếu một tệp trong mục chỗ rẽ → 'cho re thieu: <tep>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [docs/agent.md, docs/api.md, CONTEXT.md, _acceptance/tro-ly-okr-tom-tat/rang/tai-lieu.mjs]
+
+  - id: E20
+    criterion: AC-15
+    executor: judgment
+    question: >-
+      Đọc mục Tóm tắt tuần của CONTEXT.md, đoạn tóm tắt ở docs/api.md §OKR và mục chỗ rẽ 9c
+      của docs/agent.md, rồi diff của lượt: một người trong đội không đọc mã có hiểu đúng
+      rằng tóm tắt chạy sáng hôm sau ngày cập nhật, chỉ cho phòng ban, câu bị bỏ khi lệch số,
+      bản quá 30% câu bị bỏ không hiện cho ai, và chế độ ẩn chỉ quản trị chương trình thấy
+      không? Diff có giữ luật kho: trí khôn ở apps/agent (API chỉ đọc bảng tóm tắt và ghi
+      phản hồi), khuôn parse ở biên trong packages/validation, không chú thích trong mã, hằng
+      tinh chỉnh ở một tệp cấu hình mỗi khu, thành phần mới ở packages/ui không đè class ở
+      chỗ gọi?
+    inputs: [docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md, _acceptance/tro-ly-okr-tom-tat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md]
+    expected: >-
+      PASS khi mọi ý đúng và không vi phạm luật kho nào có trích dẫn tệp:dòng; FAIL nêu đúng
+      câu sai hoặc tệp vi phạm; UNCERTAIN khi thiếu bằng chứng, kèm danh sách bằng chứng cần thêm.
+    evidence_required: [run_id, verifier, verified_at, output]
+    paths: [CONTEXT.md, docs/api.md, docs/agent.md, "apps/agent/agent/**", "apps/api/src/okr/**", "packages/validation/src/**", "packages/db/src/**", "packages/ui/src/components/**"]
+
+  - id: E21
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tts_san_thiet_ke
+    expected: "exit 0; design-gate --mode static trên mọi tệp giao diện mới hay sửa của lượt (khoi-tom-tat.tsx, hop-tuan.tsx, tom-tat-quan-tri.tsx, khoi-kenh.tsx, inline-citation.tsx): không lỗi P0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/notifications/**", packages/ui/src/components/ai-elements/inline-citation.tsx]
+
+  - id: E22
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tts_doc_trang_thai
+    expected: "exit 0; bài API apps/api/test/tro-ly-okr-tom-tat-doc.spec.ts -t trang-thai trên bộ OKR mẫu: việc okr-tom-tat-tuan của tuần do chayXepTomTat ghi, chưa xả → troLyTomTat trả dangSoan true; markRunning → vẫn true; đóng da-nop với bản → dangSoan false và có bản; chu kỳ không có OkrCheckIn nào trong 7 ngày → chuaCapNhat true, không bản; người xem không xem được Mục tiêu nào của các nguồn → bản khác null với danh sách câu rỗng (đối chứng: người xem được nhận đủ câu). Chiều đỏ: bản sao chỉ đặt dangSoan khi việc đang chạy → ô 'chưa xả' đỏ với thông điệp 'dang soan lech: cho-xa'; bản sao trả null khi lọc hết → 'loc het thanh null'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, packages/db/src/okr-tom-tat.ts, apps/api/test/tro-ly-okr-tom-tat-doc.spec.ts]
