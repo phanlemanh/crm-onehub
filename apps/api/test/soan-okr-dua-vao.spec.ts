@@ -568,6 +568,125 @@ describe("quyet", () => {
 	);
 
 	test(
+		"bác → kéo → nhận lại: KR nhận ở lần nộp 1, bị kéo bác theo Mục tiêu lần nộp 2, nhận lại bị từ chối cha-da-bac",
+		async () => {
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+			const tenM = "Kênh đại lý miền Nam giữ nhịp";
+			const mt = { loai: "muc-tieu-moi", khoa: "m", ten: tenM } as const;
+			const [, k1] = (await gieoDongNhap(
+				cuoc,
+				[
+					mt,
+					{
+						loai: "kr-moi",
+						khoa: "k1",
+						chaKhoa: "m",
+						ten: "Đại lý giữ đơn hằng tháng",
+					},
+				],
+				"cho",
+				{ inputHash: "keo-1" },
+			)) as [string, string];
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(k1, "nhan", undefined, cQuanTri),
+					"nhan k1",
+				),
+			).toEqual({ ok: true });
+			tienDongHo();
+			const [m2] = (await gieoDongNhap(cuoc, [mt], "cho", {
+				inputHash: "keo-2",
+			})) as [string];
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(m2, "bac", undefined, cQuanTri),
+					"bac m2",
+				),
+			).toEqual({ ok: true });
+			expect(await trangThaiDongNhap(k1)).toBe("bac");
+			const can: SoanQuyetOutput = {
+				ok: false,
+				lyDo: "cha-da-bac",
+				chiTiet: T.chaDaBac(tenM),
+			};
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(k1, "nhan", undefined, cQuanTri),
+					"nhan lai k1",
+				),
+			).toEqual(can);
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(k1, "sua", "Đại lý giữ đơn đều mỗi tháng", cQuanTri),
+					"sua lai k1",
+				),
+			).toEqual(can);
+			expect(await trangThaiDongNhap(k1)).toBe("bac");
+			await xoaCuoc(cuoc.id);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"cha bác cũ thắng cha chờ mới cùng tên: KR mới của lần nộp 2 bị từ chối cha-da-bac",
+		async () => {
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+			const tenM = "Khách lẻ miền Nam quay lại";
+			const mt = { loai: "muc-tieu-moi", khoa: "m", ten: tenM } as const;
+			const [m1] = (await gieoDongNhap(cuoc, [mt], "cho", {
+				inputHash: "thang-1",
+			})) as [string];
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(m1, "bac", undefined, cQuanTri),
+					"bac m1",
+				),
+			).toEqual({ ok: true });
+			tienDongHo();
+			const [m2, k3] = (await gieoDongNhap(
+				cuoc,
+				[
+					mt,
+					{
+						loai: "kr-moi",
+						khoa: "k3",
+						chaKhoa: "m",
+						ten: "Khách lẻ đặt lại lần hai",
+					},
+				],
+				"cho",
+				{ inputHash: "thang-2" },
+			)) as [string, string];
+			const ds = await danhSach(cuoc.id, "trpc", cQuanTri);
+			expect(ds.dong.map((d) => d.id).sort()).toEqual([m1, k3].sort());
+			const can: SoanQuyetOutput = {
+				ok: false,
+				lyDo: "cha-da-bac",
+				chiTiet: T.chaDaBac(tenM),
+			};
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(k3, "nhan", undefined, cQuanTri),
+					"nhan k3",
+				),
+			).toEqual(can);
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(k3, "sua", "Khách lẻ đặt lại trong quý", cQuanTri),
+					"sua k3",
+				),
+			).toEqual(can);
+			expect(await hang(k3)).toMatchObject({
+				trangThai: "cho",
+				nguoiQuyet: null,
+			});
+			expect(await trangThaiDongNhap(m2)).toBe("cho");
+			await xoaCuoc(cuoc.id);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"dòng bị loại, dòng không có và dòng của cuộc không còn dang: từ chối có tên, không ghi gì",
 		async () => {
 			const biLoai = await quyet(kho.loaiC, "nhan");

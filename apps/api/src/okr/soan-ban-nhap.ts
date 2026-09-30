@@ -211,11 +211,15 @@ function giaTriSua(dong: DongSoan, giaTri: string | undefined): string {
 
 function chaTuChoi(
 	ds: readonly DongDoc[],
+	hien: readonly DongDoc[],
 	con: DongDoc,
 	chaKhoa: string,
 ): TuChoiCha | null {
-	const cung = ds.filter(laMucTieu).filter((d) => d.dong.khoa === chaKhoa);
+	const cungKhoa = (tap: readonly DongDoc[]) =>
+		tap.filter(laMucTieu).filter((d) => d.dong.khoa === chaKhoa);
+	const cung = cungKhoa(ds);
 	const cha =
+		cungKhoa(hien).at(-1) ??
 		cung.findLast((d) => d.hang.inputHash === con.hang.inputHash) ??
 		cung.at(-1);
 	if (!cha)
@@ -253,7 +257,7 @@ export async function ghiQuyet(
 	const { dong } = muc;
 	const giaTriCuoi = v.quyet === "sua" ? giaTriSua(dong, v.giaTriCuoi) : null;
 	if (v.quyet !== "bac" && dong.loai !== "muc-tieu-moi") {
-		const tuChoi = chaTuChoi(ds, muc, dong.chaKhoa);
+		const tuChoi = chaTuChoi(ds, hien, muc, dong.chaKhoa);
 		if (tuChoi) return tuChoi;
 	}
 	const quyetBoi = { nguoiQuyet: v.userId, quyetLuc: v.now };

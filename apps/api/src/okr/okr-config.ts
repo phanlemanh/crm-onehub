@@ -139,7 +139,6 @@ export const OKR = {
 			cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
 			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
 			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
-			dongDaQuyet: "Dòng này đã được quyết rồi.",
 			dongCu: "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn.",
 			chaDaBac: (ten: string) =>
 				`Mục tiêu cha «${ten}» đã bị bác — không nhận dòng dưới nó.`,
