@@ -12,6 +12,7 @@ import {
 	napBoMau,
 	phienCookie,
 	thuMau,
+	tre,
 	trpc,
 	truyVan,
 } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
@@ -40,11 +41,12 @@ const CACH_LY = {
 	chuKy: { phase: "lap-ke-hoach" },
 	capDonVi: "phong-ban",
 	ten: { toiThieu: 40, doDaiToiThieu: 4, inToiDa: 3 },
-	cho: { luotMs: 3 * PHUT_MS, moMs: 30 * GIAY_MS },
+	cho: { luotMs: 4 * PHUT_MS, moMs: 30 * GIAY_MS, noiLaiMs: GIAY_MS },
 	jwtCu: { iss: "crm-app", aud: "crm-agent", ttlGiay: 120, lechGiay: 5 },
 	claimDoiTac: ["contactId", "companyId", "dealId"],
 	hostNgoai: "agent.onehub.internal",
 	suKienKet: new Set([
+		"input.requested",
 		"session.waiting",
 		"turn.completed",
 		"turn.failed",
@@ -75,7 +77,10 @@ const CACH_LY = {
 		jwt: { biMat: "bi-mat-tu-kiem", claims: { sub: "u1", dealId: "d1" } },
 		claim: [
 			{ claims: { vai: "okr", cuocSoanId: "c1", sub: "u1" }, la: [] },
-			{ claims: { dealId: "d1", companyId: "c2" }, la: ["companyId", "dealId"] },
+			{
+				claims: { dealId: "d1", companyId: "c2" },
+				la: ["companyId", "dealId"],
+			},
 			{ claims: null, la: [] },
 		],
 	},
@@ -272,38 +277,70 @@ async function moPhien(goc, duong, cookie, dauThem, cauHoi) {
 	try {
 		than = JSON.parse(chu);
 	} catch {}
-	return { ma: res.status, than, chu: chu.slice(0, 300) };
+	return {
+		ma: res.status,
+		nhan: res.ok && Boolean(than?.sessionId),
+		than,
+		chu: chu.slice(0, 300),
+	};
 }
 
-async function docLuot(goc, duong, cookie, sessionId, dauThem = {}) {
-	const res = await fetch(
-		`${goc}${duong}/session/${encodeURIComponent(sessionId)}/stream`,
-		{
-			headers: { Cookie: `${cookie.ten}=${cookie.gia}; lang=vi`, ...dauThem },
-			signal: AbortSignal.timeout(CACH_LY.cho.luotMs),
-		},
-	);
+async function docMotLan(url, dau, conMs, suKien) {
+	const res = await fetch(url, {
+		headers: dau,
+		signal: AbortSignal.timeout(conMs),
+	});
 	if (res.status !== 200 || !res.body)
-		throw new KhongDo(`stream ${sessionId} tra ${res.status}`);
-	const suKien = [];
+		throw new KhongDo(
+			`stream tra ${res.status}: ${(await res.text()).slice(0, 200)}`,
+		);
 	const bo = res.body.getReader();
 	const giai = new TextDecoder();
 	let du = "";
+	try {
+		for (;;) {
+			const { value, done } = await bo.read();
+			if (done) return false;
+			du += giai.decode(value, { stream: true });
+			const cac = du.split("\n");
+			du = cac.pop() ?? "";
+			for (const d of cac) {
+				if (!d.trim()) continue;
+				const sk = JSON.parse(d);
+				suKien.push({ ...sk, tho: d });
+				if (CACH_LY.suKienKet.has(sk.type)) return true;
+			}
+		}
+	} finally {
+		await bo.cancel().catch(() => {});
+	}
+}
+
+async function docLuot(goc, duong, cookie, sessionId, dauThem = {}) {
+	const dau = { Cookie: `${cookie.ten}=${cookie.gia}; lang=vi`, ...dauThem };
+	const goc0 = `${goc}${duong}/session/${encodeURIComponent(sessionId)}/stream`;
+	const han = Date.now() + CACH_LY.cho.luotMs;
+	const suKien = [];
 	let het = false;
 	while (!het) {
-		const { value, done } = await bo.read();
-		if (done) break;
-		du += giai.decode(value, { stream: true });
-		const cac = du.split("\n");
-		du = cac.pop() ?? "";
-		for (const d of cac) {
-			if (!d.trim()) continue;
-			const sk = JSON.parse(d);
-			suKien.push({ ...sk, tho: d });
-			if (CACH_LY.suKienKet.has(sk.type)) het = true;
+		const conMs = han - Date.now();
+		if (conMs <= 0)
+			throw new KhongDo(
+				`luong ${sessionId} chua ket sau ${CACH_LY.cho.luotMs / GIAY_MS} s (${suKien.length} su kien, cuoi ${suKien.at(-1)?.type ?? "-"})`,
+			);
+		try {
+			het = await docMotLan(
+				`${goc0}?startIndex=${suKien.length}`,
+				dau,
+				conMs,
+				suKien,
+			);
+		} catch (e) {
+			if (e instanceof KhongDo) throw e;
+			if (Date.now() >= han) continue;
 		}
+		if (!het) await tre(CACH_LY.cho.noiLaiMs);
 	}
-	await bo.cancel().catch(() => {});
 	const tool = suKien
 		.filter((s) => s.type === "actions.requested")
 		.flatMap((s) => s.data?.actions ?? [])
@@ -461,7 +498,7 @@ async function trongPhien() {
 			{ [CACH_LY.dau.congTy]: congTy.id },
 			CACH_LY.cauHoi,
 		);
-		if (dc.ma !== 200 || !dc.than?.sessionId)
+		if (!dc.nhan)
 			throw new KhongDo(`(0) cua cu quan tri tra ${dc.ma}: ${dc.chu}`);
 		const luotDc = await docLuot(app, CACH_LY.cua.cu, qt, dc.than.sessionId);
 		const batDc = doTen.bat(luotDc.chu);
@@ -502,8 +539,7 @@ async function trongPhien() {
 			dauCuoc,
 			CACH_LY.cauHoi,
 		);
-		if (moi.ma !== 200 || !moi.than?.sessionId)
-			return loi(`(2) cua moi tra ${moi.ma}: ${moi.chu}`);
+		if (!moi.nhan) return loi(`(2) cua moi tra ${moi.ma}: ${moi.chu}`);
 		const [cuoc] = await truyVan(
 			url,
 			'SELECT "sessionId" FROM "okrCuocSoan" WHERE id = $1',
@@ -514,7 +550,7 @@ async function trongPhien() {
 				`(2) OkrCuocSoan.sessionId «${cuoc?.sessionId}» khac phien vua mo «${moi.than.sessionId}»`,
 			);
 		ghi(
-			`(2) vai okr qua cua moi: 200, cuoc ${cuocSoanId} phien ${moi.than.sessionId}`,
+			`(2) vai okr qua cua moi: ${moi.ma}, cuoc ${cuocSoanId} phien ${moi.than.sessionId}`,
 		);
 
 		const luotOkr = await docLuot(
@@ -587,7 +623,7 @@ async function trongPhien() {
 		});
 		try {
 			const mot = await moPhien(ro.goc, CACH_LY.cua.cu, ok, {}, CACH_LY.cauHoi);
-			if (mot.ma === 200 && mot.than?.sessionId) {
+			if (mot.nhan) {
 				const l = await docLuot(ro.goc, CACH_LY.cua.cu, ok, mot.than.sessionId);
 				const b = doTen.bat(l.chu);
 				return loi(
@@ -599,7 +635,7 @@ async function trongPhien() {
 			vaiDaDoi = nguoiOkr.id;
 			await doiVai(url, nguoiOkr.id, CACH_LY.vai.tam);
 			const hai = await moPhien(ro.goc, CACH_LY.cua.cu, ok, {}, CACH_LY.cauHoi);
-			if (hai.ma !== 200 || !hai.than?.sessionId)
+			if (!hai.nhan)
 				throw new KhongSong(
 					`chieu do khong do: bo hai lop ma cua ro van tra ${hai.ma}: ${hai.chu}`,
 				);
@@ -632,7 +668,9 @@ async function main() {
 		console.log(`KHONG DO DUOC: tu kiem thuoc sai: ${tu.sai.join(" · ")}`);
 		return CACH_LY.ma.khongDo;
 	}
-	console.log(`tu kiem thuoc: ${tu.soCa} ca dung (may do ten, chuoi JSON, JWT, khoa doi tac)`);
+	console.log(
+		`tu kiem thuoc: ${tu.soCa} ca dung (may do ten, chuoi JSON, JWT, khoa doi tac)`,
+	);
 	if (!coKhoaMoHinh()) {
 		console.log(`KHONG DO DUOC: ${cauThieuKhoa()}`);
 		return CACH_LY.ma.khongDo;
