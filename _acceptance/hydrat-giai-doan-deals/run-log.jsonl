@@ -20,3 +20,5 @@
 {"ts":"2026-09-30T11:35:01Z","sha":"f18b562e3605df863d28751090b3cab01ba1952e","round":1,"kind":"baseline","evals_hash":"b76c6fc803a4eaf8cec9b0629dbdc1324ac72a621ca27932db135505cfff347d","non_discriminating":[{"cmd":"bunx turbo run check-types --force","evals":["E9"]}]}
 {"ts":"2026-09-30T11:35:01Z","sha":"f18b562e3605df863d28751090b3cab01ba1952e","round":1,"kind":"round-tally","verdict":"REJECT","expected":15,"returned":15,"blocked":0}
 {"ts":"2026-09-30T11:35:01Z","sha":"f18b562e3605df863d28751090b3cab01ba1952e","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":15}
+{"kind":"thuoc-vat","ts":"2026-09-30T11:46:06Z","round":1,"san":"1d1ad2d8b9966f20dcbdbaea3da39458a78f1aeb","vat":[21,5],"thuoc":[11,3],"ho_so":[24,0],"nhat":1,"lan":0,"tep_thuoc":["_acceptance/hydrat-giai-doan-deals/rang/go-boc.mjs"]}
+{"kind":"thuoc-lech","ts":"2026-09-30T11:46:06Z","round":1,"sha":"f18b562e3605df863d28751090b3cab01ba1952e","tep":[{"tep":"_acceptance/hydrat-giai-doan-deals/rang/go-boc.mjs","doi":"đổi nội dung"}]}
