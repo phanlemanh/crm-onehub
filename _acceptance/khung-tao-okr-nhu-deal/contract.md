@@ -5,7 +5,9 @@ slug: khung-tao-okr-nhu-deal
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-30T01:57:46Z
 design_doc: docs/superpowers/specs/2026-09-30-khung-tao-okr-nhu-deal-design.md
 ---
 
