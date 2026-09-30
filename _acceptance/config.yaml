@@ -411,7 +411,7 @@ executors:
     u8d_dem_don_vi: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t dem-don-vi"'
     u8d_nguoi_duyet: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t nguoi-duyet"'
     u8d_tra_lai_truoc: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t tra-lai-truoc"'
-    u8d_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-ux-8d.dom.tsx"
+    u8d_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-theo-don-vi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-tai-co-cau.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/chuyen-okr.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx"
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
     hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"

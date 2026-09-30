@@ -14,15 +14,15 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, packages/ui/src/components/**, apps/app/test/okr-ux-8d.dom.tsx]
-    expected: "exit 0 cho nhóm -t nhan-danh-sach; ma trận viết trước 4 màn (Của tôi, Theo đơn vị, Cây căn chỉnh, OKR mồ côi) × 2 thẻ (giới hạn soNguoiXem 1, công khai) + 1 ca giới hạn soNguoiXem 0: đúng 4 nhãn [data-nhan-gioi-han] (mỗi màn một, trên thẻ giới hạn), aria-label chứa «Chỉ người liên quan và 1 người xem có tên thấy», ca 0 dùng câu không số; nhãn trong danh sách không có aria-haspopup và bấm vào không mở dialog; khung mục tiêu render nhãn từ @crm/ui (kiểm import) và vẫn mở hộp mức hiển thị. CHIỀU ĐỎ: bỏ nhãn khỏi một màn trong bản sao → đỏ in tên màn thiếu nhãn; đặt hienThi cong-khai cho thẻ giới hạn → đỏ in «4 != 3»."
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/okr/**, apps/app/components/crm/record-sheet/**, packages/ui/src/components/restricted-badge.tsx, apps/app/test/okr-theo-don-vi.dom.tsx, apps/app/test/okr-tai-co-cau.dom.tsx]
+    expected: "exit 0 cho các bài nhan-danh-sach (okr-theo-don-vi.dom.tsx: thẻ Theo đơn vị — cùng thẻ KhoiMucTieu mà Của tôi dùng — và nút cây căn chỉnh; okr-tai-co-cau.dom.tsx: mục OKR mồ côi); ma trận viết trước 3 thành phần vẽ thẻ × 2 thẻ (giới hạn soNguoiXem 1, công khai) + 1 ca giới hạn soNguoiXem 0: thẻ giới hạn mang đúng một nhãn [data-nhan-gioi-han] không có aria-haspopup, aria-label «Giới hạn: Chỉ người liên quan và N người xem có tên thấy» (N 1, 2; N 0 dùng câu không số), nhãn trên nút cây không nhận tiêu điểm (không tabindex, vì nằm trong mục cây bấm được); thẻ công khai không có nhãn; khung mục tiêu render nhãn từ @crm/ui (kiểm import) và vẫn mở hộp mức hiển thị. CHIỀU ĐỎ: bỏ nhãn khỏi một màn trong bản sao → đỏ in tên màn thiếu nhãn; đặt hienThi cong-khai cho thẻ giới hạn → đỏ ở ô thẻ a."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
     criterion: AC-3
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: ["apps/app/app/(app)/[slug]/settings/members/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/settings/members/**", packages/ui/src/components/confirm-dialog.tsx, apps/app/lib/messages/**, apps/app/test/chuyen-okr.dom.tsx]
     expected: "exit 0 cho nhóm -t go-nguoi; mock okr.transferPreview: P → {kr 3, mucTieu 1}, Q → {0, 0}, R → lỗi, S → treo (promise chưa giải). Mở hộp gỡ P: chữ nêu «3 KR» và «1 mục tiêu», nút chính «Chuyển OKR…» và bấm nó mở hộp chuyển OKR với fromUserId P, nút «Gỡ» không disabled và bấm gọi workspace.removeMember đúng một lần. Q: hộp đúng tiêu đề và thân như trước lượt này, không gọi hộp chuyển. R: dòng «Chưa đọc được OKR của người này», «Gỡ» vẫn bấm được. S: dòng «Đang đọc OKR của người này…», «Gỡ» không disabled, bấm gọi removeMember đúng một lần. Số hiện lấy nguyên từ transferPreview (đổi mock sang 7/2 thì chữ đổi theo). CHIỀU ĐỎ: bản sao hộp không đọc transferPreview → ca P đỏ in «thieu canh bao OKR»; bản sao khoá nút Gỡ khi đang đọc → ca S đỏ in «Go bi khoa khi dang doc»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -39,7 +39,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: [apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, apps/app/test/okr-gioi-han-duyet.dom.tsx]
     expected: "exit 0 cho nhóm -t gui-duyet-khoa; ma trận viết trước 2 chỗ (đầu khung, dải bị trả lại) × 2 dữ liệu (0 KR, 1 KR), quyen.guiDuyet true: 0 KR → nút [data-nut=gui-duyet] disabled, phần tử có id bằng aria-describedby của nút chứa đúng «Thêm ít nhất một KR trước khi gửi duyệt», bấm nút không làm xuất hiện alertdialog, okr.guiDuyet không được gọi; 1 KR → nút mở, không có dòng đó, bấm mở alertdialog. CHIỀU ĐỎ: bản sao bỏ điều kiện KR → ca 0 KR đỏ in «nut mo khi 0 KR»; bản sao chỉ đặt lý do trong Tooltip → đỏ in «aria-describedby rong»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -47,7 +47,7 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-tai-co-cau.dom.tsx]
     expected: "exit 0 cho nhóm -t luu-tru; mock org.luuTruXemTruoc cho năm phòng viết trước: A → [okr 3, người 2], B → [người 2], C → [okr 3], E → [khuôn «Làm quen Kinh doanh»], D → []: hộp nêu đúng số dòng lý do (A 2, B 1, C 1, E 1, D 0) với chữ lấy từ kết quả xem trước, dòng OKR kèm «Chuyển OKR…»; «Lưu trữ» disabled ở A, B, C, E, mở ở D; xem trước lỗi → dòng «Chưa kiểm được điều kiện lưu trữ», «Lưu trữ» mở (máy chủ vẫn kiểm). CHIỀU ĐỎ: bản sao hộp chỉ vẽ dòng OKR → ca B đỏ in «B: Luu tru mo khi con nguoi»; bản sao bỏ khoá khi có lý do → ca E đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -73,7 +73,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    paths: [apps/app/components/okr/hop-chuyen-okr.tsx, apps/app/lib/messages/**, apps/app/test/okr-tai-co-cau.dom.tsx]
     expected: "exit 0 cho nhóm -t chuyen-tran; mock chuyenDonViXemTruoc theo đầu vào: vuotTran {soSau 6, tran 5} → câu «Kinh doanh miền Nam sẽ có 6 mục tiêu trong một chu kỳ — vượt trần 5» (tên đơn vị nhận ghép ở giao diện) hiện trong vùng aria-live dưới ô nơi nhận trước khi bấm, nút chuyển mở; null → không cảnh báo; lỗi → dòng «Chưa kiểm được trần» trong vùng aria-live, nút chuyển mở. Bỏ chọn một mục tiêu → xem trước được gọi lại với objectiveIds mới (so mảng). CHIỀU ĐỎ: bản sao không gọi lại khi đổi tập chọn → đỏ in «xem truoc khong tinh lai»; bản sao coi lỗi xem trước là chặn → ca lỗi đỏ in «nut chuyen khoa khi loi»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -108,7 +108,7 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: [apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    paths: [apps/app/components/crm/record-sheet/**, "apps/app/app/(app)/[slug]/okr/bang-vet.tsx", apps/app/lib/messages/**, apps/app/test/okr-gioi-han-duyet.dom.tsx]
     expected: "exit 0 cho nhóm -t duyet-chu (AC-8, AC-9, AC-10): nguoiDuyetDuKien «Trần Quốc Bảo» → thân alertdialog gửi duyệt chứa «Trần Quốc Bảo sẽ duyệt.»; null → thân như cũ. choDuyet.lanTraLaiTruoc {lyDo L, nguoi X} với người xem X → dải chứa «Lần trước bạn trả lại» và L; người xem khác → chứa tên X và L; null → không có dòng. Bảng Vết: dòng tra-lai hiện note. traLaiGanNhat.nguoi là người xem → nút «Công bố» có data-variant outline; người khác → data-variant default. CHIỀU ĐỎ: bản sao bỏ nhánh «bạn» → đỏ; bản sao không hạ biến thể → đỏ in «Cong bo van default»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -116,7 +116,7 @@ evals:
     criterion: AC-11
     executor: test
     cmd: config:executors.test.u8d_dom
-    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/**", apps/app/test/okr-ux-8d.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/**", apps/app/test/okr-theo-don-vi.dom.tsx]
     expected: "exit 0 cho nhóm -t khung-xuong; hai ca viết trước: (1) okr.danhSach treo lần đầu; (2) đã có dữ liệu của đơn vị X (0 mục tiêu), chọn đơn vị Y và danhSach của Y treo (dữ liệu giữ chỗ của X). Cả hai: khung phải có [aria-busy=true] và chữ sr-only «Đang tải…», KHÔNG chứa «chưa đặt OKR», ca (2) không chứa thẻ nào của X; giải rỗng → chứa câu «chưa đặt OKR cho»; giải 2 mục tiêu → 2 thẻ, không khung xương. CHIỀU ĐỎ: bản sao coi dữ liệu giữ chỗ là dữ liệu của đơn vị mới (hành vi trước lượt) → ca (2) đỏ in «hien du lieu don vi truoc khi dang tai»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

@@ -161,7 +161,7 @@ tiết và trên các hộp của Cài đặt. Luồng hiển nhiên, không tra
   - `nguoiDuyetDuKien` bằng `choDuyet.nguoiDuyet` sau khi gửi;
   - `lanTraLaiTruoc` đúng lý do của lần trả lại trước;
   - điều kiện lưu trữ suy từ cây bằng kết quả máy chủ từ chối lưu trữ.
-- Giao diện (`apps/app/test/okr-ux-8d.dom.tsx`): từng trạng thái của bảng trên, mỗi ca có
-  chiều đỏ.
+- Giao diện: bài thêm vào bốn tệp có sẵn giàn giả của màn đó (`okr-theo-don-vi`, `okr-tai-co-cau`,
+  `chuyen-okr`, `okr-gioi-han-duyet` `.dom.tsx`), mỗi ca có chiều đỏ.
 - Màn thật (`_acceptance/ux-lai-thu-8c-okr/rang/man-ux-8d.mjs`, phiên đo trên bộ OKR mẫu):
   chụp các trạng thái của bảng.
