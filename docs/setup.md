@@ -122,6 +122,11 @@ AGENT_BRIDGE_SECRET="$(openssl rand -base64 32)"
 | `401` | The two processes hold different secrets, **or** `passThroughEnv` in `apps/app/turbo.json` / `apps/agent/turbo.json` is missing the pair (Turbo is strict-env) |
 | `502` | Agent not running, or `AGENT_URL` wrong |
 
+The OKR drafting chat has its own pair, `OKR_AGENT_URL` (default `127.0.0.1:2100`)
+and `OKR_AGENT_BRIDGE_SECRET`, and its own gate at `/eve/agents/okr/eve/v1/*`; the
+same three errors apply to the «Soạn OKR cùng Trợ lý» screen, with `apps/agent-okr`
+in place of the agent. Run it with `bun run --filter=agent-okr dev` (port 2100).
+
 `localDev()` accepts any loopback request, so `curl 127.0.0.1` proves nothing about
 the bridge — send `-H 'Host: agent.example.com'`. `GET /eve/v1/info` is the whole
 inventory, including a `diagnostics` count that finds files eve silently ignored.
@@ -326,6 +331,14 @@ So a measurement now runs in a **measure session** on a database of its own tree
   or `repin-lane` gets a clean database and its own servers without any change to the
   eval. The ports an eval names (`${APP_URL:-http://localhost:3910}`) are only
   defaults; the session's `APP_URL` wins.
+- A measurement that needs a chat agent boots it itself, inside the session, the way
+  `_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs` does: it picks free ports,
+  sets `AGENT_URL` / `OKR_AGENT_URL` (and the two bridge secrets) **before** starting
+  the session under a sibling tree name (`<tree>-cach-ly`), because the app reads
+  those variables once at start; then it starts `apps/agent` and `apps/agent-okr` on
+  those ports. The app is checked with `canh-cay.mjs`; `apps/agent-okr` answers
+  `GET /health` with the tree it serves (`cay`), and a mismatch is exit 2.
+  `rang/cach-ly-chi-okr.mjs` of `soan-okr-cung-tro-ly` is the reference.
 
 To measure a whole lane in one session — one database, one server start — wrap it:
 `bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.

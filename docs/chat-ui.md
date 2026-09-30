@@ -139,15 +139,17 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 | `message.tsx` | imported by the record sheet's Agent tab and the builder |
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
-| `conversation.tsx` | pulled fresh as the baseline for the scroll measurement; the OKR drafting prototype (`soan-okr-cung-tro-ly`) imports it, so the orphan gate's exemption is gone |
-| `prompt-input.tsx` | pulled 2026-09-30 for the OKR drafting screen: `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit`; its strings are in `messages.ts` under `promptInput` |
-| `suggestion.tsx` | pulled 2026-09-30 with `prompt-input.tsx`: `Suggestions` and `Suggestion`, the answer chips under an assistant question |
+| `conversation.tsx` | imported by `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx` (`Conversation`, `ConversationContent`, `ConversationEmptyState`) — the orphan gate's exemption for the scroll measurement is gone (`MIEN_TRU` in `mo-coi.mjs` is empty) |
+| `prompt-input.tsx` | `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit` — the composer of `okr/soan/hoi-thoai-soan.tsx`; pulled 2026-09-30 with the CLI; its strings are in `messages.ts` under `promptInput` |
+| `suggestion.tsx` | `Suggestions` and `Suggestion` — the answer chips under an assistant question in the OKR drafting chat; pulled 2026-09-30 with `prompt-input.tsx`. The accept · edit · reject card that once lived at `packages/ui/src/components/suggestion.tsx` is gone (`proposed-change.tsx` replaced it) |
 
-The other 19 vendored files were deleted in the `nen-chat-ai-elements` round —
-nine of them Adopted (`artifact`, `inline-citation`, `model-selector`, `plan`,
-`prompt-input`, `sources`, `suggestion`, `task`, `tool`), the rest Available or
-Not-for-this-product. None of them was reachable from `apps/**`, and carrying
-21 unreachable files was the cost the round was opened to remove.
+Of the 19 vendored files deleted in the `nen-chat-ai-elements` round, 17 are still
+gone — seven of them Adopted (`artifact`, `inline-citation`, `model-selector`,
+`plan`, `sources`, `task`, `tool`), the rest Available or Not-for-this-product.
+`prompt-input` and `suggestion`, the other two Adopted, were pulled back on
+2026-09-30 for the OKR drafting screen and are in the table above. None of the 19 was
+reachable from `apps/**`, and carrying 21 unreachable files was the cost the round
+was opened to remove.
 
 **Two gates now hold this shape, and they pull against each other on purpose:**
 the orphan gate (`_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs`, running
@@ -217,6 +219,11 @@ file with a fingerprint of the diverging lines:
   pulled in a scratch directory with this repo's `components.json`, because
   running `add` in `packages/ui` stops to ask about overwriting `alert.tsx` and
   `button.tsx`.
+- `prompt-input` and `suggestion` (pulled 2026-09-30): the English strings of
+  `prompt-input` go through `packages/ui/src/lib/messages.ts` (`promptInput`), its
+  upstream comments are dropped, and `suggestion` loses its `rounded-full` so the radius
+  stays on the scale of `docs/design.md`. Each has its own entry in
+  `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`.
 
 Whichever files a later phase pulls back in bring their own divergences, and
 they belong in that same ledger.
