@@ -158,6 +158,10 @@ export const OKR = {
 				"Không thấy cuộc soạn này — có thể nó không còn, hoặc bạn không được xem.",
 			cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
 			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
+			khongBoDuocCuoc:
+				"Cuộc này không phải cuộc đang soạn của đơn vị, hoặc chỉ người mở nó và quản trị bỏ được.",
+			thuLaiHayBo:
+				"Chọn một: thử lại cuộc đang soạn, hoặc bỏ nó để mở cuộc mới.",
 			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
 			dongCu: "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn.",
 			chaDaBac: (ten: string) =>

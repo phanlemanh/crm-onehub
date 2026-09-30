@@ -59,7 +59,9 @@ const sanSang = async (duong: "trpc" | "rest" = "trpc") =>
 		"soanSanSang",
 	);
 
-const mo = async (them: { thuLaiCuocId?: string } = {}) =>
+const mo = async (
+	them: { thuLaiCuocId?: string; boCuocDangId?: string } = {},
+) =>
 	ok<SoanMoOutput>(
 		await goiSoan(
 			app,
@@ -272,6 +274,154 @@ describe("soan-mo", () => {
 			);
 			expect(tra.status).toBe(400);
 			expect(tra.loi).toBe(OKR.thongDiep.soan.donViThieuId);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"bo-cuoc-dang: người mở bỏ cuộc đang và mở cuộc mới trong một lần gọi (trpc và rest); cuộc bỏ vẫn đếm vào trần",
+		async () => {
+			const dau = await mo();
+			if (!dau.ok) throw new Error(`mo: ${dau.lyDo}`);
+			const moi = await mo({ boCuocDangId: dau.cuoc.id });
+			if (!moi.ok) throw new Error(`bo roi mo: ${moi.lyDo}`);
+			expect(moi.cuoc.id).not.toBe(dau.cuoc.id);
+			expect(moi.cuoc.sessionId).toMatch(CHO_GIU);
+			const rest = ok<SoanMoOutput>(
+				await goiSoan(
+					app,
+					"soanMo",
+					"rest",
+					{ ...vaoDonVi(DON_VI.kdBac, "rest"), boCuocDangId: moi.cuoc.id },
+					cTruong,
+				),
+				"soanMo rest",
+			);
+			if (!rest.ok) throw new Error(`rest: ${rest.lyDo}`);
+			const hang = await db.okrCuocSoan.findMany({
+				where: { id: { in: [dau.cuoc.id, moi.cuoc.id, rest.cuoc.id] } },
+				select: { id: true, trangThai: true },
+			});
+			expect(new Map(hang.map((h) => [h.id, h.trangThai]))).toEqual(
+				new Map([
+					[dau.cuoc.id, "bo"],
+					[moi.cuoc.id, "bo"],
+					[rest.cuoc.id, "dang"],
+				]),
+			);
+			expect(await sanSang()).toMatchObject({ soCuocDaDung: 3 });
+			expect(await mo({ boCuocDangId: rest.cuoc.id })).toEqual({
+				ok: false,
+				lyDo: "het-cuoc-ky",
+				cuocDang: null,
+			});
+			expect(
+				(
+					await db.okrCuocSoan.findUniqueOrThrow({
+						where: { id: rest.cuoc.id },
+						select: { trangThai: true },
+					})
+				).trangThai,
+			).toBe("dang");
+		},
+		CHO_DB,
+	);
+
+	test(
+		"bo-cuoc-dang tu choi: sai cuộc, cuộc đã bỏ, cuộc người khác mở (không quản trị), kèm cả thử lại → 400 có tên, không cuộc nào đổi; quản trị bỏ được cuộc của trưởng phòng",
+		async () => {
+			const cuaQuanTri = await gieoCuoc({
+				donVi: DON_VI.kdBac,
+				nguoiMo: QUAN_TRI,
+			});
+			const daBo = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
+			await db.okrCuocSoan.update({
+				where: { id: daBo.id },
+				data: { trangThai: "bo" },
+			});
+			const khacDonVi = await gieoCuoc({
+				donVi: DON_VI.kdNam,
+				nguoiMo: TRUONG,
+			});
+			for (const [ten, them, loi] of [
+				[
+					"khong-co",
+					{ boCuocDangId: "khong-co" },
+					OKR.thongDiep.soan.khongBoDuocCuoc,
+				],
+				[
+					"da-bo",
+					{ boCuocDangId: daBo.id },
+					OKR.thongDiep.soan.khongBoDuocCuoc,
+				],
+				[
+					"khac-don-vi",
+					{ boCuocDangId: khacDonVi.id },
+					OKR.thongDiep.soan.khongBoDuocCuoc,
+				],
+				[
+					"nguoi-khac",
+					{ boCuocDangId: cuaQuanTri.id },
+					OKR.thongDiep.soan.khongBoDuocCuoc,
+				],
+				[
+					"ca-hai",
+					{ boCuocDangId: cuaQuanTri.id, thuLaiCuocId: cuaQuanTri.id },
+					OKR.thongDiep.soan.thuLaiHayBo,
+				],
+			] as const) {
+				const tra = await goiSoan(
+					app,
+					"soanMo",
+					"trpc",
+					{ ...vaoDonVi(DON_VI.kdBac, "trpc"), ...them },
+					cTruong,
+				);
+				expect({ ten, status: tra.status, loi: tra.loi }).toEqual({
+					ten,
+					status: 400,
+					loi,
+				});
+			}
+			const sauTuChoi = await db.okrCuocSoan.findMany({
+				where: { cycleId: CHU_KY_Q4 },
+				select: { id: true, trangThai: true },
+			});
+			expect(new Map(sauTuChoi.map((h) => [h.id, h.trangThai]))).toEqual(
+				new Map([
+					[cuaQuanTri.id, "dang"],
+					[daBo.id, "bo"],
+					[khacDonVi.id, "dang"],
+				]),
+			);
+			await db.okrCuocSoan.delete({ where: { id: daBo.id } });
+			const cuaTruong = await gieoCuoc({
+				donVi: DON_VI.kdBac,
+				nguoiMo: TRUONG,
+			});
+			await db.okrCuocSoan.update({
+				where: { id: cuaQuanTri.id },
+				data: { trangThai: "bo" },
+			});
+			const quanTri = ok<SoanMoOutput>(
+				await goiSoan(
+					app,
+					"soanMo",
+					"trpc",
+					{ ...vaoDonVi(DON_VI.kdBac, "trpc"), boCuocDangId: cuaTruong.id },
+					cQuanTri,
+				),
+				"soanMo quan tri",
+			);
+			expect(quanTri.ok).toBe(true);
+			expect(
+				(
+					await db.okrCuocSoan.findUniqueOrThrow({
+						where: { id: cuaTruong.id },
+						select: { trangThai: true },
+					})
+				).trangThai,
+			).toBe("bo");
 		},
 		CHO_DB,
 	);

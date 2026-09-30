@@ -755,7 +755,10 @@ export const soanSanSangOutput = z.discriminatedUnion("bat", [
 	}),
 	z.object({ bat: z.literal(false), lyDo: z.enum(LY_DO_SOAN) }),
 ]);
-export const soanMoInput = donViSoan.extend({ thuLaiCuocId: ma.optional() });
+export const soanMoInput = donViSoan.extend({
+	thuLaiCuocId: ma.optional(),
+	boCuocDangId: ma.optional(),
+});
 export const soanMoOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true), cuoc: cuocSoan }),
 	z.object({

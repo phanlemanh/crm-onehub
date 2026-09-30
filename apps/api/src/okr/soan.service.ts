@@ -75,12 +75,21 @@ import {
 } from "./soan-so-do.service";
 
 type Tx = Prisma.TransactionClient;
+
 type DbHoacTx = Db | Tx;
 type NacMo = CuocSoan["nac"];
 
 const T = OKR.thongDiep;
 const TRAN = TRO_LY_OKR_TRAN.soan;
 const phaChuKy = z.enum(PHA_CHU_KY);
+
+async function boCuoc(tx: Tx, id: string): Promise<void> {
+	const { count } = await tx.okrCuocSoan.updateMany({
+		where: { id, trangThai: "dang" },
+		data: { trangThai: "bo" },
+	});
+	if (count !== 1) throw new ConflictException(T.soan.cuocKhongDang);
+}
 
 export function donViTuVao(v: DonViSoanVao): DonViCuocSoan {
 	const goc = { cycleId: v.cycleId, divisionId: null, departmentId: null };
@@ -280,15 +289,26 @@ export class SoanService {
 		if (!cong.qua) return { ok: false, lyDo: cong.lyDo, cuocDang: null };
 		const tran = await this.tranChung(this.db, cong.ct, now);
 		if (!tran.bat) return { ok: false, lyDo: tran.lyDo, cuocDang: null };
-		const { thuLaiCuocId } = vao;
+		const { thuLaiCuocId, boCuocDangId } = vao;
+		if (thuLaiCuocId && boCuocDangId)
+			throw new BadRequestException(T.soan.thuLaiHayBo);
 		const kq = await this.db.$transaction(async (tx): Promise<KetQuaMo> => {
 			await lockIdempotencyKey(tx, khoaDonVi(dv));
 			await this.assertLapKeHoach(tx, dv.cycleId);
 			if (thuLaiCuocId) return this.thuLai(tx, userId, dv, thuLaiCuocId, now);
 			const dang = await cuocDang(tx, dv);
-			if (dang) return { ok: false, lyDo: "con-cuoc-dang", cuocDang: dang };
+			const boDuoc =
+				boCuocDangId !== undefined &&
+				dang !== null &&
+				dang.id === boCuocDangId &&
+				(dang.nguoiMoUserId === userId || cong.q.quanTri);
+			if (boCuocDangId !== undefined && !boDuoc)
+				throw new BadRequestException(T.soan.khongBoDuocCuoc);
+			if (dang && !boDuoc)
+				return { ok: false, lyDo: "con-cuoc-dang", cuocDang: dang };
 			if ((await demCuocTrongKy(tx, dv)) >= TRAN.cuocMoiDonViMoiKy)
 				return { ok: false, lyDo: "het-cuoc-ky", cuocDang: null };
+			if (dang && boDuoc) await boCuoc(tx, dang.id);
 			const cuoc = await moCuoc(tx, {
 				...dv,
 				nguoiMoUserId: userId,
