@@ -359,10 +359,11 @@ describe("dem-don-vi", () => {
 				await hoi("okr.sucKhoe", { cycleId: KY }, phien.qt ?? ""),
 				"sucKhoe",
 			).hang.find((h) => h.key === `pb:${PHAP_CHE}`);
-			console.log(`SO_THONG_KE ${JSON.stringify({ ...so[0], sucKhoe: sk })}`);
-			for (const [i, s] of so.entries())
-				expect({ ai: i, s }).toEqual({ ai: i, s: so[0] });
-			expect({ ...so[0], sucKhoe: sk }).toEqual(SO_TRUOC);
+			const [dau, ...conLai] = so;
+			console.log(`SO_THONG_KE ${JSON.stringify({ ...dau, sucKhoe: sk })}`);
+			for (const [i, s] of conLai.entries())
+				expect({ ai: i + 1, s }).toEqual({ ai: i + 1, s: dau });
+			expect({ ...dau, sucKhoe: sk }).toEqual(SO_TRUOC);
 		},
 		CHO_DB,
 	);
