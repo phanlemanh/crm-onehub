@@ -47,7 +47,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.tts_cach_ly
-    expected: "exit 0; bài tĩnh apps/agent/test/tro-ly-okr-cach-ly.spec.ts: TOOL_SONG của tro_ly_okr đúng bằng tập {nop_de_xuat, nop_tom_tat}; DANH_SACH_DOC của lib/okr/doc.ts có okrTomTat và okrCheckIn và không bảng đối tác nào; mọi ca cách ly sẵn có của 9a xanh. Chiều đỏ có sẵn của bài (thêm tool sống thứ ba → 'tool song lech')."
+    expected: "exit 0; bài tĩnh apps/agent/test/tro-ly-okr-cach-ly.spec.ts: TOOL_SONG của tro_ly_okr đúng bằng tập {nop_de_xuat, nop_tom_tat}; DANH_SACH_DOC của lib/okr/doc.ts có okrTomTat và okrCheckIn và không bảng đối tác nào; mọi ca cách ly sẵn có của 9a xanh. Chiều đỏ có sẵn của bài (thêm tool sống thứ ba → 'tool ngoai tap: <tên>')."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/agent/agent/subagents/tro_ly_okr/**", apps/agent/agent/lib/okr/doc.ts, apps/agent/test/tro-ly-okr-cach-ly.spec.ts]
 
