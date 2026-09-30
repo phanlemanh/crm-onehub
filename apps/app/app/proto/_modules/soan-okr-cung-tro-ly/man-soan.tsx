@@ -9,7 +9,12 @@ import {
 	Message,
 	MessageContent,
 } from "@crm/ui/components/ai-elements/message";
-import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import {
+	Alert,
+	AlertAction,
+	AlertDescription,
+	AlertTitle,
+} from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
@@ -202,9 +207,11 @@ function DaiThieuBoiCanh() {
 				Viết hai trang loại «Chiến lược» trong Kho tài liệu rồi duyệt; cuộc sau
 				Trợ lý sẽ đọc.
 			</AlertDescription>
-			<Button size="sm" variant="outline" className="mt-2 w-fit">
-				Tới Kho tài liệu
-			</Button>
+			<AlertAction>
+				<Button size="sm" variant="outline">
+					Tới Kho tài liệu
+				</Button>
+			</AlertAction>
 		</Alert>
 	);
 }
@@ -267,7 +274,12 @@ function CotHoiThoai({ hinh }: { hinh: HinhSoan }) {
 						<Luot key={l.id} luot={l} />
 					))}
 					{hinh === "dang-tra-loi" ? (
-						<div className="flex min-w-0 gap-2" aria-busy="true">
+						<div
+							className="flex min-w-0 gap-2"
+							role="status"
+							aria-live="polite"
+							aria-busy="true"
+						>
 							<AvatarTroLy />
 							<ThinkingIndicator label="Trợ lý OKR đang soạn…" />
 						</div>

@@ -35,6 +35,13 @@ import {
 	InputGroupText,
 } from "@crm/ui/components/input-group";
 import {
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemGroup,
+	ItemTitle,
+} from "@crm/ui/components/item";
+import {
 	Select,
 	SelectContent,
 	SelectItem,
@@ -64,6 +71,7 @@ import {
 	DON_VI,
 	DON_VI_CHON,
 	DONG_NGAN_CUOC,
+	dinhDang,
 	KY_SOAN,
 	SO_DO_SOAN,
 } from "./du-lieu";
@@ -367,7 +375,7 @@ function TheNacSoan() {
 							<InputGroupInput
 								id="tran-thang"
 								inputMode="decimal"
-								placeholder="Bằng trần thường"
+								placeholder="Bằng trần thường…"
 							/>
 							<InputGroupAddon align="inline-end">
 								<InputGroupText>USD</InputGroupText>
@@ -452,19 +460,19 @@ function TheSoDo({ rong }: { rong: boolean }) {
 									<TableCell className={CELL}>
 										<span translate="no">{c.donVi}</span>
 										<span className="block text-muted-foreground tabular-nums">
-											{c.ngay}
+											{dinhDang.ngayNgan(c.ngay)}
 										</span>
 									</TableCell>
 									<TableCell className={CELL}>{c.nac}</TableCell>
 									<TableCell className={`${CELL} text-right tabular-nums`}>
-										{c.luot}
+										{dinhDang.so(c.luot)}
 									</TableCell>
 									<TableCell className={`${CELL} text-right tabular-nums`}>
 										{c.dong}
 										{c.biLoai ? ` (+${c.biLoai} loại)` : ""}
 									</TableCell>
 									<TableCell className={`${CELL} text-right tabular-nums`}>
-										{c.chiPhi}
+										{dinhDang.usd(c.chiPhi)}
 									</TableCell>
 								</SimpleTableRow>
 							))}
@@ -485,7 +493,8 @@ function NganCuoc() {
 				<SheetHeader>
 					<SheetTitle translate="no">{c.donVi}</SheetTitle>
 					<SheetDescription>
-						{c.nac} · {c.luot} lượt · {c.chiPhi} · {c.ngay}
+						{c.nac} · {dinhDang.so(c.luot)} lượt · {dinhDang.usd(c.chiPhi)} ·{" "}
+						{dinhDang.ngayNgan(c.ngay)}
 					</SheetDescription>
 				</SheetHeader>
 				<div className="flex flex-col gap-3 px-4">
@@ -493,20 +502,24 @@ function NganCuoc() {
 						Bản nháp cuối, kể cả dòng bị loại — cuộc ở chế độ ẩn nên không ai
 						trong đơn vị thấy.
 					</p>
-					{DONG_NGAN_CUOC.map((d) => (
-						<div key={d.id} className="flex flex-col gap-1 border-b pb-3">
-							<p className="text-muted-foreground">{d.loai}</p>
-							<p translate="no">{d.chu}</p>
-							<span className="flex items-center gap-2">
-								<StatusIndicator
-									size="sm"
-									tone={d.ma ? "warning" : "neutral"}
-									label={d.trangThai}
-								/>
-								{d.ma ? <Badge variant="mono">{d.ma}</Badge> : null}
-							</span>
-						</div>
-					))}
+					<ItemGroup aria-label="Bản nháp cuối">
+						{DONG_NGAN_CUOC.map((d) => (
+							<Item key={d.id} size="sm" variant="outline" data-dong={d.id}>
+								<ItemContent>
+									<ItemDescription>{d.loai}</ItemDescription>
+									<ItemTitle translate="no">{d.chu}</ItemTitle>
+									<span className="flex items-center gap-2">
+										<StatusIndicator
+											size="sm"
+											tone={d.ma ? "warning" : "neutral"}
+											label={d.trangThai}
+										/>
+										{d.ma ? <Badge variant="mono">{d.ma}</Badge> : null}
+									</span>
+								</ItemContent>
+							</Item>
+						))}
+					</ItemGroup>
 				</div>
 			</SheetContent>
 		</Sheet>

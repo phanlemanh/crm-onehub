@@ -1,3 +1,33 @@
+const NGAY_DAY_DU = new Intl.DateTimeFormat("vi-VN", {
+	day: "2-digit",
+	month: "2-digit",
+	year: "numeric",
+});
+const NGAY_NGAN = new Intl.DateTimeFormat("vi-VN", {
+	day: "2-digit",
+	month: "2-digit",
+});
+const SO_VI = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 1 });
+const TIEN_VI = new Intl.NumberFormat("vi-VN", {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2,
+});
+
+export const dinhDang = {
+	ngayDayDu: (d: Date) => NGAY_DAY_DU.format(d),
+	ngayNgan: (d: Date) =>
+		NGAY_NGAN.formatToParts(d)
+			.filter((p) => p.type === "day" || p.type === "month")
+			.map((p) => p.value)
+			.join("/"),
+	so: (n: number) => SO_VI.format(n),
+	giay: (n: number) => `${SO_VI.format(n)} s`,
+	usd: (n: number) => `$${TIEN_VI.format(n)}`,
+} as const;
+
+const ngay = (nam: number, thang: number, ngay: number) =>
+	new Date(nam, thang - 1, ngay);
+
 export const DON_VI = {
 	ten: "Kinh doanh miền Bắc",
 	cap: "Phòng ban",
@@ -223,7 +253,7 @@ export const HOI_THOAI_BI_LOAI: LuotChat[] = [
 
 export type CuocSoan = {
 	id: string;
-	ngay: string;
+	ngay: Date;
 	nguoiMo: string;
 	dongNhan: number;
 	dongTong: number;
@@ -233,7 +263,7 @@ export type CuocSoan = {
 export const CUOC: CuocSoan[] = [
 	{
 		id: "c3",
-		ngay: "30/11/2026",
+		ngay: ngay(2026, 11, 30),
 		nguoiMo: "Trần Minh Hải",
 		dongNhan: 0,
 		dongTong: 11,
@@ -241,7 +271,7 @@ export const CUOC: CuocSoan[] = [
 	},
 	{
 		id: "c2",
-		ngay: "27/11/2026",
+		ngay: ngay(2026, 11, 27),
 		nguoiMo: "Nguyễn Thị Lan",
 		dongNhan: 9,
 		dongTong: 12,
@@ -249,7 +279,7 @@ export const CUOC: CuocSoan[] = [
 	},
 	{
 		id: "c1",
-		ngay: "24/11/2026",
+		ngay: ngay(2026, 11, 24),
 		nguoiMo: "Trần Minh Hải",
 		dongNhan: 2,
 		dongTong: 10,
@@ -276,15 +306,30 @@ export type SoDoSoan = {
 	an: string;
 };
 
+const KHONG_CO = "—";
+const { so, giay, usd } = dinhDang;
+
 export const SO_DO_SOAN: SoDoSoan[] = [
-	{ nhan: "Cuộc mở", bat: "9", an: "14" },
-	{ nhan: "Cuộc tới «Đưa vào»", bat: "6", an: "—" },
-	{ nhan: "Dòng nhận / sửa / bác", bat: "41 / 12 / 19", an: "—" },
-	{ nhan: "Dòng bị loại (theo mã)", bat: "4 · SO-MOI 3, DON-VI 1", an: "11" },
-	{ nhan: "Mục tiêu nháp → công bố trong 14 ngày", bat: "14 / 17", an: "—" },
-	{ nhan: "Chi phí mỗi cuộc", bat: "$0,21", an: "$0,19" },
-	{ nhan: "Độ trễ mỗi lượt p50", bat: "9,4 s", an: "9,8 s" },
-	{ nhan: "Độ trễ mỗi lượt p90", bat: "18,1 s", an: "19,6 s" },
+	{ nhan: "Cuộc mở", bat: so(9), an: so(14) },
+	{ nhan: "Cuộc tới «Đưa vào»", bat: so(6), an: KHONG_CO },
+	{
+		nhan: "Dòng nhận / sửa / bác",
+		bat: [41, 12, 19].map(so).join(" / "),
+		an: KHONG_CO,
+	},
+	{
+		nhan: "Dòng bị loại (theo mã)",
+		bat: `${so(4)} · SO-MOI ${so(3)}, DON-VI ${so(1)}`,
+		an: so(11),
+	},
+	{
+		nhan: "Mục tiêu nháp → công bố trong 14 ngày",
+		bat: `${so(14)} / ${so(17)}`,
+		an: KHONG_CO,
+	},
+	{ nhan: "Chi phí mỗi cuộc", bat: usd(0.21), an: usd(0.19) },
+	{ nhan: "Độ trễ mỗi lượt p50", bat: giay(9.4), an: giay(9.8) },
+	{ nhan: "Độ trễ mỗi lượt p90", bat: giay(18.1), an: giay(19.6) },
 ];
 
 export type CuocGanDay = {
@@ -294,8 +339,8 @@ export type CuocGanDay = {
 	luot: number;
 	dong: number;
 	biLoai: number;
-	chiPhi: string;
-	ngay: string;
+	chiPhi: number;
+	ngay: Date;
 };
 
 export const CUOC_GAN_DAY: CuocGanDay[] = [
@@ -306,8 +351,8 @@ export const CUOC_GAN_DAY: CuocGanDay[] = [
 		luot: 5,
 		dong: 10,
 		biLoai: 1,
-		chiPhi: "$0,24",
-		ngay: "29/11",
+		chiPhi: 0.24,
+		ngay: ngay(2026, 11, 29),
 	},
 	{
 		id: "g2",
@@ -316,8 +361,8 @@ export const CUOC_GAN_DAY: CuocGanDay[] = [
 		luot: 4,
 		dong: 11,
 		biLoai: 0,
-		chiPhi: "$0,19",
-		ngay: "27/11",
+		chiPhi: 0.19,
+		ngay: ngay(2026, 11, 27),
 	},
 	{
 		id: "g3",
@@ -326,8 +371,8 @@ export const CUOC_GAN_DAY: CuocGanDay[] = [
 		luot: 6,
 		dong: 9,
 		biLoai: 2,
-		chiPhi: "$0,27",
-		ngay: "26/11",
+		chiPhi: 0.27,
+		ngay: ngay(2026, 11, 26),
 	},
 ];
 

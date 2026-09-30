@@ -1,6 +1,11 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import {
+	Alert,
+	AlertAction,
+	AlertDescription,
+	AlertTitle,
+} from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -213,7 +218,6 @@ function TheKr({
 				id={`kr-${kr.id}`}
 				data-dong={kr.id}
 				data-loai-dong="kr"
-				tabIndex={ket ? undefined : 0}
 				label={
 					<>
 						KR <NhanThe nhan={nhan} />
@@ -257,7 +261,6 @@ function TheMucTieu({
 			id={`mt-${mt.id}`}
 			data-dong={mt.id}
 			data-loai-dong="muc-tieu"
-			tabIndex={ket ? undefined : 0}
 			label={
 				<>
 					Mục tiêu {mt.stt} · {NHAN_LOAI[loai]} <NhanThe nhan={nhan} />
@@ -478,9 +481,11 @@ export function BanNhap({ hinh }: { hinh: HinhNhap }) {
 						{conKr} KR đi kèm; đích bạn đã điền được giữ, ô trống điền tiếp ở
 						Theo đơn vị.
 					</AlertDescription>
-					<Button size="sm" variant="outline" className="mt-2 w-fit">
-						Xem ở Theo đơn vị
-					</Button>
+					<AlertAction>
+						<Button size="sm" variant="outline">
+							Xem ở Theo đơn vị
+						</Button>
+					</AlertAction>
 				</Alert>
 			) : null}
 			<div className="flex flex-col gap-4">

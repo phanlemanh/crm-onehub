@@ -26,6 +26,7 @@ import {
 	type CuocSoan,
 	DON_VI,
 	DON_VI_CHON,
+	dinhDang,
 	KY_SOAN,
 	NHAN_TRANG_THAI_CUOC,
 	TRAN,
@@ -85,13 +86,16 @@ function NutSoan({ hinh }: { hinh: HinhNut }) {
 		);
 	}
 	if (hinh === "nut-tiep") {
+		const cuocDang = CUOC.find((c) => c.trangThai === "dang");
 		return (
 			<Field data-nut-soan={hinh}>
 				<Button variant="outline" className="w-fit">
 					Tiếp cuộc đang soạn
 				</Button>
 				<FieldDescription>
-					Mở 30/11 · 2 lượt · 11 dòng chưa quyết
+					{cuocDang
+						? `Mở ${dinhDang.ngayNgan(cuocDang.ngay)} · ${dinhDang.so(2)} lượt · ${dinhDang.so(cuocDang.dongTong)} dòng chưa quyết`
+						: null}
 				</FieldDescription>
 			</Field>
 		);
@@ -219,7 +223,7 @@ export function DanhSachCuoc({ rong }: { rong: boolean }) {
 					Cuộc soạn cùng Trợ lý · {KY_SOAN.ten}
 				</h4>
 				<p className="text-muted-foreground tabular-nums">
-					{CUOC.length}/{TRAN.cuocMoiKy} cuộc
+					{dinhDang.so(CUOC.length)}/{dinhDang.so(TRAN.cuocMoiKy)} cuộc
 				</p>
 			</div>
 			<SimpleTable
@@ -234,12 +238,14 @@ export function DanhSachCuoc({ rong }: { rong: boolean }) {
 			>
 				{CUOC.map((c) => (
 					<SimpleTableRow key={c.id}>
-						<TableCell className={`${CELL} tabular-nums`}>{c.ngay}</TableCell>
+						<TableCell className={`${CELL} tabular-nums`}>
+							{dinhDang.ngayDayDu(c.ngay)}
+						</TableCell>
 						<TableCell className={CELL}>
 							<TenNguoi ten={c.nguoiMo} />
 						</TableCell>
 						<TableCell className={`${CELL} text-right tabular-nums`}>
-							{c.dongNhan}/{c.dongTong}
+							{dinhDang.so(c.dongNhan)}/{dinhDang.so(c.dongTong)}
 						</TableCell>
 						<TableCell className={CELL}>
 							<StatusIndicator
@@ -249,7 +255,11 @@ export function DanhSachCuoc({ rong }: { rong: boolean }) {
 							/>
 						</TableCell>
 						<TableCell className={`${CELL} text-right`}>
-							<Button size="sm" variant="outline">
+							<Button
+								size="sm"
+								variant="outline"
+								aria-label={`${c.trangThai === "dang" ? "Tiếp" : "Xem"} cuộc ${dinhDang.ngayDayDu(c.ngay)}`}
+							>
 								{c.trangThai === "dang" ? "Tiếp" : "Xem"}
 							</Button>
 						</TableCell>

@@ -32,6 +32,13 @@ const kho = [
 	{ ten: "mobile-375", w: 375, h: 812 },
 ];
 const themes = (process.env.THEMES ?? "light").split(",");
+const CUON_NHAP = new Set([
+	"ST-soan-dua-vao-thieu-dich",
+	"ST-soan-da-dua-vao",
+	"ST-soan-dua-vao-loi",
+	"ST-soan-het-luot",
+	"ST-soan-dong-bi-loai",
+]);
 
 const trinh = await puppeteer.launch({
 	executablePath:
@@ -65,6 +72,14 @@ for (const theme of themes) {
 				}
 			});
 			await new Promise((ok) => setTimeout(ok, 400));
+			if (CUON_NHAP.has(id)) {
+				await trang.evaluate(() => {
+					for (const el of document.querySelectorAll("[data-man-soan] .overflow-y-auto")) {
+						el.scrollTop = el.scrollHeight;
+					}
+				});
+				await new Promise((ok) => setTimeout(ok, 200));
+			}
 			if (id.startsWith("ST-caidat") || id.startsWith("ST-sodo")) {
 				const cao = await trang.evaluate(
 					() => document.documentElement.scrollHeight,
