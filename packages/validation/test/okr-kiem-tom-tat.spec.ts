@@ -293,17 +293,17 @@ const CA_SO: CaSo[] = [
 	},
 ];
 
+function nguonCuaCa(ca: CaSo, lech: boolean): NguonKiem {
+	if (lech && ca.nguonLech) {
+		return nguon({ id: "s1", keyResultId: "k1", ...ca.nguon, ...ca.nguonLech });
+	}
+	return nguon({ id: "s1", keyResultId: "k1", ...ca.nguon });
+}
+
 function goiSo(ca: CaSo, lech = false): GoiKiemTomTat {
 	return {
 		...GOI,
-		nguon: [
-			nguon({
-				id: "s1",
-				keyResultId: "k1",
-				...ca.nguon,
-				...(lech ? ca.nguonLech : {}),
-			}),
-		],
+		nguon: [nguonCuaCa(ca, lech)],
 		krs: [
 			{
 				id: "k1",
