@@ -89,7 +89,7 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.vtl_hai_giong
-    expected: "exit 0; bài DOM apps/app/test/tro-ly-okr-gop-y.dom.tsx -t hai-giong: HopThoaiKr thật với tRPC giả trả troLyDanhSach rỗng đã nộp; ca KR tên là việc ('Gọi 50 đối tác') → gợi ý tĩnh hiện VÀ mô tả rỗng là rongCoGoiY; ca KR tên không là việc → không gợi ý VÀ mô tả rongMoTaKr; cùng hai ca cho HopThoaiMucTieu (gợi ý tĩnh trên KR trong phạm vi) với rongMoTa. Chữ rút từ okrGopYMessages. Chiều đỏ: bản sao CotGopY bỏ prop coGoiYTinh → ca có gợi ý ra 'đã đọc ổn', thông điệp ghim 'hai giong: kr'."
+    expected: "exit 0; bài DOM apps/app/test/tro-ly-okr-gop-y.dom.tsx -t hai-giong: HopThoaiKr thật với tRPC giả trả troLyDanhSach rỗng đã nộp; ca KR tên là việc ('Gọi 50 đối tác') → gợi ý tĩnh hiện VÀ mô tả rỗng là rongCoGoiY; ca KR tên không là việc → không gợi ý VÀ mô tả rongMoTaKr; ca KR có gợi ý thieu-khoi-diem (khởi điểm 0) cũng ra rongCoGoiY (điều kiện là có gợi ý bất kỳ, không riêng kr-la-viec). HopThoaiMucTieu không có gợi ý tĩnh: ca rỗng giữ rongMoTa (đối chứng không đổi). Chữ rút từ okrGopYMessages. Chiều đỏ: bản sao CotGopY bỏ prop coGoiYTinh → ca có gợi ý ra 'đã đọc ổn', thông điệp ghim 'hai giong: kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
 
