@@ -134,7 +134,8 @@ export function FormDeal() {
 				<FieldLabel htmlFor="deal-giai-doan">Giai đoạn</FieldLabel>
 				<Input id="deal-giai-doan" defaultValue="Đã hẹn demo" />
 				<FieldDescription>
-					Thoả thuận mới là thoả thuận đang mở — chốt nó khi đã có kết quả để ghi lại.
+					Thoả thuận mới là thoả thuận đang mở — chốt nó khi đã có kết quả để
+					ghi lại.
 				</FieldDescription>
 			</Field>
 			<Field>
