@@ -25,6 +25,7 @@
 		"./idempotency": "./src/idempotency.ts",
 		"./json": "./src/json.ts",
 		"./kenh-thong-bao": "./src/kenh-thong-bao.ts",
+		"./measure-database": "./src/measure-database.ts",
 		"./okr-chi-so": "./src/okr-chi-so.ts",
 		"./okr-chi-so-danh-muc": "./src/okr-chi-so-danh-muc.ts",
 		"./okr-de-xuat": "./src/okr-de-xuat.ts",
