@@ -1,6 +1,2 @@
-Luot xac minh doc lap E12 (ui:E12), 2026-09-30 ~09:45 +0700. Driver = puppeteer trong rang/man-hoi-y.mjs (EVAL=E12, qua tien-de.mjs, phien do crm_dot_hoi_y_tuong_okr_do, app :4374, api :4805) - khong phai tool trinh duyet co read_network_requests.
-Nhat ky mang cua script (man-hoi-y-network.txt), nguyen van:
-2026-09-30T02:45:43.608Z B 500 GET http://localhost:4374/api/trpc/okr.hoiY?batch=1&input=... (cycleId mau-okr-chu-ky-nam)
-2026-09-30T02:45:43.608Z B console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-Giai thich: 500 tren okr.hoiY chi sinh o buoc 9 do chinh script chen (chan truy van), dung yeu cau buoc; khong co requestfailed / >=400 / pageerror nao khac.
-Ket qua script: 63 khang dinh, 0 hong, 10 anh. Chieu do: E12-ten -> DO DUNG GHIM (ma 1, ten lo «Cao Thanh Van»); E12-cot -> DO DUNG GHIM (ma 1, mep tren o soan 894px).
+2026-09-30T03:03:44.232Z B 500 GET http://localhost:4543/api/trpc/okr.hoiY?batch=1&input=%7B%220%22%3A%7B%22cycleId%22%3A%22mau-okr-chu-ky-nam%22%7D%7D
+2026-09-30T03:03:44.232Z B console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
