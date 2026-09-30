@@ -337,6 +337,11 @@ export const krCanhOutput = krOutput.extend({
 	coBangChung: z.boolean(),
 });
 
+export const nguoiDuyetOkr = z.union([
+	z.object({ ten: z.string() }),
+	z.literal("quan-tri"),
+]);
+
 export const objectiveOutput = mucTieuOutput.extend({
 	keyResults: z.array(krCanhOutput),
 	cycleName: z.string(),
@@ -346,14 +351,19 @@ export const objectiveOutput = mucTieuOutput.extend({
 	canEditKr: z.array(z.string()),
 	hienThi: z.enum(MUC_HIEN_THI),
 	nguoiXem: z.array(z.object({ id: z.string(), name: z.string() })),
+	nguoiDuyetDuKien: nguoiDuyetOkr.nullable(),
 	choDuyet: z
 		.object({
 			nguoiGui: nguoiOkr.nullable(),
 			guiLuc: z.string().nullable(),
-			nguoiDuyet: z.union([
-				z.object({ ten: z.string() }),
-				z.literal("quan-tri"),
-			]),
+			nguoiDuyet: nguoiDuyetOkr,
+			lanTraLaiTruoc: z
+				.object({
+					lyDo: z.string(),
+					nguoi: nguoiOkr.nullable(),
+					luc: z.string(),
+				})
+				.nullable(),
 		})
 		.nullable(),
 	traLaiGanNhat: z

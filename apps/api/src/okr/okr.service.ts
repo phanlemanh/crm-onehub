@@ -1869,6 +1869,20 @@ export class OkrService {
 		const ghiDuoc = ghiDuocOPha(phaChuKy.parse(ky.phase));
 		const duyetDuoc = this.quyenOkr.duyetDuoc(q, userId, objective);
 		const choDuyet = mt.status === "cho-duyet";
+		const cachCongBo = this.congBoHayGuiDuyet(ct, q, userId, objective);
+		const guiDuyetDuoc =
+			ghiDuoc &&
+			mt.canEdit &&
+			mt.status === "nhap" &&
+			cachCongBo === "cho-duyet";
+		const traLaiTruoc = guiCuoi
+			? vetDuyet.findLast(
+					(v) =>
+						v.action === "tra-lai" && v.at.getTime() < guiCuoi.at.getTime(),
+				)
+			: undefined;
+		const nguoiDuyetCua = () =>
+			this.quyenOkr.tenNguoiDuyet(q, this.quyenOkr.nguoiDuyet(q, objective));
 		const demLoai = (krId: string, laViec: boolean) =>
 			dem
 				.filter((d) => d.keyResultId === krId && (d.loai === "viec") === laViec)
@@ -1920,14 +1934,19 @@ export class OkrService {
 				.map((k) => k.id),
 			hienThi: mucHienThi.parse(hienThi),
 			nguoiXem: nguoiXem.map((x) => x.user),
+			nguoiDuyetDuKien: guiDuyetDuoc ? nguoiDuyetCua() : null,
 			choDuyet: choDuyet
 				? {
 						nguoiGui: guiCuoi ? nguoiCua(guiCuoi.actorUserId) : null,
 						guiLuc: guiCuoi ? guiCuoi.at.toISOString() : null,
-						nguoiDuyet: this.quyenOkr.tenNguoiDuyet(
-							q,
-							this.quyenOkr.nguoiDuyet(q, objective),
-						),
+						nguoiDuyet: nguoiDuyetCua(),
+						lanTraLaiTruoc: traLaiTruoc
+							? {
+									lyDo: traLaiTruoc.note ?? "",
+									nguoi: nguoiCua(traLaiTruoc.actorUserId),
+									luc: traLaiTruoc.at.toISOString(),
+								}
+							: null,
 					}
 				: null,
 			traLaiGanNhat:
@@ -1944,12 +1963,8 @@ export class OkrService {
 					ghiDuoc &&
 					mt.canEdit &&
 					(mt.status === "nhap" || choDuyet) &&
-					this.congBoHayGuiDuyet(ct, q, userId, objective) === "cong-bo",
-				guiDuyet:
-					ghiDuoc &&
-					mt.canEdit &&
-					mt.status === "nhap" &&
-					this.congBoHayGuiDuyet(ct, q, userId, objective) === "cho-duyet",
+					cachCongBo === "cong-bo",
+				guiDuyet: guiDuyetDuoc,
 				duyet: ghiDuoc && choDuyet && duyetDuoc,
 				rutDuyet: ghiDuoc && choDuyet && guiCuoi?.actorUserId === userId,
 			},

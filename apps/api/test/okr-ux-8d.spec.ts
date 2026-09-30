@@ -19,6 +19,7 @@ import {
 	ok,
 	phienMau,
 	type TraLoi,
+	tienDongHo,
 } from "./tro-ly-okr-san";
 
 const KY = idMau("chu-ky", "quy4");
@@ -34,6 +35,8 @@ const NGUOI = {
 	qt: "le-hai-dang",
 	them: "pham-thu-trang",
 	roiKr: "lu-quoc-viet",
+	thu: "doan-thi-thu",
+	anh: "vo-duc-anh",
 } as const;
 
 type Muc = { id: string; hienThi?: string; soNguoiXem?: number };
@@ -365,6 +368,211 @@ describe("dem-don-vi", () => {
 				conLai.map(() => JSON.stringify(dau)),
 			);
 			expect({ ...dau, sucKhoe: sk }).toEqual(SO_TRUOC);
+		},
+		CHO_DB,
+	);
+});
+
+const KHOI_HO_TRO_ID = idMau("bp", "ho-tro");
+
+async function lam(ten: string, vao: DauVaoHopLe, ai: string): Promise<TraLoi> {
+	const res = await goiTrpc(app, ten, "mutation", vao, {
+		cookie: phien[ai] ?? "",
+	});
+	return {
+		status: res.status,
+		data: res.body?.result?.data,
+		loi: String(res.body?.error?.message ?? ""),
+	};
+}
+
+async function taoNhap(v: {
+	id: string;
+	level: "phong-ban" | "bo-phan" | "ca-nhan";
+	chu: string;
+	departmentId?: string;
+	divisionId?: string;
+	personUserId?: string;
+}) {
+	await db.okrObjective.create({
+		data: {
+			id: v.id,
+			cycleId: KY,
+			level: v.level,
+			departmentId: v.departmentId ?? null,
+			divisionId: v.divisionId ?? null,
+			personUserId: v.personUserId ?? null,
+			ownerUserId: nguoi(v.chu),
+			kind: "cam-ket",
+			status: "nhap",
+			title: `Nháp u8d ${v.id.slice(-6)}`,
+			keyResults: {
+				create: {
+					title: "Số đo của nháp u8d",
+					kind: "tang-toi",
+					ownerUserId: nguoi(v.chu),
+					startValue: 0,
+					targetValue: 10,
+					currentValue: 0,
+				},
+			},
+		},
+	});
+}
+
+type DuyetDoc = {
+	status: string;
+	nguoiDuyetDuKien: { ten: string } | "quan-tri" | null;
+	choDuyet: {
+		nguoiDuyet: { ten: string } | "quan-tri";
+		lanTraLaiTruoc: { lyDo: string; nguoi: { id: string } | null } | null;
+	} | null;
+	trail: { action: string; note: string | null }[];
+};
+
+const docMt = async (id: string, ai: string) =>
+	ok<DuyetDoc>(
+		await hoi("okr.objective", { id }, phien[ai] ?? ""),
+		`doc ${id}`,
+	);
+
+const ten = async (ma: string) =>
+	(
+		await db.user.findUniqueOrThrow({
+			where: { id: nguoi(ma) },
+			select: { name: true },
+		})
+	).name;
+
+describe("nguoi-duyet", () => {
+	const PB = idMau("mt", "u8d-duyet-pb");
+	const BP = idMau("mt", "u8d-duyet-bp");
+	const CN = idMau("mt", "u8d-duyet-cn");
+	const CN_TRUONG = idMau("mt", "u8d-duyet-cn-truong");
+
+	beforeAll(async () => {
+		ok(
+			await lam(
+				"okr.setProgram",
+				{ duyetCongBo: true, personalOn: true },
+				"qt",
+			),
+			"bat duyet",
+		);
+		await taoNhap({
+			id: PB,
+			level: "phong-ban",
+			chu: NGUOI.chu,
+			departmentId: PHAP_CHE,
+		});
+		await taoNhap({
+			id: BP,
+			level: "bo-phan",
+			chu: NGUOI.thu,
+			divisionId: KHOI_HO_TRO_ID,
+		});
+		await taoNhap({
+			id: CN,
+			level: "ca-nhan",
+			chu: NGUOI.anh,
+			personUserId: nguoi(NGUOI.anh),
+		});
+		await taoNhap({
+			id: CN_TRUONG,
+			level: "ca-nhan",
+			chu: NGUOI.chu,
+			personUserId: nguoi(NGUOI.chu),
+		});
+	}, CHO_DB);
+
+	afterAll(async () => {
+		await lam("okr.setProgram", { duyetCongBo: false }, "qt");
+	}, CHO_DB);
+
+	test(
+		"bảng bốn cấp: nguoiDuyetDuKien đúng người duyệt, bằng choDuyet.nguoiDuyet sau khi gửi; ba ca null",
+		async () => {
+			const bang = [
+				{ id: PB, ai: "chu", kyVong: { ten: await ten(NGUOI.thu) } },
+				{ id: BP, ai: "thu", kyVong: "quan-tri" as const },
+				{ id: CN, ai: "anh", kyVong: { ten: await ten("pham-thu-trang") } },
+				{ id: CN_TRUONG, ai: "chu", kyVong: { ten: await ten(NGUOI.thu) } },
+			];
+			const ra = [];
+			for (const b of bang) ra.push((await docMt(b.id, b.ai)).nguoiDuyetDuKien);
+			expect(ra).toEqual(bang.map((b) => b.kyVong));
+
+			expect((await docMt(PB, "n")).nguoiDuyetDuKien).toBeNull();
+			expect((await docMt(G, "chu")).nguoiDuyetDuKien).toBeNull();
+			ok(await lam("okr.setProgram", { duyetCongBo: false }, "qt"), "tat");
+			expect((await docMt(PB, "chu")).nguoiDuyetDuKien).toBeNull();
+			ok(await lam("okr.setProgram", { duyetCongBo: true }, "qt"), "bat lai");
+
+			const truoc = (await docMt(PB, "chu")).nguoiDuyetDuKien;
+			tienDongHo();
+			ok(await lam("okr.guiDuyet", { id: PB }, "chu"), "gui");
+			const sau = await docMt(PB, "chu");
+			expect(sau.status).toBe("cho-duyet");
+			expect(sau.choDuyet?.nguoiDuyet).toEqual(truoc ?? "rong");
+			expect(sau.nguoiDuyetDuKien).toBeNull();
+		},
+		CHO_DB,
+	);
+});
+
+describe("tra-lai-truoc", () => {
+	const MT_TL = idMau("mt", "u8d-tra-lai");
+
+	beforeAll(async () => {
+		ok(await lam("okr.setProgram", { duyetCongBo: true }, "qt"), "bat duyet");
+		await taoNhap({
+			id: MT_TL,
+			level: "phong-ban",
+			chu: NGUOI.chu,
+			departmentId: PHAP_CHE,
+		});
+	}, CHO_DB);
+
+	afterAll(async () => {
+		await lam("okr.setProgram", { duyetCongBo: false }, "qt");
+	}, CHO_DB);
+
+	test(
+		"gửi → trả L1 → gửi → trả L2 → gửi: lanTraLaiTruoc null, rồi L1, rồi L2; Vết giữ L1, L2",
+		async () => {
+			const L1 = "Thêm KR đo doanh thu từ khách quay lại.";
+			const L2 = "Đích 40% còn thấp so với quý 3, nâng lên.";
+			const buoc = async (ten: string, vao: DauVaoHopLe, ai: string) => {
+				tienDongHo();
+				ok(await lam(ten, vao, ai), ten);
+			};
+			await buoc("okr.guiDuyet", { id: MT_TL }, "chu");
+			const lan1 = (await docMt(MT_TL, "thu")).choDuyet?.lanTraLaiTruoc;
+			await buoc("okr.traLaiMucTieu", { objectiveId: MT_TL, lyDo: L1 }, "thu");
+			await buoc("okr.guiDuyet", { id: MT_TL }, "chu");
+			const lan2 = (await docMt(MT_TL, "thu")).choDuyet?.lanTraLaiTruoc;
+			await buoc("okr.traLaiMucTieu", { objectiveId: MT_TL, lyDo: L2 }, "thu");
+			await buoc("okr.guiDuyet", { id: MT_TL }, "chu");
+			const doc3 = await docMt(MT_TL, "thu");
+			expect({
+				lan1: lan1 ?? null,
+				lan2: lan2 ? [lan2.lyDo, lan2.nguoi?.id] : null,
+				lan3: doc3.choDuyet?.lanTraLaiTruoc
+					? [
+							doc3.choDuyet.lanTraLaiTruoc.lyDo,
+							doc3.choDuyet.lanTraLaiTruoc.nguoi?.id,
+						]
+					: null,
+				vet: doc3.trail
+					.filter((v) => v.action === "tra-lai")
+					.map((v) => v.note)
+					.sort(),
+			}).toEqual({
+				lan1: null,
+				lan2: [L1, nguoi(NGUOI.thu)],
+				lan3: [L2, nguoi(NGUOI.thu)],
+				vet: [L1, L2].sort(),
+			});
 		},
 		CHO_DB,
 	);
