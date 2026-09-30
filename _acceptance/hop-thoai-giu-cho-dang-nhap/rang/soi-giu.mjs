@@ -239,6 +239,15 @@ const DANH_SACH = [
 	`${SLUG}/settings/connections/slack/slack-channels.tsx`,
 	"apps/app/components/crm/fields/field-editor.tsx",
 	`${SLUG}/settings/organization/hop-thoai-vi-tri.tsx`,
+	`${SLUG}/settings/giai-doan/hop-thoai-giai-doan.tsx`,
+	`${SLUG}/settings/okr/hop-thoai-mo-lai.tsx`,
+	`${SLUG}/settings/okr/sheet-mau-okr.tsx`,
+	`${SLUG}/settings/okr/sheet-mo-ra.tsx`,
+	`${SLUG}/tai-lieu/hop-tai-nguon.tsx`,
+	"apps/app/components/crm/record-sheet/kr-bang-chung.tsx",
+	"apps/app/components/crm/record-sheet/objective-duyet.tsx",
+	"apps/app/components/crm/record-sheet/objective-hien-thi.tsx",
+	"apps/app/components/okr/hop-chuyen-okr.tsx",
 ];
 
 const BA_HOP = [
@@ -566,8 +575,8 @@ function caHuyChieuDo() {
 		rel: BA_HOP[0],
 		pha: (chu) =>
 			chu.replace(
-				/<DialogClose asChild[^>]*>\s*(<Button variant="outline")([\s\S]*?<\/Button>)\s*<\/DialogClose>/,
-				"$1 onClick={dong}$2",
+				/<(Dialog|Sheet)Close asChild[^>]*>\s*(<Button variant="outline")([\s\S]*?<\/Button>)\s*<\/\1Close>/,
+				"$2 onClick={dong}$3",
 			),
 		cham: caHuy,
 		ghim: /^huy: hop-thoai-kr\.tsx:\d+ goi thang ham dong$/,
@@ -594,7 +603,7 @@ function dialogGoc(sf) {
 	let ra = null;
 	const di = (n) => {
 		if (ra) return;
-		if (tenThe(n, sf) === "Dialog") {
+		if (tenThe(n, sf) === "Dialog" || tenThe(n, sf) === "Sheet") {
 			ra = n;
 			return;
 		}
@@ -617,7 +626,7 @@ function caTuKhai(goc) {
 		const sf = cay(duong);
 		const dialog = dialogGoc(sf);
 		if (!dialog) {
-			hong.push(`tu-khai: khong thay <Dialog> o ${ten}`);
+			hong.push(`tu-khai: khong thay <Dialog> hay <Sheet> o ${ten}`);
 			continue;
 		}
 		const prop = thuocTinh(dialog).find(
