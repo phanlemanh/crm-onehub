@@ -19,7 +19,12 @@ import { getServerTrpcClient } from "@/lib/trpc/server";
 const loi = (status: number, error: string) =>
 	Response.json({ error }, { status });
 
-async function handler(request: Request): Promise<Response> {
+type DangDuong = keyof typeof CUA_OKR.dangDuong;
+
+async function handler(
+	request: Request,
+	{ params }: { params: Promise<{ path: string[] }> },
+): Promise<Response> {
 	await connection();
 
 	if (!okrBridgeConfigured()) return loi(503, CUA_OKR.loi.chuaCauHinh);
@@ -30,6 +35,16 @@ async function handler(request: Request): Promise<Response> {
 	const role = await workspaceRoleOf(session.user.id);
 	if (!role) return loi(403, NOT_A_MEMBER);
 	if (!docDuocPhamVi(role, "okr")) return loi(403, KHONG_TRONG_PHAM_VI);
+
+	const duong = khopDuong((await params).path);
+	if (!duong) return loi(404, CUA_OKR.loi.duongKhongPhucVu);
+
+	const dich = new URL(`/${duong.doan.join("/")}`, OKR_AGENT_URL);
+	if (dich.origin !== new URL(OKR_AGENT_URL).origin) {
+		return loi(404, CUA_OKR.loi.duongKhongPhucVu);
+	}
+	const url = new URL(request.url);
+	dich.search = url.search;
 
 	const ma = CUA_OKR.maCuoc.safeParse(request.headers.get(OKR_SOAN_CUA.header));
 	if (!ma.success) return loi(400, CUA_OKR.loi.thieuCuoc);
@@ -49,18 +64,15 @@ async function handler(request: Request): Promise<Response> {
 	}
 	if (cuoc.trangThai !== "dang") return loi(403, CUA_OKR.loi.cuocKhongDang);
 
-	const url = new URL(request.url);
-	const duongEve = url.pathname.slice(OKR_SOAN_CUA.host.length);
-	const phienXin = sessionFromPath(duongEve);
 	if (
-		phienXin &&
-		phienXin !== cuoc.sessionId &&
-		!cuoc.cacPhien.includes(phienXin)
+		duong.phien &&
+		duong.phien !== cuoc.sessionId &&
+		!cuoc.cacPhien.includes(duong.phien)
 	) {
 		return loi(403, CUA_OKR.loi.phienKhongThuocCuoc);
 	}
 
-	if (request.method === "POST" && CUA_OKR.duongLuot.test(duongEve)) {
+	if (request.method === "POST" && laLuot(duong.ten)) {
 		let luot: Awaited<ReturnType<typeof tangLuot>>;
 		try {
 			luot = await tangLuot(cuocSoanId);
@@ -103,7 +115,7 @@ async function handler(request: Request): Promise<Response> {
 
 	let upstream: Response;
 	try {
-		upstream = await fetch(`${OKR_AGENT_URL}${duongEve}${url.search}`, init);
+		upstream = await fetch(dich, init);
 	} catch (error) {
 		return Response.json(
 			{
@@ -138,7 +150,28 @@ function tangLuot(cuocSoanId: string) {
 	return getServerTrpcClient().okr.soanTangLuot.mutate({ cuocSoanId });
 }
 
-function sessionFromPath(pathname: string): string | null {
-	const match = pathname.match(CUA_OKR.duongPhien);
-	return match?.[1] ? decodeURIComponent(match[1]) : null;
+function laLuot(ten: DangDuong): boolean {
+	return CUA_OKR.dangLuot.some((luot) => luot === ten);
+}
+
+function khopDuong(
+	vao: string[],
+): { ten: DangDuong; doan: string[]; phien: string | null } | null {
+	const doan = CUA_OKR.doanDuong.safeParse(vao);
+	if (!doan.success) return null;
+	const thuc = doan.data;
+	for (const ten of Object.keys(CUA_OKR.dangDuong).filter(isDangDuong)) {
+		const mau: readonly string[] = CUA_OKR.dangDuong[ten];
+		if (mau.length !== thuc.length) continue;
+		if (!mau.every((phan, i) => phan === CUA_OKR.phien || phan === thuc[i])) {
+			continue;
+		}
+		const viTri = mau.indexOf(CUA_OKR.phien);
+		return { ten, doan: thuc, phien: viTri < 0 ? null : (thuc[viTri] ?? null) };
+	}
+	return null;
+}
+
+function isDangDuong(ten: string): ten is DangDuong {
+	return ten in CUA_OKR.dangDuong;
 }

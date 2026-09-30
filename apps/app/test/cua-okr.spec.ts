@@ -69,6 +69,12 @@ mock.module("@/lib/trpc/server", () => ({
 	}),
 }));
 
+const BIEN = [
+	"OKR_AGENT_BRIDGE_SECRET",
+	"OKR_AGENT_URL",
+	"AGENT_BRIDGE_SECRET",
+] as const;
+const bienThat = BIEN.map((ten) => [ten, process.env[ten]] as const);
 process.env.OKR_AGENT_BRIDGE_SECRET = BI_MAT;
 process.env.OKR_AGENT_URL = AGENT_GIA;
 process.env.AGENT_BRIDGE_SECRET = "bi-mat-cau-noi-cu-du-dai-32-ky-tu-thu";
@@ -144,6 +150,7 @@ function goi(
 	duong: string,
 	cuocSoanId: string | null,
 	method = "POST",
+	them: Record<string, string> = {},
 ) {
 	phien = userId
 		? { user: { id: userId, email: `${userId}@thu.test`, name: userId } }
@@ -153,11 +160,13 @@ function goi(
 	const headers = new Headers({
 		"x-crm-deal": "cmdealgiakhongduocqua1",
 		"content-type": "application/json",
+		...them,
 	});
 	if (cuocSoanId) headers.set("x-crm-cuoc-soan", cuocSoanId);
 	const url = `http://localhost:3000/eve/agents/okr${duong}`;
-	if (method === "GET") return GET(new Request(url, { method, headers }));
-	return POST(new Request(url, { method, headers, body: "{}" }));
+	const ctx = { params: Promise.resolve({ path: duong.split("/").slice(1) }) };
+	if (method === "GET") return GET(new Request(url, { method, headers }), ctx);
+	return POST(new Request(url, { method, headers, body: "{}" }), ctx);
 }
 
 async function don() {
@@ -193,6 +202,11 @@ beforeAll(async () => {
 });
 afterAll(async () => {
 	globalThis.fetch = fetchThat;
+	phien = null;
+	for (const [ten, giaTri] of bienThat) {
+		if (giaTri === undefined) delete process.env[ten];
+		else process.env[ten] = giaTri;
+	}
 	await don();
 });
 
@@ -440,6 +454,81 @@ describe("cua-okr", () => {
 			status: 403,
 			chuyen: 0,
 			luot: 0,
+		});
+	});
+	test("chi dang duong eve da liet ke moi qua; dang la 404 co ten, khong toi tro ly", async () => {
+		for (const duong of [
+			"/eve/v1/%73ession",
+			"/eve/v1/session/%6Fkr",
+			"/eve/%6Fkr/v1/session",
+			`/eve/v1/Session/phien-${CUOC.cuaOkr}`,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}/`,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}/../../../admin`,
+			"/eve/v1/session/../../admin",
+			"/eve/v1/session/..",
+			"/eve/v1/dev/schedules/x",
+			"/eve/v1/session/reset/stream/x",
+			"/admin",
+		]) {
+			const res = await goi(NGUOI.okr, duong, CUOC.cuaOkr);
+			expect({
+				duong,
+				status: res.status,
+				body: await res.json(),
+				chuyen: daChuyen.length,
+				luot: daTangLuot.length,
+			}).toEqual({
+				duong,
+				status: 404,
+				body: { error: "duong-khong-phuc-vu" },
+				chuyen: 0,
+				luot: 0,
+			});
+		}
+	});
+	test("dich chi dung tu doan duong, khong tu duong URL", async () => {
+		phien = { user: { id: NGUOI.okr, email: "x@thu.test", name: "x" } };
+		daChuyen.length = 0;
+		const res = await POST(
+			new Request("http://localhost:3000/eve/agents/%6Fkr/eve/v1/session", {
+				method: "POST",
+				headers: { "x-crm-cuoc-soan": CUOC.cuaOkr },
+				body: "{}",
+			}),
+			{ params: Promise.resolve({ path: ["eve", "v1", "session"] }) },
+		);
+		expect({ status: res.status, toi: daChuyen.map((c) => c.url) }).toEqual({
+			status: 200,
+			toi: [`${OKR_AGENT_URL}/eve/v1/session`],
+		});
+	});
+	test("cookie va authorization cua nguoi dung khong qua; chi the moi duc, khong x-crm-*", async () => {
+		const theNguoiDung = "Bearer the-cua-nguoi-dung";
+		await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr, "POST", {
+			cookie: "better-auth.session_token=bi-mat-phien",
+			authorization: theNguoiDung,
+			"x-crm-la": "khong-duoc-qua",
+		});
+		const h = daChuyen[0]?.headers;
+		const auth = h?.get("authorization") ?? "";
+		const ok = await verifyJwtHmac(auth.replace(/^Bearer /, ""), {
+			algorithm: "HS256",
+			audiences: ["crm-okr-agent"],
+			issuer: "crm-app",
+			secret: BI_MAT,
+		});
+		expect({
+			chuyen: daChuyen.length,
+			cookie: h?.get("cookie") ?? null,
+			theCu: auth === theNguoiDung,
+			theMoi: ok.ok,
+			xCrm: [...(h?.keys() ?? [])].filter((k) => k.startsWith("x-crm-")),
+		}).toEqual({
+			chuyen: 1,
+			cookie: null,
+			theCu: false,
+			theMoi: true,
+			xCrm: [],
 		});
 	});
 	test("doi chung: cua cu /eve/v1 van 403 vai okr", async () => {

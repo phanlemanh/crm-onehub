@@ -6,10 +6,21 @@ type TuChoiLuot = Extract<
 	{ ok: false }
 >["lyDo"];
 
+const PHIEN = ":phien";
+
 export const CUA_OKR = {
 	maCuoc: z.string().regex(/^[a-z0-9-]{8,64}$/),
-	duongLuot: /^\/eve\/v1\/session(?:\/[^/]+)?$/,
-	duongPhien: /\/eve\/v1\/session\/([^/]+)/,
+	doanDuong: z.array(z.string().regex(/^[A-Za-z0-9_-]{1,128}$/)).min(1),
+	phien: PHIEN,
+	dangDuong: {
+		sucKhoe: ["eve", "v1", "health"],
+		thongTin: ["eve", "v1", "info"],
+		moPhien: ["eve", "v1", "session"],
+		guiTiep: ["eve", "v1", "session", PHIEN],
+		dong: ["eve", "v1", "session", PHIEN, "stream"],
+		huyLuot: ["eve", "v1", "session", PHIEN, "cancel"],
+	},
+	dangLuot: ["moPhien", "guiTiep"],
 	khongChuyen: [
 		"host",
 		"cookie",
@@ -34,6 +45,7 @@ export const CUA_OKR = {
 		chuaCauHinh: "chua-cau-hinh-tro-ly-okr",
 		chuaDangNhap: "chua-dang-nhap",
 		thieuCuoc: "thieu-cuoc-soan",
+		duongKhongPhucVu: "duong-khong-phuc-vu",
 		cuocKhongThuocBan: "cuoc-khong-thuoc-ban",
 		cuocKhongDang: "cuoc-khong-dang",
 		phienKhongThuocCuoc: "phien-khong-thuoc-cuoc",
