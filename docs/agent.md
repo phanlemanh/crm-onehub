@@ -86,10 +86,10 @@ của tuần đó, hay đang có việc tóm tắt chưa xong, thì bỏ qua. Tr
 (`troLyOkrSanSang`: hết trần tháng, chưa có khoá mô hình…) thì dừng cả vòng và đóng
 `khong-chay:<lý do>:<số việc đã xếp>`; xong vòng thì `da-xep:<n>`.
 
-- **Ghi ngày mai trước, trong giao dịch riêng.** `chayXepTomTat` ghi việc xếp của
-  ngày mai (`subject` `okr-tom-tat-xep:<ngày VN>`, `dueAt` 06:00, khoá theo chính
-  `subject` đó) và commit, rồi mới chạy vòng phòng ban trong giao dịch thứ hai khoá
-  theo ngày hôm nay. Một lần cập nhật hỏng khuôn ở giữa vòng làm cả vòng của ngày đó
+- **Ghi ngày kế trước, trong giao dịch riêng.** `chayXepTomTat` ghi việc xếp của
+  ngày sau ngày hạn (`subject` `okr-tom-tat-xep:<ngày VN>`, `dueAt` 06:00, khoá theo
+  chính `subject` đó) và commit, rồi mới chạy vòng phòng ban trong giao dịch thứ hai
+  khoá theo ngày hạn của việc xếp đang chạy. Một lần cập nhật hỏng khuôn ở giữa vòng làm cả vòng của ngày đó
   lùi lại — không phòng nào có việc, việc xếp hỏng qua `runDirect` — nhưng không cắt
   chuỗi. Hai lượt chạy chồng nhau cho đúng một việc kế và không trùng việc tóm tắt.
 - **Nhịp dispatch nối lại chuỗi.** `drainAll` gọi `damBaoLichTomTat` ngay sau
@@ -97,15 +97,20 @@ của tuần đó, hay đang có việc tóm tắt chưa xong, thì bỏ qua. Tr
   việc xếp nào mở thì ghi một cho 06:00 kế tiếp. Tắt tóm tắt ở mọi đơn vị thì việc
   xếp đóng `khong-chay:<tat|viec-tat>:0` và không nối ngày mai; bật lại thì nhịp
   dispatch kế nối.
-- **Chạy muộn vẫn chạy, không bù ngày.** Tác tử tắt qua 06:00 rồi chạy lại lúc 10:00
-  thì việc xếp vẫn chạy cho ngày đó; bản ghi sau 08:30 vào tin nhắc sáng hôm sau.
-  «Hôm qua» tính theo giờ chạy, nên tác tử tắt quá hết một ngày thì ngày cập nhật bị
-  lỡ không được bù.
+- **«Hôm qua» neo vào hạn của việc xếp, không vào giờ chạy.** Tác tử tắt qua 06:00
+  rồi chạy lại lúc 10:00 thì việc xếp vẫn chạy cho ngày đó; bản ghi sau 08:30 vào tin
+  nhắc sáng hôm sau. Việc xếp hạn 06:00 ngày D mà chạy lúc 00:30 ngày D+1 vẫn tóm tắt
+  chu kỳ có ngày cập nhật là D−1 và nối việc cho 06:00 ngày D+1 — ngày, khoá và ngày kế
+  đều tính từ `dueAt`. Cửa sổ 7 ngày của gói và `moc` vẫn là giờ chạy. Tác tử tắt quá
+  nhiều ngày thì các việc xếp nối nhau chạy bù từng ngày, mỗi ngày trên dữ liệu của
+  lúc chạy.
 - **Cửa trước khi gửi biết nấc và đơn vị.** `lyDoChanTruocKhiGui` truyền `nac` của
   payload cho cả hai loại việc, và với việc tóm tắt thêm đơn vị của phòng (bộ phận,
   phòng ban): phòng bị tắt giữa lúc xếp và lúc gửi thì đóng
   `khong-chay:don-vi-chua-bat`; việc chế độ ẩn của phòng đang ở chế độ ẩn vẫn đi;
-  phòng không còn thì đóng `hong:…`.
+  phòng đã lưu trữ thì đóng `khong-chay:phong-luu-tru`
+  (`TRO_LY_OKR.ketThuc.phongLuuTru`) và không mở phiên; phòng không còn thì đóng
+  `hong:…`.
 
 **Phiên của việc tóm tắt: một phòng ban một tuần, nộp một lần.** Gốc chuyển việc
 `okr-tom-tat-tuan` cho `tro_ly_okr` đúng một lần như 9a. Chỉ dẫn động
@@ -127,7 +132,10 @@ dặn tĩnh («never call `nop_de_xuat`»).
   trong gói. Tool (`lib/okr/nop-tom-tat.ts`) từ chối không ghi (`tu-choi`) khi phiên
   không phải phiên OKR, việc không phải `okr-tom-tat-tuan` đang chạy, payload hỏng,
   hay việc đã có bản; phòng đã lưu trữ thì `thieu-du-lieu`. `nop_de_xuat` vẫn từ
-  chối việc tóm tắt.
+  chối việc tóm tắt. Phiên con báo `da-nop` mà việc tóm tắt không có hàng `OkrTomTat`
+  nào thì hook uỷ quyền đóng `khong-lam-duoc:khong-nop`
+  (`TRO_LY_OKR.ketThuc.tomTatKhongNop`, `ketThucCuaViec`); việc góp ý giữ cách đóng
+  của 9b.
 - **Câu lệch số bị bỏ; bỏ quá 30% thì cả bản bị giữ lại.** `ghiTomTat` chạy bộ kiểm
   câu (`kiemBanTomTat`, `@crm/validation/okr-kiem-tom-tat`, hàm thuần dùng chung với
   lúc hiện): câu trượt luật đầu tiên thì bị bỏ với mã — `nguon-ngoai-goi`,
@@ -139,7 +147,9 @@ dặn tĩnh («never call `nop_de_xuat`»).
   tính phiên, nên `lib/so-chi-phi.ts` tìm việc qua phiên gốc (cùng lối `giu-viec`)
   và đọc loại việc từ `kind` của hàng (`okrViecCuaLoai`,
   `@crm/db/ai-chi-phi-danh-muc`), nối `taskId` về việc; trước lượt này bước tóm tắt
-  rơi nhầm vào `okr.de-xuat`. Bước chuyển tiếp của phiên gốc giữ `okr.chuyen-tiep`
+  rơi nhầm vào `okr.de-xuat`. Tra việc lỗi thì chỉ ghi cảnh báo, dòng chi phí vẫn
+  ghi; không tìm được việc thì bước vào `okr.chuyen-tiep` chứ không mặc định
+  `okr.de-xuat`, để trần tháng của Trợ lý OKR vẫn đếm đủ. Bước chuyển tiếp của phiên gốc giữ `okr.chuyen-tiep`
   như 9b; thước `chi-phi-tom-tat.sql` cộng `okr.tom-tat` với các dòng
   `okr.chuyen-tiep` có `taskId` là việc `okr-tom-tat-tuan`.
 
@@ -1316,14 +1326,16 @@ Sau khi nhánh gộp vào `onehub`, merge-base đổi nên phép giao rỗng —
 
 Phần việc lớn của lượt này nằm ở tệp OneHub tự dựng, không có đường dẫn trùng ở
 `release` nên không vào bảng trên. Tác tử: `apps/agent/agent/lib/okr/lich-tom-tat.ts`,
-`nop-tom-tat.ts`, `chi-dan-tom-tat.ts` (mới), `viec.ts`, `doc.ts`, `goi-ngu-canh.ts`
-(9a đã mở, 9c sửa thêm), `apps/agent/agent/lib/so-chi-phi.ts`, `tin-nhac.ts`,
+`nop-tom-tat.ts`, `chi-dan-tom-tat.ts` (mới), `viec.ts`, `doc.ts`, `config.ts`,
+`goi-ngu-canh.ts` (9a đã mở, 9c sửa thêm), `hooks/okr-uy-quyen.ts` (đóng `da-nop`
+của việc tóm tắt chỉ khi có bản), `apps/agent/agent/lib/so-chi-phi.ts`, `tin-nhac.ts`,
 `nhac-ke-hoach.ts`, `tra-loi-nhac.ts`, và trong `subagents/tro_ly_okr/`:
 `tools/nop_tom_tat.ts` (mới), `instructions/viec.ts`, `agent.ts` (mô tả thêm việc
 tóm tắt). `instructions.md` không đổi. Gói dùng chung: `packages/db/src/okr-tom-tat.ts`
 (gói, ghi, đọc cho người xem và cho quản trị, dòng nhắc), `okr-hop-tuan.ts` (luật
 «đáng bàn», dời nguyên từ `apps/api/src/okr/hop-tuan.ts`), `okr-nhac.ts`
-(`cuaSoSuKien`), `onboarding-nhac.ts`, `okr-tro-ly-danh-muc.ts` (`OKR_TOM_TAT`),
+(`cuaSoSuKien`), `onboarding-nhac.ts` (`thuTrongTuan` dùng chung với lịch tóm tắt),
+`okr-tro-ly-danh-muc.ts` (`OKR_TOM_TAT`, `GIO_MS`),
 `ai-chi-phi-danh-muc.ts`; `packages/validation/src/okr-tom-tat.ts`,
 `okr-kiem-tom-tat.ts`, `okr-tham-so.ts`. Thành phần `inline-citation` của AI Elements
 cài bằng CLI vào `packages/ui/src/components/ai-elements/` — bản rẽ của nó ghi ở

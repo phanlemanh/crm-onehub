@@ -679,6 +679,36 @@ const MIEN_XEM = [
 		bang: "okrSoChup",
 		lyDo: "máy chụp số hằng ngày: đếm hàng mới hơn để quyết ghi currentValue",
 	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "demLanTrongCuaSo",
+		bang: "okrCheckIn",
+		lyDo: "đếm lần cập nhật trong cửa sổ của một phòng; mucTieuTrongGoi lọc Mục tiêu công khai (boGioiHan), đã công bố, của đúng phòng; chỉ ra số",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "krSoTrongGoi",
+		bang: "okrKeyResult",
+		lyDo: "đọc KR cho gói tóm tắt của máy, không có người xem; cùng hàm phụ mucTieuTrongGoi lọc công khai (boGioiHan), đã công bố, của đúng phòng",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "nguonHienTai",
+		bang: "okrCheckIn",
+		lyDo: "đọc lần cập nhật nguồn lúc hiện; docTomTatChoNguoiXem lọc theo người xem bằng dieuKienXemMucTieu (xemDuoc) trước khi trả câu",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "nguonHienTai",
+		bang: "okrKeyResult",
+		lyDo: "đọc KR của nguồn lúc hiện; docTomTatChoNguoiXem bỏ câu có nguồn thuộc Mục tiêu người xem không xem được (dieuKienXemMucTieu) trước khi trả",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "banTuanChoQuanTri",
+		bang: "okrCheckIn",
+		lyDo: "khối tóm tắt ở Sức khoẻ chương trình; troLyTomTatQuanTri chặn mọi vai trừ quản trị chương trình (quanTriChuongTrinh) trước khi gọi",
+	},
 ];
 
 const tuongDoi = (p) => (p.startsWith(GOC) ? p.slice(GOC.length + 1) : p);

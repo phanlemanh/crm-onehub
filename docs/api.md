@@ -1006,10 +1006,15 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
     lỗi như mọi thủ tục OKR. Nấc tóm tắt **hiện tại** của phòng (`nacTomTatPhong`)
     khác `bat` thì trả `{ ban: null, dangSoan: false, chuaCapNhat: false }` — màn
     không vẽ khối, nên chế độ ẩn không bao giờ lộ ra ở đây. Nấc `bat` thì
-    `docTomTatChoNguoiXem` lấy bản mới nhất của đúng chu kỳ và phòng đó có
+    `docTomTatChoNguoiXem` chỉ nhìn **tuần mới nhất** của đúng chu kỳ và phòng đó —
+    tuần lớn hơn giữa tuần của việc `okr-tom-tat-tuan` ghi sau cùng và tuần lớn nhất
+    của `OkrTomTat`, mọi trạng thái, mọi nấc — và trả bản của tuần đó khi nó có
     `trangThai = "hien"`, `cau.nac = "bat"`, ghi trong `OKR_TOM_TAT.hienTrongNgay`
-    (8) ngày; không có thì `ban: null` — chu kỳ khác không cho mượn bản. Phòng đã lưu
-    trữ cũng trả `null`. Rồi từng câu bị bỏ khi một nguồn của nó không còn (lần cập
+    (8) ngày. Bản tuần đó bị giữ lại, ở chế độ ẩn, chưa có hay việc không làm được
+    thì `ban: null`, không lùi về bản tuần trước; 7 ngày trước lúc gọi không có Cập
+    nhật tuần nào (`chuaCapNhat`) cũng `ban: null`, để màn hiện «chưa có cập nhật»
+    thay cho bản cũ. Chu kỳ khác không cho mượn bản. Phòng đã lưu trữ cũng trả
+    `null`. Rồi từng câu bị bỏ khi một nguồn của nó không còn (lần cập
     nhật hay KR đã xoá), khi người xem không xem được Mục tiêu của một nguồn
     (`dieuKienXemMucTieu`, cùng luật «Who sees an objective»), hay khi `kiemCauTomTat`
     chạy lại trên số hiện tại không còn khớp — tiến độ tính từ giá trị của **lần cập
@@ -1029,8 +1034,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   - `troLyTomTatQuanTri` (`GET /okr/weekly-summary/admin`, `{ cycleId }`) — chỉ quản
     trị chương trình (`quanTriChuongTrinh`, như `sucKhoe`), vai khác nhận 403 «Chỉ
     quản trị xem được sức khoẻ chương trình.» qua tRPC lẫn REST. Trả tuần gần nhất
-    của chu kỳ (`tuan` lớn nhất trong việc và bản) với mọi phòng chưa lưu trữ có bản
-    hay việc tuần đó, cộng mọi phòng đang ở nấc bật hay chế độ ẩn mà không có việc
+    của chu kỳ (cùng phép chọn tuần mới nhất như trên, trên cả chu kỳ) với mọi phòng
+    chưa lưu trữ có bản hay việc tuần đó — truy vấn chỉ đọc việc của tuần đó và của
+    phòng chưa lưu trữ, nên một hàng việc hỏng của tuần cũ không làm hỏng bảng — cộng mọi phòng đang ở nấc bật hay chế độ ẩn mà không có việc
     — dòng `chua-cap-nhat`. Mỗi dòng: nấc, trạng thái (`hien`, `can-xem`,
     `khong-lam-duoc`, `dang-soan`, `chua-cap-nhat`), số câu, số câu bị bỏ, số
     «Hữu ích»/«Không hữu ích», câu còn lại và câu bị bỏ kèm mã. Nguồn của mọi câu

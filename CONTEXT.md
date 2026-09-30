@@ -744,8 +744,10 @@ Vì sao: «Gợi ý» đã là câu hướng xử lý đi kèm nhắc kế hoạ
 nhật, gom các lần Cập nhật tuần của tuần đó trên Mục tiêu công khai của phòng. Câu nào
 cũng dẫn tới lần cập nhật gốc; số nào cũng được máy kiểm lại lúc ghi và lúc hiện, sai
 thì câu bị bỏ; bỏ quá 30% số câu thì cả bản bị giữ lại — không hiện cho ai, chỉ quản trị
-chương trình thấy ở Sức khoẻ chương trình. Hiện ở đầu Họp tuần; không nêu tên người. Bộ
-phận, OneHub và Mục tiêu cá nhân không có tóm tắt.
+chương trình thấy ở Sức khoẻ chương trình. Hiện ở đầu Họp tuần, chỉ bản của tuần mới
+nhất: tuần đó bị giữ lại, không làm được hay chưa có cập nhật thì Họp tuần không mượn
+bản của tuần trước. Không nêu tên người. Bộ phận, OneHub và Mục tiêu cá nhân không có
+tóm tắt.
 _Avoid_: báo cáo tuần, bản tin tuần, digest
 Vì sao: «báo cáo tuần» là thứ người viết gửi lên để duyệt; «bản tin» gợi một tin gửi đi
 cho nhiều người, còn tóm tắt nằm trên màn và lọc theo người xem.
