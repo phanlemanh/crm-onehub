@@ -4,8 +4,8 @@ import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { createParser, parseAsBoolean, useQueryState } from "nuqs";
-import { useEffect } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { HopThoaiMucTieu } from "./hop-thoai-muc-tieu";
@@ -31,6 +31,11 @@ export const parseAsHopOkr = createParser<HopOkr>({
 	serialize: khoaHopOkr,
 	eq: (a, b) => khoaHopOkr(a) === khoaHopOkr(b),
 });
+
+export function BoKhoaUrl({ bo }: { bo: () => void }) {
+	useMountEffect(bo);
+	return null;
+}
 
 export function useHopOkr() {
 	return useQueryState(SEARCH_PARAM.okr.hop, parseAsHopOkr);
@@ -72,9 +77,7 @@ export function NganTaoMucTieu({
 	tenDon: string;
 }) {
 	const [mo, datMo] = useMoTaoMucTieu();
-	useEffect(() => {
-		if (mo && suaDuoc === false) void datMo(null);
-	}, [mo, suaDuoc, datMo]);
+	if (mo && suaDuoc === false) return <BoKhoaUrl bo={() => void datMo(null)} />;
 	if (!mo || !suaDuoc) return null;
 	return (
 		<HopThoaiMucTieu

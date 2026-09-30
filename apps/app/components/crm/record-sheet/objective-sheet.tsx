@@ -29,7 +29,7 @@ import {
 import { TableCell } from "@crm/ui/components/table";
 import { ghiDuocOPha } from "@crm/validation/okr-chu-ky";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
@@ -41,7 +41,11 @@ import {
 import { HopThoaiKr } from "@/app/(app)/[slug]/okr/hop-thoai-kr";
 import { HopThoaiMucTieu } from "@/app/(app)/[slug]/okr/hop-thoai-muc-tieu";
 import { CELL, type KetQua } from "@/app/(app)/[slug]/okr/kieu";
-import { khoaHopOkr, useHopOkr } from "@/app/(app)/[slug]/okr/ngan-okr-url";
+import {
+	BoKhoaUrl,
+	khoaHopOkr,
+	useHopOkr,
+} from "@/app/(app)/[slug]/okr/ngan-okr-url";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -319,10 +323,9 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 					mt.choDuyet === null &&
 					mt.canEditKr.includes(kr.id)
 				: suaNoiDung(mt);
-	useEffect(() => {
-		if (hop !== null && !duoc) void datHop(null);
-	}, [hop, duoc, datHop]);
-	if (hop === null || !duoc) return null;
+	if (hop === null) return null;
+	if (!duoc)
+		return <BoKhoaUrl key={khoaHopOkr(hop)} bo={() => void datHop(null)} />;
 	const dong = () => void datHop(null);
 	if (hop.loai === "muc-tieu") {
 		return (
