@@ -92,13 +92,13 @@ export function KhungTao({
 					</FieldGroup>
 				</form>
 				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">{nhanHuy}</Button>
+					</SheetClose>
 					<Button type="submit" form={maForm} disabled={dangLuu || !sanSang}>
 						{dangLuu ? <Spinner /> : null}
 						{nhanLuu}
 					</Button>
-					<SheetClose asChild>
-						<Button variant="outline">{nhanHuy}</Button>
-					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

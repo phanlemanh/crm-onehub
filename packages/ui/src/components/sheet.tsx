@@ -25,6 +25,8 @@ const sheetContentVariants = cva(
 				xl: "data-[side=left]:sm:max-w-4xl data-[side=right]:sm:max-w-4xl",
 				"2xl":
 					"data-[side=left]:sm:max-w-5xl data-[side=right]:sm:max-w-5xl data-[side=left]:lg:w-[68vw] data-[side=right]:lg:w-[68vw]",
+				assist:
+					"data-[side=left]:sm:max-w-(--container-sheet) data-[side=right]:sm:max-w-(--container-sheet) data-[side=left]:lg:w-(--container-assist) data-[side=right]:lg:w-(--container-assist) data-[side=left]:lg:max-w-[calc(100%-2rem)] data-[side=right]:lg:max-w-[calc(100%-2rem)]",
 			},
 		},
 		defaultVariants: {
@@ -146,6 +148,7 @@ function SheetContent({
 			<SheetPrimitive.Content
 				data-slot="sheet-content"
 				data-side={side}
+				data-size={size ?? "sm"}
 				className={cn(sheetContentVariants({ size }), className)}
 				onInputCapture={(e) => {
 					g?.danhDau(e.target, e.currentTarget);
@@ -193,11 +196,34 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
 	);
 }
 
+function SheetBody({
+	split = false,
+	className,
+	...props
+}: React.ComponentProps<"div"> & { split?: boolean }) {
+	return (
+		<div
+			data-slot="sheet-body"
+			data-split={split}
+			className={cn(
+				"min-h-0 flex-1 overflow-y-auto overscroll-contain px-4",
+				split &&
+					"grid content-start gap-6 lg:grid-cols-[minmax(0,1fr)_var(--container-assist-rail)] lg:items-start",
+				className,
+			)}
+			{...props}
+		/>
+	);
+}
+
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			data-slot="sheet-footer"
-			className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+			className={cn(
+				"mt-auto flex flex-col-reverse gap-2 p-4 sm:flex-row sm:justify-end",
+				className,
+			)}
 			{...props}
 		/>
 	);
@@ -243,13 +269,36 @@ function SheetDescription({
 	);
 }
 
+function SheetRailHeader({ className, ...props }: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="sheet-rail-header"
+			className={cn("flex h-8 items-center justify-between gap-2", className)}
+			{...props}
+		/>
+	);
+}
+
+function SheetRailTitle({ className, ...props }: React.ComponentProps<"p">) {
+	return (
+		<p
+			data-slot="sheet-rail-title"
+			className={cn(sheetTitleVariants({ size: "default" }), className)}
+			{...props}
+		/>
+	);
+}
+
 export {
 	Sheet,
+	SheetBody,
 	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
 	SheetHeader,
+	SheetRailHeader,
+	SheetRailTitle,
 	SheetTitle,
 	SheetTrigger,
 	sheetContentVariants,

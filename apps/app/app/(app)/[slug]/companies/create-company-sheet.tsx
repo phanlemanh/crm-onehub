@@ -166,6 +166,9 @@ function CreateCompanyForm() {
 				</form>
 
 				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">{m.create.cancel}</Button>
+					</SheetClose>
 					<Button
 						type="submit"
 						form="create-company"
@@ -174,9 +177,6 @@ function CreateCompanyForm() {
 						{create.isPending ? <Spinner /> : null}
 						{m.create.submit}
 					</Button>
-					<SheetClose asChild>
-						<Button variant="outline">{m.create.cancel}</Button>
-					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

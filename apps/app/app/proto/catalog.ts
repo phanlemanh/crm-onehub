@@ -449,6 +449,21 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "khung-tao-okr-nhu-deal",
+		ten: "Tạo và sửa OKR cùng khung với deal — ngăn trượt phải",
+		states: [
+			{ id: "ST-khung-sua-kr", nhan: "Sửa KR — ngăn chồng lên khung Mục tiêu" },
+			{ id: "ST-khung-deal", nhan: "Tạo deal — ngăn để so" },
+			{ id: "ST-khung-tao-muc-tieu", nhan: "Thêm mục tiêu" },
+			{ id: "ST-khung-sua-muc-tieu", nhan: "Sửa mục tiêu" },
+			{ id: "ST-khung-them-kr", nhan: "Thêm KR" },
+			{ id: "ST-khung-cot-muc-tieu", nhan: "Sửa mục tiêu — cột góp ý mở" },
+			{ id: "ST-khung-cot-kr", nhan: "Sửa KR — cột góp ý mở" },
+			{ id: "ST-khung-hoi-lai", nhan: "Đóng khi còn sửa chưa lưu" },
+			{ id: "ST-khung-url-sai", nhan: "URL trỏ KR không còn" },
+		],
+	},
+	{
 		slug: "tro-ly-okr-de-xuat",
 		ten: "Góp ý khi bấm — hộp Mục tiêu và KR, chế độ ẩn, số đo",
 		states: [
