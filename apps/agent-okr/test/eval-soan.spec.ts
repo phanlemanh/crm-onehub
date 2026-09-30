@@ -123,7 +123,14 @@ describe("eval-soan: tổng kết", () => {
 		thuMuc = mkdtempSync(join(tmpdir(), "eval-soan-"));
 		const tep = join(thuMuc, "tong-ket.ndjson");
 		process.env[bien] = tep;
-		ghiTongKet({ loai: "boi-canh", ca: "pb", A: "a", B: "b", phiaCoGoi: "B" });
+		ghiTongKet({
+			loai: "boi-canh",
+			ca: "pb",
+			A: "a",
+			B: "b",
+			phiaCoGoi: "B",
+			usd: 0.07,
+		});
 		ghiTongKet({
 			loai: "do-tre",
 			ca: "pb",
@@ -132,7 +139,14 @@ describe("eval-soan: tổng kết", () => {
 			usd: 0.01,
 		});
 		expect(docTongKet(readFileSync(tep, "utf8"))).toEqual([
-			{ loai: "boi-canh", ca: "pb", A: "a", B: "b", phiaCoGoi: "B" },
+			{
+				loai: "boi-canh",
+				ca: "pb",
+				A: "a",
+				B: "b",
+				phiaCoGoi: "B",
+				usd: 0.07,
+			},
 			{
 				loai: "do-tre",
 				ca: "pb",
@@ -219,8 +233,13 @@ describe("eval-soan: tách thời gian lượt và khoảng tin cậy", () => {
 				su("step.completed", 15),
 				{ type: "message.appended" },
 			]),
-		).toEqual({ soBuoc: 2, moHinhMs: 11_000, congCuMs: 3_000 });
-		expect(tachLuot([])).toEqual({ soBuoc: 0, moHinhMs: 0, congCuMs: 0 });
+		).toEqual({ soBuoc: 2, moHinhMs: 11_000, congCuMs: 3_000, soCongCu: 1 });
+		expect(tachLuot([])).toEqual({
+			soBuoc: 0,
+			moHinhMs: 0,
+			congCuMs: 0,
+			soCongCu: 0,
+		});
 	});
 
 	test("khoangWilson khớp số tra tay: 2/5 và 2/3", () => {

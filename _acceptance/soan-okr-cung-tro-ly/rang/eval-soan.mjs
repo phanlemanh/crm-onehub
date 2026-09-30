@@ -187,18 +187,30 @@ const lanChay = moi.at(-1);
 if (!lanChay)
 	thoat(2, `eve eval khong de lai thu muc lan chay (ma ${ket.status}) — ma 2`);
 
-const { docTomTat, docTongKet } = await import(
-	join(APP, "evals", "okr-soan", "tong-ket.ts")
-);
+const { docTomTat, docTongKet, ketLuanThuoc, phanLoaiHong, thongKeJudge } =
+	await import(join(APP, "evals", "okr-soan", "tong-ket.ts"));
 const tomTat = docTomTat(
 	readFileSync(join(thuMucChay, lanChay, "summary.json"), "utf8"),
 );
-const { khoangWilson, phanVi, tyLeThang, xaoTron } = await import(
-	join(APP, "evals", "okr-soan", "tinh.ts")
-);
+const { khoangWilson, phanVi, phanViTheoLoaiLuot, tyLeThang, xaoTron } =
+	await import(join(APP, "evals", "okr-soan", "tinh.ts"));
 const dong = docTongKet(readFileSync(tongKet, "utf8"));
 const soan = dong.filter((d) => d.loai === "soan");
 const doTre = dong.filter((d) => d.loai === "do-tre");
+const judgeGoi = thongKeJudge(dong.filter((d) => d.loai === "judge"));
+const phan = phanLoaiHong(tomTat);
+const ghiChu = (id) =>
+	[
+		...phan.chotMa
+			.filter((h) => h.id === id)
+			.map((h) => `chốt mã hỏng: ${h.ten}`),
+		...phan.judgeHong
+			.filter((h) => h.id === id)
+			.map((h) => `judge hỏng: ${h.nhan} (${h.loi})`),
+		...phan.duoiNguong
+			.filter((h) => h.id === id)
+			.map((h) => `dưới ngưỡng: ${h.nhan} ${h.diem}`),
+	].join("; ");
 const nhan = DG.boiCanh.nhan;
 const judgeCua = (ca) =>
 	tomTat.evals
@@ -229,16 +241,20 @@ const luotCham = doTre
 		})),
 	)
 	.filter((x) => x.ms > DG.doTre.p90Ms);
-const p90Theo = (luot) =>
-	phanVi(
-		doTre.flatMap((d) => d.ms.filter((_, i) => luot.includes(i + 1))),
-		DG.doTre.phanVi.p90,
-	);
+const theoLoai = phanViTheoLoaiLuot(
+	doTre.flatMap((d) =>
+		d.ms.map((ms, i) => ({ ms, soCongCu: d.tach[i]?.soCongCu ?? 0 })),
+	),
+);
+const loaiLuot = (l) => `${so(l.p50)} / ${so(l.p90)} (${l.n} lượt)`;
 const tatCaMs = doTre.flatMap((d) => d.ms);
 const p50 = phanVi(tatCaMs, DG.doTre.phanVi.p50);
 const p90 = phanVi(tatCaMs, DG.doTre.phanVi.p90);
 const usdMax = doTre.length ? Math.max(...doTre.map((d) => d.usd)) : null;
-const tongUsd = [...soan, ...doTre].reduce((a, d) => a + d.usd, 0);
+const tongUsd = [...soan, ...doTre, ...boiCanhTatCa].reduce(
+	(a, d) => a + d.usd,
+	0,
+);
 const so = (v, cham = 0) =>
 	v === null || v === undefined ? "—" : Number(v).toFixed(cham);
 
@@ -264,11 +280,13 @@ writeFileSync(
 		"",
 		`Lần chạy: \`apps/agent-okr/.eve/evals/${lanChay}\` · mã thoát eve eval: ${ket.status} · ${tomTat.passed} đạt · ${tomTat.failed} hỏng · ${tomTat.scored} dưới ngưỡng · ${tomTat.skipped} bỏ qua / ${tomTat.totalEvals}`,
 		"",
+		`Phân loại chỗ hỏng: ${phan.chotMa.length} chốt mã hỏng · ${phan.judgeHong.length} judge hỏng (không chấm được sau ${TRO_LY_OKR_SOAN.judge.soLanThu} lần thử, không tính là trượt) · ${phan.duoiNguong.length} judge chấm dưới ngưỡng`,
+		"",
 		"| Eval | Kết quả | Ghi chú |",
 		"|---|---|---|",
 		...tomTat.evals.map(
 			(e) =>
-				`| ${e.id} | ${e.verdict} | ${(e.error ?? e.skipReason ?? "").replace(/\s+/g, " ").slice(0, 160)} |`,
+				`| ${e.id} | ${e.verdict} | ${(ghiChu(e.id) || e.error || e.skipReason || "").replace(/\s+/g, " ").replace(/\|/g, "/").slice(0, 240)} |`,
 		),
 		"",
 		"## Bảng số",
@@ -278,11 +296,14 @@ writeFileSync(
 		`| p50 mỗi lượt (ms) | ${so(p50)} | ≤ ${DG.doTre.p50Ms} |`,
 		`| p90 mỗi lượt (ms) | ${so(p90)} | ≤ ${DG.doTre.p90Ms} |`,
 		`| chi phí lớn nhất mỗi cuộc (USD) | ${so(usdMax, 4)} | ≤ ${DG.doTre.usdMoiCuoc} |`,
-		`| p90 lượt 1–2 / lượt 3–4 (ms) | ${so(p90Theo([1, 2]))} / ${so(p90Theo([3, 4]))} | — |`,
+		`| p50 / p90 lượt hỏi–đáp, không nộp bản nháp (ms) | ${loaiLuot(theoLoai.hoiDap)} | — |`,
+		`| p50 / p90 lượt nộp bản nháp (ms) | ${loaiLuot(theoLoai.nopBanNhap)} | — |`,
 		`| tỷ lệ bản có gói thắng judge mù | ${tyLe === null ? "—" : `${so(tyLe * 100)} % (${soThang}/${boiCanh.length} ca chấm được; khoảng tin cậy 95 % ${so((khoang?.duoi ?? 0) * 100)}–${so((khoang?.tren ?? 0) * 100)} %)`} | ≥ ${DG.boiCanh.tyLeThang * 100} % |`,
 		`| số cặp A/B judge mù (đã chạy / chấm được) | ${boiCanhTatCa.length} / ${boiCanh.length} | ≥ ${DG.boiCanh.soCapMacDinh} (\`${DG.env.soCapAB}\`, ước ${DG.boiCanh.usdMoiCapUoc} USD/cặp) |`,
-		`| ca judge không chấm được | ${khongCham.join(", ") || "0"} | 0 |`,
-		`| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi; chưa gồm judge) | ${so(tongUsd, 4)} | trần ${process.env[DG.env.tranUsd] ?? DG.tranUsdMacDinh} |`,
+		`| ca judge không chấm được (cặp A/B) | ${khongCham.join(", ") || "0"} | 0 |`,
+		`| lời gọi judge: tổng / phải thử lại / hỏng sau ${TRO_LY_OKR_SOAN.judge.soLanThu} lần | ${judgeGoi.soLoiGoi} / ${judgeGoi.phaiThuLai} / ${judgeGoi.hongSauCung} | hỏng 0 |`,
+		`| lần thử judge: tổng / nhiều nhất một lời gọi | ${judgeGoi.tongLanThu} / ${judgeGoi.lanThuNhieuNhat} | ≤ ${TRO_LY_OKR_SOAN.judge.soLanThu} |`,
+		`| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi: soạn + A/B + độ trễ; chưa gồm judge) | ${so(tongUsd, 4)} | trần ${process.env[DG.env.tranUsd] ?? DG.tranUsdMacDinh} |`,
 		"",
 		"## Lượt chậm hơn ngưỡng p90",
 		"",
@@ -332,21 +353,14 @@ console.log(`eval-soan: da ghi ${CHUNG_CU}`);
 
 const khongGia = await db.aiChiPhi.count({ where: { costUsd: null } });
 await db.$disconnect();
-if (khongCham.length > 0)
-	thoat(
-		2,
-		`judge khong cham duoc ${khongCham.length} ca (${khongCham.join(", ")}) — khong xanh, chay lai`,
-	);
-if (khongGia > 0)
-	thoat(
-		2,
-		`chi phi khong do duoc: ${khongGia} dong AiChiPhi costUsd null — khong xanh`,
-	);
-if (ket.status !== 0) process.exit(ket.status ?? 1);
-if (tomTat.skipped > 0) thoat(2, `${tomTat.skipped} eval bo qua — khong xanh`);
-if (tyLe === null || tyLe < DG.boiCanh.tyLeThang)
-	thoat(
-		1,
-		`ban co goi thang ${tyLe === null ? "—" : so(tyLe * 100)} % < ${DG.boiCanh.tyLeThang * 100} %`,
-	);
-process.exit(0);
+const ketLuan = ketLuanThuoc({
+	phan,
+	soLanThu: TRO_LY_OKR_SOAN.judge.soLanThu,
+	khongGia,
+	boQua: tomTat.skipped,
+	tyLe,
+	tyLeNguong: DG.boiCanh.tyLeThang,
+	maEve: ket.status,
+});
+if (ketLuan.cau) thoat(ketLuan.ma, ketLuan.cau);
+process.exit(ketLuan.ma);

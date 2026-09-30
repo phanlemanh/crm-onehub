@@ -13,6 +13,7 @@ import {
 } from "./ca";
 import { JUDGE_ZDR } from "./judge";
 import {
+	chiPhiCuoc,
 	chuKyDo,
 	type DongDoc,
 	datCauHinhSoan,
@@ -42,7 +43,12 @@ async function soan(dv: DonViCa, cycleId: string, traLoi: string) {
 	const goi = await goiSoan(mo.cuoc.id, { vai: dv.vai });
 	const nop: DongDoc[] = (await docLanNop(mo.cuoc.id)).at(-1) ?? [];
 	const cho = nop.filter((d) => d.trangThai === "cho");
-	return { trangThai, van: vanBanNhap(cho, tenDichCua(goi)), goi };
+	return {
+		trangThai,
+		van: vanBanNhap(cho, tenDichCua(goi)),
+		goi,
+		cuocSoanId: mo.cuoc.id,
+	};
 }
 
 function motCap({ ca, khoa, traLoi }: CapAB) {
@@ -75,13 +81,17 @@ function motCap({ ca, khoa, traLoi }: CapAB) {
 					satisfies<string>((s) => s.trim() !== "", "co ban nhap"),
 				);
 			const xep = xepAB(coGoi.van, khongGoi.van, Math.random);
-			t.log(JSON.stringify({ ca: khoa, phiaCoGoi: xep.phiaCoGoi }));
+			const usd =
+				(await chiPhiCuoc(coGoi.cuocSoanId)).usd +
+				(await chiPhiCuoc(khongGoi.cuocSoanId)).usd;
+			t.log(JSON.stringify({ ca: khoa, phiaCoGoi: xep.phiaCoGoi, usd }));
 			ghiTongKet({
 				loai: "boi-canh",
 				ca: khoa,
 				A: xep.A,
 				B: xep.B,
 				phiaCoGoi: xep.phiaCoGoi,
+				usd,
 			});
 			t.judge.autoevals
 				.closedQA(

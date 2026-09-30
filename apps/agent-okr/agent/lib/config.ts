@@ -17,6 +17,7 @@ export const TRO_LY_OKR_SOAN = {
 		model: MO_HINH_JUDGE,
 		nguong: 0.7,
 		tranRaMoiLoiGoi: 2_000,
+		soLanThu: 3,
 	},
 	khoaMoHinh: ["AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"],
 	tranRaMoiLoiGoi: 3_000,

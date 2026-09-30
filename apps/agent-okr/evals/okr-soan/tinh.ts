@@ -128,7 +128,12 @@ const suKienCoLuc = z.object({
 	meta: z.object({ at: z.iso.datetime({ offset: true }) }),
 });
 
-export type TachLuot = { soBuoc: number; moHinhMs: number; congCuMs: number };
+export type TachLuot = {
+	soBuoc: number;
+	moHinhMs: number;
+	congCuMs: number;
+	soCongCu: number;
+};
 
 type CapThoiGian = { dem: number; ms: number };
 
@@ -160,7 +165,31 @@ export function tachLuot(suKien: readonly unknown[]): TachLuot {
 	});
 	const moHinh = ghepCap(coLuc, "step.started", "step.completed");
 	const congCu = ghepCap(coLuc, "actions.requested", "action.result");
-	return { soBuoc: moHinh.dem, moHinhMs: moHinh.ms, congCuMs: congCu.ms };
+	return {
+		soBuoc: moHinh.dem,
+		moHinhMs: moHinh.ms,
+		congCuMs: congCu.ms,
+		soCongCu: congCu.dem,
+	};
+}
+
+export type LuotDo = { ms: number; soCongCu: number };
+
+export type PhanViLoai = { n: number; p50: number | null; p90: number | null };
+
+export type PhanViTheoLoai = { hoiDap: PhanViLoai; nopBanNhap: PhanViLoai };
+
+export function phanViTheoLoaiLuot(luot: readonly LuotDo[]): PhanViTheoLoai {
+	const PV = TRO_LY_OKR_SOAN.danhGia.doTre.phanVi;
+	const cua = (ms: number[]): PhanViLoai => ({
+		n: ms.length,
+		p50: phanVi(ms, PV.p50),
+		p90: phanVi(ms, PV.p90),
+	});
+	return {
+		hoiDap: cua(luot.filter((l) => l.soCongCu === 0).map((l) => l.ms)),
+		nopBanNhap: cua(luot.filter((l) => l.soCongCu > 0).map((l) => l.ms)),
+	};
 }
 
 export function khoangWilson(
