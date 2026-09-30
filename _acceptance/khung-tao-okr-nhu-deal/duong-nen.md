@@ -1,16 +1,15 @@
 ---
 slug: khung-tao-okr-nhu-deal
-at: 2026-09-30T01:12:41.779Z
-sha: ad65d9eb02a075c55f12fda0b2ebe333f9b6c6aa
+at: 2026-09-30T01:42:31.983Z
+sha: 48d9e7f2c26785cffe7f065307185f7194744d77
 nen: do
 cong_cu: xanh
-suite: do
-luoi: xanh
+suite: xanh
+luoi: do
 engine: xanh
 ---
 
 ## Dòng đỏ
 
-- nen suite: CAY BAN SAU SUITE _acceptance/khung-tao-okr-nhu-deal/contract.md
-- nen suite: CAY BAN SAU SUITE _acceptance/khung-tao-okr-nhu-deal/coverage-scan.md
-- nen suite: CAY BAN SAU SUITE docs/superpowers/specs/2026-09-30-khung-tao-okr-nhu-deal-design.md
+- nen luoi: 1 vi pham co san
+- VIOLATION [khung-tao-okr-nhu-deal]: hồ sơ có bằng chứng nhưng status chưa arm cổng — status=draft; PR đổi code chịu cổng (apps/app/app/proto/_modules/khung-tao-okr-nhu-deal/index.tsx…) mà hồ sơ trong PR chưa arm. Cổng chỉ chấm hồ sơ ở implemented/verified/signed-off, hồ sơ này đang tàng hình. Đặt status: implemented để cổng chấm, hoặc gỡ evidence-report.md / tách hồ sơ khỏi PR nếu bằng chứng thuộc phạm vi đã bỏ.
