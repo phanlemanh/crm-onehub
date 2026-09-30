@@ -17,13 +17,17 @@ import {
 	datAgent,
 	datDanhSach,
 	datLai,
+	dauThangSau,
 	don,
+	donViSoanCua,
 	go,
 	goiCua,
+	homNayVn,
 	kr,
 	MO_DAU,
 	m,
 	mo,
+	moKhung,
 	moMan,
 	mt,
 	nguoiNoi,
@@ -32,6 +36,7 @@ import {
 	nut,
 	q,
 	qa,
+	SAN_SANG_BAT,
 	SOAN_UI,
 	soLanMoAgent,
 	tuyChonAgent,
@@ -631,5 +636,315 @@ describe("danh sach cuoc", () => {
 		);
 		await bam(q('[data-cuoc="rong"] [data-nut="mo-cuoc-moi"]'));
 		expect(goiCua("okr.soanMo")[0]?.dauVao).toEqual(DV);
+	});
+});
+
+const CUOC_DANG = { ...CUOC, soLuot: 2, soDongTong: 5, soDongNhan: 2 };
+const DON_PB1 = "pb:pb-1";
+const DV_PB1 = {
+	cycleId: "q1",
+	level: "phong-ban",
+	divisionId: null,
+	departmentId: "pb-1",
+} as const;
+const BAT_CO_CUOC = { ...SAN_SANG_BAT, cuocDang: CUOC_DANG, soCuocDaDung: 1 };
+
+describe("nut soan — ST-soan-nut-*", () => {
+	test("ST-soan-nut", async () => {
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
+		const nutSoan = q('[data-nut-soan="nut"]') as HTMLButtonElement | null;
+		expect(nutSoan?.textContent?.trim()).toBe(m.nut.soan);
+		expect(nutSoan?.disabled).toBe(false);
+		expect(q('[data-nut-soan="nut-tiep"]')).toBeNull();
+		expect(q('[data-nut-soan="nut-an"]')).toBeNull();
+		expect(q('[data-nut="ds-cuoc"]')).toBeNull();
+	});
+
+	test("ST-soan-nut: đã dùng cuộc thì có nút xem danh sách cuộc, bấm mở danh sách", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { ...SAN_SANG_BAT, soCuocDaDung: 2 },
+		});
+		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("2", "3"));
+		expect(q("[data-cuoc]")).toBeNull();
+		await bam(q('[data-nut="ds-cuoc"]'));
+		await cho(() => q("[data-cuoc]") !== null, "danh sach cuoc mo");
+		expect(goiCua("okr.soanDanhSachCuoc")[0]?.dauVao).toEqual(DV_PB1);
+	});
+
+	test("ST-soan-nut-tiep", async () => {
+		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
+		expect(chu('[data-nut-soan="nut-tiep"] button')).toBe(m.nut.tiep);
+		expect(
+			chu('[data-nut-soan="nut-tiep"] [data-slot="field-description"]'),
+		).toBe(m.nut.tiepMoTa("01/12", "2", "3"));
+		expect(
+			chu('[data-nut-soan="nut-tiep"] [data-slot="field-description"]'),
+		).toContain("lượt");
+		expect(q('[data-nut-soan="nut"]')).toBeNull();
+		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("1", "3"));
+	});
+
+	test("ST-soan-nut-an: quản trị thấy nút kèm nhãn chế độ ẩn", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { ...SAN_SANG_BAT, nac: "an" },
+			quanTri: true,
+		});
+		expect(chu('[data-nut-soan="nut-an"] [data-slot="badge"]')).toBe(
+			m.nut.cheDoAn,
+		);
+		expect(
+			chu('[data-nut-soan="nut-an"] [data-slot="field-description"]'),
+		).toBe(m.nut.cheDoAnMoTa);
+		expect(chu('[data-nut-soan="nut-an"] button')).toBe(m.nut.soan);
+	});
+
+	test("ST-soan-nut-an: người không phải quản trị không thấy gì dù máy chủ trả nấc ẩn", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { ...SAN_SANG_BAT, nac: "an" },
+			quanTri: false,
+			canEdit: true,
+		});
+		expect(q("[data-nut-soan]")).toBeNull();
+		expect(document.body.textContent).not.toContain(m.nut.cheDoAn);
+	});
+
+	test("nút bật thường không có nhãn chế độ ẩn", async () => {
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, quanTri: true });
+		expect(q('[data-nut-soan="nut"]')).not.toBeNull();
+		expect(document.body.textContent).not.toContain(m.nut.cheDoAn);
+	});
+
+	test("ST-soan-nut-het-cuoc", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { bat: false, lyDo: "het-cuoc-ky" },
+		});
+		const o = q('[data-nut-soan="nut-het-cuoc"]');
+		const nutTat = o?.querySelector("button");
+		expect(nutTat?.textContent?.trim()).toBe(m.nut.soan);
+		expect(nutTat?.disabled).toBe(true);
+		expect(
+			chu('[data-nut-soan="nut-het-cuoc"] [data-slot="field-description"]'),
+		).toBe(m.nut.hetCuoc("3"));
+		expect(nutTat?.getAttribute("aria-describedby")).toBe(
+			q('[data-nut-soan="nut-het-cuoc"] [data-slot="field-description"]')?.id,
+		);
+		await bam(nutTat ?? null);
+		expect(goiCua("okr.soanMo")).toHaveLength(0);
+	});
+
+	test("ST-soan-nut-het-cuoc: vẫn xem lại được các cuộc đã soạn", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { bat: false, lyDo: "het-cuoc-ky" },
+		});
+		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("3", "3"));
+		await bam(q('[data-nut="ds-cuoc"]'));
+		await cho(() => q("[data-cuoc]") !== null, "danh sach cuoc mo");
+	});
+
+	test("ST-soan-nut-het-tran", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { bat: false, lyDo: "het-tran-thang" },
+		});
+		const nutTat = q(
+			'[data-nut-soan="nut-het-tran"] button',
+		) as HTMLButtonElement;
+		expect(nutTat.disabled).toBe(true);
+		expect(
+			chu('[data-nut-soan="nut-het-tran"] [data-slot="field-description"]'),
+		).toBe(m.nut.tamNghi(dauThangSau(homNayVn(new Date()))));
+		expect(q('[data-nut="ds-cuoc"]')).toBeNull();
+	});
+
+	test("chưa có khoá mô hình: nút mờ kèm lý do", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { bat: false, lyDo: "chua-co-khoa-mo-hinh" },
+		});
+		expect(
+			(q('[data-nut-soan="nut-chua-khoa"] button') as HTMLButtonElement)
+				.disabled,
+		).toBe(true);
+		expect(
+			chu('[data-nut-soan="nut-chua-khoa"] [data-slot="field-description"]'),
+		).toBe(m.lyDo["chua-co-khoa-mo-hinh"]);
+	});
+});
+
+describe("nut theo ly do", () => {
+	const KET_QUA_THEO_LY_DO = {
+		"don-vi-luu-tru": null,
+		"don-vi-chua-bat": null,
+		"don-vi-che-do-an": null,
+		"cuoc-an-dang-mo": null,
+		"con-cuoc-dang": null,
+		"het-cuoc-ky": "nut-het-cuoc",
+		"het-tran-thang": "nut-het-tran",
+		"chua-co-khoa-mo-hinh": "nut-chua-khoa",
+	} as const;
+
+	test("bảng kết quả khớp đúng các mã lý do của máy chủ", () => {
+		expect(Object.keys(KET_QUA_THEO_LY_DO).sort()).toEqual(
+			Object.keys(m.lyDo).sort(),
+		);
+	});
+
+	for (const [lyDo, hinh] of Object.entries(KET_QUA_THEO_LY_DO)) {
+		for (const quanTri of [false, true]) {
+			test(`mã ${lyDo}, ${quanTri ? "quản trị" : "người thường"}: ${hinh ?? "không có nút"}`, async () => {
+				await moKhung(DON_PB1, { sanSang: { bat: false, lyDo }, quanTri });
+				const co = qa("[data-nut-soan]").map((o) =>
+					o.getAttribute("data-nut-soan"),
+				);
+				expect(co).toEqual(hinh ? [hinh] : []);
+			});
+		}
+	}
+
+	test("nấc ẩn mà không phải quản trị: không có nút", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { bat: false, lyDo: "don-vi-che-do-an" },
+			quanTri: false,
+		});
+		expect(q("[data-nut-soan]")).toBeNull();
+	});
+
+	test("chu kỳ không ở pha lập kế hoạch: không có nút và không hỏi máy chủ", async () => {
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, pha: "dang-chay" });
+		expect(q("[data-nut-soan]")).toBeNull();
+		expect(goiCua("okr.soanSanSang")).toHaveLength(0);
+	});
+
+	test("người không sửa được đơn vị mà không phải quản trị: không có nút, không hỏi máy chủ", async () => {
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, canEdit: false });
+		expect(q("[data-nut-soan]")).toBeNull();
+		expect(goiCua("okr.soanSanSang")).toHaveLength(0);
+	});
+
+	test("quản trị không sửa được đơn vị vẫn thấy nút", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: SAN_SANG_BAT,
+			canEdit: false,
+			quanTri: true,
+		});
+		expect(q('[data-nut-soan="nut"]')).not.toBeNull();
+	});
+
+	test("đơn vị soạn suy từ ô chọn: gốc, bộ phận, phòng ban; người thì không", () => {
+		expect(donViSoanCua({ loai: "goc" }, "q1")).toEqual({
+			cycleId: "q1",
+			level: "onehub",
+			divisionId: null,
+			departmentId: null,
+		});
+		expect(donViSoanCua({ loai: "bp", id: "bp-kd" }, "q1")).toEqual({
+			cycleId: "q1",
+			level: "bo-phan",
+			divisionId: "bp-kd",
+			departmentId: null,
+		});
+		expect(donViSoanCua({ loai: "pb", id: "pb-1" }, "q1")).toEqual(DV_PB1);
+		expect(donViSoanCua({ loai: "nguoi", id: "hung" }, "q1")).toBeNull();
+	});
+
+	test("bấm nút gọi soanMo với đơn vị đúng và mở màn", async () => {
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
+		await bam(q('[data-nut-soan="nut"]'));
+		expect(goiCua("okr.soanMo")[0]?.dauVao).toEqual(DV_PB1);
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo");
+		expect(goiCua("okr.soanDanhSach")[0]?.dauVao).toEqual({
+			cuocSoanId: CUOC.id,
+		});
+	});
+
+	test("bấm Tiếp cuộc đang soạn không gọi soanMo, mở đúng cuộc", async () => {
+		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
+		await bam(q('[data-nut-soan="nut-tiep"] button'));
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo");
+		expect(goiCua("okr.soanMo")).toHaveLength(0);
+		expect(goiCua("okr.soanDanhSach")[0]?.dauVao).toEqual({
+			cuocSoanId: CUOC.id,
+		});
+	});
+
+	test("soanMo báo còn cuộc đang soạn: mở đúng cuộc đó", async () => {
+		dat("okr.soanMo", () => ({
+			ok: false,
+			lyDo: "con-cuoc-dang",
+			cuocDang: { ...CUOC, id: "cuoc-cu" },
+		}));
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
+		await bam(q('[data-nut-soan="nut"]'));
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo");
+		expect(goiCua("okr.soanDanhSach")[0]?.dauVao).toEqual({
+			cuocSoanId: "cuoc-cu",
+		});
+	});
+
+	test("soanMo từ chối vì hết cuộc: không mở màn, đọc lại trạng thái sẵn sàng", async () => {
+		dat("okr.soanMo", () => ({
+			ok: false,
+			lyDo: "het-cuoc-ky",
+			cuocDang: null,
+		}));
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
+		expect(goiCua("okr.soanSanSang")).toHaveLength(1);
+		await bam(q('[data-nut-soan="nut"]'));
+		expect(q("[data-man-soan]")).toBeNull();
+		expect(goiCua("okr.soanSanSang")).toHaveLength(2);
+	});
+
+	test("soanMo lỗi: không mở màn, nút mở lại được", async () => {
+		dat("okr.soanMo", () => {
+			throw new Error("mất mạng");
+		});
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
+		await bam(q('[data-nut-soan="nut"]'));
+		expect(q("[data-man-soan]")).toBeNull();
+		expect((q('[data-nut-soan="nut"]') as HTMLButtonElement).disabled).toBe(
+			false,
+		);
+	});
+
+	test("đóng màn thì đọc lại trạng thái sẵn sàng và bỏ tham số cuộc", async () => {
+		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC, thamSo: "cuocSoan=cuoc-1" });
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo tu url");
+		const truoc = goiCua("okr.soanSanSang").length;
+		await bam(q('[data-slot="sheet-close"]'));
+		await cho(() => q("[data-man-soan]") === null, "man soan dong");
+		expect(goiCua("okr.soanSanSang").length).toBe(truoc + 1);
+	});
+
+	test("cuộc mở từ URL còn nguyên khi trạng thái sẵn sàng đổi sang hết trần", async () => {
+		await moKhung(DON_PB1, {
+			sanSang: { bat: false, lyDo: "het-tran-thang" },
+			thamSo: "cuocSoan=cuoc-1",
+		});
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo tu url");
+		expect(q('[data-nut-soan="nut-het-tran"]')).not.toBeNull();
+	});
+
+	test("danh sách cuộc mở từ URL; bấm Tiếp trong danh sách đổi sang màn soạn", async () => {
+		dat("okr.soanDanhSachCuoc", () => ({ cuoc: [CUOC], tranCuoc: 3 }));
+		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC, thamSo: "dsCuoc=1" });
+		await cho(
+			() => q('[data-cuoc="danh-sach"]') !== null,
+			"danh sach mo tu url",
+		);
+		await bam(q('[data-nut="mo-cuoc"]'));
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo");
+		expect(q('[data-cuoc="danh-sach"]')).toBeNull();
+	});
+
+	test("không có tham số URL thì không có màn nào mở", async () => {
+		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
+		expect(q("[data-man-soan]")).toBeNull();
+		expect(q("[data-cuoc]")).toBeNull();
+	});
+
+	test("tên đơn vị không bị trình duyệt dịch", async () => {
+		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC, thamSo: "cuocSoan=cuoc-1" });
+		await cho(() => q("[data-man-soan]") !== null, "man soan mo");
+		expect(q('[data-man-soan] [translate="no"]')?.textContent).toBe(
+			CUOC.tenDonVi,
+		);
 	});
 });

@@ -18,6 +18,16 @@ type Ket = "accepted" | "dismissed" | "skipped";
 const vi = {
 	nut: {
 		soan: "Soạn OKR cùng Trợ lý",
+		tiep: "Tiếp cuộc đang soạn",
+		tiepMoTa: (ngay: string, luot: string, dongChuaQuyet: string) =>
+			`Mở ${ngay} · ${luot} lượt · ${dongChuaQuyet} dòng chưa quyết`,
+		cheDoAn: "chế độ ẩn",
+		cheDoAnMoTa:
+			"Chỉ quản trị thấy nút này; cuộc soạn tính vào số đo, không tính vào đơn vị.",
+		hetCuoc: (tran: string) => `Đã dùng hết ${tran} cuộc soạn kỳ này`,
+		tamNghi: (ngay: string) => `Trợ lý OKR tạm nghỉ tới ${ngay}`,
+		dsCuoc: (da: string, tran: string) => `${da}/${tran} cuộc`,
+		loiMo: "Chưa mở được cuộc soạn",
 	},
 	man: {
 		tieuDe: "Soạn OKR cùng Trợ lý",
@@ -184,6 +194,16 @@ export type OkrSoanMessages = typeof vi;
 const en: OkrSoanMessages = {
 	nut: {
 		soan: "Draft OKRs with the Assistant",
+		tiep: "Continue the open session",
+		tiepMoTa: (ngay, luot, dongChuaQuyet) =>
+			`Opened ${ngay} · ${luot} turns · ${dongChuaQuyet} lines undecided`,
+		cheDoAn: "hidden mode",
+		cheDoAnMoTa:
+			"Only admins see this button; the session counts in the metrics, not against the unit.",
+		hetCuoc: (tran) => `All ${tran} drafting sessions for this cycle are used`,
+		tamNghi: (ngay) => `The OKR Assistant is paused until ${ngay}`,
+		dsCuoc: (da, tran) => `${da}/${tran} sessions`,
+		loiMo: "The drafting session could not be opened",
 	},
 	man: {
 		tieuDe: "Draft OKRs with the Assistant",

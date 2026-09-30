@@ -236,6 +236,19 @@ const GHIM_OKR_GOP_Y = {
 } satisfies Record<string, [string, string]>;
 
 const GHIM_OKR_SOAN = {
+	"okr-soan:nut.tiepMoTa": [
+		"Mở 1 · A lượt · B dòng chưa quyết",
+		"Mở 12 · A lượt · B dòng chưa quyết",
+	],
+	"okr-soan:nut.hetCuoc": [
+		"Đã dùng hết 1 cuộc soạn kỳ này",
+		"Đã dùng hết 12 cuộc soạn kỳ này",
+	],
+	"okr-soan:nut.tamNghi": [
+		"Trợ lý OKR tạm nghỉ tới 1",
+		"Trợ lý OKR tạm nghỉ tới 12",
+	],
+	"okr-soan:nut.dsCuoc": ["1/A cuộc", "12/A cuộc"],
 	"okr-soan:man.luot": ["lượt 1/A", "lượt 12/A"],
 	"okr-soan:man.tabBanNhap": ["Bản nháp (1)", "Bản nháp (12)"],
 	"okr-soan:man.soDong": ["1 dòng", "12 dòng"],

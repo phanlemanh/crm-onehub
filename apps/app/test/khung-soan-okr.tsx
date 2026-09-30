@@ -1,6 +1,10 @@
 import { jest, mock } from "bun:test";
 import { chuanHoa } from "@crm/validation/okr-kiem";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	skipToken,
+} from "@tanstack/react-query";
 import type { EveMessage } from "eve/react";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
@@ -51,10 +55,13 @@ function thuTuc(duong: string) {
 	return {
 		queryKey: (vao?: DauVao) => (vao === undefined ? [duong] : [duong, vao]),
 		pathKey: () => [duong],
-		queryOptions: (vao?: DauVao) => ({
-			queryKey: [duong, vao ?? null],
-			queryFn: async () => doc(vao),
-		}),
+		queryOptions: (vao?: DauVao | typeof skipToken) =>
+			vao === skipToken
+				? { queryKey: [duong, "bo-qua"], queryFn: skipToken }
+				: {
+						queryKey: [duong, vao ?? null],
+						queryFn: async () => doc(vao),
+					},
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
@@ -203,6 +210,14 @@ export const { DanhSachCuoc } = await import(
 	"@/app/(app)/[slug]/okr/soan/danh-sach-cuoc"
 );
 export const { SOAN_UI } = await import("@/app/(app)/[slug]/okr/soan/cau-hinh");
+export const { dauThangSau } = await import("@/app/(app)/[slug]/okr/cot-gop-y");
+export const { homNayVn } = await import("@/lib/okr-chu-ky-nhan");
+export const { donViSoanCua } = await import(
+	"@/app/(app)/[slug]/okr/soan/nut-soan"
+);
+export const { TheoDonVi } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
+);
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrSoanMessages } = await import("@/lib/messages/okr-soan");
@@ -375,7 +390,7 @@ export function tatDongHoGia(): void {
 	dongHoGia = false;
 }
 
-export async function mo(man: ReactElement): Promise<void> {
+export async function mo(man: ReactElement, thamSo = ""): Promise<void> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -384,7 +399,7 @@ export async function mo(man: ReactElement): Promise<void> {
 	});
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter hasMemory searchParams="">
+			<NuqsTestingAdapter hasMemory searchParams={thamSo}>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>{man}</TooltipProvider>
@@ -496,4 +511,121 @@ export function nut(chuNut: string, goc: ParentNode = document.body) {
 	);
 	if (!tim) throw new Error(`khong thay nut "${chuNut}"`);
 	return tim;
+}
+
+export type SanSangGia =
+	| {
+			bat: true;
+			nac: "bat" | "an";
+			cuocDang: CuocSoanOutput | null;
+			soCuocDaDung: number;
+			tranCuoc: number;
+			thieuBoiCanh: boolean;
+	  }
+	| { bat: false; lyDo: string };
+
+export const SAN_SANG_BAT: Extract<SanSangGia, { bat: true }> = {
+	bat: true,
+	nac: "bat",
+	cuocDang: null,
+	soCuocDaDung: 0,
+	tranCuoc: 3,
+	thieuBoiCanh: false,
+};
+
+const NGUOI_TRUONG = {
+	id: "hung",
+	name: "Trần Văn Hùng",
+	email: "h@onehub.vn",
+};
+
+const CAY_KHUNG = {
+	divisions: [
+		{
+			id: "bp-kd",
+			name: "Kinh doanh",
+			moTa: "",
+			position: 0,
+			head: null,
+			okrMo: 0,
+			departments: [
+				{
+					id: "pb-1",
+					name: "Kinh doanh miền Bắc",
+					moTa: "",
+					position: 0,
+					divisionId: "bp-kd",
+					head: NGUOI_TRUONG,
+					stepCount: 0,
+					okrMo: 0,
+					people: [{ ...NGUOI_TRUONG, primary: true }],
+				},
+			],
+		},
+	],
+	chuaXep: [],
+	chuaCoPhongBan: [],
+	people: [],
+	archived: { divisions: [], departments: [] },
+	coverage: { members: 1, withPrimary: 1, departmentsWithoutHead: 0 },
+};
+
+export type TuyChonKhung = {
+	sanSang: SanSangGia;
+	quanTri?: boolean;
+	canEdit?: boolean;
+	pha?: "lap-ke-hoach" | "dang-chay";
+	thamSo?: string;
+};
+
+export async function moKhung(
+	don: string,
+	{
+		sanSang,
+		quanTri = false,
+		canEdit = true,
+		pha = "lap-ke-hoach",
+		thamSo = "",
+	}: TuyChonKhung,
+): Promise<void> {
+	dat("okr.soanSanSang", () => sanSang);
+	dat("org.tree", () => CAY_KHUNG);
+	dat("workspace.get", () => ({ name: "OneHub" }));
+	dat("okr.cycles", () => ({
+		cycles: [
+			{
+				id: "q1",
+				kind: "quy",
+				name: "Quý 1 · 2027",
+				parentId: null,
+				startsOn: "2027-01-01",
+				endsOn: "2027-03-31",
+				phase: pha,
+				breakStartsOn: null,
+				breakEndsOn: null,
+				updateWeekday: 1,
+				cuaSoRa: null,
+			},
+		],
+		currentId: "q1",
+	}));
+	dat("okr.access", () => ({
+		canManageProgram: quanTri,
+		headOf: { divisions: [], departments: [] },
+	}));
+	dat("okr.countByUnit", () => ({}));
+	dat("okr.danhSach", () => ({
+		rows: [],
+		total: 0,
+		facetCounts: { phuTrach: [], loai: [], trangThai: [] },
+		canEdit,
+	}));
+	const tham = new URLSearchParams(thamSo);
+	if (don !== "goc") tham.set("donOkr", don);
+	await mo(<TheoDonVi />, `?${tham}`);
+	await cho(
+		() => document.querySelector("[data-hang-nut]") !== null,
+		"khung don vi",
+	);
+	await nhip(10);
 }
