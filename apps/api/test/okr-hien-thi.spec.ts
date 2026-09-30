@@ -323,9 +323,10 @@ describe("dem-don-vi", () => {
 const SO_GOP_VIET_TRUOC = {
 	toanCanh: { soMucTieu: 2, tienDo: 30 },
 	hopTuan: { tongKr: 2, soKr: 2 },
-	countByUnit: 2,
 	sucKhoe: { tongKr: 2 },
 } as const;
+
+const DEM_DON_VI_THEO_NGUOI_XEM = { t: 3, m: 2 } as const;
 
 describe("so-gop", () => {
 	let s: SanSoGop;
@@ -374,11 +375,13 @@ describe("so-gop", () => {
 			console.log(
 				`so-gop T: ${JSON.stringify(t)}\nso-gop M: ${JSON.stringify(m)}\nsucKhoe quản trị P1: ${skP1?.tongKr}`,
 			);
-			expect(m).toEqual(t);
+			const { countByUnit: demT, ...gopT } = t;
+			const { countByUnit: demM, ...gopM } = m;
+			expect(gopM).toEqual(gopT);
+			expect({ t: demT, m: demM }).toEqual(DEM_DON_VI_THEO_NGUOI_XEM);
 			expect({
 				toanCanh: t.toanCanh,
 				hopTuan: t.hopTuan,
-				countByUnit: t.countByUnit,
 				sucKhoe: { tongKr: skP1?.tongKr },
 			}).toEqual(SO_GOP_VIET_TRUOC);
 			expect(t.krHop).toEqual([s.kr.c1, s.kr.c2].sort());
