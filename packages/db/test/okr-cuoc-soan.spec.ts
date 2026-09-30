@@ -12,6 +12,7 @@ import {
 	donViCuoc,
 	LOAI_DONG_NHAP,
 	moCuoc,
+	noiPhienMoCoi,
 	tangLuot,
 } from "../src/okr-cuoc-soan";
 import { TRO_LY_OKR_TRAN } from "../src/okr-tro-ly-danh-muc";
@@ -156,19 +157,44 @@ describe("okr-cuoc-soan", () => {
 	});
 
 	test("capNhatPhien có tuPhien: chỉ đổi khi phiên hiện tại đúng là tuPhien; hai lần đua từ cùng chỗ giữ chỉ một lần đổi", async () => {
-		const c = await mo("g");
-		expect(await capNhatPhien(db, c.id, id("g2"), id("khac"))).toEqual({
+		const c = await mo("tp");
+		expect(await capNhatPhien(db, c.id, id("tp2"), id("khac"))).toEqual({
 			doi: false,
 		});
-		expect((await docCuoc(db, c.id))?.sessionId).toBe(id("g"));
+		expect((await docCuoc(db, c.id))?.sessionId).toBe(id("tp"));
 		const dua = await Promise.all([
-			capNhatPhien(db, c.id, id("g-a"), id("g")),
-			capNhatPhien(db, c.id, id("g-b"), id("g")),
+			capNhatPhien(db, c.id, id("tp-a"), id("tp")),
+			capNhatPhien(db, c.id, id("tp-b"), id("tp")),
 		]);
 		expect(dua.filter((k) => k.doi)).toHaveLength(1);
 		const sau = await docCuoc(db, c.id);
 		expect(sau?.cacPhien).toHaveLength(2);
-		expect(sau?.cacPhien[0]).toBe(id("g"));
+		expect(sau?.cacPhien[0]).toBe(id("tp"));
+	});
+
+	test("noiPhienMoCoi: nối phiên vào cacPhien, không đổi sessionId, không trùng; cuộc không dang hay không có thì không nối", async () => {
+		const c = await mo("nc");
+		expect(await noiPhienMoCoi(db, c.id, id("nc-coi"))).toEqual({ noi: true });
+		expect(await noiPhienMoCoi(db, c.id, id("nc-coi"))).toEqual({ noi: false });
+		const sau = await docCuoc(db, c.id);
+		expect({ sessionId: sau?.sessionId, cacPhien: sau?.cacPhien }).toEqual({
+			sessionId: id("nc"),
+			cacPhien: [id("nc"), id("nc-coi")],
+		});
+		await db.okrCuocSoan.update({
+			where: { id: c.id },
+			data: { trangThai: "bo" },
+		});
+		expect(await noiPhienMoCoi(db, c.id, id("nc-coi-2"))).toEqual({
+			noi: false,
+		});
+		expect((await docCuoc(db, c.id))?.cacPhien).toEqual([
+			id("nc"),
+			id("nc-coi"),
+		]);
+		expect(await noiPhienMoCoi(db, "khong-co", id("z"))).toEqual({
+			noi: false,
+		});
 	});
 
 	test("tangLuot: đếm từng lượt tới trần rồi từ chối het-luot-cuoc, số không vượt trần", async () => {

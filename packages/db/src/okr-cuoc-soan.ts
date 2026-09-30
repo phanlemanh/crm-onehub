@@ -171,6 +171,22 @@ export async function capNhatPhien(
 	return { doi: count === 1 };
 }
 
+export async function noiPhienMoCoi(
+	db: DbHoacTx,
+	cuocId: string,
+	sessionId: string,
+): Promise<{ noi: boolean }> {
+	const { count } = await db.okrCuocSoan.updateMany({
+		where: {
+			id: cuocId,
+			trangThai: "dang",
+			NOT: { cacPhien: { has: sessionId } },
+		},
+		data: { cacPhien: { push: sessionId } },
+	});
+	return { noi: count === 1 };
+}
+
 export const LY_DO_TANG_LUOT = ["het-luot-cuoc", "cuoc-khong-dang"] as const;
 
 export type KetQuaTangLuot =

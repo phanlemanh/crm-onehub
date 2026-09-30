@@ -57,6 +57,7 @@ export const CUA_OKR = {
 		phienKhongThuocCuoc: "phien-khong-thuoc-cuoc",
 		daCoPhien: "da-co-phien",
 		khongDocDuocPhien: "khong-doc-duoc-phien",
+		khongGhiDuocPhien: "khong-ghi-duoc-phien",
 		khongDemDuocLuot: "khong-dem-duoc-luot",
 		khongNoiDuoc: "tro-ly-okr-khong-noi-duoc",
 	},

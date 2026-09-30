@@ -5,7 +5,7 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import { db } from "@crm/db";
-import { capNhatPhien } from "@crm/db/okr-cuoc-soan";
+import { capNhatPhien, noiPhienMoCoi } from "@crm/db/okr-cuoc-soan";
 import { laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
 import { connection } from "next/server";
 import {
@@ -140,13 +140,15 @@ async function handler(
 		const than = await upstream.text();
 		const phienEve = docPhienEve(upstream.headers, than);
 		if (!phienEve) return loi(502, CUA_OKR.loi.khongDocDuocPhien);
-		const { doi } = await capNhatPhien(
-			db,
-			cuocSoanId,
-			phienEve,
-			cuoc.sessionId,
-		);
-		if (!doi) return loi(409, CUA_OKR.loi.daCoPhien);
+		const ghi = await ghiPhienEve(cuocSoanId, phienEve, cuoc.sessionId);
+		if (ghi !== "da-ghi") {
+			await noiPhienMoCoi(db, cuocSoanId, phienEve).catch(() => ({
+				noi: false,
+			}));
+			return ghi === "thua"
+				? loi(409, CUA_OKR.loi.daCoPhien)
+				: loi(502, CUA_OKR.loi.khongGhiDuocPhien);
+		}
 		return new Response(than, {
 			status: upstream.status,
 			statusText: upstream.statusText,
@@ -173,6 +175,19 @@ export {
 
 function tangLuot(cuocSoanId: string) {
 	return getServerTrpcClient().okr.soanTangLuot.mutate({ cuocSoanId });
+}
+
+async function ghiPhienEve(
+	cuocSoanId: string,
+	phienEve: string,
+	choGiu: string,
+): Promise<"da-ghi" | "thua" | "hong"> {
+	try {
+		const { doi } = await capNhatPhien(db, cuocSoanId, phienEve, choGiu);
+		return doi ? "da-ghi" : "thua";
+	} catch {
+		return "hong";
+	}
 }
 
 function docPhienEve(headers: Headers, than: string): string | null {

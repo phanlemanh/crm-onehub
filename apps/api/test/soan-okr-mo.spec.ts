@@ -427,6 +427,52 @@ describe("soan-mo", () => {
 	);
 
 	test(
+		"bo-cuoc-dang sai-ma: chính người mở cuộc đang gửi mã cuộc khác (đã bỏ, khác đơn vị) → 400 có tên, cuộc đang không đổi, không mở thêm",
+		async () => {
+			const dang = await mo();
+			if (!dang.ok) throw new Error(`mo: ${dang.lyDo}`);
+			const daBo = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
+			await db.okrCuocSoan.update({
+				where: { id: daBo.id },
+				data: { trangThai: "bo" },
+			});
+			const khacDonVi = await gieoCuoc({
+				donVi: DON_VI.kdNam,
+				nguoiMo: TRUONG,
+			});
+			for (const [ten, boCuocDangId] of [
+				["da-bo", daBo.id],
+				["khac-don-vi", khacDonVi.id],
+			] as const) {
+				const tra = await goiSoan(
+					app,
+					"soanMo",
+					"trpc",
+					{ ...vaoDonVi(DON_VI.kdBac, "trpc"), boCuocDangId },
+					cTruong,
+				);
+				expect({ ten, status: tra.status, loi: tra.loi }).toEqual({
+					ten,
+					status: 400,
+					loi: OKR.thongDiep.soan.khongBoDuocCuoc,
+				});
+			}
+			const hang = await db.okrCuocSoan.findMany({
+				where: { cycleId: CHU_KY_Q4 },
+				select: { id: true, trangThai: true },
+			});
+			expect(new Map(hang.map((h) => [h.id, h.trangThai]))).toEqual(
+				new Map([
+					[dang.cuoc.id, "dang"],
+					[daBo.id, "bo"],
+					[khacDonVi.id, "dang"],
+				]),
+			);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"thu-lai: đổi phiên trên cùng cuộc, nối cacPhien; cuộc khác đơn vị → 400; cuộc đã bỏ → 409",
 		async () => {
 			const dau = await mo();

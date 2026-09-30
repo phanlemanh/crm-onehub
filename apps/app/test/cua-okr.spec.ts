@@ -80,6 +80,17 @@ const bienThat = BIEN.map((ten) => [ten, process.env[ten]] as const);
 process.env.OKR_AGENT_BRIDGE_SECRET = BI_MAT;
 process.env.OKR_AGENT_URL = AGENT_GIA;
 process.env.AGENT_BRIDGE_SECRET = "bi-mat-cau-noi-cu-du-dai-32-ky-tu-thu";
+const cuocSoanThat = await import("@crm/db/okr-cuoc-soan");
+const capNhatThat = cuocSoanThat.capNhatPhien;
+let ghiHong = false;
+mock.module("@crm/db/okr-cuoc-soan", () => ({
+	...cuocSoanThat,
+	capNhatPhien: async (...vao: Parameters<typeof capNhatThat>) => {
+		if (ghiHong) throw new Error("kho hong");
+		return capNhatThat(...vao);
+	},
+}));
+let duaVoi: { id: string; cho: string } | null = null;
 const fetchThat = globalThis.fetch;
 let soEve = 0;
 let traVe: "ca-hai" | "chi-than" | "khong-co" | "loi" = "ca-hai";
@@ -88,6 +99,7 @@ globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
 	daChuyen.push({ url: String(input), headers: new Headers(init?.headers) });
 	const eve = `${suffix}-eve-${++soEve}`;
 	daTraEve.push(eve);
+	if (duaVoi) await capNhatThat(db, duaVoi.id, duaVoi.cho);
 	if (traVe === "loi") return Response.json({ ok: false }, { status: 500 });
 	if (traVe === "khong-co") return Response.json({ ok: true }, { status: 202 });
 	return Response.json(
@@ -678,7 +690,44 @@ describe("cua-okr", () => {
 		expect(ketQua.find((k) => k.status === 409)?.body).toEqual({
 			error: "da-co-phien",
 		});
-		expect((await docPhien(id)).sessionId).toBe(qua?.body.sessionId);
+		const sau = await docPhien(id);
+		expect(sau.sessionId).toBe(qua?.body.sessionId);
+		expect([...sau.cacPhien].sort()).toEqual(
+			[`${PHIEN_CHO_EVE}${id}`, ...daTraEve.slice(-2)].sort(),
+		);
+	});
+	test("dua tat dinh: cuoc doi sang cho giu khac trong luc tro ly tra loi → 409, cuoc giu cho giu moi, ma eve vao cacPhien", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		const cho = `${PHIEN_CHO_EVE}${id}`;
+		const choKhac = `${PHIEN_CHO_EVE}${id}-khac`;
+		duaVoi = { id, cho: choKhac };
+		const res = await goi(NGUOI.okr, "/eve/v1/session", id);
+		duaVoi = null;
+		const eve = daTraEve.at(-1) ?? "";
+		expect({ status: res.status, body: await res.json() }).toEqual({
+			status: 409,
+			body: { error: "da-co-phien" },
+		});
+		expect(await docPhien(id)).toEqual({
+			sessionId: choKhac,
+			cacPhien: [cho, choKhac, eve],
+		});
+	});
+	test("ghi phien hong → 502 co ten, cuoc giu cho giu, ma eve vao cacPhien", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		const cho = `${PHIEN_CHO_EVE}${id}`;
+		ghiHong = true;
+		const res = await goi(NGUOI.okr, "/eve/v1/session", id);
+		ghiHong = false;
+		const eve = daTraEve.at(-1) ?? "";
+		expect({ status: res.status, body: await res.json() }).toEqual({
+			status: 502,
+			body: { error: "khong-ghi-duoc-phien" },
+		});
+		expect(await docPhien(id)).toEqual({
+			sessionId: cho,
+			cacPhien: [cho, eve],
+		});
 	});
 	test("doi chung: cua cu /eve/v1 van 403 vai okr", async () => {
 		phien = { user: { id: NGUOI.okr, email: "x@thu.test", name: "x" } };

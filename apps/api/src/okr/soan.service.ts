@@ -75,7 +75,6 @@ import {
 } from "./soan-so-do.service";
 
 type Tx = Prisma.TransactionClient;
-
 type DbHoacTx = Db | Tx;
 type NacMo = CuocSoan["nac"];
 
