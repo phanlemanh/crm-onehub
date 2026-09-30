@@ -28,10 +28,7 @@ const TRUONG_AN = [
 	"aiTomTatAnPhamVi",
 	"aiTomTatAnDonVi",
 ];
-const DAI_TRO_LY = {
-	goc: "cf5006d4d2675ede24bf039a5571eb9a2f258673",
-	dau: "eb8fbc0abe986f154c78f3f17a27138d679b39d2",
-};
+const GOP_LUOT_9B = "2e3280474f472b9853ed9a66bb0f4524ede6ff7d";
 const THANG = "2026-11";
 const NGAY = 24 * 60 * 60 * 1000;
 const T = new Date("2026-11-13T09:00:00+07:00").getTime();
@@ -131,20 +128,19 @@ afterAll(async () => {
 
 describe("tach-giao-dich", () => {
 	test("bài OKR sẵn có chỉ được thêm dòng, mỗi dòng thêm nêu một trong bốn trường chế độ ẩn", () => {
-		const coDu = [DAI_TRO_LY.goc, DAI_TRO_LY.dau].every(
-			(sha) => git("cat-file", "-e", `${sha}^{commit}`).ma === 0,
-		);
-		if (!coDu) {
+		const truoc = git("rev-parse", "--verify", "--quiet", `${GOP_LUOT_9B}^1`);
+		const sau = git("rev-parse", "--verify", "--quiet", `${GOP_LUOT_9B}^2`);
+		if (truoc.ma !== 0 || sau.ma !== 0 || truoc.ra === "" || sau.ra === "") {
 			console.warn(
-				"tach-giao-dich: không có commit của dải Trợ lý OKR (checkout nông) — bỏ qua phần so diff",
+				"tach-giao-dich: không có commit gộp lượt 9b (checkout nông) — bỏ qua phần so diff",
 			);
 			return;
 		}
 		const diff = git(
 			"diff",
 			"--unified=0",
-			DAI_TRO_LY.goc,
-			DAI_TRO_LY.dau,
+			truoc.ra,
+			sau.ra,
 			"--",
 			":(glob)apps/api/test/okr*.spec.ts",
 		);
