@@ -19,8 +19,8 @@ evals:
       DealStageIndicator stage="QUALIFIED_TO_BUY") renderToString voi QueryClient trong. Assert: HTML chua
       'data-tone="info"' tren span[data-slot=status-indicator] va chu «Qualified to buy»; HTML sau khi bo moi the
       (chi con nut chu) khong chua "QUALIFIED_TO_BUY".
-      CHIEU DO (cung fixture, E1d): create-deal-sheet.tsx cua 6e431a01 -> e1 fail, HTML co 'data-tone="neutral"' va
-      nut chu "QUALIFIED_TO_BUY".
+      CHIEU DO (cung fixture, E1d): create-deal-sheet.tsx cua 6e431a01 -> e1 fail, diff {tone, chu} in
+      '+ "tone": "neutral",' va '+ "chu": "QUALIFIED_TO_BUY",'.
   - id: E2
     criterion: AC-2
     executor: test
@@ -65,7 +65,7 @@ evals:
       trong ["giaiDoan.list","users.list","users.me","currency.settings"] (ma tran viet truoc: bon khoa, bon assert).
       Doi chung duong cung fixture: render voi tham so mo ngan -> du bon khoa trong cache, va o Giai doan cua form hien
       nhan cua giai doan mo dau tien «Qualified to buy».
-      CHIEU DO (E1d): ban truoc vong -> fail, thong diep liet khoa "giaiDoan.list" co trong cache khi ngan dong.
+      CHIEU DO (E1d): ban truoc vong -> fail, diff in '"khoa": "giaiDoan.list"' va '+ "coTrongCache": true,' khi ngan dong.
   - id: E5
     criterion: AC-5
     executor: test
@@ -97,8 +97,9 @@ evals:
       exit 0; chieu-do-dom.mjs dung ban sao cay (git worktree o HEAD, bun install --frozen-lockfile), thay
       create-deal-sheet.tsx bang ban o commit ghim 6e431a01 (truoc vong), roi chay RIENG tung ca e1, e2, e3, e4 cua
       deals-giai-doan-hydrat.dom.tsx (moi ca mot lenh -t '<ca> '). Moi ca phai: thoat khac 0, co dong "(fail)" cua dung
-      ca do, va thong bao loi cua chinh lan chay do chua chuoi ghim cua no — e1 'data-tone="neutral"', e2 "Hydration
-      failed", e3 "QUALIFIED_TO_BUY" trong chuoi chu ghi duoc, e4 "giaiDoan.list". Ten ca khong chua chuoi ghim nao
+      ca do, va thong bao loi cua chinh lan chay do chua chuoi ghim cua no — e1 '+ "tone": "neutral",' va
+      '+ "chu": "QUALIFIED_TO_BUY",'; e2 "Hydration failed because the server rendered text didn't match the client";
+      e3 '+ "QUALIFIED_TO_BUY",' trong chuoi chu ghi duoc; e4 '"khoa": "giaiDoan.list"' va '+ "coTrongCache": true,'. Ten ca khong chua chuoi ghim nao
       (script kiem truoc). Tep test chi nhap CreateDealSheet tu tep ngan; dau ra co "SyntaxError", "Export named" hay
       "Cannot find" -> exit 2 (loi nap, khong tinh la do dung). Du bon ca -> in "DO DUNG GHIM: e1 e2 e3 e4" exit 0;
       thieu -> "LOT: <ca>" exit 1. Doi chung duong cung ban sao: truoc khi thay tep, bon ca xanh — khong thi exit 1
