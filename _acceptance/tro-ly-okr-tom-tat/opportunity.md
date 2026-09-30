@@ -3,10 +3,10 @@ schema_version: 1
 slug: tro-ly-okr-tom-tat
 feature: Tóm tắt tuần — sáng hôm sau ngày cập nhật, Trợ lý OKR tóm tắt các lần Cập nhật tuần của một phòng ban; khối tóm tắt đứng đầu bảng họp tuần, câu nào cũng bấm ra lần cập nhật gốc, máy kiểm lại mọi con số; Trưởng phòng ban nhận một dòng trong nhắc buổi sáng và tắt được dòng đó; quản trị bật theo ba nấc tắt · chế độ ẩn · bật
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-30T14:18:50Z
 prototype:
   base_commit: fcff16b6
   disposition: archive
@@ -44,10 +44,10 @@ Theo chốt 28/09 (PR #183, «dựng hết bằng dữ liệu mẫu»): lượt 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Tóm tắt tuần có đúng số và có được Trưởng phòng ban dùng trước buổi họp tuần không, mà không làm họ tắt nhắc buổi sáng?
-- Kết quả nào là SỐNG: [đề xuất] Ba tuần chế độ ẩn trên Cập nhật tuần thật: câu bị bộ kiểm bỏ ≤ 10% và 0 số lệch lọt qua (điều kiện bật). Bốn tuần sau khi bật: ≥ 50% lượt Trưởng phòng ban nhận dòng báo có mở bảng họp tuần trong ngày; ≥ 60% phản hồi là «hữu ích»; tỷ lệ tắt dòng báo ≤ 10% Trưởng phòng ban nhận và không tăng tuần qua tuần; chi phí tóm tắt ≤ 1 US$ mỗi tháng.
-- Kết quả nào là CHẾT: [đề xuất] Có một số lệch lọt qua tới người đọc; hoặc câu bị bỏ > 30% hai tuần liền; hoặc sau ≥ 20 phản hồi, «hữu ích» < 30%; hoặc > 30% Trưởng phòng ban nhận dòng báo đã tắt nó.
-- Timebox: [đề xuất] Dựng xong trên bộ mẫu trước mùa OKR năm của cấp OneHub; chạy chế độ ẩn từ tuần đầu có Cập nhật tuần thật; phiên nghiệm thu sau bốn tuần bật.
+- Câu hỏi phép đo trả lời: Tóm tắt tuần có đúng số và có được Trưởng phòng ban dùng trước buổi họp tuần không, mà không làm họ tắt nhắc buổi sáng?
+- Kết quả nào là SỐNG: Ba tuần chế độ ẩn trên Cập nhật tuần thật: câu bị bộ kiểm bỏ ≤ 10% và 0 số lệch lọt qua (điều kiện bật). Bốn tuần sau khi bật: ≥ 50% lượt Trưởng phòng ban nhận dòng báo có mở bảng họp tuần trong ngày; ≥ 60% phản hồi là «hữu ích»; tỷ lệ tắt dòng báo ≤ 10% Trưởng phòng ban nhận và không tăng tuần qua tuần; chi phí tóm tắt ≤ 1 US$ mỗi tháng.
+- Kết quả nào là CHẾT: Có một số lệch lọt qua tới người đọc; hoặc câu bị bỏ > 30% hai tuần liền; hoặc sau ≥ 20 phản hồi, «hữu ích» < 30%; hoặc > 30% Trưởng phòng ban nhận dòng báo đã tắt nó.
+- Timebox: Dựng xong trên bộ mẫu trước mùa OKR năm của cấp OneHub; chạy chế độ ẩn từ tuần đầu có Cập nhật tuần thật; phiên nghiệm thu sau bốn tuần bật.
 
 ## Kết quả prototype
 
@@ -65,9 +65,9 @@ tắt nhắc dựng ở S1-D (`/proto/tro-ly-okr-tom-tat`) trước Cổng Phạ
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: lộ trình Trợ lý OKR mục 5 «9c», quyết định 28/09 «dựng hết bằng dữ liệu mẫu» (PR #183); 9a (#182), bộ OKR mẫu (#186) và 9b (#207, #212) đã lên `onehub`; làn A trống.
+- **decision = build.** Căn cứ: lộ trình Trợ lý OKR mục 5 «9c», quyết định 28/09 «dựng hết bằng dữ liệu mẫu» (PR #183); 9a (#182), bộ OKR mẫu (#186) và 9b (#207, #212) đã lên `onehub`; làn A trống. Quyết 2026-09-30 bởi Manh Phan trong phiên lượt 9c, bằng `/acceptance-gate:start tro-ly-okr-tom-tat`; câu gõ nguyên văn: «quyết: build; ngưỡng: gỡ nhãn đề xuất».
 - **disposition = archive.** Căn cứ: không có code prototype; nền là mã 9a, 9b đã gộp.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** gỡ nhãn đề xuất cho câu hỏi phép đo, SỐNG, CHẾT và timebox như section Ngưỡng.
 
 ## Thước đo thành công → ứng viên criterion
 
