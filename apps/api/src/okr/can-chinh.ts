@@ -32,6 +32,8 @@ export function dungCayCanChinh(
 			kind: m.kind,
 			gop: m.alignments.length,
 			lapLai,
+			hienThi: m.hienThi,
+			soNguoiXem: m.soNguoiXem,
 			children: lapLai
 				? []
 				: [
@@ -47,6 +49,8 @@ export function dungCayCanChinh(
 								kind: m.kind,
 								gop: 0,
 								lapLai: false,
+								hienThi: m.hienThi,
+								soNguoiXem: m.soNguoiXem,
 								children: (gopVao.get(k.id) ?? []).map(nutMt),
 							}),
 						),

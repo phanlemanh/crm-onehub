@@ -134,6 +134,8 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 	};
 }
 
@@ -155,6 +157,8 @@ function nut(
 		kind: "cam-ket",
 		gop: 1,
 		lapLai: false,
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 		expected: 25,
 		children,
 	};

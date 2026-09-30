@@ -297,6 +297,8 @@ export const mucTieuOutput = z.object({
 	following: z.boolean(),
 	followerCount: z.number(),
 	theoDoi: z.boolean(),
+	hienThi: z.enum(MUC_HIEN_THI),
+	soNguoiXem: z.number(),
 });
 export const vetOutput = z.object({
 	id: z.string(),
@@ -388,6 +390,8 @@ export const mucMoCoi = z.object({
 		ten: z.string(),
 	}),
 	lyDo: z.array(z.enum(LY_DO_MO_COI)),
+	hienThi: z.enum(MUC_HIEN_THI),
+	soNguoiXem: z.number(),
 });
 export const moCoiOutput = z.array(mucMoCoi);
 export const updateObjectiveInput = mucTieuUpdate;
@@ -428,6 +432,8 @@ export const nutCanChinh: z.ZodType<NutCanChinh> = z.lazy(() =>
 		kind: z.enum(LOAI_MUC_TIEU),
 		gop: z.number(),
 		lapLai: z.boolean(),
+		hienThi: z.enum(MUC_HIEN_THI),
+		soNguoiXem: z.number(),
 		children: z.array(nutCanChinh),
 	}),
 );
@@ -442,6 +448,8 @@ export type NutCanChinh = {
 	kind: (typeof LOAI_MUC_TIEU)[number];
 	gop: number;
 	lapLai: boolean;
+	hienThi: (typeof MUC_HIEN_THI)[number];
+	soNguoiXem: number;
 	children: NutCanChinh[];
 };
 export const alignmentTreeInput = z.object({ cycleId: ma });

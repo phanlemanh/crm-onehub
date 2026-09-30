@@ -1,10 +1,12 @@
 import type { Db, Prisma } from "@crm/db";
 import { dieuKienOkrMo, PHA_CHUYEN_DUOC } from "@crm/db/okr-don-vi";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
-import type {
-	ChuyenDonViInput,
-	LyDoMoCoi,
-	MoCoiInput,
+import {
+	type ChuyenDonViInput,
+	type LyDoMoCoi,
+	type MoCoiInput,
+	MUC_HIEN_THI,
+	type MucHienThi,
 } from "@crm/validation/okr-hien-thi";
 import type { CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import {
@@ -13,6 +15,7 @@ import {
 	Inject,
 	Injectable,
 } from "@nestjs/common";
+import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import type { TreeOutput } from "../to-chuc/to-chuc.contracts";
 import type { ChuyenDonViOutput, MucMoCoi } from "./okr.contracts";
@@ -29,6 +32,8 @@ type DonViNhan = ChuyenDonViInput["denDonVi"];
 type PhongBanCay = TreeOutput["chuaXep"][number];
 type BoPhanCay = TreeOutput["divisions"][number];
 
+const mucHienThi = z.enum(MUC_HIEN_THI);
+
 type MucTieuMoCoi = {
 	id: string;
 	title: string;
@@ -38,6 +43,8 @@ type MucTieuMoCoi = {
 	personUserId: string | null;
 	ownerUserId: string;
 	keyResults: { ownerUserId: string }[];
+	hienThi: MucHienThi;
+	soNguoiXem: number;
 };
 
 type CayMoCoi = {
@@ -129,7 +136,14 @@ function lyDoMoCoi(mt: MucTieuMoCoi, cay: CayMoCoi): MucMoCoi | null {
 			: []),
 	];
 	if (lyDo.length === 0) return null;
-	return { objectiveId: mt.id, tieuDe: mt.title, donVi: dv.donVi, lyDo };
+	return {
+		objectiveId: mt.id,
+		tieuDe: mt.title,
+		donVi: dv.donVi,
+		lyDo,
+		hienThi: mt.hienThi,
+		soNguoiXem: mt.soNguoiXem,
+	};
 }
 
 @Injectable()
@@ -277,6 +291,8 @@ export class OkrTaiCoCauService {
 				personUserId: true,
 				ownerUserId: true,
 				keyResults: { select: { ownerUserId: true } },
+				hienThi: true,
+				_count: { select: { nguoiXem: true } },
 			},
 			orderBy: [{ cycleId: "asc" }, { position: "asc" }, { id: "asc" }],
 		});
@@ -284,8 +300,15 @@ export class OkrTaiCoCauService {
 			q.cay,
 			hang.flatMap((h) => (h.personUserId ? [h.personUserId] : [])),
 		);
-		return hang.flatMap((h) => {
-			const muc = lyDoMoCoi(donViCua(h), cay);
+		return hang.flatMap(({ _count, hienThi, ...h }) => {
+			const muc = lyDoMoCoi(
+				{
+					...donViCua(h),
+					hienThi: mucHienThi.parse(hienThi),
+					soNguoiXem: _count.nguoiXem,
+				},
+				cay,
+			);
 			return muc ? [muc] : [];
 		});
 	}

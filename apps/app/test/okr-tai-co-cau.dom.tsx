@@ -91,6 +91,8 @@ function mucTieu(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 	};
 }
 
@@ -679,18 +681,24 @@ const MO_COI: MucMoCoi[] = [
 		tieuDe: "Chuẩn hoá nhận hàng ca đêm",
 		donVi: { level: "phong-ban", id: "pb-cu", ten: "Kho vận Củ Chi" },
 		lyDo: ["don-vi-luu-tru"],
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 	},
 	{
 		objectiveId: "o10",
 		tieuDe: "Giảm 20% hàng hư hỏng",
 		donVi: { level: "phong-ban", id: "pb-2", ten: "Kinh doanh vùng 2" },
 		lyDo: ["khong-ai-sua", "kr-phu-trach-roi"],
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 	},
 	{
 		objectiveId: "o11",
 		tieuDe: "Ký 5 hợp đồng khung với chủ hàng FDI",
 		donVi: { level: "ca-nhan", id: "phuc", ten: "Lâm Gia Phúc" },
 		lyDo: ["khong-ai-sua", "phu-trach-roi"],
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 	},
 ];
 

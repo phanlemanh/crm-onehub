@@ -1432,7 +1432,7 @@ export class OkrService {
 			include: {
 				...chonMucTieu,
 				followers: { where: { userId: viewerId }, select: { userId: true } },
-				_count: { select: { followers: true } },
+				_count: { select: { followers: true, nguoiXem: true } },
 			},
 			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 		});
@@ -1522,6 +1522,8 @@ export class OkrService {
 				following,
 				followerCount: r._count.followers,
 				theoDoi: following,
+				hienThi: mucHienThi.parse(r.hienThi),
+				soNguoiXem: r._count.nguoiXem,
 			};
 		});
 	}

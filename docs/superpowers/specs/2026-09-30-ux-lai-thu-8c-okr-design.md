@@ -21,11 +21,12 @@ vào đầu ra API và một truy vấn xem trước. Không bảng mới, khôn
 ## Tám điểm
 
 1. **Nhãn «Giới hạn» ở mọi danh sách.**
-   - `mucTieuOutput` (dùng cho `mine`, `byUnit`, họp tuần), nút cây căn chỉnh và mục OKR mồ
-     côi thêm `hienThi` và `soNguoiXem`.
+   - `mucTieuOutput` (dùng cho `mine`, `byUnit`, `danhSach`), nút cây căn chỉnh và mục OKR mồ
+     côi thêm `hienThi` và `soNguoiXem`. Họp tuần không hiện mục tiêu giới hạn cho ai (luật
+     số gộp của 8c) nên không cần nhãn.
    - Nhãn khoá của khung (`NhanGioiHan` ở `record-sheet/objective-hien-thi.tsx`) chuyển vào
      `packages/ui` thành thành phần nhận chữ nhãn và chữ gợi ý qua prop.
-   - Khung và năm danh sách cùng dùng thành phần đó. Ở danh sách, nhãn không mở hộp mức hiển
+   - Khung và bốn danh sách cùng dùng thành phần đó. Ở danh sách, nhãn không mở hộp mức hiển
      thị: danh sách chỉ đọc.
 2. **Hộp gỡ người.**
    - Khi mở, hộp đọc `okr.transferPreview({ fromUserId })`, cùng phép đếm luồng «Chuyển
@@ -96,7 +97,7 @@ vào đầu ra API và một truy vấn xem trước. Không bảng mới, khôn
 
 | Màn | MỘT việc của màn | Vào từ / ra tới |
 |---|---|---|
-| Danh sách mục tiêu (Của tôi, Theo đơn vị, Cây căn chỉnh, Họp tuần, OKR mồ côi) | cho biết mục tiêu nào là kín | khu OKR / khung mục tiêu |
+| Danh sách mục tiêu (Của tôi, Theo đơn vị, Cây căn chỉnh, OKR mồ côi) | cho biết mục tiêu nào là kín | khu OKR / khung mục tiêu |
 | Hộp gỡ người | gỡ mà không sinh OKR mồ côi | Cài đặt › Thành viên / hộp chuyển OKR |
 | Khung mục tiêu (đầu khung, dải duyệt, tab Vết) | gửi, duyệt, trả lại đúng người | danh sách / đóng khung |
 | Hộp lưu trữ phòng ban | nói hết lý do chưa lưu trữ được | Cài đặt › Tổ chức / hộp chuyển OKR |

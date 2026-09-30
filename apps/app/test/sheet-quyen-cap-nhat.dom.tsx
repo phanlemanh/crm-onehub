@@ -88,6 +88,7 @@ function mucTieu(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		soNguoiXem: 0,
 		trail: [],
 		canEditKr: [],
 		hienThi: "cong-khai",

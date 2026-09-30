@@ -74,6 +74,8 @@ function mt(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
 	};
 }
 
@@ -93,6 +95,8 @@ function nut(
 		kind: m.kind,
 		gop: m.alignments.length,
 		lapLai,
+		hienThi: m.hienThi,
+		soNguoiXem: m.soNguoiXem,
 		children,
 	};
 }
@@ -113,6 +117,8 @@ function nutKr(
 		kind: m.kind,
 		gop: 0,
 		lapLai: false,
+		hienThi: m.hienThi,
+		soNguoiXem: m.soNguoiXem,
 		children,
 	};
 }
