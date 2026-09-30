@@ -1222,7 +1222,9 @@ giữa merge-base của nhánh với `origin/onehub` và `HEAD`, giao với tệ
 phép giao: nó giữ đúng 22 tệp đó trong một danh sách cố định, so hai chiều với mục này
 — không hơn, không kém — và kiểm mỗi tệp còn có ở `origin/release` và còn khác bản đó ở
 `HEAD`. So theo `origin/onehub` thì sau mỗi lần gộp thước đỏ hay xanh giả, nên danh sách
-đứng yên; đổi mục này thì sửa cả danh sách trong thước.
+đứng yên; đổi mục này thì sửa cả danh sách trong thước. Chiều thước không bắt được: một
+tệp của hãng mới bị chạm mà chưa vào danh sách 22 tệp. Chiều đó do người soát diff trước
+gộp gánh; phép đo E27 sẽ được thêm câu này khi ký lại Cổng Phạm vi.
 
 - `.env.example` — khối `OKR_AGENT_URL` và `OKR_AGENT_BRIDGE_SECRET`, đặt sau
   `AGENT_BRIDGE_SECRET`.

@@ -10,8 +10,8 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 
 ## Người dùng thấy
 
-- Nút «Soạn cùng Trợ lý» trên khung đơn vị (chỉ khi quản trị đã bật việc soạn cho đơn
-  vị); màn soạn: hội thoại cạnh bảng nháp, trên máy hẹp là hai tab; danh sách cuộc cũ;
+- Nút «Soạn OKR cùng Trợ lý» trên khung đơn vị (khi quản trị đã bật việc soạn cho đơn
+  vị; ở chế độ ẩn chỉ quản trị thấy nút, kèm nhãn «chế độ ẩn»); màn soạn: hội thoại cạnh bảng nháp, trên máy hẹp là hai tab; danh sách cuộc cũ;
   hết lượt thì mở cuộc mới thay cho cuộc đang dở.
 - Cài đặt › Chương trình OKR: hai dòng nấc cho việc soạn (bật cho · chế độ ẩn cho), ô
   trần tháng đặt OKR, thẻ số đo «Soạn OKR cùng Trợ lý».
@@ -28,7 +28,8 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 - API: chín thủ tục soạn, mọi thủ tục qua cùng lớp phạm vi OKR (`docs/api.md` §OKR).
   API không gọi model nào — trí khôn nằm ở app Trợ lý.
 - App Trợ lý thứ hai `apps/agent-okr`: một tác nhân, một công cụ duy nhất là nộp bản nháp,
-  mười một công cụ dựng sẵn của khung tắt; model có ZDR qua xưởng chung `@crm/ai-okr`;
+  mười một công cụ dựng sẵn bị tắt; model có ZDR qua bộ tạo model ZDR dùng chung
+  `@crm/ai-okr`;
   không nhập gì từ `apps/agent`. App web gọi nó qua cửa mới `/eve/agents/okr/eve/v1/*`;
   hai biến `OKR_AGENT_URL`, `OKR_AGENT_BRIDGE_SECRET` khai đủ bốn nhà
   (`docs/environment.md`).
@@ -43,7 +44,7 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 
 ## Bậc thiết kế (theo `docs/design.md`, một dòng mỗi khối mới)
 
-- Nút «Soạn cùng Trợ lý» ở khung đơn vị — dừng ở bậc 1 (`Button`, `Badge`, `Field`,
+- Nút «Soạn OKR cùng Trợ lý» ở khung đơn vị — dừng ở bậc 1 (`Button`, `Badge`, `Field`,
   `FieldDescription`); không cần tra bậc trên.
 - Khung màn soạn (ngăn trượt hai cột, hai tab ở máy hẹp) — dừng ở bậc 1 (`Sheet
   size="assist"`, `SheetBody split`, `SheetRailHeader`, `Tabs` của khung tạo OKR #220),
@@ -55,9 +56,10 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 - Hội thoại — dừng ở bậc 1 (`Conversation`, `ConversationEmptyState`, `Message`,
   `MessageResponse`, `MessageAvatar`, `ThinkingIndicator`, `Alert` đã có trong
   `packages/ui`).
-- Ô soạn và gợi ý trả lời — dừng ở bậc 2: `PromptInput`, `Suggestion` của AI Elements
-  kéo bằng CLI vào `packages/ui/src/components/ai-elements` theo `docs/chat-ui.md` (sổ
-  thành phần 5 → 7).
+- Ô soạn và gợi ý trả lời — dừng ở bậc 1 theo đường riêng của khung chat: hội thoại
+  thuộc AI Elements (`docs/chat-ui.md`), không đi thang shadcn gốc; `PromptInput`,
+  `Suggestion` kéo bằng CLI của AI Elements vào `packages/ui/src/components/ai-elements`
+  (sổ thành phần 5 → 7).
 - Thẻ dòng nháp «Mục tiêu mới» có KR con, ô khởi điểm/đích trong thẻ, nhãn «vừa sửa ·
   vừa chuyển» — dừng ở bậc 1, thêm biến thể `fields`, `tag` cho `ProposedChange` trong
   `packages/ui`. Lúc dựng không ghi câu tìm; tra ReUI lúc viết mô tả này («nested card
@@ -88,9 +90,10 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 Điều phối đã quyết những chỗ dưới đây trong lúc làm; mỗi chỗ đổi lời của hợp đồng hay
 phép đo đã ký, nên gom lại để ký lại Cổng Phạm vi một lần.
 
-1. **Mã cuộc soạn không vào được trả 404, không phải 403** — cùng câu với mã không có,
-   theo nguyên tắc của lượt 8c «không phân biệt được với không có». Hợp đồng AC-1 và phép
-   đo E1 còn ghi 403; ma trận quyền đổi 126 ô từ 403 sang 404.
+1. **Ở API, người không có quyền vào một cuộc soạn thấy đúng câu «không có» như khi mã
+   không tồn tại** (404, không phải 403), theo nguyên tắc của lượt 8c «không phân biệt được
+   với không có». Cửa gọi Trợ lý vẫn trả 403. Hợp đồng AC-1 và phép đo E1 còn ghi 403; ma
+   trận quyền đổi 126 ô từ 403 sang 404.
 2. **Phép đo «0 số đích máy ghi» đọc vết tạo KR**, không đọc đích hiện tại: người sửa
    đích sau khi đưa vào sẽ làm thước đỏ giả. Lúc đưa vào, vết tạo ghi thêm hai số người
    đã gõ. Hợp đồng dòng 79 cần sửa lời theo.
@@ -105,7 +108,7 @@ phép đo đã ký, nên gom lại để ký lại Cổng Phạm vi một lần.
 6. **Phép đo E28 đổi đường của màn Tổ chức** từ `settings/to-chuc` sang đường thật
    `settings/organization`.
 7. **Phép đo E26 (thước tài liệu)** ghi «bảy thủ tục soạn»; router có chín, thước đòi tối
-   thiểu tám. Lời «không nhập chéo từ app Trợ lý gốc» được chấm theo đường thật, không so
+   thiểu chín. Lời «không nhập chéo từ app Trợ lý gốc» được chấm theo đường thật, không so
    chữ.
 
 ## Việc ngoài kế hoạch
@@ -113,24 +116,30 @@ phép đo đã ký, nên gom lại để ký lại Cổng Phạm vi một lần.
 - **H1 — theo lượt 8c sau khi gộp `onehub`**: gói bối cảnh gửi Trợ lý và tên đích
   trong bảng nháp nay lọc theo mức hiển thị của Mục tiêu, nên Mục tiêu giới hạn không lọt
   tên vào gói hay vào màn của người không được xem (gói chỉ lấy Mục tiêu công khai); đơn
-  vị đã lưu trữ không mở được cuộc soạn; mã cuộc ngoài tầm trả 404 (mục 1 ở trên).
+  vị đã lưu trữ không mở được cuộc soạn; người không có quyền vào một cuộc thấy câu
+  «không có» (mục 1 ở trên).
 - **D1b — mở phiên với Trợ lý**: Trợ lý tự đặt mã phiên, nên API không mở phiên bằng mã
-  mình đặt được. Cuộc mới giữ một mã tạm (`cho-eve:`), cửa đọc mã phiên thật khi Trợ lý
-  trả về rồi gắn vào cuộc — mỗi cuộc một phiên sống, mở trùng thì từ chối có tên, phiên
-  mồ côi vẫn được đếm chi phí. «Mở cuộc mới» khi hết lượt bỏ cuộc đang dở trong cùng một
-  bước (`boCuocDangId`), cuộc bỏ vẫn đếm vào trần kỳ.
+  mình đặt được. Cuộc mới giữ một mã tạm, cửa đọc mã phiên thật khi Trợ lý trả về rồi gắn
+  vào cuộc — mỗi cuộc một phiên sống, mở trùng thì từ chối có tên, phiên eve không gắn
+  được vào cuộc vẫn được đếm chi phí. «Mở cuộc mới» khi hết lượt bỏ cuộc đang dở và mở
+  cuộc mới trong cùng một bước; cuộc bỏ vẫn đếm vào trần kỳ.
 
-## Còn chờ tiền của chủ kho: ba lượt chạy với model thật
+## Ba phép đo cần model thật: một đã dựng và chờ tiền, hai chưa dựng
 
-Mọi thứ chứng được mà không tiêu tiền đã xanh. Ba lượt dưới đây gọi model thật có ZDR
-và chờ chủ kho cho phép tiêu (ước 1–1,5 USD cho eval, trần 2 USD; khoá Gateway có trần
-5 USD trọn đời). Thiếu khoá thì cả ba dừng mã 2, không xanh.
+S4 chưa chạy. Năm lệnh chứng và các thước máy đã dựng xanh ở các mốc giữa lượt. Ba phép
+đo dưới đây gọi model thật có ZDR; thiếu khoá thì dừng mã 2, không xanh.
+
+Đã dựng, chờ chủ kho cho phép tiêu (ước 1–1,5 USD, trần 2 USD; khoá Gateway có trần
+5 USD trọn đời):
 
 - **Eval soạn**: câu hỏi mở đầu đúng khuôn (2–4 câu, mỗi câu hai gợi ý); bản nháp đầu
   không có dòng bị loại, đích để trống, Căn chỉnh chỉ vào đích được phép; lượt sửa bỏ
   đúng dòng đã bác; bản có gói bối cảnh thắng bản không gói ở ≥ 70 % ca khi judge chấm
   mù; mười cuộc bốn lượt có p50 ≤ 12 s, p90 ≤ 20 s mỗi lượt và ≤ 0,25 USD mỗi cuộc. Sau
   đó chủ kho chấm mù mười bản nháp để xem judge khớp người ≥ 80 %.
+
+Chưa dựng (thước chưa có trong cây; dựng xong mới tới lượt xin tiền):
+
 - **Đo màn thật**: đi trọn luồng trên màn — mở cuộc, trả lời, nhận · sửa · bác, sửa qua
   chat, đưa vào — chụp mỗi bước ở 1440 và 390, không bước nào tràn ngang, và «Đưa vào»
   thật sự tạo đúng số Mục tiêu nháp đã nhận.
@@ -147,17 +156,23 @@ và chờ chủ kho cho phép tiêu (ước 1–1,5 USD cho eval, trần 2 USD; 
     `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs:395` phải thành bảy.
 - **Sự cố, chờ chủ kho dọn**: 2026-09-30 10:08 UTC một script gỡ lỗi chạy nhầm vào kho
   dữ liệu chung `crm` và để lại hàng mang tiền tố `sokr-`: ba trang tài liệu (hai trang
-  chiến lược đang dùng, một trang có câu chèn thử), bốn đề xuất, ba phiên bản, một người
-  dùng. Lệnh xoá bị chặn quyền nên máy không tự xoá. Trang chiến lược có câu chèn đang ở
-  trạng thái «đang dùng», nên Trợ lý chạy trên kho chung sẽ đọc nó cho tới khi dọn.
+  chiến lược đang dùng, cả hai mang câu chèn thử; trang thứ ba thuộc loại khác), bốn đề
+  xuất, ba phiên bản, một người dùng. Lệnh xoá bị chặn quyền nên máy không tự xoá. Hai
+  trang chiến lược mang câu chèn đang ở trạng thái «đang dùng», nên Trợ lý chạy trên kho
+  chung sẽ đọc chúng cho tới khi dọn.
 - **Đã mở việc riêng**: ba chỗ đường kẻ chia dòng tự dựng ở màn Cây tổ chức (có từ
   24/09, lượt này không chạm) — chip «Thay divide-y bằng Item ở màn Cây tổ chức».
 - Bật cho người dùng: nấc «ẩn» trước, «bật» theo đơn vị ở Cài đặt › Chương trình OKR;
   trần tháng đặt OKR do chủ kho quyết sau N-soạn.
-- Chưa gửi lên hãng: xưởng model ZDR và khuôn app eve thứ hai — ghi ở mục chỗ rẽ.
-- Commit cuối trước gộp: đổi dòng 11 mục 10 lộ trình sang «đã lên `onehub`» với ngày,
-  số PR và một câu nối vào Ghi chú; điền các ô `<…>` của tệp này; chạy lại thước tài liệu
-  ra mã 0.
+- Chưa gửi lên hãng: bộ tạo model ZDR và khuôn app eve thứ hai — ghi ở mục chỗ rẽ.
+- **Luật cho commit cuối trước gộp** — làm trong cùng một commit:
+  (a) dòng 11 mục 10 `docs/plan/lo-trinh-okr.md`: ô Trạng thái thành «đã lên `onehub`»,
+  ô Ngày thành ngày của commit đó, ô PR thành `#<số>`; cột Ghi chú chỉ nối thêm
+  «· <ngày>: Cổng Bằng chứng ký (<người>), <n>/28 phép đo xanh, <m> phép đo phán quyết»,
+  không sửa chữ cũ;
+  (b) điền các ô `<…>` của tệp này, xoá ô nào không dùng, rồi dán làm mô tả PR;
+  (c) chạy lại `node _acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs` → mã 0.
+  Tệp dưới `docs/` được miễn luật bằng chứng cũ nên không phải ký lại Cổng Bằng chứng.
 
 ## Bằng chứng
 
@@ -165,7 +180,7 @@ và chờ chủ kho cho phép tiêu (ước 1–1,5 USD cho eval, trần 2 USD; 
   <m> phép đo phán quyết.
 - Phép thử «app Trợ lý thứ hai dựng và chạy cạnh app thứ nhất» đạt 2026-09-30 ở việc đầu
   tiên của S3; chạy lại trong S4 <ngày>.
-- Thước tài liệu và thước sàn thiết kế chạy chiều đỏ trước khi đo (21/21 và 7/7 ca gài
+- Thước tài liệu và thước sàn thiết kế chạy chiều đỏ trước khi đo (33/33 và 7/7 ca gài
   bị bắt).
 
 ## Cách chứng
@@ -180,8 +195,9 @@ bun run lint:slop
 bun run build
 ```
 
-Hồ sơ có 28 phép đo: 21 bài kiểm (`test`), 4 thước (`script`: cách ly vai «chỉ OKR»,
-eval với model thật, thước tài liệu, sàn thiết kế), 1 lượt đo màn thật (`ui-check`) và 2
+Hồ sơ có 28 phép đo: 21 bài kiểm (`test`), 4 thước (`script`: cách ly vai «chỉ OKR» —
+chưa dựng, eval với model thật, thước tài liệu, sàn thiết kế), 1 lượt đo màn thật
+(`ui-check`, chưa dựng) và 2
 phần người chấm (`judgment`: chủ kho chấm mù bản nháp; người đọc diff theo ba luật kho).
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
