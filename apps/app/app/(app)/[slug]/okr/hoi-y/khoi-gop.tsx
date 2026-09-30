@@ -8,7 +8,6 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
@@ -57,7 +56,7 @@ import { StatCard } from "@crm/ui/components/stat-card";
 import { Textarea } from "@crm/ui/components/textarea";
 import { gopYInput, OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { useMutation } from "@tanstack/react-query";
-import { type FormEvent, useId, useState } from "react";
+import { type FormEvent, type ReactNode, useId, useState } from "react";
 import { toast } from "sonner";
 import {
 	type OkrHoiYMessages,
@@ -65,7 +64,7 @@ import {
 } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, DoanChu, demSo, dien, ghep } from "./chu";
+import { ChuNguoi, DoanChu, demSo, dien, ghep, khongTraConTro } from "./chu";
 import type { HoiY, YCuaToi } from "./man-hoi-y";
 
 type NoiDungY = { noiDung: string; viSao: string; doBangGi: string };
@@ -76,7 +75,7 @@ function LoiMo({ h }: { h: HoiY }) {
 	const m = okrHoiYMessages(useLocale()).moDau;
 	const [mo, setMo] = useState(false);
 	return (
-		<div className="flex flex-col gap-3" data-khoi="loi-mo">
+		<div className="flex flex-col gap-3 max-sm:order-1" data-khoi="loi-mo">
 			{h.hoiY.loiMo ? (
 				<Collapsible onOpenChange={setMo} open={mo}>
 					{mo ? null : (
@@ -118,16 +117,25 @@ function LoiMo({ h }: { h: HoiY }) {
 	);
 }
 
-export function KhoiMoDau({ h, ghiChu }: { h: HoiY; ghiChu: string }) {
+export function KhoiMoDau({
+	h,
+	ghiChu,
+	children,
+}: {
+	h: HoiY;
+	ghiChu: string;
+	children?: ReactNode;
+}) {
 	return (
 		<div className="flex flex-col gap-3" data-khoi="mo-dau">
 			<Card>
 				<CardHeader data-khoi="cau-hoi">
 					<CardTitle translate="no">{h.hoiY.cauHoi}</CardTitle>
-					<CardDescription>{ghiChu}</CardDescription>
+					<FieldDescription data-mo-ta>{ghiChu}</FieldDescription>
 				</CardHeader>
 			</Card>
 			<LoiMo h={h} />
+			{children}
 		</div>
 	);
 }
@@ -390,9 +398,11 @@ export function YCuaBan({ h, chiDoc }: { h: HoiY; chiDoc: boolean }) {
 						max: OKR_HOI_Y.yMoiNguoi,
 					})}
 				</CardTitle>
-				<CardDescription>{chiDoc ? m.chiDoc : m.moTa}</CardDescription>
 			</CardHeader>
 			<CardContent>
+				<FieldDescription data-mo-ta>
+					{chiDoc ? m.chiDoc : m.moTa}
+				</FieldDescription>
 				<ItemGroup>
 					{h.cuaToi.y.map((y) => (
 						<Item data-y={y.id} key={y.id} variant="outline">
@@ -411,7 +421,10 @@ export function YCuaBan({ h, chiDoc }: { h: HoiY; chiDoc: boolean }) {
 												<Icon icon={OverflowMenuHorizontal} />
 											</Button>
 										</DropdownMenuTrigger>
-										<DropdownMenuContent align="end">
+										<DropdownMenuContent
+											align="end"
+											onCloseAutoFocus={khongTraConTro}
+										>
 											<DropdownMenuGroup>
 												<DropdownMenuItem onSelect={() => setSua(y)}>
 													<Icon icon={Edit} />

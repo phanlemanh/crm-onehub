@@ -6,7 +6,6 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -30,6 +29,7 @@ import {
 	TimelineTitle,
 } from "@crm/ui/components/reui/timeline";
 import {
+	chuanCau,
 	KET_LUAN_CHON,
 	type KetLuan,
 	NOI_MOI,
@@ -138,17 +138,20 @@ function HanhTrinh({ buoc }: { buoc: Buoc[] }) {
 }
 
 function buocCua(h: HoiY, y: YCuaToi, m: OkrHoiYMessages): Buoc[] {
-	const cauMucTieu =
-		h.chuDe?.find((c) => c.id === y.chuDe?.id)?.cauMucTieu ?? null;
+	const chuDe = h.chuDe?.find((c) => c.id === y.chuDe?.id) ?? null;
+	const cauMucTieu = chuDe?.cauMucTieu ?? null;
 	const buoc: Buoc[] = [
 		{ khoa: "gop", tieuDe: m.ketQua.gop, luc: y.hanhTrinh.gopLuc },
 	];
 	if (y.chuDe) {
 		buoc.push({
 			khoa: "vao-chu-de",
-			tieuDe: ghep(m.ketQua.vaoChuDe, {
-				ten: <ChuNguoi>{y.chuDe.ten}</ChuNguoi>,
-			}),
+			tieuDe:
+				chuDe?.loai === "y-la"
+					? m.ketQua.vaoYLa
+					: ghep(m.ketQua.vaoChuDe, {
+							ten: <ChuNguoi>{y.chuDe.ten}</ChuNguoi>,
+						}),
 			luc: y.hanhTrinh.vaoChuDeLuc,
 		});
 	}
@@ -199,14 +202,14 @@ function YCuaBanKetQua({ h }: { h: HoiY }) {
 		<Card data-khoi="y-cua-ban-ket-qua">
 			<CardHeader>
 				<CardTitle>{m.cuaBan}</CardTitle>
-				<CardDescription>
+			</CardHeader>
+			<CardContent>
+				<FieldDescription data-mo-ta>
 					{ghep(m.cuaBanMoTa, {
 						ten: <ChuNguoi>{h.nguoiChon.name}</ChuNguoi>,
 						luc: h.hoiY.congBoLuc ? lucVN(h.hoiY.congBoLuc, locale) : "",
 					})}
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
+				</FieldDescription>
 				<ItemGroup>
 					{h.cuaToi.y.map((y) => (
 						<Item data-y={y.id} key={y.id} variant="outline">
@@ -275,28 +278,45 @@ function VietTruocRoiChon({ h }: { h: HoiY }) {
 						: cau.map((chu, i) => {
 								const so = i + 1;
 								const nhan = kq.cau[i] ?? "bo";
-								const noi = kq.chon.find(
+								const noi = kq.chon.filter(
 									(c) => c.noiBanTruoc === noiTuSoCau(so),
+								);
+								const nhieu = noi.length > 1;
+								const vietTruocCu = (
+									<ItemDescription unclamped>
+										{ghep(m.vietTruocCu, {
+											chu: <del translate="no">{chu}</del>,
+										})}
+									</ItemDescription>
 								);
 								return (
 									<Item data-cau={so} key={so} variant="outline">
 										<ItemContent>
-											{nhan === "doi" && noi ? (
-												<>
-													<DoanChu>{noi.cauMucTieu}</DoanChu>
-													<ItemDescription unclamped>
-														{ghep(m.vietTruocCu, {
-															chu: <del translate="no">{chu}</del>,
-														})}
-													</ItemDescription>
-												</>
-											) : (
-												<DoanChu>{chu}</DoanChu>
-											)}
+											{nhan === "doi" ? null : <DoanChu>{chu}</DoanChu>}
+											{noi.map((c) => (
+												<div
+													className="flex flex-col items-start gap-1"
+													data-noi-chu-de={c.chuDeId}
+													key={c.chuDeId}
+												>
+													{chuanCau(c.cauMucTieu) === chuanCau(chu) ? null : (
+														<DoanChu>{c.cauMucTieu}</DoanChu>
+													)}
+													{nhieu ? (
+														<ItemDescription unclamped>
+															{ghep(m.noiChuDe, {
+																ten: <ChuNguoi>{c.ten}</ChuNguoi>,
+															})}
+														</ItemDescription>
+													) : null}
+													{nhan === "doi" && !nhieu ? vietTruocCu : null}
+													<XemNhap objectiveId={c.objectiveId} />
+												</div>
+											))}
+											{nhan === "doi" && nhieu ? vietTruocCu : null}
 											{nhan === "bo" ? (
 												<ItemDescription>{m.khongNoi}</ItemDescription>
 											) : null}
-											{noi ? <XemNhap objectiveId={noi.objectiveId} /> : null}
 										</ItemContent>
 										<ItemActions>
 											<Badge

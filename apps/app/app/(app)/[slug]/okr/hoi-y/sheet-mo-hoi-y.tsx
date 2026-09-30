@@ -113,6 +113,90 @@ function napTu(sua: HoiY | null, cauHoiMacDinh: string, bayGio: number): Nap {
 	};
 }
 
+function OCauHoi({
+	id,
+	value,
+	onDoi,
+	khoa,
+	khoaVi,
+}: {
+	id: string;
+	value: string;
+	onDoi: (cauHoi: string) => void;
+	khoa: boolean;
+	khoaVi: "co-y" | null;
+}) {
+	const m = okrHoiYMessages(useLocale()).sheet;
+	const sai = !khoa && !moHoiYInput.shape.cauHoi.safeParse(value).success;
+	return (
+		<Field data-invalid={sai ? true : undefined}>
+			<FieldLabel htmlFor={id}>{m.cauHoi}</FieldLabel>
+			<Textarea
+				aria-invalid={sai ? true : undefined}
+				disabled={khoa}
+				id={id}
+				maxLength={OKR_HOI_Y.cauHoi.max}
+				onChange={(e) => onDoi(e.target.value)}
+				translate="no"
+				value={value}
+			/>
+			{sai ? (
+				<FieldError>
+					{dien(m.loiCauHoi, {
+						tu: OKR_HOI_Y.cauHoi.min,
+						den: OKR_HOI_Y.cauHoi.max,
+					})}
+				</FieldError>
+			) : (
+				<FieldDescription>
+					{khoaVi === "co-y" ? m.cauHoiKhoaMoTa : m.cauHoiMoTa}
+				</FieldDescription>
+			)}
+		</Field>
+	);
+}
+
+function ONguoiChon({
+	id,
+	value,
+	onDoi,
+	danhSach,
+	khoa,
+}: {
+	id: string;
+	value: string;
+	onDoi: (nguoiChon: string) => void;
+	danhSach: { id: string; ten: string }[];
+	khoa: boolean;
+}) {
+	const m = okrHoiYMessages(useLocale()).sheet;
+	const moTa = khoa
+		? m.nguoiChonKhoaMoTa
+		: value === ""
+			? m.nguoiChonThieu
+			: m.nguoiChonMoTa;
+	return (
+		<Field>
+			<FieldLabel htmlFor={id}>{m.nguoiChon}</FieldLabel>
+			<Select disabled={khoa} onValueChange={onDoi} value={value}>
+				<SelectTrigger id={id}>
+					<SelectValue placeholder={m.nguoiChonGoiY} />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						{danhSach.map((n) => (
+							<SelectItem key={n.id} value={n.id}>
+								<span translate="no">{n.ten}</span>
+							</SelectItem>
+						))}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
+			<FieldDescription data-khoi="mo-ta-nguoi-chon">{moTa}</FieldDescription>
+		</Field>
+	);
+}
+
 function FormHoiY({
 	chuKy,
 	cycleId,
@@ -175,6 +259,8 @@ function FormHoiY({
 	);
 
 	const khoaNoiDung = sua !== null && sua.trangThai !== "dang-mo";
+	const khoaCauHoi = khoaNoiDung || (sua?.quyen.cauHoiKhoa ?? false);
+	const khoaNguoiChon = sua?.quyen.nguoiChonKhoa ?? false;
 	const hanLuc = ngay && gio ? hanLucTu(ngay, gio) : "";
 	const soLieu = dong.map((d) => ({
 		nhan: d.nhan.trim(),
@@ -194,14 +280,15 @@ function FormHoiY({
 	const thayDoi = sua && {
 		hoiYId: sua.hoiY.id,
 		cauHoi:
-			!khoaNoiDung && vao.cauHoi !== sua.hoiY.cauHoi ? vao.cauHoi : undefined,
+			!khoaCauHoi && vao.cauHoi !== sua.hoiY.cauHoi ? vao.cauHoi : undefined,
 		loiMo: !khoaNoiDung && vao.loiMo !== sua.hoiY.loiMo ? vao.loiMo : undefined,
 		soLieu:
 			!khoaNoiDung && JSON.stringify(soLieu) !== JSON.stringify(sua.hoiY.soLieu)
 				? soLieu
 				: undefined,
 		hanLuc: doiHan ? hanLuc : undefined,
-		nguoiChonUserId: nguoiChon !== sua.nguoiChon.id ? nguoiChon : undefined,
+		nguoiChonUserId:
+			!khoaNguoiChon && nguoiChon !== sua.nguoiChon.id ? nguoiChon : undefined,
 	};
 	const loiHan: LoiHan = sua
 		? doiHan
@@ -216,8 +303,6 @@ function FormHoiY({
 		(thayDoi
 			? coThayDoi && suaHoiYInput.safeParse(thayDoi).success
 			: moHoiYInput.safeParse(vao).success);
-	const cauHoiSai =
-		!khoaNoiDung && !moHoiYInput.shape.cauHoi.safeParse(cauHoi).success;
 	const loiDong = (d: DongNhap, so: number): string | null => {
 		if (!daCham.has(d.id)) return null;
 		if (!dongSoLieuHoiY.shape.nhan.safeParse(d.nhan).success)
@@ -307,28 +392,13 @@ function FormHoiY({
 						</Select>
 						<FieldDescription>{m.chuKyMoTa}</FieldDescription>
 					</Field>
-					<Field data-invalid={cauHoiSai ? true : undefined}>
-						<FieldLabel htmlFor={`${id}-cau-hoi`}>{m.cauHoi}</FieldLabel>
-						<Textarea
-							aria-invalid={cauHoiSai ? true : undefined}
-							disabled={khoaNoiDung}
-							id={`${id}-cau-hoi`}
-							maxLength={OKR_HOI_Y.cauHoi.max}
-							onChange={(e) => setCauHoi(e.target.value)}
-							translate="no"
-							value={cauHoi}
-						/>
-						{cauHoiSai ? (
-							<FieldError>
-								{dien(m.loiCauHoi, {
-									tu: OKR_HOI_Y.cauHoi.min,
-									den: OKR_HOI_Y.cauHoi.max,
-								})}
-							</FieldError>
-						) : (
-							<FieldDescription>{m.cauHoiMoTa}</FieldDescription>
-						)}
-					</Field>
+					<OCauHoi
+						id={`${id}-cau-hoi`}
+						khoa={khoaCauHoi}
+						khoaVi={khoaCauHoi && !khoaNoiDung ? "co-y" : null}
+						onDoi={setCauHoi}
+						value={cauHoi}
+					/>
 					<Field>
 						<FieldLabel htmlFor={`${id}-loi-mo`}>{m.loiMo}</FieldLabel>
 						<Textarea
@@ -482,26 +552,13 @@ function FormHoiY({
 							<FieldDescription>{m.dongNgayMoTa}</FieldDescription>
 						</Field>
 					) : null}
-					<Field>
-						<FieldLabel htmlFor={`${id}-nguoi-chon`}>{m.nguoiChon}</FieldLabel>
-						<Select onValueChange={setNguoiChon} value={nguoiChon}>
-							<SelectTrigger id={`${id}-nguoi-chon`}>
-								<SelectValue placeholder={m.nguoiChonGoiY} />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									{nguoiChonDuoc.map((n) => (
-										<SelectItem key={n.id} value={n.id}>
-											<span translate="no">{n.ten}</span>
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-						<FieldDescription data-khoi="mo-ta-nguoi-chon">
-							{nguoiChon === "" ? m.nguoiChonThieu : m.nguoiChonMoTa}
-						</FieldDescription>
-					</Field>
+					<ONguoiChon
+						danhSach={nguoiChonDuoc}
+						id={`${id}-nguoi-chon`}
+						khoa={khoaNguoiChon}
+						onDoi={setNguoiChon}
+						value={nguoiChon}
+					/>
 				</FieldGroup>
 			</div>
 			<SheetFooter>

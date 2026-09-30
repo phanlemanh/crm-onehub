@@ -3,10 +3,10 @@
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
+import { FieldDescription } from "@crm/ui/components/field";
 import { Heatmap } from "@crm/ui/components/heatmap";
 import { ItemDescription } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -64,9 +64,9 @@ export function KhoiDoPhu({ h }: { h: HoiY }) {
 		<Card data-khoi="do-phu">
 			<CardHeader>
 				<CardTitle>{m.tieuDe}</CardTitle>
-				<CardDescription>{m.moTa}</CardDescription>
 			</CardHeader>
 			<CardContent>
+				<FieldDescription data-mo-ta>{m.moTa}</FieldDescription>
 				{doPhu.data ? (
 					<BangDoPhu dangMo={h.trangThai === "dang-mo"} doPhu={doPhu.data} />
 				) : doPhu.isError ? (

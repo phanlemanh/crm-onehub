@@ -148,14 +148,12 @@ function NoiDung({
 			return (
 				<>
 					<DaiMoc bayGio={bayGio} h={h} />
-					<KhoiMoDau
-						ghiChu={dien(m.gopGoiY, { n: OKR_HOI_Y.yMoiNguoi })}
-						h={h}
-					/>
-					{h.quyen.gopDuoc ? <OSoanY h={h} /> : null}
-					{!h.quyen.gopDuoc && h.cuaToi.y.length >= OKR_HOI_Y.yMoiNguoi ? (
-						<DuY />
-					) : null}
+					<KhoiMoDau ghiChu={dien(m.gopGoiY, { n: OKR_HOI_Y.yMoiNguoi })} h={h}>
+						{h.quyen.gopDuoc ? <OSoanY h={h} /> : null}
+						{!h.quyen.gopDuoc && h.cuaToi.y.length >= OKR_HOI_Y.yMoiNguoi ? (
+							<DuY />
+						) : null}
+					</KhoiMoDau>
 					{h.cuaToi.y.length > 0 ? <YCuaBan chiDoc={false} h={h} /> : null}
 					<KhoiYDongNghiep h={h} />
 					<KhoiDoPhu h={h} />

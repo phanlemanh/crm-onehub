@@ -8,7 +8,6 @@ import {
 	Card,
 	CardAction,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
@@ -210,7 +209,7 @@ function TheKetLuan({ h, c }: { h: HoiY; c: ChuDe }) {
 							size="sm"
 							type="single"
 							value={nhap.ketLuan ?? ""}
-							variant="outline"
+							variant="outline-check"
 						>
 							{KET_LUAN.map((k) => (
 								<ToggleGroupItem key={k} value={k}>
@@ -506,7 +505,7 @@ export function KhoiKetLuan({
 							})}
 						</Badge>
 					</CardAction>
-					<CardDescription>{m.moTa}</CardDescription>
+					<FieldDescription data-mo-ta>{m.moTa}</FieldDescription>
 				</CardHeader>
 			</Card>
 			<DanhSachYChuaGom h={h} />

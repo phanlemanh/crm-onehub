@@ -40,3 +40,7 @@ export function DoanChu({ children }: { children: string }) {
 		</p>
 	);
 }
+
+export function khongTraConTro(e: Event): void {
+	e.preventDefault();
+}

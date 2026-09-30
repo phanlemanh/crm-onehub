@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	spyOn,
+	test,
+} from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
@@ -294,7 +302,7 @@ function ketQua(): HoiYDu {
 				},
 			],
 		},
-		quyen: { ...b.quyen, gopDuoc: false },
+		quyen: { ...b.quyen, gopDuoc: false, dongYDuoc: false },
 	};
 }
 
@@ -307,7 +315,7 @@ const DU_LIEU = {
 			hoiY: { ...b.hoiY, hanLuc: new Date(BAY_GIO - GIO).toISOString() },
 			trangThai: "dang-gom",
 			cuaToi: { y: [yCuaToi("t1", "Ý của tôi trước hạn")], daHieu: false },
-			quyen: { ...b.quyen, gopDuoc: false },
+			quyen: { ...b.quyen, gopDuoc: false, dongYDuoc: false },
 		};
 	},
 	"viet-truoc": (): HoiYDu => {
@@ -320,6 +328,7 @@ const DU_LIEU = {
 				gopDuoc: false,
 				moDuoc: true,
 				niemPhongDuoc: true,
+				dongYDuoc: false,
 			},
 		};
 	},
@@ -353,6 +362,7 @@ type VaoGhi = {
 	readonly viSao?: string;
 	readonly doBangGi?: string;
 	readonly yIds?: readonly string[];
+	readonly yLa?: boolean;
 	readonly loiMo?: string;
 	readonly cauHoi?: string;
 	readonly hanLuc?: string;
@@ -364,6 +374,17 @@ type TuyChonGhi = {
 	readonly onError?: (loi: never) => unknown;
 };
 const goi: { ten: string; vao: VaoGhi }[] = [];
+const thongBao: string[] = [];
+const ghiThongBao = (chu: string) => {
+	thongBao.push(chu);
+};
+mock.module("sonner", () => ({
+	toast: Object.assign(ghiThongBao, {
+		success: ghiThongBao,
+		error: ghiThongBao,
+		warning: ghiThongBao,
+	}),
+}));
 let khiGop: () => void = () => {};
 const loiGhi = new Map<string, string>();
 let chuKy: ChuKyDu = CHU_KY;
@@ -580,6 +601,7 @@ beforeEach(() => {
 		soChuDeChuaKetLuan: null,
 	};
 	goi.length = 0;
+	thongBao.length = 0;
 	khiGop = () => {};
 	loiGhi.clear();
 	chuKy = CHU_KY;
@@ -1250,5 +1272,449 @@ describe("Hỏi ý — huy hiệu tab", () => {
 		await cho(() => trangThai(b) !== null, "tải xong");
 		await nghi(10);
 		expect({ so, khong: huyHieu(b) }).toEqual({ so: "2", khong: null });
+	});
+});
+
+function anTheoKho(e: Element | null): boolean {
+	for (let x = e; x; x = x.parentElement)
+		if ((x.getAttribute("class") ?? "").split(/\s+/).includes("hidden"))
+			return true;
+	return false;
+}
+
+function coChu(o: ParentNode, chu: string): Element[] {
+	return [...o.querySelectorAll("*")].filter(
+		(e) =>
+			e.textContent?.includes(chu) &&
+			![...e.children].some((con) => con.textContent?.includes(chu)),
+	);
+}
+
+const CAU_THAY_TEN = "Người chọn và quản trị thấy tên";
+
+describe("Hỏi ý — sửa sau tự lái: lời giải thích luôn hiện", () => {
+	const TRANG_THAI_CO_MO_TA = {
+		gop: (): HoiYDu => ({
+			...coBan(),
+			cuaToi: { y: [yCuaToi("t1", "Ý của tôi trước hạn")], daHieu: false },
+		}),
+		"het-han": DU_LIEU["het-han"],
+		"viet-truoc": DU_LIEU["viet-truoc"],
+		"chon-chua-du": chonChuaDu,
+		"ket-qua": ketQua,
+	} as const;
+	for (const [tt, dung] of Object.entries(TRANG_THAI_CO_MO_TA))
+		test(`${tt}: màn không dùng mô tả của thẻ (ẩn dưới 640px); mọi dòng giải thích nằm ngoài phần tử ẩn theo khổ`, async () => {
+			hoiY = dung();
+			const o = await mo();
+			await cho(() => trangThai(o) === tt, tt);
+			const moTa = [...o.querySelectorAll("[data-mo-ta]")];
+			expect({
+				moTaThe: o.querySelectorAll('[data-slot="card-description"]').length,
+				coMoTa: moTa.length > 0,
+				moTaAn: moTa.filter(anTheoKho).map((e) => e.textContent),
+			}).toEqual({ moTaThe: 0, coMoTa: true, moTaAn: [] });
+		});
+
+	test("gop với ý của mình: câu «Người chọn và quản trị thấy tên» có mặt và không nằm trong phần tử ẩn theo khổ", async () => {
+		hoiY = TRANG_THAI_CO_MO_TA.gop();
+		const o = await mo();
+		await cho(() => trangThai(o) === "gop", "gop");
+		const noi = coChu(o, CAU_THAY_TEN);
+		expect({
+			soNoi: noi.length,
+			an: noi.map(anTheoKho),
+		}).toEqual({ soNoi: 1, an: [false] });
+	});
+});
+
+async function moMenu(nut: Element | null | undefined): Promise<void> {
+	if (!(nut instanceof HTMLElement)) throw new Error("khong co nut menu");
+	await act(async () => {
+		nut.focus();
+		nut.dispatchEvent(
+			new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+		);
+	});
+	await cho(
+		() => document.querySelectorAll('[role="menuitem"]').length > 0,
+		"menu mo",
+	);
+}
+
+async function chonMuc(chu: string): Promise<void> {
+	const muc = [...document.querySelectorAll('[role="menuitem"]')].find(
+		(m) => m.textContent?.trim() === chu,
+	);
+	if (!(muc instanceof HTMLElement)) throw new Error(`menu khong co ${chu}`);
+	await act(async () => {
+		muc.focus();
+		muc.dispatchEvent(
+			new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+		);
+	});
+}
+
+async function chonMucGiuMenuDong(chu: string): Promise<() => Promise<void>> {
+	const hoan: (() => void)[] = [];
+	const goc = globalThis.setTimeout;
+	const giu = spyOn(globalThis, "setTimeout").mockImplementation(((
+		fn: () => void,
+		ms?: number,
+	) => {
+		if (!ms) {
+			hoan.push(fn);
+			return 0;
+		}
+		return goc(fn, ms);
+	}) as typeof setTimeout);
+	try {
+		await chonMuc(chu);
+	} finally {
+		giu.mockRestore();
+	}
+	return async () => {
+		await act(async () => {
+			for (const f of hoan.splice(0)) f();
+		});
+	};
+}
+
+async function goTiep(o: HTMLInputElement | HTMLTextAreaElement, chu: string) {
+	const dau = o.selectionStart ?? o.value.length;
+	const cuoi = o.selectionEnd ?? o.value.length;
+	const moi = o.value.slice(0, dau) + chu + o.value.slice(cuoi);
+	await go(o, moi);
+	o.setSelectionRange(dau + chu.length, dau + chu.length);
+}
+
+function oTrongHop(
+	nhanO: string,
+): HTMLInputElement | HTMLTextAreaElement | null {
+	const hop = document.querySelector('[role="dialog"]');
+	const label = [...(hop?.querySelectorAll("label") ?? [])].find(
+		(l) => l.textContent?.trim() === nhanO,
+	);
+	const el = document.getElementById(label?.getAttribute("for") ?? "");
+	return el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
+		? el
+		: null;
+}
+
+describe("Hỏi ý — sửa sau tự lái: hộp mở từ menu không bôi đen lại chữ đã gõ", () => {
+	const CA = [
+		{
+			ten: "Chủ đề mới… từ menu của một ý chưa gom",
+			du: chonChuaDu,
+			tt: "chon-chua-du",
+			nut: '[data-khoi="y-chua-gom"] [data-y="g1"] [data-slot="item-actions"] button',
+			muc: "Chủ đề mới…",
+			o: "Tên chủ đề",
+			dau: "",
+			go: "Báo giá nhanh theo tuyến",
+		},
+		{
+			ten: "Đổi tên từ menu của thẻ chủ đề",
+			du: chonChuaDu,
+			tt: "chon-chua-du",
+			nut: '#chu-de-c2 [data-slot="card-action"] button',
+			muc: "Đổi tên",
+			o: "Tên chủ đề",
+			dau: "Kho miền Trung",
+			go: " mở ở Quy Nhơn",
+		},
+		{
+			ten: "Sửa từ menu của ý của bạn",
+			du: (): HoiYDu => ({
+				...coBan(),
+				cuaToi: { y: [yCuaToi("t1", "Ý của tôi trước hạn")], daHieu: false },
+			}),
+			tt: "gop",
+			nut: '[data-khoi="y-cua-ban"] [data-y="t1"] button',
+			muc: "Sửa",
+			o: "Ý của bạn",
+			dau: "Ý của tôi trước hạn",
+			go: " cho năm tới",
+		},
+	] as const;
+	for (const ca of CA)
+		test(`${ca.ten}: gõ, để menu đóng hẳn, gõ thêm một ký tự → chữ giữ nguyên và có thêm ký tự đó`, async () => {
+			hoiY = ca.du();
+			const o = await mo();
+			await cho(() => trangThai(o) === ca.tt, ca.tt);
+			await moMenu(o.querySelector(ca.nut));
+			const menuDongHan = await chonMucGiuMenuDong(ca.muc);
+			const oChu = oTrongHop(ca.o);
+			if (!oChu) throw new Error("hop chua mo ngay sau khi chon muc");
+			oChu.setSelectionRange(oChu.value.length, oChu.value.length);
+			await goTiep(oChu, ca.go);
+			await menuDongHan();
+			await nghi(30);
+			await goTiep(oChu, "x");
+			expect({
+				chu: oChu.value,
+				dangGo: document.activeElement === oChu,
+				menu: document.querySelectorAll('[role="menu"]').length,
+			}).toEqual({ chu: `${ca.dau}${ca.go}x`, dangGo: true, menu: 0 });
+		});
+});
+
+describe("Hỏi ý — sửa sau tự lái: hai chủ đề chọn nối cùng một câu viết trước", () => {
+	const CAU_1 = BAN_TRUOC[0] ?? "";
+	function haiChuDe(): HoiYDu {
+		const b = chonChuaDu();
+		return {
+			...b,
+			chuDe: [
+				{
+					...chuDe(
+						"c1",
+						"Giao lạnh",
+						"chon",
+						"Khách lạnh quay lại nhiều nhất.",
+					),
+					cauMucTieu: "Gọi lại mọi khách lạnh đã ngừng đặt",
+				},
+				{
+					...chuDe("c4", "Lãi giao lạnh", "chon", "Đúng câu đã viết trước."),
+					cauMucTieu: CAU_1.toLocaleUpperCase("vi"),
+				},
+			],
+		};
+	}
+
+	test("xem trước ở cột bản viết trước: gọi đúng hàm của lúc công bố — «Giữ nguyên», nêu cả hai chủ đề", async () => {
+		hoiY = haiChuDe();
+		const o = await mo();
+		await cho(() => trangThai(o) === "chon-chua-du", "chon-chua-du");
+		const dong = o.querySelector(
+			'[data-khoi="ban-viet-truoc-cua-ban"] [data-cau="1"] [data-noi]',
+		);
+		expect({
+			nhan: dong?.getAttribute("data-noi"),
+			chu: dong?.textContent,
+		}).toEqual({
+			nhan: "giu",
+			chu: "Giữ nguyên — nối với «Giao lạnh» và «Lãi giao lạnh»",
+		});
+	});
+
+	test("trang kết quả liệt mọi chủ đề nối vào câu đó, mỗi chủ đề một liên kết mục tiêu nháp", async () => {
+		const b = ketQua();
+		const kq = b.ketQua;
+		if (!kq) throw new Error("thiếu kết quả");
+		hoiY = {
+			...b,
+			ketQua: {
+				...kq,
+				cau: ["giu", "bo", "bo"],
+				doi: 0,
+				chon: [
+					{
+						chuDeId: "c1",
+						ten: "Giao lạnh",
+						cauMucTieu: "Gọi lại mọi khách lạnh đã ngừng đặt",
+						noiBanTruoc: "cau-1",
+						objectiveId: "o1",
+					},
+					{
+						chuDeId: "c4",
+						ten: "Lãi giao lạnh",
+						cauMucTieu: CAU_1,
+						noiBanTruoc: "cau-1",
+						objectiveId: "o4",
+					},
+				],
+			},
+		};
+		const o = await mo();
+		await cho(() => trangThai(o) === "ket-qua", "ket-qua");
+		const cau1 = o.querySelector(
+			'[data-khoi="viet-truoc-roi-chon"] [data-cau="1"]',
+		);
+		expect({
+			nhan: cau1?.querySelector("[data-giu-bo]")?.textContent,
+			lienKet: [...(cau1?.querySelectorAll("[data-mo-muc-tieu]") ?? [])].map(
+				(e) => e.getAttribute("data-mo-muc-tieu"),
+			),
+			chuDe: [...(cau1?.querySelectorAll("[data-noi-chu-de]") ?? [])].map((e) =>
+				e.getAttribute("data-noi-chu-de"),
+			),
+			cauKhacChu: cau1?.textContent?.includes(
+				"Gọi lại mọi khách lạnh đã ngừng đặt",
+			),
+		}).toEqual({
+			nhan: "Giữ nguyên",
+			lienKet: ["o1", "o4"],
+			chuDe: ["c1", "c4"],
+			cauKhacChu: true,
+		});
+	});
+});
+
+describe("Hỏi ý — sửa sau tự lái: ô soạn đứng ngay dưới câu hỏi ở khổ hẹp", () => {
+	test("ô soạn cùng khối với câu hỏi; lời mở và thẻ con số xếp sau ô soạn dưới 640px, máy tính giữ thứ tự cũ", async () => {
+		const o = await moTrangThai("gop");
+		const khoi = o.querySelector('[data-khoi="mo-dau"]');
+		const con = [...(khoi?.children ?? [])];
+		const viTri = (chon: string) =>
+			con.findIndex((e) => e.matches(chon) || e.querySelector(chon) !== null);
+		const loiMo = o.querySelector('[data-khoi="loi-mo"]');
+		expect({
+			cauHoi: viTri('[data-khoi="cau-hoi"]'),
+			loiMo: viTri('[data-khoi="loi-mo"]'),
+			oSoan: viTri('[data-khoi="o-soan"]'),
+			loiMoXepSauKhiHep: (loiMo?.getAttribute("class") ?? "")
+				.split(/\s+/)
+				.includes("max-sm:order-1"),
+		}).toEqual({ cauHoi: 0, loiMo: 1, oSoan: 2, loiMoXepSauKhiHep: true });
+	});
+});
+
+describe("Hỏi ý — sửa sau tự lái: sheet sửa khoá theo cờ máy chủ", () => {
+	test("đã có ý (cauHoiKhoa): ô câu hỏi tắt, dòng dưới ô nói vì sao; chưa có ý thì mở", async () => {
+		const b = coBan();
+		await moSheetSua({ ...b, quyen: { ...b.quyen, cauHoiKhoa: true } });
+		const oKhoa = oTheoNhan(document.body, "Câu hỏi");
+		const moTaKhoa = oKhoa
+			.closest('[data-slot="field"]')
+			?.querySelector('[data-slot="field-description"]')?.textContent;
+		const khoa = { tat: oKhoa.disabled, moTa: moTaKhoa };
+		for (const s of dangMo) {
+			await act(async () => s.root.unmount());
+			s.o.remove();
+		}
+		dangMo = [];
+		document.body.innerHTML = "";
+		await moSheetSua(coBan());
+		const oMo = oTheoNhan(document.body, "Câu hỏi");
+		expect({
+			khoa,
+			mo: {
+				tat: oMo.disabled,
+				moTa: oMo
+					.closest('[data-slot="field"]')
+					?.querySelector('[data-slot="field-description"]')?.textContent,
+			},
+		}).toEqual({
+			khoa: {
+				tat: true,
+				moTa: "Đã khoá vì đã có người góp ý — vẫn sửa được lời mở, con số và hạn.",
+			},
+			mo: { tat: false, moTa: "Khoá lại khi đã có ý đầu tiên." },
+		});
+	});
+
+	test("người chọn đã niêm phong và còn là quản trị (nguoiChonKhoa): ô người chọn tắt kèm lý do", async () => {
+		const b = DU_LIEU["het-han"]();
+		await moSheetSua({ ...b, quyen: { ...b.quyen, nguoiChonKhoa: true } });
+		const nut = nutChonNguoi();
+		expect({
+			tat:
+				nut instanceof HTMLButtonElement
+					? nut.disabled
+					: nut.getAttribute("data-disabled") !== null,
+			moTa: document.querySelector('[data-khoi="mo-ta-nguoi-chon"]')
+				?.textContent,
+		}).toEqual({
+			tat: true,
+			moTa: "Đã khoá vì người chọn đã niêm phong bản viết trước và vẫn là quản trị.",
+		});
+	});
+});
+
+describe("Hỏi ý — sửa sau tự lái: «Tôi cũng nghĩ vậy» theo cờ máy chủ", () => {
+	test("đang mở mà không có quyen.dongYDuoc thì không có nút; có cờ thì có, và nút dùng biến thể có dấu tích", async () => {
+		const b = coBan();
+		hoiY = { ...b, quyen: { ...b.quyen, dongYDuoc: false } };
+		const a = await mo();
+		await cho(() => trangThai(a) === "gop", "gop");
+		const khong = a.querySelectorAll(
+			'[data-khoi="y-dong-nghiep"] [data-slot="toggle"]',
+		).length;
+		hoiY = coBan();
+		const c = await mo();
+		await cho(
+			() =>
+				c.querySelectorAll('[data-khoi="y-dong-nghiep"] [data-slot="toggle"]')
+					.length > 0,
+			"co nut",
+		);
+		const nut = c.querySelectorAll(
+			'[data-khoi="y-dong-nghiep"] [data-slot="toggle"]',
+		);
+		expect({
+			khong,
+			co: nut.length,
+			bienThe: nut[0]?.getAttribute("data-variant"),
+		}).toEqual({ khong: 0, co: 10, bienThe: "outline-check" });
+	});
+
+	test("nhóm kết luận Chọn · Để sau · Không làm · Đã có dùng biến thể có dấu tích", async () => {
+		const o = await moTrangThai("chon-chua-du");
+		expect(
+			[...o.querySelectorAll('[data-slot="toggle-group"]')].map((g) =>
+				g.getAttribute("data-variant"),
+			),
+		).toEqual(["outline-check", "outline-check", "outline-check"]);
+	});
+});
+
+describe("Hỏi ý — sửa sau tự lái: câu riêng cho ý lạ", () => {
+	test("«Ý lạ — đứng riêng» báo «Đã để ý này đứng riêng.»", async () => {
+		const o = await moTrangThai("chon-chua-du");
+		await moMenu(
+			o.querySelector(
+				'[data-khoi="y-chua-gom"] [data-y="g1"] [data-slot="item-actions"] button',
+			),
+		);
+		await chonMuc("Ý lạ — đứng riêng");
+		await cho(() => thongBao.length > 0, "thong bao");
+		expect({
+			goi: goi.filter((g) => g.ten === "ganY").map((g) => g.vao),
+			thongBao,
+		}).toEqual({
+			goi: [{ yIds: ["g1"], yLa: true }],
+			thongBao: ["Đã để ý này đứng riêng."],
+		});
+	});
+
+	test("hành trình của một ý lạ: bước vào chủ đề ghi «Được giữ đứng riêng để người chọn đọc»", async () => {
+		const b = ketQua();
+		const TEN_Y_LA = "Làm chỗ nghỉ cho tài xế đối tác ở các bến lớn";
+		hoiY = {
+			...b,
+			cuaToi: {
+				y: [
+					{
+						...yCuaToi("t2", TEN_Y_LA),
+						chuDe: { id: "yla", ten: TEN_Y_LA },
+						ketLuan: "de-sau",
+						lyDo: "Để sau khi có bến mới.",
+						hanhTrinh: {
+							gopLuc: new Date(BAY_GIO - 40 * GIO).toISOString(),
+							vaoChuDeLuc: new Date(BAY_GIO - 10 * GIO).toISOString(),
+							ketLuanLuc: new Date(BAY_GIO - GIO).toISOString(),
+						},
+					},
+				],
+				daHieu: false,
+			},
+			chuDe: [
+				...(b.chuDe ?? []),
+				{
+					...chuDe("yla", TEN_Y_LA, "de-sau", "Để sau khi có bến mới.", "y-la"),
+					bangChung: { soNguoi: 1, soDonVi: 1, trich: [] },
+				},
+			],
+		};
+		const o = await mo();
+		await cho(() => trangThai(o) === "ket-qua", "ket-qua");
+		const buoc = o.querySelector(
+			'[data-y="t2"] [data-buoc="vao-chu-de"] [data-slot="timeline-title"]',
+		);
+		expect(buoc?.firstChild?.textContent).toBe(
+			"Được giữ đứng riêng để người chọn đọc",
+		);
 	});
 });

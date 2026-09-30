@@ -7,7 +7,6 @@ import {
 	Card,
 	CardAction,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
@@ -65,7 +64,7 @@ import {
 } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, DoanChu, demSo, dien, ghep } from "./chu";
+import { ChuNguoi, DoanChu, demSo, dien, ghep, khongTraConTro } from "./chu";
 import { DaiMoc } from "./dai-moc";
 import {
 	type ChuDe,
@@ -91,7 +90,11 @@ function useGan(hoiYId: string, sauGan: () => void): Gan & { hop: ReactNode } {
 		trpc.okr.ganY.mutationOptions({
 			onSuccess: async (_kq, vao) => {
 				sauGan();
-				toast.success(demSo(m.daGan.mot, m.daGan.nhieu, vao.yIds.length));
+				toast.success(
+					vao.yLa
+						? m.daDeRieng
+						: demSo(m.daGan.mot, m.daGan.nhieu, vao.yIds.length),
+				);
 				await cache.hoiY();
 			},
 			onError: (error) => toast.error(error.message),
@@ -227,7 +230,7 @@ function MenuDuaVao({
 	const m = okrHoiYMessages(useLocale()).gom;
 	const [dau] = yIds;
 	return (
-		<DropdownMenuContent align="end">
+		<DropdownMenuContent align="end" onCloseAutoFocus={khongTraConTro}>
 			<DropdownMenuLabel>{m.duaVaoNhan}</DropdownMenuLabel>
 			<DropdownMenuGroup>
 				{chuDe
@@ -347,7 +350,6 @@ export function DanhSachYChuaGom({ h }: { h: HoiY }) {
 			) : (
 				<CardHeader>
 					<CardTitle>{dien(m.chuaGom, { n: chuaGom.length })}</CardTitle>
-					<CardDescription>{m.chuaGomMoTa}</CardDescription>
 					<CardAction>
 						<Button onClick={() => gan.moTao([])} size="sm" variant="outline">
 							<Icon data-icon="inline-start" icon={Add} />
@@ -357,6 +359,7 @@ export function DanhSachYChuaGom({ h }: { h: HoiY }) {
 				</CardHeader>
 			)}
 			<CardContent>
+				<FieldDescription data-mo-ta>{m.chuaGomMoTa}</FieldDescription>
 				{day ? (
 					<FieldDescription data-khoi="chon-toi-da">
 						{dien(m.chonToiDa, { n: OKR_HOI_Y.ganToiDa })}
@@ -463,7 +466,7 @@ export function MenuChuDe({ c }: { c: ChuDe }) {
 						<Icon icon={OverflowMenuHorizontal} />
 					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end">
+				<DropdownMenuContent align="end" onCloseAutoFocus={khongTraConTro}>
 					<DropdownMenuGroup>
 						<DropdownMenuItem onSelect={() => setDoiTen(true)}>
 							{m.doiTen}
@@ -523,12 +526,12 @@ function TheChuDeGom({ h, c }: { h: HoiY; c: ChuDe }) {
 		<Card data-chu-de={c.id}>
 			<CardHeader>
 				<CardTitle translate="no">{c.ten}</CardTitle>
-				<CardDescription>{moTaBangChung(c, t)}</CardDescription>
 				<CardAction>
 					<MenuChuDe c={c} />
 				</CardAction>
 			</CardHeader>
 			<CardContent>
+				<FieldDescription data-mo-ta>{moTaBangChung(c, t)}</FieldDescription>
 				<YTrongChuDe c={c} h={h} />
 			</CardContent>
 		</Card>
@@ -559,12 +562,12 @@ export function KhoiGom({ h, bayGio }: { h: HoiY; bayGio: number }) {
 			<Card>
 				<CardHeader>
 					<CardTitle>{m.tieuDe}</CardTitle>
-					<CardDescription>
+					<FieldDescription data-mo-ta>
 						{ghep(m.moTa, {
 							n: h.y.ds.length,
 							ten: <ChuNguoi>{h.nguoiChon.name}</ChuNguoi>,
 						})}
-					</CardDescription>
+					</FieldDescription>
 				</CardHeader>
 			</Card>
 			<DanhSachYChuaGom h={h} />
@@ -596,9 +599,9 @@ export function KhoiGom({ h, bayGio }: { h: HoiY; bayGio: number }) {
 				<Card data-khoi="y-la">
 					<CardHeader>
 						<CardTitle>{dien(m.yLa, { n: yLa.length })}</CardTitle>
-						<CardDescription>{m.yLaMoTa}</CardDescription>
 					</CardHeader>
 					<CardContent>
+						<FieldDescription data-mo-ta>{m.yLaMoTa}</FieldDescription>
 						{yLa.map((c) => (
 							<YTrongChuDe c={c} h={h} key={c.id} />
 						))}

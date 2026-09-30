@@ -6,7 +6,6 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
@@ -17,6 +16,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { FieldDescription } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,
@@ -76,7 +76,7 @@ function DongY({ y, bamDuoc }: { y: YXem; bamDuoc: boolean }) {
 						}}
 						pressed={bat}
 						size="sm"
-						variant="outline"
+						variant="outline-check"
 					>
 						<Icon data-icon="inline-start" icon={ThumbsUp} />
 						{m.cungNghi}
@@ -92,7 +92,7 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 	const [hienHet, setHienHet] = useState(false);
 	const khac = yNguoiKhac(h);
 	const dayDu = khac.some(coTen);
-	const bamDuoc = h.trangThai === "dang-mo";
+	const bamDuoc = h.quyen.dongYDuoc;
 
 	const khoa = m.khoa[h.y.lyDoKhoa ?? LY_DO_KHOA_Y[0]];
 	if (h.y.khoa) {
@@ -125,9 +125,11 @@ export function KhoiYDongNghiep({ h }: { h: HoiY }) {
 				<CardTitle>
 					{dien(dayDu ? m.tieuDeDayDu : m.tieuDe, { n: khac.length })}
 				</CardTitle>
-				<CardDescription>{dayDu ? m.moTaDayDu : m.moTa}</CardDescription>
 			</CardHeader>
 			<CardContent>
+				<FieldDescription data-mo-ta>
+					{dayDu ? m.moTaDayDu : m.moTa}
+				</FieldDescription>
 				{khac.length === 0 ? (
 					<Empty>
 						<EmptyHeader>

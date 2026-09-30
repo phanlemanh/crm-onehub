@@ -6,7 +6,6 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
@@ -33,14 +32,15 @@ import {
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
-	chuanCau,
 	KET_LUAN_CHON,
+	ketQuaBanTruoc,
+	type NoiBanTruoc,
 	niemPhongInput,
 	noiTuSoCau,
 	OKR_HOI_Y,
 } from "@crm/validation/okr-hoi-y";
 import { useMutation } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { Fragment, useId, useState } from "react";
 import { toast } from "sonner";
 import { okrHoiYMessages } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -85,9 +85,9 @@ export function BanVietTruoc({ h }: { h: HoiY }) {
 		<Card data-khoi="ban-viet-truoc" id={HOI_Y_MAN.neo.banVietTruoc}>
 			<CardHeader>
 				<CardTitle>{m.tieuDe}</CardTitle>
-				<CardDescription>{m.moTa}</CardDescription>
 			</CardHeader>
 			<CardContent>
+				<FieldDescription data-mo-ta>{m.moTa}</FieldDescription>
 				<FieldGroup>
 					{cau.map((c, i) => {
 						const sai = thu && !cauHopLe(c.chu);
@@ -210,20 +210,46 @@ export function BanVietTruoc({ h }: { h: HoiY }) {
 	);
 }
 
-type NhanNoi = "giu" | "doi" | "bo";
+type ChonNoi = {
+	id: string;
+	ten: string;
+	noiBanTruoc: NoiBanTruoc;
+	cauMucTieu: string;
+};
 
-type DanhGiaCau = { nhan: NhanNoi; noi: ChuDe | null };
+function chonNoi(chuDe: ChuDe[]): ChonNoi[] {
+	return chuDe.flatMap((c) =>
+		c.ketLuan === KET_LUAN_CHON && c.noiBanTruoc !== null
+			? [
+					{
+						id: c.id,
+						ten: c.ten,
+						noiBanTruoc: c.noiBanTruoc,
+						cauMucTieu: c.cauMucTieu ?? "",
+					},
+				]
+			: [],
+	);
+}
 
-function danhGia(so: number, cau: string, chuDe: ChuDe[]): DanhGiaCau {
-	const ma = noiTuSoCau(so);
-	const noi =
-		chuDe.find((c) => c.ketLuan === KET_LUAN_CHON && c.noiBanTruoc === ma) ??
-		null;
-	if (!noi) return { nhan: "bo", noi };
-	return {
-		nhan: chuanCau(noi.cauMucTieu ?? "") === chuanCau(cau) ? "giu" : "doi",
-		noi,
-	};
+function TenCacChuDe({ chuDe }: { chuDe: { id: string; ten: string }[] }) {
+	const locale = useLocale();
+	const m = okrHoiYMessages(locale).vietTruoc;
+	let thu = 0;
+	return new Intl.ListFormat(locale, { type: "conjunction" })
+		.formatToParts(chuDe.map((c) => c.ten))
+		.map((phan) => {
+			if (phan.type !== "element") return phan.value;
+			const c = chuDe[thu];
+			thu += 1;
+			return (
+				<Fragment key={c?.id ?? phan.value}>
+					{ghep(m.tenChuDe, {
+						ten: <ChuNguoi>{c?.ten ?? phan.value}</ChuNguoi>,
+					})}
+				</Fragment>
+			);
+		});
 }
 
 export function BanVietTruocDaNiem({
@@ -237,30 +263,35 @@ export function BanVietTruocDaNiem({
 	const m = t.vietTruoc;
 	const ban = h.banTruoc;
 	if (!ban) return null;
+	const chon = chuDe ? chonNoi(chuDe) : null;
+	const kq = chon ? ketQuaBanTruoc(ban, chon) : null;
 	return (
 		<Card data-khoi="ban-viet-truoc-cua-ban">
 			<CardHeader>
 				<CardTitle>{m.cuaBan}</CardTitle>
-				<CardDescription>{m.cuaBanMoTa}</CardDescription>
 			</CardHeader>
 			<CardContent>
+				<FieldDescription data-mo-ta>{m.cuaBanMoTa}</FieldDescription>
 				{ban.boQua ? (
 					<ItemDescription>{m.daBoQua}</ItemDescription>
 				) : (
 					<ItemGroup>
 						{ban.cau.map((cau, i) => {
 							const so = i + 1;
-							const dg = chuDe ? danhGia(so, cau, chuDe) : null;
+							const nhan = kq?.cau[i] ?? null;
+							const noi = (chon ?? []).filter(
+								(c) => c.noiBanTruoc === noiTuSoCau(so),
+							);
 							return (
 								<Item data-cau={so} key={so} size="xs">
 									<ItemContent>
 										<DoanChu>{`${so}. ${cau}`}</DoanChu>
-										{dg ? (
-											<ItemDescription data-noi={dg.nhan}>
-												{dg.noi
+										{nhan ? (
+											<ItemDescription data-noi={nhan}>
+												{noi.length > 0
 													? ghep(m.noi, {
-															nhan: t.ketQua.nhan[dg.nhan],
-															ten: <ChuNguoi>{dg.noi.ten}</ChuNguoi>,
+															nhan: t.ketQua.nhan[nhan],
+															ten: <TenCacChuDe chuDe={noi} />,
 														})
 													: m.chuaNoi}
 											</ItemDescription>

@@ -147,7 +147,8 @@ const vi = {
 		cuaBan: "Bản viết trước của bạn",
 		cuaBanMoTa: "Chỉ bạn đọc được tới khi công bố.",
 		daBoQua: "Bạn đã chọn không viết trước.",
-		noi: "{nhan} — nối với «{ten}»",
+		noi: "{nhan} — nối với {ten}",
+		tenChuDe: "«{ten}»",
 		chuaNoi: "Chưa chủ đề chọn nào nối tới — sẽ là «Bỏ»",
 	},
 	gom: {
@@ -203,6 +204,7 @@ const vi = {
 			mot: "Đã đưa {n} ý vào chủ đề.",
 			nhieu: "Đã đưa {n} ý vào chủ đề.",
 		} satisfies DemSo,
+		daDeRieng: "Đã để ý này đứng riêng.",
 		anY: "Ẩn ý",
 	},
 	ketLuan: {
@@ -278,6 +280,7 @@ const vi = {
 		hanhTrinh: "Ý này đã đi qua",
 		gop: "Bạn góp",
 		vaoChuDe: "Vào chủ đề «{ten}»",
+		vaoYLa: "Được giữ đứng riêng để người chọn đọc",
 		ketLuanCua: "{ten} kết luận",
 		thanhNhap: "Thành mục tiêu nháp",
 		xemNhap: "Xem mục tiêu nháp",
@@ -296,6 +299,7 @@ const vi = {
 		vietTruocCu: "Viết trước: {chu}",
 		khongNoi: "Không chủ đề chọn nào nối tới câu này.",
 		tuChuDe: "Từ chủ đề «{ten}» — không có trong bản viết trước.",
+		noiChuDe: "Từ chủ đề «{ten}»",
 		khoY: "Kho ý — để sau",
 		khoYMoTa:
 			"Chủ đề chưa làm lần này nhưng chưa bỏ. Ai cũng đọc được, không kèm tên người góp.",
@@ -311,6 +315,8 @@ const vi = {
 		cauHoiMacDinh:
 			"Nếu là CEO, theo bạn mục tiêu nào quan trọng mà công ty cần thực hiện trong {ky}?",
 		cauHoiMoTa: "Khoá lại khi đã có ý đầu tiên.",
+		cauHoiKhoaMoTa:
+			"Đã khoá vì đã có người góp ý — vẫn sửa được lời mở, con số và hạn.",
 		loiCauHoi: "Câu hỏi cần {tu}–{den} ký tự.",
 		loiMo: "Lời mở",
 		loiMoMoTa: "Vài câu của người chọn: vì sao hỏi, muốn nghe điều gì.",
@@ -336,6 +342,8 @@ const vi = {
 		nguoiChonGoiY: "Chọn một quản trị",
 		nguoiChonMoTa:
 			"Chỉ quản trị. Người chọn viết trước, kết luận từng chủ đề và công bố; người chọn không góp ý.",
+		nguoiChonKhoaMoTa:
+			"Đã khoá vì người chọn đã niêm phong bản viết trước và vẫn là quản trị.",
 		huy: "Huỷ",
 		mo: "Mở",
 		daMo: "Đã mở hỏi ý.",
@@ -502,7 +510,8 @@ const en: OkrHoiYMessages = {
 		cuaBan: "What you wrote first",
 		cuaBanMoTa: "Only you can read it until results are published.",
 		daBoQua: "You chose not to write first.",
-		noi: "{nhan} — linked to “{ten}”",
+		noi: "{nhan} — linked to {ten}",
+		tenChuDe: "“{ten}”",
 		chuaNoi: "No chosen theme links here yet — it will show as “Dropped”",
 	},
 	gom: {
@@ -557,6 +566,7 @@ const en: OkrHoiYMessages = {
 			mot: "Moved {n} idea into the theme.",
 			nhieu: "Moved {n} ideas into the theme.",
 		},
+		daDeRieng: "This idea now stands on its own.",
 		anY: "Hide ideas",
 	},
 	ketLuan: {
@@ -633,6 +643,7 @@ const en: OkrHoiYMessages = {
 		hanhTrinh: "This idea's path",
 		gop: "You gave it",
 		vaoChuDe: "Went into theme “{ten}”",
+		vaoYLa: "Kept on its own for the decider to read",
 		ketLuanCua: "{ten} concluded",
 		thanhNhap: "Became a draft objective",
 		xemNhap: "Open draft objective",
@@ -651,6 +662,7 @@ const en: OkrHoiYMessages = {
 		vietTruocCu: "Written first: {chu}",
 		khongNoi: "No chosen theme links to this line.",
 		tuChuDe: "From theme “{ten}” — not in what was written first.",
+		noiChuDe: "From theme “{ten}”",
 		khoY: "Idea bank — later",
 		khoYMoTa:
 			"Themes not taken on this time but not dropped. Everyone can read them, without contributors' names.",
@@ -666,6 +678,8 @@ const en: OkrHoiYMessages = {
 		cauHoiMacDinh:
 			"If you were the CEO, which objectives matter most for the company to achieve in {ky}?",
 		cauHoiMoTa: "Locked once the first idea arrives.",
+		cauHoiKhoaMoTa:
+			"Locked because ideas have already arrived — you can still edit the opening note, figures and deadline.",
 		loiCauHoi: "The question needs {tu}–{den} characters.",
 		loiMo: "Opening words",
 		loiMoMoTa: "A few lines from the decider: why ask, what you want to hear.",
@@ -691,6 +705,8 @@ const en: OkrHoiYMessages = {
 		nguoiChonGoiY: "Pick an admin",
 		nguoiChonMoTa:
 			"Admins only. The decider writes first, concludes each theme and publishes; the decider doesn't give ideas.",
+		nguoiChonKhoaMoTa:
+			"Locked because the decider has sealed what they wrote first and is still an admin.",
 		huy: "Cancel",
 		mo: "Open",
 		daMo: "The call for ideas is open.",
