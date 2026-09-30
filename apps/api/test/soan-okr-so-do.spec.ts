@@ -516,13 +516,13 @@ describe("so-do-soan", () => {
 				JSON.stringify({ bat: api.bat, an: api.an }),
 			);
 			console.log("so-do-soan sql:", JSON.stringify(sql));
+			const theoCuoc = bangSo.parse(sql.bat.theo_cuoc);
+			expect(theoCuoc[cuoc.b1], `thieu phien: ${cuoc.b1}`).toBe(0.05);
 			expect(lechApiSql(api, sql)).toEqual([]);
 			expect({ bat: api.bat, an: api.an }).toEqual({
 				bat: TAY_BAT,
 				an: TAY_AN,
 			});
-			const theoCuoc = bangSo.parse(sql.bat.theo_cuoc);
-			expect(theoCuoc[cuoc.b1], `thieu phien: ${cuoc.b1}`).toBe(0.05);
 			const ganDay = new Map(api.cuocGanDay.map((c) => [c.id, c]));
 			expect([...ganDay.keys()].sort()).toEqual(Object.values(cuoc).sort());
 			expect(ganDay.get(cuoc.b1)?.chiPhiUsd).toBe(0.05);
