@@ -5,6 +5,7 @@ import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
+import { DotHoiYTuongOkrMau } from "./_modules/dot-hoi-y-tuong-okr";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
@@ -35,6 +36,7 @@ const BANG_GHEP = {
 	"cua-vao-dang-nhap": CuaVaoDangNhapMau,
 	"dieu-phoi-30-ngay-dau": DieuPhoi30NgayDauMau,
 	"doi-ten-onehub-center": DoiTenOnehubCenterMau,
+	"dot-hoi-y-tuong-okr": DotHoiYTuongOkrMau,
 	"duong-proto-cho-design-pass": DuongProtoMau,
 	"gioi-han-duyet-cay-okr": GioiHanDuyetCayOkrMau,
 	"ke-hoach-la-mot-ban-ghi": KeHoachLaMotBanGhiMau,

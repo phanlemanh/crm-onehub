@@ -1,9 +1,11 @@
 "use client";
 
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
+import Bullhorn from "@carbon/icons-react/es/Bullhorn";
 import Chat from "@carbon/icons-react/es/Chat";
 import CheckmarkOutline from "@carbon/icons-react/es/CheckmarkOutline";
 import Edit from "@carbon/icons-react/es/Edit";
+import Idea from "@carbon/icons-react/es/Idea";
 import Pending from "@carbon/icons-react/es/Pending";
 import Renew from "@carbon/icons-react/es/Renew";
 import Reply from "@carbon/icons-react/es/Reply";
@@ -60,6 +62,8 @@ const ICON_VIEC = {
 	"okr-theo-doi": View,
 	"okr-cho-duyet": Pending,
 	"okr-tra-lai": Reply,
+	"okr-hoi-y-gop": Idea,
+	"okr-hoi-y-cong-bo": Bullhorn,
 } satisfies Record<ViecOkr["loai"], typeof Edit>;
 
 function khoaViec(v: ViecOkr): string {
@@ -78,6 +82,9 @@ function khoaViec(v: ViecOkr): string {
 		case "okr-cho-duyet":
 		case "okr-tra-lai":
 			return `${v.loai}:${v.objectiveId}`;
+		case "okr-hoi-y-gop":
+		case "okr-hoi-y-cong-bo":
+			return `${v.loai}:${v.hoiYId}`;
 	}
 }
 
@@ -126,6 +133,10 @@ function TieuDeViec({ viec }: { viec: ViecOkr }) {
 						: m.theoDoi,
 				{ capNhat: viec.capNhat, binhLuan: viec.binhLuan },
 			);
+		case "okr-hoi-y-gop":
+			return m.hoiYGop;
+		case "okr-hoi-y-cong-bo":
+			return m.hoiYCongBo;
 		case "okr-cho-duyet":
 			return ghep(g.choDuyet, { ten: <Ten>{viec.nhan}</Ten> });
 		case "okr-tra-lai":
@@ -164,6 +175,14 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 					{m.capNhatTuan}
 					<Icon icon={ArrowRight} data-icon="inline-end" />
 				</Link>
+			</Button>
+		);
+	}
+	if (viec.loai === "okr-hoi-y-gop" || viec.loai === "okr-hoi-y-cong-bo") {
+		const thamSo = new URLSearchParams({ [SEARCH_PARAM.okr.ky]: viec.cycleId });
+		return (
+			<Button asChild size="sm" variant="outline">
+				<Link href={`${url("/okr/hoi-y")}?${thamSo}`}>{m.moHoiY}</Link>
 			</Button>
 		);
 	}

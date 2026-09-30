@@ -3,6 +3,7 @@ import {
 	MUC_TU_TIN,
 	type MucTuTin,
 } from "@crm/validation/okr-cap-nhat";
+import type { LoaiChuKy, PhaChuKy } from "@crm/validation/okr-chu-ky";
 import {
 	LOAI_MUC_TIEU,
 	type LoaiMucTieu,
@@ -79,6 +80,40 @@ export function locOkr(v: {
 		trangThai: v[SEARCH_PARAM.okr.trangThai],
 		tuTin: v[SEARCH_PARAM.okr.tuTin],
 	};
+}
+
+type ChuKyGiai = {
+	id: string;
+	kind: LoaiChuKy;
+	phase: PhaChuKy;
+	startsOn: string;
+};
+
+const PHA_HOI_Y = "lap-ke-hoach" satisfies PhaChuKy;
+const LOAI_UU_TIEN = "nam" satisfies LoaiChuKy;
+
+export function kyMacDinhHoiY(cycles: {
+	cycles: ChuKyGiai[];
+	currentId: string | null;
+}): string | null {
+	const keHoach = cycles.cycles
+		.filter((c) => c.phase === PHA_HOI_Y)
+		.sort(
+			(a, b) =>
+				a.startsOn.localeCompare(b.startsOn) ||
+				(a.kind === b.kind ? 0 : a.kind === LOAI_UU_TIEN ? -1 : 1),
+		);
+	return keHoach[0]?.id ?? cycles.currentId;
+}
+
+export function giaiKyHoiY(
+	ky: string | null,
+	cycles: { cycles: ChuKyGiai[]; currentId: string | null } | null,
+): string | null {
+	if (!cycles) return null;
+	if (ky === KY_HIEN_TAI) return cycles.currentId;
+	if (ky !== null && cycles.cycles.some((c) => c.id === ky)) return ky;
+	return kyMacDinhHoiY(cycles);
 }
 
 export function giaiKy(

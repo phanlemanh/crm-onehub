@@ -249,6 +249,9 @@ const DANH_SACH = [
 	"apps/app/components/crm/record-sheet/objective-duyet.tsx",
 	"apps/app/components/crm/record-sheet/objective-hien-thi.tsx",
 	"apps/app/components/okr/hop-chuyen-okr.tsx",
+	`${SLUG}/okr/hoi-y/khoi-gom.tsx`,
+	`${SLUG}/okr/hoi-y/khoi-gop.tsx`,
+	`${SLUG}/okr/hoi-y/sheet-mo-hoi-y.tsx`,
 ];
 
 const BA_HOP = [

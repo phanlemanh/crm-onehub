@@ -41,9 +41,11 @@ import {
 	ghiNhan,
 	gieoBoPhan,
 	gieoChuKy,
+	gieoHoiY,
 	gieoKr,
 	gieoMucTieu,
 	gieoPhongBan,
+	gieoY,
 	guiCapNhat,
 	noiZalo,
 	tatBot,
@@ -1058,6 +1060,163 @@ describe("ghi-nhan", () => {
 			setSystemTime(goc);
 			await lenLichNhac(goc);
 			expect((await hangCuaNguoi(g.A.id)).length).toBe(0);
+		},
+		CHO_MS,
+	);
+});
+
+describe("hoi-y", () => {
+	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+	const MOC_SANG = lucVN(NGAY_NHAC, 0);
+	const HAN = new Date("2026-10-14T17:00:00+07:00");
+	const CHO_MS = 30_000;
+
+	async function gieoNam() {
+		const P = await gieoNguoi("Phuc");
+		const A = await gieoNguoi("An");
+		const B = await gieoNguoi("Binh");
+		const R = await gieoNguoi("Rong", false);
+		await noiZalo(A.id, "ZA");
+		await noiZalo(B.id, "ZB");
+		await batBot();
+		const ky = await gieoChuKy("lap-ke-hoach", 1);
+		const nhan = (
+			await db.okrCycle.findUniqueOrThrow({
+				where: { id: ky },
+				select: { name: true },
+			})
+		).name;
+		return { P, A, B, R, ky, nhan };
+	}
+
+	async function mucCua(userId: string) {
+		return (await hangCuaNguoi(userId)).flatMap(
+			(h) => parseNhacPayload(h.payload).muc,
+		);
+	}
+
+	test(
+		"hoi-y: lan hoi y dang mo — tin sang 08:31 cua A co dung mot dong hoi y kem ten chu ky, han gio VN va duong mo …/okr/hoi-y; B da gop, P nguoi chon, R da roi khong co hang",
+		async () => {
+			const g = await gieoNam();
+			const h = await gieoHoiY({
+				cycleId: g.ky,
+				nguoiChon: g.P.id,
+				han: HAN,
+				mo: new Date(goc.getTime() - 3 * GIO_MS),
+			});
+			await gieoY(h, g.B.id, new Date(goc.getTime() - 2 * GIO_MS));
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			const mucCuaA = await mucCua(g.A.id);
+			const soHang = {
+				B: (await hangCuaNguoi(g.B.id)).length,
+				P: (await hangCuaNguoi(g.P.id)).length,
+				R: (await hangCuaNguoi(g.R.id)).length,
+			};
+			const r = await guiQuaZalo(g.A.id, goc);
+			const text = r.z.guiToi("ZA")[0]?.body.text ?? "";
+			const dongHoiY = text.split("\n").filter((d) => d.includes("hỏi ý"));
+			expect({
+				ket: r.ket,
+				tieuDe: text.split("\n").includes(TIEU_DE["okr-hoi-y-gop"]),
+				mucCuaA,
+				soHang,
+				daGui: r.payload.daGui,
+				soDong: dongHoiY.length,
+			}).toEqual({
+				ket: "da-gui",
+				tieuDe: true,
+				mucCuaA: [{ loai: "okr-hoi-y-gop", hoiYId: h, cycleId: g.ky }],
+				soHang: { B: 0, P: 0, R: 0 },
+				daGui: [{ loai: "okr-hoi-y-gop", hoiYId: h, cycleId: g.ky }],
+				soDong: 1,
+			});
+			expect(dongHoiY[0]).toBe(
+				`1. Công ty đang hỏi ý cho mục tiêu ${g.nhan} — hạn 17:00 14/10 — ${APP_URL}/${await slug()}/okr/hoi-y?kyOkr=${g.ky}`,
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"hoi-y: sau han khong ai co hang; luc dung han cung khong",
+		async () => {
+			const g = await gieoNam();
+			await gieoHoiY({ cycleId: g.ky, nguoiChon: g.P.id, han: goc });
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			expect((await hangCuaNguoi(g.A.id)).length).toBe(0);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"hoi-y: da cong bo — B da gop nhan mot dong «da cong bo» kem duong mo; A chua gop, R da roi sau khi gop khong co; cong bo ngoai cua so 08:30 khong dong",
+		async () => {
+			const g = await gieoNam();
+			const trong = await gieoHoiY({
+				cycleId: g.ky,
+				nguoiChon: g.P.id,
+				han: new Date(goc.getTime() - 3 * GIO_MS),
+				congBo: new Date(MOC_SANG.getTime() - 2 * GIO_MS),
+			});
+			await gieoY(trong, g.B.id, new Date(goc.getTime() - 6 * GIO_MS));
+			await gieoY(trong, g.R.id, new Date(goc.getTime() - 6 * GIO_MS));
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			const mucB = await mucCua(g.B.id);
+			const soHang = {
+				A: (await hangCuaNguoi(g.A.id)).length,
+				R: (await hangCuaNguoi(g.R.id)).length,
+			};
+			const r = await guiQuaZalo(g.B.id, goc);
+			const text = r.z.guiToi("ZB")[0]?.body.text ?? "";
+			const dongCongBo = text
+				.split("\n")
+				.filter((d) => d.includes("xem ý của bạn đi đâu"));
+			expect({
+				ket: r.ket,
+				mucB,
+				soHang,
+				tieuDe: text.split("\n").includes(TIEU_DE["okr-hoi-y-cong-bo"]),
+				dongCongBo: dongCongBo.length,
+			}).toEqual({
+				ket: "da-gui",
+				mucB: [{ loai: "okr-hoi-y-cong-bo", hoiYId: trong, cycleId: g.ky }],
+				soHang: { A: 0, R: 0 },
+				tieuDe: true,
+				dongCongBo: 1,
+			});
+			expect(dongCongBo[0]).toBe(
+				`1. Mục tiêu ${g.nhan} đã công bố — xem ý của bạn đi đâu — ${APP_URL}/${await slug()}/okr/hoi-y?kyOkr=${g.ky}`,
+			);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"hoi-y: cong bo luc 08:30:00.001 hom nay va 08:30 hom qua deu ngoai cua so — B khong hang",
+		async () => {
+			const g = await gieoNam();
+			const muon = await gieoHoiY({
+				cycleId: g.ky,
+				nguoiChon: g.P.id,
+				han: new Date(goc.getTime() - 3 * GIO_MS),
+				congBo: new Date(MOC_SANG.getTime() + 1),
+			});
+			await gieoY(muon, g.B.id, new Date(goc.getTime() - 6 * GIO_MS));
+			const ky2 = await gieoChuKy("lap-ke-hoach", 1);
+			const som = await gieoHoiY({
+				cycleId: ky2,
+				nguoiChon: g.P.id,
+				han: new Date(goc.getTime() - 60 * GIO_MS),
+				congBo: ngayCach(MOC_SANG, HOM_QUA),
+			});
+			await gieoY(som, g.B.id, new Date(goc.getTime() - 70 * GIO_MS));
+			setSystemTime(goc);
+			await lenLichNhac(goc);
+			expect((await hangCuaNguoi(g.B.id)).length).toBe(0);
 		},
 		CHO_MS,
 	);

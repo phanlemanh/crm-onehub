@@ -1,6 +1,7 @@
 const PHUT_MS = 60_000;
 const GIO_MS = 60 * PHUT_MS;
 const NGAY_MS = 24 * GIO_MS;
+const NGAY_GIO = NGAY_MS / GIO_MS;
 
 export const OKR_MAU = {
 	tienTo: "mau-okr-",
@@ -8,6 +9,14 @@ export const OKR_MAU = {
 	tuan: { soTuanCapNhat: 6, tuanMoiQuy: 13, gioCapNhat: 9, lechVN: 7 },
 	duyet: { tuanGui: { nhap: 2, choDuyet: 5 }, gioTraLai: 6 },
 	thoiGian: { phutMs: PHUT_MS, gioMs: GIO_MS, ngayMs: NGAY_MS },
+	hoiY: {
+		moTruocGio: 6 * NGAY_GIO,
+		hanSauMoGio: 5 * NGAY_GIO,
+		niemPhongSauMoGio: 1,
+		dongYSauYGio: 1,
+		gomSauHanGio: 2,
+		ketLuanSauHanGio: 4,
+	},
 	mayCucBo: ["localhost", "127.0.0.1", "::1", "[::1]"],
 	moiTruongCam: {
 		NODE_ENV: ["production"],
