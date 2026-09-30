@@ -223,3 +223,16 @@ evals:
     expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn sửa của lượt (sheet.tsx, dialog.tsx, hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx, objective-sheet.tsx, theo-don-vi.tsx, create-deal-sheet.tsx — danh sách khai trong lệnh); năm lỗi nền P0 bằng 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["packages/ui/src/components/sheet.tsx", "packages/ui/src/components/dialog.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"]
+
+  - id: E24
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kto_man_dau_cot
+    steps:
+      - "Phiên đo riêng (tien-de, tên kho kto-e24); bật góp ý cho phòng; trưởng phòng mở ngăn Sửa mục tiêu và Sửa KR bằng URL"
+      - "Bấm «Nhờ Trợ lý OKR góp ý» — cột mở ở trạng thái đang soạn; đo phần đầu cột ở 1440 và 390"
+      - "Khi có thẻ (dòng góp ý đã có trong kho đo) đo lại; ảnh E24-<khổ>-<ngăn>.png"
+    expected: "exit 0; rang/man-khung.mjs --chi dau-cot đo bằng getBoundingClientRect: left của chữ tiêu đề cột − left của dòng mô tả ngay dưới và của phần tử đầu (khung đang soạn hoặc thẻ) ≤ 1 px; right của dấu X đóng cột − right của phần tử đầu ≤ 1 px; font-size và font-weight tính toán của tiêu đề cột bằng của tiêu đề ngăn (sheet-title); font-size của dòng mô tả ≤ font-size tiêu đề cột; ở 1440 |tâm dọc hàng tiêu đề cột − tâm dọc nút đầu của form| ≤ 2 px; khoảng cách giữa hộp dấu X đóng cột và hộp dấu X đóng ngăn ≥ 8 px. In từng số, mỗi ngăn, mỗi khổ. Chiều đỏ ghim: trang giả có tiêu đề cột thụt 11 px (--kiem-do-do dau-cot) phải in 'dau cot lech trai: 11' và mã 1; trang giả tiêu đề cột 12 px cạnh tiêu đề ngăn 14 px phải in 'dau cot khac co chu' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"]

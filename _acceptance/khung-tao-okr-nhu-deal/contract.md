@@ -5,7 +5,7 @@ slug: khung-tao-okr-nhu-deal
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: draft
 approved_by: Manh Phan
 approved_at: 2026-09-30T01:57:46Z
 design_doc: docs/superpowers/specs/2026-09-30-khung-tao-okr-nhu-deal-design.md
@@ -38,6 +38,7 @@ Source input: yêu cầu của chủ kho 2026-09-30; `docs/settings.md`; `docs/p
 - AC-11: Given `/proto/khung-tao-okr-nhu-deal` và `/proto/tro-ly-okr-de-xuat` khi bật `PROTO_ROUTE=1`, When mở từng state, Then bản mẫu của lượt này có một state cho ngăn tạo deal và một state cho mỗi dòng nhìn thấy được của bảng trạng thái trong thiết kế (mọi dòng trừ ST-khung-cot-hep, ST-khung-url-mo, ST-khung-chan-chung — ba dòng đó là khổ, URL và chân chung, đo trên app thật ở AC-2, AC-4, AC-5); bản mẫu của 9b vẽ ngăn chứ không còn hộp thoại; phép đo sổ bản mẫu xanh.
 - AC-12: Given ảnh bốn ngăn OKR và ngăn tạo deal ở 1440 px và 390 px do AC-3 và AC-5 chụp, When một người không làm lượt này đặt cạnh nhau, Then họ thấy cùng một khung — cùng phía, cùng đầu, cùng chân — và ngăn rộng đọc như ngăn đó mở thêm một cột, không phải một màn khác. (judgment)
 - AC-13: Given `docs/settings.md`, `docs/plan/lo-trinh-okr.md` và mô tả PR, When đọc, Then `docs/settings.md` ghi chân ngăn đã khớp chân hộp thoại (mục Đợt 2 đánh dấu phần chân đã xong); mục 10 của lộ trình OKR có một dòng mới cho lượt này; mô tả PR ghi bậc tra theo «Vẽ tay là bậc cuối» kèm câu tìm ReUI. (judgment)
+- AC-14: Given ngăn Sửa mục tiêu và ngăn Sửa KR có cột góp ý mở (ở trạng thái đang soạn và khi có thẻ), When đo trong trình duyệt thật ở 1440 px và 390 px, Then chữ tiêu đề cột («Trợ lý OKR» / «Trợ lý OKR · KR này») bám mép trái cột — chênh với mép trái của dòng mô tả và của thẻ đầu tiên ≤ 1 px; dấu X đóng cột bám mép phải cột — chênh với mép phải thẻ ≤ 1 px; tiêu đề cột cùng cỡ chữ và độ đậm với tiêu đề ngăn («Sửa mục tiêu»), dòng mô tả dưới nó không to hơn nó; ở 1440 px tâm hàng tiêu đề cột chênh tâm nút đầu tiên của form ≤ 2 px; dấu X đóng cột và dấu X đóng ngăn cách nhau ≥ 8 px, không chồng lên nhau.
 
 ## Coverage
 
@@ -64,5 +65,7 @@ Quét bằng `morphological-scan` ngay trong phiên (30/09), bản đầy đủ 
 - Màn soạn của `soan-okr-cung-tro-ly` — lượt đó dùng lại vỏ này.
 
 ## Notes
+
+- 2026-09-30, Cổng Bằng chứng (Manh Phan): phần đầu cột góp ý lệch trái 11 px, lệch dọc so với form, khác kiểu chữ với tiêu đề ngăn, hai dấu X sát nhau — lỗi có từ `the-gop-y-okr`, hộp thoại cũ cũng vậy. Chủ kho chọn sửa ngay trong lượt này: thêm AC-14, duyệt lại Cổng Phạm vi, chấm vòng 4 vượt trần ba vòng.
 
 - Ghim lại ở S5 (không phải một AC): `the-gop-y-okr`, `tro-ly-okr-de-xuat`, `hop-thoai-giu-cho-dang-nhap` — thước hoặc bài kiểm của chúng đổi trong lượt này. Eval nhìn bằng trình duyệt của ba hồ sơ đó không chạy trong làn ghim lại; AC-10 chạy lại chúng trong S4 của hồ sơ này.
