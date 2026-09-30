@@ -209,8 +209,14 @@ const docWorkspace = () => ({ name: "OneHub" });
 const docDem = () => dem;
 const LOC_RONG = { phuTrach: [], loai: [], trangThai: [] };
 let treo: Set<string> = new Set();
+let hoan: Map<string, { cho: Promise<void>; giai: () => void }> = new Map();
 const docDanhSach = (vao: DauVao) => {
 	if (treo.has(khoaDonVao(vao))) return new Promise<never>(() => {});
+	const h = hoan.get(khoaDonVao(vao));
+	if (h) return h.cho.then(() => danhSachCua(vao));
+	return danhSachCua(vao);
+};
+const danhSachCua = (vao: DauVao) => {
 	const d = theoDon.get(khoaDonVao(vao)) ?? { objectives: [], canEdit: false };
 	return {
 		rows: d.objectives.map((o) => ({ ...o, krKhop: [] })),
@@ -284,16 +290,22 @@ function gieo(client: QueryClient, don: string, xem: string | null) {
 	if (cycles.currentId) {
 		const cycleId = cycles.currentId;
 		client.setQueryData(["countByUnit", { cycleId }], docDem());
-		client.setQueryData(
-			["danhSach", { cycleId, unit, loc: LOC_RONG }],
-			docDanhSach({ cycleId, unit, loc: LOC_RONG }),
-		);
+		const khoa = JSON.stringify(unit);
+		if (!treo.has(khoa) && !hoan.has(khoa))
+			client.setQueryData(
+				["danhSach", { cycleId, unit, loc: LOC_RONG }],
+				danhSachCua({ cycleId, unit, loc: LOC_RONG }),
+			);
 		if (xem === "cay")
 			client.setQueryData(["cayCanChinh", { cycleId }], docCayCanChinh());
 	}
 }
 
-async function mo(don = "goc", xem: string | null = null): Promise<San> {
+async function mo(
+	don = "goc",
+	xem: string | null = null,
+	doiXong = true,
+): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -321,7 +333,7 @@ async function mo(don = "goc", xem: string | null = null): Promise<San> {
 	});
 	const san = { o, root };
 	dangMo.push(san);
-	await cho(() => !o.textContent?.includes(m.dangTai), "tai xong");
+	if (doiXong) await cho(() => !o.textContent?.includes(m.dangTai), "tai xong");
 	return san;
 }
 
@@ -347,6 +359,7 @@ beforeEach(() => {
 	dem = {};
 	cayCanChinh = { roots: [], chuaCanChinh: [] };
 	treo = new Set();
+	hoan = new Map();
 });
 
 afterEach(async () => {
@@ -649,26 +662,109 @@ describe("nhan-danh-sach", () => {
 });
 
 describe("khung-xuong", () => {
-	test("khung-xuong: danh sach don vi moi dang cho — ca lan dau va ca giu cho du lieu don vi truoc — hien khung xuong, khong hien cau chua dat OKR", async () => {
-		treo.add(JSON.stringify(donVao("pb:pb-kho")));
-		const s = await mo("pb:pb-1");
-		const truoc = s.o.textContent ?? "";
-		const nutKho = [...s.o.querySelectorAll('[role="treeitem"]')].find((n) =>
+	const DANG_TAI = m.dangTai;
+	const RONG = "chưa đặt OKR";
+	const giuLai = (don: string) => {
+		let giai = () => {};
+		const cho = new Promise<void>((r) => {
+			giai = r;
+		});
+		hoan.set(JSON.stringify(donVao(don)), { cho, giai });
+		return async () => {
+			await act(async () => {
+				giai();
+				await cho;
+			});
+		};
+	};
+	const doc = (o: HTMLElement) => ({
+		busy: o.querySelector('[aria-busy="true"]') !== null,
+		dangTai:
+			o.querySelector('[aria-busy="true"] [role="status"]')?.textContent ??
+			null,
+		rong: (o.textContent ?? "").includes(RONG),
+		the: [...o.querySelectorAll("[data-muc-tieu]")].map((k) =>
+			k.getAttribute("data-muc-tieu"),
+		),
+	});
+	const sangKho = async (o: HTMLElement) => {
+		const nut = [...o.querySelectorAll('[role="treeitem"]')].find((n) =>
 			n.textContent?.includes("Kho vận"),
 		);
-		if (!nutKho) throw new Error("khong thay don vi Kho van");
+		if (!nut) throw new Error("khong thay don vi Kho van");
 		await act(async () => {
-			(nutKho.querySelector("button") ?? (nutKho as HTMLElement)).click();
+			(nut.querySelector("button") ?? (nut as HTMLElement)).click();
 		});
 		await cho(
-			() => (s.o.textContent ?? "").includes("Kho vận"),
+			() => (o.textContent ?? "").includes("Kho vận"),
 			"doi sang Kho van",
 		);
-		const khung = s.o.querySelector('[aria-busy="true"]');
-		expect({
-			truocRong: truoc.includes("chưa đặt OKR"),
-			busy: khung !== null,
-			rong: (s.o.textContent ?? "").includes("chưa đặt OKR"),
-		}).toEqual({ truocRong: true, busy: true, rong: false });
+	};
+	const hai = [
+		{ ...mucTieu("k1", 1), unitId: "pb-kho", unitName: "Kho vận" },
+		{ ...mucTieu("k2", 1), unitId: "pb-kho", unitName: "Kho vận" },
+	];
+
+	test("khung-xuong: ba ca viet truoc — lan dau treo roi giai rong; giu cho du lieu rong cua X roi giai 2 muc tieu; giu cho du lieu co the cua X — dang cho thi khung xuong, khong the cua X, khong cau chua dat OKR", async () => {
+		const ra: Record<string, unknown> = {};
+
+		const giaiLanDau = giuLai("pb:pb-kho");
+		const s1 = await mo("pb:pb-kho", null, false);
+		ra.lanDau = doc(s1.o);
+		await giaiLanDau();
+		await cho(() => !doc(s1.o).busy, "lan dau giai xong");
+		ra.lanDauGiai = doc(s1.o);
+		await act(async () => s1.root.unmount());
+		s1.o.remove();
+		dangMo = dangMo.filter((x) => x !== s1);
+		hoan = new Map();
+
+		const s2 = await mo("pb:pb-1");
+		ra.xRongTruoc = doc(s2.o);
+		const giaiY = giuLai("pb:pb-kho");
+		theoDon.set(JSON.stringify(donVao("pb:pb-kho")), {
+			objectives: hai,
+			canEdit: false,
+		});
+		await sangKho(s2.o);
+		ra.xRongCho = doc(s2.o);
+		await giaiY();
+		await cho(() => !doc(s2.o).busy, "Y giai xong");
+		ra.xRongGiai = doc(s2.o);
+		await act(async () => s2.root.unmount());
+		s2.o.remove();
+		dangMo = dangMo.filter((x) => x !== s2);
+		hoan = new Map();
+		theoDon.delete(JSON.stringify(donVao("pb:pb-kho")));
+
+		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
+			objectives: [mucTieu("x1", 1), mucTieu("x2", 1)],
+			canEdit: false,
+		});
+		const s3 = await mo("pb:pb-1");
+		ra.xCoTheTruoc = doc(s3.o);
+		giuLai("pb:pb-kho");
+		await sangKho(s3.o);
+		const cho3 = doc(s3.o);
+		ra.xCoTheCho =
+			cho3.the.length > 0
+				? `hien du lieu don vi truoc khi dang tai: ${cho3.the.join(",")}`
+				: cho3;
+
+		const dangCho = { busy: true, dangTai: DANG_TAI, rong: false, the: [] };
+		expect(ra).toEqual({
+			lanDau: dangCho,
+			lanDauGiai: { busy: false, dangTai: null, rong: true, the: [] },
+			xRongTruoc: { busy: false, dangTai: null, rong: true, the: [] },
+			xRongCho: dangCho,
+			xRongGiai: { busy: false, dangTai: null, rong: false, the: ["k1", "k2"] },
+			xCoTheTruoc: {
+				busy: false,
+				dangTai: null,
+				rong: false,
+				the: ["x1", "x2"],
+			},
+			xCoTheCho: dangCho,
+		});
 	});
 });

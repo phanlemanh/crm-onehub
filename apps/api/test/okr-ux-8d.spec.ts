@@ -108,20 +108,25 @@ async function docDanhSach(thuTuc: string, ai: string): Promise<Muc[]> {
 	);
 }
 
-const MA_TRAN: readonly { thuTuc: string; ai: string; kyVong: number }[] = [
-	{ thuTuc: "okr.mine", ai: "v", kyVong: 0 },
-	{ thuTuc: "okr.mine", ai: "chu", kyVong: 2 },
-	{ thuTuc: "okr.mine", ai: "n", kyVong: 0 },
-	{ thuTuc: "okr.byUnit", ai: "v", kyVong: 1 },
-	{ thuTuc: "okr.byUnit", ai: "chu", kyVong: 1 },
-	{ thuTuc: "okr.byUnit", ai: "n", kyVong: 0 },
-	{ thuTuc: "okr.danhSach", ai: "v", kyVong: 1 },
-	{ thuTuc: "okr.danhSach", ai: "chu", kyVong: 1 },
-	{ thuTuc: "okr.danhSach", ai: "n", kyVong: 0 },
-	{ thuTuc: "okr.alignmentTree", ai: "v", kyVong: 1 },
-	{ thuTuc: "okr.alignmentTree", ai: "chu", kyVong: 1 },
-	{ thuTuc: "okr.alignmentTree", ai: "n", kyVong: 0 },
-	{ thuTuc: "okr.moCoi", ai: "qt", kyVong: 1 },
+const MA_TRAN: readonly {
+	thuTuc: string;
+	ai: string;
+	kyVong: number;
+	soXem: string;
+}[] = [
+	{ thuTuc: "okr.mine", ai: "v", kyVong: 0, soXem: "" },
+	{ thuTuc: "okr.mine", ai: "chu", kyVong: 2, soXem: "G0=1,G=2" },
+	{ thuTuc: "okr.mine", ai: "n", kyVong: 0, soXem: "" },
+	{ thuTuc: "okr.byUnit", ai: "v", kyVong: 1, soXem: "G=2" },
+	{ thuTuc: "okr.byUnit", ai: "chu", kyVong: 1, soXem: "G=2" },
+	{ thuTuc: "okr.byUnit", ai: "n", kyVong: 0, soXem: "" },
+	{ thuTuc: "okr.danhSach", ai: "v", kyVong: 1, soXem: "G=2" },
+	{ thuTuc: "okr.danhSach", ai: "chu", kyVong: 1, soXem: "G=2" },
+	{ thuTuc: "okr.danhSach", ai: "n", kyVong: 0, soXem: "" },
+	{ thuTuc: "okr.alignmentTree", ai: "v", kyVong: 1, soXem: "G0=1" },
+	{ thuTuc: "okr.alignmentTree", ai: "chu", kyVong: 1, soXem: "G0=1" },
+	{ thuTuc: "okr.alignmentTree", ai: "n", kyVong: 0, soXem: "" },
+	{ thuTuc: "okr.moCoi", ai: "qt", kyVong: 1, soXem: "G=2" },
 ];
 
 beforeAll(async () => {
@@ -178,7 +183,7 @@ describe("danh-sach", () => {
 	}, CHO_DB);
 
 	test(
-		"ma trận 13 ô: số mục giới hạn đúng bảng viết trước, cờ khớp bảng, soNguoiXem khớp số hàng",
+		"ma trận 13 ô: số mục giới hạn đúng bảng viết trước, cờ khớp bảng, soNguoiXem của mọi mục khớp số hàng, G và G0 đúng bảng",
 		async () => {
 			const gioiHan = new Set(
 				(
@@ -188,15 +193,29 @@ describe("danh-sach", () => {
 					})
 				).map((r) => r.id),
 			);
-			const soHang = await db.okrNguoiXem.count({ where: { objectiveId: G } });
-			expect(soHang).toBe(2);
+			const soHang = new Map(
+				(
+					await db.okrNguoiXem.groupBy({
+						by: ["objectiveId"],
+						_count: { _all: true },
+					})
+				).map((r) => [r.objectiveId, r._count._all]),
+			);
+			expect([soHang.get(G), soHang.get(G0)]).toEqual([2, 1]);
+			const tenMuc = (id: string) => (id === G ? "G" : id === G0 ? "G0" : id);
 			const ra: string[] = [];
 			for (const o of MA_TRAN) {
 				const muc = await docDanhSach(o.thuTuc, o.ai);
 				const thieuCo = muc.filter((m) => m.hienThi === undefined);
 				const coGioiHan = muc.filter((m) => m.hienThi === "gioi-han");
 				const nen = muc.filter((m) => gioiHan.has(m.id));
-				const soG = muc.find((m) => m.id === G)?.soNguoiXem;
+				const lechXem = muc.filter(
+					(m) => m.soNguoiXem !== (soHang.get(m.id) ?? 0),
+				).length;
+				const soXem = coGioiHan
+					.map((m) => `${tenMuc(m.id)}=${m.soNguoiXem}`)
+					.sort()
+					.join(",");
 				ra.push(
 					`${o.thuTuc} ${o.ai}: gioi-han ${coGioiHan.length} ky vong ${o.kyVong}; thieu co ${thieuCo.length}; lech ${
 						coGioiHan
@@ -209,17 +228,14 @@ describe("danh-sach", () => {
 							.join(",")
 							? 0
 							: 1
-					}${soG === undefined ? "" : `; soNguoiXem G ${soG}`}`,
+					}; soNguoiXem lech ${lechXem}; gioi-han xem ${soXem}`,
 				);
 			}
 			expect(ra).toEqual(
-				MA_TRAN.map((o) => {
-					const coG =
-						o.kyVong > 0 &&
-						!["okr.alignmentTree"].includes(o.thuTuc) &&
-						!(o.thuTuc === "okr.mine" && o.ai !== "chu");
-					return `${o.thuTuc} ${o.ai}: gioi-han ${o.kyVong} ky vong ${o.kyVong}; thieu co 0; lech 0${coG ? "; soNguoiXem G 2" : ""}`;
-				}),
+				MA_TRAN.map(
+					(o) =>
+						`${o.thuTuc} ${o.ai}: gioi-han ${o.kyVong} ky vong ${o.kyVong}; thieu co 0; lech 0; soNguoiXem lech 0; gioi-han xem ${o.soXem}`,
+				),
 			);
 		},
 		CHO_DB,

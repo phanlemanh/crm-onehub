@@ -509,7 +509,7 @@ const nutGo = (hop: Element) =>
 	);
 
 describe("go-nguoi", () => {
-	test("go-nguoi: P co OKR — hop neu so tu transferPreview, Chuyen OKR la nut chinh mo hop chuyen, Go van bam duoc; Q khong co — hop nhu cu; R loi va S dang doc — van go duoc", async () => {
+	test("go-nguoi: P co OKR — hop neu so tu transferPreview (hai bo so 3/1 va 7/2), Chuyen OKR la nut chinh mo hop chuyen, Go van bam duoc; Q khong co — hop nhu cu; R loi va S dang doc — van go duoc", async () => {
 		let xem: (v: DauVao) => Json | Promise<Json> = () => ({
 			kr: 3,
 			mucTieu: 1,
@@ -551,12 +551,27 @@ describe("go-nguoi", () => {
 			},
 			moChuyen: true,
 		});
-		for (const san of dangMo) {
-			await act(async () => san.root.unmount());
-			san.o.remove();
-		}
-		dangMo = [];
-		document.body.innerHTML = "";
+		const donSan = async () => {
+			for (const san of dangMo) {
+				await act(async () => san.root.unmount());
+				san.o.remove();
+			}
+			dangMo = [];
+			document.body.innerHTML = "";
+		};
+		await donSan();
+
+		xem = () => ({ kr: 7, mucTieu: 2, viec: 0 });
+		await mo(<MembersTable />);
+		const hopP2 = await moHopGo("Huong Le");
+		await cho(
+			() => hopP2.querySelector("[data-go-co-okr]") !== null,
+			"canh bao OKR bo so thu hai",
+		);
+		expect(hopP2.querySelector("[data-go-co-okr]")?.textContent ?? "").toBe(
+			dien(tv.xacNhan.go.coOkr, { kr: 7, mucTieu: 2 }),
+		);
+		await donSan();
 
 		xem = () => ({ kr: 0, mucTieu: 0, viec: 0 });
 		await mo(<MembersTable />);
