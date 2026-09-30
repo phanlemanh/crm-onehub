@@ -117,6 +117,7 @@ const KHONG_DAU = new Set([
 	"moc.xong",
 	"mucTuTin.cao",
 	"dem",
+	"donVi.dem",
 	"bangTinh.nhan",
 	"dau.crm",
 	"dau.api",

@@ -484,6 +484,7 @@ describe("vi-tri-man", () => {
 			primaryDepartmentId: "pb-cskh",
 			secondaryDepartmentIds: [],
 			managerUserId: null,
+			chucDanh: "",
 		});
 	});
 });
