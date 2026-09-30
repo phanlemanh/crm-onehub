@@ -79,7 +79,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.kto_giu
-    expected: "exit 0; bài DOM (-t giu) với Sheet thật của packages/ui, ma trận toàn phần viết trước: bốn ngăn OKR × bốn đường đóng {Esc, bấm lớp phủ, «Huỷ», dấu X} × {có chữ sửa chưa lưu, không} — có sửa: hộp hỏi lại (role=alertdialog) hiện, ngăn còn trong DOM, dong() chưa gọi; không sửa: dong() gọi đúng một lần. In số khẳng định = 32. Chiều đỏ ghim: bản sao bỏ coThayDoi khỏi ngăn KR phải làm bài đỏ 'dong mat thay doi: kr'."
+    expected: "exit 0; bài DOM (-t giu) với Sheet thật của packages/ui, ma trận toàn phần viết trước: bốn ngăn OKR × bốn đường đóng {Esc, bấm lớp phủ, «Huỷ», dấu X} × {có chữ sửa chưa lưu, không} — có sửa: ngăn còn trong DOM và dong() chưa gọi ở cả bốn đường, hộp hỏi lại (role=alertdialog) hiện ở Esc, «Huỷ», dấu X và KHÔNG hiện khi bấm lớp phủ (luật đã ký của hop-thoai-giu-cho-dang-nhap AC-3: bấm ngoài khi đã gõ không làm gì); không sửa: dong() gọi đúng một lần. In số khẳng định = 32. Chiều đỏ ghim: bản sao tắt việc giữ ở ngăn KR (giuThayDoi={false} trên Sheet) phải làm bài đỏ 'dong mat thay doi: kr' — gỡ coThayDoi không đủ vì bộ giữ tự nhận chữ vừa gõ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["packages/ui/src/components/sheet.tsx", "packages/ui/src/components/giu-thay-doi.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
 

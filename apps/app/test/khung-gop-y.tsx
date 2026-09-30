@@ -294,7 +294,15 @@ export async function nhip(lan = 1): Promise<void> {
 	}
 }
 
-export async function mo(man: ReactElement): Promise<void> {
+export type TuyChonMo = {
+	searchParams?: string;
+	onUrlUpdate?: (e: { queryString: string }) => void;
+};
+
+export async function mo(
+	man: ReactElement,
+	chon: TuyChonMo = {},
+): Promise<void> {
 	if (dangMo.length === 0) {
 		const o = document.createElement("div");
 		document.body.appendChild(o);
@@ -310,7 +318,11 @@ export async function mo(man: ReactElement): Promise<void> {
 	});
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter hasMemory searchParams="">
+			<NuqsTestingAdapter
+				hasMemory
+				searchParams={chon.searchParams ?? ""}
+				onUrlUpdate={chon.onUrlUpdate}
+			>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>{man}</TooltipProvider>

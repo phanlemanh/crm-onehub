@@ -4,15 +4,6 @@ import Close from "@carbon/icons-react/es/Close";
 import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
-	Dialog,
-	DialogAssistBody,
-	DialogClose,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@crm/ui/components/dialog";
-import {
 	Field,
 	FieldDescription,
 	FieldError,
@@ -29,6 +20,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
+import {
+	Sheet,
+	SheetBody,
+	SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "@crm/ui/components/sheet";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import {
@@ -274,23 +274,25 @@ export function HopThoaiMucTieu({
 	);
 
 	return (
-		<Dialog
+		<Sheet
 			open
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
 			coThayDoi={coThayDoi || tuMau.mauChon !== null}
 		>
-			<DialogContent
+			<SheetContent
+				side="right"
 				data-hop-thoai-muc-tieu={cu?.id ?? "moi"}
-				size={gopY.cotMo ? "assist" : "default"}
+				aria-describedby={undefined}
+				size={gopY.cotMo ? "assist" : undefined}
 			>
-				<DialogHeader>
-					<DialogTitle>
+				<SheetHeader>
+					<SheetTitle>
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
-					</DialogTitle>
-				</DialogHeader>
-				<DialogAssistBody split={gopY.cotMo} data-cuon-hop>
+					</SheetTitle>
+				</SheetHeader>
+				<SheetBody split={gopY.cotMo} data-cuon-hop>
 					{tuMau.dangMo ? (
 						<KhungTuMau
 							tuMau={tuMau}
@@ -455,13 +457,13 @@ export function HopThoaiMucTieu({
 						</form>
 					)}
 					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
-				</DialogAssistBody>
-				<DialogFooter>
-					<DialogClose asChild>
+				</SheetBody>
+				<SheetFooter>
+					<SheetClose asChild>
 						<Button variant="outline" disabled={dangLuu}>
 							{h.huy}
 						</Button>
-					</DialogClose>
+					</SheetClose>
 					{tuMau.dangMo ? (
 						<NutTaoTuMau tuMau={tuMau} id={`${ma}-tu-mau`} dangLuu={dangLuu} />
 					) : (
@@ -475,8 +477,8 @@ export function HopThoaiMucTieu({
 							{yeuCau.loai === "sua" ? h.luu : h.taoMucTieu}
 						</Button>
 					)}
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
 	);
 }
