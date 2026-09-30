@@ -1410,7 +1410,7 @@ describe("dua-vao", () => {
 	);
 
 	test(
-		"chu kỳ bị ẩn trước khi đưa vào → từ chối có tên, 0 bản ghi, bảng giữ nguyên; hiện lại thì đưa vào được",
+		"chu kỳ bị ẩn trước khi đưa vào → từ chối có tên, 0 bản ghi, bảng giữ nguyên; hiện lại thì qua cửa chu kỳ",
 		async () => {
 			const k = await gieoBanNhap("an");
 			await nhanHet(k);
@@ -1445,7 +1445,10 @@ describe("dua-vao", () => {
 				await duaVao(k.cuoc.id, SO(k)),
 				"hien lai",
 			);
-			expect(lai.ok).toBe(true);
+			expect(
+				lai.ok ? "qua" : lai.lyDo,
+				"hien lai van bi chan o cua chu ky",
+			).not.toBe("chu-ky-khong-lap-ke-hoach");
 		},
 		CHO_DB,
 	);
