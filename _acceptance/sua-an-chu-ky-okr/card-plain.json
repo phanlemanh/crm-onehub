@@ -1,46 +1,28 @@
 {
-  "feature_plain": "Quản trị tự dọn được chu kỳ OKR tạo nhầm ngay ở Cài đặt: chu kỳ còn trống thì sửa hoặc gỡ, chu kỳ đã có dữ liệu thì sửa tên hoặc ẩn đi — chu kỳ ẩn không còn làm phiền ai, và dấu vết luôn còn.",
-  "will_do": [
-    { "id": "AC-1", "p": "Sẽ tính ở MỘT chỗ chu kỳ nào sửa, gỡ, ẩn, hiện lại được; màn và máy chủ cùng đọc chỗ đó nên không thể nói khác nhau." },
-    { "id": "AC-2", "p": "Sẽ cho sửa mọi ô (tên, ngày, khoảng nghỉ, ngày cập nhật tuần) của chu kỳ còn trống ở «Lập kế hoạch», vẫn giữ luật quý nằm trong năm và không chồng quý đang hiện." },
-    { "id": "AC-3", "p": "Sẽ cho sửa tên chu kỳ chưa đóng kể cả khi đã có dữ liệu; đổi ngày lúc đó bị từ chối với câu «chỉ sửa được tên»." },
-    { "id": "AC-4", "p": "Sẽ cho gỡ hẳn chu kỳ còn trống; vết tạo và gỡ còn lại; tập «trống» đối chiếu với lược đồ để bảng mới sau này không lọt." },
-    { "id": "AC-9", "p": "Sẽ có bài soi mã giữ danh sách mọi chỗ tự tìm chu kỳ; thêm một chỗ mới mà quên bỏ chu kỳ ẩn là bài đỏ." },
-    { "id": "AC-11", "p": "Sẽ cho quản trị làm cả năm việc trên bảng chu kỳ trong trình duyệt thật: menu «…» đúng việc theo từng hàng, hàng đã ẩn ở cuối với nhãn «Đã ẩn»." },
-    { "id": "AC-13", "p": "Sẽ chỉ thêm một cột «đã ẩn» vào cơ sở dữ liệu; chu kỳ cũ giữ nguyên, không câu lệnh nào sửa hay xoá dữ liệu cũ." }
+  "feature_plain": "Quản trị sửa được chu kỳ OKR tạo nhầm, gỡ được chu kỳ còn trống, và ẩn được chu kỳ đã có dữ liệu (có lý do, hiện lại được); chu kỳ đã ẩn biến khỏi mọi ô chọn, nhắc và ghi mới nhưng dữ liệu và vết vẫn còn.",
+  "decisions": [
+    {
+      "id": "E17",
+      "q": "Chữ trên các hộp và cách dựng màn có đúng luật kho không?",
+      "why": "Ba người chấm đều nói phần đọc được là đạt, chỉ thiếu căn cứ ở bốn chỗ. Máy đã tự kiểm cả bốn: chữ hộp Ẩn nói chu kỳ biến khỏi ô chọn, không nhận ghi, không nhắc, dữ liệu giữ nguyên, hiện lại được; chữ hộp Gỡ nói vết tạo và gỡ vẫn còn (có cả bản tiếng Anh). Bài soi 14 nơi tự tìm chu kỳ đều có bộ lọc chu kỳ ẩn, 0 vi phạm. Bốn thao tác mới đều kiểm đầu vào ngay ở cửa vào. Bảng chu kỳ tính nút từ đúng một luật. Con số 15/6 trong hợp đồng thành 14/9 là do sắp lại khi thi công và đã ghi sổ."
+    }
   ],
-  "wont_do": [
-    { "id": "AC-5", "p": "Sẽ KHÔNG cho ẩn khi thiếu lý do, khi chu kỳ trống (trống thì gỡ), khi năm còn quý đang hiện; không cho hiện lại khi chồng ngày quý đang hiện — kể cả hai quản trị bấm cùng lúc." },
-    { "id": "AC-6", "p": "Chặn thành viên thường và vai «chỉ OKR» làm bốn việc mới, qua màn lẫn qua khoá API." },
-    { "id": "AC-7", "p": "Sẽ KHÔNG bao giờ chọn chu kỳ đã ẩn làm kỳ mặc định; quý ẩn không còn chặn tạo quý đúng; năm đã ẩn không nhận quý mới." },
-    { "id": "AC-8", "p": "Chặn mọi ghi vào chu kỳ đã ẩn; chu kỳ ẩn vắng khỏi nhắc buổi sáng, cập nhật tuần, chụp số, mang sang, chuyển việc, căn chỉnh." },
-    { "id": "AC-10", "p": "Sẽ KHÔNG hiện chu kỳ đã ẩn ở ô chọn kỳ của khu OKR và ô «Thuộc năm»; đường dẫn cũ tới chu kỳ ẩn rơi về kỳ mặc định." },
-    { "id": "OOS-1", "p": "KHÔNG lùi pha — vẫn chỉ có «Mở lại kỳ» như lượt 7." },
-    { "id": "OOS-2", "p": "KHÔNG sửa ngày khi đã có dữ liệu — số đã tính theo ngày cũ sẽ lệch ngầm." },
-    { "id": "OOS-3", "p": "KHÔNG xoá chu kỳ có dữ liệu — khác Perdoo có chủ ý, vì dữ liệu người khác nhập không được mất." },
-    { "id": "OOS-4", "p": "KHÔNG ẩn năm kéo theo quý, không chuyển mục tiêu sang chu kỳ khác, không bộ lọc «hiện chu kỳ đã ẩn» ở khu OKR — để sau." },
-    { "id": "OOS-5", "p": "KHÔNG tự dọn chu kỳ nhầm đang có trên production — anh làm bằng chính màn này sau khi gộp." }
-  ],
-  "scope_plain": "Năm mục cố ý để ngoài, đều vì giữ nguyên tắc «dữ liệu và vết không mất»:",
-  "coverage_plain": [
-    { "i": 0, "p": "Việc làm được (sửa mọi ô · sửa tên · gỡ · ẩn · hiện lại): mỗi việc có tiêu chí và phép đo — AC-1…AC-5, AC-11." },
-    { "i": 1, "p": "Tình trạng chu kỳ (trống lập kế hoạch · trống pha khác · có dữ liệu · đã đóng · đã ẩn): bảng ca viết trước phủ đủ tích — AC-1…AC-5." },
-    { "i": 2, "p": "Người gọi (quản trị · thành viên · «chỉ OKR»): chỉ quản trị làm được — AC-6, AC-11." },
-    { "i": 3, "p": "Nơi đọc chu kỳ: danh sách viết trước 15 chỗ phải bỏ chu kỳ ẩn, 6 chỗ miễn có lý do; bài soi mã so đúng tập — AC-7…AC-10." },
-    { "i": 4, "p": "Áp mọi việc: có vết, khoá chống bấm cùng lúc, màn đọc cờ máy chủ, hai ngôn ngữ, khổ 390 và 1440, cơ sở dữ liệu chỉ thêm." }
-  ],
-  "gap_probe_plain": [
-    { "i": 0, "p": "Chặn ghi mới chỉ thử hai thao tác; đổi pha hay mở Hỏi ý vào chu kỳ ẩn vẫn lọt. Đã sửa: mọi thao tác ghi đều chặn, bài tự dò đủ danh sách." },
-    { "i": 1, "p": "Bài soi mã chỉ tìm theo hai mẫu nên tự xác nhận chính nó; chỗ tìm kỳ theo ngày hay qua bảng con lọt. Đã sửa: danh sách viết trước theo từng chỗ, so đúng tập." },
-    { "i": 2, "p": "Hai quản trị bấm cùng lúc có thể làm vỡ luật (năm ẩn còn quý hiện, hai quý chồng). Đã sửa: thứ tự khoá cố định, thêm bốn ca bấm cùng lúc." },
-    { "i": 3, "p": "Định nghĩa «chu kỳ trống» chép tay; bảng mới sau này trỏ tới chu kỳ sẽ lọt, gỡ ra lỗi hoặc mất dữ liệu. Đã sửa: đối chiếu với lược đồ, lệch là đỏ." },
-    { "i": 4, "p": "Luật sửa ngày có hai cách đọc với chu kỳ trống đã sang «Đang chạy». Đã sửa: một câu theo cờ máy chủ, thêm ca trống đang chạy và trống chấm điểm." }
-  ],
+  "analyst_plain": "",
   "decisions_plain": [
-    { "id": "d-20260930T053653Z-1", "p": "Chọn thêm dấu «đã ẩn» riêng (cách A) — hiện lại trả đúng pha cũ; đổi lại mọi chỗ tự tìm chu kỳ phải lọc thêm." },
-    { "id": "d-20260930T053653Z-2", "p": "KHÔNG sửa ngày khi đã có dữ liệu hoặc đã rời lập kế hoạch — đổi lại quý có dữ liệu mà sai ngày thì ẩn rồi mở quý đúng." },
-    { "id": "d-20260930T053653Z-3", "p": "KHÔNG xoá chu kỳ có dữ liệu, KHÔNG ẩn năm dây chuyền — đổi lại dọn một năm nhầm phải xử từng quý trước." },
-    { "id": "d-20260930T053653Z-4", "p": "Đường dẫn cũ tới mục tiêu trong chu kỳ ẩn vẫn mở được để tra (chỉ đọc) — đổi lại ai giữ đường dẫn vẫn thấy dữ liệu đó." },
-    { "id": "d-20260930T054444Z-5", "p": "Duyệt giao diện trên ảnh bản mẫu bấm được (11 trạng thái × 2 khổ × sáng/tối), không bày hướng thay thế vì menu «…» đã là khuôn sẵn." }
+    { "id": "d-20260930T053653Z-1", "p": "Ẩn bằng một dấu thời gian riêng trên chu kỳ, pha giữ nguyên — đổi lại mọi nơi tự tìm chu kỳ phải thêm bộ lọc chu kỳ ẩn, có bài soi mã canh." },
+    { "id": "d-20260930T053653Z-2", "p": "KHÔNG sửa ngày khi chu kỳ đã có dữ liệu hoặc đã qua lập kế hoạch, chỉ sửa tên — đổi lại quý sai ngày mà có dữ liệu chỉ có đường ẩn rồi tạo quý đúng." },
+    { "id": "d-20260930T053653Z-3", "p": "KHÔNG xoá chu kỳ có dữ liệu và KHÔNG ẩn năm kéo theo quý — đổi lại dọn một năm nhầm phải ẩn từng quý trước." },
+    { "id": "d-20260930T053653Z-4", "p": "Đường dẫn cũ tới mục tiêu trong chu kỳ ẩn vẫn mở được để tra — đổi lại ai giữ đường dẫn vẫn đọc được dữ liệu đó." },
+    { "id": "d-20260930T054444Z-5", "p": "Cổng Phạm vi duyệt trên ảnh bản mẫu bấm được, không bày hướng thay thế — đổi lại không có phương án khác để so." },
+    { "id": "d-20260930T064800Z-7", "p": "Bài kiểm quan hệ giữ chu kỳ đọc mô hình dữ liệu thật của thư viện cơ sở dữ liệu — đổi lại thư viện đổi tên thuộc tính nội bộ thì bài đỏ và phải sửa bài." },
+    { "id": "d-20260930T064800Z-8", "p": "Hàng đã ẩn hiện lý do ẩn lấy từ vết, không thêm ô lý do vào chu kỳ — đổi lại bảng chu kỳ tốn thêm một lần đọc vết." },
+    { "id": "d-20260930T071110Z-9", "p": "Thi công chín việc, mỗi việc một người viết và một người soát riêng — đổi lại tốn thêm công soát cho mỗi việc." },
+    { "id": "d-20260930T080410Z-10", "p": "Sửa lời tiêu chí AC-5 (không mục tiêu nào tạo sau lúc ẩn): mục tiêu tạo trước lúc ẩn vẫn hợp lệ — đổi lại lời hợp đồng đổi sau Cổng Phạm vi, cần anh phê." },
+    { "id": "d-20260930T080410Z-11", "p": "Sửa lời bài đo kỳ mặc định cho khớp tiêu chí đã duyệt: chỉ trống khi mọi chu kỳ đều đã ẩn — đổi lại lời đo đổi sau Cổng Phạm vi." },
+    { "id": "d-20260930T090427Z-12", "p": "Danh sách nơi đọc chu kỳ sắp lại theo mã thật, thành 14 nơi lọc và 9 nơi miễn (thay cho 15 và 6), luật soi không nới — đổi lại việc bảng Cài đặt vẫn thấy chu kỳ ẩn chỉ còn bài kỳ mặc định canh." },
+    { "id": "d-20260930T120000Z-13", "p": "Sau khi gộp nhánh chính, một nơi miễn đổi tên theo mã mới, lý do giữ nguyên — không đổi luật." },
+    { "id": "d-20260930T104717Z-14", "p": "Hai bài đo ghi chu kỳ ẩn khai thêm các ca đã viết (đích căn chỉnh, OKR còn mở của đơn vị, trợ lý) — đổi lại lời đo sửa sau Cổng Phạm vi, không đổi tiêu chí." },
+    { "id": "d-20260930T110425Z-15", "p": "Bài luật năm nút thôi chép công thức từ mã, dùng 40 ca viết tay theo bảng luật — đổi lại lời đo đổi sau Cổng Phạm vi (48 → 40 ca)." },
+    { "id": "d-20260930T110425Z-16", "p": "Người chấm E17 được đưa mã thật thay vì chỉ tài liệu thiết kế — đổi lại phải chấm lại hội đồng." }
   ]
 }
