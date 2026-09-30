@@ -1,6 +1,5 @@
 "use client";
 
-import Send from "@carbon/icons-react/es/Send";
 import {
 	Conversation,
 	ConversationContent,
@@ -9,6 +8,18 @@ import {
 	Message,
 	MessageContent,
 } from "@crm/ui/components/ai-elements/message";
+import {
+	PromptInput,
+	PromptInputBody,
+	PromptInputFooter,
+	PromptInputSubmit,
+	PromptInputTextarea,
+	PromptInputTools,
+} from "@crm/ui/components/ai-elements/prompt-input";
+import {
+	Suggestion,
+	Suggestions,
+} from "@crm/ui/components/ai-elements/suggestion";
 import {
 	Alert,
 	AlertAction,
@@ -19,9 +30,9 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { FieldDescription } from "@crm/ui/components/field";
-import { Icon } from "@crm/ui/components/icon";
 import Logo from "@crm/ui/components/logo";
 import { MessageAvatar } from "@crm/ui/components/message";
+import { SectionHeading } from "@crm/ui/components/section-heading";
 import {
 	Sheet,
 	SheetContent,
@@ -35,7 +46,6 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@crm/ui/components/tabs";
-import { Textarea } from "@crm/ui/components/textarea";
 import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import type { ReactNode } from "react";
 import { BanNhap, type HinhNhap, soDong } from "./ban-nhap";
@@ -117,16 +127,11 @@ function CauHoi({ cau }: { cau: CauHoiMoDau }) {
 	return (
 		<div className="flex flex-col gap-2" data-cau-hoi={cau.id}>
 			<p>{cau.hoi}</p>
-			<fieldset
-				className="flex flex-wrap gap-2"
-				aria-label={`Gợi ý trả lời: ${cau.hoi}`}
-			>
+			<Suggestions aria-label={`Gợi ý trả lời: ${cau.hoi}`}>
 				{cau.goiY.map((g) => (
-					<Button key={g} variant="outline" size="sm" data-goi-y>
-						{g}
-					</Button>
+					<Suggestion key={g} suggestion={g} data-goi-y />
 				))}
-			</fieldset>
+			</Suggestions>
 		</div>
 	);
 }
@@ -136,7 +141,7 @@ function LuotMoDau() {
 		<div className="flex min-w-0 gap-2" data-luot="mo-dau">
 			<AvatarTroLy />
 			<Message from="assistant" className="min-w-0">
-				<MessageContent className="gap-4">
+				<MessageContent>
 					<p translate="no">{MO_DAU.daBiet}</p>
 					{MO_DAU.cauHoi.map((c) => (
 						<CauHoi key={c.id} cau={c} />
@@ -219,29 +224,27 @@ function DaiThieuBoiCanh() {
 function OSoan({ hinh }: { hinh: HinhSoan }) {
 	const khoa = hinh === "dang-tra-loi" || hinh === "het-luot";
 	return (
-		<form
-			className="flex flex-col gap-2 border-t pt-3"
-			data-o-soan={khoa ? "khoa" : "mo"}
-			onSubmit={(e) => e.preventDefault()}
-		>
-			<div className="flex min-w-0 items-end gap-2">
-				<Textarea
-					aria-label="Nhắn Trợ lý OKR"
-					size="sm"
-					placeholder="Trả lời, hoặc nói bạn muốn đổi gì trong bản nháp…"
-					disabled={khoa}
-					translate="no"
-				/>
-				<Button
-					type="submit"
-					size="icon-sm"
-					variant="outline"
-					disabled={khoa}
-					aria-label="Gửi"
-				>
-					<Icon icon={Send} />
-				</Button>
-			</div>
+		<div className="flex flex-col gap-2 border-t pt-3">
+			<PromptInput
+				onSubmit={() => undefined}
+				data-o-soan={khoa ? "khoa" : "mo"}
+			>
+				<PromptInputBody>
+					<PromptInputTextarea
+						aria-label="Nhắn Trợ lý OKR"
+						placeholder="Trả lời, hoặc nói bạn muốn đổi gì trong bản nháp…"
+						disabled={khoa}
+						translate="no"
+					/>
+				</PromptInputBody>
+				<PromptInputFooter>
+					<PromptInputTools />
+					<PromptInputSubmit
+						status={hinh === "dang-tra-loi" ? "streaming" : "ready"}
+						disabled={khoa}
+					/>
+				</PromptInputFooter>
+			</PromptInput>
 			<FieldDescription>
 				{hinh === "het-luot"
 					? `Đã dùng hết ${TRAN.luotMoiCuoc} lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới.`
@@ -254,7 +257,7 @@ function OSoan({ hinh }: { hinh: HinhSoan }) {
 					Mở cuộc mới
 				</Button>
 			) : null}
-		</form>
+		</div>
 	);
 }
 
@@ -268,7 +271,7 @@ function CotHoiThoai({ hinh }: { hinh: HinhSoan }) {
 		>
 			{hinh === "thieu-boi-canh" ? <DaiThieuBoiCanh /> : null}
 			<Conversation>
-				<ConversationContent className="gap-6 px-0">
+				<ConversationContent>
 					<LuotMoDau />
 					{luot.map((l) => (
 						<Luot key={l.id} luot={l} />
@@ -300,10 +303,13 @@ function CotBanNhap({ hinh, tieuDe }: { hinh: HinhSoan; tieuDe: boolean }) {
 			data-cot="ban-nhap"
 		>
 			{tieuDe ? (
-				<div className="flex items-center gap-2">
-					<h3 className="font-medium">Bản nháp</h3>
-					<Badge variant="outline">{soDong(HINH_NHAP[hinh])} dòng</Badge>
-				</div>
+				<SectionHeading
+					actions={
+						<Badge variant="outline">{soDong(HINH_NHAP[hinh])} dòng</Badge>
+					}
+				>
+					Bản nháp
+				</SectionHeading>
 			) : null}
 			<BanNhap hinh={HINH_NHAP[hinh]} />
 		</section>

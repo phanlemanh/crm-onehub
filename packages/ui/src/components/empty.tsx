@@ -2,9 +2,14 @@ import { cn } from "@crm/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const emptyVariants = cva(
-	"group/empty flex w-full min-w-0 flex-col items-center justify-center rounded-lg border-dashed text-center text-balance",
+	"group/empty flex w-full min-w-0 flex-col items-center justify-center rounded-lg text-center text-balance",
 	{
 		variants: {
+			border: {
+				none: "",
+				solid: "border",
+				dashed: "border border-dashed",
+			},
 			width: {
 				default: "",
 				wide: "",
@@ -15,6 +20,7 @@ const emptyVariants = cva(
 			},
 		},
 		defaultVariants: {
+			border: "none",
 			width: "default",
 			size: "default",
 		},
@@ -23,6 +29,7 @@ const emptyVariants = cva(
 
 function Empty({
 	className,
+	border,
 	width = "default",
 	size,
 	...props
@@ -30,9 +37,10 @@ function Empty({
 	return (
 		<div
 			data-slot="empty"
+			data-border={border ?? "none"}
 			data-width={width}
 			data-size={size ?? "default"}
-			className={cn(emptyVariants({ width, size, className }))}
+			className={cn(emptyVariants({ border, width, size, className }))}
 			{...props}
 		/>
 	);

@@ -23,6 +23,7 @@ import type { CarbonIcon } from "@crm/ui/components/icon";
 import { Icon } from "@crm/ui/components/icon";
 import Bot from "@crm/ui/components/icons/bot";
 import Logo from "@crm/ui/components/logo";
+import { NavItem } from "@crm/ui/components/nav-item";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import {
 	Select,
@@ -105,21 +106,10 @@ function RailDieuHuong({ vai }: { vai: Vai }) {
 			{DIEU_HUONG[vai].map((muc) => {
 				const dangMo = muc.key === "okr";
 				return (
-					<Button
-						aria-current={dangMo ? "page" : undefined}
-						className={cn(
-							"text-muted-foreground",
-							dangMo &&
-								"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-						)}
-						key={muc.key}
-						size="icon"
-						title={muc.nhan}
-						variant="ghost"
-					>
+					<NavItem active={dangMo} key={muc.key} size="icon" title={muc.nhan}>
 						<Icon icon={muc.icon} />
 						<span className="sr-only">{muc.nhan}</span>
-					</Button>
+					</NavItem>
 				);
 			})}
 		</nav>
@@ -138,19 +128,10 @@ function DieuHuongMayNho({ vai }: { vai: Vai }) {
 					className="flex flex-1 flex-col gap-1 p-2"
 				>
 					{DIEU_HUONG[vai].map((muc) => (
-						<Button
-							aria-current={muc.key === "okr" ? "page" : undefined}
-							className={cn(
-								"justify-start gap-3 text-muted-foreground",
-								muc.key === "okr" &&
-									"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-							)}
-							key={muc.key}
-							variant="ghost"
-						>
+						<NavItem active={muc.key === "okr"} key={muc.key}>
 							<Icon icon={muc.icon} />
 							<span>{muc.nhan}</span>
-						</Button>
+						</NavItem>
 					))}
 				</nav>
 			</SheetContent>

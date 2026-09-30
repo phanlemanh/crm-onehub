@@ -12,13 +12,14 @@ import {
 } from "@crm/ui/components/empty";
 import { Field, FieldDescription } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
+import { NavItem } from "@crm/ui/components/nav-item";
+import { SectionHeading } from "@crm/ui/components/section-heading";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import {
 	StatusIndicator,
 	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
-import { cn } from "@crm/ui/lib/utils";
 import type { ReactNode } from "react";
 import { TenNguoi } from "../ban-mau-okr/phan-chung";
 import {
@@ -50,20 +51,9 @@ function DanhSachDonVi() {
 			{DON_VI_CHON.map((d) => {
 				const chon = d.id === "kd-bac";
 				return (
-					<Button
-						key={d.id}
-						variant="ghost"
-						size="sm"
-						aria-current={chon ? "true" : undefined}
-						className={cn(
-							"justify-start text-muted-foreground",
-							chon &&
-								"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-						)}
-						translate="no"
-					>
+					<NavItem active={chon} key={d.id} translate="no">
 						{d.ten}
-					</Button>
+					</NavItem>
 				);
 			})}
 		</nav>
@@ -154,7 +144,7 @@ function DauDonVi({ nut }: { nut: HinhNut | null }) {
 
 function ChuaCoOkr() {
 	return (
-		<Empty className="rounded-lg border">
+		<Empty border="solid">
 			<EmptyHeader>
 				<EmptyTitle>
 					<span translate="no">{DON_VI.ten}</span> chưa đặt OKR cho{" "}
@@ -196,7 +186,7 @@ const TONE_CUOC = {
 export function DanhSachCuoc({ rong }: { rong: boolean }) {
 	if (rong) {
 		return (
-			<Empty className="rounded-lg border" data-cuoc="rong">
+			<Empty border="solid" data-cuoc="rong">
 				<EmptyHeader>
 					<EmptyTitle>Đơn vị chưa có cuộc soạn nào</EmptyTitle>
 					<EmptyDescription>
@@ -214,18 +204,20 @@ export function DanhSachCuoc({ rong }: { rong: boolean }) {
 	}
 	return (
 		<section
-			aria-labelledby="cuoc-soan"
+			aria-label="Cuộc soạn cùng Trợ lý"
 			className="flex flex-col gap-3"
 			data-cuoc="danh-sach"
 		>
-			<div className="flex items-center justify-between gap-2">
-				<h4 id="cuoc-soan" className="font-medium">
-					Cuộc soạn cùng Trợ lý · {KY_SOAN.ten}
-				</h4>
-				<p className="text-muted-foreground tabular-nums">
-					{dinhDang.so(CUOC.length)}/{dinhDang.so(TRAN.cuocMoiKy)} cuộc
-				</p>
-			</div>
+			<SectionHeading
+				level={4}
+				actions={
+					<p className="text-muted-foreground tabular-nums">
+						{dinhDang.so(CUOC.length)}/{dinhDang.so(TRAN.cuocMoiKy)} cuộc
+					</p>
+				}
+			>
+				Cuộc soạn cùng Trợ lý · {KY_SOAN.ten}
+			</SectionHeading>
 			<SimpleTable
 				surface="page"
 				columns={[

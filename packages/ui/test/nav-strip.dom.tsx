@@ -8,7 +8,7 @@ import {
 } from "bun:test";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { NavStrip } from "../src/components/nav-item";
+import { NavItem, NavStrip } from "../src/components/nav-item";
 
 const KHUNG_RONG = 390;
 const THE: readonly (readonly [number, number])[] = [
@@ -151,5 +151,36 @@ describe("nav-strip", () => {
 		expect(khung.scrollLeft).toBe(0);
 		expect(khung.tagName).toBe("NAV");
 		expect(khung.getAttribute("aria-label")).toBe("Cài đặt");
+	});
+});
+
+describe("nav-item size icon", () => {
+	test("icon: giữ data-size, aria-current, biến thể secondary, không justify-start", () => {
+		const o = document.createElement("div");
+		document.body.appendChild(o);
+		root = createRoot(o);
+		goc = o;
+		act(() =>
+			root?.render(
+				<NavItem active size="icon" orientation="horizontal">
+					A
+				</NavItem>,
+			),
+		);
+		const nut = o.querySelector('[data-slot="nav-item"]');
+		expect(nut?.getAttribute("data-size")).toBe("icon");
+		expect(nut?.getAttribute("aria-current")).toBe("page");
+		expect(nut?.getAttribute("data-variant")).toBe("secondary");
+		expect(nut?.className).not.toContain("justify-start");
+	});
+	test("sm mặc định: vẫn justify-start", () => {
+		const o = document.createElement("div");
+		document.body.appendChild(o);
+		root = createRoot(o);
+		goc = o;
+		act(() => root?.render(<NavItem>B</NavItem>));
+		const nut = o.querySelector('[data-slot="nav-item"]');
+		expect(nut?.getAttribute("data-size")).toBe("sm");
+		expect(nut?.className).toContain("justify-start");
 	});
 });

@@ -75,8 +75,7 @@ function nutBa(sua: () => void): ProposedChangeAction[] {
 	];
 }
 
-function NhanThe({ nhan }: { nhan: NhanDong | undefined }) {
-	if (!nhan) return null;
+function NhanThe({ nhan }: { nhan: NhanDong }) {
 	return (
 		<Badge variant="outline" data-nhan={nhan}>
 			{CHU_NHAN[nhan]}
@@ -206,6 +205,7 @@ function TheKr({
 				},
 			]
 		: nutBa(() => setDangSua(true));
+	const oSo = <OSoKr kr={kr} thieuDich={thieuDich} khoa={khoa} />;
 	const daBac = ket?.decision === "dismissed";
 	return (
 		<fieldset
@@ -218,13 +218,11 @@ function TheKr({
 				id={`kr-${kr.id}`}
 				data-dong={kr.id}
 				data-loai-dong="kr"
-				label={
-					<>
-						KR <NhanThe nhan={nhan} />
-					</>
-				}
+				label="KR"
+				tag={nhan ? CHU_NHAN[nhan] : undefined}
 				value={kr.ten}
 				rationale={moTaKr(kr)}
+				fields={oSo}
 				decided={ket}
 				actions={ket || khoa ? [] : actions}
 				editing={
@@ -237,7 +235,7 @@ function TheKr({
 						: undefined
 				}
 			/>
-			{daBac ? null : <OSoKr kr={kr} thieuDich={thieuDich} khoa={khoa} />}
+			{ket && !daBac ? oSo : null}
 		</fieldset>
 	);
 }
@@ -261,11 +259,8 @@ function TheMucTieu({
 			id={`mt-${mt.id}`}
 			data-dong={mt.id}
 			data-loai-dong="muc-tieu"
-			label={
-				<>
-					Mục tiêu {mt.stt} · {NHAN_LOAI[loai]} <NhanThe nhan={nhan} />
-				</>
-			}
+			label={`Mục tiêu ${mt.stt} · ${NHAN_LOAI[loai]}`}
+			tag={nhan ? CHU_NHAN[nhan] : undefined}
 			value={mt.ten}
 			rationale={
 				<>

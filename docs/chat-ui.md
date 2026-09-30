@@ -80,10 +80,10 @@ surfaces:
 | Anything that expands — reasoning, a tool call, a source list | `Reasoning` (in tree), plus `Tool` and `Sources` — **fetch first**, see the register |
 | Attachment in the transcript | `MessageAttachment` / `MessageAttachments` |
 | Attachment in the composer | `PromptInputAttachment` / `PromptInputAttachments` — **fetch first** |
-| The composer itself | the `PromptInput` family — **fetch first** |
+| The composer itself | the `PromptInput` family (in tree) |
 | Scrolling the transcript | `Conversation` + `ConversationScrollButton` (in tree) |
 | Empty transcript | `ConversationEmptyState` (in tree) |
-| Clickable prompt starters | `Suggestions` + `Suggestion` — **fetch first** |
+| Clickable prompt starters | `Suggestions` + `Suggestion` (in tree) |
 | Approving a change the AI proposes (accept, edit, reject) | `ProposedChange` in `packages/ui`, built on `Confirmation` |
 | "The agent is thinking" | `ThinkingIndicator` — see the orphan note below |
 
@@ -129,9 +129,9 @@ so both surfaces share one card.
 started: `lib/agent-transcript.ts` already exports `sourcesOf()`, it is covered
 by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 
-### What is in the tree today — 5
+### What is in the tree today — 7
 
-`packages/ui/src/components/ai-elements/` holds exactly five files:
+`packages/ui/src/components/ai-elements/` holds exactly seven files:
 
 | File | Why it is here |
 | --- | --- |
@@ -139,7 +139,9 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 | `message.tsx` | imported by the record sheet's Agent tab and the builder |
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
-| `conversation.tsx` | pulled fresh as the baseline for the scroll measurement; named exemption in the orphan gate, to be removed when Phase 1 wires it to a screen |
+| `conversation.tsx` | pulled fresh as the baseline for the scroll measurement; the OKR drafting prototype (`soan-okr-cung-tro-ly`) imports it, so the orphan gate's exemption is gone |
+| `prompt-input.tsx` | pulled 2026-09-30 for the OKR drafting screen: `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit`; its strings are in `messages.ts` under `promptInput` |
+| `suggestion.tsx` | pulled 2026-09-30 with `prompt-input.tsx`: `Suggestions` and `Suggestion`, the answer chips under an assistant question |
 
 The other 19 vendored files were deleted in the `nen-chat-ai-elements` round —
 nine of them Adopted (`artifact`, `inline-citation`, `model-selector`, `plan`,
@@ -194,7 +196,8 @@ present is not evidence that it is supported. `ThinkingIndicator` —
 ## Local divergence, and re-applying it
 
 Several vendored files need edits to satisfy `docs/design.md` and
-`locale-provider`. The counts below are for the five files in the tree today;
+`locale-provider`. The counts below are for the five files that were in the tree
+before 2026-09-30; `prompt-input` and `suggestion` carry their own entries in the ledger;
 the divergence ledger of record is
 `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, which carries one entry per
 file with a fingerprint of the diverging lines:

@@ -19,15 +19,7 @@ const BO_QUA = new Set([
 	".output",
 ]);
 
-const MIEN_TRU = [
-	{
-		tep: "conversation.tsx",
-		ly_do:
-			"AC-1 và AC-3 của contract.md cố ý giữ bản kéo tươi bằng CLI làm mốc cho phép đo cuộn AC-7 và cho sổ lệch chuẩn AC-8; vòng này không nối nó vào màn nào, nên không khả đạt là đúng hợp đồng chứ không phải rác",
-		het_han:
-			"Phase 1 của docs/plan/chat-ai-elements-rebuild.md nối Conversation vào màn thật thì bỏ mục này",
-	},
-];
+const MIEN_TRU = [];
 
 const boMienTru = new Map(MIEN_TRU.map((m) => [m.tep, m]));
 
