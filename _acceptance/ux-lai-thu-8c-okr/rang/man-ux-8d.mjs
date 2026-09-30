@@ -9,7 +9,6 @@ const HO_SO = "ux-lai-thu-8c-okr";
 const TAM =
 	process.env.BANG_CHUNG ?? join(GOC, ".acceptance-runs", HO_SO, "man");
 
-if (laChieuDo) await chieuDo();
 
 const { default: puppeteer } = await import("puppeteer-core");
 const { chepSangBangChung } = await import("./noi-bang-chung.mjs");
