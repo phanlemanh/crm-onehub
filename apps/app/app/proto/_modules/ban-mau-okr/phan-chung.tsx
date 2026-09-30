@@ -163,12 +163,14 @@ export function KhungUngDung({
 	trang,
 	moDieuHuong = false,
 	nguoi,
+	ky,
 	children,
 }: {
 	vai: Vai;
 	nguoi?: string;
 	trang: TrangOkr;
 	moDieuHuong?: boolean;
+	ky?: string;
 	children: ReactNode;
 }) {
 	return (
@@ -203,7 +205,7 @@ export function KhungUngDung({
 				<RailDieuHuong vai={vai} />
 				<div className="flex min-w-0 flex-1 flex-col px-4 pt-4 pb-6 md:px-6 md:pt-6">
 					<div className="mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6">
-						<DauTrangOkr trang={trang} />
+						<DauTrangOkr trang={trang} ky={ky} />
 						{children}
 					</div>
 				</div>
@@ -213,7 +215,13 @@ export function KhungUngDung({
 	);
 }
 
-function DauTrangOkr({ trang }: { trang: TrangOkr }) {
+function DauTrangOkr({ trang, ky }: { trang: TrangOkr; ky?: string }) {
+	const kyChon = ky ?? KY.ten;
+	const chuKy: readonly string[] = (CHU_KY_KHAC as readonly string[]).includes(
+		kyChon,
+	)
+		? CHU_KY_KHAC
+		: [kyChon, ...CHU_KY_KHAC];
 	return (
 		<header className="flex flex-col gap-3">
 			<div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -222,14 +230,14 @@ function DauTrangOkr({ trang }: { trang: TrangOkr }) {
 				</h2>
 				<div className="ml-auto flex items-center gap-2">
 					<Badge variant="outline">Dữ liệu mẫu</Badge>
-					<Select defaultValue={KY.ten}>
+					<Select defaultValue={kyChon}>
 						<SelectTrigger aria-label="Chu kỳ" size="sm">
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent align="end">
-							{CHU_KY_KHAC.map((ky) => (
-								<SelectItem key={ky} value={ky}>
-									{ky}
+							{chuKy.map((k) => (
+								<SelectItem key={k} value={k}>
+									{k}
 								</SelectItem>
 							))}
 						</SelectContent>

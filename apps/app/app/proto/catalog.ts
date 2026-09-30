@@ -505,6 +505,88 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "soan-okr-cung-tro-ly",
+		ten: "Soạn OKR cùng Trợ lý — hội thoại ghép bảng nháp, nút, cuộc, bối cảnh, số đo",
+		states: [
+			{ id: "ST-soan-nut", nhan: "Khung đơn vị — nút «Soạn OKR cùng Trợ lý»" },
+			{ id: "ST-soan-nut-tiep", nhan: "Khung đơn vị — «Tiếp cuộc đang soạn»" },
+			{ id: "ST-soan-nut-an", nhan: "Khung đơn vị — nút kèm nhãn «chế độ ẩn»" },
+			{ id: "ST-soan-nut-het-cuoc", nhan: "Khung đơn vị — hết 3 cuộc kỳ này" },
+			{ id: "ST-soan-nut-het-tran", nhan: "Khung đơn vị — hết trần tháng" },
+			{ id: "ST-soan-mo-dau", nhan: "Màn soạn — lượt mở đầu, bản nháp trống" },
+			{
+				id: "ST-soan-thieu-boi-canh",
+				nhan: "Màn soạn — dải nhắc thiếu bối cảnh",
+			},
+			{
+				id: "ST-soan-dang-tra-loi",
+				nhan: "Màn soạn — Trợ lý đang soạn, ô soạn khoá",
+			},
+			{
+				id: "ST-soan-ban-nhap",
+				nhan: "Màn soạn — bản nháp 3 Mục tiêu lồng 8 KR",
+			},
+			{ id: "ST-soan-dong-sua", nhan: "Màn soạn — thẻ mở ô sửa" },
+			{
+				id: "ST-soan-dong-da-quyet",
+				nhan: "Màn soạn — thẻ đã nhận / đã bác, thu gọn",
+			},
+			{
+				id: "ST-soan-sua-qua-chat",
+				nhan: "Màn soạn — sửa qua chat: vừa sửa · vừa chuyển · đã bỏ",
+			},
+			{ id: "ST-soan-dong-bi-loai", nhan: "Màn soạn — một KR bị bộ kiểm loại" },
+			{ id: "ST-soan-loi", nhan: "Màn soạn — Trợ lý chưa trả lời được" },
+			{ id: "ST-soan-het-luot", nhan: "Màn soạn — hết 12 lượt của cuộc" },
+			{
+				id: "ST-soan-dua-vao-xac-nhan",
+				nhan: "Màn soạn — hộp xác nhận đưa vào",
+			},
+			{
+				id: "ST-soan-dua-vao-thieu-dich",
+				nhan: "Màn soạn — chưa điền đích cho KR đã nhận",
+			},
+			{
+				id: "ST-soan-da-dua-vao",
+				nhan: "Màn soạn — đã tạo Mục tiêu nháp, bảng khoá",
+			},
+			{
+				id: "ST-soan-dua-vao-loi",
+				nhan: "Màn soạn — đưa vào hỏng, bảng giữ nguyên",
+			},
+			{
+				id: "ST-soan-hep",
+				nhan: "Màn soạn ≤ 640 — hai tab Trò chuyện · Bản nháp",
+			},
+			{ id: "ST-cuoc-danh-sach", nhan: "Danh sách cuộc của đơn vị" },
+			{ id: "ST-cuoc-rong", nhan: "Danh sách cuộc — chưa có cuộc nào" },
+			{ id: "ST-tochuc-mo-ta", nhan: "Tổ chức › đơn vị — ô Mô tả" },
+			{ id: "ST-tochuc-chuc-danh", nhan: "Tổ chức › người — ô Chức danh" },
+			{
+				id: "ST-kho-tao-chien-luoc",
+				nhan: "Kho tài liệu — trang mới loại Chiến lược",
+			},
+			{
+				id: "ST-kho-duyet-canh-bao",
+				nhan: "Kho tài liệu — duyệt có cảnh báo lương thưởng",
+			},
+			{
+				id: "ST-kho-duyet-qua-tran",
+				nhan: "Kho tài liệu — duyệt bị chặn vì quá 20.000 ký tự",
+			},
+			{
+				id: "ST-caidat-nac-soan",
+				nhan: "Cài đặt — nấc Soạn OKR và trần tháng",
+			},
+			{ id: "ST-sodo-soan", nhan: "Số đo — hai cột Bật · Ẩn, cuộc gần đây" },
+			{ id: "ST-sodo-soan-rong", nhan: "Số đo — chưa có cuộc soạn nào" },
+			{
+				id: "ST-sodo-soan-ngan",
+				nhan: "Số đo — ngăn một cuộc, dòng bị loại kèm mã",
+			},
+		],
+	},
+	{
 		slug: "canh-kr-okr",
 		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
 		states: [
