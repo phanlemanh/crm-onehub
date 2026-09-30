@@ -269,6 +269,26 @@ function SheetDescription({
 	);
 }
 
+function SheetRailHeader({ className, ...props }: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="sheet-rail-header"
+			className={cn("flex h-8 items-center justify-between gap-2", className)}
+			{...props}
+		/>
+	);
+}
+
+function SheetRailTitle({ className, ...props }: React.ComponentProps<"p">) {
+	return (
+		<p
+			data-slot="sheet-rail-title"
+			className={cn(sheetTitleVariants({ size: "default" }), className)}
+			{...props}
+		/>
+	);
+}
+
 export {
 	Sheet,
 	SheetBody,
@@ -277,6 +297,8 @@ export {
 	SheetDescription,
 	SheetFooter,
 	SheetHeader,
+	SheetRailHeader,
+	SheetRailTitle,
 	SheetTitle,
 	SheetTrigger,
 	sheetContentVariants,
