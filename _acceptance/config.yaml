@@ -387,7 +387,7 @@ executors:
     sac_pham_vi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran && bun test test/okr-sua-an-chu-ky.spec.ts -t quyen"'
     sac_ky_mac_dinh: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t ky-mac-dinh"'
     sac_an_vang_api: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t an-vang"'
-    sac_an_vang_nen: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/okr-nhac.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-chup.integration.spec.ts -t ky-an"'
+    sac_an_vang_nen: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/okr-nhac.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-chup.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-dich-can-chinh.integration.spec.ts -t ky-an"'
     sac_giai_ky: "cd apps/app && bun test test/okr-giai-ky-an.spec.ts"
     sac_bang_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-sua-an-chu-ky.dom.tsx"
     ckr_viec: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t viec-vong-doi"'

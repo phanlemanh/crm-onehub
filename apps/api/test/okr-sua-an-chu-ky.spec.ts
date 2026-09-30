@@ -13,7 +13,12 @@ import { KET_LUAN_CHON, NOI_MOI, OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { diemTheoThang } from "@crm/validation/okr-khep";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { z } from "zod";
-import type { CapNhatTuanOutput, ChuKyOutput } from "../src/okr/okr.contracts";
+import type {
+	AlignmentTreeOutput,
+	CapNhatTuanOutput,
+	ChuKyOutput,
+	NutCanChinh,
+} from "../src/okr/okr.contracts";
 import { soThuTuc } from "./ma-tran-thu";
 import { donSanCanhKr, mauMoi } from "./okr-canh-kr-san";
 import {
@@ -942,6 +947,47 @@ describe("ky-mac-dinh", () => {
 				}).toEqual({ ca: "hien-A", currentId: a });
 			} finally {
 				setSystemTime();
+			}
+		},
+		CHO_MS,
+	);
+
+	test(
+		"ky-mac-dinh: moi chu ky deu da an thi currentId null; chi con V chua an thi currentId la V",
+		async () => {
+			const v = await taoNam("mac-dinh-con-V", namMoi());
+			await gieoCoMucTieu(v);
+			const anLuc = new Date();
+			const khac = (
+				await db.okrCycle.findMany({
+					where: { anLuc: null, id: { not: v } },
+					select: { id: true },
+				})
+			).map((c) => c.id);
+			const docMacDinh = async () => {
+				const r = await doc<Cycles>("okr.cycles");
+				return {
+					soHien: r.cycles.filter((c) => c.anLuc === null).length,
+					currentId: r.currentId,
+				};
+			};
+			await db.okrCycle.updateMany({
+				where: { id: { in: khac } },
+				data: { anLuc },
+			});
+			try {
+				const chiConV = await docMacDinh();
+				await db.okrCycle.update({ where: { id: v }, data: { anLuc } });
+				const tatCaAn = await docMacDinh();
+				expect({ chiConV, tatCaAn }).toEqual({
+					chiConV: { soHien: 1, currentId: v },
+					tatCaAn: { soHien: 0, currentId: null },
+				});
+			} finally {
+				await db.okrCycle.updateMany({
+					where: { id: { in: [...khac, v] } },
+					data: { anLuc: null },
+				});
 			}
 		},
 		CHO_MS,
@@ -2474,6 +2520,105 @@ describe("an-vang", () => {
 			});
 			ok(await goi("okr.hienChuKy", { id: X.id }), "hien lai X");
 			expect(await tuanCua(), "hien lai X").toEqual([X.u, V.u].sort());
+		},
+		CHO_MS,
+	);
+
+	test(
+		"an-vang: dich can chinh cua muc tieu o X da an khong con muc tieu nao cua X; o V co dung muc tieu cong bo cua V",
+		async () => {
+			const c = await dungChung();
+			const gieoKy = async (ten: string) => {
+				const id = await taoNam(ten, namCu());
+				await dangChay(id);
+				const dich = (await gieoMucTieuCongBo(id, [{}])).objectiveId;
+				const nguon = await nhapPhong(id, c, false);
+				return { id, dich, nguon };
+			};
+			const X = await gieoKy("an-vang-dich-X");
+			const V = await gieoKy("an-vang-dich-V");
+			await an(X.id);
+			const dichCua = async (objectiveId: string) => [
+				...new Set(
+					(
+						await doc<{ targets: { objectiveId: string }[] }>(
+							"okr.alignmentTargets",
+							c.truong.cookie,
+							{ objectiveId },
+						)
+					).targets.map((t) => t.objectiveId),
+				),
+			];
+			expect({
+				x: await dichCua(X.nguon),
+				v: await dichCua(V.nguon),
+			}).toEqual({ x: [], v: [V.dich] });
+		},
+		CHO_MS,
+	);
+
+	test(
+		"an-vang: cay can chinh cua nam bo muc tieu cua quy X da an can chinh len nam, giu muc tieu cua quy V",
+		async () => {
+			const c = await dungChung();
+			const y = namCu();
+			const nam = await taoNam("an-vang-cay", y);
+			const X = await taoQuy("cay-X", nam, `${y}-01-01`, `${y}-03-31`);
+			const V = await taoQuy("cay-V", nam, `${y}-04-01`, `${y}-06-30`);
+			await dangChay(nam);
+			const goc = (await gieoMucTieuCongBo(nam, [{}])).objectiveId;
+			const conCua = async (cycleId: string) => {
+				const id = await nhapPhong(cycleId, c, false);
+				ok(await ganCanChinh(id, goc, c), `can chinh ${cycleId}`);
+				return id;
+			};
+			const oX = await conCua(X);
+			const oV = await conCua(V);
+			await an(X);
+			const cay = await doc<AlignmentTreeOutput>("okr.alignmentTree", "quan", {
+				cycleId: nam,
+			});
+			const ids = new Set<string>();
+			const di = (nut: NutCanChinh) => {
+				ids.add(nut.objectiveId);
+				for (const con of nut.children) di(con);
+			};
+			for (const nut of [...cay.roots, ...cay.chuaCanChinh]) di(nut);
+			expect({ goc: ids.has(goc), x: ids.has(oX), v: ids.has(oV) }).toEqual({
+				goc: true,
+				x: false,
+				v: true,
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"an-vang: OKR mo cua phong ban bo muc tieu o X da an — xem truoc luu tru phong chi co OKR o X khong chan vi OKR, phong co OKR o V chan",
+		async () => {
+			const c = await dungChung();
+			const c2: Chung = {
+				...c,
+				pb: c.pb2,
+				truong: await truongMoi("department", c.pb2, "an-vang-T2"),
+			};
+			const X = await taoNam("an-vang-luu-X", namCu());
+			const V = await taoNam("an-vang-luu-V", namCu());
+			await nhapPhong(X, c, true);
+			await nhapPhong(V, c2, true);
+			await an(X);
+			const lyDoOkr = async (id: string) =>
+				(
+					await doc<{ lyDo: { loai: string; cau: string }[] }>(
+						"org.luuTruXemTruoc",
+						"quan",
+						{ id },
+					)
+				).lyDo.filter((l) => l.loai === "okr").length;
+			expect({ x: await lyDoOkr(c.pb), v: await lyDoOkr(c2.pb) }).toEqual({
+				x: 0,
+				v: 1,
+			});
 		},
 		CHO_MS,
 	);
