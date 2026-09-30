@@ -1,1 +1,3 @@
-driver: puppeteer script (man-khep-ky.mjs) - no browser-tool network reader; man-khep-ky-network.txt was 0 bytes. networkObserved = n-a (driver)
+driver: Bash -> tien-de.mjs -> man-khep-ky.mjs (puppeteer-core noi bo); khong co read_network_requests tu verifier.
+man-khep-ky-network.txt (script tu ghi) = 0 byte (rong).
+networkObserved = n-a (driver)
