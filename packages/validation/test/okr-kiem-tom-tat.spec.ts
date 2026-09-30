@@ -106,8 +106,8 @@ const BANG_CA: CaKiem[] = [
 	{
 		ma: "sai-chieu",
 		ten: "chiều theo mức tự tin",
-		do: { vanBan: "Mức tự tin xuống còn 1 bậc.", nguon: ["n1"] },
-		lanh: { vanBan: "Mức tự tin lên 1 bậc.", nguon: ["n1"] },
+		do: { vanBan: "Mức tự tin xuống so với tuần trước.", nguon: ["n1"] },
+		lanh: { vanBan: "Mức tự tin lên so với tuần trước.", nguon: ["n1"] },
 	},
 	{
 		ma: "noi-ve-nguoi",
@@ -153,6 +153,20 @@ describe("bộ kiểm câu tóm tắt: mỗi mã một ca đỏ và một ca là
 		});
 	}
 
+	test("mọi từ cấm của danh mục không có trong đầu vào đều bị bỏ", () => {
+		const cam = TRO_LY_OKR_TRAN.tuCam.filter((tu) => tu !== "khách hàng");
+		expect(cam.length).toBeGreaterThan(0);
+		for (const tu of cam) {
+			expect(
+				kiemCauTomTat(
+					{ vanBan: `Nhóm nhắc tới ${tu} trong tuần.`, nguon: ["n1"] },
+					GOI,
+					[],
+				),
+			).toEqual({ qua: false, maBo: "tu-cam" });
+		}
+	});
+
 	test("thứ tự bảng: câu trượt nhiều luật mang mã của luật đầu", () => {
 		const ket = kiemCauTomTat(
 			{ vanBan: "Lương giảm 99 so với tuần trước.", nguon: ["n1"] },
@@ -175,6 +189,7 @@ type CaSo = {
 	kr?: { khoiDiem?: number; dich?: number; tienDo?: number };
 	khop: string;
 	lech: string;
+	nguonLech?: Partial<NguonKiem>;
 };
 
 const CA_SO: CaSo[] = [
@@ -246,6 +261,25 @@ const CA_SO: CaSo[] = [
 		lech: "Chỉ số đạt 12.6% hôm nay.",
 	},
 	{
+		dang: "1,200,000",
+		nguon: { giaTri: 1_200_000 },
+		khop: "Chỉ số đạt 1,200,000 hôm nay.",
+		lech: "Chỉ số đạt 1,200,000 hôm nay.",
+		nguonLech: { giaTri: 5 },
+	},
+	{
+		dang: "chuỗi số kỳ quặc 1,2,3",
+		nguon: { giaTri: 5 },
+		khop: "Chỉ số đạt 5 hôm nay.",
+		lech: "Chỉ số đạt 1,2,3 hôm nay.",
+	},
+	{
+		dang: "số bằng mức tự tin nhưng không bằng số tham chiếu nào",
+		nguon: { giaTri: 60, chenhTuTin: 1 },
+		khop: "Mức tự tin lên so với tuần trước, giá trị 60.",
+		lech: "Mức tự tin lên 1 bậc so với tuần trước, giá trị 60.",
+	},
+	{
 		dang: "1.500 đọc kiểu Việt",
 		nguon: { giaTri: 1500 },
 		khop: "Chỉ số đạt 1.500 hôm nay.",
@@ -259,10 +293,17 @@ const CA_SO: CaSo[] = [
 	},
 ];
 
-function goiSo(ca: CaSo): GoiKiemTomTat {
+function goiSo(ca: CaSo, lech = false): GoiKiemTomTat {
 	return {
 		...GOI,
-		nguon: [nguon({ id: "s1", keyResultId: "k1", ...ca.nguon })],
+		nguon: [
+			nguon({
+				id: "s1",
+				keyResultId: "k1",
+				...ca.nguon,
+				...(lech ? ca.nguonLech : {}),
+			}),
+		],
 		krs: [
 			{
 				id: "k1",
@@ -277,12 +318,11 @@ function goiSo(ca: CaSo): GoiKiemTomTat {
 describe("các dạng số: một ca khớp, một ca lệch", () => {
 	for (const ca of CA_SO) {
 		test(ca.dang, () => {
-			const goi = goiSo(ca);
 			expect(
-				kiemCauTomTat({ vanBan: ca.khop, nguon: ["s1"] }, goi, []),
+				kiemCauTomTat({ vanBan: ca.khop, nguon: ["s1"] }, goiSo(ca), []),
 			).toEqual({ qua: true });
 			expect(
-				kiemCauTomTat({ vanBan: ca.lech, nguon: ["s1"] }, goi, []),
+				kiemCauTomTat({ vanBan: ca.lech, nguon: ["s1"] }, goiSo(ca, true), []),
 			).toEqual({ qua: false, maBo: "so-lech" });
 		});
 	}
@@ -292,6 +332,8 @@ describe("các dạng số: một ca khớp, một ca lệch", () => {
 		expect(cachDocSo("đạt 3k")).toEqual([[3, 3000]]);
 		expect(cachDocSo("đạt 1.500")).toEqual([[1500, 1.5]]);
 		expect(cachDocSo("đạt 12,5")).toEqual([[12.5]]);
+		expect(cachDocSo("đạt 1,200,000")).toEqual([[1_200_000]]);
+		expect(cachDocSo("đạt 1,2,3")).toEqual([[]]);
 		expect(cachDocSo("mười hai và 3 triệu")).toEqual([[12], [3_000_000]]);
 	});
 });

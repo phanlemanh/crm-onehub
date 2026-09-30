@@ -1,4 +1,5 @@
 import { chuanHoa, coCum, khongDau, trichSo } from "./okr-kiem-de-xuat";
+import { docSoOkr } from "./okr-kr";
 import type { MaBoCau, TrangThaiTomTat } from "./okr-tom-tat";
 import { type CauTomTat, TRO_LY_OKR_TRAN } from "./okr-tro-ly";
 
@@ -45,11 +46,15 @@ const CHIEU_GIAM = ["giảm", "xuống", "tụt"];
 
 const NGAY_THANG = /(?<![\d/])(\d{1,2})\/(\d{1,2})(?![\d/])/g;
 
-const NGHIN_KIEU_ANH = /\d{1,3}(?:,\d{3})+(?:\.\d+)?/g;
+const CHUOI_SO = /(\d+(?:[.,]\d+)*)(k\b)?/gi;
 
-const HAU_TO_K = /(\d+(?:[.,]\d+)?)k\b/gi;
+const NGHIN_PHAY = /^\d{1,3}(?:,\d{3})+(?:\.\d+)?$/;
 
-const NGHIN_CHAM = /(?<![\d.,])(\d{1,3})\.(\d{3})(?![\d.,])/g;
+const THAP_PHAN_CHAM = /^\d+(?:\.\d+)?$/;
+
+const TRAN_SO = 1e12;
+
+const NGHIN = 1000;
 
 function ghepNgay(ngay: string): string {
 	const [d = "", m = ""] = ngay.split("/");
@@ -63,20 +68,56 @@ function boNgay(chu: string, ngayNguon: readonly string[]): string {
 	);
 }
 
-function vietHoaKieuAnh(chu: string): string {
-	return chu
-		.replace(NGHIN_KIEU_ANH, (s) => s.replace(/,/g, ""))
-		.replace(HAU_TO_K, "$1 nghìn")
-		.replace(NGHIN_CHAM, "$1,$2");
+function docKieuAnh(chuoi: string): number | null {
+	if (NGHIN_PHAY.test(chuoi)) return Number(chuoi.replace(/,/g, ""));
+	return THAP_PHAN_CHAM.test(chuoi) ? Number(chuoi) : null;
+}
+
+function cachDocChuoiSo(chuoi: string, coK: boolean): number[] {
+	const viet = docSoOkr(chuoi);
+	const anh = docKieuAnh(chuoi);
+	const goc = anh ?? viet;
+	const ung = coK ? [viet, goc === null ? null : goc * NGHIN] : [viet, anh];
+	const ra: number[] = [];
+	for (const so of ung) {
+		if (so === null || !Number.isFinite(so) || Math.abs(so) > TRAN_SO) continue;
+		if (!ra.includes(so)) ra.push(so);
+	}
+	return ra;
+}
+
+function dinhDangSo(so: number): string {
+	return Number.isInteger(so)
+		? String(so)
+		: so.toFixed(9).replace(/0+$/, "").replace(".", ",");
+}
+
+function thayChuoiSo(chu: string, chon: (cach: number[]) => number) {
+	let chuaDoc = 0;
+	const van = chu.replace(CHUOI_SO, (_khop, so: string, k?: string) => {
+		const cach = cachDocChuoiSo(so, k !== undefined);
+		if (cach.length === 0) {
+			chuaDoc += 1;
+			return " ";
+		}
+		return dinhDangSo(chon(cach));
+	});
+	return { van, chuaDoc };
 }
 
 export function cachDocSo(chu: string): number[][] {
-	const viet = trichSo(chu);
-	const anh = trichSo(vietHoaKieuAnh(chu));
-	return viet.map((so, i) => {
-		const kia = anh.length === viet.length ? anh[i] : undefined;
+	const dau = thayChuoiSo(chu, (cach) => cach[0] ?? 0);
+	const cuoi = thayChuoiSo(chu, (cach) => cach[cach.length - 1] ?? 0);
+	const viet = trichSo(dau.van);
+	const anh = trichSo(cuoi.van);
+	const chuaDoc: number[][] = Array.from({ length: dau.chuaDoc }, () => []);
+	if (viet.length !== anh.length)
+		return [...viet.map((so) => [so]), [], ...chuaDoc];
+	const ra = viet.map((so, i) => {
+		const kia = anh[i];
 		return kia === undefined || kia === so ? [so] : [so, kia];
 	});
+	return [...ra, ...chuaDoc];
 }
 
 function khop(a: number, b: number): boolean {
@@ -93,7 +134,6 @@ function giaTriThamChieu(dan: NguonKiem[], goi: GoiKiemTomTat): number[] {
 		ra.push(n.giaTri);
 		if (n.truoc !== null) ra.push(n.truoc);
 		if (n.chenhLech !== null) ra.push(Math.abs(n.chenhLech));
-		if (n.chenhTuTin !== null) ra.push(Math.abs(n.chenhTuTin));
 		const kr = goi.krs.find((k) => k.id === n.keyResultId);
 		for (const v of [kr?.khoiDiem, kr?.dich, kr?.tienDo])
 			if (v !== null && v !== undefined) ra.push(v);
