@@ -106,19 +106,47 @@ function NutDai({ children }: { children: ReactNode }) {
 	);
 }
 
+const idLyDoGuiKhoa = (objectiveId: string) => `ly-do-gui-khoa-${objectiveId}`;
+
+export function khoaGuiDuyet(mucTieu: {
+	quyen: { guiDuyet: boolean };
+	traLaiGanNhat: unknown;
+	keyResults: unknown[];
+}): boolean {
+	return (
+		mucTieu.quyen.guiDuyet &&
+		mucTieu.traLaiGanNhat === null &&
+		mucTieu.keyResults.length === 0
+	);
+}
+
+export function DongLyDoGuiKhoa({ objectiveId }: { objectiveId: string }) {
+	const m = okrGioiHanMessages(useLocale()).duyet;
+	return (
+		<p
+			className="text-muted-foreground text-xs"
+			data-ly-do-gui-khoa
+			id={idLyDoGuiKhoa(objectiveId)}
+		>
+			{m.canKr}
+		</p>
+	);
+}
+
 export function NutGuiDuyet({
 	objectiveId,
 	soKr,
 	nguoiDuyet,
+	lyDo,
 }: {
 	objectiveId: string;
 	soKr: number;
 	nguoiDuyet: NguoiDuyet | null;
+	lyDo: "duoi-nut" | "dong-rieng";
 }) {
 	const m = okrGioiHanMessages(useLocale()).duyet;
 	const trpc = useTRPC();
 	const [hoi, setHoi] = useState(false);
-	const idLyDo = useId();
 	const thieuKr = soKr === 0;
 	let seDuyet = "";
 	if (nguoiDuyet === "quan-tri") seDuyet = ` ${m.seDuyetQuanTri}`;
@@ -129,28 +157,27 @@ export function NutGuiDuyet({
 			useGhiDuyet(objectiveId, m.daGui, () => setHoi(false)),
 		),
 	);
+	const nut = (
+		<Button
+			aria-describedby={thieuKr ? idLyDoGuiKhoa(objectiveId) : undefined}
+			data-nut="gui-duyet"
+			disabled={gui.isPending || thieuKr}
+			onClick={() => setHoi(true)}
+			size="sm"
+		>
+			{m.guiDuyet}
+		</Button>
+	);
 	return (
 		<>
-			<span className="flex flex-col gap-1">
-				<Button
-					aria-describedby={thieuKr ? idLyDo : undefined}
-					data-nut="gui-duyet"
-					disabled={gui.isPending || thieuKr}
-					onClick={() => setHoi(true)}
-					size="sm"
-				>
-					{m.guiDuyet}
-				</Button>
-				{thieuKr ? (
-					<span
-						className="text-muted-foreground text-xs"
-						data-ly-do-gui-khoa
-						id={idLyDo}
-					>
-						{m.canKr}
-					</span>
-				) : null}
-			</span>
+			{lyDo === "duoi-nut" && thieuKr ? (
+				<span className="flex flex-col gap-1">
+					{nut}
+					<DongLyDoGuiKhoa objectiveId={objectiveId} />
+				</span>
+			) : (
+				nut
+			)}
 			<ConfirmDialog
 				tone="default"
 				nut={m.hoiGui.nut}
@@ -418,6 +445,7 @@ function DaiBiTraLai({ mucTieu }: { mucTieu: DuyetMucTieu }) {
 							objectiveId={mucTieu.id}
 							soKr={mucTieu.keyResults.length}
 							nguoiDuyet={mucTieu.nguoiDuyetDuKien}
+							lyDo="duoi-nut"
 						/>
 					</NutDai>
 				) : null}

@@ -62,7 +62,13 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { TabDienBien } from "./objective-dien-bien";
-import { coDaiDuyet, DaiDuyet, NutGuiDuyet } from "./objective-duyet";
+import {
+	coDaiDuyet,
+	DaiDuyet,
+	DongLyDoGuiKhoa,
+	khoaGuiDuyet,
+	NutGuiDuyet,
+} from "./objective-duyet";
 import { HopMucHienThi } from "./objective-hien-thi";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
@@ -167,6 +173,7 @@ function HanhDongMucTieu({
 						objectiveId={mt.id}
 						soKr={mt.keyResults.length}
 						nguoiDuyet={mt.nguoiDuyetDuKien}
+						lyDo="dong-rieng"
 					/>
 				) : null
 			) : mt.quyen.congBo && !mt.quyen.duyet ? (
@@ -772,6 +779,11 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 							{coDaiDuyet(mt) ? (
 								<DetailSheetSection>
 									<DaiDuyet mucTieu={mt} />
+								</DetailSheetSection>
+							) : null}
+							{ghiDuoc(mt) && khoaGuiDuyet(mt) ? (
+								<DetailSheetSection>
+									<DongLyDoGuiKhoa objectiveId={mt.id} />
 								</DetailSheetSection>
 							) : null}
 							<SoMucTieu mt={mt} />

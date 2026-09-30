@@ -655,9 +655,10 @@ const ngayThang = (d) => {
 	return `${lay("day")}/${lay("month")}`;
 };
 
-async function haiKho(trang, ten, conMat) {
+async function haiKho(trang, ten, conMat, moLai) {
 	for (const rong of DO.kho) {
 		await kho(trang, rong);
+		if (moLai && !(await dangHien(trang, conMat))) await moLai();
 		if (
 			conMat &&
 			!(await coMat(trang, conMat, `${ten} ${rong}: con ${conMat}`))
@@ -666,6 +667,14 @@ async function haiKho(trang, ten, conMat) {
 		await chup(trang, `E15-${ten}-${rong}.png`);
 	}
 	await kho(trang, DO.rong);
+	if (moLai && !(await dangHien(trang, conMat))) {
+		await moLai();
+		await coMat(trang, conMat, `${ten}: mo lai ${conMat}`);
+	}
+}
+
+async function dangHien(trang, sel) {
+	return trang.evaluate((s) => window.__tim(s).length > 0, sel);
 }
 
 async function soMucTieuQ4(pb) {
@@ -810,7 +819,9 @@ async function buocDuyet() {
 	const mong = dien(CHU.duyet.seDuyet, { nguoi: ten.duyet });
 	const hoiChu = await chuSel(t, "[role='alertdialog']");
 	kiem(`${nhom}: hop co «${mong}» (thay «${hoiChu}»)`, hoiChu.includes(mong));
-	await haiKho(t, nhom, "[role='alertdialog']");
+	await haiKho(t, nhom, "[role='alertdialog']", () =>
+		bam(t, `${SHEET(K.nhap)} [data-nut='gui-duyet']`),
+	);
 	await bamChu(t, "[role='alertdialog'] button", CHU.duyet.hoiGui.nut);
 	await doi(
 		t,
@@ -864,17 +875,19 @@ async function buocDuyet() {
 	await haiKho(t, nhom, dong);
 
 	nhom = "vet-tra-lai";
-	await bamEl(
-		await t.evaluateHandle(
-			(s, c) =>
-				window
-					.__tim(`${s} [role='tab']`)
-					.find((e) => e.innerText.trim().startsWith(c)) ?? null,
-			SHEET(K.nhap),
-			CHU_OKR.sheet.tabVet,
-		),
-		"tab Vet",
-	);
+	const moVet = async () =>
+		bamEl(
+			await t.evaluateHandle(
+				(s, c) =>
+					window
+						.__tim(`${s} [role='tab']`)
+						.find((e) => e.innerText.trim().startsWith(c)) ?? null,
+				SHEET(K.nhap),
+				CHU_OKR.sheet.tabVet,
+			),
+			"tab Vet",
+		);
+	await moVet();
 	const vet = `${SHEET(K.nhap)} [data-ly-do-vet]`;
 	await coMat(t, vet, `${nhom}: dong Tra lai co ly do`);
 	const chuVet = await chuSel(t, vet);
@@ -882,7 +895,7 @@ async function buocDuyet() {
 		`${nhom}: ly do trong Vet «${LY_DO_TRA}» (thay «${chuVet}»)`,
 		chuVet === LY_DO_TRA,
 	);
-	await haiKho(t, nhom, vet);
+	await haiKho(t, nhom, vet, moVet);
 	await t.close();
 }
 

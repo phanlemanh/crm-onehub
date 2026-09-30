@@ -585,7 +585,7 @@ describe("luu-tru", () => {
 	const pb = (k: string) => idMau("pb", `u8d-${k}`);
 	const nguoiMoi = (k: string) => idMau("nguoi", `u8d-${k}`);
 	const KHUON = idMau("khuon", "u8d-e");
-	const KY_VONG: Record<string, number> = { a: 2, b: 1, c: 1, e: 1, d: 0 };
+	const KY_VONG = { a: 2, b: 1, c: 1, e: 1, d: 0 } satisfies Record<string, number>;
 
 	beforeAll(async () => {
 		for (const [i, k] of ["a", "b", "c", "e", "d"].entries())
