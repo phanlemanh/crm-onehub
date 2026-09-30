@@ -1797,7 +1797,7 @@ type ChuoiAn =
 	| "soChup"
 	| "binhLuan"
 	| "loiNhan";
-type SanDoc = SanAn & { nguoiK: string; chuG: string };
+type SanDoc = SanAn & { nguoiK: string; chuG: string; hoiY: string };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
@@ -1884,6 +1884,13 @@ const THU_TU_DOC_OKR = {
 		khac: 404,
 		ma: "keyResultId",
 	},
+	"okr.hoiY": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.hoiYDoPhu": {
+		vao: (s) => ({ hoiYId: s.hoiY }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.hoiYNhan": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.hopTuan": {
 		vao: (s) => ({ cycleId: s.ky, unit: { loai: "pb", id: s.pb } }),
 		K: "vang",
@@ -2388,7 +2395,25 @@ describe("hien-thi-an", () => {
 				Q: await khoaApiCua(cookie.Q),
 			};
 			const gieo = await gieoMucTieuAn(goiGieoAn, nguoi, id, namVN());
-			const san = { ...gieo, nguoiK: nguoi.k.id, chuG: nguoi.truong.id };
+			const luc = new Date();
+			const hoiY = await db.okrHoiY.create({
+				data: {
+					cycleId: gieo.ky,
+					cauHoi: "Năm tới công ty nên dồn sức vào điều gì?",
+					soLieu: [{ nhan: "Doanh thu năm", giaTri: "186 tỷ", ghiChu: "" }],
+					hanLuc: luc,
+					nguoiChonUserId: nguoi.quanTri.id,
+					taoBoiUserId: nguoi.quanTri.id,
+					congBoLuc: luc,
+					createdAt: luc,
+				},
+			});
+			const san = {
+				...gieo,
+				nguoiK: nguoi.k.id,
+				chuG: nguoi.truong.id,
+				hoiY: hoiY.id,
+			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
 				const bc: BoiCanhAn = {
@@ -2450,6 +2475,7 @@ describe("hien-thi-an", () => {
 				).toEqual([]);
 			} finally {
 				setSystemTime();
+				await db.okrHoiY.deleteMany({ where: { id: san.hoiY } });
 				await donMucTieuAn(san, tatCaNguoi);
 			}
 		},

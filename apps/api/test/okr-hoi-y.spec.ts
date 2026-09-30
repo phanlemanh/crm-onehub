@@ -3807,6 +3807,7 @@ describe("cong-bo", () => {
 							kind: "cam-ket",
 							level: "onehub",
 							status: "nhap",
+							hienThi: "cong-khai",
 							tuHoiY: g.h,
 						},
 					})),
