@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { idMau } from "../scripts/okr-mau/nap";
 import type {
 	AlignmentTreeOutput,
@@ -9,7 +10,10 @@ import type {
 	NutCanChinh,
 } from "../src/okr/okr.contracts";
 import { cauVuotTran } from "../src/okr/okr-tai-co-cau.service";
-import type { DanhSachOutput } from "../src/okr/okr-xem.contracts";
+import type {
+	DanhSachOutput,
+	ToanCanhOutput,
+} from "../src/okr/okr-xem.contracts";
 import { type DauVaoHopLe, goiTrpc } from "./ma-tran-thu";
 import {
 	batDauMau,
@@ -282,10 +286,10 @@ function donViCuaKhoa(khoa: string): DauVaoHopLe {
 
 async function soThongKe(ai: string) {
 	const c = phien[ai] ?? "";
-	const tc = ok<{
-		tongQuan: unknown;
-		hang: { key: string; tienDo: number | null; soMucTieu: number }[];
-	}>(await hoi("okr.toanCanh", { cycleId: KY }, c), "toanCanh");
+	const tc = ok<ToanCanhOutput>(
+		await hoi("okr.toanCanh", { cycleId: KY }, c),
+		"toanCanh",
+	);
 	return {
 		tienDoGop: tc.hang
 			.filter(
@@ -385,7 +389,39 @@ describe("dem-don-vi", () => {
 			expect(conLai.map((x) => JSON.stringify(x))).toEqual(
 				conLai.map(() => JSON.stringify(dau)),
 			);
-			expect({ ...dau, sucKhoe: sk }).toEqual(SO_TRUOC);
+			const cay = ok<{
+				divisions: {
+					id: string;
+					name: string;
+					departments: { id: string; name: string }[];
+				}[];
+				chuaXep: { id: string; name: string }[];
+			}>(await hoi("org.tree", {}, phien.qt ?? ""), "org.tree");
+			const ngoaiMau = [
+				...cay.divisions.flatMap((b) => [b, ...b.departments]),
+				...cay.chuaXep,
+			]
+				.filter((d) => !d.id.startsWith(OKR_MAU.tienTo))
+				.map((d) => d.name);
+			const sapXep = (x: readonly string[]) => [...x].sort();
+			expect({
+				...dau,
+				toanCanh: {
+					...dau?.toanCanh,
+					donViChuaDat: sapXep(dau?.toanCanh.donViChuaDat ?? []),
+				},
+				sucKhoe: sk,
+			}).toEqual({
+				...SO_TRUOC,
+				toanCanh: {
+					...SO_TRUOC.toanCanh,
+					tongDonVi: SO_TRUOC.toanCanh.tongDonVi + ngoaiMau.length,
+					donViChuaDat: sapXep([
+						...SO_TRUOC.toanCanh.donViChuaDat,
+						...ngoaiMau,
+					]),
+				},
+			});
 		},
 		CHO_DB,
 	);
