@@ -225,6 +225,9 @@ function CreateCampaignForm() {
 				</form>
 
 				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">{m.create.cancel}</Button>
+					</SheetClose>
 					<Button
 						type="submit"
 						form="create-campaign"
@@ -235,9 +238,6 @@ function CreateCampaignForm() {
 						{create.isPending ? <Spinner /> : null}
 						{create.isPending ? m.create.submitting : m.create.submit}
 					</Button>
-					<SheetClose asChild>
-						<Button variant="outline">{m.create.cancel}</Button>
-					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
