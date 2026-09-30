@@ -6,7 +6,7 @@ evals:
     executor: test
     cmd: config:executors.test.sac_viec
     paths: [packages/validation/src/okr-chu-ky.ts, packages/validation/test/okr-chu-ky-viec.spec.ts]
-    expected: "exit 0; BẢNG CA VIẾT TRƯỚC là tích đủ pha (4) × trống/có dữ liệu (2) × đã ẩn/chưa (2) × loại (năm 0 quý hiện, năm ≥1 quý hiện, quý) = 48 ca, sinh bằng vòng lồng trên bốn hằng khai trong bài (không đọc lại bảng từ mã nguồn), mỗi ca so toEqual cả object năm cờ với kỳ vọng tra từ một bảng luật viết tay trong bài theo design doc; bài khẳng định số ca đã chạy = 48. Ca ghim riêng: trống lập kế hoạch → {suaMoiO true, suaTen true, go true, an false, hienLai false}; có dữ liệu đang chạy → {false, true, false, true, false}; có dữ liệu đã đóng → {false, false, false, true, false}; đã ẩn bất kỳ → chỉ hienLai true; năm có dữ liệu còn 1 quý hiện → an false. CHIỀU ĐỎ: bản sao viecChuKy cho suaTen true ở da-dong → ca đã đóng đỏ, bài in tình trạng và hai object."
+    expected: "exit 0; BẢNG CA VIẾT TRƯỚC là 40 ca phân biệt — pha (4) × đã ẩn/chưa (2) × năm dạng dữ liệu (trống năm, trống quý, có dữ liệu năm 0 quý hiện, có dữ liệu năm ≥1 quý hiện, có dữ liệu quý; «trống mà còn quý hiện» không tồn tại) — viết THẲNG thành 40 dòng trong bài, mỗi dòng mang sẵn object năm cờ kỳ vọng gõ tay theo bảng luật của design doc (không có hàm dựng kỳ vọng, không biểu thức chép thân viecChuKy); bài khẳng định 40 dòng và không hai dòng trùng tình trạng. Ca ghim riêng: trống lập kế hoạch → {suaMoiO true, suaTen true, go true, an false, hienLai false}; có dữ liệu đang chạy → {false, true, false, true, false}; có dữ liệu đã đóng → {false, false, false, true, false}; đã ẩn bất kỳ → chỉ hienLai true; năm có dữ liệu còn 1 quý hiện → an false. CHIỀU ĐỎ: bản sao viecChuKy cho suaTen true ở da-dong → ca đã đóng đỏ, bài in tình trạng và hai object."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -161,7 +161,7 @@ evals:
       điều kiện rải rác; menu, sheet sửa và hộp ẩn có dựng bằng thành phần packages/ui
       (bậc 1–2) thay vì vẽ tay; và chữ trên màn có nói rõ hệ quả (ẩn thì biến khỏi ô
       chọn, không nhắc; gỡ thì vết còn) như design doc?
-    inputs: [docs/superpowers/specs/2026-09-30-sua-an-chu-ky-okr-design.md, _acceptance/sua-an-chu-ky-okr/contract.md, _acceptance/sua-an-chu-ky-okr/design-pass.md]
+    inputs: [docs/superpowers/specs/2026-09-30-sua-an-chu-ky-okr-design.md, packages/validation/src/okr-chu-ky.ts, packages/db/src/okr-chu-ky-hien.ts, apps/api/src/okr/okr-chu-ky.service.ts, apps/api/src/okr/okr.contracts.ts, "apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx", "apps/app/app/(app)/[slug]/settings/okr/sheet-sua-chu-ky.tsx", "apps/app/app/(app)/[slug]/settings/okr/hop-thoai-an-chu-ky.tsx", "apps/app/app/(app)/[slug]/settings/okr/hoi-chu-ky.tsx", _acceptance/sua-an-chu-ky-okr/rang/noi-doc-chu-ky.json, _acceptance/sua-an-chu-ky-okr/evidence/E14-step5.png, _acceptance/sua-an-chu-ky-okr/contract.md, _acceptance/sua-an-chu-ky-okr/design-pass.md]
     expected: >-
       PASS khi cả năm vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
       tệp và dòng. FAIL khi một vế sai.
