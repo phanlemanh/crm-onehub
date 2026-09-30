@@ -1,0 +1,195 @@
+schema_version: 1
+slug: hydrat-giai-doan-deals
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.hgd_e1
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/test/deals-giai-doan-hydrat.dom.tsx"
+    expected: |
+      Moi lenh chay kem hai ca "e0" (doi chung duong cua bo nghe loi hydrat, cung ham hydratCay): cay lech chu
+      (<p>a</p> may chu, <p>b</p> trinh duyet) -> danh sach loi chua "Hydration failed because the server rendered text
+      didn't match the client"; cay lech mot thuoc tinh data-tone -> bo nghe console.error bat dong co "data-tone".
+      Ca "e1" cua deals-giai-doan-hydrat.dom.tsx: cay giai doan (CreateDealSheet dong, roi HydrationBoundary mang
+      giaiDoan.list = [QUALIFIED_TO_BUY «Qualified to buy» OPEN, CLOSED_WON «Closed won» WON], trong do
+      DealStageIndicator stage="QUALIFIED_TO_BUY") renderToString voi QueryClient trong. Assert: HTML chua
+      'data-tone="info"' tren span[data-slot=status-indicator] va chu «Qualified to buy»; HTML sau khi bo moi the
+      (chi con nut chu) khong chua "QUALIFIED_TO_BUY".
+      CHIEU DO (cung fixture, E1d): create-deal-sheet.tsx cua 6e431a01 -> e1 fail, HTML co 'data-tone="neutral"' va
+      nut chu "QUALIFIED_TO_BUY".
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.hgd_e2
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/test/deals-giai-doan-hydrat.dom.tsx"
+    expected: |
+      Ca "e2": HTML may chu cua e1; hydrateRoot cung cay voi QueryClient trinh duyet da setQueryData giaiDoan.list
+      (mo phong luot tai cua dau trang ve truoc khi vung bang hydrat). Bat onRecoverableError + console.error loc
+      /hydrat|didn't match|Hydration/i. Assert: danh sach loi BANG []; o giai doan sau hydrat co innerText
+      «Qualified to buy» va data-tone="info".
+      CHIEU DO (E1d): ban truoc vong -> fail voi "Hydration failed because the server rendered text didn't match the
+      client" (may chu ve ma tho, trinh duyet ve nhan).
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.hgd_e3
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/test/deals-giai-doan-hydrat.dom.tsx"
+    expected: |
+      Ca "e3": HTML may chu cua e1 dat vao vung chua; TRUOC hydrateRoot doc chu ban dau cua o giai doan va gan
+      MutationObserver (characterData + childList + subtree) len vung chua, ghi moi gia tri chu cua o qua suot
+      act(hydrateRoot) voi QueryClient trinh duyet trong. Assert: chuoi [chu ban dau, ...moi gia tri ghi duoc] BANG
+      toan «Qualified to buy» (khong phan tu nao la "QUALIFIED_TO_BUY"); danh sach loi hydrat BANG [].
+      CHIEU DO (E1d): ban truoc vong -> fail, chuoi ghi duoc bat dau bang "QUALIFIED_TO_BUY" roi moi «Qualified to buy»
+      (du lieu bi hoan sang effect vi ngan dong da tao truy van).
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.hgd_e4
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/test/deals-giai-doan-hydrat.dom.tsx"
+    expected: |
+      Ca "e4": render CreateDealSheet voi NuqsTestingAdapter khong co tham so mo; queryCache.getAll() khong co khoa nao
+      trong ["giaiDoan.list","users.list","users.me","currency.settings"] (ma tran viet truoc: bon khoa, bon assert).
+      Doi chung duong cung fixture: render voi tham so mo ngan -> du bon khoa trong cache, va o Giai doan cua form hien
+      nhan cua giai doan mo dau tien «Qualified to buy».
+      CHIEU DO (E1d): ban truoc vong -> fail, thong diep liet khoa "giaiDoan.list" co trong cache khi ngan dong.
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.hgd_e5
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/test/deals-giai-doan-hydrat.dom.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+      - "apps/app/test/o-so-tien.dom.tsx"
+    expected: |
+      Ca "e5" (ma tran viet truoc, sau assert, moi dong in "ok: <o>"): (a) mo ngan, go ten «Hợp đồng kho lạnh», dong
+      ngan bang cach doi tham so URL ve dong (khong qua nut Huy, de bo giu cho khong chen hop hoi), mo lai -> o ten van
+      la «Hợp đồng kho lạnh». (b) dien ten, so tien, chon tien te USD, ngay chot; tao thanh cong (deals.create gia tra
+      {id,name}); mo lai -> ten trong, so tien trong, tien te ve tien te bao cao cua workspace (VND, khong con USD),
+      ngay chot trong. (c) cong ty giu nguyen o hai truong hop: CreateDealSheet companyId="c1" -> doi so gui di lan
+      tao sau van companyId "c1"; khong companyId, nguoi chon cong ty "c2" qua CompanyPicker gia -> lan tao sau van
+      "c2". Kem hai tep test cu cua ngan (tien-te-chua-tai.dom.tsx, o-so-tien.dom.tsx) xanh.
+      CHIEU DO: ban sao bo dong xoa tien te trong ham sau khi tao -> e5 fail voi thong diep co "tien te"; ban sao dat
+      nhap vao CreateDealBody (con) -> e5 fail o dong (a).
+  - id: E1d
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.hgd_chieu_do_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/test/deals-giai-doan-hydrat.dom.tsx"
+      - "_acceptance/hydrat-giai-doan-deals/rang/chieu-do-dom.mjs"
+    expected: |
+      exit 0; chieu-do-dom.mjs dung ban sao cay (git worktree o HEAD, bun install --frozen-lockfile), thay
+      create-deal-sheet.tsx bang ban o commit ghim 6e431a01 (truoc vong), roi chay RIENG tung ca e1, e2, e3, e4 cua
+      deals-giai-doan-hydrat.dom.tsx (moi ca mot lenh -t '<ca> '). Moi ca phai: thoat khac 0, co dong "(fail)" cua dung
+      ca do, va thong bao loi cua chinh lan chay do chua chuoi ghim cua no — e1 'data-tone="neutral"', e2 "Hydration
+      failed", e3 "QUALIFIED_TO_BUY" trong chuoi chu ghi duoc, e4 "giaiDoan.list". Ten ca khong chua chuoi ghim nao
+      (script kiem truoc). Tep test chi nhap CreateDealSheet tu tep ngan; dau ra co "SyntaxError", "Export named" hay
+      "Cannot find" -> exit 2 (loi nap, khong tinh la do dung). Du bon ca -> in "DO DUNG GHIM: e1 e2 e3 e4" exit 0;
+      thieu -> "LOT: <ca>" exit 1. Doi chung duong cung ban sao: truoc khi thay tep, bon ca xanh — khong thi exit 1
+      "ban sao do sai truoc khi pha".
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hgd_man_deals
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng qua tien-de.mjs; dev:session mot nguoi moi, vai admin, gan vao workspace; doc giaiDoan.list qua API cua phien; tao qua API ba deal ma rieng cua luot, moi deal mot giai doan thuoc ba loai OPEN, WON, LOST (thieu loai nao trong giaiDoan.list -> exit 2)"
+      - "Buoc HTML: fetch HTML may chu /deals?q=<ma> va /deals?view=board&q=<ma> (khong JS); bo <script>; gom nut chu; ma tho = id giai doan khac nhan cua no"
+      - "Doi chung bo nghe: mot lan tai /deals voi evaluateOnNewDocument doi chu o giai doan dau tien truoc khi React hydrat -> bo nghe phai dem dung >= 1 loi hydrat"
+      - "Buoc trinh duyet: LUOT (mac dinh 6) luot x hai man o 1440, bo nghe gan truoc goto, networkidle0 roi cho 1.5 s; gom pageerror + console.error khop /Hydration failed|didn't match|hydrated but some attributes/i"
+      - "Luot dau /deals: chu cac o [data-slot=status-indicator] trong bang sau tai bang chu trong HTML may chu; chup anh bang -> hgd-deals-1440.png, hgd-board-1440.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "apps/app/components/crm/stage-change.tsx"
+      - "apps/app/lib/giai-doan.ts"
+      - "_acceptance/hydrat-giai-doan-deals/rang/man-deals.mjs"
+    expected: |
+      exit 0; man-deals.mjs in "man-deals: <n> kiem, 0 hong", "doi chung bo nghe: <k> loi" voi k >= 1, va
+      "loi hydrat: 0/<m> luot" voi m = 2 x LUOT. Kiem HTML may chu (ma tran viet truoc, in tung dong):
+      /deals?q=<ma>: tra 200; so o [data-slot=status-indicator] trong bang BANG 3 (ba deal cua luot) va BANG so dong
+      deals.list tra cho cung phien va cung q; ba o mang dung (nhan, data-tone) theo loai — OPEN info, WON success,
+      LOST error — moi loai dung mot o; khong nut chu nao la ma tho ("ma tho: 0").
+      /deals?view=board&q=<ma>: tra 200; khong nut chu nao la ma tho; moi tieu de cot la nhan cua mot giai doan trong
+      giaiDoan.list va so cot BANG so giai doan cua bang Kanban.
+      Sau tai: danh sach chu o giai doan trong bang BANG danh sach trong HTML may chu (ba nhan).
+      Anh o .acceptance-runs/hydrat-giai-doan-deals/evidence/, vong S4 chep sang evidence/ cua ho so va doc anh: cot
+      Giai doan hien nhan chu, khong ma viet hoa co gach duoi.
+      Khong phien do -> exit 2 "KHONG DO DUOC: ...", khong bao gio "0 hong". Doi chung bo nghe dem 0 -> hong
+      "bo nghe khong thay loi hydrat co y".
+      CHIEU DO (E6d): ban sao voi create-deal-sheet.tsx cua 6e431a01 -> exit 1 voi "html may chu /deals: ma tho
+      <ID>" — tat dinh vi may chu truoc vong luon ve ma tho.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+  - id: E6d
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.hgd_man_deals_chieu_do
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "_acceptance/hydrat-giai-doan-deals/rang/man-deals.mjs"
+    expected: |
+      exit 0; man-deals.mjs --chieu-do dung ban sao cay o HEAD, thay create-deal-sheet.tsx bang ban 6e431a01, chay
+      chinh man-deals.mjs qua tien-de trong ban sao voi LUOT=1; in "DO DUNG GHIM: ma 1, in «html may chu /deals: ma tho
+      <ID>»" va exit 0 khi ban sao thoat 1 va in dong ghim; ban sao thoat 0 hoac khong in dong ghim -> "LOT: ..." exit 1;
+      ban sao thoat 2 -> exit 2.
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kto_man_giu
+    steps:
+      - "Chay dung lenh kto_man_giu cua E17 ho so khung-tao-okr-nhu-deal (sau khi go lop boc): phien do rieng kto-e17 qua tien-de.mjs, nguyen kich ban man-giu-cho.mjs cua hop-thoai-giu-cho-dang-nhap (bay buoc, buoc 3 mo /deals)"
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "_acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"
+      - "_acceptance/config.yaml"
+    expected: |
+      Mot lan chay chung ca AC-7 lan phan "lenh chay duoc" cua AC-8: lenh la chinh kto_man_giu.
+      exit 0; dau ra co "buoc 1: dat" den "buoc 7: dat", "man-giu-cho: dat", va KHONG co dong "loi console app".
+      Anh cua kich ban o .acceptance-runs/hop-thoai-giu-cho-dang-nhap/evidence/ (hg-deal-huy.png la buoc 3 tren /deals).
+      Lan chay tren 9cda3569 (truoc vong) thoat 1 voi "loi console app: 1" / "/deals: pageerror Error: Hydration failed
+      because the server rendered text didn't match the client" — chieu do chap chon theo tai may, khong tat dinh;
+      chieu do tat dinh cua cung lop loi la E6d.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.hgd_go_boc
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/khung-tao-okr-nhu-deal/**"
+      - "_acceptance/hydrat-giai-doan-deals/rang/go-boc.mjs"
+    expected: |
+      exit 0; go-boc.mjs doc _acceptance/config.yaml va ho so khung-tao-okr-nhu-deal, kiem ma tran viet truoc (5 assert,
+      in tung dong "ok: <ten>"): (1) executors.script.kto_man_giu chua "man-giu-cho.mjs" va chua "tien-de.mjs";
+      (2) kto_man_giu khong chua "giu-cho-han-che"; (3) _acceptance/khung-tao-okr-nhu-deal/rang/giu-cho-han-che.mjs khong
+      ton tai; (4) expected va paths cua E17 trong evals.yaml khong chua "giu-cho-han-che" va khong chua "hydrat";
+      (5) contract.md cua khung-tao-okr-nhu-deal co dong nhac "hydrat-giai-doan-deals".
+      CHIEU DO (cung ham doc, --goc <thu muc>): ban sao ho so va config tai 6e431a01 -> exit 1 in
+      "hong: kto_man_giu con lop boc" va "hong: giu-cho-han-che.mjs con".
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+    expected: |
+      bunx turbo run check-types --force exit 0 (test, lint, lint:slop, build chay moi round qua suite_keys).
+      CHIEU DO: ban sao CreateDealBody bo mot prop bat buoc cua cha -> check-types exit != 0 voi TS2741 tro vao
+      create-deal-sheet.tsx.
