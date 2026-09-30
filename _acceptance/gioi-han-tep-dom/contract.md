@@ -5,7 +5,7 @@ slug: gioi-han-tep-dom
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-30-gioi-han-tep-dom-design.md
 approved_by:
 approved_at:
@@ -54,3 +54,9 @@ Không gian nhỏ, viết tay:
 ## Notes
 
 - Không tệp DOM nào treo trong run 36724007135; chi tiết đo ở design doc.
+
+### Known limits (Cổng Bằng chứng, 2026-09-30)
+
+- Ngoài-1: tệp quá giờ chỉ bị giết đúng tiến trình `bun test` của nó; tiến trình con do tệp đó sinh ra (nếu có) sống tiếp và có thể giữ job CI đứng. Hôm nay không tệp DOM nào sinh tiến trình con.
+- Ngoài-2: tệp chết vì tín hiệu khác quá giờ (sập, hết bộ nhớ) được báo là «đỏ (mã 1)», mất tên tín hiệu. Hành vi có từ trước vòng này.
+- Ngoài-3: trong bộ đo `chay-tung-tep-dom.spec.ts`, nếu không sinh được `bun -e` thì `pid` rơi về 0 và đồng hồ riêng gửi tín hiệu tới nhóm tiến trình của chính lượt test. Chỉ xảy ra khi máy không chạy được `bun`.
