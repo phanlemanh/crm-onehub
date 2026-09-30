@@ -5,7 +5,7 @@ slug: hydrat-giai-doan-deals
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-30-hydrat-giai-doan-deals-design.md
 approved_by:
 approved_at:
@@ -73,3 +73,6 @@ Bỏ quét `morphological-scan` — xem entry `descope` «bỏ coverage-scan» t
 ## Notes
 
 - Tái hiện 30/09: `man-giu-cho` trên bản `9cda3569` thoát 1 với đúng lỗi này; trên `6e431a01` thoát 0 một lượt. Đầu dò tải `/deals` hai lượt không bắt được lỗi ở cả hai bản — lỗi phụ thuộc tải máy, nên chiều đỏ tất định của vòng nằm ở HTML máy chủ (AC-1, AC-6), không ở số lỗi console.
+- S3 (30/09): test DOM chạy trên mã trước sửa đỏ đúng dự đoán — e2 in lại nguyên diff của lượt E17 thật (`data-tone` info/neutral, «Qualified to buy»/`QUALIFIED_TO_BUY`); e1, e3, e4 đỏ; e5 xanh (nháp giữ như cũ). Sau sửa bảy ca xanh. Chiều đỏ tự động E1d: «DO DUNG GHIM: e1 e2 e3 e4».
+- S3: `man-deals.mjs` 14 kiểm 0 hỏng, 0/12 lượt lỗi hydrat, đối chứng bộ nghe bắt 1 lỗi cố ý; bản sao với ngăn trước vòng lộ 3 mã thô ở bảng và 10 ở Kanban (cả bảy tiêu đề cột) trong HTML máy chủ — chiều đỏ tất định.
+- S3: `man-giu-cho` thoát 0 hai lần sau sửa (một lần bằng lệnh `kto_man_giu` mới, chạy song song với một phiên đo khác).
