@@ -9,6 +9,7 @@ import { danhSachDeXuat } from "@crm/db/okr-de-xuat";
 import {
 	cauHinhAiLuc,
 	donViCuaMucTieu,
+	tranThangCuaThang,
 	troLyOkrSanSang,
 	xepViecTroLy,
 } from "@crm/db/okr-tro-ly";
@@ -182,7 +183,7 @@ export class TroLyOkrService {
 				usd: tron(cua.reduce((s, t) => s + chi.theoTinhNang[t].usd, 0)),
 			};
 		});
-		const tranUsd = cauHinh.aiTranThangUsd;
+		const tranUsd = await tranThangCuaThang(this.db, cauHinh, thang);
 		return {
 			thang,
 			theoNhom,

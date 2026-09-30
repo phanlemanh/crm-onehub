@@ -456,7 +456,15 @@ export class OkrService {
 				aiDeXuatAnDonVi: row.aiDeXuatAnDonVi,
 				aiTomTatAnPhamVi: row.aiTomTatAnPhamVi,
 				aiTomTatAnDonVi: row.aiTomTatAnDonVi,
+				aiSoanPhamVi: row.aiSoanPhamVi,
+				aiSoanDonVi: row.aiSoanDonVi,
+				aiSoanAnPhamVi: row.aiSoanAnPhamVi,
+				aiSoanAnDonVi: row.aiSoanAnDonVi,
 				aiTranThangUsd: row.aiTranThangUsd.toNumber(),
+				aiTranThangDatOkrUsd:
+					row.aiTranThangDatOkrUsd === null
+						? null
+						: row.aiTranThangDatOkrUsd.toNumber(),
 			}),
 			version: row.version,
 		};
