@@ -38,7 +38,7 @@ const vi = {
 		nguoiChon: "Người chọn: {ten}",
 	},
 	moDau: {
-		gopGoiY: "Góp 1–{n} ý. Đồng nghiệp đọc ý, không thấy tên bạn.",
+		gopGoiY: "Góp 1–{n} ý.",
 		nguoiChonGoiY:
 			"Bạn là người chọn nên không góp ý. Bạn viết trước, rồi kết luận từng chủ đề sau hạn.",
 		loiMoCua: "Lời mở của {ten}",
@@ -54,8 +54,9 @@ const vi = {
 		kyTu: "{n}/{max} ký tự",
 		kyTuItNhat: "{n}/{max} ký tự, ít nhất {min}",
 		conDuoc: {
-			mot: "Bạn còn góp được {n} ý.",
-			nhieu: "Bạn còn góp được {n} ý.",
+			mot: "Bạn còn góp được {n} ý. Người chọn và quản trị thấy tên bạn; đồng nghiệp thì không.",
+			nhieu:
+				"Bạn còn góp được {n} ý. Người chọn và quản trị thấy tên bạn; đồng nghiệp thì không.",
 		} satisfies DemSo,
 		gui: "Gửi",
 		daGui: "Đã gửi ý của bạn.",
@@ -317,6 +318,7 @@ const vi = {
 		cauHoiMoTa: "Khoá lại khi đã có ý đầu tiên.",
 		cauHoiKhoaMoTa:
 			"Đã khoá vì đã có người góp ý — vẫn sửa được lời mở, con số và hạn.",
+		cauHoiHetHanMoTa: "Đã hết hạn góp — câu hỏi không sửa được nữa.",
 		loiCauHoi: "Câu hỏi cần {tu}–{den} ký tự.",
 		loiMo: "Lời mở",
 		loiMoMoTa: "Vài câu của người chọn: vì sao hỏi, muốn nghe điều gì.",
@@ -403,7 +405,7 @@ const en: OkrHoiYMessages = {
 		nguoiChon: "Decider: {ten}",
 	},
 	moDau: {
-		gopGoiY: "Give 1–{n} ideas. Colleagues read your ideas but not your name.",
+		gopGoiY: "Give 1–{n} ideas.",
 		nguoiChonGoiY:
 			"You are the decider, so you don't give ideas. You write first, then conclude each theme after the deadline.",
 		loiMoCua: "Opening words from {ten}",
@@ -419,8 +421,9 @@ const en: OkrHoiYMessages = {
 		kyTu: "{n}/{max} characters",
 		kyTuItNhat: "{n}/{max} characters, at least {min}",
 		conDuoc: {
-			mot: "You can give {n} more idea.",
-			nhieu: "You can give {n} more ideas.",
+			mot: "You can give {n} more idea. The decider and admins see your name; colleagues don't.",
+			nhieu:
+				"You can give {n} more ideas. The decider and admins see your name; colleagues don't.",
 		},
 		gui: "Send",
 		daGui: "Your idea is in.",
@@ -680,6 +683,8 @@ const en: OkrHoiYMessages = {
 		cauHoiMoTa: "Locked once the first idea arrives.",
 		cauHoiKhoaMoTa:
 			"Locked because ideas have already arrived — you can still edit the opening note, figures and deadline.",
+		cauHoiHetHanMoTa:
+			"Ideas are closed — the question can no longer be edited.",
 		loiCauHoi: "The question needs {tu}–{den} characters.",
 		loiMo: "Opening words",
 		loiMoMoTa: "A few lines from the decider: why ask, what you want to hear.",

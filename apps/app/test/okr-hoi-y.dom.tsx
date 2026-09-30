@@ -1324,7 +1324,27 @@ describe("Hỏi ý — sửa sau tự lái: lời giải thích luôn hiện", (
 		expect({
 			soNoi: noi.length,
 			an: noi.map(anTheoKho),
-		}).toEqual({ soNoi: 1, an: [false] });
+		}).toEqual({ soNoi: 2, an: [false, false] });
+	});
+
+	test("chưa góp ý nào: ô soạn nói người chọn và quản trị thấy tên, đồng nghiệp thì không — trong ô soạn, không ẩn theo khổ", async () => {
+		const o = await moTrangThai("gop");
+		const noi = coChu(o, CAU_THAY_TEN);
+		expect({
+			cuaBan: o.querySelector('[data-khoi="y-cua-ban"]') !== null,
+			chu: noi.map((e) => e.textContent),
+			trongOSoan: noi.map((e) => e.closest('[data-khoi="o-soan"]') !== null),
+			an: noi.map(anTheoKho),
+			goiY: o.querySelector('[data-khoi="cau-hoi"] [data-mo-ta]')?.textContent,
+		}).toEqual({
+			cuaBan: false,
+			chu: [
+				"Bạn còn góp được 3 ý. Người chọn và quản trị thấy tên bạn; đồng nghiệp thì không.",
+			],
+			trongOSoan: [true],
+			an: [false],
+			goiY: "Góp 1–3 ý.",
+		});
 	});
 });
 
@@ -1422,19 +1442,6 @@ describe("Hỏi ý — sửa sau tự lái: hộp mở từ menu không bôi đe
 			o: "Tên chủ đề",
 			dau: "Kho miền Trung",
 			go: " mở ở Quy Nhơn",
-		},
-		{
-			ten: "Sửa từ menu của ý của bạn",
-			du: (): HoiYDu => ({
-				...coBan(),
-				cuaToi: { y: [yCuaToi("t1", "Ý của tôi trước hạn")], daHieu: false },
-			}),
-			tt: "gop",
-			nut: '[data-khoi="y-cua-ban"] [data-y="t1"] button',
-			muc: "Sửa",
-			o: "Ý của bạn",
-			dau: "Ý của tôi trước hạn",
-			go: " cho năm tới",
 		},
 	] as const;
 	for (const ca of CA)
@@ -1540,6 +1547,9 @@ describe("Hỏi ý — sửa sau tự lái: hai chủ đề chọn nối cùng m
 			chuDe: [...(cau1?.querySelectorAll("[data-noi-chu-de]") ?? [])].map((e) =>
 				e.getAttribute("data-noi-chu-de"),
 			),
+			khoiChuDe: [...(cau1?.querySelectorAll("[data-noi-chu-de]") ?? [])].map(
+				(e) => e.getAttribute("data-slot"),
+			),
 			cauKhacChu: cau1?.textContent?.includes(
 				"Gọi lại mọi khách lạnh đã ngừng đặt",
 			),
@@ -1547,6 +1557,7 @@ describe("Hỏi ý — sửa sau tự lái: hai chủ đề chọn nối cùng m
 			nhan: "Giữ nguyên",
 			lienKet: ["o1", "o4"],
 			chuDe: ["c1", "c4"],
+			khoiChuDe: ["item", "item"],
 			cauKhacChu: true,
 		});
 	});
@@ -1599,6 +1610,20 @@ describe("Hỏi ý — sửa sau tự lái: ô soạn gọn để «Gửi» lên
 });
 
 describe("Hỏi ý — sửa sau tự lái: sheet sửa khoá theo cờ máy chủ", () => {
+	test("đã hết hạn góp: ô câu hỏi tắt và dòng dưới ô nói vì hết hạn, không nói «khoá khi có ý đầu tiên»", async () => {
+		await moSheetSua(DU_LIEU["het-han"]());
+		const oKhoa = oTheoNhan(document.body, "Câu hỏi");
+		expect({
+			tat: oKhoa.disabled,
+			moTa: oKhoa
+				.closest('[data-slot="field"]')
+				?.querySelector('[data-slot="field-description"]')?.textContent,
+		}).toEqual({
+			tat: true,
+			moTa: "Đã hết hạn góp — câu hỏi không sửa được nữa.",
+		});
+	});
+
 	test("đã có ý (cauHoiKhoa): ô câu hỏi tắt, dòng dưới ô nói vì sao; chưa có ý thì mở", async () => {
 		const b = coBan();
 		await moSheetSua({ ...b, quyen: { ...b.quyen, cauHoiKhoa: true } });

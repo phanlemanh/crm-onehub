@@ -64,7 +64,7 @@ import {
 } from "@/lib/messages/okr-hoi-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChuNguoi, DoanChu, demSo, dien, ghep, khongTraConTro } from "./chu";
+import { ChuNguoi, DoanChu, demSo, dien, ghep } from "./chu";
 import type { HoiY, YCuaToi } from "./man-hoi-y";
 
 type NoiDungY = { noiDung: string; viSao: string; doBangGi: string };
@@ -425,10 +425,7 @@ export function YCuaBan({ h, chiDoc }: { h: HoiY; chiDoc: boolean }) {
 												<Icon icon={OverflowMenuHorizontal} />
 											</Button>
 										</DropdownMenuTrigger>
-										<DropdownMenuContent
-											align="end"
-											onCloseAutoFocus={khongTraConTro}
-										>
+										<DropdownMenuContent align="end">
 											<DropdownMenuGroup>
 												<DropdownMenuItem onSelect={() => setSua(y)}>
 													<Icon icon={Edit} />

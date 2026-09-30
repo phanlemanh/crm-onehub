@@ -294,24 +294,26 @@ function VietTruocRoiChon({ h }: { h: HoiY }) {
 										<ItemContent>
 											{nhan === "doi" ? null : <DoanChu>{chu}</DoanChu>}
 											{noi.map((c) => (
-												<div
-													className="flex flex-col items-start gap-1"
+												<Item
 													data-noi-chu-de={c.chuDeId}
 													key={c.chuDeId}
+													size="xs"
 												>
-													{chuanCau(c.cauMucTieu) === chuanCau(chu) ? null : (
-														<DoanChu>{c.cauMucTieu}</DoanChu>
-													)}
-													{nhieu ? (
-														<ItemDescription unclamped>
-															{ghep(m.noiChuDe, {
-																ten: <ChuNguoi>{c.ten}</ChuNguoi>,
-															})}
-														</ItemDescription>
-													) : null}
-													{nhan === "doi" && !nhieu ? vietTruocCu : null}
-													<XemNhap objectiveId={c.objectiveId} />
-												</div>
+													<ItemContent>
+														{chuanCau(c.cauMucTieu) === chuanCau(chu) ? null : (
+															<DoanChu>{c.cauMucTieu}</DoanChu>
+														)}
+														{nhieu ? (
+															<ItemDescription unclamped>
+																{ghep(m.noiChuDe, {
+																	ten: <ChuNguoi>{c.ten}</ChuNguoi>,
+																})}
+															</ItemDescription>
+														) : null}
+														{nhan === "doi" && !nhieu ? vietTruocCu : null}
+														<XemNhap objectiveId={c.objectiveId} />
+													</ItemContent>
+												</Item>
 											))}
 											{nhan === "doi" && nhieu ? vietTruocCu : null}
 											{nhan === "bo" ? (

@@ -124,7 +124,7 @@ function OCauHoi({
 	value: string;
 	onDoi: (cauHoi: string) => void;
 	khoa: boolean;
-	khoaVi: "co-y" | null;
+	khoaVi: "het-han" | "co-y" | null;
 }) {
 	const m = okrHoiYMessages(useLocale()).sheet;
 	const sai = !khoa && !moHoiYInput.shape.cauHoi.safeParse(value).success;
@@ -149,7 +149,11 @@ function OCauHoi({
 				</FieldError>
 			) : (
 				<FieldDescription>
-					{khoaVi === "co-y" ? m.cauHoiKhoaMoTa : m.cauHoiMoTa}
+					{khoaVi === "het-han"
+						? m.cauHoiHetHanMoTa
+						: khoaVi === "co-y"
+							? m.cauHoiKhoaMoTa
+							: m.cauHoiMoTa}
 				</FieldDescription>
 			)}
 		</Field>
@@ -395,7 +399,7 @@ function FormHoiY({
 					<OCauHoi
 						id={`${id}-cau-hoi`}
 						khoa={khoaCauHoi}
-						khoaVi={khoaCauHoi && !khoaNoiDung ? "co-y" : null}
+						khoaVi={khoaNoiDung ? "het-han" : khoaCauHoi ? "co-y" : null}
 						onDoi={setCauHoi}
 						value={cauHoi}
 					/>
