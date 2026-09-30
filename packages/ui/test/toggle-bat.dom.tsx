@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import ThumbsUp from "@carbon/icons-react/es/ThumbsUp";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { Toggle } from "../src/components/toggle";
@@ -33,8 +34,9 @@ function dangBat(e: Element | null | undefined) {
 		state: e?.getAttribute("data-state"),
 		coDau: dau !== null && dau !== undefined,
 		dauChiHienKhiBat:
-			lop(dau).includes("hidden") &&
-			lop(dau).includes("group-data-[state=on]/toggle:inline-block"),
+			lop(dau).includes("invisible") &&
+			lop(dau).includes("group-data-[state=on]/toggle:visible") &&
+			!lop(dau).includes("hidden"),
 		dauAnVoiDocGia: dau?.getAttribute("aria-hidden"),
 	};
 }
@@ -129,5 +131,97 @@ describe("toggle — biến thể outline-check", () => {
 		expect(
 			o.querySelector('[data-slot="toggle"] [data-slot="toggle-check"]'),
 		).toBeNull();
+	});
+});
+
+describe("toggle — outline-check giữ chỗ cho dấu tích", () => {
+	test("dấu tích và icon của nơi gọi chồng trong cùng một ô: bật hay tắt thì bề ngang không đổi", () => {
+		const o = ve(
+			<Toggle icon={ThumbsUp} variant="outline-check">
+				Tôi cũng nghĩ vậy
+			</Toggle>,
+		);
+		const nut = o.querySelector('[data-slot="toggle"]');
+		const o1 = nut?.querySelector('[data-slot="toggle-mark"]');
+		const con = [...(o1?.children ?? [])];
+		const ghi = () => ({
+			state: nut?.getAttribute("data-state"),
+			soO: nut?.querySelectorAll('[data-slot="toggle-mark"]').length,
+			con: con.map((c) => c.getAttribute("data-slot")),
+			chong:
+				lop(o1).includes("*:col-start-1") && lop(o1).includes("*:row-start-1"),
+			iconAnKhiBat: lop(con[0]).includes(
+				"group-data-[state=on]/toggle:invisible",
+			),
+			bienMoi: [...(nut?.children ?? [])].map(
+				(c) => c.getAttribute("data-slot") ?? c.nodeName,
+			),
+		});
+		const truoc = ghi();
+		act(() => (nut as HTMLButtonElement).click());
+		expect({ truoc, sau: ghi() }).toEqual({
+			truoc: {
+				state: "off",
+				soO: 1,
+				con: ["toggle-icon", "toggle-check"],
+				chong: true,
+				iconAnKhiBat: true,
+				bienMoi: ["toggle-mark"],
+			},
+			sau: {
+				state: "on",
+				soO: 1,
+				con: ["toggle-icon", "toggle-check"],
+				chong: true,
+				iconAnKhiBat: true,
+				bienMoi: ["toggle-mark"],
+			},
+		});
+	});
+
+	test("nhóm nút: mục chưa chọn cũng giữ ô dấu tích (ẩn chứ không bỏ khỏi dòng)", () => {
+		const o = ve(
+			<ToggleGroup type="single" variant="outline-check">
+				<ToggleGroupItem value="chon">Chọn</ToggleGroupItem>
+				<ToggleGroupItem value="de-sau">Để sau</ToggleGroupItem>
+			</ToggleGroup>,
+		);
+		expect(
+			[...o.querySelectorAll('[data-slot="toggle-group-item"]')].map(
+				(m) => m.querySelectorAll('[data-slot="toggle-mark"]').length,
+			),
+		).toEqual([1, 1]);
+	});
+});
+
+describe("toggle — asChild", () => {
+	test("Toggle asChild với biến thể outline-check dựng đúng một phần tử con, không ô dấu tích", () => {
+		const o = ve(
+			<Toggle asChild variant="outline-check">
+				<a href="#chon">Chọn</a>
+			</Toggle>,
+		);
+		const a = o.querySelector("a");
+		expect({
+			slot: a?.getAttribute("data-slot"),
+			chu: a?.textContent,
+			o: o.querySelectorAll('[data-slot="toggle-mark"]').length,
+		}).toEqual({ slot: "toggle", chu: "Chọn", o: 0 });
+	});
+
+	test("ToggleGroupItem asChild với biến thể outline-check dựng đúng một phần tử con", () => {
+		const o = ve(
+			<ToggleGroup type="single" variant="outline-check">
+				<ToggleGroupItem asChild value="chon">
+					<a href="#chon">Chọn</a>
+				</ToggleGroupItem>
+			</ToggleGroup>,
+		);
+		const a = o.querySelector("a");
+		expect({
+			slot: a?.getAttribute("data-slot"),
+			chu: a?.textContent,
+			o: o.querySelectorAll('[data-slot="toggle-mark"]').length,
+		}).toEqual({ slot: "toggle-group-item", chu: "Chọn", o: 0 });
 	});
 });

@@ -1372,7 +1372,11 @@ async function nhomE12() {
 				return {
 					nen: nen(e),
 					nenThe: nenThe ? nen(nenThe) : null,
-					dau: dau ? Math.round(dau.getBoundingClientRect().width) : 0,
+					dau:
+						dau && getComputedStyle(dau).visibility === "visible"
+							? Math.round(dau.getBoundingClientRect().width)
+							: 0,
+					rong: Math.round(e.getBoundingClientRect().width),
 				};
 			};
 			const bat = window.__tim(`${k} [data-y='${y}'] [data-slot='toggle']`)[0];
@@ -1392,13 +1396,14 @@ async function nhomE12() {
 		nutBat.bat.nen !== nutBat.bat.nenThe &&
 		nutBat.bat.nen !== "rgba(0, 0, 0, 0)" &&
 		nutBat.bat.dau > 0 &&
-		nutBat.tat.dau === 0;
+		nutBat.tat.dau === 0 &&
+		nutBat.bat.rong === nutBat.tat.rong;
 	if (!batKhac)
 		console.log(
 			`  E12 buoc 6: nut da bat khong khac nut chua bat (${JSON.stringify(nutBat)})`,
 		);
 	kiem(
-		"E12 buoc 6: «Tôi cũng nghĩ vậy» đã bật có nền khác nút chưa bật và khác nền thẻ, có dấu tích; nút chưa bật không dấu tích",
+		"E12 buoc 6: «Tôi cũng nghĩ vậy» đã bật có nền khác nút chưa bật và khác nền thẻ, có dấu tích; nút chưa bật không dấu tích; hai nút cùng bề ngang",
 		batKhac,
 	);
 	await kiemTheoTen(g, KHUNG_DN, tenGieo, "E12 buoc-gop");

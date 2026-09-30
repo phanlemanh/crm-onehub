@@ -70,6 +70,7 @@ function DongY({ y, bamDuoc }: { y: YXem; bamDuoc: boolean }) {
 					<Toggle
 						aria-label={dien(m.cungNghiNhan, { chu: y.noiDung })}
 						disabled={dongY.isPending}
+						icon={ThumbsUp}
 						onPressedChange={(p) => {
 							setBat(p);
 							dongY.mutate({ yId: y.id, bat: p });
@@ -78,7 +79,6 @@ function DongY({ y, bamDuoc }: { y: YXem; bamDuoc: boolean }) {
 						size="sm"
 						variant="outline-check"
 					>
-						<Icon data-icon="inline-start" icon={ThumbsUp} />
 						{m.cungNghi}
 					</Toggle>
 				</ItemActions>

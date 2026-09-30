@@ -1,7 +1,7 @@
 "use client";
 
 import Checkmark from "@carbon/icons-react/es/Checkmark";
-import { Icon } from "@crm/ui/components/icon";
+import { type CarbonIcon, Icon } from "@crm/ui/components/icon";
 import { cn } from "@crm/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Toggle as TogglePrimitive } from "radix-ui";
@@ -16,7 +16,7 @@ const toggleVariants = cva(
 				outline:
 					"border border-input bg-transparent hover:bg-muted data-[state=on]:border-ring data-[state=on]:bg-background data-[state=on]:ring-1 data-[state=on]:ring-ring/30",
 				"outline-check":
-					"border border-input bg-transparent hover:bg-muted aria-pressed:bg-accent data-[state=on]:bg-accent data-[state=on]:text-accent-foreground data-[state=on]:[&>[data-icon=inline-start]]:hidden",
+					"border border-input bg-transparent hover:bg-muted aria-pressed:bg-accent data-[state=on]:bg-accent data-[state=on]:text-accent-foreground",
 			},
 			size: {
 				default:
@@ -34,15 +34,34 @@ const toggleVariants = cva(
 
 type ToggleVariant = VariantProps<typeof toggleVariants>["variant"];
 
-function ToggleCheck({ variant }: { variant: ToggleVariant }) {
+function ToggleMark({
+	variant,
+	icon,
+}: {
+	variant: ToggleVariant;
+	icon?: CarbonIcon;
+}) {
 	if (variant !== "outline-check") return null;
 	return (
-		<Icon
-			className="hidden group-data-[state=on]/toggle:inline-block"
-			data-slot="toggle-check"
-			icon={Checkmark}
-			motion="none"
-		/>
+		<span
+			className="grid place-items-center *:col-start-1 *:row-start-1"
+			data-icon="inline-start"
+			data-slot="toggle-mark"
+		>
+			{icon ? (
+				<Icon
+					className="group-data-[state=on]/toggle:invisible"
+					data-slot="toggle-icon"
+					icon={icon}
+				/>
+			) : null}
+			<Icon
+				className="invisible group-data-[state=on]/toggle:visible"
+				data-slot="toggle-check"
+				icon={Checkmark}
+				motion="none"
+			/>
+		</span>
 	);
 }
 
@@ -50,21 +69,30 @@ function Toggle({
 	className,
 	variant = "default",
 	size = "default",
+	icon,
+	asChild,
 	children,
 	...props
 }: React.ComponentProps<typeof TogglePrimitive.Root> &
-	VariantProps<typeof toggleVariants>) {
+	VariantProps<typeof toggleVariants> & { icon?: CarbonIcon }) {
 	return (
 		<TogglePrimitive.Root
+			asChild={asChild}
 			data-slot="toggle"
 			data-variant={variant}
 			className={cn(toggleVariants({ variant, size, className }))}
 			{...props}
 		>
-			<ToggleCheck variant={variant} />
-			{children}
+			{asChild ? (
+				children
+			) : (
+				<>
+					<ToggleMark icon={icon} variant={variant} />
+					{children}
+				</>
+			)}
 		</TogglePrimitive.Root>
 	);
 }
 
-export { Toggle, ToggleCheck, toggleVariants };
+export { Toggle, ToggleMark, toggleVariants };
