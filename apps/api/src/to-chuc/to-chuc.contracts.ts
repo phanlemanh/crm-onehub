@@ -41,7 +41,7 @@ export const orgPlacementInput = z.object({
 	primaryDepartmentId: ma.nullable(),
 	secondaryDepartmentIds: z.array(ma).max(50),
 	managerUserId: ma.nullable(),
-	chucDanh: chucDanhVao.default(""),
+	chucDanh: chucDanhVao.optional(),
 });
 export const orgImportInput = z.object({
 	text: z.string().max(TO_CHUC.nhap.toiDaKyTu),

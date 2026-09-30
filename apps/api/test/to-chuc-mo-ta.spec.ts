@@ -202,4 +202,26 @@ describe("mo-ta-chuc-danh", () => {
 		);
 		expect(nguoi(await cay(), a).chucDanh).toBe("");
 	});
+
+	test("setPlacement không mang chucDanh → giữ nguyên; gửi rỗng tường minh → xoá", async () => {
+		const pb = await pbMoi("pb-giu");
+		const a = await nguoiMoi("D");
+		const vao = {
+			userId: a,
+			primaryDepartmentId: pb,
+			secondaryDepartmentIds: [],
+			managerUserId: null,
+		};
+		ok(
+			await goi("org.setPlacement", { ...vao, chucDanh: "Kế toán trưởng" }),
+			"dat chuc danh",
+		);
+		expect(nguoi(await cay(), a).chucDanh).toBe("Kế toán trưởng");
+		ok(await goi("org.setPlacement", vao), "khong gui chuc danh");
+		expect(nguoi(await cay(), a).chucDanh, "khong gui thi phai giu").toBe(
+			"Kế toán trưởng",
+		);
+		ok(await goi("org.setPlacement", { ...vao, chucDanh: "" }), "gui rong");
+		expect(nguoi(await cay(), a).chucDanh, "gui rong thi phai xoa").toBe("");
+	});
 });

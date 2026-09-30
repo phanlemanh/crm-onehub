@@ -501,7 +501,8 @@ export class ToChucService {
 	}
 
 	async setPlacement(input: PlacementInput) {
-		const chucDanh = kiemChucDanh(input.chucDanh);
+		const chucDanh =
+			input.chucDanh === undefined ? undefined : kiemChucDanh(input.chucDanh);
 		await this.thanhVienHieuLuc(input.userId);
 		const phu = [...new Set(input.secondaryDepartmentIds)];
 		if (
