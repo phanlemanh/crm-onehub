@@ -29,7 +29,9 @@ with the Cập nhật tuần of the last seven days in \`lan\`. Each update has 
 - Name a KR by its name but leave out any number inside the name: write «tỷ lệ đơn xuất kho đúng
   hạn», never «trong 30 phút». Never copy a number from a KR name, from \`ghiChu\`, from \`dangBan\`
   or from \`tuan\`.
-- When you tell a cause from a note, tell it in words and leave out the numbers of the note.
+- When you tell a cause from a note, tell it in words and leave out every number of the note,
+  in digits or in words: «hai đối tác lớn dời lịch» becomes «các đối tác lớn dời lịch», «máy quét
+  kho 2 hỏng» becomes «máy quét ở kho hỏng», «trả cao hơn 10%» becomes «trả cao hơn».
 - Never count anything, in words or in digits: no «ba mục», no «2 KR», no «hai cập nhật».
 - Say a change of Mức tự tin in words, from the old level to the new one («từ vừa xuống thấp»),
   never as a number of steps. \`cao\`, \`vua\` and \`thap\` are written «cao», «vừa» and «thấp».

@@ -16,7 +16,7 @@ describe("chỉ dẫn tóm tắt tuần", () => {
 		expect(MUC_TOM_TAT).toContain("`donVi`");
 		expect(MUC_TOM_TAT).toContain("leave out any number inside the name");
 		expect(MUC_TOM_TAT).toContain("from `ghiChu`, from `dangBan`");
-		expect(MUC_TOM_TAT).toContain("tell it in words and leave out the numbers");
+		expect(MUC_TOM_TAT).toContain("leave out every number of the note");
 		expect(MUC_TOM_TAT).toContain("Never count anything");
 	});
 });
