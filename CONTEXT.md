@@ -835,7 +835,8 @@ gợi máy đã ghi vào bộ OKR, trong khi máy không ghi gì — người đ
 
 **Trang chiến lược**: trang tài liệu loại «chiến lược» trong kho tài liệu — định
 hướng, ưu tiên năm, nguyên tắc vận hành — mà Trợ lý OKR đọc bản đang dùng làm nền khi
-soạn. Chỉ bản đang dùng vào gói; trang chưa duyệt hay quá hạn xác minh không vào.
+soạn. Chỉ bản đang dùng vào gói: trang chưa duyệt không vào; trang quá hạn xác minh vẫn vào,
+kèm ngày xác minh.
 Tổng trang chiến lược có trần ký tự (20 nghìn), duyệt một trang có câu thuộc danh sách
 từ cấm thì màn duyệt cảnh báo. Phần lương thưởng và bảng điểm theo vai không thuộc
 loại này. Chốt 2026-09-30 tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
@@ -846,20 +847,22 @@ thứ người viết.
 
 **Mô tả đơn vị**: vài câu quản trị viết cho một bộ phận hay phòng ban ở Cài đặt ›
 Tổ chức — đơn vị làm gì, phục vụ ai — tối đa 500 ký tự. Trợ lý OKR đọc mô tả của đơn
-vị và đơn vị cha khi soạn; không có mô tả thì vẫn soạn, chỉ kém sát. Chốt 2026-09-30
-tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
+vị và đơn vị cha khi soạn; không có mô tả thì vẫn soạn, chỉ kém sát. Trên màn Tổ chức
+gọi ngắn là «Mô tả». Chốt 2026-09-30 tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
 _Avoid_: chức năng nhiệm vụ, sứ mệnh, description, giới thiệu
 Vì sao: «chức năng nhiệm vụ» là văn bản hành chính dài, người viết sẽ dán nguyên; «sứ
 mệnh» là chữ của cấp công ty, đặt ở trang chiến lược.
 
 **Chức danh**: chữ ghi nghề của một người trong đơn vị — «trưởng phòng», «chuyên
-viên» — đặt trên từng dòng của cây tổ chức, tối đa 80 ký tự. Trợ lý OKR chỉ đọc chức
-danh của trưởng đơn vị và người hỏi, không đọc tên; màn OKR không hiện chức danh.
+viên» — đặt cho từng người ở hộp «Vị trí trong tổ chức», tối đa 80 ký tự. Trợ lý OKR
+chỉ đọc chức danh của trưởng đơn vị và người hỏi, không đọc tên; màn OKR không hiện
+chức danh.
 Không phải vai trong workspace và không cho quyền gì. Chốt 2026-09-30 tại
 Cổng Phạm vi của `soan-okr-cung-tro-ly`.
 _Avoid_: vai, vị trí, title, job title, cấp bậc
 Vì sao: «vai» đã là vai trong workspace (quản trị, thành viên, chỉ OKR); «vị trí» là
-thứ tự sắp xếp trong cây tổ chức; «cấp bậc» gợi thang lương, thứ không có trong CRM.
+chỗ một người đứng trong tổ chức (bộ phận, phòng ban), chức danh chỉ là một ô nhập
+trong hộp đó; «cấp bậc» gợi thang lương, thứ không có trong CRM.
 
 **Chế độ ẩn**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
 việc trên OKR thật — góp ý khi một Mục tiêu được lưu, tóm tắt sau ngày cập nhật — ghi sổ
