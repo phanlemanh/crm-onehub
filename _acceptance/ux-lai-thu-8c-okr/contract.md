@@ -5,7 +5,7 @@ slug: ux-lai-thu-8c-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-30T03:17:58Z
 design_doc: docs/superpowers/specs/2026-09-30-ux-lai-thu-8c-okr-design.md
@@ -64,3 +64,13 @@ AC-12 nhìn cả tám trên màn thật.
 - Đổi luật số thống kê: Sức khoẻ, tiến độ gộp, toàn cảnh vẫn không tính mục tiêu giới hạn.
 
 ## Notes
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-30, định đoạt mục ngoài hợp đồng và hai lỗ đo của vòng chấm 2; sổ d-20260930T064528Z-22 … d-20260930T064528Z-30):
+
+- Ngoài-1 (`apps/api/src/to-chuc/to-chuc.service.ts`) — tách thành việc riêng, không ghi hạn chế: khi dùng giao diện tiếng Anh, hộp lưu trữ phòng ban hiện tiêu đề tiếng Anh nhưng câu lý do chặn bằng tiếng Việt; tên khuôn trong câu có thể bị trình duyệt tự dịch.
+- Ngoài-2 (`apps/app/components/crm/record-sheet/objective-duyet.tsx`): trong hộp gửi duyệt, tên người duyệt có thể bị trình duyệt tự dịch khi bật dịch tự động; các dải thông báo khác thì không.
+- Ngoài-3 (`apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx`): chuyển hết OKR khỏi một phòng ban rồi mở lại hộp lưu trữ, hộp có thể còn hiện lý do cũ «còn mục tiêu» trong chốc lát; nếu lần kiểm lại lỗi mạng, hộp giữ lý do cũ, khoá nút Lưu trữ và không báo là chưa kiểm được.
+- Ngoài-4 (`apps/api/test/okr-ux-8d.spec.ts`): phòng ban chưa xếp vào khối nào sẽ không được bài đếm nhãn «Giới hạn» theo đơn vị soi tới; dữ liệu mẫu hôm nay chưa có ca đó.
+- Ngoài-5 (`apps/app/test/okr-theo-don-vi.dom.tsx`): nếu nhãn «Giới hạn» trên cây đơn vị vô tình nhận phím Tab, bài kiểm hiện tại có thể không báo.
+- Ngoài-6 (`_acceptance/ux-lai-thu-8c-okr/rang/man-ux-8d.mjs`): phép đo trên màn thật so chuỗi «3 mục tiêu» nên nhận nhầm nếu cây ghi 13 hay 23.
+- Lỗ đo trong hợp đồng (`apps/api/test/okr-ux-8d.spec.ts`): E12 chưa so thời điểm «lần trả lại trước» với dòng Vết (AC-9) và E1 lấy tập mục giới hạn «xem được» từ chính đầu ra thay vì tính độc lập (AC-1); hành vi người dùng thấy vẫn được E15 đo trên màn. Lượt sau chạm hai bài này thì đóng lỗ.
