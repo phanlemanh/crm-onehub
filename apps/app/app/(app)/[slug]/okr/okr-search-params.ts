@@ -88,7 +88,14 @@ type ChuKyGiai = {
 	kind: LoaiChuKy;
 	phase: PhaChuKy;
 	startsOn: string;
+	anLuc: string | null;
 };
+
+export function kyTrongOChon<T extends { anLuc: string | null }>(
+	cycles: readonly T[],
+): T[] {
+	return cycles.filter((c) => c.anLuc === null);
+}
 
 const PHA_HOI_Y = "lap-ke-hoach" satisfies PhaChuKy;
 const LOAI_UU_TIEN = "nam" satisfies LoaiChuKy;
@@ -97,7 +104,7 @@ export function kyMacDinhHoiY(cycles: {
 	cycles: ChuKyGiai[];
 	currentId: string | null;
 }): string | null {
-	const keHoach = cycles.cycles
+	const keHoach = kyTrongOChon(cycles.cycles)
 		.filter((c) => c.phase === PHA_HOI_Y)
 		.sort(
 			(a, b) =>
@@ -113,19 +120,23 @@ export function giaiKyHoiY(
 ): string | null {
 	if (!cycles) return null;
 	if (ky === KY_HIEN_TAI) return cycles.currentId;
-	if (ky !== null && cycles.cycles.some((c) => c.id === ky)) return ky;
+	if (ky !== null && kyTrongOChon(cycles.cycles).some((c) => c.id === ky))
+		return ky;
 	return kyMacDinhHoiY(cycles);
 }
 
 export function giaiKy(
 	ky: string | null,
-	cycles: { cycles: { id: string }[]; currentId: string | null } | null,
+	cycles: {
+		cycles: { id: string; anLuc: string | null }[];
+		currentId: string | null;
+	} | null,
 ): string | null {
 	if (!cycles) return null;
 	if (
 		ky !== null &&
 		ky !== KY_HIEN_TAI &&
-		cycles.cycles.some((c) => c.id === ky)
+		kyTrongOChon(cycles.cycles).some((c) => c.id === ky)
 	)
 		return ky;
 	return cycles.currentId;

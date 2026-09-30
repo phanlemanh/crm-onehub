@@ -658,6 +658,39 @@ const GHIM = {
 	"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
 	"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
 	"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
+	"okr:caiDat.chuKy.dongAn": ["Ẩn 1 lúc pha A", "Ẩn 12 lúc pha A"],
+	"okr:caiDat.chuKy.anKhoa": [
+		"Còn 1 quý đang hiện — ẩn hoặc gỡ quý trước",
+		"Còn 12 quý đang hiện — ẩn hoặc gỡ quý trước",
+	],
+	"okr:caiDat.chuKy.go.tieuDe": ["Gỡ 1?", "Gỡ 12?"],
+	"okr:caiDat.chuKy.go.than": [
+		"1 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"12 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+	],
+	"okr:caiDat.chuKy.go.xong": ["Đã gỡ 1.", "Đã gỡ 12."],
+	"okr:caiDat.chuKy.an.tieuDe": ["Ẩn 1?", "Ẩn 12?"],
+	"okr:caiDat.chuKy.an.xong": ["Đã ẩn 1.", "Đã ẩn 12."],
+	"okr:caiDat.chuKy.hienLai.tieuDe": ["Hiện lại 1?", "Hiện lại 12?"],
+	"okr:caiDat.chuKy.hienLai.than": [
+		"Chu kỳ quay lại ô chọn kỳ với pha như lúc ẩn (1), nhận ghi và nhắc lại.",
+		"Chu kỳ quay lại ô chọn kỳ với pha như lúc ẩn (12), nhận ghi và nhắc lại.",
+	],
+	"okr:caiDat.chuKy.hienLai.xong": ["Đã hiện lại 1.", "Đã hiện lại 12."],
+	"okr:caiDat.sua.tieuDe": ["Sửa 1", "Sửa 12"],
+	"okr:caiDat.sua.moTaMoiO": [
+		"1 chưa có dữ liệu — sửa được mọi ô trừ loại và năm.",
+		"12 chưa có dữ liệu — sửa được mọi ô trừ loại và năm.",
+	],
+	"okr:caiDat.sua.moTaCoDuLieu": [
+		"1 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.",
+		"12 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.",
+	],
+	"okr:caiDat.sua.moTaRoiKeHoach": [
+		"1 đã rời pha Lập kế hoạch — chỉ sửa được tên.",
+		"12 đã rời pha Lập kế hoạch — chỉ sửa được tên.",
+	],
+	"okr:caiDat.sua.xong": ["Đã sửa 1.", "Đã sửa 12."],
 	"cua-vao:buoc.choPhep.moTa": ["Ở 1.", "Ở 12."],
 	"cua-vao:buoc.nutNgoai.tieuDe": [
 		"Đăng nhập bằng 1, đúng địa chỉ đó",

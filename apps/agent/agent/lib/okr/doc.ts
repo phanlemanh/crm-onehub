@@ -1,5 +1,6 @@
 import { db } from "@crm/db";
 import { LOAI_VIEC_TRO_LY_OKR } from "@crm/db/agent-tasks";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import {
 	boGioiHan,
 	dieuKienXemMucTieu,
@@ -109,6 +110,7 @@ export async function docDichCanChinh(nguon: NguonCanChinh) {
 					status: "cong-bo",
 					level: { in: capDichCanChinh(nguon.level) },
 					cycleId: { in: chuKyDichCanChinh(nguon) },
+					cycle: KY_CON_HIEN,
 				},
 				boGioiHan,
 			],

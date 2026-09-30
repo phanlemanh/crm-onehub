@@ -29,6 +29,16 @@ const KY = {
 	breakEndsOn: null,
 	updateWeekday: 1,
 	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: {
+		suaMoiO: false,
+		suaTen: false,
+		go: false,
+		an: false,
+		hienLai: false,
+	},
 } satisfies ChuKy["cycles"][number];
 const CO_KY = { cycles: [KY], currentId: "ky-1" } satisfies ChuKy;
 const KHONG_KY = { cycles: [], currentId: null } satisfies ChuKy;

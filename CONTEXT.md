@@ -513,6 +513,13 @@ _Avoid_: tuân thủ, KPI OKR, xếp hạng đơn vị
 ngày đầu, ngày cuối và khoảng nghỉ như Tết. Quản trị chương trình mở và khoá chu
 kỳ. Trong khu OKR, «kỳ» trần là chữ ngắn của chu kỳ — «cuối kỳ», «rà giữa kỳ».
 Chốt 2026-09-24.
+Chu kỳ tạo nhầm có hai đường dọn. **Gỡ** chu kỳ: xoá hẳn một chu kỳ còn trống — chưa
+có mục tiêu, lần hỏi ý, quý con, đợt rà, điểm hay mang sang; vết tạo và gỡ còn lại.
+**Ẩn** chu kỳ: chu kỳ đã có dữ liệu biến khỏi ô chọn kỳ, không nhận ghi, không nhắc,
+dữ liệu giữ nguyên, hiện lại được; ẩn phải ghi lý do. Chốt 2026-09-30.
+_Avoid_ (cho gỡ và ẩn): xoá mềm, lưu trữ, archive
+Vì sao: «lưu trữ» đã là chữ của đơn vị trong cây tổ chức; «xoá» trần làm người ta
+tưởng dữ liệu mất.
 _Avoid_: giai đoạn, đợt, sprint
 Vì sao: «giai đoạn» đã là chữ của thoả thuận; «đợt» đã là chữ của chiến dịch;
 sprint là nhịp làm việc của đội phần mềm, không phải kỳ đặt mục tiêu.

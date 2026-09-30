@@ -1,0 +1,4 @@
+E14 network truth (nguon: puppeteer listeners trong man-sua-an.mjs: pageerror, console.error, requestfailed, response>=400, tren moi trang do; app phien do http://localhost:4214, API http://localhost:4732)
+man-sua-an-network.txt (tep goc do thuoc ghi): 0 byte => 0 pageerror, 0 console.error, 0 requestfailed, 0 response >= 400
+Thuoc khong in HONG nao (90 khang dinh, 0 hong).
+Trang deu tai xong va thao tac tRPC (okr.suaChuKy, goChuKy, anChuKy, hienChuKy) qua API app-scope thanh cong (DB doc lai dung, xem log chay).

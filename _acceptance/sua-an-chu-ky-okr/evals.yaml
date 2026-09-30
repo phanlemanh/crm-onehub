@@ -1,0 +1,186 @@
+schema_version: 1
+feature_slug: sua-an-chu-ky-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.sac_viec
+    paths: [packages/validation/src/okr-chu-ky.ts, packages/validation/test/okr-chu-ky-viec.spec.ts]
+    expected: "exit 0; BẢNG CA VIẾT TRƯỚC là 40 ca phân biệt — pha (4) × đã ẩn/chưa (2) × năm dạng dữ liệu (trống năm, trống quý, có dữ liệu năm 0 quý hiện, có dữ liệu năm ≥1 quý hiện, có dữ liệu quý; «trống mà còn quý hiện» không tồn tại) — viết THẲNG thành 40 dòng trong bài, mỗi dòng mang sẵn object năm cờ kỳ vọng gõ tay theo bảng luật của design doc (không có hàm dựng kỳ vọng, không biểu thức chép thân viecChuKy); bài khẳng định 40 dòng và không hai dòng trùng tình trạng. Ca ghim riêng: trống lập kế hoạch → {suaMoiO true, suaTen true, go true, an false, hienLai false}; có dữ liệu đang chạy → {false, true, false, true, false}; có dữ liệu đã đóng → {false, false, false, true, false}; đã ẩn bất kỳ → chỉ hienLai true; năm có dữ liệu còn 1 quý hiện → an false. CHIỀU ĐỎ: bản sao viecChuKy cho suaTen true ở da-dong → ca đã đóng đỏ, bài in tình trạng và hai object."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_cycles
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-chu-ky.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; gieo qua thủ tục thật (createCycle, createObjective, setCyclePhase, anChuKy) năm dạng: C1 trống lập kế hoạch, C2 quý có mục tiêu đang chạy, C3 đã đóng, C4 đã ẩn, N1 năm có một quý chưa ẩn. okr.cycles → với mỗi id, viec toEqual viecChuKy(tình trạng đọc TRỰC TIẾP từ DB bằng đếm sáu quan hệ trong bài, không qua service), anLuc bằng DB (ISO hoặc null), quyConHien của N1 = 1, của quý = 0. CHIỀU ĐỎ: bản sao service đếm trống bỏ quan hệ okrHoiY → chu kỳ chỉ có lần hỏi ý báo go true, ca C-hoi-y đỏ in hai object."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_sua_moi_o
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-chu-ky.ts, packages/validation/src/okr-vet.ts, packages/db/src/okr-vet.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; năm N (2027-01-01 → 2027-12-31, trống) và quý Q (2028 Q1, trống, năm 2028 có quý R 2028-04-01 → 2028-06-30 chưa ẩn và quý S 2028-07-01 → 2028-09-30 đã ẩn): suaChuKy N đổi tên, endsOn 2027-12-30, nghỉ 2027-02-05 → 2027-02-12, updateWeekday 3 → đọc DB đúng từng ô; okrTrail đúng MỘT dòng sua-chu-ky cho N, before/after chỉ chứa các khoá đã đổi với giá trị cũ/mới. Ma trận từ chối viết trước 4 ca, mỗi ca ghim thông điệp và khẳng định bản ghi đọc lại toEqual bản trước và số dòng okrTrail không đổi: Q ra ngoài năm 2028; Q chồng R; startsOn = endsOn; nghỉ ngoài chu kỳ. Đối chứng dương cùng fixture: Q đổi sang 2028-07-15 → 2028-08-31 (chồng S đã ẩn) → ghi được. CHIỀU ĐỎ: bản sao kiểm chồng không lọc anLuc → ca chồng S đỏ, bài in tên quý chồng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_sua_ten
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-chu-ky.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; BA chu kỳ viết trước mà viecChuKy cho suaMoiO false, suaTen true: D có một mục tiêu nháp pha dang-chay; E trống pha dang-chay; F trống pha cham-diem (gieo qua setCyclePhase thật, now đóng băng sau endsOn). Trên MỖI chu kỳ (3 × 4 = 12 ca): suaChuKy chỉ đổi tên → ghi được, một dòng vết; ba ca đổi tên kèm endsOn / kèm khoảng nghỉ / kèm updateWeekday → 400 thông điệp ghim OKR.thongDiep có chữ «chỉ sửa được tên», tên KHÔNG đổi (không ghi nửa chừng), okrTrail không thêm; bài khẳng định số ca đã chạy = 12; suaChuKy trên chu kỳ da-dong và trên chu kỳ đã ẩn (mỗi ca chỉ đổi tên) → 400 thông điệp ghim riêng, bản ghi không đổi. CHIỀU ĐỎ: bản sao service ghi tên trước rồi mới kiểm ô khác → ca kèm endsOn đỏ, bài in tên đọc được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_go
+    paths: [apps/api/src/okr/**, packages/db/src/okr-chu-ky-hien.ts, packages/db/prisma/schema.prisma, packages/validation/src/okr-chu-ky.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; bài đọc mô hình dữ liệu lúc chạy của Prisma client (db._runtimeDataModel, parse bằng Zod ở biên — bản Prisma 7 của kho không xuất Prisma.dmmf), lấy mọi trường quan hệ của các model trỏ tới OkrCycle (trừ OkrTrail — cột không khoá ngoại) và so TẬP toEqual với QUAN_HE_GIU_CHU_KY; bảng fixture GIEO_THEO_QUAN_HE khoá theo tên quan hệ, mỗi quan hệ một hàm gieo qua thủ tục thật (hôm nay sáu: mục tiêu đã bỏ qua dropObjective; lần hỏi ý qua moHoiY; quý con đã ẩn qua createCycle + anChuKy; đợt rà qua moRa; điểm KR qua setCyclePhase sang cham-diem; đích mang sang qua mangSang) — bài đỏ khi một quan hệ của DMMF không có hàm gieo, in tên quan hệ. Chạy goChuKy trên mỗi chu kỳ gieo (số ca = số quan hệ, khẳng định bằng độ dài tập) → 400 thông điệp ghim, không 500, okrCycle và bảng con tương ứng đọc lại toEqual bản trước. G0 trống pha dang-chay: goChuKy → okrCycle.findUnique null; okrTrail có dòng go-chu-ky với before chứa name, kind, startsOn, endsOn, phase đúng bản trước; dòng tao-chu-ky của G0 vẫn đọc được theo cycleId. CHIỀU ĐỎ: (a) bản sao QUAN_HE_GIU_CHU_KY bỏ children → so tập đỏ in «children»; (b) bản sao hàm tính trống bỏ children → ca quý-con-đã-ẩn đỏ in id và lỗi nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_an_hien
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-chu-ky.ts, packages/validation/src/okr-khep.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; quý H có mục tiêu, pha dang-chay: anChuKy không lyDo → 400 (Zod); lyDo 9 ký tự → 400; lyDo 10 ký tự → anLuc khác null, phase vẫn dang-chay, okrTrail một dòng an-chu-ky note = lyDo; hienChuKy → anLuc null, phase vẫn dang-chay, một dòng hien-chu-ky. Ma trận biên viết trước 5 ca, mỗi ca ghim thông điệp và bản ghi không đổi: anChuKy chu kỳ trống (thông điệp nói gỡ); anChuKy chu kỳ đã ẩn; anChuKy năm còn 1 quý chưa ẩn (thông điệp chứa số 1); hienChuKy quý khi năm cha đã ẩn; hienChuKy quý K khi quý L chưa ẩn cùng năm chồng ngày K (thông điệp chứa tên L). Đối chứng dương cùng fixture: ẩn L rồi hiện K → được. CHIỀU ĐỎ: bản sao hienChuKy bỏ kiểm chồng → ca K/L đỏ, bài in hai khoảng ngày."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_pham_vi
+    paths: [apps/api/src/okr/**, apps/api/test/vai-chi-okr.spec.ts, apps/api/test/ma-tran-thu.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts]
+    expected: "exit 0; vai-chi-okr ma-tran-trpc và ma-tran-khoa-rest xanh; bài tự dò thủ tục và khẳng định bốn tên suaChuKy, goChuKy, anChuKy, hienChuKy có trong tập dò được (so tập) và DAU_VAO_HOP_LE có đầu vào hợp lệ cho cả bốn; ca quyen trong okr-sua-an-chu-ky.spec: thành viên thường và vai okr gọi bốn thủ tục qua tRPC → 403 theo vai quản trị, bản ghi chu kỳ đọc lại toEqual và okrTrail không thêm; đối chứng dương quản trị cùng đầu vào → được. CHIỀU ĐỎ: bản sao goChuKy bỏ assertQuanTri → ca thành viên đỏ, bài in id chu kỳ đã mất."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_ky_mac_dinh
+    paths: [apps/api/src/okr/**, packages/db/src/okr-tien-do.ts, packages/db/src/okr-chu-ky-hien.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; now đóng băng 2026-11-18 VN; quý A (2026-10-01 → 2026-12-31, dang-chay, đã ẩn) và quý B (2026-10-15 → 2026-12-31, lap-ke-hoach, chưa ẩn) cùng năm Y: okr.cycles().currentId === B.id; ẩn B → currentId không thuộc {A, B} (theo AC-7: null chỉ khi mọi chu kỳ đều đã ẩn; còn năm chưa ẩn thì là năm đó); createCycle quý chồng ngày A trong năm Y (B đã ẩn — B có dữ liệu nên không gỡ được) → tạo được; createCycle quý thuộc năm Z đã ẩn → 400 thông điệp ghim, số okrCycle không đổi. Đối chứng dương: hiện A → currentId === A. CHIỀU ĐỎ: bản sao cycles() truyền cả chu kỳ ẩn vào chonChuKyHienTai → ca đầu trả A, bài in id."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_an_vang_api
+    paths: [apps/api/src/okr/**, packages/db/src/okr-chu-ky-hien.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; hai quý chạy song song cùng dữ liệu gieo (mục tiêu công bố, KR của người U, KR của người rời R, lần hỏi ý đang mở): X đã ẩn, V chưa ẩn. (1) MA TRẬN GHI: bài tự dò mọi thủ tục mutation của okr router (cùng cách vai-chi-okr dò thủ tục) và đòi mỗi tên có đúng một dòng trong GHI_VAO_KY_AN (đầu vào nhắm X hoặc bản ghi con của X) hoặc trong MIEN_GHI (lý do: không chạm chu kỳ, hoặc là suaChuKy/goChuKy/anChuKy/hienChuKy); thiếu dòng → đỏ in tên thủ tục; số ca chạy = độ dài GHI_VAO_KY_AN (khẳng định). Mỗi dòng: gọi vào X → 400 thông điệp ghim chu kỳ đã ẩn, bản ghi đích đọc lại toEqual bản trước; cùng lệnh đổi id sang V → được (đối chứng dương). Tối thiểu có dòng cho createObjective, updateObjective, publishObjective, createKeyResult, updateKeyResult, setCyclePhase, moRa, chamKr, mangSang (nguồn ở X), moHoiY, guiY. (2) mangSang từ quý trước cùng loại khi kỳ kế sớm nhất theo startsOn là X → bản nháp nằm ở V (id), không ở X; (3) okr cập nhật tuần của tôi cho U → danh sách KR toEqual đúng id KR của V; (4) chuyển việc khi R rời → chỉ KR của V đổi người, KR của X đọc lại giữ ownerUserId R. Hiện lại X → dòng (3) có thêm id KR của X. Thêm bốn ca X/V so theo id (hoặc theo đơn vị riêng của bài): alignmentTargets không có mục tiêu của X; cây căn chỉnh của năm (alignmentTree → mucTieuCuaCay) bỏ quý X; OKR còn mở của đơn vị (org.luuTruXemTruoc → dieuKienOkrMo) không đếm X; okr.objective trả kyGhiDuoc false cho mục tiêu của X, true cho V. CHIỀU ĐỎ: bản sao okr-cap-nhat bỏ KY_CON_HIEN → dòng (3) đỏ in id KR thừa."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_an_vang_nen
+    paths: [packages/db/src/okr-nhac.ts, apps/agent/agent/lib/okr/doc.ts, apps/agent/test/okr-dich-can-chinh.integration.spec.ts, packages/db/src/okr-chu-ky-hien.ts, apps/agent/agent/lib/okr-chup.ts, apps/agent/test/okr-nhac.integration.spec.ts, apps/agent/test/okr-chup.integration.spec.ts]
+    expected: "exit 0; ca ky-an trong okr-nhac.integration: cùng gieo hai quý X (ẩn) / V (chưa ẩn) có KR của U chưa cập nhật tuần, mục tiêu chờ duyệt, lần hỏi ý đang mở mà U chưa góp; sinh nhắc buổi sáng cho U → các mục nhắc toEqual đúng tập id của V (mục cập nhật tuần, chờ duyệt, hỏi ý); lienQuanOkr của người chỉ có dữ liệu ở X → false. Ca ky-an trong okr-chup.integration: KR nguồn máy ở X và V, chạy chụp số một ngày → okrSoChup có dòng cho KR của V, 0 dòng cho KR của X. Hiện lại X và chạy lại → có mục/dòng của X. Ca ky-an trong okr-dich-can-chinh.integration: docDichCanChinh của tác tử Trợ lý OKR không trả mục tiêu của X, có của V (so id). CHIỀU ĐỎ: bản sao okr-chup bỏ KY_CON_HIEN → ca chụp đỏ in id KR của X."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.sac_soi_ky_con_hien
+    paths: [apps/api/src/**, packages/db/src/**, apps/agent/agent/**, _acceptance/sua-an-chu-ky-okr/rang/soi-ma.mjs, _acceptance/sua-an-chu-ky-okr/rang/noi-doc-chu-ky.json]
+    expected: "exit 0; soi-ma.mjs suy gốc kho từ vị trí của nó, quét .ts ở apps/api/src, packages/db/src, apps/agent/agent (bỏ generated, .eve, test) bằng AST TypeScript (không regex dòng); tìm mọi chỗ đọc chu kỳ không theo id: object where có khoá cycle ở MỌI độ sâu (kể cả qua objective, okrKeyResult), cycleId: { in: … }, điều kiện startsOn/endsOn trên chu kỳ, lời gọi okrCycle.findMany/findFirst/count/groupBy, $queryRaw có chuỗi okrCycle; gom thành tập (tệp, hàm bao quanh) và so TẬP toEqual với lọc ∪ miễn của rang/noi-doc-chu-ky.json (không so số) — thừa hay thiếu đều đỏ, in phần chênh; mỗi chỗ nhóm lọc phải có định danh KY_CON_HIEN trong cùng object where hoặc AND bao nó; in danh sách đã soi. CHIỀU ĐỎ trong tmpdir (--chieu-do): (a) okr-trao-doi.service.ts gỡ KY_CON_HIEN → exit 1 in tệp và dieuKienChuyen; (b) tệp giả findMany({ where: { cycle: { endsOn: { gte: now } } } }) → exit 1 in tệp giả là chỗ chưa khai; (c) tệp giả okrKeyResult.findMany({ where: { objective: { cycle: { phase: 'dang-chay' } } } }) → exit 1. Đối chứng dương: cây thật → exit 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.sac_giai_ky
+    paths: ["apps/app/app/(app)/[slug]/okr/okr-search-params.ts", "apps/app/app/(app)/[slug]/okr/chon-chu-ky.tsx", apps/app/test/okr-giai-ky-an.spec.ts]
+    expected: "exit 0; bảng ca viết trước trên dữ liệu cycles có một chu kỳ ẩn H (lap-ke-hoach, startsOn sớm nhất) và currentId C: giaiKy(H.id) === C; giaiKyHoiY(H.id) === kyMacDinhHoiY(...) và kyMacDinhHoiY bỏ H chọn chu kỳ lập kế hoạch chưa ẩn sớm nhất; danh sách ô chọn (hàm lọc của chon-chu-ky) không chứa H; giaiKy(C.id) === C.id (đối chứng dương). CHIỀU ĐỎ: bản sao kyMacDinhHoiY không lọc anLuc → trả H, bài in id."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.sac_bang_dom
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/okr.ts, apps/app/test/okr-sua-an-chu-ky.dom.tsx]
+    expected: "exit 0; bài DOM dựng BangChuKy với sáu chu kỳ viết trước (viec lấy từ viecChuKy thật): menu từng hàng có đúng TẬP data-viec-chu-ky viết trước, gồm cả việc cũ theo pha — trống lập kế hoạch: {sua, go, chay}; trống đang chạy: {sua, go, mo-ra, sang-cham} và sheet sửa của nó chỉ bật ô tên; có dữ liệu đang chạy: {sua, an, mo-ra, sang-cham}; năm có dữ liệu còn quý hiện: {sua, an[disabled], mo-ra, sang-cham} kèm chữ «Còn 1 quý đang hiện»; đã đóng: {an, mo-lai}; đã ẩn: {hien-lai} (không việc cũ nào); hàng đã ẩn là hàng cuối và có nhãn «Đã ẩn»; mở sửa chu kỳ có dữ liệu → chỉ ô tên không disabled, có FieldDescription giải thích; hộp ẩn: nút xác nhận disabled khi lý do 9 ký tự, bật khi 10; sheet «Mở chu kỳ» ô Thuộc năm không có năm đã ẩn; nút Huỷ của sheet sửa và hộp ẩn nằm trong SheetClose/DialogClose. CHIỀU ĐỎ: bản sao menu hiện «Gỡ» theo phase thay vì viec.go → ca có dữ liệu đỏ in tập mục."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sac_man_chrome
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Gieo qua API thật trong phiên đo: năm Y; quý T trống lập kế hoạch; quý D có mục tiêu đang chạy; năm N còn một quý hiện; quý Đ đã đóng; quý A đã ẩn; đăng nhập quản trị bằng dev:session; dọn theo id ở cuối kể cả khi đỏ"
+      - "Mở {APP_URL}/<slug>/settings/okr ở 1440/vi → mở menu «…» của từng hàng → ảnh buoc-menu-<hàng>; hàng A ở cuối có nhãn «Đã ẩn»"
+      - "Hàng T → «Sửa chu kỳ» → đổi tên, ngày cuối, thứ cập nhật → Lưu → toast, bảng hiện tên mới → ảnh buoc-sua-moi-o"
+      - "Hàng D → «Sửa chu kỳ» → chỉ ô tên bật, dòng giải thích hiện → ảnh buoc-sua-chi-ten; đổi tên → Lưu"
+      - "Hàng T → «Gỡ chu kỳ» → hộp hỏi lại tông huỷ → ảnh buoc-go → xác nhận → hàng biến mất"
+      - "Hàng D → «Ẩn chu kỳ» → nút xác nhận tắt khi lý do trống → ảnh buoc-an-ly-do → gõ lý do 20 ký tự → xác nhận → hàng D xuống cuối, nhãn «Đã ẩn»"
+      - "Mở khu OKR › Theo đơn vị → mở ô chọn kỳ → không có D, không có A → ảnh buoc-o-chon"
+      - "Quay lại Cài đặt → hàng D «Hiện lại» → xác nhận → D rời cuối bảng"
+      - "Đăng nhập thành viên thường → nút «…» tắt, dòng giải thích dưới tiêu đề → ảnh buoc-thanh-vien"
+      - "Ảnh 390 cho buoc-menu và buoc-sua-chi-ten; scrollWidth <= innerWidth ở cả hai khổ"
+    expected: "Mọi bước đạt; ảnh lưu ở .acceptance-runs/sua-an-chu-ky-okr/evidence/; chữ trên màn bằng chữ của tệp chữ. CHIỀU ĐỎ: --chieu-do chạy bản sao sheet sửa không tắt ô ngày khi chỉ sửa được tên → bước buoc-sua-chi-ten đỏ, script in «ô ngày còn bật»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.sac_man_chrome
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/sua-an-chu-ky-okr/rang/man-sua-an.mjs]
+    expected: "Cùng lần chạy với E14: sau sửa mọi ô, DB okrCycle của T có đúng tên, endsOn, updateWeekday đã chọn; sau sửa tên D, DB đúng tên và ngày không đổi; sau gỡ T, okrCycle.findUnique(T) null và okrTrail có dòng go-chu-ky; sau ẩn D, anLuc khác null và okrTrail an-chu-ky note bằng lý do đã gõ; sau hiện lại, anLuc null; tên trên màn mỗi bước bằng tên đọc DB. CHIỀU ĐỎ: bản sao hộp ẩn gửi lý do rỗng thay vì chữ đã gõ → bước ẩn đỏ, script in note đọc được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.sac_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/**, packages/ui/src/components/**, packages/validation/src/**, packages/db/src/**, apps/api/src/okr/**, docs/api.md, CONTEXT.md, _acceptance/sua-an-chu-ky-okr/rang/soi-ma.mjs]
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke suy gốc kho từ vị trí của nó, lấy git diff --name-only origin/onehub...HEAD và chỉ tính dòng lượt này thêm; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay (bảng docs/design.md); mọi DialogFooter/SheetFooter mới có nút Huỷ bọc DialogClose/SheetClose; tệp mới không chú thích mã, không Record<string, unknown>, không useEffect( trần; viecChuKy, suaChuKyInput, KY_CON_HIEN mỗi thứ đúng một định nghĩa (grep export const/function toàn kho = 1); chữ mới trong tệp chữ có vi và en khác nhau; docs/api.md có chữ suaChuKy, goChuKy, anChuKy, hienChuKy và KY_CON_HIEN; CONTEXT.md mục «Chu kỳ» có «ẩn» và «gỡ»; in danh sách tệp đã soi (> 0). CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn `// x` và một nút Huỷ không DialogClose → đỏ in hai vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-12
+    executor: judgment
+    question: >-
+      Nhìn diff của lượt này: năm cờ việc có đúng một nguồn (viecChuKy) mà cả màn
+      lẫn bốn thủ tục ghi cùng đọc; mọi đầu vào mới có được parse ở biên bằng Zod;
+      chu kỳ đã ẩn có vắng ở mọi nơi tự tìm chu kỳ bằng một hằng dùng chung thay vì
+      điều kiện rải rác; menu, sheet sửa và hộp ẩn có dựng bằng thành phần packages/ui
+      (bậc 1–2) thay vì vẽ tay; và chữ trên màn có nói rõ hệ quả (ẩn thì biến khỏi ô
+      chọn, không nhắc; gỡ thì vết còn) như design doc?
+    inputs: [docs/superpowers/specs/2026-09-30-sua-an-chu-ky-okr-design.md, packages/validation/src/okr-chu-ky.ts, packages/db/src/okr-chu-ky-hien.ts, apps/api/src/okr/okr-chu-ky.service.ts, apps/api/src/okr/okr.contracts.ts, "apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx", "apps/app/app/(app)/[slug]/settings/okr/sheet-sua-chu-ky.tsx", "apps/app/app/(app)/[slug]/settings/okr/hop-thoai-an-chu-ky.tsx", "apps/app/app/(app)/[slug]/settings/okr/hoi-chu-ky.tsx", _acceptance/sua-an-chu-ky-okr/rang/noi-doc-chu-ky.json, _acceptance/sua-an-chu-ky-okr/evidence/E14-step5.png, _acceptance/sua-an-chu-ky-okr/contract.md, _acceptance/sua-an-chu-ky-okr/design-pass.md]
+    expected: >-
+      PASS khi cả năm vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
+      tệp và dòng. FAIL khi một vế sai.
+    evidence_required: [run_id, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-13
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.sac_migration_chi_them
+    paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/sua-an-chu-ky-okr/rang/migration-chi-them.mjs]
+    expected: "exit 0; script đọc mọi thư mục migration mới so với origin/onehub; tập câu SQL cho phép viết trước: ALTER TABLE \"okrCycle\" ADD COLUMN \"anLuc\" TIMESTAMP(3) (không DEFAULT khác NULL, không NOT NULL), CREATE INDEX trên okrCycle; mọi câu khác → exit 1; số câu > 0 in ra. Trên cơ sở dữ liệu tạm: gieo chu kỳ, mục tiêu, cập nhật tuần bằng lược đồ trước, chạy migration mới, đọc lại số dòng từng bảng okr* không đổi và mọi okrCycle có anLuc NULL. CHIỀU ĐỎ: 3 tệp giả trong tmpdir (ADD COLUMN anLuc NOT NULL DEFAULT now(); UPDATE okrCycle; DROP INDEX) → exit 1 thông điệp ghim từng loại. Đối chứng dương: tệp chỉ ADD COLUMN anLuc TIMESTAMP(3) → exit 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sac_dong_thoi
+    paths: [apps/api/src/okr/**, packages/db/src/okr-chu-ky-hien.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts, apps/api/test/okr-sua-an-san.ts]
+    expected: "exit 0; bốn cặp đồng thời viết trước, mỗi cặp chạy trên hai kết nối Prisma riêng, thủ tục thứ nhất bị giữ bằng chốt (hàm móc sau khi lấy khoá, chờ một Promise bài mở) rồi mới thả: (1) anChuKy(năm N có dữ liệu, 0 quý hiện ngoài Q đang ẩn) ∥ hienChuKy(Q); (2) hienChuKy(K) ∥ hienChuKy(L) chồng ngày cùng năm; (3) anChuKy(C) ∥ createObjective vào C; (4) goChuKy(C0 trống) ∥ createObjective vào C0. Mỗi cặp: cặp (1), (2) và thứ tự «ẩn hoặc gỡ trước» của (3), (4) — đúng một bên trả ok, bên kia 400 hoặc 404 với thông điệp ghim viết trước cho cặp đó (không 500, không mã P2003); thứ tự «tạo mục tiêu trước» của (3), (4) — lượt tạo xong trước nên hợp lệ, lượt ẩn thành công (chu kỳ đã có dữ liệu), lượt gỡ bị từ chối «khongTrong»; đọc lại bất biến: không năm có anLuc mà còn quý anLuc null; không hai quý anLuc null chồng ngày cùng năm; không okrObjective nào được tạo SAU lúc chu kỳ của nó bị ẩn (createdAt < anLuc); không okrObjective trỏ tới id đã gỡ. Mỗi cặp chạy cả hai thứ tự thả (4 × 2 = 8 lượt, khẳng định số lượt). CHIỀU ĐỎ: bản sao hienChuKy chỉ khoá hàng quý, không khoá năm cha và anh em → cặp (1) hoặc (2) đỏ in bất biến vỡ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

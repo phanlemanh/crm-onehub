@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { ghiDuocOPha } from "@crm/validation/okr-chu-ky";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement, useState } from "react";
@@ -32,6 +33,16 @@ const QUY: ChuKyOutput = {
 	breakEndsOn: null,
 	updateWeekday: 1,
 	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: {
+		suaMoiO: false,
+		suaTen: false,
+		go: false,
+		an: false,
+		hienLai: false,
+	},
 };
 
 function kr(id: string, startLocked: boolean): KrCanhOutput {
@@ -87,6 +98,7 @@ function mucTieu(
 		id: "mt-1",
 		cycleId: QUY.id,
 		cycleName: QUY.name,
+		kyGhiDuoc: ghiDuocOPha(phaQuy),
 		mangSangToi: null,
 		mangSangTu: null,
 		level: "phong-ban",
@@ -148,7 +160,6 @@ let sheets = SHEETS_TAT;
 let origin: string | null = null;
 let cuaSoRa: ChuKyOutput["cuaSoRa"] = null;
 let phaQuy: ChuKyOutput["phase"] = QUY.phase;
-let daDocChuKy = 0;
 const TRONG_RA = { id: "ra-1", tuNgay: "2026-11-16", denNgay: "2026-11-22" };
 
 function thuTuc<TRa, TKet = { id: string; canhBao: string | null }>(
@@ -182,13 +193,10 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
 			objective: thuTuc("okr.objective", () => chiTiet),
-			cycles: thuTuc("okr.cycles", () => {
-				daDocChuKy += 1;
-				return {
-					cycles: [{ ...QUY, phase: phaQuy, cuaSoRa }],
-					currentId: QUY.id,
-				};
-			}),
+			cycles: thuTuc("okr.cycles", () => ({
+				cycles: [{ ...QUY, phase: phaQuy, cuaSoRa }],
+				currentId: QUY.id,
+			})),
 			program: thuTuc("okr.program", () => ({
 				objectiveCap: 5,
 				krCap: 5,
@@ -443,7 +451,6 @@ beforeEach(() => {
 	origin = null;
 	cuaSoRa = null;
 	phaQuy = QUY.phase;
-	daDocChuKy = 0;
 	chiTiet = mucTieu("nhap", false);
 });
 
@@ -600,16 +607,14 @@ describe("sheet-kr-o-viec-theo-pha", () => {
 			"da-dong",
 		] as const) {
 			phaQuy = pha;
-			daDocChuKy = 0;
 			chiTiet = mucTieu("cong-bo", false);
 			const san = await mo();
-			await cho(() => daDocChuKy > 0, `doc chu ky ${pha}`);
-			await act(async () => {
-				await new Promise((r) => setTimeout(r, 0));
-			});
-			const o = san.o.ownerDocument.querySelector(
-				'[data-cot-viec="kr-1"] [data-mo-khung-kr="kr-1"]',
-			);
+			const oViec = () =>
+				san.o.ownerDocument.querySelector(
+					'[data-cot-viec="kr-1"] [data-mo-khung-kr="kr-1"]',
+				);
+			await cho(() => oViec() !== null, `o viec ${pha}`);
+			const o = oViec();
 			ket[pha] = o?.textContent?.trim() ?? "khong co o";
 			await act(async () => san.root.unmount());
 			san.o.remove();

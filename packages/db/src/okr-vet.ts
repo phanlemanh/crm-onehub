@@ -2,6 +2,10 @@ import { z } from "zod";
 
 export const HANH_DONG_VET = [
 	"tao-chu-ky",
+	"sua-chu-ky",
+	"go-chu-ky",
+	"an-chu-ky",
+	"hien-chu-ky",
 	"doi-pha",
 	"cau-hinh",
 	"tao",

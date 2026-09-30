@@ -2014,6 +2014,7 @@ model OkrCycle {
   breakStartsOn DateTime?      @db.Date
   breakEndsOn   DateTime?      @db.Date
   updateWeekday Int            @default(1)
+  anLuc         DateTime?
   objectives    OkrObjective[]
   cuaSoRa       OkrCuaSoRa[]
   diemKr        OkrDiemKr[]
@@ -2024,6 +2025,7 @@ model OkrCycle {
 
   @@index([parentId])
   @@index([startsOn])
+  @@index([anLuc])
   @@map("okrCycle")
 }
 

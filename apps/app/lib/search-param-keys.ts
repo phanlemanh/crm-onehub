@@ -58,6 +58,7 @@ export const SEARCH_PARAM = {
 		xem: THAM_SO_OKR.xem,
 		moChuKy: "moChuKy",
 		moRa: "moRa",
+		suaChuKy: "suaChuKy",
 		luotGopY: "luotGopY",
 		phuTrach: "phuTrachOkr",
 		loai: "loaiOkr",

@@ -127,8 +127,8 @@ export function HopChuyenOkr({
 
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const chuKy = useQuery(trpc.okr.cycles.queryOptions());
-	const kyMo = (chuKy.data?.cycles ?? []).filter((c) =>
-		PHA_CHUYEN_DUOC.includes(c.phase),
+	const kyMo = (chuKy.data?.cycles ?? []).filter(
+		(c) => c.anLuc === null && PHA_CHUYEN_DUOC.includes(c.phase),
 	);
 	const donVi = {
 		loai: nguon.level === "phong-ban" ? ("pb" as const) : ("bp" as const),

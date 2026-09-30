@@ -27,6 +27,7 @@ export async function gieoChuKy(
 	phase: PhaChuKy,
 	updateWeekday = 1,
 	ky: KyGieo = QUY_4,
+	anLuc: Date | null = null,
 ): Promise<string> {
 	const ck = await db.okrCycle.create({
 		data: {
@@ -36,6 +37,7 @@ export async function gieoChuKy(
 			endsOn: new Date(`${ky.den}T00:00:00Z`),
 			phase,
 			updateWeekday,
+			anLuc,
 		},
 	});
 	return ck.id;

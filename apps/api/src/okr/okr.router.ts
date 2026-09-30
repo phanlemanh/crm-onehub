@@ -8,6 +8,11 @@ import {
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import {
+	goChuKyInput,
+	hienChuKyInput,
+	suaChuKyInput,
+} from "@crm/validation/okr-chu-ky";
+import {
 	chuyenDonViInput,
 	datHienThiInput,
 	moCoiInput,
@@ -30,6 +35,7 @@ import {
 	yIdInput,
 } from "@crm/validation/okr-hoi-y";
 import {
+	anChuKyInput,
 	chamKrInput,
 	dongRaInput,
 	ghiDieuHocDuocInput,
@@ -138,6 +144,7 @@ import {
 } from "./okr-canh-kr.contracts";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrChuKyService } from "./okr-chu-ky.service";
 import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
 import {
@@ -210,6 +217,7 @@ export class OkrRouter {
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
 		@Inject(OkrTaiCoCauService) private readonly taiCoCau: OkrTaiCoCauService,
+		@Inject(OkrChuKyService) private readonly chuKy: OkrChuKyService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -244,6 +252,54 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof setCyclePhaseInput>,
 	) {
 		return this.okr.setCyclePhase(ctx.user.id, input.id, input.phase);
+	}
+
+	@Mutation({
+		input: suaChuKyInput,
+		output: okOutput,
+		meta: restMeta("PATCH", "/okr/cycles/{id}", TAG),
+	})
+	suaChuKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaChuKyInput>,
+	) {
+		return this.chuKy.suaChuKy(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: goChuKyInput,
+		output: okOutput,
+		meta: restMeta("DELETE", "/okr/cycles/{id}", TAG),
+	})
+	goChuKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof goChuKyInput>,
+	) {
+		return this.chuKy.goChuKy(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: anChuKyInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/cycles/{id}/hide", TAG),
+	})
+	anChuKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof anChuKyInput>,
+	) {
+		return this.chuKy.anChuKy(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hienChuKyInput,
+		output: okOutput,
+		meta: restMeta("POST", "/okr/cycles/{id}/unhide", TAG),
+	})
+	hienChuKy(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hienChuKyInput>,
+	) {
+		return this.chuKy.hienChuKy(ctx.user.id, input);
 	}
 
 	@Query({

@@ -540,12 +540,13 @@ export function ChamDiemBang(p: ChamDiemBangProps) {
 	);
 }
 
-function kyKeCua(ky: ChuKy, ds: ChuKy[]): ChuKy | null {
+export function kyKeCua(ky: ChuKy, ds: ChuKy[]): ChuKy | null {
 	return (
 		ds
 			.filter(
 				(c) =>
 					c.kind === ky.kind &&
+					c.anLuc === null &&
 					c.startsOn > ky.endsOn &&
 					PHA_GHI_DUOC.includes(c.phase),
 			)

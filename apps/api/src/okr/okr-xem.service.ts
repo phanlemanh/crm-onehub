@@ -507,6 +507,7 @@ export class OkrXemService {
 		const donVi = `${input.unit.loai}:${input.unit.id}`;
 		const tuan = dauTuanVN(homNay);
 		return this.db.$transaction(async (tx) => {
+			await this.okr.assertKyChuaAn(tx, input.cycleId);
 			await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`mo-hop-tuan:${userId}:${donVi}`}))`;
 			const gan = await tx.okrTrail.findMany({
 				where: {
