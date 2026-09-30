@@ -25,8 +25,16 @@ Không đổi dữ liệu, thủ tục API, tác tử, bộ kiểm góp ý, vế
 
 ### Hồ sơ ghim lại
 
-`the-gop-y-okr`, `tro-ly-okr-de-xuat`, `hop-thoai-giu-cho-dang-nhap` — thước hoặc bài kiểm của
-chúng chỉ đổi chỗ bám vỏ hộp sang ngăn. Phép đo nhìn bằng trình duyệt của ba hồ sơ chạy lại trong
-lượt chấm của hồ sơ `khung-tao-okr-nhu-deal`.
+`the-gop-y-okr` và `hop-thoai-giu-cho-dang-nhap` ghim lại trong PR này: thước hoặc bài kiểm của
+chúng chỉ đổi chỗ bám vỏ hộp sang ngăn, cộng phần mã đã gộp từ onehub sau lần ký của chúng. `tro-ly-okr-de-xuat` đổi bài kiểm cùng cách nhưng lưới
+trước khi gộp vẫn báo khớp, nên không ghim. Phép đo nhìn bằng trình duyệt của ba hồ sơ chạy lại
+trong lượt chấm của hồ sơ `khung-tao-okr-nhu-deal`.
+
+### Cổng Bằng chứng
+
+Ký 2026-09-30 (Manh Phan) sau năm vòng chấm; vòng 4 vượt trần ba vòng theo yêu cầu của chủ kho
+(thêm phần đầu cột góp ý). Tám mục ngoài hợp đồng ghi vào hạn chế đã biết, xem `contract.md`.
+Hai việc tách riêng: lỗi hydrat có sẵn trên màn Deals, và bộ đọc thẻ cổng của bộ kit bỏ sót mục
+mang từ vòng trước.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
