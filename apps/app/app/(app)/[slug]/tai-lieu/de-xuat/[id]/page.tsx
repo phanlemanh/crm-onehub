@@ -73,6 +73,7 @@ async function NoiDung({ params }: { params: Params }) {
 					khoi,
 					dai: suKienDoi(khoi),
 					may,
+					chienLuoc: dx.chienLuoc ?? undefined,
 				}}
 				key={`${dx.id}-${dx.trangThai}-${dx.cu}`}
 			/>

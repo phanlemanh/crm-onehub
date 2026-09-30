@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, FieldLabel } from "@crm/ui/components/field";
+import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
@@ -79,6 +79,11 @@ export function TruongTrangMoi({
 						))}
 					</SelectContent>
 				</Select>
+				{m.loaiMoTa[giaTri.loai] ? (
+					<FieldDescription data-mo-ta-loai>
+						{m.loaiMoTa[giaTri.loai]}
+					</FieldDescription>
+				) : null}
 			</Field>
 			<Field>
 				<FieldLabel htmlFor={id.donVi}>{m.donVi}</FieldLabel>

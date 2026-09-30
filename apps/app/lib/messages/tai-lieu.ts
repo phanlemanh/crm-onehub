@@ -6,6 +6,14 @@ import type {
 } from "@crm/validation/tai-lieu";
 import { NGUON, type TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 
+const loaiMoTaEn: Partial<Record<LoaiTrang, string>> = {
+	"chien-luoc": "The OKR assistant reads the version in use of this type",
+};
+
+const loaiMoTaVi: Partial<Record<LoaiTrang, string>> = {
+	"chien-luoc": "Trợ lý OKR đọc bản đang dùng của loại này",
+};
+
 const en = {
 	tieuDe: "Documents",
 	moTa: "Rules, policies, processes and forms, in the version in use.",
@@ -171,6 +179,7 @@ const en = {
 		chonDonVi: "Choose a unit",
 		khongDonVi: "No unit",
 		chuTrang: "Page owner",
+		loaiMoTa: loaiMoTaEn,
 		ban: "You",
 		noiDung: "Content",
 		noiDungNhan: "Page content",
@@ -228,6 +237,11 @@ const en = {
 		loi: "Not done: {loi}",
 		mayChu: "the server did not answer.",
 		veTrang: "Go to the page",
+		chienLuoc: {
+			canhBao: "Mentions {tu} — the OKR assistant must not bring these up",
+			quaTran:
+				"A strategy page is at most {tran} characters ({so} now) — shorten it and resubmit.",
+		},
 	},
 	duyetMay: {
 		buoc1: "Step 1 · What the source says",
@@ -479,6 +493,7 @@ const vi: TaiLieuMessages = {
 		chonDonVi: "Chọn đơn vị",
 		khongDonVi: "Không thuộc đơn vị nào",
 		chuTrang: "Chủ trang",
+		loaiMoTa: loaiMoTaVi,
 		ban: "Bạn",
 		noiDung: "Nội dung",
 		noiDungNhan: "Nội dung trang",
@@ -534,6 +549,11 @@ const vi: TaiLieuMessages = {
 		loi: "Chưa làm được: {loi}",
 		mayChu: "máy chủ không trả lời.",
 		veTrang: "Về trang",
+		chienLuoc: {
+			canhBao: "Có chữ về {tu} — Trợ lý OKR không được nhắc tới những thứ này",
+			quaTran:
+				"Trang chiến lược tối đa {tran} ký tự (đang {so}) — rút ngắn rồi gửi lại bản đề xuất.",
+		},
 	},
 	duyetMay: {
 		buoc1: "Bước 1 · Nguồn nói gì",
