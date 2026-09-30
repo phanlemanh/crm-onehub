@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { chuanHoa } from "@crm/validation/okr-kiem";
 import type { DongSoan } from "@/app/(app)/[slug]/okr/soan/kieu";
 import { lyDoTuChoiLuot } from "@/app/(app)/[slug]/okr/soan/loi-cua";
 import {
@@ -25,20 +26,23 @@ const goc = {
 	taoRaId: null,
 };
 
+const kdMt = (ten: string) => `muc-tieu-moi:${chuanHoa(ten)}`;
+const kdKr = (ten: string) => `kr-moi:${chuanHoa(ten)}`;
+
 const mt = (
 	id: string,
 	ten: string,
 	trangThai: TrangThai = "cho",
-	khoaDong = `mt-${id}`,
+	loaiMucTieu: "cam-ket" | "tham-vong" = "cam-ket",
 ): DongSoan => ({
 	...goc,
 	id,
 	khoa: `mt:${id}`,
-	khoaDong,
+	khoaDong: kdMt(ten),
 	loai: "muc-tieu-moi",
 	ten,
 	viSaoLucNay: "vì lúc này",
-	loaiMucTieu: "cam-ket",
+	loaiMucTieu,
 	trangThai,
 });
 
@@ -52,7 +56,7 @@ const kr = (
 	...goc,
 	id,
 	khoa: `kr:${id}`,
-	khoaDong: `kr-${id}`,
+	khoaDong: kdKr(ten),
 	chaKhoa: `mt:${cha}`,
 	loai: "kr-moi",
 	ten,
@@ -66,7 +70,7 @@ const cc = (id: string, cha: string): DongSoan => ({
 	...goc,
 	id,
 	khoa: `cc:${id}`,
-	khoaDong: `cc-${id}`,
+	khoaDong: `can-chinh-moi:mt:${cha}:dich-1`,
 	chaKhoa: `mt:${cha}`,
 	loai: "can-chinh-moi",
 	dichId: "dich-1",
@@ -77,7 +81,7 @@ describe("luat-ban-nhap", () => {
 	test("cayNhap gom KR và căn chỉnh dưới Mục tiêu theo chaKhoa, bỏ dòng mồ côi", () => {
 		const cay = cayNhap([
 			mt("1", "A"),
-			kr("11", "1", "K"),
+			kr("11", "1", "K1"),
 			cc("12", "1"),
 			kr("99", "x", "mồ côi"),
 		]);
@@ -92,43 +96,55 @@ describe("luat-ban-nhap", () => {
 
 	test("soBanNhap so theo khoaDong: vừa thêm · vừa sửa · vừa chuyển · đã bỏ", () => {
 		const truoc = [
-			mt("1", "A"),
-			mt("2", "B"),
-			kr("11", "1", "K1"),
-			kr("21", "2", "K2"),
+			mt("1", "Giữ khách"),
+			mt("2", "Mở tuyến"),
+			mt("4", "Tăng biên"),
+			kr("11", "1", "Ký lại hợp đồng"),
+			kr("21", "2", "Chuyến đúng hẹn"),
 		];
 		const sau = [
-			mt("1", "A đổi"),
-			kr("11", "1", "K1"),
-			kr("21", "1", "K2"),
-			mt("3", "C"),
+			mt("1", "Giữ khách", "cho", "tham-vong"),
+			mt("2", "Mở tuyến"),
+			kr("11", "1", "Ký lại hợp đồng"),
+			kr("21", "1", "Chuyến đúng hẹn"),
+			mt("3", "Giảm chi phí"),
 		];
 		const { dong, nhan } = soBanNhap(truoc, sau);
 		expect(Object.fromEntries(nhan)).toEqual({
-			"mt-1": "vua-sua",
-			"kr-21": "vua-chuyen",
-			"mt-3": "vua-them",
-			"mt-2": "da-bo",
+			[kdMt("Giữ khách")]: "vua-sua",
+			[kdKr("Chuyến đúng hẹn")]: "vua-chuyen",
+			[kdMt("Giảm chi phí")]: "vua-them",
+			[kdMt("Tăng biên")]: "da-bo",
 		});
-		expect(dong.find((d) => d.id === "2")?.trangThai).toBe("bac");
-		expect(dong.filter((d) => d.khoaDong === "mt-2")).toHaveLength(1);
+		expect(dong.find((d) => d.id === "4")?.trangThai).toBe("bac");
+		expect(dong.filter((d) => d.khoaDong === kdMt("Tăng biên"))).toHaveLength(
+			1,
+		);
 	});
 
-	test("soBanNhap: đổi tên đổi khoaDong thì là dòng mới và dòng cũ đã bỏ", () => {
+	test("soBanNhap: đổi tên Mục tiêu là dòng mới + đã bỏ, KR con không thành «vừa chuyển»", () => {
 		const { nhan } = soBanNhap(
-			[mt("1", "A", "cho", "muc-tieu-moi:a")],
-			[mt("7", "B", "cho", "muc-tieu-moi:b")],
+			[mt("1", "Giữ khách"), kr("11", "1", "Ký lại hợp đồng")],
+			[mt("7", "Giữ khách lớn"), kr("11", "7", "Ký lại hợp đồng")],
 		);
 		expect(Object.fromEntries(nhan)).toEqual({
-			"muc-tieu-moi:b": "vua-them",
-			"muc-tieu-moi:a": "da-bo",
+			[kdMt("Giữ khách lớn")]: "vua-them",
+			[kdMt("Giữ khách")]: "da-bo",
 		});
+	});
+
+	test("soBanNhap: model đánh lại khoá mà cha vẫn là cha cũ thì không «vừa chuyển»", () => {
+		const { nhan } = soBanNhap(
+			[mt("1", "Giữ khách"), kr("11", "1", "Ký lại hợp đồng")],
+			[mt("9", "Giữ khách"), kr("11", "9", "Ký lại hợp đồng")],
+		);
+		expect(nhan.size).toBe(0);
 	});
 
 	test("soBanNhap: dòng đã quyết biến mất không thành «đã bỏ», dòng không đổi không có nhãn", () => {
 		const { dong, nhan } = soBanNhap(
-			[mt("1", "A", "nhan"), mt("2", "B")],
-			[mt("2", "B")],
+			[mt("1", "Giữ khách", "nhan"), mt("2", "Mở tuyến")],
+			[mt("2", "Mở tuyến")],
 		);
 		expect(nhan.size).toBe(0);
 		expect(dong.map((d) => d.id)).toEqual(["2"]);
@@ -162,7 +178,7 @@ describe("luat-ban-nhap", () => {
 			demDong(
 				cayNhap([
 					mt("1", "A"),
-					kr("11", "1", "K"),
+					kr("11", "1", "K1"),
 					cc("12", "1"),
 					mt("2", "B"),
 					kr("99", "x", "mồ côi"),
@@ -174,10 +190,10 @@ describe("luat-ban-nhap", () => {
 	test("demDuaVao đếm Mục tiêu và KR đã nhận/sửa, không đếm bác", () => {
 		const cay = cayNhap([
 			mt("1", "A", "nhan"),
-			kr("11", "1", "K", "sua"),
-			kr("12", "1", "K", "bac"),
+			kr("11", "1", "K1", "sua"),
+			kr("12", "1", "K2", "bac"),
 			mt("2", "B", "bac"),
-			kr("21", "2", "K", "nhan"),
+			kr("21", "2", "K3", "nhan"),
 		]);
 		expect(demDuaVao(cay)).toEqual({ soMucTieu: 1, soKr: 1 });
 	});
@@ -195,6 +211,22 @@ describe("luat-ban-nhap", () => {
 				"12": { khoiDiem: "0", dich: "1" },
 			}),
 		).toEqual([{ deXuatId: "11", khoiDiem: 3.5, dich: 10 }]);
+	});
+
+	test("krDuaVao đọc số kiểu Việt và chặn ngoài ±1e12", () => {
+		const cay = cayNhap([
+			mt("1", "A", "nhan"),
+			kr("11", "1", "K1", "nhan"),
+			kr("12", "1", "K2", "nhan"),
+		]);
+		const so = {
+			"11": { khoiDiem: "5.000", dich: "1.250.000" },
+			"12": { khoiDiem: "0", dich: "1000000000001" },
+		};
+		expect(krDuaVao(cay, so)).toEqual([
+			{ deXuatId: "11", khoiDiem: 5000, dich: 1_250_000 },
+		]);
+		expect(krThieuSo(cay, so)).toEqual(["12"]);
 	});
 
 	test("duongTheoDonVi dựng đường Theo đơn vị cho ba cấp", () => {

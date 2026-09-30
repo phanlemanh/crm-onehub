@@ -1,3 +1,4 @@
+import { docSoOkr } from "@crm/validation/okr-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import type {
 	DemDuaVao,
@@ -56,11 +57,14 @@ export function soBanNhap(
 	if (truoc.length === 0) return { dong: [...sau], nhan };
 	const cu = new Map(truoc.map((d) => [d.khoaDong, d] as const));
 	const moi = new Set(sau.map((d) => d.khoaDong));
+	const doiCha = (c: DongSoan, d: DongSoan) => {
+		const chaCu = chaCua(c, truoc);
+		return chaCu !== null && moi.has(chaCu) && chaCu !== chaCua(d, sau);
+	};
 	for (const d of sau) {
 		const c = cu.get(d.khoaDong);
 		if (!c) nhan.set(d.khoaDong, "vua-them");
-		else if (chaCua(c, truoc) !== chaCua(d, sau))
-			nhan.set(d.khoaDong, "vua-chuyen");
+		else if (doiCha(c, d)) nhan.set(d.khoaDong, "vua-chuyen");
 		else if (noiDungCua(c) !== noiDungCua(d)) nhan.set(d.khoaDong, "vua-sua");
 	}
 	const daBo = truoc
@@ -75,13 +79,6 @@ export function soMacDinh(kr: DongKr): SoKr {
 		khoiDiem: kr.khoiDiemGoiY === null ? "" : String(kr.khoiDiemGoiY),
 		dich: "",
 	};
-}
-
-export function docSo(s: string): number | null {
-	const chu = s.trim().replace(",", ".");
-	if (chu === "") return null;
-	const so = Number(chu);
-	return Number.isFinite(so) ? so : null;
 }
 
 export const canSo = (kr: DongKr): boolean => kr.kieu !== "moc";
@@ -102,7 +99,7 @@ export function krThieuSo(cay: readonly KhoiNhap[], so: SoDaGo): string[] {
 		.filter(canSo)
 		.filter((kr) => {
 			const s = soCua(kr, so);
-			return docSo(s.khoiDiem) === null || docSo(s.dich) === null;
+			return docSoOkr(s.khoiDiem) === null || docSoOkr(s.dich) === null;
 		})
 		.map((kr) => kr.id);
 }
@@ -127,8 +124,8 @@ export function krDuaVao(
 		.filter(canSo)
 		.flatMap((kr) => {
 			const s = soCua(kr, so);
-			const khoiDiem = docSo(s.khoiDiem);
-			const dich = docSo(s.dich);
+			const khoiDiem = docSoOkr(s.khoiDiem);
+			const dich = docSoOkr(s.dich);
 			return khoiDiem === null || dich === null
 				? []
 				: [{ deXuatId: kr.id, khoiDiem, dich }];

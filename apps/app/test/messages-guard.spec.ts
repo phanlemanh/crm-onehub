@@ -137,8 +137,14 @@ function mienDau(khoa: string): boolean {
 	return KHONG_DAU.has(khoa) || KHONG_DAU.has(phan.slice(-2).join("."));
 }
 
+const DOI_SO_HIEN = ["X", "Y", "Z", "W"];
+const DOI_SO_GHIM = [
+	["1", "A", "B", "C"],
+	["12", "A", "B", "C"],
+] as const;
+
 function hienRa(v: GiaTri): string {
-	return v instanceof Function ? v("X", "Y", "Z") : v;
+	return v instanceof Function ? v(...DOI_SO_HIEN.slice(0, v.length)) : v;
 }
 
 const CHUA_NOI_KHAI: readonly string[] = [
@@ -258,8 +264,8 @@ const GHIM_OKR_SOAN = {
 		"Tạo ở trạng thái nháp cho 12, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
 	],
 	"okr-soan:banNhap.xacNhan.than": [
-		"Tạo 1 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, undefined?",
-		"Tạo 12 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, undefined?",
+		"Tạo 1 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, C?",
+		"Tạo 12 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, C?",
 	],
 	"okr-soan:banNhap.daTao": [
 		"Đã tạo 1 Mục tiêu nháp",
@@ -959,8 +965,9 @@ describe("kho chuoi cua vong ③a", () => {
 			if (!lay) throw new Error(`khong co module ${ten}`);
 			const f = phang(lay("vi")).find(([k]) => k === duong)?.[1];
 			if (!(f instanceof Function)) throw new Error(`${khoa} khong phai ham`);
-			expect(f("1", "A", "B")).toBe(mot);
-			expect(f("12", "A", "B")).toBe(nhieu);
+			expect(f.length).toBeLessThanOrEqual(DOI_SO_GHIM[0].length);
+			expect(f(...DOI_SO_GHIM[0].slice(0, f.length))).toBe(mot);
+			expect(f(...DOI_SO_GHIM[1].slice(0, f.length))).toBe(nhieu);
 		}
 	});
 });

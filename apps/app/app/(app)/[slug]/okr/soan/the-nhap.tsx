@@ -13,6 +13,7 @@ import {
 	type ProposedChangeAction,
 	type ProposedChangeDecision,
 } from "@crm/ui/components/proposed-change";
+import { docSoOkr } from "@crm/validation/okr-kr";
 import { type ReactNode, useState } from "react";
 import type { okrMessages } from "@/lib/messages/okr";
 import type { OkrSoanMessages } from "@/lib/messages/okr-soan";
@@ -24,7 +25,7 @@ import type {
 	DongSoan,
 	KhoiNhap,
 } from "./kieu";
-import { canSo, daNhan, docSo, soCua } from "./luat-ban-nhap";
+import { canSo, daNhan, soCua } from "./luat-ban-nhap";
 
 type Quyet = "nhan" | "sua" | "bac";
 
@@ -286,7 +287,7 @@ function OSoKr({
 				nhan={m.banNhap.khoiDiem}
 				donVi={kr.donVi}
 				giaTri={so.khoiDiem}
-				loi={thieu && docSo(so.khoiDiem) === null}
+				loi={thieu && docSoOkr(so.khoiDiem) === null}
 				khoa={n.khoa}
 				doi={(khoiDiem) => n.s.datSo(kr.id, { ...so, khoiDiem })}
 			/>
@@ -295,7 +296,7 @@ function OSoKr({
 				nhan={m.banNhap.dich}
 				donVi={kr.donVi}
 				giaTri={so.dich}
-				loi={thieu && docSo(so.dich) === null}
+				loi={thieu && docSoOkr(so.dich) === null}
 				khoa={n.khoa}
 				doi={(dich) => n.s.datSo(kr.id, { ...so, dich })}
 			/>
