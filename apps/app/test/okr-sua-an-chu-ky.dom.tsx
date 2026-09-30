@@ -1,6 +1,10 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { viecChuKy } from "@crm/validation/okr-chu-ky";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	skipToken,
+} from "@tanstack/react-query";
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -146,6 +150,19 @@ mock.module("@/lib/trpc/client", () => ({
 			goChuKy: thuTuc("okr.goChuKy"),
 			anChuKy: thuTuc("okr.anChuKy"),
 			hienChuKy: thuTuc("okr.hienChuKy"),
+			access: thuTuc("okr.access", () => ({
+				canManageProgram: true,
+				headOf: { divisions: [], departments: [] },
+			})),
+			toanCanh: {
+				queryOptions: (vao: unknown) =>
+					vao === skipToken
+						? { queryKey: ["okr.toanCanh", "bo-qua"], queryFn: skipToken }
+						: {
+								queryKey: ["okr.toanCanh"],
+								queryFn: () => new Promise<never>(() => {}),
+							},
+			},
 		},
 	}),
 }));
@@ -185,6 +202,7 @@ const { BangChuKy } = await import(
 	"@/app/(app)/[slug]/settings/okr/bang-chu-ky"
 );
 const { ChonChuKy } = await import("@/app/(app)/[slug]/okr/chon-chu-ky");
+const { ToanCanh } = await import("@/app/(app)/[slug]/okr/toan-canh/toan-canh");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
@@ -728,5 +746,40 @@ describe("sau-go-ky-mac-dinh", () => {
 		const ten = tatCa('[role="option"]').map((o) => o.textContent ?? "");
 		expect(ten.some((t) => t.includes(DA_AN.name))).toBe(false);
 		expect(ten.length).toBe(5);
+	});
+});
+
+describe("toan-canh-moi-ky-an", () => {
+	test("toan-canh-moi-ky-an: moi chu ky deu da an thi Toan canh noi chua co chu ky, khong xoay mai", async () => {
+		dsKy = [DA_AN];
+		kyHienTai = null;
+		const o = document.createElement("div");
+		document.body.appendChild(o);
+		const root = createRoot(o);
+		const client = new QueryClient({
+			defaultOptions: { queries: { retry: false } },
+		});
+		await act(async () => {
+			root.render(
+				<NuqsTestingAdapter hasMemory searchParams="">
+					<QueryClientProvider client={client}>
+						<LocaleProvider locale="vi">
+							<TooltipProvider>
+								<ToanCanh />
+							</TooltipProvider>
+						</LocaleProvider>
+					</QueryClientProvider>
+				</NuqsTestingAdapter>,
+			);
+		});
+		dangMo.push({ o, root });
+		await cho(
+			() => q('[data-trang-thai="ST-donvi-chuakychay"]') !== null,
+			"toan canh noi chua co chu ky",
+		);
+		expect({
+			chuaKy: q('[data-trang-thai="ST-donvi-chuakychay"]') !== null,
+			dangTai: q('[data-trang-thai="ST-donvi-dangtai"]') !== null,
+		}).toEqual({ chuaKy: true, dangTai: false });
 	});
 });
