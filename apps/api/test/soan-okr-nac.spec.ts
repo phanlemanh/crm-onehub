@@ -23,6 +23,13 @@ const CHO_PHEP = [
 	/^CREATE (UNIQUE )?INDEX "[A-Za-z_]+" ON "[A-Za-z]+"\s*\([^;]*\)$/s,
 ];
 
+function themCotBatBuocKhongMacDinh(cau: string): boolean {
+	if (!/^ALTER TABLE\b/.test(cau)) return false;
+	return cau
+		.split(/,\s*(?=ADD COLUMN)/)
+		.some((cot) => /\bNOT NULL\b/i.test(cot) && !/\bDEFAULT\b/i.test(cot));
+}
+
 export function cauLech(sql: string): string[] {
 	const cau = sql
 		.split("\n")
@@ -32,7 +39,10 @@ export function cauLech(sql: string): string[] {
 		.map((c) => c.trim())
 		.filter((c) => c.length > 0);
 	return cau.filter(
-		(c) => CAM.some((r) => r.test(c)) || !CHO_PHEP.some((r) => r.test(c)),
+		(c) =>
+			CAM.some((r) => r.test(c)) ||
+			!CHO_PHEP.some((r) => r.test(c)) ||
+			themCotBatBuocKhongMacDinh(c),
 	);
 }
 
@@ -53,5 +63,34 @@ describe("migration", () => {
 			'CREATE UNIQUE INDEX "okrCuocSoan_sessionId_key"',
 		])
 			expect(sql, `thieu: ${cot}`).toContain(cot);
+	});
+
+	test("cauLech bắt DROP COLUMN", () => {
+		const lech = cauLech('ALTER TABLE "a" DROP COLUMN "b";');
+		expect(lech).toHaveLength(1);
+		expect(lech[0]).toContain("DROP COLUMN");
+	});
+
+	test("cauLech bắt ALTER COLUMN ... SET DATA TYPE", () => {
+		expect(
+			cauLech('ALTER TABLE "a" ALTER COLUMN "b" SET DATA TYPE integer;'),
+		).toHaveLength(1);
+	});
+
+	test("cauLech cho qua ADD COLUMN có DEFAULT", () => {
+		expect(
+			cauLech('ALTER TABLE "a" ADD COLUMN     "b" TEXT NOT NULL DEFAULT \'\';'),
+		).toEqual([]);
+	});
+
+	test("cauLech bắt ADD COLUMN NOT NULL không DEFAULT, kể cả cột thứ hai trong một câu", () => {
+		expect(
+			cauLech('ALTER TABLE "a" ADD COLUMN     "b" TEXT NOT NULL;'),
+		).toHaveLength(1);
+		expect(
+			cauLech(
+				'ALTER TABLE "a" ADD COLUMN     "b" TEXT,\nADD COLUMN     "c" INTEGER NOT NULL;',
+			),
+		).toHaveLength(1);
 	});
 });
