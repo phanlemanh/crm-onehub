@@ -9,7 +9,8 @@ import {
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
-import { thangVN } from "@crm/db/ai-chi-phi";
+import { chiTieuThang, thangVN } from "@crm/db/ai-chi-phi";
+import { viecAiCanNhac } from "@crm/db/ai-nhac";
 import { docCuoc } from "@crm/db/okr-cuoc-soan";
 import {
 	cauHinhAiLuc,
@@ -547,6 +548,69 @@ describe("tran-thang", () => {
 					where: { id: { in: ids } },
 					data: { phase: "lap-ke-hoach" },
 				});
+			}
+		},
+		CHO_DB,
+	);
+});
+
+describe("nhac-tran-thang", () => {
+	test(
+		"viecAiCanNhac so chi tiêu với trần của tháng: tháng có chu kỳ lập kế hoạch dùng trần đặt OKR (15) nên 11 USD chưa báo; hết chu kỳ lập kế hoạch thì trần thường (9) báo 100",
+		async () => {
+			const now = tienDongHo();
+			const thang = thangVN(now);
+			const tong = 11;
+			const daChi = (await chiTieuThang(db, thang, now)).troLyOkrUsd;
+			expect(daChi, "so chi san trong thang qua lon").toBeLessThan(tong);
+			const chi = await db.aiChiPhi.create({
+				data: {
+					id: "nhac-tran-thang-thu",
+					at: new Date(now.getTime() - 1),
+					sessionId: "nhac-tran-thang-thu",
+					tinhNang: "okr.soan",
+					costUsd: tong - daChi,
+				},
+			});
+			const keHoach = await db.okrCycle.findMany({
+				where: { phase: "lap-ke-hoach" },
+				select: { id: true },
+			});
+			const baoTran = async () => {
+				const ds = [...(await viecAiCanNhac(db, { now })).values()]
+					.flat()
+					.flatMap((v) => (v.loai === "ai-tran" ? [[v.muc, v.tranUsd]] : []));
+				return [...new Set(ds.map((v) => JSON.stringify(v)))];
+			};
+			try {
+				const ct = await cauHinhAiLuc(db, now);
+				const coKy = {
+					ky: await coChuKyLapKeHoachTrongThang(db, thang),
+					bao: await baoTran(),
+				};
+				await db.okrCycle.updateMany({
+					where: { id: { in: keHoach.map((k) => k.id) } },
+					data: { phase: "dang-chay" },
+				});
+				const hetKy = {
+					ky: await coChuKyLapKeHoachTrongThang(db, thang),
+					bao: await baoTran(),
+				};
+				expect({
+					tran: [ct.aiTranThangUsd, ct.aiTranThangDatOkrUsd],
+					coKy,
+					hetKy,
+				}).toEqual({
+					tran: [9, 15],
+					coKy: { ky: true, bao: [] },
+					hetKy: { ky: false, bao: [JSON.stringify([100, 9])] },
+				});
+			} finally {
+				await db.okrCycle.updateMany({
+					where: { id: { in: keHoach.map((k) => k.id) } },
+					data: { phase: "lap-ke-hoach" },
+				});
+				await db.aiChiPhi.delete({ where: { id: chi.id } });
 			}
 		},
 		CHO_DB,
