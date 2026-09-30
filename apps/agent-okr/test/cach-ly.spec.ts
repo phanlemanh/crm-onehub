@@ -4,6 +4,9 @@ import { join, relative } from "node:path";
 import { z } from "zod";
 import tacNhan from "../agent/agent";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
+import { type GoiSoan, goiThanhChiDan } from "../agent/lib/goi-soan";
+import { CAU_CHEN, THE_CHEN } from "./support/gieo-goi";
+import { loiBocLop5 } from "./support/the-du-lieu";
 
 const GOC =
 	process.env.THU_MUC_AGENT_OKR ?? join(import.meta.dir, "..", "agent");
@@ -17,6 +20,51 @@ function tepTs(thuMuc: string): string[] {
 	}
 	return ra;
 }
+
+const DOC_AUTH_CURRENT =
+	/\bauth\s*\??\.\s*current\b|\bauth\s*\??\.?\s*\[\s*["'`]current["'`]\s*\]/;
+const DOC_AUTH_INITIATOR = /\bauth\s*\??\.\s*initiator\b/;
+const THU_MUC_DOC_PHIEN = ["hooks", "instructions", "tools", "lib"];
+
+const GOI_GIA: GoiSoan = {
+	cuocSoanId: "gia",
+	cuoc: {
+		id: "gia",
+		cycleId: "ky",
+		level: "phong-ban",
+		divisionId: "bp",
+		departmentId: "pb",
+		nguoiMoUserId: "nguoi",
+		sessionId: "phien",
+		cacPhien: ["phien"],
+		nac: "bat",
+		trangThai: "dang",
+		soLuot: 0,
+		streamIndex: 0,
+		continuationToken: null,
+		daCat: null,
+		duaVaoLuc: null,
+		createdAt: new Date(0),
+	},
+	lop05: [
+		{
+			ten: "Chiến lược",
+			xacMinhDen: null,
+			noiDung: `Ưu tiên lấp đầy mùa thấp điểm. ${CAU_CHEN}. ${THE_CHEN}`,
+		},
+	],
+	lop1: {
+		donVi: { ten: "Phòng", cap: "phong-ban", moTa: "" },
+		cha: null,
+		truong: null,
+		nguoiHoi: { vai: "member", chucDanh: "" },
+	},
+	lop2a: { capTren: [], ngangCap: [], ungVienCanChinh: [] },
+	lop3: { chuKy: null, mucTieu: [], mangSang: [], tomGon: true },
+	lop4: { chiSo: [] },
+	cham: { thangCham: "0-1", objectiveCap: 5, krCap: 5, tuCam: [] },
+	daCat: { buoc: [], truocToken: 0, sauToken: 0, chienLuocCatKyTu: 0 },
+};
 
 async function kiemTapTool(): Promise<string[]> {
 	const loi: string[] = [];
@@ -91,5 +139,25 @@ describe("cach-ly", () => {
 			}
 		}
 		expect(loi).toEqual([]);
+	});
+
+	test("hook, tool, instructions và lib đọc auth.initiator, không đọc auth.current", () => {
+		const loi: string[] = [];
+		let docInitiator = 0;
+		for (const thuMuc of THU_MUC_DOC_PHIEN)
+			for (const t of tepTs(join(GOC, thuMuc))) {
+				const s = readFileSync(t, "utf8");
+				if (DOC_AUTH_CURRENT.test(s))
+					loi.push(`${relative(GOC, t)} doc auth.current`);
+				if (DOC_AUTH_INITIATOR.test(s)) docInitiator += 1;
+			}
+		expect(loi).toEqual([]);
+		expect(docInitiator, "khong tep nao doc auth.initiator").toBeGreaterThan(0);
+	});
+
+	test("thẻ dữ liệu bọc lớp 0-5 trong goiThanhChiDan: câu chèn ở trong thẻ, thẻ chèn trong trang bị vô hiệu, số thẻ đóng bằng số lớp", () => {
+		const chu = goiThanhChiDan(GOI_GIA);
+		expect(loiBocLop5(chu)).toEqual([]);
+		expect(chu).toContain(TRO_LY_OKR_SOAN.goi.theVoHieu);
 	});
 });

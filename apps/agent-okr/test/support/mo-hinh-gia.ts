@@ -22,8 +22,9 @@ export const KICH_BAN = {
 } as const;
 
 const TEP_DAU = "dau-loi-goi.ndjson";
+const TEP_HE_THONG = "he-thong-loi-goi.ndjson";
 
-function agentGia(duongDau: string): string {
+function agentGia(duongDau: string, duongHeThong: string): string {
 	return `import "@crm/env/load";
 import { appendFileSync } from "node:fs";
 import { bocModelZdr } from "@crm/ai-okr";
@@ -33,6 +34,7 @@ import { mockModel } from "eve/evals";
 import { TRO_LY_OKR_SOAN } from "./lib/config";
 const K = ${JSON.stringify(KICH_BAN)};
 const DAU = ${JSON.stringify(duongDau)};
+const HE_THONG = ${JSON.stringify(duongHeThong)};
 const NHAP = { mucTieu: [
 	{ khoa: "m1", ten: K.tenMucTieu3, viSaoLucNay: "Mùa Tết", loai: "cam-ket", viSao: "Kỳ trước trượt gia hạn", kr: [
 		{ khoa: "k11", ten: "Tỷ lệ đối tác gia hạn hợp đồng", kieu: "tang-toi", donVi: "%", viSao: "đo kết quả" },
@@ -57,8 +59,12 @@ const traLoi = ({ lastUserMessage, userMessages, toolResults }) => {
 		return toolResults.length > 0 ? "Đã ghi bản nháp: " + JSON.stringify(toolResults.at(-1)?.output) : { toolCalls: [{ name: "nop_ban_nhap", input: NHAP }] };
 	return "Kỳ trước phòng đạt 82 %. Hai câu hỏi:\\n1. Ưu tiên gì?\\n- gợi ý: Giữ chân · Mở rộng";
 };
+const ghiHeThong = (yc) => {
+	appendFileSync(HE_THONG, JSON.stringify(yc.messages.filter((m) => m.role === "system").map((m) => m.text).join("\\n\\n")) + "\\n");
+	return traLoi(yc);
+};
 export default defineAgent({
-	model: ghiDau(bocModelZdr(mockModel(traLoi), { tags: TRO_LY_OKR_SOAN.tags, tranRaMoiLoiGoi: TRO_LY_OKR_SOAN.tranRaMoiLoiGoi })),
+	model: ghiDau(bocModelZdr(mockModel(ghiHeThong), { tags: TRO_LY_OKR_SOAN.tags, tranRaMoiLoiGoi: TRO_LY_OKR_SOAN.tranRaMoiLoiGoi })),
 	modelContextWindowTokens: TRO_LY_OKR_SOAN.cuaSoNguCanh,
 	limits: TRO_LY_OKR_SOAN.limits,
 });
@@ -68,8 +74,18 @@ export default defineAgent({
 export type AppGia = {
 	goc: string;
 	docDau: () => (DauOnehub | null)[];
+	docHeThong: () => string[];
 	don: () => void;
 };
+
+function docDong(duong: string): unknown[] {
+	return existsSync(duong)
+		? readFileSync(duong, "utf8")
+				.split("\n")
+				.filter((d) => d.trim() !== "")
+				.map((d) => JSON.parse(d))
+		: [];
+}
 
 const dauLoiGoi = z
 	.object({
@@ -81,21 +97,20 @@ const dauLoiGoi = z
 export function chepAppGia(v: { them?: Record<string, string> } = {}): AppGia {
 	const goc = join(APP, "test", ".chay", crypto.randomUUID());
 	const duongDau = join(goc, TEP_DAU);
+	const duongHeThong = join(goc, TEP_HE_THONG);
 	mkdirSync(goc, { recursive: true });
 	for (const phan of ["agent", "package.json", "tsconfig.json"])
 		cpSync(join(APP, phan), join(goc, phan), { recursive: true });
-	writeFileSync(join(goc, "agent", "agent.ts"), agentGia(duongDau));
+	writeFileSync(
+		join(goc, "agent", "agent.ts"),
+		agentGia(duongDau, duongHeThong),
+	);
 	for (const [duong, than] of Object.entries(v.them ?? {}))
 		writeFileSync(join(goc, duong), than);
 	return {
 		goc,
-		docDau: () =>
-			existsSync(duongDau)
-				? readFileSync(duongDau, "utf8")
-						.split("\n")
-						.filter((d) => d.trim() !== "")
-						.map((d) => dauLoiGoi.parse(JSON.parse(d)))
-				: [],
+		docDau: () => docDong(duongDau).map((d) => dauLoiGoi.parse(d)),
+		docHeThong: () => docDong(duongHeThong).map((d) => z.string().parse(d)),
 		don: () => rmSync(goc, { recursive: true, force: true }),
 	};
 }
