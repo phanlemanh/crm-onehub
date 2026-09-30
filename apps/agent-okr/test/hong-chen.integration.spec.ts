@@ -7,7 +7,7 @@ import { capNhatPhien, docCuoc } from "@crm/db/okr-cuoc-soan";
 import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 import { goiSoan, goiThanhChiDan } from "../agent/lib/goi-soan";
-import { donDep, moXuong } from "./support/gieo";
+import { donDep, gieoCuoc, moXuong } from "./support/gieo";
 import { CAU_CHEN, gieoCanhGoi } from "./support/gieo-goi";
 import {
 	APP,
@@ -60,14 +60,26 @@ beforeAll(async () => {
 }, 300_000);
 
 afterAll(async () => {
-	await may?.dung();
-	appGia?.don();
-	if (sessionId) {
-		await db.aiChiPhi.deleteMany({ where: { sessionId } });
-		await db.agentEvent.deleteMany({ where: { sessionId } });
+	try {
+		await may?.dung();
+	} finally {
+		try {
+			appGia?.don();
+		} finally {
+			try {
+				if (sessionId) {
+					await db.aiChiPhi.deleteMany({ where: { sessionId } });
+					await db.agentEvent.deleteMany({ where: { sessionId } });
+				}
+			} finally {
+				try {
+					await donDep();
+				} finally {
+					if (maThoat) process.exit(maThoat);
+				}
+			}
+		}
 	}
-	await donDep();
-	if (maThoat) process.exit(maThoat);
 });
 
 describe("hong-chen", () => {
@@ -149,18 +161,42 @@ describe("hong-chen", () => {
 		for (const l of loiTraLoi) expect(l).not.toContain("thoả thuận");
 	}, 240_000);
 
-	test("(c) Thử lại đổi phiên: hai lần đổi cùng lúc thì sessionId đổi đúng một lần, cacPhien nối phiên cũ; cuộc không còn dang thì không đổi", async () => {
+	test("(c) Thử lại đổi phiên lần lượt: mỗi lần nối phiên cũ vào cacPhien theo thứ tự, gọi lại cùng phiên không đổi gì", async () => {
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			divisionId: canh.boPhan.id,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+		});
+		const [a, b] = [randomUUID(), randomUUID()];
+		expect(await capNhatPhien(db, cuoc.id, a)).toEqual({ doi: true });
+		expect(await capNhatPhien(db, cuoc.id, b)).toEqual({ doi: true });
+		const sau = await docCuoc(db, cuoc.id);
+		expect(sau?.cacPhien).toEqual([cuoc.sessionId, a, b]);
+		expect(sau?.sessionId).toBe(b);
+		expect(await capNhatPhien(db, cuoc.id, b)).toEqual({ doi: false });
+		const lai = await docCuoc(db, cuoc.id);
+		expect(lai?.cacPhien).toEqual([cuoc.sessionId, a, b]);
+		expect(lai?.sessionId).toBe(b);
+	});
+
+	test("(c) Thử lại đổi phiên cùng lúc: đúng một phiên sống, cacPhien không trùng và chỉ mang phiên cũ cùng các lần đổi thành công; cuộc không còn dang thì không đổi", async () => {
 		const cuoc = await docCuoc(db, canh.cuocSoanId);
 		if (!cuoc) throw new Error("mat cuoc");
 		const cu = cuoc.sessionId;
-		const moi = [randomUUID(), randomUUID()];
+		const moi: string[] = [randomUUID(), randomUUID()];
 		const kq = await Promise.all(
 			moi.map((id) => capNhatPhien(db, canh.cuocSoanId, id)),
 		);
-		expect(kq.filter((k) => k.doi).length).toBe(1);
+		const daDoi = moi.filter((_, i) => kq[i]?.doi);
 		const sau = await docCuoc(db, canh.cuocSoanId);
-		expect(sau?.sessionId).toBe(kq[0]?.doi ? moi[0] : moi[1]);
-		expect(sau?.cacPhien).toEqual([...cuoc.cacPhien, cu, sau?.sessionId ?? ""]);
+		const cacPhien = sau?.cacPhien ?? [];
+		expect(daDoi).toContain(sau?.sessionId ?? "");
+		expect(new Set(cacPhien).size).toBe(cacPhien.length);
+		expect(cacPhien.length).toBe(cuoc.cacPhien.length + 1 + daDoi.length);
+		expect([...cacPhien].sort()).toEqual(
+			[...cuoc.cacPhien, cu, ...daDoi].sort(),
+		);
 		await db.okrCuocSoan.update({
 			where: { id: canh.cuocSoanId },
 			data: { trangThai: "da-dua-vao" },
