@@ -86,7 +86,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.sac_an_vang_nen
-    paths: [packages/db/src/okr-nhac.ts, packages/db/src/okr-chu-ky-hien.ts, apps/agent/agent/lib/okr-chup.ts, apps/agent/test/okr-nhac.integration.spec.ts, apps/agent/test/okr-chup.integration.spec.ts]
+    paths: [packages/db/src/okr-nhac.ts, apps/agent/agent/lib/okr/doc.ts, apps/agent/test/okr-dich-can-chinh.integration.spec.ts, packages/db/src/okr-chu-ky-hien.ts, apps/agent/agent/lib/okr-chup.ts, apps/agent/test/okr-nhac.integration.spec.ts, apps/agent/test/okr-chup.integration.spec.ts]
     expected: "exit 0; ca ky-an trong okr-nhac.integration: cùng gieo hai quý X (ẩn) / V (chưa ẩn) có KR của U chưa cập nhật tuần, mục tiêu chờ duyệt, lần hỏi ý đang mở mà U chưa góp; sinh nhắc buổi sáng cho U → các mục nhắc toEqual đúng tập id của V (mục cập nhật tuần, chờ duyệt, hỏi ý); lienQuanOkr của người chỉ có dữ liệu ở X → false. Ca ky-an trong okr-chup.integration: KR nguồn máy ở X và V, chạy chụp số một ngày → okrSoChup có dòng cho KR của V, 0 dòng cho KR của X. Hiện lại X và chạy lại → có mục/dòng của X. CHIỀU ĐỎ: bản sao okr-chup bỏ KY_CON_HIEN → ca chụp đỏ in id KR của X."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
