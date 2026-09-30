@@ -8,6 +8,7 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
+import { lienQuanOkr } from "@crm/db/okr-nhac";
 import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
@@ -1455,6 +1456,105 @@ describe("duyet", () => {
 				dongH: [1, 1, 0],
 				tieuDeT: true,
 				dongT: 1,
+			});
+		},
+		CHO_MS,
+	);
+});
+
+describe("ky-an", () => {
+	const TUAN_TRUOC = vn("2026-10-05T10:00:00");
+	const LUC = vn("2026-10-12T10:00:00");
+	const AN_LUC = vn("2026-10-08T09:00:00");
+	const MO = vn("2026-10-10T09:00:00");
+	const HAN = vn("2026-10-14T17:00:00");
+	const LOAI = ["okr-cap-nhat", "okr-cho-duyet", "okr-hoi-y-gop"];
+	const CHO_MS = 60_000;
+
+	async function gieo() {
+		const U = await gieoNguoi("Uyen");
+		const T = await gieoNguoi("Tam");
+		const P = await gieoNguoi("Phuc");
+		const W = await gieoNguoi("Vinh");
+		const p1 = await gieoPhongBan(T.id, await gieoBoPhan(U.id));
+		const gieoKy = async (anLuc: Date | null) => {
+			const cycleId = await gieoChuKy("dang-chay", 1, undefined, anLuc);
+			const mt = await gieoMucTieu({ cycleId, chu: U.id, congBo: TUAN_TRUOC });
+			const kr = await gieoKr({ objectiveId: mt, chu: U.id, khoa: TUAN_TRUOC });
+			const duyet = await gieoMucTieu({
+				cycleId,
+				chu: T.id,
+				congBo: null,
+				cap: "phong-ban",
+				departmentId: p1,
+			});
+			await gieoKr({ objectiveId: duyet, chu: T.id, khoa: null });
+			await db.okrObjective.update({
+				where: { id: duyet },
+				data: { status: "cho-duyet" },
+			});
+			const hoiY = await gieoHoiY({
+				cycleId,
+				nguoiChon: P.id,
+				han: HAN,
+				mo: MO,
+			});
+			return {
+				cycleId,
+				muc: [
+					`okr-cap-nhat:${kr}`,
+					`okr-cho-duyet:${duyet}`,
+					`okr-hoi-y-gop:${hoiY}`,
+				],
+			};
+		};
+		const X = await gieoKy(AN_LUC);
+		const V = await gieoKy(null);
+		const mtW = await gieoMucTieu({
+			cycleId: X.cycleId,
+			chu: W.id,
+			congBo: TUAN_TRUOC,
+		});
+		await gieoKr({ objectiveId: mtW, chu: W.id, khoa: TUAN_TRUOC });
+		return { U, W, X, V };
+	}
+
+	function mucCua(kq: Map<string, ViecNhac[]>, userId: string): string[] {
+		return cua(kq, userId)
+			.flatMap((v) => {
+				if (!LOAI.includes(v.loai)) return [];
+				if (v.loai === "okr-cap-nhat")
+					return v.krIds.map((id) => `${v.loai}:${id}`);
+				if (v.loai === "okr-cho-duyet") return [`${v.loai}:${v.objectiveId}`];
+				if (v.loai === "okr-hoi-y-gop") return [`${v.loai}:${v.hoiYId}`];
+				return [];
+			})
+			.sort();
+	}
+
+	test(
+		"ky-an: nhac cua U chi co cap nhat tuan, cho duyet, hoi y cua V; lienQuanOkr cua nguoi chi co du lieu o X la false; hien lai X thi muc cua X quay lai",
+		async () => {
+			const g = await gieo();
+			const truoc = {
+				muc: mucCua(await tinh(LUC), g.U.id),
+				lienQuanW: await lienQuanOkr(db, g.W.id),
+			};
+			expect(truoc, "chu ky an").toEqual({
+				muc: [...g.V.muc].sort(),
+				lienQuanW: false,
+			});
+			await db.okrCycle.update({
+				where: { id: g.X.cycleId },
+				data: { anLuc: null },
+			});
+			const sau = {
+				muc: mucCua(await tinh(LUC), g.U.id),
+				lienQuanW: await lienQuanOkr(db, g.W.id),
+			};
+			expect(sau, "hien lai X").toEqual({
+				muc: [...g.X.muc, ...g.V.muc].sort(),
+				lienQuanW: true,
 			});
 		},
 		CHO_MS,

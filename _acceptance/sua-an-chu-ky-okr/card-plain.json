@@ -1,0 +1,28 @@
+{
+  "feature_plain": "Quản trị sửa được chu kỳ OKR tạo nhầm, gỡ được chu kỳ còn trống, và ẩn được chu kỳ đã có dữ liệu (có lý do, hiện lại được); chu kỳ đã ẩn biến khỏi mọi ô chọn, nhắc và ghi mới nhưng dữ liệu và vết vẫn còn.",
+  "decisions": [
+    {
+      "id": "E17",
+      "q": "Chữ trên các hộp và cách dựng màn có đúng luật kho không?",
+      "why": "Ba người chấm đều nói phần đọc được là đạt, chỉ thiếu căn cứ ở bốn chỗ. Máy đã tự kiểm cả bốn: chữ hộp Ẩn nói chu kỳ biến khỏi ô chọn, không nhận ghi, không nhắc, dữ liệu giữ nguyên, hiện lại được; chữ hộp Gỡ nói vết tạo và gỡ vẫn còn (có cả bản tiếng Anh). Bài soi 14 nơi tự tìm chu kỳ đều có bộ lọc chu kỳ ẩn, 0 vi phạm. Bốn thao tác mới đều kiểm đầu vào ngay ở cửa vào. Bảng chu kỳ tính nút từ đúng một luật. Con số 15/6 trong hợp đồng thành 14/9 là do sắp lại khi thi công và đã ghi sổ."
+    }
+  ],
+  "analyst_plain": "",
+  "decisions_plain": [
+    { "id": "d-20260930T053653Z-1", "p": "Ẩn bằng một dấu thời gian riêng trên chu kỳ, pha giữ nguyên — đổi lại mọi nơi tự tìm chu kỳ phải thêm bộ lọc chu kỳ ẩn, có bài soi mã canh." },
+    { "id": "d-20260930T053653Z-2", "p": "KHÔNG sửa ngày khi chu kỳ đã có dữ liệu hoặc đã qua lập kế hoạch, chỉ sửa tên — đổi lại quý sai ngày mà có dữ liệu chỉ có đường ẩn rồi tạo quý đúng." },
+    { "id": "d-20260930T053653Z-3", "p": "KHÔNG xoá chu kỳ có dữ liệu và KHÔNG ẩn năm kéo theo quý — đổi lại dọn một năm nhầm phải ẩn từng quý trước." },
+    { "id": "d-20260930T053653Z-4", "p": "Đường dẫn cũ tới mục tiêu trong chu kỳ ẩn vẫn mở được để tra — đổi lại ai giữ đường dẫn vẫn đọc được dữ liệu đó." },
+    { "id": "d-20260930T054444Z-5", "p": "Cổng Phạm vi duyệt trên ảnh bản mẫu bấm được, không bày hướng thay thế — đổi lại không có phương án khác để so." },
+    { "id": "d-20260930T064800Z-7", "p": "Bài kiểm quan hệ giữ chu kỳ đọc mô hình dữ liệu thật của thư viện cơ sở dữ liệu — đổi lại thư viện đổi tên thuộc tính nội bộ thì bài đỏ và phải sửa bài." },
+    { "id": "d-20260930T064800Z-8", "p": "Hàng đã ẩn hiện lý do ẩn lấy từ vết, không thêm ô lý do vào chu kỳ — đổi lại bảng chu kỳ tốn thêm một lần đọc vết." },
+    { "id": "d-20260930T071110Z-9", "p": "Thi công chín việc, mỗi việc một người viết và một người soát riêng — đổi lại tốn thêm công soát cho mỗi việc." },
+    { "id": "d-20260930T080410Z-10", "p": "Sửa lời tiêu chí AC-5 (không mục tiêu nào tạo sau lúc ẩn): mục tiêu tạo trước lúc ẩn vẫn hợp lệ — đổi lại lời hợp đồng đổi sau Cổng Phạm vi, cần anh phê." },
+    { "id": "d-20260930T080410Z-11", "p": "Sửa lời bài đo kỳ mặc định cho khớp tiêu chí đã duyệt: chỉ trống khi mọi chu kỳ đều đã ẩn — đổi lại lời đo đổi sau Cổng Phạm vi." },
+    { "id": "d-20260930T090427Z-12", "p": "Danh sách nơi đọc chu kỳ sắp lại theo mã thật, thành 14 nơi lọc và 9 nơi miễn (thay cho 15 và 6), luật soi không nới — đổi lại việc bảng Cài đặt vẫn thấy chu kỳ ẩn chỉ còn bài kỳ mặc định canh." },
+    { "id": "d-20260930T120000Z-13", "p": "Sau khi gộp nhánh chính, một nơi miễn đổi tên theo mã mới, lý do giữ nguyên — không đổi luật." },
+    { "id": "d-20260930T104717Z-14", "p": "Hai bài đo ghi chu kỳ ẩn khai thêm các ca đã viết (đích căn chỉnh, OKR còn mở của đơn vị, trợ lý) — đổi lại lời đo sửa sau Cổng Phạm vi, không đổi tiêu chí." },
+    { "id": "d-20260930T110425Z-15", "p": "Bài luật năm nút thôi chép công thức từ mã, dùng 40 ca viết tay theo bảng luật — đổi lại lời đo đổi sau Cổng Phạm vi (48 → 40 ca)." },
+    { "id": "d-20260930T110425Z-16", "p": "Người chấm E17 được đưa mã thật thay vì chỉ tài liệu thiết kế — đổi lại phải chấm lại hội đồng." }
+  ]
+}

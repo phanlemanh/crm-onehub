@@ -140,7 +140,10 @@ export class OkrCanhKrService {
 				ownerUserId: true,
 				owner: { select: { name: true } },
 				objective: {
-					select: { ...chonDonVi, cycle: { select: { phase: true } } },
+					select: {
+						...chonDonVi,
+						cycle: { select: { phase: true, anLuc: true } },
+					},
 				},
 			},
 		});
@@ -227,6 +230,7 @@ export class OkrCanhKrService {
 				ganDuoc: suaDuoc && docDuocPhamVi(q.role, "doi-tac"),
 			},
 			khoa:
+				kr.objective.cycle.anLuc !== null ||
 				!ghiDuocOPha(phaChuKy.parse(kr.objective.cycle.phase)) ||
 				objective.status === "da-bo",
 			choDuyet: objective.status === "cho-duyet",
@@ -481,6 +485,7 @@ export class OkrCanhKrService {
 			input.objectiveId,
 		);
 		return this.db.$transaction(async (tx) => {
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			if (mt.status !== "cong-bo")
 				throw new BadRequestException(T.canhKr.ghiNhanChiCongBo);
 			if (input.nguoiNhan.includes(userId))
@@ -544,10 +549,12 @@ export class OkrCanhKrService {
 					objectiveId: true,
 					keyResultId: true,
 					tacGiaUserId: true,
+					objective: { select: { cycleId: true } },
 					nhan: { select: { userId: true }, orderBy: { userId: "asc" } },
 				},
 			});
 			if (!row) throw new NotFoundException(T.canhKr.khongCoGhiNhan(input.id));
+			await this.okr.assertKyChuaAn(tx, row.objective.cycleId);
 			if (row.tacGiaUserId !== userId && !q.quanTri)
 				throw new ForbiddenException(T.canhKr.khongGoDuocGhiNhan);
 			await tx.okrGhiNhan.delete({ where: { id: row.id } });

@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
@@ -280,7 +281,7 @@ export class OkrKhepService {
 		const kr = await this.quyenOkr.assertSuaKr(userId, input.keyResultId);
 		const cycleId = kr.objective.cycleId;
 		return this.db.$transaction(async (tx) => {
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${cycleId} FOR SHARE`;
+			await this.okr.assertKyChuaAn(tx, cycleId);
 			const c = await tx.okrCycle.findUniqueOrThrow({
 				where: { id: cycleId },
 				select: { phase: true },
@@ -333,7 +334,7 @@ export class OkrKhepService {
 	async ghiDieuHocDuoc(userId: string, input: GhiDieuHocDuocInput) {
 		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
 		return this.db.$transaction(async (tx) => {
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${mt.cycleId} FOR SHARE`;
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			const c = await tx.okrCycle.findUniqueOrThrow({
 				where: { id: mt.cycleId },
 				select: { phase: true },
@@ -369,6 +370,7 @@ export class OkrKhepService {
 		await this.quyenOkr.assertQuanTri(userId);
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.id} FOR UPDATE`;
+			await this.okr.assertKyChuaAn(tx, input.id);
 			const c = await tx.okrCycle.findUnique({
 				where: { id: input.id },
 				select: { phase: true },
@@ -399,6 +401,22 @@ export class OkrKhepService {
 	): Promise<MangSangOutput> {
 		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
 		return this.db.$transaction(async (tx) => {
+			const kyNguon = await tx.okrCycle.findUniqueOrThrow({
+				where: { id: mt.cycleId },
+				select: { kind: true, endsOn: true },
+			});
+			const dich = await tx.okrCycle.findFirst({
+				where: {
+					kind: kyNguon.kind,
+					startsOn: { gt: kyNguon.endsOn },
+					phase: { in: [...PHA_GHI_DUOC] },
+					...KY_CON_HIEN,
+				},
+				orderBy: [{ startsOn: "asc" }, { createdAt: "asc" }],
+				select: { id: true },
+			});
+			for (const id of [mt.cycleId, ...(dich ? [dich.id] : [])].sort())
+				await this.okr.assertKyChuaAn(tx, id);
 			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${mt.id} FOR UPDATE`;
 			const nguon = await tx.okrObjective.findUniqueOrThrow({
 				where: { id: mt.id },
@@ -411,7 +429,7 @@ export class OkrKhepService {
 					hienThi: true,
 					participants: { select: { userId: true } },
 					nguoiXem: { select: { userId: true } },
-					cycle: { select: { kind: true, endsOn: true, phase: true } },
+					cycle: { select: { phase: true } },
 					keyResults: {
 						where: { diemKr: { isNot: null } },
 						orderBy: [{ position: "asc" }, { createdAt: "asc" }],
@@ -432,17 +450,7 @@ export class OkrKhepService {
 				throw new BadRequestException(T.khep.mangSangChiCongBo);
 			if (!PHA_CO_DIEM.includes(nguon.cycle.phase))
 				throw new BadRequestException(T.khep.mangSangChiKhi);
-			const dich = await tx.okrCycle.findFirst({
-				where: {
-					kind: nguon.cycle.kind,
-					startsOn: { gt: nguon.cycle.endsOn },
-					phase: { in: [...PHA_GHI_DUOC] },
-				},
-				orderBy: [{ startsOn: "asc" }, { createdAt: "asc" }],
-				select: { id: true },
-			});
 			if (!dich) throw new BadRequestException(T.khep.chuaCoKyKe);
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${dich.id} FOR SHARE`;
 			const daCo = await tx.okrMangSang.findUnique({
 				where: {
 					tuObjectiveId_sangCycleId: {

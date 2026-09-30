@@ -204,15 +204,22 @@ export class TroLyOkrService {
 		};
 	}
 
-	private async assertSuaDich(userId: string, dich: TroLyDichInput) {
-		await this.quyenOkr.assertXemMucTieu(userId, dich.objectiveId);
+	private async assertSuaDich(
+		userId: string,
+		dich: TroLyDichInput,
+	): Promise<{ cycleId: string }> {
+		const { mt } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			dich.objectiveId,
+		);
 		if (!dich.keyResultId) {
 			await this.quyenOkr.assertSuaMucTieu(userId, dich.objectiveId);
-			return;
+			return { cycleId: mt.cycleId };
 		}
 		const kr = await this.quyenOkr.assertSuaKr(userId, dich.keyResultId);
 		if (kr.objectiveId !== dich.objectiveId)
 			throw new BadRequestException(T.troLy.krKhacMucTieu);
+		return { cycleId: mt.cycleId };
 	}
 
 	private async lyDoNac(
@@ -245,7 +252,8 @@ export class TroLyOkrService {
 		dich: TroLyDichInput,
 		now = new Date(),
 	): Promise<TroLyDeXuatOutput> {
-		await this.assertSuaDich(userId, dich);
+		const { cycleId } = await this.assertSuaDich(userId, dich);
+		await this.okr.assertKyChuaAn(this.db, cycleId);
 		const kq = await xepViecTroLy(this.db, {
 			viec: "de-xuat",
 			objectiveId: dich.objectiveId,
@@ -511,8 +519,16 @@ export class TroLyOkrService {
 				where: { id: input.deXuatId },
 				select: { objectiveId: true },
 			});
-			if (moc)
-				await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${moc.objectiveId} FOR UPDATE`;
+			const mt = moc
+				? await tx.okrObjective.findUnique({
+						where: { id: moc.objectiveId },
+						select: { id: true, cycleId: true },
+					})
+				: null;
+			if (mt) {
+				await this.okr.assertKyChuaAn(tx, mt.cycleId);
+				await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${mt.id} FOR UPDATE`;
+			}
 			const hang = await tx.okrDeXuat.findUnique({
 				where: { id: input.deXuatId },
 			});

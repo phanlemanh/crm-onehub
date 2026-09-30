@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import {
@@ -58,7 +59,10 @@ export class OkrCapNhatService {
 				ownerUserId: userId,
 				objective: {
 					AND: [
-						{ status: "cong-bo", cycle: { phase: "dang-chay" } },
+						{
+							status: "cong-bo",
+							cycle: { phase: "dang-chay", ...KY_CON_HIEN },
+						},
 						dieuKienXemMucTieu(nc),
 					],
 				},
@@ -142,6 +146,10 @@ export class OkrCapNhatService {
 					},
 				},
 			});
+			for (const cycleId of [
+				...new Set(krs.map((k) => k.objective.cycleId)),
+			].sort())
+				await this.okr.assertKyChuaAn(tx, cycleId);
 			const q = await this.quyenOkr.quyen(userId);
 			const ke = input.items.map((m) => {
 				const kr = krs.find((k) => k.id === m.keyResultId);
