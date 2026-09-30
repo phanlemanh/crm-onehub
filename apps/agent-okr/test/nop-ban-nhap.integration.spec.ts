@@ -377,7 +377,10 @@ describe("nop-ban-nhap", () => {
 		}
 	});
 
-	test("chu kỳ rời pha lập kế hoạch → từ chối có tên", async () => {
+	test("chu kỳ rời pha lập kế hoạch → từ chối có tên, không ghi", async () => {
+		const truoc = await db.okrDeXuat.count({
+			where: { cuocSoanId: canh.cuocSoanId },
+		});
 		await db.okrCycle.update({
 			where: { id: canh.chuKy.nay },
 			data: { phase: "dang-chay" },
@@ -391,6 +394,9 @@ describe("nop-ban-nhap", () => {
 				ketQua: "tu-choi",
 				lyDo: TRO_LY_OKR_SOAN.tuChoi.chuKyKhongLapKeHoach,
 			});
+			expect(
+				await db.okrDeXuat.count({ where: { cuocSoanId: canh.cuocSoanId } }),
+			).toBe(truoc);
 		} finally {
 			await db.okrCycle.update({
 				where: { id: canh.chuKy.nay },

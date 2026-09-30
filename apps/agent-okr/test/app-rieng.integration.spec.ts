@@ -117,7 +117,10 @@ describe("app-rieng: bốn lượt", () => {
 			goc: appGia.goc,
 			env: {
 				[TRO_LY_OKR_SOAN.env.biMat]: BI_MAT_THU,
-				...moiTruongModelTacGia(),
+				...moiTruongModelTacGia({
+					TEST_DATABASE_URL: process.env.TEST_DATABASE_URL,
+					TEST_RUN_ID: process.env.TEST_RUN_ID,
+				}),
 			},
 		});
 	}, 300_000);

@@ -30,15 +30,22 @@ export function congTuDo(): Promise<number> {
 	});
 }
 
-export function moiTruongModelTacGia() {
-	const kho = runScopedUrl(
-		process.env.TEST_DATABASE_URL ?? "",
-		process.env.TEST_RUN_ID,
-	);
+export type MoiTruongKhoThu = {
+	readonly TEST_DATABASE_URL?: string;
+	readonly TEST_RUN_ID?: string;
+};
+
+export const LOI_KHO_THU = {
+	thieu: "thieu TEST_DATABASE_URL: eve con chi chay trong bun run test",
+	khongDungMotLan: "kho thu khong phai kho dung mot lan",
+} as const;
+
+export function moiTruongModelTacGia(moiTruong: MoiTruongKhoThu) {
+	const goc = moiTruong.TEST_DATABASE_URL?.trim();
+	if (!goc) throw new Error(LOI_KHO_THU.thieu);
+	const kho = runScopedUrl(goc, moiTruong.TEST_RUN_ID);
 	if (!databaseName(kho).endsWith(TEST_DATABASE.suffix))
-		throw new Error(
-			`kho thu khong phai kho dung mot lan: ${databaseName(kho)}`,
-		);
+		throw new Error(`${LOI_KHO_THU.khongDungMotLan}: ${databaseName(kho)}`);
 	return { NODE_ENV: "development", DATABASE_URL: kho };
 }
 
