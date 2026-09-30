@@ -28,7 +28,10 @@ import { OKR_MAU } from "../../api/scripts/okr-mau/cau-hinh";
 import { idMau, xoaBoOkrMau } from "../../api/scripts/okr-mau/nap";
 import { lamSachOkr, napMau } from "../../api/test/okr-mau-san";
 import hookGoc from "../agent/hooks/okr-uy-quyen";
-import { MUC_TOM_TAT } from "../agent/lib/okr/chi-dan-tom-tat";
+import {
+	CAU_KHONG_DE_XUAT,
+	MUC_TOM_TAT,
+} from "../agent/lib/okr/chi-dan-tom-tat";
 import { goiTomTatThanhChiDan } from "../agent/lib/okr/goi-ngu-canh";
 import { chayXepTomTat } from "../agent/lib/okr/lich-tom-tat";
 import { ketThucTuKetQua } from "../agent/lib/okr/uy-quyen";
@@ -369,10 +372,12 @@ describe("goi", () => {
 				deXuatCoDanTomTat: deXuat.includes(MUC_TOM_TAT),
 				deXuatCoNopTomTat: deXuat.includes("nop_tom_tat"),
 				tomTatCoDanTomTat: tomTat.includes(MUC_TOM_TAT),
+				tomTatCamDeXuat: tomTat.includes(CAU_KHONG_DE_XUAT),
 			}).toEqual({
 				deXuatCoDanTomTat: false,
 				deXuatCoNopTomTat: false,
 				tomTatCoDanTomTat: true,
+				tomTatCamDeXuat: true,
 			});
 			const thuMuc = join(import.meta.dir, "../agent/subagents/tro_ly_okr");
 			const tinh: string[] = [];

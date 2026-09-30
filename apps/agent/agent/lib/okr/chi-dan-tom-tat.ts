@@ -2,7 +2,14 @@ import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 
 const { soCauTomTat, soNguonMoiCau } = TRO_LY_OKR_TRAN;
 
+export const CAU_KHONG_DE_XUAT = "never call `nop_de_xuat`";
+
 export const MUC_TOM_TAT = `## Tóm tắt tuần — the data block holds \`phong\`, \`tuan\` and \`krs\`
+
+This task is a weekly summary, not a proposal task. Everything above about \`nop_de_xuat\`, one
+Objective, \`phamVi\` and proposal lines does not apply here: ${CAU_KHONG_DE_XUAT}. The data block
+is one department's week. Where the rules above and this section differ (for example the language
+rule), this section wins.
 
 Act at once. Do not reason at length: your first reply is the \`nop_tom_tat\` call.
 
@@ -28,7 +35,7 @@ with the Cập nhật tuần of the last seven days in \`lan\`. Each update has 
 - Say only what the values and the notes say. Never guess a cause the notes do not give.
 - Write in the language most of the notes (\`ghiChu\`) are written in; when there are no notes,
   write in Vietnamese.
-- Then finish with \`{"trangThai":"da-nop","maLoi":null}\`. If the data block is missing, or
-  \`nop_tom_tat\` answers \`thieu-du-lieu\`, finish with
-  \`{"trangThai":"khong-lam-duoc","maLoi":"thieu-du-lieu"}\`. If it answers \`tu-choi\`, finish with
-  \`{"trangThai":"khong-lam-duoc","maLoi":"tu-choi"}\`.`;
+- Then finish. When \`nop_tom_tat\` answers \`da-ghi\`, finish with
+  \`{"trangThai":"da-nop","maLoi":null}\`. When it answers \`thieu-du-lieu\`, or the data block is
+  missing, finish with \`{"trangThai":"khong-lam-duoc","maLoi":"thieu-du-lieu"}\`. When it answers
+  \`tu-choi\`, finish with \`{"trangThai":"khong-lam-duoc","maLoi":"tu-choi"}\`.`;
