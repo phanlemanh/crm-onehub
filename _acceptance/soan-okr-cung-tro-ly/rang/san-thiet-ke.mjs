@@ -2,8 +2,10 @@ import { execFileSync, spawnSync } from "node:child_process";
 import {
 	existsSync,
 	mkdtempSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
+	statSync,
 	writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -13,8 +15,21 @@ import { fileURLToPath } from "node:url";
 const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC = join(DAY, "..", "..", "..");
 const CAU_HINH = {
-	nhanGoc: "origin/onehub",
-	vung: /^(apps\/app\/app\/\(app\)\/\[slug\]\/okr\/soan\/.+\.tsx|apps\/app\/app\/\(app\)\/\[slug\]\/okr\/theo-don-vi\/.+\.tsx|apps\/app\/app\/\(app\)\/\[slug\]\/settings\/okr\/(the-tro-ly-okr|the-soan-so-do)\.tsx|apps\/app\/app\/\(app\)\/\[slug\]\/settings\/organization\/.+\.tsx|apps\/app\/app\/\(app\)\/\[slug\]\/tai-lieu\/.+\.tsx|packages\/ui\/src\/components\/(proposed-change|empty|nav-item|section-heading)\.tsx|packages\/ui\/src\/components\/ai-elements\/(suggestion|prompt-input)\.tsx)$/,
+	vung: [
+		"apps/app/app/(app)/[slug]/okr/soan",
+		"apps/app/app/(app)/[slug]/okr/theo-don-vi",
+		"apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx",
+		"apps/app/app/(app)/[slug]/settings/okr/the-soan-so-do.tsx",
+		"apps/app/app/(app)/[slug]/settings/organization",
+		"apps/app/app/(app)/[slug]/tai-lieu",
+		"packages/ui/src/components/proposed-change.tsx",
+		"packages/ui/src/components/empty.tsx",
+		"packages/ui/src/components/nav-item.tsx",
+		"packages/ui/src/components/section-heading.tsx",
+		"packages/ui/src/components/ai-elements/suggestion.tsx",
+		"packages/ui/src/components/ai-elements/prompt-input.tsx",
+	],
+	loai: [".eve", "node_modules", "test/.chay"],
 	tepPha: "apps/app/app/(app)/[slug]/okr/soan/bang-nhap.tsx",
 	chenPha: 'className="bg-red-500 text-gray-400"',
 	tienToTam: "soan-san-",
@@ -24,9 +39,6 @@ function khongDo(cau) {
 	console.log(`KHONG DO DUOC: ${cau}`);
 	process.exit(2);
 }
-
-const git = (...doi) =>
-	execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
 
 const goiKit =
 	process.env.CLAUDE_PLUGIN_ROOT ??
@@ -70,16 +82,27 @@ if (process.argv.includes("--pha")) {
 	process.exit(dat ? 0 : 1);
 }
 
-const moc = git("merge-base", "HEAD", CAU_HINH.nhanGoc);
-const tep = git("diff", "--name-only", moc)
-	.split("\n")
-	.filter(Boolean)
-	.filter((t) => CAU_HINH.vung.test(t))
-	.filter((t) => existsSync(join(GOC, t)));
-if (tep.length === 0)
-	khongDo(`khong tep giao dien nao trong diff so voi ${moc}`);
+const biLoai = (duong) =>
+	CAU_HINH.loai.some(
+		(l) => duong.split("/").includes(l) || duong.includes(`/${l}/`),
+	);
+
+function lietKe(duong) {
+	const tuyet = join(GOC, duong);
+	if (!existsSync(tuyet)) khongDo(`thieu vung: ${duong}`);
+	if (!statSync(tuyet).isDirectory()) return [duong];
+	return readdirSync(tuyet, { withFileTypes: true }).flatMap((m) => {
+		const con = `${duong}/${m.name}`;
+		if (biLoai(con)) return [];
+		if (m.isDirectory()) return lietKe(con);
+		return m.name.endsWith(".tsx") ? [con] : [];
+	});
+}
+
+const tep = [...new Set(CAU_HINH.vung.flatMap(lietKe))].sort();
+if (tep.length === 0) khongDo("vung khong co tep .tsx nao");
 console.log(
-	`tap tep: ${tep.length} (diff so voi ${CAU_HINH.nhanGoc} @ ${moc.slice(0, 8)})`,
+	`tap tep: ${tep.length} (vung co dinh, ${CAU_HINH.vung.length} duong)`,
 );
 
 let sai = 0;
