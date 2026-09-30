@@ -91,6 +91,16 @@ function luatDaHoiCua(mt: MucTieuDoc): GoiDeXuat["luatDaHoi"] {
 	}));
 }
 
+function nhanhDaCanChinh(mt: MucTieuDoc): Set<string> {
+	return new Set(
+		mt.alignments.flatMap((a) =>
+			[a.targetObjectiveId, a.targetKeyResult?.objectiveId].filter(
+				(id): id is string => Boolean(id),
+			),
+		),
+	);
+}
+
 async function dichCanChinhCua(
 	mt: MucTieuDoc,
 ): Promise<GoiDeXuat["dichCanChinh"]> {
@@ -100,7 +110,8 @@ async function dichCanChinhCua(
 		cycleId: mt.cycleId,
 		cycleParentId: mt.cycle.parentId,
 	});
-	return ds.flatMap((d) => [
+	const bo = nhanhDaCanChinh(mt);
+	return ds.filter((d) => !bo.has(d.id)).flatMap((d) => [
 		{ id: d.id, loai: "muc-tieu" as const, ten: d.title },
 		...d.keyResults.map((k) => ({
 			id: k.id,
