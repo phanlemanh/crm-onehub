@@ -1,4 +1,4 @@
-import { THAM_SO_KY_OKR } from "@crm/validation/okr-chu-ky";
+import { THAM_SO_OKR } from "@crm/validation/okr-tham-so";
 
 export const SEARCH_PARAM = {
 	list: {
@@ -53,9 +53,9 @@ export const SEARCH_PARAM = {
 		cachChia: "cachChia",
 	},
 	okr: {
-		ky: THAM_SO_KY_OKR,
-		don: "donOkr",
-		xem: "xemOkr",
+		ky: THAM_SO_OKR.ky,
+		don: THAM_SO_OKR.don,
+		xem: THAM_SO_OKR.xem,
 		moChuKy: "moChuKy",
 		moRa: "moRa",
 		luotGopY: "luotGopY",
