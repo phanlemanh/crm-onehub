@@ -387,7 +387,10 @@ function doDauCot(chon, tieuDe, nhanDong) {
 	while (hang && x && !hang.contains(x) && hang !== cot)
 		hang = hang.parentElement;
 	const ke = hang && hang !== cot ? hang.nextElementSibling : null;
-	const laChu = ke !== null && ke.tagName === "P";
+	const laChu =
+		ke !== null &&
+		ke.children.length === 0 &&
+		(ke.textContent?.trim() ?? "") !== "";
 	const moTa = laChu ? ke : null;
 	const sau = laChu ? ke.nextElementSibling : ke;
 	const dau =
