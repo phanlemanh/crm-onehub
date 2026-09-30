@@ -1,0 +1,1 @@
+E23 network: driver la kich ban puppeteer (man-khep-ky.mjs), khong co read_network_requests; man-khep-ky-network.txt do kich ban ghi ra 0 byte (khong co loi mang ghi nhan).

@@ -1,1 +1,1 @@
-driver: bun script (puppeteer-core) qua tien-de.mjs; khong co browser tool doc network -> n-a (driver)
+driver: puppeteer script qua bun (man-gop-y.mjs) — khong co duong doc network/console cua browser tool; networkObserved = n-a (driver)

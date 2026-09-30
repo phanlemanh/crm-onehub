@@ -1,13 +1,12 @@
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-  building crm_kto_e16__mau_do: migrate deploy + seed (once per source fingerprint)
-phien-do: kho crm_kto_e16_do · app http://localhost:4841 · api http://localhost:4354
+phien-do: kho crm_kto_e16_do · app http://localhost:4520 · api http://localhost:4688
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 -- API cua phien nay khong noi tac tu (thieu AGENT_BRIDGE_SECRET/AGENT_URL) — mo phien do rieng co tac tu
--- phien do co tac tu: cay determined-lehmann-cc5227-tro-ly · tac tu cong 49679
+-- phien do co tac tu: cay determined-lehmann-cc5227-tro-ly · tac tu cong 63680
 phien-do: chờ phiên khác của cây này (crm_determined_lehmann_cc5227_tro_ly_do) dọn xong
-phien-do: kho crm_determined_lehmann_cc5227_tro_ly_do · app http://localhost:4693 · api http://localhost:4342
+phien-do: kho crm_determined_lehmann_cc5227_tro_ly_do · app http://localhost:4658 · api http://localhost:4689
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
@@ -59,22 +58,22 @@ ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-co-dong-390.png
 DUNG ST-muctieu-co-dong 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
 DUNG co dong viet lai Muc tieu de nhan: title sau 1 lan thu (toi da 3)
 DUNG ST-muctieu-sua-dong 1440: o sua mo
-DUNG ST-muctieu-sua-dong 1440: con lan dua [data-cot-gop-y] [data-dong="cmuniurdl0000u4cfvg7pl3hw"] vao khung nhin
+DUNG ST-muctieu-sua-dong 1440: con lan dua [data-cot-gop-y] [data-dong="cmunjd3nx0000dkcfi5kx3akr"] vao khung nhin
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-sua-dong-1440.png
 DUNG ST-muctieu-sua-dong 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 799/799)
 DUNG ST-muctieu-sua-dong 390: o sua mo
-DUNG ST-muctieu-sua-dong 390: con lan dua [data-cot-gop-y] [data-dong="cmuniurdl0000u4cfvg7pl3hw"] vao khung nhin
+DUNG ST-muctieu-sua-dong 390: con lan dua [data-cot-gop-y] [data-dong="cmunjd3nx0000dkcfi5kx3akr"] vao khung nhin
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-sua-dong-390.png
 DUNG ST-muctieu-sua-dong 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
-DUNG ST-muctieu-da-quyet 390: dong cmuniurdl0002u4cfcvg983ys thu gon
-DUNG ST-muctieu-da-quyet 390: con lan dua [data-cot-gop-y] [data-dong="cmuniurdl0002u4cfcvg983ys"] vao khung nhin
+DUNG ST-muctieu-da-quyet 390: dong cmunjd3nx0001dkcfgxfpwu3a thu gon
+DUNG ST-muctieu-da-quyet 390: con lan dua [data-cot-gop-y] [data-dong="cmunjd3nx0001dkcfgxfpwu3a"] vao khung nhin
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-da-quyet-390.png
 DUNG ST-muctieu-da-quyet 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
-DUNG ST-muctieu-da-quyet: o title «Doanh thu miền Bắc hoàn thành mục tiêu mùa mua sắm cuối năm» = okr.objective «Doanh thu miền Bắc hoàn thành mục tiêu mùa mua sắm cuối năm» = cau da nhan
+DUNG ST-muctieu-da-quyet: o title «Miền Bắc hoàn thành chỉ tiêu doanh thu mùa mua sắm cuối năm» = okr.objective «Miền Bắc hoàn thành chỉ tiêu doanh thu mùa mua sắm cuối năm» = cau da nhan
 DUNG toast co «Hoàn tác»
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-da-quyet-1440.png
 DUNG ST-muctieu-da-quyet 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 799/799)
-DUNG OkrTrail co note tro-ly-okr:cmuniurdl0000u4cfvg7pl3hw (1 hang)
+DUNG OkrTrail co note tro-ly-okr:cmunjd3nx0000dkcfi5kx3akr (1 hang)
 DUNG Hoan tac: okr.objective title doc lai «Doanh thu quý 4 miền Bắc»
 DUNG hoan-tac.sql dem 1
 DUNG tab Vet 1440 co «theo đề xuất của Trợ lý OKR»
@@ -84,14 +83,14 @@ DUNG tab Vet 390 co «theo đề xuất của Trợ lý OKR»
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/vet-theo-tro-ly-390.png
 DUNG vet-theo-tro-ly 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390)
 DUNG luot an xong (da-nop)
-DUNG ST-sodo-co-so 1440: bang co luot cmuniuw6j000chocf2wts51an
+DUNG ST-sodo-co-so 1440: bang co luot cmunjd964000cvscfz64qv1g2
 DUNG ST-sodo-co-so 1440: con lan dua [data-the="gop-y-so-do"] vao khung nhin
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-co-so-1440.png
 DUNG ST-sodo-co-so 1440: scrollWidth <= clientWidth (trang 1440/1440)
 DUNG ST-sodo-ngan 1440: ngan mot luot mo
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-ngan-1440.png
 DUNG ST-sodo-ngan 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 459/459)
-DUNG ST-sodo-co-so 390: bang co luot cmuniuw6j000chocf2wts51an
+DUNG ST-sodo-co-so 390: bang co luot cmunjd964000cvscfz64qv1g2
 DUNG ST-sodo-co-so 390: con lan dua [data-the="gop-y-so-do"] vao khung nhin
 ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-co-so-390.png
 DUNG ST-sodo-co-so 390: scrollWidth <= clientWidth (trang 390/390)

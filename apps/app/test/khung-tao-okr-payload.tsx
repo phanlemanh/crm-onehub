@@ -1,4 +1,11 @@
 import type { ComponentType } from "react";
+import { z } from "zod";
+import {
+	createKrInput,
+	createObjectiveInput,
+	updateKrInput,
+	updateObjectiveInput,
+} from "../../api/src/okr/okr.contracts";
 import {
 	bam,
 	cho,
@@ -26,6 +33,17 @@ export const THU_TUC_GUI = [
 ] as const;
 
 export type ThuTucGui = (typeof THU_TUC_GUI)[number];
+
+export const SCHEMA_GUI = {
+	"okr.createObjective": createObjectiveInput.strict(),
+	"okr.updateObjective": updateObjectiveInput.strict(),
+	"okr.createKeyResult": createKrInput.strict(),
+	"okr.updateKeyResult": updateKrInput.strict(),
+} as const;
+
+export const bonPayloadSchema = z.object(SCHEMA_GUI);
+
+export type BonPayload = z.infer<typeof bonPayloadSchema>;
 
 type HaiHop = {
 	HopThoaiMucTieu: ComponentType<{
@@ -57,20 +75,22 @@ const TEN_KR_SUA = "Gọi 60 cuộc mỗi tuần";
 const oTen = (hop: HTMLElement | null) =>
 	hop?.querySelector<HTMLInputElement>('input[id$="-ten"]') ?? null;
 
-function motLan(thuTuc: ThuTucGui): unknown {
+function motLan<T extends ThuTucGui>(thuTuc: T): BonPayload[T] {
 	const goi = goiCua(thuTuc);
 	if (goi.length !== 1)
 		throw new Error(
 			`payload lech: ${thuTuc.split(".")[1]} (${goi.length} lan goi)`,
 		);
-	return goi[0]?.dauVao;
+	const kq = SCHEMA_GUI[thuTuc].safeParse(goi[0]?.dauVao);
+	if (!kq.success)
+		throw new Error(
+			`payload lech: ${thuTuc.split(".")[1]} khong dung schema: ${kq.error.message}`,
+		);
+	return kq.data as BonPayload[T];
 }
 
-export async function bonPayload(
-	hai: HaiHop,
-): Promise<Record<ThuTucGui, unknown>> {
+export async function bonPayload(hai: HaiHop): Promise<BonPayload> {
 	const { HopThoaiMucTieu, HopThoaiKr } = hai;
-	const ra = {} as Record<ThuTucGui, unknown>;
 
 	datMacDinh([]);
 	await mo(
@@ -91,7 +111,7 @@ export async function bonPayload(
 		VI_SAO,
 	);
 	await bam(nut(h.taoMucTieu));
-	ra["okr.createObjective"] = motLan("okr.createObjective");
+	const taoMt = motLan("okr.createObjective");
 	await dongHet();
 
 	datMacDinh([]);
@@ -101,7 +121,7 @@ export async function bonPayload(
 	await cho(() => hopMucTieu() !== null, "sua muc tieu mo");
 	await go(oTen(hopMucTieu()), TEN_MOI);
 	await bam(nut(h.luu));
-	ra["okr.updateObjective"] = motLan("okr.updateObjective");
+	const suaMt = motLan("okr.updateObjective");
 	await dongHet();
 
 	datMacDinh([]);
@@ -122,7 +142,7 @@ export async function bonPayload(
 		"20",
 	);
 	await bam(nut(h.themKr));
-	ra["okr.createKeyResult"] = motLan("okr.createKeyResult");
+	const themKr = motLan("okr.createKeyResult");
 	await dongHet();
 
 	datMacDinh([]);
@@ -139,8 +159,13 @@ export async function bonPayload(
 	await cho(() => hopKr() !== null, "sua kr mo");
 	await go(oTen(hopKr()), TEN_KR_SUA);
 	await bam(nut(h.luu));
-	ra["okr.updateKeyResult"] = motLan("okr.updateKeyResult");
+	const suaKr = motLan("okr.updateKeyResult");
 	await dongHet();
 
-	return ra;
+	return {
+		"okr.createObjective": taoMt,
+		"okr.updateObjective": suaMt,
+		"okr.createKeyResult": themKr,
+		"okr.updateKeyResult": suaKr,
+	};
 }

@@ -1,0 +1,29 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_kto_e17_do · app http://localhost:4447 · api http://localhost:4728
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts agnjahup@thu.test
+$ bun scripts/dev-session.ts tgnjahup@thu.test
+  anh hg-kr-giu.png
+buoc 1: dat
+  anh hg-hoi-lai-1440.png
+buoc 2: dat
+  anh hg-deal-huy.png
+buoc 3: dat
+  anh hg-drawer-390.png
+buoc 4: dat
+  anh hg-drawer-vuot-390.png
+buoc 5: dat
+  anh hg-kr-chi-doi-o-chon.png
+  anh hg-muc-tieu-chi-doi-o-chon.png
+  anh hg-don-vi-chi-doi-o-chon.png
+buoc 6: dat
+  anh hg-ngan-ban-ghi-tu-luu.png
+  anh hg-ngan-ban-ghi-da-dong.png
+buoc 7: dat
+man-giu-cho: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

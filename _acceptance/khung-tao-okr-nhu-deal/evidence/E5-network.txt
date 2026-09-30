@@ -1,0 +1,1 @@
+E5 network: driver la script puppeteer (man-khung.mjs) chay trong phien do rieng (app :4156, api :4500); khong co cong cu doc network/console cua trinh duyet -> n-a (driver). Khong co dump request.

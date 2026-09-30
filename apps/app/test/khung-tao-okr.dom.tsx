@@ -2,13 +2,8 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { act, type ReactElement } from "react";
-import {
-	createKrInput,
-	createObjectiveInput,
-	type DongHien,
-	updateKrInput,
-	updateObjectiveInput,
-} from "../../api/src/okr/okr.contracts";
+import { z } from "zod";
+import type { DongHien } from "../../api/src/okr/okr.contracts";
 import {
 	bam,
 	cho,
@@ -34,8 +29,8 @@ import {
 } from "./khung-gop-y";
 import {
 	bonPayload,
+	bonPayloadSchema,
 	THU_TUC_GUI,
-	type ThuTucGui,
 } from "./khung-tao-okr-payload";
 
 const { HopThoaiMucTieu } = await import(
@@ -288,34 +283,28 @@ describe("khung-tao-okr — giữ chữ đang sửa", () => {
 
 describe("khung-tao-okr — gửi đúng dữ liệu", () => {
 	test("gui-dung: bốn thao tác qua ngăn gửi đúng dữ liệu hộp thoại cũ đã gửi", async () => {
-		const chuan = JSON.parse(
-			readFileSync(
-				join(
-					import.meta.dir,
-					"../../../_acceptance/khung-tao-okr-nhu-deal/rang/payload-cu.json",
+		const chuan = z
+			.object({ nguon: z.string().min(7), payload: bonPayloadSchema })
+			.parse(
+				JSON.parse(
+					readFileSync(
+						join(
+							import.meta.dir,
+							"../../../_acceptance/khung-tao-okr-nhu-deal/rang/payload-cu.json",
+						),
+						"utf8",
+					),
 				),
-				"utf8",
-			),
-		) as { nguon: string; payload: Record<ThuTucGui, unknown> };
-		const moi = await bonPayload({ HopThoaiMucTieu, HopThoaiKr });
-		const SCHEMA = {
-			"okr.createObjective": createObjectiveInput,
-			"okr.updateObjective": updateObjectiveInput,
-			"okr.createKeyResult": createKrInput,
-			"okr.updateKeyResult": updateKrInput,
-		} as const;
-		for (const thuTuc of THU_TUC_GUI) {
-			const pMoi = SCHEMA[thuTuc].parse(moi[thuTuc]);
-			const pCu = SCHEMA[thuTuc].parse(chuan.payload[thuTuc]);
-			const tho =
-				JSON.stringify(moi[thuTuc]) === JSON.stringify(chuan.payload[thuTuc]);
-			if (!tho || JSON.stringify(pMoi) !== JSON.stringify(pCu))
-				throw new Error(
-					`payload lech: ${thuTuc.split(".")[1]} moi ${JSON.stringify(moi[thuTuc])} cu ${JSON.stringify(chuan.payload[thuTuc])}`,
-				);
-			console.log(
-				`${thuTuc} khop hop cu ${chuan.nguon.slice(0, 8)}: ${JSON.stringify(moi[thuTuc])}`,
 			);
+		const moi = await bonPayload({ HopThoaiMucTieu, HopThoaiKr });
+		for (const thuTuc of THU_TUC_GUI) {
+			const a = JSON.stringify(moi[thuTuc]);
+			const b = JSON.stringify(chuan.payload[thuTuc]);
+			if (a !== b)
+				throw new Error(
+					`payload lech: ${thuTuc.split(".")[1]} moi ${a} cu ${b}`,
+				);
+			console.log(`${thuTuc} khop hop cu ${chuan.nguon.slice(0, 8)}: ${a}`);
 		}
 	}, 120_000);
 });
