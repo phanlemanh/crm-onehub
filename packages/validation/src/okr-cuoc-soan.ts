@@ -65,3 +65,22 @@ export const soanDuaVaoInput = z.object({
 });
 
 export type SoanDuaVaoInput = z.infer<typeof soanDuaVaoInput>;
+
+export const BUOC_CAT = ["3-tom-gon", "3-kr", "ngang-cap", "2a-kr"] as const;
+
+export const bangDaCat = z.object({
+	buoc: z.array(z.enum(BUOC_CAT)),
+	truocToken: z.number().int().nonnegative(),
+	sauToken: z.number().int().nonnegative(),
+	chienLuocCatKyTu: z.number().int().nonnegative(),
+});
+
+export type BuocCat = z.infer<typeof bangDaCat>["buoc"][number];
+export type DaCat = z.infer<typeof bangDaCat>;
+
+export function parseDaCat(value: unknown): DaCat {
+	const r = bangDaCat.safeParse(value);
+	if (!r.success)
+		throw new Error(`bảng đã cắt không đọc được: ${r.error.message}`);
+	return r.data;
+}

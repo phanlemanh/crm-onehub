@@ -1,10 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import {
 	BAN_NHAP_TRAN,
+	BUOC_CAT,
 	banNhap,
 	type KrNhap,
 	type MucTieuNhap,
 	parseBanNhap,
+	parseDaCat,
 	soanDuaVaoInput,
 } from "../src/okr-cuoc-soan";
 
@@ -103,5 +105,26 @@ describe("ban-nhap", () => {
 				kr: [{ deXuatId: "dx1", khoiDiem: 0, dich: Number.NaN }],
 			}).success,
 		).toBe(false);
+	});
+});
+
+describe("bảng đã cắt", () => {
+	const bang = {
+		buoc: [...BUOC_CAT],
+		truocToken: 20_000,
+		sauToken: 16_000,
+		chienLuocCatKyTu: 0,
+	};
+	test("đọc được bảng đúng khuôn", () => {
+		expect(parseDaCat(bang)).toEqual(bang);
+	});
+	test("bước lạ, số âm, thiếu trường thì ném", () => {
+		expect(() => parseDaCat({ ...bang, buoc: ["0-5"] })).toThrow(
+			"bảng đã cắt không đọc được",
+		);
+		expect(() => parseDaCat({ ...bang, sauToken: -1 })).toThrow();
+		expect(() =>
+			parseDaCat({ buoc: [], truocToken: 1, sauToken: 1 }),
+		).toThrow();
 	});
 });

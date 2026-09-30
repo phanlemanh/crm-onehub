@@ -19,6 +19,7 @@ import {
 } from "@crm/db/okr-goi-soan";
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
+import type { BuocCat, DaCat } from "@crm/validation/okr-cuoc-soan";
 import type { GoiKiemSoan } from "@crm/validation/okr-kiem-ban-nhap";
 import { khoaDong, trichSo } from "@crm/validation/okr-kiem-de-xuat";
 import { type MucTieuKy, tomGonKr } from "@crm/validation/okr-tom-gon-ky";
@@ -27,15 +28,7 @@ import { TRO_LY_OKR_SOAN } from "./config";
 
 export const LOP = ["0-5", "1", "2a", "3", "4", "cham"] as const;
 export type Lop = (typeof LOP)[number];
-export type BuocCat = (typeof TRO_LY_OKR_SOAN.goi.thuTuCat)[number];
 export type VaiNguoiHoi = (typeof TRO_LY_OKR_SOAN.vaiDuocVao)[number];
-
-export type DaCat = {
-	buoc: BuocCat[];
-	truocToken: number;
-	sauToken: number;
-	chienLuocCatKyTu: number;
-};
 
 export type TrangTrongGoi = {
 	ten: string;
@@ -90,11 +83,17 @@ function catChienLuoc(trang: TrangTrongGoi[]): ChienLuocDaCat {
 	return { trang: ra, catKyTu };
 }
 
+const THE_TRONG_THAN = new RegExp(GOI.the.split("-").join("\\s*-\\s*"), "giu");
+
+function voHieuThe(than: string): string {
+	return than.replace(THE_TRONG_THAN, GOI.theVoHieu);
+}
+
 function the(lop: Lop, than: string): string {
 	return [
 		`<${GOI.the} lop="${lop}">`,
 		GOI.cauDanDuLieu,
-		than,
+		voHieuThe(than),
 		`</${GOI.the}>`,
 	].join("\n");
 }

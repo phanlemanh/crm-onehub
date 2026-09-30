@@ -49,7 +49,7 @@ async function kiemTapTool(): Promise<string[]> {
 }
 
 describe("cach-ly", () => {
-	test("tập tool đúng bằng {nop_ban_nhap}; chín tool dựng sẵn tắt; khuôn không vòng $ref", async () => {
+	test(`tập tool đúng bằng {${TRO_LY_OKR_SOAN.congCu.song.join(", ")}}; ${TRO_LY_OKR_SOAN.congCu.tat.length} tool dựng sẵn tắt; khuôn không vòng $ref`, async () => {
 		expect(await kiemTapTool()).toEqual([]);
 	});
 
