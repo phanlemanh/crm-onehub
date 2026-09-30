@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	setSystemTime,
+	test,
+} from "bun:test";
 import {
 	type OnboardingActivityMeta,
 	vet,
@@ -451,7 +459,12 @@ describe("go-dung-nguoi", () => {
 });
 
 describe("noi-man-buoc", () => {
+	afterEach(() => {
+		setSystemTime();
+	});
+
 	test("noi-man-buoc: tich, giao, doi han o dong hai gui dung ba payload va lam moi ba lan", async () => {
+		setSystemTime(new Date("2026-09-22T03:00:00.000Z"));
 		await mo(trongSheet(<PlanSheet planId={KE_HOACH} />));
 		const nhanTich = dien(m.sheet.markDone, { nhan: "Dao tao" });
 		await cho(
