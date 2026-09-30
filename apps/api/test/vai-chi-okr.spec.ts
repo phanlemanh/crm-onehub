@@ -1827,9 +1827,10 @@ type DongDoc = {
 	K: CotK;
 	dau?: ChuoiAn;
 	khac: 200 | 404;
-	ma?: "id" | "objectiveId" | "keyResultId";
+	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId";
 	pha?: "da-dong";
 	chiQuanTri?: string;
+	chiQuanTriTheoMa?: true;
 };
 
 const cuaKy = (s: SanDoc) => ({ cycleId: s.ky });
@@ -1965,8 +1966,9 @@ const THU_TU_DOC_OKR = {
 	"okr.soanDanhSach": {
 		vao: (s) => ({ cuocSoanId: s.cuocSoan }),
 		K: "vang",
-		khac: 200,
-		chiQuanTri: OKR.thongDiep.khongSuaDuocDonVi,
+		khac: 404,
+		ma: "cuocSoanId",
+		chiQuanTriTheoMa: true,
 	},
 	"okr.soanDanhSachCuoc": {
 		vao: (s) => ({ cycleId: s.ky, level: "phong-ban", departmentId: s.pb }),
@@ -2181,7 +2183,11 @@ async function oDocAn(
 	const o = `${ten} | ${duong} | ${ai}`;
 	const r = await goiDocAn(bc, ten, vao, duong, ai);
 	kq.trangThai[o] = r.status;
-	kq.cho[o] = d.chiQuanTri ? 403 : ai === "K" ? 200 : d.khac;
+	kq.cho[o] = d.chiQuanTri
+		? 403
+		: ai === "K" && !d.chiQuanTriTheoMa
+			? 200
+			: d.khac;
 	if (d.chiQuanTri && r.message !== d.chiQuanTri)
 		kq.cauKhac.push(`${o}: 403 sai cau «${r.message}»`);
 	const so = demChuoi(bc, r.chu);
@@ -2190,7 +2196,7 @@ async function oDocAn(
 	const dau = d.dau ?? "tieuDeG";
 	if (ai === "K" && d.K === "chua-G" && !d.chiQuanTri && so[dau] < 1)
 		kq.thieu.push(`${o} | thieu ${dau}`);
-	if (ai === "K" || !d.ma || !vao) return;
+	if ((ai === "K" && !d.chiQuanTriTheoMa) || !d.ma || !vao) return;
 	const r0 = await goiDocAn(
 		bc,
 		ten,
@@ -2210,7 +2216,7 @@ async function dongDocAn(bc: BoiCanhAn, kq: KetQuaAn, ten: string) {
 	kq.soDong += 1;
 	for (const duong of DUONG_DOC) {
 		for (const ai of NGUOI_DOC) await oDocAn(bc, kq, ten, d, duong, ai);
-		if (!d.chiQuanTri) continue;
+		if (!d.chiQuanTri && !d.chiQuanTriTheoMa) continue;
 		const o = `${ten} | ${duong} | Q`;
 		const r = await goiDocAn(bc, ten, d.vao(bc.san, bc.san.nguoiK), duong, "Q");
 		kq.trangThai[o] = r.status;

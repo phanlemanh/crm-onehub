@@ -717,7 +717,7 @@ describe("quyet", () => {
 	);
 
 	test(
-		"cuộc ẩn khi nấc đã bật: trưởng phòng không đọc, không quyết được (403); quản trị đọc được",
+		"cuộc ẩn khi nấc đã bật: trưởng phòng không đọc, không quyết được (404 cùng câu với mã không có); quản trị đọc được",
 		async () => {
 			const cuoc = await gieoCuoc({
 				donVi: DON_VI.kdBac,
@@ -735,11 +735,19 @@ describe("quyet", () => {
 					{ cuocSoanId: cuoc.id },
 					cTruong,
 				);
-				expect(doc.status, `lo cuoc an ${duong}`).toBe(403);
+				expect(doc.status, `lo cuoc an ${duong}`).toBe(404);
+				expect(doc.loi).toBe(T.khongCoCuoc);
 				expect(doc.data).toBeUndefined();
-				expect((await quyet(id, "bac", undefined, cTruong, duong)).status).toBe(
-					403,
+				const khongCo = await goiSoan(
+					app,
+					"soanDanhSach",
+					duong,
+					{ cuocSoanId: "khong-co" },
+					cTruong,
 				);
+				expect([khongCo.status, khongCo.loi]).toEqual([404, doc.loi]);
+				const bac = await quyet(id, "bac", undefined, cTruong, duong);
+				expect([bac.status, bac.loi]).toEqual([404, T.khongCoDong(id)]);
 				expect(
 					(await danhSach(cuoc.id, duong, cQuanTri)).dong.map((d) => d.id),
 				).toEqual([id]);

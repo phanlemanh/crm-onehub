@@ -25,7 +25,6 @@ import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
 import {
 	BadRequestException,
 	ConflictException,
-	ForbiddenException,
 	Inject,
 	Injectable,
 	NotFoundException,
@@ -180,15 +179,20 @@ export class SoanService {
 		userId: string,
 		cuocSoanId: string,
 		now: Date,
+		khongThay: () => NotFoundException = () =>
+			new NotFoundException(T.soan.khongCoCuoc),
 	): Promise<CongCuoc> {
 		const cuoc = await docCuoc(client, cuocSoanId);
-		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc(cuocSoanId));
+		if (!cuoc) throw khongThay();
 		const dv = donViCuoc(cuoc);
-		const q = await this.quyenDonVi(userId, dv);
+		const q = await this.quyenOkr.quyen(userId);
+		const suaDuoc =
+			q.quanTri ||
+			this.quyenOkr.suaDuocDonVi(q, userId, { ...dv, personUserId: null });
+		if (!suaDuoc || (cuoc.nac === "an" && !q.quanTri)) throw khongThay();
 		const { ct, nac } = await this.nacSoan(client, dv, q, now);
 		if (nac === "tat") return { qua: false, cuoc, lyDo: "don-vi-chua-bat" };
-		if ((nac === "an" || cuoc.nac === "an") && !q.quanTri)
-			throw new ForbiddenException(T.soan.cuocAn);
+		if (nac === "an" && !q.quanTri) throw khongThay();
 		return { qua: true, cuoc, q, ct };
 	}
 
@@ -295,7 +299,7 @@ export class SoanService {
 		const { doi } = await capNhatPhien(tx, cuocSoanId, randomUUID());
 		if (!doi) throw new ConflictException(T.soan.cuocKhongDang);
 		const cuoc = await docCuoc(tx, cuocSoanId);
-		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc(cuocSoanId));
+		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc);
 		return { ok: true, cuoc };
 	}
 
@@ -461,7 +465,13 @@ export class SoanService {
 		return this.db.$transaction(async (tx): Promise<SoanQuyetOutput> => {
 			const cuocSoanId = await cuocCuaDong(tx, input.deXuatId);
 			await tx.$queryRaw`SELECT id FROM "okrCuocSoan" WHERE id = ${cuocSoanId} FOR UPDATE`;
-			const cong = await this.congCuoc(tx, userId, cuocSoanId, now);
+			const cong = await this.congCuoc(
+				tx,
+				userId,
+				cuocSoanId,
+				now,
+				() => new NotFoundException(T.soan.khongCoDong(input.deXuatId)),
+			);
 			if (!cong.qua) return { ok: false, lyDo: cong.lyDo, chiTiet: null };
 			if (cong.cuoc.trangThai !== "dang")
 				throw new ConflictException(T.soan.cuocKhongDang);

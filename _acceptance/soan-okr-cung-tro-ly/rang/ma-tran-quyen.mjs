@@ -22,14 +22,16 @@ const THU_TUC = [
 	"soanDuaVao",
 ];
 
+const THEO_CUOC = new Set(["soanDanhSach", "soanQuyet", "soanDuaVao"]);
+
 function o(nguoi, suaDuoc, quanTri, nac, thuTuc) {
-	if (!suaDuoc) return "403";
+	if (!suaDuoc) return THEO_CUOC.has(thuTuc) ? "404" : "403";
 	if (thuTuc === "soanDanhSachCuoc") return "mo";
 	if (nac === "tat") return "don-vi-chua-bat";
 	if (nac === "an") {
 		if (quanTri) return "mo";
 		if (thuTuc === "soanSanSang" || thuTuc === "soanMo") return "don-vi-che-do-an";
-		return "403";
+		return "404";
 	}
 	return "mo";
 }
@@ -50,13 +52,16 @@ const md = [
 	"# Ma trận quyền — soan-okr-cung-tro-ly (E1, AC-1)",
 	"",
 	"Sinh bởi `ma-tran-quyen.mjs` từ bốn luật đóng; bài E1 đọc bảng này lúc chạy và từ chối",
-	"chạy nếu có ô trống hay ô hai giá trị. Giá trị ô: `mo` · một mã lý do có tên · `403`.",
+	"chạy nếu có ô trống hay ô hai giá trị. Giá trị ô: `mo` · một mã lý do có tên · `403` · `404`.",
 	"",
-	"Luật: (1) không sửa được OKR của đơn vị → 403 ở mọi thủ tục; (2) `soanDanhSachCuoc` (xem",
+	"Luật: (1) không sửa được OKR của đơn vị → 403 ở ba thủ tục theo đơn vị (`soanSanSang`,",
+	"`soanMo`, `soanDanhSachCuoc`), 404 ở ba thủ tục theo mã cuộc (`soanDanhSach`, `soanQuyet`,",
+	"`soanDuaVao`) — cùng câu với mã không có, theo luật «theo mã» của 8c; (2) `soanDanhSachCuoc` (xem",
 	"cuộc cũ) mở cho người sửa được ở mọi nấc; (3) nấc tắt → `don-vi-chua-bat` cho mọi thủ tục",
 	"còn lại, kể cả `soanDuaVao` trên cuộc đã mở trước khi tắt; (4) nấc ẩn → quản trị mở; người",
 	"khác sửa được thì `soanSanSang`/`soanMo` trả `don-vi-che-do-an`, còn `soanDanhSach`,",
-	"`soanQuyet`, `soanDuaVao` trên cuộc quản trị mở trả 403; nấc bật → mở cho người sửa được.",
+	"`soanQuyet`, `soanDuaVao` trên cuộc quản trị mở trả 404 cùng câu với mã không có; nấc bật →",
+	"mở cho người sửa được. Đổi 403 → 404 ở các ô theo mã cuộc: việc H1, 30/09, sau gộp 8c.",
 	"Ai sửa được: quản trị mọi cấp; trưởng bộ phận: bộ phận và phòng ban trong nó; trưởng phòng",
 	"ban: phòng ban; phụ trách KR và thành viên: không; vai «chỉ OKR» theo đúng chức trưởng",
 	"của mình (đường vào mới không thu hẹp quyền OKR của họ).",

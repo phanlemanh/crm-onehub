@@ -178,7 +178,7 @@ describe("soan-mo", () => {
 	);
 
 	test(
-		"thu-lai-cuoc-an: trưởng phòng thử lại cuộc ẩn quản trị mở → 403 cuocAn, phiên không đổi",
+		"thu-lai-cuoc-an: trưởng phòng thử lại cuộc ẩn quản trị mở → 404 cùng câu với mã không có, phiên không đổi",
 		async () => {
 			const an = await gieoCuoc({
 				donVi: DON_VI.kdBac,
@@ -193,8 +193,16 @@ describe("soan-mo", () => {
 					{ ...vaoDonVi(DON_VI.kdBac, duong), thuLaiCuocId: an.id },
 					cTruong,
 				);
-				expect(tra.status, duong).toBe(403);
-				expect(tra.loi).toBe(OKR.thongDiep.soan.cuocAn);
+				const khongCo = await goiSoan(
+					app,
+					"soanMo",
+					duong,
+					{ ...vaoDonVi(DON_VI.kdBac, duong), thuLaiCuocId: "khong-co" },
+					cTruong,
+				);
+				expect([tra.status, khongCo.status], duong).toEqual([404, 404]);
+				expect(tra.loi).toBe(OKR.thongDiep.soan.khongCoCuoc);
+				expect(tra.loi).toBe(khongCo.loi);
 			}
 			expect(
 				await db.okrCuocSoan.findUniqueOrThrow({

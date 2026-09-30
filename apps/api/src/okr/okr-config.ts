@@ -143,8 +143,8 @@ export const OKR = {
 			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
 		},
 		soan: {
-			khongCoCuoc: (id: string) => `Không có cuộc soạn nào mang mã ${id}.`,
-			cuocAn: "Cuộc soạn này mở ở chế độ ẩn — chỉ quản trị xem và quyết được.",
+			khongCoCuoc:
+				"Không thấy cuộc soạn này — có thể nó không còn, hoặc bạn không được xem.",
 			cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
 			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
 			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,

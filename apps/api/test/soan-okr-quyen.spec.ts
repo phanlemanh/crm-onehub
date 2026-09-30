@@ -5,6 +5,7 @@ import { db } from "@crm/db";
 import { cuocDang, demCuocTrongKy, moCuoc } from "@crm/db/okr-cuoc-soan";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { idMau } from "../scripts/okr-mau/nap";
+import { OKR } from "../src/okr/okr-config";
 import {
 	CHU_KY_Q4,
 	DON_VI,
@@ -166,8 +167,9 @@ type DuLieu = {
 	mucTieuIds?: string[];
 };
 
-function doc(thuTuc: ThuTuc, tra: TraLoi): string {
+function doc(thuTuc: ThuTuc, tra: TraLoi, cauKhongCo?: string): string {
 	if (tra.status === 403) return "403";
+	if (tra.status === 404 && tra.loi === cauKhongCo) return "404";
 	if (tra.status !== 200) return `http ${tra.status} ${tra.loi}`;
 	const d = tra.data as DuLieu;
 	if (thuTuc === "soanDanhSachCuoc") return "mo";
@@ -179,7 +181,7 @@ function doc(thuTuc: ThuTuc, tra: TraLoi): string {
 async function goiO(
 	o: O,
 	duong: Duong,
-): Promise<{ tra: TraLoi; dongGiu: string | null }> {
+): Promise<{ tra: TraLoi; dongGiu: string | null; cauKhongCo?: string }> {
 	const dv = donViO(o.nguoi, o.cap);
 	const c = cookie[o.nguoi];
 	if (o.thuTuc === "soanSanSang" || o.thuTuc === "soanDanhSachCuoc")
@@ -249,7 +251,14 @@ async function goiO(
 			? await trangThaiDongNhap(mtId ?? "")
 			: null;
 	await xoaCuoc(cuoc.id);
-	return { tra, dongGiu };
+	return {
+		tra,
+		dongGiu,
+		cauKhongCo:
+			o.thuTuc === "soanQuyet"
+				? OKR.thongDiep.soan.khongCoDong(mtId ?? "")
+				: OKR.thongDiep.soan.khongCoCuoc,
+	};
 }
 
 beforeAll(async () => {
@@ -294,8 +303,8 @@ describe("ma-tran-quyen-soan", () => {
 					await ghiCauHinh(app, cQuanTri, NAC_SOAN[nac]);
 					for (const x of o.filter((y) => y.nac === nac))
 						for (const duong of DUONG) {
-							const { tra, dongGiu } = await goiO(x, duong);
-							const thay = doc(x.thuTuc, tra);
+							const { tra, dongGiu, cauKhongCo } = await goiO(x, duong);
+							const thay = doc(x.thuTuc, tra, cauKhongCo);
 							soKhangDinh += 1;
 							if (thay !== x.giaTri)
 								lech.push(
@@ -390,7 +399,7 @@ describe("ma-tran-quyen-soan", () => {
 	);
 
 	test.skipIf(!chay("soanDanhSach") || !chay("soanQuyet"))(
-		"nac-an: trưởng phòng gọi soanDanhSach trên cuộc quản trị mở ở nấc ẩn → 403, dòng vẫn cho",
+		"nac-an: trưởng phòng gọi soanDanhSach, soanQuyet trên cuộc quản trị mở ở nấc ẩn → 404 cùng câu với mã không có, dòng vẫn cho",
 		async () => {
 			await ghiCauHinh(app, cQuanTri, NAC_SOAN.an);
 			const cuoc = await gieoCuoc({
@@ -402,29 +411,23 @@ describe("ma-tran-quyen-soan", () => {
 				{ loai: "muc-tieu-moi", khoa: "m1", ten: "Mục tiêu ẩn" },
 			]);
 			const cTruong = cookie["truong-phong-ban"];
+			const cau = (tra: TraLoi) => [tra.status, tra.loi];
 			for (const duong of DUONG) {
-				expect(
-					(
-						await goiSoan(
-							app,
-							"soanDanhSach",
-							duong,
-							{ cuocSoanId: cuoc.id },
-							cTruong,
-						)
-					).status,
-				).toBe(403);
-				expect(
-					(
-						await goiSoan(
-							app,
-							"soanQuyet",
-							duong,
-							{ deXuatId: id ?? "", quyet: "bac" },
-							cTruong,
-						)
-					).status,
-				).toBe(403);
+				const danhSach = (cuocSoanId: string) =>
+					goiSoan(app, "soanDanhSach", duong, { cuocSoanId }, cTruong);
+				const quyet = (deXuatId: string) =>
+					goiSoan(app, "soanQuyet", duong, { deXuatId, quyet: "bac" }, cTruong);
+				expect(cau(await danhSach(cuoc.id))).toEqual(
+					cau(await danhSach("khong-co")),
+				);
+				expect(cau(await danhSach(cuoc.id))).toEqual([
+					404,
+					OKR.thongDiep.soan.khongCoCuoc,
+				]);
+				expect(cau(await quyet(id ?? ""))).toEqual([
+					404,
+					OKR.thongDiep.soan.khongCoDong(id ?? ""),
+				]);
 				expect(
 					doc(
 						"soanDanhSach",

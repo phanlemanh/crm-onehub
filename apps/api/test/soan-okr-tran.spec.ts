@@ -7,6 +7,7 @@ import type {
 	SoanSanSangOutput,
 	SoanTangLuotOutput,
 } from "../src/okr/okr.contracts";
+import { OKR } from "../src/okr/okr-config";
 import {
 	DON_VI,
 	datPhaNamKe,
@@ -306,7 +307,7 @@ describe("tran-soan", () => {
 	);
 
 	test(
-		"cong: cuoc khong co -> 404; cuoc an cua nguoi khac voi nguoi khong quan tri -> 403; nguoi quan tri van dem luot",
+		"cong: cuoc khong co -> 404; cuoc an cua nguoi khac voi nguoi khong quan tri -> 404 cung cau; nguoi quan tri van dem luot",
 		async () => {
 			tienDongHo();
 			const khongCo = await goiSoan(
@@ -317,7 +318,7 @@ describe("tran-soan", () => {
 				cTruong,
 			);
 			expect(khongCo.status).toBe(404);
-			expect(khongCo.loi).toContain("Không có cuộc soạn");
+			expect(khongCo.loi).toBe(OKR.thongDiep.soan.khongCoCuoc);
 			const an = await gieoCuoc({
 				donVi: DON_VI.kdBac,
 				nguoiMo: "le-hai-dang",
@@ -331,7 +332,8 @@ describe("tran-soan", () => {
 				{ cuocSoanId: an.id },
 				cTruong,
 			);
-			expect(cam.status).toBe(403);
+			expect(cam.status).toBe(404);
+			expect(cam.loi).toBe(khongCo.loi);
 			expect(await soLuotTrongDb(an.id)).toBe(0);
 			expect(await luot(an.id, "quan tri dem luot", "trpc", cQuanTri)).toEqual({
 				ok: true,
