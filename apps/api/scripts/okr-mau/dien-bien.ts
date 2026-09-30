@@ -2,7 +2,7 @@ import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import type { KieuKr } from "@crm/validation/okr-kr";
 import { OKR_MAU } from "./cau-hinh";
-import type { KichBan } from "./khuon";
+import type { KichBan, KichBanQuy3 } from "./khuon";
 
 export type LanMau = {
 	tuan: number;
@@ -108,14 +108,22 @@ export function dienBien(kr: {
 	}));
 }
 
+const NHIP_QUY3 = {
+	deu: ["vua", "vua", "vua", "vua"],
+	troi: ["cao", "vua", "vua", "thap"],
+} satisfies Record<KichBanQuy3, MucTuTin[]>;
+
 export function lanQuy3(kr: {
 	kieu: KieuKr;
 	khoi: number;
 	dich: number;
 	chot: number;
+	kichBanQuy3?: KichBanQuy3;
+	ghiChu?: Partial<Record<string, string>>;
 }): LanMau[] {
 	const tuan = [3, 6, 9, 13];
 	const cuoi = tuan.length;
+	const tuTin = NHIP_QUY3[kr.kichBanQuy3 ?? "deu"];
 	return tuan.map((t, i) => {
 		const phan = (i + 1) / cuoi;
 		const giaTri =
@@ -124,7 +132,12 @@ export function lanQuy3(kr: {
 					? kr.chot
 					: 0
 				: tron(kr.khoi + (kr.chot - kr.khoi) * phan);
-		return { tuan: t, giaTri, tuTin: "vua", ghiChu: "" };
+		return {
+			tuan: t,
+			giaTri,
+			tuTin: tuTin[i] ?? "vua",
+			ghiChu: kr.ghiChu?.[String(t)] ?? "",
+		};
 	});
 }
 
