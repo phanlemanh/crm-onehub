@@ -3,7 +3,8 @@
 Viết 2026-09-30, cho hạng mục `soan-okr-cung-tro-ly` (làn A · Trợ lý OKR). Đây là
 bước «làm rõ bối cảnh» chủ kho đặt làm điều kiện mở hạng mục: nó trả lời một
 người cùng soạn OKR giỏi cần biết gì, CRM đã có thứ đó ở đâu, ai được thấy, tốn
-bao nhiêu, và lớp nào vào lượt đầu. Chủ kho duyệt tài liệu này xong mới chạy
+bao nhiêu, lớp nào vào lượt đầu — và hình dạng của việc soạn (mục 2b): một cuộc
+đối thoại, không phải một lần bấm. Chủ kho duyệt tài liệu này xong mới chạy
 `/feature-loop:feature-loop` với nó làm đầu vào. Nó không phải hợp đồng nghiệm
 thu và không đặt ngưỡng nào — ngưỡng là việc của Cổng Đáng và Cổng Phạm vi.
 
@@ -59,6 +60,47 @@ không điểm và «điều học được» kỳ trước, không cây tổ ch
 không số CRM, không tài liệu. Cả kho chưa có chỗ nào ước lượng cỡ một gói bối
 cảnh — chỉ có trần ký tự lẻ tẻ (`BODY_LIMIT`, `toiDaKyTu` của Kho tài liệu).
 
+## 2b. Hình dạng: một cuộc đối thoại, bộ nháp thành hình rồi người quyết đưa vào dùng
+
+Chủ kho chỉnh 30/09: hạng mục không phải «bấm một nút, nhận vài dòng» như 9b. Nó
+là **đối thoại trực tiếp** để hình thành bộ OKR nháp, rồi người quyết định đưa
+bộ đó vào sử dụng. Bối cảnh ở mục 3 là thứ Trợ lý mang vào cuộc đối thoại đó.
+
+**Người dùng thấy**
+
+1. Người sửa được OKR của một đơn vị (trưởng đơn vị, hoặc quản trị ở cấp
+   OneHub) mở «Soạn OKR cùng Trợ lý» cho đơn vị đó và chu kỳ đang lập kế hoạch.
+2. Trợ lý mở đầu bằng điều nó đã biết từ bối cảnh — kỳ trước đạt gì, trượt gì,
+   cấp trên đang nhắm gì, đơn vị chịu trách nhiệm gì — và hỏi hai tới bốn câu về
+   điều nó chưa biết: ưu tiên kỳ này, điều muốn khác kỳ trước, ràng buộc.
+3. Người trả lời bằng chữ. Trợ lý đưa **bản nháp**: hai tới bốn Mục tiêu, mỗi Mục
+   tiêu hai tới bốn KR có tên, kiểu, đơn vị đo, khởi điểm khi có từ dữ liệu, **ô
+   đích để trống**, mỗi dòng kèm một câu vì sao và chỗ Căn chỉnh gợi ý.
+4. Bản nháp là **một bảng sống đứng cạnh cuộc trò chuyện**, không phải chữ trong
+   bong bóng chat. Người sửa trực tiếp trên bảng hoặc nói trong chat («bỏ mục 2»,
+   «KR này đo việc, đổi») và Trợ lý sửa bảng; từng dòng nhận · sửa · bác như 9b,
+   dòng đã bác không mời lại.
+5. «Đưa vào bộ OKR»: tạo Mục tiêu và KR ở trạng thái **nháp** qua đường ghi có
+   quyền của OKR, có vết «theo bản soạn của Trợ lý OKR». Người điền đích, rồi công
+   bố như mọi OKR khác. Không có gì tự công bố.
+6. Cuộc soạn được lưu: bản nháp cuối, dòng nào thành OKR thật. Kỳ sau, lớp 3 đọc
+   được «bộ nháp nào thành OKR và đạt tới đâu» mà không cần bộ nhớ riêng.
+
+**Khác 9b ở đâu — và kho đã có gì cho nó**
+
+| Cần | 9b có? | Kho đã có | Việc của hạng mục |
+| --- | --- | --- | --- |
+| Phiên có trí nhớ theo lượt, Trợ lý hỏi lại được | Không — một lần nộp, `ask_question` bị khoá | Kho đã quyết chat OKR đi bằng **eve app riêng** (`defineRemoteAgent`) vì phép thử stub ở N0 không đạt (`lo-trinh-tro-ly-okr.md` mục 5 lượt 10; thiết kế §4.12). Nền đó thuộc hạng mục C `hoi-dap-okr`, **chưa dựng** | Hạng mục này là **người dùng đầu tiên của nền chat OKR**: hoặc đi sau C, hoặc gánh nền và C dùng lại. Khuyến nghị: gánh nền, vì soạn có giá trị trước mùa 07/12 hơn hỏi đáp; C thành lượt nhỏ sau. Đổi thứ tự làn A → Cổng Đáng quyết |
+| Giao diện hội thoại | Không | `docs/chat-ui.md`: AI Elements giữ transcript, composer; shadcn giữ phòng xung quanh. Thẻ góp ý của `the-gop-y-okr` (Confirmation) cho từng dòng nháp | Màn hai cột: hội thoại (AI Elements) và bảng nháp (thẻ góp ý). Không dựng bong bóng tay |
+| Bản nháp thành OKR | Nhận từng dòng ghi vào Mục tiêu có sẵn | `OkrService` tạo Mục tiêu, KR, Căn chỉnh có quyền và vết; trạng thái `nhap` → `cong-bo` có sẵn | Một thủ tục tạo cả bộ ở trạng thái nháp trong một giao dịch, vết ghi nguồn là cuộc soạn |
+| Sổ đề xuất | `OkrDeXuat` một dòng một đề xuất | Dùng lại; thêm loại dòng «mục tiêu mới», «KR mới» và mã cuộc soạn | Mở rộng sổ, không bảng mới cho sổ |
+| Bối cảnh | Một Mục tiêu | Mục 3 | Gói cho **một đơn vị và một chu kỳ**, dựng một lần khi mở cuộc soạn, đứng đầu để trúng cache qua mọi lượt |
+| Luật số | «Không viết số không có trong dữ liệu» | Bộ kiểm 9b | Mở rộng: số người gõ **trong cuộc trò chuyện** cũng là dữ liệu; đích vẫn trống trừ khi người gõ đích. NG-05 giữ |
+| Chi phí | Một lời gọi mỗi lượt bấm | Sổ chi phí, trần tháng, trần lượt/người/ngày của 9a và 9b | Mỗi lượt hội thoại gửi lại cả phần đầu (cache ≈ 56%). Cần trần lượt mỗi cuộc và trần cuộc mỗi đơn vị mỗi kỳ — xem mục 3 |
+
+**Không có trong hạng mục này:** soạn qua Zalo hay Slack (chỉ trong app); Trợ lý
+tự công bố; bộ nhớ chéo giữa các cuộc ngoài dữ liệu OKR và sổ đề xuất.
+
 ## 3. Các lớp bối cảnh: CRM có gì, ai thấy, tốn gì
 
 Khung năm lớp chủ kho gợi ý, thêm lớp 0 (hồ sơ công ty) vì đó là thứ anh thấy
@@ -80,11 +122,15 @@ ngưỡng; Cổng Phạm vi đặt phép đo thật.
 | **4 · Số CRM theo danh mục cố định** | `CHI_SO_OKR` bảy chỉ số (thoả thuận chốt, thoả thuận mới, gọi hẹn được, bước xong đúng hạn, ghi danh đạt bậc, form thành cá nhân, email gửi ra) theo toàn công ty · bộ phận · phòng ban · người; `demChiSo` | **Không** — `okr-so.service.ts` đã chặn số CRM với vai này ngay trong khu OKR; lớp này rỗng cho họ | ≈ 300: quý trước và quý này tới nay, dạng tổng | Vừa: khởi điểm có thật cho KR nguồn CRM | Nhẹ |
 | **5 · Chiến lược** — Sao Bắc Đẩu, mỏ neo, KGI, vùng cấm, sáng kiến | **Chưa có.** Kho tài liệu có thật (`TaiLieuTrang`, phiên bản, chủ trang, xác minh đến ngày, tìm toàn văn) nhưng loại trang chỉ có quy định · chính sách · quy trình · biểu mẫu, và chưa có trang nào về công ty | Có — hôm nay mọi vai đọc được mọi trang đang dùng; quyền theo trang chưa dựng | ≈ 4.000–8.000 bản rút gọn, ổn định trong năm → đứng ngay sau lớp 0 | Cao: mục tiêu đơn vị neo vào KGI và sáng kiến thật | Không (đổi theo năm) |
 
-**Cộng lại cho lượt đầu** (lớp 0 · 1 · 2a · 3 · 4 · 5): ≈ 8–17 nghìn token vào,
-2–4 nghìn ra cho một bộ 3–5 Mục tiêu. Suy từ N0: ≈ 0,02–0,04 USD một lượt soạn
-chưa cache, ≈ 0,02 khi phần tĩnh (lớp 0 và 5) trúng cache. Mùa đặt OKR với 40
-đơn vị, mỗi đơn vị ba lượt: ≈ 3–5 USD, dưới trần tháng 9 USD, và vẫn còn chỗ cho
-góp ý 9b. Con số này phải đo lại trước Cổng Phạm vi, như N0 đã làm cho 9a.
+**Cộng lại cho gói của một cuộc soạn** (lớp 0 · 1 · 1n · 2a · 3 · 4 · 5): ≈ 8–17
+nghìn token, dựng một lần khi mở cuộc soạn. Vì là đối thoại, gói đó được gửi lại
+**mỗi lượt** cùng lịch sử trò chuyện; cache đọc lại ≈ 56% phần đứng đầu (N0). Một
+cuộc soạn 6–10 lượt, ra 2–4 nghìn token cho bộ nháp cộng các lần sửa: suy từ N0
+≈ **0,10–0,25 USD một cuộc**. Mùa đặt OKR với 40 đơn vị, mỗi đơn vị một tới hai
+cuộc: ≈ 4–20 USD — **có thể vượt trần tháng 9 USD** khi cộng góp ý 9b. Ba việc
+theo sau: trần lượt mỗi cuộc (giả định 12) và trần cuộc mỗi đơn vị mỗi kỳ (giả
+định 3) ở Chương trình OKR; chủ kho quyết ở Cổng Đáng có nâng trần tháng riêng cho
+tháng đặt OKR hay không; và đo thật trước Cổng Phạm vi như N0 đã làm cho 9a.
 
 ## 4. Chỗ thiếu, và cách có nó
 
@@ -119,18 +165,24 @@ liệu OKR họ vốn đọc được.
 ## 6. Ranh giới đổi so với lộ trình — Cổng Đáng phải nói rõ
 
 - Lộ trình ghi Trợ lý «không soạn trọn bộ OKR cho cả đội» (mục 5, lượt 9). Hạng
-  mục này đổi thành: **soạn khi người yêu cầu, người nhận từng dòng, số đích do
-  người đặt** — Trợ lý đề xuất KR với đơn vị đo và khởi điểm khi có từ lớp 3 hay
-  4, ô đích để trống. NG-05 (máy không ghi số hay mức tự tin thay người) và NG-06
-  (chép KR cấp trên thành mục tiêu cấp dưới) giữ nguyên.
+  mục này đổi thành: **soạn trọn bộ nháp qua đối thoại khi người yêu cầu; người
+  nhận, sửa, bác từng dòng; số đích do người đặt; bộ chỉ vào CRM ở trạng thái
+  nháp và người công bố** — Trợ lý đề xuất KR với đơn vị đo và khởi điểm khi có
+  từ lớp 3 hay 4, ô đích để trống. NG-05 (máy không ghi số hay mức tự tin thay
+  người) và NG-06 (chép KR cấp trên thành mục tiêu cấp dưới) giữ nguyên.
+- Thứ tự làn A đổi: hạng mục này dựng nền chat OKR (eve app riêng) mà lộ trình
+  đang xếp cho C `hoi-dap-okr`; C đi sau và dùng lại nền. Cổng Đáng ghi rõ.
+- Trần tháng 9 USD có thể không đủ cho tháng đặt OKR khi có đối thoại; Cổng Đáng
+  quyết giữ hay nâng riêng cho tháng đó, trước khi mùa mở (mục 8 của lộ trình
+  Trợ lý OKR đã đòi điều này cho 9b).
 - ZDR bắt buộc kể cả eval; trần tháng của khu OKR giữ (Cài đặt, mặc định 9 USD).
 - Dùng lại sổ đề xuất, cách nhận · sửa · bác từng dòng và công tắc ba nấc tắt ·
   chế độ ẩn · bật của 9b; tắt khi gộp.
 - Trang loại «chiến lược» là dữ liệu, không phải lệnh: bộ kiểm và thẻ dữ liệu
   như 9b. Người viết trang là quản trị, và trang qua duyệt như mọi trang.
 - Hạng: **T3** — hai cột mới trên cây tổ chức (mô tả đơn vị, chức danh) chạm
-  `packages/db/prisma`, nên có Cổng 1.5 duyệt kế hoạch. Chủ kho chọn 30/09: trả
-  giá T3 một lần thay vì mở một lượt T3 nữa sau này.
+  `packages/db/prisma`, và nền chat OKR là một đường vào mới cho vai «chỉ OKR».
+  Có Cổng 1.5 duyệt kế hoạch. Chủ kho chọn 30/09 thêm hai cột trong lượt này.
 - Hạn tự nhiên: trước mùa đặt OKR năm, 2026-12-07. Làn A đang bận 9c; thiết kế
   chạy song song, viết mã và chấm S4 hỏi chủ kho trước.
 
@@ -144,6 +196,10 @@ liệu OKR họ vốn đọc được.
   bước đo trước Cổng Phạm vi.
 - [GIẢ ĐỊNH] Trần ký tự cho một trang loại «chiến lược» quanh 20 nghìn ký tự
   (≈ 8 nghìn token); con số đặt ở Cổng Phạm vi.
+- [GIẢ ĐỊNH] Trần 12 lượt mỗi cuộc soạn, 3 cuộc mỗi đơn vị mỗi kỳ; 6–10 lượt là
+  cỡ cuộc soạn thường gặp. Đặt lại ở Cổng Phạm vi sau khi đo.
+- [GIẢ ĐỊNH] Hạng mục này gánh nền chat OKR thay cho C; nếu chủ kho giữ thứ tự
+  cũ thì hạng mục chạy sau C và bỏ dòng «nền chat» ở mục 2b.
 - [GIẢ ĐỊNH] Bản rút gọn của tài liệu Operating System do chủ kho tự viết, không
   do máy soạn — máy soạn của Kho tài liệu chỉ soạn từ một nguồn đã tải và trang
   đó vẫn phải qua duyệt; có thể dùng nó để có bản đầu, nhưng chủ kho quyết nội
