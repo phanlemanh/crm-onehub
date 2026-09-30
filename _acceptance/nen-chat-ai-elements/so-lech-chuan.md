@@ -254,15 +254,15 @@ lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-c
 
 **Tệp:** `packages/ui/src/components/ai-elements/inline-citation.tsx`
 
-**Số dòng khác:** 295
+**Số dòng khác:** 297
 
-**Vân tay lệch:** `9c92d70982164b47`
+**Vân tay lệch:** `77b994bdc6112870`
 
 **Đổi gì:** Kéo bằng CLI ngày 01/10 ở lượt `tro-ly-okr-tom-tat` (Task 8), chạy
 thẳng trong `packages/ui` với `git status` sạch; bốn câu hỏi ghi đè `badge.tsx`,
 `button.tsx`, `hover-card.tsx`, `carousel.tsx` đều trả lời không. CLI thêm gói
 `cn` và xếp lại khối `@tiptap/*` trong `packages/ui/package.json`, sửa `bun.lock`;
-cả hai đã hoàn nguyên. Toàn bộ 295 dòng khác là bản vá của kho — tệp vừa kéo, không
+cả hai đã hoàn nguyên. Toàn bộ 297 dòng khác là bản vá của kho — tệp vừa kéo, không
 có phần cũ hơn thượng nguồn:
 
 - `InlineCitationCard` đổi từ `HoverCard` sang `Popover` có trạng thái mở điều
@@ -284,6 +284,10 @@ có phần cũ hơn thượng nguồn:
   Carbon qua `Icon`; hai `aria-label` "Previous" · "Next" về
   `msg.inlineCitation.previousSource` · `.nextSource`. Kiểu props đổi sang
   `ComponentProps<typeof Button>`.
+- `InlineCitationSource` đổi `truncate` của tiêu đề nguồn thành `wrap-break-word`
+  (đợt sửa cuối lượt `tro-ly-okr-tom-tat`, 01/10): tiêu đề ở đây là tên KR, dài
+  tới 200 ký tự, và cắt một dòng ở khung 390 px thì người đọc không biết thẻ
+  đang nói KR nào. Tiêu đề xuống dòng, đọc đủ chữ.
 
 **Vì sao:** Thẻ trích dẫn của khối Tóm tắt tuần phải mở được trên điện thoại và
 bằng bàn phím; `HoverCard` chỉ mở khi di chuột, nên người chạm màn và người dùng

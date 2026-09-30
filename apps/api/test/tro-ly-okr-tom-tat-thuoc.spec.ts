@@ -48,6 +48,7 @@ import {
 	TUAN,
 	thanhVienCua,
 	truongCua,
+	viecGieo,
 	vietSo,
 } from "./tro-ly-okr-tom-tat-san";
 
@@ -109,18 +110,18 @@ const KY_VONG = {
 		},
 		"khong-ro": {
 			tuan: TUAN,
-			so_ban: 0,
+			so_ban: 1,
 			can_xem: 0,
-			tong_cau: 0,
-			cau_bo: 0,
-			ty_le_bo: null,
-			theo_ma: {},
+			tong_cau: 3,
+			cau_bo: 1,
+			ty_le_bo: 0.3333,
+			theo_ma: { "so-lech": 1 },
 		},
 	},
 	"so-lech-lot": {
 		bat: { cau: 11, lech: 0 },
 		an: { cau: 3, lech: 0 },
-		"khong-ro": { cau: 0, lech: 0 },
+		"khong-ro": { cau: 2, lech: 0 },
 	},
 	"mo-sau-nhac": {
 		bat: { nhan_dong: 2, mo_trong_ngay: 1, ty_le_mo: 0.5 },
@@ -140,7 +141,7 @@ const KY_VONG = {
 	"tat-dong": {
 		bat: { truong_phong: 3, da_tat: 1, ty_le_tat: 0.3333 },
 		an: { truong_phong: 1, da_tat: 1, ty_le_tat: 1 },
-		"khong-ro": { truong_phong: 0, da_tat: 0, ty_le_tat: null },
+		"khong-ro": { truong_phong: 1, da_tat: 0, ty_le_tat: 0 },
 	},
 	"chi-phi-tom-tat": {
 		bat: {
@@ -161,8 +162,8 @@ const KY_VONG = {
 			tien_usd: 0,
 			tom_tat_usd: 0,
 			chuyen_tiep_usd: 0,
-			so_ban: 0,
-			usd_moi_ban: null,
+			so_ban: 1,
+			usd_moi_ban: 0,
 		},
 	},
 } satisfies Record<string, Record<Nac, Hang>>;
@@ -190,6 +191,7 @@ const DOC_SO: [string, (number[] | string)[]][] = [
 
 let app: NestExpressApplication;
 let P: { p1: Phong; p2: Phong; p3: Phong; p4: Phong };
+let P5: Phong;
 const ban = { p1: "", p2: "", p3: "", p4: "" };
 const viec = { p1: "", p3: "" };
 let nguonP4 = "";
@@ -246,6 +248,45 @@ function chonPhong(ds: { ma: string; goi: GoiTomTat }[]) {
 	if (!a || !b || !c || !d)
 		throw new Error(`bo mau thieu phong co truong rieng: ${chon.length}`);
 	return { p1: a, p2: b, p3: c, p4: d };
+}
+
+function phongThu5(ds: { ma: string; goi: GoiTomTat }[]): Phong {
+	const daChon = [P.p1, P.p2, P.p3, P.p4];
+	const khongNhan = new Set([
+		...daChon.map((p) => p.truong),
+		...thanhVienCua(P.p1.ma),
+	]);
+	for (const p of ds) {
+		if (daChon.some((c) => c.ma === p.ma)) continue;
+		const truong = truongCua(p.ma);
+		if (!khongNhan.has(truong)) return { ...p, truong };
+	}
+	throw new Error("bo mau thieu phong thu nam cho ban thieu nac");
+}
+
+async function gieoBanThieuNac() {
+	const s5 = nguonDau(P5);
+	const taskId = await viecGieo({
+		ma: "thuoc-p5-thieu-nac",
+		departmentId: pb(P5.ma),
+		trangThai: "xong",
+	});
+	await db.okrTomTat.create({
+		data: {
+			taskId,
+			cycleId: KY,
+			departmentId: pb(P5.ma),
+			tuan: new Date(`${TUAN}T00:00:00.000Z`),
+			cau: {
+				cau: [cauLanh(0, s5), cauLanh(1, s5)],
+				bo: [{ ...cauLanh(2, s5), maBo: "so-lech" }],
+			},
+			soCauBo: 1,
+			trangThai: "hien",
+			inputHash: "hash-thuoc-p5-thieu-nac",
+			createdAt: new Date(),
+		},
+	});
 }
 
 const nguonDau = (p: Phong) => {
@@ -525,7 +566,9 @@ beforeAll(async () => {
 	await batDauMau();
 	await donTomTat();
 	app = await dungUngDung();
-	P = chonPhong(await phongCoNguon(1));
+	const coNguon = await phongCoNguon(1);
+	P = chonPhong(coNguon);
+	P5 = phongThu5(coNguon);
 	datDongHo(new Date(SAU(0).getTime() - 10 * MINUTE_MS));
 	await ghiCauHinh(app, await cookieCua(QUAN_TRI), {
 		aiOn: true,
@@ -536,6 +579,7 @@ beforeAll(async () => {
 	});
 	datDongHo(SAU(MINUTE_MS));
 	await dungBan();
+	await gieoBanThieuNac();
 	await gieoChiPhiBan();
 	await guiNhac();
 	await moBang(P.p1.truong, P.p1.ma, MO_CUNG_NGAY);

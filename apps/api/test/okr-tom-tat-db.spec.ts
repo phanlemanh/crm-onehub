@@ -915,6 +915,64 @@ describe("quan-tri", () => {
 	);
 
 	test(
+		"quan-tri-chi-doc-tuan-moi: việc hỏng khuôn của tuần trước và của phòng lưu trữ không làm hỏng bảng quản trị",
+		async () => {
+			const luuTru = phongLuuTru[0];
+			if (!luuTru) throw new Error("bo mau khong co phong luu tru");
+			const hong = await Promise.all(
+				[
+					{
+						ma: "hong-tuan-truoc",
+						departmentId: chon.b,
+						tuan: dauTuanVN(SAU(-7 * NGAY_MS)),
+						luc: SAU(-7 * NGAY_MS),
+					},
+					{
+						ma: "hong-luu-tru",
+						departmentId: luuTru,
+						tuan: TUAN,
+						luc: new Date(LUC.getTime() - MINUTE_MS),
+					},
+				].map((v) =>
+					db.agentTask.create({
+						data: {
+							kind: "okr-tom-tat-tuan",
+							reason: "okr-tom-tat-tuan",
+							subject: `${TIEN_TO_TLO}tt-${v.ma}`,
+							budget: 0,
+							dueAt: v.luc,
+							createdAt: v.luc,
+							payload: {
+								viec: "tom-tat-tuan",
+								cycleId: KY,
+								departmentId: v.departmentId,
+								tuan: v.tuan,
+							},
+						},
+						select: { id: true },
+					}),
+				),
+			);
+			try {
+				const ban = await banTuanChoQuanTri(
+					db,
+					{ cycleId: KY, now: SAU(60 * MINUTE_MS) },
+					LUAT_TOM_TAT,
+				).then(
+					(b) => `tuan ${b.tuan}, ${b.phong.length} phong`,
+					(e: Error) => `quan tri doc hang ngoai tuan: ${e.message}`,
+				);
+				expect(ban).toBe(`tuan ${TUAN}, ${phongMau.length - 1} phong`);
+			} finally {
+				await db.agentTask.deleteMany({
+					where: { id: { in: hong.map((h) => h.id) } },
+				});
+			}
+		},
+		CHO_DB,
+	);
+
+	test(
 		"nac-phong-an: nấc hiện tại của phòng không còn bật thì bản bật cũng không hiện",
 		async () => {
 			await ghiCauHinh(app, cookieQuanTri, AN);

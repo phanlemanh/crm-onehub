@@ -281,3 +281,22 @@ describe("InlineCitation mở bằng bấm", () => {
 		expect(chiSo(t)).toBe("1/3");
 	});
 });
+
+describe("InlineCitationSource", () => {
+	test("tên nguồn dài xuống dòng, đọc đủ chữ", () => {
+		const ten =
+			"Tỷ lệ khách hàng doanh nghiệp vùng Đồng bằng sông Cửu Long gia hạn hợp đồng dịch vụ kho lạnh trước hạn ít nhất ba mươi ngày trong quý bốn";
+		const goc = ve(<InlineCitationSource title={ten} />);
+		const h = goc.querySelector("h4");
+		if (!h) throw new Error("khong thay tieu de nguon");
+		expect(h.textContent).toBe(ten);
+		const cat = [...h.classList].filter((c) =>
+			/^(truncate|line-clamp-|text-ellipsis|overflow-hidden|whitespace-nowrap)/.test(
+				c,
+			),
+		);
+		expect(
+			cat.length > 0 ? `ten nguon bi cat: ${cat.join(" ")}` : "doc du",
+		).toBe("doc du");
+	});
+});

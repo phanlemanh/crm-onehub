@@ -437,7 +437,7 @@ describe("khuôn nội dung tóm tắt", () => {
 		).toThrow(/noi dung tom tat tuan hong/);
 	});
 
-	test("việc tom-tat-tuan có nấc, mặc định bật", () => {
+	test("việc tom-tat-tuan bắt buộc có nấc, không mặc định", () => {
 		const goc = {
 			viec: "tom-tat-tuan",
 			departmentId: "d1",
@@ -445,9 +445,25 @@ describe("khuôn nội dung tóm tắt", () => {
 			tuan: "2026-09-28",
 			inputHash: "h",
 		};
-		const viec = okrTroLyViec.parse(goc);
-		expect(viec.viec === "tom-tat-tuan" && viec.nac).toBe("bat");
+		expect(
+			okrTroLyViec.safeParse(goc).success
+				? "thieu nac van qua"
+				: "thieu nac bi chan",
+		).toBe("thieu nac bi chan");
+		for (const nac of ["an", "bat"] as const) {
+			const viec = okrTroLyViec.parse({ ...goc, nac });
+			expect(viec.viec === "tom-tat-tuan" && viec.nac).toBe(nac);
+		}
 		expect(okrTroLyViec.safeParse({ ...goc, nac: "tat" }).success).toBe(false);
+		expect(
+			okrTroLyViec.parse({
+				viec: "de-xuat",
+				objectiveId: "o1",
+				keyResultId: null,
+				nguoiYeuCau: "u1",
+				inputHash: "h",
+			}),
+		).toMatchObject({ viec: "de-xuat", nac: "bat" });
 	});
 
 	test("mucNhac nhận okr-tom-tat và từ chối trường lạ", () => {

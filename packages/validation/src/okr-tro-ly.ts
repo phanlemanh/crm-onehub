@@ -71,7 +71,7 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 		cycleId: z.string().min(1),
 		tuan: ngayLich,
 		inputHash: z.string().min(1),
-		nac: z.enum(["an", "bat"]).default("bat"),
+		nac: z.enum(["an", "bat"]),
 	}),
 ]);
 
