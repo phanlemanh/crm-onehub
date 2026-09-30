@@ -50,7 +50,7 @@ const E13 = {
 		duaNhap: "Đưa bản nháp",
 		duaNhapLai:
 			"Đưa bản nháp ngay bây giờ, dùng những gì bạn đã biết về đơn vị.",
-		boMuc2: "bỏ mục tiêu 2",
+		boMuc: (stt) => `bỏ mục tiêu ${stt}`,
 	},
 	dich: 10,
 	khoiMacDinh: { "giam-xuong": 100, "phan-tram": 50, khac: 0 },
@@ -69,11 +69,6 @@ const API = process.env.API_URL ?? "http://localhost:3001";
 const m = okrSoanMessages("vi");
 const KY = idMau("chu-ky", E13.chuKy);
 const PHONG = idMau("pb", E13.phong.ma);
-const NHAN_SUA_QUA_CHAT = [
-	m.banNhap.nhan["vua-sua"],
-	m.banNhap.nhan["vua-chuyen"],
-	m.banNhap.nhan["da-bo"],
-];
 
 const dong = [];
 let sai = 0;
@@ -651,7 +646,28 @@ async function buocBanNhap(tl, A) {
 	});
 
 	buoc = "nhan-con-lai";
-	const daThu = new Set();
+	const giu = await A.p.evaluate(() => {
+		const khoi = [
+			...document.querySelectorAll(
+				'[data-cot="ban-nhap"] [data-khoi-muc-tieu]',
+			),
+		].filter((x) => x.checkVisibility());
+		const cuoi = khoi.at(-1);
+		return {
+			id: cuoi?.getAttribute("data-khoi-muc-tieu") ?? null,
+			stt: khoi.length,
+			dong: cuoi
+				? [...cuoi.querySelectorAll("[data-dong]")].map((x) =>
+						x.getAttribute("data-dong"),
+					)
+				: [],
+		};
+	});
+	if (!giu.id) throw new Error("ban nhap khong co khoi Muc tieu nao");
+	dong.push(
+		`GHI de cho Muc tieu ${giu.stt} (${giu.id}) va ${giu.dong.length - 1} dong con cho buoc sua qua chat`,
+	);
+	const daThu = new Set(giu.dong);
 	for (let i = 0; i < E13.vongNhanToiDa; i += 1) {
 		const id = await A.p.evaluate(
 			(bo) =>
@@ -669,11 +685,21 @@ async function buocBanNhap(tl, A) {
 		daThu.add(id);
 		if (!(await nhanDong(A.p, id))) dong.push(`GHI dong ${id} khong nhan duoc`);
 	}
-	const conCho = await demHien(
-		A.p,
-		'[data-cot="ban-nhap"] [data-the-cho][data-loai-dong="muc-tieu"], [data-cot="ban-nhap"] [data-the-cho][data-loai-dong="kr"]',
+	const conCho = await A.p.evaluate(
+		(bo) =>
+			[
+				...document.querySelectorAll(
+					'[data-cot="ban-nhap"] [data-the-cho][data-loai-dong="muc-tieu"], [data-cot="ban-nhap"] [data-the-cho][data-loai-dong="kr"]',
+				),
+			].filter(
+				(x) => x.checkVisibility() && !bo.includes(x.getAttribute("data-dong")),
+			).length,
+		giu.dong,
 	);
-	kiem(`nhan moi Muc tieu va KR: con ${conCho} dong cho`, conCho === 0);
+	kiem(
+		`nhan moi Muc tieu va KR ngoai Muc tieu ${giu.stt}: con ${conCho} dong cho`,
+		conCho === 0,
+	);
 
 	buoc = "ST-soan-dua-vao-thieu-dich";
 	await bamNhan(A.p, '[data-nut="dua-vao"]').catch(() => {});
@@ -713,66 +739,57 @@ async function buocBanNhap(tl, A) {
 		`dien khoi diem va dich: het thieu (${conThieu}), nut dua vao mo (${nutMo})`,
 		conThieu === 0 && nutMo,
 	);
+	return giu;
 }
 
-async function buocSuaQuaChat(tl, A) {
+async function buocSuaQuaChat(tl, A, giu) {
 	buoc = "ST-soan-sua-qua-chat";
+	const daNhan = await A.p.evaluate(() =>
+		[
+			...document.querySelectorAll(
+				'[data-cot="ban-nhap"] [data-dong][data-decided="accepted"]',
+			),
+		]
+			.filter((x) => x.checkVisibility())
+			.map((x) => x.getAttribute("data-dong")),
+	);
+	const hang = `[data-cot="ban-nhap"] [data-dong="${giu.id}"]`;
+	const daBo = `${hang}[data-decided="dismissed"] [data-nhan="da-bo"]`;
 	const B = await trang(tl, E13.kho.hep);
 	try {
 		const moB = await moLaiCuoc(B.p, true);
 		const tabB = moB && (await bamTab(B.p, "ban-nhap"));
-		await guiChu(A.p, E13.chu.boMuc2);
+		await guiChu(A.p, E13.chu.boMuc(giu.stt));
 		await choLuotXong(A.p);
-		const coNhan = (p) =>
-			p
-				.waitForFunction(
-					(nhan) =>
-						[
+		kiem(
+			`ST-soan-sua-qua-chat ${A.rong}: Muc tieu ${giu.stt} chua quyet roi bang voi nhan «${m.banNhap.nhan["da-bo"]}»`,
+			await hien(A.p, daBo),
+		);
+		const conNhan = await A.p.evaluate(
+			(ids) =>
+				ids.filter(
+					(id) =>
+						![
 							...document.querySelectorAll(
-								'[data-slot="proposed-change-tag"], [data-nhan="da-bo"]',
-							),
-						].some(
-							(x) =>
-								x.checkVisibility() && nhan.includes(x.textContent?.trim()),
-						) ||
-						[
-							...document.querySelectorAll(
-								'[data-loai-dong="muc-tieu"][data-decided="dismissed"]',
+								`[data-cot="ban-nhap"] [data-dong="${id}"][data-decided="accepted"]`,
 							),
 						].some((x) => x.checkVisibility()),
-					{ timeout: E13.cho.manMs },
-					NHAN_SUA_QUA_CHAT,
-				)
-				.then(() => true)
-				.catch(() => false);
-		const docNhan = (p) =>
-			p.evaluate(() =>
-				[
-					...document.querySelectorAll(
-						'[data-slot="proposed-change-tag"], [data-nhan="da-bo"]',
-					),
-				]
-					.filter((x) => x.checkVisibility())
-					.map((x) => x.textContent?.trim()),
-			);
-		const coA = await coNhan(A.p);
-		kiem(
-			`ST-soan-sua-qua-chat ${A.rong}: nhan [${(await docNhan(A.p)).join(", ")}] co vua sua/vua chuyen/da bo`,
-			coA,
+				),
+			daNhan,
 		);
-		await chup(A, "ST-soan-sua-qua-chat");
+		kiem(
+			`sau «${E13.chu.boMuc(giu.stt)}»: ${daNhan.length - conNhan.length}/${daNhan.length} dong da nhan con nguyen${conNhan.length ? ` (mat: ${conNhan.join(", ")})` : ""}`,
+			conNhan.length === 0,
+		);
+		await chup(A, "ST-soan-sua-qua-chat", hang);
 		if (tabB) {
 			await B.p.evaluate(() =>
 				document.dispatchEvent(new Event("visibilitychange")),
 			);
 			await B.p.bringToFront();
-			const coB = await coNhan(B.p);
-			if (coB) {
-				kiem(
-					`ST-soan-sua-qua-chat ${B.rong}: nhan [${(await docNhan(B.p)).join(", ")}]`,
-					true,
-				);
-				await chup(B, "ST-soan-sua-qua-chat");
+			if (await hien(B.p, daBo)) {
+				kiem(`ST-soan-sua-qua-chat ${B.rong}: nhan da bo`, true);
+				await chup(B, "ST-soan-sua-qua-chat", hang);
 			} else
 				dong.push(
 					`GHI ST-soan-sua-qua-chat ${B.rong}: trang hep mo truoc luot khong doc lai sau luot — khong co anh hep`,
@@ -1024,8 +1041,8 @@ try {
 	const A = await trang(tl, E13.kho.rong);
 	await buocMoDau(tl, A);
 	await buocTraLoi(A);
-	await buocBanNhap(tl, A);
-	await buocSuaQuaChat(tl, A);
+	const giu = await buocBanNhap(tl, A);
+	await buocSuaQuaChat(tl, A, giu);
 	await buocDuaVao(tl, A);
 	await A.ctx.close();
 	await buocSauKhi(tl);
