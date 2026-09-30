@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ba46f37b246c38ca8172c85dc2178209c97055dd
+verified_commit: 9a385292b6fd5af0e5aefd875a7b596d38245bf7
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -233,3 +233,7 @@ none — every multi-run eval is uniform
 
 Round 1: bộ chứng bị từ chối — E4 lọc không khớp ca, E15 ba ảnh lệch, năm phát hiện về phép đo. Trả về triển khai.
 Round 2: mọi eval và bốn lệnh suite đều đạt trên cây ba46f37b; E15 chạy lại, ảnh vòng 1 bị ghi đè bằng ảnh vòng này.
+
+### Re-pin lần 1 — 2026-09-30, do CI đỏ: bài số thống kê của 8d ghim tổng đơn vị toàn kho, sửa cho đơn vị ngoài bộ mẫu
+run_id: repin-20260930T075237Z-32687
+sha: 9a385292b6fd5af0e5aefd875a7b596d38245bf7 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E15 (E15 không khai paths) · AC không có chốt máy: AC-12
