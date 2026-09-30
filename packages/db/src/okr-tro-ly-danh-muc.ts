@@ -3,6 +3,19 @@ export const NGAY_MS = 24 * 60 * MINUTE_MS;
 
 const SECOND_MS = MINUTE_MS / 60;
 
+const TU_CAM_NHAN_SU = [
+	"lương",
+	"thưởng",
+	"xếp loại",
+	"xếp hạng",
+	"đánh giá nhân viên",
+	"đánh giá hiệu suất",
+	"KPI",
+	"bảng xếp hạng",
+	"huy hiệu",
+	"điểm đổi quà",
+] as const;
+
 export const TRO_LY_OKR_TRAN = {
 	chu: {
 		tenMucTieu: 200,
@@ -19,17 +32,9 @@ export const TRO_LY_OKR_TRAN = {
 	trangChienLuocKyTu: 20_000,
 	tranThangMacDinhUsd: 9,
 	tranThangToiDaUsd: 20,
+	tuCamTrangChienLuoc: TU_CAM_NHAN_SU,
 	tuCam: [
-		"lương",
-		"thưởng",
-		"xếp loại",
-		"xếp hạng",
-		"đánh giá nhân viên",
-		"đánh giá hiệu suất",
-		"KPI",
-		"bảng xếp hạng",
-		"huy hiệu",
-		"điểm đổi quà",
+		...TU_CAM_NHAN_SU,
 		"khách hàng",
 		"deal",
 		"cơ hội",

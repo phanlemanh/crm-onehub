@@ -104,7 +104,7 @@ describe("trang-chien-luoc", () => {
 		expect((r.data as Duyet).canhBaoTuCam).toEqual([]);
 	});
 
-	test("bản 19.000 ký tự có «thưởng quý» và «xếp hạng» → duyệt được, kết quả và proposal mang canhBaoTuCam đúng hai chữ theo thứ tự TRO_LY_OKR_TRAN.tuCam", async () => {
+	test("bản 19.000 ký tự có «thưởng quý» và «xếp hạng» → duyệt được, kết quả và proposal mang canhBaoTuCam đúng hai chữ theo thứ tự TRO_LY_OKR_TRAN.tuCamTrangChienLuoc", async () => {
 		const duoi = "\n\nChính sách thưởng quý theo xếp hạng đội.";
 		const t = await taoTrang(
 			ma("Chiến lược năm"),
@@ -113,7 +113,7 @@ describe("trang-chien-luoc", () => {
 			"chu",
 			"chien-luoc",
 		);
-		const mong = TRO_LY_OKR_TRAN.tuCam.filter(
+		const mong = TRO_LY_OKR_TRAN.tuCamTrangChienLuoc.filter(
 			(tu) => tu === "thưởng" || tu === "xếp hạng",
 		);
 		expect(mong).toEqual(["thưởng", "xếp hạng"]);
@@ -132,6 +132,38 @@ describe("trang-chien-luoc", () => {
 		);
 		expect(r.canhBaoTuCam, "canh bao tu cam sai chu").toEqual(mong);
 		expect(r.so).toBe(1);
+	});
+
+	test("trang chiến lược nói về khách hàng, dự án, cơ hội → không cảnh báo: từ bán hàng và dự án không thuộc nhóm từ cấm của trang chiến lược", async () => {
+		const duoi =
+			"\n\nKhách hàng lớn, dự án mới và cơ hội mở rộng, mỗi task có người phụ trách.";
+		const t = await taoTrang(
+			ma("Chiến lược khách hàng"),
+			than(2_000, duoi),
+			"tao",
+			"chu",
+			"chien-luoc",
+		);
+		for (const tu of ["khách hàng", "dự án", "cơ hội", "task"]) {
+			expect(TRO_LY_OKR_TRAN.tuCam as readonly string[]).toContain(tu);
+			expect(
+				TRO_LY_OKR_TRAN.tuCamTrangChienLuoc as readonly string[],
+			).not.toContain(tu);
+		}
+		const p = ok<DeXuatDoc>(
+			await hoi("taiLieu.proposal", { id: t.deXuatId }, "chu"),
+			"proposal",
+		);
+		expect(p.chienLuoc?.canhBaoTuCam, "canh bao tu ban hang").toEqual([]);
+		const r = ok<Duyet>(
+			await goi(
+				"taiLieu.approve",
+				{ id: t.deXuatId, diffHash: await hashCua(t.deXuatId, "chu") },
+				"chu",
+			),
+			"duyet tu ban hang",
+		);
+		expect(r.canhBaoTuCam, "canh bao tu ban hang").toEqual([]);
 	});
 
 	test("docTrangChienLuocDangDung: chỉ bản đang dùng của loại chien-luoc, theo thứ tự cập nhật; không bản đề xuất, không loại khác", async () => {

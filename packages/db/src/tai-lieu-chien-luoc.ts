@@ -30,7 +30,7 @@ function chuanHoa(s: string): string {
 
 export function tuCamTrong(vanBan: string): string[] {
 	const van = ` ${chuanHoa(vanBan)} `;
-	return TRO_LY_OKR_TRAN.tuCam.filter((tu) =>
+	return TRO_LY_OKR_TRAN.tuCamTrangChienLuoc.filter((tu) =>
 		van.includes(` ${chuanHoa(tu)} `),
 	);
 }
