@@ -32,7 +32,14 @@ import type { Thread } from "@/lib/agent-session";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { BangNhap, ChanDuaVao } from "./bang-nhap";
 import { SOAN_UI } from "./cau-hinh";
-import { type CuocDangSoan, useCuocSoan, useLuongCuoc } from "./dung-cuoc-soan";
+import {
+	type CuocDangSoan,
+	type NhapCuoc,
+	useCuocSoan,
+	useLuongCuoc,
+	useNhapCuoc,
+	usePhienCuoc,
+} from "./dung-cuoc-soan";
 import { useKhoHep } from "./dung-kho-hep";
 import { HoiThoaiSoan } from "./hoi-thoai-soan";
 import type { CuocSoan, DongSoan } from "./kieu";
@@ -85,8 +92,9 @@ function CotBanNhap({
 
 function Than({
 	cuoc,
-	dong,
 	thread,
+	nhap,
+	napLai,
 	thieuBoiCanh,
 	lyDo,
 	quanTri,
@@ -94,8 +102,9 @@ function Than({
 	moCuoc,
 }: {
 	cuoc: CuocSoan;
-	dong: readonly DongSoan[];
 	thread: Thread | undefined;
+	nhap: NhapCuoc;
+	napLai: () => void;
 	thieuBoiCanh: boolean;
 	lyDo: LyDoSoan | null;
 	quanTri: boolean;
@@ -103,7 +112,7 @@ function Than({
 	moCuoc: (cuocSoanId: string) => void;
 }) {
 	const m = okrSoanMessages(useLocale());
-	const s = useCuocSoan({ cuoc, dong, thread });
+	const s = useCuocSoan({ cuoc, thread, nhap, napLai });
 	const hoiThoai = (
 		<section
 			aria-label={m.hoiThoai.nhan}
@@ -124,11 +133,7 @@ function Than({
 		<>
 			{s.busy ? <CanhLuot xong={s.docLai} /> : null}
 			{s.busy ? (
-				<HenGio
-					key={s.soSuKien}
-					ms={SOAN_UI.hanKhongSuKienMs}
-					het={s.baoHetGio}
-				/>
+				<HenGio key={s.moc} ms={SOAN_UI.hanKhongSuKienMs} het={s.baoHetGio} />
 			) : null}
 			{hep ? (
 				<SheetBody cuonRieng>
@@ -162,6 +167,42 @@ function Than({
 	);
 }
 
+function ThanCuoc({
+	cuoc,
+	dong,
+	...con
+}: {
+	cuoc: CuocSoan;
+	dong: readonly DongSoan[];
+	thieuBoiCanh: boolean;
+	lyDo: LyDoSoan | null;
+	quanTri: boolean;
+	hep: boolean;
+	moCuoc: (cuocSoanId: string) => void;
+}) {
+	const nhap = useNhapCuoc(dong);
+	const phien = usePhienCuoc(cuoc);
+	if (phien.thread.isLoading) return <DangMo />;
+	return (
+		<Than
+			key={phien.khoa}
+			cuoc={cuoc}
+			thread={phien.thread.data}
+			nhap={nhap}
+			napLai={phien.napLai}
+			{...con}
+		/>
+	);
+}
+
+function DangMo() {
+	return (
+		<SheetBody role="status" aria-busy="true" data-man-dang-mo>
+			<Spinner />
+		</SheetBody>
+	);
+}
+
 function KhongMo({ m, thuLai }: { m: OkrSoanMessages; thuLai: () => void }) {
 	return (
 		<SheetBody>
@@ -190,10 +231,10 @@ export function ManSoan({
 	moCuoc: (cuocSoanId: string) => void;
 }) {
 	const m = okrSoanMessages(useLocale());
-	const { danhSach, thread } = useLuongCuoc(cuocSoanId);
+	const danhSach = useLuongCuoc(cuocSoanId);
 	const hep = useKhoHep(SOAN_UI.khoHep);
 	const du = danhSach.data;
-	const dangMo = danhSach.isPending || thread.isLoading;
+	const dangMo = danhSach.isPending;
 	return (
 		<Sheet
 			open
@@ -226,15 +267,12 @@ export function ManSoan({
 					</SheetDescription>
 				</SheetHeader>
 				{dangMo ? (
-					<SheetBody role="status" aria-busy="true" data-man-dang-mo>
-						<Spinner />
-					</SheetBody>
+					<DangMo />
 				) : du ? (
-					<Than
-						key={du.cuoc.sessionId}
+					<ThanCuoc
+						key={du.cuoc.id}
 						cuoc={du.cuoc}
 						dong={du.dong}
-						thread={thread.data}
 						thieuBoiCanh={du.thieuBoiCanh}
 						lyDo={du.lyDo}
 						quanTri={quanTri}

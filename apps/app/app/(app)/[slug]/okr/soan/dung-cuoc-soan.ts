@@ -2,6 +2,7 @@
 
 import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
+import { laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEveAgent } from "eve/react";
 import { useRef, useState } from "react";
@@ -24,7 +25,7 @@ import type {
 	SoDaGo,
 	SoKr,
 } from "./kieu";
-import { lyDoTuChoiLuot } from "./loi-cua";
+import { laDaCoPhien, lyDoTuChoiLuot } from "./loi-cua";
 import {
 	cayNhap,
 	demDuaVao,
@@ -44,26 +45,10 @@ export function donViCua(cuoc: CuocSoan): DonViSoan {
 
 export function useLuongCuoc(cuocSoanId: string) {
 	const trpc = useTRPC();
-	const danhSach = useQuery({
+	return useQuery({
 		...trpc.okr.soanDanhSach.queryOptions({ cuocSoanId }),
 		retry: false,
 	});
-	const cuoc = danhSach.data?.cuoc;
-	const sessionId = cuoc?.sessionId ?? null;
-	const thread = useQuery<Thread>({
-		queryKey: ["soan-thread", cuocSoanId, sessionId],
-		enabled: sessionId !== null && cuoc?.trangThai === "dang",
-		staleTime: SOAN_UI.giuPhienMs,
-		refetchOnWindowFocus: false,
-		queryFn: ({ signal }) =>
-			loadThread(
-				sessionId ?? "",
-				okrSoanHeader(cuocSoanId),
-				signal,
-				OKR_SOAN_CUA.host,
-			),
-	});
-	return { danhSach, thread };
 }
 
 type BanNhapDaXet = {
@@ -72,28 +57,47 @@ type BanNhapDaXet = {
 	ket: KetSoBanNhap;
 };
 
-export function useCuocSoan({
-	cuoc,
-	dong,
-	thread,
-}: {
-	cuoc: CuocSoan;
-	dong: readonly DongSoan[];
-	thread: Thread | undefined;
-}) {
-	const trpc = useTRPC();
-	const qc = useQueryClient();
-	const cache = useCrmCache();
-	const agent = useEveAgent({
-		host: OKR_SOAN_CUA.host,
-		headers: okrSoanHeader(cuoc.id),
-		...(thread && "session" in thread
-			? { initialSession: thread.session, initialEvents: eventsOf(thread) }
-			: { initialEvents: eventsOf(thread) }),
-	});
-	const busy = agent.status === "submitted" || agent.status === "streaming";
-	const soSuKien = agent.events.length;
+type PhienThan = { theo: string; id: string; lan: number; choNap: boolean };
 
+export function usePhienCuoc(cuoc: CuocSoan) {
+	const [phien, setPhien] = useState<PhienThan>({
+		theo: cuoc.sessionId,
+		id: cuoc.sessionId,
+		lan: 0,
+		choNap: false,
+	});
+	if (phien.theo !== cuoc.sessionId) {
+		const vuaGanEve =
+			laChoGiuPhien(phien.theo) && !laChoGiuPhien(cuoc.sessionId);
+		setPhien({
+			theo: cuoc.sessionId,
+			id: vuaGanEve && !phien.choNap ? phien.id : cuoc.sessionId,
+			lan: phien.choNap ? phien.lan + 1 : phien.lan,
+			choNap: false,
+		});
+	}
+	const idThan = phien.id;
+	const thread = useQuery<Thread>({
+		queryKey: ["soan-thread", cuoc.id, idThan],
+		enabled: cuoc.trangThai === "dang" && !laChoGiuPhien(idThan),
+		staleTime: SOAN_UI.giuPhienMs,
+		refetchOnWindowFocus: false,
+		queryFn: ({ signal }) =>
+			loadThread(idThan, okrSoanHeader(cuoc.id), signal, OKR_SOAN_CUA.host),
+	});
+	return {
+		khoa: `${idThan}#${phien.lan}`,
+		thread,
+		napLai: () =>
+			setPhien((p) =>
+				laChoGiuPhien(p.theo)
+					? { ...p, choNap: true }
+					: { ...p, id: p.theo, lan: p.lan + 1 },
+			),
+	};
+}
+
+export function useNhapCuoc(dong: readonly DongSoan[]) {
 	const [xet, setXet] = useState<BanNhapDaXet>(() => ({
 		nguon: dong,
 		truoc: dong,
@@ -102,23 +106,74 @@ export function useCuocSoan({
 	if (xet.nguon !== dong) {
 		setXet({ nguon: dong, truoc: dong, ket: soBanNhap(xet.truoc, dong) });
 	}
-
 	const [so, setSo] = useState<SoDaGo>({});
+	const [chu, setChu] = useState("");
 	const khaiSo = useKhaiThayDoi();
-	const datSo = (krId: string, moi: SoKr) => {
-		setSo((cu) => ({ ...cu, [krId]: moi }));
-		khaiSo(true);
+	const khaiChu = useKhaiThayDoi();
+	return {
+		ket: xet.ket,
+		so,
+		datSo: (krId: string, moi: SoKr) => {
+			setSo((cu) => ({ ...cu, [krId]: moi }));
+			khaiSo(true);
+		},
+		xongSo: () => khaiSo(false),
+		chu,
+		doiChu: (moi: string) => {
+			setChu(moi);
+			khaiChu(moi.trim() !== "");
+		},
 	};
+}
 
-	const [hetGioTai, setHetGioTai] = useState<number | null>(null);
-	const qua45s = busy && hetGioTai === soSuKien;
-	const baoHetGio = () => setHetGioTai(soSuKien);
+export type NhapCuoc = ReturnType<typeof useNhapCuoc>;
 
-	const cuoiCung = useRef<string | null>(null);
-	const docLai = () =>
-		void qc.invalidateQueries({
+export function useCuocSoan({
+	cuoc,
+	thread,
+	nhap,
+	napLai,
+}: {
+	cuoc: CuocSoan;
+	thread: Thread | undefined;
+	nhap: NhapCuoc;
+	napLai: () => void;
+}) {
+	const trpc = useTRPC();
+	const qc = useQueryClient();
+	const cache = useCrmCache();
+	const docLaiRoi = () =>
+		qc.invalidateQueries({
 			queryKey: trpc.okr.soanDanhSach.queryKey({ cuocSoanId: cuoc.id }),
 		});
+	const docLai = () => void docLaiRoi();
+	const daBaoPhien = useRef(false);
+	const agent = useEveAgent({
+		host: OKR_SOAN_CUA.host,
+		headers: okrSoanHeader(cuoc.id),
+		...(thread && "session" in thread
+			? { initialSession: thread.session, initialEvents: eventsOf(thread) }
+			: { initialEvents: eventsOf(thread) }),
+		onSessionChange: (phien) => {
+			if (daBaoPhien.current || !phien.sessionId) return;
+			if (!laChoGiuPhien(cuoc.sessionId)) return;
+			daBaoPhien.current = true;
+			docLai();
+		},
+		onError: (loi) => {
+			if (laDaCoPhien(loi)) void docLaiRoi().then(napLai);
+		},
+	});
+	const busy = agent.status === "submitted" || agent.status === "streaming";
+	const soSuKien = agent.events.length;
+
+	const [lanThu, setLanThu] = useState(0);
+	const [hetGioTai, setHetGioTai] = useState<string | null>(null);
+	const moc = `${lanThu}:${soSuKien}`;
+	const qua45s = busy && hetGioTai === moc;
+	const baoHetGio = () => setHetGioTai(moc);
+
+	const cuoiCung = useRef<string | null>(null);
 
 	const { locked, ended } = composerState(thread, busy);
 	const lyDoLuot =
@@ -128,6 +183,7 @@ export function useCuocSoan({
 	const hong =
 		lyDoLuot === null &&
 		!cuocDong &&
+		!laDaCoPhien(agent.error) &&
 		(qua45s || agent.status === "error" || ended);
 	const khoaSoan = locked || hetLuot || hong || cuocDong || lyDoLuot !== null;
 
@@ -156,10 +212,10 @@ export function useCuocSoan({
 
 	const moLai = useMutation(trpc.okr.soanMo.mutationOptions());
 	const thuLai = () => {
+		setLanThu((n) => n + 1);
 		const tin = cuoiCung.current;
 		if (agent.session.continuationToken && tin && !ended) {
 			if (busy) agent.stop();
-			setHetGioTai(null);
 			void guiThang(tin);
 			return;
 		}
@@ -176,18 +232,18 @@ export function useCuocSoan({
 		trpc.okr.soanDuaVao.mutationOptions({
 			onSuccess: (kq) => {
 				if (!kq.ok) return;
-				khaiSo(false);
+				nhap.xongSo();
 				void cache.okr();
 			},
 			onSettled: docLai,
 		}),
 	);
 
-	const cay = cayNhap(xet.ket.dong);
+	const cay = cayNhap(nhap.ket.dong);
 	return {
 		agent,
 		busy,
-		soSuKien,
+		moc,
 		baoHetGio,
 		docLai,
 		khoaSoan,
@@ -200,16 +256,18 @@ export function useCuocSoan({
 		thuLai,
 		moLai,
 		transcript: toTranscript(agent.data.messages),
-		nhan: xet.ket.nhan,
+		nhan: nhap.ket.nhan,
 		cay,
-		so,
-		datSo,
-		thieu: krThieuSo(cay, so),
+		so: nhap.so,
+		datSo: nhap.datSo,
+		chu: nhap.chu,
+		doiChu: nhap.doiChu,
+		thieu: krThieuSo(cay, nhap.so),
 		dem: demDuaVao(cay),
 		quyet,
 		duaVao,
 		guiDuaVao: () =>
-			duaVao.mutate({ cuocSoanId: cuoc.id, kr: krDuaVao(cay, so) }),
+			duaVao.mutate({ cuocSoanId: cuoc.id, kr: krDuaVao(cay, nhap.so) }),
 	};
 }
 

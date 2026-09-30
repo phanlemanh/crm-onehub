@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CUA_OKR } from "@/lib/cua-okr-config";
+import { SOAN_UI } from "./cau-hinh";
 import type { LyDoLuot } from "./kieu";
 
 const laLyDoLuot = (ma: string): ma is LyDoLuot =>
@@ -15,7 +16,7 @@ const thanLoi = z
 			return z.NEVER;
 		}
 	})
-	.pipe(z.object({ error: z.string().refine(laLyDoLuot) }));
+	.pipe(z.object({ error: z.string() }));
 
 const loiHttp = z.object({ status: z.number(), body: thanLoi });
 
@@ -25,4 +26,13 @@ export function lyDoTuChoiLuot(loi: Error | undefined): LyDoLuot | null {
 	const ma = http.data.body.error;
 	if (!laLyDoLuot(ma)) return null;
 	return CUA_OKR.trangThaiTuChoiLuot[ma] === http.data.status ? ma : null;
+}
+
+export function laDaCoPhien(loi: Error | undefined): boolean {
+	const http = loiHttp.safeParse(loi);
+	return (
+		http.success &&
+		http.data.status === SOAN_UI.trangThaiDaCoPhien &&
+		http.data.body.error === CUA_OKR.loi.daCoPhien
+	);
 }

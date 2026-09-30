@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { act } from "react";
 import {
 	BAN_NHAP,
 	bam,
+	baoLoiAgent,
 	CUOC,
 	cho,
 	chu,
@@ -10,6 +12,7 @@ import {
 	daGui,
 	daLamMoi,
 	daMoCuoc,
+	daTaiLuong,
 	dat,
 	datAgent,
 	datDanhSach,
@@ -24,13 +27,23 @@ import {
 	moMan,
 	mt,
 	nguoiNoi,
+	nhip,
 	noiTroLy,
 	nut,
 	q,
 	qa,
 	SOAN_UI,
+	soLanMoAgent,
 	tuyChonAgent,
 } from "./khung-soan-okr";
+
+async function nhanTab(o: Element | undefined): Promise<void> {
+	if (!o) throw new Error("khong thay tab");
+	await act(async () => {
+		o.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+	});
+	await nhip(3);
+}
 
 beforeEach(datLai);
 afterEach(don);
@@ -209,6 +222,8 @@ describe("man soan — trang thai theo bang thiet ke", () => {
 				mt("1", "Giữ khách lớn miền Bắc", "cho", { loaiMucTieu: "tham-vong" }),
 				kr("11", "1", "Khách lớn ký lại hợp đồng"),
 				kr("21", "1", "Chuyến đúng hẹn"),
+				mt("2", "Mở tuyến Hà Nội – Hải Phòng"),
+				kr("22", "2", "Khách mới trên tuyến"),
 			],
 		});
 		await datAgent({ status: "streaming" });
@@ -222,12 +237,12 @@ describe("man soan — trang thai theo bang thiet ke", () => {
 			() => qa('[data-slot="proposed-change-tag"]').length > 0,
 			"nhan hien",
 		);
-		const nhan = qa('[data-slot="proposed-change-tag"]').map((t) =>
-			t.textContent?.trim(),
-		);
-		expect(nhan).toContain(m.banNhap.nhan["vua-sua"]);
-		expect(nhan).toContain(m.banNhap.nhan["vua-chuyen"]);
-		const bo = q('[data-dong="2"][data-decided="dismissed"]');
+		const tag = (id: string) =>
+			q(`[data-dong="${id}"] [data-slot="proposed-change-tag"]`)?.textContent;
+		expect(tag("1")).toBe(m.banNhap.nhan["vua-sua"]);
+		expect(tag("21")).toBe(m.banNhap.nhan["vua-chuyen"]);
+		expect(tag("11")).toBeUndefined();
+		const bo = q('[data-dong="12"][data-decided="dismissed"]');
 		expect(bo?.querySelector('[data-nhan="da-bo"]')?.textContent).toBe(
 			m.banNhap.nhan["da-bo"],
 		);
@@ -268,12 +283,11 @@ describe("man soan — trang thai theo bang thiet ke", () => {
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
 	});
 
-	test("ST-soan-het-luot", async () => {
+	test("ST-soan-het-luot: Mở cuộc mới bỏ cuộc hết lượt rồi chuyển sang cuộc mới", async () => {
 		datDanhSach({ cuoc: { ...CUOC, soLuot: 12 } });
 		dat("okr.soanMo", () => ({
-			ok: false,
-			lyDo: "con-cuoc-dang",
-			cuocDang: CUOC,
+			ok: true,
+			cuoc: { ...CUOC, id: "cuoc-2", soLuot: 0 },
 		}));
 		await moMan();
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
@@ -284,24 +298,26 @@ describe("man soan — trang thai theo bang thiet ke", () => {
 			level: "phong-ban",
 			divisionId: null,
 			departmentId: "pb-1",
+			boCuocDangId: CUOC.id,
 		});
-		await cho(
-			() => chu('[data-loi="mo-cuoc-moi"]') === m.lyDo["con-cuoc-dang"],
-			"ly do mo cuoc moi",
-		);
-		expect(daMoCuoc).toEqual([]);
+		await cho(() => daMoCuoc.length === 1, "mo cuoc moi");
+		expect(daMoCuoc).toEqual(["cuoc-2"]);
 	});
 
-	test("Mở cuộc mới được thì chuyển sang cuộc mới", async () => {
+	test("Mở cuộc mới bị từ chối: hiện lý do, không chuyển", async () => {
 		datDanhSach({ cuoc: { ...CUOC, soLuot: 12 } });
 		dat("okr.soanMo", () => ({
-			ok: true,
-			cuoc: { ...CUOC, id: "cuoc-2", soLuot: 0 },
+			ok: false,
+			lyDo: "het-cuoc-ky",
+			cuocDang: null,
 		}));
 		await moMan();
 		await bam(q('[data-nut="mo-cuoc-moi"]'));
-		await cho(() => daMoCuoc.length === 1, "mo cuoc moi");
-		expect(daMoCuoc).toEqual(["cuoc-2"]);
+		await cho(
+			() => chu('[data-loi="mo-cuoc-moi"]') === m.lyDo["het-cuoc-ky"],
+			"ly do mo cuoc moi",
+		);
+		expect(daMoCuoc).toEqual([]);
 	});
 
 	test("ST-soan-dua-vao-thieu-dich", async () => {
@@ -464,6 +480,99 @@ describe("man soan — giu thay doi", () => {
 		await moMan();
 		await bam(q('[data-slot="sheet-content"] > [data-slot="sheet-close"]'));
 		expect(daDong).toEqual([1]);
+	});
+});
+
+describe("man soan — giu cho chu va so", () => {
+	test("đổi phiên (Thử lại, chỗ giữ mới): số đã gõ còn nguyên, vẫn hỏi lại khi đóng", async () => {
+		datDanhSach({ dong: DA_NHAN });
+		await moMan();
+		await go(q("#dich-11"), "10");
+		const moTruoc = soLanMoAgent;
+		datDanhSach({ cuoc: { ...CUOC, sessionId: "cho-eve:moi" } });
+		await datAgent({ status: "streaming" });
+		await datAgent({ status: "ready" });
+		await cho(() => soLanMoAgent === moTruoc + 1, "than mo lai");
+		expect((q("#dich-11") as HTMLInputElement).value).toBe("10");
+		await bam(q('[data-slot="sheet-content"] > [data-slot="sheet-close"]'));
+		expect(daDong).toEqual([]);
+		expect(q('[role="alertdialog"]')).not.toBeNull();
+	});
+
+	test("khổ hẹp: chữ đang gõ còn sau khi sang tab Bản nháp rồi quay lại", async () => {
+		const goc = window.matchMedia;
+		Object.defineProperty(window, "matchMedia", {
+			value: (truyVan: string) => ({
+				...goc(truyVan),
+				matches: truyVan === SOAN_UI.khoHep,
+			}),
+			configurable: true,
+			writable: true,
+		});
+		try {
+			datDanhSach({ dong: BAN_NHAP });
+			await moMan();
+			await go(q("[data-o-soan] textarea"), "Ưu tiên giữ khách");
+			const tab = () => qa('[data-khong="hep"] [role="tab"]');
+			await nhanTab(tab()[1]);
+			await cho(() => q("[data-o-soan] textarea") === null, "sang ban nhap");
+			await nhanTab(tab()[0]);
+			await cho(() => q("[data-o-soan] textarea") !== null, "ve tro chuyen");
+			expect((q("[data-o-soan] textarea") as HTMLTextAreaElement).value).toBe(
+				"Ưu tiên giữ khách",
+			);
+		} finally {
+			Object.defineProperty(window, "matchMedia", {
+				value: goc,
+				configurable: true,
+				writable: true,
+			});
+		}
+	});
+});
+
+describe("man soan — cho giu phien", () => {
+	const CHO_GIU = { ...CUOC, sessionId: "cho-eve:1", soLuot: 0 };
+
+	test("phiên còn chỗ giữ: không tải luồng, gửi lượt đầu, gắn mã eve thì không mở lại", async () => {
+		datDanhSach({ cuoc: CHO_GIU });
+		await moMan();
+		expect(daTaiLuong).toEqual([]);
+		expect(daGui).toEqual([SOAN_UI.luotMoDau]);
+		const moTruoc = soLanMoAgent;
+		datDanhSach({ cuoc: { ...CHO_GIU, sessionId: "wrun_eve", soLuot: 1 } });
+		await datAgent({ status: "streaming" });
+		await datAgent({ status: "ready" });
+		await cho(
+			() => chu('[data-slot="sheet-description"]')?.includes("1/12") === true,
+			"cuoc doc lai",
+		);
+		expect(soLanMoAgent).toBe(moTruoc);
+		expect(daTaiLuong).toEqual([]);
+	});
+
+	test("phiên đã có mã eve: tải luồng theo mã đó", async () => {
+		await moMan();
+		expect(daTaiLuong).toEqual([CUOC.sessionId]);
+	});
+
+	test("cửa trả 409 da-co-phien: đọc lại cuộc rồi mở lại theo phiên có sẵn", async () => {
+		datDanhSach({ cuoc: CHO_GIU });
+		await moMan();
+		const moTruoc = soLanMoAgent;
+		const doc = goiCua("okr.soanDanhSach").length;
+		datDanhSach({ cuoc: { ...CHO_GIU, sessionId: "wrun_khac", soLuot: 1 } });
+		await baoLoiAgent(
+			Object.assign(new Error("da-co-phien"), {
+				status: 409,
+				body: '{"error":"da-co-phien"}',
+			}),
+		);
+		await nhip(20);
+		expect(soLanMoAgent).toBe(moTruoc + 1);
+		expect(goiCua("okr.soanDanhSach").length).toBeGreaterThan(doc);
+		expect(daTaiLuong).toEqual(["wrun_khac"]);
+		expect(q('[data-luot="loi"]')).toBeNull();
 	});
 });
 

@@ -95,6 +95,34 @@ describe("hong — 45 giay khong su kien", () => {
 	});
 });
 
+describe("hong — Thu lai roi van im", () => {
+	test("Thử lại mà eve vẫn không có sự kiện: hẹn giờ lại và báo lại, không quay mãi", async () => {
+		await datAgent({
+			data: { messages: [noiTroLy("a0", MO_DAU)] },
+			session: {
+				sessionId: "phien-1",
+				continuationToken: "eve:live",
+				streamIndex: 2,
+			},
+		});
+		await moMan();
+		await go(q("[data-o-soan] textarea"), "Giữ khách là chính");
+		await bam(q('[data-o-soan] button[type="submit"]'));
+		batDongHoGia();
+		await datAgent({ status: "streaming", events: [{ type: "turn.started" }] });
+		await troi(SOAN_UI.hanKhongSuKienMs + 100);
+		expect(coLoi()).toBe(true);
+		await bam(q('[data-nut="thu-lai"]'));
+		expect(daDung).toBe(1);
+		expect(daGui).toEqual(["Giữ khách là chính", "Giữ khách là chính"]);
+		expect(coLoi()).toBe(false);
+		await troi(SOAN_UI.hanKhongSuKienMs - 1_000);
+		expect(coLoi()).toBe(false);
+		await troi(1_100);
+		expect(coLoi()).toBe(true);
+	});
+});
+
 describe("hong — Thu lai", () => {
 	test("(c) còn continuationToken: gửi lại tin cuối, không mở phiên mới", async () => {
 		await datAgent({

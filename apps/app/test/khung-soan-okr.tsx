@@ -1,4 +1,5 @@
 import { jest, mock } from "bun:test";
+import { chuanHoa } from "@crm/validation/okr-kiem";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { EveMessage } from "eve/react";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
@@ -6,6 +7,7 @@ import {
 	act,
 	type ReactElement,
 	type ReactNode,
+	useRef,
 	useSyncExternalStore,
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -131,6 +133,8 @@ let agentGia: AgentGia = AGENT_DAU;
 const nghe = new Set<() => void>();
 export const daGui: string[] = [];
 export let daDung = 0;
+export let soLanMoAgent = 0;
+export const daTaiLuong: string[] = [];
 
 export async function datAgent(moi: Partial<AgentGia>): Promise<void> {
 	await act(async () => {
@@ -140,6 +144,15 @@ export async function datAgent(moi: Partial<AgentGia>): Promise<void> {
 	await nhip(3);
 }
 
+export async function baoLoiAgent(loi: Error): Promise<void> {
+	await act(async () => {
+		agentGia = { ...agentGia, status: "error", error: loi };
+		for (const f of nghe) f();
+		tuyChonAgent.at(-1)?.onError?.(loi);
+	});
+	await nhip(5);
+}
+
 const eveReactThat = await import("eve/react");
 type TuyChonAgent = NonNullable<Parameters<typeof eveReactThat.useEveAgent>[0]>;
 export const tuyChonAgent: TuyChonAgent[] = [];
@@ -147,6 +160,11 @@ mock.module("eve/react", () => ({
 	...eveReactThat,
 	useEveAgent: (tuyChon: TuyChonAgent) => {
 		tuyChonAgent.push(tuyChon);
+		const moiMo = useRef(true);
+		if (moiMo.current) {
+			moiMo.current = false;
+			soLanMoAgent += 1;
+		}
 		const snap = useSyncExternalStore(
 			(f) => {
 				nghe.add(f);
@@ -174,7 +192,10 @@ export function datThread(t: Thread): void {
 const phienThat = await import("../lib/agent-session");
 mock.module("@/lib/agent-session", () => ({
 	...phienThat,
-	loadThread: async () => threadGia,
+	loadThread: async (sessionId: string) => {
+		daTaiLuong.push(sessionId);
+		return threadGia;
+	},
 }));
 
 export const { ManSoan } = await import("@/app/(app)/[slug]/okr/soan/man-soan");
@@ -226,7 +247,7 @@ export const mt = (
 	...gocDong,
 	id,
 	khoa: `m${id}`,
-	khoaDong: `muc-tieu-moi:${id}`,
+	khoaDong: `muc-tieu-moi:${chuanHoa(them.ten ?? ten)}`,
 	loai: "muc-tieu-moi",
 	ten,
 	viSaoLucNay: "Đầu quý là mùa ký lại.",
@@ -245,7 +266,7 @@ export const kr = (
 	...gocDong,
 	id,
 	khoa: `k${id}`,
-	khoaDong: `kr-moi:${id}`,
+	khoaDong: `kr-moi:${chuanHoa(ten)}`,
 	chaKhoa: `m${cha}`,
 	loai: "kr-moi",
 	ten,
@@ -319,6 +340,8 @@ export function datLai(): void {
 	daLamMoi.length = 0;
 	tuyChonAgent.length = 0;
 	daDung = 0;
+	soLanMoAgent = 0;
+	daTaiLuong.length = 0;
 	duLieu.clear();
 	agentGia = AGENT_DAU;
 	threadGia = { status: "offline", events: [] };

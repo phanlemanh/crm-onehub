@@ -31,7 +31,6 @@ import {
 } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { FieldDescription } from "@crm/ui/components/field";
-import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import Logo from "@crm/ui/components/logo";
@@ -42,7 +41,6 @@ import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 import type { TranscriptItem } from "@/lib/agent-transcript";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { useTRPC } from "@/lib/trpc/client";
@@ -183,8 +181,7 @@ function OSoan({
 	moCuoc: (cuocSoanId: string) => void;
 }) {
 	const trpc = useTRPC();
-	const [chu, setChu] = useState("");
-	const khai = useKhaiThayDoi();
+	const { chu, doiChu } = s;
 	const moMoi = useMutation(
 		trpc.okr.soanMo.mutationOptions({
 			onSuccess: (kq) => {
@@ -192,10 +189,6 @@ function OSoan({
 			},
 		}),
 	);
-	const doiChu = (moi: string) => {
-		setChu(moi);
-		khai(moi.trim() !== "");
-	};
 	const ghi = s.hetLuot
 		? m.hoiThoai.hetLuot(String(cuoc.tranLuot))
 		: s.busy
@@ -239,7 +232,9 @@ function OSoan({
 					className="w-fit"
 					data-nut="mo-cuoc-moi"
 					disabled={moMoi.isPending}
-					onClick={() => moMoi.mutate(donViCua(cuoc))}
+					onClick={() =>
+						moMoi.mutate({ ...donViCua(cuoc), boCuocDangId: cuoc.id })
+					}
 				>
 					{m.hoiThoai.moCuocMoi}
 				</Button>
