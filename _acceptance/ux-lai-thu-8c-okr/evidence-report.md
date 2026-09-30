@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: ux-lai-thu-8c-okr
-verdict: REJECT
-failed_evals: ["E4","E15"]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8af70847137401e0091d86b2b722b3fa07c4a768
+verified_commit: ba46f37b246c38ca8172c85dc2178209c97055dd
 human_signoff:
 ---
 
@@ -18,7 +18,7 @@ human_signoff:
 | E1 | AC-1 | test | PASS |
 | E2 | AC-2 | test | PASS |
 | E3 | AC-3 | test | PASS |
-| E4 | AC-3 | test | FAIL |
+| E4 | AC-3 | test | PASS |
 | E5 | AC-4 | test | PASS |
 | E6 | AC-5 | test | PASS |
 | E7 | AC-5 | test | PASS |
@@ -29,196 +29,193 @@ human_signoff:
 | E12 | AC-9 | test | PASS |
 | E13 | AC-8 | test | PASS |
 | E14 | AC-11 | test | PASS |
-| E15 | AC-12 | ui-check | FAIL |
+| E15 | AC-12 | ui-check | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-ux-lai-thu-8c-okr-E1-r1
+  run_id: minted-ux-lai-thu-8c-okr-E1-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_danh_sach
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t danh-sach"
-    chay 1 lan, dat 1/1
+    bài okr-ux-8d.spec.ts, nhóm danh-sach, chạy qua bun run test
+    __EXIT=0
 
 - eval: E2
-  run_id: minted-ux-lai-thu-8c-okr-E2-r1
+  run_id: minted-ux-lai-thu-8c-okr-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bon bai dom (okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet) chay lien tiep bang bun test
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E3
-  run_id: minted-ux-lai-thu-8c-okr-E3-r1
+  run_id: minted-ux-lai-thu-8c-okr-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cung lenh voi E2 (bon bai dom), chay 1 lan, dat 1/1
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E4
-  run_id: minted-ux-lai-thu-8c-okr-E4-r1
-  exit_code: 1
+  run_id: minted-ux-lai-thu-8c-okr-E4-r2
+  exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_go_nguoi
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t go-nguoi"
-    error: regex "go-nguoi" matched 0 tests. Searched 1 file (skipping 7 tests) [2.32s]
-    test-run: dropped crm_munmhslaunjx_test
-    Cau loc -t go-nguoi khong khop ca nao trong okr-ux-8d.spec.ts, nen khong ca nao chay; ca dem transferPreview cua AC-3 chua duoc do.
+    test-run: dropped crm_munnqdf47hhq_test
+    __EXIT=0
 
 - eval: E5
-  run_id: minted-ux-lai-thu-8c-okr-E5-r1
+  run_id: minted-ux-lai-thu-8c-okr-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cung lenh voi E2 (bon bai dom), chay 1 lan, dat 1/1
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E6
-  run_id: minted-ux-lai-thu-8c-okr-E6-r1
+  run_id: minted-ux-lai-thu-8c-okr-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cung lenh voi E2 (bon bai dom), chay 1 lan, dat 1/1
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E7
-  run_id: minted-ux-lai-thu-8c-okr-E7-r1
+  run_id: minted-ux-lai-thu-8c-okr-E7-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_luu_tru
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t luu-tru"
-    Ran 1 test across 1 file. [3.79s]
-    test-run: dropped crm_munmhsvp2rtg_test
+    test-run: dropped crm_munnqb9jdnbp_test
+    __EXIT=0
 
 - eval: E8
-  run_id: minted-ux-lai-thu-8c-okr-E8-r1
+  run_id: minted-ux-lai-thu-8c-okr-E8-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_chuyen_xem_truoc
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t chuyen-xem-truoc"
-    test-run: dropped crm_munmhsq8k3bw_test
+    test-run: dropped crm_munnqbiw8uu3_test
+    __EXIT=0
 
 - eval: E9
-  run_id: minted-ux-lai-thu-8c-okr-E9-r1
+  run_id: minted-ux-lai-thu-8c-okr-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cung lenh voi E2 (bon bai dom), chay 1 lan, dat 1/1
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E10
-  run_id: minted-ux-lai-thu-8c-okr-E10-r1
+  run_id: minted-ux-lai-thu-8c-okr-E10-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_dem_don_vi
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t dem-don-vi"
-    chay 1 lan, dat 1/1
+    test-run: dropped crm_munnqc1fck1e_test
+    __EXIT=0
 
 - eval: E11
-  run_id: minted-ux-lai-thu-8c-okr-E11-r1
+  run_id: minted-ux-lai-thu-8c-okr-E11-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_nguoi_duyet
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t nguoi-duyet"
-    test-run: dropped crm_munmhs7hkq4e_test
+    test-run: dropped crm_munnqc7ibbkp_test
+    __EXIT=0
 
 - eval: E12
-  run_id: minted-ux-lai-thu-8c-okr-E12-r1
+  run_id: minted-ux-lai-thu-8c-okr-E12-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.u8d_tra_lai_truoc
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t tra-lai-truoc"
-    chay 1 lan, dat 1/1
+    test-run: dropped crm_munnqci2rq68_test
+    __EXIT=0
 
 - eval: E13
-  run_id: minted-ux-lai-thu-8c-okr-E13-r1
+  run_id: minted-ux-lai-thu-8c-okr-E13-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cung lenh voi E2 (bon bai dom), chay 1 lan, dat 1/1
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E14
-  run_id: minted-ux-lai-thu-8c-okr-E14-r1
+  run_id: minted-ux-lai-thu-8c-okr-E14-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.u8d_dom
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   output: |
-    cung lenh voi E2 (bon bai dom), chay 1 lan, dat 1/1
-    Ran 20 tests across 1 file. [1.89s]
+    bốn bài dom chạy nối tiếp: okr-theo-don-vi, okr-tai-co-cau, chuyen-okr, okr-gioi-han-duyet
+    Ran 20 tests across 1 file. [1.79s]
+    __EXIT=0
 
 - eval: E15
-  run_id: minted-ux-lai-thu-8c-okr-E15-r1
-  exit_code: 1
+  run_id: E15-r2-20260930
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.u8d_man_chrome
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
   screenshot: evidence/E15-danh-sach-gioi-han-1440.png
   observed: |
-    1440 danh-sach-gioi-han: tree trai co "Phap che 3 muc tieu" duoc chon, the «Xu ly dut diem cac tranh chap hop dong dang mo» co chip «Cam ket», «Da cong bo», «Gioi han» (o khoa). 390 danh-sach-gioi-han: dropdown "Phap che", the o tren; KHONG thay chip «Gioi han» hay cay ghi 3 trong khung. theo-don-vi-dang-tai 1440/390: tieu de «Kho van», dong «Dang tai OKR...» va 3 khung xuong, cay/dropdown khong ghi «chua dat» trong vung noi dung dang tai (cay ben trai van co «chua dat» cho don vi khac o 1440, khong thuoc vung tai). gui-duyet-khoa 1440/390: sheet muc tieu nhap «Khach ban le mien Bac quay lai mua gnmir2d», dong «Them it nhat mot KR truoc khi gui duyet.», nut Gui duyet mo, bang KR trong. gui-duyet-hoi 1440/390: hop «Gui muc tieu nay di duyet?» ... «Tran Quoc Bao se duyet.» voi nut Huy/Gui di duyet, khong tran. cong-bo-phu: nut «Cong bo» dang vien (khong fill), dai canh bao cam «Tran Quoc Bao tra lai · 30/09» + ly do «Them KR do doanh thu tu khach quay lai gnmir2d». tra-lai-truoc: dai «Nguyen Thi Lan gui duyet · 30/09», «Lan truoc ban tra lai · 30/09: Them KR do doanh thu...», nut Duyet va cong bo / Tra lai…. vet-tra-lai: tab Vet 5 dong, dong «Tra lai» cua Tran Quoc Bao kem ly do, «Trang thai: Cho duyet → Nhap». luu-tru-hai-dieu-kien 1440: hop «Luu tru «Kinh doanh mien Bac»?», «Chua luu tru duoc», «Con 5 nguoi co phong ban chinh o day», «Phong ban con 3 muc tieu OKR o chu ky chua dong», nut Chuyen OKR…, Luu tru mo nhat. luu-tru-390 = chuyen-vuot-tran-390 (giong het): chi sheet phong ban, khong co hop. chuyen-vuot-tran 1440: hop «Chuyen OKR» chon Kinh doanh mien Nam, canh bao cam «se co 6 muc tieu trong mot chu ky — vuot tran 4 cua chuong trinh», 3 muc tieu duoc tick. go-nguoi-co-okr 1440/390: hop «Go nguoi nay?», canh bao «Nguoi nay dang phu trach 2 KR va 0 muc tieu o ky dang mo — chuyen OKR truoc...», nut Thoi/Chuyen OKR…/Go (khong bam).
-  network_observed: n-a (driver)
+    Da mo doc ca 20 anh. danh-sach-gioi-han 1440: thanh Phap che, cay ghi «Phap che 3 muc tieu», the «Xu ly dut diem cac tranh chap hop dong dang mo» co nhan «Gioi han» (o khoa) cuon vao khung. 390: cay thu thanh o chon (khong hien), the «Xu ly dut diem...» hien trong khung voi nhan «Gioi han», khong tran ngang. theo-don-vi-dang-tai 1440/390: Kho van duoc chon, dong «Dang tai OKR...», ba khung xuong, KHONG the nao cua Phap che, KHONG cau «chua dat OKR». gui-duyet-khoa 1440/390: sheet muc tieu nhap, dong «Them it nhat mot KR truoc khi gui duyet.», nut «Gui duyet» mo mau (khoa). gui-duyet-hoi 1440/390: hop «Gui muc tieu nay di duyet?» co «Tran Quoc Bao se duyet.», nut Gui di duyet/Huy vua khung 390. cong-bo-phu 1440/390: dai cam «Tran Quoc Bao tra lai · 30/09» kem ly do, nut «Cong bo» dang vien phu (outline, khong to xanh). tra-lai-truoc 1440/390: dai «Nguyen Thi Lan gui duyet · 30/09» va dong «Lan truoc ban tra lai · 30/09: Them KR do doanh thu tu khach quay lai gnnqpq2», nut Duyet va cong bo (xanh) / Tra lai.... vet-tra-lai 1440/390: tab Vet 5 dang mo, hang «Tra lai» nguoi lam Tran Quoc Bao co ly do «Them KR do doanh thu tu khach quay lai gnnqpq2» (o 390 hang duoc cuon vao tam nhin). luu-tru-hai-dieu-kien 1440/390: hop «Luu tru «Kinh doanh mien Bac»?» hai cau «Con 5 nguoi co phong ban chinh o day» va «Phong ban con 3 muc tieu OKR o chu ky chua dong», nut Luu tru mo (khoa), nut Chuyen OKR...; 390 hop day du, khong tran (khac anh vong 1 nhu byte). chuyen-vuot-tran 1440/390: hop «Chuyen OKR» chon «Kinh doanh mien Nam», canh bao cam «Kinh doanh mien Nam se co 6 muc tieu trong mot chu ky — vuot tran 5 cua chuong trinh» (3 cua Nam + 3 chuyen, tran 5), liet ke 3 muc tieu, nut Chuyen 3 muc tieu; khong tran o 390. go-nguoi-co-okr 1440/390: hop «Go nguoi nay?» co khoi cam «Nguoi nay dang phu trach 2 KR va 0 muc tieu o ky dang mo — chuyen OKR truoc...» va nut «Chuyen OKR...» (xanh), Go (do), Thoi; khong bam Go. Tat ca khop Expected; khong mau thuan.
+  network_observed: n-a (tool-error: driver puppeteer tu ghi mang; phien do chay o cong 4845/4334 chu khong phai origin config 3000/3001 nen ngoai pham vi da khai; khong co request that bai nao duoc ghi)
   output: |
-    cmd: EVAL=E15 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ux-lai-thu-8c-okr/rang/man-ux-8d.mjs"
-    Script tu kiem: man-ux-8d: 101 khang dinh, 0 hong, 20 anh (75 s), phien do rieng, da tat sach.
-    Doi chieu anh voi expected (viec cua nguoi chay, khong tin ket qua thoat cua script), 3 diem lech:
-    1) E15-luu-tru-hai-dieu-kien-390.png va E15-chuyen-vuot-tran-390.png giong het byte; ca hai chi hien ngan phong ban, khong co hop nen thieu «con 3 muc tieu», «con 5 nguoi» va canh bao tran o kho 390.
-    2) E15-chuyen-vuot-tran-1440.png: canh bao ghi «vuot tran 4», expected khai tran 5 va cau «o Quy 4»; script dat tran = soNam+1 = 4 va chi dat lai 5 sau khi chup.
-    3) E15-danh-sach-gioi-han-390.png: khung 390 khong co nhan «Gioi han» tren the va cay Phap che khong hien.
-    Dat: danh-sach-gioi-han-1440, theo-don-vi-dang-tai (1440, 390), gui-duyet-khoa, gui-duyet-hoi, cong-bo-phu, tra-lai-truoc, vet-tra-lai (moi cai 1440 va 390), luu-tru-hai-dieu-kien-1440, go-nguoi-co-okr (1440, 390).
-    scrollWidth <= clientWidth o 390 do script khang dinh, khong do lai doc lap. Network: evidence/E15-network.txt (khong request that bai).
+    Chuoi lay tu messages luc chay: nhan Gioi han tren the G; cay Phap che «3 muc tieu»; «Dang tai OKR...»; canKr; «Tran Quoc Bao se duyet.»; data-variant=outline cua Cong bo; «Lan truoc ban tra lai · 30/09» + ly do gnnqpq2; data-ly-do-vet == ly do; hai ly do luu tru dung chu may chu; canh bao tran «Kinh doanh mien Nam se co 6 muc tieu ... vuot tran 5»; hop go «2 KR va 0 muc tieu» khop transferPreview; khong bam Go.
+    20 anh da luu, moi cai co ban o evidence/ va evidence/man/: E15-danh-sach-gioi-han-{1440,390}, E15-theo-don-vi-dang-tai-{1440,390}, E15-gui-duyet-khoa-{1440,390}, E15-gui-duyet-hoi-{1440,390}, E15-cong-bo-phu-{1440,390}, E15-tra-lai-truoc-{1440,390}, E15-vet-tra-lai-{1440,390}, E15-luu-tru-hai-dieu-kien-{1440,390}, E15-chuyen-vuot-tran-{1440,390}, E15-go-nguoi-co-okr-{1440,390} tai _acceptance/ux-lai-thu-8c-okr/evidence/. Da mo doc tung anh bang Read. E15-network.txt: driver ghi 0 dong (khong requestfailed, khong loi tu 400 tro len, khong console error).
+    Luu y: (a) bang chung va thuoc do do tac gia cung kho viet nen doi chieu chuoi bang mat tren anh that; (b) go-nguoi hien «0 muc tieu» theo dung transferPreview cua du lieu mau, khop expected «theo transferPreview»; (c) anh cu vong 1 o evidence/ da bi ghi de bang anh vong nay.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-ux-lai-thu-8c-okr-SUITE-bun_run_test-r1
+  run_id: minted-ux-lai-thu-8c-okr-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-ux-lai-thu-8c-okr-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-ux-lai-thu-8c-okr-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
 
 - cmd: bun run lint:slop
-  run_id: minted-ux-lai-thu-8c-okr-SUITE-bun_run_lint_slop-r1
+  run_id: minted-ux-lai-thu-8c-okr-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-30T04:45:46Z
+  verified_at: 2026-09-30T05:20:40Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-ux-lai-thu-8c-okr-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-ux-lai-thu-8c-okr-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-30T04:45:46Z
-
-Lệnh fail không gắn eval: không có. Hai lệnh đỏ đều gắn eval: lệnh của E4 (câu lọc `-t go-nguoi` không khớp ca nào trong `apps/api/test/okr-ux-8d.spec.ts`) và bước ui-check của E15.
+  verified_at: 2026-09-30T05:20:40Z
 
 ## Known limits
 
@@ -226,7 +223,7 @@ Lệnh fail không gắn eval: không có. Hai lệnh đỏ đều gắn eval: l
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt)
+none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
@@ -234,4 +231,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E4, E15 failed — E4: câu lọc `-t go-nguoi` không khớp ca nào trong okr-ux-8d.spec.ts (bài đếm transferPreview chưa chạy); E15: ba lệch giữa ảnh và expected (hai ảnh 390 giống hệt byte không có hộp; cảnh báo trần ghi 4 thay vì 5; ảnh 390 danh-sach-gioi-han thiếu nhãn Giới hạn). Returned to implementation.
+Round 1: bộ chứng bị từ chối — E4 lọc không khớp ca, E15 ba ảnh lệch, năm phát hiện về phép đo. Trả về triển khai.
+Round 2: mọi eval và bốn lệnh suite đều đạt trên cây ba46f37b; E15 chạy lại, ảnh vòng 1 bị ghi đè bằng ảnh vòng này.

@@ -5,7 +5,7 @@ slug: ux-lai-thu-8c-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-30T03:17:58Z
 design_doc: docs/superpowers/specs/2026-09-30-ux-lai-thu-8c-okr-design.md
