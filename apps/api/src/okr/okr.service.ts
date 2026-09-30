@@ -40,6 +40,7 @@ import {
 } from "@crm/validation/okr-kr";
 import {
 	CAP_MUC_TIEU,
+	type CapMucTieu,
 	type DonViMucTieu,
 	HANG_CAP,
 	LOAI_MUC_TIEU,
@@ -110,6 +111,15 @@ import { OKR } from "./okr-config";
 const T = OKR.thongDiep;
 type Tx = Prisma.TransactionClient;
 type GhiTrong = { note?: string };
+type NguonDaQuaCong = {
+	nguon: { id: string; cycleId: string; level: CapMucTieu };
+	nc: NguCanhXem;
+};
+export type KrTrongGiaoDich = {
+	tx: Tx;
+	mt: { id: string; cycleId: string };
+	note: string;
+};
 type AlignmentInput = {
 	objectiveId: string;
 	targetObjectiveId: string | null;
@@ -614,6 +624,7 @@ export class OkrService {
 		cycleId: string,
 		dv: DonViCuaMucTieu,
 		them: number,
+		cheDo?: OkrProgram["capMode"],
 	) {
 		const ct = await this.program(tx);
 		const dem = await tx.okrObjective.count({
@@ -627,7 +638,7 @@ export class OkrService {
 			},
 		});
 		if (dem + them <= ct.objectiveCap) return null;
-		if (ct.capMode === "chan")
+		if ((cheDo ?? ct.capMode) === "chan")
 			throw new BadRequestException(T.vuotTranMucTieu(dem));
 		return T.vuotTranMucTieu(dem);
 	}
@@ -668,6 +679,7 @@ export class OkrService {
 		userId: string,
 		input: MucTieuInput,
 		vetThem: OkrVetSnapshot = {},
+		opts?: GhiTrong,
 	) {
 		const dv = donViCua(input.unit);
 		await this.assertKyGhiDuoc(tx, input.cycleId);
@@ -710,6 +722,7 @@ export class OkrService {
 				hienThi: mt.hienThi,
 				...vetThem,
 			},
+			opts?.note ?? null,
 		);
 		return { id: mt.id, canhBao };
 	}
@@ -887,9 +900,15 @@ export class OkrService {
 		if (loi) throw new BadRequestException(T.soTheoKieu[loi]);
 	}
 
-	async createKeyResult(userId: string, input: CreateKrInput) {
-		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
-		const kq = await this.db.$transaction(async (tx) => {
+	async createKeyResult(
+		userId: string,
+		input: CreateKrInput,
+		trong?: KrTrongGiaoDich,
+	) {
+		const mt =
+			trong?.mt ??
+			(await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId));
+		const ghi = async (tx: Tx) => {
 			await this.assertKyGhiDuoc(tx, mt.cycleId);
 			const trangThai = await this.trangThai(tx, mt.id);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
@@ -934,9 +953,12 @@ export class OkrService {
 					startValue: input.startValue,
 					targetValue: input.targetValue,
 				},
+				trong?.note ?? null,
 			);
 			return { id: kr.id, canhBao };
-		});
+		};
+		if (trong) return ghi(trong.tx);
+		const kq = await this.db.$transaction(ghi);
 		await this.kichLuotAn(userId, {
 			objectiveId: mt.id,
 			keyResultId: kq.id,
@@ -1207,12 +1229,11 @@ export class OkrService {
 		);
 	}
 
-	async addAlignmentTrong(
+	private async congCanChinh(
 		tx: Tx,
 		userId: string,
 		input: AlignmentInput,
-		opts?: GhiTrong,
-	) {
+	): Promise<NguonDaQuaCong> {
 		const nguon = await this.quyenOkr.assertSuaMucTieu(
 			userId,
 			input.objectiveId,
@@ -1222,6 +1243,17 @@ export class OkrService {
 			await this.quyenOkr.quyen(userId),
 			userId,
 		);
+		return { nguon, nc };
+	}
+
+	async addAlignmentTrong(
+		tx: Tx,
+		userId: string,
+		input: AlignmentInput,
+		opts?: GhiTrong & { daQuaCong?: NguonDaQuaCong },
+	) {
+		const { nguon, nc } =
+			opts?.daQuaCong ?? (await this.congCanChinh(tx, userId, input));
 		await this.assertKyGhiDuoc(tx, nguon.cycleId);
 		await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${nguon.id} FOR UPDATE`;
 		const trangThai = await this.trangThai(tx, nguon.id);

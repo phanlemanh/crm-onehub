@@ -237,6 +237,7 @@ const DAU_VAO_HOP_LE = {
 	},
 	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
 	"okr.soanQuyet": { deXuatId: "khong-co", quyet: "nhan" },
+	"okr.soanDuaVao": { cuocSoanId: "khong-co", kr: [] },
 	"okr.luuTruMau": { id: "khong-co" },
 	"okr.khoiPhucMau": { id: "khong-co" },
 	"okr.taoTuMau": {
@@ -409,6 +410,7 @@ const THU_TUC_OKR_LUOT_SOAN = [
 	"soanTangLuot",
 	"soanDanhSach",
 	"soanQuyet",
+	"soanDuaVao",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);

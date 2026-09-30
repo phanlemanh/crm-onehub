@@ -7,6 +7,7 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import { soanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import {
 	chuyenDonViInput,
 	datHienThiInput,
@@ -105,6 +106,7 @@ import {
 	setProgramInput,
 	soanDanhSachCuocOutput,
 	soanDanhSachOutput,
+	soanDuaVaoOutput,
 	soanMoOutput,
 	soanMoVao,
 	soanQuyetInput,
@@ -420,6 +422,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof soanQuyetInput>,
 	) {
 		return this.soan.quyet(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: soanDuaVaoInput,
+		output: soanDuaVaoOutput,
+		meta: restMeta("POST", "/okr/soan/sessions/{cuocSoanId}/apply", TAG),
+	})
+	soanDuaVao(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanDuaVaoInput>,
+	) {
+		return this.soan.duaVao(ctx.user.id, input);
 	}
 
 	@Mutation({

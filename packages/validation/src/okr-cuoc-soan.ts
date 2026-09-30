@@ -1,6 +1,6 @@
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
-import { KIEU_KR } from "./okr-kr";
+import { KIEU_KR, soKr } from "./okr-kr";
 
 export const LOAI_MUC_TIEU_NHAP = ["cam-ket", "tham-vong"] as const;
 
@@ -58,8 +58,8 @@ export const soanDuaVaoInput = z.object({
 	kr: z.array(
 		z.object({
 			deXuatId: z.string().min(1),
-			khoiDiem: z.number().finite(),
-			dich: z.number().finite(),
+			khoiDiem: soKr,
+			dich: soKr,
 		}),
 	),
 });

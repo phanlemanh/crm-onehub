@@ -32,8 +32,8 @@ export type DongDoc = { hang: HangNhap; dong: DongSoan; khoaDong: string };
 
 type MucTieuMoi = Extract<DongSoan, { loai: "muc-tieu-moi" }>;
 type CanChinhMoi = Extract<DongSoan, { loai: "can-chinh-moi" }>;
-type DongMucTieu = DongDoc & { dong: MucTieuMoi };
-type TuChoiCha = Extract<SoanQuyetOutput, { ok: false }>;
+export type DongMucTieu = DongDoc & { dong: MucTieuMoi };
+export type TuChoiCha = Extract<SoanQuyetOutput, { ok: false }>;
 
 const T = OKR.thongDiep.soan;
 const maLoai = z.enum(MA_LOAI_BAN_NHAP).nullable();
@@ -49,7 +49,7 @@ const TEN_SUA = {
 const dichCua = (d: CanChinhMoi) =>
 	d.targetObjectiveId ?? d.targetKeyResultId ?? "";
 
-const laMucTieu = (d: DongDoc): d is DongMucTieu =>
+export const laMucTieu = (d: DongDoc): d is DongMucTieu =>
 	d.dong.loai === "muc-tieu-moi";
 
 const daQuyet = (d: DongDoc) => DA_QUYET.has(d.hang.trangThai);
@@ -211,7 +211,7 @@ function giaTriSua(dong: DongSoan, giaTri: string | undefined): string {
 	return r.data;
 }
 
-function chaTuChoi(
+export function chaTuChoi(
 	ds: readonly DongDoc[],
 	hien: readonly DongDoc[],
 	con: DongDoc,

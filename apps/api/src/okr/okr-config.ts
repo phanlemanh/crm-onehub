@@ -155,6 +155,8 @@ export const OKR = {
 				`Mục tiêu cha «${ten}» không qua kiểm — không nhận dòng dưới nó.`,
 			khongCoCha: (khoa: string) =>
 				`Không có Mục tiêu cha «${khoa}» trong cuộc soạn này.`,
+			chaChuaNhan: (ten: string) =>
+				`Mục tiêu cha «${ten}» chưa được nhận — nhận nó, hoặc bác dòng dưới nó.`,
 			canGiaTri: "Sửa cần một giá trị mới.",
 			tenSuaKhongHop: (tran: number) =>
 				`Tên sau khi sửa quá ngắn hoặc dài quá ${tran} ký tự.`,
@@ -164,6 +166,8 @@ export const OKR = {
 			thieuSoKr: (ten: string) =>
 				`Điền khởi điểm và đích cho KR «${ten}» trước khi đưa vào.`,
 			soKrLa: (id: string) => `Dòng ${id} không phải KR đã nhận của cuộc này.`,
+			mocKhongNhanSo: (ten: string) =>
+				`KR «${ten}» là mốc — không nhận khởi điểm và đích.`,
 			vuotTranMucTieu: (tran: number) =>
 				`Vượt trần ${tran} Mục tiêu mỗi đơn vị.`,
 			duaVaoHaiLan: "Cuộc này đã được đưa vào bộ OKR.",

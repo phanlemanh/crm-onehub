@@ -676,6 +676,10 @@ export const LY_DO_DUA_VAO = [
 	"chu-ky-khong-lap-ke-hoach",
 	"cuoc-khong-dang",
 	"don-vi-chua-bat",
+	"cha-chua-nhan",
+	"cha-da-bac",
+	"cha-bi-loai",
+	"khong-co-cha",
 ] as const;
 export const capDonViSoan = z.enum(["onehub", "bo-phan", "phong-ban"]);
 export const donViSoan = z.object({
@@ -875,3 +879,4 @@ export type SoanDanhSachOutput = z.infer<typeof soanDanhSachOutput>;
 export type SoanQuyetInput = z.infer<typeof soanQuyetInput>;
 export type SoanQuyetOutput = z.infer<typeof soanQuyetOutput>;
 export type LyDoQuyet = (typeof LY_DO_QUYET)[number];
+export type SoanDuaVaoOutput = z.infer<typeof soanDuaVaoOutput>;

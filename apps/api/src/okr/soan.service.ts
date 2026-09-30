@@ -22,6 +22,7 @@ import {
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
 import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
+import type { SoanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import {
 	BadRequestException,
 	ConflictException,
@@ -36,6 +37,7 @@ import type {
 	DonViSoanVao,
 	SoanDanhSachCuocOutput,
 	SoanDanhSachOutput,
+	SoanDuaVaoOutput,
 	SoanMoOutput,
 	SoanMoVao,
 	SoanQuyetInput,
@@ -43,6 +45,7 @@ import type {
 	SoanSanSangOutput,
 	SoanTangLuotOutput,
 } from "./okr.contracts";
+import { OkrService } from "./okr.service";
 import { OkrAccessService, type Quyen } from "./okr-access.service";
 import { OKR } from "./okr-config";
 import {
@@ -55,6 +58,7 @@ import {
 	tapHien,
 	tenDichCua,
 } from "./soan-ban-nhap";
+import { duaVaoTrong } from "./soan-dua-vao";
 
 type Tx = Prisma.TransactionClient;
 type DbHoacTx = Db | Tx;
@@ -124,6 +128,7 @@ export class SoanService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(OkrService) private readonly okr: OkrService,
 	) {}
 
 	private quyenDonVi(userId: string, dv: DonViCuocSoan): Promise<Quyen> {
@@ -477,6 +482,25 @@ export class SoanService {
 			if (cong.cuoc.trangThai !== "dang")
 				throw new ConflictException(T.soan.cuocKhongDang);
 			return ghiQuyet(tx, { ...input, cuocSoanId, userId, now });
+		});
+	}
+
+	async duaVao(
+		userId: string,
+		input: SoanDuaVaoInput,
+		now = new Date(),
+	): Promise<SoanDuaVaoOutput> {
+		return this.db.$transaction(async (tx): Promise<SoanDuaVaoOutput> => {
+			await tx.$queryRaw`SELECT id FROM "okrCuocSoan" WHERE id = ${input.cuocSoanId} FOR UPDATE`;
+			const cong = await this.congCuoc(tx, userId, input.cuocSoanId, now);
+			if (!cong.qua) return { ok: false, lyDo: cong.lyDo, chiTiet: null };
+			return duaVaoTrong(tx, this.okr, {
+				cuoc: cong.cuoc,
+				userId,
+				nc: this.quyenOkr.nguCanhXem(cong.q, userId),
+				kr: input.kr,
+				now,
+			});
 		});
 	}
 }
