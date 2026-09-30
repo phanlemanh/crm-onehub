@@ -335,14 +335,23 @@ So a measurement now runs in a **measure session** on a database of its own tree
   `_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs` does this for `apps/agent`: it
   picks a free port, sets `AGENT_URL` and `AGENT_BRIDGE_SECRET` **before** starting the
   session under a sibling tree name (`<tree>-tro-ly`), because the app reads those
-  variables once at start, then starts `apps/agent` on that port. The OKR drafting
-  agent needs the same for `apps/agent-okr`, with `OKR_AGENT_URL`,
-  `OKR_AGENT_BRIDGE_SECRET` and the name `<tree>-cach-ly`; that is
-  `_acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs`, which does not exist
-  yet (task E1 writes it). The app is checked with
-  `_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs`. `apps/agent-okr` answers
-  `GET /health` with the tree it serves (`cay`); a mismatch being exit 2 is behaviour
-  E1 and D8 will prove, not something measured yet.
+  variables once at start, then starts `apps/agent` on that port. The app is checked
+  with `_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs`.
+- The session also boots `apps/agent-okr`, the OKR drafting agent, when a measurement
+  needs it: `_acceptance/soan-okr-cung-tro-ly/rang/phien-soan.mjs`. `chayTrongPhienSoan`
+  asks the operating system for a free port (port 0, not the 4100–4899 range), sets
+  `OKR_AGENT_URL` and a fresh `OKR_AGENT_BRIDGE_SECRET` **before** the session starts,
+  and runs it under the sibling tree name `<tree>-soan`: when `tien-de` wrapped the
+  command, a session of `<tree>` already holds that tree's lock, so reusing the name
+  would wait on itself. `batAgentOkr` then starts `eve dev --no-ui` of `apps/agent-okr`
+  on that port with `NODE_ENV=development` (under `test` eve swaps the real model for
+  its mock) and the session's `DATABASE_URL`, so cost rows (`AiChiPhi`) land in the
+  measure database and vanish with it. It prints the Node version first and refuses
+  one below 24. `apps/agent-okr` answers `GET /health` with `cay`, and the ruler
+  compares it with its own `treeSlug(currentTree())`: an agent on that port started by
+  another tree or session is exit 2 naming both, not a measurement. The drafting-screen
+  ruler `rang/man-soan.mjs` uses it; the isolation ruler `rang/cach-ly-chi-okr.mjs`
+  (task E1) is meant to reuse it rather than boot its own.
 
 To measure a whole lane in one session — one database, one server start — wrap it:
 `bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.
