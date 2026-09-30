@@ -138,6 +138,9 @@ function XemCay({
 	);
 }
 
+const dangCho = (q: { isPending: boolean; isPlaceholderData: boolean }) =>
+	q.isPending || q.isPlaceholderData;
+
 export function TheoDonVi() {
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -233,7 +236,7 @@ export function TheoDonVi() {
 		);
 	} else if (xem === "cay") {
 		noiDung = <XemCay cycleId={currentId} tenGoc={tenGoc} tenKy={tenKy} />;
-	} else if (byUnit.isPending) noiDung = <DangTai />;
+	} else if (dangCho(byUnit)) noiDung = <DangTai />;
 	else if (byUnit.isError) noiDung = <Loi thuLai={thuLai} />;
 	else if (objectives.length === 0 && coLoc(loc))
 		noiDung = <KhongKhop boLoc={boLoc} />;

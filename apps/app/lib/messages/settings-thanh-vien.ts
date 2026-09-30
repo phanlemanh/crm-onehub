@@ -58,6 +58,10 @@ const en = {
 			than: "They lose access now. Signing in again will not bring them back.",
 			nut: "Remove",
 			xong: "Person removed.",
+			dangDoc: "Checking what this person still owns in OKR…",
+			loiDoc: "Could not read this person's OKR.",
+			coOkr:
+				"This person owns {kr} key results and {mucTieu} objectives in open cycles — move their OKR first so it does not become orphaned.",
 		},
 		rut: {
 			tieuDe: "Withdraw this allowance?",
@@ -151,6 +155,10 @@ const vi = {
 			than: "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa.",
 			nut: "Gỡ",
 			xong: "Đã gỡ.",
+			dangDoc: "Đang đọc OKR của người này…",
+			loiDoc: "Chưa đọc được OKR của người này.",
+			coOkr:
+				"Người này đang phụ trách {kr} KR và {mucTieu} mục tiêu ở kỳ đang mở — chuyển OKR trước để chúng không thành OKR mồ côi.",
 		},
 		rut: {
 			tieuDe: "Rút lời cho phép này?",

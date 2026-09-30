@@ -108,10 +108,12 @@ function mucTieu(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		soNguoiXem: 0,
 		trail: [],
 		canEditKr: ["kr-1"],
 		hienThi: "cong-khai",
 		nguoiXem: [],
+		nguoiDuyetDuKien: null,
 		choDuyet: null,
 		traLaiGanNhat: null,
 		quyen: {

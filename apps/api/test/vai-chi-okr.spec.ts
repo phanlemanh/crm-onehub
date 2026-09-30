@@ -394,6 +394,7 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySoDo",
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const SO_THU_TUC_HOI_Y = 17;
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
@@ -1464,6 +1465,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_CANH_KR,
 				...THU_TUC_OKR_LUOT_GIOI_HAN,
 				...THU_TUC_OKR_LUOT_TRO_LY,
+				...THU_TUC_OKR_LUOT_UX_8D,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 			].sort(),
 		);
@@ -1876,6 +1878,15 @@ const THU_TU_DOC_OKR = {
 		K: "chua-G",
 		dau: "tieuDeG",
 		khac: 200,
+	},
+	"okr.chuyenDonViXemTruoc": {
+		vao: (s) => ({
+			objectiveIds: [s.g],
+			denDonVi: { level: "phong-ban", id: s.pb },
+		}),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.taiCoCau.canQuanTri,
 	},
 	"okr.dienBien": {
 		vao: (s) => ({ keyResultId: s.krG }),
