@@ -388,7 +388,6 @@ export async function gieoCanhGoi(v: { vaiNguoiMo: "member" | "okr" }) {
 	const cuoc = await gieoCuoc({
 		cycleId: nay.id,
 		level: "phong-ban",
-		divisionId: boPhan.id,
 		departmentId: phong.id,
 		nguoiMoUserId: nguoiMo.id,
 	});

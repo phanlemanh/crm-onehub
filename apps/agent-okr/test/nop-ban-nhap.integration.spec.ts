@@ -465,6 +465,45 @@ describe("nop-ban-nhap", () => {
 		}
 	});
 
+	test("nấc bật theo danh sách bộ phận, cuộc phòng ban lưu divisionId rỗng → nấc tính theo bộ phận cha của phòng: bật bộ phận cha thì ghi, bật bộ phận khác thì từ chối", async () => {
+		const ct = await db.okrProgramConfig.findUniqueOrThrow({
+			where: { version: BAN_CHUONG_TRINH },
+			select: { aiSoanPhamVi: true, aiSoanDonVi: true },
+		});
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			level: "phong-ban",
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: `${TIEN_TO}phien-bo-phan`,
+		});
+		const batCho = async (donVi: string[]) => {
+			await db.okrProgramConfig.update({
+				where: { version: BAN_CHUONG_TRINH },
+				data: { aiSoanPhamVi: "danh-sach", aiSoanDonVi: donVi },
+			});
+			return nop(tron(), nguCanh(cuoc.sessionId, canh.nguoiMo.id, cuoc.id));
+		};
+		try {
+			const cha = await batCho([canh.boPhan.id]);
+			const khac = await batCho([`${TIEN_TO}bo-phan-khac`]);
+			expect({
+				divisionId: cuoc.divisionId,
+				cha: cha.ketQua,
+				khac: [khac.ketQua, khac.lyDo],
+			}).toEqual({
+				divisionId: null,
+				cha: "da-ghi",
+				khac: ["tu-choi", TRO_LY_OKR_SOAN.tuChoi.donViChuaBat],
+			});
+		} finally {
+			await db.okrProgramConfig.update({
+				where: { version: BAN_CHUONG_TRINH },
+				data: { aiSoanPhamVi: ct.aiSoanPhamVi, aiSoanDonVi: ct.aiSoanDonVi },
+			});
+		}
+	});
+
 	test("chu kỳ rời pha lập kế hoạch → từ chối có tên, không ghi", async () => {
 		const truoc = await db.okrDeXuat.count({
 			where: { cuocSoanId: canh.cuocSoanId },

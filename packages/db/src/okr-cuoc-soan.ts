@@ -1,6 +1,10 @@
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
-import { motTrong, TRO_LY_OKR_TRAN } from "./okr-tro-ly-danh-muc";
+import {
+	type DonViMucTieu,
+	motTrong,
+	TRO_LY_OKR_TRAN,
+} from "./okr-tro-ly-danh-muc";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
 
@@ -75,6 +79,28 @@ export function donViCuoc(cuoc: CuocSoan): DonViCuocSoan {
 		level: cuoc.level,
 		divisionId: cuoc.divisionId,
 		departmentId: cuoc.departmentId,
+	};
+}
+
+export async function donViAiCuaCuoc(
+	db: DbHoacTx,
+	dv: DonViCuocSoan,
+): Promise<DonViMucTieu> {
+	if (dv.level === "onehub")
+		return { onehub: true, boPhanId: null, phongBanId: null };
+	if (dv.level === "bo-phan")
+		return { onehub: false, boPhanId: dv.divisionId, phongBanId: null };
+	const phong =
+		dv.departmentId === null
+			? null
+			: await db.department.findUnique({
+					where: { id: dv.departmentId },
+					select: { divisionId: true },
+				});
+	return {
+		onehub: false,
+		boPhanId: phong?.divisionId ?? null,
+		phongBanId: dv.departmentId,
 	};
 }
 

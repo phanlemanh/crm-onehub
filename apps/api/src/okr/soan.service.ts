@@ -9,6 +9,7 @@ import {
 	demCuocTrongKy,
 	docCuoc,
 	docCuocTheoDonVi,
+	donViAiCuaCuoc,
 	donViCuoc,
 	moCuoc,
 	tangLuot as tangLuotCuoc,
@@ -16,7 +17,6 @@ import {
 import { cauHinhAiLuc, quaTranChung } from "@crm/db/okr-tro-ly";
 import {
 	type CauHinhAi,
-	type DonViMucTieu,
 	daNhanDeXuat,
 	nacCuaDonVi,
 	TRO_LY_OKR_TRAN,
@@ -101,18 +101,6 @@ export function donViTuVao(v: DonViSoanVao): DonViCuocSoan {
 	return { ...goc, level: v.level, departmentId: v.departmentId };
 }
 
-export function donViAi(dv: DonViCuocSoan, q: Quyen): DonViMucTieu {
-	if (dv.level === "onehub")
-		return { onehub: true, boPhanId: null, phongBanId: null };
-	if (dv.level === "bo-phan")
-		return { onehub: false, boPhanId: dv.divisionId, phongBanId: null };
-	return {
-		onehub: false,
-		boPhanId: q.boPhanCua.get(dv.departmentId ?? "") ?? null,
-		phongBanId: dv.departmentId,
-	};
-}
-
 export const khoaDonVi = (dv: DonViCuocSoan) =>
 	`okr-soan:${dv.cycleId}:${dv.level}:${dv.divisionId ?? "-"}:${dv.departmentId ?? "-"}`;
 
@@ -176,11 +164,10 @@ export class SoanService {
 	private async nacSoan(
 		client: DbHoacTx,
 		dv: DonViCuocSoan,
-		q: Quyen,
 		now: Date,
 	): Promise<{ ct: CauHinhAi; nac: NacMo | "tat" }> {
 		const ct = await cauHinhAiLuc(client, now);
-		const nac = nacCuaDonVi(ct, "soan", donViAi(dv, q));
+		const nac = nacCuaDonVi(ct, "soan", await donViAiCuaCuoc(client, dv));
 		return { ct, nac: nac === "bat" || nac === "an" ? nac : "tat" };
 	}
 
@@ -193,7 +180,7 @@ export class SoanService {
 		const q = await this.quyenDonVi(userId, dv);
 		if (await this.luuTru(client, dv))
 			return { qua: false, lyDo: "don-vi-luu-tru" };
-		const { ct, nac } = await this.nacSoan(client, dv, q, now);
+		const { ct, nac } = await this.nacSoan(client, dv, now);
 		if (nac === "tat") return { qua: false, lyDo: "don-vi-chua-bat" };
 		if (nac === "an" && !q.quanTri)
 			return { qua: false, lyDo: "don-vi-che-do-an" };
@@ -217,7 +204,7 @@ export class SoanService {
 			personUserId: null,
 		});
 		if (!suaDuoc || (cuoc.nac === "an" && !q.quanTri)) throw khongThay();
-		const { ct, nac } = await this.nacSoan(client, dv, q, now);
+		const { ct, nac } = await this.nacSoan(client, dv, now);
 		if (nac === "tat") return { qua: false, cuoc, lyDo: "don-vi-chua-bat" };
 		if (nac === "an" && !q.quanTri) throw khongThay();
 		return { qua: true, cuoc, q, ct };

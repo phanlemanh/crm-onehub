@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { db, Prisma } from "@crm/db";
-import { docCuoc } from "@crm/db/okr-cuoc-soan";
+import { docCuoc, donViAiCuaCuoc } from "@crm/db/okr-cuoc-soan";
 import { cauHinhAiLuc } from "@crm/db/okr-tro-ly";
 import {
 	nacCuaDonVi,
@@ -174,11 +174,11 @@ export async function nopBanNhap(
 		select: { phase: true },
 	});
 	if (ky.phase !== "lap-ke-hoach") return tuChoi(TU_CHOI.chuKyKhongLapKeHoach);
-	const nac = nacCuaDonVi(await cauHinhAiLuc(db), "soan", {
-		onehub: cuoc.level === "onehub",
-		boPhanId: cuoc.divisionId,
-		phongBanId: cuoc.departmentId,
-	});
+	const nac = nacCuaDonVi(
+		await cauHinhAiLuc(db),
+		"soan",
+		await donViAiCuaCuoc(db, cuoc),
+	);
 	if (nac !== "bat" && nac !== "an") return tuChoi(TU_CHOI.donViChuaBat);
 	const goi = await goiSoan(cuocSoanId, { vai });
 	if (!goi) return tuChoi(TU_CHOI.cuocKhongDang);
