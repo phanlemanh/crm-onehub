@@ -9,27 +9,34 @@ import {
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
-const goiDuyet: unknown[] = [];
+type VaoDuyet = { id: string; diffHash: string };
+type VaoTraLai = { id: string; lyDo: string };
+type TuyChonDotBien = { onSuccess?: () => unknown; onError?: () => unknown };
+
+const goiDuyet: VaoDuyet[] = [];
+
+function dotBien<V, R>(ten: string, ghi: V[], tra: R) {
+	return {
+		mutationOptions: (tuy: TuyChonDotBien = {}) => ({
+			...tuy,
+			mutationKey: [ten],
+			mutationFn: async (v: V) => {
+				ghi.push(v);
+				return tra;
+			},
+		}),
+	};
+}
+
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		taiLieu: {
-			approve: {
-				mutationOptions: (t: object = {}) => ({
-					...t,
-					mutationKey: ["approve"],
-					mutationFn: async (v: unknown) => {
-						goiDuyet.push(v);
-						return { slug: "s", so: 1, canhBaoTuCam: [] };
-					},
-				}),
-			},
-			reject: {
-				mutationOptions: (t: object = {}) => ({
-					...t,
-					mutationKey: ["reject"],
-					mutationFn: async () => ({ ok: true }),
-				}),
-			},
+			approve: dotBien("approve", goiDuyet, {
+				slug: "s",
+				so: 1,
+				canhBaoTuCam: [],
+			}),
+			reject: dotBien<VaoTraLai, { ok: boolean }>("reject", [], { ok: true }),
 		},
 	}),
 }));

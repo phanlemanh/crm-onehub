@@ -6,13 +6,13 @@ import type {
 } from "@crm/validation/tai-lieu";
 import { NGUON, type TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 
-const loaiMoTaEn: Partial<Record<LoaiTrang, string>> = {
+const loaiMoTaEn = {
 	"chien-luoc": "The OKR assistant reads the version in use of this type",
-};
+} satisfies Partial<Record<LoaiTrang, string>>;
 
-const loaiMoTaVi: Partial<Record<LoaiTrang, string>> = {
+const loaiMoTaVi = {
 	"chien-luoc": "Trợ lý OKR đọc bản đang dùng của loại này",
-};
+} satisfies Partial<Record<LoaiTrang, string>>;
 
 const en = {
 	tieuDe: "Documents",
