@@ -2525,6 +2525,43 @@ describe("an-vang", () => {
 	);
 
 	test(
+		"an-vang: co ghi cua ngan muc tieu va khung KR tat o X da an, bat o V",
+		async () => {
+			const gieoKy = async (ten: string) => {
+				const id = await taoNam(ten, namCu());
+				await dangChay(id);
+				return gieoMucTieuCongBo(id, [{}]);
+			};
+			const X = await gieoKy("an-vang-co-X");
+			const V = await gieoKy("an-vang-co-V");
+			const kyCua = await db.okrObjective.findUniqueOrThrow({
+				where: { id: X.objectiveId },
+				select: { cycleId: true },
+			});
+			await an(kyCua.cycleId);
+			const coCua = async (mt: { objectiveId: string; krIds: string[] }) => {
+				const o = await doc<{
+					kyGhiDuoc: boolean;
+					quyen: { datHienThi: boolean };
+				}>("okr.objective", "quan", { id: mt.objectiveId });
+				const k = await doc<{ khoa: boolean }>("okr.canhKr", "quan", {
+					keyResultId: mt.krIds[0] ?? "",
+				});
+				return {
+					kyGhiDuoc: o.kyGhiDuoc,
+					datHienThi: o.quyen.datHienThi,
+					khoaKr: k.khoa,
+				};
+			};
+			expect({ x: await coCua(X), v: await coCua(V) }).toEqual({
+				x: { kyGhiDuoc: false, datHienThi: false, khoaKr: true },
+				v: { kyGhiDuoc: true, datHienThi: true, khoaKr: false },
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
 		"an-vang: dich can chinh cua muc tieu o X da an khong con muc tieu nao cua X; o V co dung muc tieu cong bo cua V",
 		async () => {
 			const c = await dungChung();

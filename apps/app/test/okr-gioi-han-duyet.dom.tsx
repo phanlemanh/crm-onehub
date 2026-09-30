@@ -87,6 +87,7 @@ function mucTieu(doi: Partial<ObjectiveOutput>): ObjectiveOutput {
 		id: "mt-g",
 		cycleId: QUY.id,
 		cycleName: QUY.name,
+		kyGhiDuoc: true,
 		mangSangToi: null,
 		mangSangTu: null,
 		level: "phong-ban",

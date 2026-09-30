@@ -355,6 +355,7 @@ export const nguoiDuyetOkr = z.union([
 export const objectiveOutput = mucTieuOutput.extend({
 	keyResults: z.array(krCanhOutput),
 	cycleName: z.string(),
+	kyGhiDuoc: z.boolean(),
 	mangSangToi: lienKetMangSang,
 	mangSangTu: lienKetMangSang,
 	trail: z.array(vetOutput),

@@ -1881,7 +1881,7 @@ export class OkrService {
 			}),
 			this.db.okrCycle.findUniqueOrThrow({
 				where: { id: mt.cycleId },
-				select: { name: true, phase: true },
+				select: { name: true, phase: true, anLuc: true },
 			}),
 			this.db.okrObjective.findFirst({
 				where: { AND: [{ id }, dieuKienXemMucTieu(nc)] },
@@ -1969,7 +1969,8 @@ export class OkrService {
 		const vetDuyet = vet.filter((v) => VET_DUYET.has(v.action));
 		const cuoiDuyet = vetDuyet.at(-1);
 		const guiCuoi = vetDuyet.findLast((v) => v.action === "gui-duyet");
-		const ghiDuoc = ghiDuocOPha(phaChuKy.parse(ky.phase));
+		const ghiDuoc =
+			ky.anLuc === null && ghiDuocOPha(phaChuKy.parse(ky.phase));
 		const duyetDuoc = this.quyenOkr.duyetDuoc(q, userId, objective);
 		const choDuyet = mt.status === "cho-duyet";
 		const cachCongBo = this.congBoHayGuiDuyet(ct, q, userId, objective);
@@ -2002,6 +2003,7 @@ export class OkrService {
 				coBangChung: bangChung.some((d) => d.keyResultId === k.id),
 			})),
 			cycleName: ky.name,
+			kyGhiDuoc: ghiDuoc,
 			mangSangToi: toi
 				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
 				: null,
