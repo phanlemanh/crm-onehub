@@ -78,6 +78,16 @@ export const TRO_LY_OKR_TRAN = {
 	hoanTacNgay: 7,
 } as const;
 
+export const OKR_TOM_TAT = {
+	gioXep: { gio: 6, phut: 0 },
+	cuaSoNgay: 7,
+	tyLeGiuLai: 0.3,
+	hienTrongNgay: 8,
+	hoiLaiMs: 5 * SECOND_MS,
+	tranChoMs: 2 * MINUTE_MS,
+	dongBaoAiToiDa: 2,
+} as const;
+
 export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
 
 export type MucTuTin = (typeof MUC_TU_TIN)[number];

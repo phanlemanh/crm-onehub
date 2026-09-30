@@ -1,7 +1,13 @@
+import type { LuatTomTat } from "@crm/db/okr-tom-tat";
 import { chuanHoa, coCum, khongDau, trichSo } from "./okr-kiem-de-xuat";
-import { docSoOkr } from "./okr-kr";
-import type { MaBoCau, TrangThaiTomTat } from "./okr-tom-tat";
-import { type CauTomTat, TRO_LY_OKR_TRAN } from "./okr-tro-ly";
+import { docSoOkr, tienDoKr } from "./okr-kr";
+import {
+	type MaBoCau,
+	parseNoiDungTomTat,
+	parseTrangThaiTomTat,
+	type TrangThaiTomTat,
+} from "./okr-tom-tat";
+import { type CauTomTat, okrTroLyViec, TRO_LY_OKR_TRAN } from "./okr-tro-ly";
 
 export type NguonKiem = {
 	id: string;
@@ -238,3 +244,18 @@ export function kiemBanTomTat(
 	const canXem = giu.length === 0 || bo.length / tong > tyLeGiuLai;
 	return { cau: giu, bo, trangThai: canXem ? "can-xem" : "hien" };
 }
+
+export const LUAT_TOM_TAT = {
+	kiemBan: kiemBanTomTat,
+	kiemCau: kiemCauTomTat,
+	docNoiDung: parseNoiDungTomTat,
+	docTrangThai: parseTrangThaiTomTat,
+	docViec: (value) => {
+		const ket = okrTroLyViec.safeParse(value);
+		if (!ket.success) {
+			throw new Error(`viec tro ly okr hong: ${ket.error.message}`);
+		}
+		return ket.data;
+	},
+	tienDoKr,
+} satisfies LuatTomTat;
