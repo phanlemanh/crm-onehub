@@ -1,4 +1,4 @@
-import { boDau, type MaLuatOkr } from "./okr-kiem";
+import { chuanHoa, coCum, khongDau, type MaLuatOkr } from "./okr-kiem";
 import { docSoOkr } from "./okr-kr";
 import {
 	type DongDeXuat,
@@ -178,23 +178,6 @@ function docSo(chu: string): SoDoc[] {
 
 export function trichSo(chu: string): number[] {
 	return docSo(chu).map((s) => s.giaTri);
-}
-
-function chuanHoa(s: string): string {
-	return s
-		.normalize("NFC")
-		.toLowerCase()
-		.split(/[^\p{L}\p{N}]+/u)
-		.filter(Boolean)
-		.join(" ");
-}
-
-function khongDau(s: string): string {
-	return chuanHoa(boDau(s));
-}
-
-function coCum(van: string, cum: string): boolean {
-	return cum !== "" && ` ${van} `.includes(` ${cum} `);
 }
 
 function chuCuaDong(dong: DongGopY): string[] {

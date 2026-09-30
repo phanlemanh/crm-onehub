@@ -17,6 +17,7 @@ import {
 	LOAI_MUC_TIEU_NHAP,
 	mucTieuNhap,
 } from "./okr-cuoc-soan";
+import { chuanHoa } from "./okr-kiem";
 import { KIEU_KR } from "./okr-kr";
 
 export {
@@ -245,15 +246,6 @@ export type HangSoanGhi = {
 
 export const HANG_SOAN = { objectiveId: "" } as const;
 
-function chuanHoaTen(ten: string): string {
-	return ten
-		.normalize("NFC")
-		.toLowerCase()
-		.split(/[^\p{L}\p{N}]+/u)
-		.filter(Boolean)
-		.join(" ");
-}
-
 export function dongSoanTuHang(hang: HangSoan): DongSoan {
 	const nd = noiDungSoan.parse(hang.noiDung);
 	if (nd.loai !== hang.loai || hang.cuocSoanId === null)
@@ -304,7 +296,7 @@ export function hangTuDongSoan(dong: DongSoan, sessionId: string): HangSoanGhi {
 		truong: null,
 		truoc: null,
 		sau: ten,
-		sauChuan: ten === null ? null : chuanHoaTen(ten),
+		sauChuan: ten === null ? null : chuanHoa(ten),
 		maVanDe: null,
 		dich: null,
 		lyDo: dong.viSao,

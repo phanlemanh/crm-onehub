@@ -33,6 +33,8 @@
 		"./okr-khep": "./src/okr-khep.ts",
 		"./okr-kiem": "./src/okr-kiem.ts",
 		"./okr-kiem-de-xuat": "./src/okr-kiem-de-xuat.ts",
+		"./okr-kiem-ban-nhap": "./src/okr-kiem-ban-nhap.ts",
+		"./okr-tom-gon-ky": "./src/okr-tom-gon-ky.ts",
 		"./okr-canh-kr": "./src/okr-canh-kr.ts",
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-mau": "./src/okr-mau.ts",
