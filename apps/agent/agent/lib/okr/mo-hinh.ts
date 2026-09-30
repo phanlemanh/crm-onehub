@@ -1,9 +1,10 @@
 import {
-	gateway,
-	type LanguageModel,
-	type LanguageModelMiddleware,
-	wrapLanguageModel,
-} from "ai";
+	middlewareZdr,
+	tronTuyChon as tronChung,
+	tuyChonZdr,
+	xuongModelZdr,
+} from "@crm/ai-okr";
+import type { LanguageModel, LanguageModelMiddleware } from "ai";
 import { TRO_LY_OKR } from "./config";
 
 type ThamSoGoi = Parameters<
@@ -12,35 +13,19 @@ type ThamSoGoi = Parameters<
 
 type ProviderOptions = NonNullable<ThamSoGoi["providerOptions"]>;
 
-export const TUY_CHON_MO_HINH = {
-	providerOptions: {
-		gateway: { zeroDataRetention: true, tags: [...TRO_LY_OKR.tags] },
-		google: { thinkingConfig: { thinkingLevel: "low" } },
-		vertex: { thinkingConfig: { thinkingLevel: "low" } },
-	},
-} satisfies { providerOptions: ProviderOptions };
+export const TUY_CHON_MO_HINH = tuyChonZdr(TRO_LY_OKR.tags);
 
 export function tronTuyChon(cu: ProviderOptions | undefined): ProviderOptions {
-	const ep: ProviderOptions = TUY_CHON_MO_HINH.providerOptions;
-	const khoa = new Set([...Object.keys(cu ?? {}), ...Object.keys(ep)]);
-	return Object.fromEntries(
-		[...khoa].map((k) => [k, { ...(cu?.[k] ?? {}), ...(ep[k] ?? {}) }]),
-	);
+	return tronChung(cu, TRO_LY_OKR.tags);
 }
 
-export const kepTranRaMoiLoiGoi: LanguageModelMiddleware = {
-	transformParams: async ({ params }) => ({
-		...params,
-		maxOutputTokens: Math.min(
-			params.maxOutputTokens ?? TRO_LY_OKR.tranRaMoiLoiGoi,
-			TRO_LY_OKR.tranRaMoiLoiGoi,
-		),
-		providerOptions: tronTuyChon(params.providerOptions),
-	}),
-};
+export const kepTranRaMoiLoiGoi: LanguageModelMiddleware = middlewareZdr({
+	tags: TRO_LY_OKR.tags,
+	tranRaMoiLoiGoi: TRO_LY_OKR.tranRaMoiLoiGoi,
+});
 
-export const MO_HINH_TRO_LY_OKR: LanguageModel = wrapLanguageModel({
-	model: gateway(TRO_LY_OKR.model),
-	middleware: kepTranRaMoiLoiGoi,
+export const MO_HINH_TRO_LY_OKR: LanguageModel = xuongModelZdr({
 	modelId: TRO_LY_OKR.model,
+	tags: TRO_LY_OKR.tags,
+	tranRaMoiLoiGoi: TRO_LY_OKR.tranRaMoiLoiGoi,
 });
