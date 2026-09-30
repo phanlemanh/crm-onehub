@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { type KrSo, type LyDoHop, lyDoCua } from "../src/okr-hop-tuan";
+import type { MucTuTin } from "../src/okr-tro-ly-danh-muc";
 
 const vn = (s: string) => new Date(`${s}+07:00`);
 

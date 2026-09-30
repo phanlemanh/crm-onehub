@@ -1,5 +1,5 @@
 import { OKR_NHAC } from "./okr-nhac";
-import { type MucTuTin, NGAY_MS } from "./okr-tro-ly-danh-muc";
+import { type MucTuTin, TUAN_MS } from "./okr-tro-ly-danh-muc";
 import { dauTuanVN, ngayVN, soNgayVN } from "./onboarding-nhac";
 
 export type LanCapNhat = {
@@ -35,7 +35,7 @@ const NHOM_LY_DO = { tut: 0, im: 1, "ghi-chu": 2 } as const satisfies Record<
 >;
 
 export function congTuan(tuan: string, soTuan: number): string {
-	return new Date(Date.parse(`${tuan}T00:00:00Z`) + soTuan * 7 * NGAY_MS)
+	return new Date(Date.parse(`${tuan}T00:00:00Z`) + soTuan * TUAN_MS)
 		.toISOString()
 		.slice(0, 10);
 }
