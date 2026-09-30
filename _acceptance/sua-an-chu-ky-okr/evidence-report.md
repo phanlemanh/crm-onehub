@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fb56ea3ad0d98fe827408a777019e22f99f353b4
+verified_commit: 28939bb1599fb3fd416c9a25f0feab19c512ae64
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -255,3 +255,7 @@ Round 2: vòng sửa S4-r1 viết lại E1 thành bảng ca viết tay và cấp
 ### Re-pin lần 1 — 2026-09-30, do sửa ca test kỳ mặc định đỏ trên CI vì dữ liệu của packages/db chạy song song
 run_id: repin-20260930T131325Z-20368
 sha: fb56ea3ad0d98fe827408a777019e22f99f353b4 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E14 (E14 không khai paths), E17 (E17 không khai paths)
+
+### Re-pin lần 2 — 2026-09-30, do gộp onehub (#221 hydrat giai đoạn Deals)
+run_id: repin-20260930T133656Z-60155
+sha: 28939bb1599fb3fd416c9a25f0feab19c512ae64 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E14 (E14 không khai paths), E17 (E17 không khai paths)
