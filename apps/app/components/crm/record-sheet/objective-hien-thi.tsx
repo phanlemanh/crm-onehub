@@ -3,7 +3,6 @@
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Close from "@carbon/icons-react/es/Close";
 import Locked from "@carbon/icons-react/es/Locked";
-import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
@@ -33,11 +32,6 @@ import {
 	TokenFieldItem,
 } from "@crm/ui/components/token-field";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@crm/ui/components/tooltip";
-import {
 	MUC_HIEN_THI,
 	type MucHienThi,
 	OKR_HIEN_THI,
@@ -59,37 +53,6 @@ export type MucTieuHienThi = {
 	nguoiXem: NguoiXem[];
 	coCanChinh: boolean;
 };
-
-export function NhanGioiHan({
-	soNguoiXem,
-	moHop,
-}: {
-	soNguoiXem: number;
-	moHop: (() => void) | null;
-}) {
-	const m = okrGioiHanMessages(useLocale()).nhan;
-	const goiY =
-		soNguoiXem === 0 ? m.goiYKhongTen : dien(m.goiY, { n: soNguoiXem });
-	return (
-		<Tooltip>
-			<TooltipTrigger asChild>
-				<Badge asChild variant="outline">
-					<button
-						aria-haspopup={moHop ? "dialog" : undefined}
-						aria-label={`${m.gioiHan}: ${goiY}`}
-						data-nhan-gioi-han
-						onClick={moHop ?? undefined}
-						type="button"
-					>
-						<Icon icon={Locked} data-icon="inline-start" />
-						{m.gioiHan}
-					</button>
-				</Badge>
-			</TooltipTrigger>
-			<TooltipContent side="bottom">{goiY}</TooltipContent>
-		</Tooltip>
-	);
-}
 
 const khoaTap = (ids: string[]) => [...ids].sort().join("|");
 

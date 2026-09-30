@@ -54,6 +54,7 @@ import {
 	DetailSheetStats,
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
+import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -62,7 +63,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { TabDienBien } from "./objective-dien-bien";
 import { coDaiDuyet, DaiDuyet, NutGuiDuyet } from "./objective-duyet";
-import { HopMucHienThi, NhanGioiHan } from "./objective-hien-thi";
+import { HopMucHienThi } from "./objective-hien-thi";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";

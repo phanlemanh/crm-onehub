@@ -208,7 +208,9 @@ const docAccess = () => ({
 const docWorkspace = () => ({ name: "OneHub" });
 const docDem = () => dem;
 const LOC_RONG = { phuTrach: [], loai: [], trangThai: [] };
+let treo: Set<string> = new Set();
 const docDanhSach = (vao: DauVao) => {
+	if (treo.has(khoaDonVao(vao))) return new Promise<never>(() => {});
 	const d = theoDon.get(khoaDonVao(vao)) ?? { objectives: [], canEdit: false };
 	return {
 		rows: d.objectives.map((o) => ({ ...o, krKhop: [] })),
@@ -262,8 +264,10 @@ const { TheoDonVi } = await import(
 );
 const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
+const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
+const { okrGioiHanMessages } = await import("@/lib/messages/okr-gioi-han");
 
 const m = okrMessages("vi");
 const mt = okrToanCanhMessages("vi");
@@ -307,7 +311,9 @@ async function mo(don = "goc", xem: string | null = null): Promise<San> {
 			<NuqsTestingAdapter searchParams={`?${thamSo}`} hasMemory>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
-						<TheoDonVi />
+						<TooltipProvider>
+							<TheoDonVi />
+						</TooltipProvider>
 					</LocaleProvider>
 				</QueryClientProvider>
 			</NuqsTestingAdapter>,
@@ -340,6 +346,7 @@ beforeEach(() => {
 	theoDon = new Map();
 	dem = {};
 	cayCanChinh = { roots: [], chuaCanChinh: [] };
+	treo = new Set();
 });
 
 afterEach(async () => {
@@ -572,5 +579,95 @@ describe("thanh-tab", () => {
 			],
 			dangChon: ["false", "false", "true", "false"],
 		});
+	});
+});
+
+const g = okrGioiHanMessages("vi").nhan;
+const goiY = (n: number) =>
+	n === 0 ? g.goiYKhongTen : g.goiY.replace("{n}", String(n));
+
+describe("nhan-danh-sach", () => {
+	test("nhan-danh-sach: the gioi han o Theo don vi va nut cay mang nhan khoa khong mo hop; the cong khai khong co", async () => {
+		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
+			objectives: [
+				{ ...mucTieu("a", 1), hienThi: "gioi-han", soNguoiXem: 1 },
+				{ ...mucTieu("b", 1), hienThi: "gioi-han", soNguoiXem: 0 },
+				mucTieu("c", 1),
+			],
+			canEdit: false,
+		});
+		const s = await mo("pb:pb-1");
+		const nhanCua = (id: string) =>
+			[
+				...s.o.querySelectorAll(`[data-muc-tieu="${id}"] [data-nhan-gioi-han]`),
+			].map((n) => ({
+				chu: n.textContent,
+				ten: n.getAttribute("aria-label"),
+				moHop: n.getAttribute("aria-haspopup"),
+				the: n.tagName,
+			}));
+		expect({ a: nhanCua("a"), b: nhanCua("b"), c: nhanCua("c") }).toEqual({
+			a: [
+				{
+					chu: g.gioiHan,
+					ten: `${g.gioiHan}: ${goiY(1)}`,
+					moHop: null,
+					the: "SPAN",
+				},
+			],
+			b: [
+				{
+					chu: g.gioiHan,
+					ten: `${g.gioiHan}: ${goiY(0)}`,
+					moHop: null,
+					the: "SPAN",
+				},
+			],
+			c: [],
+		});
+		await act(async () => s.root.unmount());
+		dangMo = dangMo.filter((x) => x !== s);
+		cayCanChinh = {
+			roots: [
+				{ ...nut("o", "muc-tieu", []), hienThi: "gioi-han", soNguoiXem: 2 },
+			],
+			chuaCanChinh: [nut("x", "muc-tieu", [])],
+		};
+		const c = await mo("goc", "cay");
+		const nhanCay = (id: string) =>
+			[
+				...c.o.querySelectorAll(
+					`[data-nut-can-chinh="${id}"] [data-nhan-gioi-han]`,
+				),
+			].map((n) => [n.getAttribute("aria-label"), n.getAttribute("tabindex")]);
+		expect({ o: nhanCay("o"), x: nhanCay("x") }).toEqual({
+			o: [[`${g.gioiHan}: ${goiY(2)}`, null]],
+			x: [],
+		});
+	});
+});
+
+describe("khung-xuong", () => {
+	test("khung-xuong: danh sach don vi moi dang cho — ca lan dau va ca giu cho du lieu don vi truoc — hien khung xuong, khong hien cau chua dat OKR", async () => {
+		treo.add(JSON.stringify(donVao("pb:pb-kho")));
+		const s = await mo("pb:pb-1");
+		const truoc = s.o.textContent ?? "";
+		const nutKho = [...s.o.querySelectorAll('[role="treeitem"]')].find((n) =>
+			n.textContent?.includes("Kho vận"),
+		);
+		if (!nutKho) throw new Error("khong thay don vi Kho van");
+		await act(async () => {
+			(nutKho.querySelector("button") ?? (nutKho as HTMLElement)).click();
+		});
+		await cho(
+			() => (s.o.textContent ?? "").includes("Kho vận"),
+			"doi sang Kho van",
+		);
+		const khung = s.o.querySelector('[aria-busy="true"]');
+		expect({
+			truocRong: truoc.includes("chưa đặt OKR"),
+			busy: khung !== null,
+			rong: (s.o.textContent ?? "").includes("chưa đặt OKR"),
+		}).toEqual({ truocRong: true, busy: true, rong: false });
 	});
 });
