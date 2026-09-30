@@ -135,6 +135,12 @@ export const taiLieuProposalsOutput = z.object({
 	choToiDuyet: z.number().int(),
 });
 
+const kiemChienLuoc = z.object({
+	soKyTu: z.number().int(),
+	tranKyTu: z.number().int(),
+	canhBaoTuCam: z.array(z.string()),
+});
+
 export const taiLieuProposalOutput = z.object({
 	id: z.string(),
 	slug: z.string(),
@@ -152,11 +158,13 @@ export const taiLieuProposalOutput = z.object({
 	trichDoan: danhSachTrichDoan,
 	chuNguon: z.string().nullable(),
 	soMoi: z.array(z.string()),
+	chienLuoc: kiemChienLuoc.nullable(),
 });
 
 export const taiLieuApproveOutput = z.object({
 	slug: z.string(),
 	so: z.number().int(),
+	canhBaoTuCam: z.array(z.string()),
 });
 export const taiLieuOkOutput = z.object({ ok: z.literal(true) });
 
