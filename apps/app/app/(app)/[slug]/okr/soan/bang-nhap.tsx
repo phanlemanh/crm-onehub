@@ -53,7 +53,6 @@ function useNguCanhThe(s: CuocDangSoan, cuoc: CuocSoan): NguCanhThe {
 	const so = new Intl.NumberFormat(locale);
 	return {
 		s,
-		m,
 		mOkr: okrMessages(locale),
 		khoa: cuoc.trangThai !== "dang" || daDuaVao(s, cuoc),
 		loi,
@@ -95,7 +94,7 @@ function DaDuaVao({
 
 export function BangNhap({ s, cuoc }: { s: CuocDangSoan; cuoc: CuocSoan }) {
 	const n = useNguCanhThe(s, cuoc);
-	const { m } = n;
+	const m = okrSoanMessages(useLocale());
 	const xong = daDuaVao(s, cuoc);
 	if (s.cay.length === 0 && !xong) {
 		return (
@@ -119,14 +118,14 @@ export function BangNhap({ s, cuoc }: { s: CuocDangSoan; cuoc: CuocSoan }) {
 						className="flex flex-col gap-2"
 						data-khoi-muc-tieu={khoi.mucTieu.id}
 					>
-						<TheMucTieu n={n} khoi={khoi} stt={i + 1} />
+						<TheMucTieu n={n} m={m} khoi={khoi} stt={i + 1} />
 						{bac ? null : (
 							<div className="ms-4 flex flex-col gap-3 border-s ps-3">
 								{khoi.kr.map((kr) => (
-									<TheKr key={kr.id} n={n} kr={kr} />
+									<TheKr key={kr.id} n={n} m={m} kr={kr} />
 								))}
 								{khoi.canChinh.map((d) => (
-									<TheCanChinh key={d.id} n={n} d={d} />
+									<TheCanChinh key={d.id} n={n} m={m} d={d} />
 								))}
 							</div>
 						)}

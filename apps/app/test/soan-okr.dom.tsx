@@ -8,6 +8,7 @@ import {
 	DanhSachCuoc,
 	daDong,
 	daGui,
+	daLamMoi,
 	daMoCuoc,
 	dat,
 	datAgent,
@@ -356,6 +357,7 @@ describe("man soan — trang thai theo bang thiet ke", () => {
 		);
 		expect(q("[data-hanh-dong]")).toBeNull();
 		expect(q('[data-nut="dua-vao"]')).toBeNull();
+		expect(daLamMoi).toContain("okr");
 		expect((q("#dich-11") as HTMLInputElement).disabled).toBe(true);
 	});
 
@@ -380,6 +382,7 @@ describe("man soan — trang thai theo bang thiet ke", () => {
 		);
 		expect(qa("[data-khoi-muc-tieu]")).toHaveLength(truoc);
 		expect(q("[data-da-dua-vao]")).toBeNull();
+		expect(daLamMoi).toEqual([]);
 	});
 
 	test("ST-soan-dua-vao-loi: không có chiTiet thì hiện câu theo mã", async () => {

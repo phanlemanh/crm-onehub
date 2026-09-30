@@ -18,15 +18,6 @@ type Ket = "accepted" | "dismissed" | "skipped";
 const vi = {
 	nut: {
 		soan: "Soạn OKR cùng Trợ lý",
-		tiep: "Tiếp cuộc đang soạn",
-		cheDoAn: "chế độ ẩn",
-		cheDoAnMoTa:
-			"Chỉ quản trị thấy nút này; cuộc soạn tính vào số đo, không tính vào đơn vị.",
-		hetCuoc: (n: string) => `Đã dùng hết ${n} cuộc soạn kỳ này`,
-		tamNghi: (ngay: string) => `Trợ lý OKR tạm nghỉ tới ${ngay}`,
-		tiepMoTa: (ngay: string, luot: string, dong: string) =>
-			`Mở ${ngay} · ${luot} lượt · ${dong} dòng chưa quyết`,
-		dsCuoc: (n: string, tran: string) => `Cuộc soạn · ${n}/${tran}`,
 	},
 	man: {
 		tieuDe: "Soạn OKR cùng Trợ lý",
@@ -193,15 +184,6 @@ export type OkrSoanMessages = typeof vi;
 const en: OkrSoanMessages = {
 	nut: {
 		soan: "Draft OKRs with the Assistant",
-		tiep: "Continue the open draft",
-		cheDoAn: "hidden mode",
-		cheDoAnMoTa:
-			"Only admins see this button; the session counts in the metrics, not against the unit.",
-		hetCuoc: (n) => `All ${n} drafting sessions for this cycle are used`,
-		tamNghi: (ngay) => `The OKR Assistant is paused until ${ngay}`,
-		tiepMoTa: (ngay, luot, dong) =>
-			`Opened ${ngay} · ${luot} turns · ${dong} lines undecided`,
-		dsCuoc: (n, tran) => `Drafting sessions · ${n}/${tran}`,
 	},
 	man: {
 		tieuDe: "Draft OKRs with the Assistant",

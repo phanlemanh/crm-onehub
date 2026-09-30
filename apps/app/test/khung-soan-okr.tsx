@@ -71,6 +71,19 @@ const trpcGia = new Proxy(
 
 mock.module("@/lib/trpc/client", () => ({ useTRPC: () => trpcGia }));
 
+export const daLamMoi: string[] = [];
+mock.module("@/lib/trpc/cache", () => ({
+	useCrmCache: () =>
+		new Proxy(
+			{},
+			{
+				get: (_g, ten: string) => async () => {
+					daLamMoi.push(ten);
+				},
+			},
+		),
+}));
+
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
 	useParams: () => ({ slug: "ws" }),
@@ -303,6 +316,7 @@ export function datDanhSach(moi: Partial<DanhSachGia>): void {
 export function datLai(): void {
 	goi.length = 0;
 	daGui.length = 0;
+	daLamMoi.length = 0;
 	tuyChonAgent.length = 0;
 	daDung = 0;
 	duLieu.clear();

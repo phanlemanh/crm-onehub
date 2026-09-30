@@ -127,6 +127,9 @@ const KHONG_DAU = new Set([
 	"mangSang.xacNhan",
 	"hop.onehub",
 	"vietTruoc.tenChuDe",
+	"banNhap.kr",
+	"banNhap.daQuyet",
+	"cuoc.xem",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -226,9 +229,62 @@ const GHIM_OKR_GOP_Y = {
 	"okr-gop-y:dong.gopVao": ["Góp vào «1»", "Góp vào «12»"],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_OKR_SOAN = {
+	"okr-soan:man.luot": ["lượt 1/A", "lượt 12/A"],
+	"okr-soan:man.tabBanNhap": ["Bản nháp (1)", "Bản nháp (12)"],
+	"okr-soan:man.soDong": ["1 dòng", "12 dòng"],
+	"okr-soan:hoiThoai.goiY": ["Gợi ý trả lời: 1", "Gợi ý trả lời: 12"],
+	"okr-soan:hoiThoai.hetLuot": [
+		"Đã dùng hết 1 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới",
+		"Đã dùng hết 12 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới",
+	],
+	"okr-soan:banNhap.mucTieu": ["Mục tiêu 1", "Mục tiêu 12"],
+	"okr-soan:banNhap.viSaoLucNay": ["Vì sao lúc này: 1", "Vì sao lúc này: 12"],
+	"okr-soan:banNhap.canChinh": ["Góp vào «1»", "Góp vào «12»"],
+	"okr-soan:banNhap.doBang": ["đo bằng 1", "đo bằng 12"],
+	"okr-soan:banNhap.goiYKhoiDiem": ["khởi điểm gợi ý 1", "khởi điểm gợi ý 12"],
+	"okr-soan:banNhap.daQuyet": ["1 · A — B", "12 · A — B"],
+	"okr-soan:banNhap.bacCon": ["1 dòng con thu gọn", "12 dòng con thu gọn"],
+	"okr-soan:banNhap.duaVao": [
+		"Đưa vào bộ OKR · 1 Mục tiêu, A KR",
+		"Đưa vào bộ OKR · 12 Mục tiêu, A KR",
+	],
+	"okr-soan:banNhap.thieuDich": [
+		"Điền khởi điểm và đích cho 1 KR đã nhận trước khi đưa vào",
+		"Điền khởi điểm và đích cho 12 KR đã nhận trước khi đưa vào",
+	],
+	"okr-soan:banNhap.duaVaoMoTa": [
+		"Tạo ở trạng thái nháp cho 1, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
+		"Tạo ở trạng thái nháp cho 12, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
+	],
+	"okr-soan:banNhap.xacNhan.than": [
+		"Tạo 1 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, undefined?",
+		"Tạo 12 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, undefined?",
+	],
+	"okr-soan:banNhap.daTao": [
+		"Đã tạo 1 Mục tiêu nháp",
+		"Đã tạo 12 Mục tiêu nháp",
+	],
+	"okr-soan:banNhap.daTaoMoTa": [
+		"1 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
+		"12 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
+	],
+	"okr-soan:cuoc.tieuDe": [
+		"Cuộc soạn cùng Trợ lý · 1",
+		"Cuộc soạn cùng Trợ lý · 12",
+	],
+	"okr-soan:cuoc.dem": ["1/A cuộc", "12/A cuộc"],
+	"okr-soan:cuoc.nutCuoc": ["1 cuộc A", "12 cuộc A"],
+	"okr-soan:cuoc.rongMoTa": [
+		"Mỗi chu kỳ có 1 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
+		"Mỗi chu kỳ có 12 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
+	],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
 	...GHIM_TRO_LY_OKR,
 	...GHIM_OKR_GOP_Y,
+	...GHIM_OKR_SOAN,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],

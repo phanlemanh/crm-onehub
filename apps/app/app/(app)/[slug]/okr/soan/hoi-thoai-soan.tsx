@@ -5,7 +5,6 @@ import {
 	Conversation,
 	ConversationContent,
 	ConversationEmptyState,
-	ConversationScrollButton,
 } from "@crm/ui/components/ai-elements/conversation";
 import {
 	Message,
@@ -345,7 +344,6 @@ export function HoiThoaiSoan({
 						</Alert>
 					) : null}
 				</ConversationContent>
-				<ConversationScrollButton />
 			</Conversation>
 			<OSoan s={s} cuoc={cuoc} m={m} moCuoc={moCuoc} />
 		</>

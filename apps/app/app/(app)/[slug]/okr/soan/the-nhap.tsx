@@ -30,7 +30,6 @@ type Quyet = "nhan" | "sua" | "bac";
 
 export type NguCanhThe = {
 	s: CuocDangSoan;
-	m: OkrSoanMessages;
 	mOkr: ReturnType<typeof okrMessages>;
 	khoa: boolean;
 	loi: Readonly<Record<string, string | undefined>>;
@@ -56,7 +55,11 @@ function giaTriCua(d: DongMucTieu | DongKr): string {
 	return d.giaTriCuoi ?? d.ten;
 }
 
-function useSuaDong(n: NguCanhThe, d: DongMucTieu | DongKr) {
+function useSuaDong(
+	n: NguCanhThe,
+	m: OkrSoanMessages,
+	d: DongMucTieu | DongKr,
+) {
 	const [dangSua, setDangSua] = useState(false);
 	const [chu, setChu] = useState(giaTriCua(d));
 	const huy = () => {
@@ -67,7 +70,7 @@ function useSuaDong(n: NguCanhThe, d: DongMucTieu | DongKr) {
 		? [
 				{
 					id: "nhan-ban-sua",
-					label: n.m.banNhap.nut.nhanBanSua,
+					label: m.banNhap.nut.nhanBanSua,
 					tone: "primary",
 					disabled: chu.trim() === "",
 					onClick: () => {
@@ -77,12 +80,12 @@ function useSuaDong(n: NguCanhThe, d: DongMucTieu | DongKr) {
 				},
 				{
 					id: "huy",
-					label: n.m.banNhap.nut.huy,
+					label: m.banNhap.nut.huy,
 					tone: "secondary",
 					onClick: huy,
 				},
 			]
-		: nutBa(n, d, () => {
+		: nutBa(n, m, d, () => {
 				setChu(giaTriCua(d));
 				setDangSua(true);
 			});
@@ -97,13 +100,14 @@ function useSuaDong(n: NguCanhThe, d: DongMucTieu | DongKr) {
 
 function nutBa(
 	n: NguCanhThe,
+	m: OkrSoanMessages,
 	d: DongSoan,
 	moSua: (() => void) | null,
 ): ProposedChangeAction[] {
 	return [
 		{
 			id: "nhan",
-			label: n.m.banNhap.nut.nhan,
+			label: m.banNhap.nut.nhan,
 			tone: "primary",
 			onClick: () => n.quyet(d, "nhan"),
 		},
@@ -111,7 +115,7 @@ function nutBa(
 			? [
 					{
 						id: "sua",
-						label: n.m.banNhap.nut.sua,
+						label: m.banNhap.nut.sua,
 						tone: "secondary" as const,
 						onClick: moSua,
 					},
@@ -119,7 +123,7 @@ function nutBa(
 			: []),
 		{
 			id: "bac",
-			label: n.m.banNhap.nut.bac,
+			label: m.banNhap.nut.bac,
 			tone: "quiet",
 			onClick: () => n.quyet(d, "bac"),
 		},
@@ -128,6 +132,7 @@ function nutBa(
 
 function ketCua(
 	n: NguCanhThe,
+	m: OkrSoanMessages,
 	d: DongSoan,
 	nhan: string,
 	giaTri: string,
@@ -140,13 +145,13 @@ function ketCua(
 		decision: ket,
 		text: (
 			<>
-				{n.m.banNhap.daQuyet(nhan, giaTri, n.m.banNhap.ket[ket])}
+				{m.banNhap.daQuyet(nhan, giaTri, m.banNhap.ket[ket])}
 				{them}
 				{daBo ? (
 					<>
 						{" "}
 						<Badge variant="outline" data-nhan="da-bo">
-							{n.m.banNhap.nhan["da-bo"]}
+							{m.banNhap.nhan["da-bo"]}
 						</Badge>
 					</>
 				) : null}
@@ -155,9 +160,13 @@ function ketCua(
 	};
 }
 
-function tagCua(n: NguCanhThe, d: DongSoan): string | undefined {
+function tagCua(
+	n: NguCanhThe,
+	m: OkrSoanMessages,
+	d: DongSoan,
+): string | undefined {
 	const nhan = n.s.nhan.get(d.khoaDong);
-	return nhan && nhan !== "da-bo" ? n.m.banNhap.nhan[nhan] : undefined;
+	return nhan && nhan !== "da-bo" ? m.banNhap.nhan[nhan] : undefined;
 }
 
 function dangQuyet(n: NguCanhThe, d: DongSoan): boolean {
@@ -166,24 +175,27 @@ function dangQuyet(n: NguCanhThe, d: DongSoan): boolean {
 
 export function TheMucTieu({
 	n,
+	m,
 	khoi,
 	stt,
 }: {
 	n: NguCanhThe;
+	m: OkrSoanMessages;
 	khoi: KhoiNhap;
 	stt: number;
 }) {
 	const d = khoi.mucTieu;
-	const sua = useSuaDong(n, d);
-	const nhan = `${n.m.banNhap.mucTieu(String(stt))} · ${n.m.banNhap.loai[d.loaiMucTieu]}`;
+	const sua = useSuaDong(n, m, d);
+	const nhan = `${m.banNhap.mucTieu(String(stt))} · ${m.banNhap.loai[d.loaiMucTieu]}`;
 	const soCon = khoi.kr.length + khoi.canChinh.length;
 	const ket = ketCua(
 		n,
+		m,
 		d,
 		nhan,
 		giaTriCua(d),
 		d.trangThai === "bac" && soCon > 0
-			? ` · ${n.m.banNhap.bacCon(String(soCon))}`
+			? ` · ${m.banNhap.bacCon(String(soCon))}`
 			: undefined,
 	);
 	return (
@@ -193,13 +205,11 @@ export function TheMucTieu({
 			data-loai-dong="muc-tieu"
 			data-the-cho={ket ? undefined : ""}
 			label={nhan}
-			tag={tagCua(n, d)}
+			tag={tagCua(n, m, d)}
 			value={giaTriCua(d)}
 			rationale={
 				<>
-					<span className="block">
-						{n.m.banNhap.viSaoLucNay(d.viSaoLucNay)}
-					</span>
+					<span className="block">{m.banNhap.viSaoLucNay(d.viSaoLucNay)}</span>
 					<span className="block">{d.viSao}</span>
 				</>
 			}
@@ -253,10 +263,18 @@ function OSo({
 	);
 }
 
-function OSoKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
+function OSoKr({
+	n,
+	m,
+	kr,
+}: {
+	n: NguCanhThe;
+	m: OkrSoanMessages;
+	kr: DongKr;
+}) {
 	if (!canSo(kr)) {
 		return (
-			<FieldDescription data-o-so={kr.id}>{n.m.banNhap.moc}</FieldDescription>
+			<FieldDescription data-o-so={kr.id}>{m.banNhap.moc}</FieldDescription>
 		);
 	}
 	const so = soCua(kr, n.s.so);
@@ -265,7 +283,7 @@ function OSoKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
 		<div className="grid grid-cols-2 gap-3" data-o-so={kr.id}>
 			<OSo
 				id={`khoi-${kr.id}`}
-				nhan={n.m.banNhap.khoiDiem}
+				nhan={m.banNhap.khoiDiem}
 				donVi={kr.donVi}
 				giaTri={so.khoiDiem}
 				loi={thieu && docSo(so.khoiDiem) === null}
@@ -274,7 +292,7 @@ function OSoKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
 			/>
 			<OSo
 				id={`dich-${kr.id}`}
-				nhan={n.m.banNhap.dich}
+				nhan={m.banNhap.dich}
 				donVi={kr.donVi}
 				giaTri={so.dich}
 				loi={thieu && docSo(so.dich) === null}
@@ -285,22 +303,30 @@ function OSoKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
 	);
 }
 
-function moTaKr(n: NguCanhThe, kr: DongKr): string {
+function moTaKr(n: NguCanhThe, m: OkrSoanMessages, kr: DongKr): string {
 	return [
 		n.mOkr.kieu[kr.kieu],
-		kr.donVi ? n.m.banNhap.doBang(kr.donVi) : null,
+		kr.donVi ? m.banNhap.doBang(kr.donVi) : null,
 		kr.khoiDiemGoiY === null
 			? null
-			: n.m.banNhap.goiYKhoiDiem(n.soDinhDang(kr.khoiDiemGoiY)),
+			: m.banNhap.goiYKhoiDiem(n.soDinhDang(kr.khoiDiemGoiY)),
 	]
 		.filter((x) => x !== null)
 		.join(" · ");
 }
 
-export function TheKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
-	const sua = useSuaDong(n, kr);
-	const ket = ketCua(n, kr, n.m.banNhap.kr, giaTriCua(kr));
-	const oSo = <OSoKr n={n} kr={kr} />;
+export function TheKr({
+	n,
+	m,
+	kr,
+}: {
+	n: NguCanhThe;
+	m: OkrSoanMessages;
+	kr: DongKr;
+}) {
+	const sua = useSuaDong(n, m, kr);
+	const ket = ketCua(n, m, kr, m.banNhap.kr, giaTriCua(kr));
+	const oSo = <OSoKr n={n} m={m} kr={kr} />;
 	return (
 		<fieldset
 			className="flex min-w-0 flex-col gap-2"
@@ -312,12 +338,12 @@ export function TheKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
 				data-dong={kr.id}
 				data-loai-dong="kr"
 				data-the-cho={ket ? undefined : ""}
-				label={n.m.banNhap.kr}
-				tag={tagCua(n, kr)}
+				label={m.banNhap.kr}
+				tag={tagCua(n, m, kr)}
 				value={giaTriCua(kr)}
 				rationale={
 					<>
-						<span className="block">{moTaKr(n, kr)}</span>
+						<span className="block">{moTaKr(n, m, kr)}</span>
 						<span className="block">{kr.viSao}</span>
 					</>
 				}
@@ -333,23 +359,31 @@ export function TheKr({ n, kr }: { n: NguCanhThe; kr: DongKr }) {
 	);
 }
 
-export function TheCanChinh({ n, d }: { n: NguCanhThe; d: DongCanChinh }) {
-	const giaTri = n.m.banNhap.canChinh(d.tenDich);
-	const ket = ketCua(n, d, n.m.banNhap.canChinhNhan, giaTri);
+export function TheCanChinh({
+	n,
+	m,
+	d,
+}: {
+	n: NguCanhThe;
+	m: OkrSoanMessages;
+	d: DongCanChinh;
+}) {
+	const giaTri = m.banNhap.canChinh(d.tenDich);
+	const ket = ketCua(n, m, d, m.banNhap.canChinhNhan, giaTri);
 	return (
 		<ProposedChange
 			kind="compact"
 			data-dong={d.id}
 			data-loai-dong="can-chinh"
 			data-the-cho={ket ? undefined : ""}
-			label={n.m.banNhap.canChinhNhan}
-			tag={tagCua(n, d)}
+			label={m.banNhap.canChinhNhan}
+			tag={tagCua(n, m, d)}
 			value={giaTri}
 			rationale={d.viSao}
 			decided={ket}
 			pending={dangQuyet(n, d)}
 			error={n.loi[d.id]}
-			actions={n.khoa ? [] : nutBa(n, d, null)}
+			actions={n.khoa ? [] : nutBa(n, m, d, null)}
 		/>
 	);
 }

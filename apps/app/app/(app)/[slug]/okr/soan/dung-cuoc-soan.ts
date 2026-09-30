@@ -13,6 +13,7 @@ import {
 } from "@/lib/agent-session";
 import { toTranscript } from "@/lib/agent-transcript";
 import { OKR_SOAN_CUA, okrSoanHeader } from "@/lib/okr-soan-record";
+import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { SOAN_UI } from "./cau-hinh";
 import type {
@@ -82,6 +83,7 @@ export function useCuocSoan({
 }) {
 	const trpc = useTRPC();
 	const qc = useQueryClient();
+	const cache = useCrmCache();
 	const agent = useEveAgent({
 		host: OKR_SOAN_CUA.host,
 		headers: okrSoanHeader(cuoc.id),
@@ -173,7 +175,9 @@ export function useCuocSoan({
 	const duaVao = useMutation(
 		trpc.okr.soanDuaVao.mutationOptions({
 			onSuccess: (kq) => {
-				if (kq.ok) khaiSo(false);
+				if (!kq.ok) return;
+				khaiSo(false);
+				void cache.okr();
 			},
 			onSettled: docLai,
 		}),
