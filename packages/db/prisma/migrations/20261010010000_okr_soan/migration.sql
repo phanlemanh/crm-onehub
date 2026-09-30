@@ -34,6 +34,7 @@ CREATE TABLE "okrCuocSoan" (
     "soLuot" INTEGER NOT NULL DEFAULT 0,
     "streamIndex" INTEGER NOT NULL DEFAULT 0,
     "continuationToken" TEXT,
+    "lanNopMoiNhat" TEXT,
     "daCat" JSONB,
     "duaVaoLuc" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

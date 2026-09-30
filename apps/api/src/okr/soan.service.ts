@@ -396,8 +396,15 @@ export class SoanService {
 		const tenKy = ten(ky);
 		const tenBoPhan = ten(boPhan);
 		const tenPhongBan = ten(phongBan);
+		const lanNopCua = new Map(cuoc.map((c) => [c.id, c] as const));
 		const hienCua = new Map(
-			[...dem].map(([id, ds]) => [id, tapHien(ds)] as const),
+			[...dem].map(
+				([id, ds]) =>
+					[
+						id,
+						tapHien(ds, lanNopCua.get(id) ?? { lanNopMoiNhat: null }),
+					] as const,
+			),
 		);
 		const demCua = (id: string, chiNhan: boolean) =>
 			(hienCua.get(id) ?? []).filter(
@@ -475,7 +482,7 @@ export class SoanService {
 				thieuBoiCanh,
 				lyDo: cong.lyDo,
 			};
-		const ds = await docBanNhapHien(this.db, cuocSoanId);
+		const ds = await docBanNhapHien(this.db, cong.cuoc);
 		await ghiHienLuc(this.db, ds, now);
 		const [cuoc, tenDich] = await Promise.all([
 			this.motCuocHien(this.db, cong.cuoc),
@@ -507,7 +514,7 @@ export class SoanService {
 			if (!cong.qua) return { ok: false, lyDo: cong.lyDo, chiTiet: null };
 			if (cong.cuoc.trangThai !== "dang")
 				throw new ConflictException(T.soan.cuocKhongDang);
-			return ghiQuyet(tx, { ...input, cuocSoanId, userId, now });
+			return ghiQuyet(tx, { ...input, cuoc: cong.cuoc, userId, now });
 		});
 	}
 

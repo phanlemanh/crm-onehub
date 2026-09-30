@@ -84,8 +84,10 @@ export async function docMoiDong(
 	return (await docMoiDongCuaCuoc(client, [cuocSoanId])).get(cuocSoanId) ?? [];
 }
 
-export function tapHien(ds: readonly DongDoc[]): DongDoc[] {
-	const lanMoiNhat = ds.at(-1)?.hang.inputHash;
+export type LanNop = { lanNopMoiNhat: string | null };
+
+export function tapHien(ds: readonly DongDoc[], cuoc: LanNop): DongDoc[] {
+	const lanMoiNhat = cuoc.lanNopMoiNhat ?? ds.at(-1)?.hang.inputHash;
 	const ungVien = ds.filter(
 		(d) =>
 			d.hang.trangThai !== "bi-loai" &&
@@ -110,9 +112,9 @@ export function tapHien(ds: readonly DongDoc[]): DongDoc[] {
 
 export async function docBanNhapHien(
 	client: DbHoacTx,
-	cuocSoanId: string,
+	cuoc: LanNop & { id: string },
 ): Promise<DongDoc[]> {
-	return tapHien(await docMoiDong(client, cuocSoanId));
+	return tapHien(await docMoiDong(client, cuoc.id), cuoc);
 }
 
 export async function ghiHienLuc(
@@ -256,14 +258,18 @@ export function chaTuChoi(
 
 export async function ghiQuyet(
 	tx: Tx,
-	v: SoanQuyetInput & { cuocSoanId: string; userId: string; now: Date },
+	v: SoanQuyetInput & {
+		cuoc: LanNop & { id: string };
+		userId: string;
+		now: Date;
+	},
 ): Promise<SoanQuyetOutput> {
-	const ds = await docMoiDong(tx, v.cuocSoanId);
+	const ds = await docMoiDong(tx, v.cuoc.id);
 	const muc = ds.find(
 		(d) => d.hang.id === v.deXuatId && d.hang.trangThai !== "bi-loai",
 	);
 	if (!muc) throw new NotFoundException(T.khongCoDong(v.deXuatId));
-	const hien = tapHien(ds);
+	const hien = tapHien(ds, v.cuoc);
 	if (!hien.includes(muc)) throw new ConflictException(T.dongCu);
 	const { dong } = muc;
 	const giaTriCuoi = v.quyet === "sua" ? giaTriSua(dong, v.giaTriCuoi) : null;

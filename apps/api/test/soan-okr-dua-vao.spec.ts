@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
-import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
+import { type CuocSoan, docCuoc } from "@crm/db/okr-cuoc-soan";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
 import { soGhiKhacNguoiGo, vetTaoKrSoan } from "@crm/validation/okr-cuoc-soan";
 import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
@@ -1765,6 +1765,69 @@ describe("mot-khoa-hai-dong", () => {
 			});
 			await xoaCuoc(hai.cuoc.id);
 			await xoaCuoc(mot.cuoc.id);
+		},
+		CHO_DB,
+	);
+});
+
+describe("lan-nop-moi-nhat", () => {
+	test(
+		"lần nộp mới nhất đọc từ cuộc: nộp lại «bỏ mục 2» khi mục còn lại đã nhận (0 hàng mới) → Mục tiêu 2 và KR của nó ra khỏi bảng; cuộc chưa ghi lần nộp thì lùi về hàng mới nhất",
+		async () => {
+			const gieo = async () => {
+				const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+				const lan1 = { inputHash: `lan-1:${cuoc.id}` };
+				await gieoDongNhap(
+					cuoc,
+					[
+						{ loai: "muc-tieu-moi", khoa: "m1", ten: "Giữ khách miền Nam" },
+						{
+							loai: "kr-moi",
+							khoa: "k11",
+							chaKhoa: "m1",
+							ten: "Khách miền Nam đặt lại",
+						},
+					],
+					"nhan",
+					lan1,
+				);
+				await gieoDongNhap(
+					cuoc,
+					[
+						{ loai: "muc-tieu-moi", khoa: "m2", ten: "Mở tuyến miền Tây" },
+						{
+							loai: "kr-moi",
+							khoa: "k21",
+							chaKhoa: "m2",
+							ten: "Chuyến miền Tây đúng hẹn",
+						},
+					],
+					"cho",
+					lan1,
+				);
+				return cuoc;
+			};
+			const khoaTrenBang = async (cuocSoanId: string) =>
+				(await danhSach(cuocSoanId, "trpc", cQuanTri)).dong
+					.map((d) => d.khoa)
+					.sort();
+			const boMuc2 = await gieo();
+			await db.okrCuocSoan.update({
+				where: { id: boMuc2.id },
+				data: { lanNopMoiNhat: `lan-2:${boMuc2.id}` },
+			});
+			const chuaGhi = await gieo();
+			expect({
+				boMuc2: await khoaTrenBang(boMuc2.id),
+				chuaGhi: await khoaTrenBang(chuaGhi.id),
+				cuoc: (await docCuoc(db, boMuc2.id))?.lanNopMoiNhat,
+			}).toEqual({
+				boMuc2: ["k11", "m1"],
+				chuaGhi: ["k11", "k21", "m1", "m2"],
+				cuoc: `lan-2:${boMuc2.id}`,
+			});
+			await xoaCuoc(boMuc2.id);
+			await xoaCuoc(chuaGhi.id);
 		},
 		CHO_DB,
 	);

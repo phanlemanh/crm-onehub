@@ -473,6 +473,89 @@ describe("nop-ban-nhap", () => {
 		});
 	});
 
+	test("mỗi lần nộp ghi dấu lần nộp lên cuộc, kể cả khi mọi dòng đã quyết và không có hàng mới", async () => {
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: `${TIEN_TO}phien-lan-nop`,
+		});
+		const ctx = nguCanh(cuoc.sessionId, canh.nguoiMo.id, cuoc.id);
+		const lanNop = async () =>
+			(
+				await db.okrCuocSoan.findUniqueOrThrow({
+					where: { id: cuoc.id },
+					select: { lanNopMoiNhat: true },
+				})
+			).lanNopMoiNhat;
+		await nop(tron(), ctx);
+		const dau = await lanNop();
+		const hangDau = await db.okrDeXuat.findMany({
+			where: { cuocSoanId: cuoc.id },
+			select: { inputHash: true },
+		});
+		await db.okrDeXuat.updateMany({
+			where: { cuocSoanId: cuoc.id, trangThai: "cho" },
+			data: {
+				trangThai: "nhan",
+				nguoiQuyet: canh.nguoiMo.id,
+				quyetLuc: new Date(),
+			},
+		});
+		const b = tron();
+		const chiDaNhan: BanNhap = {
+			mucTieu: [
+				{ ...mucTieu(b, 0), kr: mucTieu(b, 0).kr.slice(0, 2) },
+				{
+					...mucTieu(b, 1),
+					ten: "Kênh đại lý miền Bắc phủ đủ các tỉnh",
+					viSaoLucNay: "Đại lý miền Bắc đang hỏi chính sách mới",
+					kr: [
+						{
+							khoa: "k23",
+							ten: "Số đại lý miền Bắc đang bán",
+							kieu: "tang-toi",
+							donVi: "đại lý",
+							viSao: "đo",
+						},
+						{
+							khoa: "k24",
+							ten: "Tỷ lệ đại lý miền Bắc bán đều mỗi tháng",
+							kieu: "giu-tren",
+							donVi: "%",
+							viSao: "đo",
+						},
+					],
+				},
+			],
+		};
+		await nop(chiDaNhan, ctx);
+		await db.okrDeXuat.updateMany({
+			where: { cuocSoanId: cuoc.id, trangThai: "cho" },
+			data: {
+				trangThai: "nhan",
+				nguoiQuyet: canh.nguoiMo.id,
+				quyetLuc: new Date(),
+			},
+		});
+		const truoc = await db.okrDeXuat.count({ where: { cuocSoanId: cuoc.id } });
+		const giua = await lanNop();
+		const ra = await nop(chiDaNhan, ctx);
+		const cuoi = await lanNop();
+		expect({
+			dauLaLanCuaHang: hangDau.every((h) => h.inputHash === dau),
+			soDong: ra.soDong,
+			hangMoi:
+				(await db.okrDeXuat.count({ where: { cuocSoanId: cuoc.id } })) - truoc,
+			cuoiKhacGiua: cuoi !== null && cuoi !== giua && giua !== dau,
+		}).toEqual({
+			dauLaLanCuaHang: true,
+			soDong: 0,
+			hangMoi: 0,
+			cuoiKhacGiua: true,
+		});
+	});
+
 	test("hai dòng cùng khoá trong một bản → lỗi tool «dong trung khoa», không ghi", async () => {
 		const b = tron();
 		const m1 = mucTieu(b, 0);

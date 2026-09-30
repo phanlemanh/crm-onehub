@@ -2561,6 +2561,7 @@ model OkrCuocSoan {
   soLuot            Int       @default(0)
   streamIndex       Int       @default(0)
   continuationToken String?
+  lanNopMoiNhat     String?
   daCat             Json?
   duaVaoLuc         DateTime?
   createdAt         DateTime  @default(now())

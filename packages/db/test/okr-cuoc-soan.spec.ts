@@ -86,6 +86,7 @@ describe("okr-cuoc-soan", () => {
 			soLuot: 0,
 			streamIndex: 0,
 			continuationToken: null,
+			lanNopMoiNhat: null,
 			daCat: null,
 			duaVaoLuc: null,
 			level: "phong-ban",
@@ -93,6 +94,11 @@ describe("okr-cuoc-soan", () => {
 		});
 		expect(await docCuoc(db, c.id)).toEqual(c);
 		expect(await docCuoc(db, "khong-co")).toBeNull();
+		await db.okrCuocSoan.update({
+			where: { id: c.id },
+			data: { lanNopMoiNhat: "lan-nop-a" },
+		});
+		expect((await docCuoc(db, c.id))?.lanNopMoiNhat).toBe("lan-nop-a");
 	});
 
 	test("docCuoc: giá trị ngoài bảng enum là lỗi thật, không lọt qua", async () => {
@@ -256,6 +262,7 @@ const hang = {
 	soLuot: 0,
 	streamIndex: 0,
 	continuationToken: null,
+	lanNopMoiNhat: "lan-nop-1",
 	daCat: null,
 	duaVaoLuc: null,
 	createdAt: new Date("2032-01-02T08:00:00Z"),

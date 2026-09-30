@@ -42,6 +42,7 @@ const GOI_GIA: GoiSoan = {
 		soLuot: 0,
 		streamIndex: 0,
 		continuationToken: null,
+		lanNopMoiNhat: null,
 		daCat: null,
 		duaVaoLuc: null,
 		createdAt: new Date(0),

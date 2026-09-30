@@ -108,9 +108,10 @@ function krCoSo(
 
 function keHoachDuaVao(
 	ds: readonly DongDoc[],
+	cuoc: CuocSoan,
 	vao: readonly SoNguoiGo[],
 ): Hoac<{ mucTieu: MucDuaVao[] }> {
-	const hien = tapHien(ds);
+	const hien = tapHien(ds, cuoc);
 	const nhan = hien.filter(daNhan);
 	const mucTieu = nhan.filter(laMucTieu);
 	if (mucTieu.length === 0) throw new BadRequestException(T.khongCoDongNhan);
@@ -180,7 +181,7 @@ export async function duaVaoTrong(
 			lyDo: "chu-ky-khong-lap-ke-hoach",
 			chiTiet: ky.an ? OKR.thongDiep.chuKy.kyDaAn : T.kyKhongLapKeHoach,
 		};
-	const keHoach = keHoachDuaVao(await docMoiDong(tx, cuoc.id), v.kr);
+	const keHoach = keHoachDuaVao(await docMoiDong(tx, cuoc.id), cuoc, v.kr);
 	if (!keHoach.ok) return keHoach;
 	const unit = donViMucTieu(cuoc);
 	const vuot = await okr.kiemTranMucTieu(

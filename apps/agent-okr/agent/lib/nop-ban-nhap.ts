@@ -281,21 +281,27 @@ export async function nopBanNhap(
 	});
 	const daKiem = kiemBanNhap(conLai, kiem);
 	const lanNop = randomUUID();
-	await db.okrDeXuat.createMany({
-		data: daKiem.map(({ dong, kq }) => {
-			const trangThai: TrangThaiHang = kq.qua ? "cho" : "bi-loai";
-			return {
-				...hangTuDongSoan(veDongSoan(dong), ctx.session.id),
-				dich: Prisma.DbNull,
-				inputHash: lanNop,
-				nguoiYeuCau: userId,
-				nac: cuoc.nac,
-				trangThai,
-				maLoai: kq.qua ? null : kq.maLoai,
-				hienLuc: null,
-			};
+	await db.$transaction([
+		db.okrDeXuat.createMany({
+			data: daKiem.map(({ dong, kq }) => {
+				const trangThai: TrangThaiHang = kq.qua ? "cho" : "bi-loai";
+				return {
+					...hangTuDongSoan(veDongSoan(dong), ctx.session.id),
+					dich: Prisma.DbNull,
+					inputHash: lanNop,
+					nguoiYeuCau: userId,
+					nac: cuoc.nac,
+					trangThai,
+					maLoai: kq.qua ? null : kq.maLoai,
+					hienLuc: null,
+				};
+			}),
 		}),
-	});
+		db.okrCuocSoan.update({
+			where: { id: cuocSoanId },
+			data: { lanNopMoiNhat: lanNop },
+		}),
+	]);
 	const biLoai = daKiem.flatMap(({ dong, kq }) =>
 		kq.qua ? [] : [{ khoa: dong.khoa, ten: tenCua(dong), maLoai: kq.maLoai }],
 	);

@@ -31,6 +31,7 @@ export type CuocSoan = {
 	soLuot: number;
 	streamIndex: number;
 	continuationToken: string | null;
+	lanNopMoiNhat: string | null;
 	daCat: Prisma.JsonValue | null;
 	duaVaoLuc: Date | null;
 	createdAt: Date;
@@ -50,6 +51,7 @@ const COT = {
 	soLuot: true,
 	streamIndex: true,
 	continuationToken: true,
+	lanNopMoiNhat: true,
 	daCat: true,
 	duaVaoLuc: true,
 	createdAt: true,
