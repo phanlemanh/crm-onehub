@@ -42,6 +42,7 @@ export function vanBanNhap(
 export function nguCanhJudge(goi: GoiSoan | null): string {
 	if (!goi) return "(không có)";
 	return JSON.stringify({
+		trangChienLuoc: goi.lop05.map((t) => ({ ten: t.ten, noiDung: t.noiDung })),
 		donVi: goi.lop1,
 		capTren: goi.lop2a.capTren,
 		kyTruoc: goi.lop3,

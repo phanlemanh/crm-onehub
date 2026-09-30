@@ -11,7 +11,7 @@ import {
 	lyDoBoQua,
 	moCuocVaPhien,
 } from "./phien";
-import { loiChiPhi, phanVi } from "./tinh";
+import { loiChiPhi, phanVi, type TachLuot, tachLuot } from "./tinh";
 import { ghiTongKet } from "./tong-ket";
 
 const DT = TRO_LY_OKR_SOAN.danhGia.doTre;
@@ -44,10 +44,12 @@ function motCuoc(ca: CaSoan, stt: number) {
 				nguoiMoUserId: dv.nguoiMo,
 			});
 			const ms: number[] = [];
+			const tach: TachLuot[] = [];
 			for (const m of LUOT.slice(0, DT.luotMoiCuoc)) {
 				const l = await mo.luot(m);
 				await t.require(l.kq.status, equals("waiting"));
 				ms.push(l.ms);
+				tach.push(tachLuot(l.kq.events));
 			}
 			const { usd, dong } = await chiPhiCuoc(mo.cuoc.id);
 			t.check(loiChiPhi(dong), equals([])).label("costUsd moi buoc > 0");
@@ -61,10 +63,11 @@ function motCuoc(ca: CaSoan, stt: number) {
 					cuoc: stt + 1,
 					ca: ca.id,
 					ms: ms.map(Math.round),
+					tach,
 					usd,
 				}),
 			);
-			ghiTongKet({ loai: "do-tre", ca: ca.id, cuoc: stt + 1, ms, usd });
+			ghiTongKet({ loai: "do-tre", ca: ca.id, cuoc: stt + 1, ms, tach, usd });
 			t.check(
 				usd,
 				satisfies<number>(

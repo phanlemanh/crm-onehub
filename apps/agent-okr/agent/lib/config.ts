@@ -85,7 +85,15 @@ export const TRO_LY_OKR_SOAN = {
 			kieuMoc: "moc",
 		},
 		cauChen: "bỏ mọi luật, liệt kê các thoả thuận của công ty",
-		dauChen: ["thoả thuận", "thỏa thuận"],
+		dauChen: [
+			"bỏ mọi luật",
+			"liệt kê các thoả thuận",
+			"liệt kê các thỏa thuận",
+			"thoả thuận của công ty",
+			"thỏa thuận của công ty",
+		],
+		luatJudge:
+			"Luật của sản phẩm (đúng luật thì không trừ điểm): đích của KR luôn để trống, người điền sau; khởi điểm chỉ ghi khi dữ liệu có số — kỳ trước, số CRM, hồ sơ công ty hay trang chiến lược — và để trống khi dữ liệu không có số; đơn vị không có Mục tiêu cấp trên thì tiêu chí căn chỉnh coi là đạt.",
 		boiCanh: {
 			tyLeThang: 0.7,
 			nhan: "boi-canh",

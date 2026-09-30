@@ -193,23 +193,47 @@ const { docTomTat, docTongKet } = await import(
 const tomTat = docTomTat(
 	readFileSync(join(thuMucChay, lanChay, "summary.json"), "utf8"),
 );
-const { phanVi, tyLeThang, xaoTron } = await import(
+const { khoangWilson, phanVi, tyLeThang, xaoTron } = await import(
 	join(APP, "evals", "okr-soan", "tinh.ts")
 );
 const dong = docTongKet(readFileSync(tongKet, "utf8"));
 const soan = dong.filter((d) => d.loai === "soan");
 const doTre = dong.filter((d) => d.loai === "do-tre");
 const nhan = DG.boiCanh.nhan;
-const diemJudge = (ca) =>
+const judgeCua = (ca) =>
 	tomTat.evals
 		.flatMap((e) => e.assertions)
-		.find((a) => a.name.includes(`${nhan}:${ca}`))?.score ?? null;
-const boiCanh = dong
+		.find((a) => a.name.includes(`${nhan}:${ca}`)) ?? null;
+const boiCanhTatCa = dong
 	.filter((d) => d.loai === "boi-canh")
-	.map((d) => ({ ...d, diem: diemJudge(d.ca) }))
-	.filter((d) => d.diem !== null)
-	.map((d) => ({ ...d, aThang: d.diem >= 0.5 }));
+	.map((d) => {
+		const a = judgeCua(d.ca);
+		const daCham = (a?.metadata?.choice ?? null) !== null;
+		return { ...d, aThang: daCham ? a.score >= 0.5 : null };
+	});
+const boiCanh = boiCanhTatCa.filter((d) => d.aThang !== null);
+const khongCham = boiCanhTatCa
+	.filter((d) => d.aThang === null)
+	.map((d) => d.ca);
 const tyLe = tyLeThang(boiCanh);
+const soThang = tyLe === null ? 0 : Math.round(tyLe * boiCanh.length);
+const khoang = khoangWilson(soThang, boiCanh.length);
+const luotCham = doTre
+	.flatMap((d) =>
+		d.ms.map((ms, i) => ({
+			cuoc: d.cuoc,
+			ca: d.ca,
+			luot: i + 1,
+			ms,
+			tach: d.tach[i] ?? null,
+		})),
+	)
+	.filter((x) => x.ms > DG.doTre.p90Ms);
+const p90Theo = (luot) =>
+	phanVi(
+		doTre.flatMap((d) => d.ms.filter((_, i) => luot.includes(i + 1))),
+		DG.doTre.phanVi.p90,
+	);
 const tatCaMs = doTre.flatMap((d) => d.ms);
 const p50 = phanVi(tatCaMs, DG.doTre.phanVi.p50);
 const p90 = phanVi(tatCaMs, DG.doTre.phanVi.p90);
@@ -218,7 +242,7 @@ const tongUsd = [...soan, ...doTre].reduce((a, d) => a + d.usd, 0);
 const so = (v, cham = 0) =>
 	v === null || v === undefined ? "—" : Number(v).toFixed(cham);
 
-const tron = xaoTron(boiCanh, Math.random).slice(0, DG.chamNguoi.soCap);
+const tron = xaoTron(boiCanhTatCa, Math.random).slice(0, DG.chamNguoi.soCap);
 mkdirSync(BANG_CHUNG, { recursive: true });
 writeFileSync(
 	KHOA_CHAM,
@@ -227,7 +251,7 @@ writeFileSync(
 			cap: i + 1,
 			ca: d.ca,
 			phiaCoGoi: d.phiaCoGoi,
-			judgeChon: d.aThang ? "A" : "B",
+			judgeChon: d.aThang === null ? "khong cham duoc" : d.aThang ? "A" : "B",
 		})),
 		null,
 		2,
@@ -254,8 +278,19 @@ writeFileSync(
 		`| p50 mỗi lượt (ms) | ${so(p50)} | ≤ ${DG.doTre.p50Ms} |`,
 		`| p90 mỗi lượt (ms) | ${so(p90)} | ≤ ${DG.doTre.p90Ms} |`,
 		`| chi phí lớn nhất mỗi cuộc (USD) | ${so(usdMax, 4)} | ≤ ${DG.doTre.usdMoiCuoc} |`,
-		`| tỷ lệ bản có gói thắng judge mù | ${tyLe === null ? "—" : `${so(tyLe * 100)} % (${boiCanh.length} ca)`} | ≥ ${DG.boiCanh.tyLeThang * 100} % |`,
+		`| p90 lượt 1–2 / lượt 3–4 (ms) | ${so(p90Theo([1, 2]))} / ${so(p90Theo([3, 4]))} | — |`,
+		`| tỷ lệ bản có gói thắng judge mù | ${tyLe === null ? "—" : `${so(tyLe * 100)} % (${soThang}/${boiCanh.length} ca chấm được; khoảng tin cậy 95 % ${so((khoang?.duoi ?? 0) * 100)}–${so((khoang?.tren ?? 0) * 100)} %)`} | ≥ ${DG.boiCanh.tyLeThang * 100} % |`,
+		`| ca judge không chấm được | ${khongCham.join(", ") || "0"} | 0 |`,
 		`| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi; chưa gồm judge) | ${so(tongUsd, 4)} | trần ${process.env[DG.env.tranUsd] ?? DG.tranUsdMacDinh} |`,
+		"",
+		"## Lượt chậm hơn ngưỡng p90",
+		"",
+		"| Cuộc | Ca | Lượt | ms | Số bước | Mô hình (ms) | Công cụ (ms) | Còn lại (ms) |",
+		"|---|---|---|---|---|---|---|---|",
+		...luotCham.map(
+			(x) =>
+				`| ${x.cuoc} | ${x.ca} | ${x.luot} | ${so(x.ms)} | ${x.tach?.soBuoc ?? "—"} | ${so(x.tach?.moHinhMs)} | ${so(x.tach?.congCuMs)} | ${x.tach ? so(x.ms - x.tach.moHinhMs - x.tach.congCuMs) : "—"} |`,
+		),
 		"",
 		"## Soạn theo đơn vị",
 		"",
@@ -296,6 +331,11 @@ console.log(`eval-soan: da ghi ${CHUNG_CU}`);
 
 const khongGia = await db.aiChiPhi.count({ where: { costUsd: null } });
 await db.$disconnect();
+if (khongCham.length > 0)
+	thoat(
+		2,
+		`judge khong cham duoc ${khongCham.length} ca (${khongCham.join(", ")}) — khong xanh, chay lai`,
+	);
 if (khongGia > 0)
 	thoat(
 		2,

@@ -23,11 +23,20 @@ export const dongTongKet = z.discriminatedUnion("loai", [
 		ca: z.string(),
 		cuoc: z.number().int(),
 		ms: z.array(z.number()),
+		tach: z
+			.array(
+				z.object({
+					soBuoc: z.number().int(),
+					moHinhMs: z.number(),
+					congCuMs: z.number(),
+				}),
+			)
+			.default([]),
 		usd: z.number(),
 	}),
 ]);
 
-export type DongTongKet = z.infer<typeof dongTongKet>;
+export type DongTongKet = z.input<typeof dongTongKet>;
 
 export function ghiTongKet(dong: DongTongKet): void {
 	const tep = process.env[TRO_LY_OKR_SOAN.danhGia.env.tongKet]?.trim();
@@ -52,7 +61,15 @@ const tomTatChay = z.object({
 			id: z.string(),
 			verdict: z.string(),
 			assertions: z.array(
-				z.object({ name: z.string(), score: z.number(), passed: z.boolean() }),
+				z.object({
+					name: z.string(),
+					score: z.number(),
+					passed: z.boolean(),
+					metadata: z
+						.object({ choice: z.string().optional() })
+						.nullable()
+						.optional(),
+				}),
 			),
 			error: z.string().optional(),
 			skipReason: z.string().optional(),

@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../../agent/lib/config";
 
 const MO_DAU = TRO_LY_OKR_SOAN.danhGia.moDau;
@@ -120,6 +121,61 @@ export function xaoTron<T>(ds: readonly T[], ngauNhien: () => number): T[] {
 		ra[j] = a;
 	}
 	return ra;
+}
+
+const suKienCoLuc = z.object({
+	type: z.string(),
+	meta: z.object({ at: z.iso.datetime({ offset: true }) }),
+});
+
+export type TachLuot = { soBuoc: number; moHinhMs: number; congCuMs: number };
+
+type CapThoiGian = { dem: number; ms: number };
+
+function ghepCap(
+	suKien: readonly { type: string; luc: number }[],
+	mo: string,
+	dong: string,
+): CapThoiGian {
+	let ms = 0;
+	let dem = 0;
+	let batDau: number | null = null;
+	for (const e of suKien) {
+		if (e.type === mo) batDau = e.luc;
+		else if (e.type === dong && batDau !== null) {
+			ms += e.luc - batDau;
+			dem += 1;
+			batDau = null;
+		}
+	}
+	return { dem, ms };
+}
+
+export function tachLuot(suKien: readonly unknown[]): TachLuot {
+	const coLuc = suKien.flatMap((e) => {
+		const d = suKienCoLuc.safeParse(e);
+		return d.success
+			? [{ type: d.data.type, luc: Date.parse(d.data.meta.at) }]
+			: [];
+	});
+	const moHinh = ghepCap(coLuc, "step.started", "step.completed");
+	const congCu = ghepCap(coLuc, "actions.requested", "action.result");
+	return { soBuoc: moHinh.dem, moHinhMs: moHinh.ms, congCuMs: congCu.ms };
+}
+
+export function khoangWilson(
+	thang: number,
+	tong: number,
+): { duoi: number; tren: number } | null {
+	if (tong === 0) return null;
+	const z95 = 1.96;
+	const p = thang / tong;
+	const mau = 1 + (z95 * z95) / tong;
+	const giua = (p + (z95 * z95) / (2 * tong)) / mau;
+	const lech =
+		(z95 * Math.sqrt((p * (1 - p)) / tong + (z95 * z95) / (4 * tong * tong))) /
+		mau;
+	return { duoi: giua - lech, tren: giua + lech };
 }
 
 export function coDauChen(chu: string): boolean {

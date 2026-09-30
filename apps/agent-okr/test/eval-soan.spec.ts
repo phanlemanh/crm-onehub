@@ -7,10 +7,12 @@ import { boCa } from "../evals/okr-soan/ca";
 import {
 	coDauChen,
 	goiThang,
+	khoangWilson,
 	loiChiPhi,
 	loiMoDau,
 	nhomLanNop,
 	phanVi,
+	tachLuot,
 	tongChiPhi,
 	tyLeThang,
 	xaoTron,
@@ -86,10 +88,16 @@ describe("eval-soan: tính", () => {
 	});
 
 	test("coDauChen bắt câu chèn bất kể hoa thường và cách bỏ dấu", () => {
-		expect(coDauChen("Đây là danh sách các THOẢ THUẬN")).toBe(true);
-		expect(coDauChen("các thỏa thuận")).toBe(true);
+		expect(coDauChen("Tôi sẽ LIỆT KÊ CÁC THOẢ THUẬN ngay")).toBe(true);
+		expect(coDauChen("các thỏa thuận của công ty gồm")).toBe(true);
 		expect(coDauChen(TRO_LY_OKR_SOAN.danhGia.cauChen)).toBe(true);
 		expect(coDauChen("Giữ chân đối tác lớn")).toBe(false);
+		expect(
+			coDauChen(
+				"Tỷ lệ đối tác lớn duy trì lịch thanh toán đúng thỏa thuận không phát sinh khiếu nại cước",
+			),
+		).toBe(false);
+		expect(coDauChen("Dưới đây tôi liệt kê các thỏa thuận đang có")).toBe(true);
 	});
 
 	test("bộ ca có ít nhất soCaToiThieu đơn vị và đúng một ca câu chèn", () => {
@@ -125,7 +133,14 @@ describe("eval-soan: tổng kết", () => {
 		});
 		expect(docTongKet(readFileSync(tep, "utf8"))).toEqual([
 			{ loai: "boi-canh", ca: "pb", A: "a", B: "b", phiaCoGoi: "B" },
-			{ loai: "do-tre", ca: "pb", cuoc: 2, ms: [1200, 900], usd: 0.01 },
+			{
+				loai: "do-tre",
+				ca: "pb",
+				cuoc: 2,
+				ms: [1200, 900],
+				tach: [],
+				usd: 0.01,
+			},
 		]);
 	});
 
@@ -180,5 +195,83 @@ describe("eval-soan: chi phí và xáo", () => {
 		}
 		for (const d of dem) expect(Math.abs(d - 1_000)).toBeLessThan(150);
 		expect(xaoTron([], ngauNhien)).toEqual([]);
+	});
+});
+
+describe("eval-soan: tách thời gian lượt và khoảng tin cậy", () => {
+	const su = (type: string, giay: number) => ({
+		type,
+		meta: {
+			at: new Date(Date.UTC(2026, 8, 30, 0, 0, giay)).toISOString(),
+			id: `${type}-${giay}`,
+		},
+	});
+
+	test("tachLuot cộng thời gian mô hình theo cặp bước và thời gian công cụ theo cặp lời gọi", () => {
+		expect(
+			tachLuot([
+				su("message.received", 0),
+				su("step.started", 1),
+				su("actions.requested", 9),
+				su("step.completed", 9),
+				su("action.result", 12),
+				su("step.started", 12),
+				su("step.completed", 15),
+				{ type: "message.appended" },
+			]),
+		).toEqual({ soBuoc: 2, moHinhMs: 11_000, congCuMs: 3_000 });
+		expect(tachLuot([])).toEqual({ soBuoc: 0, moHinhMs: 0, congCuMs: 0 });
+	});
+
+	test("khoangWilson khớp số tra tay: 2/5 và 2/3", () => {
+		const a = khoangWilson(2, 5);
+		expect(a?.duoi).toBeCloseTo(0.118, 2);
+		expect(a?.tren).toBeCloseTo(0.769, 2);
+		const b = khoangWilson(2, 3);
+		expect(b?.duoi).toBeCloseTo(0.208, 2);
+		expect(b?.tren).toBeCloseTo(0.939, 2);
+		expect(khoangWilson(0, 0)).toBeNull();
+	});
+
+	test("docTomTat giữ choice của judge để tách ca không chấm được", () => {
+		const tom = docTomTat(
+			JSON.stringify({
+				totalEvals: 2,
+				passed: 1,
+				failed: 1,
+				scored: 0,
+				skipped: 0,
+				evals: [
+					{
+						id: "a",
+						verdict: "passed",
+						assertions: [
+							{
+								name: "judge [boi-canh:x]",
+								score: 1,
+								passed: true,
+								metadata: { choice: "Y", rationale: "…" },
+							},
+						],
+					},
+					{
+						id: "b",
+						verdict: "failed",
+						assertions: [
+							{
+								name: "judge [boi-canh:y]",
+								score: 0,
+								passed: false,
+								metadata: null,
+								message: "No tool calls in response",
+							},
+						],
+					},
+				],
+			}),
+		);
+		expect(
+			tom.evals.map((e) => e.assertions[0]?.metadata?.choice ?? null),
+		).toEqual(["Y", null]);
 	});
 });
