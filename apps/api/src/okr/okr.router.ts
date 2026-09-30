@@ -453,8 +453,11 @@ export class OkrRouter {
 		output: okrCountByUnitOutput,
 		meta: restMeta("GET", "/okr/units/count", TAG),
 	})
-	countByUnit(@Input() input: z.infer<typeof countByUnitInput>) {
-		return this.okr.countByUnit(input.cycleId);
+	countByUnit(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof countByUnitInput>,
+	) {
+		return this.okr.countByUnit(ctx.user.id, input.cycleId);
 	}
 
 	@Query({

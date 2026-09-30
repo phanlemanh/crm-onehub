@@ -1720,10 +1720,19 @@ export class OkrService {
 		};
 	}
 
-	async countByUnit(cycleId: string): Promise<Record<string, number>> {
+	async countByUnit(
+		userId: string,
+		cycleId: string,
+	): Promise<Record<string, number>> {
+		const q = await this.quyenOkr.quyen(userId);
 		const nhom = await this.db.okrObjective.groupBy({
 			by: ["level", "divisionId", "departmentId", "personUserId"],
-			where: { AND: [{ cycleId, status: "cong-bo" }, boGioiHan] },
+			where: {
+				AND: [
+					{ cycleId, status: "cong-bo" },
+					dieuKienXemMucTieu(this.quyenOkr.nguCanhXem(q, userId)),
+				],
+			},
 			_count: { _all: true },
 		});
 		const dem: Record<string, number> = {};

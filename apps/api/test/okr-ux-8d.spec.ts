@@ -39,6 +39,7 @@ const NGUOI = {
 type Muc = { id: string; hienThi?: string; soNguoiXem?: number };
 
 let app: NestExpressApplication;
+let thanhVienRoi: Awaited<ReturnType<typeof db.member.findMany>> = [];
 const phien: Record<string, string> = {};
 
 async function hoi(
@@ -161,7 +162,14 @@ describe("danh-sach", () => {
 				},
 			},
 		});
+		thanhVienRoi = await db.member.findMany({
+			where: { userId: nguoi(NGUOI.roiKr) },
+		});
 		await db.member.deleteMany({ where: { userId: nguoi(NGUOI.roiKr) } });
+	}, CHO_DB);
+
+	afterAll(async () => {
+		await db.member.createMany({ data: thanhVienRoi });
 	}, CHO_DB);
 
 	test(
@@ -208,6 +216,153 @@ describe("danh-sach", () => {
 					return `${o.thuTuc} ${o.ai}: gioi-han ${o.kyVong} ky vong ${o.kyVong}; thieu co 0; lech 0${coG ? "; soNguoiXem G 2" : ""}`;
 				}),
 			);
+		},
+		CHO_DB,
+	);
+});
+
+const KHOI_HO_TRO = idMau("bp", "ho-tro");
+const NHAP_PC = idMau("mt", "u8d-nhap-pc");
+const SO_TRUOC = {
+	tienDoGop: [
+		["bp:mau-okr-bp-ho-tro", 56, 6],
+		["pb:mau-okr-pb-phap-che", 50, 2],
+	],
+	toanCanh: {
+		tienDo: 47,
+		kyVong: 42,
+		donViCongBo: 12,
+		tongDonVi: 13,
+		donViChuaDat: ["Khối Hỗ trợ"],
+		tongKr: 49,
+		daCapNhat: 43,
+		daCapNhatTruoc: 46,
+		tuTinThap: 8,
+		tuTinThapTruoc: 3,
+	},
+	sucKhoe: {
+		key: "pb:mau-okr-pb-phap-che",
+		ten: "Pháp chế",
+		cap: "phong-ban",
+		truong: { id: "mau-okr-nguoi-an-khanh-linh", name: "An Khánh Linh" },
+		tongKr: 4,
+		chuaKhoiDiem: 0,
+		chuaNoiKenh: 2,
+		dungTuan: 4,
+		krIm: 0,
+	},
+};
+
+function donViCuaKhoa(khoa: string): DauVaoHopLe {
+	if (khoa === "goc") return { loai: "goc" };
+	const [loai, id] = khoa.split(":");
+	return { loai: loai ?? "", id: id ?? "" };
+}
+
+async function soThongKe(ai: string) {
+	const c = phien[ai] ?? "";
+	const tc = ok<{
+		tongQuan: unknown;
+		hang: { key: string; tienDo: number | null; soMucTieu: number }[];
+	}>(await hoi("okr.toanCanh", { cycleId: KY }, c), "toanCanh");
+	return {
+		tienDoGop: tc.hang
+			.filter(
+				(h) => h.key === `pb:${PHAP_CHE}` || h.key === `bp:${KHOI_HO_TRO}`,
+			)
+			.map((h) => [h.key, h.tienDo, h.soMucTieu]),
+		toanCanh: tc.tongQuan,
+	};
+}
+
+describe("dem-don-vi", () => {
+	beforeAll(async () => {
+		await db.okrObjective.create({
+			data: {
+				id: NHAP_PC,
+				cycleId: KY,
+				level: "phong-ban",
+				departmentId: PHAP_CHE,
+				ownerUserId: nguoi(NGUOI.chu),
+				kind: "cam-ket",
+				status: "nhap",
+				title: "Nháp của Pháp chế cho bài u8d",
+			},
+		});
+	}, CHO_DB);
+
+	test(
+		"PHẦN 1: số trên cây bằng số mục cong-bo trong danhSach không lọc, 4 người × mọi đơn vị",
+		async () => {
+			const cay = ok<{
+				divisions: { id: string; departments: { id: string }[] }[];
+			}>(await hoi("org.tree", {}, phien.qt ?? ""), "org.tree");
+			const khoa = [
+				"goc",
+				...cay.divisions.flatMap((b) => [
+					`bp:${b.id}`,
+					...b.departments.map((p) => `pb:${p.id}`),
+				]),
+			];
+			const lech: string[] = [];
+			let soO = 0;
+			for (const ai of ["v", "chu", "n", "qt"]) {
+				const dem = ok<Record<string, number>>(
+					await hoi("okr.countByUnit", { cycleId: KY }, phien[ai] ?? ""),
+					"countByUnit",
+				);
+				for (const k of khoa) {
+					const rows = ok<DanhSachOutput>(
+						await hoi(
+							"okr.danhSach",
+							{ cycleId: KY, unit: donViCuaKhoa(k), loc: LOC_RONG },
+							phien[ai] ?? "",
+						),
+						`danhSach ${k}`,
+					).rows;
+					const congBo = rows.filter(
+						(r) =>
+							r.status === "cong-bo" &&
+							(k === "goc"
+								? r.level === "onehub"
+								: r.unitId === k.split(":")[1] &&
+									r.level === (k.startsWith("bp:") ? "bo-phan" : "phong-ban")),
+					).length;
+					soO += 1;
+					if ((dem[k] ?? 0) !== congBo)
+						lech.push(`${ai} ${k} ${dem[k] ?? 0} != ${congBo}`);
+				}
+			}
+			expect(soO).toBe(4 * khoa.length);
+			expect(lech).toEqual([]);
+			const phapChe = await Promise.all(
+				["v", "chu", "n", "qt"].map(async (ai) => {
+					const dem = ok<Record<string, number>>(
+						await hoi("okr.countByUnit", { cycleId: KY }, phien[ai] ?? ""),
+						"countByUnit",
+					);
+					return `${ai} ${dem[`pb:${PHAP_CHE}`] ?? 0}`;
+				}),
+			);
+			expect(phapChe).toEqual(["v 3", "chu 3", "n 2", "qt 3"]);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"PHẦN 2: 3 loại số thống kê × 4 người bằng nhau và bằng ảnh chụp trước lượt",
+		async () => {
+			const so = await Promise.all(
+				["v", "chu", "n", "qt"].map((ai) => soThongKe(ai)),
+			);
+			const sk = ok<{ hang: { key: string }[] }>(
+				await hoi("okr.sucKhoe", { cycleId: KY }, phien.qt ?? ""),
+				"sucKhoe",
+			).hang.find((h) => h.key === `pb:${PHAP_CHE}`);
+			console.log(`SO_THONG_KE ${JSON.stringify({ ...so[0], sucKhoe: sk })}`);
+			for (const [i, s] of so.entries())
+				expect({ ai: i, s }).toEqual({ ai: i, s: so[0] });
+			expect({ ...so[0], sucKhoe: sk }).toEqual(SO_TRUOC);
 		},
 		CHO_DB,
 	);
