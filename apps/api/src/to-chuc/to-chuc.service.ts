@@ -23,6 +23,7 @@ import type {
 	HeadInput,
 	ImportApplyOutput,
 	ImportPreviewOutput,
+	LyDoChanLuuTru,
 	PlacementInput,
 	TreeOutput,
 } from "./to-chuc.contracts";
@@ -335,25 +336,44 @@ export class ToChucService {
 			.map((k) => ({ name: k.name, archived: k.archivedAt !== null }));
 	}
 
-	async archiveDepartment(input: { id: string }) {
-		await this.phongBanCo(input.id);
-		const song = (await this.khuonChua(input.id))
+	private async lyDoChanLuuTru(
+		db: Prisma.TransactionClient,
+		id: string,
+	): Promise<LyDoChanLuuTru[]> {
+		const song = (await this.khuonChua(id))
 			.filter((k) => !k.archived)
 			.map((k) => k.name);
-		if (song.length > 0)
-			throw new BadRequestException(T.phongBanTrongKhuon(song));
-		const conNguoi = await this.db.orgPlacement.count({
+		const conNguoi = await db.orgPlacement.count({
 			where: {
-				primaryDepartmentId: input.id,
+				primaryDepartmentId: id,
 				user: { members: { some: { organizationId: WORKSPACE_ID } } },
 			},
 		});
-		if (conNguoi > 0)
-			throw new BadRequestException(T.phongBanConNguoi(conNguoi));
+		const { mo } = await demOkrCuaDonVi(db, { departmentId: id });
+		return [
+			...(song.length > 0
+				? [{ loai: "khuon" as const, cau: T.phongBanTrongKhuon(song) }]
+				: []),
+			...(conNguoi > 0
+				? [{ loai: "nguoi" as const, cau: T.phongBanConNguoi(conNguoi) }]
+				: []),
+			...(mo > 0
+				? [{ loai: "okr" as const, cau: T.phongBanConOkrMo(mo) }]
+				: []),
+		];
+	}
+
+	async luuTruXemTruoc(input: { id: string }) {
+		await this.phongBanCo(input.id);
+		return { lyDo: await this.lyDoChanLuuTru(this.db, input.id) };
+	}
+
+	async archiveDepartment(input: { id: string }) {
+		await this.phongBanCo(input.id);
 		await this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "department" WHERE id = ${input.id} FOR NO KEY UPDATE`;
-			const { mo } = await demOkrCuaDonVi(tx, { departmentId: input.id });
-			if (mo > 0) throw new BadRequestException(T.phongBanConOkrMo(mo));
+			const [lyDo] = await this.lyDoChanLuuTru(tx, input.id);
+			if (lyDo !== undefined) throw new BadRequestException(lyDo.cau);
 			await tx.department.update({
 				where: { id: input.id },
 				data: { archivedAt: new Date() },

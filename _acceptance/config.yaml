@@ -417,6 +417,14 @@ executors:
     ghd_mo_coi: 'bun run test -- "cd apps/api && bun test test/okr-tai-co-cau.spec.ts -t mo-coi"'
     ghd_khung_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx"
     ghd_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t gioi-han-duyet"'
+    u8d_danh_sach: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t danh-sach"'
+    u8d_go_nguoi: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t go-nguoi"'
+    u8d_luu_tru: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t luu-tru"'
+    u8d_chuyen_xem_truoc: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t chuyen-xem-truoc"'
+    u8d_dem_don_vi: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t dem-don-vi"'
+    u8d_nguoi_duyet: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t nguoi-duyet"'
+    u8d_tra_lai_truoc: 'bun run test -- "cd apps/api && bun test test/okr-ux-8d.spec.ts -t tra-lai-truoc"'
+    u8d_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-theo-don-vi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-tai-co-cau.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/chuyen-okr.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx"
     hy_mo: 'bun run test -- "cd packages/validation && bun test test/okr-hoi-y.spec.ts && cd ../../apps/api && bun test test/okr-hoi-y.spec.ts -t mo-hoi-y"'
     hy_mo_tu_choi: 'bun run test -- "cd apps/api && bun test test/okr-hoi-y.spec.ts -t mo-tu-choi"'
     hy_gop: 'bun run test -- "cd apps/api && bun test test/okr-hoi-y.spec.ts -t gop-y"'
@@ -1438,6 +1446,7 @@ executors:
     ckr_san_thiet_ke: "bun _acceptance/canh-kr-okr/rang/soi-ma.mjs --ca thiet-ke"
     ckr_migration_chi_them: "bun _acceptance/canh-kr-okr/rang/migration-chi-them.mjs"
     ghd_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs"'
+    u8d_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ux-lai-thu-8c-okr/rang/man-ux-8d.mjs"'
     ghd_mo_coi_sql: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gioi-han-duyet-cay-okr/rang/mo-coi.mjs"'
     ghd_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gioi-han-duyet-cay-okr/rang/ty-le.mjs"'
     ghd_migration_chi_them: "bun _acceptance/gioi-han-duyet-cay-okr/rang/migration-chi-them.mjs"

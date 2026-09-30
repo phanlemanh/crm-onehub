@@ -307,6 +307,8 @@ export const mucTieuOutput = z.object({
 	following: z.boolean(),
 	followerCount: z.number(),
 	theoDoi: z.boolean(),
+	hienThi: z.enum(MUC_HIEN_THI),
+	soNguoiXem: z.number(),
 });
 export const vetOutput = z.object({
 	id: z.string(),
@@ -345,6 +347,11 @@ export const krCanhOutput = krOutput.extend({
 	coBangChung: z.boolean(),
 });
 
+export const nguoiDuyetOkr = z.union([
+	z.object({ ten: z.string() }),
+	z.literal("quan-tri"),
+]);
+
 export const objectiveOutput = mucTieuOutput.extend({
 	keyResults: z.array(krCanhOutput),
 	cycleName: z.string(),
@@ -354,14 +361,19 @@ export const objectiveOutput = mucTieuOutput.extend({
 	canEditKr: z.array(z.string()),
 	hienThi: z.enum(MUC_HIEN_THI),
 	nguoiXem: z.array(z.object({ id: z.string(), name: z.string() })),
+	nguoiDuyetDuKien: nguoiDuyetOkr.nullable(),
 	choDuyet: z
 		.object({
 			nguoiGui: nguoiOkr.nullable(),
 			guiLuc: z.string().nullable(),
-			nguoiDuyet: z.union([
-				z.object({ ten: z.string() }),
-				z.literal("quan-tri"),
-			]),
+			nguoiDuyet: nguoiDuyetOkr,
+			lanTraLaiTruoc: z
+				.object({
+					lyDo: z.string(),
+					nguoi: nguoiOkr.nullable(),
+					luc: z.string(),
+				})
+				.nullable(),
 		})
 		.nullable(),
 	traLaiGanNhat: z
@@ -385,6 +397,12 @@ export const datHienThiOutput = z.object({
 	hienThi: z.enum(MUC_HIEN_THI),
 	nguoiXem: z.array(z.string()),
 });
+export const chuyenDonViXemTruocOutput = z.object({
+	vuotTran: z.object({ soSau: z.number(), tran: z.number() }).nullable(),
+});
+export type ChuyenDonViXemTruocOutput = z.infer<
+	typeof chuyenDonViXemTruocOutput
+>;
 export const chuyenDonViOutput = z.object({
 	daChuyen: z.number(),
 	canhBao: z.string().nullable(),
@@ -398,6 +416,8 @@ export const mucMoCoi = z.object({
 		ten: z.string(),
 	}),
 	lyDo: z.array(z.enum(LY_DO_MO_COI)),
+	hienThi: z.enum(MUC_HIEN_THI),
+	soNguoiXem: z.number(),
 });
 export const moCoiOutput = z.array(mucMoCoi);
 export const updateObjectiveInput = mucTieuUpdate;
@@ -438,6 +458,8 @@ export const nutCanChinh: z.ZodType<NutCanChinh> = z.lazy(() =>
 		kind: z.enum(LOAI_MUC_TIEU),
 		gop: z.number(),
 		lapLai: z.boolean(),
+		hienThi: z.enum(MUC_HIEN_THI),
+		soNguoiXem: z.number(),
 		children: z.array(nutCanChinh),
 	}),
 );
@@ -452,6 +474,8 @@ export type NutCanChinh = {
 	kind: (typeof LOAI_MUC_TIEU)[number];
 	gop: number;
 	lapLai: boolean;
+	hienThi: (typeof MUC_HIEN_THI)[number];
+	soNguoiXem: number;
 	children: NutCanChinh[];
 };
 export const alignmentTreeInput = z.object({ cycleId: ma });

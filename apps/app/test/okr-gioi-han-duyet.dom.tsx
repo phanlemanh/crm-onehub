@@ -108,10 +108,12 @@ function mucTieu(doi: Partial<ObjectiveOutput>): ObjectiveOutput {
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		soNguoiXem: 0,
 		trail: [],
 		canEditKr: ["kr-1"],
 		hienThi: "cong-khai",
 		nguoiXem: [],
+		nguoiDuyetDuKien: null,
 		choDuyet: null,
 		traLaiGanNhat: null,
 		quyen: { ...KHONG_QUYEN, datHienThi: true },
@@ -144,6 +146,7 @@ const DU_LIEU = {
 			nguoiGui: HA,
 			guiLuc: GUI_LUC,
 			nguoiDuyet: { ten: MINH.name },
+			lanTraLaiTruoc: null,
 		},
 		quyen: { ...KHONG_QUYEN, rutDuyet: true },
 	}),
@@ -154,6 +157,7 @@ const DU_LIEU = {
 			nguoiGui: HA,
 			guiLuc: GUI_LUC,
 			nguoiDuyet: { ten: MINH.name },
+			lanTraLaiTruoc: null,
 		},
 		quyen: { ...KHONG_QUYEN, congBo: true, duyet: true },
 	}),
@@ -637,6 +641,7 @@ describe("cong-bo-tu-cho-duyet", () => {
 				nguoiGui: MINH,
 				guiLuc: GUI_LUC,
 				nguoiDuyet: { ten: MINH.name },
+				lanTraLaiTruoc: null,
 			},
 			quyen: { ...KHONG_QUYEN, congBo: true },
 		});
@@ -842,5 +847,206 @@ describe("viec-cua-toi", () => {
 			traMoTaDich: "no",
 			tenKhongDich: [TEN_G],
 		});
+	});
+});
+
+const nhapGuiDuoc = (doi: Partial<ObjectiveOutput>) =>
+	mucTieu({
+		status: "nhap",
+		publishedAt: null,
+		quyen: { ...KHONG_QUYEN, datHienThi: true, guiDuyet: true },
+		...doi,
+	});
+
+describe("gui-duyet-khoa", () => {
+	test("gui-duyet-khoa: 2 cho x 2 du lieu — 0 KR thi nut khoa, ly do hien chu noi aria-describedby, bam khong hoi lai; 1 KR thi nut mo", async () => {
+		const CA: {
+			ten: string;
+			du: ObjectiveOutput;
+			chon: string;
+			khoa: boolean;
+		}[] = [
+			{
+				ten: "dau-khung-0",
+				du: nhapGuiDuoc({ keyResults: [] }),
+				chon: '[data-nut="gui-duyet"]',
+				khoa: true,
+			},
+			{
+				ten: "dau-khung-1",
+				du: nhapGuiDuoc({}),
+				chon: '[data-nut="gui-duyet"]',
+				khoa: false,
+			},
+			{
+				ten: "tra-lai-0",
+				du: { ...DU_LIEU["bi-tra-lai"], keyResults: [] },
+				chon: '[data-dai="bi-tra-lai"] [data-nut="gui-duyet"]',
+				khoa: true,
+			},
+			{
+				ten: "tra-lai-1",
+				du: DU_LIEU["bi-tra-lai"],
+				chon: '[data-dai="bi-tra-lai"] [data-nut="gui-duyet"]',
+				khoa: false,
+			},
+		];
+		const ra: unknown[] = [];
+		for (const c of CA) {
+			chiTiet = c.du;
+			daGoi = [];
+			await moSheet();
+			const nutGui = motCai<HTMLButtonElement>(c.chon);
+			const moTa = document.getElementById(
+				nutGui.getAttribute("aria-describedby") ?? "",
+			);
+			await bam(nutGui);
+			await cho(() => true, "sau khi bam");
+			ra.push({
+				ten: c.ten,
+				khoa: nutGui.disabled,
+				lyDo: moTa?.textContent ?? null,
+				hoiLai: document.body.querySelector('[role="alertdialog"]') !== null,
+				guiDuyet: daGoi.filter((x) => x.duong === "okr.guiDuyet").length,
+			});
+			await dong();
+		}
+		expect(ra).toEqual(
+			CA.map((c) => ({
+				ten: c.ten,
+				khoa: c.khoa,
+				lyDo: c.khoa ? g.duyet.canKr : null,
+				hoiLai: !c.khoa,
+				guiDuyet: 0,
+			})),
+		);
+	});
+});
+
+describe("duyet-chu", () => {
+	const L = "Thêm KR đo doanh thu từ khách quay lại.";
+
+	test("duyet-chu: hop gui neu nguoi duyet du kien; null giu than cu", async () => {
+		chiTiet = nhapGuiDuoc({ nguoiDuyetDuKien: { ten: MINH.name } });
+		await moSheet();
+		await bam(motCai('[data-nut="gui-duyet"]'));
+		await cho(
+			() => document.body.querySelector('[role="alertdialog"]') !== null,
+			"hoi gui",
+		);
+		const coTen = motCai('[role="alertdialog"]').textContent ?? "";
+		await dong();
+		chiTiet = nhapGuiDuoc({ nguoiDuyetDuKien: null });
+		await moSheet();
+		await bam(motCai('[data-nut="gui-duyet"]'));
+		await cho(
+			() => document.body.querySelector('[role="alertdialog"]') !== null,
+			"hoi gui",
+		);
+		const khongTen = motCai(
+			'[role="alertdialog"] [data-slot="alert-dialog-description"]',
+		).textContent;
+		expect({
+			coTen: coTen.includes(`${MINH.name} sẽ duyệt.`),
+			khongTen,
+		}).toEqual({ coTen: true, khongTen: g.duyet.hoiGui.than });
+	});
+
+	test("duyet-chu: dai nguoi duyet neu lan tra lai truoc — «ban» khi chinh nguoi xem, ten khi nguoi khac, khong co khi null", async () => {
+		const voi = (nguoi: typeof HA | null) =>
+			mucTieu({
+				status: "cho-duyet",
+				publishedAt: null,
+				choDuyet: {
+					nguoiGui: HA,
+					guiLuc: GUI_LUC,
+					nguoiDuyet: { ten: MINH.name },
+					lanTraLaiTruoc: nguoi ? { lyDo: L, nguoi, luc: GUI_LUC } : null,
+				},
+				quyen: { ...KHONG_QUYEN, congBo: true, duyet: true },
+			});
+		const ra: (string | null)[] = [];
+		for (const n of [HA, MINH, null]) {
+			chiTiet = voi(n);
+			await moSheet();
+			await cho(
+				() =>
+					document.body.querySelector('[data-dai="cho-nguoi-duyet"]') !== null,
+				"dai",
+			);
+			if (n === HA)
+				await cho(
+					() =>
+						document.body
+							.querySelector("[data-lan-tra-lai-truoc]")
+							?.textContent?.startsWith("Lần trước bạn") === true,
+					"dai noi ban tra lai",
+				);
+			ra.push(
+				document.body.querySelector("[data-lan-tra-lai-truoc]")?.textContent ??
+					null,
+			);
+			await dong();
+		}
+		expect({
+			ban:
+				ra[0]?.startsWith("Lần trước bạn trả lại") === true &&
+				ra[0]?.includes(L) === true,
+			ten: ra[1]?.includes(MINH.name) === true && ra[1]?.includes(L) === true,
+			khong: ra[2],
+		}).toEqual({ ban: true, ten: true, khong: null });
+	});
+
+	test("duyet-chu: nguoi vua tra lai thay Cong bo dang phu, nguoi khac thay dang chinh; Vet hien ly do tra lai", async () => {
+		const voi = (nguoi: typeof HA) =>
+			mucTieu({
+				status: "nhap",
+				publishedAt: null,
+				traLaiGanNhat: { lyDo: L, nguoi, luc: GUI_LUC },
+				quyen: { ...KHONG_QUYEN, congBo: true },
+				trail: [
+					{
+						id: "v-tra",
+						at: GUI_LUC,
+						actor: nguoi,
+						action: "tra-lai",
+						keyResultId: null,
+						before: { status: "cho-duyet" },
+						after: { status: "nhap" },
+						note: L,
+					},
+				],
+			});
+		const bienThe: (string | null)[] = [];
+		for (const n of [HA, MINH]) {
+			chiTiet = voi(n);
+			await moSheet();
+			if (n === HA)
+				await cho(
+					() =>
+						document.body
+							.querySelector('[data-nut="cong-bo"]')
+							?.getAttribute("data-variant") === "outline",
+					"cong bo dang phu cho nguoi vua tra lai",
+				);
+			bienThe.push(motCai('[data-nut="cong-bo"]').getAttribute("data-variant"));
+			if (n === MINH) {
+				const tab = [
+					...document.body.querySelectorAll("[data-okr-sheet] [role=tab]"),
+				].find((t) => t.textContent?.startsWith(m.sheet.tabVet));
+				if (!tab) throw new Error("khong thay tab Vet");
+				await bam(tab);
+				await cho(
+					() => document.body.querySelector("[data-ly-do-vet]") !== null,
+					"vet co ly do",
+				);
+			}
+			if (n === MINH)
+				bienThe.push(
+					document.body.querySelector("[data-ly-do-vet]")?.textContent ?? null,
+				);
+			await dong();
+		}
+		expect(bienThe).toEqual(["outline", "default", L]);
 	});
 });

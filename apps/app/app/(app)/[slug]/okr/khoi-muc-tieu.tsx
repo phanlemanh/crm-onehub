@@ -10,6 +10,7 @@ import {
 } from "@crm/ui/components/card";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangKr } from "./bang-kr";
 import type { MucTieu } from "./kieu";
@@ -55,6 +56,9 @@ export function KhoiMucTieu({
 				<CardAction>
 					<Badge variant="outline">{m.loai[mucTieu.kind]}</Badge>
 					<NhanTrangThai status={mucTieu.status} />
+					{mucTieu.hienThi === "gioi-han" ? (
+						<NhanGioiHan moHop={null} soNguoiXem={mucTieu.soNguoiXem} />
+					) : null}
 				</CardAction>
 			</CardHeader>
 			<BangKr

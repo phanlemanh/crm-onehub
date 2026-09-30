@@ -1,0 +1,1 @@
+run 2026-09-30: no failed requests (>=400/requestfailed), no console/page errors recorded by driver; session app localhost:4845 api localhost:4334

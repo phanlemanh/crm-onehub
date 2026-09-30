@@ -239,6 +239,7 @@ mock.module("@/lib/trpc/client", () => ({
 			setPlacement: thuTuc("setPlacement", khongDoc),
 			previewImport: thuTuc("previewImport", khongDoc),
 			applyImport: thuTuc("applyImport", khongDoc),
+			luuTruXemTruoc: thuTuc("luuTruXemTruoc", () => ({ lyDo: [] })),
 			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
 			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
 			purgeDepartment: thuTuc("purgeDepartment", khongDoc),

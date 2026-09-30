@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	skipToken,
+} from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
 	act,
@@ -121,10 +125,13 @@ function thuTuc<TVao, TRa>(
 ) {
 	return {
 		queryKey: (dauVao?: TVao) => (dauVao === undefined ? [ten] : [ten, dauVao]),
-		queryOptions: (dauVao: TVao) => ({
-			queryKey: dauVao === undefined ? [ten] : [ten, dauVao],
-			queryFn: async () => doc(dauVao),
-		}),
+		queryOptions: (dauVao: TVao | typeof skipToken) =>
+			dauVao === skipToken
+				? { queryKey: [ten, "skip"], queryFn: skipToken }
+				: {
+						queryKey: dauVao === undefined ? [ten] : [ten, dauVao],
+						queryFn: async () => doc(dauVao),
+					},
 		mutationOptions: () => ({
 			mutationKey: [ten],
 			mutationFn: viet ?? (async () => undefined),
@@ -189,6 +196,7 @@ function orgMock() {
 		purgeDivision: khong("purgeDivision"),
 		renameDepartment: khong("renameDepartment"),
 		moveDepartment: khong("moveDepartment"),
+		luuTruXemTruoc: khong("luuTruXemTruoc"),
 		archiveDepartment: khong("archiveDepartment"),
 		restoreDepartment: khong("restoreDepartment"),
 		purgeDepartment: khong("purgeDepartment"),

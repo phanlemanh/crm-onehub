@@ -95,8 +95,8 @@
 		},
 		{
 			"tep": "apps/api/src/okr/okr-tai-co-cau.service.ts",
-			"ham": "canhBaoTran",
-			"lyDo": "cycleId in lấy từ chính các mục tiêu đang chuyển — theo id"
+			"ham": "vuotTran",
+			"lyDo": "cycleId in lấy từ chính các mục tiêu đang chuyển — theo id (onehub #219 đổi tên canhBaoTran thành vuotTran)"
 		},
 		{
 			"tep": "apps/api/src/okr/okr-so.service.ts",
