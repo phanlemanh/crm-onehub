@@ -1,13 +1,8 @@
 import "@crm/env/load";
 
 import { xuongModelZdr } from "@crm/ai-okr";
-import { db } from "@crm/db";
 import { defineAgent } from "eve";
 import { TRO_LY_OKR_SOAN } from "./lib/config";
-
-void db.$queryRaw`select 1`.catch((loi: Error) =>
-	console.warn(`[agent-okr] chưa nối được kho: ${loi.message}`),
-);
 
 export default defineAgent({
 	model: xuongModelZdr({

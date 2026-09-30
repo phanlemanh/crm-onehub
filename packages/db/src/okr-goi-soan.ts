@@ -365,6 +365,7 @@ async function kyDaDongGanNhat(db: DbHoacTx, cuoc: CuocSoan) {
 			phase: "da-dong",
 			kind: ky.kind,
 			id: { not: cuoc.cycleId },
+			endsOn: { lte: ky.startsOn },
 			objectives: {
 				some: {
 					status: { not: "nhap" },

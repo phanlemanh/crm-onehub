@@ -2,6 +2,7 @@ import { db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
 
 export const TIEN_TO = "sokr-";
+export const BAN_CHUONG_TRINH = 8_100_001;
 let dem = 0;
 export const ma = () => `${TIEN_TO}${Date.now().toString(36)}x${++dem}`;
 
@@ -124,10 +125,33 @@ export async function donDep(): Promise<void> {
 	await db.okrCuocSoan.deleteMany({
 		where: { nguoiMoUserId: { startsWith: TIEN_TO } },
 	});
-	await db.okrObjective.deleteMany({
-		where: { ownerUserId: { startsWith: TIEN_TO } },
+	const cuaThu = { ownerUserId: { startsWith: TIEN_TO } };
+	await db.okrCheckIn.deleteMany({ where: { id: { startsWith: TIEN_TO } } });
+	await db.okrCheckInSession.deleteMany({
+		where: { id: { startsWith: TIEN_TO } },
+	});
+	await db.okrDiemKr.deleteMany({ where: { keyResult: cuaThu } });
+	await db.okrNhinLai.deleteMany({ where: { objective: cuaThu } });
+	await db.okrMangSang.deleteMany({ where: { tuObjective: cuaThu } });
+	await db.okrObjective.deleteMany({ where: cuaThu });
+	await db.okrCycle.deleteMany({
+		where: { name: { startsWith: TIEN_TO }, parentId: { not: null } },
 	});
 	await db.okrCycle.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
+	await db.okrProgramConfig.deleteMany({
+		where: { version: BAN_CHUONG_TRINH },
+	});
+	const trangThu = { trangId: { startsWith: TIEN_TO } };
+	await db.taiLieuTrang.updateMany({
+		where: { id: { startsWith: TIEN_TO } },
+		data: { banDangDungId: null },
+	});
+	await db.taiLieuPhienBan.deleteMany({ where: trangThu });
+	await db.taiLieuDeXuat.deleteMany({ where: trangThu });
+	await db.taiLieuTrang.deleteMany({ where: { id: { startsWith: TIEN_TO } } });
+	await db.orgPlacement.deleteMany({
+		where: { userId: { startsWith: TIEN_TO } },
+	});
 	await db.department.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 	await db.division.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 	await db.member.deleteMany({ where: { userId: { startsWith: TIEN_TO } } });

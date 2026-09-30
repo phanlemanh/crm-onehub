@@ -727,6 +727,37 @@ describe("okr-goi-soan", () => {
 		expect(json, "ky truoc lan don vi khac").not.toContain("kyMoiKhac");
 	});
 
+	test("docKyTruoc: bỏ chu kỳ đã đóng kết thúc sau khi kỳ đang soạn bắt đầu", async () => {
+		const cheo = await db.okrCycle.create({
+			data: {
+				id: id("qcheo"),
+				kind: "quy",
+				name: `Quý chéo ${T}`,
+				parentId: id("nam"),
+				startsOn: DAY("2031-03-01"),
+				endsOn: DAY("2031-05-31"),
+				phase: "da-dong",
+			},
+		});
+		try {
+			await mucTieu({
+				ma: "kyCheo",
+				cycleId: cheo.id,
+				level: "phong-ban",
+				divisionId: cuoc.divisionId ?? undefined,
+				departmentId: cuoc.departmentId ?? undefined,
+			});
+			const ky = await docKyTruoc(db, cuoc);
+			expect(
+				ky.chuKy,
+				"ky truoc ket thuc sau khi ky dang soan bat dau",
+			).toEqual({ ten: `Quý 1 2031 ${T}` });
+		} finally {
+			await db.okrObjective.deleteMany({ where: { id: id("kyCheo") } });
+			await db.okrCycle.deleteMany({ where: { id: cheo.id } });
+		}
+	});
+
 	test("docKyTruoc: đơn vị chưa có chu kỳ đóng → không có kỳ, không Mục tiêu", async () => {
 		const ky = await docKyTruoc(db, cuocBoPhan);
 		expect(ky).toEqual({ chuKy: null, mucTieu: [], mangSang: [] });
