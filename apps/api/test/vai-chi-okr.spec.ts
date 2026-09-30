@@ -24,8 +24,14 @@ import {
 	themBangChungInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
+import {
+	goChuKyInput,
+	hienChuKyInput,
+	suaChuKyInput,
+} from "@crm/validation/okr-chu-ky";
 import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
 import {
+	anChuKyInput,
 	chamKrInput,
 	diemTheoThang,
 	dongRaInput,
@@ -179,6 +185,18 @@ const DAU_VAO_HOP_LE = {
 		noiDung: "Khách mới đến từ giới thiệu",
 	},
 	"okr.moLaiKy": { id: "khong-co", lyDo: "Chấm nhầm một KR cần sửa" },
+	"okr.suaChuKy": {
+		id: "khong-co",
+		name: "Quý 4 năm 2026",
+		startsOn: "2026-10-01",
+		endsOn: "2026-12-31",
+		breakStartsOn: null,
+		breakEndsOn: null,
+		updateWeekday: 1,
+	},
+	"okr.goChuKy": { id: "khong-co" },
+	"okr.anChuKy": { id: "khong-co", lyDo: "Tạo nhầm ngày của quý này" },
+	"okr.hienChuKy": { id: "khong-co" },
 	"okr.mangSang": { objectiveId: "khong-co" },
 	"okr.xuatKy": { cycleId: "khong-co" },
 	"okr.canhKr": { keyResultId: "khong-co" },
@@ -395,6 +413,12 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
+const THU_TUC_SUA_AN_CHU_KY = {
+	"okr.suaChuKy": suaChuKyInput,
+	"okr.goChuKy": goChuKyInput,
+	"okr.anChuKy": anChuKyInput,
+	"okr.hienChuKy": hienChuKyInput,
+} as const;
 const SO_THU_TUC_HOI_Y = 17;
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
@@ -656,6 +680,28 @@ describe("vai-chi-okr", () => {
 		},
 		CHO_MA_TRAN_MS,
 	);
+
+	test("ma-tran-sua-an-chu-ky: bon thu tuc sua, go, an, hien chu ky co trong tap do duoc, cho vai chi OKR goi toi, va co dau vao hop le", () => {
+		const bon = Object.keys(THU_TUC_SUA_AN_CHU_KY).sort();
+		const doDuoc = soThuTuc(app)
+			.filter((t) => t.loai === "mutation")
+			.map((t) => t.ten);
+		expect(
+			bon.filter((t) => !doDuoc.includes(t)),
+			"thu tuc sua an chu ky khong do duoc",
+		).toEqual([]);
+		expect(
+			choPhep().filter((t) => t in THU_TUC_SUA_AN_CHU_KY),
+			"thu tuc sua an chu ky lech tap cho phep",
+		).toEqual(bon);
+		const hong = Object.entries(THU_TUC_SUA_AN_CHU_KY).flatMap(([t, khuon]) => {
+			const vao = dauVaoCua(t);
+			if (vao === undefined) return [`${t}: thieu dau vao`];
+			const doc = khuon.safeParse(vao);
+			return doc.success ? [] : [`${t}: ${doc.error.message}`];
+		});
+		expect(hong, "dau vao hop le cho bon thu tuc sua an chu ky").toEqual([]);
+	});
 
 	test(
 		"doi-chung: member va admin khong bao gio nhan thong diep pham vi",
@@ -1465,11 +1511,13 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_GIOI_HAN,
 				...THU_TUC_OKR_LUOT_TRO_LY,
 				...THU_TUC_OKR_LUOT_HOI_Y,
+				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 			].sort(),
 		);
 		const hong = Object.entries({
 			...THU_TUC_CANH_KR,
 			...THU_TUC_HOI_Y,
+			...THU_TUC_SUA_AN_CHU_KY,
 		}).flatMap(([t, khuon]) => {
 			const vao = dauVaoCua(t);
 			if (vao === undefined) return [`${t}: thieu dau vao`];
