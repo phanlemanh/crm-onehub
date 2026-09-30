@@ -5,9 +5,12 @@ import type {
 	NguonGoi,
 } from "@crm/db/okr-tom-tat";
 import {
+	CHU_SO_CHINH_XAC,
 	chuanHoa,
 	coCum,
 	docSo,
+	HE_SO_DON_VI,
+	HE_SO_NGHIN,
 	khongDau,
 	type SoDoc,
 } from "./okr-kiem-de-xuat";
@@ -52,18 +55,7 @@ const THAP_PHAN_CHAM = /^\d+(?:\.\d+)?$/;
 
 const TRAN_SO = 1e12;
 
-const CHU_SO_CHINH_XAC = 15;
-
-const HE_SO_DON_VI = new Map([
-	["tỷ", 1e9],
-	["tỉ", 1e9],
-	["triệu", 1e6],
-	["nghìn", 1e3],
-	["ngàn", 1e3],
-	["k", 1e3],
-]);
-
-const NGHIN = 1000;
+const HE_SO_KR = new Map([...HE_SO_DON_VI, ["k", HE_SO_NGHIN]]);
 
 function ghepNgay(ngay: string): string {
 	const [d = "", m = ""] = ngay.split("/");
@@ -86,7 +78,7 @@ function cachDocChuoiSo(chuoi: string, coK: boolean): number[] {
 	const viet = docSoOkr(chuoi);
 	const anh = docKieuAnh(chuoi);
 	const ung = coK
-		? [viet, anh].map((so) => (so === null ? null : so * NGHIN))
+		? [viet, anh].map((so) => (so === null ? null : so * HE_SO_NGHIN))
 		: [viet, anh];
 	const ra: number[] = [];
 	for (const so of ung) {
@@ -165,7 +157,7 @@ function nguonDan(cau: CauTomTat, goi: GoiKiemTomTat): NguonKiem[] {
 
 function heSoDonVi(donVi: string): number | null {
 	const dau = chuanHoa(donVi).split(" ")[0] ?? "";
-	return HE_SO_DON_VI.get(dau) ?? null;
+	return HE_SO_KR.get(dau) ?? null;
 }
 
 function giaTriThamChieu(dan: NguonKiem[], goi: GoiKiemTomTat): number[] {

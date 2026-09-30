@@ -25,6 +25,7 @@ const SO_LECH = {
 	nghin: 1_000,
 	thamSoBan: "--ban",
 	thamSoDoc: "--doc",
+	thamSoDonVi: "--don-vi",
 	khongRo: "khong-ro",
 };
 
@@ -391,15 +392,29 @@ const CA_DON_VI = [
 	["3.9 tỷ đồng, KR tính bằng «tỷ đồng»", "tỷ đồng", "Đạt 3.9 tỷ đồng.", 1],
 ];
 
+const KHOA_HE_SO = ["tỷ", "tỉ", "triệu", "nghìn", "ngàn", "k"];
+
+const CA_HE_SO = KHOA_HE_SO.flatMap((khoa) => {
+	const don = `${khoa} đồng`;
+	const so = (n) => (khoa === "k" ? `${n}k` : `${n} ${khoa}`);
+	return [
+		[`he-so ${khoa}: khop, KR tính bằng «${don}»`, don, `Đạt ${so(2.9)}.`, 0],
+		[`he-so ${khoa}: lech, KR tính bằng «${don}»`, don, `Đạt ${so(3.9)}.`, 1],
+	];
+});
+
+const TAT_CA_CA_DON_VI = [...CA_DON_VI, ...CA_HE_SO];
+
 function tuKiem() {
 	let sai = 0;
-	for (const [ten, donVi, cau, mong] of CA_DON_VI) {
+	for (const [ten, donVi, cau, mong] of TAT_CA_CA_DON_VI) {
 		const tham = [thamChieuCua({ ...LAN_MAU, don_vi: donVi })];
 		const lech = soLechCuaCau(cau, tham).length;
 		const dau = lech === mong ? "ok" : "SAI";
 		if (lech !== mong) sai += 1;
 		console.log(`${TEN}: tu-kiem ${dau}: ${ten}`);
 	}
+	console.log(`${TEN}: tu-kiem tong: ${TAT_CA_CA_DON_VI.length} ca`);
 	return sai === 0 ? 0 : 1;
 }
 
@@ -416,6 +431,15 @@ function thamSoDs(ten) {
 
 async function main() {
 	if (process.argv.includes("--tu-kiem")) return tuKiem();
+	const iDonVi = process.argv.indexOf(SO_LECH.thamSoDonVi);
+	if (iDonVi >= 0) {
+		const [donVi = "", gia = "0", cau = ""] = process.argv.slice(iDonVi + 1);
+		console.log(
+			soLechCuaCau(cau, [thamChieuCua({ ...LAN_MAU, gia, don_vi: donVi })])
+				.length,
+		);
+		return 0;
+	}
 	const iDoc = process.argv.indexOf(SO_LECH.thamSoDoc);
 	if (iDoc >= 0) {
 		console.log(

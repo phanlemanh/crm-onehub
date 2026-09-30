@@ -42,20 +42,23 @@ const SO_DON = new Map([
 
 const SO_SAU_CHUC = new Map([...SO_DON, ["mốt", 1], ["tư", 4], ["lăm", 5]]);
 
-const HE_SO = new Map([
+export const HE_SO_NGHIN = 1e3;
+
+export const HE_SO_DON_VI = new Map([
 	["tỷ", 1e9],
 	["tỉ", 1e9],
 	["triệu", 1e6],
-	["nghìn", 1e3],
-	["ngàn", 1e3],
-	["%", 1],
+	["nghìn", HE_SO_NGHIN],
+	["ngàn", HE_SO_NGHIN],
 ]);
+
+const HE_SO = new Map([...HE_SO_DON_VI, ["%", 1]]);
 
 const DAU_TY = new Set(["tỷ", "tỉ"]);
 
 const SAU_TY_KHONG_PHAI_SO = new Set(["lệ", "trọng", "suất"]);
 
-const CHU_SO_CHINH_XAC = 15;
+export const CHU_SO_CHINH_XAC = 15;
 
 const SO_BANG_CHU = TRO_LY_OKR_TRAN.soBangChu;
 const CHU_CAN_NGU_CANH = new Set(["một", "năm"]);

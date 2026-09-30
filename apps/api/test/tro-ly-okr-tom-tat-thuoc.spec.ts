@@ -7,7 +7,7 @@ import type { GoiTomTat, NguonGoi } from "@crm/db/okr-tom-tat";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
-import { cachDocSo } from "@crm/validation/okr-kiem-tom-tat";
+import { cachDocSo, kiemCauTomTat } from "@crm/validation/okr-kiem-tom-tat";
 import { parseNoiDungTomTat } from "@crm/validation/okr-tom-tat";
 import type { CauTomTat } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
@@ -74,6 +74,9 @@ const DANG = [
 	"tien-do",
 	"ngay",
 ] as const;
+const KHOA_HE_SO = ["tỷ", "tỉ", "triệu", "nghìn", "ngàn", "k"] as const;
+const cauHeSo = (khoa: string, n: number) =>
+	khoa === "k" ? `Đạt ${n}k.` : `Đạt ${n} ${khoa}.`;
 const SO_LA = "Chỉ số của phòng đạt mức 987654.";
 const SO_LA_DOC = "987654";
 
@@ -648,9 +651,60 @@ describe("thuoc", () => {
 		});
 		const ra = `${r.stdout}${r.stderr}`;
 		console.log(ra.trim());
-		expect(ra.match(/tu-kiem ok:/g)?.length).toBe(6);
+		const tong = Number(ra.match(/tu-kiem tong: (\d+) ca/)?.[1]);
+		expect(tong).toBeGreaterThan(0);
+		expect(ra.match(/tu-kiem ok:/g)?.length).toBe(tong);
+		for (const khoa of KHOA_HE_SO)
+			expect(ra).toContain(`tu-kiem ok: he-so ${khoa}: khop`);
 		expect(ra).not.toContain("tu-kiem SAI");
 		expect(r.status).toBe(0);
+	});
+
+	test("bo kiem va so-lech-lot cung ket luan tren nhanh he so don vi", () => {
+		const lech: string[] = [];
+		for (const khoa of KHOA_HE_SO) {
+			const donVi = `${khoa} đồng`;
+			for (const [cau, mong] of [
+				[cauHeSo(khoa, 3), false],
+				[cauHeSo(khoa, 4), true],
+			] as const) {
+				const thuoc = Number(
+					spawnSync(
+						"bun",
+						[join(RANG, "so-lech-lot.mjs"), "--don-vi", donVi, "3", cau],
+						{ encoding: "utf8" },
+					).stdout.trim(),
+				);
+				const kiem = kiemCauTomTat(
+					{ vanBan: cau, nguon: ["s1"] },
+					{
+						nguon: [
+							{
+								id: "s1",
+								keyResultId: "k1",
+								giaTri: 3,
+								truoc: null,
+								chenhLech: null,
+								chenhTuTin: null,
+								tienDo: 3,
+								ngay: "01/01",
+							},
+						],
+						krs: [{ id: "k1", donVi, khoiDiem: null, dich: null }],
+						tenThanhVien: [],
+						tuCam: [],
+						chuDauVao: "",
+					},
+					[],
+				);
+				const kiemLech = !kiem.qua && kiem.maBo === "so-lech";
+				if (kiemLech !== mong || thuoc > 0 !== mong)
+					lech.push(
+						`${donVi}: «${cau}» mong ${mong}, bo kiem ${kiemLech}, thuoc ${thuoc}`,
+					);
+			}
+		}
+		expect(lech).toEqual([]);
 	});
 
 	test("bo kiem va so-lech-lot doc cung ket qua tren bang dang so", () => {
