@@ -386,11 +386,9 @@ export class SoanService {
 		now = new Date(),
 	): Promise<SoanTangLuotOutput> {
 		const cong = await this.congCuoc(this.db, userId, cuocSoanId, now);
-		if (!cong.qua || cong.cuoc.trangThai !== "dang")
-			return { ok: false, lyDo: "cuoc-khong-dang" };
+		if (!cong.qua) return { ok: false, lyDo: cong.lyDo };
 		const tran = await this.tranChung(this.db, cong.ct, now);
-		if (!tran.bat && tran.lyDo === "het-tran-thang")
-			return { ok: false, lyDo: "het-tran-thang" };
+		if (!tran.bat) return { ok: false, lyDo: tran.lyDo };
 		return tangLuotCuoc(this.db, cuocSoanId);
 	}
 }
