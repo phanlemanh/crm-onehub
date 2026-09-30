@@ -995,6 +995,54 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   không để lại dòng `OkrTrail` nào. Chế độ ẩn không hiện gì cho người dùng: chỉ
   quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
   Chương trình OKR.
+- **Ba thủ tục của `TroLyOkrService` cho lượt 9c «Tóm tắt tuần».** Tóm tắt là vài câu
+  Trợ lý OKR viết cho một phòng ban, sáng hôm sau ngày cập nhật của chu kỳ (lịch ở
+  `docs/agent.md`, «Two lanes»). API chỉ đọc `OkrTomTat` và ghi phản hồi — không
+  bao giờ gọi model, không xếp việc tóm tắt; bộ kiểm câu nó chạy lại lúc hiện là hàm
+  thuần `kiemCauTomTat` (`@crm/validation/okr-kiem-tom-tat`), cùng hàm tác tử chạy
+  lúc nộp. Khuôn vào và ra ở `@crm/validation/okr-tom-tat`, router nhập thẳng.
+  - `troLyTomTat` (`GET /okr/weekly-summary`, `{ cycleId, departmentId }`) — mọi
+    thành viên gọi được, kể cả vai «chỉ OKR»; người ngoài không gian làm việc nhận
+    lỗi như mọi thủ tục OKR. Nấc tóm tắt **hiện tại** của phòng (`nacTomTatPhong`)
+    khác `bat` thì trả `{ ban: null, dangSoan: false, chuaCapNhat: false }` — màn
+    không vẽ khối, nên chế độ ẩn không bao giờ lộ ra ở đây. Nấc `bat` thì
+    `docTomTatChoNguoiXem` lấy bản mới nhất của đúng chu kỳ và phòng đó có
+    `trangThai = "hien"`, `cau.nac = "bat"`, ghi trong `OKR_TOM_TAT.hienTrongNgay`
+    (8) ngày; không có thì `ban: null` — chu kỳ khác không cho mượn bản. Phòng đã lưu
+    trữ cũng trả `null`. Rồi từng câu bị bỏ khi một nguồn của nó không còn (lần cập
+    nhật hay KR đã xoá), khi người xem không xem được Mục tiêu của một nguồn
+    (`dieuKienXemMucTieu`, cùng luật «Who sees an objective»), hay khi `kiemCauTomTat`
+    chạy lại trên số hiện tại không còn khớp — tiến độ tính từ giá trị của **lần cập
+    nhật được dẫn**, không từ giá trị mới nhất của KR, và gói kiểm dựng ở `moc` =
+    `createdAt` của việc tóm tắt. Bị lọc hết vẫn là một bản với danh sách câu rỗng,
+    khác `null`: màn hiện «Không có câu nào bạn xem được». Kèm theo: dữ liệu từng
+    nguồn (KR, Mục tiêu, ngày, giá trị, đơn vị, mức tự tin, ghi chú) để thẻ trích dẫn
+    không phải hỏi thêm; `dangSoan` khi phòng có việc `okr-tom-tat-tuan` của chu kỳ
+    chưa xong (chờ xả hay đang chạy); `chuaCapNhat` khi Mục tiêu công khai của phòng
+    không có Cập nhật tuần nào trong 7 ngày trước lúc gọi; `phanHoiCuaToi`.
+  - `troLyTomTatPhanHoi` (`POST /okr/weekly-summary/{tomTatId}/feedback`,
+    `{ tomTatId, huuIch }`) — chỉ người mà `docTomTatChoNguoiXem` của (chu kỳ, phòng)
+    của bản đó trả **đúng bản đó** lúc gọi; khác thì `NotFoundException`
+    («Không có bản tóm tắt tuần nào mang mã <id>.»), không ghi hàng — bản giữ lại,
+    bản chế độ ẩn và phòng đã tắt đều rơi vào đây. `upsert` theo
+    `(tomTatId, userId)`: một hàng mỗi người mỗi bản, bấm lại đổi giá trị.
+  - `troLyTomTatQuanTri` (`GET /okr/weekly-summary/admin`, `{ cycleId }`) — chỉ quản
+    trị chương trình (`quanTriChuongTrinh`, như `sucKhoe`), vai khác nhận 403 «Chỉ
+    quản trị xem được sức khoẻ chương trình.» qua tRPC lẫn REST. Trả tuần gần nhất
+    của chu kỳ (`tuan` lớn nhất trong việc và bản) với mọi phòng chưa lưu trữ có bản
+    hay việc tuần đó, cộng mọi phòng đang ở nấc bật hay chế độ ẩn mà không có việc
+    — dòng `chua-cap-nhat`. Mỗi dòng: nấc, trạng thái (`hien`, `can-xem`,
+    `khong-lam-duoc`, `dang-soan`, `chua-cap-nhat`), số câu, số câu bị bỏ, số
+    «Hữu ích»/«Không hữu ích», câu còn lại và câu bị bỏ kèm mã. Nguồn của mọi câu
+    giải trong một truy vấn thành ngày và tên KR, hay `mat: true` khi lần cập nhật
+    không còn; không lọc theo quyền xem vì người đọc là quản trị. Đây là chỗ duy
+    nhất bản giữ lại và bản chế độ ẩn hiện ra.
+  - `zalo.cuaToi` (`GET /zalo/me`) thêm `dongTroLyOkr` (thiếu hàng
+    `NotificationPreference` là `true`) và `laTruongPhong` (người đang là trưởng của
+    ít nhất một phòng ban chưa lưu trữ) — trang Nhắc buổi sáng chỉ hiện công tắc dòng
+    Tóm tắt tuần cho Trưởng phòng ban. `zalo.luuDongTroLyOkr`
+    (`PUT /zalo/preference/okr-weekly-summary`, `{ bat }`) tự phục vụ, mọi thành viên:
+    `upsert` hàng của chính người gọi theo `ctx.user.id`, đầu vào không nhận `userId`.
 
 ### Hỏi ý mục tiêu
 
