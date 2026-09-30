@@ -1,3 +1,4 @@
+import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import type { BuocCat } from "@crm/validation/okr-cuoc-soan";
 
 const MINUTE_MS = 60_000;
@@ -30,7 +31,15 @@ export const TRO_LY_OKR_SOAN = {
 		cuocKhongDang: "cuoc khong con dang",
 		donViChuaBat: "don-vi-chua-bat",
 		saiMucDich: "phien khong phai okr-soan",
+		chuKyKhongLapKeHoach: "chu ky khong o pha lap ke hoach",
+		dongTrungKhoa: "dong trung khoa",
 	},
+	tinhNang: "okr.soan" satisfies TinhNang,
+	suKien: {
+		nguoiGo: "message.received",
+		duoiChiTruyen: ".appended",
+	},
+	canChinhDuoi: ":cc",
 	congMacDinh: 2100,
 	congCu: {
 		song: ["nop_ban_nhap"],

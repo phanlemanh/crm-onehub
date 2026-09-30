@@ -1,13 +1,10 @@
+import { banNhap } from "@crm/validation/okr-cuoc-soan";
 import { defineTool } from "eve/tools";
-import { z } from "zod";
+import { nopBanNhap } from "../lib/nop-ban-nhap";
 
 export default defineTool({
-	description: "Submit the whole OKR draft for this session. Replaced in B7.",
-	inputSchema: z.object({
-		mucTieu: z
-			.array(z.object({ khoa: z.string(), ten: z.string() }))
-			.min(2)
-			.max(4),
-	}),
-	execute: () => ({ ketQua: "tu-choi" as const, lyDo: "chua noi", biLoai: [] }),
+	description:
+		"Submit the whole OKR draft of this session: 2–4 Mục tiêu, each with 2–4 KR (kieu, donVi, optional khoiDiemGoiY from the data only, never a target) and optional canChinhId from ungVienCanChinh. Resubmit the whole draft after every edit, keeping the khoa of unchanged lines. Answers with the lines that were dropped and their code; never resubmit a line answered da-bac.",
+	inputSchema: banNhap,
+	execute: (input, ctx) => nopBanNhap(input, ctx),
 });

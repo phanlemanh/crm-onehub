@@ -18,6 +18,8 @@ const MO_TA_BO_PHAN = "Bộ phận phụ trách doanh thu lưu trú toàn quốc
 const CHUC_DANH_TRUONG = "Trưởng phòng Kinh doanh lưu trú";
 const CHUC_DANH_NGUOI_MO = "Chuyên viên kế hoạch";
 const TEN_NGANG_CAP = "Giữ chân đối tác lưu trú phía Nam";
+const TEN_ONEHUB = "Trở thành lựa chọn lưu trú đầu tiên của doanh nghiệp";
+const SO_CHOT_KY_TRUOC = 31;
 
 const DAI = (cau: string, lan: number) => Array(lan).fill(cau).join(" ");
 
@@ -253,7 +255,7 @@ export async function gieoCanhGoi(v: { vaiNguoiMo: "member" | "okr" }) {
 		cycleId: nam.id,
 		level: "onehub",
 		ownerUserId: truong.id,
-		title: "Trở thành lựa chọn lưu trú đầu tiên của doanh nghiệp",
+		title: TEN_ONEHUB,
 		whyNow: "Thị trường lưu trú doanh nghiệp đang mở rộng",
 		kr: [
 			{
@@ -358,7 +360,7 @@ export async function gieoCanhGoi(v: { vaiNguoiMo: "member" | "okr" }) {
 			data: {
 				keyResultId: k.id,
 				cycleId: truoc.id,
-				soChot: i === 0 ? 31 : 1,
+				soChot: i === 0 ? SO_CHOT_KY_TRUOC : 1,
 				diemGoiY: 0.7,
 				diem: i === 0 ? 0.7 : 1,
 				lyDo: i === 0 ? "Gần đích nhờ gọi lại đều" : "",
@@ -412,5 +414,7 @@ export async function gieoCanhGoi(v: { vaiNguoiMo: "member" | "okr" }) {
 		moTaBoPhan: MO_TA_BO_PHAN,
 		chucDanhTruong: CHUC_DANH_TRUONG,
 		tenMucTieuNgangCap: TEN_NGANG_CAP,
+		tenMucTieuCapTren: TEN_ONEHUB,
+		soChotKyTruoc: SO_CHOT_KY_TRUOC,
 	};
 }

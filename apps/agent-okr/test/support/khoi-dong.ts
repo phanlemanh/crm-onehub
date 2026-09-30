@@ -2,6 +2,11 @@ import { type ChildProcess, spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { type AddressInfo, createServer } from "node:net";
 import { join } from "node:path";
+import {
+	databaseName,
+	runScopedUrl,
+	TEST_DATABASE,
+} from "@crm/db/test-database";
 
 export const APP = join(import.meta.dir, "..", "..");
 export const KHOI_DONG = {
@@ -23,6 +28,18 @@ export function congTuDo(): Promise<number> {
 			s.close(() => ok(port));
 		});
 	});
+}
+
+export function moiTruongModelTacGia() {
+	const kho = runScopedUrl(
+		process.env.TEST_DATABASE_URL ?? "",
+		process.env.TEST_RUN_ID,
+	);
+	if (!databaseName(kho).endsWith(TEST_DATABASE.suffix))
+		throw new Error(
+			`kho thu khong phai kho dung mot lan: ${databaseName(kho)}`,
+		);
+	return { NODE_ENV: "development", DATABASE_URL: kho };
 }
 
 export type MayEve = {

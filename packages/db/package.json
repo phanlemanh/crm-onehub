@@ -47,6 +47,7 @@
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
 		"./tai-lieu-nhac": "./src/tai-lieu-nhac.ts",
 		"./tai-lieu-quyen": "./src/tai-lieu-quyen.ts",
+		"./test-database": "./src/test-database.ts",
 		"./tracking": "./src/tracking.ts",
 		"./workspace": "./src/workspace.ts",
 		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",

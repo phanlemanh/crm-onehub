@@ -8,5 +8,5 @@
 		"types": ["node", "bun"]
 	},
 	"include": ["agent/**/*.ts", "evals/**/*.ts", "test/**/*.ts"],
-	"exclude": ["node_modules", ".eve"]
+	"exclude": ["node_modules", ".eve", "test/.chay"]
 }

@@ -1,8 +1,22 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { db } from "@crm/db";
 import { currentTree, treeSlug } from "@crm/db/measure-database";
-import { APP, khoiDongEve, type MayEve } from "./support/khoi-dong";
+import { z } from "zod";
+import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
+import { docSoNguoiGo } from "../agent/lib/so-nguoi-go";
+import { donDep, moXuong } from "./support/gieo";
+import { gieoCanhGoi } from "./support/gieo-goi";
+import {
+	APP,
+	khoiDongEve,
+	type MayEve,
+	moiTruongModelTacGia,
+} from "./support/khoi-dong";
+import { type AppGia, chepAppGia, KICH_BAN } from "./support/mo-hinh-gia";
+import { clientCua } from "./support/phien-cua";
+import { BI_MAT_THU } from "./support/the-cua";
 
 let may: MayEve;
 let mayCu: MayEve | null = null;
@@ -77,4 +91,125 @@ describe("app-rieng", () => {
 			await khac.dung();
 		}
 	}, 180_000);
+});
+
+const goiCongCu = z.object({
+	actions: z.array(
+		z.object({
+			kind: z.string(),
+			callId: z.string(),
+			toolName: z.string().optional(),
+		}),
+	),
+});
+
+describe("app-rieng: bốn lượt", () => {
+	let mayGia: MayEve | null = null;
+	let appGia: AppGia | null = null;
+	let canh: Awaited<ReturnType<typeof gieoCanhGoi>>;
+	let sessionId = "";
+
+	beforeAll(async () => {
+		await moXuong();
+		canh = await gieoCanhGoi({ vaiNguoiMo: "member" });
+		appGia = chepAppGia();
+		mayGia = await khoiDongEve({
+			goc: appGia.goc,
+			env: {
+				[TRO_LY_OKR_SOAN.env.biMat]: BI_MAT_THU,
+				...moiTruongModelTacGia(),
+			},
+		});
+	}, 300_000);
+
+	afterAll(async () => {
+		await mayGia?.dung();
+		appGia?.don();
+		if (sessionId) {
+			await db.aiChiPhi.deleteMany({ where: { sessionId } });
+			await db.agentEvent.deleteMany({ where: { sessionId } });
+		}
+		await donDep();
+	});
+
+	test("mở đầu → trả lời → đưa bản nháp → sửa: lịch sử giữ, ZDR + thinkingLevel low trên mọi lời gọi, tập tool đúng, sổ chi phí đủ bước, sổ sự kiện có số người gõ", async () => {
+		if (!mayGia || !appGia) throw new Error("may gia khong khoi dong");
+		const cua = clientCua({
+			url: mayGia.url,
+			secret: BI_MAT_THU,
+			userId: canh.nguoiMo.id,
+			cuocSoanId: canh.cuocSoanId,
+		});
+		const phien = cua.session();
+		const suKien: { type: string; data?: unknown }[] = [];
+		for (const m of [
+			KICH_BAN.moDau,
+			KICH_BAN.traLoi,
+			KICH_BAN.duaNhap,
+			KICH_BAN.sua,
+		]) {
+			const kq = await (await phien.send(m)).result();
+			expect(kq.status, `luot «${m}» that bai`).toBe("waiting");
+			sessionId = kq.sessionId;
+			suKien.push(...kq.events);
+			if (m === KICH_BAN.sua)
+				expect(kq.message ?? "").toContain(KICH_BAN.tenMucTieu3);
+		}
+
+		const buoc = suKien.filter((e) => e.type === "step.completed");
+		expect(buoc.length).toBeGreaterThanOrEqual(4);
+		const dau = appGia.docDau();
+		expect(dau.length).toBeGreaterThanOrEqual(buoc.length);
+		for (const d of dau) {
+			if (d?.zeroDataRetention !== true) throw new Error("loi goi khong zdr");
+			expect(d.thinkingLevel).toBe("low");
+		}
+
+		const info = await cua.info();
+		expect(info.tools.available.map((t) => t.name).sort()).toEqual(
+			[...TRO_LY_OKR_SOAN.congCu.song].sort(),
+		);
+		const goi = new Map(
+			suKien
+				.filter((e) => e.type === "actions.requested")
+				.flatMap((e) => goiCongCu.parse(e.data).actions)
+				.map((a) => [a.callId, a.toolName ?? a.kind]),
+		);
+		expect([...goi.values()]).toEqual(["nop_ban_nhap"]);
+
+		const so = await db.aiChiPhi.findMany({ where: { sessionId } });
+		expect(so.length).toBe(buoc.length);
+		expect([...new Set(so.map((s) => s.tinhNang))]).toEqual([
+			TRO_LY_OKR_SOAN.tinhNang,
+		]);
+		expect(
+			so.every((s) => s.taskId === canh.cuocSoanId && s.phienCha === null),
+		).toBe(true);
+
+		const suKienSo = await db.agentEvent.findMany({
+			where: { sessionId },
+			select: { type: true, contactId: true, conversationId: true },
+		});
+		expect(suKienSo.filter((e) => e.type === "step.completed").length).toBe(
+			buoc.length,
+		);
+		expect(
+			suKienSo.every((e) => e.contactId === null && e.conversationId === null),
+		).toBe(true);
+		expect(
+			suKienSo.some((e) =>
+				e.type.endsWith(TRO_LY_OKR_SOAN.suKien.duoiChiTruyen),
+			),
+		).toBe(false);
+		expect([...(await docSoNguoiGo(sessionId))]).toContain(KICH_BAN.soNguoiGo);
+
+		const dong = await db.okrDeXuat.count({
+			where: {
+				cuocSoanId: canh.cuocSoanId,
+				trangThai: "cho",
+				taskId: sessionId,
+			},
+		});
+		expect(dong).toBeGreaterThan(0);
+	}, 240_000);
 });

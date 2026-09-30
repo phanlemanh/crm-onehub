@@ -1,13 +1,6 @@
 import { defineDynamic, defineInstructions } from "eve/instructions";
-import { z } from "zod";
-import { TRO_LY_OKR_SOAN } from "../lib/config";
 import { goiSoan, goiThanhChiDan } from "../lib/goi-soan";
-
-const phienSoan = z.object({
-	purpose: z.literal(TRO_LY_OKR_SOAN.purpose),
-	cuocSoanId: z.string().trim().min(1),
-	vai: z.enum(TRO_LY_OKR_SOAN.vaiDuocVao),
-});
+import { phienSoan } from "../lib/phien";
 
 export default defineDynamic({
 	events: {
