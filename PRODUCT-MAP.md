@@ -99,6 +99,7 @@ flowchart TD
 - Lưới tự đối chiếu với bản khai hình của nó, thay vì chờ người nghĩ ra đòn tấn công kế tiếp (`hinh-cua-luoi`)
 - Hỏi CRM qua Zalo giữ lời hứa «chỉ đọc» bằng chặn trong chính công cụ, bỏ qua tin không chữ bằng một câu báo, không che nhầm số tiền, và bộ đo của hồ sơ cũ thôi xanh giả (`hoan-thien-hoi-crm-qua-zalo`)
 - Hộp thoại và ngăn trượt không mất chữ đang nhập dở — thành phần dùng chung tự biết có thay đổi; bấm ra ngoài khi đã nhập thì không đóng; Esc, dấu X, nút Huỷ và vuốt xuống hỏi lại «Bỏ những gì vừa nhập?» (`hop-thoai-giu-cho-dang-nhap`)
+- Màn Deals hydrat khớp máy chủ — ô Giai đoạn hết lệch «QUALIFIED_TO_BUY» ↔ «Qualified to buy», hết lỗi «Hydration failed» chập chờn khi tải /deals (`hydrat-giai-doan-deals`)
 - Thanh biểu tượng bên trái hydrat khớp máy chủ — hết lỗi «Hydration failed» chập chờn ở AppIconRailFallback (aria-busy) (`hydrat-thanh-bieu-tuong`)
 - Kéo thả thoả thuận giữa các giai đoạn trên màn Thoả thuận (cách xem bảng cột) (`keo-tha-thoa-thuan`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Đoạn tiếng Anh do máy ghi trên tấm hồ sơ tự khai lang="en", để trình đọc màn hình không đọc nó bằng giọng tiếng Việt (`khai-lang-gioi-thieu`) — đã chấm bởi thực tế
