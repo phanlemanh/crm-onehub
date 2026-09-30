@@ -5,7 +5,7 @@ slug: hydrat-giai-doan-deals
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-30-hydrat-giai-doan-deals-design.md
 approved_by:
 approved_at:
@@ -78,3 +78,8 @@ Bỏ quét `morphological-scan` — xem entry `descope` «bỏ coverage-scan» t
 - S3: `man-giu-cho` thoát 0 hai lần sau sửa (một lần bằng lệnh `kto_man_giu` mới, chạy song song với một phiên đo khác).
 - S4 lượt đầu bị huỷ: tác tử chấm tự sửa mã và commit bốn lần lên nhánh; nhánh đưa về `1d1ad2d8`, chấm lại với luật chỉ-đọc (sổ quyết định, stage S4-r1).
 - Hạn chế: E7 (`man-giu-cho`) không có đối chứng dương riêng cho bộ nghe lỗi console của nó; đối chứng bộ nghe lỗi hydrat trên cùng trang `/deals` nằm ở E6.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-30 (Manh Phan), từ mục ngoài hợp đồng của S4 vòng 2:
+
+- Ngoài-2: mở thẳng `/deals` kèm ngăn «Thoả thuận mới» đang mở (`?new=true`) thì ngăn dựng trước vùng bảng và tạo sẵn truy vấn giai đoạn, nên cột Giai đoạn có thể thoáng hiện mã thô và báo lỗi hydrat. Người soát suy từ cơ chế React/TanStack, chưa đo thật; mở trang thường (ngăn đóng) đã hết lỗi.
+- Ngoài-3: phép đo E7 (`man-giu-cho`) chưa từng được thử cho bắt một lỗi cố ý; đối chứng bộ nghe trên cùng trang `/deals` nằm ở E6.

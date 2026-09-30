@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 02ed49e4f4e84c65e4bb55b4558153f1e84549f6
-human_signoff:
+human_signoff: Manh Phan 2026-09-30
 ---
 
 # Evidence Report: hydrat-giai-doan-deals
