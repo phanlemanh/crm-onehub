@@ -3,6 +3,7 @@ import type { DongSoan } from "@/app/(app)/[slug]/okr/soan/kieu";
 import { lyDoTuChoiLuot } from "@/app/(app)/[slug]/okr/soan/loi-cua";
 import {
 	cayNhap,
+	demDong,
 	demDuaVao,
 	duongTheoDonVi,
 	krDuaVao,
@@ -154,6 +155,20 @@ describe("luat-ban-nhap", () => {
 			"11",
 		]);
 		expect(krThieuSo(cay, {})).toEqual(["11"]);
+	});
+
+	test("demDong đếm Mục tiêu và dòng con đang hiện, bỏ mồ côi", () => {
+		expect(
+			demDong(
+				cayNhap([
+					mt("1", "A"),
+					kr("11", "1", "K"),
+					cc("12", "1"),
+					mt("2", "B"),
+					kr("99", "x", "mồ côi"),
+				]),
+			),
+		).toBe(4);
 	});
 
 	test("demDuaVao đếm Mục tiêu và KR đã nhận/sửa, không đếm bác", () => {

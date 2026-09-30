@@ -107,6 +107,10 @@ export function krThieuSo(cay: readonly KhoiNhap[], so: SoDaGo): string[] {
 		.map((kr) => kr.id);
 }
 
+export function demDong(cay: readonly KhoiNhap[]): number {
+	return cay.reduce((t, k) => t + 1 + k.kr.length + k.canChinh.length, 0);
+}
+
 export function demDuaVao(cay: readonly KhoiNhap[]): DemDuaVao {
 	const mt = cay.filter((k) => daNhan(k.mucTieu));
 	return {
