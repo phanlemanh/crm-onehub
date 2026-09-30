@@ -40,7 +40,7 @@ export type NguonGoi = {
 	truoc: number | null;
 	chenhLech: number | null;
 	chenhTuTin: ChenhTuTin | null;
-	tienDo: number | null;
+	tienDo: number;
 	ngay: string;
 };
 
@@ -448,7 +448,7 @@ export async function dungGoiTomTat(
 		lan.forEach((l, i) => {
 			if (l.luc < tu || l.luc >= den) return;
 			const n = nguonTu(kr, lan, i, luat);
-			if (!n || n.tienDo === null) return;
+			if (!n) return;
 			nguon.push(n);
 			trong.push({
 				id: l.id,
@@ -693,16 +693,65 @@ async function nguonHienTai(
 	return { theoId, krs };
 }
 
+async function tuanMoiNhat(
+	db: DbHoacTx,
+	v: { cycleId: string; departmentId?: string; now: Date },
+	luat: Pick<LuatTomTat, "docViec">,
+): Promise<string | null> {
+	const [viec, ban] = await Promise.all([
+		db.agentTask.findFirst({
+			where: {
+				kind: LOAI_VIEC,
+				createdAt: { lte: v.now },
+				AND: [
+					{ payload: { path: ["cycleId"], equals: v.cycleId } },
+					...(v.departmentId === undefined
+						? []
+						: [
+								{ payload: { path: ["departmentId"], equals: v.departmentId } },
+							]),
+				],
+			},
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			select: { payload: true },
+		}),
+		db.okrTomTat.findFirst({
+			where: {
+				cycleId: v.cycleId,
+				departmentId: v.departmentId,
+				createdAt: { lte: v.now },
+			},
+			orderBy: [{ tuan: "desc" }, { id: "desc" }],
+			select: { tuan: true },
+		}),
+	]);
+	const p = viec ? luat.docViec(viec.payload) : null;
+	return (
+		[
+			...(p?.viec === "tom-tat-tuan" ? [p.tuan] : []),
+			...(ban ? [ngayIso(ban.tuan)] : []),
+		]
+			.sort()
+			.at(-1) ?? null
+	);
+}
+
 export async function docTomTatChoNguoiXem(
 	db: DbHoacTx,
 	v: { cycleId: string; departmentId: string; nguoiXem: string; now: Date },
 	luat: LuatTomTat,
 ): Promise<BanHien | null> {
 	if ((await nacTomTatPhong(db, v)) !== "bat") return null;
+	const [tuan, soLan] = await Promise.all([
+		tuanMoiNhat(db, v, luat),
+		demLanTrongCuaSo(db, { ...v, den: v.now }),
+	]);
+	if (tuan === null || soLan === 0) return null;
 	const hang = await db.okrTomTat.findFirst({
 		where: {
 			cycleId: v.cycleId,
 			departmentId: v.departmentId,
+			tuan: ngayDb(tuan),
 			trangThai: "hien",
 			cau: { path: ["nac"], equals: "bat" },
 			createdAt: {
@@ -794,21 +843,8 @@ export async function banTuanChoQuanTri<M extends string>(
 	v: { cycleId: string; now: Date },
 	luat: Pick<LuatTomTat<M>, "docNoiDung" | "docTrangThai" | "docViec">,
 ): Promise<BanTuanQuanTri<M>> {
-	const [viec, tuanBan, phongBan, ct] = await Promise.all([
-		db.agentTask.findMany({
-			where: {
-				kind: LOAI_VIEC,
-				createdAt: { lte: v.now },
-				payload: { path: ["cycleId"], equals: v.cycleId },
-			},
-			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-			select: { payload: true, finishedAt: true },
-		}),
-		db.okrTomTat.findFirst({
-			where: { cycleId: v.cycleId, createdAt: { lte: v.now } },
-			orderBy: { tuan: "desc" },
-			select: { tuan: true },
-		}),
+	const [tuan, phongBan, ct] = await Promise.all([
+		tuanMoiNhat(db, v, luat),
 		db.department.findMany({
 			where: { archivedAt: null },
 			orderBy: [{ position: "asc" }, { id: "asc" }],
@@ -816,27 +852,37 @@ export async function banTuanChoQuanTri<M extends string>(
 		}),
 		cauHinhAiLuc(db, v.now),
 	]);
+	if (tuan === null) return { tuan: null, phong: [] };
+	const [viec, hang] = await Promise.all([
+		db.agentTask.findMany({
+			where: {
+				kind: LOAI_VIEC,
+				createdAt: { lte: v.now },
+				AND: [
+					{ payload: { path: ["cycleId"], equals: v.cycleId } },
+					{ payload: { path: ["tuan"], equals: tuan } },
+					{
+						OR: phongBan.map((pb) => ({
+							payload: { path: ["departmentId"], equals: pb.id },
+						})),
+					},
+				],
+			},
+			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+			select: { payload: true, finishedAt: true },
+		}),
+		db.okrTomTat.findMany({
+			where: {
+				cycleId: v.cycleId,
+				tuan: ngayDb(tuan),
+				createdAt: { lte: v.now },
+				departmentId: { in: phongBan.map((pb) => pb.id) },
+			},
+		}),
+	]);
 	const viecDoc = viec.flatMap((t) => {
 		const p = luat.docViec(t.payload);
-		return p.viec === "tom-tat-tuan" && p.cycleId === v.cycleId
-			? [{ mo: t.finishedAt === null, p }]
-			: [];
-	});
-	const tuan =
-		[
-			...viecDoc.map((t) => t.p.tuan),
-			...(tuanBan ? [ngayIso(tuanBan.tuan)] : []),
-		]
-			.sort()
-			.at(-1) ?? null;
-	if (tuan === null) return { tuan: null, phong: [] };
-	const hang = await db.okrTomTat.findMany({
-		where: {
-			cycleId: v.cycleId,
-			tuan: ngayDb(tuan),
-			createdAt: { lte: v.now },
-			departmentId: { in: phongBan.map((pb) => pb.id) },
-		},
+		return p.viec === "tom-tat-tuan" ? [{ mo: t.finishedAt === null, p }] : [];
 	});
 	const banTuan = hang.map((h) => ({
 		h,
@@ -888,9 +934,7 @@ export async function banTuanChoQuanTri<M extends string>(
 			._all ?? 0;
 	const phong = phongBan.flatMap((pb): DongQuanTriTomTat<M>[] => {
 		const ban = banTuan.find((b) => b.h.departmentId === pb.id);
-		const t = viecDoc
-			.filter((x) => x.p.tuan === tuan && x.p.departmentId === pb.id)
-			.at(-1);
+		const t = viecDoc.filter((x) => x.p.departmentId === pb.id).at(-1);
 		const nacHienTai = nacPhong(ct, pb);
 		const nac: NacBan | null = ban
 			? ban.noiDung.nac

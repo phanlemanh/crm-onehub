@@ -62,7 +62,13 @@ const CHU_CAN_NGU_CANH = new Set(["một", "năm"]);
 const NAM_LICH = /^\d{4}$/;
 const DAU_CAU = new Set<string>(SO_BANG_CHU.dauCau);
 
-type SoDoc = { giaTri: number; goc: number; heSo: number };
+export type SoDoc = {
+	giaTri: number;
+	goc: number;
+	heSo: number;
+	dau: number;
+	het: number;
+};
 type Doc = { giaTri: number; het: number };
 
 function tachSo(chu: string): string[] {
@@ -154,7 +160,7 @@ function docHeSo(t: string[], j: number) {
 	return heSo === undefined ? { heSo: 1, het: j } : { heSo, het: j + 1 };
 }
 
-function docSo(chu: string): SoDoc[] {
+export function docSo(chu: string): SoDoc[] {
 	const t = tachSo(chu);
 	const ra: SoDoc[] = [];
 	let i = 0;
@@ -169,6 +175,8 @@ function docSo(chu: string): SoDoc[] {
 			giaTri: Number((so.giaTri * heSo).toPrecision(CHU_SO_CHINH_XAC)),
 			goc: so.giaTri,
 			heSo,
+			dau: i,
+			het,
 		});
 		i = het;
 	}

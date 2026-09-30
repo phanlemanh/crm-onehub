@@ -172,10 +172,9 @@ function nguonTienDo(goi: GoiTomTat, krTay: ReadonlySet<string>) {
 			kr !== undefined &&
 			krTay.has(kr.id) &&
 			(kr.kieu === "tang-toi" || kr.kieu === "giam-xuong") &&
-			n.tienDo !== null &&
 			n.tienDo !== TIEN_DO_DAY &&
 			n.tienDo !== n.giaTri &&
-			!soThamChieu(goi, { ...n, tienDo: null }).includes(n.tienDo)
+			!soThamChieu(goi, { ...n, tienDo: n.giaTri }).includes(n.tienDo)
 		);
 	};
 }
@@ -200,7 +199,7 @@ function chonB(goi: GoiTomTat, krTay: ReadonlySet<string>) {
 		);
 		const s0 = o1 ? theoMt.get(o1)?.find(hopTienDo) : undefined;
 		const [d, k] = conLai;
-		if (!o1 || !s0 || s0.tienDo === null || !d || !k) continue;
+		if (!o1 || !s0 || !d || !k) continue;
 		return { o1, s0, tienDo: s0.tienDo, x, d, k };
 	}
 	return null;

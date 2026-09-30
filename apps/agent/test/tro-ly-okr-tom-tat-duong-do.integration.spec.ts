@@ -87,9 +87,8 @@ function phongCua(payload: Prisma.JsonValue | null): keyof typeof PHONG | null {
 }
 
 function cauTuGoi(goi: GoiTomTat) {
-	const n = goi.nguon.find((x) => x.tienDo !== null);
-	if (!n || n.tienDo === null)
-		throw new Error(`goi cua ${goi.phong.ten} khong co nguon`);
+	const n = goi.nguon[0];
+	if (!n) throw new Error(`goi cua ${goi.phong.ten} khong co nguon`);
 	return [
 		{
 			vanBan: "Tuần này phòng ghi nhận đủ các lần cập nhật.",

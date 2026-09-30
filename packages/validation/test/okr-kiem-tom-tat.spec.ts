@@ -23,7 +23,7 @@ const nguon = (rieng: Partial<NguonKiem> & { id: string }): NguonKiem => ({
 	truoc: null,
 	chenhLech: null,
 	chenhTuTin: null,
-	tienDo: null,
+	tienDo: rieng.giaTri ?? 0,
 	ngay: "01/01",
 	...rieng,
 });
@@ -215,6 +215,18 @@ const CA_SO: CaSo[] = [
 		lech: "Giá trị đạt 4 triệu hôm nay.",
 	},
 	{
+		dang: "3 triệu 500 nghìn",
+		nguon: { giaTri: 3_500_000 },
+		khop: "Giá trị đạt 3 triệu 500 nghìn hôm nay.",
+		lech: "Giá trị đạt 3 triệu 600 nghìn hôm nay.",
+	},
+	{
+		dang: "2 tỷ 300 triệu",
+		nguon: { giaTri: 2_300_000_000 },
+		khop: "Doanh thu đạt 2 tỷ 300 triệu hôm nay.",
+		lech: "Doanh thu đạt 2 tỷ 400 triệu hôm nay.",
+	},
+	{
 		dang: "mười hai",
 		nguon: { giaTri: 12 },
 		khop: "Có mười hai lần gặp hôm nay.",
@@ -330,12 +342,25 @@ describe("các dạng số: một ca khớp, một ca lệch", () => {
 
 	test("cách đọc kiểu Anh chỉ thêm cách đọc, không bớt cách đọc kiểu Việt", () => {
 		expect(cachDocSo("đạt 1,200")).toEqual([[1.2, 1200]]);
-		expect(cachDocSo("đạt 3k")).toEqual([[3, 3000]]);
+		expect(cachDocSo("đạt 3k")).toEqual([[3000]]);
+		expect(cachDocSo("đạt 1.5k")).toEqual([[1500]]);
 		expect(cachDocSo("đạt 1.500")).toEqual([[1500, 1.5]]);
 		expect(cachDocSo("đạt 12,5")).toEqual([[12.5]]);
 		expect(cachDocSo("đạt 1,200,000")).toEqual([[1_200_000]]);
 		expect(cachDocSo("đạt 1,2,3")).toEqual([[]]);
 		expect(cachDocSo("mười hai và 3 triệu")).toEqual([[12], [3_000_000]]);
+	});
+
+	test("chuỗi nhân giảm dần liền nhau đọc thành một số, cách chữ thì tách", () => {
+		expect(cachDocSo("đạt 3 triệu 500 nghìn")).toEqual([[3_500_000]]);
+		expect(cachDocSo("đạt 2 tỷ 300 triệu")).toEqual([[2_300_000_000]]);
+		expect(cachDocSo("đạt ba triệu năm trăm nghìn")).toEqual([[3_500_000]]);
+		expect(cachDocSo("đạt 2 tỷ 300 triệu 40 nghìn")).toEqual([[2_300_040_000]]);
+		expect(cachDocSo("đạt 3 triệu và 500 nghìn")).toEqual([
+			[3_000_000],
+			[500_000],
+		]);
+		expect(cachDocSo("đạt 5 nghìn 3 triệu")).toEqual([[5000], [3_000_000]]);
 	});
 });
 

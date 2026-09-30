@@ -7,6 +7,7 @@ import type { GoiTomTat, NguonGoi } from "@crm/db/okr-tom-tat";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
+import { cachDocSo } from "@crm/validation/okr-kiem-tom-tat";
 import { parseNoiDungTomTat } from "@crm/validation/okr-tom-tat";
 import type { CauTomTat } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
@@ -181,6 +182,10 @@ const DOC_SO: [string, (number[] | string)[]][] = [
 	["ngày 23/11", ["23/11"]],
 	["1.2.3", [[]]],
 	["3 triệu 500 nghìn", [[3_500_000]]],
+	["2 tỷ 300 triệu", [[2_300_000_000]]],
+	["ba triệu năm trăm nghìn", [[3_500_000]]],
+	["3 triệu và 500 nghìn", [[3_000_000], [500_000]]],
+	["1.5k", [[1500]]],
 ];
 
 let app: NestExpressApplication;
@@ -196,8 +201,7 @@ function lamTron(so: number): number {
 function nguonDu(goi: GoiTomTat): NguonGoi | null {
 	for (const n of goi.nguon) {
 		const kr = goi.krs.find((k) => k.id === n.keyResultId);
-		if (!kr || n.truoc === null || n.chenhLech === null || n.tienDo === null)
-			continue;
+		if (!kr || n.truoc === null || n.chenhLech === null) continue;
 		const so = [
 			n.giaTri,
 			n.truoc,
@@ -213,7 +217,7 @@ function nguonDu(goi: GoiTomTat): NguonGoi | null {
 
 function cauMoiDang(goi: GoiTomTat, n: NguonGoi): CauTomTat[] {
 	const kr = goi.krs.find((k) => k.id === n.keyResultId);
-	if (!kr || n.truoc === null || n.chenhLech === null || n.tienDo === null)
+	if (!kr || n.truoc === null || n.chenhLech === null)
 		throw new Error(`nguon ${n.id} thieu so`);
 	const van = {
 		"gia-tri": `Lần cập nhật ghi mức ${vietSo(n.giaTri)}.`,
@@ -592,6 +596,26 @@ describe("thuoc", () => {
 			`doc so: ${DOC_SO.length - sai.length}/${DOC_SO.length} dang dung`,
 		);
 		expect(sai).toEqual([]);
+	});
+
+	test("bo kiem va so-lech-lot doc cung ket qua tren bang dang so", () => {
+		const coSo = DOC_SO.filter(([, ky]) =>
+			ky.every((cach) => typeof cach !== "string"),
+		);
+		const lech = coSo.flatMap(([chu]) => {
+			const kiem = cachDocSo(chu);
+			const thuoc = docSoQuaThuoc(chu);
+			return JSON.stringify(kiem) === JSON.stringify(thuoc)
+				? []
+				: [
+						`doc so khac nhau: «${chu}» bo kiem ${JSON.stringify(kiem)}, thuoc ${JSON.stringify(thuoc)}`,
+					];
+		});
+		console.log(
+			`doc so chung: ${coSo.length - lech.length}/${coSo.length} dang khop`,
+		);
+		expect(coSo.length).toBeGreaterThan(0);
+		expect(lech).toEqual([]);
 	});
 
 	test(

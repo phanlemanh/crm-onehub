@@ -10,6 +10,7 @@ import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { chayXepTomTat } from "../../agent/agent/lib/okr/lich-tom-tat";
 import { claimDue, completeTask } from "../../agent/agent/lib/tasks";
+import { OKR } from "../src/okr/okr-config";
 import {
 	batDauMau,
 	CHO_DB,
@@ -31,6 +32,7 @@ import {
 	donTomTat,
 	ghiBan,
 	goiCua,
+	goiQua,
 	HAI_DUONG,
 	KY,
 	KY_KHAC,
@@ -272,6 +274,9 @@ afterAll(async () => {
 describe("trang-thai", () => {
 	let taskE = "";
 	let oE = "";
+	let banE = "";
+	let tuanE = "";
+	let soCauE = -1;
 
 	const docE = async (
 		ma: string,
@@ -401,6 +406,9 @@ describe("trang-thai", () => {
 				LUAT_TOM_TAT,
 			);
 			expect(ghi.trangThai).toBe("hien");
+			banE = ghi.id;
+			tuanE = p.tuan;
+			soCauE = cau.length;
 			expect(await completeTask(taskE, "da-nop")).not.toBeNull();
 			tienDongHo(MINUTE_MS);
 			for (const duong of HAI_DUONG) {
@@ -432,7 +440,7 @@ describe("trang-thai", () => {
 					bi.ban === null ? "loc het thanh null" : `${bi.ban.cau.length} cau`,
 				).toBe("0 cau");
 				const duoc = await docE(canhTt.truongE, duong);
-				expect(duoc.ban?.cau.length ?? 0).toBeGreaterThan(0);
+				expect(duoc.ban?.cau.length).toBe(soCauE);
 				expect(bi.ban?.id).toBe(duoc.ban?.id ?? "khac");
 			}
 		},
@@ -459,6 +467,140 @@ describe("trang-thai", () => {
 				const dung = await docE(canhTt.truongE, duong);
 				expect(dung.ban).not.toBeNull();
 			}
+		},
+		CHO_DB,
+	);
+
+	const tuanSau = (tuan: string) =>
+		new Date(new Date(`${tuan}T00:00:00Z`).getTime() + 7 * NGAY_MS)
+			.toISOString()
+			.slice(0, 10);
+
+	const nguonE = async () => {
+		const goi = await goiCua(pb(canhTt.e));
+		const n = goi ? motNguonMoiKr(goi)[0] : undefined;
+		if (!n) throw new Error("phong E khong co nguon");
+		return n.id;
+	};
+
+	const boBan = async (id: string) => {
+		const hang = await db.okrTomTat.delete({
+			where: { id },
+			select: { taskId: true },
+		});
+		await db.agentTask.delete({ where: { id: hang.taskId } });
+	};
+
+	const banLot = (t: DocTra) =>
+		t.ban === null
+			? "khong ban"
+			: `ban tuan truoc lot: ${t.ban.id === banE ? "tuan truoc" : t.ban.id}`;
+
+	test(
+		"trang-thai tuan-moi-nhat: tuần trước có bản hiện, tuần này bản cần xem → không bản, không lùi về tuần trước; phản hồi vào bản tuần trước bị từ chối",
+		async () => {
+			tienDongHo(MINUTE_MS);
+			const truoc = await docE(canhTt.truongE, "trpc");
+			expect(truoc.ban?.id).toBe(banE);
+			const moi = await ghiBan({
+				ma: "e-tuan-sau",
+				departmentId: pb(canhTt.e),
+				nac: "bat",
+				tuan: tuanSau(tuanE),
+				cau: [
+					{
+						vanBan: "Chỉ số của phòng đạt mức 987654.",
+						nguon: [await nguonE()],
+					},
+				],
+			});
+			expect(moi.trangThai).toBe("can-xem");
+			tienDongHo(MINUTE_MS);
+			const soHang = await db.okrTomTatPhanHoi.count({
+				where: { tomTatId: banE },
+			});
+			for (const duong of HAI_DUONG) {
+				const t = await docE(canhTt.truongE, duong);
+				expect(banLot(t)).toBe("khong ban");
+				expect(coDong(t)).toBe("ban=null dangSoan=false chuaCapNhat=false");
+				const tra = await goiQua(
+					app,
+					"phanHoi",
+					duong,
+					{ tomTatId: banE, huuIch: true },
+					await cookieCua(canhTt.truongE),
+				);
+				expect(`${tra.status} ${tra.loi}`).toBe(
+					`404 ${OKR.thongDiep.troLy.khongCoTomTat(banE)}`,
+				);
+			}
+			expect(
+				await db.okrTomTatPhanHoi.count({ where: { tomTatId: banE } }),
+			).toBe(soHang);
+			await boBan(moi.id);
+			tienDongHo(MINUTE_MS);
+			expect((await docE(canhTt.truongE, "trpc")).ban?.id).toBe(banE);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"trang-thai chua-cap-nhat-sau-ban: bản mới nhất còn trong 8 ngày nhưng 7 ngày qua không có cập nhật → chuaCapNhat, không bản",
+		async () => {
+			const lan = await db.okrCheckIn.findMany({
+				where: {
+					keyResult: {
+						objective: {
+							cycleId: KY,
+							departmentId: pb(canhTt.e),
+							level: "phong-ban",
+							status: "cong-bo",
+							hienThi: "cong-khai",
+						},
+					},
+				},
+				select: {
+					createdAt: true,
+					session: { select: { submittedAt: true } },
+				},
+			});
+			const cuoi = Math.max(
+				...lan.map((l) => (l.session.submittedAt ?? l.createdAt).getTime()),
+			);
+			expect(Number.isFinite(cuoi)).toBe(true);
+			datDongHo(new Date(cuoi + 6 * NGAY_MS));
+			const moi = await ghiBan({
+				ma: "e-chua-cap-nhat",
+				departmentId: pb(canhTt.e),
+				nac: "bat",
+				tuan: tuanSau(tuanE),
+				cau: [cauLanh(0, await nguonE())],
+			});
+			expect(moi.trangThai).toBe("hien");
+			const lucDoc = new Date(
+				cuoi + OKR_TOM_TAT.cuaSoNgay * NGAY_MS + MINUTE_MS,
+			);
+			datDongHo(lucDoc);
+			const taoLuc = (
+				await db.okrTomTat.findUniqueOrThrow({
+					where: { id: moi.id },
+					select: { createdAt: true },
+				})
+			).createdAt;
+			expect(
+				lucDoc.getTime() - taoLuc.getTime() <
+					OKR_TOM_TAT.hienTrongNgay * NGAY_MS,
+			).toBe(true);
+			for (const duong of HAI_DUONG) {
+				const t = await docE(canhTt.truongE, duong);
+				expect(
+					t.ban === null
+						? "khong ban"
+						: `ban cu lot khi chua cap nhat: ${t.ban.id}`,
+				).toBe("khong ban");
+				expect(coDong(t)).toBe("ban=null dangSoan=false chuaCapNhat=true");
+			}
+			await boBan(moi.id);
 		},
 		CHO_DB,
 	);

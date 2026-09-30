@@ -7,9 +7,8 @@ export const CAU_KHONG_DE_XUAT = "never call `nop_de_xuat`";
 export const MUC_TOM_TAT = `## Tóm tắt tuần — the data block holds \`phong\`, \`tuan\` and \`krs\`
 
 This task is a weekly summary, not a proposal task. Everything above about \`nop_de_xuat\`, one
-Objective, \`phamVi\` and proposal lines does not apply here: ${CAU_KHONG_DE_XUAT}. The data block
-is one department's week. Where the rules above and this section differ (for example the language
-rule), this section wins.
+Objective, \`phamVi\` and proposal lines does not apply here: ${CAU_KHONG_DE_XUAT}. Where the
+rules above and this section differ (for example the language rule), this section wins.
 
 Act at once. Do not reason at length: your first reply is the \`nop_tom_tat\` call.
 

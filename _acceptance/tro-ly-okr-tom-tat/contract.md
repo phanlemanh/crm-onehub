@@ -86,4 +86,7 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 ## Notes
 
+- E17 có thêm chốt «mọi việc tóm tắt của lượt đo đóng `da-nop`». Phòng không có gì để nói — không có Cập nhật tuần nào trong 7 ngày — không bao giờ có việc, nên một việc đóng khác `da-nop` là Trợ lý hỏng hay không nộp, không phải phòng im lặng.
+- Chi phí tóm tắt = bước của Trợ lý (nhóm `okr.tom-tat`) cộng bước chuyển tiếp của phiên gốc (nhóm `okr.chuyen-tiep`) nối qua mã việc — phán quyết R13 (`d-20260930T163030Z-11`). Bước chuyển tiếp giữ nhóm của nó như 9b; `rang/chi-phi-tom-tat.sql` cộng cả hai.
+
 ## Iterations

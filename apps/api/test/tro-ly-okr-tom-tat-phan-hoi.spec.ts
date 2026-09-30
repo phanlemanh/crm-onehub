@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
-import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
+import { MINUTE_MS, NGAY_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { OKR } from "../src/okr/okr-config";
 import {
@@ -31,6 +31,7 @@ import {
 	phongCoNguon,
 	QUAN_TRI,
 	SAU,
+	TUAN,
 	thanhVienCua,
 	truongCua,
 } from "./tro-ly-okr-tom-tat-san";
@@ -206,6 +207,75 @@ describe("phan-hoi", () => {
 					where: { tomTatId: { in: Object.values(banKhac) } },
 				}),
 			).toBe(0);
+		},
+		CHO_DB,
+	);
+
+	const tuChoi = async (tomTatId: string) => {
+		const thuc: string[] = [];
+		const muon: string[] = [];
+		for (const ma of [nguoiXem.tv, nguoiXem.truong])
+			for (const duong of HAI_DUONG) {
+				const tra = await phanHoi(ma, duong, tomTatId, true);
+				thuc.push(`${ma} ${duong}: ${tra.status} ${tra.loi}`);
+				muon.push(
+					`${ma} ${duong}: 404 ${OKR.thongDiep.troLy.khongCoTomTat(tomTatId)}`,
+				);
+			}
+		return { thuc, muon };
+	};
+
+	test(
+		"phong-luu-tru: phòng của bản bị lưu trữ → NotFound có tên qua tRPC và REST, không hàng mới",
+		async () => {
+			const truoc = await hangCua(banB);
+			await db.department.update({
+				where: { id: pb(phongB) },
+				data: { archivedAt: new Date() },
+			});
+			try {
+				const { thuc, muon } = await tuChoi(banB);
+				expect(thuc).toEqual(muon);
+			} finally {
+				await db.department.update({
+					where: { id: pb(phongB) },
+					data: { archivedAt: null },
+				});
+			}
+			expect(await hangCua(banB)).toEqual(truoc);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"ban-bi-thay: phòng có bản của tuần mới hơn → phản hồi vào bản cũ NotFound có tên, không hàng mới; bản mới nhận phản hồi",
+		async () => {
+			const truoc = await hangCua(banB);
+			const tuanMoi = new Date(
+				new Date(`${TUAN}T00:00:00Z`).getTime() + 7 * NGAY_MS,
+			)
+				.toISOString()
+				.slice(0, 10);
+			const goi = await goiCua(pb(phongB));
+			const n = goi ? motNguonMoiKr(goi)[0] : undefined;
+			if (!n) throw new Error(`phong ${phongB} khong co nguon`);
+			const moi = await ghiBan({
+				ma: "ph-b-moi",
+				departmentId: pb(phongB),
+				nac: "bat",
+				tuan: tuanMoi,
+				cau: [cauLanh(1, n.id)],
+			});
+			expect(moi.trangThai).toBe("hien");
+			tienDongHo(MINUTE_MS);
+			const { thuc, muon } = await tuChoi(banB);
+			expect(thuc).toEqual(muon);
+			expect(await hangCua(banB)).toEqual(truoc);
+			const dung = await phanHoi(nguoiXem.tv, "trpc", moi.id, true);
+			expect(dung.status).toBe(200);
+			expect(await hangCua(moi.id, nguoiXem.tv)).toEqual([
+				{ userId: nguoi(nguoiXem.tv), huuIch: true },
+			]);
 		},
 		CHO_DB,
 	);

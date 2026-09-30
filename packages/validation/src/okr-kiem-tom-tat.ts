@@ -4,7 +4,13 @@ import type {
 	LuatTomTat,
 	NguonGoi,
 } from "@crm/db/okr-tom-tat";
-import { chuanHoa, coCum, khongDau, trichSo } from "./okr-kiem-de-xuat";
+import {
+	chuanHoa,
+	coCum,
+	docSo,
+	khongDau,
+	type SoDoc,
+} from "./okr-kiem-de-xuat";
 import { docSoOkr, tienDoKr } from "./okr-kr";
 import {
 	type MaBoCau,
@@ -68,8 +74,9 @@ function docKieuAnh(chuoi: string): number | null {
 function cachDocChuoiSo(chuoi: string, coK: boolean): number[] {
 	const viet = docSoOkr(chuoi);
 	const anh = docKieuAnh(chuoi);
-	const goc = anh ?? viet;
-	const ung = coK ? [viet, goc === null ? null : goc * NGHIN] : [viet, anh];
+	const ung = coK
+		? [viet, anh].map((so) => (so === null ? null : so * NGHIN))
+		: [viet, anh];
 	const ra: number[] = [];
 	for (const so of ung) {
 		if (so === null || !Number.isFinite(so) || Math.abs(so) > TRAN_SO) continue;
@@ -97,11 +104,36 @@ function thayChuoiSo(chu: string, chon: (cach: number[]) => number) {
 	return { van, chuaDoc };
 }
 
+function gopChuoiNhan(ds: readonly SoDoc[]): number[] {
+	const ra: number[] = [];
+	let i = 0;
+	while (i < ds.length) {
+		const dau = ds[i];
+		if (!dau) break;
+		let { giaTri, heSo, het } = dau;
+		let j = i + 1;
+		for (let ke = ds[j]; heSo > 1 && ke; ke = ds[j]) {
+			if (ke.dau !== het || ke.heSo === 1 || ke.heSo >= heSo) break;
+			giaTri += ke.giaTri;
+			heSo = ke.heSo;
+			het = ke.het;
+			j += 1;
+		}
+		ra.push(giaTri);
+		i = j;
+	}
+	return ra;
+}
+
+function trichSoGop(chu: string): number[] {
+	return gopChuoiNhan(docSo(chu));
+}
+
 export function cachDocSo(chu: string): number[][] {
 	const dau = thayChuoiSo(chu, (cach) => cach[0] ?? 0);
 	const cuoi = thayChuoiSo(chu, (cach) => cach[cach.length - 1] ?? 0);
-	const viet = trichSo(dau.van);
-	const anh = trichSo(cuoi.van);
+	const viet = trichSoGop(dau.van);
+	const anh = trichSoGop(cuoi.van);
 	const chuaDoc: number[][] = Array.from({ length: dau.chuaDoc }, () => []);
 	if (viet.length !== anh.length)
 		return [...viet.map((so) => [so]), [], ...chuaDoc];
@@ -126,7 +158,7 @@ function giaTriThamChieu(dan: NguonKiem[], goi: GoiKiemTomTat): number[] {
 		ra.push(n.giaTri);
 		if (n.truoc !== null) ra.push(n.truoc);
 		if (n.chenhLech !== null) ra.push(Math.abs(n.chenhLech));
-		if (n.tienDo !== null) ra.push(n.tienDo);
+		ra.push(n.tienDo);
 		const kr = goi.krs.find((k) => k.id === n.keyResultId);
 		for (const v of [kr?.khoiDiem, kr?.dich])
 			if (v !== null && v !== undefined) ra.push(v);

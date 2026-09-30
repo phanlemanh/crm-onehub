@@ -160,6 +160,7 @@ export async function viecGieo(v: {
 	trangThai: "cho" | "chay" | "xong";
 	nac?: "an" | "bat";
 	outcome?: string;
+	tuan?: string;
 }): Promise<string> {
 	const hang = await db.agentTask.create({
 		data: {
@@ -178,7 +179,7 @@ export async function viecGieo(v: {
 				viec: "tom-tat-tuan",
 				departmentId: v.departmentId,
 				cycleId: v.cycleId ?? KY,
-				tuan: TUAN,
+				tuan: v.tuan ?? TUAN,
 				inputHash: `hash-${v.ma}`,
 				nac: v.nac ?? "bat",
 			},
@@ -193,12 +194,14 @@ export async function ghiBan(v: {
 	departmentId: string;
 	nac: "an" | "bat";
 	cau: CauTomTat[];
+	tuan?: string;
 }) {
 	const taskId = await viecGieo({
 		ma: v.ma,
 		departmentId: v.departmentId,
 		trangThai: "xong",
 		nac: v.nac,
+		tuan: v.tuan,
 	});
 	return ghiTomTat(
 		db,
@@ -206,7 +209,7 @@ export async function ghiBan(v: {
 			taskId,
 			cycleId: KY,
 			departmentId: v.departmentId,
-			tuan: TUAN,
+			tuan: v.tuan ?? TUAN,
 			moc: LUC,
 			inputHash: `hash-${v.ma}`,
 			nac: v.nac,
