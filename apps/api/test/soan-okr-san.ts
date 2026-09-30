@@ -17,6 +17,7 @@ import { idMau } from "../scripts/okr-mau/nap";
 import { goi, goiRest, ok, type TraLoi, type Vao } from "./tro-ly-okr-san";
 
 export const CHU_KY_Q4 = idMau("chu-ky", "quy4");
+export const CHU_KY_NAM_KE = idMau("chu-ky", "nam-ke");
 export const BP = (ma: string) => idMau("bp", ma);
 export const PB = (ma: string) => idMau("pb", ma);
 
@@ -79,6 +80,15 @@ export async function datPhaQuy4(
 	pha: "lap-ke-hoach" | "dang-chay",
 ): Promise<void> {
 	await db.okrCycle.update({ where: { id: CHU_KY_Q4 }, data: { phase: pha } });
+}
+
+export async function datPhaNamKe(
+	pha: "lap-ke-hoach" | "dang-chay",
+): Promise<void> {
+	await db.okrCycle.update({
+		where: { id: CHU_KY_NAM_KE },
+		data: { phase: pha },
+	});
 }
 
 export async function donSoan(): Promise<void> {

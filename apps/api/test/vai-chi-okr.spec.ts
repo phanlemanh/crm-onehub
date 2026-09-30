@@ -1816,7 +1816,12 @@ type ChuoiAn =
 	| "soChup"
 	| "binhLuan"
 	| "loiNhan";
-type SanDoc = SanAn & { nguoiK: string; chuG: string; hoiY: string };
+type SanDoc = SanAn & {
+	nguoiK: string;
+	chuG: string;
+	hoiY: string;
+	cuocSoan: string;
+};
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
@@ -1957,6 +1962,24 @@ const THU_TU_DOC_OKR = {
 		ma: "id",
 	},
 	"okr.program": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.soanDanhSach": {
+		vao: (s) => ({ cuocSoanId: s.cuocSoan }),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.khongSuaDuocDonVi,
+	},
+	"okr.soanDanhSachCuoc": {
+		vao: (s) => ({ cycleId: s.ky, level: "phong-ban", departmentId: s.pb }),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.khongSuaDuocDonVi,
+	},
+	"okr.soanSanSang": {
+		vao: (s) => ({ cycleId: s.ky, level: "phong-ban", departmentId: s.pb }),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.khongSuaDuocDonVi,
+	},
 	"okr.sucKhoe": {
 		vao: cuaKy,
 		K: "vang",
@@ -2436,11 +2459,22 @@ describe("hien-thi-an", () => {
 					createdAt: luc,
 				},
 			});
+			const cuocSoan = await db.okrCuocSoan.create({
+				data: {
+					cycleId: gieo.ky,
+					level: "phong-ban",
+					departmentId: gieo.pb,
+					nguoiMoUserId: nguoi.truong.id,
+					sessionId: `an-soan-${suffix}`,
+					nac: "bat",
+				},
+			});
 			const san = {
 				...gieo,
 				nguoiK: nguoi.k.id,
 				chuG: nguoi.truong.id,
 				hoiY: hoiY.id,
+				cuocSoan: cuocSoan.id,
 			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
@@ -2504,6 +2538,7 @@ describe("hien-thi-an", () => {
 			} finally {
 				setSystemTime();
 				await db.okrHoiY.deleteMany({ where: { id: san.hoiY } });
+				await db.okrCuocSoan.deleteMany({ where: { id: san.cuocSoan } });
 				await donMucTieuAn(san, tatCaNguoi);
 			}
 		},

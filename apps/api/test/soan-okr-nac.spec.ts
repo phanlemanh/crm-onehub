@@ -401,6 +401,10 @@ describe("tran-thang", () => {
 				where: { id: kyMoi },
 				data: { phase: "dang-chay" },
 			});
+			await db.okrCycle.update({
+				where: { id: idMau("chu-ky", "nam-ke") },
+				data: { phase: "dang-chay" },
+			});
 			ct = await cauHinhAiLuc(db, tienDongHo());
 			expect(await coChuKyLapKeHoachTrongThang(db, thang)).toBe(false);
 			expect(await tranThangCuaThang(db, ct, thang)).toBe(9);
@@ -411,6 +415,10 @@ describe("tran-thang", () => {
 			expect(so.troLyOkr.tranUsd).toBe(9);
 			await db.okrCycle.update({
 				where: { id: kyMoi },
+				data: { phase: "lap-ke-hoach" },
+			});
+			await db.okrCycle.update({
+				where: { id: idMau("chu-ky", "nam-ke") },
 				data: { phase: "lap-ke-hoach" },
 			});
 			const so2 = ok<{ troLyOkr: { tranUsd: number } }>(

@@ -11,8 +11,8 @@ import { idMau, LoiBoMau, ngayDb, OKR_MAU } from "./cau-hinh";
 import { dienBien, type LanMau, lanQuy3, lichMau } from "./dien-bien";
 import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
 import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
-import { napTaiLieuMau } from "./nap-tai-lieu";
 import { type DemHoiY, napHoiYMau, xoaHoiY } from "./nap-hoi-y";
+import { napTaiLieuMau } from "./nap-tai-lieu";
 
 export { idMau };
 

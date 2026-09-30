@@ -9,6 +9,7 @@ import type {
 } from "../src/okr/okr.contracts";
 import {
 	DON_VI,
+	datPhaNamKe,
 	datPhaQuy4,
 	donSoan,
 	gieoCuoc,
@@ -96,6 +97,7 @@ beforeAll(async () => {
 afterAll(async () => {
 	await db.aiChiPhi.deleteMany({ where: { tinhNang: "okr.soan" } });
 	await datPhaQuy4("lap-ke-hoach");
+	await datPhaNamKe("lap-ke-hoach");
 	await donSoan();
 	await ketThucMau(app);
 }, CHO_DB);
@@ -222,6 +224,7 @@ describe("tran-soan", () => {
 		"thang thuong: khong co chu ky lap-ke-hoach -> tran thuong; cham 9 USD moi het-tran-thang, ca soanTangLuot o cua cung tu choi",
 		async () => {
 			await datPhaQuy4("dang-chay");
+			await datPhaNamKe("dang-chay");
 			tienDongHo();
 			const chuaChamTran = await goiSoan(
 				app,
@@ -240,6 +243,7 @@ describe("tran-soan", () => {
 				lyDo: "het-tran-thang",
 			});
 			await datPhaQuy4("lap-ke-hoach");
+			await datPhaNamKe("lap-ke-hoach");
 			const cuoc = await gieoCuoc({
 				donVi: DON_VI.kdBac,
 				nguoiMo: "nguyen-thi-lan",

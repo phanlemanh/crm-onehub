@@ -137,7 +137,7 @@ describe("bo-mau-soan", () => {
 			select: { moTa: true },
 		});
 		const pb = await db.department.findMany({
-			where: { id: TIEN },
+			where: { id: TIEN, archivedAt: null },
 			select: { moTa: true },
 		});
 		expect([bp.length, pb.length]).toEqual([3, 10]);

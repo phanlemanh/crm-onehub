@@ -67,6 +67,7 @@ const PB = {
 	divisionId: "bp-kd",
 	head: null,
 	stepCount: 0,
+	okrMo: 0,
 	people: [],
 };
 const CAY: TreeOutput = {
@@ -77,6 +78,7 @@ const CAY: TreeOutput = {
 			moTa: "",
 			position: 0,
 			head: null,
+			okrMo: 0,
 			departments: [PB],
 		},
 	],
