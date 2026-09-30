@@ -32,6 +32,7 @@ function cayMau(): TreeOutput {
 	const pb1 = {
 		id: "pb-1",
 		name: "Kinh doanh vùng 1",
+		moTa: "",
 		position: 0,
 		divisionId: "bp-kd",
 		head: HUNG,
@@ -44,6 +45,7 @@ function cayMau(): TreeOutput {
 	const cskh = {
 		id: "pb-cskh",
 		name: "Chăm sóc khách hàng",
+		moTa: "",
 		position: 0,
 		divisionId: "bp-vh",
 		head: null,
@@ -56,6 +58,7 @@ function cayMau(): TreeOutput {
 	const kho = {
 		id: "pb-kho",
 		name: "Kho vận",
+		moTa: "",
 		position: 1,
 		divisionId: "bp-vh",
 		head: null,
@@ -65,6 +68,7 @@ function cayMau(): TreeOutput {
 	const pc = {
 		id: "pb-pc",
 		name: "Pháp chế",
+		moTa: "",
 		position: 0,
 		divisionId: null,
 		head: null,
@@ -78,12 +82,14 @@ function cayMau(): TreeOutput {
 		managerOverrideId: null,
 		manager: null,
 		managerSource: "khong-co" as const,
+		chucDanh: "",
 	});
 	return {
 		divisions: [
 			{
 				id: "bp-kd",
 				name: "Kinh doanh",
+				moTa: "",
 				position: 0,
 				head: LAN,
 				departments: [pb1],
@@ -91,6 +97,7 @@ function cayMau(): TreeOutput {
 			{
 				id: "bp-vh",
 				name: "Vận hành",
+				moTa: "",
 				position: 1,
 				head: null,
 				departments: [cskh, kho],
@@ -1057,6 +1064,7 @@ function baBoPhan(): TreeOutput {
 			{
 				id: "bp-tc",
 				name: "Tài chính",
+				moTa: "",
 				position: 2,
 				head: null,
 				departments: [],

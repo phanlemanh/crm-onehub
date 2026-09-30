@@ -5,6 +5,7 @@ import {
 } from "@crm/auth";
 import type { Db } from "@crm/db";
 import { parseOnboardingTemplateSteps } from "@crm/validation/onboarding-template";
+import { chucDanh as chucDanhKhuon, moTaDonVi } from "@crm/validation/to-chuc";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -23,6 +24,7 @@ import type {
 	ImportApplyOutput,
 	ImportPreviewOutput,
 	PlacementInput,
+	RenameInput,
 	TreeOutput,
 } from "./to-chuc.contracts";
 import { TO_CHUC } from "./to-chuc-config";
@@ -35,6 +37,20 @@ export function kiemTen(ten: string): string {
 	if (sach === "") throw new BadRequestException(T.tenTrong);
 	if (sach.length > TO_CHUC.ten.toiDa)
 		throw new BadRequestException(T.tenDai(TO_CHUC.ten.toiDa));
+	return sach;
+}
+
+export function kiemMoTa(chu: string): string {
+	const sach = chu.normalize("NFC").trim();
+	if (!moTaDonVi.safeParse(sach).success)
+		throw new BadRequestException(T.moTaDai(TO_CHUC.moTa.toiDa));
+	return sach;
+}
+
+export function kiemChucDanh(chu: string): string {
+	const sach = chu.normalize("NFC").trim();
+	if (!chucDanhKhuon.safeParse(sach).success)
+		throw new BadRequestException(T.chucDanhDai(TO_CHUC.chucDanh.toiDa));
 	return sach;
 }
 
@@ -63,6 +79,7 @@ export class ToChucService {
 					select: {
 						id: true,
 						name: true,
+						moTa: true,
 						position: true,
 						headUserId: true,
 						archivedAt: true,
@@ -73,6 +90,7 @@ export class ToChucService {
 					select: {
 						id: true,
 						name: true,
+						moTa: true,
 						position: true,
 						divisionId: true,
 						headUserId: true,
@@ -85,6 +103,7 @@ export class ToChucService {
 						userId: true,
 						primaryDepartmentId: true,
 						managerUserId: true,
+						chucDanh: true,
 					},
 				}),
 				this.db.orgSecondaryDepartment.findMany({
@@ -169,13 +188,14 @@ export class ToChucService {
 		});
 	}
 
-	async renameDivision(input: { id: string; name: string }) {
+	async renameDivision(input: RenameInput) {
 		const ten = kiemTen(input.name);
+		const moTa = input.moTa === undefined ? undefined : kiemMoTa(input.moTa);
 		await this.boPhanSong(input.id);
 		await this.tenKhongTrung("division", ten, input.id);
 		return this.db.division.update({
 			where: { id: input.id },
-			data: { name: ten },
+			data: { name: ten, moTa },
 			select: { id: true },
 		});
 	}
@@ -257,13 +277,14 @@ export class ToChucService {
 		});
 	}
 
-	async renameDepartment(input: { id: string; name: string }) {
+	async renameDepartment(input: RenameInput) {
 		const ten = kiemTen(input.name);
+		const moTa = input.moTa === undefined ? undefined : kiemMoTa(input.moTa);
 		await this.phongBanCo(input.id);
 		await this.tenKhongTrung("department", ten, input.id);
 		return this.db.department.update({
 			where: { id: input.id },
-			data: { name: ten },
+			data: { name: ten, moTa },
 			select: { id: true },
 		});
 	}
@@ -480,6 +501,7 @@ export class ToChucService {
 	}
 
 	async setPlacement(input: PlacementInput) {
+		const chucDanh = kiemChucDanh(input.chucDanh);
 		await this.thanhVienHieuLuc(input.userId);
 		const phu = [...new Set(input.secondaryDepartmentIds)];
 		if (
@@ -507,10 +529,12 @@ export class ToChucService {
 					userId: input.userId,
 					primaryDepartmentId: input.primaryDepartmentId,
 					managerUserId: input.managerUserId,
+					chucDanh,
 				},
 				update: {
 					primaryDepartmentId: input.primaryDepartmentId,
 					managerUserId: input.managerUserId,
+					chucDanh,
 				},
 			}),
 			this.db.orgSecondaryDepartment.deleteMany({

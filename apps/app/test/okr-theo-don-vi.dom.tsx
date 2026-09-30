@@ -39,6 +39,7 @@ function cayMau(): TreeOutput {
 	) => ({
 		id,
 		name,
+		moTa: "",
 		position: 0,
 		divisionId,
 		head,
@@ -50,6 +51,7 @@ function cayMau(): TreeOutput {
 			{
 				id: "bp-kd",
 				name: "Kinh doanh",
+				moTa: "",
 				position: 0,
 				head: LAN,
 				departments: [pb("pb-1", "Kinh doanh vùng 1", "bp-kd", HUNG)],
@@ -57,6 +59,7 @@ function cayMau(): TreeOutput {
 			{
 				id: "bp-vh",
 				name: "Vận hành",
+				moTa: "",
 				position: 1,
 				head: null,
 				departments: [pb("pb-kho", "Kho vận", "bp-vh", null)],
