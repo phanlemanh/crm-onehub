@@ -47,8 +47,11 @@ import { demDong } from "./luat-ban-nhap";
 
 type LyDoSoan = keyof OkrSoanMessages["lyDo"];
 
-function CanhLuot({ xong }: { xong: () => void }) {
-	useMountEffect(() => xong);
+function CanhLuot({ batDau, xong }: { batDau: () => void; xong: () => void }) {
+	useMountEffect(() => {
+		batDau();
+		return xong;
+	});
 	return null;
 }
 
@@ -131,7 +134,7 @@ function Than({
 	);
 	return (
 		<>
-			{s.busy ? <CanhLuot xong={s.docLai} /> : null}
+			{s.busy ? <CanhLuot batDau={s.luotBatDau} xong={s.docLai} /> : null}
 			{s.busy ? (
 				<HenGio key={s.moc} ms={SOAN_UI.hanKhongSuKienMs} het={s.baoHetGio} />
 			) : null}

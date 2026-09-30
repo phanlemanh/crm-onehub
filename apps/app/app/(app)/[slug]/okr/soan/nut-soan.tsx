@@ -11,7 +11,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import { type ReactNode, useId } from "react";
 import { toast } from "sonner";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
-import { homNayVn } from "@/lib/okr-chu-ky-nhan";
+import { homNayVn, ngayThangVn } from "@/lib/okr-chu-ky-nhan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { dauThangSau } from "../cot-gop-y";
@@ -106,8 +106,7 @@ export function NutSoan({
 	quanTri: boolean;
 	canEdit: boolean;
 }) {
-	const locale = useLocale();
-	const m = okrSoanMessages(locale);
+	const m = okrSoanMessages(useLocale());
 	const trpc = useTRPC();
 	const [cuocSoan, datCuocSoan] = useQueryState(
 		SEARCH_PARAM.okr.cuocSoan,
@@ -167,13 +166,6 @@ export function NutSoan({
 				{m.nut.dsCuoc(String(da), tran)}
 			</Button>
 		) : null;
-	const ngay = (iso: string) =>
-		new Intl.DateTimeFormat(locale, { day: "2-digit", month: "2-digit" })
-			.formatToParts(new Date(iso))
-			.filter((p) => p.type === "day" || p.type === "month")
-			.map((p) => p.value)
-			.join("/");
-
 	const s = sanSang.data;
 	let nut: ReactNode = null;
 	if (s && !s.bat) {
@@ -228,7 +220,7 @@ export function NutSoan({
 					</div>
 					<FieldDescription>
 						{m.nut.tiepMoTa(
-							ngay(cuocDang.moLuc),
+							ngayThangVn(new Date(cuocDang.moLuc)),
 							String(cuocDang.soLuot),
 							String(cuocDang.soDongTong - cuocDang.soDongNhan),
 						)}

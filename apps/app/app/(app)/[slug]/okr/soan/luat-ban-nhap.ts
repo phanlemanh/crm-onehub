@@ -59,7 +59,9 @@ export function soBanNhap(
 	const moi = new Set(sau.map((d) => d.khoaDong));
 	const doiCha = (c: DongSoan, d: DongSoan) => {
 		const chaCu = chaCua(c, truoc);
-		return chaCu !== null && moi.has(chaCu) && chaCu !== chaCua(d, sau);
+		const chaMoi = chaCua(d, sau);
+		if (chaCu === null || chaMoi === null || chaCu === chaMoi) return false;
+		return moi.has(chaCu) || cu.has(chaMoi);
 	};
 	for (const d of sau) {
 		const c = cu.get(d.khoaDong);

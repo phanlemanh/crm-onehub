@@ -31,6 +31,7 @@ import {
 } from "@crm/ui/components/status-indicator";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
+import { OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { CuocSoan, DonViSoan } from "./kieu";
 
@@ -93,6 +94,7 @@ function BangCuoc({
 		day: "2-digit",
 		month: "2-digit",
 		year: "numeric",
+		timeZone: OKR_CHU_KY.muiGio,
 	});
 	const so = new Intl.NumberFormat(locale);
 	return (

@@ -146,7 +146,7 @@ function ketCua(
 		decision: ket,
 		text: (
 			<>
-				{m.banNhap.daQuyet(nhan, giaTri, m.banNhap.ket[ket])}
+				{nhan} · <span translate="no">{giaTri}</span> — {m.banNhap.ket[ket]}
 				{them}
 				{daBo ? (
 					<>

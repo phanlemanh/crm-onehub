@@ -108,8 +108,6 @@ const vi = {
 			dismissed: "Đã bác",
 			skipped: "Đã bỏ qua",
 		} satisfies Record<Ket, string>,
-		daQuyet: (nhan: string, giaTri: string, ket: string) =>
-			`${nhan} · ${giaTri} — ${ket}`,
 		bacCon: (n: string) => `${n} dòng con thu gọn`,
 		duaVao: (mt: string, kr: string) =>
 			`Đưa vào bộ OKR · ${mt} Mục tiêu, ${kr} KR`,
@@ -278,7 +276,6 @@ const en: OkrSoanMessages = {
 			huy: "Cancel",
 		},
 		ket: { accepted: "Accepted", dismissed: "Rejected", skipped: "Skipped" },
-		daQuyet: (nhan, giaTri, ket) => `${nhan} · ${giaTri} — ${ket}`,
 		bacCon: (n) => `${n} lines below collapsed`,
 		duaVao: (mt, kr) => `Add to OKRs · ${mt} Objectives, ${kr} KRs`,
 		thieuDich: (n) =>

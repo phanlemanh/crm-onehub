@@ -53,7 +53,7 @@ export function useLuongCuoc(cuocSoanId: string) {
 
 type BanNhapDaXet = {
 	nguon: readonly DongSoan[];
-	truoc: readonly DongSoan[];
+	goc: readonly DongSoan[];
 	ket: KetSoBanNhap;
 };
 
@@ -100,11 +100,11 @@ export function usePhienCuoc(cuoc: CuocSoan) {
 export function useNhapCuoc(dong: readonly DongSoan[]) {
 	const [xet, setXet] = useState<BanNhapDaXet>(() => ({
 		nguon: dong,
-		truoc: dong,
+		goc: dong,
 		ket: soBanNhap([], dong),
 	}));
 	if (xet.nguon !== dong) {
-		setXet({ nguon: dong, truoc: dong, ket: soBanNhap(xet.truoc, dong) });
+		setXet({ nguon: dong, goc: xet.goc, ket: soBanNhap(xet.goc, dong) });
 	}
 	const [so, setSo] = useState<SoDaGo>({});
 	const [chu, setChu] = useState("");
@@ -112,6 +112,12 @@ export function useNhapCuoc(dong: readonly DongSoan[]) {
 	const khaiChu = useKhaiThayDoi();
 	return {
 		ket: xet.ket,
+		luotBatDau: () =>
+			setXet((cu) => ({
+				nguon: cu.nguon,
+				goc: cu.nguon,
+				ket: soBanNhap(cu.nguon, cu.nguon),
+			})),
 		so,
 		datSo: (krId: string, moi: SoKr) => {
 			setSo((cu) => ({ ...cu, [krId]: moi }));
@@ -246,6 +252,7 @@ export function useCuocSoan({
 		moc,
 		baoHetGio,
 		docLai,
+		luotBatDau: nhap.luotBatDau,
 		khoaSoan,
 		hong,
 		qua45s,

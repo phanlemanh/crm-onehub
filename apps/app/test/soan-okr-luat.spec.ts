@@ -133,6 +133,26 @@ describe("luat-ban-nhap", () => {
 		});
 	});
 
+	test("soBanNhap: bỏ một Mục tiêu làm KR chạy sang Mục tiêu đã có thì KR «vừa chuyển»", () => {
+		const { nhan } = soBanNhap(
+			[
+				mt("1", "Giữ khách"),
+				kr("11", "1", "Ký lại hợp đồng"),
+				mt("2", "Mở tuyến"),
+				kr("21", "2", "Chuyến đúng hẹn"),
+			],
+			[
+				mt("5", "Giữ khách"),
+				kr("51", "5", "Ký lại hợp đồng"),
+				kr("52", "5", "Chuyến đúng hẹn"),
+			],
+		);
+		expect(Object.fromEntries(nhan)).toEqual({
+			[kdKr("Chuyến đúng hẹn")]: "vua-chuyen",
+			[kdMt("Mở tuyến")]: "da-bo",
+		});
+	});
+
 	test("soBanNhap: model đánh lại khoá mà cha vẫn là cha cũ thì không «vừa chuyển»", () => {
 		const { nhan } = soBanNhap(
 			[mt("1", "Giữ khách"), kr("11", "1", "Ký lại hợp đồng")],

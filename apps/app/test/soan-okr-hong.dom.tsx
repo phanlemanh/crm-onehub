@@ -49,6 +49,19 @@ describe("hong — tac nhan chet giua chung", () => {
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
 	});
 
+	test("(a) tác nhân chết 5 giây sau khi bắt đầu lượt: báo lỗi và có Thử lại", async () => {
+		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
+		await moMan();
+		batDongHoGia();
+		await datAgent({ status: "streaming", events: [{ type: "turn.started" }] });
+		await troi(5_000);
+		expect(coLoi()).toBe(false);
+		await datAgent({ status: "error", error: new Error("session ended") });
+		expect(coLoi()).toBe(true);
+		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
+		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
+	});
+
 	test("(a) phiên còn sống: không báo lỗi", async () => {
 		datThread({
 			status: "ready",
@@ -66,6 +79,18 @@ describe("hong — tac nhan chet giua chung", () => {
 });
 
 describe("hong — 45 giay khong su kien", () => {
+	test("(b) không sự kiện nào: 44 giây chưa báo, quá 45 giây thì báo", async () => {
+		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
+		await moMan();
+		batDongHoGia();
+		await datAgent({ status: "streaming", events: [{ type: "turn.started" }] });
+		await troi(44_000);
+		expect(coLoi()).toBe(false);
+		await troi(SOAN_UI.hanKhongSuKienMs - 44_000 + 1);
+		expect(coLoi()).toBe(true);
+		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
+	});
+
 	test("(b) đúng mốc 45 giây mới báo, sự kiện mới dời mốc", async () => {
 		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
 		await moMan();

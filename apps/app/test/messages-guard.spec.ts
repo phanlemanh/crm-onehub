@@ -128,7 +128,6 @@ const KHONG_DAU = new Set([
 	"hop.onehub",
 	"vietTruoc.tenChuDe",
 	"banNhap.kr",
-	"banNhap.daQuyet",
 	"cuoc.xem",
 ]);
 
@@ -262,7 +261,6 @@ const GHIM_OKR_SOAN = {
 	"okr-soan:banNhap.canChinh": ["Góp vào «1»", "Góp vào «12»"],
 	"okr-soan:banNhap.doBang": ["đo bằng 1", "đo bằng 12"],
 	"okr-soan:banNhap.goiYKhoiDiem": ["khởi điểm gợi ý 1", "khởi điểm gợi ý 12"],
-	"okr-soan:banNhap.daQuyet": ["1 · A — B", "12 · A — B"],
 	"okr-soan:banNhap.bacCon": ["1 dòng con thu gọn", "12 dòng con thu gọn"],
 	"okr-soan:banNhap.duaVao": [
 		"Đưa vào bộ OKR · 1 Mục tiêu, A KR",
