@@ -16,6 +16,7 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
@@ -39,19 +40,24 @@ import { toast } from "sonner";
 import { CELL, type ChuKy } from "@/app/(app)/[slug]/okr/kieu";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
-import type { GoiYChuKy } from "@/lib/okr-chu-ky-nhan";
+import { type GoiYChuKy, homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import { HoiGoChuKy, HoiHienLaiChuKy } from "./hoi-chu-ky";
+import { HopThoaiAnChuKy } from "./hop-thoai-an-chu-ky";
 import { HopThoaiDongKy } from "./hop-thoai-dong-ky";
 import { HopThoaiMoLai } from "./hop-thoai-mo-lai";
 import {
 	parseMoChuKy,
 	parseMoRa,
+	parseSuaChuKy,
 	THAM_SO_MO_CHU_KY,
 	THAM_SO_MO_RA,
+	THAM_SO_SUA_CHU_KY,
 } from "./okr-settings-search-params";
 import { SheetMoChuKy } from "./sheet-mo-chu-ky";
 import { SheetMoRa } from "./sheet-mo-ra";
+import { SheetSuaChuKy } from "./sheet-sua-chu-ky";
 import { DangTaiThe, LoiThe, useQuyenChuongTrinh } from "./trang-thai-cai-dat";
 
 const TONE_PHA = {
@@ -61,7 +67,9 @@ const TONE_PHA = {
 	"da-dong": "neutral",
 } as const satisfies Record<PhaChuKy, StatusTone>;
 
-type Hoi = "chuyen" | "dong" | "mo-lai" | null;
+type Hoi = "chuyen" | "dong" | "mo-lai" | "go" | "an" | "hien-lai" | null;
+
+const daAn = (ky: ChuKy) => ky.anLuc !== null;
 
 function theoNam(cycles: ChuKy[]): ChuKy[] {
 	const nam = cycles.filter((c) => c.kind === "nam");
@@ -100,7 +108,12 @@ export function BangChuKy({
 		{ id: "hanhDong", srLabel: c.chuKy.menu, width: "w-12" },
 	];
 
-	const ds = cycles.data ? theoNam(cycles.data.cycles) : [];
+	const ds = cycles.data
+		? [
+				...theoNam(cycles.data.cycles.filter((ky) => !daAn(ky))),
+				...theoNam(cycles.data.cycles.filter(daAn)),
+			]
+		: [];
 
 	return (
 		<Card data-the="chu-ky">
@@ -132,7 +145,29 @@ export function BangChuKy({
 						<SimpleTableRow key={ky.id} data-chu-ky={ky.id}>
 							<TableCell className={`${CELL} whitespace-normal`}>
 								<span className="flex flex-col gap-0.5">
-									<span translate="no">{ky.name}</span>
+									<span
+										translate="no"
+										className={daAn(ky) ? "text-muted-foreground" : undefined}
+									>
+										{ky.name}
+									</span>
+									{ky.anLuc !== null ? (
+										<span
+											className="text-muted-foreground text-xs"
+											data-dong-an={ky.id}
+										>
+											{c.chuKy.dongAn(
+												formatDay(homNayVn(new Date(ky.anLuc)), locale),
+												c.pha[ky.phase],
+											)}
+											{ky.anLyDo ? (
+												<>
+													{" · "}
+													<span translate="no">{ky.anLyDo}</span>
+												</>
+											) : null}
+										</span>
+									) : null}
 									{ky.cuaSoRa ? (
 										<span
 											className="text-muted-foreground text-xs tabular-nums"
@@ -156,11 +191,19 @@ export function BangChuKy({
 								{formatDay(ky.endsOn, locale)}
 							</TableCell>
 							<TableCell className={CELL}>
-								<StatusIndicator
-									size="sm"
-									tone={TONE_PHA[ky.phase]}
-									label={c.pha[ky.phase]}
-								/>
+								{daAn(ky) ? (
+									<StatusIndicator
+										size="sm"
+										tone="neutral"
+										label={c.chuKy.daAn}
+									/>
+								) : (
+									<StatusIndicator
+										size="sm"
+										tone={TONE_PHA[ky.phase]}
+										label={c.pha[ky.phase]}
+									/>
+								)}
 							</TableCell>
 							<TableCell className={`${CELL} text-right`}>
 								<MenuChuKy ky={ky} canManage={canManage} lyDo={lyDo} />
@@ -172,9 +215,10 @@ export function BangChuKy({
 
 			<SheetMoChuKy
 				canManage={canManage}
-				cacNam={ds.filter((ky) => ky.kind === "nam")}
+				cacNam={ds.filter((ky) => ky.kind === "nam" && !daAn(ky))}
 				goiY={goiY}
 			/>
+			<SheetSuaChuKy canManage={canManage} cycles={ds} />
 			<SheetMoRa canManage={canManage} cycles={ds} homNay={homNay} />
 		</Card>
 	);
@@ -196,8 +240,10 @@ function MenuChuKy({
 	const cache = useCrmCache();
 	const [hoi, setHoi] = useState<Hoi>(null);
 	const [, setMoRa] = useQueryState(THAM_SO_MO_RA, parseMoRa);
+	const [, setSua] = useQueryState(THAM_SO_SUA_CHU_KY, parseSuaChuKy);
 	const ke = phaSau(ky.phase);
 	const dong = () => setHoi(null);
+	const v = c.chuKy.viec;
 
 	const chuyen = useMutation(
 		trpc.okr.setCyclePhase.mutationOptions({
@@ -232,8 +278,32 @@ function MenuChuKy({
 		</DropdownMenuItem>
 	);
 
-	const cacMuc =
-		ky.phase === "lap-ke-hoach"
+	const mucMoi = daAn(ky)
+		? [muc(v.hienLai, "hien-lai", () => setHoi("hien-lai"))]
+		: [
+				...(ky.viec.suaMoiO || ky.viec.suaTen
+					? [muc(v.sua, "sua", () => void setSua(ky.id))]
+					: []),
+				...(ky.viec.go ? [muc(v.go, "go", () => setHoi("go"))] : []),
+				...(ky.viec.an
+					? [muc(v.an, "an", () => setHoi("an"))]
+					: ky.quyConHien > 0
+						? [
+								<DropdownMenuItem key="an" disabled data-viec-chu-ky="an">
+									<span className="flex flex-col gap-0.5">
+										<span>{v.an}</span>
+										<span className="text-muted-foreground text-xs">
+											{c.chuKy.anKhoa(String(ky.quyConHien))}
+										</span>
+									</span>
+								</DropdownMenuItem>,
+							]
+						: []),
+			];
+
+	const mucCu = daAn(ky)
+		? []
+		: ky.phase === "lap-ke-hoach"
 			? [
 					muc(c.chuKy.chuyenSang(c.pha["dang-chay"]), "chay", () =>
 						setHoi("chuyen"),
@@ -268,7 +338,13 @@ function MenuChuKy({
 						<Icon icon={OverflowMenuHorizontal} />
 					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end">{cacMuc}</DropdownMenuContent>
+				<DropdownMenuContent align="end" className="w-64">
+					{mucMoi}
+					{mucMoi.length > 0 && mucCu.length > 0 ? (
+						<DropdownMenuSeparator />
+					) : null}
+					{mucCu}
+				</DropdownMenuContent>
 			</DropdownMenu>
 			{ke === "dang-chay" || ke === "cham-diem" ? (
 				<ConfirmDialog
@@ -299,6 +375,21 @@ function MenuChuKy({
 						if (!mo) dong();
 					}}
 				/>
+			) : null}
+			{ky.viec.go ? (
+				<HoiGoChuKy ky={ky} open={hoi === "go"} dong={dong} />
+			) : null}
+			{ky.viec.an ? (
+				<HopThoaiAnChuKy
+					ky={ky}
+					open={hoi === "an"}
+					onOpenChange={(mo) => {
+						if (!mo) dong();
+					}}
+				/>
+			) : null}
+			{ky.viec.hienLai ? (
+				<HoiHienLaiChuKy ky={ky} open={hoi === "hien-lai"} dong={dong} />
 			) : null}
 			{ky.phase === "da-dong" ? (
 				<HopThoaiMoLai
