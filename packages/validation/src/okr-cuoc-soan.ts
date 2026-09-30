@@ -1,0 +1,67 @@
+import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
+import { z } from "zod";
+import { KIEU_KR } from "./okr-kr";
+
+export const LOAI_MUC_TIEU_NHAP = ["cam-ket", "tham-vong"] as const;
+
+export const BAN_NHAP_TRAN = {
+	mucTieu: { min: 2, max: 4 },
+	kr: { min: 2, max: 4 },
+	khoa: 40,
+	donVi: 24,
+} as const;
+
+export const khoaNhap = z.string().trim().min(1).max(BAN_NHAP_TRAN.khoa);
+
+const viSao = z.string().trim().min(1).max(TRO_LY_OKR_TRAN.chu.viSao);
+
+export const krNhap = z.object({
+	khoa: khoaNhap,
+	ten: z.string().trim().min(3).max(TRO_LY_OKR_TRAN.chu.tenKr),
+	kieu: z.enum(KIEU_KR),
+	donVi: z.string().trim().max(BAN_NHAP_TRAN.donVi),
+	khoiDiemGoiY: z.number().finite().nullable().optional(),
+	dich: z.number().finite().nullable().optional(),
+	viSao,
+});
+
+export const mucTieuNhap = z.object({
+	khoa: khoaNhap,
+	ten: z.string().trim().min(3).max(TRO_LY_OKR_TRAN.chu.tenMucTieu),
+	viSaoLucNay: z.string().trim().max(TRO_LY_OKR_TRAN.chu.viSao),
+	loai: z.enum(LOAI_MUC_TIEU_NHAP),
+	viSao,
+	canChinhId: z.string().min(1).nullable().optional(),
+	kr: z.array(krNhap).min(BAN_NHAP_TRAN.kr.min).max(BAN_NHAP_TRAN.kr.max),
+});
+
+export const banNhap = z.object({
+	mucTieu: z
+		.array(mucTieuNhap)
+		.min(BAN_NHAP_TRAN.mucTieu.min)
+		.max(BAN_NHAP_TRAN.mucTieu.max),
+});
+
+export type KrNhap = z.infer<typeof krNhap>;
+export type MucTieuNhap = z.infer<typeof mucTieuNhap>;
+export type BanNhap = z.infer<typeof banNhap>;
+
+export function parseBanNhap(value: unknown): BanNhap {
+	const r = banNhap.safeParse(value);
+	if (!r.success)
+		throw new Error(`bản nháp không đọc được: ${r.error.message}`);
+	return r.data;
+}
+
+export const soanDuaVaoInput = z.object({
+	cuocSoanId: z.string().min(1),
+	kr: z.array(
+		z.object({
+			deXuatId: z.string().min(1),
+			khoiDiem: z.number().finite(),
+			dich: z.number().finite(),
+		}),
+	),
+});
+
+export type SoanDuaVaoInput = z.infer<typeof soanDuaVaoInput>;

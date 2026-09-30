@@ -23,6 +23,7 @@ const en = {
 		"chinh-sach": "Policy",
 		"quy-trinh": "Process",
 		"bieu-mau": "Form",
+		"chien-luoc": "Strategy",
 	} satisfies Record<LoaiTrang, string>,
 	loc: {
 		nhan: "Page type",
@@ -334,6 +335,7 @@ const vi: TaiLieuMessages = {
 		"chinh-sach": "Chính sách",
 		"quy-trinh": "Quy trình",
 		"bieu-mau": "Biểu mẫu",
+		"chien-luoc": "Chiến lược",
 	},
 	loc: {
 		nhan: "Loại trang",

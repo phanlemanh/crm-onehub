@@ -26,7 +26,7 @@ import {
 } from "@crm/validation/okr-kiem-de-xuat";
 import { kieuKr } from "@crm/validation/okr-kr";
 import {
-	type DongDeXuat,
+	type DongGopY,
 	dongTuHang,
 	maLoaiDeXuat,
 	okrTroLyViec,
@@ -92,7 +92,7 @@ const CACH_CUA_LOAI = {
 	"viet-lai": ["nhan", "sua", "bac"],
 	hoi: ["bac", "bo-qua"],
 	"can-chinh": ["nhan", "bac"],
-} as const satisfies Record<DongDeXuat["loai"], readonly string[]>;
+} as const satisfies Record<DongGopY["loai"], readonly string[]>;
 
 const TRANG_THAI_CUA_CACH = {
 	nhan: "nhan",
@@ -107,13 +107,13 @@ type MucTieuGoi = {
 	keyResults: { id: string; title: string }[];
 };
 
-function giaTriHienTai(mt: MucTieuGoi, dong: DongDeXuat): string | null {
+function giaTriHienTai(mt: MucTieuGoi, dong: DongGopY): string | null {
 	if (dong.truong === "title") return mt.title;
 	if (dong.truong === "whyNow") return mt.whyNow;
 	return mt.keyResults.find((k) => k.id === dong.keyResultId)?.title ?? null;
 }
 
-function conHieuLuc(mt: MucTieuGoi, dong: DongDeXuat): boolean {
+function conHieuLuc(mt: MucTieuGoi, dong: DongGopY): boolean {
 	return dong.loai !== "viet-lai" || dong.truoc === giaTriHienTai(mt, dong);
 }
 
@@ -124,7 +124,7 @@ function hopLe<R>(doc: z.ZodSafeParseResult<R>): R {
 	);
 }
 
-function noiDungDong(id: string, dong: DongDeXuat) {
+function noiDungDong(id: string, dong: DongGopY) {
 	return {
 		id,
 		loai: dong.loai,
@@ -402,7 +402,7 @@ export class TroLyOkrService {
 		};
 	}
 
-	private async assertSuaDong(tx: Tx, userId: string, dong: DongDeXuat) {
+	private async assertSuaDong(tx: Tx, userId: string, dong: DongGopY) {
 		const krId =
 			dong.truong === "kr.title" || dong.loai === "hoi"
 				? dong.keyResultId
@@ -414,7 +414,7 @@ export class TroLyOkrService {
 		await this.quyenOkr.assertSuaMucTieu(userId, dong.objectiveId, tx);
 	}
 
-	private async assertConHieuLuc(tx: Tx, dong: DongDeXuat) {
+	private async assertConHieuLuc(tx: Tx, dong: DongGopY) {
 		if (dong.loai !== "viet-lai") return;
 		const mt = await tx.okrObjective.findUniqueOrThrow({
 			where: { id: dong.objectiveId },
@@ -431,7 +431,7 @@ export class TroLyOkrService {
 		tx: Tx,
 		userId: string,
 		deXuatId: string,
-		dong: DongDeXuat,
+		dong: DongGopY,
 		giaTri: string | null,
 	) {
 		const ghi = { note: ghiChuVet(deXuatId) };

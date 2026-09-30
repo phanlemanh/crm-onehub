@@ -36,6 +36,7 @@ const dem = (qd: number, cs: number, qt: number, bm: number): Dem => ({
 	"chinh-sach": cs,
 	"quy-trinh": qt,
 	"bieu-mau": bm,
+	"chien-luoc": 0,
 });
 
 const MA_TRAN: readonly {
