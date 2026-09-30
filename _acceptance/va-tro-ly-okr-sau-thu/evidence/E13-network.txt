@@ -1,0 +1,1 @@
+Driver: puppeteer-core chay trong script tien-de (khong co browser tool doc network). Khong thu thap duoc network/console rieng.

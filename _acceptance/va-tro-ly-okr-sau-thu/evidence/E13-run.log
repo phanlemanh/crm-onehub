@@ -1,0 +1,35 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_va_tro_ly_okr_sau_thu_do · app http://localhost:4191 · api http://localhost:4528
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- API cua phien nay khong noi tac tu (thieu AGENT_BRIDGE_SECRET/AGENT_URL) — mo phien do rieng co tac tu
+-- phien do co tac tu: cay va-tro-ly-okr-sau-thu-tro-ly · tac tu cong 55915
+phien-do: kho crm_va_tro_ly_okr_sau_thu_tro_ly_do · app http://localhost:4556 · api http://localhost:4469
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+NAP okr:mau --moc 2026-10-01: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-10-01T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ.
+DUNG kiem san sang ghi nguon: khoa-chung
+DUNG hop KR 1440: khong co goi y «Câu này đọc như một việc làm. Làm xong thì con số nào đổi?»
+DUNG hop KR 1440: dong xu huong co don vi «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61 tỷ đồng»
+ANH .acceptance-runs/va-tro-ly-okr-sau-thu/man/ST-kr-xu-huong-don-vi-1440.png
+DUNG ST-kr-xu-huong-don-vi 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 383/383)
+DUNG hop KR 390: khong co goi y «Câu này đọc như một việc làm. Làm xong thì con số nào đổi?»
+DUNG hop KR 390: dong xu huong co don vi «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61 tỷ đồng»
+ANH .acceptance-runs/va-tro-ly-okr-sau-thu/man/ST-kr-xu-huong-don-vi-390.png
+DUNG ST-kr-xu-huong-don-vi 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG the Tro ly OKR 1440: «Sẵn sàng · khoá chung của tác tử»
+ANH .acceptance-runs/va-tro-ly-okr-sau-thu/man/ST-caidat-san-sang-chung-1440.png
+DUNG ST-caidat-san-sang-chung 1440: scrollWidth <= clientWidth (trang 1440/1440)
+DUNG the Tro ly OKR 390: «Sẵn sàng · khoá chung của tác tử»
+ANH .acceptance-runs/va-tro-ly-okr-sau-thu/man/ST-caidat-san-sang-chung-390.png
+DUNG ST-caidat-san-sang-chung 390: scrollWidth <= clientWidth (trang 390/390)
+KET LUAN: 11 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
