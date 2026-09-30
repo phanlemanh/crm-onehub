@@ -21,7 +21,7 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 
 ## Thay đổi
 
-- Dữ liệu: một migration chỉ thêm (`20261009010000_okr_soan`) — bảng cuộc soạn
+- Dữ liệu: một migration chỉ thêm (`20261010010000_okr_soan`) — bảng cuộc soạn
   `OkrCuocSoan`; mô tả cho bộ phận và phòng ban, chức danh cho chỗ đặt người; bốn cột
   nấc soạn và trần tháng đặt OKR trong cấu hình chương trình; dòng nháp mang cuộc soạn,
   nội dung và bản ghi nó tạo ra (`cuocSoanId`, `noiDung`, `taoRaId` trên `OkrDeXuat`).

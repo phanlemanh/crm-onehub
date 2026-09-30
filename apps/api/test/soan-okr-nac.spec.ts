@@ -59,7 +59,7 @@ import {
 
 const MIGRATION = join(
 	import.meta.dir,
-	"../../../packages/db/prisma/migrations/20261009010000_okr_soan/migration.sql",
+	"../../../packages/db/prisma/migrations/20261010010000_okr_soan/migration.sql",
 );
 
 const CAM = [

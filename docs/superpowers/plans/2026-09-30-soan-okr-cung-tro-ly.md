@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Mọi lời gọi model mang `providerOptions.gateway.zeroDataRetention: true` và `thinkingLevel: "low"`; judge của eval cũng ZDR; trần tiền eval `TDX_TRAN_USD` (mặc định 2 USD).
-- Migration **chỉ thêm** (`20261009010000_okr_soan`): không đổi, không xoá cột; cột đích của KR giữ NOT NULL — số của KR nháp do người điền trên thẻ, máy không ghi số.
+- Migration **chỉ thêm** (`20261010010000_okr_soan`): không đổi, không xoá cột; cột đích của KR giữ NOT NULL — số của KR nháp do người điền trên thẻ, máy không ghi số.
 - `apps/agent-okr` không nhập gì từ `apps/agent`; chỉ từ `@crm/db`, `@crm/validation`, `@crm/ai-okr`, `eve`. Tập công cụ của phiên soạn = `{nop_ban_nhap}`; công cụ dựng sẵn tắt bằng `disableTool()`; sandbox deny-all.
 - Trần: `TRO_LY_OKR_TRAN.soan = { luotMoiCuoc: 12, cuocMoiDonViMoiKy: 3 }`; trang «chiến lược» ≤ 20.000 ký tự; gói ≤ 17.000 token ước (ký tự ÷ 2,6), cắt theo thứ tự lớp 3 → ngang cấp → KR cấp trên, không bao giờ cắt lớp 0, 5, 1.
 - Vai «chỉ OKR»: cửa mới chỉ kiểm phạm vi `okr`; JWT không mang `contactId`/`companyId`/`dealId`; cửa cũ và `thanhVienPrincipal` của tác nhân CRM gốc không đổi.
@@ -36,7 +36,7 @@
 
 | Khu | Tạo mới | Sửa |
 | --- | --- | --- |
-| Dữ liệu | `packages/db/prisma/migrations/20261009010000_okr_soan/migration.sql`, `packages/db/src/okr-cuoc-soan.ts`, `packages/db/src/okr-goi-soan.ts` | `packages/db/prisma/schema.prisma`, `packages/db/src/okr-tro-ly-danh-muc.ts`, `packages/db/src/okr-tro-ly.ts` |
+| Dữ liệu | `packages/db/prisma/migrations/20261010010000_okr_soan/migration.sql`, `packages/db/src/okr-cuoc-soan.ts`, `packages/db/src/okr-goi-soan.ts` | `packages/db/prisma/schema.prisma`, `packages/db/src/okr-tro-ly-danh-muc.ts`, `packages/db/src/okr-tro-ly.ts` |
 | Khuôn | `packages/validation/src/okr-cuoc-soan.ts`, `okr-kiem-ban-nhap.ts`, `okr-tom-gon-ky.ts` | `okr-tro-ly.ts`, `okr-chuong-trinh.ts`, `to-chuc.ts`, `tai-lieu.ts`, `phien-tac-tu.ts` |
 | Xưởng model | `packages/ai-okr/{package.json,src/index.ts}` | `apps/agent/agent/lib/okr/mo-hinh.ts` (một tệp) |
 | App Trợ lý riêng | `apps/agent-okr/**` (agent.ts, channels/eve.ts, tools/nop_ban_nhap.ts + 9 disable, sandbox, instructions, hooks, lib/goi-soan.ts, lib/config.ts, evals/**, test/**) | `turbo.json`, root `package.json` workspaces, `.env.example` |
@@ -151,11 +151,11 @@ Luật kho áp mọi task (AGENTS.md): không chú thích trong mã; parse ở b
 
 ---
 
-## A1 — Migration `20261009010000_okr_soan` + schema Prisma
+## A1 — Migration `20261010010000_okr_soan` + schema Prisma
 
 **Files**
 - Sửa: `packages/db/prisma/schema.prisma`
-- Tạo: `packages/db/prisma/migrations/20261009010000_okr_soan/migration.sql`
+- Tạo: `packages/db/prisma/migrations/20261010010000_okr_soan/migration.sql`
 - Tạo: `apps/api/test/soan-okr-nac.spec.ts` (mới, chỉ ca migration; A8 nối thêm)
 
 **Interfaces**
@@ -173,7 +173,7 @@ import { join } from "node:path";
 
 const MIGRATION = join(
 	import.meta.dir,
-	"../../../packages/db/prisma/migrations/20261009010000_okr_soan/migration.sql",
+	"../../../packages/db/prisma/migrations/20261010010000_okr_soan/migration.sql",
 );
 
 const CAM = [
@@ -291,7 +291,7 @@ model OkrCuocSoan {
 }
 ```
 
-4. Tạo `packages/db/prisma/migrations/20261009010000_okr_soan/migration.sql` với đúng nội dung:
+4. Tạo `packages/db/prisma/migrations/20261010010000_okr_soan/migration.sql` với đúng nội dung:
 
 ```sql
 -- AlterTable
@@ -3604,7 +3604,7 @@ export async function donDep(): Promise<void> {
 }
 ```
 
-(`okrCuocSoan`, `moTa`, `chucDanh` là của migration Phần A `20261009010000_okr_soan`; B2 đứng sau khi migration đã gộp vào nhánh. Thứ tự xoá theo khoá ngoại: thêm `okrKeyResult`/`okrAlignment`/`okrTrail` nếu test sau gieo chúng — B6 mở rộng hàm này.)
+(`okrCuocSoan`, `moTa`, `chucDanh` là của migration Phần A `20261010010000_okr_soan`; B2 đứng sau khi migration đã gộp vào nhánh. Thứ tự xoá theo khoá ngoại: thêm `okrKeyResult`/`okrAlignment`/`okrTrail` nếu test sau gieo chúng — B6 mở rộng hàm này.)
 
 4. Test đỏ `apps/agent-okr/test/kenh.spec.ts`:
 
@@ -4265,7 +4265,7 @@ Chỉnh chuỗi kỳ vọng trong test cho khớp đúng đầu ra (tuần im: 0
 
 ## B5 — `packages/db`: bộ đọc gói `okr-goi-soan.ts`, sổ cuộc `okr-cuoc-soan.ts`, tính năng chi phí `okr.soan`
 
-Tiền đề: migration Phần A `20261009010000_okr_soan` đã vào nhánh (bảng `OkrCuocSoan`, cột `moTa`, `chucDanh`, `OkrDeXuat.cuocSoanId/taoRaId/noiDung`, `LOAI_TRANG` có `chien-luoc`, `TRO_LY_OKR_TRAN.soan` và `nacCuaViec("soan", …)`).
+Tiền đề: migration Phần A `20261010010000_okr_soan` đã vào nhánh (bảng `OkrCuocSoan`, cột `moTa`, `chucDanh`, `OkrDeXuat.cuocSoanId/taoRaId/noiDung`, `LOAI_TRANG` có `chien-luoc`, `TRO_LY_OKR_TRAN.soan` và `nacCuaViec("soan", …)`).
 
 **Files**
 - Tạo: `packages/db/src/okr-goi-soan.ts`, `packages/db/src/okr-cuoc-soan.ts`, `packages/db/test/okr-goi-soan.spec.ts`.
@@ -11673,7 +11673,7 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 
 ## Thay đổi
 
-- Dữ liệu: một migration chỉ thêm `20261009010000_okr_soan` — bảng `OkrCuocSoan`,
+- Dữ liệu: một migration chỉ thêm `20261010010000_okr_soan` — bảng `OkrCuocSoan`,
   cột `moTa`, `chucDanh`, bốn cột nấc soạn và `aiTranThangDatOkrUsd`, `cuocSoanId`
   và `taoRaId` trên `OkrDeXuat`.
 - API: `SoanService` với tám thủ tục `soan*` dưới `PhamViOkrMiddleware`
