@@ -41,6 +41,7 @@ const E9 = {
 		goiLaiMs: 15 * GIAY_MS,
 		lamMoiMs: 400,
 		nhipMs: 2 * GIAY_MS,
+		vetMs: 15 * GIAY_MS,
 	},
 	quanTri: "le-hai-dang",
 	chuKy: "quy4",
@@ -512,16 +513,33 @@ async function buocMoTuTin(tlA, url) {
 		truoc === 0,
 	);
 	const t = await trang(tlA, E9.kho[0]);
+	let daGoi = false;
 	try {
+		const phanHoi = t.p
+			.waitForResponse((r) => r.url().includes("okr.moHopTuan"), {
+				timeout: E9.cho.manMs,
+			})
+			.then(() => true)
+			.catch(() => false);
 		await t.p.goto(lienKet, { waitUntil: "load" });
 		kiem(
 			"mo duong trong tin: khoi tom tat phong A hien",
 			await hien(t.p, KHOI),
 		);
+		daGoi = await phanHoi;
 	} finally {
 		await t.ctx.close();
 	}
-	const sau = await demVet();
+	kiem(
+		"mo duong trong tin: trang da goi okr.moHopTuan va nhan phan hoi",
+		daGoi,
+	);
+	const han = Date.now() + E9.cho.vetMs;
+	let sau = await demVet();
+	while (sau === 0 && Date.now() < han) {
+		await tre(E9.cho.lamMoiMs);
+		sau = await demVet();
+	}
 	kiem(
 		`sau khi mo duong trong tin: ${sau} vet mo-hop-tuan cua truong phong A, phong A`,
 		sau === 1,
