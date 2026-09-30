@@ -195,6 +195,47 @@ describe("the viec OKR", () => {
 		).toBe("no");
 	});
 
+	test("hai loai hoi y: moi loai mot dong co bieu tuong, cau rieng, ten chu ky khong dich va lien ket toi tab Hoi y", async () => {
+		traVe = () => ({
+			lienQuanOkr: false,
+			viec: [
+				{
+					loai: "okr-hoi-y-gop",
+					hoiYId: "hy-1",
+					cycleId: "n27",
+					nhan: "Năm 2027",
+					hanLuc: "2026-10-14T10:00:00.000Z",
+				},
+				{
+					loai: "okr-hoi-y-cong-bo",
+					hoiYId: "hy-2",
+					cycleId: "n26",
+					nhan: "Năm 2026",
+				},
+			],
+		});
+		await mo("khi-co-viec", false);
+		await cho(() => dong().length === 2, "hai dong hoi y");
+		const [gop, congBo] = dong();
+		expect(dong().map((d) => d.dataset.viecOkr)).toEqual([
+			"okr-hoi-y-gop",
+			"okr-hoi-y-cong-bo",
+		]);
+		expect(gop?.textContent).toContain(m.cau.hoiYGop);
+		expect(congBo?.textContent).toContain(m.cau.hoiYCongBo);
+		expect(gop?.querySelector("[translate=no]")?.textContent).toBe("Năm 2027");
+		expect(congBo?.querySelector("[translate=no]")?.textContent).toBe(
+			"Năm 2026",
+		);
+		expect(
+			dong().map((d) => d.querySelector("a")?.getAttribute("href")),
+		).toEqual(["/ws/okr/hoi-y?kyOkr=n27", "/ws/okr/hoi-y?kyOkr=n26"]);
+		expect(dong().map((d) => d.querySelector("svg") !== null)).toEqual([
+			true,
+			true,
+		]);
+	});
+
 	test("bam dong khac mo sheet muc tieu dung ma", async () => {
 		await mo("khi-lien-quan", true);
 		await cho(() => dong().length === 6, "sau dong");

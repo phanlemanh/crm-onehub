@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
-import { LOAI_NHAC_OKR } from "@crm/db/okr-nhac";
+import { LOAI_NHAC_OKR, type LoaiNhacOkr } from "@crm/db/okr-nhac";
 import { mocNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import {
 	guiCapNhatInput,
@@ -27,6 +27,7 @@ import {
 	ok,
 	pbMoi,
 	phienCua,
+	taoNam,
 	truongMoi,
 	ungDung,
 } from "./okr-san";
@@ -517,6 +518,9 @@ describe("the-truc-tiep", () => {
 	);
 });
 
+const LOAI_CO_DUONG_RIENG: LoaiNhacOkr[] = ["okr-hoi-y-cong-bo"];
+const HAN_HOI_Y_GIO = 48;
+
 describe("du-duong", () => {
 	test(
 		"du-duong: sau loai muc OKR do duong ghi that tao, okr.viecCuaToi tra du sau loai va qua khuon dau ra",
@@ -591,6 +595,19 @@ describe("du-duong", () => {
 				"tp cap nhat k3",
 			);
 
+			const nguoiChon = await nguoiMoi("dd-chon", "admin");
+			const kyKe = await taoNam("dd-hoi-y", new Date().getUTCFullYear() + 1);
+			ok(
+				await goi("okr.moHoiY", {
+					cycleId: kyKe,
+					cauHoi: "Năm tới công ty nên dồn sức vào điều gì trước tiên?",
+					loiMo: "",
+					soLieu: [{ nhan: "Doanh thu năm", giaTri: "186 tỷ", ghiChu: "" }],
+					hanLuc: new Date(Date.now() + HAN_HOI_Y_GIO * GIO_MS).toISOString(),
+					nguoiChonUserId: nguoiChon,
+				}),
+				"mo hoi y cho X gop",
+			);
 			ok(await goi("okr.setProgram", { duyetCongBo: true }), "bat duyet");
 			const bp = await bpMoi("dd-bp");
 			ok(
@@ -626,7 +643,9 @@ describe("du-duong", () => {
 
 			const quaTrpc = await doc<ViecCuaToiOutput>("okr.viecCuaToi", cX);
 			const loai = [...new Set(quaTrpc.viec.map((v) => v.loai))].sort();
-			const mong = [...LOAI_NHAC_OKR].sort();
+			const mong = LOAI_NHAC_OKR.filter(
+				(l) => !LOAI_CO_DUONG_RIENG.includes(l),
+			).sort();
 			if (JSON.stringify(loai) !== JSON.stringify(mong)) {
 				throw new Error(
 					`du-duong: thieu ${mong.filter((l) => !loai.includes(l)).join(", ")}`,

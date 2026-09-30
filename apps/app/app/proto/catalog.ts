@@ -505,6 +505,44 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "dot-hoi-y-tuong-okr",
+		ten: "Hỏi ý mục tiêu — góp, gom, chọn, báo lại",
+		states: [
+			{ id: "ST-hoiy-dang-tai", nhan: "Thành viên — đang tải" },
+			{ id: "ST-hoiy-loi", nhan: "Thành viên — tải hỏng, thử lại" },
+			{
+				id: "ST-hoiy-trong-quan-tri",
+				nhan: "Quản trị — chưa hỏi ý cho kỳ này",
+			},
+			{
+				id: "ST-hoiy-trong-thanh-vien",
+				nhan: "Thành viên — chưa có lần hỏi ý nào",
+			},
+			{
+				id: "ST-mo-sheet",
+				nhan: "Quản trị — sheet Mở hỏi ý, một ô chưa hợp lệ",
+			},
+			{ id: "ST-gop-chua-gop", nhan: "Thành viên — đang mở, chưa góp" },
+			{ id: "ST-gop-da-gop", nhan: "Thành viên — đã góp 2 ý, còn góp được" },
+			{ id: "ST-gop-het-han", nhan: "Thành viên — hết hạn, chờ công bố" },
+			{
+				id: "ST-viet-truoc",
+				nhan: "Người chọn — viết trước, ý người khác còn khoá",
+			},
+			{ id: "ST-gom", nhan: "Quản trị — gom ý thành chủ đề sau hạn" },
+			{
+				id: "ST-chon-chua-du",
+				nhan: "Người chọn — kết luận, còn thiếu nên chưa công bố được",
+			},
+			{ id: "ST-chon-du", nhan: "Người chọn — đủ điều kiện, Công bố bật" },
+			{ id: "ST-ket-qua", nhan: "Thành viên — kết quả: ý của tôi đi đâu" },
+			{
+				id: "ST-ket-qua-da-hieu",
+				nhan: "Thành viên — kết quả, đã bấm «Tôi hiểu vì sao»",
+			},
+		],
+	},
+	{
 		slug: "canh-kr-okr",
 		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
 		states: [

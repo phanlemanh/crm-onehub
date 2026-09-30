@@ -7,20 +7,44 @@ import {
 	PeriodSelect,
 } from "@crm/ui/components/period-select";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import { useQueryStates } from "nuqs";
 import { okrMessages } from "@/lib/messages/okr";
 import { canNhanLoai } from "@/lib/okr-chu-ky-nhan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
-import { giaiKy, okrParsers } from "./okr-search-params";
+import {
+	giaiKy,
+	giaiKyHoiY,
+	kyMacDinhHoiY,
+	okrParsers,
+} from "./okr-search-params";
+import { tabTuDuong } from "./tab-okr";
+
+export function useKyHoiY() {
+	const trpc = useTRPC();
+	const cycles = useQuery(trpc.okr.cycles.queryOptions());
+	const [url] = useQueryStates(okrParsers);
+	return {
+		cycles,
+		cycleId: giaiKyHoiY(url[SEARCH_PARAM.okr.ky], cycles.data ?? null),
+	};
+}
 
 export function useChuKy() {
 	const trpc = useTRPC();
 	const cycles = useQuery(trpc.okr.cycles.queryOptions());
 	const [url, datUrl] = useQueryStates(okrParsers);
 	const ky = url[SEARCH_PARAM.okr.ky];
-	const macDinh = cycles.data?.currentId ?? null;
-	const currentId = giaiKy(ky, cycles.data ?? null);
+	const hoiY = tabTuDuong(usePathname()) === "hoi-y";
+	const macDinh = cycles.data
+		? hoiY
+			? kyMacDinhHoiY(cycles.data)
+			: cycles.data.currentId
+		: null;
+	const currentId = hoiY
+		? giaiKyHoiY(ky, cycles.data ?? null)
+		: giaiKy(ky, cycles.data ?? null);
 	const datKy = (id: string) =>
 		void datUrl({ [SEARCH_PARAM.okr.ky]: id === macDinh ? null : id });
 	return { cycles, currentId, ky, datKy };

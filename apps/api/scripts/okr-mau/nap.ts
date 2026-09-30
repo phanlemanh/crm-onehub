@@ -11,6 +11,7 @@ import { idMau, LoiBoMau, ngayDb, OKR_MAU } from "./cau-hinh";
 import { dienBien, type LanMau, lanQuy3, lichMau } from "./dien-bien";
 import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
 import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
+import { type DemHoiY, napHoiYMau, xoaHoiY } from "./nap-hoi-y";
 
 export { idMau };
 
@@ -29,7 +30,8 @@ export type DemBoMau = {
 	diem: number;
 	nguoiXem: number;
 	vet: number;
-} & DemCanhKr;
+} & DemCanhKr &
+	DemHoiY;
 
 type Quy = "quy3" | "quy4";
 
@@ -37,6 +39,7 @@ export const thuMau = (ma: string) => `${ma}@${OKR_MAU.mienThu}`;
 
 const CHU_KY = {
 	nam: idMau("chu-ky", "nam"),
+	namKe: idMau("chu-ky", "nam-ke"),
 	quy3: idMau("chu-ky", "quy3"),
 	quy4: idMau("chu-ky", "quy4"),
 };
@@ -120,6 +123,7 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const O = { in: t.mucTieu };
 	const K = { in: t.kr };
 	const canhKr = await xoaCanhKr(tx, t);
+	const hoiY = await xoaHoiY(tx, t);
 	const phien = await tx.okrCheckInSession.findMany({
 		where: { userId: U },
 		select: { id: true },
@@ -190,6 +194,7 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 		nguoiXem: nguoiXem.count,
 		vet: vet.count,
 		...canhKr,
+		...hoiY,
 	};
 }
 
@@ -273,7 +278,7 @@ export async function napTrong(
 	tx: Tx,
 	bo: BoOkrMau,
 	moc: Date,
-): Promise<DemBoMau> {
+): Promise<Omit<DemBoMau, keyof DemHoiY>> {
 	const lich = lichMau(moc);
 	const ct = await chuongTrinh(tx);
 	const bayGio = new Date(moc.getTime());
@@ -357,6 +362,15 @@ export async function napTrong(
 	});
 	await tx.okrCycle.createMany({
 		data: [
+			{
+				id: CHU_KY.namKe,
+				kind: "nam",
+				name: bo.chuKy.namKe.ten,
+				startsOn: ngayDb(lich.namKe.tu),
+				endsOn: ngayDb(lich.namKe.den),
+				phase: "lap-ke-hoach",
+				createdAt: bayGio,
+			},
 			{
 				id: CHU_KY.quy3,
 				kind: "quy",
@@ -632,7 +646,7 @@ export async function napTrong(
 		nguoi: bo.nguoi.length,
 		boPhan: bo.boPhan.length,
 		phongBan: bo.phongBan.length + bo.phongBanLuuTru.length,
-		chuKy: 3,
+		chuKy: 4,
 		mucTieu: bo.mucTieu.length,
 		kr: krDong.length,
 		capNhat: capNhat.length,
@@ -671,12 +685,23 @@ export async function napBoOkrMau(
 	bo: BoOkrMau,
 	{ moc }: { moc: Date },
 ): Promise<DemBoMau> {
-	return trongGiaoDich(db, async (tx) => {
+	const dem = await trongGiaoDich(db, async (tx) => {
 		await kiemWorkspace(tx);
 		await kiemOkrThat(tx);
 		await xoaTrong(tx);
 		return napTrong(tx, bo, moc);
 	});
+	try {
+		const hoiY = await napHoiYMau(db, bo, { moc, chuKyId: CHU_KY.namKe });
+		return { ...dem, ...hoiY };
+	} catch (loi) {
+		await xoaBoOkrMau(db).catch((loiDon) => {
+			console.error(
+				`Nạp lần hỏi ý mẫu hỏng, và dọn bộ mẫu vừa nạp cũng hỏng — kho còn bộ mẫu dở, chạy lại với ${OKR_MAU.co.xoa}: ${loiDon instanceof Error ? loiDon.message : String(loiDon)}`,
+			);
+		});
+		throw loi;
+	}
 }
 
 export async function xoaBoOkrMau(db: Db): Promise<DemBoMau | null> {

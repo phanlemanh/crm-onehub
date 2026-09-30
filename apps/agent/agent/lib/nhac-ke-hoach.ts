@@ -15,6 +15,7 @@ import {
 	mucNhac,
 	parseNhacPayload,
 } from "@crm/validation/nhac-ke-hoach";
+import { THAM_SO_KY_OKR } from "@crm/validation/okr-chu-ky";
 import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
 import { completeTask } from "./tasks";
@@ -122,6 +123,10 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 		}
 		if (v.loai === "okr-cap-nhat") {
 			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
+		}
+		if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
+			const thamSo = new URLSearchParams({ [THAM_SO_KY_OKR]: v.cycleId });
+			return `${ctx.appUrl}/${ctx.slug}/okr/hoi-y?${thamSo}`;
 		}
 		return `${ctx.appUrl}/${ctx.slug}/okr?record=objective:${v.objectiveId}`;
 	};

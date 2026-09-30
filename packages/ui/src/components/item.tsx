@@ -132,12 +132,18 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
 	);
 }
 
-function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
+function ItemDescription({
+	className,
+	unclamped = false,
+	...props
+}: React.ComponentProps<"p"> & { unclamped?: boolean }) {
 	return (
 		<p
 			data-slot="item-description"
+			data-unclamped={unclamped || undefined}
 			className={cn(
-				"line-clamp-2 text-left text-sm leading-normal font-normal text-muted-foreground wrap-anywhere group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+				"text-left text-sm leading-normal font-normal text-muted-foreground wrap-anywhere group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+				!unclamped && "line-clamp-2",
 				className,
 			)}
 			{...props}
