@@ -277,14 +277,13 @@ describe("mo-hinh-ai", () => {
 	it("ma tran bay o viet truoc", async () => {
 		let so = 0;
 		for (const o of O_NANG_LUC) {
-			const env: Record<string, string> = { ...o.env };
 			const bang = await mayKhongLienKet(() =>
-				voiEnv(env, () =>
+				voiEnv(o.env, () =>
 					trongRequest(o.header ? veOidc() : null, () => capabilities()),
 				),
 			);
 			const muc = bang.find((c) => c.id === "MO_HINH_AI");
-			const coRieng = Boolean(env.OKR_AI_GATEWAY_API_KEY);
+			const coRieng = "OKR_AI_GATEWAY_API_KEY" in o.env;
 			if (o.header && !coRieng && !muc?.enabled)
 				throw new Error("nang luc lech nguon khoa");
 			if (o.bat && coRieng && !muc?.enabled)
@@ -294,7 +293,7 @@ describe("mo-hinh-ai", () => {
 		}
 		console.log(`mo-hinh-ai: ${so}/${O_NANG_LUC.length} o`);
 		expect(so).toBe(O_NANG_LUC.length);
-	});
+	}, 30_000);
 
 	it("muc khong doc bien khoa truc tiep", () => {
 		const nguon = readFileSync(

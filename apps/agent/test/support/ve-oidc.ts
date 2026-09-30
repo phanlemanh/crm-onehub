@@ -6,7 +6,7 @@ const NGU_CANH = Symbol.for("@vercel/request-context");
 const GIAY = 1000;
 const MOT_GIO = 3600;
 
-const base64url = (o: object) =>
+const base64url = (o: Readonly<Record<string, string | number>>) =>
 	Buffer.from(JSON.stringify(o)).toString("base64url");
 
 export function veOidc(v: { hetHan?: boolean } = {}): string {

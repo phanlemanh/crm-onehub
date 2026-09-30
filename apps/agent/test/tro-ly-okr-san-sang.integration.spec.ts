@@ -552,7 +552,10 @@ describe("kiem-lai", () => {
 		},
 	];
 
-	const trongNguon = <T>(d: Pick<Dong, "env" | "header">, chay: () => Promise<T>) =>
+	const trongNguon = <T>(
+		d: Pick<Dong, "env" | "header">,
+		chay: () => Promise<T>,
+	) =>
 		mayKhongLienKet(() =>
 			voiEnv(d.env, () => trongRequest(d.header ? veOidc() : null, chay)),
 		);
@@ -576,7 +579,10 @@ describe("kiem-lai", () => {
 			await donViecDo();
 			await gieoKiemSanSang(new Date(goc - HAN_MS - PHUT_MS), d.cu);
 			if (d.cu === "san-sang") {
-				const cu = await troLyOkrSanSang(db, { viec: "de-xuat", now: new Date() });
+				const cu = await troLyOkrSanSang(db, {
+					viec: "de-xuat",
+					now: new Date(),
+				});
 				expect(cu.bat, "hang cu khong doc duoc: san-sang").toBe(true);
 			}
 			const ra = await trongNguon(d, async () => {

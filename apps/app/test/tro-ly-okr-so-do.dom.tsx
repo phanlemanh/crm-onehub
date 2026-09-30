@@ -6,6 +6,7 @@ import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import {
+	type AiChiTieuOutput,
 	aiChiTieuOutput,
 	type SoDoNac,
 	type TroLyAnOutput,
@@ -525,15 +526,17 @@ describe("nguon-khoa", () => {
 			.map((d) => d.match(/^\| (ST-caidat-[\w-]+) \|/)?.[1])
 			.filter((x): x is string => Boolean(x));
 
-	const vao = (sanSang: unknown, nguonKhoa: unknown) => ({
+	const vao = (
+		sanSang: AiChiTieuOutput["sanSang"],
+		nguonKhoa: AiChiTieuOutput["nguonKhoa"],
+	) => ({
 		sanSang: aiChiTieuOutput.shape.sanSang.parse(sanSang),
 		nguonKhoa: aiChiTieuOutput.shape.nguonKhoa.parse(nguonKhoa),
 	});
 
-	const CA: Record<
-		string,
-		{ du: ReturnType<typeof vao>; co: string[]; khong: string[] }
-	> = {
+	type Ca = { du: ReturnType<typeof vao>; co: string[]; khong: string[] };
+
+	const CA = {
 		"ST-caidat-san-sang-rieng": {
 			du: vao({ bat: true, conLaiUsd: 9 }, "khoa-rieng"),
 			co: [s.sanSangNguon["khoa-rieng"]],
@@ -564,7 +567,10 @@ describe("nguon-khoa", () => {
 			],
 			khong: [],
 		},
-	};
+	} satisfies Record<string, Ca>;
+
+	const caCua = (st: string): Ca | undefined =>
+		Object.entries(CA).find(([k]) => k === st)?.[1];
 
 	async function moChiBao(du: ReturnType<typeof vao>) {
 		const { ChiBaoSanSang } = await import(
@@ -594,7 +600,7 @@ describe("nguon-khoa", () => {
 		const bang = docBang();
 		expect(bang.length).toBeGreaterThan(0);
 		for (const st of bang) {
-			const ca = CA[st];
+			const ca = caCua(st);
 			if (!ca) throw new Error(`trang thai chua do: ${st}`);
 			const o = await moChiBao(ca.du);
 			const chu = o.textContent ?? "";

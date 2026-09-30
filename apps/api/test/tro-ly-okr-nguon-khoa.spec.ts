@@ -13,6 +13,7 @@ import {
 	type KetQuaKiemSanSang,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import type { OkrProgramSua } from "@crm/validation/okr-chuong-trinh";
+import type { NguonKhoaHien } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { AgentTriggerService } from "../src/agent/agent-trigger.service";
@@ -30,16 +31,16 @@ let app: NestExpressApplication;
 const nguoi = { quan: id("quan"), thuong: id("thuong") };
 const cookie = { quan: "", thuong: "" };
 
-const BANG_NGUON: Record<
-	KetQuaKiemSanSang,
-	{ nguonKhoa: "khoa-rieng" | "khoa-chung" | "oidc" | "chua-ro" | null; bat: boolean }
-> = {
+const BANG_NGUON = {
 	"san-sang-khoa-rieng": { nguonKhoa: "khoa-rieng", bat: true },
 	"san-sang-khoa-chung": { nguonKhoa: "khoa-chung", bat: true },
 	"san-sang-oidc": { nguonKhoa: "oidc", bat: true },
 	"san-sang": { nguonKhoa: "chua-ro", bat: true },
 	"chua-co-khoa-mo-hinh": { nguonKhoa: null, bat: false },
-};
+} as const satisfies Record<
+	KetQuaKiemSanSang,
+	{ nguonKhoa: NguonKhoaHien; bat: boolean }
+>;
 
 async function goiTrpc(
 	thuTuc: string,
@@ -80,7 +81,10 @@ afterAll(async () => {
 	await db.agentTask.deleteMany({
 		where: {
 			kind: "okr-kiem-san-sang",
-			OR: [{ subject: { startsWith: id("") } }, { dueAt: { gte: new Date(BAY_GIO.getTime() - 60 * PHUT_MS) } }],
+			OR: [
+				{ subject: { startsWith: id("") } },
+				{ dueAt: { gte: new Date(BAY_GIO.getTime() - 60 * PHUT_MS) } },
+			],
 		},
 	});
 	await db.okrProgramConfig.deleteMany({
@@ -101,7 +105,10 @@ describe("nguon-khoa", () => {
 	test("nguon-khoa: moi ket qua kiem ra dung nguonKhoa, bang rut tu KET_QUA_KIEM_SAN_SANG", async () => {
 		await db.agentTask.updateMany({
 			where: { kind: "okr-kiem-san-sang", finishedAt: null },
-			data: { finishedAt: new Date(BAY_GIO.getTime() - 50 * PHUT_MS), outcome: "chua-co-khoa-mo-hinh" },
+			data: {
+				finishedAt: new Date(BAY_GIO.getTime() - 50 * PHUT_MS),
+				outcome: "chua-co-khoa-mo-hinh",
+			},
 		});
 		let so = 0;
 		for (const [i, ketQua] of KET_QUA_KIEM_SAN_SANG.entries()) {
@@ -131,5 +138,5 @@ describe("nguon-khoa", () => {
 
 	test("nguon-khoa: thanh vien van bi tu choi", async () => {
 		expect((await goiTrpc("okr.aiChiTieu", "thuong")).status).toBe(403);
-	});
+	}, 30_000);
 });

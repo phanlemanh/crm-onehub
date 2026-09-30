@@ -22,7 +22,5 @@ export async function nguonKhoaMoHinh(
 	const env = v.env ?? process.env;
 	if ((v.rieng ?? true) && co(env, TRO_LY_OKR.khoa.rieng)) return "khoa-rieng";
 	if (co(env, TRO_LY_OKR.khoa.chung)) return "khoa-chung";
-	return (await coVe(v.layVe ?? (() => getVercelOidcToken())))
-		? "oidc"
-		: null;
+	return (await coVe(v.layVe ?? (() => getVercelOidcToken()))) ? "oidc" : null;
 }

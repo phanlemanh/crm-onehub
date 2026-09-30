@@ -183,7 +183,9 @@ describe("okr-kiem", () => {
 describe("dong-tu", () => {
 	const laViecKr = (title: string) =>
 		kiemOkr(mt(kr(title, "tang-toi"))).some((c) => c.ma === "kr-la-viec");
-	const ASCII = /^[\x00-\x7F]*$/;
+	const ASCII = {
+		test: (s: string) => [...s].every((c) => (c.codePointAt(0) ?? 0) < 128),
+	};
 
 	test("dong-tu: moi dong tu mot cap co dau va go khong dau, deu la viec", () => {
 		let so = 0;

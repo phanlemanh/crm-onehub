@@ -112,7 +112,7 @@ describe("model-rieng", () => {
 	type Goi = Parameters<MockLanguageModelV4["doGenerate"]>[0];
 
 	function dung(env: Record<string, string>) {
-		const cauHinh: unknown[] = [];
+		const cauHinh: ({ apiKey?: string } | undefined)[] = [];
 		const daGoi: Goi[] = [];
 		const gia = new MockLanguageModelV4({
 			doGenerate: async (vao) => {
@@ -120,7 +120,7 @@ describe("model-rieng", () => {
 				return {} as never;
 			},
 		});
-		const tao = ((c?: unknown) => {
+		const tao = ((c?: { apiKey?: string }) => {
 			cauHinh.push(c);
 			return () => gia;
 		}) as unknown as typeof createGateway;
@@ -136,10 +136,7 @@ describe("model-rieng", () => {
 		for (const o of O_MODEL) {
 			const r = dung({ ...o.env });
 			expect(r.cauHinh.length, `so lan tao nha: ${o.ten}`).toBe(1);
-			expect(
-				(r.cauHinh[0] as { apiKey?: string } | undefined)?.apiKey,
-				`khoa nha: ${o.ten}`,
-			).toBe(o.apiKey);
+			expect(r.cauHinh[0]?.apiKey, `khoa nha: ${o.ten}`).toBe(o.apiKey);
 			expect((r.model as { modelId?: string }).modelId).toBe(TRO_LY_OKR.model);
 		}
 	});

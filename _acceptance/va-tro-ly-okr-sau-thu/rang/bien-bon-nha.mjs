@@ -1,4 +1,11 @@
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	cpSync,
+	mkdirSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -72,7 +79,11 @@ function soat(goc, bien) {
 
 	const dong = readFileSync(join(goc, TEP.envMau), "utf8").split("\n");
 	const i = dong.findIndex((d) => d.trim() === `# ${bien}=""`);
-	ghi(TEP.envMau, i > 0 && /^# \S/.test(dong[i - 1] ?? ""), "dong khai kem cau mo ta ngay tren");
+	ghi(
+		TEP.envMau,
+		i > 0 && /^# \S/.test(dong[i - 1] ?? ""),
+		"dong khai kem cau mo ta ngay tren",
+	);
 
 	const turbo = docJsonc(join(goc, TEP.turbo));
 	const trongEnv = [

@@ -111,14 +111,16 @@ async function dichCanChinhCua(
 		cycleParentId: mt.cycle.parentId,
 	});
 	const bo = nhanhDaCanChinh(mt);
-	return ds.filter((d) => !bo.has(d.id)).flatMap((d) => [
-		{ id: d.id, loai: "muc-tieu" as const, ten: d.title },
-		...d.keyResults.map((k) => ({
-			id: k.id,
-			loai: "kr" as const,
-			ten: k.title,
-		})),
-	]);
+	return ds
+		.filter((d) => !bo.has(d.id))
+		.flatMap((d) => [
+			{ id: d.id, loai: "muc-tieu" as const, ten: d.title },
+			...d.keyResults.map((k) => ({
+				id: k.id,
+				loai: "kr" as const,
+				ten: k.title,
+			})),
+		]);
 }
 
 function soDeXuat(mt: MucTieuDoc, hang: HangConTacDung[], nac: NacTroLy) {

@@ -157,7 +157,8 @@ describe("nhanh-can-chinh", () => {
 			const tap = await tapDich(mt);
 			const lot = nhanhX.filter((d) => tap.has(d));
 			if (lot.length > 0) throw new Error(`nhanh chong: X (${ten})`);
-			for (const d of khac) expect(tap.has(d), `mat dich khac: ${ten}`).toBe(true);
+			for (const d of khac)
+				expect(tap.has(d), `mat dich khac: ${ten}`).toBe(true);
 		}
 		const tapC = await tapDich(id.c);
 		for (const d of [...nhanhX, ...khac])
@@ -168,7 +169,9 @@ describe("nhanh-can-chinh", () => {
 		const viec = await moViecDeXuat({ objectiveId: id.a, nguoiYeuCau: nguoi });
 		const ra = await nop(viec, [canChinh(id.a, { targetObjectiveId: id.x })]);
 		expect(ra.biLoai).toBe(1);
-		const hang = await db.okrDeXuat.findMany({ where: { taskId: viec.taskId } });
+		const hang = await db.okrDeXuat.findMany({
+			where: { taskId: viec.taskId },
+		});
 		expect(hang.map((h) => [h.trangThai, h.maLoai])).toEqual([
 			["bi-loai", "id-ngoai-goi"],
 		]);

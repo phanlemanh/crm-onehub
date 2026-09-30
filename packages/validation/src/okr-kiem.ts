@@ -72,7 +72,8 @@ export function boDau(s: string): string {
 		.trim();
 }
 
-const chuThuong = (s: string) => s.normalize("NFC").toLocaleLowerCase("vi").trim();
+const chuThuong = (s: string) =>
+	s.normalize("NFC").toLocaleLowerCase("vi").trim();
 
 const coDau = (s: string) => boDau(s) !== chuThuong(s).replace(/đ/g, "d");
 

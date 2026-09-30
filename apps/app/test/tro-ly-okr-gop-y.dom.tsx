@@ -1200,7 +1200,7 @@ async function moHopKrVoi(kr: KrOutput): Promise<void> {
 	await mo(
 		<HopThoaiKr
 			objectiveId={MT.id}
-			mucTieu={{ ...MT, keyResults: [kr] }}
+			mucTieu={MT}
 			kr={kr}
 			chuMacDinh={HAI.id}
 			suaDuocCot
@@ -1279,9 +1279,9 @@ describe("chu-nho", () => {
 		await bamNho();
 		await cho(() => dongCua(D_HOI.id) !== null, "cot co dong hoi");
 		expect(chu(cot())).toContain(m.cot.soDong("1"));
-		const boQua = [...(dongCua(D_HOI.id)?.querySelectorAll("button") ?? [])].find(
-			(b) => b.textContent?.trim() === m.dong.boQua,
-		);
+		const boQua = [
+			...(dongCua(D_HOI.id)?.querySelectorAll("button") ?? []),
+		].find((b) => b.textContent?.trim() === m.dong.boQua);
 		if (!boQua) throw new Error("khong thay nut Bo qua");
 		await bam(boQua);
 		await cho(() => chu(cot()).includes(m.cot.daQuyetHet), "da quyet het");

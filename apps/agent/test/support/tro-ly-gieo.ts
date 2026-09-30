@@ -1,10 +1,7 @@
 import { db, Prisma } from "@crm/db";
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import { CAU_HINH_AI_MAC_DINH } from "@crm/db/okr-tro-ly";
-import type {
-	CauHinhAi,
-	KetQuaKiemSanSang,
-} from "@crm/db/okr-tro-ly-danh-muc";
+import type { CauHinhAi, KetQuaKiemSanSang } from "@crm/db/okr-tro-ly-danh-muc";
 import { ma, TIEN_TO } from "./nhac-gieo";
 
 let dem = 0;
