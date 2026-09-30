@@ -19,6 +19,9 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    gtd_qua_gio: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t qua-gio"
+    gtd_thoi_luong: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t thoi-luong"
+    gtd_do: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t tep-do"
     ktl_bat_dong_qua_may_chu: 'bun run test -- "cd apps/api && bun test test/tai-lieu-bat-dong.spec.ts"'
     ktl_man_sua_chua_doi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-soan.dom.tsx -t chua-doi"
     ktl_man_tao_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-soan.dom.tsx -t tao-loi"
@@ -1000,6 +1003,7 @@ executors:
     kto_bai_cu: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-gop-y.dom.tsx ./test/the-gop-y-okr.dom.tsx ./test/okr-sheet.dom.tsx ./test/okr-canh-kr.dom.tsx'
     kto_ngan_ui: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sheet-khung.dom.tsx'
   script:
+    gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
     htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
