@@ -88,11 +88,7 @@ export async function choBenKiaDoiKhoa(
 	return false;
 }
 
-export function giuHangMucTieu(id: string): {
-	daGiu: Promise<void>;
-	tha: () => void;
-	xong: Promise<void>;
-} {
+export function giuHangMucTieu(id: string) {
 	let bao: () => void = () => {};
 	let tha: () => void = () => {};
 	const daGiu = new Promise<void>((r) => {
