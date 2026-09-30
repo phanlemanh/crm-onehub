@@ -1529,6 +1529,7 @@ executors:
     kto_chan_quet: 'node _acceptance/khung-tao-okr-nhu-deal/rang/chan-ngan.mjs'
     kto_ui_goc: 'node _acceptance/khung-tao-okr-nhu-deal/rang/ui-goc.mjs'
     kto_thuoc_cu: 'bun _acceptance/khung-tao-okr-nhu-deal/rang/thuoc-cu.mjs'
+    kto_khep_ky: 'EVAL=E3,E7 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khep-ky-okr/rang/man-khep-ky.mjs"'
     kto_proto: 'node _acceptance/khung-tao-okr-nhu-deal/rang/proto-khung.mjs && cd apps/app && bun test test/proto-catalog.spec.ts'
     kto_san_thiet_ke: 'for t in "packages/ui/src/components/sheet.tsx" "packages/ui/src/components/dialog.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/components/crm/record-sheet/objective-sheet.tsx" "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx" "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   design:

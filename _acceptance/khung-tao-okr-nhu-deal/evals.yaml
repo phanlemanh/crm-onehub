@@ -166,9 +166,20 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.kto_thuoc_cu
-    expected: "exit 0; chạy các eval máy của ba hồ sơ bám vỏ (tro-ly-okr-de-xuat E2 E3, the-gop-y-okr E2–E10 E16, hop-thoai-giu-cho-dang-nhap E7 E9, khep-ky-okr E3 E7) bằng đúng lệnh khai trong config của chúng, in mã thoát từng eval; mọi mã bằng mã kỳ vọng của evals.yaml hồ sơ đó. Và danh sách viết trước mọi chốt đỏ thay chữ trên hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx hay objective-sheet.tsx trong bốn hồ sơ (rút bằng cách đọc chuỗi tìm từ chính script của hồ sơ: khep-ky-okr E3 và E7 trong man-khep-ky.mjs, hop-thoai-giu-cho-dang-nhap E7 và E9 trong soi-giu.mjs, và mọi chốt khác tìm thấy khi dò ở S3 — thêm vào danh sách trước khi đổi vỏ): với mỗi chốt, chép tệp, thay chữ bằng chính hàm thay của script đó, khẳng định bản sao khác bản gốc; in số chốt đã soi = độ dài danh sách. Chiều đỏ ghim: một chốt có chuỗi tìm không còn trong tệp phải in 'chot do khong an: <hồ sơ> <eval>' và mã 1 — ca ghim cho khep-ky-okr E3 ('chot do khong an: khep-ky-okr E3') và cho hop-thoai-giu-cho-dang-nhap E9."
+    expected: "exit 0; rang/thuoc-cu.mjs chạy các eval máy (test/script) của ba hồ sơ bám vỏ — tro-ly-okr-de-xuat E2 E3, the-gop-y-okr E2–E10 E16, hop-thoai-giu-cho-dang-nhap E7 E9 — bằng đúng lệnh khai trong config, in mã thoát từng eval, mọi mã bằng expected_exit của evals.yaml hồ sơ đó (vắng thì 0). Và danh sách viết trước mọi chốt đỏ thay chữ trên hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx, objective-sheet.tsx (khep-ky-okr E3 E7, canh-kr-okr E11, hop-thoai-giu-cho-dang-nhap E7 E9): chuỗi tìm rút bằng AST từ chính script của hồ sơ (bảng có tep/cam hoặc lời gọi có rel/pha), khẳng định chuỗi tìm còn khớp tệp hiện tại để phép thay đổi được tệp; in số chốt = 5; mọi chốt máy tìm thấy trên ba tệp mà không có trong danh sách thì in 'chot ngoai danh sach' và đỏ. Chiều đỏ ghim: bản sao hop-thoai-kr.tsx đổi dòng khoá nút lưu phải in 'chot do khong an: khep-ky-okr E3'; bản sao thụt form sâu thêm một nấc phải in 'chot do khong an: khep-ky-okr E7'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs", "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs", "_acceptance/khung-tao-okr-nhu-deal/rang/thuoc-cu.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs", "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs", "_acceptance/khung-tao-okr-nhu-deal/rang/thuoc-cu.mjs"]
+
+  - id: E23
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kto_khep_ky
+    steps:
+      - "Kịch bản lái màn của khep-ky-okr, lọc EVAL=E3,E7 (câu hỏi chất lượng không chặn lưu; ô lý do đổi đích) trên vỏ ngăn"
+    expected: "exit 0; khep-ky-okr/rang/man-khep-ky.mjs chạy E3 và E7 trên ngăn Sửa KR, đạt đúng như lúc hồ sơ đó ký (không đổi ngưỡng hay kịch bản); ảnh ghi vào .acceptance-runs của hồ sơ đó, không vào cây _acceptance."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "packages/ui/src/components/sheet.tsx", "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs"]
 
   - id: E19
     criterion: AC-11

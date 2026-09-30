@@ -208,7 +208,7 @@ function caConfirmChieuDo() {
 
 const SLUG = "apps/app/app/(app)/[slug]";
 
-const KHAI_TAY = [`${SLUG}/okr/hop-thoai-cap-nhat-kr.tsx`];
+const KHAI_TAY = [];
 
 const PHAN_TRONG_NGAN = ["apps/app/components/detail-sheet.tsx"];
 
@@ -239,6 +239,7 @@ const DANH_SACH = [
 	`${SLUG}/settings/connections/slack/slack-channels.tsx`,
 	"apps/app/components/crm/fields/field-editor.tsx",
 	`${SLUG}/settings/organization/hop-thoai-vi-tri.tsx`,
+	`${SLUG}/okr/hop-thoai-cap-nhat-kr.tsx`,
 	`${SLUG}/settings/giai-doan/hop-thoai-giai-doan.tsx`,
 	`${SLUG}/settings/okr/hop-thoai-mo-lai.tsx`,
 	`${SLUG}/settings/okr/sheet-mau-okr.tsx`,
