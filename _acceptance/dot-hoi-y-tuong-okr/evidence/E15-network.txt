@@ -1,5 +1,4 @@
-network: driver = script CDP/puppeteer (man-hoi-y.mjs, EVAL=E15) chay qua tien-de.mjs trong phien do rieng crm_dot_hoi_y_tuong_okr_do; requestfailed + pageerror duoc script bat; ket qua 84 khang dinh, 0 hong, exit 0.
-app origin http://localhost:4882, api http://localhost:4607 (cong tu do, khong phai 3000/3001 cua config).
-E16 (cung lan chay): ghi 118 phan hoi toi trinh duyet thanh vien M truoc cong bo; 0 chua cau viet truoc; 5 font woff2 (status 200, static asset) khong doc duoc than (Network.getResponseBody: No data found) — chi note, khong tinh loi; 76 phan hoi toi nguoi chon (doi chung, 7 chua cau viet truoc).
-Khong co requestfailed, khong co pageerror, khong co status >= 400 toi origin app/api.
-Chieu do (--chieu-do --chi E15, app :4690 api rieng): exit 1, HONG «E15 buoc 2: danh sach y khoa, dong ly do «Niêm phong trước khi đọc ý», 0 y hien (thay {"tt":"gop","khoa":0,"tieuDe":null,"soY":2})»; tong ket «E15: DO DUNG GHIM — ma 1, in «E15 buoc-khoa-nguoi-chon: nguoi chon chua niem phong thay 2 y»».
+E15 verify lan doc lap (ui:E15, 2026-09-30): driver = script puppeteer/CDP (man-hoi-y.mjs, EVAL=E15) chay qua tien-de.mjs trong phien do rieng crm_dot_hoi_y_tuong_okr_do; khong phai tool doc network (n-a (driver)).
+Xanh: 84 khang dinh, 0 hong, exit 0. app http://localhost:4644 api http://localhost:4850 (cong tu do, khong phai 3000/3001 cua config).
+Script bat requestfailed + pageerror: khong ghi dong nao trong log. E16 CDP: 118 phan hoi toi trinh duyet thanh vien truoc cong bo, 0 chua cau viet truoc; 5 font woff2 (200, static asset) khong doc duoc than — chi note.
+Chieu do (--chieu-do --chi E15, app :4826): exit 1, HONG «E15 buoc 2: danh sach y khoa, dong ly do «Niêm phong trước khi đọc ý», 0 y hien (thay {"tt":"gop","khoa":0,"tieuDe":null,"soY":2})»; tong ket «E15: DO DUNG GHIM — ma 1, in «E15 buoc-khoa-nguoi-chon: nguoi chon chua niem phong thay 2 y»».
