@@ -143,12 +143,25 @@ function canMo(loi: string): HTMLElement {
 	return t;
 }
 
-function phim(dich: Element, loai: "keydown" | "keyup", key: string) {
+function phim(dich: Element, loai: "keydown" | "keyup", key: string): boolean {
+	let khongChan = true;
 	act(() => {
-		dich.dispatchEvent(
+		khongChan = dich.dispatchEvent(
 			new KeyboardEvent(loai, { key, bubbles: true, cancelable: true }),
 		);
 	});
+	return khongChan;
+}
+
+function kichHoatNhuTrinhDuyet(dich: HTMLElement, key: "Enter" | " ") {
+	const laNut = dich instanceof HTMLButtonElement;
+	const xuong = phim(dich, "keydown", key);
+	if (key === "Enter") {
+		if (laNut && xuong) act(() => dich.click());
+		return;
+	}
+	const len = phim(dich, "keyup", key);
+	if (laNut && xuong && len) act(() => dich.click());
 }
 
 function diChuot(
@@ -185,21 +198,24 @@ describe("InlineCitation mở bằng bấm", () => {
 		const goc = ve(<TrichDan />);
 		expect(the()).toBeNull();
 		act(() => nutMo(goc).click());
-		canMo("trich dan khong bam duoc");
+		const t = canMo("trich dan khong bam duoc");
+		expect(t.getAttribute("role")).toBe("dialog");
+		if (t.getAttribute("aria-label") !== msg.inlineCitation.sources) {
+			throw new Error("hop trich dan khong co ten truy cap");
+		}
 	});
 
 	test("Enter mở thẻ", () => {
 		const goc = ve(<TrichDan />);
 		nutMo(goc).focus();
-		phim(nutMo(goc), "keydown", "Enter");
+		kichHoatNhuTrinhDuyet(nutMo(goc), "Enter");
 		canMo("trich dan khong mo bang Enter");
 	});
 
 	test("Space mở thẻ", () => {
 		const goc = ve(<TrichDan />);
 		nutMo(goc).focus();
-		phim(nutMo(goc), "keydown", " ");
-		phim(nutMo(goc), "keyup", " ");
+		kichHoatNhuTrinhDuyet(nutMo(goc), " ");
 		canMo("trich dan khong mo bang Space");
 	});
 

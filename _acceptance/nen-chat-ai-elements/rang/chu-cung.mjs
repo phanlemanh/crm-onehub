@@ -93,7 +93,6 @@ const MIEN_GIA_TRI = {
 			"approval-responded": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"output-denied": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"output-available": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
-			Enter: "giá trị KeyboardEvent.key, nút trích dẫn đem đi so sánh để mở thẻ bằng bàn phím",
 			"conversation.md":
 				"tên tệp máy đọc của bản tải về. Nó CÓ thể hiện ở thanh tải của trình duyệt; miễn ở đây là quyết định có ý thức vì nó là định danh tập tin kèm đuôi, không phải câu trên màn.",
 		},

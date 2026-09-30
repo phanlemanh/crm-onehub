@@ -205,8 +205,7 @@ file with a fingerprint of the diverging lines:
   between tags, display attributes, parameter defaults, and intermediate
   variables. A scan that lists syntax shapes misses a new one every time; the
   string gate uses a closed allow-list instead.
-- 5 radii off our scale, all `rounded-full`, in `message`, `conversation` and
-  `inline-citation`.
+- 4 radii off our scale, all `rounded-full`, in `message` and `conversation`.
 - 0 raw palette colours — all six lived in `tool` and `web-preview`, both deleted.
 - 2 CSS properties added to `ConversationContent` so it drops off-screen layout
   the way `MessageScroller` does. Without them the transcript at 500 turns is
@@ -218,7 +217,9 @@ file with a fingerprint of the diverging lines:
   `button.tsx`.
 - `inline-citation` swaps `HoverCard` for `Popover` so the card opens on click,
   tap and keyboard, takes `nhan` instead of deriving a hostname from `sources`,
-  and uses `Button` and Carbon icons for its previous and next controls.
+  drops the upstream `rounded-full` on the trigger rather than replacing it,
+  names the card with `aria-label`, and uses `Button` and Carbon icons for its
+  previous and next controls.
 
 Whichever files a later phase pulls back in bring their own divergences, and
 they belong in that same ledger.

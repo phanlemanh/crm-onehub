@@ -68,6 +68,7 @@ const en = {
 	inlineCitation: {
 		previousSource: "Previous source",
 		nextSource: "Next source",
+		sources: "Sources",
 	},
 	proposedChange: {
 		edit: "Edit",
@@ -254,6 +255,7 @@ const vi = {
 	inlineCitation: {
 		previousSource: "Nguồn trước",
 		nextSource: "Nguồn sau",
+		sources: "Nguồn",
 	},
 	proposedChange: {
 		edit: "Sửa",

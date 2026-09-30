@@ -21,7 +21,6 @@ import { cn } from "@crm/ui/lib/utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import type {
   ComponentProps,
-  KeyboardEvent,
   MouseEvent,
   PointerEvent,
 } from "react";
@@ -184,8 +183,6 @@ export const InlineCitationCardTrigger = ({
   nhan,
   className,
   onClick,
-  onKeyDown,
-  onKeyUp,
   onPointerEnter,
   onPointerLeave,
   ...props
@@ -196,24 +193,6 @@ export const InlineCitationCardTrigger = ({
     onClick?.(event);
     if (the.ghimNeuDangMoBangChuot()) {
       event.preventDefault();
-    }
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
-    onKeyDown?.(event);
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      if (event.key === "Enter" && !event.repeat) {
-        event.currentTarget.click();
-      }
-    }
-  };
-
-  const handleKeyUp = (event: KeyboardEvent<HTMLSpanElement>) => {
-    onKeyUp?.(event);
-    if (event.key === " ") {
-      event.preventDefault();
-      event.currentTarget.click();
     }
   };
 
@@ -237,8 +216,6 @@ export const InlineCitationCardTrigger = ({
         asChild
         className={cn("ml-1", className)}
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
         variant="secondary"
@@ -259,10 +236,12 @@ export const InlineCitationCardBody = ({
   onPointerLeave,
   ...props
 }: InlineCitationCardBodyProps) => {
+  const msg = useMessages();
   const the = useInlineCitationCard();
 
   return (
     <PopoverContent
+      aria-label={msg.inlineCitation.sources}
       onCloseAutoFocus={(event) => {
         onCloseAutoFocus?.(event);
         if (the.dongTuChuot()) {
