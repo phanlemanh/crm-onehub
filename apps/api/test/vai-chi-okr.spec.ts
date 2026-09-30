@@ -222,6 +222,7 @@ const DAU_VAO_HOP_LE = {
 		departmentId: null,
 	},
 	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
+	"okr.soanQuyet": { deXuatId: "khong-co", quyet: "nhan" },
 	"okr.luuTruMau": { id: "khong-co" },
 	"okr.khoiPhucMau": { id: "khong-co" },
 	"okr.taoTuMau": {
@@ -336,6 +337,8 @@ const THU_TUC_OKR_LUOT_SOAN = [
 	"soanMo",
 	"soanDanhSachCuoc",
 	"soanTangLuot",
+	"soanDanhSach",
+	"soanQuyet",
 ].map((t) => `okr.${t}`);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 

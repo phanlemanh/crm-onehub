@@ -78,8 +78,11 @@ import {
 	setCyclePhaseInput,
 	setProgramInput,
 	soanDanhSachCuocOutput,
+	soanDanhSachOutput,
 	soanMoOutput,
 	soanMoVao,
+	soanQuyetInput,
+	soanQuyetOutput,
 	soanSanSangOutput,
 	soanTangLuotOutput,
 	thanhVienOutput,
@@ -348,6 +351,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cuocIdInput>,
 	) {
 		return this.soan.tangLuot(ctx.user.id, input.cuocSoanId);
+	}
+
+	@Query({
+		input: cuocIdInput,
+		output: soanDanhSachOutput,
+		meta: restMeta("GET", "/okr/soan/sessions/{cuocSoanId}/draft", TAG),
+	})
+	soanDanhSach(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cuocIdInput>,
+	) {
+		return this.soan.danhSach(ctx.user.id, input.cuocSoanId);
+	}
+
+	@Mutation({
+		input: soanQuyetInput,
+		output: soanQuyetOutput,
+		meta: restMeta("POST", "/okr/soan/lines/{deXuatId}/decision", TAG),
+	})
+	soanQuyet(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanQuyetInput>,
+	) {
+		return this.soan.quyet(ctx.user.id, input);
 	}
 
 	@Mutation({

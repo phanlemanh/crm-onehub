@@ -36,13 +36,24 @@ import type {
 	CuocSoanOutput,
 	DonViSoanVao,
 	SoanDanhSachCuocOutput,
+	SoanDanhSachOutput,
 	SoanMoOutput,
 	SoanMoVao,
+	SoanQuyetInput,
+	SoanQuyetOutput,
 	SoanSanSangOutput,
 	SoanTangLuotOutput,
 } from "./okr.contracts";
 import { OkrAccessService, type Quyen } from "./okr-access.service";
 import { OKR } from "./okr-config";
+import {
+	cuocCuaDong,
+	docBanNhap,
+	dongHienTu,
+	ghiHienLuc,
+	ghiQuyet,
+	tenDichCua,
+} from "./soan-ban-nhap";
 
 type Tx = Prisma.TransactionClient;
 type DbHoacTx = Db | Tx;
@@ -390,5 +401,51 @@ export class SoanService {
 		const tran = await this.tranChung(this.db, cong.ct, now);
 		if (!tran.bat) return { ok: false, lyDo: tran.lyDo };
 		return tangLuotCuoc(this.db, cuocSoanId);
+	}
+
+	async danhSach(
+		userId: string,
+		cuocSoanId: string,
+		now = new Date(),
+	): Promise<SoanDanhSachOutput> {
+		const cong = await this.congCuoc(this.db, userId, cuocSoanId, now);
+		const thieuBoiCanh =
+			(await docTrangChienLuocDangDung(this.db)).length === 0;
+		if (!cong.qua)
+			return {
+				cuoc: await this.motCuocHien(this.db, cong.cuoc),
+				dong: [],
+				thieuBoiCanh,
+				lyDo: cong.lyDo,
+			};
+		const ds = await docBanNhap(this.db, cuocSoanId);
+		await ghiHienLuc(this.db, ds, now);
+		const [cuoc, tenDich] = await Promise.all([
+			this.motCuocHien(this.db, cong.cuoc),
+			tenDichCua(this.db, ds),
+		]);
+		return {
+			cuoc,
+			dong: ds.map((d) => dongHienTu(d, tenDich)),
+			thieuBoiCanh,
+			lyDo: null,
+		};
+	}
+
+	async quyet(
+		userId: string,
+		input: SoanQuyetInput,
+		now = new Date(),
+	): Promise<SoanQuyetOutput> {
+		return this.db.$transaction(async (tx): Promise<SoanQuyetOutput> => {
+			const cuocSoanId = await cuocCuaDong(tx, input.deXuatId);
+			await tx.$queryRaw`SELECT id FROM "okrCuocSoan" WHERE id = ${cuocSoanId} FOR UPDATE`;
+			const cong = await this.congCuoc(tx, userId, cuocSoanId, now);
+			if (!cong.qua) return { ok: false, lyDo: cong.lyDo };
+			if (cong.cuoc.trangThai !== "dang")
+				throw new ConflictException(T.soan.cuocKhongDang);
+			await ghiQuyet(tx, { ...input, cuocSoanId, userId, now });
+			return { ok: true };
+		});
 	}
 }

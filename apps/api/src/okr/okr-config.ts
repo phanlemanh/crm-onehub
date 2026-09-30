@@ -142,6 +142,8 @@ export const OKR = {
 			dongDaQuyet: "Dòng này đã được quyết rồi.",
 			chaDaBac: "Mục tiêu cha đã bị bác — không nhận KR dưới nó.",
 			canGiaTri: "Sửa cần một giá trị mới.",
+			tenSuaKhongHop: (tran: number) =>
+				`Tên sau khi sửa quá ngắn hoặc dài quá ${tran} ký tự.`,
 			cachKhongHop: "Cách quyết không hợp với loại dòng.",
 			kyKhongLapKeHoach: "Chu kỳ không còn ở pha lập kế hoạch.",
 			khongCoDongNhan: "Chưa có Mục tiêu nào được nhận để đưa vào.",
