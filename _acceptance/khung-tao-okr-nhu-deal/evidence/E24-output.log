@@ -1,0 +1,92 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+  building crm_kto_e24__mau_do: migrate deploy + seed (once per source fingerprint)
+phien-do: kho crm_kto_e24_do · app http://localhost:4809 · api http://localhost:4641
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+NAP okr:mau --moc 2026-09-30: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-30T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ.
+GHI workspace onehub-center · muc tieu mau-okr-mt-q4-kd-bac-1 (3 KR) · KR sua mau-okr-kr-q4-kd-bac-1-k1
+GHI okr.troLySanSang mau-okr-mt-q4-kd-bac-1: {"bat":true,"conLaiUsd":9}
+-- E24 can tac tu — mo phien do rieng co tac tu
+-- phien do co tac tu: cay determined-lehmann-cc5227-tro-ly · tac tu cong 63424
+phien-do: chờ phiên khác của cây này (crm_determined_lehmann_cc5227_tro_ly_do) dọn xong
+phien-do: kho crm_determined_lehmann_cc5227_tro_ly_do · app http://localhost:4349 · api http://localhost:4787
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+NAP okr:mau --moc 2026-09-30: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-30T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ.
+GHI workspace onehub-center · muc tieu mau-okr-mt-q4-kd-bac-1 (3 KR) · KR sua mau-okr-kr-q4-kd-bac-1-k1
+GHI okr.troLySanSang mau-okr-mt-q4-kd-bac-1: {"bat":true,"conLaiUsd":9}
+GHI E24 1440 sua-muc-tieu: bam nut gop y (nho)
+GHI E24 1440 sua-muc-tieu dang-soan: {"tieu":{"left":1044,"right":1112.078125,"top":59,"bottom":77},"x":{"left":1396,"right":1424,"top":54,"bottom":82},"moTa":{"left":1044,"right":1234.96875,"top":85,"bottom":101},"dau":{"left":1044,"right":1424,"top":103.5,"bottom":183.5},"nutForm":{"left":657,"right":797.015625,"top":52,"bottom":84},"xNgan":{"left":1400,"right":1428,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":{"co":12,"dam":"400"},"kieuNgan":{"co":14,"dam":"500"},"coThe":false}
+DUNG E24 1440 sua-muc-tieu dang-soan: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 1440 sua-muc-tieu dang-soan: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 1440 sua-muc-tieu dang-soan: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 1440 sua-muc-tieu dang-soan: dong mo ta 12px khong to hon tieu de 14px
+DUNG E24 1440 sua-muc-tieu dang-soan: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 1440 sua-muc-tieu dang-soan: hai dau X cach nhau 14 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-1440-sua-muc-tieu-dang-soan.png
+GHI E24 1440 sua-muc-tieu: cot khong co the (model khong goi y) — do trang thai cuoi
+GHI E24 1440 sua-muc-tieu trang-thai-cuoi: {"tieu":{"left":1044,"right":1112.078125,"top":59,"bottom":77},"x":{"left":1396,"right":1424,"top":54,"bottom":82},"moTa":null,"dau":{"left":1044,"right":1424,"top":84,"bottom":244},"nutForm":{"left":657,"right":797.015625,"top":52,"bottom":84},"xNgan":{"left":1400,"right":1428,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":null,"kieuNgan":{"co":14,"dam":"500"},"coThe":false}
+DUNG E24 1440 sua-muc-tieu trang-thai-cuoi: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 1440 sua-muc-tieu trang-thai-cuoi: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 1440 sua-muc-tieu trang-thai-cuoi: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 1440 sua-muc-tieu trang-thai-cuoi: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 1440 sua-muc-tieu trang-thai-cuoi: hai dau X cach nhau 14 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-1440-sua-muc-tieu-cuoi.png
+GHI E24 1440 sua-kr: bam nut gop y (nho)
+GHI E24 1440 sua-kr dang-soan: {"tieu":{"left":1044,"right":1190.234375,"top":80.5,"bottom":98.5},"x":{"left":1396,"right":1424,"top":75.5,"bottom":103.5},"moTa":{"left":1044,"right":1202.796875,"top":106.5,"bottom":122.5},"dau":{"left":1044,"right":1424,"top":125,"bottom":205},"nutForm":{"left":657,"right":797.015625,"top":73.5,"bottom":105.5},"xNgan":{"left":1400,"right":1428,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":{"co":12,"dam":"400"},"kieuNgan":{"co":14,"dam":"500"},"coThe":false}
+DUNG E24 1440 sua-kr dang-soan: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 1440 sua-kr dang-soan: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 1440 sua-kr dang-soan: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 1440 sua-kr dang-soan: dong mo ta 12px khong to hon tieu de 14px
+DUNG E24 1440 sua-kr dang-soan: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 1440 sua-kr dang-soan: hai dau X cach nhau 35.5 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-1440-sua-kr-dang-soan.png
+GHI E24 1440 sua-kr: cot khong co the (model khong goi y) — do trang thai cuoi
+GHI E24 1440 sua-kr trang-thai-cuoi: {"tieu":{"left":1044,"right":1190.234375,"top":80.5,"bottom":98.5},"x":{"left":1396,"right":1424,"top":75.5,"bottom":103.5},"moTa":null,"dau":{"left":1044,"right":1424,"top":105.5,"bottom":249},"nutForm":{"left":657,"right":797.015625,"top":73.5,"bottom":105.5},"xNgan":{"left":1400,"right":1428,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":null,"kieuNgan":{"co":14,"dam":"500"},"coThe":false}
+DUNG E24 1440 sua-kr trang-thai-cuoi: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 1440 sua-kr trang-thai-cuoi: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 1440 sua-kr trang-thai-cuoi: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 1440 sua-kr trang-thai-cuoi: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 1440 sua-kr trang-thai-cuoi: hai dau X cach nhau 35.5 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-1440-sua-kr-cuoi.png
+GHI E24 390 sua-muc-tieu: cot da mo san khi vao
+GHI E24 390 sua-muc-tieu dang-soan: {"tieu":{"left":114.5,"right":182.578125,"top":219,"bottom":237},"x":{"left":346,"right":374,"top":214,"bottom":242},"moTa":{"left":114.5,"right":346.28125,"top":245,"bottom":284},"dau":{"left":114.5,"right":374,"top":286,"bottom":440},"nutForm":{"left":114.5,"right":244.703125,"top":-399,"bottom":-367},"xNgan":{"left":350,"right":378,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":{"co":14,"dam":"400"},"kieuNgan":{"co":14,"dam":"500"},"coThe":true}
+DUNG E24 390 sua-muc-tieu dang-soan: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 390 sua-muc-tieu dang-soan: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 390 sua-muc-tieu dang-soan: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 390 sua-muc-tieu dang-soan: dong mo ta 14px khong to hon tieu de 14px
+DUNG E24 390 sua-muc-tieu dang-soan: hai dau X cach nhau 174 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-390-sua-muc-tieu-dang-soan.png
+GHI E24 390 sua-muc-tieu: cot co the gop y
+GHI E24 390 sua-muc-tieu co-the: {"tieu":{"left":114.5,"right":182.578125,"top":219,"bottom":237},"x":{"left":346,"right":374,"top":214,"bottom":242},"moTa":{"left":114.5,"right":346.28125,"top":245,"bottom":284},"dau":{"left":114.5,"right":374,"top":286,"bottom":440},"nutForm":{"left":114.5,"right":244.703125,"top":-399,"bottom":-367},"xNgan":{"left":350,"right":378,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":{"co":14,"dam":"400"},"kieuNgan":{"co":14,"dam":"500"},"coThe":true}
+DUNG E24 390 sua-muc-tieu co-the: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 390 sua-muc-tieu co-the: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 390 sua-muc-tieu co-the: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 390 sua-muc-tieu co-the: dong mo ta 14px khong to hon tieu de 14px
+DUNG E24 390 sua-muc-tieu co-the: hai dau X cach nhau 174 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-390-sua-muc-tieu-co-the.png
+GHI E24 390 sua-kr: bam nut gop y (nho)
+GHI E24 390 sua-kr dang-soan: {"tieu":{"left":114.5,"right":260.734375,"top":551.5,"bottom":569.5},"x":{"left":346,"right":374,"top":546.5,"bottom":574.5},"moTa":null,"dau":{"left":114.5,"right":374,"top":576.5,"bottom":740},"nutForm":{"left":114.5,"right":254.515625,"top":-789.5,"bottom":-757.5},"xNgan":{"left":350,"right":378,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":null,"kieuNgan":{"co":14,"dam":"500"},"coThe":false}
+DUNG E24 390 sua-kr dang-soan: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 390 sua-kr dang-soan: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 390 sua-kr dang-soan: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 390 sua-kr dang-soan: hai dau X cach nhau 506.5 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-390-sua-kr-dang-soan.png
+GHI E24 390 sua-kr: cot khong co the (model khong goi y) — do trang thai cuoi
+GHI E24 390 sua-kr trang-thai-cuoi: {"tieu":{"left":114.5,"right":260.734375,"top":551.5,"bottom":569.5},"x":{"left":346,"right":374,"top":546.5,"bottom":574.5},"moTa":null,"dau":{"left":114.5,"right":374,"top":576.5,"bottom":740},"nutForm":{"left":114.5,"right":254.515625,"top":-789.5,"bottom":-757.5},"xNgan":{"left":350,"right":378,"top":12,"bottom":40},"kieuTieu":{"co":14,"dam":"500"},"kieuMoTa":null,"kieuNgan":{"co":14,"dam":"500"},"coThe":false}
+DUNG E24 390 sua-kr trang-thai-cuoi: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 390 sua-kr trang-thai-cuoi: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 390 sua-kr trang-thai-cuoi: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 390 sua-kr trang-thai-cuoi: hai dau X cach nhau 506.5 >= 8
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E24-390-sua-kr-cuoi.png
+DUNG E24: do duoc trang thai co the o it nhat mot ngan (1 lan)
+KET LUAN: 41 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

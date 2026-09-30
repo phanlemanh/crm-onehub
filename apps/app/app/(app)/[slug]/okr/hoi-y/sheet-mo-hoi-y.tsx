@@ -566,17 +566,21 @@ function FormHoiY({
 				</FieldGroup>
 			</div>
 			<SheetFooter>
-				{loiMay ? <FieldError data-khoi="loi-may">{loiMay}</FieldError> : null}
-				<div className="flex items-center justify-between gap-2">
-					<SheetClose asChild>
-						<Button data-nut="huy-sheet" type="button" variant="outline">
-							{m.huy}
+				<div className="flex w-full flex-col gap-2">
+					{loiMay ? (
+						<FieldError data-khoi="loi-may">{loiMay}</FieldError>
+					) : null}
+					<div className="flex items-center justify-between gap-2">
+						<SheetClose asChild>
+							<Button data-nut="huy-sheet" type="button" variant="outline">
+								{m.huy}
+							</Button>
+						</SheetClose>
+						<Button disabled={!hopLe || dangGui} type="submit">
+							{dangGui ? <Spinner data-icon="inline-start" /> : null}
+							{sua ? m.luu : m.mo}
 						</Button>
-					</SheetClose>
-					<Button disabled={!hopLe || dangGui} type="submit">
-						{dangGui ? <Spinner data-icon="inline-start" /> : null}
-						{sua ? m.luu : m.mo}
-					</Button>
+					</div>
 				</div>
 			</SheetFooter>
 			{dongDuoc ? (

@@ -271,6 +271,9 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 				</form>
 
 				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">{m.create.cancel}</Button>
+					</SheetClose>
 					<Button
 						type="submit"
 						form="create-deal"
@@ -279,9 +282,6 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 						{create.isPending ? <Spinner /> : null}
 						{m.create.submit}
 					</Button>
-					<SheetClose asChild>
-						<Button variant="outline">{m.create.cancel}</Button>
-					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

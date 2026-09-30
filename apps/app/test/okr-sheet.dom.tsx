@@ -572,7 +572,7 @@ describe("sheet-cong-bo-khoa-khoi-diem", () => {
 		expect({
 			disabled: o instanceof HTMLInputElement && o.disabled,
 			moTa: moTaId ? document.getElementById(moTaId)?.textContent : null,
-			tieuDe: hop()?.querySelector('[data-slot="dialog-title"]')?.textContent,
+			tieuDe: hop()?.querySelector('[data-slot="sheet-title"]')?.textContent,
 		}).toEqual({
 			disabled: true,
 			moTa: m.hopThoai.daKhoa,

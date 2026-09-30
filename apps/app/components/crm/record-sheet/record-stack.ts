@@ -46,6 +46,7 @@ const params = {
 	[SEARCH_PARAM.fieldsSheet.field]: parseAsString,
 	[SEARCH_PARAM.record.timeline]: timelineTabParser,
 	[SEARCH_PARAM.record.ngaySo]: parseAsString,
+	[SEARCH_PARAM.okr.hop]: parseAsString,
 };
 
 export function recordKey(ref: RecordRef): string {
@@ -91,6 +92,7 @@ export function useRecordStack() {
 					[SEARCH_PARAM.fieldsSheet.field]: null,
 					[SEARCH_PARAM.record.timeline]: null,
 					[SEARCH_PARAM.record.ngaySo]: giuNgaySo(stack, next) ? ngaySo : null,
+					[SEARCH_PARAM.okr.hop]: null,
 				},
 				{ history },
 			);

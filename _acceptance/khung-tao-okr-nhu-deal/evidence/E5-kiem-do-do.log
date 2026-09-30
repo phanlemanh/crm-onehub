@@ -1,0 +1,15 @@
+DUNG E5 1440 doi-chung: chan co «Huỷ» va nut chinh («Tạo» variant default)
+DUNG E5 1440 doi-chung: «Huỷ».right 1377 <= nut chinh.left 1385
+DUNG E5 1440 doi-chung: top hai nut chenh 0 < 2
+DUNG E5 1440 doi-chung: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+DUNG E5 1440 doi-chung: ngan tao rong co nut gui «Tạo» disabled=true
+DUNG E5 390 doi-chung: chan co «Huỷ» va nut chinh («Tạo» variant default)
+DUNG E5 390 doi-chung: nut chinh bottom 799 <= «Huỷ» top 807
+DUNG E5 390 doi-chung: ngan tao rong co nut gui «Tạo» disabled=true
+DUNG E5 1440 gia: chan co «Huỷ» va nut chinh («Tạo» variant default)
+SAI huy khong ben trai: gia 1440 («Huỷ».right 1424 > nut chinh.left 1337.3)
+DUNG E5 1440 gia: top hai nut chenh 0 < 2
+SAI E5 1440 gia: nut chinh right 1376.3 cach chan right 1440 = 63.7 <= 24
+DUNG E5 1440 gia: ngan tao rong co nut gui «Tạo» disabled=true
+KIEM DO DO chan: doi chung xanh · thong diep ghim «huy khong ben trai» co
+KET LUAN: 11 DUNG, 2 SAI — ma thoat 1

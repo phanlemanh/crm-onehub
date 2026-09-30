@@ -1,0 +1,114 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+  building crm_kto_e16__mau_do: migrate deploy + seed (once per source fingerprint)
+phien-do: kho crm_kto_e16_do · app http://localhost:4419 · api http://localhost:4370
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- API cua phien nay khong noi tac tu (thieu AGENT_BRIDGE_SECRET/AGENT_URL) — mo phien do rieng co tac tu
+-- phien do co tac tu: cay determined-lehmann-cc5227-tro-ly · tac tu cong 63557
+phien-do: chờ phiên khác của cây này (crm_determined_lehmann_cc5227_tro_ly_do) dọn xong
+phien-do: kho crm_determined_lehmann_cc5227_tro_ly_do · app http://localhost:4249 · api http://localhost:4186
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+NAP okr:mau --moc 2026-09-30: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-30T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ.
+DUNG setProgram: aiOn true, de xuat danh-sach [mau-okr-pb-kd-bac]
+DUNG ST-caidat-nac 1440: the Tro ly OKR da tai
+DUNG ST-caidat-nac 1440: con lan dua [data-the="tro-ly-okr"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-caidat-nac-1440.png
+DUNG ST-caidat-nac 1440: scrollWidth <= clientWidth (trang 1440/1440)
+DUNG ST-caidat-nac 390: the Tro ly OKR da tai
+DUNG ST-caidat-nac 390: con lan dua [data-the="tro-ly-okr"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-caidat-nac-390.png
+DUNG ST-caidat-nac 390: scrollWidth <= clientWidth (trang 390/390)
+DUNG ST-muctieu-nut 1440: nut «Nhờ Trợ lý OKR góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-1440.png
+DUNG ST-muctieu-nut 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 383/383)
+DUNG ST-muctieu-nut-khoa-sua 1440: nut tat true, co «Lưu thay đổi trước khi nhờ góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-khoa-sua-1440.png
+DUNG ST-muctieu-nut-khoa-sua 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 383/383)
+DUNG hoan lai chu da go 1440: nut mo lai
+DUNG ST-muctieu-nut 390: nut «Nhờ Trợ lý OKR góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-390.png
+DUNG ST-muctieu-nut 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG ST-muctieu-nut-khoa-sua 390: nut tat true, co «Lưu thay đổi trước khi nhờ góp ý»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-nut-khoa-sua-390.png
+DUNG ST-muctieu-nut-khoa-sua 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG hoan lai chu da go 390: nut mo lai
+DUNG ST-kr-xu-huong 1440: «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61»
+DUNG ST-kr-xu-huong 1440: con lan dua [data-hop-thoai-kr] [data-xu-huong] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-kr-xu-huong-1440.png
+DUNG ST-kr-xu-huong 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 383/383)
+DUNG ST-kr-xu-huong 390: «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61»
+DUNG ST-kr-xu-huong 390: con lan dua [data-hop-thoai-kr] [data-xu-huong] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-kr-xu-huong-390.png
+DUNG ST-kr-xu-huong 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG ST-muctieu-dang-soan 1440: con lan dua [data-cot-gop-y] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-dang-soan-1440.png
+DUNG ST-muctieu-dang-soan 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 799/799)
+DUNG ST-muctieu-dang-soan 390: con lan dua [data-cot-gop-y] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-dang-soan-390.png
+DUNG ST-muctieu-dang-soan 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG cot gop y co dong 1440 (lan 1)
+DUNG ST-muctieu-co-dong 1440: con lan dua [data-cot-gop-y] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-co-dong-1440.png
+DUNG ST-muctieu-co-dong 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 799/799)
+DUNG cot gop y co dong 390 (lan 1)
+DUNG ST-muctieu-co-dong 390: con lan dua [data-cot-gop-y] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-co-dong-390.png
+DUNG ST-muctieu-co-dong 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG co dong viet lai Muc tieu de nhan: title sau 1 lan thu (toi da 3)
+DUNG ST-muctieu-sua-dong 1440: o sua mo
+DUNG ST-muctieu-sua-dong 1440: con lan dua [data-cot-gop-y] [data-dong="cmunnmq7t0000pncfgyqityjj"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-sua-dong-1440.png
+DUNG ST-muctieu-sua-dong 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 799/799)
+DUNG ST-muctieu-sua-dong 390: o sua mo
+DUNG ST-muctieu-sua-dong 390: con lan dua [data-cot-gop-y] [data-dong="cmunnmq7t0000pncfgyqityjj"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-sua-dong-390.png
+DUNG ST-muctieu-sua-dong 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG ST-muctieu-da-quyet 390: dong cmunnmq7t0001pncf7uswvt18 thu gon
+DUNG ST-muctieu-da-quyet 390: con lan dua [data-cot-gop-y] [data-dong="cmunnmq7t0001pncf7uswvt18"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-da-quyet-390.png
+DUNG ST-muctieu-da-quyet 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+DUNG ST-muctieu-da-quyet: o title «Doanh thu miền Bắc về đích trong mùa cao điểm cuối năm» = okr.objective «Doanh thu miền Bắc về đích trong mùa cao điểm cuối năm» = cau da nhan
+DUNG toast co «Hoàn tác»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-da-quyet-1440.png
+DUNG ST-muctieu-da-quyet 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 799/799)
+DUNG OkrTrail co note tro-ly-okr:cmunnmq7t0000pncfgyqityjj (1 hang)
+DUNG Hoan tac: okr.objective title doc lai «Doanh thu quý 4 miền Bắc»
+DUNG hoan-tac.sql dem 1
+DUNG tab Vet 1440 co «theo đề xuất của Trợ lý OKR»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/vet-theo-tro-ly-1440.png
+DUNG vet-theo-tro-ly 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978)
+DUNG tab Vet 390 co «theo đề xuất của Trợ lý OKR»
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/vet-theo-tro-ly-390.png
+DUNG vet-theo-tro-ly 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390)
+DUNG luot an xong (da-nop)
+DUNG ST-sodo-co-so 1440: bang co luot cmunnmvg6000cjocfaue1rh5m
+DUNG ST-sodo-co-so 1440: con lan dua [data-the="gop-y-so-do"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-co-so-1440.png
+DUNG ST-sodo-co-so 1440: scrollWidth <= clientWidth (trang 1440/1440)
+DUNG ST-sodo-ngan 1440: ngan mot luot mo
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-ngan-1440.png
+DUNG ST-sodo-ngan 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 459/459)
+DUNG ST-sodo-co-so 390: bang co luot cmunnmvg6000cjocfaue1rh5m
+DUNG ST-sodo-co-so 390: con lan dua [data-the="gop-y-so-do"] vao khung nhin
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-co-so-390.png
+DUNG ST-sodo-co-so 390: scrollWidth <= clientWidth (trang 390/390)
+DUNG ST-sodo-ngan 390: ngan mot luot mo
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-sodo-ngan-390.png
+DUNG ST-sodo-ngan 390: scrollWidth <= clientWidth (trang 390/390, hop 292/292)
+DUNG che do an 1440: truong phong kd-nam khong thay nut (false) va cot (false)
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-an-khong-nut-1440.png
+DUNG ST-muctieu-an-khong-nut 1440: scrollWidth <= clientWidth (trang 1440/1440, hop 978/978, hop 383/383)
+DUNG che do an 390: truong phong kd-nam khong thay nut (false) va cot (false)
+ANH .acceptance-runs/tro-ly-okr-de-xuat/man/ST-muctieu-an-khong-nut-390.png
+DUNG ST-muctieu-an-khong-nut 390: scrollWidth <= clientWidth (trang 390/390, hop 390/390, hop 292/292)
+KET LUAN: 68 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
