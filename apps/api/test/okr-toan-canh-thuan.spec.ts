@@ -1,17 +1,17 @@
 import { describe, expect, test } from "bun:test";
 import {
+	cacTuan,
+	type KrSo,
+	soTuanCuaNhom,
+	xepHopTuan,
+} from "@crm/db/okr-hop-tuan";
+import {
 	type ChuKyNgan,
 	chonChuKyHienTai,
 	kyVongTheoNgay,
 } from "@crm/db/okr-tien-do";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { dienBienKr, tuanCapNhatDau } from "../src/okr/dien-bien";
-import {
-	cacTuan,
-	type KrSo,
-	soTuanCuaNhom,
-	xepHopTuan,
-} from "../src/okr/hop-tuan";
 import {
 	type CayGon,
 	gopToanCanh,

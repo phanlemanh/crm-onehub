@@ -77,6 +77,10 @@ export const TRO_LY_OKR_TRAN = {
 	hoanTacNgay: 7,
 } as const;
 
+export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
+
+export type MucTuTin = (typeof MUC_TU_TIN)[number];
+
 export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
 
 export type ViecTroLy = (typeof VIEC_TRO_LY)[number];

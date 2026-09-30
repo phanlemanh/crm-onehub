@@ -32,6 +32,7 @@
 		"./okr-duyet": "./src/okr-duyet.ts",
 		"./okr-hien-thi": "./src/okr-hien-thi.ts",
 		"./okr-hoi-y-trang-thai": "./src/okr-hoi-y-trang-thai.ts",
+		"./okr-hop-tuan": "./src/okr-hop-tuan.ts",
 		"./okr-nhac": "./src/okr-nhac.ts",
 		"./okr-so-config": "./src/okr-so-config.ts",
 		"./okr-tien-do": "./src/okr-tien-do.ts",

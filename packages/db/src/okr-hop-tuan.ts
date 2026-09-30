@@ -1,7 +1,6 @@
-import { OKR_NHAC } from "@crm/db/okr-nhac";
-import { dauTuanVN, ngayVN, soNgayVN } from "@crm/db/onboarding-nhac";
-import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
-import { OKR_XEM } from "./okr-xem.config";
+import { OKR_NHAC } from "./okr-nhac";
+import { type MucTuTin, NGAY_MS } from "./okr-tro-ly-danh-muc";
+import { dauTuanVN, ngayVN, soNgayVN } from "./onboarding-nhac";
 
 export type LanCapNhat = {
 	tuan: string;
@@ -36,10 +35,7 @@ const NHOM_LY_DO = { tut: 0, im: 1, "ghi-chu": 2 } as const satisfies Record<
 >;
 
 export function congTuan(tuan: string, soTuan: number): string {
-	return new Date(
-		Date.parse(`${tuan}T00:00:00Z`) +
-			soTuan * OKR_XEM.thoiGian.soNgayTuan * OKR_XEM.thoiGian.ngayMs,
-	)
+	return new Date(Date.parse(`${tuan}T00:00:00Z`) + soTuan * 7 * NGAY_MS)
 		.toISOString()
 		.slice(0, 10);
 }
