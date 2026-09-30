@@ -1,0 +1,460 @@
+import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { db } from "@crm/db";
+import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	KHONG_TRONG_PHAM_VI,
+	type WorkspaceRole,
+} from "@crm/validation/vai-workspace";
+import { verifyJwtHmac } from "eve/channels/auth";
+import { z } from "zod";
+
+const suffix = `${process.env.TEST_RUN_ID ?? "cua-okr"}-cua`;
+const NGUOI = {
+	owner: `${suffix}-owner`,
+	admin: `${suffix}-admin`,
+	member: `${suffix}-member`,
+	okr: `${suffix}-okr`,
+} as const;
+const NGOAI = `${suffix}-ngoai`;
+const CHU_KY = `${suffix}-ky`;
+const CUOC = {
+	cuaOkr: `${suffix}-cuoc-okr`,
+	cuaNguoiKhac: `${suffix}-cuoc-khac`,
+	daDuaVao: `${suffix}-cuoc-xong`,
+	cuaNgoai: `${suffix}-cuoc-ngoai`,
+} as const;
+const BI_MAT = "bi-mat-cua-okr-du-dai-32-ky-tu-thu";
+const AGENT_GIA = "http://127.0.0.1:65530";
+const LY_DO_LUOT = [
+	"het-luot-cuoc",
+	"het-tran-thang",
+	"cuoc-khong-dang",
+	"don-vi-chua-bat",
+	"chua-co-khoa-mo-hinh",
+] as const;
+
+type KetLuot =
+	| { ok: true; soLuot: number }
+	| { ok: false; lyDo: (typeof LY_DO_LUOT)[number] }
+	| "nem";
+
+let phien: { user: { id: string; email: string; name: string } } | null = null;
+let ketLuot: KetLuot = { ok: true, soLuot: 1 };
+const daChuyen: { url: string; headers: Headers }[] = [];
+const daTangLuot: string[] = [];
+
+const serverThat = await import("next/server");
+mock.module("next/server", () => ({
+	...serverThat,
+	connection: async () => undefined,
+}));
+const sessionThat = await import("@/lib/session");
+mock.module("@/lib/session", () => ({
+	...sessionThat,
+	getSession: async () => phien,
+}));
+mock.module("@/lib/trpc/server", () => ({
+	getServerQueryClient: () => ({}),
+	getServerTrpc: () => ({}),
+	getServerTrpcClient: () => ({
+		okr: {
+			soanTangLuot: {
+				mutate: async (vao: { cuocSoanId: string }) => {
+					daTangLuot.push(vao.cuocSoanId);
+					if (ketLuot === "nem") throw new Error("api khong tra loi");
+					return ketLuot;
+				},
+			},
+		},
+	}),
+}));
+
+process.env.OKR_AGENT_BRIDGE_SECRET = BI_MAT;
+process.env.OKR_AGENT_URL = AGENT_GIA;
+process.env.AGENT_BRIDGE_SECRET = "bi-mat-cau-noi-cu-du-dai-32-ky-tu-thu";
+const fetchThat = globalThis.fetch;
+globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+	daChuyen.push({ url: String(input), headers: new Headers(init?.headers) });
+	return new Response('{"sessionId":"phien-eve"}', { status: 200 });
+}) as typeof fetch;
+
+const { POST, GET } = await import(
+	"@/app/eve/agents/okr/eve/v1/[...path]/route"
+);
+const { POST: POST_CU } = await import("@/app/eve/v1/[...path]/route");
+const { AGENT_URL, OKR_AGENT_URL } = await import("@/lib/agent-bridge");
+
+async function gieoNguoi(userId: string, vai: WorkspaceRole | null) {
+	const now = new Date();
+	await db.organization.upsert({
+		where: { id: WORKSPACE_ID },
+		create: { id: WORKSPACE_ID, name: "CRM", slug: "crm", createdAt: now },
+		update: {},
+	});
+	await db.user.upsert({
+		where: { id: userId },
+		create: {
+			id: userId,
+			name: userId,
+			email: `${userId}@thu.test`,
+			emailVerified: true,
+			createdAt: now,
+			updatedAt: now,
+		},
+		update: {},
+	});
+	if (!vai) return;
+	await db.member.upsert({
+		where: {
+			organizationId_userId: { organizationId: WORKSPACE_ID, userId },
+		},
+		create: {
+			id: `member-${userId}`,
+			organizationId: WORKSPACE_ID,
+			userId,
+			role: vai,
+			createdAt: now,
+		},
+		update: { role: vai },
+	});
+}
+
+async function gieoCuoc(
+	id: string,
+	nguoiMoUserId: string,
+	trangThai: "dang" | "da-dua-vao",
+	cacPhien: string[] = [],
+) {
+	await db.okrCuocSoan.create({
+		data: {
+			id,
+			cycleId: CHU_KY,
+			level: "onehub",
+			nguoiMoUserId,
+			sessionId: `phien-${id}`,
+			cacPhien,
+			nac: "bat",
+			trangThai,
+		},
+	});
+}
+
+function goi(
+	userId: string | null,
+	duong: string,
+	cuocSoanId: string | null,
+	method = "POST",
+) {
+	phien = userId
+		? { user: { id: userId, email: `${userId}@thu.test`, name: userId } }
+		: null;
+	daChuyen.length = 0;
+	daTangLuot.length = 0;
+	const headers = new Headers({
+		"x-crm-deal": "cmdealgiakhongduocqua1",
+		"content-type": "application/json",
+	});
+	if (cuocSoanId) headers.set("x-crm-cuoc-soan", cuocSoanId);
+	const url = `http://localhost:3000/eve/agents/okr${duong}`;
+	if (method === "GET") return GET(new Request(url, { method, headers }));
+	return POST(new Request(url, { method, headers, body: "{}" }));
+}
+
+async function don() {
+	await db.okrCuocSoan.deleteMany({
+		where: { id: { startsWith: `${suffix}-` } },
+	});
+	await db.okrCycle.deleteMany({ where: { id: CHU_KY } });
+	await db.member.deleteMany({
+		where: { userId: { startsWith: `${suffix}-` } },
+	});
+	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
+}
+
+beforeAll(async () => {
+	await don();
+	for (const [vai, id] of Object.entries(NGUOI))
+		await gieoNguoi(id, vai as keyof typeof NGUOI);
+	await gieoNguoi(NGOAI, null);
+	await db.okrCycle.create({
+		data: {
+			id: CHU_KY,
+			kind: "quy",
+			name: "Quý thử",
+			startsOn: new Date("2027-01-01"),
+			endsOn: new Date("2027-03-31"),
+			phase: "lap-ke-hoach",
+		},
+	});
+	await gieoCuoc(CUOC.cuaOkr, NGUOI.okr, "dang", [`phien-cu-${CUOC.cuaOkr}`]);
+	await gieoCuoc(CUOC.cuaNguoiKhac, NGUOI.member, "dang");
+	await gieoCuoc(CUOC.daDuaVao, NGUOI.okr, "da-dua-vao");
+	await gieoCuoc(CUOC.cuaNgoai, NGOAI, "dang");
+});
+afterAll(async () => {
+	globalThis.fetch = fetchThat;
+	await don();
+});
+
+const phanThanThe = z.record(z.string(), z.union([z.string(), z.number()]));
+
+function claims(token: string) {
+	const [, payload] = token.split(".");
+	return phanThanThe.parse(
+		JSON.parse(Buffer.from(payload ?? "", "base64url").toString()),
+	);
+}
+
+describe("cua-okr", () => {
+	test("tro ly OKR o dia chi rieng, khong phai tac nhan CRM", () => {
+		expect(OKR_AGENT_URL).not.toBe(AGENT_URL);
+	});
+	test("503 co ten khi chua dat bi mat, ke ca bi mat chi co khoang trang", async () => {
+		for (const biMat of ["", "   "]) {
+			process.env.OKR_AGENT_BRIDGE_SECRET = biMat;
+			const res = await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+			expect({
+				biMat,
+				status: res.status,
+				body: await res.json(),
+				chuyen: daChuyen.length,
+				luot: daTangLuot.length,
+			}).toEqual({
+				biMat,
+				status: 503,
+				body: { error: "chua-cau-hinh-tro-ly-okr" },
+				chuyen: 0,
+				luot: 0,
+			});
+		}
+		process.env.OKR_AGENT_BRIDGE_SECRET = BI_MAT;
+	});
+	test("401 khi khong dang nhap", async () => {
+		expect((await goi(null, "/eve/v1/session", CUOC.cuaOkr)).status).toBe(401);
+		expect(daChuyen).toHaveLength(0);
+	});
+	test("403 khi khong phai thanh vien", async () => {
+		const res = await goi(NGOAI, "/eve/v1/session", CUOC.cuaNgoai);
+		expect({
+			status: res.status,
+			chuyen: daChuyen.length,
+			luot: daTangLuot.length,
+		}).toEqual({
+			status: 403,
+			chuyen: 0,
+			luot: 0,
+		});
+	});
+	test("400 khi thieu hoac sai dang ma cuoc", async () => {
+		for (const ma of [null, "CO HOA!", "ngan"]) {
+			const res = await goi(NGUOI.okr, "/eve/v1/session", ma);
+			expect({
+				ma,
+				status: res.status,
+				body: await res.json(),
+				chuyen: daChuyen.length,
+			}).toEqual({
+				ma,
+				status: 400,
+				body: { error: "thieu-cuoc-soan" },
+				chuyen: 0,
+			});
+		}
+	});
+	for (const vai of ["owner", "admin", "member", "okr"] as const) {
+		test(`vai ${vai}: 200 chuyen tiep toi OKR_AGENT_URL khi cuoc dang thuoc minh`, async () => {
+			const id = `${suffix}-cuoc-${vai}-rieng`;
+			await gieoCuoc(id, NGUOI[vai], "dang");
+			const res = await goi(NGUOI[vai], "/eve/v1/session", id);
+			expect(
+				{ vai, status: res.status, toi: daChuyen[0]?.url },
+				"cua moi chan vai okr",
+			).toEqual({ vai, status: 200, toi: `${OKR_AGENT_URL}/eve/v1/session` });
+		});
+	}
+	test("403 khi cuoc cua nguoi khac; 403 khi cuoc khong dang", async () => {
+		expect(
+			(await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaNguoiKhac)).status,
+		).toBe(403);
+		expect(
+			(await goi(NGUOI.okr, "/eve/v1/session", CUOC.daDuaVao)).status,
+		).toBe(403);
+		expect(daChuyen).toHaveLength(0);
+	});
+	test("JWT: audience crm-okr-agent, purpose okr-soan, cuocSoanId, vai, KHONG id doi tac, KHONG chuyen x-crm-*", async () => {
+		await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		const h = daChuyen[0]?.headers;
+		const token = h?.get("authorization")?.replace(/^Bearer /, "") ?? "";
+		const c = claims(token);
+		expect(Object.keys(c).sort(), "jwt mang id doi tac").toEqual([
+			"aud",
+			"cuocSoanId",
+			"email",
+			"exp",
+			"iat",
+			"iss",
+			"name",
+			"nbf",
+			"purpose",
+			"sub",
+			"vai",
+		]);
+		expect({
+			aud: c.aud,
+			purpose: c.purpose,
+			cuocSoanId: c.cuocSoanId,
+			sub: c.sub,
+			vai: c.vai,
+		}).toEqual({
+			aud: "crm-okr-agent",
+			purpose: "okr-soan",
+			cuocSoanId: CUOC.cuaOkr,
+			sub: NGUOI.okr,
+			vai: "okr",
+		});
+		const ok = await verifyJwtHmac(token, {
+			algorithm: "HS256",
+			audiences: ["crm-okr-agent"],
+			issuer: "crm-app",
+			secret: BI_MAT,
+		});
+		expect(ok.ok).toBe(true);
+		const audCu = await verifyJwtHmac(token, {
+			algorithm: "HS256",
+			audiences: ["crm-agent"],
+			issuer: "crm-app",
+			secret: BI_MAT,
+		});
+		expect(audCu.ok, "the okr lot vao kenh crm-agent").toBe(false);
+		expect(
+			[...(h?.keys() ?? [])].filter((k) => k.startsWith("x-crm-")),
+		).toEqual([]);
+	});
+	test("dem luot: POST session goi soanTangLuot; het-luot-cuoc → 429, khong chuyen", async () => {
+		await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		expect(daTangLuot).toEqual([CUOC.cuaOkr]);
+		await goi(NGUOI.okr, `/eve/v1/session/phien-${CUOC.cuaOkr}`, CUOC.cuaOkr);
+		expect(daTangLuot).toEqual([CUOC.cuaOkr]);
+		await goi(
+			NGUOI.okr,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}/stream`,
+			CUOC.cuaOkr,
+			"GET",
+		);
+		expect(daTangLuot).toEqual([]);
+		expect(daChuyen).toHaveLength(1);
+		await goi(
+			NGUOI.okr,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}/cancel`,
+			CUOC.cuaOkr,
+		);
+		expect(daTangLuot).toEqual([]);
+		await goi(NGUOI.okr, "/eve/v1/health", CUOC.cuaOkr, "GET");
+		expect(daTangLuot).toEqual([]);
+		await goi(
+			NGUOI.okr,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}`,
+			CUOC.cuaOkr,
+			"GET",
+		);
+		expect(daTangLuot).toEqual([]);
+		ketLuot = { ok: false, lyDo: "het-luot-cuoc" };
+		const res = await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		ketLuot = { ok: true, soLuot: 2 };
+		expect({
+			status: res.status,
+			body: await res.json(),
+			chuyen: daChuyen.length,
+		}).toEqual({ status: 429, body: { error: "het-luot-cuoc" }, chuyen: 0 });
+	});
+	test("moi ly do tu choi luot co ten va trang thai rieng, khong luot nao toi tro ly", async () => {
+		const trangThai = {
+			"het-luot-cuoc": 429,
+			"het-tran-thang": 429,
+			"cuoc-khong-dang": 403,
+			"don-vi-chua-bat": 403,
+			"chua-co-khoa-mo-hinh": 503,
+		} satisfies Record<(typeof LY_DO_LUOT)[number], number>;
+		for (const lyDo of LY_DO_LUOT) {
+			ketLuot = { ok: false, lyDo };
+			const res = await goi(
+				NGUOI.okr,
+				`/eve/v1/session/phien-${CUOC.cuaOkr}`,
+				CUOC.cuaOkr,
+			);
+			expect({
+				lyDo,
+				status: res.status,
+				body: await res.json(),
+				chuyen: daChuyen.length,
+			}).toEqual({
+				lyDo,
+				status: trangThai[lyDo],
+				body: { error: lyDo },
+				chuyen: 0,
+			});
+		}
+		ketLuot = { ok: true, soLuot: 2 };
+	});
+	test("502 co ten khi khong dem duoc luot, khong chuyen", async () => {
+		ketLuot = "nem";
+		const res = await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		ketLuot = { ok: true, soLuot: 2 };
+		expect({
+			status: res.status,
+			body: await res.json(),
+			chuyen: daChuyen.length,
+		}).toEqual({
+			status: 502,
+			body: { error: "khong-dem-duoc-luot" },
+			chuyen: 0,
+		});
+	});
+	test("phien tren duong: phien chinh va phien cu cua cuoc qua; phien la 403", async () => {
+		expect(
+			(
+				await goi(
+					NGUOI.okr,
+					`/eve/v1/session/phien-${CUOC.cuaOkr}/stream`,
+					CUOC.cuaOkr,
+					"GET",
+				)
+			).status,
+		).toBe(200);
+		expect(
+			(
+				await goi(
+					NGUOI.okr,
+					`/eve/v1/session/phien-cu-${CUOC.cuaOkr}/stream`,
+					CUOC.cuaOkr,
+					"GET",
+				)
+			).status,
+		).toBe(200);
+		const res = await goi(NGUOI.okr, "/eve/v1/session/phien-la", CUOC.cuaOkr);
+		expect({
+			status: res.status,
+			chuyen: daChuyen.length,
+			luot: daTangLuot.length,
+		}).toEqual({
+			status: 403,
+			chuyen: 0,
+			luot: 0,
+		});
+	});
+	test("doi chung: cua cu /eve/v1 van 403 vai okr", async () => {
+		phien = { user: { id: NGUOI.okr, email: "x@thu.test", name: "x" } };
+		daChuyen.length = 0;
+		const res = await POST_CU(
+			new Request("http://localhost:3000/eve/v1/session", {
+				method: "POST",
+				body: "{}",
+			}),
+		);
+		expect({
+			status: res.status,
+			error: ((await res.json()) as { error?: string }).error,
+			chuyen: daChuyen.length,
+		}).toEqual({ status: 403, error: KHONG_TRONG_PHAM_VI, chuyen: 0 });
+	});
+});
