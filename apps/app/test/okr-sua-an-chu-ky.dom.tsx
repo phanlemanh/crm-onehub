@@ -8,6 +8,7 @@ import {
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { renderToStaticMarkup } from "react-dom/server";
 import type { ChuKyOutput } from "../../api/src/okr/okr.contracts";
 
 type TinhTrang = {
@@ -100,6 +101,7 @@ type DauVao = { readonly [khoa: string]: Json | undefined } | undefined;
 let daGoi: { duong: string; dauVao: DauVao }[] = [];
 let daLamMoi = 0;
 let daToast: [string, string][] = [];
+let toastKhongDich: (string | null)[] = [];
 let khach: QueryClient | null = null;
 
 function thuTuc<TRa>(duong: string, doc: () => TRa = () => null as TRa) {
@@ -176,14 +178,17 @@ mock.module("@/lib/trpc/cache", () => ({
 	}),
 }));
 
+function ghiToast(loai: string, chu: ReactNode): void {
+	const o = document.createElement("div");
+	o.innerHTML = renderToStaticMarkup(chu);
+	daToast.push([loai, o.textContent ?? ""]);
+	toastKhongDich.push(o.querySelector('[translate="no"]')?.textContent ?? null);
+}
+
 mock.module("sonner", () => ({
 	toast: Object.assign(() => undefined, {
-		error: (chu: string) => {
-			daToast.push(["loi", chu]);
-		},
-		success: (chu: string) => {
-			daToast.push(["xong", chu]);
-		},
+		error: (chu: ReactNode) => ghiToast("loi", chu),
+		success: (chu: ReactNode) => ghiToast("xong", chu),
 	}),
 }));
 
@@ -346,6 +351,7 @@ beforeEach(() => {
 	daGoi = [];
 	daLamMoi = 0;
 	daToast = [];
+	toastKhongDich = [];
 	url = [];
 });
 
@@ -746,6 +752,59 @@ describe("sau-go-ky-mac-dinh", () => {
 		const ten = tatCa('[role="option"]').map((o) => o.textContent ?? "");
 		expect(ten.some((t) => t.includes(DA_AN.name))).toBe(false);
 		expect(ten.length).toBe(5);
+	});
+});
+
+describe("ten-khong-dich", () => {
+	test("ten-khong-dich: ten chu ky trong tieu de, mo ta va toast cua sheet Sua va hop An mang translate=no", async () => {
+		await mo();
+		await moMenu(TRONG_KE_HOACH.id);
+		await chonMuc("sua");
+		const sheet = `[data-sheet-sua-chu-ky="${TRONG_KE_HOACH.id}"]`;
+		await cho(() => q(sheet) !== null, "sheet sua mo");
+		const khongDich = (chon: string) =>
+			q(`${chon} [translate="no"]`)?.textContent ?? null;
+		const sua = {
+			tieuDe: khongDich(`${sheet} [data-slot="sheet-title"]`),
+			moTa: khongDich(`${sheet} [data-slot="sheet-description"]`),
+			chuTieuDe: q(`${sheet} [data-slot="sheet-title"]`)?.textContent,
+		};
+		await go(q(`${sheet} [data-o-ten]`), "Năm 2027 đúng");
+		const luu = q('[data-nut="luu-chu-ky"]');
+		if (!luu) throw new Error("khong co nut Luu");
+		await bam(luu);
+		await cho(() => daToast.length > 0, "toast sua");
+		await cho(() => q(sheet) === null, "sheet sua dong");
+
+		await moMenu(CO_DU_LIEU.id);
+		await chonMuc("an");
+		const hop = "[data-hop-an-chu-ky]";
+		await cho(() => q(hop) !== null, "hop an");
+		const an = {
+			tieuDe: khongDich(`${hop} [data-slot="dialog-title"]`),
+			chuTieuDe: q(`${hop} [data-slot="dialog-title"]`)?.textContent,
+		};
+		await go(q("[data-o-ly-do-an]"), "Tạo nhầm quý, số liệu đã sang quý đúng");
+		const gui = q('[data-nut="an-chu-ky"]');
+		if (!gui) throw new Error("khong co nut An");
+		await bam(gui);
+		await cho(() => daToast.length > 1, "toast an");
+		expect({ sua, an, daToast, toastKhongDich }).toEqual({
+			sua: {
+				tieuDe: TRONG_KE_HOACH.name,
+				moTa: TRONG_KE_HOACH.name,
+				chuTieuDe: m.sua.tieuDe(TRONG_KE_HOACH.name),
+			},
+			an: {
+				tieuDe: CO_DU_LIEU.name,
+				chuTieuDe: m.chuKy.an.tieuDe(CO_DU_LIEU.name),
+			},
+			daToast: [
+				["xong", m.sua.xong("Năm 2027 đúng")],
+				["xong", m.chuKy.an.xong(CO_DU_LIEU.name)],
+			],
+			toastKhongDich: ["Năm 2027 đúng", CO_DU_LIEU.name],
+		});
 	});
 });
 

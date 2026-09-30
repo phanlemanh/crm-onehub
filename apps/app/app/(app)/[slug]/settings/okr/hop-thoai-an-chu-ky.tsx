@@ -18,6 +18,7 @@ import { OKR_KHEP } from "@crm/validation/okr-khep";
 import { useMutation } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
+import { ChuNguoi, ghep } from "@/app/(app)/[slug]/okr/hoi-y/chu";
 import type { ChuKy } from "@/app/(app)/[slug]/okr/kieu";
 import { okrMessages } from "@/lib/messages/okr";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -40,12 +41,13 @@ export function HopThoaiAnChuKy({
 	const ma = useId();
 	const [lyDo, setLyDo] = useState("");
 	const du = lyDo.trim().length >= OKR_KHEP.lyDo.toiThieu;
+	const tenKy = { ky: <ChuNguoi>{ky.name}</ChuNguoi> };
 
 	const an = useMutation(
 		trpc.okr.anChuKy.mutationOptions({
 			onSuccess: async () => {
 				await cache.okr();
-				toast.success(a.xong(ky.name));
+				toast.success(ghep(a.xong("{ky}"), tenKy));
 				setLyDo("");
 				onOpenChange(false);
 			},
@@ -65,7 +67,7 @@ export function HopThoaiAnChuKy({
 		>
 			<DialogContent data-hop-an-chu-ky={ky.id}>
 				<DialogHeader>
-					<DialogTitle>{a.tieuDe(ky.name)}</DialogTitle>
+					<DialogTitle>{ghep(a.tieuDe("{ky}"), tenKy)}</DialogTitle>
 					<DialogDescription>{a.moTa}</DialogDescription>
 				</DialogHeader>
 				<form

@@ -635,8 +635,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   moves exactly one step forward (`setCyclePhase` locks the cycle row `FOR UPDATE`,
   refuses a jump with `OKR.thongDiep.khep.phaTungBuoc` and a step back with
   `phaChiDiToi`); the one way back is `moLaiKy` — see «Closing a cycle» below.
-- **A cycle made by mistake is removed or hidden, never edited into shape.** The five
-  flags — `suaMoiO`, `suaTen`, `go`, `an`, `hienLai` — come from one pure function,
+- **A cycle made by mistake is corrected, removed or hidden; its dates change only while
+  nothing hangs on them.** The five flags — `suaMoiO`, `suaTen`, `go`, `an`, `hienLai`
+  — come from one pure function,
   `viecChuKy` (`@crm/validation/okr-chu-ky`), read by the settings screen and by the
   four procedures `okr.suaChuKy`, `okr.goChuKy`, `okr.anChuKy`, `okr.hienChuKy`
   (admin, each re-checks under the lock), so a button and its procedure cannot
@@ -645,19 +646,28 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
     (`@crm/db/okr-chu-ky-hien`); a test reads the Prisma data model and fails, naming
     the relation, when a table pointing at `OkrCycle` is missing from it.
   - Hidden is `okrCycle.anLuc` set. **`KY_CON_HIEN`** (`@crm/db/okr-chu-ky-hien`) goes in
-    every self-directed cycle read — pickers, the default cycle, carry-over targets,
-    alignment targets, reminders, the daily snapshot, the unit-archive guard — listed
-    one `file:function` at a time in `_acceptance/sua-an-chu-ky-okr/rang/noi-doc-chu-ky.json`;
+    every self-directed cycle read on the server — carry-over targets, alignment
+    targets and the alignment tree, the open-OKR count behind the unit-archive guard,
+    reminders, the daily snapshot — listed one `file:function` at a time in
+    `_acceptance/sua-an-chu-ky-okr/rang/noi-doc-chu-ky.json`;
     `rang/soi-ma.mjs --ca ky-con-hien` fails on a read that is not in the list or
     lacks the constant. Reads by id stay unfiltered: data inside a hidden cycle is
     still reachable, it just takes no writes.
+  - `okr.cycles` returns hidden cycles too, because the settings table lists them; it
+    drops them only from `currentId`. Pickers filter on the client through
+    `kyTrongOChon` (`apps/app/app/(app)/[slug]/okr/okr-search-params.ts`), so a screen
+    that offers a cycle out of `okr.cycles` passes the list through it first.
   - Every write into a hidden cycle is refused with `OKR.thongDiep.chuKy.kyDaAn`
     through `OkrService.assertKyChuaAn`, which takes the cycle row `FOR SHARE` and
     re-reads `anLuc` under it — called by `assertKyGhiDuoc` and by every write that
     skips it. A new mutation on the router needs a row in the test's write table.
-  - **Lock order.** `suaChuKy`, `goChuKy`, `anChuKy`, `hienChuKy` and `createCycle` lock the whole year
-    family `FOR UPDATE` in one statement ordered by `id` (`OkrService.khoaHoNam`), the
-    same global order as `OkrTaiCoCauService.khoaLo`, so the two never deadlock. A write
+    The read-side flags agree: `okr.objective` returns `kyGhiDuoc` false and
+    `okr.canhKr` returns `khoa` true inside a hidden cycle, and the objective sheet
+    reads those instead of deriving them from the phase.
+  - **Lock order.** `suaChuKy`, `goChuKy`, `anChuKy`, `hienChuKy` — and `createCycle`
+    when it creates a quarter — lock the whole year family `FOR UPDATE` in one
+    statement ordered by `id` (`OkrService.khoaHoNam`), the same global order as
+    `OkrTaiCoCauService.khoaLo`, so the two never deadlock. A write
     that needs several cycles (`mangSang`) takes `FOR SHARE` in ascending `id`.
   - Trail actions `sua-chu-ky`, `go-chu-ky`, `an-chu-ky` (reason in `note`),
     `hien-chu-ky`. `okrTrail.cycleId` has no foreign key, so the rows of a removed

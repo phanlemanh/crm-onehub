@@ -19,6 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import { useId, useState } from "react";
 import { toast } from "sonner";
+import { ChuNguoi, ghep } from "@/app/(app)/[slug]/okr/hoi-y/chu";
 import type { ChuKy } from "@/app/(app)/[slug]/okr/kieu";
 import { okrMessages } from "@/lib/messages/okr";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -76,7 +77,9 @@ function KhungSua({
 		trpc.okr.suaChuKy.mutationOptions({
 			onSuccess: async (_kq, vao) => {
 				await cache.okr();
-				toast.success(s.xong(vao.name));
+				toast.success(
+					ghep(s.xong("{ky}"), { ky: <ChuNguoi>{vao.name}</ChuNguoi> }),
+				);
 				dong();
 			},
 			onError: async (error) => {
@@ -132,11 +135,13 @@ function FormSua({
 	const [nhap, setNhap] = useState<GiaChuKy>(daLuu);
 	const khoa = !ky.viec.suaMoiO;
 	const gia = khoa ? { ...daLuu, ten: nhap.ten } : nhap;
-	const moTa = !khoa
-		? s.moTaMoiO(ky.name)
-		: ky.viec.go
-			? s.moTaRoiKeHoach(ky.name)
-			: s.moTaCoDuLieu(ky.name);
+	const tenKy = { ky: <ChuNguoi>{ky.name}</ChuNguoi> };
+	const moTa = ghep(
+		(!khoa ? s.moTaMoiO : ky.viec.go ? s.moTaRoiKeHoach : s.moTaCoDuLieu)(
+			"{ky}",
+		),
+		tenKy,
+	);
 	const lyDoKhoa = !khoa
 		? undefined
 		: ky.viec.go
@@ -164,7 +169,7 @@ function FormSua({
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>{s.tieuDe(ky.name)}</SheetTitle>
+				<SheetTitle>{ghep(s.tieuDe("{ky}"), tenKy)}</SheetTitle>
 				<SheetDescription>{moTa}</SheetDescription>
 			</SheetHeader>
 

@@ -28,12 +28,9 @@ const truongNgayChuKy = {
 	breakEndsOn: ngayLich.nullable(),
 };
 
-type NgayChuKy = {
-	startsOn: string;
-	endsOn: string;
-	breakStartsOn: string | null;
-	breakEndsOn: string | null;
-};
+const ngayChuKy = z.object(truongNgayChuKy);
+
+type NgayChuKy = z.infer<typeof ngayChuKy>;
 
 const kiemBatDau = (c: NgayChuKy) => c.startsOn < c.endsOn;
 
