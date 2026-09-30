@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a8af896d4f715b6d413bf3cb36faadf81ce95631
+verified_commit: 21b20e9fc9789a48272e69d636391a3544ec3e95
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -235,3 +235,7 @@ Round 2: PASS — kịch bản màn nhờ lại tới khi đủ loại thẻ và
 ### Re-pin lần 1 — 2026-09-29, do gộp onehub (#208–#211) vào nhánh thẻ góp ý OKR
 run_id: repin-20260929T165336Z-18491
 sha: a8af896d4f715b6d413bf3cb36faadf81ce95631 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E1, E11, E13, E14 · AC không có chốt máy: AC-13, AC-14
+
+### Re-pin lần 2 — 2026-09-30, do vỏ Sheet của khung-tao-okr-nhu-deal và gộp onehub
+run_id: repin-20260930T072126Z-75787
+sha: 21b20e9fc9789a48272e69d636391a3544ec3e95 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E1, E11, E13, E14 · diff chạm vật đo ngoài làn máy: E1, E11, E13, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13, AC-14

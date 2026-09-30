@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d6f32ed0324c03d6980771fe1c8d195322b50765
+verified_commit: 21b20e9fc9789a48272e69d636391a3544ec3e95
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -254,3 +254,7 @@ sha: d3e206a26c0905c77187dc45065ac746f555c3cc · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-27, do hoá cũ do gộp onehub (#168) sau khi mở PR
 run_id: repin-20260927T064247Z-42463
 sha: d6f32ed0324c03d6980771fe1c8d195322b50765 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · AC không có chốt máy: AC-10
+
+### Re-pin lần 3 — 2026-09-30, do vỏ Sheet của khung-tao-okr-nhu-deal và gộp onehub
+run_id: repin-20260930T071334Z-96398
+sha: 21b20e9fc9789a48272e69d636391a3544ec3e95 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · diff chạm vật đo ngoài làn máy: E10, E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10

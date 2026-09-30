@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 161d7714cba63b95d839d80475b15dcddd78a507
+verified_commit: 21b20e9fc9789a48272e69d636391a3544ec3e95
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -316,3 +316,7 @@ none — every multi-run eval is uniform
 
 Round 4: REJECT — E23 không đạt trong run-log của round đó và mô tả PR thiếu dòng bậc tra cho đầu cột (AC-13); sửa ở commit ae23d26e và 161d7714 (E17 chạy qua lớp bọc hạn chế đã biết).
 Round 5: PASS — E17 và E23 chạy lại và đạt, bốn lệnh suite đạt, 20 eval còn lại mang từ round 4 vì delta không chạm paths của chúng; hai judgment item đề xuất PASS, human_override để trống cho người quyết.
+
+### Re-pin lần 1 — 2026-09-30, do sửa sau chữ ký: xoá khoá URL không được mở bằng useMountEffect thay cho useEffect (E11 của hop-thoai-giu-cho-dang-nhap)
+run_id: repin-20260930T072944Z-36590
+sha: 21b20e9fc9789a48272e69d636391a3544ec3e95 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E3, E5, E6, E16, E17, E23, E20, E21, E24 · diff chạm vật đo ngoài làn máy: E3, E5, E16, E17, E21 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-12, AC-13, AC-14
