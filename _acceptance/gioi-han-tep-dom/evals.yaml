@@ -12,7 +12,7 @@ evals:
       - "packages/ui/test/chay-dom-config.ts"
       - "packages/ui/test/chay-tung-tep-dom.spec.ts"
     expected: |
-      Thư mục tạm test/ = [a-xanh, b-treo (Atomics.wait trần 20 s, chặn đồng bộ), c-xanh (ghi tệp
+      Thư mục tạm test/ = [a-xanh, b-treo (Atomics.wait trần 60 s — dài hơn đồng hồ riêng — chặn đồng bộ), c-xanh (ghi tệp
       dấu c.dau khi chạy)], giới hạn 1500 ms. Hàm chayTungTep chạy trong tiến trình con (bun -e)
       bằng spawn detached của node:child_process, đồng hồ riêng 30 s giết cả nhóm; ca khai timeout 45 s.
       Ghim: mã thoát == CHAY_DOM.tep.maQuaGio (import từ module cấu hình, không viết tay 124);

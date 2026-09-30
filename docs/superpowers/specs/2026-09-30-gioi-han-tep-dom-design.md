@@ -64,7 +64,9 @@ trả mã thoát, cộng một đoạn `import.meta.main` gọi hàm với `CHAY
 
 - Mỗi tệp: `spawnSync("bun", ["test", ...co, "./test/<tệp>"], { cwd: goc, stdio: "inherit",
   timeout: tranMs, killSignal: "SIGKILL" })`. Đo bằng `performance.now()` quanh lời gọi, tức
-  tính cả khởi động `bun` và nạp module — đúng phần bun không báo.
+  tính cả khởi động tiến trình `bun` và `--preload`. Số bun tự báo (`Ran … [x]`) đã gồm nạp module
+  của tệp test (đo ở S3: tệp ngủ 300 ms ở cấp module báo 306 ms); phần bun không báo là khởi động
+  tiến trình và preload.
 Dòng xanh, dòng tổng và dòng «chậm nhất» ra stdout; dòng đỏ, dòng quá giờ và dòng «không có
 tệp» ra stderr. Số giây in một chữ số thập phân với dấu chấm.
 
@@ -85,7 +87,7 @@ của `node:child_process`, `detached` để có nhóm tiến trình riêng, v�
 giờ thì giết cả nhóm (`process.kill(-pid)`), nên tiến trình cháu đang giữ pipe cũng chết. Mỗi
 ca khai timeout 45 s, lớn hơn đồng hồ riêng. Nhờ vậy một bản trình chạy quên `timeout` làm ca
 đỏ với thông điệp ghim, chứ không treo bộ test hay để lại tiến trình mồ côi. Tệp treo dùng
-`Atomics.wait` có trần 20 s — chặn đồng bộ, đồng hồ 5 s của `bun test` không cắt được, đúng
+`Atomics.wait` có trần 60 s, dài hơn đồng hồ riêng — chặn đồng bộ, đồng hồ 5 s của `bun test` không cắt được, đúng
 hình dạng của một ca treo thật. Tệp thứ ba của mỗi thư mục ghi một tệp dấu khi chạy, để «không
 được chạy» đo bằng tệp dấu vắng mặt chứ không bằng một dòng log vắng mặt.
 
