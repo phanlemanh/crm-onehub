@@ -249,6 +249,18 @@ describe("tran-soan", () => {
 				lyDo: "het-tran-thang",
 			});
 			expect(await soLuotTrongDb(cuoc.id)).toBe(0);
+			const daBo = await gieoCuoc({
+				donVi: DON_VI.kdNam,
+				nguoiMo: "ly-thanh-tam",
+			});
+			await db.okrCuocSoan.update({
+				where: { id: daBo.id },
+				data: { trangThai: "bo" },
+			});
+			expect(
+				await luot(daBo.id, "cuoc bo khi het tran", "trpc", cNam),
+				"cuoc khong dang phai thang ly do tran thang",
+			).toEqual({ ok: false, lyDo: "cuoc-khong-dang" });
 			await db.aiChiPhi.deleteMany({ where: { tinhNang: "okr.soan" } });
 			await ghiCauHinh(app, cQuanTri, { aiTranThangDatOkrUsd: null });
 			expect(await luot(cuoc.id, "luot khi con tran")).toEqual({
@@ -315,6 +327,47 @@ describe("tran-soan", () => {
 				ok: true,
 				soLuot: 1,
 			});
+		},
+		CHO_DB,
+	);
+
+	test(
+		"nac tat giua chung: cuoc dang van khong nhan luot (cuoc-khong-dang); khoa mo hinh thieu khong lam luot bi tu choi",
+		async () => {
+			const cuoc = await gieoCuoc({
+				donVi: DON_VI.kdBac,
+				nguoiMo: "nguyen-thi-lan",
+			});
+			await ghiCauHinh(app, cQuanTri, NAC_SOAN.tat);
+			expect(await luot(cuoc.id, "luot khi nac tat", "trpc", cTruong)).toEqual({
+				ok: false,
+				lyDo: "cuoc-khong-dang",
+			});
+			expect(await soLuotTrongDb(cuoc.id)).toBe(0);
+			await ghiCauHinh(app, cQuanTri, NAC_SOAN.bat);
+			tienDongHo();
+			const luc = new Date();
+			const kiem = await db.agentTask.create({
+				data: {
+					kind: "okr-kiem-san-sang",
+					reason: "okr-kiem-san-sang",
+					subject: "soan-tran-khoa",
+					dueAt: luc,
+					finishedAt: luc,
+					outcome: "chua-co-khoa-mo-hinh",
+				},
+			});
+			try {
+				expect(await sanSang()).toMatchObject({
+					bat: false,
+					lyDo: "chua-co-khoa-mo-hinh",
+				});
+				expect(
+					await luot(cuoc.id, "luot khi thieu khoa", "trpc", cTruong),
+				).toEqual({ ok: true, soLuot: 1 });
+			} finally {
+				await db.agentTask.delete({ where: { id: kiem.id } });
+			}
 		},
 		CHO_DB,
 	);
