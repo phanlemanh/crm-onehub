@@ -221,6 +221,7 @@ const DAU_VAO_HOP_LE = {
 		divisionId: null,
 		departmentId: null,
 	},
+	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
 	"okr.luuTruMau": { id: "khong-co" },
 	"okr.khoiPhucMau": { id: "khong-co" },
 	"okr.taoTuMau": {
@@ -330,9 +331,12 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySoDo",
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
-const THU_TUC_OKR_LUOT_SOAN = ["soanSanSang", "soanMo", "soanDanhSachCuoc"].map(
-	(t) => `okr.${t}`,
-);
+const THU_TUC_OKR_LUOT_SOAN = [
+	"soanSanSang",
+	"soanMo",
+	"soanDanhSachCuoc",
+	"soanTangLuot",
+].map((t) => `okr.${t}`);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();

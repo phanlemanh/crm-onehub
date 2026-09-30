@@ -11,6 +11,7 @@ import {
 	docCuocTheoDonVi,
 	donViCuoc,
 	moCuoc,
+	tangLuot as tangLuotCuoc,
 } from "@crm/db/okr-cuoc-soan";
 import { cauHinhAiLuc, quaTranChung } from "@crm/db/okr-tro-ly";
 import {
@@ -38,6 +39,7 @@ import type {
 	SoanMoOutput,
 	SoanMoVao,
 	SoanSanSangOutput,
+	SoanTangLuotOutput,
 } from "./okr.contracts";
 import { OkrAccessService, type Quyen } from "./okr-access.service";
 import { OKR } from "./okr-config";
@@ -87,7 +89,7 @@ export type CongDonVi =
 	| { qua: false; lyDo: "don-vi-chua-bat" | "don-vi-che-do-an" };
 
 export type CongCuoc =
-	| { qua: true; cuoc: CuocSoan; q: Quyen }
+	| { qua: true; cuoc: CuocSoan; q: Quyen; ct: CauHinhAi }
 	| { qua: false; cuoc: CuocSoan; lyDo: "don-vi-chua-bat" };
 
 type TranChung =
@@ -148,11 +150,11 @@ export class SoanService {
 		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc(cuocSoanId));
 		const dv = donViCuoc(cuoc);
 		const q = await this.quyenDonVi(userId, dv);
-		const { nac } = await this.nacSoan(client, dv, q, now);
+		const { ct, nac } = await this.nacSoan(client, dv, q, now);
 		if (nac === "tat") return { qua: false, cuoc, lyDo: "don-vi-chua-bat" };
 		if ((nac === "an" || cuoc.nac === "an") && !q.quanTri)
 			throw new ForbiddenException(T.soan.cuocAn);
-		return { qua: true, cuoc, q };
+		return { qua: true, cuoc, q, ct };
 	}
 
 	private async assertLapKeHoach(
@@ -376,5 +378,19 @@ export class SoanService {
 			),
 			tranCuoc: TRAN.cuocMoiDonViMoiKy,
 		};
+	}
+
+	async tangLuot(
+		userId: string,
+		cuocSoanId: string,
+		now = new Date(),
+	): Promise<SoanTangLuotOutput> {
+		const cong = await this.congCuoc(this.db, userId, cuocSoanId, now);
+		if (!cong.qua || cong.cuoc.trangThai !== "dang")
+			return { ok: false, lyDo: "cuoc-khong-dang" };
+		const tran = await this.tranChung(this.db, cong.ct, now);
+		if (!tran.bat && tran.lyDo === "het-tran-thang")
+			return { ok: false, lyDo: "het-tran-thang" };
+		return tangLuotCuoc(this.db, cuocSoanId);
 	}
 }

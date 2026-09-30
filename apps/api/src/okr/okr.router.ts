@@ -53,6 +53,7 @@ import {
 	createCycleInput,
 	createKrInput,
 	createObjectiveInput,
+	cuocIdInput,
 	cyclesOutput,
 	donViSoanVao,
 	followOutput,
@@ -80,6 +81,7 @@ import {
 	soanMoOutput,
 	soanMoVao,
 	soanSanSangOutput,
+	soanTangLuotOutput,
 	thanhVienOutput,
 	transferOkrOutput,
 	troLyAnInput,
@@ -334,6 +336,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof donViSoanVao>,
 	) {
 		return this.soan.danhSachCuoc(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: cuocIdInput,
+		output: soanTangLuotOutput,
+		meta: restMeta("POST", "/okr/soan/sessions/{cuocSoanId}/turn", TAG),
+	})
+	soanTangLuot(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cuocIdInput>,
+	) {
+		return this.soan.tangLuot(ctx.user.id, input.cuocSoanId);
 	}
 
 	@Mutation({

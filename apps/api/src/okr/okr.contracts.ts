@@ -780,4 +780,5 @@ export type SoanMoVao = z.infer<typeof soanMoVao>;
 export type CuocSoanOutput = z.infer<typeof cuocSoan>;
 export type SoanSanSangOutput = z.infer<typeof soanSanSangOutput>;
 export type SoanMoOutput = z.infer<typeof soanMoOutput>;
+export type SoanTangLuotOutput = z.infer<typeof soanTangLuotOutput>;
 export type SoanDanhSachCuocOutput = z.infer<typeof soanDanhSachCuocOutput>;
