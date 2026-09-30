@@ -866,11 +866,10 @@ export class OkrHoiYService {
 			phaChuKy.parse(h.cycle.phase) === "lap-ke-hoach" &&
 			dieuThieu.length === 0;
 		const nguoiChonKhoa =
+			q.quanTri &&
 			daNiemPhong &&
 			trangThai !== "da-cong-bo" &&
-			(laNguoiChon
-				? q.quanTri
-				: isWorkspaceAdmin(await workspaceRoleOf(h.nguoiChonUserId, this.db)));
+			(laNguoiChon || (await this.laQuanTri(this.db, h.nguoiChonUserId)));
 		return {
 			hoiY: {
 				id: h.id,

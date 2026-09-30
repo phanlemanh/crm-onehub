@@ -104,7 +104,7 @@ bảng mới. Không cột mới trên bảng có sẵn: nối chủ đề ↔ m
 | Sửa hạn, lời mở, con số | quản trị | `dang-mo`; hạn mới từ bây giờ tới 7 ngày sau lúc mở — đặt bằng bây giờ là đóng sớm; câu hỏi khoá khi đã có ý đầu tiên |
 | Đổi người chọn | quản trị | `dang-mo` hoặc `dang-gom`, chưa công bố; khi đã niêm phong thì chỉ khi người chọn hiện tại không còn là owner/admin (bị hạ vai hay đã rời) — bản viết trước giữ nguyên, của người cũ, và kết quả ghi rõ ai viết; vết `doi-nguoi-chon` |
 | Góp, sửa, gỡ ý của mình | mọi thành viên — cả vai «chỉ OKR» — trừ người chọn | `dang-mo`; 1–3 ý mỗi người |
-| «Tôi cũng nghĩ vậy» | mọi thành viên trừ tác giả ý đó | `dang-mo` |
+| «Tôi cũng nghĩ vậy» | mọi thành viên trừ tác giả ý đó và người chọn (chủ kho chốt 30/09: số người cũng nghĩ vậy là bằng chứng người chọn đọc khi kết luận) | `dang-mo` |
 | Đọc ý của người khác | mọi thành viên, **không kèm tên, không kèm số đồng ý**; quản trị và người chọn: kèm tên và số — người chọn chỉ sau khi niêm phong hoặc khai không viết trước | mọi trạng thái |
 | Niêm phong hoặc khai không viết trước | người chọn | `dang-mo`, một lần |
 | Đọc bản viết trước | người chọn | trước công bố; sau công bố: mọi thành viên |

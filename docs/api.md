@@ -909,7 +909,9 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   `cauHoiKhoa`, `nguoiChonKhoa`, `lyDoChuaCongBo`); màn không tự suy lại luật nào —
   nút «Tôi cũng nghĩ vậy» theo `dongYDuoc`, sheet sửa khoá ô câu hỏi theo
   `cauHoiKhoa` (đã có ý) và ô người chọn theo `nguoiChonKhoa` (người chọn đã niêm
-  phong và còn là quản trị), đúng hai điều `suaHoiY` từ chối. Người chọn
+  phong và còn là quản trị), đúng hai điều `suaHoiY` từ chối. `nguoiChonKhoa` chỉ tính
+  cho người xem là quản trị (người mở được sheet), nên thành viên không tốn thêm truy
+  vấn vai của người chọn. Người chọn
   chưa niêm phong chỉ nhận các mã chung trong `lyDoChuaCongBo` (`chua-niem-phong`,
   `y-chua-gom`, `khong-chon`, `vuot-tran`), không mã nào kèm `chuDeId`.
 - **Luật đọc ở một chỗ.** `apps/api/src/okr/hoi-y.ts` giữ hai hàm, và mọi thủ tục

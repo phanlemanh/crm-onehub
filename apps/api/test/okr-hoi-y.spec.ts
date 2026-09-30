@@ -4721,6 +4721,10 @@ describe("tu-lai", () => {
 			);
 			await gieoBanTruoc(g.h, P.id);
 			buoc.push(await co("da niem phong"));
+			const vaiKhac = {
+				nguoiChon: (await quyenCua(g.ky, P.cookie)).nguoiChonKhoa,
+				thanhVien: (await quyenCua(g.ky, g.nguoi.T.cookie)).nguoiChonKhoa,
+			};
 			const doiNguoi = await goi(
 				"okr.suaHoiY",
 				{ hoiYId: g.h, nguoiChonUserId: Q.id },
@@ -4730,9 +4734,11 @@ describe("tu-lai", () => {
 			buoc.push(await co("nguoi chon ha vai"));
 			expect({
 				buoc,
+				vaiKhac,
 				doiCau: { maHttp: doiCau.status, cau: doiCau.loi },
 				doiNguoi: { maHttp: doiNguoi.status, cau: doiNguoi.loi },
 			}).toEqual({
+				vaiKhac: { nguoiChon: true, thanhVien: false },
 				buoc: [
 					{ buoc: "chua co y", cauHoi: false, nguoiChon: false },
 					{ buoc: "co y", cauHoi: true, nguoiChon: false },
