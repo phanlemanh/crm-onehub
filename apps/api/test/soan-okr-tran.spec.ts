@@ -243,6 +243,7 @@ describe("tran-soan", () => {
 				bat: false,
 				lyDo: "het-tran-thang",
 			});
+			expect(await mo()).toMatchObject({ ok: false, lyDo: "het-tran-thang" });
 			await datPhaQuy4("lap-ke-hoach");
 			await datPhaNamKe("lap-ke-hoach");
 			const cuoc = await gieoCuoc({

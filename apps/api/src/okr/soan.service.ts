@@ -243,12 +243,14 @@ export class SoanService {
 			demCuocTrongKy(this.db, dv),
 			docTrangChienLuocDangDung(this.db),
 		]);
+		if (dang !== null && !thayDuoc(cong.q, dang))
+			return { bat: false, lyDo: "cuoc-an-dang-mo" };
 		if (dang === null && da >= TRAN.cuocMoiDonViMoiKy)
 			return { bat: false, lyDo: "het-cuoc-ky" };
 		return {
 			bat: true,
 			nac: cong.nac,
-			cuocDang: await this.cuocDangHien(cong.q, dang),
+			cuocDang: await this.cuocDangHien(dang),
 			soCuocDaDung: da,
 			tranCuoc: TRAN.cuocMoiDonViMoiKy,
 			thieuBoiCanh: trang.length === 0,
@@ -284,10 +286,12 @@ export class SoanService {
 		});
 		if (kq.ok)
 			return { ok: true, cuoc: await this.motCuocHien(this.db, kq.cuoc) };
+		if (kq.cuocDang && !thayDuoc(cong.q, kq.cuocDang))
+			return { ok: false, lyDo: "cuoc-an-dang-mo", cuocDang: null };
 		return {
 			ok: false,
 			lyDo: kq.lyDo,
-			cuocDang: await this.cuocDangHien(cong.q, kq.cuocDang),
+			cuocDang: await this.cuocDangHien(kq.cuocDang),
 		};
 	}
 
@@ -310,11 +314,9 @@ export class SoanService {
 	}
 
 	private async cuocDangHien(
-		q: Quyen,
 		dang: CuocSoan | null,
 	): Promise<CuocSoanOutput | null> {
-		if (!dang || !thayDuoc(q, dang)) return null;
-		return this.motCuocHien(this.db, dang);
+		return dang ? this.motCuocHien(this.db, dang) : null;
 	}
 
 	async motCuocHien(client: DbHoacTx, cuoc: CuocSoan): Promise<CuocSoanOutput> {

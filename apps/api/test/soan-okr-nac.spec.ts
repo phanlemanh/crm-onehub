@@ -1,4 +1,11 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
@@ -16,10 +23,25 @@ import type {
 import { AI_PHAM_VI } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { idMau } from "../scripts/okr-mau/nap";
+import type {
+	SoanDanhSachCuocOutput,
+	SoanMoOutput,
+	SoanSanSangOutput,
+} from "../src/okr/okr.contracts";
+import {
+	DON_VI,
+	datPhaQuy4,
+	donSoan,
+	gieoCuoc,
+	goiSoan,
+	NAC_SOAN,
+	vaoDonVi,
+} from "./soan-okr-san";
 import {
 	batDauMau,
 	CHO_DB,
 	dungUngDung,
+	ghiCauHinh,
 	goi,
 	goiRest,
 	ketThucMau,
@@ -126,6 +148,7 @@ let app: NestExpressApplication;
 let cookieQuanTri = "";
 let cookieThanhVien = "";
 let cookieOkr = "";
+let cookieTruong = "";
 
 beforeAll(async () => {
 	await batDauMau();
@@ -133,6 +156,7 @@ beforeAll(async () => {
 	cookieQuanTri = await phienMau("le-hai-dang");
 	cookieThanhVien = await phienMau("bui-quang-huy");
 	cookieOkr = await phienMau("giang-hai-yen");
+	cookieTruong = await phienMau("nguyen-thi-lan");
 }, CHO_DB);
 
 afterAll(async () => {
@@ -428,6 +452,149 @@ describe("tran-thang", () => {
 			expect(so2.troLyOkr.tranUsd, "so chi phi khong doi tran dat okr").toBe(
 				15,
 			);
+		},
+		CHO_DB,
+	);
+});
+
+describe("nac-an-cuoc", () => {
+	const QUAN_TRI = "le-hai-dang";
+	const TRUONG = "nguyen-thi-lan";
+	const DUONG = ["trpc", "rest"] as const;
+
+	const sanSang = async (duong: (typeof DUONG)[number], cookie: string) =>
+		ok<SoanSanSangOutput>(
+			await goiSoan(
+				app,
+				"soanSanSang",
+				duong,
+				vaoDonVi(DON_VI.kdBac, duong),
+				cookie,
+			),
+			`san sang ${duong}`,
+		);
+	const mo = async (duong: (typeof DUONG)[number], cookie: string) =>
+		ok<SoanMoOutput>(
+			await goiSoan(
+				app,
+				"soanMo",
+				duong,
+				vaoDonVi(DON_VI.kdBac, duong),
+				cookie,
+			),
+			`mo ${duong}`,
+		);
+	const danhSachCuoc = async (duong: (typeof DUONG)[number], cookie: string) =>
+		ok<SoanDanhSachCuocOutput>(
+			await goiSoan(
+				app,
+				"soanDanhSachCuoc",
+				duong,
+				vaoDonVi(DON_VI.kdBac, duong),
+				cookie,
+			),
+			`danh sach cuoc ${duong}`,
+		);
+	const idCuoc = (d: SoanDanhSachCuocOutput) =>
+		new Set(d.cuoc.map((c) => c.id));
+
+	beforeEach(async () => {
+		await donSoan();
+		await datPhaQuy4("lap-ke-hoach");
+	});
+
+	afterAll(async () => {
+		await donSoan();
+	}, CHO_DB);
+
+	test(
+		"nấc ẩn: quản trị mở được cuộc ẩn, trưởng phòng bị từ chối don-vi-che-do-an; danh sách cuộc của trưởng phòng không có cuộc ẩn, của quản trị có",
+		async () => {
+			await ghiCauHinh(app, cookieQuanTri, NAC_SOAN.an);
+			const daBo = await gieoCuoc({
+				donVi: DON_VI.kdBac,
+				nguoiMo: TRUONG,
+				nac: "bat",
+			});
+			await db.okrCuocSoan.update({
+				where: { id: daBo.id },
+				data: { trangThai: "bo" },
+			});
+			for (const duong of DUONG) {
+				expect(await sanSang(duong, cookieTruong)).toEqual({
+					bat: false,
+					lyDo: "don-vi-che-do-an",
+				});
+				expect(await mo(duong, cookieTruong)).toEqual({
+					ok: false,
+					lyDo: "don-vi-che-do-an",
+					cuocDang: null,
+				});
+			}
+			expect(await db.okrCuocSoan.count({ where: { nac: "an" } })).toBe(0);
+			tienDongHo();
+			const m = await mo("trpc", cookieQuanTri);
+			if (!m.ok) throw new Error(`quan tri mo: ${m.lyDo}`);
+			expect(m.cuoc).toMatchObject({
+				nac: "an",
+				trangThai: "dang",
+				nguoiMo: { id: idMau("nguoi", QUAN_TRI) },
+			});
+			for (const duong of DUONG) {
+				expect(
+					idCuoc(await danhSachCuoc(duong, cookieTruong)),
+					"lo cuoc an cho truong phong",
+				).toEqual(new Set([daBo.id]));
+				expect(idCuoc(await danhSachCuoc(duong, cookieQuanTri))).toEqual(
+					new Set([daBo.id, m.cuoc.id]),
+				);
+			}
+		},
+		CHO_DB,
+	);
+
+	test(
+		"nấc đã bật mà còn cuộc ẩn đang chạy: trưởng phòng nhận cuoc-an-dang-mo có tên (không phải bat kèm cuocDang null), quản trị vẫn thấy cuộc; cuộc ẩn đã bỏ thì trưởng phòng mở được",
+		async () => {
+			await ghiCauHinh(app, cookieQuanTri, NAC_SOAN.an);
+			tienDongHo();
+			const m = await mo("trpc", cookieQuanTri);
+			if (!m.ok) throw new Error(`quan tri mo: ${m.lyDo}`);
+			await ghiCauHinh(app, cookieQuanTri, NAC_SOAN.bat);
+			for (const duong of DUONG) {
+				expect(await sanSang(duong, cookieTruong), "ngo cut").toEqual({
+					bat: false,
+					lyDo: "cuoc-an-dang-mo",
+				});
+				expect(await mo(duong, cookieTruong)).toEqual({
+					ok: false,
+					lyDo: "cuoc-an-dang-mo",
+					cuocDang: null,
+				});
+				expect(await sanSang(duong, cookieQuanTri)).toMatchObject({
+					bat: true,
+					nac: "bat",
+					cuocDang: { id: m.cuoc.id, nac: "an" },
+				});
+				expect(await mo(duong, cookieQuanTri)).toMatchObject({
+					ok: false,
+					lyDo: "con-cuoc-dang",
+					cuocDang: { id: m.cuoc.id },
+				});
+			}
+			expect(await db.okrCuocSoan.count()).toBe(1);
+			await db.okrCuocSoan.update({
+				where: { id: m.cuoc.id },
+				data: { trangThai: "bo" },
+			});
+			for (const duong of DUONG)
+				expect(await sanSang(duong, cookieTruong)).toMatchObject({
+					bat: true,
+					cuocDang: null,
+					soCuocDaDung: 1,
+				});
+			const moi = await mo("trpc", cookieTruong);
+			expect(moi).toMatchObject({ ok: true, cuoc: { nac: "bat" } });
 		},
 		CHO_DB,
 	);
