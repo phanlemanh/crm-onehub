@@ -229,9 +229,10 @@ export class SoanService {
 	): Promise<void> {
 		const c = await client.okrCycle.findUnique({
 			where: { id: cycleId },
-			select: { phase: true },
+			select: { phase: true, anLuc: true },
 		});
 		if (!c) throw new NotFoundException(T.khongCoChuKy(cycleId));
+		if (c.anLuc !== null) throw new BadRequestException(T.chuKy.kyDaAn);
 		if (phaChuKy.parse(c.phase) !== "lap-ke-hoach")
 			throw new BadRequestException(T.soan.kyKhongLapKeHoach);
 	}

@@ -53,6 +53,7 @@ import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { ngayThangVn } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { kySoDoSoan } from "../../okr/okr-search-params";
 import { SOAN_UI } from "../../okr/soan/cau-hinh";
 import { parseCuocSoan, THAM_SO_CUOC_SOAN } from "./okr-settings-search-params";
 
@@ -66,7 +67,6 @@ type DaCat = NonNullable<An["daCat"]>;
 type ChuKy = RouterOutputs["okr"]["cycles"]["cycles"][number];
 type MaLoai = SoNac["theoMa"][number]["maLoai"];
 
-const PHA_SOAN = "lap-ke-hoach" satisfies ChuKy["phase"];
 const HANG_CHO = ["mot", "hai", "ba", "bon", "nam", "sau"];
 
 type DinhDang = (n: SoNac, locale: Locale) => ReactNode;
@@ -444,17 +444,6 @@ function NganCuoc({
 	);
 }
 
-function chuKySoDo(
-	cycles: RouterOutputs["okr"]["cycles"] | undefined,
-): ChuKy | null {
-	if (!cycles) return null;
-	return (
-		cycles.cycles.find((c) => c.phase === PHA_SOAN) ??
-		cycles.cycles.find((c) => c.id === cycles.currentId) ??
-		null
-	);
-}
-
 function TheKhung({
 	m,
 	ky,
@@ -500,7 +489,7 @@ export function TheSoanSoDo() {
 	const m = okrSoanMessages(useLocale());
 	const trpc = useTRPC();
 	const cycles = useQuery(trpc.okr.cycles.queryOptions());
-	const ky = chuKySoDo(cycles.data);
+	const ky = kySoDoSoan(cycles.data);
 	const soDo = useQuery(
 		trpc.okr.soanSoDo.queryOptions(ky ? { cycleId: ky.id } : skipToken),
 	);

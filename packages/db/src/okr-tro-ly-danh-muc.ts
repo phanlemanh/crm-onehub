@@ -29,6 +29,7 @@ export const TRO_LY_OKR_TRAN = {
 	soCauTomTat: 6,
 	soNguonMoiCau: 4,
 	soan: { luotMoiCuoc: 12, cuocMoiDonViMoiKy: 3, tranRaMoiLoiGoi: 3_000 },
+	thangLapKeHoachTruocKy: 3,
 	trangChienLuocKyTu: 20_000,
 	tranThangMacDinhUsd: 9,
 	tranThangToiDaUsd: 20,

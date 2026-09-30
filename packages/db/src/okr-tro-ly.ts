@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
 import { PRIORITY } from "./agent-tasks";
-import { chiTieuThang, khungThangVN, thangVN } from "./ai-chi-phi";
+import { chiTieuThang, khungThangUTC, thangVN } from "./ai-chi-phi";
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
 import { lockIdempotencyKey } from "./idempotency";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import { dieuKienXemMucTieu, nguCanhXemOkr } from "./okr-hien-thi";
 import {
 	AI_PHAM_VI,
@@ -215,11 +216,23 @@ export async function coChuKyLapKeHoachTrongThang(
 	db: DbHoacTx,
 	thang: string,
 ): Promise<boolean> {
-	const { tu } = khungThangVN(thang);
+	const { tu } = khungThangUTC(thang);
 	const so = await db.okrCycle.count({
-		where: { phase: "lap-ke-hoach", endsOn: { gte: tu } },
+		where: {
+			phase: "lap-ke-hoach",
+			...KY_CON_HIEN,
+			endsOn: { gte: tu },
+			startsOn: {
+				lt: dauThangUTCSau(thang, TRO_LY_OKR_TRAN.thangLapKeHoachTruocKy + 1),
+			},
+		},
 	});
 	return so > 0;
+}
+
+function dauThangUTCSau(thang: string, soThang: number): Date {
+	const [nam, t] = thang.split("-").map(Number) as [number, number];
+	return new Date(Date.UTC(nam, t - 1 + soThang, 1));
 }
 
 export async function tranThangCuaThang(

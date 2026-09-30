@@ -461,6 +461,96 @@ describe("tran-thang", () => {
 		},
 		CHO_DB,
 	);
+
+	test(
+		"coChuKyLapKeHoachTrongThang: chu kỳ lap-ke-hoach đã ẩn không nâng trần; chu kỳ bắt đầu ngoài cửa lập kế hoạch không nâng trần tháng này",
+		async () => {
+			const thang = thangVN(MOC_MAU);
+			const keHoach = await db.okrCycle.findMany({
+				where: { phase: "lap-ke-hoach" },
+				select: { id: true },
+			});
+			const ids = keHoach.map((k) => k.id);
+			const kyThu = idMau("chu-ky", "ke-hoach-thu");
+			await db.okrCycle.updateMany({
+				where: { id: { in: ids } },
+				data: { phase: "dang-chay" },
+			});
+			try {
+				await db.okrCycle.create({
+					data: {
+						id: kyThu,
+						kind: "quy",
+						name: "Quý kế hoạch thử",
+						startsOn: new Date("2027-01-04T00:00:00.000Z"),
+						endsOn: new Date("2027-04-04T00:00:00.000Z"),
+						phase: "lap-ke-hoach",
+					},
+				});
+				const ct = await cauHinhAiLuc(db, tienDongHo());
+				const doi = async (data: {
+					anLuc?: Date | null;
+					startsOn?: Date;
+					endsOn?: Date;
+				}) => {
+					await db.okrCycle.update({ where: { id: kyThu }, data });
+					return {
+						co: await coChuKyLapKeHoachTrongThang(db, thang),
+						tran: await tranThangCuaThang(db, ct, thang),
+					};
+				};
+				const hien = await doi({});
+				const an = await doi({ anLuc: MOC_MAU });
+				const hienLai = await doi({ anLuc: null });
+				const xa = await doi({
+					startsOn: new Date("2028-01-03T00:00:00.000Z"),
+					endsOn: new Date("2028-04-02T00:00:00.000Z"),
+				});
+				const bienTrong = await doi({
+					startsOn: new Date("2027-02-28T00:00:00.000Z"),
+					endsOn: new Date("2027-05-30T00:00:00.000Z"),
+				});
+				const bienNgoai = await doi({
+					startsOn: new Date("2027-03-01T00:00:00.000Z"),
+					endsOn: new Date("2027-05-31T00:00:00.000Z"),
+				});
+				const daQua = await doi({
+					startsOn: new Date("2026-08-01T00:00:00.000Z"),
+					endsOn: new Date("2026-10-31T00:00:00.000Z"),
+				});
+				expect({
+					thang,
+					thuong: ct.aiTranThangUsd,
+					datOkr: ct.aiTranThangDatOkrUsd,
+					hien,
+					an,
+					hienLai,
+					xa,
+					bienTrong,
+					bienNgoai,
+					daQua,
+				}).toEqual({
+					thang: "2026-11",
+					thuong: 9,
+					datOkr: 15,
+					hien: { co: true, tran: 15 },
+					an: { co: false, tran: 9 },
+					hienLai: { co: true, tran: 15 },
+					xa: { co: false, tran: 9 },
+					bienTrong: { co: true, tran: 15 },
+					bienNgoai: { co: false, tran: 9 },
+					daQua: { co: false, tran: 9 },
+				});
+			} finally {
+				await db.okrCycle.deleteMany({ where: { id: kyThu } });
+				await db.okrCycle.updateMany({
+					where: { id: { in: ids } },
+					data: { phase: "lap-ke-hoach" },
+				});
+			}
+		},
+		CHO_DB,
+	);
 });
 
 describe("nac-an-cuoc", () => {

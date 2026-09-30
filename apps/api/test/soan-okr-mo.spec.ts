@@ -258,6 +258,40 @@ describe("soan-mo", () => {
 	);
 
 	test(
+		"ky-an: chu kỳ lập kế hoạch đã ẩn → 400 có tên ở sẵn sàng và mở, không cuộc; hiện lại thì sẵn sàng bật",
+		async () => {
+			await db.okrCycle.update({
+				where: { id: CHU_KY_Q4 },
+				data: { anLuc: new Date() },
+			});
+			try {
+				for (const ten of ["soanSanSang", "soanMo"] as const) {
+					const tra = await goiSoan(
+						app,
+						ten,
+						"trpc",
+						vaoDonVi(DON_VI.kdBac, "trpc"),
+						cTruong,
+					);
+					expect({ ten, status: tra.status, loi: tra.loi }).toEqual({
+						ten,
+						status: 400,
+						loi: OKR.thongDiep.chuKy.kyDaAn,
+					});
+				}
+				expect(await db.okrCuocSoan.count()).toBe(0);
+			} finally {
+				await db.okrCycle.update({
+					where: { id: CHU_KY_Q4 },
+					data: { anLuc: null },
+				});
+			}
+			expect((await sanSang()).bat).toBe(true);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"don-vi-thieu-id: phòng ban không kèm departmentId → 400 có tên",
 		async () => {
 			const tra = await goiSoan(

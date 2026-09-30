@@ -9,6 +9,7 @@ import {
 	type MaChiSo,
 	type PhamViDem,
 } from "./okr-chi-so-danh-muc";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import { CAP_CUOC, type CuocSoan } from "./okr-cuoc-soan";
 import { boGioiHan } from "./okr-hien-thi";
 import { ngayVN } from "./onboarding-nhac";
@@ -374,6 +375,7 @@ async function kyDaDongGanNhat(db: DbHoacTx, cuoc: CuocSoan) {
 	return db.okrCycle.findFirst({
 		where: {
 			phase: "da-dong",
+			...KY_CON_HIEN,
 			kind: ky.kind,
 			id: { not: cuoc.cycleId },
 			endsOn: { lte: ky.startsOn },

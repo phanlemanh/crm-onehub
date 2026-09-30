@@ -1410,6 +1410,47 @@ describe("dua-vao", () => {
 	);
 
 	test(
+		"chu kỳ bị ẩn trước khi đưa vào → từ chối có tên, 0 bản ghi, bảng giữ nguyên; hiện lại thì đưa vào được",
+		async () => {
+			const k = await gieoBanNhap("an");
+			await nhanHet(k);
+			await db.okrCycle.update({
+				where: { id: k.cuoc.cycleId },
+				data: { anLuc: new Date() },
+			});
+			try {
+				expect(
+					ok<SoanDuaVaoOutput>(await duaVao(k.cuoc.id, SO(k)), "an"),
+				).toEqual({
+					ok: false,
+					lyDo: "chu-ky-khong-lap-ke-hoach",
+					chiTiet: OKR.thongDiep.chuKy.kyDaAn,
+				});
+				expect((await demBanGhi(k.cuoc.id)).vet).toHaveLength(0);
+				expect(
+					(
+						await db.okrCuocSoan.findUniqueOrThrow({
+							where: { id: k.cuoc.id },
+						})
+					).trangThai,
+				).toBe("dang");
+				expect(await trangThaiDongNhap(k.mtA)).toBe("nhan");
+			} finally {
+				await db.okrCycle.update({
+					where: { id: k.cuoc.cycleId },
+					data: { anLuc: null },
+				});
+			}
+			const lai = ok<SoanDuaVaoOutput>(
+				await duaVao(k.cuoc.id, SO(k)),
+				"hien lai",
+			);
+			expect(lai.ok).toBe(true);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"vượt objectiveCap của đơn vị ở cả hai capMode, và ở cuộc phòng ban mang divisionId thừa → từ chối có tên, 0 bản ghi",
 		async () => {
 			const demPhong = () =>

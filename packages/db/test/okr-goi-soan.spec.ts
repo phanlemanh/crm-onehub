@@ -758,6 +758,34 @@ describe("okr-goi-soan", () => {
 		}
 	});
 
+	test("docKyTruoc: chu kỳ đã đóng bị ẩn không phải kỳ trước; hiện lại thì là kỳ trước", async () => {
+		const hien = await docKyTruoc(db, cuoc);
+		await db.okrCycle.update({
+			where: { id: id("q1") },
+			data: { anLuc: new Date("2031-04-02T03:00:00.000Z") },
+		});
+		try {
+			const an = await docKyTruoc(db, cuoc);
+			expect({
+				hien: hien.chuKy,
+				an: an.chuKy,
+				anMucTieu: an.mucTieu.map((m) => m.ten),
+			}).toEqual({
+				hien: { ten: `Quý 1 2031 ${T}` },
+				an: null,
+				anMucTieu: [],
+			});
+		} finally {
+			await db.okrCycle.update({
+				where: { id: id("q1") },
+				data: { anLuc: null },
+			});
+		}
+		expect((await docKyTruoc(db, cuoc)).chuKy).toEqual({
+			ten: `Quý 1 2031 ${T}`,
+		});
+	});
+
 	test("docKyTruoc: đơn vị chưa có chu kỳ đóng → không có kỳ, không Mục tiêu", async () => {
 		const ky = await docKyTruoc(db, cuocBoPhan);
 		expect(ky).toEqual({ chuKy: null, mucTieu: [], mangSang: [] });

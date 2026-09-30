@@ -144,14 +144,14 @@ function donViMucTieu(cuoc: CuocSoan): DonViMucTieu {
 	return { level: "phong-ban", departmentId: cuoc.departmentId ?? "" };
 }
 
-async function phaCuaKy(tx: Tx, cycleId: string) {
+async function kyCuaCuoc(tx: Tx, cycleId: string) {
 	await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${cycleId} FOR SHARE`;
 	const ky = await tx.okrCycle.findUnique({
 		where: { id: cycleId },
-		select: { phase: true },
+		select: { phase: true, anLuc: true },
 	});
 	if (!ky) throw new NotFoundException(OKR.thongDiep.khongCoChuKy(cycleId));
-	return phaChuKy.parse(ky.phase);
+	return { pha: phaChuKy.parse(ky.phase), an: ky.anLuc !== null };
 }
 
 export async function duaVaoTrong(
@@ -173,11 +173,12 @@ export async function duaVaoTrong(
 			chiTiet:
 				cuoc.trangThai === "da-dua-vao" ? T.duaVaoHaiLan : T.cuocKhongDang,
 		};
-	if ((await phaCuaKy(tx, cuoc.cycleId)) !== "lap-ke-hoach")
+	const ky = await kyCuaCuoc(tx, cuoc.cycleId);
+	if (ky.an || ky.pha !== "lap-ke-hoach")
 		return {
 			ok: false,
 			lyDo: "chu-ky-khong-lap-ke-hoach",
-			chiTiet: T.kyKhongLapKeHoach,
+			chiTiet: ky.an ? OKR.thongDiep.chuKy.kyDaAn : T.kyKhongLapKeHoach,
 		};
 	const keHoach = keHoachDuaVao(await docMoiDong(tx, cuoc.id), v.kr);
 	if (!keHoach.ok) return keHoach;
