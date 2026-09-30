@@ -81,5 +81,6 @@ export const canhKrOutput = z.object({
 	bangChung: z.array(bangChungDong),
 	quyen: z.object({ suaDuoc: z.boolean(), ganDuoc: z.boolean() }),
 	khoa: z.boolean(),
+	choDuyet: z.boolean(),
 });
 export type CanhKrOutput = z.infer<typeof canhKrOutput>;

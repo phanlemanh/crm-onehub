@@ -7,7 +7,8 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
-import { DauTrangOkr } from "./thanh-tab";
+import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
+import { kyMacDinhHoiY } from "./okr-search-params";
 
 export default function OkrLayout({
 	children,
@@ -29,16 +30,21 @@ async function DauTrang() {
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
-	await Promise.all([
-		queryClient.prefetchQuery(trpc.okr.cycles.queryOptions()),
+	const [cycles] = await Promise.all([
+		queryClient.fetchQuery(trpc.okr.cycles.queryOptions()).catch(() => null),
 		queryClient.prefetchQuery(trpc.okr.access.queryOptions()),
 		queryClient.prefetchQuery(trpc.org.tree.queryOptions()),
 		queryClient.prefetchQuery(trpc.workspace.get.queryOptions()),
 	]);
+	const kyHoiY = cycles ? kyMacDinhHoiY(cycles) : null;
+	if (kyHoiY)
+		await queryClient.prefetchQuery(
+			trpc.okr.hoiYNhan.queryOptions({ cycleId: kyHoiY }),
+		);
 
 	return (
 		<HydrateClient>
-			<DauTrangOkr chonChuKy={<ChonChuKy />} />
+			<DauTrangOkrHoiY chonChuKy={<ChonChuKy />} />
 			<DaiKy />
 		</HydrateClient>
 	);

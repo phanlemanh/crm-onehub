@@ -60,6 +60,7 @@ function canh(doi: Partial<CanhKrOutput>): CanhKrOutput {
 		bangChung: [],
 		quyen: { suaDuoc: true, ganDuoc: true },
 		khoa: false,
+		choDuyet: false,
 		...doi,
 	};
 }
@@ -125,6 +126,7 @@ const CAY_TO_CHUC = {
 			moTa: "",
 			position: 0,
 			head: null,
+			okrMo: 0,
 			departments: [
 				{
 					id: "p1",
@@ -134,6 +136,7 @@ const CAY_TO_CHUC = {
 					divisionId: "bp-1",
 					head: null,
 					stepCount: 0,
+					okrMo: 0,
 					people: [],
 				},
 				{
@@ -144,6 +147,7 @@ const CAY_TO_CHUC = {
 					divisionId: "bp-1",
 					head: null,
 					stepCount: 0,
+					okrMo: 0,
 					people: [],
 				},
 			],
@@ -265,6 +269,7 @@ const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
 
 const m = okrCanhKrMessages("vi");
+const { okrGioiHanMessages } = await import("@/lib/messages/okr-gioi-han");
 
 const BO_DU_LIEU = {
 	"dang-tai": { loai: "dang-tai" },
@@ -459,6 +464,23 @@ describe("khung KR: sau trang thai cua danh sach viec", () => {
 		expect(o.textContent).toContain(m.khung.khoa);
 		for (const oDanh of o.querySelectorAll('[data-viec] [role="checkbox"]'))
 			expect(oDanh.hasAttribute("disabled")).toBe(true);
+		expect(
+			motCai<HTMLButtonElement>(o, '[data-nut="them-viec"]').disabled,
+		).toBe(true);
+		expect(
+			o.querySelector('[data-viec] [data-nut="thao-tac-viec"]'),
+		).toBeNull();
+	});
+
+	test("cho-duyet: viec, sang kien, bang chung khoa; o danh dau xong van mo", async () => {
+		const o = await dung(
+			danhSach({ loai: "xong", canh: canh({ choDuyet: true }) }, taoGoi()),
+		);
+		expect(o.textContent).toContain(okrGioiHanMessages("vi").canhKrChoDuyet);
+		expect(o.textContent).not.toContain(m.khung.khoa);
+		const oDanh = [...o.querySelectorAll('[data-viec] [role="checkbox"]')];
+		expect(oDanh.length).toBeGreaterThan(0);
+		for (const x of oDanh) expect(x.hasAttribute("disabled")).toBe(false);
 		expect(
 			motCai<HTMLButtonElement>(o, '[data-nut="them-viec"]').disabled,
 		).toBe(true);

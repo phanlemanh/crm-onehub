@@ -4,15 +4,6 @@ import Close from "@carbon/icons-react/es/Close";
 import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import {
-	Dialog,
-	DialogAssistBody,
-	DialogClose,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@crm/ui/components/dialog";
-import {
 	Field,
 	FieldDescription,
 	FieldError,
@@ -29,12 +20,22 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
+import {
+	Sheet,
+	SheetBody,
+	SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "@crm/ui/components/sheet";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import {
 	TokenFieldAction,
 	TokenFieldItem,
 } from "@crm/ui/components/token-field";
+import { MUC_HIEN_THI, type MucHienThi } from "@crm/validation/okr-hien-thi";
 import {
 	type CapMucTieu,
 	type DonViMucTieu,
@@ -50,6 +51,10 @@ import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
+import {
+	type OkrGioiHanMessages,
+	okrGioiHanMessages,
+} from "@/lib/messages/okr-gioi-han";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { CotGopY, type GiaTriDaNhan, NutGopY, useGopY } from "./cot-gop-y";
@@ -90,6 +95,46 @@ function donViMoi(
 const cungTapHop = (a: string[], b: string[]) =>
 	a.length === b.length && [...a].sort().join("|") === [...b].sort().join("|");
 
+function OMucHienThi({
+	ma,
+	hienThi,
+	onDoi,
+	g,
+}: {
+	ma: string;
+	hienThi: MucHienThi;
+	onDoi: (moi: MucHienThi) => void;
+	g: OkrGioiHanMessages;
+}) {
+	return (
+		<Field>
+			<FieldLabel htmlFor={`${ma}-hien-thi`}>{g.hienThi.tieuDe}</FieldLabel>
+			<Select
+				value={hienThi}
+				onValueChange={(v) => {
+					const moi = MUC_HIEN_THI.find((x) => x === v);
+					if (moi) onDoi(moi);
+				}}
+			>
+				<SelectTrigger
+					id={`${ma}-hien-thi`}
+					aria-describedby={`${ma}-hien-thi-mo-ta`}
+					data-o="muc-hien-thi"
+				>
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectItem value="cong-khai">{g.hienThi.congKhai}</SelectItem>
+					<SelectItem value="gioi-han">{g.hienThi.gioiHan}</SelectItem>
+				</SelectContent>
+			</Select>
+			<FieldDescription id={`${ma}-hien-thi-mo-ta`}>
+				{hienThi === "gioi-han" ? g.hienThi.khiTao : g.hienThi.congKhaiMoTa}
+			</FieldDescription>
+		</Field>
+	);
+}
+
 export function HopThoaiMucTieu({
 	yeuCau,
 	dong,
@@ -103,6 +148,7 @@ export function HopThoaiMucTieu({
 	const m = okrMessages(locale);
 	const h = m.hopThoai;
 	const tm = okrCanhKrMessages(locale).mau.tuMau;
+	const g = okrGioiHanMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const openRecord = useOpenRecord();
@@ -131,6 +177,7 @@ export function HopThoaiMucTieu({
 	const [chuChon, setChuChon] = useState(dau.chuChon);
 	const [thamGia, setThamGia] = useState<string[]>(dau.thamGia);
 	const [viSao, setViSao] = useState(dau.viSao);
+	const [hienThi, setHienThi] = useState<MucHienThi>("cong-khai");
 	const [loi, setLoi] = useState<string | null>(null);
 	const coThayDoi =
 		cap !== dau.cap ||
@@ -138,7 +185,8 @@ export function HopThoaiMucTieu({
 		loai !== dau.loai ||
 		chuChon !== dau.chuChon ||
 		!cungTapHop(thamGia, dau.thamGia) ||
-		viSao !== dau.viSao;
+		viSao !== dau.viSao ||
+		hienThi !== "cong-khai";
 	const oDangSua = new Set<TruongVietLai>([
 		...(ten !== dau.ten ? (["title"] as const) : []),
 		...(viSao !== dau.viSao ? (["whyNow"] as const) : []),
@@ -256,6 +304,7 @@ export function HopThoaiMucTieu({
 				ownerUserId: chu,
 				participantIds: nguoiThamGia,
 				whyNow: viSao,
+				hienThi,
 			});
 			return;
 		}
@@ -274,23 +323,25 @@ export function HopThoaiMucTieu({
 	);
 
 	return (
-		<Dialog
+		<Sheet
 			open
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
 			coThayDoi={coThayDoi || tuMau.mauChon !== null}
 		>
-			<DialogContent
+			<SheetContent
+				side="right"
 				data-hop-thoai-muc-tieu={cu?.id ?? "moi"}
-				size={gopY.cotMo ? "assist" : "default"}
+				aria-describedby={undefined}
+				size={gopY.cotMo ? "assist" : undefined}
 			>
-				<DialogHeader>
-					<DialogTitle>
+				<SheetHeader>
+					<SheetTitle>
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
-					</DialogTitle>
-				</DialogHeader>
-				<DialogAssistBody split={gopY.cotMo} data-cuon-hop>
+					</SheetTitle>
+				</SheetHeader>
+				<SheetBody split={gopY.cotMo} data-cuon-hop>
 					{tuMau.dangMo ? (
 						<KhungTuMau
 							tuMau={tuMau}
@@ -432,6 +483,14 @@ export function HopThoaiMucTieu({
 										</div>
 									) : null}
 								</Field>
+								{yeuCau.loai === "tao" ? (
+									<OMucHienThi
+										ma={ma}
+										hienThi={hienThi}
+										onDoi={setHienThi}
+										g={g}
+									/>
+								) : null}
 								<Field>
 									<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
 									<Textarea
@@ -455,13 +514,13 @@ export function HopThoaiMucTieu({
 						</form>
 					)}
 					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
-				</DialogAssistBody>
-				<DialogFooter>
-					<DialogClose asChild>
+				</SheetBody>
+				<SheetFooter>
+					<SheetClose asChild>
 						<Button variant="outline" disabled={dangLuu}>
 							{h.huy}
 						</Button>
-					</DialogClose>
+					</SheetClose>
 					{tuMau.dangMo ? (
 						<NutTaoTuMau tuMau={tuMau} id={`${ma}-tu-mau`} dangLuu={dangLuu} />
 					) : (
@@ -475,8 +534,8 @@ export function HopThoaiMucTieu({
 							{yeuCau.loai === "sua" ? h.luu : h.taoMucTieu}
 						</Button>
 					)}
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
 	);
 }

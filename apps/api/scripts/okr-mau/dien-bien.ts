@@ -146,6 +146,7 @@ export type LichMau = {
 	quy4: { tu: string; den: string };
 	quy3: { tu: string; den: string };
 	nam: { tu: string; den: string };
+	namKe: { tu: string; den: string };
 	ngay: (quy: "quy3" | "quy4", tuan: number) => string;
 	lucCapNhat: (quy: "quy3" | "quy4", tuan: number) => Date;
 };
@@ -171,6 +172,10 @@ export function lichMau(moc: Date): LichMau {
 		quy4: { tu: dauQuy4, den: cuoiQuy4 },
 		quy3: { tu: dauQuy3, den: congNgay(dauQuy4, -1) },
 		nam: { tu: dauQuy3, den: congNgay(dauQuy3, 7 * 52 - 1) },
+		namKe: {
+			tu: congNgay(dauQuy3, 7 * 52),
+			den: congNgay(dauQuy3, 7 * 104 - 1),
+		},
 		ngay,
 		lucCapNhat: (quy, tuan) => {
 			const luc = new Date(

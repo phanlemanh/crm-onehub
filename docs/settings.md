@@ -78,7 +78,11 @@ Không dùng `SaveBar` ở Cài đặt: các section độc lập với nhau.
 - Tối đa ba ô và không có phần xem trước: `Dialog`. Còn lại: `Sheet`. Trạng thái
   mở ghi trên URL, như Khoá API và SSO đang làm.
 - Chân hộp: «Huỷ» bên trái, nút chính bên phải, cho cả `Dialog` lẫn `Sheet`.
-  `SheetFooter` được sửa trong `packages/ui` cho khớp `DialogFooter`.
+  `SheetFooter` trong `packages/ui` xếp như `DialogFooter` từ 2026-09-30
+  (`khung-tao-okr-nhu-deal`): «Huỷ» đứng trước nút chính trong mã; từ 640 px một
+  hàng dồn phải, dưới 640 px nút chính nằm trên.
+- Form tạo hay sửa có cột phụ bên cạnh (cột góp ý của Trợ lý OKR): `SheetContent`
+  cỡ `assist` và `SheetBody` có `split`. Không mở rộng `Dialog` thành hai cột.
 - Nút gửi tắt tới khi form hợp lệ.
 - Hỏi lại trước thao tác không hoàn tác được: `ConfirmDialog`, chuyển vào
   `packages/ui` trước khi dùng thêm chỗ nào.
@@ -118,7 +122,7 @@ Mỗi đợt là một lượt `/feature-loop`:
    nhóm, dời «Nhắc buổi sáng» ra menu người dùng.
 2. Chuyển `ConfirmDialog` và `CopyValue` vào `packages/ui`; dòng `Field` ngang;
    `StatusIndicator` thay chấm tự vẽ; phần đệm ô của `SimpleTable`;
-   `SheetFooter`.
+   `SheetFooter` (đã xong 2026-09-30 ở `khung-tao-okr-nhu-deal`).
 3. Cài `Item`, gộp các danh sách tự vẽ.
 4. Hai luật lưu và bốn trạng thái trên mọi trang.
 5. Gộp màn kết nối Google và Microsoft.

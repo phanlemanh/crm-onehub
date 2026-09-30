@@ -59,6 +59,8 @@ export type Vai = "chi-okr" | "day-du";
 
 export type TrangOkr = "cua-toi" | "cap-nhat" | "theo-don-vi" | "toan-canh";
 
+export type TrangKhung = TrangOkr | "hoi-y";
+
 type MucDieuHuong = { key: string; nhan: string; icon: CarbonIcon };
 
 const MUC_OKR: MucDieuHuong = { key: "okr", nhan: "OKR", icon: Target };
@@ -90,12 +92,18 @@ const TRANG: { value: TrangOkr; nhan: string }[] = [
 	{ value: "toan-canh", nhan: "Toàn cảnh" },
 ];
 
+const TAB_HOI_Y = {
+	value: "hoi-y",
+	nhan: "Hỏi ý",
+} satisfies { value: TrangKhung; nhan: string };
+
 const TIEU_DE_TRANG = {
 	"cua-toi": "OKR của tôi",
 	"cap-nhat": "Cập nhật tuần của tôi",
 	"theo-don-vi": "OKR theo đơn vị",
 	"toan-canh": "Toàn cảnh OKR",
-} satisfies Record<TrangOkr, string>;
+	"hoi-y": "Hỏi ý mục tiêu",
+} satisfies Record<TrangKhung, string>;
 
 function RailDieuHuong({ vai }: { vai: Vai }) {
 	return (
@@ -144,14 +152,18 @@ export function KhungUngDung({
 	trang,
 	moDieuHuong = false,
 	nguoi,
-	ky,
+	chuKy,
+	nhanTabHoiY,
+	congCuCungHangTab = false,
 	children,
 }: {
 	vai: Vai;
 	nguoi?: string;
-	trang: TrangOkr;
+	trang: TrangKhung;
 	moDieuHuong?: boolean;
-	ky?: string;
+	chuKy?: string;
+	nhanTabHoiY?: string;
+	congCuCungHangTab?: boolean;
 	children: ReactNode;
 }) {
 	return (
@@ -186,7 +198,12 @@ export function KhungUngDung({
 				<RailDieuHuong vai={vai} />
 				<div className="flex min-w-0 flex-1 flex-col px-4 pt-4 pb-6 md:px-6 md:pt-6">
 					<div className="mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6">
-						<DauTrangOkr trang={trang} ky={ky} />
+						<DauTrangOkr
+							chuKy={chuKy}
+							congCuCungHangTab={congCuCungHangTab}
+							nhanTabHoiY={nhanTabHoiY}
+							trang={trang}
+						/>
 						{children}
 					</div>
 				</div>
@@ -196,48 +213,112 @@ export function KhungUngDung({
 	);
 }
 
-function DauTrangOkr({ trang, ky }: { trang: TrangOkr; ky?: string }) {
-	const kyChon = ky ?? KY.ten;
-	const chuKy: readonly string[] = (CHU_KY_KHAC as readonly string[]).includes(
+const LE_TAB_PX = 16;
+
+function cuonTabDangDungVaoKhung(khung: HTMLDivElement | null) {
+	const tab = khung?.querySelector<HTMLElement>(
+		'[role="tab"][data-state="active"]',
+	);
+	if (!khung || !tab) return;
+	const phai = tab.offsetLeft + tab.offsetWidth + LE_TAB_PX - khung.clientWidth;
+	const trai = tab.offsetLeft - LE_TAB_PX;
+	if (phai > khung.scrollLeft) khung.scrollLeft = phai;
+	else if (trai < khung.scrollLeft) khung.scrollLeft = Math.max(0, trai);
+}
+
+function CongCuTrang({ chuKy }: { chuKy?: string }) {
+	const kyChon = chuKy ?? KY.ten;
+	const cacKy: readonly string[] = (CHU_KY_KHAC as readonly string[]).includes(
 		kyChon,
 	)
 		? CHU_KY_KHAC
 		: [kyChon, ...CHU_KY_KHAC];
+	return (
+		<>
+			<Badge variant="outline">Dữ liệu mẫu</Badge>
+			<Select defaultValue={kyChon}>
+				<SelectTrigger aria-label="Chu kỳ" size="sm">
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent align="end">
+					{cacKy.map((ky) => (
+						<SelectItem key={ky} value={ky}>
+							{ky}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
+		</>
+	);
+}
+
+function DauTrangOkr({
+	trang,
+	chuKy,
+	nhanTabHoiY,
+	congCuCungHangTab,
+}: {
+	trang: TrangKhung;
+	chuKy?: string;
+	nhanTabHoiY?: string;
+	congCuCungHangTab: boolean;
+}) {
+	const tab = trang === "hoi-y" ? [...TRANG, TAB_HOI_Y] : TRANG;
 	return (
 		<header className="flex flex-col gap-3">
 			<div className="flex flex-wrap items-center gap-x-4 gap-y-2">
 				<h2 className="min-w-0 font-medium text-2xl tracking-tight md:text-3xl">
 					{TIEU_DE_TRANG[trang]}
 				</h2>
-				<div className="ml-auto flex items-center gap-2">
-					<Badge variant="outline">Dữ liệu mẫu</Badge>
-					<Select defaultValue={kyChon}>
-						<SelectTrigger aria-label="Chu kỳ" size="sm">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent align="end">
-							{chuKy.map((k) => (
-								<SelectItem key={k} value={k}>
-									{k}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+				<div
+					className={
+						congCuCungHangTab
+							? "ml-auto flex items-center gap-2 md:hidden"
+							: "ml-auto flex items-center gap-2"
+					}
+				>
+					<CongCuTrang chuKy={chuKy} />
 				</div>
 			</div>
 			<Tabs value={trang}>
-				<div className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
-					<TabsList
-						aria-label="Khu OKR"
-						className="w-full justify-start gap-6 border-b"
-						variant="line"
+				<div
+					className={
+						congCuCungHangTab
+							? "flex items-center gap-4 md:border-b"
+							: "flex items-center gap-4"
+					}
+				>
+					<div
+						className="relative -mx-4 min-w-0 flex-1 overflow-x-auto px-4 md:mx-0 md:px-0"
+						data-khung-tab
+						ref={cuonTabDangDungVaoKhung}
 					>
-						{TRANG.map((t) => (
-							<TabsTrigger key={t.value} value={t.value}>
-								{t.nhan}
-							</TabsTrigger>
-						))}
-					</TabsList>
+						<TabsList
+							aria-label="Khu OKR"
+							className={
+								congCuCungHangTab
+									? "w-max min-w-full justify-start gap-6 border-b md:border-b-0"
+									: "w-max min-w-full justify-start gap-6 border-b"
+							}
+							variant="line"
+						>
+							{tab.map((t) => (
+								<TabsTrigger key={t.value} value={t.value}>
+									{t.nhan}
+									{t.value === "hoi-y" && nhanTabHoiY ? (
+										<Badge data-nhan-tab variant="secondary">
+											{nhanTabHoiY}
+										</Badge>
+									) : null}
+								</TabsTrigger>
+							))}
+						</TabsList>
+					</div>
+					{congCuCungHangTab ? (
+						<div className="hidden shrink-0 items-center gap-2 md:flex">
+							<CongCuTrang chuKy={chuKy} />
+						</div>
+					) : null}
 				</div>
 			</Tabs>
 		</header>

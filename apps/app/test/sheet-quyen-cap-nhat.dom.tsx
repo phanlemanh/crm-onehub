@@ -88,8 +88,21 @@ function mucTieu(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		soNguoiXem: 0,
 		trail: [],
 		canEditKr: [],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		nguoiDuyetDuKien: null,
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: false,
+			congBo: false,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 		...thay,
 	};
 }

@@ -1,13 +1,16 @@
+import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	LOI_KHUON_CAP_NHAT,
 	type LoiGiaTri,
 } from "@crm/validation/okr-cap-nhat";
+import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
 import { OKR_MAU } from "@crm/validation/okr-mau";
+import type { MaThieu } from "./hoi-y";
 
 export const OKR = {
 	tenGoc: "OneHub",
-	thoiGian: { giayMs: 1000 },
+	thoiGian: { giayMs: 1000, gioMs: 60 * MINUTE_MS },
 	ten: {
 		toiThieu: 3,
 		mucTieuToiDa: 200,
@@ -39,6 +42,8 @@ export const OKR = {
 			"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới sửa KR này.",
 		khongCoChuKy: (id: string) => `Không có chu kỳ nào mang mã ${id}.`,
 		khongCoMucTieu: (id: string) => `Không có mục tiêu nào mang mã ${id}.`,
+		khongThayMucTieu:
+			"Không thấy mục tiêu này — có thể nó không còn, hoặc bạn không được xem.",
 		khongCoKr: (id: string) => `Không có KR nào mang mã ${id}.`,
 		khongCoDonVi: (id: string) => `Không có đơn vị nào mang mã ${id}.`,
 		krDangLaDich:
@@ -83,6 +88,8 @@ export const OKR = {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
 			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
+			nhacKhongXemDuoc: (ten: string) =>
+				`${ten} không xem được mục tiêu này — bỏ nhắc tên, hoặc thêm vào người xem của mục tiêu.`,
 		},
 		canhKr: {
 			mucTieuDaBo: "Mục tiêu này đã bỏ — việc cạnh KR chỉ đọc.",
@@ -108,6 +115,8 @@ export const OKR = {
 			tuGhiNhan: "Không tự ghi nhận chính mình — chọn người khác.",
 			nguoiNhanKhongConThanhVien:
 				"Người nhận phải là thành viên còn trong không gian làm việc.",
+			nguoiNhanKhongXemDuoc: (ten: string) =>
+				`${ten} không xem được mục tiêu này — không gửi ghi nhận tới người không xem được.`,
 			khongCoGhiNhan: (id: string) => `Không có ghi nhận nào mang mã ${id}.`,
 			khongGoDuocGhiNhan:
 				"Chỉ người gửi hoặc quản trị mới gỡ được ghi nhận này.",
@@ -216,6 +225,115 @@ export const OKR = {
 			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
 			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
 		},
+		hoiY: {
+			chiQuanTri: "Chỉ quản trị mới mở hay sửa được lần hỏi ý mục tiêu.",
+			nguoiChonPhaiQuanTri:
+				"Người chọn phải là quản trị (owner hoặc admin) của không gian làm việc.",
+			nguoiChonDaGop:
+				"Người này đã góp ý trong lần hỏi ý — người chọn không góp ý, hãy chọn người khác.",
+			kyKhongLapKeHoach:
+				"Chỉ mở hỏi ý mục tiêu khi chu kỳ đang ở pha lập kế hoạch.",
+			daCoHoiY: "Chu kỳ này đã có một lần hỏi ý mục tiêu.",
+			hanNgoaiKhoang: `Hạn phải cách lúc mở từ ${OKR_HOI_Y.hanGio.min} tới ${OKR_HOI_Y.hanGio.max} giờ.`,
+			hanSuaNgoaiKhoang: `Hạn mới phải từ bây giờ tới ${OKR_HOI_Y.hanGio.max} giờ sau lúc mở — đặt bằng bây giờ là đóng sớm.`,
+			cauHoiDaKhoa:
+				"Đã có người góp ý — câu hỏi đã khoá, chỉ sửa được lời mở, con số và hạn.",
+			daNiemPhong:
+				"Người chọn đã niêm phong bản viết trước và vẫn là quản trị — không đổi người chọn được.",
+			chiKhiDangMo:
+				"Lần hỏi ý đã qua hạn — lời mở, con số, câu hỏi và hạn chỉ sửa được khi còn mở.",
+			daCongBo: "Lần hỏi ý này đã công bố.",
+			khongCoHoiY: (id: string) => `Không có lần hỏi ý nào mang mã ${id}.`,
+			hetHan:
+				"Lần hỏi ý đã qua hạn — không góp, sửa, gỡ ý hay bấm «Tôi cũng nghĩ vậy» được nữa.",
+			quaBaY: `Mỗi người góp tối đa ${OKR_HOI_Y.yMoiNguoi} ý — sửa hoặc gỡ một ý cũ để góp ý mới.`,
+			nguoiChonKhongGop: "Người chọn không góp ý trong lần hỏi ý mà mình chọn.",
+			chiYCuaMinh: "Chỉ người góp mới sửa hay gỡ được ý này.",
+			yCuaMinh: "Không bấm «Tôi cũng nghĩ vậy» cho ý của chính mình.",
+			nguoiChonKhongDongY:
+				"Người chọn không bấm «Tôi cũng nghĩ vậy» — số người cũng nghĩ vậy là bằng chứng người chọn đọc khi kết luận.",
+			khongCoY: (id: string) => `Không có ý nào mang mã ${id}.`,
+			chiNguoiChon:
+				"Chỉ người chọn của lần hỏi ý này mới niêm phong, khai không viết trước, kết luận hay công bố được.",
+			daCoBanTruoc:
+				"Bản viết trước đã niêm phong hoặc đã khai không viết trước — không làm lại, không sửa được.",
+			chiGom: "Chỉ quản trị hoặc người chọn mới gom ý thành chủ đề được.",
+			chuaHetHan:
+				"Lần hỏi ý còn mở — chưa gom được, chờ tới hạn hoặc dời hạn về bây giờ.",
+			nguoiChonChuaNiemPhong:
+				"Người chọn cần niêm phong bản viết trước (hoặc khai không viết trước) rồi mới gom hay kết luận được.",
+			khongCoChuDe: (id: string) => `Không có chủ đề nào mang mã ${id}.`,
+			chuDeConY:
+				"Chủ đề còn ý — chuyển hết ý sang chủ đề khác rồi mới gỡ được.",
+			yKhacHoiY: "Ý này không thuộc lần hỏi ý của chủ đề.",
+			chuDeYLa:
+				"Chủ đề ý lạ chỉ chứa đúng một ý — gắn ý vào một chủ đề thường.",
+			yLaKhongDoiTen:
+				"Chủ đề ý lạ mang tên của ý — không đổi tên, hãy sửa ý hoặc chuyển ý sang chủ đề thường.",
+			noiBanTruocKhongCo: (soCau: number) =>
+				`Bản viết trước chỉ có ${soCau} câu — nối tới câu có thật hoặc chọn «mới».`,
+			noiBanTruocBoQua:
+				"Người chọn đã khai không viết trước — chủ đề chỉ nối được «mới».",
+			congBoChuaHetHan:
+				"Lần hỏi ý còn mở — chưa công bố được, chờ tới hạn hoặc dời hạn về bây giờ.",
+			congBoKyKhongLapKeHoach:
+				"Chỉ công bố được khi chu kỳ đang ở pha lập kế hoạch.",
+			congBoThieu: {
+				"chua-niem-phong":
+					"Người chọn cần niêm phong bản viết trước (hoặc khai không viết trước) rồi mới công bố được.",
+				"y-chua-gom": "Còn ý chưa gắn vào chủ đề — gắn hết ý rồi mới công bố.",
+				"chu-de-rong":
+					"Còn chủ đề rỗng — chuyển ý vào hoặc gỡ chủ đề rồi mới công bố.",
+				"thieu-ket-luan":
+					"Còn chủ đề chưa có kết luận — kết luận hết rồi mới công bố.",
+				"thieu-ly-do": `Mỗi chủ đề cần lý do dài ${OKR_HOI_Y.lyDo.min}–${OKR_HOI_Y.lyDo.max} ký tự (chủ đề chọn tối đa ${OKR_HOI_Y.ketLuan.lyDoChonMax}).`,
+				"thieu-cau-muc-tieu":
+					"Còn chủ đề chọn thiếu câu mục tiêu hợp khuôn tên mục tiêu.",
+				"thieu-noi-ban-truoc":
+					"Còn chủ đề chọn chưa khai nối với câu viết trước nào — hoặc «mới».",
+				"khong-chon":
+					"Cần ít nhất một chủ đề kết luận «chọn» mới công bố được.",
+			} satisfies Record<Exclude<MaThieu, "vuot-tran">, string>,
+			congBoVuotTran: (tran: number, sau: number) =>
+				`Công bố sẽ đưa cấp OneHub lên ${sau} mục tiêu — vượt trần ${tran} của chương trình.`,
+			conHoiYChuaCongBo: (ten: string) =>
+				`Chu kỳ «${ten}» còn một lần hỏi ý mục tiêu chưa công bố — người chọn công bố rồi mới rời lập kế hoạch được. Lần hỏi ý không có ý nào vẫn công bố được: người chọn niêm phong hoặc khai không viết trước, rồi công bố không tạo mục tiêu nào. Người chọn đã hết quyền quản trị thì quản trị đổi người chọn trước.`,
+			chuaCongBo: "Lần hỏi ý chưa công bố — chưa bấm «Tôi hiểu vì sao» được.",
+			chuaGop: "Chỉ người đã góp ý mới bấm «Tôi hiểu vì sao» được.",
+		},
+		dangChoDuyet: "Mục tiêu đang chờ duyệt — rút lại để sửa.",
+		duyet: {
+			canDuyet: "Chương trình cần duyệt trước khi công bố — bấm «Gửi duyệt».",
+			khongCanDuyet:
+				"Mục tiêu này không cần duyệt — chương trình chưa bật bước duyệt, hoặc mục tiêu cấp OneHub. Bấm «Công bố».",
+			chiGuiTuNhap: "Chỉ gửi duyệt được mục tiêu nháp.",
+			guiCanKr: "Cần ít nhất một KR trước khi gửi duyệt.",
+			khongDuyetDuoc:
+				"Chỉ người duyệt của mục tiêu này mới duyệt hay trả lại được.",
+			khongPhaiNguoiGui: "Chỉ người đã gửi duyệt mới rút lại được.",
+			khongConChoDuyet:
+				"Mục tiêu này không còn chờ duyệt — tải lại để xem trạng thái mới.",
+		},
+		taiCoCau: {
+			canQuanTri:
+				"Cần quyền quản trị để chuyển OKR giữa các đơn vị hay xem OKR mồ côi.",
+			khacCap: (ten: string) =>
+				`Mục tiêu «${ten}» không cùng cấp với đơn vị nhận — mục tiêu phòng ban chỉ sang phòng ban, mục tiêu bộ phận chỉ sang bộ phận.`,
+			daBo: (ten: string) => `Mục tiêu «${ten}» đã bỏ — không chuyển nữa.`,
+			kyDaDong: (ten: string) =>
+				`Mục tiêu «${ten}» thuộc chu kỳ đã đóng — OKR đã đóng giữ ở đơn vị cũ.`,
+			khongDonVi: "Không gắn đơn vị",
+			donViNhanLuuTru:
+				"Đơn vị nhận đã lưu trữ — khôi phục đơn vị đó hoặc chọn đơn vị khác.",
+			vuotTran: (n: number, tran: number) =>
+				`Đã chuyển. Đơn vị nhận giờ có ${n} mục tiêu trong một chu kỳ — vượt trần ${tran} của chương trình.`,
+		},
+		hienThi: {
+			nguoiXemKhongConThanhVien:
+				"Người xem có tên phải là thành viên còn trong không gian làm việc.",
+			conCanChinh: (n: number) =>
+				`Mục tiêu còn ${n} căn chỉnh — gỡ hết căn chỉnh (góp vào và nhận góp) rồi mới đặt mức giới hạn.`,
+		},
 		troLy: {
 			daQuyet: "Đề xuất này đã được quyết",
 			khongCoDeXuat: (id: string) => `Không có đề xuất nào mang mã ${id}.`,
@@ -241,6 +359,8 @@ export const OKR = {
 			daGan: "Đã gắn vào chỗ này rồi.",
 			khongCoDich: "Cần đúng một đích: mục tiêu hoặc KR.",
 			khongCo: (id: string) => `Không có căn chỉnh nào mang mã ${id}.`,
+			gioiHanKhongCanChinh:
+				"Mục tiêu ở mức giới hạn không căn chỉnh được: không góp vào mục tiêu khác, cũng không nhận mục tiêu nào góp vào.",
 		},
 		nhap: {
 			thieuMucTieu: "Thiếu mục tiêu",

@@ -269,7 +269,7 @@ export function KrBangChung({
 	const [mo, setMo] = useState(false);
 	const [hoiGo, setHoiGo] = useState<BangChung | null>(null);
 	const [dangGo, setDangGo] = useState(false);
-	const ghiDuoc = canh.quyen.suaDuoc && !canh.khoa;
+	const ghiDuoc = canh.quyen.suaDuoc && !canh.khoa && !canh.choDuyet;
 	const dinhDuoc = ghiDuoc && canh.kr.xong;
 
 	const nutDinh = ghiDuoc ? (

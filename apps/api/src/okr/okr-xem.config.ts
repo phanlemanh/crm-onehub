@@ -8,6 +8,5 @@ export const OKR_XEM = {
 	khoiCuaToi: { toiDa: 5 },
 	thongDiep: {
 		chiQuanTri: "Chỉ quản trị xem được sức khoẻ chương trình.",
-		khongCoKr: "Không có KR này.",
 	},
 } as const;

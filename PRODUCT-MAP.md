@@ -10,9 +10,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>109 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>23 việc"] --> GG{"Cổng Giá trị"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>111 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>25 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -32,7 +32,6 @@ flowchart TD
 
 ## Đang làm
 
-- Soạn OKR cùng Trợ lý — người sửa được OKR của một đơn vị mở một cuộc đối thoại với Trợ lý OKR cho đơn vị và chu kỳ đang lập kế hoạch; Trợ lý mang bối cảnh (hồ sơ công ty và chiến lược từ Kho tài liệu, đơn vị · mô tả · chức danh, OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng) vào cuộc, hỏi vài câu, đưa bản nháp bộ OKR trên bảng sống cạnh chat; người nhận · sửa · bác từng dòng, «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp; chạy trên app eve riêng, vai «chỉ OKR» đi qua đường mới; dựng và đo trên bộ OKR mẫu (`soan-okr-cung-tro-ly`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -44,6 +43,8 @@ flowchart TD
 - Cửa vào đăng nhập cho người mới — trang /sign-in nói cách vào ở khối «Lần đầu vào?» (bước tính theo nút đang bật), báo lỗi khi better-auth trả về vì địa chỉ chưa được cho phép, theo giao diện máy thay vì ép tối; bốn trang AuthShell khác giữ bố cục (`cua-vao-dang-nhap`)
 - Khu OKR trong CRM — quản trị mở chu kỳ năm và quý; mỗi cấp đặt mục tiêu với KR đủ sáu kiểu, căn chỉnh vào cấp trên, công bố; nhập bộ OKR quý 4 từ bảng tính có xem trước; mọi sửa đổi để lại vết (`dat-okr-trong-crm`)
 - Đổi tên sản phẩm trên mọi chữ người đọc từ «CRM» sang «OneHub Center» (trùng tên miền onehub.center), và làm lại cột trái /sign-in theo hướng A — nền lưới chấm bằng token cho năm trang AuthShell, dòng neo cỡ lớn, ba bước nối bằng đường dọc, không Card (`doi-ten-onehub-center`)
+- Hỏi ý mục tiêu — trước mỗi kỳ đặt OKR cả công ty góp ý cho mục tiêu công ty, người gom xếp ý thành chủ đề, người chọn (CEO) viết trước rồi kết luận từng chủ đề bằng lý do tự viết, chủ đề chọn thành bản nháp mục tiêu cấp OneHub, ai góp cũng thấy ý mình đi đâu và vì sao (bước 1–2 chu kỳ OKR, hạng mục 11 lộ trình OKR) (`dot-hoi-y-tuong-okr`)
+- Mục tiêu có mức hiển thị giới hạn, có bước duyệt nhẹ tuỳ chọn, và tái cơ cấu giữa kỳ không làm OKR mồ côi — mức công khai hay giới hạn áp trên mọi đường đọc OKR, ô «Công bố cần duyệt» của Chương trình OKR với một người duyệt suy từ cây, cây tổ chức không lưu trữ hay xoá được đơn vị còn OKR, chuyển OKR sang đơn vị khác, danh sách OKR mồ côi (lượt 8c — MT-06, QT-02, TC-06) (`gioi-han-duyet-cay-okr`)
 - Người đã nối Zalo nhắn một câu hỏi cho bot thì trợ lý AI của CRM trả lời bằng chữ, chỉ đọc, theo đúng cổng vai của người hỏi và trong ranh giới dữ liệu A; có trần theo người và theo xưởng (`hoi-crm-qua-zalo`)
 - Kế hoạch 30 ngày là một bản ghi làm việc được — mở như thoả thuận, giao bước, đánh dấu xong, đổi cầm trịch, ghi chú, và mọi thay đổi để lại vết (`ke-hoach-la-mot-ban-ghi`)
 - Khép kỳ OKR — quản trị mở cửa sổ rà giữa kỳ; cuối kỳ máy gợi ý điểm từ số chốt, người chỉnh được kèm lý do; mỗi mục tiêu có ô điều học được; kỳ chỉ đóng khi mọi KR đã chấm; mục tiêu dở mang sang kỳ sau; số kỳ đã đóng bị khoá và xuất được; kiểm chất lượng khi đặt bằng luật (`khep-ky-okr`)
@@ -110,6 +111,7 @@ flowchart TD
 - Khoá lô hàng agentTask trong CTE MATERIALIZED để LIMIT giữ đúng trần dưới thống kê cũ (`khoa-lo-giu-tran`)
 - Hộp «Chuyển việc 30 ngày» ghép câu từ mẫu tin nhắn mà không sinh hai phần tử cùng khoá React khi mẫu bắt đầu, kết thúc hay có hai chỗ trống liền nhau — chữ trên màn giữ nguyên (`khoa-rieng-dien-node`) — đã giao — máy thông, cửa veto còn mở
 - Thước «không chạm thước đã ký» của bo-chu-lap-keo-tha bắt được tệp đã ký bị đổi tên hoặc dời ra khỏi vùng cấm (`khong-cham-thuoc-bat-doi-ten`)
+- Tạo và sửa OKR cùng khung với deal — tạo và sửa Mục tiêu, thêm và sửa KR mở trong ngăn trượt phải như tạo deal, trạng thái mở trên URL, chân «Huỷ» trái nút chính phải cho mọi ngăn; cột góp ý của Trợ lý OKR mở thành ngăn rộng; thẻ góp ý giữ nguyên; chỉ giao diện (`khung-tao-okr-nhu-deal`)
 - Khung trang Cài đặt — một khung căn trái cho mọi trang, đầu trang và breadcrumb thống nhất, thanh bên bốn nhóm, Nhắc buổi sáng dời ra menu người dùng (`khung-trang-cai-dat`)
 - Bộ phận còn nằm trong một khuôn bất kỳ (kể cả đã lưu trữ) thì không xoá vĩnh viễn được, nên khuôn đã lưu trữ khôi phục được sau khi khôi phục bộ phận của nó (`khuon-mat-bo-phan`) — đã giao — không đo, khai ở Cổng Đáng
 - Trần giờ và cô lập cho thước lai-ra-man — ca lái từng component không còn đỏ ngẫu nhiên trên CI, và khi quá hạn thì không kéo đỏ ca nào khác (`lai-ra-man-tran-gio`)
@@ -167,6 +169,7 @@ flowchart TD
 - Trần một-lần-uỷ-thác agent_builder áp cho cả lượt KHÔNG có quyền — hook builder-delegation đang return sớm khi commandType khác CREATE_AGENT, nên chốt cứng duy nhất không chạy trên nhánh not_authorized và chỉ còn câu chữ trong prompt giữ trần (`tran-mot-lan-uy-thac`)
 - Bộ đo của trần một-lần-uỷ-thác bắt được khi chốt chết, và kiểu tham số neo vào type công khai của eve — CỘNG bằng chứng từ mã eve cho biết vì sao ca «step chạy lại bị giết oan» KHÔNG vá được ở lớp actions.requested, ghi thành giới hạn đã khai và ghim bằng một phép đo có tên (`tran-uy-thac-chiu-chay-lai`)
 - Trang chưa có bản đề xuất mở được — một luật «ai thấy trang» cho danh sách, màn đọc và «trang nhắc tới»; màn đọc nói trang đang chờ gì theo nguồn và chỉ lối viết tay (`trang-chua-de-xuat-mo-duoc`)
+- Sửa UX sau lái thử lượt 8c OKR — nhãn «Giới hạn» ở mọi danh sách mục tiêu, gỡ người báo trước OKR đang phụ trách, điều kiện chặn biết trước thì báo trước khi xác nhận, cây đơn vị đếm khớp khung, hộp gửi duyệt nêu người duyệt, người duyệt thấy lần trả lại trước, hạ «Công bố» sau khi trả lại, khung xương khi tải (lượt 8d) (`ux-lai-thu-8c-okr`)
 - Vùng cuộn của khung trang là khối chứa — phần tử định vị bên trong mọi trang dùng PageShell không kéo dài document, trang dài chỉ có một vùng cuộn và khung ứng dụng không trượt (`vung-cuon-la-khoi-chua`)
 - Màn Kết nối › Zalo in «trả lời lần cuối» theo múi giờ của xưởng (Asia/Ho_Chi_Minh) thay vì giờ UTC của máy chủ (`zalo-gio-theo-mui-gio-xuong`)
 - Khi Zalo nhận đăng ký nhưng gọi thử địa chỉ nhận tin hỏng, màn Kết nối › Zalo hiện đúng bot vừa lưu kèm cảnh báo «Đăng ký lại», và cảnh báo giữ nguyên qua các nhịp kiểm cho tới lần đăng ký lại thành công (`zalo-goi-thu-hong-hien-dung-bot`)

@@ -108,8 +108,21 @@ function mucTieu(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		soNguoiXem: 0,
 		trail: [],
 		canEditKr: ["kr-1"],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		nguoiDuyetDuKien: null,
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: true,
+			congBo: status === "nhap",
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 	};
 }
 
@@ -552,7 +565,7 @@ describe("sheet-cong-bo-khoa-khoi-diem", () => {
 		expect({
 			disabled: o instanceof HTMLInputElement && o.disabled,
 			moTa: moTaId ? document.getElementById(moTaId)?.textContent : null,
-			tieuDe: hop()?.querySelector('[data-slot="dialog-title"]')?.textContent,
+			tieuDe: hop()?.querySelector('[data-slot="sheet-title"]')?.textContent,
 		}).toEqual({
 			disabled: true,
 			moTa: m.hopThoai.daKhoa,

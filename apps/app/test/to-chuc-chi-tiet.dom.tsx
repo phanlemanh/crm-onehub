@@ -37,6 +37,7 @@ function cayMau(): TreeOutput {
 		divisionId: "bp-kd",
 		head: HUNG,
 		stepCount: 3,
+		okrMo: 0,
 		people: [
 			{ ...HUNG, primary: true },
 			{ ...MAI, primary: true },
@@ -50,6 +51,7 @@ function cayMau(): TreeOutput {
 		divisionId: "bp-vh",
 		head: null,
 		stepCount: 1,
+		okrMo: 0,
 		people: [
 			{ ...THAO, primary: true },
 			{ ...MAI, primary: false },
@@ -63,6 +65,7 @@ function cayMau(): TreeOutput {
 		divisionId: "bp-vh",
 		head: null,
 		stepCount: 0,
+		okrMo: 0,
 		people: [{ ...TUAN, primary: true }],
 	};
 	const pc = {
@@ -73,6 +76,7 @@ function cayMau(): TreeOutput {
 		divisionId: null,
 		head: null,
 		stepCount: 0,
+		okrMo: 0,
 		people: [],
 	};
 	const viTri = (n: typeof LAN, chinh: string | null, phu: string[]) => ({
@@ -92,6 +96,7 @@ function cayMau(): TreeOutput {
 				moTa: "",
 				position: 0,
 				head: LAN,
+				okrMo: 0,
 				departments: [pb1],
 			},
 			{
@@ -100,6 +105,7 @@ function cayMau(): TreeOutput {
 				moTa: "",
 				position: 1,
 				head: null,
+				okrMo: 0,
 				departments: [cskh, kho],
 			},
 		],
@@ -115,7 +121,9 @@ function cayMau(): TreeOutput {
 		],
 		archived: {
 			divisions: [],
-			departments: [{ id: "pb-cu", name: "Marketing (cũ)", purgeable: true }],
+			departments: [
+				{ id: "pb-cu", name: "Marketing (cũ)", okrMo: 0, purgeable: true },
+			],
 		},
 		coverage: { members: 6, withPrimary: 4, departmentsWithoutHead: 3 },
 	};
@@ -238,6 +246,7 @@ mock.module("@/lib/trpc/client", () => ({
 			setPlacement: thuTuc("setPlacement", khongDoc),
 			previewImport: thuTuc("previewImport", khongDoc),
 			applyImport: thuTuc("applyImport", khongDoc),
+			luuTruXemTruoc: thuTuc("luuTruXemTruoc", () => ({ lyDo: [] })),
 			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
 			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
 			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
@@ -779,7 +788,9 @@ describe("chon-nut", () => {
 			chuaXep: [...cay.chuaXep, ...(vh?.departments ?? [])],
 			archived: {
 				...cay.archived,
-				divisions: [{ id: "bp-vh", name: "Vận hành", purgeable: false }],
+				divisions: [
+					{ id: "bp-vh", name: "Vận hành", okrMo: 0, purgeable: false },
+				],
 			},
 		};
 		await act(async () => {
@@ -1067,6 +1078,7 @@ function baBoPhan(): TreeOutput {
 				moTa: "",
 				position: 2,
 				head: null,
+				okrMo: 0,
 				departments: [],
 			},
 		],

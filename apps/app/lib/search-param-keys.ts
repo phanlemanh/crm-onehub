@@ -1,3 +1,5 @@
+import { THAM_SO_KY_OKR } from "@crm/validation/okr-chu-ky";
+
 export const SEARCH_PARAM = {
 	list: {
 		q: "q",
@@ -43,6 +45,7 @@ export const SEARCH_PARAM = {
 	toChuc: {
 		don: "don",
 		loc: "loc",
+		chuyenOkr: "chuyenOkr",
 	},
 	onboarding: {
 		trangThai: "trangThai",
@@ -50,7 +53,7 @@ export const SEARCH_PARAM = {
 		cachChia: "cachChia",
 	},
 	okr: {
-		ky: "kyOkr",
+		ky: THAM_SO_KY_OKR,
 		don: "donOkr",
 		xem: "xemOkr",
 		moChuKy: "moChuKy",
@@ -63,6 +66,8 @@ export const SEARCH_PARAM = {
 		kr: "krOkr",
 		tu: "tu",
 		mau: "mau",
+		hop: "hopOkr",
+		moHoiY: "moHoiY",
 	},
 	taiLieu: {
 		tab: "tabTaiLieu",

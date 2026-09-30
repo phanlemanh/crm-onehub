@@ -11,14 +11,9 @@ import {
 } from "@crm/ui/components/empty";
 import { Field, FieldDescription } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
-import {
-	Item,
-	ItemActions,
-	ItemContent,
-	ItemDescription,
-	ItemGroup,
-} from "@crm/ui/components/item";
+import { ItemDescription, ItemGroup } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { SheetRailHeader, SheetRailTitle } from "@crm/ui/components/sheet";
 import { Shimmer } from "@crm/ui/components/shimmer";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import {
@@ -416,22 +411,20 @@ function KhungCot({
 			ref={cuonToi}
 			onKeyDown={phimCot}
 		>
-			<Item size="xs">
-				<ItemContent>
-					<p>{gopY.laKr ? m.cot.tieuDeKr : m.cot.tieuDe}</p>
-				</ItemContent>
-				<ItemActions>
-					<Button
-						type="button"
-						size="icon-sm"
-						variant="ghost"
-						aria-label={m.cot.dong}
-						onClick={gopY.dongCot}
-					>
-						<Icon icon={Close} />
-					</Button>
-				</ItemActions>
-			</Item>
+			<SheetRailHeader>
+				<SheetRailTitle>
+					{gopY.laKr ? m.cot.tieuDeKr : m.cot.tieuDe}
+				</SheetRailTitle>
+				<Button
+					type="button"
+					size="icon-sm"
+					variant="ghost"
+					aria-label={m.cot.dong}
+					onClick={gopY.dongCot}
+				>
+					<Icon icon={Close} />
+				</Button>
+			</SheetRailHeader>
 			{children}
 		</section>
 	);

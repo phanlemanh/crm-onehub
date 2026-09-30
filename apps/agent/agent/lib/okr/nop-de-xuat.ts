@@ -60,7 +60,7 @@ export async function nopDeXuatVao(
 	if ((await soLanNop(hang.id)) > 0) {
 		return khongGhi("tu-choi", "already submitted");
 	}
-	const goi = await dungGoiDeXuat(viec.objectiveId, {
+	const goi = await dungGoiDeXuat(viec.objectiveId, viec.nguoiYeuCau, {
 		keyResultId: viec.keyResultId,
 		nac: viec.nac,
 	});

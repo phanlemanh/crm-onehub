@@ -28,7 +28,7 @@ export async function laKhoThu(): Promise<void> {
 export async function lamSachOkr(): Promise<void> {
 	await laKhoThu();
 	await db.$executeRawUnsafe(
-		'TRUNCATE "okrCycle", "okrTrail", "okrCheckInSession", "okrDeXuat", "okrTomTat" CASCADE',
+		'TRUNCATE "okrCycle", "okrTrail", "okrCheckInSession", "okrDeXuat", "okrTomTat", "okrHoiY", "okrHoiYBanTruoc", "okrY", "okrYDongY", "okrChuDe", "okrHoiYHieu" CASCADE',
 	);
 }
 
@@ -67,6 +67,107 @@ function rutBangDem(): BangDem[] {
 
 export const BANG_DEM: readonly BangDem[] = rutBangDem();
 
+const theoChu = (ds: object[]): string[] =>
+	ds.map((x) => JSON.stringify(x)).sort();
+
+export async function vanTayHoiY(): Promise<Record<string, string[]>> {
+	const hoiY = await db.okrHoiY.findMany({
+		where: { cycleId: { startsWith: OKR_MAU.tienTo } },
+		include: {
+			banTruoc: true,
+			hieu: true,
+			chuDe: { include: { objective: { select: { title: true } } } },
+			y: {
+				include: {
+					chuDe: { select: { ten: true, loai: true } },
+					dongY: true,
+				},
+			},
+		},
+	});
+	return {
+		okrHoiY: theoChu(
+			hoiY.map((h) => ({
+				cycleId: h.cycleId,
+				cauHoi: h.cauHoi,
+				loiMo: h.loiMo,
+				soLieu: h.soLieu,
+				hanLuc: h.hanLuc,
+				nguoiChonUserId: h.nguoiChonUserId,
+				taoBoiUserId: h.taoBoiUserId,
+				congBoLuc: h.congBoLuc,
+				createdAt: h.createdAt,
+			})),
+		),
+		okrHoiYBanTruoc: theoChu(
+			hoiY.flatMap((h) =>
+				h.banTruoc
+					? [
+							{
+								cycleId: h.cycleId,
+								cau: h.banTruoc.cau,
+								boQua: h.banTruoc.boQua,
+								vietBoiUserId: h.banTruoc.vietBoiUserId,
+								niemPhongLuc: h.banTruoc.niemPhongLuc,
+							},
+						]
+					: [],
+			),
+		),
+		okrY: theoChu(
+			hoiY.flatMap((h) =>
+				h.y.map((y) => ({
+					cycleId: h.cycleId,
+					tacGiaUserId: y.tacGiaUserId,
+					noiDung: y.noiDung,
+					viSao: y.viSao,
+					doBangGi: y.doBangGi,
+					chuDe: y.chuDe,
+					ganLuc: y.ganLuc,
+					createdAt: y.createdAt,
+				})),
+			),
+		),
+		okrYDongY: theoChu(
+			hoiY.flatMap((h) =>
+				h.y.flatMap((y) =>
+					y.dongY.map((d) => ({
+						cycleId: h.cycleId,
+						y: { tacGiaUserId: y.tacGiaUserId, noiDung: y.noiDung },
+						userId: d.userId,
+						createdAt: d.createdAt,
+					})),
+				),
+			),
+		),
+		okrChuDe: theoChu(
+			hoiY.flatMap((h) =>
+				h.chuDe.map((c) => ({
+					cycleId: h.cycleId,
+					loai: c.loai,
+					ten: c.ten,
+					ketLuan: c.ketLuan,
+					lyDo: c.lyDo,
+					cauMucTieu: c.cauMucTieu,
+					noiBanTruoc: c.noiBanTruoc,
+					mucTieu: c.objective?.title ?? null,
+					viTri: c.viTri,
+					createdAt: c.createdAt,
+				})),
+			),
+		),
+		okrHoiYHieu: theoChu(
+			hoiY.flatMap((h) =>
+				h.hieu.map((x) => ({
+					cycleId: h.cycleId,
+					userId: x.userId,
+					luc: x.luc,
+				})),
+			),
+		),
+	};
+}
+
 export async function vanTay(): Promise<Record<string, string[]>> {
 	const cap = await Promise.all(
 		BANG_DEM.map(async ({ bang, khoa }) => {
@@ -78,7 +179,7 @@ export async function vanTay(): Promise<Record<string, string[]>> {
 			return [bang, rows.map((r) => r.dong)] as const;
 		}),
 	);
-	return Object.fromEntries(cap);
+	return { ...Object.fromEntries(cap), ...(await vanTayHoiY()) };
 }
 
 export async function vanTayKho(): Promise<Record<string, string>> {

@@ -1,3 +1,4 @@
+import { KHONG_OKR, type OkrTheoDonVi } from "@crm/db/okr-don-vi";
 import { quanLyTrucTiep } from "./quan-ly";
 import type { NguoiOutput, TreeOutput } from "./to-chuc.contracts";
 import { lyDoKhongXoaPhongBan } from "./xoa-phong-ban";
@@ -31,12 +32,15 @@ export type CayTho = {
 	}[];
 	secondaries: { userId: string; departmentId: string }[];
 	khuonCuaPhongBan: ReadonlyMap<string, readonly string[]>;
+	okr: OkrTheoDonVi;
 };
 
 const theoTen = (a: NguoiOutput, b: NguoiOutput) =>
 	a.name.localeCompare(b.name, "vi");
 
 export function dungCay(tho: CayTho): TreeOutput {
+	const okrPb = (id: string) => tho.okr.phongBan.get(id) ?? KHONG_OKR;
+	const okrBp = (id: string) => tho.okr.boPhan.get(id) ?? KHONG_OKR;
 	const nguoi = new Map(tho.members.map((m) => [m.id, m]));
 	const hieuLuc = new Set(nguoi.keys());
 	const pbSong = tho.departments.filter((d) => d.archivedAt === null);
@@ -96,6 +100,7 @@ export function dungCay(tho: CayTho): TreeOutput {
 				: null,
 		head: nguoi.get(truongPb.get(d.id) ?? "") ?? null,
 		stepCount: d.stepCount,
+		okrMo: okrPb(d.id).mo,
 		people: [
 			...[...chinh]
 				.filter(([, pb]) => pb === d.id)
@@ -124,6 +129,7 @@ export function dungCay(tho: CayTho): TreeOutput {
 		moTa: b.moTa,
 		position: b.position,
 		head: nguoi.get(truongBp.get(b.id) ?? "") ?? null,
+		okrMo: okrBp(b.id).mo,
 		departments: pbSong
 			.filter((d) => d.divisionId === b.id)
 			.sort(theoViTri)
@@ -176,19 +182,22 @@ export function dungCay(tho: CayTho): TreeOutput {
 				.map((d) => ({
 					id: d.id,
 					name: d.name,
-					purgeable: d.departmentCount === 0,
+					okrMo: okrBp(d.id).mo,
+					purgeable: d.departmentCount === 0 && okrBp(d.id).lichSu === 0,
 				})),
 			departments: tho.departments
 				.filter((d) => d.archivedAt !== null)
 				.map((d) => ({
 					id: d.id,
 					name: d.name,
+					okrMo: okrPb(d.id).mo,
 					purgeable:
 						lyDoKhongXoaPhongBan({
 							archived: true,
 							stepCount: d.stepCount,
 							primaryCount: soChinh.get(d.id) ?? 0,
 							khuon: tho.khuonCuaPhongBan.get(d.id) ?? [],
+							okrLichSu: okrPb(d.id).lichSu,
 						}) === null,
 				})),
 		},

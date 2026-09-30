@@ -1,0 +1,1 @@
+driver: puppeteer-core script (man-khung.mjs), khong co read_network_requests -> n-a (driver)

@@ -1,0 +1,3 @@
+driver: Bash -> tien-de.mjs -> man-khep-ky.mjs (puppeteer-core noi bo); khong co read_network_requests tu verifier.
+man-khep-ky-network.txt (script tu ghi) = 0 byte (rong).
+networkObserved = n-a (driver)

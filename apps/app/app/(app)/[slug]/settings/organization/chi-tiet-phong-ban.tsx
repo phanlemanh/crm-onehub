@@ -17,6 +17,7 @@ import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import {
 	DongNguoi,
+	DongOkrMo,
 	MenuDong,
 	TieuDeChiTiet,
 	TieuDeMuc,
@@ -103,6 +104,12 @@ export function ChiTietPhongBan({
 						]}
 					/>
 				}
+			/>
+			<DongOkrMo
+				level="phong-ban"
+				okrMo={pb.okrMo}
+				sua={hd.sua}
+				moChuyen={() => hd.moChuyenOkr({ level: "phong-ban", id: pb.id })}
 			/>
 			<OTruong
 				kind="department"

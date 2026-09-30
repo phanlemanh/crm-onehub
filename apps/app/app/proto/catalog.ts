@@ -449,6 +449,21 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "khung-tao-okr-nhu-deal",
+		ten: "Tạo và sửa OKR cùng khung với deal — ngăn trượt phải",
+		states: [
+			{ id: "ST-khung-sua-kr", nhan: "Sửa KR — ngăn chồng lên khung Mục tiêu" },
+			{ id: "ST-khung-deal", nhan: "Tạo deal — ngăn để so" },
+			{ id: "ST-khung-tao-muc-tieu", nhan: "Thêm mục tiêu" },
+			{ id: "ST-khung-sua-muc-tieu", nhan: "Sửa mục tiêu" },
+			{ id: "ST-khung-them-kr", nhan: "Thêm KR" },
+			{ id: "ST-khung-cot-muc-tieu", nhan: "Sửa mục tiêu — cột góp ý mở" },
+			{ id: "ST-khung-cot-kr", nhan: "Sửa KR — cột góp ý mở" },
+			{ id: "ST-khung-hoi-lai", nhan: "Đóng khi còn sửa chưa lưu" },
+			{ id: "ST-khung-url-sai", nhan: "URL trỏ KR không còn" },
+		],
+	},
+	{
 		slug: "tro-ly-okr-de-xuat",
 		ten: "Góp ý khi bấm — hộp Mục tiêu và KR, chế độ ẩn, số đo",
 		states: [
@@ -587,6 +602,44 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "dot-hoi-y-tuong-okr",
+		ten: "Hỏi ý mục tiêu — góp, gom, chọn, báo lại",
+		states: [
+			{ id: "ST-hoiy-dang-tai", nhan: "Thành viên — đang tải" },
+			{ id: "ST-hoiy-loi", nhan: "Thành viên — tải hỏng, thử lại" },
+			{
+				id: "ST-hoiy-trong-quan-tri",
+				nhan: "Quản trị — chưa hỏi ý cho kỳ này",
+			},
+			{
+				id: "ST-hoiy-trong-thanh-vien",
+				nhan: "Thành viên — chưa có lần hỏi ý nào",
+			},
+			{
+				id: "ST-mo-sheet",
+				nhan: "Quản trị — sheet Mở hỏi ý, một ô chưa hợp lệ",
+			},
+			{ id: "ST-gop-chua-gop", nhan: "Thành viên — đang mở, chưa góp" },
+			{ id: "ST-gop-da-gop", nhan: "Thành viên — đã góp 2 ý, còn góp được" },
+			{ id: "ST-gop-het-han", nhan: "Thành viên — hết hạn, chờ công bố" },
+			{
+				id: "ST-viet-truoc",
+				nhan: "Người chọn — viết trước, ý người khác còn khoá",
+			},
+			{ id: "ST-gom", nhan: "Quản trị — gom ý thành chủ đề sau hạn" },
+			{
+				id: "ST-chon-chua-du",
+				nhan: "Người chọn — kết luận, còn thiếu nên chưa công bố được",
+			},
+			{ id: "ST-chon-du", nhan: "Người chọn — đủ điều kiện, Công bố bật" },
+			{ id: "ST-ket-qua", nhan: "Thành viên — kết quả: ý của tôi đi đâu" },
+			{
+				id: "ST-ket-qua-da-hieu",
+				nhan: "Thành viên — kết quả, đã bấm «Tôi hiểu vì sao»",
+			},
+		],
+	},
+	{
 		slug: "canh-kr-okr",
 		ten: "Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR",
 		states: [
@@ -640,6 +693,55 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-canh-chong",
 				nhan: "Cảnh ngữ cảnh — khung KR chồng lên khung mục tiêu",
 			},
+		],
+	},
+	{
+		slug: "gioi-han-duyet-cay-okr",
+		ten: "Mức hiển thị, bước duyệt nhẹ, tái cơ cấu không mồ côi",
+		states: [
+			{
+				id: "ST-khung-gioi-han",
+				nhan: "Khung mục tiêu — nhãn khoá «Giới hạn»",
+			},
+			{
+				id: "ST-khung-khong-thay",
+				nhan: "Khung mục tiêu — người không xem được mở đường dẫn",
+			},
+			{
+				id: "ST-hienthi-hop",
+				nhan: "Hộp mức hiển thị — giới hạn, 2 người xem",
+			},
+			{
+				id: "ST-hienthi-con-can-chinh",
+				nhan: "Hộp mức hiển thị — mục tiêu còn căn chỉnh",
+			},
+			{ id: "ST-duyet-cho-nguoi-gui", nhan: "Chờ duyệt — người gửi thấy" },
+			{ id: "ST-duyet-cho-nguoi-duyet", nhan: "Chờ duyệt — người duyệt thấy" },
+			{ id: "ST-duyet-tra-lai-hop", nhan: "Hộp trả lại — lý do chưa đủ dài" },
+			{ id: "ST-duyet-bi-tra-lai", nhan: "Bản nháp bị trả lại, kèm lý do" },
+			{ id: "ST-duyet-viec-cua-toi", nhan: "Việc OKR của tôi — chờ bạn duyệt" },
+			{
+				id: "ST-chuongtrinh-duyet",
+				nhan: "Chương trình OKR — bật «Công bố cần duyệt»",
+			},
+			{
+				id: "ST-chuongtrinh-khong-quyen",
+				nhan: "Chương trình OKR — không phải quản trị, công tắc khoá",
+			},
+			{ id: "ST-tochuc-okr-mo", nhan: "Tổ chức — phòng ban còn 4 mục tiêu mở" },
+			{
+				id: "ST-tochuc-luu-tru-chan",
+				nhan: "Tổ chức — lưu trữ bị chặn vì còn OKR",
+			},
+			{ id: "ST-chuyen-hop", nhan: "Hộp chuyển OKR" },
+			{
+				id: "ST-chuyen-loi",
+				nhan: "Hộp chuyển OKR — lỗi, không mục nào chuyển",
+			},
+			{ id: "ST-mocoi-co", nhan: "Sức khoẻ — có OKR mồ côi" },
+			{ id: "ST-mocoi-rong", nhan: "Sức khoẻ — không có OKR mồ côi" },
+			{ id: "ST-mocoi-dang-tai", nhan: "Sức khoẻ — OKR mồ côi đang tải" },
+			{ id: "ST-mocoi-loi", nhan: "Sức khoẻ — OKR mồ côi lỗi tải" },
 		],
 	},
 	{

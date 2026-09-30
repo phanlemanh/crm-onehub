@@ -40,6 +40,14 @@ export const TO_CHUC = {
 			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
 		phongBanConTrongKhuon: (khuon: readonly string[]) =>
 			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — xoá vĩnh viễn khuôn đó hoặc bỏ phòng ban khỏi khuôn trước.`,
+		phongBanConOkrMo: (n: number) =>
+			`Phòng ban còn ${n} mục tiêu OKR ở chu kỳ chưa đóng — chuyển OKR sang phòng ban khác hoặc bỏ mục tiêu rồi mới lưu trữ.`,
+		boPhanConOkrMo: (n: number) =>
+			`Bộ phận còn ${n} mục tiêu OKR ở chu kỳ chưa đóng — chuyển OKR sang bộ phận khác hoặc bỏ mục tiêu rồi mới lưu trữ.`,
+		phongBanConOkrXoa: (n: number) =>
+			`Phòng ban còn ${n} mục tiêu OKR trỏ tới, kể cả chu kỳ đã đóng — không xoá hẳn được, chỉ giữ ở lưu trữ.`,
+		boPhanConOkrXoa: (n: number) =>
+			`Bộ phận còn ${n} mục tiêu OKR trỏ tới, kể cả chu kỳ đã đóng — không xoá hẳn được, chỉ giữ ở lưu trữ.`,
 		khongPhaiThanhVien: (id: string) =>
 			`Người ${id} không phải thành viên đang hoạt động.`,
 		truongNgoaiPhongBan: "Trưởng phòng ban phải là người của phòng ban đó.",

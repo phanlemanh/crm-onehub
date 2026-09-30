@@ -203,6 +203,9 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 				</form>
 
 				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">{m.create.cancel}</Button>
+					</SheetClose>
 					<Button
 						type="submit"
 						form="create-contact"
@@ -211,9 +214,6 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 						{create.isPending ? <Spinner /> : null}
 						{m.create.submit}
 					</Button>
-					<SheetClose asChild>
-						<Button variant="outline">{m.create.cancel}</Button>
-					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

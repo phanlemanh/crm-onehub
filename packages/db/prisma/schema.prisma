@@ -72,12 +72,20 @@ model User {
   okrKeyResultsOwned  OkrKeyResult[]   @relation("OkrKeyResultOwner")
   okrParticipations   OkrParticipant[]
 
-  okrViecKrLam       OkrViecKr[]      @relation("OkrViecKrNguoiLam")
-  okrViecKrTao       OkrViecKr[]      @relation("OkrViecKrTaoBoi")
-  okrBangChungTacGia OkrBangChung[]   @relation("OkrBangChungTacGia")
-  okrGhiNhanTacGia   OkrGhiNhan[]     @relation("OkrGhiNhanTacGia")
-  okrGhiNhanNhanDuoc OkrGhiNhanNhan[] @relation("OkrGhiNhanNhan")
-  okrMauTaoBoi       OkrMau[]         @relation("OkrMauTaoBoi")
+  okrViecKrLam       OkrViecKr[]       @relation("OkrViecKrNguoiLam")
+  okrViecKrTao       OkrViecKr[]       @relation("OkrViecKrTaoBoi")
+  okrBangChungTacGia OkrBangChung[]    @relation("OkrBangChungTacGia")
+  okrGhiNhanTacGia   OkrGhiNhan[]      @relation("OkrGhiNhanTacGia")
+  okrGhiNhanNhanDuoc OkrGhiNhanNhan[]  @relation("OkrGhiNhanNhan")
+  okrMauTaoBoi       OkrMau[]          @relation("OkrMauTaoBoi")
+  okrHoiYNguoiChon   OkrHoiY[]         @relation("OkrHoiYNguoiChon")
+  okrHoiYTaoBoi      OkrHoiY[]         @relation("OkrHoiYTaoBoi")
+  okrHoiYVietBoi     OkrHoiYBanTruoc[] @relation("OkrHoiYVietBoi")
+  okrYTacGia         OkrY[]            @relation("OkrYTacGia")
+  okrYDongY          OkrYDongY[]       @relation("OkrYDongY")
+  okrHoiYHieu        OkrHoiYHieu[]     @relation("OkrHoiYHieu")
+  okrNguoiXemDuoc    OkrNguoiXem[]     @relation("OkrNguoiXemNguoi")
+  okrNguoiXemDat     OkrNguoiXem[]     @relation("OkrNguoiXemDatBoi")
 
   taiLieuChuTrang   TaiLieuTrang[]    @relation("TaiLieuChuTrang")
   taiLieuTaoBoi     TaiLieuTrang[]    @relation("TaiLieuTaoBoi")
@@ -2013,6 +2021,7 @@ model OkrCycle {
   cuaSoRa       OkrCuaSoRa[]
   diemKr        OkrDiemKr[]
   mangSangToi   OkrMangSang[]
+  hoiY          OkrHoiY?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -2040,6 +2049,7 @@ model OkrProgramConfig {
   aiTomTatAnPhamVi     String   @default("tat")
   aiTomTatAnDonVi      String[] @default([])
   aiTranThangUsd       Decimal  @default(9) @db.Decimal(8, 2)
+  duyetCongBo          Boolean  @default(false)
   aiSoanPhamVi         String   @default("tat")
   aiSoanDonVi          String[] @default([])
   aiSoanAnPhamVi       String   @default("tat")
@@ -2066,6 +2076,7 @@ model OkrObjective {
   owner        User             @relation("OkrObjectiveOwner", fields: [ownerUserId], references: [id], onDelete: Restrict)
   kind         String
   status       String           @default("nhap")
+  hienThi      String           @default("cong-khai")
   title        String
   whyNow       String           @default("")
   publishedAt  DateTime?
@@ -2082,10 +2093,13 @@ model OkrObjective {
   mangSangTu   OkrMangSang?     @relation("OkrMangSangSang")
   ghiNhan      OkrGhiNhan[]
   mucTieuTuMau OkrMucTieuTuMau?
+  chuDeHoiY    OkrChuDe?
+  nguoiXem     OkrNguoiXem[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
   @@index([cycleId, level])
+  @@index([cycleId, hienThi])
   @@index([divisionId])
   @@index([departmentId])
   @@index([personUserId])
@@ -2723,4 +2737,117 @@ model OkrMucTieuTuMau {
 
   @@index([mauId])
   @@map("okrMucTieuTuMau")
+}
+
+model OkrNguoiXem {
+  objectiveId String
+  objective   OkrObjective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User         @relation("OkrNguoiXemNguoi", fields: [userId], references: [id], onDelete: Restrict)
+  createdById String
+  createdBy   User         @relation("OkrNguoiXemDatBoi", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime     @default(now())
+
+  @@id([objectiveId, userId])
+  @@index([userId])
+  @@map("okrNguoiXem")
+}
+
+model OkrHoiY {
+  id              String           @id @default(cuid())
+  cycleId         String           @unique
+  cycle           OkrCycle         @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  cauHoi          String
+  loiMo           String           @default("")
+  soLieu          Json
+  hanLuc          DateTime
+  nguoiChonUserId String
+  nguoiChon       User             @relation("OkrHoiYNguoiChon", fields: [nguoiChonUserId], references: [id], onDelete: Restrict)
+  taoBoiUserId    String
+  taoBoi          User             @relation("OkrHoiYTaoBoi", fields: [taoBoiUserId], references: [id], onDelete: Restrict)
+  congBoLuc       DateTime?
+  createdAt       DateTime
+  updatedAt       DateTime         @updatedAt
+  banTruoc        OkrHoiYBanTruoc?
+  y               OkrY[]
+  chuDe           OkrChuDe[]
+  hieu            OkrHoiYHieu[]
+
+  @@map("okrHoiY")
+}
+
+model OkrHoiYBanTruoc {
+  id            String   @id @default(cuid())
+  hoiYId        String   @unique
+  hoiY          OkrHoiY  @relation(fields: [hoiYId], references: [id], onDelete: Restrict)
+  cau           String[]
+  boQua         Boolean
+  vietBoiUserId String
+  vietBoi       User     @relation("OkrHoiYVietBoi", fields: [vietBoiUserId], references: [id], onDelete: Restrict)
+  niemPhongLuc  DateTime
+
+  @@map("okrHoiYBanTruoc")
+}
+
+model OkrY {
+  id           String      @id @default(cuid())
+  hoiYId       String
+  hoiY         OkrHoiY     @relation(fields: [hoiYId], references: [id], onDelete: Restrict)
+  tacGiaUserId String
+  tacGia       User        @relation("OkrYTacGia", fields: [tacGiaUserId], references: [id], onDelete: Restrict)
+  noiDung      String
+  viSao        String      @default("")
+  doBangGi     String      @default("")
+  chuDeId      String?
+  chuDe        OkrChuDe?   @relation(fields: [chuDeId], references: [id], onDelete: SetNull)
+  ganLuc       DateTime?
+  createdAt    DateTime
+  updatedAt    DateTime    @updatedAt
+  dongY        OkrYDongY[]
+
+  @@index([hoiYId, tacGiaUserId])
+  @@index([chuDeId])
+  @@map("okrY")
+}
+
+model OkrYDongY {
+  yId       String
+  y         OkrY     @relation(fields: [yId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation("OkrYDongY", fields: [userId], references: [id], onDelete: Restrict)
+  createdAt DateTime
+
+  @@id([yId, userId])
+  @@map("okrYDongY")
+}
+
+model OkrChuDe {
+  id          String        @id @default(cuid())
+  hoiYId      String
+  hoiY        OkrHoiY       @relation(fields: [hoiYId], references: [id], onDelete: Restrict)
+  loai        String
+  ten         String
+  ketLuan     String?
+  lyDo        String        @default("")
+  cauMucTieu  String        @default("")
+  noiBanTruoc String?
+  objectiveId String?       @unique
+  objective   OkrObjective? @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
+  viTri       Int
+  createdAt   DateTime      @default(now())
+  y           OkrY[]
+
+  @@index([hoiYId])
+  @@map("okrChuDe")
+}
+
+model OkrHoiYHieu {
+  hoiYId String
+  hoiY   OkrHoiY  @relation(fields: [hoiYId], references: [id], onDelete: Restrict)
+  userId String
+  user   User     @relation("OkrHoiYHieu", fields: [userId], references: [id], onDelete: Restrict)
+  luc    DateTime
+
+  @@id([hoiYId, userId])
+  @@map("okrHoiYHieu")
 }

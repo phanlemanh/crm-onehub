@@ -42,6 +42,7 @@ const chuongTrinh = () => ({
 	aiSoanAnDonVi: [],
 	aiTranThangUsd: 9,
 	aiTranThangDatOkrUsd: null,
+	duyetCongBo: false,
 	...cauHinh,
 	version: 4,
 	canManage: coQuyen,

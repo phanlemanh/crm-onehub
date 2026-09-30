@@ -64,7 +64,12 @@ export function SoanOkrCungTroLyMau({ state }: { state: string }) {
 		);
 	}
 	const khung = (nut: HinhNut | null, con?: React.ReactNode) => (
-		<KhungUngDung key={state} ky={KY_SOAN.ten} trang="theo-don-vi" vai="day-du">
+		<KhungUngDung
+			chuKy={KY_SOAN.ten}
+			key={state}
+			trang="theo-don-vi"
+			vai="day-du"
+		>
 			<KhungDonVi nut={nut}>{con}</KhungDonVi>
 		</KhungUngDung>
 	);

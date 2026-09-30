@@ -114,7 +114,7 @@ async function hangCua(taskId: string) {
 }
 
 async function danhSach(objectiveId: string) {
-	const goi = await dungGoiDeXuat(objectiveId, { keyResultId: null });
+	const goi = await dungGoiDeXuat(objectiveId, nguoi, { keyResultId: null });
 	return danhSachDeXuat(db, {
 		objectiveId,
 		keyResultIds: "moi",

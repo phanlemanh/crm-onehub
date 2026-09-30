@@ -1,0 +1,9 @@
+E17 network/console dump - run 2026-09-30 12:31 (driver: puppeteer script man-giu-cho.mjs via phien-do kto-e17; no browser-tool network reader)
+app http://localhost:4878 · api http://localhost:4547 (phien do rieng, kho crm_kto_e17_do)
+22:loi console app: 1
+23:  /deals: pageerror Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+26:man-giu-cho: hong 1
+29:phien-do: kho crm_kto_e17_do · app http://localhost:4878 · api http://localhost:4547
+32:phien-do: xong — mã 1
+33:giu-cho-han-che: 7/7 buoc dat · loi console 1 · loi la 0 · dong hong khac 0
+Script chi ghi pageerror + console.error; khong ghi fetch/XHR that bai.

@@ -1,6 +1,9 @@
 import { mock } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { NuqsTestingAdapter } from "nuqs/adapters/testing";
+import {
+	NuqsTestingAdapter,
+	type OnUrlUpdateFunction,
+} from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type {
@@ -146,6 +149,8 @@ export const MT: MucTieuOutput = {
 	following: false,
 	followerCount: 0,
 	theoDoi: false,
+	hienThi: "cong-khai",
+	soNguoiXem: 0,
 };
 
 const RONG_DONG = {
@@ -276,6 +281,17 @@ export function datMacDinh(dong: DongHien[]): void {
 		mangSangTu: null,
 		trail: [],
 		canEditKr: [KR_1.id, KR_2.id],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: true,
+			congBo: true,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 	}));
 	dat("okr.program", () => ({ weightsOn: false, personalOn: false }));
 	dat("okr.cycles", () => ({ cycles: [], currentId: null }));
@@ -294,7 +310,16 @@ export async function nhip(lan = 1): Promise<void> {
 	}
 }
 
-export async function mo(man: ReactElement): Promise<void> {
+export type TuyChonMo = {
+	searchParams?: string;
+	onUrlUpdate?: OnUrlUpdateFunction;
+	giuHangDoiUrl?: boolean;
+};
+
+export async function mo(
+	man: ReactElement,
+	chon: TuyChonMo = {},
+): Promise<void> {
 	if (dangMo.length === 0) {
 		const o = document.createElement("div");
 		document.body.appendChild(o);
@@ -310,7 +335,12 @@ export async function mo(man: ReactElement): Promise<void> {
 	});
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter hasMemory searchParams="">
+			<NuqsTestingAdapter
+				hasMemory
+				searchParams={chon.searchParams ?? ""}
+				onUrlUpdate={chon.onUrlUpdate}
+				resetUrlUpdateQueueOnMount={!chon.giuHangDoiUrl}
+			>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>{man}</TooltipProvider>
