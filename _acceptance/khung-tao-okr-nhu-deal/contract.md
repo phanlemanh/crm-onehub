@@ -69,6 +69,7 @@ Quét bằng `morphological-scan` ngay trong phiên (30/09), bản đầy đủ 
 ### Known limits
 
 - E17: màn Deals báo lỗi hydrat trên console khi tải; lỗi có sẵn trên onehub trước lượt này (đo trên bản sạch của onehub 30/09) nên kịch bản «hộp giữ chỗ» thoát 1 dù bảy bước đều đạt. Chủ kho duyệt 30/09 ghi thành hạn chế đã biết khi cho chạy vòng 5; lỗi Deals tách thành việc riêng.
+- E17 (gỡ 2026-09-30): lỗi Deals đã sửa ở gốc trong hồ sơ `hydrat-giai-doan-deals` (ngăn tạo deal thôi tạo truy vấn khi đóng). E17 chạy thẳng `man-giu-cho.mjs`, lớp bọc `rang/giu-cho-han-che.mjs` đã xoá; các mục Ngoài-1 đến Ngoài-4 về lớp bọc hết đối tượng.
 
 - Ngoài-1 (ký 2026-09-30, Manh Phan): expected của E17 nói chiều đỏ của lớp bọc đã ghim, nhưng không có đầu ra mẫu nào trong kho và lệnh E17 không gọi `--tu-tep`. Lớp bọc bị xoá khi lỗi hydrat Deals được sửa ở việc riêng.
 - Ngoài-2 (ký 2026-09-30, Manh Phan): lớp bọc E17 không đếm dòng «buoc N: nem …», nên một bước đã in «dat» rồi đứng giữa chừng vẫn qua. Lần chạy vòng 5 ghi đúng một hỏng (lỗi hydrat đã biết), nên bằng chứng vòng này không dính lỗ này.

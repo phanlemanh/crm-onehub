@@ -1563,7 +1563,7 @@ executors:
     kto_man_chan: 'PHIEN_DO_TEN_CAY=kto-e5 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"'
     kto_man_dau_cot: 'PHIEN_DO_TEN_CAY=kto-e24 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs --chi dau-cot"'
     kto_man_9b: 'PHIEN_DO_TEN_CAY=kto-e16 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-de-xuat/rang/man-gop-y.mjs"'
-    kto_man_giu: 'node _acceptance/khung-tao-okr-nhu-deal/rang/giu-cho-han-che.mjs'
+    kto_man_giu: 'PHIEN_DO_TEN_CAY=kto-e17 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     kto_man_gop_y: 'PHIEN_DO_TEN_CAY=kto-e6 BANG_CHUNG=_acceptance/khung-tao-okr-nhu-deal/evidence/gop-y bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"'
     kto_chan_quet: 'node _acceptance/khung-tao-okr-nhu-deal/rang/chan-ngan.mjs'
     kto_ui_goc: 'node _acceptance/khung-tao-okr-nhu-deal/rang/ui-goc.mjs'
