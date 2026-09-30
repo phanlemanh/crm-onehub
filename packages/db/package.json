@@ -29,6 +29,7 @@
 		"./okr-chi-so": "./src/okr-chi-so.ts",
 		"./okr-chi-so-danh-muc": "./src/okr-chi-so-danh-muc.ts",
 		"./okr-de-xuat": "./src/okr-de-xuat.ts",
+		"./okr-cuoc-soan": "./src/okr-cuoc-soan.ts",
 		"./okr-goi-soan": "./src/okr-goi-soan.ts",
 		"./okr-nhac": "./src/okr-nhac.ts",
 		"./okr-so-config": "./src/okr-so-config.ts",
