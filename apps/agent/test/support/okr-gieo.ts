@@ -256,6 +256,7 @@ export async function vet(v: {
 	keyResultId?: string;
 	truoc?: OkrVetSnapshot;
 	sau?: OkrVetSnapshot;
+	ghiChu?: string;
 	luc: Date;
 }): Promise<void> {
 	await db.okrTrail.create({
@@ -267,6 +268,7 @@ export async function vet(v: {
 			keyResultId: v.keyResultId ?? null,
 			before: v.truoc,
 			after: v.sau,
+			note: v.ghiChu ?? null,
 		},
 	});
 }

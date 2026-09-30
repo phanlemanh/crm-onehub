@@ -15,6 +15,7 @@ import { dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { CHI_SO_OKR } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
+import { OKR_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { goiYDiem } from "@crm/validation/okr-khep";
 import {
 	KIEU_KR,
@@ -35,6 +36,7 @@ import {
 	xoaTrong,
 } from "../scripts/okr-mau/nap";
 import { kiemDongKy } from "../src/okr/khep";
+import type { MucMoCoi } from "../src/okr/okr.contracts";
 import type { BangChamOutput } from "../src/okr/okr-khep.contracts";
 import type {
 	HopTuanOutput,
@@ -83,6 +85,7 @@ const krTheoKichBan = (kb: KichBan) =>
 			m.krs.filter((k) => k.kichBan === kb).map((k) => idMau("kr", k.ma)),
 		);
 const phongBanMau = bo.phongBan.map((p) => idMau("pb", p.ma));
+const phongBanLuuTruMau = bo.phongBanLuuTru.map((p) => idMau("pb", p.ma));
 
 async function ceo() {
 	return phienCua(nguoiMau(bo.nguoi.find((n) => n.vai === "admin")?.ma ?? ""));
@@ -95,6 +98,7 @@ async function mucTieuThieuCanChinh(): Promise<string[]> {
 			cycleId: CHU_KY.quy4,
 			level: "phong-ban",
 			status: "cong-bo",
+			hienThi: "cong-khai",
 			alignments: { none: {} },
 		},
 		select: { title: true },
@@ -705,13 +709,13 @@ describe("quy-3-mau", () => {
 				cycleId: CHU_KY.quy3,
 			});
 			const mt = bang.mucTieu.filter((m) => m.id.startsWith(OKR_MAU.tienTo));
-			expect(mt.length).toBe(10);
+			expect(mt.length).toBe(phongBanMau.length + phongBanLuuTruMau.length);
 			const pb = await db.okrObjective.findMany({
 				where: { cycleId: CHU_KY.quy3 },
 				select: { departmentId: true },
 			});
 			expect(pb.map((p) => p.departmentId).sort()).toEqual(
-				[...phongBanMau].sort(),
+				[...phongBanMau, ...phongBanLuuTruMau].sort(),
 			);
 			let khac = 0;
 			for (const m of mt) {
@@ -884,6 +888,8 @@ const BANG_CO_MAU = [
 	"orgPlacement",
 	"okrCycle",
 	"okrObjective",
+	"okrNguoiXem",
+	"okrTrail",
 	"okrKeyResult",
 	"okrAlignment",
 	"okrNguonKr",
@@ -1509,6 +1515,249 @@ describe("canh-kr-mau", () => {
 				nhan: ngoai.nhan.filter((n) => n.userId !== nhanMau),
 			});
 			await donNgoaiCanhKr();
+		},
+		CHO,
+	);
+});
+
+describe("gioi-han-duyet-mau", () => {
+	const NGUOI_XEM = "tran-quoc-bao";
+	const mauMt = { id: { startsWith: OKR_MAU.tienTo } } as const;
+	const vetMau = { id: { startsWith: idMau("vet", "") } } as const;
+
+	const docBo = async () => {
+		const [gioiHan, choDuyet, traLai, nguoiXem, luuTru] = await Promise.all([
+			db.okrObjective.findMany({
+				where: { ...mauMt, hienThi: "gioi-han" },
+				select: {
+					id: true,
+					level: true,
+					departmentId: true,
+					status: true,
+					nguoiXem: { select: { userId: true, createdById: true } },
+				},
+			}),
+			db.okrObjective.findMany({
+				where: { ...mauMt, status: "cho-duyet" },
+				select: { id: true, cycleId: true, publishedAt: true },
+			}),
+			db.okrTrail.findMany({
+				where: { ...vetMau, action: "tra-lai" },
+				select: {
+					objectiveId: true,
+					note: true,
+					before: true,
+					after: true,
+					actorUserId: true,
+				},
+			}),
+			db.okrNguoiXem.count({ where: { objectiveId: mauMt.id } }),
+			db.department.findMany({
+				where: { ...mauMt, archivedAt: { not: null } },
+				select: {
+					id: true,
+					headUserId: true,
+					okrObjectives: {
+						select: { id: true, cycle: { select: { phase: true } } },
+					},
+				},
+			}),
+		]);
+		return { gioiHan, choDuyet, traLai, nguoiXem, luuTru };
+	};
+
+	const dem = async () => ({
+		nguoiXem: await db.okrNguoiXem.count({ where: { objectiveId: mauMt.id } }),
+		vet: await db.okrTrail.count({ where: vetMau }),
+	});
+
+	test(
+		"nạp: một mục tiêu giới hạn có một người xem, một chờ duyệt, một vết trả lại trên nháp, một phòng ban lưu trữ chỉ còn quý 3 đã khép, chương trình chưa bật duyệt, không mồ côi",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const b = await docBo();
+
+			expect(b.gioiHan.length).toBe(1);
+			expect(b.gioiHan[0]).toEqual({
+				id: idMau("mt", "q4-phap-che-3"),
+				level: "phong-ban",
+				departmentId: idMau("pb", "phap-che"),
+				status: "cong-bo",
+				nguoiXem: [
+					{
+						userId: nguoiMau(NGUOI_XEM),
+						createdById: nguoiMau("an-khanh-linh"),
+					},
+				],
+			});
+			expect(b.nguoiXem).toBe(1);
+			expect(
+				await db.okrAlignment.count({
+					where: {
+						OR: [
+							{ objectiveId: idMau("mt", "q4-phap-che-3") },
+							{ targetObjectiveId: idMau("mt", "q4-phap-che-3") },
+							{
+								targetKeyResult: { objectiveId: idMau("mt", "q4-phap-che-3") },
+							},
+						],
+					},
+				}),
+			).toBe(0);
+			expect(
+				(
+					await db.okrObjective.groupBy({
+						by: ["hienThi"],
+						where: mauMt,
+						_count: { _all: true },
+					})
+				)
+					.map((g) => g.hienThi)
+					.sort(),
+			).toEqual(["cong-khai", "gioi-han"]);
+
+			expect(b.choDuyet).toEqual([
+				{
+					id: idMau("mt", "q4-kd-nam-3"),
+					cycleId: CHU_KY.quy4,
+					publishedAt: null,
+				},
+			]);
+			const guiDuyet = await db.okrTrail.findMany({
+				where: { ...vetMau, action: "gui-duyet" },
+				select: {
+					objectiveId: true,
+					actorUserId: true,
+					before: true,
+					after: true,
+				},
+			});
+			expect(guiDuyet.map((v) => v.objectiveId).sort()).toEqual(
+				[idMau("mt", "q4-kd-nam-3"), idMau("mt", "q4-marketing-nhap")].sort(),
+			);
+			for (const v of guiDuyet) {
+				expect(v.before).toEqual({ status: "nhap" });
+				expect(v.after).toEqual({ status: "cho-duyet" });
+			}
+
+			expect(b.traLai.length).toBe(1);
+			const tl = b.traLai[0];
+			expect(tl?.objectiveId).toBe(idMau("mt", "q4-marketing-nhap"));
+			expect(tl?.before).toEqual({ status: "cho-duyet" });
+			expect(tl?.after).toEqual({ status: "nhap" });
+			expect(tl?.actorUserId).toBe(nguoiMau("tran-quoc-bao"));
+			expect((tl?.note ?? "").length).toBeGreaterThanOrEqual(
+				OKR_HIEN_THI.lyDoTraLai.toiThieu,
+			);
+			expect(
+				(
+					await db.okrObjective.findUniqueOrThrow({
+						where: { id: idMau("mt", "q4-marketing-nhap") },
+					})
+				).status,
+			).toBe("nhap");
+
+			expect(b.luuTru.map((d) => d.id)).toEqual(phongBanLuuTruMau);
+			for (const d of b.luuTru) {
+				expect(d.headUserId).toBeNull();
+				expect(d.okrObjectives.length).toBeGreaterThanOrEqual(1);
+				for (const o of d.okrObjectives)
+					expect(o.cycle.phase, o.id).toBe("da-dong");
+				expect(
+					await db.orgPlacement.count({
+						where: { primaryDepartmentId: d.id },
+					}),
+				).toBe(0);
+			}
+
+			const cookie = await ceo();
+			expect(
+				(await doc<{ duyetCongBo: boolean }>("okr.program", cookie))
+					.duyetCongBo,
+			).toBe(false);
+			expect(await doc<MucMoCoi[]>("okr.moCoi", cookie, {})).toEqual([]);
+		},
+		CHO,
+	);
+
+	test(
+		"nạp lại không nhân đôi người xem và vết mẫu; xoá để lại 0 hàng mẫu, hàng ngoài đứng nguyên",
+		async () => {
+			await lamSachOkr();
+			await hangNgoai();
+			await db.okrTrail.create({
+				data: {
+					id: "ngoai-mau-vet",
+					actorUserId: "ngoai-mau-nguoi",
+					action: "tra-lai",
+					note: "vết ngoài bộ mẫu",
+				},
+			});
+			const ngoai = await chupNgoai();
+			const vetNgoai = await db.okrTrail.findUniqueOrThrow({
+				where: { id: "ngoai-mau-vet" },
+			});
+			await napMau(MOC_THU_NAM);
+			const mot = await dem();
+			expect(mot).toEqual({ nguoiXem: 1, vet: 3 });
+			await napMau(MOC_THU_NAM);
+			expect(await dem()).toEqual(mot);
+			expect(await db.okrTrail.count({ where: { action: "tra-lai" } })).toBe(2);
+
+			const ids = await tapIdMau();
+			const loi = await db
+				.$transaction((tx) => xoaTrong(tx), { timeout: CHO })
+				.then(
+					() => "",
+					(e) => String(e),
+				);
+			expect(loi).toBe("");
+			expect(await dem()).toEqual({ nguoiXem: 0, vet: 0 });
+			expect(
+				await db.okrNguoiXem.count({
+					where: {
+						OR: [
+							{ objectiveId: mauMt.id },
+							{ userId: mauMt.id },
+							{ createdById: mauMt.id },
+						],
+					},
+				}),
+			).toBe(0);
+			expect(await demThamChieu(ids)).toEqual({});
+			expect(await chupNgoai()).toEqual(ngoai);
+			expect(
+				await db.okrTrail.findUniqueOrThrow({ where: { id: "ngoai-mau-vet" } }),
+			).toEqual(vetNgoai);
+			await db.okrTrail.delete({ where: { id: "ngoai-mau-vet" } });
+			await donNgoai();
+		},
+		CHO,
+	);
+
+	test(
+		"chiều đỏ: phòng ban lưu trữ mà có mục tiêu quý 4 thì okr.moCoi trả mục đó",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const moi = idMau("mt", "q4-kho-lanh-do");
+			await db.okrObjective.create({
+				data: {
+					id: moi,
+					cycleId: CHU_KY.quy4,
+					level: "phong-ban",
+					departmentId: idMau("pb", "kho-lanh"),
+					ownerUserId: nguoiMau("dinh-cong-son"),
+					kind: "cam-ket",
+					status: "cong-bo",
+					title: "Mục tiêu quý 4 đặt nhầm vào phòng ban lưu trữ",
+				},
+			});
+			const ra = await doc<MucMoCoi[]>("okr.moCoi", await ceo(), {});
+			expect(ra.map((m) => m.objectiveId)).toEqual([moi]);
+			expect(ra[0]?.lyDo).toEqual(["don-vi-luu-tru"]);
+			await db.okrObjective.delete({ where: { id: moi } });
 		},
 		CHO,
 	);

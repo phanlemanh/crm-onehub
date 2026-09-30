@@ -4,7 +4,9 @@ import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Chat from "@carbon/icons-react/es/Chat";
 import CheckmarkOutline from "@carbon/icons-react/es/CheckmarkOutline";
 import Edit from "@carbon/icons-react/es/Edit";
+import Pending from "@carbon/icons-react/es/Pending";
 import Renew from "@carbon/icons-react/es/Renew";
+import Reply from "@carbon/icons-react/es/Reply";
 import Time from "@carbon/icons-react/es/Time";
 import Trophy from "@carbon/icons-react/es/Trophy";
 import UserFollow from "@carbon/icons-react/es/UserFollow";
@@ -37,6 +39,7 @@ import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -55,6 +58,8 @@ const ICON_VIEC = {
 	"okr-nhac-ten": Chat,
 	"okr-ghi-nhan": Trophy,
 	"okr-theo-doi": View,
+	"okr-cho-duyet": Pending,
+	"okr-tra-lai": Reply,
 } satisfies Record<ViecOkr["loai"], typeof Edit>;
 
 function khoaViec(v: ViecOkr): string {
@@ -70,6 +75,8 @@ function khoaViec(v: ViecOkr): string {
 		case "okr-ghi-nhan":
 			return `${v.loai}:${v.ghiNhanId}`;
 		case "okr-theo-doi":
+		case "okr-cho-duyet":
+		case "okr-tra-lai":
 			return `${v.loai}:${v.objectiveId}`;
 	}
 }
@@ -91,7 +98,9 @@ function Ten({ children }: { children: string }) {
 }
 
 function TieuDeViec({ viec }: { viec: ViecOkr }) {
-	const m = okrMessages(useLocale()).viecCuaToi.cau;
+	const locale = useLocale();
+	const m = okrMessages(locale).viecCuaToi.cau;
+	const g = okrGioiHanMessages(locale).viec;
 	switch (viec.loai) {
 		case "okr-cap-nhat":
 			return ghep(m.capNhat, { n: viec.soKr });
@@ -117,6 +126,29 @@ function TieuDeViec({ viec }: { viec: ViecOkr }) {
 						: m.theoDoi,
 				{ capNhat: viec.capNhat, binhLuan: viec.binhLuan },
 			);
+		case "okr-cho-duyet":
+			return ghep(g.choDuyet, { ten: <Ten>{viec.nhan}</Ten> });
+		case "okr-tra-lai":
+			return ghep(g.traLai, {
+				nguoi: <Ten>{viec.nguoiTraLai}</Ten>,
+				ten: <Ten>{viec.nhan}</Ten>,
+			});
+	}
+}
+
+function MoTaViec({ viec }: { viec: ViecOkr }) {
+	const g = okrGioiHanMessages(useLocale()).viec;
+	switch (viec.loai) {
+		case "okr-cho-duyet":
+			return viec.nguoiGui === null ? null : (
+				<ItemDescription>
+					{ghep(g.nguoiGui, { nguoi: <Ten>{viec.nguoiGui}</Ten> })}
+				</ItemDescription>
+			);
+		case "okr-tra-lai":
+			return <ItemDescription translate="no">{viec.lyDo}</ItemDescription>;
+		default:
+			return <ItemDescription translate="no">{viec.nhan}</ItemDescription>;
 	}
 }
 
@@ -159,7 +191,7 @@ function DongViec({ viec }: { viec: ViecOkr }) {
 						<TieuDeViec viec={viec} />
 					</span>
 				</ItemTitle>
-				<ItemDescription translate="no">{viec.nhan}</ItemDescription>
+				<MoTaViec viec={viec} />
 			</ItemContent>
 			<ItemActions>
 				<DichViec viec={viec} />

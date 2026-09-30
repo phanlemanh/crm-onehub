@@ -279,6 +279,17 @@ export function datMacDinh(dong: DongHien[]): void {
 		mangSangTu: null,
 		trail: [],
 		canEditKr: [KR_1.id, KR_2.id],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: true,
+			congBo: true,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 	}));
 	dat("okr.program", () => ({ weightsOn: false, personalOn: false }));
 	dat("okr.cycles", () => ({ cycles: [], currentId: null }));

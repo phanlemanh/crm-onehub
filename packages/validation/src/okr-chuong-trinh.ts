@@ -38,6 +38,7 @@ const okrProgramGoc = z.object({
 	aiTomTatAnPhamVi: phamVi,
 	aiTomTatAnDonVi: donViAi,
 	aiTranThangUsd: tranThangUsd,
+	duyetCongBo: z.boolean(),
 });
 
 export const okrProgram = okrProgramGoc.extend({
@@ -70,6 +71,7 @@ export const OKR_PROGRAM_MAC_DINH: OkrProgram = {
 	aiTomTatAnPhamVi: "tat",
 	aiTomTatAnDonVi: [],
 	aiTranThangUsd: TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
+	duyetCongBo: false,
 };
 
 export function docTranUsd(chu: string): number | null {

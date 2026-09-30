@@ -416,6 +416,17 @@ function datKhung(chon: { suaDuoc?: boolean; cho?: number } = {}): void {
 		mangSangTu: null,
 		trail: [],
 		canEditKr: sua ? [KR_1.id, KR_2.id] : [],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: sua,
+			congBo: sua,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 	};
 	dat("okr.objective", () =>
 		chon.cho
