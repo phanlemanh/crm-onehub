@@ -157,6 +157,9 @@ function coBan(): HoiYDu {
 			chonDuoc: false,
 			congBoDuoc: false,
 			niemPhongDuoc: false,
+			dongYDuoc: true,
+			cauHoiKhoa: false,
+			nguoiChonKhoa: false,
 			lyDoChuaCongBo: [],
 		},
 	};
@@ -222,6 +225,9 @@ function chonChuaDu(): HoiYDu {
 			chonDuoc: true,
 			congBoDuoc: false,
 			niemPhongDuoc: false,
+			dongYDuoc: false,
+			cauHoiKhoa: true,
+			nguoiChonKhoa: true,
 			lyDoChuaCongBo: [
 				{ ma: "y-chua-gom", chuDeId: null },
 				{ ma: "thieu-ket-luan", chuDeId: "c2" },

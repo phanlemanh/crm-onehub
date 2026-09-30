@@ -3,11 +3,12 @@ import {
 	loaiChuDe,
 	lyDoKhoaYKhuon,
 	noiBanTruoc,
+	SO_PHAN_BAN_TRUOC,
 	soLieuHoiY,
 	trangThaiHoiYKhuon,
 } from "@crm/validation/okr-hoi-y";
 import { z } from "zod";
-import { LOAI_DON_VI_DO_PHU, MA_THIEU, SO_PHAN_BAN_TRUOC } from "./hoi-y";
+import { LOAI_DON_VI_DO_PHU, MA_THIEU } from "./hoi-y";
 
 export const hoiYGhiOutput = z.object({ id: z.string() });
 export type HoiYGhiOutput = z.infer<typeof hoiYGhiOutput>;
@@ -116,6 +117,9 @@ export const hoiYChiTiet = z.object({
 		chonDuoc: z.boolean(),
 		congBoDuoc: z.boolean(),
 		niemPhongDuoc: z.boolean(),
+		dongYDuoc: z.boolean(),
+		cauHoiKhoa: z.boolean(),
+		nguoiChonKhoa: z.boolean(),
 		lyDoChuaCongBo: z.array(
 			z.object({ ma: z.enum(MA_THIEU), chuDeId: z.string().nullable() }),
 		),

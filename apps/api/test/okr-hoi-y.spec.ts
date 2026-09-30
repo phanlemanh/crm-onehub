@@ -4652,3 +4652,97 @@ describe("nhac", () => {
 		CHO_MA_TRAN_MS,
 	);
 });
+
+describe("tu-lai", () => {
+	const quyenCua = async (ky: string, cookie: string) => {
+		const doc = hoiYDocOutput.parse(
+			ok(await goiQuery("okr.hoiY", cookie, { cycleId: ky }), "doc hoi y"),
+		);
+		if (!doc) throw new Error("khong co hoi y");
+		return doc.quyen;
+	};
+
+	test(
+		"tu-lai: người chọn không bấm «Tôi cũng nghĩ vậy» — dongY bật hay tắt đều 400 câu ghim, bảng không đổi; hoiY trả quyen.dongYDuoc: thành viên và quản trị khác true, người chọn false, sau hạn false",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY({ niemPhong: true });
+			const { A, P, Q, T: tv } = g.nguoi;
+			const y1 = (await gieoY(g.h, A.id)).id;
+			ok(await dongYCua(y1, tv.cookie), "T dong y");
+			const soHang = () => db.okrYDongY.count({ where: { yId: y1 } });
+			const truoc = await soHang();
+			const bat = await dongYCua(y1, P.cookie);
+			const tat = await dongYCua(y1, P.cookie, false);
+			const dongYDuoc = async (cookie: string) =>
+				(await quyenCua(g.ky, cookie)).dongYDuoc;
+			const dangMo = {
+				T: await dongYDuoc(tv.cookie),
+				Q: await dongYDuoc(Q.cookie),
+				P: await dongYDuoc(P.cookie),
+			};
+			await donHanVeBayGio(g);
+			expect({
+				truoc,
+				bat: { maHttp: bat.status, cau: bat.loi },
+				tat: { maHttp: tat.status, cau: tat.loi },
+				sau: await soHang(),
+				dangMo,
+				sauHan: { T: await dongYDuoc(tv.cookie) },
+			}).toEqual({
+				truoc: 1,
+				bat: { maHttp: 400, cau: T.nguoiChonKhongDongY },
+				tat: { maHttp: 400, cau: T.nguoiChonKhongDongY },
+				sau: 1,
+				dangMo: { T: true, Q: true, P: false },
+				sauHan: { T: false },
+			});
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tu-lai: sheet sửa hỏi cờ khoá của máy chủ — cauHoiKhoa từ ý đầu tiên (đổi câu hỏi 400 cauHoiDaKhoa); nguoiChonKhoa khi người chọn đã niêm phong và còn là quản trị (đổi người chọn 400 daNiemPhong), hết khi người chọn bị hạ vai",
+		async () => {
+			datDongHo(LUC);
+			const g = await gieoHoiY();
+			const { A, P, Q } = g.nguoi;
+			const co = async (buoc: string) => {
+				const q = await quyenCua(g.ky, Q.cookie);
+				return { buoc, cauHoi: q.cauHoiKhoa, nguoiChon: q.nguoiChonKhoa };
+			};
+			const buoc = [await co("chua co y")];
+			await gieoY(g.h, A.id);
+			buoc.push(await co("co y"));
+			const doiCau = await goi(
+				"okr.suaHoiY",
+				{ hoiYId: g.h, cauHoi: "Năm tới công ty nên dồn sức vào đâu trước?" },
+				Q.cookie,
+			);
+			await gieoBanTruoc(g.h, P.id);
+			buoc.push(await co("da niem phong"));
+			const doiNguoi = await goi(
+				"okr.suaHoiY",
+				{ hoiYId: g.h, nguoiChonUserId: Q.id },
+				Q.cookie,
+			);
+			await doiVai(P.id, "member");
+			buoc.push(await co("nguoi chon ha vai"));
+			expect({
+				buoc,
+				doiCau: { maHttp: doiCau.status, cau: doiCau.loi },
+				doiNguoi: { maHttp: doiNguoi.status, cau: doiNguoi.loi },
+			}).toEqual({
+				buoc: [
+					{ buoc: "chua co y", cauHoi: false, nguoiChon: false },
+					{ buoc: "co y", cauHoi: true, nguoiChon: false },
+					{ buoc: "da niem phong", cauHoi: true, nguoiChon: true },
+					{ buoc: "nguoi chon ha vai", cauHoi: true, nguoiChon: false },
+				],
+				doiCau: { maHttp: 400, cau: T.cauHoiDaKhoa },
+				doiNguoi: { maHttp: 400, cau: T.daNiemPhong },
+			});
+		},
+		CHO_MS,
+	);
+});

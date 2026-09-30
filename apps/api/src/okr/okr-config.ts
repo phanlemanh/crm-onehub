@@ -215,6 +215,8 @@ export const OKR = {
 			nguoiChonKhongGop: "Người chọn không góp ý trong lần hỏi ý mà mình chọn.",
 			chiYCuaMinh: "Chỉ người góp mới sửa hay gỡ được ý này.",
 			yCuaMinh: "Không bấm «Tôi cũng nghĩ vậy» cho ý của chính mình.",
+			nguoiChonKhongDongY:
+				"Người chọn không bấm «Tôi cũng nghĩ vậy» — số người cũng nghĩ vậy là bằng chứng người chọn đọc khi kết luận.",
 			khongCoY: (id: string) => `Không có ý nào mang mã ${id}.`,
 			chiNguoiChon:
 				"Chỉ người chọn của lần hỏi ý này mới niêm phong, khai không viết trước, kết luận hay công bố được.",

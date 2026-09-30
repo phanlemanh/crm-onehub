@@ -389,6 +389,8 @@ export class OkrHoiYService {
 		return this.db.$transaction(async (tx) => {
 			const k = await this.khoaTheoY(tx, input.yId);
 			kiemDangMo(k.h, k.now);
+			if (k.h.nguoiChonUserId === userId)
+				throw new BadRequestException(T.nguoiChonKhongDongY);
 			if (k.tacGiaUserId === userId) throw new BadRequestException(T.yCuaMinh);
 			if (input.bat)
 				await tx.okrYDongY.createMany({
@@ -863,6 +865,12 @@ export class OkrHoiYService {
 			nguoiChonHieuLuc &&
 			phaChuKy.parse(h.cycle.phase) === "lap-ke-hoach" &&
 			dieuThieu.length === 0;
+		const nguoiChonKhoa =
+			daNiemPhong &&
+			trangThai !== "da-cong-bo" &&
+			(laNguoiChon
+				? q.quanTri
+				: isWorkspaceAdmin(await workspaceRoleOf(h.nguoiChonUserId, this.db)));
 		return {
 			hoiY: {
 				id: h.id,
@@ -905,6 +913,9 @@ export class OkrHoiYService {
 				congBoDuoc,
 				niemPhongDuoc:
 					nguoiChonHieuLuc && !daNiemPhong && trangThai !== "da-cong-bo",
+				dongYDuoc: trangThai === "dang-mo" && !laNguoiChon,
+				cauHoiKhoa: h.y.length > 0,
+				nguoiChonKhoa,
 				lyDoChuaCongBo: dieuThieu,
 			},
 		};

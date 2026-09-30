@@ -902,9 +902,14 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   người chọn ở bất cứ chỗ nào: không thấy tên, số, chủ đề, không nhận
   `lyDoChuaCongBo`, không được mời niêm phong (`lyDoKhoa = "het-quyen-chon"`). Hạn
   đặt bằng bây giờ là đóng sớm; `suaHoiY({ dongNgay: true })` lấy giờ của máy chủ
-  làm hạn, vì giờ máy khách gửi lên luôn trễ hơn giờ máy chủ nhận. `hoiY` trả cờ
-  `quyen` (`moDuoc`, `gopDuoc`, `gomDuoc`, `chonDuoc`, `congBoDuoc`,
-  `niemPhongDuoc`, `lyDoChuaCongBo`); màn không tự suy lại luật nào. Người chọn
+  làm hạn, vì giờ máy khách gửi lên luôn trễ hơn giờ máy chủ nhận. `dongY` từ chối
+  người chọn cả khi bật lẫn khi tắt (`nguoiChonKhongDongY`), vì số người cũng nghĩ
+  vậy là bằng chứng người chọn đọc khi kết luận. `hoiY` trả cờ `quyen` (`moDuoc`,
+  `gopDuoc`, `gomDuoc`, `chonDuoc`, `congBoDuoc`, `niemPhongDuoc`, `dongYDuoc`,
+  `cauHoiKhoa`, `nguoiChonKhoa`, `lyDoChuaCongBo`); màn không tự suy lại luật nào —
+  nút «Tôi cũng nghĩ vậy» theo `dongYDuoc`, sheet sửa khoá ô câu hỏi theo
+  `cauHoiKhoa` (đã có ý) và ô người chọn theo `nguoiChonKhoa` (người chọn đã niêm
+  phong và còn là quản trị), đúng hai điều `suaHoiY` từ chối. Người chọn
   chưa niêm phong chỉ nhận các mã chung trong `lyDoChuaCongBo` (`chua-niem-phong`,
   `y-chua-gom`, `khong-chon`, `vuot-tran`), không mã nào kèm `chuDeId`.
 - **Luật đọc ở một chỗ.** `apps/api/src/okr/hoi-y.ts` giữ hai hàm, và mọi thủ tục
@@ -916,7 +921,9 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   `(hoiYId, userId)`); `docBanTruoc` chỉ trả bản viết trước cho người chọn, hay cho
   mọi người sau công bố. `chieuChuDeChoNguoiXem` dựng chủ đề trên
   `chieuYChoNguoiXem`. Độ phủ (`hoiYDoPhu`) không bao giờ trả tên hay danh sách
-  người chưa góp. `rang/soi-ma.mjs --ca thiet-ke` của hồ sơ đếm chỗ trả bằng số lời
+  người chưa góp; hàng xếp toàn công ty trước, rồi mỗi bộ phận và ngay dưới là
+  phòng ban của nó, rồi phòng ban chưa vào bộ phận nào, «chưa xếp» cuối
+  (`donViTuCay`). `rang/soi-ma.mjs --ca thiet-ke` của hồ sơ đếm chỗ trả bằng số lời
   gọi hai hàm này.
 - **Công bố đi qua đường tạo mục tiêu có sẵn.** `congBo` khoá hàng `okrHoiY`
   (`FOR UPDATE`, nên bấm hai lần gần như cùng lúc chỉ tạo một lần, lần sau nhận
@@ -926,7 +933,10 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   `OkrService.taoMucTieuTrongTx` trong cùng transaction — mục tiêu nháp cấp
   OneHub, người phụ trách là người chọn, `whyNow` là lý do của chủ đề, vết `tao`
   mang `after.tuHoiY`. Không ghi thẳng vào `okrObjective`. Kết quả giữ nguyên · đổi
-  · bỏ · thêm tính bằng `ketQuaBanTruoc` (so câu sau `chuanCau`). Lần hỏi ý không
+  · bỏ · thêm tính bằng `ketQuaBanTruoc` (so câu sau `chuanCau`) — hàm thuần ở
+  `@crm/validation/okr-hoi-y`, nên phần xem trước ở màn kết luận gọi đúng hàm đó:
+  một câu viết trước được nhiều chủ đề chọn nối vào thì «giữ nguyên» khi bất kỳ chủ
+  đề nào trùng chữ, và trang kết quả liệt mọi chủ đề nối vào câu đó. Lần hỏi ý không
   có ý nào và không có chủ đề nào không bị đòi «ít nhất một chủ đề chọn»: người
   chọn niêm phong hoặc khai không viết trước (làm được cả khi đang gom), rồi công bố
   rỗng — không mục tiêu nào, `congBoLuc` được đặt, vết `cong-bo-hoi-y` mang

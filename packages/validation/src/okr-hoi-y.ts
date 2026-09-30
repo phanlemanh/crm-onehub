@@ -289,3 +289,35 @@ export function thuTuXao(ids: string[], hat: string): string[] {
 export function chuanCau(s: string): string {
 	return s.replace(/\s+/g, " ").trim().toLocaleLowerCase("vi");
 }
+
+export const SO_PHAN_BAN_TRUOC = ["giu", "doi", "bo"] as const;
+export type SoPhanBanTruoc = (typeof SO_PHAN_BAN_TRUOC)[number];
+
+export type KetQuaBanTruoc = {
+	cau: SoPhanBanTruoc[];
+	doi: number;
+	them: number;
+	boQua: boolean;
+};
+
+export function ketQuaBanTruoc(
+	ban: { cau: string[]; boQua: boolean },
+	chon: { noiBanTruoc: string; cauMucTieu: string }[],
+): KetQuaBanTruoc {
+	const them = chon.filter((c) => c.noiBanTruoc === NOI_MOI).length;
+	if (ban.boQua) {
+		return { cau: [], doi: 0, them: chon.length, boQua: true };
+	}
+	const cau = ban.cau.map((chu, i): SoPhanBanTruoc => {
+		const noi = chon.filter((c) => c.noiBanTruoc === noiTuSoCau(i + 1));
+		if (noi.length === 0) return "bo";
+		const chuan = chuanCau(chu);
+		return noi.some((c) => chuanCau(c.cauMucTieu) === chuan) ? "giu" : "doi";
+	});
+	return {
+		cau,
+		doi: cau.filter((c) => c === "doi").length,
+		them,
+		boQua: false,
+	};
+}

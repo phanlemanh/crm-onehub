@@ -26,12 +26,12 @@ export const E11_DON_VI: {
 }[] = [
 	{ khoa: GOC, loai: "goc", cha: null, giaTri: [33.3, 57.1] },
 	{ khoa: "bpA", loai: "bo-phan", cha: GOC, giaTri: [42.9, 71.4] },
-	{ khoa: "bpB", loai: "bo-phan", cha: GOC, giaTri: [33.3, 44.4] },
-	{ khoa: "bpC", loai: "bo-phan", cha: GOC, giaTri: [0, 50] },
 	{ khoa: "pb1", loai: "phong-ban", cha: "bpA", giaTri: [50, 75] },
 	{ khoa: "pb2", loai: "phong-ban", cha: "bpA", giaTri: [33.3, 66.7] },
+	{ khoa: "bpB", loai: "bo-phan", cha: GOC, giaTri: [33.3, 44.4] },
 	{ khoa: "pb3", loai: "phong-ban", cha: "bpB", giaTri: [40, 40] },
 	{ khoa: "pb4", loai: "phong-ban", cha: "bpB", giaTri: [25, 50] },
+	{ khoa: "bpC", loai: "bo-phan", cha: GOC, giaTri: [0, 50] },
 	{ khoa: "pb5", loai: "phong-ban", cha: "bpC", giaTri: [0, 50] },
 	{ khoa: CHUA_XEP, loai: "chua-xep", cha: GOC, giaTri: [100, 100] },
 ];

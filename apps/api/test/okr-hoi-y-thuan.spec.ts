@@ -3,6 +3,7 @@ import type { TrangThaiHoiY } from "@crm/validation/okr-hoi-y";
 import {
 	ganYInput,
 	ketLuanInput,
+	ketQuaBanTruoc,
 	NOI_BAN_TRUOC,
 	NOI_MOI,
 	noiTuSoCau,
@@ -15,14 +16,15 @@ import {
 import {
 	bangChungChuDe,
 	bangDoPhu,
+	type CayDoPhu,
 	type ChuDeTho,
 	cacNgayVN,
 	chieuChuDeChoNguoiXem,
 	chieuYChoNguoiXem,
 	chieuYCuaToi,
 	docBanTruoc,
+	donViTuCay,
 	doPhu,
-	ketQuaBanTruoc,
 	ketQuaCongBo,
 	lyDoChuaCongBo,
 	type MaThieu,
@@ -300,6 +302,59 @@ describe("do-phu", () => {
 			cot: E11_COT,
 			hang: e11KyVong((khoa) => khoa),
 		});
+	});
+
+	const cayE11 = (chuaXep: CayDoPhu["chuaXep"]): CayDoPhu => ({
+		divisions: E11_DON_VI.filter((d) => d.loai === "bo-phan").map((b) => ({
+			id: b.khoa,
+			name: b.khoa,
+			departments: E11_DON_VI.filter((d) => d.cha === b.khoa).map((p) => ({
+				id: p.khoa,
+				name: p.khoa,
+			})),
+		})),
+		chuaXep,
+		people: [],
+	});
+
+	test("E11: mỗi bộ phận rồi ngay dưới là phòng ban của nó; toàn công ty đầu, phòng ban chưa vào bộ phận và «chưa xếp» cuối — đúng thứ tự viết trước", () => {
+		const thuTu = (cay: CayDoPhu) => donViTuCay(cay, "OneHub").map((d) => d.id);
+		expect({
+			e11: thuTu(cayE11([])),
+			coPhongBanLe: thuTu(cayE11([{ id: "pbLe", name: "pbLe" }])),
+		}).toEqual({
+			e11: [
+				OKR_HOI_Y.doPhu.idGoc,
+				"bpA",
+				"pb1",
+				"pb2",
+				"bpB",
+				"pb3",
+				"pb4",
+				"bpC",
+				"pb5",
+				OKR_HOI_Y.doPhu.idChuaXep,
+			],
+			coPhongBanLe: [
+				OKR_HOI_Y.doPhu.idGoc,
+				"bpA",
+				"pb1",
+				"pb2",
+				"bpB",
+				"pb3",
+				"pb4",
+				"bpC",
+				"pb5",
+				"pbLe",
+				OKR_HOI_Y.doPhu.idChuaXep,
+			],
+		});
+	});
+
+	test("E11: ma trận viết trước xếp đúng thứ tự cây — hàng của bảng theo thứ tự donViTuCay", () => {
+		expect(E11_DON_VI.map((d) => d.khoa)).toEqual(
+			donViTuCay(cayE11([]), "OneHub").map((d) => d.id),
+		);
 	});
 
 	test("E11 đỏ: bản sao mẫu số gồm người chọn cho gốc 12/22, lệch ma trận", () => {

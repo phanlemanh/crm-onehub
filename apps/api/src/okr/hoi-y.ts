@@ -6,10 +6,10 @@ import type {
 	TrangThaiHoiY,
 } from "@crm/validation/okr-hoi-y";
 import {
-	chuanCau,
 	KET_LUAN_CHON,
+	type KetQuaBanTruoc,
+	ketQuaBanTruoc,
 	NOI_MOI,
-	noiTuSoCau,
 	OKR_HOI_Y,
 	thuTuXao,
 } from "@crm/validation/okr-hoi-y";
@@ -62,38 +62,6 @@ export function bangChungChuDe(y: YBangChung[]): BangChungChuDe {
 		.slice(0, OKR_HOI_Y.trich)
 		.map((x) => x.noiDung);
 	return { soNguoi: nguoi.size, soDonVi: donVi.size, soDongY, trich };
-}
-
-export const SO_PHAN_BAN_TRUOC = ["giu", "doi", "bo"] as const;
-export type SoPhanBanTruoc = (typeof SO_PHAN_BAN_TRUOC)[number];
-
-export type KetQuaBanTruoc = {
-	cau: SoPhanBanTruoc[];
-	doi: number;
-	them: number;
-	boQua: boolean;
-};
-
-export function ketQuaBanTruoc(
-	ban: { cau: string[]; boQua: boolean },
-	chon: { noiBanTruoc: string; cauMucTieu: string }[],
-): KetQuaBanTruoc {
-	const them = chon.filter((c) => c.noiBanTruoc === NOI_MOI).length;
-	if (ban.boQua) {
-		return { cau: [], doi: 0, them: chon.length, boQua: true };
-	}
-	const cau = ban.cau.map((chu, i): SoPhanBanTruoc => {
-		const noi = chon.filter((c) => c.noiBanTruoc === noiTuSoCau(i + 1));
-		if (noi.length === 0) return "bo";
-		const chuan = chuanCau(chu);
-		return noi.some((c) => chuanCau(c.cauMucTieu) === chuan) ? "giu" : "doi";
-	});
-	return {
-		cau,
-		doi: cau.filter((c) => c === "doi").length,
-		them,
-		boQua: false,
-	};
 }
 
 export const LOAI_DON_VI_DO_PHU = [
@@ -226,16 +194,9 @@ export function donViTuCay(cay: CayDoPhu, tenGoc: string): DonViCoNhan[] {
 	const goc = OKR_HOI_Y.doPhu.idGoc;
 	return [
 		{ id: goc, nhan: tenGoc, loai: "goc", cha: null },
-		...cay.divisions.map(
-			(b): DonViCoNhan => ({
-				id: b.id,
-				nhan: b.name,
-				loai: "bo-phan",
-				cha: goc,
-			}),
-		),
-		...cay.divisions.flatMap((b) =>
-			b.departments.map(
+		...cay.divisions.flatMap((b): DonViCoNhan[] => [
+			{ id: b.id, nhan: b.name, loai: "bo-phan", cha: goc },
+			...b.departments.map(
 				(p): DonViCoNhan => ({
 					id: p.id,
 					nhan: p.name,
@@ -243,7 +204,7 @@ export function donViTuCay(cay: CayDoPhu, tenGoc: string): DonViCoNhan[] {
 					cha: b.id,
 				}),
 			),
-		),
+		]),
 		...cay.chuaXep.map(
 			(p): DonViCoNhan => ({
 				id: p.id,
