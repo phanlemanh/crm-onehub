@@ -974,7 +974,7 @@ executors:
     tgy_co_hop: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t co-hop'
     tgy_thong_tin: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t thong-tin'
     soan_quyen: bun run test -- "cd apps/api && bun test test/soan-okr-quyen.spec.ts"
-    soan_cua: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr.spec.ts
+    soan_cua: bun run test -- "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr.spec.ts"
     soan_goi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts"
     soan_to_chuc: bun run test -- "cd apps/api && bun test test/to-chuc-mo-ta.spec.ts"
     soan_man_to_chuc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-mo-ta.dom.tsx
