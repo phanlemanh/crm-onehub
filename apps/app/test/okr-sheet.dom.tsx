@@ -32,6 +32,16 @@ const QUY: ChuKyOutput = {
 	breakEndsOn: null,
 	updateWeekday: 1,
 	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: {
+		suaMoiO: false,
+		suaTen: false,
+		go: false,
+		an: false,
+		hienLai: false,
+	},
 };
 
 function kr(id: string, startLocked: boolean): KrCanhOutput {

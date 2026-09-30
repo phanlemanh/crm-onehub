@@ -68,6 +68,16 @@ export const chuKyOutput = z.object({
 	breakEndsOn: ngay.nullable(),
 	updateWeekday: z.number(),
 	cuaSoRa: cuaSoRaOutput.nullable(),
+	anLuc: z.string().nullable(),
+	anLyDo: z.string().nullable(),
+	quyConHien: z.number().int(),
+	viec: z.object({
+		suaMoiO: z.boolean(),
+		suaTen: z.boolean(),
+		go: z.boolean(),
+		an: z.boolean(),
+		hienLai: z.boolean(),
+	}),
 });
 export const cyclesOutput = z.object({
 	cycles: z.array(chuKyOutput),
