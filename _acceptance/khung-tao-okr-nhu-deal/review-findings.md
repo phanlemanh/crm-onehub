@@ -32,25 +32,25 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **The new URL parser for OKR sheets lives inside a client component instead of a *-search-params module** (r4)
+- **The new URL parser for OKR sheets lives inside a client component instead of a *-search-params module (r4)**
   Người dùng thấy gì: Người dùng không thấy khác biệt nào: các ngăn OKR mở, đóng và tải lại đúng như đã hứa. Chỉ là chỗ đặt mã đọc địa chỉ trang lệch thói quen của kho, nên người sửa sau này khó tìm hơn.
   file: `apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **record-stack registers hopOkr with parseAsString while useHopOkr uses parseAsHopOkr, two parsers on one key** (r4)
+- **record-stack registers hopOkr with parseAsString while useHopOkr uses parseAsHopOkr, two parsers on one key (r4)**
   Người dùng thấy gì: Hôm nay việc mở và đóng ngăn OKR không bị ảnh hưởng. Nếu sau này có người cho khung bản ghi ghi thêm vào địa chỉ trang này, hai chỗ đọc có thể hiểu khác nhau và làm ngăn mở sai.
   file: `apps/app/components/crm/record-sheet/record-stack.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 3 — đòi QUAN HỆ (hai tập class bằng nhau) nhưng chỉ kiểm từng class của DialogFooter có mặt bên SheetFooter** (r4)
+- **Hình dạng 3 — đòi QUAN HỆ (hai tập class bằng nhau) nhưng chỉ kiểm từng class của DialogFooter có mặt bên SheetFooter (r4)**
   Người dùng thấy gì: Hôm nay chân các ngăn vẫn xếp đúng: nút Huỷ bên trái, nút chính bên phải. Nhưng phép kiểm chưa bắt được trường hợp về sau có người thêm kiểu xếp khác vào chân ngăn mà vẫn báo xanh.
   file: `_acceptance/khung-tao-okr-nhu-deal/rang/chan-ngan.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 — khẳng định âm một mình: «đóng khung xoá hopOkr» vẫn xanh khi không có lần ghi URL nào** (r4)
+- **Hình dạng 4 — khẳng định âm một mình: «đóng khung xoá hopOkr» vẫn xanh khi không có lần ghi URL nào (r4)**
   Người dùng thấy gì: Hôm nay đóng khung Mục tiêu thì ngăn OKR rời địa chỉ trang như đã hứa. Nhưng bài kiểm có thể báo xanh dù việc xoá đó không xảy ra, nên nếu sau này hỏng thì có thể không ai hay.
   file: `apps/app/test/khung-tao-okr.dom.tsx`
   severity: medium
