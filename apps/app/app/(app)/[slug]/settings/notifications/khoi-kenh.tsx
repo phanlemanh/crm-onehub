@@ -2,6 +2,7 @@
 
 import Warning from "@carbon/icons-react/es/Warning";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import { CardTitle } from "@crm/ui/components/card";
 import {
 	Field,
 	FieldContent,
@@ -180,9 +181,7 @@ export function KhoiDongTroLyOkr() {
 			data-khoi="dong-tro-ly-okr"
 			data-trang-thai="ST-nhac-dong-tomtat"
 		>
-			<h2 className="font-medium text-sm" id={idTieuDe}>
-				{t.troLy.tieuDe}
-			</h2>
+			<CardTitle id={idTieuDe}>{t.troLy.tieuDe}</CardTitle>
 			<Field orientation="horizontal">
 				<FieldContent>
 					<FieldLabel htmlFor={idCongTac}>{t.troLy.dongTomTat}</FieldLabel>

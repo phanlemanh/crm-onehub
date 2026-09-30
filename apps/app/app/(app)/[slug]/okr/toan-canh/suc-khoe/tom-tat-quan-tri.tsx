@@ -261,9 +261,9 @@ function NganMotBan({
 									className="flex flex-col gap-3"
 									data-cau-con
 								>
-									<h3 className="font-medium text-sm" id={idCon}>
+									<CardTitle id={idCon}>
 										{m.cauCon(String(d.cau.length))}
-									</h3>
+									</CardTitle>
 									{d.cau.length === 0 ? (
 										<p className="text-muted-foreground text-sm">
 											{m.khongCau}
@@ -292,9 +292,9 @@ function NganMotBan({
 									className="flex flex-col gap-3"
 									data-cau-bo
 								>
-									<h3 className="font-medium text-sm" id={idBo}>
+									<CardTitle id={idBo}>
 										{m.cauBo(String(d.bo.length))}
-									</h3>
+									</CardTitle>
 									{d.bo.length === 0 ? (
 										<p className="text-muted-foreground text-sm">
 											{m.khongCau}

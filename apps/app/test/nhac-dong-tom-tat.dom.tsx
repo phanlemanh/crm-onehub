@@ -200,7 +200,9 @@ const CA = {
 		const khoi = document.body.querySelector(
 			'[data-trang-thai="ST-nhac-dong-tomtat"]',
 		);
-		expect(chu(khoi?.querySelector("h2"))).toBe("Trợ lý OKR");
+		const tieuDe = khoi?.querySelector('[data-slot="card-title"]');
+		expect(chu(tieuDe)).toBe("Trợ lý OKR");
+		expect(khoi?.getAttribute("aria-labelledby")).toBe(tieuDe?.id ?? "");
 		const field = khoi?.querySelector('[data-slot="field"]');
 		expect(field?.getAttribute("data-orientation")).toBe("horizontal");
 		const nhan = field?.querySelector('[data-slot="field-label"]');

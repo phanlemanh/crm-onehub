@@ -451,7 +451,9 @@ const CA = {
 			if (!cauBo) throw new Error(`thieu co dinh ma ${ma}`);
 			kiemNguon(dong, cauBo.nguon);
 		}
-		const tieuDe = [...(ngan?.querySelectorAll("section > h3") ?? [])];
+		const tieuDe = [
+			...(ngan?.querySelectorAll('section > [data-slot="card-title"]') ?? []),
+		];
 		expect(tieuDe.map((h) => chu(h))).toEqual([
 			`Câu còn lại · ${CAU_CON.length}`,
 			`Câu bị bỏ · ${CAU_BO.length}`,
