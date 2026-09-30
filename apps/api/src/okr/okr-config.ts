@@ -244,6 +244,23 @@ export const OKR = {
 			mangSangChiKhi: "Mang sang từ chu kỳ ở pha chấm điểm hoặc đã đóng.",
 			xuatChiKhiDong: "Chỉ xuất được chu kỳ đã đóng.",
 		},
+		chuKy: {
+			chiSuaTen:
+				"Chu kỳ này đã có dữ liệu hoặc đã rời «Lập kế hoạch» — chỉ sửa được tên.",
+			daDongKhongSua: "Chu kỳ đã đóng — không sửa được nữa.",
+			daAnKhongSua: "Chu kỳ đang ẩn — hiện lại rồi mới sửa được.",
+			khongTrong:
+				"Chu kỳ đã có dữ liệu — không gỡ được. Ẩn chu kỳ nếu nó tạo nhầm.",
+			trongThiGo: "Chu kỳ chưa có dữ liệu — gỡ nó thay vì ẩn.",
+			daAn: "Chu kỳ này đã ẩn rồi.",
+			chuaAn: "Chu kỳ này đang hiện — không có gì để hiện lại.",
+			conQuyHien: (n: number) =>
+				`Năm này còn ${n} quý đang hiện — ẩn hoặc gỡ các quý đó trước.`,
+			namChaDaAn: "Năm cha đang ẩn — hiện lại năm trước.",
+			hienLaiChong: (ten: string) =>
+				`Chồng ngày với quý «${ten}» đang hiện — ẩn hoặc sửa quý đó trước.`,
+			kyDaAn: "Chu kỳ này đã ẩn — không ghi được nữa. Hiện lại để ghi tiếp.",
+		},
 		hoiY: {
 			chiQuanTri: "Chỉ quản trị mới mở hay sửa được lần hỏi ý mục tiêu.",
 			nguoiChonPhaiQuanTri:

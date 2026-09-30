@@ -239,7 +239,9 @@ export function ToanCanh() {
 				trangThai="ST-toancanh-loi"
 			/>
 		);
-	if (cycles.isPending || access.isPending || tc.isPending) return <DangTai />;
+	if (cycles.isPending || access.isPending) return <DangTai />;
+	if (currentId === null) return <ChuaChuKy quanTri={quanTri} />;
+	if (tc.isPending) return <DangTai />;
 
 	const { tongQuan, hang, tuan, tuanNay } = tc.data;
 	const chuaDat = tongQuan.donViChuaDat;

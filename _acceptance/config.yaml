@@ -377,6 +377,19 @@ executors:
     kko_xuat: 'bun run test -- "cd apps/api && bun test test/okr-khep-xuat.spec.ts"'
     kko_pham_vi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran && bun test test/vai-chi-okr.spec.ts -t pham-vi-khep"'
     kko_bang_cham_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-khep-cham.dom.tsx"
+    sac_viec: "cd packages/validation && bun test test/okr-chu-ky-viec.spec.ts"
+    sac_cycles: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t cycles-viec"'
+    sac_sua_moi_o: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t sua-moi-o"'
+    sac_sua_ten: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t sua-ten"'
+    sac_go: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t go-chu-ky"'
+    sac_an_hien: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t an-hien"'
+    sac_dong_thoi: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t dong-thoi"'
+    sac_pham_vi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran && bun test test/okr-sua-an-chu-ky.spec.ts -t quyen"'
+    sac_ky_mac_dinh: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t ky-mac-dinh"'
+    sac_an_vang_api: 'bun run test -- "cd apps/api && bun test test/okr-sua-an-chu-ky.spec.ts -t an-vang"'
+    sac_an_vang_nen: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/okr-nhac.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-chup.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-dich-can-chinh.integration.spec.ts -t ky-an"'
+    sac_giai_ky: "cd apps/app && bun test test/okr-giai-ky-an.spec.ts"
+    sac_bang_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-sua-an-chu-ky.dom.tsx"
     ckr_viec: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t viec-vong-doi"'
     ckr_viec_quyen: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t viec-quyen"'
     ckr_sang_kien: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t sang-kien"'
@@ -963,6 +976,11 @@ executors:
     htbt_e3: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e3 '
     htbt_e4: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e4 '
     htbt_e5: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-bieu-tuong-hydrat.dom.tsx -t 'e0|e5 '
+    hgd_e1: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx -t 'e0|e1 '
+    hgd_e2: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx -t 'e0|e2 '
+    hgd_e3: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx -t 'e0|e3 '
+    hgd_e4: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx -t 'e0|e4 '
+    hgd_e5: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx -t 'e0|e5 ' && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx
     tgy_the_ba_tang: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/proposed-change.dom.tsx -t ba-tang'
     tgy_cot_sua_roi_nhan: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t sua-roi-nhan'
     tgy_cot_mo_kr: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t mo-kr'
@@ -1006,6 +1024,10 @@ executors:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
     htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
+    hgd_chieu_do_dom: 'bun _acceptance/hydrat-giai-doan-deals/rang/chieu-do-dom.mjs'
+    hgd_man_deals: 'PHIEN_DO_TEN_CAY=hgd-man bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hydrat-giai-doan-deals/rang/man-deals.mjs"'
+    hgd_man_deals_chieu_do: 'bun _acceptance/hydrat-giai-doan-deals/rang/man-deals.mjs --chieu-do'
+    hgd_go_boc: 'bun _acceptance/hydrat-giai-doan-deals/rang/go-boc.mjs'
     mctkkn_khoa_rong: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/khoa-rong.mjs
     mctkkn_chieu_do: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/chieu-do-can-khoa.mjs
     mctkkn_ten_khoa: node _acceptance/man-chu-theo-khoa-kho-nguon/rang/ten-khoa.mjs
@@ -1453,6 +1475,10 @@ executors:
     kko_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khep-ky-okr/rang/ty-le.mjs"'
     kko_san_thiet_ke: "bun _acceptance/khep-ky-okr/rang/soi-ma.mjs --ca thiet-ke"
     kko_migration_chi_them: "bun _acceptance/khep-ky-okr/rang/migration-chi-them.mjs"
+    sac_soi_ky_con_hien: "bun _acceptance/sua-an-chu-ky-okr/rang/soi-ma.mjs --ca ky-con-hien"
+    sac_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/sua-an-chu-ky-okr/rang/man-sua-an.mjs"'
+    sac_san_thiet_ke: "bun _acceptance/sua-an-chu-ky-okr/rang/soi-ma.mjs --ca thiet-ke"
+    sac_migration_chi_them: "bun _acceptance/sua-an-chu-ky-okr/rang/migration-chi-them.mjs"
     ckr_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
     ckr_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/ty-le.mjs"'
     ckr_san_thiet_ke: "bun _acceptance/canh-kr-okr/rang/soi-ma.mjs --ca thiet-ke"
@@ -1580,7 +1606,7 @@ executors:
     kto_man_chan: 'PHIEN_DO_TEN_CAY=kto-e5 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"'
     kto_man_dau_cot: 'PHIEN_DO_TEN_CAY=kto-e24 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs --chi dau-cot"'
     kto_man_9b: 'PHIEN_DO_TEN_CAY=kto-e16 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-de-xuat/rang/man-gop-y.mjs"'
-    kto_man_giu: 'node _acceptance/khung-tao-okr-nhu-deal/rang/giu-cho-han-che.mjs'
+    kto_man_giu: 'PHIEN_DO_TEN_CAY=kto-e17 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"'
     kto_man_gop_y: 'PHIEN_DO_TEN_CAY=kto-e6 BANG_CHUNG=_acceptance/khung-tao-okr-nhu-deal/evidence/gop-y bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"'
     kto_chan_quet: 'node _acceptance/khung-tao-okr-nhu-deal/rang/chan-ngan.mjs'
     kto_ui_goc: 'node _acceptance/khung-tao-okr-nhu-deal/rang/ui-goc.mjs'

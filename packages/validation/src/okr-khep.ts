@@ -90,7 +90,9 @@ export const ghiDieuHocDuocInput = z.object({
 	noiDung: z.string().trim().max(OKR_KHEP.dieuHocDuoc.toiDa),
 });
 export const moLaiKyInput = z.object({ id: ma, lyDo });
+export const anChuKyInput = z.object({ id: ma, lyDo });
 export const mangSangInput = z.object({ objectiveId: ma });
 export const xuatKyInput = z.object({ cycleId: ma });
 export type ChamKrInput = z.infer<typeof chamKrInput>;
 export type MoRaInput = z.infer<typeof moRaInput>;
+export type AnChuKyInput = z.infer<typeof anChuKyInput>;

@@ -189,6 +189,7 @@ export class OkrTaiCoCauService {
 		const kyIds = ky.map((k) => k.cycleId).sort();
 		if (kyIds.length > 0)
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ANY(${kyIds}) ORDER BY id FOR UPDATE`;
+		for (const id of kyIds) await this.okr.assertKyChuaAn(tx, id);
 		await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ANY(${[...ids].sort()}) ORDER BY id FOR UPDATE`;
 	}
 

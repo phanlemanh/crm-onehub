@@ -2,12 +2,13 @@ import { Module } from "@nestjs/common";
 import { AgentModule } from "../agent/agent.module";
 import { ToChucModule } from "../to-chuc/to-chuc.module";
 import { TrpcModule } from "../trpc/trpc.module";
-import { DONG_HO_HOI_Y } from "./dong-ho";
+import { DONG_HO_HOI_Y, MOC_SAU_KHOA_CHU_KY } from "./dong-ho";
 import { OkrRouter } from "./okr.router";
 import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrChuKyService } from "./okr-chu-ky.service";
 import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
 import { OkrHoiYService } from "./okr-hoi-y.service";
@@ -36,6 +37,8 @@ import { TroLyOkrService } from "./tro-ly.service";
 		SoanService,
 		OkrHoiYService,
 		{ provide: DONG_HO_HOI_Y, useValue: () => new Date() },
+		OkrChuKyService,
+		{ provide: MOC_SAU_KHOA_CHU_KY, useValue: async () => {} },
 		OkrHienThiService,
 		OkrDuyetService,
 		OkrTaiCoCauService,

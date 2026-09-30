@@ -17,6 +17,7 @@ import {
 	giaiKy,
 	giaiKyHoiY,
 	kyMacDinhHoiY,
+	kyTrongOChon,
 	okrParsers,
 } from "./okr-search-params";
 import { tabTuDuong } from "./tab-okr";
@@ -54,7 +55,7 @@ export function ChonChuKy() {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const { cycles, currentId, datKy } = useChuKy();
-	const ds = cycles.data?.cycles ?? [];
+	const ds = kyTrongOChon(cycles.data?.cycles ?? []);
 	if (ds.length === 0 || currentId === null) return null;
 	const dangChay = cycles.data?.currentId ?? null;
 	const nhan = (c: (typeof ds)[number]) =>

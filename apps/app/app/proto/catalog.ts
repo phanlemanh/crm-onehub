@@ -765,6 +765,29 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-loi", nhan: "Lỗi tải" },
 		],
 	},
+	{
+		slug: "sua-an-chu-ky-okr",
+		ten: "Cài đặt › Chương trình OKR — sửa, gỡ, ẩn chu kỳ tạo nhầm",
+		states: [
+			{ id: "ST-bang-an", nhan: "Bảng chu kỳ — chu kỳ đã ẩn ở cuối" },
+			{ id: "ST-menu-trong", nhan: "Menu chu kỳ trống — Sửa, Gỡ" },
+			{
+				id: "ST-menu-co-du-lieu",
+				nhan: "Menu chu kỳ có dữ liệu — Sửa tên, Ẩn",
+			},
+			{
+				id: "ST-menu-nam-con-quy",
+				nhan: "Menu năm còn quý đang hiện — Ẩn khoá",
+			},
+			{ id: "ST-menu-da-an", nhan: "Menu chu kỳ đã ẩn — Hiện lại" },
+			{ id: "ST-sua-moi-o", nhan: "Sheet sửa — chu kỳ trống, mọi ô" },
+			{ id: "ST-sua-chi-ten", nhan: "Sheet sửa — có dữ liệu, chỉ tên" },
+			{ id: "ST-go", nhan: "Gỡ chu kỳ trống — hỏi lại" },
+			{ id: "ST-an-ly-do", nhan: "Ẩn chu kỳ — ô lý do bắt buộc" },
+			{ id: "ST-hien-lai", nhan: "Hiện lại — hỏi lại" },
+			{ id: "ST-khong-quyen", nhan: "Thành viên thường — menu khoá" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

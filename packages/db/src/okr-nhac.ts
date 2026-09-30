@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Db } from "./client";
 import type { JsonValue } from "./json";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import {
 	CHO_DUYET,
 	nguoiDuyetMucTieu,
@@ -172,7 +173,9 @@ const DON_VI = {
 
 function docKr(db: Db) {
 	return db.okrKeyResult.findMany({
-		where: { objective: { status: CONG_BO, cycle: CHAY } },
+		where: {
+			objective: { status: CONG_BO, cycle: { ...CHAY, ...KY_CON_HIEN } },
+		},
 		select: {
 			id: true,
 			title: true,
@@ -518,7 +521,10 @@ async function viecHoiY(
 	userIds: string[] | undefined,
 ): Promise<Gui[]> {
 	const lan = await db.okrHoiY.findMany({
-		where: { OR: [{ congBoLuc: null }, { congBoLuc: cuaSo }] },
+		where: {
+			OR: [{ congBoLuc: null }, { congBoLuc: cuaSo }],
+			cycle: KY_CON_HIEN,
+		},
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 		select: {
 			id: true,
@@ -600,7 +606,7 @@ async function viecChoDuyet(db: Db): Promise<Gui[]> {
 	const mts = await db.okrObjective.findMany({
 		where: {
 			status: CHO_DUYET,
-			cycle: { phase: { in: [...PHA_GHI_DUOC] } },
+			cycle: { phase: { in: [...PHA_GHI_DUOC] }, ...KY_CON_HIEN },
 		},
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 		select: {
@@ -772,17 +778,26 @@ async function locTheoQuyenXem(
 export async function lienQuanOkr(db: Db, userId: string): Promise<boolean> {
 	const chay = { phase: "dang-chay" };
 	const [coChuKy, kr, mt, theo, truong] = await Promise.all([
-		db.okrCycle.count({ where: chay }),
+		db.okrCycle.count({ where: { ...chay, ...KY_CON_HIEN } }),
 		db.okrKeyResult.count({
 			where: {
 				ownerUserId: userId,
-				objective: { status: { not: "da-bo" }, cycle: chay },
+				objective: {
+					status: { not: "da-bo" },
+					cycle: { ...chay, ...KY_CON_HIEN },
+				},
 			},
 		}),
 		db.okrObjective.count({
-			where: { ownerUserId: userId, status: { not: "da-bo" }, cycle: chay },
+			where: {
+				ownerUserId: userId,
+				status: { not: "da-bo" },
+				cycle: { ...chay, ...KY_CON_HIEN },
+			},
 		}),
-		db.okrFollow.count({ where: { userId, objective: { cycle: chay } } }),
+		db.okrFollow.count({
+			where: { userId, objective: { cycle: { ...chay, ...KY_CON_HIEN } } },
+		}),
 		Promise.all([
 			db.department.count({ where: { headUserId: userId, archivedAt: null } }),
 			db.division.count({ where: { headUserId: userId, archivedAt: null } }),

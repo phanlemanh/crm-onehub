@@ -22,6 +22,7 @@ import { okrHoiYMessages } from "@/lib/messages/okr-hoi-y";
 import { useTRPC } from "@/lib/trpc/client";
 import { useChuKy, useKyHoiY } from "../chon-chu-ky";
 import type { ChuKy } from "../kieu";
+import { kyTrongOChon } from "../okr-search-params";
 import { ChuaChuKy } from "../trang-thai-okr";
 import { ChuNguoi, dien, ghep } from "./chu";
 import { DaiMoc } from "./dai-moc";
@@ -243,8 +244,8 @@ export function HoiYMan() {
 			</div>
 		);
 	}
-	const chuKy = cycles.data.cycles;
-	const ky = chuKy.find((c) => c.id === cycleId) ?? null;
+	const chuKy = kyTrongOChon(cycles.data.cycles);
+	const ky = cycles.data.cycles.find((c) => c.id === cycleId) ?? null;
 	if (khongKy || !hoiY.data) {
 		return (
 			<div data-trang-thai={quanTri ? "trong-quan-tri" : "trong-thanh-vien"}>

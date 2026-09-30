@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN, tinhTrangGiu } from "@crm/db/okr-chu-ky-hien";
 import {
 	boGioiHan,
 	dieuKienXemMucTieu,
@@ -23,6 +24,7 @@ import {
 	PHA_CHU_KY,
 	type PhaChuKy,
 	phaSau,
+	viecChuKy,
 } from "@crm/validation/okr-chu-ky";
 import {
 	OKR_PROGRAM_MAC_DINH,
@@ -67,6 +69,7 @@ import {
 	Injectable,
 	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { z } from "zod";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
@@ -80,6 +83,7 @@ import {
 	vetSangKienChoVai,
 } from "./canh-kr";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
+import { MOC_SAU_KHOA_CHU_KY, type MocSauKhoa } from "./dong-ho";
 import { locXemTrongVet, type PhamDoc, vetChoNguoiXem } from "./hien-thi";
 import {
 	type CuaSoRa,
@@ -259,8 +263,8 @@ function ghiKhac(
 	sau[o] = moi;
 }
 
-const ngay = (d: Date) => ngayVN(d);
-const toDate = (s: string) => new Date(`${s}T00:00:00Z`);
+export const ngay = (d: Date) => ngayVN(d);
+export const toDate = (s: string) => new Date(`${s}T00:00:00Z`);
 
 type ChupGanNhat = {
 	ngay: Date;
@@ -316,7 +320,10 @@ type ChuKyDong = {
 	breakStartsOn: Date | null;
 	breakEndsOn: Date | null;
 	updateWeekday: number;
+	anLuc: Date | null;
 };
+
+type GiuChuKy = { trong: boolean; quyConHien: number };
 
 @Injectable()
 export class OkrService {
@@ -326,6 +333,9 @@ export class OkrService {
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 		@Inject(AgentTriggerService) private readonly trigger: AgentTriggerService,
+		@Optional()
+		@Inject(MOC_SAU_KHOA_CHU_KY)
+		private readonly moc?: MocSauKhoa,
 	) {}
 
 	private async kichLuotAn(nguoiLuu: string, luot: LuotAn) {
@@ -356,19 +366,36 @@ export class OkrService {
 		};
 	}
 
-	private chuKyRa(c: ChuKyDong, cuaSoRa: CuaSoRa | null): ChuKyOutput {
+	private chuKyRa(
+		c: ChuKyDong,
+		cuaSoRa: CuaSoRa | null,
+		giu: GiuChuKy,
+		anLyDo: string | null,
+	): ChuKyOutput {
+		const kind = loaiChuKy.parse(c.kind);
+		const phase = phaChuKy.parse(c.phase);
 		return {
 			id: c.id,
-			kind: loaiChuKy.parse(c.kind),
+			kind,
 			name: c.name,
 			parentId: c.parentId,
 			startsOn: ngay(c.startsOn),
 			endsOn: ngay(c.endsOn),
-			phase: phaChuKy.parse(c.phase),
+			phase,
 			breakStartsOn: c.breakStartsOn ? ngay(c.breakStartsOn) : null,
 			breakEndsOn: c.breakEndsOn ? ngay(c.breakEndsOn) : null,
 			updateWeekday: c.updateWeekday,
 			cuaSoRa,
+			anLuc: c.anLuc ? c.anLuc.toISOString() : null,
+			anLyDo: c.anLuc ? anLyDo : null,
+			quyConHien: giu.quyConHien,
+			viec: viecChuKy({
+				phase,
+				kind,
+				trong: giu.trong,
+				daAn: c.anLuc !== null,
+				quyConHien: giu.quyConHien,
+			}),
 		};
 	}
 
@@ -383,10 +410,44 @@ export class OkrService {
 			}),
 		]);
 		const theoKy = new Map(cuaSo.map((r) => [r.cycleId, cuaSoRaRa(r)]));
-		const cycles = rows.map((c) => this.chuKyRa(c, theoKy.get(c.id) ?? null));
+		const idsDaAn = rows.flatMap((c) => (c.anLuc ? [c.id] : []));
+		const [giu, vetAn] = await Promise.all([
+			tinhTrangGiu(
+				this.db,
+				rows.map((c) => c.id),
+			),
+			idsDaAn.length === 0
+				? []
+				: this.db.okrTrail.findMany({
+						where: { cycleId: { in: idsDaAn }, action: "an-chu-ky" },
+						orderBy: { at: "desc" },
+						select: { cycleId: true, note: true },
+					}),
+		]);
+		const lyDoAn = new Map<string, string | null>();
+		for (const v of vetAn)
+			if (v.cycleId !== null && !lyDoAn.has(v.cycleId))
+				lyDoAn.set(v.cycleId, v.note);
+		const cycles = rows.flatMap((c) => {
+			const g = giu.get(c.id);
+			return g
+				? [
+						this.chuKyRa(
+							c,
+							theoKy.get(c.id) ?? null,
+							g,
+							lyDoAn.get(c.id) ?? null,
+						),
+					]
+				: [];
+		});
 		return {
 			cycles,
-			currentId: chonChuKyHienTai(cycles, ngay(homNay))?.id ?? null,
+			currentId:
+				chonChuKyHienTai(
+					cycles.filter((c) => c.anLuc === null),
+					ngay(homNay),
+				)?.id ?? null,
 		};
 	}
 
@@ -398,18 +459,21 @@ export class OkrService {
 			if (input.kind === "quy") {
 				if (input.parentId === null)
 					throw new BadRequestException(T.namKhongCoCha);
+				await this.khoaHoNam(tx, input.parentId);
 				const cha = await tx.okrCycle.findUnique({
 					where: { id: input.parentId },
 				});
 				if (cha?.kind !== "nam")
 					throw new NotFoundException(T.khongCoChuKy(input.parentId));
+				if (cha.anLuc !== null)
+					throw new BadRequestException(T.chuKy.namChaDaAn);
 				if (
 					input.startsOn < ngay(cha.startsOn) ||
 					input.endsOn > ngay(cha.endsOn)
 				)
 					throw new BadRequestException(T.quyNgoaiNam);
 				const anhEm = await tx.okrCycle.findMany({
-					where: { parentId: cha.id },
+					where: { parentId: cha.id, ...KY_CON_HIEN },
 				});
 				const chong = anhEm.find(
 					(q) =>
@@ -444,6 +508,7 @@ export class OkrService {
 		await this.quyenOkr.assertQuanTri(userId);
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${id} FOR UPDATE`;
+			await this.assertKyChuaAn(tx, id);
 			const c = await tx.okrCycle.findUnique({ where: { id } });
 			if (!c) throw new NotFoundException(T.khongCoChuKy(id));
 			const phaCu = phaChuKy.parse(c.phase);
@@ -562,7 +627,27 @@ export class OkrService {
 		return tra;
 	}
 
+	async khoaHoNam(tx: Tx, namId: string) {
+		await tx.$queryRaw`
+			SELECT id FROM "okrCycle"
+			WHERE id = ${namId} OR "parentId" = ${namId}
+			ORDER BY id
+			FOR UPDATE`;
+	}
+
+	async assertKyChuaAn(tx: Tx | Db, cycleId: string) {
+		await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${cycleId} FOR SHARE`;
+		await this.moc?.("ghi", cycleId);
+		const c = await tx.okrCycle.findUnique({
+			where: { id: cycleId },
+			select: { anLuc: true },
+		});
+		if (!c) throw new NotFoundException(T.khongCoChuKy(cycleId));
+		if (c.anLuc !== null) throw new BadRequestException(T.chuKy.kyDaAn);
+	}
+
 	async assertKyGhiDuoc(tx: Tx | Db, cycleId: string) {
+		await this.assertKyChuaAn(tx, cycleId);
 		const c = await tx.okrCycle.findUnique({
 			where: { id: cycleId },
 			select: { phase: true },
@@ -1380,6 +1465,7 @@ export class OkrService {
 						status: "cong-bo",
 						level: { in: capDichCanChinh(nguonCanChinh.level) },
 						cycleId: { in: chuKyDichCanChinh(nguonCanChinh) },
+						cycle: KY_CON_HIEN,
 					},
 					boGioiHan,
 				],
@@ -1444,7 +1530,7 @@ export class OkrService {
 			: await this.docMucTieu(
 					this.db,
 					{
-						cycle: { parentId: cycleId },
+						cycle: { parentId: cycleId, ...KY_CON_HIEN },
 						alignments: {
 							some: {
 								OR: [
@@ -1841,7 +1927,7 @@ export class OkrService {
 			}),
 			this.db.okrCycle.findUniqueOrThrow({
 				where: { id: mt.cycleId },
-				select: { name: true, phase: true },
+				select: { name: true, phase: true, anLuc: true },
 			}),
 			this.db.okrObjective.findFirst({
 				where: { AND: [{ id }, dieuKienXemMucTieu(nc)] },
@@ -1929,7 +2015,7 @@ export class OkrService {
 		const vetDuyet = vet.filter((v) => VET_DUYET.has(v.action));
 		const cuoiDuyet = vetDuyet.at(-1);
 		const guiCuoi = vetDuyet.findLast((v) => v.action === "gui-duyet");
-		const ghiDuoc = ghiDuocOPha(phaChuKy.parse(ky.phase));
+		const ghiDuoc = ky.anLuc === null && ghiDuocOPha(phaChuKy.parse(ky.phase));
 		const duyetDuoc = this.quyenOkr.duyetDuoc(q, userId, objective);
 		const choDuyet = mt.status === "cho-duyet";
 		const cachCongBo = this.congBoHayGuiDuyet(ct, q, userId, objective);
@@ -1962,6 +2048,7 @@ export class OkrService {
 				coBangChung: bangChung.some((d) => d.keyResultId === k.id),
 			})),
 			cycleName: ky.name,
+			kyGhiDuoc: ghiDuoc,
 			mangSangToi: toi
 				? { objectiveId: toi.sangObjectiveId, cycleName: toi.sangCycle.name }
 				: null,
