@@ -198,6 +198,18 @@ const docPhien = (id: string) =>
 		select: { sessionId: true, cacPhien: true },
 	});
 
+const TIEN_TO_NEXT = "/eve/agents/okr/eve/v1/";
+
+function pathTuUrl(url: string): string[] {
+	const { pathname } = new URL(url);
+	if (!pathname.startsWith(TIEN_TO_NEXT))
+		throw new Error(`Next khong dua ${pathname} vao cua nay`);
+	return pathname
+		.slice(TIEN_TO_NEXT.length)
+		.split("/")
+		.map((doan) => decodeURIComponent(doan));
+}
+
 function goi(
 	userId: string | null,
 	duong: string,
@@ -217,7 +229,7 @@ function goi(
 	});
 	if (cuocSoanId) headers.set("x-crm-cuoc-soan", cuocSoanId);
 	const url = `http://localhost:3000/eve/agents/okr${duong}`;
-	const ctx = { params: Promise.resolve({ path: duong.split("/").slice(1) }) };
+	const ctx = { params: Promise.resolve({ path: pathTuUrl(url) }) };
 	if (method === "GET") return GET(new Request(url, { method, headers }), ctx);
 	return POST(new Request(url, { method, headers, body: "{}" }), ctx);
 }
@@ -520,17 +532,15 @@ describe("cua-okr", () => {
 	});
 	test("chi dang duong eve da liet ke moi qua; dang la 404 co ten, khong toi tro ly", async () => {
 		for (const duong of [
-			"/eve/v1/%73ession",
-			"/eve/v1/session/%6Fkr",
-			"/eve/%6Fkr/v1/session",
+			"/eve/v1/%6Fkr/session",
+			"/eve/v1/eve/v1/session",
 			`/eve/v1/Session/phien-${CUOC.cuaOkr}`,
 			`/eve/v1/session/phien-${CUOC.cuaOkr}/`,
-			`/eve/v1/session/phien-${CUOC.cuaOkr}/../../../admin`,
-			"/eve/v1/session/../../admin",
-			"/eve/v1/session/..",
+			"/eve/v1/session/..%2F..%2Fadmin",
+			"/eve/v1/session%2F..%2Fadmin",
 			"/eve/v1/dev/schedules/x",
 			"/eve/v1/session/reset/stream/x",
-			"/admin",
+			"/eve/v1/admin",
 		]) {
 			const res = await goi(NGUOI.okr, duong, CUOC.cuaOkr);
 			expect({
@@ -548,19 +558,31 @@ describe("cua-okr", () => {
 			});
 		}
 	});
-	test("dich chi dung tu doan duong, khong tu duong URL", async () => {
+	test('params y het Next giao: { path: ["session"] } mo phien; doan ma hoa duoc Next giai ma truoc', async () => {
+		expect(
+			pathTuUrl("http://localhost:3000/eve/agents/okr/eve/v1/session"),
+		).toEqual(["session"]);
 		const moi = await cuocCho(NGUOI.okr);
 		phien = { user: { id: NGUOI.okr, email: "x@thu.test", name: "x" } };
 		daChuyen.length = 0;
 		const res = await POST(
-			new Request("http://localhost:3000/eve/agents/%6Fkr/eve/v1/session", {
+			new Request("http://localhost:3000/eve/agents/okr/eve/v1/session", {
 				method: "POST",
 				headers: { "x-crm-cuoc-soan": moi },
 				body: "{}",
 			}),
-			{ params: Promise.resolve({ path: ["eve", "v1", "session"] }) },
+			{ params: Promise.resolve({ path: ["session"] }) },
 		);
 		expect({ status: res.status, toi: daChuyen.map((c) => c.url) }).toEqual({
+			status: 202,
+			toi: [`${OKR_AGENT_URL}/eve/v1/session`],
+		});
+		const maHoa = await goi(
+			NGUOI.okr,
+			"/eve/v1/%73ession",
+			await cuocCho(NGUOI.okr),
+		);
+		expect({ status: maHoa.status, toi: daChuyen.map((c) => c.url) }).toEqual({
 			status: 202,
 			toi: [`${OKR_AGENT_URL}/eve/v1/session`],
 		});

@@ -41,7 +41,10 @@ async function handler(
 	const duong = khopDuong((await params).path);
 	if (!duong) return loi(404, CUA_OKR.loi.duongKhongPhucVu);
 
-	const dich = new URL(`/${duong.doan.join("/")}`, OKR_AGENT_URL);
+	const dich = new URL(
+		`${CUA_OKR.tienToEve}/${duong.doan.join("/")}`,
+		OKR_AGENT_URL,
+	);
 	if (dich.origin !== new URL(OKR_AGENT_URL).origin) {
 		return loi(404, CUA_OKR.loi.duongKhongPhucVu);
 	}
