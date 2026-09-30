@@ -1969,8 +1969,7 @@ export class OkrService {
 		const vetDuyet = vet.filter((v) => VET_DUYET.has(v.action));
 		const cuoiDuyet = vetDuyet.at(-1);
 		const guiCuoi = vetDuyet.findLast((v) => v.action === "gui-duyet");
-		const ghiDuoc =
-			ky.anLuc === null && ghiDuocOPha(phaChuKy.parse(ky.phase));
+		const ghiDuoc = ky.anLuc === null && ghiDuocOPha(phaChuKy.parse(ky.phase));
 		const duyetDuoc = this.quyenOkr.duyetDuoc(q, userId, objective);
 		const choDuyet = mt.status === "cho-duyet";
 		const cachCongBo = this.congBoHayGuiDuyet(ct, q, userId, objective);

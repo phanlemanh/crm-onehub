@@ -157,7 +157,7 @@ mock.module("@/lib/trpc/client", () => ({
 				headOf: { divisions: [], departments: [] },
 			})),
 			toanCanh: {
-				queryOptions: (vao: unknown) =>
+				queryOptions: (vao: { cycleId: string } | typeof skipToken) =>
 					vao === skipToken
 						? { queryKey: ["okr.toanCanh", "bo-qua"], queryFn: skipToken }
 						: {
