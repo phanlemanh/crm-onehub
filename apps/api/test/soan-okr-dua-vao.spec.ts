@@ -2,6 +2,8 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
+import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
+import { dongSoanTuHang, TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import type {
 	SoanDanhSachOutput,
@@ -216,10 +218,6 @@ describe("quyet", () => {
 	test(
 		"danh sách: chỉ dòng qua kiểm (không bi-loai), ghi hienLuc lần đầu rồi giữ, cùng tập id qua hai đường, dòng phẳng theo khuôn D",
 		async () => {
-			await db.okrDeXuat.updateMany({
-				where: { cuocSoanId: kho.cuoc.id },
-				data: { hienLuc: null },
-			});
 			const truoc = await danhSach(kho.cuoc.id);
 			const ids = new Set(truoc.dong.map((d) => d.id));
 			expect(ids.has(kho.loaiC)).toBe(false);
@@ -239,6 +237,11 @@ describe("quyet", () => {
 			);
 			expect(truoc.cuoc.id).toBe(kho.cuoc.id);
 			expect(truoc.cuoc.soDongTong).toBe(10);
+			for (const d of truoc.dong)
+				expect(d.khoaDong, `khoaDong ${d.id}`).toBe(
+					khoaDong(dongSoanTuHang(await hang(d.id))),
+				);
+			expect(new Set(truoc.dong.map((d) => d.khoaDong)).size).toBe(10);
 			expect(truoc.lyDo).toBeNull();
 			expect(truoc.thieuBoiCanh).toBe(
 				(await docTrangChienLuocDangDung(db)).length === 0,
@@ -304,9 +307,25 @@ describe("quyet", () => {
 			const thieu = await quyet(kho.kA1, "sua");
 			expect(thieu.status, "sua can gia tri").toBe(400);
 			expect(thieu.loi).toBe(T.canGiaTri);
-			expect((await quyet(kho.kA1, "sua", "ab")).status, "sua qua ngan").toBe(
-				400,
+			const ngan = await quyet(kho.kA1, "sua", "ab");
+			expect(ngan.status, "sua qua ngan").toBe(400);
+			expect(ngan.loi).toBe(T.tenSuaKhongHop(TRO_LY_OKR_TRAN.chu.tenKr));
+			const dai = await quyet(
+				kho.mtA,
+				"sua",
+				"x".repeat(TRO_LY_OKR_TRAN.chu.tenMucTieu + 1),
 			);
+			expect(dai.status, "sua muc tieu qua dai").toBe(400);
+			expect(dai.loi).toBe(T.tenSuaKhongHop(TRO_LY_OKR_TRAN.chu.tenMucTieu));
+			expect(await trangThaiDongNhap(kho.mtA)).toBe("nhan");
+			const tenA = "Bán lẻ miền Bắc ký đều hằng tháng";
+			expect(
+				ok<SoanQuyetOutput>(await quyet(kho.mtA, "sua", tenA), "sua A"),
+			).toEqual({ ok: true });
+			expect(await hang(kho.mtA)).toMatchObject({
+				trangThai: "sua",
+				giaTriCuoi: tenA,
+			});
 			const ccSua = await quyet(kho.ccA, "sua", "Căn chỉnh khác");
 			expect(ccSua.status, "sua can chinh").toBe(400);
 			expect(ccSua.loi).toBe(T.cachKhongHop);
@@ -326,8 +345,8 @@ describe("quyet", () => {
 			});
 			expect(a1.quyetLuc).not.toBeNull();
 			expect(await hang(kho.mtA)).toMatchObject({
-				trangThai: "nhan",
-				giaTriCuoi: null,
+				trangThai: "sua",
+				giaTriCuoi: tenA,
 				nguoiQuyet: nguoi(TRUONG),
 				dich: null,
 			});
@@ -367,7 +386,7 @@ describe("quyet", () => {
 	);
 
 	test(
-		"bác Mục tiêu C kéo KR con c1 và Căn chỉnh cc-c cùng bac; dòng bị loại và dòng của Mục tiêu khác giữ nguyên; nhận KR dưới Mục tiêu đã bác bị từ chối",
+		"bác Mục tiêu C kéo KR con c1 và Căn chỉnh cc-c cùng bac; dòng bị loại và dòng của Mục tiêu khác giữ nguyên; nhận hay sửa dưới Mục tiêu đã bác, bị loại hay không có trả lý do có tên",
 		async () => {
 			expect(
 				ok<SoanQuyetOutput>(await quyet(kho.kC1, "nhan"), "nhan c1 truoc"),
@@ -386,13 +405,62 @@ describe("quyet", () => {
 			const [them] = (await gieoDongNhap(kho.cuoc, [
 				{ loai: "kr-moi", khoa: "c2", chaKhoa: "c", ten: "KR nộp lại dưới C" },
 			])) as [string];
-			const tuChoi = await quyet(them, "nhan");
-			expect(tuChoi.status, "cha da bac").toBe(400);
-			expect(tuChoi.loi).toBe(T.chaDaBac);
-			expect((await quyet(them, "sua", "KR nộp lại dưới C, sửa")).status).toBe(
-				400,
-			);
-			expect(await trangThaiDongNhap(them)).toBe("cho");
+			const tenC = `Mục tiêu sẽ bị bác 1`;
+			const [chaLoai] = (await gieoDongNhap(
+				kho.cuoc,
+				[{ loai: "muc-tieu-moi", khoa: "d", ten: "Mục tiêu tăng 300 % ngay" }],
+				"bi-loai",
+				{ maLoai: "so-moi" },
+			)) as [string];
+			const [conLoai, moCoi] = (await gieoDongNhap(kho.cuoc, [
+				{
+					loai: "kr-moi",
+					khoa: "d1",
+					chaKhoa: "d",
+					ten: "KR dưới mục tiêu bị loại",
+				},
+				{
+					loai: "kr-moi",
+					khoa: "z1",
+					chaKhoa: "zz",
+					ten: "KR không có mục tiêu cha",
+				},
+			])) as [string, string];
+			const ca = [
+				[them, { ok: false, lyDo: "cha-da-bac", chiTiet: T.chaDaBac(tenC) }],
+				[
+					conLoai,
+					{
+						ok: false,
+						lyDo: "cha-bi-loai",
+						chiTiet: T.chaBiLoai("Mục tiêu tăng 300 % ngay"),
+					},
+				],
+				[
+					moCoi,
+					{ ok: false, lyDo: "khong-co-cha", chiTiet: T.khongCoCha("zz") },
+				],
+			] as const;
+			for (const [id, can] of ca) {
+				expect(
+					ok<SoanQuyetOutput>(await quyet(id, "nhan"), `nhan ${can.lyDo}`),
+				).toEqual(can);
+				expect(
+					ok<SoanQuyetOutput>(
+						await quyet(id, "sua", "Tên KR sửa lại cho rõ"),
+						`sua ${can.lyDo}`,
+					),
+				).toEqual(can);
+				expect(await hang(id), `giu ${can.lyDo}`).toMatchObject({
+					trangThai: "cho",
+					nguoiQuyet: null,
+					giaTriCuoi: null,
+				});
+			}
+			expect(await trangThaiDongNhap(chaLoai)).toBe("bi-loai");
+			expect(
+				ok<SoanQuyetOutput>(await quyet(moCoi, "bac"), "bac mo coi"),
+			).toEqual({ ok: true });
 			expect(ok<SoanQuyetOutput>(await quyet(them, "bac"), "bac c2")).toEqual({
 				ok: true,
 			});
@@ -411,8 +479,90 @@ describe("quyet", () => {
 				where: { cuocSoanId: kho.cuoc.id },
 				select: { dich: true },
 			});
-			expect(dong.length).toBe(12);
+			expect(dong.length).toBe(15);
 			expect(dong.every((d) => d.dich === null)).toBe(true);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"hai lần nộp: chỉ lần mới nhất và dòng đã quyết hiện, mỗi khoaDong một dòng; quyết dòng cũ bị từ chối; bác Mục tiêu không chạm dòng cũ",
+		async () => {
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+			const lan1 = { inputHash: "nop-1" };
+			const lan2 = { inputHash: "nop-2" };
+			const mt = {
+				loai: "muc-tieu-moi",
+				khoa: "m",
+				ten: "Kênh bán miền Nam ổn định",
+			} as const;
+			const kr1 = {
+				loai: "kr-moi",
+				khoa: "k1",
+				chaKhoa: "m",
+				ten: "Đại lý mới ký hợp đồng",
+			} as const;
+			const [m1, k1, k2] = (await gieoDongNhap(
+				cuoc,
+				[
+					mt,
+					kr1,
+					{
+						loai: "kr-moi",
+						khoa: "k2",
+						chaKhoa: "m",
+						ten: "Doanh số đại lý cũ",
+					},
+				],
+				"cho",
+				lan1,
+			)) as [string, string, string];
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(k1, "nhan", undefined, cQuanTri),
+					"nhan k1",
+				),
+			).toEqual({ ok: true });
+			tienDongHo();
+			const [m2, k1Moi, k3] = (await gieoDongNhap(
+				cuoc,
+				[
+					mt,
+					kr1,
+					{
+						loai: "kr-moi",
+						khoa: "k3",
+						chaKhoa: "m",
+						ten: "Đơn đặt lại trong 30 ngày",
+					},
+				],
+				"cho",
+				lan2,
+			)) as [string, string, string];
+			const ds = await danhSach(cuoc.id, "trpc", cQuanTri);
+			expect(ds.dong.map((d) => d.id).sort()).toEqual([m2, k1, k3].sort());
+			expect(new Set(ds.dong.map((d) => d.khoaDong)).size).toBe(3);
+			expect(ds.cuoc).toMatchObject({ soDongTong: 3, soDongNhan: 1 });
+			for (const cu of [m1, k2, k1Moi])
+				expect((await hang(cu)).hienLuc, `cu ${cu}`).toBeNull();
+			const dongCu = await quyet(k2, "nhan", undefined, cQuanTri);
+			expect(dongCu.status, "quyet dong cu").toBe(409);
+			expect(dongCu.loi).toBe(T.dongCu);
+			expect((await quyet(k1Moi, "bac", undefined, cQuanTri)).status).toBe(409);
+			expect(
+				ok<SoanQuyetOutput>(
+					await quyet(m2, "bac", undefined, cQuanTri),
+					"bac m2",
+				),
+			).toEqual({ ok: true });
+			for (const id of [k1, k3])
+				expect(await trangThaiDongNhap(id), `keo ${id}`).toBe("bac");
+			for (const id of [m1, k2, k1Moi])
+				expect(await hang(id), `giu cu ${id}`).toMatchObject({
+					trangThai: "cho",
+					nguoiQuyet: null,
+				});
+			await xoaCuoc(cuoc.id);
 		},
 		CHO_DB,
 	);
@@ -497,7 +647,7 @@ describe("quyet", () => {
 							await quyet(kho.kB2, "bac", undefined, cTruong, duong),
 							`tat ${duong}`,
 						),
-					).toEqual({ ok: false, lyDo: "don-vi-chua-bat" });
+					).toEqual({ ok: false, lyDo: "don-vi-chua-bat", chiTiet: null });
 				}
 				expect(await trangThaiDongNhap(kho.kB2)).toBe("nhan");
 			} finally {

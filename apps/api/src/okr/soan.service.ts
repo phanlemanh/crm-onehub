@@ -48,10 +48,12 @@ import { OkrAccessService, type Quyen } from "./okr-access.service";
 import { OKR } from "./okr-config";
 import {
 	cuocCuaDong,
-	docBanNhap,
+	docBanNhapHien,
+	docMoiDongCuaCuoc,
 	dongHienTu,
 	ghiHienLuc,
 	ghiQuyet,
+	tapHien,
 	tenDichCua,
 } from "./soan-ban-nhap";
 
@@ -325,14 +327,10 @@ export class SoanService {
 				where: { id: { in: idCua((c) => c.departmentId) } },
 				...theoId,
 			}),
-			client.okrDeXuat.groupBy({
-				by: ["cuocSoanId", "trangThai"],
-				where: {
-					cuocSoanId: { in: cuoc.map((c) => c.id) },
-					trangThai: { not: "bi-loai" },
-				},
-				_count: { _all: true },
-			}),
+			docMoiDongCuaCuoc(
+				client,
+				cuoc.map((c) => c.id),
+			),
 		]);
 		const ten = (ds: { id: string; name: string }[]) =>
 			new Map(ds.map((d) => [d.id, d.name]));
@@ -340,12 +338,13 @@ export class SoanService {
 		const tenKy = ten(ky);
 		const tenBoPhan = ten(boPhan);
 		const tenPhongBan = ten(phongBan);
+		const hienCua = new Map(
+			[...dem].map(([id, ds]) => [id, tapHien(ds)] as const),
+		);
 		const demCua = (id: string, chiNhan: boolean) =>
-			dem
-				.filter(
-					(d) => d.cuocSoanId === id && (!chiNhan || DA_NHAN.has(d.trangThai)),
-				)
-				.reduce((tong, d) => tong + d._count._all, 0);
+			(hienCua.get(id) ?? []).filter(
+				(d) => !chiNhan || DA_NHAN.has(d.hang.trangThai),
+			).length;
 		const tenDonVi = (c: CuocSoan) => {
 			if (c.level === "onehub") return OKR.tenGoc;
 			if (c.level === "bo-phan") return tenBoPhan.get(c.divisionId ?? "") ?? "";
@@ -418,7 +417,7 @@ export class SoanService {
 				thieuBoiCanh,
 				lyDo: cong.lyDo,
 			};
-		const ds = await docBanNhap(this.db, cuocSoanId);
+		const ds = await docBanNhapHien(this.db, cuocSoanId);
 		await ghiHienLuc(this.db, ds, now);
 		const [cuoc, tenDich] = await Promise.all([
 			this.motCuocHien(this.db, cong.cuoc),
@@ -441,11 +440,10 @@ export class SoanService {
 			const cuocSoanId = await cuocCuaDong(tx, input.deXuatId);
 			await tx.$queryRaw`SELECT id FROM "okrCuocSoan" WHERE id = ${cuocSoanId} FOR UPDATE`;
 			const cong = await this.congCuoc(tx, userId, cuocSoanId, now);
-			if (!cong.qua) return { ok: false, lyDo: cong.lyDo };
+			if (!cong.qua) return { ok: false, lyDo: cong.lyDo, chiTiet: null };
 			if (cong.cuoc.trangThai !== "dang")
 				throw new ConflictException(T.soan.cuocKhongDang);
-			await ghiQuyet(tx, { ...input, cuocSoanId, userId, now });
-			return { ok: true };
+			return ghiQuyet(tx, { ...input, cuocSoanId, userId, now });
 		});
 	}
 }

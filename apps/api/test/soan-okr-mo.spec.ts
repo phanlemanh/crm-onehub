@@ -328,9 +328,21 @@ describe("soan-mo", () => {
 				ten: "Mục tiêu mẫu",
 			} as const;
 			await gieoDongNhap(thay, [mtMau], "nhan");
-			await gieoDongNhap(thay, [{ ...mtMau, khoa: "m2" }], "sua");
-			await gieoDongNhap(thay, [{ ...mtMau, khoa: "m3" }], "bac");
-			await gieoDongNhap(thay, [{ ...mtMau, khoa: "m4" }], "bi-loai");
+			await gieoDongNhap(
+				thay,
+				[{ ...mtMau, khoa: "m2", ten: "Mục tiêu mẫu hai" }],
+				"sua",
+			);
+			await gieoDongNhap(
+				thay,
+				[{ ...mtMau, khoa: "m3", ten: "Mục tiêu mẫu ba" }],
+				"bac",
+			);
+			await gieoDongNhap(
+				thay,
+				[{ ...mtMau, khoa: "m4", ten: "Mục tiêu mẫu bốn" }],
+				"bi-loai",
+			);
 			const vao = vaoDonVi(DON_VI.kdBac, "rest");
 			const truong = ok<SoanDanhSachCuocOutput>(
 				await goiSoan(app, "soanDanhSachCuoc", "rest", vao, cTruong),

@@ -180,7 +180,7 @@ export async function gieoDongNhap(
 	cuoc: CuocSoan,
 	dong: DongNhapGieo[],
 	trangThai: "cho" | "nhan" | "sua" | "bac" | "bi-loai" = "cho",
-	them: { maLoai?: string; giaTriCuoi?: string } = {},
+	them: { maLoai?: string; giaTriCuoi?: string; inputHash?: string } = {},
 ): Promise<string[]> {
 	const daQuyet = trangThai !== "cho" && trangThai !== "bi-loai";
 	const ids: string[] = [];
@@ -189,7 +189,7 @@ export async function gieoDongNhap(
 			data: {
 				...hangTuDongSoan(dongTuGieo(cuoc, d), cuoc.sessionId),
 				dich: Prisma.DbNull,
-				inputHash: `gieo:${cuoc.id}`,
+				inputHash: them.inputHash ?? `gieo:${cuoc.id}`,
 				nguoiYeuCau: cuoc.nguoiMoUserId,
 				nac: cuoc.nac,
 				trangThai,
@@ -197,7 +197,7 @@ export async function gieoDongNhap(
 				giaTriCuoi: them.giaTriCuoi ?? null,
 				nguoiQuyet: daQuyet ? cuoc.nguoiMoUserId : null,
 				quyetLuc: daQuyet ? new Date() : null,
-				hienLuc: trangThai === "bi-loai" ? null : new Date(),
+				hienLuc: null,
 			},
 			select: { id: true },
 		});

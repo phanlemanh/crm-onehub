@@ -592,6 +592,12 @@ export const LY_DO_LUOT = [
 	"don-vi-chua-bat",
 	"chua-co-khoa-mo-hinh",
 ] as const;
+export const LY_DO_QUYET = [
+	"don-vi-chua-bat",
+	"cha-da-bac",
+	"cha-bi-loai",
+	"khong-co-cha",
+] as const;
 export const LY_DO_DUA_VAO = [
 	"thieu-so-kr",
 	"vuot-tran-muc-tieu",
@@ -628,6 +634,7 @@ export const cuocSoan = z.object({
 const gocDongSoan = {
 	id: z.string(),
 	khoa: z.string(),
+	khoaDong: z.string(),
 	viSao: z.string(),
 	trangThai: trangThaiDeXuat,
 	maLoai: maLoaiBanNhap.nullable(),
@@ -696,7 +703,11 @@ export const soanQuyetInput = z.object({
 });
 export const soanQuyetOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true) }),
-	z.object({ ok: z.literal(false), lyDo: z.enum(LY_DO_SOAN) }),
+	z.object({
+		ok: z.literal(false),
+		lyDo: z.enum(LY_DO_QUYET),
+		chiTiet: z.string().nullable(),
+	}),
 ]);
 export const soanDuaVaoOutput = z.discriminatedUnion("ok", [
 	z.object({
@@ -788,3 +799,4 @@ export type DongSoanOutput = z.infer<typeof dongSoan>;
 export type SoanDanhSachOutput = z.infer<typeof soanDanhSachOutput>;
 export type SoanQuyetInput = z.infer<typeof soanQuyetInput>;
 export type SoanQuyetOutput = z.infer<typeof soanQuyetOutput>;
+export type LyDoQuyet = (typeof LY_DO_QUYET)[number];

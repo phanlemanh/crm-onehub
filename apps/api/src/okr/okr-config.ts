@@ -140,7 +140,13 @@ export const OKR = {
 			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
 			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
 			dongDaQuyet: "Dòng này đã được quyết rồi.",
-			chaDaBac: "Mục tiêu cha đã bị bác — không nhận KR dưới nó.",
+			dongCu: "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn.",
+			chaDaBac: (ten: string) =>
+				`Mục tiêu cha «${ten}» đã bị bác — không nhận dòng dưới nó.`,
+			chaBiLoai: (ten: string) =>
+				`Mục tiêu cha «${ten}» không qua kiểm — không nhận dòng dưới nó.`,
+			khongCoCha: (khoa: string) =>
+				`Không có Mục tiêu cha «${khoa}» trong cuộc soạn này.`,
 			canGiaTri: "Sửa cần một giá trị mới.",
 			tenSuaKhongHop: (tran: number) =>
 				`Tên sau khi sửa quá ngắn hoặc dài quá ${tran} ký tự.`,

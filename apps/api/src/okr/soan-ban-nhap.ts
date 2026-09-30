@@ -1,5 +1,6 @@
 import type { Db, Prisma } from "@crm/db";
 import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
+import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
 import {
 	type DongSoan,
 	dongKrMoi,
@@ -9,19 +10,33 @@ import {
 	TRO_LY_OKR_TRAN,
 	trangThaiDeXuat,
 } from "@crm/validation/okr-tro-ly";
-import { BadRequestException, NotFoundException } from "@nestjs/common";
+import {
+	BadRequestException,
+	ConflictException,
+	NotFoundException,
+} from "@nestjs/common";
 import { z } from "zod";
-import type { DongSoanOutput, SoanQuyetInput } from "./okr.contracts";
+import type {
+	DongSoanOutput,
+	SoanQuyetInput,
+	SoanQuyetOutput,
+} from "./okr.contracts";
 import { OKR } from "./okr-config";
 
 type Tx = Prisma.TransactionClient;
 type DbHoacTx = Db | Tx;
 type HangNhap = Prisma.OkrDeXuatModel;
 
-export type DongDoc = { hang: HangNhap; dong: DongSoan };
+export type DongDoc = { hang: HangNhap; dong: DongSoan; khoaDong: string };
+
+type MucTieuMoi = Extract<DongSoan, { loai: "muc-tieu-moi" }>;
+type CanChinhMoi = Extract<DongSoan, { loai: "can-chinh-moi" }>;
+type DongMucTieu = DongDoc & { dong: MucTieuMoi };
+type TuChoiCha = Extract<SoanQuyetOutput, { ok: false }>;
 
 const T = OKR.thongDiep.soan;
 const maLoai = z.enum(MA_LOAI_BAN_NHAP).nullable();
+const DA_QUYET: ReadonlySet<string> = new Set(["nhan", "sua", "bac"]);
 const TEN_SUA = {
 	"muc-tieu-moi": {
 		khuon: dongMucTieuMoi.shape.ten,
@@ -30,29 +45,69 @@ const TEN_SUA = {
 	"kr-moi": { khuon: dongKrMoi.shape.ten, tran: TRO_LY_OKR_TRAN.chu.tenKr },
 } as const;
 
-type CanChinhMoi = Extract<DongSoan, { loai: "can-chinh-moi" }>;
-
 const dichCua = (d: CanChinhMoi) =>
 	d.targetObjectiveId ?? d.targetKeyResultId ?? "";
 
-export async function docBanNhap(
+const laMucTieu = (d: DongDoc): d is DongMucTieu =>
+	d.dong.loai === "muc-tieu-moi";
+
+const daQuyet = (d: DongDoc) => DA_QUYET.has(d.hang.trangThai);
+
+function docTuHang(hang: HangNhap): DongDoc {
+	const dong = dongSoanTuHang(hang);
+	return { hang, dong, khoaDong: khoaDong(dong) };
+}
+
+export async function docMoiDongCuaCuoc(
 	client: DbHoacTx,
-	cuocSoanId: string,
-): Promise<DongDoc[]> {
+	cuocSoanIds: string[],
+): Promise<ReadonlyMap<string, DongDoc[]>> {
 	const hang = await client.okrDeXuat.findMany({
 		where: {
-			cuocSoanId,
+			cuocSoanId: { in: cuocSoanIds },
 			loai: { in: [...LOAI_DONG_SOAN] },
-			trangThai: { not: "bi-loai" },
 		},
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 	});
-	return hang.map((h) => ({ hang: h, dong: dongSoanTuHang(h) }));
+	const theoCuoc = new Map<string, DongDoc[]>(
+		cuocSoanIds.map((id) => [id, []]),
+	);
+	for (const h of hang) theoCuoc.get(h.cuocSoanId ?? "")?.push(docTuHang(h));
+	return theoCuoc;
+}
+
+export async function docMoiDong(
+	client: DbHoacTx,
+	cuocSoanId: string,
+): Promise<DongDoc[]> {
+	return (await docMoiDongCuaCuoc(client, [cuocSoanId])).get(cuocSoanId) ?? [];
+}
+
+export function tapHien(ds: readonly DongDoc[]): DongDoc[] {
+	const lanMoiNhat = ds.at(-1)?.hang.inputHash;
+	const ungVien = ds.filter(
+		(d) =>
+			d.hang.trangThai !== "bi-loai" &&
+			(daQuyet(d) || d.hang.inputHash === lanMoiNhat),
+	);
+	const thang = new Map<string, DongDoc>();
+	for (const d of ungVien) {
+		const cu = thang.get(d.khoaDong);
+		if (!cu || daQuyet(d) || !daQuyet(cu)) thang.set(d.khoaDong, d);
+	}
+	return ungVien.filter((d) => thang.get(d.khoaDong) === d);
+}
+
+export async function docBanNhapHien(
+	client: DbHoacTx,
+	cuocSoanId: string,
+): Promise<DongDoc[]> {
+	return tapHien(await docMoiDong(client, cuocSoanId));
 }
 
 export async function ghiHienLuc(
 	client: DbHoacTx,
-	ds: DongDoc[],
+	ds: readonly DongDoc[],
 	now: Date,
 ): Promise<void> {
 	const lanDau = ds
@@ -67,7 +122,7 @@ export async function ghiHienLuc(
 
 export async function tenDichCua(
 	client: DbHoacTx,
-	ds: DongDoc[],
+	ds: readonly DongDoc[],
 ): Promise<ReadonlyMap<string, string>> {
 	const ids = [
 		...new Set(
@@ -91,12 +146,13 @@ export async function tenDichCua(
 }
 
 export function dongHienTu(
-	{ hang, dong }: DongDoc,
+	{ hang, dong, khoaDong: khoa }: DongDoc,
 	tenDich: ReadonlyMap<string, string>,
 ): DongSoanOutput {
 	const goc = {
 		id: hang.id,
 		khoa: dong.khoa,
+		khoaDong: khoa,
 		viSao: hang.lyDo,
 		trangThai: trangThaiDeXuat.parse(hang.trangThai),
 		maLoai: maLoai.parse(hang.maLoai),
@@ -153,28 +209,60 @@ function giaTriSua(dong: DongSoan, giaTri: string | undefined): string {
 	return r.data;
 }
 
-const chaCua = (ds: DongDoc[], chaKhoa: string) =>
-	ds.findLast((d) => d.dong.loai === "muc-tieu-moi" && d.dong.khoa === chaKhoa);
+function chaTuChoi(
+	ds: readonly DongDoc[],
+	con: DongDoc,
+	chaKhoa: string,
+): TuChoiCha | null {
+	const cung = ds.filter(laMucTieu).filter((d) => d.dong.khoa === chaKhoa);
+	const cha =
+		cung.findLast((d) => d.hang.inputHash === con.hang.inputHash) ??
+		cung.at(-1);
+	if (!cha)
+		return {
+			ok: false,
+			lyDo: "khong-co-cha",
+			chiTiet: T.khongCoCha(chaKhoa),
+		};
+	if (cha.hang.trangThai === "bi-loai")
+		return {
+			ok: false,
+			lyDo: "cha-bi-loai",
+			chiTiet: T.chaBiLoai(cha.dong.ten),
+		};
+	if (cha.hang.trangThai === "bac")
+		return {
+			ok: false,
+			lyDo: "cha-da-bac",
+			chiTiet: T.chaDaBac(cha.dong.ten),
+		};
+	return null;
+}
 
 export async function ghiQuyet(
 	tx: Tx,
 	v: SoanQuyetInput & { cuocSoanId: string; userId: string; now: Date },
-): Promise<void> {
-	const ds = await docBanNhap(tx, v.cuocSoanId);
-	const muc = ds.find((d) => d.hang.id === v.deXuatId);
+): Promise<SoanQuyetOutput> {
+	const ds = await docMoiDong(tx, v.cuocSoanId);
+	const muc = ds.find(
+		(d) => d.hang.id === v.deXuatId && d.hang.trangThai !== "bi-loai",
+	);
 	if (!muc) throw new NotFoundException(T.khongCoDong(v.deXuatId));
+	const hien = tapHien(ds);
+	if (!hien.includes(muc)) throw new ConflictException(T.dongCu);
 	const { dong } = muc;
 	const giaTriCuoi = v.quyet === "sua" ? giaTriSua(dong, v.giaTriCuoi) : null;
-	if (v.quyet !== "bac" && dong.loai !== "muc-tieu-moi")
-		if (chaCua(ds, dong.chaKhoa)?.hang.trangThai === "bac")
-			throw new BadRequestException(T.chaDaBac);
+	if (v.quyet !== "bac" && dong.loai !== "muc-tieu-moi") {
+		const tuChoi = chaTuChoi(ds, muc, dong.chaKhoa);
+		if (tuChoi) return tuChoi;
+	}
 	const quyetBoi = { nguoiQuyet: v.userId, quyetLuc: v.now };
 	await tx.okrDeXuat.update({
 		where: { id: v.deXuatId },
 		data: { trangThai: v.quyet, giaTriCuoi, ...quyetBoi },
 	});
-	if (v.quyet !== "bac" || dong.loai !== "muc-tieu-moi") return;
-	const con = ds
+	if (v.quyet !== "bac" || dong.loai !== "muc-tieu-moi") return { ok: true };
+	const con = hien
 		.filter(
 			(d) =>
 				d.dong.loai !== "muc-tieu-moi" &&
@@ -182,9 +270,10 @@ export async function ghiQuyet(
 				d.hang.trangThai !== "bac",
 		)
 		.map((d) => d.hang.id);
-	if (con.length === 0) return;
-	await tx.okrDeXuat.updateMany({
-		where: { id: { in: con } },
-		data: { trangThai: "bac", giaTriCuoi: null, ...quyetBoi },
-	});
+	if (con.length > 0)
+		await tx.okrDeXuat.updateMany({
+			where: { id: { in: con } },
+			data: { trangThai: "bac", giaTriCuoi: null, ...quyetBoi },
+		});
+	return { ok: true };
 }
