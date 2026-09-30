@@ -128,6 +128,7 @@ const KHONG_DAU = new Set([
 	"hop.onehub",
 	"vietTruoc.tenChuDe",
 	"banNhap.kr",
+	"loaiDong.kr-moi",
 	"cuoc.xem",
 ]);
 
@@ -296,6 +297,8 @@ const GHIM_OKR_SOAN = {
 		"Mỗi chu kỳ có 1 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
 		"Mỗi chu kỳ có 12 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
 	],
+	"okr-soan:soDo.luot": ["1 lượt", "12 lượt"],
+	"okr-soan:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
 } satisfies Record<string, [string, string]>;
 
 const GHIM = {

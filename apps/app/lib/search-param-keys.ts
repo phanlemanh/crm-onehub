@@ -70,6 +70,7 @@ export const SEARCH_PARAM = {
 		moHoiY: "moHoiY",
 		cuocSoan: "cuocSoan",
 		dsCuoc: "dsCuoc",
+		cuocSoanAn: "cuocSoanAn",
 	},
 	taiLieu: {
 		tab: "tabTaiLieu",

@@ -300,6 +300,8 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.soanSanSang.queryKey(),
 					trpc.okr.soanDanhSach.queryKey(),
 					trpc.okr.soanDanhSachCuoc.queryKey(),
+					trpc.okr.soanSoDo.queryKey(),
+					trpc.okr.soanAn.queryKey(),
 				],
 				options,
 			),
