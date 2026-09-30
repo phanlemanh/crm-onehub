@@ -1,11 +1,23 @@
 import { gateway, type LanguageModel } from "ai";
 
-export type XuongModelZdr = {
-	model: string | LanguageModel;
+export type ModelCoSan = Exclude<LanguageModel, string>;
+
+export type TuyChonZdr = {
 	tags: readonly string[];
 	tranRaMoiLoiGoi: number;
 };
 
+export type XuongModelZdr = TuyChonZdr & {
+	modelId: string;
+};
+
+export function bocModelZdr(
+	model: ModelCoSan,
+	_tuyChon: TuyChonZdr,
+): LanguageModel {
+	return model;
+}
+
 export function xuongModelZdr(v: XuongModelZdr): LanguageModel {
-	return typeof v.model === "string" ? gateway(v.model) : v.model;
+	return bocModelZdr(gateway(v.modelId), v);
 }

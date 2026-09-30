@@ -11,7 +11,7 @@ void db.$queryRaw`select 1`.catch((loi: Error) =>
 
 export default defineAgent({
 	model: xuongModelZdr({
-		model: TRO_LY_OKR_SOAN.model,
+		modelId: TRO_LY_OKR_SOAN.model,
 		tags: TRO_LY_OKR_SOAN.tags,
 		tranRaMoiLoiGoi: TRO_LY_OKR_SOAN.tranRaMoiLoiGoi,
 	}),

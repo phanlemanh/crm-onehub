@@ -1,8 +1,14 @@
-import { basename, resolve } from "node:path";
-import { treeSlug } from "@crm/db/measure-database";
-import { TRO_LY_OKR_SOAN } from "./config";
+import {
+	currentTree,
+	MeasureDatabaseError,
+	treeSlug,
+} from "@crm/db/measure-database";
 
-export function dauMocCay(): string {
-	const ten = process.env[TRO_LY_OKR_SOAN.env.tenCay]?.trim();
-	return treeSlug(ten || basename(resolve(process.cwd(), "..", "..")));
+export function dauMocCay(cwd = process.cwd()): string | null {
+	try {
+		return treeSlug(currentTree(cwd));
+	} catch (loi) {
+		if (loi instanceof MeasureDatabaseError) return null;
+		throw loi;
+	}
 }
