@@ -240,6 +240,13 @@ mock.module("@/lib/trpc/client", () => ({
 			countByUnit: thuTuc("countByUnit", docDem),
 			danhSach: thuTuc("danhSach", docDanhSach),
 			cayCanChinh: thuTuc("cayCanChinh", docCayCanChinh),
+			soanSanSang: thuTuc("soanSanSang", () => ({
+				bat: false,
+				lyDo: "don-vi-chua-bat",
+			})),
+			soanMo: {
+				mutationOptions: () => ({ mutationFn: async () => null }),
+			},
 		},
 	}),
 }));
