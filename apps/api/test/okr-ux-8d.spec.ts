@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { idMau } from "../scripts/okr-mau/nap";
@@ -513,7 +514,8 @@ describe("nguoi-duyet", () => {
 			ok(await lam("okr.guiDuyet", { id: PB }, "chu"), "gui");
 			const sau = await docMt(PB, "chu");
 			expect(sau.status).toBe("cho-duyet");
-			expect(sau.choDuyet?.nguoiDuyet).toEqual(truoc ?? "rong");
+			expect(truoc).not.toBeNull();
+			expect(sau.choDuyet?.nguoiDuyet ?? null).toEqual(truoc);
 			expect(sau.nguoiDuyetDuKien).toBeNull();
 		},
 		CHO_DB,
@@ -573,6 +575,235 @@ describe("tra-lai-truoc", () => {
 				lan3: [L2, nguoi(NGUOI.thu)],
 				vet: [L1, L2].sort(),
 			});
+		},
+		CHO_DB,
+	);
+});
+
+describe("luu-tru", () => {
+	const pb = (k: string) => idMau("pb", `u8d-${k}`);
+	const nguoiMoi = (k: string) => idMau("nguoi", `u8d-${k}`);
+	const KHUON = idMau("khuon", "u8d-e");
+	const KY_VONG: Record<string, number> = { a: 2, b: 1, c: 1, e: 1, d: 0 };
+
+	beforeAll(async () => {
+		for (const [i, k] of ["a", "b", "c", "e", "d"].entries())
+			await db.department.create({
+				data: {
+					id: pb(k),
+					name: `Phòng u8d ${k.toUpperCase()}`,
+					position: 900 + i,
+					divisionId: KHOI_HO_TRO_ID,
+				},
+			});
+		for (const k of ["a", "b", "d"]) {
+			await db.user.create({
+				data: {
+					id: nguoiMoi(k),
+					name: `Người u8d ${k}`,
+					email: `${nguoiMoi(k)}@thu.test`,
+				},
+			});
+			await db.member.create({
+				data: {
+					id: `m-${nguoiMoi(k)}`,
+					organizationId: WORKSPACE_ID,
+					userId: nguoiMoi(k),
+					role: "member",
+					createdAt: new Date(),
+				},
+			});
+		}
+		await db.orgPlacement.createMany({
+			data: [
+				{ userId: nguoiMoi("a"), primaryDepartmentId: pb("a") },
+				{ userId: nguoiMoi("b"), primaryDepartmentId: pb("b") },
+				{ userId: nguoiMoi("d"), primaryDepartmentId: null },
+			],
+		});
+		await db.orgSecondaryDepartment.create({
+			data: { userId: nguoiMoi("d"), departmentId: pb("d") },
+		});
+		for (const k of ["a", "c"])
+			await taoNhap({
+				id: idMau("mt", `u8d-luu-${k}`),
+				level: "phong-ban",
+				chu: NGUOI.chu,
+				departmentId: pb(k),
+			});
+		await db.onboardingTemplate.create({
+			data: {
+				id: KHUON,
+				name: "Khuôn u8d E",
+				steps: [
+					{
+						label: "Bước u8d",
+						departmentId: pb("e"),
+						position: 0,
+						offsetDays: 0,
+					},
+				],
+			},
+		});
+	}, CHO_DB);
+
+	afterAll(async () => {
+		await db.onboardingTemplate.deleteMany({ where: { id: KHUON } });
+		await db.okrObjective.deleteMany({
+			where: { id: { in: ["a", "c"].map((k) => idMau("mt", `u8d-luu-${k}`)) } },
+		});
+		await db.orgSecondaryDepartment.deleteMany({
+			where: { userId: { in: ["a", "b", "d"].map(nguoiMoi) } },
+		});
+		await db.orgPlacement.deleteMany({
+			where: { userId: { in: ["a", "b", "d"].map(nguoiMoi) } },
+		});
+		await db.member.deleteMany({
+			where: { userId: { in: ["a", "b", "d"].map(nguoiMoi) } },
+		});
+		await db.user.deleteMany({
+			where: { id: { in: ["a", "b", "d"].map(nguoiMoi) } },
+		});
+		await db.department.deleteMany({
+			where: { id: { in: ["a", "b", "c", "e", "d"].map(pb) } },
+		});
+	}, CHO_DB);
+
+	test(
+		"mọi phòng ban sống: lý do xem trước khớp việc máy chủ từ chối hay cho lưu trữ; năm phòng gieo đúng số lý do",
+		async () => {
+			const cay = ok<{
+				divisions: { departments: { id: string }[] }[];
+				chuaXep: { id: string }[];
+			}>(await hoi("org.tree", {}, phien.qt ?? ""), "org.tree");
+			const ids = [
+				...cay.divisions.flatMap((b) => b.departments.map((p) => p.id)),
+				...cay.chuaXep.map((p) => p.id),
+			];
+			const lech: string[] = [];
+			const soLyDo: Record<string, number> = {};
+			for (const id of ids) {
+				const { lyDo } = ok<{ lyDo: string[] }>(
+					await hoi("org.luuTruXemTruoc", { id }, phien.qt ?? ""),
+					`xem truoc ${id}`,
+				);
+				const luuTru = await lam("org.archiveDepartment", { id }, "qt");
+				if (luuTru.status === 200)
+					ok(
+						await lam("org.restoreDepartment", { id }, "qt"),
+						`khoi phuc ${id}`,
+					);
+				const mayChu = luuTru.status === 200 ? [] : [luuTru.loi];
+				if (JSON.stringify(lyDo.slice(0, 1)) !== JSON.stringify(mayChu))
+					lech.push(
+						`${id}: xem truoc ${JSON.stringify(lyDo)} != may chu ${JSON.stringify(mayChu)}`,
+					);
+				for (const k of Object.keys(KY_VONG))
+					if (id === pb(k)) soLyDo[k] = lyDo.length;
+			}
+			expect(lech).toEqual([]);
+			expect(soLyDo).toEqual(KY_VONG);
+		},
+		CHO_DB,
+	);
+});
+
+describe("chuyen-xem-truoc", () => {
+	const KD_NAM = idMau("pb", "kd-nam");
+	const mtChuyen = ["1", "2", "3"].map((k) => idMau("mt", `u8d-chuyen-${k}`));
+
+	beforeAll(async () => {
+		for (const id of mtChuyen)
+			await taoNhap({
+				id,
+				level: "phong-ban",
+				chu: NGUOI.chu,
+				departmentId: PHAP_CHE,
+			});
+	}, CHO_DB);
+
+	afterAll(async () => {
+		await lam("okr.setProgram", { objectiveCap: 5, capMode: "canh-bao" }, "qt");
+		await db.okrObjective.deleteMany({ where: { id: { in: mtChuyen } } });
+	}, CHO_DB);
+
+	test(
+		"bốn ca dưới, bằng, vượt (cảnh báo), vượt (chặn): canhBao xem trước bằng canhBao của lệnh chuyển thật; xem trước không ghi",
+		async () => {
+			const dangCo = await db.okrObjective.count({
+				where: {
+					cycleId: KY,
+					level: "phong-ban",
+					departmentId: KD_NAM,
+					status: { not: "da-bo" },
+				},
+			});
+			const tran = dangCo + 2;
+			const ca = [
+				{ ten: "duoi", so: 1, cheDo: "canh-bao" },
+				{ ten: "bang", so: 2, cheDo: "canh-bao" },
+				{ ten: "vuot", so: 3, cheDo: "canh-bao" },
+				{ ten: "vuot-chan", so: 3, cheDo: "chan" },
+			] as const;
+			const ra: string[] = [];
+			for (const c of ca) {
+				ok(
+					await lam(
+						"okr.setProgram",
+						{ objectiveCap: tran, capMode: c.cheDo },
+						"qt",
+					),
+					`tran ${c.ten}`,
+				);
+				const vao = {
+					objectiveIds: mtChuyen.slice(0, c.so),
+					denDonVi: { level: "phong-ban", id: KD_NAM },
+				};
+				const demTruoc = [
+					await db.okrObjective.count({ where: { departmentId: KD_NAM } }),
+					await db.okrTrail.count(),
+				];
+				const xem = ok<{ canhBao: string | null }>(
+					await hoi("okr.chuyenDonViXemTruoc", vao, phien.qt ?? ""),
+					`xem ${c.ten}`,
+				);
+				const demSau = [
+					await db.okrObjective.count({ where: { departmentId: KD_NAM } }),
+					await db.okrTrail.count(),
+				];
+				expect({ ca: c.ten, dem: demSau }).toEqual({
+					ca: c.ten,
+					dem: demTruoc,
+				});
+				const that = ok<{ canhBao: string | null }>(
+					await lam("okr.chuyenDonVi", vao, "qt"),
+					`chuyen ${c.ten}`,
+				);
+				ok(
+					await lam(
+						"okr.chuyenDonVi",
+						{
+							objectiveIds: vao.objectiveIds,
+							denDonVi: { level: "phong-ban", id: PHAP_CHE },
+						},
+						"qt",
+					),
+					`tra ve ${c.ten}`,
+				);
+				ra.push(
+					`${c.ten}: xem ${xem.canhBao === null ? "null" : "canh bao"}; ${
+						xem.canhBao === that.canhBao
+							? "khop"
+							: `lech ${xem.canhBao} != ${that.canhBao}`
+					}`,
+				);
+			}
+			expect(ra).toEqual([
+				"duoi: xem null; khop",
+				"bang: xem null; khop",
+				"vuot: xem canh bao; khop",
+				"vuot-chan: xem canh bao; khop",
+			]);
 		},
 		CHO_DB,
 	);

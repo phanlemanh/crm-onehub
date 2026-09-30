@@ -55,6 +55,7 @@ import {
 	byUnitOutput,
 	capNhatTuanOutput,
 	chuyenDonViOutput,
+	chuyenDonViXemTruocOutput,
 	commentsOutput,
 	countByUnitInput,
 	createCycleInput,
@@ -554,6 +555,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof traLaiInput>,
 	) {
 		return this.duyet.traLaiMucTieu(ctx.user.id, input);
+	}
+
+	@Query({
+		input: chuyenDonViInput,
+		output: chuyenDonViXemTruocOutput,
+		meta: restMeta("POST", "/okr/objectives/move-unit/check", TAG),
+	})
+	chuyenDonViXemTruoc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof chuyenDonViInput>,
+	) {
+		return this.taiCoCau.chuyenDonViXemTruoc(ctx.user.id, input);
 	}
 
 	@Mutation({

@@ -25,6 +25,7 @@ import {
 	orgImportApplyOutput,
 	orgImportInput,
 	orgImportPreviewOutput,
+	orgLuuTruXemTruocOutput,
 	orgOkOutput,
 	orgPlacementInput,
 	orgRenameInput,
@@ -152,6 +153,19 @@ export class ToChucRouter {
 	) {
 		await this.toChuc.yeuCauQuanTri(ctx.user.id);
 		return this.toChuc.renameDepartment(input);
+	}
+
+	@Query({
+		input: orgIdInput,
+		output: orgLuuTruXemTruocOutput,
+		meta: restMeta("GET", "/org/departments/{id}/archive-check", TAG),
+	})
+	async luuTruXemTruoc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.luuTruXemTruoc(input);
 	}
 
 	@Mutation({

@@ -92,7 +92,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.u8d_nguoi_duyet
     paths: [apps/api/src/okr/**, apps/api/test/okr-ux-8d.spec.ts]
-    expected: "exit 0; ô duyệt bật, bảng viết trước 4 ca theo cấp (phòng ban → trưởng bộ phận; bộ phận → quản trị; cá nhân → trưởng phòng chính; cá nhân của trưởng phòng → trưởng bộ phận): objective().nguoiDuyetDuKien.id toEqual người trong bảng, và sau guiDuyet toEqual choDuyet.nguoiDuyet.id của cùng mục tiêu. null ở: ô duyệt tắt; người đọc không có quyen.guiDuyet; mục tiêu cong-bo. CHIỀU ĐỎ: bản sao suy người duyệt bằng trưởng phòng của mục tiêu → ca phòng ban đỏ in id sai."
+    expected: "exit 0; ô duyệt bật, bảng viết trước 4 ca theo cấp (phòng ban → trưởng bộ phận; bộ phận → quản trị; cá nhân → trưởng phòng chính; cá nhân của trưởng phòng → trưởng bộ phận): objective().nguoiDuyetDuKien toEqual người trong bảng ({ ten } lấy từ bảng user, hay «quan-tri»), và sau guiDuyet choDuyet.nguoiDuyet toEqual giá trị đọc trước khi gửi. null ở: ô duyệt tắt; người đọc không có quyen.guiDuyet; mục tiêu cong-bo. CHIỀU ĐỎ: bản sao suy người duyệt bằng trưởng phòng của mục tiêu → ca phòng ban đỏ in id sai."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E12

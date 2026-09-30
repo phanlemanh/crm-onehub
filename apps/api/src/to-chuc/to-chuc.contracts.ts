@@ -103,6 +103,7 @@ export const orgTreeOutput = z.object({
 });
 export const orgAccessOutput = z.object({ canManage: z.boolean() });
 export const orgOkOutput = z.object({ id: z.string() });
+export const orgLuuTruXemTruocOutput = z.object({ lyDo: z.array(z.string()) });
 export const orgDepartmentArchiveOutput = orgOkOutput.extend({
 	purgeable: z.boolean(),
 });

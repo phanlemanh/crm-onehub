@@ -387,6 +387,12 @@ export const datHienThiOutput = z.object({
 	hienThi: z.enum(MUC_HIEN_THI),
 	nguoiXem: z.array(z.string()),
 });
+export const chuyenDonViXemTruocOutput = z.object({
+	canhBao: z.string().nullable(),
+});
+export type ChuyenDonViXemTruocOutput = z.infer<
+	typeof chuyenDonViXemTruocOutput
+>;
 export const chuyenDonViOutput = z.object({
 	daChuyen: z.number(),
 	canhBao: z.string().nullable(),
