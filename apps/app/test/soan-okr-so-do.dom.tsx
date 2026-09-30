@@ -26,6 +26,8 @@ type Vao = { cycleId?: string; cuocSoanId?: string } | undefined;
 let rong = false;
 let loiSoDo = false;
 let loiAn = false;
+let loiChuKy = false;
+let khongChuKy = false;
 let quanTri = true;
 let choSoDo: Promise<void> = Promise.resolve();
 let daDoc: { duong: string; vao: Vao }[] = [];
@@ -231,7 +233,13 @@ const CHU_KY = {
 };
 
 const DU_LIEU = new Map<string, (vao: Vao) => Promise<unknown>>([
-	["okr.cycles", async () => CHU_KY],
+	[
+		"okr.cycles",
+		async () => {
+			if (loiChuKy) throw new Error("chu ky hong");
+			return khongChuKy ? { cycles: [], currentId: null } : CHU_KY;
+		},
+	],
 	["okr.program", async () => ({ canManage: quanTri })],
 	[
 		"okr.soanSoDo",
@@ -371,6 +379,8 @@ beforeEach(() => {
 	rong = false;
 	loiSoDo = false;
 	loiAn = false;
+	loiChuKy = false;
+	khongChuKy = false;
 	quanTri = true;
 	choSoDo = Promise.resolve();
 	daDoc = [];
@@ -516,6 +526,43 @@ describe("trang thai", () => {
 	});
 });
 
+describe("chu ky loi", () => {
+	test("chu kỳ lỗi, Thử lại hồi về không có chu kỳ: hiện rỗng, không kẹt ở lỗi", async () => {
+		loiChuKy = true;
+		await mo();
+		await cho(
+			() => q('[data-the="soan-so-do"] [data-trang-thai="loi"]') !== null,
+			"the loi",
+		);
+		loiChuKy = false;
+		khongChuKy = true;
+		await bam(q('[data-the="soan-so-do"] [data-nut="thu-lai"]'));
+		await cho(
+			() => q('[data-the="soan-so-do"] [data-trang-thai="rong"]') !== null,
+			"ket o loi",
+		);
+		expect(chuCua('[data-trang-thai="rong"] [data-slot="empty-title"]')).toBe(
+			m.soDo.rong,
+		);
+		expect(goiCua("okr.soanSoDo")).toHaveLength(0);
+	});
+
+	test("chu kỳ lỗi, Thử lại hồi về có chu kỳ: đọc số đo và hiện bảng", async () => {
+		loiChuKy = true;
+		await mo();
+		await cho(
+			() => q('[data-the="soan-so-do"] [data-trang-thai="loi"]') !== null,
+			"the loi",
+		);
+		loiChuKy = false;
+		await bam(q('[data-the="soan-so-do"] [data-nut="thu-lai"]'));
+		await cho(coSo, "tai lai xong");
+		expect(goiCua("okr.soanSoDo").map((g) => g.vao)).toEqual([
+			{ cycleId: "q1-2027" },
+		]);
+	});
+});
+
 describe("cuoc gan day", () => {
 	test("bảng cuộc: cả hai nấc, mới nhất trước, tên đơn vị không bị dịch", async () => {
 		await mo();
@@ -614,6 +661,9 @@ describe("ngan", () => {
 		expect(chuCua('[data-ngan-cuoc] [data-slot="empty-title"]')).toBe(
 			m.soDo.loiCuoc,
 		);
+		const tieuDe = q('[data-ngan-cuoc] [data-slot="sheet-title"]');
+		expect(tieuDe?.textContent, "tieu de ngan rong").toBe(m.soDo.nganTieuDe);
+		expect(tieuDe?.getAttribute("translate")).toBeNull();
 		const truoc = goiCua("okr.soanAn").length;
 		loiAn = false;
 		await bam(q('[data-ngan-cuoc] [data-nut="thu-lai"]'));
@@ -625,7 +675,7 @@ describe("ngan", () => {
 describe("quyen", () => {
 	test("không phải quản trị: không có thẻ, không hỏi số đo", async () => {
 		quanTri = false;
-		await mo("", <KhoiTroLyOkr />);
+		await mo("?cuocSoanAn=c-an-1", <KhoiTroLyOkr />);
 		await cho(() => goiCua("okr.program").length > 0, "doc quyen");
 		await act(async () => {
 			await new Promise((r) => setTimeout(r, 0));

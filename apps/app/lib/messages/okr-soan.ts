@@ -217,6 +217,7 @@ const vi = {
 			an: "Bản nháp cuối, kể cả dòng bị loại — cuộc ở chế độ ẩn nên không ai trong đơn vị thấy.",
 		} satisfies Record<Nac, string>,
 		banNhapCuoi: "Bản nháp cuối",
+		nganTieuDe: "Cuộc soạn",
 		loaiDong: {
 			"muc-tieu-moi": "Mục tiêu",
 			"kr-moi": "KR",
@@ -467,6 +468,7 @@ const en: OkrSoanMessages = {
 			an: "The last draft, including removed lines — the session is in hidden mode, so nobody in the unit sees it.",
 		},
 		banNhapCuoi: "Last draft",
+		nganTieuDe: "Drafting session",
 		loaiDong: {
 			"muc-tieu-moi": "Objective",
 			"kr-moi": "KR",

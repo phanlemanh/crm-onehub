@@ -53,6 +53,7 @@ import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { ngayThangVn } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { SOAN_UI } from "../../okr/soan/cau-hinh";
 import { parseCuocSoan, THAM_SO_CUOC_SOAN } from "./okr-settings-search-params";
 
 type SoDo = RouterOutputs["okr"]["soanSoDo"];
@@ -66,8 +67,6 @@ type ChuKy = RouterOutputs["okr"]["cycles"]["cycles"][number];
 type MaLoai = SoNac["theoMa"][number]["maLoai"];
 
 const PHA_SOAN = "lap-ke-hoach" satisfies ChuKy["phase"];
-const GIAY_MS = 1_000;
-const CHU_SO_TIEN_LE = 3;
 const HANG_CHO = ["mot", "hai", "ba", "bon", "nam", "sau"];
 
 type DinhDang = (n: SoNac, locale: Locale) => ReactNode;
@@ -103,7 +102,7 @@ function dinhDangGiay(ms: number, locale: Locale): string {
 		style: "unit",
 		unit: "second",
 		maximumFractionDigits: 1,
-	}).format(ms / GIAY_MS);
+	}).format(ms / SOAN_UI.soDo.giayMs);
 }
 
 function dinhDangTien(usd: number, locale: Locale): string {
@@ -111,7 +110,7 @@ function dinhDangTien(usd: number, locale: Locale): string {
 		style: "currency",
 		currency: "USD",
 		minimumFractionDigits: 2,
-		maximumFractionDigits: CHU_SO_TIEN_LE,
+		maximumFractionDigits: SOAN_UI.soDo.chuSoTienLe,
 	}).format(usd);
 }
 
@@ -273,7 +272,7 @@ function chuDong(d: DongAn): string {
 }
 
 function DongNgan({ d, m }: { d: DongAn; m: OkrSoanMessages }) {
-	const biLoai = d.trangThai === "bi-loai" && d.maLoai !== null;
+	const maBiLoai = d.trangThai === "bi-loai" ? d.maLoai : null;
 	return (
 		<Item size="sm" variant="outline" data-dong={d.id}>
 			<ItemContent>
@@ -282,10 +281,10 @@ function DongNgan({ d, m }: { d: DongAn; m: OkrSoanMessages }) {
 				<span className="flex items-center gap-2">
 					<StatusIndicator
 						size="sm"
-						tone={biLoai ? "warning" : "neutral"}
+						tone={maBiLoai ? "warning" : "neutral"}
 						label={
-							biLoai && d.maLoai
-								? m.soDo.biLoaiMa(m.soDo.maLoai[d.maLoai])
+							maBiLoai
+								? m.soDo.biLoaiMa(m.soDo.maLoai[maBiLoai])
 								: m.soDo.trangThai[d.trangThai]
 						}
 						data-trang-thai-dong
@@ -383,56 +382,62 @@ function NganCuoc({
 		>
 			<SheetContent side="right" size="md" data-ngan-cuoc={cuocSoanId ?? ""}>
 				<SheetHeader>
-					<SheetTitle translate="no">{du?.cuoc.tenDonVi ?? ""}</SheetTitle>
+					{du ? (
+						<SheetTitle translate="no">{du.cuoc.tenDonVi}</SheetTitle>
+					) : (
+						<SheetTitle>{m.soDo.nganTieuDe}</SheetTitle>
+					)}
 					<SheetDescription>
 						{du
 							? `${m.soDo.nac[du.cuoc.nac]} · ${m.soDo.luot(String(du.cuoc.soLuot))} · ${dinhDangTien(du.cuoc.chiPhiUsd, locale)} · ${ngayThangVn(new Date(du.cuoc.moLuc))}`
 							: null}
 					</SheetDescription>
 				</SheetHeader>
-				<SheetBody className="flex flex-col gap-4 pb-4">
-					{an.isError ? (
-						<Empty data-trang-thai="loi">
-							<EmptyHeader>
-								<EmptyTitle>{m.soDo.loiCuoc}</EmptyTitle>
-							</EmptyHeader>
-							<EmptyContent>
-								<Button
-									variant="outline"
-									size="sm"
-									data-nut="thu-lai"
-									onClick={() => void an.refetch()}
-								>
-									<Icon icon={Renew} data-icon="inline-start" />
-									{m.soDo.thuLai}
-								</Button>
-							</EmptyContent>
-						</Empty>
-					) : !du ? (
-						<div role="status" aria-busy="true">
-							<Spinner />
-						</div>
-					) : (
-						<>
-							<p className="text-muted-foreground" data-ghi-chu>
-								{m.soDo.ghiChu[du.cuoc.nac]}
-							</p>
-							{du.dong.length === 0 ? (
-								<Empty data-trang-thai="cuoc-rong">
-									<EmptyHeader>
-										<EmptyTitle>{m.soDo.khongDong}</EmptyTitle>
-									</EmptyHeader>
-								</Empty>
-							) : (
-								<ItemGroup aria-label={m.soDo.banNhapCuoi}>
-									{du.dong.map((d) => (
-										<DongNgan key={d.id} d={d} m={m} />
-									))}
-								</ItemGroup>
-							)}
-							<BangDaCat daCat={du.daCat} m={m} />
-						</>
-					)}
+				<SheetBody>
+					<div className="flex flex-col gap-4 pb-4">
+						{an.isError ? (
+							<Empty data-trang-thai="loi">
+								<EmptyHeader>
+									<EmptyTitle>{m.soDo.loiCuoc}</EmptyTitle>
+								</EmptyHeader>
+								<EmptyContent>
+									<Button
+										variant="outline"
+										size="sm"
+										data-nut="thu-lai"
+										onClick={() => void an.refetch()}
+									>
+										<Icon icon={Renew} data-icon="inline-start" />
+										{m.soDo.thuLai}
+									</Button>
+								</EmptyContent>
+							</Empty>
+						) : !du ? (
+							<div role="status" aria-busy="true">
+								<Spinner />
+							</div>
+						) : (
+							<>
+								<p className="text-muted-foreground" data-ghi-chu>
+									{m.soDo.ghiChu[du.cuoc.nac]}
+								</p>
+								{du.dong.length === 0 ? (
+									<Empty data-trang-thai="cuoc-rong">
+										<EmptyHeader>
+											<EmptyTitle>{m.soDo.khongDong}</EmptyTitle>
+										</EmptyHeader>
+									</Empty>
+								) : (
+									<ItemGroup aria-label={m.soDo.banNhapCuoi}>
+										{du.dong.map((d) => (
+											<DongNgan key={d.id} d={d} m={m} />
+										))}
+									</ItemGroup>
+								)}
+								<BangDaCat daCat={du.daCat} m={m} />
+							</>
+						)}
+					</div>
 				</SheetBody>
 			</SheetContent>
 		</Sheet>
@@ -517,8 +522,8 @@ export function TheSoanSoDo() {
 							size="sm"
 							data-nut="thu-lai"
 							onClick={() => {
-								void cycles.refetch();
-								void soDo.refetch();
+								if (cycles.isError) void cycles.refetch();
+								if (ky) void soDo.refetch();
 							}}
 						>
 							<Icon icon={Renew} data-icon="inline-start" />

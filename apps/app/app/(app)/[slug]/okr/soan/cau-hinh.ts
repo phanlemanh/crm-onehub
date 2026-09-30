@@ -6,4 +6,5 @@ export const SOAN_UI = {
 		"Bắt đầu cuộc soạn: nói điều bạn đã biết về đơn vị này và hỏi tôi.",
 	congCuNop: "nop_ban_nhap",
 	trangThaiDaCoPhien: 409,
+	soDo: { giayMs: 1_000, chuSoTienLe: 3 },
 } as const;
