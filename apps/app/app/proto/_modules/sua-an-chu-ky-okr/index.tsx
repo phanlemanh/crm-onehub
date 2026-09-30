@@ -142,7 +142,7 @@ const DONG: Dong[] = [
 	},
 ];
 
-const NHAN_VIEC: Record<Viec, string> = {
+const NHAN_VIEC = {
 	sua: "Sửa chu kỳ",
 	go: "Gỡ chu kỳ",
 	an: "Ẩn chu kỳ",
@@ -150,7 +150,7 @@ const NHAN_VIEC: Record<Viec, string> = {
 	"mo-ra": "Mở rà giữa kỳ",
 	"sang-cham": "Sang chấm điểm",
 	"mo-lai": "Mở lại kỳ",
-};
+} as const satisfies Record<Viec, string>;
 
 const VIEC_CU: readonly Viec[] = ["mo-ra", "sang-cham", "mo-lai"];
 
