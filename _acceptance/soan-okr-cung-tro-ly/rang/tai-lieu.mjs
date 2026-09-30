@@ -879,7 +879,13 @@ function chieuDo(inRa) {
 		let tam;
 		try {
 			tam = banSao(tep);
-			ca.lam(tam);
+			try {
+				ca.lam(tam);
+			} catch (e) {
+				if (!(e instanceof KhongDo)) throw e;
+				inRa(`SAI pha-${ca.ten}: ${e.message}`);
+				continue;
+			}
 			const r = spawnSync(process.execPath, [TEP, "--goc", tam], {
 				encoding: "utf8",
 			});
@@ -909,7 +915,7 @@ function chayThat() {
 	const loi = [...kiemTinh(GOC), ...kiemRelease()];
 	for (const l of loi) console.log(l);
 	if (loi.length > 0) {
-		console.log(`tai-lieu: ${loi.length} loi — ma thoat 1`);
+		console.log(`tai-lieu: ${loi.length} loi`);
 		return 1;
 	}
 	console.log(
@@ -929,13 +935,19 @@ function main() {
 			);
 			return bat === PHA.length ? 0 : 1;
 		}
+		const that = chayThat();
 		const bat = chieuDo((d) => console.log(`chieu do -> ${d}`));
-		if (bat !== PHA.length) {
-			console.log(`doi chung: SAI — chieu do chi bat ${bat}/${PHA.length}`);
-			return 3;
-		}
-		console.log(`doi chung: do dung ${bat}/${PHA.length}`);
-		return chayThat();
+		const duPha = bat === PHA.length;
+		console.log(
+			duPha
+				? `doi chung: do dung ${bat}/${PHA.length}`
+				: `doi chung: SAI — chieu do chi bat ${bat}/${PHA.length}`,
+		);
+		const ma = that !== 0 || !duPha ? 1 : 0;
+		console.log(
+			`KET LUAN: that ${that === 0 ? "xanh" : "do"}, chieu do ${bat}/${PHA.length} — ma thoat ${ma}`,
+		);
+		return ma;
 	} catch (e) {
 		if (!(e instanceof KhongDo)) throw e;
 		console.log(`KHONG DO DUOC: ${e.message}`);
