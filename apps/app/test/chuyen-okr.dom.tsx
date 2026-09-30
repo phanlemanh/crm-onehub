@@ -7,7 +7,11 @@ import {
 	mock,
 	test,
 } from "bun:test";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	skipToken,
+} from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -24,7 +28,7 @@ type DauVao = Json | undefined;
 
 type LoiGoi = { duong: string; dauVao: DauVao };
 
-type Lay = (dauVao: DauVao) => Json;
+type Lay = (dauVao: DauVao) => Json | Promise<Json>;
 
 let daGoi: LoiGoi[] = [];
 const duLieu = new Map<string, Lay>();
@@ -34,7 +38,7 @@ function dat(duong: string, lay: Lay): void {
 }
 
 function thuTuc(duong: string) {
-	const doc = (v: DauVao): Json => {
+	const doc = async (v: DauVao): Promise<Json> => {
 		daGoi.push({ duong, dauVao: v });
 		const lay = duLieu.get(duong);
 		return lay ? lay(v) : null;
@@ -42,18 +46,24 @@ function thuTuc(duong: string) {
 	return {
 		queryKey: (v?: DauVao) => (v === undefined ? [duong] : [duong, v]),
 		pathKey: () => [duong],
-		queryOptions: (v?: DauVao, chon?: { enabled?: boolean }) => ({
-			...chon,
-			queryKey: [duong, v],
-			queryFn: async () => doc(v),
-		}),
+		queryOptions: (
+			v?: DauVao | typeof skipToken,
+			chon?: { enabled?: boolean },
+		) =>
+			v === skipToken
+				? { queryKey: [duong, "skip"], queryFn: skipToken }
+				: {
+						...chon,
+						queryKey: [duong, v],
+						queryFn: async () => doc(v),
+					},
 		mutationOptions: (chon?: {
 			onSuccess?: (kq: Json, v: DauVao) => void;
 			onError?: (e: Error) => void;
 		}) => ({
 			...chon,
 			mutationKey: [duong],
-			mutationFn: async (v: DauVao) => doc(v) ?? { id: "ok" },
+			mutationFn: async (v: DauVao) => (await doc(v)) ?? { id: "ok" },
 		}),
 	};
 }
@@ -472,4 +482,145 @@ describe("chuyen-okr-khoa-rieng", () => {
 			).toContain(ten);
 		},
 	);
+});
+
+const { thanhVienMessages } = await import(
+	"@/lib/messages/settings-thanh-vien"
+);
+const tv = thanhVienMessages("vi");
+
+async function moHopGo(ten: string): Promise<Element> {
+	await moMenuCua(ten);
+	const muc = mucMenu(tv.go);
+	if (!muc) throw new Error("khong thay muc Go");
+	await bam(muc);
+	await cho(
+		() => document.body.querySelector('[role="alertdialog"]') !== null,
+		"hop go",
+	);
+	const hop = document.body.querySelector('[role="alertdialog"]');
+	if (!hop) throw new Error("khong thay hop go");
+	return hop;
+}
+
+const nutGo = (hop: Element) =>
+	[...hop.querySelectorAll("button")].find(
+		(b) => b.textContent?.trim() === tv.xacNhan.go.nut,
+	);
+
+describe("go-nguoi", () => {
+	test("go-nguoi: P co OKR — hop neu so tu transferPreview, Chuyen OKR la nut chinh mo hop chuyen, Go van bam duoc; Q khong co — hop nhu cu; R loi va S dang doc — van go duoc", async () => {
+		let xem: (v: DauVao) => Json | Promise<Json> = () => ({
+			kr: 3,
+			mucTieu: 1,
+			viec: 0,
+		});
+		datThanhVien(true, { kr: 3, mucTieu: 1, viec: 0 });
+		dat("okr.transferPreview", (v) => xem(v));
+		await mo(<MembersTable />);
+		const hopP = await moHopGo("Huong Le");
+		await cho(
+			() => hopP.querySelector("[data-go-co-okr]") !== null,
+			"canh bao OKR",
+		);
+		const p = {
+			chu: hopP.querySelector("[data-go-co-okr]")?.textContent ?? "",
+			nutPhu: hopP.querySelector("[data-nut-phu]")?.textContent?.trim(),
+			goMo: nutGo(hopP)?.disabled === false,
+			vao: daGoi.filter((g) => g.duong === "okr.transferPreview").at(-1)
+				?.dauVao,
+		};
+		const phu = hopP.querySelector("[data-nut-phu]");
+		if (!phu) throw new Error("khong thay nut phu");
+		await bam(phu);
+		await cho(
+			() =>
+				document.body
+					.querySelector('[role="dialog"]')
+					?.textContent?.includes("3 KR") === true,
+			"hop chuyen OKR mo",
+		);
+		const moChuyen =
+			document.body.querySelector('[role="alertdialog"]') === null;
+		expect({ p, moChuyen }).toEqual({
+			p: {
+				chu: dien(tv.xacNhan.go.coOkr, { kr: 3, mucTieu: 1 }),
+				nutPhu: kOkr.menu,
+				goMo: true,
+				vao: { fromUserId: "u-h" },
+			},
+			moChuyen: true,
+		});
+		for (const san of dangMo) {
+			await act(async () => san.root.unmount());
+			san.o.remove();
+		}
+		dangMo = [];
+		document.body.innerHTML = "";
+
+		xem = () => ({ kr: 0, mucTieu: 0, viec: 0 });
+		await mo(<MembersTable />);
+		const hopQ = await moHopGo("Tuan Do");
+		await cho(
+			() => hopQ.querySelector("[data-go-dang-doc]") === null,
+			"doc xong Q",
+		);
+		const q = {
+			canhBao: hopQ.querySelector("[data-go-co-okr]") !== null,
+			nutPhu: hopQ.querySelector("[data-nut-phu]") !== null,
+			than: hopQ.textContent?.includes(tv.xacNhan.go.than) === true,
+		};
+
+		xem = () => Promise.reject(new Error("mat ket noi"));
+		await bam(
+			[...hopQ.querySelectorAll("button")].find(
+				(b) => b.textContent?.trim() === tv.xacNhan.thoi,
+			) ?? hopQ,
+		);
+		const hopR = await moHopGo("Kim Anh");
+		await cho(
+			() => hopR.querySelector("[data-go-loi-doc]") !== null,
+			"loi doc R",
+		);
+		const r = { goMo: nutGo(hopR)?.disabled === false };
+
+		xem = () => new Promise<Json>(() => {});
+		await bam(
+			[...hopR.querySelectorAll("button")].find(
+				(b) => b.textContent?.trim() === tv.xacNhan.thoi,
+			) ?? hopR,
+		);
+		const hopS = await moHopGo("Huong Le");
+		await cho(
+			() => hopS.querySelector("[data-go-dang-doc]") !== null,
+			"dang doc S",
+		);
+		const truocGo = daGoi.filter(
+			(g) => g.duong === "workspace.removeMember",
+		).length;
+		const go = nutGo(hopS);
+		if (!go) throw new Error("khong thay nut Go");
+		const sMo = go.disabled === false;
+		await bam(go);
+		await cho(
+			() =>
+				daGoi.filter((g) => g.duong === "workspace.removeMember").length >
+				truocGo,
+			"goi removeMember",
+		);
+		expect({
+			q,
+			r,
+			s: {
+				mo: sMo,
+				goi: daGoi
+					.filter((g) => g.duong === "workspace.removeMember")
+					.map((g) => g.dauVao),
+			},
+		}).toEqual({
+			q: { canhBao: false, nutPhu: false, than: true },
+			r: { goMo: true },
+			s: { mo: true, goi: [{ memberId: "m-h" }] },
+		});
+	});
 });
