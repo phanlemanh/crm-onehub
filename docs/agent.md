@@ -1216,10 +1216,13 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
 
 ## Chỗ rẽ: Soạn OKR cùng Trợ lý
 
-Tệp của hãng mà hạng mục «Soạn OKR cùng Trợ lý» chạm — rút bằng `git diff` giữa
-merge-base của nhánh với `origin/onehub` và `HEAD`, giao với tệp có ở `origin/release`.
-`_acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs` tính lại phép giao mỗi lần chạy
-và so với mục này; không hơn, không kém.
+Tệp của hãng mà hạng mục «Soạn OKR cùng Trợ lý» chạm — rút một lần bằng `git diff`
+giữa merge-base của nhánh với `origin/onehub` và `HEAD`, giao với tệp có ở
+`origin/release`. `_acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs` không tính lại
+phép giao: nó giữ đúng 22 tệp đó trong một danh sách cố định, so hai chiều với mục này
+— không hơn, không kém — và kiểm mỗi tệp còn có ở `origin/release` và còn khác bản đó ở
+`HEAD`. So theo `origin/onehub` thì sau mỗi lần gộp thước đỏ hay xanh giả, nên danh sách
+đứng yên; đổi mục này thì sửa cả danh sách trong thước.
 
 - `.env.example` — khối `OKR_AGENT_URL` và `OKR_AGENT_BRIDGE_SECRET`, đặt sau
   `AGENT_BRIDGE_SECRET`.
