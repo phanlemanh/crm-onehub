@@ -122,12 +122,21 @@ async function tuChoi(
 	const truoc = await Promise.all(ids.map(kyDb));
 	const vet = await demVet(ids);
 	const r = await lam();
-	expect({
+	expect(
+		{
+			ca,
+			tra: tra(r),
+			ky: await Promise.all(ids.map(kyDb)),
+			vet: await demVet(ids),
+		},
 		ca,
-		tra: tra(r),
-		ky: await Promise.all(ids.map(kyDb)),
-		vet: await demVet(ids),
-	}).toEqual({ ca, tra: mong, ky: truoc, vet });
+	).toEqual({ ca, tra: mong, ky: truoc, vet });
+}
+
+function lechCa<T extends { ca: string }>(thuc: T[], mong: T[]) {
+	return thuc.flatMap((t, i) =>
+		Bun.deepEquals(t, mong[i]) ? [] : [{ ca: t.ca, thuc: t, mong: mong[i] }],
+	);
 }
 
 async function viecTuDb(id: string) {
@@ -252,7 +261,8 @@ describe("cycles-viec", () => {
 				});
 				mong.push({ ca: ten, id, ...(await viecTuDb(id)) });
 			}
-			expect(thuc).toEqual(mong);
+			expect(thuc.length).toBe(mong.length);
+			expect(lechCa(thuc, mong), "ca lech viecChuKy doc tu DB").toEqual([]);
 			const chiMotQuanHe = [];
 			for (const [ten, id] of theoQuanHe)
 				chiMotQuanHe.push({ ca: ten, co: chiCo(await demQuanHe(id)) });
@@ -533,9 +543,9 @@ describe("go-chu-ky", () => {
 				const truoc = { ky: await kyDb(id), dem: await demQuanHe(id) };
 				const r = await goi("okr.goChuKy", { id });
 				const sau = { ky: await kyDb(id), dem: await demQuanHe(id) };
-				thuc.push({ q, id, co: chiCo(truoc.dem), tra: tra(r), sau });
+				thuc.push({ ca: q, id, co: chiCo(truoc.dem), tra: tra(r), sau });
 				mong.push({
-					q,
+					ca: q,
 					id,
 					co: [q],
 					tra: `400 ${CAU.khongTrong}`,
@@ -543,7 +553,7 @@ describe("go-chu-ky", () => {
 				});
 			}
 			expect(thuc.length).toBe(tap.length);
-			expect(thuc).toEqual(mong);
+			expect(lechCa(thuc, mong), "quan he khong giu duoc chu ky").toEqual([]);
 		},
 		CHO_MS,
 	);
@@ -729,7 +739,7 @@ describe("an-hien", () => {
 					cau: CAU.namChaDaAn,
 				},
 				{
-					ca: "hien-K-chong-L-dang-hien",
+					ca: `hien-K-chong-L-dang-hien K ${yW}-01-01→${yW}-03-31 L ${yW}-02-01→${yW}-04-30`,
 					ids: [k, l],
 					thuTuc: "okr.hienChuKy",
 					id: k,
@@ -1124,7 +1134,13 @@ describe("dong-thoi", () => {
 					.flatMap((l) => l.ra)
 					.filter((t) => t.startsWith("500") || t.includes("P2003")),
 			).toEqual([]);
-			expect(thuc).toEqual(mong);
+			expect(
+				lechCa(
+					thuc.map((l) => ({ ...l, ca: `${l.cap}/${l.thuTu}` })),
+					mong.map((l) => ({ ...l, ca: `${l.cap}/${l.thuTu}` })),
+				),
+				"luot dong thoi lech ket qua viet truoc hoac vo bat bien",
+			).toEqual([]);
 		},
 		CHO_MS,
 	);
