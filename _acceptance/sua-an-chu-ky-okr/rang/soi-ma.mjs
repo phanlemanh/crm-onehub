@@ -68,24 +68,29 @@ function cay(duong, chu) {
 const dongCua = (sf, n) =>
 	sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;
 
-const tenKhoa = (p) =>
-	p.name && (ts.isIdentifier(p.name) || ts.isStringLiteral(p.name))
-		? p.name.text
-		: null;
+const laChuoi = (n) =>
+	ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n);
+
+const tenKhoa = (p) => {
+	const t = p.name;
+	if (!t) return null;
+	if (ts.isIdentifier(t) || ts.isStringLiteral(t)) return t.text;
+	if (ts.isComputedPropertyName(t) && laChuoi(t.expression))
+		return t.expression.text;
+	return null;
+};
+
+const tenThanhVien = (e) => {
+	if (ts.isIdentifier(e)) return e.text;
+	if (ts.isPropertyAccessExpression(e)) return e.name.text;
+	if (ts.isElementAccessExpression(e) && laChuoi(e.argumentExpression))
+		return e.argumentExpression.text;
+	return null;
+};
 
 const laKhoa = (n, ten) =>
 	(ts.isPropertyAssignment(n) || ts.isShorthandPropertyAssignment(n)) &&
 	tenKhoa(n) === ten;
-
-const coDinhDanh = (n) => {
-	let thay = false;
-	const di = (c) => {
-		if (ts.isIdentifier(c) && c.text === DINH_DANH_HIEN) thay = true;
-		if (!thay) ts.forEachChild(c, di);
-	};
-	di(n);
-	return thay;
-};
 
 function hamBao(n) {
 	for (let p = n.parent; p; p = p.parent) {
@@ -125,39 +130,78 @@ function khoaTrongObject(o) {
 	return o.properties.map(tenKhoa).filter((k) => k !== null);
 }
 
-function mangKhoa(giaTri) {
-	return ts.isObjectLiteralExpression(giaTri) ? khoaTrongObject(giaTri) : [];
+const laKy = (n) => ts.isIdentifier(n) && n.text === DINH_DANH_HIEN;
+
+const boVo = (n) => {
+	let cur = n;
+	while (
+		ts.isParenthesizedExpression(cur) ||
+		ts.isAsExpression(cur) ||
+		ts.isSatisfiesExpression(cur) ||
+		ts.isNonNullExpression(cur)
+	)
+		cur = cur.expression;
+	return cur;
+};
+
+function giuKy(n) {
+	const v = boVo(n);
+	if (laKy(v)) return true;
+	if (ts.isArrayLiteralExpression(v)) return v.elements.some(giuKy);
+	if (!ts.isObjectLiteralExpression(v)) return false;
+	return v.properties.some((p) =>
+		ts.isSpreadAssignment(p)
+			? giuKy(p.expression)
+			: ts.isPropertyAssignment(p) &&
+				tenKhoa(p) === "AND" &&
+				giuKy(p.initializer),
+	);
 }
 
-function objectBao(n) {
-	for (let p = n.parent; p; p = p.parent)
-		if (ts.isObjectLiteralExpression(p)) return p;
-	return null;
+function coCycleGiuKy(n) {
+	const v = boVo(n);
+	if (ts.isArrayLiteralExpression(v)) return v.elements.some(coCycleGiuKy);
+	if (!ts.isObjectLiteralExpression(v)) return false;
+	return v.properties.some(
+		(p) =>
+			ts.isPropertyAssignment(p) &&
+			((tenKhoa(p) === "cycle" && giuKy(p.initializer)) ||
+				(tenKhoa(p) === "AND" && coCycleGiuKy(p.initializer))),
+	);
 }
 
-function leoQuaAnd(diem) {
-	let cur = diem;
+function leoQuaAnd(thuocTinh) {
+	let cur = thuocTinh;
 	for (let buoc = 0; buoc < 12; buoc += 1) {
-		const o = objectBao(cur);
-		if (!o) return false;
-		if (coDinhDanh(o)) return true;
-		let p = o.parent;
-		if (p && ts.isArrayLiteralExpression(p)) p = p.parent;
-		if (p && ts.isPropertyAssignment(p) && tenKhoa(p) === "AND") cur = p;
+		const o = cur.parent;
+		if (!o || !ts.isObjectLiteralExpression(o)) return false;
+		if (coCycleGiuKy(o)) return true;
+		let cha = o.parent;
+		if (cha && ts.isArrayLiteralExpression(cha)) cha = cha.parent;
+		if (cha && ts.isPropertyAssignment(cha) && tenKhoa(cha) === "AND")
+			cur = cha;
 		else return false;
 	}
 	return false;
 }
 
-function theoId(callNode) {
+function whereCua(callNode) {
 	const doi = callNode.arguments[0];
-	if (!doi || !ts.isObjectLiteralExpression(doi)) return false;
+	if (!doi || !ts.isObjectLiteralExpression(doi)) return null;
 	const where = doi.properties.find((p) => laKhoa(p, "where"));
-	if (!where || !ts.isPropertyAssignment(where)) return false;
-	if (!ts.isObjectLiteralExpression(where.initializer)) return false;
-	const id = where.initializer.properties.find((p) => laKhoa(p, "id"));
-	if (!id || !ts.isPropertyAssignment(id)) return false;
-	return !mangKhoa(id.initializer).includes("not");
+	return where && ts.isPropertyAssignment(where) ? where.initializer : null;
+}
+
+function theoId(callNode) {
+	const where = whereCua(callNode);
+	if (!where || !ts.isObjectLiteralExpression(where)) return false;
+	if (where.properties.length !== 1) return false;
+	const [id] = where.properties;
+	if (!ts.isPropertyAssignment(id) || tenKhoa(id) !== "id") return false;
+	const v = boVo(id.initializer);
+	if (!ts.isObjectLiteralExpression(v)) return true;
+	const khoa = v.properties.map(tenKhoa);
+	return khoa.length === 1 && khoa[0] === "in";
 }
 
 function vanBanQueryRaw(mau) {
@@ -167,21 +211,32 @@ function vanBanQueryRaw(mau) {
 	);
 }
 
+function vanBanGoi(arg) {
+	const v = boVo(arg);
+	if (laChuoi(v)) return v.text;
+	if (ts.isTemplateExpression(v)) return vanBanQueryRaw(v);
+	if (ts.isTaggedTemplateExpression(v)) return vanBanQueryRaw(v.template);
+	return arg.getText();
+}
+
 function soiTep(tep, duong, ra) {
 	const sf = cay(duong, readFileSync(duong, "utf8"));
-	const ghi = (n, loai, xet) => {
-		const ok =
-			xet === "theo-id"
-				? null
-				: coDinhDanh(n) || (ts.isPropertyAssignment(n) && leoQuaAnd(n));
+	const ghi = (n, loai, ok, laTheoId = false) => {
 		ra.push({
 			tep,
 			ham: hamBao(n),
 			loai,
 			dong: dongCua(sf, n),
-			ok,
-			theoId: xet === "theo-id",
+			ok: laTheoId ? null : ok,
+			theoId: laTheoId,
 		});
+	};
+	const laNgayKy = (c) =>
+		(ts.isPropertyAssignment(c) || ts.isShorthandPropertyAssignment(c)) &&
+		(tenKhoa(c) === "startsOn" || tenKhoa(c) === "endsOn");
+	const raw = (n, chu) => {
+		if (chu.includes("okrCycle") && !CHI_THEO_ID.test(chu.trim()))
+			ghi(n, "$queryRaw okrCycle", false);
 	};
 	const di = (n) => {
 		if (ts.isPropertyAssignment(n) || ts.isShorthandPropertyAssignment(n)) {
@@ -189,19 +244,15 @@ function soiTep(tep, duong, ra) {
 			const giaTri = ts.isPropertyAssignment(n) ? n.initializer : null;
 			if (khoa === "cycle") {
 				const laChon =
-					giaTri === null ||
-					giaTri.kind === ts.SyntaxKind.TrueKeyword ||
-					giaTri.kind === ts.SyntaxKind.FalseKeyword ||
-					chiChon(giaTri);
-				if (!laChon) ghi(n, "cycle:");
+					giaTri !== null &&
+					(giaTri.kind === ts.SyntaxKind.TrueKeyword ||
+						giaTri.kind === ts.SyntaxKind.FalseKeyword ||
+						chiChon(giaTri));
+				const ok = (giaTri !== null && giuKy(giaTri)) || leoQuaAnd(n);
+				if (!laChon) ghi(n, "cycle:", ok);
 				if (giaTri && ts.isObjectLiteralExpression(giaTri)) {
 					const duoi = (c) => {
-						if (
-							(ts.isPropertyAssignment(c) ||
-								ts.isShorthandPropertyAssignment(c)) &&
-							(tenKhoa(c) === "startsOn" || tenKhoa(c) === "endsOn")
-						)
-							ghi(c, `cycle.${tenKhoa(c)}`);
+						if (laNgayKy(c)) ghi(c, `cycle.${tenKhoa(c)}`, ok);
 						ts.forEachChild(c, duoi);
 					};
 					duoi(giaTri);
@@ -211,26 +262,33 @@ function soiTep(tep, duong, ra) {
 				khoa === "cycleId" &&
 				giaTri &&
 				ts.isObjectLiteralExpression(giaTri) &&
-				khoaTrongObject(giaTri).includes("in")
+				khoaTrongObject(giaTri).some((k) => k === "in" || k === "notIn")
 			)
-				ghi(n, "cycleId: { in }");
+				ghi(n, "cycleId: { in }", leoQuaAnd(n));
 		}
-		if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression)) {
-			const e = n.expression;
-			const goc = e.expression;
-			const laOkrCycle =
-				(ts.isIdentifier(goc) && goc.text === "okrCycle") ||
-				(ts.isPropertyAccessExpression(goc) && goc.name.text === "okrCycle");
-			if (laOkrCycle && GOI_DOC_KY.has(e.name.text))
-				ghi(n, `okrCycle.${e.name.text}`, theoId(n) ? "theo-id" : null);
+		if (ts.isCallExpression(n)) {
+			const callee = boVo(n.expression);
+			if (
+				ts.isPropertyAccessExpression(callee) ||
+				ts.isElementAccessExpression(callee)
+			) {
+				const ham = tenThanhVien(callee);
+				if (
+					ham !== null &&
+					GOI_DOC_KY.has(ham) &&
+					tenThanhVien(boVo(callee.expression)) === "okrCycle"
+				) {
+					const where = whereCua(n);
+					ghi(n, `okrCycle.${ham}`, where !== null && giuKy(where), theoId(n));
+				}
+				if (ham === "$queryRaw" || ham === "$queryRawUnsafe")
+					if (n.arguments[0]) raw(n, vanBanGoi(n.arguments[0]));
+			}
 		}
 		if (ts.isTaggedTemplateExpression(n)) {
-			const tag = n.tag.getText(sf);
-			if (/\$queryRaw$/.test(tag)) {
-				const chu = vanBanQueryRaw(n.template);
-				if (chu.includes("okrCycle") && !CHI_THEO_ID.test(chu.trim()))
-					ghi(n, "$queryRaw okrCycle");
-			}
+			const ham = tenThanhVien(boVo(n.tag));
+			if (ham === "$queryRaw" || ham === "$queryRawUnsafe")
+				raw(n, vanBanQueryRaw(n.template));
 		}
 		ts.forEachChild(n, di);
 	};
@@ -253,12 +311,13 @@ function docDanhSach() {
 	return { loc: j.loc, mien: j.mien };
 }
 
-function caKyConHien(tepList) {
+function caKyConHien(tepList, locThem = []) {
 	const hong = [];
 	const chamNoi = [];
 	for (const { tep, duong } of tepList) soiTep(tep, duong, chamNoi);
 
-	const { loc, mien } = docDanhSach();
+	const { loc: locGoc, mien } = docDanhSach();
+	const loc = [...locGoc, ...locThem];
 	const khoaHam = (t, h) => `${t}\t${h}`;
 	const soiDuoc = new Map();
 	for (const c of chamNoi) {
@@ -342,78 +401,261 @@ function batDo(nhan, hong, moTa) {
 	return bat;
 }
 
+const CA_GIA = [
+	{
+		ten: "b tep gia findMany cycle.endsOn",
+		tep: "gia-tim-ky-theo-ngay.ts",
+		ham: "timKyConChay",
+		loc: false,
+		ma: [
+			"export async function timKyConChay(db: any, now: Date) {",
+			"\treturn db.okrObjective.findMany({",
+			"\t\twhere: { cycle: { endsOn: { gte: now } } },",
+			"\t});",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "c tep gia okrKeyResult objective.cycle",
+		tep: "gia-doc-kr-theo-ky.ts",
+		ham: "docKrTheoKy",
+		loc: false,
+		ma: [
+			"export async function docKrTheoKy(db: any) {",
+			"\treturn db.okrKeyResult.findMany({",
+			"\t\twhere: { objective: { cycle: { phase: 'dang-chay' } } },",
+			"\t});",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "d khoa cycle viet tat",
+		tep: "gia-cycle-viet-tat.ts",
+		ham: "timNganGon",
+		loc: false,
+		ma: [
+			"export async function timNganGon(db: any) {",
+			"\tconst cycle = { phase: 'dang-chay' };",
+			"\treturn db.okrObjective.findMany({ where: { cycle } });",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "d2 khoa cycle viet tat trong ham da khai loc",
+		tep: "gia-cycle-viet-tat-loc.ts",
+		ham: "timNganGonLoc",
+		loc: true,
+		ma: [
+			"export async function timNganGonLoc(db: any) {",
+			"\tconst cycle = { phase: 'dang-chay' };",
+			"\treturn db.okrObjective.findMany({ where: { cycle } });",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "e KY_CON_HIEN dat sai cho (cycle khac, va trong select)",
+		tep: "gia-ky-dat-sai-cho.ts",
+		ham: "timKyDatSai",
+		loc: true,
+		ma: [
+			"import { KY_CON_HIEN } from '@crm/db/okr-chu-ky-hien';",
+			"export async function timKyDatSai(db: any) {",
+			"\treturn db.okrObjective.findMany({",
+			"\t\twhere: {",
+			"\t\t\tcycle: { phase: 'x' },",
+			"\t\t\tkeyResults: { some: { objective: { cycle: KY_CON_HIEN } } },",
+			"\t\t},",
+			"\t});",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "e2 KY_CON_HIEN chi nam trong select cua okrCycle",
+		tep: "gia-ky-trong-select.ts",
+		ham: "timKySelect",
+		loc: true,
+		ma: [
+			"import { KY_CON_HIEN } from '@crm/db/okr-chu-ky-hien';",
+			"export async function timKySelect(db: any, phase: string) {",
+			"\treturn db.okrCycle.findMany({",
+			"\t\twhere: { phase },",
+			"\t\tselect: { anLuc: KY_CON_HIEN },",
+			"\t});",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "f where co id va phase",
+		tep: "gia-id-va-phase.ts",
+		ham: "timIdVaPha",
+		loc: true,
+		ma: [
+			"export async function timIdVaPha(db: any, ids: string[]) {",
+			"\treturn db.okrCycle.findMany({",
+			"\t\twhere: { id: { in: ids }, phase: 'dang-chay' },",
+			"\t});",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "f2 where co id va OR",
+		tep: "gia-id-va-or.ts",
+		ham: "timIdVaOr",
+		loc: true,
+		ma: [
+			"export async function timIdVaOr(db: any, phase: string) {",
+			"\treturn db.okrCycle.findMany({",
+			"\t\twhere: { id: 'a', OR: [{ phase }] },",
+			"\t});",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "f3 where co id va an",
+		tep: "gia-id-va-an.ts",
+		ham: "timIdVaAn",
+		loc: true,
+		ma: [
+			"export async function timIdVaAn(db: any) {",
+			"\treturn db.okrCycle.findMany({",
+			"\t\twhere: { id: 'a', anLuc: { not: null } },",
+			"\t});",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "f4 where id notIn",
+		tep: "gia-id-not-in.ts",
+		ham: "timIdNotIn",
+		loc: true,
+		ma: [
+			"export async function timIdNotIn(db: any, ids: string[]) {",
+			"\treturn db.okrCycle.findMany({ where: { id: { notIn: ids } } });",
+			"}",
+		],
+		mong: "thiếu KY_CON_HIEN",
+	},
+	{
+		ten: "g truy cap phan tu okrCycle",
+		tep: "gia-truy-cap-phan-tu.ts",
+		ham: "timPhanTu",
+		loc: false,
+		ma: [
+			"export async function timPhanTu(tx: any) {",
+			"\treturn tx['okrCycle'].findMany({ where: { phase: 'dang-chay' } });",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "h queryRawUnsafe",
+		tep: "gia-query-raw-unsafe.ts",
+		ham: "timRawKhongAn",
+		loc: false,
+		ma: [
+			"export async function timRawKhongAn(db: any) {",
+			"\treturn db.$queryRawUnsafe('SELECT id FROM \"okrCycle\" WHERE phase = 1');",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "h2 queryRaw dang goi voi Prisma.sql",
+		tep: "gia-query-raw-goi.ts",
+		ham: "timRawGoi",
+		loc: false,
+		ma: [
+			"export async function timRawGoi(db: any, Prisma: any) {",
+			'\treturn db.$queryRaw(Prisma.sql`SELECT id FROM "okrCycle" WHERE phase = \u0024{1}`);',
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "i cycleId notIn",
+		tep: "gia-cycle-id-not-in.ts",
+		ham: "timNotIn",
+		loc: false,
+		ma: [
+			"export async function timNotIn(db: any, ids: string[]) {",
+			"\treturn db.okrObjective.findMany({ where: { cycleId: { notIn: ids } } });",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+	{
+		ten: "j khoa cycle tinh toan",
+		tep: "gia-khoa-tinh-toan.ts",
+		ham: "timKhoaTinhToan",
+		loc: false,
+		ma: [
+			"export async function timKhoaTinhToan(db: any) {",
+			"\treturn db.okrObjective.findMany({ where: { ['cycle']: { phase: 'x' } } });",
+			"}",
+		],
+		mong: "chưa khai",
+	},
+];
+
 async function chieuDoKyConHien() {
 	const thuMuc = mkdtempSync(join(tmpdir(), "soi-ky-con-hien-"));
 	const ketQua = [];
+	let khongDo = null;
 	try {
 		const traoDoi = "apps/api/src/okr/okr-trao-doi.service.ts";
 		const goc = readFileSync(join(GOC, traoDoi), "utf8");
 		const banSao = goc.replace(", ...KY_CON_HIEN", "");
 		if (banSao === goc || banSao.includes("...KY_CON_HIEN")) {
-			console.log(
-				`KHONG DO DUOC: khong go duoc ${DINH_DANH_HIEN} khoi ${traoDoi} de dung ca (a)`,
+			khongDo = `khong go duoc ${DINH_DANH_HIEN} khoi ${traoDoi} de dung ca (a)`;
+		} else {
+			const tepA = join(thuMuc, "a-okr-trao-doi.service.ts");
+			writeFileSync(tepA, banSao);
+			const them = new Map();
+			const locThem = [];
+			const ca = [
+				{
+					nhan: "(a) okr-trao-doi.service.ts go KY_CON_HIEN",
+					moTa: [traoDoi, "dieuKienChuyen", DINH_DANH_HIEN],
+				},
+			];
+			for (const g of CA_GIA) {
+				const ten = `apps/api/src/okr/${g.tep}`;
+				const duong = join(thuMuc, g.tep);
+				writeFileSync(duong, `${g.ma.join("\n")}\n`);
+				them.set(ten, duong);
+				if (g.loc) locThem.push({ tep: ten, ham: g.ham });
+				ca.push({
+					nhan: `(${g.ten})`,
+					moTa: [ten, g.ham, g.mong],
+				});
+			}
+			const { hong } = caKyConHien(
+				danhSachTep(new Map([[traoDoi, tepA]]), them),
+				locThem,
 			);
-			process.exit(2);
-		}
-		const tepA = join(thuMuc, "a-okr-trao-doi.service.ts");
-		writeFileSync(tepA, banSao);
-
-		const tenB = "apps/api/src/okr/gia-tim-ky-theo-ngay.ts";
-		const tepB = join(thuMuc, "b-gia-tim-ky-theo-ngay.ts");
-		writeFileSync(
-			tepB,
-			[
-				"export async function timKyConChay(db: any, now: Date) {",
-				"\treturn db.okrObjective.findMany({",
-				"\t\twhere: { cycle: { endsOn: { gte: now } } },",
-				"\t});",
-				"}",
-				"",
-			].join("\n"),
-		);
-
-		const tenC = "apps/api/src/okr/gia-doc-kr-theo-ky.ts";
-		const tepC = join(thuMuc, "c-gia-doc-kr-theo-ky.ts");
-		writeFileSync(
-			tepC,
-			[
-				"export async function docKrTheoKy(db: any) {",
-				"\treturn db.okrKeyResult.findMany({",
-				"\t\twhere: { objective: { cycle: { phase: 'dang-chay' } } },",
-				"\t});",
-				"}",
-				"",
-			].join("\n"),
-		);
-
-		const ca = [
-			{
-				nhan: "(a) okr-trao-doi.service.ts go KY_CON_HIEN",
-				tep: danhSachTep(new Map([[traoDoi, tepA]])),
-				moTa: [traoDoi, "dieuKienChuyen", DINH_DANH_HIEN],
-			},
-			{
-				nhan: "(b) tep gia findMany cycle.endsOn",
-				tep: danhSachTep(new Map(), new Map([[tenB, tepB]])),
-				moTa: [tenB, "timKyConChay", "chưa khai"],
-			},
-			{
-				nhan: "(c) tep gia okrKeyResult objective.cycle",
-				tep: danhSachTep(new Map(), new Map([[tenC, tepC]])),
-				moTa: [tenC, "docKrTheoKy", "chưa khai"],
-			},
-		];
-		for (const c of ca) {
-			const { hong } = caKyConHien(c.tep);
 			for (const h of hong) console.log(`HONG ${h}`);
-			ketQua.push(batDo(c.nhan, hong, c.moTa));
+			for (const c of ca) ketQua.push(batDo(c.nhan, hong, c.moTa));
 		}
 	} finally {
 		rmSync(thuMuc, { recursive: true, force: true });
 	}
+	if (khongDo !== null) {
+		console.log(`KHONG DO DUOC: ${khongDo}`);
+		process.exitCode = 2;
+		return;
+	}
 	const bat = ketQua.filter(Boolean).length;
 	console.log(`chieu do: ${bat}/${ketQua.length} ca do bi bat`);
-	process.exit(bat === ketQua.length ? 1 : 0);
+	process.exitCode = bat === ketQua.length ? 1 : 0;
 }
 
 const CA = {
