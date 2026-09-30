@@ -21,6 +21,7 @@ import {
 	trpc,
 	truyVan,
 } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
+import { gioNhacSau } from "./gio-nhac.mjs";
 import { docSo } from "./so-lech-lot.mjs";
 
 const GIAY_MS = 1000;
@@ -44,8 +45,7 @@ const E9 = {
 	quanTri: "le-hai-dang",
 	chuKy: "quy4",
 	phong: { a: "kd-bac", b: "cham-soc" },
-	gioNhac: { gio: 8, phut: 31 },
-	gioVN: 7,
+	gioNhac: { gio: 8, phut: 31, gioVN: 7 },
 	xep: {
 		loai: "okr-tom-tat-xep",
 		loaiTomTat: "okr-tom-tat-tuan",
@@ -266,7 +266,7 @@ async function xepVaXa(url) {
 async function banCua(url, pb) {
 	const [b] = await truyVan(
 		url,
-		`SELECT id, "trangThai", cau FROM "okrTomTat" WHERE "cycleId" = $1 AND "departmentId" = $2
+		`SELECT id, "trangThai", cau, (extract(epoch from "createdAt") * 1000)::float8 AS tao_ms FROM "okrTomTat" WHERE "cycleId" = $1 AND "departmentId" = $2
 		 ORDER BY "createdAt" DESC LIMIT 1`,
 		[KY, pb],
 	);
@@ -439,24 +439,20 @@ async function buocKhoi(tlA, url, api) {
 	);
 }
 
-function sangMai() {
-	const mai = ngayVN(new Date(Date.now() + NGAY_MS));
-	return new Date(
-		Date.parse(`${mai}T00:00:00Z`) -
-			E9.gioVN * GIO_MS +
-			E9.gioNhac.gio * GIO_MS +
-			E9.gioNhac.phut * PHUT_MS,
-	);
+async function sangSauBan(url) {
+	const ban = await banCua(url, PB.a);
+	if (!ban) throw new Error("khong co ban tom tat phong A de tinh gio nhac");
+	return gioNhacSau(new Date(ban.tao_ms), E9.gioNhac);
 }
 
-async function dungTinNhac() {
+async function dungTinNhac(url) {
 	const nhac = await import("../../../apps/agent/agent/lib/nhac-ke-hoach.ts");
 	const gieo = await import("../../../apps/agent/test/support/okr-gieo.ts");
 	const { zaloGia } = await import(
 		"../../../apps/agent/test/support/zalo-gia.ts"
 	);
 	const nguoi = idMau("nguoi", truongCua(E9.phong.a));
-	const luc = sangMai();
+	const luc = await sangSauBan(url);
 	await gieo.batBot();
 	await gieo.noiZalo(nguoi, E9.zaloGia);
 	const z = zaloGia();
@@ -483,7 +479,7 @@ async function dungTinNhac() {
 
 async function buocMoTuTin(tlA, url) {
 	buoc = "nhac-mo-bang";
-	const lienKet = await dungTinNhac();
+	const lienKet = await dungTinNhac(url);
 	if (
 		!kiem(
 			`tin nhac cua truong phong A co dong tom tat co duong mo`,
