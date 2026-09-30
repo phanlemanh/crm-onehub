@@ -40,16 +40,15 @@ vào đầu ra API và một truy vấn xem trước. Không bảng mới, khôn
    - (a) Mục tiêu nháp chưa có KR và ô duyệt bật: nút «Gửi duyệt» ở đầu khung và trong dải
      «bị trả lại» khoá. Một dòng chữ hiện rõ ngay dưới nút: «Thêm ít nhất một KR trước khi
      gửi duyệt». Hộp hỏi lại không mở.
-   - (b) Hộp lưu trữ phòng ban nêu mọi điều kiện chặn ngay khi mở: còn OKR ở kỳ đang mở
-     (`okrMo`) và còn người có phòng ban chính ở đây (`people[].primary`). Nút «Lưu trữ» khoá
-     khi có ít nhất một điều kiện; điều kiện OKR kèm «Chuyển OKR…». Tập điều kiện suy bằng
-     một hàm thuần `dieuKienLuuTru` ở `@crm/validation/to-chuc-luu-tru`; máy chủ và hộp cùng gọi
-     hàm đó.
-   - (c) Hộp «Chuyển OKR» gọi truy vấn mới `okr.chuyenDonViXemTruoc`. Truy vấn nhận cùng
-     input với `okr.chuyenDonVi` và dùng CHÍNH hàm kiểm trần mà mutation dùng. Nó trả
-     `{ canhBao: string | null, chan: string | null }` cho đơn vị nhận ngay khi chọn nơi nhận
-     và mỗi khi đổi tập mục tiêu chọn. Có `chan` thì nút chuyển khoá kèm câu; có `canhBao` thì
-     hiện cảnh báo, nút vẫn bấm được.
+   - (b) Hộp lưu trữ phòng ban gọi truy vấn mới `org.luuTruXemTruoc({ id })` khi mở. Truy vấn trả
+     `{ lyDo: string[] }` từ CHÍNH hàm kiểm mà `org.archiveDepartment` dùng (tách thành
+     `lyDoChanLuuTru` trong `to-chuc.service.ts`): còn nằm trong khuôn đang dùng, còn người có
+     phòng ban chính, còn OKR ở kỳ đang mở. Hộp nêu mọi lý do; «Lưu trữ» khoá khi có lý do;
+     lý do OKR kèm «Chuyển OKR…»; xem trước lỗi thì nêu một dòng và vẫn cho bấm.
+   - (c) Hộp «Chuyển OKR» gọi truy vấn mới `okr.chuyenDonViXemTruoc`, nhận cùng input với
+     `okr.chuyenDonVi`, trả `{ canhBao: string | null }` bằng CHÍNH hàm `canhBaoTran` mà mutation
+     dùng, ngay khi chọn nơi nhận và mỗi khi đổi tập chọn. Chuyển OKR hôm nay chỉ cảnh báo khi
+     vượt trần, kể cả khi chương trình đặt «Chặn, không ghi» — lượt này không đổi luật đó.
 4. **Cây đơn vị đếm theo quyền xem.**
    - `okr.countByUnit` đổi điều kiện từ `boGioiHan` sang `dieuKienXemMucTieu(nc)` của người
      gọi. Với mọi người và mọi đơn vị, số trên cây bằng độ dài danh sách `byUnit` của đơn vị
@@ -118,8 +117,9 @@ vào đầu ra API và một truy vấn xem trước. Không bảng mới, khôn
 | ST-vet-tra-lai | Tab Vết | dòng «Trả lại» có lý do ở dòng dưới | — |
 | ST-congbo-phu | Khung mục tiêu (người vừa trả lại) | «Công bố» dạng nút phụ | — |
 | ST-luutru-hai-dieu-kien | Hộp lưu trữ | «Chưa lưu trữ được» nêu hai dòng: «còn 3 mục tiêu ở kỳ đang mở» + «Chuyển OKR…», «còn 5 người có phòng ban chính ở đây»; «Lưu trữ» khoá | chuyển OKR, chuyển người |
+| ST-luutru-khuon | Hộp lưu trữ | dòng «Phòng ban này còn nằm trong khuôn … — sửa khuôn trước»; «Lưu trữ» khoá | sửa khuôn |
+| ST-luutru-loi | Hộp lưu trữ | «Chưa kiểm được điều kiện lưu trữ»; «Lưu trữ» bấm được | lưu trữ |
 | ST-chuyen-vuot-tran | Hộp chuyển OKR | cảnh báo «Kinh doanh miền Nam sẽ có 6 mục tiêu ở Quý 4 — vượt trần 5» dưới ô nơi nhận | chuyển, bỏ chọn bớt |
-| ST-chuyen-chan | Hộp chuyển OKR | cùng chỗ, câu chặn; nút chuyển khoá | bỏ chọn bớt |
 | ST-theodonvi-dang-tai | Theo đơn vị · khung phải | khung xương cùng hình danh sách, `aria-busy` | chờ |
 | ST-theodonvi-rong | Theo đơn vị · khung phải | «<đơn vị> chưa đặt OKR cho <chu kỳ>» — chỉ khi đã tải xong | thêm mục tiêu |
 <!-- UX-STATE-TABLE>>> -->

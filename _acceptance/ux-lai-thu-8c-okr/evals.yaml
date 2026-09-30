@@ -48,7 +48,7 @@ evals:
     executor: test
     cmd: config:executors.test.u8d_dom
     paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
-    expected: "exit 0 cho nhóm -t luu-tru; bốn phòng viết trước A (okrMo 3, 2 người chính), B (0, 2), C (3, 0), D (0, 0; có 1 người phụ, không chính): A nêu hai dòng (OKR kèm «Chuyển OKR…», người), B một dòng người, C một dòng OKR, D không dòng nào; «Lưu trữ» disabled ở A, B, C, mở ở D; số trong câu lấy từ dữ liệu (đổi okrMo 3→4 thì chữ đổi). CHIỀU ĐỎ: bản sao chỉ xét okrMo → ca B đỏ in «B: Luu tru mo khi con nguoi»; bản sao đếm cả người phụ → ca D đỏ."
+    expected: "exit 0 cho nhóm -t luu-tru; mock org.luuTruXemTruoc cho năm phòng viết trước: A → [okr 3, người 2], B → [người 2], C → [okr 3], E → [khuôn «Làm quen Kinh doanh»], D → []: hộp nêu đúng số dòng lý do (A 2, B 1, C 1, E 1, D 0) với chữ lấy từ kết quả xem trước, dòng OKR kèm «Chuyển OKR…»; «Lưu trữ» disabled ở A, B, C, E, mở ở D; xem trước lỗi → dòng «Chưa kiểm được điều kiện lưu trữ», «Lưu trữ» mở (máy chủ vẫn kiểm). CHIỀU ĐỎ: bản sao hộp chỉ vẽ dòng OKR → ca B đỏ in «B: Luu tru mo khi con nguoi»; bản sao bỏ khoá khi có lý do → ca E đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -56,8 +56,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.u8d_luu_tru
-    paths: [apps/api/src/to-chuc/**, packages/validation/src/to-chuc-luu-tru.ts, apps/api/test/okr-ux-8d.spec.ts]
-    expected: "exit 0; bộ mẫu cộng bốn phòng gieo A, B, C, D như E6. Với MỌI phòng ban trong org.tree: tập điều kiện suy bằng hàm dùng chung dieuKienLuuTru (@crm/validation/to-chuc-luu-tru — hộp lưu trữ và máy chủ cùng gọi, không bản chép) từ nút cây toEqual kết quả gọi thật org.archive (từ chối nêu OKR / người / cả hai, hay cho lưu trữ) — mỗi phòng một lần gọi trong giao dịch cuộn lại. CHIỀU ĐỎ: bản sao hàm suy bỏ điều kiện người → phòng B đỏ in «B: suy [] != may chu [nguoi]»."
+    paths: [apps/api/src/to-chuc/**, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; bộ mẫu cộng năm phòng gieo A (OKR mở + người chính), B (người chính), C (OKR mở), E (nằm trong một khuôn đang dùng), D (không gì; có một người phụ). Với MỌI phòng ban đang sống: org.luuTruXemTruoc(id).lyDo toEqual kết quả gọi thật org.archiveDepartment(id) trong giao dịch cuộn lại — từ chối thì câu lỗi nằm trong tập lý do xem trước và tập có đúng một phần tử khi chỉ một điều kiện; cho lưu trữ thì tập rỗng. Ma trận viết trước năm phòng gieo: A 2 lý do, B 1, C 1, E 1, D 0. Xem trước không ghi hàng nào (department.archivedAt không đổi). CHIỀU ĐỎ: bản sao xem trước bỏ kiểm khuôn → phòng E đỏ in «E: xem truoc [] != may chu [khuon]»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -66,7 +66,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.u8d_chuyen_xem_truoc
     paths: [apps/api/src/okr/okr-tai-co-cau.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr.contracts.ts, apps/api/test/okr-ux-8d.spec.ts]
-    expected: "exit 0; trần mục tiêu mỗi đơn vị 5, đơn vị nhận đang có 3 ở quý 4. Ma trận viết trước 4 ca (chuyển 1 → 4 dưới trần; 2 → 5 bằng trần; 3 → 6 với cheDo canh-bao; 3 → 6 với cheDo chan): chuyenDonViXemTruoc trả {canhBao, chan} toEqual kết quả chuyenDonVi thật trên cùng đầu vào (canhBao của mutation; chan = câu lỗi 400 của mutation, mutation không ghi hàng nào) ở cả bốn ca; ca 1–2 cả hai null; xem trước không ghi hàng nào (đếm okrObjective theo đơn vị và okrTrail trước/sau bằng nhau). CHIỀU ĐỎ: bản sao xem trước tự tính trần bằng > thay >= theo mutation → ca «bằng trần» hoặc «vượt» lệch và in tên ca."
+    expected: "exit 0; trần mục tiêu mỗi đơn vị 5, đơn vị nhận đang có 3 ở quý 4. Ma trận viết trước 4 ca: chuyển 1 → 4 dưới trần; 2 → 5 bằng trần; 3 → 6 với chính sách canh-bao; 3 → 6 với chính sách chan. Mỗi ca: chuyenDonViXemTruoc.canhBao toEqual canhBao của chuyenDonVi thật trên cùng đầu vào (chạy mutation trong giao dịch cuộn lại); ca 1–2 null; ca 3–4 cùng một câu vượt trần (ghim: chuyển OKR hôm nay chỉ cảnh báo, kể cả chính sách chan); xem trước không ghi hàng nào (đếm okrObjective theo đơn vị và okrTrail trước/sau bằng nhau). CHIỀU ĐỎ: bản sao xem trước tự tính trần bằng >= thay > như canhBaoTran → ca «bằng trần» đỏ in «bang tran: xem truoc canh bao, may chu null»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -74,7 +74,7 @@ evals:
     executor: test
     cmd: config:executors.test.u8d_dom
     paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
-    expected: "exit 0 cho nhóm -t chuyen-tran; mock chuyenDonViXemTruoc theo đầu vào: canhBao «Kinh doanh miền Nam sẽ có 6 mục tiêu ở Quý 4 — vượt trần 5» → hiện trong vùng aria-live dưới ô nơi nhận trước khi bấm, nút chuyển mở; chan → câu chặn cùng chỗ, nút chuyển disabled; null → không cảnh báo; lỗi → dòng «Chưa kiểm được trần» trong vùng aria-live, nút chuyển mở. Bỏ chọn một mục tiêu → xem trước được gọi lại với objectiveIds mới (so mảng). CHIỀU ĐỎ: bản sao không gọi lại khi đổi tập chọn → đỏ in «xem truoc khong tinh lai»; bản sao bỏ khoá khi chan → đỏ; bản sao coi lỗi xem trước là chặn → ca lỗi đỏ in «nut chuyen khoa khi loi»."
+    expected: "exit 0 cho nhóm -t chuyen-tran; mock chuyenDonViXemTruoc theo đầu vào: canhBao «Kinh doanh miền Nam sẽ có 6 mục tiêu ở Quý 4 — vượt trần 5» → hiện trong vùng aria-live dưới ô nơi nhận trước khi bấm, nút chuyển mở; null → không cảnh báo; lỗi → dòng «Chưa kiểm được trần» trong vùng aria-live, nút chuyển mở. Bỏ chọn một mục tiêu → xem trước được gọi lại với objectiveIds mới (so mảng). CHIỀU ĐỎ: bản sao không gọi lại khi đổi tập chọn → đỏ in «xem truoc khong tinh lai»; bản sao coi lỗi xem trước là chặn → ca lỗi đỏ in «nut chuyen khoa khi loi»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
