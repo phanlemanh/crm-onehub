@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
@@ -117,7 +118,7 @@ export async function donViCua(ca: CaSoan): Promise<DonViCa> {
 export async function donViTrong(ca: CaSoan, goc: DonViCa) {
 	const pb = await db.department.create({
 		data: {
-			id: `${idMau("pb", `trong-${ca.id}`)}-${crypto.randomUUID().slice(0, 8)}`,
+			id: `${idMau("pb", `trong-${ca.id}`)}-${randomUUID().slice(0, 8)}`,
 			name: `${goc.ten}${DG.boiCanh.hauToTrong}`,
 			position: 0,
 			moTa: "",

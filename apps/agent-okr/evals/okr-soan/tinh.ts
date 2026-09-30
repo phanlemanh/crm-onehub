@@ -88,6 +88,40 @@ export function tyLeThang(
 	return ds.filter((d) => goiThang(d.phiaCoGoi, d.aThang)).length / ds.length;
 }
 
+export type DongChiPhi = { costUsd: number | null };
+
+export function loiChiPhi(dong: readonly DongChiPhi[]): string[] {
+	return dong.flatMap((d, i) =>
+		d.costUsd === null
+			? [`dong ${i + 1} costUsd null`]
+			: d.costUsd > 0
+				? []
+				: [`dong ${i + 1} costUsd ${d.costUsd}`],
+	);
+}
+
+export type TongChiPhi = { usd: number; thieu: number };
+
+export function tongChiPhi(dong: readonly DongChiPhi[]): TongChiPhi {
+	return {
+		usd: dong.reduce((a, d) => a + (d.costUsd ?? 0), 0),
+		thieu: dong.filter((d) => d.costUsd === null).length,
+	};
+}
+
+export function xaoTron<T>(ds: readonly T[], ngauNhien: () => number): T[] {
+	const ra = [...ds];
+	for (let i = ra.length - 1; i > 0; i--) {
+		const j = Math.floor(ngauNhien() * (i + 1));
+		const a = ra[i];
+		const b = ra[j];
+		if (a === undefined || b === undefined) continue;
+		ra[i] = b;
+		ra[j] = a;
+	}
+	return ra;
+}
+
 export function coDauChen(chu: string): boolean {
 	const thuong = chu.normalize("NFC").toLowerCase();
 	return TRO_LY_OKR_SOAN.danhGia.dauChen.some((d) =>

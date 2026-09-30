@@ -22,7 +22,7 @@ import {
 	soChiPhiPhien,
 	trangThaiCua,
 } from "./phien";
-import { coDauChen, loiMoDau } from "./tinh";
+import { coDauChen, loiChiPhi, loiMoDau } from "./tinh";
 import { ghiTongKet } from "./tong-ket";
 import { idUngVien, nguCanhJudge, tenDichCua, vanBanNhap } from "./van";
 
@@ -169,7 +169,7 @@ function motCa(ca: CaSoan) {
 							)
 							.map((d) => d.khoa),
 						equals([]),
-					).label("muc tieu da nhan khong doi ten");
+					).label("muc tieu da nhan khong co hang moi cung khoa");
 					t.check(
 						nop2.filter(
 							(d) =>
@@ -193,10 +193,12 @@ function motCa(ca: CaSoan) {
 					equals([]),
 				).label("chi nop_ban_nhap");
 				const eve = mo.phienEve() ?? "";
-				const soChi = await soChiPhiPhien(eve);
-				t.check(soChi.length, equals(soBuoc(luot))).label(
+				const buoc = soBuoc(luot);
+				const soChi = await soChiPhiPhien(eve, buoc);
+				t.check(soChi.length, equals(buoc)).label(
 					"AiChiPhi moi step.completed",
 				);
+				t.check(loiChiPhi(soChi), equals([])).label("costUsd moi buoc > 0");
 				t.check(
 					[...new Set(soChi.map((c) => c.tinhNang))],
 					equals([TRO_LY_OKR_SOAN.tinhNang]),
@@ -215,7 +217,7 @@ function motCa(ca: CaSoan) {
 				}
 
 				const van = vanBanNhap(cho1, tenDichCua(goi));
-				const usd = await chiPhiCuoc(mo.cuoc.id);
+				const { usd } = await chiPhiCuoc(mo.cuoc.id);
 				const biLoai = biLoaiCua(nop1);
 				t.log(
 					JSON.stringify({

@@ -16,7 +16,12 @@ import { Client, type MessageResult } from "eve/client";
 import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../../agent/lib/config";
 import { mintOkr, yeuSach } from "./the";
-import { nhomLanNop } from "./tinh";
+import {
+	type DongChiPhi,
+	nhomLanNop,
+	type TongChiPhi,
+	tongChiPhi,
+} from "./tinh";
 
 const DG = TRO_LY_OKR_SOAN.danhGia;
 
@@ -47,9 +52,16 @@ function tranUsd(): number {
 	return Number.isFinite(so) && so > 0 ? so : DG.tranUsdMacDinh;
 }
 
-async function chiDaTieu(): Promise<number> {
-	const s = await db.aiChiPhi.aggregate({ _sum: { costUsd: true } });
-	return s._sum.costUsd?.toNumber() ?? 0;
+async function dongChiPhi(sessionIds?: readonly string[]) {
+	const hang = await db.aiChiPhi.findMany({
+		where: sessionIds ? { sessionId: { in: [...sessionIds] } } : undefined,
+		orderBy: [{ at: "asc" }, { id: "asc" }],
+		select: { tinhNang: true, costUsd: true },
+	});
+	return hang.map((h) => ({
+		tinhNang: h.tinhNang,
+		costUsd: h.costUsd?.toNumber() ?? null,
+	}));
 }
 
 export async function lyDoBoQua(): Promise<string | null> {
@@ -57,9 +69,11 @@ export async function lyDoBoQua(): Promise<string | null> {
 		return "chi chay tren kho do crm_<cay>_do";
 	if (!TRO_LY_OKR_SOAN.khoaMoHinh.some((k) => process.env[k]?.trim()))
 		return "thieu khoa mo hinh";
-	const chi = await chiDaTieu();
-	if (chi >= tranUsd())
-		return `tran usd ${tranUsd()} da cham: so chi phi ${chi.toFixed(6)}`;
+	const chi = tongChiPhi(await dongChiPhi());
+	if (chi.thieu > 0)
+		return `chi phi khong do duoc: ${chi.thieu} dong AiChiPhi costUsd null`;
+	if (chi.usd >= tranUsd())
+		return `tran usd ${tranUsd()} da cham: so chi phi ${chi.usd.toFixed(6)}`;
 	return null;
 }
 
@@ -235,21 +249,24 @@ export async function trangThaiCua(id: string): Promise<string | null> {
 	);
 }
 
-export async function chiPhiCuoc(cuocSoanId: string): Promise<number> {
+export async function chiPhiCuoc(
+	cuocSoanId: string,
+): Promise<TongChiPhi & { dong: DongChiPhi[] }> {
 	const cuoc = await docCuoc(db, cuocSoanId);
-	if (!cuoc) return 0;
-	const s = await db.aiChiPhi.aggregate({
-		where: { sessionId: { in: [cuoc.sessionId, ...cuoc.cacPhien] } },
-		_sum: { costUsd: true },
-	});
-	return s._sum.costUsd?.toNumber() ?? 0;
+	const dong = cuoc ? await dongChiPhi([cuoc.sessionId, ...cuoc.cacPhien]) : [];
+	return { ...tongChiPhi(dong), dong };
 }
 
-export async function soChiPhiPhien(sessionId: string) {
-	return db.aiChiPhi.findMany({
-		where: { sessionId },
-		select: { tinhNang: true },
-	});
+export async function soChiPhiPhien(
+	sessionId: string,
+	toiThieu: number,
+): Promise<{ tinhNang: string; costUsd: number | null }[]> {
+	const het = Date.now() + DG.choChiPhi.ms;
+	for (;;) {
+		const dong = await dongChiPhi([sessionId]);
+		if (dong.length >= toiThieu || Date.now() >= het) return dong;
+		await new Promise((r) => setTimeout(r, DG.choChiPhi.nhipMs));
+	}
 }
 
 const goiCongCu = z.object({

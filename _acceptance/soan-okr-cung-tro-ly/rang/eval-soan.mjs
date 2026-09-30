@@ -5,6 +5,7 @@ import {
 	mkdirSync,
 	readdirSync,
 	readFileSync,
+	rmSync,
 	writeFileSync,
 } from "node:fs";
 import { createServer } from "node:net";
@@ -150,6 +151,7 @@ if (the.status !== 0) {
 
 const tongKet = join(tmpdir(), `eval-soan-${randomUUID()}.ndjson`);
 writeFileSync(tongKet, "");
+process.on("exit", () => rmSync(tongKet, { force: true }));
 const thuMucChay = join(APP, ".eve", "evals");
 const truoc = new Set(existsSync(thuMucChay) ? readdirSync(thuMucChay) : []);
 const ket = spawnSync(
@@ -191,7 +193,7 @@ const { docTomTat, docTongKet } = await import(
 const tomTat = docTomTat(
 	readFileSync(join(thuMucChay, lanChay, "summary.json"), "utf8"),
 );
-const { phanVi, tyLeThang } = await import(
+const { phanVi, tyLeThang, xaoTron } = await import(
 	join(APP, "evals", "okr-soan", "tinh.ts")
 );
 const dong = docTongKet(readFileSync(tongKet, "utf8"));
@@ -216,9 +218,7 @@ const tongUsd = [...soan, ...doTre].reduce((a, d) => a + d.usd, 0);
 const so = (v, cham = 0) =>
 	v === null || v === undefined ? "—" : Number(v).toFixed(cham);
 
-const tron = [...boiCanh]
-	.sort(() => Math.random() - 0.5)
-	.slice(0, DG.chamNguoi.soCap);
+const tron = xaoTron(boiCanh, Math.random).slice(0, DG.chamNguoi.soCap);
 mkdirSync(BANG_CHUNG, { recursive: true });
 writeFileSync(
 	KHOA_CHAM,
@@ -294,6 +294,13 @@ writeFileSync(
 );
 console.log(`eval-soan: da ghi ${CHUNG_CU}`);
 
+const khongGia = await db.aiChiPhi.count({ where: { costUsd: null } });
+await db.$disconnect();
+if (khongGia > 0)
+	thoat(
+		2,
+		`chi phi khong do duoc: ${khongGia} dong AiChiPhi costUsd null — khong xanh`,
+	);
 if (ket.status !== 0) process.exit(ket.status ?? 1);
 if (tomTat.skipped > 0) thoat(2, `${tomTat.skipped} eval bo qua — khong xanh`);
 if (tyLe === null || tyLe < DG.boiCanh.tyLeThang)

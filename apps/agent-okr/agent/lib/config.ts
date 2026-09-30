@@ -2,7 +2,9 @@ import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import type { TRANG_THAI_DE_XUAT } from "@crm/db/okr-tro-ly-danh-muc";
 import type { BuocCat } from "@crm/validation/okr-cuoc-soan";
 
-const MINUTE_MS = 60_000;
+const SECOND_MS = 1_000;
+const MINUTE_MS = 60 * SECOND_MS;
+const HOUR_MS = 60 * MINUTE_MS;
 const MO_HINH = "google/gemini-3.8-flash";
 const MO_HINH_JUDGE = "zai/glm-5.2-fast";
 const THE = ["onehub:tro-ly-okr", "onehub:soan-okr"] as const;
@@ -66,7 +68,8 @@ export const TRO_LY_OKR_SOAN = {
 		chuKyNam: "mau-okr-chu-ky-nam",
 		chuKyTrong: "mau-okr-chu-ky-nam-ke",
 		kyDo: { ten: "Quý đo soạn", chuKyMau: "mau-okr-chu-ky-quy4" },
-		hanTheGiay: 3 * 60 * 60,
+		hanTheGiay: (3 * HOUR_MS) / SECOND_MS,
+		choChiPhi: { ms: 10 * SECOND_MS, nhipMs: SECOND_MS / 4 },
 		moDau: { cauHoi: { min: 2, max: 4 }, soGoiY: 2 },
 		banNhap: {
 			mucTieu: { min: 2, max: 4 },

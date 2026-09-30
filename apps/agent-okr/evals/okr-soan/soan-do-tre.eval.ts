@@ -11,7 +11,7 @@ import {
 	lyDoBoQua,
 	moCuocVaPhien,
 } from "./phien";
-import { phanVi } from "./tinh";
+import { loiChiPhi, phanVi } from "./tinh";
 import { ghiTongKet } from "./tong-ket";
 
 const DT = TRO_LY_OKR_SOAN.danhGia.doTre;
@@ -49,7 +49,12 @@ function motCuoc(ca: CaSoan, stt: number) {
 				await t.require(l.kq.status, equals("waiting"));
 				ms.push(l.ms);
 			}
-			const usd = await chiPhiCuoc(mo.cuoc.id);
+			const { usd, dong } = await chiPhiCuoc(mo.cuoc.id);
+			t.check(loiChiPhi(dong), equals([])).label("costUsd moi buoc > 0");
+			t.check(
+				dong.length,
+				satisfies<number>((n) => n > 0, "cuoc co dong AiChiPhi"),
+			);
 			daDo.push({ cuoc: stt, ms, usd });
 			t.log(
 				JSON.stringify({
@@ -63,8 +68,8 @@ function motCuoc(ca: CaSoan, stt: number) {
 			t.check(
 				usd,
 				satisfies<number>(
-					(u) => u <= DT.usdMoiCuoc,
-					`chi phi moi cuoc <= ${DT.usdMoiCuoc} usd`,
+					(u) => u > 0 && u <= DT.usdMoiCuoc,
+					`0 < chi phi moi cuoc <= ${DT.usdMoiCuoc} usd`,
 				),
 			);
 			if (stt !== DT.soCuoc - 1) return;

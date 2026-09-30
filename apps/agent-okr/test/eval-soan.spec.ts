@@ -7,10 +7,13 @@ import { boCa } from "../evals/okr-soan/ca";
 import {
 	coDauChen,
 	goiThang,
+	loiChiPhi,
 	loiMoDau,
 	nhomLanNop,
 	phanVi,
+	tongChiPhi,
 	tyLeThang,
+	xaoTron,
 	xepAB,
 } from "../evals/okr-soan/tinh";
 import { docTomTat, docTongKet, ghiTongKet } from "../evals/okr-soan/tong-ket";
@@ -147,5 +150,35 @@ describe("eval-soan: tổng kết", () => {
 			"thieu khoa mo hinh",
 		);
 		expect(() => docTomTat(JSON.stringify({ evals: [] }))).toThrow();
+	});
+});
+
+describe("eval-soan: chi phí và xáo", () => {
+	test("loiChiPhi đỏ khi một bước có costUsd null hay bằng 0, tongChiPhi đếm dòng thiếu", () => {
+		expect(loiChiPhi([{ costUsd: 0.002 }, { costUsd: 0.001 }])).toEqual([]);
+		expect(loiChiPhi([{ costUsd: 0.002 }, { costUsd: null }])).toEqual([
+			"dong 2 costUsd null",
+		]);
+		expect(loiChiPhi([{ costUsd: 0 }])).toEqual(["dong 1 costUsd 0"]);
+		expect(tongChiPhi([{ costUsd: 0.25 }, { costUsd: null }])).toEqual({
+			usd: 0.25,
+			thieu: 1,
+		});
+	});
+
+	test("xaoTron là Fisher–Yates: giữ đủ phần tử, phân bố đều ở vị trí đầu", () => {
+		let hat = 7;
+		const ngauNhien = () => {
+			hat = (hat * 48_271) % 2_147_483_647;
+			return hat / 2_147_483_647;
+		};
+		const dem = [0, 0, 0, 0];
+		for (let i = 0; i < 4_000; i++) {
+			const ra = xaoTron([0, 1, 2, 3], ngauNhien);
+			expect([...ra].sort()).toEqual([0, 1, 2, 3]);
+			dem[ra[0] ?? 0] = (dem[ra[0] ?? 0] ?? 0) + 1;
+		}
+		for (const d of dem) expect(Math.abs(d - 1_000)).toBeLessThan(150);
+		expect(xaoTron([], ngauNhien)).toEqual([]);
 	});
 });
