@@ -87,3 +87,10 @@ Known limits — Cổng Bằng chứng (Manh Phan 2026-09-30, định đoạt m�
 - Ngoài-4 (`apps/app/components/okr/hop-chuyen-okr.tsx`): Các ô chọn chu kỳ hôm nay đều không hiện chu kỳ đã ẩn. Nếu sau này đổi định nghĩa thế nào là đã ẩn, ba màn lọc tại chỗ phải sửa riêng nên dễ sót một màn.
 - Ngoài-5 (`apps/api/src/okr/tro-ly.service.ts`): Nếu quản trị ẩn chu kỳ đúng lúc người khác nhờ trợ lý soạn đề xuất cho chu kỳ đó, trợ lý vẫn có thể làm việc trên chu kỳ vừa ẩn. Tình huống trùng khít thời điểm này hiếm.
 - Ngoài-6 (`apps/app/app/(app)/[slug]/settings/okr/hop-thoai-an-chu-ky.tsx`): Khi ẩn một chu kỳ bị lỗi vì người khác vừa đổi nó, về sau hộp ẩn có thể tự bật lên dù người dùng chưa bấm gì. Đóng hộp đi là xong, không mất dữ liệu.
+
+Known limits — bổ sung sau chữ ký (Manh Phan 2026-09-30, bốn mục đỗ của sổ thi công không có trên thẻ Cổng 2; sổ d-20260930T122732Z-25 … -28):
+
+- Đỗ-1 (`apps/api/src/okr/okr-trao-doi.service.ts`): Nếu quản trị ẩn một chu kỳ đúng lúc hệ thống chuyển việc của người nghỉ, KR của người đó trong chu kỳ vừa ẩn vẫn có thể đổi chủ.
+- Đỗ-2 (`chonChuKyHienTai`): Ẩn quý đang chạy thì chu kỳ mặc định rơi về quý đã đóng của năm trước và vẫn gắn nhãn «hiện tại».
+- Đỗ-3 (`packages/validation/src/okr-chu-ky.ts`): «Hiện lại» vẫn bấm được trên quý có năm cha đã ẩn; máy chủ từ chối và nhắc hiện năm trước.
+- Đỗ-4 (`apps/app/app/(app)/[slug]/okr/hoi-y/chu.tsx`): Ô chọn người của Hỏi ý được dùng lại ở Cài đặt mà chưa chuyển vào bộ giao diện chung.
