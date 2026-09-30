@@ -93,6 +93,7 @@ function mucTieu(
 		canEditKr: [],
 		hienThi: "cong-khai",
 		nguoiXem: [],
+		nguoiDuyetDuKien: null,
 		choDuyet: null,
 		traLaiGanNhat: null,
 		quyen: {

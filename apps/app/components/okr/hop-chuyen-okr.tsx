@@ -45,6 +45,7 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { PHA_CHUYEN_DUOC } from "@crm/validation/okr-chu-ky";
 import { OKR_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import {
+	skipToken,
 	useMutation,
 	useQueries,
 	useQuery,
@@ -187,6 +188,17 @@ export function HopChuyenOkr({
 
 	const guiDuoc =
 		den !== "" && chon.length > 0 && !quaTran && !chuyen.isPending;
+	const xemTruoc = useQuery(
+		trpc.okr.chuyenDonViXemTruoc.queryOptions(
+			den !== "" && chon.length > 0 && !quaTran
+				? {
+						objectiveIds: chon,
+						denDonVi: { level: nguon.level, id: den },
+					}
+				: skipToken,
+		),
+	);
+	const vuot = xemTruoc.data?.vuotTran ?? null;
 
 	let danhSach: ReactNode;
 	if (hong)
@@ -338,6 +350,27 @@ export function HopChuyenOkr({
 							data-o-den
 						/>
 						<FieldDescription>{m.denMoTa[nguon.level]}</FieldDescription>
+						<div aria-live="polite" data-vung-tran>
+							{vuot ? (
+								<Alert variant="warning" data-canh-bao-tran>
+									<Icon icon={WarningAlt} />
+									<AlertDescription>
+										<p>
+											{dienNode(m.seVuotTran, {
+												ten: <span translate="no">{tenDen}</span>,
+												n: String(vuot.soSau),
+												tran: String(vuot.tran),
+											})}
+										</p>
+									</AlertDescription>
+								</Alert>
+							) : null}
+							{xemTruoc.isError ? (
+								<FieldDescription data-chua-kiem-tran>
+									{m.chuaKiemTran}
+								</FieldDescription>
+							) : null}
+						</div>
 					</Field>
 					{danhSach}
 				</form>

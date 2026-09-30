@@ -684,10 +684,11 @@ describe("luu-tru", () => {
 			const lech: string[] = [];
 			const soLyDo: Record<string, number> = {};
 			for (const id of ids) {
-				const { lyDo } = ok<{ lyDo: string[] }>(
+				const { lyDo: coLoai } = ok<{ lyDo: { cau: string }[] }>(
 					await hoi("org.luuTruXemTruoc", { id }, phien.qt ?? ""),
 					`xem truoc ${id}`,
 				);
+				const lyDo = coLoai.map((l) => l.cau);
 				const luuTru = await lam("org.archiveDepartment", { id }, "qt");
 				if (luuTru.status === 200)
 					ok(

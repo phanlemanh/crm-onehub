@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	skipToken,
+} from "@tanstack/react-query";
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, createElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -168,6 +172,22 @@ type DauVao = Json | undefined;
 let cay: TreeOutput = cayMau();
 let quanTri = true;
 let moCoi: () => Promise<MucMoCoi[]> = async () => [];
+type LyDoXem = { loai: "khuon" | "nguoi" | "okr"; cau: string };
+const lyDoMacDinh = (id: string): LyDoXem[] => {
+	const okrMo =
+		[...cay.divisions.flatMap((b) => b.departments), ...cay.chuaXep].find(
+			(p) => p.id === id,
+		)?.okrMo ?? 0;
+	return okrMo > 0
+		? [{ loai: "okr", cau: t.toChuc.chan.lyDo["phong-ban"](okrMo) }]
+		: [];
+};
+let luuTruXem: (id: string) => Promise<LyDoXem[]> = async (id) =>
+	lyDoMacDinh(id);
+let xemTran: (
+	vao: DauVao,
+) => Promise<{ vuotTran: { soSau: number; tran: number } | null }> =
+	async () => ({ vuotTran: null });
 let daGoi: { duong: string; dauVao: DauVao }[] = [];
 let loiGhi = new Map<string, string>();
 let daLamMoi = 0;
@@ -220,6 +240,11 @@ const docTheoDuong = new Map<string, Doc>([
 		},
 	],
 	["okr.moCoi", () => moCoi()],
+	[
+		"org.luuTruXemTruoc",
+		async (vao) => ({ lyDo: await luuTruXem((vao as { id: string }).id) }),
+	],
+	["okr.chuyenDonViXemTruoc", (vao) => xemTran(vao)],
 	["onboarding.listTemplates", () => []],
 	["onboarding.listDepartments", () => []],
 	["onboarding.manDanhMuc", () => null],
@@ -244,15 +269,18 @@ function thuTuc(duong: string) {
 	return {
 		queryKey: () => [duong],
 		pathKey: () => [duong],
-		queryOptions: (vao?: DauVao) => ({
-			queryKey: [duong, vao],
-			queryFn: async () => {
-				daGoi.push({ duong, dauVao: vao });
-				const doc = docTheoDuong.get(duong);
-				if (!doc) throw new Error(`khong doc ${duong}`);
-				return doc(vao);
-			},
-		}),
+		queryOptions: (vao?: DauVao | typeof skipToken) =>
+			vao === skipToken
+				? { queryKey: [duong, "skip"], queryFn: skipToken }
+				: {
+						queryKey: [duong, vao],
+						queryFn: async () => {
+							daGoi.push({ duong, dauVao: vao });
+							const doc = docTheoDuong.get(duong);
+							if (!doc) throw new Error(`khong doc ${duong}`);
+							return doc(vao);
+						},
+					},
 		mutationOptions: (chon: ChonGhi = {}) => ({
 			...chon,
 			mutationKey: [duong],
@@ -288,8 +316,17 @@ const THU_TUC = {
 		"archiveDepartment",
 		"restoreDepartment",
 		"purgeDepartment",
+		"luuTruXemTruoc",
 	],
-	okr: ["cycles", "program", "setProgram", "byUnit", "chuyenDonVi", "moCoi"],
+	okr: [
+		"cycles",
+		"program",
+		"setProgram",
+		"byUnit",
+		"chuyenDonVi",
+		"chuyenDonViXemTruoc",
+		"moCoi",
+	],
 	onboarding: [
 		"listDepartments",
 		"manDanhMuc",
@@ -484,6 +521,8 @@ beforeEach(() => {
 	cay = cayMau();
 	quanTri = true;
 	moCoi = async () => [];
+	luuTruXem = async (id) => lyDoMacDinh(id);
+	xemTran = async () => ({ vuotTran: null });
 	daGoi = [];
 	loiGhi = new Map();
 	daLamMoi = 0;
@@ -573,13 +612,16 @@ describe("luu-tru-chan", () => {
 		await mo(<ToChuc />, "?don=pb:pb-1");
 		await cho(() => q("[data-chi-tiet='phong-ban']") !== null, "chi tiet");
 		await luuTruTuMenu("Kinh doanh vùng 1");
-		await cho(() => q("[data-hop='luu-tru-chan']") !== null, "hop luu tru");
+		await cho(() => q("[data-ly-do-chan]") !== null, "hop luu tru co ly do");
 		const nutLuu = q("[data-nut='luu-tru-khoa']");
 		const lyDo = q("[data-ly-do-chan]");
 		expect({
 			khoa: khoa(nutLuu),
 			lyDo: chu(lyDo),
-			troLyDo: nutLuu?.getAttribute("aria-describedby") === lyDo?.id,
+			troLyDo:
+				document
+					.getElementById(nutLuu?.getAttribute("aria-describedby") ?? "")
+					?.contains(lyDo ?? null) === true,
 			alert: q("[role='alertdialog']"),
 		}).toEqual({
 			khoa: true,
@@ -824,5 +866,178 @@ describe("mo-coi", () => {
 			"mo ngan muc tieu thu hai",
 		);
 		expect(url.getAll("record").join(",")).toContain("objective:o11");
+	});
+});
+
+async function moHopLuuTru(): Promise<void> {
+	await mo(<ToChuc />, "?don=pb:pb-2");
+	await cho(() => q("[data-chi-tiet='phong-ban']") !== null, "chi tiet");
+	await luuTruTuMenu("Kinh doanh vùng 2");
+	await cho(
+		() =>
+			(q("[data-hop='luu-tru-chan']") !== null &&
+				q("[data-dang-kiem-luu-tru]") === null) ||
+			q("[role='alertdialog']") !== null,
+		"hop luu tru",
+	);
+}
+
+describe("luu-tru", () => {
+	const CA: readonly { ten: string; lyDo: LyDoXem[] }[] = [
+		{
+			ten: "A",
+			lyDo: [
+				{
+					loai: "nguoi",
+					cau: "Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
+				},
+				{ loai: "okr", cau: "Phòng ban còn 3 mục tiêu ở kỳ đang mở." },
+			],
+		},
+		{
+			ten: "B",
+			lyDo: [
+				{
+					loai: "nguoi",
+					cau: "Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
+				},
+			],
+		},
+		{
+			ten: "C",
+			lyDo: [{ loai: "okr", cau: "Phòng ban còn 4 mục tiêu ở kỳ đang mở." }],
+		},
+		{
+			ten: "E",
+			lyDo: [
+				{
+					loai: "khuon",
+					cau: "Phòng ban này còn nằm trong khuôn Làm quen Kinh doanh — sửa khuôn trước.",
+				},
+			],
+		},
+		{ ten: "D", lyDo: [] },
+	];
+
+	test("luu-tru: nam phong viet truoc — hop neu dung cac ly do xem truoc tra, dong OKR kem Chuyen OKR, Luu tru khoa khi con ly do; xem truoc loi van cho luu", async () => {
+		const ra: unknown[] = [];
+		for (const c of CA) {
+			luuTruXem = async () => c.lyDo;
+			await moHopLuuTru();
+			ra.push({
+				ten: c.ten,
+				dong: tatCa("[data-ly-do-chan]").map((x) => [
+					x.getAttribute("data-ly-do-chan"),
+					chu(x),
+				]),
+				chuyen: q("[data-nut='chuyen-okr-tu-luu-tru']") !== null,
+				khoa:
+					q("[data-hop='luu-tru-chan']") !== null
+						? khoa(q("[data-nut='luu-tru-khoa']"))
+						: khoa(q("[data-slot='alert-dialog-action']")),
+			});
+			for (const san of dangMo) {
+				await act(async () => san.root.unmount());
+				san.o.remove();
+			}
+			dangMo = [];
+			document.body.innerHTML = "";
+		}
+		expect(ra).toEqual(
+			CA.map((c) => ({
+				ten: c.ten,
+				dong: c.lyDo.map((l) => [l.loai, l.cau]),
+				chuyen: c.lyDo.some((l) => l.loai === "okr"),
+				khoa: c.lyDo.length > 0,
+			})),
+		);
+		luuTruXem = async () => {
+			throw new Error("mat ket noi");
+		};
+		await moHopLuuTru();
+		expect({
+			hoiLai: q("[role='alertdialog']") !== null,
+			khoa: khoa(q("[data-slot='alert-dialog-action']")),
+			chuaKiem: (q("[role='alertdialog']")?.textContent ?? "").includes(
+				t.toChuc.chan.chuaKiem,
+			),
+		}).toEqual({ hoiLai: true, khoa: false, chuaKiem: true });
+	});
+});
+
+describe("chuyen-tran", () => {
+	test("chuyen-tran: canh bao vuot tran hien truoc khi bam, tinh lai khi doi tap chon; null khong canh bao; loi xem truoc khong khoa nut; tap chon rong khong goi xem truoc", async () => {
+		xemTran = async (vao) =>
+			(vao as { objectiveIds: string[] }).objectiveIds.length >= 3
+				? { vuotTran: { soSau: 6, tran: 5 } }
+				: { vuotTran: null };
+		await mo(<ToChuc />, "?don=pb:pb-1&chuyenOkr=pb:pb-1");
+		await moHopChuyenVaCho();
+		await chonDonViNhan("Kinh doanh vùng 2");
+		await cho(() => q("[data-canh-bao-tran]") !== null, "canh bao tran");
+		const canhBao = q("[data-canh-bao-tran]");
+		const truoc = {
+			chu: chu(canhBao),
+			live: canhBao?.closest("[aria-live='polite']") !== null,
+			nutMo: khoa(nutChuyen()) === false,
+			vao: goiCua("okr.chuyenDonViXemTruoc").at(-1)?.dauVao,
+		};
+		await boChon("o1");
+		await boChon("o2");
+		await cho(() => q("[data-canh-bao-tran]") === null, "het canh bao");
+		const sauBoChon = goiCua("okr.chuyenDonViXemTruoc").at(-1)?.dauVao;
+		xemTran = async () => {
+			throw new Error("mat ket noi");
+		};
+		await boChon("o3");
+		await cho(() => q("[data-chua-kiem-tran]") !== null, "chua kiem tran");
+		const loi = { nutMo: khoa(nutChuyen()) === false };
+		const soGoi = goiCua("okr.chuyenDonViXemTruoc").length;
+		await boChon("o4");
+		await cho(() => khoa(nutChuyen()) === true, "nut khoa khi rong");
+		expect({
+			truoc,
+			sauBoChon,
+			loi,
+			khongGoiKhiRong: goiCua("okr.chuyenDonViXemTruoc").length === soGoi,
+		}).toEqual({
+			truoc: {
+				chu: "«Kinh doanh vùng 2» sẽ có 6 mục tiêu trong một chu kỳ — vượt trần 5 của chương trình.",
+				live: true,
+				nutMo: true,
+				vao: {
+					objectiveIds: ["o1", "o2", "o3", "o4"],
+					denDonVi: { level: "phong-ban", id: "pb-2" },
+				},
+			},
+			sauBoChon: {
+				objectiveIds: ["o3", "o4"],
+				denDonVi: { level: "phong-ban", id: "pb-2" },
+			},
+			loi: { nutMo: true },
+			khongGoiKhiRong: true,
+		});
+	});
+});
+
+describe("nhan-danh-sach", () => {
+	test("nhan-danh-sach: muc mo coi gioi han mang nhan khoa kem so nguoi xem, muc cong khai khong co", async () => {
+		const goc = MO_COI[0];
+		if (!goc) throw new Error("thieu mau mo coi");
+		moCoi = async () => [
+			{ ...goc, objectiveId: "gh", hienThi: "gioi-han", soNguoiXem: 1 },
+			{ ...goc, objectiveId: "ck" },
+		];
+		await mo(<KhoiMoCoi />);
+		await cho(() => tatCa("[data-mo-coi]").length === 2, "hai muc mo coi");
+		expect({
+			gh: tatCa("[data-mo-coi='gh'] [data-nhan-gioi-han]").map((n) =>
+				n.getAttribute("aria-label"),
+			),
+			ck: tatCa("[data-mo-coi='ck'] [data-nhan-gioi-han]").length,
+		}).toEqual({
+			gh: ["Giới hạn: Chỉ người liên quan và 1 người xem có tên thấy"],
+			ck: 0,
+		});
 	});
 });

@@ -23,6 +23,7 @@ import type {
 	HeadInput,
 	ImportApplyOutput,
 	ImportPreviewOutput,
+	LyDoChanLuuTru,
 	PlacementInput,
 	TreeOutput,
 } from "./to-chuc.contracts";
@@ -338,7 +339,7 @@ export class ToChucService {
 	private async lyDoChanLuuTru(
 		db: Prisma.TransactionClient,
 		id: string,
-	): Promise<string[]> {
+	): Promise<LyDoChanLuuTru[]> {
 		const song = (await this.khuonChua(id))
 			.filter((k) => !k.archived)
 			.map((k) => k.name);
@@ -350,9 +351,15 @@ export class ToChucService {
 		});
 		const { mo } = await demOkrCuaDonVi(db, { departmentId: id });
 		return [
-			...(song.length > 0 ? [T.phongBanTrongKhuon(song)] : []),
-			...(conNguoi > 0 ? [T.phongBanConNguoi(conNguoi)] : []),
-			...(mo > 0 ? [T.phongBanConOkrMo(mo)] : []),
+			...(song.length > 0
+				? [{ loai: "khuon" as const, cau: T.phongBanTrongKhuon(song) }]
+				: []),
+			...(conNguoi > 0
+				? [{ loai: "nguoi" as const, cau: T.phongBanConNguoi(conNguoi) }]
+				: []),
+			...(mo > 0
+				? [{ loai: "okr" as const, cau: T.phongBanConOkrMo(mo) }]
+				: []),
 		];
 	}
 
@@ -366,7 +373,7 @@ export class ToChucService {
 		await this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "department" WHERE id = ${input.id} FOR NO KEY UPDATE`;
 			const [lyDo] = await this.lyDoChanLuuTru(tx, input.id);
-			if (lyDo !== undefined) throw new BadRequestException(lyDo);
+			if (lyDo !== undefined) throw new BadRequestException(lyDo.cau);
 			await tx.department.update({
 				where: { id: input.id },
 				data: { archivedAt: new Date() },
