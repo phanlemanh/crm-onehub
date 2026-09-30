@@ -55,7 +55,12 @@ const vi = {
 		"phan-tram": "Phần trăm",
 	},
 	loai: { "cam-ket": "Cam kết", "tham-vong": "Tham vọng" },
-	trangThai: { nhap: "Nháp", "cong-bo": "Đã công bố", "da-bo": "Đã bỏ" },
+	trangThai: {
+		nhap: "Nháp",
+		"cho-duyet": "Chờ duyệt",
+		"cong-bo": "Đã công bố",
+		"da-bo": "Đã bỏ",
+	},
 	moc: {
 		xong: "Xong",
 		chuaXong: "Chưa xong",
@@ -256,6 +261,12 @@ const vi = {
 		"ghi-nhan": "Ghi nhận",
 		"go-ghi-nhan": "Gỡ ghi nhận",
 		"sua-mau": "Sửa mẫu OKR",
+		"doi-hien-thi": "Đổi mức hiển thị",
+		"gui-duyet": "Gửi duyệt",
+		duyet: "Duyệt",
+		"tra-lai": "Trả lại",
+		"rut-duyet": "Rút lại",
+		"chuyen-don-vi": "Chuyển OKR sang đơn vị",
 	},
 	vet: {
 		cot: {
@@ -606,7 +617,12 @@ const en: OkrMessages = {
 		"phan-tram": "Percentage",
 	},
 	loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
-	trangThai: { nhap: "Draft", "cong-bo": "Published", "da-bo": "Dropped" },
+	trangThai: {
+		nhap: "Draft",
+		"cho-duyet": "Awaiting approval",
+		"cong-bo": "Published",
+		"da-bo": "Dropped",
+	},
 	moc: {
 		xong: "Done",
 		chuaXong: "Not done",
@@ -807,6 +823,12 @@ const en: OkrMessages = {
 		"ghi-nhan": "Recognition",
 		"go-ghi-nhan": "Remove recognition",
 		"sua-mau": "Edit OKR template",
+		"doi-hien-thi": "Change visibility",
+		"gui-duyet": "Submit for approval",
+		duyet: "Approve",
+		"tra-lai": "Send back",
+		"rut-duyet": "Withdraw",
+		"chuyen-don-vi": "Move OKR to unit",
 	},
 	vet: {
 		cot: {

@@ -7,9 +7,12 @@ import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrDuyetService } from "./okr-duyet.service";
+import { OkrHienThiService } from "./okr-hien-thi.service";
 import { OkrKhepService } from "./okr-khep.service";
 import { OkrMauService } from "./okr-mau.service";
 import { OkrSoService } from "./okr-so.service";
+import { OkrTaiCoCauService } from "./okr-tai-co-cau.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import { OkrXemService } from "./okr-xem.service";
 import { TroLyOkrService } from "./tro-ly.service";
@@ -27,6 +30,9 @@ import { TroLyOkrService } from "./tro-ly.service";
 		OkrKhepService,
 		OkrCanhKrService,
 		OkrMauService,
+		OkrHienThiService,
+		OkrDuyetService,
+		OkrTaiCoCauService,
 		OkrRouter,
 	],
 })

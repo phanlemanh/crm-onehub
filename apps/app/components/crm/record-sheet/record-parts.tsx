@@ -25,6 +25,7 @@ import { useRecordStack } from "./record-stack";
 export function RecordSheetFrame({
 	loading,
 	error,
+	errorView,
 	title,
 	description,
 	note,
@@ -37,6 +38,7 @@ export function RecordSheetFrame({
 }: {
 	loading: boolean;
 	error: string | null;
+	errorView?: ReactNode;
 	title: ReactNode;
 	description?: ReactNode;
 	note?: ReactNode;
@@ -65,6 +67,8 @@ export function RecordSheetFrame({
 				<div className="flex min-h-0 flex-1 items-center justify-center">
 					<Spinner />
 				</div>
+			) : error && errorView ? (
+				errorView
 			) : error ? (
 				<div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 p-6 text-center">
 					<p className="font-medium text-sm">{m.misc.recordNotLoaded}</p>

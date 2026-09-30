@@ -37,6 +37,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useId, useState } from "react";
 import { toast } from "sonner";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrTaiCoCauMessages } from "@/lib/messages/okr-tai-co-cau";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { DangTaiThe, LoiThe, useQuyenChuongTrinh } from "./trang-thai-cai-dat";
@@ -50,6 +51,7 @@ const luatChung = okrProgram.pick({
 	scoreScale: true,
 	weightsOn: true,
 	personalOn: true,
+	duyetCongBo: true,
 });
 
 type LuatChung = Pick<
@@ -60,6 +62,7 @@ type LuatChung = Pick<
 	| "scoreScale"
 	| "weightsOn"
 	| "personalOn"
+	| "duyetCongBo"
 >;
 
 type Nhap = Omit<LuatChung, "objectiveCap" | "krCap"> & {
@@ -78,13 +81,15 @@ const nhapTu = (ct: LuatChung): Nhap => ({
 	scoreScale: ct.scoreScale,
 	weightsOn: ct.weightsOn,
 	personalOn: ct.personalOn,
+	duyetCongBo: ct.duyetCongBo,
 	objectiveCap: String(ct.objectiveCap),
 	krCap: String(ct.krCap),
 });
 
 export function FormCauHinh() {
-	const m = okrMessages(useLocale());
-	const c = m.caiDat.cauHinh;
+	const locale = useLocale();
+	const c = okrMessages(locale).caiDat.cauHinh;
+	const d = okrTaiCoCauMessages(locale).chuongTrinh;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const ma = useId();
@@ -122,7 +127,8 @@ export function FormCauHinh() {
 			nhap.capMode !== daLuu.capMode ||
 			nhap.scoreScale !== daLuu.scoreScale ||
 			nhap.weightsOn !== daLuu.weightsOn ||
-			nhap.personalOn !== daLuu.personalOn);
+			nhap.personalOn !== daLuu.personalOn ||
+			nhap.duyetCongBo !== daLuu.duyetCongBo);
 	const hopLe = ketQua?.success === true;
 	const khoa = !canManage || luu.isPending;
 	const moTaTran = lyDo ? `${lyDo} ${ma}-tran-mo-ta` : `${ma}-tran-mo-ta`;
@@ -284,6 +290,23 @@ export function FormCauHinh() {
 									aria-describedby={lyDo}
 									data-cong-tac="ca-nhan"
 									onCheckedChange={(on) => sua({ personalOn: on })}
+								/>
+							</Field>
+
+							<Field orientation="horizontal">
+								<FieldContent>
+									<FieldLabel htmlFor={`${ma}-duyet-cong-bo`}>
+										{d.duyetCongBo}
+									</FieldLabel>
+									<FieldDescription>{d.duyetCongBoMoTa}</FieldDescription>
+								</FieldContent>
+								<Switch
+									id={`${ma}-duyet-cong-bo`}
+									checked={nhap.duyetCongBo}
+									disabled={khoa}
+									aria-describedby={lyDo}
+									data-cong-tac="duyet-cong-bo"
+									onCheckedChange={(on) => sua({ duyetCongBo: on })}
 								/>
 							</Field>
 						</FieldGroup>

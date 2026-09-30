@@ -110,6 +110,17 @@ function mucTieu(
 		theoDoi: false,
 		trail: [],
 		canEditKr: ["kr-1"],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: true,
+			congBo: status === "nhap",
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 	};
 }
 

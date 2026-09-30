@@ -90,6 +90,17 @@ function mucTieu(
 		theoDoi: false,
 		trail: [],
 		canEditKr: [],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: false,
+			congBo: false,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 		...thay,
 	};
 }

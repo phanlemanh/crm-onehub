@@ -1,0 +1,7 @@
+# E15 network (lan chay verifier doc lap 2026-09-29, app http://localhost:4131 api http://localhost:4700; raw tu man-gioi-han-duyet-network.txt)
+2026-09-29T13:09:07.487Z truong 400 POST http://localhost:4131/api/trpc/okr.datHienThi?batch=1
+2026-09-29T13:09:07.487Z truong console.error Failed to load resource: the server responded with a status of 400 (Bad Request)
+2026-09-29T13:09:28.036Z truong 500 GET http://localhost:4131/api/trpc/okr.objective?batch=1&input=%7B%220%22%3A%7B%22id%22%3A%22cmump06570002kocfawtcgjzb%22%7D%7D
+2026-09-29T13:09:28.036Z truong console.error Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+# 400 okr.datHienThi = buoc 4 (Gioi han tren muc tieu con can chinh, loi 'con 1 can chinh' la ket qua dung cua eval)
+# 500 okr.objective = buoc 9 (chan truy van bang request interception -> Empty loi + Thu lai; 500 do buoc chan tao ra)

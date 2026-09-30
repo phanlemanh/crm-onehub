@@ -87,6 +87,19 @@ const MAU = {
 		capNhat: 1,
 		binhLuan: 2,
 	},
+	"okr-cho-duyet": {
+		loai: "okr-cho-duyet",
+		objectiveId: "mt-6",
+		nhan: "Mở rộng kho",
+		nguoiGui: "Trần Hà",
+	},
+	"okr-tra-lai": {
+		loai: "okr-tra-lai",
+		objectiveId: "mt-7",
+		nhan: "Khách mới",
+		nguoiTraLai: "Lê Minh",
+		lyDo: "Chưa có KR đo khách hàng mới",
+	},
 	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 2 },
 } satisfies {
 	[K in Exclude<ViecNhac["loai"], "ai-tran" | "ai-doi-soat-lech">]: Extract<

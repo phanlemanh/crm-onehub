@@ -43,6 +43,7 @@ function cayMau(): TreeOutput {
 		divisionId,
 		head,
 		stepCount: 0,
+		okrMo: 0,
 		people: head ? [{ ...head, primary: true }] : [],
 	});
 	return {
@@ -52,6 +53,7 @@ function cayMau(): TreeOutput {
 				name: "Kinh doanh",
 				position: 0,
 				head: LAN,
+				okrMo: 0,
 				departments: [pb("pb-1", "Kinh doanh vùng 1", "bp-kd", HUNG)],
 			},
 			{
@@ -59,6 +61,7 @@ function cayMau(): TreeOutput {
 				name: "Vận hành",
 				position: 1,
 				head: null,
+				okrMo: 0,
 				departments: [pb("pb-kho", "Kho vận", "bp-vh", null)],
 			},
 		],

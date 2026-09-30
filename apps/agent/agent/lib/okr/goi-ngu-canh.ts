@@ -1,3 +1,4 @@
+import { boGioiHan } from "@crm/db/okr-hien-thi";
 import { kiemOkr, type MaLuatOkr } from "@crm/validation/okr-kiem";
 import {
 	type GoiKiem,
@@ -22,6 +23,7 @@ import {
 	docTenThanhVien,
 	docThangCham,
 	type MucTieuDoc,
+	nguoiYeuCauXemDuoc,
 } from "./doc";
 
 const capMucTieu = z.enum(CAP_MUC_TIEU);
@@ -92,6 +94,7 @@ function luatDaHoiCua(mt: MucTieuDoc): GoiDeXuat["luatDaHoi"] {
 async function dichCanChinhCua(
 	mt: MucTieuDoc,
 ): Promise<GoiDeXuat["dichCanChinh"]> {
+	if (mt.hienThi !== boGioiHan.hienThi) return [];
 	const ds = await docDichCanChinh({
 		level: capMucTieu.parse(mt.level),
 		cycleId: mt.cycleId,
@@ -135,11 +138,13 @@ function soDeXuat(mt: MucTieuDoc, hang: HangConTacDung[], nac: NacTroLy) {
 
 export async function dungGoiDeXuat(
 	objectiveId: string,
+	nguoiYeuCau: string,
 	v: { keyResultId?: string | null; nac?: NacTroLy } = {},
 ): Promise<GoiDeXuat | null> {
+	if (!(await nguoiYeuCauXemDuoc(objectiveId, nguoiYeuCau))) return null;
 	const keyResultId = v.keyResultId ?? null;
 	const [mt, thangCham, hang, tenThanhVien] = await Promise.all([
-		docMucTieu(objectiveId),
+		docMucTieu(objectiveId, nguoiYeuCau),
 		docThangCham(),
 		docDeXuatConTacDung(objectiveId),
 		docTenThanhVien(),

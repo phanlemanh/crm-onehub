@@ -1067,7 +1067,7 @@ describe("dien-bien", () => {
 		];
 		for (const [luc, tuTin, gia, ghi] of gieo)
 			await capNhat(p.nguoi, kr, vn(luc), tuTin, gia, ghi);
-		const r = await xem().dienBien(kr, vn("2026-10-28T10:00:00"));
+		const r = await xem().dienBien(p.nguoi, kr, vn("2026-10-28T10:00:00"));
 		expect(r.diem.map((d) => [d.tuan, d.giaTri, d.kyVong, d.tuTin])).toEqual([
 			["2026-10-05", 62, 60, "vua"],
 			["2026-10-12", 65, 62.5, "cao"],
