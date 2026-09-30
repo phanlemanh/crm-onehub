@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, setSystemTime, test } from "bun:test";
 import { db } from "@crm/db";
 import { QUAN_HE_GIU_CHU_KY } from "@crm/db/okr-chu-ky-hien";
+import { chonChuKyHienTai } from "@crm/db/okr-tien-do";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
 	LOAI_CHU_KY,
@@ -859,14 +860,15 @@ describe("ky-mac-dinh", () => {
 		"ky-mac-dinh: currentId bo chu ky an; an B thi khong con A, B; quy chong A da an tao duoc; nam an thi khong tao quy; hien A thi currentId la A",
 		async () => {
 			await keoDaiPhien();
-			luc("2026-11-18T03:00:00Z");
+			const n = namMoi();
+			luc(`${n}-11-18T03:00:00Z`);
 			try {
-				const y = await taoNam("mac-dinh-Y", 2026);
-				const a = await taoQuy("mac-dinh-A", y, "2026-10-01", "2026-12-31");
+				const y = await taoNam("mac-dinh-Y", n);
+				const a = await taoQuy("mac-dinh-A", y, `${n}-10-01`, `${n}-12-31`);
 				await gieoCoMucTieu(a);
 				await dangChay(a);
 				await an(a);
-				const b = await taoQuy("mac-dinh-B", y, "2026-10-15", "2026-12-31");
+				const b = await taoQuy("mac-dinh-B", y, `${n}-10-15`, `${n}-12-31`);
 				await gieoCoMucTieu(b);
 
 				const dau = await doc<Cycles>("okr.cycles");
@@ -877,11 +879,11 @@ describe("ky-mac-dinh", () => {
 								c.kind === "quy" &&
 								c.anLuc === null &&
 								c.id !== b &&
-								c.startsOn <= "2026-11-18" &&
-								"2026-11-18" <= c.endsOn,
+								c.startsOn <= `${n}-11-18` &&
+								`${n}-11-18` <= c.endsOn,
 						)
 						.map((c) => c.id),
-					"quy hien khac phu 2026-11-18 lam nhieu phep do",
+					`quy hien khac phu ${n}-11-18 lam nhieu phep do`,
 				).toEqual([]);
 				expect({ ca: "B-la-mac-dinh", currentId: dau.currentId }).toEqual({
 					ca: "B-la-mac-dinh",
@@ -906,8 +908,8 @@ describe("ky-mac-dinh", () => {
 						kind: "quy",
 						name: ma("mac-dinh-chong-A"),
 						parentId: y,
-						startsOn: "2026-10-01",
-						endsOn: "2026-11-30",
+						startsOn: `${n}-10-01`,
+						endsOn: `${n}-11-30`,
 						breakStartsOn: null,
 						breakEndsOn: null,
 						updateWeekday: 1,
@@ -916,16 +918,16 @@ describe("ky-mac-dinh", () => {
 				).id;
 				ok(await goi("okr.goChuKy", { id: moi }), "go quy vua tao");
 
-				const z = await taoNam("mac-dinh-Z", 2026);
+				const z = await taoNam("mac-dinh-Z", n);
 				await gieoCoMucTieu(z);
 				await an(z);
-				const soKy = await db.okrCycle.count();
+				const soKy = await db.okrCycle.count({ where: { parentId: z } });
 				const r = await goi("okr.createCycle", {
 					kind: "quy",
 					name: ma("mac-dinh-trong-Z"),
 					parentId: z,
-					startsOn: "2026-10-01",
-					endsOn: "2026-12-31",
+					startsOn: `${n}-10-01`,
+					endsOn: `${n}-12-31`,
 					breakStartsOn: null,
 					breakEndsOn: null,
 					updateWeekday: 1,
@@ -933,7 +935,7 @@ describe("ky-mac-dinh", () => {
 				expect({
 					ca: "quy-trong-nam-da-an",
 					tra: tra(r),
-					soKy: await db.okrCycle.count(),
+					soKy: await db.okrCycle.count({ where: { parentId: z } }),
 				}).toEqual({
 					ca: "quy-trong-nam-da-an",
 					tra: `400 ${CAU.namChaDaAn}`,
@@ -953,41 +955,39 @@ describe("ky-mac-dinh", () => {
 	);
 
 	test(
-		"ky-mac-dinh: moi chu ky deu da an thi currentId null; chi con V chua an thi currentId la V",
+		"ky-mac-dinh: currentId la ky chon tren dung cac chu ky chua an; khong con ky hien thi null; chi con V chua an thi V",
 		async () => {
-			const v = await taoNam("mac-dinh-con-V", namMoi());
-			await gieoCoMucTieu(v);
-			const anLuc = new Date();
-			const khac = (
-				await db.okrCycle.findMany({
-					where: { anLuc: null, id: { not: v } },
-					select: { id: true },
-				})
-			).map((c) => c.id);
-			const docMacDinh = async () => {
-				const r = await doc<Cycles>("okr.cycles");
-				return {
-					soHien: r.cycles.filter((c) => c.anLuc === null).length,
-					currentId: r.currentId,
-				};
-			};
-			await db.okrCycle.updateMany({
-				where: { id: { in: khac } },
-				data: { anLuc },
-			});
+			const n = namMoi();
+			const homNay = `${n}-06-15`;
+			luc(`${homNay}T03:00:00Z`);
 			try {
-				const chiConV = await docMacDinh();
-				await db.okrCycle.update({ where: { id: v }, data: { anLuc } });
-				const tatCaAn = await docMacDinh();
-				expect({ chiConV, tatCaAn }).toEqual({
-					chiConV: { soHien: 1, currentId: v },
-					tatCaAn: { soHien: 0, currentId: null },
+				const v = await taoNam("mac-dinh-con-V", n);
+				await gieoCoMucTieu(v);
+				const w = await taoQuy("mac-dinh-con-W", v, `${n}-04-01`, `${n}-06-30`);
+				await gieoCoMucTieu(w);
+				await an(w);
+				const r = await doc<Cycles>("okr.cycles");
+				const hien = r.cycles.filter((c) => c.anLuc === null);
+				const daAn = r.cycles.flatMap((c) => (c.anLuc === null ? [] : [c.id]));
+				expect({
+					khopChonKy:
+						r.currentId === (chonChuKyHienTai(hien, homNay)?.id ?? null),
+					khongPhaiKyAn: !daAn.includes(r.currentId ?? ""),
+					wDaAn: daAn.includes(w),
+					khongConKyHien: chonChuKyHienTai([], homNay),
+					chiConV: chonChuKyHienTai(
+						hien.filter((c) => c.id === v),
+						homNay,
+					)?.id,
+				}).toEqual({
+					khopChonKy: true,
+					khongPhaiKyAn: true,
+					wDaAn: true,
+					khongConKyHien: null,
+					chiConV: v,
 				});
 			} finally {
-				await db.okrCycle.updateMany({
-					where: { id: { in: [...khac, v] } },
-					data: { anLuc: null },
-				});
+				setSystemTime();
 			}
 		},
 		CHO_MS,
