@@ -39,6 +39,8 @@ const CHON = new Set(
 const TEP_CHIEU = "apps/api/src/okr/hoi-y.ts";
 const TEP_GOP = "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx";
 const TEP_KET_LUAN = "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx";
+const TEP_DONG_NGHIEP =
+	"apps/app/app/(app)/[slug]/okr/hoi-y/khoi-y-dong-nghiep.tsx";
 const TEP_CONG_BO = "apps/api/src/okr/okr-hoi-y.service.ts";
 const TEP_THANH_LUU = "packages/ui/src/components/save-bar.tsx";
 const VET = {
@@ -63,8 +65,20 @@ const VET = {
 					'<StatGroup aria-label={m.conSo} data-khoi="the-con-so" role="group">',
 					'<div aria-label={m.conSo} className="flex flex-col gap-3" data-khoi="the-con-so" role="group">',
 				)
-				.replace("</StatGroup>", "</div>"),
+				.replace("</StatGroup>", "</div>")
+				.replace(
+					'className="flex flex-col gap-3 max-sm:order-1" data-khoi="loi-mo"',
+					'className="flex flex-col gap-3" data-khoi="loi-mo"',
+				),
 		ghim: /E12 buoc-man-dau: mep tren o soan \d+px/,
+	},
+	"E12-bat": {
+		eval: "E12",
+		tep: TEP_DONG_NGHIEP,
+		mo: "ban sao «Toi cung nghi vay» dung lai bien the vien (bat chi doi vien, khong nen, khong dau tich)",
+		cam: (s) =>
+			s.replace('variant="outline-check"', 'variant="outline"'),
+		ghim: /E12 buoc 6: nut da bat khong khac nut chua bat/,
 	},
 	E13: {
 		eval: "E12",
@@ -1170,6 +1184,7 @@ async function nhomE12() {
 			.map((e) => e.innerText.replace(/\s+/g, " ").trim());
 		const clamp = window.__tim("[data-khoi='loi-mo'] p.line-clamp-3")[0];
 		const oSoan = window.__tim("[data-khoi='o-soan'] textarea")[0];
+		const gui = window.__tim("[data-khoi='o-soan'] button[type='submit']")[0];
 		const tab = window.__tim("[data-khung-tab] a[aria-current='page']")[0];
 		const r = tab?.getBoundingClientRect();
 		return {
@@ -1187,6 +1202,7 @@ async function nhomE12() {
 					}
 				: null,
 			oSoanTop: oSoan ? Math.round(oSoan.getBoundingClientRect().top) : null,
+			guiDay: gui ? Math.round(gui.getBoundingClientRect().bottom) : null,
 			tab: r ? { trai: r.left, phai: r.right } : null,
 			rong: window.innerWidth,
 		};
@@ -1238,6 +1254,10 @@ async function nhomE12() {
 	kiem(
 		`E12 buoc 5: mep tren o «${CHU.gop.y}» ${dau.oSoanTop}px < ${DO.cao[DO.hep]}`,
 		dau.oSoanTop !== null && dau.oSoanTop < DO.cao[DO.hep],
+	);
+	kiem(
+		`E12 buoc 5: nut «${CHU.gop.gui}» nam tron trong man dau, day ${dau.guiDay}px <= ${DO.cao[DO.hep]}`,
+		dau.guiDay !== null && dau.guiDay <= DO.cao[DO.hep],
 	);
 	kiem(
 		`E12 buoc 5: tab Hoi y dang dung nam tron [0, ${dau.rong}] (thay ${JSON.stringify(dau.tab)})`,
@@ -1341,6 +1361,46 @@ async function nhomE12() {
 		`${KHUNG_DN} [data-y='${yDau}'] [data-slot='toggle']`,
 	);
 	await cho(DO.choGhiMs);
+	await g.mouse.move(0, 0);
+	const nutBat = await g.evaluate(
+		(k, y) => {
+			const doc = (e) => {
+				if (!e) return null;
+				const dau = e.querySelector("[data-slot='toggle-check']");
+				const nen = (x) => getComputedStyle(x).backgroundColor;
+				const nenThe = e.closest("[data-slot='card-content']");
+				return {
+					nen: nen(e),
+					nenThe: nenThe ? nen(nenThe) : null,
+					dau: dau ? Math.round(dau.getBoundingClientRect().width) : 0,
+				};
+			};
+			const bat = window.__tim(`${k} [data-y='${y}'] [data-slot='toggle']`)[0];
+			const tat = window
+				.__tim(`${k} [data-slot='toggle']`)
+				.find((e) => e.getAttribute("aria-pressed") === "false");
+			return { bat: doc(bat), tat: doc(tat) };
+		},
+		KHUNG_DN,
+		yDau,
+	);
+	console.log(`  E12 buoc 6: nut «Toi cung nghi vay» ${JSON.stringify(nutBat)}`);
+	const batKhac =
+		nutBat.bat !== null &&
+		nutBat.tat !== null &&
+		nutBat.bat.nen !== nutBat.tat.nen &&
+		nutBat.bat.nen !== nutBat.bat.nenThe &&
+		nutBat.bat.nen !== "rgba(0, 0, 0, 0)" &&
+		nutBat.bat.dau > 0 &&
+		nutBat.tat.dau === 0;
+	if (!batKhac)
+		console.log(
+			`  E12 buoc 6: nut da bat khong khac nut chua bat (${JSON.stringify(nutBat)})`,
+		);
+	kiem(
+		"E12 buoc 6: «Tôi cũng nghĩ vậy» đã bật có nền khác nút chưa bật và khác nền thẻ, có dấu tích; nút chưa bật không dấu tích",
+		batKhac,
+	);
 	await kiemTheoTen(g, KHUNG_DN, tenGieo, "E12 buoc-gop");
 	const khongDich = await g.evaluate((k) => {
 		const doan = window.__tim(`${k} [data-y] p`);

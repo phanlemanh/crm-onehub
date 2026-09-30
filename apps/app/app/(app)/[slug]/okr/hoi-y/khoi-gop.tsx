@@ -185,9 +185,11 @@ function TruongY({
 					translate="no"
 					value={gia.viSao}
 				/>
-				<FieldDescription>
-					{dien(m.kyTu, { n: gia.viSao.length, max: OKR_HOI_Y.viSao.max })}
-				</FieldDescription>
+				{gia.viSao.length > 0 ? (
+					<FieldDescription>
+						{dien(m.kyTu, { n: gia.viSao.length, max: OKR_HOI_Y.viSao.max })}
+					</FieldDescription>
+				) : null}
 			</Field>
 			<Field>
 				<FieldLabel htmlFor={`${id}-do-bang`}>{m.doBangGi}</FieldLabel>
@@ -198,12 +200,14 @@ function TruongY({
 					translate="no"
 					value={gia.doBangGi}
 				/>
-				<FieldDescription>
-					{dien(m.kyTu, {
-						n: gia.doBangGi.length,
-						max: OKR_HOI_Y.doBangGi.max,
-					})}
-				</FieldDescription>
+				{gia.doBangGi.length > 0 ? (
+					<FieldDescription>
+						{dien(m.kyTu, {
+							n: gia.doBangGi.length,
+							max: OKR_HOI_Y.doBangGi.max,
+						})}
+					</FieldDescription>
+				) : null}
 			</Field>
 		</>
 	);

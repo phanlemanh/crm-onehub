@@ -1571,6 +1571,33 @@ describe("Hỏi ý — sửa sau tự lái: ô soạn đứng ngay dưới câu 
 	});
 });
 
+describe("Hỏi ý — sửa sau tự lái: ô soạn gọn để «Gửi» lên màn đầu", () => {
+	test("«Vì sao» và «Đo bằng gì» còn trống thì không in đếm ký tự; gõ vào thì hiện; ô ý luôn in trần và mức tối thiểu", async () => {
+		const o = await moTrangThai("gop");
+		const dem = (nhanO: string) =>
+			oTheoNhan(o, nhanO)
+				.closest('[data-slot="field"]')
+				?.querySelector('[data-slot="field-description"]')?.textContent ?? null;
+		const truoc = {
+			y: dem("Ý của bạn"),
+			viSao: dem("Vì sao (tuỳ chọn)"),
+			doBang: dem("Đo bằng gì (tuỳ chọn)"),
+		};
+		await go(oTheoNhan(o, "Vì sao (tuỳ chọn)"), "Ba chuỗi đã hỏi");
+		await go(oTheoNhan(o, "Đo bằng gì (tuỳ chọn)"), "Số hợp đồng");
+		expect({
+			truoc,
+			sau: {
+				viSao: dem("Vì sao (tuỳ chọn)"),
+				doBang: dem("Đo bằng gì (tuỳ chọn)"),
+			},
+		}).toEqual({
+			truoc: { y: "0/300 ký tự, ít nhất 10", viSao: null, doBang: null },
+			sau: { viSao: "15/500 ký tự", doBang: "11/200 ký tự" },
+		});
+	});
+});
+
 describe("Hỏi ý — sửa sau tự lái: sheet sửa khoá theo cờ máy chủ", () => {
 	test("đã có ý (cauHoiKhoa): ô câu hỏi tắt, dòng dưới ô nói vì sao; chưa có ý thì mở", async () => {
 		const b = coBan();
