@@ -37,6 +37,7 @@ const ky = (id: string, name: string, phase: ChuKyOutput["phase"]) => ({
 	breakEndsOn: null,
 	updateWeekday: 1,
 	cuaSoRa: null,
+	anLuc: null as string | null,
 });
 const Q4 = ky("q4", "Quý 4 · 2026", "dang-chay");
 const Q3 = ky("q3", "Quý 3 · 2026", "da-dong");
@@ -686,6 +687,56 @@ describe("chuyen-okr", () => {
 		]);
 		await cho(() => hopChuyen() === null, "hop dong sau khi chuyen");
 		expect(url.get("chuyenOkr")).toBeNull();
+	});
+
+	test("chuyen-ky-an: hop chuyen khong liet, khong doc muc tieu cua chu ky da an", async () => {
+		const QAN = {
+			...ky("q4-an", "Quý 4 · 2026 tạo nhầm", "dang-chay"),
+			anLuc: "2026-09-30T03:00:00.000Z",
+		};
+		const cu = {
+			cycles: docTheoDuong.get("okr.cycles"),
+			byUnit: docTheoDuong.get("okr.byUnit"),
+		};
+		docTheoDuong.set("okr.cycles", () => ({
+			cycles: [QAN, Q4, Q3],
+			currentId: Q4.id,
+		}));
+		docTheoDuong.set("okr.byUnit", (vao) =>
+			(vao as { cycleId: string }).cycleId === QAN.id
+				? {
+						objectives: [
+							{
+								...mucTieu(
+									"o-an",
+									"Mục tiêu trong quý tạo nhầm",
+									"cong-bo",
+									HA,
+									1,
+								),
+								cycleId: QAN.id,
+							},
+						],
+						canEdit: true,
+						canhBao: null,
+					}
+				: cu.byUnit?.(vao),
+		);
+		try {
+			await mo(<ToChuc />, "?don=pb:pb-1&chuyenOkr=pb:pb-1");
+			await moHopChuyenVaCho();
+			expect({
+				muc: tatCa("[data-muc-tieu-chuyen]").map((o) =>
+					o.getAttribute("data-muc-tieu-chuyen"),
+				),
+				kyDoc: goiCua("okr.byUnit").map(
+					(g) => (g.dauVao as { cycleId: string }).cycleId,
+				),
+			}).toEqual({ muc: ["o1", "o2", "o3", "o4"], kyDoc: [Q4.id] });
+		} finally {
+			if (cu.cycles) docTheoDuong.set("okr.cycles", cu.cycles);
+			if (cu.byUnit) docTheoDuong.set("okr.byUnit", cu.byUnit);
+		}
 	});
 
 	test("ST-chuyen-loi: may chu tu choi — loi trong hop, giu lua chon, khong dong hop", async () => {

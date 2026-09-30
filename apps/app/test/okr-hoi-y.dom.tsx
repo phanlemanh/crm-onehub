@@ -68,6 +68,16 @@ const CHU_KY: ChuKyDu = {
 			breakEndsOn: null,
 			updateWeekday: 1,
 			cuaSoRa: null,
+			anLuc: null,
+			anLyDo: null,
+			quyConHien: 0,
+			viec: {
+				suaMoiO: false,
+				suaTen: false,
+				go: false,
+				an: false,
+				hienLai: false,
+			},
 		},
 		{
 			id: "n27",
@@ -81,6 +91,16 @@ const CHU_KY: ChuKyDu = {
 			breakEndsOn: null,
 			updateWeekday: 1,
 			cuaSoRa: null,
+			anLuc: null,
+			anLyDo: null,
+			quyConHien: 0,
+			viec: {
+				suaMoiO: false,
+				suaTen: false,
+				go: false,
+				an: false,
+				hienLai: false,
+			},
 		},
 	],
 	currentId: "q4",
@@ -1186,6 +1206,45 @@ describe("Hỏi ý — trạng thái biên", () => {
 		const o = await mo();
 		await cho(() => trangThai(o) === "trong-thanh-vien", "trống thành viên");
 		expect(o.querySelector('[data-khoi="trong-thanh-vien"]')).not.toBeNull();
+	});
+
+	test("ky-an-khong-mo-hoi-y: sheet mở hỏi ý không liệt chu kỳ lập kế hoạch đã ẩn", async () => {
+		const [q4, n27] = CHU_KY.cycles;
+		if (!q4 || !n27) throw new Error("thiếu chu kỳ mẫu");
+		const anNham = {
+			...n27,
+			id: "n27-an",
+			name: "Năm 2027 tạo nhầm",
+			startsOn: "2026-12-01",
+			anLuc: "2026-09-30T03:00:00.000Z",
+			anLyDo: "Tạo nhầm năm, đã có năm đúng",
+		};
+		chuKy = { cycles: [q4, anNham, n27], currentId: "q4" };
+		hoiY = null;
+		quanTri = true;
+		const o = await mo();
+		await cho(() => trangThai(o) === "trong-quan-tri", "trống quản trị");
+		await act(async () =>
+			o.querySelector<HTMLButtonElement>('[data-nut="mo-hoi-y"]')?.click(),
+		);
+		await cho(
+			() => document.querySelector('[data-khoi="sheet-mo-hoi-y"]') !== null,
+			"sheet mở",
+		);
+		const label = [...document.body.querySelectorAll("label")].find(
+			(l) => l.textContent?.trim() === "Chu kỳ",
+		);
+		const trigger = document.getElementById(label?.getAttribute("for") ?? "");
+		if (!trigger) throw new Error("không thấy ô chu kỳ");
+		await bam(trigger);
+		const tuyChon = () => [
+			...document.body.querySelectorAll('[role="option"]'),
+		];
+		await cho(() => tuyChon().length > 0, "select mở");
+		expect({
+			dangChon: trigger.textContent,
+			tuyChon: tuyChon().map((x) => x.textContent),
+		}).toEqual({ dangChon: "Năm 2027", tuyChon: ["Năm 2027"] });
 	});
 
 	test("danh sách khoá mà thiếu mã lý do vẫn có tiêu đề", async () => {

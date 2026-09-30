@@ -277,6 +277,7 @@ export function datMacDinh(dong: DongHien[]): void {
 			coBangChung: false,
 		})),
 		cycleName: "Quý 4/2026",
+		kyGhiDuoc: true,
 		mangSangToi: null,
 		mangSangTu: null,
 		trail: [],

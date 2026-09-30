@@ -1,5 +1,6 @@
 import { db } from "@crm/db";
 import { chupKrCrm } from "@crm/db/okr-chi-so";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { OKR_SO } from "@crm/db/okr-so-config";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
@@ -122,6 +123,7 @@ export async function chupSoOkr(
 					phase: { in: [...PHA_GHI_DUOC] },
 					startsOn: { lte: ngayDb },
 					endsOn: { gte: ngayDb },
+					...KY_CON_HIEN,
 				},
 			},
 			soChup: { none: { ngay: ngayDb, nguon: { in: [...NGUON_CHUP] } } },

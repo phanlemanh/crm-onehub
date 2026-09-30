@@ -1,5 +1,6 @@
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
 
@@ -13,7 +14,7 @@ const DA_BO = "da-bo";
 
 export const dieuKienOkrMo: Prisma.OkrObjectiveWhereInput = {
 	status: { not: DA_BO },
-	cycle: { phase: { in: [...PHA_CHUYEN_DUOC] } },
+	cycle: { phase: { in: [...PHA_CHUYEN_DUOC] }, ...KY_CON_HIEN },
 };
 
 export type DonViDem = { departmentId?: string; divisionId?: string };
