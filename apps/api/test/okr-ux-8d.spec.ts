@@ -8,6 +8,7 @@ import type {
 	MucMoCoi,
 	NutCanChinh,
 } from "../src/okr/okr.contracts";
+import { cauVuotTran } from "../src/okr/okr-tai-co-cau.service";
 import type { DanhSachOutput } from "../src/okr/okr-xem.contracts";
 import { type DauVaoHopLe, goiTrpc } from "./ma-tran-thu";
 import {
@@ -763,7 +764,7 @@ describe("chuyen-xem-truoc", () => {
 					await db.okrObjective.count({ where: { departmentId: KD_NAM } }),
 					await db.okrTrail.count(),
 				];
-				const xem = ok<{ canhBao: string | null }>(
+				const xem = ok<{ vuotTran: { soSau: number; tran: number } | null }>(
 					await hoi("okr.chuyenDonViXemTruoc", vao, phien.qt ?? ""),
 					`xem ${c.ten}`,
 				);
@@ -791,18 +792,18 @@ describe("chuyen-xem-truoc", () => {
 					`tra ve ${c.ten}`,
 				);
 				ra.push(
-					`${c.ten}: xem ${xem.canhBao === null ? "null" : "canh bao"}; ${
-						xem.canhBao === that.canhBao
+					`${c.ten}: xem ${xem.vuotTran === null ? "null" : `${xem.vuotTran.soSau}/${xem.vuotTran.tran}`}; ${
+						cauVuotTran(xem.vuotTran) === that.canhBao
 							? "khop"
-							: `lech ${xem.canhBao} != ${that.canhBao}`
+							: `lech ${cauVuotTran(xem.vuotTran)} != ${that.canhBao}`
 					}`,
 				);
 			}
 			expect(ra).toEqual([
 				"duoi: xem null; khop",
 				"bang: xem null; khop",
-				"vuot: xem canh bao; khop",
-				"vuot-chan: xem canh bao; khop",
+				`vuot: xem ${tran + 1}/${tran}; khop`,
+				`vuot-chan: xem ${tran + 1}/${tran}; khop`,
 			]);
 		},
 		CHO_DB,

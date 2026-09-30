@@ -38,6 +38,9 @@ type BoPhanCay = TreeOutput["divisions"][number];
 
 const mucHienThi = z.enum(MUC_HIEN_THI);
 
+export const cauVuotTran = (v: { soSau: number; tran: number } | null) =>
+	v ? T.taiCoCau.vuotTran(v.soSau, v.tran) : null;
+
 type MucTieuMoCoi = {
 	id: string;
 	title: string;
@@ -189,12 +192,12 @@ export class OkrTaiCoCauService {
 		await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ANY(${[...ids].sort()}) ORDER BY id FOR UPDATE`;
 	}
 
-	private async canhBaoTran(
+	private async vuotTran(
 		tx: Tx,
 		dv: DonViNhan,
 		chuKy: string[],
 		them: ReadonlyMap<string, number> = new Map(),
-	): Promise<string | null> {
+	): Promise<{ soSau: number; tran: number } | null> {
 		if (chuKy.length === 0) return null;
 		const ct = await this.okr.program(tx);
 		const nhom = await tx.okrObjective.groupBy({
@@ -213,7 +216,7 @@ export class OkrTaiCoCauService {
 			...chuKy.map((k) => (dem.get(k) ?? 0) + (them.get(k) ?? 0)),
 		);
 		return nhieuNhat > ct.objectiveCap
-			? T.taiCoCau.vuotTran(nhieuNhat, ct.objectiveCap)
+			? { soSau: nhieuNhat, tran: ct.objectiveCap }
 			: null;
 	}
 
@@ -267,7 +270,7 @@ export class OkrTaiCoCauService {
 		for (const mt of chuyen)
 			them.set(mt.cycleId, (them.get(mt.cycleId) ?? 0) + 1);
 		return {
-			canhBao: await this.canhBaoTran(this.db, den, [...them.keys()], them),
+			vuotTran: await this.vuotTran(this.db, den, [...them.keys()], them),
 		};
 	}
 
@@ -302,9 +305,11 @@ export class OkrTaiCoCauService {
 			}
 			return {
 				daChuyen: chuyen.length,
-				canhBao: await this.canhBaoTran(tx, den, [
-					...new Set(chuyen.map((mt) => mt.cycleId)),
-				]),
+				canhBao: cauVuotTran(
+					await this.vuotTran(tx, den, [
+						...new Set(chuyen.map((mt) => mt.cycleId)),
+					]),
+				),
 			};
 		});
 	}

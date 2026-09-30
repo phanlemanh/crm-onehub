@@ -388,7 +388,7 @@ export const datHienThiOutput = z.object({
 	nguoiXem: z.array(z.string()),
 });
 export const chuyenDonViXemTruocOutput = z.object({
-	canhBao: z.string().nullable(),
+	vuotTran: z.object({ soSau: z.number(), tran: z.number() }).nullable(),
 });
 export type ChuyenDonViXemTruocOutput = z.infer<
 	typeof chuyenDonViXemTruocOutput

@@ -66,7 +66,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.u8d_chuyen_xem_truoc
     paths: [apps/api/src/okr/okr-tai-co-cau.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr.contracts.ts, apps/api/test/okr-ux-8d.spec.ts]
-    expected: "exit 0; trần mục tiêu mỗi đơn vị 5, đơn vị nhận đang có 3 ở quý 4. Ma trận viết trước 4 ca: chuyển 1 → 4 dưới trần; 2 → 5 bằng trần; 3 → 6 với chính sách canh-bao; 3 → 6 với chính sách chan. Mỗi ca: chuyenDonViXemTruoc.canhBao toEqual canhBao của chuyenDonVi thật trên cùng đầu vào (chạy mutation trong giao dịch cuộn lại); ca 1–2 null; ca 3–4 cùng một câu vượt trần (ghim: chuyển OKR hôm nay chỉ cảnh báo, kể cả chính sách chan); xem trước không ghi hàng nào (đếm okrObjective theo đơn vị và okrTrail trước/sau bằng nhau). CHIỀU ĐỎ: bản sao xem trước tự tính trần bằng >= thay > như canhBaoTran → ca «bằng trần» đỏ in «bang tran: xem truoc canh bao, may chu null»."
+    expected: "exit 0; trần mục tiêu mỗi đơn vị 5, đơn vị nhận đang có 3 ở quý 4. Ma trận viết trước 4 ca: chuyển 1 → 4 dưới trần; 2 → 5 bằng trần; 3 → 6 với chính sách canh-bao; 3 → 6 với chính sách chan. Mỗi ca: chuyenDonViXemTruoc.vuotTran ({ soSau, tran } hay null) ghép qua cauVuotTran — chính hàm lệnh chuyển dùng — toEqual canhBao của chuyenDonVi thật trên cùng đầu vào (chuyển thật rồi chuyển trả về); ca 1–2 null; ca 3–4 cùng {trần+1, trần} (ghim: chuyển OKR hôm nay chỉ cảnh báo, kể cả chính sách chan); trần đặt bằng số mục tiêu đơn vị nhận đang có cộng 2; xem trước không ghi hàng nào (đếm okrObjective theo đơn vị và okrTrail trước/sau bằng nhau). CHIỀU ĐỎ: bản sao xem trước cộng thừa một mục → ca «bằng» đỏ in «bang: xem <trần+1>/<trần>; lech … != null» (đã chạy)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -74,7 +74,7 @@ evals:
     executor: test
     cmd: config:executors.test.u8d_dom
     paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
-    expected: "exit 0 cho nhóm -t chuyen-tran; mock chuyenDonViXemTruoc theo đầu vào: canhBao «Kinh doanh miền Nam sẽ có 6 mục tiêu ở Quý 4 — vượt trần 5» → hiện trong vùng aria-live dưới ô nơi nhận trước khi bấm, nút chuyển mở; null → không cảnh báo; lỗi → dòng «Chưa kiểm được trần» trong vùng aria-live, nút chuyển mở. Bỏ chọn một mục tiêu → xem trước được gọi lại với objectiveIds mới (so mảng). CHIỀU ĐỎ: bản sao không gọi lại khi đổi tập chọn → đỏ in «xem truoc khong tinh lai»; bản sao coi lỗi xem trước là chặn → ca lỗi đỏ in «nut chuyen khoa khi loi»."
+    expected: "exit 0 cho nhóm -t chuyen-tran; mock chuyenDonViXemTruoc theo đầu vào: vuotTran {soSau 6, tran 5} → câu «Kinh doanh miền Nam sẽ có 6 mục tiêu trong một chu kỳ — vượt trần 5» (tên đơn vị nhận ghép ở giao diện) hiện trong vùng aria-live dưới ô nơi nhận trước khi bấm, nút chuyển mở; null → không cảnh báo; lỗi → dòng «Chưa kiểm được trần» trong vùng aria-live, nút chuyển mở. Bỏ chọn một mục tiêu → xem trước được gọi lại với objectiveIds mới (so mảng). CHIỀU ĐỎ: bản sao không gọi lại khi đổi tập chọn → đỏ in «xem truoc khong tinh lai»; bản sao coi lỗi xem trước là chặn → ca lỗi đỏ in «nut chuyen khoa khi loi»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10

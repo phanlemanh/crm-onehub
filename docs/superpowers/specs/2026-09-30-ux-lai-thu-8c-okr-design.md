@@ -47,8 +47,8 @@ vào đầu ra API và một truy vấn xem trước. Không bảng mới, khôn
      phòng ban chính, còn OKR ở kỳ đang mở. Hộp nêu mọi lý do; «Lưu trữ» khoá khi có lý do;
      lý do OKR kèm «Chuyển OKR…»; xem trước lỗi thì nêu một dòng và vẫn cho bấm.
    - (c) Hộp «Chuyển OKR» gọi truy vấn mới `okr.chuyenDonViXemTruoc`, nhận cùng input với
-     `okr.chuyenDonVi`, trả `{ canhBao: string | null }` bằng CHÍNH hàm `canhBaoTran` mà mutation
-     dùng, ngay khi chọn nơi nhận và mỗi khi đổi tập chọn. Chuyển OKR hôm nay chỉ cảnh báo khi
+     `okr.chuyenDonVi`, trả `{ vuotTran: { soSau, tran } | null }` bằng CHÍNH hàm `vuotTran` mà mutation
+     dùng để ghép câu cảnh báo (mutation nói «Đã chuyển…», giao diện ghép «<đơn vị> sẽ có…»), ngay khi chọn nơi nhận và mỗi khi đổi tập chọn. Chuyển OKR hôm nay chỉ cảnh báo khi
      vượt trần, kể cả khi chương trình đặt «Chặn, không ghi» — lượt này không đổi luật đó.
 4. **Cây đơn vị đếm theo quyền xem.**
    - `okr.countByUnit` đổi điều kiện từ `boGioiHan` sang `dieuKienXemMucTieu(nc)` của người
