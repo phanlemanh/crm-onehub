@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { db, Prisma } from "@crm/db";
 import { docCuoc } from "@crm/db/okr-cuoc-soan";
 import { cauHinhAiLuc } from "@crm/db/okr-tro-ly";
@@ -12,7 +13,12 @@ import {
 	type MaLoaiBanNhap,
 } from "@crm/validation/okr-kiem-ban-nhap";
 import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
-import { type DongSoan, hangTuDongSoan } from "@crm/validation/okr-tro-ly";
+import {
+	type DongSoan,
+	dongSoanTuHang,
+	hangTuDongSoan,
+} from "@crm/validation/okr-tro-ly";
+import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "./config";
 import { type GoiSoan, goiKiemTu, goiSoan } from "./goi-soan";
 import { type NguCanhPhien, thuocTinhPhien } from "./phien";
@@ -20,14 +26,23 @@ import { docSoNguoiGo } from "./so-nguoi-go";
 
 export type DongBiLoai = { khoa: string; ten: string; maLoai: MaLoaiBanNhap };
 
+type TrangThaiHang = (typeof TRANG_THAI_DE_XUAT)[number];
+
+type TrangThaiDaQuyet = (typeof TRO_LY_OKR_SOAN.trangThaiDaQuyet)[number];
+
+export type DongGiuNguyen = {
+	khoa: string;
+	ten: string;
+	trangThai: TrangThaiDaQuyet;
+};
+
 export type KetQuaNop = {
 	ketQua: "da-ghi" | "tu-choi";
 	lyDo: string;
 	soDong: number;
 	biLoai: DongBiLoai[];
+	giuNguyen: DongGiuNguyen[];
 };
-
-type TrangThaiHang = (typeof TRANG_THAI_DE_XUAT)[number];
 
 const TU_CHOI = TRO_LY_OKR_SOAN.tuChoi;
 
@@ -36,6 +51,7 @@ const tuChoi = (lyDo: string): KetQuaNop => ({
 	lyDo,
 	soDong: 0,
 	biLoai: [],
+	giuNguyen: [],
 });
 
 function dongTuBanNhap(
@@ -96,13 +112,44 @@ function tenCua(d: DongKiemSoan): string {
 	return d.loai === "can-chinh-moi" ? d.khoa : d.ten;
 }
 
+function khoaCua(d: DongKiemSoan): string {
+	return khoaDong(veDongSoan(d));
+}
+
 function chanTrungKhoa(dongs: readonly DongKiemSoan[]): void {
 	const da = new Set<string>();
 	for (const d of dongs) {
-		const k = khoaDong(veDongSoan(d));
+		const k = khoaCua(d);
 		if (da.has(k)) throw new Error(`${TU_CHOI.dongTrungKhoa}: ${d.khoa}`);
 		da.add(k);
 	}
+}
+
+async function docKhoaDaQuyet(
+	cuocSoanId: string,
+): Promise<Map<string, TrangThaiDaQuyet>> {
+	const hang = await db.okrDeXuat.findMany({
+		where: {
+			cuocSoanId,
+			trangThai: { in: [...TRO_LY_OKR_SOAN.trangThaiDaQuyet] },
+		},
+		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+		select: {
+			loai: true,
+			cuocSoanId: true,
+			sau: true,
+			lyDo: true,
+			noiDung: true,
+			trangThai: true,
+		},
+	});
+	const trangThai = z.enum(TRO_LY_OKR_SOAN.trangThaiDaQuyet);
+	return new Map(
+		hang.map((h) => [
+			khoaDong(dongSoanTuHang(h)),
+			trangThai.parse(h.trangThai),
+		]),
+	);
 }
 
 function idKrCua(goi: GoiSoan): Set<string> {
@@ -137,22 +184,29 @@ export async function nopBanNhap(
 	if (!goi) return tuChoi(TU_CHOI.cuocKhongDang);
 	const dongs = dongTuBanNhap(input, { cuocSoanId, idKr: idKrCua(goi) });
 	chanTrungKhoa(dongs);
+	const daQuyet = await docKhoaDaQuyet(cuocSoanId);
+	const giuNguyen = dongs.flatMap((d) => {
+		const trangThai = daQuyet.get(khoaCua(d));
+		return trangThai ? [{ khoa: d.khoa, ten: tenCua(d), trangThai }] : [];
+	});
+	const conLai = dongs.filter((d) => !daQuyet.has(khoaCua(d)));
 	const kiem = await goiKiemTu(goi, {
 		soNguoiGo: await docSoNguoiGo(ctx.session.id),
 	});
-	const daKiem = kiemBanNhap(dongs, kiem);
+	const daKiem = kiemBanNhap(conLai, kiem);
+	const lanNop = randomUUID();
 	await db.okrDeXuat.createMany({
 		data: daKiem.map(({ dong, kq }) => {
 			const trangThai: TrangThaiHang = kq.qua ? "cho" : "bi-loai";
 			return {
 				...hangTuDongSoan(veDongSoan(dong), ctx.session.id),
 				dich: Prisma.DbNull,
-				inputHash: cuocSoanId,
+				inputHash: lanNop,
 				nguoiYeuCau: userId,
 				nac: cuoc.nac,
 				trangThai,
 				maLoai: kq.qua ? null : kq.maLoai,
-				hienLuc: kq.qua ? new Date() : null,
+				hienLuc: null,
 			};
 		}),
 	});
@@ -164,5 +218,6 @@ export async function nopBanNhap(
 		lyDo: "",
 		soDong: daKiem.length - biLoai.length,
 		biLoai,
+		giuNguyen,
 	};
 }

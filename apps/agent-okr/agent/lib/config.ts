@@ -1,4 +1,5 @@
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
+import type { TRANG_THAI_DE_XUAT } from "@crm/db/okr-tro-ly-danh-muc";
 import type { BuocCat } from "@crm/validation/okr-cuoc-soan";
 
 const MINUTE_MS = 60_000;
@@ -35,6 +36,10 @@ export const TRO_LY_OKR_SOAN = {
 		dongTrungKhoa: "dong trung khoa",
 	},
 	tinhNang: "okr.soan" satisfies TinhNang,
+	trangThaiDaQuyet: [
+		"nhan",
+		"sua",
+	] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][],
 	suKien: {
 		nguoiGo: "message.received",
 		duoiChiTruyen: ".appended",

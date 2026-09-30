@@ -228,7 +228,8 @@ describe("nop-ban-nhap", () => {
 					h.objectiveId === "" &&
 					h.taoRaId === null &&
 					h.nguoiYeuCau === canh.nguoiMo.id &&
-					h.noiDung !== null,
+					h.noiDung !== null &&
+					h.hienLuc === null,
 			),
 		).toBe(true);
 		expect(hang.filter((h) => h.trangThai === "cho").length).toBe(ra.soDong);
@@ -294,6 +295,93 @@ describe("nop-ban-nhap", () => {
 				.at(-1);
 		expect(dich("m1:cc")).toEqual([canh.idCapTren[0] ?? "", null]);
 		expect(dich("m3:cc")).toEqual([null, canh.idCapTren[1] ?? ""]);
+	});
+
+	test("mỗi lần nộp một inputHash riêng cho mọi hàng của lần đó, kể cả hai bản giống hệt", async () => {
+		const ctx = nguCanh(PHIEN_1, canh.nguoiMo.id, canh.cuocSoanId);
+		const truoc = new Set(
+			(
+				await db.okrDeXuat.findMany({
+					where: { cuocSoanId: canh.cuocSoanId },
+					select: { id: true },
+				})
+			).map((h) => h.id),
+		);
+		await nop(tron(), ctx);
+		await nop(tron(), ctx);
+		const moi = (
+			await db.okrDeXuat.findMany({
+				where: { cuocSoanId: canh.cuocSoanId },
+				select: { id: true, inputHash: true },
+			})
+		).filter((h) => !truoc.has(h.id));
+		const nhom = new Map<string, number>();
+		for (const h of moi)
+			nhom.set(h.inputHash, (nhom.get(h.inputHash) ?? 0) + 1);
+		expect(nhom.size).toBe(2);
+		expect([...nhom.values()][0]).toBe([...nhom.values()][1]);
+		expect(nhom.has(canh.cuocSoanId)).toBe(false);
+	});
+
+	test("dòng trùng khoá với hàng người đã nhận hay sửa → không tạo hàng mới, không đổi hàng cũ, trả giuNguyen", async () => {
+		const ctx = nguCanh(PHIEN_1, canh.nguoiMo.id, canh.cuocSoanId);
+		const krCho = async (ten: string) =>
+			db.okrDeXuat.findFirstOrThrow({
+				where: {
+					cuocSoanId: canh.cuocSoanId,
+					loai: "kr-moi",
+					sau: ten,
+					trangThai: "cho",
+				},
+				orderBy: { createdAt: "desc" },
+			});
+		const nhan = await krCho("Số khiếu nại giao hàng");
+		const sua = await krCho("Tỷ lệ đối tác gia hạn hợp đồng");
+		await db.okrDeXuat.update({
+			where: { id: nhan.id },
+			data: {
+				trangThai: "nhan",
+				nguoiQuyet: canh.nguoiMo.id,
+				quyetLuc: new Date(),
+			},
+		});
+		await db.okrDeXuat.update({
+			where: { id: sua.id },
+			data: {
+				trangThai: "sua",
+				giaTriCuoi: "Tỷ lệ đối tác lớn gia hạn",
+				nguoiQuyet: canh.nguoiMo.id,
+				quyetLuc: new Date(),
+			},
+		});
+		const dem = (ten: string) =>
+			db.okrDeXuat.count({
+				where: { cuocSoanId: canh.cuocSoanId, loai: "kr-moi", sau: ten },
+			});
+		const truocNhan = await dem(nhan.sau ?? "");
+		const truocSua = await dem(sua.sau ?? "");
+		const ra = await nop(tron(), ctx);
+		expect(ra.giuNguyen.map((g) => [g.khoa, g.trangThai]).sort()).toEqual([
+			["k11", "sua"],
+			["k12", "nhan"],
+		]);
+		expect(ra.biLoai.some((b) => b.khoa === "k11" || b.khoa === "k12")).toBe(
+			false,
+		);
+		expect(await dem(nhan.sau ?? "")).toBe(truocNhan);
+		expect(await dem(sua.sau ?? "")).toBe(truocSua);
+		expect(
+			await db.okrDeXuat.findUniqueOrThrow({ where: { id: nhan.id } }),
+		).toEqual({
+			...nhan,
+			trangThai: "nhan",
+			quyetLuc: expect.any(Date),
+			nguoiQuyet: canh.nguoiMo.id,
+		});
+		expect(
+			(await db.okrDeXuat.findUniqueOrThrow({ where: { id: sua.id } }))
+				.giaTriCuoi,
+		).toBe("Tỷ lệ đối tác lớn gia hạn");
 	});
 
 	test("hai dòng cùng khoá trong một bản → lỗi tool «dong trung khoa», không ghi", async () => {
