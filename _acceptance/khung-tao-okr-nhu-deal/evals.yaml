@@ -45,7 +45,7 @@ evals:
     criterion: AC-4
     executor: ui-check
     layer: ui-observed
-    cmd: config:executors.script.kto_man_that
+    cmd: config:executors.script.kto_man_chan
     steps:
       - "Cùng phiên E3"
       - "1440 px: ngăn tạo deal, bốn ngăn OKR, ngăn Mở chu kỳ ở Cài đặt › Chương trình OKR (quản trị) — đo hai nút ở chân"
@@ -144,7 +144,7 @@ evals:
     criterion: AC-10
     executor: ui-check
     layer: ui-observed
-    cmd: config:executors.script.tdx_man_that
+    cmd: config:executors.script.kto_man_9b
     steps:
       - "Kịch bản lái màn của tro-ly-okr-de-xuat trên vỏ ngăn"
     expected: "exit 0; tro-ly-okr-de-xuat/rang/man-gop-y.mjs chạy trên vỏ ngăn và đạt đúng các ngưỡng như lúc hồ sơ đó ký (không nới ngưỡng nào); diff của script đó so với merge-base chỉ đổi bộ chọn vỏ hoặc thư mục ghi ảnh."
@@ -155,7 +155,7 @@ evals:
     criterion: AC-10
     executor: ui-check
     layer: ui-observed
-    cmd: config:executors.script.hg_man_that
+    cmd: config:executors.script.kto_man_giu
     steps:
       - "Kịch bản lái màn của hop-thoai-giu-cho-dang-nhap trên vỏ ngăn"
     expected: "exit 0; hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs đạt đủ các bước như lúc ký, hộp Mục tiêu tìm bằng [data-hop-thoai-muc-tieu]; diff của script so với merge-base chỉ đổi bộ chọn đó."
