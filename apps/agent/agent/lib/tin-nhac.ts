@@ -12,7 +12,7 @@ import {
 } from "@crm/db/onboarding-nhac";
 import type { ViecTaiLieu } from "@crm/db/tai-lieu-nhac";
 
-type LoaiTin = ViecNhac["loai"];
+type LoaiTin = ViecNhac["loai"] | "okr-tom-tat";
 
 export const TIEU_DE = {
 	"buoc-qua-han": "Quá hạn",
@@ -29,6 +29,7 @@ export const TIEU_DE = {
 	"okr-theo-doi": "Đang theo dõi",
 	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
 	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
+	"okr-tom-tat": "Tóm tắt tuần",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",

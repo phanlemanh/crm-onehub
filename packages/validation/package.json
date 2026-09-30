@@ -38,6 +38,8 @@
 		"./okr-hoi-y": "./src/okr-hoi-y.ts",
 		"./okr-muc-tieu": "./src/okr-muc-tieu.ts",
 		"./okr-nguon": "./src/okr-nguon.ts",
+		"./okr-tom-tat": "./src/okr-tom-tat.ts",
+		"./okr-kiem-tom-tat": "./src/okr-kiem-tom-tat.ts",
 		"./okr-trao-doi": "./src/okr-trao-doi.ts",
 		"./okr-vet": "./src/okr-vet.ts",
 		"./onboarding-activity": "./src/onboarding-activity.ts",

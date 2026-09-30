@@ -179,7 +179,7 @@ export function trichSo(chu: string): number[] {
 	return docSo(chu).map((s) => s.giaTri);
 }
 
-function chuanHoa(s: string): string {
+export function chuanHoa(s: string): string {
 	return s
 		.normalize("NFC")
 		.toLowerCase()
@@ -188,11 +188,11 @@ function chuanHoa(s: string): string {
 		.join(" ");
 }
 
-function khongDau(s: string): string {
+export function khongDau(s: string): string {
 	return chuanHoa(boDau(s));
 }
 
-function coCum(van: string, cum: string): boolean {
+export function coCum(van: string, cum: string): boolean {
 	return cum !== "" && ` ${van} `.includes(` ${cum} `);
 }
 
