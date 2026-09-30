@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7c1a8fa99d856eadebc0a38247ac0f4833f75138
+verified_commit: fb56ea3ad0d98fe827408a777019e22f99f353b4
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -251,3 +251,7 @@ none — every multi-run eval is uniform
 
 Round 1: mọi eval máy đạt (E1-E16, E18, E19); E17 (judgment) UNCERTAIN chờ người chốt ở Cổng 2. Không lệnh fail nào ngoài eval; không finder chết.
 Round 2: vòng sửa S4-r1 viết lại E1 thành bảng ca viết tay và cấp mã thật cho E17; chạy lại E1, E13, E14, E15 cùng bốn lệnh suite, tất cả đạt; các eval còn lại mang sang từ round 1 vì delta không chạm paths của chúng. E17 vẫn UNCERTAIN chờ người chốt ở Cổng 2. Không lệnh fail nào ngoài eval; không finder chết.
+
+### Re-pin lần 1 — 2026-09-30, do sửa ca test kỳ mặc định đỏ trên CI vì dữ liệu của packages/db chạy song song
+run_id: repin-20260930T131325Z-20368
+sha: fb56ea3ad0d98fe827408a777019e22f99f353b4 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E14 (E14 không khai paths), E17 (E17 không khai paths)
