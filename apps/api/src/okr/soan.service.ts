@@ -31,6 +31,7 @@ import {
 import {
 	BadRequestException,
 	ConflictException,
+	ForbiddenException,
 	Inject,
 	Injectable,
 	NotFoundException,
@@ -108,6 +109,11 @@ const cungDonVi = (dv: DonViCuocSoan, cuoc: CuocSoan) =>
 	khoaDonVi(dv) === khoaDonVi(donViTuVao(donViCuoc(cuoc)));
 
 const thayDuoc = (q: Quyen, cuoc: CuocSoan) => q.quanTri || cuoc.nac === "bat";
+
+function assertNguoiMo(q: Quyen, userId: string, cuoc: CuocSoan): void {
+	if (cuoc.nguoiMoUserId !== userId && !q.quanTri)
+		throw new ForbiddenException(T.soan.khongPhaiNguoiMo);
+}
 
 export type CongDonVi =
 	| { qua: true; q: Quyen; nac: NacMo; ct: CauHinhAi }
@@ -336,6 +342,7 @@ export class SoanService {
 		if (!cungDonVi(dv, cong.cuoc))
 			throw new BadRequestException(T.soan.cuocKhacDonVi);
 		if (!cong.qua) return { ok: false, lyDo: cong.lyDo, cuocDang: null };
+		assertNguoiMo(cong.q, userId, cong.cuoc);
 		const { doi } = await capNhatPhien(
 			tx,
 			cuocSoanId,
@@ -472,6 +479,7 @@ export class SoanService {
 	): Promise<SoanTangLuotOutput> {
 		const cong = await this.congCuoc(this.db, userId, cuocSoanId, now);
 		if (!cong.qua) return { ok: false, lyDo: cong.lyDo };
+		assertNguoiMo(cong.q, userId, cong.cuoc);
 		const tran = await this.tranChung(this.db, cong.ct, now);
 		if (!tran.bat) return { ok: false, lyDo: tran.lyDo };
 		return tangLuotCuoc(this.db, cuocSoanId);

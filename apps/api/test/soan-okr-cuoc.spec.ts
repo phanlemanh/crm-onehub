@@ -11,6 +11,7 @@ import type {
 	SoanMoOutput,
 	SoanSanSangOutput,
 } from "../src/okr/okr.contracts";
+import { OKR } from "../src/okr/okr-config";
 import {
 	CHU_KY_Q4,
 	DON_VI,
@@ -547,6 +548,61 @@ describe("cuoc", () => {
 					})
 				).cacPhien,
 			).toEqual(daDuaVao.cacPhien);
+		},
+		CHO_DB,
+	);
+});
+
+describe("nguoi-mo-cuoc", () => {
+	test(
+		"Thử lại và đếm lượt chỉ cho người mở cuộc hoặc quản trị: trưởng bộ phận cùng đơn vị bị 403 có tên, phiên và số lượt giữ nguyên",
+		async () => {
+			const cBoPhan = await phienMau("tran-quoc-bao");
+			const doc = () =>
+				db.okrCuocSoan.findUniqueOrThrow({
+					where: { id: cuocA.dang },
+					select: { sessionId: true, soLuot: true },
+				});
+			const truoc = await doc();
+			const thuLai = await goiSoan(
+				app,
+				"soanMo",
+				"trpc",
+				{ ...vaoDonVi(DON_VI.kdBac, "trpc"), thuLaiCuocId: cuocA.dang },
+				cBoPhan,
+			);
+			const luot = await goiSoan(
+				app,
+				"soanTangLuot",
+				"trpc",
+				{ cuocSoanId: cuocA.dang },
+				cBoPhan,
+			);
+			const sauNguoiKhac = await doc();
+			const quanTri = await moLai("trpc", cuocA.dang, cQuanTri);
+			const luotQuanTri = await goiSoan(
+				app,
+				"soanTangLuot",
+				"trpc",
+				{ cuocSoanId: cuocA.dang },
+				cQuanTri,
+			);
+			const nguoiMo = await moLai("rest", cuocA.dang, cA);
+			expect({
+				thuLai: [thuLai.status, thuLai.loi],
+				luot: [luot.status, luot.loi],
+				giuNguyen: sauNguoiKhac,
+				quanTri: quanTri.ok,
+				luotQuanTri: (luotQuanTri.data as { ok?: boolean } | undefined)?.ok,
+				nguoiMo: nguoiMo.ok,
+			}).toEqual({
+				thuLai: [403, OKR.thongDiep.soan.khongPhaiNguoiMo],
+				luot: [403, OKR.thongDiep.soan.khongPhaiNguoiMo],
+				giuNguyen: truoc,
+				quanTri: true,
+				luotQuanTri: true,
+				nguoiMo: true,
+			});
 		},
 		CHO_DB,
 	);

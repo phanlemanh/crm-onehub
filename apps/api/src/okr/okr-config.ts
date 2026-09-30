@@ -157,6 +157,8 @@ export const OKR = {
 			khongCoCuoc:
 				"Không thấy cuộc soạn này — có thể nó không còn, hoặc bạn không được xem.",
 			cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
+			khongPhaiNguoiMo:
+				"Chỉ người mở cuộc soạn này hoặc quản trị mới thử lại hay gửi tiếp được.",
 			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
 			khongBoDuocCuoc:
 				"Cuộc này không phải cuộc đang soạn của đơn vị, hoặc chỉ người mở nó và quản trị bỏ được.",
