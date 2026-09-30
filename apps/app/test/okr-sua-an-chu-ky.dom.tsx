@@ -478,6 +478,98 @@ describe("sheet-sua", () => {
 			});
 		});
 	}
+
+	test("sua-loi-thanh-chi-ten: may chu tu choi vi ky vua co du lieu, sheet khoa o ngay ve gia tri da luu, Luu gui ten moi voi ngay cu", async () => {
+		const CAU = "Năm 2027 vừa có mục tiêu — chỉ sửa được tên.";
+		await mo();
+		await moMenu(TRONG_KE_HOACH.id);
+		await chonMuc("sua");
+		const sheet = `[data-sheet-sua-chu-ky="${TRONG_KE_HOACH.id}"]`;
+		await cho(() => q(sheet) !== null, "sheet sua mo");
+		await go(q(`${sheet} [data-o-ten]`), "Năm 2027 đúng");
+		const thu = q(`${sheet} [role="combobox"]`);
+		if (!thu) throw new Error("khong co o thu");
+		await bam(thu);
+		await cho(() => tatCa('[role="option"]').length > 0, "select thu mo");
+		const thuTu = tatCa('[role="option"]').find(
+			(o) => o.textContent === m.mo.thu[2],
+		);
+		if (!thuTu) throw new Error("khong co Thu Tu");
+		await act(async () => {
+			thuTu.dispatchEvent(
+				new KeyboardEvent("keydown", {
+					key: "Enter",
+					bubbles: true,
+					cancelable: true,
+				}),
+			);
+		});
+		await cho(() => tatCa('[role="option"]').length === 0, "select dong");
+
+		nemLoi.set("okr.suaChuKy", CAU);
+		dsKy = dsKy.map((c) =>
+			c.id === TRONG_KE_HOACH.id ? SAU_KHI_CO_DU_LIEU : c,
+		);
+		const luu = () => q('[data-nut="luu-chu-ky"]');
+		const nut = luu();
+		if (!nut) throw new Error("khong co nut Luu");
+		await bam(nut);
+		await cho(() => daLamMoi > 0, "lam moi sau tu choi");
+		await cho(
+			() => tat(q(`${sheet} [role="combobox"]`)) === true,
+			"o thu khoa sau lam moi",
+		);
+		const sauLoi = {
+			ten: (q(`${sheet} [data-o-ten]`) as HTMLInputElement | null)?.value,
+			thu: q(`${sheet} [role="combobox"]`)?.textContent,
+			luu: tat(luu()),
+			moTaKhoa: q(`${sheet} [data-mo-ta-khoa]`)?.textContent,
+		};
+
+		nemLoi.delete("okr.suaChuKy");
+		const lai = luu();
+		if (!lai) throw new Error("khong co nut Luu");
+		await bam(lai);
+		await cho(() => daGoi.length === 2, "gui lan hai");
+		expect({ sauLoi, daGoi, daToast }).toEqual({
+			sauLoi: {
+				ten: "Năm 2027 đúng",
+				thu: m.mo.thu[0],
+				luu: false,
+				moTaKhoa: m.sua.khoaCoDuLieu,
+			},
+			daGoi: [
+				{
+					duong: "okr.suaChuKy",
+					dauVao: {
+						id: TRONG_KE_HOACH.id,
+						name: "Năm 2027 đúng",
+						startsOn: "2026-01-01",
+						endsOn: "2026-12-31",
+						breakStartsOn: null,
+						breakEndsOn: null,
+						updateWeekday: 3,
+					},
+				},
+				{
+					duong: "okr.suaChuKy",
+					dauVao: {
+						id: TRONG_KE_HOACH.id,
+						name: "Năm 2027 đúng",
+						startsOn: "2026-01-01",
+						endsOn: "2026-12-31",
+						breakStartsOn: null,
+						breakEndsOn: null,
+						updateWeekday: 1,
+					},
+				},
+			],
+			daToast: [
+				["loi", CAU],
+				["xong", m.sua.xong("Năm 2027 đúng")],
+			],
+		});
+	});
 });
 
 describe("hop-an", () => {

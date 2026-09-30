@@ -121,15 +121,17 @@ function FormSua({
 	const c = m.caiDat.mo;
 	const s = m.caiDat.sua;
 	const ma = useId();
-	const [gia, setGia] = useState<GiaChuKy>({
+	const daLuu: GiaChuKy = {
 		ten: ky.name,
 		batDau: ky.startsOn,
 		ketThuc: ky.endsOn,
 		nghiTu: ky.breakStartsOn,
 		nghiDen: ky.breakEndsOn,
 		thu: ky.updateWeekday,
-	});
+	};
+	const [nhap, setNhap] = useState<GiaChuKy>(daLuu);
 	const khoa = !ky.viec.suaMoiO;
+	const gia = khoa ? { ...daLuu, ten: nhap.ten } : nhap;
 	const moTa = !khoa
 		? s.moTaMoiO(ky.name)
 		: ky.viec.go
@@ -178,7 +180,7 @@ function FormSua({
 				<OChuKy
 					ma={ma}
 					gia={gia}
-					doi={(moi) => setGia((cu) => ({ ...cu, ...moi }))}
+					doi={(moi) => setNhap((cu) => ({ ...cu, ...moi }))}
 					khoaNgoaiTen={khoa}
 					moTaKhoa={lyDoKhoa}
 					truocTen={
