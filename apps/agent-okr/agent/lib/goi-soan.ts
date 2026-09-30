@@ -17,7 +17,6 @@ import {
 	docTenThanhVien,
 	docTrangChienLuocDangDung,
 } from "@crm/db/okr-goi-soan";
-import { nguCanhXemOkr } from "@crm/db/okr-hien-thi";
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
 import type { BuocCat, DaCat } from "@crm/validation/okr-cuoc-soan";
@@ -205,17 +204,15 @@ const ngay = (d: Date) => d.toISOString().slice(0, 10);
 
 export async function goiSoan(
 	cuocSoanId: string,
-	v: { vai: VaiNguoiHoi; nguoiHoiId: string; ghiDaCat?: boolean },
+	v: { vai: VaiNguoiHoi; ghiDaCat?: boolean },
 ): Promise<GoiSoan | null> {
 	const cuoc = await docCuoc(db, cuocSoanId);
 	if (cuoc?.trangThai !== "dang") return null;
-	const nguoiXem = (await nguCanhXemOkr(db, [v.nguoiHoiId])).get(v.nguoiHoiId);
-	if (!nguoiXem) return null;
 	const [donVi, trang, lop2a, kyTruoc, cham, chiSo] = await Promise.all([
 		docDonViCuoc(db, cuoc),
 		docTrangChienLuocDangDung(db),
-		docCapTrenVaNgangCap(db, cuoc, nguoiXem),
-		docKyTruoc(db, cuoc, nguoiXem),
+		docCapTrenVaNgangCap(db, cuoc),
+		docKyTruoc(db, cuoc),
 		docChamVaTran(db),
 		docSoCrmDonVi(db, cuoc, v.vai),
 	]);

@@ -186,9 +186,10 @@ export class SoanService {
 		if (!cuoc) throw khongThay();
 		const dv = donViCuoc(cuoc);
 		const q = await this.quyenOkr.quyen(userId);
-		const suaDuoc =
-			q.quanTri ||
-			this.quyenOkr.suaDuocDonVi(q, userId, { ...dv, personUserId: null });
+		const suaDuoc = this.quyenOkr.nhapDuoc(q, userId, {
+			...dv,
+			personUserId: null,
+		});
 		if (!suaDuoc || (cuoc.nac === "an" && !q.quanTri)) throw khongThay();
 		const { ct, nac } = await this.nacSoan(client, dv, q, now);
 		if (nac === "tat") return { qua: false, cuoc, lyDo: "don-vi-chua-bat" };
