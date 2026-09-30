@@ -12,8 +12,9 @@ import {
 	donViCuoc,
 	moCuoc,
 } from "@crm/db/okr-cuoc-soan";
-import { cauHinhAiLuc, troLyOkrSanSang } from "@crm/db/okr-tro-ly";
+import { cauHinhAiLuc, quaTranChung } from "@crm/db/okr-tro-ly";
 import {
+	type CauHinhAi,
 	type DonViMucTieu,
 	nacCuaDonVi,
 	TRO_LY_OKR_TRAN,
@@ -82,7 +83,7 @@ const cungDonVi = (dv: DonViCuocSoan, cuoc: CuocSoan) =>
 const thayDuoc = (q: Quyen, cuoc: CuocSoan) => q.quanTri || cuoc.nac === "bat";
 
 export type CongDonVi =
-	| { qua: true; q: Quyen; nac: NacMo }
+	| { qua: true; q: Quyen; nac: NacMo; ct: CauHinhAi }
 	| { qua: false; lyDo: "don-vi-chua-bat" | "don-vi-che-do-an" };
 
 export type CongCuoc =
@@ -91,10 +92,7 @@ export type CongCuoc =
 
 type TranChung =
 	| { bat: true }
-	| {
-			bat: false;
-			lyDo: "het-tran-thang" | "chua-co-khoa-mo-hinh" | "don-vi-chua-bat";
-	  };
+	| { bat: false; lyDo: "het-tran-thang" | "chua-co-khoa-mo-hinh" };
 
 type KetQuaMo =
 	| { ok: true; cuoc: CuocSoan }
@@ -120,13 +118,10 @@ export class SoanService {
 		dv: DonViCuocSoan,
 		q: Quyen,
 		now: Date,
-	): Promise<NacMo | "tat"> {
-		const nac = nacCuaDonVi(
-			await cauHinhAiLuc(client, now),
-			"soan",
-			donViAi(dv, q),
-		);
-		return nac === "bat" || nac === "an" ? nac : "tat";
+	): Promise<{ ct: CauHinhAi; nac: NacMo | "tat" }> {
+		const ct = await cauHinhAiLuc(client, now);
+		const nac = nacCuaDonVi(ct, "soan", donViAi(dv, q));
+		return { ct, nac: nac === "bat" || nac === "an" ? nac : "tat" };
 	}
 
 	async congDonVi(
@@ -136,11 +131,11 @@ export class SoanService {
 		now: Date,
 	): Promise<CongDonVi> {
 		const q = await this.quyenDonVi(userId, dv);
-		const nac = await this.nacSoan(client, dv, q, now);
+		const { ct, nac } = await this.nacSoan(client, dv, q, now);
 		if (nac === "tat") return { qua: false, lyDo: "don-vi-chua-bat" };
 		if (nac === "an" && !q.quanTri)
 			return { qua: false, lyDo: "don-vi-che-do-an" };
-		return { qua: true, q, nac };
+		return { qua: true, q, nac, ct };
 	}
 
 	async congCuoc(
@@ -153,7 +148,7 @@ export class SoanService {
 		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc(cuocSoanId));
 		const dv = donViCuoc(cuoc);
 		const q = await this.quyenDonVi(userId, dv);
-		const nac = await this.nacSoan(client, dv, q, now);
+		const { nac } = await this.nacSoan(client, dv, q, now);
 		if (nac === "tat") return { qua: false, cuoc, lyDo: "don-vi-chua-bat" };
 		if ((nac === "an" || cuoc.nac === "an") && !q.quanTri)
 			throw new ForbiddenException(T.soan.cuocAn);
@@ -175,20 +170,14 @@ export class SoanService {
 
 	private async tranChung(
 		client: DbHoacTx,
-		dv: DonViCuocSoan,
-		q: Quyen,
+		ct: CauHinhAi,
 		now: Date,
 	): Promise<TranChung> {
-		const kq = await troLyOkrSanSang(client, {
-			viec: "soan",
-			donVi: donViAi(dv, q),
-			nacViec: "an",
-			now,
-		});
+		const kq = await quaTranChung(client, ct, now);
 		if (kq.bat) return { bat: true };
 		if (kq.lyDo === "het-tran-thang" || kq.lyDo === "chua-co-khoa-mo-hinh")
 			return { bat: false, lyDo: kq.lyDo };
-		return { bat: false, lyDo: "don-vi-chua-bat" };
+		throw new Error(`quaTranChung tra ly do la: ${kq.lyDo}`);
 	}
 
 	async sanSang(
@@ -199,7 +188,7 @@ export class SoanService {
 		const dv = donViTuVao(vao);
 		const cong = await this.congDonVi(this.db, userId, dv, now);
 		if (!cong.qua) return { bat: false, lyDo: cong.lyDo };
-		const tran = await this.tranChung(this.db, dv, cong.q, now);
+		const tran = await this.tranChung(this.db, cong.ct, now);
 		if (!tran.bat) return tran;
 		await this.assertLapKeHoach(this.db, dv.cycleId);
 		const [dang, da, trang] = await Promise.all([
@@ -227,7 +216,7 @@ export class SoanService {
 		const dv = donViTuVao(vao);
 		const cong = await this.congDonVi(this.db, userId, dv, now);
 		if (!cong.qua) return { ok: false, lyDo: cong.lyDo, cuocDang: null };
-		const tran = await this.tranChung(this.db, dv, cong.q, now);
+		const tran = await this.tranChung(this.db, cong.ct, now);
 		if (!tran.bat) return { ok: false, lyDo: tran.lyDo, cuocDang: null };
 		const { thuLaiCuocId } = vao;
 		const kq = await this.db.$transaction(async (tx): Promise<KetQuaMo> => {

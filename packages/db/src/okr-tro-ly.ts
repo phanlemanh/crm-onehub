@@ -229,7 +229,7 @@ export async function tranThangCuaThang(
 	return tranThangApDung(ct, await coChuKyLapKeHoachTrongThang(db, thang));
 }
 
-async function quaTranChung(
+export async function quaTranChung(
 	db: DbHoacTx,
 	ct: CauHinhAi,
 	now: Date,
