@@ -20,21 +20,18 @@ function ve(cay: ReactElement) {
 }
 
 describe("Empty — biến thể viền", () => {
-	test("mặc định không viền; solid có border liền; dashed có border nét đứt", () => {
-		expect(
-			ve(<Empty />).querySelector('[data-slot="empty"]')?.className,
-		).not.toMatch(/\bborder(-dashed)?\b/);
+	test("mặc định giữ nét đứt kiểu cũ (chỉ kiểu, chưa có bề rộng); solid có border liền", () => {
+		const mac = ve(<Empty />).querySelector('[data-slot="empty"]');
+		expect(mac?.getAttribute("data-border")).toBe("default");
+		expect(mac?.className).toContain("border-dashed");
+		expect(mac?.className).not.toMatch(/(^|\s)border(\s|$)/);
 		act(() => root?.unmount());
 		const solid = ve(<Empty border="solid" />).querySelector(
 			'[data-slot="empty"]',
 		);
 		expect(solid?.getAttribute("data-border")).toBe("solid");
-		expect(solid?.className).toMatch(/\bborder\b/);
+		expect(solid?.className).toMatch(/(^|\s)border(\s|$)/);
+		expect(solid?.className).toContain("border-solid");
 		expect(solid?.className).not.toContain("border-dashed");
-		act(() => root?.unmount());
-		expect(
-			ve(<Empty border="dashed" />).querySelector('[data-slot="empty"]')
-				?.className,
-		).toContain("border-dashed");
 	});
 });

@@ -6,9 +6,8 @@ const emptyVariants = cva(
 	{
 		variants: {
 			border: {
-				none: "",
-				solid: "border",
-				dashed: "border border-dashed",
+				default: "border-dashed",
+				solid: "border border-solid",
 			},
 			width: {
 				default: "",
@@ -20,7 +19,7 @@ const emptyVariants = cva(
 			},
 		},
 		defaultVariants: {
-			border: "none",
+			border: "default",
 			width: "default",
 			size: "default",
 		},
@@ -37,7 +36,7 @@ function Empty({
 	return (
 		<div
 			data-slot="empty"
-			data-border={border ?? "none"}
+			data-border={border ?? "default"}
 			data-width={width}
 			data-size={size ?? "default"}
 			className={cn(emptyVariants({ border, width, size, className }))}

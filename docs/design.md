@@ -66,7 +66,7 @@ Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả 
 | `<h1>`, `<h2>` tự đặt cỡ chữ | `PageShellTitle`, `CardTitle` |
 | `<h3>`, `<h4>` tự đặt cỡ chữ, có khi kèm số đếm hay nút cùng hàng | `SectionHeading` (`level={4}` cho h4, `actions` cho phần cùng hàng) |
 | `Button variant="ghost"` tô nền tay cho mục đang chọn của thanh điều hướng | `NavItem active`; thanh chỉ có icon dùng `size="icon"` |
-| `<Empty className="border">` để có viền | `Empty border="solid"` (`"dashed"` cho nét đứt) |
+| `<Empty className="border-solid border">` để có viền liền | `Empty border="solid"` |
 | nhãn, mô tả và công tắc xếp bằng `div` | `Field orientation="horizontal"` |
 | chữ phụ `<p className="text-muted-foreground text-xs">` cạnh ô nhập | `FieldDescription` |
 | `navigator.clipboard` | `CopyValue` |
