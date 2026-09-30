@@ -40,7 +40,8 @@ import {
 
 const TRUONG = "nguyen-thi-lan";
 const QUAN_TRI = "le-hai-dang";
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const CHO_GIU =
+	/^cho-eve:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 let app: NestExpressApplication;
 let cTruong = "";
@@ -133,7 +134,7 @@ describe("soan-mo", () => {
 				soDongNhan: 0,
 				soDongTong: 0,
 			});
-			expect(kq.cuoc.sessionId).toMatch(UUID);
+			expect(kq.cuoc.sessionId).toMatch(CHO_GIU);
 			expect(Number.isNaN(Date.parse(kq.cuoc.moLuc))).toBe(false);
 			const lai = await mo();
 			expect(lai).toMatchObject({
@@ -283,7 +284,7 @@ describe("soan-mo", () => {
 			const lai = await mo({ thuLaiCuocId: dau.cuoc.id });
 			if (!lai.ok) throw new Error(`thu lai: ${lai.lyDo}`);
 			expect(lai.cuoc.id).toBe(dau.cuoc.id);
-			expect(lai.cuoc.sessionId).toMatch(UUID);
+			expect(lai.cuoc.sessionId).toMatch(CHO_GIU);
 			expect(lai.cuoc.sessionId).not.toBe(dau.cuoc.sessionId);
 			const hang = await db.okrCuocSoan.findUniqueOrThrow({
 				where: { id: dau.cuoc.id },

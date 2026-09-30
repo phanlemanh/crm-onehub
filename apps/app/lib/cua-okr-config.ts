@@ -7,10 +7,16 @@ type TuChoiLuot = Extract<
 >["lyDo"];
 
 const PHIEN = ":phien";
+const doan = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/);
 
 export const CUA_OKR = {
 	maCuoc: z.string().regex(/^[a-z0-9-]{8,64}$/),
-	doanDuong: z.array(z.string().regex(/^[A-Za-z0-9_-]{1,128}$/)).min(1),
+	doanDuong: z.array(doan).min(1),
+	phienEve: {
+		header: "x-eve-session-id",
+		ma: doan,
+		than: z.object({ sessionId: doan }),
+	},
 	phien: PHIEN,
 	dangDuong: {
 		sucKhoe: ["eve", "v1", "health"],
@@ -49,6 +55,8 @@ export const CUA_OKR = {
 		cuocKhongThuocBan: "cuoc-khong-thuoc-ban",
 		cuocKhongDang: "cuoc-khong-dang",
 		phienKhongThuocCuoc: "phien-khong-thuoc-cuoc",
+		daCoPhien: "da-co-phien",
+		khongDocDuocPhien: "khong-doc-duoc-phien",
 		khongDemDuocLuot: "khong-dem-duoc-luot",
 		khongNoiDuoc: "tro-ly-okr-khong-noi-duoc",
 	},

@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { db } from "@crm/db";
+import { capNhatPhien } from "@crm/db/okr-cuoc-soan";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { PHIEN_CHO_EVE } from "@crm/validation/okr-cuoc-soan";
 import {
 	KHONG_TRONG_PHAM_VI,
 	type WorkspaceRole,
@@ -79,9 +81,22 @@ process.env.OKR_AGENT_BRIDGE_SECRET = BI_MAT;
 process.env.OKR_AGENT_URL = AGENT_GIA;
 process.env.AGENT_BRIDGE_SECRET = "bi-mat-cau-noi-cu-du-dai-32-ky-tu-thu";
 const fetchThat = globalThis.fetch;
+let soEve = 0;
+let traVe: "ca-hai" | "chi-than" | "khong-co" | "loi" = "ca-hai";
+const daTraEve: string[] = [];
 globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
 	daChuyen.push({ url: String(input), headers: new Headers(init?.headers) });
-	return new Response('{"sessionId":"phien-eve"}', { status: 200 });
+	const eve = `${suffix}-eve-${++soEve}`;
+	daTraEve.push(eve);
+	if (traVe === "loi") return Response.json({ ok: false }, { status: 500 });
+	if (traVe === "khong-co") return Response.json({ ok: true }, { status: 202 });
+	return Response.json(
+		{ ok: true, sessionId: eve, continuationToken: `eve:${eve}` },
+		{
+			status: 202,
+			headers: traVe === "ca-hai" ? { "x-eve-session-id": eve } : {},
+		},
+	);
 }) as typeof fetch;
 
 const { POST, GET } = await import(
@@ -144,6 +159,31 @@ async function gieoCuoc(
 		},
 	});
 }
+
+let soCuocCho = 0;
+async function cuocCho(nguoiMoUserId: string): Promise<string> {
+	const id = `${suffix}-cho-${++soCuocCho}`;
+	const cho = `${PHIEN_CHO_EVE}${id}`;
+	await db.okrCuocSoan.create({
+		data: {
+			id,
+			cycleId: CHU_KY,
+			level: "onehub",
+			nguoiMoUserId,
+			sessionId: cho,
+			cacPhien: [cho],
+			nac: "bat",
+			trangThai: "dang",
+		},
+	});
+	return id;
+}
+
+const docPhien = (id: string) =>
+	db.okrCuocSoan.findUniqueOrThrow({
+		where: { id },
+		select: { sessionId: true, cacPhien: true },
+	});
 
 function goi(
 	userId: string | null,
@@ -277,13 +317,12 @@ describe("cua-okr", () => {
 	});
 	for (const vai of ["owner", "admin", "member", "okr"] as const) {
 		test(`vai ${vai}: 200 chuyen tiep toi OKR_AGENT_URL khi cuoc dang thuoc minh`, async () => {
-			const id = `${suffix}-cuoc-${vai}-rieng`;
-			await gieoCuoc(id, NGUOI[vai], "dang");
+			const id = await cuocCho(NGUOI[vai]);
 			const res = await goi(NGUOI[vai], "/eve/v1/session", id);
 			expect(
 				{ vai, status: res.status, toi: daChuyen[0]?.url },
 				"cua moi chan vai okr",
-			).toEqual({ vai, status: 200, toi: `${OKR_AGENT_URL}/eve/v1/session` });
+			).toEqual({ vai, status: 202, toi: `${OKR_AGENT_URL}/eve/v1/session` });
 		});
 	}
 	test("403 khi cuoc cua nguoi khac; 403 khi cuoc khong dang", async () => {
@@ -296,7 +335,7 @@ describe("cua-okr", () => {
 		expect(daChuyen).toHaveLength(0);
 	});
 	test("JWT: audience crm-okr-agent, purpose okr-soan, cuocSoanId, vai, KHONG id doi tac, KHONG chuyen x-crm-*", async () => {
-		await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		await goi(NGUOI.okr, `/eve/v1/session/phien-${CUOC.cuaOkr}`, CUOC.cuaOkr);
 		const h = daChuyen[0]?.headers;
 		const token = h?.get("authorization")?.replace(/^Bearer /, "") ?? "";
 		const c = claims(token);
@@ -345,8 +384,9 @@ describe("cua-okr", () => {
 		).toEqual([]);
 	});
 	test("dem luot: POST session goi soanTangLuot; het-luot-cuoc → 429, khong chuyen", async () => {
-		await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
-		expect(daTangLuot).toEqual([CUOC.cuaOkr]);
+		const moi = await cuocCho(NGUOI.okr);
+		await goi(NGUOI.okr, "/eve/v1/session", moi);
+		expect(daTangLuot).toEqual([moi]);
 		await goi(NGUOI.okr, `/eve/v1/session/phien-${CUOC.cuaOkr}`, CUOC.cuaOkr);
 		expect(daTangLuot).toEqual([CUOC.cuaOkr]);
 		await goi(
@@ -373,7 +413,11 @@ describe("cua-okr", () => {
 		);
 		expect(daTangLuot).toEqual([]);
 		ketLuot = { ok: false, lyDo: "het-luot-cuoc" };
-		const res = await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		const res = await goi(
+			NGUOI.okr,
+			"/eve/v1/session",
+			await cuocCho(NGUOI.okr),
+		);
 		ketLuot = { ok: true, soLuot: 2 };
 		expect({
 			status: res.status,
@@ -412,7 +456,11 @@ describe("cua-okr", () => {
 	});
 	test("502 co ten khi khong dem duoc luot, khong chuyen", async () => {
 		ketLuot = "nem";
-		const res = await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr);
+		const res = await goi(
+			NGUOI.okr,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}`,
+			CUOC.cuaOkr,
+		);
 		ketLuot = { ok: true, soLuot: 2 };
 		expect({
 			status: res.status,
@@ -434,7 +482,7 @@ describe("cua-okr", () => {
 					"GET",
 				)
 			).status,
-		).toBe(200);
+		).toBe(202);
 		expect(
 			(
 				await goi(
@@ -444,7 +492,7 @@ describe("cua-okr", () => {
 					"GET",
 				)
 			).status,
-		).toBe(200);
+		).toBe(202);
 		const res = await goi(NGUOI.okr, "/eve/v1/session/phien-la", CUOC.cuaOkr);
 		expect({
 			status: res.status,
@@ -487,28 +535,35 @@ describe("cua-okr", () => {
 		}
 	});
 	test("dich chi dung tu doan duong, khong tu duong URL", async () => {
+		const moi = await cuocCho(NGUOI.okr);
 		phien = { user: { id: NGUOI.okr, email: "x@thu.test", name: "x" } };
 		daChuyen.length = 0;
 		const res = await POST(
 			new Request("http://localhost:3000/eve/agents/%6Fkr/eve/v1/session", {
 				method: "POST",
-				headers: { "x-crm-cuoc-soan": CUOC.cuaOkr },
+				headers: { "x-crm-cuoc-soan": moi },
 				body: "{}",
 			}),
 			{ params: Promise.resolve({ path: ["eve", "v1", "session"] }) },
 		);
 		expect({ status: res.status, toi: daChuyen.map((c) => c.url) }).toEqual({
-			status: 200,
+			status: 202,
 			toi: [`${OKR_AGENT_URL}/eve/v1/session`],
 		});
 	});
 	test("cookie va authorization cua nguoi dung khong qua; chi the moi duc, khong x-crm-*", async () => {
 		const theNguoiDung = "Bearer the-cua-nguoi-dung";
-		await goi(NGUOI.okr, "/eve/v1/session", CUOC.cuaOkr, "POST", {
-			cookie: "better-auth.session_token=bi-mat-phien",
-			authorization: theNguoiDung,
-			"x-crm-la": "khong-duoc-qua",
-		});
+		await goi(
+			NGUOI.okr,
+			`/eve/v1/session/phien-${CUOC.cuaOkr}`,
+			CUOC.cuaOkr,
+			"POST",
+			{
+				cookie: "better-auth.session_token=bi-mat-phien",
+				authorization: theNguoiDung,
+				"x-crm-la": "khong-duoc-qua",
+			},
+		);
 		const h = daChuyen[0]?.headers;
 		const auth = h?.get("authorization") ?? "";
 		const ok = await verifyJwtHmac(auth.replace(/^Bearer /, ""), {
@@ -530,6 +585,100 @@ describe("cua-okr", () => {
 			theMoi: true,
 			xCrm: [],
 		});
+	});
+	test("mo phien: ma eve thay cho giu, than giu nguyen; mo lan hai 409 da-co-phien; luot tren phien eve qua", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		const cho = `${PHIEN_CHO_EVE}${id}`;
+		const res = await goi(NGUOI.okr, "/eve/v1/session", id);
+		const eve = daTraEve.at(-1) ?? "";
+		expect({ status: res.status, body: await res.json() }).toEqual({
+			status: 202,
+			body: { ok: true, sessionId: eve, continuationToken: `eve:${eve}` },
+		});
+		expect(await docPhien(id)).toEqual({
+			sessionId: eve,
+			cacPhien: [cho, eve],
+		});
+		const lan2 = await goi(NGUOI.okr, "/eve/v1/session", id);
+		expect({
+			status: lan2.status,
+			body: await lan2.json(),
+			chuyen: daChuyen.length,
+			luot: daTangLuot.length,
+		}).toEqual({
+			status: 409,
+			body: { error: "da-co-phien" },
+			chuyen: 0,
+			luot: 0,
+		});
+		const luot = await goi(NGUOI.okr, `/eve/v1/session/${eve}`, id);
+		expect({ status: luot.status, luot: daTangLuot }).toEqual({
+			status: 202,
+			luot: [id],
+		});
+		expect(await docPhien(id)).toEqual({
+			sessionId: eve,
+			cacPhien: [cho, eve],
+		});
+	});
+	test("thu lai: cho giu moi thi mo lai duoc; phien eve cu van doc duoc", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		await goi(NGUOI.okr, "/eve/v1/session", id);
+		const eveCu = daTraEve.at(-1) ?? "";
+		const choMoi = `${PHIEN_CHO_EVE}${id}-lai`;
+		expect(await capNhatPhien(db, id, choMoi)).toEqual({ doi: true });
+		const res = await goi(NGUOI.okr, "/eve/v1/session", id);
+		const eveMoi = daTraEve.at(-1) ?? "";
+		expect(res.status).toBe(202);
+		expect(await docPhien(id)).toEqual({
+			sessionId: eveMoi,
+			cacPhien: [`${PHIEN_CHO_EVE}${id}`, eveCu, choMoi, eveMoi],
+		});
+		expect(
+			(await goi(NGUOI.okr, `/eve/v1/session/${eveCu}/stream`, id, "GET"))
+				.status,
+		).toBe(202);
+	});
+	test("ma eve chi o than cung doc duoc; khong doc duoc thi 502 co ten, cuoc giu cho giu", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		traVe = "chi-than";
+		const res = await goi(NGUOI.okr, "/eve/v1/session", id);
+		traVe = "ca-hai";
+		expect(res.status).toBe(202);
+		expect((await docPhien(id)).sessionId).toBe(daTraEve.at(-1) ?? "");
+		const id2 = await cuocCho(NGUOI.okr);
+		traVe = "khong-co";
+		const hong = await goi(NGUOI.okr, "/eve/v1/session", id2);
+		traVe = "ca-hai";
+		expect({ status: hong.status, body: await hong.json() }).toEqual({
+			status: 502,
+			body: { error: "khong-doc-duoc-phien" },
+		});
+		expect((await docPhien(id2)).sessionId).toBe(`${PHIEN_CHO_EVE}${id2}`);
+	});
+	test("tro ly tu choi mo phien thi tra nguyen, cuoc giu cho giu", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		traVe = "loi";
+		const res = await goi(NGUOI.okr, "/eve/v1/session", id);
+		traVe = "ca-hai";
+		expect(res.status).toBe(500);
+		expect((await docPhien(id)).sessionId).toBe(`${PHIEN_CHO_EVE}${id}`);
+	});
+	test("hai lan mo cung luc tu mot cho giu: mot lan qua, lan kia 409 va khong tra phien", async () => {
+		const id = await cuocCho(NGUOI.okr);
+		const [a, b] = await Promise.all([
+			goi(NGUOI.okr, "/eve/v1/session", id),
+			goi(NGUOI.okr, "/eve/v1/session", id),
+		]);
+		const ketQua = await Promise.all(
+			[a, b].map(async (r) => ({ status: r.status, body: await r.json() })),
+		);
+		expect(ketQua.map((k) => k.status).sort()).toEqual([202, 409]);
+		const qua = ketQua.find((k) => k.status === 202);
+		expect(ketQua.find((k) => k.status === 409)?.body).toEqual({
+			error: "da-co-phien",
+		});
+		expect((await docPhien(id)).sessionId).toBe(qua?.body.sessionId);
 	});
 	test("doi chung: cua cu /eve/v1 van 403 vai okr", async () => {
 		phien = { user: { id: NGUOI.okr, email: "x@thu.test", name: "x" } };

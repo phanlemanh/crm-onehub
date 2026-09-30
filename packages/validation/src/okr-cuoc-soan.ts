@@ -111,3 +111,9 @@ export function soGhiKhacNguoiGo(vet: VetTaoKrSoan): boolean {
 		vet.targetValue !== vet.soNguoiGoDich
 	);
 }
+
+export const PHIEN_CHO_EVE = "cho-eve:";
+
+export function laChoGiuPhien(id: string): boolean {
+	return id.startsWith(PHIEN_CHO_EVE);
+}

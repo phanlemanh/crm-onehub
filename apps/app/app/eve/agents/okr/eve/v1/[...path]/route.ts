@@ -5,6 +5,8 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import { db } from "@crm/db";
+import { capNhatPhien } from "@crm/db/okr-cuoc-soan";
+import { laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
 import { connection } from "next/server";
 import {
 	mintOkrBridgeToken,
@@ -72,6 +74,11 @@ async function handler(
 		return loi(403, CUA_OKR.loi.phienKhongThuocCuoc);
 	}
 
+	const moPhien = request.method === "POST" && duong.ten === "moPhien";
+	if (moPhien && !laChoGiuPhien(cuoc.sessionId)) {
+		return loi(409, CUA_OKR.loi.daCoPhien);
+	}
+
 	if (request.method === "POST" && laLuot(duong.ten)) {
 		let luot: Awaited<ReturnType<typeof tangLuot>>;
 		try {
@@ -129,6 +136,24 @@ async function handler(
 	const responseHeaders = new Headers(upstream.headers);
 	for (const header of CUA_OKR.khongTra) responseHeaders.delete(header);
 
+	if (moPhien && upstream.ok) {
+		const than = await upstream.text();
+		const phienEve = docPhienEve(upstream.headers, than);
+		if (!phienEve) return loi(502, CUA_OKR.loi.khongDocDuocPhien);
+		const { doi } = await capNhatPhien(
+			db,
+			cuocSoanId,
+			phienEve,
+			cuoc.sessionId,
+		);
+		if (!doi) return loi(409, CUA_OKR.loi.daCoPhien);
+		return new Response(than, {
+			status: upstream.status,
+			statusText: upstream.statusText,
+			headers: responseHeaders,
+		});
+	}
+
 	return new Response(upstream.body, {
 		status: upstream.status,
 		statusText: upstream.statusText,
@@ -148,6 +173,19 @@ export {
 
 function tangLuot(cuocSoanId: string) {
 	return getServerTrpcClient().okr.soanTangLuot.mutate({ cuocSoanId });
+}
+
+function docPhienEve(headers: Headers, than: string): string | null {
+	const tuHeader = CUA_OKR.phienEve.ma.safeParse(
+		headers.get(CUA_OKR.phienEve.header),
+	);
+	if (tuHeader.success) return tuHeader.data;
+	try {
+		const tuThan = CUA_OKR.phienEve.than.safeParse(JSON.parse(than));
+		return tuThan.success ? tuThan.data.sessionId : null;
+	} catch {
+		return null;
+	}
 }
 
 function laLuot(ten: DangDuong): boolean {

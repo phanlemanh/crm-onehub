@@ -40,7 +40,8 @@ const RANG = join(
 	import.meta.dir,
 	"../../../_acceptance/soan-okr-cung-tro-ly/rang",
 );
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const CHO_GIU =
+	/^cho-eve:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const TRUONG_A = "nguyen-thi-lan";
 const TRUONG_B = "ly-thanh-tam";
 const QUAN_TRI = "le-hai-dang";
@@ -318,7 +319,7 @@ describe("cuoc", () => {
 			const hang = await db.okrCuocSoan.findUniqueOrThrow({
 				where: { id: cuocA.dang },
 			});
-			expect(hang.sessionId).toMatch(UUID);
+			expect(hang.sessionId).toMatch(CHO_GIU);
 			const dang = (await danhSach(cA)).cuoc.find((c) => c.id === cuocA.dang);
 			expect(dang?.sessionId).toBe(hang.sessionId);
 			expect(
@@ -494,7 +495,7 @@ describe("cuoc", () => {
 			const lan1 = await moLai("trpc", cuocA.dang);
 			if (!lan1.ok) throw new Error(`thu lai 1: ${lan1.lyDo}`);
 			expect(lan1.cuoc.id).toBe(cuocA.dang);
-			expect(lan1.cuoc.sessionId).toMatch(UUID);
+			expect(lan1.cuoc.sessionId).toMatch(CHO_GIU);
 			expect(lan1.cuoc.sessionId).not.toBe(truoc.sessionId);
 			const sau1 = await db.okrCuocSoan.findUniqueOrThrow({
 				where: { id: cuocA.dang },

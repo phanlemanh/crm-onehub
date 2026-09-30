@@ -151,12 +151,14 @@ export async function capNhatPhien(
 	db: DbHoacTx,
 	cuocId: string,
 	sessionId: string,
+	tuPhien?: string,
 ): Promise<{ doi: boolean }> {
 	const cu = await db.okrCuocSoan.findUnique({
 		where: { id: cuocId },
 		select: { sessionId: true, cacPhien: true },
 	});
 	if (!cu || cu.sessionId === sessionId) return { doi: false };
+	if (tuPhien !== undefined && cu.sessionId !== tuPhien) return { doi: false };
 	const { count } = await db.okrCuocSoan.updateMany({
 		where: { id: cuocId, sessionId: cu.sessionId, trangThai: "dang" },
 		data: {

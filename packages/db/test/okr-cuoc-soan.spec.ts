@@ -155,6 +155,22 @@ describe("okr-cuoc-soan", () => {
 		expect(await capNhatPhien(db, "khong-co", id("z"))).toEqual({ doi: false });
 	});
 
+	test("capNhatPhien có tuPhien: chỉ đổi khi phiên hiện tại đúng là tuPhien; hai lần đua từ cùng chỗ giữ chỉ một lần đổi", async () => {
+		const c = await mo("g");
+		expect(await capNhatPhien(db, c.id, id("g2"), id("khac"))).toEqual({
+			doi: false,
+		});
+		expect((await docCuoc(db, c.id))?.sessionId).toBe(id("g"));
+		const dua = await Promise.all([
+			capNhatPhien(db, c.id, id("g-a"), id("g")),
+			capNhatPhien(db, c.id, id("g-b"), id("g")),
+		]);
+		expect(dua.filter((k) => k.doi)).toHaveLength(1);
+		const sau = await docCuoc(db, c.id);
+		expect(sau?.cacPhien).toHaveLength(2);
+		expect(sau?.cacPhien[0]).toBe(id("g"));
+	});
+
 	test("tangLuot: đếm từng lượt tới trần rồi từ chối het-luot-cuoc, số không vượt trần", async () => {
 		const c = await mo("f");
 		const tran = TRO_LY_OKR_TRAN.soan.luotMoiCuoc;

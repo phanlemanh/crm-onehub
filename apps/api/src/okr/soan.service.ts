@@ -24,6 +24,7 @@ import {
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
 import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
 import {
+	PHIEN_CHO_EVE,
 	parseDaCat,
 	type SoanDuaVaoInput,
 } from "@crm/validation/okr-cuoc-soan";
@@ -291,7 +292,7 @@ export class SoanService {
 			const cuoc = await moCuoc(tx, {
 				...dv,
 				nguoiMoUserId: userId,
-				sessionId: randomUUID(),
+				sessionId: `${PHIEN_CHO_EVE}${randomUUID()}`,
 				nac: cong.nac,
 			});
 			return { ok: true, cuoc };
@@ -318,7 +319,11 @@ export class SoanService {
 		if (!cungDonVi(dv, cong.cuoc))
 			throw new BadRequestException(T.soan.cuocKhacDonVi);
 		if (!cong.qua) return { ok: false, lyDo: cong.lyDo, cuocDang: null };
-		const { doi } = await capNhatPhien(tx, cuocSoanId, randomUUID());
+		const { doi } = await capNhatPhien(
+			tx,
+			cuocSoanId,
+			`${PHIEN_CHO_EVE}${randomUUID()}`,
+		);
 		if (!doi) throw new ConflictException(T.soan.cuocKhongDang);
 		const cuoc = await docCuoc(tx, cuocSoanId);
 		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc);

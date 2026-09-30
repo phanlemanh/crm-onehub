@@ -4,7 +4,9 @@ import {
 	BUOC_CAT,
 	banNhap,
 	type KrNhap,
+	laChoGiuPhien,
 	type MucTieuNhap,
+	PHIEN_CHO_EVE,
 	parseBanNhap,
 	parseDaCat,
 	soanDuaVaoInput,
@@ -166,5 +168,13 @@ describe("vết tạo KR từ soạn", () => {
 		expect(vetTaoKrSoan.safeParse({ ...moc, targetValue: 5 }).success).toBe(
 			false,
 		);
+	});
+});
+
+describe("cho-giu-phien", () => {
+	test("chỗ giữ mang tiền tố riêng; mã phiên eve thì không", () => {
+		expect(laChoGiuPhien(`${PHIEN_CHO_EVE}1f0e`)).toBe(true);
+		expect(laChoGiuPhien("wrun_01ARYZ6S41TSV4RRFFQ69G5FAV")).toBe(false);
+		expect(laChoGiuPhien("xcho-eve:1")).toBe(false);
 	});
 });
