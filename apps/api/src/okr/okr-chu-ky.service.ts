@@ -84,30 +84,21 @@ export class OkrChuKyService {
 			select: { parentId: true },
 		});
 		if (!dau) throw new NotFoundException(T.khongCoChuKy(id));
-		if (dau.parentId !== null)
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${dau.parentId} FOR UPDATE`;
-		await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${id} FOR UPDATE`;
+		await this.okr.khoaHoNam(tx, dau.parentId ?? id);
+		await this.moc("khoa", id);
 		const c = await tx.okrCycle.findUnique({ where: { id } });
 		if (!c) throw new NotFoundException(T.khongCoChuKy(id));
 		const cha =
 			c.parentId === null
 				? null
 				: await tx.okrCycle.findUnique({ where: { id: c.parentId } });
-		const anhEm: OkrCycle[] = [];
-		if (c.parentId !== null) {
-			const khoa = await tx.$queryRaw<{ id: string }[]>`
-				SELECT id FROM "okrCycle"
-				WHERE "parentId" = ${c.parentId} AND id <> ${id}
-				ORDER BY id
-				FOR UPDATE`;
-			anhEm.push(
-				...(await tx.okrCycle.findMany({
-					where: { id: { in: khoa.map((k) => k.id) } },
-					orderBy: { id: "asc" },
-				})),
-			);
-		}
-		await this.moc("khoa", id);
+		const anhEm =
+			c.parentId === null
+				? []
+				: await tx.okrCycle.findMany({
+						where: { parentId: c.parentId, id: { not: id } },
+						orderBy: { id: "asc" },
+					});
 		return { c, cha, anhEm };
 	}
 

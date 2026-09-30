@@ -448,7 +448,7 @@ export class OkrService {
 			if (input.kind === "quy") {
 				if (input.parentId === null)
 					throw new BadRequestException(T.namKhongCoCha);
-				await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.parentId} FOR UPDATE`;
+				await this.khoaHoNam(tx, input.parentId);
 				const cha = await tx.okrCycle.findUnique({
 					where: { id: input.parentId },
 				});
@@ -605,6 +605,14 @@ export class OkrService {
 		const { vuaBatAi, ...tra } = ket;
 		if (vuaBatAi) await this.trigger.okrKiemSanSang();
 		return tra;
+	}
+
+	async khoaHoNam(tx: Tx, namId: string) {
+		await tx.$queryRaw`
+			SELECT id FROM "okrCycle"
+			WHERE id = ${namId} OR "parentId" = ${namId}
+			ORDER BY id
+			FOR UPDATE`;
 	}
 
 	async assertKyChuaAn(tx: Tx | Db, cycleId: string) {

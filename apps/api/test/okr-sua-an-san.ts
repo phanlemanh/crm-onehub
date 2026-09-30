@@ -68,6 +68,7 @@ export function tha(): void {
 
 export async function choBenKiaDoiKhoa(
 	benKia: Promise<unknown>,
+	bang: "okrCycle" | "okrObjective" = "okrCycle",
 ): Promise<boolean> {
 	let xong = false;
 	const danhDau = () => {
@@ -78,12 +79,37 @@ export async function choBenKiaDoiKhoa(
 	while (!xong && Date.now() - tu < CHO_KHOA_MS) {
 		const [dong] = await db.$queryRaw<{ n: number }[]>`
 			SELECT count(*)::int AS n FROM pg_stat_activity
-			WHERE datname = current_database() AND wait_event_type = 'Lock'`;
+			WHERE datname = current_database() AND wait_event_type = 'Lock'
+				AND query ILIKE ${`%"${bang}"%`}`;
 		if ((dong?.n ?? 0) > 0) return true;
 		await Bun.sleep(NHIP_CHO_MS);
 	}
 	if (!xong) throw new Error("bên thứ hai không đứng chờ khoá hàng chu kỳ");
 	return false;
+}
+
+export function giuHangMucTieu(id: string): {
+	daGiu: Promise<void>;
+	tha: () => void;
+	xong: Promise<void>;
+} {
+	let bao: () => void = () => {};
+	let tha: () => void = () => {};
+	const daGiu = new Promise<void>((r) => {
+		bao = r;
+	});
+	const cho = new Promise<void>((r) => {
+		tha = r;
+	});
+	const xong = db.$transaction(
+		async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${id} FOR UPDATE`;
+			bao();
+			await cho;
+		},
+		{ timeout: CHO_KHOA_MS * 2 },
+	);
+	return { daGiu, tha, xong };
 }
 
 export function dungSanSuaAn(): void {

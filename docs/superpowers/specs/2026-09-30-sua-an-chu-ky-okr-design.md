@@ -83,9 +83,13 @@ kiểm đọc Prisma DMMF, lấy mọi trường quan hệ tới `OkrCycle` (tr�
 không khoá ngoại) và so tập với hằng; lệch là đỏ, in tên quan hệ thiếu. Thêm bảng
 mới trỏ tới chu kỳ ở lượt sau thì bài đỏ tới khi hằng được cập nhật.
 
-**Thứ tự khoá.** Bốn thủ tục mới và `createCycle` khoá `FOR UPDATE` theo thứ tự cố
-định: năm cha trước, rồi quý (với quý), rồi các quý anh em cùng năm theo `id` tăng
-dần khi luật cần đọc chúng (kiểm chồng, đếm quý còn hiện). `assertKyChuaAn` trong
+**Thứ tự khoá.** Bốn thủ tục mới và `createCycle` khoá `FOR UPDATE` cả gia đình năm —
+năm và mọi quý của nó — trong MỘT câu lệnh, theo `id` tăng dần (`WHERE id = <năm> OR
+"parentId" = <năm> ORDER BY id FOR UPDATE`). Đây đúng là thứ tự khoá toàn cục theo `id`
+mà `OkrTaiCoCauService.khoaLo` (chuyển đơn vị) đang dùng, nên hai đường không kẹt chéo;
+khoá «năm trước rồi quý» hay «quý trước rồi anh em» đều kẹt chéo với nó (soát việc 3,
+30/09). Đường ghi cần nhiều chu kỳ (như `mangSang` nguồn và đích) khoá `FOR SHARE`
+theo `id` tăng dần. `assertKyChuaAn` trong
 một giao dịch ghi khoá hàng chu kỳ `FOR SHARE`, nên ẩn hay gỡ chờ ghi đang chạy và
 ngược lại; ghi tới sau lúc ẩn đọc lại `anLuc` dưới khoá và bị từ chối bằng câu ghim,
 không bằng lỗi khoá ngoại. Để bài kiểm dựng được ca đồng thời, dịch vụ nhận một móc
