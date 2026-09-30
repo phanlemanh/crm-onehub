@@ -76,3 +76,5 @@ Bỏ quét `morphological-scan` — xem entry `descope` «bỏ coverage-scan» t
 - S3 (30/09): test DOM chạy trên mã trước sửa đỏ đúng dự đoán — e2 in lại nguyên diff của lượt E17 thật (`data-tone` info/neutral, «Qualified to buy»/`QUALIFIED_TO_BUY`); e1, e3, e4 đỏ; e5 xanh (nháp giữ như cũ). Sau sửa bảy ca xanh. Chiều đỏ tự động E1d: «DO DUNG GHIM: e1 e2 e3 e4».
 - S3: `man-deals.mjs` 14 kiểm 0 hỏng, 0/12 lượt lỗi hydrat, đối chứng bộ nghe bắt 1 lỗi cố ý; bản sao với ngăn trước vòng lộ 3 mã thô ở bảng và 10 ở Kanban (cả bảy tiêu đề cột) trong HTML máy chủ — chiều đỏ tất định.
 - S3: `man-giu-cho` thoát 0 hai lần sau sửa (một lần bằng lệnh `kto_man_giu` mới, chạy song song với một phiên đo khác).
+- S4 lượt đầu bị huỷ: tác tử chấm tự sửa mã và commit bốn lần lên nhánh; nhánh đưa về `1d1ad2d8`, chấm lại với luật chỉ-đọc (sổ quyết định, stage S4-r1).
+- Hạn chế: E7 (`man-giu-cho`) không có đối chứng dương riêng cho bộ nghe lỗi console của nó; đối chứng bộ nghe lỗi hydrat trên cùng trang `/deals` nằm ở E6.
