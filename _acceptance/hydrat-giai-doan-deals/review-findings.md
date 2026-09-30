@@ -14,13 +14,13 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Hydration mismatch still happens when /deals is loaded with the create sheet already open (?new=true)** (r1)
+- **Hydration mismatch still happens when /deals is loaded with the create sheet already open (?new=true) (r1)**
   Người dùng thấy gì: Nếu ai đó mở thẳng đường dẫn Deals có kèm ngăn «Thoả thuận mới» đang mở, cột Giai đoạn có thể thoáng hiện mã thô như QUALIFIED_TO_BUY trước khi đổi thành nhãn, và có thể vẫn báo lỗi hydrat. Bình thường, khi ngăn đóng lúc tải trang, lỗi này đã hết.
   file: `apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 4 (a negative check with no positive control): E7 passes when the «loi console app» line is absent, but its console listener is never shown to catch anything** (r1)
+- **Shape 4 (a negative check with no positive control): E7 passes when the «loi console app» line is absent, but its console listener is never shown to catch anything (r1)**
   Người dùng thấy gì: Phép kiểm cuối «mở Deals sau khi đăng nhập không có lỗi trên màn» có thể báo xanh dù bộ bắt lỗi của nó hỏng, vì chưa từng thử cho nó bắt một lỗi cố ý. Một phép đo khác trên cùng trang Deals đã chứng minh bộ bắt lỗi hoạt động, nên rủi ro thấp.
   file: `_acceptance/hydrat-giai-doan-deals/evals.yaml`
   severity: low
