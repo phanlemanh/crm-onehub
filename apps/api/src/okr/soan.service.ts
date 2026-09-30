@@ -118,7 +118,11 @@ export type CongDonVi =
 
 export type CongCuoc =
 	| { qua: true; cuoc: CuocSoan; q: Quyen; ct: CauHinhAi }
-	| { qua: false; cuoc: CuocSoan; lyDo: "don-vi-chua-bat" };
+	| {
+			qua: false;
+			cuoc: CuocSoan;
+			lyDo: "don-vi-luu-tru" | "don-vi-chua-bat";
+	  };
 
 type TranChung =
 	| { bat: true }
@@ -128,7 +132,11 @@ type KetQuaMo =
 	| { ok: true; cuoc: CuocSoan }
 	| {
 			ok: false;
-			lyDo: "con-cuoc-dang" | "het-cuoc-ky" | "don-vi-chua-bat";
+			lyDo:
+				| "con-cuoc-dang"
+				| "het-cuoc-ky"
+				| "don-vi-chua-bat"
+				| "don-vi-luu-tru";
 			cuocDang: CuocSoan | null;
 	  };
 
@@ -204,6 +212,8 @@ export class SoanService {
 			personUserId: null,
 		});
 		if (!suaDuoc || (cuoc.nac === "an" && !q.quanTri)) throw khongThay();
+		if (await this.luuTru(client, dv))
+			return { qua: false, cuoc, lyDo: "don-vi-luu-tru" };
 		const { ct, nac } = await this.nacSoan(client, dv, now);
 		if (nac === "tat") return { qua: false, cuoc, lyDo: "don-vi-chua-bat" };
 		if (nac === "an" && !q.quanTri) throw khongThay();

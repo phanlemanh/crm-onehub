@@ -206,7 +206,9 @@ describe("app-rieng: bốn lượt", () => {
 				e.type.endsWith(TRO_LY_OKR_SOAN.suKien.duoiChiTruyen),
 			),
 		).toBe(false);
-		expect([...(await docSoNguoiGo(sessionId))]).toContain(KICH_BAN.soNguoiGo);
+		expect([...(await docSoNguoiGo([sessionId]))]).toContain(
+			KICH_BAN.soNguoiGo,
+		);
 
 		const dong = await db.okrDeXuat.count({
 			where: {

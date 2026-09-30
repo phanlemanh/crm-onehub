@@ -68,6 +68,7 @@ export const CUA_OKR = {
 		"het-tran-thang": 429,
 		"cuoc-khong-dang": 403,
 		"don-vi-chua-bat": 403,
+		"don-vi-luu-tru": 403,
 		"chua-co-khoa-mo-hinh": 503,
 	} satisfies Record<TuChoiLuot, number>,
 } as const;

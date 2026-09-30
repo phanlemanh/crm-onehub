@@ -638,6 +638,77 @@ describe("soan-mo", () => {
 	);
 
 	test(
+		"don-vi-luu-tru-cuoc: cuộc đang của phòng ban vừa lưu trữ → đọc bảng, đếm lượt, quyết, đưa vào đều trả don-vi-luu-tru, dòng giữ nguyên; bỏ lưu trữ thì bảng mở lại",
+		async () => {
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+			const [mt] = await gieoDongNhap(cuoc, [
+				{ loai: "muc-tieu-moi", khoa: "m", ten: "Mục tiêu phòng sắp lưu trữ" },
+			]);
+			const phong = { id: DON_VI.kdNam.departmentId };
+			const lyDo = async () => {
+				const vao = { cuocSoanId: cuoc.id };
+				const tra = await Promise.all([
+					goiSoan(app, "soanDanhSach", "trpc", vao, cQuanTri),
+					goiSoan(app, "soanTangLuot", "trpc", vao, cQuanTri),
+					goiSoan(
+						app,
+						"soanQuyet",
+						"trpc",
+						{ deXuatId: mt ?? "", quyet: "bac" },
+						cQuanTri,
+					),
+					goiSoan(
+						app,
+						"soanDuaVao",
+						"trpc",
+						{ ...vao, kr: [] } as never,
+						cQuanTri,
+					),
+				]);
+				return tra.map((t) =>
+					t.status === 200
+						? String((t.data as { lyDo?: string | null }).lyDo ?? null)
+						: `http ${t.status}`,
+				);
+			};
+			await db.department.update({
+				where: phong,
+				data: { archivedAt: new Date() },
+			});
+			let luuTru: string[];
+			try {
+				luuTru = await lyDo();
+			} finally {
+				await db.department.update({
+					where: phong,
+					data: { archivedAt: null },
+				});
+			}
+			const dong = await db.okrDeXuat.findUniqueOrThrow({
+				where: { id: mt ?? "" },
+				select: { trangThai: true },
+			});
+			const bang = ok<{ lyDo: string | null }>(
+				await goiSoan(
+					app,
+					"soanDanhSach",
+					"trpc",
+					{ cuocSoanId: cuoc.id },
+					cQuanTri,
+				),
+				"danh sach sau bo luu tru",
+			);
+			expect({ luuTru, dong: dong.trangThai, sau: bang.lyDo }).toEqual({
+				luuTru: Array(4).fill("don-vi-luu-tru"),
+				dong: "cho",
+				sau: null,
+			});
+			await donSoan();
+		},
+		CHO_DB,
+	);
+
+	test(
 		"danh-sach-cuoc: người không quản trị không thấy cuộc ẩn; đếm dòng nhận và dòng tổng bỏ bi-loai",
 		async () => {
 			const thay = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });

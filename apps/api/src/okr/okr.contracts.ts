@@ -675,10 +675,12 @@ export const LY_DO_LUOT = [
 	"het-tran-thang",
 	"cuoc-khong-dang",
 	"don-vi-chua-bat",
+	"don-vi-luu-tru",
 	"chua-co-khoa-mo-hinh",
 ] as const;
 export const LY_DO_QUYET = [
 	"don-vi-chua-bat",
+	"don-vi-luu-tru",
 	"cha-da-bac",
 	"cha-bi-loai",
 	"khong-co-cha",
@@ -689,6 +691,7 @@ export const LY_DO_DUA_VAO = [
 	"chu-ky-khong-lap-ke-hoach",
 	"cuoc-khong-dang",
 	"don-vi-chua-bat",
+	"don-vi-luu-tru",
 	"cha-chua-nhan",
 	"cha-da-bac",
 	"cha-bi-loai",

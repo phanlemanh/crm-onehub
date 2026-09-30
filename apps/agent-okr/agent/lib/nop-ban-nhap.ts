@@ -277,7 +277,11 @@ export async function nopBanNhap(
 	const giuNguyen = giu.flatMap(({ giu }) => (giu ? [giu] : []));
 	const conLai = giu.flatMap(({ d, giu }) => (giu ? [] : [d]));
 	const kiem = await goiKiemTu(goi, {
-		soNguoiGo: await docSoNguoiGo(ctx.session.id),
+		soNguoiGo: await docSoNguoiGo([
+			ctx.session.id,
+			cuoc.sessionId,
+			...cuoc.cacPhien,
+		]),
 	});
 	const daKiem = kiemBanNhap(conLai, kiem);
 	const lanNop = randomUUID();

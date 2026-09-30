@@ -32,6 +32,7 @@ const LY_DO_LUOT = [
 	"het-tran-thang",
 	"cuoc-khong-dang",
 	"don-vi-chua-bat",
+	"don-vi-luu-tru",
 	"chua-co-khoa-mo-hinh",
 ] as const;
 
@@ -443,6 +444,7 @@ describe("cua-okr", () => {
 			"het-tran-thang": 429,
 			"cuoc-khong-dang": 403,
 			"don-vi-chua-bat": 403,
+			"don-vi-luu-tru": 403,
 			"chua-co-khoa-mo-hinh": 503,
 		} satisfies Record<(typeof LY_DO_LUOT)[number], number>;
 		for (const lyDo of LY_DO_LUOT) {

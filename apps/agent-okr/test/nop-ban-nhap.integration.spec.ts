@@ -300,6 +300,35 @@ describe("nop-ban-nhap", () => {
 		expect(dich("m3:cc")).toEqual([null, canh.idCapTren[1] ?? ""]);
 	});
 
+	test("số người gõ đọc trên mọi phiên của cuộc: số gõ ở phiên trước lần Thử lại vẫn được nhận ở phiên sống", async () => {
+		const cu = `${TIEN_TO}phien-go-cu`;
+		const song = `${TIEN_TO}phien-go-song`;
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: cu,
+		});
+		await capNhatPhien(db, cuoc.id, song);
+		const so = SO_NGUOI_GO + 4;
+		const lai = banNhapLai(`Có ${so} đại lý mới ở miền Trung`);
+		const ctx = nguCanh(song, canh.nguoiMo.id, cuoc.id);
+		const m3 = (ra: KetQuaNop) =>
+			ra.biLoai.find((x) => x.khoa === "m3")?.maLoai;
+		const chuaGo = m3(await nop(lai, ctx));
+		await db.agentEvent.create({
+			data: {
+				id: `${TIEN_TO}sk-go-cu`,
+				sessionId: cu,
+				type: TRO_LY_OKR_SOAN.suKien.nguoiGo,
+				data: { message: `Tôi muốn ${so} đại lý mới` },
+				emittedAt: new Date(),
+			},
+		});
+		const daGo = m3(await nop(lai, ctx));
+		expect({ chuaGo, daGo }).toEqual({ chuaGo: "so-moi", daGo: undefined });
+	});
+
 	test("mỗi lần nộp một inputHash riêng cho mọi hàng của lần đó, kể cả hai bản giống hệt", async () => {
 		const ctx = nguCanh(PHIEN_1, canh.nguoiMo.id, canh.cuocSoanId);
 		const truoc = new Set(

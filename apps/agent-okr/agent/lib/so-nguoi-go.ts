@@ -7,9 +7,14 @@ const thanTin = z
 	.object({ message: z.string().catch("") })
 	.catch({ message: "" });
 
-export async function docSoNguoiGo(sessionId: string): Promise<Set<string>> {
+export async function docSoNguoiGo(
+	sessionIds: readonly string[],
+): Promise<Set<string>> {
 	const ds = await db.agentEvent.findMany({
-		where: { sessionId, type: TRO_LY_OKR_SOAN.suKien.nguoiGo },
+		where: {
+			sessionId: { in: [...sessionIds] },
+			type: TRO_LY_OKR_SOAN.suKien.nguoiGo,
+		},
 		select: { data: true },
 	});
 	return new Set(
