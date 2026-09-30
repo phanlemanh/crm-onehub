@@ -398,7 +398,28 @@ describe("cua truoc khi gui", () => {
 	test(
 		"ban an cua phong an qua cua, ban cua phong khong bat bi chan — ca cau hinh tron va cau hinh chi an",
 		async () => {
-			const tron = luc("2026-11-29T12:00:00");
+			await ghiCauHinh(
+				{
+					aiTomTatPhamVi: "tat",
+					aiTomTatDonVi: [],
+					aiTomTatAnPhamVi: "danh-sach",
+					aiTomTatAnDonVi: [pb(PHONG.anCo)],
+				},
+				luc("2026-11-29T12:00:00"),
+			);
+			const chiAn = luc("2026-11-29T12:30:00");
+			expect(
+				qua(
+					await lyDoChanTruocKhiGui(viecTomTat(PHONG.anCo, "an"), chiAn),
+					"an",
+				),
+			).toBe("an qua cua truoc khi gui");
+			expect(
+				await lyDoChanTruocKhiGui(viecTomTat(PHONG.anKhong, "an"), chiAn),
+			).toBe("khong-chay:don-vi-chua-bat");
+
+			await ghiCauHinh(CAU_HINH_A, luc("2026-11-29T13:00:00"));
+			const tron = luc("2026-11-29T13:30:00");
 			expect(
 				qua(
 					await lyDoChanTruocKhiGui(viecTomTat(PHONG.anCo, "an"), tron),
@@ -417,27 +438,6 @@ describe("cua truoc khi gui", () => {
 			expect(
 				await lyDoChanTruocKhiGui(viecTomTat(PHONG.anCo, "bat"), tron),
 			).toBe("khong-chay:don-vi-chua-bat");
-
-			await ghiCauHinh(
-				{
-					aiTomTatPhamVi: "tat",
-					aiTomTatDonVi: [],
-					aiTomTatAnPhamVi: "danh-sach",
-					aiTomTatAnDonVi: [pb(PHONG.anCo)],
-				},
-				luc("2026-11-29T13:00:00"),
-			);
-			const chiAn = luc("2026-11-29T14:00:00");
-			expect(
-				qua(
-					await lyDoChanTruocKhiGui(viecTomTat(PHONG.anCo, "an"), chiAn),
-					"an",
-				),
-			).toBe("an qua cua truoc khi gui");
-			expect(
-				await lyDoChanTruocKhiGui(viecTomTat(PHONG.anKhong, "an"), chiAn),
-			).toBe("khong-chay:don-vi-chua-bat");
-			await ghiCauHinh(CAU_HINH_A, luc("2026-11-29T15:00:00"));
 		},
 		CHO_DB,
 	);
