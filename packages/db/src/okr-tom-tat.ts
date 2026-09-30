@@ -110,6 +110,7 @@ export type LanTrongGoi = {
 	luc: string;
 	giaTri: number;
 	tienDo: number;
+	tuTinTruoc: MucTuTin | null;
 	tuTin: MucTuTin;
 	ghiChu: string;
 	truoc: number | null;
@@ -197,6 +198,14 @@ export class TomTatDaCo extends Error {
 		super(
 			`tom tat tuan da co: task ${khoa.taskId} hoac (${khoa.cycleId}, ${khoa.departmentId}, ${khoa.tuan})`,
 		);
+	}
+}
+
+export class PhongKhongTomTatDuoc extends Error {
+	override readonly name = "PhongKhongTomTatDuoc";
+
+	constructor(readonly departmentId: string) {
+		super(`phong ban khong tom tat duoc: ${departmentId}`);
 	}
 }
 
@@ -396,6 +405,7 @@ export async function dungGoiTomTat(
 				luc: l.luc.toISOString(),
 				giaTri: l.giaTri,
 				tienDo: n.tienDo,
+				tuTinTruoc: lan[i - 1]?.tuTin ?? null,
 				tuTin: l.tuTin,
 				ghiChu: l.ghiChu,
 				truoc: n.truoc,
@@ -484,7 +494,7 @@ export async function ghiTomTat(
 		},
 		luat,
 	);
-	if (!goi) throw new Error(`phong ban khong tom tat duoc: ${v.departmentId}`);
+	if (!goi) throw new PhongKhongTomTatDuoc(v.departmentId);
 	const kiem = luat.kiemBan(v.cau, await goiKiemTomTatTu(db, goi), {
 		tyLeGiuLai: OKR_TOM_TAT.tyLeGiuLai,
 	});

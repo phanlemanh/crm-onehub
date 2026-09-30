@@ -263,15 +263,14 @@ export function goiTomTatThanhChiDan(goi: GoiTomTat): string {
 						tuTin: k.lanTruoc.tuTin,
 					}
 				: null,
-			lan: k.lan.map((l, i) => ({
+			lan: k.lan.map((l) => ({
 				id: l.id,
 				ngay: l.ngay,
 				giaTri: l.giaTri,
 				truoc: l.truoc,
 				chenhLech: l.chenhLech,
 				tienDo: l.tienDo,
-				tuTinTruoc:
-					i === 0 ? (k.lanTruoc?.tuTin ?? null) : (k.lan[i - 1]?.tuTin ?? null),
+				tuTinTruoc: l.tuTinTruoc,
 				tuTin: l.tuTin,
 				chenhTuTin: l.chenhTuTin,
 				ghiChu: l.ghiChu,

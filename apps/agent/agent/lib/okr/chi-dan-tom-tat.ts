@@ -1,10 +1,8 @@
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
-import { defineInstructions } from "eve/instructions";
 
 const { soCauTomTat, soNguonMoiCau } = TRO_LY_OKR_TRAN;
 
-export default defineInstructions({
-	markdown: `## Tóm tắt tuần — the data block holds \`phong\`, \`tuan\` and \`krs\`
+export const MUC_TOM_TAT = `## Tóm tắt tuần — the data block holds \`phong\`, \`tuan\` and \`krs\`
 
 Act at once. Do not reason at length: your first reply is the \`nop_tom_tat\` call.
 
@@ -33,6 +31,4 @@ with the Cập nhật tuần of the last seven days in \`lan\`. Each update has 
 - Then finish with \`{"trangThai":"da-nop","maLoi":null}\`. If the data block is missing, or
   \`nop_tom_tat\` answers \`thieu-du-lieu\`, finish with
   \`{"trangThai":"khong-lam-duoc","maLoi":"thieu-du-lieu"}\`. If it answers \`tu-choi\`, finish with
-  \`{"trangThai":"khong-lam-duoc","maLoi":"tu-choi"}\`.
-`,
-});
+  \`{"trangThai":"khong-lam-duoc","maLoi":"tu-choi"}\`.`;

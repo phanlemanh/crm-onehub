@@ -1,5 +1,6 @@
 import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { defineDynamic, defineInstructions } from "eve/instructions";
+import { MUC_TOM_TAT } from "../../../lib/okr/chi-dan-tom-tat";
 import {
 	dungGoiDeXuat,
 	goiThanhChiDan,
@@ -21,7 +22,7 @@ async function chiDanDeXuat(hang: ViecCon): Promise<string | null> {
 
 async function chiDanTomTat(hang: ViecCon): Promise<string | null> {
 	const goi = await goiTomTatCuaViec(hang);
-	return goi ? goiTomTatThanhChiDan(goi) : null;
+	return goi ? `${MUC_TOM_TAT}\n\n${goiTomTatThanhChiDan(goi)}` : null;
 }
 
 async function chiDanCua(hang: ViecCon): Promise<string | null> {

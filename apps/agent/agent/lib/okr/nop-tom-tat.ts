@@ -4,6 +4,7 @@ import {
 	dungGoiTomTat,
 	type GoiTomTat,
 	ghiTomTat,
+	PhongKhongTomTatDuoc,
 	TomTatDaCo,
 } from "@crm/db/okr-tom-tat";
 import { LUAT_TOM_TAT } from "@crm/validation/okr-kiem-tom-tat";
@@ -69,16 +70,12 @@ export async function nopTomTatVao(
 	if (await daCoTomTat(hang.id)) {
 		return khongGhi("tu-choi", "already submitted");
 	}
-	const khoa = khoaGoiCua(hang, viec);
-	if (!(await dungGoiTomTat(db, khoa, LUAT_TOM_TAT))) {
-		return khongGhi("thieu-du-lieu", "the department is gone or archived");
-	}
 	try {
 		const ghi = await ghiTomTat(
 			db,
 			{
 				taskId: hang.id,
-				...khoa,
+				...khoaGoiCua(hang, viec),
 				inputHash: viec.inputHash,
 				nac: viec.nac,
 				cau: input.cau,
@@ -92,6 +89,9 @@ export async function nopTomTatVao(
 			soBo: ghi.soCauBo,
 		};
 	} catch (loi) {
+		if (loi instanceof PhongKhongTomTatDuoc) {
+			return khongGhi("thieu-du-lieu", "the department is gone or archived");
+		}
 		if (loi instanceof TomTatDaCo) {
 			return khongGhi("tu-choi", "already submitted");
 		}
