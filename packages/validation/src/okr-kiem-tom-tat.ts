@@ -52,6 +52,17 @@ const THAP_PHAN_CHAM = /^\d+(?:\.\d+)?$/;
 
 const TRAN_SO = 1e12;
 
+const CHU_SO_CHINH_XAC = 15;
+
+const HE_SO_DON_VI = new Map([
+	["tỷ", 1e9],
+	["tỉ", 1e9],
+	["triệu", 1e6],
+	["nghìn", 1e3],
+	["ngàn", 1e3],
+	["k", 1e3],
+]);
+
 const NGHIN = 1000;
 
 function ghepNgay(ngay: string): string {
@@ -152,16 +163,26 @@ function nguonDan(cau: CauTomTat, goi: GoiKiemTomTat): NguonKiem[] {
 	return cau.nguon.flatMap((id) => goi.nguon.filter((n) => n.id === id));
 }
 
+function heSoDonVi(donVi: string): number | null {
+	const dau = chuanHoa(donVi).split(" ")[0] ?? "";
+	return HE_SO_DON_VI.get(dau) ?? null;
+}
+
 function giaTriThamChieu(dan: NguonKiem[], goi: GoiKiemTomTat): number[] {
 	const ra: number[] = [];
 	for (const n of dan) {
-		ra.push(n.giaTri);
-		if (n.truoc !== null) ra.push(n.truoc);
-		if (n.chenhLech !== null) ra.push(Math.abs(n.chenhLech));
-		ra.push(n.tienDo);
 		const kr = goi.krs.find((k) => k.id === n.keyResultId);
+		const cuaKr: number[] = [n.giaTri];
+		if (n.truoc !== null) cuaKr.push(n.truoc);
+		if (n.chenhLech !== null) cuaKr.push(Math.abs(n.chenhLech));
 		for (const v of [kr?.khoiDiem, kr?.dich])
-			if (v !== null && v !== undefined) ra.push(v);
+			if (v !== null && v !== undefined) cuaKr.push(v);
+		ra.push(...cuaKr, n.tienDo);
+		const heSo = kr ? heSoDonVi(kr.donVi) : null;
+		if (heSo !== null)
+			ra.push(
+				...cuaKr.map((v) => Number((v * heSo).toPrecision(CHU_SO_CHINH_XAC))),
+			);
 	}
 	return ra;
 }

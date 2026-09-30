@@ -46,6 +46,7 @@ export type NguonGoi = {
 
 export type KrKiemGoi = {
 	id: string;
+	donVi: string;
 	khoiDiem: number | null;
 	dich: number | null;
 };
@@ -512,6 +513,7 @@ export async function goiKiemTomTatTu(
 		nguon: goi.nguon,
 		krs: goi.krs.map((k) => ({
 			id: k.id,
+			donVi: k.donVi,
 			khoiDiem: k.khoiDiem,
 			dich: k.dich,
 		})),
@@ -810,7 +812,12 @@ export async function docTomTatChoNguoiXem(
 		nguon: [...theoId.values()].map((n) => n.kiem),
 		krs: krs.map((kr) => {
 			const so = soCuaKr(kr);
-			return { id: kr.id, khoiDiem: so.khoiDiem, dich: so.dich };
+			return {
+				id: kr.id,
+				donVi: kr.unit,
+				khoiDiem: so.khoiDiem,
+				dich: so.dich,
+			};
 		}),
 	};
 	const giu: BanHien["cau"] = [];

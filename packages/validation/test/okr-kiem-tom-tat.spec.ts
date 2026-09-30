@@ -52,8 +52,8 @@ const GOI: GoiKiemTomTat = {
 		}),
 	],
 	krs: [
-		{ id: "kr1", khoiDiem: 0, dich: 100 },
-		{ id: "kr2", khoiDiem: 100, dich: 20 },
+		{ id: "kr1", donVi: "lần", khoiDiem: 0, dich: 100 },
+		{ id: "kr2", donVi: "lần", khoiDiem: 100, dich: 20 },
 	],
 	tenThanhVien: ["Nguyễn Thị Hồng Nhung", "Trần Văn Bình"],
 	tuCam: TRO_LY_OKR_TRAN.tuCam,
@@ -189,7 +189,7 @@ describe("bộ kiểm câu tóm tắt: mỗi mã một ca đỏ và một ca là
 type CaSo = {
 	dang: string;
 	nguon?: Partial<NguonKiem>;
-	kr?: { khoiDiem?: number; dich?: number };
+	kr?: { donVi?: string; khoiDiem?: number; dich?: number };
 	khop: string;
 	lech: string;
 	nguonLech?: Partial<NguonKiem>;
@@ -300,6 +300,34 @@ const CA_SO: CaSo[] = [
 		lech: "Chỉ số đạt 1.600 hôm nay.",
 	},
 	{
+		dang: "2.9 tỷ đồng với KR đơn vị «tỷ đồng» (giá trị đã mang hệ số)",
+		nguon: { giaTri: 2.9 },
+		kr: { donVi: "tỷ đồng" },
+		khop: "Doanh thu đạt 2.9 tỷ đồng hôm nay.",
+		lech: "Doanh thu đạt 3.9 tỷ đồng hôm nay.",
+	},
+	{
+		dang: "0.5 tỷ đồng ở lần trước với KR đơn vị «tỷ đồng»",
+		nguon: { giaTri: 2.9, truoc: 0.5, chenhLech: 2.4 },
+		kr: { donVi: "tỷ đồng" },
+		khop: "Doanh thu từ 0.5 tỷ đồng lên 2.9 tỷ đồng, thêm 2.4 tỷ đồng.",
+		lech: "Doanh thu từ 0.6 tỷ đồng lên 2.9 tỷ đồng, thêm 2.4 tỷ đồng.",
+	},
+	{
+		dang: "2.9 tỷ đồng với KR đơn vị «đồng»: vẫn lệch",
+		nguon: { giaTri: 2.9 },
+		kr: { donVi: "đồng" },
+		khop: "Doanh thu đạt 2.9 đồng hôm nay.",
+		lech: "Doanh thu đạt 2.9 tỷ đồng hôm nay.",
+	},
+	{
+		dang: "2.9 triệu với KR đơn vị «tỷ đồng»: sai hệ số vẫn lệch",
+		nguon: { giaTri: 2.9 },
+		kr: { donVi: "tỷ đồng" },
+		khop: "Doanh thu đạt 2.9 tỷ đồng hôm nay.",
+		lech: "Doanh thu đạt 2.9 triệu đồng hôm nay.",
+	},
+	{
 		dang: "1.500 đọc kiểu Anh",
 		nguon: { giaTri: 1.5 },
 		khop: "Chỉ số đạt 1.500 hôm nay.",
@@ -321,6 +349,7 @@ function goiSo(ca: CaSo, lech = false): GoiKiemTomTat {
 		krs: [
 			{
 				id: "k1",
+				donVi: ca.kr?.donVi ?? "",
 				khoiDiem: ca.kr?.khoiDiem ?? null,
 				dich: ca.kr?.dich ?? null,
 			},

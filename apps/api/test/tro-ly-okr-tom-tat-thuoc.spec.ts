@@ -642,6 +642,17 @@ describe("thuoc", () => {
 		expect(sai).toEqual([]);
 	});
 
+	test("so-lech-lot: don vi co he so nhan doi chieu, sai he so van lech", () => {
+		const r = spawnSync("bun", [join(RANG, "so-lech-lot.mjs"), "--tu-kiem"], {
+			encoding: "utf8",
+		});
+		const ra = `${r.stdout}${r.stderr}`;
+		console.log(ra.trim());
+		expect(ra.match(/tu-kiem ok:/g)?.length).toBe(6);
+		expect(ra).not.toContain("tu-kiem SAI");
+		expect(r.status).toBe(0);
+	});
+
 	test("bo kiem va so-lech-lot doc cung ket qua tren bang dang so", () => {
 		const coSo = DOC_SO.filter(([, ky]) =>
 			ky.every((cach) => Array.isArray(cach)),

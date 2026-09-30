@@ -49,6 +49,7 @@ const NHAN = new Map([
 	["nghìn", 1e3],
 	["ngàn", 1e3],
 ]);
+const HE_SO_DON_VI = new Map([...NHAN, ["k", 1e3]]);
 const TY_KHONG_NHAN = new Set(["lệ", "trọng", "suất"]);
 const NGU_CANH = TRO_LY_OKR_TRAN.soBangChu;
 const CAN_NGU_CANH = new Set(["một", "năm"]);
@@ -247,6 +248,14 @@ export function tienDo(kieu, khoi, dich, hien) {
 	}
 }
 
+function heSoDonVi(donVi) {
+	const tu = (donVi ?? "")
+		.normalize("NFC")
+		.toLowerCase()
+		.match(/\p{L}+/u);
+	return tu ? (HE_SO_DON_VI.get(tu[0]) ?? null) : null;
+}
+
 const lamTronChenh = (so) =>
 	Math.round(so * SO_LECH.lamTronChenh) / SO_LECH.lamTronChenh + 0;
 
@@ -266,6 +275,14 @@ export function thamChieuCua(lan, bo = []) {
 		["dich", dich],
 		["tien-do", tienDo(lan.kieu, khoi, dich, giaTri)],
 	].filter(([dang, v]) => v !== null && !bo.includes(dang));
+	const heSo = heSoDonVi(lan.don_vi);
+	const nhan = ["gia-tri", "truoc", "chenh-lech", "khoi-diem", "dich"];
+	if (heSo !== null)
+		so.push(
+			...so
+				.filter(([dang]) => nhan.includes(dang))
+				.map(([dang, v]) => [dang, Number((v * heSo).toPrecision(15))]),
+		);
 	return {
 		so: so.map(([dang, v]) => ({ dang, v })),
 		ngay: bo.includes("ngay") ? [] : [lan.ngay],
@@ -309,7 +326,7 @@ const CAU_LAN = `WITH dan AS (
 	)
 	SELECT l.id, l.gia, l.truoc,
 		to_char(l.luc + make_interval(hours => $2::int), 'DD/MM') AS ngay,
-		k.kind AS kieu, k."startValue"::text AS khoi, k."targetValue"::text AS dich
+		k.kind AS kieu, k.unit AS don_vi, k."startValue"::text AS khoi, k."targetValue"::text AS dich
 	FROM lan l
 	JOIN "okrKeyResult" k ON k.id = l."keyResultId"
 	WHERE l.id IN (SELECT id FROM dan)`;
@@ -356,6 +373,36 @@ export async function soLechTrongKho(url, { ban = null, bo = [] } = {}) {
 	}
 }
 
+const LAN_MAU = {
+	gia: "2.9",
+	truoc: "0.5",
+	khoi: "0",
+	dich: "5",
+	kieu: "tang-toi",
+	ngay: "12/10",
+};
+
+const CA_DON_VI = [
+	["2.9 tỷ đồng, KR tính bằng «tỷ đồng»", "tỷ đồng", "Đạt 2.9 tỷ đồng.", 0],
+	["0.5 tỷ đồng, KR tính bằng «tỷ đồng»", "tỷ đồng", "Từ 0.5 tỷ đồng.", 0],
+	["2.9 tỷ đồng, KR tính bằng «đồng»", "đồng", "Đạt 2.9 tỷ đồng.", 1],
+	["2.9 triệu đồng, KR tính bằng «tỷ đồng»", "tỷ đồng", "Đạt 2.9 triệu.", 1],
+	["2.9 không hệ số, KR tính bằng «tỷ đồng»", "tỷ đồng", "Đạt 2.9 hôm nay.", 0],
+	["3.9 tỷ đồng, KR tính bằng «tỷ đồng»", "tỷ đồng", "Đạt 3.9 tỷ đồng.", 1],
+];
+
+function tuKiem() {
+	let sai = 0;
+	for (const [ten, donVi, cau, mong] of CA_DON_VI) {
+		const tham = [thamChieuCua({ ...LAN_MAU, don_vi: donVi })];
+		const lech = soLechCuaCau(cau, tham).length;
+		const dau = lech === mong ? "ok" : "SAI";
+		if (lech !== mong) sai += 1;
+		console.log(`${TEN}: tu-kiem ${dau}: ${ten}`);
+	}
+	return sai === 0 ? 0 : 1;
+}
+
 function thamSoDs(ten) {
 	const i = process.argv.indexOf(ten);
 	if (i < 0) return null;
@@ -368,6 +415,7 @@ function thamSoDs(ten) {
 }
 
 async function main() {
+	if (process.argv.includes("--tu-kiem")) return tuKiem();
 	const iDoc = process.argv.indexOf(SO_LECH.thamSoDoc);
 	if (iDoc >= 0) {
 		console.log(
