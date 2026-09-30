@@ -752,7 +752,6 @@ const GHIM = {
 	"okr-toan-canh:quanTri.boTrenTong": ["bỏ 1/A câu", "bỏ 12/A câu"],
 	"okr-toan-canh:quanTri.cauCon": ["Câu còn lại · 1", "Câu còn lại · 12"],
 	"okr-toan-canh:quanTri.cauBo": ["Câu bị bỏ · 1", "Câu bị bỏ · 12"],
-	"okr-toan-canh:quanTri.nguon": ["Dẫn 1 lần cập nhật", "Dẫn 12 lần cập nhật"],
 	"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 		"Cả đội · 1",
 		"Cả đội · 12",

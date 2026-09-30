@@ -47,9 +47,61 @@ type Dong = {
 	soCauBo: number;
 	huuIch: number;
 	khongHuuIch: number;
-	cau: { vanBan: string }[];
-	bo: { vanBan: string; maBo: string }[];
+	cau: CauDong[];
+	bo: (CauDong & { maBo: string })[];
 };
+type NguonDong =
+	| { id: string; mat: false; ngay: string; krTen: string }
+	| { id: string; mat: true };
+type CauDong = { vanBan: string; nguon: NguonDong[] };
+
+const NGAY_VN = new Intl.DateTimeFormat("en-CA", {
+	timeZone: "Asia/Ho_Chi_Minh",
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+});
+
+async function cauTuKho(
+	departmentId: string,
+): Promise<{ cau: CauDong[]; bo: (CauDong & { maBo: string })[] }> {
+	const ban = await db.okrTomTat.findFirst({
+		where: {
+			cycleId: KY,
+			departmentId,
+			tuan: new Date(`${TUAN}T00:00:00.000Z`),
+		},
+	});
+	if (!ban) return { cau: [], bo: [] };
+	const noiDung = parseNoiDungTomTat(ban.cau);
+	const ids = [...noiDung.cau, ...noiDung.bo].flatMap((c) => c.nguon);
+	const lan = await db.okrCheckIn.findMany({
+		where: { id: { in: ids } },
+		include: { session: true, keyResult: true },
+	});
+	const giai = (id: string): NguonDong => {
+		const l = lan.find((x) => x.id === id);
+		return l
+			? {
+					id,
+					mat: false,
+					ngay: NGAY_VN.format(l.session.submittedAt ?? l.createdAt),
+					krTen: l.keyResult.title,
+				}
+			: { id, mat: true };
+	};
+	return {
+		cau: noiDung.cau.map((c) => ({
+			vanBan: c.vanBan,
+			nguon: c.nguon.map(giai),
+		})),
+		bo: noiDung.bo.map((c) => ({
+			vanBan: c.vanBan,
+			nguon: c.nguon.map(giai),
+			maBo: c.maBo,
+		})),
+	};
+}
 type BangQuanTri = { tuan: string | null; phong: Dong[] };
 
 let app: NestExpressApplication;
@@ -221,6 +273,17 @@ describe("quan-tri", () => {
 					b: theo.get(pb(phong.b))?.cau.length,
 					c: theo.get(pb(phong.c))?.bo.map((x) => x.maBo),
 				}).toEqual({ b: 2, c: ["so-lech", "nguon-ngoai-goi"] });
+				for (const m of Object.values(phong)) {
+					const d = theo.get(pb(m));
+					expect(
+						{ cau: d?.cau, bo: d?.bo },
+						`nguon quan tri ${duong} ${m}`,
+					).toEqual(await cauTuKho(pb(m)));
+				}
+				const nguonC = theo
+					.get(pb(phong.c))
+					?.bo.flatMap((x) => x.nguon.map((n) => `${x.maBo}:${n.mat}`));
+				expect(nguonC).toEqual(["so-lech:false", "nguon-ngoai-goi:true"]);
 			}
 			expect(muon.map((m) => m.split(" ")[2])).toEqual([
 				"hien",

@@ -156,7 +156,8 @@ const vi = {
 		boTrenTong: (bo: string, tong: string) => `bỏ ${bo}/${tong} câu`,
 		cauCon: (n: string) => `Câu còn lại · ${n}`,
 		cauBo: (n: string) => `Câu bị bỏ · ${n}`,
-		nguon: (n: string) => `Dẫn ${n} lần cập nhật`,
+		nguon: "Nguồn:",
+		nguonMat: "lần cập nhật không còn trong kho",
 		khongCau: "Không có câu nào",
 		maBo: {
 			"nguon-ngoai-goi": "Dẫn nguồn ngoài phòng",
@@ -358,7 +359,8 @@ const en: OkrToanCanhMessages = {
 			`${bo} of ${tong} sentences dropped`,
 		cauCon: (n: string) => `Kept sentences · ${n}`,
 		cauBo: (n: string) => `Dropped sentences · ${n}`,
-		nguon: (n: string) => `Cites ${n} updates`,
+		nguon: "Source:",
+		nguonMat: "update no longer exists",
 		khongCau: "No sentences",
 		maBo: {
 			"nguon-ngoai-goi": "Cites a source outside the department",

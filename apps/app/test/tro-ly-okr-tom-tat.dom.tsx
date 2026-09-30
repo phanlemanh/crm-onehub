@@ -746,6 +746,28 @@ describe("don vi", () => {
 		});
 	}
 
+	for (const [nhanh, thay] of [
+		["ST-hoptuan-tuandau", { tuanDau: true }],
+		["ST-hoptuan-yenang", { dangBan: [] }],
+	] as const) {
+		test(`khoi dung truoc than bang o nhanh ${nhanh}`, async () => {
+			dat("okr.hopTuan", () => hopTuanOutput.parse({ ...HOP_TUAN, ...thay }));
+			await moBang();
+			await cho(
+				() =>
+					trangThai(nhanh) !== null && trangThai("ST-tomtat-co-cau") !== null,
+				`khoi va ${nhanh}`,
+			);
+			const k = khoi();
+			const than = trangThai(nhanh);
+			if (!k || !than) throw new Error(`thieu khoi hoac ${nhanh}`);
+			expect(
+				k.compareDocumentPosition(than) & Node.DOCUMENT_POSITION_FOLLOWING,
+			).toBeTruthy();
+			expect(k.parentElement).toBe(than.parentElement);
+		});
+	}
+
 	test("phong khong o nac bat hay ban bi giu: khong co khoi", async () => {
 		tomTatHienTai = () => tomTat({});
 		await moBang();

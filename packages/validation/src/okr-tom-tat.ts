@@ -102,6 +102,23 @@ export const troLyTomTatPhanHoiOutput = z.object({ ok: z.literal(true) });
 
 export const troLyTomTatQuanTriInput = z.object({ cycleId: ma });
 
+export const nguonQuanTriTomTat = z.discriminatedUnion("mat", [
+	z.object({
+		id: z.string(),
+		mat: z.literal(false),
+		ngay,
+		krTen: z.string(),
+	}),
+	z.object({ id: z.string(), mat: z.literal(true) }),
+]);
+
+export const cauQuanTriTomTat = z.object({
+	vanBan: z.string(),
+	nguon: z.array(nguonQuanTriTomTat),
+});
+
+export const cauBoQuanTriTomTat = cauQuanTriTomTat.extend({ maBo: maBoCau });
+
 export const dongQuanTriTomTat = z.object({
 	departmentId: z.string(),
 	ten: z.string(),
@@ -112,8 +129,8 @@ export const dongQuanTriTomTat = z.object({
 	soCauBo: z.number().int(),
 	huuIch: z.number().int(),
 	khongHuuIch: z.number().int(),
-	cau: z.array(cauTomTat),
-	bo: z.array(cauBoTomTat),
+	cau: z.array(cauQuanTriTomTat),
+	bo: z.array(cauBoQuanTriTomTat),
 });
 
 export const troLyTomTatQuanTriOutput = z.object({
@@ -127,5 +144,6 @@ export type TroLyTomTatOutput = z.infer<typeof troLyTomTatOutput>;
 export type TroLyTomTatPhanHoiInput = z.infer<typeof troLyTomTatPhanHoiInput>;
 export type TroLyTomTatPhanHoiOutput = z.infer<typeof troLyTomTatPhanHoiOutput>;
 export type TroLyTomTatQuanTriInput = z.infer<typeof troLyTomTatQuanTriInput>;
+export type NguonQuanTriTomTat = z.infer<typeof nguonQuanTriTomTat>;
 export type DongQuanTriTomTat = z.infer<typeof dongQuanTriTomTat>;
 export type TroLyTomTatQuanTriOutput = z.infer<typeof troLyTomTatQuanTriOutput>;

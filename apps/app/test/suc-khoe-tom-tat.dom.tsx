@@ -136,14 +136,55 @@ function nhanMaBo(ma: MaBoCau): string {
 	return nhan;
 }
 
+const NGUON_A = {
+	id: "ci-a",
+	mat: false,
+	ngay: "2026-10-12",
+	krTen: "Doanh thu hợp đồng mới đạt 12 tỷ",
+} as const;
+const NGUON_B = {
+	id: "ci-b",
+	mat: false,
+	ngay: "2026-10-13",
+	krTen: "Thêm 40 khách hàng doanh nghiệp",
+} as const;
+const NGUON_MAT = { id: "ci-mat", mat: true } as const;
+
+const DONG_NGUON = {
+	"ci-a": "Cập nhật 12/10 · Doanh thu hợp đồng mới đạt 12 tỷ",
+	"ci-b": "Cập nhật 13/10 · Thêm 40 khách hàng doanh nghiệp",
+	"ci-mat": "lần cập nhật không còn trong kho",
+} satisfies Record<string, string>;
+
+function nguonHien(n: { id: string; mat: boolean }): string {
+	const ky = Object.entries(DONG_NGUON).find(([k]) => k === n.id)?.[1];
+	if (!ky) throw new Error(`nguon chua co ky vong: ${n.id}`);
+	return ky;
+}
+
+function kiemNguon(
+	o: Element,
+	nguon: readonly { id: string; mat: boolean; krTen?: string }[],
+): void {
+	const dong = o.querySelector("[data-nguon-cau]");
+	expect(chu(dong)).toBe(`Nguồn: ${nguon.map(nguonHien).join("; ")}`);
+	for (const n of nguon) {
+		const phan = dong?.querySelector(`[data-nguon="${n.id}"]`);
+		if (!phan) throw new Error(`thieu nguon ${n.id}`);
+		const ten = phan.querySelector('[translate="no"]');
+		if (n.mat) expect(ten).toBeNull();
+		else expect(chu(ten)).toBe(n.krTen ?? "");
+	}
+}
+
 const CAU_CON = [
-	{ vanBan: "Doanh thu hợp đồng mới lên 7,5 tỷ.", nguon: ["ci-a"] },
-	{ vanBan: "Hai KR giữ mức tự tin vừa.", nguon: ["ci-a", "ci-b"] },
+	{ vanBan: "Doanh thu hợp đồng mới lên 7,5 tỷ.", nguon: [NGUON_A] },
+	{ vanBan: "Hai KR giữ mức tự tin vừa.", nguon: [NGUON_A, NGUON_B] },
 ];
 
 const CAU_BO = MA_BO_CAU.map((ma, i) => ({
 	vanBan: `Câu bị bỏ thứ ${i + 1} của phòng Kinh doanh.`,
-	nguon: ["ci-a"],
+	nguon: ma === "nguon-ngoai-goi" ? [NGUON_MAT] : [NGUON_B],
 	maBo: ma,
 }));
 
@@ -389,11 +430,14 @@ const CA = {
 		expect(chu(ngan?.querySelector('[data-slot="sheet-description"]'))).toBe(
 			`Bật · Giữ lại — bỏ ${CAU_BO.length}/${CAU_BO.length + CAU_CON.length} câu`,
 		);
-		const con = ngan?.querySelector("[data-cau-con]");
-		for (const c of CAU_CON) {
-			expect(chu(con)).toContain(c.vanBan);
-			expect(chu(con)).toContain(`Dẫn ${c.nguon.length} lần cập nhật`);
-		}
+		const con = [...(ngan?.querySelectorAll("[data-cau-con-dong]") ?? [])];
+		expect(con).toHaveLength(CAU_CON.length);
+		CAU_CON.forEach((c, i) => {
+			const o = con[i];
+			if (!o) throw new Error(`thieu cau con ${i}`);
+			expect(chu(o.querySelector('p[translate="no"]'))).toBe(c.vanBan);
+			kiemNguon(o, c.nguon);
+		});
 		const bo = ngan?.querySelector("[data-cau-bo]");
 		expect(bo?.querySelectorAll("[data-ma-bo]").length).toBe(MA_BO_CAU.length);
 		for (const ma of MA_BO_CAU) {
@@ -403,7 +447,18 @@ const CA = {
 			expect(chu(dong.querySelector(`[data-nhan-ma-bo="${ma}"]`))).toBe(
 				nhanMaBo(ma),
 			);
+			const cauBo = CAU_BO.find((c) => c.maBo === ma);
+			if (!cauBo) throw new Error(`thieu co dinh ma ${ma}`);
+			kiemNguon(dong, cauBo.nguon);
 		}
+		const tieuDe = [...(ngan?.querySelectorAll("section > h3") ?? [])];
+		expect(tieuDe.map((h) => chu(h))).toEqual([
+			`Câu còn lại · ${CAU_CON.length}`,
+			`Câu bị bỏ · ${CAU_BO.length}`,
+		]);
+		for (const h of tieuDe)
+			expect(h.closest("section")?.getAttribute("aria-labelledby")).toBe(h.id);
+		expect(ngan?.querySelector('[data-slot="sheet-body"]')).not.toBeNull();
 	},
 } satisfies Record<string, () => Promise<void>>;
 

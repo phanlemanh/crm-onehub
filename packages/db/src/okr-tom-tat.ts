@@ -156,6 +156,16 @@ export type BanHien = {
 	phanHoiCuaToi: boolean | null;
 };
 
+export type NguonQuanTri =
+	| { id: string; mat: false; ngay: string; krTen: string }
+	| { id: string; mat: true };
+
+export type CauQuanTri = { vanBan: string; nguon: NguonQuanTri[] };
+
+export type CauBoQuanTri<M extends string = string> = CauQuanTri & {
+	maBo: M;
+};
+
 export type DongQuanTriTomTat<M extends string = string> = {
 	departmentId: string;
 	ten: string;
@@ -166,8 +176,8 @@ export type DongQuanTriTomTat<M extends string = string> = {
 	soCauBo: number;
 	huuIch: number;
 	khongHuuIch: number;
-	cau: CauBan[];
-	bo: CauBanBo<M>[];
+	cau: CauQuanTri[];
+	bo: CauBoQuanTri<M>[];
 };
 
 export type BanTuanQuanTri<M extends string = string> = {
@@ -833,10 +843,45 @@ export async function banTuanChoQuanTri<M extends string>(
 		noiDung: luat.docNoiDung(h.cau),
 		trangThai: luat.docTrangThai(h.trangThai),
 	}));
-	const phanHoi = await db.okrTomTatPhanHoi.groupBy({
-		by: ["tomTatId", "huuIch"],
-		where: { tomTatId: { in: banTuan.map((b) => b.h.id) } },
-		_count: { _all: true },
+	const idNguon = [
+		...new Set(
+			banTuan.flatMap((b) =>
+				[...b.noiDung.cau, ...b.noiDung.bo].flatMap((c) => c.nguon),
+			),
+		),
+	];
+	const [phanHoi, lanDan] = await Promise.all([
+		db.okrTomTatPhanHoi.groupBy({
+			by: ["tomTatId", "huuIch"],
+			where: { tomTatId: { in: banTuan.map((b) => b.h.id) } },
+			_count: { _all: true },
+		}),
+		db.okrCheckIn.findMany({
+			where: { id: { in: idNguon } },
+			select: {
+				id: true,
+				createdAt: true,
+				session: { select: { submittedAt: true } },
+				keyResult: { select: { title: true } },
+			},
+		}),
+	]);
+	const nguonTheoId = new Map(
+		lanDan.map((l) => [
+			l.id,
+			{
+				id: l.id,
+				mat: false as const,
+				ngay: ngayVN(l.session.submittedAt ?? l.createdAt),
+				krTen: l.keyResult.title,
+			},
+		]),
+	);
+	const giaiNguon = (id: string): NguonQuanTri =>
+		nguonTheoId.get(id) ?? { id, mat: true };
+	const giaiCau = <C extends CauBan>(c: C) => ({
+		...c,
+		nguon: c.nguon.map(giaiNguon),
 	});
 	const dem = (tomTatId: string, huuIch: boolean) =>
 		phanHoi.find((p) => p.tomTatId === tomTatId && p.huuIch === huuIch)?._count
@@ -873,8 +918,8 @@ export async function banTuanChoQuanTri<M extends string>(
 				soCauBo: ban?.noiDung.bo.length ?? 0,
 				huuIch: ban ? dem(ban.h.id, true) : 0,
 				khongHuuIch: ban ? dem(ban.h.id, false) : 0,
-				cau: ban?.noiDung.cau ?? [],
-				bo: ban?.noiDung.bo ?? [],
+				cau: ban?.noiDung.cau.map(giaiCau) ?? [],
+				bo: ban?.noiDung.bo.map(giaiCau) ?? [],
 			},
 		];
 	});

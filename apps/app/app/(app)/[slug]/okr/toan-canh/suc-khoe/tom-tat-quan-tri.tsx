@@ -34,6 +34,7 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
+	SheetBody,
 	SheetContent,
 	SheetDescription,
 	SheetHeader,
@@ -51,7 +52,7 @@ import {
 	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 import { useQuery } from "@tanstack/react-query";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useId, useState } from "react";
 import {
 	type OkrToanCanhMessages,
 	okrToanCanhMessages,
@@ -61,6 +62,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 
 type QuanTri = RouterOutputs["okr"]["troLyTomTatQuanTri"];
 type DongQuanTri = QuanTri["phong"][number];
+type CauNgan = DongQuanTri["cau"][number];
 type NhanTrangThai = keyof OkrToanCanhMessages["quanTri"]["trangThai"];
 
 function ngayNgan(ngay: string): string {
@@ -190,6 +192,28 @@ function DongBang({ d, mo }: { d: DongQuanTri; mo: (id: string) => void }) {
 	);
 }
 
+function DongNguon({ nguon }: { nguon: CauNgan["nguon"] }) {
+	const mt = okrToanCanhMessages(useLocale());
+	return (
+		<ItemDescription data-nguon-cau unclamped>
+			{mt.quanTri.nguon}{" "}
+			{nguon.map((n, i) => (
+				<span data-nguon={n.id} key={n.id}>
+					{i > 0 ? "; " : null}
+					{n.mat ? (
+						mt.quanTri.nguonMat
+					) : (
+						<>
+							{mt.tomTat.nhanTrichDan(ngayNgan(n.ngay))} ·{" "}
+							<span translate="no">{n.krTen}</span>
+						</>
+					)}
+				</span>
+			))}
+		</ItemDescription>
+	);
+}
+
 function NganMotBan({
 	d,
 	tuan,
@@ -200,6 +224,8 @@ function NganMotBan({
 	dong: () => void;
 }) {
 	const m = okrToanCanhMessages(useLocale()).quanTri;
+	const idCon = useId();
+	const idBo = useId();
 	return (
 		<Sheet
 			onOpenChange={(mo) => {
@@ -228,69 +254,78 @@ function NganMotBan({
 								)}
 							</SheetDescription>
 						</SheetHeader>
-						<div className="flex min-h-0 flex-col gap-5 overflow-y-auto px-4 pb-6">
-							<section
-								aria-labelledby="cau-con"
-								className="flex flex-col gap-3"
-								data-cau-con
-							>
-								<p className="font-medium text-sm" id="cau-con">
-									{m.cauCon(String(d.cau.length))}
-								</p>
-								{d.cau.length === 0 ? (
-									<p className="text-muted-foreground text-sm">{m.khongCau}</p>
-								) : (
-									<ItemGroup>
-										{d.cau.map((c) => (
-											<Item key={c.vanBan} variant="outline">
-												<ItemContent>
-													<p className="text-sm" translate="no">
-														{c.vanBan}
-													</p>
-													<ItemDescription>
-														{m.nguon(String(c.nguon.length))}
-													</ItemDescription>
-												</ItemContent>
-											</Item>
-										))}
-									</ItemGroup>
-								)}
-							</section>
-							<section
-								aria-labelledby="cau-bo"
-								className="flex flex-col gap-3"
-								data-cau-bo
-							>
-								<p className="font-medium text-sm" id="cau-bo">
-									{m.cauBo(String(d.bo.length))}
-								</p>
-								{d.bo.length === 0 ? (
-									<p className="text-muted-foreground text-sm">{m.khongCau}</p>
-								) : (
-									<ItemGroup>
-										{d.bo.map((c) => (
-											<Item
-												data-ma-bo={c.maBo}
-												key={`${c.maBo}:${c.vanBan}`}
-												variant="outline"
-											>
-												<ItemContent>
-													<ItemDescription translate="no" unclamped>
-														<del>{c.vanBan}</del>
-													</ItemDescription>
-													<StatusIndicator
-														data-nhan-ma-bo={c.maBo}
-														label={m.maBo[c.maBo]}
-														size="sm"
-														tone="warning"
-													/>
-												</ItemContent>
-											</Item>
-										))}
-									</ItemGroup>
-								)}
-							</section>
-						</div>
+						<SheetBody>
+							<div className="flex flex-col gap-5 pb-6">
+								<section
+									aria-labelledby={idCon}
+									className="flex flex-col gap-3"
+									data-cau-con
+								>
+									<h3 className="font-medium text-sm" id={idCon}>
+										{m.cauCon(String(d.cau.length))}
+									</h3>
+									{d.cau.length === 0 ? (
+										<p className="text-muted-foreground text-sm">
+											{m.khongCau}
+										</p>
+									) : (
+										<ItemGroup>
+											{d.cau.map((c) => (
+												<Item
+													data-cau-con-dong
+													key={c.vanBan}
+													variant="outline"
+												>
+													<ItemContent>
+														<p className="text-sm" translate="no">
+															{c.vanBan}
+														</p>
+														<DongNguon nguon={c.nguon} />
+													</ItemContent>
+												</Item>
+											))}
+										</ItemGroup>
+									)}
+								</section>
+								<section
+									aria-labelledby={idBo}
+									className="flex flex-col gap-3"
+									data-cau-bo
+								>
+									<h3 className="font-medium text-sm" id={idBo}>
+										{m.cauBo(String(d.bo.length))}
+									</h3>
+									{d.bo.length === 0 ? (
+										<p className="text-muted-foreground text-sm">
+											{m.khongCau}
+										</p>
+									) : (
+										<ItemGroup>
+											{d.bo.map((c) => (
+												<Item
+													data-ma-bo={c.maBo}
+													key={`${c.maBo}:${c.vanBan}`}
+													variant="outline"
+												>
+													<ItemContent>
+														<ItemDescription translate="no" unclamped>
+															<del>{c.vanBan}</del>
+														</ItemDescription>
+														<StatusIndicator
+															data-nhan-ma-bo={c.maBo}
+															label={m.maBo[c.maBo]}
+															size="sm"
+															tone="warning"
+														/>
+														<DongNguon nguon={c.nguon} />
+													</ItemContent>
+												</Item>
+											))}
+										</ItemGroup>
+									)}
+								</section>
+							</div>
+						</SheetBody>
 					</>
 				) : null}
 			</SheetContent>
