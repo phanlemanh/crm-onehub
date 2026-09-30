@@ -2172,6 +2172,7 @@ describe("kr-may", () => {
 		const cookieChu = await phienCua(chu);
 		const NGAY = "2026-10-15";
 		const TRONG_KY = new Date("2026-10-10T03:00:00Z");
+		const TRUOC_KY = new Date("2026-09-20T03:00:00Z");
 
 		const a = await mucTieu(
 			quy,
@@ -2236,6 +2237,7 @@ describe("kr-may", () => {
 					companyId: cty.id,
 					ownerId: chu,
 					stage: "CLOSED_WON",
+					createdAt: TRUOC_KY,
 					closedAt: TRONG_KY,
 				},
 			});
