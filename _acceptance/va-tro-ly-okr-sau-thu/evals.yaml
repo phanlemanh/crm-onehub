@@ -1,0 +1,143 @@
+schema_version: 1
+feature_slug: va-tro-ly-okr-sau-thu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vtl_nguon_khoa
+    expected: "exit 0; bài thuần apps/agent/test/mo-hinh-khoa.spec.ts -t nguon-khoa gọi nguonKhoaMoHinh trên MA TRẬN TOÀN PHẦN viết trước trong bài: mười ô {OKR riêng, chung, cả hai, header OIDC còn hạn, biến VERCEL_OIDC_TOKEN còn hạn, không có, vé hết hạn, vé không phải JWT, layVe ném, khoá chỉ khoảng trắng} → kỳ vọng {khoa-rieng, khoa-chung, khoa-rieng, oidc, oidc, null, null, null, null, null}; tên biến rút từ TRO_LY_OKR.khoa (không chép chuỗi); số khẳng định = số ô (in ra, lệch là đỏ). Vé giả là JWT ba phần base64url với exp tương lai (ô hết hạn: exp quá khứ), và bài giải mã fixture bằng bộ giải mã của chính @vercel/oidc trước khi dùng (fixture sai khuôn là đỏ 'fixture ve sai khuon'). Ca header dùng getVercelOidcToken THẬT với request context giả ở globalThis[Symbol.for('@vercel/request-context')] (không giả layVe) — đối chứng dương đường thật. Mọi ô chạy với HOME và cwd là thư mục tạm không có .vercel và không có phiên CLI; spy globalThis.fetch và spy createGateway/gateway đều đếm 0. Chiều đỏ trên cùng bảng: bản sao chỉ đọc process.env (hàm cũ) → ô header OIDC ra null, thông điệp ghim 'o lech: header-oidc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/mo-hinh-khoa.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vtl_san_sang_oidc
+    expected: "exit 0; bài tích hợp apps/agent/test/tro-ly-okr-san-sang.integration.spec.ts -t oidc trên kho kiểm của lượt: xoá AI_GATEWAY_API_KEY, OKR_AI_GATEWAY_API_KEY, VERCEL_OIDC_TOKEN khỏi env trong ca, HOME và cwd tạm như E1; request context giả mang header x-vercel-oidc-token là JWT còn hạn dựng bằng cùng hàm fixture của E1; cấu hình Trợ lý bật qua đường ghi thật; xếp việc okr-kiem-san-sang bằng xepKiemLaiKhoa/đường dispatch thật rồi chạy chayKiemSanSang → db.agentTask.outcome = 'san-sang-oidc'; troLyOkrSanSang trả bat:true; lyDoChanTruocKhiGui trên một việc okr-de-xuat do xepViecTroLy ghi trả null. Ca không vé (context rỗng) → outcome 'chua-co-khoa-mo-hinh' và lyDoChanTruocKhiGui trả TRO_LY_OKR.ketThuc.chuaCoKhoa (rút từ config). Chiều đỏ: bản sao chayKiemSanSang dùng lại hàm cũ chỉ đọc env → ca oidc ra 'chua-co-khoa-mo-hinh', thông điệp ghim 'kiem khoa khong thay oidc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/agent/lib/okr/viec.ts, apps/agent/agent/lib/okr/kiem-san-sang.ts, packages/db/src/okr-tro-ly.ts, packages/db/src/okr-tro-ly-danh-muc.ts, apps/agent/test/tro-ly-okr-san-sang.integration.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vtl_kiem_lai_oidc
+    expected: "exit 0; cùng tệp -t kiem-lai: BẢNG viết trước bốn lượt đổi {chua-co-khoa-mo-hinh → header OIDC ⇒ san-sang-oidc; san-sang (cũ) → AI_GATEWAY_API_KEY ⇒ san-sang-khoa-chung; san-sang-oidc → OKR_AI_GATEWAY_API_KEY ⇒ san-sang-khoa-rieng; san-sang-khoa-chung → không còn gì ⇒ chua-co-khoa-mo-hinh}; mỗi dòng gieo hàng okr-kiem-san-sang đóng với finishedAt cũ hơn TRO_LY_OKR_TRAN.hanKiemKhoaMs (rút từ config) theo đồng hồ giả, rồi chạy ba lần đường nhịp điều phối xếp kiểm lại (truyền nguồn hiện tại do nguonKhoaMoHinh tính) → đúng MỘT hàng mới (đếm có where kind), chạy việc đó → outcome của dòng, troLyOkrSanSang theo nguồn mới. Đối chứng: cùng nguồn (san-sang-oidc + header OIDC) → 0 hàng mới qua ba nhịp; khác nguồn nhưng chưa quá hạn → 0 hàng. Hàng cũ 'san-sang' trước lượt kiểm lại → ketQuaKiemGanNhat parse được, troLyOkrSanSang bat:true. Số dòng bảng in ra. Chiều đỏ: bản sao canKiemLaiKhoa chỉ xét 'chua-co-khoa-mo-hinh' (hàm cũ) → dòng oidc→khoá riêng ra 0 hàng, thông điệp ghim 'khong kiem lai khi doi nguon: san-sang-oidc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/kiem-san-sang.ts, apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/agent/schedules/dispatch.ts, packages/db/src/okr-tro-ly.ts, packages/db/src/okr-tro-ly-danh-muc.ts, apps/agent/test/tro-ly-okr-san-sang.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vtl_nang_luc
+    expected: "exit 0; apps/agent/test/capabilities.spec.ts -t mo-hinh-ai: MA TRẬN viết trước bảy ô {chỉ header OIDC → bật, không gì → tắt, chỉ khoá chung → bật, chỉ khoá riêng → tắt, riêng + chung → bật, riêng + header OIDC → bật, riêng + biến OIDC → bật} cho mục MO_HINH_AI của capabilities(); số khẳng định = số ô; vé giả và HOME/cwd tạm như E1. Bài kiểm tĩnh trong cùng tệp: capabilities.ts không còn đọc process.env.VERCEL_OIDC_TOKEN hay AI_GATEWAY_API_KEY trực tiếp và import nguonKhoaMoHinh. Chiều đỏ: (a) bản sao để mục đọc process.env như cũ → ô header ra tắt, 'nang luc lech nguon khoa'; (b) bản sao lọc theo giá trị trả cho Trợ lý (khoa-chung hoặc oidc) → ô riêng + header ra tắt, 'nang luc bi khoa rieng che'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/capabilities.ts, apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/test/capabilities.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.vtl_model_rieng
+    expected: "exit 0; apps/agent/test/mo-hinh-khoa.spec.ts -t model-rieng: hàm dựng model của Trợ lý nhận env và nhà tạo Gateway tiêm vào (như modelMaySoan của tai-lieu-model.ts): có OKR_AI_GATEWAY_API_KEY → nhà tạo được gọi đúng một lần với {apiKey: <khoá đó>}; không có → được gọi không apiKey; model trả về mang modelId TRO_LY_OKR.model. Gọi doGenerate qua một model giả ghi params: providerOptions.gateway có zeroDataRetention true và tags chứa 'onehub:tro-ly-okr'; maxOutputTokens ≤ TRO_LY_OKR.tranRaMoiLoiGoi — cả hai ca. Chiều đỏ: bản sao bỏ middleware ở nhánh khoá riêng → ca riêng thiếu zeroDataRetention, thông điệp ghim 'khoa rieng mat zdr'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/subagents/tro_ly_okr/agent.ts, apps/agent/test/mo-hinh-khoa.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.vtl_bien_bon_nha
+    expected: "exit 0; _acceptance/va-tro-ly-okr-sau-thu/rang/bien-bon-nha.mjs đọc tên biến từ apps/agent/agent/lib/okr/config.ts (TRO_LY_OKR.khoa.rieng, không chép chuỗi) rồi soát bốn nhà: .env.example có dòng '# OKR_AI_GATEWAY_API_KEY' kèm câu mô tả ngay trên; turbo.json globalPassThroughEnv chứa; turbo.json env KHÔNG chứa; lệnh dev của apps/agent (package.json hoặc turbo.json của agent) có pass-through; docs/environment.md có dòng bảng. In một dòng mỗi nhà. Đường gốc suy từ vị trí script. Chiều đỏ ghim trong script bằng bản sao tạm ở tmpdir: xoá dòng khỏi .env.example của bản sao → mã 1 'thieu nha: .env.example'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [.env.example, turbo.json, apps/agent/package.json, apps/agent/turbo.json, docs/environment.md, apps/agent/agent/lib/okr/config.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/bien-bon-nha.mjs]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vtl_ai_chi_tieu_nguon
+    expected: "exit 0; bài API apps/api/test/tro-ly-okr-nguon-khoa.spec.ts: với mỗi outcome trong KET_QUA_KIEM_SAN_SANG (rút lúc chạy) gieo một hàng okr-kiem-san-sang đóng, gọi okr.aiChiTieu bằng quản trị qua tRPC → nguonKhoa theo bảng viết trước {san-sang-khoa-rieng: khoa-rieng, san-sang-khoa-chung: khoa-chung, san-sang-oidc: oidc, san-sang: chua-ro, chua-co-khoa-mo-hinh: null} và sanSang.bat true ở bốn dòng đầu; output parse bằng aiChiTieuOutput. Thêm một outcome mới mà không thêm dòng bảng là đỏ 'ket qua chua co dong: <ma>'. Thành viên gọi → 403 như trước."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr.contracts.ts, apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, packages/db/src/okr-tro-ly.ts, packages/db/src/okr-tro-ly-danh-muc.ts, apps/api/test/tro-ly-okr-nguon-khoa.spec.ts]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.vtl_the_nguon
+    expected: "exit 0; bài DOM apps/app/test/tro-ly-okr-so-do.dom.tsx -t nguon-khoa của thẻ Trợ lý OKR: một ca cho MỖI dòng ST-caidat-* của bảng trạng thái trong design doc (id rút lúc chạy từ UX-STATE-TABLE, đường suy từ vị trí bài) với dữ liệu aiChiTieu giả tương ứng; mỗi ca khẳng định đúng chữ của dòng đọc từ troLyOkrMessages (không chép chuỗi); ca thiếu khoá có mô tả nêu OKR_AI_GATEWAY_API_KEY, AI_GATEWAY_API_KEY và OIDC; ca ST-caidat-san-sang-cu (nguonKhoa 'chua-ro', sanSang bat) hiện chữ sanSang không kèm nguồn và KHÔNG chứa chữ lyDo['chua-co-khoa-mo-hinh']; không ca nào có input kiểu password hay nhãn chứa 'khoá' trong form. Dữ liệu giả parse qua aiChiTieuOutput trước khi dùng. Chiều đỏ: (a) bảng có id ST-caidat-* mà bài không có ca → 'trang thai chua do: <id>'; (b) bản sao coi nguonKhoa null/chua-ro là thiếu khoá → ca cũ ra chữ thiếu khoá, 'the lech san sang cu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/lib/messages/tro-ly-okr.ts, apps/app/test/tro-ly-okr-so-do.dom.tsx, docs/superpowers/specs/2026-10-01-va-tro-ly-okr-sau-thu-design.md]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vtl_nhanh_can_chinh
+    expected: "exit 0; bài tích hợp apps/agent/test/tro-ly-okr-nhanh-can-chinh.integration.spec.ts trên bộ OKR mẫu nạp bằng napBoOkrMau (hàm nạp thật): Mục tiêu A căn chỉnh tới một KR của Mục tiêu X, Mục tiêu B căn chỉnh thẳng tới X (gieo qua okrAlignment như sổ mẫu), Y là Mục tiêu cấp trên không liên quan. dungGoiDeXuat(A) và (B): tập id đích không chứa X và không chứa KR nào của X (so tập với id rút từ db, không đếm); chứa Y và KR của Y. Tool nop_de_xuat THẬT nộp một dòng Căn chỉnh A→X → db.okrDeXuat trangThai 'bi-loai', maLoai 'dich-ngoai-tap'; okr.troLyDanhSach không có dòng đó. Dòng 'cho' A→KR-khác-của-X gieo trước, rồi thêm căn chỉnh A→X → troLyDanhSach không còn dòng đó. Đối chứng dương: Mục tiêu C không căn chỉnh gì → tập đích chứa X. Chiều đỏ: bản sao dichCanChinhCua bỏ bộ lọc nhánh → tập của A chứa X, thông điệp ghim 'nhanh chong: X'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/goi-ngu-canh.ts, apps/agent/agent/lib/okr/doc.ts, packages/validation/src/okr-kiem-de-xuat.ts, apps/agent/test/tro-ly-okr-nhanh-can-chinh.integration.spec.ts]
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.vtl_dong_tu
+    expected: "exit 0; packages/validation/test/okr-kiem.spec.ts -t dong-tu: với MỖI động từ của OKR_KIEM.dongTuViec (rút lúc chạy) một cặp câu '<động từ> …' có dấu và bản boDau của nó → cả hai ra kr-la-viec; số cặp = số động từ (lệch là đỏ 'dong tu chua co cap: <v>'). Bảng trùng mặt viết trước: 'Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng', 'Gói dịch vụ bán kèm đạt 40%', 'Lâm Đồng đạt 12 đại lý' → không kr-la-viec; 'Họp giao ban đủ 12 buổi', 'Gọi 50 đối tác', 'Làm mới 20 hồ sơ' → kr-la-viec. Mỗi câu không dấu (sinh hay viết tay) phải khớp /^[\\x00-\\x7F]*$/ (không thì đỏ 'khong dau con ky tu: <cau>'); thêm ca viết tay 'dao tao 50 nhan su', 'to chuc 4 hoi thao', 'xay dung bo tai lieu' → kr-la-viec. Mọi ca CA cũ của tệp giữ nguyên kỳ vọng. Chiều đỏ: bản sao laViec bỏ dấu cả câu có dấu (hàm cũ) → 'Hợp đồng bán lẻ…' ra kr-la-viec, thông điệp ghim 'trung mat: hop'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-kiem.ts, packages/validation/test/okr-kiem.spec.ts]
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.vtl_hai_giong
+    expected: "exit 0; bài DOM apps/app/test/tro-ly-okr-gop-y.dom.tsx -t hai-giong: HopThoaiKr thật với tRPC giả trả troLyDanhSach rỗng đã nộp; ca KR tên là việc ('Gọi 50 đối tác') → gợi ý tĩnh hiện VÀ mô tả rỗng là rongCoGoiY; ca KR tên không là việc → không gợi ý VÀ mô tả rongMoTaKr; cùng hai ca cho HopThoaiMucTieu (gợi ý tĩnh trên KR trong phạm vi) với rongMoTa. Chữ rút từ okrGopYMessages. Chiều đỏ: bản sao CotGopY bỏ prop coGoiYTinh → ca có gợi ý ra 'đã đọc ổn', thông điệp ghim 'hai giong: kr'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.vtl_chu_nho
+    expected: "exit 0; cùng tệp -t chu-nho: HopThoaiKr với xuHuongKr giả và KR có unit 'tỷ đồng' → dòng xu hướng kết thúc bằng '<ước> tỷ đồng'; KR unit rỗng → không có đơn vị và không khoảng trắng thừa ở cuối. CotGopY sau khi quyết hết mọi dòng (nhan, bo-qua qua tRPC giả) → đầu cột là daQuyetHet, không còn chuỗi soDong('0'). Chiều đỏ: bản sao bỏ tham số đơn vị → '6,61' không có 'tỷ đồng', thông điệp ghim 'xu huong thieu don vi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
+
+  - id: E13
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vtl_man_that
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo riêng (tien-de); nạp bộ OKR mẫu bằng bun run okr:mau; bật Trợ lý OKR góp ý cho toàn công ty qua okr.setProgram; chạy một việc okr-kiem-san-sang qua tác tử của phiên đo (khoá chung có trên máy đo; thiếu → mã 2, không xanh)"
+      - "Đăng nhập dev:session nguyen-thi-lan@mau.onehub.test; mở Mục tiêu 'Giữ đà tăng trưởng bán lẻ miền Bắc' bằng bấm, menu KR đầu › Sửa → ảnh ST-kr-xu-huong-don-vi ở 1440 và 390"
+      - "Đọc chữ của hộp KR: không có chuỗi kr-la-viec của okrKhepMessages; dòng xu hướng chứa 'tỷ đồng'"
+      - "Đăng nhập le-hai-dang@mau.onehub.test; Cài đặt › Chương trình OKR → ảnh ST-caidat-san-sang-chung ở 1440 và 390; đọc chữ dòng trạng thái"
+      - "Mọi ảnh đo scrollWidth ≤ clientWidth"
+    expected: "exit 0; ảnh trong .acceptance-runs/va-tro-ly-okr-sau-thu/man/; một dòng kết quả mỗi bước; hộp KR không có câu 'đọc như một việc làm' và có 'tỷ đồng'; thẻ có đúng chữ sanSangNguon['khoa-chung'] rút từ troLyOkrMessages. Chiều đỏ ghim trong script: trước bước đọc, kiểm hộp KR có tên đúng 'Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng' (không thì mã 3 'sai kr: <ten>') — không có KR đó thì bước đọc không chứng gì."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/validation/src/okr-kiem.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/man-that.mjs]
+
+  - id: E14
+    criterion: AC-13
+    executor: judgment
+    question: >-
+      Đọc diff của lượt (git diff diffBase...HEAD, loại _acceptance/**) cùng docs/agent.md,
+      docs/environment.md và CONTEXT.md: diff có giữ luật kho không — không dòng chú thích mới
+      trong mã; mọi đọc khoá mô hình đi qua nguonKhoaMoHinh ở apps/agent, API không đọc khoá và
+      không gọi Gateway; tên biến khoá và danh sách động từ nằm trong tệp cấu hình của khu
+      (TRO_LY_OKR, OKR_KIEM), không lặp chuỗi; outcome mới parse ở biên qua
+      KET_QUA_KIEM_SAN_SANG và aiChiTieuOutput, không Record<string, unknown>; không thành phần
+      giao diện mới ngoài packages/ui, không className đè kiểu; docs/agent.md nói hàm nguồn khoá,
+      thứ tự nguồn và khoá riêng; chữ trên màn dùng «tác tử», không «tác nhân»?
+    inputs: [docs/superpowers/specs/2026-10-01-va-tro-ly-okr-sau-thu-design.md, _acceptance/va-tro-ly-okr-sau-thu/contract.md, docs/agent.md, docs/environment.md, CONTEXT.md, AGENTS.md]
+    expected: >-
+      PASS khi mọi ý đạt; FAIL nêu tệp và dòng của ý trượt.
+    evidence_required: [run_id, verdict, rationale]
+
+  - id: E15
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.vtl_san_thiet_ke
+    expected: "exit 0; design-gate --mode static của plugin acceptance-gate chạy trên từng tệp giao diện lượt này chạm (cot-gop-y.tsx, hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx, the-tro-ly-okr.tsx) và không tệp nào có P0 (bán kính, màu, khoảng cách tự đặt, className đè thành phần của packages/ui). Chiều đỏ là của chính design-gate (bộ ca của kit); lượt này không dựng thêm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx"]
