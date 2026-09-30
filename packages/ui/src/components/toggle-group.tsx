@@ -1,6 +1,6 @@
 "use client";
 
-import { toggleVariants } from "@crm/ui/components/toggle";
+import { ToggleCheck, toggleVariants } from "@crm/ui/components/toggle";
 import { cn } from "@crm/ui/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
@@ -87,6 +87,7 @@ function ToggleGroupItem({
 			)}
 			{...props}
 		>
+			<ToggleCheck variant={context.variant || variant} />
 			{children}
 		</ToggleGroupPrimitive.Item>
 	);
