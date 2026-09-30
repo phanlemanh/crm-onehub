@@ -20,6 +20,8 @@ const HO_SO = "dot-hoi-y-tuong-okr";
 const TAM =
 	process.env.BANG_CHUNG ?? join(GOC, ".acceptance-runs", HO_SO, "man");
 const DICH = join(GOC, "_acceptance", HO_SO, "evidence", "man");
+const HOP_DONG = join(GOC, "_acceptance", HO_SO, "contract.md");
+const DA_THONG_CONG = new Set(["signed-off", "machine-cleared"]);
 const NHOM = { E12: "E12", E13: "E12", E15: "E15", E16: "E15" };
 const MOI_EVAL = Object.keys(NHOM);
 const LENH_DO =
@@ -2591,6 +2593,14 @@ async function nhomE15() {
 
 function chepBangChung() {
 	if (process.env.CHIEU_DO || hong.length > 0 || anh.length === 0) return;
+	const trangThai =
+		/^status:\s*(\S+)/m.exec(readFileSync(HOP_DONG, "utf8"))?.[1] ?? "";
+	if (DA_THONG_CONG.has(trangThai)) {
+		console.log(
+			`  xanh: ho so ${trangThai}, khong chep anh sang ${relative(GOC, DICH)}/ — bang chung da ky chi doi qua dong revisit`,
+		);
+		return;
+	}
 	mkdirSync(DICH, { recursive: true });
 	for (const a of anh) copyFileSync(join(TAM, a), join(DICH, a));
 	console.log(`  xanh: da chep ${anh.length} anh sang ${relative(GOC, DICH)}/`);
