@@ -1,6 +1,7 @@
 import { db } from "@crm/db";
 import { laViecTroLyOkr, soLanThuToiDa, VIEC_OKR } from "@crm/db/agent-tasks";
 import { troLyOkrSanSang } from "@crm/db/okr-tro-ly";
+import type { DonViMucTieu } from "@crm/db/okr-tro-ly-danh-muc";
 import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import type { LeasedTask } from "../tasks";
 import { completeTask } from "../tasks";
@@ -31,10 +32,26 @@ export async function lyDoChanTruocKhiGui(
 		viec: viec.data.viec,
 		objectiveId:
 			viec.data.viec === "de-xuat" ? viec.data.objectiveId : undefined,
-		nacViec: viec.data.viec === "de-xuat" ? viec.data.nac : undefined,
+		donVi:
+			viec.data.viec === "tom-tat-tuan"
+				? await donViCuaPhong(viec.data.departmentId)
+				: undefined,
+		nacViec: viec.data.nac,
 		now,
 	});
 	return san.bat ? null : `khong-chay:${san.lyDo}`;
+}
+
+async function donViCuaPhong(departmentId: string): Promise<DonViMucTieu> {
+	const phong = await db.department.findUniqueOrThrow({
+		where: { id: departmentId },
+		select: { divisionId: true },
+	});
+	return {
+		onehub: false,
+		boPhanId: phong.divisionId,
+		phongBanId: departmentId,
+	};
 }
 
 export async function giaHanLease(

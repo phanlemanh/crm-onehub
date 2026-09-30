@@ -86,6 +86,7 @@ export const OKR_TOM_TAT = {
 	hoiLaiMs: 5 * SECOND_MS,
 	tranChoMs: 2 * MINUTE_MS,
 	dongBaoAiToiDa: 2,
+	giaoDichXepMs: MINUTE_MS,
 } as const;
 
 export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
