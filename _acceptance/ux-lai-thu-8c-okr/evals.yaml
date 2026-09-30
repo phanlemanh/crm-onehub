@@ -1,0 +1,139 @@
+schema_version: 1
+feature_slug: ux-lai-thu-8c-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_danh_sach
+    paths: [apps/api/src/okr/**, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; bộ OKR mẫu, G = mục tiêu giới hạn q4-phap-che-3 (người xem có tên V = tran-quoc-bao), bài gieo thêm một người xem để soNguoiXem = 2 và gieo một cập nhật tuần cho KR của G nếu bộ mẫu chưa có (để G có mặt ở okr.hopTuan). MA TRẬN VIẾT TRƯỚC 13 ô, mỗi ô ghi số mục gioi-han kỳ vọng: okr.mine × {V 0, chủ G 1, N 0}; okr.byUnit(Pháp chế) × {V 1, chủ G 1, N 0}; okr.alignmentTree × {V 1, chủ G 1, N 0}; okr.hopTuan(Pháp chế) × {V 1, chủ G 1, N 0}; okr.moCoi × quản trị 1 (sau khi gỡ người phụ trách KR của G). Mỗi ô: đếm mục hienThi gioi-han toEqual số ghi trước VÀ tập id đó toEqual tập mục tiêu giới hạn người đó xem được có mặt trong danh sách (tính bằng xemDuocMucTieu trên cùng dữ liệu, không viết tay); mọi mục có hienThi; soNguoiXem của G toEqual số hàng okrNguoiXem đọc từ bảng (2). CHIỀU ĐỎ, một ca cho TỪNG danh sách trên cùng fixture: bản sao bộ dựng danh sách đó trả hienThi cong-khai cố định → ô của V (hay chủ G với mine, quản trị với moCoi) đỏ in «<tên thủ tục>: gioi-han 0 != 1»; bản sao đếm soNguoiXem = 0 → đỏ in «soNguoiXem G 0 != 2»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, packages/ui/src/components/**, apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t nhan-danh-sach; ma trận viết trước 5 màn × 2 thẻ (giới hạn soNguoiXem 1, công khai) + 1 ca giới hạn soNguoiXem 0: đúng 5 nhãn [data-nhan-gioi-han] (mỗi màn một, trên thẻ giới hạn), aria-label chứa «Chỉ người liên quan và 1 người xem có tên thấy», ca 0 dùng câu không số; nhãn trong danh sách không có aria-haspopup và bấm vào không mở dialog; khung mục tiêu render nhãn từ @crm/ui (kiểm import) và vẫn mở hộp mức hiển thị. CHIỀU ĐỎ: bỏ nhãn khỏi một màn trong bản sao → đỏ in tên màn thiếu nhãn; đặt hienThi cong-khai cho thẻ giới hạn → đỏ in «5 != 4»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: ["apps/app/app/(app)/[slug]/settings/members/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t go-nguoi; mock okr.transferPreview: P → {kr 3, mucTieu 1}, Q → {0, 0}, R → lỗi, S → treo (promise chưa giải). Mở hộp gỡ P: chữ nêu «3 KR» và «1 mục tiêu», nút chính «Chuyển OKR…» và bấm nó mở hộp chuyển OKR với fromUserId P, nút «Gỡ» không disabled và bấm gọi workspace.removeMember đúng một lần. Q: hộp đúng tiêu đề và thân như trước lượt này, không gọi hộp chuyển. R: dòng «Chưa đọc được OKR của người này», «Gỡ» vẫn bấm được. S: dòng «Đang đọc OKR của người này…», «Gỡ» không disabled, bấm gọi removeMember đúng một lần. Số hiện lấy nguyên từ transferPreview (đổi mock sang 7/2 thì chữ đổi theo). CHIỀU ĐỎ: bản sao hộp không đọc transferPreview → ca P đỏ in «thieu canh bao OKR»; bản sao khoá nút Gỡ khi đang đọc → ca S đỏ in «Go bi khoa khi dang doc»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_go_nguoi
+    paths: [apps/api/src/okr/okr-trao-doi.service.ts, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; bộ mẫu, người P phụ trách KR ở quý đang chạy, một KR ở quý đã đóng và một mục tiêu cá nhân. transferPreview(P) trả kr, mucTieu bằng số đếm độc lập từ bảng theo điều kiện kỳ còn ghi được, không mục tiêu cá nhân (đếm bằng truy vấn riêng của bài, không gọi dieuKienChuyen); gọi transferWork rồi transferPreview lần nữa → {0, 0, 0}. CHIỀU ĐỎ: trên cùng fixture, bài đếm cả quý đã đóng thì khác số preview và in «preview 3 != dem 4» — bài giữ đúng một ca đối chứng này để chứng minh phép đếm phân biệt được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t gui-duyet-khoa; ma trận viết trước 2 chỗ (đầu khung, dải bị trả lại) × 2 dữ liệu (0 KR, 1 KR), quyen.guiDuyet true: 0 KR → nút [data-nut=gui-duyet] disabled, phần tử có id bằng aria-describedby của nút chứa đúng «Thêm ít nhất một KR trước khi gửi duyệt», bấm nút không làm xuất hiện alertdialog, okr.guiDuyet không được gọi; 1 KR → nút mở, không có dòng đó, bấm mở alertdialog. CHIỀU ĐỎ: bản sao bỏ điều kiện KR → ca 0 KR đỏ in «nut mo khi 0 KR»; bản sao chỉ đặt lý do trong Tooltip → đỏ in «aria-describedby rong»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t luu-tru; bốn phòng viết trước A (okrMo 3, 2 người chính), B (0, 2), C (3, 0), D (0, 0; có 1 người phụ, không chính): A nêu hai dòng (OKR kèm «Chuyển OKR…», người), B một dòng người, C một dòng OKR, D không dòng nào; «Lưu trữ» disabled ở A, B, C, mở ở D; số trong câu lấy từ dữ liệu (đổi okrMo 3→4 thì chữ đổi). CHIỀU ĐỎ: bản sao chỉ xét okrMo → ca B đỏ in «B: Luu tru mo khi con nguoi»; bản sao đếm cả người phụ → ca D đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_luu_tru
+    paths: [apps/api/src/to-chuc/**, packages/validation/src/to-chuc-luu-tru.ts, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; bộ mẫu cộng bốn phòng gieo A, B, C, D như E6. Với MỌI phòng ban trong org.tree: tập điều kiện suy bằng hàm dùng chung dieuKienLuuTru (@crm/validation/to-chuc-luu-tru — hộp lưu trữ và máy chủ cùng gọi, không bản chép) từ nút cây toEqual kết quả gọi thật org.archive (từ chối nêu OKR / người / cả hai, hay cho lưu trữ) — mỗi phòng một lần gọi trong giao dịch cuộn lại. CHIỀU ĐỎ: bản sao hàm suy bỏ điều kiện người → phòng B đỏ in «B: suy [] != may chu [nguoi]»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_chuyen_xem_truoc
+    paths: [apps/api/src/okr/okr-tai-co-cau.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr.contracts.ts, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; trần mục tiêu mỗi đơn vị 5, đơn vị nhận đang có 3 ở quý 4. Ma trận viết trước 4 ca (chuyển 1 → 4 dưới trần; 2 → 5 bằng trần; 3 → 6 với cheDo canh-bao; 3 → 6 với cheDo chan): chuyenDonViXemTruoc trả {canhBao, chan} toEqual kết quả chuyenDonVi thật trên cùng đầu vào (canhBao của mutation; chan = câu lỗi 400 của mutation, mutation không ghi hàng nào) ở cả bốn ca; ca 1–2 cả hai null; xem trước không ghi hàng nào (đếm okrObjective theo đơn vị và okrTrail trước/sau bằng nhau). CHIỀU ĐỎ: bản sao xem trước tự tính trần bằng > thay >= theo mutation → ca «bằng trần» hoặc «vượt» lệch và in tên ca."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: ["apps/app/app/(app)/[slug]/settings/organization/**", apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t chuyen-tran; mock chuyenDonViXemTruoc theo đầu vào: canhBao «Kinh doanh miền Nam sẽ có 6 mục tiêu ở Quý 4 — vượt trần 5» → hiện trong vùng aria-live dưới ô nơi nhận trước khi bấm, nút chuyển mở; chan → câu chặn cùng chỗ, nút chuyển disabled; null → không cảnh báo; lỗi → dòng «Chưa kiểm được trần» trong vùng aria-live, nút chuyển mở. Bỏ chọn một mục tiêu → xem trước được gọi lại với objectiveIds mới (so mảng). CHIỀU ĐỎ: bản sao không gọi lại khi đổi tập chọn → đỏ in «xem truoc khong tinh lai»; bản sao bỏ khoá khi chan → đỏ; bản sao coi lỗi xem trước là chặn → ca lỗi đỏ in «nut chuyen khoa khi loi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_dem_don_vi
+    paths: [apps/api/src/okr/**, packages/db/src/okr-hien-thi.ts, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; bộ mẫu có G. PHẦN 1 — ma trận 4 người (V, chủ G, N, quản trị) × mọi khoá đơn vị countByUnit: countByUnit[khoá] === byUnit(đơn vị đó).objectives.length của cùng người, số assert = số ô; Pháp chế: V 3, chủ G 3, N 2, quản trị 3. PHẦN 2 — ma trận viết trước 3 loại số × 4 người = 12 ô: (a) số của Sức khoẻ chương trình cho Pháp chế, (b) tiến độ gộp của Pháp chế và của Khối Hỗ trợ, (c) toàn cảnh cho Pháp chế — mỗi ô toEqual ảnh chụp trước lượt (ghim trong bài, chụp trên onehub 79168cbe) và bằng nhau giữa bốn người. CHIỀU ĐỎ: bản sao countByUnit dùng boGioiHan (luật cũ) → ô Pháp chế của V đỏ in «V phap-che 2 != 3»; bản sao phép gộp tiến độ dùng dieuKienXemMucTieu → PHẦN 2 đỏ in «tien do gop V != N»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_nguoi_duyet
+    paths: [apps/api/src/okr/**, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; ô duyệt bật, bảng viết trước 4 ca theo cấp (phòng ban → trưởng bộ phận; bộ phận → quản trị; cá nhân → trưởng phòng chính; cá nhân của trưởng phòng → trưởng bộ phận): objective().nguoiDuyetDuKien.id toEqual người trong bảng, và sau guiDuyet toEqual choDuyet.nguoiDuyet.id của cùng mục tiêu. null ở: ô duyệt tắt; người đọc không có quyen.guiDuyet; mục tiêu cong-bo. CHIỀU ĐỎ: bản sao suy người duyệt bằng trưởng phòng của mục tiêu → ca phòng ban đỏ in id sai."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.u8d_tra_lai_truoc
+    paths: [apps/api/src/okr/**, apps/api/test/okr-ux-8d.spec.ts]
+    expected: "exit 0; chuỗi gui-duyet → tra-lai(L1) → gui-duyet: choDuyet.lanTraLaiTruoc toEqual {lyDo L1, nguoi người trả, luc đúng dòng vết}; lần gửi đầu: null; chuỗi thêm tra-lai(L2) → gui-duyet: lanTraLaiTruoc.lyDo L2 (lần gần nhất, không phải L1); trail trả note L1, L2 ở hai dòng tra-lai. CHIỀU ĐỎ: bản sao lấy dòng tra-lai cũ nhất → ca hai lần đỏ in «L1 != L2»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t duyet-chu (AC-8, AC-9, AC-10): nguoiDuyetDuKien «Trần Quốc Bảo» → thân alertdialog gửi duyệt chứa «Trần Quốc Bảo sẽ duyệt.»; null → thân như cũ. choDuyet.lanTraLaiTruoc {lyDo L, nguoi X} với người xem X → dải chứa «Lần trước bạn trả lại» và L; người xem khác → chứa tên X và L; null → không có dòng. Bảng Vết: dòng tra-lai hiện note. traLaiGanNhat.nguoi là người xem → nút «Công bố» có data-variant outline; người khác → data-variant default. CHIỀU ĐỎ: bản sao bỏ nhánh «bạn» → đỏ; bản sao không hạ biến thể → đỏ in «Cong bo van default»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.u8d_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/**", apps/app/test/okr-ux-8d.dom.tsx]
+    expected: "exit 0 cho nhóm -t khung-xuong; byUnit treo (promise chưa giải): khung phải có [aria-busy=true] và chữ sr-only «Đang tải…», KHÔNG chứa «chưa đặt OKR»; giải rỗng → chứa câu «chưa đặt OKR cho»; giải 2 mục tiêu → 2 thẻ, không khung xương. CHIỀU ĐỎ: bản sao coi data undefined là rỗng → ca treo đỏ in «hien trang thai rong khi dang tai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.u8d_man_chrome
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo nạp bộ OKR mẫu; bật ô duyệt qua API thật bằng quản trị mẫu"
+      - "tran-quoc-bao → Theo đơn vị › Pháp chế ở 1440 và 390 → thẻ «Xử lý dứt điểm…» có nhãn «Giới hạn», cây ghi Pháp chế 3 → ảnh danh-sach-gioi-han"
+      - "Chặn byUnit ở trình duyệt khi chuyển đơn vị → khung xương → ảnh theo-don-vi-dang-tai"
+      - "nguyen-thi-lan → tạo mục tiêu nháp → «Gửi duyệt» khoá + dòng lý do → ảnh gui-duyet-khoa; thêm KR → «Gửi duyệt» → hộp có «Trần Quốc Bảo sẽ duyệt.» → ảnh gui-duyet-hoi → gửi"
+      - "tran-quoc-bao → trả lại với lý do → nút «Công bố» dạng phụ → ảnh cong-bo-phu; nguyen-thi-lan gửi lại; tran-quoc-bao mở → dải «Lần trước bạn trả lại» → ảnh tra-lai-truoc; tab Vết có lý do → ảnh vet-tra-lai"
+      - "le-hai-dang → Tổ chức › Kinh doanh miền Bắc › Lưu trữ → hai điều kiện → ảnh luu-tru-hai-dieu-kien; «Chuyển OKR…» → chọn Kinh doanh miền Nam → cảnh báo trần → ảnh chuyen-vuot-tran"
+      - "le-hai-dang → Thành viên → hộp gỡ lu-quoc-viet → câu OKR + «Chuyển OKR…» → ảnh go-nguoi-co-okr (không bấm Gỡ)"
+      - "Mỗi ảnh: đọc chữ khai trong bảng Đặc tả UX có trên màn; scrollWidth <= clientWidth ở 390"
+    expected: "exit 0; ma trận viết trước 10 trạng thái × 2 khổ (1440, 390) = 20 ảnh evidence/E15-<tên>-<khổ>.png. Bảng ảnh → chuỗi phải có (chuỗi cố định lấy từ bản dịch messages lúc chạy; số tính từ dữ liệu phiên đo; ngày = ngày chạy dạng dd/MM): danh-sach-gioi-han → «Giới hạn» trên thẻ «Xử lý dứt điểm các tranh chấp hợp đồng đang mở» và cây «Pháp chế» ghi 3; theo-don-vi-dang-tai → [aria-busy=true] và không có «chưa đặt OKR»; gui-duyet-khoa → «Thêm ít nhất một KR trước khi gửi duyệt»; gui-duyet-hoi → «Trần Quốc Bảo sẽ duyệt.»; cong-bo-phu → nút «Công bố» data-variant outline; tra-lai-truoc → «Lần trước bạn trả lại · <dd/MM>» và lý do đã gõ; vet-tra-lai → dòng «Trả lại» có lý do đã gõ; luu-tru-hai-dieu-kien → «còn <okrMo> mục tiêu» và «còn <số người chính> người» của Kinh doanh miền Bắc; chuyen-vuot-tran → «Kinh doanh miền Nam sẽ có <n> mục tiêu ở Quý 4 — vượt trần 5»; go-nguoi-co-okr → «<kr> KR» và «<mucTieu> mục tiêu» của lu-quoc-viet theo transferPreview. Bước 2 đặt trần mục tiêu mỗi đơn vị 5, chính sách cảnh báo qua API thật và in số mục tiêu Quý 4 của Miền Bắc và Miền Nam trước khi chuyển. Mỗi ảnh 390: scrollWidth <= clientWidth cho trang và cho hộp đang mở. Ảnh thiếu chuỗi hay tràn → thoát 1, in tên ảnh và chuỗi thiếu. Lệch cây → mã 2, không đọc số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]

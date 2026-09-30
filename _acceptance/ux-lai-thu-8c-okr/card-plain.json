@@ -1,0 +1,46 @@
+{
+ "feature_plain": "Người dùng OKR thôi bị bất ngờ ở những chỗ đã thấy khi lái thử 8c: nội dung kín có dấu ở mọi danh sách, gỡ người được báo trước OKR đang phụ trách, và điều kiện chặn hiện ra trước khi bấm xác nhận; luồng duyệt và cây đơn vị khớp với điều người dùng thấy.",
+ "will_do": [
+  {"id":"AC-1","p":"Sẽ gửi kèm mức hiển thị và số người xem có tên cho mọi mục tiêu trong năm danh sách, đúng với quyền xem của từng người."},
+  {"id":"AC-2","p":"Sẽ vẽ nhãn khoá «Giới hạn» trên thẻ mục tiêu kín ở Của tôi, Theo đơn vị, Cây căn chỉnh, Họp tuần và OKR mồ côi."},
+  {"id":"AC-3","p":"Sẽ báo trong hộp gỡ người số KR và mục tiêu người đó đang phụ trách, mời «Chuyển OKR…» trước, mà vẫn cho gỡ."},
+  {"id":"AC-4","p":"Sẽ khoá «Gửi duyệt» khi mục tiêu chưa có KR và ghi lý do thành chữ ngay dưới nút."},
+  {"id":"AC-5","p":"Sẽ nêu mọi lý do chưa lưu trữ được phòng ban (còn OKR, còn người) ngay khi mở hộp, khớp với máy chủ."},
+  {"id":"AC-6","p":"Sẽ cảnh báo trong hộp Chuyển OKR khi đơn vị nhận vượt trần mục tiêu, trước khi bấm, theo đúng luật máy chủ."},
+  {"id":"AC-7","p":"Sẽ đếm trên cây đơn vị đúng số mục tiêu người đang xem mở được; số thống kê vẫn không tính mục tiêu kín."},
+  {"id":"AC-8","p":"Sẽ nêu tên người sẽ duyệt trong hộp gửi duyệt."},
+  {"id":"AC-9","p":"Sẽ cho người duyệt thấy lần trả lại trước và lý do; tab Vết ghi lý do trả lại."},
+  {"id":"AC-10","p":"Sẽ hạ nút «Công bố» xuống dạng phụ cho người vừa trả lại mục tiêu."},
+  {"id":"AC-11","p":"Sẽ hiện khung xương khi «Theo đơn vị» đang tải, thay vì báo đơn vị chưa có OKR."}
+ ],
+ "wont_do": [
+  {"id":"AC-12","p":"Sẽ KHÔNG để trang nào tràn ngang: mọi trạng thái mới được chụp trên màn thật ở khổ máy tính và khổ điện thoại."},
+  {"id":"OOS-1","p":"KHÔNG làm các điểm mức Thấp của báo cáo lái thử."},
+  {"id":"OOS-2","p":"KHÔNG xử lý độ trễ của «Việc cần làm» — đo lại trên bản thật trước."},
+  {"id":"OOS-3","p":"KHÔNG đổi luật nào ở máy chủ: duyệt, lưu trữ, trần, người duyệt giữ nguyên."},
+  {"id":"OOS-4","p":"KHÔNG chặn cứng việc gỡ người còn OKR."},
+  {"id":"OOS-5","p":"KHÔNG xử lý mục tiêu cá nhân của người bị gỡ — giới hạn đã ghi từ 8c."},
+  {"id":"OOS-6","p":"KHÔNG đổi luật số thống kê: Sức khoẻ, tiến độ gộp, toàn cảnh vẫn không tính mục tiêu kín."}
+ ],
+ "scope_plain": "Phạm vi là tám điểm chủ kho chốt từ báo cáo lái thử; phần còn lại của báo cáo để sau.",
+ "coverage_plain": [
+  {"i":0,"p":"Không quét độ phủ vì phạm vi là danh sách đóng tám điểm; mỗi điểm có ít nhất một tiêu chí, và AC-12 nhìn cả tám trên màn thật."}
+ ],
+ "gap_probe_plain": [
+  {"i":0,"p":"Tiêu chí về số thống kê bỏ sót tiến độ gộp và chỉ so hai người — đã thêm tiến độ gộp và so đủ bốn người."},
+  {"i":1,"p":"Phép đo danh sách không ghi trước số mục kín từng danh sách phải có, nên danh sách rỗng vẫn qua — đã ghi trước 13 ô và gieo dữ liệu họp tuần."},
+  {"i":2,"p":"Phép đo màn thật không nói ảnh nào phải có chữ gì, và chưa đặt trần mục tiêu — đã thêm bảng ảnh và chữ, đặt trần qua API."},
+  {"i":3,"p":"Chưa đo lúc hộp gỡ người đang đọc và lúc xem trước trần bị lỗi — đã thêm cả hai ca, nút vẫn bấm được."},
+  {"i":4,"p":"Hứa đo hai khổ màn nhưng chỉ đo khổ điện thoại cho ba trạng thái — đã đo đủ 20 ảnh."}
+ ],
+ "decisions_plain": [
+  {"id":"d-20260930T030133Z-1","p":"KHÔNG quét độ phủ tiêu chí — phạm vi là tám điểm đã chốt; đổi lại không có bằng chứng độ phủ."},
+  {"id":"d-20260930T030133Z-2","p":"KHÔNG dựng bản mẫu bấm được trước duyệt — màn đã có và có 24 ảnh lái thử; đổi lại duyệt giao diện bằng chữ."},
+  {"id":"d-20260930T030133Z-3","p":"Gỡ người chỉ cảnh báo, không chặn — người nghỉ gỡ được ngay; đổi lại vẫn có thể sinh OKR mồ côi nếu gỡ vội."},
+  {"id":"d-20260930T030133Z-4","p":"Cây đơn vị đếm theo quyền xem, số thống kê giữ luật cũ — đổi lại hai loại số theo hai luật."},
+  {"id":"d-20260930T030133Z-5","p":"Hạ «Công bố» thành nút phụ chứ không ẩn — giữ quyền tự công bố của trưởng khối."},
+  {"id":"d-20260930T030133Z-6","p":"Nhãn khoá chuyển vào bộ thành phần chung trước khi dùng ở năm danh sách."},
+  {"id":"d-20260930T030133Z-7","p":"Nút «Gửi duyệt» khoá kèm lý do hiện chữ, lệch một luật của chuẩn giao diện đã khai vì đây là điều kiện tiên quyết."},
+  {"id":"d-20260930T030133Z-8","p":"Cảnh báo trần lấy từ máy chủ bằng đúng hàm kiểm trần khi chuyển — đổi lại thêm một lượt gọi mỗi khi đổi lựa chọn."}
+ ]
+}
