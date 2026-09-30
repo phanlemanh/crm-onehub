@@ -4,6 +4,7 @@ import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
 import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
 import { dongSoanTuHang, TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
+import { BadRequestException } from "@nestjs/common";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { z } from "zod";
 import type {
@@ -11,8 +12,10 @@ import type {
 	SoanDuaVaoOutput,
 	SoanQuyetOutput,
 } from "../src/okr/okr.contracts";
+import { OkrService } from "../src/okr/okr.service";
 import { OKR } from "../src/okr/okr-config";
 import {
+	BP,
 	CHU_KY_Q4,
 	DON_VI,
 	type DonViSan,
@@ -1403,7 +1406,7 @@ describe("dua-vao", () => {
 	);
 
 	test(
-		"vượt objectiveCap của đơn vị ở chế độ trần chỉ cảnh báo → vẫn từ chối có tên, 0 bản ghi",
+		"vượt objectiveCap của đơn vị ở cả hai capMode, và ở cuộc phòng ban mang divisionId thừa → từ chối có tên, 0 bản ghi",
 		async () => {
 			const demPhong = () =>
 				db.okrObjective.count({
@@ -1419,18 +1422,192 @@ describe("dua-vao", () => {
 			expect(ok<{ capMode: string }>(ct, "chuong trinh").capMode).toBe(
 				"canh-bao",
 			);
+			const vuot: SoanDuaVaoOutput = {
+				ok: false,
+				lyDo: "vuot-tran-muc-tieu",
+				chiTiet: T.vuotTranMucTieu(5),
+			};
 			const k = await gieoBanNhap("tran");
 			await nhanHet(k);
 			expect(
 				ok<SoanDuaVaoOutput>(await duaVao(k.cuoc.id, SO(k)), "tran"),
-			).toEqual({
-				ok: false,
-				lyDo: "vuot-tran-muc-tieu",
-				chiTiet: T.vuotTranMucTieu(5),
-			});
+			).toEqual(vuot);
+			await ghiCauHinh(app, cQuanTri, { capMode: "chan" });
+			try {
+				expect(
+					ok<SoanDuaVaoOutput>(await duaVao(k.cuoc.id, SO(k)), "tran chan"),
+				).toEqual(vuot);
+			} finally {
+				await ghiCauHinh(app, cQuanTri, { capMode: "canh-bao" });
+			}
 			expect((await demBanGhi(k.cuoc.id)).vet).toHaveLength(0);
-			expect(await demPhong()).toBe(daCo);
 			await xoaCuoc(k.cuoc.id);
+			const lech = await gieoBanNhap("lech", {
+				...DON_VI.kdBac,
+				divisionId: BP("kinh-doanh"),
+			});
+			await nhanHet(lech);
+			expect(
+				ok<SoanDuaVaoOutput>(
+					await duaVao(lech.cuoc.id, SO(lech)),
+					"tran cuoc mang divisionId",
+				),
+			).toEqual(vuot);
+			expect((await demBanGhi(lech.cuoc.id)).vet).toHaveLength(0);
+			expect(await demPhong()).toBe(daCo);
+			await xoaCuoc(lech.cuoc.id);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"Căn chỉnh tới đích kín hoặc chưa công bố → 400 có tên, cả giao dịch lùi: 0 bản ghi",
+		async () => {
+			const taoDich = (
+				tieuDe: string,
+				trangThai: "cong-bo" | "nhap",
+				hienThi: "cong-khai" | "gioi-han",
+			) =>
+				db.okrObjective.create({
+					data: {
+						cycleId: CHU_KY_Q4,
+						level: "bo-phan",
+						divisionId: DON_VI.kinhDoanh.divisionId,
+						ownerUserId: nguoi("tran-quoc-bao"),
+						kind: "cam-ket",
+						status: trangThai,
+						hienThi,
+						title: tieuDe,
+					},
+					select: { id: true },
+				});
+			const kin = await taoDich("Đích kín của bộ phận", "cong-bo", "gioi-han");
+			const nhap = await taoDich(
+				"Đích còn nháp của bộ phận",
+				"nhap",
+				"cong-khai",
+			);
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+			try {
+				await gieoDongNhap(
+					cuoc,
+					[
+						{
+							loai: "muc-tieu-moi",
+							khoa: "m",
+							ten: "Mục tiêu góp vào đích lạ",
+						},
+					],
+					"nhan",
+				);
+				const [kr] = (await gieoDongNhap(
+					cuoc,
+					[
+						{
+							loai: "kr-moi",
+							khoa: "k",
+							chaKhoa: "m",
+							ten: "KR góp vào đích lạ",
+						},
+					],
+					"nhan",
+				)) as [string];
+				const ca = [
+					[kin.id, OKR.thongDiep.canChinh.gioiHanKhongCanChinh],
+					[nhap.id, OKR.thongDiep.canChinh.chuaCongBo],
+				] as const;
+				for (const [dich, loi] of ca) {
+					const [cc] = (await gieoDongNhap(
+						cuoc,
+						[
+							{
+								loai: "can-chinh-moi",
+								khoa: `cc-${dich}`,
+								chaKhoa: "m",
+								dichId: dich,
+								loaiDich: "muc-tieu",
+							},
+						],
+						"nhan",
+					)) as [string];
+					const tra = await duaVao(
+						cuoc.id,
+						[{ deXuatId: kr, khoiDiem: 0, dich: 4 }],
+						cQuanTri,
+					);
+					expect([tra.status, tra.loi], `can chinh ${dich}`).toEqual([
+						400,
+						loi,
+					]);
+					expect(
+						(await demBanGhi(cuoc.id)).vet,
+						"can chinh lui ca giao dich",
+					).toHaveLength(0);
+					expect(
+						await db.okrDeXuat.count({
+							where: { cuocSoanId: cuoc.id, taoRaId: { not: null } },
+						}),
+					).toBe(0);
+					await db.okrDeXuat.update({
+						where: { id: cc },
+						data: { trangThai: "bac" },
+					});
+				}
+				expect(
+					(await db.okrCuocSoan.findUniqueOrThrow({ where: { id: cuoc.id } }))
+						.trangThai,
+				).toBe("dang");
+			} finally {
+				await xoaCuoc(cuoc.id);
+				await db.okrObjective.deleteMany({
+					where: { id: { in: [kin.id, nhap.id] } },
+				});
+			}
+		},
+		CHO_DB,
+	);
+
+	test(
+		"số ngoài miền (1e12 + 1) → 400 ở biên, 0 bản ghi; KR ghi với objectiveId khác mục tiêu của giao dịch → 400 có tên",
+		async () => {
+			const k = await gieoBanNhap("mien");
+			await nhanHet(k);
+			const ngoai = await duaVao(k.cuoc.id, [
+				...SO(k).filter((s) => s.deXuatId !== k.kB1),
+				{ deXuatId: k.kB1, khoiDiem: 0, dich: 1e12 + 1 },
+			]);
+			expect(ngoai.status, "so ngoai mien").toBe(400);
+			expect((await demBanGhi(k.cuoc.id)).vet).toHaveLength(0);
+			await xoaCuoc(k.cuoc.id);
+			const okr = app.get(OkrService);
+			const vao = {
+				objectiveId: mt("q4-kd-bac-1"),
+				title: "KR ghi lệch mục tiêu",
+				kind: "tang-toi",
+				ownerUserId: nguoi(TRUONG),
+				startValue: 0,
+				targetValue: 5,
+				currentValue: 0,
+				unit: "lần",
+				dueOn: null,
+				weight: 1,
+			} as const;
+			const ghi = db.$transaction((tx) =>
+				okr.createKeyResult(nguoi(TRUONG), vao, {
+					tx,
+					mt: { id: mt("q4-kd-bac-2"), cycleId: CHU_KY_Q4 },
+					note: "soan-okr:lech",
+				}),
+			);
+			await expect(ghi, "kr lech giao dich").rejects.toBeInstanceOf(
+				BadRequestException,
+			);
+			await expect(ghi).rejects.toThrow(
+				OKR.thongDiep.krKhacGiaoDich(mt("q4-kd-bac-1"), mt("q4-kd-bac-2")),
+			);
+			expect(await db.okrKeyResult.count({ where: { title: vao.title } })).toBe(
+				0,
+			);
 		},
 		CHO_DB,
 	);

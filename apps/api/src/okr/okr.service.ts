@@ -905,6 +905,10 @@ export class OkrService {
 		input: CreateKrInput,
 		trong?: KrTrongGiaoDich,
 	) {
+		if (trong && trong.mt.id !== input.objectiveId)
+			throw new BadRequestException(
+				T.krKhacGiaoDich(input.objectiveId, trong.mt.id),
+			);
 		const mt =
 			trong?.mt ??
 			(await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId));

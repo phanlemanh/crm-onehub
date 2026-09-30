@@ -42,6 +42,8 @@ export const OKR = {
 			"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới sửa KR này.",
 		khongCoChuKy: (id: string) => `Không có chu kỳ nào mang mã ${id}.`,
 		khongCoMucTieu: (id: string) => `Không có mục tiêu nào mang mã ${id}.`,
+		krKhacGiaoDich: (objectiveId: string, dangGhi: string) =>
+			`KR nhắm mục tiêu ${objectiveId} nhưng giao dịch đang ghi mục tiêu ${dangGhi}.`,
 		khongThayMucTieu:
 			"Không thấy mục tiêu này — có thể nó không còn, hoặc bạn không được xem.",
 		khongCoKr: (id: string) => `Không có KR nào mang mã ${id}.`,

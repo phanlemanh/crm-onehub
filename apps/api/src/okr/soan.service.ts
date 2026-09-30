@@ -17,6 +17,7 @@ import { cauHinhAiLuc, quaTranChung } from "@crm/db/okr-tro-ly";
 import {
 	type CauHinhAi,
 	type DonViMucTieu,
+	daNhanDeXuat,
 	nacCuaDonVi,
 	TRO_LY_OKR_TRAN,
 } from "@crm/db/okr-tro-ly-danh-muc";
@@ -67,7 +68,6 @@ type NacMo = CuocSoan["nac"];
 const T = OKR.thongDiep;
 const TRAN = TRO_LY_OKR_TRAN.soan;
 const phaChuKy = z.enum(PHA_CHU_KY);
-const DA_NHAN: ReadonlySet<string> = new Set(["nhan", "sua"]);
 
 export function donViTuVao(v: DonViSoanVao): DonViCuocSoan {
 	const goc = { cycleId: v.cycleId, divisionId: null, departmentId: null };
@@ -375,7 +375,7 @@ export class SoanService {
 		);
 		const demCua = (id: string, chiNhan: boolean) =>
 			(hienCua.get(id) ?? []).filter(
-				(d) => !chiNhan || DA_NHAN.has(d.hang.trangThai),
+				(d) => !chiNhan || daNhanDeXuat(d.hang.trangThai),
 			).length;
 		const tenDonVi = (c: CuocSoan) => {
 			if (c.level === "onehub") return OKR.tenGoc;

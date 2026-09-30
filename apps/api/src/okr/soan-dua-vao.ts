@@ -1,6 +1,7 @@
 import type { Prisma } from "@crm/db";
-import { type CuocSoan, donViCuoc } from "@crm/db/okr-cuoc-soan";
+import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import type { NguCanhXem } from "@crm/db/okr-hien-thi";
+import { daNhanDeXuat } from "@crm/db/okr-tro-ly-danh-muc";
 import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
 import type { SoanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";
@@ -12,7 +13,7 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import type { SoanDuaVaoOutput } from "./okr.contracts";
-import type { OkrService } from "./okr.service";
+import { donViCua, type OkrService } from "./okr.service";
 import { OKR } from "./okr-config";
 import {
 	chaTuChoi,
@@ -25,6 +26,7 @@ import {
 
 type Tx = Prisma.TransactionClient;
 type TuChoi = Extract<SoanDuaVaoOutput, { ok: false }>;
+type Hoac<T> = ({ ok: true } & T) | TuChoi;
 type DongKr = DongDoc & { dong: Extract<DongSoan, { loai: "kr-moi" }> };
 type DongCanChinh = DongDoc & {
 	dong: Extract<DongSoan, { loai: "can-chinh-moi" }>;
@@ -39,30 +41,28 @@ type MucDuaVao = {
 
 const T = OKR.thongDiep.soan;
 const phaChuKy = z.enum(PHA_CHU_KY);
-const DA_NHAN: ReadonlySet<string> = new Set(["nhan", "sua"]);
 const SO_MOC = {
 	khoiDiem: OKR.mau.moc.startValue,
 	dich: OKR.mau.moc.targetValue,
 };
 
-const daNhan = (d: DongDoc) => DA_NHAN.has(d.hang.trangThai);
+const daNhan = (d: DongDoc) => daNhanDeXuat(d.hang.trangThai);
 const laKr = (d: DongDoc): d is DongKr => d.dong.loai === "kr-moi";
 const laCanChinh = (d: DongDoc): d is DongCanChinh =>
 	d.dong.loai === "can-chinh-moi";
-const laTuChoi = <X extends object>(x: X | TuChoi): x is TuChoi => "ok" in x;
 const tenCua = (d: DongMucTieu | DongKr) => d.hang.giaTriCuoi ?? d.dong.ten;
 
 function chaCua(
 	ds: readonly DongDoc[],
 	hien: readonly DongDoc[],
 	con: DongKr | DongCanChinh,
-): DongMucTieu | TuChoi {
+): Hoac<{ cha: DongMucTieu }> {
 	const { chaKhoa } = con.dong;
 	const cha = hien
 		.filter(laMucTieu)
 		.filter((d) => d.dong.khoa === chaKhoa)
 		.at(-1);
-	if (cha && daNhan(cha)) return cha;
+	if (cha && daNhan(cha)) return { ok: true, cha };
 	if (cha?.hang.trangThai === "cho")
 		return {
 			ok: false,
@@ -81,7 +81,7 @@ function chaCua(
 function krCoSo(
 	kr: readonly DongKr[],
 	vao: readonly SoNguoiGo[],
-): KrDuaVao[] | TuChoi {
+): Hoac<{ kr: KrDuaVao[] }> {
 	const theoId = new Map(kr.map((k) => [k.hang.id, k]));
 	const so = new Map<string, SoNguoiGo>();
 	for (const s of vao) {
@@ -102,13 +102,13 @@ function krCoSo(
 			};
 		ra.push({ dong: k, so: { khoiDiem: s.khoiDiem, dich: s.dich } });
 	}
-	return ra;
+	return { ok: true, kr: ra };
 }
 
 function keHoachDuaVao(
 	ds: readonly DongDoc[],
 	vao: readonly SoNguoiGo[],
-): MucDuaVao[] | TuChoi {
+): Hoac<{ mucTieu: MucDuaVao[] }> {
 	const hien = tapHien(ds);
 	const nhan = hien.filter(daNhan);
 	const mucTieu = nhan.filter(laMucTieu);
@@ -118,19 +118,22 @@ function keHoachDuaVao(
 	);
 	const chaTheoCon = new Map<string, DongMucTieu>();
 	for (const c of con) {
-		const cha = chaCua(ds, hien, c);
-		if (laTuChoi(cha)) return cha;
-		chaTheoCon.set(c.hang.id, cha);
+		const kq = chaCua(ds, hien, c);
+		if (!kq.ok) return kq;
+		chaTheoCon.set(c.hang.id, kq.cha);
 	}
-	const kr = krCoSo(con.filter(laKr), vao);
-	if (laTuChoi(kr)) return kr;
+	const so = krCoSo(con.filter(laKr), vao);
+	if (!so.ok) return so;
 	const cua = (m: DongMucTieu) => (c: DongDoc) =>
 		chaTheoCon.get(c.hang.id) === m;
-	return mucTieu.map((m) => ({
-		dong: m,
-		kr: kr.filter((k) => cua(m)(k.dong)),
-		canChinh: con.filter(laCanChinh).filter(cua(m)),
-	}));
+	return {
+		ok: true,
+		mucTieu: mucTieu.map((m) => ({
+			dong: m,
+			kr: so.kr.filter((k) => cua(m)(k.dong)),
+			canChinh: con.filter(laCanChinh).filter(cua(m)),
+		})),
+	};
 }
 
 function donViMucTieu(cuoc: CuocSoan): DonViMucTieu {
@@ -176,13 +179,13 @@ export async function duaVaoTrong(
 			chiTiet: T.kyKhongLapKeHoach,
 		};
 	const keHoach = keHoachDuaVao(await docMoiDong(tx, cuoc.id), v.kr);
-	if (laTuChoi(keHoach)) return keHoach;
-	const dv = { ...donViCuoc(cuoc), personUserId: null };
+	if (!keHoach.ok) return keHoach;
+	const unit = donViMucTieu(cuoc);
 	const vuot = await okr.kiemTranMucTieu(
 		tx,
 		cuoc.cycleId,
-		dv,
-		keHoach.length,
+		donViCua(unit),
+		keHoach.mucTieu.length,
 		"canh-bao",
 	);
 	if (vuot !== null)
@@ -194,10 +197,9 @@ export async function duaVaoTrong(
 	const note = (d: DongDoc) => `${OKR.soan.ghiChuVet}${cuoc.id}:${d.hang.id}`;
 	const ghiTaoRa = (d: DongDoc, taoRaId: string) =>
 		tx.okrDeXuat.update({ where: { id: d.hang.id }, data: { taoRaId } });
-	const unit = donViMucTieu(cuoc);
 	const mucTieuIds: string[] = [];
 	let soKr = 0;
-	for (const m of keHoach) {
+	for (const m of keHoach.mucTieu) {
 		const { id } = await okr.taoMucTieuTrongTx(
 			tx,
 			userId,

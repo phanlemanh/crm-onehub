@@ -107,6 +107,15 @@ export const TRANG_THAI_DE_XUAT = [
 	"bi-loai",
 ] as const;
 
+export const TRANG_THAI_DA_NHAN = [
+	"nhan",
+	"sua",
+] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
+
+export function daNhanDeXuat(trangThai: string): boolean {
+	return (TRANG_THAI_DA_NHAN as readonly string[]).includes(trangThai);
+}
+
 export const NAC_TRO_LY = ["tat", "an", "bat"] as const;
 
 export type NacTroLy = (typeof NAC_TRO_LY)[number];
