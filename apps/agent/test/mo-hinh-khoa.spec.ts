@@ -1,8 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
+import type { createGateway } from "@ai-sdk/gateway";
 import { getVercelOidcToken } from "@vercel/oidc";
+import { MockLanguageModelV4 } from "ai/test";
 import { nguonKhoaMoHinh } from "../agent/lib/mo-hinh-khoa";
 import { TRO_LY_OKR } from "../agent/lib/okr/config";
+import { moHinhTroLyOkr } from "../agent/lib/okr/mo-hinh";
 import {
 	type DemMang,
 	mayKhongLienKet,
@@ -101,6 +104,60 @@ describe("nguon-khoa", () => {
 	test("khong o nao nem", async () => {
 		for (const o of O_NGUON) {
 			await expect(chayO(o, { soLan: 0 })).resolves.toBeDefined();
+		}
+	});
+});
+
+describe("model-rieng", () => {
+	type Goi = Parameters<MockLanguageModelV4["doGenerate"]>[0];
+
+	function dung(env: Record<string, string>) {
+		const cauHinh: unknown[] = [];
+		const daGoi: Goi[] = [];
+		const gia = new MockLanguageModelV4({
+			doGenerate: async (vao) => {
+				daGoi.push(vao);
+				return {} as never;
+			},
+		});
+		const tao = ((c?: unknown) => {
+			cauHinh.push(c);
+			return () => gia;
+		}) as unknown as typeof createGateway;
+		return { model: moHinhTroLyOkr(env, tao), cauHinh, daGoi };
+	}
+
+	const O_MODEL = [
+		{ ten: "rieng", env: { [K.rieng]: "khoa-okr-7Q" }, apiKey: "khoa-okr-7Q" },
+		{ ten: "chung", env: {}, apiKey: undefined },
+	] as const;
+
+	test("model-rieng: khoa rieng thi nha Gateway dung khoa do, vang thi di duong mac dinh", async () => {
+		for (const o of O_MODEL) {
+			const r = dung({ ...o.env });
+			expect(r.cauHinh.length, `so lan tao nha: ${o.ten}`).toBe(1);
+			expect(
+				(r.cauHinh[0] as { apiKey?: string } | undefined)?.apiKey,
+				`khoa nha: ${o.ten}`,
+			).toBe(o.apiKey);
+			expect((r.model as { modelId?: string }).modelId).toBe(TRO_LY_OKR.model);
+		}
+	});
+
+	test("model-rieng: moi loi goi mang ZDR, nhan va tran ra, ca hai ca", async () => {
+		for (const o of O_MODEL) {
+			const r = dung({ ...o.env });
+			await (r.model as unknown as MockLanguageModelV4).doGenerate({
+				prompt: [],
+				maxOutputTokens: 1_000_000,
+			});
+			const gw = r.daGoi[0]?.providerOptions?.gateway as
+				| { zeroDataRetention?: boolean; tags?: string[] }
+				| undefined;
+			if (gw?.zeroDataRetention !== true)
+				throw new Error(`khoa rieng mat zdr: ${o.ten}`);
+			expect(gw.tags).toContain(TRO_LY_OKR.tags[0]);
+			expect(r.daGoi[0]?.maxOutputTokens).toBe(TRO_LY_OKR.tranRaMoiLoiGoi);
 		}
 	});
 });
