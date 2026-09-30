@@ -61,6 +61,13 @@ const vi = {
 		sanSang: {
 			dangTat: "Đang tắt",
 			sanSang: "Sẵn sàng",
+			sanSangNguon: {
+				"khoa-rieng": "Sẵn sàng · khoá riêng của Trợ lý OKR",
+				"khoa-chung": "Sẵn sàng · khoá chung của tác tử",
+				oidc: "Sẵn sàng · qua Vercel",
+			},
+			thieuKhoaMoTa:
+				"Cắm OKR_AI_GATEWAY_API_KEY (hoặc AI_GATEWAY_API_KEY) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng 10 phút.",
 			chuaSanSang: (lyDo: string) => `Chưa sẵn sàng — ${lyDo}`,
 			hetTran: (ngay: string) => `Đã chạm trần tháng — tạm nghỉ tới ${ngay}`,
 			dangKiem: "Đang kiểm tra…",
@@ -242,6 +249,13 @@ const en: TroLyOkrMessages = {
 		sanSang: {
 			dangTat: "Off",
 			sanSang: "Ready",
+			sanSangNguon: {
+				"khoa-rieng": "Ready · Trợ lý OKR's own key",
+				"khoa-chung": "Ready · the agent's shared key",
+				oidc: "Ready · through Vercel",
+			},
+			thieuKhoaMoTa:
+				"Set OKR_AI_GATEWAY_API_KEY (or AI_GATEWAY_API_KEY) on the agent project, or turn on that project's OIDC on Vercel. The agent checks again within about 10 minutes.",
 			chuaSanSang: (lyDo: string) => `Not ready — ${lyDo}`,
 			hetTran: (ngay: string) => `Monthly cap reached — paused until ${ngay}`,
 			dangKiem: "Checking…",

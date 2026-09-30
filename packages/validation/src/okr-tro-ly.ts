@@ -4,6 +4,7 @@ import {
 	LY_DO_KHONG_SAN_SANG,
 	MA_LOAI_DE_XUAT,
 	NAC_TRO_LY,
+	NGUON_KHOA,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
 	TRUONG_VIET_LAI,
@@ -25,8 +26,11 @@ export {
 	MA_LOAI_DE_XUAT,
 	type MaLoaiDeXuat,
 	NAC_TRO_LY,
+	NGUON_KHOA,
 	type NacTroLy,
+	type NguonKhoaDb,
 	nacCuaDonVi,
+	nguonCuaKetQua,
 	phamViCuaViec,
 	TRANG_THAI_DE_XUAT,
 	TRO_LY_OKR_TRAN,
@@ -55,6 +59,10 @@ export const troLySanSang = z.discriminatedUnion("bat", [
 ]);
 
 export const ketQuaKiemSanSang = z.enum(KET_QUA_KIEM_SAN_SANG);
+
+export const nguonKhoaHien = z.enum([...NGUON_KHOA, "chua-ro"]).nullable();
+
+export type NguonKhoaHien = z.infer<typeof nguonKhoaHien>;
 
 export const okrTroLyViec = z.discriminatedUnion("viec", [
 	z.object({

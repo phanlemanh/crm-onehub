@@ -1,10 +1,12 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { readFileSync } from "node:fs";
 import { MA_LOAI_DE_XUAT } from "@crm/validation/okr-tro-ly";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { act } from "react";
+import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import {
+	aiChiTieuOutput,
 	type SoDoNac,
 	type TroLyAnOutput,
 	type TroLySoDoOutput,
@@ -211,6 +213,10 @@ function thuTuc<TVao, TRa>(duong: string, doc: (vao?: TVao) => TRa) {
 		}),
 	};
 }
+
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
 
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
@@ -504,5 +510,102 @@ describe("nhan-ma-loai", () => {
 			);
 		});
 		expect(thieu).toEqual([]);
+	});
+});
+
+describe("nguon-khoa", () => {
+	const THIET_KE = new URL(
+		"../../../docs/superpowers/specs/2026-10-01-va-tro-ly-okr-sau-thu-design.md",
+		import.meta.url,
+	);
+	const s = troLyOkrMessages("vi").troLy.sanSang;
+	const docBang = () =>
+		readFileSync(THIET_KE, "utf8")
+			.split("\n")
+			.map((d) => d.match(/^\| (ST-caidat-[\w-]+) \|/)?.[1])
+			.filter((x): x is string => Boolean(x));
+
+	const vao = (sanSang: unknown, nguonKhoa: unknown) => ({
+		sanSang: aiChiTieuOutput.shape.sanSang.parse(sanSang),
+		nguonKhoa: aiChiTieuOutput.shape.nguonKhoa.parse(nguonKhoa),
+	});
+
+	const CA: Record<
+		string,
+		{ du: ReturnType<typeof vao>; co: string[]; khong: string[] }
+	> = {
+		"ST-caidat-san-sang-rieng": {
+			du: vao({ bat: true, conLaiUsd: 9 }, "khoa-rieng"),
+			co: [s.sanSangNguon["khoa-rieng"]],
+			khong: [],
+		},
+		"ST-caidat-san-sang-chung": {
+			du: vao({ bat: true, conLaiUsd: 9 }, "khoa-chung"),
+			co: [s.sanSangNguon["khoa-chung"]],
+			khong: [],
+		},
+		"ST-caidat-san-sang-oidc": {
+			du: vao({ bat: true, conLaiUsd: 9 }, "oidc"),
+			co: [s.sanSangNguon.oidc],
+			khong: [],
+		},
+		"ST-caidat-san-sang-cu": {
+			du: vao({ bat: true, conLaiUsd: 9 }, "chua-ro"),
+			co: [s.sanSang],
+			khong: [s.lyDo["chua-co-khoa-mo-hinh"], "·"],
+		},
+		"ST-caidat-thieu-khoa": {
+			du: vao({ bat: false, lyDo: "chua-co-khoa-mo-hinh" }, null),
+			co: [
+				s.chuaSanSang(s.lyDo["chua-co-khoa-mo-hinh"]),
+				"OKR_AI_GATEWAY_API_KEY",
+				"AI_GATEWAY_API_KEY",
+				"OIDC",
+			],
+			khong: [],
+		},
+	};
+
+	async function moChiBao(du: ReturnType<typeof vao>) {
+		const { ChiBaoSanSang } = await import(
+			"@/app/(app)/[slug]/settings/okr/the-tro-ly-okr"
+		);
+		const o = document.createElement("div");
+		document.body.appendChild(o);
+		const root = createRoot(o);
+		await act(async () => {
+			root.render(
+				<LocaleProvider locale="vi">
+					<ChiBaoSanSang
+						aiOn
+						dangKiem={false}
+						sanSang={du.sanSang}
+						nguonKhoa={du.nguonKhoa}
+						thang="2026-10"
+					/>
+				</LocaleProvider>,
+			);
+		});
+		dangMo.push({ o, root });
+		return o;
+	}
+
+	test("nguon-khoa: moi dong ST-caidat-* cua bang trang thai co mot ca, dung chu", async () => {
+		const bang = docBang();
+		expect(bang.length).toBeGreaterThan(0);
+		for (const st of bang) {
+			const ca = CA[st];
+			if (!ca) throw new Error(`trang thai chua do: ${st}`);
+			const o = await moChiBao(ca.du);
+			const chu = o.textContent ?? "";
+			for (const c of ca.khong) {
+				if (st === "ST-caidat-san-sang-cu" && chu.includes(c))
+					throw new Error("the lech san sang cu");
+				expect(chu).not.toContain(c);
+			}
+			for (const c of ca.co) expect(chu, `${st} thieu: ${c}`).toContain(c);
+			expect(o.querySelector('input[type="password"]')).toBeNull();
+		}
+		expect(Object.keys(CA).sort()).toEqual([...bang].sort());
 	});
 });
