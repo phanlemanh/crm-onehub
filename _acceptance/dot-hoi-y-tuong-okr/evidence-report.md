@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 169eb0c06221afb335096202e4fd7e66b84463f9
+verified_commit: 44a7274a3f3f61703819d36644320f35179b559c
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -290,3 +290,7 @@ Round 1: PENDING-JUDGMENT — các eval máy đạt nhưng thước lệch (tệ
 Round 2: E1–E20 đạt trên cây a235a090, hai lượt đo màn E12 và E15 có ảnh và phần quan sát; E21 chưa có căn cứ nên UNCERTAIN. Chuyển lên Cổng 2.
 Round 3: E1–E20 đạt trên cây 6736d5d9 (sau khi gộp onehub, có thêm ba thủ tục đọc hỏi ý vào ma trận xem giới hạn); E12 và E15 có ảnh và phần quan sát mới; E21 vẫn UNCERTAIN vì hội đồng không có diff thật, chờ người quyết ở Cổng 2. Baseline không đo lại.
 Round 4: E1–E20 và bốn lệnh suite đạt trên cây 169eb0c0 (hợp đồng về implemented để chấm lại sau khi hồ sơ vòng 3 trượt khuôn run_id E15, mã không đổi); E12 và E15 có ảnh và phần quan sát mới; E21 vẫn UNCERTAIN vì hội đồng không có diff thật, chờ người quyết ở Cổng 2. Baseline không đo lại (evals.yaml không đổi từ round 1).
+
+### Re-pin lần 1 — 2026-09-30, do dùng lại bản ghim bài canh Trợ lý OKR của onehub sau chữ ký; thước màn thôi ghi vào hồ sơ đã ký
+run_id: repin-20260930T035602Z-23610
+sha: 44a7274a3f3f61703819d36644320f35179b559c · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12 (E12 không khai paths), E15 (E15 không khai paths), E21 (E21 không khai paths)
