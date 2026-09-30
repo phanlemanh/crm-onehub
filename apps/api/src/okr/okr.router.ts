@@ -7,12 +7,12 @@ import {
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
 import { guiCapNhatInput, moCapNhatInput } from "@crm/validation/okr-cap-nhat";
-import { soanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import {
 	goChuKyInput,
 	hienChuKyInput,
 	suaChuKyInput,
 } from "@crm/validation/okr-chu-ky";
+import { soanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import {
 	chuyenDonViInput,
 	datHienThiInput,
