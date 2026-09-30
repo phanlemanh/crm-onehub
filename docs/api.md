@@ -1016,7 +1016,7 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   dùng `aiTranThangDatOkrUsd` nếu đã đặt, không thì `aiTranThangUsd`), `con-cuoc-dang`,
   `cuoc-an-dang-mo` (đơn vị có cuộc ẩn mà người gọi không thấy), `chua-co-khoa-mo-hinh`.
   Bảng đầy đủ người × đơn vị × nấc × thủ tục: `rang/ma-tran-quyen.md`. `soanMo` tạo
-  `OkrCuocSoan` (`sessionId @unique`, đặt là chỗ giữ `cho-eve:<uuid>` cho tới khi cửa
+  `OkrCuocSoan` (`sessionId @unique`, đặt là placeholder `cho-eve:<uuid>` cho tới khi cửa
   ghi mã phiên eve — xem `agent.md`) và từ chối khi đơn vị còn cuộc `dang`; nhận thêm
   `thuLaiCuocId` (đổi phiên, nối `cacPhien`) hoặc `boCuocDangId` (bỏ cuộc đang mở của
   chính đơn vị rồi mở cuộc mới trong cùng giao dịch — để «Mở cuộc mới» khi hết lượt).

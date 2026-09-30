@@ -1155,10 +1155,6 @@ mỗi lần chạy và so với mục này; không hơn, không kém.
 - `packages/ui/src/components/sonner.tsx` — vùng thông báo `pointer-events-auto`:
   hộp modal của Radix khoá con trỏ trên body, nên thiếu lớp này thì nút
   «Hoàn tác» sau khi Nhận một dòng góp ý không bấm được khi hộp còn mở.
-- `packages/ui/src/components/suggestion.tsx` — thành phần `Suggestion` chung
-  của `packages/ui`, có sẵn từ hãng (không phải ReUI, cũng không phải
-  `Suggestion` gợi ý câu hỏi của AI Elements trong `docs/chat-ui.md`), mở rộng
-  cho ba cách (nhận · sửa · bác) và khoá nút khi có `acceptDisabledReason`.
 - `packages/ui/src/lib/utils.ts` — `laEscTuOSuaDeXuat` và `laTuThongBao`, dùng
   ở `dialog.tsx` và `sheet.tsx` phía trên.
 - `packages/validation/package.json` — một subpath export mới:
@@ -1312,13 +1308,13 @@ cách ly duy nhất tin được là **không có gì để rò**:
   và không phát `x-crm-contact|company|deal`. Mỗi lần mở phiên hay gửi tiếp, cửa gọi
   `okr.soanTangLuot`: hết lượt của cuộc hay hết trần tháng là 429 (`het-luot-cuoc`,
   `het-tran-thang`).
-- **Chỗ giữ phiên.** eve tự đúc mã phiên, API không mở được phiên bằng mã tự đúc. Nên
-  `okr.soanMo` đặt `OkrCuocSoan.sessionId` là một chỗ giữ `cho-eve:<uuid>`; chỉ khi
-  `sessionId` còn là chỗ giữ, cửa mới cho `POST /eve/v1/session` (không thì 409
-  `da-co-phien`), rồi đọc mã phiên eve từ phản hồi và ghi thay chỗ giữ trước khi trả.
+- **Placeholder `cho-eve:`.** eve tự đúc mã phiên, API không mở được phiên bằng mã tự đúc. Nên
+  `okr.soanMo` đặt `OkrCuocSoan.sessionId` là một placeholder `cho-eve:<uuid>`; chỉ khi
+  `sessionId` còn là placeholder, cửa mới cho `POST /eve/v1/session` (không thì 409
+  `da-co-phien`), rồi đọc mã phiên eve từ phản hồi và ghi thay placeholder trước khi trả.
   Đường có mã phiên phải thuộc `sessionId` hoặc `cacPhien` của cuộc. Phiên eve thua đua
   hay không ghi được thì nối vào `cacPhien` mà không đổi `sessionId` (chi phí cộng theo
-  mọi phiên của cuộc). «Thử lại» là `soanMo({ thuLaiCuocId })`, đúc chỗ giữ mới.
+  mọi phiên của cuộc). «Thử lại» là `soanMo({ thuLaiCuocId })`, đúc placeholder mới.
 - `GET /health` trả `{ cay }` — cây kho mà tiến trình phục vụ, tính bằng
   `treeSlug(currentTree(<gốc kho>))` (`agent/lib/cay.ts`; `PHIEN_DO_TEN_CAY` thắng) —
   để phiên đo cảnh cây. Không suy được cây thì `{ cay: null }`.

@@ -331,14 +331,18 @@ So a measurement now runs in a **measure session** on a database of its own tree
   or `repin-lane` gets a clean database and its own servers without any change to the
   eval. The ports an eval names (`${APP_URL:-http://localhost:3910}`) are only
   defaults; the session's `APP_URL` wins.
-- A measurement that needs a chat agent boots it itself, inside the session, the way
-  `_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs` does: it picks free ports,
-  sets `AGENT_URL` / `OKR_AGENT_URL` (and the two bridge secrets) **before** starting
-  the session under a sibling tree name (`<tree>-cach-ly`), because the app reads
-  those variables once at start; then it starts `apps/agent` and `apps/agent-okr` on
-  those ports. The app is checked with `canh-cay.mjs`; `apps/agent-okr` answers
-  `GET /health` with the tree it serves (`cay`), and a mismatch is exit 2.
-  `rang/cach-ly-chi-okr.mjs` of `soan-okr-cung-tro-ly` is the reference.
+- A measurement that needs a chat agent boots it itself, inside the session.
+  `_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs` does this for `apps/agent`: it
+  picks a free port, sets `AGENT_URL` and `AGENT_BRIDGE_SECRET` **before** starting the
+  session under a sibling tree name (`<tree>-tro-ly`), because the app reads those
+  variables once at start, then starts `apps/agent` on that port. The OKR drafting
+  agent needs the same for `apps/agent-okr`, with `OKR_AGENT_URL`,
+  `OKR_AGENT_BRIDGE_SECRET` and the name `<tree>-cach-ly`; that is
+  `_acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs`, which does not exist
+  yet (task E1 writes it). The app is checked with
+  `_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs`. `apps/agent-okr` answers
+  `GET /health` with the tree it serves (`cay`); a mismatch being exit 2 is behaviour
+  E1 and D8 will prove, not something measured yet.
 
 To measure a whole lane in one session — one database, one server start — wrap it:
 `bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.
