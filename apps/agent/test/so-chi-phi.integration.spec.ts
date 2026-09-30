@@ -1,14 +1,42 @@
-import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	spyOn,
+	test,
+} from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
+import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
+import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { z } from "zod";
 import hookGoc from "../agent/hooks/so-chi-phi";
+import { beginResearch } from "../agent/lib/dispatch";
+import { chayXepTomTat } from "../agent/lib/okr/lich-tom-tat";
+import { noteSession } from "../agent/lib/tasks";
 import hookBuilder from "../agent/subagents/agent_builder/hooks/so-chi-phi";
 import hookRunner from "../agent/subagents/agent_runner/hooks/so-chi-phi";
 import hookTroLy from "../agent/subagents/tro_ly_okr/hooks/so-chi-phi";
-import { TIEN_TO } from "./support/nhac-gieo";
+import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
+import {
+	donOkr,
+	gieoChuKy,
+	gieoKr,
+	gieoMucTieu,
+	gieoPhongBan,
+	guiCapNhat,
+} from "./support/okr-gieo";
+import {
+	donTroLy,
+	gieoCauHinhAi,
+	gieoChiPhi,
+	gieoKiemSanSang,
+} from "./support/tro-ly-gieo";
+import { moViecDeXuat } from "./support/tro-ly-phien-con";
 
 const TEP = resolve(import.meta.dir, "fixtures/so-chi-phi-that.json");
 const SUBAGENT = ["tro_ly_okr", "agent_runner", "agent_builder"] as const;
@@ -201,4 +229,147 @@ describe("moi-phien", () => {
 		await HOOK.goc(ev, goc.ctx);
 		expect(await dongCua(ev.meta.id)).toEqual([]);
 	});
+});
+
+describe("tom-tat", () => {
+	const DONG_HO = new Date("2031-06-10T06:00:00+07:00");
+	const GIO_MS = 60 * 60 * 1000;
+	const khoaCu = process.env.AI_GATEWAY_API_KEY;
+	let phong = "";
+	let viecTomTat = { id: "", phienGoc: "" };
+	let viecDeXuat = { taskId: "", phienGoc: "" };
+
+	const ctxCon = (phienGoc: string) => {
+		const con = cua("con_tro_ly");
+		return {
+			...con.ctx,
+			channel: {
+				...con.ctx.channel,
+				continuationToken: `subagent:${phienGoc}:goi-tro-ly`,
+			},
+		};
+	};
+
+	async function buocCon(phienGoc: string) {
+		const ev = suKien(cua("con_tro_ly"), { costUsd: 0.000321 });
+		const ctx = ctxCon(phienGoc);
+		expect(ctx.session.auth).toEqual({
+			current: { attributes: {} },
+			initiator: { attributes: {} },
+		});
+		await HOOK.tro_ly_okr(ev, ctx);
+		const ds = await dongCua(ev.meta.id);
+		expect(ds.length).toBe(1);
+		return ds[0];
+	}
+
+	beforeAll(async () => {
+		setSystemTime(DONG_HO);
+		process.env.AI_GATEWAY_API_KEY = "khoa-thu";
+		await moXuong();
+		const chu = await gieoNguoi("Người gieo sổ tóm tắt");
+		phong = await gieoPhongBan(chu.id);
+		const ck = await gieoChuKy("dang-chay", 1, {
+			tu: "2031-04-01",
+			den: "2031-06-30",
+		});
+		const congBo = new Date(DONG_HO.getTime() - 30 * 24 * GIO_MS);
+		const mt = await gieoMucTieu({
+			cycleId: ck,
+			chu: chu.id,
+			congBo,
+			cap: "phong-ban",
+			departmentId: phong,
+		});
+		const kr = await gieoKr({ objectiveId: mt, chu: chu.id, khoa: congBo });
+		await guiCapNhat(kr, chu.id, new Date(DONG_HO.getTime() - 12 * GIO_MS));
+		await gieoKiemSanSang(
+			new Date(DONG_HO.getTime() - 48 * GIO_MS),
+			"san-sang",
+		);
+		await gieoCauHinhAi(new Date(DONG_HO.getTime() - 24 * GIO_MS), {
+			aiOn: true,
+			aiDeXuatPhamVi: "toan-cong-ty",
+			aiTomTatPhamVi: "danh-sach",
+			aiTomTatDonVi: [phong],
+			aiTranThangUsd: TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
+		});
+		const xep = await db.agentTask.create({
+			data: {
+				kind: "okr-tom-tat-xep",
+				reason: "okr-tom-tat-xep",
+				subject: `${TIEN_TO}xep-so-chi-phi`,
+				budget: 0,
+				dueAt: DONG_HO,
+			},
+			select: { id: true },
+		});
+		await chayXepTomTat(xep, DONG_HO);
+		const hang = (
+			await db.agentTask.findMany({
+				where: { kind: "okr-tom-tat-tuan", finishedAt: null },
+				select: { id: true, payload: true },
+			})
+		).find((h) => {
+			const p = okrTroLyViec.parse(h.payload);
+			return p.viec === "tom-tat-tuan" && p.departmentId === phong;
+		});
+		if (!hang) throw new Error("chayXepTomTat khong xep viec tom tat");
+		viecTomTat = { id: hang.id, phienGoc: `${TIEN_TO}goc-${hang.id}` };
+		await noteSession(hang.id, viecTomTat.phienGoc);
+		viecDeXuat = await moViecDeXuat({ objectiveId: mt, nguoiYeuCau: chu.id });
+	}, 60_000);
+
+	afterAll(async () => {
+		setSystemTime();
+		if (khoaCu === undefined) delete process.env.AI_GATEWAY_API_KEY;
+		else process.env.AI_GATEWAY_API_KEY = khoaCu;
+		await donTroLy();
+		await donOkr();
+		await donDep();
+	}, 60_000);
+
+	test("tom-tat: bước của phiên con không có thuộc tính, việc tóm tắt thật qua phiên gốc → okr.tom-tat, nối về việc", async () => {
+		const d = await buocCon(viecTomTat.phienGoc);
+		expect(
+			d?.tinhNang === "okr.tom-tat" ? null : `tinh nang lech: ${d?.tinhNang}`,
+		).toBeNull();
+		expect([d?.taskId, d?.phienCha]).toEqual([
+			viecTomTat.id,
+			viecTomTat.phienGoc,
+		]);
+	}, 30_000);
+
+	test("tom-tat: đối chứng — cùng dựng cảnh với việc okr-de-xuat → okr.de-xuat", async () => {
+		const d = await buocCon(viecDeXuat.phienGoc);
+		expect([d?.tinhNang, d?.taskId]).toEqual([
+			"okr.de-xuat",
+			viecDeXuat.taskId,
+		]);
+	}, 30_000);
+
+	test("tom-tat: sổ tới trần → việc tóm tắt đóng khong-chay:het-tran-thang, không gọi start", async () => {
+		await gieoChiPhi(
+			new Date(DONG_HO.getTime() - GIO_MS),
+			"okr.tom-tat",
+			TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
+		);
+		const hang = await db.agentTask.findUniqueOrThrow({
+			where: { id: viecTomTat.id },
+		});
+		let goiStart = 0;
+		await beginResearch(hang, async () => {
+			goiStart += 1;
+			return { id: `${TIEN_TO}khong-duoc-mo` };
+		});
+		const dong = await db.agentTask.findUniqueOrThrow({
+			where: { id: viecTomTat.id },
+			select: { outcome: true, finishedAt: true },
+		});
+		expect([dong.outcome, dong.finishedAt !== null, goiStart]).toEqual([
+			"khong-chay:het-tran-thang",
+			true,
+			0,
+		]);
+	}, 30_000);
 });

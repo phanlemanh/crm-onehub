@@ -1,3 +1,6 @@
+import type { LOAI_VIEC_TRO_LY_OKR } from "./agent-tasks";
+import type { ViecTroLy } from "./okr-tro-ly-danh-muc";
+
 export const TINH_NANG = [
 	"crm.nghien-cuu",
 	"crm.hoi-dap",
@@ -75,6 +78,17 @@ export type NguonBuoc = {
 	subagent: string | null;
 	okrViec: string | null;
 };
+
+const VIEC_CUA_LOAI_OKR = {
+	"okr-de-xuat": "de-xuat",
+	"okr-tom-tat-tuan": "tom-tat-tuan",
+} as const satisfies Record<(typeof LOAI_VIEC_TRO_LY_OKR)[number], ViecTroLy>;
+
+export function okrViecCuaLoai(kind: string): ViecTroLy | null {
+	return kind in VIEC_CUA_LOAI_OKR
+		? VIEC_CUA_LOAI_OKR[kind as keyof typeof VIEC_CUA_LOAI_OKR]
+		: null;
+}
 
 export function tinhNangCua(nguon: NguonBuoc): TinhNang {
 	if (nguon.subagent === "tro_ly_okr") {

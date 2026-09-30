@@ -13,7 +13,7 @@ const THU_MUC_CON =
 const THU_MUC_EVAL =
 	process.env.THU_MUC_EVAL_OKR ?? join(import.meta.dir, "..", "evals/okr");
 const CAU_HINH_EVAL = join(import.meta.dir, "..", "evals/evals.config.ts");
-const TOOL_SONG = ["nop_de_xuat"] as const;
+const TOOL_SONG = ["nop_de_xuat", "nop_tom_tat"] as const;
 const TOOL_TAT = [
 	"ask_question",
 	"bash",
@@ -26,6 +26,31 @@ const TOOL_TAT = [
 	"write_file",
 ] as const;
 const BANG_GHI_DUOC = new Set(["okrDeXuat", "okrTomTat"]);
+const BANG_DOC_TOM_TAT = ["okrTomTat", "okrCheckIn"] as const;
+const BANG_DOI_TAC = [
+	"company",
+	"companyEnrichment",
+	"contact",
+	"contactFact",
+	"contactBrief",
+	"deal",
+	"dealStage",
+	"dealContact",
+	"campaign",
+	"campaignTouch",
+	"activity",
+	"mailboxSync",
+	"emailThread",
+	"emailMessage",
+	"calendarEvent",
+	"calendarAttendee",
+	"suppressedDomain",
+	"suppressedContact",
+	"trackedDomain",
+	"trackedVisitor",
+	"trackedEvent",
+	"formSubmission",
+] as const;
 
 function tepTs(thuMuc: string): string[] {
 	const ra: string[] = [];
@@ -142,6 +167,14 @@ describe("tro-ly-okr-cach-ly", () => {
 				},
 			}),
 		).toEqual(["thieu thinkingLevel: vertex"]);
+	});
+
+	test("danh sách đọc có bảng của tóm tắt tuần và không bảng đối tác nào", () => {
+		const doc: readonly string[] = DANH_SACH_DOC;
+		expect(BANG_DOC_TOM_TAT.filter((b) => !doc.includes(b))).toEqual([]);
+		expect(
+			doc.filter((b) => (BANG_DOI_TAC as readonly string[]).includes(b)),
+		).toEqual([]);
 	});
 
 	test("sandbox deny-all", () => {

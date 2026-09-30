@@ -178,6 +178,8 @@ export const nopTomTat = z.object({
 	cau: z.array(cauTomTat).max(TRO_LY_OKR_TRAN.soCauTomTat),
 });
 
+export type NopTomTat = z.infer<typeof nopTomTat>;
+
 export const MA_LOI_TRO_LY = [
 	"thieu-du-lieu",
 	"khuon-hong",

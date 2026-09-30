@@ -17,6 +17,10 @@ export const DANH_SACH_DOC = [
 	"okrObjective",
 	"okrProgramConfig",
 	"okrDeXuat",
+	"okrTomTat",
+	"okrCheckIn",
+	"okrKeyResult",
+	"department",
 ] as const;
 
 const TRANG_THAI_CON_TAC_DUNG = ["cho", "bac", "bo-qua"];
@@ -32,7 +36,13 @@ export async function docViecTheoPhienGoc(sessionId: string) {
 	return db.agentTask.findFirst({
 		where: { sessionId, kind: { in: [...LOAI_VIEC_TRO_LY_OKR] } },
 		orderBy: { createdAt: "desc" },
-		select: { id: true, kind: true, finishedAt: true, payload: true },
+		select: {
+			id: true,
+			kind: true,
+			finishedAt: true,
+			payload: true,
+			createdAt: true,
+		},
 	});
 }
 
@@ -147,4 +157,8 @@ export async function docTenThanhVien(): Promise<string[]> {
 
 export async function soLanNop(taskId: string): Promise<number> {
 	return db.okrDeXuat.count({ where: { taskId } });
+}
+
+export async function daCoTomTat(taskId: string): Promise<boolean> {
+	return (await db.okrTomTat.count({ where: { taskId } })) > 0;
 }
