@@ -649,6 +649,7 @@ export const luuMauVao = luuMauInput
 const maLoaiBanNhap = z.enum(MA_LOAI_BAN_NHAP);
 
 export const LY_DO_SOAN = [
+	"don-vi-luu-tru",
 	"don-vi-chua-bat",
 	"don-vi-che-do-an",
 	"het-cuoc-ky",

@@ -25,6 +25,7 @@ import {
 	gieoDongNhap,
 	goiSoan,
 	NAC_SOAN,
+	PB,
 	vaoDonVi,
 } from "./soan-okr-san";
 import {
@@ -305,6 +306,94 @@ describe("soan-mo", () => {
 			);
 			expect(traBo.status).toBe(409);
 			expect(traBo.loi).toBe(OKR.thongDiep.soan.cuocKhongDang);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"don-vi-luu-tru: quản trị hỏi sẵn sàng và mở cho phòng ban hay bộ phận đã lưu trữ → từ chối don-vi-luu-tru, không tạo cuộc; đơn vị sống cùng lúc vẫn mở",
+		async () => {
+			const boPhanLuuTru = await db.division.create({
+				data: {
+					name: "Bộ phận đã gộp",
+					position: 90,
+					archivedAt: new Date(),
+				},
+			});
+			const luuTru = {
+				phongBan: {
+					level: "phong-ban",
+					divisionId: null,
+					departmentId: PB("kho-lanh"),
+				},
+				boPhan: {
+					level: "bo-phan",
+					divisionId: boPhanLuuTru.id,
+					departmentId: null,
+				},
+			} as const;
+			try {
+				expect(
+					(
+						await db.department.findUniqueOrThrow({
+							where: { id: PB("kho-lanh") },
+							select: { archivedAt: true },
+						})
+					).archivedAt,
+					"bo mau thieu phong ban luu tru",
+				).not.toBeNull();
+				for (const dv of Object.values(luuTru))
+					for (const duong of ["trpc", "rest"] as const) {
+						expect(
+							ok<SoanSanSangOutput>(
+								await goiSoan(
+									app,
+									"soanSanSang",
+									duong,
+									vaoDonVi(dv, duong),
+									cQuanTri,
+								),
+								`san sang ${dv.level} ${duong}`,
+							),
+						).toEqual({ bat: false, lyDo: "don-vi-luu-tru" });
+						expect(
+							ok<SoanMoOutput>(
+								await goiSoan(
+									app,
+									"soanMo",
+									duong,
+									vaoDonVi(dv, duong),
+									cQuanTri,
+								),
+								`mo ${dv.level} ${duong}`,
+							),
+						).toEqual({ ok: false, lyDo: "don-vi-luu-tru", cuocDang: null });
+					}
+				expect(
+					await db.okrCuocSoan.count({
+						where: {
+							OR: [
+								{ departmentId: PB("kho-lanh") },
+								{ divisionId: boPhanLuuTru.id },
+							],
+						},
+					}),
+				).toBe(0);
+				const song = ok<SoanMoOutput>(
+					await goiSoan(
+						app,
+						"soanMo",
+						"trpc",
+						vaoDonVi(DON_VI.kdNam, "trpc"),
+						cQuanTri,
+					),
+					"mo don vi song",
+				);
+				expect(song.ok).toBe(true);
+			} finally {
+				await donSoan();
+				await db.division.delete({ where: { id: boPhanLuuTru.id } });
+			}
 		},
 		CHO_DB,
 	);

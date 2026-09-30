@@ -99,7 +99,10 @@ const thayDuoc = (q: Quyen, cuoc: CuocSoan) => q.quanTri || cuoc.nac === "bat";
 
 export type CongDonVi =
 	| { qua: true; q: Quyen; nac: NacMo; ct: CauHinhAi }
-	| { qua: false; lyDo: "don-vi-chua-bat" | "don-vi-che-do-an" };
+	| {
+			qua: false;
+			lyDo: "don-vi-luu-tru" | "don-vi-chua-bat" | "don-vi-che-do-an";
+	  };
 
 export type CongCuoc =
 	| { qua: true; cuoc: CuocSoan; q: Quyen; ct: CauHinhAi }
@@ -128,6 +131,23 @@ export class SoanService {
 		return this.quyenOkr.assertNhapDuoc(userId, { ...dv, personUserId: null });
 	}
 
+	private async luuTru(client: DbHoacTx, dv: DonViCuocSoan): Promise<boolean> {
+		const daLuuTru = { archivedAt: { not: null } };
+		if (dv.level === "bo-phan")
+			return (
+				(await client.division.count({
+					where: { id: dv.divisionId ?? "", ...daLuuTru },
+				})) > 0
+			);
+		if (dv.level === "phong-ban")
+			return (
+				(await client.department.count({
+					where: { id: dv.departmentId ?? "", ...daLuuTru },
+				})) > 0
+			);
+		return false;
+	}
+
 	private async nacSoan(
 		client: DbHoacTx,
 		dv: DonViCuocSoan,
@@ -146,6 +166,8 @@ export class SoanService {
 		now: Date,
 	): Promise<CongDonVi> {
 		const q = await this.quyenDonVi(userId, dv);
+		if (await this.luuTru(client, dv))
+			return { qua: false, lyDo: "don-vi-luu-tru" };
 		const { ct, nac } = await this.nacSoan(client, dv, q, now);
 		if (nac === "tat") return { qua: false, lyDo: "don-vi-chua-bat" };
 		if (nac === "an" && !q.quanTri)
