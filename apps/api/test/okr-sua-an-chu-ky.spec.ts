@@ -41,7 +41,7 @@ import {
 	gieoCoMucTieu,
 	gieoTheoQuanHe,
 	gieoTrong,
-	giuHangMucTieu,
+	giuHangChuKy,
 	LY_DO_AN,
 	namMoi,
 	type QuanHeGiu,
@@ -1113,7 +1113,7 @@ async function chayCap(
 	};
 }
 
-type ThuTuChuyen = "sua-truoc" | "chuyen-truoc";
+type ThuTuChuyen = "chuyen-xep-truoc" | "sua-xep-truoc";
 
 async function gieoChuyenAnhEm() {
 	const pbDi = await pbMoi("dt-pb-di");
@@ -1162,39 +1162,27 @@ async function chayChuyenAnhEm(thuTu: ThuTuChuyen) {
 			denDonVi: { level: "phong-ban", id: g.pbDen },
 		});
 	const doiKhoa: boolean[] = [];
-	let pSua: Promise<TraLoi>;
-	let pChuyen: Promise<TraLoi>;
-	if (thuTu === "sua-truoc") {
-		const daToi = chan("khoa", g.hi);
-		pSua = sua();
-		pChuyen = Promise.resolve({ status: 0, data: null, loi: "chua goi" });
-		try {
-			await Promise.race([
-				daToi,
-				pSua.then((r) => {
-					throw new Error(`sua tra ${tra(r)} truoc khi toi moc`);
-				}),
-			]);
-			pChuyen = chuyen();
-			doiKhoa.push(await choBenKiaDoiKhoa(pChuyen));
-		} finally {
-			tha();
-		}
-	} else {
-		const giu = giuHangMucTieu(g.mHi);
-		await giu.daGiu;
-		pChuyen = chuyen();
-		pSua = Promise.resolve({ status: 0, data: null, loi: "chua goi" });
-		try {
-			doiKhoa.push(await choBenKiaDoiKhoa(pChuyen, "okrObjective"));
-			pSua = sua();
-			doiKhoa.push(await choBenKiaDoiKhoa(pSua));
-		} finally {
-			giu.tha();
-			await giu.xong;
-		}
+	const [dau, sau] =
+		thuTu === "chuyen-xep-truoc" ? [chuyen, sua] : [sua, chuyen];
+	const giu = giuHangChuKy(g.lo);
+	await giu.daGiu;
+	const pDau = dau();
+	let pSau: Promise<TraLoi> = Promise.resolve({
+		status: 0,
+		data: null,
+		loi: "chua goi",
+	});
+	try {
+		doiKhoa.push(await choBenKiaDoiKhoa(pDau, "okrCycle", 1));
+		pSau = sau();
+		doiKhoa.push(await choBenKiaDoiKhoa(pSau, "okrCycle", 2));
+	} finally {
+		giu.tha();
+		await giu.xong;
 	}
-	const [rSua, rChuyen] = await Promise.all([pSua, pChuyen]);
+	const [rDau, rSau] = await Promise.all([pDau, pSau]);
+	const [rChuyen, rSua] =
+		thuTu === "chuyen-xep-truoc" ? [rDau, rSau] : [rSau, rDau];
 	const donVi = await db.okrObjective.findMany({
 		where: { id: { in: [g.mLo, g.mHi] } },
 		select: { departmentId: true },
@@ -1212,7 +1200,7 @@ async function chayChuyenAnhEm(thuTu: ThuTuChuyen) {
 			ca: thuTu,
 			sua: "200",
 			chuyen: "200",
-			doiKhoa: thuTu === "sua-truoc" ? [true] : [true, true],
+			doiKhoa: [true, true],
 			donVi: [g.pbDen, g.pbDen],
 			tenHi: tenMoi,
 		},
@@ -1221,10 +1209,10 @@ async function chayChuyenAnhEm(thuTu: ThuTuChuyen) {
 
 describe("dong-thoi", () => {
 	test(
-		"dong-thoi: chuyen-don-vi-anh-em — chuyen muc tieu cua hai quy anh em cung luc sua quy id lon hon, hai thu tu tha: ca hai xong, khong 500, khong 40P01",
+		"dong-thoi: chuyen-don-vi-anh-em — mot giao dich giu quy lo, chuyenDonVi va suaChuKy(hi) cung xep hang cho lo, tha: ca hai xong, khong 500, khong 40P01",
 		async () => {
 			const luot = [];
-			for (const thuTu of ["sua-truoc", "chuyen-truoc"] as const)
+			for (const thuTu of ["chuyen-xep-truoc", "sua-xep-truoc"] as const)
 				luot.push(await chayChuyenAnhEm(thuTu));
 			expect(luot.length).toBe(2);
 			expect(
