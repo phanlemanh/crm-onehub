@@ -1,1 +1,6 @@
-driver: bash/puppeteer script (man-giu-cho.mjs), khong doc network qua browser tool -> n-a (driver)
+E17 network/console dump (driver: puppeteer script man-giu-cho.mjs; no browser-tool network reader available)
+run1 (evidence/E17) and run2 (scratch) both:
+loi console app: 1
+  /deals: pageerror Error: Hydration failed because the server rendered text didn't match the client (text truncated by script at 200 chars)
+man-giu-cho: hong 1 -> exit 1
+No failed fetch/XHR recorded by the script (it only records pageerror + console.error).

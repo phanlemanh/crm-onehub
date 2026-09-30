@@ -1,59 +1,40 @@
-# Review findings: khung-tao-okr-nhu-deal (round 3)
+# Review findings: khung-tao-okr-nhu-deal (round 4)
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+- **PR description has no build-tier line for SheetRailHeader and SheetRailTitle**
+  file: `_acceptance/khung-tao-okr-nhu-deal/mo-ta-pr.md:16`
+  severity: medium
+  AC: AC-13
+  source: conventions
+  detail: docs/design.md, section «Vẽ tay là bậc cuối», requires one line in the PR description for every new UI block: which tier it stopped at, plus what was searched in the tiers above (item names, ReUI queries). The diff adds two new components to packages/ui/src/components/sheet.tsx, SheetRailHeader and SheetRailTitle (commit c66f68c4), and uses them in okr/cot-gop-y.tsx in place of the old Item size="xs" header. The table in mo-ta-pr.md covers only three blocks: the footer, size="assist" and SheetBody. It has no line for SheetRailHeader or SheetRailTitle, and no search record for tiers 1-4 (for example whether Item or CardHeader/CardTitle could have been reused). The S5 step opens the PR with --body-file from this file, so the gap will reach the real PR.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **E13 no longer compares the raw payload: both sides are compared only after parsing, and parsing hides a dropped field and extra spaces**
-  Người dùng thấy gì: Bài kiểm kiểm tra ngăn tạo và sửa OKR gửi đúng dữ liệu chỉ so sau khi hệ thống đã tự điền mặc định và cắt khoảng trắng. Nếu sau này ngăn bỏ sót một ô như chế độ hiển thị hoặc gửi tiêu đề thừa dấu cách, bài kiểm vẫn báo xanh, nên lỗi kiểu đó có thể lọt qua mà không ai thấy.
-  file: `apps/app/test/khung-tao-okr-payload.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **E13 gui-dung now compares Zod-parsed output instead of the raw payload, so defaults and trims hide a changed payload**
-  Người dùng thấy gì: Bài kiểm ngăn gửi dữ liệu chỉ nhìn kết quả sau khi hệ thống tự sửa và điền mặc định, nên nếu ngăn quên gửi mức hiển thị của Mục tiêu thì Mục tiêu giới hạn vẫn có thể bị tạo thành công khai mà bài kiểm không báo đỏ. Hiện chưa có bài kiểm nào khác canh chỗ này.
-  file: `apps/app/test/khung-tao-okr-payload.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **hopOkr gets its own parser in a component file and a second, different parser in record-stack** (r2)
-  Người dùng thấy gì: Hiện người dùng không thấy lỗi nào. Nếu sau này có người sửa cách đọc tham số trên URL của ngăn OKR mà không biết có hai chỗ khai báo, ngăn có thể mở sai hoặc không mở khi bấm.
+- **The new URL parser for OKR sheets lives inside a client component instead of a *-search-params module**
+  Người dùng thấy gì: Người dùng không thấy khác biệt nào: các ngăn OKR mở, đóng và tải lại đúng như đã hứa. Chỉ là chỗ đặt mã đọc địa chỉ trang lệch thói quen của kho, nên người sửa sau này khó tìm hơn.
   file: `apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Sheet open state in the URL is cleaned up with useEffect, against the repo's no-useEffect convention** (r2)
-  Người dùng thấy gì: Người dùng không thấy khác biệt: người không có quyền mở đường dẫn ngăn OKR vẫn không thấy ngăn nào. Chỉ là cách viết mã trái quy ước của kho, có thể bị nhắc khi rà soát.
-  file: `apps/app/components/crm/record-sheet/objective-sheet.tsx`
+- **record-stack registers hopOkr with parseAsString while useHopOkr uses parseAsHopOkr, two parsers on one key**
+  Người dùng thấy gì: Hôm nay việc mở và đóng ngăn OKR không bị ảnh hưởng. Nếu sau này có người cho khung bản ghi ghi thêm vào địa chỉ trang này, hai chỗ đọc có thể hiểu khác nhau và làm ngăn mở sai.
+  file: `apps/app/components/crm/record-sheet/record-stack.ts`
   severity: low
   Đề xuất: known-limits
 
-- **The proto hand-builds a sheet body even though SheetBody was added in this same diff** (r2)
-  Người dùng thấy gì: Chỉ ảnh hưởng bản mẫu xem thử: phần ngăn nền phía sau có thể không cuộn được như ngăn thật khi nội dung dài. Ứng dụng thật không bị ảnh hưởng.
-  file: `apps/app/app/proto/_modules/khung-tao-okr-nhu-deal/ngan.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (âm tính không đỏ được): E6 vẫn tính «scrollWidth == innerWidth» của trang trên vỏ ngăn** (r2)
-  Người dùng thấy gì: Phép kiểm cũ về chuyện nội dung tràn ngang ở cột góp ý không còn bắt được lỗi trên ngăn mới. Nếu cột góp ý bị tràn ngang sau này, phép kiểm này sẽ vẫn báo đạt.
-  file: `_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (có mặt thay cho quan hệ): E4 hứa hai tập class chân bằng nhau nhưng chỉ kiểm một chiều** (r2)
-  Người dùng thấy gì: Phép kiểm chân ngăn có thể bỏ sót nếu chân ngăn có thêm kiểu xếp khác chân hộp thoại. Hiện các nút vẫn xếp đúng chỗ, chỉ có thêm khoảng đệm.
+- **Hình dạng 3 — đòi QUAN HỆ (hai tập class bằng nhau) nhưng chỉ kiểm từng class của DialogFooter có mặt bên SheetFooter**
+  Người dùng thấy gì: Hôm nay chân các ngăn vẫn xếp đúng: nút Huỷ bên trái, nút chính bên phải. Nhưng phép kiểm chưa bắt được trường hợp về sau có người thêm kiểu xếp khác vào chân ngăn mà vẫn báo xanh.
   file: `_acceptance/khung-tao-okr-nhu-deal/rang/chan-ngan.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 (đếm không ghim): E18 hứa «số chốt = 5» nhưng không so với cỡ danh sách** (r2)
-  Người dùng thấy gì: Một bước kiểm nội bộ in ra số chốt nhưng không tự báo lỗi khi số này lệch dự kiến. Người dùng cuối không bị ảnh hưởng.
-  file: `_acceptance/khung-tao-okr-nhu-deal/rang/thuoc-cu.mjs`
-  severity: low
+- **Hình dạng 4 — khẳng định âm một mình: «đóng khung xoá hopOkr» vẫn xanh khi không có lần ghi URL nào**
+  Người dùng thấy gì: Hôm nay đóng khung Mục tiêu thì ngăn OKR rời địa chỉ trang như đã hứa. Nhưng bài kiểm có thể báo xanh dù việc xoá đó không xảy ra, nên nếu sau này hỏng thì có thể không ai hay.
+  file: `apps/app/test/khung-tao-okr.dom.tsx`
+  severity: medium
   Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

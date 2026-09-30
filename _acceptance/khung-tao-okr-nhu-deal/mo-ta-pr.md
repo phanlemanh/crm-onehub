@@ -10,6 +10,8 @@ Chân ngăn chung trong `packages/ui` nay xếp như chân hộp thoại: «Hu�
 khoá API, SSO, khung tạo ở màn chào) đổi thứ tự nút theo; ba ngăn ở Cài đặt › Chương trình OKR
 vốn đã đặt «Huỷ» trước nên nay mới hiện đúng.
 
+Phần đầu cột góp ý nay bám mép cột, cùng kiểu chữ với tiêu đề ngăn và thẳng tâm với nút đầu của form (thêm ở Cổng Bằng chứng theo yêu cầu của chủ kho).
+
 Không đổi dữ liệu, thủ tục API, tác tử, bộ kiểm góp ý, vết hay hoàn tác.
 
 ### Vẽ tay là bậc cuối — đã tra gì
@@ -19,6 +21,7 @@ Không đổi dữ liệu, thủ tục API, tác tử, bộ kiểm góp ý, vế
 | Chân ngăn một hàng | 1 — sửa `SheetFooter` có sẵn | `DialogFooter` đã có bố cục đích; `docs/settings.md` ghi sửa ở đây |
 | Ngăn rộng có cột (`size="assist"`) | 5 — mở rộng `Sheet` trong `packages/ui` | (1) `Sheet` năm cỡ, không cỡ nào có cột · (2) shadcn `sheet`, `drawer` · (3) ReUI «sheet drawer create form footer cancel submit»: `c-sheet-1`, `c-sheet-2`, `c-sheet-4` — một cột · (4) Pro «side sheet form with assistant panel column, edit form drawer with side rail»: `sheet-8`, `sheet-4`, `sheet-10`, `ai-chat-2` — chép cách đặt cột trợ lý, không block nào có form cộng cột |
 | Thân ngăn chung (`SheetBody`) | 5 — tạo trong `packages/ui` | như trên; `sheet-8` cho cách xếp thân cuộn và chân dính |
+| Tiêu đề cột phụ của ngăn (`SheetRailHeader`, `SheetRailTitle`) — đầu cột góp ý | 5 — tạo trong `packages/ui` | (1) `Item size="xs"` đang dùng có đệm trong riêng nên chữ thụt 11 px — chính là lỗi; `CardHeader`/`CardTitle` là tiêu đề của thẻ có viền, không phải của một cột trong ngăn; `SheetTitle` là tiêu đề Radix, một ngăn chỉ có một · (2) shadcn `sheet`: chỉ có `SheetHeader`/`SheetTitle` · (3) ReUI «sheet side panel section header title with close button aligned to content edge» (mặt `card`): `c-sheet-4` — không có đầu cột phụ · (4) Pro: `sheet-8`, `sheet-4`, `sheet-10` — đầu ngăn có nút, không có đầu cột phụ cạnh form; chép cách đặt tiêu đề và nút đóng trên một hàng cao bằng nút |
 
 ### Hồ sơ ghim lại
 
