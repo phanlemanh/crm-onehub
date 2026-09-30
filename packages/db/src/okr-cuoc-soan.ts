@@ -7,6 +7,11 @@ type DbHoacTx = Db | Prisma.TransactionClient;
 export const CAP_CUOC = ["onehub", "bo-phan", "phong-ban"] as const;
 export const NAC_CUOC = ["an", "bat"] as const;
 export const TRANG_THAI_CUOC = ["dang", "da-dua-vao", "bo"] as const;
+export const LOAI_DONG_NHAP = [
+	"muc-tieu-moi",
+	"kr-moi",
+	"can-chinh-moi",
+] as const;
 
 export type CuocSoan = {
 	id: string;
@@ -48,7 +53,7 @@ const COT = {
 
 type Hang = Prisma.OkrCuocSoanGetPayload<{ select: typeof COT }>;
 
-function docHang(h: Hang): CuocSoan {
+export function cuocTuHang(h: Hang): CuocSoan {
 	return {
 		...h,
 		level: motTrong(CAP_CUOC, h.level, "okrCuocSoan.level"),
@@ -64,6 +69,26 @@ export type DonViCuocSoan = {
 	departmentId: string | null;
 };
 
+export function donViCuoc(cuoc: CuocSoan): DonViCuocSoan {
+	return {
+		cycleId: cuoc.cycleId,
+		level: cuoc.level,
+		divisionId: cuoc.divisionId,
+		departmentId: cuoc.departmentId,
+	};
+}
+
+export function dieuKienDonVi(v: DonViCuocSoan): Prisma.OkrCuocSoanWhereInput {
+	if (v.level === "onehub") return { cycleId: v.cycleId, level: "onehub" };
+	if (v.level === "bo-phan")
+		return { cycleId: v.cycleId, level: "bo-phan", divisionId: v.divisionId };
+	return {
+		cycleId: v.cycleId,
+		level: "phong-ban",
+		departmentId: v.departmentId,
+	};
+}
+
 export async function moCuoc(
 	db: DbHoacTx,
 	v: DonViCuocSoan & {
@@ -72,7 +97,7 @@ export async function moCuoc(
 		nac: CuocSoan["nac"];
 	},
 ): Promise<CuocSoan> {
-	return docHang(
+	return cuocTuHang(
 		await db.okrCuocSoan.create({
 			data: { ...v, cacPhien: [v.sessionId] },
 			select: COT,
@@ -88,7 +113,7 @@ export async function docCuoc(
 		where: { id },
 		select: COT,
 	});
-	return h ? docHang(h) : null;
+	return h ? cuocTuHang(h) : null;
 }
 
 export async function docCuocTheoDonVi(
@@ -96,16 +121,30 @@ export async function docCuocTheoDonVi(
 	v: DonViCuocSoan,
 ): Promise<CuocSoan[]> {
 	const hs = await db.okrCuocSoan.findMany({
-		where: {
-			cycleId: v.cycleId,
-			level: v.level,
-			divisionId: v.divisionId,
-			departmentId: v.departmentId,
-		},
+		where: dieuKienDonVi(v),
 		orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 		select: COT,
 	});
-	return hs.map(docHang);
+	return hs.map(cuocTuHang);
+}
+
+export async function cuocDang(
+	db: DbHoacTx,
+	v: DonViCuocSoan,
+): Promise<CuocSoan | null> {
+	const h = await db.okrCuocSoan.findFirst({
+		where: { ...dieuKienDonVi(v), trangThai: "dang" },
+		orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+		select: COT,
+	});
+	return h ? cuocTuHang(h) : null;
+}
+
+export async function demCuocTrongKy(
+	db: DbHoacTx,
+	v: DonViCuocSoan,
+): Promise<number> {
+	return db.okrCuocSoan.count({ where: dieuKienDonVi(v) });
 }
 
 export async function capNhatPhien(
