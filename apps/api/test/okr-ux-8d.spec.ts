@@ -361,8 +361,9 @@ describe("dem-don-vi", () => {
 			).hang.find((h) => h.key === `pb:${PHAP_CHE}`);
 			const [dau, ...conLai] = so;
 			console.log(`SO_THONG_KE ${JSON.stringify({ ...dau, sucKhoe: sk })}`);
-			for (const [i, s] of conLai.entries())
-				expect({ ai: i + 1, s }).toEqual({ ai: i + 1, s: dau });
+			expect(conLai.map((x) => JSON.stringify(x))).toEqual(
+				conLai.map(() => JSON.stringify(dau)),
+			);
 			expect({ ...dau, sucKhoe: sk }).toEqual(SO_TRUOC);
 		},
 		CHO_DB,
