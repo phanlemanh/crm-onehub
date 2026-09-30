@@ -17,7 +17,18 @@ const DICH = [
 
 const EVAL_MAY = {
 	"tro-ly-okr-de-xuat": ["E2", "E3"],
-	"the-gop-y-okr": ["E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E16"],
+	"the-gop-y-okr": [
+		"E2",
+		"E3",
+		"E4",
+		"E5",
+		"E6",
+		"E7",
+		"E8",
+		"E9",
+		"E10",
+		"E16",
+	],
 	"hop-thoai-giu-cho-dang-nhap": ["E7", "E9"],
 };
 
@@ -45,22 +56,25 @@ function hangSo(sf) {
 	const bang = new Map();
 	const giai = (e) => {
 		if (!e) return null;
-		if (ts.isStringLiteral(e) || ts.isNoSubstitutionTemplateLiteral(e)) return e.text;
+		if (ts.isStringLiteral(e) || ts.isNoSubstitutionTemplateLiteral(e))
+			return { chuoi: e.text };
 		if (ts.isIdentifier(e)) return bang.get(e.text) ?? null;
 		if (ts.isTemplateExpression(e)) {
 			let chu = e.head.text;
 			for (const sp of e.templateSpans) {
 				const v = giai(sp.expression);
-				if (typeof v !== "string") return null;
-				chu += v + sp.literal.text;
+				if (!v || !("chuoi" in v)) return null;
+				chu += v.chuoi + sp.literal.text;
 			}
-			return chu;
+			return { chuoi: chu };
 		}
-		if (ts.isArrayLiteralExpression(e)) return e.elements.map(giai);
+		if (ts.isArrayLiteralExpression(e)) return { mang: e.elements.map(giai) };
 		if (ts.isElementAccessExpression(e)) {
 			const mang = giai(e.expression);
 			const i = e.argumentExpression;
-			return Array.isArray(mang) && ts.isNumericLiteral(i) ? mang[Number(i.text)] : null;
+			return mang && "mang" in mang && ts.isNumericLiteral(i)
+				? (mang.mang[Number(i.text)] ?? null)
+				: null;
 		}
 		return null;
 	};
@@ -82,11 +96,13 @@ function chuoiTim(ham) {
 			n.arguments[0]
 		) {
 			const a = n.arguments[0];
-			if (ts.isStringLiteral(a) || ts.isNoSubstitutionTemplateLiteral(a)) ra.push(a.text);
+			if (ts.isStringLiteral(a) || ts.isNoSubstitutionTemplateLiteral(a))
+				ra.push({ khop: (chu) => chu.includes(a.text) });
 			else if (ts.isRegularExpressionLiteral(a)) {
 				const t = a.text;
 				const cuoi = t.lastIndexOf("/");
-				ra.push(new RegExp(t.slice(1, cuoi), t.slice(cuoi + 1)));
+				const re = new RegExp(t.slice(1, cuoi), t.slice(cuoi + 1));
+				ra.push({ khop: (chu) => re.test(chu) });
 			}
 		}
 		ts.forEachChild(n, di);
@@ -95,22 +111,23 @@ function chuoiTim(ham) {
 	return ra;
 }
 
-function thuTu(tenTep, doc) {
-	return (tep) => {
-		if (typeof tep !== "string") return null;
-		return DICH.find((d) => d === tep || tep.endsWith(d)) ?? null;
-	};
+function khopDich(gia) {
+	if (!gia || !("chuoi" in gia)) return null;
+	return DICH.find((d) => d === gia.chuoi || gia.chuoi.endsWith(d)) ?? null;
 }
 
 function timChot(hoSo, tenTep) {
 	const duong = join(GOC, "_acceptance", hoSo, "rang", tenTep);
-	const sf = ts.createSourceFile(tenTep, readFileSync(duong, "utf8"), ts.ScriptTarget.Latest, true);
+	const sf = ts.createSourceFile(
+		tenTep,
+		readFileSync(duong, "utf8"),
+		ts.ScriptTarget.Latest,
+		true,
+	);
 	const giai = hangSo(sf);
-	const khop = thuTu();
 	const ra = [];
 	const di = (n, ham) => {
-		const tenHam =
-			ts.isFunctionDeclaration(n) && n.name ? n.name.text : ham;
+		const tenHam = ts.isFunctionDeclaration(n) && n.name ? n.name.text : ham;
 		if (ts.isObjectLiteralExpression(n)) {
 			const lay = (k) =>
 				n.properties.find(
@@ -119,11 +136,12 @@ function timChot(hoSo, tenTep) {
 			const tep = lay("tep") ?? lay("rel");
 			const cam = lay("cam") ?? lay("pha");
 			if (tep && cam) {
-				const dich = khop(giai(tep.initializer));
+				const dich = khopDich(giai(tep.initializer));
 				if (dich) {
 					const cha = n.parent;
-					const khoa =
-						ts.isPropertyAssignment(cha) ? cha.name.getText(sf) : tenHam;
+					const khoa = ts.isPropertyAssignment(cha)
+						? cha.name.getText(sf)
+						: tenHam;
 					ra.push({ khoa, dich, tim: chuoiTim(cam.initializer) });
 				}
 			}
@@ -138,12 +156,15 @@ const tatCa = [];
 for (const hoSo of readdirSync(join(GOC, "_acceptance"))) {
 	let tep = [];
 	try {
-		tep = readdirSync(join(GOC, "_acceptance", hoSo, "rang")).filter((t) => t.endsWith(".mjs"));
+		tep = readdirSync(join(GOC, "_acceptance", hoSo, "rang")).filter((t) =>
+			t.endsWith(".mjs"),
+		);
 	} catch {
 		continue;
 	}
 	if (hoSo === "khung-tao-okr-nhu-deal") continue;
-	for (const t of tep) for (const c of timChot(hoSo, t)) tatCa.push({ hoSo, ...c });
+	for (const t of tep)
+		for (const c of timChot(hoSo, t)) tatCa.push({ hoSo, ...c });
 }
 
 let soChot = 0;
@@ -155,9 +176,12 @@ for (const c of CHOT) {
 	}
 	for (const x of tim) {
 		const chu = docDich(x.dich);
-		const an = x.tim.length > 0 && x.tim.every((t) => (typeof t === "string" ? chu.includes(t) : t.test(chu)));
+		const an = x.tim.length > 0 && x.tim.every((t) => t.khop(chu));
 		soChot += 1;
-		if (an) console.log(`ok chot con an: ${c.hoSo} ${c.eval} (${x.dich.split("/").at(-1)})`);
+		if (an)
+			console.log(
+				`ok chot con an: ${c.hoSo} ${c.eval} (${x.dich.split("/").at(-1)})`,
+			);
 		else loi.push(`chot do khong an: ${c.hoSo} ${c.eval}`);
 	}
 }
@@ -168,10 +192,18 @@ for (const x of tatCa) {
 console.log(`so chot: ${soChot}`);
 
 if (!chiChot) {
-	const cfg = yaml.parse(readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8"));
-	const lenh = (ref) => ref.replace(/^config:/, "").split(".").reduce((o, k) => o?.[k], cfg);
+	const cfg = yaml.parse(
+		readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8"),
+	);
+	const lenh = (ref) =>
+		ref
+			.replace(/^config:/, "")
+			.split(".")
+			.reduce((o, k) => o?.[k], cfg);
 	for (const [hoSo, ids] of Object.entries(EVAL_MAY)) {
-		const evals = yaml.parse(readFileSync(join(GOC, "_acceptance", hoSo, "evals.yaml"), "utf8")).evals;
+		const evals = yaml.parse(
+			readFileSync(join(GOC, "_acceptance", hoSo, "evals.yaml"), "utf8"),
+		).evals;
 		for (const id of ids) {
 			const e = evals.find((x) => x.id === id);
 			const cmd = e ? lenh(e.cmd) : null;
@@ -179,13 +211,24 @@ if (!chiChot) {
 				loi.push(`khong co lenh: ${hoSo} ${id}`);
 				continue;
 			}
-			const kq = spawnSync("bash", ["-c", cmd], { cwd: GOC, encoding: "utf8", env: process.env });
+			const kq = spawnSync("bash", ["-c", cmd], {
+				cwd: GOC,
+				encoding: "utf8",
+				env: process.env,
+			});
 			const ky = e.expected_exit ?? 0;
 			const ma = kq.status ?? 1;
-			console.log(`${ma === ky ? "ok" : "DO"} ${hoSo} ${id}: ma ${ma} (ky vong ${ky})`);
+			console.log(
+				`${ma === ky ? "ok" : "DO"} ${hoSo} ${id}: ma ${ma} (ky vong ${ky})`,
+			);
 			if (ma !== ky) {
 				loi.push(`eval lech: ${hoSo} ${id} ma ${ma} != ${ky}`);
-				console.log(`${kq.stdout ?? ""}${kq.stderr ?? ""}`.split("\n").slice(-15).join("\n"));
+				console.log(
+					`${kq.stdout ?? ""}${kq.stderr ?? ""}`
+						.split("\n")
+						.slice(-15)
+						.join("\n"),
+				);
 			}
 		}
 	}
