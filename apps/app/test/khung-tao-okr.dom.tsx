@@ -575,7 +575,9 @@ describe("khung-tao-okr — tạo Mục tiêu trên URL", () => {
 			onUrlUpdate: nk.ghi,
 			giuHangDoiUrl: true,
 		});
-		await choUrl(() => nk.lan.length > 0, "xoa khoa new khi khong quyen");
+		await choUrl(() => nk.lan.length > 0, "xoa khoa new").catch(() => {
+			throw new Error("mo ngan khong quyen: new");
+		});
 		if (hopMucTieu() !== null) throw new Error("mo ngan khong quyen: new");
 		expect(nk.cuoi().has("new")).toBe(false);
 		await dongHet();
@@ -654,7 +656,9 @@ describe("khung-tao-okr — ngăn trong khung Mục tiêu trên URL", () => {
 			await moKhung(`record=objective:${MT.id}&hopOkr=${khoa}`, nk, [], {
 				suaDuoc: false,
 			});
-			await choUrl(() => nk.lan.length > 0, `xoa khoa khong quyen ${khoa}`);
+			await choUrl(() => nk.lan.length > 0, `xoa khoa ${khoa}`).catch(() => {
+				throw new Error(`mo ngan khong quyen: ${khoa}`);
+			});
 			if (hopMucTieu() !== null || hopKr() !== null)
 				throw new Error(`mo ngan khong quyen: ${khoa}`);
 			expect(nk.cuoi().has("hopOkr")).toBe(false);
