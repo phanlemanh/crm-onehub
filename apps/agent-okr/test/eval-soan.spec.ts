@@ -3,7 +3,7 @@ import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
-import { boCa } from "../evals/okr-soan/ca";
+import { boCa, danhSachCap, soCapAB } from "../evals/okr-soan/ca";
 import {
 	coDauChen,
 	goiThang,
@@ -273,5 +273,35 @@ describe("eval-soan: tách thời gian lượt và khoảng tin cậy", () => {
 		expect(
 			tom.evals.map((e) => e.assertions[0]?.metadata?.choice ?? null),
 		).toEqual(["Y", null]);
+	});
+});
+
+describe("eval-soan: số cặp judge mù", () => {
+	const bien = TRO_LY_OKR_SOAN.danhGia.env.soCapAB;
+	afterEach(() => {
+		delete process.env[bien];
+	});
+
+	test("mặc định 15 cặp = 3 vòng × 5 đơn vị, mỗi vòng một câu trả lời khác, khoá cặp không trùng", () => {
+		expect(soCapAB()).toBe(TRO_LY_OKR_SOAN.danhGia.boiCanh.soCapMacDinh);
+		const cap = danhSachCap(boCa(), soCapAB());
+		expect(cap.length).toBe(15);
+		expect(new Set(cap.map((c) => c.khoa)).size).toBe(15);
+		expect(new Set(cap.map((c) => c.traLoi)).size).toBe(3);
+		for (const id of new Set(cap.map((c) => c.ca.id)))
+			expect(
+				new Set(cap.filter((c) => c.ca.id === id).map((c) => c.traLoi)).size,
+			).toBe(3);
+	});
+
+	test("TDX_SO_CAP_AB đặt số cặp; giá trị hỏng quay về mặc định", () => {
+		process.env[bien] = "7";
+		expect(
+			danhSachCap(boCa(), soCapAB())
+				.map((c) => c.khoa)
+				.at(-1),
+		).toBe("bp-kinh-doanh#v2");
+		process.env[bien] = "khong-so";
+		expect(soCapAB()).toBe(TRO_LY_OKR_SOAN.danhGia.boiCanh.soCapMacDinh);
 	});
 });

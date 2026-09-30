@@ -39,6 +39,25 @@ export function boCa(): CaSoan[] {
 	return ca;
 }
 
+export type CapAB = { ca: CaSoan; vong: number; khoa: string; traLoi: string };
+
+export function soCapAB(): number {
+	const so = Number(process.env[DG.env.soCapAB]);
+	return Number.isInteger(so) && so > 0 ? so : DG.boiCanh.soCapMacDinh;
+}
+
+export function danhSachCap(ca: readonly CaSoan[], soCap: number): CapAB[] {
+	const traLoi = DG.boiCanh.traLoiTheoVong;
+	return Array.from({ length: soCap }, (_, i) => i).flatMap((i) => {
+		const c = ca[i % ca.length];
+		const vong = Math.floor(i / ca.length);
+		const tl = traLoi[vong % traLoi.length];
+		return c && tl
+			? [{ ca: c, vong, khoa: `${c.id}#v${vong + 1}`, traLoi: tl }]
+			: [];
+	});
+}
+
 const vaiPhien = z.enum(TRO_LY_OKR_SOAN.vaiDuocVao);
 
 export type DonViCa = Omit<DonViCuocSoan, "cycleId"> & {

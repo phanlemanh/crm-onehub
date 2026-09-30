@@ -2,7 +2,15 @@ import { defineEval } from "eve/evals";
 import { equals, satisfies } from "eve/evals/expect";
 import { TRO_LY_OKR_SOAN } from "../../agent/lib/config";
 import { goiSoan } from "../../agent/lib/goi-soan";
-import { boCa, type CaSoan, type DonViCa, donViCua, donViTrong } from "./ca";
+import {
+	boCa,
+	type CapAB,
+	type DonViCa,
+	danhSachCap,
+	donViCua,
+	donViTrong,
+	soCapAB,
+} from "./ca";
 import { JUDGE_ZDR } from "./judge";
 import {
 	chuKyDo,
@@ -20,7 +28,7 @@ import { nguCanhJudge, tenDichCua, vanBanNhap } from "./van";
 
 const DG = TRO_LY_OKR_SOAN.danhGia;
 
-async function soan(dv: DonViCa, cycleId: string) {
+async function soan(dv: DonViCa, cycleId: string, traLoi: string) {
 	const mo = await moCuocVaPhien({
 		cycleId,
 		level: dv.level,
@@ -29,7 +37,7 @@ async function soan(dv: DonViCa, cycleId: string) {
 		nguoiMoUserId: dv.nguoiMo,
 	});
 	const trangThai: string[] = [];
-	for (const m of [KICH_BAN.moDau, KICH_BAN.traLoi, KICH_BAN.duaNhap])
+	for (const m of [KICH_BAN.moDau, traLoi, KICH_BAN.duaNhap])
 		trangThai.push((await mo.luot(m)).kq.status);
 	const goi = await goiSoan(mo.cuoc.id, { vai: dv.vai });
 	const nop: DongDoc[] = (await docLanNop(mo.cuoc.id)).at(-1) ?? [];
@@ -37,9 +45,9 @@ async function soan(dv: DonViCa, cycleId: string) {
 	return { trangThai, van: vanBanNhap(cho, tenDichCua(goi)), goi };
 }
 
-function motCa(ca: CaSoan) {
+function motCap({ ca, khoa, traLoi }: CapAB) {
 	return defineEval({
-		description: `Soạn OKR có gói và không gói, judge mù — ${ca.id}`,
+		description: `Soạn OKR có gói và không gói, judge mù — ${khoa}`,
 		tags: ["okr", "soan", DG.boiCanh.nhan, ca.id],
 		timeoutMs: DG.timeoutMs,
 		judge: JUDGE_ZDR,
@@ -49,12 +57,12 @@ function motCa(ca: CaSoan) {
 			const dv = await donViCua(ca);
 			await datCauHinhSoan(dv.nguoiMo);
 			const cycleId = await chuKyDo();
-			const coGoi = await soan(dv, cycleId);
+			const coGoi = await soan(dv, cycleId, traLoi);
 			const trong = await donViTrong(ca, dv);
 			const traTrang = await doiLoaiTrangChienLuoc();
 			let khongGoi: Awaited<ReturnType<typeof soan>>;
 			try {
-				khongGoi = await soan(trong.donVi, DG.chuKyTrong);
+				khongGoi = await soan(trong.donVi, DG.chuKyTrong, traLoi);
 			} finally {
 				await traTrang();
 				await trong.luuTru();
@@ -67,10 +75,10 @@ function motCa(ca: CaSoan) {
 					satisfies<string>((s) => s.trim() !== "", "co ban nhap"),
 				);
 			const xep = xepAB(coGoi.van, khongGoi.van, Math.random);
-			t.log(JSON.stringify({ ca: ca.id, phiaCoGoi: xep.phiaCoGoi }));
+			t.log(JSON.stringify({ ca: khoa, phiaCoGoi: xep.phiaCoGoi }));
 			ghiTongKet({
 				loai: "boi-canh",
-				ca: ca.id,
+				ca: khoa,
 				A: xep.A,
 				B: xep.B,
 				phiaCoGoi: xep.phiaCoGoi,
@@ -85,9 +93,9 @@ function motCa(ca: CaSoan) {
 					].join("\n"),
 					{ on: `A:\n${xep.A}\n\nB:\n${xep.B}` },
 				)
-				.label(`${DG.boiCanh.nhan}:${ca.id}`);
+				.label(`${DG.boiCanh.nhan}:${khoa}`);
 		},
 	});
 }
 
-export default boCa().map(motCa);
+export default danhSachCap(boCa(), soCapAB()).map(motCap);

@@ -68,6 +68,7 @@ export const TRO_LY_OKR_SOAN = {
 			tranUsd: "TDX_TRAN_USD",
 			tongKet: "TDX_TONG_KET",
 			thuMucThem: "TDX_THU_MUC_THEM",
+			soCapAB: "TDX_SO_CAP_AB",
 		},
 		khoDo: /\/crm_[a-z0-9_]+_do(\?|$)/,
 		mienMau: "@mau.onehub.test",
@@ -97,6 +98,13 @@ export const TRO_LY_OKR_SOAN = {
 		boiCanh: {
 			tyLeThang: 0.7,
 			nhan: "boi-canh",
+			soCapMacDinh: 15,
+			usdMoiCapUoc: 0.07,
+			traLoiTheoVong: [
+				"Ưu tiên giữ chân đối tác lớn và đúng hạn giao; ràng buộc: không thêm người, ngân sách như quý trước.",
+				"Ưu tiên giảm chi phí mỗi chuyến mà không để chất lượng giao hàng tụt; ràng buộc: giữ nguyên đội xe.",
+				"Ưu tiên mở thêm đối tác mới ở mảng đơn vị đang yếu; ràng buộc: không tăng ngân sách marketing.",
+			],
 			hauToTrong: " (trống)",
 			loaiTam: "chien-luoc-tam",
 			tieuChi: [

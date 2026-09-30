@@ -203,7 +203,7 @@ const nhan = DG.boiCanh.nhan;
 const judgeCua = (ca) =>
 	tomTat.evals
 		.flatMap((e) => e.assertions)
-		.find((a) => a.name.includes(`${nhan}:${ca}`)) ?? null;
+		.find((a) => a.name.includes(`[${nhan}:${ca}]`)) ?? null;
 const boiCanhTatCa = dong
 	.filter((d) => d.loai === "boi-canh")
 	.map((d) => {
@@ -280,6 +280,7 @@ writeFileSync(
 		`| chi phí lớn nhất mỗi cuộc (USD) | ${so(usdMax, 4)} | ≤ ${DG.doTre.usdMoiCuoc} |`,
 		`| p90 lượt 1–2 / lượt 3–4 (ms) | ${so(p90Theo([1, 2]))} / ${so(p90Theo([3, 4]))} | — |`,
 		`| tỷ lệ bản có gói thắng judge mù | ${tyLe === null ? "—" : `${so(tyLe * 100)} % (${soThang}/${boiCanh.length} ca chấm được; khoảng tin cậy 95 % ${so((khoang?.duoi ?? 0) * 100)}–${so((khoang?.tren ?? 0) * 100)} %)`} | ≥ ${DG.boiCanh.tyLeThang * 100} % |`,
+		`| số cặp A/B judge mù (đã chạy / chấm được) | ${boiCanhTatCa.length} / ${boiCanh.length} | ≥ ${DG.boiCanh.soCapMacDinh} (\`${DG.env.soCapAB}\`, ước ${DG.boiCanh.usdMoiCapUoc} USD/cặp) |`,
 		`| ca judge không chấm được | ${khongCham.join(", ") || "0"} | 0 |`,
 		`| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi; chưa gồm judge) | ${so(tongUsd, 4)} | trần ${process.env[DG.env.tranUsd] ?? DG.tranUsdMacDinh} |`,
 		"",
