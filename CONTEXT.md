@@ -827,8 +827,8 @@ với hoá đơn đó.
 
 **Chế độ ẩn**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
 việc trên OKR thật — góp ý khi một Mục tiêu được lưu, tóm tắt sau ngày cập nhật — ghi sổ
-chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả ở Cài đặt ›
-Chương trình OKR. Tiền của nấc này là tiền thật, tính vào trần tháng. Quản trị chọn đơn vị
+chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả — góp ý ở
+Cài đặt › Chương trình OKR, tóm tắt ở Sức khoẻ chương trình. Tiền của nấc này là tiền thật, tính vào trần tháng. Quản trị chọn đơn vị
 ở chế độ ẩn cho từng việc; đơn vị đã bật thì không ở chế độ ẩn. Chốt 2026-09-28 (Manh
 Phan).
 _Avoid_: chạy bóng, shadow mode, thử nghiệm, beta
