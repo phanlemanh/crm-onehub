@@ -804,10 +804,21 @@ async function buocDangTai() {
 		`${nhom}: giai xong thi het khung xuong`,
 		() => window.__tim("[aria-busy='true']").length === 0,
 	);
-	const sau = await t.evaluate(() => window.__tim("[data-muc-tieu]").length);
+	const theSau = await t.evaluate(() =>
+		window.__tim("[data-muc-tieu]").map((e) => e.getAttribute("data-muc-tieu")),
+	);
+	const hang = await db.okrObjective.findMany({
+		where: { id: { in: theSau } },
+		select: { status: true, department: { select: { name: true } } },
+	});
+	const congBo = hang.filter((h) => h.status === "cong-bo").length;
+	const ngoaiKho = hang.filter((h) => h.department?.name !== "Kho vận").length;
 	kiem(
-		`${nhom}: giai xong hien ${soKho} the Kho van theo cay (thay ${sau}, cay «${cayKho}»)`,
-		Number.isInteger(soKho) && soKho > 0 && sau === soKho,
+		`${nhom}: giai xong hien ${theSau.length} the, deu cua Kho van (ngoai ${ngoaiKho}), ${congBo} the cong-bo bang so cay ${soKho} (cay «${cayKho}»)`,
+		theSau.length > 0 &&
+			ngoaiKho === 0 &&
+			Number.isInteger(soKho) &&
+			congBo === soKho,
 	);
 	await t.close();
 }
@@ -974,7 +985,17 @@ async function moHopLuuTru(t) {
 }
 
 async function dongHopDangMo(t) {
-	await t.keyboard.press("Escape");
+	await t.evaluate(
+		(huy) => {
+			for (const hop of document.querySelectorAll(
+				"[data-hop='luu-tru-chan'], [data-hop='chuyen-okr']",
+			))
+				[...hop.querySelectorAll("button")]
+					.find((b) => huy.includes(b.innerText.trim()))
+					?.click();
+		},
+		[CHU_TCC.toChuc.chan.huy, CHU_TCC.chuyen.huy],
+	);
 	await doi(
 		t,
 		`${nhom}: hop cu da dong`,
