@@ -5,7 +5,7 @@ slug: sua-an-chu-ky-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-30T06:43:16Z
 design_doc: docs/superpowers/specs/2026-09-30-sua-an-chu-ky-okr-design.md
@@ -79,3 +79,11 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Hạng T3: chạm `packages/db/prisma` (một cột). Có Cổng 1.5.
 - Hồ sơ đã ký có thể phải ghim lại: `dat-okr-trong-crm` (bảng chu kỳ, `okr.cycles` thêm trường), `khep-ky-okr` (`mangSang` bỏ kỳ ẩn; menu chu kỳ), `vai-chi-okr` (bốn thủ tục mới), `dot-hoi-y-tuong-okr` (kỳ mặc định Hỏi ý, nhắc Hỏi ý), `so-okr-tu-chay` (chụp số).
 - Không có `opportunity.md` (vòng mở từ phản hồi thử trên production, không qua Cổng Đáng) — không section «Đường đo», không phiên nghiệm thu.
+
+Known limits — Cổng Bằng chứng (Manh Phan 2026-09-30, định đoạt mục ngoài hợp đồng của vòng chấm 2; sổ d-20260930T121107Z-17 … -22):
+
+- Ngoài-1 (`_acceptance/sua-an-chu-ky-okr/evals.yaml`): Chữ trên hộp ẩn và hộp gỡ giải thích hệ quả (ẩn thì chu kỳ biến khỏi ô chọn, gỡ thì vết vẫn còn) chưa được kiểm bằng chính chữ đã hiện trên màn. Nếu dòng giải thích ấy bị sửa sai hoặc mơ hồ thì phép đo vẫn có thể cho qua.
+- Ngoài-2 (`apps/api/src/okr/okr.contracts.ts`): Năm nút ở menu chu kỳ hôm nay hiện đúng. Nếu sau này thêm nút thứ sáu mà phía máy chủ tính ra nhưng màn hình không nhận, nút mới sẽ lặng lẽ không xuất hiện.
+- Ngoài-4 (`apps/app/components/okr/hop-chuyen-okr.tsx`): Các ô chọn chu kỳ hôm nay đều không hiện chu kỳ đã ẩn. Nếu sau này đổi định nghĩa thế nào là đã ẩn, ba màn lọc tại chỗ phải sửa riêng nên dễ sót một màn.
+- Ngoài-5 (`apps/api/src/okr/tro-ly.service.ts`): Nếu quản trị ẩn chu kỳ đúng lúc người khác nhờ trợ lý soạn đề xuất cho chu kỳ đó, trợ lý vẫn có thể làm việc trên chu kỳ vừa ẩn. Tình huống trùng khít thời điểm này hiếm.
+- Ngoài-6 (`apps/app/app/(app)/[slug]/settings/okr/hop-thoai-an-chu-ky.tsx`): Khi ẩn một chu kỳ bị lỗi vì người khác vừa đổi nó, về sau hộp ẩn có thể tự bật lên dù người dùng chưa bấm gì. Đóng hộp đi là xong, không mất dữ liệu.
