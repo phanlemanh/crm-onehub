@@ -7,7 +7,8 @@ Hạng mục `soan-okr-cung-tro-ly`, làn A · Trợ lý OKR, hạng T3. Cổng 
 cảnh — nó nói **dựng thế nào**.
 
 Đã đọc: `docs/agent.md`, `docs/api.md`, `docs/chat-ui.md`, `docs/agent-panel.md`,
-`docs/settings.md`, `docs/design.md`, `docs/proto.md`, `docs/reui.md`, `CONTEXT.md`,
+`docs/settings.md`, `docs/design.md`, `docs/proto.md`, `docs/reui.md`, `docs/setup.md` (phiên đo,
+`tien-de`, kho `_do`), `docs/environment.md` (ba nhà của một biến mới), `CONTEXT.md`,
 thiết kế 9b (`2026-09-28-tro-ly-okr-de-xuat-design.md`), hồ sơ 9a/9b, N0, mã
 `apps/agent/agent/lib/okr/`, `subagents/tro_ly_okr/`, `channels/eve.ts`,
 `apps/app/components/crm/agent-panel.tsx`, `apps/app/lib/agent-record.ts`,
@@ -21,8 +22,9 @@ chu kỳ đang lập kế hoạch. Trợ lý đã biết công ty, chiến lư�
 trước đạt gì và trượt gì, cấp trên đang nhắm gì — nó nói ra điều đã biết, hỏi hai tới bốn
 câu, rồi đưa **bản nháp** bộ OKR lên một bảng sống cạnh cuộc trò chuyện. Người sửa trên
 bảng hay nói trong chat; nhận · sửa · bác từng dòng; «Đưa vào bộ OKR» tạo cả bộ ở trạng
-thái **nháp**, người điền đích rồi công bố như mọi OKR. Không gì tự công bố, không số
-đích nào do máy ghi.
+thái **nháp** rồi người công bố như mọi OKR. Số đích và khởi điểm của từng KR do **người
+điền ngay trên thẻ KR trong bảng nháp** trước khi đưa vào; nút «Đưa vào» khoá tới khi mọi KR
+đã nhận có đủ hai số. Không gì tự công bố, không số nào do máy ghi.
 
 ## 2. Đã chốt trước lượt này — không mở lại
 
@@ -113,11 +115,11 @@ nào ngoài `nop_ban_nhap` (mọi công cụ khác bị thay bằng bản từ c
 | `Division`, `Department` | `moTa String @default("")` | ≤ 500 ký tự, khuôn Zod ở `to-chuc` |
 | `OrgPlacement` | `chucDanh String @default("")` | ≤ 80 ký tự |
 | `OkrProgramConfig` | `aiSoanPhamVi`, `aiSoanDonVi`, `aiSoanAnPhamVi`, `aiSoanAnDonVi` (cùng khuôn `aiDeXuat*`); `aiTranThangDatOkrUsd Decimal?` | null = bằng `aiTranThangUsd`; bản cũ đọc lên là việc soạn tắt |
-| `OkrCuocSoan` (mới) | `id`, `cycleId`, `level`, `divisionId?`, `departmentId?`, `nguoiMoUserId`, `sessionId @unique`, `nac`, `trangThai` (`dang` · `da-dua-vao` · `bo`), `soLuot`, `streamIndex`, `continuationToken?`, `duaVaoLuc?`, `createdAt`, `updatedAt` | Đơn vị theo `level` như `OkrObjective`; `sessionId` là phiên eve |
-| `OkrDeXuat` | `cuocSoanId String?` | Ba loại dòng mới trong `dongDeXuat`: `muc-tieu-moi` (tên, vì sao lúc này, loại cam kết/tham vọng, vị trí), `kr-moi` (thuộc dòng Mục tiêu, tên, kiểu, đơn vị, khởi điểm?, đích null, vì sao), `can-chinh-moi` (dòng Mục tiêu → đích trong tập máy lọc) |
-| `OkrTrail` | không đổi | `note` `soan-okr:<cuocSoanId>` cho mọi bản ghi tạo từ cuộc |
+| `OkrCuocSoan` (mới) | `id`, `cycleId`, `level`, `divisionId?`, `departmentId?`, `nguoiMoUserId`, `sessionId @unique`, `cacPhien String[]`, `nac`, `trangThai` (`dang` · `da-dua-vao` · `bo`), `soLuot`, `streamIndex`, `continuationToken?`, `daCat Json?`, `duaVaoLuc?`, `createdAt`, `updatedAt` | Đơn vị theo `level` như `OkrObjective`; `sessionId` là phiên eve đang sống, `cacPhien` là mọi phiên từng thuộc cuộc (Thử lại đổi phiên thì nối thêm) — sổ chi phí nối với cuộc qua `AiChiPhi.sessionId = ANY(cacPhien)`, không qua `sessionId` hiện tại |
+| `OkrDeXuat` | `cuocSoanId String?`, `taoRaId String?` | Ba loại dòng mới trong `dongDeXuat`: `muc-tieu-moi` (tên, vì sao lúc này, loại cam kết/tham vọng, vị trí), `kr-moi` (thuộc dòng Mục tiêu, tên, kiểu, đơn vị, khởi điểm gợi ý?, đích luôn null, vì sao), `can-chinh-moi` (dòng Mục tiêu → đích trong tập máy lọc). `taoRaId` = id Mục tiêu/KR/Căn chỉnh tạo ra từ dòng, ghi trong cùng giao dịch đưa vào — cặp dòng → bản ghi là dữ liệu, không suy từ tên |
+| `OkrTrail` | không đổi | `note` `soan-okr:<cuocSoanId>:<deXuatId>` cho mọi bản ghi tạo từ cuộc; `after` mang đích và khởi điểm người điền |
 | `TaiLieuTrang` | không đổi | `loai` nhận thêm `chien-luoc` qua `LOAI_TRANG` (validation) |
-| `AiChiPhi` | không đổi | ghi theo phiên như 9a; [GIẢ ĐỊNH] khoá phiên đủ để nối chi phí ↔ cuộc, kiểm ở S2 |
+| `AiChiPhi` | không đổi | ghi theo `sessionId` như 9a; nối với cuộc qua `OkrCuocSoan.cacPhien` (trên) |
 
 Mọi cột chuỗi mới parse bằng enum Zod lúc đọc. Không xoá, không đổi cột nào.
 
@@ -133,7 +135,8 @@ Mọi cột chuỗi mới parse bằng enum Zod lúc đọc. Không xoá, không
 | Nền chat OKR | `apps/agent-okr/` (workspace mới): `agent/agent.ts`, `agent/channels/eve.ts`, `agent/instructions/` (tĩnh + động), `agent/tools/nop_ban_nhap.ts`, chín tệp `disableTool()` cho công cụ dựng sẵn, `sandbox` deny-all, hook chi phí và kiểm toán; `package.json`, `tsconfig`, mục turbo, `scripts/start.ts` | Tập công cụ dựng từ rỗng — không có gì để rò; model tĩnh ghim ZDR; `thinkingLevel: low`; trần phiên riêng cho chat (vào 60 nghìn, ra 8 nghìn, 30 phút); `session.started` dựng gói từ `cuocSoanId` đọc ở `auth.initiator` (không đọc `current`, để thẻ sau không đổi đơn vị giữa phiên) |
 | Xưởng model ZDR | `packages/ai-okr/` (mới, nhỏ) | Tách `lib/okr/mo-hinh.ts` thành xưởng `(model, thẻ, trần ra mỗi lời gọi)`; `apps/agent` đổi sang xưởng này trong cùng lượt (một tệp) — hai app không nhập chéo gốc |
 | Gói dùng chung | `packages/validation`, `packages/db` | Mọi hàm đọc và khuôn mà hai app cùng cần sống ở gói, không ở `apps/agent/agent/lib` — `apps/agent-okr` không nhập gì từ `apps/agent` |
-| Cửa | `apps/app/app/eve/agents/okr/eve/v1/[...path]/route.ts` (mới), `apps/app/lib/agent-bridge.ts` (biến thể mint) | Kiểm đăng nhập + phạm vi `okr` (không đòi `doi-tac`); xác nhận `cuocSoanId` thuộc người gọi và cuộc còn `dang`; kiểm chủ phiên như cửa cũ; JWT audience riêng `crm-okr-agent`, bí mật riêng `OKR_AGENT_BRIDGE_SECRET`, mang `purpose: okr-soan`, `cuocSoanId`, không id đối tác; chuyển tới `OKR_AGENT_URL`; đếm `soLuot`, từ chối `het-luot-cuoc`. Hai biến mới khai ở `.env.example` |
+| Cửa | `apps/app/app/eve/agents/okr/eve/v1/[...path]/route.ts` (mới), `apps/app/lib/agent-bridge.ts` (biến thể mint) | Kiểm đăng nhập + phạm vi `okr` (không đòi `doi-tac`); xác nhận `cuocSoanId` thuộc người gọi và cuộc còn `dang`; kiểm chủ phiên như cửa cũ; JWT audience riêng `crm-okr-agent`, bí mật riêng `OKR_AGENT_BRIDGE_SECRET`, mang `purpose: okr-soan`, `cuocSoanId`, không id đối tác; chuyển tới `OKR_AGENT_URL`; đếm `soLuot`, từ chối `het-luot-cuoc`. Hai biến mới có **ba nhà** (`docs/environment.md`): `.env.example`, `globalPassThroughEnv` của `turbo.json` gốc, và `env.validation.ts` nếu API đọc (API không đọc — chỉ app Next) |
+| Phiên đo | `scripts/lan-do/phien-do.mjs`, `tien-de.mjs`, `canh-cay.mjs` | Phiên đo dựng thêm `apps/agent-okr` trên một cổng tự do trong dải 4100–4899, đặt `OKR_AGENT_URL` cho app đo, và cảnh cây với tới tiến trình đó (dấu mốc cây trả qua một route `/health` của app eve riêng); thiếu → mã 2. Không có bước này thì cửa mới trỏ `127.0.0.1:2100` mặc định — có thể là tiến trình của cây khác |
 | Kênh | `apps/agent-okr/agent/channels/eve.ts` | Nhận vai `okr`, `member`, `admin`, `owner` khi `purpose = okr-soan`; không có `localDev()` sau bước từ chối; principal không có quyền CRM. Cửa và kênh của tác nhân CRM gốc không đổi |
 | Thủ tục | `apps/api/src/okr/soan.service.ts` (mới), `okr.router.ts` | `soanSanSang`, `soanMo`, `soanDanhSachCuoc`, `soanDanhSach` (dòng nháp qua kiểm), `soanQuyet` (nhận · sửa · bác), `soanDuaVao` (một giao dịch), `soanAn` (quản trị), `soanSoDo` (quản trị); tất cả dưới `PhamViOkrMiddleware`, lộ REST như 9b nên có trần theo người |
 | Ghi có giao dịch | `apps/api/src/okr/okr.service.ts` | Dùng lại `createObjectiveTrong`, `createKeyResultTrong`, `addAlignmentTrong` (tách ở 9b hoặc tách thêm cùng khuôn) |
@@ -193,8 +196,9 @@ Gói ghi kèm bảng «đã cắt gì» vào cuộc để thẻ số đo và eva
   bản nháp; dòng không đổi giữ trạng thái đã quyết, dòng đã bác không được nộp lại (khoá
   dòng như 9b).
 - Hỏng: phiên chết hay quá 45 giây không có sự kiện → màn hiện lỗi có «Thử lại» (gửi lại
-  lượt trên cùng phiên nếu còn tiếp nối, mở phiên mới cùng cuộc nếu không); không bao giờ
-  hai phiên sống cùng một cuộc (`sessionId @unique` + kiểm ở `soanMo`).
+  lượt trên cùng phiên nếu còn tiếp nối, mở phiên mới cùng cuộc nếu không — `sessionId`
+  đổi, phiên cũ nối vào `cacPhien`); không bao giờ hai phiên sống cùng một cuộc
+  (`sessionId @unique` + kiểm ở `soanMo`).
 - Chi phí: hook ghi `AiChiPhi` theo phiên như 9a; `quaTranChung` chặn trước khi mở cuộc và
   trước mỗi lượt (cửa hỏi API một câu rẻ).
 
@@ -213,13 +217,23 @@ Gói ghi kèm bảng «đã cắt gì» vào cuộc để thẻ số đo và eva
   bỏ» và vẫn xem được.
 - Quyết: `nhan` · `sua` (giá trị cuối) · `bac` từng dòng qua `soanQuyet`; bác một Mục tiêu
   là bác cả KR con; sổ đề xuất khoá dòng đã bác (khoá = loại + tên chuẩn hoá).
-- «Đưa vào bộ OKR»: hộp xác nhận nêu n Mục tiêu, m KR sẽ tạo ở trạng thái nháp; một giao
-  dịch tạo Mục tiêu (`nhap`), KR (đích null → màn OKR đã cho phép KR chưa có đích ở trạng
-  thái nháp; nếu không thì tạo với đích tạm bằng khởi điểm và cờ «chưa đặt đích» — quyết ở
-  S2 sau khi đọc luật `createKeyResult`), Căn chỉnh; `OkrTrail` `note` `soan-okr:<id>`;
-  cuộc sang `da-dua-vao`; dòng đã nhận sang trạng thái cuối. Trần số mục của Chương trình
-  kiểm trước; chu kỳ phải ở pha lập kế hoạch; hai lần bấm hay đồng thời → cập nhật có điều
-  kiện trên `trangThai`, đúng một lần thành công.
+- **Số của KR do người điền trên thẻ.** Cột đích và khởi điểm của KR là bắt buộc (không
+  null) và luật là máy không ghi số: mỗi thẻ KR đã nhận có hai ô «Khởi điểm» (điền sẵn
+  khi gói có số, người sửa được) và «Đích» (luôn trống); người điền trước khi đưa vào. Nút
+  «Đưa vào bộ OKR» khoá kèm «Điền đích cho n KR đã nhận trước khi đưa vào» tới khi đủ.
+  Số người điền đi trong lời gọi `soanDuaVao` (mỗi dòng KR: `khoiDiem`, `dich`), không ghi
+  vào `OkrDeXuat.dich` (cột đó luôn null cho dòng nháp) — nên thước «0 số đích máy ghi»
+  so được: đích của KR tạo ra bằng đúng số trong lời gọi, và không dòng nháp nào mang số
+  đích.
+- «Đưa vào bộ OKR»: hộp xác nhận nêu n Mục tiêu, m KR (đích do bạn đặt) sẽ tạo ở trạng
+  thái nháp; một giao dịch tạo Mục tiêu (`nhap`), KR với số người điền, Căn chỉnh — qua
+  `createObjectiveTrong`, `createKeyResultTrong`, `addAlignmentTrong` nên luật
+  `assertSoTheoKieu` chạy như thường; `OkrTrail` `note` `soan-okr:<cuocSoanId>:<deXuatId>`;
+  `OkrDeXuat.taoRaId` ghi id bản ghi; cuộc sang `da-dua-vao`; dòng đã nhận sang trạng thái
+  cuối. Trần số mục của Chương trình kiểm trước; chu kỳ phải ở pha lập kế hoạch; hai lần
+  bấm hay đồng thời → cập nhật có điều kiện trên `trangThai`, đúng một lần thành công. Mục
+  tiêu nháp từ cuộc công bố bằng đường công bố thường, không cần sửa gì (`congBoCanKr` đã
+  thoả vì KR có đủ số).
 - Sau khi đưa vào, màn dẫn tới các Mục tiêu nháp ở «Theo đơn vị»; người điền đích và công
   bố như thường.
 
@@ -304,14 +318,15 @@ gieo thẳng bản đang dùng).
 | ST-soan-mo-dau | Màn soạn | Cột trái: lượt mở đầu «Kỳ trước phòng đạt…, cấp trên nhắm…»; 2–4 câu hỏi, mỗi câu hai `Suggestion`; ô soạn; cột phải: «Chưa có dòng nào» | Bấm gợi ý hay gõ |
 | ST-soan-thieu-boi-canh | Màn soạn | Dải nhắc «Chưa có Hồ sơ công ty và Chiến lược năm…» trên cột trái; quản trị có nút tới Kho tài liệu | Soạn tiếp hoặc đi viết trang |
 | ST-soan-dang-tra-loi | Màn soạn | `Shimmer` «Trợ lý OKR đang soạn…»; ô soạn khoá | Chờ |
-| ST-soan-ban-nhap | Màn soạn | Cột phải: thẻ Mục tiêu (tên, vì sao lúc này, loại) lồng thẻ KR (tên, kiểu, đơn vị, khởi điểm, «Đích: bạn đặt»), mỗi thẻ một câu vì sao, Căn chỉnh gợi ý; hàng nút Nhận · Sửa · Bác, một nút chính | Quyết hay nói tiếp |
+| ST-soan-ban-nhap | Màn soạn | Cột phải: thẻ Mục tiêu (tên, vì sao lúc này, loại) lồng thẻ KR (tên, kiểu, đơn vị, hai ô «Khởi điểm» · «Đích» người điền), mỗi thẻ một câu vì sao, Căn chỉnh gợi ý; hàng nút Nhận · Sửa · Bác, một nút chính | Quyết hay nói tiếp |
 | ST-soan-dong-sua | Màn soạn | Thẻ mở ô sửa, «Nhận bản đã sửa» · «Huỷ» | Sửa rồi nhận |
 | ST-soan-dong-da-quyet | Màn soạn | Thẻ thu gọn «Đã nhận» / «Đã bác»; bác Mục tiêu thu gọn cả KR con | Quyết dòng khác |
 | ST-soan-sua-qua-chat | Màn soạn | Sau «bỏ mục 2»: thẻ mục 2 chuyển «Đã bác», thẻ đổi có nhãn «vừa sửa» | Xem lại |
 | ST-soan-dong-bi-loai | Màn soạn | Không hiện dòng; chỉ dòng chat của Trợ lý nói «đã bỏ một KR vì có số không có trong dữ liệu» | — |
 | ST-soan-loi | Màn soạn | «Trợ lý OKR chưa trả lời được» + «Thử lại» | Thử lại |
 | ST-soan-het-luot | Màn soạn | Ô soạn khoá + «Đã dùng hết 12 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới» | Đưa vào / cuộc mới |
-| ST-soan-dua-vao-xac-nhan | Màn soạn | `ConfirmDialog` «Tạo 3 Mục tiêu và 8 KR ở trạng thái nháp cho Phòng X, Quý 1 2027?» | Xác nhận |
+| ST-soan-dua-vao-thieu-dich | Màn soạn | Nút «Đưa vào bộ OKR» khoá + «Điền đích cho 2 KR đã nhận trước khi đưa vào»; ô Đích trống đánh dấu lỗi | Điền đích |
+| ST-soan-dua-vao-xac-nhan | Màn soạn | `ConfirmDialog` «Tạo 3 Mục tiêu và 8 KR (đích do bạn đặt) ở trạng thái nháp cho Phòng X, Quý 1 2027?» | Xác nhận |
 | ST-soan-da-dua-vao | Màn soạn | «Đã tạo 3 Mục tiêu nháp» + nút «Xem ở Theo đơn vị»; bảng khoá | Đi điền đích |
 | ST-soan-dua-vao-loi | Màn soạn | Lỗi dưới nút («Vượt trần 5 Mục tiêu mỗi đơn vị» / «Chu kỳ không còn ở pha lập kế hoạch»), bảng giữ nguyên | Bác bớt / đóng |
 | ST-soan-hep | Màn soạn ≤ 640 | Hai tab «Trò chuyện» · «Bản nháp (n)» thay hai cột | Chuyển tab |
@@ -334,7 +349,8 @@ gieo thẳng bản đang dùng).
   trả lời; Enter gửi, Shift+Enter xuống dòng.
 - Bảng nháp đọc lại sau mỗi lượt của Trợ lý (không hỏi lại theo đồng hồ); một dòng sửa qua
   chat mang nhãn «vừa sửa» tới lượt kế.
-- Số trong bản nháp: chỉ số có trong gói hay trong chữ người gõ; ô đích luôn «bạn đặt».
+- Số trong bản nháp: chỉ số có trong gói hay trong chữ người gõ; ô Đích luôn trống, người
+  điền trên thẻ; «Đưa vào» khoá tới khi mọi KR đã nhận có khởi điểm và đích.
 - Chữ người gõ và chữ máy viết về dữ liệu: `translate="no"`.
 - Phím: Tab qua từng thẻ theo thứ tự Mục tiêu → KR; Esc trong ô sửa huỷ sửa.
 - Ngăn rộng chỉ khi ≥ 1024; ≤ 640 thành hai tab.
