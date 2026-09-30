@@ -28,7 +28,7 @@ import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, se
 import { giaiDoanListOutput, giaiDoanCreateInput, giaiDoanWriteOutput, giaiDoanRenameInput, giaiDoanReorderInput, giaiDoanArchiveInput } from "../giai-doan/giai-doan.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
-import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, donViSoanVao, soanSanSangOutput, soanMoVao, soanMoOutput, soanDanhSachCuocOutput, cuocIdInput, soanTangLuotOutput, soanDanhSachOutput, soanQuyetInput, soanQuyetOutput, soanDuaVaoOutput, datHienThiOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, chuyenDonViXemTruocOutput, chuyenDonViOutput, moCoiOutput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
+import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, donViSoanVao, soanSanSangOutput, soanMoVao, soanMoOutput, soanDanhSachCuocOutput, cuocIdInput, soanTangLuotOutput, soanDanhSachOutput, soanQuyetInput, soanQuyetOutput, soanDuaVaoOutput, soanAnOutput, soanSoDoInput, soanSoDoOutput, datHienThiOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, chuyenDonViXemTruocOutput, chuyenDonViOutput, moCoiOutput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
 import { soanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import { moRaInput, dongRaInput, xuatKyInput, chamKrInput, ghiDieuHocDuocInput, moLaiKyInput, mangSangInput } from "@crm/validation/okr-khep";
 import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYInput, yIdInput, dongYInput, niemPhongInput, taoChuDeInput, suaChuDeInput, chuDeIdInput, ganYInput, ketLuanInput } from "@crm/validation/okr-hoi-y";
@@ -732,6 +732,14 @@ const appRouter = t.router({
       .input(soanDuaVaoInput)
       .output(soanDuaVaoOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    soanAn: publicProcedure
+      .input(cuocIdInput)
+      .output(soanAnOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    soanSoDo: publicProcedure
+      .input(soanSoDoInput)
+      .output(soanSoDoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     moRa: publicProcedure
       .input(moRaInput)
       .output(okOutput)

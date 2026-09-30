@@ -411,6 +411,8 @@ const THU_TUC_OKR_LUOT_SOAN = [
 	"soanDanhSach",
 	"soanQuyet",
 	"soanDuaVao",
+	"soanAn",
+	"soanSoDo",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
@@ -1965,6 +1967,12 @@ const THU_TU_DOC_OKR = {
 		ma: "id",
 	},
 	"okr.program": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.soanAn": {
+		vao: (s) => ({ cuocSoanId: s.cuocSoan }),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
 	"okr.soanDanhSach": {
 		vao: (s) => ({ cuocSoanId: s.cuocSoan }),
 		K: "vang",
@@ -1983,6 +1991,12 @@ const THU_TU_DOC_OKR = {
 		K: "vang",
 		khac: 200,
 		chiQuanTri: OKR.thongDiep.khongSuaDuocDonVi,
+	},
+	"okr.soanSoDo": {
+		vao: cuaKy,
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
 	},
 	"okr.sucKhoe": {
 		vao: cuaKy,

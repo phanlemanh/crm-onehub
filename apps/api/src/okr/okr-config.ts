@@ -1,3 +1,4 @@
+import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	LOI_KHUON_CAP_NHAT,
@@ -20,7 +21,14 @@ export const OKR = {
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
 	troLy: { soLuotGanDay: 50, ghiChuVet: "tro-ly-okr:" },
-	soan: { ghiChuVet: "soan-okr:", soCuocGanDay: 50, ngayCongBo: 14 },
+	soan: {
+		ghiChuVet: "soan-okr:",
+		soCuocGanDay: 50,
+		ngayCongBo: 14,
+		tinhNang: "okr.soan" satisfies TinhNang,
+		suKien: { nguoiGo: "message.received", xongBuoc: "step.completed" },
+		phanVi: { giua: 0.5, cao: 0.9 },
+	},
 	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],

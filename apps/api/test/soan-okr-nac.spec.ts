@@ -10,6 +10,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { thangVN } from "@crm/db/ai-chi-phi";
+import { docCuoc } from "@crm/db/okr-cuoc-soan";
 import {
 	cauHinhAiLuc,
 	coChuKyLapKeHoachTrongThang,
@@ -24,15 +25,20 @@ import { AI_PHAM_VI } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { idMau } from "../scripts/okr-mau/nap";
 import type {
+	SoanAnOutput,
 	SoanDanhSachCuocOutput,
 	SoanMoOutput,
 	SoanSanSangOutput,
+	SoanSoDoOutput,
 } from "../src/okr/okr.contracts";
+import { OKR } from "../src/okr/okr-config";
 import {
+	CHU_KY_Q4,
 	DON_VI,
 	datPhaQuy4,
 	donSoan,
 	gieoCuoc,
+	gieoDongNhap,
 	goiSoan,
 	NAC_SOAN,
 	vaoDonVi,
@@ -595,6 +601,59 @@ describe("nac-an-cuoc", () => {
 				});
 			const moi = await mo("trpc", cookieTruong);
 			expect(moi).toMatchObject({ ok: true, cuoc: { nac: "bat" } });
+		},
+		CHO_DB,
+	);
+
+	test(
+		"cuộc ẩn quản trị mở xuất hiện ở ngăn quản trị: soanAn trả cuộc nấc an và dòng nháp, soanSoDo đếm nó ở cột an; trưởng phòng nhận 403 ở cả hai",
+		async () => {
+			await ghiCauHinh(app, cookieQuanTri, NAC_SOAN.an);
+			tienDongHo();
+			const m = await mo("trpc", cookieQuanTri);
+			if (!m.ok) throw new Error(`quan tri mo: ${m.lyDo}`);
+			const cuocAn = await docCuoc(db, m.cuoc.id);
+			if (!cuocAn) throw new Error("khong doc lai duoc cuoc an");
+			const [dong] = await gieoDongNhap(cuocAn, [
+				{ loai: "muc-tieu-moi", khoa: "m1", ten: "Mục tiêu soạn ở chế độ ẩn" },
+			]);
+			for (const duong of DUONG) {
+				const an = ok<SoanAnOutput>(
+					await goiSoan(
+						app,
+						"soanAn",
+						duong,
+						{ cuocSoanId: m.cuoc.id },
+						cookieQuanTri,
+					),
+					`an ${duong}`,
+				);
+				expect(an.cuoc).toMatchObject({ id: m.cuoc.id, nac: "an" });
+				expect(an.dong.map((d) => d.id)).toEqual([dong ?? ""]);
+				const tra = await goiSoan(
+					app,
+					"soanAn",
+					duong,
+					{ cuocSoanId: m.cuoc.id },
+					cookieTruong,
+				);
+				expect([tra.status, tra.loi]).toEqual([
+					403,
+					OKR.thongDiep.canQuyenQuanTri,
+				]);
+			}
+			const soDo = ok<SoanSoDoOutput>(
+				await goiSoan(
+					app,
+					"soanSoDo",
+					"trpc",
+					{ cycleId: CHU_KY_Q4 },
+					cookieQuanTri,
+				),
+				"so do",
+			);
+			expect([soDo.an.cuocMo, soDo.bat.cuocMo]).toEqual([1, 0]);
+			expect(soDo.cuocGanDay.map((c) => c.id)).toEqual([m.cuoc.id]);
 		},
 		CHO_DB,
 	);

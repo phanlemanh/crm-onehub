@@ -221,12 +221,12 @@ export function phanVi(so: readonly number[], p: number): number | null {
 	);
 }
 
-const tyLe = (tu: number, mau: number) =>
+export const tyLe = (tu: number, mau: number) =>
 	mau === 0
 		? null
 		: new Prisma.Decimal(tu).div(mau).toDecimalPlaces(CHU_SO_TY_LE).toNumber();
 
-const chiaTien = (tien: Prisma.Decimal, mau: number) =>
+export const chiaTien = (tien: Prisma.Decimal, mau: number) =>
 	mau === 0 ? null : tien.div(mau).toDecimalPlaces(CHU_SO_TIEN).toNumber();
 
 export const lamTronTien = (tien: Prisma.Decimal) =>

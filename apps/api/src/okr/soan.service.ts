@@ -23,7 +23,10 @@ import {
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
 import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
-import type { SoanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
+import {
+	parseDaCat,
+	type SoanDuaVaoInput,
+} from "@crm/validation/okr-cuoc-soan";
 import {
 	BadRequestException,
 	ConflictException,
@@ -36,6 +39,7 @@ import { InjectDatabase } from "../database/database.constants";
 import type {
 	CuocSoanOutput,
 	DonViSoanVao,
+	SoanAnOutput,
 	SoanDanhSachCuocOutput,
 	SoanDanhSachOutput,
 	SoanDuaVaoOutput,
@@ -44,6 +48,7 @@ import type {
 	SoanQuyetInput,
 	SoanQuyetOutput,
 	SoanSanSangOutput,
+	SoanSoDoOutput,
 	SoanTangLuotOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
@@ -52,6 +57,7 @@ import { OKR } from "./okr-config";
 import {
 	cuocCuaDong,
 	docBanNhapHien,
+	docMoiDong,
 	docMoiDongCuaCuoc,
 	dongHienTu,
 	ghiHienLuc,
@@ -60,6 +66,12 @@ import {
 	tenDichCua,
 } from "./soan-ban-nhap";
 import { duaVaoTrong } from "./soan-dua-vao";
+import {
+	docKySoan,
+	soDoSoanCua,
+	tienCua,
+	tienTheoCuoc,
+} from "./soan-so-do.service";
 
 type Tx = Prisma.TransactionClient;
 type DbHoacTx = Db | Tx;
@@ -485,6 +497,46 @@ export class SoanService {
 				throw new ConflictException(T.soan.cuocKhongDang);
 			return ghiQuyet(tx, { ...input, cuocSoanId, userId, now });
 		});
+	}
+
+	async an(userId: string, cuocSoanId: string): Promise<SoanAnOutput> {
+		await this.quyenOkr.assertQuanTri(userId);
+		const cuoc = await docCuoc(this.db, cuocSoanId);
+		if (!cuoc) throw new NotFoundException(T.soan.khongCoCuoc);
+		const [hien, ds, tien, q] = await Promise.all([
+			this.motCuocHien(this.db, cuoc),
+			docMoiDong(this.db, cuocSoanId),
+			tienTheoCuoc(this.db, [cuoc]),
+			this.quyenOkr.quyen(userId),
+		]);
+		const tenDich = await tenDichCua(
+			this.db,
+			ds,
+			this.quyenOkr.nguCanhXem(q, userId),
+		);
+		return {
+			cuoc: { ...hien, chiPhiUsd: tienCua(tien, cuoc.id) },
+			dong: ds.map((d) => dongHienTu(d, tenDich)),
+			daCat: cuoc.daCat === null ? null : parseDaCat(cuoc.daCat),
+		};
+	}
+
+	async soDo(userId: string, cycleId: string): Promise<SoanSoDoOutput> {
+		await this.quyenOkr.assertQuanTri(userId);
+		const so = await docKySoan(this.db, cycleId);
+		const ganDay = await this.cuocHien(
+			this.db,
+			so.cuoc.slice(0, OKR.soan.soCuocGanDay),
+		);
+		return {
+			cycleId,
+			bat: soDoSoanCua(so, "bat"),
+			an: soDoSoanCua(so, "an"),
+			cuocGanDay: ganDay.map((c) => ({
+				...c,
+				chiPhiUsd: tienCua(so.tien, c.id),
+			})),
+		};
 	}
 
 	async duaVao(

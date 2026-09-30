@@ -23,6 +23,7 @@ import {
 	laMucTieu,
 	tapHien,
 } from "./soan-ban-nhap";
+import { ghiChuVetSoan } from "./soan-so-do.service";
 
 type Tx = Prisma.TransactionClient;
 type TuChoi = Extract<SoanDuaVaoOutput, { ok: false }>;
@@ -194,7 +195,7 @@ export async function duaVaoTrong(
 			lyDo: "vuot-tran-muc-tieu",
 			chiTiet: T.vuotTranMucTieu((await okr.program(tx)).objectiveCap),
 		};
-	const note = (d: DongDoc) => `${OKR.soan.ghiChuVet}${cuoc.id}:${d.hang.id}`;
+	const note = (d: DongDoc) => ghiChuVetSoan(cuoc.id, d.hang.id);
 	const ghiTaoRa = (d: DongDoc, taoRaId: string) =>
 		tx.okrDeXuat.update({ where: { id: d.hang.id }, data: { taoRaId } });
 	const mucTieuIds: string[] = [];

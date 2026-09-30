@@ -7,6 +7,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
+import { bangDaCat } from "@crm/validation/okr-cuoc-soan";
 import { LY_DO_MO_COI, MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
@@ -835,7 +836,7 @@ export const soanSoDoOutput = z.object({
 export const soanAnOutput = z.object({
 	cuoc: cuocSoan.extend({ chiPhiUsd: z.number() }),
 	dong: z.array(dongSoan),
-	daCat: z.unknown().nullable(),
+	daCat: bangDaCat.nullable(),
 });
 
 const donViSoanVaoRest = {
@@ -881,3 +882,6 @@ export type SoanQuyetInput = z.infer<typeof soanQuyetInput>;
 export type SoanQuyetOutput = z.infer<typeof soanQuyetOutput>;
 export type LyDoQuyet = (typeof LY_DO_QUYET)[number];
 export type SoanDuaVaoOutput = z.infer<typeof soanDuaVaoOutput>;
+export type SoDoSoanNac = z.infer<typeof soDoSoanNac>;
+export type SoanSoDoOutput = z.infer<typeof soanSoDoOutput>;
+export type SoanAnOutput = z.infer<typeof soanAnOutput>;
