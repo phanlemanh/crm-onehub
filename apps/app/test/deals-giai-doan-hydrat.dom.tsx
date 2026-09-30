@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	spyOn,
+	test,
+} from "bun:test";
 import {
 	type DehydratedState,
 	dehydrate,
@@ -416,9 +424,11 @@ describe("ngan tao deal chi tao truy van khi mo", () => {
 		const dong = await dung(<CreateDealSheet />, "");
 		const khoaDong = khoaTrongCache(dong);
 		for (const khoa of KHOA_NGAN) {
-			expect({ ngan: "dong", khoa, coTrongCache: khoaDong.includes(khoa) }).toEqual(
-				{ ngan: "dong", khoa, coTrongCache: false },
-			);
+			expect({
+				ngan: "dong",
+				khoa,
+				coTrongCache: khoaDong.includes(khoa),
+			}).toEqual({ ngan: "dong", khoa, coTrongCache: false });
 		}
 		act(() => goc?.unmount());
 		document.body.innerHTML = "";
@@ -426,11 +436,13 @@ describe("ngan tao deal chi tao truy van khi mo", () => {
 		const mo = await dung(<CreateDealSheet />, "?new=true");
 		const khoaMo = khoaTrongCache(mo);
 		for (const khoa of KHOA_NGAN) {
-			expect({ ngan: "mo", khoa, coTrongCache: khoaMo.includes(khoa) }).toEqual({
-				ngan: "mo",
-				khoa,
-				coTrongCache: true,
-			});
+			expect({ ngan: "mo", khoa, coTrongCache: khoaMo.includes(khoa) }).toEqual(
+				{
+					ngan: "mo",
+					khoa,
+					coTrongCache: true,
+				},
+			);
 		}
 		expect(
 			document.querySelector("#create-deal-stage")?.textContent ?? "",
