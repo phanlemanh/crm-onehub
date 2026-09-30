@@ -38,6 +38,17 @@ export type NguCanhSo = PurposeContext &
 		readonly session: PurposeContext["session"] & { readonly id: string };
 	};
 
+async function viecTheoPhienGoc(goc: string) {
+	try {
+		return await docViecTheoPhienGoc(goc);
+	} catch (loi) {
+		console.warn(
+			`[so-chi-phi] không tra được việc của phiên gốc ${goc}: ${loi instanceof Error ? loi.message : String(loi)}`,
+		);
+		return null;
+	}
+}
+
 async function viecOkrCuaBuoc(
 	ctx: NguCanhSo,
 	subagent: string | null,
@@ -48,14 +59,7 @@ async function viecOkrCuaBuoc(
 		return { okrViec, taskId };
 	}
 	const goc = phienGocCua(ctx);
-	const hang = goc
-		? await docViecTheoPhienGoc(goc).catch((loi: unknown) => {
-				console.warn(
-					`[so-chi-phi] không tra được việc của phiên gốc ${goc}: ${loi instanceof Error ? loi.message : String(loi)}`,
-				);
-				return null;
-			})
-		: null;
+	const hang = goc ? await viecTheoPhienGoc(goc) : null;
 	if (!hang) return { okrViec, taskId };
 	return { okrViec: okrViecCuaLoai(hang.kind), taskId: hang.id };
 }

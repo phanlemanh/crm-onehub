@@ -644,7 +644,7 @@ describe("thuoc", () => {
 
 	test("bo kiem va so-lech-lot doc cung ket qua tren bang dang so", () => {
 		const coSo = DOC_SO.filter(([, ky]) =>
-			ky.every((cach) => typeof cach !== "string"),
+			ky.every((cach) => Array.isArray(cach)),
 		);
 		const lech = coSo.flatMap(([chu]) => {
 			const kiem = cachDocSo(chu);
