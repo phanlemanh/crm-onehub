@@ -17,6 +17,7 @@ export const OKR = {
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
 	troLy: { soLuotGanDay: 50, ghiChuVet: "tro-ly-okr:" },
+	soan: { ghiChuVet: "soan-okr:", soCuocGanDay: 50, ngayCongBo: 14 },
 	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
@@ -131,6 +132,27 @@ export const OKR = {
 			krHong: (thu: number, ten: string, cau: string) =>
 				`KR thứ ${thu} «${ten}»: ${cau}`,
 			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
+		},
+		soan: {
+			khongCoCuoc: (id: string) => `Không có cuộc soạn nào mang mã ${id}.`,
+			cuocAn: "Cuộc soạn này mở ở chế độ ẩn — chỉ quản trị xem và quyết được.",
+			cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
+			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
+			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
+			dongDaQuyet: "Dòng này đã được quyết rồi.",
+			chaDaBac: "Mục tiêu cha đã bị bác — không nhận KR dưới nó.",
+			canGiaTri: "Sửa cần một giá trị mới.",
+			cachKhongHop: "Cách quyết không hợp với loại dòng.",
+			kyKhongLapKeHoach: "Chu kỳ không còn ở pha lập kế hoạch.",
+			khongCoDongNhan: "Chưa có Mục tiêu nào được nhận để đưa vào.",
+			thieuSoKr: (ten: string) =>
+				`Điền khởi điểm và đích cho KR «${ten}» trước khi đưa vào.`,
+			soKrLa: (id: string) => `Dòng ${id} không phải KR đã nhận của cuộc này.`,
+			vuotTranMucTieu: (tran: number) =>
+				`Vượt trần ${tran} Mục tiêu mỗi đơn vị.`,
+			duaVaoHaiLan: "Cuộc này đã được đưa vào bộ OKR.",
+			donViThieuId: "Bộ phận cần divisionId, phòng ban cần departmentId.",
+			chuaCoKhoaMoHinh: "Chưa có khoá model cho Trợ lý OKR.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

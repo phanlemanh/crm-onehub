@@ -215,6 +215,12 @@ const DAU_VAO_HOP_LE = {
 			],
 		},
 	},
+	"okr.soanMo": {
+		cycleId: "khong-co",
+		level: "onehub",
+		divisionId: null,
+		departmentId: null,
+	},
 	"okr.luuTruMau": { id: "khong-co" },
 	"okr.khoiPhucMau": { id: "khong-co" },
 	"okr.taoTuMau": {
@@ -324,6 +330,9 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySoDo",
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_SOAN = ["soanSanSang", "soanMo", "soanDanhSachCuoc"].map(
+	(t) => `okr.${t}`,
+);
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1388,6 +1397,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_TRUOC_LUOT,
 				...THU_TUC_OKR_LUOT_CANH_KR,
 				...THU_TUC_OKR_LUOT_TRO_LY,
+				...THU_TUC_OKR_LUOT_SOAN,
 			].sort(),
 		);
 		const hong = Object.entries(THU_TUC_CANH_KR).flatMap(([t, khuon]) => {

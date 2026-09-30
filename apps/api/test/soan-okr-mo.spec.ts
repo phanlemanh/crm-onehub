@@ -1,0 +1,300 @@
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "bun:test";
+import { db } from "@crm/db";
+import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
+import type { NestExpressApplication } from "@nestjs/platform-express";
+import { idMau } from "../scripts/okr-mau/nap";
+import type {
+	SoanDanhSachCuocOutput,
+	SoanMoOutput,
+	SoanSanSangOutput,
+} from "../src/okr/okr.contracts";
+import { OKR } from "../src/okr/okr-config";
+import {
+	CHU_KY_Q4,
+	DON_VI,
+	datPhaQuy4,
+	donSoan,
+	gieoCuoc,
+	gieoDongNhap,
+	goiSoan,
+	NAC_SOAN,
+	vaoDonVi,
+} from "./soan-okr-san";
+import {
+	batDauMau,
+	CHO_DB,
+	dungUngDung,
+	ghiCauHinh,
+	ketThucMau,
+	ok,
+	phienMau,
+} from "./tro-ly-okr-san";
+
+const TRUONG = "nguyen-thi-lan";
+const QUAN_TRI = "le-hai-dang";
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+let app: NestExpressApplication;
+let cTruong = "";
+let cQuanTri = "";
+
+const sanSang = async (duong: "trpc" | "rest" = "trpc") =>
+	ok<SoanSanSangOutput>(
+		await goiSoan(
+			app,
+			"soanSanSang",
+			duong,
+			vaoDonVi(DON_VI.kdBac, duong),
+			cTruong,
+		),
+		"soanSanSang",
+	);
+
+const mo = async (them: { thuLaiCuocId?: string } = {}) =>
+	ok<SoanMoOutput>(
+		await goiSoan(
+			app,
+			"soanMo",
+			"trpc",
+			{ ...vaoDonVi(DON_VI.kdBac, "trpc"), ...them },
+			cTruong,
+		),
+		"soanMo",
+	);
+
+beforeAll(async () => {
+	await batDauMau();
+	await donSoan();
+	await datPhaQuy4("lap-ke-hoach");
+	app = await dungUngDung();
+	cTruong = await phienMau(TRUONG);
+	cQuanTri = await phienMau(QUAN_TRI);
+	await ghiCauHinh(app, cQuanTri, NAC_SOAN.bat);
+}, CHO_DB);
+
+afterAll(async () => {
+	await donSoan();
+	await ketThucMau(app);
+}, CHO_DB);
+
+beforeEach(async () => {
+	await donSoan();
+	await datPhaQuy4("lap-ke-hoach");
+});
+
+describe("soan-mo", () => {
+	test(
+		"san-sang: đơn vị bật, chưa có cuộc → bat, tranCuoc 3, thieuBoiCanh đúng kho tài liệu",
+		async () => {
+			const thieu = (await docTrangChienLuocDangDung(db)).length === 0;
+			for (const duong of ["trpc", "rest"] as const)
+				expect(await sanSang(duong)).toEqual({
+					bat: true,
+					nac: "bat",
+					cuocDang: null,
+					soCuocDaDung: 0,
+					tranCuoc: 3,
+					thieuBoiCanh: thieu,
+				});
+		},
+		CHO_DB,
+	);
+
+	test(
+		"mo: trả cuộc đủ trường theo khuôn D, phiên do API đúc; mở lần hai → con-cuoc-dang kèm cuộc đó",
+		async () => {
+			const kq = await mo();
+			if (!kq.ok) throw new Error(`mo: ${kq.lyDo}`);
+			const ky = await db.okrCycle.findUniqueOrThrow({
+				where: { id: CHU_KY_Q4 },
+				select: { name: true },
+			});
+			expect(kq.cuoc).toMatchObject({
+				cycleId: CHU_KY_Q4,
+				level: "phong-ban",
+				divisionId: null,
+				departmentId: DON_VI.kdBac.departmentId,
+				tenDonVi: "Kinh doanh miền Bắc",
+				tenChuKy: ky.name,
+				nguoiMo: { id: idMau("nguoi", TRUONG), name: "Nguyễn Thị Lan" },
+				nac: "bat",
+				trangThai: "dang",
+				soLuot: 0,
+				tranLuot: 12,
+				duaVaoLuc: null,
+				soDongNhan: 0,
+				soDongTong: 0,
+			});
+			expect(kq.cuoc.sessionId).toMatch(UUID);
+			expect(Number.isNaN(Date.parse(kq.cuoc.moLuc))).toBe(false);
+			const lai = await mo();
+			expect(lai).toMatchObject({
+				ok: false,
+				lyDo: "con-cuoc-dang",
+				cuocDang: { id: kq.cuoc.id },
+			});
+			expect(await sanSang()).toMatchObject({
+				bat: true,
+				cuocDang: { id: kq.cuoc.id },
+				soCuocDaDung: 1,
+			});
+		},
+		CHO_DB,
+	);
+
+	test(
+		"het-cuoc-ky: ba cuộc trong kỳ (mọi trạng thái) → sẵn sàng và mở đều từ chối",
+		async () => {
+			for (const trangThai of ["bo", "da-dua-vao", "bo"] as const) {
+				const c = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
+				await db.okrCuocSoan.update({
+					where: { id: c.id },
+					data: { trangThai },
+				});
+			}
+			expect(await sanSang()).toEqual({ bat: false, lyDo: "het-cuoc-ky" });
+			expect(await mo()).toEqual({
+				ok: false,
+				lyDo: "het-cuoc-ky",
+				cuocDang: null,
+			});
+		},
+		CHO_DB,
+	);
+
+	test(
+		"ky-khong-lap-ke-hoach: chu kỳ đang chạy → 400 có tên ở sẵn sàng và mở",
+		async () => {
+			await datPhaQuy4("dang-chay");
+			for (const ten of ["soanSanSang", "soanMo"] as const) {
+				const tra = await goiSoan(
+					app,
+					ten,
+					"trpc",
+					vaoDonVi(DON_VI.kdBac, "trpc"),
+					cTruong,
+				);
+				expect(tra.status, ten).toBe(400);
+				expect(tra.loi).toBe(OKR.thongDiep.soan.kyKhongLapKeHoach);
+			}
+			expect(await db.okrCuocSoan.count()).toBe(0);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"don-vi-thieu-id: phòng ban không kèm departmentId → 400 có tên",
+		async () => {
+			const tra = await goiSoan(
+				app,
+				"soanSanSang",
+				"trpc",
+				{
+					cycleId: CHU_KY_Q4,
+					level: "phong-ban",
+					divisionId: null,
+					departmentId: null,
+				},
+				cTruong,
+			);
+			expect(tra.status).toBe(400);
+			expect(tra.loi).toBe(OKR.thongDiep.soan.donViThieuId);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"thu-lai: đổi phiên trên cùng cuộc, nối cacPhien; cuộc khác đơn vị → 400; cuộc đã bỏ → 409",
+		async () => {
+			const dau = await mo();
+			if (!dau.ok) throw new Error(`mo: ${dau.lyDo}`);
+			const lai = await mo({ thuLaiCuocId: dau.cuoc.id });
+			if (!lai.ok) throw new Error(`thu lai: ${lai.lyDo}`);
+			expect(lai.cuoc.id).toBe(dau.cuoc.id);
+			expect(lai.cuoc.sessionId).toMatch(UUID);
+			expect(lai.cuoc.sessionId).not.toBe(dau.cuoc.sessionId);
+			const hang = await db.okrCuocSoan.findUniqueOrThrow({
+				where: { id: dau.cuoc.id },
+				select: { sessionId: true, cacPhien: true },
+			});
+			expect(hang.sessionId).toBe(lai.cuoc.sessionId);
+			expect(hang.cacPhien).toEqual([dau.cuoc.sessionId, lai.cuoc.sessionId]);
+			const khac = await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI });
+			const traKhac = await goiSoan(
+				app,
+				"soanMo",
+				"trpc",
+				{ ...vaoDonVi(DON_VI.kdBac, "trpc"), thuLaiCuocId: khac.id },
+				cQuanTri,
+			);
+			expect(traKhac.status).toBe(400);
+			expect(traKhac.loi).toBe(OKR.thongDiep.soan.cuocKhacDonVi);
+			await db.okrCuocSoan.update({
+				where: { id: dau.cuoc.id },
+				data: { trangThai: "bo" },
+			});
+			const traBo = await goiSoan(
+				app,
+				"soanMo",
+				"trpc",
+				{ ...vaoDonVi(DON_VI.kdBac, "trpc"), thuLaiCuocId: dau.cuoc.id },
+				cTruong,
+			);
+			expect(traBo.status).toBe(409);
+			expect(traBo.loi).toBe(OKR.thongDiep.soan.cuocKhongDang);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"danh-sach-cuoc: người không quản trị không thấy cuộc ẩn; đếm dòng nhận và dòng tổng bỏ bi-loai",
+		async () => {
+			const thay = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
+			await db.okrCuocSoan.update({
+				where: { id: thay.id },
+				data: { trangThai: "da-dua-vao" },
+			});
+			const an = await gieoCuoc({
+				donVi: DON_VI.kdBac,
+				nguoiMo: QUAN_TRI,
+				nac: "an",
+			});
+			const mtMau = {
+				loai: "muc-tieu-moi",
+				khoa: "m",
+				ten: "Mục tiêu mẫu",
+			} as const;
+			await gieoDongNhap(thay, [mtMau], "nhan");
+			await gieoDongNhap(thay, [{ ...mtMau, khoa: "m2" }], "sua");
+			await gieoDongNhap(thay, [{ ...mtMau, khoa: "m3" }], "bac");
+			await gieoDongNhap(thay, [{ ...mtMau, khoa: "m4" }], "bi-loai");
+			const vao = vaoDonVi(DON_VI.kdBac, "rest");
+			const truong = ok<SoanDanhSachCuocOutput>(
+				await goiSoan(app, "soanDanhSachCuoc", "rest", vao, cTruong),
+				"danh sach truong",
+			);
+			expect(truong.tranCuoc).toBe(3);
+			expect(truong.cuoc.map((c) => c.id)).toEqual([thay.id]);
+			expect(truong.cuoc[0]).toMatchObject({
+				trangThai: "da-dua-vao",
+				soDongNhan: 2,
+				soDongTong: 3,
+			});
+			const quanTri = ok<SoanDanhSachCuocOutput>(
+				await goiSoan(app, "soanDanhSachCuoc", "rest", vao, cQuanTri),
+				"danh sach quan tri",
+			);
+			expect(quanTri.cuoc.map((c) => c.id).sort()).toEqual(
+				[thay.id, an.id].sort(),
+			);
+		},
+		CHO_DB,
+	);
+});

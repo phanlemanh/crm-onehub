@@ -54,6 +54,7 @@ import {
 	createKrInput,
 	createObjectiveInput,
 	cyclesOutput,
+	donViSoanVao,
 	followOutput,
 	guiCapNhatOutput,
 	idInput,
@@ -75,6 +76,10 @@ import {
 	programOutput,
 	setCyclePhaseInput,
 	setProgramInput,
+	soanDanhSachCuocOutput,
+	soanMoOutput,
+	soanMoVao,
+	soanSanSangOutput,
 	thanhVienOutput,
 	transferOkrOutput,
 	troLyAnInput,
@@ -143,6 +148,7 @@ import {
 	toanCanhOutput,
 } from "./okr-xem.contracts";
 import { OkrXemService } from "./okr-xem.service";
+import { SoanService } from "./soan.service";
 import { TroLyOkrService } from "./tro-ly.service";
 
 const TAG = ["OKR"];
@@ -160,6 +166,7 @@ export class OkrRouter {
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
+		@Inject(SoanService) private readonly soan: SoanService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -291,6 +298,42 @@ export class OkrRouter {
 	})
 	xuHuongKr(@Input() input: z.infer<typeof xuHuongKrInput>) {
 		return this.troLy.xuHuongKr(input.keyResultId);
+	}
+
+	@Query({
+		input: donViSoanVao,
+		output: soanSanSangOutput,
+		meta: restMeta("GET", "/okr/soan/ready", TAG),
+	})
+	soanSanSang(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof donViSoanVao>,
+	) {
+		return this.soan.sanSang(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: soanMoVao,
+		output: soanMoOutput,
+		meta: restMeta("POST", "/okr/soan/sessions", TAG),
+	})
+	soanMo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanMoVao>,
+	) {
+		return this.soan.mo(ctx.user.id, input);
+	}
+
+	@Query({
+		input: donViSoanVao,
+		output: soanDanhSachCuocOutput,
+		meta: restMeta("GET", "/okr/soan/sessions", TAG),
+	})
+	soanDanhSachCuoc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof donViSoanVao>,
+	) {
+		return this.soan.danhSachCuoc(ctx.user.id, input);
 	}
 
 	@Mutation({
