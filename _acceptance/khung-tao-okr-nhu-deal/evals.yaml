@@ -158,9 +158,9 @@ evals:
     cmd: config:executors.script.kto_man_giu
     steps:
       - "Kịch bản lái màn của hop-thoai-giu-cho-dang-nhap trên vỏ ngăn"
-    expected: "exit 0; hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs đạt đủ các bước như lúc ký, hộp Mục tiêu tìm bằng [data-hop-thoai-muc-tieu]; diff của script so với merge-base chỉ đổi bộ chọn đó."
+    expected: "exit 0; rang/giu-cho-han-che.mjs chạy hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs trong phiên đo riêng (kto-e17) và in nguyên văn đầu ra: đạt khi kịch bản đó thoát 0, HOẶC khi đủ bảy bước in «dat», không dòng hỏng nào khác, và lỗi console duy nhất là lỗi hydrat trên /deals — lỗi đó có sẵn trên onehub trước lượt này (đo trên bản sạch của onehub 30/09), là hạn chế đã biết chủ kho duyệt 30/09 khi cho chạy vòng 5; hộp Mục tiêu tìm bằng [data-hop-thoai-muc-tieu]. Chiều đỏ ghim: đầu ra mẫu có lỗi console khác phải in 'loi console khac' và mã 1; đầu ra mẫu có một bước hỏng phải in 'thieu buoc dat' và mã 1 (--tu-tep)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/**", "packages/ui/src/components/sheet.tsx", "_acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "packages/ui/src/components/sheet.tsx", "_acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs", "_acceptance/khung-tao-okr-nhu-deal/rang/giu-cho-han-che.mjs"]
 
   - id: E18
     criterion: AC-10

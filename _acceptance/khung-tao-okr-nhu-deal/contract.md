@@ -66,6 +66,10 @@ Quét bằng `morphological-scan` ngay trong phiên (30/09), bản đầy đủ 
 
 ## Notes
 
+### Known limits
+
+- E17: màn Deals báo lỗi hydrat trên console khi tải; lỗi có sẵn trên onehub trước lượt này (đo trên bản sạch của onehub 30/09) nên kịch bản «hộp giữ chỗ» thoát 1 dù bảy bước đều đạt. Chủ kho duyệt 30/09 ghi thành hạn chế đã biết khi cho chạy vòng 5; lỗi Deals tách thành việc riêng.
+
 - 2026-09-30, Cổng Bằng chứng (Manh Phan): phần đầu cột góp ý lệch trái 11 px, lệch dọc so với form, khác kiểu chữ với tiêu đề ngăn, hai dấu X sát nhau — lỗi có từ `the-gop-y-okr`, hộp thoại cũ cũng vậy. Chủ kho chọn sửa ngay trong lượt này: thêm AC-14, duyệt lại Cổng Phạm vi, chấm vòng 4 vượt trần ba vòng.
 
 - Ghim lại ở S5 (không phải một AC): `the-gop-y-okr`, `tro-ly-okr-de-xuat`, `hop-thoai-giu-cho-dang-nhap` — thước hoặc bài kiểm của chúng đổi trong lượt này. Eval nhìn bằng trình duyệt của ba hồ sơ đó không chạy trong làn ghim lại; AC-10 chạy lại chúng trong S4 của hồ sơ này.
