@@ -57,7 +57,7 @@ const VET = {
 				"an.mutate({ id: ky.id, lyDo: lyDo.trim() });",
 				'an.mutate({ id: ky.id, lyDo: "" });',
 			),
-		ghim: /note doc duoc «[^»]*» khac ly do da go/,
+		ghim: /note doc duoc «[^»]*» khac ly do da go «[^»]*»; okr\.anChuKy tra 4\d\d/,
 	},
 };
 
@@ -183,6 +183,112 @@ async function chieuDo() {
 	process.exit(ket.every((k) => k.ket === "DO DUNG GHIM") ? 0 : 1);
 }
 
+const ngayVN = (d) =>
+	new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(d);
+const ngay = (y, m, d) =>
+	`${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+const cuoiThang = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+const dauQuy = (y, q) => ngay(y, q * 3 - 2, 1);
+const cuoiQuy = (y, q) => ngay(y, q * 3, cuoiThang(y, q * 3));
+
+const KHOA_HANG = ["Y", "T", "D", "N", "DD", "A"];
+
+function keHoach(homNay) {
+	const nam = Number(homNay.slice(0, 4));
+	const ke = nam + 1;
+	const truoc = nam - 1;
+	return {
+		namKe: ke,
+		namTruoc: truoc,
+		Y: { kind: "nam", cha: null, tu: ngay(ke, 1, 1), den: ngay(ke, 12, 31) },
+		T: { kind: "quy", cha: "Y", tu: dauQuy(ke, 2), den: cuoiQuy(ke, 2) },
+		D: { kind: "quy", cha: "Y", tu: dauQuy(ke, 1), den: cuoiQuy(ke, 1) },
+		N: {
+			kind: "nam",
+			cha: null,
+			tu: ngay(truoc, 1, 1),
+			den: ngay(truoc, 12, 31),
+		},
+		DD: {
+			kind: "quy",
+			cha: "N",
+			tu: dauQuy(truoc, 4),
+			den: cuoiQuy(truoc, 4),
+		},
+		A: {
+			kind: "quy",
+			cha: "N",
+			tu: dauQuy(truoc, 3),
+			den: cuoiQuy(truoc, 3),
+		},
+	};
+}
+
+function theoNam(cycles) {
+	const nam = cycles.filter((c) => c.kind === "nam");
+	const coCha = new Set(nam.map((c) => c.id));
+	return [
+		...nam.flatMap((n) => [n, ...cycles.filter((c) => c.parentId === n.id)]),
+		...cycles.filter(
+			(c) =>
+				c.kind !== "nam" && (c.parentId === null || !coCha.has(c.parentId)),
+		),
+	];
+}
+
+function thuTuMan(rows) {
+	const api = [...rows].sort(
+		(a, b) =>
+			b.startsOn.localeCompare(a.startsOn) ||
+			(a.kind < b.kind ? -1 : a.kind > b.kind ? 1 : 0),
+	);
+	return [
+		...theoNam(api.filter((c) => !c.an)),
+		...theoNam(api.filter((c) => c.an)),
+	].map((c) => c.id);
+}
+
+function hangKeHoach(homNay, an, bo = []) {
+	const k = keHoach(homNay);
+	return KHOA_HANG.filter((x) => !bo.includes(x)).map((x) => ({
+		id: x,
+		kind: k[x].kind,
+		parentId: k[x].cha,
+		startsOn: k[x].tu,
+		an: an.includes(x),
+	}));
+}
+
+const CANH_THU_TU = [
+	["luc mo", [["A"], []], ["Y", "T", "D", "N", "DD", "A"]],
+	["sau go T, an D", [["A", "D"], ["T"]], ["Y", "N", "DD", "D", "A"]],
+	["sau hien lai D", [["A"], ["T"]], ["Y", "D", "N", "DD", "A"]],
+];
+
+if (process.argv.includes("--thu-tu")) {
+	let sai = 0;
+	for (const d of [
+		"2026-09-30",
+		"2026-10-01",
+		"2026-12-31",
+		"2027-01-01",
+		ngayVN(new Date()),
+	]) {
+		const k = keHoach(d);
+		const hopLe =
+			k.D.tu > d && k.T.tu > k.D.den && k.DD.den < d && k.A.den < k.DD.tu;
+		for (const [canh, [an, bo], mong] of CANH_THU_TU) {
+			const thay = thuTuMan(hangKeHoach(d, an, bo));
+			const dung = JSON.stringify(thay) === JSON.stringify(mong) && hopLe;
+			if (!dung) sai += 1;
+			console.log(
+				`${dung ? "DUNG" : "SAI "} hom nay ${d} (Y ${k.namKe}, N ${k.namTruoc}) ${canh}: ${thay.join(",")}${hopLe ? "" : " — ngay gieo khong hop le"}`,
+			);
+		}
+	}
+	process.exit(sai === 0 ? 0 : 1);
+}
+
 if (process.argv.includes("--chieu-do")) await chieuDo();
 
 const { default: puppeteer } = await import("puppeteer-core");
@@ -244,17 +350,8 @@ if (chuKySan > 0)
 		"    Thuoc can kho khong co chu ky nao de sau hang da gieo bang chi co sau hang cua thuoc.",
 	);
 
-const ngayVN = (d) =>
-	new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }).format(d);
 const HOM_NAY = ngayVN(new Date());
-const NAM = Number(HOM_NAY.slice(0, 4));
-const QUY = Math.ceil(Number(HOM_NAY.slice(5, 7)) / 3);
-const QUY_T = QUY < 4 ? QUY + 1 : QUY - 1;
-const ngay = (y, m, d) =>
-	`${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-const cuoiThang = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
-const dauQuy = (y, q) => ngay(y, q * 3 - 2, 1);
-const cuoiQuy = (y, q) => ngay(y, q * 3, cuoiThang(y, q * 3));
+const KE = keHoach(HOM_NAY);
 const ngayDb = (d) => (d ? d.toISOString().slice(0, 10) : null);
 
 const NGUOI = {
@@ -264,20 +361,20 @@ const NGUOI = {
 
 const TEN = {
 	P: `Phòng Kế hoạch chu kỳ ${MA}`,
-	Y: `Năm ${NAM} ${MA}`,
-	T: `Quý ${QUY_T}/${NAM} ${MA}`,
-	D: `Quý ${QUY}/${NAM} ${MA}`,
-	N: `Năm ${NAM - 1} ${MA}`,
-	DD: `Quý 4/${NAM - 1} ${MA}`,
-	A: `Quý 3/${NAM - 1} ${MA}`,
-	tMoi: `Quý ${QUY_T}/${NAM} dời lịch ${MA}`,
-	dMoi: `Quý ${QUY}/${NAM} đối tác ${MA}`,
+	Y: `Năm ${KE.namKe} ${MA}`,
+	T: `Quý 2/${KE.namKe} ${MA}`,
+	D: `Quý 1/${KE.namKe} ${MA}`,
+	N: `Năm ${KE.namTruoc} ${MA}`,
+	DD: `Quý 4/${KE.namTruoc} ${MA}`,
+	A: `Quý 3/${KE.namTruoc} ${MA}`,
+	tMoi: `Quý 2/${KE.namKe} dời lịch ${MA}`,
+	dMoi: `Quý 1/${KE.namKe} đối tác ${MA}`,
 	mtD: "Đối tác mới được đỡ trọn tháng đầu",
 	mtA: "Mạng lưới đối tác phía Nam phủ đủ tỉnh",
 	lyDoA: "Mở trùng với quý đã có",
 	lyDoD: "Mở nhầm quý đối tác.",
 };
-const T_CUOI_MOI = ngay(NAM, QUY_T * 3, 15);
+const T_CUOI_MOI = ngay(KE.namKe, 6, 15);
 const THU_MOI = 3;
 
 const phienCua = (email) =>
@@ -345,6 +442,7 @@ const hong = [];
 const anh = [];
 const mang = [];
 const loiConsole = [];
+let lanGoLai = 0;
 const kiem = (nhan, dat) => {
 	khang += 1;
 	if (!dat) hong.push(nhan);
@@ -406,40 +504,34 @@ async function gieo() {
 		id: K.P,
 		userId: id.admin,
 	});
-	K.Y = await taoKy("nam", TEN.Y, null, ngay(NAM, 1, 1), ngay(NAM, 12, 31));
-	K.D = await taoKy("quy", TEN.D, K.Y, dauQuy(NAM, QUY), cuoiQuy(NAM, QUY));
+	const ky = (khoa) =>
+		taoKy(
+			KE[khoa].kind,
+			TEN[khoa],
+			KE[khoa].cha ? K[KE[khoa].cha] : null,
+			KE[khoa].tu,
+			KE[khoa].den,
+		);
+	K.Y = await ky("Y");
+	K.D = await ky("D");
 	await doiPha(K.D, "dang-chay");
 	K.mtD = await taoMt(K.D, TEN.mtD);
-	K.T = await taoKy("quy", TEN.T, K.Y, dauQuy(NAM, QUY_T), cuoiQuy(NAM, QUY_T));
-	K.N = await taoKy(
-		"nam",
-		TEN.N,
-		null,
-		ngay(NAM - 1, 1, 1),
-		ngay(NAM - 1, 12, 31),
-	);
-	K.DD = await taoKy(
-		"quy",
-		TEN.DD,
-		K.N,
-		dauQuy(NAM - 1, 4),
-		cuoiQuy(NAM - 1, 4),
-	);
+	K.T = await ky("T");
+	K.N = await ky("N");
+	K.DD = await ky("DD");
 	await doiPha(K.DD, "dang-chay");
 	await doiPha(K.DD, "cham-diem");
 	await doiPha(K.DD, "da-dong");
-	K.A = await taoKy("quy", TEN.A, K.N, dauQuy(NAM - 1, 3), cuoiQuy(NAM - 1, 3));
+	K.A = await ky("A");
 	K.mtA = await taoMt(K.A, TEN.mtA);
 	await lam(cookie.admin, "okr.anChuKy", { id: K.A, lyDo: TEN.lyDoA });
 	const dong = await db.okrCycle.findMany({
 		where: { id: { in: G.ky } },
 		select: { id: true, name: true, phase: true, anLuc: true },
 	});
-	const nhan = Object.fromEntries(
-		["Y", "T", "D", "N", "DD", "A"].map((k) => [K[k], k]),
-	);
+	const nhan = Object.fromEntries(KHOA_HANG.map((k) => [K[k], k]));
 	console.log(
-		`  gieo: ${dong.map((r) => `${nhan[r.id]}=${r.phase}${r.anLuc ? "/an" : ""}`).join(" ")}; hom nay ${HOM_NAY}, D = quy ${QUY}, T = quy ${QUY_T}`,
+		`  gieo: ${dong.map((r) => `${nhan[r.id]}=${r.phase}${r.anLuc ? "/an" : ""}`).join(" ")}; hom nay ${HOM_NAY}, Y ${KE.namKe} (D quy 1, T quy 2), N ${KE.namTruoc} (Đ quy 4, A quy 3)`,
 	);
 }
 
@@ -655,6 +747,7 @@ async function go(trang, sel, chu) {
 		);
 		thay = sau.gia;
 		if (thay === chu) return true;
+		lanGoLai += 1;
 		console.log(
 			`  go lai ${sel} (lan ${lan}): o giu «${thay}», ${sau.cuO ? "van la o cu" : "o da bi dung lai giua luc go"}`,
 		);
@@ -741,6 +834,38 @@ async function tenKhopDb(t, nhan) {
 		lech.length === 0 && thieu.length === 0,
 	);
 	return man;
+}
+
+async function kiemThuTu(man, canh, nhan) {
+	const [tenCanh, , khoa] = CANH_THU_TU[canh];
+	const mong = khoa.map((k) => K[k]);
+	const rows = await db.okrCycle.findMany({
+		where: { id: { in: G.ky } },
+		select: {
+			id: true,
+			kind: true,
+			parentId: true,
+			startsOn: true,
+			anLuc: true,
+		},
+	});
+	const theoDb = thuTuMan(
+		rows.map((r) => ({
+			id: r.id,
+			kind: r.kind,
+			parentId: r.parentId,
+			startsOn: ngayDb(r.startsOn),
+			an: r.anLuc !== null,
+		})),
+	);
+	const tenKhoa = (ids) =>
+		ids.map((x) => KHOA_HANG.find((k) => K[k] === x) ?? x).join(",");
+	const thay = man.map((h) => h.id);
+	e14(
+		`${nhan}: thu tu hang ${tenCanh} ${khoa.join(",")} = thu tu man suy tu DB ${tenKhoa(theoDb)} (thay ${tenKhoa(thay)})`,
+		JSON.stringify(thay) === JSON.stringify(mong) &&
+			JSON.stringify(theoDb) === JSON.stringify(mong),
+	);
 }
 
 async function moMenu(t, ky) {
@@ -861,12 +986,7 @@ const CHU_MUC = {
 async function buocMenu() {
 	const t = await moCaiDat(cookie.admin);
 	const man = await tenKhopDb(t, "buoc 3 luc mo");
-	const thuTu = man.map((h) => h.id);
-	const mongThuTu = ["Y", "T", "D", "N", "DD", "A"].map((k) => K[k]);
-	e14(
-		`buoc 3: thu tu hang Y,T,D,N,Đ,A (thay ${JSON.stringify(man.map((h) => h.ten))})`,
-		JSON.stringify(thuTu) === JSON.stringify(mongThuTu),
-	);
+	await kiemThuTu(man, 0, "buoc 3");
 	const hangA = man.at(-1);
 	e14(
 		`buoc 3: hang cuoi la A mang nhan «${C.chuKy.daAn}» (thay «${hangA?.chu}»)`,
@@ -980,7 +1100,7 @@ async function buocSuaMoiO() {
 		r?.name === TEN.tMoi &&
 			r.endsOn === T_CUOI_MOI &&
 			r.updateWeekday === THU_MOI &&
-			r.startsOn === dauQuy(NAM, QUY_T),
+			r.startsOn === KE.T.tu,
 	);
 	await tenKhopDb(t, "sau sua T");
 	await t.close();
@@ -1185,6 +1305,7 @@ async function buocAn() {
 		`buoc 7: hang D xuong khoi da an cuoi bang, nhan «${C.chuKy.daAn}» (thay vi tri ${iD}/${man.length}, «${man[iD]?.chu}»)`,
 		iD > 0 && cuoi && man[iD].chu.includes(C.chuKy.daAn),
 	);
+	await kiemThuTu(man, 1, "buoc 7");
 	await chup(t, "buoc-an-xong.png");
 	const r = await chupCy(K.D);
 	const vet = await db.okrTrail.findMany({
@@ -1195,10 +1316,15 @@ async function buocAn() {
 	console.log(
 		`  E15 DB sau an D: anLuc ${r?.anLuc?.toISOString() ?? null}, okrTrail an-chu-ky ${JSON.stringify(note)}`,
 	);
-	if (!(vet.length === 1 && note[0] === TEN.lyDoD))
+	if (!(vet.length === 1 && note[0] === TEN.lyDoD)) {
+		const tuChoi =
+			mang
+				.map((d) => d.match(/ (4\d\d) POST \S*okr\.anChuKy/)?.[1])
+				.find(Boolean) ?? null;
 		console.log(
-			`  E15: note doc duoc «${note.length === 0 ? "(khong co dong an-chu-ky)" : note.join(" | ")}» khac ly do da go «${TEN.lyDoD}»`,
+			`  E15: note doc duoc «${note.length === 0 ? "(khong co dong an-chu-ky)" : note.join(" | ")}» khac ly do da go «${TEN.lyDoD}»; okr.anChuKy tra ${tuChoi ?? "khong co phan hoi 4xx"}`,
 		);
+	}
 	e15(
 		`sau an D: anLuc khac null va dung mot okrTrail an-chu-ky note bang ly do da go (thay ${r?.anLuc ? "co anLuc" : "anLuc null"}, ${JSON.stringify(note)})`,
 		r?.anLuc != null && vet.length === 1 && note[0] === TEN.lyDoD,
@@ -1257,6 +1383,7 @@ async function buocHienLai() {
 	const man = await hangMan(t);
 	const iD = man.findIndex((x) => x.id === K.D);
 	const iA = man.findIndex((x) => x.id === K.A);
+	await kiemThuTu(man, 2, "buoc 9");
 	e14(
 		`buoc 9: D roi cuoi bang, dung truoc khoi da an va khong con nhan «${C.chuKy.daAn}» (thay D ${iD}, A ${iA}, «${man[iD]?.chu}»)`,
 		iD >= 0 &&
@@ -1380,6 +1507,7 @@ try {
 	console.log(
 		`man-sua-an: ${khang} khang dinh, ${hong.length} hong, ${anh.length} anh (${anh.join(", ")}), ${Math.round((Date.now() - bat) / 1000)} s`,
 	);
+	console.log(`  go phai thu lai: ${lanGoLai}`);
 	console.log(`  anh o ${relative(GOC, BANG_CHUNG)}/`);
 	for (const h of hong) console.log(`  HONG: ${h}`);
 	ma = hong.length === 0 ? 0 : 1;
