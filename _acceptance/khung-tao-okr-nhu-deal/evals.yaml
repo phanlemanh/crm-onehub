@@ -120,7 +120,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kto_gui_dung
-    expected: "exit 0; bài DOM (-t gui-dung) với tRPC giả ghi lời gọi: tạo Mục tiêu, sửa Mục tiêu, thêm KR, sửa KR qua ngăn — mỗi ca gọi đúng một thủ tục (okr.createObjective, okr.updateObjective, okr.createKeyResult, okr.updateKeyResult) đúng một lần, payload parse bằng schema input thật của thủ tục nhập từ apps/api/src/okr (không so với object viết tay) và bằng payload của cùng thao tác trên mã merge-base ghi sẵn trong bài bằng chính các hàm dựng payload của hộp cũ; in bốn payload. Chiều đỏ ghim: bản sao bỏ whyNow khỏi payload tạo Mục tiêu phải làm bài đỏ 'payload lech: createObjective'."
+    expected: "exit 0; bài DOM (-t gui-dung) với tRPC giả ghi lời gọi: tạo Mục tiêu, sửa Mục tiêu, thêm KR, sửa KR qua ngăn — mỗi ca gọi đúng một thủ tục (okr.createObjective, okr.updateObjective, okr.createKeyResult, okr.updateKeyResult) đúng một lần, payload parse bằng schema input thật của thủ tục nhập từ apps/api/src/okr (không so với object viết tay) và bằng payload của cùng thao tác trên mã merge-base ghi sẵn trong bài bằng chính các hàm dựng payload của hộp cũ; in bốn payload. Chiều đỏ ghim: bản sao gửi whyNow rỗng thay cho chữ đã gõ khi tạo Mục tiêu phải làm bài đỏ 'payload lech: createObjective'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
 
