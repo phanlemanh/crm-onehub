@@ -706,7 +706,7 @@ describe("khung-xuong", () => {
 	];
 
 	test("khung-xuong: ba ca viet truoc — lan dau treo roi giai rong; giu cho du lieu rong cua X roi giai 2 muc tieu; giu cho du lieu co the cua X — dang cho thi khung xuong, khong the cua X, khong cau chua dat OKR", async () => {
-		const ra: Record<string, unknown> = {};
+		const ra: Record<string, ReturnType<typeof doc> | string> = {};
 
 		const giaiLanDau = giuLai("pb:pb-kho");
 		const s1 = await mo("pb:pb-kho", null, false);
