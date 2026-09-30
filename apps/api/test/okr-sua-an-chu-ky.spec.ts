@@ -855,13 +855,16 @@ describe("ky-mac-dinh", () => {
 
 				await an(b);
 				const sauAnB = await doc<Cycles>("okr.cycles");
-				const conHien = sauAnB.cycles.filter(
-					(c) => c.kind === "quy" && c.anLuc === null,
-				).length;
+				const conHien = sauAnB.cycles
+					.filter((c) => c.anLuc === null)
+					.map((c) => c.id);
 				expect({
 					thuocAB: [a, b].includes(sauAnB.currentId ?? ""),
-					nullKhiHetQuy: conHien === 0 ? sauAnB.currentId : null,
-				}).toEqual({ thuocAB: false, nullKhiHetQuy: null });
+					laKyConHienHoacNull:
+						sauAnB.currentId === null
+							? conHien.length === 0
+							: conHien.includes(sauAnB.currentId),
+				}).toEqual({ thuocAB: false, laKyConHienHoacNull: true });
 
 				const moi = ok<{ id: string }>(
 					await goi("okr.createCycle", {
@@ -1062,11 +1065,18 @@ async function chayCap(
 	ten: string,
 	cap: CapGieo,
 	thuTu: ThuTuTha,
-): Promise<{ cap: string; thuTu: ThuTuTha; ra: string[]; batBien: string[] }> {
+): Promise<{
+	cap: string;
+	thuTu: ThuTuTha;
+	benSauDoiKhoa: boolean;
+	ra: string[];
+	batBien: string[];
+}> {
 	const [dau, sau] = thuTu === "x-truoc" ? [cap.x, cap.y] : [cap.y, cap.x];
 	const daToi = chan(dau.buoc, dau.id);
 	const pDau = dau.lam();
 	let pSau: Promise<TraLoi> | null = null;
+	let benSauDoiKhoa = false;
 	try {
 		await Promise.race([
 			daToi,
@@ -1075,7 +1085,7 @@ async function chayCap(
 			}),
 		]);
 		pSau = sau.lam();
-		await choBenKiaDoiKhoa(pSau);
+		benSauDoiKhoa = await choBenKiaDoiKhoa(pSau);
 	} finally {
 		tha();
 	}
@@ -1084,6 +1094,7 @@ async function chayCap(
 	return {
 		cap: ten,
 		thuTu,
+		benSauDoiKhoa,
 		ra: [tra(rx), tra(ry)],
 		batBien: await cap.batBien(),
 	};
@@ -1099,7 +1110,13 @@ describe("dong-thoi", () => {
 				for (const thuTu of ["x-truoc", "y-truoc"] as const) {
 					const cap = await gieo();
 					thuc.push(await chayCap(ten, cap, thuTu));
-					mong.push({ cap: ten, thuTu, ra: cap.mong[thuTu], batBien: [] });
+					mong.push({
+						cap: ten,
+						thuTu,
+						benSauDoiKhoa: true,
+						ra: cap.mong[thuTu],
+						batBien: [],
+					});
 				}
 			expect(thuc.length).toBe(8);
 			expect(

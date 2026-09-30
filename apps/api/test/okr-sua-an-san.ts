@@ -68,7 +68,7 @@ export function tha(): void {
 
 export async function choBenKiaDoiKhoa(
 	benKia: Promise<unknown>,
-): Promise<void> {
+): Promise<boolean> {
 	let xong = false;
 	const danhDau = () => {
 		xong = true;
@@ -79,10 +79,11 @@ export async function choBenKiaDoiKhoa(
 		const [dong] = await db.$queryRaw<{ n: number }[]>`
 			SELECT count(*)::int AS n FROM pg_stat_activity
 			WHERE datname = current_database() AND wait_event_type = 'Lock'`;
-		if ((dong?.n ?? 0) > 0) return;
+		if ((dong?.n ?? 0) > 0) return true;
 		await Bun.sleep(NHIP_CHO_MS);
 	}
 	if (!xong) throw new Error("bên thứ hai không đứng chờ khoá hàng chu kỳ");
+	return false;
 }
 
 export function dungSanSuaAn(): void {
