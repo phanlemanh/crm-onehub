@@ -146,7 +146,7 @@ export function ChanDuaVao({ s, cuoc }: { s: CuocDangSoan; cuoc: CuocSoan }) {
 		? (tuChoi.chiTiet ?? m.banNhap.loiDuaVao[tuChoi.lyDo])
 		: s.duaVao.error?.message;
 	const khoa =
-		soMucTieu === 0 || s.thieu.length > 0 || s.duaVao.isPending || s.busy;
+		soMucTieu === 0 || s.thieu.length > 0 || s.duaVao.isPending || s.dangTraLoi;
 	return (
 		<Field data-chan="dua-vao">
 			<Button

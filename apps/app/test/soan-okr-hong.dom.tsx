@@ -19,6 +19,7 @@ import {
 	noiTroLy,
 	q,
 	SOAN_UI,
+	soLanMoAgent,
 	troi,
 } from "./khung-soan-okr";
 
@@ -191,5 +192,87 @@ describe("hong — Thu lai", () => {
 			"doc lai bang",
 		);
 		expect(daGui).toEqual([]);
+	});
+});
+
+describe("hong — luong nap len dang chay", () => {
+	const LUOT_CHAY = [
+		{ type: "message.received", meta: { at: "2026-12-01T03:00:00.000Z" } },
+		{ type: "turn.started", meta: { at: "2026-12-01T03:00:01.000Z" } },
+	];
+	const dangChay = () =>
+		datThread({
+			status: "working",
+			session: { sessionId: "phien-1", streamIndex: 2 },
+			events: LUOT_CHAY as never,
+		});
+	const oSoan = () => q("[data-o-soan] textarea") as HTMLTextAreaElement;
+	const chiBao = () =>
+		q('[role="status"][aria-live="polite"][aria-busy="true"]')?.textContent ??
+		null;
+
+	test("mở lại khi Trợ lý đang trả lời: hiện «đang soạn», ô soạn khoá, không gợi ý", async () => {
+		dangChay();
+		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
+		await moMan();
+		expect(chiBao()).toContain(m.hoiThoai.dangSoan);
+		expect(oSoan().disabled).toBe(true);
+		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
+		expect(chu("[data-o-soan-ghi]")).toBe(m.hoiThoai.khoaKhiSoan);
+		expect(q("[data-goi-y]")).toBeNull();
+		expect((q('[data-nut="dua-vao"]') as HTMLButtonElement).disabled).toBe(
+			true,
+		);
+	});
+
+	test("mở lại khi lượt đã xong: không chỉ báo, ô soạn mở", async () => {
+		datThread({
+			status: "ready",
+			session: {
+				sessionId: "phien-1",
+				streamIndex: 3,
+				continuationToken: "eve:song",
+			},
+			events: [...LUOT_CHAY, { ...TIN_CU, type: "session.waiting" }] as never,
+		});
+		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
+		await moMan();
+		expect(chiBao()).toBeNull();
+		expect(oSoan().disabled).toBe(false);
+		expect(chu("[data-o-soan-ghi]")).toBe(m.hoiThoai.phim);
+	});
+
+	test("lượt đang chạy xong ở lần hỏi lại: ô soạn mở, bảng đọc lại", async () => {
+		batDongHoGia();
+		dangChay();
+		await moMan();
+		expect(oSoan().disabled).toBe(true);
+		const doc = goiCua("okr.soanDanhSach").length;
+		const moTruoc = soLanMoAgent;
+		datThread({
+			status: "ready",
+			session: {
+				sessionId: "phien-1",
+				streamIndex: 3,
+				continuationToken: "eve:song",
+			},
+			events: [...LUOT_CHAY, { ...TIN_CU, type: "session.waiting" }] as never,
+		});
+		await troi(SOAN_UI.hoiLuongMs + 200);
+		await cho(() => oSoan()?.disabled === false, "o soan mo lai");
+		expect(chiBao()).toBeNull();
+		expect(goiCua("okr.soanDanhSach").length).toBeGreaterThan(doc);
+		expect(soLanMoAgent).toBe(moTruoc + 1);
+	});
+
+	test("lượt đang chạy mà 45 giây không có sự kiện: báo lỗi, có Thử lại", async () => {
+		batDongHoGia();
+		dangChay();
+		await moMan();
+		await troi(SOAN_UI.hanKhongSuKienMs - 1_000);
+		expect(coLoi()).toBe(false);
+		await troi(1_100);
+		expect(coLoi()).toBe(true);
+		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
 	});
 });

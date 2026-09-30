@@ -81,12 +81,16 @@ export function usePhienCuoc(cuoc: CuocSoan) {
 		queryKey: ["soan-thread", cuoc.id, idThan],
 		enabled: cuoc.trangThai === "dang" && !laChoGiuPhien(idThan),
 		staleTime: SOAN_UI.giuPhienMs,
+		gcTime: 0,
 		refetchOnWindowFocus: false,
+		refetchInterval: (q) =>
+			q.state.data?.status === "working" ? SOAN_UI.hoiLuongMs : false,
 		queryFn: ({ signal }) =>
 			loadThread(idThan, okrSoanHeader(cuoc.id), signal, OKR_SOAN_CUA.host),
 	});
+	const luong = thread.data?.status === "working" ? "chay" : "yen";
 	return {
-		khoa: `${idThan}#${phien.lan}`,
+		khoa: `${idThan}#${phien.lan}#${luong}`,
 		thread,
 		napLai: () =>
 			setPhien((p) =>
@@ -171,12 +175,13 @@ export function useCuocSoan({
 		},
 	});
 	const busy = agent.status === "submitted" || agent.status === "streaming";
-	const soSuKien = agent.events.length;
+	const dangTraLoi = busy || thread?.status === "working";
+	const soSuKien = agent.events.length + eventsOf(thread).length;
 
 	const [lanThu, setLanThu] = useState(0);
 	const [hetGioTai, setHetGioTai] = useState<string | null>(null);
 	const moc = `${lanThu}:${soSuKien}`;
-	const qua45s = busy && hetGioTai === moc;
+	const qua45s = dangTraLoi && hetGioTai === moc;
 	const baoHetGio = () => setHetGioTai(moc);
 
 	const cuoiCung = useRef<string | null>(null);
@@ -249,6 +254,7 @@ export function useCuocSoan({
 	return {
 		agent,
 		busy,
+		dangTraLoi,
 		moc,
 		baoHetGio,
 		docLai,

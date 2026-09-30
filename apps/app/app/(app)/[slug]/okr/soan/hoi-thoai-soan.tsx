@@ -191,7 +191,7 @@ function OSoan({
 	);
 	const ghi = s.hetLuot
 		? m.hoiThoai.hetLuot(String(cuoc.tranLuot))
-		: s.busy
+		: s.dangTraLoi
 			? m.hoiThoai.khoaKhiSoan
 			: m.hoiThoai.phim;
 	const tuChoiMo = moMoi.data?.ok === false ? moMoi.data.lyDo : null;
@@ -268,7 +268,7 @@ export function HoiThoaiSoan({
 	const tuTroLy = s.transcript.filter((t) => !t.mine);
 	const cuoiTroLy = tuTroLy.at(-1)?.id ?? null;
 	const loiMo = s.moLai.data?.ok === false ? s.moLai.data.lyDo : null;
-	const rong = s.transcript.length === 0 && !s.busy;
+	const rong = s.transcript.length === 0 && !s.dangTraLoi;
 	return (
 		<>
 			{thieuBoiCanh ? (
@@ -319,7 +319,7 @@ export function HoiThoaiSoan({
 							/>
 						)),
 					)}
-					{s.busy ? (
+					{s.dangTraLoi ? (
 						<div
 							className="flex min-w-0 gap-2"
 							role="status"

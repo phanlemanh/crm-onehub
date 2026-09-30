@@ -134,8 +134,8 @@ function Than({
 	);
 	return (
 		<>
-			{s.busy ? <CanhLuot batDau={s.luotBatDau} xong={s.docLai} /> : null}
-			{s.busy ? (
+			{s.dangTraLoi ? <CanhLuot batDau={s.luotBatDau} xong={s.docLai} /> : null}
+			{s.dangTraLoi ? (
 				<HenGio key={s.moc} ms={SOAN_UI.hanKhongSuKienMs} het={s.baoHetGio} />
 			) : null}
 			{hep ? (
