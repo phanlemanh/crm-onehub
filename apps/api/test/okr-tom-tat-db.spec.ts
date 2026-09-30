@@ -27,6 +27,7 @@ import type { CauTomTat } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { idMau } from "../scripts/okr-mau/nap";
+import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { congTy } from "./okr-mau-san";
 import {
 	batDauMau,
@@ -66,10 +67,10 @@ const phongLuuTru = congTy().phongBanLuuTru.map((p) => idMau("pb", p.ma));
 
 const vietSo = (n: number) => String(n).replace(".", ",");
 
-const goiCua = (departmentId: string, now = LUC) =>
+const goiCua = (departmentId: string, moc = LUC) =>
 	dungGoiTomTat(
 		db,
-		{ cycleId: KY, departmentId, tuan: TUAN, now },
+		{ cycleId: KY, departmentId, tuan: TUAN, moc },
 		LUAT_TOM_TAT,
 	);
 
@@ -92,9 +93,11 @@ type Chon = {
 	p: string;
 	q: string;
 	r: string;
+	s: string;
 	goi: Map<string, GoiTomTat>;
 	cauB: CauTomTat[];
 	o1: string;
+	s0Kr: string;
 	xId: string;
 	dId: string;
 	kKr: string;
@@ -141,9 +144,9 @@ function soThamChieu(goi: GoiTomTat, n: NguonGoi): number[] {
 	return [
 		n.truoc,
 		n.chenhLech === null ? null : Math.abs(n.chenhLech),
+		n.tienDo,
 		kr?.khoiDiem,
 		kr?.dich,
-		kr?.tienDo,
 	].flatMap((x) => (x === null || x === undefined ? [] : [x]));
 }
 
@@ -160,7 +163,24 @@ function motNguonMoiKr(goi: GoiTomTat): NguonGoi[] {
 	});
 }
 
-function chonB(goi: GoiTomTat) {
+const TIEN_DO_DAY = 100;
+
+function nguonTienDo(goi: GoiTomTat, krTay: ReadonlySet<string>) {
+	return (n: NguonGoi) => {
+		const kr = goi.krs.find((k) => k.id === n.keyResultId);
+		return (
+			kr !== undefined &&
+			krTay.has(kr.id) &&
+			(kr.kieu === "tang-toi" || kr.kieu === "giam-xuong") &&
+			n.tienDo !== null &&
+			n.tienDo !== TIEN_DO_DAY &&
+			n.tienDo !== n.giaTri &&
+			!soThamChieu(goi, { ...n, tienDo: null }).includes(n.tienDo)
+		);
+	};
+}
+
+function chonB(goi: GoiTomTat, krTay: ReadonlySet<string>) {
 	const nguon = motNguonMoiKr(goi);
 	const theoMt = new Map<string, NguonGoi[]>();
 	for (const n of nguon) {
@@ -174,11 +194,14 @@ function chonB(goi: GoiTomTat) {
 		);
 		if (!x) continue;
 		const conLai = ds2.filter((n) => n.id !== x.id);
-		const o1 = [...theoMt.keys()].find((m) => m !== o2);
-		const s0 = o1 ? theoMt.get(o1)?.[0] : undefined;
+		const hopTienDo = nguonTienDo(goi, krTay);
+		const o1 = [...theoMt.keys()].find(
+			(m) => m !== o2 && (theoMt.get(m) ?? []).some(hopTienDo),
+		);
+		const s0 = o1 ? theoMt.get(o1)?.find(hopTienDo) : undefined;
 		const [d, k] = conLai;
-		if (!o1 || !s0 || !d || !k) continue;
-		return { o1, s0, x, d, k };
+		if (!o1 || !s0 || s0.tienDo === null || !d || !k) continue;
+		return { o1, s0, tienDo: s0.tienDo, x, d, k };
 	}
 	return null;
 }
@@ -219,9 +242,17 @@ beforeAll(async () => {
 		const g = await goiCua(pb);
 		if (g) goi.set(pb, g);
 	}
+	const krTay = new Set(
+		(
+			await db.okrKeyResult.findMany({
+				where: { source: "tay" },
+				select: { id: true },
+			})
+		).map((k) => k.id),
+	);
 	let pick: (ReturnType<typeof chonB> & { b: string }) | null = null;
 	for (const [pb, g] of goi) {
-		const ket = chonB(g);
+		const ket = chonB(g, krTay);
 		if (ket) {
 			pick = { ...ket, b: pb };
 			break;
@@ -232,8 +263,8 @@ beforeAll(async () => {
 		(pb) =>
 			pb !== pick.b && motNguonMoiKr(goi.get(pb) as GoiTomTat).length >= 2,
 	);
-	const [a, c, p, q, r] = conLai;
-	if (!a || !c || !p || !q || !r)
+	const [a, c, p, q, r, luuTru] = conLai;
+	if (!a || !c || !p || !q || !r || !luuTru)
 		throw new Error(`bo mau thieu phong co cap nhat: ${conLai.length}`);
 	chon = {
 		a,
@@ -242,6 +273,7 @@ beforeAll(async () => {
 		p,
 		q,
 		r,
+		s: luuTru,
 		goi,
 		cauB: [
 			{ vanBan: "Phòng giữ nhịp cập nhật đều đặn.", nguon: [pick.s0.id] },
@@ -251,8 +283,13 @@ beforeAll(async () => {
 			},
 			{ vanBan: "Có ghi chú mới trong tuần.", nguon: [pick.d.id] },
 			{ vanBan: "Phòng có thêm cập nhật trong tuần.", nguon: [pick.k.id] },
+			{
+				vanBan: `Tiến độ đạt ${vietSo(pick.tienDo)}% theo lần cập nhật này.`,
+				nguon: [pick.s0.id],
+			},
 		],
 		o1: pick.o1,
+		s0Kr: pick.s0.keyResultId,
 		xId: pick.x.id,
 		dId: pick.d.id,
 		kKr: pick.k.keyResultId,
@@ -395,7 +432,7 @@ describe("ghi", () => {
 					inputHash: "hash-a",
 					nac: "bat",
 					cau,
-					now: LUC,
+					moc: LUC,
 				},
 				LUAT_TOM_TAT,
 			);
@@ -432,7 +469,7 @@ describe("ghi", () => {
 						inputHash: "hash-a2",
 						nac: "bat",
 						cau: cau.slice(0, 1),
-						now: LUC,
+						moc: LUC,
 					},
 					LUAT_TOM_TAT,
 				);
@@ -508,7 +545,7 @@ describe("doc", () => {
 					inputHash: "hash-b",
 					nac: "bat",
 					cau: chon.cauB,
-					now: LUC,
+					moc: LUC,
 				},
 				LUAT_TOM_TAT,
 			);
@@ -517,7 +554,7 @@ describe("doc", () => {
 			const goiB = chon.goi.get(chon.b) as GoiTomTat;
 			const nguonX = goiB.nguon.find((n) => n.id === chon.xId);
 			const krX = goiB.krs.find((k) => k.id === nguonX?.keyResultId);
-			expect(chiSoCau(ban)).toEqual([0, 1, 2, 3]);
+			expect(chiSoCau(ban)).toEqual([0, 1, 2, 3, 4]);
 			expect({
 				id: ban?.id,
 				tuan: ban?.tuan,
@@ -552,6 +589,53 @@ describe("doc", () => {
 	);
 
 	test(
+		"doc-tien-do-lan-dan: KR có lần cập nhật mới sau khi ghi bản thì câu nói tiến độ của lần được dẫn vẫn còn",
+		async () => {
+			const kr = await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: chon.s0Kr },
+				select: { ownerUserId: true, targetValue: true, currentValue: true },
+			});
+			const dich = kr.targetValue.toNumber();
+			const capNhat = app.get(OkrCapNhatService);
+			const luc = SAU(10 * MINUTE_MS);
+			const { sessionId } = await capNhat.moCapNhat(
+				kr.ownerUserId,
+				{ entry: "tab" },
+				luc,
+			);
+			await capNhat.guiCapNhat(
+				kr.ownerUserId,
+				{
+					sessionId,
+					items: [
+						{
+							keyResultId: chon.s0Kr,
+							value: dich,
+							confidence: "cao",
+							note: "",
+						},
+					],
+				},
+				luc,
+			);
+			const sau = await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: chon.s0Kr },
+				select: { currentValue: true },
+			});
+			expect({
+				truoc: kr.currentValue.toNumber() === dich,
+				sau: sau.currentValue.toNumber(),
+			}).toEqual({ truoc: false, sau: dich });
+			const ca = chiSoCau(await docB(quanTri));
+			expect(
+				ca.includes(4) ? "tien do lan dan con" : "tien do lan dan mat: cau 4",
+			).toBe("tien do lan dan con");
+			expect(ca).toEqual([0, 1, 2, 3, 4]);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"doc-loc-quyen: Mục tiêu nguồn chuyển giới hạn thì người không xem được mất câu đó, quản trị vẫn thấy",
 		async () => {
 			await db.okrObjective.update({
@@ -578,7 +662,7 @@ describe("doc", () => {
 			expect({
 				nguoiXem: chiSoCau(await docB(nguoiXem)),
 				quanTri: chiSoCau(await docB(quanTri)),
-			}).toEqual({ nguoiXem: [1, 2, 3], quanTri: [0, 1, 2, 3] });
+			}).toEqual({ nguoiXem: [1, 2, 3], quanTri: [0, 1, 2, 3, 4] });
 			nguoiBiChan = nguoiXem;
 		},
 		CHO_DB,
@@ -601,7 +685,7 @@ describe("doc", () => {
 				qt.includes(1) || nx.includes(1) ? "so cu lot: cau 1" : "so cu da bo",
 			).toBe("so cu da bo");
 			expect({ quanTri: qt, nguoiXem: nx }).toEqual({
-				quanTri: [0, 2, 3],
+				quanTri: [0, 2, 3, 4],
 				nguoiXem: [2, 3],
 			});
 		},
@@ -615,7 +699,7 @@ describe("doc", () => {
 			expect({
 				quanTri: chiSoCau(await docB(quanTri)),
 				nguoiXem: chiSoCau(await docB(nguoiBiChan)),
-			}).toEqual({ quanTri: [0, 3], nguoiXem: [3] });
+			}).toEqual({ quanTri: [0, 3, 4], nguoiXem: [3] });
 		},
 		CHO_DB,
 	);
@@ -628,7 +712,7 @@ describe("doc", () => {
 			expect({
 				quanTri: chiSoCau(await docB(quanTri)),
 				nguoiXem: nx === null ? null : nx.cau.length,
-			}).toEqual({ quanTri: [0], nguoiXem: 0 });
+			}).toEqual({ quanTri: [0, 4], nguoiXem: 0 });
 		},
 		CHO_DB,
 	);
@@ -654,7 +738,7 @@ describe("doc", () => {
 					inputHash: "hash-c",
 					nac: "an",
 					cau: [{ vanBan: "Phòng giữ nhịp cập nhật đều đặn.", nguon: [n.id] }],
-					now: LUC,
+					moc: LUC,
 				},
 				LUAT_TOM_TAT,
 			);
@@ -671,6 +755,110 @@ describe("doc", () => {
 					LUAT_TOM_TAT,
 				),
 			).toBeNull();
+		},
+		CHO_DB,
+	);
+});
+
+describe("hang-cu-hong", () => {
+	test(
+		"hang-cu-hong: một hàng cũ hỏng khuôn của tuần trước không làm hỏng bản đang đọc hay bảng quản trị",
+		async () => {
+			const taskId = await viecGieo({
+				ma: "b-cu",
+				departmentId: chon.b,
+				trangThai: "xong",
+			});
+			await db.okrTomTat.create({
+				data: {
+					taskId,
+					cycleId: KY,
+					departmentId: chon.b,
+					tuan: new Date(`${dauTuanVN(SAU(-7 * NGAY_MS))}T00:00:00.000Z`),
+					cau: { nac: "bat", cau: "hong" },
+					soCauBo: 0,
+					trangThai: "hien",
+					inputHash: "hash-b-cu",
+					createdAt: SAU(-7 * NGAY_MS),
+				},
+			});
+			const ban = await docB(quanTri);
+			const qt = await banTuanChoQuanTri(
+				db,
+				{ cycleId: KY, now: SAU(45 * MINUTE_MS) },
+				LUAT_TOM_TAT,
+			);
+			expect({
+				cau: chiSoCau(ban),
+				tuan: qt.tuan,
+				b: qt.phong.find((d) => d.departmentId === chon.b)?.soCau,
+			}).toEqual({ cau: [0, 4], tuan: TUAN, b: 5 });
+		},
+		CHO_DB,
+	);
+});
+
+describe("luu-tru", () => {
+	test(
+		"phong-luu-tru-co-ban: phòng có bản rồi bị lưu trữ thì người xem nhận null và bảng quản trị bỏ phòng đó",
+		async () => {
+			const goi = chon.goi.get(chon.s) as GoiTomTat;
+			const [n] = goi.nguon;
+			if (!n) throw new Error("phong s thieu nguon");
+			const taskId = await viecGieo({
+				ma: "s",
+				departmentId: chon.s,
+				trangThai: "xong",
+			});
+			const ket = await ghiTomTat(
+				db,
+				{
+					taskId,
+					cycleId: KY,
+					departmentId: chon.s,
+					tuan: TUAN,
+					moc: LUC,
+					inputHash: "hash-s",
+					nac: "bat",
+					cau: [{ vanBan: "Phòng giữ nhịp cập nhật đều đặn.", nguon: [n.id] }],
+				},
+				LUAT_TOM_TAT,
+			);
+			const doc = () =>
+				docTomTatChoNguoiXem(
+					db,
+					{
+						cycleId: KY,
+						departmentId: chon.s,
+						nguoiXem: quanTri,
+						now: SAU(45 * MINUTE_MS),
+					},
+					LUAT_TOM_TAT,
+				);
+			const coTrongQuanTri = async () =>
+				(
+					await banTuanChoQuanTri(
+						db,
+						{ cycleId: KY, now: SAU(45 * MINUTE_MS) },
+						LUAT_TOM_TAT,
+					)
+				).phong.some((p) => p.departmentId === chon.s);
+			const truoc = {
+				trangThai: ket.trangThai,
+				soCau: (await doc())?.cau.length ?? null,
+				quanTri: await coTrongQuanTri(),
+			};
+			await db.department.update({
+				where: { id: chon.s },
+				data: { archivedAt: SAU(40 * MINUTE_MS) },
+			});
+			expect({
+				truoc,
+				sau: { ban: await doc(), quanTri: await coTrongQuanTri() },
+			}).toEqual({
+				truoc: { trangThai: "hien", soCau: 1, quanTri: true },
+				sau: { ban: null, quanTri: false },
+			});
 		},
 		CHO_DB,
 	);
@@ -697,7 +885,7 @@ describe("quan-tri", () => {
 			) => `${nac} ${trangThai} ${soCau} ${bo}`;
 			const mongDoi = new Map<string, string>([
 				[chon.a, dong("bat", "can-xem", 3, 2)],
-				[chon.b, dong("bat", "hien", 4, 0)],
+				[chon.b, dong("bat", "hien", 5, 0)],
 				[chon.c, dong("an", "hien", 1, 0)],
 				[chon.p, dong("bat", "dang-soan", 0, 0)],
 				[chon.q, dong("bat", "dang-soan", 0, 0)],
@@ -707,9 +895,10 @@ describe("quan-tri", () => {
 				const d = theo.get(pb);
 				return `${pb}: ${d ? dong(d.nac, d.trangThai, d.soCau, d.soCauBo) : "khong co dong"}`;
 			});
-			const muon = phongMau.map(
-				(pb) =>
-					`${pb}: ${mongDoi.get(pb) ?? dong("bat", "chua-cap-nhat", 0, 0)}`,
+			const muon = phongMau.map((pb) =>
+				pb === chon.s
+					? `${pb}: khong co dong`
+					: `${pb}: ${mongDoi.get(pb) ?? dong("bat", "chua-cap-nhat", 0, 0)}`,
 			);
 			expect(ban.tuan).toBe(TUAN);
 			expect(thuc).toEqual(muon);

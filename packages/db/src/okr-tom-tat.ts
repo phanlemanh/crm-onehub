@@ -49,6 +49,7 @@ export type NguonGoi = {
 	truoc: number | null;
 	chenhLech: number | null;
 	chenhTuTin: ChenhTuTin | null;
+	tienDo: number | null;
 	ngay: string;
 };
 
@@ -56,7 +57,6 @@ export type KrKiemGoi = {
 	id: string;
 	khoiDiem: number | null;
 	dich: number | null;
-	tienDo: number | null;
 };
 
 export type GoiKiem = {
@@ -69,9 +69,13 @@ export type GoiKiem = {
 
 export type CauBan = { vanBan: string; nguon: string[] };
 
-export type CauBanBo = CauBan & { maBo: string };
+export type CauBanBo<M extends string = string> = CauBan & { maBo: M };
 
-export type NoiDungBan = { nac: NacBan; cau: CauBan[]; bo: CauBanBo[] };
+export type NoiDungBan<M extends string = string> = {
+	nac: NacBan;
+	cau: CauBan[];
+	bo: CauBanBo<M>[];
+};
 
 export type ViecDoc =
 	| { viec: "de-xuat" }
@@ -83,18 +87,18 @@ export type ViecDoc =
 			nac: NacBan;
 	  };
 
-export type LuatTomTat = {
+export type LuatTomTat<M extends string = string> = {
 	kiemBan: (
 		cau: CauBan[],
 		goi: GoiKiem,
 		tuyChon: { tyLeGiuLai: number },
-	) => { cau: CauBan[]; bo: CauBanBo[]; trangThai: TrangThaiBan };
+	) => { cau: CauBan[]; bo: CauBanBo<M>[]; trangThai: TrangThaiBan };
 	kiemCau: (
 		cau: CauBan,
 		goi: GoiKiem,
 		truoc: readonly string[],
-	) => { qua: true } | { qua: false; maBo: string };
-	docNoiDung: (value: Prisma.JsonValue) => NoiDungBan;
+	) => { qua: true } | { qua: false; maBo: M };
+	docNoiDung: (value: Prisma.JsonValue) => NoiDungBan<M>;
 	docTrangThai: (value: string) => TrangThaiBan;
 	docViec: (value: Prisma.JsonValue) => ViecDoc;
 	tienDoKr: (kieu: KieuKr, khoi: number, dich: number, hien: number) => number;
@@ -105,6 +109,7 @@ export type LanTrongGoi = {
 	ngay: string;
 	luc: string;
 	giaTri: number;
+	tienDo: number;
 	tuTin: MucTuTin;
 	ghiChu: string;
 	truoc: number | null;
@@ -121,7 +126,6 @@ export type KrTrongGoi = {
 	donVi: string;
 	khoiDiem: number;
 	dich: number;
-	tienDo: number;
 	lyDo: LyDoHop[];
 	lanTruoc: {
 		id: string;
@@ -160,7 +164,7 @@ export type BanHien = {
 	phanHoiCuaToi: boolean | null;
 };
 
-export type DongQuanTriTomTat = {
+export type DongQuanTriTomTat<M extends string = string> = {
 	departmentId: string;
 	ten: string;
 	nac: NacBan;
@@ -171,12 +175,12 @@ export type DongQuanTriTomTat = {
 	huuIch: number;
 	khongHuuIch: number;
 	cau: CauBan[];
-	bo: CauBanBo[];
+	bo: CauBanBo<M>[];
 };
 
-export type BanTuanQuanTri = {
+export type BanTuanQuanTri<M extends string = string> = {
 	tuan: string | null;
-	phong: DongQuanTriTomTat[];
+	phong: DongQuanTriTomTat<M>[];
 };
 
 export class TomTatDaCo extends Error {
@@ -279,7 +283,6 @@ const chonKr = {
 	unit: true,
 	startValue: true,
 	targetValue: true,
-	currentValue: true,
 	startLockedAt: true,
 	objective: { select: { id: true, title: true, publishedAt: true } },
 	checkIns: {
@@ -313,9 +316,23 @@ function lanCua(kr: KrDoc): LanCo[] {
 		.sort((a, b) => a.luc.getTime() - b.luc.getTime());
 }
 
-function nguonTu(kr: KrDoc, lan: LanCo[], i: number): NguonGoi | null {
+function soCuaKr(kr: KrDoc) {
+	return {
+		kieu: motTrong(KIEU_KR, kr.kind, "okrKeyResult.kind"),
+		khoiDiem: kr.startValue.toNumber(),
+		dich: kr.targetValue.toNumber(),
+	};
+}
+
+function nguonTu(
+	kr: KrDoc,
+	lan: LanCo[],
+	i: number,
+	luat: Pick<LuatTomTat, "tienDoKr">,
+): NguonGoi | null {
 	const l = lan[i];
 	if (!l) return null;
+	const so = soCuaKr(kr);
 	const truoc = lan[i - 1] ?? null;
 	return {
 		id: l.id,
@@ -324,19 +341,8 @@ function nguonTu(kr: KrDoc, lan: LanCo[], i: number): NguonGoi | null {
 		truoc: truoc?.giaTri ?? null,
 		chenhLech: truoc ? lamTron(l.giaTri - truoc.giaTri) : null,
 		chenhTuTin: truoc ? chenhTuTin(truoc.tuTin, l.tuTin) : null,
+		tienDo: luat.tienDoKr(so.kieu, so.khoiDiem, so.dich, l.giaTri),
 		ngay: ngayNgan(l.luc),
-	};
-}
-
-function soCuaKr(kr: KrDoc, luat: Pick<LuatTomTat, "tienDoKr">) {
-	const kieu = motTrong(KIEU_KR, kr.kind, "okrKeyResult.kind");
-	const khoiDiem = kr.startValue.toNumber();
-	const dich = kr.targetValue.toNumber();
-	return {
-		kieu,
-		khoiDiem,
-		dich,
-		tienDo: luat.tienDoKr(kieu, khoiDiem, dich, kr.currentValue.toNumber()),
 	};
 }
 
@@ -350,7 +356,7 @@ async function tenThanhVien(db: DbHoacTx): Promise<string[]> {
 
 export async function dungGoiTomTat(
 	db: DbHoacTx,
-	v: { cycleId: string; departmentId: string; tuan: string; now: Date },
+	v: { cycleId: string; departmentId: string; tuan: string; moc: Date },
 	luat: Pick<LuatTomTat, "tienDoKr">,
 ): Promise<GoiTomTat | null> {
 	const phong = await db.department.findUnique({
@@ -368,7 +374,7 @@ export async function dungGoiTomTat(
 			{ id: "asc" },
 		],
 	});
-	const { tu, den } = cuaSoDen(v.now);
+	const { tu, den } = cuaSoDen(v.moc);
 	const nguon: NguonGoi[] = [];
 	const goiKrs = krs.map((kr, thuTu): KrTrongGoi => {
 		const lan = lanCua(kr);
@@ -381,14 +387,15 @@ export async function dungGoiTomTat(
 		const trong: LanTrongGoi[] = [];
 		lan.forEach((l, i) => {
 			if (l.luc < tu || l.luc >= den) return;
-			const n = nguonTu(kr, lan, i);
-			if (!n) return;
+			const n = nguonTu(kr, lan, i, luat);
+			if (!n || n.tienDo === null) return;
 			nguon.push(n);
 			trong.push({
 				id: l.id,
 				ngay: n.ngay,
 				luc: l.luc.toISOString(),
 				giaTri: l.giaTri,
+				tienDo: n.tienDo,
 				tuTin: l.tuTin,
 				ghiChu: l.ghiChu,
 				truoc: n.truoc,
@@ -403,8 +410,8 @@ export async function dungGoiTomTat(
 			mucTieuId: kr.objective.id,
 			mucTieu: kr.objective.title,
 			donVi: kr.unit,
-			...soCuaKr(kr, luat),
-			lyDo: lyDoCua(so, v.now),
+			...soCuaKr(kr),
+			lyDo: lyDoCua(so, v.moc),
 			lanTruoc: truoc
 				? {
 						id: truoc.id,
@@ -424,7 +431,7 @@ export async function dungGoiTomTat(
 	};
 }
 
-function chuCuaGoi(goi: GoiTomTat): string {
+function chuDauVaoCua(goi: GoiTomTat): string {
 	return [
 		goi.phong.ten,
 		...goi.krs.flatMap((k) => [
@@ -446,11 +453,10 @@ export async function goiKiemTomTatTu(
 			id: k.id,
 			khoiDiem: k.khoiDiem,
 			dich: k.dich,
-			tienDo: k.tienDo,
 		})),
 		tenThanhVien: await tenThanhVien(db),
 		tuCam: TRO_LY_OKR_TRAN.tuCam,
-		chuDauVao: chuCuaGoi(goi),
+		chuDauVao: chuDauVaoCua(goi),
 	};
 }
 
@@ -461,21 +467,20 @@ export async function ghiTomTat(
 		cycleId: string;
 		departmentId: string;
 		tuan: string;
+		moc: Date;
 		inputHash: string;
 		nac: NacBan;
 		cau: CauBan[];
-		now?: Date;
 	},
 	luat: LuatTomTat,
 ): Promise<{ id: string; trangThai: TrangThaiBan; soCauBo: number }> {
-	const now = v.now ?? new Date();
 	const goi = await dungGoiTomTat(
 		db,
 		{
 			cycleId: v.cycleId,
 			departmentId: v.departmentId,
 			tuan: v.tuan,
-			now,
+			moc: v.moc,
 		},
 		luat,
 	);
@@ -499,7 +504,7 @@ export async function ghiTomTat(
 				soCauBo: noiDung.bo.length,
 				trangThai: kiem.trangThai,
 				inputHash: v.inputHash,
-				createdAt: now,
+				createdAt: new Date(),
 			},
 			select: { id: true },
 		});
@@ -577,6 +582,7 @@ type NguonDoc = { kiem: NguonGoi; hien: NguonHien };
 async function nguonHienTai(
 	db: DbHoacTx,
 	idNguon: readonly string[],
+	luat: Pick<LuatTomTat, "tienDoKr">,
 ): Promise<{ theoId: Map<string, NguonDoc>; krs: KrDoc[] }> {
 	const lanDan = await db.okrCheckIn.findMany({
 		where: { id: { in: [...idNguon] } },
@@ -592,7 +598,7 @@ async function nguonHienTai(
 		const lan = lanCua(kr);
 		lan.forEach((l, i) => {
 			if (!can.has(l.id)) return;
-			const kiem = nguonTu(kr, lan, i);
+			const kiem = nguonTu(kr, lan, i, luat);
 			if (!kiem) return;
 			theoId.set(l.id, {
 				kiem,
@@ -621,15 +627,16 @@ export async function docTomTatChoNguoiXem(
 ): Promise<BanHien | null> {
 	const phong = await db.department.findUnique({
 		where: { id: v.departmentId },
-		select: { id: true, name: true, divisionId: true },
+		select: { id: true, divisionId: true, archivedAt: true },
 	});
-	if (!phong) return null;
+	if (!phong || phong.archivedAt !== null) return null;
 	if (nacPhong(await cauHinhAiLuc(db, v.now), phong) !== "bat") return null;
-	const hang = await db.okrTomTat.findMany({
+	const hang = await db.okrTomTat.findFirst({
 		where: {
 			cycleId: v.cycleId,
 			departmentId: v.departmentId,
 			trangThai: "hien",
+			cau: { path: ["nac"], equals: "bat" },
 			createdAt: {
 				gte: new Date(v.now.getTime() - OKR_TOM_TAT.hienTrongNgay * NGAY_MS),
 				lte: v.now,
@@ -637,32 +644,36 @@ export async function docTomTatChoNguoiXem(
 		},
 		orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 	});
-	const ban = hang
-		.map((h) => ({
-			h,
-			noiDung: luat.docNoiDung(h.cau),
-			trangThai: luat.docTrangThai(h.trangThai),
-		}))
-		.find((b) => b.noiDung.nac === "bat" && b.trangThai === "hien");
-	if (!ban) return null;
-	const idNguon = [...new Set(ban.noiDung.cau.flatMap((c) => c.nguon))];
-	const [{ theoId, krs }, nguCanh, ten, phanHoi, soLanCapNhat] =
-		await Promise.all([
-			nguonHienTai(db, idNguon),
-			nguCanhXemOkr(db, [v.nguoiXem]),
-			tenThanhVien(db),
-			db.okrTomTatPhanHoi.findUnique({
-				where: {
-					tomTatId_userId: { tomTatId: ban.h.id, userId: v.nguoiXem },
-				},
-				select: { huuIch: true },
-			}),
-			demLanTrongCuaSo(db, {
-				cycleId: v.cycleId,
-				departmentId: v.departmentId,
-				den: ban.h.createdAt,
-			}),
-		]);
+	if (!hang) return null;
+	if (luat.docTrangThai(hang.trangThai) !== "hien") return null;
+	const noiDung = luat.docNoiDung(hang.cau);
+	const viec = await db.agentTask.findUnique({
+		where: { id: hang.taskId },
+		select: { createdAt: true },
+	});
+	const goi = await dungGoiTomTat(
+		db,
+		{
+			cycleId: v.cycleId,
+			departmentId: v.departmentId,
+			tuan: ngayIso(hang.tuan),
+			moc: viec?.createdAt ?? hang.createdAt,
+		},
+		luat,
+	);
+	if (!goi) return null;
+	const idNguon = [...new Set(noiDung.cau.flatMap((c) => c.nguon))];
+	const [{ theoId, krs }, nguCanh, goiKiemChung, phanHoi] = await Promise.all([
+		nguonHienTai(db, idNguon, luat),
+		nguCanhXemOkr(db, [v.nguoiXem]),
+		goiKiemTomTatTu(db, goi),
+		db.okrTomTatPhanHoi.findUnique({
+			where: {
+				tomTatId_userId: { tomTatId: hang.id, userId: v.nguoiXem },
+			},
+			select: { huuIch: true },
+		}),
+	]);
 	const nc = nguCanh.get(v.nguoiXem);
 	const mucTieuIds = [...new Set(krs.map((k) => k.objective.id))];
 	const xemDuoc = new Set(
@@ -678,30 +689,15 @@ export async function docTomTatChoNguoiXem(
 			: [],
 	);
 	const goiKiem: GoiKiem = {
+		...goiKiemChung,
 		nguon: [...theoId.values()].map((n) => n.kiem),
 		krs: krs.map((kr) => {
-			const so = soCuaKr(kr, luat);
-			return {
-				id: kr.id,
-				khoiDiem: so.khoiDiem,
-				dich: so.dich,
-				tienDo: so.tienDo,
-			};
+			const so = soCuaKr(kr);
+			return { id: kr.id, khoiDiem: so.khoiDiem, dich: so.dich };
 		}),
-		tenThanhVien: ten,
-		tuCam: TRO_LY_OKR_TRAN.tuCam,
-		chuDauVao: [
-			phong.name,
-			...krs.flatMap((kr) => [
-				kr.title,
-				kr.objective.title,
-				kr.unit,
-				...kr.checkIns.map((c) => c.note),
-			]),
-		].join("\n"),
 	};
 	const giu: BanHien["cau"] = [];
-	for (const c of ban.noiDung.cau) {
+	for (const c of noiDung.cau) {
 		const nguon = c.nguon.flatMap((id) => {
 			const n = theoId.get(id);
 			return n ? [n] : [];
@@ -717,20 +713,20 @@ export async function docTomTatChoNguoiXem(
 		giu.push({ vanBan: c.vanBan, nguon: nguon.map((n) => n.hien) });
 	}
 	return {
-		id: ban.h.id,
-		tuan: ngayIso(ban.h.tuan),
-		soLanCapNhat,
+		id: hang.id,
+		tuan: ngayIso(hang.tuan),
+		soLanCapNhat: goi.nguon.length,
 		cau: giu,
 		phanHoiCuaToi: phanHoi?.huuIch ?? null,
 	};
 }
 
-export async function banTuanChoQuanTri(
+export async function banTuanChoQuanTri<M extends string>(
 	db: DbHoacTx,
 	v: { cycleId: string; now: Date },
-	luat: Pick<LuatTomTat, "docNoiDung" | "docTrangThai" | "docViec">,
-): Promise<BanTuanQuanTri> {
-	const [viec, hang, phongBan, ct] = await Promise.all([
+	luat: Pick<LuatTomTat<M>, "docNoiDung" | "docTrangThai" | "docViec">,
+): Promise<BanTuanQuanTri<M>> {
+	const [viec, tuanBan, phongBan, ct] = await Promise.all([
 		db.agentTask.findMany({
 			where: {
 				kind: LOAI_VIEC,
@@ -738,15 +734,17 @@ export async function banTuanChoQuanTri(
 				payload: { path: ["cycleId"], equals: v.cycleId },
 			},
 			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-			select: { id: true, payload: true, finishedAt: true },
+			select: { payload: true, finishedAt: true },
 		}),
-		db.okrTomTat.findMany({
+		db.okrTomTat.findFirst({
 			where: { cycleId: v.cycleId, createdAt: { lte: v.now } },
-			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+			orderBy: { tuan: "desc" },
+			select: { tuan: true },
 		}),
 		db.department.findMany({
+			where: { archivedAt: null },
 			orderBy: [{ position: "asc" }, { id: "asc" }],
-			select: { id: true, name: true, divisionId: true, archivedAt: true },
+			select: { id: true, name: true, divisionId: true },
 		}),
 		cauHinhAiLuc(db, v.now),
 	]);
@@ -756,18 +754,27 @@ export async function banTuanChoQuanTri(
 			? [{ mo: t.finishedAt === null, p }]
 			: [];
 	});
-	const banDoc = hang.map((h) => ({
-		h,
-		tuan: ngayIso(h.tuan),
-		noiDung: luat.docNoiDung(h.cau),
-		trangThai: luat.docTrangThai(h.trangThai),
-	}));
 	const tuan =
-		[...viecDoc.map((t) => t.p.tuan), ...banDoc.map((b) => b.tuan)]
+		[
+			...viecDoc.map((t) => t.p.tuan),
+			...(tuanBan ? [ngayIso(tuanBan.tuan)] : []),
+		]
 			.sort()
 			.at(-1) ?? null;
 	if (tuan === null) return { tuan: null, phong: [] };
-	const banTuan = banDoc.filter((b) => b.tuan === tuan);
+	const hang = await db.okrTomTat.findMany({
+		where: {
+			cycleId: v.cycleId,
+			tuan: ngayDb(tuan),
+			createdAt: { lte: v.now },
+			departmentId: { in: phongBan.map((pb) => pb.id) },
+		},
+	});
+	const banTuan = hang.map((h) => ({
+		h,
+		noiDung: luat.docNoiDung(h.cau),
+		trangThai: luat.docTrangThai(h.trangThai),
+	}));
 	const phanHoi = await db.okrTomTatPhanHoi.groupBy({
 		by: ["tomTatId", "huuIch"],
 		where: { tomTatId: { in: banTuan.map((b) => b.h.id) } },
@@ -776,12 +783,12 @@ export async function banTuanChoQuanTri(
 	const dem = (tomTatId: string, huuIch: boolean) =>
 		phanHoi.find((p) => p.tomTatId === tomTatId && p.huuIch === huuIch)?._count
 			._all ?? 0;
-	const phong = phongBan.flatMap((pb): DongQuanTriTomTat[] => {
-		const ban = banTuan.filter((b) => b.h.departmentId === pb.id).at(-1);
+	const phong = phongBan.flatMap((pb): DongQuanTriTomTat<M>[] => {
+		const ban = banTuan.find((b) => b.h.departmentId === pb.id);
 		const t = viecDoc
 			.filter((x) => x.p.tuan === tuan && x.p.departmentId === pb.id)
 			.at(-1);
-		const nacHienTai = pb.archivedAt === null ? nacPhong(ct, pb) : "tat";
+		const nacHienTai = nacPhong(ct, pb);
 		const nac: NacBan | null = ban
 			? ban.noiDung.nac
 			: t

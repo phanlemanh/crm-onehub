@@ -23,6 +23,7 @@ const nguon = (rieng: Partial<NguonKiem> & { id: string }): NguonKiem => ({
 	truoc: null,
 	chenhLech: null,
 	chenhTuTin: null,
+	tienDo: null,
 	ngay: "01/01",
 	...rieng,
 });
@@ -36,6 +37,7 @@ const GOI: GoiKiemTomTat = {
 			truoc: 45,
 			chenhLech: 15,
 			chenhTuTin: 1,
+			tienDo: 60,
 			ngay: "12/10",
 		}),
 		nguon({
@@ -45,12 +47,13 @@ const GOI: GoiKiemTomTat = {
 			truoc: 55,
 			chenhLech: -15,
 			chenhTuTin: -1,
+			tienDo: 25,
 			ngay: "13/10",
 		}),
 	],
 	krs: [
-		{ id: "kr1", khoiDiem: 0, dich: 100, tienDo: 60 },
-		{ id: "kr2", khoiDiem: 100, dich: 20, tienDo: 25 },
+		{ id: "kr1", khoiDiem: 0, dich: 100 },
+		{ id: "kr2", khoiDiem: 100, dich: 20 },
 	],
 	tenThanhVien: ["Nguyễn Thị Hồng Nhung", "Trần Văn Bình"],
 	tuCam: TRO_LY_OKR_TRAN.tuCam,
@@ -186,7 +189,7 @@ describe("bộ kiểm câu tóm tắt: mỗi mã một ca đỏ và một ca là
 type CaSo = {
 	dang: string;
 	nguon?: Partial<NguonKiem>;
-	kr?: { khoiDiem?: number; dich?: number; tienDo?: number };
+	kr?: { khoiDiem?: number; dich?: number };
 	khop: string;
 	lech: string;
 	nguonLech?: Partial<NguonKiem>;
@@ -201,7 +204,7 @@ const CA_SO: CaSo[] = [
 	},
 	{
 		dang: "12%",
-		kr: { tienDo: 12 },
+		nguon: { tienDo: 12 },
 		khop: "Tiến độ đạt 12% hôm nay.",
 		lech: "Tiến độ đạt 13% hôm nay.",
 	},
@@ -231,8 +234,7 @@ const CA_SO: CaSo[] = [
 	},
 	{
 		dang: "tiến độ",
-		nguon: { giaTri: 9 },
-		kr: { tienDo: 40 },
+		nguon: { giaTri: 9, tienDo: 40 },
 		khop: "Tiến độ 40 khi giá trị là 9.",
 		lech: "Tiến độ 41 khi giá trị là 9.",
 	},
@@ -309,7 +311,6 @@ function goiSo(ca: CaSo, lech = false): GoiKiemTomTat {
 				id: "k1",
 				khoiDiem: ca.kr?.khoiDiem ?? null,
 				dich: ca.kr?.dich ?? null,
-				tienDo: ca.kr?.tienDo ?? null,
 			},
 		],
 	};

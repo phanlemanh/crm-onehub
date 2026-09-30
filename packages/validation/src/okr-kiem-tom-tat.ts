@@ -1,4 +1,9 @@
-import type { LuatTomTat } from "@crm/db/okr-tom-tat";
+import type {
+	GoiKiem,
+	KrKiemGoi,
+	LuatTomTat,
+	NguonGoi,
+} from "@crm/db/okr-tom-tat";
 import { chuanHoa, coCum, khongDau, trichSo } from "./okr-kiem-de-xuat";
 import { docSoOkr, tienDoKr } from "./okr-kr";
 import {
@@ -9,30 +14,11 @@ import {
 } from "./okr-tom-tat";
 import { type CauTomTat, okrTroLyViec, TRO_LY_OKR_TRAN } from "./okr-tro-ly";
 
-export type NguonKiem = {
-	id: string;
-	keyResultId: string;
-	giaTri: number;
-	truoc: number | null;
-	chenhLech: number | null;
-	chenhTuTin: -2 | -1 | 0 | 1 | 2 | null;
-	ngay: string;
-};
+export type NguonKiem = NguonGoi;
 
-export type KrKiem = {
-	id: string;
-	khoiDiem: number | null;
-	dich: number | null;
-	tienDo: number | null;
-};
+export type KrKiem = KrKiemGoi;
 
-export type GoiKiemTomTat = {
-	nguon: NguonKiem[];
-	krs: KrKiem[];
-	tenThanhVien: string[];
-	tuCam: readonly string[];
-	chuDauVao: string;
-};
+export type GoiKiemTomTat = GoiKiem;
 
 export type KetQuaKiemCau = { qua: true } | { qua: false; maBo: MaBoCau };
 
@@ -140,8 +126,9 @@ function giaTriThamChieu(dan: NguonKiem[], goi: GoiKiemTomTat): number[] {
 		ra.push(n.giaTri);
 		if (n.truoc !== null) ra.push(n.truoc);
 		if (n.chenhLech !== null) ra.push(Math.abs(n.chenhLech));
+		if (n.tienDo !== null) ra.push(n.tienDo);
 		const kr = goi.krs.find((k) => k.id === n.keyResultId);
-		for (const v of [kr?.khoiDiem, kr?.dich, kr?.tienDo])
+		for (const v of [kr?.khoiDiem, kr?.dich])
 			if (v !== null && v !== undefined) ra.push(v);
 	}
 	return ra;
@@ -258,4 +245,4 @@ export const LUAT_TOM_TAT = {
 		return ket.data;
 	},
 	tienDoKr,
-} satisfies LuatTomTat;
+} satisfies LuatTomTat<MaBoCau>;
