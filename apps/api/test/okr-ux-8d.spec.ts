@@ -813,3 +813,190 @@ describe("chuyen-xem-truoc", () => {
 		CHO_DB,
 	);
 });
+
+describe("go-nguoi", () => {
+	const P = idMau("nguoi", "u8d-go-p");
+	const DICH = idMau("nguoi", "u8d-go-dich");
+	const KY_DONG = idMau("chu-ky", "quy3");
+	const PB_GO = idMau("pb", "u8d-go");
+	const MT_GO = {
+		q4: idMau("mt", "u8d-go-q4"),
+		chu: idMau("mt", "u8d-go-chu"),
+		dong: idMau("mt", "u8d-go-dong"),
+		caNhan: idMau("mt", "u8d-go-ca-nhan"),
+	};
+	const PHA_CON_GHI = ["lap-ke-hoach", "dang-chay"];
+	const KY_VONG_TRUOC = { kr: 3, mucTieu: 1, viec: 0 };
+	const KY_VONG_SAU = { kr: 0, mucTieu: 0, viec: 0 };
+
+	const kr = (ten: string) => ({
+		title: `KR u8d gỡ ${ten}`,
+		kind: "tang-toi",
+		ownerUserId: P,
+		startValue: 0,
+		targetValue: 10,
+		currentValue: 0,
+	});
+
+	const demRieng = async (gomQuyDong: boolean) => {
+		const pha = gomQuyDong ? {} : { cycle: { phase: { in: PHA_CON_GHI } } };
+		const krCuaP = await db.okrKeyResult.findMany({
+			where: {
+				ownerUserId: P,
+				objective: { status: { not: "da-bo" }, ...pha },
+			},
+			select: { objective: { select: { level: true, personUserId: true } } },
+		});
+		const mucTieu = await db.okrObjective.count({
+			where: {
+				ownerUserId: P,
+				status: { not: "da-bo" },
+				level: { not: "ca-nhan" },
+				...pha,
+			},
+		});
+		return {
+			kr: krCuaP.filter(
+				(k) =>
+					!(k.objective.level === "ca-nhan" && k.objective.personUserId === P),
+			).length,
+			mucTieu,
+		};
+	};
+
+	beforeAll(async () => {
+		await db.department.create({
+			data: {
+				id: PB_GO,
+				name: "Phòng u8d gỡ người",
+				position: 950,
+				divisionId: KHOI_HO_TRO_ID,
+			},
+		});
+		for (const u of [P, DICH]) {
+			await db.user.create({
+				data: {
+					id: u,
+					name: `Người u8d ${u.slice(-6)}`,
+					email: `${u}@thu.test`,
+				},
+			});
+			await db.member.create({
+				data: {
+					id: `m-${u}`,
+					organizationId: WORKSPACE_ID,
+					userId: u,
+					role: "member",
+					createdAt: new Date(),
+				},
+			});
+		}
+		const chung = {
+			level: "phong-ban",
+			departmentId: PB_GO,
+			kind: "cam-ket",
+			status: "cong-bo",
+			publishedAt: new Date(),
+		};
+		await db.okrObjective.create({
+			data: {
+				...chung,
+				id: MT_GO.q4,
+				cycleId: KY,
+				ownerUserId: nguoi(NGUOI.chu),
+				title: "Mục tiêu u8d gỡ người quý 4",
+				keyResults: { create: [kr("a"), kr("b"), kr("c")] },
+			},
+		});
+		await db.okrObjective.create({
+			data: {
+				...chung,
+				id: MT_GO.chu,
+				cycleId: KY,
+				ownerUserId: P,
+				title: "Mục tiêu u8d P phụ trách",
+			},
+		});
+		await db.okrObjective.create({
+			data: {
+				...chung,
+				id: MT_GO.dong,
+				cycleId: KY_DONG,
+				ownerUserId: nguoi(NGUOI.chu),
+				title: "Mục tiêu u8d quý đã đóng",
+				keyResults: { create: [kr("dong")] },
+			},
+		});
+		await db.okrObjective.create({
+			data: {
+				id: MT_GO.caNhan,
+				cycleId: KY,
+				level: "ca-nhan",
+				personUserId: P,
+				ownerUserId: P,
+				kind: "cam-ket",
+				status: "cong-bo",
+				publishedAt: new Date(),
+				title: "Mục tiêu cá nhân u8d của P",
+				keyResults: { create: [kr("ca-nhan")] },
+			},
+		});
+	}, CHO_DB);
+
+	afterAll(async () => {
+		const ids = Object.values(MT_GO);
+		await db.okrTrail.deleteMany({ where: { objectiveId: { in: ids } } });
+		await db.okrObjective.deleteMany({ where: { id: { in: ids } } });
+		await db.member.deleteMany({ where: { userId: { in: [P, DICH] } } });
+		await db.user.deleteMany({ where: { id: { in: [P, DICH] } } });
+		await db.department.deleteMany({ where: { id: PB_GO } });
+	}, CHO_DB);
+
+	test(
+		"transferPreview của P bằng phép đếm riêng theo kỳ còn ghi, không gồm mục tiêu cá nhân; đếm gồm quý đã đóng thì lệch; chuyển xong về 0",
+		async () => {
+			const ky = await db.okrCycle.findUniqueOrThrow({
+				where: { id: KY_DONG },
+				select: { phase: true },
+			});
+			const xem = async (u: string) =>
+				ok<{ kr: number; mucTieu: number; viec: number }>(
+					await hoi("okr.transferPreview", { fromUserId: u }, phien.qt ?? ""),
+					"okr.transferPreview",
+				);
+			const truoc = await xem(P);
+			const dung = await demRieng(false);
+			const sai = await demRieng(true);
+			const chuyen = ok<{ kr: number; mucTieu: number; viec: number }>(
+				await lam("okr.transferWork", { fromUserId: P, toUserId: DICH }, "qt"),
+				"okr.transferWork",
+			);
+			const sau = await xem(P);
+			const dich = await xem(DICH);
+			console.log(
+				`go-nguoi: quy dong ${ky.phase}; truoc ${JSON.stringify(truoc)}; dem ${JSON.stringify(dung)}; dem gom quy dong ${JSON.stringify(sai)}; chuyen ${JSON.stringify(chuyen)}; sau ${JSON.stringify(sau)}; dich ${JSON.stringify(dich)}`,
+			);
+			expect({
+				phaQuyDong: PHA_CON_GHI.includes(ky.phase) ? "con ghi" : "da dong",
+				truoc,
+				dung: `preview ${truoc.kr} == dem ${dung.kr}; muc tieu ${truoc.mucTieu} == ${dung.mucTieu}`,
+				doiChung:
+					sai.kr === truoc.kr
+						? "dem gom quy dong khong lech — phep dem khong phan biet"
+						: `preview ${truoc.kr} != dem ${sai.kr}`,
+				chuyen,
+				sau,
+				dich,
+			}).toEqual({
+				phaQuyDong: "da dong",
+				truoc: KY_VONG_TRUOC,
+				dung: `preview ${KY_VONG_TRUOC.kr} == dem ${KY_VONG_TRUOC.kr}; muc tieu ${KY_VONG_TRUOC.mucTieu} == ${KY_VONG_TRUOC.mucTieu}`,
+				doiChung: `preview ${KY_VONG_TRUOC.kr} != dem ${KY_VONG_TRUOC.kr + 1}`,
+				chuyen: KY_VONG_TRUOC,
+				sau: KY_VONG_SAU,
+				dich: KY_VONG_TRUOC,
+			});
+		},
+		CHO_DB,
+	);
+});
