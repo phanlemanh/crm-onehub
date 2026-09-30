@@ -96,6 +96,50 @@ describe("heatmap — năm bậc, ô rỗng, cột hiện tại", () => {
 	});
 });
 
+function veHeatmap(legend?: { cao: string; trong: string }) {
+	khung = document.createElement("div");
+	document.body.appendChild(khung);
+	root = createRoot(khung);
+	act(() =>
+		root?.render(
+			<LocaleProvider locale="vi">
+				<Heatmap
+					caption="Độ phủ góp ý theo đơn vị và ngày"
+					columns={COT}
+					legend={legend}
+					rows={[
+						{ id: "r1", label: "Kinh doanh" },
+						{ id: "r2", label: "Vùng 1", indent: true },
+						{ id: "r3", label: "Kho vận", indent: true },
+					]}
+					values={GIA_TRI}
+				/>
+			</LocaleProvider>,
+		),
+	);
+	return document.querySelector('[data-slot="heatmap-legend"]');
+}
+
+describe("heatmap — chú giải truyền vào", () => {
+	test("in đúng hai câu truyền vào, không còn chữ KR", () => {
+		const chuGiai = veHeatmap({
+			cao: "Ô càng nổi khỏi nền, càng nhiều người trong đơn vị đã góp ý.",
+			trong: "ngày chưa tới",
+		});
+		expect(chuGiai?.textContent).toBe(
+			"Ô càng nổi khỏi nền, càng nhiều người trong đơn vị đã góp ý.ngày chưa tới",
+		);
+		expect(document.body.textContent).not.toContain("KR");
+	});
+
+	test("không truyền chú giải thì giữ câu của màn toàn cảnh", () => {
+		const chuGiai = veHeatmap();
+		expect(chuGiai?.textContent).toBe(
+			"Ô càng nổi khỏi nền, càng nhiều KR tự tin cao.tuần chưa tới hoặc chưa ai cập nhật",
+		);
+	});
+});
+
 const CSS = readFileSync(`${import.meta.dir}/../src/styles/geist.css`, "utf8");
 
 function khoiCua(chon: ":root" | ".dark"): string {

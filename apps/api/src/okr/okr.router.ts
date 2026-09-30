@@ -14,6 +14,22 @@ import {
 	traLaiInput,
 } from "@crm/validation/okr-hien-thi";
 import {
+	chuDeIdInput,
+	cycleIdInput,
+	dongYInput,
+	ganYInput,
+	gopYInput,
+	hoiYIdInput,
+	ketLuanInput,
+	moHoiYInput,
+	niemPhongInput,
+	suaChuDeInput,
+	suaHoiYInput,
+	suaYInput,
+	taoChuDeInput,
+	yIdInput,
+} from "@crm/validation/okr-hoi-y";
+import {
 	chamKrInput,
 	dongRaInput,
 	ghiDieuHocDuocInput,
@@ -116,6 +132,15 @@ import { OkrCapNhatService } from "./okr-cap-nhat.service";
 import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
 import {
+	congBoOutput,
+	hieuViSaoOutput,
+	hoiYDocOutput,
+	hoiYDoPhuOutput,
+	hoiYGhiOutput,
+	hoiYNhanOutput,
+} from "./okr-hoi-y.contracts";
+import { OkrHoiYService } from "./okr-hoi-y.service";
+import {
 	bangChamInput,
 	bangChamOutput,
 	mangSangOutput,
@@ -172,6 +197,7 @@ export class OkrRouter {
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
+		@Inject(OkrHoiYService) private readonly hoiYDv: OkrHoiYService,
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
 		@Inject(OkrTaiCoCauService) private readonly taiCoCau: OkrTaiCoCauService,
@@ -333,6 +359,207 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof dongRaInput>,
 	) {
 		return this.khep.dongRa(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: moHoiYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y", TAG),
+	})
+	moHoiY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moHoiYInput>,
+	) {
+		return this.hoiYDv.moHoiY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaHoiYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}", TAG),
+	})
+	suaHoiY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaHoiYInput>,
+	) {
+		return this.hoiYDv.suaHoiY(ctx.user.id, input);
+	}
+
+	@Query({
+		input: cycleIdInput,
+		output: hoiYDocOutput,
+		meta: restMeta("GET", "/okr/hoi-y", TAG),
+	})
+	hoiY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleIdInput>,
+	) {
+		return this.hoiYDv.hoiY(ctx.user.id, input);
+	}
+
+	@Query({
+		input: cycleIdInput,
+		output: hoiYNhanOutput,
+		meta: restMeta("GET", "/okr/hoi-y/nhan", TAG),
+	})
+	hoiYNhan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleIdInput>,
+	) {
+		return this.hoiYDv.hoiYNhan(ctx.user.id, input);
+	}
+
+	@Query({
+		input: hoiYIdInput,
+		output: hoiYDoPhuOutput,
+		meta: restMeta("GET", "/okr/hoi-y/do-phu", TAG),
+	})
+	hoiYDoPhu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiYIdInput>,
+	) {
+		return this.hoiYDv.hoiYDoPhu(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: gopYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/y", TAG),
+	})
+	gopY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof gopYInput>,
+	) {
+		return this.hoiYDv.gopY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/y/{yId}/sua", TAG),
+	})
+	suaY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaYInput>,
+	) {
+		return this.hoiYDv.suaY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: yIdInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/y/{yId}/go", TAG),
+	})
+	goY(@Ctx() ctx: AuthedTrpcContext, @Input() input: z.infer<typeof yIdInput>) {
+		return this.hoiYDv.goY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: dongYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/y/{yId}/dong-y", TAG),
+	})
+	dongY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dongYInput>,
+	) {
+		return this.hoiYDv.dongY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: niemPhongInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/niem-phong", TAG),
+	})
+	niemPhong(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof niemPhongInput>,
+	) {
+		return this.hoiYDv.niemPhong(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: taoChuDeInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/chu-de", TAG),
+	})
+	taoChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taoChuDeInput>,
+	) {
+		return this.hoiYDv.taoChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaChuDeInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/chu-de/{chuDeId}/sua", TAG),
+	})
+	suaChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaChuDeInput>,
+	) {
+		return this.hoiYDv.suaChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: chuDeIdInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/chu-de/{chuDeId}/go", TAG),
+	})
+	goChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof chuDeIdInput>,
+	) {
+		return this.hoiYDv.goChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ganYInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/y/gan", TAG),
+	})
+	ganY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ganYInput>,
+	) {
+		return this.hoiYDv.ganY(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: ketLuanInput,
+		output: hoiYGhiOutput,
+		meta: restMeta("POST", "/okr/hoi-y/chu-de/{chuDeId}/ket-luan", TAG),
+	})
+	ketLuanChuDe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof ketLuanInput>,
+	) {
+		return this.hoiYDv.ketLuanChuDe(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hoiYIdInput,
+		output: congBoOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/cong-bo", TAG),
+	})
+	congBo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiYIdInput>,
+	) {
+		return this.hoiYDv.congBo(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hoiYIdInput,
+		output: hieuViSaoOutput,
+		meta: restMeta("POST", "/okr/hoi-y/{hoiYId}/hieu-vi-sao", TAG),
+	})
+	hieuViSao(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiYIdInput>,
+	) {
+		return this.hoiYDv.hieuViSao(ctx.user.id, input);
 	}
 
 	@Query({

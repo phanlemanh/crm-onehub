@@ -7,12 +7,15 @@ const vi = {
 		"cap-nhat-tuan": "Cập nhật tuần",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
+		"hoi-y": "Hỏi ý",
 	},
+	nhanHoiYMoi: "Mới",
 	tieuDe: {
 		"cua-toi": "OKR của tôi",
 		"cap-nhat-tuan": "Cập nhật tuần của tôi",
 		"theo-don-vi": "OKR theo đơn vị",
 		"toan-canh": "Toàn cảnh OKR",
+		"hoi-y": "Hỏi ý mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -22,6 +25,7 @@ const vi = {
 		"theo-don-vi":
 			"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 		"toan-canh": "Cả công ty trong một màn.",
+		"hoi-y": "Cả công ty góp ý cho mục tiêu kỳ tới, trước khi đặt OKR.",
 	},
 	chuKy: "Chu kỳ",
 	loaiChuKy: { nam: "Năm", quy: "Quý" },
@@ -261,6 +265,11 @@ const vi = {
 		"ghi-nhan": "Ghi nhận",
 		"go-ghi-nhan": "Gỡ ghi nhận",
 		"sua-mau": "Sửa mẫu OKR",
+		"mo-hoi-y": "Mở hỏi ý",
+		"sua-hoi-y": "Sửa hỏi ý",
+		"doi-nguoi-chon": "Đổi người chọn",
+		"niem-phong": "Niêm phong bản viết trước",
+		"cong-bo-hoi-y": "Công bố hỏi ý",
 		"doi-hien-thi": "Đổi mức hiển thị",
 		"gui-duyet": "Gửi duyệt",
 		duyet: "Duyệt",
@@ -526,9 +535,12 @@ const vi = {
 			theoDoi: "{capNhat} cập nhật, {binhLuan} bình luận mới",
 			theoDoiCapNhat: "{capNhat} cập nhật mới",
 			theoDoiBinhLuan: "{binhLuan} bình luận mới",
+			hoiYGop: "Hỏi ý mục tiêu đang chờ bạn góp",
+			hoiYCongBo: "Hỏi ý mục tiêu đã công bố — xem ý của bạn đi đâu",
 		},
 		capNhatTuan: "Cập nhật tuần",
 		moMucTieu: "Mở mục tiêu",
+		moHoiY: "Mở Hỏi ý",
 		rong: "Hôm nay OKR không cần gì từ bạn",
 		loi: {
 			title: "Không lấy được việc OKR của bạn",
@@ -566,12 +578,15 @@ const en: OkrMessages = {
 		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
+		"hoi-y": "Call for ideas",
 	},
+	nhanHoiYMoi: "New",
 	tieuDe: {
 		"cua-toi": "My OKRs",
 		"cap-nhat-tuan": "My weekly update",
 		"theo-don-vi": "OKRs by unit",
 		"toan-canh": "OKR overview",
+		"hoi-y": "Call for ideas on objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -581,6 +596,8 @@ const en: OkrMessages = {
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
+		"hoi-y":
+			"The whole company gives ideas for next period's objectives before OKRs are set.",
 	},
 	chuKy: "Cycle",
 	loaiChuKy: { nam: "Year", quy: "Quarter" },
@@ -823,6 +840,11 @@ const en: OkrMessages = {
 		"ghi-nhan": "Recognition",
 		"go-ghi-nhan": "Remove recognition",
 		"sua-mau": "Edit OKR template",
+		"mo-hoi-y": "Opened call for ideas",
+		"sua-hoi-y": "Edited call for ideas",
+		"doi-nguoi-chon": "Changed decider",
+		"niem-phong": "Sealed what was written first",
+		"cong-bo-hoi-y": "Published call for ideas",
 		"doi-hien-thi": "Change visibility",
 		"gui-duyet": "Submit for approval",
 		duyet: "Approve",
@@ -1089,9 +1111,12 @@ const en: OkrMessages = {
 			theoDoi: "New: {capNhat} updates, {binhLuan} comments",
 			theoDoiCapNhat: "New updates: {capNhat}",
 			theoDoiBinhLuan: "New comments: {binhLuan}",
+			hoiYGop: "The call for ideas on objectives is waiting for yours",
+			hoiYCongBo: "The call for ideas is published — see where your ideas went",
 		},
 		capNhatTuan: "Weekly update",
 		moMucTieu: "Open objective",
+		moHoiY: "Open the call for ideas",
 		rong: "Nothing in OKR needs you today",
 		loi: {
 			title: "Couldn't load your OKR to-dos",

@@ -8,6 +8,7 @@ import {
 	PHA_GHI_DUOC,
 } from "./okr-duyet";
 import { dieuKienXemMucTieu, docCayOkr, nguCanhXemOkr } from "./okr-hien-thi";
+import { trangThaiHoiY } from "./okr-hoi-y-trang-thai";
 import { parseOkrVet } from "./okr-vet";
 import {
 	type CuaSoNhac,
@@ -17,6 +18,7 @@ import {
 	ngayVN,
 	soNgayVN,
 } from "./onboarding-nhac";
+import { WORKSPACE_ID } from "./workspace";
 
 export const OKR_NHAC = {
 	imNgay: 14,
@@ -81,6 +83,19 @@ export const viecOkr = z.discriminatedUnion("loai", [
 		nguoiTraLai: z.string(),
 		lyDo: z.string(),
 	}),
+	z.object({
+		loai: z.literal("okr-hoi-y-gop"),
+		hoiYId: maMuc,
+		cycleId: maMuc,
+		nhan: z.string(),
+		hanLuc: z.iso.datetime(),
+	}),
+	z.object({
+		loai: z.literal("okr-hoi-y-cong-bo"),
+		hoiYId: maMuc,
+		cycleId: maMuc,
+		nhan: z.string(),
+	}),
 ]);
 
 export type ViecOkr = z.infer<typeof viecOkr>;
@@ -96,6 +111,8 @@ export const KHOA_MUC_OKR = {
 	"okr-theo-doi": { loai: true, objectiveId: true },
 	"okr-cho-duyet": { loai: true, objectiveId: true },
 	"okr-tra-lai": { loai: true, objectiveId: true },
+	"okr-hoi-y-gop": { loai: true, hoiYId: true, cycleId: true },
+	"okr-hoi-y-cong-bo": { loai: true, hoiYId: true, cycleId: true },
 } as const satisfies {
 	[K in LoaiNhacOkr]: {
 		readonly [P in keyof Extract<ViecOkr, { loai: K }>]?: true;
@@ -494,6 +511,83 @@ async function viecTraoDoi(
 	return [...nhacTen, ...duocGhiNhan, ...theo];
 }
 
+async function viecHoiY(
+	db: Db,
+	now: Date,
+	cuaSo: { gt: Date; lte: Date },
+	userIds: string[] | undefined,
+): Promise<Gui[]> {
+	const lan = await db.okrHoiY.findMany({
+		where: { OR: [{ congBoLuc: null }, { congBoLuc: cuaSo }] },
+		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+		select: {
+			id: true,
+			hanLuc: true,
+			congBoLuc: true,
+			nguoiChonUserId: true,
+			cycleId: true,
+			cycle: { select: { name: true } },
+		},
+	});
+	const dangMo = lan.filter((h) => trangThaiHoiY(h, now) === "dang-mo");
+	const daCongBo = lan.filter((h) => trangThaiHoiY(h, now) === "da-cong-bo");
+	if (dangMo.length + daCongBo.length === 0) return [];
+	const chiNguoi = userIds && { in: userIds };
+	const [y, thanhVien] = await Promise.all([
+		db.okrY.findMany({
+			where: {
+				hoiYId: { in: [...dangMo, ...daCongBo].map((h) => h.id) },
+				tacGiaUserId: chiNguoi,
+			},
+			distinct: ["hoiYId", "tacGiaUserId"],
+			select: { hoiYId: true, tacGiaUserId: true },
+		}),
+		db.member.findMany({
+			where: {
+				organizationId: WORKSPACE_ID,
+				userId: chiNguoi,
+			},
+			select: { userId: true },
+		}),
+	]);
+	const daGop = new Set(y.map((r) => `${r.hoiYId}:${r.tacGiaUserId}`));
+	const gop = dangMo.flatMap((h) =>
+		thanhVien
+			.filter(
+				(m) =>
+					m.userId !== h.nguoiChonUserId && !daGop.has(`${h.id}:${m.userId}`),
+			)
+			.map(
+				(m): Gui => ({
+					userId: m.userId,
+					viec: {
+						loai: "okr-hoi-y-gop",
+						hoiYId: h.id,
+						cycleId: h.cycleId,
+						nhan: h.cycle.name,
+						hanLuc: h.hanLuc.toISOString(),
+					},
+				}),
+			),
+	);
+	const congBo = daCongBo.flatMap((h) =>
+		thanhVien
+			.filter((m) => daGop.has(`${h.id}:${m.userId}`))
+			.map(
+				(m): Gui => ({
+					userId: m.userId,
+					viec: {
+						loai: "okr-hoi-y-cong-bo",
+						hoiYId: h.id,
+						cycleId: h.cycleId,
+						nhan: h.cycle.name,
+					},
+				}),
+			),
+	);
+	return [...gop, ...congBo];
+}
+
 async function tenNguoi(db: Db, ids: string[]): Promise<Map<string, string>> {
 	const nguoi = await db.user.findMany({
 		where: { id: { in: [...new Set(ids)] } },
@@ -614,6 +708,12 @@ export async function viecOkrCanNhac(
 		viecTraoDoi(db, cuaSo),
 		viecChoDuyet(db),
 		viecTraLai(db, cuaSo),
+		viecHoiY(
+			db,
+			chon.now,
+			cuaSo,
+			chon.userId === undefined ? undefined : [chon.userId],
+		),
 	]);
 	const ket = new Map<string, ViecOkr[]>();
 	for (const g of phan.flat()) {
@@ -624,7 +724,11 @@ export async function viecOkrCanNhac(
 }
 
 function mucTieuCua(v: ViecOkr): string | null {
-	return v.loai === "okr-cap-nhat" ? null : v.objectiveId;
+	return v.loai === "okr-cap-nhat" ||
+		v.loai === "okr-hoi-y-gop" ||
+		v.loai === "okr-hoi-y-cong-bo"
+		? null
+		: v.objectiveId;
 }
 
 async function locTheoQuyenXem(

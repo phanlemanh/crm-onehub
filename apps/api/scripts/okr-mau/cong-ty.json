@@ -4,6 +4,9 @@
 		"nam": {
 			"ten": "Năm · mẫu"
 		},
+		"namKe": {
+			"ten": "Năm kế · mẫu"
+		},
 		"quy3": {
 			"ten": "Quý 3 · mẫu"
 		},
@@ -2215,5 +2218,358 @@
 				"mau": "phong-ho-tro"
 			}
 		]
+	},
+	"hoiY": {
+		"nguoiChon": "le-hai-dang",
+		"cauHoi": "Năm tới Hải Đăng nên dồn sức vào điều gì để khách hàng quay lại nhiều hơn?",
+		"loiMo": "Năm nay mình giữ được khách cũ nhưng khách mới về chậm hơn hẳn. Mỗi người góp tối đa ba ý, ý nào cũng được đọc.",
+		"soLieu": [
+			{
+				"nhan": "Doanh thu năm",
+				"giaTri": "186 tỷ",
+				"ghiChu": "tăng 12% so với năm trước"
+			},
+			{
+				"nhan": "Khách quay lại",
+				"giaTri": "64%",
+				"ghiChu": "mục tiêu năm nay là 70%"
+			},
+			{
+				"nhan": "Khách mới",
+				"giaTri": "41",
+				"ghiChu": "thấp nhất ba năm"
+			}
+		],
+		"banTruoc": [
+			"Đưa giao hàng lạnh thành mảng có lãi ở cả hai miền",
+			"Mở thêm hai kho trung chuyển ở miền Trung",
+			"Rút thời gian giao chặng cuối xuống dưới một ngày",
+			"Giữ tỉ lệ khách quay lại trên bảy mươi phần trăm"
+		],
+		"y": [
+			{
+				"ma": "y01",
+				"tacGia": "tran-quoc-bao",
+				"gio": 3,
+				"noiDung": "Bán gói giao hàng lạnh theo tháng cho các chuỗi nhà thuốc",
+				"viSao": "Ba chuỗi nhà thuốc đã hỏi giá cố định theo quý, mình chưa có bảng giá nào để đưa.",
+				"doBangGi": "Số hợp đồng gói lạnh ký được trong quý đầu"
+			},
+			{
+				"ma": "y02",
+				"tacGia": "ly-thanh-tam",
+				"gio": 5,
+				"noiDung": "Làm bảng giá giao lạnh riêng theo mức nhiệt độ khách yêu cầu",
+				"viSao": "Hiện mình báo giá lạnh bằng cách cộng tay từ giá thường, mỗi người một kiểu.",
+				"doBangGi": "Số báo giá lạnh ra khỏi bảng giá không phải sửa tay"
+			},
+			{
+				"ma": "y03",
+				"tacGia": "dinh-cong-son",
+				"gio": 9,
+				"noiDung": "Mua thêm hai xe lạnh cũ để chạy tuyến nội thành trước khi mở tuyến dài",
+				"viSao": "Xe lạnh hiện có chạy kín lịch, khách lạnh mới phải chờ xe từ tuyến khác.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y04",
+				"tacGia": "chu-van-hung",
+				"gio": 12,
+				"noiDung": "Gom chuyến lạnh vào hai khung giờ cố định mỗi ngày",
+				"viSao": "Chuyến lạnh lẻ làm xe chạy rỗng nửa quãng.",
+				"doBangGi": "Tỉ lệ lấp đầy xe lạnh mỗi chuyến"
+			},
+			{
+				"ma": "y05",
+				"tacGia": "doan-thi-thu",
+				"gio": 14,
+				"noiDung": "Tính lãi lỗ riêng cho từng tuyến lạnh mỗi tuần",
+				"viSao": "Chưa ai biết tuyến lạnh nào đang lỗ vì chi phí điện và nhiên liệu nằm chung với xe thường.",
+				"doBangGi": "Số tuyến lạnh có báo cáo lãi lỗ hằng tuần"
+			},
+			{
+				"ma": "y06",
+				"tacGia": "trinh-hoai-nam",
+				"gio": 20,
+				"noiDung": "Làm trang giới thiệu dịch vụ lạnh kèm video quay tại kho mát",
+				"viSao": "",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y07",
+				"tacGia": "vu-thu-ha",
+				"gio": 24,
+				"noiDung": "Báo nhiệt độ thùng hàng cho khách sau mỗi chuyến giao lạnh",
+				"viSao": "Khách lạnh hay hỏi hàng có giữ đủ nhiệt độ không, mình chưa có gì để trả lời ngay.",
+				"doBangGi": "Số khách hỏi lại về nhiệt độ giảm"
+			},
+			{
+				"ma": "y08",
+				"tacGia": "an-khanh-linh",
+				"gio": 27,
+				"noiDung": "Chuẩn hoá điều khoản bồi thường khi hàng lạnh hỏng do nhiệt độ",
+				"viSao": "Ba vụ khiếu nại năm nay mỗi vụ xử lý một kiểu, khó thuyết phục khách ký gói dài hạn.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y09",
+				"tacGia": "ha-van-thanh",
+				"gio": 31,
+				"noiDung": "Thuê kho nhỏ ở Đà Nẵng trước, chưa mua đất",
+				"viSao": "Thuê đo được cầu thật trong sáu tháng, mua đất thì khó quay đầu.",
+				"doBangGi": "Sản lượng hàng qua kho Đà Nẵng mỗi tháng"
+			},
+			{
+				"ma": "y10",
+				"tacGia": "truong-bao-ngoc",
+				"gio": 35,
+				"noiDung": "Giao đủ trong hai ngày cho khách miền Trung đang định chuyển hàng sang bên khác",
+				"viSao": "Hai khách lớn ở Huế đã giảm đơn quý này, lý do ghi trong phiếu là thời gian giao.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y11",
+				"tacGia": "nghiem-thu-uyen",
+				"gio": 38,
+				"noiDung": "Nối chuyến Bắc–Nam ở Vinh để hàng miền Trung không phải chờ xe đầy",
+				"viSao": "",
+				"doBangGi": "Số ngày trung bình từ nhận hàng đến giao ở miền Trung"
+			},
+			{
+				"ma": "y12",
+				"tacGia": "thai-minh-chau",
+				"gio": 41,
+				"noiDung": "Đặt trần vốn cho kho mới, không vượt hai mươi phần trăm tiền mặt",
+				"viSao": "Hai năm trước một kho mở vội làm chậm lương ba tháng.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y13",
+				"tacGia": "tong-bich-ngoc",
+				"gio": 47,
+				"noiDung": "Tuyển tổ kho miền Trung từ người địa phương, đào tạo tại Hà Nội hai tuần",
+				"viSao": "Người từ ngoài Bắc vào thường xin về sau sáu tháng.",
+				"doBangGi": "Tỉ lệ nhân viên kho miền Trung còn làm sau một năm"
+			},
+			{
+				"ma": "y14",
+				"tacGia": "to-thi-hong",
+				"gio": 52,
+				"noiDung": "Đưa mọi kho về cùng một phần mềm quản kho trước khi mở kho mới",
+				"viSao": "Kho cũ ghi sổ tay, kho mới sẽ ghi máy, số hai bên không cộng được với nhau.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y15",
+				"tacGia": "mai-duc-long",
+				"gio": 58,
+				"noiDung": "Gọi lại mọi khách đã ngừng đặt hàng quá bốn mươi lăm ngày",
+				"viSao": "Khách nghỉ đặt lặng lẽ, đến lúc mình biết thì đã sang bên khác.",
+				"doBangGi": "Số khách được gọi lại và số khách đặt lại trong ba mươi ngày sau đó"
+			},
+			{
+				"ma": "y16",
+				"tacGia": "cao-thanh-van",
+				"gio": 63,
+				"noiDung": "Gắn một người phụ trách cố định cho từng khách hàng lớn",
+				"viSao": "Khách lớn hỏi cùng một việc với ba người khác nhau trong cùng một tuần.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y17",
+				"tacGia": "nguyen-thi-lan",
+				"gio": 66,
+				"noiDung": "Tính thưởng kinh doanh theo tỉ lệ khách quay lại chứ không chỉ theo doanh thu",
+				"viSao": "Bây giờ ký được khách mới thì được thưởng, giữ được khách cũ thì không.",
+				"doBangGi": "Tỉ lệ khách quay lại theo từng nhóm kinh doanh"
+			},
+			{
+				"ma": "y18",
+				"tacGia": "ta-my-linh",
+				"gio": 71,
+				"noiDung": "Gửi bản tin số liệu giao hàng hằng tháng cho từng khách",
+				"viSao": "",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y19",
+				"tacGia": "pham-thu-trang",
+				"gio": 78,
+				"noiDung": "Cho khách xem đơn đang chạy trên điện thoại, không cần gọi tổng đài",
+				"viSao": "Một phần ba cuộc gọi vào tổng đài chỉ để hỏi hàng đang ở đâu.",
+				"doBangGi": "Số cuộc gọi hỏi hàng đang ở đâu"
+			},
+			{
+				"ma": "y20",
+				"tacGia": "do-minh-khoa",
+				"gio": 84,
+				"noiDung": "Báo giá trong ngày cho mọi tuyến đã có bảng giá",
+				"viSao": "Báo giá đến sau hai ngày thì khách đã hỏi bên khác.",
+				"doBangGi": "Tỉ lệ báo giá gửi trong cùng ngày"
+			},
+			{
+				"ma": "y21",
+				"tacGia": "huynh-gia-phuc",
+				"gio": 90,
+				"noiDung": "Làm bộ báo giá mẫu cho ba loại hàng phổ biến nhất",
+				"viSao": "",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y22",
+				"tacGia": "vo-duc-anh",
+				"gio": 95,
+				"noiDung": "Tự điền giá từ bảng tuyến vào báo giá để khỏi gõ lại",
+				"viSao": "Gõ lại giá là chỗ sai nhiều nhất trong báo giá tháng này.",
+				"doBangGi": "Số báo giá phải sửa giá sau khi gửi"
+			},
+			{
+				"ma": "y23",
+				"tacGia": "hoang-yen-nhi",
+				"gio": 101,
+				"noiDung": "Nhắc người phụ trách khi báo giá chưa có phản hồi sau ba ngày",
+				"viSao": "",
+				"doBangGi": "Tỉ lệ báo giá được trả lời có hoặc không"
+			},
+			{
+				"ma": "y24",
+				"tacGia": "dang-ngoc-mai",
+				"gio": 108,
+				"noiDung": "Cho khách ký nhận báo giá ngay trên điện thoại",
+				"viSao": "Khách in ra, ký, quét lại mất cả buổi.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y25",
+				"tacGia": "quach-minh-tri",
+				"gio": 112,
+				"noiDung": "Cho tài xế đối tác thuê chỗ nghỉ ngay tại kho, tính phí theo giờ",
+				"viSao": "Tài xế đối tác đến sớm phải đỗ ngoài đường chờ bốc hàng, kho thì có phòng trống ban đêm.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y26",
+				"tacGia": "doan-thi-thu",
+				"gio": 29,
+				"noiDung": "Gom hoá đơn xăng dầu về một thẻ nhiên liệu để đối chiếu nhanh cuối tháng",
+				"viSao": "Cuối tháng phòng Tài chính đối chiếu bằng tay hơn hai trăm hoá đơn.",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y27",
+				"tacGia": "tong-bich-ngoc",
+				"gio": 44,
+				"noiDung": "Làm sổ tay một trang cho người mới vào kho và điều phối",
+				"viSao": "",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y28",
+				"tacGia": "dinh-cong-son",
+				"gio": 60,
+				"noiDung": "Dán mã quét lên từng pallet để bớt đếm tay lúc kiểm kho cuối ngày",
+				"viSao": "Kiểm kho cuối ngày mất gần hai giờ, thường sai vài pallet.",
+				"doBangGi": "Thời gian kiểm kho cuối ngày"
+			},
+			{
+				"ma": "y29",
+				"tacGia": "vu-thu-ha",
+				"gio": 76,
+				"noiDung": "Cho khách gửi ảnh hàng hỏng qua Zalo và có phiếu xử lý trong hai giờ",
+				"viSao": "",
+				"doBangGi": ""
+			},
+			{
+				"ma": "y30",
+				"tacGia": "tran-quoc-bao",
+				"gio": 116,
+				"noiDung": "Họp giao ban khối kinh doanh vào sáng thứ Hai thay vì chiều thứ Sáu",
+				"viSao": "Chiều thứ Sáu ai cũng đã đi gặp khách, họp chỉ còn nửa số người.",
+				"doBangGi": ""
+			}
+		],
+		"dongY": [
+			{
+				"y": "y01",
+				"nguoi": "huynh-gia-phuc"
+			},
+			{
+				"y": "y01",
+				"nguoi": "vu-thu-ha"
+			},
+			{
+				"y": "y01",
+				"nguoi": "luu-phuong-thao"
+			},
+			{
+				"y": "y05",
+				"nguoi": "dinh-cong-son"
+			},
+			{
+				"y": "y05",
+				"nguoi": "vuong-duc-tai"
+			},
+			{
+				"y": "y09",
+				"nguoi": "truong-bao-ngoc"
+			},
+			{
+				"y": "y09",
+				"nguoi": "duong-tuan-kiet"
+			},
+			{
+				"y": "y15",
+				"nguoi": "cao-thanh-van"
+			},
+			{
+				"y": "y15",
+				"nguoi": "lam-quynh-anh"
+			},
+			{
+				"y": "y20",
+				"nguoi": "ngo-van-toan"
+			},
+			{
+				"y": "y25",
+				"nguoi": "la-hoang-phuc"
+			},
+			{
+				"y": "y17",
+				"nguoi": "bui-quang-huy"
+			}
+		],
+		"chuDe": [
+			{
+				"ma": "cd1",
+				"ten": "Giao hàng lạnh thành dịch vụ có lãi",
+				"y": ["y01", "y02", "y03", "y04", "y05", "y06", "y07", "y08"],
+				"ketLuan": {
+					"loai": "chon",
+					"lyDo": "Ba chuỗi nhà thuốc đã hỏi giá gói cố định và tuyến lạnh nội thành đã có xe, làm được ngay trong quý đầu.",
+					"cauMucTieu": "Đưa giao hàng lạnh thành dịch vụ có lãi ở cả hai miền",
+					"noi": "cau-1"
+				}
+			},
+			{
+				"ma": "cd2",
+				"ten": "Kho và tuyến ở miền Trung",
+				"y": ["y09", "y10", "y11", "y12", "y13", "y14"],
+				"ketLuan": {
+					"loai": "de-sau",
+					"lyDo": "Chưa có chi phí thuê kho ở Đà Nẵng và phương án vốn của khối Hỗ trợ, để sang quý sau khi có số."
+				}
+			},
+			{
+				"ma": "cd3",
+				"ten": "Giữ khách cũ",
+				"y": ["y15", "y16", "y17", "y18", "y19"]
+			},
+			{
+				"ma": "cd4",
+				"ten": "Báo giá nhanh và chốt đơn sớm",
+				"y": ["y20", "y21", "y22", "y23", "y24"]
+			}
+		],
+		"yLa": ["y25"]
 	}
 }

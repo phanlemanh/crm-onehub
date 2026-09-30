@@ -21,11 +21,13 @@ export const THU_TU_NHAC = [
 	"okr-cap-nhat",
 	"okr-cho-duyet",
 	"okr-tra-lai",
+	"okr-hoi-y-gop",
 	...LOAI_NHAC,
 	"okr-kr-im",
 	"okr-duoc-giao",
 	"okr-nhac-ten",
 	"okr-ghi-nhan",
+	"okr-hoi-y-cong-bo",
 	"okr-theo-doi",
 	"tai-lieu-cho-duyet",
 	"ai-tran",
@@ -100,6 +102,10 @@ function lechPhut(d: Date): number {
 	if (!dau) return 0;
 	const lech = Number(gio) * PHUT_MOI_GIO + Number(phut);
 	return dau === "-" ? -lech : lech;
+}
+
+export function gioVN(d: Date): string {
+	return dinhGio.format(d);
 }
 
 export function dauNgayVN(now: Date): Date {

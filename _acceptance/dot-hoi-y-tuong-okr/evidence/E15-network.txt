@@ -1,0 +1,5 @@
+E15 verify doc lap (ui:E15, 2026-09-30 lan 4): driver = script puppeteer/CDP (man-hoi-y.mjs, EVAL=E15) chay qua tien-de.mjs trong phien do rieng crm_dot_hoi_y_tuong_okr_do; khong phai tool doc network (n-a (driver)).
+Xanh: 84 khang dinh, 0 hong, exit 0. app http://localhost:4673 api http://localhost:4797 (cong tu do, khong phai 3000/3001).
+Script bat requestfailed + pageerror: khong ghi dong nao.
+E16 CDP: 118 phan hoi toi trinh duyet thanh vien truoc cong bo, 0 chua cau viet truoc; doi chung duong 76 phan hoi toi nguoi chon, 7 chua cau viet truoc. 5 font woff2 (200, static asset) khong doc duoc than - chi note.
+Chieu do (--chieu-do --chi E15, app :4155): exit 1, HONG «E15 buoc 2: danh sach y khoa, dong ly do «Niêm phong trước khi đọc ý», 0 y hien (thay {"tt":"gop","khoa":0,"tieuDe":null,"soY":2})»; tong ket «E15: DO DUNG GHIM - ma 1, in «E15 buoc-khoa-nguoi-chon: nguoi chon chua niem phong thay 2 y»».

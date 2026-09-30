@@ -982,6 +982,103 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
   Chương trình OKR.
 
+### Hỏi ý mục tiêu
+
+Trước khi đặt mục tiêu cho một chu kỳ đang lập kế hoạch, quản trị hỏi cả công ty
+một câu; người chọn (một quản trị, thường là CEO) viết trước vài câu mục tiêu, đọc
+ý, gom thành chủ đề, kết luận từng chủ đề kèm lý do và công bố. Từ ngữ ở
+`CONTEXT.md` (Hỏi ý mục tiêu, Ý, Người chọn, Bản viết trước, Chủ đề, Ý lạ, Kết
+luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
+(`apps/api/src/okr/okr-hoi-y.service.ts`) dưới router `okr`, nên vai «chỉ OKR» gọi
+được như thành viên; 17 thủ tục mới có tên trong tập ghim của
+`apps/api/test/vai-chi-okr.spec.ts`.
+
+- **Sáu bảng mới, không cột mới trên bảng cũ.** `OkrHoiY` (một lần mỗi chu kỳ,
+  `cycleId` duy nhất; câu hỏi, lời mở, `soLieu` là `Json` chỉ đọc qua
+  `parseSoLieuHoiY`, hạn, người chọn, `congBoLuc`), `OkrHoiYBanTruoc` (bản viết
+  trước, một hàng ghi một lần: 3–5 câu hoặc `boQua`), `OkrY` (ý: nội dung, vì sao,
+  đo bằng gì, `chuDeId`), `OkrYDongY` («Tôi cũng nghĩ vậy», khoá `(yId, userId)`),
+  `OkrChuDe` (chủ đề; ý lạ là chủ đề `loai = "y-la"` chứa đúng một ý; kết luận, lý
+  do, câu mục tiêu, `noiBanTruoc`, và `objectiveId` nối tới mục tiêu nháp) và
+  `OkrHoiYHieu` («Tôi hiểu vì sao», khoá `(hoiYId, userId)`). Khoá ngoại tới
+  chu kỳ, mục tiêu và người là `RESTRICT`; `okrYDongY → okrY` là `CASCADE`;
+  `okrY → okrChuDe` là `SET NULL`. Trạng thái không lưu: `trangThaiHoiY`
+  (`@crm/db/okr-hoi-y-trang-thai`) suy `dang-mo` khi `now < hanLuc` (biên nửa mở),
+  `dang-gom` khi đã qua hạn và chưa công bố, `da-cong-bo` khi có `congBoLuc`.
+  Trần và câu khuôn ở `OKR_HOI_Y` (`@crm/validation/okr-hoi-y`); câu lỗi máy chủ ở
+  `OKR.thongDiep.hoiY`.
+- **Quyền nằm trong service; màn chỉ hỏi cờ.** Mở và sửa lần hỏi ý: quản trị
+  (`OkrAccessService.quyen`). Góp, sửa, gỡ ý và bấm đồng ý: mọi thành viên trừ
+  người chọn, chỉ khi `dang-mo`, tối đa `OKR_HOI_Y.yMoiNguoi` ý. Gom (`taoChuDe`,
+  `suaChuDe`, `goChuDe`, `ganY`): quản trị hoặc người chọn, chỉ khi `dang-gom`.
+  Niêm phong, kết luận và công bố: chỉ người chọn, và người chọn phải còn là quản
+  trị. Đổi người chọn bị từ chối khi người mới đã góp ý (`nguoiChonDaGop`) hay khi
+  người cũ đã niêm phong mà vẫn là quản trị. Người chọn bị hạ vai không còn là
+  người chọn ở bất cứ chỗ nào: không thấy tên, số, chủ đề, không nhận
+  `lyDoChuaCongBo`, không được mời niêm phong (`lyDoKhoa = "het-quyen-chon"`). Hạn
+  đặt bằng bây giờ là đóng sớm; `suaHoiY({ dongNgay: true })` lấy giờ của máy chủ
+  làm hạn, vì giờ máy khách gửi lên luôn trễ hơn giờ máy chủ nhận. `dongY` từ chối
+  người chọn cả khi bật lẫn khi tắt (`nguoiChonKhongDongY`), vì số người cũng nghĩ
+  vậy là bằng chứng người chọn đọc khi kết luận. `hoiY` trả cờ `quyen` (`moDuoc`,
+  `gopDuoc`, `gomDuoc`, `chonDuoc`, `congBoDuoc`, `niemPhongDuoc`, `dongYDuoc`,
+  `cauHoiKhoa`, `nguoiChonKhoa`, `lyDoChuaCongBo`); màn không tự suy lại luật nào —
+  nút «Tôi cũng nghĩ vậy» theo `dongYDuoc`, sheet sửa khoá ô câu hỏi theo
+  `cauHoiKhoa` (đã có ý) và ô người chọn theo `nguoiChonKhoa` (người chọn đã niêm
+  phong và còn là quản trị), đúng hai điều `suaHoiY` từ chối. `nguoiChonKhoa` chỉ tính
+  cho người xem là quản trị (người mở được sheet), nên thành viên không tốn thêm truy
+  vấn vai của người chọn. Người chọn
+  chưa niêm phong chỉ nhận các mã chung trong `lyDoChuaCongBo` (`chua-niem-phong`,
+  `y-chua-gom`, `khong-chon`, `vuot-tran`), không mã nào kèm `chuDeId`.
+- **Luật đọc ở một chỗ.** `apps/api/src/okr/hoi-y.ts` giữ hai hàm, và mọi thủ tục
+  trả ý hay bản viết trước đi qua chúng: `chieuYChoNguoiXem` quyết ai thấy tên
+  người góp và số đồng ý (quản trị không phải người chọn, và người chọn còn là quản
+  trị đã niêm phong — người chọn chưa niêm phong nhận danh sách khoá, `khoa: true`,
+  không ý nào; người chọn đã hạ vai xem như thành viên), còn thành viên nhận ý
+  không tên theo thứ tự xáo cố định theo người xem (`thuTuXao`, băm
+  `(hoiYId, userId)`); `docBanTruoc` chỉ trả bản viết trước cho người chọn, hay cho
+  mọi người sau công bố. `chieuChuDeChoNguoiXem` dựng chủ đề trên
+  `chieuYChoNguoiXem`. Độ phủ (`hoiYDoPhu`) không bao giờ trả tên hay danh sách
+  người chưa góp; hàng xếp toàn công ty trước, rồi mỗi bộ phận và ngay dưới là
+  phòng ban của nó, rồi phòng ban chưa vào bộ phận nào, «chưa xếp» cuối
+  (`donViTuCay`). `rang/soi-ma.mjs --ca thiet-ke` của hồ sơ đếm chỗ trả bằng số lời
+  gọi hai hàm này.
+- **Công bố đi qua đường tạo mục tiêu có sẵn.** `congBo` khoá hàng `okrHoiY`
+  (`FOR UPDATE`, nên bấm hai lần gần như cùng lúc chỉ tạo một lần, lần sau nhận
+  `daCongBo`), kiểm `lyDoChuaCongBo` (niêm phong, ý chưa gom, chủ đề rỗng, thiếu
+  kết luận, lý do, câu mục tiêu, nối câu viết trước, không chủ đề nào chọn, vượt
+  trần mục tiêu cấp OneHub), rồi với mỗi chủ đề «chọn» gọi
+  `OkrService.taoMucTieuTrongTx` trong cùng transaction — mục tiêu nháp cấp
+  OneHub, người phụ trách là người chọn, `whyNow` là lý do của chủ đề, vết `tao`
+  mang `after.tuHoiY`. Không ghi thẳng vào `okrObjective`. Kết quả giữ nguyên · đổi
+  · bỏ · thêm tính bằng `ketQuaBanTruoc` (so câu sau `chuanCau`) — hàm thuần ở
+  `@crm/validation/okr-hoi-y`, nên phần xem trước ở màn kết luận gọi đúng hàm đó:
+  một câu viết trước được nhiều chủ đề chọn nối vào thì «giữ nguyên» khi bất kỳ chủ
+  đề nào trùng chữ, và trang kết quả liệt mọi chủ đề nối vào câu đó. Lần hỏi ý không
+  có ý nào và không có chủ đề nào không bị đòi «ít nhất một chủ đề chọn»: người
+  chọn niêm phong hoặc khai không viết trước (làm được cả khi đang gom), rồi công bố
+  rỗng — không mục tiêu nào, `congBoLuc` được đặt, vết `cong-bo-hoi-y` mang
+  `soMucTieu: 0`. Không có lối này thì chu kỳ kẹt ở lập kế hoạch mãi.
+- **Chốt pha.** Chỉ mở và công bố được khi chu kỳ ở `lap-ke-hoach`;
+  `setCyclePhase` từ chối rời `lap-ke-hoach` khi chu kỳ còn lần hỏi ý chưa công bố
+  (`conHoiYChuaCongBo`). Câu lỗi nêu đúng các lối ra: người chọn công bố — kể cả
+  công bố rỗng khi không có ý nào; người chọn đã hết quyền quản trị thì quản trị
+  đổi người chọn trước. Không có lối huỷ lần hỏi ý.
+- **Vết mức chu kỳ, không vết cho dữ liệu góp.** `mo-hoi-y`, `sua-hoi-y`,
+  `doi-nguoi-chon`, `niem-phong` (`after = { soCau, boQua }`, không chữ câu) và
+  `cong-bo-hoi-y`, với `objectiveId` null. Ý, đồng ý, gom, kết luận, hiểu là dữ liệu
+  góp của người, không để vết.
+- **Đồng hồ tiêm được.** Service đọc giờ qua nhà cung cấp `DONG_HO_HOI_Y`
+  (`apps/api/src/okr/dong-ho.ts`, mặc định `() => new Date()`) và ghi tường minh
+  `createdAt` của `OkrHoiY`, `OkrY`, `OkrYDongY`, `niemPhongLuc`, `congBoLuc` và
+  `OkrHoiYHieu.luc` — không dựa `@default(now())` cho mốc nào được đo. Bài test
+  (`okr-hoi-y-san.ts`, `datDongHo`) và bộ OKR mẫu (`nap-hoi-y.ts`) thay đồng hồ;
+  máy chủ đang chạy thì không thay được, nên phép đo tỉ lệ
+  (`_acceptance/dot-hoi-y-tuong-okr/rang/ty-le.mjs`) dựng app Nest trong tiến trình
+  với `overrideProvider(DONG_HO_HOI_Y)` rồi gọi thủ tục thật qua tRPC. Không bài
+  nào `UPDATE` tay một mốc.
+- **Nhắc buổi sáng** có hai loại mục `okr-hoi-y-gop` và `okr-hoi-y-cong-bo` — xem
+  `docs/agent.md`.
+
 ## Kho tài liệu: nguồn
 
 `apps/api/src/tai-lieu/tai-lieu-nguon.*` owns the `taiLieuNguon.*` router: `trangThai`,

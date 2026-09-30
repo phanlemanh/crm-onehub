@@ -72,6 +72,7 @@ import {
 	gieoMucTieuAn,
 	type SanAn,
 } from "./okr-hien-thi-san";
+import { THU_TUC_HOI_Y } from "./okr-hoi-y-thu-tuc";
 import type { Json } from "./okr-san";
 import { gieoThanhVien } from "./phien-thu";
 
@@ -237,6 +238,53 @@ const DAU_VAO_HOP_LE = {
 		ownerUserId: "khong-co",
 		krs: [{ startValue: 0, targetValue: 10, ownerUserId: "khong-co" }],
 	},
+	"okr.moHoiY": {
+		cycleId: "khong-co",
+		cauHoi: "Năm tới OneHub nên dồn sức vào đâu?",
+		loiMo: "",
+		soLieu: [{ nhan: "Doanh thu", giaTri: "182 tỷ", ghiChu: "" }],
+		hanLuc: "2026-12-10T10:00:00.000Z",
+		nguoiChonUserId: "khong-co",
+	},
+	"okr.suaHoiY": { hoiYId: "khong-co", loiMo: "Lời mở mới" },
+	"okr.hoiY": { cycleId: "khong-co" },
+	"okr.hoiYNhan": { cycleId: "khong-co" },
+	"okr.hoiYDoPhu": { hoiYId: "khong-co" },
+	"okr.gopY": {
+		hoiYId: "khong-co",
+		noiDung: "Mở tuyến giao lạnh cho khách dược",
+		viSao: "",
+		doBangGi: "",
+	},
+	"okr.suaY": {
+		yId: "khong-co",
+		noiDung: "Mở tuyến giao lạnh cho khách dược",
+		viSao: "Khách dược cần giao lạnh.",
+		doBangGi: "",
+	},
+	"okr.goY": { yId: "khong-co" },
+	"okr.dongY": { yId: "khong-co", bat: true },
+	"okr.niemPhong": {
+		hoiYId: "khong-co",
+		cau: [
+			"Đưa giao lạnh thành dịch vụ có lãi",
+			"Mở thêm hai kho ở miền Trung",
+			"Giảm thời gian giao chặng cuối",
+		],
+	},
+	"okr.taoChuDe": { hoiYId: "khong-co", ten: "Giao lạnh" },
+	"okr.suaChuDe": { chuDeId: "khong-co", ten: "Giao lạnh cho dược" },
+	"okr.goChuDe": { chuDeId: "khong-co" },
+	"okr.ganY": { yIds: ["khong-co"], chuDeId: "khong-co" },
+	"okr.ketLuanChuDe": {
+		chuDeId: "khong-co",
+		ketLuan: "chon",
+		lyDo: "Đúng hướng năm tới của công ty.",
+		cauMucTieu: "Giao lạnh có lãi ở ba tỉnh",
+		noiBanTruoc: "cau-1",
+	},
+	"okr.congBo": { hoiYId: "khong-co" },
+	"okr.hieuViSao": { hoiYId: "khong-co" },
 } satisfies Record<string, DauVaoHopLe>;
 const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
 	ten in DAU_VAO_HOP_LE
@@ -346,6 +394,8 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySoDo",
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
+const SO_THU_TUC_HOI_Y = 17;
 const KHOA_DOI_TAC = ["contactId", "companyId", "dealId"] as const;
 
 const giaTriJson = z.json();
@@ -1401,7 +1451,10 @@ describe("pham-vi-khep", () => {
 describe("sang-kien-an", () => {
 	beforeEach(don);
 
-	test("thu tuc okr vai chi OKR voi toi duoc: danh sach viet truoc cong dung thu tuc cua luot; thu tuc canh KR co dau vao hop le", () => {
+	test("thu tuc okr vai chi OKR voi toi duoc: danh sach viet truoc cong dung thu tuc cua luot; thu tuc canh KR va hoi y co dau vao hop le", () => {
+		expect(THU_TUC_OKR_LUOT_HOI_Y.length, "so thu tuc moi cua luot hoi y").toBe(
+			SO_THU_TUC_HOI_Y,
+		);
 		expect(
 			choPhep().filter((t) => t.startsWith("okr.")),
 			"thu tuc okr cua vai chi OKR lech danh sach viet truoc",
@@ -1411,15 +1464,19 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_CANH_KR,
 				...THU_TUC_OKR_LUOT_GIOI_HAN,
 				...THU_TUC_OKR_LUOT_TRO_LY,
+				...THU_TUC_OKR_LUOT_HOI_Y,
 			].sort(),
 		);
-		const hong = Object.entries(THU_TUC_CANH_KR).flatMap(([t, khuon]) => {
+		const hong = Object.entries({
+			...THU_TUC_CANH_KR,
+			...THU_TUC_HOI_Y,
+		}).flatMap(([t, khuon]) => {
 			const vao = dauVaoCua(t);
 			if (vao === undefined) return [`${t}: thieu dau vao`];
 			const doc = khuon.safeParse(vao);
 			return doc.success ? [] : [`${t}: ${doc.error.message}`];
 		});
-		expect(hong, "dau vao hop le cho thu tuc canh KR").toEqual([]);
+		expect(hong, "dau vao hop le cho thu tuc canh KR va hoi y").toEqual([]);
 	});
 
 	test(
@@ -1740,7 +1797,7 @@ type ChuoiAn =
 	| "soChup"
 	| "binhLuan"
 	| "loiNhan";
-type SanDoc = SanAn & { nguoiK: string; chuG: string };
+type SanDoc = SanAn & { nguoiK: string; chuG: string; hoiY: string };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
@@ -1827,6 +1884,13 @@ const THU_TU_DOC_OKR = {
 		khac: 404,
 		ma: "keyResultId",
 	},
+	"okr.hoiY": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.hoiYDoPhu": {
+		vao: (s) => ({ hoiYId: s.hoiY }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.hoiYNhan": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.hopTuan": {
 		vao: (s) => ({ cycleId: s.ky, unit: { loai: "pb", id: s.pb } }),
 		K: "vang",
@@ -2331,7 +2395,25 @@ describe("hien-thi-an", () => {
 				Q: await khoaApiCua(cookie.Q),
 			};
 			const gieo = await gieoMucTieuAn(goiGieoAn, nguoi, id, namVN());
-			const san = { ...gieo, nguoiK: nguoi.k.id, chuG: nguoi.truong.id };
+			const luc = new Date();
+			const hoiY = await db.okrHoiY.create({
+				data: {
+					cycleId: gieo.ky,
+					cauHoi: "Năm tới công ty nên dồn sức vào điều gì?",
+					soLieu: [{ nhan: "Doanh thu năm", giaTri: "186 tỷ", ghiChu: "" }],
+					hanLuc: luc,
+					nguoiChonUserId: nguoi.quanTri.id,
+					taoBoiUserId: nguoi.quanTri.id,
+					congBoLuc: luc,
+					createdAt: luc,
+				},
+			});
+			const san = {
+				...gieo,
+				nguoiK: nguoi.k.id,
+				chuG: nguoi.truong.id,
+				hoiY: hoiY.id,
+			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
 				const bc: BoiCanhAn = {
@@ -2393,6 +2475,7 @@ describe("hien-thi-an", () => {
 				).toEqual([]);
 			} finally {
 				setSystemTime();
+				await db.okrHoiY.deleteMany({ where: { id: san.hoiY } });
 				await donMucTieuAn(san, tatCaNguoi);
 			}
 		},

@@ -2,6 +2,8 @@ import { PHA_CHUYEN_DUOC as PHA_CHUYEN } from "@crm/db/okr-don-vi";
 import { PHA_GHI_DUOC as PHA_GHI } from "@crm/db/okr-duyet";
 import { z } from "zod";
 
+export const THAM_SO_KY_OKR = "kyOkr";
+
 export const LOAI_CHU_KY = ["nam", "quy"] as const;
 export const PHA_CHU_KY = [
 	"lap-ke-hoach",

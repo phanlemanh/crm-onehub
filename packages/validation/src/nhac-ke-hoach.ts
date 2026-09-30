@@ -14,8 +14,18 @@ const ma = z.string().min(1);
 
 const thangMa = z.string().regex(/^\d{4}-\d{2}$/);
 
-const [capNhat, krIm, duocGiao, nhacTen, ghiNhan, theoDoi, choDuyet, traLai] =
-	viecOkr.options;
+const [
+	capNhat,
+	krIm,
+	duocGiao,
+	nhacTen,
+	ghiNhan,
+	theoDoi,
+	choDuyet,
+	traLai,
+	hoiYGop,
+	hoiYCongBo,
+] = viecOkr.options;
 
 export const mucNhac = z.union([
 	z
@@ -29,6 +39,8 @@ export const mucNhac = z.union([
 	theoDoi.pick(KHOA_MUC_OKR["okr-theo-doi"]).strict(),
 	choDuyet.pick(KHOA_MUC_OKR["okr-cho-duyet"]).strict(),
 	traLai.pick(KHOA_MUC_OKR["okr-tra-lai"]).strict(),
+	hoiYGop.pick(KHOA_MUC_OKR["okr-hoi-y-gop"]).strict(),
+	hoiYCongBo.pick(KHOA_MUC_OKR["okr-hoi-y-cong-bo"]).strict(),
 	z
 		.object({
 			loai: z.literal("ai-tran"),
