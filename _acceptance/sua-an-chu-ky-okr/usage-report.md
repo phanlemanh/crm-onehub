@@ -54,3 +54,44 @@ wall: 681s
 - **claude-sonnet-5-5**: 30 agent · 91 calls · out 38,984 · in 182 · cache_read 5,475,803 · cache_create 1,808,092
 - **claude-opus-5-5**: 3 agent · 83 calls · out 6,715 · in 166 · cache_read 11,648,410 · cache_create 530,863
 
+
+### S4 round 2 — wf_92f2fba7-cbe (18 agent, 41,827 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 10,762 | 8 | 329,365 | 70 |
+| judge:E17:domain-correctness | claude-sonnet-5-5 | 3 | 8,225 | 6 | 172,428 | 55 |
+| judge:E17:spec-alignment | claude-sonnet-5-5 | 3 | 6,054 | 6 | 205,067 | 38 |
+| ui:E14 | claude-sonnet-5-5 | 16 | 5,925 | 32 | 1,506,222 | 163 |
+| judge:E17:operational-feasibility | claude-sonnet-5-5 | 3 | 5,024 | 6 | 205,088 | 33 |
+| triage | claude-sonnet-5-5 | 2 | 1,144 | 4 | 71,322 | 10 |
+| review:bugs | claude-opus-5-5 | 8 | 950 | 16 | 676,756 | 43 |
+| review:measurement | claude-opus-5-5 | 8 | 788 | 16 | 681,819 | 58 |
+| baseline:diffBase | claude-sonnet-5-5 | 9 | 760 | 18 | 607,223 | 47 |
+| machine:bunx turbo run lint --force | claude-sonnet-5-5 | 2 | 707 | 4 | 102,836 | 12 |
+| machine:EVAL=${EVAL:-} bun scripts/lan-do/tien-d | claude-sonnet-5-5 | 2 | 413 | 4 | 102,205 | 51 |
+| machine:bun run test | claude-sonnet-5-5 | 2 | 271 | 4 | 0 | 438 |
+| machine:cd packages/validation && bun test test/ | claude-sonnet-5-5 | 2 | 207 | 4 | 102,148 | 7 |
+| machine:bun run lint:slop | claude-sonnet-5-5 | 2 | 202 | 4 | 102,830 | 9 |
+| capture:provenance | claude-sonnet-5-5 | 3 | 181 | 6 | 142,884 | 9 |
+| review:conventions | claude-opus-5-5 | 9 | 134 | 18 | 690,761 | 44 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-sonnet-5-5 | 2 | 40 | 4 | 102,209 | 9 |
+| machine:bunx turbo run build --force | claude-sonnet-5-5 | 2 | 40 | 4 | 102,834 | 89 |
+
+
+wall: 646s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 760 | 607,223 | 47 | 11:05:07 | 11:05:54 |
+| machine | 7 | 1,880 | 615,062 | 553 | 11:05:07 | 11:14:21 |
+| ui | 1 | 5,925 | 1,506,222 | 163 | 11:05:07 | 11:07:50 |
+| judge | 3 | 19,303 | 582,583 | 55 | 11:05:07 | 11:06:02 |
+| review | 3 | 1,872 | 2,049,336 | 60 | 11:05:07 | 11:06:07 |
+| triage | 1 | 1,144 | 71,322 | 10 | 11:14:22 | 11:14:32 |
+| capture | 1 | 181 | 142,884 | 9 | 11:14:33 | 11:14:42 |
+| synthesize | 1 | 10,762 | 329,365 | 70 | 11:14:43 | 11:15:53 |
+
+- **claude-sonnet-5-5**: 15 agent · 57 calls · out 39,955 · in 114 · cache_read 3,854,661 · cache_create 1,211,560
+- **claude-opus-5-5**: 3 agent · 25 calls · out 1,872 · in 50 · cache_read 2,049,336 · cache_create 236,968
+

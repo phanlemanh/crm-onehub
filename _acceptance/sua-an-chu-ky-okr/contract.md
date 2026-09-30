@@ -5,7 +5,7 @@ slug: sua-an-chu-ky-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-30T06:43:16Z
 design_doc: docs/superpowers/specs/2026-09-30-sua-an-chu-ky-okr-design.md
