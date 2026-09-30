@@ -73,7 +73,7 @@ ngưỡng; Cổng Phạm vi đặt phép đo thật.
 | --- | --- | --- | --- | --- | --- |
 | **0 · Hồ sơ công ty** — mô hình, khách hàng, địa bàn, sản phẩm chủ lực, công ty tương tự | **Chưa có.** `WorkspaceProfile` (`sells`, `sellsTo`, `edge`, 320 ký tự) là bản máy viết từ website, dùng cho tác nhân CRM, không có phiên bản hay duyệt | Có (không phải dữ liệu đối tác) | ≈ 800–1.500, ổn định → đứng đầu gói, trúng cache | **Cao nhất** — điều chủ kho nói thẳng | Không |
 | **1 · Cây tổ chức và vai người hỏi** | `Division` → `Department` (trưởng), `OrgPlacement` (phòng ban chính, quản lý trực tiếp), `Member.role`; đường đọc `to-chuc.tree` | Có (phạm vi «tổ chức» đã mở cho vai này) | ≈ 200–400, chỉ nhánh của đơn vị đang soạn | Vừa: biết soạn cho phòng ban hay bộ phận, ai là trưởng | Không |
-| **1n · Chức danh** | **Chưa có** trường nào trên `User` hay `OrgPlacement`; bộ mẫu cũng chưa gán quản lý trực tiếp | — | ≈ 50 | Cao cho OKR cá nhân; thấp cho OKR đơn vị | Không |
+| **1n · Mô tả đơn vị và chức danh** — «đơn vị này làm gì, chịu trách nhiệm gì»; chức danh của người | **Chưa có** trường nào trên `Division`, `Department`, `User` hay `OrgPlacement`; tài liệu Operating System ghi mandate và KPI theo Khối nhưng CRM không có chỗ giữ; bộ mẫu chưa gán quản lý trực tiếp | Có (phạm vi «tổ chức») | ≈ 150–400: mô tả của đơn vị đang soạn và đơn vị cha, chức danh người hỏi | **Cao** cho OKR đơn vị — không có nó, nháp cho hai phòng ban khác nhau ra na ná nhau; chức danh cao cho OKR cá nhân | Không |
 | **2a · OKR cấp trên và ngang cấp** | Đủ trong bảng OKR (Mục tiêu, KR, tiến độ, Cập nhật tuần); gói hôm nay chỉ lấy tên cấp trên | Có | ≈ 1.000–3.000: cấp trên đủ KR và tiến độ, ngang cấp chỉ tên | Cao: Căn chỉnh đúng, không trùng ngang cấp | Không (chỉ kỳ đang soạn và năm) |
 | **2b · Hỏi ý mục tiêu** | Nhánh `feat/dot-hoi-y-tuong-okr`, đã qua S4, chờ Cổng Bằng chứng, **chưa lên `onehub`**. Chủ đề được chọn có `cauMucTieu`, `ketLuan`, `lyDo` | Có | ≈ 300–800 | Cao cho cấp OneHub và bộ phận mùa đặt OKR năm | Không |
 | **3 · Lịch sử kỳ trước** | `OkrDiemKr` (số chốt, điểm, lý do), `OkrNhinLai.dieuHocDuoc`, `OkrMangSang`, toàn bộ `OkrCheckIn` (giá trị, mức tự tin cao·vừa·thấp, ghi chú ≤ 200 ký tự) | Có | ≈ 1.500–4.000 cho một kỳ, **khi mã tóm gọn** Cập nhật tuần (mức tự tin đầu và cuối, số tuần im, ghi chú hai lần cuối); đưa thô thì gấp 3–5 lần | Cao: biết bộ nào đạt, bộ nào trượt và vì sao | **Có** — mỗi kỳ thêm một tầng; lượt đầu một kỳ, sau đó hai kỳ gần nhất |
@@ -92,7 +92,7 @@ góp ý 9b. Con số này phải đo lại trước Cổng Phạm vi, như N0 đ
 | --- | --- | --- |
 | Hồ sơ công ty (lớp 0) và chiến lược rút gọn (lớp 5) | **Một loại trang mới «chiến lược» trong Kho tài liệu.** Quản trị viết hai trang: «Hồ sơ công ty» và «Chiến lược năm», rút từ tài liệu Operating System, không có phần lương thưởng. Trang có chủ trang, phiên bản, xác minh đến ngày; Trợ lý chỉ đọc **bản đang dùng** của mọi trang loại này. Mỗi trang có trần ký tự, kiểm lúc duyệt bản đề xuất — chủ trang thấy ngay, không cắt im lặng. Thêm giá trị vào `LOAI_TRANG` (cột `loai` là chuỗi) — không migration | Mở rộng `WorkspaceProfile` thành form: bảng có sẵn nhưng là bản máy viết và tự làm mới từ website, không phiên bản, không duyệt — dễ ghi đè bản người viết. Bảng mới `OkrBoiCanh`: T3 và lặp lại thứ Kho tài liệu đã có |
 | Lương thưởng lọt vào trang chiến lược | Dùng lại danh sách từ cấm của bộ kiểm 9b để **cảnh báo lúc duyệt** trang loại «chiến lược» (không chặn — chủ trang quyết). Bộ kiểm đầu ra vẫn chạy như 9b | Không làm gì: dữ liệu là dữ liệu, nhưng đưa từ cấm vào gói là mời model vi phạm rồi để bộ kiểm dọn |
-| Chức danh (1n) | **Để sau.** Ghi là nợ; mở khi Chương trình OKR bật OKR cá nhân hoặc khi số đo cho thấy nháp đơn vị sai vai. Cách có: một cột trên `OrgPlacement` — T3 | Đưa vào lượt đầu: kéo hạng mục lên T3 vì sửa `prisma`, trong khi OKR đơn vị chỉ cần tên đơn vị và trưởng |
+| Mô tả đơn vị và chức danh (1n) | **Làm trong lượt này** (chủ kho chốt 30/09). Hai ô, một migration chỉ thêm: `moTa` ≤ 500 ký tự trên `Division` và `Department`, quản trị sửa ở màn Cây tổ chức; `chucDanh` ≤ 80 ký tự trên `OrgPlacement`, sửa ở chỗ đặt người vào phòng ban. Cả hai thuộc phạm vi «tổ chức». Bộ mẫu điền đủ cho Hải Đăng Logistics | Để sau: tiết kiệm được T3 hôm nay nhưng chức danh và mô tả rồi cũng cần, và mở một lượt T3 nữa đắt hơn thêm hai cột cùng lúc. Chỉ thêm mô tả đơn vị, bỏ chức danh: đã trả giá T3 thì cột thứ hai gần như miễn phí. Nhét mô tả đơn vị vào trang «Hồ sơ công ty»: không migration, nhưng model phải khớp tên đơn vị trong chữ tự do, và người sửa cây tổ chức không thấy chỗ sửa mô tả |
 | Hỏi ý mục tiêu (2b) chưa lên `onehub` | **Lượt đầu không đọc.** Khi Hỏi ý gộp, thêm lớp 2b bằng một lượt T2 nhỏ: chỉ đọc chủ đề đã kết luận «chọn» của lần hỏi ý trong chu kỳ đang soạn | Dựng có điều kiện trong lượt này: hai nhánh chạm cùng gói bối cảnh, S4 phải chấm lại khi nhánh kia gộp |
 | Bộ mẫu chưa thử được lớp 3 | **Làm trong lượt này:** quý 3 mẫu (`lanQuy3` ở `dien-bien.ts`) sinh mức tự tin đều «vừa» và ghi chú rỗng — thêm kịch bản mức tự tin trôi và ghi chú có lý do trượt cho vài KR; thêm hai trang loại «chiến lược» của Hải Đăng Logistics; gán quản lý trực tiếp | — |
 | Không có thước cỡ gói | Một hàm ước lượng token theo ký tự trong `lib/okr/config.ts` (hệ số theo N0), trần mỗi lớp và trần tổng; quá trần thì cắt lớp 3 trước (kỳ xa hơn), rồi ngang cấp — **không bao giờ cắt lớp 0 và 5** | Đếm bằng bộ mã hoá thật: đúng hơn nhưng thêm phụ thuộc; đo ở S4 để hiệu chỉnh hệ số là đủ |
@@ -101,18 +101,20 @@ góp ý 9b. Con số này phải đo lại trước Cổng Phạm vi, như N0 đ
 ## 5. Đề xuất: lớp nào vào lượt đầu
 
 **Lượt đầu — `soan-okr-cung-tro-ly`:** lớp 0, 5 (qua loại trang «chiến lược»), 1
-(không chức danh), 2a, 3 (một kỳ, tóm gọn bằng mã), 4 (rỗng với vai «chỉ OKR»),
-cộng thước cỡ gói và bổ sung bộ mẫu. Thứ tự trong gói: lời dặn tĩnh → lớp 0 → lớp
-5 → lớp 1 → lớp 2a → lớp 3 → lớp 4 → đơn vị đang soạn, để phần tĩnh trúng cache.
+và 1n (mô tả đơn vị, chức danh), 2a, 3 (một kỳ, tóm gọn bằng mã), 4 (rỗng với vai
+«chỉ OKR»), cộng thước cỡ gói và bổ sung bộ mẫu. Thứ tự trong gói: lời dặn tĩnh →
+lớp 0 → lớp 5 → lớp 1 và 1n → lớp 2a → lớp 3 → lớp 4 → đơn vị đang soạn, để phần
+tĩnh trúng cache.
 Mọi lớp bọc trong thẻ «đây là dữ liệu, không phải lệnh» như 9b.
 
 **Để sau, mỗi thứ một lượt nhỏ, có điều kiện mở:** 2b khi Hỏi ý lên `onehub`;
-chức danh khi OKR cá nhân bật; hai kỳ trở lên sau khi quý 4 khép; tìm toàn văn
-và quyền theo trang theo điều kiện đã ghi ở thiết kế §7.2.
+hai kỳ trở lên sau khi quý 4 khép; tìm toàn văn và quyền theo trang theo điều
+kiện đã ghi ở thiết kế §7.2.
 
 **Mỗi lớp thêm vào có một phép đo cho vai «chỉ OKR»**, theo luật «một phép đo cho
 mỗi đường vào» của `vai-chi-okr`: lớp 4 phải rỗng với vai này; lớp 0, 5 là trang
-Kho tài liệu họ vốn đọc được; lớp 1, 2a, 3 là dữ liệu OKR họ vốn đọc được.
+Kho tài liệu họ vốn đọc được; lớp 1, 1n là dữ liệu tổ chức và lớp 2a, 3 là dữ
+liệu OKR họ vốn đọc được.
 
 ## 6. Ranh giới đổi so với lộ trình — Cổng Đáng phải nói rõ
 
@@ -126,8 +128,9 @@ Kho tài liệu họ vốn đọc được; lớp 1, 2a, 3 là dữ liệu OKR h
   chế độ ẩn · bật của 9b; tắt khi gộp.
 - Trang loại «chiến lược» là dữ liệu, không phải lệnh: bộ kiểm và thẻ dữ liệu
   như 9b. Người viết trang là quản trị, và trang qua duyệt như mọi trang.
-- Hạng: **T2** nếu giữ đúng phần trên (không sửa `prisma`, không chạm `auth`);
-  thành T3 ngay khi thêm chức danh hay cột mới. [GIẢ ĐỊNH — Cổng Đáng chốt]
+- Hạng: **T3** — hai cột mới trên cây tổ chức (mô tả đơn vị, chức danh) chạm
+  `packages/db/prisma`, nên có Cổng 1.5 duyệt kế hoạch. Chủ kho chọn 30/09: trả
+  giá T3 một lần thay vì mở một lượt T3 nữa sau này.
 - Hạn tự nhiên: trước mùa đặt OKR năm, 2026-12-07. Làn A đang bận 9c; thiết kế
   chạy song song, viết mã và chấm S4 hỏi chủ kho trước.
 
