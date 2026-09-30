@@ -8,7 +8,7 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
-import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
+import { NGAY_MS, TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import {
 	OKR_PROGRAM_MAC_DINH,
@@ -59,14 +59,14 @@ const CAU_HINH_A: OkrProgramSua = {
 	aiTomTatAnDonVi: [pb(PHONG.anCo), pb(PHONG.anKhong)],
 };
 
-const MA_TRAN: { ngay: string; homQua: number; ky: TenKy[] }[] = [
-	{ ngay: "2026-11-23", homQua: 7, ky: [] },
-	{ ngay: "2026-11-24", homQua: 1, ky: ["quy4"] },
-	{ ngay: "2026-11-25", homQua: 2, ky: [] },
-	{ ngay: "2026-11-26", homQua: 3, ky: [] },
-	{ ngay: "2026-11-27", homQua: 4, ky: ["nam"] },
-	{ ngay: "2026-11-28", homQua: 5, ky: [] },
-	{ ngay: "2026-11-29", homQua: 6, ky: [] },
+const MA_TRAN: { ngay: string; homQua: number; ky: TenKy[]; tuan: string }[] = [
+	{ ngay: "2026-11-23", homQua: 7, ky: [], tuan: "2026-11-16" },
+	{ ngay: "2026-11-24", homQua: 1, ky: ["quy4"], tuan: "2026-11-23" },
+	{ ngay: "2026-11-25", homQua: 2, ky: [], tuan: "2026-11-23" },
+	{ ngay: "2026-11-26", homQua: 3, ky: [], tuan: "2026-11-23" },
+	{ ngay: "2026-11-27", homQua: 4, ky: ["nam"], tuan: "2026-11-23" },
+	{ ngay: "2026-11-28", homQua: 5, ky: [], tuan: "2026-11-23" },
+	{ ngay: "2026-11-29", homQua: 6, ky: [], tuan: "2026-11-23" },
 ];
 
 const CO_CAP_NHAT = [PHONG.batCo, PHONG.anCo, PHONG.tatCo];
@@ -325,6 +325,14 @@ describe("ma tran bay ngay", () => {
 			expect(await damBaoLichTomTat(luc("2026-11-23T05:00:00"))).toBe(true);
 			const loi: string[] = [];
 			const chuoi: string[] = [];
+			type Phu = {
+				ngay: string;
+				homQua: number;
+				ketQua: (string | null)[];
+				tuan: string[];
+			};
+			const phu: Phu[] = [];
+			const canPhu: Phu[] = [];
 			for (const o of MA_TRAN) {
 				const now = sau6(o.ngay);
 				const xep = await db.agentTask.findFirst({
@@ -340,21 +348,28 @@ describe("ma tran bay ngay", () => {
 					[PHONG.batCo, "bat"],
 					[PHONG.anCo, "an"],
 				]);
-				expect(ketQua).toBe(`da-xep:${can.length}`);
 				loi.push(...lech(o.ngay, await oMoi(now), can));
-				const tuan = await tuanMoi(now);
-				expect(tuan).toEqual(
-					can.length ? [dauTuanVN(new Date(now.getTime() - 1))] : [],
-				);
 				const dong = await db.agentTask.findUniqueOrThrow({
 					where: { id: xep.id },
-					select: { finishedAt: true, outcome: true },
+					select: { outcome: true },
 				});
-				expect(dong.outcome).toBe(ketQua);
+				phu.push({
+					ngay: o.ngay,
+					homQua: new Date(now.getTime() - NGAY_MS).getDay() || 7,
+					ketQua: [ketQua, dong.outcome],
+					tuan: await tuanMoi(now),
+				});
+				canPhu.push({
+					ngay: o.ngay,
+					homQua: o.homQua,
+					ketQua: [`da-xep:${can.length}`, `da-xep:${can.length}`],
+					tuan: can.length ? [o.tuan] : [],
+				});
 				await db.agentTask.deleteMany({ where: { kind: TOM_TAT } });
 			}
 			expect(chuoi).toEqual([]);
 			expect(loi).toEqual([]);
+			expect(phu).toEqual(canPhu);
 			expect(await demXep("2026-11-30")).toBe(1);
 		},
 		CHO_DB,
