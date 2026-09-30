@@ -3,10 +3,10 @@ schema_version: 1
 slug: soan-okr-cung-tro-ly
 feature: Soạn OKR cùng Trợ lý — người sửa được OKR của một đơn vị mở một cuộc đối thoại với Trợ lý OKR cho đơn vị và chu kỳ đang lập kế hoạch; Trợ lý mang bối cảnh (hồ sơ công ty và chiến lược, đơn vị · mô tả · chức danh, OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng) vào cuộc đó, hỏi vài câu, đưa bản nháp bộ OKR trên bảng sống cạnh chat; người nhận · sửa · bác từng dòng, «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp, người điền đích rồi công bố
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-30T01:15:11Z
 prototype:
   base_commit: 246d1ac6
   disposition: archive
@@ -47,10 +47,10 @@ Logistics (hạng mục M); dữ liệu thật là điều kiện bật, không 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Trưởng đơn vị có dùng cuộc đối thoại với Trợ lý để soạn ra bộ OKR mà mình công bố được, thay vì soạn ngoài CRM rồi chép vào, với chi phí trong trần và không lộ dữ liệu đối tác cho vai «chỉ OKR» không?
-- Kết quả nào là SỐNG: [đề xuất] Trong mùa đặt OKR đầu tiên bật (cấp OneHub cho OKR năm 2027, rồi mọi phòng ban cho quý 1): ≥ 50% đơn vị được bật có ít nhất một cuộc soạn đi tới «Đưa vào bộ OKR»; ≥ 60% dòng nháp được nhận nguyên văn hoặc sửa rồi nhận; ≥ 70% Mục tiêu tạo từ nháp được công bố trong 14 ngày; chi phí mỗi cuộc ≤ 0,25 USD; 0 số đích do máy ghi; 0 lọt dữ liệu đối tác qua đường chat cho vai «chỉ OKR».
-- Kết quả nào là CHẾT: [đề xuất] Sau ≥ 10 cuộc soạn: < 20% đơn vị được bật hoàn tất cuộc nào; hoặc < 30% dòng nháp được nhận; hoặc khu OKR chạm trần tháng trước ngày 20 của tháng đặt OKR; hoặc có bất kỳ số đích nào máy tự ghi; hoặc một lần lọt dữ liệu đối tác.
-- Timebox: [đề xuất] Dựng xong và ở nấc tắt trên `onehub` trước 2026-12-07; bật cho cấp OneHub trong mùa OKR năm 2027; đo tại phiên nghiệm thu sau mùa đó; bật cho mọi phòng ban trước mùa quý 1 chỉ khi đạt ngưỡng sống.
+- Câu hỏi phép đo trả lời: Trưởng đơn vị có dùng cuộc đối thoại với Trợ lý để soạn ra bộ OKR mà mình công bố được, thay vì soạn ngoài CRM rồi chép vào, với chi phí trong trần và không lộ dữ liệu đối tác cho vai «chỉ OKR» không?
+- Kết quả nào là SỐNG: Trong mùa đặt OKR đầu tiên bật (cấp OneHub cho OKR năm 2027, rồi mọi phòng ban cho quý 1): ≥ 50% đơn vị được bật có ít nhất một cuộc soạn đi tới «Đưa vào bộ OKR»; ≥ 60% dòng nháp được nhận nguyên văn hoặc sửa rồi nhận; ≥ 70% Mục tiêu tạo từ nháp được công bố trong 14 ngày; chi phí mỗi cuộc ≤ 0,25 USD; 0 số đích do máy ghi; 0 lọt dữ liệu đối tác qua đường chat cho vai «chỉ OKR».
+- Kết quả nào là CHẾT: Sau ≥ 10 cuộc soạn: < 20% đơn vị được bật hoàn tất cuộc nào; hoặc < 30% dòng nháp được nhận; hoặc khu OKR chạm trần tháng trước ngày 20 của tháng đặt OKR; hoặc có bất kỳ số đích nào máy tự ghi; hoặc một lần lọt dữ liệu đối tác.
+- Timebox: Dựng xong và ở nấc tắt trên `onehub` trước 2026-12-07; bật cho cấp OneHub trong mùa OKR năm 2027; đo tại phiên nghiệm thu sau mùa đó; bật cho mọi phòng ban trước mùa quý 1 chỉ khi đạt ngưỡng sống.
 
 ## Kết quả prototype
 
@@ -69,13 +69,13 @@ sửa OKR cùng khung với deal» đang chạy ở phiên khác.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ đề nghị: tài liệu bối cảnh đã duyệt 30/09; hạn tự nhiên 2026-12-07; giả định 1, 3, 5 thử được trước Cổng Phạm vi.
+- **decision = build.** Căn cứ: tài liệu bối cảnh đã duyệt 30/09; hạn tự nhiên 2026-12-07; giả định 1, 3, 5 thử được trước Cổng Phạm vi. Quyết 2026-09-30 bởi Manh Phan: «build, giữ ngưỡng đề xuất, chốt cả ba chỗ đổi».
 - **disposition = archive.** Căn cứ: không có code prototype.
-- **Ngưỡng UAT chốt cùng lúc ký:** gỡ tiền tố đề xuất ở section Ngưỡng, hoặc sửa số.
-- **Ba chỗ đổi so với lộ trình, ký Cổng Đáng là chốt:**
-  1. [đề xuất] Ranh giới lượt 9 «không soạn trọn bộ OKR cho cả đội» đổi thành: soạn trọn bộ **nháp** qua đối thoại khi người yêu cầu; người quyết từng dòng; số đích người đặt; bộ chỉ vào CRM ở trạng thái nháp, người công bố. NG-05, NG-06 giữ.
-  2. [đề xuất] Thứ tự làn A: hạng mục này dựng nền chat OKR (eve app riêng) mà lộ trình xếp cho C `hoi-dap-okr`; C đi sau, dùng lại nền.
-  3. [đề xuất] Trần tháng khu OKR: giữ 9 USD, nhưng cho phép trần riêng cho tháng đặt OKR do quản trị đặt ở Chương trình OKR (mặc định bằng trần thường); con số nâng — nếu có — chủ kho quyết sau khi đo 20 cuộc ở giả định 3.
+- **Ngưỡng UAT chốt cùng lúc ký:** giữ nguyên số ở section Ngưỡng (chủ kho giữ ngưỡng máy đề xuất, 2026-09-30).
+- **Ba chỗ đổi so với lộ trình — đã chốt cùng chữ ký 2026-09-30:**
+  1. Ranh giới lượt 9 «không soạn trọn bộ OKR cho cả đội» đổi thành: soạn trọn bộ **nháp** qua đối thoại khi người yêu cầu; người quyết từng dòng; số đích người đặt; bộ chỉ vào CRM ở trạng thái nháp, người công bố. NG-05, NG-06 giữ.
+  2. Thứ tự làn A: hạng mục này dựng nền chat OKR (eve app riêng) mà lộ trình xếp cho C `hoi-dap-okr`; C đi sau, dùng lại nền.
+  3. Trần tháng khu OKR: giữ 9 USD, nhưng cho phép trần riêng cho tháng đặt OKR do quản trị đặt ở Chương trình OKR (mặc định bằng trần thường); con số nâng — nếu có — chủ kho quyết sau khi đo 20 cuộc ở giả định 3.
 
 ## Thước đo thành công → ứng viên criterion
 
