@@ -249,6 +249,15 @@ export function BangVet({
 										{kr}
 									</span>
 								) : null}
+								{v.action === "tra-lai" && v.note ? (
+									<span
+										className="text-muted-foreground text-xs"
+										data-ly-do-vet
+										translate="no"
+									>
+										{v.note}
+									</span>
+								) : null}
 							</span>
 						</TableCell>
 						<TableCell className={CELL}>

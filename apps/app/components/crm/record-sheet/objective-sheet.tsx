@@ -139,6 +139,7 @@ function HanhDongMucTieu({
 	const m = okrMessages(locale).sheet;
 	const g = okrGioiHanMessages(locale);
 	const trpc = useTRPC();
+	const toi = useQuery(trpc.users.me.queryOptions());
 	const [hoi, setHoi] = useState<"cong-bo" | "bo" | "sua" | null>(null);
 	const [krMo, setKrMo] = useState<string | null>(null);
 	const dongHoi = () => setHoi(null);
@@ -152,17 +153,27 @@ function HanhDongMucTieu({
 		trpc.okr.dropObjective.mutationOptions(useXong(mt.id, m.daBo, dongHoi)),
 	);
 
+	const vuaTraLai =
+		mt.traLaiGanNhat?.nguoi?.id !== undefined &&
+		mt.traLaiGanNhat.nguoi.id === toi.data?.id;
+
 	if (!ghiDuoc(mt)) return null;
 
 	return (
 		<>
 			{mt.quyen.guiDuyet ? (
 				mt.traLaiGanNhat === null ? (
-					<NutGuiDuyet objectiveId={mt.id} />
+					<NutGuiDuyet
+						objectiveId={mt.id}
+						soKr={mt.keyResults.length}
+						nguoiDuyet={mt.nguoiDuyetDuKien}
+					/>
 				) : null
 			) : mt.quyen.congBo && !mt.quyen.duyet ? (
 				<Button
 					size="sm"
+					variant={vuaTraLai ? "outline" : "default"}
+					data-variant={vuaTraLai ? "outline" : "default"}
 					data-nut="cong-bo"
 					disabled={congBo.isPending}
 					onClick={() => setHoi("cong-bo")}
