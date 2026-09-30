@@ -168,7 +168,7 @@ export class SoanService {
 			throw new BadRequestException(T.soan.kyKhongLapKeHoach);
 	}
 
-	private async tranChung(
+	async tranChung(
 		client: DbHoacTx,
 		ct: CauHinhAi,
 		now: Date,
