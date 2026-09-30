@@ -2,11 +2,11 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
+import { soGhiKhacNguoiGo, vetTaoKrSoan } from "@crm/validation/okr-cuoc-soan";
 import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
 import { dongSoanTuHang, TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { BadRequestException } from "@nestjs/common";
 import type { NestExpressApplication } from "@nestjs/platform-express";
-import { z } from "zod";
 import type {
 	SoanDanhSachOutput,
 	SoanDuaVaoOutput,
@@ -222,8 +222,6 @@ async function duaVao(
 	return goiSoan(app, "soanDuaVao", duong, { cuocSoanId, kr } as never, c);
 }
 
-const vetGhiSo = z.object({ startValue: z.number(), targetValue: z.number() });
-
 async function demBanGhi(cuocSoanId: string) {
 	const vet = await db.okrTrail.findMany({
 		where: { note: { startsWith: `${OKR.soan.ghiChuVet}${cuocSoanId}:` } },
@@ -255,20 +253,9 @@ async function soDichMayGhi(cuocSoanIds: string[]): Promise<string[]> {
 		},
 		select: { keyResultId: true, after: true },
 	});
-	const kr = new Map(
-		(
-			await db.okrKeyResult.findMany({
-				where: { id: { in: vet.flatMap((v) => v.keyResultId ?? []) } },
-				select: { id: true, startValue: true, targetValue: true },
-			})
-		).map((k) => [k.id, k]),
-	);
 	return vet.flatMap((v) => {
-		const k = kr.get(v.keyResultId ?? "");
-		const so = vetGhiSo.parse(v.after);
-		return k &&
-			k.startValue.toNumber() === so.startValue &&
-			k.targetValue.toNumber() === so.targetValue
+		const doc = vetTaoKrSoan.safeParse(v.after);
+		return doc.success && !soGhiKhacNguoiGo(doc.data)
 			? []
 			: [v.keyResultId ?? ""];
 	});
@@ -1139,9 +1126,11 @@ describe("dua-vao", () => {
 					(v) => v.note === `${OKR.soan.ghiChuVet}${kho.cuoc.id}:${s.deXuatId}`,
 				);
 				expect(vet?.keyResultId).toBe(krDb.id);
-				expect(vet?.after).toMatchObject({
+				expect(vet?.after, "vet mang so nguoi go").toMatchObject({
 					startValue: s.khoiDiem,
 					targetValue: s.dich,
+					soNguoiGoKhoiDiem: s.khoiDiem,
+					soNguoiGoDich: s.dich,
 				});
 			}
 			const moc = await db.okrKeyResult.findUniqueOrThrow({
@@ -1152,6 +1141,14 @@ describe("dua-vao", () => {
 				moc.startValue.toNumber(),
 				moc.targetValue.toNumber(),
 			]).toEqual(["moc", OKR.mau.moc.startValue, OKR.mau.moc.targetValue]);
+			expect(
+				dem.vet.find((v) => v.keyResultId === moc.id)?.after,
+				"moc khong co so nguoi go",
+			).toMatchObject({
+				kind: "moc",
+				soNguoiGoKhoiDiem: null,
+				soNguoiGoDich: null,
+			});
 			const a1 = await db.okrKeyResult.findUniqueOrThrow({
 				where: { id: (await hang(kho.kA1)).taoRaId ?? "" },
 			});
@@ -1187,7 +1184,14 @@ describe("dua-vao", () => {
 					action: "tao-kr",
 					objectiveId: idA,
 					keyResultId: gia.id,
-					after: { title: gia.title, startValue: 0, targetValue: 99 },
+					after: {
+						title: gia.title,
+						kind: "tang-toi",
+						startValue: 0,
+						targetValue: 99,
+						soNguoiGoKhoiDiem: 0,
+						soNguoiGoDich: 50,
+					},
 					note: `${OKR.soan.ghiChuVet}${kho.cuoc.id}:doi-chung`,
 				},
 			});

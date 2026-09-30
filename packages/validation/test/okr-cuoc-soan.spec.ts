@@ -8,6 +8,8 @@ import {
 	parseBanNhap,
 	parseDaCat,
 	soanDuaVaoInput,
+	soGhiKhacNguoiGo,
+	vetTaoKrSoan,
 } from "../src/okr-cuoc-soan";
 
 const kr = (i: number): KrNhap => ({
@@ -126,5 +128,43 @@ describe("bảng đã cắt", () => {
 		expect(() =>
 			parseDaCat({ buoc: [], truocToken: 1, sauToken: 1 }),
 		).toThrow();
+	});
+});
+
+describe("vết tạo KR từ soạn", () => {
+	const vet = {
+		title: "Hợp đồng ký mới",
+		kind: "tang-toi",
+		startValue: 0,
+		targetValue: 10,
+		soNguoiGoKhoiDiem: 0,
+		soNguoiGoDich: 10,
+	};
+	test("số ghi bằng số người gõ thì không lệch; khác đích thì lệch", () => {
+		expect(soGhiKhacNguoiGo(vetTaoKrSoan.parse(vet))).toBe(false);
+		expect(
+			soGhiKhacNguoiGo(vetTaoKrSoan.parse({ ...vet, targetValue: 999 })),
+		).toBe(true);
+		expect(
+			soGhiKhacNguoiGo(vetTaoKrSoan.parse({ ...vet, startValue: 3 })),
+		).toBe(true);
+	});
+	test("thiếu số người gõ, hay mốc mang số người gõ hay số khác luật mốc, đều không đọc được", () => {
+		const { soNguoiGoDich: _bo, ...thieu } = vet;
+		expect(vetTaoKrSoan.safeParse(thieu).success).toBe(false);
+		const moc = {
+			kind: "moc",
+			startValue: 0,
+			targetValue: 1,
+			soNguoiGoKhoiDiem: null,
+			soNguoiGoDich: null,
+		};
+		expect(soGhiKhacNguoiGo(vetTaoKrSoan.parse(moc))).toBe(false);
+		expect(vetTaoKrSoan.safeParse({ ...moc, soNguoiGoDich: 1 }).success).toBe(
+			false,
+		);
+		expect(vetTaoKrSoan.safeParse({ ...moc, targetValue: 5 }).success).toBe(
+			false,
+		);
 	});
 });

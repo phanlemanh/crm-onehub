@@ -1,6 +1,6 @@
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
-import { KIEU_KR, soKr } from "./okr-kr";
+import { KIEU_KR, SO_KR_MOC, soKr } from "./okr-kr";
 
 export const LOAI_MUC_TIEU_NHAP = ["cam-ket", "tham-vong"] as const;
 
@@ -83,4 +83,31 @@ export function parseDaCat(value: unknown): DaCat {
 	if (!r.success)
 		throw new Error(`bảng đã cắt không đọc được: ${r.error.message}`);
 	return r.data;
+}
+
+export const vetTaoKrSoan = z.discriminatedUnion("kind", [
+	z.object({
+		kind: z.literal("moc"),
+		startValue: z.literal(SO_KR_MOC.startValue),
+		targetValue: z.literal(SO_KR_MOC.targetValue),
+		soNguoiGoKhoiDiem: z.null(),
+		soNguoiGoDich: z.null(),
+	}),
+	z.object({
+		kind: z.enum(KIEU_KR).exclude(["moc"]),
+		startValue: soKr,
+		targetValue: soKr,
+		soNguoiGoKhoiDiem: soKr,
+		soNguoiGoDich: soKr,
+	}),
+]);
+
+export type VetTaoKrSoan = z.infer<typeof vetTaoKrSoan>;
+
+export function soGhiKhacNguoiGo(vet: VetTaoKrSoan): boolean {
+	if (vet.kind === "moc") return false;
+	return (
+		vet.startValue !== vet.soNguoiGoKhoiDiem ||
+		vet.targetValue !== vet.soNguoiGoDich
+	);
 }

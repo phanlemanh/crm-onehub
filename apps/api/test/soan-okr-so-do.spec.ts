@@ -72,6 +72,7 @@ let cNam = "";
 let cQuanTri = "";
 const cuoc = { b1: "", b2: "", b3: "", a1: "", a2: "" };
 const dongB2 = { bac: "", loai: "" };
+let krSua = "";
 const DA_CAT_B2: DaCat = {
 	buoc: ["3-tom-gon", "3-kr"],
 	truocToken: 18_400,
@@ -238,15 +239,37 @@ async function dungCanh(): Promise<void> {
 		[{ loai: "muc-tieu-moi", khoa: "m3", ten: "Mục tiêu bị bác" }],
 		"bac",
 	);
+	await gieoDongNhap(
+		b1,
+		[{ loai: "muc-tieu-moi", khoa: "m4", ten: "Kho miền Bắc giao trong ngày" }],
+		"nhan",
+	);
+	const [k4] = await gieoDongNhap(
+		b1,
+		[
+			{
+				loai: "kr-moi",
+				khoa: "k4",
+				chaKhoa: "m4",
+				ten: "Đơn giao trong ngày",
+				kieu: "tang-toi",
+			},
+		],
+		"nhan",
+	);
 	await db.okrDeXuat.updateMany({
 		where: { cuocSoanId: b1.id },
 		data: { hienLuc: luc(0) },
 	});
 	expect(m1 && m2).toBeTruthy();
-	const [mtA, mtB] = await duaVaoThat(b1.id, cTruong, [
+	const [mtA, mtB, mtC] = await duaVaoThat(b1.id, cTruong, [
 		{ deXuatId: k1 ?? "", khoiDiem: 0, dich: 10 },
 		{ deXuatId: k2 ?? "", khoiDiem: 0, dich: 8 },
+		{ deXuatId: k4 ?? "", khoiDiem: 20, dich: 60 },
 	]);
+	krSua =
+		(await db.okrDeXuat.findUniqueOrThrow({ where: { id: k1 ?? "" } }))
+			.taoRaId ?? "";
 	datDongHo(luc(3));
 	ok(
 		await goi(
@@ -258,6 +281,19 @@ async function dungCanh(): Promise<void> {
 		),
 		"cong bo 3 ngay",
 	);
+	datDongHo(luc(5));
+	await ghiCauHinh(app, cQuanTri, { duyetCongBo: true });
+	ok(
+		await goi(app, "okr.guiDuyet", "mutation", { id: mtC ?? "" }, cTruong),
+		"gui duyet 5 ngay",
+	);
+	await ghiCauHinh(app, cQuanTri, { duyetCongBo: false });
+	expect(
+		await db.okrObjective.findUniqueOrThrow({
+			where: { id: mtC ?? "" },
+			select: { status: true, publishedAt: true },
+		}),
+	).toEqual({ status: "cho-duyet", publishedAt: null });
 	datDongHo(luc(20));
 	ok(
 		await goi(
@@ -358,6 +394,9 @@ async function dungCanh(): Promise<void> {
 		["step.completed", luc(21, 0)],
 		["message.received", luc(21, 500)],
 		["step.completed", luc(21, 1_300)],
+		["message.received", luc(21, 5_000)],
+		["message.received", luc(21, 5_000)],
+		["step.completed", luc(21, 6_000)],
 	]);
 	await gieoLuot(`${TIEN_TO_TLO}phien-ngoai`, [
 		["message.received", luc(21, 0)],
@@ -435,23 +474,23 @@ const TAY_BAT: SoDoSoanNac = {
 	donViCoCuoc: 2,
 	donViHoanTat: 1,
 	tyLeDonViHoanTat: 0.5,
-	daHien: 7,
-	dongNhan: 2,
+	daHien: 9,
+	dongNhan: 4,
 	dongSua: 2,
 	dongBac: 2,
-	tyLeDuocNhan: 0.5714,
+	tyLeDuocNhan: 0.6667,
 	dongBiLoai: 3,
 	theoMa: [
 		{ maLoai: "so-moi", so: 2 },
 		{ maLoai: "tu-cam", so: 1 },
 	],
-	mucTieuNhap: 2,
+	mucTieuNhap: 3,
 	mucTieuCongBo14Ngay: 1,
-	tyLeCongBo14Ngay: 0.5,
+	tyLeCongBo14Ngay: 0.3333,
 	tienUsd: 0.06,
 	chiPhiMoiCuocUsd: 0.02,
-	p50Ms: 1_850,
-	p90Ms: 3_550,
+	p50Ms: 1_200,
+	p90Ms: 3_400,
 };
 const TAY_AN: SoDoSoanNac = {
 	cuocMo: 2,
@@ -647,13 +686,32 @@ describe("so-do-soan", () => {
 	test(
 		"so-dich-may-ghi.mjs xanh trên kho này và đỏ với --doi-chung (đối chứng dương), đối chứng không để lại hàng",
 		async () => {
+			const truoc = await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: krSua },
+			});
+			expect(truoc.targetValue.toNumber()).toBe(10);
+			ok(
+				await goi(
+					app,
+					"okr.updateKeyResult",
+					"mutation",
+					{ id: krSua, targetValue: 12 },
+					cTruong,
+				),
+				"nguoi sua dich",
+			);
+			expect(
+				(
+					await db.okrKeyResult.findUniqueOrThrow({ where: { id: krSua } })
+				).targetValue.toNumber(),
+			).toBe(12);
 			const tep = join(RANG, "so-dich-may-ghi.mjs");
 			const xanh = spawnSync("bun", [tep], {
 				env: process.env,
 				encoding: "utf8",
 			});
 			console.log(xanh.stdout);
-			expect(xanh.stdout).toContain("KR mang vet soan-okr = 3");
+			expect(xanh.stdout).toContain("KR mang vet soan-okr = 4");
 			expect(xanh.stdout).toContain("0 so dich do may ghi");
 			expect(xanh.status).toBe(0);
 			const doiChung = spawnSync("bun", [tep, "--doi-chung"], {

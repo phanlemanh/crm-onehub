@@ -23,7 +23,7 @@ import {
 	laMucTieu,
 	tapHien,
 } from "./soan-ban-nhap";
-import { ghiChuVetSoan } from "./soan-so-do.service";
+import { ghiChuVetSoan } from "./soan-vet";
 
 type Tx = Prisma.TransactionClient;
 type TuChoi = Extract<SoanDuaVaoOutput, { ok: false }>;
@@ -196,6 +196,14 @@ export async function duaVaoTrong(
 			chiTiet: T.vuotTranMucTieu((await okr.program(tx)).objectiveCap),
 		};
 	const note = (d: DongDoc) => ghiChuVetSoan(cuoc.id, d.hang.id);
+	const nguoiGo = new Map(v.kr.map((s) => [s.deXuatId, s]));
+	const soNguoiGo = (d: DongDoc) => {
+		const go = nguoiGo.get(d.hang.id);
+		return {
+			soNguoiGoKhoiDiem: go?.khoiDiem ?? null,
+			soNguoiGoDich: go?.dich ?? null,
+		};
+	};
 	const ghiTaoRa = (d: DongDoc, taoRaId: string) =>
 		tx.okrDeXuat.update({ where: { id: d.hang.id }, data: { taoRaId } });
 	const mucTieuIds: string[] = [];
@@ -235,7 +243,7 @@ export async function duaVaoTrong(
 					dueOn: null,
 					weight: OKR.mau.trongSoKr,
 				},
-				{ tx, mt, note: note(k.dong) },
+				{ tx, mt, note: note(k.dong), sauThem: soNguoiGo(k.dong) },
 			);
 			await ghiTaoRa(k.dong, kr.id);
 			soKr += 1;

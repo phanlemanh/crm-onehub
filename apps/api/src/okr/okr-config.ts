@@ -6,6 +6,7 @@ import {
 } from "@crm/validation/okr-cap-nhat";
 import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
+import { SO_KR_MOC } from "@crm/validation/okr-kr";
 import { OKR_MAU } from "@crm/validation/okr-mau";
 import type { MaThieu } from "./hoi-y";
 
@@ -29,7 +30,7 @@ export const OKR = {
 		suKien: { nguoiGo: "message.received", xongBuoc: "step.completed" },
 		phanVi: { giua: 0.5, cao: 0.9 },
 	},
-	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
+	mau: { moc: SO_KR_MOC, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
 		kieu: {

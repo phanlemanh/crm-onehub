@@ -119,6 +119,7 @@ export type KrTrongGiaoDich = {
 	tx: Tx;
 	mt: { id: string; cycleId: string };
 	note: string;
+	sauThem?: OkrVetSnapshot;
 };
 type AlignmentInput = {
 	objectiveId: string;
@@ -956,6 +957,7 @@ export class OkrService {
 					kind: kr.kind,
 					startValue: input.startValue,
 					targetValue: input.targetValue,
+					...trong?.sauThem,
 				},
 				trong?.note ?? null,
 			);

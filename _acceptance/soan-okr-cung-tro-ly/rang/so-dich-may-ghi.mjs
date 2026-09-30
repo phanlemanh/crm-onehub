@@ -30,33 +30,38 @@ if (DOI_CHUNG && !khoDungMotLan()) {
 }
 
 const { db } = await import(join(GOC, "packages/db/src/client.ts"));
+const { soGhiKhacNguoiGo, vetTaoKrSoan } = await import(
+	join(GOC, "packages/validation/src/okr-cuoc-soan.ts")
+);
 
 async function thuoc(tx) {
 	const dich = await tx.$queryRawUnsafe(
 		`SELECT id FROM "okrDeXuat" WHERE "cuocSoanId" IS NOT NULL AND dich IS NOT NULL AND dich <> 'null'::jsonb ORDER BY id`,
 	);
-	const kr = await tx.$queryRawUnsafe(
-		`SELECT t."keyResultId" AS id, t.after, k.title, k."startValue"::float AS khoi, k."targetValue"::float AS dich
-		 FROM "okrTrail" t JOIN "okrKeyResult" k ON k.id = t."keyResultId"
-		 WHERE t.action = 'tao-kr' AND t.note LIKE 'soan-okr:%'
-		 ORDER BY t."keyResultId"`,
+	const vet = await tx.$queryRawUnsafe(
+		`SELECT id, "keyResultId", after FROM "okrTrail"
+		 WHERE action = 'tao-kr' AND note LIKE 'soan-okr:%'
+		 ORDER BY id`,
 	);
-	const lech = kr.filter(
-		(h) =>
-			Number(h.after?.startValue) !== h.khoi ||
-			Number(h.after?.targetValue) !== h.dich,
-	);
-	return { dongDich: dich.map((d) => d.id), soKr: kr.length, lech };
+	const lech = vet.flatMap((v) => {
+		const doc = vetTaoKrSoan.safeParse(v.after);
+		if (!doc.success)
+			return [{ ...v, lyDo: "vet thieu so nguoi go hoac sai khuon" }];
+		return soGhiKhacNguoiGo(doc.data)
+			? [{ ...v, lyDo: "so ghi khac so nguoi go" }]
+			: [];
+	});
+	return { dongDich: dich.map((d) => d.id), soKr: vet.length, lech };
 }
 
 function in_(kq) {
 	console.log(
-		`so-dich-may-ghi: dong nhap mang dich = ${kq.dongDich.length}; KR mang vet soan-okr = ${kq.soKr}; KR lech after = ${kq.lech.length}`,
+		`so-dich-may-ghi: dong nhap mang dich = ${kq.dongDich.length}; KR mang vet soan-okr = ${kq.soKr}; KR lech so nguoi go = ${kq.lech.length}`,
 	);
 	for (const id of kq.dongDich) console.log(`  dong nhap mang dich: ${id}`);
-	for (const h of kq.lech)
+	for (const v of kq.lech)
 		console.log(
-			`  lech: ${h.id} «${h.title}» after=${JSON.stringify(h.after)} kr=[${h.khoi}, ${h.dich}]`,
+			`  lech: vet ${v.id} KR ${v.keyResultId} (${v.lyDo}) after=${JSON.stringify(v.after)}`,
 		);
 }
 
@@ -107,7 +112,14 @@ async function gieoDoiChung(tx) {
 			objectiveId: `${GIEO}-mt`,
 			keyResultId: `${GIEO}-kr`,
 			action: "tao-kr",
-			after: { startValue: 0, targetValue: 10 },
+			after: {
+				title: "KR doi chung",
+				kind: "tang-toi",
+				startValue: 0,
+				targetValue: 999,
+				soNguoiGoKhoiDiem: 0,
+				soNguoiGoDich: 10,
+			},
 			note: `soan-okr:${GIEO}:${GIEO}`,
 		},
 	});
@@ -145,7 +157,7 @@ if (DOI_CHUNG) {
 			const kq = await thuoc(tx);
 			in_(kq);
 			bat = {
-				kr: kq.lech.some((h) => h.id === `${GIEO}-kr`),
+				kr: kq.lech.some((v) => v.keyResultId === `${GIEO}-kr`),
 				dong: kq.dongDich.includes(`${GIEO}-dong`),
 			};
 			throw new Error(LUI);
@@ -156,12 +168,12 @@ if (DOI_CHUNG) {
 	await db.$disconnect();
 	if (!bat.kr || !bat.dong) {
 		console.log(
-			`doi chung khong do: thuoc khong bat ${[!bat.kr && "KR gieo co dich khac after", !bat.dong && "dong nhap gieo mang dich"].filter(Boolean).join(", ")}`,
+			`doi chung khong do: thuoc khong bat ${[!bat.kr && "vet KR gieo co dich khac so nguoi go", !bat.dong && "dong nhap gieo mang dich"].filter(Boolean).join(", ")}`,
 		);
 		process.exit(1);
 	}
 	console.log(
-		"doi chung duong: thuoc do dung cho (KR lech after va dong nhap mang dich)",
+		"doi chung duong: thuoc do dung cho (vet KR ghi dich khac so nguoi go va dong nhap mang dich)",
 	);
 	process.exit(0);
 }
@@ -169,15 +181,15 @@ if (DOI_CHUNG) {
 const kq = await thuoc(db);
 await db.$disconnect();
 in_(kq);
+if (kq.dongDich.length > 0 || kq.lech.length > 0) {
+	console.log(
+		`so dich may ghi: dong nhap co dich ${kq.dongDich.length}, KR lech ${kq.lech.map((v) => v.keyResultId).join(", ")}`,
+	);
+	process.exit(1);
+}
 if (kq.soKr === 0) {
 	console.log("chua co KR nao tu cuoc soan — thuoc khong do duoc (ma 2)");
 	process.exit(2);
-}
-if (kq.dongDich.length > 0 || kq.lech.length > 0) {
-	console.log(
-		`so dich may ghi: dong nhap co dich ${kq.dongDich.length}, KR lech ${kq.lech.map((h) => h.id).join(", ")}`,
-	);
-	process.exit(1);
 }
 console.log("0 so dich do may ghi");
 process.exit(0);

@@ -10,6 +10,7 @@ import { trangThaiDeXuat } from "@crm/validation/okr-tro-ly";
 import { z } from "zod";
 import type { SoDoSoanNac } from "./okr.contracts";
 import { OKR } from "./okr-config";
+import { cuocCuaVet, tienToVetCuoc } from "./soan-vet";
 import { chiaTien, lamTronTien, phanVi, tyLe } from "./tro-ly-so-do";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
@@ -54,17 +55,6 @@ export type SoKySoan = {
 	tien: ReadonlyMap<string, Prisma.Decimal>;
 	suKien: SuKienPhien[];
 };
-
-export const tienToVetCuoc = (cuocSoanId: string) =>
-	`${SOAN.ghiChuVet}${cuocSoanId}:`;
-
-export const ghiChuVetSoan = (cuocSoanId: string, deXuatId: string) =>
-	`${tienToVetCuoc(cuocSoanId)}${deXuatId}`;
-
-export function cuocCuaVet(note: string | null): string | null {
-	if (!note?.startsWith(SOAN.ghiChuVet)) return null;
-	return note.slice(SOAN.ghiChuVet.length).split(":")[0] ?? null;
-}
 
 export const tienCua = (
 	tien: ReadonlyMap<string, Prisma.Decimal>,
@@ -166,21 +156,37 @@ export async function docKySoan(
 }
 
 function doTreMoiLuot(suKien: readonly SuKienPhien[]): number[] {
-	const theoPhien = new Map<string, SuKienPhien[]>();
-	for (const e of suKien)
-		theoPhien.set(e.sessionId, [...(theoPhien.get(e.sessionId) ?? []), e]);
-	return [...theoPhien.values()].flatMap((ds) => {
-		const xong = ds
-			.filter((e) => e.type === SOAN.suKien.xongBuoc)
-			.map((e) => e.emittedAt.getTime());
-		return ds
-			.filter((e) => e.type === SOAN.suKien.nguoiGo)
-			.flatMap((e) => {
-				const nhan = e.emittedAt.getTime();
-				const sau = xong.filter((t) => t > nhan);
-				return sau.length === 0 ? [] : [Math.min(...sau) - nhan];
-			});
-	});
+	const xep = [...suKien].sort(
+		(a, b) =>
+			a.sessionId.localeCompare(b.sessionId) ||
+			a.emittedAt.getTime() - b.emittedAt.getTime(),
+	);
+	const tre: number[] = [];
+	let phien: string | null = null;
+	let buocSau: number | null = null;
+	let i = xep.length - 1;
+	while (i >= 0) {
+		const dau = xep[i];
+		if (!dau) break;
+		const luc = dau.emittedAt.getTime();
+		if (dau.sessionId !== phien) {
+			phien = dau.sessionId;
+			buocSau = null;
+		}
+		let coNhan = false;
+		let coBuoc = false;
+		for (
+			let e = xep[i];
+			e && e.sessionId === phien && e.emittedAt.getTime() === luc;
+			e = xep[--i]
+		) {
+			if (e.type === SOAN.suKien.nguoiGo) coNhan = true;
+			else coBuoc = true;
+		}
+		if (coNhan && buocSau !== null) tre.push(buocSau - luc);
+		if (coBuoc) buocSau = luc;
+	}
+	return tre;
 }
 
 const khoaDonVi = (c: CuocSoan) =>
