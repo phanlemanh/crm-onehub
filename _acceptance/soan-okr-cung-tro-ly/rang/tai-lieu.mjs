@@ -59,13 +59,14 @@ const TAI_LIEU = {
 		"OKR_AGENT_BRIDGE_SECRET",
 		"nop_ban_nhap",
 	],
+	soChatUi: { tieuDe: "— 7", cau: "exactly seven files" },
 	chatUi: [
 		"Conversation",
 		"ConversationEmptyState",
 		"Suggestion",
 		"PromptInput",
 	],
-	thuTuc: { mau: /^\t(soan[A-Z][A-Za-z]*)\(/, toiThieu: 8 },
+	thuTuc: { mau: /^\t(soan[A-Z][A-Za-z]*)\(/, toiThieu: 9 },
 	trangTri: /^\t@(Query|Mutation)\(/,
 	thanTrangTri: /^\t\t|^\t\}\)/,
 	trangThai: [
@@ -147,7 +148,7 @@ const TAI_LIEU = {
 	nhapServer:
 		/\b(?:import|export)\s+(type\s+)?[^;]*?\bfrom\s*["'](@crm\/(?:db|auth)(?:\/[^"']*)?)["']/g,
 	nhap: /(?:\bfrom\s*|\bimport\s*\(\s*|\bimport\s+|\brequire\s*\(\s*)["']([^"'\n]+)["']/g,
-	agent: { tuyet: "apps/agent/", goi: /^agent(\/|$)/ },
+	agent: { thuMuc: "apps/agent", goi: /^agent(\/|$)/ },
 	goiMoHinh:
 		/\b(generateText|streamText|generateObject|streamObject)\s*\(|from\s+["'](ai|@ai-sdk\/[^"']+|openai|@anthropic-ai\/[^"']+|@google\/[^"']+)["']/,
 	tienToTam: "soan-tai-lieu-",
@@ -281,9 +282,22 @@ function kiemChatUi(goc) {
 	const doan = mucTieuDe(doc(goc, TAI_LIEU.tep.chatUi), TAI_LIEU.muc.trongCay);
 	if (doan === null)
 		return [`docs/chat-ui.md thieu muc «${TAI_LIEU.muc.trongCay}»`];
-	return TAI_LIEU.chatUi
-		.filter((t) => !doan.includes(`\`${t}\``))
-		.map((t) => `docs/chat-ui.md so thieu ${t} o «What is in the tree today»`);
+	const dauMuc = doan.split("\n")[0];
+	const loi = [];
+	if (!dauMuc.endsWith(TAI_LIEU.soChatUi.tieuDe))
+		loi.push(
+			`docs/chat-ui.md tieu de «What is in the tree today» khong ghi «${TAI_LIEU.soChatUi.tieuDe}»: ${dauMuc}`,
+		);
+	if (!doan.includes(TAI_LIEU.soChatUi.cau))
+		loi.push(`docs/chat-ui.md muc so khong ghi «${TAI_LIEU.soChatUi.cau}»`);
+	return [
+		...loi,
+		...TAI_LIEU.chatUi
+			.filter((t) => !doan.includes(`\`${t}\``))
+			.map(
+				(t) => `docs/chat-ui.md so thieu ${t} o «What is in the tree today»`,
+			),
+	];
 }
 
 function mangEnv(turbo) {
@@ -406,12 +420,15 @@ function kiemApi(goc) {
 	);
 }
 
+function trongAgent(duong) {
+	const thuMuc = TAI_LIEU.agent.thuMuc;
+	return duong === thuMuc || duong.startsWith(`${thuMuc}/`);
+}
+
 function vaoAgent(t, dich) {
-	if (dich.startsWith(".")) {
-		const tuyet = posix.normalize(posix.join(posix.dirname(t), dich));
-		return tuyet.startsWith(TAI_LIEU.agent.tuyet);
-	}
-	return TAI_LIEU.agent.goi.test(dich) || dich.startsWith(TAI_LIEU.agent.tuyet);
+	if (dich.startsWith("."))
+		return trongAgent(posix.normalize(posix.join(posix.dirname(t), dich)));
+	return TAI_LIEU.agent.goi.test(dich) || trongAgent(dich);
 }
 
 function kiemNhapCheo(goc) {
@@ -501,6 +518,16 @@ const ghiJson = (goc, tep, doi) =>
 
 const chenSau = (moc, them) => (cu) => cu.replace(moc, `${moc}${them}`);
 
+const doiTrongMucContext = (ten, tu, thanh) => (c) => {
+	const bat = c.indexOf(ten);
+	const ket = c.indexOf("\n\n**", bat + ten.length);
+	return `${c.slice(0, bat)}${c.slice(bat, ket).replaceAll(tu, thanh)}${c.slice(ket)}`;
+};
+
+const doiTieuDe = (tep, tu, thanh) => ({
+	lam: (g) => ghi(g, tep, (c) => c.replace(tu, thanh)),
+});
+
 const PHA = [
 	{
 		ten: "context-thieu-muc",
@@ -514,11 +541,105 @@ const PHA = [
 		ten: "context-thieu-avoid",
 		ghim: "CONTEXT.md muc «Cuộc soạn» thieu dong _Avoid_",
 		lam: (g) =>
-			ghi(g, TAI_LIEU.tep.context, (c) => {
-				const bat = c.indexOf("**Cuộc soạn**");
-				const ket = c.indexOf("\n\n**", bat + 1);
-				return `${c.slice(0, bat)}${c.slice(bat, ket).replaceAll("_Avoid_", "_Tranh_")}${c.slice(ket)}`;
-			}),
+			ghi(
+				g,
+				TAI_LIEU.tep.context,
+				doiTrongMucContext("**Cuộc soạn**", "_Avoid_", "_Tranh_"),
+			),
+	},
+	{
+		ten: "context-thieu-vi-sao",
+		ghim: "CONTEXT.md muc «Cuộc soạn» thieu dong Vì sao",
+		lam: (g) =>
+			ghi(
+				g,
+				TAI_LIEU.tep.context,
+				doiTrongMucContext("**Cuộc soạn**", "Vì sao:", "Vi sao -"),
+			),
+	},
+	{
+		ten: "context-thieu-cau-chot",
+		ghim: "CONTEXT.md muc «Cuộc soạn» thieu cau chot tai Cong Pham vi",
+		lam: (g) =>
+			ghi(
+				g,
+				TAI_LIEU.tep.context,
+				doiTrongMucContext(
+					"**Cuộc soạn**",
+					`Cổng Phạm vi của \`${TAI_LIEU.slug}\``,
+					`Cổng Phạm vi (${TAI_LIEU.slug})`,
+				),
+			),
+	},
+	{
+		ten: "router-thieu-thu-tuc",
+		ghim: `router chi co ${TAI_LIEU.thuTuc.toiThieu - 1} thu tuc soan* (< ${TAI_LIEU.thuTuc.toiThieu})`,
+		lam: (g) =>
+			ghi(g, TAI_LIEU.tep.router, (c) => c.replace("\tsoanAn(", "\tanSoan(")),
+	},
+	{
+		ten: "api-thieu-h2",
+		ghim: `docs/api.md thieu muc «${TAI_LIEU.muc.okr}»`,
+		...doiTieuDe(
+			TAI_LIEU.tep.api,
+			`\n${TAI_LIEU.muc.okr}\n`,
+			"\n## Muc tieu\n",
+		),
+	},
+	{
+		ten: "agent-thieu-h2-app",
+		ghim: `docs/agent.md thieu muc «${TAI_LIEU.muc.appThuHai}»`,
+		...doiTieuDe(
+			TAI_LIEU.tep.agent,
+			TAI_LIEU.muc.appThuHai,
+			"## App eve thu hai",
+		),
+	},
+	{
+		ten: "agent-thieu-h2-cho-re",
+		ghim: `docs/agent.md thieu muc «${TAI_LIEU.muc.choRe}»`,
+		...doiTieuDe(TAI_LIEU.tep.agent, TAI_LIEU.muc.choRe, "## Cho re: Soan OKR"),
+	},
+	{
+		ten: "chat-ui-thieu-h3",
+		ghim: `docs/chat-ui.md thieu muc «${TAI_LIEU.muc.trongCay}»`,
+		...doiTieuDe(
+			TAI_LIEU.tep.chatUi,
+			TAI_LIEU.muc.trongCay,
+			"### What is in the tree now",
+		),
+	},
+	{
+		ten: "chat-ui-so-tieu-de",
+		ghim: `docs/chat-ui.md tieu de «What is in the tree today» khong ghi «${TAI_LIEU.soChatUi.tieuDe}»`,
+		...doiTieuDe(
+			TAI_LIEU.tep.chatUi,
+			`${TAI_LIEU.muc.trongCay} ${TAI_LIEU.soChatUi.tieuDe}`,
+			`${TAI_LIEU.muc.trongCay} — 8`,
+		),
+	},
+	{
+		ten: "chat-ui-so-cau",
+		ghim: `docs/chat-ui.md muc so khong ghi «${TAI_LIEU.soChatUi.cau}»`,
+		...doiTieuDe(
+			TAI_LIEU.tep.chatUi,
+			TAI_LIEU.soChatUi.cau,
+			"exactly eight files",
+		),
+	},
+	{
+		ten: "setup-thieu-h3",
+		ghim: `docs/setup.md thieu muc «${TAI_LIEU.muc.phienDo}»`,
+		...doiTieuDe(
+			TAI_LIEU.tep.setup,
+			TAI_LIEU.muc.phienDo,
+			"### Screen measurements",
+		),
+	},
+	{
+		ten: "lo-trinh-thieu-muc",
+		ghim: "lo-trinh-okr.md thieu muc 10",
+		...doiTieuDe(TAI_LIEU.tep.loTrinh, TAI_LIEU.muc.theoDoi, "## 10. Theo doi"),
 	},
 	{
 		ten: "api-thieu-thu-tuc",
@@ -627,19 +748,19 @@ const PHA = [
 	{
 		ten: "lo-trinh-thieu-dong",
 		ghim: `lo-trinh-okr.md muc 10 thieu dong ${TAI_LIEU.slug}`,
-		lam: (g) => {
-			const c = doc(g, TAI_LIEU.tep.loTrinh);
-			const doan = mucTieuDe(c, TAI_LIEU.muc.theoDoi);
-			const moi = doan
-				.split("\n")
-				.map((d) =>
-					hangLoTrinh().test(d)
-						? d.replace(`\`${TAI_LIEU.slug}\``, `\`${TAI_LIEU.slug}-x\``)
-						: d,
-				)
-				.join("\n");
-			writeFileSync(join(g, TAI_LIEU.tep.loTrinh), c.replace(doan, moi));
-		},
+		lam: (g) =>
+			ghi(g, TAI_LIEU.tep.loTrinh, (c) => {
+				const doan = mucTieuDe(c, TAI_LIEU.muc.theoDoi);
+				const moi = doan
+					.split("\n")
+					.map((d) =>
+						hangLoTrinh().test(d)
+							? d.replace(`\`${TAI_LIEU.slug}\``, `\`${TAI_LIEU.slug}-x\``)
+							: d,
+					)
+					.join("\n");
+				return c.replace(doan, moi);
+			}),
 	},
 	{
 		ten: "lo-trinh-trang-thai",
@@ -706,6 +827,16 @@ const PHA = [
 			),
 	},
 	{
+		ten: "nhap-cheo-thu-muc-tran",
+		ghim: "nhap cheo apps/agent: apps/agent-okr/agent/lib/config.ts:1",
+		lam: (g) =>
+			ghi(
+				g,
+				"apps/agent-okr/agent/lib/config.ts",
+				(c) => `import agent from "../../../agent";\n${c}`,
+			),
+	},
+	{
 		ten: "thieu-tep",
 		ghim: `KHONG DO DUOC: thieu tep: ${TAI_LIEU.tep.setup}`,
 		ma: 2,
@@ -713,8 +844,7 @@ const PHA = [
 	},
 ];
 
-function banSao() {
-	const tam = mkdtempSync(join(tmpdir(), TAI_LIEU.tienToTam));
+function tepNguon() {
 	const tep = [
 		...Object.values(TAI_LIEU.tep),
 		...tapTep(GOC, [
@@ -723,18 +853,32 @@ function banSao() {
 			...TAI_LIEU.vung.agentOkr,
 		]),
 	];
-	for (const t of new Set(tep)) {
-		mkdirSync(dirname(join(tam, t)), { recursive: true });
-		cpSync(join(GOC, t), join(tam, t));
+	for (const t of tep)
+		if (!existsSync(join(GOC, t))) khongDo(`thieu tep: ${t}`);
+	return [...new Set(tep)];
+}
+
+function banSao(tep) {
+	const tam = mkdtempSync(join(tmpdir(), TAI_LIEU.tienToTam));
+	try {
+		for (const t of tep) {
+			mkdirSync(dirname(join(tam, t)), { recursive: true });
+			cpSync(join(GOC, t), join(tam, t));
+		}
+	} catch (e) {
+		rmSync(tam, { recursive: true, force: true });
+		throw e;
 	}
 	return tam;
 }
 
 function chieuDo(inRa) {
+	const tep = tepNguon();
 	let bat = 0;
 	for (const ca of PHA) {
-		const tam = banSao();
+		let tam;
 		try {
+			tam = banSao(tep);
 			ca.lam(tam);
 			const r = spawnSync(process.execPath, [TEP, "--goc", tam], {
 				encoding: "utf8",
@@ -749,7 +893,7 @@ function chieuDo(inRa) {
 					: `SAI pha-${ca.ten}: exit ${r.status} · KHONG BAT «${ca.ghim}» (${dong.filter(Boolean).slice(-3).join(" | ")})`,
 			);
 		} finally {
-			rmSync(tam, { recursive: true, force: true });
+			if (tam) rmSync(tam, { recursive: true, force: true });
 		}
 	}
 	return bat;
