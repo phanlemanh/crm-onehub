@@ -24,4 +24,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   Người dùng thấy gì: Không ảnh hưởng người dùng. Chỉ khi máy không chạy được `bun`, bộ đo của chính trình chạy có thể giết cả lượt test đang chạy thay vì báo lỗi gọn.
   file: `packages/ui/test/chay-tung-tep-dom.spec.ts:89`
   severity: low
-  Đề xuất: mở contract mới (sửa nhỏ, có thể gộp vào lượt sau)
+  Đề xuất: known-limits
