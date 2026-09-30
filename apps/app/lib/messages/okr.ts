@@ -228,6 +228,10 @@ const vi = {
 	},
 	hanhDong: {
 		"tao-chu-ky": "Mở chu kỳ",
+		"sua-chu-ky": "Sửa chu kỳ",
+		"go-chu-ky": "Gỡ chu kỳ",
+		"an-chu-ky": "Ẩn chu kỳ",
+		"hien-chu-ky": "Hiện lại chu kỳ",
 		"doi-pha": "Chuyển pha",
 		"cau-hinh": "Đổi cấu hình",
 		tao: "Tạo mục tiêu",
@@ -803,6 +807,10 @@ const en: OkrMessages = {
 	},
 	hanhDong: {
 		"tao-chu-ky": "Opened cycle",
+		"sua-chu-ky": "Edited cycle",
+		"go-chu-ky": "Removed cycle",
+		"an-chu-ky": "Hid cycle",
+		"hien-chu-ky": "Unhid cycle",
 		"doi-pha": "Changed phase",
 		"cau-hinh": "Changed settings",
 		tao: "Created objective",
