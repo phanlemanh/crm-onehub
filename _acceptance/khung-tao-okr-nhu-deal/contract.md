@@ -5,7 +5,7 @@ slug: khung-tao-okr-nhu-deal
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-30T04:36:30Z
 design_doc: docs/superpowers/specs/2026-09-30-khung-tao-okr-nhu-deal-design.md
@@ -69,6 +69,15 @@ Quét bằng `morphological-scan` ngay trong phiên (30/09), bản đầy đủ 
 ### Known limits
 
 - E17: màn Deals báo lỗi hydrat trên console khi tải; lỗi có sẵn trên onehub trước lượt này (đo trên bản sạch của onehub 30/09) nên kịch bản «hộp giữ chỗ» thoát 1 dù bảy bước đều đạt. Chủ kho duyệt 30/09 ghi thành hạn chế đã biết khi cho chạy vòng 5; lỗi Deals tách thành việc riêng.
+
+- Ngoài-1 (ký 2026-09-30, Manh Phan): expected của E17 nói chiều đỏ của lớp bọc đã ghim, nhưng không có đầu ra mẫu nào trong kho và lệnh E17 không gọi `--tu-tep`. Lớp bọc bị xoá khi lỗi hydrat Deals được sửa ở việc riêng.
+- Ngoài-2 (ký 2026-09-30, Manh Phan): lớp bọc E17 không đếm dòng «buoc N: nem …», nên một bước đã in «dat» rồi đứng giữa chừng vẫn qua. Lần chạy vòng 5 ghi đúng một hỏng (lỗi hydrat đã biết), nên bằng chứng vòng này không dính lỗ này.
+- Ngoài-3 (ký 2026-09-30, Manh Phan): lớp bọc E17 nhận lỗi hydrat Deals chỉ qua câu mở đầu chung của React, không so với lần chạy trên onehub; một lỗi lệch chữ mới trên /deals cũng được tha. Thay đổi duy nhất của lượt này trên /deals là thứ tự hai nút chân ngăn, giống nhau ở máy chủ và trình duyệt.
+- Ngoài-4 (ký 2026-09-30, Manh Phan): chưa lần chạy nào thử lớp bọc E17 với một lỗi console lạ; lời hứa bắt lỗi lạ chưa có bằng chứng.
+- Ngoài-5 (ký 2026-09-30, Manh Phan): bộ đọc khoá URL của ngăn OKR nằm trong `ngan-okr-url.tsx` thay vì một mô-đun `*-search-params`; người dùng không thấy khác biệt.
+- Ngoài-6 (ký 2026-09-30, Manh Phan): khung bản ghi khai `hopOkr` bằng bộ đọc chuỗi trơn, còn ngăn OKR dùng bộ đọc riêng; hai bộ đọc trên cùng một khoá. Hôm nay khung bản ghi chỉ xoá khoá này nên không lệch.
+- Ngoài-7 (ký 2026-09-30, Manh Phan): E4 chỉ kiểm mọi lớp của chân hộp thoại có mặt ở chân ngăn, không kiểm hai tập bằng nhau; thêm một kiểu xếp vào chân ngăn vẫn xanh.
+- Ngoài-8 (ký 2026-09-30, Manh Phan): bài «đóng khung xoá hopOkr» chỉ khẳng định khoá vắng, vẫn xanh khi không có lần ghi URL nào.
 
 - 2026-09-30, Cổng Bằng chứng (Manh Phan): phần đầu cột góp ý lệch trái 11 px, lệch dọc so với form, khác kiểu chữ với tiêu đề ngăn, hai dấu X sát nhau — lỗi có từ `the-gop-y-okr`, hộp thoại cũ cũng vậy. Chủ kho chọn sửa ngay trong lượt này: thêm AC-14, duyệt lại Cổng Phạm vi, chấm vòng 4 vượt trần ba vòng.
 
