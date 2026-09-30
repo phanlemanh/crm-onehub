@@ -44,7 +44,6 @@ export const TRO_LY_OKR_SOAN = {
 			"agent",
 			"ask_question",
 			"load_skill",
-			"connection_search",
 		],
 	},
 	bangGhiDuoc: ["okrDeXuat", "okrCuocSoan", "aiChiPhi", "agentEvent"],
