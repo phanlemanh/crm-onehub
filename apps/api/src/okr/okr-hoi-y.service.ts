@@ -140,11 +140,16 @@ export class OkrHoiYService {
 		return isWorkspaceAdmin(await workspaceRoleOf(userId, tx));
 	}
 
+	private kiemKyChuaAn(tx: Tx, cycleId: string): Promise<void> {
+		return this.okr.assertKyChuaAn(tx, cycleId);
+	}
+
 	async moHoiY(userId: string, input: MoHoiYInput): Promise<HoiYGhiOutput> {
 		await this.assertQuanTri(userId);
 		const hanLuc = new Date(input.hanLuc);
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.cycleId} FOR UPDATE`;
+			await this.kiemKyChuaAn(tx, input.cycleId);
 			const now = this.dongHo();
 			const c = await tx.okrCycle.findUnique({
 				where: { id: input.cycleId },
@@ -207,6 +212,7 @@ export class OkrHoiYService {
 				include: { banTruoc: { select: { id: true } } },
 			});
 			if (!h) throw new NotFoundException(T.khongCoHoiY(input.hoiYId));
+			await this.kiemKyChuaAn(tx, h.cycleId);
 			const trangThai = trangThaiHoiY(h, now);
 			if (trangThai === "da-cong-bo") throw new BadRequestException(T.daCongBo);
 
@@ -309,6 +315,7 @@ export class OkrHoiYService {
 			},
 		});
 		if (!h) throw new NotFoundException(T.khongCoHoiY(hoiYId));
+		await this.kiemKyChuaAn(tx, h.cycleId);
 		return h;
 	}
 

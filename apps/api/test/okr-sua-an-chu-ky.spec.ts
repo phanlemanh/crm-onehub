@@ -8,9 +8,21 @@ import {
 	type SuaChuKyInput,
 	viecChuKy,
 } from "@crm/validation/okr-chu-ky";
+import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
+import { KET_LUAN_CHON, NOI_MOI, OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
+import { diemTheoThang } from "@crm/validation/okr-khep";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { z } from "zod";
-import type { ChuKyOutput } from "../src/okr/okr.contracts";
+import type { CapNhatTuanOutput, ChuKyOutput } from "../src/okr/okr.contracts";
+import { soThuTuc } from "./ma-tran-thu";
+import { donSanCanhKr, mauMoi } from "./okr-canh-kr-san";
+import {
+	BAN_TRUOC_MAC_DINH,
+	CAU_HOI_MAC_DINH,
+	LOI_MO_MAC_DINH,
+	SO_LIEU_MAC_DINH,
+	sauGio,
+} from "./okr-hoi-y-san";
 import {
 	donSanKhep,
 	gieoMucTieuCongBo,
@@ -19,17 +31,22 @@ import {
 	sangPha,
 } from "./okr-khep-san";
 import {
+	CHUONG_TRINH_RONG,
 	dangChay,
 	doc,
 	goi,
 	ma,
+	nguoiMoi,
 	ok,
 	pbMoi,
 	phien,
+	phienCua,
+	TIEN_TO,
 	type TraLoi,
 	taoNam,
 	taoQuy,
 	truongMoi,
+	ungDung,
 } from "./okr-san";
 import {
 	an,
@@ -1256,6 +1273,1207 @@ describe("dong-thoi", () => {
 				),
 				"luot dong thoi lech ket qua viet truoc hoac vo bat bien",
 			).toEqual([]);
+		},
+		CHO_MS,
+	);
+});
+
+const CHO_MA_TRAN_MS = 600_000;
+const LY_DO_TRA_LAI = "Chưa có KR đo khách hàng mới, sửa rồi gửi lại";
+const Y_MOT = "Mở tuyến giao lạnh cho khách dược";
+const Y_HAI = "Giảm thời gian giao chặng cuối";
+const thangCham = z.enum(THANG_CHAM);
+
+type LenhGhi = { goi: () => Promise<TraLoi>; doc: () => Promise<unknown> };
+type Chung = {
+	pb: string;
+	pb2: string;
+	truong: { nguoi: string; cookie: string };
+	chienDich: string;
+	mau: string;
+};
+type BenAn = {
+	chung: Chung;
+	canAn: string[];
+	kyChay: () => Promise<string>;
+	kyLap: () => Promise<string>;
+	kyMoi: () => Promise<string>;
+	kyCham: () => Promise<{
+		cycleId: string;
+		objectiveId: string;
+		krIds: string[];
+	}>;
+	hoiYMo: () => Promise<{ hoiYId: string; y1: string; y2: string }>;
+	hoiYGom: () => Promise<{
+		hoiYId: string;
+		y1: string;
+		cSua: string;
+		cGo: string;
+		cKetLuan: string;
+	}>;
+};
+type CaGhi = { gieo: (b: BenAn) => Promise<LenhGhi>; cau?: string };
+
+function nho<T>(tao: () => Promise<T>): () => Promise<T> {
+	let co: Promise<T> | null = null;
+	return () => {
+		co ??= tao();
+		return co;
+	};
+}
+
+let namCuKe = 1900;
+const namCu = () => {
+	namCuKe += 1;
+	return namCuKe;
+};
+
+const idTra = (r: TraLoi, nhan: string) => ok<{ id: string }>(r, nhan).id;
+
+async function namCuaKy(id: string): Promise<number> {
+	const c = await db.okrCycle.findUniqueOrThrow({ where: { id } });
+	return Number(ngayVN(c.startsOn).slice(0, 4));
+}
+
+function vaoKr(objectiveId: string, chu: string = phien.quan.nguoi) {
+	return {
+		objectiveId,
+		title: ma("kr an vang"),
+		kind: "tang-toi",
+		ownerUserId: chu,
+		startValue: 0,
+		targetValue: 100,
+		currentValue: 0,
+		unit: "",
+		dueOn: null,
+		weight: 1,
+	};
+}
+
+const MOC_XONG = {
+	kind: "moc",
+	startValue: 0,
+	targetValue: 1,
+	currentValue: 1,
+} as const;
+
+async function nhapCoKr(cycleId: string, kieu: Partial<typeof MOC_XONG> = {}) {
+	const objectiveId = await gieoCoMucTieu(cycleId);
+	const krId = idTra(
+		await goi("okr.createKeyResult", { ...vaoKr(objectiveId), ...kieu }),
+		"kr nhap",
+	);
+	return { objectiveId, krId };
+}
+
+async function nhapPhong(cycleId: string, c: Chung, coKr: boolean) {
+	const objectiveId = idTra(
+		await goi(
+			"okr.createObjective",
+			{
+				cycleId,
+				unit: { level: "phong-ban", departmentId: c.pb },
+				title: ma("muc tieu phong an vang"),
+				kind: "cam-ket",
+				ownerUserId: c.truong.nguoi,
+				participantIds: [],
+				whyNow: "",
+			},
+			c.truong.cookie,
+		),
+		"muc tieu phong",
+	);
+	if (coKr)
+		idTra(
+			await goi(
+				"okr.createKeyResult",
+				vaoKr(objectiveId, c.truong.nguoi),
+				c.truong.cookie,
+			),
+			"kr phong",
+		);
+	return objectiveId;
+}
+
+async function choDuyet(cycleId: string, c: Chung) {
+	const id = await nhapPhong(cycleId, c, true);
+	ok(await goi("okr.guiDuyet", { id }, c.truong.cookie), "gui duyet");
+	return id;
+}
+
+const vaoMoHoiY = (cycleId: string) => ({
+	cycleId,
+	cauHoi: CAU_HOI_MAC_DINH,
+	loiMo: LOI_MO_MAC_DINH,
+	soLieu: SO_LIEU_MAC_DINH,
+	hanLuc: sauGio(new Date(), OKR_HOI_Y.hanGio.min * 2).toISOString(),
+	nguoiChonUserId: phien.chu.nguoi,
+});
+
+const moHoiYChoChu = async (cycleId: string) =>
+	idTra(await goi("okr.moHoiY", vaoMoHoiY(cycleId)), "mo hoi y");
+
+const gopYThuong = async (hoiYId: string, noiDung: string) =>
+	idTra(
+		await goi(
+			"okr.gopY",
+			{ hoiYId, noiDung, viSao: "", doBangGi: "" },
+			"thuong",
+		),
+		"gop y",
+	);
+
+async function dongVaNiemPhong(hoiYId: string) {
+	ok(await goi("okr.suaHoiY", { hoiYId, dongNgay: true }), "dong hoi y");
+	ok(
+		await goi("okr.niemPhong", { hoiYId, cau: BAN_TRUOC_MAC_DINH }, "chu"),
+		"niem phong",
+	);
+}
+
+const ketLuanChon = (chuDeId: string) =>
+	goi(
+		"okr.ketLuanChuDe",
+		{
+			chuDeId,
+			ketLuan: KET_LUAN_CHON,
+			lyDo: "Đúng hướng năm tới của công ty, có người làm ngay.",
+			cauMucTieu: "Đưa giao lạnh thành dịch vụ có lãi",
+			noiBanTruoc: NOI_MOI,
+		},
+		"chu",
+	);
+
+async function hoiYSanCongBo(cycleId: string): Promise<string> {
+	const hoiYId = await moHoiYChoChu(cycleId);
+	const y = await gopYThuong(hoiYId, Y_MOT);
+	await dongVaNiemPhong(hoiYId);
+	const chuDeId = idTra(
+		await goi("okr.ganY", { yIds: [y], yLa: true }, "chu"),
+		"gan y la",
+	);
+	ok(await ketLuanChon(chuDeId), "ket luan chon");
+	return hoiYId;
+}
+
+const loNhap = (cycleId: string) => ({
+	cycleId,
+	unit: { loai: "goc" },
+	text: [
+		ma("nhap an vang"),
+		"KR nhập",
+		"mốc",
+		"",
+		"",
+		"",
+		`${phien.quan.nguoi}@thu.test`,
+	].join("\t"),
+});
+
+async function dungChung(): Promise<Chung> {
+	const pb = await pbMoi("an-vang");
+	const pb2 = await pbMoi("an-vang-2");
+	const truong = await truongMoi("department", pb, "an-vang-T");
+	const view = await db.savedView.create({
+		data: {
+			entity: "CONTACT",
+			name: ma("goc nhin"),
+			shared: true,
+			filters: { q: "", sort: "", dir: "asc", archived: false, filters: {} },
+			ownerId: phien.quan.nguoi,
+		},
+	});
+	const chienDich = (
+		await db.campaign.create({
+			data: {
+				name: ma("chien dich"),
+				savedViewId: view.id,
+				createdById: phien.quan.nguoi,
+			},
+			select: { id: true },
+		})
+	).id;
+	const mau = await mauMoi({
+		ten: "mau an vang",
+		cap: "phong-ban",
+		donViIds: [],
+		noiDung: {
+			cauMucTieu: "Tăng doanh thu phòng",
+			loai: "cam-ket",
+			krs: [
+				{
+					title: "Doanh thu mới",
+					kind: "tang-toi",
+					unit: "triệu",
+					startValue: null,
+					targetValue: null,
+				},
+			],
+		},
+	});
+	return { pb, pb2, truong, chienDich, mau };
+}
+
+function benMoi(chung: Chung, laX: boolean): BenAn {
+	const canAn: string[] = [];
+	const dangKy = (id: string) => {
+		if (laX) canAn.push(id);
+		return id;
+	};
+	const kyMoi = async () => {
+		const id = dangKy(await taoNam("an-vang", namCu()));
+		await gieoCoMucTieu(id);
+		return id;
+	};
+	return {
+		chung,
+		canAn,
+		kyMoi,
+		kyChay: nho(async () => {
+			const id = dangKy(await taoNam("an-vang-chay", 2026));
+			await dangChay(id);
+			await gieoCoMucTieu(id);
+			return id;
+		}),
+		kyLap: nho(kyMoi),
+		kyCham: nho(async () => {
+			const cycleId = await kyMoi();
+			await dangChay(cycleId);
+			const mt = await gieoMucTieuCongBo(cycleId, [{}]);
+			ok(await sangPha(cycleId, "cham-diem"), "sang cham diem");
+			return { cycleId, ...mt };
+		}),
+		hoiYMo: nho(async () => {
+			const hoiYId = await moHoiYChoChu(await kyMoi());
+			return {
+				hoiYId,
+				y1: await gopYThuong(hoiYId, Y_MOT),
+				y2: await gopYThuong(hoiYId, Y_HAI),
+			};
+		}),
+		hoiYGom: nho(async () => {
+			const hoiYId = await moHoiYChoChu(await kyMoi());
+			const y1 = await gopYThuong(hoiYId, Y_MOT);
+			await gopYThuong(hoiYId, Y_HAI);
+			await dongVaNiemPhong(hoiYId);
+			const chuDe = async (ten: string) =>
+				idTra(await goi("okr.taoChuDe", { hoiYId, ten }), `chu de ${ten}`);
+			return {
+				hoiYId,
+				y1,
+				cSua: await chuDe("Giao lạnh"),
+				cGo: await chuDe("Chủ đề rỗng"),
+				cKetLuan: await chuDe("Chặng cuối"),
+			};
+		}),
+	};
+}
+
+const lenh = (
+	goiNay: () => Promise<TraLoi>,
+	doc: () => Promise<unknown>,
+): LenhGhi => ({ goi: goiNay, doc });
+const mucTieuDb = (id: string) => db.okrObjective.findUnique({ where: { id } });
+const krDb = (id: string) => db.okrKeyResult.findUnique({ where: { id } });
+const viecCuaKr = (keyResultId: string) =>
+	db.okrViecKr.findMany({ where: { keyResultId }, orderBy: { id: "asc" } });
+const viecMoi = async (keyResultId: string) =>
+	idTra(
+		await goi("okr.themViec", {
+			keyResultId,
+			tieuDe: "Gọi khách",
+			nguoiLamUserId: phien.quan.nguoi,
+			hanNgay: null,
+		}),
+		"them viec",
+	);
+const vaoBangChung = (keyResultId: string) => ({
+	keyResultId,
+	url: "https://vi.du/bang-chung",
+	ghiChu: "",
+});
+const ghiNhanMoi = (objectiveId: string) =>
+	goi("okr.guiGhiNhan", {
+		objectiveId,
+		keyResultId: null,
+		nguoiNhan: [phien.thuong.nguoi],
+		loiNhan: "Cảm ơn cả nhóm",
+	});
+const ganCanChinh = (objectiveId: string, dich: string, c: Chung) =>
+	goi(
+		"okr.addAlignment",
+		{ objectiveId, targetObjectiveId: dich, targetKeyResultId: null },
+		c.truong.cookie,
+	);
+const moiTheoKy = (cycleId: string) =>
+	db.okrObjective.findMany({ where: { cycleId }, orderBy: { id: "asc" } });
+
+const GHI_VAO_KY_AN = {
+	createCycle: {
+		cau: CAU.namChaDaAn,
+		gieo: async (b) => {
+			const nam = await b.kyLap();
+			const y = await namCuaKy(nam);
+			return lenh(
+				() =>
+					goi("okr.createCycle", {
+						kind: "quy",
+						name: ma("quy an vang"),
+						parentId: nam,
+						startsOn: `${y}-01-01`,
+						endsOn: `${y}-03-31`,
+						breakStartsOn: null,
+						breakEndsOn: null,
+						updateWeekday: 1,
+					}),
+				() =>
+					db.okrCycle.findMany({
+						where: { parentId: nam },
+						orderBy: { id: "asc" },
+					}),
+			);
+		},
+	},
+	setCyclePhase: {
+		gieo: async (b) => {
+			const id = await b.kyMoi();
+			return lenh(
+				() => goi("okr.setCyclePhase", { id, phase: "dang-chay" }),
+				() => kyDb(id),
+			);
+		},
+	},
+	troLyDeXuat: {
+		gieo: async (b) => {
+			const objectiveId = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() => goi("okr.troLyDeXuat", { objectiveId }),
+				async () => ({
+					mt: await mucTieuDb(objectiveId),
+					deXuat: await db.okrDeXuat.count({ where: { objectiveId } }),
+				}),
+			);
+		},
+	},
+	troLyQuyet: {
+		gieo: async (b) => {
+			const { objectiveId, krIds } = await gieoMucTieuCongBo(await b.kyChay(), [
+				{},
+			]);
+			const { id } = await db.okrDeXuat.create({
+				data: {
+					taskId: ma("task"),
+					objectiveId,
+					keyResultId: krIds[0] ?? null,
+					loai: "hoi",
+					maVanDe: "kr-la-viec",
+					lyDo: "KR này đang là một việc cần làm",
+					inputHash: ma("bam"),
+					nguoiYeuCau: phien.quan.nguoi,
+				},
+			});
+			return lenh(
+				() => goi("okr.troLyQuyet", { deXuatId: id, cach: "bac" }),
+				() => db.okrDeXuat.findUnique({ where: { id } }),
+			);
+		},
+	},
+	moRa: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			return lenh(
+				() =>
+					goi("okr.moRa", {
+						cycleId,
+						tuNgay: "2026-02-01",
+						denNgay: "2026-02-07",
+					}),
+				() =>
+					db.okrCuaSoRa.findMany({
+						where: { cycleId },
+						orderBy: { id: "asc" },
+					}),
+			);
+		},
+	},
+	dongRa: {
+		gieo: async (b) => {
+			const id = idTra(
+				await goi("okr.moRa", {
+					cycleId: await b.kyChay(),
+					tuNgay: "2026-03-01",
+					denNgay: "2026-03-07",
+				}),
+				"mo ra",
+			);
+			return lenh(
+				() => goi("okr.dongRa", { id }),
+				() => db.okrCuaSoRa.findUnique({ where: { id } }),
+			);
+		},
+	},
+	moHoiY: {
+		gieo: async (b) => {
+			const cycleId = await b.kyLap();
+			return lenh(
+				() => goi("okr.moHoiY", vaoMoHoiY(cycleId)),
+				() => db.okrHoiY.findMany({ where: { cycleId } }),
+			);
+		},
+	},
+	suaHoiY: {
+		gieo: async (b) => {
+			const { hoiYId } = await b.hoiYMo();
+			return lenh(
+				() =>
+					goi("okr.suaHoiY", {
+						hoiYId,
+						loiMo: `${LOI_MO_MAC_DINH} Sửa lời mở.`,
+					}),
+				() => db.okrHoiY.findUnique({ where: { id: hoiYId } }),
+			);
+		},
+	},
+	gopY: {
+		gieo: async (b) => {
+			const { hoiYId } = await b.hoiYMo();
+			return lenh(
+				() =>
+					goi(
+						"okr.gopY",
+						{
+							hoiYId,
+							noiDung: "Chuẩn hoá hợp đồng khách lớn",
+							viSao: "",
+							doBangGi: "",
+						},
+						"thuong",
+					),
+				() => db.okrY.findMany({ where: { hoiYId }, orderBy: { id: "asc" } }),
+			);
+		},
+	},
+	suaY: {
+		gieo: async (b) => {
+			const { y1 } = await b.hoiYMo();
+			return lenh(
+				() =>
+					goi(
+						"okr.suaY",
+						{
+							yId: y1,
+							noiDung: `${Y_MOT} và y tế`,
+							viSao: "",
+							doBangGi: "",
+						},
+						"thuong",
+					),
+				() => db.okrY.findUnique({ where: { id: y1 } }),
+			);
+		},
+	},
+	goY: {
+		gieo: async (b) => {
+			const { y2 } = await b.hoiYMo();
+			return lenh(
+				() => goi("okr.goY", { yId: y2 }, "thuong"),
+				() => db.okrY.findUnique({ where: { id: y2 } }),
+			);
+		},
+	},
+	dongY: {
+		gieo: async (b) => {
+			const { y1 } = await b.hoiYMo();
+			return lenh(
+				() => goi("okr.dongY", { yId: y1, bat: true }),
+				() => db.okrYDongY.findMany({ where: { yId: y1 } }),
+			);
+		},
+	},
+	niemPhong: {
+		gieo: async (b) => {
+			const { hoiYId } = await b.hoiYMo();
+			return lenh(
+				() => goi("okr.niemPhong", { hoiYId, cau: BAN_TRUOC_MAC_DINH }, "chu"),
+				() => db.okrHoiYBanTruoc.findUnique({ where: { hoiYId } }),
+			);
+		},
+	},
+	taoChuDe: {
+		gieo: async (b) => {
+			const { hoiYId } = await b.hoiYGom();
+			return lenh(
+				() => goi("okr.taoChuDe", { hoiYId, ten: "Chủ đề mới" }),
+				() =>
+					db.okrChuDe.findMany({ where: { hoiYId }, orderBy: { id: "asc" } }),
+			);
+		},
+	},
+	suaChuDe: {
+		gieo: async (b) => {
+			const { cSua } = await b.hoiYGom();
+			return lenh(
+				() => goi("okr.suaChuDe", { chuDeId: cSua, ten: "Giao lạnh có lãi" }),
+				() => db.okrChuDe.findUnique({ where: { id: cSua } }),
+			);
+		},
+	},
+	goChuDe: {
+		gieo: async (b) => {
+			const { cGo } = await b.hoiYGom();
+			return lenh(
+				() => goi("okr.goChuDe", { chuDeId: cGo }),
+				() => db.okrChuDe.findUnique({ where: { id: cGo } }),
+			);
+		},
+	},
+	ganY: {
+		gieo: async (b) => {
+			const { y1, cSua } = await b.hoiYGom();
+			return lenh(
+				() => goi("okr.ganY", { yIds: [y1], chuDeId: cSua }),
+				() => db.okrY.findUnique({ where: { id: y1 } }),
+			);
+		},
+	},
+	ketLuanChuDe: {
+		gieo: async (b) => {
+			const { cKetLuan } = await b.hoiYGom();
+			return lenh(
+				() => ketLuanChon(cKetLuan),
+				() => db.okrChuDe.findUnique({ where: { id: cKetLuan } }),
+			);
+		},
+	},
+	congBo: {
+		gieo: async (b) => {
+			const hoiYId = await hoiYSanCongBo(await b.kyMoi());
+			return lenh(
+				() => goi("okr.congBo", { hoiYId }, "chu"),
+				() => db.okrHoiY.findUnique({ where: { id: hoiYId } }),
+			);
+		},
+	},
+	hieuViSao: {
+		gieo: async (b) => {
+			const hoiYId = await hoiYSanCongBo(await b.kyMoi());
+			ok(await goi("okr.congBo", { hoiYId }, "chu"), "cong bo");
+			return lenh(
+				() => goi("okr.hieuViSao", { hoiYId }, "thuong"),
+				() => db.okrHoiYHieu.findMany({ where: { hoiYId } }),
+			);
+		},
+	},
+	chamKr: {
+		gieo: async (b) => {
+			const keyResultId = (await b.kyCham()).krIds[0] ?? "";
+			const d = await db.okrDiemKr.findUniqueOrThrow({
+				where: { keyResultId },
+			});
+			const diem = diemTheoThang(Number(d.diemGoiY), thangCham.parse(d.thang));
+			return lenh(
+				() => goi("okr.chamKr", { keyResultId, diem }),
+				() => db.okrDiemKr.findUnique({ where: { keyResultId } }),
+			);
+		},
+	},
+	ghiDieuHocDuoc: {
+		gieo: async (b) => {
+			const { objectiveId } = await b.kyCham();
+			return lenh(
+				() =>
+					goi("okr.ghiDieuHocDuoc", {
+						objectiveId,
+						noiDung: "Khách lớn cần người phụ trách riêng từ tuần đầu.",
+					}),
+				() => db.okrNhinLai.findUnique({ where: { objectiveId } }),
+			);
+		},
+	},
+	moLaiKy: {
+		gieo: async (b) => {
+			const id = await b.kyMoi();
+			await dangChay(id);
+			await gieoMucTieuCongBo(id, [{}]);
+			ok(await sangPha(id, "cham-diem"), "sang cham diem");
+			ok(await sangPha(id, "da-dong"), "dong");
+			return lenh(
+				() => goi("okr.moLaiKy", { id, lyDo: LY_DO_AN }),
+				() => kyDb(id),
+			);
+		},
+	},
+	mangSang: {
+		gieo: async (b) => {
+			const { objectiveId } = await b.kyCham();
+			await taoNam("an-vang-dich", namCu());
+			return lenh(
+				() => goi("okr.mangSang", { objectiveId }),
+				() =>
+					db.okrMangSang.findMany({ where: { tuObjectiveId: objectiveId } }),
+			);
+		},
+	},
+	datHienThi: {
+		gieo: async (b) => {
+			const objectiveId = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() =>
+					goi("okr.datHienThi", {
+						objectiveId,
+						hienThi: "gioi-han",
+						nguoiXem: [],
+					}),
+				() => mucTieuDb(objectiveId),
+			);
+		},
+	},
+	createObjective: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			return lenh(
+				() =>
+					goi("okr.createObjective", {
+						cycleId,
+						unit: { level: "onehub" },
+						title: ma("muc tieu moi"),
+						kind: "cam-ket",
+						ownerUserId: phien.quan.nguoi,
+						participantIds: [],
+						whyNow: "",
+					}),
+				() => moiTheoKy(cycleId),
+			);
+		},
+	},
+	updateObjective: {
+		gieo: async (b) => {
+			const id = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() => goi("okr.updateObjective", { id, title: ma("ten sua") }),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	publishObjective: {
+		gieo: async (b) => {
+			const { objectiveId: id } = await nhapCoKr(await b.kyChay());
+			return lenh(
+				() => goi("okr.publishObjective", { id }),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	guiDuyet: {
+		gieo: async (b) => {
+			const id = await nhapPhong(await b.kyChay(), b.chung, true);
+			return lenh(
+				() => goi("okr.guiDuyet", { id }, b.chung.truong.cookie),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	duyetMucTieu: {
+		gieo: async (b) => {
+			const id = await choDuyet(await b.kyChay(), b.chung);
+			return lenh(
+				() => goi("okr.duyetMucTieu", { id }),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	traLaiMucTieu: {
+		gieo: async (b) => {
+			const objectiveId = await choDuyet(await b.kyChay(), b.chung);
+			return lenh(
+				() => goi("okr.traLaiMucTieu", { objectiveId, lyDo: LY_DO_TRA_LAI }),
+				() => mucTieuDb(objectiveId),
+			);
+		},
+	},
+	rutDuyet: {
+		gieo: async (b) => {
+			const id = await choDuyet(await b.kyChay(), b.chung);
+			return lenh(
+				() => goi("okr.rutDuyet", { id }, b.chung.truong.cookie),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	chuyenDonVi: {
+		gieo: async (b) => {
+			const id = await nhapPhong(await b.kyChay(), b.chung, false);
+			return lenh(
+				() =>
+					goi("okr.chuyenDonVi", {
+						objectiveIds: [id],
+						denDonVi: { level: "phong-ban", id: b.chung.pb2 },
+					}),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	dropObjective: {
+		gieo: async (b) => {
+			const id = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() => goi("okr.dropObjective", { id }),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	createKeyResult: {
+		gieo: async (b) => {
+			const objectiveId = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() => goi("okr.createKeyResult", vaoKr(objectiveId)),
+				() =>
+					db.okrKeyResult.findMany({
+						where: { objectiveId },
+						orderBy: { id: "asc" },
+					}),
+			);
+		},
+	},
+	updateKeyResult: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			return lenh(
+				() => goi("okr.updateKeyResult", { id: krId, title: ma("kr sua") }),
+				() => krDb(krId),
+			);
+		},
+	},
+	removeKeyResult: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			return lenh(
+				() => goi("okr.removeKeyResult", { id: krId }),
+				() => krDb(krId),
+			);
+		},
+	},
+	addAlignment: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			const dich = await gieoMucTieuCongBo(cycleId, [{}]);
+			const nguon = await nhapPhong(cycleId, b.chung, false);
+			return lenh(
+				() => ganCanChinh(nguon, dich.objectiveId, b.chung),
+				() => db.okrAlignment.findMany({ where: { objectiveId: nguon } }),
+			);
+		},
+	},
+	removeAlignment: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			const dich = await gieoMucTieuCongBo(cycleId, [{}]);
+			const nguon = await nhapPhong(cycleId, b.chung, false);
+			const id = idTra(
+				await ganCanChinh(nguon, dich.objectiveId, b.chung),
+				"gan can chinh",
+			);
+			return lenh(
+				() => goi("okr.removeAlignment", { id }, b.chung.truong.cookie),
+				() => db.okrAlignment.findUnique({ where: { id } }),
+			);
+		},
+	},
+	previewImport: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			return lenh(
+				() => goi("okr.previewImport", loNhap(cycleId)),
+				() => moiTheoKy(cycleId),
+			);
+		},
+	},
+	applyImport: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			return lenh(
+				() => goi("okr.applyImport", { ...loNhap(cycleId), congBo: false }),
+				() => moiTheoKy(cycleId),
+			);
+		},
+	},
+	moHopTuan: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			return lenh(
+				() =>
+					goi(
+						"okr.moHopTuan",
+						{ cycleId, unit: { loai: "pb", id: b.chung.pb } },
+						b.chung.truong.cookie,
+					),
+				() =>
+					db.okrTrail.findMany({
+						where: { cycleId, action: "mo-hop-tuan" },
+					}),
+			);
+		},
+	},
+	guiCapNhat: {
+		gieo: async (b) => {
+			const { krIds } = await gieoMucTieuCongBo(await b.kyChay(), [{}]);
+			const keyResultId = krIds[0] ?? "";
+			return lenh(
+				async () => {
+					const { sessionId } = ok<{ sessionId: string }>(
+						await goi("okr.moCapNhat", { entry: "tab" }),
+						"mo phien",
+					);
+					return goi("okr.guiCapNhat", {
+						sessionId,
+						items: [{ keyResultId, value: 10, confidence: "vua", note: "" }],
+					});
+				},
+				async () => ({
+					kr: await krDb(keyResultId),
+					lan: await db.okrCheckIn.findMany({ where: { keyResultId } }),
+				}),
+			);
+		},
+	},
+	addComment: {
+		gieo: async (b) => {
+			const objectiveId = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() =>
+					goi("okr.addComment", {
+						objectiveId,
+						body: "Tuần này cần gọi lại khách lớn",
+						mentionUserIds: [],
+					}),
+				() => db.okrComment.findMany({ where: { objectiveId } }),
+			);
+		},
+	},
+	themViec: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			return lenh(
+				() =>
+					goi("okr.themViec", {
+						keyResultId: krId,
+						tieuDe: "Gọi khách",
+						nguoiLamUserId: phien.quan.nguoi,
+						hanNgay: null,
+					}),
+				() => viecCuaKr(krId),
+			);
+		},
+	},
+	suaViec: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			const id = await viecMoi(krId);
+			return lenh(
+				() => goi("okr.suaViec", { id, tieuDe: "Gọi lại khách" }),
+				() => viecCuaKr(krId),
+			);
+		},
+	},
+	danhDauViec: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			const id = await viecMoi(krId);
+			return lenh(
+				() => goi("okr.danhDauViec", { id, xong: true }),
+				() => viecCuaKr(krId),
+			);
+		},
+	},
+	goViec: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			const id = await viecMoi(krId);
+			return lenh(
+				() => goi("okr.goViec", { id }),
+				() => viecCuaKr(krId),
+			);
+		},
+	},
+	ganSangKien: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			return lenh(
+				() =>
+					goi("okr.ganSangKien", {
+						keyResultId: krId,
+						loai: "chien-dich",
+						banGhiId: b.chung.chienDich,
+					}),
+				() => viecCuaKr(krId),
+			);
+		},
+	},
+	themBangChung: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay(), MOC_XONG);
+			return lenh(
+				() => goi("okr.themBangChung", vaoBangChung(krId)),
+				() => db.okrBangChung.findMany({ where: { keyResultId: krId } }),
+			);
+		},
+	},
+	goBangChung: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay(), MOC_XONG);
+			const id = idTra(
+				await goi("okr.themBangChung", vaoBangChung(krId)),
+				"them bang chung",
+			);
+			return lenh(
+				() => goi("okr.goBangChung", { id }),
+				() => db.okrBangChung.findUnique({ where: { id } }),
+			);
+		},
+	},
+	guiGhiNhan: {
+		gieo: async (b) => {
+			const { objectiveId } = await gieoMucTieuCongBo(await b.kyChay(), [{}]);
+			return lenh(
+				() => ghiNhanMoi(objectiveId),
+				() => db.okrGhiNhan.findMany({ where: { objectiveId } }),
+			);
+		},
+	},
+	goGhiNhan: {
+		gieo: async (b) => {
+			const { objectiveId } = await gieoMucTieuCongBo(await b.kyChay(), [{}]);
+			const id = idTra(await ghiNhanMoi(objectiveId), "ghi nhan");
+			return lenh(
+				() => goi("okr.goGhiNhan", { id }),
+				() => db.okrGhiNhan.findUnique({ where: { id } }),
+			);
+		},
+	},
+	taoTuMau: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			const { truong } = b.chung;
+			return lenh(
+				() =>
+					goi(
+						"okr.taoTuMau",
+						{
+							mauId: b.chung.mau,
+							cycleId,
+							unit: { level: "phong-ban", departmentId: b.chung.pb },
+							ownerUserId: truong.nguoi,
+							krs: [
+								{ startValue: 0, targetValue: 10, ownerUserId: truong.nguoi },
+							],
+						},
+						truong.cookie,
+					),
+				() => moiTheoKy(cycleId),
+			);
+		},
+	},
+	follow: {
+		gieo: async (b) => {
+			const objectiveId = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() => goi("okr.follow", { objectiveId, on: true }),
+				() => db.okrFollow.findMany({ where: { objectiveId } }),
+			);
+		},
+	},
+	datNguonKr: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			return lenh(
+				() => goi("okr.datNguonKr", { keyResultId: krId, loai: "api" }),
+				async () => ({
+					kr: await krDb(krId),
+					nguon: await db.okrNguonKr.findUnique({
+						where: { keyResultId: krId },
+					}),
+				}),
+			);
+		},
+	},
+	ghiSoKr: {
+		gieo: async (b) => {
+			const { krId } = await nhapCoKr(await b.kyChay());
+			ok(
+				await goi("okr.datNguonKr", { keyResultId: krId, loai: "api" }),
+				"nguon api",
+			);
+			return lenh(
+				() => goi("okr.ghiSoKr", { id: krId, giaTri: 5 }),
+				async () => ({
+					kr: await krDb(krId),
+					chup: await db.okrSoChup.findMany({ where: { keyResultId: krId } }),
+				}),
+			);
+		},
+	},
+} satisfies { [ten: string]: CaGhi };
+
+const MIEN_GHI = {
+	setProgram:
+		"cấu hình chương trình OKR — không nhận id chu kỳ, mục tiêu hay KR",
+	luuMau: "mẫu OKR không thuộc chu kỳ nào",
+	luuTruMau: "mẫu OKR không thuộc chu kỳ nào",
+	khoiPhucMau: "mẫu OKR không thuộc chu kỳ nào",
+	moCapNhat:
+		"chỉ mở phiên cập nhật của người gọi — phiên không trỏ tới chu kỳ hay KR; KR được ghi ở guiCapNhat, có dòng riêng",
+	transferWork:
+		"không nhận id chu kỳ, mục tiêu hay KR; chỉ đổi người trên các bản ghi dieuKienChuyen tự tìm, đã lọc KY_CON_HIEN — ca chuyen-viec giữ KR của X",
+	suaChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài sua-moi-o, sua-ten",
+	goChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài go-chu-ky",
+	anChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài an-hien",
+	hienChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài an-hien",
+} satisfies { [ten: string]: string };
+
+async function datDuyetCongBo(bat: boolean): Promise<void> {
+	ok(
+		await goi("okr.setProgram", { ...CHUONG_TRINH_RONG, duyetCongBo: bat }),
+		`duyet cong bo ${bat}`,
+	);
+}
+
+async function donAnVang(): Promise<void> {
+	await db.okrDeXuat.deleteMany({
+		where: { nguoiYeuCau: { startsWith: TIEN_TO } },
+	});
+	await donSanCanhKr();
+	await donSanKhep();
+}
+
+describe("an-vang", () => {
+	afterAll(donAnVang, CHO_MS);
+
+	test(
+		"an-vang: ma tran ghi — moi mutation cua okr co dung mot dong GHI_VAO_KY_AN hoac MIEN_GHI; goi vao X da an 400 cau ghim va ban ghi dich doc lai giu nguyen; cung lenh vao V duoc",
+		async () => {
+			const thuTuc = soThuTuc(ungDung())
+				.filter((t) => t.loai === "mutation" && t.ten.startsWith("okr."))
+				.map((t) => t.ten.slice("okr.".length))
+				.sort();
+			const ghi = Object.keys(GHI_VAO_KY_AN);
+			const mien = Object.keys(MIEN_GHI);
+			const khai = new Set([...ghi, ...mien]);
+			expect(
+				{
+					thieuDong: thuTuc.filter((t) => !khai.has(t)),
+					dongThua: [...khai].filter((t) => !thuTuc.includes(t)).sort(),
+					haiDong: ghi.filter((t) => mien.includes(t)),
+				},
+				"thu tuc mutation okr thieu dong, thua dong hoac nam o ca hai bang",
+			).toEqual({ thieuDong: [], dongThua: [], haiDong: [] });
+
+			const chung = await dungChung();
+			await datDuyetCongBo(true);
+			try {
+				const x = benMoi(chung, true);
+				const v = benMoi(chung, false);
+				const lenhCa = [];
+				for (const [ten, ca] of Object.entries<CaGhi>(GHI_VAO_KY_AN))
+					lenhCa.push({
+						ten,
+						cau: ca.cau ?? CAU.kyDaAn,
+						x: await ca.gieo(x),
+						v: await ca.gieo(v),
+					});
+				for (const id of x.canAn) await an(id);
+				const thuc = [];
+				const mong = [];
+				for (const l of lenhCa) {
+					const truoc = JSON.stringify(await l.x.doc());
+					const rx = await l.x.goi();
+					const sau = JSON.stringify(await l.x.doc());
+					const rv = await l.v.goi();
+					thuc.push({
+						ca: l.ten,
+						x: tra(rx),
+						giu: truoc === sau ? "giu" : `${truoc} -> ${sau}`,
+						v: tra(rv),
+					});
+					mong.push({ ca: l.ten, x: `400 ${l.cau}`, giu: "giu", v: "200" });
+				}
+				expect(thuc.length).toBe(ghi.length);
+				expect(
+					lechCa(thuc, mong),
+					"ghi vao chu ky an khong bi chan, doi ban ghi, hoac doi chung V hong",
+				).toEqual([]);
+			} finally {
+				await datDuyetCongBo(false);
+			}
+		},
+		CHO_MA_TRAN_MS,
+	);
+
+	test(
+		"an-vang: mang sang tu quy truoc khi ky ke som nhat X da an — ban nhap nam o V",
+		async () => {
+			const y = namCu();
+			const nam = await taoNam("an-vang-ms", y);
+			const q1 = await taoQuy("ms-q1", nam, `${y}-01-01`, `${y}-03-31`);
+			const X = await taoQuy("ms-x", nam, `${y}-04-01`, `${y}-06-30`);
+			const V = await taoQuy("ms-v", nam, `${y}-07-01`, `${y}-09-30`);
+			await gieoCoMucTieu(X);
+			await dangChay(q1);
+			const { objectiveId } = await gieoMucTieuCongBo(q1, [{}]);
+			ok(await sangPha(q1, "cham-diem"), "q1 cham diem");
+			await an(X);
+			ok(await goi("okr.mangSang", { objectiveId }), "mang sang");
+			const dong = await db.okrMangSang.findFirstOrThrow({
+				where: { tuObjectiveId: objectiveId },
+			});
+			const banNhap = await db.okrObjective.findUniqueOrThrow({
+				where: { id: dong.sangObjectiveId },
+			});
+			expect({
+				sangCycleId: dong.sangCycleId,
+				banNhap: banNhap.cycleId,
+			}).toEqual({ sangCycleId: V, banNhap: V });
+		},
+		CHO_MS,
+	);
+
+	test(
+		"an-vang: cap nhat tuan cua U chi co KR cua V; chuyen viec khi R roi chi doi KR cua V; hien lai X thi KR cua U o X quay lai",
+		async () => {
+			const U = await nguoiMoi("an-vang-U");
+			const R = await nguoiMoi("an-vang-R");
+			const N = await nguoiMoi("an-vang-N");
+			const gieoKy = async (ten: string) => {
+				const id = await taoNam(ten, namCu());
+				await dangChay(id);
+				const { krIds } = await gieoMucTieuCongBo(id, [
+					{ ownerUserId: U },
+					{ ownerUserId: R },
+				]);
+				const [u = "", r = ""] = krIds;
+				return { id, u, r };
+			};
+			const X = await gieoKy("an-vang-X");
+			const V = await gieoKy("an-vang-V");
+			await an(X.id);
+			const cookieU = await phienCua(U);
+			const tuanCua = async () =>
+				(await doc<CapNhatTuanOutput>("okr.capNhatTuan", cookieU)).items
+					.map((i) => i.keyResultId)
+					.sort();
+			expect(await tuanCua(), "cap nhat tuan cua U").toEqual([V.u]);
+			ok(
+				await goi("okr.transferWork", { fromUserId: R, toUserId: N }),
+				"chuyen viec",
+			);
+			const chu = async (id: string) =>
+				(await db.okrKeyResult.findUniqueOrThrow({ where: { id } }))
+					.ownerUserId;
+			expect({ x: await chu(X.r), v: await chu(V.r) }).toEqual({
+				x: R,
+				v: N,
+			});
+			ok(await goi("okr.hienChuKy", { id: X.id }), "hien lai X");
+			expect(await tuanCua(), "hien lai X").toEqual([X.u, V.u].sort());
 		},
 		CHO_MS,
 	);

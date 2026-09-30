@@ -1,5 +1,6 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { laViecOkr, lienQuanOkr } from "@crm/db/okr-nhac";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
@@ -37,7 +38,7 @@ const chonNguoi = { id: true, name: true, email: true } as const;
 function dieuKienChuyen(fromUserId: string) {
 	const conGhi = {
 		status: { not: "da-bo" },
-		cycle: { phase: { in: [...PHA_GHI_DUOC] } },
+		cycle: { phase: { in: [...PHA_GHI_DUOC] }, ...KY_CON_HIEN },
 	} satisfies Prisma.OkrObjectiveWhereInput;
 	const krConGhi = {
 		objective: {
@@ -172,11 +173,12 @@ export class OkrTraoDoiService {
 
 	async addComment(userId: string, input: AddCommentInput, now = new Date()) {
 		const nhac = [...new Set(input.mentionUserIds)];
-		const { q, nc } = await this.quyenOkr.assertXemMucTieu(
+		const { q, nc, mt } = await this.quyenOkr.assertXemMucTieu(
 			userId,
 			input.objectiveId,
 		);
 		return this.db.$transaction(async (tx) => {
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			if (input.keyResultId !== undefined) {
 				const kr = await tx.okrKeyResult.findFirst({
 					where: {
@@ -230,11 +232,12 @@ export class OkrTraoDoiService {
 	}
 
 	async follow(userId: string, input: FollowInput): Promise<FollowOutput> {
-		const { nc } = await this.quyenOkr.assertXemMucTieu(
+		const { nc, mt } = await this.quyenOkr.assertXemMucTieu(
 			userId,
 			input.objectiveId,
 		);
 		return this.db.$transaction(async (tx) => {
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			const doi = input.on
 				? (
 						await tx.okrFollow.createMany({

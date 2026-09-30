@@ -481,6 +481,7 @@ export class OkrCanhKrService {
 			input.objectiveId,
 		);
 		return this.db.$transaction(async (tx) => {
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			if (mt.status !== "cong-bo")
 				throw new BadRequestException(T.canhKr.ghiNhanChiCongBo);
 			if (input.nguoiNhan.includes(userId))
@@ -544,10 +545,12 @@ export class OkrCanhKrService {
 					objectiveId: true,
 					keyResultId: true,
 					tacGiaUserId: true,
+					objective: { select: { cycleId: true } },
 					nhan: { select: { userId: true }, orderBy: { userId: "asc" } },
 				},
 			});
 			if (!row) throw new NotFoundException(T.canhKr.khongCoGhiNhan(input.id));
+			await this.okr.assertKyChuaAn(tx, row.objective.cycleId);
 			if (row.tacGiaUserId !== userId && !q.quanTri)
 				throw new ForbiddenException(T.canhKr.khongGoDuocGhiNhan);
 			await tx.okrGhiNhan.delete({ where: { id: row.id } });

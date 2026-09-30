@@ -497,6 +497,7 @@ export class OkrService {
 		await this.quyenOkr.assertQuanTri(userId);
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${id} FOR UPDATE`;
+			await this.assertKyChuaAn(tx, id);
 			const c = await tx.okrCycle.findUnique({ where: { id } });
 			if (!c) throw new NotFoundException(T.khongCoChuKy(id));
 			const phaCu = phaChuKy.parse(c.phase);
@@ -1418,6 +1419,7 @@ export class OkrService {
 						status: "cong-bo",
 						level: { in: capDichCanChinh(nguonCanChinh.level) },
 						cycleId: { in: chuKyDichCanChinh(nguonCanChinh) },
+						cycle: KY_CON_HIEN,
 					},
 					boGioiHan,
 				],
@@ -1482,7 +1484,7 @@ export class OkrService {
 			: await this.docMucTieu(
 					this.db,
 					{
-						cycle: { parentId: cycleId },
+						cycle: { parentId: cycleId, ...KY_CON_HIEN },
 						alignments: {
 							some: {
 								OR: [
