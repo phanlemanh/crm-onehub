@@ -1410,7 +1410,7 @@ describe("dua-vao", () => {
 	);
 
 	test(
-		"chu kỳ bị ẩn trước khi đưa vào → từ chối có tên, 0 bản ghi, bảng giữ nguyên; hiện lại thì qua cửa chu kỳ",
+		"chu kỳ bị ẩn trước khi đưa vào → 400 câu chu kỳ đã ẩn, 0 bản ghi, bảng giữ nguyên; hiện lại thì qua cửa chu kỳ",
 		async () => {
 			const k = await gieoBanNhap("an");
 			await nhanHet(k);
@@ -1419,13 +1419,8 @@ describe("dua-vao", () => {
 				data: { anLuc: new Date() },
 			});
 			try {
-				expect(
-					ok<SoanDuaVaoOutput>(await duaVao(k.cuoc.id, SO(k)), "an"),
-				).toEqual({
-					ok: false,
-					lyDo: "chu-ky-khong-lap-ke-hoach",
-					chiTiet: OKR.thongDiep.chuKy.kyDaAn,
-				});
+				const an = await duaVao(k.cuoc.id, SO(k));
+				expect([an.status, an.loi]).toEqual([400, OKR.thongDiep.chuKy.kyDaAn]);
 				expect((await demBanGhi(k.cuoc.id)).vet).toHaveLength(0);
 				expect(
 					(

@@ -192,6 +192,7 @@ export class SoanService {
 		now: Date,
 	): Promise<CongDonVi> {
 		const q = await this.quyenDonVi(userId, dv);
+		await this.okr.assertKyChuaAn(client, dv.cycleId);
 		if (await this.luuTru(client, dv))
 			return { qua: false, lyDo: "don-vi-luu-tru" };
 		const { ct, nac } = await this.nacSoan(client, dv, now);
@@ -218,6 +219,7 @@ export class SoanService {
 			personUserId: null,
 		});
 		if (!suaDuoc || (cuoc.nac === "an" && !q.quanTri)) throw khongThay();
+		await this.okr.assertKyChuaAn(client, cuoc.cycleId);
 		if (await this.luuTru(client, dv))
 			return { qua: false, cuoc, lyDo: "don-vi-luu-tru" };
 		const { ct, nac } = await this.nacSoan(client, dv, now);
