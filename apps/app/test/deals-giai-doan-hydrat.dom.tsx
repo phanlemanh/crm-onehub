@@ -43,16 +43,24 @@ const GIAI_DOAN = {
 	canManage: true,
 	tran: 20,
 	stages: [
-		{ id: MA_THO, label: NHAN, kind: "OPEN", position: 0, dealCount: 1 },
 		{
 			id: "CLOSED_WON",
 			label: "Closed won",
 			kind: "WON",
-			position: 1,
+			position: 0,
+			dealCount: 0,
+		},
+		{ id: MA_THO, label: NHAN, kind: "OPEN", position: 1, dealCount: 1 },
+		{
+			id: "CONTRACT_SENT",
+			label: "Contract sent",
+			kind: "OPEN",
+			position: 2,
 			dealCount: 0,
 		},
 	],
 };
+const MO_DAU_TIEN = GIAI_DOAN.stages.filter((g) => g.kind === "OPEN")[0];
 const KHOA_NGAN = [
 	"giaiDoan.list",
 	"users.list",
@@ -446,10 +454,18 @@ describe("ngan tao deal chi tao truy van khi mo", () => {
 		}
 		expect(
 			document.querySelector("#create-deal-stage")?.textContent ?? "",
-		).toBe(MA_THO);
+		).toBe(MO_DAU_TIEN?.id ?? "-");
 		expect(
-			document.querySelector(`[data-select-item="${MA_THO}"]`)?.textContent,
-		).toBe(NHAN);
+			document.querySelector(`[data-select-item="${MO_DAU_TIEN?.id}"]`)
+				?.textContent,
+		).toBe(MO_DAU_TIEN?.label ?? "-");
+		expect(
+			[...document.querySelectorAll("[data-select-item]")]
+				.map((b) => b.getAttribute("data-select-item"))
+				.filter((id) => GIAI_DOAN.stages.some((g) => g.id === id)),
+		).toEqual(
+			GIAI_DOAN.stages.filter((g) => g.kind === "OPEN").map((g) => g.id),
+		);
 	});
 });
 
