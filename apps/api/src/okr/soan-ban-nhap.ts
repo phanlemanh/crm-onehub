@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
 import { khoaDong } from "@crm/validation/okr-kiem-de-xuat";
 import {
@@ -123,6 +124,7 @@ export async function ghiHienLuc(
 export async function tenDichCua(
 	client: DbHoacTx,
 	ds: readonly DongDoc[],
+	nguoiXem: NguCanhXem,
 ): Promise<ReadonlyMap<string, string>> {
 	const ids = [
 		...new Set(
@@ -134,11 +136,11 @@ export async function tenDichCua(
 	if (ids.length === 0) return new Map();
 	const [mucTieu, kr] = await Promise.all([
 		client.okrObjective.findMany({
-			where: { id: { in: ids } },
+			where: { AND: [{ id: { in: ids } }, dieuKienXemMucTieu(nguoiXem)] },
 			select: { id: true, title: true },
 		}),
 		client.okrKeyResult.findMany({
-			where: { id: { in: ids } },
+			where: { id: { in: ids }, objective: dieuKienXemMucTieu(nguoiXem) },
 			select: { id: true, title: true },
 		}),
 	]);

@@ -421,7 +421,7 @@ export class SoanService {
 		await ghiHienLuc(this.db, ds, now);
 		const [cuoc, tenDich] = await Promise.all([
 			this.motCuocHien(this.db, cong.cuoc),
-			tenDichCua(this.db, ds),
+			tenDichCua(this.db, ds, this.quyenOkr.nguCanhXem(cong.q, userId)),
 		]);
 		return {
 			cuoc,

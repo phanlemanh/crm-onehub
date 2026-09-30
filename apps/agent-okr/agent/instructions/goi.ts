@@ -1,6 +1,6 @@
 import { defineDynamic, defineInstructions } from "eve/instructions";
 import { goiSoan, goiThanhChiDan } from "../lib/goi-soan";
-import { phienSoan } from "../lib/phien";
+import { phienSoan, thuocTinhPhien } from "../lib/phien";
 
 export default defineDynamic({
 	events: {
@@ -8,9 +8,11 @@ export default defineDynamic({
 			const phien = phienSoan.safeParse(
 				ctx.session.auth.initiator?.attributes ?? {},
 			);
-			if (!phien.success) return null;
+			const { userId } = thuocTinhPhien(ctx);
+			if (!phien.success || !userId) return null;
 			const goi = await goiSoan(phien.data.cuocSoanId, {
 				vai: phien.data.vai,
+				nguoiHoiId: userId,
 				ghiDaCat: true,
 			});
 			return goi ? defineInstructions({ markdown: goiThanhChiDan(goi) }) : null;

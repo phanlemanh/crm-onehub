@@ -15,6 +15,7 @@ import {
 	docTenThanhVien,
 	docTrangChienLuocDangDung,
 } from "../src/okr-goi-soan";
+import { type NguCanhXem, nguCanhXemOkr } from "../src/okr-hien-thi";
 import { WORKSPACE_ID } from "../src/workspace";
 
 const T = `goi${(process.env.TEST_RUN_ID ?? "x").slice(0, 8)}`;
@@ -107,6 +108,17 @@ async function mucTieu(v: {
 	for (const k of v.kr ?? []) idKr[k.ma] = id(k.ma);
 	return m;
 }
+
+async function xemCua(userId: string): Promise<NguCanhXem> {
+	const nc = (await nguCanhXemOkr(db, [userId])).get(userId);
+	if (!nc) throw new Error(`khong dung duoc ngu canh xem ${userId}`);
+	return nc;
+}
+
+const capTrenCua = async (c: CuocSoan) =>
+	docCapTrenVaNgangCap(db, c, await xemCua(c.nguoiMoUserId));
+const kyTruocCua = async (c: CuocSoan) =>
+	docKyTruoc(db, c, await xemCua(c.nguoiMoUserId));
 
 async function don() {
 	await db.okrCuocSoan.deleteMany({ where: { sessionId: { startsWith: T } } });
@@ -577,7 +589,7 @@ describe("okr-goi-soan", () => {
 	});
 
 	test("docCapTrenVaNgangCap: cấp trên đủ KR + tiến độ + id; ngang cấp chỉ tên; ứng viên Căn chỉnh = Mục tiêu và KR cấp trên", async () => {
-		const r = await docCapTrenVaNgangCap(db, cuoc);
+		const r = await capTrenCua(cuoc);
 		expect(r.capTren.map((m) => m.id)).toEqual([
 			idMucTieu.onehubNam,
 			idMucTieu.bpQ2,
@@ -642,18 +654,18 @@ describe("okr-goi-soan", () => {
 	});
 
 	test("docCapTrenVaNgangCap: cấp OneHub không có cấp trên và không có ngang cấp", async () => {
-		const r = await docCapTrenVaNgangCap(db, cuocOnehub);
+		const r = await capTrenCua(cuocOnehub);
 		expect(r).toEqual({ capTren: [], ngangCap: [], ungVienCanChinh: [] });
 	});
 
 	test("docCapTrenVaNgangCap: cấp bộ phận chỉ thấy OneHub; ngang cấp là bộ phận khác", async () => {
-		const r = await docCapTrenVaNgangCap(db, cuocBoPhan);
+		const r = await capTrenCua(cuocBoPhan);
 		expect(r.capTren.map((m) => m.cap)).toEqual(["onehub"]);
 		expect(r.ngangCap).toEqual([`Mục tiêu bp2Q2 ${T}`]);
 	});
 
 	test("docKyTruoc: chu kỳ đã đóng gần nhất của phòng, mỗi Mục tiêu có điểm/điều học được, mỗi KR có soChot/dich/diem/lyDo và capNhat[] theo tuần", async () => {
-		const ky = await docKyTruoc(db, cuoc);
+		const ky = await kyTruocCua(cuoc);
 		expect(ky.chuKy, "ky truoc lay ky cua don vi khac").toEqual({
 			ten: `Quý 1 2031 ${T}`,
 		});
@@ -747,7 +759,7 @@ describe("okr-goi-soan", () => {
 				divisionId: cuoc.divisionId ?? undefined,
 				departmentId: cuoc.departmentId ?? undefined,
 			});
-			const ky = await docKyTruoc(db, cuoc);
+			const ky = await kyTruocCua(cuoc);
 			expect(
 				ky.chuKy,
 				"ky truoc ket thuc sau khi ky dang soan bat dau",
@@ -759,8 +771,137 @@ describe("okr-goi-soan", () => {
 	});
 
 	test("docKyTruoc: đơn vị chưa có chu kỳ đóng → không có kỳ, không Mục tiêu", async () => {
-		const ky = await docKyTruoc(db, cuocBoPhan);
+		const ky = await kyTruocCua(cuocBoPhan);
 		expect(ky).toEqual({ chuKy: null, mucTieu: [], mangSang: [] });
+	});
+
+	test("dieu-kien-xem: Mục tiêu giới hạn ở cấp trên, ngang cấp, kỳ trước và mang sang vắng với thành viên không có hàng người xem; có với quản trị và người xem có tên; không bao giờ là ứng viên Căn chỉnh", async () => {
+		await nguoi("qt", `Quản Trị Viên${T}`, "admin");
+		const han = (v: {
+			ma: string;
+			cycleId: string;
+			level: string;
+			divisionId?: string;
+			departmentId?: string;
+			status?: string;
+		}) =>
+			db.okrObjective.create({
+				data: {
+					id: id(v.ma),
+					cycleId: v.cycleId,
+					level: v.level,
+					divisionId: v.divisionId ?? null,
+					departmentId: v.departmentId ?? null,
+					ownerUserId: id("nv2"),
+					kind: "cam-ket",
+					status: v.status ?? "cong-bo",
+					hienThi: "gioi-han",
+					title: `Mục tiêu kín ${v.ma} ${T}`,
+					keyResults: {
+						create: [
+							{
+								id: id(`${v.ma}-kr`),
+								title: `KR kín ${v.ma} ${T}`,
+								kind: "tang-toi",
+								ownerUserId: id("nv2"),
+								startValue: 0,
+								targetValue: 10,
+								currentValue: 4,
+								unit: "",
+								position: 0,
+							},
+						],
+					},
+				},
+			});
+		const kin = ["hcTren", "hcNgang", "hcKy"];
+		try {
+			await han({ ma: "hcTren", cycleId: id("nam"), level: "onehub" });
+			await han({
+				ma: "hcNgang",
+				cycleId: id("q2"),
+				level: "phong-ban",
+				divisionId: id("bp"),
+				departmentId: id("pb2"),
+			});
+			await han({
+				ma: "hcKy",
+				cycleId: id("q1"),
+				level: "phong-ban",
+				divisionId: id("bp"),
+				departmentId: id("pb"),
+			});
+			await mucTieu({
+				ma: "hcSang",
+				cycleId: id("q2"),
+				level: "phong-ban",
+				divisionId: id("bp"),
+				departmentId: id("pb"),
+				status: "nhap",
+			});
+			await db.okrMangSang.create({
+				data: {
+					tuObjectiveId: id("hcKy"),
+					sangObjectiveId: id("hcSang"),
+					sangCycleId: id("q2"),
+					boiUserId: id("truong"),
+				},
+			});
+			const ten = kin.flatMap((m) => [
+				`Mục tiêu kín ${m} ${T}`,
+				...(m === "hcTren" ? [`KR kín ${m} ${T}`] : []),
+			]);
+			const chuCua = async (userId: string) => {
+				const nc = await xemCua(userId);
+				const [tren, ky] = await Promise.all([
+					docCapTrenVaNgangCap(db, cuoc, nc),
+					docKyTruoc(db, cuoc, nc),
+				]);
+				return { tren, ky, chu: JSON.stringify({ tren, ky }) };
+			};
+			const thanhVien = await chuCua(id("nv"));
+			expect(
+				ten.filter((t) => thanhVien.chu.includes(t)),
+				"ten muc tieu kin lot vao goi cua thanh vien",
+			).toEqual([]);
+			expect(thanhVien.ky.mangSang).not.toContain(`Mục tiêu kín hcKy ${T}`);
+			const quanTri = await chuCua(id("qt"));
+			expect(
+				ten.filter((t) => !quanTri.chu.includes(t)),
+				"quan tri thieu muc tieu kin",
+			).toEqual([]);
+			await db.okrNguoiXem.createMany({
+				data: kin.map((m) => ({
+					objectiveId: id(m),
+					userId: id("nv"),
+					createdById: id("qt"),
+				})),
+			});
+			const coTen = await chuCua(id("nv"));
+			expect(
+				ten.filter((t) => !coTen.chu.includes(t)),
+				"nguoi xem co ten thieu muc tieu kin",
+			).toEqual([]);
+			expect(coTen.ky.mangSang).toContain(`Mục tiêu kín hcKy ${T}`);
+			for (const r of [quanTri, coTen]) {
+				expect(r.tren.capTren.map((m) => m.id)).toContain(id("hcTren"));
+				const ung = r.tren.ungVienCanChinh.map((u) => u.id);
+				expect(ung, "muc tieu kin la ung vien can chinh").not.toContain(
+					id("hcTren"),
+				);
+				expect(ung, "KR cua muc tieu kin la ung vien").not.toContain(
+					id("hcTren-kr"),
+				);
+				expect(ung).toContain(idMucTieu.onehubNam);
+			}
+		} finally {
+			await db.okrMangSang.deleteMany({ where: { tuObjectiveId: id("hcKy") } });
+			await db.okrObjective.deleteMany({
+				where: { id: { in: [...kin, "hcSang"].map(id) } },
+			});
+			await db.member.deleteMany({ where: { userId: id("qt") } });
+			await db.user.deleteMany({ where: { id: id("qt") } });
+		}
 	});
 
 	test("docSoCrmDonVi: bảy chỉ số quý trước và quý này cho vai member; rỗng cho vai okr", async () => {

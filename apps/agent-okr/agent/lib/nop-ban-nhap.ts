@@ -180,7 +180,7 @@ export async function nopBanNhap(
 		phongBanId: cuoc.departmentId,
 	});
 	if (nac !== "bat" && nac !== "an") return tuChoi(TU_CHOI.donViChuaBat);
-	const goi = await goiSoan(cuocSoanId, { vai });
+	const goi = await goiSoan(cuocSoanId, { vai, nguoiHoiId: userId });
 	if (!goi) return tuChoi(TU_CHOI.cuocKhongDang);
 	const dongs = dongTuBanNhap(input, { cuocSoanId, idKr: idKrCua(goi) });
 	chanTrungKhoa(dongs);

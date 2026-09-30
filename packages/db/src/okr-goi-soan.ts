@@ -10,6 +10,7 @@ import {
 	type PhamViDem,
 } from "./okr-chi-so-danh-muc";
 import { CAP_CUOC, type CuocSoan } from "./okr-cuoc-soan";
+import { boGioiHan, dieuKienXemMucTieu, type NguCanhXem } from "./okr-hien-thi";
 import { ngayVN } from "./onboarding-nhac";
 import { WORKSPACE_ID } from "./workspace";
 
@@ -244,6 +245,7 @@ async function boPhanCuaPhong(
 export async function docCapTrenVaNgangCap(
 	db: DbHoacTx,
 	cuoc: CuocSoan,
+	nguoiXem: NguCanhXem,
 ): Promise<CapTrenVaNgangCap> {
 	const don = donViCua(cuoc);
 	if (don.cap === "onehub")
@@ -258,15 +260,21 @@ export async function docCapTrenVaNgangCap(
 	];
 	const tren = await db.okrObjective.findMany({
 		where: {
-			status: "cong-bo",
-			level: { in: capDichCua(cuoc.level) },
-			cycleId: { in: chuKyDichCua(cuoc.cycleId, ky.parentId) },
-			OR: cungBoPhan,
+			AND: [
+				{
+					status: "cong-bo",
+					level: { in: capDichCua(cuoc.level) },
+					cycleId: { in: chuKyDichCua(cuoc.cycleId, ky.parentId) },
+					OR: cungBoPhan,
+				},
+				dieuKienXemMucTieu(nguoiXem),
+			],
 		},
 		orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
 		select: {
 			id: true,
 			level: true,
+			hienThi: true,
 			title: true,
 			whyNow: true,
 			keyResults: {
@@ -285,12 +293,17 @@ export async function docCapTrenVaNgangCap(
 	});
 	const ngang = await db.okrObjective.findMany({
 		where: {
-			status: "cong-bo",
-			cycleId: cuoc.cycleId,
-			level: cuoc.level,
-			...(don.cap === "phong-ban"
-				? { divisionId: boPhanId, departmentId: { not: don.departmentId } }
-				: { divisionId: { not: don.divisionId } }),
+			AND: [
+				{
+					status: "cong-bo",
+					cycleId: cuoc.cycleId,
+					level: cuoc.level,
+					...(don.cap === "phong-ban"
+						? { divisionId: boPhanId, departmentId: { not: don.departmentId } }
+						: { divisionId: { not: don.divisionId } }),
+				},
+				dieuKienXemMucTieu(nguoiXem),
+			],
 		},
 		orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
 		select: { title: true },
@@ -317,10 +330,15 @@ export async function docCapTrenVaNgangCap(
 				CAP_CUOC.indexOf(a.cap as CuocSoan["level"]) -
 				CAP_CUOC.indexOf(b.cap as CuocSoan["level"]),
 		);
-	const ungVienCanChinh = capTren.flatMap((m) => [
-		{ id: m.id, loai: "muc-tieu" as const, ten: m.ten },
-		...m.kr.map((k) => ({ id: k.id, loai: "kr" as const, ten: k.ten })),
-	]);
+	const congKhai = new Set(
+		tren.filter((m) => m.hienThi === boGioiHan.hienThi).map((m) => m.id),
+	);
+	const ungVienCanChinh = capTren
+		.filter((m) => congKhai.has(m.id))
+		.flatMap((m) => [
+			{ id: m.id, loai: "muc-tieu" as const, ten: m.ten },
+			...m.kr.map((k) => ({ id: k.id, loai: "kr" as const, ten: k.ten })),
+		]);
 	return { capTren, ngangCap: ngang.map((n) => n.title), ungVienCanChinh };
 }
 
@@ -388,12 +406,18 @@ function diemGop(diem: (number | null)[]): number | null {
 export async function docKyTruoc(
 	db: DbHoacTx,
 	cuoc: CuocSoan,
+	nguoiXem: NguCanhXem,
 ): Promise<KyTruoc> {
 	const ky = await kyDaDongGanNhat(db, cuoc);
 	if (!ky) return KHONG_CO_KY_TRUOC;
 	const loc = locMucTieuCuaDonVi(donViCua(cuoc));
 	const muc = await db.okrObjective.findMany({
-		where: { cycleId: ky.id, status: { not: "nhap" }, ...loc },
+		where: {
+			AND: [
+				{ cycleId: ky.id, status: { not: "nhap" }, ...loc },
+				dieuKienXemMucTieu(nguoiXem),
+			],
+		},
 		orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
 		select: {
 			title: true,
@@ -424,7 +448,9 @@ export async function docKyTruoc(
 	const sang = await db.okrMangSang.findMany({
 		where: {
 			sangCycleId: cuoc.cycleId,
-			tuObjective: { cycleId: ky.id, ...loc },
+			tuObjective: {
+				AND: [{ cycleId: ky.id, ...loc }, dieuKienXemMucTieu(nguoiXem)],
+			},
 		},
 		orderBy: [{ luc: "asc" }, { id: "asc" }],
 		select: { tuObjective: { select: { title: true } } },

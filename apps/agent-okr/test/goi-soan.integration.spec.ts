@@ -17,7 +17,7 @@ import {
 	LOP,
 	uocToken,
 } from "../agent/lib/goi-soan";
-import { donDep, ma, moXuong } from "./support/gieo";
+import { donDep, gieoNguoi, ma, moXuong } from "./support/gieo";
 import {
 	CAU_CHEN,
 	CHU_DE_XUAT,
@@ -43,8 +43,9 @@ const viTri = (chu: string, lop: string) =>
 const goiCua = async (
 	cuocSoanId: string,
 	vai: "member" | "okr" = "member",
+	nguoiHoiId = canh.nguoiMo.id,
 ): Promise<GoiSoan> => {
-	const goi = await goiSoan(cuocSoanId, { vai });
+	const goi = await goiSoan(cuocSoanId, { vai, nguoiHoiId });
 	if (!goi) throw new Error("khong dung duoc goi");
 	return goi;
 };
@@ -56,7 +57,10 @@ type SuKienPhien = (
 			id: string;
 			auth: {
 				current: null;
-				initiator: { attributes: Record<string, string> } | null;
+				initiator: {
+					principalId: string;
+					attributes: Record<string, string>;
+				} | null;
 			};
 		};
 	},
@@ -66,7 +70,10 @@ const phienBatDau = (
 	loiDanGoi as unknown as { events: Record<string, SuKienPhien> }
 ).events;
 
-const moPhien = (attributes: Record<string, string> | null) =>
+const moPhien = (
+	attributes: Record<string, string> | null,
+	principalId = canh.nguoiMo.id,
+) =>
 	phienBatDau["session.started"]?.(
 		{ type: "session.started" },
 		{
@@ -74,7 +81,7 @@ const moPhien = (attributes: Record<string, string> | null) =>
 				id: ma(),
 				auth: {
 					current: null,
-					initiator: attributes ? { attributes } : null,
+					initiator: attributes ? { principalId, attributes } : null,
 				},
 			},
 		},
@@ -137,7 +144,9 @@ describe("goi-soan", () => {
 	});
 
 	test("vai okr của phiên → lớp 4 rỗng, kể cả khi người mở trong kho là member", async () => {
-		expect((await goiCua(canhOkr.cuocSoanId, "okr")).lop4.chiSo).toEqual([]);
+		expect(
+			(await goiCua(canhOkr.cuocSoanId, "okr", canhOkr.nguoiMo.id)).lop4.chiSo,
+		).toEqual([]);
 		const cungCuoc = await goiCua(canh.cuocSoanId, "okr");
 		expect(cungCuoc.lop4.chiSo, "vai lay tu kho thay vi tu phien").toEqual([]);
 		expect(cungCuoc.lop1.nguoiHoi.vai).toBe("okr");
@@ -204,6 +213,7 @@ describe("goi-soan", () => {
 		}
 		const daGhi = await goiSoan(canh.cuocSoanId, {
 			vai: "member",
+			nguoiHoiId: canh.nguoiMo.id,
 			ghiDaCat: true,
 		});
 		if (!daGhi) throw new Error("khong dung duoc goi");
@@ -251,6 +261,7 @@ describe("goi-soan", () => {
 		try {
 			const goi = await goiSoan(canh.cuocSoanId, {
 				vai: "member",
+				nguoiHoiId: canh.nguoiMo.id,
 				ghiDaCat: true,
 			});
 			if (!goi) throw new Error("khong dung duoc goi");
@@ -377,6 +388,17 @@ describe("goi-soan", () => {
 		);
 		expect(await moPhien(null)).toBeNull();
 		expect(
+			await moPhien(
+				{
+					purpose: TRO_LY_OKR_SOAN.purpose,
+					cuocSoanId: canh.cuocSoanId,
+					vai: "member",
+				},
+				"",
+			),
+			"phien khong co nguoi hoi van dung goi",
+		).toBeNull();
+		expect(
 			await moPhien({ purpose: TRO_LY_OKR_SOAN.purpose, vai: "member" }),
 		).toBeNull();
 		expect(
@@ -392,6 +414,64 @@ describe("goi-soan", () => {
 				vai: "khach",
 			}),
 		).toBeNull();
+	});
+
+	test("mục tiêu giới hạn trong chuỗi cấp trên: tên không vào gói của người hỏi không xem được; vào gói của quản trị; không là ứng viên Căn chỉnh", async () => {
+		const TEN_KIN = `Mở cơ sở lưu trú ở thị trường kín ${ma()}`;
+		const TEN_KR_KIN = `Số cơ sở mới ở thị trường kín ${ma()}`;
+		const quanTri = await gieoNguoi(`Quản trị gói ${ma()}`, "admin");
+		const kin = await db.okrObjective.create({
+			data: {
+				cycleId: canh.chuKy.nam,
+				level: "onehub",
+				ownerUserId: quanTri.id,
+				kind: "cam-ket",
+				status: "cong-bo",
+				hienThi: "gioi-han",
+				title: TEN_KIN,
+				keyResults: {
+					create: [
+						{
+							title: TEN_KR_KIN,
+							kind: "tang-toi",
+							ownerUserId: quanTri.id,
+							startValue: 0,
+							targetValue: 6,
+							currentValue: 1,
+							unit: "cơ sở",
+							position: 9,
+						},
+					],
+				},
+			},
+			select: { id: true, keyResults: { select: { id: true } } },
+		});
+		try {
+			const chuNguoiHoi = goiThanhChiDan(await goiCua(canh.cuocSoanId));
+			expect(chuNguoiHoi, "ten muc tieu kin lot vao goi").not.toContain(
+				TEN_KIN,
+			);
+			expect(chuNguoiHoi, "ten KR kin lot vao goi").not.toContain(TEN_KR_KIN);
+			expect(chuNguoiHoi).toContain(canh.tenMucTieuCapTren);
+			const goiQuanTri = await goiCua(canh.cuocSoanId, "member", quanTri.id);
+			const chuQuanTri = goiThanhChiDan(goiQuanTri);
+			expect(chuQuanTri, "quan tri khong thay muc tieu kin").toContain(TEN_KIN);
+			expect(chuQuanTri).toContain(TEN_KR_KIN);
+			const ung = goiQuanTri.lop2a.ungVienCanChinh.map((u) => u.id);
+			expect(ung).not.toContain(kin.id);
+			for (const k of kin.keyResults) expect(ung).not.toContain(k.id);
+			expect(ung.sort()).toEqual([...canh.idCapTren].sort());
+			const phien = await moPhien({
+				purpose: TRO_LY_OKR_SOAN.purpose,
+				cuocSoanId: canh.cuocSoanId,
+				vai: "member",
+			});
+			expect(phien?.markdown, "session.started lot ten kin").not.toContain(
+				TEN_KIN,
+			);
+		} finally {
+			await db.okrObjective.delete({ where: { id: kin.id } });
+		}
 	});
 
 	test("lời dặn tĩnh: câu hỏi mở đầu đúng khuôn «1. …?» rồi «- gợi ý: A · B»; gọi nop_ban_nhap; nhắc thẻ dữ liệu", () => {

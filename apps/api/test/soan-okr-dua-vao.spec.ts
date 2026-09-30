@@ -11,6 +11,7 @@ import type {
 } from "../src/okr/okr.contracts";
 import { OKR } from "../src/okr/okr-config";
 import {
+	CHU_KY_Q4,
 	DON_VI,
 	type Duong,
 	datPhaQuy4,
@@ -745,6 +746,119 @@ describe("quyet", () => {
 			}
 			expect(await trangThaiDongNhap(id)).toBe("cho");
 			await xoaCuoc(cuoc.id);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"danh sách: đích Căn chỉnh là Mục tiêu giới hạn (hay KR của nó) thì tên rỗng như đích không còn với người không xem được; quản trị và người xem có tên thấy tên",
+		async () => {
+			const TEN_KIN = "Mở kênh bán cho khách hàng kín của bộ phận";
+			const TEN_KR_KIN = "Số hợp đồng với khách hàng kín";
+			const chu = nguoi("tran-quoc-bao");
+			const kin = await db.okrObjective.create({
+				data: {
+					cycleId: CHU_KY_Q4,
+					level: "bo-phan",
+					divisionId: DON_VI.kinhDoanh.divisionId,
+					ownerUserId: chu,
+					kind: "cam-ket",
+					status: "cong-bo",
+					hienThi: "gioi-han",
+					title: TEN_KIN,
+					keyResults: {
+						create: [
+							{
+								title: TEN_KR_KIN,
+								kind: "tang-toi",
+								ownerUserId: chu,
+								startValue: 0,
+								targetValue: 5,
+								currentValue: 1,
+								unit: "hợp đồng",
+								position: 0,
+							},
+						],
+					},
+				},
+				select: { id: true, keyResults: { select: { id: true } } },
+			});
+			const krKin = kin.keyResults[0]?.id ?? "";
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
+			try {
+				await gieoDongNhap(cuoc, [
+					{ loai: "muc-tieu-moi", khoa: "k", ten: "Mục tiêu góp vào đích kín" },
+				]);
+				const [ccMt, ccKr, ccCong] = (await gieoDongNhap(cuoc, [
+					{
+						loai: "can-chinh-moi",
+						khoa: "cc-mt",
+						chaKhoa: "k",
+						dichId: kin.id,
+						loaiDich: "muc-tieu",
+					},
+					{
+						loai: "can-chinh-moi",
+						khoa: "cc-kr",
+						chaKhoa: "k",
+						dichId: krKin,
+						loaiDich: "kr",
+					},
+					{
+						loai: "can-chinh-moi",
+						khoa: "cc-cong",
+						chaKhoa: "k",
+						dichId: mt("q4-kd"),
+						loaiDich: "muc-tieu",
+					},
+				])) as [string, string, string];
+				const tenCongKhai = (
+					await db.okrObjective.findUniqueOrThrow({
+						where: { id: mt("q4-kd") },
+						select: { title: true },
+					})
+				).title;
+				const tenCua = (ds: SoanDanhSachOutput) =>
+					Object.fromEntries(
+						ds.dong.flatMap((d) =>
+							d.loai === "can-chinh-moi" ? [[d.id, [d.dichId, d.tenDich]]] : [],
+						),
+					);
+				for (const duong of DUONG) {
+					const truong = await danhSach(cuoc.id, duong);
+					expect(tenCua(truong), `truong ${duong}`).toEqual({
+						[ccMt]: [kin.id, ""],
+						[ccKr]: [krKin, ""],
+						[ccCong]: [mt("q4-kd"), tenCongKhai],
+					});
+					const chuTruong = JSON.stringify(truong);
+					expect(chuTruong, "ten muc tieu kin lot").not.toContain(TEN_KIN);
+					expect(chuTruong, "ten KR kin lot").not.toContain(TEN_KR_KIN);
+					expect(
+						tenCua(await danhSach(cuoc.id, duong, cQuanTri)),
+						`quan tri ${duong}`,
+					).toEqual({
+						[ccMt]: [kin.id, TEN_KIN],
+						[ccKr]: [krKin, TEN_KR_KIN],
+						[ccCong]: [mt("q4-kd"), tenCongKhai],
+					});
+				}
+				await db.okrNguoiXem.create({
+					data: {
+						objectiveId: kin.id,
+						userId: nguoi(TRUONG),
+						createdById: chu,
+					},
+				});
+				expect(tenCua(await danhSach(cuoc.id)), "nguoi xem co ten").toEqual({
+					[ccMt]: [kin.id, TEN_KIN],
+					[ccKr]: [krKin, TEN_KR_KIN],
+					[ccCong]: [mt("q4-kd"), tenCongKhai],
+				});
+			} finally {
+				await xoaCuoc(cuoc.id);
+				await db.okrObjective.delete({ where: { id: kin.id } });
+			}
 		},
 		CHO_DB,
 	);
