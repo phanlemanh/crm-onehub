@@ -4,34 +4,107 @@
     {
       "id": "E21",
       "q": "Mã và màn Hỏi ý có giữ đúng sáu nếp thiết kế đã hứa không?",
-      "why": "Hội đồng chấm chỉ được đọc thiết kế và hợp đồng, không đọc được mã, nên không tự kết luận được. Phần lớn sáu nếp đã có máy đo xanh: chỉ thêm bảng mới, soi mã thiết kế, luật đọc tên và bản viết trước nằm một chỗ, tám mục từ điển."
+      "why": "Hội đồng chấm chỉ đọc được thiết kế và hợp đồng, không đọc được mã. Phần lớn sáu nếp đã có máy đo xanh ở vòng 3: chỉ thêm bảng mới, soi mã thiết kế 0 vi phạm, luật đọc tên và bản viết trước nằm một chỗ, tám mục từ điển."
     }
   ],
   "analyst_plain": "",
   "scope_plain": "Những việc dưới đây cố ý để ngoài lượt này, như đã duyệt ở Cổng Phạm vi.",
   "decisions_plain": [
-    {"id": "d-20260929T094942Z-1", "p": "Gọi tính năng là «Hỏi ý mục tiêu», không dùng chữ «đợt» vì chữ đó đã là của chiến dịch — mã hồ sơ giữ nguyên."},
-    {"id": "d-20260929T094942Z-2", "p": "Người chọn là một quản trị được chỉ định khi mở hỏi ý — không thêm vai «CEO» mới, không để quản trị nào cũng chọn."},
-    {"id": "d-20260929T094942Z-3", "p": "Người chọn chỉ đọc được ý người khác sau khi niêm phong bản viết trước hoặc khai không viết trước — đổi lại phải viết trước."},
-    {"id": "d-20260929T094942Z-4", "p": "KHÔNG làm Trợ lý OKR đề xuất nhóm chủ đề ở lượt này — tách thành lượt 11b."},
-    {"id": "d-20260929T094942Z-5", "p": "Tin «ý của bạn đi đâu» sống trên tab Hỏi ý; nhắc buổi sáng chỉ trỏ tới — không dựng hộp tin trong ứng dụng."},
-    {"id": "d-20260929T094942Z-6", "p": "«Ý lạ» là một chủ đề chứa đúng một ý; «đã có» là một kết luận chứ không phải ô gom riêng."},
-    {"id": "d-20260929T094942Z-7", "p": "Chu kỳ không rời được «lập kế hoạch» khi còn lần hỏi ý chưa công bố — đổi lại chạm một thao tác chu kỳ có sẵn."},
-    {"id": "d-20260929T100532Z-8", "p": "Duyệt giao diện trên bản mẫu bấm được trong khung khu OKR, phản hồi không đồng bộ — không bày nhiều hướng thiết kế."},
-    {"id": "d-20260929T102113Z-9", "p": "Áp bảy sửa của rà soát trải nghiệm theo lời chủ kho — tab cuộn tới tab đang đứng, ô soạn trong màn đầu ở điện thoại, lý do không cắt."},
-    {"id": "d-20260929T105141Z-10", "p": "Áp năm đề xuất ReUI theo lời chủ kho — dải pha và hành trình của ý bằng dòng thời gian, huy hiệu trên tab, mục lục chủ đề, thẻ con số."},
-    {"id": "d-20260929T111626Z-12", "p": "Công bố tạo mục tiêu nháp qua đúng đường tạo mục tiêu có sẵn, không ghi thẳng bảng — đổi lại tách lõi của thao tác tạo mục tiêu."},
-    {"id": "d-20260929T111626Z-13", "p": "Mọi mốc thời gian của hỏi ý đọc từ một đồng hồ thay được khi kiểm — để kiểm được hạn, cửa sổ nhắc và hành trình của ý."},
-    {"id": "d-20260929T122554Z-14", "p": "Chủ kho duyệt kế hoạch 14 việc ở Cổng 1.5; thi công bằng tác tử, ba việc đầu chạy song song."},
-    {"id": "d-20260929T122656Z-15", "p": "Gộp bản onehub mới trước khi viết mã — dòng số các thao tác OKR đổi chỗ, mốc migration của lượt giữ nguyên."},
-    {"id": "d-20260929T202434Z-16", "p": "Người chọn niêm phong được cả khi đã qua hạn (thiết kế ghi chỉ khi còn mở) — không thì quên niêm phong là kẹt vĩnh viễn; vẫn không đọc được ý trước khi niêm phong."},
-    {"id": "d-20260929T202434Z-17", "p": "Người chọn chưa niêm phong không được gom hay kết luận; quản trị khác vẫn gom được — đổi lại người chọn phải niêm phong trước."},
-    {"id": "d-20260929T202434Z-18", "p": "Trước công bố, quản trị khác không thấy câu mục tiêu và chỗ nối bản viết trước của chủ đề; thành viên không thấy chủ đề — để không lộ bản viết trước."},
-    {"id": "d-20260929T202434Z-19", "p": "Lần hỏi ý không có ý nào được công bố rỗng (thiết kế ghi không có huỷ) — không thì chu kỳ kẹt; vẫn phải niêm phong, công bố tạo 0 mục tiêu."},
-    {"id": "d-20260929T202434Z-20", "p": "Thêm màn sửa lần hỏi ý: lời mở, con số, hạn, «Đóng ngay», đổi người chọn — bảng trạng thái màn đã duyệt không có màn này."},
-    {"id": "d-20260929T202434Z-21", "p": "Lý do của chủ đề «chọn» tối đa 500 ký tự cho khớp «vì sao lúc này» của mục tiêu nháp — kết luận khác vẫn 1000."},
-    {"id": "d-20260929T202434Z-22", "p": "Chỉ người chọn còn là quản trị thấy danh sách còn thiếu trước công bố; người chọn bị hạ vai được xem như thành viên."},
-    {"id": "d-20260929T202434Z-23", "p": "Tin nhắc hỏi ý mở đúng chu kỳ của lần hỏi ý; mở tab không kèm chu kỳ thì mặc định chu kỳ lập kế hoạch sớm nhất."},
-    {"id": "d-20260929T202434Z-24", "p": "Để hẹn xem lại: người chọn thay thế trước khi niêm phong có thể đã đọc ý rồi mới viết — con số «đổi/thêm» của lần đó có thể phồng; xem lại ở Cổng Giá trị 14/12."}
+    {
+      "id": "d-20260929T094942Z-1",
+      "p": "Gọi tính năng là «Hỏi ý mục tiêu», không dùng chữ «đợt» vì chữ đó đã là của chiến dịch — mã hồ sơ giữ nguyên."
+    },
+    {
+      "id": "d-20260929T094942Z-2",
+      "p": "Người chọn là một quản trị được chỉ định khi mở hỏi ý — không thêm vai «CEO» mới, không để quản trị nào cũng chọn."
+    },
+    {
+      "id": "d-20260929T094942Z-3",
+      "p": "Người chọn chỉ đọc được ý người khác sau khi niêm phong bản viết trước hoặc khai không viết trước — đổi lại phải viết trước."
+    },
+    {
+      "id": "d-20260929T094942Z-4",
+      "p": "KHÔNG làm Trợ lý OKR đề xuất nhóm chủ đề ở lượt này — tách thành lượt 11b."
+    },
+    {
+      "id": "d-20260929T094942Z-5",
+      "p": "Tin «ý của bạn đi đâu» sống trên tab Hỏi ý; nhắc buổi sáng chỉ trỏ tới — không dựng hộp tin trong ứng dụng."
+    },
+    {
+      "id": "d-20260929T094942Z-6",
+      "p": "«Ý lạ» là một chủ đề chứa đúng một ý; «đã có» là một kết luận chứ không phải ô gom riêng."
+    },
+    {
+      "id": "d-20260929T094942Z-7",
+      "p": "Chu kỳ không rời được «lập kế hoạch» khi còn lần hỏi ý chưa công bố — đổi lại chạm một thao tác chu kỳ có sẵn."
+    },
+    {
+      "id": "d-20260929T100532Z-8",
+      "p": "Duyệt giao diện trên bản mẫu bấm được trong khung khu OKR, phản hồi không đồng bộ — không bày nhiều hướng thiết kế."
+    },
+    {
+      "id": "d-20260929T102113Z-9",
+      "p": "Áp bảy sửa của rà soát trải nghiệm theo lời chủ kho — tab cuộn tới tab đang đứng, ô soạn trong màn đầu ở điện thoại, lý do không cắt."
+    },
+    {
+      "id": "d-20260929T105141Z-10",
+      "p": "Áp năm đề xuất ReUI theo lời chủ kho — dải pha và hành trình của ý bằng dòng thời gian, huy hiệu trên tab, mục lục chủ đề, thẻ con số."
+    },
+    {
+      "id": "d-20260929T111626Z-12",
+      "p": "Công bố tạo mục tiêu nháp qua đúng đường tạo mục tiêu có sẵn, không ghi thẳng bảng — đổi lại tách lõi của thao tác tạo mục tiêu."
+    },
+    {
+      "id": "d-20260929T111626Z-13",
+      "p": "Mọi mốc thời gian của hỏi ý đọc từ một đồng hồ thay được khi kiểm — để kiểm được hạn, cửa sổ nhắc và hành trình của ý."
+    },
+    {
+      "id": "d-20260929T122554Z-14",
+      "p": "Chủ kho duyệt kế hoạch 14 việc ở Cổng 1.5; thi công bằng tác tử, ba việc đầu chạy song song."
+    },
+    {
+      "id": "d-20260929T122656Z-15",
+      "p": "Gộp bản onehub mới trước khi viết mã — dòng số các thao tác OKR đổi chỗ, mốc migration của lượt giữ nguyên."
+    },
+    {
+      "id": "d-20260929T202434Z-16",
+      "p": "Người chọn niêm phong được cả khi đã qua hạn (thiết kế ghi chỉ khi còn mở) — không thì quên niêm phong là kẹt vĩnh viễn; vẫn không đọc được ý trước khi niêm phong."
+    },
+    {
+      "id": "d-20260929T202434Z-17",
+      "p": "Người chọn chưa niêm phong không được gom hay kết luận; quản trị khác vẫn gom được — đổi lại người chọn phải niêm phong trước."
+    },
+    {
+      "id": "d-20260929T202434Z-18",
+      "p": "Trước công bố, quản trị khác không thấy câu mục tiêu và chỗ nối bản viết trước của chủ đề; thành viên không thấy chủ đề — để không lộ bản viết trước."
+    },
+    {
+      "id": "d-20260929T202434Z-19",
+      "p": "Lần hỏi ý không có ý nào được công bố rỗng (thiết kế ghi không có huỷ) — không thì chu kỳ kẹt; vẫn phải niêm phong, công bố tạo 0 mục tiêu."
+    },
+    {
+      "id": "d-20260929T202434Z-20",
+      "p": "Thêm màn sửa lần hỏi ý: lời mở, con số, hạn, «Đóng ngay», đổi người chọn — bảng trạng thái màn đã duyệt không có màn này."
+    },
+    {
+      "id": "d-20260929T202434Z-21",
+      "p": "Lý do của chủ đề «chọn» tối đa 500 ký tự cho khớp «vì sao lúc này» của mục tiêu nháp — kết luận khác vẫn 1000."
+    },
+    {
+      "id": "d-20260929T202434Z-22",
+      "p": "Chỉ người chọn còn là quản trị thấy danh sách còn thiếu trước công bố; người chọn bị hạ vai được xem như thành viên."
+    },
+    {
+      "id": "d-20260929T202434Z-23",
+      "p": "Tin nhắc hỏi ý mở đúng chu kỳ của lần hỏi ý; mở tab không kèm chu kỳ thì mặc định chu kỳ lập kế hoạch sớm nhất."
+    },
+    {
+      "id": "d-20260929T202434Z-24",
+      "p": "Để hẹn xem lại: người chọn thay thế trước khi niêm phong có thể đã đọc ý rồi mới viết — con số «đổi/thêm» của lần đó có thể phồng; xem lại ở Cổng Giá trị 14/12."
+    },
+    {
+      "id": "d-20260930T025544Z-25",
+      "p": "Sửa mười lỗi phiên tự lái tìm ra trước khi ký, trong đó người chọn không được bấm «Tôi cũng nghĩ vậy» — đổi lại phải chấm lại vòng 3."
+    }
   ]
 }
