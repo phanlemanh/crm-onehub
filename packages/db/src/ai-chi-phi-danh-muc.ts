@@ -7,6 +7,7 @@ export const TINH_NANG = [
 	"okr.chuyen-tiep",
 	"okr.de-xuat",
 	"okr.tom-tat",
+	"okr.soan",
 	"tai-lieu.may-soan",
 	"khac",
 ] as const;
@@ -33,6 +34,7 @@ export const NHOM_CUA_TINH_NANG = {
 	"okr.chuyen-tiep": "tro-ly-okr",
 	"okr.de-xuat": "tro-ly-okr",
 	"okr.tom-tat": "tro-ly-okr",
+	"okr.soan": "tro-ly-okr",
 	"tai-lieu.may-soan": "chua-gan",
 	khac: "chua-gan",
 } as const satisfies Record<TinhNang, NhomViecAi>;
@@ -41,6 +43,7 @@ export const TINH_NANG_TRO_LY_OKR = [
 	"okr.chuyen-tiep",
 	"okr.de-xuat",
 	"okr.tom-tat",
+	"okr.soan",
 ] as const satisfies readonly TinhNang[];
 
 export function laTinhNang(chu: string): chu is TinhNang {
@@ -67,6 +70,7 @@ const VIEC_CUA_PURPOSE = {
 	zalo: "zalo.hoi-crm",
 	research: "crm.nghien-cuu",
 	"may-soan": "tai-lieu.may-soan",
+	"okr-soan": "okr.soan",
 } as const satisfies Record<string, TinhNang>;
 
 export type NguonBuoc = {
@@ -84,6 +88,7 @@ export function tinhNangCua(nguon: NguonBuoc): TinhNang {
 		return VIEC_CUA_SUBAGENT[nguon.subagent];
 	}
 	if (nguon.subagent) return "khac";
+	if (nguon.purpose === "okr-soan") return "okr.soan";
 	if (nguon.kenh === "eve") return "crm.hoi-dap";
 	if (nguon.kenh === "zalo") return "zalo.hoi-crm";
 	const purpose = nguon.purpose ?? "research";

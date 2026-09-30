@@ -13,7 +13,7 @@ import {
 } from "../src/okr-kiem-de-xuat";
 import {
 	type DongGopY,
-	dongDeXuat,
+	dongGopY,
 	MA_LOAI_DE_XUAT,
 	MA_VAN_DE,
 	type MaLoaiDeXuat,
@@ -95,7 +95,7 @@ const CA_LUAT = caDau(
 type DauVaoDong = Partial<DongGopY> & Pick<DongGopY, "loai" | "objectiveId">;
 
 function dong(d: DauVaoDong): DongGopY {
-	return dongDeXuat.parse({
+	return dongGopY.parse({
 		keyResultId: null,
 		truong: null,
 		truoc: null,

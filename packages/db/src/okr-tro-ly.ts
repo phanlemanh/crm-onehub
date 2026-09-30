@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { PRIORITY } from "./agent-tasks";
-import { chiTieuThang, thangVN } from "./ai-chi-phi";
+import { chiTieuThang, khungThangVN, thangVN } from "./ai-chi-phi";
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
 import { lockIdempotencyKey } from "./idempotency";
@@ -33,7 +33,12 @@ export const CAU_HINH_AI_MAC_DINH: CauHinhAi = {
 	aiDeXuatAnDonVi: [],
 	aiTomTatAnPhamVi: "tat",
 	aiTomTatAnDonVi: [],
+	aiSoanPhamVi: "tat",
+	aiSoanDonVi: [],
+	aiSoanAnPhamVi: "tat",
+	aiSoanAnDonVi: [],
 	aiTranThangUsd: TRO_LY_OKR_TRAN.tranThangMacDinhUsd,
+	aiTranThangDatOkrUsd: null,
 };
 
 export async function cauHinhAiLuc(
@@ -54,7 +59,12 @@ export async function cauHinhAiLuc(
 			aiDeXuatAnDonVi: true,
 			aiTomTatAnPhamVi: true,
 			aiTomTatAnDonVi: true,
+			aiSoanPhamVi: true,
+			aiSoanDonVi: true,
+			aiSoanAnPhamVi: true,
+			aiSoanAnDonVi: true,
 			aiTranThangUsd: true,
+			aiTranThangDatOkrUsd: true,
 		},
 	});
 	if (!row) return { ...CAU_HINH_AI_MAC_DINH, version: 0 };
@@ -77,7 +87,15 @@ export async function cauHinhAiLuc(
 			"aiTomTatAnPhamVi",
 		),
 		aiTomTatAnDonVi: row.aiTomTatAnDonVi,
+		aiSoanPhamVi: motTrong(AI_PHAM_VI, row.aiSoanPhamVi, "aiSoanPhamVi"),
+		aiSoanDonVi: row.aiSoanDonVi,
+		aiSoanAnPhamVi: motTrong(AI_PHAM_VI, row.aiSoanAnPhamVi, "aiSoanAnPhamVi"),
+		aiSoanAnDonVi: row.aiSoanAnDonVi,
 		aiTranThangUsd: row.aiTranThangUsd.toNumber(),
+		aiTranThangDatOkrUsd:
+			row.aiTranThangDatOkrUsd === null
+				? null
+				: row.aiTranThangDatOkrUsd.toNumber(),
 	};
 }
 
@@ -183,20 +201,47 @@ async function nacCuaMucTieu(
 	return nacCuaViec(ct, viec);
 }
 
+export function tranThangApDung(
+	ct: CauHinhAi,
+	coChuKyLapKeHoach: boolean,
+): number {
+	return coChuKyLapKeHoach && ct.aiTranThangDatOkrUsd !== null
+		? ct.aiTranThangDatOkrUsd
+		: ct.aiTranThangUsd;
+}
+
+export async function coChuKyLapKeHoachTrongThang(
+	db: DbHoacTx,
+	thang: string,
+): Promise<boolean> {
+	const { tu } = khungThangVN(thang);
+	const so = await db.okrCycle.count({
+		where: { phase: "lap-ke-hoach", endsOn: { gte: tu } },
+	});
+	return so > 0;
+}
+
+export async function tranThangCuaThang(
+	db: DbHoacTx,
+	ct: CauHinhAi,
+	thang: string,
+): Promise<number> {
+	return tranThangApDung(ct, await coChuKyLapKeHoachTrongThang(db, thang));
+}
+
 async function quaTranChung(
 	db: DbHoacTx,
 	ct: CauHinhAi,
 	now: Date,
 ): Promise<TroLySanSang> {
-	const chi = (await chiTieuThang(db, thangVN(now), now)).troLyOkrUsd;
-	if (chi >= ct.aiTranThangUsd) return khong("het-tran-thang");
+	const thang = thangVN(now);
+	const tran = await tranThangCuaThang(db, ct, thang);
+	const chi = (await chiTieuThang(db, thang, now)).troLyOkrUsd;
+	if (chi >= tran) return khong("het-tran-thang");
 	if ((await ketQuaKiemGanNhat(db, now))?.ketQua === "chua-co-khoa-mo-hinh") {
 		return khong("chua-co-khoa-mo-hinh");
 	}
-	return {
-		bat: true,
-		conLaiUsd: Math.round((ct.aiTranThangUsd - chi) * 1e6) / 1e6,
-	};
+	return { bat: true, conLaiUsd: Math.round((tran - chi) * 1e6) / 1e6 };
 }
 
 async function soLuotDeXuatTrongNgay(
