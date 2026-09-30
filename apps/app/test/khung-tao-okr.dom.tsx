@@ -1,4 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { act, type ReactElement } from "react";
 import {
 	createKrInput,
@@ -18,7 +20,6 @@ import {
 	datMacDinh,
 	dongHet,
 	go,
-	goiCua,
 	HAI,
 	hopKr,
 	hopMucTieu,
@@ -31,6 +32,11 @@ import {
 	nutCo,
 	phim,
 } from "./khung-gop-y";
+import {
+	bonPayload,
+	THU_TUC_GUI,
+	type ThuTucGui,
+} from "./khung-tao-okr-payload";
 
 const { HopThoaiMucTieu } = await import(
 	"@/app/(app)/[slug]/okr/hop-thoai-muc-tieu"
@@ -151,12 +157,6 @@ async function moNgan(
 	);
 	await cho(() => n.hop() !== null, `ngan ${n.ten} mo`);
 	return { lan: () => lan };
-}
-
-function motLan(goi: readonly { dauVao: unknown }[]): unknown {
-	const [dau] = goi;
-	if (!dau) throw new Error("khong co loi goi");
-	return dau.dauVao;
 }
 
 const oTen = (hop: HTMLElement | null) =>
@@ -287,89 +287,36 @@ describe("khung-tao-okr — giữ chữ đang sửa", () => {
 });
 
 describe("khung-tao-okr — gửi đúng dữ liệu", () => {
-	test("gui-dung: bốn thao tác qua ngăn gọi đúng thủ tục với đúng payload", async () => {
-		const tenMoi = "Không thoả thuận nào của miền Bắc bị mất dấu";
-		const viSao = "Đầu quý 1 là mùa ký lại hợp đồng năm.";
-
-		await moNgan(BON_NGAN[0]);
-		await go(oTen(hopMucTieu()), tenMoi);
-		await go(
-			hopMucTieu()?.querySelector('textarea[id$="-vi-sao"]') ?? null,
-			viSao,
-		);
-		await bam(nut(h.taoMucTieu));
-		const tao = goiCua("okr.createObjective");
-		if (tao.length !== 1)
-			throw new Error("payload lech: createObjective (so lan)");
-		const pTao = createObjectiveInput.parse(motLan(tao));
-		const kyTao = {
-			cycleId: MT.cycleId,
-			unit: { level: "onehub" },
-			title: tenMoi,
-			kind: "cam-ket",
-			ownerUserId: HAI.id,
-			participantIds: [],
-			whyNow: viSao,
-		};
-		if (
-			JSON.stringify(pTao) !== JSON.stringify(createObjectiveInput.parse(kyTao))
-		)
-			throw new Error(`payload lech: createObjective ${JSON.stringify(pTao)}`);
-		console.log("createObjective", JSON.stringify(pTao));
-		await dongHet();
-
-		await moNgan(BON_NGAN[1]);
-		await go(oTen(hopMucTieu()), tenMoi);
-		await bam(nut(h.luu));
-		const sua = goiCua("okr.updateObjective");
-		if (sua.length !== 1)
-			throw new Error("payload lech: updateObjective (so lan)");
-		const pSua = updateObjectiveInput.parse(motLan(sua));
-		expect(pSua).toEqual(
-			updateObjectiveInput.parse({ id: MT.id, title: tenMoi }),
-		);
-		console.log("updateObjective", JSON.stringify(pSua));
-		await dongHet();
-
-		await moNgan(BON_NGAN[2]);
-		await go(oTen(hopKr()), "Khách mới hẹn gặp sau cuộc gọi đầu");
-		await go(
-			hopKr()?.querySelector<HTMLInputElement>("[data-o-dich]") ?? null,
-			"20",
-		);
-		await bam(nut(h.themKr, ngan(hopKr()) ?? document.body));
-		const them = goiCua("okr.createKeyResult");
-		if (them.length !== 1)
-			throw new Error("payload lech: createKeyResult (so lan)");
-		const pThem = createKrInput.parse(motLan(them));
-		expect(pThem).toEqual(
-			createKrInput.parse({
-				objectiveId: MT.id,
-				title: "Khách mới hẹn gặp sau cuộc gọi đầu",
-				kind: "tang-toi",
-				ownerUserId: HAI.id,
-				startValue: 0,
-				targetValue: 20,
-				currentValue: 0,
-				unit: "",
-				dueOn: null,
-				weight: 1,
-			}),
-		);
-		console.log("createKeyResult", JSON.stringify(pThem));
-		await dongHet();
-
-		await moNgan(BON_NGAN[3]);
-		await go(oTen(hopKr()), "Gọi 60 cuộc mỗi tuần");
-		await bam(nut(h.luu));
-		const suaKr = goiCua("okr.updateKeyResult");
-		if (suaKr.length !== 1)
-			throw new Error("payload lech: updateKeyResult (so lan)");
-		const pSuaKr = updateKrInput.parse(motLan(suaKr));
-		expect(pSuaKr).toEqual(
-			updateKrInput.parse({ id: KR_1.id, title: "Gọi 60 cuộc mỗi tuần" }),
-		);
-		console.log("updateKeyResult", JSON.stringify(pSuaKr));
+	test("gui-dung: bốn thao tác qua ngăn gửi đúng dữ liệu hộp thoại cũ đã gửi", async () => {
+		const chuan = JSON.parse(
+			readFileSync(
+				join(
+					import.meta.dir,
+					"../../../_acceptance/khung-tao-okr-nhu-deal/rang/payload-cu.json",
+				),
+				"utf8",
+			),
+		) as { nguon: string; payload: Record<ThuTucGui, unknown> };
+		const moi = await bonPayload({ HopThoaiMucTieu, HopThoaiKr });
+		const SCHEMA = {
+			"okr.createObjective": createObjectiveInput,
+			"okr.updateObjective": updateObjectiveInput,
+			"okr.createKeyResult": createKrInput,
+			"okr.updateKeyResult": updateKrInput,
+		} as const;
+		for (const thuTuc of THU_TUC_GUI) {
+			const pMoi = SCHEMA[thuTuc].parse(moi[thuTuc]);
+			const pCu = SCHEMA[thuTuc].parse(chuan.payload[thuTuc]);
+			const tho =
+				JSON.stringify(moi[thuTuc]) === JSON.stringify(chuan.payload[thuTuc]);
+			if (!tho || JSON.stringify(pMoi) !== JSON.stringify(pCu))
+				throw new Error(
+					`payload lech: ${thuTuc.split(".")[1]} moi ${JSON.stringify(moi[thuTuc])} cu ${JSON.stringify(chuan.payload[thuTuc])}`,
+				);
+			console.log(
+				`${thuTuc} khop hop cu ${chuan.nguon.slice(0, 8)}: ${JSON.stringify(moi[thuTuc])}`,
+			);
+		}
 	}, 120_000);
 });
 

@@ -120,9 +120,9 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kto_gui_dung
-    expected: "exit 0; bài DOM (-t gui-dung) với tRPC giả ghi lời gọi: tạo Mục tiêu, sửa Mục tiêu, thêm KR, sửa KR qua ngăn — mỗi ca gọi đúng một thủ tục (okr.createObjective, okr.updateObjective, okr.createKeyResult, okr.updateKeyResult) đúng một lần, payload parse bằng schema input thật của thủ tục nhập từ apps/api/src/okr (không so với object viết tay) và bằng payload của cùng thao tác trên mã merge-base ghi sẵn trong bài bằng chính các hàm dựng payload của hộp cũ; in bốn payload. Chiều đỏ ghim: bản sao gửi whyNow rỗng thay cho chữ đã gõ khi tạo Mục tiêu phải làm bài đỏ 'payload lech: createObjective'."
+    expected: "exit 0; bài DOM (-t gui-dung) chạy bốn thao tác (tạo Mục tiêu, sửa Mục tiêu, thêm KR, sửa KR) bằng một hàm dùng chung (apps/app/test/khung-tao-okr-payload.tsx) trên ngăn mới, với tRPC giả ghi lời gọi; mỗi thủ tục okr.createObjective, okr.updateObjective, okr.createKeyResult, okr.updateKeyResult được gọi đúng một lần; payload thô của ngăn mới BẰNG payload thô mà CÙNG hàm đó thu được khi chạy trên hộp thoại cũ ở merge-base (rang/payload-cu.mjs dựng cây tạm ở merge-base, cài thư viện riêng, chạy hàm, ghi rang/payload-cu.json kèm mã commit nguồn — rút từ bên ghi thật, không viết tay), và hai vế cùng parse được bằng schema input thật nhập từ apps/api/src/okr/okr.contracts.ts; in bốn payload kèm mã commit nguồn. Chiều đỏ ghim: bản sao ngăn mới gửi whyNow rỗng thay cho chữ đã gõ khi tạo Mục tiêu phải làm bài đỏ 'payload lech: createObjective'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/khung-tao-okr.dom.tsx", "apps/app/test/khung-tao-okr-payload.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/payload-cu.mjs", "_acceptance/khung-tao-okr-nhu-deal/rang/payload-cu.json"]
 
   - id: E14
     criterion: AC-9
