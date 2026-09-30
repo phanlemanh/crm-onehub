@@ -22,5 +22,12 @@ export const TRO_LY_OKR_SOAN = {
 		biMat: "OKR_AGENT_BRIDGE_SECRET",
 		tenCay: "PHIEN_DO_TEN_CAY",
 	},
+	vaiDuocVao: ["owner", "admin", "member", "okr"],
+	tuChoi: {
+		cuocKhongThuocPhien: "cuoc khong thuoc phien",
+		cuocKhongDang: "cuoc khong con dang",
+		donViChuaBat: "don-vi-chua-bat",
+		saiMucDich: "phien khong phai okr-soan",
+	},
 	congMacDinh: 2100,
 } as const;
