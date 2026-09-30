@@ -196,11 +196,7 @@ describe("okr-cuoc-soan", () => {
 	});
 
 	test("LOAI_DONG_NHAP: ba loại dòng nháp theo đúng thứ tự", () => {
-		expect(LOAI_DONG_NHAP).toEqual([
-			"muc-tieu-moi",
-			"kr-moi",
-			"can-chinh-moi",
-		]);
+		expect(LOAI_DONG_NHAP).toEqual(["muc-tieu-moi", "kr-moi", "can-chinh-moi"]);
 	});
 });
 
