@@ -129,6 +129,12 @@ type DuongMo = {
 	soThamSo: number;
 };
 
+type TieuDeNhom = {
+	kenh: O["kenh"];
+	tieuDe: string | null;
+	soLan: number;
+};
+
 const DONG_TOM_TAT = /Tóm tắt tuần Phòng (.+?) · (\d+) KR đáng bàn/;
 
 type Tin = {
@@ -610,6 +616,36 @@ describe("ma tran tam o", () => {
 				loai: tin?.daGui.map((m) => m.loai),
 				coDong: DONG_TOM_TAT.test(tin?.text ?? ""),
 			}).toEqual({ outcome: "da-gui:1", loai: ["okr-tom-tat"], coDong: true });
+		},
+		CHO_DB,
+	);
+
+	test(
+		"tieu de nhom la Tro ly OKR, chu Tom tat tuan dung mot lan moi tin — Slack va Zalo",
+		() => {
+			const ra = new Map<string, TieuDeNhom>();
+			const can = new Map<string, TieuDeNhom>();
+			for (const [o, v] of MA_TRAN) {
+				const tin = tinSang.get(o);
+				if (!tin?.daGui.some((m) => m.loai === "okr-tom-tat")) continue;
+				const dong = tin.text.split("\n");
+				const i = dong.findIndex((d) => DONG_TOM_TAT.test(d));
+				ra.set(o, {
+					kenh: v.kenh,
+					tieuDe: dong[i - 1] ?? null,
+					soLan: tin.text.split("Tóm tắt tuần").length - 1,
+				});
+				can.set(o, {
+					kenh: v.kenh,
+					tieuDe: v.kenh === "slack" ? "*Trợ lý OKR*" : "Trợ lý OKR",
+					soLan: 1,
+				});
+			}
+			expect([...new Set([...ra.values()].map((t) => t.kenh))].sort()).toEqual([
+				"slack",
+				"zalo",
+			]);
+			expect(Object.fromEntries(ra)).toEqual(Object.fromEntries(can));
 		},
 		CHO_DB,
 	);

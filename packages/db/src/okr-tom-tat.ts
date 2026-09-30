@@ -8,6 +8,7 @@ import {
 	type LyDoHop,
 	lyDoCua,
 } from "./okr-hop-tuan";
+import { cuaSoSuKien } from "./okr-nhac";
 import { cauHinhAiLuc } from "./okr-tro-ly";
 import {
 	MUC_TU_TIN,
@@ -21,7 +22,7 @@ import {
 	type TrangThaiQuanTriTomTat,
 } from "./okr-tro-ly-danh-muc";
 import { KIEU_KR, type KieuKr } from "./okr-xu-huong";
-import { mocNhac, ngayVN } from "./onboarding-nhac";
+import { ngayVN } from "./onboarding-nhac";
 import { WORKSPACE_ID } from "./workspace";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
@@ -293,7 +294,15 @@ const chonKr = {
 	startValue: true,
 	targetValue: true,
 	startLockedAt: true,
-	objective: { select: { id: true, title: true, publishedAt: true } },
+	objective: {
+		select: {
+			id: true,
+			title: true,
+			publishedAt: true,
+			cycleId: true,
+			departmentId: true,
+		},
+	},
 	checkIns: {
 		select: {
 			id: true,
@@ -323,6 +332,54 @@ function lanCua(kr: KrDoc): LanCo[] {
 			giaTri: c.value.toNumber(),
 		}))
 		.sort((a, b) => a.luc.getTime() - b.luc.getTime());
+}
+
+type PhongKy = { cycleId: string; departmentId: string };
+
+type KrGoi = { kr: KrDoc; lan: LanCo[]; so: KrSo };
+
+const khoaPhongKy = (v: PhongKy) => `${v.cycleId}|${v.departmentId}`;
+
+async function krSoTrongGoi(
+	db: DbHoacTx,
+	cap: readonly PhongKy[],
+): Promise<Map<string, KrGoi[]>> {
+	if (cap.length === 0) return new Map();
+	const krs = await db.okrKeyResult.findMany({
+		where: {
+			objective: {
+				OR: cap.map((c) => mucTieuTrongGoi(c.cycleId, c.departmentId)),
+			},
+		},
+		select: chonKr,
+		orderBy: [
+			{ objective: { position: "asc" } },
+			{ objectiveId: "asc" },
+			{ position: "asc" },
+			{ id: "asc" },
+		],
+	});
+	const ra = new Map<string, KrGoi[]>();
+	for (const kr of krs) {
+		const khoa = khoaPhongKy({
+			cycleId: kr.objective.cycleId,
+			departmentId: kr.objective.departmentId ?? "",
+		});
+		const ds = ra.get(khoa) ?? [];
+		const lan = lanCua(kr);
+		ds.push({
+			kr,
+			lan,
+			so: {
+				id: kr.id,
+				thuTu: ds.length,
+				khoaLuc: kr.startLockedAt ?? kr.objective.publishedAt,
+				lan,
+			},
+		});
+		ra.set(khoa, ds);
+	}
+	return ra;
 }
 
 function soCuaKr(kr: KrDoc) {
@@ -373,26 +430,10 @@ export async function dungGoiTomTat(
 		select: { id: true, name: true, archivedAt: true },
 	});
 	if (!phong || phong.archivedAt !== null) return null;
-	const krs = await db.okrKeyResult.findMany({
-		where: { objective: mucTieuTrongGoi(v.cycleId, v.departmentId) },
-		select: chonKr,
-		orderBy: [
-			{ objective: { position: "asc" } },
-			{ objectiveId: "asc" },
-			{ position: "asc" },
-			{ id: "asc" },
-		],
-	});
+	const krs = (await krSoTrongGoi(db, [v])).get(khoaPhongKy(v)) ?? [];
 	const { tu, den } = cuaSoDen(v.moc);
 	const nguon: NguonGoi[] = [];
-	const goiKrs = krs.map((kr, thuTu): KrTrongGoi => {
-		const lan = lanCua(kr);
-		const so: KrSo = {
-			id: kr.id,
-			thuTu,
-			khoaLuc: kr.startLockedAt ?? kr.objective.publishedAt,
-			lan,
-		};
+	const goiKrs = krs.map(({ kr, lan, so }): KrTrongGoi => {
 		const trong: LanTrongGoi[] = [];
 		lan.forEach((l, i) => {
 			if (l.luc < tu || l.luc >= den) return;
@@ -840,47 +881,15 @@ export async function banTuanChoQuanTri<M extends string>(
 	return { tuan, phong };
 }
 
-async function krDangBanCua(
-	db: DbHoacTx,
-	v: { cycleId: string; departmentId: string },
-	now: Date,
-): Promise<string[]> {
-	const krs = await db.okrKeyResult.findMany({
-		where: { objective: mucTieuTrongGoi(v.cycleId, v.departmentId) },
-		select: chonKr,
-		orderBy: [
-			{ objective: { position: "asc" } },
-			{ objectiveId: "asc" },
-			{ position: "asc" },
-			{ id: "asc" },
-		],
-	});
-	return krs
-		.filter(
-			(kr, thuTu) =>
-				lyDoCua(
-					{
-						id: kr.id,
-						thuTu,
-						khoaLuc: kr.startLockedAt ?? kr.objective.publishedAt,
-						lan: lanCua(kr),
-					},
-					now,
-				).length > 0,
-		)
-		.map((kr) => kr.id);
-}
-
 export async function viecTomTatCanNhac(
 	db: DbHoacTx,
 	chon: { cuaSo: "buoi-sang"; now: Date; userId?: string },
 ): Promise<Map<string, ViecTomTat[]>> {
-	const moc = mocNhac(chon.now);
 	const ban = await db.okrTomTat.findMany({
 		where: {
 			trangThai: "hien",
 			cau: { path: ["nac"], equals: "bat" },
-			createdAt: { gt: new Date(moc.getTime() - NGAY_MS), lte: moc },
+			createdAt: cuaSoSuKien(chon),
 		},
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 		select: { id: true, cycleId: true, departmentId: true },
@@ -919,26 +928,31 @@ export async function viecTomTatCanNhac(
 	const nhan = new Set(
 		thanhVien.map((m) => m.userId).filter((userId) => !tat.has(userId)),
 	);
-	const viec = await Promise.all(
-		ban.flatMap((b) => {
-			const p = phongBat.get(b.departmentId);
-			if (!p || !nhan.has(p.truong)) return [];
-			return [
-				krDangBanCua(db, b, chon.now).then((krDangBan) => ({
-					userId: p.truong,
-					viec: {
-						loai: "okr-tom-tat" as const,
-						tomTatId: b.id,
-						departmentId: b.departmentId,
-						cycleId: b.cycleId,
-						phongTen: p.ten,
-						krDangBan,
-						soKrDangBan: krDangBan.length,
-					},
-				})),
-			];
-		}),
+	const gui = ban.flatMap((b) => {
+		const p = phongBat.get(b.departmentId);
+		return p && nhan.has(p.truong) ? [{ b, p }] : [];
+	});
+	const krTheoPhong = await krSoTrongGoi(
+		db,
+		gui.map(({ b }) => b),
 	);
+	const viec = gui.map(({ b, p }) => {
+		const krDangBan = (krTheoPhong.get(khoaPhongKy(b)) ?? [])
+			.filter(({ so }) => lyDoCua(so, chon.now).length > 0)
+			.map(({ kr }) => kr.id);
+		return {
+			userId: p.truong,
+			viec: {
+				loai: "okr-tom-tat" as const,
+				tomTatId: b.id,
+				departmentId: b.departmentId,
+				cycleId: b.cycleId,
+				phongTen: p.ten,
+				krDangBan,
+				soKrDangBan: krDangBan.length,
+			},
+		};
+	});
 	const ra = new Map<string, ViecTomTat[]>();
 	for (const { userId, viec: v } of viec)
 		ra.set(userId, [...(ra.get(userId) ?? []), v]);

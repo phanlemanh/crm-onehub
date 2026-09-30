@@ -693,15 +693,24 @@ async function viecTraLai(
 	});
 }
 
+export type CuaSoSuKien = { gt: Date; lte: Date };
+
+export function cuaSoSuKien(chon: {
+	now: Date;
+	cuaSo: CuaSoNhac;
+}): CuaSoSuKien {
+	const den = chon.cuaSo === "buoi-sang" ? mocNhac(chon.now) : chon.now;
+	return {
+		gt: new Date(den.getTime() - OKR_NHAC.suKienGio * GIO_MS),
+		lte: den,
+	};
+}
+
 export async function viecOkrCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecOkr[]>> {
-	const den = chon.cuaSo === "buoi-sang" ? mocNhac(chon.now) : chon.now;
-	const cuaSo = {
-		gt: new Date(den.getTime() - OKR_NHAC.suKienGio * GIO_MS),
-		lte: den,
-	};
+	const cuaSo = cuaSoSuKien(chon);
 	const phan = await Promise.all([
 		viecKr(db, chon.now),
 		viecGiao(db, cuaSo),

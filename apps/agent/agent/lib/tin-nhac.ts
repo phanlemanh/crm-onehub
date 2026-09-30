@@ -31,7 +31,7 @@ export const TIEU_DE = {
 	"okr-theo-doi": "Đang theo dõi",
 	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
 	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
-	"okr-tom-tat": "Tóm tắt tuần",
+	"okr-tom-tat": "Trợ lý OKR",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",
@@ -183,6 +183,8 @@ function dongTaiLieu(
 	return `• ${chu}${url ? ` — <${url}|mở tab Chờ duyệt>` : ""}`;
 }
 
+const DONG_TOM_TAT = "Tóm tắt tuần";
+
 function dongTomTat(
 	v: ViecTomTat,
 	so: number,
@@ -190,7 +192,7 @@ function dongTomTat(
 	khuon: KhuonTin,
 ): string {
 	const chu = (ten: string) =>
-		`${TIEU_DE[v.loai]} Phòng ${ten} · ${v.soKrDangBan} KR đáng bàn`;
+		`${DONG_TOM_TAT} Phòng ${ten} · ${v.soKrDangBan} KR đáng bàn`;
 	if (khuon === "tron")
 		return `${so}. ${chu(v.phongTen)}${url ? ` — ${url}` : ""}`;
 	return `• ${chu(thoat(v.phongTen))}${url ? ` — <${url}|mở>` : ""}`;
