@@ -5,6 +5,12 @@ import {
 import { z } from "zod";
 import { cauTomTat } from "./okr-tro-ly";
 
+export {
+	OKR_TOM_TAT,
+	TRANG_THAI_QUAN_TRI_TOM_TAT,
+	type TrangThaiQuanTriTomTat,
+} from "@crm/db/okr-tro-ly-danh-muc";
+
 export const TRANG_THAI_TOM_TAT = ["hien", "can-xem"] as const;
 
 export type TrangThaiTomTat = (typeof TRANG_THAI_TOM_TAT)[number];

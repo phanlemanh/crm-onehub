@@ -14,7 +14,10 @@ import { nhacQuaZaloMessages } from "@/lib/messages/nhac-qua-zalo";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { KhoiKenh } from "../settings/notifications/khoi-kenh";
+import {
+	KhoiDongTroLyOkr,
+	KhoiKenh,
+} from "../settings/notifications/khoi-kenh";
 import { KhoiZalo } from "../settings/notifications/khoi-zalo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,6 +69,7 @@ async function ThongBao() {
 					</h2>
 					<KhoiKenh />
 				</section>
+				<KhoiDongTroLyOkr />
 			</div>
 		</HydrateClient>
 	);

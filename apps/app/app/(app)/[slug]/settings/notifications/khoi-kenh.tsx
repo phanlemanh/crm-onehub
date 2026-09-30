@@ -2,9 +2,17 @@
 
 import Warning from "@carbon/icons-react/es/Warning";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import {
+	Field,
+	FieldContent,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { Switch } from "@crm/ui/components/switch";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
@@ -128,5 +136,67 @@ export function KhoiKenh() {
 				</p>
 			) : null}
 		</div>
+	);
+}
+
+export function KhoiDongTroLyOkr() {
+	const t = nhacQuaZaloMessages(useLocale());
+	const trpc = useTRPC();
+	const queryClient = useQueryClient();
+	const idCongTac = useId();
+	const idTieuDe = useId();
+	const [dangChon, setDangChon] = useState<boolean | null>(null);
+	const [loi, setLoi] = useState(false);
+
+	const trangThai = useQuery(trpc.zalo.cuaToi.queryOptions());
+
+	const luu = useMutation(
+		trpc.zalo.luuDongTroLyOkr.mutationOptions({
+			onMutate: (v) => {
+				setLoi(false);
+				setDangChon(v.bat);
+			},
+			onSuccess: (kq) => {
+				queryClient.setQueryData(trpc.zalo.cuaToi.queryKey(), (cu) =>
+					cu ? { ...cu, dongTroLyOkr: kq.bat } : cu,
+				);
+				setDangChon(null);
+			},
+			onError: () => {
+				setDangChon(null);
+				setLoi(true);
+			},
+		}),
+	);
+
+	const du = trangThai.data;
+	if (!du?.laTruongPhong) return null;
+	const bat = dangChon ?? du.dongTroLyOkr;
+
+	return (
+		<section
+			aria-labelledby={idTieuDe}
+			className="flex flex-col gap-3 border-t pt-5"
+			data-khoi="dong-tro-ly-okr"
+			data-trang-thai="ST-nhac-dong-tomtat"
+		>
+			<h2 className="font-medium text-sm" id={idTieuDe}>
+				{t.troLy.tieuDe}
+			</h2>
+			<Field orientation="horizontal">
+				<FieldContent>
+					<FieldLabel htmlFor={idCongTac}>{t.troLy.dongTomTat}</FieldLabel>
+					<FieldDescription>{t.troLy.dongTomTatMoTa}</FieldDescription>
+					{loi ? <FieldError>{t.kenh.luuLoi}</FieldError> : null}
+				</FieldContent>
+				<Switch
+					checked={bat}
+					data-cong-tac="dong-tom-tat"
+					disabled={luu.isPending}
+					id={idCongTac}
+					onCheckedChange={(v) => luu.mutate({ bat: v })}
+				/>
+			</Field>
+		</section>
 	);
 }
