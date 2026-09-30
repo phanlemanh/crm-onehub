@@ -30,4 +30,19 @@ export const TRO_LY_OKR_SOAN = {
 		saiMucDich: "phien khong phai okr-soan",
 	},
 	congMacDinh: 2100,
+	congCu: {
+		song: ["nop_ban_nhap"],
+		tat: [
+			"bash",
+			"read_file",
+			"write_file",
+			"glob",
+			"grep",
+			"web_fetch",
+			"web_search",
+			"todo",
+			"agent",
+		],
+	},
+	bangGhiDuoc: ["okrDeXuat", "okrCuocSoan", "aiChiPhi", "agentEvent"],
 } as const;
