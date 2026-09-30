@@ -186,7 +186,7 @@ beforeAll(async () => {
 			budget: 0,
 			dueAt: LUC_XEP,
 		},
-		select: { id: true },
+		select: { id: true, dueAt: true },
 	});
 	setSystemTime(LUC_XEP);
 	ketQuaXep = await chayXepTomTat(xep, LUC_XEP);

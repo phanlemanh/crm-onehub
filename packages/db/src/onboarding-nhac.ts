@@ -121,6 +121,13 @@ export function soNgayVN(tu: Date, den: Date): number {
 	return Math.round((dau(den) - dau(tu)) / DAY_MS);
 }
 
+const NGAY_MOI_TUAN = 7;
+
+export function thuTrongTuan(luc: Date): number {
+	const thu = new Date(`${ngayVN(luc)}T00:00:00Z`).getUTCDay();
+	return ((thu + NGAY_MOI_TUAN - 1) % NGAY_MOI_TUAN) + 1;
+}
+
 export function dauTuanVN(now: Date): string {
 	const hom = Date.parse(`${ngayVN(now)}T00:00:00Z`);
 	const thu = new Date(hom).getUTCDay();

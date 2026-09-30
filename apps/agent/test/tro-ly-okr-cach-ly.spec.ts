@@ -26,7 +26,18 @@ const TOOL_TAT = [
 	"write_file",
 ] as const;
 const BANG_GHI_DUOC = new Set(["okrDeXuat", "okrTomTat"]);
-const BANG_DOC_TOM_TAT = ["okrTomTat", "okrCheckIn"] as const;
+const BANG_DOC_TOM_TAT = [
+	"okrTomTat",
+	"okrCheckIn",
+	"okrCheckInSession",
+	"okrKeyResult",
+	"okrObjective",
+	"department",
+	"member",
+	"user",
+	"agentTask",
+	"okrProgramConfig",
+] as const;
 const BANG_DOI_TAC = [
 	"company",
 	"companyEnrichment",

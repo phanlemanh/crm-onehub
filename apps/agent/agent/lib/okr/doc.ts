@@ -19,8 +19,10 @@ export const DANH_SACH_DOC = [
 	"okrDeXuat",
 	"okrTomTat",
 	"okrCheckIn",
+	"okrCheckInSession",
 	"okrKeyResult",
 	"department",
+	"user",
 ] as const;
 
 const TRANG_THAI_CON_TAC_DUNG = ["cho", "bac", "bo-qua"];
@@ -30,6 +32,10 @@ export async function docViecOkr(taskId: string) {
 		where: { id: taskId },
 		select: { id: true, kind: true, finishedAt: true, payload: true },
 	});
+}
+
+export async function coBanTomTatCuaViec(taskId: string): Promise<boolean> {
+	return (await db.okrTomTat.count({ where: { taskId } })) > 0;
 }
 
 export async function docViecTheoPhienGoc(sessionId: string) {

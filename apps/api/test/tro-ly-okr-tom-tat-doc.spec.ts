@@ -319,7 +319,7 @@ describe("trang-thai", () => {
 					dueAt: canhTt.nowXep,
 					createdAt: canhTt.nowXep,
 				},
-				select: { id: true },
+				select: { id: true, dueAt: true },
 			});
 			const ketQua = await chayXepTomTat(xep, canhTt.nowXep);
 			const viec = await db.agentTask.findMany({

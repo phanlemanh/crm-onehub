@@ -254,7 +254,7 @@ beforeAll(async () => {
 			budget: 0,
 			dueAt: LUC_XEP,
 		},
-		select: { id: true },
+		select: { id: true, dueAt: true },
 	});
 	const ketQua = await chayXepTomTat(xep, LUC_XEP);
 	if (ketQua !== "da-xep:2") throw new Error(`xep ra ${ketQua}`);
@@ -545,6 +545,62 @@ describe("nop", () => {
 				"da-nop",
 				true,
 			]);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"ket-thuc-khong-ban: phien con bao da-nop ma viec tom tat khong co ban -> khong-lam-duoc:khong-nop",
+		async () => {
+			const goc = await db.agentTask.findUniqueOrThrow({
+				where: { id: viecB.taskId },
+				select: { kind: true, reason: true, payload: true },
+			});
+			const hang = await db.agentTask.create({
+				data: {
+					kind: goc.kind,
+					reason: goc.reason,
+					subject: `${TIEN_TO}khong-ban`,
+					budget: 0,
+					dueAt: new Date(),
+					attempts: 1,
+					payload: goc.payload ?? {},
+				},
+			});
+			try {
+				const ketQua = {
+					kind: "subagent-result",
+					subagentName: "tro_ly_okr",
+					callId: "goi-tro-ly",
+					isError: false,
+					output: ketQuaTroLy.parse({ trangThai: "da-nop", maLoi: null }),
+				};
+				const moc = hookGoc.events[
+					"action.result"
+				] as unknown as XuLyKetQuaHanhDong;
+				await moc(
+					{ type: "action.result", data: { result: ketQua as never } },
+					{
+						agent: { name: "crm" },
+						channel: { kind: "crm" },
+						session: {
+							id: `${TIEN_TO}phien-khong-ban`,
+							auth: {
+								current: { attributes: okrAuthAttributes(hang) },
+								initiator: null,
+							},
+						},
+					} as never,
+				);
+				expect(await hangTomTat(hang.id)).toEqual([]);
+				const dong = await db.agentTask.findUniqueOrThrow({
+					where: { id: hang.id },
+					select: { outcome: true },
+				});
+				expect(dong.outcome).toBe("khong-lam-duoc:khong-nop");
+			} finally {
+				await db.agentTask.delete({ where: { id: hang.id } });
+			}
 		},
 		CHO_DB,
 	);

@@ -92,7 +92,8 @@ export function okrViecCuaLoai(kind: string): ViecTroLy | null {
 
 export function tinhNangCua(nguon: NguonBuoc): TinhNang {
 	if (nguon.subagent === "tro_ly_okr") {
-		return nguon.okrViec === "tom-tat-tuan" ? "okr.tom-tat" : "okr.de-xuat";
+		if (nguon.okrViec === "tom-tat-tuan") return "okr.tom-tat";
+		return nguon.okrViec === "de-xuat" ? "okr.de-xuat" : "okr.chuyen-tiep";
 	}
 	if (nguon.subagent === "agent_runner" || nguon.subagent === "agent_builder") {
 		return VIEC_CUA_SUBAGENT[nguon.subagent];

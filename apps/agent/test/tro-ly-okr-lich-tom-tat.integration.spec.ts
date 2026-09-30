@@ -9,7 +9,7 @@ import {
 import { db } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import { NGAY_MS, TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
-import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import { dauTuanVN, thuTrongTuan } from "@crm/db/onboarding-nhac";
 import {
 	OKR_PROGRAM_MAC_DINH,
 	type OkrProgramSua,
@@ -19,7 +19,7 @@ import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { OKR_MAU } from "../../api/scripts/okr-mau/cau-hinh";
 import { idMau, xoaBoOkrMau } from "../../api/scripts/okr-mau/nap";
 import { congTy, lamSachOkr, napMau } from "../../api/test/okr-mau-san";
-import { runDirect } from "../agent/lib/dispatch";
+import { beginResearch, runDirect } from "../agent/lib/dispatch";
 import { chayXepTomTat, damBaoLichTomTat } from "../agent/lib/okr/lich-tom-tat";
 import { lyDoChanTruocKhiGui } from "../agent/lib/okr/viec";
 import { moXuong } from "./support/nhac-gieo";
@@ -192,8 +192,8 @@ async function gieoMucTieuPhong(
 	});
 }
 
-async function viecXep(ngay: string): Promise<string> {
-	const hang = await db.agentTask.create({
+async function viecXep(ngay: string): Promise<{ id: string; dueAt: Date }> {
+	return db.agentTask.create({
 		data: {
 			kind: XEP,
 			reason: XEP,
@@ -201,9 +201,8 @@ async function viecXep(ngay: string): Promise<string> {
 			budget: 0,
 			dueAt: sau6(ngay),
 		},
-		select: { id: true },
+		select: { id: true, dueAt: true },
 	});
-	return hang.id;
 }
 
 async function oMoi(now: Date): Promise<O[]> {
@@ -355,7 +354,7 @@ describe("ma tran bay ngay", () => {
 				});
 				phu.push({
 					ngay: o.ngay,
-					homQua: new Date(now.getTime() - NGAY_MS).getDay() || 7,
+					homQua: thuTrongTuan(new Date(now.getTime() - NGAY_MS)),
 					ketQua: [ketQua, dong.outcome],
 					tuan: await tuanMoi(now),
 				});
@@ -441,6 +440,47 @@ describe("cua truoc khi gui", () => {
 		},
 		CHO_DB,
 	);
+
+	test(
+		"phong-luu-tru-truoc-gui: viec tom tat cua phong da luu tru dong khong-chay:phong-luu-tru, khong mo phien",
+		async () => {
+			const luuTru = congTy().phongBanLuuTru[0]?.ma;
+			if (!luuTru) throw new Error("bo mau khong co phong luu tru");
+			expect(
+				await lyDoChanTruocKhiGui(
+					viecTomTat(luuTru, "bat"),
+					luc("2026-11-29T13:30:00"),
+				),
+			).toBe("khong-chay:phong-luu-tru");
+			const hang = await db.agentTask.create({
+				data: {
+					kind: TOM_TAT,
+					reason: TOM_TAT,
+					subject: `${TIEN_TO}luu-tru`,
+					budget: 0,
+					dueAt: new Date(),
+					attempts: 1,
+					payload: viecTomTat(luuTru, "bat").payload,
+				},
+			});
+			let moPhien = 0;
+			await beginResearch(hang, async () => {
+				moPhien += 1;
+				return { id: `${TIEN_TO}khong-duoc-mo` };
+			});
+			const dong = await db.agentTask.findUniqueOrThrow({
+				where: { id: hang.id },
+				select: { outcome: true, finishedAt: true },
+			});
+			expect([dong.outcome, dong.finishedAt !== null, moPhien]).toEqual([
+				"khong-chay:phong-luu-tru",
+				true,
+				0,
+			]);
+			await db.agentTask.delete({ where: { id: hang.id } });
+		},
+		CHO_DB,
+	);
 });
 
 describe("review focus", () => {
@@ -452,23 +492,26 @@ describe("review focus", () => {
 				where: { id: KY.nam },
 				data: { updateWeekday: 7 },
 			});
-			await capNhat("nam", PHONG.batCo, luc("2026-11-29T20:00:00"));
-			const now = sau6("2026-11-30");
-			const xep = await viecXep("2026-11-30");
-			expect(await chayXepTomTat({ id: xep }, now)).toBe("da-xep:1");
-			expect(
-				lech(
-					"2026-11-30",
-					await oMoi(now),
-					canCo(["nam"], [[PHONG.batCo, "bat"]]),
-				),
-			).toEqual([]);
-			expect(await tuanMoi(now)).toEqual(["2026-11-23"]);
-			expect(dauTuanVN(now)).toBe("2026-11-30");
-			await db.okrCycle.update({
-				where: { id: KY.nam },
-				data: { updateWeekday: 4 },
-			});
+			try {
+				await capNhat("nam", PHONG.batCo, luc("2026-11-29T20:00:00"));
+				const now = sau6("2026-11-30");
+				const xep = await viecXep("2026-11-30");
+				expect(await chayXepTomTat(xep, now)).toBe("da-xep:1");
+				expect(
+					lech(
+						"2026-11-30",
+						await oMoi(now),
+						canCo(["nam"], [[PHONG.batCo, "bat"]]),
+					),
+				).toEqual([]);
+				expect(await tuanMoi(now)).toEqual(["2026-11-23"]);
+				expect(dauTuanVN(now)).toBe("2026-11-30");
+			} finally {
+				await db.okrCycle.update({
+					where: { id: KY.nam },
+					data: { updateWeekday: 4 },
+				});
+			}
 		},
 		CHO_DB,
 	);
@@ -481,7 +524,7 @@ describe("review focus", () => {
 				await capNhat("quy4", ma, luc("2026-11-30T20:00:00"));
 			const now = luc("2026-12-01T10:00:00");
 			const xep = await viecXep("2026-12-01");
-			expect(await chayXepTomTat({ id: xep }, now)).toBe("da-xep:2");
+			expect(await chayXepTomTat(xep, now)).toBe("da-xep:2");
 			expect(
 				lech(
 					"2026-12-01",
@@ -507,6 +550,38 @@ describe("review focus", () => {
 	);
 
 	test(
+		"xep-tre-qua-nua-dem: viec xep hen 06:00 hom truoc chay luc 00:30 xu ly ngay truoc han va noi sang ngay han ke",
+		async () => {
+			await donViec();
+			await capNhat("quy4", PHONG.batCo, luc("2026-12-07T20:00:00"));
+			const now = luc("2026-12-09T00:30:00");
+			const xep = await viecXep("2026-12-08");
+			const ketQua = await chayXepTomTat(xep, now);
+			const tuan = await tuanMoi(now);
+			expect(
+				ketQua === "da-xep:1" && tuan.join() === "2026-12-07"
+					? "neo han"
+					: `hom qua lech: ${ketQua} ${tuan.join()}`,
+			).toBe("neo han");
+			expect(
+				lech(
+					"2026-12-08",
+					await oMoi(now),
+					canCo(["quy4"], [[PHONG.batCo, "bat"]]),
+				),
+			).toEqual([]);
+			const ke = await db.agentTask.findMany({
+				where: { kind: XEP, finishedAt: null },
+				select: { subject: true, dueAt: true },
+			});
+			expect(ke.map((k) => [k.subject, k.dueAt.toISOString()])).toEqual([
+				[`${XEP}:2026-12-09`, sau6("2026-12-09").toISOString()],
+			]);
+		},
+		CHO_DB,
+	);
+
+	test(
 		"phong-luu-tru: phong da luu tru co cap nhat van khong duoc xep",
 		async () => {
 			await donViec();
@@ -525,7 +600,7 @@ describe("review focus", () => {
 			await capNhat("quy4", PHONG.batCo, luc("2026-12-28T20:00:00"));
 			const now = sau6("2026-12-29");
 			const xep = await viecXep("2026-12-29");
-			expect(await chayXepTomTat({ id: xep }, now)).toBe("da-xep:1");
+			expect(await chayXepTomTat(xep, now)).toBe("da-xep:1");
 			const co = await oMoi(now);
 			expect(
 				co
@@ -551,8 +626,8 @@ describe("dong thoi, chay lai, loi giua vong, tran", () => {
 			const now = sau6("2026-12-08");
 			const xep = await viecXep("2026-12-08");
 			const ketQua = await Promise.all([
-				chayXepTomTat({ id: xep }, now),
-				chayXepTomTat({ id: xep }, now),
+				chayXepTomTat(xep, now),
+				chayXepTomTat(xep, now),
 			]);
 			expect(ketQua.sort()).toEqual(["da-xep:0", "da-xep:2"]);
 			expect(await demXep("2026-12-09")).toBe(1);
@@ -573,7 +648,7 @@ describe("dong thoi, chay lai, loi giua vong, tran", () => {
 			).toEqual([]);
 
 			const lai = await viecXep("2026-12-08");
-			expect(await chayXepTomTat({ id: lai }, luc("2026-12-08T07:00:00"))).toBe(
+			expect(await chayXepTomTat(lai, luc("2026-12-08T07:00:00"))).toBe(
 				"da-xep:0",
 			);
 			expect(await db.agentTask.count({ where: { kind: TOM_TAT } })).toBe(2);
@@ -595,7 +670,7 @@ describe("dong thoi, chay lai, loi giua vong, tran", () => {
 			);
 			const now = sau6("2026-12-15");
 			const xep = await viecXep("2026-12-15");
-			const loi = await chayXepTomTat({ id: xep }, now).then(
+			const loi = await chayXepTomTat(xep, now).then(
 				() => "khong nem",
 				(e: Error) => e.message,
 			);
@@ -637,13 +712,13 @@ describe("dong thoi, chay lai, loi giua vong, tran", () => {
 			setSystemTime(now);
 			try {
 				await runDirect(
-					await db.agentTask.findUniqueOrThrow({ where: { id: xep } }),
+					await db.agentTask.findUniqueOrThrow({ where: { id: xep.id } }),
 				);
 			} finally {
 				setSystemTime();
 			}
 			const dong = await db.agentTask.findUniqueOrThrow({
-				where: { id: xep },
+				where: { id: xep.id },
 				select: { outcome: true },
 			});
 			expect(dong.outcome).toBe("khong-chay:het-tran-thang:0");
@@ -707,9 +782,7 @@ describe("damBaoLichTomTat", () => {
 			expect(await damBaoLichTomTat(now)).toBe(false);
 			expect(await db.agentTask.count({ where: { kind: XEP } })).toBe(0);
 			const xep = await viecXep("2026-12-24");
-			expect(await chayXepTomTat({ id: xep }, now)).toBe(
-				"khong-chay:viec-tat:0",
-			);
+			expect(await chayXepTomTat(xep, now)).toBe("khong-chay:viec-tat:0");
 			expect(await demXep("2026-12-25")).toBe(0);
 			await ghiCauHinh(CAU_HINH_A, luc("2026-12-24T14:00:00"));
 		},

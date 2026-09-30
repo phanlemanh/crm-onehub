@@ -1,7 +1,12 @@
 import { appendFileSync, writeFileSync } from "node:fs";
 import { db, Prisma } from "@crm/db";
 import { dungGoiTomTat, type GoiTomTat } from "@crm/db/okr-tom-tat";
-import { MINUTE_MS, NGAY_MS, OKR_TOM_TAT } from "@crm/db/okr-tro-ly-danh-muc";
+import {
+	GIO_MS,
+	MINUTE_MS,
+	NGAY_MS,
+	OKR_TOM_TAT,
+} from "@crm/db/okr-tro-ly-danh-muc";
 import { dauNgayVN, ngayVN } from "@crm/db/onboarding-nhac";
 import { LUAT_TOM_TAT } from "@crm/validation/okr-kiem-tom-tat";
 import { parseNoiDungTomTat } from "@crm/validation/okr-tom-tat";
@@ -12,7 +17,6 @@ import { TRO_LY_OKR } from "../../agent/lib/okr/config";
 import { chayXepTomTat } from "../../agent/lib/okr/lich-tom-tat";
 
 const SECOND_MS = 1_000;
-const GIO_MS = 60 * MINUTE_MS;
 
 const TOM_TAT_EVAL = {
 	khoDo: /\/crm_[a-z0-9_]+_do(\?|$)/,
@@ -117,7 +121,7 @@ async function xepMotLan(luc: Date): Promise<string> {
 		},
 		select: { id: true },
 	});
-	const ketQua = await chayXepTomTat(xep, luc);
+	const ketQua = await chayXepTomTat({ id: xep.id, dueAt: luc }, luc);
 	await db.agentTask.updateMany({
 		where: { kind: TOM_TAT_EVAL.loaiXep, finishedAt: null },
 		data: { finishedAt: new Date(), outcome: TOM_TAT_EVAL.dongViecXepThua },

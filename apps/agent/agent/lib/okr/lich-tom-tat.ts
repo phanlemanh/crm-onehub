@@ -11,13 +11,19 @@ import {
 import {
 	type CauHinhAi,
 	type DonViMucTieu,
+	GIO_MS,
 	MINUTE_MS,
 	NGAY_MS,
 	nacCuaDonVi,
 	nacCuaViec,
 	OKR_TOM_TAT,
 } from "@crm/db/okr-tro-ly-danh-muc";
-import { dauNgayVN, dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
+import {
+	dauNgayVN,
+	dauTuanVN,
+	ngayVN,
+	thuTrongTuan,
+} from "@crm/db/onboarding-nhac";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { LUAT_TOM_TAT } from "@crm/validation/okr-kiem-tom-tat";
 import type { LeasedTask } from "../tasks";
@@ -25,8 +31,6 @@ import type { LeasedTask } from "../tasks";
 const LOAI_XEP = "okr-tom-tat-xep" as const;
 const LOAI_TOM_TAT = "okr-tom-tat-tuan" as const;
 const PHA_CHAY = "dang-chay" satisfies PhaChuKy;
-const GIO_MS = 60 * MINUTE_MS;
-const NGAY_TRONG_TUAN = 7;
 
 type Tx = Prisma.TransactionClient;
 
@@ -44,11 +48,6 @@ function ngayKe(luc: Date): Date {
 
 function homQuaCua(luc: Date): Date {
 	return new Date(dauNgayVN(luc).getTime() - 1);
-}
-
-function thuTrongTuan(luc: Date): number {
-	const thu = new Date(`${ngayVN(luc)}T00:00:00Z`).getUTCDay();
-	return ((thu + NGAY_TRONG_TUAN - 1) % NGAY_TRONG_TUAN) + 1;
 }
 
 const tenViecXep = (dueAt: Date) => `${LOAI_XEP}:${ngayVN(dueAt)}`;
@@ -105,10 +104,10 @@ function bamDauVao(
 
 async function xepTrongNgay(
 	tx: Tx,
-	task: Pick<LeasedTask, "id">,
+	task: Pick<LeasedTask, "id" | "dueAt">,
 	now: Date,
 ): Promise<string> {
-	await lockIdempotencyKey(tx, tenViecXep(now));
+	await lockIdempotencyKey(tx, tenViecXep(task.dueAt));
 	const ct = await cauHinhAiLuc(tx, now);
 	const dong = async (outcome: string) => {
 		await tx.agentTask.updateMany({
@@ -119,7 +118,7 @@ async function xepTrongNgay(
 	};
 	if (!lichTomTatBat(ct))
 		return dong(`khong-chay:${nacCuaViec(ct, "tom-tat-tuan")}:0`);
-	const homQua = homQuaCua(now);
+	const homQua = homQuaCua(task.dueAt);
 	const tuan = dauTuanVN(homQua);
 	const chuKy = await tx.okrCycle.findMany({
 		where: { phase: PHA_CHAY, updateWeekday: thuTrongTuan(homQua) },
@@ -186,12 +185,14 @@ async function xepTrongNgay(
 }
 
 export async function chayXepTomTat(
-	task: Pick<LeasedTask, "id">,
+	task: Pick<LeasedTask, "id" | "dueAt">,
 	now: Date = new Date(),
 ): Promise<string> {
 	const ct = await cauHinhAiLuc(db, now);
 	if (lichTomTatBat(ct)) {
-		await db.$transaction((tx) => ghiViecXep(tx, gioXepCua(ngayKe(now)), now));
+		await db.$transaction((tx) =>
+			ghiViecXep(tx, gioXepCua(ngayKe(task.dueAt)), now),
+		);
 	}
 	return db.$transaction((tx) => xepTrongNgay(tx, task, now), {
 		timeout: OKR_TOM_TAT.giaoDichXepMs,

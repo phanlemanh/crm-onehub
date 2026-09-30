@@ -103,5 +103,7 @@ export const TRO_LY_OKR = {
 		payloadHong: "hong:payload",
 		chuaCoKhoa: "khong-chay:chua-co-khoa-mo-hinh",
 		khongXemDuoc: "khong-chay:khong-xem-duoc",
+		phongLuuTru: "khong-chay:phong-luu-tru",
+		tomTatKhongNop: "khong-lam-duoc:khong-nop",
 	},
 } as const;

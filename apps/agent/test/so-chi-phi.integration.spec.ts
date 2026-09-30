@@ -16,6 +16,7 @@ import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { z } from "zod";
 import hookGoc from "../agent/hooks/so-chi-phi";
 import { beginResearch } from "../agent/lib/dispatch";
+import * as docOkr from "../agent/lib/okr/doc";
 import { chayXepTomTat } from "../agent/lib/okr/lich-tom-tat";
 import { noteSession } from "../agent/lib/tasks";
 import hookBuilder from "../agent/subagents/agent_builder/hooks/so-chi-phi";
@@ -125,7 +126,12 @@ const BANG: O[] = [
 		kenh: "crm",
 		thuocTinh: { purpose: "okr" },
 	},
-	{ tinhNang: "okr.de-xuat", hook: "tro_ly_okr", ban: "con_tro_ly" },
+	{
+		tinhNang: "okr.de-xuat",
+		hook: "tro_ly_okr",
+		ban: "con_tro_ly",
+		thuocTinh: { okrViec: "de-xuat" },
+	},
 	{
 		tinhNang: "okr.tom-tat",
 		hook: "tro_ly_okr",
@@ -219,7 +225,7 @@ describe("moi-phien", () => {
 		await HOOK.tro_ly_okr(ev, goc.ctx);
 		const ds = await dongCua(ev.meta.id);
 		expect(ds.map((d) => [d.tinhNang, d.costUsd])).toEqual([
-			["okr.de-xuat", null],
+			["okr.chuyen-tiep", null],
 		]);
 	});
 
@@ -302,7 +308,7 @@ describe("tom-tat", () => {
 				budget: 0,
 				dueAt: DONG_HO,
 			},
-			select: { id: true },
+			select: { id: true, dueAt: true },
 		});
 		await chayXepTomTat(xep, DONG_HO);
 		const hang = (
@@ -346,6 +352,28 @@ describe("tom-tat", () => {
 			"okr.de-xuat",
 			viecDeXuat.taskId,
 		]);
+	}, 30_000);
+
+	test("tom-tat: phiên gốc không có việc → vẫn một dòng, nhóm okr.chuyen-tiep, không nối việc", async () => {
+		const d = await buocCon(`${TIEN_TO}goc-khong-viec`);
+		expect([d?.tinhNang, d?.taskId]).toEqual(["okr.chuyen-tiep", null]);
+	}, 30_000);
+
+	test("tom-tat: tra việc của phiên gốc lỗi → vẫn ghi dòng, nhóm okr.chuyen-tiep", async () => {
+		const tra = spyOn(docOkr, "docViecTheoPhienGoc").mockImplementation(() =>
+			Promise.reject(new Error("kho tam dung")),
+		);
+		const canhBao = spyOn(console, "warn").mockImplementation(() => {});
+		try {
+			const d = await buocCon(viecTomTat.phienGoc);
+			expect(
+				d ? `${d.tinhNang} ${d.taskId}` : "mat dong chi phi khi tra viec loi",
+			).toBe("okr.chuyen-tiep null");
+			expect(tra).toHaveBeenCalled();
+		} finally {
+			tra.mockRestore();
+			canhBao.mockRestore();
+		}
 	}, 30_000);
 
 	test("tom-tat: sổ tới trần → việc tóm tắt đóng khong-chay:het-tran-thang, không gọi start", async () => {
