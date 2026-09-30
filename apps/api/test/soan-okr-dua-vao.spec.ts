@@ -15,6 +15,7 @@ import { OKR } from "../src/okr/okr-config";
 import {
 	CHU_KY_Q4,
 	DON_VI,
+	type DonViSan,
 	type Duong,
 	datPhaQuy4,
 	donSoan,
@@ -65,8 +66,12 @@ type Kho = {
 };
 let kho: Kho;
 
-async function gieoBanNhap(nhan: string): Promise<Kho> {
-	const cuoc = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
+async function gieoBanNhap(
+	nhan: string,
+	donVi: DonViSan = DON_VI.kdBac,
+	nguoiMo = TRUONG,
+): Promise<Kho> {
+	const cuoc = await gieoCuoc({ donVi, nguoiMo });
 	const [mtA, mtB, mtC] = (await gieoDongNhap(cuoc, [
 		{
 			loai: "muc-tieu-moi",
@@ -266,12 +271,15 @@ async function soDichMayGhi(cuocSoanIds: string[]): Promise<string[]> {
 	});
 }
 
-async function nhanHet(k: Kho) {
+async function nhanHet(k: Kho, c = cTruong) {
 	for (const id of [k.mtA, k.kA1, k.kA2, k.ccA, k.mtB, k.kB1, k.kB2])
-		expect(ok<SoanQuyetOutput>(await quyet(id, "nhan"), `nhan ${id}`).ok).toBe(
-			true,
-		);
-	expect(ok<SoanQuyetOutput>(await quyet(k.mtC, "bac"), "bac C").ok).toBe(true);
+		expect(
+			ok<SoanQuyetOutput>(await quyet(id, "nhan", undefined, c), `nhan ${id}`)
+				.ok,
+		).toBe(true);
+	expect(
+		ok<SoanQuyetOutput>(await quyet(k.mtC, "bac", undefined, c), "bac C").ok,
+	).toBe(true);
 }
 
 const SO = (k: Kho): SoKr[] => [
@@ -982,7 +990,7 @@ describe("quyet", () => {
 
 describe("dua-vao", () => {
 	test(
-		"thiếu khởi điểm hay đích cho một KR đã nhận → thieu-so-kr; số cho dòng lạ, số cho KR mốc, số sai kiểu → 400 có tên; 0 bản ghi",
+		"thiếu khởi điểm hay đích cho một KR đã nhận → thieu-so-kr; số cho dòng lạ hay cho KR mốc → 400 có tên; 0 bản ghi",
 		async () => {
 			const thieu = SO(kho).filter((s) => s.deXuatId !== kho.kB1);
 			for (const duong of DUONG)
@@ -1012,16 +1020,7 @@ describe("dua-vao", () => {
 				400,
 				T.mocKhongNhanSo("Hoàn thành chương trình chăm sóc lại"),
 			]);
-			const saiKieu = await duaVao(kho.cuoc.id, [
-				...SO(kho).filter((s) => s.deXuatId !== kho.kB1),
-				{ deXuatId: kho.kB1, khoiDiem: 8, dich: 2 },
-			]);
-			expect([saiKieu.status, saiKieu.loi], "so sai kieu").toEqual([
-				400,
-				OKR.thongDiep.soTheoKieu["dich-phai-lon-hon-khoi-diem"],
-			]);
-			const dem = await demBanGhi(kho.cuoc.id);
-			expect(dem.vet, "sai kieu lui ca giao dich").toHaveLength(0);
+			expect((await demBanGhi(kho.cuoc.id)).vet).toHaveLength(0);
 			expect(
 				(
 					await db.okrCuocSoan.findUniqueOrThrow({
@@ -1034,6 +1033,41 @@ describe("dua-vao", () => {
 					where: { cuocSoanId: kho.cuoc.id, taoRaId: { not: null } },
 				}),
 			).toBe(0);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"số sai kiểu ở Mục tiêu thứ hai → 400 có tên, Mục tiêu thứ nhất đã ghi trong giao dịch cũng lùi: 0 bản ghi",
+		async () => {
+			const k = await gieoBanNhap("sai", DON_VI.kdNam, QUAN_TRI);
+			await nhanHet(k, cQuanTri);
+			const saiKieu = await duaVao(
+				k.cuoc.id,
+				[
+					...SO(k).filter((s) => s.deXuatId !== k.kB1),
+					{ deXuatId: k.kB1, khoiDiem: 8, dich: 2 },
+				],
+				cQuanTri,
+			);
+			expect([saiKieu.status, saiKieu.loi], "so sai kieu").toEqual([
+				400,
+				OKR.thongDiep.soTheoKieu["dich-phai-lon-hon-khoi-diem"],
+			]);
+			expect(
+				(await demBanGhi(k.cuoc.id)).vet,
+				"sai kieu lui ca giao dich",
+			).toHaveLength(0);
+			expect(
+				await db.okrDeXuat.count({
+					where: { cuocSoanId: k.cuoc.id, taoRaId: { not: null } },
+				}),
+			).toBe(0);
+			expect(
+				(await db.okrCuocSoan.findUniqueOrThrow({ where: { id: k.cuoc.id } }))
+					.trangThai,
+			).toBe("dang");
+			await xoaCuoc(k.cuoc.id);
 		},
 		CHO_DB,
 	);
