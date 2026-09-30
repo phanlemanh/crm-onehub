@@ -65,6 +65,10 @@ const en = {
 		previousSlide: "Previous item",
 		nextSlide: "Next item",
 	},
+	inlineCitation: {
+		previousSource: "Previous source",
+		nextSource: "Next source",
+	},
 	proposedChange: {
 		edit: "Edit",
 	},
@@ -246,6 +250,10 @@ const vi = {
 		itemRole: "mục",
 		previousSlide: "Mục trước",
 		nextSlide: "Mục sau",
+	},
+	inlineCitation: {
+		previousSource: "Nguồn trước",
+		nextSource: "Nguồn sau",
 	},
 	proposedChange: {
 		edit: "Sửa",

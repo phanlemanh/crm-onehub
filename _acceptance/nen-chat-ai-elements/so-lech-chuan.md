@@ -250,6 +250,48 @@ làm, nhưng nó vẫn phải đi qua đúng nghi thức ở cuối sổ, vì `r
 thành biến thể `sm` của `Button`. Tệp không có chữ hiện trên màn: các chuỗi còn
 lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-cung.mjs`.
 
+### inline-citation.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/inline-citation.tsx`
+
+**Số dòng khác:** 316
+
+**Vân tay lệch:** `8239f613b0f667dd`
+
+**Đổi gì:** Kéo bằng CLI ngày 01/10 ở lượt `tro-ly-okr-tom-tat` (Task 8), chạy
+thẳng trong `packages/ui` với `git status` sạch; bốn câu hỏi ghi đè `badge.tsx`,
+`button.tsx`, `hover-card.tsx`, `carousel.tsx` đều trả lời không. CLI thêm gói
+`cn` và xếp lại khối `@tiptap/*` trong `packages/ui/package.json`, sửa `bun.lock`;
+cả hai đã hoàn nguyên. Toàn bộ 316 dòng khác là bản vá của kho — tệp vừa kéo, không
+có phần cũ hơn thượng nguồn:
+
+- `InlineCitationCard` đổi từ `HoverCard` sang `Popover` có trạng thái mở điều
+  khiển được (`useControllableState`) và một ngữ cảnh riêng: bấm hay chạm mở và
+  ghim thẻ; Esc và bấm ra ngoài đóng. Chuột (`pointerType` là `mouse`) vẫn mở khi
+  di vào nút, rời nút và rời thẻ thì đóng sau `DI_CHUOT.dongSauMs`; đang mở bằng
+  chuột mà bấm thì ghim chứ không đóng. Mở bằng chuột không kéo tiêu điểm vào thẻ,
+  đóng bằng chuột không trả tiêu điểm về nút.
+- `InlineCitationCardTrigger` bỏ prop `sources` và nhánh suy tên miền
+  `new URL(sources[0]).hostname` · `+N` · `"unknown"`; nhận `nhan: string` và hiện
+  đúng chuỗi đó. Nút là `Badge asChild` bọc `<button type="button">`; Enter mở
+  lúc nhấn xuống, Space mở lúc nhả, cả hai chặn kích hoạt gốc của trình duyệt để
+  không bấm hai lần. Bỏ `rounded-full` (ngoài thang), giữ `ml-1`.
+- `InlineCitationCardBody` dùng `PopoverContent size="panel"` thay cho
+  `HoverCardContent className="relative w-80 p-0"`.
+- `InlineCitationCarouselPrev` · `Next` đổi từ `<button>` trần với icon Lucide sang
+  `Button variant="ghost" size="icon-sm"` với `ArrowLeft` · `ArrowRight` của
+  Carbon qua `Icon`; hai `aria-label` "Previous" · "Next" về
+  `msg.inlineCitation.previousSource` · `.nextSource`. Kiểu props đổi sang
+  `ComponentProps<typeof Button>`.
+
+**Vì sao:** Thẻ trích dẫn của khối Tóm tắt tuần phải mở được trên điện thoại và
+bằng bàn phím; `HoverCard` chỉ mở khi di chuột, nên người chạm màn và người dùng
+bàn phím không bao giờ thấy nguồn. Nhãn thay tên miền vì nguồn ở đây là KR và cập
+nhật trong kho, không phải URL. Bán kính theo thang, icon Carbon, chuỗi qua bảng
+chuỗi là luật của `docs/design.md` và `docs/reui.md`. Năm chuỗi máy mới
+(`secondary`, `panel`, `mouse`, `select`, `Enter`) đã khai miễn trong `chu-cung.mjs`
+kèm lý do.
+
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 
 Đây không phải cảnh báo trừu tượng. Nó đã xảy ra trong chính kho này, trong hai

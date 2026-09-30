@@ -53,6 +53,8 @@ const MIEN_GIA_TRI = {
 			icon: "cỡ Button — ô vuông vừa đúng một icon",
 			"icon-sm": "cỡ Button — ô vuông nhỏ",
 			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
+			secondary: "biến thể Badge — chip xám của nút trích dẫn trong InlineCitation",
+			panel: "cỡ PopoverContent — khung không đệm của thẻ trích dẫn InlineCitation",
 		},
 	},
 	"enum-may": {
@@ -63,6 +65,8 @@ const MIEN_GIA_TRI = {
 			log: "giá trị vai trò ARIA role=log",
 			horizontal: "hướng của ButtonGroup",
 			smooth: "giá trị prop initial và resize của StickToBottom",
+			mouse: "giá trị PointerEvent.pointerType — chỉ chuột mới mở thẻ trích dẫn theo đường di chuột, chạm thì không",
+			select: "tên sự kiện của Embla mà InlineCitationCarouselIndex đăng ký để đếm nguồn",
 		},
 	},
 	"ten-the": {
@@ -89,6 +93,7 @@ const MIEN_GIA_TRI = {
 			"approval-responded": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"output-denied": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"output-available": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			Enter: "giá trị KeyboardEvent.key, nút trích dẫn đem đi so sánh để mở thẻ bằng bàn phím",
 			"conversation.md":
 				"tên tệp máy đọc của bản tải về. Nó CÓ thể hiện ở thanh tải của trình duyệt; miễn ở đây là quyết định có ý thức vì nó là định danh tập tin kèm đuôi, không phải câu trên màn.",
 		},
