@@ -9,6 +9,8 @@ export const zaloTaoMaOutput = z.object({
 export const zaloGoOutput = z.object({ ok: z.literal(true) });
 export const zaloLuuUuTienInput = z.object({ channel: z.enum(UU_TIEN) });
 export const zaloLuuUuTienOutput = zaloLuuUuTienInput;
+export const zaloLuuDongTroLyOkrInput = z.object({ bat: z.boolean() });
+export const zaloLuuDongTroLyOkrOutput = zaloLuuDongTroLyOkrInput;
 
 export const zaloCuaToiOutput = z.object({
 	zaloBat: z.boolean(),
@@ -24,6 +26,8 @@ export const zaloCuaToiOutput = z.object({
 	slackDuoc: z.boolean(),
 	kenhSeDung: z.enum(["zalo", "slack"]).nullable(),
 	lech: z.boolean(),
+	dongTroLyOkr: z.boolean(),
+	laTruongPhong: z.boolean(),
 });
 export type ZaloCuaToi = z.infer<typeof zaloCuaToiOutput>;
 

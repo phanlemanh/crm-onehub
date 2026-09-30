@@ -18,6 +18,7 @@ import {
 	nacCuaDonVi,
 	OKR_TOM_TAT,
 	TRO_LY_OKR_TRAN,
+	type TrangThaiQuanTriTomTat,
 } from "./okr-tro-ly-danh-muc";
 import { KIEU_KR, type KieuKr } from "./okr-xu-huong";
 import { ngayVN } from "./onboarding-nhac";
@@ -30,17 +31,6 @@ export type ChenhTuTin = -2 | -1 | 0 | 1 | 2;
 export type NacBan = "an" | "bat";
 
 export type TrangThaiBan = "hien" | "can-xem";
-
-export const TRANG_THAI_QUAN_TRI_TOM_TAT = [
-	"hien",
-	"can-xem",
-	"khong-lam-duoc",
-	"dang-soan",
-	"chua-cap-nhat",
-] as const;
-
-export type TrangThaiQuanTriTomTat =
-	(typeof TRANG_THAI_QUAN_TRI_TOM_TAT)[number];
 
 export type NguonGoi = {
 	id: string;
@@ -587,6 +577,18 @@ function nacPhong(
 	});
 }
 
+export async function nacTomTatPhong(
+	db: DbHoacTx,
+	v: { departmentId: string; now: Date },
+): Promise<NacCuaDonVi | null> {
+	const phong = await db.department.findUnique({
+		where: { id: v.departmentId },
+		select: { id: true, divisionId: true, archivedAt: true },
+	});
+	if (!phong || phong.archivedAt !== null) return null;
+	return nacPhong(await cauHinhAiLuc(db, v.now), phong);
+}
+
 type NguonDoc = { kiem: NguonGoi; hien: NguonHien };
 
 async function nguonHienTai(
@@ -635,12 +637,7 @@ export async function docTomTatChoNguoiXem(
 	v: { cycleId: string; departmentId: string; nguoiXem: string; now: Date },
 	luat: LuatTomTat,
 ): Promise<BanHien | null> {
-	const phong = await db.department.findUnique({
-		where: { id: v.departmentId },
-		select: { id: true, divisionId: true, archivedAt: true },
-	});
-	if (!phong || phong.archivedAt !== null) return null;
-	if (nacPhong(await cauHinhAiLuc(db, v.now), phong) !== "bat") return null;
+	if ((await nacTomTatPhong(db, v)) !== "bat") return null;
 	const hang = await db.okrTomTat.findFirst({
 		where: {
 			cycleId: v.cycleId,

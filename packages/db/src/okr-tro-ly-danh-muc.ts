@@ -89,6 +89,17 @@ export const OKR_TOM_TAT = {
 	giaoDichXepMs: MINUTE_MS,
 } as const;
 
+export const TRANG_THAI_QUAN_TRI_TOM_TAT = [
+	"hien",
+	"can-xem",
+	"khong-lam-duoc",
+	"dang-soan",
+	"chua-cap-nhat",
+] as const;
+
+export type TrangThaiQuanTriTomTat =
+	(typeof TRANG_THAI_QUAN_TRI_TOM_TAT)[number];
+
 export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
 
 export type MucTuTin = (typeof MUC_TU_TIN)[number];

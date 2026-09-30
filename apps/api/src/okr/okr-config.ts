@@ -312,6 +312,8 @@ export const OKR = {
 			canGiaTri: "Sửa rồi nhận cần giá trị mới.",
 			daCu: "Ô này đã đổi từ lúc Trợ lý OKR đề xuất — tải lại danh sách góp ý.",
 			krKhacMucTieu: "KR này không thuộc Mục tiêu đang hỏi.",
+			khongCoTomTat: (id: string) =>
+				`Không có bản tóm tắt tuần nào mang mã ${id}.`,
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
