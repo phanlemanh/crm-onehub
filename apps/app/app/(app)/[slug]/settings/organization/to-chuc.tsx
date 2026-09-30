@@ -27,6 +27,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { useState, useSyncExternalStore } from "react";
 import { searchParsers } from "@/components/data-table/list-search-params";
+import { HopChuyenOkr } from "@/components/okr/hop-chuyen-okr";
 import { PageShellLoading } from "@/components/page-shell-loading";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -45,6 +46,7 @@ import {
 	type HoiLuuTru,
 	KHO_HEP,
 	moiPhongBan,
+	okrMoCua,
 	type YeuCauDonVi,
 } from "./kieu";
 import { OSo } from "./o-so";
@@ -81,7 +83,7 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 	const trpc = useTRPC();
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const quyen = useQuery(trpc.org.access.queryOptions());
-	const [{ don, loc }, datUrl] = useQueryStates(toChucParsers);
+	const [{ don, loc, chuyenOkr }, datUrl] = useQueryStates(toChucParsers);
 	const [{ q }] = useQueryStates(searchParsers);
 	const hep = useKhoHep();
 	const [nguoiMo, setNguoiMo] = useState<string | null>(null);
@@ -148,6 +150,7 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 		hoiLuuTru: setHoiLuu,
 		moGan: (bp) => setGanVao(bp.id),
 		moThem: (pb) => setThemVao(pb.id),
+		moChuyenOkr: (x) => void datUrl({ [SEARCH_PARAM.toChuc.chuyenOkr]: x }),
 	};
 
 	const duong =
@@ -291,8 +294,20 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 				/>
 			) : null}
 			{moNhap ? <HopThoaiNhap dong={() => setMoNhap(false)} /> : null}
+			{chuyenOkr && sua ? (
+				<HopChuyenOkr
+					key={`${chuyenOkr.level}:${chuyenOkr.id}`}
+					nguon={chuyenOkr}
+					dong={() => void datUrl({ [SEARCH_PARAM.toChuc.chuyenOkr]: null })}
+				/>
+			) : null}
 			<XacNhanLuuTru
 				hoi={hoiLuu}
+				okrMo={hoiLuu ? okrMoCua(d, hoiLuu) : 0}
+				moChuyen={(x) => {
+					setHoiLuu(null);
+					hd.moChuyenOkr({ level: x.loai, id: x.id });
+				}}
 				dong={() => setHoiLuu(null)}
 				daLuu={(x) => {
 					if (chon.loai === "pb" && chon.pb.id === x.id)

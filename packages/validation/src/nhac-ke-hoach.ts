@@ -21,6 +21,8 @@ const [
 	nhacTen,
 	ghiNhan,
 	theoDoi,
+	choDuyet,
+	traLai,
 	hoiYGop,
 	hoiYCongBo,
 ] = viecOkr.options;
@@ -35,6 +37,8 @@ export const mucNhac = z.union([
 	nhacTen.pick(KHOA_MUC_OKR["okr-nhac-ten"]).strict(),
 	ghiNhan.pick(KHOA_MUC_OKR["okr-ghi-nhan"]).strict(),
 	theoDoi.pick(KHOA_MUC_OKR["okr-theo-doi"]).strict(),
+	choDuyet.pick(KHOA_MUC_OKR["okr-cho-duyet"]).strict(),
+	traLai.pick(KHOA_MUC_OKR["okr-tra-lai"]).strict(),
 	hoiYGop.pick(KHOA_MUC_OKR["okr-hoi-y-gop"]).strict(),
 	hoiYCongBo.pick(KHOA_MUC_OKR["okr-hoi-y-cong-bo"]).strict(),
 	z

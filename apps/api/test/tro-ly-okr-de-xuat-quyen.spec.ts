@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { OKR } from "../src/okr/okr-config";
 import {
 	batDauMau,
 	CHO_DB,
@@ -546,6 +547,105 @@ describe("ma-tran-quyen", () => {
 			for (const dich of Object.keys(DICH) as Dich[]) {
 				expect(await trangThaiDong(kho[dich].vietLaiDuTru)).toBe("cho");
 				expect(await trangThaiDong(kho[dich].hoiDuTru)).toBe("cho");
+			}
+		},
+		CHO_DB,
+	);
+});
+
+describe("gioi-han", () => {
+	test(
+		"gioi-han: Mục tiêu đổi sang giới hạn sau khi có đề xuất — người không xem được nhận danh sách rỗng như mã không có, sẵn sàng và xếp việc 404 cùng câu với mã không có, quyết 404 như mã đề xuất không có; người xem được vẫn thấy dòng",
+		async () => {
+			const goc = await db.okrObjective.findUniqueOrThrow({
+				where: { id: mt("q4-kd-bac-1") },
+				select: {
+					cycleId: true,
+					level: true,
+					divisionId: true,
+					departmentId: true,
+					personUserId: true,
+					ownerUserId: true,
+					kind: true,
+				},
+			});
+			const id = mt("gioi-han-de-xuat");
+			const tieuDe = "Mục tiêu giới hạn thử";
+			await db.okrObjective.create({
+				data: { ...goc, id, status: "cong-bo", title: tieuDe },
+			});
+			try {
+				const [dongId = ""] = await gieoDong(id, null, [
+					dongMau({
+						loai: "viet-lai",
+						objectiveId: id,
+						truong: "title",
+						truoc: tieuDe,
+						sau: `${tieuDe}, rõ từng tuần`,
+					}),
+				]);
+				await db.okrObjective.update({
+					where: { id },
+					data: { hienThi: "gioi-han" },
+				});
+				const vao = { objectiveId: id };
+				const thay = await goi(
+					app,
+					"okr.troLyDanhSach",
+					"query",
+					vao,
+					cookie["truong-phong-ban"],
+				);
+				expect(`${thay.status} ${thay.loi}`).toBe("200 ");
+				expect(
+					(thay.data as { dong: { id: string }[] }).dong.map((d) => d.id),
+				).toEqual([dongId]);
+				const rong = { dong: [], dangSoan: false, maKetThuc: null, lyDo: null };
+				const khongThay = `404 ${OKR.thongDiep.khongThayMucTieu}`;
+				const ra: Record<string, string> = {};
+				for (const ai of ["thanh-vien", "vai-okr"] as const) {
+					const c = cookie[ai];
+					for (const tra of [
+						await goi(app, "okr.troLyDanhSach", "query", vao, c),
+						await goiRest(app, "GET", REST.troLyDanhSach[1], vao, c),
+					]) {
+						expect(`${tra.status} ${tra.loi}`).toBe("200 ");
+						expect(tra.data).toEqual(rong);
+					}
+					for (const [ten, loai] of [
+						["okr.troLySanSang", "query"],
+						["okr.troLyDeXuat", "mutation"],
+					] as const) {
+						ra[`${ai} ${ten}`] = [
+							await goi(app, ten, loai, vao, c),
+							await goi(app, ten, loai, { objectiveId: mt("khong-co") }, c),
+						]
+							.map((t) => `${t.status} ${t.loi}`)
+							.join(" | ");
+					}
+					const quyet = await goi(
+						app,
+						"okr.troLyQuyet",
+						"mutation",
+						{ deXuatId: dongId, cach: "bac" },
+						c,
+					);
+					ra[`${ai} okr.troLyQuyet`] = `${quyet.status} ${quyet.loi}`;
+				}
+				const hai = `${khongThay} | ${khongThay}`;
+				const quyetKhong = `404 ${OKR.thongDiep.troLy.khongCoDeXuat(dongId)}`;
+				expect(ra).toEqual({
+					"thanh-vien okr.troLySanSang": hai,
+					"thanh-vien okr.troLyDeXuat": hai,
+					"thanh-vien okr.troLyQuyet": quyetKhong,
+					"vai-okr okr.troLySanSang": hai,
+					"vai-okr okr.troLyDeXuat": hai,
+					"vai-okr okr.troLyQuyet": quyetKhong,
+				});
+				expect(await trangThaiDong(dongId)).toBe("cho");
+			} finally {
+				await db.okrDeXuat.deleteMany({ where: { objectiveId: id } });
+				await db.okrObjective.delete({ where: { id } });
 			}
 		},
 		CHO_DB,

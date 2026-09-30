@@ -56,6 +56,7 @@ export const phongBanNode = z.object({
 	divisionId: z.string().nullable(),
 	head: nguoiOutput.nullable(),
 	stepCount: z.number(),
+	okrMo: z.number(),
 	people: z.array(nguoiTrongPhongBan),
 });
 export const boPhanNode = z.object({
@@ -63,6 +64,7 @@ export const boPhanNode = z.object({
 	name: z.string(),
 	position: z.number(),
 	head: nguoiOutput.nullable(),
+	okrMo: z.number(),
 	departments: z.array(phongBanNode),
 });
 export const nguonQuanLy = z.enum([
@@ -81,6 +83,7 @@ export const viTriNguoi = nguoiOutput.extend({
 export const donViLuuTru = z.object({
 	id: z.string(),
 	name: z.string(),
+	okrMo: z.number(),
 	purgeable: z.boolean(),
 });
 export const orgTreeOutput = z.object({

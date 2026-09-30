@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tái cơ cấu không mồ côi · Hình d-5 d-6 d-7</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 66ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-5 · d-6 · d-7 · Luồng · gioi-han-duyet-cay-okr</p>
+    <h1>Tái cơ cấu giữa kỳ không để OKR mồ côi</h1>
+    <p class="sub">Đơn vị còn mục tiêu ở kỳ chưa đóng thì không lưu trữ được: máy từ chối, nói số mục tiêu và chỉ lối ra là chuyển OKR sang đơn vị khác. Xoá hẳn đơn vị có lịch sử OKR bị từ chối bằng một câu thay vì lỗi 500. Ca đã lọt từ trước hiện ở khối «OKR mồ côi» cho quản trị.</p>
+
+    <svg viewBox="0 0 1200 648" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-5 · d-6 · d-7 · LƯU TRỮ, CHUYỂN OKR, MỒ CÔI · AC-9 · AC-10 · AC-11</text>
+
+      <path d="M 224 160 L 256 160" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 432 160 L 488 160" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 688 160 L 736 160" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 920 160 L 968 160" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1064 208 L 1064 272" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 344 208 L 344 272" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 280 440 L 344 440" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="444" y="140" width="32" height="12" rx="2" fill="#fafafa"/>
+      <text x="460" y="149" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ</text>
+      <rect x="352" y="234" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text x="356" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">KHÔNG</text>
+
+      <rect x="228" y="80" width="56" height="12" rx="2" fill="transparent" stroke="rgba(87,87,87,0.60)" stroke-width="0.8"/>
+      <text x="256" y="89" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIẢ ĐỊNH</text>
+      <text x="292" y="90" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mục tiêu không bỏ · kỳ chưa đóng gồm cả pha chấm điểm</text>
+
+      <rect x="40" y="128" width="184" height="64" rx="6" fill="#fafafa"/>
+      <rect x="40" y="128" width="184" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="132" y="155" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị bấm</text>
+      <text x="132" y="173" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">«Lưu trữ phòng ban»</text>
+
+      <polygon points="256,160 344,112 432,160 344,208" fill="#fafafa"/>
+      <polygon points="256,160 344,112 432,160 344,208" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="344" y="157" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">còn mục tiêu ở</text>
+      <text x="344" y="172" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">kỳ chưa đóng?</text>
+
+      <rect x="488" y="120" width="200" height="80" rx="6" fill="#fafafa"/>
+      <rect x="488" y="120" width="200" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="588" y="152" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+      <text x="588" y="172" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">nêu số + «Chuyển OKR…»</text>
+
+      <rect x="736" y="120" width="184" height="80" rx="6" fill="#fafafa"/>
+      <rect x="736" y="120" width="184" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="828" y="152" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chọn đơn vị nhận</text>
+      <text x="828" y="172" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cùng cấp</text>
+
+      <rect x="968" y="112" width="192" height="96" rx="6" fill="#fafafa"/>
+      <rect x="968" y="112" width="192" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1064" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">OKR đi sang</text>
+      <text x="1064" y="164" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">giữ KR, cập nhật tuần,</text>
+      <text x="1064" y="180" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">căn chỉnh, vết</text>
+
+      <rect x="968" y="272" width="192" height="64" rx="6" fill="#fafafa"/>
+      <rect x="968" y="272" width="192" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1064" y="309" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lưu trữ được</text>
+
+      <rect x="256" y="272" width="176" height="64" rx="6" fill="#fafafa"/>
+      <rect x="256" y="272" width="176" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="344" y="309" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lưu trữ như cũ</text>
+
+      <text x="40" y="392" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NHÁNH PHỤ</text>
+      <rect x="40" y="408" width="240" height="64" rx="6" fill="#fafafa"/>
+      <rect x="40" y="408" width="240" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="436" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">«Xoá hẳn» đơn vị</text>
+      <text x="160" y="456" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">có lịch sử OKR</text>
+
+      <rect x="344" y="408" width="216" height="64" rx="6" fill="#fafafa"/>
+      <rect x="344" y="408" width="216" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="452" y="436" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối có câu</text>
+      <text x="452" y="456" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không 500</text>
+
+      <rect x="640" y="376" width="520" height="184" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="4,3"/>
+      <text x="656" y="404" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">OKR mồ côi</text>
+      <text x="752" y="404" fill="#575757" font-size="10" font-family="'Geist', sans-serif">khối bên · chỉ quản trị thấy</text>
+      <text x="656" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LÝ DO</text>
+      <text x="928" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LỐI SỬA</text>
+
+      <path d="M 872 468 L 912 468" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 872 500 L 912 500" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 872 532 L 912 532" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="656" y="456" width="216" height="24" rx="4" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="668" y="472" fill="#171717" font-size="11" font-weight="500" font-family="'Geist', sans-serif">đơn vị đã lưu trữ</text>
+      <text x="928" y="472" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chuyển OKR</text>
+
+      <rect x="656" y="488" width="216" height="24" rx="4" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="668" y="504" fill="#171717" font-size="11" font-weight="500" font-family="'Geist', sans-serif">không ai sửa được</text>
+      <text x="928" y="504" fill="#171717" font-size="11" font-family="'Geist', sans-serif">đặt trưởng</text>
+
+      <rect x="656" y="520" width="216" height="24" rx="4" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="668" y="536" fill="#171717" font-size="11" font-weight="500" font-family="'Geist', sans-serif">người phụ trách đã rời</text>
+      <text x="928" y="536" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chuyển OKR của người rời</text>
+
+      <line x1="40" y1="588" x2="1160" y2="588" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="604" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="618" width="16" height="10" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="64" y="627" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Luật mới: từ chối kèm lối ra</text>
+      <polygon points="248,623 256,617 264,623 256,629" fill="#ffffff" stroke="#171717" stroke-width="0.8"/>
+      <text x="272" y="627" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi rẽ nhánh</text>
+      <rect x="400" y="618" width="16" height="10" rx="3" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="3,2"/>
+      <text x="424" y="627" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Khối bên, không nằm trên luồng</text>
+      <rect x="616" y="617" width="44" height="12" rx="2" fill="transparent" stroke="rgba(87,87,87,0.60)" stroke-width="0.8"/>
+      <text x="638" y="626" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIẢ ĐỊNH</text>
+      <text x="668" y="627" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Giả định trong hợp đồng, chờ người chốt ở cổng</text>
+    </svg>
+
+    <footer>d-5 · d-6 · d-7 · gioi-han-duyet-cay-okr · tái cơ cấu · design doc 2026-09-29 mục 6 · AC-9 · AC-10 · AC-11</footer>
+  </div>
+</body>
+</html>

@@ -608,6 +608,38 @@ describe("du-duong", () => {
 				}),
 				"mo hoi y cho X gop",
 			);
+			ok(await goi("okr.setProgram", { duyetCongBo: true }), "bat duyet");
+			const bp = await bpMoi("dd-bp");
+			ok(
+				await goi("org.setHead", { kind: "division", id: bp, userId: X }),
+				"X truong bo phan",
+			);
+			const pbDuoi = await pbMoi("dd-p-duoi", bp);
+			const td = await truongMoi("department", pbDuoi, "dd-td");
+			const o4 = await mucTieu(
+				quy,
+				{ level: "phong-ban", departmentId: pbDuoi },
+				td.nguoi,
+				td.cookie,
+			);
+			await taoKr(o4, td.nguoi, td.cookie);
+			ok(await goi("okr.guiDuyet", { id: o4 }, td.cookie), "td gui duyet o4");
+			const o5 = await mucTieu(
+				quy,
+				{ level: "ca-nhan", personUserId: X },
+				X,
+				cX,
+			);
+			await taoKr(o5, X, cX);
+			ok(await goi("okr.guiDuyet", { id: o5 }, cX), "X gui duyet o5");
+			ok(
+				await goi("okr.traLaiMucTieu", {
+					objectiveId: o5,
+					lyDo: "Chưa có KR đo kết quả cuối",
+				}),
+				"quan tri tra lai o5",
+			);
+			ok(await goi("okr.setProgram", { duyetCongBo: false }), "tat duyet");
 
 			const quaTrpc = await doc<ViecCuaToiOutput>("okr.viecCuaToi", cX);
 			const loai = [...new Set(quaTrpc.viec.map((v) => v.loai))].sort();

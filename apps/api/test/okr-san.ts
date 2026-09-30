@@ -160,6 +160,7 @@ export const CHUONG_TRINH_RONG = {
 	scoreScale: "0-100",
 	weightsOn: false,
 	personalOn: true,
+	duyetCongBo: false,
 } as const;
 
 export const taoNam = (ten: string, nam: number) =>

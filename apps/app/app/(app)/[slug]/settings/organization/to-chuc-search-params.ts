@@ -1,4 +1,5 @@
 import { createParser, parseAsStringLiteral } from "nuqs";
+import { chuyenOkrParsers } from "@/components/okr/hop-chuyen-okr-search-params";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
 export type DonChon =
@@ -26,4 +27,5 @@ export const parseAsDon = createParser<DonChon>({
 export const toChucParsers = {
 	[SEARCH_PARAM.toChuc.don]: parseAsDon,
 	[SEARCH_PARAM.toChuc.loc]: parseAsStringLiteral(["chua-truong"] as const),
+	...chuyenOkrParsers,
 };

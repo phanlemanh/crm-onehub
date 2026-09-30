@@ -1,4 +1,5 @@
 import type { Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import type { OkrProgram } from "@crm/validation/okr-chuong-trinh";
@@ -104,30 +105,29 @@ export type DongKy = {
 	theoDonVi: { khoa: string; ten: string; conLai: number }[];
 };
 
-export async function kiemDongKy(
-	tx: Prisma.TransactionClient | Db,
-	cycleId: string,
-): Promise<DongKy> {
-	const dong = await tx.okrDiemKr.findMany({
-		where: { cycleId, diem: null },
+const chonDongChuaCham = {
+	keyResult: {
 		select: {
-			keyResult: {
+			objective: {
 				select: {
-					objective: {
-						select: {
-							level: true,
-							divisionId: true,
-							departmentId: true,
-							personUserId: true,
-							division: { select: { name: true } },
-							department: { select: { name: true } },
-							person: { select: { name: true } },
-						},
-					},
+					level: true,
+					divisionId: true,
+					departmentId: true,
+					personUserId: true,
+					division: { select: { name: true } },
+					department: { select: { name: true } },
+					person: { select: { name: true } },
 				},
 			},
 		},
-	});
+	},
+} satisfies Prisma.OkrDiemKrSelect;
+
+type DongChuaCham = Prisma.OkrDiemKrGetPayload<{
+	select: typeof chonDongChuaCham;
+}>;
+
+function gopDongKy(dong: DongChuaCham[]): DongKy {
 	const theo = new Map<string, { khoa: string; ten: string; conLai: number }>();
 	for (const { keyResult } of dong) {
 		const khoa = khoaDonViDong(keyResult.objective);
@@ -144,4 +144,33 @@ export async function kiemDongKy(
 		conLai: dong.length,
 		theoDonVi: [...theo.values()].sort((a, b) => a.ten.localeCompare(b.ten)),
 	};
+}
+
+export async function kiemDongKy(
+	tx: Prisma.TransactionClient | Db,
+	cycleId: string,
+): Promise<DongKy> {
+	return gopDongKy(
+		await tx.okrDiemKr.findMany({
+			where: { cycleId, diem: null },
+			select: chonDongChuaCham,
+		}),
+	);
+}
+
+export async function dongKyChoNguoiXem(
+	tx: Prisma.TransactionClient | Db,
+	cycleId: string,
+	nc: NguCanhXem,
+): Promise<DongKy> {
+	return gopDongKy(
+		await tx.okrDiemKr.findMany({
+			where: {
+				cycleId,
+				diem: null,
+				keyResult: { objective: dieuKienXemMucTieu(nc) },
+			},
+			select: chonDongChuaCham,
+		}),
+	);
 }

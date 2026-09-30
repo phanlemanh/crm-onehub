@@ -44,6 +44,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 
 const KHONG_DAU = new Set([
 	"dong.soKr",
+	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
 	"chiaSe.xong",
 	"tep.kiloByte",
@@ -830,6 +831,32 @@ const GHIM = {
 	"okr-khep:caiDat.moLai.daMo": [
 		"1 đã về pha chấm điểm.",
 		"12 đã về pha chấm điểm.",
+	],
+	"okr-tai-co-cau:toChuc.okrMo": [
+		"OKR: 1 mục tiêu ở kỳ đang mở",
+		"OKR: 12 mục tiêu ở kỳ đang mở",
+	],
+	"okr-tai-co-cau:toChuc.chan.lyDo.phong-ban": [
+		"Phòng ban còn 1 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+		"Phòng ban còn 12 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+	],
+	"okr-tai-co-cau:toChuc.chan.lyDo.bo-phan": [
+		"Bộ phận còn 1 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+		"Bộ phận còn 12 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+	],
+	"okr-tai-co-cau:chuyen.danhSach": [
+		"Mục tiêu ở kỳ đang mở (1)",
+		"Mục tiêu ở kỳ đang mở (12)",
+	],
+	"okr-tai-co-cau:chuyen.dongMoTa": ["1 KR · A · B", "12 KR · A · B"],
+	"okr-tai-co-cau:chuyen.quaTran": [
+		"Mỗi lần chuyển tối đa 1 mục tiêu — bỏ chọn bớt rồi chuyển.",
+		"Mỗi lần chuyển tối đa 12 mục tiêu — bỏ chọn bớt rồi chuyển.",
+	],
+	"okr-tai-co-cau:chuyen.nut": ["Chuyển 1 mục tiêu", "Chuyển 12 mục tiêu"],
+	"okr-tai-co-cau:chuyen.xong": [
+		"Đã chuyển 1 mục tiêu sang A.",
+		"Đã chuyển 12 mục tiêu sang A.",
 	],
 } satisfies Record<string, [string, string]>;
 

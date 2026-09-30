@@ -19,6 +19,8 @@ export type LoaiNhac = (typeof LOAI_NHAC)[number];
 
 export const THU_TU_NHAC = [
 	"okr-cap-nhat",
+	"okr-cho-duyet",
+	"okr-tra-lai",
 	"okr-hoi-y-gop",
 	...LOAI_NHAC,
 	"okr-kr-im",

@@ -1,6 +1,13 @@
 import { z } from "zod";
 import type { Db } from "./client";
 import type { JsonValue } from "./json";
+import {
+	CHO_DUYET,
+	nguoiDuyetMucTieu,
+	nguoiNhanDuyet,
+	PHA_GHI_DUOC,
+} from "./okr-duyet";
+import { dieuKienXemMucTieu, docCayOkr, nguCanhXemOkr } from "./okr-hien-thi";
 import { trangThaiHoiY } from "./okr-hoi-y-trang-thai";
 import { parseOkrVet } from "./okr-vet";
 import {
@@ -64,6 +71,19 @@ export const viecOkr = z.discriminatedUnion("loai", [
 		binhLuan: z.number(),
 	}),
 	z.object({
+		loai: z.literal("okr-cho-duyet"),
+		objectiveId: maMuc,
+		nhan: z.string(),
+		nguoiGui: z.string().nullable(),
+	}),
+	z.object({
+		loai: z.literal("okr-tra-lai"),
+		objectiveId: maMuc,
+		nhan: z.string(),
+		nguoiTraLai: z.string(),
+		lyDo: z.string(),
+	}),
+	z.object({
 		loai: z.literal("okr-hoi-y-gop"),
 		hoiYId: maMuc,
 		cycleId: maMuc,
@@ -89,6 +109,8 @@ export const KHOA_MUC_OKR = {
 	"okr-nhac-ten": { loai: true, commentId: true },
 	"okr-ghi-nhan": { loai: true, ghiNhanId: true },
 	"okr-theo-doi": { loai: true, objectiveId: true },
+	"okr-cho-duyet": { loai: true, objectiveId: true },
+	"okr-tra-lai": { loai: true, objectiveId: true },
 	"okr-hoi-y-gop": { loai: true, hoiYId: true, cycleId: true },
 	"okr-hoi-y-cong-bo": { loai: true, hoiYId: true, cycleId: true },
 } as const satisfies {
@@ -129,6 +151,12 @@ const DA_BO = "da-bo";
 const VET_GIAO = ["tao", "sua", "tao-kr", "sua-kr", "chuyen-viec"];
 
 const VET_TAO = ["tao", "tao-kr"];
+
+const GUI_DUYET = "gui-duyet";
+
+const TRA_LAI = "tra-lai";
+
+const NHAP = "nhap";
 
 type Gui = { userId: string; viec: ViecOkr };
 
@@ -560,6 +588,111 @@ async function viecHoiY(
 	return [...gop, ...congBo];
 }
 
+async function tenNguoi(db: Db, ids: string[]): Promise<Map<string, string>> {
+	const nguoi = await db.user.findMany({
+		where: { id: { in: [...new Set(ids)] } },
+		select: { id: true, name: true },
+	});
+	return new Map(nguoi.map((n) => [n.id, n.name]));
+}
+
+async function viecChoDuyet(db: Db): Promise<Gui[]> {
+	const mts = await db.okrObjective.findMany({
+		where: {
+			status: CHO_DUYET,
+			cycle: { phase: { in: [...PHA_GHI_DUOC] } },
+		},
+		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+		select: {
+			id: true,
+			title: true,
+			level: true,
+			departmentId: true,
+			personUserId: true,
+		},
+	});
+	if (mts.length === 0) return [];
+	const [cay, gui] = await Promise.all([
+		docCayOkr(db),
+		db.okrTrail.findMany({
+			where: { objectiveId: { in: mts.map((m) => m.id) }, action: GUI_DUYET },
+			orderBy: [{ at: "desc" }, { id: "desc" }],
+			distinct: ["objectiveId"],
+			select: { objectiveId: true, actorUserId: true },
+		}),
+	]);
+	const ten = await tenNguoi(
+		db,
+		gui.map((g) => g.actorUserId),
+	);
+	return mts.flatMap((m) => {
+		const nguoiGui = gui.find((g) => g.objectiveId === m.id)?.actorUserId;
+		return nguoiNhanDuyet(cay, nguoiDuyetMucTieu(cay, m)).map(
+			(userId): Gui => ({
+				userId,
+				viec: {
+					loai: "okr-cho-duyet",
+					objectiveId: m.id,
+					nhan: m.title,
+					nguoiGui: nguoiGui === undefined ? null : (ten.get(nguoiGui) ?? null),
+				},
+			}),
+		);
+	});
+}
+
+async function viecTraLai(
+	db: Db,
+	cuaSo: { gt: Date; lte: Date },
+): Promise<Gui[]> {
+	const traLai = await db.okrTrail.findMany({
+		where: { at: cuaSo, action: TRA_LAI },
+		orderBy: [{ at: "desc" }, { id: "desc" }],
+		select: { at: true, actorUserId: true, objectiveId: true, note: true },
+	});
+	const ids = [
+		...new Set(traLai.flatMap((t) => (t.objectiveId ? [t.objectiveId] : []))),
+	];
+	if (ids.length === 0) return [];
+	const [mts, gui] = await Promise.all([
+		db.okrObjective.findMany({
+			where: { id: { in: ids }, status: NHAP },
+			select: { id: true, title: true },
+		}),
+		db.okrTrail.findMany({
+			where: { objectiveId: { in: ids }, action: GUI_DUYET },
+			orderBy: [{ at: "desc" }, { id: "desc" }],
+			select: { at: true, actorUserId: true, objectiveId: true },
+		}),
+	]);
+	const ten = await tenNguoi(
+		db,
+		traLai.map((t) => t.actorUserId),
+	);
+	const daCo = new Set<string>();
+	return traLai.flatMap((t): Gui[] => {
+		const mt = mts.find((m) => m.id === t.objectiveId);
+		if (!mt || daCo.has(mt.id)) return [];
+		daCo.add(mt.id);
+		const cuaMt = gui.filter((g) => g.objectiveId === mt.id);
+		if (cuaMt.some((g) => g.at > t.at)) return [];
+		const nguoiGui = cuaMt.find((g) => g.at <= t.at)?.actorUserId;
+		if (nguoiGui === undefined || nguoiGui === t.actorUserId) return [];
+		return [
+			{
+				userId: nguoiGui,
+				viec: {
+					loai: "okr-tra-lai",
+					objectiveId: mt.id,
+					nhan: mt.title,
+					nguoiTraLai: ten.get(t.actorUserId) ?? "",
+					lyDo: t.note ?? "",
+				},
+			},
+		];
+	});
+}
+
 export async function viecOkrCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
@@ -573,6 +706,8 @@ export async function viecOkrCanNhac(
 		viecKr(db, chon.now),
 		viecGiao(db, cuaSo),
 		viecTraoDoi(db, cuaSo),
+		viecChoDuyet(db),
+		viecTraLai(db, cuaSo),
 		viecHoiY(
 			db,
 			chon.now,
@@ -585,7 +720,53 @@ export async function viecOkrCanNhac(
 		if (chon.userId !== undefined && g.userId !== chon.userId) continue;
 		ket.set(g.userId, [...(ket.get(g.userId) ?? []), g.viec]);
 	}
-	return ket;
+	return locTheoQuyenXem(db, ket);
+}
+
+function mucTieuCua(v: ViecOkr): string | null {
+	return v.loai === "okr-cap-nhat" ||
+		v.loai === "okr-hoi-y-gop" ||
+		v.loai === "okr-hoi-y-cong-bo"
+		? null
+		: v.objectiveId;
+}
+
+async function locTheoQuyenXem(
+	db: Db,
+	ket: Map<string, ViecOkr[]>,
+): Promise<Map<string, ViecOkr[]>> {
+	const nguoi = [...ket]
+		.filter(([, ds]) => ds.some((v) => mucTieuCua(v) !== null))
+		.map(([userId]) => userId);
+	const nguCanh = await nguCanhXemOkr(db, nguoi);
+	const xemDuoc = new Map(
+		await Promise.all(
+			nguoi.map(async (userId): Promise<[string, Set<string>]> => {
+				const nc = nguCanh.get(userId);
+				const ids = [
+					...new Set(
+						(ket.get(userId) ?? []).flatMap((v) => mucTieuCua(v) ?? []),
+					),
+				];
+				if (!nc) return [userId, new Set()];
+				const thay = await db.okrObjective.findMany({
+					where: { AND: [{ id: { in: ids } }, dieuKienXemMucTieu(nc)] },
+					select: { id: true },
+				});
+				return [userId, new Set(thay.map((m) => m.id))];
+			}),
+		),
+	);
+	const ra = new Map<string, ViecOkr[]>();
+	for (const [userId, ds] of ket) {
+		const thay = xemDuoc.get(userId);
+		const giu = ds.filter((v) => {
+			const mt = mucTieuCua(v);
+			return mt === null || (thay?.has(mt) ?? false);
+		});
+		if (giu.length > 0) ra.set(userId, giu);
+	}
+	return ra;
 }
 
 export async function lienQuanOkr(db: Db, userId: string): Promise<boolean> {

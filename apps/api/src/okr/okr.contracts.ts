@@ -7,6 +7,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
+import { LY_DO_MO_COI, MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import {
 	KIEU_KR,
@@ -341,8 +342,54 @@ export const objectiveOutput = mucTieuOutput.extend({
 	mangSangTu: lienKetMangSang,
 	trail: z.array(vetOutput),
 	canEditKr: z.array(z.string()),
+	hienThi: z.enum(MUC_HIEN_THI),
+	nguoiXem: z.array(z.object({ id: z.string(), name: z.string() })),
+	choDuyet: z
+		.object({
+			nguoiGui: nguoiOkr.nullable(),
+			guiLuc: z.string().nullable(),
+			nguoiDuyet: z.union([
+				z.object({ ten: z.string() }),
+				z.literal("quan-tri"),
+			]),
+		})
+		.nullable(),
+	traLaiGanNhat: z
+		.object({
+			lyDo: z.string(),
+			nguoi: nguoiOkr.nullable(),
+			luc: z.string(),
+		})
+		.nullable(),
+	quyen: z.object({
+		datHienThi: z.boolean(),
+		congBo: z.boolean(),
+		guiDuyet: z.boolean(),
+		duyet: z.boolean(),
+		rutDuyet: z.boolean(),
+	}),
 });
 export const createObjectiveInput = mucTieuInput;
+export const datHienThiOutput = z.object({
+	id: z.string(),
+	hienThi: z.enum(MUC_HIEN_THI),
+	nguoiXem: z.array(z.string()),
+});
+export const chuyenDonViOutput = z.object({
+	daChuyen: z.number(),
+	canhBao: z.string().nullable(),
+});
+export const mucMoCoi = z.object({
+	objectiveId: z.string(),
+	tieuDe: z.string(),
+	donVi: z.object({
+		level: z.enum(CAP_MUC_TIEU),
+		id: z.string().nullable(),
+		ten: z.string(),
+	}),
+	lyDo: z.array(z.enum(LY_DO_MO_COI)),
+});
+export const moCoiOutput = z.array(mucMoCoi);
 export const updateObjectiveInput = mucTieuUpdate;
 export const idInput = z.object({ id: ma });
 export const okOutput = z.object({
@@ -583,6 +630,9 @@ export type DonViChon = z.infer<typeof donViChon>;
 export type OkrDongNhapOutput = z.infer<typeof okrDongNhapOutput>;
 export type VetOutput = z.infer<typeof vetOutput>;
 export type ObjectiveOutput = z.infer<typeof objectiveOutput>;
+export type DatHienThiOutput = z.infer<typeof datHienThiOutput>;
+export type ChuyenDonViOutput = z.infer<typeof chuyenDonViOutput>;
+export type MucMoCoi = z.infer<typeof mucMoCoi>;
 export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;

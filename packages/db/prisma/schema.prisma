@@ -84,6 +84,8 @@ model User {
   okrYTacGia         OkrY[]            @relation("OkrYTacGia")
   okrYDongY          OkrYDongY[]       @relation("OkrYDongY")
   okrHoiYHieu        OkrHoiYHieu[]     @relation("OkrHoiYHieu")
+  okrNguoiXemDuoc    OkrNguoiXem[]     @relation("OkrNguoiXemNguoi")
+  okrNguoiXemDat     OkrNguoiXem[]     @relation("OkrNguoiXemDatBoi")
 
   taiLieuChuTrang   TaiLieuTrang[]    @relation("TaiLieuChuTrang")
   taiLieuTaoBoi     TaiLieuTrang[]    @relation("TaiLieuTaoBoi")
@@ -2044,6 +2046,7 @@ model OkrProgramConfig {
   aiTomTatAnPhamVi String   @default("tat")
   aiTomTatAnDonVi  String[] @default([])
   aiTranThangUsd   Decimal  @default(9) @db.Decimal(8, 2)
+  duyetCongBo      Boolean  @default(false)
   createdById      String
   createdAt        DateTime @default(now())
 
@@ -2065,6 +2068,7 @@ model OkrObjective {
   owner        User             @relation("OkrObjectiveOwner", fields: [ownerUserId], references: [id], onDelete: Restrict)
   kind         String
   status       String           @default("nhap")
+  hienThi      String           @default("cong-khai")
   title        String
   whyNow       String           @default("")
   publishedAt  DateTime?
@@ -2082,10 +2086,12 @@ model OkrObjective {
   ghiNhan      OkrGhiNhan[]
   mucTieuTuMau OkrMucTieuTuMau?
   chuDeHoiY    OkrChuDe?
+  nguoiXem     OkrNguoiXem[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
   @@index([cycleId, level])
+  @@index([cycleId, hienThi])
   @@index([divisionId])
   @@index([departmentId])
   @@index([personUserId])
@@ -2694,6 +2700,20 @@ model OkrMucTieuTuMau {
 
   @@index([mauId])
   @@map("okrMucTieuTuMau")
+}
+
+model OkrNguoiXem {
+  objectiveId String
+  objective   OkrObjective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User         @relation("OkrNguoiXemNguoi", fields: [userId], references: [id], onDelete: Restrict)
+  createdById String
+  createdBy   User         @relation("OkrNguoiXemDatBoi", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime     @default(now())
+
+  @@id([objectiveId, userId])
+  @@index([userId])
+  @@map("okrNguoiXem")
 }
 
 model OkrHoiY {

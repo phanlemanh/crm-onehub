@@ -737,6 +737,7 @@ export class OkrHoiYService {
 						title: c.cauMucTieu,
 						whyNow: c.lyDo,
 						participantIds: [],
+						hienThi: "cong-khai",
 					},
 					{ tuHoiY: h.id },
 				);

@@ -7,6 +7,7 @@ export const OKR_MAU = {
 	tienTo: "mau-okr-",
 	mienThu: "mau.onehub.test",
 	tuan: { soTuanCapNhat: 6, tuanMoiQuy: 13, gioCapNhat: 9, lechVN: 7 },
+	duyet: { tuanGui: { nhap: 2, choDuyet: 5 }, gioTraLai: 6 },
 	thoiGian: { phutMs: PHUT_MS, gioMs: GIO_MS, ngayMs: NGAY_MS },
 	hoiY: {
 		moTruocGio: 6 * NGAY_GIO,

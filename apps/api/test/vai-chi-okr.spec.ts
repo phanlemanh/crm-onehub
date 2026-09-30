@@ -4,9 +4,11 @@ import {
 	beforeEach,
 	describe,
 	expect,
+	setSystemTime,
 	spyOn,
 	test,
 } from "bun:test";
+import { readFileSync } from "node:fs";
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
 import { auth, KHONG_TRONG_PHAM_VI, NOT_A_MEMBER } from "@crm/auth";
@@ -22,8 +24,10 @@ import {
 	themBangChungInput,
 	themViecInput,
 } from "@crm/validation/okr-canh-kr";
+import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
 import {
 	chamKrInput,
+	diemTheoThang,
 	dongRaInput,
 	ghiDieuHocDuocInput,
 	mangSangInput,
@@ -46,11 +50,13 @@ import {
 } from "../src/okr/okr-canh-kr.contracts";
 import { OKR } from "../src/okr/okr-config";
 import { bangChamInput } from "../src/okr/okr-khep.contracts";
+import { OKR_XEM } from "../src/okr/okr-xem.config";
 import { AuthMiddleware } from "../src/trpc/middlewares/auth.middleware";
 import { PhamViChungMiddleware } from "../src/trpc/middlewares/pham-vi-du-lieu.middleware";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 import {
+	type DauVao,
 	type DauVaoHopLe,
 	dangNhap,
 	datMatKhau,
@@ -60,7 +66,14 @@ import {
 	maTranTrpc,
 	soThuTuc,
 } from "./ma-tran-thu";
+import {
+	donMucTieuAn,
+	G_AN,
+	gieoMucTieuAn,
+	type SanAn,
+} from "./okr-hien-thi-san";
 import { THU_TUC_HOI_Y } from "./okr-hoi-y-thu-tuc";
+import type { Json } from "./okr-san";
 import { gieoThanhVien } from "./phien-thu";
 
 const suffix = process.env.TEST_RUN_ID ?? "vai-chi-okr";
@@ -363,6 +376,15 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"xuatKy",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_CANH_KR = Object.keys(THU_TUC_CANH_KR);
+const THU_TUC_OKR_LUOT_GIOI_HAN = [
+	"datHienThi",
+	"guiDuyet",
+	"duyetMucTieu",
+	"traLaiMucTieu",
+	"rutDuyet",
+	"chuyenDonVi",
+	"moCoi",
+].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySanSang",
 	"troLyDeXuat",
@@ -1440,6 +1462,7 @@ describe("sang-kien-an", () => {
 			[
 				...THU_TUC_OKR_TRUOC_LUOT,
 				...THU_TUC_OKR_LUOT_CANH_KR,
+				...THU_TUC_OKR_LUOT_GIOI_HAN,
 				...THU_TUC_OKR_LUOT_TRO_LY,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 			].sort(),
@@ -1740,5 +1763,696 @@ describe("sang-kien-an", () => {
 			}
 		},
 		CHO_MA_TRAN_MS,
+	);
+});
+
+const DUONG_DOC_NGOAI = join(
+	import.meta.dir,
+	"..",
+	"..",
+	"..",
+	"_acceptance",
+	"gioi-han-duyet-cay-okr",
+	"rang",
+	"duong-doc-okr.json",
+);
+const duongDocNgoai = z.array(
+	z.object({
+		tep: z.string(),
+		thuTuc: z.array(z.string()),
+		lyDo: z.string(),
+	}),
+);
+const CHO_AN_MS = 240_000;
+const THANG_CHAM_AN = z.enum(THANG_CHAM);
+
+type CotK = "chua-G" | "vang";
+type NguoiDoc = "K" | "M" | "O";
+type DuongDoc = "trpc" | "rest" | "khoa-api rest";
+type ChuoiAn =
+	| "idG"
+	| "tieuDeG"
+	| "tieuDeKr"
+	| "idKrG"
+	| "soChup"
+	| "binhLuan"
+	| "loiNhan";
+type SanDoc = SanAn & { nguoiK: string; chuG: string };
+type DongDoc = {
+	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
+	K: CotK;
+	dau?: ChuoiAn;
+	khac: 200 | 404;
+	ma?: "id" | "objectiveId" | "keyResultId";
+	pha?: "da-dong";
+	chiQuanTri?: string;
+};
+
+const cuaKy = (s: SanDoc) => ({ cycleId: s.ky });
+const THU_TU_DOC_OKR = {
+	"okr.access": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.aiChiTieu": {
+		vao: () => undefined,
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
+	"okr.alignmentTargets": {
+		vao: (s) => ({ objectiveId: s.c1 }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.alignmentTree": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.banGhiChiSo": {
+		vao: (s) => ({ keyResultId: s.krG, trang: 1 }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 404,
+		ma: "keyResultId",
+	},
+	"okr.bangCham": {
+		vao: cuaKy,
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+		pha: "da-dong",
+	},
+	"okr.byUnit": {
+		vao: (s) => ({ cycleId: s.ky, unit: { loai: "pb", id: s.pb } }),
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+	},
+	"okr.canhKr": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 404,
+		ma: "keyResultId",
+	},
+	"okr.capNhatTuan": {
+		vao: () => undefined,
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+	},
+	"okr.cayCanChinh": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.chiSo": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.comments": {
+		vao: (s) => ({ objectiveId: s.g }),
+		K: "chua-G",
+		dau: "binhLuan",
+		khac: 404,
+		ma: "objectiveId",
+	},
+	"okr.countByUnit": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.cycles": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.danhSach": {
+		vao: (s) => ({
+			cycleId: s.ky,
+			unit: { loai: "pb", id: s.pb },
+			loc: { phuTrach: [], loai: [], trangThai: [], tuTin: [] },
+		}),
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+	},
+	"okr.dienBien": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 404,
+		ma: "keyResultId",
+	},
+	"okr.hopTuan": {
+		vao: (s) => ({ cycleId: s.ky, unit: { loai: "pb", id: s.pb } }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.khoiCuaToi": {
+		vao: (s, k) => ({ cycleId: s.ky, userId: k }),
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+	},
+	"okr.lichSuSo": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "chua-G",
+		dau: "soChup",
+		khac: 404,
+		ma: "keyResultId",
+	},
+	"okr.mau": {
+		vao: (s) => ({ cap: "phong-ban", donViId: s.pb }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.mine": { vao: cuaKy, K: "chua-G", dau: "tieuDeG", khac: 200 },
+	"okr.moCoi": {
+		vao: cuaKy,
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.taiCoCau.canQuanTri,
+	},
+	"okr.objective": {
+		vao: (s) => ({ id: s.g }),
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 404,
+		ma: "id",
+	},
+	"okr.program": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.sucKhoe": {
+		vao: cuaKy,
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR_XEM.thongDiep.chiQuanTri,
+	},
+	"okr.thanhVien": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.toanCanh": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.transferPreview": {
+		vao: (_s, k) => ({ fromUserId: k }),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.chuyen.canQuanTri,
+	},
+	"okr.troLyAn": {
+		vao: () => ({}),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
+	"okr.troLyDanhSach": {
+		vao: (s) => ({ objectiveId: s.g, keyResultId: s.krG }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.troLySanSang": {
+		vao: (s) => ({ objectiveId: s.g, keyResultId: s.krG }),
+		K: "vang",
+		khac: 404,
+		ma: "objectiveId",
+	},
+	"okr.troLySoDo": {
+		vao: () => ({}),
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
+	"okr.viecCuaToi": {
+		vao: () => undefined,
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+	},
+	"okr.xemTruocChiSo": {
+		vao: (s) => ({
+			chiSo: "thoa-thuan-chot-duoc",
+			phamVi: { kieu: "toan-cong-ty" },
+			cycleId: s.ky,
+		}),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.xuHuongKr": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "vang",
+		khac: 404,
+		ma: "keyResultId",
+	},
+	"okr.xuatKy": {
+		vao: cuaKy,
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
+		pha: "da-dong",
+	},
+} satisfies Record<string, DongDoc>;
+const dongDoc = (ten: string): DongDoc | undefined =>
+	ten in THU_TU_DOC_OKR
+		? THU_TU_DOC_OKR[ten as keyof typeof THU_TU_DOC_OKR]
+		: undefined;
+
+function thuTucDocOkr(): string[] {
+	const ngoai = duongDocNgoai
+		.parse(JSON.parse(readFileSync(DUONG_DOC_NGOAI, "utf8")))
+		.flatMap((d) => d.thuTuc);
+	return [
+		...new Set([
+			...soThuTuc(app)
+				.filter((t) => t.loai === "query" && t.ten.startsWith("okr."))
+				.map((t) => t.ten),
+			...ngoai,
+		]),
+	].sort();
+}
+
+function namVN() {
+	const nam = new Date(Date.now() + 7 * 60 * 60 * 1000).getUTCFullYear();
+	return { tu: `${nam}-01-01`, den: `${nam}-12-31` };
+}
+
+const DUONG_DOC: DuongDoc[] = ["trpc", "rest", "khoa-api rest"];
+const NGUOI_DOC: NguoiDoc[] = ["K", "M", "O"];
+
+type BoiCanhAn = {
+	san: SanDoc;
+	cookie: Record<NguoiDoc | "Q", string>;
+	khoa: Record<NguoiDoc | "Q", Dau>;
+	chuoi: Record<ChuoiAn, string>;
+	restCua: Map<string, string>;
+};
+
+type KetQuaAn = {
+	trangThai: Record<string, number>;
+	cho: Record<string, number>;
+	lo: string[];
+	thieu: string[];
+	cauKhac: string[];
+	bang: string[];
+	soDong: number;
+};
+
+const giaTriTruyVan = z
+	.union([z.string(), z.number(), z.boolean()])
+	.transform(String);
+
+type TraDoc = {
+	status: number;
+	message: string;
+	data: GiaTriJson;
+	chu: string;
+};
+
+function goiRestAn(
+	bc: BoiCanhAn,
+	ten: string,
+	vao: DauVao,
+	dau: Dau,
+): request.Test {
+	const restKey = bc.restCua.get(ten);
+	if (!restKey) throw new Error(`${ten} khong co duong REST`);
+	const [method, duong] = restKey.split(" ") as [string, string];
+	const con = new Map(Object.entries(vao ?? {}));
+	const url = duong.replace(/\{(\w+)\}/g, (_m, k: string) => {
+		const v = con.get(k);
+		con.delete(k);
+		return encodeURIComponent(String(v));
+	});
+	const server = app.getHttpServer();
+	if (method === "GET") {
+		const truyVan = Object.fromEntries(
+			[...con].map(([k, v]) => [k, giaTriTruyVan.parse(v)]),
+		);
+		return gan(request(server).get(url).query(truyVan), dau);
+	}
+	return gan(
+		request(server)
+			.post(url)
+			.set("content-type", "application/json")
+			.send(JSON.stringify(Object.fromEntries(con))),
+		dau,
+	);
+}
+
+async function goiDocAn(
+	bc: BoiCanhAn,
+	ten: string,
+	vao: DauVao,
+	duong: DuongDoc,
+	ai: NguoiDoc | "Q",
+): Promise<TraDoc> {
+	const cookie = { cookie: bc.cookie[ai] };
+	const res =
+		duong === "trpc"
+			? await goiTrpc(app, ten, "query", vao, cookie)
+			: await goiRestAn(bc, ten, vao, duong === "rest" ? cookie : bc.khoa[ai]);
+	const laTrpc = duong === "trpc";
+	return {
+		status: res.status,
+		message: String(
+			(laTrpc ? res.body?.error?.message : res.body?.message) ?? "",
+		),
+		data: giaTriJson.parse(
+			(laTrpc ? res.body?.result?.data : res.body) ?? null,
+		),
+		chu: JSON.stringify(res.body),
+	};
+}
+
+function demChuoi(bc: BoiCanhAn, chu: string): Record<ChuoiAn, number> {
+	return Object.fromEntries(
+		Object.entries(bc.chuoi).map(([k, c]) => [k, chu.split(c).length - 1]),
+	) as Record<ChuoiAn, number>;
+}
+
+function ghiLo(kq: KetQuaAn, o: string, so: Record<ChuoiAn, number>) {
+	for (const [c, n] of Object.entries(so))
+		if (n > 0) kq.lo.push(`${o} | lo ${c} x${n}`);
+}
+
+async function oDocAn(
+	bc: BoiCanhAn,
+	kq: KetQuaAn,
+	ten: string,
+	d: DongDoc,
+	duong: DuongDoc,
+	ai: NguoiDoc,
+) {
+	const vao = d.vao(bc.san, bc.san.nguoiK);
+	const o = `${ten} | ${duong} | ${ai}`;
+	const r = await goiDocAn(bc, ten, vao, duong, ai);
+	kq.trangThai[o] = r.status;
+	kq.cho[o] = d.chiQuanTri ? 403 : ai === "K" ? 200 : d.khac;
+	if (d.chiQuanTri && r.message !== d.chiQuanTri)
+		kq.cauKhac.push(`${o}: 403 sai cau «${r.message}»`);
+	const so = demChuoi(bc, r.chu);
+	kq.bang.push(`${o} | ${r.status} | ${Object.values(so).join(" ")}`);
+	if (ai !== "K" || d.K === "vang") ghiLo(kq, o, so);
+	const dau = d.dau ?? "tieuDeG";
+	if (ai === "K" && d.K === "chua-G" && !d.chiQuanTri && so[dau] < 1)
+		kq.thieu.push(`${o} | thieu ${dau}`);
+	if (ai === "K" || !d.ma || !vao) return;
+	const r0 = await goiDocAn(
+		bc,
+		ten,
+		{ ...vao, [d.ma]: `khong-co-${suffix}` },
+		duong,
+		ai,
+	);
+	if (r0.status !== 404 || r0.message !== r.message)
+		kq.cauKhac.push(
+			`${o}: G ${r.status} «${r.message}» / ma khong co ${r0.status} «${r0.message}»`,
+		);
+}
+
+async function dongDocAn(bc: BoiCanhAn, kq: KetQuaAn, ten: string) {
+	const d = dongDoc(ten);
+	if (!d) throw new Error(`${ten} khong co dong khai`);
+	kq.soDong += 1;
+	for (const duong of DUONG_DOC) {
+		for (const ai of NGUOI_DOC) await oDocAn(bc, kq, ten, d, duong, ai);
+		if (!d.chiQuanTri) continue;
+		const o = `${ten} | ${duong} | Q`;
+		const r = await goiDocAn(bc, ten, d.vao(bc.san, bc.san.nguoiK), duong, "Q");
+		kq.trangThai[o] = r.status;
+		kq.cho[o] = 200;
+		const so = demChuoi(bc, r.chu);
+		kq.bang.push(`${o} | ${r.status} | ${Object.values(so).join(" ")}`);
+		ghiLo(kq, o, so);
+	}
+}
+
+const vetDoc = z.object({
+	trail: z.array(
+		z.object({
+			action: z.string(),
+			before: z.json().nullable(),
+			after: z.json().nullable(),
+		}),
+	),
+});
+
+async function vetC1An(bc: BoiCanhAn, kq: KetQuaAn): Promise<string[]> {
+	const lech: string[] = [];
+	const { san } = bc;
+	const dichCua = (x: GiaTriJson | undefined) => {
+		const r = z.object({ targetObjectiveId: z.string() }).safeParse(x);
+		return r.success ? r.data.targetObjectiveId : null;
+	};
+	for (const duong of DUONG_DOC)
+		for (const ai of NGUOI_DOC) {
+			const o = `vet C1 | ${duong} | ${ai}`;
+			const r = await goiDocAn(bc, "okr.objective", { id: san.c1 }, duong, ai);
+			const dien = await goiDocAn(
+				bc,
+				"okr.dienBien",
+				{ keyResultId: san.krC1 },
+				duong,
+				ai,
+			);
+			if (r.status !== 200 || dien.status !== 200) {
+				lech.push(`${o}: ${r.status} / dienBien ${dien.status}`);
+				continue;
+			}
+			const vet = vetDoc.parse(r.data).trail;
+			const thay = {
+				gan: vet.find((v) => v.action === "gan-can-chinh")?.after,
+				go: vet.find((v) => v.action === "go-can-chinh")?.before,
+			};
+			const ra =
+				ai === "K" ? { gan: dichCua(thay.gan), go: dichCua(thay.go) } : thay;
+			const cho =
+				ai === "K"
+					? { gan: san.g, go: san.g }
+					: { gan: { gioiHan: true }, go: { gioiHan: true } };
+			if (JSON.stringify(ra) !== JSON.stringify(cho))
+				lech.push(`${o}: ${JSON.stringify(thay)}`);
+			const soG = demChuoi(bc, r.chu + dien.chu).idG;
+			kq.bang.push(`${o} | idG ${soG}`);
+			if (ai !== "K" && soG > 0) kq.lo.push(`${o} | lo idG x${soG}`);
+			if (ai === "K" && soG < 1) kq.thieu.push(`${o} | thieu idG`);
+		}
+	return lech;
+}
+
+const CHUA_CHAM_VIET_TRUOC = {
+	K: { conLai: 2, coDonViG: true },
+	M: { conLai: 1, coDonViG: false },
+	O: { conLai: 1, coDonViG: false },
+} as const satisfies Record<NguoiDoc, { conLai: number; coDonViG: boolean }>;
+
+const bangChuaCham = z.object({
+	conLai: z.number(),
+	chuaCham: z.array(z.object({ khoa: z.string(), conLai: z.number() })),
+});
+
+async function chuaChamAn(bc: BoiCanhAn, kq: KetQuaAn): Promise<string[]> {
+	const { san } = bc;
+	const lech: string[] = [];
+	const chuoiG = {
+		idG: san.g,
+		tieuDeG: G_AN.tieuDe,
+		tieuDeKr: G_AN.tieuDeKr,
+		donViG: id("pb-an"),
+		chuG: `${san.chuG}"`,
+	};
+	for (const duong of DUONG_DOC)
+		for (const ai of NGUOI_DOC) {
+			const o = `bangCham chua cham | ${duong} | ${ai}`;
+			const r = await goiDocAn(
+				bc,
+				"okr.bangCham",
+				{ cycleId: san.ky },
+				duong,
+				ai,
+			);
+			if (r.status !== 200) {
+				lech.push(`${o}: ${r.status} «${r.message}»`);
+				continue;
+			}
+			const bang = bangChuaCham.parse(r.data);
+			const thay = {
+				conLai: bang.conLai,
+				coDonViG: bang.chuaCham.some((d) => d.khoa === `pb:${san.pb}`),
+			};
+			if (JSON.stringify(thay) !== JSON.stringify(CHUA_CHAM_VIET_TRUOC[ai]))
+				lech.push(`${o}: ${JSON.stringify(thay)}`);
+			const so = Object.entries(chuoiG).map(
+				([k, c]) => [k, r.chu.split(c).length - 1] as const,
+			);
+			kq.bang.push(
+				`${o} | ${JSON.stringify(thay)} | ${so.map(([k, n]) => `${k} ${n}`).join(" ")}`,
+			);
+			if (ai !== "K")
+				for (const [k, n] of so) if (n > 0) kq.lo.push(`${o} | lo ${k} x${n}`);
+		}
+	return lech;
+}
+
+async function sangDaDongAn(bc: BoiCanhAn, kq: KetQuaAn): Promise<string[]> {
+	const { san } = bc;
+	await db.session.updateMany({
+		where: { userId: { startsWith: `${suffix}-` } },
+		data: { expiresAt: new Date("2099-01-01T00:00:00Z") },
+	});
+	const namSau = Number(namVN().den.slice(0, 4)) + 1;
+	setSystemTime(new Date(`${namSau}-01-02T03:00:00Z`));
+	try {
+		const cham = await goiTrpc(
+			app,
+			"okr.setCyclePhase",
+			"mutation",
+			{ id: san.ky, phase: "cham-diem" },
+			{ cookie: bc.cookie.Q },
+		);
+		expect(cham.status, JSON.stringify(cham.body)).toBe(200);
+	} finally {
+		setSystemTime();
+	}
+	const lech = await chuaChamAn(bc, kq);
+	const chua = await db.okrDiemKr.findMany({
+		where: { cycleId: san.ky, diem: null },
+		select: { keyResultId: true, diemGoiY: true, thang: true },
+	});
+	for (const d of chua) {
+		const res = await goiTrpc(
+			app,
+			"okr.chamKr",
+			"mutation",
+			{
+				keyResultId: d.keyResultId,
+				diem: diemTheoThang(Number(d.diemGoiY), THANG_CHAM_AN.parse(d.thang)),
+			},
+			{ cookie: bc.cookie.K },
+		);
+		expect(res.status, JSON.stringify(res.body)).toBe(200);
+	}
+	const dong = await goiTrpc(
+		app,
+		"okr.setCyclePhase",
+		"mutation",
+		{ id: san.ky, phase: "da-dong" },
+		{ cookie: bc.cookie.Q },
+	);
+	expect(dong.status, JSON.stringify(dong.body)).toBe(200);
+	return lech;
+}
+
+async function taoNguoiAn(phan: string, vai: Vai) {
+	const n = await gieoNguoi(phan, vai);
+	return { id: n.userId, cookie: await dangNhap(n.email) };
+}
+
+async function khoaApiCua(cookie: string): Promise<Dau> {
+	const res = await goiTrpc(
+		app,
+		"apiKeys.create",
+		"mutation",
+		{ name: "an", expiresInDays: null },
+		{ cookie },
+	);
+	expect(res.status, JSON.stringify(res.body)).toBe(200);
+	return { "x-api-key": res.body.result.data.key as string };
+}
+
+async function goiGieoAn(thuTuc: string, vao: Json, cookie: string) {
+	const res = await goiTrpc(app, thuTuc, "mutation", vao as DauVaoHopLe, {
+		cookie,
+	});
+	return {
+		status: res.status,
+		data: res.body?.result?.data,
+		loi: String(res.body?.error?.message ?? ""),
+	};
+}
+
+describe("hien-thi-an", () => {
+	beforeEach(don);
+
+	test("THU_TU_DOC_OKR khop dung tap thu tuc doc: query cua router okr cong duong-doc-okr.json", () => {
+		const thuTuc = thuTucDocOkr();
+		const khai = Object.keys(THU_TU_DOC_OKR).sort();
+		console.log(
+			`hien-thi-an: ${thuTuc.length} thu tuc doc, ${khai.length} dong khai`,
+		);
+		expect(
+			thuTuc.filter((t) => !khai.includes(t)),
+			"thu tuc doc moi chua co dong trong THU_TU_DOC_OKR",
+		).toEqual([]);
+		expect(khai).toEqual(thuTuc);
+	});
+
+	test(
+		"ba duong x ba nguoi: M, O khong nhan id, tieu de G, tieu de KR; theo ma 404 cung cau voi ma khong co; vet C1 che dich",
+		async () => {
+			const nguoi = {
+				quanTri: await taoNguoiAn("an-q", "admin"),
+				truong: await taoNguoiAn("an-t", "member"),
+				k: await taoNguoiAn("an-k", "member"),
+				thamGia: await taoNguoiAn("an-tg", "member"),
+				x: await taoNguoiAn("an-x", "member"),
+			};
+			const m = await taoNguoiAn("an-m", "member");
+			const o = await taoNguoiAn("an-o", "okr");
+			const cookie = {
+				K: nguoi.k.cookie,
+				M: m.cookie,
+				O: o.cookie,
+				Q: nguoi.quanTri.cookie,
+			};
+			const khoa = {
+				K: await khoaApiCua(cookie.K),
+				M: await khoaApiCua(cookie.M),
+				O: await khoaApiCua(cookie.O),
+				Q: await khoaApiCua(cookie.Q),
+			};
+			const gieo = await gieoMucTieuAn(goiGieoAn, nguoi, id, namVN());
+			const san = { ...gieo, nguoiK: nguoi.k.id, chuG: nguoi.truong.id };
+			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
+			try {
+				const bc: BoiCanhAn = {
+					san,
+					cookie,
+					khoa,
+					chuoi: {
+						idG: san.g,
+						tieuDeG: G_AN.tieuDe,
+						tieuDeKr: G_AN.tieuDeKr,
+						idKrG: san.krG,
+						soChup: `"giaTri":${G_AN.soChup}`,
+						binhLuan: G_AN.binhLuan,
+						loiNhan: G_AN.loiNhan,
+					},
+					restCua: new Map(
+						soThuTuc(app).flatMap((t) =>
+							t.restKey ? [[t.ten, t.restKey] as const] : [],
+						),
+					),
+				};
+				const kq: KetQuaAn = {
+					trangThai: {},
+					cho: {},
+					lo: [],
+					thieu: [],
+					cauKhac: [],
+					bang: [],
+					soDong: 0,
+				};
+				const thuTuc = thuTucDocOkr();
+				const phaHai = thuTuc.filter((t) => dongDoc(t)?.pha === "da-dong");
+				for (const ten of thuTuc.filter((t) => !phaHai.includes(t)))
+					await dongDocAn(bc, kq, ten);
+				const vetLech = await vetC1An(bc, kq);
+				const chuaChamLech = await sangDaDongAn(bc, kq);
+				for (const ten of phaHai) await dongDocAn(bc, kq, ten);
+				console.log(
+					[
+						`hien-thi-an: ${kq.soDong} dong assert / ${thuTuc.length} thu tuc`,
+						`thu tuc | duong | nguoi | status | ${Object.keys(bc.chuoi).join(" ")}`,
+						...kq.bang,
+					].join("\n"),
+				);
+				expect(kq.soDong).toBe(thuTuc.length);
+				expect(kq.trangThai).toEqual(kq.cho);
+				expect(
+					kq.lo,
+					"M, O nhan chuoi cua G; K nhan chuoi cua G o dong K vang",
+				).toEqual([]);
+				expect(kq.thieu, "K khong thay G o dong chua G").toEqual([]);
+				expect(kq.cauKhac, "404 khac cau ma khong co / 403 sai cau").toEqual(
+					[],
+				);
+				expect(vetLech, "vet C1").toEqual([]);
+				expect(
+					chuaChamLech,
+					"bangCham o pha cham diem: so KR chua cham cua nguoi khong xem duoc tinh ca G",
+				).toEqual([]);
+			} finally {
+				setSystemTime();
+				await donMucTieuAn(san, tatCaNguoi);
+			}
+		},
+		CHO_AN_MS,
 	);
 });

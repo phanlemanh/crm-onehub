@@ -93,6 +93,13 @@
 			"truong": "an-khanh-linh"
 		}
 	],
+	"phongBanLuuTru": [
+		{
+			"ma": "kho-lanh",
+			"ten": "Kho lạnh Bình Dương",
+			"boPhan": "van-hanh"
+		}
+	],
 	"nguoi": [
 		{
 			"ma": "le-hai-dang",
@@ -1734,7 +1741,13 @@
 				}
 			],
 			"donVi": "marketing",
-			"trangThai": "nhap"
+			"trangThai": "nhap",
+			"duyet": {
+				"traLai": {
+					"nguoi": "tran-quoc-bao",
+					"lyDo": "Chưa nêu ngân sách và người làm video. Bổ sung hai điều này rồi gửi lại."
+				}
+			}
 		},
 		{
 			"ma": "q4-kho-van-bo",
@@ -1758,6 +1771,89 @@
 			],
 			"donVi": "kho-van",
 			"trangThai": "da-bo"
+		},
+		{
+			"ma": "q3-kho-lanh",
+			"chuKy": "quy3",
+			"cap": "phong-ban",
+			"donVi": "kho-lanh",
+			"chu": "dinh-cong-son",
+			"kieu": "cam-ket",
+			"ten": "Dồn hàng lạnh về kho Long An",
+			"viSao": "Kho lạnh Bình Dương hết hợp đồng thuê cuối quý.",
+			"dieuHocDuoc": "Dồn kho êm khi báo khách hàng lạnh trước ba tuần, không báo sát ngày.",
+			"krs": [
+				{
+					"ma": "q3-kho-lanh-k1",
+					"ten": "Chuyển hết hàng lạnh sang kho Long An",
+					"kieu": "moc",
+					"chu": "dinh-cong-son",
+					"khoi": 0,
+					"dich": 1,
+					"donVi": "",
+					"chot": 1,
+					"diem": 1.0
+				},
+				{
+					"ma": "q3-kho-lanh-k2",
+					"ten": "Hàng lạnh còn ở kho cũ giảm từ 120 xuống 0 tấn",
+					"kieu": "giam-xuong",
+					"chu": "ha-van-thanh",
+					"khoi": 120,
+					"dich": 0,
+					"donVi": "tấn",
+					"chot": 0,
+					"diem": 1.0
+				}
+			]
+		},
+		{
+			"ma": "q4-phap-che-3",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"donVi": "phap-che",
+			"chu": "an-khanh-linh",
+			"kieu": "cam-ket",
+			"ten": "Xử lý dứt điểm các tranh chấp hợp đồng đang mở",
+			"viSao": "Nội dung còn nhạy cảm, chỉ người có tên được xem.",
+			"hienThi": "gioi-han",
+			"nguoiXem": ["tran-quoc-bao"],
+			"krs": [
+				{
+					"ma": "q4-phap-che-3-k1",
+					"ten": "Tranh chấp hợp đồng đang mở giảm từ 5 xuống 1",
+					"kieu": "giam-xuong",
+					"chu": "lu-quoc-viet",
+					"khoi": 5,
+					"dich": 1,
+					"donVi": "vụ",
+					"kichBan": "deu"
+				}
+			]
+		},
+		{
+			"ma": "q4-kd-nam-3",
+			"chuKy": "quy4",
+			"cap": "phong-ban",
+			"donVi": "kd-nam",
+			"chu": "ly-thanh-tam",
+			"kieu": "tham-vong",
+			"ten": "Mở đại lý cấp hai ở Cần Thơ",
+			"viSao": "Chờ trưởng bộ phận duyệt trước khi công bố.",
+			"trangThai": "cho-duyet",
+			"duyet": {},
+			"krs": [
+				{
+					"ma": "q4-kd-nam-3-k1",
+					"ten": "Ký hợp đồng với đại lý cấp hai",
+					"kieu": "tang-toi",
+					"chu": "huynh-gia-phuc",
+					"khoi": 0,
+					"dich": 3,
+					"donVi": "đại lý",
+					"kichBan": "deu"
+				}
+			]
 		}
 	],
 	"canhKr": {

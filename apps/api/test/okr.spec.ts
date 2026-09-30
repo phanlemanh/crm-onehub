@@ -67,6 +67,7 @@ type ChuongTrinh = {
 	aiTomTatAnPhamVi: string;
 	aiTomTatAnDonVi: string[];
 	aiTranThangUsd: number;
+	duyetCongBo: boolean;
 	version: number;
 	canManage: boolean;
 };
@@ -316,6 +317,7 @@ describe("chuong-trinh", () => {
 			aiTomTatAnPhamVi: v1.aiTomTatAnPhamVi,
 			aiTomTatAnDonVi: v1.aiTomTatAnDonVi,
 			aiTranThangUsd: v1.aiTranThangUsd,
+			duyetCongBo: v1.duyetCongBo,
 		};
 		const v2 = ok<ChuongTrinh>(
 			await goi("okr.setProgram", moi),

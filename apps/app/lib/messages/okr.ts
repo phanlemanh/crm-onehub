@@ -59,7 +59,12 @@ const vi = {
 		"phan-tram": "Phần trăm",
 	},
 	loai: { "cam-ket": "Cam kết", "tham-vong": "Tham vọng" },
-	trangThai: { nhap: "Nháp", "cong-bo": "Đã công bố", "da-bo": "Đã bỏ" },
+	trangThai: {
+		nhap: "Nháp",
+		"cho-duyet": "Chờ duyệt",
+		"cong-bo": "Đã công bố",
+		"da-bo": "Đã bỏ",
+	},
 	moc: {
 		xong: "Xong",
 		chuaXong: "Chưa xong",
@@ -265,6 +270,12 @@ const vi = {
 		"doi-nguoi-chon": "Đổi người chọn",
 		"niem-phong": "Niêm phong bản viết trước",
 		"cong-bo-hoi-y": "Công bố hỏi ý",
+		"doi-hien-thi": "Đổi mức hiển thị",
+		"gui-duyet": "Gửi duyệt",
+		duyet: "Duyệt",
+		"tra-lai": "Trả lại",
+		"rut-duyet": "Rút lại",
+		"chuyen-don-vi": "Chuyển OKR sang đơn vị",
 	},
 	vet: {
 		cot: {
@@ -623,7 +634,12 @@ const en: OkrMessages = {
 		"phan-tram": "Percentage",
 	},
 	loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
-	trangThai: { nhap: "Draft", "cong-bo": "Published", "da-bo": "Dropped" },
+	trangThai: {
+		nhap: "Draft",
+		"cho-duyet": "Awaiting approval",
+		"cong-bo": "Published",
+		"da-bo": "Dropped",
+	},
 	moc: {
 		xong: "Done",
 		chuaXong: "Not done",
@@ -829,6 +845,12 @@ const en: OkrMessages = {
 		"doi-nguoi-chon": "Changed decider",
 		"niem-phong": "Sealed what was written first",
 		"cong-bo-hoi-y": "Published call for ideas",
+		"doi-hien-thi": "Change visibility",
+		"gui-duyet": "Submit for approval",
+		duyet: "Approve",
+		"tra-lai": "Send back",
+		"rut-duyet": "Withdraw",
+		"chuyen-don-vi": "Move OKR to unit",
 	},
 	vet: {
 		cot: {

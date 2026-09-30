@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MUC_HIEN_THI } from "./okr-hien-thi";
 
 export const CAP_MUC_TIEU = [
 	"onehub",
@@ -7,7 +8,12 @@ export const CAP_MUC_TIEU = [
 	"ca-nhan",
 ] as const;
 export const LOAI_MUC_TIEU = ["cam-ket", "tham-vong"] as const;
-export const TRANG_THAI_MUC_TIEU = ["nhap", "cong-bo", "da-bo"] as const;
+export const TRANG_THAI_MUC_TIEU = [
+	"nhap",
+	"cho-duyet",
+	"cong-bo",
+	"da-bo",
+] as const;
 
 export type CapMucTieu = (typeof CAP_MUC_TIEU)[number];
 export type LoaiMucTieu = (typeof LOAI_MUC_TIEU)[number];
@@ -67,6 +73,7 @@ export const mucTieuInput = z.object({
 	ownerUserId: ma,
 	participantIds: z.array(ma).max(50),
 	whyNow: z.string().trim().max(500),
+	hienThi: z.enum(MUC_HIEN_THI).default("cong-khai"),
 });
 
 export type MucTieuInput = z.infer<typeof mucTieuInput>;
