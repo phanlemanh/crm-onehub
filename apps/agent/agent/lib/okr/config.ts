@@ -49,7 +49,7 @@ export const TRO_LY_OKR = {
 	chiDanGoc:
 		'This session runs one Trợ lý OKR task. Call the tool tro_ly_okr exactly once with the message "run". Do not call any other tool and do not do the work yourself. When it returns, reply "done".',
 	tinNhanGoc: "run",
-	khoaMoHinh: ["AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"],
+	khoa: { rieng: "OKR_AI_GATEWAY_API_KEY", chung: "AI_GATEWAY_API_KEY" },
 	timViecCon: { soLan: 8, cachMs: 250 },
 	khoaKiemLai: "agent-task:okr-kiem-san-sang",
 	congCuChan: {

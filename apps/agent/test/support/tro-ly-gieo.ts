@@ -1,7 +1,10 @@
 import { db, Prisma } from "@crm/db";
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import { CAU_HINH_AI_MAC_DINH } from "@crm/db/okr-tro-ly";
-import type { CauHinhAi } from "@crm/db/okr-tro-ly-danh-muc";
+import type {
+	CauHinhAi,
+	KetQuaKiemSanSang,
+} from "@crm/db/okr-tro-ly-danh-muc";
 import { ma, TIEN_TO } from "./nhac-gieo";
 
 let dem = 0;
@@ -65,7 +68,7 @@ export async function gieoChiPhi(
 
 export async function gieoKiemSanSang(
 	luc: Date,
-	outcome: "san-sang" | "chua-co-khoa-mo-hinh",
+	outcome: KetQuaKiemSanSang,
 ): Promise<void> {
 	await db.agentTask.create({
 		data: {
