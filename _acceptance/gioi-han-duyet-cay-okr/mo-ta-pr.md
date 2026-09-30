@@ -49,6 +49,9 @@ Hồ sơ `_acceptance/gioi-han-duyet-cay-okr` · MT-06, QT-02, TC-06 · T3.
 - Tài liệu: `docs/api.md` (mục OKR, mục cây tổ chức), `docs/agent.md` (hai loại nhắc,
   trợ lý đọc lại quyền), `CONTEXT.md` (Mức hiển thị, Chờ duyệt / Người duyệt, Chuyển OKR,
   OKR mồ côi).
+- **Hồ sơ 9b ghim lại trong PR này**, vì 8c đổi đường đọc của trợ lý. Bài `tach-giao-dich`
+  của 9b nay so đúng khoảng thay đổi của lượt 9b (`2e328047^1..^2`) thay cho so với onehub,
+  cùng cách onehub đã sửa `tai-lieu.mjs`. E22 xanh; E24 thoát 1 theo giới hạn đã khai ở #212.
 
 ## Khối giao diện mới — bậc dừng (docs/design.md)
 
