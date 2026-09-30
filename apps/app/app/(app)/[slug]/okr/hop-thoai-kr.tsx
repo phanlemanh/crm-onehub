@@ -119,7 +119,13 @@ function oKrKhac(a: OKr, b: OKr): boolean {
 	);
 }
 
-function DongXuHuong({ keyResultId }: { keyResultId: string }) {
+function DongXuHuong({
+	keyResultId,
+	donVi,
+}: {
+	keyResultId: string;
+	donVi: string;
+}) {
 	const locale = useLocale();
 	const trpc = useTRPC();
 	const xuHuong = useQuery(trpc.okr.xuHuongKr.queryOptions({ keyResultId }));
@@ -128,7 +134,11 @@ function DongXuHuong({ keyResultId }: { keyResultId: string }) {
 	const moiTuan = `${x.moiTuan > 0 ? "+" : ""}${hienSo(x.moiTuan, locale)}`;
 	return (
 		<FieldDescription variant="hoi" data-xu-huong>
-			{okrGopYMessages(locale).xuHuong(moiTuan, hienSo(x.uocCuoiKy, locale))}
+			{okrGopYMessages(locale).xuHuong(
+				moiTuan,
+				hienSo(x.uocCuoiKy, locale),
+				donVi,
+			)}
 		</FieldDescription>
 	);
 }
@@ -484,7 +494,9 @@ export function HopThoaiKr({
 										</FieldDescription>
 									) : null}
 									{hoiDuoi("targetValue")}
-									{n.krId ? <DongXuHuong keyResultId={n.krId} /> : null}
+									{n.krId ? (
+										<DongXuHuong keyResultId={n.krId} donVi={dau.donVi} />
+									) : null}
 								</Field>
 								<Field>
 									<FieldLabel htmlFor={`${ma}-hien`}>{h.hienTai}</FieldLabel>
@@ -620,7 +632,13 @@ export function HopThoaiKr({
 							{loi ? <FieldError data-loi-may-chu>{loi}</FieldError> : null}
 						</FieldGroup>
 					</form>
-					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
+					{gopY.cotMo ? (
+						<CotGopY
+							gopY={gopY}
+							oDangSua={oDangSua}
+							coGoiYTinh={hoi.length > 0}
+						/>
+					) : null}
 				</SheetBody>
 				<SheetFooter>
 					<SheetClose asChild dongNgay={daLuuMot && !coThayDoi}>
