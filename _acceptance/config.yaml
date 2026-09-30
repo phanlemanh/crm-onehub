@@ -937,6 +937,27 @@ executors:
     tgy_cot_trang_thai: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t trang-thai'
     tgy_co_hop: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t co-hop'
     tgy_thong_tin: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t thong-tin'
+    soan_quyen: bun run test -- "cd apps/api && bun test test/soan-okr-quyen.spec.ts"
+    soan_cua: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr.spec.ts
+    soan_goi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts"
+    soan_to_chuc: bun run test -- "cd apps/api && bun test test/to-chuc-mo-ta.spec.ts"
+    soan_man_to_chuc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-mo-ta.dom.tsx
+    soan_trang_chien_luoc: bun run test -- "cd apps/api && bun test test/tai-lieu-chien-luoc.spec.ts"
+    soan_man_kho: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-chien-luoc.dom.tsx
+    soan_app_rieng: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/app-rieng.integration.spec.ts"
+    soan_tran: bun run test -- "cd apps/api && bun test test/soan-okr-tran.spec.ts"
+    soan_bo_kiem: cd packages/validation && bun test test/okr-kiem-ban-nhap.spec.ts
+    soan_nop_ghi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-ban-nhap.integration.spec.ts"
+    soan_man_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr.dom.tsx
+    soan_quyet_dua_vao: bun run test -- "cd apps/api && bun test test/soan-okr-dua-vao.spec.ts"
+    soan_cuoc: bun run test -- "cd apps/api && bun test test/soan-okr-cuoc.spec.ts"
+    soan_nac: bun run test -- "cd apps/api && bun test test/soan-okr-nac.spec.ts"
+    soan_man_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-cai-dat.dom.tsx
+    soan_so_do: bun run test -- "cd apps/api && bun test test/soan-okr-so-do.spec.ts"
+    soan_man_so_do: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-so-do.dom.tsx
+    soan_hong_chen: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/hong-chen.integration.spec.ts" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-hong.dom.tsx
+    soan_judge_zdr: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/judge-zdr.spec.ts
+    soan_bo_mau: bun run test -- "cd apps/api && bun test test/okr-mau-soan.spec.ts"
   script:
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
@@ -1495,6 +1516,11 @@ executors:
     tgy_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"'
     tgy_ten_goi: 'node _acceptance/the-gop-y-okr/rang/ten-goi.mjs'
     tgy_san_thiet_ke: 'for t in "packages/ui/src/components/proposed-change.tsx" "packages/ui/src/components/ai-elements/confirmation.tsx" "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/components/crm/facts.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    soan_man_that: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/man-soan.mjs"
+    soan_cach_ly: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs"
+    soan_eval: bun _acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs
+    soan_tai_lieu: node _acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs
+    soan_san_thiet_ke: node _acceptance/soan-okr-cung-tro-ly/rang/san-thiet-ke.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
