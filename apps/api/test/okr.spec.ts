@@ -67,6 +67,11 @@ type ChuongTrinh = {
 	aiTomTatAnPhamVi: string;
 	aiTomTatAnDonVi: string[];
 	aiTranThangUsd: number;
+	aiSoanPhamVi: string;
+	aiSoanDonVi: string[];
+	aiSoanAnPhamVi: string;
+	aiSoanAnDonVi: string[];
+	aiTranThangDatOkrUsd: number | null;
 	duyetCongBo: boolean;
 	version: number;
 	canManage: boolean;
@@ -317,6 +322,11 @@ describe("chuong-trinh", () => {
 			aiTomTatAnPhamVi: v1.aiTomTatAnPhamVi,
 			aiTomTatAnDonVi: v1.aiTomTatAnDonVi,
 			aiTranThangUsd: v1.aiTranThangUsd,
+			aiSoanPhamVi: v1.aiSoanPhamVi,
+			aiSoanDonVi: v1.aiSoanDonVi,
+			aiSoanAnPhamVi: v1.aiSoanAnPhamVi,
+			aiSoanAnDonVi: v1.aiSoanAnDonVi,
+			aiTranThangDatOkrUsd: v1.aiTranThangDatOkrUsd,
 			duyetCongBo: v1.duyetCongBo,
 		};
 		const v2 = ok<ChuongTrinh>(
