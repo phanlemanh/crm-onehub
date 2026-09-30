@@ -150,6 +150,62 @@ describe("soan-mo", () => {
 	);
 
 	test(
+		"bam-dup: hai lần mở cùng lúc cho cùng đơn vị → đúng một cuộc, lần kia con-cuoc-dang kèm cuộc đó",
+		async () => {
+			const [a, b] = await Promise.all([mo(), mo()]);
+			const thanh = [a, b].filter((k) => k.ok);
+			const hong = [a, b].filter((k) => !k.ok);
+			expect(thanh).toHaveLength(1);
+			const cuoc = thanh[0]?.ok ? thanh[0].cuoc : null;
+			expect(hong).toEqual([
+				expect.objectContaining({
+					ok: false,
+					lyDo: "con-cuoc-dang",
+					cuocDang: expect.objectContaining({ id: cuoc?.id }),
+				}),
+			]);
+			expect(
+				await db.okrCuocSoan.count({
+					where: {
+						cycleId: CHU_KY_Q4,
+						departmentId: DON_VI.kdBac.departmentId,
+					},
+				}),
+			).toBe(1);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"thu-lai-cuoc-an: trưởng phòng thử lại cuộc ẩn quản trị mở → 403 cuocAn, phiên không đổi",
+		async () => {
+			const an = await gieoCuoc({
+				donVi: DON_VI.kdBac,
+				nguoiMo: QUAN_TRI,
+				nac: "an",
+			});
+			for (const duong of ["trpc", "rest"] as const) {
+				const tra = await goiSoan(
+					app,
+					"soanMo",
+					duong,
+					{ ...vaoDonVi(DON_VI.kdBac, duong), thuLaiCuocId: an.id },
+					cTruong,
+				);
+				expect(tra.status, duong).toBe(403);
+				expect(tra.loi).toBe(OKR.thongDiep.soan.cuocAn);
+			}
+			expect(
+				await db.okrCuocSoan.findUniqueOrThrow({
+					where: { id: an.id },
+					select: { sessionId: true, cacPhien: true },
+				}),
+			).toEqual({ sessionId: an.sessionId, cacPhien: [an.sessionId] });
+		},
+		CHO_DB,
+	);
+
+	test(
 		"het-cuoc-ky: ba cuộc trong kỳ (mọi trạng thái) → sẵn sàng và mở đều từ chối",
 		async () => {
 			for (const trangThai of ["bo", "da-dua-vao", "bo"] as const) {

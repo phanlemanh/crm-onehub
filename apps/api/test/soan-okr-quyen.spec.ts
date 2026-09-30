@@ -87,8 +87,27 @@ const DON_VI_CUA = {
 const donViO = (nguoi: Nguoi, cap: Cap) =>
 	cap === "onehub" ? DON_VI.onehub : DON_VI_CUA[nguoi][cap];
 
-const LOC = process.env.SOAN_MA_TRAN_THU_TUC?.split(",").filter(Boolean);
-const chay = (t: ThuTuc) => !LOC || LOC.includes(t);
+const O_MOI_THU_TUC = 63;
+const SO_O_MA_TRAN = 378;
+
+function docLoc(): readonly ThuTuc[] {
+	const bien = process.env.SOAN_MA_TRAN_THU_TUC;
+	if (bien === undefined) return THU_TUC;
+	const ten = bien
+		.split(",")
+		.map((t) => t.trim())
+		.filter(Boolean);
+	const la = ten.filter((t) => !(THU_TUC as readonly string[]).includes(t));
+	if (la.length > 0 || ten.length === 0)
+		throw new Error(
+			`SOAN_MA_TRAN_THU_TUC co ten la: «${la.join(",")}» (chon trong ${THU_TUC.join(",")})`,
+		);
+	return THU_TUC.filter((t) => ten.includes(t));
+}
+
+const CHON = docLoc();
+const chay = (t: ThuTuc) => CHON.includes(t);
+const BO = THU_TUC.filter((t) => !chay(t));
 
 type O = { nguoi: Nguoi; cap: Cap; nac: Nac; thuTuc: ThuTuc; giaTri: string };
 
@@ -112,11 +131,28 @@ function docMaTran(): O[] {
 			throw new Error(`thu tuc la: ${thuTuc}`);
 		return { nguoi, cap, nac, thuTuc, giaTri } as O;
 	});
-	const soO =
-		Object.keys(NGUOI).length * CAP.length * NAC.length * THU_TUC.length;
-	if (o.length !== soO) throw new Error(`ma tran co ${o.length} o, can ${soO}`);
-	return o.filter((x) => chay(x.thuTuc));
+	const khoa = (x: Omit<O, "giaTri">) =>
+		`${x.nguoi}|${x.cap}|${x.nac}|${x.thuTuc}`;
+	const co = new Set(o.map(khoa));
+	if (co.size !== o.length)
+		throw new Error(`ma tran co ${o.length - co.size} o trung`);
+	const thieu = (Object.keys(NGUOI) as Nguoi[]).flatMap((nguoi) =>
+		CAP.flatMap((cap) =>
+			NAC.flatMap((nac) =>
+				THU_TUC.map((thuTuc) => khoa({ nguoi, cap, nac, thuTuc })).filter(
+					(k) => !co.has(k),
+				),
+			),
+		),
+	);
+	if (thieu.length > 0) throw new Error(`ma tran thieu o: ${thieu.join(" ")}`);
+	if (o.length !== SO_O_MA_TRAN)
+		throw new Error(`ma tran co ${o.length} o, can ${SO_O_MA_TRAN}`);
+	return o;
 }
+
+const MA_TRAN = docMaTran();
+let tongKhangDinh = 0;
 
 let app: NestExpressApplication;
 const cookie = {} as Record<Nguoi, string>;
@@ -232,41 +268,64 @@ afterAll(async () => {
 }, CHO_DB);
 
 describe("ma-tran-quyen-soan", () => {
-	test(
-		"7 người × 3 đơn vị × 3 nấc × 6 thủ tục × 2 đường: mỗi ô đúng bảng viết trước",
-		async () => {
-			const o = docMaTran();
-			const lech: string[] = [];
-			const bacKhongQuyen: string[] = [];
-			let soKhangDinh = 0;
-			for (const nac of NAC) {
-				await ghiCauHinh(app, cQuanTri, NAC_SOAN[nac]);
-				for (const x of o.filter((y) => y.nac === nac))
-					for (const duong of DUONG) {
-						const { tra, dongGiu } = await goiO(x, duong);
-						const thay = doc(x.thuTuc, tra);
-						soKhangDinh += 1;
-						if (thay !== x.giaTri)
-							lech.push(
-								`o lech: ${x.nguoi} x ${x.cap} x ${x.nac} x ${x.thuTuc} x ${duong} — can ${x.giaTri}, thay ${thay}`,
-							);
-						if (dongGiu !== null && dongGiu !== "cho")
-							bacKhongQuyen.push(
-								`quyet khong quyen: ${x.nguoi} x ${x.cap} x ${x.nac} x ${duong}`,
-							);
-					}
-			}
-			console.log(
-				`ma-tran-quyen-soan: ${o.length} o × ${DUONG.length} duong = ${o.length * DUONG.length}; da khang dinh ${soKhangDinh}`,
+	test("ma-tran-day-du: bảng đủ 7 × 3 × 3 × 6 = 378 ô, không trùng; in thủ tục bị bỏ", () => {
+		expect(
+			new Set(MA_TRAN.map((x) => `${x.nguoi}|${x.cap}|${x.nac}|${x.thuTuc}`))
+				.size,
+		).toBe(SO_O_MA_TRAN);
+		for (const t of THU_TUC)
+			expect(MA_TRAN.filter((x) => x.thuTuc === t).length, t).toBe(
+				O_MOI_THU_TUC,
 			);
-			expect(bacKhongQuyen).toEqual([]);
-			expect(lech).toEqual([]);
-			expect(soKhangDinh, "so khang dinh lech so o").toBe(
-				o.length * DUONG.length,
-			);
-		},
-		CHO_MA_TRAN,
-	);
+		console.log(
+			`ma-tran-quyen-soan: chon ${CHON.join(",")}; bo ${BO.length === 0 ? "khong" : BO.map((t) => `${t} (${O_MOI_THU_TUC} o)`).join(", ")}`,
+		);
+	});
+
+	for (const thuTuc of THU_TUC)
+		test.skipIf(!chay(thuTuc))(
+			`${thuTuc}: 7 người × 3 đơn vị × 3 nấc × 2 đường, mỗi ô đúng bảng viết trước`,
+			async () => {
+				const o = MA_TRAN.filter((x) => x.thuTuc === thuTuc);
+				const lech: string[] = [];
+				const bacKhongQuyen: string[] = [];
+				let soKhangDinh = 0;
+				for (const nac of NAC) {
+					await ghiCauHinh(app, cQuanTri, NAC_SOAN[nac]);
+					for (const x of o.filter((y) => y.nac === nac))
+						for (const duong of DUONG) {
+							const { tra, dongGiu } = await goiO(x, duong);
+							const thay = doc(x.thuTuc, tra);
+							soKhangDinh += 1;
+							if (thay !== x.giaTri)
+								lech.push(
+									`o lech: ${x.nguoi} x ${x.cap} x ${x.nac} x ${x.thuTuc} x ${duong} — can ${x.giaTri}, thay ${thay}`,
+								);
+							if (dongGiu !== null && dongGiu !== "cho")
+								bacKhongQuyen.push(
+									`quyet khong quyen: ${x.nguoi} x ${x.cap} x ${x.nac} x ${duong}`,
+								);
+						}
+				}
+				tongKhangDinh += soKhangDinh;
+				console.log(
+					`ma-tran-quyen-soan ${thuTuc}: da khang dinh ${soKhangDinh}`,
+				);
+				expect(bacKhongQuyen).toEqual([]);
+				expect(lech).toEqual([]);
+				expect(soKhangDinh, `so khang dinh ${thuTuc}`).toBe(O_MOI_THU_TUC * 2);
+			},
+			CHO_MA_TRAN,
+		);
+
+	test("tong-khang-dinh: số thủ tục chọn × 63 ô × 2 đường", () => {
+		const can = CHON.length * O_MOI_THU_TUC * 2;
+		console.log(
+			`ma-tran-quyen-soan: ${CHON.length * O_MOI_THU_TUC} o × 2 duong = ${can}; da khang dinh ${tongKhangDinh}`,
+		);
+		expect(tongKhangDinh).toBe(can);
+		if (BO.length === 0) expect(tongKhangDinh).toBe(756);
+	});
 
 	test(
 		"doi-chung-duong: trưởng phòng ban vai okr × phòng ban × bat × soanMo = mo qua hai đường, và cuộc mở đúng đơn vị",
