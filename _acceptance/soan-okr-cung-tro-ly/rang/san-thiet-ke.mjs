@@ -33,6 +33,41 @@ const CAU_HINH = {
 	tepPha: "apps/app/app/(app)/[slug]/okr/soan/bang-nhap.tsx",
 	chenPha: 'className="bg-red-500 text-gray-400"',
 	tienToTam: "soan-san-",
+	nhanh:
+		/(?:className|style)=(?:"[^"]*"|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})/g,
+	mau: [
+		{
+			ma: "ban-kinh-literal",
+			re: /\brounded(?:-[a-z]{1,2})?-\[/,
+			pha: '<div className="rounded-[7px]" />',
+		},
+		{
+			ma: "hex-trong-class-hoac-style",
+			re: /#[0-9a-fA-F]{3,8}\b/,
+			pha: '<div className="bg-[#ff0000]" />',
+			chiTrongNhanh: true,
+		},
+		{
+			ma: "table-tho",
+			re: /<table\b/,
+			pha: "<table />",
+		},
+		{
+			ma: "divide-y",
+			re: /\bdivide-y\b/,
+			pha: '<ul className="divide-y" />',
+		},
+		{
+			ma: "navigator-clipboard",
+			re: /navigator\.clipboard/,
+			pha: 'const chep = () => navigator.clipboard.writeText("x");',
+		},
+		{
+			ma: "cham-size-2-rounded-full",
+			re: /\bsize-2(?![\d.])[^"'`\n]*\brounded-full\b|\brounded-full\b[^"'`\n]*\bsize-2(?![\d.])/,
+			pha: '<span className="size-2 rounded-full" />',
+		},
+	],
 };
 
 function khongDo(cau) {
@@ -65,6 +100,44 @@ function cong(duong) {
 	});
 }
 
+const dongCua = (van, viTri) => van.slice(0, viTri).split("\n").length;
+
+function quetMau(van) {
+	const loi = [];
+	for (const m of CAU_HINH.mau) {
+		const vet = [];
+		if (m.chiTrongNhanh) {
+			for (const nh of van.matchAll(CAU_HINH.nhanh)) {
+				const k = new RegExp(m.re.source, "g");
+				for (const h of nh[0].matchAll(k))
+					vet.push(dongCua(van, nh.index + h.index));
+			}
+		} else {
+			const k = new RegExp(m.re.source, "g");
+			for (const h of van.matchAll(k)) vet.push(dongCua(van, h.index));
+		}
+		for (const dong of vet) loi.push({ ma: m.ma, dong });
+	}
+	return loi;
+}
+
+function phaMau(tam, goc) {
+	let hong = 0;
+	for (const m of CAU_HINH.mau) {
+		const ban = join(tam, `pha-${m.ma}.tsx`);
+		writeFileSync(ban, `${goc}\n${m.pha}\n`);
+		const van = readFileSync(ban, "utf8");
+		const dongGai = dongCua(van, van.lastIndexOf(m.pha));
+		const bat = quetMau(van).filter((l) => l.ma === m.ma && l.dong === dongGai);
+		const dat = bat.length > 0;
+		if (!dat) hong += 1;
+		console.log(
+			`${dat ? "DUNG" : "SAI"} pha-${m.ma}: gai ${m.pha} o dong ${dongGai} -> ${dat ? `bat ${m.ma}:${dongGai}` : "khong bat"}`,
+		);
+	}
+	return hong;
+}
+
 if (process.argv.includes("--pha")) {
 	const tam = mkdtempSync(join(tmpdir(), CAU_HINH.tienToTam));
 	const ban = join(tam, "bang-nhap.tsx");
@@ -74,12 +147,13 @@ if (process.argv.includes("--pha")) {
 		khongDo(`khong chen duoc className vao Button cua ${CAU_HINH.tepPha}`);
 	writeFileSync(ban, pha);
 	const r = cong(ban);
-	rmSync(tam, { recursive: true, force: true });
 	const dat = r.status !== 0 && /gray-on-color/.test(r.stdout ?? "");
 	console.log(
 		`${dat ? "DUNG" : "SAI"} pha-gray-on-color: ban sao co ${CAU_HINH.chenPha} tren Button -> design-gate ma ${r.status}`,
 	);
-	process.exit(dat ? 0 : 1);
+	const hong = phaMau(tam, goc);
+	rmSync(tam, { recursive: true, force: true });
+	process.exit(dat && hong === 0 ? 0 : 1);
 }
 
 const biLoai = (duong) =>
@@ -108,17 +182,22 @@ console.log(
 let sai = 0;
 for (const t of tep) {
 	const r = cong(t);
-	if (r.status === 0) {
-		console.log(`DUNG ${t}: design-gate ma 0`);
+	const loiMau = quetMau(readFileSync(join(GOC, t), "utf8"));
+	if (r.status === 0 && loiMau.length === 0) {
+		console.log(`DUNG ${t}: design-gate ma 0, quet mau 0`);
 		continue;
 	}
 	sai += 1;
-	console.log(`SAI ${t}: design-gate ma ${r.status}`);
-	for (const d of `${r.stdout ?? ""}${r.stderr ?? ""}`
-		.trim()
-		.split("\n")
-		.slice(0, 8))
-		console.log(`  ${d}`);
+	console.log(
+		`SAI ${t}: design-gate ma ${r.status}, quet mau ${loiMau.length}`,
+	);
+	for (const l of loiMau) console.log(`  ${t}:${l.dong} ${l.ma}`);
+	if (r.status !== 0)
+		for (const d of `${r.stdout ?? ""}${r.stderr ?? ""}`
+			.trim()
+			.split("\n")
+			.slice(0, 8))
+			console.log(`  ${d}`);
 }
 console.log(
 	`KET LUAN ${tep.length - sai} DUNG, ${sai} SAI — ma thoat ${sai ? 1 : 0}`,
