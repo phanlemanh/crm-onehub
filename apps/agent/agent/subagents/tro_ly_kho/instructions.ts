@@ -4,7 +4,7 @@ import { moHoi } from "../../lib/tai-lieu-hoi";
 
 const D = TAI_LIEU_AGENT.hoi.dauTrang;
 
-const LOI_DAN = `You answer one question for an employee of OneHub from the company document library.
+export const LOI_DAN = `You answer one question for an employee of OneHub from the company document library.
 
 Rules:
 - Use only search_pages and read_page. Only approved pages in use exist for you; there is nothing else to read.

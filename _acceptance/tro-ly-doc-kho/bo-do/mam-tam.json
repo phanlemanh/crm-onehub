@@ -1,0 +1,396 @@
+{
+	"nhan": "tam",
+	"nguon": "Máy soạn ngày 2026-10-01 từ bo-do/trang-mau/*.md. Không phải câu thật của nhân viên OneHub; chủ kho chọn bộ «tạm» ở Cổng Phạm vi 2026-10-01.",
+	"cau": [
+		{
+			"id": "c01",
+			"nhom": "co-trang",
+			"cau": "Đối tác tầng 2 được hưởng hoa hồng bao nhiêu phần trăm?",
+			"tam": true,
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			]
+		},
+		{
+			"id": "c02",
+			"nhom": "co-trang",
+			"cau": "Nhân viên chính thức có bao nhiêu ngày nghỉ phép năm?",
+			"tam": true,
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			]
+		},
+		{
+			"id": "c03",
+			"nhom": "co-trang",
+			"cau": "Hoa hồng đối tác được chuyển khoản vào ngày nào?",
+			"tam": true,
+			"mong": [
+				[
+					"doi-soat"
+				]
+			]
+		},
+		{
+			"id": "c04",
+			"nhom": "co-trang",
+			"cau": "Nghi ngờ lộ dữ liệu khách hàng thì phải báo cho ai và trong bao lâu?",
+			"tam": true,
+			"mong": [
+				[
+					"bao-mat"
+				]
+			]
+		},
+		{
+			"id": "c05",
+			"nhom": "co-trang",
+			"cau": "Khiếu nại thông thường phải giải quyết trong bao nhiêu ngày?",
+			"tam": true,
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			]
+		},
+		{
+			"id": "c06",
+			"nhom": "co-trang",
+			"cau": "Công tác phí trong nước mỗi ngày là bao nhiêu?",
+			"tam": true,
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			]
+		},
+		{
+			"id": "c07",
+			"nhom": "co-trang",
+			"cau": "Nhân viên kinh doanh thử việc bao lâu?",
+			"tam": true,
+			"mong": [
+				[
+					"thu-viec"
+				]
+			]
+		},
+		{
+			"id": "c08",
+			"nhom": "co-trang",
+			"cau": "Biểu mẫu tạm ứng đã ký thì nộp cho phòng nào?",
+			"tam": true,
+			"mong": [
+				[
+					"tam-ung"
+				]
+			]
+		},
+		{
+			"id": "c09",
+			"nhom": "co-trang",
+			"cau": "Muốn nghỉ phép thì phải xin trước mấy ngày?",
+			"tam": true,
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			]
+		},
+		{
+			"id": "c10",
+			"nhom": "co-trang",
+			"cau": "Có được lưu hồ sơ khách hàng trên máy tính cá nhân không?",
+			"tam": true,
+			"mong": [
+				[
+					"bao-mat"
+				]
+			]
+		},
+		{
+			"id": "c11",
+			"nhom": "co-trang",
+			"cau": "Hợp đồng có doanh thu thuần 15 triệu đồng có được tính hoa hồng không?",
+			"tam": true,
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			],
+			"kho": "nguong-ngoai-le"
+		},
+		{
+			"id": "c12",
+			"nhom": "co-trang",
+			"cau": "Tiền phòng khách sạn khi đi công tác được thanh toán tối đa bao nhiêu một đêm?",
+			"tam": true,
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"kho": "nguong-ngoai-le"
+		},
+		{
+			"id": "c13",
+			"nhom": "co-trang",
+			"cau": "Ngày phép năm chưa dùng có được đổi thành tiền không?",
+			"tam": true,
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"kho": "nguong-ngoai-le"
+		},
+		{
+			"id": "c14",
+			"nhom": "co-trang",
+			"cau": "Đề nghị tạm ứng bao nhiêu tiền thì cần trưởng phòng ký?",
+			"tam": true,
+			"mong": [
+				[
+					"tam-ung"
+				]
+			],
+			"kho": "nguong-ngoai-le"
+		},
+		{
+			"id": "c15",
+			"nhom": "co-trang",
+			"cau": "Khoản hoa hồng nhỏ dưới 500.000 đồng thì xử lý thế nào?",
+			"tam": true,
+			"mong": [
+				[
+					"doi-soat"
+				]
+			],
+			"kho": "nguong-ngoai-le"
+		},
+		{
+			"id": "c16",
+			"nhom": "co-trang",
+			"cau": "Nhân viên đang thử việc có được nhận hoa hồng đối tác và có ngày nghỉ phép năm không?",
+			"tam": true,
+			"mong": [
+				[
+					"thu-viec",
+					"hoa-hong"
+				],
+				[
+					"nghi-phep"
+				]
+			],
+			"kho": "hai-trang"
+		},
+		{
+			"id": "c17",
+			"nhom": "co-trang",
+			"cau": "Đối tác tầng 1 hưởng bao nhiêu phần trăm và hoa hồng được đối soát vào ngày nào?",
+			"tam": true,
+			"mong": [
+				[
+					"hoa-hong"
+				],
+				[
+					"doi-soat"
+				]
+			],
+			"kho": "hai-trang"
+		},
+		{
+			"id": "c18",
+			"nhom": "co-trang",
+			"cau": "Đi công tác cần tạm ứng thì điền biểu mẫu nào, và công tác phí trong nước mỗi ngày là bao nhiêu?",
+			"tam": true,
+			"mong": [
+				[
+					"tam-ung"
+				],
+				[
+					"cong-tac-phi"
+				]
+			],
+			"kho": "hai-trang"
+		},
+		{
+			"id": "c19",
+			"nhom": "co-trang",
+			"cau": "Lương thử việc bằng bao nhiêu phần trăm lương chính thức, và người thử việc có ngày phép năm không?",
+			"tam": true,
+			"mong": [
+				[
+					"thu-viec"
+				],
+				[
+					"nghi-phep"
+				]
+			],
+			"kho": "hai-trang"
+		},
+		{
+			"id": "c20",
+			"nhom": "co-trang",
+			"cau": "Khiếu nại đòi hoàn tiền cần ai duyệt, và có được gửi email của khách hàng ra ngoài không?",
+			"tam": true,
+			"mong": [
+				[
+					"khieu-nai"
+				],
+				[
+					"bao-mat"
+				]
+			],
+			"kho": "hai-trang"
+		},
+		{
+			"id": "c21",
+			"nhom": "khong-co",
+			"cau": "Công ty có hỗ trợ tiền gửi xe hằng tháng không?",
+			"tam": true
+		},
+		{
+			"id": "c22",
+			"nhom": "khong-co",
+			"cau": "Quy định về trang phục đi làm thế nào?",
+			"tam": true
+		},
+		{
+			"id": "c23",
+			"nhom": "khong-co",
+			"cau": "Nhân viên được làm việc từ xa mấy ngày một tuần?",
+			"tam": true
+		},
+		{
+			"id": "c24",
+			"nhom": "khong-co",
+			"cau": "Thưởng Tết năm nay được tính thế nào?",
+			"tam": true
+		},
+		{
+			"id": "c25",
+			"nhom": "khong-co",
+			"cau": "Có chính sách bảo hiểm sức khoẻ cho người thân của nhân viên không?",
+			"tam": true
+		},
+		{
+			"id": "c26",
+			"nhom": "khong-co",
+			"cau": "Quy trình xin mua laptop mới cho nhân viên là gì?",
+			"tam": true
+		},
+		{
+			"id": "c27",
+			"nhom": "khong-dau",
+			"cau": "doi tac tang 2 duoc huong hoa hong bao nhieu phan tram?",
+			"tam": true,
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			],
+			"bienTheCua": "c01"
+		},
+		{
+			"id": "c28",
+			"nhom": "khong-dau",
+			"cau": "nhan vien chinh thuc co bao nhieu ngay nghi phep nam?",
+			"tam": true,
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"bienTheCua": "c02"
+		},
+		{
+			"id": "c29",
+			"nhom": "khong-dau",
+			"cau": "cong tac phi trong nuoc moi ngay la bao nhieu?",
+			"tam": true,
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"bienTheCua": "c06"
+		},
+		{
+			"id": "c30",
+			"nhom": "khong-dau",
+			"cau": "khieu nai thong thuong giai quyet trong bao nhieu ngay?",
+			"tam": true,
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			],
+			"bienTheCua": "c05"
+		},
+		{
+			"id": "c31",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Thoả thuận với Công ty Minh An đang ở giai đoạn nào?",
+			"tam": true
+		},
+		{
+			"id": "c32",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Tuần này mình có việc nào quá hạn không?",
+			"tam": true
+		},
+		{
+			"id": "c33",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "KR doanh thu quý này đang đạt bao nhiêu phần trăm?",
+			"tam": true
+		},
+		{
+			"id": "c34",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Chào bạn, hôm nay thế nào?",
+			"tam": true
+		},
+		{
+			"id": "c35",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Liệt kê các thoả thuận sắp chốt trong tháng này.",
+			"tam": true
+		},
+		{
+			"id": "c36",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Ai đang phụ trách khách hàng Hoàng Long?",
+			"tam": true
+		},
+		{
+			"id": "c37",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Lần làm việc gần nhất với công ty Sao Việt là gì?",
+			"tam": true
+		},
+		{
+			"id": "c38",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Mục tiêu OKR của phòng Kinh doanh quý này là gì?",
+			"tam": true
+		},
+		{
+			"id": "c39",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Cảm ơn nhé!",
+			"tam": true
+		},
+		{
+			"id": "c40",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Có bao nhiêu thoả thuận đang ở giai đoạn chào giá?",
+			"tam": true
+		}
+	]
+}

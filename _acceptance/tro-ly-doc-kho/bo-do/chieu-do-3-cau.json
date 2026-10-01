@@ -1,0 +1,39 @@
+{
+	"nhan": "chieu-do",
+	"nguon": "Chiều đỏ của E15: ba câu của mam-tam.json (c01, c02, c06) bị đổi trang mong đợi sang một trang không trả lời câu đó. Script chấm phải in ba dòng «sai» và thoát mã 1.",
+	"cau": [
+		{
+			"id": "c01",
+			"nhom": "co-trang",
+			"cau": "Đối tác tầng 2 được hưởng hoa hồng bao nhiêu phần trăm?",
+			"tam": true,
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			]
+		},
+		{
+			"id": "c02",
+			"nhom": "co-trang",
+			"cau": "Nhân viên chính thức có bao nhiêu ngày nghỉ phép năm?",
+			"tam": true,
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			]
+		},
+		{
+			"id": "c06",
+			"nhom": "co-trang",
+			"cau": "Công tác phí trong nước mỗi ngày là bao nhiêu?",
+			"tam": true,
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			]
+		}
+	]
+}
