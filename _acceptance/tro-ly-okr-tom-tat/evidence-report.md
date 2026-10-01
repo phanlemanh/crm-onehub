@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d3dcee3180eb46d6a4ce45c6c45a95840c322ed8
+verified_commit: 8fa89fe50f884a461be5514e055bb16b55311eca
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -288,3 +288,7 @@ none — every multi-run eval is uniform
 Round 1-2: xem lịch sử run-log.jsonl và các commit S4-r1, S4-r2 của nhánh.
 Round 3: E19 và E9 hỏng (mục chỗ rẽ 9c thiếu agent-tasks.ts; ba ảnh E9 chỉ chụp khung đầu). Quay lại thi công, chủ kho cho mở vòng 4 sửa ba chỗ.
 Round 4: sửa danh sách chỗ rẽ, thước E9 cuộn tới phần tử trước khi chụp, tách E20 thành bài chấm tài liệu cho người chấm. Mọi eval và lệnh suite đạt; E10, E15, E19 đỏ trên baseline (có phân biệt); các eval còn lại giữ nguyên từ round 3.
+
+### Re-pin lần 1 — 2026-10-01, do PR 226: vòng 9c chạm mã trong vùng của hồ sơ; sửa bài bảng quản trị đếm phòng bộ mẫu
+run_id: repin-20261001T035438Z-57515
+sha: 8fa89fe50f884a461be5514e055bb16b55311eca · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20
