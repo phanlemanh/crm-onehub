@@ -338,19 +338,27 @@ const HAM_LUAT = {
 	[L.cachLy.ten]: (t, p, nc) => {
 		const minh = nc.agent.find((a) => trong(t, a.thuMuc));
 		if (!minh) return [];
+		const thuMucTest = `${minh.thuMuc}/${L.cachLy.thuMucTest}`;
+		const laTest = trong(t, thuMucTest);
 		const khac = nc.apps.filter(
-			(a) => a.thuMuc !== minh.thuMuc && (a.laAgent || !laKiem(t)),
+			(a) => a.thuMuc !== minh.thuMuc && !(laTest && a.laNest),
 		);
-		return dong(
+		const sang = nhapSang(
 			t,
-			nhapSang(
-				t,
-				p,
-				khac.map((a) => a.thuMuc),
-				khac.map((a) => a.ten).filter(Boolean),
-			),
-			nhapIn,
+			p,
+			khac.map((a) => a.thuMuc),
+			khac.map((a) => a.ten).filter(Boolean),
 		);
+		const vaoTest = laTest
+			? []
+			: p.nhap.filter((n) => {
+					const d = giaiTuongDoi(t, n.nguon);
+					return d !== null && trong(d, thuMucTest);
+				});
+		return [
+			...dong(t, sang, nhapIn),
+			...dong(t, vaoTest, (n) => `nhap test cua chinh app: ${n.nguon}`),
+		];
 	},
 };
 
@@ -741,6 +749,79 @@ const PHA = [
 			goiMoi(THU.web, {}),
 			tepMoi(`${THU.web}/agent.ts`, "export const agent = 1;\n"),
 			nhapTu(`${THU.agentA}/agent/nhap.ts`, `../../${DO}web/agent`),
+		],
+	},
+	{
+		ten: "agent-test-trong-lib-nhap-nest",
+		luat: L.cachLy.ten,
+		buoc: [
+			...appAgent(THU.agentA),
+			appNest(),
+			tepMoi(
+				`${THU.agentA}/agent/lib/dung-that.ts`,
+				'export { cau } from "./test/cau";\n',
+			),
+			tepMoi(
+				`${THU.agentA}/agent/lib/test/cau.ts`,
+				`export { agent as cau } from "../../../../${DO}api/src/x";\n`,
+			),
+		],
+	},
+	{
+		ten: "ma-that-nhap-test-cua-app",
+		luat: L.cachLy.ten,
+		buoc: [
+			...appAgent(THU.agentA),
+			appNest(),
+			tepMoi(
+				`${THU.agentA}/test/support/cau.ts`,
+				`export { agent as cau } from "../../../${DO}api/src/x";\n`,
+			),
+			tepMoi(
+				`${THU.agentA}/agent/lib/dung-that.ts`,
+				'export { cau } from "../../test/support/cau";\n',
+			),
+		],
+	},
+	{
+		ten: "spec-ngoai-test-nhap-nest",
+		luat: L.cachLy.ten,
+		buoc: [
+			...appAgent(THU.agentA),
+			appNest(),
+			nhapTu(`${THU.agentA}/agent/lib/may.spec.ts`, `../../../${DO}api/src/x`),
+		],
+	},
+	{
+		ten: "dom-ngoai-test-nhap-nest",
+		luat: L.cachLy.ten,
+		buoc: [
+			...appAgent(THU.agentA),
+			appNest(),
+			nhapTu(
+				`${THU.agentA}/agent/lib/khung.dom.tsx`,
+				`../../../${DO}api/src/x`,
+			),
+		],
+	},
+	{
+		ten: "test-cua-agent-nhap-app-khong-phai-nest",
+		luat: L.cachLy.ten,
+		buoc: [
+			...appAgent(THU.agentA),
+			goiMoi(THU.web, {}),
+			tepMoi(`${THU.web}/agent.ts`, "export const agent = 1;\n"),
+			nhapTu(`${THU.agentA}/test/web.ts`, `../../${DO}web/agent`),
+		],
+	},
+	{
+		ten: "doi-chung-test-cua-agent-nhap-nest",
+		luat: L.cachLy.ten,
+		xanh: true,
+		buoc: [
+			...appAgent(THU.agentA),
+			appNest(),
+			nhapTu(`${THU.agentA}/test/support/gieo.ts`, `../../../${DO}api/src/x`),
 		],
 	},
 	{

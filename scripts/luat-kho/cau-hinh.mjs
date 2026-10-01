@@ -77,6 +77,7 @@ export const LUAT_KHO_CAY = {
 		},
 		cachLy: {
 			ten: "cach-ly-hai-agent",
+			thuMucTest: "test",
 		},
 	},
 	nen: {
